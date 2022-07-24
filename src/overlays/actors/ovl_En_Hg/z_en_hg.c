@@ -125,7 +125,7 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
-    if ((gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
+    if ((GET_WEEKEVENTREG(WEEKEVENTREG_75_20)) || (GET_WEEKEVENTREG(WEEKEVENTREG_52_20))) {
         Actor_MarkForDeath(&this->actor);
     }
     this->actor.targetMode = 1;
@@ -303,7 +303,7 @@ void func_80BCF95C(EnHg* this, PlayState* play) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
                     break;
                 case 6:
-                    gSaveContext.save.weekEventReg[75] |= 0x20;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_75_20);
                     Actor_MarkForDeath(&this->actor);
                     break;
             }
@@ -369,8 +369,8 @@ void func_80BCFC0C(EnHg* this, PlayState* play) {
         } else {
             if (this->actor.xzDistToPlayer < 60.0f && fabsf(this->actor.playerHeightRel) < 40.0f) {
                 if ((this->actionFunc != func_80BCF8A0) && (this->actionFunc != func_80BCF95C)) {
-                    if (!(gSaveContext.save.weekEventReg[61] & 2)) {
-                        gSaveContext.save.weekEventReg[61] |= 2;
+                    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_61_02))) {
+                        SET_WEEKEVENTREG(WEEKEVENTREG_61_02);
                         this->unk218 = 0;
                     } else {
                         this->unk218 = 2;

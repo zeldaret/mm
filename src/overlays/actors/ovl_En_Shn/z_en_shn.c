@@ -218,7 +218,7 @@ s32 func_80AE65F4(EnShn* this, PlayState* play) {
         this->unk_1DA = temp;
         this->unk_1D8 |= 0x40;
     } else if (this->unk_1D8 & 0x40) {
-        if (!(gSaveContext.save.weekEventReg[23] & 8)) {
+        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_23_08))) {
             func_80AE615C(this, 3);
         }
         this->unk_1DA = 0;
@@ -299,7 +299,7 @@ s32 func_80AE68F0(EnShn* this, PlayState* play) {
             SubS_UpdateFlags(&this->unk_1D8, 0, 7);
             this->unk_1DC = func_80AE6880(this, play);
             this->unk_2C6 = 0;
-            if (gSaveContext.save.weekEventReg[23] & 8) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_23_08)) {
                 this->unk_1D8 |= 8;
             }
             this->actionFunc = func_80AE6A64;
@@ -311,7 +311,7 @@ s32 func_80AE68F0(EnShn* this, PlayState* play) {
 
 void func_80AE69E8(EnShn* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
-    if ((gSaveContext.save.weekEventReg[23] & 8) && EnShn_IsFacingPlayer(this)) {
+    if ((GET_WEEKEVENTREG(WEEKEVENTREG_23_08)) && EnShn_IsFacingPlayer(this)) {
         this->unk_1D8 |= 8;
     } else {
         this->unk_1D8 &= ~0x8;
@@ -346,7 +346,7 @@ void EnShn_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gBurlyGuySkel, NULL, this->jointTable, this->morphTable,
                        BURLY_GUY_LIMB_MAX);
     this->unk_2E8 = -1;
-    if (gSaveContext.save.weekEventReg[23] & 8) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_23_08)) {
         func_80AE615C(this, 0);
     } else {
         func_80AE615C(this, 2);

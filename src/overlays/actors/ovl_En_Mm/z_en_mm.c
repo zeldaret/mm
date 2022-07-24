@@ -74,8 +74,8 @@ void EnMm_Init(Actor* thisx, PlayState* play) {
     EnMm* this = THIS;
     EnMmActionFunc action;
 
-    if ((this->actor.params >= 0) && ((!(gSaveContext.save.weekEventReg[37] & 0x10)) ||
-                                      (gSaveContext.save.weekEventReg[37] & 8) || (gSaveContext.unk_1014 != 0))) {
+    if ((this->actor.params >= 0) && ((!(GET_WEEKEVENTREG(WEEKEVENTREG_37_10))) ||
+                                      (GET_WEEKEVENTREG(WEEKEVENTREG_37_08)) || (gSaveContext.unk_1014 != 0))) {
         Actor_MarkForDeath(&this->actor);
         return;
     }

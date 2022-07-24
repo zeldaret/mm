@@ -38,12 +38,12 @@ void BgTobira01_Open(BgTobira01* this, PlayState* play) {
             ActorCutscene_Stop(0x7C);
         } else if (ActorCutscene_GetCanPlayNext(cutsceneId)) {
             ActorCutscene_StartAndSetUnkLinkFields(cutsceneId, &this->dyna.actor);
-            gSaveContext.save.weekEventReg[88] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_88_40);
             this->playCutscene = false;
         } else {
             ActorCutscene_SetIntentToPlay(cutsceneId);
         }
-    } else if (!(gSaveContext.save.weekEventReg[88] & 0x40) && (this->timer == 0) && (play->actorCtx.unk1F5 != 0) &&
+    } else if (!(GET_WEEKEVENTREG(WEEKEVENTREG_88_40)) && (this->timer == 0) && (play->actorCtx.unk1F5 != 0) &&
                (play->actorCtx.unk1F4 == 0) &&
                (SurfaceType_GetSceneExitIndex(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 6)) {
         this->playCutscene = true;
@@ -52,7 +52,7 @@ void BgTobira01_Open(BgTobira01* this, PlayState* play) {
 
     prevTimer = this->timer;
 
-    if (gSaveContext.save.weekEventReg[88] & 0x40) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_88_40)) {
         this->timer++;
     } else {
         this->timer--;
@@ -67,7 +67,7 @@ void BgTobira01_Open(BgTobira01* this, PlayState* play) {
         this->timer2 = 180;
     }
 
-    if (!(player->stateFlags1 & 0x40) && (gSaveContext.save.weekEventReg[88] & 0x40) && (DECR(this->timer2) == 0)) {
+    if (!(player->stateFlags1 & 0x40) && (GET_WEEKEVENTREG(WEEKEVENTREG_88_40)) && (DECR(this->timer2) == 0)) {
         gSaveContext.save.weekEventReg[88] &= (u8)~0x40;
     }
 }

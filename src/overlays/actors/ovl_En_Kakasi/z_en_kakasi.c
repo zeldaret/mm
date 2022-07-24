@@ -177,14 +177,14 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->aboveGroundStatus) {
-        if (gSaveContext.save.weekEventReg[79] & 8) {
+        if (GET_WEEKEVENTREG(WEEKEVENTREG_79_08)) {
             this->aboveGroundStatus = ENKAKASI_ABOVE_GROUND_TYPE;
             this->songSummonDist = 80.0f;
             EnKakasi_SetupIdleUnderground(this);
         } else {
             Actor_SetFocus(&this->actor, 60.0f);
             this->unkFunc = EnKakasi_8096F88C;
-            if (gSaveContext.save.weekEventReg[83] & 1) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_83_01)) {
                 EnKakasi_InitTimeSkipDialogue(this);
             } else {
                 EnKakasi_SetupIdleStanding(this);
@@ -945,7 +945,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                     gSaveContext.save.time = CLOCK_TIME(18, 0);
                     gSaveContext.respawnFlag = -8;
                 }
-                gSaveContext.save.weekEventReg[83] |= 1;
+                SET_WEEKEVENTREG(WEEKEVENTREG_83_01);
                 this->unk190 = 0;
                 this->actionFunc = EnKakasi_DoNothing;
             }
@@ -1014,7 +1014,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
 
     Math_ApproachF(&this->actor.shape.yOffset, -6000.0f, 0.5f, 200.0f);
     if (fabsf(this->actor.shape.yOffset + 6000.0f) < 10.0f) {
-        gSaveContext.save.weekEventReg[79] |= 8;
+        SET_WEEKEVENTREG(WEEKEVENTREG_79_08);
         func_800B7298(play, &this->actor, 6);
         ActorCutscene_Stop(this->actorCutscenes[0]);
         this->aboveGroundStatus = ENKAKASI_ABOVE_GROUND_TYPE;
@@ -1032,7 +1032,7 @@ void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
 }
 
 void EnKakasi_IdleUnderground(EnKakasi* this, PlayState* play) {
-    if ((gSaveContext.save.weekEventReg[79] & 8) && this->actor.xzDistToPlayer < this->songSummonDist &&
+    if ((GET_WEEKEVENTREG(WEEKEVENTREG_79_08)) && this->actor.xzDistToPlayer < this->songSummonDist &&
         (BREG(1) != 0 || play->msgCtx.ocarinaMode == 0xD)) {
         this->actor.flags &= ~ACTOR_FLAG_8000000;
         play->msgCtx.ocarinaMode = 4;

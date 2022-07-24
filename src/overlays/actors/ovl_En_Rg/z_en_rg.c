@@ -658,7 +658,7 @@ void func_80BF4EBC(EnRg* this, PlayState* play) {
             this->actor.shape.yOffset = 14.0f;
             this->actionFunc = func_80BF4FC4;
         }
-    } else if (gSaveContext.save.weekEventReg[12] & 2) {
+    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_12_02)) {
         if (DECR(this->unk_318) == 0) {
             func_80BF409C(this, 1);
             this->unk_310 &= ~8;
@@ -750,7 +750,7 @@ void EnRg_Init(Actor* thisx, PlayState* play) {
         this->actor.gravity = -1.0f;
         SubS_UpdateFlags(&this->unk_310, 3, 7);
 
-        if (!(gSaveContext.save.weekEventReg[12] & 2)) {
+        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_12_02))) {
             this->unk_318 = Rand_S16Offset(30, 30);
         }
 

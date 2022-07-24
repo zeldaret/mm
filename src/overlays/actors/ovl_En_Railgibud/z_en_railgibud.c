@@ -271,7 +271,7 @@ void EnRailgibud_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    if (gSaveContext.save.weekEventReg[14] & 4) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_14_04)) {
         Actor_MarkForDeath(&this->actor);
     }
 

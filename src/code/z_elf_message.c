@@ -7,17 +7,17 @@ u16 ElfMessage_GetFirstCycleHint(PlayState* play) {
     if (CURRENT_DAY <= 0) {
         return 0;
     }
-    if (gSaveContext.save.weekEventReg[88] & 0x20) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_88_20)) {
         return 0;
     }
-    if (gSaveContext.save.weekEventReg[79] & 0x10) {
-        if (gSaveContext.save.weekEventReg[8] & 0x40) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_79_10)) {
+        if (GET_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
             return 0;
         }
         return 0x224;
     }
-    if (!(gSaveContext.save.weekEventReg[8] & 0x80)) {
-        if (gSaveContext.save.weekEventReg[9] & 1) {
+    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_08_80))) {
+        if (GET_WEEKEVENTREG(WEEKEVENTREG_09_01)) {
             return 0x21E;
         }
         if (play->sceneNum == SCENE_YOUSEI_IZUMI) {
@@ -35,27 +35,27 @@ u16 ElfMessage_GetFirstCycleHint(PlayState* play) {
         return 0;
     }
     if (INV_CONTENT(ITEM_MOON_TEAR) == ITEM_MOON_TEAR) {
-        if (gSaveContext.save.weekEventReg[86] & 4) {
+        if (GET_WEEKEVENTREG(WEEKEVENTREG_86_04)) {
             return 0x242;
         }
         return 0x243;
     }
-    if (gSaveContext.save.weekEventReg[74] & 0x20) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_74_20)) {
         return 0x223;
     }
-    if (gSaveContext.save.weekEventReg[73] & 0x80) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_73_80)) {
         return 0x222;
     }
-    if (gSaveContext.save.weekEventReg[73] & 0x20) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_73_20)) {
         return 0x221;
     }
-    if (gSaveContext.save.weekEventReg[77] & 2) {
-        if (gSaveContext.save.weekEventReg[73] & 0x10) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_77_02)) {
+        if (GET_WEEKEVENTREG(WEEKEVENTREG_73_10)) {
             return 0x240;
         }
         return 0x241;
     }
-    if ((gSaveContext.save.weekEventReg[86] & 2) || (gSaveContext.save.weekEventReg[73] & 0x40)) {
+    if ((GET_WEEKEVENTREG(WEEKEVENTREG_86_02)) || (GET_WEEKEVENTREG(WEEKEVENTREG_73_40))) {
         return 0x23F;
     }
     return 0x220;

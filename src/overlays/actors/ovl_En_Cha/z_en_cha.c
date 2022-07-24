@@ -83,7 +83,7 @@ void EnCha_Ring(EnCha* this, PlayState* play) {
 }
 
 void EnCha_Idle(EnCha* this, PlayState* play) {
-    if (gSaveContext.save.weekEventReg[60] & 4) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_60_04)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DOOR_BELL);
         gSaveContext.save.weekEventReg[60] &= (u8)~4;
         this->actor.home.rot.z = 0x7D0;
@@ -91,8 +91,8 @@ void EnCha_Idle(EnCha* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DOOR_BELL);
         this->actor.home.rot.z = 0x7D0;
-        if (!(gSaveContext.save.weekEventReg[51] & 4)) {
-            gSaveContext.save.weekEventReg[51] |= 4;
+        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_51_04))) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_51_04);
             this->actionFunc = EnCha_Ring;
         }
     }

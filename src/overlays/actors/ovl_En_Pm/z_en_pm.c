@@ -544,19 +544,19 @@ static AnimationInfoS sAnimations[] = {
 };
 
 s32 func_80AF7B40(void) {
-    if (gSaveContext.save.weekEventReg[90] & 1) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_90_01)) {
         return 4;
     }
 
-    if (gSaveContext.save.weekEventReg[89] & 0x40) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_89_40)) {
         return 3;
     }
 
-    if (gSaveContext.save.weekEventReg[89] & 8) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_89_08)) {
         return 2;
     }
 
-    if (gSaveContext.save.weekEventReg[86] & 1) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_86_01)) {
         return 1;
     }
 
@@ -566,28 +566,28 @@ s32 func_80AF7B40(void) {
 s32 func_80AF7BAC(EnPm* this) {
     switch (this->unk_38C) {
         case 0:
-            if (gSaveContext.save.weekEventReg[86] & 1) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_86_01)) {
                 D_801F4E78 = gSaveContext.save.time;
                 this->unk_38C++;
             }
             break;
 
         case 1:
-            if (gSaveContext.save.weekEventReg[89] & 8) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_89_08)) {
                 D_801F4E78 = gSaveContext.save.time;
                 this->unk_38C++;
             }
             break;
 
         case 2:
-            if (gSaveContext.save.weekEventReg[89] & 0x40) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_89_40)) {
                 D_801F4E78 = 0;
                 this->unk_38C++;
             }
             break;
 
         case 3:
-            if (gSaveContext.save.weekEventReg[90] & 1) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_90_01)) {
                 D_801F4E78 = gSaveContext.save.time;
                 this->unk_38C++;
             }
@@ -842,7 +842,7 @@ s32 func_80AF81E8(EnPm* this, PlayState* play) {
         case 1:
         case 3:
         case 5:
-            if ((gSaveContext.save.weekEventReg[86] & 8) && (this->unk_378 == 3)) {
+            if ((GET_WEEKEVENTREG(WEEKEVENTREG_86_08)) && (this->unk_378 == 3)) {
                 ActorCutscene_Stop(sp2A);
             } else {
                 Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), &this->actor);
@@ -1109,20 +1109,20 @@ void func_80AF8BA8(s32 arg0) {
         0x1B40, 0x1B80, 0x1C01, 0x1C02, 0x1C04,
     };
 
-    if (!(gSaveContext.save.weekEventReg[88] & 2)) {
+    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_88_02))) {
         if (gSaveContext.save.weekEventReg[D_80AFB8D4[arg0] >> 8] &
             (D_80AFB8D4[arg0] & (1 | 2 | 4 | 0x38 | 0x40 | 0x80))) {
             switch (gSaveContext.save.day) {
                 case 2:
-                    gSaveContext.save.weekEventReg[28] |= 8;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_28_08);
                     break;
 
                 case 3:
-                    gSaveContext.save.weekEventReg[28] |= 0x10;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_28_10);
                     break;
             }
-            gSaveContext.save.weekEventReg[51] |= 2;
-            gSaveContext.save.weekEventReg[90] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_51_02);
+            SET_WEEKEVENTREG(WEEKEVENTREG_90_08);
         }
     }
 
@@ -1261,7 +1261,7 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             this->unk_36C = scheduleOutput->time1 - scheduleOutput->time0;
             this->unk_36E = sp56 - scheduleOutput->time0;
             this->actor.flags &= ~ACTOR_FLAG_1;
-            if (gSaveContext.save.weekEventReg[90] & 8) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_90_08)) {
                 this->unk_356 |= 0x800;
             }
             this->unk_356 |= 0x9000;
@@ -1341,7 +1341,7 @@ s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             default:
                 SubS_UpdateFlags(&this->unk_356, 3, 7);
                 func_80AF7E98(this, 0);
-                if (gSaveContext.save.weekEventReg[90] & 8) {
+                if (GET_WEEKEVENTREG(WEEKEVENTREG_90_08)) {
                     this->unk_356 |= 0x800;
                 }
                 this->unk_356 |= 0x9000;
@@ -1457,10 +1457,10 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 break;
 
             case 23:
-                if (gSaveContext.save.weekEventReg[90] & 8) {
+                if (GET_WEEKEVENTREG(WEEKEVENTREG_90_08)) {
                     this->unk_356 |= 0x800;
                 }
-                gSaveContext.save.weekEventReg[60] |= 4;
+                SET_WEEKEVENTREG(WEEKEVENTREG_60_04);
 
             default:
                 if (scheduleOutput->result == 29) {
@@ -1784,7 +1784,7 @@ s32 func_80AF9E7C(EnPm* this, PlayState* play) {
 
         gSaveContext.save.weekEventReg[89] = val;
         if (val == 0) {
-            gSaveContext.save.weekEventReg[89] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_89_40);
         }
     }
 
@@ -1798,7 +1798,7 @@ s32 func_80AFA170(EnPm* this, PlayState* play) {
     switch (this->unk_258) {
         case 28:
             if (gSaveContext.save.time >= CLOCK_TIME(1, 39)) {
-                gSaveContext.save.weekEventReg[89] |= 8;
+                SET_WEEKEVENTREG(WEEKEVENTREG_89_08);
             }
 
         case 16:
@@ -2120,7 +2120,7 @@ void EnPm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
                 Matrix_MultVec3f(&gZeroVec3f, &this->actor.focus.pos);
                 Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             }
-            if ((this->unk_356 & 0x8000) && !(gSaveContext.save.weekEventReg[90] & 4)) {
+            if ((this->unk_356 & 0x8000) && !(GET_WEEKEVENTREG(WEEKEVENTREG_90_04))) {
                 func_80AF8890(this, gfx, 1);
             }
             break;

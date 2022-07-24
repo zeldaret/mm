@@ -200,7 +200,7 @@ void EnMa4_Init(Actor* thisx, PlayState* play) {
 
     if (CURRENT_DAY == 1) {
         this->type = MA4_TYPE_DAY1;
-    } else if (gSaveContext.save.weekEventReg[22] & 1) { // Aliens defeated
+    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_22_01)) { // Aliens defeated
         this->type = MA4_TYPE_ALIENS_DEFEATED;
     } else {
         this->type = MA4_TYPE_ALIENS_WON;
@@ -372,7 +372,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
             case 0x3341:
                 if (play->msgCtx.choiceIndex == 0) {
                     func_8019F208();
-                    gSaveContext.save.weekEventReg[21] |= 0x20;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_21_20);
                     Message_StartTextbox(play, 0x3343, &this->actor);
                     this->textId = 0x3343;
                 } else {
@@ -388,7 +388,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
             case 0x3346:
                 if (play->msgCtx.choiceIndex == 0) {
                     func_8019F208();
-                    gSaveContext.save.weekEventReg[21] |= 0x20;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_21_20);
                     Message_StartTextbox(play, 0x3343, &this->actor);
                     this->textId = 0x3343;
                 } else {
@@ -690,7 +690,7 @@ void EnMa4_InitHorsebackGame(EnMa4* this, PlayState* play) {
 
     play->interfaceCtx.unk_280 = 1;
     func_8010E9F0(4, 0);
-    gSaveContext.save.weekEventReg[8] |= 1;
+    SET_WEEKEVENTREG(WEEKEVENTREG_08_01);
     func_80112AFC(play);
     player->stateFlags1 |= 0x20;
     this->actionFunc = EnMa4_SetupHorsebackGameWait;
@@ -873,7 +873,7 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
     switch (this->type) {
         case MA4_TYPE_DAY1:
             if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
-                if ((gSaveContext.save.weekEventReg[21] & 0x80)) {
+                if ((GET_WEEKEVENTREG(WEEKEVENTREG_21_80))) {
                     EnMa4_SetFaceExpression(this, 3, 3);
                     Message_StartTextbox(play, 0x3337, &this->actor);
                     this->textId = 0x3337;
@@ -881,11 +881,11 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                 } else {
                     Message_StartTextbox(play, 0x3335, &this->actor);
                     this->textId = 0x3335;
-                    gSaveContext.save.weekEventReg[21] |= 0x80;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_21_80);
                 }
             } else if (this->state == MA4_STATE_DEFAULT) {
-                if ((gSaveContext.save.weekEventReg[21] & 0x40)) {
-                    if (!(gSaveContext.save.weekEventReg[21] & 0x20)) {
+                if ((GET_WEEKEVENTREG(WEEKEVENTREG_21_40))) {
+                    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_21_20))) {
                         Message_StartTextbox(play, 0x3346, &this->actor);
                         this->textId = 0x3346;
                     } else {
@@ -895,7 +895,7 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                 } else {
                     Message_StartTextbox(play, 0x3338, &this->actor);
                     this->textId = 0x3338;
-                    gSaveContext.save.weekEventReg[21] |= 0x40;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_21_40);
                 }
             } else if (this->state == MA4_STATE_AFTERHORSEBACKGAME) {
                 if (gSaveContext.unk_3DE0[4] >= 2 * 60 * 100) {
@@ -929,7 +929,7 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
 
         case MA4_TYPE_ALIENS_DEFEATED:
             if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
-                if ((gSaveContext.save.weekEventReg[21] & 0x80)) {
+                if ((GET_WEEKEVENTREG(WEEKEVENTREG_21_80))) {
                     EnMa4_SetFaceExpression(this, 3, 3);
                     Message_StartTextbox(play, 0x3337, &this->actor);
                     this->textId = 0x3337;
@@ -937,7 +937,7 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                 } else {
                     Message_StartTextbox(play, 0x3335, &this->actor);
                     this->textId = 0x3335;
-                    gSaveContext.save.weekEventReg[21] |= 0x80;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_21_80);
                 }
             } else if (this->state == MA4_STATE_DEFAULT) {
                 Message_StartTextbox(play, 0x3354, &this->actor);

@@ -97,7 +97,7 @@ void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
     this->path = SubS_GetPathByIndex(play, this->unk_29A, 0x3F);
     this->unk_2C8 = 80.0f;
 
-    if ((gSaveContext.save.entranceIndex == 0xD220) && (gSaveContext.save.weekEventReg[73] & 0x80) &&
+    if ((gSaveContext.save.entranceIndex == 0xD220) && (GET_WEEKEVENTREG(WEEKEVENTREG_73_80)) &&
         !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
         this->unk_2D6 = this->actor.cutscene;
         if (this->unk_2D6 == 0) {
@@ -339,10 +339,10 @@ void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
         gSaveContext.nextTransitionType = TRANS_TYPE_03;
         gSaveContext.save.weekEventReg[75] &= (u8)~0x40;
         if (player->transformation == PLAYER_FORM_HUMAN) {
-            gSaveContext.save.weekEventReg[84] |= 0x80;
+            SET_WEEKEVENTREG(WEEKEVENTREG_84_80);
             gSaveContext.save.weekEventReg[77] &= (u8)~2;
         } else {
-            gSaveContext.save.weekEventReg[73] |= 0x20;
+            SET_WEEKEVENTREG(WEEKEVENTREG_73_20);
             gSaveContext.save.weekEventReg[85] &= (u8)~1;
         }
     }
@@ -401,7 +401,7 @@ void func_809C5408(EnBomBowlMan* this, PlayState* play) {
 
 void func_809C5524(EnBomBowlMan* this, PlayState* play) {
     this->actor.textId = 0x730;
-    if (!(gSaveContext.save.weekEventReg[85] & 2)) {
+    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_85_02))) {
         this->actor.textId = 0x72F;
     }
     func_809C493C(this, 3, 1.0f);
@@ -483,7 +483,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
             (this->path != NULL)) {
             this->unk_298++;
             if (this->unk_298 >= this->path->count) {
-                gSaveContext.save.weekEventReg[84] |= 0x80;
+                SET_WEEKEVENTREG(WEEKEVENTREG_84_80);
                 gSaveContext.save.weekEventReg[83] &= (u8)~4;
                 ActorCutscene_Stop(this->unk_2D6);
                 Actor_MarkForDeath(&this->actor);

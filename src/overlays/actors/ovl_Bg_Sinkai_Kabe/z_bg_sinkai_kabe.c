@@ -67,7 +67,7 @@ void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
     this->pythonIndex = sCurrentPythonIndex;
     sCurrentPythonIndex++;
 
-    if (!(gSaveContext.save.weekEventReg[13] & 1)) {
+    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_13_01))) {
         this->deepPython = Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_EN_DRAGON, pos.x, pos.y,
                                               pos.z, 0, this->dyna.actor.world.rot.y, 1, this->dyna.actor.params);
 
@@ -82,14 +82,14 @@ void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
         }
     } else {
         shouldSpawnSeahorse = false;
-        if (((this->dyna.actor.params == 0) && (gSaveContext.save.weekEventReg[83] & 0x10)) ||
-            ((this->dyna.actor.params == 1) && (gSaveContext.save.weekEventReg[83] & 0x20)) ||
-            ((this->dyna.actor.params == 2) && (gSaveContext.save.weekEventReg[83] & 0x40)) ||
-            ((this->dyna.actor.params == 3) && (gSaveContext.save.weekEventReg[83] & 0x80)) ||
-            ((this->dyna.actor.params == 4) && (gSaveContext.save.weekEventReg[84] & 1)) ||
-            ((this->dyna.actor.params == 5) && (gSaveContext.save.weekEventReg[84] & 2)) ||
-            ((this->dyna.actor.params == 6) && (gSaveContext.save.weekEventReg[84] & 4)) ||
-            ((this->dyna.actor.params == 7) && (gSaveContext.save.weekEventReg[84] & 8))) {
+        if (((this->dyna.actor.params == 0) && (GET_WEEKEVENTREG(WEEKEVENTREG_83_10))) ||
+            ((this->dyna.actor.params == 1) && (GET_WEEKEVENTREG(WEEKEVENTREG_83_20))) ||
+            ((this->dyna.actor.params == 2) && (GET_WEEKEVENTREG(WEEKEVENTREG_83_40))) ||
+            ((this->dyna.actor.params == 3) && (GET_WEEKEVENTREG(WEEKEVENTREG_83_80))) ||
+            ((this->dyna.actor.params == 4) && (GET_WEEKEVENTREG(WEEKEVENTREG_84_01))) ||
+            ((this->dyna.actor.params == 5) && (GET_WEEKEVENTREG(WEEKEVENTREG_84_02))) ||
+            ((this->dyna.actor.params == 6) && (GET_WEEKEVENTREG(WEEKEVENTREG_84_04))) ||
+            ((this->dyna.actor.params == 7) && (GET_WEEKEVENTREG(WEEKEVENTREG_84_08)))) {
             shouldSpawnSeahorse = true;
         }
 

@@ -190,7 +190,7 @@ u16 EnSob1_GetTalkOption(EnSob1* this, PlayState* play) {
     if (this->shopType == BOMB_SHOP) {
         if (gSaveContext.save.day == 1 && gSaveContext.save.time >= CLOCK_TIME(6, 00)) {
             return 0x648;
-        } else if (gSaveContext.save.weekEventReg[33] & 8) {
+        } else if (GET_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
             return 0x649;
         } else {
             return 0x64A;
@@ -260,58 +260,58 @@ u16 EnSob1_GetWelcome(EnSob1* this, PlayState* play) {
     } else if (this->shopType == ZORA_SHOP) {
         switch (player->transformation) {
             case PLAYER_FORM_HUMAN:
-                if (gSaveContext.save.weekEventReg[57] & 0x10) {
+                if (GET_WEEKEVENTREG(WEEKEVENTREG_57_10)) {
                     return 0x12CF;
                 }
-                gSaveContext.save.weekEventReg[57] |= 0x10;
+                SET_WEEKEVENTREG(WEEKEVENTREG_57_10);
                 return 0x12CE;
             case PLAYER_FORM_DEKU:
-                if (gSaveContext.save.weekEventReg[57] & 0x20) {
+                if (GET_WEEKEVENTREG(WEEKEVENTREG_57_20)) {
                     return 0x12D1;
                 }
-                gSaveContext.save.weekEventReg[57] |= 0x20;
+                SET_WEEKEVENTREG(WEEKEVENTREG_57_20);
                 return 0x12D0;
             case PLAYER_FORM_GORON:
-                if (gSaveContext.save.weekEventReg[57] & 0x40) {
+                if (GET_WEEKEVENTREG(WEEKEVENTREG_57_40)) {
                     return 0x12D3;
                 }
-                gSaveContext.save.weekEventReg[57] |= 0x40;
+                SET_WEEKEVENTREG(WEEKEVENTREG_57_40);
                 return 0x12D2;
             case PLAYER_FORM_ZORA:
-                if (gSaveContext.save.weekEventReg[57] & 0x80) {
+                if (GET_WEEKEVENTREG(WEEKEVENTREG_57_80)) {
                     return 0x12D5;
                 }
-                gSaveContext.save.weekEventReg[57] |= 0x80;
+                SET_WEEKEVENTREG(WEEKEVENTREG_57_80);
                 return 0x12D4;
             default:
                 return 0x12CE;
         }
     } else if (this->shopType == GORON_SHOP) {
         if (player->transformation != PLAYER_FORM_GORON) {
-            if (gSaveContext.save.weekEventReg[58] & 4) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_58_04)) {
                 return 0xBB9;
             }
-            gSaveContext.save.weekEventReg[58] |= 4;
+            SET_WEEKEVENTREG(WEEKEVENTREG_58_04);
             return 0xBB8;
         } else {
-            if (gSaveContext.save.weekEventReg[58] & 8) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_58_08)) {
                 return 0xBBB;
             }
-            gSaveContext.save.weekEventReg[58] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_58_08);
             return 0xBBA;
         }
     } else if (this->shopType == GORON_SHOP_SPRING) {
         if (player->transformation != PLAYER_FORM_GORON) {
-            if (gSaveContext.save.weekEventReg[58] & 0x10) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_58_10)) {
                 return 0xBBD;
             }
-            gSaveContext.save.weekEventReg[58] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_58_10);
             return 0xBBC;
         } else {
-            if (gSaveContext.save.weekEventReg[58] & 0x20) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_58_20)) {
                 return 0xBBF;
             }
-            gSaveContext.save.weekEventReg[58] |= 0x20;
+            SET_WEEKEVENTREG(WEEKEVENTREG_58_20);
             return 0xBBE;
         }
     }
@@ -386,7 +386,7 @@ void EnSob1_Init(Actor* thisx, PlayState* play) {
             this->shopType = ZORA_SHOP;
             break;
         case GORON_SHOP:
-            if (gSaveContext.save.weekEventReg[33] & 0x80) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
                 this->shopType = GORON_SHOP_SPRING;
             } else {
                 this->shopType = GORON_SHOP;
@@ -1360,7 +1360,7 @@ void EnSob1_InitShop(EnSob1* this, PlayState* play) {
         this->actor.world.pos.y += posOffset->y;
         this->actor.world.pos.z += posOffset->z;
         shopItems = sShops[this->shopType];
-        if ((this->shopType == BOMB_SHOP) && (gSaveContext.save.weekEventReg[33] & 8)) {
+        if ((this->shopType == BOMB_SHOP) && (GET_WEEKEVENTREG(WEEKEVENTREG_33_08))) {
             sShops[this->shopType][0].shopItemId = SI_BOMB_BAG_30_2;
         }
 

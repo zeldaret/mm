@@ -131,13 +131,13 @@ void func_80AD341C(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD349C(EnTrt2* this) {
-    if ((gSaveContext.save.weekEventReg[85] & 0x10) && !(gSaveContext.save.weekEventReg[84] & 0x40)) {
+    if ((GET_WEEKEVENTREG(WEEKEVENTREG_85_10)) && !(GET_WEEKEVENTREG(WEEKEVENTREG_84_40))) {
         this->unk_3A8 = 0x88F;
     } else if (this->unk_3A8 == 0) {
         this->unk_3A8 = 0x84B;
-    } else if (gSaveContext.save.weekEventReg[16] & 0x10) {
+    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
         this->unk_3A8 = 0x838;
-    } else if (gSaveContext.save.weekEventReg[17] & 1) {
+    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_17_01)) {
         this->unk_3A8 = 0x84D;
     } else {
         this->unk_3A8 = 0x849;
@@ -365,7 +365,7 @@ void func_80AD3E34(EnTrt2* this, PlayState* play) {
             play->msgCtx.stateTimer = 4;
             this->unk_3B2 = 12;
         } else {
-            gSaveContext.save.weekEventReg[85] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_85_10);
             this->unk_3A8 = 0x88E;
             Message_StartTextbox(play, this->unk_3A8, &this->actor);
             this->unk_3B2 = 10;
@@ -378,11 +378,11 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
 
     if (talkState == TEXT_STATE_DONE) {
         if (Message_ShouldAdvance(play)) {
-            if ((Inventory_HasEmptyBottle() && !(gSaveContext.save.weekEventReg[84] & 0x40)) ||
-                !(gSaveContext.save.weekEventReg[12] & 0x10)) {
+            if ((Inventory_HasEmptyBottle() && !(GET_WEEKEVENTREG(WEEKEVENTREG_84_40))) ||
+                !(GET_WEEKEVENTREG(WEEKEVENTREG_12_10))) {
                 this->unk_3B2 = 12;
             } else {
-                gSaveContext.save.weekEventReg[85] |= 0x10;
+                SET_WEEKEVENTREG(WEEKEVENTREG_85_10);
                 this->unk_3A8 = 0x88E;
                 Message_StartTextbox(play, this->unk_3A8, &this->actor);
                 this->unk_3B2 = 10;
@@ -397,13 +397,13 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
 
 void func_80AD3FF4(EnTrt2* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!(gSaveContext.save.weekEventReg[12] & 0x10)) {
-            gSaveContext.save.weekEventReg[12] |= 0x10;
+        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_12_10))) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_12_10);
         }
-        gSaveContext.save.weekEventReg[84] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_84_40);
         this->actor.parent = NULL;
         this->unk_3B2 = 14;
-    } else if (gSaveContext.save.weekEventReg[12] & 0x10) {
+    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
         Actor_PickUp(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
@@ -729,20 +729,20 @@ void func_80AD4DB4(EnTrt2* this, PlayState* play) {
     this->unk_3B8 = 0;
     this->unk_3BC = func_80AD4608;
 
-    if (gSaveContext.save.weekEventReg[12] & 8) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_12_08)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
-    if (gSaveContext.save.weekEventReg[84] & 0x40) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_84_40)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
     if ((play->sceneNum == SCENE_20SICHITAI) || (play->sceneNum == SCENE_20SICHITAI2)) {
         if (gSaveContext.save.day == 2) {
-            if (!(gSaveContext.save.weekEventReg[15] & 0x80)) {
-                gSaveContext.save.weekEventReg[15] |= 0x80;
+            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_15_80))) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_15_80);
                 this->unk_3B2 = 3;
             } else {
                 Actor_MarkForDeath(&this->actor);
@@ -753,7 +753,7 @@ void func_80AD4DB4(EnTrt2* this, PlayState* play) {
             return;
         }
     } else if (gSaveContext.save.day == 2) {
-        if (gSaveContext.save.weekEventReg[15] & 0x80) {
+        if (GET_WEEKEVENTREG(WEEKEVENTREG_15_80)) {
             this->unk_3B2 = 4;
         } else {
             Actor_MarkForDeath(&this->actor);

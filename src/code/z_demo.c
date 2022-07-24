@@ -603,7 +603,7 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
 
             switch (D_801F4DE2) {
                 case 0x1F:
-                    if (gSaveContext.save.weekEventReg[20] & 2) {
+                    if (GET_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
                         play->nextEntranceIndex = 0x3010;
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;
@@ -616,7 +616,7 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
                     break;
 
                 case 0x44:
-                    if (gSaveContext.save.weekEventReg[33] & 0x80) {
+                    if (GET_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
                         play->nextEntranceIndex = 0xAE70;
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;
@@ -629,7 +629,7 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
                     break;
 
                 case 0x5F:
-                    gSaveContext.save.weekEventReg[55] |= 0x80;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_55_80);
                     play->nextEntranceIndex = 0x6A80;
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
                     play->transitionTrigger = TRANS_TRIGGER_START;
@@ -637,7 +637,7 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
                     break;
 
                 case 0x36:
-                    gSaveContext.save.weekEventReg[52] |= 0x20;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_52_20);
                     play->nextEntranceIndex = 0x2000;
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
                     play->transitionTrigger = TRANS_TRIGGER_START;

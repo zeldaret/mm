@@ -274,7 +274,7 @@ void func_80A6F5E4(EnMm3* this, PlayState* play) {
             case 0x2795:
             case 0x2796:
             case 0x2797:
-                if (gSaveContext.save.weekEventReg[63] & 2) {
+                if (GET_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
                     Message_StartTextbox(play, 0x279B, &this->actor);
                     this->unk_2B4 = 0x279B;
                     func_80151BB4(play, 0xB);
@@ -368,7 +368,7 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
 void func_80A6FBA0(EnMm3* this) {
     func_801A5BD0(0x6F);
     func_801A0238(0, 5);
-    gSaveContext.save.weekEventReg[63] |= 1;
+    SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
     gSaveContext.save.weekEventReg[63] &= (u8)~2;
     this->actionFunc = func_80A6FBFC;
 }
@@ -417,12 +417,12 @@ void func_80A6FE1C(EnMm3* this) {
 
 void func_80A6FE30(EnMm3* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!(gSaveContext.save.weekEventReg[77] & 1)) {
-            gSaveContext.save.weekEventReg[77] |= 1;
+        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_77_01))) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_77_01);
         }
         this->actor.parent = NULL;
         func_80A6FED8(this);
-    } else if (gSaveContext.save.weekEventReg[77] & 1) {
+    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_77_01)) {
         Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);

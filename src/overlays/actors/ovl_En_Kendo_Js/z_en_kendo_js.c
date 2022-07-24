@@ -498,7 +498,7 @@ void func_80B27030(EnKendoJs* this, PlayState* play) {
 }
 
 void func_80B2714C(EnKendoJs* this) {
-    gSaveContext.save.weekEventReg[82] |= 8;
+    SET_WEEKEVENTREG(WEEKEVENTREG_82_08);
     this->unk_28C = 1;
     this->unk_290 = 0;
     this->unk_284 = 0;
@@ -566,7 +566,7 @@ void func_80B27188(EnKendoJs* this, PlayState* play) {
 }
 
 void func_80B273D0(EnKendoJs* this) {
-    gSaveContext.save.weekEventReg[82] |= 8;
+    SET_WEEKEVENTREG(WEEKEVENTREG_82_08);
     this->unk_290 = 120;
     this->unk_284 = 0;
     this->unk_286 = 1;
@@ -642,7 +642,7 @@ void func_80B276D8(EnKendoJs* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         func_80B27760(this);
-    } else if (!(gSaveContext.save.weekEventReg[63] & 0x20)) {
+    } else if (!(GET_WEEKEVENTREG(WEEKEVENTREG_63_20))) {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 800.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 800.0f, 100.0f);
@@ -657,8 +657,8 @@ void func_80B27774(EnKendoJs* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (!(gSaveContext.save.weekEventReg[63] & 0x20)) {
-            gSaveContext.save.weekEventReg[63] |= 0x20;
+        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_63_20))) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_63_20);
             Message_StartTextbox(play, 0x272F, &this->actor);
             this->unk_288 = 0x272F;
         } else {

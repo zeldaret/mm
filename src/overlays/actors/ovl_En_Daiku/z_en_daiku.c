@@ -88,7 +88,7 @@ void EnDaiku_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
         this->actor.flags |= ACTOR_FLAG_8000000;
-        if ((gSaveContext.save.weekEventReg[63] & 0x80) ||
+        if ((GET_WEEKEVENTREG(WEEKEVENTREG_63_80)) ||
             ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }

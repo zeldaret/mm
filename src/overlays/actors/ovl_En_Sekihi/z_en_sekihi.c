@@ -58,7 +58,7 @@ void EnSekihi_Init(Actor* thisx, PlayState* play) {
         Actor_MarkForDeath(&this->dyna.actor);
     } else {
         if ((params == SEKIHI_TYPE_4) && (((gSaveContext.save.skullTokenCount & 0xFFFF)) >= 30)) {
-            gSaveContext.save.weekEventReg[13] |= 0x20;
+            SET_WEEKEVENTREG(WEEKEVENTREG_13_20);
         }
         objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[params]);
         if (objectIndex >= 0) {

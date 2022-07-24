@@ -80,7 +80,7 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
 
     switch (STRAY_FAIRY_TYPE(thisx)) {
         case STRAY_FAIRY_TYPE_CLOCK_TOWN:
-            if (gSaveContext.save.weekEventReg[8] & 0x80) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_08_80)) {
                 Actor_MarkForDeath(thisx);
                 return;
             }
@@ -430,7 +430,7 @@ void EnElforg_ClockTownFairyCollected(EnElforg* this, PlayState* play) {
         player->actor.freezeTimer = 0;
         player->stateFlags1 &= ~0x20000000;
         Actor_MarkForDeath(&this->actor);
-        gSaveContext.save.weekEventReg[8] |= 0x80;
+        SET_WEEKEVENTREG(WEEKEVENTREG_08_80);
         ActorCutscene_Stop(0x7C);
     } else {
         func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);

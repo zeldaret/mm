@@ -31,7 +31,7 @@ const ActorInit Obj_Dinner_InitVars = {
 void ObjDinner_Init(Actor* thisx, PlayState* play) {
     ObjDinner* this = THIS;
 
-    if (gSaveContext.save.isNight != true || (CURRENT_DAY == 3 && gSaveContext.save.weekEventReg[22] & 1)) {
+    if (gSaveContext.save.isNight != true || (CURRENT_DAY == 3 && GET_WEEKEVENTREG(WEEKEVENTREG_22_01))) {
         Actor_MarkForDeath(&this->actor);
     }
     Actor_SetScale(&this->actor, 0.1f);

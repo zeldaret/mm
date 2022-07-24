@@ -93,7 +93,7 @@ void EnHgo_Init(Actor* thisx, PlayState* play) {
     this->unk_314 = 0;
     this->unk_310 = 0;
     this->unk_312 = 0;
-    if ((gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
+    if ((GET_WEEKEVENTREG(WEEKEVENTREG_75_20)) || (GET_WEEKEVENTREG(WEEKEVENTREG_52_20))) {
         func_80BD049C(this);
     } else {
         thisx->draw = NULL;
@@ -204,7 +204,7 @@ void func_80BD06FC(EnHgo* this, PlayState* play) {
                 this->unk_314 = 0x1590;
                 break;
             case 0x1590:
-                if (gSaveContext.save.weekEventReg[14] & 4) {
+                if (GET_WEEKEVENTREG(WEEKEVENTREG_14_04)) {
                     Message_StartTextbox(play, 0x1591, &this->actor);
                     this->unk_314 = 0x1591;
                     break;

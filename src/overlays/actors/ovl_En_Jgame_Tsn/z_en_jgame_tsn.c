@@ -286,7 +286,7 @@ void func_80C1410C(EnJgameTsn* this, PlayState* play) {
     func_801A2BB8(0x25);
     play->interfaceCtx.unk_280 = 1;
     func_80112AFC(play);
-    gSaveContext.save.weekEventReg[90] |= 0x20;
+    SET_WEEKEVENTREG(WEEKEVENTREG_90_20);
     func_8010E9F0(4, 0x78);
     this->actionFunc = func_80C1418C;
 }
@@ -379,11 +379,11 @@ void func_80C14540(EnJgameTsn* this) {
 
 void func_80C14554(EnJgameTsn* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!(gSaveContext.save.weekEventReg[82] & 0x10)) {
-            gSaveContext.save.weekEventReg[82] |= 0x10;
+        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_82_10))) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_82_10);
         }
         func_80C145FC(this);
-    } else if (gSaveContext.save.weekEventReg[82] & 0x10) {
+    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_82_10)) {
         Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);

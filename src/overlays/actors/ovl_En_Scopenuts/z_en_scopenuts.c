@@ -170,7 +170,7 @@ void func_80BCAE78(EnScopenuts* this, PlayState* play) {
 s16 func_80BCAF0C(EnScopenuts* this) {
     switch (this->unk_33C) {
         case 0x0:
-            if (gSaveContext.save.weekEventReg[53] & 2) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_53_02)) {
                 this->unk_328 |= 1;
                 return 0x1638;
             }
@@ -239,7 +239,7 @@ void func_80BCB1C8(EnScopenuts* this, PlayState* play) {
     this->unk_350 *= 0.92f;
     Actor_SetScale(&this->actor, this->unk_350);
     if (this->actor.bgCheckFlags & 1) {
-        gSaveContext.save.weekEventReg[52] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_52_40);
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -368,7 +368,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
 void func_80BCB90C(EnScopenuts* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        gSaveContext.save.weekEventReg[53] |= 2;
+        SET_WEEKEVENTREG(WEEKEVENTREG_53_02);
         this->actionFunc = func_80BCB6D0;
     } else {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 300.0f, 300.0f);
@@ -684,7 +684,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnScopenuts* this = THIS;
 
-    if (!(gSaveContext.save.weekEventReg[74] & 0x40) &&
+    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_74_40)) &&
         (gSaveContext.save.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -705,7 +705,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     this->actor.speedXZ = 0.0f;
 
     if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_0) {
-        if (gSaveContext.save.weekEventReg[52] & 0x40) {
+        if (GET_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
             Actor_MarkForDeath(&this->actor);
         } else if (play->actorCtx.unk5 & 2) {
             this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
@@ -716,7 +716,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
             Actor_MarkForDeath(&this->actor);
         }
     } else if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_1) {
-        if (gSaveContext.save.weekEventReg[52] & 0x40) {
+        if (GET_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
             this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
             if (this->path == NULL) {
                 Actor_MarkForDeath(&this->actor);

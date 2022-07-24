@@ -363,7 +363,7 @@ void func_80BAAB78(EnSuttari* this, PlayState* play) {
     } else if (this->flags1 & 1) {
         switch (this->textId) {
             case 0:
-                if (gSaveContext.save.weekEventReg[81] & 1) {
+                if (GET_WEEKEVENTREG(WEEKEVENTREG_81_01)) {
                     this->textId = 0x1455;
                     ((EnElf*)GET_PLAYER(play)->tatlActor)->unk_264 |= 8;
                     this->flags2 |= 1;
@@ -381,12 +381,12 @@ void func_80BAAB78(EnSuttari* this, PlayState* play) {
                 } else {
                     this->flags1 |= 0x400;
                     this->textId = 0x1452;
-                    gSaveContext.save.weekEventReg[81] |= 1;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_81_01);
                 }
                 break;
             case 0x1453:
                 this->flags1 |= 0x400;
-                gSaveContext.save.weekEventReg[81] |= 1;
+                SET_WEEKEVENTREG(WEEKEVENTREG_81_01);
                 ((EnElf*)GET_PLAYER(play)->tatlActor)->unk_264 |= 8;
                 this->flags2 |= 1;
                 this->textId = 0x1454;
@@ -454,7 +454,7 @@ void func_80BAAFDC(EnSuttari* this, PlayState* play) {
             if (this->unk1F4[0] != 0) {
                 this->unk1F4[0]--;
             }
-            gSaveContext.save.weekEventReg[61] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_61_08);
             this->unk3F6 = 20;
             this->actionFunc = func_80BADE8C;
         }
@@ -486,7 +486,7 @@ void func_80BAB1A0(EnSuttari* this, PlayState* play) {
             if (this->unk1F4[0] != 0) {
                 this->unk1F4[0]--;
             }
-            gSaveContext.save.weekEventReg[61] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_61_08);
             this->unk3F6 = 20;
             this->actionFunc = func_80BADE8C;
         } else {
@@ -855,7 +855,7 @@ void func_80BAC2FC(EnSuttari* this, PlayState* play) {
                 this->animationIndex = 2;
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
             }
-            if (!(gSaveContext.save.weekEventReg[83] & 4) && !(this->flags1 & 0x1000)) {
+            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_83_04)) && !(this->flags1 & 0x1000)) {
                 if (ActorCutscene_GetCanPlayNext(this->cutscenes[0])) {
                     ActorCutscene_Start(this->cutscenes[0], &this->actor);
                     if (!(player->stateFlags1 & 0x10000000)) {
@@ -904,7 +904,7 @@ void func_80BAC2FC(EnSuttari* this, PlayState* play) {
             Actor_MarkForDeath(&this->actor);
             break;
         case 2:
-            if (!(gSaveContext.save.weekEventReg[81] & 4)) {
+            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_81_04))) {
                 this->flags1 |= 0x80;
                 this->actor.world.pos.x = -16.0f;
                 this->actor.world.pos.z = -16.0f;
@@ -914,7 +914,7 @@ void func_80BAC2FC(EnSuttari* this, PlayState* play) {
             }
             break;
         case 4:
-            if (!(gSaveContext.save.weekEventReg[33] & 8)) {
+            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_33_08))) {
                 if (this->animationIndex == 2 || this->animationIndex == 1) {
                     this->animationIndex = 5;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
@@ -951,8 +951,8 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
             this->actionFunc = func_80BACA14;
             return;
         } else if ((gSaveContext.save.day == 3) && (gSaveContext.save.time <= CLOCK_TIME(19, 0)) &&
-                   !(gSaveContext.save.weekEventReg[61] & 8) && !(gSaveContext.save.weekEventReg[33] & 8) &&
-                   (gSaveContext.save.weekEventReg[51] & 8)) {
+                   !(GET_WEEKEVENTREG(WEEKEVENTREG_61_08)) && !(GET_WEEKEVENTREG(WEEKEVENTREG_33_08)) &&
+                   (GET_WEEKEVENTREG(WEEKEVENTREG_51_08))) {
             this->animationIndex = 2;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
             this->actionFunc = func_80BACEE0;
@@ -962,7 +962,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
         if (gSaveContext.save.time >= CLOCK_TIME(0, 20) && gSaveContext.save.time < CLOCK_TIME(6, 00)) {
             Actor_MarkForDeath(&this->actor);
         }
-        if ((gSaveContext.save.entranceIndex == 0xD670) || (gSaveContext.save.weekEventReg[58] & 0x40)) {
+        if ((gSaveContext.save.entranceIndex == 0xD670) || (GET_WEEKEVENTREG(WEEKEVENTREG_58_40))) {
             Actor_MarkForDeath(&this->actor);
         }
         this->cutscenes[0] = this->actor.cutscene;
@@ -974,7 +974,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
         this->actionFunc = func_80BAD004;
         return;
     } else if (play->sceneNum == SCENE_ICHIBA) {
-        if (gSaveContext.save.weekEventReg[33] & 8) {
+        if (GET_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
@@ -984,7 +984,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
         this->actionFunc = func_80BAD5F8;
         return;
     } else if (play->sceneNum == SCENE_AYASHIISHOP) {
-        if (gSaveContext.save.weekEventReg[33] & 8) {
+        if (GET_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
@@ -1112,7 +1112,7 @@ void func_80BACEE0(EnSuttari* this, PlayState* play) {
     func_80BAC2FC(this, play);
     func_80BAB434(this);
     if (this->unk428 == 5) {
-        gSaveContext.save.weekEventReg[58] |= 0x80;
+        SET_WEEKEVENTREG(WEEKEVENTREG_58_80);
         this->actionFunc = func_80BADDB4;
         this->actor.speedXZ = 0.0f;
     } else if (Player_GetMask(play) != PLAYER_MASK_STONE) {
@@ -1216,7 +1216,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
             this->flags2 |= 8;
             func_80BAAF1C(this);
         } else if (this->flags1 & 0x200) {
-            gSaveContext.save.weekEventReg[79] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_79_40);
             this->flags2 |= 4;
             this->actor.speedXZ = 0.0f;
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
@@ -1227,7 +1227,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
         }
         if (this->unk1F4[1] == -0x63) {
             if (this->flags2 & 8) {
-                gSaveContext.save.weekEventReg[33] |= 8;
+                SET_WEEKEVENTREG(WEEKEVENTREG_33_08);
             }
             this->actor.speedXZ = 0.0f;
             Audio_QueueSeqCmd(0x101400FF);
@@ -1319,7 +1319,7 @@ void func_80BADA08(EnSuttari* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80BAAB78(this, play);
-        gSaveContext.save.weekEventReg[81] |= 4;
+        SET_WEEKEVENTREG(WEEKEVENTREG_81_04);
     } else if (this->actor.xzDistToPlayer < 500.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8614(&this->actor, play, 500.0f);
@@ -1397,7 +1397,7 @@ void func_80BADD0C(EnSuttari* this, PlayState* play) {
 void func_80BADDB4(EnSuttari* this, PlayState* play) {
     func_80BABA90(this, 1, 1);
     func_80BAB434(this);
-    if (gSaveContext.save.weekEventReg[51] & 0x10) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_51_10)) {
         this->actionFunc = func_80BADE14;
     }
     Actor_MoveWithGravity(&this->actor);
@@ -1443,7 +1443,7 @@ void EnSuttari_Init(Actor* thisx, PlayState* play) {
     EnSuttari* this = THIS;
     s32 pad;
 
-    if (gSaveContext.save.weekEventReg[79] & 0x40) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }

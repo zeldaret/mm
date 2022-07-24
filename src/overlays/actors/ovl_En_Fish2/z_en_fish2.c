@@ -163,27 +163,27 @@ void EnFish2_Init(Actor* thisx, PlayState* play) {
                            this->morphTable, 24);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         if (this->unk_344 == 0) {
-            if (gSaveContext.save.weekEventReg[81] & 0x10) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_81_10)) {
                 this->unk_2C0 = 1;
             }
 
-            if (gSaveContext.save.weekEventReg[81] & 0x20) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_81_20)) {
                 this->unk_2C0 = 2;
             }
 
-            if (gSaveContext.save.weekEventReg[81] & 0x40) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_81_40)) {
                 this->unk_2C0 = 3;
             }
         } else {
-            if (gSaveContext.save.weekEventReg[81] & 0x80) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_81_80)) {
                 this->unk_2C0 = 1;
             }
 
-            if (gSaveContext.save.weekEventReg[82] & 1) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_82_01)) {
                 this->unk_2C0 = 2;
             }
 
-            if (gSaveContext.save.weekEventReg[82] & 2) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_82_02)) {
                 this->unk_2C0 = 3;
             }
         }
@@ -619,18 +619,18 @@ void func_80B297FC(EnFish2* this, PlayState* play) {
                 this->unk_2C0++;
                 if (this->unk_344 == 0) {
                     if (this->unk_2C0 == 1) {
-                        gSaveContext.save.weekEventReg[81] |= 0x10;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_81_10);
                     } else if (this->unk_2C0 == 2) {
-                        gSaveContext.save.weekEventReg[81] |= 0x20;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_81_20);
                     } else if (this->unk_2C0 == 3) {
-                        gSaveContext.save.weekEventReg[81] |= 0x40;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_81_40);
                     }
                 } else if (this->unk_2C0 == 1) {
-                    gSaveContext.save.weekEventReg[81] |= 0x80;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_81_80);
                 } else if (this->unk_2C0 == 2) {
-                    gSaveContext.save.weekEventReg[82] |= 1;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_82_01);
                 } else if (this->unk_2C0 == 3) {
-                    gSaveContext.save.weekEventReg[82] |= 2;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_82_02);
                 }
 
                 if (this->unk_2B0 != 0) {

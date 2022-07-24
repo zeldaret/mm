@@ -388,9 +388,9 @@ void func_80962340(EnFu* this, PlayState* play) {
                 if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
                     Message_StartTextbox(play, 0x287E, &this->actor);
                     this->unk_552 = 0x287E;
-                } else if ((CURRENT_DAY == 3) && (gSaveContext.save.weekEventReg[22] & 0x10) &&
-                           (gSaveContext.save.weekEventReg[22] & 0x20)) {
-                    if ((gSaveContext.save.weekEventReg[22] & 0x40)) {
+                } else if ((CURRENT_DAY == 3) && (GET_WEEKEVENTREG(WEEKEVENTREG_22_10)) &&
+                           (GET_WEEKEVENTREG(WEEKEVENTREG_22_20))) {
+                    if ((GET_WEEKEVENTREG(WEEKEVENTREG_22_40))) {
                         Message_StartTextbox(play, 0x2883, &this->actor);
                         this->unk_552 = 0x2883;
                     } else {
@@ -531,7 +531,7 @@ void func_80962660(EnFu* this, PlayState* play) {
                 break;
 
             case 0x287D:
-                gSaveContext.save.weekEventReg[63] |= 1;
+                SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
                 func_801477B4(play);
                 player->stateFlags1 |= 0x20;
@@ -737,7 +737,7 @@ void func_80962EBC(EnFu* this, PlayState* play) {
 void func_80962F10(EnFu* this) {
     this->unk_548 = 0;
     this->actor.flags &= ~ACTOR_FLAG_1;
-    gSaveContext.save.weekEventReg[8] |= 1;
+    SET_WEEKEVENTREG(WEEKEVENTREG_08_01);
     this->actionFunc = func_80962F4C;
 }
 
@@ -878,7 +878,7 @@ void func_80963560(EnFu* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         func_80963610(this);
-    } else if ((this->unk_552 == 0x2880) && !(gSaveContext.save.weekEventReg[22] & 0x80)) {
+    } else if ((this->unk_552 == 0x2880) && !(GET_WEEKEVENTREG(WEEKEVENTREG_22_80))) {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
@@ -895,13 +895,13 @@ void func_80963630(EnFu* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if ((gSaveContext.save.weekEventReg[22] & 0x10) && (gSaveContext.save.weekEventReg[22] & 0x20) &&
+        if ((GET_WEEKEVENTREG(WEEKEVENTREG_22_10)) && (GET_WEEKEVENTREG(WEEKEVENTREG_22_20)) &&
             (CURRENT_DAY == 3) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
-            if (gSaveContext.save.weekEventReg[22] & 0x40) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_22_40)) {
                 Message_StartTextbox(play, 0x2884, &this->actor);
                 this->unk_552 = 0x2884;
-            } else if (!(gSaveContext.save.weekEventReg[22] & 0x80)) {
-                gSaveContext.save.weekEventReg[22] |= 0x80;
+            } else if (!(GET_WEEKEVENTREG(WEEKEVENTREG_22_80))) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_22_80);
                 Message_StartTextbox(play, 0x2882, &this->actor);
                 this->unk_552 = 0x2882;
             } else {
@@ -920,15 +920,15 @@ void func_80963630(EnFu* this, PlayState* play) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
             switch (CURRENT_DAY) {
                 case 1:
-                    gSaveContext.save.weekEventReg[22] |= 0x10;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_22_10);
                     break;
 
                 case 2:
-                    gSaveContext.save.weekEventReg[22] |= 0x20;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_22_20);
                     break;
 
                 case 3:
-                    gSaveContext.save.weekEventReg[22] |= 0x40;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_22_40);
                     break;
             }
         }
@@ -1019,7 +1019,7 @@ void func_809639D0(EnFu* this, PlayState* play) {
                 if (CUR_UPG_VALUE(UPG_BOMB_BAG) == 0) {
                     Message_StartTextbox(play, 0x2853, &this->actor);
                     this->unk_552 = 0x2853;
-                } else if (gSaveContext.save.weekEventReg[22] & 0x10) {
+                } else if (GET_WEEKEVENTREG(WEEKEVENTREG_22_10)) {
                     Message_StartTextbox(play, 0x284D, &this->actor);
                     this->unk_552 = 0x284D;
                 } else if (this->unk_53E == 1) {
@@ -1043,7 +1043,7 @@ void func_809639D0(EnFu* this, PlayState* play) {
             } else if (CUR_UPG_VALUE(UPG_BOMB_BAG) == 0) {
                 Message_StartTextbox(play, 0x2853, &this->actor);
                 this->unk_552 = 0x2853;
-            } else if (!(gSaveContext.save.weekEventReg[22] & 0x10)) {
+            } else if (!(GET_WEEKEVENTREG(WEEKEVENTREG_22_10))) {
                 if (this->unk_53E == 1) {
                     Message_StartTextbox(play, 0x285B, &this->actor);
                     this->unk_552 = 0x285B;
@@ -1052,7 +1052,7 @@ void func_809639D0(EnFu* this, PlayState* play) {
                     Message_StartTextbox(play, 0x285D, &this->actor);
                     this->unk_552 = 0x285D;
                 }
-            } else if (gSaveContext.save.weekEventReg[22] & 0x20) {
+            } else if (GET_WEEKEVENTREG(WEEKEVENTREG_22_20)) {
                 Message_StartTextbox(play, 0x2855, &this->actor);
                 this->unk_552 = 0x2855;
             } else if (this->unk_53E == 1) {
@@ -1076,15 +1076,15 @@ void func_809639D0(EnFu* this, PlayState* play) {
             } else if (CUR_UPG_VALUE(UPG_QUIVER) == 0) {
                 Message_StartTextbox(play, 0x284B, &this->actor);
                 this->unk_552 = 0x284B;
-            } else if (gSaveContext.save.weekEventReg[22] & 0x40) {
-                if ((gSaveContext.save.weekEventReg[22] & 0x10) && (gSaveContext.save.weekEventReg[22] & 0x20)) {
+            } else if (GET_WEEKEVENTREG(WEEKEVENTREG_22_40)) {
+                if ((GET_WEEKEVENTREG(WEEKEVENTREG_22_10)) && (GET_WEEKEVENTREG(WEEKEVENTREG_22_20))) {
                     Message_StartTextbox(play, 0x285F, &this->actor);
                     this->unk_552 = 0x285F;
                 } else {
                     Message_StartTextbox(play, 0x2861, &this->actor);
                     this->unk_552 = 0x2861;
                 }
-            } else if ((gSaveContext.save.weekEventReg[22] & 0x10) && (gSaveContext.save.weekEventReg[22] & 0x20)) {
+            } else if ((GET_WEEKEVENTREG(WEEKEVENTREG_22_10)) && (GET_WEEKEVENTREG(WEEKEVENTREG_22_20))) {
                 if (this->unk_53E == 1) {
                     Message_StartTextbox(play, 0x2863, &this->actor);
                     this->unk_552 = 0x2863;
@@ -1093,7 +1093,7 @@ void func_809639D0(EnFu* this, PlayState* play) {
                     Message_StartTextbox(play, 0x2865, &this->actor);
                     this->unk_552 = 0x2865;
                 }
-            } else if ((gSaveContext.save.weekEventReg[22] & 0x10) || (gSaveContext.save.weekEventReg[22] & 0x20)) {
+            } else if ((GET_WEEKEVENTREG(WEEKEVENTREG_22_10)) || (GET_WEEKEVENTREG(WEEKEVENTREG_22_20))) {
                 if (this->unk_53E == 1) {
                     Message_StartTextbox(play, 0x2867, &this->actor);
                     this->unk_552 = 0x2867;

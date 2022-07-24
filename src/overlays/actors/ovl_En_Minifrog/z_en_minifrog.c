@@ -129,7 +129,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnMinifrog_SetupYellowFrogDialog;
 
             // Not spoken to MINIFROG_YELLOW
-            if (!(gSaveContext.save.weekEventReg[34] & 1)) {
+            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_34_01))) {
                 this->actor.flags |= ACTOR_FLAG_10000;
             }
 
@@ -271,7 +271,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
                 break;
 
             case 0xD82:                                          // "What has brought you all this way?"
-                if (gSaveContext.save.weekEventReg[33] & 0x80) { // Mountain village is unfrozen
+                if (GET_WEEKEVENTREG(WEEKEVENTREG_33_80)) { // Mountain village is unfrozen
                     func_80151938(play, 0xD83); // "Could it be... Has spring finally come to the mountains?"
                 } else {
                     func_80151938(play, 0xD86); // "Could it be... You came all this way looking for me?"
@@ -520,7 +520,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                                 // you've lost a little weight..."
                         func_80151938(play, play->msgCtx.currentTextId + 1);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
-                        gSaveContext.save.weekEventReg[34] |= 1; // Spoken to MINIFROG_YELLOW
+                        SET_WEEKEVENTREG(WEEKEVENTREG_34_01); // Spoken to MINIFROG_YELLOW
                         break;
                     case 0xD78: // "Unfortunately, it seems not all of our members have gathered."
                     case 0xD79: // "Perhaps it is because winter was too long? They must not have realized that spring
@@ -534,11 +534,11 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                         play->msgCtx.msgLength = 0;
                         break;
                     case 0xD7C: // "The conducting was spectacular. And all of our members rose to the occasion!"
-                        if (gSaveContext.save.weekEventReg[35] & 0x80) { // Obtained Heart Piece
+                        if (GET_WEEKEVENTREG(WEEKEVENTREG_35_80)) { // Obtained Heart Piece
                             func_80151938(play, 0xD7E);
                         } else {
                             func_80151938(play, 0xD7D); // Get Heart Piece
-                            gSaveContext.save.weekEventReg[35] |= 0x80;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_35_80);
                         }
                         break;
                     case 0xD7D: // "This is how deeply we were moved by your spectacular conducting..."
@@ -567,7 +567,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, PlayState* play) {
     EnMinifrog_JumpTimer(this);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = EnMinifrog_YellowFrogDialog;
-        if (!(gSaveContext.save.weekEventReg[34] & 1)) { // Not spoken with MINIFROG_YELLOW
+        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_34_01))) { // Not spoken with MINIFROG_YELLOW
             Message_StartTextbox(play, 0xD76,
                                  &this->actor); // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken,
                                                 // but it looks like you've lost a little weight..."

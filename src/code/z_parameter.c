@@ -601,16 +601,16 @@ u8 Item_Give(PlayState* play, u8 item) {
 
     } else if (item == ITEM_MAGIC_SMALL) {
         Parameter_AddMagic(play, 0x18);
-        if (!(gSaveContext.save.weekEventReg[12] & 0x80)) {
-            gSaveContext.save.weekEventReg[12] |= 0x80;
+        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_12_80))) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_12_80);
             return ITEM_NONE;
         }
         return item;
 
     } else if (item == ITEM_MAGIC_LARGE) {
         Parameter_AddMagic(play, 0x30);
-        if (!(gSaveContext.save.weekEventReg[12] & 0x80)) {
-            gSaveContext.save.weekEventReg[12] |= 0x80;
+        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_12_80))) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_12_80);
             return ITEM_NONE;
         }
         return item;
@@ -820,7 +820,7 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
         return ITEM_RECOVERY_HEART;
 
     } else if ((item == ITEM_MAGIC_SMALL) || (item == ITEM_MAGIC_LARGE)) {
-        if (!(gSaveContext.save.weekEventReg[12] & 0x80)) {
+        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_12_80))) {
             return ITEM_NONE;
         }
         return item;

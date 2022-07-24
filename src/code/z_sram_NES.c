@@ -296,7 +296,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
         gSaveContext.maskMaskBit[i] = 0;
     }
 
-    if (gSaveContext.save.weekEventReg[84] & 0x20) {
+    if (GET_WEEKEVENTREG(WEEKEVENTREG_84_20)) {
         Inventory_DeleteItem(ITEM_MASK_FIERCE_DEITY, SLOT(ITEM_MASK_FIERCE_DEITY));
     }
 
@@ -849,11 +849,11 @@ void Sram_InitDebugSave(void) {
     gSaveContext.save.isFirstCycle = true;
 
     //
-    gSaveContext.save.weekEventReg[0x0F] |= 0x20;
+    SET_WEEKEVENTREG(WEEKEVENTREG_15_20);
     // Unconfirmed: "Entered South Clock Town"
-    gSaveContext.save.weekEventReg[0x3B] |= 0x04;
+    SET_WEEKEVENTREG(WEEKEVENTREG_59_04);
     // Unconfirmed: "Tatl's Second Cycle Text?"
-    gSaveContext.save.weekEventReg[0x1F] |= 0x04;
+    SET_WEEKEVENTREG(WEEKEVENTREG_31_04);
 
     gSaveContext.cycleSceneFlags[SCENE_INSIDETOWER].switch0 = 1;
     gSaveContext.save.permanentSceneFlags[SCENE_INSIDETOWER].switch0 = 1;
@@ -983,10 +983,10 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
         }
     } else {
         gSaveContext.save.entranceIndex = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
-        if ((gSaveContext.save.entranceIndex == 0x84A0) && (gSaveContext.save.weekEventReg[20] & 2)) {
+        if ((gSaveContext.save.entranceIndex == 0x84A0) && (GET_WEEKEVENTREG(WEEKEVENTREG_20_02))) {
             // Unconfirmed weekEventReg: "Woodfall Temple Prison Entrance raised / Water cleansed"
             gSaveContext.save.entranceIndex = 0xCA0;
-        } else if ((gSaveContext.save.entranceIndex == 0x9A80) && (gSaveContext.save.weekEventReg[33] & 0x80)) {
+        } else if ((gSaveContext.save.entranceIndex == 0x9A80) && (GET_WEEKEVENTREG(WEEKEVENTREG_33_80))) {
             // Unconfirmed weekEventReg: "Mountain Village Unfrozen"
             gSaveContext.save.entranceIndex = 0xAE80;
         }

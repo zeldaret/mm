@@ -383,11 +383,11 @@ s32 func_80AD0E10(EnOsn* this, PlayState* play) {
                 return 0x1FCD;
             }
             this->unk_1EA |= 8;
-            if (gSaveContext.save.weekEventReg[76] & 0x20) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_76_20)) {
                 return 0x1FC8;
             }
 
-            gSaveContext.save.weekEventReg[76] |= 0x20;
+            SET_WEEKEVENTREG(WEEKEVENTREG_76_20);
             return 0x1FCE;
         }
 
@@ -401,10 +401,10 @@ s32 func_80AD0E10(EnOsn* this, PlayState* play) {
                 return 0x1FCD;
             }
             this->unk_1EA |= 0x10;
-            if (gSaveContext.save.weekEventReg[76] & 0x40) {
+            if (GET_WEEKEVENTREG(WEEKEVENTREG_76_40)) {
                 return 0x1FC8;
             }
-            gSaveContext.save.weekEventReg[76] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_76_40);
             return 0x1FD0;
         }
 
