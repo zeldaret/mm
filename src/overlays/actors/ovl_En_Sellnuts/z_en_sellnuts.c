@@ -341,7 +341,7 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (Player_GetExchangeItemId(play) == EXCH_ITEM_2A) {
+        if (Player_GetExchangeItemId(play) == EXCH_ITEM_MOON_TEAR) {
             player->actor.textId = D_80ADD928[this->unk_33A];
             this->unk_340 = player->actor.textId;
             this->actionFunc = func_80ADBAB8;
@@ -382,7 +382,7 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
     } else if (((this->actor.xzDistToPlayer < 80.0f) &&
                 (((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false)) ||
                this->actor.isTargeted) {
-        func_800B85E0(&this->actor, play, 80.0f, EXCH_ITEM_2A);
+        func_800B85E0(&this->actor, play, 80.0f, EXCH_ITEM_MOON_TEAR);
         if (player->transformation == PLAYER_FORM_DEKU) {
             if (gSaveContext.save.day == 3) {
                 this->unk_33A = 2;
@@ -416,13 +416,13 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
 
 void func_80ADB924(EnSellnuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    u8 msgState = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
     s32 item;
 
-    if (msgState == 0x10) {
+    if (talkState == TEXT_STATE_16) {
         item = func_80123810(play);
         if (item > EXCH_ITEM_NONE) {
-            if (item == EXCH_ITEM_2A) {
+            if (item == EXCH_ITEM_MOON_TEAR) {
                 player->actor.textId = D_80ADD928[this->unk_33A];
                 this->unk_340 = player->actor.textId;
                 player->exchangeItemId = item;
@@ -438,7 +438,7 @@ void func_80ADB924(EnSellnuts* this, PlayState* play) {
             func_80151938(play, this->unk_340);
             this->actionFunc = func_80ADB0D8;
         }
-    } else if ((msgState == 5) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_340 == D_80ADD910[this->unk_33A]) {
             this->unk_340 = D_80ADD938[this->unk_33A];
             func_80151938(play, this->unk_340);
@@ -452,7 +452,7 @@ void func_80ADB924(EnSellnuts* this, PlayState* play) {
 }
 
 void func_80ADBAB8(EnSellnuts* this, PlayState* play) {
-    u8 sp27 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
     s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animation);
 
@@ -468,9 +468,9 @@ void func_80ADBAB8(EnSellnuts* this, PlayState* play) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80ADD990, 6);
     }
 
-    if ((sp27 == 5) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
-        play->msgCtx.unk12023 = 4;
+        play->msgCtx.stateTimer = 4;
         this->actionFunc = func_80ADBBEC;
         func_800B7298(play, NULL, 0x13);
     }
@@ -497,7 +497,7 @@ void func_80ADBC60(EnSellnuts* this, PlayState* play) {
 }
 
 void func_80ADBCE4(EnSellnuts* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         func_800B85E0(&this->actor, play, 400.0f, EXCH_ITEM_MINUS1);
         this->unk_340 = D_80ADD930[this->unk_33A];
         this->actionFunc = func_80ADBC60;
@@ -505,7 +505,7 @@ void func_80ADBCE4(EnSellnuts* this, PlayState* play) {
 }
 
 void func_80ADBD64(EnSellnuts* this, PlayState* play) {
-    u8 sp27 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
     s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animation);
 
@@ -514,9 +514,9 @@ void func_80ADBD64(EnSellnuts* this, PlayState* play) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80ADD990, 0);
     }
 
-    if ((sp27 == 5) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
-        play->msgCtx.unk12023 = 4;
+        play->msgCtx.stateTimer = 4;
         this->unk_338 &= ~2;
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->unk_34C = 8;
@@ -556,9 +556,9 @@ void func_80ADBE80(EnSellnuts* this, PlayState* play) {
 }
 
 void func_80ADBFA0(EnSellnuts* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
-        play->msgCtx.unk12023 = 4;
+        play->msgCtx.stateTimer = 4;
         if (this->unk_34C == 0) {
             this->actionFunc = func_80ADB544;
         } else {
@@ -719,9 +719,9 @@ void func_80ADC5A4(EnSellnuts* this, PlayState* play) {
 void func_80ADC6D0(EnSellnuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
-        play->msgCtx.unk12023 = 4;
+        play->msgCtx.stateTimer = 4;
         if (player->transformation == PLAYER_FORM_DEKU) {
             if (gSaveContext.save.day == 3) {
                 this->unk_33A = 2;
@@ -737,7 +737,7 @@ void func_80ADC6D0(EnSellnuts* this, PlayState* play) {
 }
 
 void func_80ADC7B4(EnSellnuts* this, PlayState* play) {
-    s32 temp = Message_GetState(&play->msgCtx);
+    s32 talkState = Message_GetState(&play->msgCtx);
 
     if (this->unk_366 == 0) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -749,9 +749,9 @@ void func_80ADC7B4(EnSellnuts* this, PlayState* play) {
             }
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
-    } else if ((this->unk_366 == 1) && (temp == 5) && Message_ShouldAdvance(play)) {
+    } else if ((this->unk_366 == 1) && (talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
-        play->msgCtx.unk12023 = 4;
+        play->msgCtx.stateTimer = 4;
         this->unk_366 = 0;
         ActorCutscene_Stop(this->cutscene);
         this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);

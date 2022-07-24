@@ -134,7 +134,7 @@ void func_80ACA184(EnTimeTag* this, PlayState* play) {
 }
 
 void func_80ACA208(EnTimeTag* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         this->actionFunc = func_80ACA268;
     }
@@ -171,17 +171,17 @@ void func_80ACA348(EnTimeTag* this, PlayState* play) {
 }
 
 void func_80ACA3C0(EnTimeTag* this, PlayState* play) {
-    if ((play->msgCtx.unk11F00->unk01 == 0) && (play->msgCtx.msgMode == 0x1B)) {
+    if ((play->msgCtx.unk11F00->state == 0) && (play->msgCtx.msgMode == 0x1B)) {
         this->actor.home.rot.x = 5;
         this->actionFunc = func_80ACA348;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         play->msgCtx.msgMode = 0;
     }
 }
 
 void func_80ACA418(EnTimeTag* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x101C:
@@ -216,7 +216,7 @@ void func_80ACA418(EnTimeTag* this, PlayState* play) {
             }
             break;
 
-        case 2:
+        case TEXT_STATE_CLOSING:
             this->actionFunc = func_80ACA5F8;
             break;
     }
@@ -262,9 +262,9 @@ void func_80ACA714(EnTimeTag* this, PlayState* play) {
 }
 
 void func_80ACA724(EnTimeTag* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
         play->nextEntranceIndex = play->setupExitList[ENTIMETAG_GET_1F(&this->actor)];
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
         if (!ENTIMETAG_GET_E000(&this->actor)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_OC_DOOR_OPEN);
         }
