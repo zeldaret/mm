@@ -1230,6 +1230,7 @@ typedef enum SunsSongState {
 #define CHECK_EVENTINF(flag) (gSaveContext.eventInf[(flag) >> 4] & (1 << ((flag) & 0xF)))
 #define SET_EVENTINF(flag) (gSaveContext.eventInf[(flag) >> 4] |= (1 << ((flag) & 0xF)))
 #define CLEAR_EVENTINF(flag) (gSaveContext.eventInf[(flag) >> 4] &= (u8)~(1 << ((flag) & 0xF)))
+#define CLEAR_EVENTINF_ALT(flag) (gSaveContext.eventInf[(flag) >> 4] &= ~(1 << ((flag) & 0xF)))
 
 
 typedef enum {

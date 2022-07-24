@@ -316,38 +316,38 @@ void Sram_SaveEndOfCycle(PlayState* play) {
         gSaveContext.eventInf[i] = 0;
     }
 
-    gSaveContext.eventInf[7] &= (u8)~1;
-    gSaveContext.eventInf[7] &= (u8)~2;
-    gSaveContext.eventInf[7] &= (u8)~4;
-    gSaveContext.eventInf[7] &= (u8)~8;
-    gSaveContext.eventInf[7] &= (u8)~0x10;
+    CLEAR_EVENTINF(EVENTINF_70);
+    CLEAR_EVENTINF(EVENTINF_71);
+    CLEAR_EVENTINF(EVENTINF_72);
+    CLEAR_EVENTINF(EVENTINF_73);
+    CLEAR_EVENTINF(EVENTINF_74);
 
     if (gSaveContext.save.playerData.rupees != 0) {
-        gSaveContext.eventInf[7] |= 1;
+        SET_EVENTINF(EVENTINF_70);
     }
 
     if (INV_CONTENT(ITEM_BOMB) == ITEM_BOMB) {
         item = INV_CONTENT(ITEM_BOMB);
         if (AMMO(item) != 0) {
-            gSaveContext.eventInf[7] |= 2;
+            SET_EVENTINF(EVENTINF_71);
         }
     }
     if (INV_CONTENT(ITEM_NUT) == ITEM_NUT) {
         item = INV_CONTENT(ITEM_NUT);
         if (AMMO(item) != 0) {
-            gSaveContext.eventInf[7] |= 4;
+            SET_EVENTINF(EVENTINF_72);
         }
     }
     if (INV_CONTENT(ITEM_STICK) == ITEM_STICK) {
         item = INV_CONTENT(ITEM_STICK);
         if (AMMO(item) != 0) {
-            gSaveContext.eventInf[7] |= 8;
+            SET_EVENTINF(EVENTINF_73);
         }
     }
     if (INV_CONTENT(ITEM_BOW) == ITEM_BOW) {
         item = INV_CONTENT(ITEM_BOW);
         if (AMMO(item) != 0) {
-            gSaveContext.eventInf[7] |= 0x10;
+            SET_EVENTINF(EVENTINF_74);
         }
     }
 

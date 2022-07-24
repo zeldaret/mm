@@ -131,15 +131,15 @@ void func_80B0F6DC(EnGb2* this) {
 }
 
 void func_80B0F728(EnGb2* this, PlayState* play) {
-    if (gSaveContext.eventInf[4] & 0x10) {
+    if (CHECK_EVENTINF(EVENTINF_44)) {
         func_80B0FBF0(this, play);
         this->unk_26E = 0x14E1;
-        if (gSaveContext.eventInf[4] & 0x80) {
+        if (CHECK_EVENTINF(EVENTINF_47)) {
             this->unk_288 = 10;
         } else {
             this->unk_288 = 30;
         }
-    } else if (gSaveContext.eventInf[4] & 0x20) {
+    } else if (CHECK_EVENTINF(EVENTINF_45)) {
         func_80B0FBF0(this, play);
         this->unk_26E = 0x14E0;
         this->unk_26C |= 2;
@@ -147,9 +147,9 @@ void func_80B0F728(EnGb2* this, PlayState* play) {
         this->unk_26E = 0x14DC;
     }
 
-    gSaveContext.eventInf[4] &= (u8)~0x10;
-    gSaveContext.eventInf[4] &= (u8)~0x20;
-    gSaveContext.eventInf[4] &= (u8)~0x40;
+    CLEAR_EVENTINF(EVENTINF_44);
+    CLEAR_EVENTINF(EVENTINF_45);
+    CLEAR_EVENTINF(EVENTINF_46);
     this->actionFunc = func_80B10584;
 }
 
@@ -159,7 +159,7 @@ u16 func_80B0F7FC(EnGb2* this) {
             return 0x14D1;
 
         case 0x14D1:
-            if (gSaveContext.eventInf[4] & 0x80) {
+            if (CHECK_EVENTINF(EVENTINF_47)) {
                 return 0x14E4;
             }
 
@@ -179,7 +179,7 @@ u16 func_80B0F7FC(EnGb2* this) {
             return 0x14D3;
 
         case 0x14D2:
-            if (gSaveContext.eventInf[4] & 0x80) {
+            if (CHECK_EVENTINF(EVENTINF_47)) {
                 return 0x14E5;
             }
             return 0x14D4;
@@ -372,7 +372,7 @@ void func_80B0FE7C(PlayState* play) {
 void func_80B0FEBC(EnGb2* this, PlayState* play) {
     if ((play->msgCtx.ocarinaMode == OCARINA_SONG_ELEGY) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
         play->msgCtx.ocarinaMode = 4;
-        gSaveContext.eventInf[4] |= 0x80;
+        SET_EVENTINF(EVENTINF_47);
         this->unk_26E = 0x14D1;
         this->unk_288 = 10;
     }
@@ -395,7 +395,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                 play->msgCtx.stateTimer = 4;
                 this->unk_26E = 0x14D1;
                 this->unk_288 = 30;
-                gSaveContext.eventInf[4] &= (u8)~0x80;
+                CLEAR_EVENTINF(EVENTINF_47);
                 this->unk_26C &= ~2;
                 this->actionFunc = func_80B0FEBC;
             } else {
@@ -489,7 +489,7 @@ void func_80B10344(EnGb2* this, PlayState* play) {
             this->unk_26C &= ~0x200;
             gSaveContext.unk_3DD0[1] = 5;
             func_800FE498();
-            gSaveContext.eventInf[4] |= 0x40;
+            SET_EVENTINF(EVENTINF_46);
             func_80B0FE7C(play);
         } else if (this->unk_280 == 2) {
             if (this->unk_26C & 0x400) {
@@ -507,8 +507,8 @@ void func_80B10344(EnGb2* this, PlayState* play) {
 
     if (gSaveContext.save.playerData.health < 49) {
         gSaveContext.unk_3DD0[1] = 5;
-        gSaveContext.eventInf[4] |= 0x40;
-        gSaveContext.eventInf[4] |= 0x20;
+        SET_EVENTINF(EVENTINF_46);
+        SET_EVENTINF(EVENTINF_45);
 
         if ((this->unk_268 != NULL) && (this->unk_268->update == NULL)) {
             this->unk_268 = NULL;
@@ -521,8 +521,8 @@ void func_80B10344(EnGb2* this, PlayState* play) {
         func_80B0FE7C(play);
     } else if (gSaveContext.unk_3DE0[1] == 0) {
         gSaveContext.unk_3DD0[1] = 5;
-        gSaveContext.eventInf[4] |= 0x40;
-        gSaveContext.eventInf[4] |= 0x10;
+        SET_EVENTINF(EVENTINF_46);
+        SET_EVENTINF(EVENTINF_44);
 
         if ((this->unk_268 != NULL) && (this->unk_268->update == NULL)) {
             this->unk_268 = NULL;
@@ -564,7 +564,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                 } else {
                     this->unk_26E = 0x14D1;
                     this->unk_288 = 30;
-                    gSaveContext.eventInf[4] &= (u8)~0x80;
+                    CLEAR_EVENTINF(EVENTINF_47);
                     this->actionFunc = func_80B0FEBC;
                 }
             } else {
@@ -900,7 +900,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
             this->actor.flags |= ACTOR_FLAG_10;
             this->actor.flags |= ACTOR_FLAG_2000000;
 
-            if (gSaveContext.eventInf[4] & 0x40) {
+            if (CHECK_EVENTINF(EVENTINF_46)) {
                 func_80B0F728(this, play);
             } else {
                 func_80B0FBF0(this, play);

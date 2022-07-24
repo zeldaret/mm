@@ -697,7 +697,7 @@ void func_80BF4FC4(EnRg* this, PlayState* play) {
             this->unk_310 &= ~0x800;
         }
 
-        if (gSaveContext.eventInf[1] & 1) {
+        if (CHECK_EVENTINF(EVENTINF_10)) {
             if (DECR(this->unk_318) == 0) {
                 func_80BF47AC(this, play);
 

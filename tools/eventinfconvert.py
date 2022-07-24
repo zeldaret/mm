@@ -4,6 +4,13 @@ import argparse
 import math
 import re
 
+def isValid(index: int, mask: int) -> bool:
+    if index < 0 or index > 7:
+        return False
+    if mask != (1 << int(math.log2(mask))):
+        return False
+    return True
+
 def getFlagMacro(index: int, mask: int) -> str:
     return f"EVENTINF_{index}{int(math.log2(mask))}"
 
@@ -28,7 +35,10 @@ def applyChange(fileContents: str, compiledRegex: re.Pattern, callback) -> str:
 
         start, end = match.span()
         parsedContents += fileContents[:start]
-        parsedContents += callback(index, mask)
+        if isValid(index, mask):
+            parsedContents += callback(index, mask)
+        else:
+            parsedContents += fileContents[start:end]
 
         fileContents = fileContents[end:]
         match = compiledRegex.search(fileContents)
@@ -74,7 +84,8 @@ def main():
     parsedContents = updateSet(parsedContents)
     parsedContents = updateClear(parsedContents)
 
-    write_file(args.filename, parsedContents)
+    if fileContents != parsedContents:
+        write_file(args.filename, parsedContents)
 
 if __name__ == "__main__":
     main()

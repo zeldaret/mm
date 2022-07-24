@@ -907,7 +907,7 @@ void func_80B5227C(EnGk* this, PlayState* play) {
 void func_80B52340(EnGk* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_1E4 |= 4;
-        if (gSaveContext.eventInf[1] & 2) {
+        if (CHECK_EVENTINF(EVENTINF_11)) {
             this->unk_31C = 0xE90;
             this->actionFunc = func_80B52430;
         } else {

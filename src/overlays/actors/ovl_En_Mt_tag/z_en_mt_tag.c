@@ -77,7 +77,7 @@ s32 EnMttag_IsInFinishLine(Vec3f* pos) {
  * and, if so, what kind of cheating the player is performing.
  */
 s32 EnMttag_CheckPlayerCheatStatus(Vec3f* pos) {
-    if (!(gSaveContext.eventInf[1] & 1)) {
+    if (!(CHECK_EVENTINF(EVENTINF_10))) {
         if (Math3D_XZBoundCheck(-466.0f, -386.0f, -687.0f, 193.0f, pos->x, pos->z)) {
             // The race hasn't started yet, but the player is beyond the starting line.
             return GORON_RACE_CHEAT_FALSE_START;
@@ -311,7 +311,7 @@ void EnMttag_RaceStart(EnMttag* this, PlayState* play) {
             }
 
             EnMttag_ShowFalseStartMessage(this, play);
-            gSaveContext.eventInf[1] |= 8;
+            SET_EVENTINF(EVENTINF_13);
         } else {
             if (DECR(this->timer) == 60) {
                 func_8010E9F0(4, 0);
@@ -321,7 +321,7 @@ void EnMttag_RaceStart(EnMttag* this, PlayState* play) {
                 player->stateFlags1 &= ~0x20;
             } else if ((this->timer < 60) && (play->interfaceCtx.unk_280 == 8)) {
                 this->timer = 0;
-                gSaveContext.eventInf[1] |= 1;
+                SET_EVENTINF(EVENTINF_10);
                 this->actionFunc = EnMttag_Race;
             }
         }
@@ -363,14 +363,14 @@ void EnMttag_Race(EnMttag* this, PlayState* play) {
         play_sound(NA_SE_SY_START_SHOT);
         Audio_QueueSeqCmd(NA_BGM_GORON_GOAL | 0x8000);
         this->timer = 55;
-        gSaveContext.eventInf[1] |= 2;
+        SET_EVENTINF(EVENTINF_11);
         this->actionFunc = EnMttag_RaceFinish;
     } else if (EnMttag_IsAnyRaceGoronOverFinishLine(this)) {
         gSaveContext.unk_3DD0[4] = 6;
         play_sound(NA_SE_SY_START_SHOT);
         Audio_QueueSeqCmd(NA_BGM_GORON_GOAL | 0x8000);
         this->timer = 55;
-        gSaveContext.eventInf[1] |= 4;
+        SET_EVENTINF(EVENTINF_12);
         this->actionFunc = EnMttag_RaceFinish;
     } else {
         playerCheatStatus = EnMttag_CheckPlayerCheatStatus(playerPos);
@@ -382,10 +382,10 @@ void EnMttag_Race(EnMttag* this, PlayState* play) {
             }
 
             EnMttag_ShowFalseStartMessage(this, play);
-            gSaveContext.eventInf[1] |= 8;
+            SET_EVENTINF(EVENTINF_13);
         } else if ((EnMttag_UpdateCheckpoints(this, play)) && (this->timer == 0)) {
             EnMttag_ShowCantWinMessage(this, play);
-            gSaveContext.eventInf[1] |= 8;
+            SET_EVENTINF(EVENTINF_13);
         }
     }
 }
@@ -396,7 +396,7 @@ void EnMttag_Race(EnMttag* this, PlayState* play) {
  */
 void EnMttag_RaceFinish(EnMttag* this, PlayState* play) {
     if (DECR(this->timer) == 0) {
-        if ((gSaveContext.eventInf[1] & 2)) {
+        if ((CHECK_EVENTINF(EVENTINF_11))) {
             // Player won
             EnMttag_ExitRace(play, TRANS_TYPE_03, TRANS_TYPE_03);
         } else {
@@ -436,11 +436,12 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
             Parameter_AddMagic(play,
                                ((void)0, gSaveContext.unk_3F30) + (gSaveContext.save.playerData.doubleMagic * 48) + 48);
 
-            gSaveContext.eventInf[1] &= (u8)~1;
-            gSaveContext.eventInf[1] &= (u8)~2;
-            gSaveContext.eventInf[1] &= (u8)~4;
-            gSaveContext.eventInf[1] &= (u8)~8;
+            CLEAR_EVENTINF(EVENTINF_10);
+            CLEAR_EVENTINF(EVENTINF_11);
+            CLEAR_EVENTINF(EVENTINF_12);
+            CLEAR_EVENTINF(EVENTINF_13);
             gSaveContext.eventInf[2] = ((gSaveContext.eventInf[2] & 0xF) + 1) | (gSaveContext.eventInf[2] & 0xF0);
+            // gSaveContext.eventInf[2] = ((CHECK_EVENTINF(EVENTINF_23)) + 1) | (CHECK_EVENTINF(EVENTINF_27));
         } else {
             EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
         }
@@ -459,15 +460,15 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play) {
             func_8019F230();
             gSaveContext.unk_3DD0[4] = 0;
             EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
-            gSaveContext.eventInf[1] &= (u8)~8;
-            gSaveContext.eventInf[1] |= 4;
+            CLEAR_EVENTINF(EVENTINF_13);
+            SET_EVENTINF(EVENTINF_12);
             Actor_MarkForDeath(&this->actor);
         } else {
             // Keep racing
             func_8019F208();
             func_801477B4(play);
             func_800B7298(play, &this->actor, 6);
-            gSaveContext.eventInf[1] &= (u8)~8;
+            CLEAR_EVENTINF(EVENTINF_13);
             this->timer = 100;
             this->actionFunc = EnMttag_Race;
         }
@@ -484,10 +485,10 @@ void EnMttag_Init(Actor* thisx, PlayState* play) {
         this->raceInitialized = false;
         this->timer = 100;
 
-        gSaveContext.eventInf[1] &= (u8)~1;
-        gSaveContext.eventInf[1] &= (u8)~2;
-        gSaveContext.eventInf[1] &= (u8)~4;
-        gSaveContext.eventInf[1] &= (u8)~8;
+        CLEAR_EVENTINF(EVENTINF_10);
+        CLEAR_EVENTINF(EVENTINF_11);
+        CLEAR_EVENTINF(EVENTINF_12);
+        CLEAR_EVENTINF(EVENTINF_13);
 
         if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_12_02))) {
             this->actionFunc = EnMttag_ShowIntroCutscene;

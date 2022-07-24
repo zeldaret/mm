@@ -28,7 +28,7 @@ void GameOver_Update(PlayState* play) {
                 gSaveContext.unk_3DD0[i] = 0;
             }
 
-            gSaveContext.eventInf[1] &= ~1;
+            CLEAR_EVENTINF_ALT(EVENTINF_10);
 
             if (CUR_FORM == 0) {
                 if (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_KOKIRI &&

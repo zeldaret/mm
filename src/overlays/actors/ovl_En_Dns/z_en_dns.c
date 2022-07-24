@@ -399,16 +399,16 @@ void func_8092D1B8(EnDns* this, PlayState* play) {
     }
 
     if (!ENDNS_GET_4000(&this->actor) || (this->unk_2D2 != 0)) {
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) && !(gSaveContext.eventInf[1] & 0x20) && func_8092CC68(play)) {
+        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) && !(CHECK_EVENTINF(EVENTINF_15)) && func_8092CC68(play)) {
             player->stateFlags1 |= 0x20;
             this->unk_2C6 |= 0x100;
             SubS_UpdateFlags(&this->unk_2C6, 4, 7);
             play_sound(NA_SE_SY_FOUND);
-            gSaveContext.eventInf[1] |= 0x20;
+            SET_EVENTINF(EVENTINF_15);
             this->unk_2F4 = func_8092CCEC;
             func_8092C63C(this, EN_DNS_ANIMATION_WALK_1);
             this->actionFunc = EnDns_DoNothing;
-        } else if (gSaveContext.eventInf[1] & 0x40) {
+        } else if (CHECK_EVENTINF(EVENTINF_16)) {
             func_8092CCEC(this, play);
             func_8092C63C(this, EN_DNS_ANIMATION_WALK_1);
             this->actionFunc = func_8092D330;
@@ -458,7 +458,7 @@ void func_8092D4D8(EnDns* this, PlayState* play) {
         SubS_UpdateFlags(&this->unk_2C6, 3, 7);
         this->unk_2F4 = NULL;
         if (ENDNS_GET_4000(&this->actor)) {
-            if (!(gSaveContext.eventInf[1] & 0x20)) {
+            if (!(CHECK_EVENTINF(EVENTINF_15))) {
                 this->skelAnime.curFrame = this->unk_2F0;
                 this->actor.world.rot.y = this->unk_2DA;
                 func_8092C63C(this, EN_DNS_ANIMATION_DANCE);
@@ -530,8 +530,8 @@ void EnDns_Init(Actor* thisx, PlayState* play) {
         this->unk_2FC = 0;
     }
     this->actionFunc = func_8092D1B8;
-    gSaveContext.eventInf[1] &= (u8)~0x20;
-    gSaveContext.eventInf[1] &= (u8)~0x40;
+    CLEAR_EVENTINF(EVENTINF_15);
+    CLEAR_EVENTINF(EVENTINF_16);
 }
 
 void EnDns_Destroy(Actor* thisx, PlayState* play) {

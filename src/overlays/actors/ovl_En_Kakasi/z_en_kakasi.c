@@ -304,7 +304,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
 
     if (gSaveContext.respawnFlag != -4 && gSaveContext.respawnFlag != -8) {
         if (gSaveContext.save.time != CLOCK_TIME(6, 0) && gSaveContext.save.time != CLOCK_TIME(18, 0) &&
-            !(gSaveContext.eventInf[1] & 0x80)) {
+            !(CHECK_EVENTINF(EVENTINF_17))) {
 
             if (this->actor.textId == 0) {
                 // dialogue after skipped time 'did you feel that? went by in an instant'
@@ -940,7 +940,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                 if (gSaveContext.save.time > CLOCK_TIME(18, 0) || gSaveContext.save.time < CLOCK_TIME(6, 0)) {
                     gSaveContext.save.time = CLOCK_TIME(6, 0);
                     gSaveContext.respawnFlag = -4;
-                    gSaveContext.eventInf[2] |= 0x80;
+                    SET_EVENTINF(EVENTINF_27);
                 } else {
                     gSaveContext.save.time = CLOCK_TIME(18, 0);
                     gSaveContext.respawnFlag = -8;

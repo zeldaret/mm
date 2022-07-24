@@ -76,7 +76,8 @@ def main():
     parsedContents = updateSet(parsedContents)
     parsedContents = updateClear(parsedContents)
 
-    write_file(args.filename, parsedContents)
+    if fileContents != parsedContents:
+        write_file(args.filename, parsedContents)
 
 if __name__ == "__main__":
     main()

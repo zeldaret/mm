@@ -76,7 +76,7 @@ void KaleidoSetup_Update(PlayState* play) {
             if ((gSaveContext.save.cutscene < 0xFFF0) && (gSaveContext.nextCutsceneIndex < 0xFFF0)) {
                 if (!Play_InCsMode(play) || ((msgCtx->msgMode != 0) && (msgCtx->currentTextId == 0xFF))) {
                     if ((play->unk_1887C < 2) && (gSaveContext.unk_3F28 != 8) && (gSaveContext.unk_3F28 != 9)) {
-                        if (!(gSaveContext.eventInf[1] & 0x80) && !(player->stateFlags1 & 0x20)) {
+                        if (!(CHECK_EVENTINF(EVENTINF_17)) && !(player->stateFlags1 & 0x20)) {
                             if (!(play->actorCtx.unk5 & 2) && !(play->actorCtx.unk5 & 4)) {
                                 if ((play->actorCtx.unk268 == 0) && CHECK_BTN_ALL(input->press.button, BTN_START)) {
                                     gSaveContext.unk_3F26 = gSaveContext.unk_3F22;
