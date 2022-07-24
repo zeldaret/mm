@@ -2234,7 +2234,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     CycleSceneFlags* cycleFlags;
     s32 i;
 
-    gSaveContext.save.weekEventReg[92] |= 0x80;
+    SET_WEEKEVENTREG(WEEKEVENTREG_92_80);
     cycleFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneNumber(play->sceneNum)];
 
     bzero(actorCtx, sizeof(ActorContext));
