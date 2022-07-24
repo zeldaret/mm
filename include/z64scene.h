@@ -769,7 +769,7 @@ typedef enum {
 * 0x01F0:  Index into the scenes specific entrance table (get the entrance)
 * 0x000F:  Index into the specific entrance table (get the tableEntry)
 */
-#define NEXT_ENTRANCE(entranceScene, entrance, entranceEntry) ((((entranceScene) & 0x7F) << 9) | (((entrance) & 0x1F) << 4) | ((entranceEntry) & 0xF))
+#define NEXT_ENTRANCE(entranceScene, entrance, entranceEntry) ((((ENTRANCE_SCENE_##entranceScene) & 0x7F) << 9) | (((entrance) & 0x1F) << 4) | ((entranceEntry) & 0xF))
 
 // SceneTableEntry draw configs
 typedef enum {
