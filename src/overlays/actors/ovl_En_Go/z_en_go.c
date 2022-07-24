@@ -535,7 +535,8 @@ s32 func_80A1222C(EnGo* this, PlayState* play) {
     s32 ret = false;
 
     if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
-         (play->msgCtx.unk1202E == 1) && (this->unk_3EC == 0) && (this->actor.xzDistToPlayer < 400.0f)) ||
+         (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->unk_3EC == 0) &&
+         (this->actor.xzDistToPlayer < 400.0f)) ||
         (!(gSaveContext.save.weekEventReg[22] & 4) && (play->sceneNum == SCENE_16GORON_HOUSE) &&
          (gSaveContext.sceneSetupIndex == 0) && (this->unk_3EC == 0) && (play->csCtx.currentCsIndex == 1))) {
         ret = true;
