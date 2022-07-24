@@ -18,7 +18,7 @@
         <DList Name="gBbaFeetDL" Offset="0x4180" />
 
         <!-- Animations -->
-        <Animation Name="gBbaWalkingAnim" Offset="0x4910" /> <!-- Looks to be unused -->
+        <Animation Name="gBbaSwayAnim" Offset="0x4910" />
         <Animation Name="gBbaKnockedOverAnim" Offset="0x5154" />
         <Animation Name="gBbaLyingDownAnim" Offset="0x58B8" />
         <Animation Name="gBbaIdleHoldingBagAnim" Offset="0x5DC4" />

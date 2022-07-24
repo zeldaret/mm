@@ -9,7 +9,6 @@ typedef struct EnMag {
     /* 0x00000 */ Actor actor;
     /* 0x00144 */ UNK_TYPE1 unk144[0x2C];
     /* 0x00170 */ Font font;
-    /* 0x11EFC */ UNK_TYPE1 unk11EFC[4];
     /* 0x11F00 */ s16 unk11F00; // Set and not used.
     /* 0x11F02 */ s16 unk11F02; // Set and not used.
     /* 0x11F04 */ s16 state; // State of whole actor, uses EnMagState enum

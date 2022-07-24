@@ -508,7 +508,7 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
                     s32 absYawDiff = ABS_ALT(yawDiff);
 
                     if (absYawDiff > (0x10000 / 3)) {
-                        Actor_PickUp(&this->actor, play, 0, 36.0f, 30.0f);
+                        Actor_PickUp(&this->actor, play, GI_NONE, 36.0f, 30.0f);
                     }
                 }
             }
