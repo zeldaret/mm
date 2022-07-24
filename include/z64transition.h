@@ -6,11 +6,11 @@
 typedef struct {
     /* 0x00 */ void* (*init)(void* transition);
     /* 0x04 */ void  (*destroy)(void* transition);
-    /* 0x08 */ void  (*update)(void* transition, s32 updateRate);
+    /* 0x08 */ void  (*update)(void* transition);
     /* 0x0C */ void  (*draw)(void* transition, Gfx** gfxP);
     /* 0x10 */ void  (*start)(void* transition);
     /* 0x14 */ void  (*setType)(void* transition, s32 type);
-    /* 0x18 */ void  (*setColor)(void* transition, u32 color);
+    /* 0x18 */ void  (*setColor)(s32* transition, u32 color);
     /* 0x1C */ void  (*setEnvColor)(void* transition, u32 color);
     /* 0x20 */ s32   (*isDone)(void* transition);
 } TransitionInit;
@@ -22,10 +22,8 @@ typedef struct {
 extern const TransitionInit TransitionFade_InitVars;
 
 typedef struct {
-    /* 0x00 */ u8 unk_00; // lod
-    /* 0x01 */ u8 unk_01; // r
-    /* 0x02 */ u8 unk_02; // g
-    /* 0x03 */ u8 unk_03; // b
+    /* 0x00 */ Color_RGB8 primColor;
+    /* 0x03 */ u8 lod;
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 stepValue;
     /* 0x0C */ f32 unk_0C;
@@ -34,7 +32,7 @@ typedef struct {
     /* 0x15 */ u8 unk_15;
     /* 0x16 */ u8 isDone;
     /* 0x17 */ s8 unk_17;
-    /* 0x18 */ TexturePtr* unk_18;
+    /* 0x18 */ TexturePtr texture;
     /* 0x1C */ u8 unk_1C;
     /* 0x1D */ u8 unk_1D;
     /* 0x1E */ s8 unk_1E;

@@ -2606,8 +2606,8 @@ s32 Actor_RecordUndrawnActor(PlayState* play, Actor* actor) {
     return true;
 }
 
-void func_800B9E84(Gfx** arg0, s32 arg1) {
-    func_80164C14(arg0, D_801DE890, 4, 0, 6, 6, ((100 - arg1) * 0.003f) + 1.0f);
+void func_800B9E84(Gfx** gfxp, s32 arg1) {
+    TransitionCircle_LoadAndSetTexture(gfxp, D_801DE890, 4, 0, 6, 6, ((100 - arg1) * 0.003f) + 1.0f);
 }
 
 #ifdef NON_EQUIVALENT
