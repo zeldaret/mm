@@ -132,7 +132,7 @@ void func_8098F438(ObjMure3* this, PlayState* play) {
     for (i = 0; i < count; i++) {
         EnItem00** collectible = &this->unk148[i];
 
-        if ((*collectible != NULL) && (!((this->unk164 >> i) & 1))) {
+        if ((*collectible != NULL) && !((this->unk164 >> i) & 1)) {
             if ((*collectible)->unk1A4 != 0) {
                 Flags_SetSwitch(play, OBJMURE3_PARAMS_7F(&this->actor));
             }
