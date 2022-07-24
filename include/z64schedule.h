@@ -196,11 +196,11 @@ typedef struct {
 #define SCHEDULE_PACK_S16(val) \
     ((val) >> 8) & 0xFF, (val) & 0xFF
 
-#define SCHEDULE_CMD_CHECK_FLAG_S(index, mask, offset) \
-    SCHEDULE_CMD_ID_CHECK_FLAG_S, (index), (mask), (offset)
+#define SCHEDULE_CMD_CHECK_FLAG_S(flag, offset) \
+    SCHEDULE_CMD_ID_CHECK_FLAG_S, SCHEDULE_PACK_S16(flag), (offset)
 
-#define SCHEDULE_CMD_CHECK_FLAG_L(index, mask, offset) \
-    SCHEDULE_CMD_ID_CHECK_FLAG_L, (index), (mask), SCHEDULE_PACK_S16(offset)
+#define SCHEDULE_CMD_CHECK_FLAG_L(flag, offset) \
+    SCHEDULE_CMD_ID_CHECK_FLAG_L, SCHEDULE_PACK_S16(flag), SCHEDULE_PACK_S16(offset)
 
 #define SCHEDULE_CMD_CHECK_TIME_RANGE_S(startHr, startMin, endHr, endMin, offset) \
     SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S, (startHr), (startMin), (endHr), (endMin), (offset)
