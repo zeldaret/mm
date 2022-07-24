@@ -14,10 +14,9 @@ typedef struct MirRay2 {
     /* 0x164 */ ColliderJntSphElement elements;
     /* 0x1A4 */ u16 unk1A4;
     /* 0x1A6 */ s16 radius;
-    /* 0x1A8 */ f32 unk1A8;
-    /* 0x1AC */ LightNode* unk1AC;
-    /* 0x1B0 */ LightInfo info;
-    /* 0x1BE */ UNK_TYPE1 pad1BE[2];
+    /* 0x1A8 */ f32 range;
+    /* 0x1AC */ LightNode* light;
+    /* 0x1B0 */ LightInfo lightInfo;
 } MirRay2; // size = 0x1C0
 
 extern const ActorInit Mir_Ray2_InitVars;

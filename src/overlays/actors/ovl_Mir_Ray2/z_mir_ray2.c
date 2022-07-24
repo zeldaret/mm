@@ -15,9 +15,6 @@ void MirRay2_Destroy(Actor* thisx, PlayState* play);
 void MirRay2_Update(Actor* thisx, PlayState* play);
 void MirRay2_Draw(Actor* thisx, PlayState* play);
 
-void func_80AF3F70(MirRay2* this);
-void func_80AF3FE0(MirRay2* this, PlayState* play);
-
 const ActorInit Mir_Ray2_InitVars = {
     ACTOR_MIR_RAY2,
     ACTORCAT_ITEMACTION,
@@ -58,48 +55,44 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 void func_80AF3F70(MirRay2* this) {
-    ColliderJntSphElement* elements;
-
     this->collider.elements->dim.worldSphere.center.x = this->actor.world.pos.x;
     this->collider.elements->dim.worldSphere.center.y = this->actor.world.pos.y;
     this->collider.elements->dim.worldSphere.center.z = this->actor.world.pos.z;
-    elements = this->collider.elements;
-    elements->dim.worldSphere.radius = this->unk1A8 * elements->dim.scale;
+    this->collider.elements->dim.worldSphere.radius = this->range * this->collider.elements->dim.scale;
 }
 
 void func_80AF3FE0(MirRay2* this, PlayState* play) {
-    if (this->actor.xzDistToPlayer < this->unk1A8) {
+    if (this->actor.xzDistToPlayer < this->range) {
         Math_StepToS(&this->radius, 150, 50);
     } else {
         Math_StepToS(&this->radius, 0, 50);
     }
-    Lights_PointNoGlowSetInfo(&this->info, this->actor.world.pos.x, this->actor.world.pos.y + 100.0f,
+    Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y + 100.0f,
                               this->actor.world.pos.z, 255, 255, 255, this->radius);
 }
 
 void MirRay2_Init(Actor* thisx, PlayState* play) {
-    s32 switchFlags;
+    s32 pad;
     MirRay2* this = THIS;
 
     if (this->actor.home.rot.x <= 0) {
-        this->unk1A8 = 100.0f;
+        this->range = 100.0f;
     } else {
-        this->unk1A8 = this->actor.home.rot.x * 4.0f;
+        this->range = this->actor.home.rot.x * 4.0f;
     }
     Actor_SetScale(&this->actor, 1.0f);
     if (MIRRAY2_GET_F(&this->actor) != 1) {
-        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawWhiteCircle, this->unk1A8 * 0.02f);
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawWhiteCircle, this->range * 0.02f);
     }
     func_80AF3FE0(this, play);
-    this->unk1AC = LightContext_InsertLight(play, &play->lightCtx, &this->info);
+    this->light = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     Collider_InitJntSph(play, &this->collider);
     Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, &this->elements);
     func_80AF3F70(this);
     this->actor.shape.rot.x = 0;
     this->actor.world.rot.x = this->actor.shape.rot.x;
-    if (MIRRAY2_GET_F(&this->actor) != 1) {
-        switchFlags = MIRRAY2_GET_SWITCH_FLAGS(&this->actor);
-        if ((switchFlags != 0x7F) && !Flags_GetSwitch(play, switchFlags)) {
+    if (MIRRAY2_GET_F(thisx) != 1) {
+        if ((MIRRAY2_GET_SWITCH_FLAGS(thisx) != 0x7F) && !Flags_GetSwitch(play, MIRRAY2_GET_SWITCH_FLAGS(thisx))) {
             this->unk1A4 |= 1;
         }
     }
@@ -108,7 +101,7 @@ void MirRay2_Init(Actor* thisx, PlayState* play) {
 void MirRay2_Destroy(Actor* thisx, PlayState* play) {
     MirRay2* this = THIS;
 
-    LightContext_RemoveLight(play, &play->lightCtx, this->unk1AC);
+    LightContext_RemoveLight(play, &play->lightCtx, this->light);
     Collider_DestroyJntSph(play, &this->collider);
 }
 
@@ -121,7 +114,7 @@ void MirRay2_Update(Actor* thisx, PlayState* play) {
         }
     } else {
         func_80AF3FE0(this, play);
-        if ((this->actor.params & 0xF) != 1) {
+        if (MIRRAY2_GET_F(thisx) != 1) {
             Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 4);
             this->actor.shape.shadowAlpha = 0x50;
         } else {
