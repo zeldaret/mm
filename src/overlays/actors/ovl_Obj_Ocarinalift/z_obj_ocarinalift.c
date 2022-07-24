@@ -217,7 +217,7 @@ void func_80AC9B48(ObjOcarinalift* this) {
 void func_80AC9B5C(ObjOcarinalift* this, PlayState* play) {
     if (func_800B886C(&this->dyna.actor, play)) {
         if (play->msgCtx.ocarinaMode == 4) {
-            if (play->msgCtx.unk1202E == 0) {
+            if (play->msgCtx.lastPlayedSong == 0) {
                 if (OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAMSC_1) {
                     Flags_SetSwitch(play, OBJOCARINALIFT_GET_SWITCH_FLAG(&this->dyna.actor));
                 }
