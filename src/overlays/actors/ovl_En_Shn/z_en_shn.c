@@ -254,7 +254,7 @@ s32 func_80AE6704(Actor* thisx, PlayState* play) {
             }
             break;
         case 6:
-            gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
             func_800B7298(play, &this->actor, 7);
             play->nextEntranceIndex = 0x8460;
             gSaveContext.nextCutsceneIndex = 0;

@@ -213,7 +213,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSyatekiMan_Destroy(Actor* thisx, PlayState* play) {
-    gSaveContext.save.weekEventReg[63] &= (u8)~1;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
 }
 
 /**
@@ -333,7 +333,7 @@ void EnSyatekiMan_Swamp_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                 func_8019F208();
                 Rupees_ChangeBy(-20);
                 SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.stateTimer = 4;
                 this->shootingGameState = SG_GAME_STATE_MOVING_PLAYER;
@@ -402,8 +402,8 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
                 if (GET_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
                     func_801477B4(play);
                     player->stateFlags1 &= ~0x20;
-                    gSaveContext.save.weekEventReg[63] &= (u8)~1;
-                    gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                     this->actionFunc = EnSyatekiMan_Swamp_Idle;
                     gSaveContext.minigameState = 3;
                     this->shootingGameState = SG_GAME_STATE_NONE;
@@ -460,8 +460,8 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.stateTimer = 4;
                 player->stateFlags1 &= ~0x20;
-                gSaveContext.save.weekEventReg[63] &= (u8)~1;
-                gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                 this->actionFunc = EnSyatekiMan_Swamp_Idle;
                 this->shootingGameState = SG_GAME_STATE_NONE;
             }
@@ -652,7 +652,7 @@ void EnSyatekiMan_Town_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                 }
 
                 SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
             }
         } else {
             func_8019F230();
@@ -739,7 +739,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                     this->shootingGameState = SG_GAME_STATE_MOVING_PLAYER;
                     player->stateFlags1 |= 0x20;
                     SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                    gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                     this->actionFunc = EnSyatekiMan_Town_MovePlayerAndSayHighScore;
                 }
                 break;
@@ -760,8 +760,8 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
             case 0x401: // You got [score]? Oh, that's too bad...
                 if (GET_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
                     func_801477B4(play);
-                    gSaveContext.save.weekEventReg[63] &= (u8)~1;
-                    gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                     this->shootingGameState = SG_GAME_STATE_NONE;
                     this->actionFunc = EnSyatekiMan_Town_Idle;
                 } else {
@@ -774,8 +774,8 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
             case 0x403: // You got [score]? Too bad...
                 if (GET_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
                     func_801477B4(play);
-                    gSaveContext.save.weekEventReg[63] &= (u8)~1;
-                    gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                     this->shootingGameState = SG_GAME_STATE_NONE;
                     this->actionFunc = EnSyatekiMan_Town_Idle;
                 } else {
@@ -830,8 +830,8 @@ void EnSyatekiMan_Town_Talk(EnSyatekiMan* this, PlayState* play) {
 
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
-                gSaveContext.save.weekEventReg[63] &= (u8)~1;
-                gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                 player->stateFlags1 &= ~0x20;
                 this->actionFunc = EnSyatekiMan_Town_Idle;
                 this->shootingGameState = SG_GAME_STATE_NONE;
@@ -949,8 +949,8 @@ void EnSyatekiMan_Town_GiveReward(EnSyatekiMan* this, PlayState* play) {
             player->stateFlags1 &= ~0x20;
             this->score = 0;
             this->shootingGameState = SG_GAME_STATE_NONE;
-            gSaveContext.save.weekEventReg[63] &= (u8)~1;
-            gSaveContext.save.weekEventReg[63] &= (u8)~2;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
             this->actionFunc = EnSyatekiMan_SetupIdle;
         }
     } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -1110,8 +1110,8 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
                 this->shootingGameState = SG_GAME_STATE_ENDED;
             } else if (this->score >= 2000) {
                 if (GET_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
-                    gSaveContext.save.weekEventReg[63] &= (u8)~1;
-                    gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                     this->shootingGameState = SG_GAME_STATE_NONE;
                     gSaveContext.minigameState = 3;
                     this->actionFunc = EnSyatekiMan_Swamp_Idle;

@@ -153,7 +153,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->flags = 0;
 
-    gSaveContext.save.weekEventReg[87] &= (u8)~1;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_87_01);
 }
 
 void EnCow_Destroy(Actor* thisx, PlayState* play) {
@@ -301,7 +301,7 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
                 this->actionFunc = EnCow_Talk;
             }
         } else {
-            gSaveContext.save.weekEventReg[87] &= (u8)~1;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_87_01);
         }
     }
 

@@ -117,7 +117,7 @@ void EnBomjima_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->jointTable,
                        this->morphTable, OBJECT_CS_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    gSaveContext.save.weekEventReg[83] &= (u8)~4;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_04);
     this->actor.targetMode = 0;
     this->unk_2E6 = ENBOMJIMA_GET_F0(&this->actor);
     this->unk_2E4 = ENBOMJIMA_GET_F(&this->actor);
@@ -460,7 +460,7 @@ void func_80BFF03C(EnBomjima* this, PlayState* play) {
         ActorCutscene_SetIntentToPlay(this->unk_2D4[0]);
     } else {
         player->stateFlags1 &= ~0x20;
-        gSaveContext.save.weekEventReg[83] &= (u8)~4;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_04);
         this->actor.world.rot.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
         this->unk_2DC = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
         ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D4[0], &this->actor);
@@ -566,7 +566,7 @@ void func_80BFF430(EnBomjima* this, PlayState* play) {
             bombal->unk_150 = 0.0f;
             bombal->unk_14C = this->unk_2F4;
             Actor_ChangeFocus(&this->actor, play, &bombal->actor);
-            gSaveContext.save.weekEventReg[83] &= (u8)~4;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_04);
             func_80BFE65C(this);
             func_801477B4(play);
             this->actionFunc = func_80BFEA94;
@@ -696,17 +696,17 @@ void func_80BFF9B0(EnBomjima* this, PlayState* play) {
             SET_WEEKEVENTREG(WEEKEVENTREG_85_01);
         }
 
-        gSaveContext.save.weekEventReg[11] &= (u8)~1;
-        gSaveContext.save.weekEventReg[11] &= (u8)~2;
-        gSaveContext.save.weekEventReg[11] &= (u8)~4;
-        gSaveContext.save.weekEventReg[11] &= (u8)~8;
-        gSaveContext.save.weekEventReg[11] &= (u8)~0x10;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_11_01);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_11_02);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_11_04);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_11_08);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_11_10);
 
-        gSaveContext.save.weekEventReg[76] &= (u8)~1;
-        gSaveContext.save.weekEventReg[76] &= (u8)~2;
-        gSaveContext.save.weekEventReg[76] &= (u8)~4;
-        gSaveContext.save.weekEventReg[76] &= (u8)~8;
-        gSaveContext.save.weekEventReg[76] &= (u8)~0x10;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_01);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_02);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_04);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_08);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_10);
 
         gSaveContext.save.bombersCaughtNum = 0;
         gSaveContext.save.bombersCaughtOrder[0] = 0;

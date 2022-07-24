@@ -68,7 +68,7 @@ void BgTobira01_Open(BgTobira01* this, PlayState* play) {
     }
 
     if (!(player->stateFlags1 & 0x40) && (GET_WEEKEVENTREG(WEEKEVENTREG_88_40)) && (DECR(this->timer2) == 0)) {
-        gSaveContext.save.weekEventReg[88] &= (u8)~0x40;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_88_40);
     }
 }
 
@@ -78,7 +78,7 @@ void BgTobira01_Init(Actor* thisx, PlayState* play) {
 
     DynaPolyActor_Init(&this->dyna, 1);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_spot11_obj_Colheader_0011C0);
-    gSaveContext.save.weekEventReg[88] &= (u8)~0x40;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_88_40);
     Actor_SetScale(&this->dyna.actor, 1.0f);
     this->timer2 = gSaveContext.save.isNight;
     this->timer = 0;

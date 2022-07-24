@@ -50,7 +50,7 @@ def updateSet(fileContents: str) -> str:
 
 def updateClear(fileContents: str) -> str:
     # gSaveContext.save.weekEventReg[85] &= (u8)~0x80
-    clearRegex = re.compile(rf"gSaveContext.save.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\&=\s*(\(u8\))?(?P<mask>{NUMBER_PATTERN})")
+    clearRegex = re.compile(rf"gSaveContext.save.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\&=\s*(\(u8\))?~(?P<mask>{NUMBER_PATTERN})")
 
     return applyChange(fileContents, clearRegex, getClearMacro)
 

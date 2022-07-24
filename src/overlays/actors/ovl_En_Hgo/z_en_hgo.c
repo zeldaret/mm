@@ -306,7 +306,7 @@ s32 func_80BD0898(EnHgo* this, PlayState* play) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
         return true;
     }
-    if ((play->csCtx.state == 0) && (((gSaveContext.save.weekEventReg[75]) & 0x20)) &&
+    if ((play->csCtx.state == 0) && GET_WEEKEVENTREG(WEEKEVENTREG_75_20) &&
         (this->actionFunc == func_80BD0410)) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Actor_Spawn(&play->actorCtx, play, ACTOR_ELF_MSG2, this->actor.focus.pos.x, this->actor.focus.pos.y,

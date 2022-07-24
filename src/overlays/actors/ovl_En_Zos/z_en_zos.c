@@ -115,7 +115,7 @@ void EnZos_Init(Actor* thisx, PlayState* play) {
 void EnZos_Destroy(Actor* thisx, PlayState* play) {
     EnZos* this = THIS;
 
-    gSaveContext.save.weekEventReg[52] &= (u8)~0x10;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_10);
 }
 
 void func_80BBAE84(EnZos* this, s16 arg1, u8 arg2) {
@@ -546,7 +546,7 @@ void func_80BBBDE0(EnZos* this, PlayState* play) {
     if (!Actor_IsFacingPlayer(&this->actor, 0x4000) && (this->actor.xzDistToPlayer < 100.0f)) {
         SET_WEEKEVENTREG(WEEKEVENTREG_52_10);
     } else {
-        gSaveContext.save.weekEventReg[52] &= (u8)~0x10;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_10);
     }
 
     sp28.x = this->actor.projectedPos.x;

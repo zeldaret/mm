@@ -594,7 +594,7 @@ void func_80BCBFFC(EnScopenuts* this, PlayState* play) {
         if (sp32 == 3) {
             if (this->unk_334 >= (this->path->count - 1)) {
                 ActorCutscene_Stop(this->unk_338);
-                gSaveContext.save.weekEventReg[52] &= (u8)~0x40;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_40);
                 this->actionFunc = func_80BCC288;
             } else {
                 this->unk_334++;

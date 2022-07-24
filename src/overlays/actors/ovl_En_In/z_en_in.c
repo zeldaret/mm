@@ -808,12 +808,12 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
                 case 0x3472:
                     func_808F43E0(this);
-                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     func_80151BB4(play, 0x11);
                     ret = true;
                     break;
                 case 0x3473:
-                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     func_80151BB4(play, 0x11);
                     break;
                 case 0x3475:
@@ -830,14 +830,14 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                         ret = false;
                     } else {
                         func_8019F230();
-                        gSaveContext.save.weekEventReg[56] &= (u8)~8;
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                         func_808F4108(this, play, 0x3479);
                         ret = false;
                     }
                     break;
                 case 0x347B:
                     func_808F4108(this, play, 0x347C);
-                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     ret = false;
                     break;
             }
@@ -1056,7 +1056,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     ret = false;
                     break;
                 case 0x3473:
-                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     func_80151BB4(play, 0x11);
                     break;
                 case 0x3474:
@@ -1161,13 +1161,13 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
                 case 0x3472:
                     func_808F43E0(this);
-                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     func_80151BB4(play, 0x11);
                     ret = true;
                     break;
                 case 0x349E:
                     func_808F4108(this, play, 0x349F);
-                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     ret = false;
                     break;
             }
@@ -1388,7 +1388,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
         this->unk23D = 0;
         if (type == ENIN_YELLOW_SHIRT || type == ENIN_BLUE_SHIRT) {
             if (GET_RACE_FLAGS == RACE_FLAG_2 || GET_RACE_FLAGS == RACE_FLAG_3) {
-                gSaveContext.save.weekEventReg[56] &= (u8)~8;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                 this->unk4A8 = 0;
                 this->unk4AC |= 2;
                 func_808F35AC(this, play);
@@ -1409,7 +1409,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                 }
             } else {
                 if (GET_RACE_FLAGS != RACE_FLAG_START) {
-                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     this->unk23C = 0;
                     this->unk4AC |= 2;
                     if (type == ENIN_BLUE_SHIRT) {

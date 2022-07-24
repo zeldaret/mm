@@ -277,15 +277,15 @@ void EnKujiya_SetBoughtTicket(void) {
 void EnKujiya_UnsetBoughtTicket(void) {
     switch (CURRENT_DAY) {
         case 1:
-            gSaveContext.save.weekEventReg[33] &= (u8)~0x10;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_33_10);
             break;
 
         case 2:
-            gSaveContext.save.weekEventReg[33] &= (u8)~0x20;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_33_20);
             break;
 
         case 3:
-            gSaveContext.save.weekEventReg[33] &= (u8)~0x40;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_33_40);
             break;
     }
 }

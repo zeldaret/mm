@@ -202,8 +202,8 @@ void func_809C4BC4(EnBomBowlMan* this, PlayState* play) {
     func_809C493C(this, 3, 1.0f);
     this->unk_2D4 = this->actor.yawTowardsPlayer;
     this->unk_290 = this->actor.yawTowardsPlayer;
-    gSaveContext.save.weekEventReg[73] &= (u8)~0x10;
-    gSaveContext.save.weekEventReg[85] &= (u8)~2;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_73_10);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_85_02);
     this->unk_29C = 0;
     this->actionFunc = func_809C4DA4;
 }
@@ -337,13 +337,13 @@ void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;
         gSaveContext.nextTransitionType = TRANS_TYPE_03;
-        gSaveContext.save.weekEventReg[75] &= (u8)~0x40;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_75_40);
         if (player->transformation == PLAYER_FORM_HUMAN) {
             SET_WEEKEVENTREG(WEEKEVENTREG_84_80);
-            gSaveContext.save.weekEventReg[77] &= (u8)~2;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_77_02);
         } else {
             SET_WEEKEVENTREG(WEEKEVENTREG_73_20);
-            gSaveContext.save.weekEventReg[85] &= (u8)~1;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_85_01);
         }
     }
 }
@@ -484,7 +484,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
             this->unk_298++;
             if (this->unk_298 >= this->path->count) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_84_80);
-                gSaveContext.save.weekEventReg[83] &= (u8)~4;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_04);
                 ActorCutscene_Stop(this->unk_2D6);
                 Actor_MarkForDeath(&this->actor);
             } else {

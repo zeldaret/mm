@@ -258,16 +258,16 @@ void func_80BED090(PlayState* play) {
 
     if (player->transformation == PLAYER_FORM_DEKU) {
         SET_WEEKEVENTREG(WEEKEVENTREG_63_08);
-        gSaveContext.save.weekEventReg[63] &= (u8)~0x10;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_10);
     } else if (player->transformation == PLAYER_FORM_ZORA) {
-        gSaveContext.save.weekEventReg[63] &= (u8)~8;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_08);
         SET_WEEKEVENTREG(WEEKEVENTREG_63_10);
     } else if (player->transformation == PLAYER_FORM_GORON) {
         SET_WEEKEVENTREG(WEEKEVENTREG_63_08);
         SET_WEEKEVENTREG(WEEKEVENTREG_63_10);
     } else if (player->transformation == PLAYER_FORM_HUMAN) {
-        gSaveContext.save.weekEventReg[63] &= (u8)~8;
-        gSaveContext.save.weekEventReg[63] &= (u8)~0x10;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_08);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_10);
     }
 }
 

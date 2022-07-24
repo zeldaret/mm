@@ -44,11 +44,11 @@
  *     Passed through Milk Road after winning the Milk Run
  *
  * weekEventReg flags unset by this actor:
- * - gSaveContext.save.weekEventReg[31] &= (u8)~0x80
+ * - CLEAR_WEEKEVENTREG(WEEKEVENTREG_31_80)
  *     Turned off when the Milk Run finishes
- * - gSaveContext.save.weekEventReg[52] &= (u8)~1
+ * - CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_01)
  *     Turned off if Player lose the Milk Run
- * - gSaveContext.save.weekEventReg[52] &= (u8)~2
+ * - CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_02)
  *     Turned off if Player wins the Milk Run
  */
 
@@ -1296,7 +1296,7 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
             gSaveContext.seqIndex = 0xFF;
-            gSaveContext.save.weekEventReg[31] &= (u8)~0x80;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_31_80);
             gSaveContext.nightSeqIndex = 0xFF;
 
             if (!(GET_WEEKEVENTREG(WEEKEVENTREG_52_01)) && !(GET_WEEKEVENTREG(WEEKEVENTREG_52_02))) {
@@ -1306,14 +1306,14 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
                     gSaveContext.nextTransitionType = TRANS_TYPE_03;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     SET_WEEKEVENTREG(WEEKEVENTREG_52_01);
-                    gSaveContext.save.weekEventReg[52] &= (u8)~2;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_02);
                 } else {
                     play->nextEntranceIndex = 0x6480;
                     play->transitionType = TRANS_TYPE_64;
                     gSaveContext.nextTransitionType = TRANS_TYPE_03;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     SET_WEEKEVENTREG(WEEKEVENTREG_52_02);
-                    gSaveContext.save.weekEventReg[52] &= (u8)~1;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_01);
                 }
             }
             break;

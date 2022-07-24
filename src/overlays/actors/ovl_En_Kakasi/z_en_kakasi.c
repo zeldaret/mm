@@ -309,7 +309,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
             if (this->actor.textId == 0) {
                 // dialogue after skipped time 'did you feel that? went by in an instant'
                 this->actor.textId = 0x1653;
-                gSaveContext.save.weekEventReg[83] &= (u8)~1;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_01);
                 this->talkState = TEXT_STATE_5;
                 player->stateFlags1 |= 0x20;
                 this->actor.flags |= ACTOR_FLAG_10000;

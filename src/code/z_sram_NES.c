@@ -233,15 +233,15 @@ void Sram_ClearHighscores(void) {
  */
 void Sram_ClearFlagsAtDawnOfTheFirstDay(void) {
     // Unconfirmed: "Link the Goron Claims His Reservation: 4:30 PM"
-    gSaveContext.save.weekEventReg[55] &= (u8)~2;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_55_02);
     // Unconfirmed: "Postman fleeing town"
-    gSaveContext.save.weekEventReg[90] &= (u8)~1;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_01);
     // Unconfirmed: "Postman is about to flee"
-    gSaveContext.save.weekEventReg[89] &= (u8)~0x40;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_89_40);
     // Unconfirmed: "Postman has delivered priority mail"
-    gSaveContext.save.weekEventReg[89] &= (u8)~8;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_89_08);
     // Unconfirmed: "Postman showing priority mail to Madame"
-    gSaveContext.save.weekEventReg[85] &= (u8)~0x80;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_85_80);
 }
 
 /**
@@ -483,9 +483,9 @@ void Sram_IncrementDay(void) {
     gSaveContext.save.bombersCaughtOrder[4] = 0;
 
     // Unconfirmed: "Bombers Hide & Seek started on Day 1???"
-    gSaveContext.save.weekEventReg[73] &= (u8)~0x10;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_73_10);
     // Unconfirmed: "Bombers Hide & Seek in Progress"
-    gSaveContext.save.weekEventReg[85] &= (u8)~2;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_85_02);
 }
 
 u16 Sram_CalcChecksum(void* data, size_t count) {
@@ -1558,7 +1558,7 @@ void Sram_SaveSpecialNewDay(PlayState* play) {
     day = gSaveContext.save.day;
 
     // Unconfirmed: "Obtained Fierce Deity Mask?"
-    gSaveContext.save.weekEventReg[84] &= (u8)~0x20;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_84_20);
 
     Sram_SaveEndOfCycle(play);
     func_8014546C(&play->sramCtx);

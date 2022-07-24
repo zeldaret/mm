@@ -255,7 +255,7 @@ void func_809542A0(BgIngate* this, PlayState* play) {
     play->transitionType = TRANS_TYPE_03;
     gSaveContext.nextTransitionType = TRANS_TYPE_03;
     this->actionFunc = func_80953F8C;
-    gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
     func_800FE498();
 }
 
@@ -291,7 +291,7 @@ void func_809543D4(BgIngate* this, PlayState* play) {
                         this->timePath = &play->setupPathList[this->timePath->unk1];
                     }
                     func_80953F14(this, play);
-                    gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
                     func_8019F230();
                 }
                 func_801477B4(play);
@@ -299,7 +299,7 @@ void func_809543D4(BgIngate* this, PlayState* play) {
             case 0x9E6:
                 if (play->msgCtx.choiceIndex == 0) {
                     func_80953EA4(this, play);
-                    gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
                     func_8019F208();
                 } else {
                     func_800B7298(play, &this->dyna.actor, 6);
@@ -332,7 +332,7 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
         this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_FF(&this->dyna.actor), 0);
         this->dyna.actor.room = -1;
         if (GET_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
-            gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
         }
         if (!(gSaveContext.eventInf[3] & 0x20) && (GET_WEEKEVENTREG(WEEKEVENTREG_90_40))) {
             phi_a2 = 1;

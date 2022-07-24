@@ -525,7 +525,7 @@ void func_80B67C1C(EnSth* this, PlayState* play) {
 
             case 0x91A:
                 SET_WEEKEVENTREG(WEEKEVENTREG_34_40);
-                gSaveContext.save.weekEventReg[34] &= (u8)~8;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_34_08);
 
             case 0x902:
             case 0x903:

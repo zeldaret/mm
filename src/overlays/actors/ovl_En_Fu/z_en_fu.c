@@ -229,8 +229,8 @@ void EnFu_Init(Actor* thisx, PlayState* play) {
 void EnFu_Destroy(Actor* thisx, PlayState* play) {
     EnFu* this = THIS;
 
-    gSaveContext.save.weekEventReg[63] &= (u8)~1;
-    gSaveContext.save.weekEventReg[8] &= (u8)~1;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_08_01);
     Collider_DestroyCylinder(play, &this->collider);
 }
 
@@ -532,7 +532,7 @@ void func_80962660(EnFu* this, PlayState* play) {
 
             case 0x287D:
                 SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                 func_801477B4(play);
                 player->stateFlags1 |= 0x20;
                 this->unk_53C = 0;
@@ -604,8 +604,8 @@ void func_809628D0(EnFu* this, PlayState* play) {
                     case 0x2884:
                     case 0x2887:
                     case 0x288A:
-                        gSaveContext.save.weekEventReg[63] &= (u8)~1;
-                        gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                         func_809622FC(this);
                         break;
 
@@ -824,7 +824,7 @@ void func_809632D0(EnFu* this) {
         Interface_ChangeAlpha(50);
     }
 
-    gSaveContext.save.weekEventReg[8] &= (u8)~1;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_08_01);
 
     if (this->unk_2D4 != NULL) {
         BgFuMizu* mizu = this->unk_2D4;

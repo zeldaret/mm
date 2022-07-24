@@ -890,12 +890,12 @@ void func_80B2A498(EnFish2* this, PlayState* play) {
             temp_v0->speedXZ = 4.0f;
             temp_v0->velocity.y = 15.0f;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
-            gSaveContext.save.weekEventReg[81] &= (u8)~0x10;
-            gSaveContext.save.weekEventReg[81] &= (u8)~0x20;
-            gSaveContext.save.weekEventReg[81] &= (u8)~0x40;
-            gSaveContext.save.weekEventReg[81] &= (u8)~0x80;
-            gSaveContext.save.weekEventReg[82] &= (u8)~1;
-            gSaveContext.save.weekEventReg[82] &= (u8)~2;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_81_10);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_81_20);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_81_40);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_81_80);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_82_01);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_82_02);
         }
     }
 

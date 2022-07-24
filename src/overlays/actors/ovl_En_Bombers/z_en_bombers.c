@@ -130,11 +130,11 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
                     while (cs != -1) { bomBowlMan->unk_2CC[i] = cs; cs = ActorCutscene_GetAdditionalCutscene(cs); i++; }
                     // clang-format on
 
-                    gSaveContext.save.weekEventReg[76] &= (u8)~1;
-                    gSaveContext.save.weekEventReg[76] &= (u8)~2;
-                    gSaveContext.save.weekEventReg[76] &= (u8)~4;
-                    gSaveContext.save.weekEventReg[76] &= (u8)~8;
-                    gSaveContext.save.weekEventReg[76] &= (u8)~0x10;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_01);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_02);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_04);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_08);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_10);
                 }
             }
             Actor_MarkForDeath(&this->actor);

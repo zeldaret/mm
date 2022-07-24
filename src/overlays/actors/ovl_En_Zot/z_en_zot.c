@@ -229,7 +229,7 @@ void EnZot_Destroy(Actor* thisx, PlayState* play) {
 
     Collider_DestroyCylinder(play, &this->collider);
     if (ENZOT_GET_1F(&this->actor) == 8) {
-        gSaveContext.save.weekEventReg[41] &= (u8)~0x20;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_41_20);
     }
 }
 
@@ -1102,7 +1102,7 @@ void func_80B98AD0(EnZot* this, PlayState* play) {
             case 0x12B8:
                 func_801477B4(play);
                 this->actionFunc = func_80B98CA8;
-                gSaveContext.save.weekEventReg[41] &= (u8)~0x20;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_41_20);
                 AudioOcarina_SetInstrumentId(OCARINA_INSTRUMENT_OFF);
                 break;
 
@@ -1157,7 +1157,7 @@ void func_80B98CA8(EnZot* this, PlayState* play) {
     }
 
     if (this->actor.xzDistToPlayer > 100.0f) {
-        gSaveContext.save.weekEventReg[41] &= (u8)~0x20;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_41_20);
     }
 }
 

@@ -74,37 +74,37 @@ s32 func_80BD697C(s16 ruppeIndex) {
     switch (ruppeIndex) {
         case RUPEE_GREEN:
             if (GET_WEEKEVENTREG(WEEKEVENTREG_53_04)) {
-                gSaveContext.save.weekEventReg[53] &= (u8)~4;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_53_04);
                 return true;
             }
             break;
         case RUPEE_BLUE:
             if (GET_WEEKEVENTREG(WEEKEVENTREG_53_80)) {
-                gSaveContext.save.weekEventReg[53] &= (u8)~0x80;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_53_80);
                 return true;
             }
             break;
         case RUPEE_RED:
             if (GET_WEEKEVENTREG(WEEKEVENTREG_54_01)) {
-                gSaveContext.save.weekEventReg[54] &= (u8)~1;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_54_01);
                 return true;
             }
             break;
         case RUPEE_ORANGE:
             if (GET_WEEKEVENTREG(WEEKEVENTREG_54_02)) {
-                gSaveContext.save.weekEventReg[54] &= (u8)~2;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_54_02);
                 return true;
             }
             break;
         case RUPEE_PURPLE:
             if (GET_WEEKEVENTREG(WEEKEVENTREG_54_04)) {
-                gSaveContext.save.weekEventReg[54] &= (u8)~4;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_54_04);
                 return true;
             }
             break;
         case RUPEE_UNUSED:
             if ((GET_WEEKEVENTREG(WEEKEVENTREG_54_08))) {
-                gSaveContext.save.weekEventReg[54] &= (u8)~8;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_54_08);
                 return true;
             }
             break;

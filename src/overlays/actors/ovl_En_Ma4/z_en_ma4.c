@@ -238,7 +238,7 @@ void EnMa4_Destroy(Actor* thisx, PlayState* play) {
     EnMa4* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    gSaveContext.save.weekEventReg[8] &= (u8)~1;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_08_01);
 }
 
 // Running in circles in the ranch
@@ -726,7 +726,7 @@ void EnMa4_HorsebackGameWait(EnMa4* this, PlayState* play) {
 }
 
 void EnMa4_SetupHorsebackGameEnd(EnMa4* this, PlayState* play) {
-    gSaveContext.save.weekEventReg[8] &= (u8)~1;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_08_01);
     this->actionFunc = EnMa4_HorsebackGameEnd;
     Audio_QueueSeqCmd(NA_BGM_STOP);
     Audio_QueueSeqCmd(NA_BGM_HORSE_GOAL | 0x8000);

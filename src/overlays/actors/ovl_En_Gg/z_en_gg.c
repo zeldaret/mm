@@ -660,9 +660,9 @@ void EnGg_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    gSaveContext.save.weekEventReg[20] &= (u8)~4;
-    gSaveContext.save.weekEventReg[20] &= (u8)~8;
-    gSaveContext.save.weekEventReg[20] &= (u8)~0x10;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_04);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_08);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_10);
     this->actor.flags &= ~ACTOR_FLAG_80;
     this->unk_310 = this->actor.home.pos.y;
     this->unk_2DC = this->actor.cutscene;

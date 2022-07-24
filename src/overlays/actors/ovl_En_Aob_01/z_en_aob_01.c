@@ -413,7 +413,7 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
 void func_809C1C9C(EnAob01* this, PlayState* play) {
     if (gSaveContext.rupeeAccumulator == 0) {
         SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
-        gSaveContext.save.weekEventReg[63] &= (u8)~2;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
         this->unk_2D2 |= 0x20;
         func_800FD750(0x40);
         play->nextEntranceIndex = 0x7C10;
@@ -780,11 +780,11 @@ void func_809C2BE4(EnAob01* this, PlayState* play) {
 
     if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
         if (GET_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
-            gSaveContext.save.weekEventReg[63] &= (u8)~2;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
         }
 
         if (GET_WEEKEVENTREG(WEEKEVENTREG_63_01)) {
-            gSaveContext.save.weekEventReg[63] &= (u8)~1;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
         }
 
         this->unk_210 = 0;
@@ -834,11 +834,11 @@ void func_809C2D0C(EnAob01* this, PlayState* play) {
             this->unk_434 = 0;
             this->actor.shape.rot.y = this->actor.world.rot.y;
             if (GET_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
-                gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
             }
 
             if (GET_WEEKEVENTREG(WEEKEVENTREG_63_01)) {
-                gSaveContext.save.weekEventReg[63] &= (u8)~1;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
             }
 
             this->unk_210 = 0x354C;
@@ -967,7 +967,7 @@ void EnAob01_Destroy(Actor* thisx, PlayState* play) {
     EnAob01* this = THIS;
 
     if (!(this->unk_2D2 & 0x20)) {
-        gSaveContext.save.weekEventReg[63] &= (u8)~1;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
     }
     Collider_DestroyCylinder(play, &this->collider);
 }

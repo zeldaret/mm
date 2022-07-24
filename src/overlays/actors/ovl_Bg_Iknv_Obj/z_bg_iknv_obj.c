@@ -84,7 +84,7 @@ void BgIknvObj_Init(Actor* thisx, PlayState* play) {
             Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
             Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
             this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
-            gSaveContext.save.weekEventReg[51] &= (u8)~0x10;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_51_10);
             Actor_SetFocus(&this->dyna.actor, IREG(88));
             break;
         default:
@@ -98,7 +98,7 @@ void BgIknvObj_Destroy(Actor* thisx, PlayState* play) {
     if (IKNV_OBJ_TYPE(this) != IKNV_OBJ_RAISED_DOOR) {
         if (IKNV_OBJ_TYPE(this) == IKNV_OBJ_SAKON_DOOR) {
             Collider_DestroyCylinder(play, &this->collider);
-            gSaveContext.save.weekEventReg[51] &= (u8)~0x10;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_51_10);
         } else {
             return;
         }
@@ -156,7 +156,7 @@ s32 func_80BD7E0C(BgIknvObj* this, s16 targetRotation, PlayState* play) {
 void func_80BD7ED8(BgIknvObj* this, PlayState* play) {
     if (func_80BD7E0C(this, this->dyna.actor.home.rot.y, play)) {
         this->actionFunc = BgIknvObj_UpdateSakonDoor;
-        gSaveContext.save.weekEventReg[51] &= (u8)~0x10;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_51_10);
     }
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }

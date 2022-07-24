@@ -102,7 +102,7 @@ void EnMm3_Init(Actor* thisx, PlayState* play) {
 void EnMm3_Destroy(Actor* thisx, PlayState* play) {
     EnMm3* this = THIS;
 
-    gSaveContext.save.weekEventReg[63] &= (u8)~1;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
     Collider_DestroyCylinder(play, &this->collider);
 }
 
@@ -346,8 +346,8 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
                     play_sound(NA_SE_SY_START_SHOT);
                     func_80A6FBA0(this);
                 } else {
-                    gSaveContext.save.weekEventReg[63] &= (u8)~1;
-                    gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                     func_80A6F270(this);
                 }
             }
@@ -369,7 +369,7 @@ void func_80A6FBA0(EnMm3* this) {
     func_801A5BD0(0x6F);
     func_801A0238(0, 5);
     SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
-    gSaveContext.save.weekEventReg[63] &= (u8)~2;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
     this->actionFunc = func_80A6FBFC;
 }
 

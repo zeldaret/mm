@@ -161,7 +161,7 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
         if (GET_WEEKEVENTREG(WEEKEVENTREG_61_04)) {
             if (!(GET_WEEKEVENTREG(WEEKEVENTREG_59_01)) || (gSaveContext.save.entranceIndex != 0x2020)) {
                 if ((gSaveContext.save.entranceIndex != 0x2020) && (GET_WEEKEVENTREG(WEEKEVENTREG_59_01))) {
-                    gSaveContext.save.weekEventReg[59] &= (u8)~1;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_59_01);
                 }
                 func_80BD8700(this);
             } else {
@@ -303,7 +303,7 @@ void func_80BD8A7C(EnPamera* this, PlayState* play) {
                        0x3000, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Math_Vec3f_StepTo(&this->actor.world.pos, &this->actor.home.pos, 1.5f) < 10.0f) {
-        gSaveContext.save.weekEventReg[59] &= (u8)~1;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_59_01);
         if (!(GET_WEEKEVENTREG(WEEKEVENTREG_61_04))) {
             func_80BD92D0(this, play);
             SET_WEEKEVENTREG(WEEKEVENTREG_61_04);
@@ -852,7 +852,7 @@ void func_80BDA344(Actor* thisx, PlayState* play) {
     if (func_80BD9CB8(this, play)) {
         // Pamela is outside
         if (GET_WEEKEVENTREG(WEEKEVENTREG_59_01)) {
-            gSaveContext.save.weekEventReg[59] &= (u8)~1;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_59_01);
         }
         if (!(GET_WEEKEVENTREG(WEEKEVENTREG_61_04))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_61_04);

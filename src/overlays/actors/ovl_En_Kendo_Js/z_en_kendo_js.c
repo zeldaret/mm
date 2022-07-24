@@ -146,7 +146,7 @@ void EnKendoJs_Destroy(Actor* thisx, PlayState* play) {
     EnKendoJs* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    gSaveContext.save.weekEventReg[82] &= (u8)~8;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_82_08);
 }
 
 void func_80B26538(EnKendoJs* this) {
@@ -559,7 +559,7 @@ void func_80B27188(EnKendoJs* this, PlayState* play) {
         }
 
         if (this->unk_284 == 7) {
-            gSaveContext.save.weekEventReg[82] &= (u8)~8;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_82_08);
             func_80B26AE8(this);
         }
     }
@@ -599,7 +599,7 @@ void func_80B274BC(EnKendoJs* this, PlayState* play) {
                 this->unk_288 = 0x272E;
             }
             player->stateFlags1 |= 0x20;
-            gSaveContext.save.weekEventReg[82] &= (u8)~8;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_82_08);
             func_80B26AE8(this);
             return;
         }

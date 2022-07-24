@@ -141,7 +141,7 @@ void EnJgameTsn_Destroy(Actor* thisx, PlayState* play) {
     EnJgameTsn* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    gSaveContext.save.weekEventReg[90] &= (u8)~0x20;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_20);
 }
 
 void func_80C13B74(EnJgameTsn* this) {
@@ -480,7 +480,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
                 func_801477B4(play);
                 gSaveContext.minigameState = 3;
                 gSaveContext.unk_3DD0[4] = 5;
-                gSaveContext.save.weekEventReg[90] &= (u8)~0x20;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_20);
                 func_80C144E4(this);
                 break;
 
