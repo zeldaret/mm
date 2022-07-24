@@ -354,7 +354,7 @@ typedef enum SunsSongState {
 #define SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(score) (gSaveContext.save.shootingGalleryHighScores = ((gSaveContext.save.shootingGalleryHighScores) & 0xFFFF) | ((u16)(score) << 0x10))
 
 
-#define PACK_WEEKEVENTREG_FLAG(index, bit) (((index) << 8) | (bit))
+#define PACK_WEEKEVENTREG_FLAG(index, mask) (((index) << 8) | (mask))
 
 #define WEEKEVENTREG_00_01 PACK_WEEKEVENTREG_FLAG(0, 0x01)
 #define WEEKEVENTREG_00_02 PACK_WEEKEVENTREG_FLAG(0, 0x02)
