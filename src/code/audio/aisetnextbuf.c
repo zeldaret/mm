@@ -60,6 +60,7 @@ void func_80194804(s32 index) {
     D_801D618C = D_801D6028[index];
 }
 
+// Only used below
 s16 func_80194840(s32 arg0) {
     s32 i;
     s32 j = 0;
