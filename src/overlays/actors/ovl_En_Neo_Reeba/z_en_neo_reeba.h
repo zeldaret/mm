@@ -8,7 +8,7 @@
 
 struct EnNeoReeba;
 
-typedef void (*EnNeoReebaActionFunc)(struct EnNeoReeba*, GlobalContext*);
+typedef void (*EnNeoReebaActionFunc)(struct EnNeoReeba*, PlayState*);
 
 typedef struct EnNeoReeba {
     /* 0x000 */ Actor actor;

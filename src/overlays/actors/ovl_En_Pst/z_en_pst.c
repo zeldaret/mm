@@ -11,13 +11,13 @@
 
 #define THIS ((EnPst*)thisx)
 
-void EnPst_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnPst_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnPst_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnPst_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnPst_Init(Actor* thisx, PlayState* play);
+void EnPst_Destroy(Actor* thisx, PlayState* play);
+void EnPst_Update(Actor* thisx, PlayState* play);
+void EnPst_Draw(Actor* thisx, PlayState* play);
 
-void func_80B2BD98(EnPst* this, GlobalContext* globalCtx);
-void func_80B2BE54(EnPst* this, GlobalContext* globalCtx);
+void func_80B2BD98(EnPst* this, PlayState* play);
+void func_80B2BE54(EnPst* this, PlayState* play);
 
 s32 D_80B2C200[] = { 0x02091F09, 0x23030400, 0x01040002 };
 s32 D_80B2C20C[] = { 0x020A030A, 0x07030400, 0x01040002 };

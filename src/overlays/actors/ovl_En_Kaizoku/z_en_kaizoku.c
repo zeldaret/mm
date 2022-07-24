@@ -10,9 +10,9 @@
 
 #define THIS ((EnKaizoku*)thisx)
 
-void EnKaizoku_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnKaizoku_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnKaizoku_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnKaizoku_Init(Actor* thisx, PlayState* play);
+void EnKaizoku_Destroy(Actor* thisx, PlayState* play);
+void EnKaizoku_Update(Actor* thisx, PlayState* play);
 
 #if 0
 // static DamageTable sDamageTable = {

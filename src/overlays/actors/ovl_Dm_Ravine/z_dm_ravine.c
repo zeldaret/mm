@@ -10,11 +10,11 @@
 
 #define THIS ((DmRavine*)thisx)
 
-void DmRavine_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmRavine_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmRavine_DoNothing(DmRavine* this, GlobalContext* globalCtx);
-void DmRavine_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmRavine_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmRavine_Init(Actor* thisx, PlayState* play);
+void DmRavine_Destroy(Actor* thisx, PlayState* play);
+void DmRavine_DoNothing(DmRavine* this, PlayState* play);
+void DmRavine_Update(Actor* thisx, PlayState* play);
+void DmRavine_Draw(Actor* thisx, PlayState* play);
 
 const ActorInit Dm_Ravine_InitVars = {
     ACTOR_DM_RAVINE,
@@ -28,29 +28,30 @@ const ActorInit Dm_Ravine_InitVars = {
     (ActorFunc)DmRavine_Draw,
 };
 
-void DmRavine_Init(Actor* thisx, GlobalContext* globalCtx) {
+void DmRavine_Init(Actor* thisx, PlayState* play) {
+    s32 pad;
     DmRavine* this = THIS;
-    u8 flag = gSaveContext.save.weekEventReg[0];
-    if (((flag & 0x10) | cREG(0)) != 0) {
+
+    if (((((void)0, gSaveContext.save.weekEventReg[0]) & 0x10) | cREG(0)) != 0) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
     this->isActive = false;
-    globalCtx->roomCtx.unk7A[0] = 1;
-    globalCtx->roomCtx.unk7A[1] = 0;
+    play->roomCtx.unk7A[0] = 1;
+    play->roomCtx.unk7A[1] = 0;
     this->state = 0;
     Actor_SetScale(&this->actor, 1.0f);
     this->actionFunc = DmRavine_DoNothing;
 }
 
-void DmRavine_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void DmRavine_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void DmRavine_DoNothing(DmRavine* this, GlobalContext* globalCtx) {
+void DmRavine_DoNothing(DmRavine* this, PlayState* play) {
 }
 
-void DmRavine_Update(Actor* thisx, GlobalContext* globalCtx) {
+void DmRavine_Update(Actor* thisx, PlayState* play) {
     DmRavine* this = THIS;
     RoomContext* roomCtx;
 
@@ -59,12 +60,12 @@ void DmRavine_Update(Actor* thisx, GlobalContext* globalCtx) {
             return;
         case DM_RAVINE_STATE_ACTIVE:
             this->isActive = true;
-            globalCtx->roomCtx.unk7A[1]++;
-            if (globalCtx->roomCtx.unk7A[1] > 254) {
-                globalCtx->roomCtx.unk7A[1] = 254;
-                if (globalCtx->csCtx.frames > 700) {
-                    globalCtx->roomCtx.unk7A[1] = 255;
-                    globalCtx->roomCtx.unk7A[0] = 0;
+            play->roomCtx.unk7A[1]++;
+            if (play->roomCtx.unk7A[1] > 254) {
+                play->roomCtx.unk7A[1] = 254;
+                if (play->csCtx.frames > 700) {
+                    play->roomCtx.unk7A[1] = 255;
+                    play->roomCtx.unk7A[0] = 0;
                     this->state++; // -> DM_RAVINE_STATE_PENDING_DEATH
                 }
             }
@@ -75,5 +76,5 @@ void DmRavine_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void DmRavine_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void DmRavine_Draw(Actor* thisx, PlayState* play) {
 }

@@ -6,7 +6,7 @@
 
 struct EnHorseGameCheck;
 
-typedef s32 (*EnHorseGameCheckUnkFunc)(struct EnHorseGameCheck*, GlobalContext*);
+typedef s32 (*EnHorseGameCheckUnkFunc)(struct EnHorseGameCheck*, PlayState*);
 
 #define ENHORSEGAMECHECK_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define ENHORSEGAMECHECK_GET_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
@@ -39,7 +39,7 @@ enum {
         gSaveContext.save.weekEventReg[92] &= (u8)~RACE_FLAGS;                                                      \
         gSaveContext.save.weekEventReg[92] =                                                                        \
             gSaveContext.save.weekEventReg[92] | (u8)((gSaveContext.save.weekEventReg[92] & ~RACE_FLAGS) | (flag)); \
-    }
+    } (void)0
 
 typedef struct EnHorseGameCheck {
     /* 0x000 */ DynaPolyActor dyna;

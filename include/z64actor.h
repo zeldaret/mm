@@ -13,13 +13,13 @@
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
 
 struct Actor;
-struct GlobalContext;
+struct PlayState;
 struct Lights;
 struct CollisionPoly;
 
 struct EnBox;
 
-typedef void(*ActorFunc)(struct Actor* this, struct GlobalContext* globalCtx);
+typedef void(*ActorFunc)(struct Actor* this, struct PlayState* play);
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
@@ -81,6 +81,11 @@ typedef struct {
 } ActorEnTest20C; // size = 0x3C
 
 typedef struct {
+    /* 0x0 */ s16 unk_0; // frame?
+    /* 0x2 */ Vec3s unk_2; // pos?
+} struct_80124618; // size = 0x8
+
+typedef struct {
     /* 0x00 */ s16 id;
     /* 0x02 */ u8 type;
     /* 0x04 */ u32 flags;
@@ -110,7 +115,7 @@ typedef struct {
     /* 0x1E */ s8 numLoaded; // original name: "clients"
 } ActorOverlay; // size = 0x20
 
-typedef void(*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct GlobalContext* globalCtx);
+typedef void(*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct PlayState* play);
 
 typedef struct {
     /* 0x00 */ Vec3s rot; // Current actor shape rotation
@@ -221,7 +226,7 @@ typedef enum {
     /* 0x00 */ ITEM00_RUPEE_GREEN,
     /* 0x01 */ ITEM00_RUPEE_BLUE,
     /* 0x02 */ ITEM00_RUPEE_RED,
-    /* 0x03 */ ITEM00_HEART,
+    /* 0x03 */ ITEM00_RECOVERY_HEART,
     /* 0x04 */ ITEM00_BOMBS_A,
     /* 0x05 */ ITEM00_ARROWS_10,
     /* 0x06 */ ITEM00_HEART_PIECE,
@@ -254,13 +259,16 @@ typedef enum {
 
 struct EnItem00;
 
-typedef void (*EnItem00ActionFunc)(struct EnItem00*, struct GlobalContext*);
+typedef void (*EnItem00ActionFunc)(struct EnItem00*, struct PlayState*);
+
+#define ENITEM00_GET_8000(thisx) ((thisx)->params & 0x8000)
+#define ENITEM00_GET_7F00(thisx) (((thisx)->params & 0x7F00) >> 8)
 
 typedef struct EnItem00 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnItem00ActionFunc actionFunc;
     /* 0x148 */ s16 collectibleFlag;
-    /* 0x14A */ s16 unk14A;
+    /* 0x14A */ s16 getItemId;
     /* 0x14C */ s16 unk14C;
     /* 0x14E */ s16 unk14E;
     /* 0x150 */ s16 unk150;
@@ -272,7 +280,7 @@ typedef struct EnItem00 {
 
 struct EnAObj;
 
-typedef void (*EnAObjActionFunc)(struct EnAObj*, struct GlobalContext*);
+typedef void (*EnAObjActionFunc)(struct EnAObj*, struct PlayState*);
 
 typedef struct EnAObj {
     /* 0x000 */ Actor actor;
@@ -1130,7 +1138,7 @@ typedef enum {
 #define ACTOR_FLAG_2000          (1 << 13)
 // 
 #define ACTOR_FLAG_4000          (1 << 14)
-// 
+//! Carried by arrow
 #define ACTOR_FLAG_8000          (1 << 15)
 // 
 #define ACTOR_FLAG_10000         (1 << 16)

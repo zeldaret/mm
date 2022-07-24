@@ -82,7 +82,7 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
             state->running = 0;
         }
 
-        SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
+        SET_NEXT_GAMESTATE(&this->state, Play_Init, PlayState);
         gSaveContext.save.time = CLOCK_TIME(6, 0);
         D_801BDBC8 = 0xFE;
     } else if (this->transitionCountdown == 90) {
@@ -226,7 +226,7 @@ void Daytelop_Init(GameState* thisx) {
     DaytelopContext* this = (DaytelopContext*)thisx;
 
     Game_SetFramerateDivisor(thisx, 1);
-    Matrix_StateAlloc(thisx);
+    Matrix_Init(thisx);
     ShrinkWindow_Destroy();
     View_Init(&this->view, thisx->gfxCtx);
     thisx->main = Daytelop_Main;

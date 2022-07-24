@@ -6,18 +6,19 @@
 #include "objects/object_ani/object_ani.h"
 #include "objects/object_fsn/object_fsn.h"
 
-#define ENOSSAN_LIMB_MAX MAX(FSN_LIMB_MAX + 1, ANI_LIMB_MAX)
+// Note: adding 1 to FSN_LIMB_MAX due to bug in object_fsn, see bug in object_fsn.xml
+#define ENOSSAN_LIMB_MAX MAX((s32)FSN_LIMB_MAX + 1, (s32)ANI_LIMB_MAX)
 
 struct EnOssan;
 
-typedef void (*EnOssanActionFunc)(struct EnOssan*, GlobalContext*);
+typedef void (*EnOssanActionFunc)(struct EnOssan*, PlayState*);
 typedef void (*EnOssanBlinkFunc)(struct EnOssan*);
 
 typedef struct EnOssan {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnOssanActionFunc actionFunc;
-    /* 0x18C */ EnOssanActionFunc tmpActionFunc; // Used to restore back to correct browsing function
+    /* 0x18C */ EnOssanActionFunc prevActionFunc; // Used to restore back to correct browsing function
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ s16 delayTimer;
     /* 0x1DE */ s8 objIndex;
@@ -56,7 +57,7 @@ typedef struct EnOssan {
     /* 0x31E */ Vec3s jointTable[ENOSSAN_LIMB_MAX];
     /* 0x390 */ Vec3s morphTable[ENOSSAN_LIMB_MAX];
     /* 0x402 */ s16 animationIndex;
-    /* 0x404 */ Vec3s headRotPartTimeWorker;
+    /* 0x404 */ Vec3s partTimerHeadRot;
     /* 0x40A */ u16 flags;
 } EnOssan; // size = 0x40C
 

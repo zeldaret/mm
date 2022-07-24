@@ -10,10 +10,10 @@
 
 #define THIS ((EnPp*)thisx)
 
-void EnPp_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnPp_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnPp_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnPp_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnPp_Init(Actor* thisx, PlayState* play);
+void EnPp_Destroy(Actor* thisx, PlayState* play);
+void EnPp_Update(Actor* thisx, PlayState* play);
+void EnPp_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 // static DamageTable sDamageTable = {
@@ -75,7 +75,7 @@ static ColliderJntSphElementInit D_80B21664[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80B21688 = {
     { COLTYPE_HARD, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_80B21664, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80B21664, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -89,7 +89,7 @@ static ColliderJntSphElementInit D_80B21698[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80B216BC = {
     { COLTYPE_HARD, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_80B21698, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80B21698, // sJntSphElementsInit,
 };
 
 // static ColliderQuadInit sQuadInit = {
