@@ -353,6 +353,9 @@ typedef enum SunsSongState {
 #define SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(score) (gSaveContext.save.shootingGalleryHighScores = (gSaveContext.save.shootingGalleryHighScores & 0xFFFF0000) | ((u16)(score)))
 #define SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(score) (gSaveContext.save.shootingGalleryHighScores = ((gSaveContext.save.shootingGalleryHighScores) & 0xFFFF) | ((u16)(score) << 0x10))
 
+/**
+ * gSaveContext.save.weekEventReg
+ */
 
 #define PACK_WEEKEVENTREG_FLAG(index, mask) (((index) << 8) | (mask))
 
@@ -1092,9 +1095,12 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_91_20 PACK_WEEKEVENTREG_FLAG(91, 0x20)
 #define WEEKEVENTREG_91_40 PACK_WEEKEVENTREG_FLAG(91, 0x40)
 #define WEEKEVENTREG_91_80 PACK_WEEKEVENTREG_FLAG(91, 0x80)
-#define WEEKEVENTREG_92_01 PACK_WEEKEVENTREG_FLAG(92, 0x01)
-#define WEEKEVENTREG_92_02 PACK_WEEKEVENTREG_FLAG(92, 0x02)
-#define WEEKEVENTREG_92_04 PACK_WEEKEVENTREG_FLAG(92, 0x04)
+
+// RACE_FLAGS
+//#define WEEKEVENTREG_92_01 PACK_WEEKEVENTREG_FLAG(92, 0x01)
+//#define WEEKEVENTREG_92_02 PACK_WEEKEVENTREG_FLAG(92, 0x02)
+//#define WEEKEVENTREG_92_04 PACK_WEEKEVENTREG_FLAG(92, 0x04)
+
 #define WEEKEVENTREG_92_08 PACK_WEEKEVENTREG_FLAG(92, 0x08)
 #define WEEKEVENTREG_92_10 PACK_WEEKEVENTREG_FLAG(92, 0x10)
 #define WEEKEVENTREG_92_20 PACK_WEEKEVENTREG_FLAG(92, 0x20)
@@ -1161,6 +1167,23 @@ typedef enum SunsSongState {
 #define SET_WEEKEVENTREG(flag) (gSaveContext.save.weekEventReg[(flag) >> 8] = ((void)0, gSaveContext.save.weekEventReg[(flag) >> 8]) | ((flag) & 0xFF))
 #define CLEAR_WEEKEVENTREG(flag) (gSaveContext.save.weekEventReg[(flag) >> 8] = ((void)0, gSaveContext.save.weekEventReg[(flag) >> 8]) & (u8)~((flag) & 0xFF))
 
+#define WEEKEVENTREG_RACE_FLAG_END 0
+#define WEEKEVENTREG_RACE_FLAG_START 1
+#define WEEKEVENTREG_RACE_FLAG_2 2
+#define WEEKEVENTREG_RACE_FLAG_3 3
+#define WEEKEVENTREG_RACE_FLAG_4 4
+#define WEEKEVENTREG_RACE_FLAGS 7
+
+#define GET_WEEKEVENTREG_RACE_FLAGS() (gSaveContext.save.weekEventReg[92] & WEEKEVENTREG_RACE_FLAGS)
+
+#define SET_WEEKEVENTREG_RACE_FLAGS(flag)                                                                                    \
+    gSaveContext.save.weekEventReg[92] &= (u8)~WEEKEVENTREG_RACE_FLAGS;                                                      \
+    gSaveContext.save.weekEventReg[92] =                                                                                     \
+        gSaveContext.save.weekEventReg[92] | (u8)((gSaveContext.save.weekEventReg[92] & ~WEEKEVENTREG_RACE_FLAGS) | (flag))
+
+/**
+ * gSaveContext.eventInf
+ */
 
 #define EVENTINF_00 0x00
 #define EVENTINF_01 0x01
