@@ -2557,7 +2557,7 @@ void TransitionCircle_Start(void* thisx);
 void* TransitionCircle_Init(void* thisx);
 void TransitionCircle_Destroy(void* thisx);
 void TransitionCircle_Update(void* thisx);
-void TransitionCircle_SetColor(s32* arg0, u32 arg);
+void TransitionCircle_SetColor(void* transition, u32 color);
 void TransitionCircle_SetType(void* thisx, s32 type);
 void TransitionCircle_LoadAndSetTexture(Gfx** gfxp, TexturePtr texture, s32 arg2, s32 arg3, s32 arg4, s32 arg5, f32 arg6);
 void TransitionCircle_Draw(void* thisx, Gfx** gfxp);

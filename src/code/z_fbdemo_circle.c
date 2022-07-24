@@ -3,6 +3,7 @@
 Gfx D_801D0D00[] = { 0xE7000000, 0x00000000, 0xEF002CF0, 0x0342524D, 0xFA0000FF,
                      0x00000001, 0xF9000000, 0x00000001, 0xDF000000, 0x00000000 };
 
+// @bug TransitionCircle_Update may need to be casted? (void (*)(void* transition, s32 updateRate))?
 const TransitionInit TransitionCircle_InitVars = {
     TransitionCircle_Init,   TransitionCircle_Destroy, TransitionCircle_Update,   TransitionCircle_Draw,
     TransitionCircle_Start,  TransitionCircle_SetType, TransitionCircle_SetColor, NULL,
@@ -46,8 +47,10 @@ void TransitionCircle_Update(void* thisx) {
     this->isDone = Math_StepToF(&this->unk_04, this->unk_10, this->stepValue);
 }
 
-void TransitionCircle_SetColor(s32* gfxp, u32 arg1) {
-    *gfxp = arg1;
+void TransitionCircle_SetColor(void* thisx, u32 color) {
+    TransitionCircle* this = (TransitionCircle*)thisx;
+
+    this->color.rgba = color;
 }
 
 void TransitionCircle_SetType(void* thisx, s32 type) {
@@ -110,7 +113,7 @@ void TransitionCircle_Draw(void* thisx, Gfx** gfxp) {
 
     gDPPipeSync(gfx++);
     gSPDisplayList(gfx++, &D_801D0D00);
-    gDPSetPrimColor(gfx++, 0, this->lod, this->primColor.r, this->primColor.g, this->primColor.b, 1);
+    gDPSetPrimColor(gfx++, 0, this->color.a, this->color.r, this->color.g, this->color.b, 1);
     if (this->unk_15 == 0) {
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIM_LOD_FRAC, PRIMITIVE, 0, 0, 0, PRIMITIVE, TEXEL0, 0,
                           PRIM_LOD_FRAC, PRIMITIVE);
