@@ -9,6 +9,6 @@
         <Texture Name="gPostboxSlotHoleTex" OutName="postbox_slot_hole" Format="i4" Width="32" Height="16" Offset="0x1960" />
         <Limb Name="gPostboxFrameLimb" Type="Standard" EnumName="POSTBOX_FRAME" Offset="0x1A60" />
         <Limb Name="gPostboxMailSlotLimb" Type="Standard" EnumName="POSTBOX_MAIL_SLOT" Offset="0x1A6C" />
-        <Skeleton Name="gPostboxSkel" Type="Flex" LimbType="Standard" LimbNone="POSTBOX_LIMB_NONE" LimbMax="POSTBOX_LIMB_MAX" EnumName="PostboxLimbs" Offset="0x1A80" />
+        <Skeleton Name="gPostboxSkel" Type="Flex" LimbType="Standard" LimbNone="POSTBOX_LIMB_NONE" LimbMax="POSTBOX_LIMB_MAX" EnumName="PostboxLimb" Offset="0x1A80" />
     </File>
 </Root>

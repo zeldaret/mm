@@ -15,14 +15,13 @@ typedef struct EnPst {
     /* 0x0188 */ EnPstActionFunc actionFunc;
     /* 0x018C */ ColliderCylinder collider;
     /* 0x1D8 */ u8 scheduleResult;
-    /* 0x1D9 */ UNK_TYPE1 pad1D9[3];
-    /* 0x1DC */ s32* unk1DC;
+    /* 0x1DC */ s32* msgEventScript;
     /* 0x1E0 */ s32 msgEventArg4;
     /* 0x1E4 */ Vec3s jointTable[POSTBOX_LIMB_MAX];
     /* 0x1F6 */ Vec3s morphTable[POSTBOX_LIMB_MAX];
     /* 0x208 */ u16 stateFlags;
     /* 0x20A */ UNK_TYPE1 pad20A[4];
-    /* 0x20E */ s16 unk20E;
+    /* 0x20E */ s16 behaviour;
     /* 0x210 */ MsgEventFunc msgEventCallback;
     /* 0x214 */ s32 unk214;
     /* 0x218 */ s32 exchangeItemId;

@@ -15,42 +15,48 @@ void EnPst_Destroy(Actor* thisx, PlayState* play);
 void EnPst_Update(Actor* thisx, PlayState* play);
 void EnPst_Draw(Actor* thisx, PlayState* play);
 
-void func_80B2BD98(EnPst* this, PlayState* play);
+void EnPst_FollowSchedule(EnPst* this, PlayState* play);
 void func_80B2BE54(EnPst* this, PlayState* play);
 
 typedef enum {
     /* 0 */ POSTBOX_SCH_NONE,
-    /* 1 */ POSTBOX_SCH_AVAILABLE
+    /* 1 */ POSTBOX_SCH_AVAILABLE,
+    /* 2 */ POSTBOX_SCH_CHECKED_BY_MAILMAN
 } PostboxScheduleResult;
+
+typedef enum {
+    /* 0 */ POSTBOX_BEHAVIOUR_WAIT_FOR_ITEM,
+    /* 1 */ POSTBOX_BEHAVIOUR_TAKE_ITEM,
+} PostboxBehaviour;
 
 static u8 D_80B2C200[] = {
     /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 31, 9, 35, 0x9 - 0x6),
-    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(1),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(2),
+    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
+    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_MAILMAN),
 };
 
 static u8 D_80B2C20C[] = {
     /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 3, 10, 7, 0x9 - 0x6),
-    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(1),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(2),
+    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
+    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_MAILMAN),
 };
 
 static u8 D_80B2C218[] = {
     /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 35, 10, 39, 0x9 - 0x6),
-    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(1),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(2),
+    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
+    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_MAILMAN),
 };
 
 static u8 D_80B2C224[] = {
     /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 53, 10, 57, 0x9 - 0x6),
-    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(1),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(2),
+    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
+    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_MAILMAN),
 };
 
 static u8 D_80B2C230[] = {
     /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 25, 11, 29, 0x9 - 0x6),
-    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(1),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(2),
+    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
+    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_MAILMAN),
 };
 
 s32 D_80B2C23C[] = { 0x0E27840C, 0x0E00FF2B, 0x00000031, 0x00392800, 0x0A122C27, 0xA40C2F00, 0x000C1012,
@@ -124,7 +130,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimations[] = { &object_pst_Anim_000018, 1.0f, 0, -1, ANIMMODE_ONCE, 0 };
+static AnimationInfoS sAnimationInfo[] = { &object_pst_Anim_000018, 1.0f, 0, -1, ANIMMODE_ONCE, 0 };
 
 void EnPst_UpdateCollision(EnPst* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -134,15 +140,15 @@ void EnPst_UpdateCollision(EnPst* this, PlayState* play) {
 s32 func_80B2B874(EnPst* this) {
     switch (this->actor.params) {
         case 0:
-            return gSaveContext.save.weekEventReg[0x1B] & 0x2;
+            return gSaveContext.save.weekEventReg[27] & 0x2;
         case 1:
-            return gSaveContext.save.weekEventReg[0x1B] & 0x4;
+            return gSaveContext.save.weekEventReg[27] & 0x4;
         case 2:
-            return gSaveContext.save.weekEventReg[0x1B] & 0x8;
+            return gSaveContext.save.weekEventReg[27] & 0x8;
         case 3:
-            return gSaveContext.save.weekEventReg[0x1B] & 0x10;
+            return gSaveContext.save.weekEventReg[27] & 0x10;
         case 4:
-            return gSaveContext.save.weekEventReg[0x1B] & 0x20;
+            return gSaveContext.save.weekEventReg[27] & 0x20;
         default:
             return false;
     }
@@ -151,27 +157,27 @@ s32 func_80B2B874(EnPst* this) {
 s32 func_80B2B8F4(EnPst* this) {
     switch (this->actor.params) {
         case 0:
-            return gSaveContext.save.weekEventReg[0x1B] & 0x40;
+            return gSaveContext.save.weekEventReg[27] & 0x40;
         case 1:
-            return gSaveContext.save.weekEventReg[0x1B] & 0x80;
+            return gSaveContext.save.weekEventReg[27] & 0x80;
         case 2:
-            return gSaveContext.save.weekEventReg[0x1C] & 0x1;
+            return gSaveContext.save.weekEventReg[28] & 0x1;
         case 3:
-            return gSaveContext.save.weekEventReg[0x1C] & 0x2;
+            return gSaveContext.save.weekEventReg[28] & 0x2;
         case 4:
-            return gSaveContext.save.weekEventReg[0x1C] & 0x4;
+            return gSaveContext.save.weekEventReg[28] & 0x4;
         default:
             return false;
     }
 }
 
-s32 func_80B2B974(Actor* thisx, PlayState* play) {
+s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
     s32 itemActionParam = 0;
     s32 scriptBranch = 0;
     EnPst* this = THIS;
 
-    switch (this->unk20E) {
-        case 0:
+    switch (this->behaviour) {
+        case POSTBOX_BEHAVIOUR_WAIT_FOR_ITEM:
             switch (Message_GetState(&play->msgCtx)) {
                 case TEXT_STATE_CHOICE:
                 case TEXT_STATE_5:
@@ -182,20 +188,20 @@ s32 func_80B2B974(Actor* thisx, PlayState* play) {
                             if ((itemActionParam == PLAYER_AP_LETTER_TO_KAFEI) ||
                                 (itemActionParam == PLAYER_AP_LETTER_MAMA)) {
                                 this->exchangeItemId = itemActionParam;
-                                this->unk20E++;
+                                this->behaviour++;
                                 scriptBranch = 1;
                             } else if (itemActionParam < PLAYER_AP_NONE) {
-                                this->unk20E++;
+                                this->behaviour++;
                                 scriptBranch = 3;
                             } else if (itemActionParam != PLAYER_AP_NONE) {
-                                this->unk20E++;
+                                this->behaviour++;
                                 scriptBranch = 2;
                             }
                     }
                     break;
             }
             break;
-        case 1:
+        case POSTBOX_BEHAVIOUR_TAKE_ITEM:
             if (this->exchangeItemId == EXCH_ITEM_LETTER_TO_KAFEI) {
                 scriptBranch = 1;
             }
@@ -204,7 +210,7 @@ s32 func_80B2B974(Actor* thisx, PlayState* play) {
     return scriptBranch;
 }
 
-s32* func_80B2BAA4(EnPst* this, PlayState* play) {
+s32* EnPst_GetMsgEventScript(EnPst* this, PlayState* play) {
     if (Player_GetMask(play) == PLAYER_MASK_POSTMAN) {
         return D_80B2C3B8;
     }
@@ -232,7 +238,7 @@ s32* func_80B2BAA4(EnPst* this, PlayState* play) {
         return D_80B2C490;
     } else {
 
-        this->msgEventCallback = func_80B2B974;
+        this->msgEventCallback = EnPst_ChooseBehaviour;
         switch (this->actor.params) {
             case 0:
                 return D_80B2C23C;
@@ -260,16 +266,16 @@ s32 EnPst_CheckTalk(EnPst* this, PlayState* play) {
             if (player->exchangeItemId == EXCH_ITEM_LETTER_TO_KAFEI) {
                 this->stateFlags |= 0x10;
                 this->exchangeItemId = player->exchangeItemId;
-            } else if (player->exchangeItemId != 0) {
+            } else if (player->exchangeItemId != EXCH_ITEM_NONE) {
                 this->stateFlags |= 0x20;
                 this->exchangeItemId = player->exchangeItemId;
             }
             this->unk21C = func_80B2B874(this);
             SubS_UpdateFlags(&this->stateFlags, 0, 7);
-            this->unk20E = 0;
+            this->behaviour = 0;
             this->msgEventCallback = NULL;
             this->stateFlags |= 0x40;
-            this->unk1DC = func_80B2BAA4(this, play);
+            this->msgEventScript = EnPst_GetMsgEventScript(this, play);
             this->actionFunc = func_80B2BE54;
             ret = true;
         }
@@ -288,27 +294,27 @@ s32 func_80B2BD30(EnPst* this, PlayState* play, ScheduleOutput* scheduleOutput) 
     this->stateFlags = 0;
 
     switch (scheduleOutput->result) {
-        case 1:
+        case POSTBOX_SCH_AVAILABLE:
             ret = EnPst_UpdateFlagsSubs(this, play, scheduleOutput);
             break;
-        case 2:
+        case POSTBOX_SCH_CHECKED_BY_MAILMAN:
             ret = true;
             break;
     }
     return ret;
 }
 
-void func_80B2BD88(EnPst* this, PlayState* play) {
+void EnPst_Idle(EnPst* this, PlayState* play) {
 }
 
-void func_80B2BD98(EnPst* this, PlayState* play) {
-    static u8* sScheduleScript[] = {
+void EnPst_FollowSchedule(EnPst* this, PlayState* play) {
+    static u8* sScheduleScripts[] = {
         D_80B2C200, D_80B2C20C, D_80B2C218, D_80B2C224, D_80B2C230,
     };
     s16 params = this->actor.params;
     ScheduleOutput scheduleOutput;
 
-    if (!Schedule_RunScript(play, sScheduleScript[params], &scheduleOutput) ||
+    if (!Schedule_RunScript(play, sScheduleScripts[params], &scheduleOutput) ||
         ((this->scheduleResult != scheduleOutput.result) && !func_80B2BD30(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_1;
@@ -318,39 +324,39 @@ void func_80B2BD98(EnPst* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_1;
     }
     this->scheduleResult = scheduleOutput.result;
-    func_80B2BD88(this, play);
+    EnPst_Idle(this, play);
 }
 
 void func_80B2BE54(EnPst* this, PlayState* play) {
-    if (func_8010BF58(&this->actor, play, this->unk1DC, this->msgEventCallback, &this->msgEventArg4)) {
+    if (func_8010BF58(&this->actor, play, this->msgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
         if (func_80B2B874(this) != this->unk21C) {
             switch (gSaveContext.save.day) {
                 case 1:
-                    gSaveContext.save.weekEventReg[0x5B] |= 4;
+                    gSaveContext.save.weekEventReg[91] |= 4;
                     break;
 
                 case 2:
-                    if (func_80B2B8F4(this) != 0) {
-                        gSaveContext.save.weekEventReg[0x5B] |= 8;
+                    if (func_80B2B8F4(this)) {
+                        gSaveContext.save.weekEventReg[91] |= 8;
                     } else {
-                        gSaveContext.save.weekEventReg[0x5B] |= 4;
+                        gSaveContext.save.weekEventReg[91] |= 4;
                     }
                     break;
 
                 default:
-                    gSaveContext.save.weekEventReg[0x5B] |= 8;
+                    gSaveContext.save.weekEventReg[91] |= 8;
                     break;
             }
         }
         SubS_UpdateFlags(&this->stateFlags, 3, 7);
         this->msgEventArg4 = 0;
-        this->actionFunc = func_80B2BD98;
+        this->actionFunc = EnPst_FollowSchedule;
     }
 }
 
 void EnPst_Init(Actor* thisx, PlayState* play) {
-    EnPst* this = THIS;
     s32 pad;
+    EnPst* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gPostboxSkel, NULL, this->jointTable, this->morphTable,
@@ -358,10 +364,10 @@ void EnPst_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     SubS_UpdateFlags(&this->stateFlags, 3, 7);
-    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 0);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
     this->actor.targetMode = 0;
     Actor_SetScale(&this->actor, 0.02f);
-    this->actionFunc = func_80B2BD98;
+    this->actionFunc = EnPst_FollowSchedule;
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 }
 
@@ -388,15 +394,15 @@ void EnPst_Update(Actor* thisx, PlayState* play) {
 
 s32 EnPst_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnPst* this = THIS;
-    f32 phi_fa1;
+    f32 yTranslation;
 
-    if (limbIndex == 2) {
+    if (limbIndex == POSTBOX_MAIL_SLOT) {
         if (this->stateFlags & 0x40) {
-            phi_fa1 = -100.0f;
+            yTranslation = -100.0f;
         } else {
-            phi_fa1 = 0.0f;
+            yTranslation = 0.0f;
         }
-        Matrix_Translate(0.0f, phi_fa1, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, yTranslation, 0.0f, MTXMODE_APPLY);
     }
     return false;
 }
