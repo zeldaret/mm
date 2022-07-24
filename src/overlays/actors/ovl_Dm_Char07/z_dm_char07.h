@@ -10,11 +10,11 @@ typedef void (*DmChar07ActionFunc)(struct DmChar07*, PlayState*);
 #define DMCHAR07_GET_SPOTLIGHTFLAGS(thisx) (((thisx)->params >> 8) & 0x1F)
 #define DMCHAR07_GET_TYPE(thisx) ((thisx)->params & 0xFF)
 
-#define DMCHAR07_STAGE_RIGHT_SPOTLIGHT 1   // Deku spotlight
-#define DMCHAR07_UPSTAGE_RIGHT_SPOTLIGHT 2 // Goron spotlight
-#define DMCHAR07_STAGE_CENTER_SPOTLIGHT 4  // Human spotlight
-#define DMCHAR07_UPSTAGE_LEFT_SPOTLIGHT 8  // Zora spotlight
-#define DMCHAR07_DOWNSTAGE_CENTER_SPOTLIGHT 16
+#define DMCHAR07_STAGE_RIGHT_SPOTLIGHT (1 << 0)   // Deku spotlight
+#define DMCHAR07_UPSTAGE_RIGHT_SPOTLIGHT (1 << 1) // Goron spotlight
+#define DMCHAR07_STAGE_CENTER_SPOTLIGHT (1 << 2)  // Human spotlight
+#define DMCHAR07_UPSTAGE_LEFT_SPOTLIGHT (1 << 3)  // Zora spotlight
+#define DMCHAR07_DOWNSTAGE_CENTER_SPOTLIGHT (1 << 4)
 
 typedef enum {
     /* 0 */ DMCHAR07_STAGE,
