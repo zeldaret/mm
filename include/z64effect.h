@@ -227,11 +227,11 @@ typedef struct {
 } EffectInfo; // size = 0x14
 
 typedef enum {
-    /* 0x0 */ EFFECT_SPARK,
-    /* 0x1 */ EFFECT_BLURE1,
-    /* 0x2 */ EFFECT_BLURE2,
-    /* 0x3 */ EFFECT_SHIELD_PARTICLE,
-    /* 0x4 */ EFFECT_TIRE_MARK
+    /* 0 */ EFFECT_SPARK,
+    /* 1 */ EFFECT_BLURE1,
+    /* 2 */ EFFECT_BLURE2,
+    /* 3 */ EFFECT_SHIELD_PARTICLE,
+    /* 4 */ EFFECT_TIRE_MARK
 } EffectType;
 
 /* Effect Soft Sprites */

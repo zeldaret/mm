@@ -7,9 +7,9 @@
 // TODO fill out these enums
 
 typedef enum {
-    /* 0x0 */ EQUIP_TYPE_SWORD,
-    /* 0x1 */ EQUIP_TYPE_SHIELD,
-    /* 0x2 */ EQUIP_TYPE_MAX
+    /* 0 */ EQUIP_TYPE_SWORD,
+    /* 1 */ EQUIP_TYPE_SHIELD,
+    /* 2 */ EQUIP_TYPE_MAX
 } EquipmentType;
 
 typedef enum {
@@ -29,14 +29,14 @@ typedef enum {
 } EquipValueShield;
 
 typedef enum {
-    /* 0x0 */ UPG_QUIVER,
-    /* 0x1 */ UPG_BOMB_BAG,
-    /* 0x2 */ UPG_STRENGTH,
-    /* 0x3 */ UPG_SCALE,
-    /* 0x4 */ UPG_WALLET,
-    /* 0x5 */ UPG_BULLET_BAG,
-    /* 0x6 */ UPG_STICKS,
-    /* 0x7 */ UPG_NUTS
+    /* 0 */ UPG_QUIVER,
+    /* 1 */ UPG_BOMB_BAG,
+    /* 2 */ UPG_STRENGTH,
+    /* 3 */ UPG_SCALE,
+    /* 4 */ UPG_WALLET,
+    /* 5 */ UPG_BULLET_BAG,
+    /* 6 */ UPG_STICKS,
+    /* 7 */ UPG_NUTS
 } UpgradeType;
 
 typedef enum {
