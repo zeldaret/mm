@@ -6,6 +6,7 @@
 
 #include "z_shot_sun.h"
 #include "overlays/actors/ovl_Item_Etcetera/z_item_etcetera.h"
+#include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -15,7 +16,7 @@ void ShotSun_Init(Actor* thisx, PlayState* play);
 void ShotSun_Destroy(Actor* thisx, PlayState* play);
 void ShotSun_Update(Actor* thisx, PlayState* play);
 
-void func_809738D0(ShotSun* this, PlayState* play);
+void ShotSun_UpdateForOcarina(ShotSun* this, PlayState* play);
 void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play2);
 
 const ActorInit Shot_Sun_InitVars = {
@@ -59,7 +60,7 @@ void ShotSun_Init(Actor* thisx, PlayState* play) {
         this->unk_19C = 0;
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
-        this->actionFunc = func_809738D0;
+        this->actionFunc = ShotSun_UpdateForOcarina;
         this->actor.flags |= ACTOR_FLAG_8000000;
     } else {
         Collider_InitCylinder(play, &this->collider);
@@ -89,10 +90,10 @@ void ShotSun_SpawnFairy(ShotSun* this, PlayState* play2) {
         ActorCutscene_Stop(this->actor.cutscene);
         switch (params) {
             case SHOTSUN_FAIRY_SPAWNER_SUNS:
-                fairyType = 7;
+                fairyType = ENELF_TYPE_7;
                 break;
             case SHOTSUN_FAIRY_SPAWNER_STORMS:
-                fairyType = 7;
+                fairyType = ENELF_TYPE_7;
                 break;
         }
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.home.pos.x, this->actor.home.pos.y,
@@ -116,7 +117,7 @@ void ShotSun_TriggerFairy(ShotSun* this, PlayState* play) {
     }
 }
 
-void func_809738D0(ShotSun* this, PlayState* play) {
+void ShotSun_UpdateForOcarina(ShotSun* this, PlayState* play) {
     s32 params = SHOTSUN_GET_FF(&this->actor);
 
     if (play->msgCtx.ocarinaMode == 3) {
