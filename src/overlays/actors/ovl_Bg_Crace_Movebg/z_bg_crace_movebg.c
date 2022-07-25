@@ -113,8 +113,8 @@ void BgCraceMovebg_Init(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80A7090C(PlayState* play) {
-    u32 pad;
-    u32 returnVal = 0;
+    s32 pad;
+    s32 returnVal = 0;
     Actor* tempActor = SubS_FindActor(play, NULL, ACTORCAT_NPC, ACTOR_EN_DNO);
 
     if (tempActor != NULL) {
