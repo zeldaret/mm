@@ -589,8 +589,8 @@ s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header) {
 /**
  * Creates an entrance index from the scene index, spawn index, and scene setup.
  */
-u16 Entrance_CreateIndex(s32 sceneIndex, s32 spawnIndex, s32 sceneSetup) {
-    return (((sceneIndex << 9) | (spawnIndex << 4)) | sceneSetup) & 0xFFFF;
+u16 Entrance_CreateIndex(s32 sceneIndex, s32 spawnIndex, s32 setupIndex) {
+    return (sceneIndex << 9) | (spawnIndex << 4) | setupIndex;
 }
 
 /**

@@ -2187,7 +2187,7 @@ void Scene_HeaderCmdSetAreaVisitedFlag(PlayState* play, SceneCmd* cmd);
 void Scene_HeaderCmdAnimatedMaterials(PlayState* play, SceneCmd* cmd);
 void Scene_SetExitFade(PlayState* play);
 s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header);
-u16 Entrance_CreateIndex(s32 sceneIndex, s32 spawnIndex, s32 sceneSetup);
+u16 Entrance_CreateIndex(s32 sceneIndex, s32 spawnIndex, s32 setupIndex);
 u16 Entrance_CreateIndexFromSpawn(s32 spawnIndex);
 void Scene_ExecuteDrawConfig(PlayState* play);
 void Scene_DrawConfigDefault(PlayState* play);

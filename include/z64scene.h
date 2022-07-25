@@ -765,11 +765,11 @@ typedef enum {
 } EntranceSceneID;
 
 /*
-* 0xFE00:  Index into sSceneEntranceTable (get the scene)
-* 0x01F0:  Index into the scenes specific entrance table (get the entrance)
-* 0x000F:  Index into the specific entrance table (get the tableEntry)
+* 0xFE00:  Index into sSceneEntranceTable (Scene)
+* 0x01F0:  Index into the scenes specific entrance table (Spawn)
+* 0x000F:  Index into the specific entrance table (Setup)
 */
-#define NEXT_ENTRANCE(entranceScene, entrance, entranceEntry) ((((ENTR_SCENE_##entranceScene) & 0x7F) << 9) | (((entrance) & 0x1F) << 4) | ((entranceEntry) & 0xF))
+#define NEXT_ENTRANCE(sceneIndex, spawnIndex, setupIndex) ((((ENTR_SCENE_##sceneIndex) & 0x7F) << 9) | (((spawnIndex) & 0x1F) << 4) | ((setupIndex) & 0xF))
 
 // SceneTableEntry draw configs
 typedef enum {
