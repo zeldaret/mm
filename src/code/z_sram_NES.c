@@ -131,6 +131,7 @@ u32 D_801C5FC0[SCENE_MAX][4] = {
     { 0, 0, 1, 0 },                 // SCENE_ALLEY
 };
 
+// TODO: figure out a way to use the WEEKEVENTREG defines here
 // weekEventReg flags which will be not be cleared on a cycle reset
 u16 D_801C66D0[ARRAY_COUNT(gSaveContext.save.weekEventReg)] = {
     /*  0 */ 0xFFFC,
