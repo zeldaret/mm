@@ -183,7 +183,7 @@ void EnGiant_Init(Actor* thisx, PlayState* play) {
     }
 
     if (GIANT_TYPE_IS_CLOCK_TOWER_SUCCESS(type)) {
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_25_02))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_25_02)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }

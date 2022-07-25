@@ -67,7 +67,7 @@ void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
     this->pythonIndex = sCurrentPythonIndex;
     sCurrentPythonIndex++;
 
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_13_01))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_13_01)) {
         this->deepPython = Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_EN_DRAGON, pos.x, pos.y,
                                               pos.z, 0, this->dyna.actor.world.rot.y, 1, this->dyna.actor.params);
 
@@ -82,14 +82,14 @@ void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
         }
     } else {
         shouldSpawnSeahorse = false;
-        if (((this->dyna.actor.params == 0) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_83_10))) ||
-            ((this->dyna.actor.params == 1) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_83_20))) ||
-            ((this->dyna.actor.params == 2) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_83_40))) ||
-            ((this->dyna.actor.params == 3) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_83_80))) ||
-            ((this->dyna.actor.params == 4) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_01))) ||
-            ((this->dyna.actor.params == 5) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_02))) ||
-            ((this->dyna.actor.params == 6) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_04))) ||
-            ((this->dyna.actor.params == 7) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_08)))) {
+        if (((this->dyna.actor.params == 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_10)) ||
+            ((this->dyna.actor.params == 1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_20)) ||
+            ((this->dyna.actor.params == 2) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_40)) ||
+            ((this->dyna.actor.params == 3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_80)) ||
+            ((this->dyna.actor.params == 4) && CHECK_WEEKEVENTREG(WEEKEVENTREG_84_01)) ||
+            ((this->dyna.actor.params == 5) && CHECK_WEEKEVENTREG(WEEKEVENTREG_84_02)) ||
+            ((this->dyna.actor.params == 6) && CHECK_WEEKEVENTREG(WEEKEVENTREG_84_04)) ||
+            ((this->dyna.actor.params == 7) && CHECK_WEEKEVENTREG(WEEKEVENTREG_84_08))) {
             shouldSpawnSeahorse = true;
         }
 

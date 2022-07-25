@@ -129,7 +129,7 @@ s32 func_80B34FB4(EnGg* this, PlayState* play) {
     pitch = Math_Vec3f_Pitch(&sp34, &sp40);
 
     if ((this->actor.xzDistToPlayer < 250.0f) && (this->actor.xzDistToPlayer > 50.0f) &&
-        (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80)))) {
+        (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80))) {
         Math_SmoothStepToS(&this->unk_2E8, pitch, 4, 0x2AA8, 1);
     } else {
         Math_SmoothStepToS(&this->unk_2E8, 0, 4, 0x2AA8, 1);
@@ -225,7 +225,7 @@ void func_80B352A4(EnGg* this, PlayState* play) {
 }
 
 void func_80B35450(EnGg* this, PlayState* play) {
-    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_91_10)) && (play->csCtx.state == 0)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_91_10) && (play->csCtx.state == 0)) {
         func_80B359DC(this, play);
     }
 
@@ -400,7 +400,7 @@ void func_80B359DC(EnGg* this, PlayState* play) {
 
         if ((player->transformation == PLAYER_FORM_HUMAN) && (play->msgCtx.ocarinaMode == 3) &&
             (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_19_80);
             }
             this->unk_307 = true;
@@ -708,8 +708,8 @@ void EnGg_Update(Actor* thisx, PlayState* play) {
         func_80B35968(this, play);
     }
 
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_91_10)) &&
-        ((CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80)) || CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) ||
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_91_10) &&
+        (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80) || CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) ||
          (this->unk_308 == 1))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_91_10);
     }

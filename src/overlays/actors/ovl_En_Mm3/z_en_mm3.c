@@ -417,7 +417,7 @@ void func_80A6FE1C(EnMm3* this) {
 
 void func_80A6FE30(EnMm3* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_77_01))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_01)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_77_01);
         }
         this->actor.parent = NULL;

@@ -393,7 +393,7 @@ void EnTruMt_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnTruMt* this = THIS;
 
-    if (!(CHECK_EVENTINF(EVENTINF_35))) {
+    if (!CHECK_EVENTINF(EVENTINF_35)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -442,7 +442,7 @@ void EnTruMt_Update(Actor* thisx, PlayState* play) {
     func_80B76110(this);
     Actor_SetFocus(&this->actor, 34.0f);
 
-    if (!(CHECK_EVENTINF(EVENTINF_40))) {
+    if (!CHECK_EVENTINF(EVENTINF_40)) {
         func_80B761FC(this, play);
     }
 

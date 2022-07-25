@@ -230,7 +230,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
             switch (this->unk_344) {
                 case 0:
                     Actor_SetScale(&this->actor, 0.0f);
-                    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_13_01))) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_13_01)) {
                         Actor_SetScale(&this->actor, 0.0f);
                         func_80B5C910(this, play);
                     } else {
@@ -264,7 +264,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
             break;
 
         case 3:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
                 this->actor.flags |= ACTOR_FLAG_8000000;
                 this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
                 Actor_SetScale(&this->actor, 0.0064999997f);
@@ -527,7 +527,7 @@ void func_80B5C6DC(EnOt* this, PlayState* play) {
     Math_SmoothStepToF(&this->actor.world.pos.x, this->unk_348.x, 1.0f, 2.0f, 0.01f);
     Math_SmoothStepToF(&this->actor.world.pos.z, this->unk_348.z, 1.0f, 2.0f, 0.01f);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
-    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10)) && (this->unk_33C == 1)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10) && (this->unk_33C == 1)) {
         this->actor.textId = 0;
         this->unk_384 = 1;
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -701,7 +701,7 @@ void func_80B5CEC8(EnOt* this, PlayState* play) {
         }
     }
 
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10)) && (ENOT_GET_C000(&this->actor) == 1)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10) && (ENOT_GET_C000(&this->actor) == 1)) {
         if ((fabsf(this->actor.xzDistToPlayer) <= 130.0f) && (fabsf(this->actor.playerHeightRel) <= 130.0f)) {
             player->unk_B2B = 29;
         }
@@ -985,7 +985,7 @@ void func_80B5DB6C(Actor* thisx, PlayState* play) {
     EnOt* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10)) && !(this->unk_32C & 8)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10) && !(this->unk_32C & 8)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_04)) {
             Vec3f sp50;
 

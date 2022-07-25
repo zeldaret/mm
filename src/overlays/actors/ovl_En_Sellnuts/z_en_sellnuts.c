@@ -947,7 +947,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad2;
 
-    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_17_80)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_61_10))) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_61_10)) {
         Actor_MarkForDeath(&this->actor);
     }
 

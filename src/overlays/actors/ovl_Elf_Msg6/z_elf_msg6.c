@@ -41,19 +41,19 @@ static InitChainEntry sInitChain[] = {
 };
 
 s32 func_80BA15A0(void) {
-    if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_87_10))) {
+    if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_87_10)) {
         return true;
     }
 
-    if (CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_87_20))) {
+    if (CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_87_20)) {
         return true;
     }
 
-    if (CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_87_40))) {
+    if (CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_87_40)) {
         return true;
     }
 
-    if (CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_87_80))) {
+    if (CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_87_80)) {
         return true;
     }
 
@@ -79,7 +79,7 @@ void func_80BA165C(void) {
 }
 
 s32 func_80BA16F4(ElfMsg6* this, PlayState* play) {
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_31_04)) && (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_04) && (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
         this->actor.textId = 0x216;
         return false;
     }
@@ -190,7 +190,7 @@ void ElfMsg6_Init(Actor* thisx, PlayState* play) {
                 }
                 this->actor.textId = 0x25B;
             } else {
-                if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_74_20)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_10))) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_74_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_79_10)) {
                     Actor_MarkForDeath(&this->actor);
                     return;
                 }
@@ -202,7 +202,7 @@ void ElfMsg6_Init(Actor* thisx, PlayState* play) {
         case 3:
             if (((ELFMSG6_SWITCHFLAG(&this->actor) != 0x7F) &&
                  Flags_GetSwitch(play, ELFMSG6_SWITCHFLAG(&this->actor))) ||
-                (CHECK_WEEKEVENTREG(WEEKEVENTREG_88_10)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_91_01)) ||
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_88_10) || CHECK_WEEKEVENTREG(WEEKEVENTREG_91_01) ||
                 (INV_CONTENT(ITEM_MASK_ZORA) == ITEM_MASK_ZORA)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
@@ -276,7 +276,7 @@ void func_80BA1CF8(ElfMsg6* this, PlayState* play) {
         return;
     }
 
-    if ((this->actor.textId == 0x224) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40))) {
+    if ((this->actor.textId == 0x224) && CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
         this->actor.textId = 0x25B;
     } else if (func_80BA1C00(this) && (player->actor.speedXZ > 1.0f)) {
         player->tatlTextId = -this->actor.textId;
@@ -330,7 +330,7 @@ void func_80BA1E30(ElfMsg6* this, PlayState* play) {
 }
 
 void func_80BA1F80(ElfMsg6* this, PlayState* play) {
-    if (((ELFMSG6_GET_F0(&this->actor)) == 1) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_83_02))) {
+    if (((ELFMSG6_GET_F0(&this->actor)) == 1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_02)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -362,7 +362,7 @@ void func_80BA2048(ElfMsg6* this, PlayState* play) {
     }
 
     if (((ELFMSG6_SWITCHFLAG(&this->actor) != 0x7F) && Flags_GetSwitch(play, ELFMSG6_SWITCHFLAG(&this->actor))) ||
-        (CHECK_WEEKEVENTREG(WEEKEVENTREG_88_10)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_91_01)) ||
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_88_10) || CHECK_WEEKEVENTREG(WEEKEVENTREG_91_01) ||
         (INV_CONTENT(ITEM_MASK_ZORA) == ITEM_MASK_ZORA)) {
         Actor_MarkForDeath(&this->actor);
         return;

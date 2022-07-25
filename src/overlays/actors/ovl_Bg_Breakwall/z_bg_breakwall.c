@@ -146,14 +146,14 @@ s32 func_808B736C(BgBreakwall* this, PlayState* play) {
 }
 
 s32 func_808B7380(BgBreakwall* this, PlayState* play) {
-    if ((gSaveContext.save.day >= 2) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01))) {
+    if ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         return false;
     }
     return true;
 }
 
 s32 func_808B73C4(BgBreakwall* this, PlayState* play) {
-    return (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_01));
+    return CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_21_01);
 }
 
 s32 func_808B73FC(BgBreakwall* this, PlayState* play) {
@@ -183,7 +183,7 @@ s32 func_808B74A8(BgBreakwall* this, PlayState* play) {
 }
 
 s32 func_808B74D8(BgBreakwall* this, PlayState* play) {
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         return false;
     }
     return true;

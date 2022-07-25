@@ -119,7 +119,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
                 Actor_MarkForDeath(&this->actor);
             }
             this->actor.textId = 0;
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_34_40)) || !(CHECK_WEEKEVENTREG(WEEKEVENTREG_34_08))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_34_40) || !CHECK_WEEKEVENTREG(WEEKEVENTREG_34_08)) {
                 this->unk_29C |= 1;
             }
             break;
@@ -148,7 +148,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ENSTH_F_5:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_13_20)) || (Inventory_GetSkullTokenCount(play->sceneNum) < 30)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_13_20) || (Inventory_GetSkullTokenCount(play->sceneNum) < 30)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -440,7 +440,7 @@ void func_80B67984(EnSth* this, PlayState* play) {
         sp1E = 0x90F;
         func_80B670A4(this, 2);
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_40)) {
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_34_08))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_34_08)) {
             sp1E = 0x91B;
         } else {
             sp1E = 0x918;
@@ -579,8 +579,8 @@ void EnSth_Update(Actor* thisx, PlayState* play) {
                                this->jointTable, this->morphTable, 16);
             Animation_PlayLoop(&this->skelAnime, &ovl_En_Sth_Anim_0045B4);
             this->unk_29A = 1;
-            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_34_10)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_20)) ||
-                (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_40)) || (Inventory_GetSkullTokenCount(play->sceneNum) >= 30)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_10) || CHECK_WEEKEVENTREG(WEEKEVENTREG_34_20) ||
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_34_40) || (Inventory_GetSkullTokenCount(play->sceneNum) >= 30)) {
                 func_80B670A4(this, 3);
             }
         } else {

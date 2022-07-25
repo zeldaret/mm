@@ -16,7 +16,7 @@ u16 ElfMessage_GetFirstCycleHint(PlayState* play) {
         }
         return 0x224;
     }
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_08_80))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_08_80)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_01)) {
             return 0x21E;
         }
@@ -55,7 +55,7 @@ u16 ElfMessage_GetFirstCycleHint(PlayState* play) {
         }
         return 0x241;
     }
-    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_86_02)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_40))) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_02) || CHECK_WEEKEVENTREG(WEEKEVENTREG_73_40)) {
         return 0x23F;
     }
     return 0x220;

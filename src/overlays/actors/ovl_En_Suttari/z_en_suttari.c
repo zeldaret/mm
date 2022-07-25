@@ -855,7 +855,7 @@ void func_80BAC2FC(EnSuttari* this, PlayState* play) {
                 this->animationIndex = 2;
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
             }
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_83_04)) && !(this->flags1 & 0x1000)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_83_04) && !(this->flags1 & 0x1000)) {
                 if (ActorCutscene_GetCanPlayNext(this->cutscenes[0])) {
                     ActorCutscene_Start(this->cutscenes[0], &this->actor);
                     if (!(player->stateFlags1 & 0x10000000)) {
@@ -904,7 +904,7 @@ void func_80BAC2FC(EnSuttari* this, PlayState* play) {
             Actor_MarkForDeath(&this->actor);
             break;
         case 2:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_81_04))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_81_04)) {
                 this->flags1 |= 0x80;
                 this->actor.world.pos.x = -16.0f;
                 this->actor.world.pos.z = -16.0f;
@@ -914,7 +914,7 @@ void func_80BAC2FC(EnSuttari* this, PlayState* play) {
             }
             break;
         case 4:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
                 if (this->animationIndex == 2 || this->animationIndex == 1) {
                     this->animationIndex = 5;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
@@ -951,8 +951,8 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
             this->actionFunc = func_80BACA14;
             return;
         } else if ((gSaveContext.save.day == 3) && (gSaveContext.save.time <= CLOCK_TIME(19, 0)) &&
-                   !(CHECK_WEEKEVENTREG(WEEKEVENTREG_61_08)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) &&
-                   (CHECK_WEEKEVENTREG(WEEKEVENTREG_51_08))) {
+                   !CHECK_WEEKEVENTREG(WEEKEVENTREG_61_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) &&
+                   CHECK_WEEKEVENTREG(WEEKEVENTREG_51_08)) {
             this->animationIndex = 2;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
             this->actionFunc = func_80BACEE0;
@@ -962,7 +962,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
         if (gSaveContext.save.time >= CLOCK_TIME(0, 20) && gSaveContext.save.time < CLOCK_TIME(6, 00)) {
             Actor_MarkForDeath(&this->actor);
         }
-        if ((gSaveContext.save.entranceIndex == 0xD670) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_40))) {
+        if ((gSaveContext.save.entranceIndex == 0xD670) || CHECK_WEEKEVENTREG(WEEKEVENTREG_58_40)) {
             Actor_MarkForDeath(&this->actor);
         }
         this->cutscenes[0] = this->actor.cutscene;

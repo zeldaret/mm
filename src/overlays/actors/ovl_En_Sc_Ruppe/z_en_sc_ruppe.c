@@ -103,7 +103,7 @@ s32 func_80BD697C(s16 ruppeIndex) {
             }
             break;
         case RUPEE_UNUSED:
-            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_54_08))) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_08)) {
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_54_08);
                 return true;
             }

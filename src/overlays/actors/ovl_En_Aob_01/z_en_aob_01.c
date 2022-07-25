@@ -218,14 +218,14 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
             switch (gSaveContext.save.day) {
                 case 1:
                     if (!gSaveContext.save.isNight) {
-                        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_64_80))) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_64_80)) {
                             SET_WEEKEVENTREG(WEEKEVENTREG_64_80);
                             this->unk_210 = 0x3520;
                         } else {
                             this->unk_210 = 0x352F;
                         }
                     } else {
-                        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_65_01))) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_65_01)) {
                             SET_WEEKEVENTREG(WEEKEVENTREG_65_01);
                             this->unk_210 = 0x3530;
                         } else {
@@ -236,14 +236,14 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
 
                 case 2:
                     if (!gSaveContext.save.isNight) {
-                        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_65_02))) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_65_02)) {
                             SET_WEEKEVENTREG(WEEKEVENTREG_65_02);
                             this->unk_210 = 0x3531;
                         } else {
                             this->unk_210 = 0x352F;
                         }
                     } else {
-                        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_65_04))) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_65_04)) {
                             SET_WEEKEVENTREG(WEEKEVENTREG_65_04);
                             this->unk_210 = 0x3532;
                         } else {
@@ -254,14 +254,14 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
 
                 case 3:
                     if (!gSaveContext.save.isNight) {
-                        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_65_08))) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_65_08)) {
                             SET_WEEKEVENTREG(WEEKEVENTREG_65_08);
                             this->unk_210 = 0x3533;
                         } else {
                             this->unk_210 = 0x352F;
                         }
                     } else {
-                        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_65_10))) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_65_10)) {
                             SET_WEEKEVENTREG(WEEKEVENTREG_65_10);
                             this->unk_210 = 0x3534;
                         } else {

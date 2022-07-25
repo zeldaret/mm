@@ -120,7 +120,7 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
                 this->actionFunc = func_80BA0AD8;
             }
 
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -238,7 +238,7 @@ void func_80B9FA3C(EnZob* this, PlayState* play) {
         textId = 0x11FA;
         this->unk_304 = 1;
         func_80B9F7E4(this, 2, ANIMMODE_ONCE);
-    } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_30_04))) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_30_04)) {
         SET_WEEKEVENTREG(WEEKEVENTREG_30_04);
         textId = 0x11FB;
         this->unk_304 = 1;

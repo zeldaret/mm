@@ -146,7 +146,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
                     this->unk_14A |= 2;
                     func_80A396B0(this, 6);
                 }
-            } else if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_08_80))) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_80)) {
                 func_80A39DC8(this, play, 24, 0);
                 this->actionFunc = func_80A3A398;
                 if (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU) {

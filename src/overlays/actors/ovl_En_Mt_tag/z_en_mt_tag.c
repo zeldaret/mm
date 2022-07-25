@@ -77,7 +77,7 @@ s32 EnMttag_IsInFinishLine(Vec3f* pos) {
  * and, if so, what kind of cheating the player is performing.
  */
 s32 EnMttag_CheckPlayerCheatStatus(Vec3f* pos) {
-    if (!(CHECK_EVENTINF(EVENTINF_10))) {
+    if (!CHECK_EVENTINF(EVENTINF_10)) {
         if (Math3D_XZBoundCheck(-466.0f, -386.0f, -687.0f, 193.0f, pos->x, pos->z)) {
             // The race hasn't started yet, but the player is beyond the starting line.
             return GORON_RACE_CHEAT_FALSE_START;
@@ -396,7 +396,7 @@ void EnMttag_Race(EnMttag* this, PlayState* play) {
  */
 void EnMttag_RaceFinish(EnMttag* this, PlayState* play) {
     if (DECR(this->timer) == 0) {
-        if ((CHECK_EVENTINF(EVENTINF_11))) {
+        if (CHECK_EVENTINF(EVENTINF_11)) {
             // Player won
             EnMttag_ExitRace(play, TRANS_TYPE_03, TRANS_TYPE_03);
         } else {
@@ -489,7 +489,7 @@ void EnMttag_Init(Actor* thisx, PlayState* play) {
         CLEAR_EVENTINF(EVENTINF_12);
         CLEAR_EVENTINF(EVENTINF_13);
 
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_12_02))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_02)) {
             this->actionFunc = EnMttag_ShowIntroCutscene;
         } else {
             s32 requiredScopeTemp;

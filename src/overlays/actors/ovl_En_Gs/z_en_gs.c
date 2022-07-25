@@ -459,28 +459,28 @@ void func_8099874C(EnGs* this, PlayState* play) {
                 this->unk_20C = -1;
                 switch (this->unk_194) {
                     case 1:
-                        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_77_08))) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_08)) {
                             this->unk_20C = 6;
                             SET_WEEKEVENTREG(WEEKEVENTREG_77_08);
                         }
                         break;
 
                     case 3:
-                        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_77_10))) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_10)) {
                             this->unk_20C = 6;
                             SET_WEEKEVENTREG(WEEKEVENTREG_77_10);
                         }
                         break;
 
                     case 2:
-                        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_77_20))) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_20)) {
                             this->unk_20C = 6;
                             SET_WEEKEVENTREG(WEEKEVENTREG_77_20);
                         }
                         break;
                 }
 
-                if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_90_10))) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_90_10)) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_90_10);
                     this->unk_20C = 12;
                 }

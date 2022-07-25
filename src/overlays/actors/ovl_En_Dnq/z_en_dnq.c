@@ -340,11 +340,11 @@ void func_80A52DC8(EnDnq* this, PlayState* play) {
         SubS_UpdateFlags(&this->unk_37C, 0, 7);
     }
 
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         this->unk_390 = 70.0f;
         if (Inventory_HasItemInBottle(ITEM_DEKU_PRINCESS) && !Play_InCsMode(play) &&
             (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) && (ActorCutscene_GetCurrentIndex() == -1)) {
-            if ((DECR(this->unk_384) == 0) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40))) {
+            if ((DECR(this->unk_384) == 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40)) {
                 Message_StartTextbox(play, 0x969, NULL);
                 this->unk_384 = 200;
             }

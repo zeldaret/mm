@@ -379,7 +379,7 @@ void func_80C14540(EnJgameTsn* this) {
 
 void func_80C14554(EnJgameTsn* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_82_10))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_82_10)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_82_10);
         }
         func_80C145FC(this);

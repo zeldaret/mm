@@ -120,7 +120,7 @@ u16 func_80B50410(EnGk* this, PlayState* play) {
 
     if (play->sceneNum == SCENE_17SETUGEN2) {
         if (player->transformation == PLAYER_FORM_GORON) {
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_40_80))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_40_80)) {
                 switch (this->unk_31C) {
                     case 0xE7A:
                         return 0xE7B;
@@ -143,7 +143,7 @@ u16 func_80B50410(EnGk* this, PlayState* play) {
                 this->unk_1E4 |= 1;
                 return 0xE81;
             }
-        } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_41_01))) {
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_01)) {
             switch (this->unk_31C) {
                 case 0xE82:
                     return 0xE83;
@@ -166,9 +166,9 @@ u16 func_80B50410(EnGk* this, PlayState* play) {
         }
     } else if (play->sceneNum == SCENE_GORONRACE) {
         if (player->transformation == PLAYER_FORM_GORON) {
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_41_04))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_04)) {
                 if (this->unk_31C == 0xE88) {
-                    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_41_08)) || Inventory_HasEmptyBottle()) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_08) || Inventory_HasEmptyBottle()) {
                         return 0xE89;
                     }
                     SET_WEEKEVENTREG(WEEKEVENTREG_41_04);
@@ -179,7 +179,7 @@ u16 func_80B50410(EnGk* this, PlayState* play) {
             }
 
             if ((this->unk_31C == 0xE8D) || (this->unk_31C == 0xE98)) {
-                if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_41_08)) || Inventory_HasEmptyBottle()) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_08) || Inventory_HasEmptyBottle()) {
                     return 0xE89;
                 }
                 SET_WEEKEVENTREG(WEEKEVENTREG_41_04);
@@ -193,7 +193,7 @@ u16 func_80B50410(EnGk* this, PlayState* play) {
             return 0xE98;
         }
 
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_41_02))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_02)) {
             switch (this->unk_31C) {
                 case 0xE85:
                     return 0xE86;
@@ -830,7 +830,7 @@ void func_80B51EA4(EnGk* this, PlayState* play) {
 }
 
 void func_80B51FD0(EnGk* this, PlayState* play) {
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {
         if (this->unk_1E4 & 2) {
             func_801A4748(&this->actor.projectedPos, NA_SE_EN_GOLON_KID_CRY - SFX_FLAG);
         } else {
@@ -1043,7 +1043,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
             Actor_MarkForDeath(&this->actor);
         }
     } else if (ENGK_GET_F(&this->actor) == ENGK_F_2) {
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {
             this->actionFunc = func_80B51FD0;
             this->actor.draw = NULL;
             this->actor.flags |= ACTOR_FLAG_10;
@@ -1051,7 +1051,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
         } else {
             Actor_MarkForDeath(&this->actor);
         }
-    } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04))) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {
         this->unk_2E4 = 0;
         this->unk_318 = this->actor.cutscene;
         this->actor.flags |= ACTOR_FLAG_10;
@@ -1075,7 +1075,7 @@ void EnGk_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if ((ENGK_GET_F(&this->actor) == ENGK_F_1) ||
-        ((ENGK_GET_F(&this->actor) == ENGK_F_0) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)))) {
+        ((ENGK_GET_F(&this->actor) == ENGK_F_0) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04))) {
         func_80B507A0(this, play);
         SkelAnime_Update(&this->skelAnime);
         Actor_TrackPlayer(play, &this->actor, &this->unk_1D8, &this->unk_1DE, this->actor.focus.pos);
@@ -1234,7 +1234,7 @@ void EnGk_Draw(Actor* thisx, PlayState* play) {
 
     func_8012C28C(play->state.gfxCtx);
 
-    if ((ENGK_GET_F(&this->actor) == ENGK_F_0) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04))) {
+    if ((ENGK_GET_F(&this->actor) == ENGK_F_0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {
         Matrix_RotateXS(-0x4000, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

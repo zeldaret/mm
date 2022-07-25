@@ -97,7 +97,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
             break;
 
         case DMCHAR01_1:
-            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) || (gSaveContext.sceneSetupIndex == 1)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02) || (gSaveContext.sceneSetupIndex == 1)) {
                 this->unk_34C = 1;
                 this->actionFunc = func_80AA8F1C;
             } else {
@@ -107,7 +107,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
 
         case DMCHAR01_2:
             this->unk_34C = 0;
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_20_01))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_01)) {
                 this->unk_34C = 1;
                 this->dyna.actor.world.pos.y -= 400.0f;
             }
@@ -123,7 +123,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
         case DMCHAR01_3:
             this->dyna.actor.world.rot.y += 0x8000;
             this->dyna.actor.shape.rot.y += 0x8000;
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_20_01))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_01)) {
                 Actor_MarkForDeath(&this->dyna.actor);
                 return;
             }
@@ -134,7 +134,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
             DynaPolyActor_LoadMesh(play, &this->dyna, &object_mtoride_Colheader_00FE5C);
 
             this->unk_34D = true;
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
                 this->actionFunc = func_80AA9020;
                 this->dyna.actor.world.pos.y -= 120.0f;
             } else {

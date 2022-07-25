@@ -184,14 +184,14 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             func_80B96BEC(this, 2, ANIMMODE_LOOP);
             this->actor.colChkInfo.cylRadius = 0;
             this->actor.shape.yOffset = -1400.0f;
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                 Actor_MarkForDeath(&this->actor);
             }
             break;
 
         case 18:
             this->actionFunc = func_80B99384;
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                 Actor_MarkForDeath(&this->actor);
             }
             break;
@@ -219,7 +219,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             break;
     }
 
-    if ((ENZOT_GET_1F(thisx) >= 2) && (ENZOT_GET_1F(thisx) < 11) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80))) {
+    if ((ENZOT_GET_1F(thisx) >= 2) && (ENZOT_GET_1F(thisx) < 11) && CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
         Actor_MarkForDeath(&this->actor);
     }
 }

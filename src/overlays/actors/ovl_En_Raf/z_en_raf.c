@@ -700,7 +700,7 @@ void EnRaf_Update(Actor* thisx, PlayState* play) {
     DECR(this->timer);
     this->actionFunc(this, play);
 
-    if ((this->action == EN_RAF_ACTION_IDLE) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01))) {
+    if ((this->action == EN_RAF_ACTION_IDLE) && CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) {
         this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_DEAD;
         EnRaf_SetupConvulse(this);
         return;

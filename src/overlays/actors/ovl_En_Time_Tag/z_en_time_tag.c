@@ -49,7 +49,7 @@ void EnTimeTag_Init(Actor* thisx, PlayState* play) {
 
     switch (ENTIMETAG_GET_E000(&this->actor)) {
         case 4:
-            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) || (CURRENT_DAY != 3)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40) || (CURRENT_DAY != 3)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -273,7 +273,7 @@ void func_80ACA724(EnTimeTag* this, PlayState* play) {
 }
 
 void func_80ACA7C4(EnTimeTag* this, PlayState* play) {
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_63_01)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_01) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
         func_800B7298(play, &this->actor, 7);
         Message_StartTextbox(play, ENTIMETAG_GET_1FE0(&this->actor) + 0x1883, NULL);
         this->actionFunc = func_80ACA724;

@@ -72,7 +72,7 @@ Actor* BgIngate_FindActor(BgIngate* this, PlayState* play, u8 actorCat, s16 acto
 void func_80953B40(BgIngate* this) {
     s32 temp;
 
-    if (!(CHECK_EVENTINF(EVENTINF_35))) {
+    if (!CHECK_EVENTINF(EVENTINF_35)) {
         this->timePathTotalTime = 4 * 1000;
         this->timePathTimeSpeed = 4;
     } else {
@@ -139,7 +139,7 @@ s32 func_80953DA8(BgIngate* this, PlayState* play) {
 void func_80953E38(PlayState* play) {
     Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), CAM_SET_NORMAL0);
 
-    if (!(CHECK_EVENTINF(EVENTINF_35))) {
+    if (!CHECK_EVENTINF(EVENTINF_35)) {
         CLEAR_EVENTINF(EVENTINF_41);
     }
 
@@ -180,9 +180,9 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
-    if (!(CHECK_EVENTINF(EVENTINF_40))) {
+    if (!CHECK_EVENTINF(EVENTINF_40)) {
 
-        if (!(CHECK_EVENTINF(EVENTINF_35)) && (this->unk160 & 0x10) && (this->unk16C == 0)) {
+        if (!CHECK_EVENTINF(EVENTINF_35) && (this->unk160 & 0x10) && (this->unk16C == 0)) {
             this->dyna.actor.textId = 0x9E3;
             Message_StartTextbox(play, this->dyna.actor.textId, NULL);
             this->unk160 &= ~0x10;
@@ -199,7 +199,7 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_90_40);
                 this->actionFunc = func_809543D4;
             } else {
-                if (!(CHECK_EVENTINF(EVENTINF_35))) {
+                if (!CHECK_EVENTINF(EVENTINF_35)) {
                     CLEAR_EVENTINF(EVENTINF_41);
                 } else {
                     SET_EVENTINF(EVENTINF_40);
@@ -333,7 +333,7 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
         }
-        if (!(CHECK_EVENTINF(EVENTINF_35)) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_40))) {
+        if (!CHECK_EVENTINF(EVENTINF_35) && CHECK_WEEKEVENTREG(WEEKEVENTREG_90_40)) {
             phi_a2 = 1;
             this->unk16C = 1;
             this->actionFunc = func_809541B8;

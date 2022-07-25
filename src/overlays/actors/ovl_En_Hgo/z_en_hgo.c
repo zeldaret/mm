@@ -93,7 +93,7 @@ void EnHgo_Init(Actor* thisx, PlayState* play) {
     this->unk_314 = 0;
     this->unk_310 = 0;
     this->unk_312 = 0;
-    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20))) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
         func_80BD049C(this);
     } else {
         thisx->draw = NULL;

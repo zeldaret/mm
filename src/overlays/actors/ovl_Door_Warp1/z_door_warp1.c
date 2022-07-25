@@ -885,7 +885,7 @@ void func_808BAAF4(DoorWarp1* this, PlayState* play) {
         phi_f2 = 85.0f;
     }
 
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_86_80)) && (fabsf(this->dyna.actor.xzDistToPlayer) < phi_f2) &&
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_86_80) && (fabsf(this->dyna.actor.xzDistToPlayer) < phi_f2) &&
         ((player->actor.world.pos.y - 20.0f) < this->dyna.actor.world.pos.y) &&
         (this->dyna.actor.world.pos.y < (player->actor.world.pos.y + 20.0f))) {
         cutscene = this->dyna.actor.cutscene;

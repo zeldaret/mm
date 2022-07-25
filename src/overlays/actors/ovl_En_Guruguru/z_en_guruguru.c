@@ -131,8 +131,8 @@ void func_80BC6E10(EnGuruguru* this) {
     this->headZRotTarget = 0;
     this->unk268 = 1;
     this->actor.textId = textIDs[this->textIdIndex];
-    if ((this->textIdIndex == 0 || this->textIdIndex == 1) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04))) {
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_88_04))) {
+    if ((this->textIdIndex == 0 || this->textIdIndex == 1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_04)) {
             this->actor.textId = 0x295F;
         } else {
             this->actor.textId = 0x2960;

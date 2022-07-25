@@ -136,7 +136,7 @@ void EnMuto_Idle(EnMuto* this, PlayState* play) {
     if (!this->isInMayorsRoom) {
         player = GET_PLAYER(play);
         if (player->transformation == PLAYER_FORM_DEKU) {
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_88_08))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_08)) {
                 this->actor.textId = 0x62C;
             } else {
                 this->actor.textId = 0x62B;

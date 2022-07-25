@@ -104,18 +104,18 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
     this->unk_2BE = ENBOMBERS_GET_F(&this->actor);
 
     if (this->unk_2BC == ENBOMBERS_F0_0) {
-        if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02))) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) || CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
             Actor_MarkForDeath(&this->actor);
         } else {
             this->unk_2BE++;
             func_80C03ACC(this);
         }
-    } else if (((CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02))) &&
-               (((this->unk_2BE == ENBOMBERS_F_0) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_76_01))) ||
-                ((this->unk_2BE == ENBOMBERS_F_1) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_76_02))) ||
-                ((this->unk_2BE == ENBOMBERS_F_2) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_76_04))) ||
-                ((this->unk_2BE == ENBOMBERS_F_3) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_76_08))) ||
-                ((this->unk_2BE == ENBOMBERS_F_4) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_76_10))))) {
+    } else if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) || CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) &&
+               (((this->unk_2BE == ENBOMBERS_F_0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_76_01)) ||
+                ((this->unk_2BE == ENBOMBERS_F_1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_76_02)) ||
+                ((this->unk_2BE == ENBOMBERS_F_2) && CHECK_WEEKEVENTREG(WEEKEVENTREG_76_04)) ||
+                ((this->unk_2BE == ENBOMBERS_F_3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_76_08)) ||
+                ((this->unk_2BE == ENBOMBERS_F_4) && CHECK_WEEKEVENTREG(WEEKEVENTREG_76_10)))) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40)) {
             if (this->unk_2BE == ENBOMBERS_F_0) {
                 EnBomBowlMan* bomBowlMan = (EnBomBowlMan*)Actor_Spawn(
@@ -198,10 +198,10 @@ void func_80C039A8(EnBombers* this, PlayState* play) {
                 this->actor.textId = 0x75A;
             } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_40)) {
                 this->actor.textId = 0x749;
-                if (((this->unk_2BE == ENBOMBERS_F_1) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_01))) ||
-                    ((this->unk_2BE == ENBOMBERS_F_2) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_02))) ||
-                    ((this->unk_2BE == ENBOMBERS_F_3) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_04))) ||
-                    ((this->unk_2BE == ENBOMBERS_F_4) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_08)))) {
+                if (((this->unk_2BE == ENBOMBERS_F_1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_74_01)) ||
+                    ((this->unk_2BE == ENBOMBERS_F_2) && CHECK_WEEKEVENTREG(WEEKEVENTREG_74_02)) ||
+                    ((this->unk_2BE == ENBOMBERS_F_3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_74_04)) ||
+                    ((this->unk_2BE == ENBOMBERS_F_4) && CHECK_WEEKEVENTREG(WEEKEVENTREG_74_08))) {
                     this->actor.textId = 0x74A;
                 }
             } else {

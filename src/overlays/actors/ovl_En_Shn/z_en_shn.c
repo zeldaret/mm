@@ -218,7 +218,7 @@ s32 func_80AE65F4(EnShn* this, PlayState* play) {
         this->unk_1DA = temp;
         this->unk_1D8 |= 0x40;
     } else if (this->unk_1D8 & 0x40) {
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_23_08))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_08)) {
             func_80AE615C(this, 3);
         }
         this->unk_1DA = 0;
@@ -311,7 +311,7 @@ s32 func_80AE68F0(EnShn* this, PlayState* play) {
 
 void func_80AE69E8(EnShn* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
-    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_23_08)) && EnShn_IsFacingPlayer(this)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_08) && EnShn_IsFacingPlayer(this)) {
         this->unk_1D8 |= 8;
     } else {
         this->unk_1D8 &= ~0x8;

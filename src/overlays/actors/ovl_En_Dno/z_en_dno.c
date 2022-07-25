@@ -211,7 +211,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
             switch (ENDNO_GET_C000(thisx)) {
                 case ENDNO_GET_C000_0:
                     func_80A71788(this, play);
-                    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_93_02))) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_93_02)) {
                         Actor_MarkForDeath(thisx);
                     } else {
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 14, &this->unk_32C);

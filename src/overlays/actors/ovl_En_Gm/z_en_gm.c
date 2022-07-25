@@ -463,7 +463,7 @@ s32 func_8094E52C(EnGm* this, PlayState* play) {
             }
 
         case 2:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_86_40)) && (this->unk_3E0 == 2)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_86_40) && (this->unk_3E0 == 2)) {
                 ActorCutscene_Stop(sp2A);
             } else {
                 Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), &this->actor);
@@ -632,8 +632,8 @@ s32 func_8094EB1C(EnGm* this, PlayState* play) {
 
     switch (this->unk_3E0) {
         case 0:
-            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80)) ||
-                (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02))) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80) ||
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
                 ret = true;
                 break;
             }
@@ -739,14 +739,14 @@ s32 func_8094EE84(EnGm* this, PlayState* play) {
             this->actor.child = this->unk_268;
             this->unk_264 = func_8094EDBC(this, play);
 
-            if ((this->unk_258 == 5) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01)) &&
-                !(CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02))) {
+            if ((this->unk_258 == 5) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) &&
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
                 this->unk_3A4 |= 0x20;
             } else if ((this->unk_258 != 1) && (this->unk_258 != 5) && (this->unk_258 != 7)) {
                 this->unk_3A4 |= 0x20;
             }
 
-            if ((this->unk_258 == 3) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_01))) {
+            if ((this->unk_258 == 3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_01)) {
                 this->unk_3A4 &= ~0x20;
             }
 
@@ -1136,7 +1136,7 @@ s32 func_8094FE10(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         func_8094E054(this, play, 11);
         SubS_UpdateFlags(&this->unk_3A4, 3, 7);
         this->unk_268 = al;
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_86_20))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_86_20)) {
             this->unk_3C8 = 2;
             this->unk_3CA = 2;
             this->unk_3CC = 8;
@@ -1351,7 +1351,7 @@ s32 func_80950490(EnGm* this, PlayState* play) {
     };
     s32 pad;
 
-    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80))) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80)) {
         if (this->unk_400 == 0) {
             this->unk_3C8 = 1;
             this->unk_3CA = 1;

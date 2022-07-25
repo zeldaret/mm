@@ -153,7 +153,7 @@ u16 EnFsn_GetWelcome(PlayState* play) {
 void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
     switch (this->textId) {
         case 0:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_80_10))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_80_10)) {
                 this->textId = 0x29E0;
                 break;
             } else {
@@ -301,8 +301,8 @@ void EnFsn_CursorLeftRight(EnFsn* this) {
 }
 
 s16 EnFsn_GetThirdDayItemId(void) {
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04)) && CURRENT_DAY == 3) {
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04) && CURRENT_DAY == 3) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
             return SI_BOMB_BAG_30_1;
         }
         return SI_MASK_ALL_NIGHT;
@@ -335,7 +335,7 @@ s32 EnFsn_HasItemsToSell(void) {
     }
 
     if ((STOLEN_ITEM_1 != STOLEN_ITEM_NONE) || (STOLEN_ITEM_2 != STOLEN_ITEM_NONE) ||
-        !(CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04))) {
+        !CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04)) {
         return true;
     }
 
@@ -443,7 +443,7 @@ s32 EnFsn_FacingShopkeeperDialogResult(EnFsn* this, PlayState* play) {
                 this->actor.textId = 0x29FB;
             } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04)) {
                 this->actor.textId = 0x29FF;
-            } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40))) {
+            } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
                 this->actor.textId = 0x29D7;
             } else {
                 this->actor.textId = 0x29D8;
@@ -863,7 +863,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
                 case 0x29D2:
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04)) {
                         this->actor.textId = 0x2A01;
-                    } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40))) {
+                    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
                         this->actor.textId = 0x29D3;
                     } else {
                         this->actor.textId = 0x29D4;
@@ -1419,7 +1419,7 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
         EnFsn_GetCutscenes(this);
         EnFsn_InitShop(this, play);
     } else {
-        if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40))) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) || CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }

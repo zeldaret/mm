@@ -842,7 +842,7 @@ s32 func_80AF81E8(EnPm* this, PlayState* play) {
         case 1:
         case 3:
         case 5:
-            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_86_08)) && (this->unk_378 == 3)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_08) && (this->unk_378 == 3)) {
                 ActorCutscene_Stop(sp2A);
             } else {
                 Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), &this->actor);
@@ -1109,7 +1109,7 @@ void func_80AF8BA8(s32 arg0) {
         WEEKEVENTREG_27_40, WEEKEVENTREG_27_80, WEEKEVENTREG_28_01, WEEKEVENTREG_28_02, WEEKEVENTREG_28_04,
     };
 
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_88_02))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_02)) {
         if (CHECK_WEEKEVENTREG(D_80AFB8D4[arg0])) {
             switch (gSaveContext.save.day) {
                 case 2:
@@ -2116,7 +2116,7 @@ void EnPm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
                 Matrix_MultVec3f(&gZeroVec3f, &this->actor.focus.pos);
                 Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             }
-            if ((this->unk_356 & 0x8000) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_90_04))) {
+            if ((this->unk_356 & 0x8000) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_90_04)) {
                 func_80AF8890(this, gfx, 1);
             }
             break;

@@ -182,7 +182,7 @@ void func_8092C934(EnDns* this) {
 s32* func_8092C9BC(EnDns* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         if (player->transformation != PLAYER_FORM_DEKU) {
             return &D_8092DCB0[16];
         } else if (this->unk_2FC != 0) {
@@ -365,10 +365,10 @@ s32 func_8092D068(EnDns* this) {
             ret = true;
         }
     } else if (ENDNS_GET_4000(&this->actor)) {
-        if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20))) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
             ret = true;
         }
-    } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20))) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         ret = true;
     }
 
@@ -399,7 +399,7 @@ void func_8092D1B8(EnDns* this, PlayState* play) {
     }
 
     if (!ENDNS_GET_4000(&this->actor) || (this->unk_2D2 != 0)) {
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) && !(CHECK_EVENTINF(EVENTINF_15)) && func_8092CC68(play)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20) && !CHECK_EVENTINF(EVENTINF_15) && func_8092CC68(play)) {
             player->stateFlags1 |= 0x20;
             this->unk_2C6 |= 0x100;
             SubS_UpdateFlags(&this->unk_2C6, 4, 7);
@@ -458,7 +458,7 @@ void func_8092D4D8(EnDns* this, PlayState* play) {
         SubS_UpdateFlags(&this->unk_2C6, 3, 7);
         this->unk_2F4 = NULL;
         if (ENDNS_GET_4000(&this->actor)) {
-            if (!(CHECK_EVENTINF(EVENTINF_15))) {
+            if (!CHECK_EVENTINF(EVENTINF_15)) {
                 this->skelAnime.curFrame = this->unk_2F0;
                 this->actor.world.rot.y = this->unk_2DA;
                 func_8092C63C(this, EN_DNS_ANIMATION_DANCE);

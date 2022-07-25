@@ -91,7 +91,7 @@ void EnCha_Idle(EnCha* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DOOR_BELL);
         this->actor.home.rot.z = 0x7D0;
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_51_04))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_51_04)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_51_04);
             this->actionFunc = EnCha_Ring;
         }

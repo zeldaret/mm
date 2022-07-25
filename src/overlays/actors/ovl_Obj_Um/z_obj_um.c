@@ -683,7 +683,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
     this->initialPathIndex = OBJ_UM_PARSE_PATH_INDEX(thisx);
 
     // if (!AliensDefeated)
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
@@ -702,9 +702,9 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         } else {
             // Waiting for player
 
-            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_34_80)) || gSaveContext.save.time >= CLOCK_TIME(19, 0) ||
-                gSaveContext.save.time <= CLOCK_TIME(6, 0) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) ||
-                (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02))) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_80) || gSaveContext.save.time >= CLOCK_TIME(19, 0) ||
+                gSaveContext.save.time <= CLOCK_TIME(6, 0) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) ||
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
                 Actor_MarkForDeath(&this->dyna.actor);
                 return;
             }
@@ -714,12 +714,12 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
             ObjUm_SetupAction(this, ObjUm_RanchWait);
         }
     } else if (this->type == OBJ_UM_TYPE_PRE_MILK_RUN) {
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
             Actor_MarkForDeath(&this->dyna.actor);
             return;
         }
 
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
             this->pathIndex = this->initialPathIndex;
             sp54 = false;
             func_800FE484();
@@ -728,7 +728,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
             ObjUm_RotatePlayer(this, play, 0);
         }
     } else if (this->type == OBJ_UM_TYPE_MILK_RUN_MINIGAME) {
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80)) {
             Actor_MarkForDeath(&this->dyna.actor);
             return;
         }
@@ -740,7 +740,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, play, 0);
     } else if (this->type == OBJ_UM_TYPE_POST_MILK_RUN) {
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_59_02))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_59_02)) {
             Actor_MarkForDeath(&this->dyna.actor);
             return;
         }
@@ -1299,7 +1299,7 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_31_80);
             gSaveContext.nightSeqIndex = 0xFF;
 
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
                 if (!this->areAllPotsBroken) {
                     play->nextEntranceIndex = 0x3E60;
                     play->transitionType = TRANS_TYPE_64;
@@ -1545,7 +1545,7 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
     this->wheelRot += 0x3E8;
     ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_TROT);
 
-    if ((ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_4) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_59_02))) {
+    if ((ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_4) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_02)) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         Audio_SetCutsceneFlag(false);
         SET_WEEKEVENTREG(WEEKEVENTREG_59_02);

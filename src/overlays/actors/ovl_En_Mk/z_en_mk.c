@@ -428,7 +428,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
     } else if ((this->actor.xzDistToPlayer < 120.0f) && (ABS_ALT(sp22) <= 0x4300)) {
         this->unk_27A |= 1;
         func_800B8614(&this->actor, play, 200.0f);
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_20_40)) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_40))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_40) && CHECK_WEEKEVENTREG(WEEKEVENTREG_19_40)) {
             func_800B874C(&this->actor, play, 200.0f, 100.0f);
         }
     } else {

@@ -157,17 +157,17 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
             break;
         case 0x45A: // "All right, little guy, now I've got a total of [rupees] from you!"
             if (((gSaveContext.save.bankRupees & 0xFFFF) >= 200) && (this->previousBankValue < 200) &&
-                !(CHECK_WEEKEVENTREG(WEEKEVENTREG_59_40))) {
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_40)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_59_40);
                 Message_StartTextbox(play, 0x45B, &this->actor);
                 this->curTextId = 0x45B; // "What's this? You've already saved up 200 Rupees!?!
             } else if (((gSaveContext.save.bankRupees & 0xFFFF) >= 1000) && ((this->previousBankValue) < 1000) &&
-                       !(CHECK_WEEKEVENTREG(WEEKEVENTREG_59_80))) {
+                       !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_80)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_59_80);
                 Message_StartTextbox(play, 0x45C, &this->actor);
                 this->curTextId = 0x45C; // "What's this? You've already saved up 1000 Rupees!?!
             } else if ((gSaveContext.save.bankRupees & 0xFFFF) >= 5000) {
-                if ((this->previousBankValue < 5000) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_60_01))) {
+                if ((this->previousBankValue < 5000) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_60_01)) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_60_01);
                     Message_StartTextbox(play, 0x45D, &this->actor);
                     this->curTextId = 0x45D; // "What's this? You've already saved up 5000 Rupees?!
@@ -516,14 +516,14 @@ void EnGinkoMan_BankAward(EnGinkoMan* this, PlayState* play) {
         this->actor.parent = NULL;
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) { // "Whats this, you already saved up 200?"
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08)) {
             Actor_PickUp(&this->actor, play, GI_WALLET_ADULT + CUR_UPG_VALUE(UPG_WALLET), 500.0f, 100.0f);
         } else {
             Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
         }
     } else if (this->curTextId == 0x45C) { // "Whats this, you already saved up 5000?"
         Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
-    } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_59_08))) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_08)) {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
@@ -538,7 +538,7 @@ void EnGinkoMan_SetupBankAward2(EnGinkoMan* this) {
 // separate function to handle bank rewards... called while the player is receiving the award
 void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08)) && (this->curTextId == 0x45B)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08) && (this->curTextId == 0x45B)) {
             // "What's this? You've already saved up 200 Rupees!?!  Well, little guy, here's your special gift. Take
             // it!"
             SET_WEEKEVENTREG(WEEKEVENTREG_10_08);
@@ -553,7 +553,7 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
         EnGinkoMan_SetupDialogue(this);
     } else if (this->curTextId == 0x45D) { // saved up 5000 rupees for HP
         if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_59_08))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_08)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_59_08);
             }
             EnGinkoMan_SetupIdle(this);

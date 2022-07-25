@@ -131,7 +131,7 @@ void func_80AD341C(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD349C(EnTrt2* this) {
-    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_85_10)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40))) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_10) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40)) {
         this->unk_3A8 = 0x88F;
     } else if (this->unk_3A8 == 0) {
         this->unk_3A8 = 0x84B;
@@ -378,8 +378,8 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
 
     if (talkState == TEXT_STATE_DONE) {
         if (Message_ShouldAdvance(play)) {
-            if ((Inventory_HasEmptyBottle() && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40))) ||
-                !(CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10))) {
+            if ((Inventory_HasEmptyBottle() && !CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40)) ||
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
                 this->unk_3B2 = 12;
             } else {
                 SET_WEEKEVENTREG(WEEKEVENTREG_85_10);
@@ -397,7 +397,7 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
 
 void func_80AD3FF4(EnTrt2* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_12_10);
         }
         SET_WEEKEVENTREG(WEEKEVENTREG_84_40);
@@ -741,7 +741,7 @@ void func_80AD4DB4(EnTrt2* this, PlayState* play) {
 
     if ((play->sceneNum == SCENE_20SICHITAI) || (play->sceneNum == SCENE_20SICHITAI2)) {
         if (gSaveContext.save.day == 2) {
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_15_80))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_15_80)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_15_80);
                 this->unk_3B2 = 3;
             } else {

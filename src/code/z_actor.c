@@ -2294,7 +2294,7 @@ void Actor_SpawnSetupActors(PlayState* play, ActorContext* actorCtx) {
             }
 
             if (!(phi_v0 & temp_fp) && (phi_v0 & actorCtx->unkC) &&
-                (!(CHECK_EVENTINF(EVENTINF_17)) || !(phi_v0 & temp_s1) || !(actorEntry->id & 0x800))) {
+                (!CHECK_EVENTINF(EVENTINF_17) || !(phi_v0 & temp_s1) || !(actorEntry->id & 0x800))) {
                 Actor_SpawnEntry(&play->actorCtx, actorEntry, play);
             }
             actorEntry++;

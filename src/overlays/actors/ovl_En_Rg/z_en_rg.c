@@ -750,7 +750,7 @@ void EnRg_Init(Actor* thisx, PlayState* play) {
         this->actor.gravity = -1.0f;
         SubS_UpdateFlags(&this->unk_310, 3, 7);
 
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_12_02))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_02)) {
             this->unk_318 = Rand_S16Offset(30, 30);
         }
 

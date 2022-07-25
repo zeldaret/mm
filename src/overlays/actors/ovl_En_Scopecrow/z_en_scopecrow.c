@@ -111,42 +111,42 @@ s32 func_80BCD09C(s16 arg0) {
 s32 func_80BCD1AC(s16 arg0) {
     switch (arg0) {
         case 0:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_53_04))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_04)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_53_04);
                 return true;
             }
             break;
 
         case 1:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_53_80))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_80)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_53_80);
                 return true;
             }
             break;
 
         case 2:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_54_01))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_01)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_54_01);
                 return true;
             }
             break;
 
         case 3:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_54_02))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_02)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_54_02);
                 return true;
             }
             break;
 
         case 4:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_54_04))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_04)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_54_04);
                 return true;
             }
             break;
 
         case 5:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_54_08))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_08)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_54_08);
                 return true;
             }

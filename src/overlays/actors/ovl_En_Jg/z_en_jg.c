@@ -493,14 +493,14 @@ void EnJg_Talk(EnJg* this, PlayState* play) {
 
         temp = this->textId;
         if ((temp == 0xDBB) || (temp == 0xDBC)) {
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_24_80))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_24_80)) {
                 // The player hasn't talked to the Goron Child at least once, so they can't learn
                 // the Lullaby Intro. End the current conversation with the player.
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.stateTimer = 4;
                 this->flags &= ~FLAG_LOOKING_AT_PLAYER;
                 this->actionFunc = EnJg_SetupWalk;
-            } else if (((CHECK_WEEKEVENTREG(WEEKEVENTREG_24_40))) ||
+            } else if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_24_40)) ||
                        (CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO))) {
                 // The player already has the Lullaby or Lullaby Intro, so say "I'm counting on you"
                 this->textId = EnJg_GetNextTextId(this);
@@ -848,7 +848,7 @@ s32 EnJg_GetStartingConversationTextId(EnJg* this, PlayState* play) {
 
     if (!EN_JG_IS_IN_GORON_SHRINE(&this->actor)) {
         if (player->transformation == PLAYER_FORM_GORON) {
-            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_24_10)) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) ||
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_10) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) ||
                 CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO)) {
                 // The player has already talked as a Goron at least once.
                 return 0xDBC; // Following me won't do you any good

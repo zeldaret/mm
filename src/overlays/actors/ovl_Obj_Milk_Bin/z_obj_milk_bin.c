@@ -58,7 +58,7 @@ void ObjMilkBin_Init(Actor* thisx, PlayState* play) {
     this->disableDraw = 0;
     this->type = thisx->params;
 
-    if ((this->type == OBJ_MILK_BIN_TYPE_2) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01))) {
+    if ((this->type == OBJ_MILK_BIN_TYPE_2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
         this->disableDraw |= 1;
     }
 }

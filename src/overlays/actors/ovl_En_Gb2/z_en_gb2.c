@@ -120,7 +120,7 @@ s32 func_80B0F660(EnGb2* this, PlayState* play) {
 }
 
 void func_80B0F6DC(EnGb2* this) {
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_54_20))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_20)) {
         SET_WEEKEVENTREG(WEEKEVENTREG_54_20);
         this->unk_26E = 0x14D0;
     } else {
@@ -259,7 +259,7 @@ s32 func_80B0FA48(EnGb2* this, PlayState* play) {
             return false;
 
         case PLAYER_MASK_CAPTAIN:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_80_40))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_80_40)) {
                 this->unk_26E = 0x14EB;
                 return false;
             }
@@ -267,7 +267,7 @@ s32 func_80B0FA48(EnGb2* this, PlayState* play) {
             return true;
     }
 
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_80_20))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_80_20)) {
         this->unk_26E = 0x14EF;
         return false;
     } else {
@@ -909,7 +909,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ENGB2_7_1:
-            if ((play->curSpawn == 1) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_80_80))) {
+            if ((play->curSpawn == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_80_80)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }

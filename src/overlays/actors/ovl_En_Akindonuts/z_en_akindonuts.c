@@ -275,19 +275,19 @@ s32 func_80BED140(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->transformation == PLAYER_FORM_DEKU) {
-        if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_63_08)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_63_10))) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_63_10)) {
             return true;
         }
     } else if (player->transformation == PLAYER_FORM_ZORA) {
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_63_08)) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_10))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_08) && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_10)) {
             return true;
         }
     } else if (player->transformation == PLAYER_FORM_GORON) {
-        if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_63_08)) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_10))) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_08) && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_10)) {
             return true;
         }
     } else if (player->transformation == PLAYER_FORM_HUMAN) {
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_63_08)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_63_10))) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_63_10)) {
             return true;
         }
     }
@@ -384,7 +384,7 @@ void func_80BED3BC(EnAkindonuts* this, PlayState* play) {
             break;
 
         case 0x15E7:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_61_20))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_61_20)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_61_20);
                 this->unk_33C = 0x15E8;
                 break;
@@ -461,7 +461,7 @@ void func_80BED3BC(EnAkindonuts* this, PlayState* play) {
 void func_80BED680(EnAkindonuts* this, PlayState* play) {
     switch (this->unk_33C) {
         case 0:
-            if (func_80BED140(play) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_61_40))) {
+            if (func_80BED140(play) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_61_40)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_61_40);
                 this->unk_33C = 0x15F0;
                 break;
@@ -562,7 +562,7 @@ void func_80BED8A4(EnAkindonuts* this, PlayState* play) {
             break;
 
         case 0x15FE:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_62_01))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_62_01)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_62_01);
                 this->unk_33C = 0x15FF;
                 break;
@@ -640,7 +640,7 @@ void func_80BEDB88(EnAkindonuts* this, PlayState* play) {
 
     switch (this->unk_33C) {
         case 0:
-            if ((player->transformation == PLAYER_FORM_DEKU) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_62_02))) {
+            if ((player->transformation == PLAYER_FORM_DEKU) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_62_02)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_62_02);
                 this->unk_33C = 0x15F0;
                 break;
@@ -740,7 +740,7 @@ void func_80BEDDAC(EnAkindonuts* this, PlayState* play) {
             break;
 
         case 0x1610:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_62_08))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_62_08)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_62_08);
                 this->unk_33C = 0x1611;
                 break;
@@ -813,7 +813,7 @@ void func_80BEE070(EnAkindonuts* this, PlayState* play) {
 
     switch (this->unk_33C) {
         case 0:
-            if ((player->transformation == PLAYER_FORM_GORON) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_62_10))) {
+            if ((player->transformation == PLAYER_FORM_GORON) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_62_10)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_62_10);
                 this->unk_33C = 0x1614;
                 break;
@@ -900,7 +900,7 @@ void func_80BEE274(EnAkindonuts* this, PlayState* play) {
             break;
 
         case 0x1624:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_62_40))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_62_40)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_62_40);
                 this->unk_33C = 0x1625;
                 break;
@@ -974,7 +974,7 @@ void func_80BEE530(EnAkindonuts* this, PlayState* play) {
 
     switch (this->unk_33C) {
         case 0:
-            if ((player->transformation == PLAYER_FORM_ZORA) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_62_80))) {
+            if ((player->transformation == PLAYER_FORM_ZORA) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_62_80)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_62_80);
                 this->unk_33C = 0x162A;
                 break;

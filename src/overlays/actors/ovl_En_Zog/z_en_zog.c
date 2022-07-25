@@ -265,7 +265,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    if ((ENZOG_GET_F(&this->actor) != ENZOG_F_2) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_88_10))) {
+    if ((ENZOG_GET_F(&this->actor) != ENZOG_F_2) && CHECK_WEEKEVENTREG(WEEKEVENTREG_88_10)) {
         this->unk_302 = this->unk_300 = 0;
         this->unk_2FC = this->unk_2FE = 3;
         this->actor.flags |= ACTOR_FLAG_2000000;

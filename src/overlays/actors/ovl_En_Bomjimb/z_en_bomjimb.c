@@ -115,7 +115,7 @@ void EnBomjimb_Init(Actor* thisx, PlayState* play) {
         this->unk_2C6 = ENBOMJIMB_F0_0;
     }
 
-    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02))) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) || CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
         switch (this->unk_2C8) {
             case ENBOMJIMB_F_0:
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_11_01)) {
@@ -154,8 +154,8 @@ void EnBomjimb_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    if ((!(CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02))) ||
-        (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40))) {
+    if ((!CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) ||
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -674,8 +674,8 @@ void func_80C02740(EnBomjimb* this, PlayState* play) {
         return;
     }
 
-    if (((player->transformation == PLAYER_FORM_DEKU) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10))) ||
-        ((player->transformation == PLAYER_FORM_HUMAN) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)))) {
+    if (((player->transformation == PLAYER_FORM_DEKU) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10)) ||
+        ((player->transformation == PLAYER_FORM_HUMAN) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02))) {
         func_80C0113C(this, 17, 1.0f);
         Message_StartTextbox(play, 0x72E, &this->actor);
         player->stateFlags1 |= 0x10000000;

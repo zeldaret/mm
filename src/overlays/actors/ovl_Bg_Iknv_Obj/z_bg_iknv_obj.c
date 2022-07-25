@@ -165,7 +165,7 @@ void func_80BD7F4C(BgIknvObj* this, PlayState* play) {
     if (gSaveContext.save.time > CLOCK_TIME(19, 30)) {
         this->actionFunc = func_80BD7ED8;
     }
-    if ((this->dyna.actor.home.rot.x == 1) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_58_80))) {
+    if ((this->dyna.actor.home.rot.x == 1) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_58_80)) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         this->dyna.actor.home.rot.x = 0;
     }

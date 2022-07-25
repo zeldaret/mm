@@ -140,7 +140,7 @@ void EnJcMato_Update(Actor* thisx, PlayState* play) {
     EnJcMato* this = THIS;
 
     this->actionFunc(this, play);
-    if (!(CHECK_EVENTINF(EVENTINF_40))) {
+    if (!CHECK_EVENTINF(EVENTINF_40)) {
         EnJcMato_CheckForHit(this, play);
     }
 }

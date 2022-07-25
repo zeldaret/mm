@@ -220,7 +220,7 @@ void EnFall_Setup(EnFall* this, PlayState* play) {
                 this->actor.draw = EnFall_Moon_Draw;
                 this->actionFunc = EnFall_StoppedClosedMouthMoon_PerformCutsceneActions;
                 Actor_SetScale(&this->actor, this->scale * 3.0f);
-                if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_25_02))) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_25_02)) {
                     Actor_MarkForDeath(&this->actor);
                 }
                 break;

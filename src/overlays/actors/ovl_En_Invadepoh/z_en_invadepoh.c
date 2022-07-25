@@ -1763,7 +1763,7 @@ void EnInvadepoh_InitRomani(EnInvadepoh* this, PlayState* play) {
                 return;
             }
         } else if (temp == 0xC) {
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 Actor_MarkForDeath(&this->actor);
             }
             D_80B503F4 = this;
@@ -1818,7 +1818,7 @@ void EnInvadepoh_InitCremia(EnInvadepoh* this, PlayState* play) {
     if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
     }
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         Actor_MarkForDeath(&this->actor);
     }
     D_80B503F8 = this;

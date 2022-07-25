@@ -109,7 +109,7 @@ void EnGuardNuts_Init(Actor* thisx, PlayState* play) {
     sGuardCount++;
 
     // If you have returned deku princess guards will init burrowed.
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         EnGuardNuts_SetupWait(this);
     } else {
         EnGuardNuts_Burrow(this, play);
@@ -158,7 +158,7 @@ void EnGuardNuts_Wait(EnGuardNuts* this, PlayState* play) {
     if (player->transformation == PLAYER_FORM_DEKU) {
         // this is the palace of...
         this->guardTextIndex = 0;
-        if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_17_04)) && (!this->hasCompletedConversation)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_04) && (!this->hasCompletedConversation)) {
             // I told you not to enter!!
             this->guardTextIndex = 7;
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_40)) {
@@ -300,7 +300,7 @@ void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play) {
     Vec3f digPos;
 
     // If you have returned Deku Princess, guards will not unburrow
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         yawDiff = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.home.rot.y));
         if ((yawDiff < 0x4000) && ((D_80ABBE20 == 0) || (this->actor.xzDistToPlayer > 150.0f))) {
             Math_Vec3f_Copy(&digPos, &this->actor.world.pos);

@@ -535,7 +535,7 @@ void func_80AED4F8(EnTk* this, PlayState* play) {
 }
 
 void func_80AED544(EnTk* this, PlayState* play) {
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_31_10))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_10)) {
         Message_StartTextbox(play, 0x13FE, &this->actor);
         SET_WEEKEVENTREG(WEEKEVENTREG_31_10);
     } else if (gSaveContext.save.time < CLOCK_TIME(9, 0)) {
@@ -758,7 +758,7 @@ void func_80AEDE10(EnTk* this, PlayState* play) {
             switch (this->unk_310) {
                 case 0:
                     this->unk_2CA &= ~0x1000;
-                    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_52_80))) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_80)) {
                         this->unk_2E6 = 0x1405;
                     } else {
                         this->unk_2E6 = 0x140B;

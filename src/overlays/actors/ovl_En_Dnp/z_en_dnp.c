@@ -206,7 +206,7 @@ s32 func_80B3CF60(EnDnp* this, PlayState* play) {
         this->unk_322 |= 8;
         this->actionFunc = func_80B3D3F8;
         ret = true;
-    } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) && Actor_HasParent(&this->actor, play)) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20) && Actor_HasParent(&this->actor, play)) {
         SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->unk_322 &= ~0x500;
         this->actor.parent = NULL;
@@ -247,7 +247,7 @@ void func_80B3D11C(EnDnp* this, PlayState* play) {
     s32 temp_v0;
     s32 val;
 
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40)) && (play->sceneNum == SCENE_MITURIN) &&
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40) && (play->sceneNum == SCENE_MITURIN) &&
         (play->csCtx.currentCsIndex == 0)) {
         this->unk_322 |= 0x20;
         SET_WEEKEVENTREG(WEEKEVENTREG_29_40);
@@ -365,12 +365,12 @@ void EnDnp_Init(Actor* thisx, PlayState* play) {
         this->actor.cutscene = 0x10;
         this->actionFunc = func_80B3D47C;
     } else if (((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_0) && !Inventory_HasItemInBottle(ITEM_DEKU_PRINCESS) &&
-                !(CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20))) ||
-               ((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_2) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)))) {
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) ||
+               ((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_2) && CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20))) {
         Actor_SetScale(&this->actor, 0.0085f);
         SubS_UpdateFlags(&this->unk_322, 3, 7);
         this->unk_322 |= 0x400;
-        if ((play->sceneNum == SCENE_MITURIN) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40))) {
+        if ((play->sceneNum == SCENE_MITURIN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40)) {
             this->unk_322 |= 0x20;
             func_80B3CC38(this, 1);
         }
@@ -406,7 +406,7 @@ void EnDnp_Update(Actor* thisx, PlayState* play) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         sp2C = this->collider.dim.radius + 50;
         sp28 = this->collider.dim.height + 30;
-        if ((this->unk_322 & 0x400) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20))) {
+        if ((this->unk_322 & 0x400) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
             Actor_PickUp(&this->actor, play, GI_MAX, sp2C, sp28);
         }
         func_8013C964(&this->actor, play, sp2C, sp28, EXCH_ITEM_NONE, this->unk_322 & 7);

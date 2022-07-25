@@ -873,7 +873,7 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
     switch (this->type) {
         case MA4_TYPE_DAY1:
             if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
-                if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_21_80))) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_80)) {
                     EnMa4_SetFaceExpression(this, 3, 3);
                     Message_StartTextbox(play, 0x3337, &this->actor);
                     this->textId = 0x3337;
@@ -884,8 +884,8 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_21_80);
                 }
             } else if (this->state == MA4_STATE_DEFAULT) {
-                if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_21_40))) {
-                    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_21_20))) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_40)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_21_20)) {
                         Message_StartTextbox(play, 0x3346, &this->actor);
                         this->textId = 0x3346;
                     } else {
@@ -929,7 +929,7 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
 
         case MA4_TYPE_ALIENS_DEFEATED:
             if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
-                if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_21_80))) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_80)) {
                     EnMa4_SetFaceExpression(this, 3, 3);
                     Message_StartTextbox(play, 0x3337, &this->actor);
                     this->textId = 0x3337;

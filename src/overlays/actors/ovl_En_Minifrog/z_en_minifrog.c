@@ -127,7 +127,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnMinifrog_SetupYellowFrogDialog;
 
             // Not spoken to MINIFROG_YELLOW
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_34_01))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_34_01)) {
                 this->actor.flags |= ACTOR_FLAG_10000;
             }
 
@@ -562,7 +562,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, PlayState* play) {
     EnMinifrog_JumpTimer(this);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = EnMinifrog_YellowFrogDialog;
-        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_34_01))) { // Not spoken with MINIFROG_YELLOW
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_34_01)) { // Not spoken with MINIFROG_YELLOW
             Message_StartTextbox(play, 0xD76,
                                  &this->actor); // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken,
                                                 // but it looks like you've lost a little weight..."

@@ -304,7 +304,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
 
     if (gSaveContext.respawnFlag != -4 && gSaveContext.respawnFlag != -8) {
         if (gSaveContext.save.time != CLOCK_TIME(6, 0) && gSaveContext.save.time != CLOCK_TIME(18, 0) &&
-            !(CHECK_EVENTINF(EVENTINF_17))) {
+            !CHECK_EVENTINF(EVENTINF_17)) {
 
             if (this->actor.textId == 0) {
                 // dialogue after skipped time 'did you feel that? went by in an instant'
@@ -1032,7 +1032,7 @@ void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
 }
 
 void EnKakasi_IdleUnderground(EnKakasi* this, PlayState* play) {
-    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_79_08)) && this->actor.xzDistToPlayer < this->songSummonDist &&
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_08) && this->actor.xzDistToPlayer < this->songSummonDist &&
         (BREG(1) != 0 || play->msgCtx.ocarinaMode == 0xD)) {
         this->actor.flags &= ~ACTOR_FLAG_8000000;
         play->msgCtx.ocarinaMode = 4;

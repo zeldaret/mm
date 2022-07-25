@@ -185,7 +185,7 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
                 this->textId = 0x2A32;
                 break;
             } else if (player->transformation == PLAYER_FORM_DEKU) {
-                if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_79_20))) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_79_20)) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_79_20);
                     this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
                     // Small customer, use bombs as adult
@@ -197,8 +197,8 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
                     this->textId = 0x2A38;
                 }
                 break;
-            } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08))) {
-                if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_73_01))) {
+            } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_73_01)) {
                     // Thought could sell Big Bomb Bags
                     this->textId = 0x660;
                     break;
@@ -207,7 +207,7 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
                 this->textId = 0x662;
                 break;
             } else {
-                if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_73_02))) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_73_02)) {
                     // Someone helped me out
                     this->textId = 0x65A;
                     break;
@@ -511,7 +511,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
     } else if (play->sceneNum == SCENE_BACKTOWN) {
         if ((BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_FOLLOW_SCHEDULE) &&
             (gSaveContext.save.entranceIndex != 0xD670) && (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != 0x3F)) {
-            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_58_40)) ||
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_40) ||
                 (gSaveContext.save.time >= CLOCK_TIME(0, 20) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
                 Actor_MarkForDeath(&this->actor);
                 return;
@@ -697,7 +697,7 @@ void EnBaba_KnockedOver(EnBaba* this, PlayState* play) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
         }
     } else {
-        if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) && (DECR(this->sakonDeadTimer) == 0)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40) && (DECR(this->sakonDeadTimer) == 0)) {
             Audio_QueueSeqCmd(0x101400FF);
             EnBaba_TriggerTransition(play, 0xD670);
         } else {
