@@ -23,17 +23,20 @@
 #undef DEFINE_ACTOR_UNSET
 
 // Actor Overlay Table definition
-#define DEFINE_ACTOR(name, _1, allocType, _3)                                                   \
-    {                                                                                          \
-        SEGMENT_ROM_START(ovl_##name), SEGMENT_ROM_END(ovl_##name), SEGMENT_START(ovl_##name), \
-            SEGMENT_END(ovl_##name), NULL, &name##_InitVars, NULL, allocType, 0                \
-    },
+#define DEFINE_ACTOR(name, _1, allocType, _3) \
+    { SEGMENT_ROM_START(ovl_##name),          \
+      SEGMENT_ROM_END(ovl_##name),            \
+      SEGMENT_START(ovl_##name),              \
+      SEGMENT_END(ovl_##name),                \
+      NULL,                                   \
+      &name##_InitVars,                       \
+      NULL,                                   \
+      allocType,                              \
+      0 },
 
-#define DEFINE_ACTOR_INTERNAL(name, _1, allocType, _3) \
-    { 0, 0, NULL, NULL, NULL, &name##_InitVars, NULL, allocType, 0 },
+#define DEFINE_ACTOR_INTERNAL(name, _1, allocType, _3) { 0, 0, NULL, NULL, NULL, &name##_InitVars, NULL, allocType, 0 },
 
-#define DEFINE_ACTOR_UNSET(_1) \
-    { 0 },
+#define DEFINE_ACTOR_UNSET(_1) { 0 },
 
 ActorOverlay gActorOverlayTable[] = {
 #include "tables/actor_table.h"
