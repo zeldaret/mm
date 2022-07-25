@@ -486,22 +486,22 @@ static EntranceTableEntry* sTreasureChestShopEntranceTable[] = {
     sTreasureChestShopEntrance1,
 };
 
-static EntranceTableEntry sStoneTowerTempleReversedEntrance0[] = {
+static EntranceTableEntry sStoneTowerTempleInvertedEntrance0[] = {
     { 0xE8, 0x00, 0xC102 },
 };
 
-static EntranceTableEntry sStoneTowerTempleReversedEntrance1[] = {
+static EntranceTableEntry sStoneTowerTempleInvertedEntrance1[] = {
     { 0xE8, 0x01, 0x8102 },
 };
 
-static EntranceTableEntry sStoneTowerTempleReversedEntrance2[] = {
+static EntranceTableEntry sStoneTowerTempleInvertedEntrance2[] = {
     { 0xE8, 0x02, 0x8102 },
 };
 
-static EntranceTableEntry* sStoneTowerTempleReversedEntranceTable[] = {
-    sStoneTowerTempleReversedEntrance0,
-    sStoneTowerTempleReversedEntrance1,
-    sStoneTowerTempleReversedEntrance2,
+static EntranceTableEntry* sStoneTowerTempleInvertedEntranceTable[] = {
+    sStoneTowerTempleInvertedEntrance0,
+    sStoneTowerTempleInvertedEntrance1,
+    sStoneTowerTempleInvertedEntrance2,
 };
 
 static EntranceTableEntry sClockTowerRooftopEntrance0[] = {
@@ -2678,7 +2678,7 @@ static SceneEntranceTableEntry sSceneEntranceTable[] = {
     SCENE_ENTRANCE(sMilkBarEntranceTable, "Z2_MILK_BAR"),
     SCENE_ENTRANCE(sStoneTowerTempleEntranceTable, "Z2_INISIE_N"),
     SCENE_ENTRANCE(sTreasureChestShopEntranceTable, "Z2_TAKARAYA"),
-    SCENE_ENTRANCE(sStoneTowerTempleReversedEntranceTable, "Z2_INISIE_R"),
+    SCENE_ENTRANCE(sStoneTowerTempleInvertedEntranceTable, "Z2_INISIE_R"),
     SCENE_ENTRANCE(sClockTowerRooftopEntranceTable, "Z2_OKUJOU"),
     SCENE_ENTRANCE(sOpeningDungeonEntranceTable, "Z2_OPENINGDAN"),
     SCENE_ENTRANCE(sWoodfallTempleEntranceTable, "Z2_MITURIN"),

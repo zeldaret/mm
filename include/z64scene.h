@@ -672,7 +672,7 @@ typedef enum {
     /* 0x12 */ ENTR_SCENE_MILK_BAR,
     /* 0x13 */ ENTR_SCENE_STONE_TOWER_TEMPLE,
     /* 0x14 */ ENTR_SCENE_TREASURE_CHEST_SHOP,
-    /* 0x15 */ ENTR_SCENE_STONE_TOWER_TEMPLE_REVERSED,
+    /* 0x15 */ ENTR_SCENE_STONE_TOWER_TEMPLE_INVERTED,
     /* 0x16 */ ENTR_SCENE_CLOCK_TOWER_ROOFTOP,
     /* 0x17 */ ENTR_SCENE_OPENING_DUNGEON,
     /* 0x18 */ ENTR_SCENE_WOODFALL_TEMPLE,
@@ -769,7 +769,7 @@ typedef enum {
 * 0x01F0:  Index into the scenes specific entrance table (Spawn)
 * 0x000F:  Index into the specific entrance table (Setup)
 */
-#define NEXT_ENTRANCE(sceneIndex, spawnIndex, setupIndex) ((((ENTR_SCENE_##sceneIndex) & 0x7F) << 9) | (((spawnIndex) & 0x1F) << 4) | ((setupIndex) & 0xF))
+#define ENTRANCE(sceneIndex, spawnIndex, setupIndex) ((((ENTR_SCENE_##sceneIndex) & 0x7F) << 9) | (((spawnIndex) & 0x1F) << 4) | ((setupIndex) & 0xF))
 
 // SceneTableEntry draw configs
 typedef enum {

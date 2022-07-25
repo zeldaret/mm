@@ -295,7 +295,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
 void func_809CD634(EnBji01* this, PlayState* play) {
     func_801A5BD0(0x6F);
     Audio_QueueSeqCmd(0xE0000101);
-    play->nextEntranceIndex = NEXT_ENTRANCE(TERMINA_FIELD, 10, 0); /* Termina Field from telescope */
+    play->nextEntranceIndex = ENTRANCE(TERMINA_FIELD, 10, 0); /* Termina Field from telescope */
     gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = play->nextEntranceIndex;
     func_80169EFC(&play->state); /* Load new entrance? */
     gSaveContext.respawnFlag = -2;

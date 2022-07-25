@@ -1658,10 +1658,10 @@ void func_80B4627C(EnInvadepoh* this, PlayState* play) {
             func_80B46F88(this);
         }
     } else if (D_80B4E940 == 3) {
-        if (gSaveContext.save.entranceIndex == 0x6460) {
+        if (gSaveContext.save.entranceIndex == ENTRANCE(ROMANI_RANCH, 6, 0)) {
             func_80B471C0(this);
 
-        } else if (gSaveContext.save.entranceIndex == 0x6470) {
+        } else if (gSaveContext.save.entranceIndex == ENTRANCE(ROMANI_RANCH, 7, 0)) {
             func_80B47248(this);
         } else {
             func_80B47248(this);
@@ -1994,7 +1994,7 @@ void func_80B47108(EnInvadepoh* this, PlayState* play) {
     }
     this->actionTimer--;
     if (this->actionTimer <= 0) {
-        play->nextEntranceIndex = NEXT_ENTRANCE(ROMANI_RANCH, 6, 0);
+        play->nextEntranceIndex = ENTRANCE(ROMANI_RANCH, 6, 0);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_73;
@@ -2012,7 +2012,7 @@ void func_80B471C0(EnInvadepoh* this) {
 
 void func_80B471E0(EnInvadepoh* this, PlayState* play) {
     if (D_80B4E998) {
-        play->nextEntranceIndex = NEXT_ENTRANCE(ROMANI_RANCH, 7, 0);
+        play->nextEntranceIndex = ENTRANCE(ROMANI_RANCH, 7, 0);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_72;
@@ -2035,7 +2035,7 @@ void func_80B47278(EnInvadepoh* this) {
 }
 
 void func_80B47298(EnInvadepoh* this, PlayState* play) {
-    play->nextEntranceIndex = NEXT_ENTRANCE(ROMANI_RANCH, 0, 0);
+    play->nextEntranceIndex = ENTRANCE(ROMANI_RANCH, 0, 0);
     gSaveContext.nextCutsceneIndex = 0xFFF3;
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_72;

@@ -256,7 +256,7 @@ s32 func_80AE6704(Actor* thisx, PlayState* play) {
         case 6:
             gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
             func_800B7298(play, &this->actor, 7);
-            play->nextEntranceIndex = NEXT_ENTRANCE(SOUTHERN_SWAMP_POISONED, 6, 0);
+            play->nextEntranceIndex = ENTRANCE(SOUTHERN_SWAMP_POISONED, 6, 0);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;
             play->transitionType = TRANS_TYPE_03;
