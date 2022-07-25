@@ -67,7 +67,7 @@ s32 func_80C1D4D0(DmAh* this, s32 arg1) {
     Vec3f sp34;
     s16 temp_v0;
 
-    Math_Vec3f_Copy(&sp40, &this->unk280->actor.world.pos);
+    Math_Vec3f_Copy(&sp40, &this->unk280->world.pos);
     Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
     temp_v0 = Math_Vec3f_Yaw(&sp34, &sp40);
 
@@ -77,10 +77,10 @@ s32 func_80C1D4D0(DmAh* this, s32 arg1) {
     Math_ApproachS(&this->unk290, (s16)((temp_v0 - this->unk28C) - this->actor.shape.rot.y), 4, 0x2AA8);
     this->unk290 = CLAMP(this->unk290, -0x1C70, 0x1C70);
 
-    if (this->unk280->actor.id == 0) {
-        sp40.y = this->unk280->bodyPartsPos[7].y + 3.0f;
+    if (this->unk280->id == 0) {
+        sp40.y = ((Player*)this->unk280)->bodyPartsPos[7].y + 3.0f;
     } else {
-        Math_Vec3f_Copy(&sp40, &this->unk280->actor.focus.pos);
+        Math_Vec3f_Copy(&sp40, &this->unk280->focus.pos);
     }
 
     Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
@@ -172,7 +172,7 @@ void DmAh_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->unk27C |= 1;
     if ((play->sceneNum == SCENE_YADOYA) && (play->curSpawn == 4)) {
-        this->unk280 = (Player*)func_80C1D78C(play);
+        this->unk280 = func_80C1D78C(play);
         func_80C1D410(this, 1);
         this->actionFunc = func_80C1D92C;
     } else {
