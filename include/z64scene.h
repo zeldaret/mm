@@ -648,7 +648,7 @@ typedef enum {
     /* 0x6F */ SCENE_CLOCKTOWER,
     /* 0x70 */ SCENE_ALLEY,
     /* 0x71 */ SCENE_MAX
-} SceneID;
+} SceneId;
 
 typedef enum {
     /* 0x00 */ ENTR_SCENE_MAYORS_RESIDENCE,
@@ -762,7 +762,7 @@ typedef enum {
     /* 0x6C */ ENTR_SCENE_SOUTH_CLOCK_TOWN,
     /* 0x6D */ ENTR_SCENE_LAUNDRY_POOL,
     /* 0x6E */ ENTR_SCENE_MAX
-} EntranceSceneID;
+} EntranceSceneId;
 
 /*
 * 0xFE00:  Index into sSceneEntranceTable (Scene)

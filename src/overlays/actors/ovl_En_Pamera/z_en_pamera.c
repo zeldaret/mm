@@ -160,8 +160,10 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
             Actor_MarkForDeath(&this->actor);
         }
         if (gSaveContext.save.weekEventReg[61] & 4) {
-            if (!(gSaveContext.save.weekEventReg[59] & 1) || (gSaveContext.save.entrance != 0x2020)) {
-                if ((gSaveContext.save.entrance != 0x2020) && (gSaveContext.save.weekEventReg[59] & 1)) {
+            if (!(gSaveContext.save.weekEventReg[59] & 1) ||
+                (gSaveContext.save.entrance != ENTRANCE(IKANA_CANYON, 2, 0))) {
+                if ((gSaveContext.save.entrance != ENTRANCE(IKANA_CANYON, 2, 0)) &&
+                    (gSaveContext.save.weekEventReg[59] & 1)) {
                     gSaveContext.save.weekEventReg[59] &= (u8)~1;
                 }
                 func_80BD8700(this);

@@ -1758,7 +1758,7 @@ void EnInvadepoh_InitRomani(EnInvadepoh* this, PlayState* play) {
         }
     } else if (temp != 8) {
         if (temp == 9) {
-            if (gSaveContext.save.entrance != 0x6460) {
+            if (gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 6, 0)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }

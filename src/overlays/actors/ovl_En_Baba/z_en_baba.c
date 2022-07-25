@@ -510,7 +510,8 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
         this->actionFunc = EnBaba_Idle;
     } else if (play->sceneNum == SCENE_BACKTOWN) {
         if ((BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_FOLLOW_SCHEDULE) &&
-            (gSaveContext.save.entrance != 0xD670) && (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != 0x3F)) {
+            (gSaveContext.save.entrance != ENTRANCE(NORTH_CLOCK_TOWN, 7, 0)) &&
+            (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != 0x3F)) {
             if ((gSaveContext.save.weekEventReg[58] & 0x40) ||
                 (gSaveContext.save.time >= CLOCK_TIME(0, 20) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
                 Actor_MarkForDeath(&this->actor);

@@ -356,7 +356,7 @@ void EnShn_Init(Actor* thisx, PlayState* play) {
     this->unk_2E0 = 0;
     this->unk_2D8 = 0;
     this->unk_1D8 = 0;
-    if (gSaveContext.save.entrance != 0xA820) {
+    if (gSaveContext.save.entrance != ENTRANCE(TOURIST_INFORMATION, 2, 0)) {
         SubS_UpdateFlags(&this->unk_1D8, 3, 7);
         this->unk_2BE = 0;
     } else {

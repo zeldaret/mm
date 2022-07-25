@@ -37,7 +37,7 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
 
     if (spawn != 0) {
         gSaveContext.save.entrance =
-            Entrance_CreateIndex((s32)gSaveContext.save.entrance >> 9, spawn, gSaveContext.save.entrance & 0xF);
+            Entrance_CreateEntry((s32)gSaveContext.save.entrance >> 9, spawn, gSaveContext.save.entrance & 0xF);
     }
     if (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 0, 0)) {
         gSaveContext.save.day = 0;
@@ -45,7 +45,7 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
     }
 
     gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = 0xFFFF;
-    gSaveContext.seqIndex = NA_BGM_DISABLED;
+    gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
     gSaveContext.nightSeqIndex = 0xFF;
     gSaveContext.showTitleCard = true;
     gSaveContext.respawnFlag = 0;

@@ -795,7 +795,7 @@ void func_80C02CA4(EnBomjimb* this, PlayState* play) {
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
     } else {
-        play->nextEntrance = Entrance_CreateIndexFromSpawn(5);
+        play->nextEntrance = Entrance_CreateEntryFromSpawn(5);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;
