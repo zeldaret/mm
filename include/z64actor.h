@@ -9,6 +9,7 @@
 
 // This value is hardcoded to be the size of ovl_Arrow_Fire which currently is the biggest actor that uses the AM_FIELD.
 #define AM_FIELD_SIZE SEGMENT_SIZE(ovl_Arrow_Fire)
+
 #define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
 
@@ -221,38 +222,6 @@ typedef struct {
     /* 0x158 */ u8 stateFlags;
     /* 0x15A */ s16 pad15A;
 } DynaPolyActor; // size = 0x15C
-
-typedef s32 (*PictoValidationFunc)(struct PlayState*, Actor*);
-
-typedef struct {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ PictoValidationFunc validationFunc;
-} PictoActor;
-
-// Picto box flags
-
-typedef enum {
-    // Used externally, set and read by actors
-    /* 0x00 */ PICTOGRAPH_0,
-    /* 0x01 */ PICTOGRAPH_IN_SWAMP,
-    /* 0x02 */ PICTOGRAPH_MONKEY,
-    /* 0x03 */ PICTOGRAPH_BIG_OCTO,
-    /* 0x04 */ PICTOGRAPH_LULU_HEAD,
-    /* 0x05 */ PICTOGRAPH_LULU_RIGHT_ARM,
-    /* 0x06 */ PICTOGRAPH_LULU_LEFT_ARM, // Need all three of these to qualify as a good picture
-    /* 0x07 */ PICTOGRAPH_SCARECROW,
-    /* 0x08 */ PICTOGRAPH_TINGLE,
-    /* 0x09 */ PICTOGRAPH_PIRATE_GOOD,
-    /* 0x0A */ PICTOGRAPH_DEKU_KING,
-    /* 0x0B */ PICTOGRAPH_PIRATE_TOO_FAR, // overlaps with PICTOGRAPH_PIRATE_GOOD, but that is checked first
-
-    // Used internally, test for failures of position, angle etc.
-    /* 0x3B */ PICTOGRAPH_BEHIND_COLLISION = 0x3B,
-    /* 0x3C */ PICTOGRAPH_BEHIND_BG,
-    /* 0x3D */ PICTOGRAPH_NOT_IN_VIEW,
-    /* 0x3E */ PICTOGRAPH_BAD_ANGLE,
-    /* 0x3F */ PICTOGRAPH_BAD_DISTANCE
-} PictographFlag;
 
 
 typedef enum {

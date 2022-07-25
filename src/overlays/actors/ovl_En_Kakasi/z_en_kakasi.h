@@ -2,6 +2,7 @@
 #define Z_EN_KAKASI_H
 
 #include "global.h"
+#include "z64snap.h"
 
 struct EnKakasi;
 

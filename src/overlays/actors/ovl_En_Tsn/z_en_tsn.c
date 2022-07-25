@@ -5,6 +5,7 @@
  */
 
 #include "z_en_tsn.h"
+#include "z64snap.h"
 #include "objects/object_tsn/object_tsn.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)

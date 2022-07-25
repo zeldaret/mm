@@ -2,6 +2,7 @@
 #define Z_EN_DNQ_H
 
 #include "global.h"
+#include "z64snap.h"
 
 struct EnDnq;
 

@@ -391,12 +391,12 @@ void func_800B4B50(Actor* actor, Lights* mapper, PlayState* play) {
     }
 }
 
-void Actor_GetProjectedPos(PlayState* play, Vec3f* arg1, Vec3f* arg2, f32* arg3) {
-    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, arg1, arg2, arg3);
-    if (*arg3 < 1.0f) {
-        *arg3 = 1.0f;
+void Actor_GetProjectedPos(PlayState* play, Vec3f* worldPos, Vec3f* projectedPos, f32* invW) {
+    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, worldPos, projectedPos, invW);
+    if (*invW < 1.0f) {
+        *invW = 1.0f;
     } else {
-        *arg3 = 1.0f / *arg3;
+        *invW = 1.0f / *invW;
     }
 }
 
@@ -419,7 +419,7 @@ TatlColor sTatlColorList[] = {
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         { { 255, 255, 0, 255 }, { 200, 155, 0, 0 } },
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },
-    { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } }
+    { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },
 };
 
 void func_800B4F78(TargetContext* targetCtx, s32 type, PlayState* play) {
@@ -480,9 +480,9 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
             TargetContextEntry* entry;
             s16 alpha = 255;
             f32 var1 = 1.0f;
-            Vec3f spBC;
+            Vec3f projectedPos;
             s32 spB8;
-            f32 spB4;
+            f32 invW;
             s32 spB0;
             s32 spAC;
             f32 var2;
@@ -505,22 +505,22 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
                 alpha = targetCtx->unk48;
             }
 
-            Actor_GetProjectedPos(play, &targetCtx->targetCenterPos, &spBC, &spB4);
+            Actor_GetProjectedPos(play, &targetCtx->targetCenterPos, &projectedPos, &invW);
 
-            spBC.x = (160 * (spBC.x * spB4)) * var1;
-            spBC.x = CLAMP(spBC.x, -320.0f, 320.0f);
+            projectedPos.x = (160 * (projectedPos.x * invW)) * var1;
+            projectedPos.x = CLAMP(projectedPos.x, -320.0f, 320.0f);
 
-            spBC.y = (120 * (spBC.y * spB4)) * var1;
-            spBC.y = CLAMP(spBC.y, -240.0f, 240.0f);
+            projectedPos.y = (120 * (projectedPos.y * invW)) * var1;
+            projectedPos.y = CLAMP(projectedPos.y, -240.0f, 240.0f);
 
-            spBC.z = spBC.z * var1;
+            projectedPos.z = projectedPos.z * var1;
 
             targetCtx->unk4C--;
             if (targetCtx->unk4C < 0) {
                 targetCtx->unk4C = 2;
             }
 
-            Target_SetPos(targetCtx, targetCtx->unk4C, spBC.x, spBC.y, spBC.z);
+            Target_SetPos(targetCtx, targetCtx->unk4C, projectedPos.x, projectedPos.y, projectedPos.z);
 
             if ((!(player->stateFlags1 & 0x40)) || (actor != player->unk_730)) {
                 OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 0x39);
@@ -1966,18 +1966,19 @@ void Actor_GetScreenPos(PlayState* play, Actor* actor, s16* x, s16* y) {
     f32 w;
 
     Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &w);
-    *x = (projectedPos.x * w * (SCREEN_WIDTH / 2)) + (SCREEN_WIDTH / 2);
-    *y = (projectedPos.y * w * -(SCREEN_HEIGHT / 2)) + (SCREEN_HEIGHT / 2);
+    *x = SCREEN_TO_DEVICE_X(projectedPos, w);
+    *y = SCREEN_TO_DEVICE_Y(projectedPos, w);
 }
 
 s32 func_800B8934(PlayState* play, Actor* actor) {
-    Vec3f sp2C;
-    f32 sp28;
+    Vec3f projectedPos;
+    f32 invW;
     s32 pad[2];
 
-    Actor_GetProjectedPos(play, &actor->focus.pos, &sp2C, &sp28);
+    Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &invW);
 
-    return (sp2C.x * sp28 >= -1.0f) && (sp2C.x * sp28 <= 1.0f) && (sp2C.y * sp28 >= -1.0f) && (sp2C.y * sp28 <= 1.0f);
+    return (projectedPos.x * invW >= -1.0f) && (projectedPos.x * invW <= 1.0f) && (projectedPos.y * invW >= -1.0f) &&
+           (projectedPos.y * invW <= 1.0f);
 }
 
 s32 Actor_HasParent(Actor* actor, PlayState* play) {

@@ -2,6 +2,7 @@
 #define Z_EN_BIGOKUTA_H
 
 #include "global.h"
+#include "z64snap.h"
 #include "assets/objects/object_bigokuta/object_bigokuta.h"
 
 struct EnBigokuta;

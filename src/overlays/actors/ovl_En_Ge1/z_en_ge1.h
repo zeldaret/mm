@@ -2,6 +2,7 @@
 #define Z_EN_GE1_H
 
 #include "global.h"
+#include "z64snap.h"
 #include "objects/object_ge1/object_ge1.h"
 
 #define GERUDO_WHITE_GET_TYPE(thisx) (((thisx)->params) & 0xF)

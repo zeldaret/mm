@@ -5,6 +5,7 @@
  */
 
 #include "z_en_zot.h"
+#include "z64snap.h"
 #include "objects/object_zo/object_zo.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)

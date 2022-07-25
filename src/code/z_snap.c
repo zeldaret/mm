@@ -1,5 +1,9 @@
 #include "global.h"
+#include "z64snap.h"
 #include "overlays/actors/ovl_En_Kakasi/z_en_kakasi.h"
+
+#define PICTO_SEEN_IN_SCENE 1
+#define PICTO_SEEN_ANYWHERE 2
 
 /**
  * Test every loaded actor to see if it is a pictographable `PictoActor`, and if so, run its `validationFunc` to set
@@ -29,7 +33,7 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
             switch (play->sceneNum) {
                 case SCENE_20SICHITAI:
                     if ((actor->id == ACTOR_EN_MNK) || (actor->id == ACTOR_EN_BIGOKUTA)) {
-                        seen = 1;
+                        seen = PICTO_SEEN_IN_SCENE;
                     }
                     break;
 
@@ -46,32 +50,32 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
             switch (actor->id) {
                 case ACTOR_EN_KAKASI:
                     if (GET_KAKASI_ABOVE_GROUND(actor) == 1) {
-                        seen |= 2;
+                        seen |= PICTO_SEEN_ANYWHERE;
                         break; //! @bug break is inside conditional, meaning it falls through if it is false
                     }
                     // FALLTHROUGH
                 case ACTOR_EN_ZOV:
-                    seen |= 2;
+                    seen |= PICTO_SEEN_ANYWHERE;
                     break;
 
                 case ACTOR_EN_BAL:
-                    seen |= 2;
+                    seen |= PICTO_SEEN_ANYWHERE;
                     break;
 
                 case ACTOR_EN_DNQ:
-                    seen |= 2;
+                    seen |= PICTO_SEEN_ANYWHERE;
                     break;
 
                 case ACTOR_EN_GE1:
                 case ACTOR_EN_GE3:
                 case ACTOR_EN_KAIZOKU:
                 case ACTOR_EN_GE2:
-                    seen |= 2;
+                    seen |= PICTO_SEEN_ANYWHERE;
                     break;
             }
 
             // If actor is recordable, run its validity function and record if valid
-            if (seen != 0) {
+            if (seen) {
                 pictoActor = (PictoActor*)actor;
                 if (pictoActor->validationFunc != NULL) {
                     if ((pictoActor->validationFunc)(play, actor) == 0) {
@@ -131,9 +135,10 @@ s16 Snap_AbsS(s16 val) {
  * @param distanceMin closest point may be
  * @param distanceMax farthest away point may be
  * @param angleRange Size of range that counts as facing the camera (-1 is used for any allowed)
- * @return s32 0 on success, `or`ed combination of the validity flags if not
+ * @return s32 0 on success, `or`ed combination of the validity flag indices if not
  *
- * @note It is generally not possible to recover the actual failure mode(s) from the return value)
+ * @note It is generally not possible to recover the actual failure mode(s) from the return value: oring `ret` with the
+ * actual flag rather than its index would rectify this.
  */
 s32 Snap_ValidatePictograph(PlayState* play, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin,
                             f32 distanceMax, s16 angleRange) {
@@ -162,12 +167,14 @@ s32 Snap_ValidatePictograph(PlayState* play, Actor* actor, s32 flag, Vec3f* pos,
         ret |= PICTOGRAPH_BAD_ANGLE;
     }
 
-    // Check in viewfinder
+    // Check in capture region
     Actor_GetProjectedPos(play, pos, &projectedPos, &distance);
-    //! TODO: relate these numbers to the pictograph box interface / capture
-    x = (s16)(projectedPos.x * distance * 160.0f + 160.0f) - 85;
-    y = (s16)(projectedPos.y * distance * -120.0f + 120.0f) - 67;
-    if ((x < 0) || (x > 150) || (y < 0) || (y > 105)) {
+    // Convert to projected position to device coordinates, shift to be relative to the capture region's top-left corner
+    x = (s16)SCREEN_TO_DEVICE_X(projectedPos, distance) - PICTO_CAPTURE_REGION_TOPLEFT_X;
+    y = (s16)SCREEN_TO_DEVICE_Y(projectedPos, distance) - PICTO_CAPTURE_REGION_TOPLEFT_Y;
+
+    // checks if the coordinates are within the capture region
+    if ((x < 0) || (x > PICTO_RESOLUTION_HORIZONTAL) || (y < 0) || (y > PICTO_RESOLUTION_VERTICAL)) {
         Snap_SetFlag(PICTOGRAPH_NOT_IN_VIEW);
         ret |= PICTOGRAPH_NOT_IN_VIEW;
     }

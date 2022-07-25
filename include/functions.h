@@ -594,7 +594,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play);
 void Actor_SetFeetPos(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFootPos, s32 rightFootIndex, Vec3f* rightFootPos);
 void func_800B4AEC(PlayState* play, Actor* actor, f32 y);
 void func_800B4B50(Actor* actor, Lights* mapper, PlayState* play);
-void Actor_GetProjectedPos(PlayState* play, Vec3f* arg1, Vec3f* arg2, f32* arg3);
+void Actor_GetProjectedPos(PlayState* play, Vec3f* worldPos, Vec3f* projectedPos, f32* invW);
 
 void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play);
 
@@ -2344,13 +2344,6 @@ void SkinMatrix_MulXRotation(MtxF* mf, s16 a);
 void SkinMatrix_SetYRotation(MtxF* mf, s16 a);
 void SkinMatrix_MulYRotation(MtxF* mf, s16 a);
 void SkinMatrix_SetZRotation(MtxF* mf, s16 a);
-
-s32 Snap_RecordPictographedActors(PlayState* play);
-void Snap_SetFlag(s32 flag);
-void Snap_UnsetFlag(s32 flag);
-u32 Snap_CheckFlag(s32 flag);
-s16 Snap_AbsS(s16 val);
-s32 Snap_ValidatePictograph(PlayState* play, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleRange);
 
 void View_ViewportToVp(Vp* dest, Viewport* src);
 void View_Init(View* view, GraphicsContext* gfxCtx);
