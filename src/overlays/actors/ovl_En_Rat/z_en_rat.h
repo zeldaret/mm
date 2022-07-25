@@ -9,7 +9,7 @@
 #define EN_RAT_GET_ATTACK_RANGE(thisx) ((thisx)->params & 0xFF)
 
 /**
- * There are quite a few differences between the two types of Real Bombchu:
+ * There are many differences between the two types of Real Bombchu:
  * - Dungeon-type don't respawn, while Overworld-type do.
  * - Dungeon-type leave a blure trail behind them as they chase the player,
  *   while Overworld-type spawn dust around themselves instead.

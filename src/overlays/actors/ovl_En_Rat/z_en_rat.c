@@ -226,7 +226,6 @@ s32 EnRat_UpdateFloorPoly(EnRat* this, CollisionPoly* floorPoly, PlayState* play
     }
 
     normDotUp = DOTXYZ(normal, this->axisUp);
-
     if (fabsf(normDotUp) >= 0.999f) {
         return false;
     }
@@ -239,7 +238,6 @@ s32 EnRat_UpdateFloorPoly(EnRat* this, CollisionPoly* floorPoly, PlayState* play
     Math3D_CrossProduct(&this->axisUp, &normal, &vec);
 
     magnitude = Math3D_Vec3fMagnitude(&vec);
-
     if (magnitude < 0.001f) {
         EnRat_Explode(this, play);
         return false;
@@ -314,14 +312,14 @@ void EnRat_ChooseDirection(EnRat* this) {
                 angle -= 0x8000;
             }
 
-            angle += (s16)randPlusMinusPoint5Scaled(2048.0f);
+            angle += (s16)randPlusMinusPoint5Scaled(0x800);
         } else {
-            angle = (Rand_ZeroOne() < 0.1f) ? (s16)randPlusMinusPoint5Scaled(2048.0f) : 0;
+            angle = (Rand_ZeroOne() < 0.1f) ? (s16)randPlusMinusPoint5Scaled(0x800) : 0;
         }
     }
 
     angle = CLAMP(angle, -0x800, 0x800);
-    Matrix_RotateAxisF(angle * 0.0000958738f, &this->axisUp, MTXMODE_NEW);
+    Matrix_RotateAxisF(angle * (M_PI / 0x8000), &this->axisUp, MTXMODE_NEW);
     Matrix_MultVec3f(&this->axisForwards, &sp74);
     Math_Vec3f_Copy(&this->axisForwards, &sp74);
     Math3D_CrossProduct(&this->axisUp, &this->axisForwards, &this->axisLeft);
@@ -337,7 +335,7 @@ s32 EnRat_IsOnCollisionPoly(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* po
     s32 isOnWater;
     f32 waterSurface;
 
-    if ((WaterBox_GetSurface1(play, &play->colCtx, posB->x, posB->z, &waterSurface, &waterBox)) &&
+    if (WaterBox_GetSurface1(play, &play->colCtx, posB->x, posB->z, &waterSurface, &waterBox) &&
         (waterSurface <= posA->y) && (posB->y <= waterSurface)) {
         isOnWater = true;
     } else {
@@ -362,10 +360,7 @@ s32 EnRat_IsOnCollisionPoly(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* po
     return false;
 }
 
-/**
- * "Floor" in this case means floors, walls, and ceilings, since the Real Bombchu can run on any of them.
- */
-s32 EnRat_IsTouchingFloor(EnRat* this, PlayState* play) {
+s32 EnRat_IsTouchingSurface(EnRat* this, PlayState* play) {
     CollisionPoly* polySide = NULL;
     CollisionPoly* polyUpDown = NULL;
     s32 bgIdSide;
@@ -452,7 +447,8 @@ s32 EnRat_IsTouchingFloor(EnRat* this, PlayState* play) {
 }
 
 /**
- * Transform coordinates from actor coordinate space to world space, according to current orientation.
+ * Transform coordinates from actor coordinate space (origin at actor's world.pos, z-axis is facing
+ * angle, i.e. shape.rot.y) to world space, according to current orientation.
  * `offset` is expected to already be at world scale.
  */
 void EnRat_ActorCoordsToWorld(EnRat* this, Vec3f* offset, Vec3f* pos) {
@@ -508,8 +504,8 @@ void EnRat_HandleNonSceneCollision(EnRat* this, PlayState* play) {
     }
 }
 
-Vec3f sSmokeAccel = { 0.0f, 0.6f, 0.0f };
-Color_RGBA8 sSmokeColor = { 255, 255, 255, 255 };
+static Vec3f sSmokeAccel = { 0.0f, 0.6f, 0.0f };
+static Color_RGBA8 sSmokeColor = { 255, 255, 255, 255 };
 
 void EnRat_SpawnSmoke(EnRat* this, PlayState* play) {
     func_800B0EB0(play, &this->smokePos, &gZeroVec3f, &sSmokeAccel, &sSmokeColor, &sSmokeColor, 75, 7, 8);
@@ -589,7 +585,7 @@ void EnRat_Idle(EnRat* this, PlayState* play) {
     }
 
     if (!(player->stateFlags3 & PLAYER_STATE3_100) && (this->actor.xzDistToPlayer < this->attackRange) &&
-        (Player_GetMask(play) != PLAYER_MASK_STONE) && (Actor_IsFacingPlayer(&this->actor, 0x3800))) {
+        (Player_GetMask(play) != PLAYER_MASK_STONE) && Actor_IsFacingPlayer(&this->actor, 0x3800)) {
         EnRat_SetupSpottedPlayer(this);
     }
 }
@@ -606,7 +602,7 @@ void EnRat_SetupSpottedPlayer(EnRat* this) {
  * Play the "spotted" animation a few times, then start chasing the player.
  */
 void EnRat_SpottedPlayer(EnRat* this, PlayState* play) {
-    if ((this->animLoopCounter == 3) && (Animation_OnFrame(&this->skelAnime, 5.0f))) {
+    if ((this->animLoopCounter == 3) && Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_AIM);
     }
 
@@ -637,10 +633,10 @@ void EnRat_SetupChasePlayer(EnRat* this) {
     this->actionFunc = EnRat_ChasePlayer;
 }
 
-Vec3f sBlureP1Offset = { 0.0f, 10.5f, -9.0f };
-Vec3f sBlureP2LeftOffset = { 18.0f, 0.0f, -7.5f };
-Vec3f sBlureP2RightOffset = { -18.0f, 0.0f, -7.5f };
-Vec3f sDustVelocity = { 0.0f, 3.0f, 0.0f };
+static Vec3f sBlureP1Offset = { 0.0f, 10.5f, -9.0f };
+static Vec3f sBlureP2LeftOffset = { 18.0f, 0.0f, -7.5f };
+static Vec3f sBlureP2RightOffset = { -18.0f, 0.0f, -7.5f };
+static Vec3f sDustVelocity = { 0.0f, 3.0f, 0.0f };
 
 /**
  * Run towards the player. If the player puts on the Stone Mask or burrows into a Deku
@@ -654,7 +650,7 @@ void EnRat_ChasePlayer(EnRat* this, PlayState* play) {
     this->actor.speedXZ = 6.1f;
     if (this->hasLostTrackOfPlayer) {
         if (!(player->stateFlags3 & PLAYER_STATE3_100) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
-            (Actor_IsFacingPlayer(&this->actor, 0x3000))) {
+            Actor_IsFacingPlayer(&this->actor, 0x3000)) {
             this->hasLostTrackOfPlayer = false;
         }
     } else if ((player->stateFlags3 & PLAYER_STATE3_100) || (Player_GetMask(play) == PLAYER_MASK_STONE)) {
@@ -677,7 +673,7 @@ void EnRat_ChasePlayer(EnRat* this, PlayState* play) {
 
     EnRat_SpawnSmoke(this, play);
     this->visualJitter =
-        (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS(((Rand_ZeroOne() * 512.0f) + 12288.0f) * this->timer);
+        (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS(((Rand_ZeroOne() * 0x200) + 0x3000) * this->timer);
 
     if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_DUNGEON) {
         EnRat_ActorCoordsToWorld(this, &sBlureP1Offset, &blureP1);
@@ -687,7 +683,7 @@ void EnRat_ChasePlayer(EnRat* this, PlayState* play) {
 
         EnRat_ActorCoordsToWorld(this, &sBlureP2RightOffset, &blureP2);
         EffectBlure_AddVertex(Effect_GetByIndex(this->blure2Index), &blureP1, &blureP2);
-    } else if ((this->actor.floorPoly != NULL) && !(play->gameplayFrames & 3)) {
+    } else if ((this->actor.floorPoly != NULL) && ((play->gameplayFrames % 4) == 0)) {
         func_800B1210(play, &this->actor.world.pos, &sDustVelocity, &gZeroVec3f, 550, 50);
     }
 
@@ -731,10 +727,9 @@ void EnRat_Bounced(EnRat* this, PlayState* play) {
 }
 
 void EnRat_Explode(EnRat* this, PlayState* play) {
-    EnBom* bomb;
+    EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
+                                      this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, ENBOM_0);
 
-    bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
-                               this->actor.world.pos.z, 0, 0, 0, ENBOM_0);
     if (bomb != NULL) {
         bomb->timer = 0;
     }
@@ -830,7 +825,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
                 EnRat_ChooseDirection(this);
             }
 
-            if ((this->actionFunc != EnRat_SpottedPlayer) && !EnRat_IsTouchingFloor(this, play)) {
+            if ((this->actionFunc != EnRat_SpottedPlayer) && !EnRat_IsTouchingSurface(this, play)) {
                 EnRat_Explode(this, play);
                 return;
             }
@@ -904,7 +899,7 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
             s32 i;
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 150, 255);
-            gDPSetEnvColor(POLY_XLU_DISP++, 0xFF, 0x00, 0x00, 0x00);
+            gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
             Matrix_Scale(45.0f, 45.0f, 45.0f, MTXMODE_APPLY);
 
             for (i = 0; i < ARRAY_COUNT(this->sparkOffsets); i++) {
@@ -918,7 +913,7 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
                 gSPDisplayList(POLY_XLU_DISP++, gEffSparkDL);
             }
 
-            Matrix_Scale(0.022222223f, 0.022222223f, 0.022222223f, MTXMODE_APPLY);
+            Matrix_Scale(1.0f / 45.0f, 1.0f / 45.0f, 1.0f / 45.0f, MTXMODE_APPLY);
             currentMatrixState->mf[3][0] = this->smokePos.x;
             currentMatrixState->mf[3][1] = this->smokePos.y - 15.0f;
             currentMatrixState->mf[3][2] = this->smokePos.z;
