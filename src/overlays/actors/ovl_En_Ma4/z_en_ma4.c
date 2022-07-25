@@ -200,7 +200,7 @@ void EnMa4_Init(Actor* thisx, PlayState* play) {
 
     if (CURRENT_DAY == 1) {
         this->type = MA4_TYPE_DAY1;
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) { // Aliens defeated
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         this->type = MA4_TYPE_ALIENS_DEFEATED;
     } else {
         this->type = MA4_TYPE_ALIENS_WON;

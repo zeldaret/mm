@@ -232,15 +232,10 @@ void Sram_ClearHighscores(void) {
  * Clears specific weekEventReg flags. Used by the "Dawn of the First Day" message
  */
 void Sram_ClearFlagsAtDawnOfTheFirstDay(void) {
-    // Unconfirmed: "Link the Goron Claims His Reservation: 4:30 PM"
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_55_02);
-    // Unconfirmed: "Postman fleeing town"
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_01);
-    // Unconfirmed: "Postman is about to flee"
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_89_40);
-    // Unconfirmed: "Postman has delivered priority mail"
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_89_08);
-    // Unconfirmed: "Postman showing priority mail to Madame"
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_85_80);
 }
 
@@ -482,9 +477,7 @@ void Sram_IncrementDay(void) {
     gSaveContext.save.bombersCaughtOrder[3] = 0;
     gSaveContext.save.bombersCaughtOrder[4] = 0;
 
-    // Unconfirmed: "Bombers Hide & Seek started on Day 1???"
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_73_10);
-    // Unconfirmed: "Bombers Hide & Seek in Progress"
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_85_02);
 }
 
@@ -848,11 +841,8 @@ void Sram_InitDebugSave(void) {
     gSaveContext.save.entranceIndex = 0x1C00;
     gSaveContext.save.isFirstCycle = true;
 
-    //
     SET_WEEKEVENTREG(WEEKEVENTREG_15_20);
-    // Unconfirmed: "Entered South Clock Town"
     SET_WEEKEVENTREG(WEEKEVENTREG_59_04);
-    // Unconfirmed: "Tatl's Second Cycle Text?"
     SET_WEEKEVENTREG(WEEKEVENTREG_31_04);
 
     gSaveContext.cycleSceneFlags[SCENE_INSIDETOWER].switch0 = 1;
@@ -984,10 +974,8 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
     } else {
         gSaveContext.save.entranceIndex = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
         if ((gSaveContext.save.entranceIndex == 0x84A0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
-            // Unconfirmed weekEventReg: "Woodfall Temple Prison Entrance raised / Water cleansed"
             gSaveContext.save.entranceIndex = 0xCA0;
         } else if ((gSaveContext.save.entranceIndex == 0x9A80) && CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
-            // Unconfirmed weekEventReg: "Mountain Village Unfrozen"
             gSaveContext.save.entranceIndex = 0xAE80;
         }
 
@@ -1557,7 +1545,6 @@ void Sram_SaveSpecialNewDay(PlayState* play) {
 
     day = gSaveContext.save.day;
 
-    // Unconfirmed: "Obtained Fierce Deity Mask?"
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_84_20);
 
     Sram_SaveEndOfCycle(play);

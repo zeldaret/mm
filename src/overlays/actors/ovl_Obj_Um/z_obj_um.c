@@ -33,7 +33,7 @@
  * - SET_WEEKEVENTREG(WEEKEVENTREG_31_40): Cremia offered a ride
  *     Cremia offered a ride accross the Milk Road to Player
  * - SET_WEEKEVENTREG(WEEKEVENTREG_31_80): Player is in Milk Run
- *     Player accepts the ride and is with Cremia during the Milk Run.
+ *     Player accepts the ride and is with Cremia during the Milk Run
  * - SET_WEEKEVENTREG(WEEKEVENTREG_34_80): Cremia does Milk Run alone
  *     Player didn't interact or didn't accept the ride
  * - SET_WEEKEVENTREG(WEEKEVENTREG_52_01): Won Milk Run minigame

@@ -211,7 +211,6 @@ s32 EnMaYto_CheckValidSpawn(EnMaYto* this, PlayState* play) {
             break;
 
         case MA_YTO_TYPE_AFTERMILKRUN:
-            // if (!(ProtectedCremia) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) || (PlayedMilkMinigame))
             if ((!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) ||
                 CHECK_WEEKEVENTREG(WEEKEVENTREG_14_01)) {
                 return false;
@@ -240,7 +239,6 @@ void EnMaYto_InitAnimation(EnMaYto* this, PlayState* play) {
             break;
 
         case MA_YTO_TYPE_BARN:
-            // if (AliensDefeated)
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 EnMaYto_ChangeAnim(this, 12);
             } else {
@@ -343,7 +341,6 @@ s32 EnMaYto_TryFindRomani(EnMaYto* this, PlayState* play) {
             return 1;
 
         case MA_YTO_TYPE_BARN:
-            // if (AliensDefeated)
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 if (EnMaYto_SearchRomani(this, play)) {
                     return 2;
@@ -878,7 +875,7 @@ void EnMaYto_BarnChooseNextDialogue(EnMaYto* this, PlayState* play) {
 }
 
 void EnMaYto_SetupAfterMilkRunInit(EnMaYto* this) {
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) { // if (ProtectedCremia)
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
         EnMaYto_SetFaceExpression(this, 3, 1);
     } else {
         func_801A3098(NA_BGM_FAILURE_1);
@@ -893,7 +890,7 @@ void EnMaYto_AfterMilkRunInit(EnMaYto* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) { // if (ProtectedCremia)
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
             Message_StartTextbox(play, 0x33C1, &this->actor);
             this->textId = 0x33C1;
         } else {
@@ -901,7 +898,6 @@ void EnMaYto_AfterMilkRunInit(EnMaYto* this, PlayState* play) {
             EnMaYto_SetFaceExpression(this, 5, 2);
             Message_StartTextbox(play, 0x33C0, &this->actor);
             this->textId = 0x33C0;
-            // Attempted Cremia Cart Ride
             SET_WEEKEVENTREG(WEEKEVENTREG_14_01);
             this->unk310 = 4;
             EnMaYto_SetupPostMilkRunWaitDialogueEnd(this);
@@ -983,7 +979,6 @@ void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, PlayState* play) {
             EnMaYto_SetFaceExpression(this, 0, 1);
             Message_StartTextbox(play, 0x33C3, &this->actor);
             this->textId = 0x33C3;
-            // Attempted Cremia Cart Ride
             SET_WEEKEVENTREG(WEEKEVENTREG_14_01);
             this->unk310 = 3;
             func_80151BB4(play, 0x20);
@@ -995,7 +990,6 @@ void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, PlayState* play) {
             EnMaYto_SetFaceExpression(this, 0, 1);
             Message_StartTextbox(play, 0x33D0, &this->actor);
             this->textId = 0x33D0;
-            // Attempted Cremia Cart Ride
             SET_WEEKEVENTREG(WEEKEVENTREG_14_01);
             this->unk310 = 3;
             func_80151BB4(play, 6);
@@ -1046,7 +1040,6 @@ void EnMaYto_WarmFuzzyFeelingCs(EnMaYto* this, PlayState* play) {
                         break;
 
                     case 2:
-                        // Attempted Cremia Cart Ride
                         SET_WEEKEVENTREG(WEEKEVENTREG_14_01);
                         EnMaYto_ChangeAnim(this, 18);
                         break;
@@ -1230,7 +1223,6 @@ void EnMaYto_DinnerStartDialogue(EnMaYto* this, PlayState* play) {
 }
 
 void EnMaYto_BarnStartDialogue(EnMaYto* this, PlayState* play) {
-    // if (AliensDefeated)
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         if (CURRENT_DAY == 2) {
             if (this->unk310 == 1) {
@@ -1468,7 +1460,7 @@ void EnMaYto_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
-    if (this->type == MA_YTO_TYPE_BARN && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) { // Aliens defeated
+    if (this->type == MA_YTO_TYPE_BARN && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gCremiaWoodenBoxDL);
     }

@@ -310,13 +310,11 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnBigslime_Init(Actor* thisx, PlayState* play2) {
-    // gSaveContext.save.weekEventReg[KEY] = VALUE
-    // KEY | VALUE
     static s32 isFrogReturnedFlags[] = {
-        WEEKEVENTREG_32_40, // Woodfall Temple Frog Returned
-        WEEKEVENTREG_32_80, // Great Bay Temple Frog Returned
-        WEEKEVENTREG_33_01, // Southern Swamp Frog Returned
-        WEEKEVENTREG_33_02, // Laundry Pool Frog Returned
+        WEEKEVENTREG_32_40,
+        WEEKEVENTREG_32_80,
+        WEEKEVENTREG_33_01,
+        WEEKEVENTREG_33_02,
     };
     PlayState* play = play2;
     EnBigslime* this = THIS;

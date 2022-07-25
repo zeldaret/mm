@@ -69,11 +69,11 @@ static TexturePtr D_808A4D74[] = {
 // gSaveContext.save.weekEventReg[KEY] = VALUE
 // KEY | VALUE
 static u16 isFrogReturnedFlags[] = {
-    0,                  // NULL
-    WEEKEVENTREG_32_40, // Woodfall Temple Frog Returned
-    WEEKEVENTREG_32_80, // Great Bay Temple Frog Returned
-    WEEKEVENTREG_33_01, // Southern Swamp Frog Returned
-    WEEKEVENTREG_33_02, // Laundry Pool Frog Returned
+    0,
+    WEEKEVENTREG_32_40,
+    WEEKEVENTREG_32_80,
+    WEEKEVENTREG_33_01,
+    WEEKEVENTREG_33_02,
 };
 
 static s32 isInitialized = false;
@@ -126,7 +126,6 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
             this->actor.textId = 0;
             this->actionFunc = EnMinifrog_SetupYellowFrogDialog;
 
-            // Not spoken to MINIFROG_YELLOW
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_34_01)) {
                 this->actor.flags |= ACTOR_FLAG_10000;
             }
@@ -267,8 +266,8 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
                 func_80151938(play, play->msgCtx.currentTextId + 1);
                 break;
 
-            case 0xD82:                                       // "What has brought you all this way?"
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) { // Mountain village is unfrozen
+            case 0xD82: // "What has brought you all this way?"
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
                     func_80151938(play, 0xD83); // "Could it be... Has spring finally come to the mountains?"
                 } else {
                     func_80151938(play, 0xD86); // "Could it be... You came all this way looking for me?"
@@ -515,7 +514,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                                 // you've lost a little weight..."
                         func_80151938(play, play->msgCtx.currentTextId + 1);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
-                        SET_WEEKEVENTREG(WEEKEVENTREG_34_01); // Spoken to MINIFROG_YELLOW
+                        SET_WEEKEVENTREG(WEEKEVENTREG_34_01);
                         break;
                     case 0xD78: // "Unfortunately, it seems not all of our members have gathered."
                     case 0xD79: // "Perhaps it is because winter was too long? They must not have realized that spring
@@ -562,7 +561,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, PlayState* play) {
     EnMinifrog_JumpTimer(this);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = EnMinifrog_YellowFrogDialog;
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_34_01)) { // Not spoken with MINIFROG_YELLOW
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_34_01)) {
             Message_StartTextbox(play, 0xD76,
                                  &this->actor); // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken,
                                                 // but it looks like you've lost a little weight..."

@@ -170,13 +170,11 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 10, ICHAIN_STOP),
 };
 
-// gSaveContext.save.weekEventReg[KEY] = VALUE
-// KEY | VALUE
 static s32 isFrogReturnedFlags[] = {
-    WEEKEVENTREG_32_40, // Woodfall Temple Frog Returned
-    WEEKEVENTREG_32_80, // Great Bay Temple Frog Returned
-    WEEKEVENTREG_33_01, // Southern Swamp Frog Returned
-    WEEKEVENTREG_33_02, // Laundry Pool Frog Returned
+    WEEKEVENTREG_32_40,
+    WEEKEVENTREG_32_80,
+    WEEKEVENTREG_33_01,
+    WEEKEVENTREG_33_02,
 };
 
 void EnPametfrog_Init(Actor* thisx, PlayState* play) {
