@@ -554,7 +554,7 @@ void Cutscene_Command_SetTime(PlayState* play, CutsceneContext* csCtx, CsCmdDayT
 
         nextTime = hourAsMinutes + minutes;
         gSaveContext.save.time = nextTime;
-        gSaveContext.environmentTime = nextTime;
+        gSaveContext.skyboxTime = nextTime;
     }
 }
 
@@ -1494,11 +1494,9 @@ void func_800EDA84(PlayState* play, CutsceneContext* csCtx) {
     }
 }
 
-#ifdef NON_MATCHING
 // HandleFlags?
-// regalloc
 void func_800EDBE0(PlayState* play) {
-    CutsceneEntry* temp_a3;
+    s32 pad;
     s16 sp2A;
     SceneTableEntry* sp24;
     s32 temp_v0_3;
@@ -1508,15 +1506,16 @@ void func_800EDBE0(PlayState* play) {
         if (sp2A != -1) {
             temp_v0_3 = func_800F2138(sp2A);
             if (temp_v0_3 != -1) {
-                temp_a3 = ((void)0, play->csCtx.sceneCsList);
-                if ((temp_a3[temp_v0_3].unk7 != 0xFF) && (gSaveContext.respawnFlag == 0)) {
-                    if (temp_a3[temp_v0_3].unk7 == 0xFE) {
+                if ((play->csCtx.sceneCsList[temp_v0_3].unk7 != 0xFF) && (gSaveContext.respawnFlag == 0)) {
+                    if (play->csCtx.sceneCsList[temp_v0_3].unk7 == 0xFE) {
                         ActorCutscene_Start(sp2A, NULL);
                         gSaveContext.showTitleCard = false;
-                    } else if (!((1 << (temp_a3[temp_v0_3].unk7 % 8)) &
-                                 gSaveContext.save.weekEventReg[temp_a3[temp_v0_3].unk7 / 8])) {
-                        gSaveContext.save.weekEventReg[(temp_a3[temp_v0_3].unk7 / 8)] |=
-                            1 << (temp_a3[temp_v0_3].unk7 % 8);
+                    } else if (!(((void)0,
+                                  gSaveContext.save.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)]) &
+                                 (1 << (play->csCtx.sceneCsList[temp_v0_3].unk7 % 8)))) {
+                        gSaveContext.save.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)] =
+                            ((void)0, gSaveContext.save.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)]) |
+                            (1 << (play->csCtx.sceneCsList[temp_v0_3].unk7 % 8));
                         ActorCutscene_Start(sp2A, NULL);
                         gSaveContext.showTitleCard = false;
                     }
@@ -1530,7 +1529,8 @@ void func_800EDBE0(PlayState* play) {
     if ((gSaveContext.respawnFlag == 0) || (gSaveContext.respawnFlag == -2)) {
         sp24 = play->loadedScene;
         if ((sp24->titleTextId != 0) && gSaveContext.showTitleCard) {
-            if ((Entrance_GetTransitionFlags(gSaveContext.sceneSetupIndex + gSaveContext.save.entranceIndex) &
+            if ((Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entranceIndex) +
+                                             ((void)0, gSaveContext.sceneSetupIndex)) &
                  0x4000) != 0) {
                 func_80151A68(play, sp24->titleTextId);
             }
@@ -1539,9 +1539,6 @@ void func_800EDBE0(PlayState* play) {
         gSaveContext.showTitleCard = true;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EDBE0.s")
-#endif
 
 void func_800EDDB0(PlayState* play) {
 }

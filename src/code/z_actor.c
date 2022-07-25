@@ -4514,7 +4514,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
         currentMatrix = Matrix_GetCurrent();
 
         // Apply sfx along with damage effect
-        if ((actor != NULL) && (effectAlpha > 0.05f) && (play->gameOverCtx.state == 0)) {
+        if ((actor != NULL) && (effectAlpha > 0.05f) && (play->gameOverCtx.state == GAMEOVER_INACTIVE)) {
             if (type == ACTOR_DRAW_DMGEFF_FIRE) {
                 Actor_PlaySfxAtPos(actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
             } else if (type == ACTOR_DRAW_DMGEFF_BLUE_FIRE) {

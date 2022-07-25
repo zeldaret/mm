@@ -226,7 +226,7 @@ typedef enum {
     /* 0x00 */ ITEM00_RUPEE_GREEN,
     /* 0x01 */ ITEM00_RUPEE_BLUE,
     /* 0x02 */ ITEM00_RUPEE_RED,
-    /* 0x03 */ ITEM00_HEART,
+    /* 0x03 */ ITEM00_RECOVERY_HEART,
     /* 0x04 */ ITEM00_BOMBS_A,
     /* 0x05 */ ITEM00_ARROWS_10,
     /* 0x06 */ ITEM00_HEART_PIECE,
@@ -268,7 +268,7 @@ typedef struct EnItem00 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnItem00ActionFunc actionFunc;
     /* 0x148 */ s16 collectibleFlag;
-    /* 0x14A */ s16 unk14A;
+    /* 0x14A */ s16 getItemId;
     /* 0x14C */ s16 unk14C;
     /* 0x14E */ s16 unk14E;
     /* 0x150 */ s16 unk150;

@@ -461,7 +461,6 @@ beginseg
     include "build/data/code/z_debug_mode.bss.o"
     include "build/src/code/z_demo.o"
     include "build/src/code/z_draw.o"
-    include "build/data/code/z_draw.data.o"
     include "build/src/code/z_eff_footmark.o"
     include "build/data/code/z_eff_footmark.data.o"
     include "build/src/code/z_sound_source.o"
@@ -708,7 +707,6 @@ beginseg
     include "build/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_map.o"
     include "build/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_mask.o"
     include "build/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.o"
-    include "build/data/ovl_kaleido_scope/ovl_kaleido_scope.data.o"
     include "build/data/ovl_kaleido_scope/ovl_kaleido_scope.bss.o"
     include "build/data/ovl_kaleido_scope/ovl_kaleido_scope.reloc.o"
 endseg
@@ -1468,8 +1466,7 @@ beginseg
     name "ovl_En_Okarina_Tag"
     compress
     include "build/src/overlays/actors/ovl_En_Okarina_Tag/z_en_okarina_tag.o"
-    include "build/data/ovl_En_Okarina_Tag/ovl_En_Okarina_Tag.data.o"
-    include "build/data/ovl_En_Okarina_Tag/ovl_En_Okarina_Tag.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Okarina_Tag/ovl_En_Okarina_Tag_reloc.o"
 endseg
 
 beginseg
@@ -3134,8 +3131,7 @@ beginseg
     name "ovl_Dm_Char03"
     compress
     include "build/src/overlays/actors/ovl_Dm_Char03/z_dm_char03.o"
-    include "build/data/ovl_Dm_Char03/ovl_Dm_Char03.data.o"
-    include "build/data/ovl_Dm_Char03/ovl_Dm_Char03.reloc.o"
+    include "build/src/overlays/actors/ovl_Dm_Char03/ovl_Dm_Char03_reloc.o"
 endseg
 
 beginseg
@@ -4064,8 +4060,7 @@ beginseg
     name "ovl_Obj_Um"
     compress
     include "build/src/overlays/actors/ovl_Obj_Um/z_obj_um.o"
-    include "build/data/ovl_Obj_Um/ovl_Obj_Um.data.o"
-    include "build/data/ovl_Obj_Um/ovl_Obj_Um.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Um/ovl_Obj_Um_reloc.o"
 endseg
 
 beginseg

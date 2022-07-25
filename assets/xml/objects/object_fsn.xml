@@ -53,8 +53,8 @@
         <Texture Name="gFsnUnusedEyeHalfTex" OutName="fsn_unused_eye_half" Format="rgba32" Width="32" Height="32" Offset="0x9640" />
         <Texture Name="gFsnUnusedEyeClosedTex" OutName="fsn_unused_eye_closed" Format="rgba32" Width="32" Height="32" Offset="0xA640" />
 
-        <!-- Unused Empty Eye Texture Animation -->
-        <TextureAnimation Name="gFsnUnusedTexAnim" Offset="0xB664" />
+        <!-- Unused Eye Texture Animation -->
+        <TextureAnimation Name="gFsnEyeTexAnim" Offset="0xB664" />
         
         <!-- Animations -->
         <Animation Name="gFsnSlamCounterStartAnim" Offset="0xB9D8" />

@@ -1,85 +1,101 @@
 ﻿<Root>
+    <!-- Assets for Cremia -->
     <File Name="object_ma2" Segment="6">
-        <Animation Name="object_ma2_Anim_000CC0" Offset="0xCC0" />
-        <Animation Name="object_ma2_Anim_001FD0" Offset="0x1FD0" />
-        <Animation Name="object_ma2_Anim_0030B4" Offset="0x30B4" />
-        <Animation Name="object_ma2_Anim_003D54" Offset="0x3D54" />
-        <Animation Name="object_ma2_Anim_004370" Offset="0x4370" />
-        <Animation Name="object_ma2_Anim_005314" Offset="0x5314" />
-        <DList Name="gCremiaWoodenBox" Offset="0x5430" />
-        <Texture Name="object_ma2_Tex_0054E0" OutName="tex_0054E0" Format="rgba16" Width="32" Height="64" Offset="0x54E0" />
-        <Animation Name="object_ma2_Anim_0070EC" Offset="0x70EC" />
-        <Animation Name="object_ma2_Anim_007E28" Offset="0x7E28" />
-        <Animation Name="object_ma2_Anim_0093E8" Offset="0x93E8" />
-        <Animation Name="object_ma2_Anim_00A174" Offset="0xA174" />
-        <Animation Name="object_ma2_Anim_00AF7C" Offset="0xAF7C" />
-        <DList Name="object_ma2_DL_00E170" Offset="0xE170" />
-        <DList Name="object_ma2_DL_00E370" Offset="0xE370" />
-        <DList Name="object_ma2_DL_00E4E0" Offset="0xE4E0" />
-        <DList Name="object_ma2_DL_00E6E8" Offset="0xE6E8" />
-        <DList Name="object_ma2_DL_00E7F0" Offset="0xE7F0" />
-        <DList Name="object_ma2_DL_00E8B0" Offset="0xE8B0" />
-        <DList Name="object_ma2_DL_00E940" Offset="0xE940" />
-        <DList Name="object_ma2_DL_00EA20" Offset="0xEA20" />
-        <DList Name="object_ma2_DL_00EB30" Offset="0xEB30" />
-        <DList Name="object_ma2_DL_00EBC0" Offset="0xEBC0" />
-        <DList Name="object_ma2_DL_00ECA0" Offset="0xECA0" />
-        <DList Name="object_ma2_DL_00EDB0" Offset="0xEDB0" />
-        <DList Name="object_ma2_DL_00F108" Offset="0xF108" />
-        <DList Name="object_ma2_DL_00F5A0" Offset="0xF5A0" />
-        <DList Name="object_ma2_DL_00F6E8" Offset="0xF6E8" />
-        <DList Name="object_ma2_DL_00F8F8" Offset="0xF8F8" />
-        <DList Name="object_ma2_DL_00F9E0" Offset="0xF9E0" />
-        <DList Name="object_ma2_DL_00FBA8" Offset="0xFBA8" />
-        <DList Name="object_ma2_DL_00FDB0" Offset="0xFDB0" />
-        <DList Name="object_ma2_DL_00FE98" Offset="0xFE98" />
-        <Texture Name="object_ma2_TLUT_010018" OutName="tlut_010018" Format="rgba16" Width="16" Height="16" Offset="0x10018" />
-        <Texture Name="object_ma2_Tex_010218" OutName="tex_010218" Format="rgba16" Width="8" Height="8" Offset="0x10218" />
-        <Texture Name="object_ma2_Tex_010298" OutName="tex_010298" Format="rgba16" Width="8" Height="8" Offset="0x10298" />
-        <Texture Name="object_ma2_Tex_010318" OutName="tex_010318" Format="ci8" Width="64" Height="16" Offset="0x10318" />
-        <Texture Name="object_ma2_Tex_010718" OutName="tex_010718" Format="rgba16" Width="16" Height="16" Offset="0x10718" />
-        <Texture Name="object_ma2_Tex_010918" OutName="tex_010918" Format="ci8" Width="16" Height="16" Offset="0x10918" />
-        <Texture Name="object_ma2_Tex_010A18" OutName="tex_010A18" Format="ci8" Width="8" Height="8" Offset="0x10A18" />
-        <Texture Name="object_ma2_Tex_010A58" OutName="tex_010A58" Format="rgba16" Width="16" Height="32" Offset="0x10A58" />
-        <Texture Name="object_ma2_Tex_010E58" OutName="tex_010E58" Format="ci8" Width="16" Height="16" Offset="0x10E58" />
-        <Texture Name="object_ma2_Tex_010F58" OutName="tex_010F58" Format="ci8" Width="8" Height="16" Offset="0x10F58" />
-        <Texture Name="object_ma2_Tex_010FD8" OutName="tex_010FD8" Format="ci8" Width="32" Height="16" Offset="0x10FD8" />
-        <Texture Name="object_ma2_Tex_0111D8" OutName="tex_0111D8" Format="ci8" Width="16" Height="32" Offset="0x111D8" />
-        <Texture Name="object_ma2_Tex_0113D8" OutName="tex_0113D8" Format="ci8" Width="16" Height="16" Offset="0x113D8" />
-        <Texture Name="object_ma2_Tex_0114D8" OutName="tex_0114D8" Format="rgba16" Width="16" Height="32" Offset="0x114D8" />
-        <Texture Name="object_ma2_Tex_0118D8" OutName="tex_0118D8" Format="rgba16" Width="16" Height="16" Offset="0x118D8" />
-        <Texture Name="object_ma2_Tex_011AD8" OutName="tex_011AD8" Format="rgba16" Width="32" Height="32" Offset="0x11AD8" />
-        <Texture Name="object_ma2_Tex_0122D8" OutName="tex_0122D8" Format="rgba16" Width="32" Height="32" Offset="0x122D8" />
-        <Texture Name="object_ma2_Tex_012AD8" OutName="tex_012AD8" Format="rgba16" Width="32" Height="32" Offset="0x12AD8" />
-        <Texture Name="object_ma2_Tex_0132D8" OutName="tex_0132D8" Format="rgba16" Width="32" Height="32" Offset="0x132D8" />
-        <Texture Name="object_ma2_Tex_013AD8" OutName="tex_013AD8" Format="rgba16" Width="32" Height="32" Offset="0x13AD8" />
-        <Texture Name="object_ma2_Tex_0142D8" OutName="tex_0142D8" Format="rgba16" Width="32" Height="32" Offset="0x142D8" />
-        <Texture Name="object_ma2_Tex_014AD8" OutName="tex_014AD8" Format="rgba16" Width="32" Height="16" Offset="0x14AD8" />
-        <Texture Name="object_ma2_Tex_014ED8" OutName="tex_014ED8" Format="rgba16" Width="32" Height="16" Offset="0x14ED8" />
-        <Texture Name="object_ma2_Tex_0152D8" OutName="tex_0152D8" Format="rgba16" Width="32" Height="16" Offset="0x152D8" />
-        <Texture Name="object_ma2_Tex_0156D8" OutName="tex_0156D8" Format="rgba16" Width="32" Height="16" Offset="0x156D8" />
-        <Limb Name="object_ma2_Standardlimb_015AD8" Type="Standard" EnumName="OBJECT_MA2_LIMB_01" Offset="0x15AD8" />
-        <Limb Name="object_ma2_Standardlimb_015AE4" Type="Standard" EnumName="OBJECT_MA2_LIMB_02" Offset="0x15AE4" />
-        <Limb Name="object_ma2_Standardlimb_015AF0" Type="Standard" EnumName="OBJECT_MA2_LIMB_03" Offset="0x15AF0" />
-        <Limb Name="object_ma2_Standardlimb_015AFC" Type="Standard" EnumName="OBJECT_MA2_LIMB_04" Offset="0x15AFC" />
-        <Limb Name="object_ma2_Standardlimb_015B08" Type="Standard" EnumName="OBJECT_MA2_LIMB_05" Offset="0x15B08" />
-        <Limb Name="object_ma2_Standardlimb_015B14" Type="Standard" EnumName="OBJECT_MA2_LIMB_06" Offset="0x15B14" />
-        <Limb Name="object_ma2_Standardlimb_015B20" Type="Standard" EnumName="OBJECT_MA2_LIMB_07" Offset="0x15B20" />
-        <Limb Name="object_ma2_Standardlimb_015B2C" Type="Standard" EnumName="OBJECT_MA2_LIMB_08" Offset="0x15B2C" />
-        <Limb Name="object_ma2_Standardlimb_015B38" Type="Standard" EnumName="OBJECT_MA2_LIMB_09" Offset="0x15B38" />
-        <Limb Name="object_ma2_Standardlimb_015B44" Type="Standard" EnumName="OBJECT_MA2_LIMB_0A" Offset="0x15B44" />
-        <Limb Name="object_ma2_Standardlimb_015B50" Type="Standard" EnumName="OBJECT_MA2_LIMB_0B" Offset="0x15B50" />
-        <Limb Name="object_ma2_Standardlimb_015B5C" Type="Standard" EnumName="OBJECT_MA2_LIMB_0C" Offset="0x15B5C" />
-        <Limb Name="object_ma2_Standardlimb_015B68" Type="Standard" EnumName="OBJECT_MA2_LIMB_0D" Offset="0x15B68" />
-        <Limb Name="object_ma2_Standardlimb_015B74" Type="Standard" EnumName="OBJECT_MA2_LIMB_0E" Offset="0x15B74" />
-        <Limb Name="object_ma2_Standardlimb_015B80" Type="Standard" EnumName="OBJECT_MA2_LIMB_0F" Offset="0x15B80" />
-        <Limb Name="object_ma2_Standardlimb_015B8C" Type="Standard" EnumName="OBJECT_MA2_LIMB_10" Offset="0x15B8C" />
-        <Limb Name="object_ma2_Standardlimb_015B98" Type="Standard" EnumName="OBJECT_MA2_LIMB_11" Offset="0x15B98" />
-        <Limb Name="object_ma2_Standardlimb_015BA4" Type="Standard" EnumName="OBJECT_MA2_LIMB_12" Offset="0x15BA4" />
-        <Limb Name="object_ma2_Standardlimb_015BB0" Type="Standard" EnumName="OBJECT_MA2_LIMB_13" Offset="0x15BB0" />
-        <Limb Name="object_ma2_Standardlimb_015BBC" Type="Standard" EnumName="OBJECT_MA2_LIMB_14" Offset="0x15BBC" />
-        <Limb Name="object_ma2_Standardlimb_015BC8" Type="Standard" EnumName="OBJECT_MA2_LIMB_15" Offset="0x15BC8" />
-        <Skeleton Name="object_ma2_Skel_015C28" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MA2_LIMB_NONE" LimbMax="OBJECT_MA2_LIMB_MAX" EnumName="object_ma2_Limbs" Offset="0x15C28" />
-        <Animation Name="object_ma2_Anim_016720" Offset="0x16720" />
+        <!-- Cremia Animations -->
+        <Animation Name="gCremiaSpreadArmsLoopAnim" Offset="0xCC0" /> <!-- Original name is "kl_aogu" ("to look up") -->
+        <Animation Name="gCremiaHugStartAnim" Offset="0x1FD0" /> <!-- Original name is "kl_dakisime" ("to hug someone close") -->
+        <Animation Name="gCremiaHugLoopAnim" Offset="0x30B4" /> <!-- Original name is "kl_dakisime_loop" -->
+        <Animation Name="gCremiaSittingLookDownAnim" Offset="0x3D54" /> <!-- Original name is "kl_gakkurisuwari" ("heartbroken" + "sitting") -->
+        <Animation Name="gCremiaClapAnim" Offset="0x4370" /> <!-- Original name is "kl_hakusyu_loop" ("applause") -->
+        <Animation Name="gCremiaThinkAnim" Offset="0x5314" /> <!-- Original name is "kl_kangaeru" ("thinking/contemplating") -->
+
+        <!-- Cremia's Wooden Box DisplayList and Textures. She sits on it when petting the cows in the barn. -->
+        <DList Name="gCremiaWoodenBoxDL" Offset="0x5430" />
+        <Texture Name="gCremiaWoodenBoxTex" OutName="cremia_wooden_box" Format="rgba16" Width="32" Height="64" Offset="0x54E0" />
+
+        <!-- Cremia Animations -->
+        <Animation Name="gCremiaSittingAnim" Offset="0x70EC" /> <!-- Original name is "kl_suwari" ("sitting") -->
+        <Animation Name="gCremiaSittingPetCowAnim" Offset="0x7E28" /> <!-- Original name is "kl_usinades" ("cow" + "stroke" + first letter of "sitting"?) -->
+        <Animation Name="gCremiaPetCowAnim" Offset="0x93E8" /> <!-- Original name is "kl_usinadet" -->
+        <Animation Name="gCremiaIdleAnim" Offset="0xA174" /> <!-- Original name is "kl_wait" -->
+        <Animation Name="gCremiaSpreadArmsStartAnim" Offset="0xAF7C" /> <!-- Original name is "kl_wait2aogu" -->
+
+        <!-- Cremia Limb DisplayLists -->
+        <DList Name="gCremiaDress1DL" Offset="0xE170" />
+        <DList Name="gCremiaDress2DL" Offset="0xE370" />
+        <DList Name="gCremiaDress3DL" Offset="0xE4E0" />
+        <DList Name="gCremiaDress4DL" Offset="0xE6E8" />
+        <DList Name="gCremiaPelvisDL" Offset="0xE7F0" /> <!-- Renders a single triangle instead of a normal-looking limb -->
+        <DList Name="gCremiaRightThighDL" Offset="0xE8B0" /> <!-- Renders a single triangle instead of a normal-looking limb -->
+        <DList Name="gCremiaRightShinDL" Offset="0xE940" />
+        <DList Name="gCremiaRightFootDL" Offset="0xEA20" />
+        <DList Name="gCremiaLeftThighDL" Offset="0xEB30" /> <!-- Renders a single triangle instead of a normal-looking limb -->
+        <DList Name="gCremiaLeftShinDL" Offset="0xEBC0" />
+        <DList Name="gCremiaLeftFootDL" Offset="0xECA0" />
+        <DList Name="gCremiaTorsoDL" Offset="0xEDB0" />
+        <DList Name="gCremiaHeadDL" Offset="0xF108" />
+        <DList Name="gCremiaHairEndDL" Offset="0xF5A0" />
+        <DList Name="gCremiaRightUpperArmDL" Offset="0xF6E8" />
+        <DList Name="gCremiaRightForearmDL" Offset="0xF8F8" />
+        <DList Name="gCremiaRightHandDL" Offset="0xF9E0" />
+        <DList Name="gCremiaLeftUpperArmDL" Offset="0xFBA8" />
+        <DList Name="gCremiaLeftForearmDL" Offset="0xFDB0" />
+        <DList Name="gCremiaLeftHandDL" Offset="0xFE98" />
+
+        <!-- Cremia Textures -->
+        <Texture Name="gCremiaTLUT" OutName="cremia_tlut" Format="rgba16" Width="16" Height="16" Offset="0x10018" />
+        <Texture Name="gCremiaSkinArmsTex" OutName="cremia_skin_arms" Format="rgba16" Width="8" Height="8" Offset="0x10218" />
+        <Texture Name="gCremiaSkinHeadTex" OutName="cremia_skin_head" Format="rgba16" Width="8" Height="8" Offset="0x10298" />
+        <Texture Name="gCremiaBootTex" OutName="cremia_boot" Format="ci8" Width="64" Height="16" Offset="0x10318" />
+        <Texture Name="gCremiaEarTex" OutName="cremia_ear" Format="rgba16" Width="16" Height="16" Offset="0x10718" />
+        <Texture Name="gCremiaHairTex" OutName="cremia_hair" Format="ci8" Width="16" Height="16" Offset="0x10918" />
+        <Texture Name="gCremiaShawlTex" OutName="cremia_shawl" Format="ci8" Width="8" Height="8" Offset="0x10A18" />
+        <Texture Name="gCremiaBroochTex" OutName="cremia_brooch" Format="rgba16" Width="16" Height="32" Offset="0x10A58" />
+        <Texture Name="gCremiaShirtTex" OutName="cremia_shirt" Format="ci8" Width="16" Height="16" Offset="0x10E58" />
+        <Texture Name="gCremiaSleevesTex" OutName="cremia_sleeves" Format="ci8" Width="8" Height="16" Offset="0x10F58" />
+        <Texture Name="gCremiaBeltTex" OutName="cremia_belt" Format="ci8" Width="32" Height="16" Offset="0x10FD8" />
+        <Texture Name="gCremiaDressPatternTex" OutName="cremia_dress_pattern" Format="ci8" Width="16" Height="32" Offset="0x111D8" />
+        <Texture Name="gCremiaDressTex" OutName="cremia_dress" Format="ci8" Width="16" Height="16" Offset="0x113D8" />
+        <Texture Name="gCremiaApronTex" OutName="cremia_apron" Format="rgba16" Width="16" Height="32" Offset="0x114D8" />
+        <Texture Name="gCremiaHandTex" OutName="cremia_hand" Format="rgba16" Width="16" Height="16" Offset="0x118D8" />
+        <Texture Name="gCremiaEyeOpenTex" OutName="cremia_eye_open" Format="rgba16" Width="32" Height="32" Offset="0x11AD8" />
+        <Texture Name="gCremiaEyeHalfTex" OutName="cremia_eye_half" Format="rgba16" Width="32" Height="32" Offset="0x122D8" />
+        <Texture Name="gCremiaEyeClosedTex" OutName="cremia_eye_closed" Format="rgba16" Width="32" Height="32" Offset="0x12AD8" />
+        <Texture Name="gCremiaEyeHappyTex" OutName="cremia_eye_happy" Format="rgba16" Width="32" Height="32" Offset="0x132D8" />
+        <Texture Name="gCremiaEyeAngryTex" OutName="cremia_eye_angry" Format="rgba16" Width="32" Height="32" Offset="0x13AD8" />
+        <Texture Name="gCremiaEyeSadTex" OutName="cremia_eye_sad" Format="rgba16" Width="32" Height="32" Offset="0x142D8" />
+        <Texture Name="gCremiaMouthNormalTex" OutName="cremia_mouth_normal" Format="rgba16" Width="32" Height="16" Offset="0x14AD8" />
+        <Texture Name="gCremiaMouthSlightSmileTex" OutName="cremia_mouth_slight_smile" Format="rgba16" Width="32" Height="16" Offset="0x14ED8" />
+        <Texture Name="gCremiaMouthFrownTex" OutName="cremia_mouth_frown" Format="rgba16" Width="32" Height="16" Offset="0x152D8" />
+        <Texture Name="gCremiaMouthHangingOpenTex" OutName="cremia_mouth_hanging_open" Format="rgba16" Width="32" Height="16" Offset="0x156D8" />
+        
+        <!-- Cremia Limbs -->
+        <Limb Name="gCremiaRootLimb" Type="Standard" EnumName="CREMIA_LIMB_ROOT" Offset="0x15AD8" />
+        <Limb Name="gCremiaTorsoLimb" Type="Standard" EnumName="CREMIA_LIMB_TORSO" Offset="0x15AE4" />
+        <Limb Name="gCremiaLeftUpperArmLimb" Type="Standard" EnumName="CREMIA_LIMB_LEFT_UPPER_ARM" Offset="0x15AF0" />
+        <Limb Name="gCremiaLeftForearmLimb" Type="Standard" EnumName="CREMIA_LIMB_LEFT_FOREARM" Offset="0x15AFC" />
+        <Limb Name="gCremiaLeftHandLimb" Type="Standard" EnumName="CREMIA_LIMB_LEFT_HAND" Offset="0x15B08" />
+        <Limb Name="gCremiaRightUpperArmLimb" Type="Standard" EnumName="CREMIA_LIMB_RIGHT_UPPER_ARM" Offset="0x15B14" />
+        <Limb Name="gCremiaRightForearmLimb" Type="Standard" EnumName="CREMIA_LIMB_RIGHT_FOREARM" Offset="0x15B20" />
+        <Limb Name="gCremiaRightHandLimb" Type="Standard" EnumName="CREMIA_LIMB_RIGHT_HAND" Offset="0x15B2C" />
+        <Limb Name="gCremiaHeadLimb" Type="Standard" EnumName="CREMIA_LIMB_HEAD" Offset="0x15B38" />
+        <Limb Name="gCremiaHairEndLimb" Type="Standard" EnumName="CREMIA_LIMB_HAIR_END" Offset="0x15B44" />
+        <Limb Name="gCremiaPelvisLimb" Type="Standard" EnumName="CREMIA_LIMB_PELVIS" Offset="0x15B50" />
+        <Limb Name="gCremiaLeftThighLimb" Type="Standard" EnumName="CREMIA_LIMB_LEFT_THIGH" Offset="0x15B5C" />
+        <Limb Name="gCremiaLeftShinLimb" Type="Standard" EnumName="CREMIA_LIMB_LEFT_SHIN" Offset="0x15B68" />
+        <Limb Name="gCremiaLeftFootLimb" Type="Standard" EnumName="CREMIA_LIMB_LEFT_FOOT" Offset="0x15B74" />
+        <Limb Name="gCremiaRightThighLimb" Type="Standard" EnumName="CREMIA_LIMB_RIGHT_THIGH" Offset="0x15B80" />
+        <Limb Name="gCremiaRightShinLimb" Type="Standard" EnumName="CREMIA_LIMB_RIGHT_SHIN" Offset="0x15B8C" />
+        <Limb Name="gCremiaRightFootLimb" Type="Standard" EnumName="CREMIA_LIMB_RIGHT_FOOT" Offset="0x15B98" />
+        <Limb Name="gCremiaDress1Limb" Type="Standard" EnumName="CREMIA_LIMB_DRESS_1" Offset="0x15BA4" />
+        <Limb Name="gCremiaDress2Limb" Type="Standard" EnumName="CREMIA_LIMB_DRESS_2" Offset="0x15BB0" />
+        <Limb Name="gCremiaDress3Limb" Type="Standard" EnumName="CREMIA_LIMB_DRESS_3" Offset="0x15BBC" />
+        <Limb Name="gCremiaDress4Limb" Type="Standard" EnumName="CREMIA_LIMB_DRESS_4" Offset="0x15BC8" />
+        
+        <!-- Cremia Skeleton -->
+        <Skeleton Name="gCremiaSkel" Type="Flex" LimbType="Standard" LimbNone="CREMIA_LIMB_NONE" LimbMax="CREMIA_LIMB_MAX" EnumName="CremiaLimbs" Offset="0x15C28" />
+
+        <!-- Cremia Animation -->
+        <Animation Name="gCremiaWalkAnim" Offset="0x16720" /> <!-- Original name is "kl_walk" -->
     </File>
 </Root>
