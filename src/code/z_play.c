@@ -207,7 +207,7 @@ void Play_SetupRespawnPoint(GameState* thisx, s32 respawnMode, s32 playerParams)
 // Override respawn data in Sakon's Hideout
 void func_80169ECC(PlayState* this) {
     if (this->sceneNum == SCENE_SECOM) {
-        this->nextEntrance = ENTRANCE(IKANA_CANYON, 6, 0);
+        this->nextEntrance = ENTRANCE(IKANA_CANYON, 6);
         gSaveContext.respawnFlag = -7;
     }
 }

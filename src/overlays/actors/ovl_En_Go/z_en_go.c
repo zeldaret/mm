@@ -1372,8 +1372,8 @@ void func_80A143A8(EnGo* this, PlayState* play) {
 }
 
 void func_80A14430(EnGo* this, PlayState* play) {
-    if (((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 0, 0)) ||
-         (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 2, 0))) &&
+    if (((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 0)) ||
+         (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 2))) &&
         (gSaveContext.save.weekEventReg[33] & 0x80)) {
         func_80A14018(this, play);
         this->actionFunc = func_80A149B0;
@@ -1383,8 +1383,8 @@ void func_80A14430(EnGo* this, PlayState* play) {
 }
 
 void func_80A1449C(EnGo* this, PlayState* play) {
-    if ((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1, 0)) ||
-        (gSaveContext.save.entrance == ENTRANCE(CUTSCENE, 0, 0))) {
+    if ((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1)) ||
+        (gSaveContext.save.entrance == ENTRANCE(CUTSCENE, 0))) {
         func_80A14104(this, play);
         this->actionFunc = func_80A149B0;
     } else {
@@ -1512,7 +1512,7 @@ void func_80A14798(EnGo* this, PlayState* play) {
 void func_80A149B0(EnGo* this, PlayState* play) {
     s16 sp26 = this->actor.world.rot.y;
 
-    if ((ENGO_GET_F(&this->actor) == ENGO_F_2) && (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1, 0))) {
+    if ((ENGO_GET_F(&this->actor) == ENGO_F_2) && (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_CHEER - SFX_FLAG);
     } else if (ENGO_GET_F(&this->actor) != ENGO_F_8) {
         if (func_80A1222C(this, play)) {

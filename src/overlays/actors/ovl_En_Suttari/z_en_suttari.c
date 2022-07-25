@@ -962,7 +962,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
         if (gSaveContext.save.time >= CLOCK_TIME(0, 20) && gSaveContext.save.time < CLOCK_TIME(6, 00)) {
             Actor_MarkForDeath(&this->actor);
         }
-        if ((gSaveContext.save.entrance == ENTRANCE(NORTH_CLOCK_TOWN, 7, 0)) ||
+        if ((gSaveContext.save.entrance == ENTRANCE(NORTH_CLOCK_TOWN, 7)) ||
             (gSaveContext.save.weekEventReg[58] & 0x40)) {
             Actor_MarkForDeath(&this->actor);
         }
@@ -1233,7 +1233,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
             this->actor.speedXZ = 0.0f;
             Audio_QueueSeqCmd(0x101400FF);
             this->flags2 |= 4;
-            EnSuttari_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7, 0));
+            EnSuttari_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
         } else {
             this->unk3F2 = this->headRot.y;
             Math_ApproachF(&this->actor.speedXZ, 4.0f, 0.2f, 0.5f);

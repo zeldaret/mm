@@ -501,7 +501,7 @@ u16 Sram_CalcChecksum(void* data, size_t count) {
 
 // Resets `Save` substruct
 void Sram_ResetSave(void) {
-    gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0, 0);
+    gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0);
     gSaveContext.save.equippedMask = 0;
     gSaveContext.save.isFirstCycle = false;
     gSaveContext.save.unk_06 = 0;
@@ -845,7 +845,7 @@ void Sram_InitDebugSave(void) {
     gSaveContext.save.horseData.pos.z = -1285;
     gSaveContext.save.horseData.yaw = -0x7554;
 
-    gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0, 0);
+    gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0);
     gSaveContext.save.isFirstCycle = true;
 
     //
@@ -911,11 +911,11 @@ void func_80144A94(SramContext* sramCtx) {
 }
 
 u16 D_801C6A58[] = {
-    ENTRANCE(GREAT_BAY_COAST, 11, 0), ENTRANCE(ZORA_CAPE, 6, 0),
-    ENTRANCE(SNOWHEAD, 3, 0),         ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8, 0),
-    ENTRANCE(SOUTH_CLOCK_TOWN, 9, 0), ENTRANCE(MILK_ROAD, 4, 0),
-    ENTRANCE(WOODFALL, 4, 0),         ENTRANCE(SOUTHERN_SWAMP_POISONED, 10, 0),
-    ENTRANCE(IKANA_CANYON, 4, 0),     ENTRANCE(STONE_TOWER, 3, 0),
+    ENTRANCE(GREAT_BAY_COAST, 11), ENTRANCE(ZORA_CAPE, 6),
+    ENTRANCE(SNOWHEAD, 3),         ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8),
+    ENTRANCE(SOUTH_CLOCK_TOWN, 9), ENTRANCE(MILK_ROAD, 4),
+    ENTRANCE(WOODFALL, 4),         ENTRANCE(SOUTHERN_SWAMP_POISONED, 10),
+    ENTRANCE(IKANA_CANYON, 4),     ENTRANCE(STONE_TOWER, 3),
 };
 
 void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
@@ -979,24 +979,24 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
         }
 
         if (gSaveContext.save.isFirstCycle) {
-            gSaveContext.save.entrance = ENTRANCE(SOUTH_CLOCK_TOWN, 0, 0);
+            gSaveContext.save.entrance = ENTRANCE(SOUTH_CLOCK_TOWN, 0);
             gSaveContext.save.day = 0;
             gSaveContext.save.time = 0x3FFF;
         } else {
-            gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0, 0);
+            gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0);
             gSaveContext.nextCutsceneIndex = 0;
             gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
         }
     } else {
         gSaveContext.save.entrance = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
-        if ((gSaveContext.save.entrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10, 0)) &&
+        if ((gSaveContext.save.entrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) &&
             (gSaveContext.save.weekEventReg[20] & 2)) {
             // Unconfirmed weekEventReg: "Woodfall Temple Prison Entrance raised / Water cleansed"
-            gSaveContext.save.entrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10, 0);
-        } else if ((gSaveContext.save.entrance == ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8, 0)) &&
+            gSaveContext.save.entrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10);
+        } else if ((gSaveContext.save.entrance == ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8)) &&
                    (gSaveContext.save.weekEventReg[33] & 0x80)) {
             // Unconfirmed weekEventReg: "Mountain Village Unfrozen"
-            gSaveContext.save.entrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 8, 0);
+            gSaveContext.save.entrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 8);
         }
 
         for (i = 0; i < ARRAY_COUNT(gSaveContext.cycleSceneFlags); i++) {

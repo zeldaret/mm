@@ -775,7 +775,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
     }
 
     if (((play->sceneNum == SCENE_KOEPONARACE) && (GET_RACE_FLAGS == 1)) ||
-        ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0, 0)) && Cutscene_GetSceneSetupIndex(play))) {
+        ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && Cutscene_GetSceneSetupIndex(play))) {
         this->stateFlags |= ENHORSE_FLAG_25;
     }
 

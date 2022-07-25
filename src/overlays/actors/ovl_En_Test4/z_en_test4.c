@@ -451,9 +451,9 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                                         &player->unk_3C0, player->unk_3CC);
 
                     if ((play->sceneNum == SCENE_TENMON_DAI) || (play->sceneNum == SCENE_00KEIKOKU)) {
-                        play->nextEntrance = ENTRANCE(TERMINA_FIELD, 0, 0);
+                        play->nextEntrance = ENTRANCE(TERMINA_FIELD, 0);
                     } else {
-                        play->nextEntrance = ENTRANCE(SOUTH_CLOCK_TOWN, 0, 0);
+                        play->nextEntrance = ENTRANCE(SOUTH_CLOCK_TOWN, 0);
                     }
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
                     play->transitionTrigger = TRANS_TRIGGER_START;

@@ -698,7 +698,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
                     break;
             }
 
-            play->nextEntrance = ENTRANCE(GIANTS_CHAMBER, 0, 0);
+            play->nextEntrance = ENTRANCE(GIANTS_CHAMBER, 0);
             if (phi_v0_3 < 10) {
                 gSaveContext.nextCutsceneIndex = phi_v0_3 + 0xFFF0;
             }
@@ -711,12 +711,12 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
                 case 0:
                     if (gSaveContext.save.weekEventReg[20] & 2) {
                         gSaveContext.save.weekEventReg[7] |= 0x80;
-                        play->nextEntrance = ENTRANCE(WOODFALL_TEMPLE, 1, 0);
+                        play->nextEntrance = ENTRANCE(WOODFALL_TEMPLE, 1);
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;
                         gSaveContext.nextTransitionType = TRANS_TYPE_03;
                     } else {
-                        play->nextEntrance = ENTRANCE(WOODFALL, 0, 0);
+                        play->nextEntrance = ENTRANCE(WOODFALL, 0);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;
@@ -726,7 +726,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
 
                 case 1:
                     gSaveContext.save.weekEventReg[33] |= 0x80;
-                    play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 7, 0);
+                    play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 7);
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     play->transitionType = TRANS_TYPE_03;
                     gSaveContext.nextTransitionType = TRANS_TYPE_03;
@@ -734,14 +734,14 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
 
                 case 3:
                     if (gSaveContext.save.weekEventReg[55] & 0x80) {
-                        play->nextEntrance = ENTRANCE(ZORA_CAPE, 9, 0);
+                        play->nextEntrance = ENTRANCE(ZORA_CAPE, 9);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;
                         gSaveContext.nextTransitionType = TRANS_TYPE_03;
                     } else {
                         gSaveContext.save.weekEventReg[55] |= 0x80;
-                        play->nextEntrance = ENTRANCE(ZORA_CAPE, 8, 0);
+                        play->nextEntrance = ENTRANCE(ZORA_CAPE, 8);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;
@@ -751,7 +751,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
 
                 case 2:
                     gSaveContext.save.weekEventReg[52] |= 0x20;
-                    play->nextEntrance = ENTRANCE(IKANA_CANYON, 15, 0);
+                    play->nextEntrance = ENTRANCE(IKANA_CANYON, 15);
                     gSaveContext.nextCutsceneIndex = 0xFFF2;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     play->transitionType = TRANS_TYPE_03;
