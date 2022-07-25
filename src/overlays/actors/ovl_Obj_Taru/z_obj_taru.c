@@ -91,12 +91,15 @@ void func_80B9B74C(ObjTaru* this, PlayState* play) {
         pos.x = sin * tempRand;
         pos.y = (Rand_ZeroOne() * 10.0f) + 2.0f;
         pos.z = cos * tempRand;
+
         velocity.x = pos.x * 0.2f;
         velocity.y = (Rand_ZeroOne() * 10.0f) + 2.0f;
         velocity.z = pos.z * 0.2f;
+
         pos.x += thisPos->x;
         pos.y += thisPos->y;
         pos.z += thisPos->z;
+
         tempRand = Rand_ZeroOne();
         if (tempRand < 0.05f) {
             phi_s0 = 0x60;
@@ -118,15 +121,15 @@ void func_80B9B9C8(ObjTaru* this, PlayState* play) {
     Vec3f spD8;
     Vec3f spCC;
     s32 pad[2];
-    f32 spC0;
-    f32 spBC;
+    f32 sin;
+    f32 cos;
     s32 phi_fp;
     Vec3f* thisPos = &this->dyna.actor.world.pos;
     f32 temp_fs0;
     f32 temp_fs1;
 
-    spC0 = Math_SinS(this->dyna.actor.shape.rot.y);
-    spBC = Math_CosS(this->dyna.actor.shape.rot.y);
+    sin = Math_SinS(this->dyna.actor.shape.rot.y);
+    cos = Math_CosS(this->dyna.actor.shape.rot.y);
 
     if (OBJ_TARU_GET_100(&this->dyna.actor)) {
         phi_fp = 0;
@@ -140,12 +143,12 @@ void func_80B9B9C8(ObjTaru* this, PlayState* play) {
         for (j = phi_fp; j < phi_s5; j++) {
             temp_fs0 = randPlusMinusPoint5Scaled(10.0f) + -105.0f + (j * 30.0f);
             temp_fs1 = randPlusMinusPoint5Scaled(4.0f);
-            spD8.x = temp_fs0 * spBC;
+            spD8.x = temp_fs0 * cos;
             spD8.y = randPlusMinusPoint5Scaled(10.0f) + 15.0f + (i * 30.0f);
-            spD8.z = temp_fs0 * spC0;
-            spCC.x = (spD8.x * 0.05f) + (temp_fs1 * spC0);
+            spD8.z = temp_fs0 * sin;
+            spCC.x = (spD8.x * 0.05f) + (temp_fs1 * sin);
             spCC.y = Rand_ZeroFloat(5.0f) + 2.0f;
-            spCC.z = (spD8.z * 0.05f) + (temp_fs1 * spBC);
+            spCC.z = (spD8.z * 0.05f) + (temp_fs1 * cos);
             spD8.x += thisPos->x;
             spD8.y += thisPos->y;
             spD8.z += thisPos->z;
@@ -170,7 +173,7 @@ void func_80B9BCBC(ObjTaru* this, PlayState* play) {
     Actor* spawnedActor;
     s16 rotY;
 
-    if (func_80B9B6E0(this, play) != 0) {
+    if (func_80B9B6E0(this, play)) {
         params1F = (OBJ_TARU_GET_1F(&this->dyna.actor) * 4) | 0xFF01;
         rotY = (Rand_Next() >> 0x11) + this->dyna.actor.yawTowardsPlayer + 0xC000;
         spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->dyna.actor.world.pos.x,
@@ -238,7 +241,7 @@ void ObjTaru_Destroy(Actor* thisx, PlayState* play) {
 
 s32 func_80B9BF7C(ObjTaru* this) {
     s32 pad;
-    s32 phi_a3 = 0;
+    s32 phi_a3 = false;
 
     if ((!OBJ_TARU_GET_80(&this->dyna.actor)) && (this->collider.base.acFlags & AC_HIT)) {
         Actor* ac = this->collider.base.ac;
@@ -246,20 +249,20 @@ s32 func_80B9BF7C(ObjTaru* this) {
         this->collider.base.acFlags &= ~AC_HIT;
         if (ac != NULL) {
             if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000) {
-                phi_a3 = 0;
+                phi_a3 = false;
                 if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(160.0f)) {
-                    phi_a3 = 1;
+                    phi_a3 = true;
                 }
             } else if (this->collider.info.acHitInfo->toucher.dmgFlags & 8) {
                 if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(100.0f)) {
-                    phi_a3 = 1;
+                    phi_a3 = true;
                 }
             } else if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x500) {
-                phi_a3 = 1;
+                phi_a3 = true;
             }
         }
     } else if (this->dyna.actor.home.rot.z != 0) {
-        phi_a3 = 1;
+        phi_a3 = true;
     }
     return phi_a3;
 }
