@@ -1,8 +1,8 @@
 /* Header taken as placeholder from OoT sister project */
 /* Confirm as needed */
 
-#ifndef _REGS_H_
-#define _REGS_H_
+#ifndef REGS_H
+#define REGS_H
 
 #define REG_GROUPS 29 // number of REG groups, i.e. REG, SREG, OREG, etc.
 #define REG_PAGES 6
@@ -74,10 +74,10 @@
 #define R_MAGIC_BAR_X               XREG(49)
 #define R_MAGIC_BAR_LARGE_Y         XREG(50)
 #define R_MAGIC_FILL_X              XREG(51)
+#define R_MINIMAP_DISABLED          XREG(95)
 #define R_B_LABEL_DD                WREG(0)
 #define R_OW_MINIMAP_X              WREG(29)
 #define R_OW_MINIMAP_Y              WREG(30)
-#define R_MINIMAP_TOGGLED           WREG(31)
 #define R_B_LABEL_X(i)              WREG(40 + i)
 #define R_B_LABEL_Y(i)              WREG(43 + i)
 #define R_DGN_MINIMAP_X             WREG(68)

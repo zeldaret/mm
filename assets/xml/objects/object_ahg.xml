@@ -1,0 +1,53 @@
+﻿<Root>
+    <File Name="object_ahg" Segment="6">
+        <Texture Name="object_ahg_TLUT_000000" OutName="tlut_000000" Format="rgba16" Width="16" Height="16" Offset="0x0" />
+        <Texture Name="object_ahg_Tex_000200" OutName="tex_000200" Format="ci8" Width="16" Height="16" Offset="0x200" />
+        <Texture Name="object_ahg_Tex_000300" OutName="tex_000300" Format="ci8" Width="16" Height="16" Offset="0x300" />
+        <Texture Name="object_ahg_Tex_000400" OutName="tex_000400" Format="ci8" Width="8" Height="8" Offset="0x400" />
+        <Texture Name="object_ahg_Tex_000440" OutName="tex_000440" Format="ci8" Width="8" Height="8" Offset="0x440" />
+        <!-- <Blob Name="object_ahg_Blob_000480" Size="0x300" Offset="0x480" /> -->
+        <Texture Name="object_ahg_Tex_000780" OutName="tex_000780" Format="ci8" Width="16" Height="16" Offset="0x780" />
+        <Texture Name="object_ahg_Tex_000880" OutName="tex_000880" Format="i8" Width="8" Height="8" Offset="0x880" />
+        <Texture Name="object_ahg_Tex_0008C0" OutName="tex_0008C0" Format="i8" Width="8" Height="8" Offset="0x8C0" />
+        <Texture Name="object_ahg_Tex_000900" OutName="tex_000900" Format="ci8" Width="32" Height="16" Offset="0x900" />
+        <Texture Name="object_ahg_Tex_000B00" OutName="tex_000B00" Format="ci8" Width="16" Height="16" Offset="0xB00" />
+        <DList Name="object_ahg_DL_002FF0" Offset="0x2FF0" />
+        <DList Name="object_ahg_DL_003400" Offset="0x3400" />
+        <DList Name="object_ahg_DL_003570" Offset="0x3570" />
+        <DList Name="object_ahg_DL_0036A0" Offset="0x36A0" />
+        <DList Name="object_ahg_DL_0037D8" Offset="0x37D8" />
+        <DList Name="object_ahg_DL_003948" Offset="0x3948" />
+        <DList Name="object_ahg_DL_003A78" Offset="0x3A78" />
+        <DList Name="object_ahg_DL_003BB0" Offset="0x3BB0" />
+        <DList Name="object_ahg_DL_003DD8" Offset="0x3DD8" />
+        <DList Name="object_ahg_DL_003F18" Offset="0x3F18" />
+        <DList Name="object_ahg_DL_004048" Offset="0x4048" />
+        <DList Name="object_ahg_DL_004180" Offset="0x4180" />
+        <DList Name="object_ahg_DL_0042C0" Offset="0x42C0" />
+        <DList Name="object_ahg_DL_0043F0" Offset="0x43F0" />
+        <DList Name="object_ahg_DL_004528" Offset="0x4528" />
+        <!-- <Blob Name="object_ahg_Blob_0046C8" Size="0x180" Offset="0x46C8" /> -->
+        <Texture Name="object_ahg_Tex_004848" OutName="tex_004848" Format="ci8" Width="8" Height="8" Offset="0x4848" />
+        <Texture Name="object_ahg_Tex_004888" OutName="tex_004888" Format="ci8" Width="32" Height="16" Offset="0x4888" />
+        <Texture Name="object_ahg_Tex_004A88" OutName="tex_004A88" Format="ci8" Width="16" Height="16" Offset="0x4A88" />
+        <Texture Name="object_ahg_Tex_004B88" OutName="tex_004B88" Format="ci8" Width="8" Height="16" Offset="0x4B88" />
+        <DList Name="object_ahg_DL_005408" Offset="0x5408" />
+        <DList Name="object_ahg_DL_005628" Offset="0x5628" />
+        <Limb Name="object_ahg_Standardlimb_0058A8" Type="Standard" EnumName="OBJECT_AHG_LIMB_01" Offset="0x58A8" />
+        <Limb Name="object_ahg_Standardlimb_0058B4" Type="Standard" EnumName="OBJECT_AHG_LIMB_02" Offset="0x58B4" />
+        <Limb Name="object_ahg_Standardlimb_0058C0" Type="Standard" EnumName="OBJECT_AHG_LIMB_03" Offset="0x58C0" />
+        <Limb Name="object_ahg_Standardlimb_0058CC" Type="Standard" EnumName="OBJECT_AHG_LIMB_04" Offset="0x58CC" />
+        <Limb Name="object_ahg_Standardlimb_0058D8" Type="Standard" EnumName="OBJECT_AHG_LIMB_05" Offset="0x58D8" />
+        <Limb Name="object_ahg_Standardlimb_0058E4" Type="Standard" EnumName="OBJECT_AHG_LIMB_06" Offset="0x58E4" />
+        <Limb Name="object_ahg_Standardlimb_0058F0" Type="Standard" EnumName="OBJECT_AHG_LIMB_07" Offset="0x58F0" />
+        <Limb Name="object_ahg_Standardlimb_0058FC" Type="Standard" EnumName="OBJECT_AHG_LIMB_08" Offset="0x58FC" />
+        <Limb Name="object_ahg_Standardlimb_005908" Type="Standard" EnumName="OBJECT_AHG_LIMB_09" Offset="0x5908" />
+        <Limb Name="object_ahg_Standardlimb_005914" Type="Standard" EnumName="OBJECT_AHG_LIMB_0A" Offset="0x5914" />
+        <Limb Name="object_ahg_Standardlimb_005920" Type="Standard" EnumName="OBJECT_AHG_LIMB_0B" Offset="0x5920" />
+        <Limb Name="object_ahg_Standardlimb_00592C" Type="Standard" EnumName="OBJECT_AHG_LIMB_0C" Offset="0x592C" />
+        <Limb Name="object_ahg_Standardlimb_005938" Type="Standard" EnumName="OBJECT_AHG_LIMB_0D" Offset="0x5938" />
+        <Limb Name="object_ahg_Standardlimb_005944" Type="Standard" EnumName="OBJECT_AHG_LIMB_0E" Offset="0x5944" />
+        <Limb Name="object_ahg_Standardlimb_005950" Type="Standard" EnumName="OBJECT_AHG_LIMB_0F" Offset="0x5950" />
+        <Skeleton Name="object_ahg_Skel_005998" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AHG_LIMB_NONE" LimbMax="OBJECT_AHG_LIMB_MAX" EnumName="object_ahg_Limbs" Offset="0x5998" />
+    </File>
+</Root>

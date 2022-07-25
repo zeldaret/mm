@@ -1,15 +1,21 @@
+/*
+ * File: z_en_snowwd.c
+ * Overlay: ovl_En_Snowwd
+ * Description: Snow-Covered Tree
+ */
+
 #include "z_en_snowwd.h"
 
 #define FLAGS 0x00000000
 
 #define THIS ((EnSnowwd*)thisx)
 
-void EnSnowwd_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnSnowwd_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnSnowwd_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnSnowwd_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnSnowwd_Init(Actor* thisx, PlayState* play);
+void EnSnowwd_Destroy(Actor* thisx, PlayState* play);
+void EnSnowwd_Update(Actor* thisx, PlayState* play);
+void EnSnowwd_Draw(Actor* thisx, PlayState* play);
 
-void func_80AF76F0(EnSnowwd* this, GlobalContext* globalCtx);
+void func_80AF76F0(EnSnowwd* this, PlayState* play);
 
 #if 0
 const ActorInit En_Snowwd_InitVars = {

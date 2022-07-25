@@ -1,0 +1,7 @@
+﻿<Root>
+    <File Name="object_dor02" Segment="6">
+        <DList Name="object_dor02_DL_000420" Offset="0x420"/>
+        <DList Name="gZoraHallDoorDL" Offset="0x428"/>
+        <Texture Name="gZoraHallDoorTex" OutName="zora_hall_door" Format="rgba16" Width="32" Height="64" Offset="0x610"/>
+    </File>
+</Root>

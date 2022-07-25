@@ -5,9 +5,9 @@
 
 struct EnDno;
 
-typedef void (*EnDnoActionFunc)(struct EnDno*, GlobalContext*);
+typedef void (*EnDnoActionFunc)(struct EnDno*, PlayState*);
 
-#define ENDNO_GET_F(thisx) (u32)((thisx)->params & 0xF)
+#define ENDNO_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENDNO_GET_7F(thisx) ((thisx)->params & 0x7F)
 #define ENDNO_GET_7F0(thisx) (((thisx)->params >> 4) & 0x7F)
 #define ENDNO_GET_3F80(thisx) (((thisx)->params >> 7) & 0x7F)
@@ -34,7 +34,7 @@ typedef struct EnDno {
     /* 0x32C */ s32 unk_32C;
     /* 0x330 */ UNK_TYPE1 unk_330[0x4];
     /* 0x334 */ Vec3f unk_334;
-    /* 0x340 */ EnDno_ActorUnkStruct unk_340;
+    /* 0x340 */ ActorPathing actorPath;
     /* 0x3AC */ s16 unk_3AC;
     /* 0x3AE */ s16 unk_3AE;
     /* 0x3B0 */ u16 unk_3B0;
@@ -48,10 +48,10 @@ typedef struct EnDno {
     /* 0x44F */ UNK_TYPE1 unk_44F[0x3];
     /* 0x452 */ s16 unk_452;
     /* 0x454 */ f32 unk_454;
-    /* 0x458 */ s32 unk_458;
+    /* 0x458 */ s32 getItemId;
     /* 0x45C */ s16 unk_45C;
     /* 0x460 */ Actor* unk_460;
-    /* 0x464 */ u16 unk_464;
+    /* 0x464 */ u16 textId;
     /* 0x466 */ s16 unk_466;
     /* 0x468 */ u8 unk_468;
 } EnDno; // size = 0x46C

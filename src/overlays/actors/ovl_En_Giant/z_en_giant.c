@@ -6,18 +6,71 @@
 
 #include "z_en_giant.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnGiant*)thisx)
 
-void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnGiant_Init(Actor* thisx, PlayState* play);
+void EnGiant_Destroy(Actor* thisx, PlayState* play);
+void EnGiant_Update(Actor* thisx, PlayState* play);
+void EnGiant_Draw(Actor* thisx, PlayState* play);
 
-void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx);
-void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, GlobalContext* globalCtx);
-void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx);
+void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, PlayState* play);
+void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, PlayState* play);
+void EnGiant_PerformCutsceneActions(EnGiant* this, PlayState* play);
+
+#define GIANT_TYPE_IS_NOT_TERMINA_FIELD(type) (type > GIANT_TYPE_OCEAN_TERMINA_FIELD)
+#define GIANT_TYPE_IS_TERMINA_FIELD(type) (type <= GIANT_TYPE_OCEAN_TERMINA_FIELD)
+#define GIANT_TYPE_IS_CLOCK_TOWER_SUCCESS(type) \
+    (type >= GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS && type <= GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS)
+#define GIANT_TYPE_IS_CHAMBER_OR_ENDING(type) \
+    (type >= GIANT_TYPE_MOUNTAIN_GIANTS_CHAMBER_AND_ENDING && type <= GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING)
+#define GIANT_TYPE_IS_CLOCK_TOWER_FAILURE(type) \
+    (type >= GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_FAILURE && type <= GIANT_TYPE_OCEAN_CLOCK_TOWER_FAILURE)
+
+/**
+ * These values are used to index into sAnimations to pick the appropriate animation.
+ */
+typedef enum {
+    /*  0 */ GIANT_ANIMATION_LOOK_UP_START,
+    /*  1 */ GIANT_ANIMATION_LOOK_UP_LOOP,
+    /*  2 */ GIANT_ANIMATION_FALLING_OVER,
+    /*  3 */ GIANT_ANIMATION_RAISED_ARMS_START,
+    /*  4 */ GIANT_ANIMATION_RAISED_ARMS_LOOP,
+    /*  5 */ GIANT_ANIMATION_STRUGGLE_START,
+    /*  6 */ GIANT_ANIMATION_STRUGGLE_LOOP,
+    /*  7 */ GIANT_ANIMATION_IDLE_LOOP,
+    /*  8 */ GIANT_ANIMATION_WALKING_LOOP,
+    /*  9 */ GIANT_ANIMATION_BIG_CALL_START,
+    /* 10 */ GIANT_ANIMATION_BIG_CALL_LOOP,
+    /* 11 */ GIANT_ANIMATION_BIG_CALL_END,
+    /* 12 */ GIANT_ANIMATION_SMALL_CALL_START,
+    /* 13 */ GIANT_ANIMATION_SMALL_CALL_LOOP,
+    /* 14 */ GIANT_ANIMATION_SMALL_CALL_END,
+    /* 15 */ GIANT_ANIMATION_MAX
+} GiantAnimationIndex;
+
+/**
+ * Used as values for csAction. The UNKNOWN ones are never used in-game.
+ */
+typedef enum {
+    /*  0 */ GIANT_CS_ACTION_NONE,
+    /*  1 */ GIANT_CS_ACTION_IDLE,
+    /*  2 */ GIANT_CS_ACTION_WALKING,
+    /*  3 */ GIANT_CS_ACTION_LOOKING_UP,
+    /*  4 */ GIANT_CS_ACTION_RAISING_ARMS,
+    /*  5 */ GIANT_CS_ACTION_STRUGGLING,
+    /*  6 */ GIANT_CS_ACTION_FALLING_OVER,
+    /*  7 */ GIANT_CS_ACTION_IDLE_FADE_IN,
+    /*  8 */ GIANT_CS_ACTION_TALKING,
+    /*  9 */ GIANT_CS_ACTION_DONE_TALKING,
+    /* 10 */ GIANT_CS_ACTION_TEACHING_OATH_TO_ORDER,
+    /* 11 */ GIANT_CS_ACTION_PLAYER_LEARNED_OATH_TO_ORDER,
+    /* 12 */ GIANT_CS_ACTION_UNKNOWN_12,
+    /* 13 */ GIANT_CS_ACTION_UNKNOWN_13,
+    /* 14 */ GIANT_CS_ACTION_UNKNOWN_14,
+    /* 15 */ GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER
+} GiantCsActionIndex;
 
 const ActorInit En_Giant_InitVars = {
     ACTOR_EN_GIANT,
@@ -31,41 +84,21 @@ const ActorInit En_Giant_InitVars = {
     (ActorFunc)EnGiant_Draw,
 };
 
-extern AnimationHeader D_06002168;
-extern Gfx D_06005A80[];
-extern Gfx D_06006280[];
-extern Gfx D_06007610[];
-extern Gfx D_06006A80[];
-extern FlexSkeletonHeader D_060079B0;
-extern AnimationHeader D_06008394;
-extern AnimationHeader D_060096E4;
-extern AnimationHeader D_0600A1C4;
-extern AnimationHeader D_0600ACA4;
-extern AnimationHeader D_0600B784;
-extern AnimationHeader D_0600C5D4;
-extern AnimationHeader D_0600D040;
-extern AnimationHeader D_0600DE84;
-extern AnimationHeader D_060102A4;
-extern AnimationHeader D_060116E4;
-extern AnimationHeader D_06012A38;
-extern AnimationHeader D_06013004;
-extern AnimationHeader D_06013FE8;
-extern AnimationHeader D_06015334;
-extern AnimationHeader D_06017944;
-
-static AnimationHeader* sAnimationTable[] = {
-    &D_06008394, &D_060096E4, &D_060102A4, &D_060116E4, &D_06012A38, &D_06013004, &D_06013FE8, &D_06015334,
-    &D_06017944, &D_0600A1C4, &D_0600D040, &D_0600DE84, &D_0600ACA4, &D_0600B784, &D_0600C5D4,
+static AnimationHeader* sAnimations[] = {
+    &gGiantLookUpStartAnim,    &gGiantLookUpLoopAnim,    &gGiantFallingOverAnim,  &gGiantRaisedArmsStartAnim,
+    &gGiantRaisedArmsLoopAnim, &gGiantStruggleStartAnim, &gGiantStruggleLoopAnim, &gGiantIdleAnim,
+    &gGiantWalkingAnim,        &gGiantBigCallStartAnim,  &gGiantBigCallLoopAnim,  &gGiantBigCallEndAnim,
+    &gGiantSmallCallStartAnim, &gGiantSmallCallLoopAnim, &gGiantSmallCallEndAnim,
 };
 
 void EnGiant_ChangeAnimation(EnGiant* this, s16 newAnimationId) {
     if (newAnimationId >= GIANT_ANIMATION_LOOK_UP_START && newAnimationId < GIANT_ANIMATION_MAX) {
         if ((this->animationId == GIANT_ANIMATION_WALKING_LOOP && newAnimationId != GIANT_ANIMATION_WALKING_LOOP) ||
             (newAnimationId == GIANT_ANIMATION_WALKING_LOOP && this->animationId != GIANT_ANIMATION_WALKING_LOOP)) {
-            Animation_Change(&this->skelAnime, sAnimationTable[newAnimationId], 1.0f, 0.0f,
-                             Animation_GetLastFrame(&sAnimationTable[newAnimationId]->common), 2, 10.0f);
+            Animation_Change(&this->skelAnime, sAnimations[newAnimationId], 1.0f, 0.0f,
+                             Animation_GetLastFrame(&sAnimations[newAnimationId]->common), ANIMMODE_ONCE, 10.0f);
         } else {
-            Animation_PlayOnce(&this->skelAnime, sAnimationTable[newAnimationId]);
+            Animation_PlayOnce(&this->skelAnime, sAnimations[newAnimationId]);
         }
         this->animationId = newAnimationId;
     }
@@ -77,7 +110,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_SWAMP_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_FAILURE:
-            if (!CHECK_QUEST_ITEM(0)) {
+            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA)) {
                 return true;
             }
             break;
@@ -85,7 +118,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_MOUNTAIN_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_FAILURE:
-            if (!CHECK_QUEST_ITEM(1)) {
+            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT)) {
                 return true;
             }
             break;
@@ -93,7 +126,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_OCEAN_CLOCK_TOWER_FAILURE:
-            if (!CHECK_QUEST_ITEM(2)) {
+            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG)) {
                 return true;
             }
             break;
@@ -101,7 +134,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_CANYON_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_CANYON_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_CANYON_CLOCK_TOWER_FAILURE:
-            if (!CHECK_QUEST_ITEM(3)) {
+            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
                 return true;
             }
             break;
@@ -110,7 +143,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
     return false;
 }
 
-void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnGiant_Init(Actor* thisx, PlayState* play) {
     EnGiant* this = THIS;
     s32 type = GIANT_TYPE(thisx);
 
@@ -118,59 +151,63 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.uncullZoneScale = 2000.0f;
     this->actor.uncullZoneDownward = 2400.0f;
     Actor_SetScale(&this->actor, 0.32f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060079B0, &D_06002168, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGiantSkel, &gGiantLargeStrideAnim, this->jointTable, this->morphTable,
+                       GIANT_LIMB_MAX);
     EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
     this->csAction = GIANT_CS_ACTION_NONE;
     this->actionFunc = EnGiant_PerformCutsceneActions;
     this->actor.draw = NULL;
     this->alpha = 0;
     this->actor.velocity.y = -10.0f;
-    this->actor.minVelocityY = -10.0f;
+    this->actor.terminalVelocity = -10.0f;
     this->actor.gravity = -5.0f;
     switch (type) {
         case GIANT_TYPE_CANYON_TERMINA_FIELD:
         case GIANT_TYPE_CANYON_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_CANYON_GIANTS_CHAMBER_AND_ENDING:
-            this->unk_24A = 0x1C6;
+            this->actorActionCommand = 454;
             break;
         case GIANT_TYPE_SWAMP_TERMINA_FIELD:
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_SWAMP_GIANTS_CHAMBER_AND_ENDING:
-            this->unk_24A = 0x1C7;
+            this->actorActionCommand = 455;
             break;
         case GIANT_TYPE_OCEAN_TERMINA_FIELD:
         case GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING:
-            this->unk_24A = 0x1C8;
+            this->actorActionCommand = 456;
             break;
         default:
-            this->unk_24A = 0x1C5;
+            this->actorActionCommand = 453;
             break;
     }
 
     if (GIANT_TYPE_IS_CLOCK_TOWER_SUCCESS(type)) {
-        if (!(gSaveContext.weekEventReg[0x19] & 2)) {
+        if (!(gSaveContext.save.weekEventReg[25] & 2)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
-        this->unk_24A = 0x1C5;
+
+        this->actorActionCommand = 0x1C5;
         Actor_SetScale(&this->actor, 0.32f);
         this->actionFunc = EnGiant_PerformClockTowerSuccessActions;
-        Animation_Change(&this->skelAnime, &D_060116E4, 0.0f, Animation_GetLastFrame(&D_060116E4) - 1.0f,
-                         Animation_GetLastFrame(&D_060116E4), 2, 0.0f);
+        Animation_Change(&this->skelAnime, &gGiantRaisedArmsStartAnim, 0.0f,
+                         Animation_GetLastFrame(&gGiantRaisedArmsStartAnim) - 1.0f,
+                         Animation_GetLastFrame(&gGiantRaisedArmsStartAnim), ANIMMODE_ONCE, 0.0f);
         this->actor.draw = EnGiant_Draw;
         this->actor.velocity.y = 0.0f;
-        this->actor.minVelocityY = 0.0f;
+        this->actor.terminalVelocity = 0.0f;
         this->actor.gravity = 0.0f;
     }
 
     if (GIANT_TYPE_IS_CLOCK_TOWER_FAILURE(type)) {
         Actor_SetScale(&this->actor, 0.32f);
         this->actionFunc = EnGiant_PlayClockTowerFailureAnimation;
-        Animation_Change(&this->skelAnime, &D_06013FE8, 1.0f, 0.0f, Animation_GetLastFrame(&D_06013004), 0, 0.0f);
+        Animation_Change(&this->skelAnime, &gGiantStruggleLoopAnim, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&gGiantStruggleStartAnim), ANIMMODE_LOOP, 0.0f);
         this->actor.draw = EnGiant_Draw;
         this->actor.velocity.y = 0.0f;
-        this->actor.minVelocityY = 0.0f;
+        this->actor.terminalVelocity = 0.0f;
         this->actor.gravity = 0.0f;
         if (EnGiant_IsImprisoned(this)) {
             Actor_MarkForDeath(&this->actor);
@@ -200,11 +237,11 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnGiant_Destroy(Actor* thisx, PlayState* play) {
 }
 
 /**
- * The animations in sAnimationTable are organized such that looping animations
+ * The animations in sAnimations are organized such that looping animations
  * appear immediately after their respective starting animations. The point of
  * this function is to play the requested start animation if it has not been
  * played yet and play the respetive looping animation otherwise.
@@ -266,8 +303,9 @@ void EnGiant_ChangeAnimationBasedOnCsAction(EnGiant* this) {
             }
             break;
         case GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER:
-            Animation_Change(&this->skelAnime, &D_060116E4, 0.0f, Animation_GetLastFrame(&D_060116E4) - 1.0f,
-                             Animation_GetLastFrame(&D_060116E4), 2, 0.0f);
+            Animation_Change(&this->skelAnime, &gGiantRaisedArmsStartAnim, 0.0f,
+                             Animation_GetLastFrame(&gGiantRaisedArmsStartAnim) - 1.0f,
+                             Animation_GetLastFrame(&gGiantRaisedArmsStartAnim), ANIMMODE_ONCE, 0.0f);
             break;
     }
 }
@@ -333,10 +371,10 @@ void EnGiant_PlaySound(EnGiant* this) {
     if (this->actor.draw != NULL && this->alpha > 0) {
         if (this->animationId == GIANT_ANIMATION_WALKING_LOOP &&
             (Animation_OnFrame(&this->skelAnime, 40.0f) || Animation_OnFrame(&this->skelAnime, 100.0f))) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_KYOJIN_WALK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KYOJIN_WALK);
         }
         if (this->animationId == GIANT_ANIMATION_FALLING_OVER && Animation_OnFrame(&this->skelAnime, 40.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_KYOJIN_VOICE_FAIL);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KYOJIN_VOICE_FAIL);
         }
         if (this->sfxId != 0xFFFF &&
             ((this->animationId == GIANT_ANIMATION_BIG_CALL_START && this->skelAnime.curFrame >= 18.0f) ||
@@ -350,22 +388,23 @@ void EnGiant_PlaySound(EnGiant* this) {
     }
 }
 
-void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionIndex) {
-    CsCmdActorAction* actorAction = globalCtx->csCtx.npcActions[actionIndex];
-    f32 floatUnk10 = actorAction->unk10;
+void EnGiant_UpdatePosition(EnGiant* this, PlayState* play, u32 actionIndex) {
+    CsCmdActorAction* actorAction = play->csCtx.actorActions[actionIndex];
+    f32 startPosY = actorAction->startPos.y;
     s32 pad[2];
-    f32 floatUnk1C = actorAction->unk1C;
-    f32 functionTemp;
+    f32 endPosY = actorAction->endPos.y;
+    f32 scale = Environment_LerpWeight(actorAction->endFrame, actorAction->startFrame, play->csCtx.frames);
 
-    functionTemp = func_800F5A8C(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames, globalCtx);
-    this->actor.world.pos.y = ((floatUnk1C - floatUnk10) * functionTemp) + floatUnk10;
+    this->actor.world.pos.y = ((endPosY - startPosY) * scale) + startPosY;
 }
 
-void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, this->unk_24A)) {
-        EnGiant_UpdatePosition(this, globalCtx, func_800EE200(globalCtx, this->unk_24A));
-        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
-            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
+void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, PlayState* play) {
+    if (Cutscene_CheckActorAction(play, this->actorActionCommand)) {
+        EnGiant_UpdatePosition(this, play, Cutscene_GetActorActionIndex(play, this->actorActionCommand));
+        if (this->csAction !=
+            play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCommand)]->action) {
+            this->csAction =
+                play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCommand)]->action;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
@@ -378,17 +417,19 @@ void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globa
     EnGiant_PlayAndUpdateAnimation(this);
 }
 
-void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, GlobalContext* globalCtx) {
+void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
 
-void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
+void EnGiant_PerformCutsceneActions(EnGiant* this, PlayState* play) {
     this->actor.draw = EnGiant_Draw;
 
-    if (func_800EE29C(globalCtx, this->unk_24A)) {
-        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, this->unk_24A));
-        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
-            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
+    if (Cutscene_CheckActorAction(play, this->actorActionCommand)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCommand));
+        if (this->csAction !=
+            play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCommand)]->action) {
+            this->csAction =
+                play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCommand)]->action;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
@@ -402,13 +443,13 @@ void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
     EnGiant_PlayAndUpdateAnimation(this);
 }
 
-void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnGiant_Update(Actor* thisx, PlayState* play) {
     EnGiant* this = THIS;
     s32 blinkTimerTemp;
 
-    this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    this->actionFunc(this, play);
+    Actor_MoveWithGravity(&this->actor);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
     if (this->blinkTimer == 0) {
         blinkTimerTemp = 0;
@@ -426,65 +467,57 @@ void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnGiant_PostLimbDrawOpa(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == 1) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+void EnGiant_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    if (limbIndex == GIANT_LIMB_HEAD) {
+        OPEN_DISPS(play->state.gfxCtx);
 
-        gSPDisplayList(POLY_OPA_DISP++, D_06007610);
+        gSPDisplayList(POLY_OPA_DISP++, gGiantBeardDL);
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }
 
-void EnGiant_PostLimbDrawXlu(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx,
-                             Gfx** gfx) {
+void EnGiant_PostLimbDrawXlu(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnGiant* this = THIS;
 
-    if (limbIndex == 1) {
-        Matrix_CopyCurrentState(&this->unk_254);
+    if (limbIndex == GIANT_LIMB_HEAD) {
+        Matrix_Get(&this->headDrawMtxF);
     }
 }
 
-void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnGiant_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     EnGiant* this = THIS;
-
-    /**
-     * 0 = eyes fully open face
-     * 1 = eyes half-closed face
-     * 2 = eyes fully closed face
-     */
-    static TexturePtr sFaceTextures[] = { D_06005A80, D_06006280, D_06006A80 };
+    static TexturePtr sFaceTextures[] = { gGiantFaceEyeOpenTex, gGiantFaceEyeHalfTex, gGiantFaceEyeClosedTex };
 
     if (this->alpha > 0) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
         if (this->alpha >= 255) {
-            func_8012C28C(globalCtx->state.gfxCtx);
+            func_8012C28C(play->state.gfxCtx);
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sFaceTextures[this->faceIndex]));
             gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
-            Scene_SetRenderModeXlu(globalCtx, 0, 1);
-            SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+            Scene_SetRenderModeXlu(play, 0, 1);
+            SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                   this->skelAnime.dListCount, NULL, EnGiant_PostLimbDrawOpa, thisx);
         } else if (this->alpha > 0) {
             if (this->alpha >= 129) {
                 func_8012C2B4(POLY_XLU_DISP++);
-                Scene_SetRenderModeXlu(globalCtx, 2, 2);
+                Scene_SetRenderModeXlu(play, 2, 2);
             } else {
                 func_8012C304(POLY_XLU_DISP++);
-                Scene_SetRenderModeXlu(globalCtx, 1, 2);
+                Scene_SetRenderModeXlu(play, 1, 2);
             }
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sFaceTextures[this->faceIndex]));
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
             POLY_XLU_DISP =
-                SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, NULL, EnGiant_PostLimbDrawXlu, thisx, POLY_XLU_DISP);
-            Matrix_InsertMatrix(&this->unk_254, MTXMODE_NEW);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_06007610);
+            Matrix_Mult(&this->headDrawMtxF, MTXMODE_NEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_XLU_DISP++, gGiantBeardDL);
         }
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }

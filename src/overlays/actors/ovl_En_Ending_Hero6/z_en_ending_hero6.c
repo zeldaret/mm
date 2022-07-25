@@ -5,49 +5,24 @@
  */
 
 #include "z_en_ending_hero6.h"
+#include "objects/object_dt/object_dt.h"
+#include "objects/object_daiku/object_daiku.h"
+#include "objects/object_bai/object_bai.h"
+#include "objects/object_toryo/object_toryo.h"
+#include "objects/object_sdn/object_sdn.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnEndingHero6*)thisx)
 
-void EnEndingHero6_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnEndingHero6_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnEndingHero6_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnEndingHero6_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnEndingHero6_Init(Actor* thisx, PlayState* play);
+void EnEndingHero6_Destroy(Actor* thisx, PlayState* play);
+void EnEndingHero6_Update(Actor* thisx, PlayState* play);
+void EnEndingHero6_Draw(Actor* thisx, PlayState* play);
 
 void EnEndingHero6_InitSkelAnime(EnEndingHero6* this, s32 npcIndex);
 void EnEndingHero6_SetupIdle(EnEndingHero6* this);
-void EnEndingHero6_Idle(EnEndingHero6* this, GlobalContext* globalCtx);
-
-extern FlexSkeletonHeader D_0600B0CC; // object_dt
-extern FlexSkeletonHeader D_06007908; // object_bai
-extern FlexSkeletonHeader D_06007150; // object_toryo
-extern FlexSkeletonHeader D_0600D640; // object_sdn
-extern FlexSkeletonHeader D_0600A850; // object_daiku
-
-extern AnimationHeader D_06000BE0; // object_dt
-extern AnimationHeader D_060011C0; // object_bai
-extern AnimationHeader D_06000E50; // object_toryo
-extern AnimationHeader D_06002A84; // object_sdn
-extern AnimationHeader D_06002FA0; // object_daiku
-
-// object_daiku
-extern Gfx D_060070C0[];
-extern Gfx D_06006FB0[];
-extern Gfx D_06006E80[];
-extern Gfx D_06006D70[];
-extern Gfx D_0600A390_dl[];
-
-// object_dt
-extern TexturePtr D_06007350;
-extern TexturePtr D_06009590;
-extern TexturePtr D_06009F90;
-extern TexturePtr D_0600A790;
-extern TexturePtr D_0600AB90;
-
-extern TexturePtr D_06007750;
-extern TexturePtr D_0600A390_tex;
-extern TexturePtr D_0600A490;
+void EnEndingHero6_Idle(EnEndingHero6* this, PlayState* play);
 
 const ActorInit En_Ending_Hero6_InitVars = {
     ACTOR_EN_ENDING_HERO6,
@@ -61,34 +36,40 @@ const ActorInit En_Ending_Hero6_InitVars = {
     (ActorFunc)EnEndingHero6_Draw,
 };
 
-static FlexSkeletonHeader* sSkeletons[] = { &D_0600B0CC, &D_06007908, &D_06007150, &D_0600D640, &D_0600A850,
-                                            &D_0600A850, &D_0600A850, &D_0600A850, &D_0600A850 };
+static FlexSkeletonHeader* sSkeletons[] = {
+    &object_dt_Skel_00B0CC,    &object_bai_Skel_007908,   &object_toryo_Skel_007150, &gSoldierSkel,
+    &object_daiku_Skel_00A850, &object_daiku_Skel_00A850, &object_daiku_Skel_00A850, &object_daiku_Skel_00A850,
+    &object_daiku_Skel_00A850,
+};
 
-static AnimationHeader* sAnimations[] = { &D_06000BE0, &D_060011C0, &D_06000E50, &D_06002A84, &D_06002FA0,
-                                          &D_06002FA0, &D_06002FA0, &D_06002FA0, &D_06002FA0 };
+static AnimationHeader* sAnimations[] = {
+    &object_dt_Anim_000BE0,    &object_bai_Anim_0011C0,   &object_toryo_Anim_000E50,
+    &gSoldierCheerWithSpear,   &object_daiku_Anim_002FA0, &object_daiku_Anim_002FA0,
+    &object_daiku_Anim_002FA0, &object_daiku_Anim_002FA0, &object_daiku_Anim_002FA0,
+};
 
 static s32 sLimbCounts[] = { 15, 20, 17, 17, 17, 17, 17, 17, 17 };
 
-void EnEndingHero6_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnEndingHero6_Init(Actor* thisx, PlayState* play) {
     EnEndingHero6* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, sSkeletons[this->npcIndex], sAnimations[this->npcIndex],
+    SkelAnime_InitFlex(play, &this->skelAnime, sSkeletons[this->npcIndex], sAnimations[this->npcIndex],
                        this->jointTable, this->morphTable, sLimbCounts[this->npcIndex]);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     EnEndingHero6_SetupIdle(this);
 }
 
-void EnEndingHero6_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnEndingHero6_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnEndingHero6_InitSkelAnime(EnEndingHero6* this, s32 npcIndex) {
     this->animIndex = npcIndex;
     this->frameCount = Animation_GetLastFrame(sAnimations[npcIndex]);
-    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.f, this->frameCount, 0, 0.0f);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.f, this->frameCount, ANIMMODE_LOOP, 0.0f);
 }
 
 void EnEndingHero6_SetupIdle(EnEndingHero6* this) {
@@ -97,11 +78,11 @@ void EnEndingHero6_SetupIdle(EnEndingHero6* this) {
     this->actionFunc = EnEndingHero6_Idle;
 }
 
-void EnEndingHero6_Idle(EnEndingHero6* this, GlobalContext* globalCtx) {
+void EnEndingHero6_Idle(EnEndingHero6* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
 
-void EnEndingHero6_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnEndingHero6_Update(Actor* thisx, PlayState* play) {
     EnEndingHero6* this = THIS;
 
     if (this->timer != 0) {
@@ -118,41 +99,43 @@ void EnEndingHero6_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    this->actionFunc(this, play);
+    Actor_MoveWithGravity(&this->actor);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
-void EnEndingHero6_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Gfx* D_80C2426C[] = { D_060070C0, D_06006FB0, D_06006E80, D_06006D70, D_0600A390_dl };
+void EnEndingHero6_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static Gfx* D_80C2426C[] = { object_daiku_DL_0070C0, object_daiku_DL_006FB0, object_daiku_DL_006E80,
+                                 object_daiku_DL_006D70, object_daiku_DL_00A390 };
     EnEndingHero6* this = THIS;
     s32 index;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     if (this->npcIndex >= 4 && limbIndex == 15) {
         index = this->npcIndex - 4;
         gSPDisplayList(POLY_OPA_DISP++, D_80C2426C[index]);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnEndingHero6_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr D_80C24280[] = { &D_06007350, &D_06009590, &D_06009F90, &D_0600A790, &D_0600AB90 };
-    static TexturePtr D_80C24294[] = { &D_06007750, &D_0600A390_tex, &D_0600A490 };
+void EnEndingHero6_Draw(Actor* thisx, PlayState* play) {
+    static TexturePtr D_80C24280[] = { object_dt_Tex_007350, object_dt_Tex_009590, object_dt_Tex_009F90,
+                                       object_dt_Tex_00A790, object_dt_Tex_00AB90 };
+    static TexturePtr D_80C24294[] = { object_dt_Tex_007750, object_dt_Tex_00A390, object_dt_Tex_00A490 };
     s32 pad;
     EnEndingHero6* this = THIS;
     s32 index = 0;
 
     if (this->isIdle == 1) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(globalCtx->state.gfxCtx);
-        func_8012C2DC(globalCtx->state.gfxCtx);
+        func_8012C28C(play->state.gfxCtx);
+        func_8012C2DC(play->state.gfxCtx);
 
-        if (this->objectIndex >= 0 && Object_IsLoaded(&globalCtx->objectCtx, this->objectIndex)) {
-            gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->objectIndex].segment);
+        if (this->objectIndex >= 0 && Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
+            gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->objectIndex].segment);
 
             switch (this->npcIndex) {
                 case 4:
@@ -182,10 +165,10 @@ void EnEndingHero6_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C24294[index]));
             }
 
-            SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+            SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                   this->skelAnime.dListCount, NULL, EnEndingHero6_PostLimbDraw, &this->actor);
         }
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }

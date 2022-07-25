@@ -34,7 +34,7 @@ f32 func_80179400(s32 n) {
 
     //! @bug No check for negative argument. Will read the array out-of-bounds if the argument is negative.
     //! (The OoT version does an unsigned check instead, which will return sFactorialTbl[12] for a negative argument.)
-    if (n > 12) {
+    if (n >= ARRAY_COUNT(sFactorialTbl)) {
         ret = sFactorialTbl[12];
         for (i = 13; i <= n; i++) {
             ret *= i;

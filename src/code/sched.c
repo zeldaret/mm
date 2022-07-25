@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 #define RSP_DONE_MSG 667
@@ -179,7 +180,7 @@ halt_rdp:
         if (dpTask->type == M_GFXTASK) {
             // Try to stop DP
             osSyncPrintf("DP止めようとします\n");
-            bzero(dpTask->output_buff, (u32)dpTask->output_buff_size - (u32)dpTask->output_buff);
+            bzero(dpTask->outputBuff, (u32)dpTask->outputBuffSize - (u32)dpTask->outputBuff);
             osSendMesg(&sched->interruptQ, RDP_DONE_MSG, OS_MESG_NOBLOCK);
         }
     }
@@ -225,7 +226,7 @@ s32 Sched_TaskCheckFramebuffers(SchedContext* sched, OSScTask* task) {
     void* nextFB = osViGetNextFramebuffer();
     void* curFB = osViGetCurrentFramebuffer();
 
-    if (task == NULL || sched->pendingSwapBuf1 != NULL || (curFB == task->framebuffer->fb1 && curFB != nextFB)) {
+    if (task == NULL || sched->pendingSwapBuf1 != NULL || (curFB == TASK_FRAMEBUFFER(task)->fb1 && curFB != nextFB)) {
         return 0;
     }
     return 1;
@@ -257,7 +258,7 @@ s32 Sched_Schedule(SchedContext* sched, OSScTask** spTask, OSScTask** dpTask, s3
                 }
             }
         } else if (ret == (OS_SC_SP | OS_SC_DP)) {
-            if (gfxTask->framebuffer == NULL || Sched_TaskCheckFramebuffers(sched, gfxTask)) {
+            if (TASK_FRAMEBUFFER(gfxTask) == NULL || Sched_TaskCheckFramebuffers(sched, gfxTask)) {
                 *spTask = *dpTask = gfxTask;
                 ret &= ~(OS_SC_SP | OS_SC_DP);
                 sched->gfxListHead = sched->gfxListHead->next;
@@ -271,7 +272,7 @@ s32 Sched_Schedule(SchedContext* sched, OSScTask** spTask, OSScTask** dpTask, s3
 }
 
 void Sched_TaskUpdateFramebuffer(SchedContext* sched, OSScTask* task) {
-    sched->pendingSwapBuf1 = task->framebuffer;
+    sched->pendingSwapBuf1 = TASK_FRAMEBUFFER(task);
 
     if (sched->curBuf != NULL && sched->curBuf->updateRate2 > 0) {
         return;
@@ -336,8 +337,8 @@ void Sched_RunTask(SchedContext* sched, OSScTask* spTask, OSScTask* dpTask) {
 
         if (spTask->list.t.type == M_AUDTASK) {
             // Set global pointers to audio task data for use in audio processing
-            gAudioSPDataPtr = spTask->list.t.data_ptr;
-            gAudioSPDataSize = spTask->list.t.data_size;
+            gAudioSPDataPtr = spTask->list.t.dataPtr;
+            gAudioSPDataSize = spTask->list.t.dataSize;
         }
 
         // Begin task execution
@@ -527,7 +528,7 @@ void Sched_FaultClient(void* param1, void* param2) {
     spTask = sched->curRSPTask;
     if (spTask != NULL) {
         FaultDrawer_Printf("RSPTask %08x %08x %02x %02x\n%01x %08x %08x\n", spTask, spTask->next, spTask->state,
-                           spTask->flags, spTask->list.t.type, spTask->list.t.data_ptr, spTask->list.t.data_size);
+                           spTask->flags, spTask->list.t.type, spTask->list.t.dataPtr, spTask->list.t.dataSize);
     }
 
     dpTask = sched->curRDPTask;

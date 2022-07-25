@@ -1,15 +1,21 @@
+/*
+ * File: z_en_tg.c
+ * Overlay: ovl_En_Tg
+ * Description: Target Game (Honey & Darling)
+ */
+
 #include "z_en_tg.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnTg*)thisx)
 
-void EnTg_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTg_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTg_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnTg_Init(Actor* thisx, PlayState* play);
+void EnTg_Destroy(Actor* thisx, PlayState* play);
+void EnTg_Update(Actor* thisx, PlayState* play);
+void EnTg_Draw(Actor* thisx, PlayState* play);
 
-void func_8098FA70(EnTg* this, GlobalContext* globalCtx);
+void func_8098FA70(EnTg* this, PlayState* play);
 
 #if 0
 const ActorInit En_Tg_InitVars = {

@@ -1,13 +1,19 @@
+/*
+ * File: z_bg_dkjail_ivy.c
+ * Overlay: ovl_Bg_Dkjail_Ivy
+ * Description: Cuttable Ivy wall (beneath Woodfall Temple, Swamp Spider House)
+ */
+
 #include "z_bg_dkjail_ivy.h"
 
 #define FLAGS 0x00000000
 
 #define THIS ((BgDkjailIvy*)thisx)
 
-void BgDkjailIvy_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgDkjailIvy_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgDkjailIvy_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgDkjailIvy_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgDkjailIvy_Init(Actor* thisx, PlayState* play);
+void BgDkjailIvy_Destroy(Actor* thisx, PlayState* play);
+void BgDkjailIvy_Update(Actor* thisx, PlayState* play);
+void BgDkjailIvy_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Bg_Dkjail_Ivy_InitVars = {

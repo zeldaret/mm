@@ -1,0 +1,135 @@
+﻿<Root>
+    <File Name="object_ha" Segment="6">
+        <Animation Name="object_ha_Anim_0000C4" Offset="0xC4" />
+        <DList Name="object_ha_DL_0030C0" Offset="0x30C0" />
+        <DList Name="object_ha_DL_003418" Offset="0x3418" />
+        <DList Name="object_ha_DL_0035D8" Offset="0x35D8" />
+        <DList Name="object_ha_DL_0037A8" Offset="0x37A8" />
+        <DList Name="object_ha_DL_003A68" Offset="0x3A68" />
+        <DList Name="object_ha_DL_003DB8" Offset="0x3DB8" />
+        <DList Name="object_ha_DL_003F78" Offset="0x3F78" />
+        <DList Name="object_ha_DL_004150" Offset="0x4150" />
+        <DList Name="object_ha_DL_0044C0" Offset="0x44C0" />
+        <DList Name="object_ha_DL_004628" Offset="0x4628" />
+        <DList Name="object_ha_DL_0047A8" Offset="0x47A8" />
+        <DList Name="object_ha_DL_004880" Offset="0x4880" />
+        <DList Name="object_ha_DL_004CA8" Offset="0x4CA8" />
+        <DList Name="object_ha_DL_005000" Offset="0x5000" />
+        <DList Name="object_ha_DL_0051C0" Offset="0x51C0" />
+        <DList Name="object_ha_DL_005390" Offset="0x5390" />
+        <DList Name="object_ha_DL_005450" Offset="0x5450" />
+        <DList Name="object_ha_DL_005E08" Offset="0x5E08" />
+        <DList Name="object_ha_DL_005F98" Offset="0x5F98" />
+        <DList Name="object_ha_DL_006220" Offset="0x6220" />
+        <DList Name="object_ha_DL_006538" Offset="0x6538" />
+        <DList Name="object_ha_DL_006708" Offset="0x6708" />
+        <DList Name="object_ha_DL_0068E8" Offset="0x68E8" />
+        <DList Name="object_ha_DL_0069A8" Offset="0x69A8" />
+        <Texture Name="object_ha_TLUT_006E58" OutName="tlut_006E58" Format="rgba16" Width="16" Height="16" Offset="0x6E58" />
+        <Texture Name="object_ha_Tex_007058" OutName="tex_007058" Format="ci8" Width="16" Height="16" Offset="0x7058" />
+        <Texture Name="object_ha_Tex_007158" OutName="tex_007158" Format="ci8" Width="16" Height="32" Offset="0x7158" />
+        <Texture Name="object_ha_Tex_007358" OutName="tex_007358" Format="rgba16" Width="16" Height="16" Offset="0x7358" />
+        <Texture Name="object_ha_Tex_007558" OutName="tex_007558" Format="ci8" Width="16" Height="16" Offset="0x7558" />
+        <Texture Name="object_ha_Tex_007658" OutName="tex_007658" Format="ci8" Width="16" Height="16" Offset="0x7658" />
+        <Texture Name="object_ha_Tex_007758" OutName="tex_007758" Format="rgba16" Width="32" Height="32" Offset="0x7758" />
+        <Texture Name="object_ha_Tex_007F58" OutName="tex_007F58" Format="ci8" Width="32" Height="32" Offset="0x7F58" />
+        <Texture Name="object_ha_Tex_008358" OutName="tex_008358" Format="ci8" Width="32" Height="32" Offset="0x8358" />
+        <Texture Name="object_ha_Tex_008758" OutName="tex_008758" Format="rgba16" Width="8" Height="16" Offset="0x8758" />
+        <Texture Name="object_ha_Tex_008858" OutName="tex_008858" Format="ci8" Width="16" Height="16" Offset="0x8858" />
+        <Texture Name="object_ha_Tex_008958" OutName="tex_008958" Format="ci8" Width="16" Height="16" Offset="0x8958" />
+        <Texture Name="object_ha_Tex_008A58" OutName="tex_008A58" Format="ci8" Width="8" Height="16" Offset="0x8A58" />
+        <Limb Name="object_ha_Standardlimb_008AD8" Type="Standard" EnumName="OBJECT_HA_1_LIMB_01" Offset="0x8AD8" />
+        <Limb Name="object_ha_Standardlimb_008AE4" Type="Standard" EnumName="OBJECT_HA_1_LIMB_02" Offset="0x8AE4" />
+        <Limb Name="object_ha_Standardlimb_008AF0" Type="Standard" EnumName="OBJECT_HA_1_LIMB_03" Offset="0x8AF0" />
+        <Limb Name="object_ha_Standardlimb_008AFC" Type="Standard" EnumName="OBJECT_HA_1_LIMB_04" Offset="0x8AFC" />
+        <Limb Name="object_ha_Standardlimb_008B08" Type="Standard" EnumName="OBJECT_HA_1_LIMB_05" Offset="0x8B08" />
+        <Limb Name="object_ha_Standardlimb_008B14" Type="Standard" EnumName="OBJECT_HA_1_LIMB_06" Offset="0x8B14" />
+        <Limb Name="object_ha_Standardlimb_008B20" Type="Standard" EnumName="OBJECT_HA_1_LIMB_07" Offset="0x8B20" />
+        <Limb Name="object_ha_Standardlimb_008B2C" Type="Standard" EnumName="OBJECT_HA_1_LIMB_08" Offset="0x8B2C" />
+        <Limb Name="object_ha_Standardlimb_008B38" Type="Standard" EnumName="OBJECT_HA_1_LIMB_09" Offset="0x8B38" />
+        <Limb Name="object_ha_Standardlimb_008B44" Type="Standard" EnumName="OBJECT_HA_1_LIMB_0A" Offset="0x8B44" />
+        <Limb Name="object_ha_Standardlimb_008B50" Type="Standard" EnumName="OBJECT_HA_1_LIMB_0B" Offset="0x8B50" />
+        <Limb Name="object_ha_Standardlimb_008B5C" Type="Standard" EnumName="OBJECT_HA_1_LIMB_0C" Offset="0x8B5C" />
+        <Limb Name="object_ha_Standardlimb_008B68" Type="Standard" EnumName="OBJECT_HA_1_LIMB_0D" Offset="0x8B68" />
+        <Limb Name="object_ha_Standardlimb_008B74" Type="Standard" EnumName="OBJECT_HA_1_LIMB_0E" Offset="0x8B74" />
+        <Limb Name="object_ha_Standardlimb_008B80" Type="Standard" EnumName="OBJECT_HA_1_LIMB_0F" Offset="0x8B80" />
+        <Limb Name="object_ha_Standardlimb_008B8C" Type="Standard" EnumName="OBJECT_HA_1_LIMB_10" Offset="0x8B8C" />
+        <Limb Name="object_ha_Standardlimb_008B98" Type="Standard" EnumName="OBJECT_HA_1_LIMB_11" Offset="0x8B98" />
+        <Limb Name="object_ha_Standardlimb_008BA4" Type="Standard" EnumName="OBJECT_HA_1_LIMB_12" Offset="0x8BA4" />
+        <Limb Name="object_ha_Standardlimb_008BB0" Type="Standard" EnumName="OBJECT_HA_1_LIMB_13" Offset="0x8BB0" />
+        <Limb Name="object_ha_Standardlimb_008BBC" Type="Standard" EnumName="OBJECT_HA_1_LIMB_14" Offset="0x8BBC" />
+        <Limb Name="object_ha_Standardlimb_008BC8" Type="Standard" EnumName="OBJECT_HA_1_LIMB_15" Offset="0x8BC8" />
+        <Limb Name="object_ha_Standardlimb_008BD4" Type="Standard" EnumName="OBJECT_HA_1_LIMB_16" Offset="0x8BD4" />
+        <Limb Name="object_ha_Standardlimb_008BE0" Type="Standard" EnumName="OBJECT_HA_1_LIMB_17" Offset="0x8BE0" />
+        <Limb Name="object_ha_Standardlimb_008BEC" Type="Standard" EnumName="OBJECT_HA_1_LIMB_18" Offset="0x8BEC" />
+        <Limb Name="object_ha_Standardlimb_008BF8" Type="Standard" EnumName="OBJECT_HA_1_LIMB_19" Offset="0x8BF8" />
+        <Skeleton Name="object_ha_Skel_008C68" Type="Flex" LimbType="Standard" LimbNone="OBJECT_HA_1_LIMB_NONE" LimbMax="OBJECT_HA_1_LIMB_MAX" EnumName="object_ha_1_Limbs" Offset="0x8C68" />
+        <Animation Name="object_ha_Anim_009208" Offset="0x9208" />
+        <Animation Name="object_ha_Anim_009858" Offset="0x9858" />
+        <Animation Name="object_ha_Anim_00A05C" Offset="0xA05C" />
+        <Animation Name="object_ha_Anim_00A650" Offset="0xA650" />
+        <Animation Name="object_ha_Anim_00B00C" Offset="0xB00C" />
+        <Animation Name="object_ha_Anim_00B9C8" Offset="0xB9C8" />
+        <Animation Name="object_ha_Anim_00C850" Offset="0xC850" />
+        <Animation Name="object_ha_Anim_00CE70" Offset="0xCE70" />
+        <Animation Name="object_ha_Anim_00D648" Offset="0xD648" />
+        <DList Name="object_ha_DL_0100B0" Offset="0x100B0" />
+        <DList Name="object_ha_DL_010258" Offset="0x10258" />
+        <DList Name="object_ha_DL_0103F0" Offset="0x103F0" />
+        <DList Name="object_ha_DL_0105C8" Offset="0x105C8" />
+        <DList Name="object_ha_DL_0107A8" Offset="0x107A8" />
+        <DList Name="object_ha_DL_010940" Offset="0x10940" />
+        <DList Name="object_ha_DL_010AE0" Offset="0x10AE0" />
+        <DList Name="object_ha_DL_010CB8" Offset="0x10CB8" />
+        <DList Name="object_ha_DL_010E88" Offset="0x10E88" />
+        <DList Name="object_ha_DL_010FE0" Offset="0x10FE0" />
+        <DList Name="object_ha_DL_011160" Offset="0x11160" />
+        <DList Name="object_ha_DL_011228" Offset="0x11228" />
+        <DList Name="object_ha_DL_011378" Offset="0x11378" />
+        <DList Name="object_ha_DL_011518" Offset="0x11518" />
+        <DList Name="object_ha_DL_0116A8" Offset="0x116A8" />
+        <DList Name="object_ha_DL_011888" Offset="0x11888" />
+        <DList Name="object_ha_DL_011948" Offset="0x11948" />
+        <DList Name="object_ha_DL_011E08" Offset="0x11E08" />
+        <DList Name="object_ha_DL_011F90" Offset="0x11F90" />
+        <DList Name="object_ha_DL_0122C0" Offset="0x122C0" />
+        <DList Name="object_ha_DL_012460" Offset="0x12460" />
+        <DList Name="object_ha_DL_0125E8" Offset="0x125E8" />
+        <DList Name="object_ha_DL_0127D0" Offset="0x127D0" />
+        <DList Name="object_ha_DL_012890" Offset="0x12890" />
+        <Texture Name="object_ha_TLUT_012D48" OutName="tlut_012D48" Format="rgba16" Width="16" Height="16" Offset="0x12D48" />
+        <Texture Name="object_ha_Tex_012F48" OutName="tex_012F48" Format="ci8" Width="32" Height="32" Offset="0x12F48" />
+        <Texture Name="object_ha_Tex_013348" OutName="tex_013348" Format="ci8" Width="32" Height="32" Offset="0x13348" />
+        <Texture Name="object_ha_Tex_013748" OutName="tex_013748" Format="rgba32" Width="32" Height="32" Offset="0x13748" />
+        <Texture Name="object_ha_Tex_014748" OutName="tex_014748" Format="ci8" Width="16" Height="32" Offset="0x14748" />
+        <Texture Name="object_ha_Tex_014948" OutName="tex_014948" Format="ci8" Width="32" Height="32" Offset="0x14948" />
+        <Texture Name="object_ha_Tex_014D48" OutName="tex_014D48" Format="ci8" Width="16" Height="16" Offset="0x14D48" />
+        <Texture Name="object_ha_Tex_014E48" OutName="tex_014E48" Format="ci8" Width="16" Height="16" Offset="0x14E48" />
+        <Limb Name="object_ha_Standardlimb_014F48" Type="Standard" EnumName="OBJECT_HA_2_LIMB_01" Offset="0x14F48" />
+        <Limb Name="object_ha_Standardlimb_014F54" Type="Standard" EnumName="OBJECT_HA_2_LIMB_02" Offset="0x14F54" />
+        <Limb Name="object_ha_Standardlimb_014F60" Type="Standard" EnumName="OBJECT_HA_2_LIMB_03" Offset="0x14F60" />
+        <Limb Name="object_ha_Standardlimb_014F6C" Type="Standard" EnumName="OBJECT_HA_2_LIMB_04" Offset="0x14F6C" />
+        <Limb Name="object_ha_Standardlimb_014F78" Type="Standard" EnumName="OBJECT_HA_2_LIMB_05" Offset="0x14F78" />
+        <Limb Name="object_ha_Standardlimb_014F84" Type="Standard" EnumName="OBJECT_HA_2_LIMB_06" Offset="0x14F84" />
+        <Limb Name="object_ha_Standardlimb_014F90" Type="Standard" EnumName="OBJECT_HA_2_LIMB_07" Offset="0x14F90" />
+        <Limb Name="object_ha_Standardlimb_014F9C" Type="Standard" EnumName="OBJECT_HA_2_LIMB_08" Offset="0x14F9C" />
+        <Limb Name="object_ha_Standardlimb_014FA8" Type="Standard" EnumName="OBJECT_HA_2_LIMB_09" Offset="0x14FA8" />
+        <Limb Name="object_ha_Standardlimb_014FB4" Type="Standard" EnumName="OBJECT_HA_2_LIMB_0A" Offset="0x14FB4" />
+        <Limb Name="object_ha_Standardlimb_014FC0" Type="Standard" EnumName="OBJECT_HA_2_LIMB_0B" Offset="0x14FC0" />
+        <Limb Name="object_ha_Standardlimb_014FCC" Type="Standard" EnumName="OBJECT_HA_2_LIMB_0C" Offset="0x14FCC" />
+        <Limb Name="object_ha_Standardlimb_014FD8" Type="Standard" EnumName="OBJECT_HA_2_LIMB_0D" Offset="0x14FD8" />
+        <Limb Name="object_ha_Standardlimb_014FE4" Type="Standard" EnumName="OBJECT_HA_2_LIMB_0E" Offset="0x14FE4" />
+        <Limb Name="object_ha_Standardlimb_014FF0" Type="Standard" EnumName="OBJECT_HA_2_LIMB_0F" Offset="0x14FF0" />
+        <Limb Name="object_ha_Standardlimb_014FFC" Type="Standard" EnumName="OBJECT_HA_2_LIMB_10" Offset="0x14FFC" />
+        <Limb Name="object_ha_Standardlimb_015008" Type="Standard" EnumName="OBJECT_HA_2_LIMB_11" Offset="0x15008" />
+        <Limb Name="object_ha_Standardlimb_015014" Type="Standard" EnumName="OBJECT_HA_2_LIMB_12" Offset="0x15014" />
+        <Limb Name="object_ha_Standardlimb_015020" Type="Standard" EnumName="OBJECT_HA_2_LIMB_13" Offset="0x15020" />
+        <Limb Name="object_ha_Standardlimb_01502C" Type="Standard" EnumName="OBJECT_HA_2_LIMB_14" Offset="0x1502C" />
+        <Limb Name="object_ha_Standardlimb_015038" Type="Standard" EnumName="OBJECT_HA_2_LIMB_15" Offset="0x15038" />
+        <Limb Name="object_ha_Standardlimb_015044" Type="Standard" EnumName="OBJECT_HA_2_LIMB_16" Offset="0x15044" />
+        <Limb Name="object_ha_Standardlimb_015050" Type="Standard" EnumName="OBJECT_HA_2_LIMB_17" Offset="0x15050" />
+        <Limb Name="object_ha_Standardlimb_01505C" Type="Standard" EnumName="OBJECT_HA_2_LIMB_18" Offset="0x1505C" />
+        <Limb Name="object_ha_Standardlimb_015068" Type="Standard" EnumName="OBJECT_HA_2_LIMB_19" Offset="0x15068" />
+        <Skeleton Name="object_ha_Skel_0150D8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_HA_2_LIMB_NONE" LimbMax="OBJECT_HA_2_LIMB_MAX" EnumName="object_ha_2_Limbs" Offset="0x150D8" />
+    </File>
+</Root>

@@ -1,0 +1,59 @@
+﻿<Root>
+    <File Name="object_warp1" Segment="6">
+        <DList Name="object_warp1_DL_0001A0" Offset="0x1A0" />
+        <Texture Name="object_warp1_Tex_0002C0" OutName="tex_0002C0" Format="i8" Width="64" Height="64" Offset="0x2C0" />
+        <Animation Name="object_warp1_Anim_001374" Offset="0x1374" />
+        <DList Name="object_warp1_DL_001750" Offset="0x1750" />
+        <DList Name="object_warp1_DL_001828" Offset="0x1828" />
+        <DList Name="object_warp1_DL_0018B0" Offset="0x18B0" />
+        <DList Name="object_warp1_DL_001938" Offset="0x1938" />
+        <DList Name="object_warp1_DL_0019C0" Offset="0x19C0" />
+        <DList Name="object_warp1_DL_001A48" Offset="0x1A48" />
+        <DList Name="object_warp1_DL_001AD0" Offset="0x1AD0" />
+        <Texture Name="object_warp1_Tex_001B58" OutName="tex_001B58" Format="i8" Width="64" Height="64" Offset="0x1B58" />
+        <Limb Name="object_warp1_Standardlimb_002B58" Type="Standard" EnumName="OBJECT_WARP1_LIMB_01" Offset="0x2B58" />
+        <Limb Name="object_warp1_Standardlimb_002B64" Type="Standard" EnumName="OBJECT_WARP1_LIMB_02" Offset="0x2B64" />
+        <Limb Name="object_warp1_Standardlimb_002B70" Type="Standard" EnumName="OBJECT_WARP1_LIMB_03" Offset="0x2B70" />
+        <Limb Name="object_warp1_Standardlimb_002B7C" Type="Standard" EnumName="OBJECT_WARP1_LIMB_04" Offset="0x2B7C" />
+        <Limb Name="object_warp1_Standardlimb_002B88" Type="Standard" EnumName="OBJECT_WARP1_LIMB_05" Offset="0x2B88" />
+        <Limb Name="object_warp1_Standardlimb_002B94" Type="Standard" EnumName="OBJECT_WARP1_LIMB_06" Offset="0x2B94" />
+        <Limb Name="object_warp1_Standardlimb_002BA0" Type="Standard" EnumName="OBJECT_WARP1_LIMB_07" Offset="0x2BA0" />
+        <Limb Name="object_warp1_Standardlimb_002BAC" Type="Standard" EnumName="OBJECT_WARP1_LIMB_08" Offset="0x2BAC" />
+        <Limb Name="object_warp1_Standardlimb_002BB8" Type="Standard" EnumName="OBJECT_WARP1_LIMB_09" Offset="0x2BB8" />
+        <Limb Name="object_warp1_Standardlimb_002BC4" Type="Standard" EnumName="OBJECT_WARP1_LIMB_0A" Offset="0x2BC4" />
+        <Limb Name="object_warp1_Standardlimb_002BD0" Type="Standard" EnumName="OBJECT_WARP1_LIMB_0B" Offset="0x2BD0" />
+        <Limb Name="object_warp1_Standardlimb_002BDC" Type="Standard" EnumName="OBJECT_WARP1_LIMB_0C" Offset="0x2BDC" />
+        <Limb Name="object_warp1_Standardlimb_002BE8" Type="Standard" EnumName="OBJECT_WARP1_LIMB_0D" Offset="0x2BE8" />
+        <Limb Name="object_warp1_Standardlimb_002BF4" Type="Standard" EnumName="OBJECT_WARP1_LIMB_0E" Offset="0x2BF4" />
+        <Limb Name="object_warp1_Standardlimb_002C00" Type="Standard" EnumName="OBJECT_WARP1_LIMB_0F" Offset="0x2C00" />
+        <Limb Name="object_warp1_Standardlimb_002C0C" Type="Standard" EnumName="OBJECT_WARP1_LIMB_10" Offset="0x2C0C" />
+        <Limb Name="object_warp1_Standardlimb_002C18" Type="Standard" EnumName="OBJECT_WARP1_LIMB_11" Offset="0x2C18" />
+        <Limb Name="object_warp1_Standardlimb_002C24" Type="Standard" EnumName="OBJECT_WARP1_LIMB_12" Offset="0x2C24" />
+        <Limb Name="object_warp1_Standardlimb_002C30" Type="Standard" EnumName="OBJECT_WARP1_LIMB_13" Offset="0x2C30" />
+        <Limb Name="object_warp1_Standardlimb_002C3C" Type="Standard" EnumName="OBJECT_WARP1_LIMB_14" Offset="0x2C3C" />
+        <Limb Name="object_warp1_Standardlimb_002C48" Type="Standard" EnumName="OBJECT_WARP1_LIMB_15" Offset="0x2C48" />
+        <Skeleton Name="object_warp1_Skel_002CA8" Type="Normal" LimbType="Standard" LimbNone="OBJECT_WARP1_LIMB_NONE" LimbMax="OBJECT_WARP1_LIMB_MAX" EnumName="object_warp1_Limbs" Offset="0x2CA8" />
+        <DList Name="object_warp1_DL_003230" Offset="0x3230" />
+        <DList Name="object_warp1_DL_0034C8" Offset="0x34C8" />
+        <Texture Name="object_warp1_Tex_0034D0" OutName="tex_0034D0" Format="i8" Width="32" Height="64" Offset="0x34D0" />
+        <Texture Name="object_warp1_Tex_003CD0" OutName="tex_003CD0" Format="i8" Width="32" Height="64" Offset="0x3CD0" />
+        <TextureAnimation Name="object_warp1_Matanimheader_0044D8" Offset="0x44D8" />
+        <DList Name="object_warp1_DL_004690" Offset="0x4690" />
+        <DList Name="object_warp1_DL_0047C8" Offset="0x47C8" />
+        <Texture Name="object_warp1_Tex_0047D0" OutName="tex_0047D0" Format="i4" Width="64" Height="64" Offset="0x47D0" />
+        <Texture Name="object_warp1_Tex_004FD0" OutName="tex_004FD0" Format="i4" Width="64" Height="64" Offset="0x4FD0" />
+        <TextureAnimation Name="object_warp1_Matanimheader_0057D8" Offset="0x57D8" />
+        <DList Name="object_warp1_DL_0058C0" Offset="0x58C0" />
+        <DList Name="object_warp1_DL_0058C8" Offset="0x58C8" />
+        <Texture Name="object_warp1_Tex_005A30" OutName="tex_005A30" Format="i4" Width="64" Height="64" Offset="0x5A30" />
+        <Texture Name="object_warp1_Tex_006230" OutName="tex_006230" Format="i4" Width="64" Height="64" Offset="0x6230" />
+        <Texture Name="object_warp1_Tex_006A30" OutName="tex_006A30" Format="i8" Width="32" Height="64" Offset="0x6A30" />
+        <TextureAnimation Name="object_warp1_Matanimheader_007238" Offset="0x7238" />
+        <DList Name="object_warp1_DL_0076C0" Offset="0x76C0" />
+        <Texture Name="object_warp1_TLUT_0078A0" OutName="tlut_0078A0" Format="rgba16" Width="4" Height="4" Offset="0x78A0" />
+        <Texture Name="object_warp1_TLUT_0078C0" OutName="tlut_0078C0" Format="rgba16" Width="4" Height="4" Offset="0x78C0" />
+        <Texture Name="object_warp1_Tex_0078E0" OutName="tex_0078E0" Format="ci4" Width="64" Height="64" Offset="0x78E0" />
+        <Texture Name="object_warp1_Tex_0080E0" OutName="tex_0080E0" Format="ci4" Width="64" Height="64" Offset="0x80E0" />
+        <Collision Name="object_warp1_Colheader_008BD4" Offset="0x8BD4" />
+    </File>
+</Root>

@@ -1,16 +1,22 @@
+/*
+ * File: z_en_stop_heishi.c
+ * Overlay: ovl_En_Stop_heishi
+ * Description: Clock Town - Gate-Blocking Soldier
+ */
+
 #include "z_en_stop_heishi.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnStopheishi*)thisx)
 
-void EnStopheishi_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnStopheishi_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnStopheishi_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnStopheishi_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnStopheishi_Init(Actor* thisx, PlayState* play);
+void EnStopheishi_Destroy(Actor* thisx, PlayState* play);
+void EnStopheishi_Update(Actor* thisx, PlayState* play);
+void EnStopheishi_Draw(Actor* thisx, PlayState* play);
 
-void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx);
-void func_80AE85C4(EnStopheishi* this, GlobalContext* globalCtx);
+void func_80AE7F34(EnStopheishi* this, PlayState* play);
+void func_80AE85C4(EnStopheishi* this, PlayState* play);
 
 #if 0
 const ActorInit En_Stop_heishi_InitVars = {

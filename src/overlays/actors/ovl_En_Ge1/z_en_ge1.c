@@ -1,13 +1,19 @@
+/*
+ * File: z_en_ge1.c
+ * Overlay: ovl_En_Ge1
+ * Description: White-clad Gerudo Pirate
+ */
+
 #include "z_en_ge1.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnGe1*)thisx)
 
-void EnGe1_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnGe1_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnGe1_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnGe1_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnGe1_Init(Actor* thisx, PlayState* play);
+void EnGe1_Destroy(Actor* thisx, PlayState* play);
+void EnGe1_Update(Actor* thisx, PlayState* play);
+void EnGe1_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Ge1_InitVars = {

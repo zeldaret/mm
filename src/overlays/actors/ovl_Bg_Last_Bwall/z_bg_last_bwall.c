@@ -1,13 +1,19 @@
+/*
+ * File: z_bg_last_bwall.c
+ * Overlay: ovl_Bg_Last_Bwall
+ * Description: Link Moon Dungeon - Bombable, Climbable Wall
+ */
+
 #include "z_bg_last_bwall.h"
 
 #define FLAGS 0x00000000
 
 #define THIS ((BgLastBwall*)thisx)
 
-void BgLastBwall_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgLastBwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgLastBwall_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgLastBwall_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgLastBwall_Init(Actor* thisx, PlayState* play);
+void BgLastBwall_Destroy(Actor* thisx, PlayState* play);
+void BgLastBwall_Update(Actor* thisx, PlayState* play);
+void BgLastBwall_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Bg_Last_Bwall_InitVars = {
@@ -37,7 +43,7 @@ static ColliderTrisElementInit D_80C189C0[2] = {
 // static ColliderTrisInit sTrisInit = {
 static ColliderTrisInit D_80C18A38 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_TRIS, },
-    2, D_80C189C0, // sTrisElementsInit,
+    ARRAY_COUNT(sTrisElementsInit), D_80C189C0, // sTrisElementsInit,
 };
 
 // static InitChainEntry sInitChain[] = {

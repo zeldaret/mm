@@ -1,7 +1,17 @@
 #ifndef _ULTRA64_HARDWARE_H_
 #define _ULTRA64_HARDWARE_H_
 
-#define HW_REG(reg, type) *(volatile type*)((reg) | 0xa0000000)
+// Segment Wrapper
+// Uncached RDRAM
+#define KSEG1 0xA0000000 // 0xA0000000 - 0xBFFFFFFF  Physical memory, uncached, unmapped
+#define RDRAM_UNCACHED KSEG1
+
+// Cached RDRAM
+#define KSEG0 0x80000000 // 0x80000000 - 0x9FFFFFFF  Physical memory, cached, unmapped
+#define RDRAM_CACHED KSEG0
+
+// Volatile access wrapper, enforcing uncached memory
+#define HW_REG(reg, type) *(volatile type*)((reg) | KSEG1)
 
 #define AI_DRAM_ADDR_REG   0x04500000
 #define AI_LEN_REG         0x04500004
@@ -43,6 +53,8 @@
 #define SP_DMEM_START  0x04000000
 #define SP_DMEM_SIZE   0x1000
 
+#define TMEM_SIZE 0x1000
+
 #define SP_MEM_ADDR_REG   0x04040000
 #define SP_DRAM_ADDR_REG  0x04040004
 #define SP_RD_LEN_REG     0x04040008
@@ -70,7 +82,7 @@
 
 #define PI_STATUS_BUSY    (1 << 0)
 #define PI_STATUS_IOBUSY  (1 << 1)
-#define PI_STATUS_ERROR   (PI_STATUS_BUSY | PI_STATUS_IOBUSY)
+#define PI_STATUS_ERROR   (1 << 2)
 
 #define PI_STATUS_RESET_CONTROLLER  (1 << 0)
 #define PI_STATUS_CLEAR_INTR        (1 << 1)
@@ -86,6 +98,7 @@
 #define SI_STATUS_INTERRUPT     (1 << 12)
 
 #define PIF_RAM_START  0x1FC007C0
+#define PIF_RAM_SIZE   0x40
 
 #define MI_INIT_MODE_REG  0x04300000
 #define MI_MODE_REG       MI_INIT_MODE_REG

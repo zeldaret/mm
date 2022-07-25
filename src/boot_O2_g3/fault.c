@@ -29,11 +29,11 @@ const char* sFpuExceptions[] = {
 };
 
 void Fault_SleepImpl(u32 duration) {
-    u64 value = (duration * OS_CPU_COUNTER) / 1000ull;
+    u64 value = (duration * OS_CPU_COUNTER) / 1000ULL;
     Sleep_Cycles(value);
 }
 
-void Fault_AddClient(FaultClient* client, fault_client_func callback, void* param0, void* param1) {
+void Fault_AddClient(FaultClient* client, void* callback, void* param0, void* param1) {
     OSIntMask mask;
     u32 alreadyExists = 0;
 
@@ -104,7 +104,7 @@ void Fault_RemoveClient(FaultClient* client) {
     }
 }
 
-void Fault_AddAddrConvClient(FaultAddrConvClient* client, FaultAddrConvFunc callback, void* param) {
+void Fault_AddAddrConvClient(FaultAddrConvClient* client, void* callback, void* param) {
     OSIntMask mask;
     u32 alreadyExists = 0;
 
@@ -269,9 +269,9 @@ void Fault_DrawCornerRec(u16 color) {
 
 void Fault_PrintFReg(s32 idx, f32* value) {
     u32 raw = *(u32*)value;
-    s32 v0 = ((raw & 0x7f800000) >> 0x17) - 0x7f;
+    s32 v0 = ((raw & 0x7F800000) >> 0x17) - 0x7F;
 
-    if ((v0 >= -0x7e && v0 < 0x80) || raw == 0) {
+    if ((v0 >= -0x7E && v0 < 0x80) || raw == 0) {
         FaultDrawer_Printf("F%02d:%14.7e ", idx, *value);
     } else {
         FaultDrawer_Printf("F%02d:  %08x(16) ", idx, raw);
@@ -320,7 +320,7 @@ void osSyncPrintfFPCR(u32 value) {
 
 void Fault_PrintThreadContext(OSThread* t) {
     __OSThreadContext* ctx;
-    s32 causeStrIdx = (s32)((((u32)t->context.cause >> 2) & 0x1f) << 0x10) >> 0x10;
+    s32 causeStrIdx = (s32)((((u32)t->context.cause >> 2) & 0x1F) << 0x10) >> 0x10;
     if (causeStrIdx == 0x17) {
         causeStrIdx = 0x10;
     }
@@ -383,11 +383,11 @@ void Fault_PrintThreadContext(OSThread* t) {
 
 void osSyncPrintfThreadContext(OSThread* t) {
     __OSThreadContext* ctx;
-    s32 causeStrIdx = (s32)((((u32)t->context.cause >> 2) & 0x1f) << 0x10) >> 0x10;
+    s32 causeStrIdx = (s32)((((u32)t->context.cause >> 2) & 0x1F) << 0x10) >> 0x10;
     if (causeStrIdx == 0x17) {
         causeStrIdx = 0x10;
     }
-    if (causeStrIdx == 0x1f) {
+    if (causeStrIdx == 0x1F) {
         causeStrIdx = 0x11;
     }
 
@@ -416,29 +416,29 @@ void osSyncPrintfThreadContext(OSThread* t) {
     osSyncPrintfFReg(6, &ctx->fp6.f.f_even);
     osSyncPrintf("\n");
     osSyncPrintfFReg(8, &ctx->fp8.f.f_even);
-    osSyncPrintfFReg(0xa, &ctx->fp10.f.f_even);
+    osSyncPrintfFReg(10, &ctx->fp10.f.f_even);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(0xc, &ctx->fp12.f.f_even);
-    osSyncPrintfFReg(0xe, &ctx->fp14.f.f_even);
+    osSyncPrintfFReg(12, &ctx->fp12.f.f_even);
+    osSyncPrintfFReg(14, &ctx->fp14.f.f_even);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(0x10, &ctx->fp16.f.f_even);
-    osSyncPrintfFReg(0x12, &ctx->fp18.f.f_even);
+    osSyncPrintfFReg(16, &ctx->fp16.f.f_even);
+    osSyncPrintfFReg(18, &ctx->fp18.f.f_even);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(0x14, &ctx->fp20.f.f_even);
-    osSyncPrintfFReg(0x16, &ctx->fp22.f.f_even);
+    osSyncPrintfFReg(20, &ctx->fp20.f.f_even);
+    osSyncPrintfFReg(22, &ctx->fp22.f.f_even);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(0x18, &ctx->fp24.f.f_even);
-    osSyncPrintfFReg(0x1a, &ctx->fp26.f.f_even);
+    osSyncPrintfFReg(24, &ctx->fp24.f.f_even);
+    osSyncPrintfFReg(26, &ctx->fp26.f.f_even);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(0x1c, &ctx->fp28.f.f_even);
-    osSyncPrintfFReg(0x1e, &ctx->fp30.f.f_even);
+    osSyncPrintfFReg(28, &ctx->fp28.f.f_even);
+    osSyncPrintfFReg(30, &ctx->fp30.f.f_even);
     osSyncPrintf("\n");
 }
 
 OSThread* Fault_FindFaultedThread() {
     OSThread* iter = __osGetActiveQueue();
     while (iter->priority != -1) {
-        if (iter->priority > 0 && iter->priority < 0x7f && (iter->flags & 3)) {
+        if (iter->priority > 0 && iter->priority < 0x7F && (iter->flags & 3)) {
             return iter;
         }
         iter = iter->tlnext;
@@ -459,7 +459,7 @@ void Fault_Wait5Seconds(void) {
 void Fault_WaitForButtonCombo(void) {
     Input* input = &sFaultContext->padInput[0];
 
-    FaultDrawer_SetForeColor(0xffff);
+    FaultDrawer_SetForeColor(0xFFFF);
     FaultDrawer_SetBackColor(1);
     do {
         do {
@@ -480,8 +480,8 @@ void Fault_DrawMemDumpPage(const char* title, u32* addr, u32 param_3) {
     if (alignedAddr < (u32*)0x80000000) {
         alignedAddr = (u32*)0x80000000;
     }
-    if (alignedAddr > (u32*)0x807fff00) {
-        alignedAddr = (u32*)0x807fff00;
+    if (alignedAddr > (u32*)0x807FFF00) {
+        alignedAddr = (u32*)0x807FFF00;
     }
 
     alignedAddr = (u32*)((u32)alignedAddr & ~3);
@@ -513,8 +513,8 @@ void Fault_DrawMemDump(u32 pc, u32 sp, u32 unk0, u32 unk1) {
         if (addr < 0x80000000) {
             addr = 0x80000000;
         }
-        if (addr > 0x807fff00) {
-            addr = 0x807fff00;
+        if (addr > 0x807FFF00) {
+            addr = 0x807FFF00;
         }
 
         addr &= ~0xF;
@@ -575,66 +575,59 @@ void Fault_DrawMemDump(u32 pc, u32 sp, u32 unk0, u32 unk1) {
     sFaultContext->faultActive = 1;
 }
 
-#ifdef NON_MATCHING
-// This function still needs a bit of work
-void Fault_FindNextStackCall(u32** sp, u32** pc, u32** ra) {
-    u32* currentSp;
-    u32* currentPc;
-    u32* currentRa;
-    u32 lastInst;
-    u32 currInst;
+void Fault_FindNextStackCall(uintptr_t* spPtr, uintptr_t* pcPtr, uintptr_t* raPtr) {
+    uintptr_t sp = *spPtr;
+    uintptr_t pc = *pcPtr;
+    uintptr_t ra = *raPtr;
+    u32 lastOpc;
+    u16 opcHi;
+    s16 opcLo;
+    u32 imm;
 
-    currentSp = *sp;
-    currentPc = *pc;
-    currentRa = *ra;
-
-    if ((((u32)currentSp & 3) != 0) || (currentSp < (u32*)0x80000000) || (currentSp >= (u32*)0xC0000000) ||
-        (((u32)currentRa & 3) != 0) || (currentRa < (u32*)0x80000000) || (currentRa >= (u32*)0xC0000000)) {
-        *sp = NULL;
-        *pc = NULL;
-        *ra = NULL;
+    if (sp & 3 || sp < 0x80000000 || sp >= 0xC0000000 || ra & 3 || ra < 0x80000000 || ra >= 0xC0000000) {
+        *spPtr = 0;
+        *pcPtr = 0;
+        *raPtr = 0;
         return;
     }
 
-    if ((((u32)currentPc & 3) != 0) || (currentPc < (u32*)0x80000000) || (currentPc >= (u32*)0xC0000000)) {
-        *pc = currentRa;
+    if (pc & 3 || pc < 0x80000000 || pc >= 0xC0000000) {
+        *pcPtr = ra;
         return;
     }
 
-    lastInst = 0;
-    while (1) {
-        currInst = *currentPc;
-        if (((currInst >> 0x10) & 0xFFFF) == 0x8FBF) {
-            currentRa = *(u32**)((u32)currentSp + (s16)currInst);
-        } else if (((currInst >> 0x10) & 0xFFFF) == 0x27BD) {
-            currentSp = (u32*)((u32)currentSp + (s16)currInst);
-        } else if (currInst == 0x42000018) {
-            currentSp = NULL;
-            currentPc = NULL;
-            currentRa = NULL;
-            break;
-        }
+    lastOpc = 0;
+    while (true) {
+        opcHi = *(uintptr_t*)pc >> 16;
+        opcLo = *(uintptr_t*)pc & 0xFFFF;
+        imm = opcLo;
 
-        if (lastInst == 0x03E00008) {
-            break;
+        if (opcHi == 0x8FBF) {
+            ra = *(uintptr_t*)(sp + imm);
+        } else if (opcHi == 0x27BD) {
+            sp += imm;
+        } else if (*(uintptr_t*)pc == 0x42000018) {
+            sp = 0;
+            pc = 0;
+            ra = 0;
+            goto end;
         }
-
-        if ((lastInst >> 0x1A) == 2) {
-            currentPc = (u32*)((((u32)currentPc >> 0x1C) << 0x1C) | ((lastInst << 6) >> 4));
-            break;
+        if (lastOpc == 0x3E00008) {
+            pc = ra;
+            goto end;
+        } else if ((lastOpc >> 26) == 2) {
+            pc = pc >> 28 << 28 | lastOpc << 6 >> 4;
+            goto end;
         }
-
-        lastInst = currInst;
-        currentPc++;
+        lastOpc = *(uintptr_t*)pc;
+        pc += 4;
     }
 
-    *sp = currentSp;
-    *pc = currentPc;
-    *ra = currentRa;
+end:
+    *spPtr = sp;
+    *pcPtr = pc;
+    *raPtr = ra;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/fault/Fault_FindNextStackCall.s")
-#endif
 
 void Fault_DrawStackTrace(OSThread* t, u32 flags) {
     s32 y;
@@ -664,7 +657,7 @@ void Fault_DrawStackTrace(OSThread* t, u32 flags) {
             FaultDrawer_Printf(" -> ????????");
         }
 
-        Fault_FindNextStackCall((u32**)&sp, (u32**)&pc, (u32**)&ra);
+        Fault_FindNextStackCall(&sp, &pc, &ra);
     }
 }
 
@@ -695,7 +688,7 @@ void osSyncPrintfStackTrace(OSThread* t, u32 flags) {
         }
         osSyncPrintf("\n");
 
-        Fault_FindNextStackCall((u32**)&sp, (u32**)&pc, (u32**)&ra);
+        Fault_FindNextStackCall(&sp, &pc, &ra);
     }
 }
 
@@ -703,18 +696,19 @@ void Fault_ResumeThread(OSThread* t) {
     t->context.cause = 0;
     t->context.fpcsr = 0;
     t->context.pc += 4;
-    *(u32*)t->context.pc = 0xd;
+    *(u32*)t->context.pc = 0x0000000D; // write in a break instruction
     osWritebackDCache((void*)t->context.pc, 4);
     osInvalICache((void*)t->context.pc, 4);
     osStartThread(t);
 }
 
-void Fault_CommitFB() {
+void Fault_CommitFB(void) {
     u16* fb;
+
     osViSetYScale(1.0f);
     osViSetMode(&osViModeNtscLan1);
     osViSetSpecialFeatures(0x42); // gama_disable|dither_fliter_enable_aa_mode3_disable
-    osViBlack(0);
+    osViBlack(false);
 
     if (sFaultContext->fb) {
         fb = sFaultContext->fb;
@@ -751,32 +745,33 @@ void Fault_ProcessClients(void) {
 }
 
 #ifdef NON_MATCHING
-// regalloc and ordering differences around the two bool variables (faultCustomOptions and faultCopyToLog)
+// needs in-function static bss
 void Fault_SetOptionsFromController3(void) {
-    Input* input3;
+    static u32 faultCustomOptions;
+    Input* input3 = &sFaultContext->padInput[3];
     u32 pad;
     u32 graphPC;
     u32 graphRA;
     u32 graphSP;
 
-    input3 = &sFaultContext->padInput[3];
-
     if (CHECK_BTN_ALL(input3->press.button, 0x80)) {
-        faultCustomOptions = faultCustomOptions == 0;
+        faultCustomOptions = !faultCustomOptions;
     }
 
     if (faultCustomOptions) {
         graphPC = sGraphThread.context.pc;
         graphRA = sGraphThread.context.ra;
         graphSP = sGraphThread.context.sp;
-        if (CHECK_BTN_ALL(input3->press.button, BTN_R)) {
+        if (CHECK_BTN_ALL(input3->cur.button, BTN_R)) {
+            static u32 faultCopyToLog;
+
             faultCopyToLog = !faultCopyToLog;
             FaultDrawer_SetOsSyncPrintfEnabled(faultCopyToLog);
         }
-        if (CHECK_BTN_ALL(input3->press.button, BTN_A)) {
+        if (CHECK_BTN_ALL(input3->cur.button, BTN_A)) {
             osSyncPrintf("GRAPH PC=%08x RA=%08x STACK=%08x\n", graphPC, graphRA, graphSP);
         }
-        if (CHECK_BTN_ALL(input3->press.button, BTN_B)) {
+        if (CHECK_BTN_ALL(input3->cur.button, BTN_B)) {
             FaultDrawer_SetDrawerFB(osViGetNextFramebuffer(), 0x140, 0xF0);
             Fault_DrawRec(0, 0xD7, 0x140, 9, 1);
             FaultDrawer_SetCharPad(-2, 0);
@@ -802,7 +797,7 @@ void Fault_ThreadEntry(void* arg) {
     osSetEventMesg(12, &sFaultContext->queue, (OSMesg)2);
     while (1) {
         do {
-            osRecvMesg(&sFaultContext->queue, &msg, 1);
+            osRecvMesg(&sFaultContext->queue, &msg, OS_MESG_BLOCK);
 
             if (msg == (OSMesg)1) {
                 sFaultContext->msgId = 1;
@@ -893,7 +888,7 @@ void Fault_Start(void) {
     sFaultContext->clients = NULL;
     sFaultContext->faultActive = 0;
     gFaultStruct.faultHandlerEnabled = 1;
-    osCreateMesgQueue(&sFaultContext->queue, sFaultContext->msg, 1);
+    osCreateMesgQueue(&sFaultContext->queue, sFaultContext->msg, ARRAY_COUNT(sFaultContext->msg));
     StackCheck_Init(&sFaultThreadInfo, sFaultStack, sFaultStack + sizeof(sFaultStack), 0, 0x100, "fault");
     osCreateThread(&sFaultContext->thread, 2, Fault_ThreadEntry, NULL, sFaultStack + sizeof(sFaultStack), 0x7F);
     osStartThread(&sFaultContext->thread);
@@ -910,8 +905,8 @@ void Fault_HangupFaultClient(const char* arg0, char* arg1) {
 
 void Fault_AddHungupAndCrashImpl(const char* arg0, char* arg1) {
     FaultClient client;
-    char padd[4];
-    Fault_AddClient(&client, (fault_client_func)Fault_HangupFaultClient, (void*)arg0, arg1);
+    u32 pad;
+    Fault_AddClient(&client, Fault_HangupFaultClient, (void*)arg0, arg1);
     *(u32*)0x11111111 = 0; // trigger an exception
 }
 

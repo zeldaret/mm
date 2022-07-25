@@ -1,17 +1,23 @@
+/*
+ * File: z_dm_char09.c
+ * Overlay: ovl_Dm_Char09
+ * Description: Pirates' Fortress cutscene characters
+ */
+
 #include "z_dm_char09.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((DmChar09*)thisx)
 
-void DmChar09_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmChar09_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmChar09_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmChar09_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmChar09_Init(Actor* thisx, PlayState* play);
+void DmChar09_Destroy(Actor* thisx, PlayState* play);
+void DmChar09_Update(Actor* thisx, PlayState* play);
+void DmChar09_Draw(Actor* thisx, PlayState* play);
 
-void func_80AB1FDC(DmChar09* this, GlobalContext* globalCtx);
-void func_80AB2258(DmChar09* this, GlobalContext* globalCtx);
-void func_80AB2268(DmChar09* this, GlobalContext* globalCtx);
+void func_80AB1FDC(DmChar09* this, PlayState* play);
+void func_80AB2258(DmChar09* this, PlayState* play);
+void func_80AB2268(DmChar09* this, PlayState* play);
 
 #if 0
 const ActorInit Dm_Char09_InitVars = {

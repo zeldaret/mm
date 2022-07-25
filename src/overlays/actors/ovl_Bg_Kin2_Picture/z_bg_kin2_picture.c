@@ -1,19 +1,25 @@
+/*
+ * File: z_bg_kin2_picture.c
+ * Overlay: ovl_Bg_Kin2_Picture
+ * Description: Ocean Spider House - Skullkid Painting
+ */
+
 #include "z_bg_kin2_picture.h"
 
 #define FLAGS 0x00000000
 
 #define THIS ((BgKin2Picture*)thisx)
 
-void BgKin2Picture_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgKin2Picture_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgKin2Picture_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgKin2Picture_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgKin2Picture_Init(Actor* thisx, PlayState* play);
+void BgKin2Picture_Destroy(Actor* thisx, PlayState* play);
+void BgKin2Picture_Update(Actor* thisx, PlayState* play);
+void BgKin2Picture_Draw(Actor* thisx, PlayState* play);
 
-void func_80B6F4D4(BgKin2Picture* this, GlobalContext* globalCtx);
-void func_80B6F5B8(BgKin2Picture* this, GlobalContext* globalCtx);
-void func_80B6F640(BgKin2Picture* this, GlobalContext* globalCtx);
-void func_80B6F72C(BgKin2Picture* this, GlobalContext* globalCtx);
-void func_80B6F90C(BgKin2Picture* this, GlobalContext* globalCtx);
+void func_80B6F4D4(BgKin2Picture* this, PlayState* play);
+void func_80B6F5B8(BgKin2Picture* this, PlayState* play);
+void func_80B6F640(BgKin2Picture* this, PlayState* play);
+void func_80B6F72C(BgKin2Picture* this, PlayState* play);
+void func_80B6F90C(BgKin2Picture* this, PlayState* play);
 
 #if 0
 const ActorInit Bg_Kin2_Picture_InitVars = {
@@ -43,13 +49,13 @@ static ColliderTrisElementInit D_80B6F990[2] = {
 // static ColliderTrisInit sTrisInit = {
 static ColliderTrisInit D_80B6FA08 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_TRIS, },
-    2, D_80B6F990, // sTrisElementsInit,
+    ARRAY_COUNT(sTrisElementsInit), D_80B6F990, // sTrisElementsInit,
 };
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B6FA24[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(minVelocityY, -20000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),

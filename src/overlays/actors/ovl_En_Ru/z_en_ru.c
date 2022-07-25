@@ -1,15 +1,21 @@
+/*
+ * File: z_en_ru.c
+ * Overlay: ovl_En_Ru
+ * Description: OoT's Adult Ruto (unused)
+ */
+
 #include "z_en_ru.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnRu*)thisx)
 
-void EnRu_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnRu_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnRu_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnRu_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnRu_Init(Actor* thisx, PlayState* play);
+void EnRu_Destroy(Actor* thisx, PlayState* play);
+void EnRu_Update(Actor* thisx, PlayState* play);
+void EnRu_Draw(Actor* thisx, PlayState* play);
 
-void func_80A38DF4(EnRu* this, GlobalContext* globalCtx);
+void func_80A38DF4(EnRu* this, PlayState* play);
 
 #if 0
 const ActorInit En_Ru_InitVars = {

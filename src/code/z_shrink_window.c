@@ -2,6 +2,7 @@
  * File: z_shrink_window.c
  * Description: Draws black top/bottom/side borders on the viewing window (e.g. Z-targeting, talking to NPC)
  */
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 ShrinkWindowContext gShrinkWindowContext;

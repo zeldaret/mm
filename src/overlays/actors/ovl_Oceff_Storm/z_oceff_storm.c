@@ -1,16 +1,22 @@
+/*
+ * File: z_oceff_storm.c
+ * Overlay: ovl_Oceff_Storm
+ * Description: Song of Storms Ocarina Effect
+ */
+
 #include "z_oceff_storm.h"
 
-#define FLAGS 0x02000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((OceffStorm*)thisx)
 
-void OceffStorm_Init(Actor* thisx, GlobalContext* globalCtx);
-void OceffStorm_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void OceffStorm_Update(Actor* thisx, GlobalContext* globalCtx);
-void OceffStorm_Draw(Actor* thisx, GlobalContext* globalCtx);
+void OceffStorm_Init(Actor* thisx, PlayState* play);
+void OceffStorm_Destroy(Actor* thisx, PlayState* play);
+void OceffStorm_Update(Actor* thisx, PlayState* play);
+void OceffStorm_Draw(Actor* thisx, PlayState* play);
 
-void func_80981928(OceffStorm* this, GlobalContext* globalCtx);
-void func_80981B48(OceffStorm* this, GlobalContext* globalCtx);
+void func_80981928(OceffStorm* this, PlayState* play);
+void func_80981B48(OceffStorm* this, PlayState* play);
 
 void OceffStorm_SetupAction(OceffStorm* this, OceffStormActionFunc actionFunc);
 

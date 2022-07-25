@@ -1,0 +1,9 @@
+﻿<Root>
+    <File Name="object_dkjail_obj" Segment="6">
+        <DList Name="object_dkjail_obj_DL_000080" Offset="0x80" />
+        <DList Name="object_dkjail_obj_DL_000150" Offset="0x150" />
+        <Texture Name="object_dkjail_obj_Tex_000158" OutName="tex_000158" Format="rgba16" Width="32" Height="32" Offset="0x158" />
+        <Texture Name="object_dkjail_obj_Tex_000958" OutName="tex_000958" Format="ia8" Width="32" Height="64" Offset="0x958" />
+        <Collision Name="object_dkjail_obj_Colheader_0011A8" Offset="0x11A8" />
+    </File>
+</Root>

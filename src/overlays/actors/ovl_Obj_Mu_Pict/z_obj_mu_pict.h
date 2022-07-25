@@ -5,9 +5,9 @@
 
 struct ObjMuPict;
 
-#define UNK_ACTOR_PARAM ((this->actor.params & 0xF000) >> 0xC)
+#define OBJMUPICT_GET_F000(thisx) (((thisx)->params & 0xF000) >> 0xC)
 
-typedef void (*ObjMuPictActionFunc)(struct ObjMuPict*, GlobalContext*);
+typedef void (*ObjMuPictActionFunc)(struct ObjMuPict*, PlayState*);
 
 typedef struct ObjMuPict {
     /* 0x000 */ Actor actor;

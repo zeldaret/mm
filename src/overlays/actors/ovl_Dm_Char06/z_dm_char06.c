@@ -1,15 +1,21 @@
+/*
+ * File: z_dm_char06.c
+ * Overlay: ovl_Dm_Char06
+ * Description: Mountain Village Snowy landscape fadeout in post-Snowhead thawing cutscene
+ */
+
 #include "z_dm_char06.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((DmChar06*)thisx)
 
-void DmChar06_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmChar06_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmChar06_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmChar06_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmChar06_Init(Actor* thisx, PlayState* play);
+void DmChar06_Destroy(Actor* thisx, PlayState* play);
+void DmChar06_Update(Actor* thisx, PlayState* play);
+void DmChar06_Draw(Actor* thisx, PlayState* play);
 
-void func_80AAE6F0(DmChar06* this, GlobalContext* globalCtx);
+void func_80AAE6F0(DmChar06* this, PlayState* play);
 
 void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc);
 

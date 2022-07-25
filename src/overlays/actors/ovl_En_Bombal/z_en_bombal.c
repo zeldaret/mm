@@ -1,17 +1,23 @@
+/*
+ * File: z_en_bombal.c
+ * Overlay: ovl_En_Bombal
+ * Description: Bombers - Majora Balloon
+ */
+
 #include "z_en_bombal.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnBombal*)thisx)
 
-void EnBombal_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnBombal_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBombal_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnBombal_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnBombal_Init(Actor* thisx, PlayState* play);
+void EnBombal_Destroy(Actor* thisx, PlayState* play);
+void EnBombal_Update(Actor* thisx, PlayState* play);
+void EnBombal_Draw(Actor* thisx, PlayState* play);
 
-void func_80C05B3C(EnBombal* this, GlobalContext* globalCtx);
-void func_80C05C44(EnBombal* this, GlobalContext* globalCtx);
-void func_80C05DE8(EnBombal* this, GlobalContext* globalCtx);
+void func_80C05B3C(EnBombal* this, PlayState* play);
+void func_80C05C44(EnBombal* this, PlayState* play);
+void func_80C05DE8(EnBombal* this, PlayState* play);
 
 #if 0
 const ActorInit En_Bombal_InitVars = {

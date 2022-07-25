@@ -1,15 +1,21 @@
+/*
+ * File: z_bg_hakugin_elvpole.c
+ * Overlay: ovl_Bg_Hakugin_Elvpole
+ * Description: Raisable pillar in Snowhead Temple Map room
+ */
+
 #include "z_bg_hakugin_elvpole.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgHakuginElvpole*)thisx)
 
-void BgHakuginElvpole_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgHakuginElvpole_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgHakuginElvpole_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgHakuginElvpole_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgHakuginElvpole_Init(Actor* thisx, PlayState* play);
+void BgHakuginElvpole_Destroy(Actor* thisx, PlayState* play);
+void BgHakuginElvpole_Update(Actor* thisx, PlayState* play);
+void BgHakuginElvpole_Draw(Actor* thisx, PlayState* play);
 
-void func_80ABD92C(BgHakuginElvpole* this, GlobalContext* globalCtx);
+void func_80ABD92C(BgHakuginElvpole* this, PlayState* play);
 
 #if 0
 const ActorInit Bg_Hakugin_Elvpole_InitVars = {

@@ -1,12 +1,18 @@
+/*
+ * File: z_obj_makekinsuta.c
+ * Overlay: ovl_Obj_Makekinsuta
+ * Description: Swamp Spider House - Soft soil with Skulltula hiding in it
+ */
+
 #include "z_obj_makekinsuta.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjMakekinsuta*)thisx)
 
-void ObjMakekinsuta_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjMakekinsuta_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjMakekinsuta_Update(Actor* thisx, GlobalContext* globalCtx);
+void ObjMakekinsuta_Init(Actor* thisx, PlayState* play);
+void ObjMakekinsuta_Destroy(Actor* thisx, PlayState* play);
+void ObjMakekinsuta_Update(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Obj_Makekinsuta_InitVars = {

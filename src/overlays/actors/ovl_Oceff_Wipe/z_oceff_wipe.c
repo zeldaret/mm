@@ -1,13 +1,19 @@
+/*
+ * File: z_oceff_wipe.c
+ * Overlay: ovl_Oceff_Wipe
+ * Description: Song of Time Ocarina Effect
+ */
+
 #include "z_oceff_wipe.h"
 
-#define FLAGS 0x02000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((OceffWipe*)thisx)
 
-void OceffWipe_Init(Actor* thisx, GlobalContext* globalCtx);
-void OceffWipe_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void OceffWipe_Update(Actor* thisx, GlobalContext* globalCtx);
-void OceffWipe_Draw(Actor* thisx, GlobalContext* globalCtx);
+void OceffWipe_Init(Actor* thisx, PlayState* play);
+void OceffWipe_Destroy(Actor* thisx, PlayState* play);
+void OceffWipe_Update(Actor* thisx, PlayState* play);
+void OceffWipe_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Oceff_Wipe_InitVars = {

@@ -5,14 +5,13 @@
 
 struct EnMm;
 
-typedef void (*EnMmActionFunc)(struct EnMm*, GlobalContext*);
+typedef void (*EnMmActionFunc)(struct EnMm*, PlayState*);
 
 typedef struct EnMm {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x50];
-    /* 0x0194 */ EnMmActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ColliderCylinder collider;
+    /* 0x190 */ s16 unk_190;
+    /* 0x194 */ EnMmActionFunc actionFunc;
 } EnMm; // size = 0x198
-
-extern const ActorInit En_Mm_InitVars;
 
 #endif // Z_EN_MM_H

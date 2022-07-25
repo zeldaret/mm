@@ -5,7 +5,7 @@
 
 struct EnIn;
 
-typedef void (*EnInActionFunc)(struct EnIn*, GlobalContext*);
+typedef void (*EnInActionFunc)(struct EnIn*, PlayState*);
 
 typedef enum {
     /* 0 */ ENIN_UNK_TYPE,
@@ -36,15 +36,10 @@ typedef struct EnIn {
     /* 0x261 */ u8 unk261;
     /* 0x262 */ Vec3s jointTable[20];
     /* 0x2DA */ Vec3s morphTable[20];
-    /* 0x352 */ s16 unk352;
-    /* 0x354 */ s16 unk354;
-    /* 0x356 */ char unk356[0x2];
-    /* 0x358 */ s16 unk358;
-    /* 0x35A */ s16 unk35A;
-    /* 0x35C */ char unk35C[0x2];
-    /* 0x35E */ s16 unk35E;
-    /* 0x360 */ s16 unk360;
-    /* 0x362 */ char unk362[0x14];
+    /* 0x352 */ Vec3s trackTarget;
+    /* 0x358 */ Vec3s headRot;
+    /* 0x35E */ Vec3s torsoRot;
+    /* 0x364 */ char unk364[0x12];
     /* 0x376 */ s16 unk376[20];
     /* 0x39E */ s16 unk39E[20];
     /* 0x3C6 */ char unk3C6[0xBC];
@@ -64,7 +59,7 @@ typedef struct EnIn {
     /* 0x4B4 */ Vec3f unk4B4;
     /* 0x4C0 */ f32 unk4C0;
     /* 0x4C0 */ f32 unk4C4;
-    /* 0x4C0 */ s32 unk4C8;
+    /* 0x4C0 */ s32 prevTalkState;
 } EnIn; // size = 0x4CC
 
 extern const ActorInit En_In_InitVars;

@@ -1,13 +1,19 @@
+/*
+ * File: z_bg_crace_movebg.c
+ * Overlay: ovl_Bg_Crace_Movebg
+ * Description: Huge sliding doors in Deku Shrine
+ */
+
 #include "z_bg_crace_movebg.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgCraceMovebg*)thisx)
 
-void BgCraceMovebg_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgCraceMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgCraceMovebg_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgCraceMovebg_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgCraceMovebg_Init(Actor* thisx, PlayState* play);
+void BgCraceMovebg_Destroy(Actor* thisx, PlayState* play);
+void BgCraceMovebg_Update(Actor* thisx, PlayState* play);
+void BgCraceMovebg_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Bg_Crace_Movebg_InitVars = {

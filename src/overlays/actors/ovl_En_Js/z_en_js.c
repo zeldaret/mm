@@ -1,13 +1,19 @@
+/*
+ * File: z_en_js.c
+ * Overlay: ovl_En_Js
+ * Description: Moon Child
+ */
+
 #include "z_en_js.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnJs*)thisx)
 
-void EnJs_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnJs_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnJs_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnJs_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnJs_Init(Actor* thisx, PlayState* play);
+void EnJs_Destroy(Actor* thisx, PlayState* play);
+void EnJs_Update(Actor* thisx, PlayState* play);
+void EnJs_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Js_InitVars = {

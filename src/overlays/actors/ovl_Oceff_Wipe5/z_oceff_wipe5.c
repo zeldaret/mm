@@ -1,13 +1,19 @@
+/*
+ * File: z_oceff_wipe5.c
+ * Overlay: ovl_Oceff_Wipe5
+ * Description: Sonata/Lullaby/Bossa Nova/Elegy/Oath Ocarina Effect
+ */
+
 #include "z_oceff_wipe5.h"
 
-#define FLAGS 0x02000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((OceffWipe5*)thisx)
 
-void OceffWipe5_Init(Actor* thisx, GlobalContext* globalCtx);
-void OceffWipe5_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void OceffWipe5_Update(Actor* thisx, GlobalContext* globalCtx);
-void OceffWipe5_Draw(Actor* thisx, GlobalContext* globalCtx);
+void OceffWipe5_Init(Actor* thisx, PlayState* play);
+void OceffWipe5_Destroy(Actor* thisx, PlayState* play);
+void OceffWipe5_Update(Actor* thisx, PlayState* play);
+void OceffWipe5_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Oceff_Wipe5_InitVars = {

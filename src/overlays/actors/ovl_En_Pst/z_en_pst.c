@@ -1,16 +1,22 @@
+/*
+ * File: z_en_pst.c
+ * Overlay: ovl_En_Pst
+ * Description: Postbox
+ */
+
 #include "z_en_pst.h"
 
-#define FLAGS 0x00000001
+#define FLAGS (ACTOR_FLAG_1)
 
 #define THIS ((EnPst*)thisx)
 
-void EnPst_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnPst_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnPst_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnPst_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnPst_Init(Actor* thisx, PlayState* play);
+void EnPst_Destroy(Actor* thisx, PlayState* play);
+void EnPst_Update(Actor* thisx, PlayState* play);
+void EnPst_Draw(Actor* thisx, PlayState* play);
 
-void func_80B2BD98(EnPst* this, GlobalContext* globalCtx);
-void func_80B2BE54(EnPst* this, GlobalContext* globalCtx);
+void func_80B2BD98(EnPst* this, PlayState* play);
+void func_80B2BE54(EnPst* this, PlayState* play);
 
 #if 0
 const ActorInit En_Pst_InitVars = {

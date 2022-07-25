@@ -1,16 +1,22 @@
+/*
+ * File: z_oceff_spot.c
+ * Overlay: ovl_Oceff_Spot
+ * Description: Sun's Song Ocarina Effect
+ */
+
 #include "z_oceff_spot.h"
 
-#define FLAGS 0x02000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((OceffSpot*)thisx)
 
-void OceffSpot_Init(Actor* thisx, GlobalContext* globalCtx);
-void OceffSpot_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void OceffSpot_Update(Actor* thisx, GlobalContext* globalCtx);
-void OceffSpot_Draw(Actor* thisx, GlobalContext* globalCtx);
+void OceffSpot_Init(Actor* thisx, PlayState* play);
+void OceffSpot_Destroy(Actor* thisx, PlayState* play);
+void OceffSpot_Update(Actor* thisx, PlayState* play);
+void OceffSpot_Draw(Actor* thisx, PlayState* play);
 
-void func_809728F8(OceffSpot* this, GlobalContext* globalCtx);
-void func_80972934(OceffSpot* this, GlobalContext* globalCtx);
+void func_809728F8(OceffSpot* this, PlayState* play);
+void func_80972934(OceffSpot* this, PlayState* play);
 
 void OceffSpot_SetupAction(OceffSpot* this, OceffSpotActionFunc actionFunc);
 

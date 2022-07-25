@@ -1,13 +1,19 @@
+/*
+ * File: z_mir_ray2.c
+ * Overlay: ovl_Mir_Ray2
+ * Description: Reflectable light ray (static beam)
+ */
+
 #include "z_mir_ray2.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((MirRay2*)thisx)
 
-void MirRay2_Init(Actor* thisx, GlobalContext* globalCtx);
-void MirRay2_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void MirRay2_Update(Actor* thisx, GlobalContext* globalCtx);
-void MirRay2_Draw(Actor* thisx, GlobalContext* globalCtx);
+void MirRay2_Init(Actor* thisx, PlayState* play);
+void MirRay2_Destroy(Actor* thisx, PlayState* play);
+void MirRay2_Update(Actor* thisx, PlayState* play);
+void MirRay2_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Mir_Ray2_InitVars = {
@@ -33,7 +39,7 @@ static ColliderJntSphElementInit D_80AF4350[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80AF4374 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_OTHER, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_JNTSPH, },
-    1, D_80AF4350, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80AF4350, // sJntSphElementsInit,
 };
 
 #endif

@@ -1,4 +1,8 @@
-#include "global.h"
+#include "os_malloc.h"
+#include "libc/stdbool.h"
+#include "libc/stdint.h"
+#include "macros.h"
+#include "functions.h"
 
 #define FILL_ALLOCBLOCK (1 << 0)
 #define FILL_FREEBLOCK (1 << 1)
@@ -13,9 +17,9 @@
 #define BLOCK_FREE_MAGIC (0xEF)
 #define BLOCK_FREE_MAGIC_32 (0xEFEFEFEF)
 
-extern OSMesg sArenaLockMsg[1];
+OSMesg sArenaLockMsg[1];
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/__osMalloc/D_80099110.s")
+void __osMallocAddHeap(Arena* arena, void* heap, size_t size);
 
 void ArenaImpl_LockInit(Arena* arena) {
     osCreateMesgQueue(&arena->lock, sArenaLockMsg, ARRAY_COUNT(sArenaLockMsg));
@@ -45,111 +49,184 @@ ArenaNode* ArenaImpl_GetLastBlock(Arena* arena) {
     return last;
 }
 
-void __osMallocInit(Arena* arena, void* start, size_t size) {
-    bzero(arena, sizeof(*arena));
+/**
+ * Initializes \p arena to manage the memory region \p heap.
+ *
+ * @param arena  The Arena to initialize.
+ * @param heap   The memory region to use as heap space.
+ * @param size   The size of the heap.
+ */
+void __osMallocInit(Arena* arena, void* heap, size_t size) {
+    bzero(arena, sizeof(Arena));
+
     ArenaImpl_LockInit(arena);
-    __osMallocAddBlock(arena, start, size);
-    arena->isInit = 1;
+
+    __osMallocAddHeap(arena, heap, size);
+    arena->isInit = true;
 }
 
-void __osMallocAddBlock(Arena* arena, void* start, s32 size) {
-    s32 diff;
-    s32 size2;
+// Original name: __osMallocAddBlock
+void __osMallocAddHeap(Arena* arena, void* heap, size_t size) {
+    ptrdiff_t diff;
+    s32 alignedSize;
     ArenaNode* firstNode;
     ArenaNode* lastNode;
 
-    if (start != NULL) {
-        firstNode = (ArenaNode*)ALIGN16((u32)start);
-        diff = (s32)firstNode - (s32)start;
-        size2 = (size - diff) & ~0xF;
+    if (heap == NULL) {
+        return;
+    }
 
-        if (size2 > (s32)sizeof(ArenaNode)) {
-            firstNode->next = NULL;
-            firstNode->prev = NULL;
-            firstNode->size = size2 - sizeof(ArenaNode);
-            firstNode->isFree = 1;
-            firstNode->magic = NODE_MAGIC;
-            ArenaImpl_Lock(arena);
-            lastNode = ArenaImpl_GetLastBlock(arena);
-            if (lastNode == NULL) {
-                arena->head = firstNode;
-                arena->start = start;
-            } else {
-                firstNode->prev = lastNode;
-                lastNode->next = firstNode;
-            }
-            ArenaImpl_Unlock(arena);
+    firstNode = (ArenaNode*)ALIGN16((uintptr_t)heap);
+    diff = (uintptr_t)firstNode - (uintptr_t)heap;
+    alignedSize = ((s32)size - diff) & ~0xF;
+
+    // If the size of the heap is smaller than sizeof(ArenaNode), then the initialization will silently fail
+    if (alignedSize > (s32)sizeof(ArenaNode)) {
+        firstNode->next = NULL;
+        firstNode->prev = NULL;
+        firstNode->size = alignedSize - sizeof(ArenaNode);
+        firstNode->isFree = true;
+        firstNode->magic = NODE_MAGIC;
+
+        ArenaImpl_Lock(arena);
+
+        lastNode = ArenaImpl_GetLastBlock(arena);
+
+        // Checks if there's already a block
+        if (lastNode == NULL) {
+            arena->head = firstNode;
+            arena->start = heap;
+        } else {
+            // Chain the existing block with the new one
+            firstNode->prev = lastNode;
+            lastNode->next = firstNode;
         }
+
+        ArenaImpl_Unlock(arena);
     }
 }
 
+/**
+ * Clears the whole \p arena, invalidating every allocated pointer to it.
+ *
+ * @param arena  The Arena to clear.
+ */
 void __osMallocCleanup(Arena* arena) {
-    bzero(arena, sizeof(*arena));
+    bzero(arena, sizeof(Arena));
 }
 
+/**
+ * Returns whether or not the \p arena has been initialized.
+ *
+ * @param arena  The Arena to check.
+ * @return u8    `true` if the \p arena has been initialized. `false` otherwise.
+ */
 u8 __osMallocIsInitalized(Arena* arena) {
     return arena->isInit;
 }
 
+/**
+ * Allocates at least \p size bytes of memory using the given \p arena.
+ * The block of memory will be allocated at the start of the first sufficiently large free block.
+ *
+ *  - If there's not enough space in the given \p arena, this function will fail, returning `NULL`.
+ *  - If \p size is zero, then an empty region of memory is returned.
+ *
+ * To avoid memory leaks, the returned pointer should be eventually deallocated using either `__osFree` or
+ * `__osRealloc`.
+ *
+ * @param[in, out] arena  The specific Arena to be used for the allocation.
+ * @param[in] size        The size in bytes that will be allocated.
+ * @return void*          On success, the allocated area of the \p arena memory. Otherwise, `NULL`.
+ */
 void* __osMalloc(Arena* arena, size_t size) {
     ArenaNode* iter;
     ArenaNode* newNode;
-    void* alloc;
-    u32 blockSize;
-    alloc = NULL;
+    void* alloc = NULL;
 
     size = ALIGN16(size);
+
     ArenaImpl_Lock(arena);
+
+    // Start iterating from the head of the arena.
     iter = arena->head;
 
+    // Iterate over the arena looking for a big enough space of memory.
     while (iter != NULL) {
         if (iter->isFree && iter->size >= size) {
-            ArenaNode* next;
-            blockSize = ALIGN16(size) + sizeof(ArenaNode);
+            size_t blockSize = ALIGN16(size) + sizeof(ArenaNode);
+
+            // If the block is larger than the requested size, then split it and just use the required size of the
+            // current block.
             if (blockSize < iter->size) {
-                newNode = (ArenaNode*)((u32)iter + blockSize);
+                ArenaNode* next;
+
+                newNode = (ArenaNode*)((uintptr_t)iter + blockSize);
                 newNode->next = iter->next;
                 newNode->prev = iter;
                 newNode->size = iter->size - blockSize;
-                newNode->isFree = 1;
+                newNode->isFree = true;
                 newNode->magic = NODE_MAGIC;
 
                 iter->next = newNode;
                 iter->size = size;
+
                 next = newNode->next;
-                if (next) {
+                if (next != NULL) {
                     next->prev = newNode;
                 }
             }
 
-            iter->isFree = 0;
-            alloc = (void*)((u32)iter + sizeof(ArenaNode));
+            iter->isFree = false;
+            alloc = (void*)((uintptr_t)iter + sizeof(ArenaNode));
             break;
         }
 
         iter = iter->next;
     }
+
     ArenaImpl_Unlock(arena);
 
     return alloc;
 }
 
+/**
+ * Allocates at least \p size bytes of memory using the given \p arena.
+ * Unlike __osMalloc, the block of memory will be allocated from the end of the \p arena.
+ *
+ * - If there's not enough space in the given \p arena, this function will fail, returning `NULL`.
+ * - If \p size is zero, then an empty region of memory is returned.
+ *
+ * To avoid memory leaks, the returned pointer should be eventually deallocated using `__osFree` or `__osRealloc`.
+ *
+ * @param[in, out] arena  The specific Arena to be used for the allocation.
+ * @param[in] size        The size in bytes that will be allocated.
+ * @return void*          On success, the allocated area of the \p arena memory. Otherwise, `NULL`.
+ */
 void* __osMallocR(Arena* arena, size_t size) {
     ArenaNode* iter;
     ArenaNode* newNode;
-    u32 blockSize;
+    size_t blockSize;
     void* alloc = NULL;
 
     size = ALIGN16(size);
+
     ArenaImpl_Lock(arena);
+
+    // Start iterating from the last block of the arena.
     iter = ArenaImpl_GetLastBlock(arena);
 
+    // Iterate in reverse the arena looking for a big enough space of memory.
     while (iter != NULL) {
         if (iter->isFree && iter->size >= size) {
-            ArenaNode* next;
             blockSize = ALIGN16(size) + sizeof(ArenaNode);
+
+            // If the block is larger than the requested size, then split it and just use the required size of the
+            // current block.
             if (blockSize < iter->size) {
-                newNode = (ArenaNode*)((u32)iter + (iter->size - size));
+                ArenaNode* next;
+
+                newNode = (ArenaNode*)((uintptr_t)iter + (iter->size - size));
                 newNode->next = iter->next;
                 newNode->prev = iter;
                 newNode->size = size;
@@ -157,69 +234,171 @@ void* __osMallocR(Arena* arena, size_t size) {
 
                 iter->next = newNode;
                 iter->size -= blockSize;
+
                 next = newNode->next;
-                if (next) {
+                if (next != NULL) {
                     next->prev = newNode;
                 }
                 iter = newNode;
             }
 
-            iter->isFree = 0;
-            alloc = (void*)((u32)iter + sizeof(ArenaNode));
+            iter->isFree = false;
+            alloc = (void*)((uintptr_t)iter + sizeof(ArenaNode));
             break;
         }
         iter = iter->prev;
     }
+
     ArenaImpl_Unlock(arena);
 
     return alloc;
 }
 
+/**
+ * Deallocates the pointer \p ptr previously allocated by `__osMalloc`, `__osMallocR` or `__osRealloc`.
+ * If \p ptr is `NULL` or it has been already been freed, then this function does nothing.
+ *
+ * - The behaviour is undefined if \p ptr is not a memory region returned by one of the cited allocating
+ * functions.
+ * - The behaviour is undefined if \p ptr doesn't correspond to the given \p arena.
+ * - Any access to the freed pointer is undefined behaviour.
+ *
+ * @param[in, out] arena  The specific Arena to be used for the allocation.
+ * @param[in, out] ptr    The allocated memory block to deallocate.
+ */
 void __osFree(Arena* arena, void* ptr) {
     ArenaNode* node;
     ArenaNode* next;
     ArenaNode* prev;
-    ArenaNode* newNext;
 
     ArenaImpl_Lock(arena);
-    node = (ArenaNode*)((u32)ptr - sizeof(ArenaNode));
 
-    if (ptr == NULL || (node->magic != NODE_MAGIC) || node->isFree) {
-        goto end;
-    }
+    node = (ArenaNode*)((uintptr_t)ptr - sizeof(ArenaNode));
 
-    next = node->next;
-    prev = node->prev;
-    node->isFree = 1;
+    if (ptr != NULL && node->magic == NODE_MAGIC && !node->isFree) {
+        next = node->next;
+        prev = node->prev;
+        node->isFree = true;
 
-    newNext = next;
-    if ((u32)next == (u32)node + sizeof(ArenaNode) + node->size && next->isFree) {
-        newNext = next->next;
-        if (newNext != NULL) {
-            newNext->prev = node;
+        // Checks if the next node is contiguous to the current node and if it isn't currently allocated. Then merge the
+        // two nodes into one.
+        if ((uintptr_t)next == (uintptr_t)node + sizeof(ArenaNode) + node->size && next->isFree) {
+            ArenaNode* newNext = next->next;
+
+            if (newNext != NULL) {
+                newNext->prev = node;
+            }
+
+            node->size += next->size + sizeof(ArenaNode);
+
+            node->next = newNext;
+            next = newNext;
         }
 
-        node->size += next->size + sizeof(ArenaNode);
+        // Checks if the previous node is contiguous to the current node and if it isn't currently allocated. Then merge
+        // the two nodes into one.
+        if (prev != NULL && prev->isFree && (uintptr_t)node == (uintptr_t)prev + sizeof(ArenaNode) + prev->size) {
+            if (next != NULL) {
+                next->prev = prev;
+            }
 
-        node->next = newNext;
-        next = newNext;
-    }
-
-    if (prev != NULL && prev->isFree && (u32)node == (u32)prev + sizeof(ArenaNode) + prev->size) {
-        if (next) {
-            next->prev = prev;
+            prev->next = next;
+            prev->size += node->size + sizeof(ArenaNode);
         }
-        prev->next = next;
-        prev->size += node->size + sizeof(ArenaNode);
     }
 
-end:
     ArenaImpl_Unlock(arena);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/__osMalloc/__osRealloc.s")
+/**
+ * Reallocates the pointer \p ptr.
+ * \p ptr must be either a pointer previously allocated by `__osMalloc`, `__osMallocR` or `__osRealloc` and
+ * not freed yet, or a `NULL` pointer.
+ *
+ * - If \p ptr is `NULL` a new pointer is allocated. See `__osMalloc` for more details.
+ * - If \p newSize is 0, then the given pointer is freed and `NULL` is returned. See `__osFree` for more details.
+ * - If \p newSize is bigger than the currently allocated allocated pointer, then the area of memory is expanded to a
+ * size big enough to fit the requested size.
+ *
+ * - The behaviour is undefined if \p ptr is not a memory region returned by one of the cited allocating
+ * functions.
+ * - The behaviour is undefined if \p ptr doesn't correspond to the given \p arena.
+ * - If the pointer is freed, then any access to the original freed pointer is undefined behaviour.
+ *
+ * @param[in, out] arena  The specific Arena to be used for the allocation.
+ * @param[in, out] ptr    The allocated memory block to deallocate.
+ * @param[in] newSize     The new requested size.
+ * @return void*          On success, the pointer to the reallocated area of memory. On failure, `NULL` is returned,
+ * and the original parameter \p ptr remains valid.
+ */
+void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
+    ArenaImpl_Lock(arena);
 
-void __osAnalyzeArena(Arena* arena, size_t* outMaxFree, size_t* outFree, size_t* outAlloc) {
+    (void)"__osRealloc(%08x, %d)\n";
+
+    if (ptr == NULL) {
+        // if the `ptr` is NULL, then allocate a new pointer with the specified size
+        // if newSize is 0, then __osMalloc would return a NULL pointer
+        ptr = __osMalloc(arena, newSize);
+    } else if (newSize == 0) {
+        // if the requested size is zero, then free the pointer
+        __osFree(arena, ptr);
+        ptr = NULL;
+    } else {
+        size_t diff;
+        void* newPtr;
+        // Gets the start of the ArenaNode pointer embedded
+        ArenaNode* node = (void*)((uintptr_t)ptr - sizeof(ArenaNode));
+
+        newSize = ALIGN16(newSize);
+
+        // Only reallocate the memory if the new size isn't smaller than the actual node size
+        if ((newSize != node->size) && (node->size < newSize)) {
+            ArenaNode* next = node->next;
+
+            diff = newSize - node->size;
+            // Checks if the next node is contiguous to the current allocated node and it has enough space to fit the
+            // new requested size
+            if (((uintptr_t)next == (uintptr_t)node + node->size + sizeof(ArenaNode)) && (next->isFree) &&
+                (next->size >= diff)) {
+                ArenaNode* next2 = next->next;
+
+                next->size = (next->size - diff);
+                if (next2 != NULL) {
+                    // Update the previous element of the linked list
+                    next2->prev = (void*)((uintptr_t)next + diff);
+                }
+
+                next2 = (void*)((uintptr_t)next + diff);
+                node->next = next2;
+                node->size = newSize;
+                __osMemcpy(next2, next, sizeof(ArenaNode));
+            } else {
+                // Create a new pointer and manually copy the data from the old pointer to the new one
+                newPtr = __osMalloc(arena, newSize);
+                if (newPtr != NULL) {
+                    bcopy(newPtr, ptr, node->size);
+                    __osFree(arena, ptr);
+                }
+                ptr = newPtr;
+            }
+        }
+    }
+
+    ArenaImpl_Unlock(arena);
+
+    return ptr;
+}
+
+/**
+ * Gets the size of the largest free block, the total free space and the total allocated space.
+ *
+ * @param[in, out] arena   The Arena which will be used to get the values from.
+ * @param[out] outMaxFree  The size of the largest free block.
+ * @param[out] outFree     The total free space.
+ * @param[out] outAlloc    The total allocated space.
+ */
+void __osGetSizes(Arena* arena, size_t* outMaxFree, size_t* outFree, size_t* outAlloc) {
     ArenaNode* iter;
 
     ArenaImpl_Lock(arena);
@@ -245,4 +424,35 @@ void __osAnalyzeArena(Arena* arena, size_t* outMaxFree, size_t* outFree, size_t*
     ArenaImpl_Unlock(arena);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/__osMalloc/__osCheckArena.s")
+/**
+ * Checks the validity of every node of the \p arena.
+ *
+ * @param arena  The Arena to check.
+ * @return s32   0 if every pointer is valid. 1 otherwise.
+ */
+s32 __osCheckArena(Arena* arena) {
+    ArenaNode* iter;
+    s32 err = 0;
+
+    ArenaImpl_Lock(arena);
+
+    // "Checking the contents of the arena..."
+    (void)"アリーナの内容をチェックしています．．． (%08x)\n";
+
+    for (iter = arena->head; iter != NULL; iter = iter->next) {
+        if (iter->magic != NODE_MAGIC) {
+            // "Oops!!"
+            (void)"おおっと！！ (%08x %08x)\n";
+
+            err = 1;
+            break;
+        }
+    }
+
+    // "The arena still looks good"
+    (void)"アリーナはまだ、いけそうです\n";
+
+    ArenaImpl_Unlock(arena);
+
+    return err;
+}

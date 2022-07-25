@@ -1,16 +1,22 @@
+/*
+ * File: z_en_nb.c
+ * Overlay: ovl_En_Nb
+ * Description: Anju's Grandma
+ */
+
 #include "z_en_nb.h"
 
-#define FLAGS 0x00000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnNb*)thisx)
 
-void EnNb_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnNb_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnNb_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnNb_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnNb_Init(Actor* thisx, PlayState* play);
+void EnNb_Destroy(Actor* thisx, PlayState* play);
+void EnNb_Update(Actor* thisx, PlayState* play);
+void EnNb_Draw(Actor* thisx, PlayState* play);
 
-void func_80BC0D84(EnNb* this, GlobalContext* globalCtx);
-void func_80BC0EAC(EnNb* this, GlobalContext* globalCtx);
+void func_80BC0D84(EnNb* this, PlayState* play);
+void func_80BC0EAC(EnNb* this, PlayState* play);
 
 #if 0
 const ActorInit En_Nb_InitVars = {

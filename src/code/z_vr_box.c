@@ -36,7 +36,7 @@ void func_80143148(SkyboxContext* skyboxCtx, s32 arg1) {
 }
 
 void func_801431E8(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType) {
-    GlobalContext* globalCtx = (GlobalContext*)gameState;
+    PlayState* play = (PlayState*)gameState;
     size_t size;
     void* offset;
     s32 pad;
@@ -75,13 +75,13 @@ void func_801431E8(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType) 
         skyboxCtx->envB = 40;
 
         // Inverted Stone Tower Temple and Inverted Stone Tower
-        if ((globalCtx->sceneNum == SCENE_F41) || (globalCtx->sceneNum == SCENE_INISIE_R)) {
+        if ((play->sceneNum == SCENE_F41) || (play->sceneNum == SCENE_INISIE_R)) {
             skyboxCtx->rotZ = 3.15000009537f;
         }
     }
 }
 
-void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType) {
+void func_80143324(PlayState* play, SkyboxContext* skyboxCtx, s16 skyType) {
     size_t size;
 
     if (1) {}
@@ -89,7 +89,7 @@ void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyTy
     if (skyType == 1) {
         osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
-        if (globalCtx->envCtx.unk_10 == 0) {
+        if (play->envCtx.unk_10 == 0) {
             // Send a DMA request for the clear sky texture
             size = SEGMENT_ROM_SIZE(d2_fine_static);
 
@@ -103,10 +103,10 @@ void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyTy
                                    SEGMENT_ROM_START(d2_cloud_static), size, 0, &skyboxCtx->loadQueue, NULL);
         }
 
-        osRecvMesg(&skyboxCtx->loadQueue, NULL, 1);
+        osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
         osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
-        if (globalCtx->envCtx.unk_11 == 0) {
+        if (play->envCtx.unk_11 == 0) {
             // Send a DMA request for the clear sky texture
             size = SEGMENT_ROM_SIZE(d2_fine_static);
 
@@ -120,7 +120,7 @@ void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyTy
                                    SEGMENT_ROM_START(d2_cloud_static), size, 0, &skyboxCtx->loadQueue, NULL);
         }
 
-        osRecvMesg(&skyboxCtx->loadQueue, NULL, 1);
+        osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
         osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
         size = SEGMENT_ROM_SIZE(d2_fine_pal_static);
@@ -129,7 +129,7 @@ void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyTy
         DmaMgr_SendRequestImpl(&skyboxCtx->unk1C8, skyboxCtx->skyboxPaletteStaticSegment,
                                SEGMENT_ROM_START(d2_fine_pal_static), size, 0, &skyboxCtx->loadQueue, NULL);
 
-        osRecvMesg(&skyboxCtx->loadQueue, NULL, 1);
+        osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
     }
 }
 
@@ -140,7 +140,7 @@ void func_801434E4(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType) 
     func_801431E8(gameState, skyboxCtx, skyType);
 
     if (skyType != 0) {
-        skyboxCtx->unk17C = THA_AllocEndAlign16(&gameState->heap, 0x3840);
+        skyboxCtx->dListBuf = THA_AllocEndAlign16(&gameState->heap, 0x3840);
 
         if (skyType == 5) {
             // Allocate enough space for the vertices for a 6 sided skybox (cube)

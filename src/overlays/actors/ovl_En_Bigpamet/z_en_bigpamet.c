@@ -1,28 +1,35 @@
-#include "z_en_bigpamet.h"
+/*
+ * File: z_en_bigpamet.c
+ * Overlay: ovl_En_Bigpamet
+ * Description: Gekko & Snapper Miniboss - Snapper
+ */
 
-#define FLAGS 0x00000435
+#include "z_en_bigpamet.h"
+#include "z64rumble.h"
+
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
 
 #define THIS ((EnBigpamet*)thisx)
 
-void EnBigpamet_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnBigpamet_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBigpamet_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnBigpamet_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnBigpamet_Init(Actor* thisx, PlayState* play);
+void EnBigpamet_Destroy(Actor* thisx, PlayState* play);
+void EnBigpamet_Update(Actor* thisx, PlayState* play);
+void EnBigpamet_Draw(Actor* thisx, PlayState* play);
 
-void func_80A281DC(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A282C8(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A283A0(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A2844C(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A2855C(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A2866C(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A28708(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A287E8(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A289C8(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A28A98(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A28D0C(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A28DC0(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A28E98(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A28EE8(EnBigpamet* this, GlobalContext* globalCtx);
+void func_80A281DC(EnBigpamet* this, PlayState* play);
+void func_80A282C8(EnBigpamet* this, PlayState* play);
+void func_80A283A0(EnBigpamet* this, PlayState* play);
+void func_80A2844C(EnBigpamet* this, PlayState* play);
+void func_80A2855C(EnBigpamet* this, PlayState* play);
+void func_80A2866C(EnBigpamet* this, PlayState* play);
+void func_80A28708(EnBigpamet* this, PlayState* play);
+void func_80A287E8(EnBigpamet* this, PlayState* play);
+void func_80A289C8(EnBigpamet* this, PlayState* play);
+void func_80A28A98(EnBigpamet* this, PlayState* play);
+void func_80A28D0C(EnBigpamet* this, PlayState* play);
+void func_80A28DC0(EnBigpamet* this, PlayState* play);
+void func_80A28E98(EnBigpamet* this, PlayState* play);
+void func_80A28EE8(EnBigpamet* this, PlayState* play);
 
 #if 0
 const ActorInit En_Bigpamet_InitVars = {

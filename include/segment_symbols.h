@@ -1,7 +1,8 @@
-#ifndef _SEGMENT_SYMBOLS_H_
-#define _SEGMENT_SYMBOLS_H_
+#ifndef SEGMENT_SYMBOLS_H
+#define SEGMENT_SYMBOLS_H
 
-#include "z64.h"
+#include "libc/stddef.h"
+#include "PR/ultratypes.h"
 
 #define DECLARE_SEGMENT(name)          \
     extern u8 _##name##SegmentStart[]; \
@@ -73,7 +74,7 @@ DECLARE_OVERLAY_SEGMENT(opening)
 DECLARE_OVERLAY_SEGMENT(file_choose)
 DECLARE_OVERLAY_SEGMENT(daytelop)
 DECLARE_OVERLAY_SEGMENT(kaleido_scope)
-DECLARE_OVERLAY_SEGMENT(Player_Actor)
+DECLARE_OVERLAY_SEGMENT(player_actor)
 
 DECLARE_OVERLAY_SEGMENT(En_Test)
 DECLARE_OVERLAY_SEGMENT(En_GirlA)
@@ -1161,7 +1162,9 @@ DECLARE_ROM_SEGMENT(scene_texture_07)
 DECLARE_ROM_SEGMENT(scene_texture_08)
 DECLARE_ROM_SEGMENT(nintendo_rogo_static)
 DECLARE_ROM_SEGMENT(title_static)
+DECLARE_SEGMENT(memerrmsg)
 DECLARE_ROM_SEGMENT(memerrmsg)
+DECLARE_SEGMENT(locerrmsg)
 DECLARE_ROM_SEGMENT(locerrmsg)
 DECLARE_ROM_SEGMENT(parameter_static)
 DECLARE_ROM_SEGMENT(week_static)

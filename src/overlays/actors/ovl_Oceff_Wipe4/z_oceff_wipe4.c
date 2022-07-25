@@ -1,13 +1,19 @@
+/*
+ * File: z_oceff_wipe4.c
+ * Overlay: ovl_Oceff_Wipe4
+ * Description: Scarecrow's Song Ocarina Effect
+ */
+
 #include "z_oceff_wipe4.h"
 
-#define FLAGS 0x02000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((OceffWipe4*)thisx)
 
-void OceffWipe4_Init(Actor* thisx, GlobalContext* globalCtx);
-void OceffWipe4_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void OceffWipe4_Update(Actor* thisx, GlobalContext* globalCtx);
-void OceffWipe4_Draw(Actor* thisx, GlobalContext* globalCtx);
+void OceffWipe4_Init(Actor* thisx, PlayState* play);
+void OceffWipe4_Destroy(Actor* thisx, PlayState* play);
+void OceffWipe4_Update(Actor* thisx, PlayState* play);
+void OceffWipe4_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Oceff_Wipe4_InitVars = {

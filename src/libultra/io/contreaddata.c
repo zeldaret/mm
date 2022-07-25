@@ -6,14 +6,14 @@ s32 osContStartReadData(OSMesgQueue* mq) {
 
     __osSiGetAccess();
 
-    if (__osContLastCmd != 1) {
+    if (__osContLastPoll != 1) {
         __osPackReadData();
-        __osSiRawStartDma(1, &__osContPifRam);
-        osRecvMesg(mq, NULL, 1);
+        __osSiRawStartDma(OS_WRITE, &__osContPifRam);
+        osRecvMesg(mq, NULL, OS_MESG_BLOCK);
     }
 
-    ret = __osSiRawStartDma(0, &__osContPifRam);
-    __osContLastCmd = 1;
+    ret = __osSiRawStartDma(OS_READ, &__osContPifRam);
+    __osContLastPoll = 1;
 
     __osSiRelAccess();
 
@@ -28,7 +28,7 @@ void osContGetReadData(OSContPad* data) {
     ptr = (u8*)__osContPifRam.ramarray;
     for (i = 0; i < __osMaxControllers; i++, ptr += sizeof(__OSContReadFormat), data++) {
         readformat = *(__OSContReadFormat*)ptr;
-        data->errno = (readformat.rxsize & 0xc0) >> 4;
+        data->errno = (readformat.rxsize & 0xC0) >> 4;
         if (data->errno == 0) {
             data->button = readformat.button;
             data->stick_x = readformat.stick_x;
@@ -47,7 +47,7 @@ void __osPackReadData() {
         __osContPifRam.ramarray[i] = 0;
     }
 
-    __osContPifRam.pifstatus = 1;
+    __osContPifRam.status = 1;
     readformat.dummy = 255;
     readformat.txsize = 1;
     readformat.rxsize = 4;

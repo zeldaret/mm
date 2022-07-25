@@ -1,13 +1,19 @@
+/*
+ * File: z_obj_y2shutter.c
+ * Overlay: ovl_Obj_Y2shutter
+ * Description: Pirates' Fortress sliding grate
+ */
+
 #include "z_obj_y2shutter.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjY2shutter*)thisx)
 
-void ObjY2shutter_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjY2shutter_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjY2shutter_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjY2shutter_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjY2shutter_Init(Actor* thisx, PlayState* play);
+void ObjY2shutter_Destroy(Actor* thisx, PlayState* play);
+void ObjY2shutter_Update(Actor* thisx, PlayState* play);
+void ObjY2shutter_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Obj_Y2shutter_InitVars = {

@@ -1,12 +1,18 @@
+/*
+ * File: z_bg_umajump.c
+ * Overlay: ovl_Bg_Umajump
+ * Description: Horse Jumping Fence
+ */
+
 #include "z_bg_umajump.h"
 
 #define FLAGS 0x00000000
 
 #define THIS ((BgUmajump*)thisx)
 
-void BgUmajump_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgUmajump_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgUmajump_Update(Actor* thisx, GlobalContext* globalCtx);
+void BgUmajump_Init(Actor* thisx, PlayState* play);
+void BgUmajump_Destroy(Actor* thisx, PlayState* play);
+void BgUmajump_Update(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Bg_Umajump_InitVars = {

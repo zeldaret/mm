@@ -1,12 +1,18 @@
+/*
+ * File: z_en_door_etc.c
+ * Overlay: ovl_En_Door_Etc
+ * Description: Wooden Door
+ */
+
 #include "z_en_door_etc.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnDoorEtc*)thisx)
 
-void EnDoorEtc_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDoorEtc_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDoorEtc_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnDoorEtc_Init(Actor* thisx, PlayState* play);
+void EnDoorEtc_Destroy(Actor* thisx, PlayState* play);
+void EnDoorEtc_Update(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Door_Etc_InitVars = {

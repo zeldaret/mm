@@ -1,0 +1,14 @@
+﻿<Root>
+    <File Name="object_pst" Segment="6">
+        <Animation Name="object_pst_Anim_000018" Offset="0x18" />
+        <DList Name="object_pst_DL_0004A0" Offset="0x4A0" />
+        <DList Name="object_pst_DL_000638" Offset="0x638" />
+        <Texture Name="object_pst_Tex_000760" OutName="tex_000760" Format="rgba16" Width="32" Height="32" Offset="0x760" />
+        <Texture Name="object_pst_Tex_000F60" OutName="tex_000F60" Format="rgba16" Width="32" Height="32" Offset="0xF60" />
+        <Texture Name="object_pst_Tex_001760" OutName="tex_001760" Format="rgba16" Width="16" Height="16" Offset="0x1760" />
+        <Texture Name="object_pst_Tex_001960" OutName="tex_001960" Format="i4" Width="32" Height="16" Offset="0x1960" />
+        <Limb Name="object_pst_Standardlimb_001A60" Type="Standard" EnumName="OBJECT_PST_LIMB_01" Offset="0x1A60" />
+        <Limb Name="object_pst_Standardlimb_001A6C" Type="Standard" EnumName="OBJECT_PST_LIMB_02" Offset="0x1A6C" />
+        <Skeleton Name="object_pst_Skel_001A80" Type="Flex" LimbType="Standard" LimbNone="OBJECT_PST_LIMB_NONE" LimbMax="OBJECT_PST_LIMB_MAX" EnumName="object_pst_Limbs" Offset="0x1A80" />
+    </File>
+</Root>

@@ -8,9 +8,9 @@
 
 #define PARAMS ((EffectSsFhgFlashInitParams*)initParamsx)
 
-s32 EffectSsFhgFlash_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsFhgFlash_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsFhgFlash_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+s32 EffectSsFhgFlash_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsFhgFlash_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsFhgFlash_Draw(PlayState* play, u32 index, EffectSs* this);
 
 #if 0
 const EffectSsInit Effect_Ss_Fhg_Flash_InitVars = {

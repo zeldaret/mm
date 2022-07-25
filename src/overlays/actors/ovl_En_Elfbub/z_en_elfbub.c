@@ -5,18 +5,20 @@
  */
 
 #include "z_en_elfbub.h"
+#include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
+#include "objects/object_bubble/object_bubble.h"
 
-#define FLAGS 0x00000001
+#define FLAGS (ACTOR_FLAG_1)
 
 #define THIS ((EnElfbub*)thisx)
 
-void EnElfbub_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnElfbub_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnElfbub_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnElfbub_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnElfbub_Init(Actor* thisx, PlayState* play);
+void EnElfbub_Destroy(Actor* thisx, PlayState* play);
+void EnElfbub_Update(Actor* thisx, PlayState* play);
+void EnElfbub_Draw(Actor* thisx, PlayState* play);
 
-void EnElfbub_Pop(EnElfbub* this, GlobalContext* globalCtx);
-void EnElfbub_Idle(EnElfbub* this, GlobalContext* globalCtx);
+void EnElfbub_Pop(EnElfbub* this, PlayState* play);
+void EnElfbub_Idle(EnElfbub* this, PlayState* play);
 
 const ActorInit En_Elfbub_InitVars = {
     ACTOR_EN_ELFBUB,
@@ -50,18 +52,16 @@ static ColliderCylinderInit sCylinderInit = {
     { 16, 32, 0, { 0, 0, 0 } },
 };
 
-extern Gfx D_06001000[];
-
-void EnElfbub_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnElfbub_Init(Actor* thisx, PlayState* play) {
     EnElfbub* this = THIS;
     Actor* childActor;
 
-    if (Flags_GetSwitch(globalCtx, ENELFBUB_GET_SWITCHFLAG(&this->actor))) {
+    if (Flags_GetSwitch(play, ENELFBUB_GET_SWITCHFLAG(&this->actor))) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
-    ActorShape_Init(&this->actor.shape, 16.0f, func_800B3FC0, 0.2f);
+    ActorShape_Init(&this->actor.shape, 16.0f, ActorShadow_DrawCircle, 0.2f);
     this->actor.hintId = 0x16;
     Actor_SetScale(&this->actor, 1.25f);
 
@@ -70,27 +70,27 @@ void EnElfbub_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->zRotDelta = 1000;
     this->xScale = 0.08f;
 
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
-    childActor = Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_ELFORG,
-                                    this->actor.world.pos.x, this->actor.world.pos.y + 12.0f, this->actor.world.pos.z,
-                                    this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z,
-                                    ((ENELFBUB_GET_SWITCHFLAG(&this->actor) & 0x7F) << 9) | 2);
+    childActor = Actor_SpawnAsChild(
+        &play->actorCtx, &this->actor, play, ACTOR_EN_ELFORG, this->actor.world.pos.x, this->actor.world.pos.y + 12.0f,
+        this->actor.world.pos.z, this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z,
+        STRAY_FAIRY_PARAMS(ENELFBUB_GET_SWITCHFLAG(&this->actor), 0, STRAY_FAIRY_TYPE_BUBBLE));
     if (childActor != NULL) {
         childActor->parent = &this->actor;
     }
 
     this->oscillationAngle = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
-void EnElfbub_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnElfbub_Destroy(Actor* thisx, PlayState* play) {
     EnElfbub* this = THIS;
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnElfbub_Pop(EnElfbub* this, GlobalContext* globalCtx) {
+void EnElfbub_Pop(EnElfbub* this, PlayState* play) {
     static Color_RGBA8 sPrimColor = { 255, 255, 255, 255 };
     static Color_RGBA8 sEnvColor = { 150, 150, 150, 0 };
     static Vec3f sAccel = { 0.0f, -0.5f, 0.0f };
@@ -112,16 +112,16 @@ void EnElfbub_Pop(EnElfbub* this, GlobalContext* globalCtx) {
             velocity.x = (Rand_ZeroOne() - 0.5f) * 7.0f;
             velocity.y = Rand_ZeroOne() * 7.0f;
             velocity.z = (Rand_ZeroOne() - 0.5f) * 7.0f;
-            EffectSsDtBubble_SpawnCustomColor(globalCtx, &pos, &velocity, &sAccel, &sPrimColor, &sEnvColor,
+            EffectSsDtBubble_SpawnCustomColor(play, &pos, &velocity, &sAccel, &sPrimColor, &sEnvColor,
                                               Rand_S16Offset(100, 50), 25, 0);
         }
 
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 60, NA_SE_EN_AWA_BREAK);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 60, NA_SE_EN_AWA_BREAK);
         Actor_MarkForDeath(&this->actor);
     }
 }
 
-void EnElfbub_Idle(EnElfbub* this, GlobalContext* globalCtx) {
+void EnElfbub_Idle(EnElfbub* this, PlayState* play) {
     s32 pad;
 
     this->zRot += this->zRotDelta;
@@ -134,34 +134,34 @@ void EnElfbub_Idle(EnElfbub* this, GlobalContext* globalCtx) {
         return;
     }
 
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-void EnElfbub_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnElfbub_Update(Actor* thisx, PlayState* play) {
     EnElfbub* this = THIS;
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, this->actor.shape.yOffset);
+    this->actionFunc(this, play);
+    Actor_SetFocus(&this->actor, this->actor.shape.yOffset);
 }
 
-void EnElfbub_Draw(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnElfbub_Draw(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnElfbub* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
-    Matrix_InsertTranslation(0.0f, 0.0f, 1.0f, 1);
-    Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
-    Matrix_Scale(this->xyScale + 1.0f, this->xyScale + 1.0f, 1.0f, 1);
-    Matrix_InsertZRotation_s(this->zRot, 1);
-    Matrix_Scale(this->xScale + 1.0f, 1.0f, 1.0f, 1);
-    Matrix_InsertZRotation_s(this->zRot * -1, 1);
+    Matrix_Translate(0.0f, 0.0f, 1.0f, MTXMODE_APPLY);
+    Matrix_ReplaceRotation(&play->billboardMtxF);
+    Matrix_Scale(this->xyScale + 1.0f, this->xyScale + 1.0f, 1.0f, MTXMODE_APPLY);
+    Matrix_RotateZS(this->zRot, MTXMODE_APPLY);
+    Matrix_Scale(this->xScale + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+    Matrix_RotateZS(this->zRot * -1, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_06001000);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, object_bubble_DL_001000);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

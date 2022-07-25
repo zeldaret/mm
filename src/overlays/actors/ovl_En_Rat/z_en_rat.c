@@ -1,13 +1,19 @@
+/*
+ * File: z_en_rat.c
+ * Overlay: ovl_En_Rat
+ * Description: Real Bombchu
+ */
+
 #include "z_en_rat.h"
 
-#define FLAGS 0x00000205
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200)
 
 #define THIS ((EnRat*)thisx)
 
-void EnRat_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnRat_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnRat_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnRat_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnRat_Init(Actor* thisx, PlayState* play);
+void EnRat_Destroy(Actor* thisx, PlayState* play);
+void EnRat_Update(Actor* thisx, PlayState* play);
+void EnRat_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Rat_InitVars = {

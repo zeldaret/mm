@@ -1,13 +1,19 @@
+/*
+ * File: z_dm_char08.c
+ * Overlay: ovl_Dm_Char08
+ * Description: Large Great Bay Turtle
+ */
+
 #include "z_dm_char08.h"
 
-#define FLAGS 0x02000000
+#define FLAGS (ACTOR_FLAG_2000000)
 
 #define THIS ((DmChar08*)thisx)
 
-void DmChar08_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmChar08_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmChar08_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmChar08_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmChar08_Init(Actor* thisx, PlayState* play);
+void DmChar08_Destroy(Actor* thisx, PlayState* play);
+void DmChar08_Update(Actor* thisx, PlayState* play);
+void DmChar08_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Dm_Char08_InitVars = {

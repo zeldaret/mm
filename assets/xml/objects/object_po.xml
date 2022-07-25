@@ -1,0 +1,53 @@
+﻿<Root>
+    <File Name="object_po" Segment="6">
+        <Animation Name="object_po_Anim_0001A8" Offset="0x1A8" />
+        <Animation Name="object_po_Anim_0004EC" Offset="0x4EC" />
+        <Animation Name="object_po_Anim_0006E0" Offset="0x6E0" />
+        <Animation Name="object_po_Anim_000A60" Offset="0xA60" />
+        <Animation Name="object_po_Anim_0011C4" Offset="0x11C4" />
+        <Animation Name="object_po_Anim_0015B0" Offset="0x15B0" />
+        <DList Name="object_po_DL_001620" Offset="0x1620" />
+        <DList Name="object_po_DL_001898" Offset="0x1898" />
+        <DList Name="object_po_DL_001A78" Offset="0x1A78" />
+        <DList Name="object_po_DL_001B70" Offset="0x1B70" />
+        <DList Name="object_po_DL_001C68" Offset="0x1C68" />
+        <DList Name="object_po_DL_001FB0" Offset="0x1FB0" />
+        <DList Name="object_po_DL_002608" Offset="0x2608" />
+        <DList Name="object_po_DL_002910" Offset="0x2910" />
+        <DList Name="object_po_DL_002D28" Offset="0x2D28" />
+        <DList Name="object_po_DL_002F58" Offset="0x2F58" />
+        <Texture Name="object_po_Tex_003010" OutName="tex_003010" Format="i8" Width="32" Height="64" Offset="0x3010" />
+        <DList Name="object_po_DL_003850" Offset="0x3850" />
+        <Texture Name="object_po_Tex_003910" OutName="tex_003910" Format="rgba16" Width="32" Height="16" Offset="0x3910" />
+        <Texture Name="object_po_Tex_003D10" OutName="tex_003D10" Format="rgba16" Width="32" Height="32" Offset="0x3D10" />
+        <Texture Name="object_po_Tex_004510" OutName="tex_004510" Format="rgba16" Width="16" Height="16" Offset="0x4510" />
+        <Texture Name="object_po_Tex_004710" OutName="tex_004710" Format="rgba16" Width="8" Height="8" Offset="0x4710" />
+        <Texture Name="object_po_Tex_004790" OutName="tex_004790" Format="rgba16" Width="16" Height="16" Offset="0x4790" />
+        <Texture Name="object_po_Tex_004990" OutName="tex_004990" Format="rgba16" Width="8" Height="8" Offset="0x4990" />
+        <Texture Name="object_po_Tex_004A10" OutName="tex_004A10" Format="rgba16" Width="8" Height="16" Offset="0x4A10" />
+        <Texture Name="object_po_Tex_004B10" OutName="tex_004B10" Format="rgba16" Width="16" Height="16" Offset="0x4B10" />
+        <Texture Name="object_po_Tex_004D10" OutName="tex_004D10" Format="rgba16" Width="16" Height="16" Offset="0x4D10" />
+        <Texture Name="object_po_Tex_004F10" OutName="tex_004F10" Format="rgba16" Width="8" Height="8" Offset="0x4F10" />
+        <Limb Name="object_po_Standardlimb_004F90" Type="Standard" EnumName="OBJECT_PO_LIMB_01" Offset="0x4F90" />
+        <Limb Name="object_po_Standardlimb_004F9C" Type="Standard" EnumName="OBJECT_PO_LIMB_02" Offset="0x4F9C" />
+        <Limb Name="object_po_Standardlimb_004FA8" Type="Standard" EnumName="OBJECT_PO_LIMB_03" Offset="0x4FA8" />
+        <Limb Name="object_po_Standardlimb_004FB4" Type="Standard" EnumName="OBJECT_PO_LIMB_04" Offset="0x4FB4" />
+        <Limb Name="object_po_Standardlimb_004FC0" Type="Standard" EnumName="OBJECT_PO_LIMB_05" Offset="0x4FC0" />
+        <Limb Name="object_po_Standardlimb_004FCC" Type="Standard" EnumName="OBJECT_PO_LIMB_06" Offset="0x4FCC" />
+        <Limb Name="object_po_Standardlimb_004FD8" Type="Standard" EnumName="OBJECT_PO_LIMB_07" Offset="0x4FD8" />
+        <Limb Name="object_po_Standardlimb_004FE4" Type="Standard" EnumName="OBJECT_PO_LIMB_08" Offset="0x4FE4" />
+        <Limb Name="object_po_Standardlimb_004FF0" Type="Standard" EnumName="OBJECT_PO_LIMB_09" Offset="0x4FF0" />
+        <Limb Name="object_po_Standardlimb_004FFC" Type="Standard" EnumName="OBJECT_PO_LIMB_0A" Offset="0x4FFC" />
+        <Limb Name="object_po_Standardlimb_005008" Type="Standard" EnumName="OBJECT_PO_LIMB_0B" Offset="0x5008" />
+        <Limb Name="object_po_Standardlimb_005014" Type="Standard" EnumName="OBJECT_PO_LIMB_0C" Offset="0x5014" />
+        <Limb Name="object_po_Standardlimb_005020" Type="Standard" EnumName="OBJECT_PO_LIMB_0D" Offset="0x5020" />
+        <Limb Name="object_po_Standardlimb_00502C" Type="Standard" EnumName="OBJECT_PO_LIMB_0E" Offset="0x502C" />
+        <Limb Name="object_po_Standardlimb_005038" Type="Standard" EnumName="OBJECT_PO_LIMB_0F" Offset="0x5038" />
+        <Limb Name="object_po_Standardlimb_005044" Type="Standard" EnumName="OBJECT_PO_LIMB_10" Offset="0x5044" />
+        <Limb Name="object_po_Standardlimb_005050" Type="Standard" EnumName="OBJECT_PO_LIMB_11" Offset="0x5050" />
+        <Limb Name="object_po_Standardlimb_00505C" Type="Standard" EnumName="OBJECT_PO_LIMB_12" Offset="0x505C" />
+        <Limb Name="object_po_Standardlimb_005068" Type="Standard" EnumName="OBJECT_PO_LIMB_13" Offset="0x5068" />
+        <Limb Name="object_po_Standardlimb_005074" Type="Standard" EnumName="OBJECT_PO_LIMB_14" Offset="0x5074" />
+        <Skeleton Name="object_po_Skel_0050D0" Type="Normal" LimbType="Standard" LimbNone="OBJECT_PO_LIMB_NONE" LimbMax="OBJECT_PO_LIMB_MAX" EnumName="object_po_Limbs" Offset="0x50D0" />
+    </File>
+</Root>

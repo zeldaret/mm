@@ -1,0 +1,68 @@
+﻿<Root>
+    <File Name="object_test3" Segment="6">
+        <Texture Name="object_test3_TLUT_000000" OutName="tlut_000000" Format="rgba16" Width="16" Height="16" Offset="0x0" />
+        <Texture Name="object_test3_TLUT_000200" OutName="tlut_000200" Format="rgba16" Width="16" Height="16" Offset="0x200" />
+        <Texture Name="object_test3_Tex_000400" OutName="tex_000400" Format="rgba16" Width="16" Height="16" Offset="0x400" />
+        <Texture Name="object_test3_Tex_000600" OutName="tex_000600" Format="rgba16" Width="16" Height="16" Offset="0x600" />
+        <Texture Name="object_test3_Tex_000800" OutName="tex_000800" Format="ci8" Width="8" Height="8" Offset="0x800" />
+        <Texture Name="object_test3_Tex_000840" OutName="tex_000840" Format="ci8" Width="8" Height="16" Offset="0x840" />
+        <Texture Name="object_test3_Tex_0008C0" OutName="tex_0008C0" Format="ci8" Width="16" Height="16" Offset="0x8C0" />
+        <!-- <Blob Name="object_test3_Blob_0009C0" Size="0xC00" Offset="0x9C0" /> -->
+        <Texture Name="object_test3_Tex_0015C0" OutName="tex_0015C0" Format="ci8" Width="8" Height="16" Offset="0x15C0" />
+        <Texture Name="object_test3_Tex_001640" OutName="tex_001640" Format="ci8" Width="16" Height="16" Offset="0x1640" />
+        <Texture Name="object_test3_Tex_001740" OutName="tex_001740" Format="ci8" Width="32" Height="32" Offset="0x1740" />
+        <Texture Name="object_test3_Tex_001B40" OutName="tex_001B40" Format="ci8" Width="32" Height="32" Offset="0x1B40" />
+        <Texture Name="object_test3_Tex_001F40" OutName="tex_001F40" Format="ci8" Width="8" Height="8" Offset="0x1F40" />
+        <Texture Name="object_test3_Tex_001F80" OutName="tex_001F80" Format="ci8" Width="32" Height="16" Offset="0x1F80" />
+        <Texture Name="object_test3_Tex_002180" OutName="tex_002180" Format="rgba16" Width="32" Height="64" Offset="0x2180" />
+        <Texture Name="object_test3_Tex_003180" OutName="tex_003180" Format="ci8" Width="16" Height="64" Offset="0x3180" />
+        <Texture Name="object_test3_Tex_003580" OutName="tex_003580" Format="ci8" Width="16" Height="16" Offset="0x3580" />
+        <!-- <Blob Name="object_test3_Blob_003680" Size="0x4400" Offset="0x3680" /> -->
+        <DList Name="object_test3_DL_00BF10" Offset="0xBF10" />
+        <DList Name="object_test3_DL_00C198" Offset="0xC198" />
+        <DList Name="object_test3_DL_00C300" Offset="0xC300" />
+        <DList Name="object_test3_DL_00C478" Offset="0xC478" />
+        <DList Name="object_test3_DL_00C708" Offset="0xC708" />
+        <DList Name="object_test3_DL_00C870" Offset="0xC870" />
+        <DList Name="object_test3_DL_00C9E8" Offset="0xC9E8" />
+        <DList Name="object_test3_DL_00CB60" Offset="0xCB60" />
+        <DList Name="object_test3_DL_00CC20" Offset="0xCC20" />
+        <DList Name="object_test3_DL_00CF70" Offset="0xCF70" />
+        <DList Name="object_test3_DL_00D670" Offset="0xD670" />
+        <DList Name="object_test3_DL_00D730" Offset="0xD730" />
+        <DList Name="object_test3_DL_00D7F0" Offset="0xD7F0" />
+        <DList Name="object_test3_DL_00D930" Offset="0xD930" />
+        <DList Name="object_test3_DL_00DA70" Offset="0xDA70" />
+        <DList Name="object_test3_DL_00DCF0" Offset="0xDCF0" />
+        <DList Name="object_test3_DL_00DE30" Offset="0xDE30" />
+        <DList Name="object_test3_DL_00DF70" Offset="0xDF70" />
+        <DList Name="object_test3_DL_00EDD0" Offset="0xEDD0" />
+        <Texture Name="object_test3_Tex_00F2C0" OutName="tex_00F2C0" Format="i4" Width="16" Height="16" Offset="0xF2C0" />
+        <Texture Name="object_test3_Tex_00F340" OutName="tex_00F340" Format="i4" Width="16" Height="16" Offset="0xF340" />
+        <Texture Name="object_test3_Tex_00F3C0" OutName="tex_00F3C0" Format="i4" Width="16" Height="16" Offset="0xF3C0" />
+        <Texture Name="object_test3_Tex_00F440" OutName="tex_00F440" Format="i4" Width="32" Height="32" Offset="0xF440" />
+        <DList Name="object_test3_DL_00F640" Offset="0xF640" />
+        <Limb Name="object_test3_Lodlimb_00F648" Type="LOD" EnumName="OBJECT_TEST3_LIMB_01" Offset="0xF648" />
+        <Limb Name="object_test3_Lodlimb_00F658" Type="LOD" EnumName="OBJECT_TEST3_LIMB_02" Offset="0xF658" />
+        <Limb Name="object_test3_Lodlimb_00F668" Type="LOD" EnumName="OBJECT_TEST3_LIMB_03" Offset="0xF668" />
+        <Limb Name="object_test3_Lodlimb_00F678" Type="LOD" EnumName="OBJECT_TEST3_LIMB_04" Offset="0xF678" />
+        <Limb Name="object_test3_Lodlimb_00F688" Type="LOD" EnumName="OBJECT_TEST3_LIMB_05" Offset="0xF688" />
+        <Limb Name="object_test3_Lodlimb_00F698" Type="LOD" EnumName="OBJECT_TEST3_LIMB_06" Offset="0xF698" />
+        <Limb Name="object_test3_Lodlimb_00F6A8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_07" Offset="0xF6A8" />
+        <Limb Name="object_test3_Lodlimb_00F6B8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_08" Offset="0xF6B8" />
+        <Limb Name="object_test3_Lodlimb_00F6C8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_09" Offset="0xF6C8" />
+        <Limb Name="object_test3_Lodlimb_00F6D8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0A" Offset="0xF6D8" />
+        <Limb Name="object_test3_Lodlimb_00F6E8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0B" Offset="0xF6E8" />
+        <Limb Name="object_test3_Lodlimb_00F6F8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0C" Offset="0xF6F8" />
+        <Limb Name="object_test3_Lodlimb_00F708" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0D" Offset="0xF708" />
+        <Limb Name="object_test3_Lodlimb_00F718" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0E" Offset="0xF718" />
+        <Limb Name="object_test3_Lodlimb_00F728" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0F" Offset="0xF728" />
+        <Limb Name="object_test3_Lodlimb_00F738" Type="LOD" EnumName="OBJECT_TEST3_LIMB_10" Offset="0xF738" />
+        <Limb Name="object_test3_Lodlimb_00F748" Type="LOD" EnumName="OBJECT_TEST3_LIMB_11" Offset="0xF748" />
+        <Limb Name="object_test3_Lodlimb_00F758" Type="LOD" EnumName="OBJECT_TEST3_LIMB_12" Offset="0xF758" />
+        <Limb Name="object_test3_Lodlimb_00F768" Type="LOD" EnumName="OBJECT_TEST3_LIMB_13" Offset="0xF768" />
+        <Limb Name="object_test3_Lodlimb_00F778" Type="LOD" EnumName="OBJECT_TEST3_LIMB_14" Offset="0xF778" />
+        <Limb Name="object_test3_Lodlimb_00F788" Type="LOD" EnumName="OBJECT_TEST3_LIMB_15" Offset="0xF788" />
+        <Skeleton Name="object_test3_Skel_00F7EC" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TEST3_LIMB_NONE" LimbMax="OBJECT_TEST3_LIMB_MAX" EnumName="object_test3_Limbs" Offset="0xF7EC" />
+    </File>
+</Root>

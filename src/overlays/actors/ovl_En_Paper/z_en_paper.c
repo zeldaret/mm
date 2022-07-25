@@ -1,16 +1,22 @@
+/*
+ * File: z_en_paper.c
+ * Overlay: ovl_En_Paper
+ * Description: Tingle Confetti
+ */
+
 #include "z_en_paper.h"
 
-#define FLAGS 0x02100010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnPaper*)thisx)
 
-void EnPaper_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnPaper_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnPaper_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnPaper_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnPaper_Init(Actor* thisx, PlayState* play);
+void EnPaper_Destroy(Actor* thisx, PlayState* play);
+void EnPaper_Update(Actor* thisx, PlayState* play);
+void EnPaper_Draw(Actor* thisx, PlayState* play);
 
-void func_80C1F480(EnPaper* this, GlobalContext* globalCtx);
-void func_80C1F4FC(EnPaper* this, GlobalContext* globalCtx);
+void func_80C1F480(EnPaper* this, PlayState* play);
+void func_80C1F4FC(EnPaper* this, PlayState* play);
 
 #if 0
 const ActorInit En_Paper_InitVars = {

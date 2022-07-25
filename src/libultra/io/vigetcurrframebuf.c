@@ -1,3 +1,10 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/vigetcurrframebuf/osViGetCurrentFramebuffer.s")
+u32* osViGetCurrentFramebuffer(void) {
+    register u32 prevInt = __osDisableInt();
+    u32* curBuf = __osViCurr->buffer;
+
+    __osRestoreInt(prevInt);
+
+    return curBuf;
+}

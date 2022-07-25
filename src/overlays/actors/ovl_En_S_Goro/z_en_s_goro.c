@@ -1,13 +1,19 @@
+/*
+ * File: z_en_s_goro.c
+ * Overlay: ovl_En_S_Goro
+ * Description: Goron in Goron Shrine / Bomb Shop Goron
+ */
+
 #include "z_en_s_goro.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnSGoro*)thisx)
 
-void EnSGoro_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnSGoro_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnSGoro_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnSGoro_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnSGoro_Init(Actor* thisx, PlayState* play);
+void EnSGoro_Destroy(Actor* thisx, PlayState* play);
+void EnSGoro_Update(Actor* thisx, PlayState* play);
+void EnSGoro_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_S_Goro_InitVars = {

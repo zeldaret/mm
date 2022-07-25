@@ -1,0 +1,78 @@
+﻿<Root>
+    <File Name="object_ru2" Segment="6">
+        <Animation Name="object_ru2_Anim_0004CC" Offset="0x4CC" />
+        <Animation Name="object_ru2_Anim_000DE8" Offset="0xDE8" />
+        <!-- <Blob Name="object_ru2_Blob_000DF8" Size="0x128" Offset="0xDF8" /> -->
+        <Texture Name="object_ru2_Tex_000F20" OutName="tex_000F20" Format="rgba16" Width="32" Height="32" Offset="0xF20" />
+        <Texture Name="object_ru2_Tex_001720" OutName="tex_001720" Format="ci8" Width="8" Height="8" Offset="0x1720" />
+        <Texture Name="object_ru2_Tex_001760" OutName="tex_001760" Format="ci8" Width="16" Height="16" Offset="0x1760" />
+        <Texture Name="object_ru2_Tex_001860" OutName="tex_001860" Format="ci8" Width="16" Height="16" Offset="0x1860" />
+        <Texture Name="object_ru2_Tex_001960" OutName="tex_001960" Format="ci8" Width="8" Height="8" Offset="0x1960" />
+        <Texture Name="object_ru2_Tex_0019A0" OutName="tex_0019A0" Format="rgba16" Width="32" Height="32" Offset="0x19A0" />
+        <Texture Name="object_ru2_Tex_0021A0" OutName="tex_0021A0" Format="ci8" Width="8" Height="8" Offset="0x21A0" />
+        <Texture Name="object_ru2_Tex_0021E0" OutName="tex_0021E0" Format="ci8" Width="16" Height="16" Offset="0x21E0" />
+        <!-- <Blob Name="object_ru2_Blob_0022E0" Size="0x1000" Offset="0x22E0" /> -->
+        <Texture Name="object_ru2_Tex_0032E0" OutName="tex_0032E0" Format="rgba16" Width="8" Height="16" Offset="0x32E0" />
+        <DList Name="object_ru2_DL_003EB0" Offset="0x3EB0" />
+        <Texture Name="object_ru2_TLUT_0043C0" OutName="tlut_0043C0" Format="rgba16" Width="16" Height="16" Offset="0x43C0" />
+        <Texture Name="object_ru2_Tex_0045C0" OutName="tex_0045C0" Format="ci8" Width="8" Height="8" Offset="0x45C0" />
+        <Texture Name="object_ru2_Tex_004600" OutName="tex_004600" Format="ci8" Width="8" Height="8" Offset="0x4600" />
+        <Texture Name="object_ru2_Tex_004640" OutName="tex_004640" Format="ci8" Width="16" Height="16" Offset="0x4640" />
+        <Texture Name="object_ru2_Tex_004740" OutName="tex_004740" Format="ci8" Width="16" Height="16" Offset="0x4740" />
+        <Texture Name="object_ru2_Tex_004840" OutName="tex_004840" Format="ci8" Width="32" Height="64" Offset="0x4840" />
+        <Texture Name="object_ru2_Tex_005040" OutName="tex_005040" Format="ci8" Width="32" Height="32" Offset="0x5040" />
+        <Texture Name="object_ru2_Tex_005440" OutName="tex_005440" Format="ci8" Width="8" Height="8" Offset="0x5440" />
+        <Texture Name="object_ru2_Tex_005480" OutName="tex_005480" Format="ci8" Width="16" Height="16" Offset="0x5480" />
+        <Texture Name="object_ru2_Tex_005580" OutName="tex_005580" Format="ci8" Width="8" Height="8" Offset="0x5580" />
+        <Texture Name="object_ru2_Tex_0055C0" OutName="tex_0055C0" Format="ci8" Width="8" Height="32" Offset="0x55C0" />
+        <Texture Name="object_ru2_Tex_0056C0" OutName="tex_0056C0" Format="rgba16" Width="32" Height="32" Offset="0x56C0" />
+        <DList Name="object_ru2_DL_0088F0" Offset="0x88F0" />
+        <DList Name="object_ru2_DL_008D30" Offset="0x8D30" />
+        <DList Name="object_ru2_DL_009680" Offset="0x9680" />
+        <DList Name="object_ru2_DL_009998" Offset="0x9998" />
+        <DList Name="object_ru2_DL_009B80" Offset="0x9B80" />
+        <DList Name="object_ru2_DL_009F50" Offset="0x9F50" />
+        <DList Name="object_ru2_DL_00A030" Offset="0xA030" />
+        <DList Name="object_ru2_DL_00A150" Offset="0xA150" />
+        <DList Name="object_ru2_DL_00A468" Offset="0xA468" />
+        <DList Name="object_ru2_DL_00A650" Offset="0xA650" />
+        <DList Name="object_ru2_DL_00AA20" Offset="0xAA20" />
+        <DList Name="object_ru2_DL_00AB00" Offset="0xAB00" />
+        <DList Name="object_ru2_DL_00AC20" Offset="0xAC20" />
+        <DList Name="object_ru2_DL_00B048" Offset="0xB048" />
+        <DList Name="object_ru2_DL_00B178" Offset="0xB178" />
+        <DList Name="object_ru2_DL_00B568" Offset="0xB568" />
+        <DList Name="object_ru2_DL_00B8E0" Offset="0xB8E0" />
+        <DList Name="object_ru2_DL_00BD08" Offset="0xBD08" />
+        <DList Name="object_ru2_DL_00BE38" Offset="0xBE38" />
+        <DList Name="object_ru2_DL_00C228" Offset="0xC228" />
+        <Limb Name="object_ru2_Standardlimb_00C5A0" Type="Standard" EnumName="OBJECT_RU2_LIMB_01" Offset="0xC5A0" />
+        <Limb Name="object_ru2_Standardlimb_00C5AC" Type="Standard" EnumName="OBJECT_RU2_LIMB_02" Offset="0xC5AC" />
+        <Limb Name="object_ru2_Standardlimb_00C5B8" Type="Standard" EnumName="OBJECT_RU2_LIMB_03" Offset="0xC5B8" />
+        <Limb Name="object_ru2_Standardlimb_00C5C4" Type="Standard" EnumName="OBJECT_RU2_LIMB_04" Offset="0xC5C4" />
+        <Limb Name="object_ru2_Standardlimb_00C5D0" Type="Standard" EnumName="OBJECT_RU2_LIMB_05" Offset="0xC5D0" />
+        <Limb Name="object_ru2_Standardlimb_00C5DC" Type="Standard" EnumName="OBJECT_RU2_LIMB_06" Offset="0xC5DC" />
+        <Limb Name="object_ru2_Standardlimb_00C5E8" Type="Standard" EnumName="OBJECT_RU2_LIMB_07" Offset="0xC5E8" />
+        <Limb Name="object_ru2_Standardlimb_00C5F4" Type="Standard" EnumName="OBJECT_RU2_LIMB_08" Offset="0xC5F4" />
+        <Limb Name="object_ru2_Standardlimb_00C600" Type="Standard" EnumName="OBJECT_RU2_LIMB_09" Offset="0xC600" />
+        <Limb Name="object_ru2_Standardlimb_00C60C" Type="Standard" EnumName="OBJECT_RU2_LIMB_0A" Offset="0xC60C" />
+        <Limb Name="object_ru2_Standardlimb_00C618" Type="Standard" EnumName="OBJECT_RU2_LIMB_0B" Offset="0xC618" />
+        <Limb Name="object_ru2_Standardlimb_00C624" Type="Standard" EnumName="OBJECT_RU2_LIMB_0C" Offset="0xC624" />
+        <Limb Name="object_ru2_Standardlimb_00C630" Type="Standard" EnumName="OBJECT_RU2_LIMB_0D" Offset="0xC630" />
+        <Limb Name="object_ru2_Standardlimb_00C63C" Type="Standard" EnumName="OBJECT_RU2_LIMB_0E" Offset="0xC63C" />
+        <Limb Name="object_ru2_Standardlimb_00C648" Type="Standard" EnumName="OBJECT_RU2_LIMB_0F" Offset="0xC648" />
+        <Limb Name="object_ru2_Standardlimb_00C654" Type="Standard" EnumName="OBJECT_RU2_LIMB_10" Offset="0xC654" />
+        <Limb Name="object_ru2_Standardlimb_00C660" Type="Standard" EnumName="OBJECT_RU2_LIMB_11" Offset="0xC660" />
+        <Limb Name="object_ru2_Standardlimb_00C66C" Type="Standard" EnumName="OBJECT_RU2_LIMB_12" Offset="0xC66C" />
+        <Limb Name="object_ru2_Standardlimb_00C678" Type="Standard" EnumName="OBJECT_RU2_LIMB_13" Offset="0xC678" />
+        <Limb Name="object_ru2_Standardlimb_00C684" Type="Standard" EnumName="OBJECT_RU2_LIMB_14" Offset="0xC684" />
+        <Limb Name="object_ru2_Standardlimb_00C690" Type="Standard" EnumName="OBJECT_RU2_LIMB_15" Offset="0xC690" />
+        <Limb Name="object_ru2_Standardlimb_00C69C" Type="Standard" EnumName="OBJECT_RU2_LIMB_16" Offset="0xC69C" />
+        <Skeleton Name="object_ru2_Skel_00C700" Type="Flex" LimbType="Standard" LimbNone="OBJECT_RU2_LIMB_NONE" LimbMax="OBJECT_RU2_LIMB_MAX" EnumName="object_ru2_Limbs" Offset="0xC700" />
+        <Animation Name="object_ru2_Anim_00D3DC" Offset="0xD3DC" />
+        <Animation Name="object_ru2_Anim_00DCAC" Offset="0xDCAC" />
+        <Animation Name="object_ru2_Anim_00E630" Offset="0xE630" />
+        <Animation Name="object_ru2_Anim_00F03C" Offset="0xF03C" />
+        <Animation Name="object_ru2_Anim_00F8B8" Offset="0xF8B8" />
+    </File>
+</Root>

@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
 #
 #   z64compress wrapper for decomp projects
-#   Arguments: <rom in> <rom out> <elf> <spec> [cache directory] [num threads]
+#     https://github.com/z64me/z64compress
+#   Arguments: <rom in> <rom out> <elf> <spec> [--cache [cache directory]] [--threads [num threads]] [--mb [target rom size]] [--matching]
+#   Example Makefile usage:
+#     python3 tools/z64compress_wrapper.py --matching --threads $(shell nproc) $< $@ $(ELF) build/$(SPEC)
 #
 
 import argparse, itertools, subprocess, sys
+
 from elftools.elf.elffile import ELFFile
 from elftools.elf.sections import SymbolTableSection
 
 # Args from command line
-parser = argparse.ArgumentParser(description="Compress rom produced by the OoT Decomp project")
+parser = argparse.ArgumentParser(description="Compress rom produced by the OoT and MM Decomp projects")
 
 parser.add_argument("in_rom", help="uncompressed input rom filename")
 parser.add_argument("out_rom", help="compressed output rom filename")
@@ -17,7 +21,7 @@ parser.add_argument("elf", help="path to the uncompressed rom elf file")
 parser.add_argument("spec", help="path to processed spec file")
 parser.add_argument("--cache", help="cache directory")
 parser.add_argument("--threads", help="number of threads to run compression on, 0 disables multithreading")
-parser.add_argument("--mb", help="compressed rom size in MB, default 32")
+parser.add_argument("--mb", help="compressed rom size in MB, default is the smallest multiple of 8mb fitting the whole rom")
 parser.add_argument("--matching", help="matching compression, forfeits some useful optimizations", action="store_true")
 parser.add_argument("--stderr", help="z64compress will write its output messages to stderr instead of stdout", action="store_true")
 
@@ -26,14 +30,13 @@ args = parser.parse_args()
 IN_ROM = args.in_rom
 OUT_ROM = args.out_rom
 
-STDOUT = not args.stderr
-
 elf_path = args.elf
 
 CACHE_DIR = args.cache
 N_THREADS = int(args.threads or 0)
-MB = int(args.mb or 32)
-matching = args.matching
+MB = args.mb
+MATCHING = args.matching
+STDOUT = not args.stderr
 
 # Get segments to compress
 
@@ -83,8 +86,8 @@ def get_dmadata_start_len():
                 if dmadata_start != -1 and dmadata_end != -1:
                     break
 
-        assert dmadata_start != -1
-        assert dmadata_end != -1
+        assert dmadata_start != -1, "_dmadataSegmentRomStart symbol not found in supplied ELF"
+        assert dmadata_end != -1, "_dmadataSegmentRomEnd symbol not found in supplied ELF"
 
     return dmadata_start, (dmadata_end - dmadata_start)//0x10
 
@@ -92,13 +95,21 @@ DMADATA_ADDR, DMADATA_COUNT = get_dmadata_start_len()
 
 # Run
 
-cmd = f"./tools/z64compress/z64compress --in {IN_ROM} --out {OUT_ROM}{' --matching' if matching else ''} \
---mb {MB} --codec yaz{f' --cache {CACHE_DIR}' if CACHE_DIR is not None else ''} --dma 0x{DMADATA_ADDR:X},{DMADATA_COUNT} \
---compress {COMPRESS_INDICES}{f' --threads {N_THREADS}' if N_THREADS > 0 else ''}{f' --only-stdout' if STDOUT else ''}"
+cmd = f"./tools/z64compress/z64compress \
+--in {IN_ROM} \
+--out {OUT_ROM}\
+{' --matching' if MATCHING else ''}\
+{f' --mb {MB}' if MB is not None else ''} \
+--codec yaz\
+{f' --cache {CACHE_DIR}' if CACHE_DIR is not None else ''} \
+--dma 0x{DMADATA_ADDR:X},{DMADATA_COUNT} \
+--compress {COMPRESS_INDICES}\
+{f' --threads {N_THREADS}' if N_THREADS > 0 else ''}\
+{f' --only-stdout' if STDOUT else ''}"
 
 print(cmd)
-
 try:
     subprocess.check_call(cmd, shell=True)
 except subprocess.CalledProcessError as e:
+    # Return the same error code for the wrapper if z64compress fails
     sys.exit(e.returncode)

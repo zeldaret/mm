@@ -5,36 +5,19 @@
  */
 
 #include "z_en_dai.h"
+#include "objects/object_dai/object_dai.h"
 
-#define FLAGS 0x02000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnDai*)thisx)
 
-void EnDai_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDai_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDai_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnDai_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnDai_Init(Actor* thisx, PlayState* play);
+void EnDai_Destroy(Actor* thisx, PlayState* play);
+void EnDai_Update(Actor* thisx, PlayState* play);
+void EnDai_Draw(Actor* thisx, PlayState* play);
 
-void func_80B3F00C(EnDai* this, GlobalContext* globalCtx);
-void func_80B3EF90(EnDai* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_060107B0;
-extern AnimationHeader D_06010FB0;
-extern AnimationHeader D_060117B0;
-extern AnimationHeader D_06010FB0;
-extern AnimationHeader D_06011FB0;
-extern AnimationHeader D_060127B0;
-extern AnimationHeader D_060079E4;
-extern AnimationHeader D_06007354;
-extern AnimationHeader D_06000CEC;
-extern AnimationHeader D_060069DC;
-extern AnimationHeader D_0600563C;
-extern AnimationHeader D_06002E58;
-extern AnimationHeader D_06006590;
-extern FlexSkeletonHeader D_060130D0;
-extern Gfx D_06000230[];
-extern Gfx D_060002E8[];
-extern Gfx D_0600C538[];
+void func_80B3F00C(EnDai* this, PlayState* play);
+void func_80B3EF90(EnDai* this, PlayState* play);
 
 const ActorInit En_Dai_InitVars = {
     ACTOR_EN_DAI,
@@ -50,111 +33,115 @@ const ActorInit En_Dai_InitVars = {
 
 static Vec3f D_80B3FBF0 = { 1.0f, 1.0f, 1.0f };
 
-EnDaiParticle* func_80B3DFF0(EnDaiParticle* particle, Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5,
-                             s32 arg6) {
+EnDaiEffect* func_80B3DFF0(EnDaiEffect* effect, Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5, s32 arg6) {
     s32 i;
 
-    for (i = 0; i < 32; i++, particle++) {
-        if (!particle->isEnabled) {
-            particle->isEnabled = true;
-            particle->unk_01 = (Rand_ZeroOne() * (2.0f * (arg6 / 3.0f))) + (arg6 / 3.0f);
-            particle->unk_02 = particle->unk_01;
-            particle->unk_10 = arg1;
-            particle->unk_1C = arg2;
-            particle->unk_28 = arg3;
-            particle->unk_34 = arg4;
-            particle->unk_38 = arg5;
-            return particle;
+    for (i = 0; i < EN_DAI_EFFECT_COUNT; i++, effect++) {
+        if (!effect->isEnabled) {
+            effect->isEnabled = true;
+            effect->unk_01 = (Rand_ZeroOne() * (2.0f * (arg6 / 3.0f))) + (arg6 / 3.0f);
+            effect->unk_02 = effect->unk_01;
+            effect->unk_10 = arg1;
+            effect->unk_1C = arg2;
+            effect->unk_28 = arg3;
+            effect->unk_34 = arg4;
+            effect->unk_38 = arg5;
+            return effect;
         }
     }
 
     return NULL;
 }
 
-void func_80B3E168(EnDaiParticle* particle, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void func_80B3E168(EnDaiEffect* effect, PlayState* play2) {
+    PlayState* play = play2;
     s32 pad;
     s32 isDisplayListSet = false;
     s32 i;
     f32 alpha;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
-    for (i = 0; i < 32; i++, particle++) {
-        if (particle->isEnabled == true) {
+    for (i = 0; i < EN_DAI_EFFECT_COUNT; i++, effect++) {
+        if (effect->isEnabled == true) {
             gDPPipeSync(POLY_XLU_DISP++);
 
             if (!isDisplayListSet) {
-                gSPDisplayList(POLY_XLU_DISP++, D_06000230);
+                gSPDisplayList(POLY_XLU_DISP++, object_dai_DL_000230);
                 isDisplayListSet = true;
             }
 
-            Matrix_StatePush();
+            Matrix_Push();
 
-            alpha = (particle->unk_02 / (f32)particle->unk_01);
+            alpha = (effect->unk_02 / (f32)effect->unk_01);
             alpha *= 255.0f;
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, (u8)alpha);
 
             gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (particle->unk_02 + (i * 3)) * 3,
-                                        (particle->unk_02 + (i * 3)) * 15, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, (effect->unk_02 + (i * 3)) * 3,
+                                        (effect->unk_02 + (i * 3)) * 15, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
 
-            Matrix_InsertTranslation(particle->unk_10.x, particle->unk_10.y, particle->unk_10.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
-            Matrix_Scale(particle->unk_34, particle->unk_34, 1.0f, MTXMODE_APPLY);
+            Matrix_Translate(effect->unk_10.x, effect->unk_10.y, effect->unk_10.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&play->billboardMtxF);
+            Matrix_Scale(effect->unk_34, effect->unk_34, 1.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_060002E8);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_XLU_DISP++, object_dai_DL_0002E8);
 
-            Matrix_StatePop();
+            Matrix_Pop();
         }
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 s32 func_80B3E460(EnDai* this) {
-    EnDaiParticle* particle = &this->particles[0];
+    EnDaiEffect* effect = this->effects;
     s32 i;
     s32 count;
 
-    for (i = 0, count = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
-        if (particle->isEnabled && particle->unk_02) {
-            particle->unk_10.x += particle->unk_28.x;
-            particle->unk_02--;
-            particle->unk_10.y += particle->unk_28.y;
-            particle->unk_10.z += particle->unk_28.z;
-            particle->unk_28.x += particle->unk_1C.x;
-            particle->unk_28.y += particle->unk_1C.y;
-            particle->unk_28.z += particle->unk_1C.z;
-            particle->unk_34 += particle->unk_38;
+    for (i = 0, count = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (effect->isEnabled && effect->unk_02) {
+            effect->unk_10.x += effect->unk_28.x;
+            effect->unk_02--;
+            effect->unk_10.y += effect->unk_28.y;
+            effect->unk_10.z += effect->unk_28.z;
+            effect->unk_28.x += effect->unk_1C.x;
+            effect->unk_28.y += effect->unk_1C.y;
+            effect->unk_28.z += effect->unk_1C.z;
+            effect->unk_34 += effect->unk_38;
             count++;
-        } else if (particle->isEnabled) {
-            particle->isEnabled = false;
+        } else if (effect->isEnabled) {
+            effect->isEnabled = false;
         }
     }
 
     return count;
 }
 
-s32 func_80B3E5B4(EnDai* this, GlobalContext* globalCtx) {
-    func_80B3E168(this->particles, globalCtx);
+s32 func_80B3E5B4(EnDai* this, PlayState* play) {
+    func_80B3E168(this->effects, play);
     return 0;
 }
 
 s32 func_80B3E5DC(EnDai* this, s32 arg1) {
-    static ActorAnimationEntryS D_80B3FBFC[] = {
-        { &D_060079E4, 1.0f, 0, -1, 0, 0 },  { &D_060079E4, 1.0f, 0, -1, 0, -4 }, { &D_06007354, 1.0f, 0, -1, 2, -4 },
-        { &D_06000CEC, 1.0f, 0, -1, 2, -4 }, { &D_060069DC, 1.0f, 0, -1, 2, -4 }, { &D_0600563C, 1.0f, 0, -1, 2, 0 },
-        { &D_0600563C, 1.0f, 0, -1, 2, -4 }, { &D_06002E58, 1.0f, 0, -1, 0, -4 }, { &D_06006590, 1.0f, 0, -1, 2, -4 },
+    static AnimationInfoS D_80B3FBFC[] = {
+        { &object_dai_Anim_0079E4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+        { &object_dai_Anim_0079E4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+        { &object_dai_Anim_007354, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+        { &object_dai_Anim_000CEC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+        { &object_dai_Anim_0069DC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+        { &object_dai_Anim_00563C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+        { &object_dai_Anim_00563C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+        { &object_dai_Anim_002E58, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+        { &object_dai_Anim_006590, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     };
 
     s32 phi_v1 = false;
-    s32 ret = 0;
+    s32 ret = false;
 
     switch (arg1) {
         case 0:
@@ -180,19 +167,19 @@ s32 func_80B3E5DC(EnDai* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_A70 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, D_80B3FBFC, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80B3FBFC, arg1);
     }
 
     return ret;
 }
 
-s32 func_80B3E69C(EnDai* this, GlobalContext* globalCtx) {
+s32 func_80B3E69C(EnDai* this, PlayState* play) {
     s32 ret = false;
 
-    if ((globalCtx->csCtx.state != 0) && (globalCtx->sceneNum == SCENE_12HAKUGINMAE) &&
-        (globalCtx->csCtx.unk_12 == 0) && !(gSaveContext.weekEventReg[30] & 1)) {
+    if ((play->csCtx.state != 0) && (play->sceneNum == SCENE_12HAKUGINMAE) && (play->csCtx.currentCsIndex == 0) &&
+        !(gSaveContext.save.weekEventReg[30] & 1)) {
         if (!(this->unk_1CE & 0x10)) {
-            Actor_SetSwitchFlag(globalCtx, 20);
+            Flags_SetSwitch(play, 20);
             this->unk_1CE |= (0x80 | 0x10);
             this->unk_1CE &= ~(0x100 | 0x20);
             this->unk_1CC = 0xFF;
@@ -205,19 +192,19 @@ s32 func_80B3E69C(EnDai* this, GlobalContext* globalCtx) {
     } else if (this->unk_1CE & 0x10) {
         this->unk_1CE &= ~0x10;
         this->unk_1CE |= 0x200;
-        gSaveContext.weekEventReg[30] |= 1;
+        gSaveContext.save.weekEventReg[30] |= 1;
         this->actionFunc = func_80B3F00C;
     }
 
     return ret;
 }
 
-s32 func_80B3E7C8(EnDai* this, GlobalContext* globalCtx) {
+s32 func_80B3E7C8(EnDai* this, PlayState* play) {
     s32 ret = false;
 
     if (this->unk_1CE & 7) {
-        if (func_800B84D0(&this->actor, globalCtx)) {
-            func_8013AED4(&this->unk_1CE, 0, 7);
+        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+            SubS_UpdateFlags(&this->unk_1CE, 0, 7);
             this->actionFunc = func_80B3EF90;
             ret = true;
         }
@@ -289,7 +276,7 @@ s16 func_80B3E8BC(EnDai* this, s32 arg1) {
     return this->unk_1D6;
 }
 
-s32 func_80B3E96C(EnDai* this, GlobalContext* globalCtx) {
+s32 func_80B3E96C(EnDai* this, PlayState* play) {
     Vec3f sp74;
     Vec3f sp68;
     Vec3f sp5C;
@@ -304,8 +291,8 @@ s32 func_80B3E96C(EnDai* this, GlobalContext* globalCtx) {
                 break;
 
             case 1:
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_SNOWSTORM_HARD);
-                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WEATHER_TAG, this->actor.world.pos.x,
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWSTORM_HARD);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WEATHER_TAG, this->actor.world.pos.x,
                             this->actor.world.pos.y, this->actor.world.pos.z, 0x1388, 0x708, 0x3E8, 0);
                 func_80B3E5DC(this, 3);
                 this->unk_1DC++;
@@ -336,7 +323,7 @@ s32 func_80B3E96C(EnDai* this, GlobalContext* globalCtx) {
         sp5C.y = -40.0f;
 
         Lib_Vec3f_TranslateAndRotateY(&this->unk_1E4, this->unk_1D4, &sp50, &sp74);
-        func_80B3DFF0(this->particles, sp74, sp68, sp5C, 0.03f, 0.04f, 0x10);
+        func_80B3DFF0(this->effects, sp74, sp68, sp5C, 0.03f, 0.04f, 0x10);
     }
 
     return 0;
@@ -411,7 +398,7 @@ s32 func_80B3ED88(EnDai* this) {
     return ret;
 }
 
-void func_80B3EE8C(EnDai* this, GlobalContext* globalCtx) {
+void func_80B3EE8C(EnDai* this, PlayState* play) {
     s16 cutscene = this->actor.cutscene;
 
     if (ActorCutscene_GetCanPlayNext(cutscene)) {
@@ -421,15 +408,15 @@ void func_80B3EE8C(EnDai* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B3EEDC(EnDai* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80B3EEDC(EnDai* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
-    if ((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.unk1202A == 3) &&
-        (globalCtx->msgCtx.unk1202E == 1)) {
+    if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
+        (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY)) {
         func_80B3E5DC(this, 1);
         this->actionFunc = func_80B3EE8C;
     } else if (!(player->stateFlags2 & 0x08000000)) {
-        func_80B3E96C(this, globalCtx);
+        func_80B3E96C(this, play);
         this->unk_A6C = 0;
     } else if (this->unk_A6C == 0) {
         play_sound(NA_SE_SY_TRE_BOX_APPEAR);
@@ -437,9 +424,9 @@ void func_80B3EEDC(EnDai* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B3EF90(EnDai* this, GlobalContext* globalCtx) {
-    if (func_8010BF58(&this->actor, globalCtx, D_80B3FC8C, NULL, &this->unk_1D0)) {
-        func_8013AED4(&this->unk_1CE, 3, 7);
+void func_80B3EF90(EnDai* this, PlayState* play) {
+    if (func_8010BF58(&this->actor, play, D_80B3FC8C, NULL, &this->unk_1D0)) {
+        SubS_UpdateFlags(&this->unk_1CE, 3, 7);
         this->unk_1D0 = 0;
         this->actionFunc = func_80B3F00C;
     } else {
@@ -447,21 +434,20 @@ void func_80B3EF90(EnDai* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B3F00C(EnDai* this, GlobalContext* globalCtx) {
+void func_80B3F00C(EnDai* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
 }
 
-void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
+void func_80B3F044(EnDai* this, PlayState* play) {
     static s32 D_80B3FE38[] = {
         0, 0, 6, 7, 8,
     };
-
     s32 sp2C = 0;
     s32 sp28;
 
-    if (func_800EE29C(globalCtx, 0x1D8)) {
-        sp2C = func_800EE200(globalCtx, 0x1D8);
-        sp28 = globalCtx->csCtx.npcActions[sp2C]->unk0;
+    if (Cutscene_CheckActorAction(play, 472)) {
+        sp2C = Cutscene_GetActorActionIndex(play, 472);
+        sp28 = play->csCtx.actorActions[sp2C]->action;
         if (this->unk_1CC != (u8)sp28) {
             func_80B3E5DC(this, D_80B3FE38[sp28]);
             switch (sp28) {
@@ -470,7 +456,7 @@ void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
                     break;
 
                 case 2:
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EV_ROLL_AND_FALL);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROLL_AND_FALL);
                     break;
 
                 case 3:
@@ -492,41 +478,41 @@ void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
             break;
 
         case 2:
-            if (globalCtx->csCtx.frames == 360) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_DAIGOLON_SLEEP3 - SFX_FLAG);
+            if (play->csCtx.frames == 360) {
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP3 - SFX_FLAG);
             }
             if (Animation_OnFrame(&this->skelAnime, 43.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_GORON_BOUND_1);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_BOUND_1);
             }
             this->unk_1D6 = func_80B3E8BC(this, this->unk_1CC);
             break;
 
         case 3:
             if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_DAIGOLON_SLEEP1);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP1);
             }
             this->unk_1D6 = func_80B3E8BC(this, this->unk_1CC);
             break;
 
         case 4:
             if (Animation_OnFrame(&this->skelAnime, 30.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_DAIGOLON_SLEEP2);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP2);
             }
             if (Animation_OnFrame(&this->skelAnime, 35.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_GORON_BOUND_0);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_BOUND_0);
             }
             this->unk_1D6 = func_80B3E8BC(this, this->unk_1CC);
             break;
     }
 
-    func_800EDF24(&this->actor, globalCtx, sp2C);
+    Cutscene_ActorTranslateAndYaw(&this->actor, play, sp2C);
 }
 
-void EnDai_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnDai_Init(Actor* thisx, PlayState* play) {
     EnDai* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060130D0, NULL, this->jointTable, this->morphTable, 19);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_dai_Skel_0130D0, NULL, this->jointTable, this->morphTable, 19);
     this->unk_A70 = -1;
     func_80B3E5DC(this, 0);
     Actor_SetScale(&this->actor, 0.2f);
@@ -536,54 +522,54 @@ void EnDai_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_1CE = 0;
     this->unk_1D6 = 0;
 
-    if (gSaveContext.weekEventReg[33] & 0x80) {
-        func_8013AED4(&this->unk_1CE, 3, 7);
+    if (gSaveContext.save.weekEventReg[33] & 0x80) {
+        SubS_UpdateFlags(&this->unk_1CE, 3, 7);
         this->unk_1CE |= 0x80;
         this->unk_1CD = 0xFF;
         this->actionFunc = func_80B3F00C;
         return;
     }
 
-    if (gSaveContext.weekEventReg[30] & 1) {
+    if (gSaveContext.save.weekEventReg[30] & 1) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
     this->unk_1CD = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_1CE |= (0x100 | 0x20);
     this->unk_1CE |= 0x80;
     this->actionFunc = func_80B3EEDC;
 }
 
-void EnDai_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnDai_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void EnDai_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnDai_Update(Actor* thisx, PlayState* play) {
     EnDai* this = THIS;
     s32 pad;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
 
-    if (!func_80B3E7C8(this, globalCtx) && func_80B3E69C(this, globalCtx)) {
-        func_80B3F044(this, globalCtx);
+    if (!func_80B3E7C8(this, play) && func_80B3E69C(this, play)) {
+        func_80B3F044(this, play);
         SkelAnime_Update(&this->skelAnime);
         func_80B3E834(this);
         func_80B3E460(this);
     } else {
-        this->actionFunc(this, globalCtx);
+        this->actionFunc(this, play);
         if (!(player->stateFlags2 & 0x8000000)) {
             SkelAnime_Update(&this->skelAnime);
             func_80B3E834(this);
             if (!(this->unk_1CE & 0x200)) {
-                func_8013C964(&this->actor, globalCtx, 0.0f, 0.0f, 0, this->unk_1CE & 7);
+                func_8013C964(&this->actor, play, 0.0f, 0.0f, EXCH_ITEM_NONE, this->unk_1CE & 7);
             }
             func_80B3E460(this);
         }
     }
 }
 
-s32 func_80B3F598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
-                  Gfx** gfx) {
+s32 EnDai_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+                           Gfx** gfx) {
     EnDai* this = THIS;
 
     if (!(this->unk_1CE & 0x40)) {
@@ -591,17 +577,17 @@ s32 func_80B3F598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     }
 
     if (limbIndex == 11) {
-        Matrix_MultiplyVector3fByState(&D_801D15B0, &this->unk_1E4);
+        Matrix_MultVec3f(&gZeroVec3f, &this->unk_1E4);
     }
 
     if (limbIndex == 10) {
         *dList = NULL;
     }
 
-    return 0;
+    return false;
 }
 
-void func_80B3F614(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnDai_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     static Vec3f D_80B3FE4C = { 0.0f, 0.0f, 0.0f };
 
     EnDai* this = THIS;
@@ -613,23 +599,23 @@ void func_80B3F614(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
             D_80B3FE4C.x = sREG(0);
             D_80B3FE4C.y = sREG(1);
             D_80B3FE4C.z = sREG(2);
-            Matrix_MultiplyVector3fByState(&D_80B3FE4C, &this->actor.focus.pos);
+            Matrix_MultVec3f(&D_80B3FE4C, &this->actor.focus.pos);
             Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
-            Matrix_CopyCurrentState(&sp24);
-            func_8018219C(&sp24, &sp64, 0);
+            Matrix_Get(&sp24);
+            Matrix_MtxFToYXZRot(&sp24, &sp64, false);
             this->unk_1D4 = BINANG_SUB(sp64.y, 0x4000);
             break;
 
         case 10:
-            Matrix_CopyCurrentState(&this->unk_18C);
+            Matrix_Get(&this->unk_18C);
             break;
     }
 }
 
-void func_80B3F6EC(GlobalContext* globalCtx, s32 arg1, Actor* thisx, Gfx** gfx) {
+void EnDai_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx, Gfx** gfx) {
     EnDai* this = THIS;
 
-    switch (arg1) {
+    switch (limbIndex) {
         case 9:
             if (this->unk_1CE & 0x100) {
                 func_80B3EC84(this);
@@ -646,102 +632,103 @@ void func_80B3F6EC(GlobalContext* globalCtx, s32 arg1, Actor* thisx, Gfx** gfx) 
     }
 }
 
-void func_80B3F78C(EnDai* this, GlobalContext* globalCtx) {
-    static AnimationHeader* D_80B3FE58[] = {
-        &D_060107B0, &D_06010FB0, &D_060117B0, &D_06010FB0, &D_06011FB0, &D_060127B0,
+void func_80B3F78C(EnDai* this, PlayState* play) {
+    static TexturePtr D_80B3FE58[] = {
+        object_dai_Tex_0107B0, object_dai_Tex_010FB0, object_dai_Tex_0117B0,
+        object_dai_Tex_010FB0, object_dai_Tex_011FB0, object_dai_Tex_0127B0,
     };
-
     s32 pad;
 
-    if (globalCtx->actorCtx.unkB != 0) {
+    if (play->actorCtx.unkB != 0) {
         this->unk_1CE |= 0x40;
     } else {
-        Actor_RecordUndrawnActor(globalCtx, &this->actor);
+        Actor_RecordUndrawnActor(play, &this->actor);
         this->unk_1CE &= ~0x40;
     }
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    Scene_SetRenderModeXlu(globalCtx, 2, 2);
+    Scene_SetRenderModeXlu(play, 2, 2);
 
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 255);
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3FE58[this->unk_1D6]));
 
-    POLY_XLU_DISP =
-        func_8013AB00(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                      func_80B3F598, func_80B3F614, func_80B3F6EC, &this->actor, POLY_XLU_DISP);
+    POLY_XLU_DISP = SubS_DrawTransformFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                           this->skelAnime.dListCount, EnDai_OverrideLimbDraw, EnDai_PostLimbDraw,
+                                           EnDai_TransformLimbDraw, &this->actor, POLY_XLU_DISP);
     if (this->unk_1CE & 0x40) {
-        Matrix_SetCurrentState(&this->unk_18C);
+        Matrix_Put(&this->unk_18C);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_0600C538);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, object_dai_DL_00C538);
     }
 
-    func_80B3E5B4(this, globalCtx);
+    func_80B3E5B4(this, play);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80B3F920(EnDai* this, GlobalContext* globalCtx) {
-    static AnimationHeader* D_80B3FE70[] = {
-        &D_060107B0, &D_06010FB0, &D_060117B0, &D_06010FB0, &D_06011FB0, &D_060127B0,
+void func_80B3F920(EnDai* this, PlayState* play) {
+    static TexturePtr D_80B3FE70[] = {
+        object_dai_Tex_0107B0, object_dai_Tex_010FB0, object_dai_Tex_0117B0,
+        object_dai_Tex_010FB0, object_dai_Tex_011FB0, object_dai_Tex_0127B0,
     };
 
     s32 pad;
 
     this->unk_1CE |= 0x40;
     if (this->unk_1CD == 0xFF) {
-        func_8012C28C(globalCtx->state.gfxCtx);
+        func_8012C28C(play->state.gfxCtx);
 
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
-        Scene_SetRenderModeXlu(globalCtx, 0, 1);
+        Scene_SetRenderModeXlu(play, 0, 1);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3FE70[this->unk_1D6]));
 
-        POLY_OPA_DISP =
-            func_8013AB00(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80B3F598, func_80B3F614, func_80B3F6EC, &this->actor, POLY_OPA_DISP);
-        Matrix_SetCurrentState(&this->unk_18C);
+        POLY_OPA_DISP = SubS_DrawTransformFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                               this->skelAnime.dListCount, EnDai_OverrideLimbDraw, EnDai_PostLimbDraw,
+                                               EnDai_TransformLimbDraw, &this->actor, POLY_OPA_DISP);
+        Matrix_Put(&this->unk_18C);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_0600C538);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, object_dai_DL_00C538);
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     } else {
-        func_8012C2DC(globalCtx->state.gfxCtx);
+        func_8012C2DC(play->state.gfxCtx);
 
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
-        Scene_SetRenderModeXlu(globalCtx, 2, 2);
+        Scene_SetRenderModeXlu(play, 2, 2);
 
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk_1CD);
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3FE70[this->unk_1D6]));
 
-        POLY_XLU_DISP =
-            func_8013AB00(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80B3F598, func_80B3F614, func_80B3F6EC, &this->actor, POLY_XLU_DISP);
-        Matrix_SetCurrentState(&this->unk_18C);
+        POLY_XLU_DISP = SubS_DrawTransformFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                               this->skelAnime.dListCount, EnDai_OverrideLimbDraw, EnDai_PostLimbDraw,
+                                               EnDai_TransformLimbDraw, &this->actor, POLY_XLU_DISP);
+        Matrix_Put(&this->unk_18C);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_0600C538);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, object_dai_DL_00C538);
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 
-    func_80B3E5B4(this, globalCtx);
+    func_80B3E5B4(this, play);
 }
 
-void EnDai_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnDai_Draw(Actor* thisx, PlayState* play) {
     EnDai* this = THIS;
 
     if (!(this->unk_1CE & 0x200)) {
         if (this->unk_1CE & 0x20) {
-            func_80B3F78C(this, globalCtx);
+            func_80B3F78C(this, play);
         } else {
-            func_80B3F920(this, globalCtx);
+            func_80B3F920(this, play);
         }
     }
 }

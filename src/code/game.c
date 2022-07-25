@@ -1,12 +1,11 @@
 #include "global.h"
+#include "system_malloc.h"
+#include "z64rumble.h"
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;
 f32 gFramerateDivisorHalf = 1.0f / 2.0f;
 f32 gFramerateDivisorThird = 1.0f / 3.0f;
-
-u32 D_801D1510 = 0x0000000A;
-u32 D_801D1514[3] = { 0 };
 
 void Game_UpdateFramerateVariables(s32 divisor) {
     gFramerateDivisor = divisor;
@@ -54,7 +53,7 @@ void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
                 sMonoColors.envColor.g = R_FB_FILTER_ENV_COLOR(1);
                 sMonoColors.envColor.b = R_FB_FILTER_ENV_COLOR(2);
                 sMonoColors.envColor.a = R_FB_FILTER_A;
-                VisMono_Draw(&sMonoColors, &dlist, arg1);
+                VisMono_Draw(&sMonoColors, &dlist);
             }
         }
     }
@@ -104,12 +103,12 @@ void GameState_Draw(GameState* gameState, GraphicsContext* gfxCtx) {
 void GameState_SetFrameBuffer(GraphicsContext* gfxCtx) {
     OPEN_DISPS(gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0, NULL);
-    gSPSegment(POLY_OPA_DISP++, 0xF, gfxCtx->framebuffer);
-    gSPSegment(POLY_XLU_DISP++, 0, NULL);
-    gSPSegment(POLY_XLU_DISP++, 0xF, gfxCtx->framebuffer);
-    gSPSegment(OVERLAY_DISP++, 0, NULL);
-    gSPSegment(OVERLAY_DISP++, 0xF, gfxCtx->framebuffer);
+    gSPSegment(POLY_OPA_DISP++, 0x00, NULL);
+    gSPSegment(POLY_OPA_DISP++, 0x0F, gfxCtx->curFrameBuffer);
+    gSPSegment(POLY_XLU_DISP++, 0x00, NULL);
+    gSPSegment(POLY_XLU_DISP++, 0x0F, gfxCtx->curFrameBuffer);
+    gSPSegment(OVERLAY_DISP++, 0x00, NULL);
+    gSPSegment(OVERLAY_DISP++, 0x0F, gfxCtx->curFrameBuffer);
 
     CLOSE_DISPS(gfxCtx);
 }
@@ -177,7 +176,7 @@ void GameState_Realloc(GameState* gameState, size_t size) {
     alloc = &gameState->alloc;
     THA_Dt(&gameState->heap);
     GameAlloc_Free(alloc, heapStart);
-    SystemArena_AnalyzeArena(&systemMaxFree, &bytesFree, &bytesAllocated);
+    SystemArena_GetSizes(&systemMaxFree, &bytesFree, &bytesAllocated);
     size = ((systemMaxFree - (sizeof(ArenaNode))) < size) ? (0) : (size);
     if (size == 0) {
         size = systemMaxFree - (sizeof(ArenaNode));
@@ -193,16 +192,16 @@ void GameState_Realloc(GameState* gameState, size_t size) {
 
 void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* gfxCtx) {
     gameState->gfxCtx = gfxCtx;
-    gameState->frames = 0U;
+    gameState->frames = 0;
     gameState->main = NULL;
     gameState->destroy = NULL;
     gameState->running = 1;
     gfxCtx->viMode = D_801FBB88;
     gfxCtx->viConfigFeatures = gViConfigFeatures;
-    gfxCtx->viConfigXScale = gViConfigXScale;
-    gfxCtx->viConfigYScale = gViConfigYScale;
+    gfxCtx->xScale = gViConfigXScale;
+    gfxCtx->yScale = gViConfigYScale;
     gameState->nextGameStateInit = NULL;
-    gameState->nextGameStateSize = 0U;
+    gameState->nextGameStateSize = 0;
 
     {
         s32 requiredScopeTemp;
@@ -215,29 +214,29 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
 
         func_80140CE0(&D_801F8010);
         func_801420C0(&D_801F8020);
-        func_801418B0(&sMonoColors);
+        VisMono_Init(&sMonoColors);
         func_80140898(&D_801F8048);
         func_801773A0(&D_801F7FF0);
-        func_8013ED9C();
+        Rumble_Init();
 
-        osSendMesg(&gameState->gfxCtx->unk5C, NULL, 1);
+        osSendMesg(&gameState->gfxCtx->queue, NULL, OS_MESG_BLOCK);
     }
 }
 
 void GameState_Destroy(GameState* gameState) {
-    func_80172BC0();
+    AudioMgr_StopAllSfxExceptSystem();
     func_8019E014();
-    osRecvMesg(&gameState->gfxCtx->unk5C, NULL, OS_MESG_BLOCK);
+    osRecvMesg(&gameState->gfxCtx->queue, NULL, OS_MESG_BLOCK);
 
     if (gameState->destroy != NULL) {
         gameState->destroy(gameState);
     }
 
-    func_8013EDD0();
+    Rumble_Destroy();
     func_801773C4(&D_801F7FF0);
     func_80140D04(&D_801F8010);
     func_801420F4(&D_801F8020);
-    func_80141900(&sMonoColors);
+    VisMono_Destroy(&sMonoColors);
     func_80140900(&D_801F8048);
     THA_Dt(&gameState->heap);
     GameAlloc_Cleanup(&gameState->alloc);
@@ -247,7 +246,7 @@ GameStateFunc GameState_GetNextStateInit(GameState* gameState) {
     return gameState->nextGameStateInit;
 }
 
-size_t Game_GetNextStateSize(GameState* gameState) {
+size_t GameState_GetNextStateSize(GameState* gameState) {
     return gameState->nextGameStateSize;
 }
 

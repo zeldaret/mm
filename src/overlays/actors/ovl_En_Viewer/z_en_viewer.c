@@ -1,17 +1,23 @@
+/*
+ * File: z_en_viewer.c
+ * Overlay: ovl_En_Viewer
+ * Description: Cutscene Actors?
+ */
+
 #include "z_en_viewer.h"
 
-#define FLAGS 0x00200030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000)
 
 #define THIS ((EnViewer*)thisx)
 
-void EnViewer_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnViewer_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnViewer_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnViewer_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnViewer_Init(Actor* thisx, PlayState* play);
+void EnViewer_Destroy(Actor* thisx, PlayState* play);
+void EnViewer_Update(Actor* thisx, PlayState* play);
+void EnViewer_Draw(Actor* thisx, PlayState* play);
 
-void func_8089F17C(EnViewer* this, GlobalContext* globalCtx);
-void func_8089F218(EnViewer* this, GlobalContext* globalCtx);
-void func_8089F2C4(EnViewer* this, GlobalContext* globalCtx);
+void func_8089F17C(EnViewer* this, PlayState* play);
+void func_8089F218(EnViewer* this, PlayState* play);
+void func_8089F2C4(EnViewer* this, PlayState* play);
 
 void EnViewer_SetupAction(EnViewer* this, EnViewerActionFunc actionFunc);
 

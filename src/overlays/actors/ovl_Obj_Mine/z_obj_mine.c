@@ -1,13 +1,19 @@
+/*
+ * File: z_obj_mine.c
+ * Overlay: ovl_Obj_Mine
+ * Description: Spike metal Mine
+ */
+
 #include "z_obj_mine.h"
 
 #define FLAGS 0x00000000
 
 #define THIS ((ObjMine*)thisx)
 
-void ObjMine_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjMine_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjMine_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjMine_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjMine_Init(Actor* thisx, PlayState* play);
+void ObjMine_Destroy(Actor* thisx, PlayState* play);
+void ObjMine_Update(Actor* thisx, PlayState* play);
+void ObjMine_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Obj_Mine_InitVars = {
@@ -33,7 +39,7 @@ static ColliderJntSphElementInit D_80A84570[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80A84594 = {
     { COLTYPE_METAL, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_1, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_80A84570, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80A84570, // sJntSphElementsInit,
 };
 
 // static InitChainEntry sInitChain[] = {

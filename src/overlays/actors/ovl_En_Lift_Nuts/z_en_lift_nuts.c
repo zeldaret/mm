@@ -1,13 +1,19 @@
+/*
+ * File: z_en_lift_nuts.c
+ * Overlay: ovl_En_Lift_Nuts
+ * Description: Deku Scrub Playground - Employee
+ */
+
 #include "z_en_lift_nuts.h"
 
-#define FLAGS 0x02000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnLiftNuts*)thisx)
 
-void EnLiftNuts_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnLiftNuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnLiftNuts_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnLiftNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnLiftNuts_Init(Actor* thisx, PlayState* play);
+void EnLiftNuts_Destroy(Actor* thisx, PlayState* play);
+void EnLiftNuts_Update(Actor* thisx, PlayState* play);
+void EnLiftNuts_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Lift_Nuts_InitVars = {

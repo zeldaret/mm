@@ -1,13 +1,19 @@
+/*
+ * File: z_obj_taru.c
+ * Overlay: ovl_Obj_Taru
+ * Description: Wooden Barrel
+ */
+
 #include "z_obj_taru.h"
 
 #define FLAGS 0x00000000
 
 #define THIS ((ObjTaru*)thisx)
 
-void ObjTaru_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjTaru_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjTaru_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjTaru_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjTaru_Init(Actor* thisx, PlayState* play);
+void ObjTaru_Destroy(Actor* thisx, PlayState* play);
+void ObjTaru_Update(Actor* thisx, PlayState* play);
+void ObjTaru_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Obj_Taru_InitVars = {

@@ -8,7 +8,7 @@
 
 struct ObjHsStump;
 
-typedef void (*ObjHsStumpActionFunc)(struct ObjHsStump*, GlobalContext*);
+typedef void (*ObjHsStumpActionFunc)(struct ObjHsStump*, PlayState*);
 
 typedef struct ObjHsStump {
     /* 0x000 */ DynaPolyActor dyna;

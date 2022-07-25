@@ -1,0 +1,12 @@
+﻿<Root>
+    <File Name="object_taisou" Segment="6">
+        <Animation Name="object_taisou_Anim_0016C8" Offset="0x16C8" />
+        <Animation Name="object_taisou_Anim_00283C" Offset="0x283C" />
+        <Animation Name="object_taisou_Anim_002C48" Offset="0x2C48" />
+        <Animation Name="object_taisou_Anim_0031D8" Offset="0x31D8" />
+        <Animation Name="object_taisou_Anim_004DD4" Offset="0x4DD4" />
+        <Animation Name="object_taisou_Anim_005790" Offset="0x5790" />
+        <Animation Name="object_taisou_Anim_005EE0" Offset="0x5EE0" />
+        <Animation Name="object_taisou_Anim_007764" Offset="0x7764" />
+    </File>
+</Root>
