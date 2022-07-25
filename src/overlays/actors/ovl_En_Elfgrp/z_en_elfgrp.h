@@ -28,6 +28,4 @@ typedef struct EnElfgrp {
     /* 0x14C */ EnElfgrpActionFunc actionFunc;
 } EnElfgrp; // size = 0x150
 
-extern const ActorInit En_Elfgrp_InitVars;
-
 #endif // Z_EN_ELFGRP_H

@@ -37,6 +37,4 @@ typedef struct EnTite {
     /* 0x3AC */ ColliderSphere collider;
 } EnTite; // size = 0x404
 
-extern const ActorInit En_Tite_InitVars;
-
 #endif // Z_EN_TITE_H

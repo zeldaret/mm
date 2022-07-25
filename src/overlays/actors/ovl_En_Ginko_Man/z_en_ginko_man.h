@@ -24,8 +24,6 @@ typedef struct EnGinkoMan {
     /* 0x264 */ s16 animTimer;
 } EnGinkoMan; // size = 0x268
 
-extern const ActorInit En_Ginko_Man_InitVars;
-
 #define GINKOMAN_CHOICE_DEPOSIT   0
 #define GINKOMAN_CHOICE_WITHDRAWL 1
 #define GINKOMAN_CHOICE_CANCEL    2

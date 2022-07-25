@@ -14,6 +14,4 @@ typedef struct DmChar06 {
     /* 0x294 */ char unk_294[0x10];
 } DmChar06; // size = 0x2A4
 
-extern const ActorInit Dm_Char06_InitVars;
-
 #endif // Z_DM_CHAR06_H

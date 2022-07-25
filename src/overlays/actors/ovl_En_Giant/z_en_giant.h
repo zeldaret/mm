@@ -58,6 +58,4 @@ typedef struct EnGiant {
     /* 0x298 */ EnGiantActionFunc actionFunc;
 } EnGiant; // size = 0x29C
 
-extern const ActorInit En_Giant_InitVars;
-
 #endif // Z_EN_GIANT_H

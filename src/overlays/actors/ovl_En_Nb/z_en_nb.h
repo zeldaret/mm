@@ -14,6 +14,4 @@ typedef struct EnNb {
     /* 0x18C */ char unk_18C[0x110];
 } EnNb; // size = 0x29C
 
-extern const ActorInit En_Nb_InitVars;
-
 #endif // Z_EN_NB_H

@@ -31,6 +31,4 @@ typedef struct EnSyatekiCrow {
     /* 0x25C */ ColliderJntSphElement unk_25C;
 } EnSyatekiCrow; // size = 0x29C
 
-extern const ActorInit En_Syateki_Crow_InitVars;
-
 #endif // Z_EN_SYATEKI_CROW_H

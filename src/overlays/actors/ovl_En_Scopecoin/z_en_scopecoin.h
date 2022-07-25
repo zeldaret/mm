@@ -14,6 +14,4 @@ typedef struct EnScopecoin {
     /* 0x14A */ s16 unk14A;
 } EnScopecoin; // size = 0x14C
 
-extern const ActorInit En_Scopecoin_InitVars;
-
 #endif // Z_EN_SCOPECOIN_H

@@ -232,6 +232,4 @@ typedef struct EnHorse {
     /* 0x590 */ s32 unk_590;
 } EnHorse; // size = 0x594
 
-extern const ActorInit En_Horse_InitVars;
-
 #endif // Z_EN_HORSE_H

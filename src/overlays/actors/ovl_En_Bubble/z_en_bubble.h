@@ -13,6 +13,4 @@ typedef struct EnBubble {
     /* 0x148 */ char unk_148[0x110];
 } EnBubble; // size = 0x258
 
-extern const ActorInit En_Bubble_InitVars;
-
 #endif // Z_EN_BUBBLE_H

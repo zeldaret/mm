@@ -56,6 +56,4 @@ typedef struct EnBomjima {
     /* 0x2F8 */ ColliderCylinder collider;
 } EnBomjima; // size = 0x344
 
-extern const ActorInit En_Bomjima_InitVars;
-
 #endif // Z_EN_BOMJIMA_H

@@ -42,6 +42,4 @@ typedef struct EnAob01 {
     /* 0x440 */ s16 unk_440;
 } EnAob01; // size = 0x444
 
-extern const ActorInit En_Aob_01_InitVars;
-
 #endif // Z_EN_AOB_01_H

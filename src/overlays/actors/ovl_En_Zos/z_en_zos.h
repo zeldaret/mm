@@ -30,6 +30,4 @@ typedef struct EnZos {
     /* 0x2C0 */ EnZosActionFunc actionFunc;
 } EnZos; // size = 0x2C4
 
-extern const ActorInit En_Zos_InitVars;
-
 #endif // Z_EN_ZOS_H

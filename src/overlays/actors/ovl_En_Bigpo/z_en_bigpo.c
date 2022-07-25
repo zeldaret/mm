@@ -82,8 +82,6 @@ void EnBigpo_DrawLantern(Actor* thisx, PlayState* play);
 void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play);
 void EnBigpo_RevealedFire(Actor* thisx, PlayState* play);
 
-extern const ActorInit En_Bigpo_InitVars;
-
 const ActorInit En_Bigpo_InitVars = {
     ACTOR_EN_BIGPO,
     ACTORCAT_ENEMY,

@@ -17,6 +17,4 @@ typedef struct ObjMuPict {
     /* 0x14C */ u16 textId;
 } ObjMuPict; // size = 0x150
 
-extern const ActorInit Obj_Mu_Pict_InitVars;
-
 #endif // Z_OBJ_MU_PICT_H

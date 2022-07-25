@@ -19,8 +19,6 @@ typedef struct EnWeatherTag {
     /* 0x158 */ u16 unk158; // increment/decrement amount for 154
 } EnWeatherTag; // size = 0x15C
 
-extern const ActorInit En_Weather_Tag_InitVars;
-
 #define WEATHER_TAG_TYPE(x) (x->actor.params & 0xF)
 #define WEATHER_TAG_PATHID(x) (x->actor.params >> 4 & 0xF)
 #define WEATHER_TAG_RANGE100(x) ((u8)(((x->actor.params >> 8) & 0xFF)) * 100.0f)

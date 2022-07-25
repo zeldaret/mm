@@ -33,6 +33,4 @@ typedef struct EnButte {
     /* 0x25C */ f32 unk_25C;
 } EnButte; // size = 0x260
 
-extern const ActorInit En_Butte_InitVars;
-
 #endif // Z_EN_BUTTE_H

@@ -14,6 +14,4 @@ typedef struct ObjMoonStone {
     /* 0x194 */ s16 unk194;
 } ObjMoonStone; // size = 0x198
 
-extern const ActorInit Obj_Moon_Stone_InitVars;
-
 #endif // Z_OBJ_MOON_STONE_H

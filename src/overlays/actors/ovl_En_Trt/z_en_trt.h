@@ -64,6 +64,4 @@ typedef enum {
     /* 3 */ ENTRT_CUTSCENESTATE_PLAYING
 } EnTrtCutsceneState;
 
-extern const ActorInit En_Trt_InitVars;
-
 #endif // Z_EN_TRT_H

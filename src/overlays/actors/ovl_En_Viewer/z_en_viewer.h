@@ -13,6 +13,4 @@ typedef struct EnViewer {
     /* 0x148 */ char unk_148[0x10];
 } EnViewer; // size = 0x158
 
-extern const ActorInit En_Viewer_InitVars;
-
 #endif // Z_EN_VIEWER_H

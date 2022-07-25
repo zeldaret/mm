@@ -18,6 +18,4 @@ typedef struct EnBombal {
     /* 0x02B0 */ char unk2B0[0x2794];
 } EnBombal; // size = 0x2A44
 
-extern const ActorInit En_Bombal_InitVars;
-
 #endif // Z_EN_BOMBAL_H

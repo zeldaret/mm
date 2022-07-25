@@ -16,6 +16,4 @@ typedef struct EnSGoro {
     /* 0x190 */ char unk_190[0x180];
 } EnSGoro; // size = 0x310
 
-extern const ActorInit En_S_Goro_InitVars;
-
 #endif // Z_EN_S_GORO_H

@@ -35,6 +35,4 @@ typedef struct EnGg2 {
     /* 0x304 */ Vec3f unk_304;
 } EnGg2; // size = 0x310
 
-extern const ActorInit En_Gg2_InitVars;
-
 #endif // Z_EN_GG2_H

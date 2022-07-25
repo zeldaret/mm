@@ -16,8 +16,6 @@ typedef struct ObjSyokudai {
     /* 0x1E4 */ LightInfo lightInfo;
 } ObjSyokudai; // size = 0x1F4
 
-extern const ActorInit Obj_Syokudai_InitVars;
-
 typedef enum {
     /* 0 */ OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME,
     /* 1 */ OBJ_SYOKUDAI_TYPE_FLAME_CAUSES_SWITCH,

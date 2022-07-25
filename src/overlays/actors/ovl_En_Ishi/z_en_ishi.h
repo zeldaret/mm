@@ -28,6 +28,4 @@ typedef struct EnIshi {
     /* 0x197 */ u8 unk_197;
 } EnIshi; // size = 0x198
 
-extern const ActorInit En_Ishi_InitVars;
-
 #endif // Z_EN_ISHI_H

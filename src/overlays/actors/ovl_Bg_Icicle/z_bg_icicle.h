@@ -23,6 +23,4 @@ typedef struct BgIcicle {
     /* 0x164 */ ColliderCylinder collider;
 } BgIcicle; // size = 0x1B0
 
-extern const ActorInit Bg_Icicle_InitVars;
-
 #endif // Z_BG_ICICLE_H

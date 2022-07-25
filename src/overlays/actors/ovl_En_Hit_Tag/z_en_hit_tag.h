@@ -15,6 +15,4 @@ typedef struct EnHitTag {
     /* 0x190 */ EnHitTagActionFunc actionFunc;
 } EnHitTag; // size = 0x194
 
-extern const ActorInit En_Hit_Tag_InitVars;
-
 #endif // Z_EN_HIT_TAG_H

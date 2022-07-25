@@ -26,6 +26,4 @@ typedef enum {
     /* 0x1 */ MADAME_AROMA_ANIMATION_1
 } DmAlAnimations;
 
-extern const ActorInit Dm_Al_InitVars;
-
 #endif // Z_DM_AL_H

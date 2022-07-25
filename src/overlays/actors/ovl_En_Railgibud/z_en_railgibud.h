@@ -55,6 +55,4 @@ typedef struct EnRailgibud {
     /* 0x405 */ s8 unk_405; // related to player->unk_ADD
 } EnRailgibud; // size = 0x408
 
-extern const ActorInit En_Railgibud_InitVars;
-
 #endif // Z_EN_RAILGIBUD_H

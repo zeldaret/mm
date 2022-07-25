@@ -13,6 +13,4 @@ typedef struct EnPaper {
     /* 0x148 */ char unk_148[0xC40];
 } EnPaper; // size = 0xD88
 
-extern const ActorInit En_Paper_InitVars;
-
 #endif // Z_EN_PAPER_H

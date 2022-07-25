@@ -14,6 +14,4 @@ typedef struct DmAh {
     /* 0x18C */ char unk_18C[0x114];
 } DmAh; // size = 0x2A0
 
-extern const ActorInit Dm_Ah_InitVars;
-
 #endif // Z_DM_AH_H

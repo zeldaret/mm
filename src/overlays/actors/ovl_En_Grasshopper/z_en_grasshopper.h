@@ -14,6 +14,4 @@ typedef struct EnGrasshopper {
     /* 0x02AC */ char unk_2AC[0x15C4];
 } EnGrasshopper; // size = 0x1870
 
-extern const ActorInit En_Grasshopper_InitVars;
-
 #endif // Z_EN_GRASSHOPPER_H

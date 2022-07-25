@@ -42,6 +42,4 @@ typedef struct EnWaterEffect {
     /* 0xE38 */ f32 unk_E38;
 } EnWaterEffect; // size = 0xE3C
 
-extern const ActorInit En_Water_Effect_InitVars;
-
 #endif // Z_EN_WATER_EFFECT_H

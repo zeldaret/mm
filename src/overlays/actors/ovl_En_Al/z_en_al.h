@@ -45,6 +45,4 @@ typedef struct EnAl {
     /* 0x4FC */ UNK_TYPE1 unk4FC[4];
 } EnAl; // size = 0x500
 
-extern const ActorInit En_Al_InitVars;
-
 #endif // Z_EN_AL_H

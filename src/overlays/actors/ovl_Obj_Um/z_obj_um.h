@@ -62,8 +62,6 @@ typedef struct ObjUm {
     /* 0x4E0 */ s32 areAllPotsBroken; // true when all of the pots have been broken
 } ObjUm; // size = 0x4E4
 
-extern const ActorInit Obj_Um_InitVars;
-
 typedef enum {
     /* 0 */ OBJ_UM_TYPE_TERMINA_FIELD,
     /* 1 */ OBJ_UM_TYPE_RANCH,

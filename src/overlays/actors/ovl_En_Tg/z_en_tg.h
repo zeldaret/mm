@@ -13,6 +13,4 @@ typedef struct EnTg {
     /* 0x148 */ char unk_148[0x400];
 } EnTg; // size = 0x548
 
-extern const ActorInit En_Tg_InitVars;
-
 #endif // Z_EN_TG_H

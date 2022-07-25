@@ -14,6 +14,4 @@ typedef struct DmTag {
     /* 0x18C */ char unk_18C[0x20];
 } DmTag; // size = 0x1AC
 
-extern const ActorInit Dm_Tag_InitVars;
-
 #endif // Z_DM_TAG_H

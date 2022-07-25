@@ -17,6 +17,4 @@ typedef struct EnEncount4 {
     /* 0x0152 */ char unk_152[0x6];
 } EnEncount4; // size = 0x158
 
-extern const ActorInit En_Encount4_InitVars;
-
 #endif // Z_EN_ENCOUNT4_H

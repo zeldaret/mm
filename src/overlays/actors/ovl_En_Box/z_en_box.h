@@ -66,7 +66,5 @@ typedef struct EnBox {
     /* 0x220 */ s32 collectableFlag;
 } EnBox; // size = 0x224
 
-extern const ActorInit En_Box_InitVars;
-
 
 #endif // Z_EN_BOX_H

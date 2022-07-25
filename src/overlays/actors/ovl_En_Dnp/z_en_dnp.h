@@ -38,6 +38,4 @@ typedef struct EnDnp {
     /* 0x340 */ s32 unk_340;
 } EnDnp; // size = 0x344
 
-extern const ActorInit En_Dnp_InitVars;
-
 #endif // Z_EN_DNP_H

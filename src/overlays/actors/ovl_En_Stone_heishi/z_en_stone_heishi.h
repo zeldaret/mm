@@ -14,6 +14,4 @@ typedef struct EnStoneheishi {
     /* 0x258 */ char unk_258[0x6C];
 } EnStoneheishi; // size = 0x2C4
 
-extern const ActorInit En_Stone_heishi_InitVars;
-
 #endif // Z_EN_STONE_HEISHI_H

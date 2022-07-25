@@ -55,6 +55,4 @@ typedef struct BgDblueMovebg {
     /* 0x310 */ UNK_TYPE1 unk310[0x60];
 } BgDblueMovebg; // size = 0x370
 
-extern const ActorInit Bg_Dblue_Movebg_InitVars;
-
 #endif // Z_BG_DBLUE_MOVEBG_H

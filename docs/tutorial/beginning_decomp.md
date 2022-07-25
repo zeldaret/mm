@@ -122,8 +122,6 @@ typedef struct EnRecepgirl {
     /* 0x02AC */ char unk_2AC[0x8];
 } EnRecepgirl; // size = 0x2B4
 
-extern const ActorInit En_Recepgirl_InitVars;
-
 #endif // Z_EN_RECEPGIRL_H
 ```
 

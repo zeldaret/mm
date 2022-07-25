@@ -12,6 +12,4 @@ typedef struct BgHakaCurtain {
     /* 0x15C */ BgHakaCurtainActionFunc actionFunc;
 } BgHakaCurtain; // size = 0x160
 
-extern const ActorInit Bg_Haka_Curtain_InitVars;
-
 #endif // Z_BG_HAKA_CURTAIN_H

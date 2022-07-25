@@ -13,6 +13,4 @@ typedef struct EnRu {
     /* 0x148 */ char unk_148[0x30C];
 } EnRu; // size = 0x454
 
-extern const ActorInit En_Ru_InitVars;
-
 #endif // Z_EN_RU_H

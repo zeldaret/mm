@@ -14,6 +14,4 @@ typedef struct BgLastBwall {
     /* 0x160 */ char unk_160[0xDC];
 } BgLastBwall; // size = 0x23C
 
-extern const ActorInit Bg_Last_Bwall_InitVars;
-
 #endif // Z_BG_LAST_BWALL_H

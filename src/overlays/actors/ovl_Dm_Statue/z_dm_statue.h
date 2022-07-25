@@ -10,6 +10,4 @@ typedef struct DmStatue {
     /* 0x144 */ char unk_144[0x50];
 } DmStatue; // size = 0x194
 
-extern const ActorInit Dm_Statue_InitVars;
-
 #endif // Z_DM_STATUE_H

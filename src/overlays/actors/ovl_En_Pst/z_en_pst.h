@@ -14,6 +14,4 @@ typedef struct EnPst {
     /* 0x18C */ char unk_18C[0x94];
 } EnPst; // size = 0x220
 
-extern const ActorInit En_Pst_InitVars;
-
 #endif // Z_EN_PST_H

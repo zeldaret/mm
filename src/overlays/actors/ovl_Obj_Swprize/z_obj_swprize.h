@@ -13,6 +13,4 @@ typedef struct ObjSwprize {
     /* 0x148 */ char unk_148[0x4];
 } ObjSwprize; // size = 0x14C
 
-extern const ActorInit Obj_Swprize_InitVars;
-
 #endif // Z_OBJ_SWPRIZE_H

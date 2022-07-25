@@ -14,6 +14,4 @@ typedef struct EnPp {
     /* 0x2C4 */ char unk_2C4[0x328];
 } EnPp; // size = 0x5EC
 
-extern const ActorInit En_Pp_InitVars;
-
 #endif // Z_EN_PP_H

@@ -14,6 +14,4 @@ typedef struct ObjDanpeilift {
     /* 0x160 */ char unk_160[0x2C];
 } ObjDanpeilift; // size = 0x18C
 
-extern const ActorInit Obj_Danpeilift_InitVars;
-
 #endif // Z_OBJ_DANPEILIFT_H

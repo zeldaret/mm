@@ -78,6 +78,4 @@ typedef struct ObjIceblock {
     /* 0x2B4 */ f32 unk_2B4;
 } ObjIceblock; // size = 0x2B8
 
-extern const ActorInit Obj_Iceblock_InitVars;
-
 #endif // Z_OBJ_ICEBLOCK_H

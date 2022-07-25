@@ -51,6 +51,4 @@ typedef struct EnWizFire {
     /* 0x0254 */ EnWizFireStruct unk_254[200];
 } EnWizFire; // size = 0x2AF4
 
-extern const ActorInit En_Wiz_Fire_InitVars;
-
 #endif // Z_EN_WIZ_FIRE_H

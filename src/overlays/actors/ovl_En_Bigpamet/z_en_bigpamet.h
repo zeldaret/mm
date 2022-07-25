@@ -16,6 +16,4 @@ typedef struct EnBigpamet {
     /* 0x2B0 */ char unk_2B0[0x31C];
 } EnBigpamet; // size = 0x5CC
 
-extern const ActorInit En_Bigpamet_InitVars;
-
 #endif // Z_EN_BIGPAMET_H

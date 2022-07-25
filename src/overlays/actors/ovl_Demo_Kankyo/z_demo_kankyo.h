@@ -48,6 +48,4 @@ typedef enum {
     /* 3 */ DEMO_KANKYO_STATE_DISABLED,
 } DemoKankyoStateType;
 
-extern const ActorInit Demo_Kankyo_InitVars;
-
 #endif // Z_DEMO_KANKYO_H

@@ -14,6 +14,4 @@ typedef struct EnDt {
     /* 0x240 */ char unk_240[0xA0];
 } EnDt; // size = 0x2E0
 
-extern const ActorInit En_Dt_InitVars;
-
 #endif // Z_EN_DT_H

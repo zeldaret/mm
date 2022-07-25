@@ -41,8 +41,6 @@ typedef struct EnKakasi {
     /* 0x254 */ ColliderCylinder collider;
 } EnKakasi; // size = 0x2A0
 
-extern const ActorInit En_Kakasi_InitVars;
-
 #define ENKAKASI_ABOVE_GROUND_TYPE 2
 
 #define GET_KAKASI_SUMMON_DISTANCE(thisx) (((thisx)->params >> 0x8) & 0xFF) 

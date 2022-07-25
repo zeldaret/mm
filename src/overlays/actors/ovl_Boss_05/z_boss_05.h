@@ -14,6 +14,4 @@ typedef struct Boss05 {
     /* 0x174 */ char unk_174[0x394];
 } Boss05; // size = 0x508
 
-extern const ActorInit Boss_05_InitVars;
-
 #endif // Z_BOSS_05_H

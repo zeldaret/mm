@@ -14,6 +14,4 @@ typedef struct EnTwig {
     /* 0x160 */ char unk_160[0x2C];
 } EnTwig; // size = 0x18C
 
-extern const ActorInit En_Twig_InitVars;
-
 #endif // Z_EN_TWIG_H

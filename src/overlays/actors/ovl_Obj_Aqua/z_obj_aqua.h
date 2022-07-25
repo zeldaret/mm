@@ -19,6 +19,4 @@ typedef struct ObjAqua {
     /* 0x198 */ s16 unk_198;
 } ObjAqua; // size = 0x19C
 
-extern const ActorInit Obj_Aqua_InitVars;
-
 #endif // Z_OBJ_AQUA_H

@@ -25,6 +25,4 @@ typedef struct ObjPzlblock {
     /* 0x17A */ s8 unk_17A;
 } ObjPzlblock; // size = 0x17C
 
-extern const ActorInit Obj_Pzlblock_InitVars;
-
 #endif // Z_OBJ_PZLBLOCK_H

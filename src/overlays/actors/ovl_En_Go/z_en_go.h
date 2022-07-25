@@ -101,6 +101,4 @@ typedef struct EnGo {
     /* 0x3F8 */ EnGoStruct unk_3F8[32];
 } EnGo; // size = 0xB78
 
-extern const ActorInit En_Go_InitVars;
-
 #endif // Z_EN_GO_H

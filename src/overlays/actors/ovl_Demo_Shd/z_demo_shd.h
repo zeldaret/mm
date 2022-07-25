@@ -10,6 +10,4 @@ typedef struct DemoShd {
     /* 0x0144 */ char unk_0144[0x118C];
 } DemoShd; // size = 0x12D0
 
-extern const ActorInit Demo_Shd_InitVars;
-
 #endif // Z_DEMO_SHD_H

@@ -29,8 +29,6 @@ typedef struct ObjMure {
     /* 0x1A0 */ s16 unk_1A0;
 } ObjMure; // size = 0x1A4
 
-extern const ActorInit Obj_Mure_InitVars;
-
 #define OBJ_MURE_GET_CHNUM(params) ((params >> 12) & 0xF)
 #define OBJ_MURE_GET_PTN(params) ((params >> 8) & 0x7)
 #define OBJ_MURE_GET_SVNUM(params) ((params >> 5) & 0x3)

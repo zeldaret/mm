@@ -40,6 +40,4 @@ typedef struct EnBat {
     /* 0x184 */ ColliderSphere collider;
 } EnBat; // size = 0x1DC
 
-extern const ActorInit En_Bat_InitVars;
-
 #endif // Z_EN_BAT_H

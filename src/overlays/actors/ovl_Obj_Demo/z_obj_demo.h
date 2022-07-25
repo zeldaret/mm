@@ -17,6 +17,4 @@ typedef struct ObjDemo {
     /* 0x150 */ f32 yRange;
 } ObjDemo; // size = 0x154
 
-extern const ActorInit Obj_Demo_InitVars;
-
 #endif // Z_OBJ_DEMO_H

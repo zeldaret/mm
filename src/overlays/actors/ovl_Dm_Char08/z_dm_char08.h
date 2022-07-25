@@ -14,6 +14,4 @@ typedef struct DmChar08 {
     /* 0x1A4 */ char unk_1A4[0x68];
 } DmChar08; // size = 0x20C
 
-extern const ActorInit Dm_Char08_InitVars;
-
 #endif // Z_DM_CHAR08_H

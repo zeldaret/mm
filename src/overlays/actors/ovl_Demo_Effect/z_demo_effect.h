@@ -34,6 +34,4 @@ typedef struct DemoEffect {
     /* 0x178 */ DemoEffectActionFunc actionFunc;
 } DemoEffect; // size = 0x17C
 
-extern const ActorInit Demo_Effect_InitVars;
-
 #endif // Z_DEMO_EFFECT_H
