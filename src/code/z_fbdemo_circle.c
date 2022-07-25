@@ -14,7 +14,7 @@ void TransitionCircle_Start(void* thisx) {
     TransitionCircle* this = (TransitionCircle*)thisx;
 
     this->stepValue = 0.1f;
-    if (this->unk_14 == 0) {
+    if (this->direction == 0) {
         this->unk_10 = 0.0f;
         this->unk_0C = 1.0f;
     } else {
@@ -56,12 +56,12 @@ void TransitionCircle_SetColor(void* thisx, u32 color) {
 void TransitionCircle_SetType(void* thisx, s32 type) {
     TransitionCircle* this = (TransitionCircle*)thisx;
 
-    if (type & 0x80) {
+    if (type & TC_SET_PARAMS) {
         this->unk_15 = type & 1;
     } else if (type == 1) {
-        this->unk_14 = 1;
+        this->direction = 1;
     } else {
-        this->unk_14 = 0;
+        this->direction = 0;
     }
 }
 

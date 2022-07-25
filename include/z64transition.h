@@ -3,6 +3,8 @@
 
 #include "ultra64.h"
 
+#define TC_SET_PARAMS (1 << 7)
+
 typedef struct {
     /* 0x00 */ void* (*init)(void* transition);
     /* 0x04 */ void  (*destroy)(void* transition);
@@ -27,7 +29,7 @@ typedef struct {
     /* 0x08 */ f32 stepValue;
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
-    /* 0x14 */ u8 unk_14;
+    /* 0x14 */ u8 direction;
     /* 0x15 */ u8 unk_15;
     /* 0x16 */ u8 isDone;
     /* 0x17 */ s8 unk_17;
