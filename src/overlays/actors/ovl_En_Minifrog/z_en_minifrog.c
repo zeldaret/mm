@@ -69,11 +69,7 @@ static TexturePtr D_808A4D74[] = {
 // gSaveContext.save.weekEventReg[KEY] = VALUE
 // KEY | VALUE
 static u16 isFrogReturnedFlags[] = {
-    0,
-    WEEKEVENTREG_32_40,
-    WEEKEVENTREG_32_80,
-    WEEKEVENTREG_33_01,
-    WEEKEVENTREG_33_02,
+    0, WEEKEVENTREG_32_40, WEEKEVENTREG_32_80, WEEKEVENTREG_33_01, WEEKEVENTREG_33_02,
 };
 
 static s32 isInitialized = false;
