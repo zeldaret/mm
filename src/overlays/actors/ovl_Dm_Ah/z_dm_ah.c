@@ -46,17 +46,17 @@ s32 func_80C1D410(DmAh* this, s32 animationIndex) {
 void func_80C1D458(DmAh* this) {
     s16 phi_v1;
 
-    if (this->unk286 == 0) {
+    if (this->unk_286 == 0) {
         phi_v1 = 0;
     } else {
-        this->unk286--;
-        phi_v1 = this->unk286;
+        this->unk_286--;
+        phi_v1 = this->unk_286;
     }
     if (phi_v1 == 0) {
-        this->unk284++;
-        if (this->unk284 >= 4) {
-            this->unk286 = Rand_S16Offset(30, 30);
-            this->unk284 = 0;
+        this->unk_284++;
+        if (this->unk_284 >= 4) {
+            this->unk_286 = Rand_S16Offset(30, 30);
+            this->unk_284 = 0;
         }
     }
 }
@@ -67,45 +67,45 @@ s32 func_80C1D4D0(DmAh* this, s32 arg1) {
     Vec3f sp34;
     s16 temp_v0;
 
-    Math_Vec3f_Copy(&sp40, &this->unk280->world.pos);
+    Math_Vec3f_Copy(&sp40, &this->unk_280->world.pos);
     Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
     temp_v0 = Math_Vec3f_Yaw(&sp34, &sp40);
 
-    Math_ApproachS(&this->unk28C, (temp_v0 - this->unk290) - this->actor.shape.rot.y, 4, 0x2AA8);
-    this->unk28C = CLAMP(this->unk28C, -0x1FFE, 0x1FFE);
+    Math_ApproachS(&this->unk_28C, (temp_v0 - this->unk_290) - this->actor.shape.rot.y, 4, 0x2AA8);
+    this->unk_28C = CLAMP(this->unk_28C, -0x1FFE, 0x1FFE);
 
-    Math_ApproachS(&this->unk290, (s16)((temp_v0 - this->unk28C) - this->actor.shape.rot.y), 4, 0x2AA8);
-    this->unk290 = CLAMP(this->unk290, -0x1C70, 0x1C70);
+    Math_ApproachS(&this->unk_290, (s16)((temp_v0 - this->unk_28C) - this->actor.shape.rot.y), 4, 0x2AA8);
+    this->unk_290 = CLAMP(this->unk_290, -0x1C70, 0x1C70);
 
-    if (this->unk280->id == 0) {
-        sp40.y = ((Player*)this->unk280)->bodyPartsPos[7].y + 3.0f;
+    if (this->unk_280->id == 0) {
+        sp40.y = ((Player*)this->unk_280)->bodyPartsPos[7].y + 3.0f;
     } else {
-        Math_Vec3f_Copy(&sp40, &this->unk280->focus.pos);
+        Math_Vec3f_Copy(&sp40, &this->unk_280->focus.pos);
     }
 
     Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
-    Math_ApproachS(&this->unk28A, Math_Vec3f_Pitch(&sp34, &sp40) - this->unk28E, 4, 0x2AA8);
-    this->unk28A = CLAMP(this->unk28A, -0x1C70, 0x1C70);
+    Math_ApproachS(&this->unk_28A, Math_Vec3f_Pitch(&sp34, &sp40) - this->unk_28E, 4, 0x2AA8);
+    this->unk_28A = CLAMP(this->unk_28A, -0x1C70, 0x1C70);
 
-    Math_ApproachS(&this->unk28E, Math_Vec3f_Pitch(&sp34, &sp40) - this->unk28A, 4, 0x2AA8);
-    this->unk28E = CLAMP(this->unk28E, -0x1C70, 0x1C70);
+    Math_ApproachS(&this->unk_28E, Math_Vec3f_Pitch(&sp34, &sp40) - this->unk_28A, 4, 0x2AA8);
+    this->unk_28E = CLAMP(this->unk_28E, -0x1C70, 0x1C70);
     return true;
 }
 
 s32 func_80C1D6E0(DmAh* this, PlayState* play) {
-    if (this->unk280 != NULL) {
+    if (this->unk_280 != NULL) {
         func_80C1D4D0(this, play);
-        this->unk27C &= ~1;
-        this->unk27C |= 2;
-    } else if (this->unk27C & 2) {
-        this->unk27C &= ~2;
-        this->unk28A = 0;
-        this->unk28C = 0;
-        this->unk28E = 0;
-        this->unk290 = 0;
-        this->unk288 = 20;
-    } else if (DECR(this->unk288) == 0) {
-        this->unk27C |= 1;
+        this->unk_27C &= ~1;
+        this->unk_27C |= 2;
+    } else if (this->unk_27C & 2) {
+        this->unk_27C &= ~2;
+        this->unk_28A = 0;
+        this->unk_28C = 0;
+        this->unk_28E = 0;
+        this->unk_290 = 0;
+        this->unk_288 = 20;
+    } else if (DECR(this->unk_288) == 0) {
+        this->unk_27C |= 1;
     }
     return true;
 }
@@ -137,9 +137,9 @@ void func_80C1D7FC(DmAh* this, PlayState* play) {
     s32 actionIndex;
 
     if (play->csCtx.state != 0) {
-        if (!this->unk29C) {
+        if (!this->unk_29C) {
             this->action = 0xFF;
-            this->unk29C = true;
+            this->unk_29C = true;
             this->animationIndex2 = this->animationIndex;
         }
         if (Cutscene_CheckActorAction(play, 0x232)) {
@@ -151,8 +151,8 @@ void func_80C1D7FC(DmAh* this, PlayState* play) {
             }
             Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
         }
-    } else if (this->unk29C) {
-        this->unk29C = false;
+    } else if (this->unk_29C) {
+        this->unk_29C = false;
         func_80C1D410(this, this->animationIndex2);
     }
 }
@@ -170,9 +170,9 @@ void DmAh_Init(Actor* thisx, PlayState* play) {
     func_80C1D410(this, 0);
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
-    this->unk27C |= 1;
+    this->unk_27C |= 1;
     if ((play->sceneNum == SCENE_YADOYA) && (play->curSpawn == 4)) {
-        this->unk280 = func_80C1D78C(play);
+        this->unk_280 = func_80C1D78C(play);
         func_80C1D410(this, 1);
         this->actionFunc = func_80C1D92C;
     } else {
@@ -207,8 +207,8 @@ void DmAh_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     s32 stepRot;
     s32 overrideRot;
 
-    if (!(this->unk27C & 1)) {
-        if (this->unk27C & 2) {
+    if (!(this->unk_27C & 1)) {
+        if (this->unk_27C & 2) {
             overrideRot = true;
         } else {
             overrideRot = false;
@@ -220,25 +220,25 @@ void DmAh_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     }
 
     if (limbIndex == OBJECT_AH_LIMB_07) {
-        SubS_UpdateLimb(BINANG_ADD(this->unk28A + this->unk28E, 0x4000),
-                        BINANG_ADD(this->unk28C + this->unk290 + this->actor.shape.rot.y, 0x4000), &this->unk18C,
-                        &this->unk1A4, stepRot, overrideRot);
+        SubS_UpdateLimb(BINANG_ADD(this->unk_28A + this->unk_28E, 0x4000),
+                        BINANG_ADD(this->unk_28C + this->unk_290 + this->actor.shape.rot.y, 0x4000), &this->unk_18C,
+                        &this->unk_1A4, stepRot, overrideRot);
         Matrix_Pop();
-        Matrix_Translate(this->unk18C.x, this->unk18C.y, this->unk18C.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_18C.x, this->unk_18C.y, this->unk_18C.z, MTXMODE_NEW);
         Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-        Matrix_RotateYS(this->unk1A4.y, MTXMODE_APPLY);
-        Matrix_RotateXS(this->unk1A4.x, MTXMODE_APPLY);
-        Matrix_RotateZS(this->unk1A4.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_1A4.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_1A4.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_1A4.z, MTXMODE_APPLY);
         Matrix_Push();
     } else if (limbIndex == OBJECT_AH_LIMB_02) {
-        SubS_UpdateLimb(BINANG_ADD(this->unk28E, 0x4000), BINANG_ADD(this->unk290 + this->actor.shape.rot.y, 0x4000),
-                        &this->unk198, &this->unk1AA, stepRot, overrideRot);
+        SubS_UpdateLimb(BINANG_ADD(this->unk_28E, 0x4000), BINANG_ADD(this->unk_290 + this->actor.shape.rot.y, 0x4000),
+                        &this->unk_198, &this->unk_1AA, stepRot, overrideRot);
         Matrix_Pop();
-        Matrix_Translate(this->unk198.x, this->unk198.y, this->unk198.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_198.x, this->unk_198.y, this->unk_198.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateYS(this->unk1AA.y, MTXMODE_APPLY);
-        Matrix_RotateXS(this->unk1AA.x, MTXMODE_APPLY);
-        Matrix_RotateZS(this->unk1AA.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_1AA.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_1AA.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_1AA.z, MTXMODE_APPLY);
         Matrix_Push();
     }
 }
@@ -256,7 +256,7 @@ void DmAh_Draw(Actor* thisx, PlayState* play) {
 
     func_8012C28C(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C1DE28[this->unk284]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C1DE28[this->unk_284]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C1DE20[0]));
 
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
