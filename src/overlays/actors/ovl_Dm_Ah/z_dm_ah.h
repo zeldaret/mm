@@ -2,6 +2,7 @@
 #define Z_DM_AH_H
 
 #include "global.h"
+#include "objects/object_ah/object_ah.h"
 
 struct DmAh;
 
@@ -15,13 +16,10 @@ typedef struct DmAh {
     /* 0x198 */ Vec3f unk198;
     /* 0x1A4 */ Vec3s unk1A4;
     /* 0x1AA */ Vec3s unk1AA;
-    /* 0x1B0 */ Vec3s unk1B0;
-    /* 0x1B6 */ char pad1B6[0x60];
-    /* 0x216 */ Vec3s unk216;
-    /* 0x21C */ char pad21C[0x60];
+    /* 0x1B0 */ Vec3s morphTable[OBJECT_AH_LIMB_MAX];
+    /* 0x216 */ Vec3s jointTable[OBJECT_AH_LIMB_MAX];
     /* 0x27C */ u16 unk27C;
     /* 0x27E */ u8 action;
-    /* 0x27F */ char pad27F[1];
     /* 0x280 */ Player* unk280;
     /* 0x284 */ s16 unk284;
     /* 0x286 */ s16 unk286;
@@ -30,7 +28,6 @@ typedef struct DmAh {
     /* 0x28C */ s16 unk28C;
     /* 0x28E */ s16 unk28E;
     /* 0x290 */ s16 unk290;
-    /* 0x292 */ char pad292[2];
     /* 0x294 */ s32 animationIndex;
     /* 0x298 */ s32 animationIndex2;
     /* 0x29C */ s32 unk29C;

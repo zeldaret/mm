@@ -15,16 +15,6 @@ void DmAh_Destroy(Actor* thisx, PlayState* play);
 void DmAh_Update(Actor* thisx, PlayState* play);
 void DmAh_Draw(Actor* thisx, PlayState* play);
 
-void func_80C1D7FC(DmAh* this, PlayState* play);
-void func_80C1D92C(DmAh* this, PlayState* play);
-s32 func_80C1D410(DmAh* this, s32 arg1);
-void func_80C1D458(DmAh* this);
-s32 func_80C1D4D0(DmAh* this, s32 arg1);
-s32 func_80C1D6E0(DmAh* this, PlayState* play);
-void func_80C1DB24(PlayState* play, s32 limbIndex, Actor* thisx);
-void func_80C1DAD4(PlayState *play, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx);
-
-#if 1
 const ActorInit Dm_Ah_InitVars = {
     ACTOR_DM_AH,
     ACTORCAT_NPC,
@@ -37,39 +27,21 @@ const ActorInit Dm_Ah_InitVars = {
     (ActorFunc)DmAh_Draw,
 };
 
-static AnimationInfoS D_80C1DDE0[] = {
-    { (AnimationHeader *)0x06001860, 1.0f, 0, -1, 0, 0 },
-    { (AnimationHeader *)0x06000DDC, 1.0f, 0, -1, 0, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &object_ah_Anim_001860, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_ah_Anim_000DDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
-//static s32 D_80C1DE00 = 0;
-
-
-//s32 D_80C1C280[] = { 0, 0, 0, 0, 0 };
-#endif
-
-extern UNK_TYPE D_06009E70;
-//extern AnimationInfoS D_80C1DDE0[];
-//extern Vec3f D_80C1DE14;
-//extern s32 D_80C1C280[];
-//extern UNK_TYPE D_80C1DE20[];
-//extern UNK_TYPE D_80C1DE28[];
-//extern UNK_TYPE D_80C1DE00;
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ah/func_80C1D410.s")
-
 s32 func_80C1D410(DmAh* this, s32 animationIndex) {
-    s32 phi_v1;
+    s32 ret;
 
-    phi_v1 = 0;
+    ret = 0;
     if (animationIndex != this->animationIndex) {
         this->animationIndex = animationIndex;
-        phi_v1 = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80C1DDE0, animationIndex);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, animationIndex);
     }
-    return phi_v1;
+    return ret;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ah/func_80C1D458.s")
 
 void func_80C1D458(DmAh* this) {
     s16 phi_v1;
@@ -83,13 +55,11 @@ void func_80C1D458(DmAh* this) {
     if (phi_v1 == 0) {
         this->unk284++;
         if (this->unk284 >= 4) {
-            this->unk286 = Rand_S16Offset(0x1E, 0x1E);
+            this->unk286 = Rand_S16Offset(30, 30);
             this->unk284 = 0;
         }
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ah/func_80C1D4D0.s")
 
 s32 func_80C1D4D0(DmAh* this, s32 arg1) {
     s32 pad;
@@ -114,20 +84,18 @@ s32 func_80C1D4D0(DmAh* this, s32 arg1) {
     }
 
     Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
-    Math_ApproachS(&this->unk28A, (s16)(Math_Vec3f_Pitch(&sp34, &sp40) - this->unk28E), 4, 0x2AA8);
+    Math_ApproachS(&this->unk28A, Math_Vec3f_Pitch(&sp34, &sp40) - this->unk28E, 4, 0x2AA8);
     this->unk28A = CLAMP(this->unk28A, -0x1C70, 0x1C70);
 
-    Math_ApproachS(&this->unk28E, (s16)(Math_Vec3f_Pitch(&sp34, &sp40) - this->unk28A), 4, 0x2AA8);
+    Math_ApproachS(&this->unk28E, Math_Vec3f_Pitch(&sp34, &sp40) - this->unk28A, 4, 0x2AA8);
     this->unk28E = CLAMP(this->unk28E, -0x1C70, 0x1C70);
     return true;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ah/func_80C1D6E0.s")
-
 s32 func_80C1D6E0(DmAh* this, PlayState* play) {
     if (this->unk280 != NULL) {
         func_80C1D4D0(this, play);
-        this->unk27C &= 0xFFFE;
+        this->unk27C &= ~1;
         this->unk27C |= 2;
     } else if (this->unk27C & 2) {
         this->unk27C &= ~2;
@@ -141,8 +109,6 @@ s32 func_80C1D6E0(DmAh* this, PlayState* play) {
     }
     return true;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ah/func_80C1D78C.s")
 
 Actor* func_80C1D78C(PlayState* play) {
     Actor* tempActor;
@@ -165,12 +131,8 @@ Actor* func_80C1D78C(PlayState* play) {
     return foundActor;
 }
 
-
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ah/func_80C1D7FC.s")
-// COMMENTED UNTIL DATA IS IMPORTED
 void func_80C1D7FC(DmAh* this, PlayState* play) {
-    s32 D_80C1DE00[] = {0,0,0,0,0};
+    s32 D_80C1DE00[] = { 0, 0, 0, 0, 0 };
     u16 csAction;
     s32 actionIndex;
 
@@ -195,24 +157,21 @@ void func_80C1D7FC(DmAh* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ah/func_80C1D92C.s")
-
-void func_80C1D92C(DmAh *this, PlayState *play) {
+void func_80C1D92C(DmAh* this, PlayState* play) {
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ah/DmAh_Init.s")
-
-void DmAh_Init(Actor *thisx, PlayState *play) {
-    DmAh *this = THIS;
+void DmAh_Init(Actor* thisx, PlayState* play) {
+    DmAh* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, (FlexSkeletonHeader *) &D_06009E70, NULL, &this->unk1B0, &this->unk216, 0x11);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_ah_Skel_009E70, NULL, &this->morphTable, &this->jointTable,
+                       OBJECT_AH_LIMB_MAX);
     this->animationIndex = -1;
     func_80C1D410(this, 0);
-    this->actor.flags &= -2;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
     this->unk27C |= 1;
-    if ((play->sceneNum == 0x61) && (play->curSpawn == 4)) {
+    if ((play->sceneNum == SCENE_YADOYA) && (play->curSpawn == 4)) {
         this->unk280 = func_80C1D78C(play);
         func_80C1D410(this, 1);
         this->actionFunc = func_80C1D92C;
@@ -221,15 +180,11 @@ void DmAh_Init(Actor *thisx, PlayState *play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ah/DmAh_Destroy.s")
-
-void DmAh_Destroy(Actor *thisx, PlayState *play) {
+void DmAh_Destroy(Actor* thisx, PlayState* play) {
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ah/DmAh_Update.s")
-
-void DmAh_Update(Actor *thisx, PlayState *play) {
-    DmAh *this = THIS;
+void DmAh_Update(Actor* thisx, PlayState* play) {
+    DmAh* this = THIS;
 
     this->actionFunc(this, play);
     func_80C1D6E0(this, play);
@@ -238,19 +193,16 @@ void DmAh_Update(Actor *thisx, PlayState *play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ah/func_80C1DAD4.s")
 static Vec3f D_80C1DE14 = { 1000.0f, 0.0f, 0.0f };
 
-void func_80C1DAD4(PlayState *play, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx) {
-    if (limbIndex == 7) {
+void DmAh_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    if (limbIndex == OBJECT_AH_LIMB_07) {
         Matrix_MultVec3f(&D_80C1DE14, &thisx->focus.pos);
         Math_Vec3s_Copy(&thisx->focus.rot, &thisx->world.rot);
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ah/func_80C1DB24.s")
-
-void func_80C1DB24(PlayState* play, s32 limbIndex, Actor* thisx) {
+void DmAh_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     DmAh* this = THIS;
     s32 stepRot;
     s32 overrideRot;
@@ -267,7 +219,7 @@ void func_80C1DB24(PlayState* play, s32 limbIndex, Actor* thisx) {
         overrideRot = false;
     }
 
-    if (limbIndex == 7) {
+    if (limbIndex == OBJECT_AH_LIMB_07) {
         SubS_UpdateLimb(BINANG_ADD(this->unk28A + this->unk28E, 0x4000),
                         BINANG_ADD(this->unk28C + this->unk290 + this->actor.shape.rot.y, 0x4000), &this->unk18C,
                         &this->unk1A4, stepRot, overrideRot);
@@ -278,7 +230,7 @@ void func_80C1DB24(PlayState* play, s32 limbIndex, Actor* thisx) {
         Matrix_RotateXS(this->unk1A4.x, MTXMODE_APPLY);
         Matrix_RotateZS(this->unk1A4.z, MTXMODE_APPLY);
         Matrix_Push();
-    } else if (limbIndex == 2) {
+    } else if (limbIndex == OBJECT_AH_LIMB_02) {
         SubS_UpdateLimb(BINANG_ADD(this->unk28E, 0x4000), BINANG_ADD(this->unk290 + this->actor.shape.rot.y, 0x4000),
                         &this->unk198, &this->unk1AA, stepRot, overrideRot);
         Matrix_Pop();
@@ -291,15 +243,10 @@ void func_80C1DB24(PlayState* play, s32 limbIndex, Actor* thisx) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ah/DmAh_Draw.s")
-static TexturePtr D_80C1DE20[2] = { (void *)0x06008D70, (void *)0x06009570 };
-static  TexturePtr D_80C1DE28[6] = {
-    (void *)0x06006D70,
-    (void *)0x06007570,
-    (void *)0x06007D70,
-    (void *)0x06007570,
-    (void *)0x06008570,
-    NULL,
+static TexturePtr D_80C1DE20[] = { object_ah_Tex_008D70, object_ah_Tex_009570 };
+
+static TexturePtr D_80C1DE28[] = {
+    object_ah_Tex_006D70, object_ah_Tex_007570, object_ah_Tex_007D70, object_ah_Tex_007570, object_ah_Tex_008570,
 };
 
 void DmAh_Draw(Actor* thisx, PlayState* play) {
@@ -313,7 +260,7 @@ void DmAh_Draw(Actor* thisx, PlayState* play) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C1DE20[0]));
 
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                   this->skelAnime.dListCount, NULL, func_80C1DAD4, func_80C1DB24,
+                                   this->skelAnime.dListCount, NULL, DmAh_PostLimbDraw, DmAh_TransformLimbDraw,
                                    &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
