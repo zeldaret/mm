@@ -1231,7 +1231,8 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_99_40 PACK_WEEKEVENTREG_FLAG(99, 0x40)
 #define WEEKEVENTREG_99_80 PACK_WEEKEVENTREG_FLAG(99, 0x80)
 
-#define CHECK_WEEKEVENTREG(flag) ((void)0, gSaveContext.save.weekEventReg[(flag) >> 8] & ((flag) & 0xFF))
+#define CHECK_WEEKEVENTREG(flag) (gSaveContext.save.weekEventReg[(flag) >> 8] & ((flag) & 0xFF))
+#define CHECK_WEEKEVENTREG_ALT(flag) (((void)0, gSaveContext.save.weekEventReg[(flag) >> 8]) & ((flag) & 0xFF))
 #define SET_WEEKEVENTREG(flag) (gSaveContext.save.weekEventReg[(flag) >> 8] = ((void)0, gSaveContext.save.weekEventReg[(flag) >> 8]) | ((flag) & 0xFF))
 #define CLEAR_WEEKEVENTREG(flag) (gSaveContext.save.weekEventReg[(flag) >> 8] = ((void)0, gSaveContext.save.weekEventReg[(flag) >> 8]) & (u8)~((flag) & 0xFF))
 
