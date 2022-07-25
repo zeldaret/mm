@@ -159,7 +159,7 @@ void ObjDanpeilift_Wait(ObjDanpeilift* this, PlayState* play) {
 
 void ObjDanpeilift_Update(Actor* thisx, PlayState* play) {
     f32 step;
-    ObjDanpeilift* this = (ObjDanpeilift*)thisx;
+    ObjDanpeilift* this = THIS;
 
     this->actionFunc(this, play);
     Actor_SetFocus(&this->dyna.actor, 10.0f);
