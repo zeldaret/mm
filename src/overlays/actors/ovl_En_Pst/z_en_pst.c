@@ -16,12 +16,12 @@ void EnPst_Update(Actor* thisx, PlayState* play);
 void EnPst_Draw(Actor* thisx, PlayState* play);
 
 void EnPst_FollowSchedule(EnPst* this, PlayState* play);
-void func_80B2BE54(EnPst* this, PlayState* play);
+void EnPst_UpdateSchedule(EnPst* this, PlayState* play);
 
 typedef enum {
     /* 0 */ POSTBOX_SCH_NONE,
     /* 1 */ POSTBOX_SCH_AVAILABLE,
-    /* 2 */ POSTBOX_SCH_CHECKED_BY_MAILMAN
+    /* 2 */ POSTBOX_SCH_CHECKED_BY_POSTMAN
 } PostboxScheduleResult;
 
 typedef enum {
@@ -29,68 +29,98 @@ typedef enum {
     /* 1 */ POSTBOX_BEHAVIOUR_TAKE_ITEM,
 } PostboxBehaviour;
 
+typedef enum {
+    /* 0 */ POSTBOX_SOUTH_UPPER_CLOCKTOWN,
+    /* 1 */ POSTBOX_NORTH_CLOCKTOWN,
+    /* 2 */ POSTBOX_EAST_UPPER_CLOCKTOWN,
+    /* 3 */ POSTBOX_EAST_LOWER_CLOCKTOWN,
+    /* 4 */ POSTBOX_SOUTH_LOWER_CLOCKTOWN,
+} PostboxParams;
+
 static u8 D_80B2C200[] = {
     /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 31, 9, 35, 0x9 - 0x6),
     /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_MAILMAN),
+    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_POSTMAN),
 };
 
 static u8 D_80B2C20C[] = {
     /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 3, 10, 7, 0x9 - 0x6),
     /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_MAILMAN),
+    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_POSTMAN),
 };
 
 static u8 D_80B2C218[] = {
     /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 35, 10, 39, 0x9 - 0x6),
     /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_MAILMAN),
+    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_POSTMAN),
 };
 
 static u8 D_80B2C224[] = {
     /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 53, 10, 57, 0x9 - 0x6),
     /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_MAILMAN),
+    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_POSTMAN),
 };
 
 static u8 D_80B2C230[] = {
     /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 25, 11, 29, 0x9 - 0x6),
     /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_MAILMAN),
+    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_POSTMAN),
 };
 
-s32 D_80B2C23C[] = { 0x0E27840C, 0x0E00FF2B, 0x00000031, 0x00392800, 0x0A122C27, 0xA40C2F00, 0x000C1012,
-                     0x2C27870C, 0x2F00000C, 0x111B022A, 0x002F001B, 0x4000080F, 0x27882D00, 0x180C100F,
-                     0x27892D00, 0x180C1012, 0x2C27850C, 0x2FFFD20E, 0x27860C10 };
+s32 D_80B2C23C[] = {
+    0x0E27840C, 0x0E00FF2B, 0x00000031, 0x00392800, 0x0A122C27, 0xA40C2F00, 0x000C1012,
+    0x2C27870C, 0x2F00000C, 0x111B022A, 0x002F001B, 0x4000080F, 0x27882D00, 0x180C100F,
+    0x27892D00, 0x180C1012, 0x2C27850C, 0x2FFFD20E, 0x27860C10,
+};
 
-s32 D_80B2C288[] = { 0x0E27840C, 0x0E00FF2B, 0x00000031, 0x00392800, 0x0A122C27, 0xA40C2F00, 0x000C1012,
-                     0x2C27870C, 0x2F00000C, 0x111B042A, 0x002F001B, 0x8000080F, 0x27882D00, 0x180C100F,
-                     0x27892D00, 0x180C1012, 0x2C27850C, 0x2FFFD20E, 0x27860C10 };
+s32 D_80B2C288[] = {
+    0x0E27840C, 0x0E00FF2B, 0x00000031, 0x00392800, 0x0A122C27, 0xA40C2F00, 0x000C1012,
+    0x2C27870C, 0x2F00000C, 0x111B042A, 0x002F001B, 0x8000080F, 0x27882D00, 0x180C100F,
+    0x27892D00, 0x180C1012, 0x2C27850C, 0x2FFFD20E, 0x27860C10,
+};
 
-s32 D_80B2C2D4[] = { 0x0E27840C, 0x0E00FF2B, 0x00000031, 0x00392800, 0x0A122C27, 0xA40C2F00, 0x000C1012,
-                     0x2C27870C, 0x2F00000C, 0x111B082A, 0x002F001C, 0x0100080F, 0x27882D00, 0x180C100F,
-                     0x27892D00, 0x180C1012, 0x2C27850C, 0x2FFFD20E, 0x27860C10 };
+s32 D_80B2C2D4[] = {
+    0x0E27840C, 0x0E00FF2B, 0x00000031, 0x00392800, 0x0A122C27, 0xA40C2F00, 0x000C1012,
+    0x2C27870C, 0x2F00000C, 0x111B082A, 0x002F001C, 0x0100080F, 0x27882D00, 0x180C100F,
+    0x27892D00, 0x180C1012, 0x2C27850C, 0x2FFFD20E, 0x27860C10,
+};
 
-s32 D_80B2C320[] = { 0x0E27840C, 0x0E00FF2B, 0x00000031, 0x00392800, 0x0A122C27, 0xA40C2F00, 0x000C1012,
-                     0x2C27870C, 0x2F00000C, 0x111B102A, 0x002F001C, 0x0200080F, 0x27882D00, 0x180C100F,
-                     0x27892D00, 0x180C1012, 0x2C27850C, 0x2FFFD20E, 0x27860C10 };
+s32 D_80B2C320[] = {
+    0x0E27840C, 0x0E00FF2B, 0x00000031, 0x00392800, 0x0A122C27, 0xA40C2F00, 0x000C1012,
+    0x2C27870C, 0x2F00000C, 0x111B102A, 0x002F001C, 0x0200080F, 0x27882D00, 0x180C100F,
+    0x27892D00, 0x180C1012, 0x2C27850C, 0x2FFFD20E, 0x27860C10,
+};
 
-s32 D_80B2C36C[] = { 0x0E27840C, 0x0E00FF2B, 0x00000031, 0x00392800, 0x0A122C27, 0xA40C2F00, 0x000C1012,
-                     0x2C27870C, 0x2F00000C, 0x111B202A, 0x002F001C, 0x0400080F, 0x27882D00, 0x180C100F,
-                     0x27892D00, 0x180C1012, 0x2C27850C, 0x2FFFD20E, 0x27860C10 };
+s32 D_80B2C36C[] = {
+    0x0E27840C, 0x0E00FF2B, 0x00000031, 0x00392800, 0x0A122C27, 0xA40C2F00, 0x000C1012,
+    0x2C27870C, 0x2F00000C, 0x111B202A, 0x002F001C, 0x0400080F, 0x27882D00, 0x180C100F,
+    0x27892D00, 0x180C1012, 0x2C27850C, 0x2FFFD20E, 0x27860C10,
+};
 
-s32 D_80B2C3B8[] = { 0x0E27A10C, 0x0F27A20C, 0x12005108, 0x000F0600, 0x0C000013, 0x000C0C11,
-                     0x51080700, 0x0C060001, 0x00001300, 0x010C0700, 0x000E27A3, 0x0C161000 };
+s32 D_80B2C3B8[] = {
+    0x0E27A10C, 0x0F27A20C, 0x12005108, 0x000F0600, 0x0C000013, 0x000C0C11,
+    0x51080700, 0x0C060001, 0x00001300, 0x010C0700, 0x000E27A3, 0x0C161000,
+};
 
-s32 D_80B2C3E8[] = { 0x2C27870C, 0x111B022A, 0x002F001B, 0x4000080F, 0x27882D00, 0x180C100F, 0x27892D00, 0x180C1000 };
+s32 D_80B2C3E8[] = {
+    0x2C27870C, 0x111B022A, 0x002F001B, 0x4000080F, 0x27882D00, 0x180C100F, 0x27892D00, 0x180C1000,
+};
 
-s32 D_80B2C408[] = { 0x2C27870C, 0x111B042A, 0x002F001B, 0x8000080F, 0x27882D00, 0x180C100F, 0x27892D00, 0x180C1000 };
+s32 D_80B2C408[] = {
+    0x2C27870C, 0x111B042A, 0x002F001B, 0x8000080F, 0x27882D00, 0x180C100F, 0x27892D00, 0x180C1000,
+};
 
-s32 D_80B2C428[] = { 0x2C27870C, 0x111B082A, 0x002F001C, 0x0100080F, 0x27882D00, 0x180C100F, 0x27892D00, 0x180C1000 };
+s32 D_80B2C428[] = {
+    0x2C27870C, 0x111B082A, 0x002F001C, 0x0100080F, 0x27882D00, 0x180C100F, 0x27892D00, 0x180C1000,
+};
 
-s32 D_80B2C448[] = { 0x2C27870C, 0x111B102A, 0x002F001C, 0x0200080F, 0x27882D00, 0x180C100F, 0x27892D00, 0x180C1000 };
+s32 D_80B2C448[] = {
+    0x2C27870C, 0x111B102A, 0x002F001C, 0x0200080F, 0x27882D00, 0x180C100F, 0x27892D00, 0x180C1000,
+};
 
-s32 D_80B2C468[] = { 0x2C27870C, 0x111B202A, 0x002F001C, 0x0400080F, 0x27882D00, 0x180C100F, 0x27892D00, 0x180C1000 };
+s32 D_80B2C468[] = {
+    0x2C27870C, 0x111B202A, 0x002F001C, 0x0400080F, 0x27882D00, 0x180C100F, 0x27892D00, 0x180C1000,
+};
 
 s32 D_80B2C488[] = { 0x2C27A40C, 0x10000000 };
 
@@ -130,41 +160,41 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimationInfo[] = { &object_pst_Anim_000018, 1.0f, 0, -1, ANIMMODE_ONCE, 0 };
+static AnimationInfoS sAnimationInfo[] = { { &gPostboxOpenSlot, 1.0f, 0, -1, ANIMMODE_ONCE, 0 } };
 
 void EnPst_UpdateCollision(EnPst* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-s32 func_80B2B874(EnPst* this) {
+s32 EnPst_HandleLetterDay1(EnPst* this) {
     switch (this->actor.params) {
-        case 0:
+        case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
             return gSaveContext.save.weekEventReg[27] & 0x2;
-        case 1:
+        case POSTBOX_NORTH_CLOCKTOWN:
             return gSaveContext.save.weekEventReg[27] & 0x4;
-        case 2:
+        case POSTBOX_EAST_UPPER_CLOCKTOWN:
             return gSaveContext.save.weekEventReg[27] & 0x8;
-        case 3:
+        case POSTBOX_EAST_LOWER_CLOCKTOWN:
             return gSaveContext.save.weekEventReg[27] & 0x10;
-        case 4:
+        case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
             return gSaveContext.save.weekEventReg[27] & 0x20;
         default:
             return false;
     }
 }
 
-s32 func_80B2B8F4(EnPst* this) {
+s32 EnPst_HandleLetterDay2(EnPst* this) {
     switch (this->actor.params) {
-        case 0:
+        case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
             return gSaveContext.save.weekEventReg[27] & 0x40;
-        case 1:
+        case POSTBOX_NORTH_CLOCKTOWN:
             return gSaveContext.save.weekEventReg[27] & 0x80;
-        case 2:
+        case POSTBOX_EAST_UPPER_CLOCKTOWN:
             return gSaveContext.save.weekEventReg[28] & 0x1;
-        case 3:
+        case POSTBOX_EAST_LOWER_CLOCKTOWN:
             return gSaveContext.save.weekEventReg[28] & 0x2;
-        case 4:
+        case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
             return gSaveContext.save.weekEventReg[28] & 0x4;
         default:
             return false;
@@ -217,38 +247,37 @@ s32* EnPst_GetMsgEventScript(EnPst* this, PlayState* play) {
 
     if (this->stateFlags & 0x10) {
         switch (this->actor.params) {
-            case 0:
+            case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
                 return D_80B2C3E8;
-            case 1:
+            case POSTBOX_NORTH_CLOCKTOWN:
                 return D_80B2C408;
-            case 2:
+            case POSTBOX_EAST_UPPER_CLOCKTOWN:
                 return D_80B2C428;
-            case 3:
+            case POSTBOX_EAST_LOWER_CLOCKTOWN:
                 return D_80B2C448;
-            case 4:
+            case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
                 return D_80B2C468;
             default:
                 return NULL;
         }
-
     } else if (this->stateFlags & 0x20) {
-        if (this->exchangeItemId == 0x33) {
+        if (this->exchangeItemId == EXCH_ITEM_LETTER_MAMA) {
             return D_80B2C488;
+        } else {
+            return D_80B2C490;
         }
-        return D_80B2C490;
     } else {
-
         this->msgEventCallback = EnPst_ChooseBehaviour;
         switch (this->actor.params) {
-            case 0:
+            case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
                 return D_80B2C23C;
-            case 1:
+            case POSTBOX_NORTH_CLOCKTOWN:
                 return D_80B2C288;
-            case 2:
+            case POSTBOX_EAST_UPPER_CLOCKTOWN:
                 return D_80B2C2D4;
-            case 3:
+            case POSTBOX_EAST_LOWER_CLOCKTOWN:
                 return D_80B2C320;
-            case 4:
+            case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
                 return D_80B2C36C;
             default:
                 return NULL;
@@ -270,13 +299,14 @@ s32 EnPst_CheckTalk(EnPst* this, PlayState* play) {
                 this->stateFlags |= 0x20;
                 this->exchangeItemId = player->exchangeItemId;
             }
-            this->unk21C = func_80B2B874(this);
+            // If Letter to Kafei is deposited, value is set to 2
+            this->isLetterToKafeiDeposited = EnPst_HandleLetterDay1(this);
             SubS_UpdateFlags(&this->stateFlags, 0, 7);
             this->behaviour = 0;
             this->msgEventCallback = NULL;
             this->stateFlags |= 0x40;
             this->msgEventScript = EnPst_GetMsgEventScript(this, play);
-            this->actionFunc = func_80B2BE54;
+            this->actionFunc = EnPst_UpdateSchedule;
             ret = true;
         }
     }
@@ -288,7 +318,7 @@ s32 EnPst_UpdateFlagsSubs(EnPst* this, PlayState* play, ScheduleOutput* schedule
     return true;
 }
 
-s32 func_80B2BD30(EnPst* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+s32 EnPst_ProcessScheduleOutput(EnPst* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     this->stateFlags = 0;
@@ -297,14 +327,14 @@ s32 func_80B2BD30(EnPst* this, PlayState* play, ScheduleOutput* scheduleOutput) 
         case POSTBOX_SCH_AVAILABLE:
             ret = EnPst_UpdateFlagsSubs(this, play, scheduleOutput);
             break;
-        case POSTBOX_SCH_CHECKED_BY_MAILMAN:
+        case POSTBOX_SCH_CHECKED_BY_POSTMAN:
             ret = true;
             break;
     }
     return ret;
 }
 
-void EnPst_Idle(EnPst* this, PlayState* play) {
+void EnPst_HandleSchedule(EnPst* this, PlayState* play) {
 }
 
 void EnPst_FollowSchedule(EnPst* this, PlayState* play) {
@@ -315,7 +345,8 @@ void EnPst_FollowSchedule(EnPst* this, PlayState* play) {
     ScheduleOutput scheduleOutput;
 
     if (!Schedule_RunScript(play, sScheduleScripts[params], &scheduleOutput) ||
-        ((this->scheduleResult != scheduleOutput.result) && !func_80B2BD30(this, play, &scheduleOutput))) {
+        ((this->scheduleResult != scheduleOutput.result) &&
+         !EnPst_ProcessScheduleOutput(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_1;
         scheduleOutput.result = POSTBOX_SCH_NONE;
@@ -324,19 +355,19 @@ void EnPst_FollowSchedule(EnPst* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_1;
     }
     this->scheduleResult = scheduleOutput.result;
-    EnPst_Idle(this, play);
+    EnPst_HandleSchedule(this, play);
 }
 
-void func_80B2BE54(EnPst* this, PlayState* play) {
+void EnPst_UpdateSchedule(EnPst* this, PlayState* play) {
     if (func_8010BF58(&this->actor, play, this->msgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
-        if (func_80B2B874(this) != this->unk21C) {
+        if (EnPst_HandleLetterDay1(this) != this->isLetterToKafeiDeposited) {
             switch (gSaveContext.save.day) {
                 case 1:
                     gSaveContext.save.weekEventReg[91] |= 4;
                     break;
 
                 case 2:
-                    if (func_80B2B8F4(this)) {
+                    if (EnPst_HandleLetterDay2(this)) {
                         gSaveContext.save.weekEventReg[91] |= 8;
                     } else {
                         gSaveContext.save.weekEventReg[91] |= 4;
