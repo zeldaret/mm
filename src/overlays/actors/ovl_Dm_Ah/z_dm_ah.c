@@ -164,7 +164,7 @@ void DmAh_Init(Actor* thisx, PlayState* play) {
     DmAh* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_ah_Skel_009E70, NULL, &this->morphTable, &this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_ah_Skel_009E70, NULL, this->morphTable, this->jointTable,
                        OBJECT_AH_LIMB_MAX);
     this->animationIndex = -1;
     func_80C1D410(this, 0);
@@ -172,7 +172,7 @@ void DmAh_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->unk27C |= 1;
     if ((play->sceneNum == SCENE_YADOYA) && (play->curSpawn == 4)) {
-        this->unk280 = func_80C1D78C(play);
+        this->unk280 = (Player*)func_80C1D78C(play);
         func_80C1D410(this, 1);
         this->actionFunc = func_80C1D92C;
     } else {
