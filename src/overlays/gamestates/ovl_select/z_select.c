@@ -17,7 +17,7 @@ void MapSelect_LoadTitle(MapSelectState* this) {
     SET_NEXT_GAMESTATE(&this->state, Title_Init, TitleContext);
 }
 
-void MapSelect_LoadGame(MapSelectState* this, u32 entranceIndex, s32 opt) {
+void MapSelect_LoadGame(MapSelectState* this, u32 entranceIndex, s32 spawnIndex) {
     if (gSaveContext.fileNum == 0xFF) {
         Sram_InitDebugSave();
     }
@@ -35,9 +35,9 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entranceIndex, s32 opt) {
     Audio_QueueSeqCmd(NA_BGM_STOP);
     gSaveContext.save.entranceIndex = entranceIndex;
 
-    if (opt != 0) {
+    if (spawnIndex != 0) {
         gSaveContext.save.entranceIndex =
-            Entrance_CreateIndex((s32)gSaveContext.save.entranceIndex >> 9, opt, gSaveContext.save.entranceIndex & 0xF);
+            Entrance_CreateIndex((s32)gSaveContext.save.entranceIndex >> 9, spawnIndex, gSaveContext.save.entranceIndex & 0xF);
     }
     if (gSaveContext.save.entranceIndex == 0xC000) {
         gSaveContext.save.day = 0;
