@@ -67,12 +67,12 @@ static ColliderSphereInit sSphereInit = {
     { 1, { { 0, 0, 0 }, 15 }, 100 },
 };
 
-struct EnMkkDlists {
+typedef struct EnMkkDlists {
     /* 0x00 */ Gfx* unk0;
     /* 0x04 */ Gfx* unk4;
     /* 0x08 */ Gfx* unk8;
     /* 0x0C */ Gfx* unkC;
-}; // size = 0x10
+} EnMkkDlists; // size = 0x10
 
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 15, 30, 10 };
 
@@ -127,7 +127,7 @@ static Color_RGBA8 sEffPrimColors[] = { { 50, 50, 50, 255 }, { 255, 255, 255, 25
 
 static Color_RGBA8 sEffEnvColors[] = { { 200, 200, 200, 255 }, { 255, 255, 255, 255 } };
 
-static struct EnMkkDlists sBoeDLists[] = {
+static EnMkkDlists sBoeDLists[] = {
     { object_mkk_DL_000030, object_mkk_DL_0000B0, object_mkk_DL_0000C8, object_mkk_DL_000140 },
     { object_mkk_DL_0001F0, object_mkk_DL_000278, object_mkk_DL_000290, object_mkk_DL_000310 },
 };
@@ -509,12 +509,11 @@ void func_80A4F16C(Actor* thisx, PlayState* play) {
 }
 
 void EnMkk_Draw(Actor* thisx, PlayState* play) {
-    struct EnMkkDlists* dLists;
+    EnMkkDlists* dLists = &sBoeDLists[thisx->params];
     Gfx* gfx;
     Color_RGBA8* primColors;
     EnMkk* this = THIS;
 
-    dLists = &sBoeDLists[this->actor.params];
     if (this->actor.projectedPos.z > 0.0f) {
         MtxF* matrix;
 
@@ -537,7 +536,7 @@ void EnMkk_Draw(Actor* thisx, PlayState* play) {
         Matrix_ReplaceRotation(&play->billboardMtxF);
         gSPMatrix(&gfx[3], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(&gfx[4], dLists->unk4);
-        if (this->actor.params == 0) {
+        if (thisx->params == 0) {
             matrix = Matrix_GetCurrent();
             matrix->mf[3][0] = this->unk_154.x;
             matrix->mf[3][1] = this->unk_154.y + 8.5f;
@@ -569,7 +568,7 @@ void func_80A4F4C8(Actor* thisx, PlayState* play) {
     s32 pad;
     Gfx* gfx;
     MtxF* matrix;
-    struct EnMkkDlists* dLists = &sBoeDLists[thisx->params];
+    EnMkkDlists* dLists = &sBoeDLists[thisx->params];
     EnMkk* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
