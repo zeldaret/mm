@@ -47,7 +47,7 @@ void DmChar06_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AAE6F0(DmChar06* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 463)) {
+    if (Cutscene_CheckActorAction(play, 0x1CF)) {
         s32 actionIndex = Cutscene_GetActorActionIndex(play, 0x1CF);
 
         if ((play->csCtx.frames >= play->csCtx.actorActions[actionIndex]->startFrame) &&
@@ -55,10 +55,10 @@ void func_80AAE6F0(DmChar06* this, PlayState* play) {
             if (play->csCtx.actorActions[actionIndex]->action == 1) {
                 this->alpha = 255;
             } else if (play->csCtx.actorActions[actionIndex]->action == 2) {
-                f32 floatTemp = 1.0f - Environment_LerpWeight(play->csCtx.actorActions[actionIndex]->endFrame,
+                f32 lerp = 1.0f - Environment_LerpWeight(play->csCtx.actorActions[actionIndex]->endFrame,
                                                               play->csCtx.actorActions[actionIndex]->startFrame,
                                                               play->csCtx.frames);
-                this->alpha = 255 * floatTemp;
+                this->alpha = 255 * lerp;
             }
         }
     }
