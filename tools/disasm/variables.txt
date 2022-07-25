@@ -5740,7 +5740,7 @@
     0x808743E8:("D_808743E8","f32","",0x4),
     0x808743EC:("D_808743EC","f32","",0x4),
     0x808743F0:("D_808743F0","f32","",0x4),
-    0x80874650:("sPowderKegFuseSegments","s80874650","[16]",0x1c0),
+    0x80874650:("sPowderKegFuseSegments","PowderKegFuseSegment","[16]",0x1c0),
     0x80874668:("D_80874668","UNK_TYPE1","",0x1),
     0x8087466A:("D_8087466A","UNK_TYPE1","",0x1),
     0x8087466C:("D_8087466C","UNK_TYPE1","",0x1),
