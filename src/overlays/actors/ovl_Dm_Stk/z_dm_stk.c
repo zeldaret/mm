@@ -1044,7 +1044,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
 
             Collider_InitCylinder(play, &this->collider);
 
-            if (gSaveContext.save.entranceIndex == ENTRANCE(CLOCK_TOWER_ROOFTOP, 0, 0)) {
+            if (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_ROOFTOP, 0, 0)) {
                 if (gSaveContext.sceneSetupIndex == 0) {
                     if (gSaveContext.unk_3DD0[3] == 0) {
                         // Starts a 5 minute (300 second) timer until the moon falls.

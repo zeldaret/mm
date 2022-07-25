@@ -499,7 +499,7 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
             }
         }
         if ((this->actor.xzDistToPlayer < 800.0f) ||
-            (gSaveContext.save.entranceIndex == ENTRANCE(GORON_RACETRACK, 1, 0))) {
+            (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1, 0))) {
             Collider_UpdateCylinder(&this->actor, &this->cylinderCollider);
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->cylinderCollider.base);
             if (this->actor.xzDistToPlayer < 150.0f) {

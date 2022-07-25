@@ -222,8 +222,8 @@ Actor* EnSuttari_GetActorById(PlayState* play, s16 actorId) {
     return NULL;
 }
 
-void EnSuttari_TriggerTransition(PlayState* play, u16 nextEntranceIndex) {
-    play->nextEntranceIndex = nextEntranceIndex;
+void EnSuttari_TriggerTransition(PlayState* play, u16 entrance) {
+    play->nextEntrance = entrance;
     play->transitionType = TRANS_TYPE_64;
     gSaveContext.nextTransitionType = TRANS_TYPE_64;
     play->transitionTrigger = TRANS_TRIGGER_START;
@@ -962,7 +962,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
         if (gSaveContext.save.time >= CLOCK_TIME(0, 20) && gSaveContext.save.time < CLOCK_TIME(6, 00)) {
             Actor_MarkForDeath(&this->actor);
         }
-        if ((gSaveContext.save.entranceIndex == ENTRANCE(NORTH_CLOCK_TOWN, 7, 0)) ||
+        if ((gSaveContext.save.entrance == ENTRANCE(NORTH_CLOCK_TOWN, 7, 0)) ||
             (gSaveContext.save.weekEventReg[58] & 0x40)) {
             Actor_MarkForDeath(&this->actor);
         }

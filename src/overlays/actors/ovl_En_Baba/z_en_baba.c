@@ -300,7 +300,7 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
 }
 
 void EnBaba_TriggerTransition(PlayState* play, u16 nextEntrance) {
-    play->nextEntranceIndex = nextEntrance;
+    play->nextEntrance = nextEntrance;
     play->transitionType = TRANS_TYPE_64;
     gSaveContext.nextTransitionType = TRANS_TYPE_64;
     play->transitionTrigger = TRANS_TRIGGER_START;
@@ -510,7 +510,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
         this->actionFunc = EnBaba_Idle;
     } else if (play->sceneNum == SCENE_BACKTOWN) {
         if ((BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_FOLLOW_SCHEDULE) &&
-            (gSaveContext.save.entranceIndex != 0xD670) && (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != 0x3F)) {
+            (gSaveContext.save.entrance != 0xD670) && (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != 0x3F)) {
             if ((gSaveContext.save.weekEventReg[58] & 0x40) ||
                 (gSaveContext.save.time >= CLOCK_TIME(0, 20) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
                 Actor_MarkForDeath(&this->actor);
@@ -522,7 +522,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
             this->actionFunc = EnBaba_FollowSchedule;
         } else if ((BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_IDLE) &&
-                   (gSaveContext.save.entranceIndex == ENTRANCE(NORTH_CLOCK_TOWN, 7, 0))) {
+                   (gSaveContext.save.entrance == ENTRANCE(NORTH_CLOCK_TOWN, 7, 0))) {
             if (gSaveContext.save.weekEventReg[81] & 2) {
                 Actor_MarkForDeath(&this->actor);
                 return;

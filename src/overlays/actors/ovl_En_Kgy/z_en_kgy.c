@@ -512,7 +512,7 @@ void func_80B41A48(EnKgy* this, PlayState* play) {
     if (this->unk_2E4 > 0) {
         this->unk_2E4--;
     } else {
-        play->nextEntranceIndex = play->setupExitList[ENKGY_GET_1F(&this->actor)];
+        play->nextEntrance = play->setupExitList[ENKGY_GET_1F(&this->actor)];
         play->transitionTrigger = TRANS_TRIGGER_START;
     }
 }

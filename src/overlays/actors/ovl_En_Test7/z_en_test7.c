@@ -659,20 +659,20 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
     this->unk_148.unk_10 -= 0x2EE0;
 
     if (play->sceneNum == SCENE_SECOM) {
-        play->nextEntranceIndex = ENTRANCE(IKANA_CANYON, 6, 0);
+        play->nextEntrance = ENTRANCE(IKANA_CANYON, 6, 0);
     } else if (ENTEST7_GET(&this->actor) == ENTEST7_26) {
         func_80169F78(&play->state);
         gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams =
             (gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams & 0xFF) | 0x600;
         gSaveContext.respawnFlag = -6;
     } else {
-        play->nextEntranceIndex = D_80AF343C[ENTEST7_GET(&this->actor) - ENTEST7_1C];
-        if ((play->nextEntranceIndex == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10, 0)) &&
+        play->nextEntrance = D_80AF343C[ENTEST7_GET(&this->actor) - ENTEST7_1C];
+        if ((play->nextEntrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10, 0)) &&
             (gSaveContext.save.weekEventReg[20] & 2)) {
-            play->nextEntranceIndex = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10, 0);
-        } else if ((play->nextEntranceIndex == ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8, 0)) &&
+            play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10, 0);
+        } else if ((play->nextEntrance == ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8, 0)) &&
                    (gSaveContext.save.weekEventReg[33] & 0x80)) {
-            play->nextEntranceIndex = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 8, 0);
+            play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 8, 0);
         }
     }
 

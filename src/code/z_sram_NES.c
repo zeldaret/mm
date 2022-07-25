@@ -501,7 +501,7 @@ u16 Sram_CalcChecksum(void* data, size_t count) {
 
 // Resets `Save` substruct
 void Sram_ResetSave(void) {
-    gSaveContext.save.entranceIndex = ENTRANCE(CUTSCENE, 0, 0);
+    gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0, 0);
     gSaveContext.save.equippedMask = 0;
     gSaveContext.save.isFirstCycle = false;
     gSaveContext.save.unk_06 = 0;
@@ -845,7 +845,7 @@ void Sram_InitDebugSave(void) {
     gSaveContext.save.horseData.pos.z = -1285;
     gSaveContext.save.horseData.yaw = -0x7554;
 
-    gSaveContext.save.entranceIndex = ENTRANCE(CUTSCENE, 0, 0);
+    gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0, 0);
     gSaveContext.save.isFirstCycle = true;
 
     //
@@ -979,24 +979,24 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
         }
 
         if (gSaveContext.save.isFirstCycle) {
-            gSaveContext.save.entranceIndex = ENTRANCE(SOUTH_CLOCK_TOWN, 0, 0);
+            gSaveContext.save.entrance = ENTRANCE(SOUTH_CLOCK_TOWN, 0, 0);
             gSaveContext.save.day = 0;
             gSaveContext.save.time = 0x3FFF;
         } else {
-            gSaveContext.save.entranceIndex = ENTRANCE(CUTSCENE, 0, 0);
+            gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0, 0);
             gSaveContext.nextCutsceneIndex = 0;
             gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
         }
     } else {
-        gSaveContext.save.entranceIndex = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
-        if ((gSaveContext.save.entranceIndex == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10, 0)) &&
+        gSaveContext.save.entrance = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
+        if ((gSaveContext.save.entrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10, 0)) &&
             (gSaveContext.save.weekEventReg[20] & 2)) {
             // Unconfirmed weekEventReg: "Woodfall Temple Prison Entrance raised / Water cleansed"
-            gSaveContext.save.entranceIndex = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10, 0);
-        } else if ((gSaveContext.save.entranceIndex == ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8, 0)) &&
+            gSaveContext.save.entrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10, 0);
+        } else if ((gSaveContext.save.entrance == ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8, 0)) &&
                    (gSaveContext.save.weekEventReg[33] & 0x80)) {
             // Unconfirmed weekEventReg: "Mountain Village Unfrozen"
-            gSaveContext.save.entranceIndex = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 8, 0);
+            gSaveContext.save.entrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 8, 0);
         }
 
         for (i = 0; i < ARRAY_COUNT(gSaveContext.cycleSceneFlags); i++) {
@@ -1521,7 +1521,7 @@ void func_80146DF8(SramContext* sramCtx) {
 }
 
 void Sram_InitSram(GameState* gameState, SramContext* sramCtx) {
-    if (gSaveContext.save.entranceIndex) {} // Required to match
+    if (gSaveContext.save.entrance) {} // Required to match
 
     func_801A3D98(gSaveContext.options.audioSetting);
 }

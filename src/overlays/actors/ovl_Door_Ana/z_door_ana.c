@@ -52,7 +52,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 50, 10, 0, { 0, 0, 0 } },
 };
 
-static u16 sEntranceIndexes[] = {
+static u16 sEntrances[] = {
     ENTRANCE(UNSET_0D, 0, 0), ENTRANCE(GROTTOS, 0, 0),  ENTRANCE(GROTTOS, 1, 0),  ENTRANCE(GROTTOS, 2, 0),
     ENTRANCE(GROTTOS, 3, 0),  ENTRANCE(GROTTOS, 4, 0),  ENTRANCE(GROTTOS, 5, 0),  ENTRANCE(GROTTOS, 6, 0),
     ENTRANCE(GROTTOS, 7, 0),  ENTRANCE(GROTTOS, 8, 0),  ENTRANCE(GROTTOS, 9, 0),  ENTRANCE(GROTTOS, 10, 0),
@@ -137,7 +137,7 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
             if (grottoType == DOORANA_TYPE_VISIBLE_SCENE_EXIT) {
                 s32 exitIndex = DOORANA_GET_EXIT_INDEX(&this->actor);
 
-                play->nextEntranceIndex = play->setupExitList[exitIndex];
+                play->nextEntrance = play->setupExitList[exitIndex];
             } else {
                 s32 destinationIdx = DOORANA_GET_ENTRANCE(&this->actor);
 
@@ -153,7 +153,7 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
                     destinationIdx = DOORANA_GET_EX_ENTRANCE(&this->actor);
                 }
 
-                play->nextEntranceIndex = sEntranceIndexes[destinationIdx];
+                play->nextEntrance = sEntrances[destinationIdx];
             }
 
             DoorAna_SetupAction(this, DoorAna_GrabLink);

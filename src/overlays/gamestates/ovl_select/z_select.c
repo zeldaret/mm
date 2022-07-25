@@ -17,7 +17,7 @@ void MapSelect_LoadTitle(MapSelectState* this) {
     SET_NEXT_GAMESTATE(&this->state, Title_Init, TitleContext);
 }
 
-void MapSelect_LoadGame(MapSelectState* this, u32 entranceIndex, s32 spawn) {
+void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
     if (gSaveContext.fileNum == 0xFF) {
         Sram_InitDebugSave();
     }
@@ -33,26 +33,26 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entranceIndex, s32 spawn) {
     gSaveContext.unk_3F24 = 0;
 
     Audio_QueueSeqCmd(NA_BGM_STOP);
-    gSaveContext.save.entranceIndex = entranceIndex;
+    gSaveContext.save.entrance = entrance;
 
     if (spawn != 0) {
-        gSaveContext.save.entranceIndex = Entrance_CreateIndex((s32)gSaveContext.save.entranceIndex >> 9, spawn,
-                                                               gSaveContext.save.entranceIndex & 0xF);
+        gSaveContext.save.entrance = Entrance_CreateIndex((s32)gSaveContext.save.entrance >> 9, spawn,
+                                                               gSaveContext.save.entrance & 0xF);
     }
-    if (gSaveContext.save.entranceIndex == ENTRANCE(CLOCK_TOWER_INTERIOR, 0, 0)) {
+    if (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 0, 0)) {
         gSaveContext.save.day = 0;
         gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
     }
 
-    gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = 0xFFFF;
+    gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = 0xFFFF;
     gSaveContext.seqIndex = NA_BGM_DISABLED;
     gSaveContext.nightSeqIndex = 0xFF;
     gSaveContext.showTitleCard = true;
     gSaveContext.respawnFlag = 0;
-    gSaveContext.respawn[RESPAWN_MODE_GORON].entranceIndex = 0xFF;
-    gSaveContext.respawn[RESPAWN_MODE_ZORA].entranceIndex = 0xFF;
-    gSaveContext.respawn[RESPAWN_MODE_DEKU].entranceIndex = 0xFF;
-    gSaveContext.respawn[RESPAWN_MODE_HUMAN].entranceIndex = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_GORON].entrance = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_ZORA].entrance = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_DEKU].entrance = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_HUMAN].entrance = 0xFF;
     gWeatherMode = 0;
 
     do {
@@ -527,7 +527,7 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
             gSaveContext.minigameState = 0;
 
             if (this->scenes[this->currentScene].loadFunc != NULL) {
-                this->scenes[this->currentScene].loadFunc(this, this->scenes[this->currentScene].entranceIndex,
+                this->scenes[this->currentScene].loadFunc(this, this->scenes[this->currentScene].entrance,
                                                           this->opt);
             }
         }

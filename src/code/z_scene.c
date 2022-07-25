@@ -527,7 +527,7 @@ void Scene_HeaderCmdAnimatedMaterials(PlayState* play, SceneCmd* cmd) {
  * Sets the exit fade from the next entrance index.
  */
 void Scene_SetExitFade(PlayState* play) {
-    play->transitionType = Entrance_GetTransitionFlags(play->nextEntranceIndex) & 0x7F;
+    play->transitionType = Entrance_GetTransitionFlags(play->nextEntrance) & 0x7F;
 }
 
 /**
@@ -597,5 +597,5 @@ u16 Entrance_CreateIndex(s32 scene, s32 spawn, s32 layer) {
  * Creates an entrance index from the current entrance index with the given spawn index.
  */
 u16 Entrance_CreateIndexFromSpawn(s32 spawn) {
-    return Entrance_CreateIndex(gSaveContext.save.entranceIndex >> 9, spawn, 0);
+    return Entrance_CreateIndex(gSaveContext.save.entrance >> 9, spawn, 0);
 }

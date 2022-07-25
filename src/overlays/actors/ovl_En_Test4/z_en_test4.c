@@ -440,20 +440,20 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
                      (play->sceneNum == SCENE_CLOCKTOWER))) {
                     s32 playerParams;
-                    u32 entranceIndex = gSaveContext.save.entranceIndex;
+                    u32 entrance = gSaveContext.save.entrance;
 
                     if ((play->actorCtx.unk5 & 2)) {
                         playerParams = 0xCFF;
                     } else {
                         playerParams = 0xBFF;
                     }
-                    Play_SetRespawnData(&play->state, RESPAWN_MODE_RETURN, entranceIndex, player->unk_3CE, playerParams,
+                    Play_SetRespawnData(&play->state, RESPAWN_MODE_RETURN, entrance, player->unk_3CE, playerParams,
                                         &player->unk_3C0, player->unk_3CC);
 
                     if ((play->sceneNum == SCENE_TENMON_DAI) || (play->sceneNum == SCENE_00KEIKOKU)) {
-                        play->nextEntranceIndex = ENTRANCE(TERMINA_FIELD, 0, 0);
+                        play->nextEntrance = ENTRANCE(TERMINA_FIELD, 0, 0);
                     } else {
-                        play->nextEntranceIndex = ENTRANCE(SOUTH_CLOCK_TOWN, 0, 0);
+                        play->nextEntrance = ENTRANCE(SOUTH_CLOCK_TOWN, 0, 0);
                     }
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
                     play->transitionTrigger = TRANS_TRIGGER_START;
