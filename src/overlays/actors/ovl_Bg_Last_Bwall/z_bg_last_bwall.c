@@ -11,9 +11,9 @@
 #define THIS ((BgLastBwall*)thisx)
 
 typedef struct {
-    /* 0x0 */ Vec3s* unk0;
-    /* 0x6 */ s16* unk4;
-    /* 0x8 */ s32 unk6;
+    /* 0x0 */ Vec3s* posOffsets;
+    /* 0x4 */ s16* indices;
+    /* 0x8 */ s32 count;
 } BgLastBwallInitColliderStruct; // size = 0xC
 
 typedef struct {
@@ -84,7 +84,7 @@ static ColliderTrisInit sTrisInit = {
         COLSHAPE_TRIS,
     },
     ARRAY_COUNT(sTrisElementsInit),
-    sTrisElementsInit, // sTrisElementsInit,
+    sTrisElementsInit,
 };
 
 static BgLastBwallModelInfo D_80C18A48[] = {
@@ -93,10 +93,10 @@ static BgLastBwallModelInfo D_80C18A48[] = {
 };
 
 static Vec3s D_80C18A60[] = {
-    { 0x118, 0x118, -0x28 },
-    { 0x118, 0x118, 0x78 },
-    { 0x118, 0x190, 0x78 },
-    { 0x118, 0x190, -0x28 },
+    { 280, 280, -40 },
+    { 280, 280, 120 },
+    { 280, 400, 120 },
+    { 280, 400, -40 },
 };
 
 static s16 D_80C18A78[] = { 0, 1, 2, 0, 2, 3 };
@@ -104,10 +104,10 @@ static s16 D_80C18A78[] = { 0, 1, 2, 0, 2, 3 };
 static BgLastBwallInitColliderStruct D_80C18A84 = { D_80C18A60, D_80C18A78, 2 };
 
 static Vec3s D_80C18A90[] = {
-    { -0x50, 0x190, -0x50 },
-    { -0x50, 0x190, 0x50 },
-    { 0x50, 0x190, 0x50 },
-    { 0x50, 0x190, -0x50 },
+    { -80, 400, -80 },
+    { -80, 400, 80 },
+    { 80, 400, 80 },
+    { 80, 400, -80 },
 };
 
 static s16 D_80C18AA8[] = { 0, 3, 2, 0, 2, 1 };
@@ -133,12 +133,12 @@ void BgLastBwall_InitCollider(ColliderTrisInit* init, Vec3f* pos, Vec3s* rot, Co
     Matrix_RotateZS(rot->z, MTXMODE_APPLY);
     for (i = 0; i < init->count; i++) {
         for (j = 0; j < 3; j++) {
-            Math_Vec3s_ToVec3f(&sp60, &arg4->unk0[arg4->unk4[j]]);
+            Math_Vec3s_ToVec3f(&sp60, &arg4->posOffsets[arg4->indices[j]]);
             Matrix_MultVec3f(&sp60, &sp54);
             Math_Vec3f_Sum(&sp54, pos, &sp6C[j]);
         }
 
-        arg4->unk4 += 3;
+        arg4->indices += 3;
         Collider_SetTrisVertices(collider, i, &sp6C[0], &sp6C[1], &sp6C[2]);
     }
 }
@@ -148,18 +148,17 @@ void BgLastBwall_Init(Actor* thisx, PlayState* play) {
     BgLastBwall* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, D_80C18AC8);
-    this->unk238 = BGLASTBWALL_GET_F000(&this->dyna.actor);
+    this->type = BGLASTBWALL_GET_TYPE(&this->dyna.actor);
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(play, &this->dyna, D_80C18A48[this->unk238].colHeader);
+    DynaPolyActor_LoadMesh(play, &this->dyna, D_80C18A48[this->type].colHeader);
     Collider_InitTris(play, &this->colliderTris);
     if (Flags_GetSwitch(play, BGLASTBWALL_GET_SWITCHFLAGS(&this->dyna.actor))) {
         Actor_MarkForDeath(&this->dyna.actor);
-    } else if (!Collider_SetTris(play, &this->colliderTris, &this->dyna.actor, &sTrisInit,
-                                 &this->colliderTrisElement)) {
+    } else if (!Collider_SetTris(play, &this->colliderTris, &this->dyna.actor, &sTrisInit, this->colliderTrisElement)) {
         Actor_MarkForDeath(&this->dyna.actor);
     } else {
         BgLastBwall_InitCollider(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape.rot,
-                                 &this->colliderTris, D_80C18AC0[this->unk238]);
+                                 &this->colliderTris, D_80C18AC0[this->type]);
         SubS_FillCutscenesList(&this->dyna.actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
         func_80C187E4(this);
     }
@@ -174,35 +173,36 @@ void BgLastBwall_Destroy(Actor* thisx, PlayState* play) {
 void func_80C184EC(BgLastBwall* this, PlayState* play) {
     f32 randVar;
     Vec3f spD0;
-    Vec3f position;
+    Vec3f effectPosAndAccel;
     s32 var_v0;
-    Vec3f spB4;
+    Vec3f effectVelocity;
     s32 i;
 
     Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
     Matrix_RotateXS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_RotateZS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
     for (i = 0; i < 30; i++) {
-        switch (this->unk238) {
-            case 0:
+        switch (this->type) {
+            case BGLASTBWALL_TYPE_0:
                 spD0.x = 280.0f;
                 spD0.y = Rand_Centered() * 160.0f + 320.0f;
                 spD0.z = Rand_Centered() * 160.0f;
-                Matrix_MultVec3f(&spD0, &position);
-                Math_Vec3f_Sum(&this->dyna.actor.world.pos, &position, &position);
+                Matrix_MultVec3f(&spD0, &effectPosAndAccel);
+                Math_Vec3f_Sum(&this->dyna.actor.world.pos, &effectPosAndAccel, &effectPosAndAccel);
                 break;
-            case 1:
+            case BGLASTBWALL_TYPE_1:
                 spD0.x = Rand_Centered() * 160.0f;
                 spD0.y = 400.0f;
                 spD0.z = Rand_Centered() * 160.0f;
-                Matrix_MultVec3f(&spD0, &position);
-                Math_Vec3f_Sum(&this->dyna.actor.world.pos, &position, &position);
+                Matrix_MultVec3f(&spD0, &effectPosAndAccel);
+                Math_Vec3f_Sum(&this->dyna.actor.world.pos, &effectPosAndAccel, &effectPosAndAccel);
                 break;
         }
-        func_800BBFB0(play, &position, 50.0f, 2, Rand_ZeroOne() * 120.0f + 20.0f, Rand_ZeroOne() * 240.0f + 20.0f, 0);
-        spB4.x = Rand_ZeroOne() * 2.5f;
-        spB4.y = Rand_ZeroOne() * 2.5f + 1.0f;
-        spB4.z = Rand_ZeroOne() * 2.5f;
+        func_800BBFB0(play, &effectPosAndAccel, 50.0f, 2, Rand_ZeroOne() * 120.0f + 20.0f,
+                      Rand_ZeroOne() * 240.0f + 20.0f, 0);
+        effectVelocity.x = Rand_ZeroOne() * 2.5f;
+        effectVelocity.y = Rand_ZeroOne() * 2.5f + 1.0f;
+        effectVelocity.z = Rand_ZeroOne() * 2.5f;
         randVar = Rand_ZeroOne();
         if (randVar < 0.2f) {
             var_v0 = 0x60;
@@ -211,8 +211,8 @@ void func_80C184EC(BgLastBwall* this, PlayState* play) {
         } else {
             var_v0 = 0x20;
         }
-        EffectSsKakera_Spawn(play, &position, &spB4, &position, -260, var_v0, 20, 0, 0, 10, 0, 0, 50, -1,
-                             OBJECT_LAST_OBJ, object_last_obj_DL_000098);
+        EffectSsKakera_Spawn(play, &effectPosAndAccel, &effectVelocity, &effectPosAndAccel, -260, var_v0, 20, 0, 0, 10,
+                             0, 0, 50, -1, OBJECT_LAST_OBJ, object_last_obj_DL_000098);
     }
 }
 
@@ -261,5 +261,5 @@ void BgLastBwall_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     BgLastBwall* this = THIS;
 
-    Gfx_DrawDListOpa(play, D_80C18A48[this->unk238].dList);
+    Gfx_DrawDListOpa(play, D_80C18A48[this->type].dList);
 }
