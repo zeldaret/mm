@@ -1231,10 +1231,13 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_99_40 PACK_WEEKEVENTREG_FLAG(99, 0x40)
 #define WEEKEVENTREG_99_80 PACK_WEEKEVENTREG_FLAG(99, 0x80)
 
-#define CHECK_WEEKEVENTREG(flag) (gSaveContext.save.weekEventReg[(flag) >> 8] & ((flag) & 0xFF))
-#define CHECK_WEEKEVENTREG_ALT(flag) (((void)0, gSaveContext.save.weekEventReg[(flag) >> 8]) & ((flag) & 0xFF))
-#define SET_WEEKEVENTREG(flag) (gSaveContext.save.weekEventReg[(flag) >> 8] = ((void)0, gSaveContext.save.weekEventReg[(flag) >> 8]) | ((flag) & 0xFF))
-#define CLEAR_WEEKEVENTREG(flag) (gSaveContext.save.weekEventReg[(flag) >> 8] = ((void)0, gSaveContext.save.weekEventReg[(flag) >> 8]) & (u8)~((flag) & 0xFF))
+#define WEEKEVENTREG(index) (gSaveContext.save.weekEventReg[(index)])
+#define GET_WEEKEVENTREG(index) ((void)0, WEEKEVENTREG(index))
+
+#define CHECK_WEEKEVENTREG(flag) (WEEKEVENTREG((flag) >> 8) & ((flag) & 0xFF))
+#define CHECK_WEEKEVENTREG_ALT(flag) (GET_WEEKEVENTREG((flag) >> 8) & ((flag) & 0xFF))
+#define SET_WEEKEVENTREG(flag) (WEEKEVENTREG((flag) >> 8) = GET_WEEKEVENTREG((flag) >> 8) | ((flag) & 0xFF))
+#define CLEAR_WEEKEVENTREG(flag) (WEEKEVENTREG((flag) >> 8) = GET_WEEKEVENTREG((flag) >> 8) & (u8)~((flag) & 0xFF))
 
 #define WEEKEVENTREG_RACE_FLAG_END 0
 #define WEEKEVENTREG_RACE_FLAG_START 1
