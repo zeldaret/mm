@@ -46,7 +46,7 @@ void func_8098F040(ObjMure3* this, PlayState* play) {
     Vec3f spawnPos;
 
     Math_Vec3f_Copy(&spawnPos, &this->actor.world.pos);
-    for (i = 0; i < ARRAY_COUNT(this->unk148) - 1; i++, spawnPos.y += 20.0f) {
+    for (i = 0; i < 5; i++, spawnPos.y += 20.0f) {
         if (!((this->unk164 >> i) & 1)) {
             this->unk148[i] = (EnItem00*)Item_DropCollectible2(play, &spawnPos, 0x10001);
             if (this->unk148[i] != NULL) {
@@ -61,14 +61,14 @@ void func_8098F110(ObjMure3* this, PlayState* play) {
     Vec3f spawnPos;
     f32 sin = Math_SinS(this->actor.world.rot.y);
     f32 cos = Math_CosS(this->actor.world.rot.y);
-    f32 radius;
+    f32 dist;
 
     spawnPos.y = this->actor.world.pos.y;
 
-    for (i = 0, radius = -40.0f; i < ARRAY_COUNT(this->unk148) - 1; i++, radius += 20.0f) {
+    for (i = 0, dist = -40.0f; i < 5; i++, dist += 20.0f) {
         if (!((this->unk164 >> i) & 1)) {
-            spawnPos.x = this->actor.world.pos.x + (sin * radius);
-            spawnPos.z = this->actor.world.pos.z + (cos * radius);
+            spawnPos.x = this->actor.world.pos.x + (sin * dist);
+            spawnPos.z = this->actor.world.pos.z + (cos * dist);
             this->unk148[i] = (EnItem00*)Item_DropCollectible2(play, &spawnPos, 0x4000);
             if (this->unk148[i] != NULL) {
                 this->unk148[i]->actor.room = this->actor.room;
@@ -85,7 +85,7 @@ void func_8098F220(ObjMure3* this, PlayState* play) {
     spawnPos.y = this->actor.world.pos.y;
     yRot = this->actor.world.rot.y;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk148); i++) {
+    for (i = 0; i < 6; i++) {
         if (!((this->unk164 >> i) & 1)) {
             spawnPos.x = (Math_SinS(yRot) * 40.0f) + this->actor.world.pos.x;
             spawnPos.z = (Math_CosS(yRot) * 40.0f) + this->actor.world.pos.z;

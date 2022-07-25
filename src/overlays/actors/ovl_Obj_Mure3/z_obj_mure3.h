@@ -4,7 +4,7 @@
 #include "global.h"
 
 #define OBJMURE3_PARAMS_7F(thisx) ((thisx)->params & 0x7F)
-#define OBJMURE3_PARAMS_RUPEEINDEX(thisx) (((thisx)->params >> 0xD) & 7)
+#define OBJMURE3_PARAMS_RUPEEINDEX(thisx) (((thisx)->params >> 13) & 7)
 
 struct ObjMure3;
 
