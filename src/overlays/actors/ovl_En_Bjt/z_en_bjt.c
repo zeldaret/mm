@@ -243,13 +243,13 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
     switch (this->behaviour) {
         case TOILET_HAND_BEHAVIOUR_WAIT_FOR_ITEM:
             switch (Message_GetState(&play->msgCtx)) {
-                case 4:
-                case 5:
+                case TEXT_STATE_CHOICE:
+                case TEXT_STATE_5:
                     if (!Message_ShouldAdvance(play)) {
                         break;
                     }
                     // Fallthrough
-                case 16:
+                case TEXT_STATE_16:
                     itemAP = func_80123810(play);
                     if ((itemAP == EXCH_ITEM_DEED_LAND) || (itemAP == EXCH_ITEM_LETTER_TO_KAFEI) ||
                         (itemAP == EXCH_ITEM_DEED_SWAMP) || (itemAP == EXCH_ITEM_DEED_MOUNTAIN) ||

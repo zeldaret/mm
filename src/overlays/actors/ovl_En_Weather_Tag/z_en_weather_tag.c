@@ -125,8 +125,8 @@ u8 func_80966608(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, 
             if (!(play->envCtx.unk_1E == 0) || ((play->envCtx.unk_1F != 1) && (play->envCtx.unk_21 == 0))) {
 
                 D_801BDBB8 = 0;
-                if (D_801BDBB0 != weatherMode) {
-                    D_801BDBB0 = weatherMode;
+                if (gWeatherMode != weatherMode) {
+                    gWeatherMode = weatherMode;
                     play->envCtx.unk_21 = 1;
                     play->envCtx.unk_1F = new1F;
                     play->envCtx.unk_20 = new20;
@@ -153,7 +153,7 @@ u8 func_80966758(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, 
             if (!(play->envCtx.unk_1E == 0) || ((play->envCtx.unk_1F != 1) && (play->envCtx.unk_21 == 0))) {
 
                 D_801BDBB8 = 0;
-                D_801BDBB0 = 0;
+                gWeatherMode = 0;
                 play->envCtx.unk_21 = 1;
                 play->envCtx.unk_1F = new1F;
                 play->envCtx.unk_20 = new20;
@@ -230,7 +230,7 @@ void EnWeatherTag_Die(EnWeatherTag* this, PlayState* play) {
 //  poisoned swamp: placed behind the water fall from ikana
 // this tag stops spawning after STT cleared?
 void func_80966B08(EnWeatherTag* this, PlayState* play) {
-    if (func_80966608(this, play, 0, 0, play->envCtx.unk_1F, 5, 100, 2) || D_801BDBB0 == 2) {
+    if (func_80966608(this, play, 0, 0, play->envCtx.unk_1F, 5, 100, 2) || (gWeatherMode == 2)) {
         play->skyboxId = 3;
         EnWeatherTag_SetupAction(this, func_80966D20);
     } else if (D_801F4E74 <= 0.01f) {
@@ -298,7 +298,7 @@ void func_80966D20(EnWeatherTag* this, PlayState* play) {
         EnWeatherTag_SetupAction(this, func_80966B08);
     }
 
-    if (D_801BDBB0 != 2) {
+    if (gWeatherMode != 2) {
         EnWeatherTag_SetupAction(this, func_80966B08);
     }
 }
@@ -452,7 +452,7 @@ void func_809674C8(EnWeatherTag* this, PlayState* play) {
             if ((gSaveContext.save.time >= CLOCK_TIME(7, 0)) && (gSaveContext.save.time < CLOCK_TIME(17, 30)) &&
                 (play->envCtx.unk_F2[2] == 0)) {
 
-                D_801BDBB0 = 1;
+                gWeatherMode = 1;
                 func_800FD78C(play);
                 play->envCtx.unk_F2[4] = 0x20;
                 EnWeatherTag_SetupAction(this, func_80967608);
@@ -471,7 +471,7 @@ void func_809674C8(EnWeatherTag* this, PlayState* play) {
 // WEATHERTAG_TYPE_LOCALDAY2RAIN 2
 void func_80967608(EnWeatherTag* this, PlayState* play) {
     if ((WEATHER_TAG_RANGE100(this) + 10.0f) < Actor_XZDistanceBetweenActors(&GET_PLAYER(play)->actor, &this->actor)) {
-        D_801BDBB0 = 0;
+        gWeatherMode = 0;
         EnWeatherTag_SetupAction(this, func_809674C8);
     }
 }

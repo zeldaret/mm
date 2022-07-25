@@ -6,7 +6,6 @@
 
 #include "z_obj_nozoki.h"
 #include "objects/object_secom_obj/object_secom_obj.h"
-#include "prevent_bss_reordering.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -465,7 +464,7 @@ void ObjNozoki_Draw(Actor* thisx, PlayState* play) {
     ObjNozoki* this = THIS;
 
     if (this->unk_15C == 1) {
-        GetItem_Draw(play, GID_39);
+        GetItem_Draw(play, GID_MASK_SUN);
     } else {
         Gfx_DrawDListOpa(play, D_80BA34FC[this->unk_15C]);
     }

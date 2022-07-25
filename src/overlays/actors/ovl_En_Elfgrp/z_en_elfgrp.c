@@ -241,7 +241,7 @@ void func_80A39DC8(EnElfgrp* this, PlayState* play, s32 arg2, s32 arg3) {
     s32 pad;
     s32 i;
     Actor* elforg;
-    s32 temp;
+    s32 params;
     Vec3f sp6C;
     Player* player = GET_PLAYER(play);
 
@@ -252,16 +252,16 @@ void func_80A39DC8(EnElfgrp* this, PlayState* play, s32 arg2, s32 arg3) {
     if (arg3 == 0) {
         sp6C = this->actor.world.pos;
         sp6C.y += 20.0f;
-        temp = ((this->unk_147 & 7) << 6) | STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN;
+        params = STRAY_FAIRY_PARAMS(0, this->unk_147, STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN);
     } else {
         sp6C = player->actor.world.pos;
         sp6C.y += 20.0f;
-        temp = ((this->unk_147 & 7) << 6) | STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN;
+        params = STRAY_FAIRY_PARAMS(0, this->unk_147, STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN);
     }
 
     for (i = 0; i < arg2; i++) {
         elforg = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG, randPlusMinusPoint5Scaled(20.0f) + sp6C.x, sp6C.y,
-                             randPlusMinusPoint5Scaled(20.0f) + sp6C.z, 0, 0, 0, temp);
+                             randPlusMinusPoint5Scaled(20.0f) + sp6C.z, 0, 0, 0, params);
         if (elforg == NULL) {
             continue;
         }
@@ -284,8 +284,8 @@ s32 func_80A39F50(PlayState* play) {
         }
 
         elfOrg = (EnElforg*)itemAction;
-        if (!(elfOrg->flags & STRAY_FAIRY_FLAG_MOVES_QUICKLY_TO_HOME)) {
-            elfOrg->flags |= STRAY_FAIRY_FLAG_MOVES_QUICKLY_TO_HOME;
+        if (!(elfOrg->strayFairyFlags & STRAY_FAIRY_FLAG_MOVES_QUICKLY_TO_HOME)) {
+            elfOrg->strayFairyFlags |= STRAY_FAIRY_FLAG_MOVES_QUICKLY_TO_HOME;
         }
         itemAction = itemAction->next;
     }
@@ -307,8 +307,8 @@ s32 func_80A39FBC(PlayState* play) {
         }
 
         elfOrg = (EnElforg*)itemAction;
-        if (!(elfOrg->flags & STRAY_FAIRY_FLAG_CIRCLES_QUICKLY_IN_FOUNTAIN)) {
-            elfOrg->flags |= STRAY_FAIRY_FLAG_CIRCLES_QUICKLY_IN_FOUNTAIN;
+        if (!(elfOrg->strayFairyFlags & STRAY_FAIRY_FLAG_CIRCLES_QUICKLY_IN_FOUNTAIN)) {
+            elfOrg->strayFairyFlags |= STRAY_FAIRY_FLAG_CIRCLES_QUICKLY_IN_FOUNTAIN;
             if (phi_v1 >= 100) {
                 return phi_v1;
             }
@@ -336,7 +336,7 @@ void func_80A3A044(PlayState* play) {
 
         elfOrg = (EnElforg*)itemAction;
         elfOrg->actor.home.rot.x = 0x14;
-        elfOrg->flags |= STRAY_FAIRY_FLAG_SPARKLES_AND_SHRINKS;
+        elfOrg->strayFairyFlags |= STRAY_FAIRY_FLAG_SPARKLES_AND_SHRINKS;
 
         itemAction = itemAction->next;
     }

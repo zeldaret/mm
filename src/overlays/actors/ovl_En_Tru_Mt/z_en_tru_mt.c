@@ -371,7 +371,7 @@ void func_80B76A64(EnTruMt* this, PlayState* play) {
 }
 
 void func_80B76BB8(EnTruMt* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             play->nextEntranceIndex = 0xA810;
             play->transitionType = TRANS_TYPE_03;
