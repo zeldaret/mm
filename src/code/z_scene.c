@@ -587,14 +587,14 @@ s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header) {
 }
 
 /**
- * Creates an entrance index from the scene index, spawn index, and scene setup.
+ * Creates an entrance from the scene, spawn, and lyaer.
  */
 u16 Entrance_CreateEntry(s32 scene, s32 spawn, s32 layer) {
     return (scene << 9) | (spawn << 4) | layer;
 }
 
 /**
- * Creates an entrance index from the current entrance index with the given spawn index.
+ * Creates an layer 0 entranace from the current entrance and the given spawn.
  */
 u16 Entrance_CreateEntryFromSpawn(s32 spawn) {
     return Entrance_CreateEntry(gSaveContext.save.entrance >> 9, spawn, 0);
