@@ -1966,8 +1966,8 @@ void Actor_GetScreenPos(PlayState* play, Actor* actor, s16* x, s16* y) {
     f32 w;
 
     Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &w);
-    *x = SCREEN_TO_DEVICE_X(projectedPos, w);
-    *y = SCREEN_TO_DEVICE_Y(projectedPos, w);
+    *x = PROJECTED_TO_SCREEN_X(projectedPos, w);
+    *y = PROJECTED_TO_SCREEN_Y(projectedPos, w);
 }
 
 s32 func_800B8934(PlayState* play, Actor* actor) {

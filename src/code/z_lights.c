@@ -391,8 +391,8 @@ void Lights_GlowCheck(PlayState* play) {
             params->drawGlow = 0;
 
             if ((projectedPos.z > 1) && (fabsf(projectedPos.x * invW) < 1) && (fabsf(projectedPos.y * invW) < 1)) {
-                s32 wX = SCREEN_TO_DEVICE_X(projectedPos, invW);
-                s32 wY = SCREEN_TO_DEVICE_Y(projectedPos, invW);
+                s32 wX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
+                s32 wY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
                 s32 wZ = (s32)((projectedPos.z * invW) * 16352) + 16352;
                 s32 zBuf = func_80178A94(wX, wY);
 
