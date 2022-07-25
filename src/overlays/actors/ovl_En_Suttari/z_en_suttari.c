@@ -222,7 +222,7 @@ Actor* EnSuttari_GetActorById(PlayState* play, s16 actorId) {
     return NULL;
 }
 
-void EnSuttari_SetNextEntrance(PlayState* play, u16 nextEntranceIndex) {
+void EnSuttari_TriggerTransition(PlayState* play, u16 nextEntranceIndex) {
     play->nextEntranceIndex = nextEntranceIndex;
     play->transitionType = TRANS_TYPE_64;
     gSaveContext.nextTransitionType = TRANS_TYPE_64;
@@ -1232,7 +1232,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
             this->actor.speedXZ = 0.0f;
             Audio_QueueSeqCmd(0x101400FF);
             this->flags2 |= 4;
-            EnSuttari_SetNextEntrance(play, 0xD670);
+            EnSuttari_TriggerTransition(play, NEXT_ENTRANCE(NORTH_CLOCK_TOWN, 7, 0));
         } else {
             this->unk3F2 = this->headRot.y;
             Math_ApproachF(&this->actor.speedXZ, 4.0f, 0.2f, 0.5f);

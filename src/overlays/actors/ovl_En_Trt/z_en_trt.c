@@ -1034,9 +1034,9 @@ void EnTrt_ShopkeeperGone(EnTrt* this, PlayState* play) {
     }
     if ((talkState == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         if (gSaveContext.save.weekEventReg[20] & 2) {
-            play->nextEntranceIndex = 0xC50;
+            play->nextEntranceIndex = NEXT_ENTRANCE(SOUTHERN_SWAMP_CLEARED, 5, 0);
         } else {
-            play->nextEntranceIndex = 0x8450;
+            play->nextEntranceIndex = NEXT_ENTRANCE(SOUTHERN_SWAMP_POISONED, 5, 0);
         }
         play->transitionType = TRANS_TYPE_64;
         gSaveContext.nextTransitionType = TRANS_TYPE_64;

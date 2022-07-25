@@ -111,7 +111,7 @@ void func_80A66278(EnWarpUzu* this, PlayState* play) {
 }
 
 void func_80A66384(EnWarpUzu* this, PlayState* play) {
-    play->nextEntranceIndex = 0x22A0;
+    play->nextEntranceIndex = NEXT_ENTRANCE(PIRATES_FORTRESS, 10, 0);
     gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = play->nextEntranceIndex;
     func_80169EFC(&play->state);
     gSaveContext.respawnFlag = -2;

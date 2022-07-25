@@ -638,7 +638,11 @@ void func_80AF2318(EnTest7* this, PlayState* play) {
 }
 
 u16 D_80AF343C[] = {
-    0x68B0, 0x6A60, 0xB230, 0x9A80, 0xD890, 0x3E40, 0x8640, 0x84A0, 0x2040, 0xAA30,
+    NEXT_ENTRANCE(GREAT_BAY_COAST, 11, 0), NEXT_ENTRANCE(ZORA_CAPE, 6, 0),
+    NEXT_ENTRANCE(SNOWHEAD, 3, 0),         NEXT_ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8, 0),
+    NEXT_ENTRANCE(SOUTH_CLOCK_TOWN, 9, 0), NEXT_ENTRANCE(MILK_ROAD, 4, 0),
+    NEXT_ENTRANCE(WOODFALL, 4, 0),         NEXT_ENTRANCE(SOUTHERN_SWAMP_POISONED, 10, 0),
+    NEXT_ENTRANCE(IKANA_CANYON, 4, 0),     NEXT_ENTRANCE(STONE_TOWER, 3, 0),
 };
 
 void func_80AF2350(EnTest7* this, PlayState* play) {
@@ -655,17 +659,20 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
     this->unk_148.unk_10 -= 0x2EE0;
 
     if (play->sceneNum == SCENE_SECOM) {
-        play->nextEntranceIndex = 0x2060;
+        play->nextEntranceIndex = NEXT_ENTRANCE(IKANA_CANYON, 6, 0);
     } else if (ENTEST7_GET(&this->actor) == ENTEST7_26) {
         func_80169F78(&play->state);
-        gSaveContext.respawn[2].playerParams = (gSaveContext.respawn[2].playerParams & 0xFF) | 0x600;
+        gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams =
+            (gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams & 0xFF) | 0x600;
         gSaveContext.respawnFlag = -6;
     } else {
         play->nextEntranceIndex = D_80AF343C[ENTEST7_GET(&this->actor) - ENTEST7_1C];
-        if ((play->nextEntranceIndex == 0x84A0) && (gSaveContext.save.weekEventReg[20] & 2)) {
-            play->nextEntranceIndex = 0xCA0;
-        } else if ((play->nextEntranceIndex == 0x9A80) && (gSaveContext.save.weekEventReg[33] & 0x80)) {
-            play->nextEntranceIndex = 0xAE80;
+        if ((play->nextEntranceIndex == NEXT_ENTRANCE(SOUTHERN_SWAMP_POISONED, 10, 0)) &&
+            (gSaveContext.save.weekEventReg[20] & 2)) {
+            play->nextEntranceIndex = NEXT_ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10, 0);
+        } else if ((play->nextEntranceIndex == NEXT_ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8, 0)) &&
+                   (gSaveContext.save.weekEventReg[33] & 0x80)) {
+            play->nextEntranceIndex = NEXT_ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 8, 0);
         }
     }
 

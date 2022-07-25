@@ -356,14 +356,14 @@ void func_80B0FD8C(EnGb2* this, PlayState* play) {
 
 void func_80B0FE18(PlayState* play) {
     func_800FD750(0x38);
-    play->nextEntranceIndex = 0x9C10;
+    play->nextEntranceIndex = NEXT_ENTRANCE(GHOST_HUT, 1, 0);
     play->transitionType = TRANS_TYPE_64;
     gSaveContext.nextTransitionType = TRANS_TYPE_64;
     play->transitionTrigger = TRANS_TRIGGER_START;
 }
 
 void func_80B0FE7C(PlayState* play) {
-    play->nextEntranceIndex = 0x9C20;
+    play->nextEntranceIndex = NEXT_ENTRANCE(GHOST_HUT, 2, 0);
     play->transitionType = TRANS_TYPE_64;
     gSaveContext.nextTransitionType = TRANS_TYPE_64;
     play->transitionTrigger = TRANS_TRIGGER_START;

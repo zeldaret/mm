@@ -684,7 +684,7 @@ void func_80BD9B4C(EnPamera* this, PlayState* play) {
 }
 
 void func_80BD9C70(EnPamera* this, PlayState* play) {
-    play->nextEntranceIndex = 0x2020;
+    play->nextEntranceIndex = NEXT_ENTRANCE(IKANA_CANYON, 2, 0);
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_70;
     gSaveContext.nextTransitionType = TRANS_TYPE_02;

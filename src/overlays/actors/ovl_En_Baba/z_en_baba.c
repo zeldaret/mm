@@ -603,12 +603,12 @@ void EnBaba_Talk(EnBaba* this, PlayState* play) {
                     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                         if (play->msgCtx.unk120B1 == 0) {
                             gSaveContext.save.weekEventReg[81] |= 2;
-                            EnBaba_TriggerTransition(play, 0xD670);
+                            EnBaba_TriggerTransition(play, NEXT_ENTRANCE(NORTH_CLOCK_TOWN, 7, 0));
                             return;
                         }
                     } else {
                         gSaveContext.save.weekEventReg[81] |= 2;
-                        EnBaba_TriggerTransition(play, 0xD670);
+                        EnBaba_TriggerTransition(play, NEXT_ENTRANCE(NORTH_CLOCK_TOWN, 7, 0));
                     }
                 } else {
                     this->textId = 0;
@@ -626,7 +626,7 @@ void EnBaba_Talk(EnBaba* this, PlayState* play) {
     } else if (talkState == TEXT_STATE_DONE) {
         if (Message_ShouldAdvance(play) && (play->msgCtx.unk120B1 == 0)) {
             gSaveContext.save.weekEventReg[81] |= 2;
-            EnBaba_TriggerTransition(play, 0xD670);
+            EnBaba_TriggerTransition(play, NEXT_ENTRANCE(NORTH_CLOCK_TOWN, 7, 0));
         }
     }
 }
@@ -699,7 +699,7 @@ void EnBaba_KnockedOver(EnBaba* this, PlayState* play) {
     } else {
         if ((gSaveContext.save.weekEventReg[79] & 0x40) && (DECR(this->sakonDeadTimer) == 0)) {
             Audio_QueueSeqCmd(0x101400FF);
-            EnBaba_TriggerTransition(play, 0xD670);
+            EnBaba_TriggerTransition(play, NEXT_ENTRANCE(NORTH_CLOCK_TOWN, 7, 0));
         } else {
             Actor_MoveWithGravity(&this->actor);
         }

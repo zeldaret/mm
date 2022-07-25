@@ -15198,7 +15198,7 @@
     0x80BAA220:("EnBaba_Draw",),
     0x80BAA6D0:("EnSuttari_UpdateCollider",),
     0x80BAA848:("EnSuttari_GetActorById",),
-    0x80BAA88C:("EnSuttari_SetNextEntrance",),
+    0x80BAA88C:("EnSuttari_TriggerTransition",),
     0x80BAA8D0:("EnSuttari_UpdateTime",),
     0x80BAA904:("func_80BAA904",),
     0x80BAA9B4:("func_80BAA9B4",),

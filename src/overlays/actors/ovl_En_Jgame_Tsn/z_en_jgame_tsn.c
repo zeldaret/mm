@@ -367,7 +367,7 @@ void func_80C144E4(EnJgameTsn* this) {
 }
 
 void func_80C144F8(EnJgameTsn* this, PlayState* play) {
-    play->nextEntranceIndex = 0x68D0;
+    play->nextEntranceIndex = NEXT_ENTRANCE(GREAT_BAY_COAST, 13, 0);
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_80;
     gSaveContext.nextTransitionType = TRANS_TYPE_03;

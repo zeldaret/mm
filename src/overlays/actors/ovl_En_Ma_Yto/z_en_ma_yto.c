@@ -1092,10 +1092,10 @@ void EnMaYto_SetupPostMilkRunEnd(EnMaYto* this) {
 void EnMaYto_PostMilkRunEnd(EnMaYto* this, PlayState* play) {
     if (this->unk310 == 3) {
         // Termina Field
-        play->nextEntranceIndex = 0x54D0;
+        play->nextEntranceIndex = NEXT_ENTRANCE(TERMINA_FIELD, 13, 0);
     } else {
         // Romani Ranch
-        play->nextEntranceIndex = 0x6480;
+        play->nextEntranceIndex = NEXT_ENTRANCE(ROMANI_RANCH, 8, 0);
     }
     gSaveContext.nextCutsceneIndex = 0;
     play->transitionTrigger = TRANS_TRIGGER_START;
