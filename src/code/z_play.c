@@ -179,8 +179,8 @@ void Play_SaveCycleSceneFlags(GameState* thisx) {
     cycleSceneFlags->clearedRoom = this->actorCtx.flags.clearedRoom;
 }
 
-void Play_SetRespawnData(GameState* thisx, s32 respawnMode, u16 entrance, s32 roomIndex, s32 playerParams,
-                         Vec3f* pos, s16 yaw) {
+void Play_SetRespawnData(GameState* thisx, s32 respawnMode, u16 entrance, s32 roomIndex, s32 playerParams, Vec3f* pos,
+                         s16 yaw) {
     PlayState* this = (PlayState*)thisx;
 
     gSaveContext.respawn[respawnMode].entrance = Entrance_CreateIndex(entrance >> 9, 0, entrance & 0xF);

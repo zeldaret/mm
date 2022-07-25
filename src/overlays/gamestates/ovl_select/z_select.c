@@ -36,8 +36,8 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
     gSaveContext.save.entrance = entrance;
 
     if (spawn != 0) {
-        gSaveContext.save.entrance = Entrance_CreateIndex((s32)gSaveContext.save.entrance >> 9, spawn,
-                                                               gSaveContext.save.entrance & 0xF);
+        gSaveContext.save.entrance =
+            Entrance_CreateIndex((s32)gSaveContext.save.entrance >> 9, spawn, gSaveContext.save.entrance & 0xF);
     }
     if (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 0, 0)) {
         gSaveContext.save.day = 0;
@@ -527,8 +527,7 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
             gSaveContext.minigameState = 0;
 
             if (this->scenes[this->currentScene].loadFunc != NULL) {
-                this->scenes[this->currentScene].loadFunc(this, this->scenes[this->currentScene].entrance,
-                                                          this->opt);
+                this->scenes[this->currentScene].loadFunc(this, this->scenes[this->currentScene].entrance, this->opt);
             }
         }
 
