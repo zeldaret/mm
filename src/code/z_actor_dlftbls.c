@@ -1,16 +1,5 @@
 #include "global.h"
 
-// Linker symbol declarations (used in the table below)
-#define DEFINE_ACTOR(name, _1, _2, _3) DECLARE_OVERLAY_SEGMENT(name)
-#define DEFINE_ACTOR_INTERNAL(_0, _1, _2, _3)
-#define DEFINE_ACTOR_UNSET(_0)
-
-#include "tables/actor_table.h"
-
-#undef DEFINE_ACTOR
-#undef DEFINE_ACTOR_INTERNAL
-#undef DEFINE_ACTOR_UNSET
-
 // Init Vars declarations (also used in the table below)
 #define DEFINE_ACTOR(name, _1, _2, _3) extern ActorInit name##_InitVars;
 #define DEFINE_ACTOR_INTERNAL(name, _1, _2, _3) extern ActorInit name##_InitVars;
