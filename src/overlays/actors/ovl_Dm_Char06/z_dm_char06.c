@@ -48,17 +48,17 @@ void DmChar06_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80AAE6F0(DmChar06* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, 463)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(play, 463);
+        s32 actionIndex = Cutscene_GetActorActionIndex(play, 0x1CF);
 
-        if (play->csCtx.frames >= play->csCtx.actorActions[actionIndex]->startFrame &&
-            play->csCtx.actorActions[actionIndex]->endFrame >= play->csCtx.frames) {
+        if ((play->csCtx.frames >= play->csCtx.actorActions[actionIndex]->startFrame) &&
+            (play->csCtx.actorActions[actionIndex]->endFrame >= play->csCtx.frames)) {
             if (play->csCtx.actorActions[actionIndex]->action == 1) {
                 this->alpha = 255;
             } else if (play->csCtx.actorActions[actionIndex]->action == 2) {
                 f32 floatTemp = 1.0f - Environment_LerpWeight(play->csCtx.actorActions[actionIndex]->endFrame,
                                                               play->csCtx.actorActions[actionIndex]->startFrame,
                                                               play->csCtx.frames);
-                this->alpha = (u8)(255.0f * floatTemp);
+                this->alpha = 255 * floatTemp;
             }
         }
     }
@@ -71,8 +71,8 @@ void DmChar06_Update(Actor* thisx, PlayState* play) {
 }
 
 void DmChar06_Draw(Actor* thisx, PlayState* play) {
-    DmChar06* this = THIS;
     s32 pad;
+    DmChar06* this = THIS;
 
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_yukiyama_Matanimheader_006868));
 
