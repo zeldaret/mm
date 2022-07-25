@@ -18,14 +18,14 @@
 
 void EnTest2_Init(Actor* thisx, PlayState* play);
 void EnTest2_Update(Actor* thisx, PlayState* play);
-void EnTest2_SetActorFlags(Actor* thisx, PlayState* play);
+void EnTest2_UpdateForLens(Actor* thisx, PlayState* play);
 void EnTest2_Draw(Actor* thisx, PlayState* play);
 
 typedef struct EnTest2ModelInfo {
     /* 0x0 */ Gfx* dList1;
     /* 0x4 */ Gfx* dList2;
     /* 0x8 */ AnimatedMaterial* animMat;
-} EnTest2ModelInfo;
+} EnTest2ModelInfo; // size = 0xC
 
 const ActorInit En_Test2_InitVars = {
     ACTOR_EN_TEST2,
@@ -97,14 +97,14 @@ void EnTest2_Update(Actor* thisx, PlayState* play) {
             this->animMat = Lib_SegmentedToVirtual(modelInfo->animMat);
         }
         if (play->roomCtx.currRoom.unk5) {
-            this->actor.update = EnTest2_SetActorFlags;
+            this->actor.update = EnTest2_UpdateForLens;
         } else {
             this->actor.update = Actor_Noop;
         }
     }
 }
 
-void EnTest2_SetActorFlags(Actor* thisx, PlayState* play) {
+void EnTest2_UpdateForLens(Actor* thisx, PlayState* play) {
     EnTest2* this = THIS;
 
     if (play->actorCtx.unk4 == 100) {
