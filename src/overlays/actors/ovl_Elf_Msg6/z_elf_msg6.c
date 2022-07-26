@@ -330,7 +330,7 @@ void func_80BA1E30(ElfMsg6* this, PlayState* play) {
 }
 
 void func_80BA1F80(ElfMsg6* this, PlayState* play) {
-    if (((ELFMSG6_GET_F0(&this->actor)) == 1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_02)) {
+    if ((ELFMSG6_GET_F0(&this->actor) == 1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_02)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
