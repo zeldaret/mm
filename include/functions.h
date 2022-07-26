@@ -549,7 +549,7 @@ void EffectSsDtBubble_SpawnCustomColor(PlayState* play, Vec3f* pos, Vec3f* veloc
 void EffectSsHahen_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 flags, s16 scale, s16 objId, s16 life, Gfx* dList);
 void EffectSsHahen_SpawnBurst(PlayState* play, Vec3f* pos, f32 burstScale, s16 flags, s16 scale, s16 randScaleRange, s16 count, s16 objId, s16 life, Gfx* dList);
 // void func_800B2364(void);
-// void EffectSsStick_Spawn(UNK_TYPE4 uParm1, UNK_PTR puParm2, UNK_TYPE2 uParm3);
+void EffectSsStick_Spawn(PlayState* play, Vec3f* pos, s16 yaw);
 // void EffectSsSibuki_Spawn(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
 void EffectSsSibuki_SpawnBurst(PlayState* play, Vec3f* pos);
 void EffectSsStone1_Spawn(PlayState* play, Vec3f* pos, s32 reg0);
