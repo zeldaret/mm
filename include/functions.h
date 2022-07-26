@@ -1951,7 +1951,7 @@ s32 func_80122744(PlayState* play, struct_80122744_arg1* arg1, u32 arg2, Vec3s* 
 s32 func_80122760(PlayState* play, struct_80122744_arg1* arg1, f32 arg2);
 void func_80122868(PlayState* play, Player* player);
 void func_801229A0(PlayState* play, Player* player);
-void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1);
+void func_801229EC(Actor* thisx, PlayState* play);
 void func_801229FC(Player* player);
 void func_80122BA4(PlayState* play, struct_80122D44_arg1* arg1, s32 arg2, s32 alpha);
 void func_80122C20(PlayState* play, struct_80122D44_arg1* arg1);

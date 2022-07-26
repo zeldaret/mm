@@ -656,7 +656,7 @@ typedef struct Player {
     /* 0x147 */ s8 itemActionParam; // PlayerActionParam enum
     /* 0x148 */ u8 heldItemId; // ItemID enum
     /* 0x149 */ s8 prevBoots;
-    /* 0x14A */ s8 heldItemActionParam;
+    /* 0x14A */ s8 heldItemActionParam; // PlayerActionParam enum
     /* 0x14B */ u8 transformation; // PlayerTransformation enum
     /* 0x14C */ u8 modelGroup; // PlayerModelGroup enum
     /* 0x14D */ u8 nextModelGroup;

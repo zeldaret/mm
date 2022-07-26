@@ -148,7 +148,7 @@ void func_801229A0(PlayState* play, Player* player) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
+void func_801229EC(Actor* thisx, PlayState* play) {
 }
 
 s16 sMaskObjectIds[PLAYER_MASK_MAX - 1] = {
