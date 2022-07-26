@@ -107,7 +107,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
 
     this->cutsceneIndex = -1;
 
-    switch (ENJS_GET_F(&this->actor)) {
+    switch (ENJS_GET_TYPE(&this->actor)) {
         case 0:
             this->maskDlSelector = 0;
             this->actionFunc = func_8096A6F4;
@@ -126,11 +126,11 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
         case 2:
         case 3:
         case 4:
-            this->maskDlSelector = ENJS_GET_F(&this->actor);
+            this->maskDlSelector = ENJS_GET_TYPE(&this->actor);
             func_80968B8C(this, play);
             this->actionFunc = func_80969B5C;
             func_80968A5C(this);
-            if (func_809692A8((ENJS_GET_F(&this->actor)) + 4)) {
+            if (func_809692A8((ENJS_GET_TYPE(&this->actor)) + 4)) {
                 Actor_MarkForDeath(&this->actor);
                 break;
             }
@@ -139,7 +139,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
         case 6:
         case 7:
         case 8:
-            this->maskDlSelector = (ENJS_GET_F(&this->actor)) - 4;
+            this->maskDlSelector = (ENJS_GET_TYPE(&this->actor)) - 4;
             this->actionFunc = func_8096A104;
             break;
     }
@@ -150,7 +150,7 @@ void EnJs_Destroy(Actor* thisx, PlayState* play) {
     EnJs* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    paramsF = ENJS_GET_F(&this->actor);
+    paramsF = ENJS_GET_TYPE(&this->actor);
     switch (paramsF) {
         case 0:
             func_80165690();
@@ -160,7 +160,7 @@ void EnJs_Destroy(Actor* thisx, PlayState* play) {
         case 7:
         case 8:
             if (!func_809692A8(paramsF)) {
-                func_80969400(ENJS_GET_F(&this->actor));
+                func_80969400(ENJS_GET_TYPE(&this->actor));
             }
         default:
             return;
@@ -196,7 +196,7 @@ s32 func_80968B8C(EnJs* this, PlayState* play) {
     Vec3s* phi_a0;
 
     sp18 = 0.0f;
-    params = ENJS_GET_FC00(&this->actor) >> 0xA;
+    params = ENJS_GET_PATH_INDEX(&this->actor) >> 0xA;
     if (params != 0x3F) {
         this->path = play->setupPathList + params;
         if (this->path != NULL) {
@@ -497,11 +497,11 @@ void func_80969530(EnJs* this, PlayState* play) {
 }
 
 s32 func_809695FC(EnJs* this, PlayState* play) {
-    if (ENJS_GET_3F0(&this->actor) == 0x3F) {
+    if (ENJS_GET_EXIT_INDEX(&this->actor) == 0x3F) {
         return false;
     }
     play->sceneLoadFlag = 0x14;
-    play->nextEntranceIndex = play->setupExitList[ENJS_GET_3F0(&this->actor)];
+    play->nextEntranceIndex = play->setupExitList[ENJS_GET_EXIT_INDEX(&this->actor)];
     this->actionFunc = func_8096971C;
     play->msgCtx.unk11F10 = 0;
     gSaveContext.respawnFlag = -2;
@@ -541,9 +541,9 @@ void func_80969748(EnJs* this, PlayState* play) {
         if (item > 0) {
             func_801477B4(play);
             if ((item >= 0x3A) && (item < 0x4E)) {
-                func_809691B8(item, ENJS_GET_F(&this->actor));
+                func_809691B8(item, ENJS_GET_TYPE(&this->actor));
                 Inventory_UnequipItem(item - 4);
-                if (!func_809692A8(ENJS_GET_F(&this->actor))) {
+                if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
                     player->actor.textId = 0x2212;
                 } else {
                     player->actor.textId = 0x2213;
@@ -587,7 +587,7 @@ void func_80969898(EnJs* this, PlayState* play) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x220C:
                         this->unk_2B8 |= 1;
-                        if (!func_8096933C(ENJS_GET_F(&this->actor))) {
+                        if (!func_8096933C(ENJS_GET_TYPE(&this->actor))) {
                             func_80151938(play, 0x220F);
                             break;
                         }
@@ -631,9 +631,9 @@ void func_80969AA0(EnJs* this, PlayState* play) {
         textId = 0x220B;
     } else {
         textId = 0x2215;
-        if (!func_809692A8(ENJS_GET_F(&this->actor))) {
+        if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
             if (this->unk_2B8 & 1) {
-                if (!func_8096933C(ENJS_GET_F(&this->actor))) {
+                if (!func_8096933C(ENJS_GET_TYPE(&this->actor))) {
                     textId = 0x220F;
                 } else {
                     textId = 0x220E;
@@ -687,9 +687,9 @@ void func_80969C54(EnJs* this, PlayState* play) {
         if (item > 0) {
             func_801477B4(play);
             if ((item >= 0x3A) && (item < 0x4E)) {
-                func_809691B8(item, ENJS_GET_F(&this->actor));
+                func_809691B8(item, ENJS_GET_TYPE(&this->actor));
                 Inventory_UnequipItem(item - 4);
-                if (!func_809692A8(ENJS_GET_F(&this->actor))) {
+                if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
                     player->actor.textId = 0x2221;
                 } else {
                     player->actor.textId = 0x2222;
@@ -736,7 +736,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x221B:
-                        if (!func_8096933C(ENJS_GET_F(&this->actor))) {
+                        if (!func_8096933C(ENJS_GET_TYPE(&this->actor))) {
                             func_80151938(play, 0x2219);
                             break;
                         }
@@ -762,7 +762,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                         func_80151938(play, play->msgCtx.currentTextId + 1);
                         break;
                     case 0x2223:
-                        switch (ENJS_GET_F(&this->actor)) {
+                        switch (ENJS_GET_TYPE(&this->actor)) {
                             case 5:
                                 func_80151938(play, 0x2224);
                                 break;
@@ -805,7 +805,7 @@ void func_8096A080(EnJs* this, PlayState* play) {
     } else {
         textId = 0x221B;
         if (this->unk_2B8 & 1) {
-            if (!func_8096933C(ENJS_GET_F(&this->actor))) {
+            if (!func_8096933C(ENJS_GET_TYPE(&this->actor))) {
                 textId = 0x2219;
             } else {
                 textId = 0x221C;
@@ -1041,12 +1041,12 @@ void func_8096A9F4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
             OPEN_DISPS(play->state.gfxCtx);
 
             if (this->maskDlSelector != 0) {
-                Matrix_Scale(D_8096ABE0[this->maskDlSelector], D_8096ABE0[this->maskDlSelector], D_8096ABE0[this->maskDlSelector],
-                             MTXMODE_APPLY);
+                Matrix_Scale(D_8096ABE0[this->maskDlSelector], D_8096ABE0[this->maskDlSelector],
+                             D_8096ABE0[this->maskDlSelector], MTXMODE_APPLY);
                 Matrix_RotateZYX(0, -0x4000, -0x36B0, MTXMODE_APPLY);
             }
-            Matrix_Translate(D_8096ABF4[this->maskDlSelector], D_8096AC08[this->maskDlSelector], D_8096AC1C[this->maskDlSelector],
-                             MTXMODE_APPLY);
+            Matrix_Translate(D_8096ABF4[this->maskDlSelector], D_8096AC08[this->maskDlSelector],
+                             D_8096AC1C[this->maskDlSelector], MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, D_8096ABCC[this->maskDlSelector]);
         }

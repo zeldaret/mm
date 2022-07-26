@@ -4,9 +4,9 @@
 #include "global.h"
 #include "objects/object_ob/object_ob.h"
 
-#define ENJS_GET_F(thisx) ((thisx)->params & 0xF)
-#define ENJS_GET_FC00(thisx) ((thisx)->params & 0xFC00)
-#define ENJS_GET_3F0(thisx)  (((thisx)->params & 0x3F0) >> 4)
+#define ENJS_GET_TYPE(thisx) ((thisx)->params & 0xF)
+#define ENJS_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFC00)
+#define ENJS_GET_EXIT_INDEX(thisx)  (((thisx)->params & 0x3F0) >> 4)
 
 struct EnJs;
 
