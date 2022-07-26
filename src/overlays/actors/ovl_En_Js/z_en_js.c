@@ -5,7 +5,6 @@
  */
 
 #include "z_en_js.h"
-#include "objects/object_ob/object_ob.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
@@ -16,9 +15,9 @@ void EnJs_Destroy(Actor* thisx, PlayState* play);
 void EnJs_Update(Actor* thisx, PlayState* play);
 void EnJs_Draw(Actor* thisx, PlayState* play);
 
-void func_80968A5C(EnJs* this);
 s32 func_80968B8C(EnJs* this, PlayState* play);
 s32 func_809692A8(s32 arg0);
+void func_80968A5C(EnJs* this);
 void func_80969400(s32 arg0);
 void func_8096971C(EnJs* this, PlayState* play);
 void func_80969898(EnJs* this, PlayState* play);
@@ -28,7 +27,6 @@ void func_8096A104(EnJs* this, PlayState* play);
 void func_8096A38C(EnJs* this, PlayState* play);
 void func_8096A6F4(EnJs* this, PlayState* play);
 
-#if 0
 const ActorInit En_Js_InitVars = {
     ACTOR_EN_JS,
     ACTORCAT_NPC,
@@ -41,29 +39,42 @@ const ActorInit En_Js_InitVars = {
     (ActorFunc)EnJs_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_8096ABA0 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_ENEMY, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_ENEMY,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 20, 40, 0, { 0, 0, 0 } },
 };
-static u32 D_8096ABCC[5] = { 0x06006380, 0x06000690, 0x06003AD0, 0x06001D80, 0x06005020 };
-static f32 D_8096ABE0[5] = { 1.0f, 0.5f, 0.5f, 0.48f, 0.45f };
-static f32 D_8096ABF4[5] = { 60.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-static f32 D_8096AC08[5] = { -450.0f, 1400.0f, 1470.0f, 1670.0f, 1470.0f };
-static f32 D_8096AC1C[5] = { 0.0f, 700.0f, 900.0f, 900.0f, 900.0f };
+
+static Gfx* D_8096ABCC[] = {
+    gMoonChildMajorasMaskDL, gMoonChildOdalwasMaskDL,   gMoonChildGohtsMaskDL,
+    gMoonChildGyorgsMaskDL,  gMoonChildTwinmoldsMaskDL,
+};
+
+static f32 D_8096ABE0[] = { 1.0f, 0.5f, 0.5f, 0.48f, 0.45f };
+
+static f32 D_8096ABF4[] = { 60.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+
+static f32 D_8096AC08[] = { -450.0f, 1400.0f, 1470.0f, 1670.0f, 1470.0f };
+
+static f32 D_8096AC1C[] = { 0.0f, 700.0f, 900.0f, 900.0f, 900.0f };
+
 static Vec3f D_8096AC30 = { 500.0f, -500.0f, 0.0f };
-#endif
 
-extern ColliderCylinderInit D_8096ABA0;
-extern u32 D_8096ABCC[];
-extern f32 D_8096ABE0[];
-extern f32 D_8096ABF4[];
-extern f32 D_8096AC08[];
-extern f32 D_8096AC1C[];
-extern Vec3f D_8096AC30;
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/EnJs_Init.s")
+extern ColliderCylinderInit sCylinderInit;
 
 void EnJs_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -73,13 +84,13 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_ob_Skel_0164B8, &object_ob_Anim_017E98, this->jointTable,
-                       this->morphTable, 0x12);
-    Animation_PlayLoop(&this->skelAnime, &object_ob_Anim_017E98);
-    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &D_8096ABA0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gMoonChildSkel, &gMoonChildStandingAnim, this->jointTable,
+                       this->morphTable, OBJECT_OB_LIMB_MAX);
+    Animation_PlayLoop(&this->skelAnime, &gMoonChildStandingAnim);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     this->actionFunc = func_8096971C;
-    this->unk_2BA = 0;
+    this->maskDlSelector = 0;
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
@@ -88,7 +99,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
     while (i != 2) {
         this->cutscenes[i] = cs;
         if (cs != -1) {
-            this->actor.cutscene = (s8)cs;
+            this->actor.cutscene = cs;
             cs = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
         }
         i++;
@@ -96,15 +107,17 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
 
     this->cutsceneIndex = -1;
 
-    switch (this->actor.params & 0xF) {
+    switch (ENJS_GET_F(&this->actor)) {
         case 0:
-            this->unk_2BA = 0;
+            this->maskDlSelector = 0;
             this->actionFunc = func_8096A6F4;
-            Animation_PlayLoop(&this->skelAnime, &object_ob_Anim_01764C);
+
+            Animation_PlayLoop(&this->skelAnime, &gMoonChildSittingAnim);
             func_8016566C(0x3CU);
-            if ((gSaveContext.save.weekEventReg[0x54] & 0x20) != 0) {
-                Inventory_DeleteItem(0x35, (s16)gItemSlots[0x35]);
-                gSaveContext.save.weekEventReg[0x54] &= 0xDF;
+
+            if (gSaveContext.save.weekEventReg[84] & 0x20) {
+                Inventory_DeleteItem(0x35, gItemSlots[0x35]);
+                gSaveContext.save.weekEventReg[84] &= (u8)~0x20;
                 break;
             }
         default:
@@ -113,11 +126,11 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
         case 2:
         case 3:
         case 4:
-            this->unk_2BA = this->actor.params & 0xF;
+            this->maskDlSelector = ENJS_GET_F(&this->actor);
             func_80968B8C(this, play);
             this->actionFunc = func_80969B5C;
             func_80968A5C(this);
-            if (func_809692A8((this->actor.params & 0xF) + 4) != 0) {
+            if (func_809692A8((ENJS_GET_F(&this->actor)) + 4)) {
                 Actor_MarkForDeath(&this->actor);
                 break;
             }
@@ -126,20 +139,18 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
         case 6:
         case 7:
         case 8:
-            this->unk_2BA = (this->actor.params & 0xF) - 4;
+            this->maskDlSelector = (ENJS_GET_F(&this->actor)) - 4;
             this->actionFunc = func_8096A104;
             break;
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/EnJs_Destroy.s")
-
 void EnJs_Destroy(Actor* thisx, PlayState* play) {
     u32 paramsF;
-    EnJs* this = (EnJs*)thisx;
+    EnJs* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    paramsF = this->actor.params & 0xF;
+    paramsF = ENJS_GET_F(&this->actor);
     switch (paramsF) {
         case 0:
             func_80165690();
@@ -148,38 +159,32 @@ void EnJs_Destroy(Actor* thisx, PlayState* play) {
         case 6:
         case 7:
         case 8:
-            if (func_809692A8(paramsF) == 0) {
-                func_80969400(this->actor.params & 0xF);
+            if (!func_809692A8(paramsF)) {
+                func_80969400(ENJS_GET_F(&this->actor));
             }
         default:
             return;
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80968A5C.s")
-
 void func_80968A5C(EnJs* this) {
     if (Rand_ZeroOne() < 0.5f) {
-        Animation_MorphToLoop(&this->skelAnime, &object_ob_Anim_010CD8, -10.0f);
+        Animation_MorphToLoop(&this->skelAnime, &gMoonChildRunningAnim, -10.0f);
         this->unk_2B4 = 5.0f;
     } else {
-        Animation_MorphToLoop(&this->skelAnime, &object_ob_Anim_010880, -10.0f);
+        Animation_MorphToLoop(&this->skelAnime, &gMoonChildWalkingAnim, -10.0f);
         this->unk_2B4 = 2.5f;
     }
     this->unk_2B8 &= ~4;
     this->unk_2BC = Rand_ZeroFloat(40.0f) + 80.0f;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80968B18.s")
-
 void func_80968B18(EnJs* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_ob_Anim_017E98, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gMoonChildStandingAnim, -10.0f);
     this->unk_2B4 = 0.0f;
     this->unk_2BC = Rand_ZeroFloat(20.0f) + 40.0f;
     this->unk_2B8 |= 4;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80968B8C.s")
 
 s32 func_80968B8C(EnJs* this, PlayState* play) {
     Path* path;
@@ -191,11 +196,11 @@ s32 func_80968B8C(EnJs* this, PlayState* play) {
     Vec3s* phi_a0;
 
     sp18 = 0.0f;
-    params = (this->actor.params & 0xFC00) >> 0xA;
+    params = ENJS_GET_FC00(&this->actor) >> 0xA;
     if (params != 0x3F) {
-        this->unk_2AC = play->setupPathList + params;
-        if (this->unk_2AC != NULL) {
-            path = this->unk_2AC;
+        this->path = play->setupPathList + params;
+        if (this->path != NULL) {
+            path = this->path;
 
             phi_a0 = Lib_SegmentedToVirtual(path->points);
 
@@ -218,33 +223,32 @@ s32 func_80968B8C(EnJs* this, PlayState* play) {
             }
         }
     } else {
-        this->unk_2AC = NULL;
+        this->path = NULL;
         this->unk_2B0 = 0;
     }
     return false;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80968CB8.s")
-
 s32 func_80968CB8(EnJs* this) {
-    Path* new_var3;
+    Path* path;
     s32 pad;
     f32 temp_fa0;
     f32 temp_fa1;
     Vec3s* temp_v1;
 
-    if (this->unk_2AC == NULL)
+    if (this->path == NULL)
         return true;
 
-    new_var3 = this->unk_2AC;
-    temp_v1 = &((Vec3s*)Lib_SegmentedToVirtual(new_var3->points))[this->unk_2B0];
+    path = this->path;
+    temp_v1 = &((Vec3s*)Lib_SegmentedToVirtual(path->points))[this->unk_2B0];
     temp_fa0 = temp_v1->x - this->actor.world.pos.x;
     temp_fa1 = temp_v1->z - this->actor.world.pos.z;
     this->actor.world.rot.y = Math_Atan2S(temp_fa0, temp_fa1);
+
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 0x7D0, 0xC8);
     if ((SQ(temp_fa0) + SQ(temp_fa1)) < 100.0f) {
         this->unk_2B0++;
-        if (this->unk_2B0 >= new_var3->count) {
+        if (this->unk_2B0 >= path->count) {
             this->unk_2B0 = 0;
         }
         return true;
@@ -253,17 +257,14 @@ s32 func_80968CB8(EnJs* this) {
     return false;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80968DD0.s")
-
 s32 func_80968DD0(EnJs* this, PlayState* play) {
     if ((this->actor.xzDistToPlayer < 100.0f) && (Player_IsFacingActor(&this->actor, 0x3000, play)) &&
         (Actor_IsFacingPlayer(&this->actor, 0x3000))) {
         return true;
     }
+
     return false;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80968E38.s")
 
 s32 func_80968E38(s32 maskIndex) {
     s32 i;
@@ -300,8 +301,6 @@ s32 func_80968E38(s32 maskIndex) {
 
     return count;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80968F48.s")
 
 s32 func_80968F48(void) {
     s32 count = 0;
@@ -371,8 +370,6 @@ s32 func_80968F48(void) {
     return count;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_809691B8.s")
-
 void func_809691B8(s32 arg0, s32 arg1) {
     u8* maskMaskBit = gSaveContext.maskMaskBit;
     s32 a = 0;
@@ -405,8 +402,6 @@ void func_809691B8(s32 arg0, s32 arg1) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_809692A8.s")
-
 s32 func_809692A8(s32 arg0) {
     switch (arg0) {
         case 1:
@@ -429,8 +424,6 @@ s32 func_809692A8(s32 arg0) {
             return false;
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096933C.s")
 
 s32 func_8096933C(s32 arg0) {
     s32 sp1C;
@@ -461,8 +454,6 @@ s32 func_8096933C(s32 arg0) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969400.s")
-
 void func_80969400(s32 arg0) {
     u8* maskMaskBit = gSaveContext.maskMaskBit;
     u8* temp_v0 = &gSaveContext.maskMaskBit[arg0 * 3];
@@ -480,52 +471,42 @@ void func_80969400(s32 arg0) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969494.s")
-
 void func_80969494(EnJs* this, PlayState* play) {
     func_80968A5C(this);
     func_801477B4(play);
-    this->actor.flags &= -0x101;
+    this->actor.flags &= ~ACTOR_FLAG_100;
     this->actionFunc = func_80969B5C;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_809694E8.s")
-
 void func_809694E8(EnJs* this, PlayState* play) {
     func_801477B4(play);
-    this->actor.flags &= -0x101;
+    this->actor.flags &= ~ACTOR_FLAG_100;
     this->actionFunc = func_8096A104;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969530.s")
-
 void func_80969530(EnJs* this, PlayState* play) {
     func_801477B4(play);
-    this->actor.flags &= -0x101;
+    this->actor.flags &= ~ACTOR_FLAG_100;
     this->actionFunc = func_8096A6F4;
     if ((this->actor.home.rot.y == this->actor.shape.rot.y) && (this->unk_2B8 & 0x10)) {
-        Animation_Change(&this->skelAnime, &object_ob_Anim_016F58, -1.0f,
-                         Animation_GetLastFrame(&object_ob_Anim_016F58) - 1.0f, 0.0f, 2, -10.0f);
+        Animation_Change(&this->skelAnime, &gMoonChildGettingUpAnim, -1.0f,
+                         Animation_GetLastFrame(&gMoonChildGettingUpAnim) - 1.0f, 0.0f, 2, -10.0f);
         this->unk_2B8 &= ~0x10;
         this->unk_2B8 |= 8;
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_809695FC.s")
-
 s32 func_809695FC(EnJs* this, PlayState* play) {
-    if (((this->actor.params & 0x3F0) >> 4) == 0x3F) {
+    if (ENJS_GET_3F0(&this->actor) == 0x3F) {
         return false;
     }
     play->sceneLoadFlag = 0x14;
-    play->nextEntranceIndex = play->setupExitList[(s32)(this->actor.params & 0x3F0) >> 4];
+    play->nextEntranceIndex = play->setupExitList[ENJS_GET_3F0(&this->actor)];
     this->actionFunc = func_8096971C;
     play->msgCtx.unk11F10 = 0;
     gSaveContext.respawnFlag = -2;
     return true;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969688.s")
 
 void func_80969688(EnJs* this) {
     if (this->cutsceneIndex != -1) {
@@ -536,20 +517,14 @@ void func_80969688(EnJs* this) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_809696EC.s")
-
 void func_809696EC(EnJs* this, s16 arg1) {
     func_80969688(this);
     this->cutsceneIndex = arg1;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096971C.s")
-
 void func_8096971C(EnJs* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969748.s")
 
 void func_80969748(EnJs* this, PlayState* play) {
     s32 item;
@@ -566,9 +541,9 @@ void func_80969748(EnJs* this, PlayState* play) {
         if (item > 0) {
             func_801477B4(play);
             if ((item >= 0x3A) && (item < 0x4E)) {
-                func_809691B8(item, this->actor.params & 0xF);
+                func_809691B8(item, ENJS_GET_F(&this->actor));
                 Inventory_UnequipItem(item - 4);
-                if (func_809692A8(this->actor.params & 0xF) == 0) {
+                if (!func_809692A8(ENJS_GET_F(&this->actor))) {
                     player->actor.textId = 0x2212;
                 } else {
                     player->actor.textId = 0x2213;
@@ -584,8 +559,6 @@ void func_80969748(EnJs* this, PlayState* play) {
         }
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969898.s")
 
 void func_80969898(EnJs* this, PlayState* play) {
     s32 pad;
@@ -614,7 +587,7 @@ void func_80969898(EnJs* this, PlayState* play) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x220C:
                         this->unk_2B8 |= 1;
-                        if (!func_8096933C(this->actor.params & 0xF)) {
+                        if (!func_8096933C(ENJS_GET_F(&this->actor))) {
                             func_80151938(play, 0x220F);
                             break;
                         }
@@ -651,18 +624,16 @@ void func_80969898(EnJs* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969AA0.s")
-
 void func_80969AA0(EnJs* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm != 4) {
+    if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
         textId = 0x220B;
     } else {
         textId = 0x2215;
-        if (!func_809692A8(this->actor.params & 0xF)) {
+        if (!func_809692A8(ENJS_GET_F(&this->actor))) {
             if (this->unk_2B8 & 1) {
-                if (!func_8096933C(this->actor.params & 0xF)) {
+                if (!func_8096933C(ENJS_GET_F(&this->actor))) {
                     textId = 0x220F;
                 } else {
                     textId = 0x220E;
@@ -674,11 +645,9 @@ void func_80969AA0(EnJs* this, PlayState* play) {
             textId = 0x2215;
         }
     }
-    Animation_MorphToLoop(&this->skelAnime, &object_ob_Anim_017E98, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gMoonChildStandingAnim, -10.0f);
     Message_StartTextbox(play, textId, &this->actor);
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969B5C.s")
 
 void func_80969B5C(EnJs* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
@@ -703,8 +672,6 @@ void func_80969B5C(EnJs* this, PlayState* play) {
     func_80968CB8(this);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969C54.s")
-
 void func_80969C54(EnJs* this, PlayState* play) {
     s32 item;
     Player* player = GET_PLAYER(play);
@@ -720,9 +687,9 @@ void func_80969C54(EnJs* this, PlayState* play) {
         if (item > 0) {
             func_801477B4(play);
             if ((item >= 0x3A) && (item < 0x4E)) {
-                func_809691B8(item, this->actor.params & 0xF);
+                func_809691B8(item, ENJS_GET_F(&this->actor));
                 Inventory_UnequipItem(item - 4);
-                if (!func_809692A8(this->actor.params & 0xF)) {
+                if (!func_809692A8(ENJS_GET_F(&this->actor))) {
                     player->actor.textId = 0x2221;
                 } else {
                     player->actor.textId = 0x2222;
@@ -738,8 +705,6 @@ void func_80969C54(EnJs* this, PlayState* play) {
         }
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969DA4.s")
 
 void func_80969DA4(EnJs* this, PlayState* play) {
     s32 pad;
@@ -771,7 +736,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x221B:
-                        if (!func_8096933C(this->actor.params & 0xF)) {
+                        if (!func_8096933C(ENJS_GET_F(&this->actor))) {
                             func_80151938(play, 0x2219);
                             break;
                         }
@@ -797,7 +762,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                         func_80151938(play, play->msgCtx.currentTextId + 1);
                         break;
                     case 0x2223:
-                        switch (this->actor.params & 0xF) {
+                        switch (ENJS_GET_F(&this->actor)) {
                             case 5:
                                 func_80151938(play, 0x2224);
                                 break;
@@ -832,17 +797,15 @@ void func_80969DA4(EnJs* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A080.s")
-
 void func_8096A080(EnJs* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm != 4) {
+    if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
         textId = 0x2218;
     } else {
         textId = 0x221B;
         if (this->unk_2B8 & 1) {
-            if (func_8096933C(this->actor.params & 0xF) == 0) {
+            if (!func_8096933C(ENJS_GET_F(&this->actor))) {
                 textId = 0x2219;
             } else {
                 textId = 0x221C;
@@ -853,8 +816,6 @@ void func_8096A080(EnJs* this, PlayState* play) {
     }
     Message_StartTextbox(play, textId, &this->actor);
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A104.s")
 
 void func_8096A104(EnJs* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
@@ -868,12 +829,10 @@ void func_8096A104(EnJs* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A184.s")
-
 void func_8096A184(EnJs* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm != 4) {
+    if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
         textId = 0x220B;
     } else {
         if (func_80968E38(0) >= 0x14) {
@@ -885,44 +844,38 @@ void func_8096A184(EnJs* this, PlayState* play) {
     Message_StartTextbox(play, textId, &this->actor);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A1E8.s")
-
 void func_8096A1E8(EnJs* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        Animation_MorphToLoop(&this->skelAnime, &object_ob_Anim_017E98, 0.0f);
+        Animation_MorphToLoop(&this->skelAnime, &gMoonChildStandingAnim, 0.0f);
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        this->actor.flags &= 0xFFFEFFFF;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = func_8096A38C;
         Message_StartTextbox(play, 0x2208, &this->actor);
-        gSaveContext.save.weekEventReg[0x54] |= 0x20;
+        gSaveContext.save.weekEventReg[84] |= 0x20;
         func_809696EC(this, 0);
     } else {
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A2C0.s")
-
 void func_8096A2C0(EnJs* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        Animation_MorphToLoop(&this->skelAnime, &object_ob_Anim_017E98, 0.0f);
+        Animation_MorphToLoop(&this->skelAnime, &gMoonChildStandingAnim, 0.0f);
     }
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         this->actionFunc = func_8096A1E8;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
     } else {
-        Actor_PickUp(&this->actor, play, 0x7B, 10000.0f, 1000.0f);
+        Actor_PickUp(&this->actor, play, GI_MASK_FIERCE_DEITY, 10000.0f, 1000.0f);
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A38C.s")
-
 void func_8096A38C(EnJs* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        Animation_MorphToLoop(&this->skelAnime, &object_ob_Anim_017E98, 0.0f);
+        Animation_MorphToLoop(&this->skelAnime, &gMoonChildStandingAnim, 0.0f);
         this->unk_2B8 |= 2;
     }
     switch (Message_GetState(&play->msgCtx)) {
@@ -943,7 +896,7 @@ void func_8096A38C(EnJs* this, PlayState* play) {
                         switch (play->msgCtx.choiceIndex) {
                             case 0:
                                 func_80151938(play, 0x21FE);
-                                Animation_MorphToPlayOnce(&this->skelAnime, &object_ob_Anim_016F58, -5.0f);
+                                Animation_MorphToPlayOnce(&this->skelAnime, &gMoonChildGettingUpAnim, -5.0f);
                                 this->unk_2B8 |= 0x10;
                                 break;
                             case 1:
@@ -968,7 +921,7 @@ void func_8096A38C(EnJs* this, PlayState* play) {
                         switch (play->msgCtx.choiceIndex) {
                             case 0:
                                 func_80151938(play, 0x2205);
-                                Animation_MorphToPlayOnce(&this->skelAnime, &object_ob_Anim_016F58, -5.0f);
+                                Animation_MorphToPlayOnce(&this->skelAnime, &gMoonChildGettingUpAnim, -5.0f);
                                 this->unk_2B8 |= 0x10;
                                 break;
                             case 1:
@@ -995,7 +948,7 @@ void func_8096A38C(EnJs* this, PlayState* play) {
                         break;
 
                     case 0x2207:
-                        if (gSaveContext.save.inventory.items[gItemSlots[0x35]] == 0x35) {
+                        if (INV_CONTENT(ITEM_MASK_FIERCE_DEITY) == ITEM_MASK_FIERCE_DEITY) {
                             func_80151938(play, 0x2208);
                             func_809696EC(this, 0);
                         } else {
@@ -1022,28 +975,26 @@ void func_8096A38C(EnJs* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A6F4.s")
-
 void func_8096A6F4(EnJs* this, PlayState* play) {
-    PosRot* new_var = &this->actor.home;
+    s32 pad;
 
-    if (this->actor.shape.rot.y != (*new_var).rot.y) {
+    if (this->actor.home.rot.y != this->actor.shape.rot.y) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x400, 0x100);
-        if ((this->actor.shape.rot.y == (*new_var).rot.y) && (this->unk_2B8 & 0x10)) {
-            Animation_Change(&this->skelAnime, &object_ob_Anim_016F58, -1.0f,
-                             Animation_GetLastFrame(&object_ob_Anim_016F58) - 1.0f, 0.0f, 2, -10.0f);
-            this->unk_2B8 &= 0xFFEF;
+        if ((this->actor.home.rot.y == this->actor.shape.rot.y) && (this->unk_2B8 & 0x10)) {
+            Animation_Change(&this->skelAnime, &gMoonChildGettingUpAnim, -1.0f,
+                             Animation_GetLastFrame(&gMoonChildGettingUpAnim) - 1.0f, 0.0f, 2, -10.0f);
+            this->unk_2B8 &= ~0x10;
             this->unk_2B8 |= 8;
         }
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
     if (SkelAnime_Update(&this->skelAnime)) {
-        Animation_MorphToLoop(&this->skelAnime, &object_ob_Anim_01764C, -10.0f);
-        this->unk_2B8 &= 0xFFF7;
+        Animation_MorphToLoop(&this->skelAnime, &gMoonChildSittingAnim, -10.0f);
+        this->unk_2B8 &= ~8;
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_8096A38C;
-        this->unk_2B8 &= 0xFFFD;
+        this->unk_2B8 &= ~2;
         func_8096A184(this, play);
         return;
     }
@@ -1053,8 +1004,6 @@ void func_8096A6F4(EnJs* this, PlayState* play) {
         func_800B8614(&this->actor, play, 120.0f);
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/EnJs_Update.s")
 
 void EnJs_Update(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -1082,32 +1031,28 @@ void EnJs_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A9F4.s")
-
 void func_8096A9F4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
     EnJs* this = THIS;
 
-    if (limbIndex == 0xA) {
+    if (limbIndex == MOONCHILD_LIMB_HEAD) {
         Matrix_MultVec3f(&D_8096AC30, &thisx->focus.pos);
-        if ((this->unk_2BA >= 0) && (this->unk_2BA < 5)) {
+        if ((this->maskDlSelector >= 0) && (this->maskDlSelector < 5)) {
             OPEN_DISPS(play->state.gfxCtx);
 
-            if (this->unk_2BA != 0) {
-                Matrix_Scale(D_8096ABE0[this->unk_2BA], D_8096ABE0[this->unk_2BA], D_8096ABE0[this->unk_2BA],
+            if (this->maskDlSelector != 0) {
+                Matrix_Scale(D_8096ABE0[this->maskDlSelector], D_8096ABE0[this->maskDlSelector], D_8096ABE0[this->maskDlSelector],
                              MTXMODE_APPLY);
                 Matrix_RotateZYX(0, -0x4000, -0x36B0, MTXMODE_APPLY);
             }
-            Matrix_Translate(D_8096ABF4[this->unk_2BA], D_8096AC08[this->unk_2BA], D_8096AC1C[this->unk_2BA],
+            Matrix_Translate(D_8096ABF4[this->maskDlSelector], D_8096AC08[this->maskDlSelector], D_8096AC1C[this->maskDlSelector],
                              MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, D_8096ABCC[this->unk_2BA]);
+            gSPDisplayList(POLY_OPA_DISP++, D_8096ABCC[this->maskDlSelector]);
         }
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/EnJs_Draw.s")
 
 void EnJs_Draw(Actor* thisx, PlayState* play) {
     EnJs* this = THIS;
