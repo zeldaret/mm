@@ -235,8 +235,8 @@ void EnRaf_Init(Actor* thisx, PlayState* play) {
     }
 
     if (((this->switchFlag >= 0) || (this->mainType == EN_RAF_TYPE_DORMANT) ||
-         (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01))) &&
-        ((Flags_GetSwitch(play, this->switchFlag)) || (this->mainType == EN_RAF_TYPE_DORMANT))) {
+         CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) &&
+        (Flags_GetSwitch(play, this->switchFlag) || (this->mainType == EN_RAF_TYPE_DORMANT))) {
         s32 i;
 
         for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT; i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT;
