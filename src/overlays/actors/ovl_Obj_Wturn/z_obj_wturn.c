@@ -63,20 +63,20 @@ void func_808A7A5C(ObjWturn* this, PlayState* play) {
 
 void func_808A7AAC(ObjWturn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    Vec3f eye;
-    Vec3f at;
+    Vec3f subCamEye;
+    Vec3f subCamAt;
 
     ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
     func_8016566C(140);
-    this->camId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
     func_800B7298(play, &this->actor, 21);
-    at.x = player->actor.focus.pos.x;
-    at.z = player->actor.focus.pos.z;
-    at.y = player->actor.focus.pos.y;
-    eye.x = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + at.x;
-    eye.z = (Math_CosS(this->actor.shape.rot.y) * 150.0f) + at.z;
-    eye.y = at.y + 4.0f;
-    Play_CameraSetAtEye(play, this->camId, &at, &eye);
+    subCamAt.x = player->actor.focus.pos.x;
+    subCamAt.z = player->actor.focus.pos.z;
+    subCamAt.y = player->actor.focus.pos.y;
+    subCamEye.x = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + subCamAt.x;
+    subCamEye.z = (Math_CosS(this->actor.shape.rot.y) * 150.0f) + subCamAt.z;
+    subCamEye.y = subCamAt.y + 4.0f;
+    Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &subCamEye);
     this->actionFunc = func_808A7BA0;
 }
 
@@ -85,7 +85,7 @@ void func_808A7BA0(ObjWturn* this, PlayState* play) {
         func_808A7C04(this, play);
     }
     func_800B8FE8(&this->actor, NA_SE_EV_EARTHQUAKE - SFX_FLAG);
-    Play_CameraSetRoll(play, this->camId, this->actor.shape.rot.z);
+    Play_CameraSetRoll(play, this->subCamId, this->actor.shape.rot.z);
 }
 
 void func_808A7C04(ObjWturn* this, PlayState* play) {
@@ -101,23 +101,23 @@ void func_808A7C04(ObjWturn* this, PlayState* play) {
 }
 
 void func_808A7C78(ObjWturn* this, PlayState* play) {
-    static Vec3f D_808A7DC0 = { 0.0f, -1.0f, 0.0f };
-    Camera* camera = Play_GetCamera(play, this->camId);
+    static Vec3f sSubCamUp = { 0.0f, -1.0f, 0.0f };
+    Camera* subCam = Play_GetCamera(play, this->subCamId);
     Player* player = GET_PLAYER(play);
 
     this->unk_14A++;
     player->actor.world.pos.y = this->actor.world.pos.y + this->unk_14A * 4.0f;
-    Play_CameraSetAtEyeUp(play, this->camId, &player->actor.focus.pos, &camera->eye, &D_808A7DC0);
+    Play_CameraSetAtEyeUp(play, this->subCamId, &player->actor.focus.pos, &subCam->eye, &sSubCamUp);
     if (this->unk_14A == 1) {
-        play->unk_1887F = 0x40;
-        gSaveContext.nextTransition = 3;
+        play->transitionType = TRANS_TYPE_64;
+        gSaveContext.nextTransitionType = TRANS_TYPE_03;
         gSaveContext.nextCutsceneIndex = 0;
         if (play->sceneNum == 0x58) {
             play->nextEntranceIndex = 0xAC00;
         } else {
             play->nextEntranceIndex = 0xAA10;
         }
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
     }
 }
 

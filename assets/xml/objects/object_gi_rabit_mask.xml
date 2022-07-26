@@ -1,7 +1,15 @@
 ﻿<Root>
+    <!-- Dependencies -->
+    <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
+
+    <!-- Get Item Draw: Bunny Hood -->
     <File Name="object_gi_rabit_mask" Segment="6">
-        <Texture Name="object_gi_rabit_mask_Tex_000000" OutName="tex_000000" Format="ia8" Width="16" Height="16" Offset="0x0" />
-        <DList Name="object_gi_rabit_mask_DL_000BC0" Offset="0xBC0" />
-        <DList Name="object_gi_rabit_mask_DL_000E58" Offset="0xE58" />
+
+        <!-- Bunny Hood Textures -->
+        <Texture Name="gGiBunnyHoodEyeTex" OutName="gi_bunny_hood_eye" Format="ia8" Width="16" Height="16" Offset="0x0" />
+
+        <!-- Bunny Hood Display Lists -->
+        <DList Name="gGiBunnyHoodDL" Offset="0xBC0" />
+        <DList Name="gGiBunnyHoodEyesDL" Offset="0xE58" />
     </File>
 </Root>

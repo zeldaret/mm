@@ -3,12 +3,9 @@
 
 #include "global.h"
 
-struct SelectContext;
+struct MapSelectState;
 
-void Select_Init(GameState* thisx);
-void Select_Destroy(GameState* thisx);
-
-typedef void (*Select_LoadFunc)(struct SelectContext*, u32, s32);
+typedef void (*Select_LoadFunc)(struct MapSelectState*, u32, s32);
 
 typedef struct {
     /* 0x00 */ char* name;
@@ -16,7 +13,7 @@ typedef struct {
     /* 0x08 */ s32 entranceIndex;
 } SceneSelectEntry; // size = 0xC
 
-typedef struct SelectContext {
+typedef struct MapSelectState {
     /* 0x000 */ GameState state;
     /* 0x0A8 */ View view;
     /* 0x210 */ s32 count;
@@ -36,6 +33,9 @@ typedef struct SelectContext {
     /* 0x270 */ s32 lockDown;
     /* 0x274 */ s32 unk_274; // unused
     /* 0x278 */ UNK_TYPE1 unk_278[0x08];
-} SelectContext; // size = 0x280
+} MapSelectState; // size = 0x280
+
+void MapSelect_Init(GameState* thisx);
+void MapSelect_Destroy(GameState* thisx);
 
 #endif

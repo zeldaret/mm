@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 u32 sDmaMgrDmaBuffSize = 0x2000;
