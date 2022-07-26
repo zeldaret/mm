@@ -56,8 +56,8 @@ void func_80AAE6F0(DmChar06* this, PlayState* play) {
                 this->alpha = 255;
             } else if (play->csCtx.actorActions[actionIndex]->action == 2) {
                 f32 lerp = 1.0f - Environment_LerpWeight(play->csCtx.actorActions[actionIndex]->endFrame,
-                                                              play->csCtx.actorActions[actionIndex]->startFrame,
-                                                              play->csCtx.frames);
+                                                         play->csCtx.actorActions[actionIndex]->startFrame,
+                                                         play->csCtx.frames);
                 this->alpha = 255 * lerp;
             }
         }
