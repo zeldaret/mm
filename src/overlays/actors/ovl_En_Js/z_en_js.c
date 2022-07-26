@@ -5,6 +5,7 @@
  */
 
 #include "z_en_js.h"
+#include "objects/object_ob/object_ob.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
@@ -15,38 +16,15 @@ void EnJs_Destroy(Actor* thisx, PlayState* play);
 void EnJs_Update(Actor* thisx, PlayState* play);
 void EnJs_Draw(Actor* thisx, PlayState* play);
 
-void func_80968A5C(EnJs* this);                  /* extern */
-s32 func_80968B8C(EnJs* this, PlayState* play);  /* extern */
-s32 func_809692A8(s32);                          /* extern */
-void func_8096971C(EnJs* this, PlayState* play); /* extern */
-void func_80969B5C(EnJs* this, PlayState* play); /* extern */
-void func_8096A104(EnJs* this, PlayState* play); /* extern */
-void func_8096A6F4(EnJs* this, PlayState* play);
-s32 func_80969400(s32);
-void func_80968B18(EnJs* this);
-s32 func_80968CB8(EnJs* this);
-s32 func_80968DD0(EnJs* this, PlayState* play);
-s32 func_80968E38(s32 arg0);
-void func_80969494(EnJs* this, PlayState* play);
-void func_809694E8(EnJs* this, PlayState* play);
-void func_80969530(EnJs* this, PlayState* play);
-s32 func_809695FC(EnJs* this, PlayState* play);
-void func_80969688(EnJs* this);
-void func_809696EC(EnJs* this, s16 arg1);
-void func_80969748(EnJs* this, PlayState* play);
+void func_80968A5C(EnJs* this);
+void func_8096971C(EnJs* this, PlayState* play);
 void func_80969898(EnJs* this, PlayState* play);
-void func_809691B8(s32 arg0, s32 arg1);
-s32 func_8096933C(s32 arg0);
-void func_80969AA0(EnJs* this, PlayState* play);
-void func_80969C54(EnJs* this, PlayState* play);
+void func_80969B5C(EnJs* this, PlayState* play);
 void func_80969DA4(EnJs* this, PlayState* play);
-void func_80969DA4(EnJs* this, PlayState* play);
-void func_8096A080(EnJs* this, PlayState* play);
-void func_8096A184(EnJs* this, PlayState* play);
-void func_8096A1E8(EnJs* this, PlayState* play);
+void func_8096A104(EnJs* this, PlayState* play);
 void func_8096A38C(EnJs* this, PlayState* play);
-void func_8096A2C0(EnJs* this, PlayState* play);
-void func_8096A9F4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
+void func_8096A6F4(EnJs* this, PlayState* play);
+
 #if 0
 const ActorInit En_Js_InitVars = {
     ACTOR_EN_JS,
@@ -75,14 +53,6 @@ static Vec3f D_8096AC30 = { 500.0f, -500.0f, 0.0f };
 #endif
 
 extern ColliderCylinderInit D_8096ABA0;
-
-extern UNK_TYPE D_06010880;
-extern UNK_TYPE D_06016F58;
-extern UNK_TYPE D_06017E98;
-extern FlexSkeletonHeader D_060164B8;
-extern AnimationHeader D_06010CD8;
-extern AnimationHeader D_0601764C;
-
 extern u32 D_8096ABCC[];
 extern f32 D_8096ABE0[];
 extern f32 D_8096ABF4[];
@@ -96,18 +66,20 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     s16 cs;
     s32 i;
-    EnJs* this = (EnJs*)thisx;
+    EnJs* this = THIS;
 
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &D_060164B8, (AnimationHeader*)&D_06017E98, &this->unk1D4, &this->unk240,
-                       0x12);
-    Animation_PlayLoop(&this->skelAnime, (AnimationHeader*)&D_06017E98);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_ob_Skel_0164B8, &object_ob_Anim_017E98, this->jointTable,
+                       this->morphTable, 0x12);
+    Animation_PlayLoop(&this->skelAnime, &object_ob_Anim_017E98);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &D_8096ABA0);
+
     this->actionFunc = func_8096971C;
-    this->unk2BA = 0;
+    this->unk_2BA = 0;
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
+
     cs = this->actor.cutscene;
     i = 0;
     while (i != 2) {
@@ -118,38 +90,40 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
         }
         i++;
     }
+
     this->cutsceneIndex = -1;
+
     switch (this->actor.params & 0xF) {
         case 0:
-            this->unk2BA = 0;
+            this->unk_2BA = 0;
             this->actionFunc = func_8096A6F4;
-            Animation_PlayLoop(&this->skelAnime, &D_0601764C);
+            Animation_PlayLoop(&this->skelAnime, &object_ob_Anim_01764C);
             func_8016566C(0x3CU);
             if ((gSaveContext.save.weekEventReg[0x54] & 0x20) != 0) {
                 Inventory_DeleteItem(0x35, (s16)gItemSlots[0x35]);
                 gSaveContext.save.weekEventReg[0x54] &= 0xDF;
-                return;
+                break;
             }
         default:
-            return;
+            break;
         case 1:
         case 2:
         case 3:
         case 4:
-            this->unk2BA = this->actor.params & 0xF;
+            this->unk_2BA = this->actor.params & 0xF;
             func_80968B8C(this, play);
             this->actionFunc = func_80969B5C;
             func_80968A5C(this);
             if (func_809692A8((this->actor.params & 0xF) + 4) != 0) {
                 Actor_MarkForDeath(&this->actor);
-                return;
+                break;
             }
             break;
         case 5:
         case 6:
         case 7:
         case 8:
-            this->unk2BA = (this->actor.params & 0xF) - 4;
+            this->unk_2BA = (this->actor.params & 0xF) - 4;
             this->actionFunc = func_8096A104;
             break;
     }
@@ -183,23 +157,23 @@ void EnJs_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80968A5C(EnJs* this) {
     if (Rand_ZeroOne() < 0.5f) {
-        Animation_MorphToLoop(&this->skelAnime, &D_06010CD8, -10.0f);
-        this->unk2B4 = 5.0f;
+        Animation_MorphToLoop(&this->skelAnime, &object_ob_Anim_010CD8, -10.0f);
+        this->unk_2B4 = 5.0f;
     } else {
-        Animation_MorphToLoop(&this->skelAnime, (AnimationHeader*)&D_06010880, -10.0f);
-        this->unk2B4 = 2.5f;
+        Animation_MorphToLoop(&this->skelAnime, &object_ob_Anim_010880, -10.0f);
+        this->unk_2B4 = 2.5f;
     }
-    this->unk2B8 &= ~4;
-    this->unk2BC = Rand_ZeroFloat(40.0f) + 80.0f;
+    this->unk_2B8 &= ~4;
+    this->unk_2BC = Rand_ZeroFloat(40.0f) + 80.0f;
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80968B18.s")
 
 void func_80968B18(EnJs* this) {
-    Animation_MorphToLoop(&this->skelAnime, (AnimationHeader*)&D_06017E98, -10.0f);
-    this->unk2B4 = 0.0f;
-    this->unk2BC = Rand_ZeroFloat(20.0f) + 40.0f;
-    this->unk2B8 |= 4;
+    Animation_MorphToLoop(&this->skelAnime, &object_ob_Anim_017E98, -10.0f);
+    this->unk_2B4 = 0.0f;
+    this->unk_2BC = Rand_ZeroFloat(20.0f) + 40.0f;
+    this->unk_2B8 |= 4;
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80968B8C.s")
@@ -214,11 +188,11 @@ s32 func_80968B8C(EnJs* this, PlayState* play) {
     Vec3s* phi_a0;
 
     sp18 = 0.0f;
-    params = ((s32)(this->actor.params & 0xFC00)) >> 0xA;
+    params = (this->actor.params & 0xFC00) >> 0xA;
     if (params != 0x3F) {
-        this->unk2AC = play->setupPathList + params;
-        if (this->unk2AC != NULL) {
-            path = this->unk2AC;
+        this->unk_2AC = play->setupPathList + params;
+        if (this->unk_2AC != NULL) {
+            path = this->unk_2AC;
 
             phi_a0 = Lib_SegmentedToVirtual(path->points);
 
@@ -228,21 +202,21 @@ s32 func_80968B8C(EnJs* this, PlayState* play) {
                 f0 = SQ(f0) + SQ(f2);
                 if (i == 0) {
                     sp18 = f0;
-                    this->unk2B0 = 0;
+                    this->unk_2B0 = 0;
                 } else if (f0 < sp18) {
                     sp18 = f0;
-                    this->unk2B0 = i;
+                    this->unk_2B0 = i;
                 }
             }
 
-            this->unk2B0++;
-            if (this->unk2B0 >= path->count) {
-                this->unk2B0 = 0;
+            this->unk_2B0++;
+            if (this->unk_2B0 >= path->count) {
+                this->unk_2B0 = 0;
             }
         }
     } else {
-        this->unk2AC = NULL;
-        this->unk2B0 = 0;
+        this->unk_2AC = NULL;
+        this->unk_2B0 = 0;
     }
     return false;
 }
@@ -255,24 +229,25 @@ s32 func_80968CB8(EnJs* this) {
     f32 temp_fa0;
     f32 temp_fa1;
     Vec3s* temp_v1;
-    if (this->unk2AC == NULL) {
-        return 1;
-    }
-    new_var3 = this->unk2AC;
-    temp_v1 = &((Vec3s*)Lib_SegmentedToVirtual(new_var3->points))[this->unk2B0];
+
+    if (this->unk_2AC == NULL)
+        return true;
+
+    new_var3 = this->unk_2AC;
+    temp_v1 = &((Vec3s*)Lib_SegmentedToVirtual(new_var3->points))[this->unk_2B0];
     temp_fa0 = temp_v1->x - this->actor.world.pos.x;
     temp_fa1 = temp_v1->z - this->actor.world.pos.z;
     this->actor.world.rot.y = Math_Atan2S(temp_fa0, temp_fa1);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 0x7D0, 0xC8);
     if ((SQ(temp_fa0) + SQ(temp_fa1)) < 100.0f) {
-        this->unk2B0++;
-        if (this->unk2B0 >= new_var3->count) {
-            this->unk2B0 = 0;
+        this->unk_2B0++;
+        if (this->unk_2B0 >= new_var3->count) {
+            this->unk_2B0 = 0;
         }
-        return 1;
+        return true;
     }
-    Math_StepToF(&this->actor.speedXZ, this->unk2B4, 0.5f);
-    return 0;
+    Math_StepToF(&this->actor.speedXZ, this->unk_2B4, 0.5f);
+    return false;
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80968DD0.s")
@@ -287,35 +262,35 @@ s32 func_80968DD0(EnJs* this, PlayState* play) {
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80968E38.s")
 
-s32 func_80968E38(s32 arg0) {
+s32 func_80968E38(s32 maskIndex) {
     s32 i;
     s32 count;
     u8 mask;
     u8* maskMaskBit = gSaveContext.maskMaskBit;
 
-    if (((arg0 < 0) || (arg0 > 8))) {
-        return 0;
+    if (((maskIndex < 0) || (maskIndex > 8))) {
+        return false;
     }
 
     count = 0;
 
-    arg0 *= 3;
+    maskIndex *= 3;
     for (mask = 1, i = 0; i < 8; i++, mask <<= 1) {
-        if (maskMaskBit[arg0] & mask) {
+        if (maskMaskBit[maskIndex] & mask) {
             count++;
         }
     }
 
-    arg0++;
+    maskIndex++;
     for (mask = 1, i = 0; i < 8; i++, mask <<= 1) {
-        if (maskMaskBit[arg0] & mask) {
+        if (maskMaskBit[maskIndex] & mask) {
             count++;
         }
     }
 
-    arg0++;
+    maskIndex++;
     for (mask = 1, i = 0; i < 5; i++, mask <<= 1) {
-        if (maskMaskBit[arg0] & mask) {
+        if (maskMaskBit[maskIndex] & mask) {
             count++;
         }
     }
@@ -396,46 +371,33 @@ s32 func_80968F48(void) {
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_809691B8.s")
 
 void func_809691B8(s32 arg0, s32 arg1) {
-    s32 temp_a0;
-    s32 temp_a0_2;
-    s32 temp_a0_3;
-    s32 temp_a1;
-    s32 temp_a1_2;
-    s32 temp_v1;
-    s32 temp_v1_2;
-    s32 temp_v1_3;
-    u8 *temp_a2;
-    u8 *temp_a2_2;
-    u8 *temp_a2_3;
-    u8 *temp_t0;
-    u8 *temp_t0_2;
+    u8* maskMaskBit = gSaveContext.maskMaskBit;
+    s32 a = 0;
 
-    if ((arg1 >= 0) && (temp_a0 = arg0 - 0x3A, ((arg1 < 9) != 0))) {
-        temp_a1 = arg1 * 3;
-        if (temp_a0 < 8) {
-            temp_a2 = gSaveContext.maskMaskBit + temp_a1;
-            temp_v1 = 1 << temp_a0;
-            *temp_a2 |= temp_v1;
-            gSaveContext.maskMaskBit[0] = gSaveContext.maskMaskBit[0] | temp_v1;
+    if ((arg1 >= 0) && (arg1 < 9)) {
+        arg0 -= 0x3A;
+        arg1 *= 3;
+        if (arg0 < 8) {
+            maskMaskBit[arg1] |= 1 << arg0;
+            maskMaskBit[a] |= 1 << arg0;
             return;
         }
-        temp_a0_2 = temp_a0 - 8;
-        temp_a1_2 = temp_a1 + 1;
-        if (temp_a0_2 < 8) {
-            temp_t0 = gSaveContext.maskMaskBit;
-            temp_a2_2 = &temp_t0[temp_a1_2];
-            temp_v1_2 = 1 << temp_a0_2;
-            *temp_a2_2 |= temp_v1_2;
-            temp_t0[1] |= temp_v1_2;
+
+        arg0 -= 8;
+        arg1++;
+        a++;
+        if (arg0 < 8) {
+            maskMaskBit[arg1] |= 1 << arg0;
+            maskMaskBit[a] |= 1 << arg0;
             return;
         }
-        temp_a0_3 = temp_a0_2 - 8;
-        if (temp_a0_3 < 6) {
-            temp_t0_2 = gSaveContext.maskMaskBit;
-            temp_a2_3 = &temp_t0_2[temp_a1_2 + 1];
-            temp_v1_3 = 1 << temp_a0_3;
-            *temp_a2_3 |= temp_v1_3;
-            temp_t0_2[2] |= temp_v1_3;
+
+        arg0 -= 8;
+        arg1++;
+        a++;
+        if (arg0 < 6) {
+            maskMaskBit[arg1] |= 1 << arg0;
+            maskMaskBit[a] |= 1 << arg0;
         }
     }
 }
@@ -443,64 +405,87 @@ void func_809691B8(s32 arg0, s32 arg1) {
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_809692A8.s")
 
 s32 func_809692A8(s32 arg0) {
-    s32 phi_v0;
-
-    phi_v0 = 0;
     switch (arg0) {
         case 1:
         case 2:
         case 3:
         case 4:
             if (func_80968E38(arg0) < arg0) {
-                return 0;
+                return false;
             }
-            return 1;
+            return true;
         case 5:
         case 6:
         case 7:
         case 8:
             if (func_80968E38(arg0) < (arg0 - 4)) {
-                return 0;
+                return false;
             }
-            return 1;
+            return true;
         default:
-            return phi_v0;
+            return false;
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096933C.s")
-/*
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096933C.s")
+
 s32 func_8096933C(s32 arg0) {
     s32 sp1C;
-    s32 phi_v0;
 
-    phi_v0 = 0;
     switch (arg0) {
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-        sp1C = func_80968F48();
-        if ((func_80968E38(arg0) + sp1C) < arg0) {
-            return 0;
-        }
-        return 1;
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-        sp1C = func_80968F48();
-        if ((func_80968E38(arg0) + sp1C) < (arg0 - 4)) {
-            return 0;
-        }
-        phi_v0 = 1;
-    default:
-        return phi_v0;
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+            sp1C = func_80968F48();
+            if ((func_80968E38(arg0) + sp1C) < arg0) {
+                return false;
+            } else {
+                return true;
+            }
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            sp1C = func_80968F48();
+            if ((func_80968E38(arg0) + sp1C) < (arg0 - 4)) {
+                return false;
+            } else {
+                return true;
+            }
+        default:
+            return false;
     }
-}*/
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969400.s")
+/*
+typedef struct unkStruct {
+    u8 unk0;
+    u8 unk1;
+    u8 unk2;
+} unkStruct;
 
+void func_80969400(s32 arg0) {
+    //u8 temp_t9;
+unkStruct * temp_v0;
+
+    if ((arg0 >= 0) && (arg0 < 9)) {
+        temp_v0 = gSaveContext.maskMaskBit[arg0];
+        //temp_v0 = (arg0 * 3) + 0x48CA + &gSaveContext;
+
+        gSaveContext.maskMaskBit[0] = ~gSaveContext.maskMaskBit[0] & ~temp_v0->unk0;
+        gSaveContext.maskMaskBit[1] = gSaveContext.maskMaskBit[1] & ~temp_v0->unk1;
+        //temp_t9 = temp_v0->unk2 & 0xF;
+        temp_v0->unk2 = temp_v0->unk2 & 0xF;
+        gSaveContext.maskMaskBit[2] = gSaveContext.maskMaskBit[2] & ~temp_v0->unk2 & 0xF;
+        //gSaveContext.maskMaskBit[0] = 0;
+        temp_v0->unk0 = 0;
+        temp_v0->unk1 = 0;
+        temp_v0->unk2 = 0;
+    }
+}
+*/
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969494.s")
 
 void func_80969494(EnJs* this, PlayState* play) {
@@ -524,26 +509,26 @@ void func_80969530(EnJs* this, PlayState* play) {
     func_801477B4(play);
     this->actor.flags &= -0x101;
     this->actionFunc = func_8096A6F4;
-    if ((this->actor.home.rot.y == this->actor.shape.rot.y) && ((this->unk2B8 & 0x10) != 0)) {
-        Animation_Change(&this->skelAnime, (AnimationHeader*)(&D_06016F58), -1.0f,
-                         ((f32)Animation_GetLastFrame(&D_06016F58)) - 1.0f, 0.0f, (u8)2, -10.0f);
-        this->unk2B8 &= 0xFFEF;
-        this->unk2B8 |= 8;
+    if ((this->actor.home.rot.y == this->actor.shape.rot.y) && (this->unk_2B8 & 0x10)) {
+        Animation_Change(&this->skelAnime, &object_ob_Anim_016F58, -1.0f,
+                         Animation_GetLastFrame(&object_ob_Anim_016F58) - 1.0f, 0.0f, 2, -10.0f);
+        this->unk_2B8 &= ~0x10;
+        this->unk_2B8 |= 8;
     }
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_809695FC.s")
 
 s32 func_809695FC(EnJs* this, PlayState* play) {
-    if (((s32)(this->actor.params & 0x3F0) >> 4) == 0x3F) {
-        return 0;
+    if (((this->actor.params & 0x3F0) >> 4) == 0x3F) {
+        return false;
     }
     play->sceneLoadFlag = 0x14;
     play->nextEntranceIndex = play->setupExitList[(s32)(this->actor.params & 0x3F0) >> 4];
     this->actionFunc = func_8096971C;
     play->msgCtx.unk11F10 = 0;
     gSaveContext.respawnFlag = -2;
-    return 1;
+    return true;
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969688.s")
@@ -573,36 +558,35 @@ void func_8096971C(EnJs* this, PlayState* play) {
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969748.s")
 
 void func_80969748(EnJs* this, PlayState* play) {
-    s32 temp_v0;
+    s32 item;
     Player* player = GET_PLAYER(play);
 
-    // player = play->actorCtx.player;
     SkelAnime_Update(&this->skelAnime);
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, (s16)0x64);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (Message_GetState(&play->msgCtx) == 0x10) {
-        temp_v0 = func_80123810(play);
-        if (temp_v0 != 0) {
+        item = func_80123810(play);
+        if (item != 0) {
             this->actionFunc = func_80969898;
         }
-        if (temp_v0 > 0) {
+        if (item > 0) {
             func_801477B4(play);
-            if ((temp_v0 >= 0x3A) && (temp_v0 < 0x4E)) {
-                func_809691B8(temp_v0, this->actor.params & 0xF);
-                Inventory_UnequipItem((s16)(temp_v0 - 4));
+            if ((item >= 0x3A) && (item < 0x4E)) {
+                func_809691B8(item, this->actor.params & 0xF);
+                Inventory_UnequipItem(item - 4);
                 if (func_809692A8(this->actor.params & 0xF) == 0) {
                     player->actor.textId = 0x2212;
                 } else {
                     player->actor.textId = 0x2213;
                 }
-            } else if ((temp_v0 >= 0x4E) && (temp_v0 < 0x52)) {
+            } else if ((item >= 0x4E) && (item < 0x52)) {
                 player->actor.textId = 0x2211;
             } else {
                 player->actor.textId = 0x2210;
             }
         }
-        if (temp_v0 < 0) {
-            func_80151938(play, 0x2216U);
+        if (item < 0) {
+            func_80151938(play, 0x2216);
         }
     }
 }
@@ -614,56 +598,54 @@ void func_80969898(EnJs* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, (s16)0x64);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     switch (Message_GetState(&play->msgCtx)) {
         case 4:
-            if ((Message_ShouldAdvance(play) != 0) && (play->msgCtx.currentTextId == 0x2215)) {
+            if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x2215)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        func_80151938(play, 0x2217U);
-                        return;
+                        func_80151938(play, 0x2217);
+                        break;
                     case 1:
                         func_8019F230();
-                        func_80151938(play, 0x2216U);
-                        return;
+                        func_80151938(play, 0x2216);
+                        break;
                 }
-            } else {
-                return;
             }
             break;
         case 5:
-            if (Message_ShouldAdvance(play) != 0) {
+            if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x220C:
-                        this->unk2B8 |= 1;
-                        if (func_8096933C(this->actor.params & 0xF) == 0) {
-                            func_80151938(play, 0x220FU);
-                            return;
+                        this->unk_2B8 |= 1;
+                        if (!func_8096933C(this->actor.params & 0xF)) {
+                            func_80151938(play, 0x220F);
+                            break;
                         }
-                        func_80151938(play, 0x220DU);
-                        return;
+                        func_80151938(play, 0x220D);
+                        break;
                     case 0x220D:
                     case 0x2213:
-                        func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
-                        return;
+                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        break;
                     case 0x220E:
-                        func_80151938(play, 0xFFU);
+                        func_80151938(play, 0xFF);
                         this->actionFunc = func_80969748;
-                        return;
+                        break;
                     case 0x2210:
                     case 0x2211:
                     case 0x2212:
                         player->exchangeItemId = 0;
-                        func_80151938(play, 0xFFU);
+                        func_80151938(play, 0xFF);
                         this->actionFunc = func_80969748;
-                        return;
+                        break;
                     case 0x2214:
                     case 0x2217:
-                        if (func_809695FC(this, play) == 0) {
+                        if (!func_809695FC(this, play)) {
                             func_80969494(this, play);
-                            return;
+                            break;
                         }
                         break;
                     default:
@@ -674,52 +656,54 @@ void func_80969898(EnJs* this, PlayState* play) {
             break;
     }
 }
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969AA0.s")
-/*
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969AA0.s")
 
 void func_80969AA0(EnJs* this, PlayState* play) {
-    u16 phi_a3;
+    u16 textId;
 
     if (gSaveContext.save.playerForm != 4) {
-        phi_a3 = 0x220B;
+        textId = 0x220B;
     } else {
-        phi_a3 = 0x2215;
-        if ((this->unk2B8 & 1) != 0) {
-            if (func_809692A8(this->actor.params & 0xF) == 0) {
-                if (func_8096933C(this->actor.params & 0xF) == 0) {
-                    phi_a3 = 0x220F;
+        textId = 0x2215;
+        if (!func_809692A8(this->actor.params & 0xF)) {
+            if (this->unk_2B8 & 1) {
+                if (!func_8096933C(this->actor.params & 0xF)) {
+                    textId = 0x220F;
                 } else {
-                    phi_a3 = 0x220E;
+                    textId = 0x220E;
                 }
             } else {
-                phi_a3 = 0x220C;
+                textId = 0x220C;
             }
+        } else {
+            textId = 0x2215;
         }
     }
-    Animation_MorphToLoop(&this->skelAnime, (AnimationHeader*)&D_06017E98, -10.0f);
-    Message_StartTextbox(play, phi_a3, &this->actor);
+    Animation_MorphToLoop(&this->skelAnime, &object_ob_Anim_017E98, -10.0f);
+    Message_StartTextbox(play, textId, &this->actor);
 }
-*/
+
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969B5C.s")
 
 void func_80969B5C(EnJs* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (this->unk2BC > 0) {
-        this->unk2BC--;
-        if (this->unk2BC == 0) {
-            if ((this->unk2B8 & 4) != 0) {
+    if (this->unk_2BC > 0) {
+        this->unk_2BC--;
+        if (this->unk_2BC == 0) {
+            if (this->unk_2B8 & 4) {
                 func_80968A5C(this);
             } else {
                 func_80968B18(this);
             }
         }
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80969898;
         this->actor.speedXZ = 0.0f;
-        this->unk2B4 = 0.0f;
+        this->unk_2B4 = 0.0f;
         func_80969AA0(this, play);
-    } else if ((this->actor.xzDistToPlayer < 100.0f) && (Player_IsFacingActor(&this->actor, 0x3000, play) != 0)) {
+    } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
         func_800B8614(&this->actor, play, 120.0f);
     }
     func_80968CB8(this);
@@ -728,36 +712,35 @@ void func_80969B5C(EnJs* this, PlayState* play) {
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969C54.s")
 
 void func_80969C54(EnJs* this, PlayState* play) {
-    s32 temp_v0;
+    s32 item;
     Player* player = GET_PLAYER(play);
 
-    // player = play->actorCtx.player;
     SkelAnime_Update(&this->skelAnime);
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, (s16)0x64);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (Message_GetState(&play->msgCtx) == 0x10) {
-        temp_v0 = func_80123810(play);
-        if (temp_v0 != 0) {
+        item = func_80123810(play);
+        if (item != 0) {
             this->actionFunc = func_80969DA4;
         }
-        if (temp_v0 > 0) {
+        if (item > 0) {
             func_801477B4(play);
-            if ((temp_v0 >= 0x3A) && (temp_v0 < 0x4E)) {
-                func_809691B8(temp_v0, this->actor.params & 0xF);
-                Inventory_UnequipItem((s16)(temp_v0 - 4));
-                if (func_809692A8(this->actor.params & 0xF) == 0) {
+            if ((item >= 0x3A) && (item < 0x4E)) {
+                func_809691B8(item, this->actor.params & 0xF);
+                Inventory_UnequipItem(item - 4);
+                if (!func_809692A8(this->actor.params & 0xF)) {
                     player->actor.textId = 0x2221;
                 } else {
                     player->actor.textId = 0x2222;
                 }
-            } else if ((temp_v0 >= 0x4E) && (temp_v0 < 0x52)) {
+            } else if ((item >= 0x4E) && (item < 0x52)) {
                 player->actor.textId = 0x2220;
             } else {
                 player->actor.textId = 0x221D;
             }
         }
-        if (temp_v0 < 0) {
-            func_80151938(play, 0x221EU);
+        if (item < 0) {
+            func_80151938(play, 0x221E);
         }
     }
 }
@@ -769,85 +752,83 @@ void func_80969DA4(EnJs* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, (s16)0x64);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     switch (Message_GetState(&play->msgCtx)) {
         case 4:
-            if ((Message_ShouldAdvance(play) != 0) &&
-                (((play->msgCtx.currentTextId == 0x2219)) || (play->msgCtx.currentTextId == 0x221E))) {
+            if ((Message_ShouldAdvance(play)) &&
+                ((play->msgCtx.currentTextId == 0x2219) || (play->msgCtx.currentTextId == 0x221E))) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        if (func_809695FC(this, play) == 0) {
+                        if (!func_809695FC(this, play)) {
                             func_809694E8(this, play);
-                            return;
+                            break;
                         }
                         break;
                     case 1:
                         func_8019F230();
-                        func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
-                        return;
+                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        break;
                 }
-            } else {
-                return;
-            }
+            } 
             break;
         case 5:
-            if (Message_ShouldAdvance(play) != 0) {
+            if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x221B:
-                        if (func_8096933C(this->actor.params & 0xF) == 0) {
-                            func_80151938(play, 0x2219U);
-                            return;
+                        if (!func_8096933C(this->actor.params & 0xF)) {
+                            func_80151938(play, 0x2219);
+                            break;
                         }
-                        func_80151938(play, 0x221CU);
-                        return;
+                        func_80151938(play, 0x221C);
+                        break;
                     case 0x2224:
                     case 0x2226:
                     case 0x2228:
                     case 0x222A:
-                        func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
-                        return;
+                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        break;
                     case 0x2225:
                     case 0x2227:
                     case 0x2229:
                     case 0x222B:
-                        if (func_809695FC(this, play) == 0) {
+                        if (!func_809695FC(this, play)) {
                             func_809694E8(this, play);
-                            return;
+                            break;
                         }
                         break;
                     case 0x2222:
                         player->exchangeItemId = 0;
-                        func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
-                        return;
+                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        break;
                     case 0x2223:
                         switch (this->actor.params & 0xF) {
                             case 5:
-                                func_80151938(play, 0x2224U);
-                                return;
+                                func_80151938(play, 0x2224);
+                                break;
                             case 6:
-                                func_80151938(play, 0x2226U);
-                                return;
+                                func_80151938(play, 0x2226);
+                                break;
                             case 7:
-                                func_80151938(play, 0x2228U);
-                                return;
+                                func_80151938(play, 0x2228);
+                                break;
                             case 8:
-                                func_80151938(play, 0x222AU);
-                                return;
+                                func_80151938(play, 0x222A);
+                                break;
                         }
                         break;
                     case 0x221C:
-                        func_80151938(play, 0xFFU);
+                        func_80151938(play, 0xFF);
                         this->actionFunc = func_80969C54;
-                        return;
+                        break;
                     case 0x221D:
                     case 0x2220:
                     case 0x2221:
                         player->exchangeItemId = 0;
-                        func_80151938(play, 0xFFU);
+                        func_80151938(play, 0xFF);
                         this->actionFunc = func_80969C54;
-                        return;
+                        break;
                     default:
                         func_809694E8(this, play);
                         break;
@@ -860,23 +841,23 @@ void func_80969DA4(EnJs* this, PlayState* play) {
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A080.s")
 
 void func_8096A080(EnJs* this, PlayState* play) {
-    u16 phi_a1;
+    u16 textId;
 
     if (gSaveContext.save.playerForm != 4) {
-        phi_a1 = 0x2218U;
+        textId = 0x2218;
     } else {
-        phi_a1 = 0x221BU;
-        if ((this->unk2B8 & 1) != 0) {
+        textId = 0x221B;
+        if (this->unk_2B8 & 1) {
             if (func_8096933C(this->actor.params & 0xF) == 0) {
-                phi_a1 = 0x2219U;
+                textId = 0x2219;
             } else {
-                phi_a1 = 0x221CU;
+                textId = 0x221C;
             }
         } else {
-            this->unk2B8 |= 1;
+            this->unk_2B8 |= 1;
         }
     }
-    Message_StartTextbox(play, phi_a1, &this->actor);
+    Message_StartTextbox(play, textId, &this->actor);
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A104.s")
@@ -893,30 +874,45 @@ void func_8096A104(EnJs* this, PlayState* play) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A184.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A184.s")
+
+void func_8096A184(EnJs* this, PlayState* play) {
+    u16 textId;
+
+    if (gSaveContext.save.playerForm != 4) {
+        textId = 0x220B;
+    } else {
+        if (func_80968E38(0) >= 0x14) {
+            textId = 0x2202;
+        } else {
+            textId = 0x21FC;
+        }
+    }
+    Message_StartTextbox(play, textId, this);
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A1E8.s")
 
 void func_8096A1E8(EnJs* this, PlayState* play) {
-    if (SkelAnime_Update(&this->skelAnime) != 0) {
-        Animation_MorphToLoop(&this->skelAnime, (AnimationHeader*)&D_06017E98, 0.0f);
+    if (SkelAnime_Update(&this->skelAnime)) {
+        Animation_MorphToLoop(&this->skelAnime, &object_ob_Anim_017E98, 0.0f);
     }
-    if (Actor_ProcessTalkRequest(&this->actor, play) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, play)) {
         this->actor.flags &= 0xFFFEFFFF;
         this->actionFunc = func_8096A38C;
-        Message_StartTextbox(play, 0x2208U, &this->actor);
+        Message_StartTextbox(play, 0x2208, &this->actor);
         gSaveContext.save.weekEventReg[0x54] |= 0x20;
         func_809696EC(this, 0);
-        return;
+    } else {
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
     }
-    func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A2C0.s")
 
 void func_8096A2C0(EnJs* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        Animation_MorphToLoop(&this->skelAnime, (AnimationHeader*)&D_06017E98, 0.0f);
+        Animation_MorphToLoop(&this->skelAnime, &object_ob_Anim_017E98, 0.0f);
     }
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
@@ -928,135 +924,138 @@ void func_8096A2C0(EnJs* this, PlayState* play) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A38C.s")
-/*
-void func_8096A38C(EnJs *this, PlayState *play) {
-    if (SkelAnime_Update(&this->skelAnime) != 0) {
-        Animation_MorphToLoop(&this->skelAnime, (AnimationHeader *) &D_06017E98, 0.0f);
-        this->unk2B8 |= 2;
-    }
-    //temp_v0 = Message_GetState(&play->msgCtx);
-    switch (Message_GetState(&play->msgCtx)) {
-    case 4:
-        if (Message_ShouldAdvance(play)) {
-            switch (play->msgCtx.choiceIndex) {
-            case 0:
-                func_8019F208();
-                break;
-            case 1:
-                func_8019F230();
-                break;
-            }
-            switch (play->msgCtx.currentTextId) {
-            case 0x21FC:
-                if (play->msgCtx.choiceIndex != 0) {
-                    if (play->msgCtx.currentTextId == 1) {
-                        return;
-                    }
-                    func_80151938(play, 0x21FDU);
-                    return;
-                }
-                func_80151938(play, 0x21FEU);
-                Animation_MorphToPlayOnce(&this->skelAnime, (AnimationHeader *) &D_06016F58, -5.0f);
-                this->unk2B8 |= 0x10;
-                return;
-            case 0x21FE:
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A38C.s")
 
-                if (play->msgCtx.currentTextId != 0) {
-                    if (play->msgCtx.currentTextId == 1) {
-                        return;
-                    }
-                    func_80151938(play, 0x21FFU);
-                    return;
+void func_8096A38C(EnJs* this, PlayState* play) {
+    if (SkelAnime_Update(&this->skelAnime)) {
+        Animation_MorphToLoop(&this->skelAnime, &object_ob_Anim_017E98, 0.0f);
+        this->unk_2B8 |= 2;
+    }
+    switch (Message_GetState(&play->msgCtx)) {
+        case 4:
+            if (Message_ShouldAdvance(play)) {
+                switch (play->msgCtx.choiceIndex) {
+                    case 0:
+                        func_8019F208();
+                        break;
+
+                    case 1:
+                        func_8019F230();
+                        break;
                 }
-                func_80151938(play, 0x2200U);
-                func_809696EC(this, 0);
-                return;
-            case 0x2203:
-                if (play->msgCtx.currentTextId != 0) {
-                    if (play->msgCtx.currentTextId != 1) {
-                        return;
-                    }
-                    func_80151938(play, 0x2204U);
-                    return;
+
+                switch (play->msgCtx.currentTextId) {
+                    case 0x21FC:
+                        switch (play->msgCtx.choiceIndex) {
+                            case 0:
+                                func_80151938(play, 0x21FE);
+                                Animation_MorphToPlayOnce(&this->skelAnime, &object_ob_Anim_016F58, -5.0f);
+                                this->unk_2B8 |= 0x10;
+                                break;
+                            case 1:
+                                func_80151938(play, 0x21FD);
+                                break;
+                        }
+                        break;
+
+                    case 0x21FE:
+                        switch (play->msgCtx.choiceIndex) {
+                            case 0:
+                                func_80151938(play, 0x2200);
+                                func_809696EC(this, 0);
+                                break;
+                            case 1:
+                                func_80151938(play, 0x21FF);
+                                break;
+                        }
+                        break;
+
+                    case 0x2203:
+                        switch (play->msgCtx.choiceIndex) {
+                            case 0:
+                                func_80151938(play, 0x2205);
+                                Animation_MorphToPlayOnce(&this->skelAnime, &object_ob_Anim_016F58, -5.0f);
+                                this->unk_2B8 |= 0x10;
+                                break;
+                            case 1:
+                                func_80151938(play, 0x2204);
+                                break;
+                        }
                 }
-                func_80151938(play, 0x2205U);
-                Animation_MorphToPlayOnce(&this->skelAnime, (AnimationHeader *) &D_06016F58, -5.0f);
-                this->unk2B8 |= 0x10;
-                return;
             }
-        } else {
-            return;
-        }
-        break;
-    case 5:
-        if (Message_ShouldAdvance(play) != 0) {
-            switch (play->msgCtx.currentTextId) {
-            case 0x2202:
-            case 0x2205:
-            case 0x2206:
-            case 0x2209:
-                func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
-                return;
-            case 0x2200:
-            case 0x2208:
-                func_809696EC(this, 1);
-                func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
-                return;
-            case 0x2207:
-                if (gSaveContext.save.inventory.items[gItemSlots[0x35]] == 0x35) {
-                    func_80151938(play, 0x2208U);
-                    func_809696EC(this, 0);
-                    return;
+            break;
+        case 5:
+            if (Message_ShouldAdvance(play)) {
+                switch (play->msgCtx.currentTextId) {
+                    case 0x2202:
+                    case 0x2205:
+                    case 0x2206:
+                    case 0x2209:
+                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        break;
+
+                    case 0x2200:
+                    case 0x2208:
+                        func_809696EC(this, 1);
+                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        break;
+
+                    case 0x2207:
+                        if (gSaveContext.save.inventory.items[gItemSlots[0x35]] == 0x35) {
+                            func_80151938(play, 0x2208);
+                            func_809696EC(this, 0);
+                        } else {
+                            func_801477B4(play);
+                            this->actionFunc = func_8096A2C0;
+                            func_8096A2C0(this, play);
+                        }
+                        break;
+
+                    case 0x2201:
+
+                    case 0x220A:
+                        if (!func_809695FC(this, play)) {
+                            func_80969530(this, play);
+                        }
+                        break;
+
+                    default:
+                        func_80969530(this, play);
+                        break;
                 }
-                func_801477B4(play);
-                this->actionFunc = func_8096A2C0;
-                func_8096A2C0(this, play);
-                return;
-            case 0x2201:
-            case 0x220A:
-                if (func_809695FC(this, play) == 0) {
-                    func_80969530(this, play);
-                    return;
-                }
-                break;
-            default:
-                func_80969530(this, play);
-                break;
             }
-        }
-        break;
+            break;
     }
 }
-*/
+
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A6F4.s")
 
 void func_8096A6F4(EnJs* this, PlayState* play) {
     PosRot* new_var = &this->actor.home;
 
     if (this->actor.shape.rot.y != (*new_var).rot.y) {
-        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x400, (s16)0x100);
-        if ((this->actor.shape.rot.y == (*new_var).rot.y) && ((this->unk2B8 & 0x10) != 0)) {
-            Animation_Change(&this->skelAnime, (AnimationHeader*)(&D_06016F58), -1.0f,
-                             ((f32)Animation_GetLastFrame(&D_06016F58)) - 1.0f, 0.0f, (u8)2, -10.0f);
-            this->unk2B8 &= 0xFFEF;
-            this->unk2B8 |= 8;
+        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x400, 0x100);
+        if ((this->actor.shape.rot.y == (*new_var).rot.y) && (this->unk_2B8 & 0x10)) {
+            Animation_Change(&this->skelAnime, &object_ob_Anim_016F58, -1.0f,
+                             Animation_GetLastFrame(&object_ob_Anim_016F58) - 1.0f, 0.0f, 2, -10.0f);
+            this->unk_2B8 &= 0xFFEF;
+            this->unk_2B8 |= 8;
         }
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
-    if (SkelAnime_Update(&this->skelAnime) != 0) {
-        Animation_MorphToLoop(&this->skelAnime, &D_0601764C, -10.0f);
-        this->unk2B8 &= 0xFFF7;
+    if (SkelAnime_Update(&this->skelAnime)) {
+        Animation_MorphToLoop(&this->skelAnime, &object_ob_Anim_01764C, -10.0f);
+        this->unk_2B8 &= 0xFFF7;
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_8096A38C;
-        this->unk2B8 &= 0xFFFD;
+        this->unk_2B8 &= 0xFFFD;
         func_8096A184(this, play);
         return;
     }
-    if (((((this->unk2B8 & 8) == 0) && (this->actor.xzDistToPlayer < 100.0f)) &&
-         (Player_IsFacingActor(&this->actor, 0x3000, play) != 0)) &&
-        (Actor_IsFacingPlayer(&this->actor, 0x1000) != 0)) {
+    if ((((!(this->unk_2B8 & 8)) && (this->actor.xzDistToPlayer < 100.0f)) &&
+         Player_IsFacingActor(&this->actor, 0x3000, play)) &&
+        Actor_IsFacingPlayer(&this->actor, 0x1000)) {
         func_800B8614(&this->actor, play, 120.0f);
     }
 }
@@ -1069,9 +1068,12 @@ void EnJs_Update(Actor* thisx, PlayState* play) {
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+    
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, 5U);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, 5);
+
     this->actionFunc(this, play);
+
     if ((this->cutsceneIndex != -1) && (ActorCutscene_GetCurrentIndex() != this->cutscenes[this->cutsceneIndex])) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
@@ -1094,18 +1096,18 @@ void func_8096A9F4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
 
     if (limbIndex == 0xA) {
         Matrix_MultVec3f(&D_8096AC30, &thisx->focus.pos);
-        if ((this->unk2BA >= 0) && (this->unk2BA < 5)) {
+        if ((this->unk_2BA >= 0) && (this->unk_2BA < 5)) {
             OPEN_DISPS(play->state.gfxCtx);
 
-            if (this->unk2BA != 0) {
-                Matrix_Scale(D_8096ABE0[this->unk2BA], D_8096ABE0[this->unk2BA], D_8096ABE0[this->unk2BA],
+            if (this->unk_2BA != 0) {
+                Matrix_Scale(D_8096ABE0[this->unk_2BA], D_8096ABE0[this->unk_2BA], D_8096ABE0[this->unk_2BA],
                              MTXMODE_APPLY);
                 Matrix_RotateZYX(0, -0x4000, -0x36B0, MTXMODE_APPLY);
             }
-            Matrix_Translate(D_8096ABF4[this->unk2BA], D_8096AC08[this->unk2BA], D_8096AC1C[this->unk2BA],
+            Matrix_Translate(D_8096ABF4[this->unk_2BA], D_8096AC08[this->unk_2BA], D_8096AC1C[this->unk_2BA],
                              MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, D_8096ABCC[this->unk2BA]);
+            gSPDisplayList(POLY_OPA_DISP++, D_8096ABCC[this->unk_2BA]);
         }
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -1117,6 +1119,6 @@ void EnJs_Draw(Actor* thisx, PlayState* play) {
     EnJs* this = THIS;
 
     func_8012C28C(play->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32)this->skelAnime.dListCount,
-                          NULL, func_8096A9F4, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          func_8096A9F4, &this->actor);
 }
