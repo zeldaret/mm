@@ -16,7 +16,7 @@ void EnPst_Update(Actor* thisx, PlayState* play);
 void EnPst_Draw(Actor* thisx, PlayState* play);
 
 void EnPst_FollowSchedule(EnPst* this, PlayState* play);
-void EnPst_UpdateSchedule(EnPst* this, PlayState* play);
+void EnPst_Talk(EnPst* this, PlayState* play);
 
 typedef enum {
     /* 0 */ POSTBOX_SCH_NONE,
@@ -306,7 +306,7 @@ s32 EnPst_CheckTalk(EnPst* this, PlayState* play) {
             this->msgEventCallback = NULL;
             this->stateFlags |= 0x40;
             this->msgEventScript = EnPst_GetMsgEventScript(this, play);
-            this->actionFunc = EnPst_UpdateSchedule;
+            this->actionFunc = EnPst_Talk;
             ret = true;
         }
     }
@@ -358,7 +358,7 @@ void EnPst_FollowSchedule(EnPst* this, PlayState* play) {
     EnPst_HandleSchedule(this, play);
 }
 
-void EnPst_UpdateSchedule(EnPst* this, PlayState* play) {
+void EnPst_Talk(EnPst* this, PlayState* play) {
     if (func_8010BF58(&this->actor, play, this->msgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
         if (EnPst_HandleLetterDay1(this) != this->isLetterToKafeiDeposited) {
             switch (gSaveContext.save.day) {

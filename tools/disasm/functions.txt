@@ -13382,7 +13382,7 @@
     0x80B2BD30:("EnPst_ProcessScheduleOutput",),
     0x80B2BD88:("EnPst_Idle",),
     0x80B2BD98:("EnPst_FollowSchedule",),
-    0x80B2BE54:("EnPst_UpdateSchedule",),
+    0x80B2BE54:("EnPst_Talk",),
     0x80B2BF3C:("EnPst_Init",),
     0x80B2C04C:("EnPst_Destroy",),
     0x80B2C078:("EnPst_Update",),
