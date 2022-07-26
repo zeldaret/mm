@@ -2549,6 +2549,7 @@ void func_80832578(Player* this, PlayState* play);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80832660.s")
 
+s16 func_80832754(Player* this, s32 arg1);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80832754.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80832888.s")
@@ -3982,6 +3983,8 @@ void func_8083B32C(PlayState* play, Player* this, f32 arg2) {
     func_80123140(play, this);
 }
 
+// boolean
+s32 func_8083B3B4(PlayState* play, Player* this, Input* input);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083B3B4.s")
 
 void func_808513EC(Player*, PlayState* play);
@@ -4019,16 +4022,155 @@ void func_8083B850(PlayState* play, Player* this) {
     this->prevBoots = PLAYER_BOOTS_ZORA_LAND;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083B8D0.s")
+void func_8083B8D0(PlayState* play, Player* this) {
+    if (func_80837730(play, this, this->actor.velocity.y, 500)) {
+        func_800B8E58(this, NA_SE_EV_DIVE_INTO_WATER);
+        if (this->unk_B6A > 0x320) {
+            func_8082DF8C(this, NA_SE_VO_LI_CLIMB_END);
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083B930.s")
+void func_80857BE8(Player* this, PlayState* play);
+void func_8084CA24(Player* this, PlayState* play);
+void func_8084C94C(Player* this, PlayState* play);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083BB4C.s")
+void func_808516B4(Player *this, PlayState *play);
 
+void func_8083B930(PlayState* play, Player* this) {
+    LinkAnimationHeader* var_a2;
+
+    if ((this->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER) || !(this->actor.bgCheckFlags & 1) || (func_80857BE8 == this->unk_748)) {
+        func_8082DE50(play, this);
+
+        if (func_8084CA24 == this->unk_748) {
+            func_8083B850(play, this);
+            this->stateFlags3 |= PLAYER_STATE3_8000;
+        } else if ((this->transformation == PLAYER_FORM_ZORA) && (func_8084C94C == this->unk_748)) {
+            func_8083B850(play, this);
+            this->stateFlags3 |= PLAYER_STATE3_8000;
+            func_8082DB60(play, this, &gameplay_keep_Linkanim_00E3D8);
+        } else if ((this->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER) && (this->stateFlags2 & PLAYER_STATE2_400)) {
+            this->stateFlags2 &= ~PLAYER_STATE2_400;
+            func_8083B3B4(play, this, NULL);
+            this->unk_AE7 = 1;
+        } else if (func_8084C94C == this->unk_748) {
+            func_80831494(play, this, func_808516B4, 0);
+            func_8083B798(play, this);
+        } else {
+            func_80831494(play, this, func_808508C8, 1);
+            func_8082E438(play, this, (this->actor.bgCheckFlags & 1) ? &gameplay_keep_Linkanim_00E008 : &gameplay_keep_Linkanim_00DFC0);
+        }
+    }
+    if (!(this->stateFlags1 & PLAYER_STATE1_8000000) || (this->actor.depthInWater < this->ageProperties->unk_2C)) {
+        func_8083B8D0(play, this);
+    }
+
+    this->stateFlags1 |= PLAYER_STATE1_8000000;
+    this->stateFlags2 |= PLAYER_STATE2_400;
+    this->stateFlags1 &= ~(PLAYER_STATE1_40000 | PLAYER_STATE1_80000);
+
+    this->unk_AEC = 0.0f;
+    func_80123140(play, this);
+}
+
+void func_808497A0(Player *this, PlayState *play);
+void func_8084D4EC(Player* this, PlayState* play);
+
+void func_8084E724(Player* this, PlayState* play);
+void func_80851B58(Player* this, PlayState* play);
+void func_80851588(Player* this, PlayState* play);
+void func_808519FC(Player* this, PlayState* play);
+
+//void func_8083BB4C(PlayState* play, Player* this);
+void func_8083BB4C(PlayState* play, Player* this) {
+    f32 sp1C = this->actor.depthInWater - this->ageProperties->unk_2C;
+
+    if (sp1C < 0.0f) {
+        this->unk_AD8 = 0;
+        if ((this->transformation == PLAYER_FORM_ZORA) && (this->actor.bgCheckFlags & 1)) {
+            this->currentBoots = 4;
+        }
+        func_801A3E38(0);
+    } else {
+        func_801A3E38(0x20);
+        if ((this->transformation == PLAYER_FORM_ZORA) || (sp1C < 10.0f)) {
+            this->unk_AD8 = 0;
+        } else if (this->unk_AD8 < 300) {
+            this->unk_AD8++;
+        }
+    }
+
+    if ((this->actor.parent == NULL) && (func_8084D4EC != this->unk_748) && (func_8084F3DC != this->unk_748) && ((func_8084CA24 != this->unk_748) || (this->actor.velocity.y < -2.0f))) {
+        if (this->ageProperties->unk_2C < this->actor.depthInWater) {
+            if (this->transformation == PLAYER_FORM_GORON) {
+                func_80834140(play, this, &D_0400DFE8);
+                func_808345C8();
+                func_8083B8D0(play, this);
+            } else if (this->transformation == PLAYER_FORM_DEKU) {
+                if (this->unk_B67 != 0) {
+                    func_808373F8(play, this, NA_SE_VO_LI_AUTO_JUMP);
+                } else {
+                    if ((play->sceneNum == SCENE_20SICHITAI) && (this->unk_3CF == 0)) {
+                        if (gSaveContext.eventInf[5] & 1) {
+                            play->nextEntranceIndex = 0xA820;
+                        } else {
+                            play->nextEntranceIndex = 0xA810;
+                        }
+                        play->transitionTrigger = TRANS_TRIGGER_START;
+                        play->transitionType = 4;
+                        this->stateFlags1 |= 0x200;
+                        play_sound(NA_SE_SY_DEKUNUTS_JUMP_FAILED);
+                    } else if ((this->unk_3CF == 0) && ((play->sceneNum == SCENE_30GYOSON) || (play->sceneNum == SCENE_31MISAKI) || (play->sceneNum == SCENE_TORIDE))) {
+                        func_80169EFC(&play->state);
+                        func_808345C8();
+                    } else {
+                        func_80831494(play, this, func_808497A0, 0);
+                        this->stateFlags1 |= 0x20000000;
+                    }
+                    func_8083B8D0(play, this);
+                }
+            } else if (!(this->stateFlags1 & 0x8000000) || (((this->currentBoots < 5) || !(this->actor.bgCheckFlags & 1)) && (func_8084E724 != this->unk_748) && (func_80851B58 != this->unk_748) && (func_80851BD4 != this->unk_748) && (func_808508C8 != this->unk_748) && (func_808513EC != this->unk_748) && (func_80851588 != this->unk_748) && (func_808516B4 != this->unk_748) && (func_808519FC != this->unk_748) && (func_80850B18 != this->unk_748) && (func_80850D68 != this->unk_748))) {
+                func_8083B930(play, this);
+            }
+        } else if ((this->stateFlags1 & 0x8000000) && (this->actor.depthInWater < this->ageProperties->unk_24) && (((func_80850D68 != this->unk_748) && !(this->stateFlags3 & 0x8000)) || (this->actor.bgCheckFlags & 1))) {
+            if (this->skelAnime.moveFlags == 0) {
+                this = this;
+                func_8083B0E4(play, this, this->actor.shape.rot.y);
+            }
+            func_8083B32C(play, this, this->actor.velocity.y);
+        }
+    }
+}
+
+void func_8083BF54(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083BF54.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083C62C.s")
+#ifdef NON_MATCHING
+s16 func_8083C62C(Player* this, s32 arg1) {
+    Vec3f sp30;
+    s16 sp2E;
+    s16 sp2C;
+    Vec3f* sp28 = &this->unk_730->focus.pos;
 
+    sp30.x = this->actor.world.pos.x;
+    sp30.y = this->bodyPartsPos[7].y + 3.0f;
+    sp30.z = this->actor.world.pos.z;
+
+    sp2E = Math_Vec3f_Pitch(&sp30, sp28);
+    sp2C = Math_Vec3f_Yaw(&sp30, sp28);
+    Math_SmoothStepToS(&this->actor.focus.rot.y, sp2C, 4, 0x2710, 0);
+    Math_SmoothStepToS(&this->actor.focus.rot.x, sp2E, 4, 0x2710, 0);
+    this->unk_AA6 |= 2;
+
+    return func_80832754(this, arg1);
+}
+#else
+s16 func_8083C62C(Player* this, s32 arg1);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083C62C.s")
+#endif
+
+void func_8083C6E8(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083C6E8.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083C85C.s")

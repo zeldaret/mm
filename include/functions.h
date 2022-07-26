@@ -3368,7 +3368,7 @@ void func_801A3B48(UNK_TYPE arg0);
 void func_801A3CD8(s8 param_1);
 // void func_801A3CF4(void);
 void func_801A3D98(s8 audioSetting);
-// void func_801A3E38(void);
+void func_801A3E38(u8 arg0);
 // void func_801A3EC0(void);
 void Audio_SetCutsceneFlag(u8 flag);
 // void func_801A3F6C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
