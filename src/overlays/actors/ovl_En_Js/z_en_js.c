@@ -381,7 +381,7 @@ void EnJs_TakeMask(s32 item, s32 childType) {
     s32 a = 0;
 
     if ((childType >= 0) && (childType < 9)) {
-        item -= 0x3A;
+        item -= PLAYER_AP_MASK_TRUTH;
         childType *= 3;
         if (item < 8) {
             maskMaskBit[childType] |= 1 << item;
@@ -546,7 +546,7 @@ void func_80969748(EnJs* this, PlayState* play) {
         }
         if (item > 0) {
             func_801477B4(play);
-            if ((item >= 0x3A) && (item < 0x4E)) {
+            if ((item >= PLAYER_AP_MASK_TRUTH) && (item < PLAYER_AP_MASK_FIERCE_DEITY)) {
                 EnJs_TakeMask(item, ENJS_GET_TYPE(&this->actor));
                 Inventory_UnequipItem(item - 4);
                 if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
@@ -554,7 +554,7 @@ void func_80969748(EnJs* this, PlayState* play) {
                 } else {
                     player->actor.textId = 0x2213;
                 }
-            } else if ((item >= 0x4E) && (item < 0x52)) {
+            } else if ((item >= PLAYER_AP_MASK_FIERCE_DEITY) && (item < PLAYER_AP_LENS)) {
                 player->actor.textId = 0x2211;
             } else {
                 player->actor.textId = 0x2210;
