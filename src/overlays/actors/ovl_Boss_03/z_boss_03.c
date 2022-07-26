@@ -520,7 +520,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
     Actor_SetScale(&this->actor, 0.2f);
 
     // CHECK_EVENTINF(EVENTINF_56): intro cutscene already watched
-    if ((KREG(64) != 0) || (CHECK_EVENTINF(EVENTINF_56))) {
+    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_56)) {
         this->actionFunc = func_809E344C;
         D_809E9842 = false;
         Audio_QueueSeqCmd(NA_BGM_STOP | 0x10000);
