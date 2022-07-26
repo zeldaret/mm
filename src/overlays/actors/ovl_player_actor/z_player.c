@@ -4035,12 +4035,13 @@ void func_80857BE8(Player* this, PlayState* play);
 void func_8084CA24(Player* this, PlayState* play);
 void func_8084C94C(Player* this, PlayState* play);
 
-void func_808516B4(Player *this, PlayState *play);
+void func_808516B4(Player* this, PlayState* play);
 
 void func_8083B930(PlayState* play, Player* this) {
     LinkAnimationHeader* var_a2;
 
-    if ((this->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER) || !(this->actor.bgCheckFlags & 1) || (func_80857BE8 == this->unk_748)) {
+    if ((this->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER) || !(this->actor.bgCheckFlags & 1) ||
+        (func_80857BE8 == this->unk_748)) {
         func_8082DE50(play, this);
 
         if (func_8084CA24 == this->unk_748) {
@@ -4059,7 +4060,9 @@ void func_8083B930(PlayState* play, Player* this) {
             func_8083B798(play, this);
         } else {
             func_80831494(play, this, func_808508C8, 1);
-            func_8082E438(play, this, (this->actor.bgCheckFlags & 1) ? &gameplay_keep_Linkanim_00E008 : &gameplay_keep_Linkanim_00DFC0);
+            func_8082E438(play, this,
+                          (this->actor.bgCheckFlags & 1) ? &gameplay_keep_Linkanim_00E008
+                                                         : &gameplay_keep_Linkanim_00DFC0);
         }
     }
     if (!(this->stateFlags1 & PLAYER_STATE1_8000000) || (this->actor.depthInWater < this->ageProperties->unk_2C)) {
@@ -4074,7 +4077,7 @@ void func_8083B930(PlayState* play, Player* this) {
     func_80123140(play, this);
 }
 
-void func_808497A0(Player *this, PlayState *play);
+void func_808497A0(Player* this, PlayState* play);
 void func_8084D4EC(Player* this, PlayState* play);
 
 void func_8084E724(Player* this, PlayState* play);
@@ -4082,7 +4085,6 @@ void func_80851B58(Player* this, PlayState* play);
 void func_80851588(Player* this, PlayState* play);
 void func_808519FC(Player* this, PlayState* play);
 
-//void func_8083BB4C(PlayState* play, Player* this);
 void func_8083BB4C(PlayState* play, Player* this) {
     f32 sp1C = this->actor.depthInWater - this->ageProperties->unk_2C;
 
@@ -4101,10 +4103,11 @@ void func_8083BB4C(PlayState* play, Player* this) {
         }
     }
 
-    if ((this->actor.parent == NULL) && (func_8084D4EC != this->unk_748) && (func_8084F3DC != this->unk_748) && ((func_8084CA24 != this->unk_748) || (this->actor.velocity.y < -2.0f))) {
+    if ((this->actor.parent == NULL) && (func_8084D4EC != this->unk_748) && (func_8084F3DC != this->unk_748) &&
+        ((func_8084CA24 != this->unk_748) || (this->actor.velocity.y < -2.0f))) {
         if (this->ageProperties->unk_2C < this->actor.depthInWater) {
             if (this->transformation == PLAYER_FORM_GORON) {
-                func_80834140(play, this, &D_0400DFE8);
+                func_80834140(play, this, &gameplay_keep_Linkanim_00DFE8);
                 func_808345C8();
                 func_8083B8D0(play, this);
             } else if (this->transformation == PLAYER_FORM_DEKU) {
@@ -4119,21 +4122,32 @@ void func_8083BB4C(PlayState* play, Player* this) {
                         }
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = 4;
-                        this->stateFlags1 |= 0x200;
+                        this->stateFlags1 |= PLAYER_STATE1_200;
                         play_sound(NA_SE_SY_DEKUNUTS_JUMP_FAILED);
-                    } else if ((this->unk_3CF == 0) && ((play->sceneNum == SCENE_30GYOSON) || (play->sceneNum == SCENE_31MISAKI) || (play->sceneNum == SCENE_TORIDE))) {
+                    } else if ((this->unk_3CF == 0) &&
+                               ((play->sceneNum == SCENE_30GYOSON) || (play->sceneNum == SCENE_31MISAKI) ||
+                                (play->sceneNum == SCENE_TORIDE))) {
                         func_80169EFC(&play->state);
                         func_808345C8();
                     } else {
                         func_80831494(play, this, func_808497A0, 0);
-                        this->stateFlags1 |= 0x20000000;
+                        this->stateFlags1 |= PLAYER_STATE1_20000000;
                     }
                     func_8083B8D0(play, this);
                 }
-            } else if (!(this->stateFlags1 & 0x8000000) || (((this->currentBoots < 5) || !(this->actor.bgCheckFlags & 1)) && (func_8084E724 != this->unk_748) && (func_80851B58 != this->unk_748) && (func_80851BD4 != this->unk_748) && (func_808508C8 != this->unk_748) && (func_808513EC != this->unk_748) && (func_80851588 != this->unk_748) && (func_808516B4 != this->unk_748) && (func_808519FC != this->unk_748) && (func_80850B18 != this->unk_748) && (func_80850D68 != this->unk_748))) {
+            } else if (!(this->stateFlags1 & PLAYER_STATE1_8000000) ||
+                       (((this->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER) || !(this->actor.bgCheckFlags & 1)) &&
+                        (func_8084E724 != this->unk_748) && (func_80851B58 != this->unk_748) &&
+                        (func_80851BD4 != this->unk_748) && (func_808508C8 != this->unk_748) &&
+                        (func_808513EC != this->unk_748) && (func_80851588 != this->unk_748) &&
+                        (func_808516B4 != this->unk_748) && (func_808519FC != this->unk_748) &&
+                        (func_80850B18 != this->unk_748) && (func_80850D68 != this->unk_748))) {
                 func_8083B930(play, this);
             }
-        } else if ((this->stateFlags1 & 0x8000000) && (this->actor.depthInWater < this->ageProperties->unk_24) && (((func_80850D68 != this->unk_748) && !(this->stateFlags3 & 0x8000)) || (this->actor.bgCheckFlags & 1))) {
+        } else if ((this->stateFlags1 & PLAYER_STATE1_8000000) &&
+                   (this->actor.depthInWater < this->ageProperties->unk_24) &&
+                   (((func_80850D68 != this->unk_748) && !(this->stateFlags3 & PLAYER_STATE3_8000)) ||
+                    (this->actor.bgCheckFlags & 1))) {
             if (this->skelAnime.moveFlags == 0) {
                 this = this;
                 func_8083B0E4(play, this, this->actor.shape.rot.y);
