@@ -60,7 +60,7 @@
         <Limb Name="object_thiefbird_Standardlimb_00613C" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_0E" Offset="0x613C" />
         <Limb Name="object_thiefbird_Standardlimb_006148" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_0F" Offset="0x6148" />
         <Limb Name="object_thiefbird_Standardlimb_006154" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_10" Offset="0x6154" />
-        <Skeleton Name="object_thiefbird_Skel_0061A0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_THIEFBIRD_LIMB_NONE" LimbMax="OBJECT_THIEFBIRD_LIMB_MAX" EnumName="object_thiefbird_Limbs" Offset="0x61A0" />
+        <Skeleton Name="object_thiefbird_Skel_0061A0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_THIEFBIRD_LIMB_NONE" LimbMax="OBJECT_THIEFBIRD_LIMB_MAX" EnumName="ObjectThiefbirdLimb" Offset="0x61A0" />
         <Animation Name="object_thiefbird_Anim_0063C4" Offset="0x63C4" />
     </File>
 </Root>

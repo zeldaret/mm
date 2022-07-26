@@ -34,6 +34,6 @@
         <Limb Name="object_hata_Standardlimb_002F5C" Type="Standard" EnumName="OBJECT_HATA_LIMB_12" Offset="0x2F5C" />
         <Limb Name="object_hata_Standardlimb_002F68" Type="Standard" EnumName="OBJECT_HATA_LIMB_13" Offset="0x2F68" />
         <Limb Name="object_hata_Standardlimb_002F74" Type="Standard" EnumName="OBJECT_HATA_LIMB_14" Offset="0x2F74" />
-        <Skeleton Name="object_hata_Skel_002FD0" Type="Normal" LimbType="Standard" LimbNone="OBJECT_HATA_LIMB_NONE" LimbMax="OBJECT_HATA_LIMB_MAX" EnumName="object_hata_Limbs" Offset="0x2FD0" />
+        <Skeleton Name="object_hata_Skel_002FD0" Type="Normal" LimbType="Standard" LimbNone="OBJECT_HATA_LIMB_NONE" LimbMax="OBJECT_HATA_LIMB_MAX" EnumName="ObjectHataLimb" Offset="0x2FD0" />
     </File>
 </Root>

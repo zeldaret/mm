@@ -50,7 +50,7 @@
         <Limb Name="gCowTailEndLimb" Type="Standard" EnumName="COW_TAIL_LIMB_END" Offset="0x4C10" />
 
         <!-- Cow Tail Skeleton -->
-        <Skeleton Name="gCowTailSkel" Type="Flex" LimbType="Standard" LimbNone="COW_TAIL_LIMB_NONE" LimbMax="COW_TAIL_LIMB_MAX" ENUMNAME="CowTailLimb"Offset="0x4C30" />
+        <Skeleton Name="gCowTailSkel" Type="Flex" LimbType="Standard" LimbNone="COW_TAIL_LIMB_NONE" LimbMax="COW_TAIL_LIMB_MAX" ENUMNAME="CowTailLimb" Offset="0x4C30" />
 
         <Animation Name="gCowTailSwishAnim" Offset="0x4E98" /> <!-- Original name is "ust_furifuri" ("fluttery") -->
     </File>
