@@ -506,10 +506,10 @@ s32 func_809695FC(EnJs* this, PlayState* play) {
     if (ENJS_GET_EXIT_INDEX(&this->actor) == 0x3F) {
         return false;
     }
-    play->sceneLoadFlag = 0x14;
+    play->transitionTrigger = 0x14;
     play->nextEntranceIndex = play->setupExitList[ENJS_GET_EXIT_INDEX(&this->actor)];
     this->actionFunc = func_8096971C;
-    play->msgCtx.unk11F10 = 0;
+    play->msgCtx.msgLength = 0;
     gSaveContext.respawnFlag = -2;
     return true;
 }
