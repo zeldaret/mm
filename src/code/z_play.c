@@ -183,7 +183,7 @@ void Play_SetRespawnData(GameState* thisx, s32 respawnMode, u16 entrance, s32 ro
                          s16 yaw) {
     PlayState* this = (PlayState*)thisx;
 
-    gSaveContext.respawn[respawnMode].entrance = Entrance_CreateEntry(entrance >> 9, 0, entrance & 0xF);
+    gSaveContext.respawn[respawnMode].entrance = Entrance_Create(entrance >> 9, 0, entrance & 0xF);
     gSaveContext.respawn[respawnMode].roomIndex = roomIndex;
     gSaveContext.respawn[respawnMode].pos = *pos;
     gSaveContext.respawn[respawnMode].yaw = yaw;

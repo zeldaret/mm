@@ -1550,7 +1550,7 @@ void EnHorse_Stopping(EnHorse* this, PlayState* play) {
 
     if ((this->stateFlags & ENHORSE_STOPPING_NEIGH_SOUND) && (this->skin.skelAnime.curFrame > 29.0f)) {
         this->actor.speedXZ = 0.0f;
-        if ((Rand_ZeroOne() > 0.5f) && ((gSaveContext.save.entrance != 0x6400) || !Cutscene_GetSceneSetupIndex(play))) {
+        if ((Rand_ZeroOne() > 0.5f) && ((gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 0)) || !Cutscene_GetSceneSetupIndex(play))) {
             if (this->stateFlags & ENHORSE_DRAW) {
                 if (this->type == HORSE_TYPE_2) {
                     Audio_PlaySfxAtPos(&this->unk_218, NA_SE_EV_KID_HORSE_NEIGH);

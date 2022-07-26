@@ -118,8 +118,7 @@ entranceScenes = [
 def macro(num):
     sceneIndex = (num >> 9) & 0x7F
     spawnIndex = (num >> 4) & 0x1F
-    setupIndex = num & 0xF
-    return f'ENTRANCE({entranceScenes[sceneIndex][len(enumPrfix):]}, {spawnIndex}, {setupIndex})'
+    return f'ENTRANCE({entranceScenes[sceneIndex][len(enumPrfix):]}, {spawnIndex})'
 
 if __name__ == "__main__":
     import sys

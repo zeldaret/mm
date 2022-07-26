@@ -332,7 +332,7 @@ void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
 
     if ((play->msgCtx.unk120B1 == 0) &&
         ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
-        play->nextEntrance = Entrance_CreateEntryFromSpawn(6);
+        play->nextEntrance = Entrance_CreateFromSpawn(6);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;
