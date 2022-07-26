@@ -33,9 +33,8 @@ static AnimationInfoS sAnimations[] = {
 };
 
 s32 func_80C1D410(DmAh* this, s32 animationIndex) {
-    s32 ret;
+    s32 ret = false;
 
-    ret = 0;
     if (animationIndex != this->animationIndex) {
         this->animationIndex = animationIndex;
         ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, animationIndex);
@@ -44,15 +43,7 @@ s32 func_80C1D410(DmAh* this, s32 animationIndex) {
 }
 
 void func_80C1D458(DmAh* this) {
-    s16 phi_v1;
-
-    if (this->unk_286 == 0) {
-        phi_v1 = 0;
-    } else {
-        this->unk_286--;
-        phi_v1 = this->unk_286;
-    }
-    if (phi_v1 == 0) {
+    if (DECR(this->unk_286) == 0) {
         this->unk_284++;
         if (this->unk_284 >= 4) {
             this->unk_286 = Rand_S16Offset(30, 30);
@@ -74,10 +65,10 @@ s32 func_80C1D4D0(DmAh* this, s32 arg1) {
     Math_ApproachS(&this->unk_28C, (temp_v0 - this->unk_290) - this->actor.shape.rot.y, 4, 0x2AA8);
     this->unk_28C = CLAMP(this->unk_28C, -0x1FFE, 0x1FFE);
 
-    Math_ApproachS(&this->unk_290, (s16)((temp_v0 - this->unk_28C) - this->actor.shape.rot.y), 4, 0x2AA8);
+    Math_ApproachS(&this->unk_290, (temp_v0 - this->unk_28C) - this->actor.shape.rot.y, 4, 0x2AA8);
     this->unk_290 = CLAMP(this->unk_290, -0x1C70, 0x1C70);
 
-    if (this->unk_280->id == 0) {
+    if (this->unk_280->id == ACTOR_PLAYER) {
         sp40.y = ((Player*)this->unk_280)->bodyPartsPos[7].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_280->focus.pos);
@@ -122,7 +113,7 @@ Actor* func_80C1D78C(PlayState* play) {
         }
 
         tempActor = foundActor->next;
-        if (tempActor == NULL || NULL) {
+        if (tempActor == NULL || false) {
             foundActor = NULL;
             break;
         }
