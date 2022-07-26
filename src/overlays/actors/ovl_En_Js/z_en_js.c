@@ -16,10 +16,10 @@ void EnJs_Destroy(Actor* thisx, PlayState* play);
 void EnJs_Update(Actor* thisx, PlayState* play);
 void EnJs_Draw(Actor* thisx, PlayState* play);
 
+void func_80968A5C(EnJs* this);
 s32 func_80968B8C(EnJs* this, PlayState* play);
 s32 func_809692A8(s32 arg0);
 void func_80969400(s32 arg0);
-void func_80968A5C(EnJs* this);
 void func_8096971C(EnJs* this, PlayState* play);
 void func_80969898(EnJs* this, PlayState* play);
 void func_80969B5C(EnJs* this, PlayState* play);
@@ -461,34 +461,25 @@ s32 func_8096933C(s32 arg0) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969400.s")
-/*
-typedef struct unkStruct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-} unkStruct;
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969400.s")
 
 void func_80969400(s32 arg0) {
-    //u8 temp_t9;
-unkStruct * temp_v0;
+    u8* maskMaskBit = gSaveContext.maskMaskBit;
+    u8* temp_v0 = &gSaveContext.maskMaskBit[arg0 * 3];
 
     if ((arg0 >= 0) && (arg0 < 9)) {
-        temp_v0 = gSaveContext.maskMaskBit[arg0];
-        //temp_v0 = (arg0 * 3) + 0x48CA + &gSaveContext;
+        maskMaskBit[0] &= ~temp_v0[0];
+        maskMaskBit[1] &= ~temp_v0[1];
 
-        gSaveContext.maskMaskBit[0] = ~gSaveContext.maskMaskBit[0] & ~temp_v0->unk0;
-        gSaveContext.maskMaskBit[1] = gSaveContext.maskMaskBit[1] & ~temp_v0->unk1;
-        //temp_t9 = temp_v0->unk2 & 0xF;
-        temp_v0->unk2 = temp_v0->unk2 & 0xF;
-        gSaveContext.maskMaskBit[2] = gSaveContext.maskMaskBit[2] & ~temp_v0->unk2 & 0xF;
-        //gSaveContext.maskMaskBit[0] = 0;
-        temp_v0->unk0 = 0;
-        temp_v0->unk1 = 0;
-        temp_v0->unk2 = 0;
+        temp_v0[2] &= 0xF;
+        maskMaskBit[2] &= ~temp_v0[2];
+
+        temp_v0[0] = 0;
+        temp_v0[1] = 0;
+        temp_v0[2] = 0;
     }
 }
-*/
+
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80969494.s")
 
 void func_80969494(EnJs* this, PlayState* play) {
@@ -774,7 +765,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                         func_80151938(play, play->msgCtx.currentTextId + 1);
                         break;
                 }
-            } 
+            }
             break;
         case 5:
             if (Message_ShouldAdvance(play)) {
@@ -1071,7 +1062,7 @@ void EnJs_Update(Actor* thisx, PlayState* play) {
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    
+
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, 5);
 
