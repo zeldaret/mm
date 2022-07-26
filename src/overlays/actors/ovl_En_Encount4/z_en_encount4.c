@@ -32,10 +32,10 @@ const ActorInit En_Encount4_InitVars = {
     (ActorFunc)NULL,
 };
 
-static s16 D_809C46D0[5] = {
+static s16 D_809C46D0[] = {
     0x4000, 0xC000, 0x4000, 0, 0xC000,
 };
-static f32 D_809C46DC[5] = {
+static f32 D_809C46DC[] = {
     200.0f, 200.0f, 100.0f, 0.0f, 100.0f,
 };
 
@@ -142,32 +142,29 @@ void func_809C42A8(EnEncount4* this, PlayState* play) {
         if ((this->stalchild->actor.id != ACTOR_EN_BSB) || (stalchild->actor.update == NULL)) {
             Actor_MarkForDeath(&this->actor);
         }
-    } else {
-        if (this->unk14E >= 2) {
-            this->unk150 = 100;
-            this->actionFunc = func_809C464C;
-        } else if (!(gSaveContext.save.weekEventReg[85] & 0x40) && (this->unk14C < 2) &&
-                   !(this->actor.xzDistToPlayer > 240.0f)) {
-            pos.x = (Math_SinS(this->actor.world.rot.y) * 30.0f) + this->actor.world.pos.x;
-            pos.y = actor->actor.floorHeight + 120.0f;
-            pos.z = (Math_CosS(this->actor.world.rot.y) * 30.0f) + this->actor.world.pos.z;
-            yIntersect = BgCheck_EntityRaycastFloor5(&play->colCtx, &colPoly, &bgId, &this->actor, &pos);
-            if (!(yIntersect <= -32000.0f) &&
-                ((actor->actor.depthInWater == -32000.0f ||
-                  !(yIntersect < (actor->actor.world.pos.y - actor->actor.depthInWater))))) {
-                pos.y = yIntersect;
-                yRot = (s32)Rand_ZeroFloat(512.0f) + this->actor.world.rot.y + 0x3800;
-                if (this->unk14C != 0) {
-                    yRot += 0x8000;
-                }
-                pos.x += Math_SinS(yRot) * (40.0f + randPlusMinusPoint5Scaled(40.0f));
-                pos.z += Math_CosS(yRot) * (40.0f + randPlusMinusPoint5Scaled(40.0f));
-                if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_SKB, pos.x, pos.y, pos.z, 0, 0, 0,
-                                       0) != NULL) {
-                    this->unk14C += 1;
-                    if (this->unk14C >= 2) {
-                        this->actionFunc = func_809C4598;
-                    }
+    } else if (this->unk14E >= 2) {
+        this->unk150 = 100;
+        this->actionFunc = func_809C464C;
+    } else if (!(gSaveContext.save.weekEventReg[85] & 0x40) && (this->unk14C < 2) &&
+               !(this->actor.xzDistToPlayer > 240.0f)) {
+        pos.x = (Math_SinS(this->actor.world.rot.y) * 30.0f) + this->actor.world.pos.x;
+        pos.y = actor->actor.floorHeight + 120.0f;
+        pos.z = (Math_CosS(this->actor.world.rot.y) * 30.0f) + this->actor.world.pos.z;
+        yIntersect = BgCheck_EntityRaycastFloor5(&play->colCtx, &colPoly, &bgId, &this->actor, &pos);
+        if (!(yIntersect <= -32000.0f) && ((actor->actor.depthInWater == -32000.0f ||
+                                            !(yIntersect < (actor->actor.world.pos.y - actor->actor.depthInWater))))) {
+            pos.y = yIntersect;
+            yRot = (s32)Rand_ZeroFloat(512.0f) + this->actor.world.rot.y + 0x3800;
+            if (this->unk14C != 0) {
+                yRot += 0x8000;
+            }
+            pos.x += Math_SinS(yRot) * (40.0f + randPlusMinusPoint5Scaled(40.0f));
+            pos.z += Math_CosS(yRot) * (40.0f + randPlusMinusPoint5Scaled(40.0f));
+            if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_SKB, pos.x, pos.y, pos.z, 0, 0, 0,
+                                   0) != NULL) {
+                this->unk14C += 1;
+                if (this->unk14C >= 2) {
+                    this->actionFunc = func_809C4598;
                 }
             }
         }
