@@ -64,7 +64,7 @@ void func_809C3FD8(EnEncount4* this, PlayState* play) {
 
     this->unk14E = 0;
     if ((this->switchFlags >= 0) && Flags_GetSwitch(play, this->switchFlags)) {
-        this->unk150 = 100;
+        this->timer = 100;
         this->actionFunc = func_809C464C;
     } else {
         actor = play->actorCtx.actorLists[ACTORCAT_BOSS].first;
@@ -72,9 +72,9 @@ void func_809C3FD8(EnEncount4* this, PlayState* play) {
             if (actor->id != ACTOR_EN_BSB) {
                 actor = actor->next;
             } else {
-                this->stalchild = (EnSkb*)actor;
+                this->captainKeeta = (EnBsb*)actor;
                 this->actionFunc = func_809C4078;
-                return;
+                break;
             }
         }
     }
@@ -83,39 +83,37 @@ void func_809C3FD8(EnEncount4* this, PlayState* play) {
 void func_809C4078(EnEncount4* this, PlayState* play) {
     s16 rotY;
     Vec3f pos;
-    s32 params;
+    s32 fireWallParams;
     s32 i;
-    EnSkb* stalchild = this->stalchild;
+    EnBsb* captainKeeta = this->captainKeeta;
 
     if ((this->switchFlags >= 0) && Flags_GetSwitch(play, this->switchFlags)) {
-        this->unk150 = 100;
+        this->timer = 100;
         this->actionFunc = func_809C464C;
-    } else {
-        if (BREG(1) == 0) {
-            if ((this->stalchild->actor.id != ACTOR_EN_BSB) || (stalchild->actor.update == 0)) {
+    } else if (BREG(1) == 0) {
+        if ((this->captainKeeta->actor.id != ACTOR_EN_BSB) || (captainKeeta->actor.update == NULL)) {
+            Actor_MarkForDeath(&this->actor);
+        } else if ((this->unk148 != 0) || (this->actor.xzDistToPlayer < 240.0f)) {
+            if ((this->unk148 == 0) && (captainKeeta->unk2DC != 0)) {
                 Actor_MarkForDeath(&this->actor);
-            } else if ((this->unk148 != 0) || (this->actor.xzDistToPlayer < 240.0f)) {
-                if ((this->unk148 == 0) && (stalchild->limbCount != 0)) {
-                    Actor_MarkForDeath(&this->actor);
-                } else {
-                    params = 0;
-                    if ((this->unk148 == 0) || (stalchild->limbCount != 0)) {
-                        i = 0;
-                        if (this->unk148 != 0) {
-                            params = 1;
-                            i = 2;
-                        }
-                        while (i < ARRAY_COUNT(D_809C46DC)) {
-                            rotY = D_809C46D0[i] + this->actor.world.rot.y;
-                            pos.x = Math_SinS(rotY) * D_809C46DC[i] + this->actor.world.pos.x;
-                            pos.y = this->actor.world.pos.y;
-                            pos.z = Math_CosS(rotY) * D_809C46DC[i] + this->actor.world.pos.z;
-                            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_BG_FIRE_WALL, pos.x, pos.y,
-                                               pos.z, 0, this->actor.world.rot.y, 0, params);
-                            i++;
-                        }
-                        this->actionFunc = func_809C42A8;
+            } else {
+                fireWallParams = BGFIREWALL_PARAMS_0;
+                if ((this->unk148 == 0) || (captainKeeta->unk2DC != 0)) {
+                    i = 0;
+                    if (this->unk148 != 0) {
+                        fireWallParams = BGFIREWALL_PARAMS_1;
+                        i = 2;
                     }
+                    while (i < ARRAY_COUNT(D_809C46DC)) {
+                        rotY = D_809C46D0[i] + this->actor.world.rot.y;
+                        pos.x = Math_SinS(rotY) * D_809C46DC[i] + this->actor.world.pos.x;
+                        pos.y = this->actor.world.pos.y;
+                        pos.z = Math_CosS(rotY) * D_809C46DC[i] + this->actor.world.pos.z;
+                        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_BG_FIRE_WALL, pos.x, pos.y, pos.z,
+                                           0, this->actor.world.rot.y, 0, fireWallParams);
+                        i++;
+                    }
+                    this->actionFunc = func_809C42A8;
                 }
             }
         }
@@ -124,7 +122,7 @@ void func_809C4078(EnEncount4* this, PlayState* play) {
 
 void func_809C42A8(EnEncount4* this, PlayState* play) {
     Player* actor = GET_PLAYER(play);
-    EnSkb* stalchild = this->stalchild;
+    EnBsb* captainKeeta = this->captainKeeta;
     Vec3f pos;
     f32 yIntersect;
     s16 yRot;
@@ -133,26 +131,30 @@ void func_809C42A8(EnEncount4* this, PlayState* play) {
 
     if (this->switchFlags >= 0) {
         if (Flags_GetSwitch(play, this->switchFlags)) {
-            this->unk150 = 100;
+            this->timer = 100;
             this->actionFunc = func_809C464C;
             return;
         }
     }
     if (this->unk148 == 1) {
-        if ((this->stalchild->actor.id != ACTOR_EN_BSB) || (stalchild->actor.update == NULL)) {
+        if ((this->captainKeeta->actor.id != ACTOR_EN_BSB) || (captainKeeta->actor.update == NULL)) {
             Actor_MarkForDeath(&this->actor);
         }
     } else if (this->unk14E >= 2) {
-        this->unk150 = 100;
+        this->timer = 100;
         this->actionFunc = func_809C464C;
-    } else if (!(gSaveContext.save.weekEventReg[85] & 0x40) && (this->unk14C < 2) &&
-               !(this->actor.xzDistToPlayer > 240.0f)) {
+    } else if ((gSaveContext.save.weekEventReg[85] & 0x40) || (this->unk14C >= 2) ||
+               (this->actor.xzDistToPlayer > 240.0f)) {
+        return;
+    } else {
         pos.x = (Math_SinS(this->actor.world.rot.y) * 30.0f) + this->actor.world.pos.x;
         pos.y = actor->actor.floorHeight + 120.0f;
         pos.z = (Math_CosS(this->actor.world.rot.y) * 30.0f) + this->actor.world.pos.z;
         yIntersect = BgCheck_EntityRaycastFloor5(&play->colCtx, &colPoly, &bgId, &this->actor, &pos);
-        if (!(yIntersect <= -32000.0f) && ((actor->actor.depthInWater == -32000.0f ||
-                                            !(yIntersect < (actor->actor.world.pos.y - actor->actor.depthInWater))))) {
+        if (yIntersect <= BGCHECK_Y_MIN || (actor->actor.depthInWater != BGCHECK_Y_MIN &&
+                                            (yIntersect < (actor->actor.world.pos.y - actor->actor.depthInWater)))) {
+            return;
+        } else {
             pos.y = yIntersect;
             yRot = (s32)Rand_ZeroFloat(512.0f) + this->actor.world.rot.y + 0x3800;
             if (this->unk14C != 0) {
@@ -161,8 +163,8 @@ void func_809C42A8(EnEncount4* this, PlayState* play) {
             pos.x += Math_SinS(yRot) * (40.0f + randPlusMinusPoint5Scaled(40.0f));
             pos.z += Math_CosS(yRot) * (40.0f + randPlusMinusPoint5Scaled(40.0f));
             if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_SKB, pos.x, pos.y, pos.z, 0, 0, 0,
-                                   0) != NULL) {
-                this->unk14C += 1;
+                                   ENSKB_PARAMS_0) != NULL) {
+                this->unk14C++;
                 if (this->unk14C >= 2) {
                     this->actionFunc = func_809C4598;
                 }
@@ -172,11 +174,11 @@ void func_809C42A8(EnEncount4* this, PlayState* play) {
 }
 
 void func_809C4598(EnEncount4* this, PlayState* play) {
-    if ((this->switchFlags >= 0) && (Flags_GetSwitch(play, this->switchFlags))) {
-        this->unk150 = 100;
+    if ((this->switchFlags >= 0) && Flags_GetSwitch(play, this->switchFlags)) {
+        this->timer = 100;
         this->actionFunc = func_809C464C;
     } else if (this->unk14E >= 2) {
-        this->unk150 = 100;
+        this->timer = 100;
         if (this->switchFlags >= 0) {
             Flags_SetSwitch(play, this->switchFlags);
         }
@@ -187,7 +189,7 @@ void func_809C4598(EnEncount4* this, PlayState* play) {
 }
 
 void func_809C464C(EnEncount4* this, PlayState* play) {
-    if (this->unk150 == 0) {
+    if (this->timer == 0) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -195,8 +197,8 @@ void func_809C464C(EnEncount4* this, PlayState* play) {
 void EnEncount4_Update(Actor* thisx, PlayState* play) {
     EnEncount4* this = THIS;
 
-    if (this->unk150 != 0) {
-        this->unk150--;
+    if (this->timer != 0) {
+        this->timer--;
     }
     this->actionFunc(this, play);
 }
