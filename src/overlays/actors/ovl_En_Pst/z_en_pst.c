@@ -427,7 +427,7 @@ s32 EnPst_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     EnPst* this = THIS;
     f32 yTranslation;
 
-    if (limbIndex == POSTBOX_MAIL_SLOT) {
+    if (limbIndex == POSTBOX_LIMB_MAIL_SLOT) {
         if (this->stateFlags & 0x40) {
             yTranslation = -100.0f;
         } else {
