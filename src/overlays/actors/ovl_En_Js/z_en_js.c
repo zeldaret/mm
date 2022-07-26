@@ -16,6 +16,9 @@ void EnJs_Destroy(Actor* thisx, PlayState* play);
 void EnJs_Update(Actor* thisx, PlayState* play);
 void EnJs_Draw(Actor* thisx, PlayState* play);
 
+s32 func_80968B8C(EnJs* this, PlayState* play);
+s32 func_809692A8(s32 arg0);
+void func_80969400(s32 arg0);
 void func_80968A5C(EnJs* this);
 void func_8096971C(EnJs* this, PlayState* play);
 void func_80969898(EnJs* this, PlayState* play);
@@ -888,7 +891,7 @@ void func_8096A184(EnJs* this, PlayState* play) {
             textId = 0x21FC;
         }
     }
-    Message_StartTextbox(play, textId, this);
+    Message_StartTextbox(play, textId, &this->actor);
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_8096A1E8.s")
@@ -897,7 +900,7 @@ void func_8096A1E8(EnJs* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         Animation_MorphToLoop(&this->skelAnime, &object_ob_Anim_017E98, 0.0f);
     }
-    if (Actor_ProcessTalkRequest(&this->actor, play)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actor.flags &= 0xFFFEFFFF;
         this->actionFunc = func_8096A38C;
         Message_StartTextbox(play, 0x2208, &this->actor);
