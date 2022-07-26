@@ -30,7 +30,6 @@ const ActorInit Bg_Hakugin_Elvpole_InitVars = {
     (ActorFunc)BgHakuginElvpole_Draw,
 };
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole/BgHakuginElvpole_Init.s")
 void BgHakuginElvpole_Init(Actor* thisx, PlayState* play) {
     s32 switchFlags;
     CollisionHeader* colHeader = NULL;
@@ -44,22 +43,20 @@ void BgHakuginElvpole_Init(Actor* thisx, PlayState* play) {
     switchFlags = BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor);
     this->unk_15C = 0;
     this->unk_160 = false;
-    if ((switchFlags != 0x7F) && (Flags_GetSwitch(play, switchFlags))) {
+    if ((switchFlags != 0x7F) && Flags_GetSwitch(play, switchFlags)) {
         this->unk_15E = 0x64;
-        return;
+    } else {
+        this->unk_15E = -1;
+        this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 320.0f;
     }
-    this->unk_15E = -1;
-    this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 320.0f;
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole/BgHakuginElvpole_Destroy.s")
 void BgHakuginElvpole_Destroy(Actor* thisx, PlayState* play) {
     BgHakuginElvpole* this = THIS;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole/func_80ABD92C.s")
 void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
     s32 pad;
     s32 sp28;
@@ -75,7 +72,7 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
             }
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 120.0f;
-            // FAKE
+            //! FAKE:
             if (1) {}
             this->unk_15E--;
         }
@@ -89,14 +86,12 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
             this->unk_15E = -1;
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
         }
-    } else {
-        if (((BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor)) != 0x7F) &&
-            (Flags_GetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor)))) {
-            this->unk_15E = 0x64;
-            this->unk_160 = true;
-        }
+    } else if ((BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor) != 0x7F) &&
+               Flags_GetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor))) {
+        this->unk_15E = 0x64;
+        this->unk_160 = true;
     }
-    if ((sp28) || ((this->unk_15C & 7) != 0)) {
+    if (sp28 || (this->unk_15C & 7)) {
         if (this->unk_15C & 1) {
             var_fv1 = 1.0f;
         } else {
@@ -105,7 +100,7 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
         this->unk_15C++;
         this->dyna.actor.world.pos.x = (Math_SinS(this->unk_15C * 0x2000) * var_fv1) + this->dyna.actor.home.pos.x;
         this->dyna.actor.world.pos.z = (Math_CosS(this->unk_15C * 0x2000) * var_fv1) + this->dyna.actor.home.pos.z;
-        func_800B9010(&this->dyna.actor, 0x2103U);
+        func_800B9010(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
     } else {
         this->unk_15C = 0;
     }
@@ -113,8 +108,7 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
         if (this->dyna.actor.cutscene == -1) {
             this->unk_160 = false;
             return;
-        }
-        if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
+        } else if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
             this->unk_160 = false;
             return;
@@ -123,18 +117,18 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
     }
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole/BgHakuginElvpole_Update.s")
 void BgHakuginElvpole_Update(Actor* thisx, PlayState* play) {
     BgHakuginElvpole* this = THIS;
 
     this->actionFunc(this, play);
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole/BgHakuginElvpole_Draw.s")
 void BgHakuginElvpole_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
+
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C28C(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_hakugin_obj_DL_00ACB8);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
