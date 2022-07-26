@@ -113,7 +113,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = func_8096A6F4;
 
             Animation_PlayLoop(&this->skelAnime, &gMoonChildSittingAnim);
-            func_8016566C(0x3CU);
+            func_8016566C(0x3C);
 
             if (gSaveContext.save.weekEventReg[84] & 0x20) {
                 Inventory_DeleteItem(0x35, gItemSlots[0x35]);
@@ -130,7 +130,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
             func_80968B8C(this, play);
             this->actionFunc = func_80969B5C;
             func_80968A5C(this);
-            if (func_809692A8((ENJS_GET_TYPE(&this->actor)) + 4)) {
+            if (func_809692A8(ENJS_GET_TYPE(&this->actor) + 4)) {
                 Actor_MarkForDeath(&this->actor);
                 break;
             }
@@ -139,7 +139,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
         case 6:
         case 7:
         case 8:
-            this->maskDlSelector = (ENJS_GET_TYPE(&this->actor)) - 4;
+            this->maskDlSelector = ENJS_GET_TYPE(&this->actor) - 4;
             this->actionFunc = func_8096A104;
             break;
     }
@@ -150,6 +150,7 @@ void EnJs_Destroy(Actor* thisx, PlayState* play) {
     EnJs* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
+
     paramsF = ENJS_GET_TYPE(&this->actor);
     switch (paramsF) {
         case 0:
@@ -196,6 +197,7 @@ s32 func_80968B8C(EnJs* this, PlayState* play) {
     Vec3s* phi_a0;
 
     sp18 = 0.0f;
+
     params = ENJS_GET_PATH_INDEX(&this->actor) >> 0xA;
     if (params != 0x3F) {
         this->path = play->setupPathList + params;
@@ -226,6 +228,7 @@ s32 func_80968B8C(EnJs* this, PlayState* play) {
         this->path = NULL;
         this->unk_2B0 = 0;
     }
+
     return false;
 }
 
@@ -246,6 +249,7 @@ s32 func_80968CB8(EnJs* this) {
     this->actor.world.rot.y = Math_Atan2S(temp_fa0, temp_fa1);
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 0x7D0, 0xC8);
+
     if ((SQ(temp_fa0) + SQ(temp_fa1)) < 100.0f) {
         this->unk_2B0++;
         if (this->unk_2B0 >= path->count) {
@@ -253,7 +257,9 @@ s32 func_80968CB8(EnJs* this) {
         }
         return true;
     }
+
     Math_StepToF(&this->actor.speedXZ, this->unk_2B4, 0.5f);
+
     return false;
 }
 
@@ -266,35 +272,35 @@ s32 func_80968DD0(EnJs* this, PlayState* play) {
     return false;
 }
 
-s32 func_80968E38(s32 maskIndex) {
+s32 func_80968E38(s32 arg0) {
     s32 i;
     s32 count;
     u8 mask;
     u8* maskMaskBit = gSaveContext.maskMaskBit;
 
-    if (((maskIndex < 0) || (maskIndex > 8))) {
+    if (((arg0 < 0) || (arg0 > 8))) {
         return false;
     }
 
     count = 0;
 
-    maskIndex *= 3;
+    arg0 *= 3;
     for (mask = 1, i = 0; i < 8; i++, mask <<= 1) {
-        if (maskMaskBit[maskIndex] & mask) {
+        if (maskMaskBit[arg0] & mask) {
             count++;
         }
     }
 
-    maskIndex++;
+    arg0++;
     for (mask = 1, i = 0; i < 8; i++, mask <<= 1) {
-        if (maskMaskBit[maskIndex] & mask) {
+        if (maskMaskBit[arg0] & mask) {
             count++;
         }
     }
 
-    maskIndex++;
+    arg0++;
     for (mask = 1, i = 0; i < 5; i++, mask <<= 1) {
-        if (maskMaskBit[maskIndex] & mask) {
+        if (maskMaskBit[arg0] & mask) {
             count++;
         }
     }
@@ -302,7 +308,7 @@ s32 func_80968E38(s32 maskIndex) {
     return count;
 }
 
-s32 func_80968F48(void) {
+s32 EnJs_GetRemainingMasks(void) {
     s32 count = 0;
 
     if (INV_CONTENT(ITEM_MASK_TRUTH) == ITEM_MASK_TRUTH) {
@@ -370,34 +376,34 @@ s32 func_80968F48(void) {
     return count;
 }
 
-void func_809691B8(s32 arg0, s32 arg1) {
+void EnJs_TakeMask(s32 item, s32 childType) {
     u8* maskMaskBit = gSaveContext.maskMaskBit;
     s32 a = 0;
 
-    if ((arg1 >= 0) && (arg1 < 9)) {
-        arg0 -= 0x3A;
-        arg1 *= 3;
-        if (arg0 < 8) {
-            maskMaskBit[arg1] |= 1 << arg0;
-            maskMaskBit[a] |= 1 << arg0;
+    if ((childType >= 0) && (childType < 9)) {
+        item -= 0x3A;
+        childType *= 3;
+        if (item < 8) {
+            maskMaskBit[childType] |= 1 << item;
+            maskMaskBit[a] |= 1 << item;
             return;
         }
 
-        arg0 -= 8;
-        arg1++;
+        item -= 8;
+        childType++;
         a++;
-        if (arg0 < 8) {
-            maskMaskBit[arg1] |= 1 << arg0;
-            maskMaskBit[a] |= 1 << arg0;
+        if (item < 8) {
+            maskMaskBit[childType] |= 1 << item;
+            maskMaskBit[a] |= 1 << item;
             return;
         }
 
-        arg0 -= 8;
-        arg1++;
+        item -= 8;
+        childType++;
         a++;
-        if (arg0 < 6) {
-            maskMaskBit[arg1] |= 1 << arg0;
-            maskMaskBit[a] |= 1 << arg0;
+        if (item < 6) {
+            maskMaskBit[childType] |= 1 << item;
+            maskMaskBit[a] |= 1 << item;
         }
     }
 }
@@ -433,7 +439,7 @@ s32 func_8096933C(s32 arg0) {
         case 2:
         case 3:
         case 4:
-            sp1C = func_80968F48();
+            sp1C = EnJs_GetRemainingMasks();
             if ((func_80968E38(arg0) + sp1C) < arg0) {
                 return false;
             } else {
@@ -443,7 +449,7 @@ s32 func_8096933C(s32 arg0) {
         case 6:
         case 7:
         case 8:
-            sp1C = func_80968F48();
+            sp1C = EnJs_GetRemainingMasks();
             if ((func_80968E38(arg0) + sp1C) < (arg0 - 4)) {
                 return false;
             } else {
@@ -541,7 +547,7 @@ void func_80969748(EnJs* this, PlayState* play) {
         if (item > 0) {
             func_801477B4(play);
             if ((item >= 0x3A) && (item < 0x4E)) {
-                func_809691B8(item, ENJS_GET_TYPE(&this->actor));
+                EnJs_TakeMask(item, ENJS_GET_TYPE(&this->actor));
                 Inventory_UnequipItem(item - 4);
                 if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
                     player->actor.textId = 0x2212;
@@ -687,7 +693,7 @@ void func_80969C54(EnJs* this, PlayState* play) {
         if (item > 0) {
             func_801477B4(play);
             if ((item >= 0x3A) && (item < 0x4E)) {
-                func_809691B8(item, ENJS_GET_TYPE(&this->actor));
+                EnJs_TakeMask(item, ENJS_GET_TYPE(&this->actor));
                 Inventory_UnequipItem(item - 4);
                 if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
                     player->actor.textId = 0x2221;
