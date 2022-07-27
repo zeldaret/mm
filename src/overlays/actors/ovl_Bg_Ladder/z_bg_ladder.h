@@ -3,8 +3,8 @@
 
 #include "global.h"
 
-#define GET_BGLADDER_SIZE(thisx) ((thisx)->params & 0xFF)
-#define GET_BGLADDER_SWITCHFLAG(thisx) (((thisx)->params >> 8) & 0xFF)
+#define BGLADDER_GET_SIZE(thisx) ((thisx)->params & 0xFF)
+#define BGLADDER_GET_SWITCHFLAG(thisx) (((thisx)->params >> 8) & 0xFF)
 
 struct BgLadder;
 
