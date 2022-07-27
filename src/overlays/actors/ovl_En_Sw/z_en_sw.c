@@ -1163,11 +1163,11 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
 
         Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
         if (!ENSW_GET_3(&this->actor)) {
-            this->actor.hintId = 0x1F;
+            this->actor.hintId = TATL_ENEMY_SKULLWALLTULA;
             CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
             this->collider.info.toucher.damage = 8;
         } else {
-            this->actor.hintId = 0x20;
+            this->actor.hintId = TATL_ENEMY_GOLD_SKULLTULA;
             CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable2, &sColChkInfoInit2);
             this->collider.info.toucher.damage = 16;
         }

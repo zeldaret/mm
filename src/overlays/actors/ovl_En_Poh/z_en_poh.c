@@ -388,7 +388,7 @@ void func_80B2D2C0(EnPoh* this) {
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_18E = 0;
-    this->actor.hintId = 0xFF;
+    this->actor.hintId = TATL_ENEMY_DEFAULT;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actionFunc = func_80B2D300;
 }

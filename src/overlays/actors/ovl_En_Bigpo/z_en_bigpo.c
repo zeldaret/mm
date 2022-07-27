@@ -672,7 +672,7 @@ void EnBigpo_SetupDeath(EnBigpo* this) {
     this->idleTimer = 0;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->actor.hintId = 0xFF;
+    this->actor.hintId = TATL_ENEMY_DEFAULT;
     this->collider.base.ocFlags1 &= ~OC1_ON;
     this->actionFunc = EnBigpo_BurnAwayDeath;
 }
