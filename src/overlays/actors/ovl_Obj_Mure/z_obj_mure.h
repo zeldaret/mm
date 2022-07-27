@@ -31,9 +31,9 @@ typedef struct ObjMure {
 
 extern const ActorInit Obj_Mure_InitVars;
 
-#define OBJ_MURE_GET_CHNUM(params) ((params >> 12) & 0xF)
-#define OBJ_MURE_GET_PTN(params) ((params >> 8) & 0x7)
-#define OBJ_MURE_GET_SVNUM(params) ((params >> 5) & 0x3)
-#define OBJ_MURE_GET_TYPE(params) (params & 0x1F)
+#define OBJ_MURE_GET_CHNUM(thisx) (((thisx)->params >> 12) & 0xF)
+#define OBJ_MURE_GET_PTN(thisx) (((thisx)->params >> 8) & 0x7)
+#define OBJ_MURE_GET_SVNUM(thisx) (((thisx)->params >> 5) & 0x3)
+#define OBJ_MURE_GET_TYPE(thisx) ((thisx)->params & 0x1F)
 
 #endif // Z_OBJ_MURE_H

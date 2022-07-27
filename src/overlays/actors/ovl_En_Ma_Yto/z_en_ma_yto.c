@@ -161,7 +161,7 @@ void EnMaYto_Init(Actor* thisx, PlayState* play) {
 
     this->unk31E = 0;
     this->blinkTimer = 100;
-    this->type = EN_MA_YTO_PARSE_TYPE(this->actor.params);
+    this->type = EN_MA_YTO_PARSE_TYPE(&this->actor);
     if (!EnMaYto_CheckValidSpawn(this, play)) {
         Actor_MarkForDeath(&this->actor);
         return;
