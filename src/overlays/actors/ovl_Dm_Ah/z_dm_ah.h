@@ -12,7 +12,7 @@ typedef struct DmAh {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ DmAhActionFunc actionFunc;
-    /* 0x18c */ Vec3f unk_18C;
+    /* 0x18C */ Vec3f unk_18C;
     /* 0x198 */ Vec3f unk_198;
     /* 0x1A4 */ Vec3s unk_1A4;
     /* 0x1AA */ Vec3s unk_1AA;
