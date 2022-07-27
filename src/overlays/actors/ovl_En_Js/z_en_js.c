@@ -280,7 +280,7 @@ s32 func_80968E38(s32 arg0) {
     u8* maskMaskBit = gSaveContext.maskMaskBit;
 
     if (((arg0 < 0) || (arg0 >= 9))) {
-        return false;
+        return 0;
     }
 
     count = 0;
