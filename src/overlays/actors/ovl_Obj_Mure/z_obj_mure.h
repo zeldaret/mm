@@ -11,7 +11,7 @@ typedef void (*ObjMureActionFunc)(struct ObjMure*, PlayState*);
 
 typedef struct {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x53];
+    /* 0x144 */ UNK_TYPE1 unk_144[0x53];
     /* 0x197 */ u8 unk_197;
 } ObjMureChild; // size = 0x198
 
