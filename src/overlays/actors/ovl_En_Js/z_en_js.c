@@ -229,7 +229,7 @@ s32 func_80968B8C(EnJs* this, PlayState* play) {
         this->unk_2B0 = 0;
     }
 
-    return false;
+    return 0;
 }
 
 s32 func_80968CB8(EnJs* this) {
@@ -239,8 +239,9 @@ s32 func_80968CB8(EnJs* this) {
     f32 temp_fa1;
     Vec3s* temp_v1;
 
-    if (this->path == NULL)
+    if (this->path == NULL) {
         return true;
+    }
 
     path = this->path;
     temp_v1 = &((Vec3s*)Lib_SegmentedToVirtual(path->points))[this->unk_2B0];
@@ -264,8 +265,8 @@ s32 func_80968CB8(EnJs* this) {
 }
 
 s32 func_80968DD0(EnJs* this, PlayState* play) {
-    if ((this->actor.xzDistToPlayer < 100.0f) && (Player_IsFacingActor(&this->actor, 0x3000, play)) &&
-        (Actor_IsFacingPlayer(&this->actor, 0x3000))) {
+    if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
+        Actor_IsFacingPlayer(&this->actor, 0x3000)) {
         return true;
     }
 
@@ -278,7 +279,7 @@ s32 func_80968E38(s32 arg0) {
     u8 mask;
     u8* maskMaskBit = gSaveContext.maskMaskBit;
 
-    if (((arg0 < 0) || (arg0 > 8))) {
+    if (((arg0 < 0) || (arg0 >= 9))) {
         return false;
     }
 
@@ -546,7 +547,7 @@ void func_80969748(EnJs* this, PlayState* play) {
         }
         if (item > 0) {
             func_801477B4(play);
-            if ((item >= PLAYER_AP_MASK_TRUTH) && (item < PLAYER_AP_MASK_FIERCE_DEITY)) {
+            if ((item >= PLAYER_AP_MASK_TRUTH) && (item <= PLAYER_AP_MASK_GIANT)) {
                 EnJs_TakeMask(item, ENJS_GET_TYPE(&this->actor));
                 Inventory_UnequipItem(item - 4);
                 if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
@@ -554,7 +555,7 @@ void func_80969748(EnJs* this, PlayState* play) {
                 } else {
                     player->actor.textId = 0x2213;
                 }
-            } else if ((item >= PLAYER_AP_MASK_FIERCE_DEITY) && (item < PLAYER_AP_LENS)) {
+            } else if ((item >= PLAYER_AP_MASK_FIERCE_DEITY) && (item <= PLAYER_AP_MASK_DEKU)) {
                 player->actor.textId = 0x2211;
             } else {
                 player->actor.textId = 0x2210;
@@ -692,7 +693,7 @@ void func_80969C54(EnJs* this, PlayState* play) {
         }
         if (item > 0) {
             func_801477B4(play);
-            if ((item >= 0x3A) && (item < 0x4E)) {
+            if ((item >= PLAYER_AP_MASK_TRUTH) && (item <= PLAYER_AP_MASK_GIANT)) {
                 EnJs_TakeMask(item, ENJS_GET_TYPE(&this->actor));
                 Inventory_UnequipItem(item - 4);
                 if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
@@ -700,7 +701,7 @@ void func_80969C54(EnJs* this, PlayState* play) {
                 } else {
                     player->actor.textId = 0x2222;
                 }
-            } else if ((item >= 0x4E) && (item < 0x52)) {
+            } else if ((item >= PLAYER_AP_MASK_FIERCE_DEITY) && (item <= PLAYER_AP_MASK_DEKU)) {
                 player->actor.textId = 0x2220;
             } else {
                 player->actor.textId = 0x221D;
@@ -721,7 +722,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     switch (Message_GetState(&play->msgCtx)) {
         case 4:
-            if ((Message_ShouldAdvance(play)) &&
+            if (Message_ShouldAdvance(play) &&
                 ((play->msgCtx.currentTextId == 0x2219) || (play->msgCtx.currentTextId == 0x221E))) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
@@ -828,10 +829,8 @@ void func_8096A104(EnJs* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80969DA4;
         func_8096A080(this, play);
-    } else {
-        if (func_80968DD0(this, play)) {
-            func_800B8614(&this->actor, play, 120.0f);
-        }
+    } else if (func_80968DD0(this, play)) {
+        func_800B8614(&this->actor, play, 120.0f);
     }
 }
 
@@ -840,12 +839,10 @@ void func_8096A184(EnJs* this, PlayState* play) {
 
     if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
         textId = 0x220B;
+    } else if (func_80968E38(0) >= 0x14) {
+        textId = 0x2202;
     } else {
-        if (func_80968E38(0) >= 0x14) {
-            textId = 0x2202;
-        } else {
-            textId = 0x21FC;
-        }
+        textId = 0x21FC;
     }
     Message_StartTextbox(play, textId, &this->actor);
 }
@@ -1004,9 +1001,8 @@ void func_8096A6F4(EnJs* this, PlayState* play) {
         func_8096A184(this, play);
         return;
     }
-    if ((((!(this->unk_2B8 & 8)) && (this->actor.xzDistToPlayer < 100.0f)) &&
-         Player_IsFacingActor(&this->actor, 0x3000, play)) &&
-        Actor_IsFacingPlayer(&this->actor, 0x1000)) {
+    if (!(this->unk_2B8 & 8) && (this->actor.xzDistToPlayer < 100.0f) &&
+        Player_IsFacingActor(&this->actor, 0x3000, play) && Actor_IsFacingPlayer(&this->actor, 0x1000)) {
         func_800B8614(&this->actor, play, 120.0f);
     }
 }
