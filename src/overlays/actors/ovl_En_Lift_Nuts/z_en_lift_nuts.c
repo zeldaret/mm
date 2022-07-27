@@ -5,7 +5,6 @@
  */
 
 #include "z_en_lift_nuts.h"
-#include "objects/object_dnt/object_dnt.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
@@ -177,10 +176,10 @@ s32 func_80AE9B4C(s32 arg0, s32 arg1) {
 }
 
 s32 func_80AE9B8C() {
-    s32 ret = false;
+    s32 ret = 0;
 
     if (gSaveContext.save.weekEventReg[14] & 0x10) {
-        ret = true;
+        ret = 1;
     }
 
     if (gSaveContext.save.weekEventReg[14] & 0x20) {
@@ -246,7 +245,7 @@ void EnLiftNuts_Init(Actor* thisx, PlayState* play) {
     } else if (func_80AE9AC4(this, 0)) {
         Player* player = GET_PLAYER(play);
 
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         func_80AE9AC4(this, 1);
         func_80AE9B4C(1, 3);
         func_80AEA0B4(this);
@@ -372,7 +371,6 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
                         } else {
                             Message_StartTextbox(play, 0x27E1, &this->actor);
                             this->textId = 0x27E1;
-                            break;
                         }
                         break;
                 }
@@ -468,7 +466,7 @@ void func_80AEA7A4(EnLiftNuts* this, PlayState* play) {
                 break;
             case 0x238D:
                 if (play->msgCtx.choiceIndex == 0) { // Yes
-                    player->stateFlags1 |= 0x20;
+                    player->stateFlags1 |= PLAYER_STATE1_20;
                     func_80AEB1C8(this);
                 } else {
                     func_80AE9FC8(this);
@@ -504,7 +502,7 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
                 break;
             case 0x27E5:
                 func_801477B4(play);
-                player->stateFlags1 |= 0x20;
+                player->stateFlags1 |= PLAYER_STATE1_20;
                 func_80AEAEAC(this);
                 break;
             case 0x27E6:
@@ -532,7 +530,7 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
                 break;
             case 0x27FA:
                 func_801477B4(play);
-                player->stateFlags1 &= ~0x20;
+                player->stateFlags1 &= ~PLAYER_STATE1_20;
                 func_80AEB114(this);
                 break;
             case 0x27EE:
@@ -562,7 +560,7 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
             case 0x27F5:
                 func_801477B4(play);
                 func_80AE9B4C(1, 0);
-                player->stateFlags1 &= ~0x20;
+                player->stateFlags1 &= ~PLAYER_STATE1_20;
                 func_80AE9FC8(this);
                 break;
             case 0x27F9:
@@ -613,7 +611,7 @@ void func_80AEACF8(EnLiftNuts* this, PlayState* play) {
             break;
         case 6:
             if (Message_ShouldAdvance(play)) {
-                player->stateFlags1 &= ~0x20;
+                player->stateFlags1 &= ~PLAYER_STATE1_20;
                 func_80AE9FC8(this);
                 func_80AE9AC4(this, 2);
                 if (func_80AE9B4C(0, 3)) {
@@ -712,7 +710,7 @@ void func_80AEB114(EnLiftNuts* this) {
 void func_80AEB148(EnLiftNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags3 & 0x200) {
+    if (player->stateFlags3 & PLAYER_STATE3_200) {
         this->actor.speedXZ = 2.0f;
         gSaveContext.eventInf[3] |= 0x10;
         func_8010E9F0(4, 0);
@@ -734,7 +732,7 @@ void func_80AEB230(EnLiftNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (gSaveContext.unk_3DE0[4] > 0) {
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         func_80AEB280(this);
     }
 }
@@ -749,12 +747,12 @@ void func_80AEB294(EnLiftNuts* this, PlayState* play) {
     if (((player->actor.bgCheckFlags & 1) && (player->actor.floorBgId == BG_ACTOR_MAX) &&
          player->actor.world.pos.y < 20.0f) ||
         gSaveContext.unk_3DE0[4] >= 0x2EE0) {
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         Flags_SetSwitch(play, 0x41);
         func_80AEB3E0(this, play);
     }
-    if (*this->ptr_1EC == 0x12C) {
-        player->stateFlags1 |= 0x20;
+    if (*this->ptr_1EC == 300) {
+        player->stateFlags1 |= PLAYER_STATE1_20;
 
         if (((void)0, gSaveContext.unk_3DE0[4]) < gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
             Flags_SetSwitch(play, 0x40);
@@ -811,7 +809,7 @@ void func_80AEB598(EnLiftNuts* this, PlayState* play) {
             gSaveContext.save.weekEventReg[14] |= 0x80;
         }
         func_80AEB684(this);
-    } else if (this->textId == 0x27F4 && !(gSaveContext.save.weekEventReg[14] & 0x80)) {
+    } else if ((this->textId == 0x27F4) && !(gSaveContext.save.weekEventReg[14] & 0x80)) {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
