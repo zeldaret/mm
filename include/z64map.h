@@ -88,7 +88,7 @@ typedef struct {
     /* 0x3A */ s16 unk3A; //scene boundsMidpoint.z
     /* 0x3C */ s16* unk3C;
     /* 0x40 */ s16 unk40;
-    /* 0x42 */ char unk42[2];
+    /* 0x42 */ s16 unk42;
     /* 0x44 */ s16 unk44;
     /* 0x48 */ s16* unk48;
     /* 0x4C */ char unk4C[0x0C];
