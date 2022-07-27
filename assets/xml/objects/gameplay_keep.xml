@@ -832,7 +832,7 @@
         <Limb Name="gameplay_keep_Lodlimb_014520" Type="LOD" EnumName="ARROW_LIMB_2" Offset="0x14520" />
         <Limb Name="gameplay_keep_Lodlimb_014530" Type="LOD" EnumName="ARROW_LIMB_3" Offset="0x14530" />
         <Limb Name="gameplay_keep_Lodlimb_014540" Type="LOD" EnumName="ARROW_LIMB_4" Offset="0x14540" />
-        <Skeleton Name="gameplay_keep_Skel_014560" Type="Normal" LimbType="Standard" LimbNone="ARROW_LIMB_NONE" LimbMax="ARROW_LIMB_MAX" EnumName="ArrowLimb" Offset="0x14560" /> <!-- Arrow -->
+        <Skeleton Name="gameplay_keep_Skel_014560" Type="Normal" LimbType="Standard" LimbNone="ARROW_LIMB_NONE" LimbMax="ARROW_LIMB_MAX" EnumName="ArrowLimb" Offset="0x14560" />
         <Texture Name="gameplay_keep_Tex_014570" OutName="tex_014570" Format="rgba32" Width="16" Height="32" Offset="0x14570" />
         <Texture Name="gameplay_keep_Tex_014D70" OutName="tex_014D70" Format="ia8" Width="64" Height="64" Offset="0x14D70" />
         <DList Name="gameplay_keep_DL_015DB0" Offset="0x15DB0" />
@@ -948,7 +948,7 @@
         <Limb Name="gameplay_keep_Standardlimb_02AF1C" Type="Standard" EnumName="FAIRY_LIMB_4" Offset="0x2AF1C" />
         <Limb Name="gameplay_keep_Standardlimb_02AF28" Type="Standard" EnumName="FAIRY_LIMB_5" Offset="0x2AF28" />
         <Limb Name="gameplay_keep_Standardlimb_02AF34" Type="Standard" EnumName="FAIRY_LIMB_6" Offset="0x2AF34" />
-        <Skeleton Name="gameplay_keep_Skel_02AF58" Type="Flex" LimbType="Standard" LimbNone="FAIRY_LIMB_NONE" LimbMax="FAIRY_LIMB_MAX" EnumName="FairyLimb" Offset="0x2AF58" /> <!-- Fairy -->
+        <Skeleton Name="gameplay_keep_Skel_02AF58" Type="Flex" LimbType="Standard" LimbNone="FAIRY_LIMB_NONE" LimbMax="FAIRY_LIMB_MAX" EnumName="FairyLimb" Offset="0x2AF58" />
         <Animation Name="gameplay_keep_Anim_02B2E8" Offset="0x2B2E8" />
 
         <!-- Stray Fairy -->
@@ -1001,7 +1001,7 @@
         <Limb Name="gameplay_keep_Standardlimb_02EFEC" Type="Standard" EnumName="FISH_LIMB_4" Offset="0x2EFEC" />
         <Limb Name="gameplay_keep_Standardlimb_02EFF8" Type="Standard" EnumName="FISH_LIMB_5" Offset="0x2EFF8" />
         <Limb Name="gameplay_keep_Standardlimb_02F004" Type="Standard" EnumName="FISH_LIMB_6" Offset="0x2F004" />
-        <Skeleton Name="gameplay_keep_Skel_02F028" Type="Flex" LimbType="Standard" LimbNone="FISH_LIMB_NONE" LimbMax="FISH_LIMB_MAX" EnumName="FishLimb" Offset="0x2F028" /> <!-- Fish -->
+        <Skeleton Name="gameplay_keep_Skel_02F028" Type="Flex" LimbType="Standard" LimbNone="FISH_LIMB_NONE" LimbMax="FISH_LIMB_MAX" EnumName="FishLimb" Offset="0x2F028" />
         <Animation Name="gameplay_keep_Anim_02F0EC" Offset="0x2F0EC" />
         <Texture Name="gEffShockwaveTex" OutName="eff_shockwave" Format="i8" Width="64" Height="64" Offset="0x2F100" />
         <DList Name="gEffShockwaveDL" Offset="0x30100" />
@@ -1173,7 +1173,7 @@
         <Limb Name="gameplay_keep_Standardlimb_052720" Type="Standard" EnumName="BUG_LIMB_15" Offset="0x52720" />
         <Limb Name="gameplay_keep_Standardlimb_05272C" Type="Standard" EnumName="BUG_LIMB_16" Offset="0x5272C" />
         <Limb Name="gameplay_keep_Standardlimb_052738" Type="Standard" EnumName="BUG_LIMB_17" Offset="0x52738" />
-        <Skeleton Name="gameplay_keep_Skel_0527A0" Type="Normal" LimbType="Standard" LimbNone="BUG_LIMB_NONE" LimbMax="BUG_LIMB_MAX" EnumName="BugLimb" Offset="0x527A0" /> <!-- Bugs -->
+        <Skeleton Name="gameplay_keep_Skel_0527A0" Type="Normal" LimbType="Standard" LimbNone="BUG_LIMB_NONE" LimbMax="BUG_LIMB_MAX" EnumName="BugLimb" Offset="0x527A0" />
         <DList Name="gKakeraLeafMiddle" Offset="0x527F0" />
         <DList Name="gKakeraLeafTip" Offset="0x528B0" />
         <Texture Name="gameplay_keep_Tex_052940" OutName="tex_052940" Format="rgba16" Width="32" Height="32" Offset="0x52940" />
