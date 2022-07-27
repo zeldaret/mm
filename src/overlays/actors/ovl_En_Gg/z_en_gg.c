@@ -399,7 +399,7 @@ void func_80B359DC(EnGg* this, PlayState* play) {
         }
 
         if ((player->transformation == PLAYER_FORM_HUMAN) && (play->msgCtx.ocarinaMode == 3) &&
-            (play->msgCtx.unk1202E == 7)) {
+            (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
             if (!(gSaveContext.save.weekEventReg[19] & 0x80)) {
                 gSaveContext.save.weekEventReg[19] |= 0x80;
             }

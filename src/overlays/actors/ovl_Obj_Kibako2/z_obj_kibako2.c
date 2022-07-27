@@ -134,7 +134,7 @@ void ObjKibako2_SpawnSkulltula(ObjKibako2* this, PlayState* play) {
 }
 
 void ObjKibako2_SpawnContents(ObjKibako2* this, PlayState* play) {
-    if (KIBAKO2_CONTENTS(&this->dyna.actor) == CONTENTS_COLLECTIBLE) {
+    if (KIBAKO2_CONTENTS(&this->dyna.actor) == OBJKIBAKO2_CONTENTS_COLLECTIBLE) {
         ObjKibako2_SpawnCollectible(this, play);
     } else {
         ObjKibako2_SpawnSkulltula(this, play);
@@ -157,14 +157,14 @@ void ObjKibako2_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.shape.rot.z = 0;
     this->dyna.actor.world.rot.x = 0;
     this->dyna.actor.shape.rot.x = 0;
-    if (contents == CONTENTS_COLLECTIBLE) {
+    if (contents == OBJKIBAKO2_CONTENTS_COLLECTIBLE) {
         if (Item_CanDropBigFairy(play, KIBAKO2_COLLECTIBLE_ID(&this->dyna.actor),
                                  KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor))) {
             this->unk_1AC = 1;
             this->dyna.actor.flags |= ACTOR_FLAG_10;
         }
     }
-    if ((contents != CONTENTS_SKULLTULA) || !ObjKibako2_ContainsSkulltula(this, play)) {
+    if ((contents != OBJKIBAKO2_CONTENTS_SKULLTULA) || !ObjKibako2_ContainsSkulltula(this, play)) {
         this->skulltulaNoiseTimer = -1;
     }
     this->actionFunc = ObjKibako2_Idle;

@@ -256,7 +256,7 @@ s32 func_80B50854(EnGk* this, PlayState* play) {
     }
 
     if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
-        (play->msgCtx.unk1202E == 1)) {
+        (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY)) {
         Flags_SetSwitch(play, ENGK_GET_3F00(&this->actor));
         this->unk_2E4 = 3;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
@@ -506,7 +506,7 @@ void func_80B51410(EnGk* this, PlayState* play) {
 
     if (this->actor.xzDistToPlayer < 100.0f) {
         if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
-            (play->msgCtx.unk1202E == 0xE)) {
+            (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY_INTRO)) {
             this->unk_1E4 |= 0x20;
         }
 

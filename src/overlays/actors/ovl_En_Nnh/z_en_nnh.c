@@ -16,10 +16,10 @@ void EnNnh_Destroy(Actor* thisx, PlayState* play);
 void EnNnh_Update(Actor* thisx, PlayState* play);
 void EnNnh_Draw(Actor* thisx, PlayState* play);
 
-void func_80C08828(EnNnh* this);
-void func_80C0883C(EnNnh* this, PlayState* play);
-void func_80C088A4(EnNnh* this);
-void func_80C088B8(EnNnh* this, PlayState* play);
+void EnNnh_SetupWaitForDialogue(EnNnh* this);
+void EnNnh_WaitForDialogue(EnNnh* this, PlayState* play);
+void EnNnh_SetupDialogue(EnNnh* this);
+void EnNnh_Dialogue(EnNnh* this, PlayState* play);
 
 const ActorInit En_Nnh_InitVars = {
     ACTOR_EN_NNH,
@@ -62,7 +62,7 @@ void EnNnh_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = 1;
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;
-    func_80C08828(this);
+    EnNnh_SetupWaitForDialogue(this);
 }
 
 void EnNnh_Destroy(Actor* thisx, PlayState* play) {
@@ -71,26 +71,26 @@ void EnNnh_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80C08828(EnNnh* this) {
-    this->actionFunc = func_80C0883C;
+void EnNnh_SetupWaitForDialogue(EnNnh* this) {
+    this->actionFunc = EnNnh_WaitForDialogue;
 }
 
-void func_80C0883C(EnNnh* this, PlayState* play) {
+void EnNnh_WaitForDialogue(EnNnh* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x228, &this->actor);
-        func_80C088A4(this);
-        return;
+        EnNnh_SetupDialogue(this);
+    } else {
+        func_800B8614(&this->actor, play, 100.0f);
     }
-    func_800B8614(&this->actor, play, 100.0f);
 }
 
-void func_80C088A4(EnNnh* this) {
-    this->actionFunc = func_80C088B8;
+void EnNnh_SetupDialogue(EnNnh* this) {
+    this->actionFunc = EnNnh_Dialogue;
 }
 
-void func_80C088B8(EnNnh* this, PlayState* play) {
+void EnNnh_Dialogue(EnNnh* this, PlayState* play) {
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        func_80C08828(this);
+        EnNnh_SetupWaitForDialogue(this);
     }
 }
 
@@ -109,5 +109,5 @@ void EnNnh_Draw(Actor* thisx, PlayState* play) {
 
     func_8012C28C(gfxCtx);
     gSPMatrix(gfxCtx->polyOpa.p++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(gfxCtx->polyOpa.p++, object_nnh_DL_001510);
+    gSPDisplayList(gfxCtx->polyOpa.p++, gButlerSonMainBodyDL);
 }

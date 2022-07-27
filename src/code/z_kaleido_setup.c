@@ -1,8 +1,8 @@
 #include "global.h"
 #include "z64rumble.h"
-#include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
-s16 D_801BDB00[] = { PAUSE_1, PAUSE_2, PAUSE_3, PAUSE_0 };
+s16 D_801BDB00[] = { PAUSE_MAP, PAUSE_QUEST, PAUSE_MASK, PAUSE_ITEM };
 f32 sKaleidoSetupEyeX[] = { -64.0f, 0.0f, 64.0f, 0.0f };
 f32 sKaleidoSetupEyeZ[] = { 0.0f, -64.0f, 0.0f, 64.0f };
 
@@ -70,7 +70,8 @@ void KaleidoSetup_Update(PlayState* play) {
         if (msgCtx && msgCtx) {}
     }
 
-    if ((pauseCtx->state == 0) && (pauseCtx->debugState == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE)) {
+    if ((pauseCtx->state == 0) && (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
+        (play->gameOverCtx.state == GAMEOVER_INACTIVE)) {
         if ((play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
             if ((gSaveContext.save.cutscene < 0xFFF0) && (gSaveContext.nextCutsceneIndex < 0xFFF0)) {
                 if (!Play_InCsMode(play) || ((msgCtx->msgMode != 0) && (msgCtx->currentTextId == 0xFF))) {
@@ -108,7 +109,7 @@ void KaleidoSetup_Init(PlayState* play) {
 
     bzero(pauseCtx, sizeof(PauseContext));
 
-    pauseCtx->pageIndex = PAUSE_0;
+    pauseCtx->pageIndex = PAUSE_ITEM;
 
     pauseCtx->unk_21C = 160.0f;
     pauseCtx->unk_218 = 160.0f;
@@ -119,18 +120,18 @@ void KaleidoSetup_Init(PlayState* play) {
     pauseCtx->unk_20C = 936.0f;
     pauseCtx->unk_220 = -314.0f;
 
-    pauseCtx->unk_238[PAUSE_1] = XREG(94) + 3;
+    pauseCtx->unk_238[PAUSE_MAP] = XREG(94) + 3;
 
     pauseCtx->unk_258 = 11;
     pauseCtx->unk_25A = 0;
 
-    pauseCtx->cursorItem[PAUSE_0] = 999;
-    pauseCtx->cursorItem[PAUSE_1] = XREG(94) + 3;
-    pauseCtx->cursorItem[PAUSE_2] = 999;
-    pauseCtx->cursorItem[PAUSE_3] = 999;
+    pauseCtx->cursorItem[PAUSE_ITEM] = 999;
+    pauseCtx->cursorItem[PAUSE_MAP] = XREG(94) + 3;
+    pauseCtx->cursorItem[PAUSE_QUEST] = 999;
+    pauseCtx->cursorItem[PAUSE_MASK] = 999;
 
-    pauseCtx->unk_268[PAUSE_0] = 0;
-    pauseCtx->unk_268[PAUSE_1] = XREG(94) + 3;
+    pauseCtx->unk_268[PAUSE_ITEM] = 0;
+    pauseCtx->unk_268[PAUSE_MAP] = XREG(94) + 3;
 
     pauseCtx->unk_284 = 2;
     pauseCtx->unk_2A0 = -1;

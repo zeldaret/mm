@@ -144,4 +144,4 @@ Please note that is is our strict policy that *Anyone who wishes to contribute t
 
 Most discussions happen on our [Discord Server](https://discord.zelda64.dev), where you are welcome to ask if you need help getting started, or if you have any questions regarding this project or ZeldaRET's other decompilation projects.
 
-For more information on getting started, see our [Contributing Guide](CONTRIBUTING.md), [Style Guide](docs/STYLE.md) and our [Code Review Guidelines](docs/REVIEWING.md) to see what code quality guidelines we follow.
+For more information on getting started, see our [Contributing Guide](docs/CONTRIBUTING.md), [Style Guide](docs/STYLE.md) and our [Code Review Guidelines](docs/REVIEWING.md) to see what code quality guidelines we follow.

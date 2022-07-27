@@ -4938,7 +4938,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                     } else {
                         if ((D_809171CC >= 60.0f) && !(gSaveContext.save.unk_EE4 & 0x800)) {
                             gSaveContext.save.unk_EE4 |= 0x800;
-                            getItemId = GI_SCALE_GOLD;
+                            getItemId = GI_SKULL_TOKEN;
                             sSinkingLureLocation = Rand_ZeroFloat(3.999f) + 1.0f;
                         }
                     }
@@ -4997,7 +4997,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             if (Actor_HasParent(&this->actor, play)) {
                 this->unk_154 = 24;
             } else {
-                Actor_PickUp(&this->actor, play, GI_SCALE_GOLD, 2000.0f, 1000.0f);
+                Actor_PickUp(&this->actor, play, GI_SKULL_TOKEN, 2000.0f, 1000.0f);
             }
             break;
 
