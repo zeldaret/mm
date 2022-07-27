@@ -110,30 +110,29 @@ void ObjRaillift_DoNothing(ObjRaillift* this, PlayState* play) {
 }
 
 void ObjRaillift_Move(ObjRaillift* this, PlayState* play) {
-    s32 isTeleporting;
+    Actor* thisx = &this->dyna.actor;
     Vec3f nextPoint;
     f32 speed;
     f32 target;
     f32 step;
+    s32 isTeleporting;
     s32 isPosUpdated;
-    Vec3s* initialPoint;
     Vec3s* endPoint;
-    s32 pad;
 
-    if (OBJRAILLIFT_HAS_FLAG(&this->dyna.actor)) {
-        if (!Flags_GetSwitch(play, OBJRAILLIFT_GET_FLAG(&this->dyna.actor))) {
+    if (OBJRAILLIFT_HAS_FLAG(thisx)) {
+        if (!Flags_GetSwitch(play, OBJRAILLIFT_GET_FLAG(thisx))) {
             this->actionFunc = ObjRaillift_Idle;
             return;
         }
 
-        if (OBJRAILLIFT_GET_TYPE(&this->dyna.actor) == DEKU_FLOWER_PLATFORM) {
-            func_800B9010(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
+        if (OBJRAILLIFT_GET_TYPE(thisx) == DEKU_FLOWER_PLATFORM) {
+            func_800B9010(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
         }
     }
 
-    Math_Vec3s_ToVec3f(&nextPoint, &(&this->points[this->curPoint])[this->direction]);
-    Math_Vec3f_Diff(&nextPoint, &this->dyna.actor.world.pos, &this->dyna.actor.velocity);
-    speed = Math3D_Vec3fMagnitude(&this->dyna.actor.velocity);
+    Math_Vec3s_ToVec3f(&nextPoint, this->points + this->curPoint + this->direction);
+    Math_Vec3f_Diff(&nextPoint, &thisx->world.pos, &thisx->velocity);
+    speed = Math3D_Vec3fMagnitude(&thisx->velocity);
     if ((speed < (this->speed * 8.0f)) && (this->speed > 2.0f)) {
         target = ((this->speed - 2.0f) * 0.1f) + 2.0f;
         step = this->speed * 0.03f;
@@ -142,17 +141,16 @@ void ObjRaillift_Move(ObjRaillift* this, PlayState* play) {
         step = this->speed * 0.16f;
     }
 
-    Math_StepToF(&this->dyna.actor.speedXZ, target, step);
-    if ((this->dyna.actor.speedXZ + 0.05f) < speed) {
-        Math_Vec3f_Scale(&this->dyna.actor.velocity, this->dyna.actor.speedXZ / speed);
-        this->dyna.actor.world.pos.x += this->dyna.actor.velocity.x;
-        this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
-        this->dyna.actor.world.pos.z += this->dyna.actor.velocity.z;
+    Math_StepToF(&thisx->speedXZ, target, step);
+    if ((thisx->speedXZ + 0.05f) < speed) {
+        Math_Vec3f_Scale(&thisx->velocity, thisx->speedXZ / speed);
+        thisx->world.pos.x += thisx->velocity.x;
+        thisx->world.pos.y += thisx->velocity.y;
+        thisx->world.pos.z += thisx->velocity.z;
     } else {
         this->curPoint += this->direction;
-        if (1) {}
-        this->dyna.actor.speedXZ *= 0.4f;
-        isTeleporting = OBJRAILLIFT_SHOULD_TELEPORT(&this->dyna.actor);
+        thisx->speedXZ *= 0.4f;
+        isTeleporting = OBJRAILLIFT_SHOULD_TELEPORT(thisx);
         isPosUpdated = true;
         if (((this->curPoint >= this->endPoint) && (this->direction > 0)) ||
             ((this->curPoint <= 0) && (this->direction < 0))) {
@@ -163,9 +161,8 @@ void ObjRaillift_Move(ObjRaillift* this, PlayState* play) {
             } else {
                 endPoint = &this->points[this->endPoint];
                 this->curPoint = this->direction > 0 ? 0 : this->endPoint;
-                initialPoint = &this->points[0];
-                if ((initialPoint->x != endPoint->x) || (initialPoint->y != endPoint->y) ||
-                    (initialPoint->z != endPoint->z)) {
+                if ((this->points[0].x != endPoint->x) || (this->points[0].y != endPoint->y) ||
+                    (this->points[0].z != endPoint->z)) {
                     this->actionFunc = ObjRaillift_Teleport;
                     func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
                     isPosUpdated = false;
@@ -222,7 +219,7 @@ void ObjRaillift_Update(Actor* thisx, PlayState* play) {
     f32 step;
 
     this->actionFunc(this, play);
-    Actor_SetFocus(&this->dyna.actor, 10.0f);
+    Actor_SetFocus(thisx, 10.0f);
     if (this->cutsceneTimer > 0) {
         this->cutsceneTimer--;
         if (this->cutsceneTimer == 0) {

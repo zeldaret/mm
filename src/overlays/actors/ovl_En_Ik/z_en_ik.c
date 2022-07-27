@@ -646,13 +646,13 @@ void EnIk_SetupReactToAttack(EnIk* this, s32 arg1) {
 
 void EnIk_ReactToAttack(EnIk* this, PlayState* play) {
     Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f);
-    if (this->subCamId != CAM_ID_MAIN) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &Play_GetCamera(play, this->subCamId)->eye);
     }
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->subCamId != CAM_ID_MAIN) {
+        if (this->subCamId != SUB_CAM_ID_DONE) {
             ActorCutscene_Stop(this->actor.cutscene);
-            this->subCamId = CAM_ID_MAIN;
+            this->subCamId = SUB_CAM_ID_DONE;
             EnIk_SetupIdle(this);
         } else {
             EnIk_CheckActions(this, play);
@@ -738,7 +738,7 @@ void EnIk_PlayCutscene(EnIk* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         if (this->actor.cutscene != -1) {
             ActorCutscene_StartAndSetFlag(this->actor.cutscene, &this->actor);
-            this->subCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+            this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
             subCamEye.x = (Math_SinS((this->actor.shape.rot.y - 0x2000)) * 120.0f) + this->actor.focus.pos.x;
             subCamEye.y = this->actor.focus.pos.y + 20.0f;
             subCamEye.z = (Math_CosS((this->actor.shape.rot.y - 0x2000)) * 120.0f) + this->actor.focus.pos.z;

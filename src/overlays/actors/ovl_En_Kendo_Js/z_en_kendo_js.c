@@ -317,15 +317,15 @@ void func_80B26AFC(EnKendoJs* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             func_80B26758(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             func_80B269A4(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 if (this->unk_288 == 0x272C) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
@@ -339,10 +339,10 @@ void func_80B26AFC(EnKendoJs* this, PlayState* play) {
                 func_80B26538(this);
             }
 
-        case 0:
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
     }
 }
@@ -509,7 +509,7 @@ void func_80B2714C(EnKendoJs* this) {
 void func_80B27188(EnKendoJs* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_288 == 0x2729) {
             func_80B26F14(this, play);
         } else if (!func_80B26F6C(this, play)) {

@@ -370,26 +370,26 @@ s32 EnRuppecrow_CheckPlayedMatchingSong(PlayState* play) {
     if (play->msgCtx.ocarinaMode == 0x3) {
         switch (player->transformation) {
             case PLAYER_FORM_DEKU:
-                if (play->msgCtx.unk1202E == OCARINA_SONG_SONATA) {
+                if (play->msgCtx.lastPlayedSong == OCARINA_SONG_SONATA) {
                     return true;
                 }
                 break;
             case PLAYER_FORM_GORON:
-                if (play->msgCtx.unk1202E == OCARINA_SONG_GORON_LULLABY) {
+                if (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) {
                     return true;
                 }
                 break;
             case PLAYER_FORM_ZORA:
-                if (play->msgCtx.unk1202E == OCARINA_SONG_NEW_WAVE) {
+                if (play->msgCtx.lastPlayedSong == OCARINA_SONG_NEW_WAVE) {
                     return true;
                 }
                 break;
             case PLAYER_FORM_HUMAN:
-                if (play->msgCtx.unk1202E == OCARINA_SONG_SONATA) {
+                if (play->msgCtx.lastPlayedSong == OCARINA_SONG_SONATA) {
                     return true;
-                } else if (play->msgCtx.unk1202E == OCARINA_SONG_GORON_LULLABY) {
+                } else if (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) {
                     return true;
-                } else if (play->msgCtx.unk1202E == OCARINA_SONG_NEW_WAVE) {
+                } else if (play->msgCtx.lastPlayedSong == OCARINA_SONG_NEW_WAVE) {
                     return true;
                 }
                 break;

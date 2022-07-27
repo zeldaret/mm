@@ -120,13 +120,13 @@ static AnimationInfo sAnimations[] = {
     { &object_delf_Anim_000E44, 1.0f, 0.0f, -1.0f, 0, 0.0f },
 };
 
-DmChar00Struct D_80AA77A8[] = {
+Color_RGBAf D_80AA77A8[] = {
     { 250.0f, 255.0f, 230.0f, 255.0f },
     { 63.0f, 18.0f, 93.0f, 255.0f },
     { 255.0f, 235.0f, 220.0f, 255.0f },
 };
 
-DmChar00Struct D_80AA77D8[] = {
+Color_RGBAf D_80AA77D8[] = {
     { 220.0f, 160.0f, 80.0f, 255.0f },
     { 250.0f, 40.0f, 10.0f, 255.0f },
     { 255.0f, 235.0f, 220.0f, 255.0f },
@@ -899,7 +899,7 @@ s32 DmChar00_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
     Vec3f sp1C;
 
     if (limbIndex == 6) {
-        sp28 = ((Math_SinS(this->unk_262 * 0x1000) * 0.1f) + 1.0f) * 0.012f * (this->actor.scale.x * 124.99999f);
+        sp28 = ((Math_SinS(this->unk_262 * 0x1000) * 0.1f) + 1.0f) * 0.012f * (this->actor.scale.x * (1.0f / 0.008f));
         Matrix_MultVec3f(&D_80AA7808, &sp1C);
         Matrix_Translate(sp1C.x, sp1C.y, sp1C.z, MTXMODE_NEW);
         Matrix_Scale(sp28, sp28, sp28, MTXMODE_APPLY);
@@ -934,13 +934,13 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
     gSPSegment(POLY_XLU_DISP++, 0x08, &gfx[0]);
 
     gDPPipeSync(gfx++);
-    gDPSetPrimColor(gfx++, 0, 0x01, (u8)this->unk_240.unk_00, (u8)this->unk_240.unk_04, (u8)this->unk_240.unk_08,
-                    (u8)(this->unk_240.unk_0C * 1));
+    gDPSetPrimColor(gfx++, 0, 0x01, (u8)this->unk_240.r, (u8)this->unk_240.g, (u8)this->unk_240.b,
+                    (u8)(this->unk_240.a * 1));
     gDPSetRenderMode(gfx++, G_RM_PASS, G_RM_ZB_CLD_SURF2);
     gSPEndDisplayList(gfx);
 
-    gDPSetEnvColor(POLY_XLU_DISP++, (u8)(s8)this->unk_250.unk_00, (u8)(s8)this->unk_250.unk_04,
-                   (u8)(s8)this->unk_250.unk_08, (u8)(s8)((f32)phi_a0 * 1));
+    gDPSetEnvColor(POLY_XLU_DISP++, (u8)(s8)this->unk_250.r, (u8)(s8)this->unk_250.g, (u8)(s8)this->unk_250.b,
+                   (u8)(s8)((f32)phi_a0 * 1));
     gDPSetDither(POLY_XLU_DISP++, G_CD_BAYER);
 
     POLY_XLU_DISP = SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable,

@@ -176,7 +176,7 @@ void func_80AA8698(DmChar01* this, PlayState* play) {
     }
 
     if ((player->transformation == PLAYER_FORM_DEKU) && (play->msgCtx.ocarinaMode == 3) &&
-        (play->msgCtx.unk1202E == 0)) {
+        (play->msgCtx.lastPlayedSong == OCARINA_SONG_SONATA)) {
 
         if ((player2->actor.world.pos.x > -40.0f) && (player2->actor.world.pos.x < 40.0f) &&
             (player2->actor.world.pos.z > 1000.0f) && (player2->actor.world.pos.z < 1078.0f)) {

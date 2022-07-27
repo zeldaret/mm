@@ -368,8 +368,8 @@ void EnTest4_Destroy(Actor* thisx, PlayState* play) {
 void func_80A42AB8(EnTest4* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((play->unk_18B4A == 0) && !Play_InCsMode(play) && (play->numSetupActors <= 0) && (play->roomCtx.unk31 == 0) &&
-        (!Play_IsDebugCamEnabled())) {
+    if ((play->transitionMode == TRANS_MODE_OFF) && !Play_InCsMode(play) && (play->numSetupActors <= 0) &&
+        (play->roomCtx.unk31 == 0) && !Play_IsDebugCamEnabled()) {
         s16 temp_a2;
         u16 temp_a0 = D_80A43364[this->unk_144];
         s16 temp_a3;
@@ -404,7 +404,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     if (player->stateFlags1 & 0x800000) {
                         EnHorse* rideActor = (EnHorse*)player->rideActor;
 
-                        if ((rideActor->type == HORSE_EPONA) || (rideActor->type == HORSE_2)) {
+                        if ((rideActor->type == HORSE_TYPE_EPONA) || (rideActor->type == HORSE_TYPE_2)) {
                             if (CURRENT_DAY < 3) {
                                 D_801BDA9C = 1;
                             } else {
@@ -456,8 +456,8 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                         play->nextEntranceIndex = 0xD800;
                     }
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
-                    play->sceneLoadFlag = 0x14;
-                    play->unk_1887F = 2;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
+                    play->transitionType = TRANS_TYPE_02;
                     player->stateFlags1 |= 0x200;
                     Actor_MarkForDeath(&this->actor);
                 }
@@ -520,7 +520,7 @@ void func_80A430C8(EnTest4* this, PlayState* play) {
         (gSaveContext.save.time < CLOCK_TIME(17, 30)) && (play->envCtx.unk_F2[2] == 0)) {
         // rain?
 
-        D_801BDBB0 = 1;
+        gWeatherMode = 1;
         func_800FD78C(play);
         play->envCtx.unk_E3 = 1;
         play->envCtx.unk_F2[0] = 0x3C;
@@ -535,7 +535,7 @@ void func_80A430C8(EnTest4* this, PlayState* play) {
         }
     }
 
-    if (D_801BDBB0 == 1) {
+    if (gWeatherMode == 1) {
         this->state = TEST4_STATE_1;
     }
 }
@@ -544,11 +544,11 @@ void func_80A431C8(EnTest4* this, PlayState* play) {
     if (((gSaveContext.save.time >= CLOCK_TIME(17, 30)) && (gSaveContext.save.time < CLOCK_TIME(23, 0)) &&
          (play->envCtx.unk_F2[0] != 0)) ||
         (play->envCtx.unk_F2[2] != 0)) {
-        D_801BDBB0 = 0;
+        gWeatherMode = 0;
         play->envCtx.unk_E3 = 2;
     }
 
-    if (D_801BDBB0 == 0) {
+    if (gWeatherMode == 0) {
         this->state = TEST4_STATE_0;
     }
 }

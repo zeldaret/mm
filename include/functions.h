@@ -131,6 +131,7 @@ u32 StackCheck_Check(StackEntry* entry);
 
 void MtxConv_F2L(Mtx* mtx, MtxF* mf);
 void MtxConv_L2F(MtxF* mtx, Mtx* mf);
+
 void __assert(const char* file, u32 lineNum);
 // void func_800862B4(void);
 void* SystemArena_MallocMin1(u32 size);
@@ -296,12 +297,8 @@ f32 sqrtf(f32 f);
 s32 osAfterPreNMI(void);
 s32 osContStartQuery(OSMesgQueue* mq);
 void osContGetQuery(OSContStatus* data);
-void guLookAtHiliteF(float mf[4][4], LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt,
-                     f32 xUp, f32 yUp, f32 zUp, f32 xl1, f32 yl1, f32 zl1, f32 xl2, f32 yl2, f32 zl2, s32 hiliteWidth,
-                     s32 hiliteHeight);
-void guLookAtHilite(Mtx* m, LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp,
-                    f32 yUp, f32 zUp, f32 xl1, f32 yl1, f32 zl1, f32 xl2, f32 yl2, f32 zl2, s32 hiliteWidth,
-                    s32 hiliteHeight);
+void guLookAtHiliteF(float mf[4][4], LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp, f32 xl1, f32 yl1, f32 zl1, f32 xl2, f32 yl2, f32 zl2, s32 hiliteWidth, s32 hiliteHeight);
+void guLookAtHilite(Mtx* m, LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp, f32 xl1, f32 yl1, f32 zl1, f32 xl2, f32 yl2, f32 zl2, s32 hiliteWidth, s32 hiliteHeight);
 s32 _Printf(PrintCallback pfn, void* arg, const char* fmt, va_list ap);
 void _Putfld(_Pft* px, va_list* pap, u8 code, u8* ac);
 // void osVoiceClearDictionary(void);
@@ -477,8 +474,7 @@ void func_800AE5A0(PlayState* play);
 void func_800AE5E4(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3);
 void func_800AE778(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3);
 void func_800AE8EC(PlayState* play);
-void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f32 arg3, s16 arg4,
-                   CollisionPoly* colPoly, s32 arg6);
+void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f32 arg3, s16 arg4, CollisionPoly* colPoly, s32 arg6);
 void func_800AEF44(EffectTireMark* this);
 void EffectTireMark_Init(void* thisx, void* initParamsx);
 void EffectTireMark_Destroy(void* thisx);
@@ -821,8 +817,7 @@ void BgCheck_Allocate(CollisionContext* colCtx, PlayState* play, CollisionHeader
 void BgCheck_SetContextFlags(CollisionContext* colCtx, u32 flags);
 void BgCheck_UnsetContextFlags(CollisionContext* colCtx, u32 flags);
 CollisionHeader* BgCheck_GetCollisionHeader(CollisionContext* colCtx, s32 bgId);
-f32 BgCheck_RaycastFloorImpl(PlayState* play, CollisionContext* colCtx, u16 xpFlags, CollisionPoly** outPoly,
-                             s32* outBgId, Vec3f* pos, Actor* actor, u32 arg7, f32 checkDist, s32 arg9);
+f32 BgCheck_RaycastFloorImpl(PlayState* play, CollisionContext* colCtx, u16 xpFlags, CollisionPoly** outPoly, s32* outBgId, Vec3f* pos, Actor* actor, u32 arg7, f32 checkDist, s32 arg9);
 f32 BgCheck_CameraRaycastFloor1(CollisionContext* colCtx, CollisionPoly** outPoly, Vec3f* pos);
 f32 BgCheck_EntityRaycastFloor1(CollisionContext* colCtx, CollisionPoly** outPoly, Vec3f* pos);
 f32 BgCheck_EntityRaycastFloor2(PlayState* play, CollisionContext* colCtx, CollisionPoly** outPoly, Vec3f* pos);
@@ -831,8 +826,7 @@ f32 BgCheck_EntityRaycastFloor3(CollisionContext* colCtx, CollisionPoly** outPol
 f32 BgCheck_EntityRaycastFloor5(CollisionContext* colCtx, CollisionPoly** outPoly, s32* outBgId, Actor* actor, Vec3f* pos);
 f32 BgCheck_EntityRaycastFloor5_2(PlayState* play, CollisionContext* colCtx, CollisionPoly** outPoly, s32* bgId, Actor* actor, Vec3f* pos);
 f32 BgCheck_EntityRaycastFloor5_3(PlayState* play, CollisionContext* colCtx, CollisionPoly** outPoly, s32* bgId, Actor* actor, Vec3f* pos);
-f32 BgCheck_EntityRaycastFloor6(CollisionContext* colCtx, CollisionPoly** outPoly, s32* bgId, Actor* actor, Vec3f* pos,
-                                f32 checkDist);
+f32 BgCheck_EntityRaycastFloor6(CollisionContext* colCtx, CollisionPoly** outPoly, s32* bgId, Actor* actor, Vec3f* pos, f32 checkDist);
 f32 BgCheck_EntityRaycastFloor7(CollisionContext* colCtx, CollisionPoly** outPoly, s32* bgId, Actor* actor, Vec3f* pos);
 f32 BgCheck_AnyRaycastFloor1(CollisionContext* colCtx, CollisionPoly* outPoly, Vec3f* pos);
 f32 BgCheck_AnyRaycastFloor2(CollisionContext* colCtx, CollisionPoly* outPoly, s32* bgId, Vec3f* pos);
@@ -847,30 +841,15 @@ s32 BgCheck_EntitySphVsWall4(CollisionContext* colCtx, Vec3f* posResult, Vec3f* 
 s32 BgCheck_CheckCeilingImpl(CollisionContext* colCtx, u16 xpFlags, f32* outY, Vec3f* pos, f32 checkHeight, CollisionPoly** outPoly, s32* outBgId, Actor* actor);
 s32 BgCheck_AnyCheckCeiling(CollisionContext* colCtx, f32* outY, Vec3f* pos, f32 checkHeight);
 s32 BgCheck_EntityCheckCeiling(CollisionContext* colCtx, f32* outY, Vec3f* pos, f32 checkHeight, CollisionPoly** outPoly, s32* outBgId, Actor* actor);
-s32 BgCheck_CameraLineTest1(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
-                            CollisionPoly** outPoly, s32 checkWall, s32 checkFloor, s32 checkCeil, s32 checkOneFace,
-                            s32* bgId);
-s32 BgCheck_CameraLineTest2(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
-                            CollisionPoly** outPoly, s32 checkWall, s32 checkFloor, s32 checkCeil, s32 checkOneFace,
-                            s32* bgId);
-s32 BgCheck_EntityLineTest1(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
-                            CollisionPoly** outPoly, s32 checkWall, s32 checkFloor, s32 checkCeil, s32 checkOneFace,
-                            s32* bgId);
-s32 BgCheck_EntityLineTest2(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
-                            CollisionPoly** outPoly, s32 checkWall, s32 checkFloor, s32 checkCeil, s32 checkOneFace,
-                            s32* bgId, Actor* actor);
-s32 BgCheck_EntityLineTest3(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
-                            CollisionPoly** outPoly, s32 checkWall, s32 checkFloor, s32 checkCeil, s32 checkOneFace,
-                            s32* bgId, Actor* actor, f32 checkDist);
-s32 BgCheck_ProjectileLineTest(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
-                               CollisionPoly** outPoly, s32 checkWall, s32 checkFloor, s32 checkCeil, s32 checkOneFace,
-                               s32* bgId);
-s32 BgCheck_AnyLineTest1(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly,
-                         s32 checkOneFace);
-s32 BgCheck_AnyLineTest2(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly,
-                         s32 checkWall, s32 checkFloor, s32 checkCeil, s32 checkOneFace);
-s32 BgCheck_AnyLineTest3(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly,
-                         s32 checkWall, s32 checkFloor, s32 checkCeil, s32 checkOneFace, s32* bgId);
+s32 BgCheck_CameraLineTest1(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly, s32 checkWall, s32 checkFloor, s32 checkCeil, s32 checkOneFace, s32* bgId);
+s32 BgCheck_CameraLineTest2(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly, s32 checkWall, s32 checkFloor, s32 checkCeil, s32 checkOneFace, s32* bgId);
+s32 BgCheck_EntityLineTest1(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly, s32 checkWall, s32 checkFloor, s32 checkCeil, s32 checkOneFace, s32* bgId);
+s32 BgCheck_EntityLineTest2(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly, s32 checkWall, s32 checkFloor, s32 checkCeil, s32 checkOneFace, s32* bgId, Actor* actor);
+s32 BgCheck_EntityLineTest3(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly, s32 checkWall, s32 checkFloor, s32 checkCeil, s32 checkOneFace, s32* bgId, Actor* actor, f32 checkDist);
+s32 BgCheck_ProjectileLineTest(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly, s32 checkWall, s32 checkFloor, s32 checkCeil, s32 checkOneFace, s32* bgId);
+s32 BgCheck_AnyLineTest1(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly, s32 checkOneFace);
+s32 BgCheck_AnyLineTest2(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly, s32 checkWall, s32 checkFloor, s32 checkCeil, s32 checkOneFace);
+s32 BgCheck_AnyLineTest3(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly, s32 checkWall, s32 checkFloor, s32 checkCeil, s32 checkOneFace, s32* bgId);
 s32 BgCheck_SphVsFirstPolyImpl(CollisionContext* colCtx, u16 xpFlags, CollisionPoly** outPoly, s32* outBgId, Vec3f* center, f32 radius, Actor* actor, u16 bciFlags);
 s32 BgCheck_SphVsFirstPoly(CollisionContext* colCtx, Vec3f* center, f32 radius);
 s32 BgCheck_SphVsFirstWall(CollisionContext* colCtx, Vec3f* center, f32 radius);
@@ -916,11 +895,15 @@ void DynaPoly_UpdateBgActorTransforms(PlayState* play, DynaCollisionContext* dyn
 void CollisionHeader_SegmentedToVirtual(CollisionHeader* colHeader);
 void CollisionHeader_GetVirtual(CollisionHeader* colHeader, CollisionHeader** dest);
 void BgCheck_InitCollisionHeaders(CollisionContext* colCtx, PlayState* play);
-u32 SurfaceType_GetData(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 dataIdx);
-u32 SurfaceType_GetCamDataIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
-u16 SurfaceType_GetCameraSType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
-u16 SurfaceType_GetNumCameras(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
-Vec3s* SurfaceType_GetCamPosData(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+
+u32 SurfaceType_GetBgCamIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+u16 BgCheck_GetBgCamSettingImpl(CollisionContext* colCtx, u32 bgCamIndex, s32 bgId);
+u16 BgCheck_GetBgCamSetting(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+u16 BgCheck_GetBgCamCountImpl(CollisionContext* colCtx, u32 bgCamIndex, s32 bgId);
+u16 BgCheck_GetBgCamCount(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+Vec3s* BgCheck_GetBgCamFuncDataImpl(CollisionContext* colCtx, s32 bgCamIndex, s32 bgId);
+Vec3s* BgCheck_GetBgCamFuncData(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+
 u32 SurfaceType_GetSceneExitIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 func_800C99D4(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 func_800C99FC(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
@@ -950,11 +933,10 @@ u32 SurfaceType_IsWallDamage(CollisionContext* colCtx, CollisionPoly* poly, s32 
 s32 WaterBox_GetSurfaceImpl(PlayState* play, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox, s32* bgId);
 s32 WaterBox_GetSurface1(PlayState* play, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox);
 s32 WaterBox_GetSurface1_2(PlayState* play, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox);
-s32 WaterBox_GetSurface2(PlayState* play, CollisionContext* colCtx, Vec3f* pos, f32 surfaceCheckDist,
-                         WaterBox** outWaterBox, s32* bgId);
+s32 WaterBox_GetSurface2(PlayState* play, CollisionContext* colCtx, Vec3f* pos, f32 surfaceCheckDist, WaterBox** outWaterBox, s32* bgId);
 f32 func_800CA568(CollisionContext* colCtx, s32 waterBoxId, s32 bgId);
-u16 WaterBox_GetCameraSType(CollisionContext* colCtx, WaterBox* waterBox, s32 bgId);
-void func_800CA6B8(CollisionContext* colCtx, WaterBox* waterBox);
+u16 WaterBox_GetBgCamSetting(CollisionContext* colCtx, WaterBox* waterBox, s32 bgId);
+void WaterBox_GetSceneBgCamSetting(CollisionContext* colCtx, WaterBox* waterBox);
 u32 WaterBox_GetLightSettingIndex(CollisionContext* colCtx, WaterBox* waterBox);
 s32 func_800CA6F0(PlayState* play, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox, s32* bgId);
 s32 func_800CA9D0(PlayState* play, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox);
@@ -998,7 +980,7 @@ f32 func_800CB700(Camera* camera);
 // void func_800CB7F8(void);
 // void func_800CB828(void);
 // void func_800CB854(void);
-// void func_800CB880(void);
+// void Camera_IsSwimming(void);
 // void func_800CB8C8(void);
 // void func_800CB8F4(void);
 // void func_800CB924(void);
@@ -1021,10 +1003,10 @@ f32 func_800CB700(Camera* camera);
 // void func_800CC488(void);
 // void func_800CC56C(void);
 // void func_800CC5C8(void);
-// void func_800CC740(void);
-// void func_800CC7A8(void);
-// void func_800CC804(void);
-// void func_800CC874(void);
+// void Camera_GetBgCamOrActorCsCamSetting(void);
+// void Camera_GetBgCamOrActorCsCamFuncData(void);
+// void Camera_GetBgCamIndex(void);
+// void Camera_GetWaterBoxBgCamSetting(void);
 // void func_800CC938(void);
 // void func_800CC958(void);
 // void func_800CC9C0(void);
@@ -1413,30 +1395,8 @@ s32 Cutscene_GetActorActionIndex(PlayState* play, u16 actorActionCmd);
 s32 Cutscene_CheckActorAction(PlayState* play, u16 actorActionCmd);
 u8 Cutscene_IsPlaying(PlayState* play);
 
-void GetItem_Draw(PlayState* play, s16 index);
-void func_800EE364(PlayState* play, s16 index);
-void func_800EE400(PlayState* play, s16 index);
-void func_800EE5FC(PlayState* play, s16 index);
-void func_800EE7D8(PlayState* play, s16 index);
-void func_800EE940(PlayState* play, s16 index);
-void func_800EEA48(PlayState* play, s16 index);
-void func_800EEC18(PlayState* play, s16 index);
-void func_800EED20(PlayState* play, s16 index);
-void func_800EEE34(PlayState* play, s16 index);
-void func_800EEF4C(PlayState* play, s16 index);
-void func_800EF054(PlayState* play, s16 index);
-void func_800EF0F0(PlayState* play, s16 index);
-void func_800EF1F4(PlayState* play, s16 index);
-void func_800EF2AC(PlayState* play, s16 index);
-void func_800EF364(PlayState* play, s16 index);
-void func_800EF4D4(PlayState* play, s16 index);
-void func_800EF65C(PlayState* play, s16 index);
-void func_800EF780(PlayState* play, s16 index);
-void func_800EF89C(PlayState* play, s16 index);
-void func_800EF984(PlayState* play, s16 index);
-void func_800EFAB8(PlayState* play, s16 index);
-void func_800EFBFC(PlayState* play, s16 index);
-void func_800EFD44(PlayState* play, s16 index);
+void GetItem_Draw(PlayState* play, s16 drawId);
+
 void EffFootmark_Init(PlayState* play);
 void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, Vec3f* location, u16 size, u8 red, u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay);
 void EffFootmark_Update(PlayState* play);
@@ -1471,9 +1431,9 @@ s16 ActorCutscene_GetCurrentIndex(void);
 ActorCutscene* ActorCutscene_GetCutscene(s16 index);
 s16 ActorCutscene_GetAdditionalCutscene(s16 index);
 s16 ActorCutscene_GetLength(s16 index);
-s32 func_800F2138(s8 arg0);
+s32 func_800F2138(s32 arg0);
 s32 func_800F2178(s16 arg0);
-s16 ActorCutscene_GetCurrentCamera(s16 index);
+s16 ActorCutscene_GetCurrentSubCamId(s16 index);
 s16 func_800F21CC(void);
 s32 func_800F22C4(s16 param_1, Actor* actor);
 void ActorCutscene_SetReturnCamera(s16 index);
@@ -1645,7 +1605,7 @@ void Color_RGBA8_Copy(Color_RGBA8* dst, Color_RGBA8* src);
 void func_801000A4(u16 sfxId);
 void func_801000CC(u16 sfxId);
 void Lib_PlaySfxAtPos(Vec3f* pos, u16 sfxId);
-void Lib_Vec3f_TranslateAndRotateY(Vec3f* translation, s16 a, Vec3f* src, Vec3f* dst);
+void Lib_Vec3f_TranslateAndRotateY(Vec3f* translation, s16 rotAngle, Vec3f* src, Vec3f* dst);
 void Lib_LerpRGB(Color_RGB8* a, Color_RGB8* b, f32 t, Color_RGB8* dst);
 f32 Math_Vec3f_StepTo(Vec3f* start, Vec3f* target, f32 speed);
 void Lib_Nop801004FC(void);
@@ -2271,7 +2231,7 @@ s32 Entrance_GetSceneNum(u16 entranceIndex);
 s32 Entrance_GetSceneNumAbsolute(u16 entranceIndex);
 s32 Entrance_GetSpawnNum(u16 entranceIndex);
 s32 Entrance_GetTransitionFlags(u16 entranceIndex);
-s32 Schedule_RunScript(PlayState* play, u8* script, ScheduleResult* result);
+s32 Schedule_RunScript(PlayState* play, u8* script, ScheduleOutput* output);
 void SkelAnime_DrawLimbLod(PlayState* play, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor, s32 lod);
 void SkelAnime_DrawLod(PlayState* play, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor, s32 lod);
 void SkelAnime_DrawFlexLimbLod(PlayState* play, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor, s32 lod, Mtx** mtx);
@@ -2336,8 +2296,7 @@ s32 Animation_OnFrameImpl(SkelAnime* skelAnime, f32 frame, f32 updateRate);
 s32 LinkAnimation_OnFrame(SkelAnime* skelAnime, f32 frame);
 void SkelAnime_Init(PlayState* play, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg, AnimationHeader* animation, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
 void SkelAnime_InitFlex(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, AnimationHeader* animation, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
-void SkelAnime_InitSkin(GameState* gameState, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
-                        AnimationHeader* animation);
+void SkelAnime_InitSkin(GameState* gameState, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg, AnimationHeader* animation);
 void SkelAnime_SetUpdate(SkelAnime* skelAnime);
 s32 SkelAnime_Update(SkelAnime* skelAnime);
 s32 SkelAnime_Morph(SkelAnime* skelAnime);
@@ -2648,7 +2607,7 @@ s32 Play_CreateSubCamera(PlayState* play);
 s32 Play_GetActiveCamId(PlayState* play);
 void Play_CameraChangeStatus(PlayState* play, s16 camId, s16 status);
 void Play_ClearCamera(PlayState* play, s16 camId);
-Camera* Play_GetCamera(PlayState* play, s16 index);
+Camera* Play_GetCamera(PlayState* play, s16 camId);
 s32 Play_CameraSetAtEye(PlayState* play, s16 camId, Vec3f* at, Vec3f* eye);
 void Play_CameraSetAtEyeUp(PlayState* play, s16 camId, Vec3f* at, Vec3f* eye, Vec3f* up);
 void Play_CameraSetFov(PlayState* play, s16 camId, f32 fov);
@@ -2657,12 +2616,11 @@ void Play_CopyCamera(PlayState* play, s16 dstCamId, s16 srcCamId);
 // void func_80169A50(void);
 void Play_CameraChangeSetting(PlayState* play, s16 camId, s16 setting);
 void func_80169AFC(PlayState* play, s16 camId, s16 arg2);
-s16 Play_GetCsCamDataSetting(PlayState* play, s32 camId);
-Vec3s* Play_GetCsCamDataVec3s(PlayState* play, s32 camId);
+u16 Play_GetActorCsCamSetting(PlayState* this, s32 csCamDataIndex);
+Vec3s* Play_GetActorCsCamFuncData(PlayState* this, s32 csCamDataIndex);
 s16 Play_GetOriginalSceneNumber(s16 sceneNum);
 void Play_SaveCycleSceneFlags(GameState* thisx);
-void Play_SetRespawnData(GameState* thisx, s32 respawnMode, u16 entranceIndex, s32 roomIndex, s32 playerParams,
-                         Vec3f* pos, s16 yaw);
+void Play_SetRespawnData(GameState* thisx, s32 respawnMode, u16 entranceIndex, s32 roomIndex, s32 playerParams, Vec3f* pos, s16 yaw);
 void Play_SetupRespawnPoint(GameState* thisx, s32 respawnMode, s32 playerParams);
 void func_80169EFC(GameState* thisx);
 void func_80169F78(GameState* thisx);
@@ -3021,9 +2979,7 @@ void func_801835EC(UNK_PTR arg0, UNK_PTR arg1);
 // void func_80183B68(void);
 s32 func_80183DE0(SkeletonInfo* skeletonInfo);
 // void func_8018410C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-void func_8018450C(PlayState* play, SkeletonInfo* skeleton, Mtx* mtx,
-                   OverrideKeyframeDrawScaled overrideKeyframeDraw, PostKeyframeDrawScaled postKeyframeDraw,
-                   Actor* actor);
+void func_8018450C(PlayState* play, SkeletonInfo* skeleton, Mtx* mtx, OverrideKeyframeDrawScaled overrideKeyframeDraw, PostKeyframeDrawScaled postKeyframeDraw, Actor* actor);
 // void func_801845A4(void);
 // void func_801845C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_80184638(void);
@@ -3150,8 +3106,8 @@ void AudioLoad_AsyncLoadFont(s32 fontId, s32 arg1, s32 retData, OSMesgQueue* ret
 u8* AudioLoad_GetFontsForSequence(s32 seqId, u32* outNumFonts);
 void AudioLoad_DiscardSeqFonts(s32 seqId);
 void func_8018FA60(u32 tableType, u32 id, s32 type, s32 data);
-s32 AudioLoad_SyncIniPlayer(s32 playerIdx, s32 seqId, s32 arg2);
-s32 AudioLoad_SyncInitSetSeqqPlayerSkipTicks(s32 playerIdx, s32 seqId, s32 skipTicks);
+s32 AudioLoad_SyncInitSeqPlayer(s32 playerIndex, s32 seqId, s32 arg2);
+s32 AudioLoad_SyncInitSeqPlayerSkipTicks(s32 playerIndex, s32 seqId, s32 skipTicks);
 void AudioLoad_ProcessLoads(s32 resetStatus);
 void AudioLoad_SetDmaHandler(DmaHandler callback);
 void AudioLoad_Init(void* heap, u32 heapSize);
@@ -3224,43 +3180,17 @@ void AudioEffects_SequencePlayerProcessSound(SequencePlayer* seqPlayer);
 void AudioEffects_NoteVibratoUpdate(Note* note);
 void AudioEffects_NoteVibratoInit(Note* note);
 void AudioEffects_NotePortamentoInit(Note* note);
-void AudioEffects_AdsrInit(AdsrState* adsr, AdsrEnvelope* envelope, s16* volOut);
+void AudioEffects_AdsrInit(AdsrState* adsr, EnvelopePoint* envelope, s16* volOut);
 f32 AudioEffects_AdsrUpdate(AdsrState* adsr);
-// void func_801974D0(void);
-// void func_80197538(void);
-// void func_80197714(void);
-// void func_80197880(void);
-// void func_801979D8(void);
-// void func_80197A54(void);
 void AudioSeq_SequenceChannelDisable(SequenceChannel* channel);
-// void func_80197B14(void);
-// void func_80197C0C(void);
-// void func_80197C8C(void);
 void AudioSeq_SequencePlayerDisableAsFinished(SequencePlayer* seqPlayer);
 void AudioSeq_SequencePlayerDisable(SequencePlayer* seqPlayer);
 void AudioSeq_AudioListPushBack(AudioListItem* list, AudioListItem* item);
 void* AudioSeq_AudioListPopBack(AudioListItem* list);
-// void func_80197E88(void);
-// void func_80197F28(void);
-// void func_80197F3C(void);
-// void func_80197F74(void);
-// void func_80197FB4(void);
-// void func_801980D0(void);
-// void func_8019815C(void);
-// void func_8019825C(void);
-// void func_80198640(void);
-// void func_80198CE0(void);
-// void func_801990F4(void);
-// void func_80199124(void);
-// void func_80199198(void);
-// void func_80199244(void);
-void func_80199268(s32* param_1);
-// void func_8019A0BC(void);
-// void func_8019AA3C(void);
-// void func_8019AAF0(void);
+void AudioSeq_ProcessSequences(s32 arg0);
+void AudioSeq_SkipForwardSequence(SequencePlayer* seqPlayer);
 void AudioSeq_ResetSequencePlayer(SequencePlayer* seqPlayer);
-void AudioSeq_InitSequencePlayerChannels(s32 playerIdx);
-// void func_8019ACEC(void);
+void AudioSeq_InitSequencePlayerChannels(s32 playerIndex);
 void AudioSeq_InitSequencePlayers(void);
 void func_8019AE40(s32 param_1, s32 param_2, u32 param_3, s32 param_4);
 void func_8019AEC0(UNK_PTR param_1, UNK_PTR param_2);
@@ -3382,7 +3312,7 @@ void func_801A1DB8(Vec3f* vec, u8 seqId, f32 arg2);
 // void func_801A1E0C(void);
 void func_801A1F00(u8 arg0, u16 seqId);
 void func_801A1F88(void);
-void func_801A1FB4(u8 playerIdx, Vec3f* pos, u16 seqId, f32 maxDist);
+void func_801A1FB4(u8 playerIndex, Vec3f* pos, u16 seqId, f32 maxDist);
 // void func_801A2090(void);
 void func_801A246C(u8 param_1, u8 param_2);
 // void func_801A2544(void);
@@ -3500,7 +3430,7 @@ void Audio_QueueSeqCmd(u32 cmd);
 // void func_801A89D0(void);
 s32 func_801A8A50(s32 param1);
 // void func_801A8ABC(void);
-void Audio_SetVolumeScale(u8 playerIdx, u8 scaleIdx, u8 targetVol, u8 volFadeTimer);
+void Audio_SetVolumeScale(u8 playerIndex, u8 scaleIndex, u8 targetVol, u8 volFadeTimer);
 // void func_801A8D5C(void);
 // void func_801A8E90(void);
 // void func_801A9768(void);

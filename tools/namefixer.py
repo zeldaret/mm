@@ -23,7 +23,7 @@ wordReplace = {
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
     "atan_flip": "Math_Acot2F",
     "atans": "Math_Atan2S",
-    
+
     # "SysMatrix_StateAlloc":                         "Matrix_StateAlloc",
     # "SysMatrix_StatePush":                          "Matrix_StatePush",
     # "SysMatrix_StatePop":                           "Matrix_StatePop",
@@ -393,8 +393,8 @@ wordReplace = {
     "BgCheck_RelocateMeshHeader": "CollisionHeader_GetVirtual",
     "BgCheck_RelocateAllMeshHeaders": "BgCheck_InitCollisionHeaders",
     "BgCheck_GetPolygonAttributes": "SurfaceType_GetData",
-    "func_800C9704": "SurfaceType_GetCamDataIndex",
-    "func_800C9924": "SurfaceType_GetCamPosData",
+    "func_800C9704": "SurfaceType_GetBgCamIndex",
+    "func_800C9924": "BgCheck_GetBgCamFuncData",
     "func_800C99AC": "SurfaceType_GetSceneExitIndex",
     "func_800C9B90": "SurfaceType_IsHorseBlocked",
     "func_800C9BDC": "SurfaceType_GetSfx",
@@ -460,8 +460,8 @@ wordReplace = {
     "func_801699D4": "Play_CopyCamera",
     "func_80169AC0": "Play_CameraChangeSetting",
     "func_80169BC4": "Play_CameraGetUID",
-    "func_80169C64": "Play_GetCsCamDataSetting",
-    "func_80169C84": "Play_GetCsCamDataVec3s",
+    "func_80169C64": "Play_GetActorCsCamSetting",
+    "func_80169C84": "Play_GetActorCsCamFuncData",
     "convert_scene_number_among_shared_scenes": "Play_GetOriginalSceneNumber",
     "func_80169D40": "Play_SaveCycleSceneFlags",
     "func_80169DCC": "Play_SetRespawnData",
@@ -576,6 +576,7 @@ wordReplace = {
     "func_800E8F08": "Actor_TrackNone",
     "func_800E8FA4": "Actor_TrackPoint",
     "func_800E9250": "Actor_TrackPlayer",
+    "func_800E8EA0": "Actor_ContinueText",
 
     "func_8010A000": "Map_GetDungeonOrBossAreaIndex",
     "func_8010A074": "Map_IsInDungeonOrBossArea",
@@ -590,6 +591,8 @@ wordReplace = {
     "func_8010A54C": "Minimap_Draw",
     "func_8010A580": "Map_Update",
 
+    "ActorCutscene_GetCurrentCamera": "ActorCutscene_GetCurrentSubCamId",
+
     # Structs
     "ActorAnimationEntry": "AnimationInfo",
     "ActorAnimationEntryS": "AnimationInfoS",
@@ -597,6 +600,7 @@ wordReplace = {
     "GlobalContext": "PlayState",
     "globalCtx": "play",
     "globalCtx2": "play2",
+    "ScheduleResult": "ScheduleOutput",
 
     # Struct members
     "skelAnime.unk03": "skelAnime.taper",
@@ -623,6 +627,7 @@ wordReplace = {
     "gSaveContext.playerForm": "gSaveContext.save.playerForm",
     "gSaveContext.day": "gSaveContext.save.day",
     "gSaveContext.isNight": "gSaveContext.save.isNight",
+    "gSaveContext.environmentTime": "gSaveContext.skyboxTime",
     "gSaveContext.naviTimer": "gSaveContext.save.playerData.tatlTimer",
     "gSaveContext.tatlTimer": "gSaveContext.save.playerData.tatlTimer",
     "gSaveContext.rupees": "gSaveContext.save.playerData.rupees",
@@ -675,10 +680,20 @@ wordReplace = {
     "globalCtx->envCtx.unk_DC": "play->envCtx.lightBlend",
     "globalCtx->interfaceCtx.unk_21E": "play->interfaceCtx.bButtonDoAction",
 
+    "play->msgCtx.unk11F04": "play->msgCtx.currentTextId",
+    "play->msgCtx.unk11F10": "play->msgCtx.msgLength",
+    "play->msgCtx.unk11F22": "play->msgCtx.msgMode",
+    "play->msgCtx.unk12023": "play->msgCtx.stateTimer",
     "play->msgCtx.unk1202A": "play->msgCtx.ocarinaMode",
     "play->msgCtx.unk1202C": "play->msgCtx.ocarinaAction",
-    "play->msgCtx.unk11F22": "play->msgCtx.msgMode",
-    "play->msgCtx.unk11F04": "play->msgCtx.currentTextId",
+
+    "play->sceneLoadFlag": "play->transitionTrigger",
+    "play->unk_18B4A": "play->transitionMode",
+    "play->unk_1887F": "play->transitionType",
+    "gSaveContext.nextTransition": "gSaveContext.nextTransitionType",
+    "gSaveContext.unk_3F48": "gSaveContext.cutsceneTransitionControl",
+    "gSaveContext.fadeDuration": "gSaveContext.transFadeDuration",
+    "gSaveContext.fadeSpeed": "gSaveContext.transWipeSpeed",
 
     "D_801D15B0" : "gZeroVec3f",
     "D_801D15BC" : "gZeroVec3s",
