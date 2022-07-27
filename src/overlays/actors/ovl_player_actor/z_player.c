@@ -2808,7 +2808,7 @@ f32 func_80835D2C(PlayState* play, Player* this, Vec3f* arg2, Vec3f* pos) {
     return func_80835CD8(play, this, arg2, pos, &poly, &bgId);
 }
 
-void func_80835D58(PlayState* play, Player* this, Vec3f* arg2, CollisionPoly** outPoly, s32* bgId, Vec3f* posResult) {
+s32 func_80835D58(PlayState* play, Player* this, Vec3f* arg2, CollisionPoly** outPoly, s32* bgId, Vec3f* posResult) {
     Vec3f posA;
     Vec3f posB;
 
@@ -2816,7 +2816,7 @@ void func_80835D58(PlayState* play, Player* this, Vec3f* arg2, CollisionPoly** o
     posA.y = this->actor.world.pos.y + arg2->y;
     posA.z = this->actor.world.pos.z;
     func_80835BC8(this, &this->actor.world.pos, arg2, &posB);
-    BgCheck_EntityLineTest2(&play->colCtx, &posA, &posB, posResult, outPoly, 1, 0, 0, 1, bgId, &this->actor);
+    return BgCheck_EntityLineTest2(&play->colCtx, &posA, &posB, posResult, outPoly, 1, 0, 0, 1, bgId, &this->actor);
 }
 
 extern Vec3f D_8085D100;
@@ -5493,45 +5493,76 @@ void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
     }
 }
 
-void func_808442D8(PlayState* arg0, Player* arg1) {
+void func_808442D8(PlayState* play, Player* this) {
     f32 var_fa0;
     f32 temp_fv1;
 
-    if (arg1->unk_B08[1] == 0.0f) {
-        func_80831990(arg0, arg1, ITEM_NONE);
+    if (this->unk_B08[1] == 0.0f) {
+        func_80831990(play, this, ITEM_NONE);
         return;
     }
 
     var_fa0 = 1.0f;
-    if (DECR(arg1->unk_B28) == 0) {
+    if (DECR(this->unk_B28) == 0) {
         Inventory_ChangeAmmo(ITEM_STICK, -1);
-        arg1->unk_B28 = 1;
-        arg1->unk_B08[1] = 0.0f;
+        this->unk_B28 = 1;
+        this->unk_B08[1] = 0.0f;
         var_fa0 = 0.0f;
-    } else if (arg1->unk_B28 >= 0xC9) {
-        var_fa0 = (f32) (0xD2 - arg1->unk_B28) / 10.0f;
-    } else if (arg1->unk_B28 < 0x14) {
-        var_fa0 = (f32) arg1->unk_B28 / 20.0f;
-        arg1->unk_B08[1] = var_fa0;
+    } else if (this->unk_B28 >= 0xC9) {
+        var_fa0 = (0xD2 - this->unk_B28) / 10.0f;
+    } else if (this->unk_B28 < 0x14) {
+        var_fa0 = this->unk_B28 / 20.0f;
+        this->unk_B08[1] = var_fa0;
     }
 
     if (var_fa0 > 0.0f) {
-        func_800B0EB0(arg0, &arg1->meleeWeaponInfo[0].tip, &D_8085D364, &D_8085D370, &D_8085D37C, &D_8085D380, (var_fa0 * 200.0f), 0, 8);
-        if (((arg0->roomCtx.currRoom.enablePosLights != 0)) || (gGameInfo->data[0x23D] != 0)) {
+        func_800B0EB0(play, &this->meleeWeaponInfo[0].tip, &D_8085D364, &D_8085D370, &D_8085D37C, &D_8085D380, (var_fa0 * 200.0f), 0, 8);
+        if (((play->roomCtx.currRoom.enablePosLights != 0)) || (gGameInfo->data[0x23D] != 0)) {
             temp_fv1 = (Rand_ZeroOne() * 30.0f) + 225.0f;
-            Lights_PointSetColorAndRadius(&arg1->lightInfo, temp_fv1, temp_fv1 * 0.7f, 0, var_fa0 * 300.0f);
+            Lights_PointSetColorAndRadius(&this->lightInfo, temp_fv1, temp_fv1 * 0.7f, 0, var_fa0 * 300.0f);
         }
     }
 }
 
-
+void func_808445C4(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808445C4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808446F4.s")
+void func_808446F4(PlayState* play, Player* this) {
+    f32 var_fv0;
+
+    var_fv0 = 200000.0f - (this->unk_AA0 * 5.0f);
+    if (var_fv0 < 0.0f) {
+        var_fv0 = 0.0f;
+    }
+
+    this->unk_A9C += var_fv0;
+    if (this->unk_A9C > 4000000.0f) {
+        this->unk_A9C = 0.0f;
+        Player_RequestRumble(play, this, 120, 20, 10, SQ(0));
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80844784.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80844D80.s")
+void func_80844D80(PlayState* play, Player* this) {
+    Vec3f pos;
+    Vec3f spA0;
+    Vec3f velocity;
+    Vec3f accel;
+    Vec3f sp7C;
+    s32 i;
+
+    Math_Vec3f_Diff(&this->meleeWeaponInfo[0].tip, &this->meleeWeaponInfo[0].base, &sp7C);
+    Math_Vec3f_SumScaled(&this->meleeWeaponInfo[0].base, &sp7C, 0.3f, &spA0);
+
+    for (i = 0; i< 2; i++) {
+        Math_Vec3f_SumScaled(&this->meleeWeaponInfo[0].base, &sp7C, Rand_ZeroOne(), &pos);
+        Math_Vec3f_AddRand(&pos, 15.0f, &pos);
+        Math_Vec3f_DistXYZAndStoreNormDiff(&spA0, &pos, 1.7f, &velocity);
+        Math_Vec3f_ScaleAndStore(&velocity, 0.01f, &accel);
+        EffectSsKirakira_SpawnDispersed(play, &pos, &velocity, &accel, &D_8085D3F4, &D_8085D3F8, Rand_S16Offset(-20, -120), 15);
+    }
+}
 
 #if 0
 // Player_UpdateCommon
@@ -6128,8 +6159,27 @@ void Player_DrawGameplay(PlayState* play, Player* this, s32 lod, Gfx* cullDList,
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80846460(Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80846460.s")
+void func_80846460(Player* this) {
+    Vec3f* pos;
+    Vec3f* bodyPartsPos;
+    s32 i;
+
+    this->actor.focus.pos.x = this->actor.world.pos.x;
+    this->actor.focus.pos.z = this->actor.world.pos.z;
+    this->actor.focus.pos.y = this->actor.world.pos.y + 24.0f;
+
+    pos = &this->actor.world.pos;
+    bodyPartsPos = this->bodyPartsPos;
+    for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+        Math_Vec3f_Copy(bodyPartsPos, pos);
+        bodyPartsPos++;
+    }
+
+    this->bodyPartsPos[7].y = this->actor.world.pos.y + 24.0f;
+    this->bodyPartsPos[0].y = this->actor.world.pos.y + 60.0f;
+    Math_Vec3f_Copy(this->actor.shape.feetPos, pos);
+    Math_Vec3f_Copy(&this->actor.shape.feetPos[1], pos);
+}
 
 extern struct_80124618 D_8085D510[2];
 extern struct_80124618 D_8085D520[2];
@@ -6537,21 +6587,99 @@ void Player_Destroy(Actor* thisx, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808475B4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808477D0.s")
+void func_808477D0(PlayState* play, Player* this, Input* input, f32 arg3) {
+    f32 var_fv0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847880.s")
+    if ((input != NULL) && CHECK_BTN_ANY(input->press.button, BTN_B | BTN_A)) {
+        var_fv0 = 1.0f;
+    } else {
+        var_fv0 = 0.5f;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847994.s")
+    var_fv0 = var_fv0 * arg3;
+    var_fv0 = CLAMP(var_fv0, 1.0f, 2.5f);
+    this->skelAnime.playSpeed = var_fv0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808479F4.s")
+    LinkAnimation_Update(play, &this->skelAnime);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847A50.s")
+void func_80854614(Player *this, PlayState *play);
+
+s32 func_80847880(PlayState* play, Player* this) {
+    if (play->unk_1887C != 0) {
+        if (play->sceneNum == SCENE_20SICHITAI) {
+            func_80831494(play, this, func_80854430, 0);
+            play->unk_1887C = 0;
+            this->csMode = 0;
+            return true;
+        }
+
+        func_8082DE50(play, this);
+        func_80831494(play, this, func_80854614, 0);
+        if (!func_800B7118(this) || Player_IsHoldingHookshot(this)) {
+            func_80831990(play, this, ITEM_BOW);
+        }
+        func_8082DB18(play, this, func_8082ED20(this));
+        this->csMode = 0;
+        this->stateFlags1 |= PLAYER_STATE1_100000;
+        func_8082DABC(this);
+        func_80836D8C(this);
+
+        return true;
+    }
+    return false;
+}
+
+s32 func_80847994(PlayState* play, Player* this) {
+    if (this->stateFlags3 & PLAYER_STATE3_20) {
+        this->stateFlags3 &= ~PLAYER_STATE3_20;
+        this->heldItemActionParam = PLAYER_AP_OCARINA;
+        this->unk_AA5 = 5;
+        func_80838A90(this, play);
+        return true;
+    }
+    return false;
+}
+
+void func_808479F4(PlayState* play, Player* this, f32 arg2) {
+    if (this->actor.wallBgId != 0x32) {
+        DynaPolyActor* actor = DynaPoly_GetActor(&play->colCtx, this->actor.wallBgId);
+
+        if (actor != NULL) {
+            func_800B72F8(actor, arg2, this->actor.world.rot.y);
+        }
+    }
+}
+
+void func_80847A50(Player* this) {
+    func_800B8E58(this, ((this->unk_AE7 != 0) ? NA_SE_PL_WALK_METAL1 : NA_SE_PL_WALK_LADDER) + this->ageProperties->unk_94);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847A94.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847BF0.s")
 
+#if 0
+void func_80847E2C(Player* arg0, f32 arg1, f32 arg2) {
+    f32 var_fa0;
+
+    if ((arg0->unk_B48 != 0.0f) && (arg2 <= arg0->skelAnime.curFrame)) {
+        if (arg1 < fabsf(arg0->unk_B48)) {
+            if (arg0->unk_B48 >= 0.0f) {
+                var_fa0 = 1 * arg1;
+            } else {
+                var_fa0 = -1 * arg1;
+            }
+        } else {
+            var_fa0 = arg0->unk_B48;
+        }
+        arg0->unk_B48 -= var_fa0;
+        arg0->actor.world.pos.y += var_fa0;
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847E2C.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847ED4.s")
 
