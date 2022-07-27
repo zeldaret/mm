@@ -321,7 +321,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 this->actionFunc = EnKakasi_RegularDialogue;
             } else {
-                func_800B8500(&this->actor, play, 9999.9f, 9999.9f, -1);
+                func_800B8500(&this->actor, play, 9999.9f, 9999.9f, EXCH_ITEM_MINUS1);
             }
         }
     }
