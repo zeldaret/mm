@@ -6849,6 +6849,7 @@ s32 func_80848570(Player* this, PlayState* play) {
     return true;
 }
 
+// elegy of emptiness (?)
 void func_80848640(PlayState* play, Player* this) {
     EnTorch2* torch2;
     Actor* effChange;
