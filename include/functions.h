@@ -24,7 +24,7 @@ void* Yaz0_FirstDMA(void);
 void* Yaz0_NextDMA(void* curSrcPos);
 s32 Yaz0_DecompressImpl(u8* src, u8* dst);
 void Yaz0_Decompress(u32 romStart, void* dst, size_t size);
-void IrqMgr_AddClient(IrqMgr* irqmgr, IrqMgrClient* param_2, OSMesgQueue* param_3);
+void IrqMgr_AddClient(IrqMgr* irqmgr, IrqMgrClient* client, OSMesgQueue* msgQueue);
 void IrqMgr_RemoveClient(IrqMgr* irqmgr, IrqMgrClient* remove);
 void IrqMgr_SendMesgForClient(IrqMgr* irqmgr, OSMesg msg);
 void IrqMgr_JamMesgForClient(IrqMgr* irqmgr, OSMesg msg);
@@ -539,8 +539,7 @@ void EffectSsBlast_SpawnWhiteShockwave(PlayState* play, Vec3f* pos, Vec3f* veloc
 void EffectSsGSpk_SpawnFuse(PlayState* play, Actor* actor, Vec3f* pos, Vec3f* velocity, Vec3f* accel);
 // void EffectSsGSpk_SpawnRandColor(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
 // void EffectSsGSpk_SpawnSmall(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-void EffectSsDFire_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
-                         s16 alpha, s16 fadeDelay, s16 arg8, s32 life);
+void EffectSsDFire_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep, s16 alpha, s16 fadeDelay, s16 arg8, s32 life);
 void EffectSsBubble_Spawn(PlayState* play, Vec3f* pos, f32 yPosOffset, f32 yPosRandScale, f32 xzPosRandScale, f32 scale);
 void EffectSsGRipple_Spawn(PlayState* play, Vec3f* pos, s16 radius, s16 radiusMax, s16 life);
 void EffectSsGSplash_Spawn(PlayState* play, Vec3f* pos, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 type, s16 scale);
@@ -3017,7 +3016,7 @@ void func_80185F64(void* arg0, UNK_TYPE arg1, UNK_TYPE arg2);
 s32 func_80185F90(u32 param_1);
 u32 osFlashGetAddr(u32 pageNum);
 OSPiHandle* osFlashReInit(u8 latency, u8 pulse, u8 pageSize, u8 relDuration, u32 start);
-void osFlashChange(u32 flash_num);
+void osFlashChange(u32 flashNum);
 OSPiHandle* osFlashInit(void);
 void osFlashReadStatus(u8* flashStatus);
 void osFlashReadId(u32* flashType, u32* flashVendor);
