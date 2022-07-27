@@ -524,13 +524,12 @@ s32 func_80BA4530(EnToto* this, PlayState* play) {
             return func_80BA407C(this, play);
         }
         if (!ENTOTO_WEEK_EVENT_FLAGS) {
-            for (i = 0; i < 4; i++) {
+            for (i = 0; i < ARRAY_COUNT(D_80BA50DC); i++) {
                 if (func_80BA44D4(&D_80BA50DC[i], player)) {
                     if (this->unk2B1 < 10) {
                         this->unk2B1++;
                         if (this->unk2B1 >= 10) {
-                            Message_StartTextbox(play, D_80BA50DC[((void)0, gSaveContext.save.playerForm) - 1].unk2,
-                                                 NULL);
+                            Message_StartTextbox(play, D_80BA50DC[GET_PLAYER_FORM - 1].unk2, NULL);
                         }
                     }
                     return 0;
@@ -584,7 +583,7 @@ s32 func_80BA47E0(EnToto* this, PlayState* play) {
     if (gSaveContext.save.weekEventReg[56] & 0x80) {
         this->unk2B3 += 8;
     }
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < ARRAY_COUNT(D_80BA50DC); i++) {
         if (gSaveContext.save.playerForm != (i + 1) && (D_80BA5128[i] & this->unk2B3)) {
             Math_Vec3s_ToVec3f(&spawnPos, &D_80BA50DC[i].unk6);
             Actor_Spawn(&play->actorCtx, play, ACTOR_PLAYER, spawnPos.x, spawnPos.y, spawnPos.z, i + 2, 0, 0, -1);

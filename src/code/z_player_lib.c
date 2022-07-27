@@ -361,7 +361,7 @@ void func_8012301C(Player* player, PlayState* play2) {
     player->unk_AE7++;
 
     if (player->unk_AE7 == 2) {
-        s16 objectId = gPlayerFormObjectIndices[((void)0, gSaveContext.save.playerForm)];
+        s16 objectId = gPlayerFormObjectIndices[GET_PLAYER_FORM];
 
         gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = objectId;
         func_8012F73C(&play->objectCtx, player->actor.objBankIndex, objectId);
@@ -371,7 +371,7 @@ void func_8012301C(Player* player, PlayState* play2) {
 
         if (Object_IsLoaded(&play->objectCtx, objBankIndex)) {
             player->actor.objBankIndex = objBankIndex;
-            player->actor.shape.rot.z = gSaveContext.save.playerForm + 1;
+            player->actor.shape.rot.z = GET_PLAYER_FORM + 1;
             player->actor.init = PlayerCall_Init;
             player->actor.update = PlayerCall_Update;
             player->actor.draw = PlayerCall_Draw;
@@ -1333,7 +1333,7 @@ s32 Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 y
 }
 
 u8 Player_GetStrength(void) {
-    return sPlayerStrengths[(void)0, gSaveContext.save.playerForm];
+    return sPlayerStrengths[GET_PLAYER_FORM];
 }
 
 u8 Player_GetMask(PlayState* play) {

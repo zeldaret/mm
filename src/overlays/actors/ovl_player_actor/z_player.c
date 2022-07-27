@@ -2594,7 +2594,8 @@ void func_808332A0(PlayState* play, Player* this, s32 arg2, s32 arg3) {
             }
         }
 
-        actor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_M_THUNDER, this->bodyPartsPos[0].x, this->bodyPartsPos[0].y, this->bodyPartsPos[0].z, var_v1, 0, 0, (this->itemActionParam - 3) | arg2);
+        actor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_M_THUNDER, this->bodyPartsPos[0].x, this->bodyPartsPos[0].y,
+                            this->bodyPartsPos[0].z, var_v1, 0, 0, (this->itemActionParam - 3) | arg2);
 
         if ((actor != NULL) && (arg3 != 0)) {
             func_80115DB4(play, 1, 7);
@@ -6873,7 +6874,7 @@ void func_80848640(PlayState* play, Player* this) {
 
     effChange = Actor_Spawn(&play->actorCtx, play, ACTOR_EFF_CHANGE, this->actor.world.pos.x, this->actor.world.pos.y,
                             this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
-                            (((void)0, gSaveContext.save.playerForm) << 3) | this->transformation);
+                            (GET_PLAYER_FORM << 3) | this->transformation);
     if (effChange != NULL) {
         //! @bug
         func_800B8E58((Player*)effChange, NA_SE_PL_TRANSFORM);
@@ -6898,7 +6899,7 @@ s32 func_80848808(Player* this, PlayState* play) {
     if (LinkAnimation_Update(play, &this->unk_284) ||
         ((func_8082F524(this, this->heldItemId) == this->itemActionParam) &&
          (D_80862B48 = D_80862B48 || ((this->modelAnimType != PLAYER_ANIMTYPE_3) &&
-                                        (this->itemActionParam != PLAYER_AP_STICK) && (play->unk_1887C == 0))))) {
+                                      (this->itemActionParam != PLAYER_AP_STICK) && (play->unk_1887C == 0))))) {
         func_8082F43C(play, this, D_8085C9F0[this->itemActionParam]);
         this->unk_ACC = 0;
         this->unk_AA4 = 0;
@@ -7162,7 +7163,8 @@ void func_8084B4A8(Player* this, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084B5C0.s")
 
-void func_8084BAA4(Player* this, PlayState* play) {    func_80832F24(this);
+void func_8084BAA4(Player* this, PlayState* play) {
+    func_80832F24(this);
     if (this->unk_AE7 == 0) {
         D_80862B04 = func_8083216C(this, play);
         if ((func_8084894C == this->unk_AC4) || (func_808331FC(play, this, &this->unk_284, 4.0f) > 0)) {
@@ -7200,7 +7202,7 @@ void func_8084BBF0(Player* this, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084BC64.s")
 
-void func_8084BF28(Player *this, PlayState *play);
+void func_8084BF28(Player* this, PlayState* play);
 
 void func_8084BE40(Player* this, PlayState* play) {
     this->stateFlags2 |= (PLAYER_STATE2_20 | PLAYER_STATE2_40);
@@ -7214,7 +7216,9 @@ void func_8084BE40(Player* this, PlayState* play) {
             this->stateFlags1 |= PLAYER_STATE1_4000000;
         }
 
-        func_8082DB90(play, this, (this->currentYaw != this->actor.shape.rot.y) ? &gameplay_keep_Linkanim_00DC88 : &gameplay_keep_Linkanim_00DAE0);
+        func_8082DB90(play, this,
+                      (this->currentYaw != this->actor.shape.rot.y) ? &gameplay_keep_Linkanim_00DC88
+                                                                    : &gameplay_keep_Linkanim_00DAE0);
         this->currentYaw = this->actor.shape.rot.y;
     }
 }
@@ -7244,7 +7248,9 @@ extern struct_8082E224_arg1 D_8085D60C[];
 
 void func_8084BFDC(Player* this, PlayState* play) {
     if ((this->transformation != PLAYER_FORM_GORON) && (this->actor.depthInWater <= 0.0f)) {
-        if ((play->roomCtx.currRoom.unk2 == 3) || (D_80862B08 == 9) || ((func_808340AC(D_80862B08) >= 0) && !SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId))) {
+        if ((play->roomCtx.currRoom.unk2 == 3) || (D_80862B08 == 9) ||
+            ((func_808340AC(D_80862B08) >= 0) &&
+             !SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId))) {
             func_808344C0(play, this);
         }
     }
@@ -7256,7 +7262,8 @@ void func_8084BFDC(Player* this, PlayState* play) {
         }
     } else if (this->skelAnime.animation == &gameplay_keep_Linkanim_00D698) {
         func_8082E224(this, D_8085D60C);
-    } else if ((this->skelAnime.animation == &gameplay_keep_Linkanim_00DC28) && LinkAnimation_OnFrame(&this->skelAnime, 88.0f)) {
+    } else if ((this->skelAnime.animation == &gameplay_keep_Linkanim_00DC28) &&
+               LinkAnimation_OnFrame(&this->skelAnime, 88.0f)) {
         func_8082E094(this, 0x850);
     }
 }
