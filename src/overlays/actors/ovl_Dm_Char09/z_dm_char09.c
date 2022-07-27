@@ -76,13 +76,7 @@ void func_80AB1FDC(DmChar09 *this, PlayState *play) {
     Vec3f sp58;
     f32 sp54;
     Vec3f sp40;
-    PosRot *sp30;
-    Vec3f *sp28;
-    PosRot *temp_a1;
-    Vec3f *temp_a2;
     f32 temp_fv0;
-    f32 temp_fv0_2;
-    f32 temp_fv1;
     s32 temp_a0;
     s32 temp_v0;
     unkStruct *temp_v0_2;
@@ -91,27 +85,21 @@ void func_80AB1FDC(DmChar09 *this, PlayState *play) {
     f32 phi_fa0;
     s32 phi_a1;
 
-    temp_a1 = &this->actor.world;
-    sp30 = temp_a1;
-    Math_Vec3f_Copy(&sp40, &temp_a1->pos);
+    Math_Vec3f_Copy(&sp40, &this->actor.world.pos);
     Math_Vec3s_ToVec3f(&sp58, this->unk224 + (this->unk21C * 6) + (this->unk220 * 6));
-    temp_a2 = &this->actor.velocity;
-    sp28 = temp_a2;
-    Math_Vec3f_Diff(&sp58, &sp30->pos, temp_a2);
-    temp_fv0 = Math3D_Vec3fMagnitude(sp28);
-    temp_fv1 = this->unk210;
-    if ((temp_fv0 < (temp_fv1 * 8.0f)) && (temp_fv1 > 2.0f)) {
-        phi_fv0 = ((temp_fv1 - 2.0f) * 0.1f) + 2.0f;
-        phi_fa0 = temp_fv1 * 0.03f;
+    Math_Vec3f_Diff(&sp58, &this->actor.world.pos, &this->actor.velocity);
+    temp_fv0 = Math3D_Vec3fMagnitude(&this->actor.velocity);
+    if ((temp_fv0 < (this->unk210 * 8.0f)) && (this->unk210 > 2.0f)) {
+        phi_fv0 = ((this->unk210 - 2.0f) * 0.1f) + 2.0f;
+        phi_fa0 = this->unk210 * 0.03f;
     } else {
-        phi_fv0 = temp_fv1;
-        phi_fa0 = temp_fv1 * 0.16f;
+        phi_fv0 = this->unk210;
+        phi_fa0 = this->unk210 * 0.16f;
     }
     sp54 = temp_fv0;
     Math_StepToF(&this->actor.speedXZ, phi_fv0, phi_fa0);
-    temp_fv0_2 = this->actor.speedXZ;
-    if ((temp_fv0_2 + 0.05f) < temp_fv0) {
-        Math_Vec3f_Scale(sp28, temp_fv0_2 / temp_fv0);
+    if ((this->actor.speedXZ + 0.05f) < temp_fv0) {
+        Math_Vec3f_Scale(&this->actor.velocity, this->actor.speedXZ / temp_fv0);
         this->actor.world.pos.x += this->actor.velocity.x;
         this->actor.world.pos.y += this->actor.velocity.y;
         this->actor.world.pos.z += this->actor.velocity.z;
@@ -122,9 +110,8 @@ void func_80AB1FDC(DmChar09 *this, PlayState *play) {
         this->actor.speedXZ *= 0.4f;
         phi_a1 = 1;
         if (((temp_v0 >= temp_a0) && (this->unk220 > 0)) || ((temp_v0 <= 0) && (this->unk220 < 0))) {
-            temp_v0_2 = this->unk224;
-            temp_v1 = temp_v0_2 + (temp_a0 * 6);
-            if ((temp_v1->unk0 == temp_v0_2->unk0) && (temp_v1->unk2 == temp_v0_2->unk2) && (temp_v1->unk4 == temp_v0_2->unk4)) {
+            temp_v1 = this->unk224 + (temp_a0 * 6);
+            if ((temp_v1->unk0 == this->unk224->unk0) && (temp_v1->unk2 == this->unk224->unk2) && (temp_v1->unk4 == this->unk224->unk4)) {
                 this->unk21C = 0;
                 this->unk220 = 1;
             } else {
@@ -136,7 +123,7 @@ void func_80AB1FDC(DmChar09 *this, PlayState *play) {
             func_80AB1FA0(this, this->unk21C);
         }
     }
-    Math_SmoothStepToS(&this->actor.world.rot.y, (s16) (Math_Vec3f_Yaw(&sp30->pos, &sp40) + 0x7FFF), 1, 0x7D0, (s16) 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, (s16) (Math_Vec3f_Yaw(&this->actor.world.pos, &sp40) + 0x7FFF), 1, 0x7D0, (s16) 0);
     this->actor.shape.rot.y = this->actor.world.rot.y;
 }
 
