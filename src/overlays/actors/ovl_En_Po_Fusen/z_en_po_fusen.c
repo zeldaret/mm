@@ -168,7 +168,7 @@ u16 EnPoFusen_CheckCollision(EnPoFusen* this, PlayState* play) {
     }
 
     this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
-    this->collider.dim.worldSphere.center.y = (this->actor.world.pos.y + 20.0f);
+    this->collider.dim.worldSphere.center.y = this->actor.world.pos.y + 20.0f;
     this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
 
     if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {

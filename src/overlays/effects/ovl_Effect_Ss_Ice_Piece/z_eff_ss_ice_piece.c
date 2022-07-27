@@ -66,7 +66,7 @@ void EffectSsIcePiece_Draw(PlayState* play, u32 index, EffectSs* this) {
     Matrix_RotateXS(this->rPitch, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C2DC(play->state.gfxCtx);
-    gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, (s32)alpha & 0xFF);
+    gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, (u8)(s32)alpha);
     func_800BCC68(&this->pos, play);
     gSPSegment(
         POLY_XLU_DISP++, 0x08,

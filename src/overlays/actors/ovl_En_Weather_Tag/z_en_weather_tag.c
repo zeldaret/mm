@@ -199,7 +199,7 @@ void func_8096689C(EnWeatherTag* this, PlayState* play) {
 // WEATHERTAG_TYPE_UNK0
 void func_80966A08(EnWeatherTag* this, PlayState* play) {
     this->unk154 += this->unk158;
-    if (this->unk154 >= 0x8001) {
+    if (this->unk154 > 0x8000) {
         this->unk154 = 0x8000;
         EnWeatherTag_SetupAction(this, func_80966A68);
     }
