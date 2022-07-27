@@ -31,7 +31,7 @@ const ActorInit Bg_Hakugin_Elvpole_InitVars = {
 };
 
 void BgHakuginElvpole_Init(Actor* thisx, PlayState* play) {
-    s32 switchFlags;
+    s32 pad;
     CollisionHeader* colHeader = NULL;
     BgHakuginElvpole* this = THIS;
 
@@ -40,10 +40,10 @@ void BgHakuginElvpole_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&object_hakugin_obj_Colheader_00BF40, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
-    switchFlags = BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor);
     this->unk_15C = 0;
     this->unk_160 = false;
-    if ((switchFlags != 0x7F) && Flags_GetSwitch(play, switchFlags)) {
+    if ((BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor) != 0x7F) &&
+        Flags_GetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor))) {
         this->unk_15E = 0x64;
     } else {
         this->unk_15E = -1;
@@ -59,12 +59,11 @@ void BgHakuginElvpole_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
     s32 pad;
-    s32 sp28;
+    s32 sp28 = false;
     f32 var_fv1;
 
-    sp28 = false;
     if (this->unk_15E > 0) {
-        if ((this->dyna.actor.world.pos.y - this->dyna.actor.home.pos.y) < (-120.0f)) {
+        if ((this->dyna.actor.world.pos.y - this->dyna.actor.home.pos.y) < -120.0f) {
             this->dyna.actor.world.pos.y += 4.0f;
             sp28 = true;
         } else if (this->unk_15E > 0) {
