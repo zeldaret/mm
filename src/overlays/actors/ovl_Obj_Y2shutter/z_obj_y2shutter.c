@@ -41,13 +41,14 @@ const ActorInit Obj_Y2shutter_InitVars = {
     (ActorFunc)ObjY2shutter_Draw,
 };
 
+typedef enum {
+    /* 0x0 */ BARRED_SHUTTER,
+    /* 0x1 */ GRATED_SHUTTER,
+} ShutterType;
+
 ShutterInfo sShutterInfo[] = {
-    // rectangular shutter door, activated by floor plate
-    { object_kaizoku_obj_DL_0032A0, &object_kaizoku_obj_Colheader_0035B0, 120.0f, 20.0f, 3.0f, -20.0f, 3.0f, 4, 8,
-      160 },
-    // hexagonal shutter, activated by hitting crystal switch
-    { object_kaizoku_obj_DL_005720, &object_kaizoku_obj_Colheader_005EC8, 150.0f, 1.0f, 0.04f, -1.0f, 0.04f, 6, 0xC,
-      160 },
+    { gPirateBarredShutterDL, &gPirateBarredShutterColHeader, 120.0f, 20.0f, 3.0f, -20.0f, 3.0f, 4, 8, 160 },
+    { gPirateGratedShutterDL, &gPirateGratedShutterColHeader, 150.0f, 1.0f, 0.04f, -1.0f, 0.04f, 6, 0xC, 160 },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -73,10 +74,10 @@ void ObjY2shutter_Destroy(Actor* thisx, PlayState* play) {
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void func_80B9AA20(ObjY2shutter* this, ShutterInfo* info, s32 shutterType) {
+void func_80B9AA20(ObjY2shutter* this, ShutterInfo* info, ShutterType shutterType) {
     this->unk_15C = info->unk_1E;
     this->unk_15F = info->unk_1C;
-    if (shutterType == 0) {
+    if (shutterType == BARRED_SHUTTER) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_METALDOOR_OPEN);
     }
 }
@@ -84,7 +85,7 @@ void func_80B9AA20(ObjY2shutter* this, ShutterInfo* info, s32 shutterType) {
 void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjY2shutter* this = THIS;
-    s32 shutterType = OBJY2SHUTTER_GET_SHUTTER_TYPE(&this->dyna.actor);
+    ShutterType shutterType = OBJY2SHUTTER_GET_SHUTTER_TYPE(&this->dyna.actor);
     ShutterInfo* info = &sShutterInfo[shutterType];
     f32 sp2C = this->dyna.actor.world.pos.y;
     f32 sp28 = 0.0f;
@@ -93,8 +94,8 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
     sShutterInfo[0].unk_1E = DREG(84) + 0xA0;
     sShutterInfo[1].unk_1E = DREG(85) + 0xA0;
 
-    if (((shutterType == 0) && (DREG(86) != 0)) || ((shutterType != 0) && (DREG(87) != 0))) {
-        if (shutterType == 0) {
+    if (((shutterType == BARRED_SHUTTER) && (DREG(86) != 0)) || ((shutterType != BARRED_SHUTTER) && (DREG(87) != 0))) {
+        if (shutterType == BARRED_SHUTTER) {
             DREG(86) = 0;
         } else {
             DREG(87) = 0;
@@ -152,7 +153,7 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
         if (!this->unk_15E) {
             this->unk_15E = true;
             this->unk_15F = info->unk_1D;
-            if (shutterType != 0) {
+            if (shutterType != BARRED_SHUTTER) {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_METALDOOR_STOP);
             }
         }
@@ -169,8 +170,7 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
 
 void ObjY2shutter_Draw(Actor* thisx, PlayState* play) {
     ObjY2shutter* this = THIS;
-    ShutterInfo* info;
+    ShutterInfo* info = &sShutterInfo[(OBJY2SHUTTER_GET_SHUTTER_TYPE(&this->dyna.actor))];
 
-    info = &sShutterInfo[(OBJY2SHUTTER_GET_SHUTTER_TYPE(&this->dyna.actor))];
     Gfx_DrawDListOpa(play, info->dList);
 }
