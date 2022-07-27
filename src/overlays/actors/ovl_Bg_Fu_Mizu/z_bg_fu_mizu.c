@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_fu_mizu.h"
+#include "objects/object_fu_kaiten/object_fu_kaiten.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -15,7 +16,6 @@ void BgFuMizu_Destroy(Actor* thisx, PlayState* play);
 void BgFuMizu_Update(Actor* thisx, PlayState* play);
 void BgFuMizu_Draw(Actor* thisx, PlayState* play);
 
-#if 0
 const ActorInit Bg_Fu_Mizu_InitVars = {
     ACTOR_BG_FU_MIZU,
     ACTORCAT_BG,
@@ -28,17 +28,68 @@ const ActorInit Bg_Fu_Mizu_InitVars = {
     (ActorFunc)BgFuMizu_Draw,
 };
 
-#endif
+void BgFuMizu_Init(Actor* thisx, PlayState* play) {
+    BgFuMizu* this = THIS;
+    s32 pad;
+    CollisionHeader* colHeader = NULL;
 
-extern UNK_TYPE D_060037D8;
-extern UNK_TYPE D_060037F8;
+    Actor_SetScale(&this->dyna.actor, 1.0f);
+    DynaPolyActor_Init(&this->dyna, 1);
+    CollisionHeader_GetVirtual(&object_fu_kaiten_Colheader_0037F8, &colHeader);
+    this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
+    this->unk_160 = 0;
+    this->dyna.actor.world.pos.y = -10.0f + this->dyna.actor.home.pos.y;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fu_Mizu/BgFuMizu_Init.s")
+void BgFuMizu_Destroy(Actor* thisx, PlayState* play) {
+    BgFuMizu* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fu_Mizu/BgFuMizu_Destroy.s")
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fu_Mizu/func_80ADABA4.s")
+s32 func_80ADABA4(BgFuMizu* this, PlayState* play) {
+    Actor* actor = play->actorCtx.actorLists[ACTORCAT_BG].first;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fu_Mizu/BgFuMizu_Update.s")
+    while (actor != NULL) {
+        if ((actor != NULL) && (actor->id == ACTOR_EN_FU_KAGO) && (actor->colChkInfo.health == 0)) {
+            return false;
+        }
+        actor = actor->next;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fu_Mizu/BgFuMizu_Draw.s")
+    return true;
+}
+
+void BgFuMizu_Update(Actor* thisx, PlayState* play) {
+    f32 heightTarget;
+    BgFuMizu* this = THIS;
+
+    if (this->unk_160 == 0) {
+        if (func_80ADABA4(this, play)) {
+            heightTarget = -10.0f + this->dyna.actor.home.pos.y;
+        } else {
+            heightTarget = 10.0f + this->dyna.actor.home.pos.y;
+        }
+    } else {
+        heightTarget = 25.0f + this->dyna.actor.home.pos.y;
+    }
+    if (Math_SmoothStepToF(&this->dyna.actor.world.pos.y, heightTarget, 0.05f, 1.0f, 0.5f) > 1.0f) {
+        if (this->unk_160 == 1) {
+            func_800B9010(&this->dyna.actor, NA_SE_EV_WATER_LEVEL_DOWN_FIX - SFX_FLAG);
+        } else {
+            func_800B9010(&this->dyna.actor, NA_SE_EV_WATER_LEVEL_DOWN_FIX - SFX_FLAG);
+        }
+    }
+}
+
+void BgFuMizu_Draw(Actor* thisx, PlayState* play) {
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_fu_kaiten_Matanimheader_0037D8));
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, object_fu_kaiten_DL_002FC0);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}

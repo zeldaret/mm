@@ -452,7 +452,7 @@ void func_80AEA7A4(EnLiftNuts* this, PlayState* play) {
                         func_8019F208();
                         Message_StartTextbox(play, 0x27E5, &this->actor);
                         this->textId = 0x27E5;
-                        func_801159EC(-10);
+                        Rupees_ChangeBy(-10);
                     } else {
                         play_sound(NA_SE_SY_ERROR);
                         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
@@ -793,8 +793,8 @@ void func_80AEB428(EnLiftNuts* this, PlayState* play) {
         gSaveContext.nextCutsceneIndex = 0;
         func_80169EFC(&play->state);
         gSaveContext.respawnFlag = -2;
-        play->unk_1887F = 0x40;
-        gSaveContext.nextTransition = 2;
+        play->transitionType = 0x40;
+        gSaveContext.nextTransitionType = 2;
     }
     this->unk_354++;
 }

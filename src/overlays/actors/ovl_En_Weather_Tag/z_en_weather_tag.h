@@ -10,7 +10,7 @@ typedef void (*EnWeatherTagActionFunc)(struct EnWeatherTag*, PlayState*);
 typedef struct EnWeatherTag {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnWeatherTagActionFunc actionFunc;
-    /* 0x148 */ u8 pad148[0x4]; // todo attempt remove
+    /* 0x148 */ UNK_TYPE1 pad148[0x4];
     /* 0x14C */ u8 pathCount;
     /* 0x150 */ Vec3s* pathPoints;
     // 154: the code avoids what would be a negative value if signed, but signed wont match

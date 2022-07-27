@@ -13,8 +13,11 @@
 void EnSth2_Init(Actor* thisx, PlayState* play);
 void EnSth2_Destroy(Actor* thisx, PlayState* play);
 void EnSth2_Update(Actor* thisx, PlayState* play);
+void EnSth2_Draw(Actor* thisx, PlayState* play2);
 
-#if 0
+void EnSth2_UpdateSkelAnime(EnSth2* this, PlayState* play);
+void EnSth2_UpdateActionFunc(Actor* thisx, PlayState* play);
+
 const ActorInit En_Sth2_InitVars = {
     ACTOR_EN_STH2,
     ACTORCAT_NPC,
@@ -27,22 +30,95 @@ const ActorInit En_Sth2_InitVars = {
     (ActorFunc)NULL,
 };
 
-#endif
+#include "overlays/ovl_En_Sth2/ovl_En_Sth2.c"
 
-extern UNK_TYPE D_060031F8;
+void EnSth2_Init(Actor* thisx, PlayState* play) {
+    EnSth2* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sth2/EnSth2_Init.s")
+    this->objIndex = Object_GetIndex(&play->objectCtx, OBJECT_STH);
+    Actor_SetScale(&this->actor, 0.01f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
+    this->unused = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sth2/EnSth2_Destroy.s")
+    if (play->actorCtx.unk5 & 2) {
+        this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
+    } else {
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+    this->actionFunc = EnSth2_UpdateSkelAnime;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sth2/func_80BF75A0.s")
+void EnSth2_Destroy(Actor* thisx, PlayState* play) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sth2/EnSth2_Update.s")
+void EnSth2_UpdateSkelAnime(EnSth2* this, PlayState* play) {
+    SkelAnime_Update(&this->skelAnime);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sth2/func_80BF7688.s")
+void EnSth2_Update(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnSth2* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sth2/func_80BF76AC.s")
+    if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
+        this->actor.objBankIndex = this->objIndex;
+        Actor_SetObjectDependency(play, &this->actor);
+        SkelAnime_InitFlex(play, &this->skelAnime, &object_sth_Skel_0031F8, &gEnSth2WavingHandAnim, this->jointTable,
+                           this->morphTable, OBJECT_STH_LIMB_MAX);
+        Animation_PlayLoop(&this->skelAnime, &gEnSth2WavingHandAnim);
+        this->actor.update = EnSth2_UpdateActionFunc;
+        this->actor.draw = EnSth2_Draw;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sth2/func_80BF77AC.s")
+void EnSth2_UpdateActionFunc(Actor* thisx, PlayState* play) {
+    EnSth2* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sth2/func_80BF7814.s")
+    this->actionFunc(this, play);
+}
+
+s32 EnSth2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    s32 pad;
+
+    if (limbIndex == OBJECT_STH_LIMB_0F) {
+        *dList = gEnSth2HeadDL;
+    }
+    if ((limbIndex == OBJECT_STH_LIMB_08) || (limbIndex == OBJECT_STH_LIMB_0A) || (limbIndex == OBJECT_STH_LIMB_0D)) {
+        rot->y += (s16)(Math_SinS((play->state.frames * ((limbIndex * 50) + 0x814))) * 200.0f);
+        rot->z += (s16)(Math_CosS((play->state.frames * ((limbIndex * 50) + 0x940))) * 200.0f);
+    }
+    return false;
+}
+
+void EnSth2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static Vec3f focusOffset = { 700.0f, 400.0f, 0.0f };
+
+    if (limbIndex == OBJECT_STH_LIMB_0F) {
+        Matrix_MultVec3f(&focusOffset, &thisx->focus.pos);
+
+        OPEN_DISPS(play->state.gfxCtx);
+
+        gSPDisplayList(POLY_OPA_DISP++, gEnSth2HairDL);
+
+        CLOSE_DISPS(play->state.gfxCtx);
+    }
+}
+
+void EnSth2_Draw(Actor* thisx, PlayState* play2) {
+    static Color_RGB8 sEnvColors[] = {
+        { 190, 110, 0 }, { 0, 180, 110 }, { 0, 255, 80 }, { 255, 160, 60 }, { 190, 230, 250 }, { 240, 230, 120 },
+    };
+    PlayState* play = play2;
+    EnSth2* this = THIS;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+    gSPSegment(POLY_OPA_DISP++, 0x08,
+               Gfx_EnvColor(play->state.gfxCtx, sEnvColors[1].r, sEnvColors[1].g, sEnvColors[1].b, 255));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(play->state.gfxCtx, 90, 110, 130, 255));
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnSth2_OverrideLimbDraw, EnSth2_PostLimbDraw, &this->actor);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}

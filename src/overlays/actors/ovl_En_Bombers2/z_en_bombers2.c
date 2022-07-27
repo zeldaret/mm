@@ -146,12 +146,12 @@ void func_80C04BA0(EnBombers2* this, PlayState* play) {
         case PLAYER_FORM_GORON:
         case PLAYER_FORM_ZORA:
             this->textIdIndex = 1;
-            this->unk_2CE = 5;
+            this->talkState = TEXT_STATE_5;
             break;
         case PLAYER_FORM_DEKU:
         case PLAYER_FORM_HUMAN:
             this->textIdIndex = 2;
-            this->unk_2CE = 5;
+            this->talkState = TEXT_STATE_5;
             break;
     }
     if (this->unk_2AC != 0) {
@@ -213,8 +213,8 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
         default:
             break;
     }
-    if ((this->unk_2CE == Message_GetState(&play->msgCtx)) && Message_ShouldAdvance(play)) {
-        if (this->unk_2CE == 0xF) {
+    if ((this->talkState == Message_GetState(&play->msgCtx)) && Message_ShouldAdvance(play)) {
+        if (this->talkState == TEXT_STATE_15) {
             s32 i;
             s32 correctDigits;
 
@@ -234,7 +234,7 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
                 this->actor.textId = sTextIds[this->textIdIndex];
                 func_80151938(play, this->actor.textId);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
-                this->unk_2CE = 5;
+                this->talkState = TEXT_STATE_5;
                 return;
             }
         }
@@ -258,7 +258,7 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
                     this->textIdIndex = 3;
                     this->actor.textId = sTextIds[this->textIdIndex];
                     func_80151938(play, this->actor.textId);
-                    this->unk_2CE = 0xF;
+                    this->talkState = TEXT_STATE_15;
                     break;
                 case 3:
                     for (j = 0; j < ARRAY_COUNT(this->correctDigitSlots); j++) {
@@ -268,16 +268,16 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_ERROR);
                     this->actor.textId = sTextIds[this->textIdIndex];
                     func_80151938(play, this->actor.textId);
-                    this->unk_2CE = 5;
+                    this->talkState = TEXT_STATE_5;
                     break;
                 case 4:
                     this->textIdIndex = 5;
                     this->actor.textId = sTextIds[this->textIdIndex];
                     func_80151938(play, this->actor.textId);
-                    this->unk_2CE = 5;
+                    this->talkState = TEXT_STATE_5;
                     break;
                 case 6:
-                    play->msgCtx.unk11F10 = 0;
+                    play->msgCtx.msgLength = 0;
                     func_80C050B8(this, play);
                     break;
             }
@@ -324,7 +324,7 @@ void func_80C0520C(EnBombers2* this, PlayState* play) {
             this->actor.speedXZ = 0.0f;
             if (fabsf(this->actor.world.rot.y - this->actor.yawTowardsPlayer) < 100.0f) {
                 func_801477B4(play);
-                this->unk_2CE = 5;
+                this->talkState = TEXT_STATE_5;
                 this->textIdIndex = 7;
                 EnBombers2_ChangeAnim(this, 6, 1.0f);
                 this->unk_2A8 = 0;

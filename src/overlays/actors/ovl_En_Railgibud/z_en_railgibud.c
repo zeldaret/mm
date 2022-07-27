@@ -6,7 +6,7 @@
 
 #include "z_en_railgibud.h"
 #include "z64rumble.h"
-#include "objects/object_rd/object_rd.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
@@ -674,7 +674,7 @@ void EnRailgibud_SpawnEffectsForSinkingIntoTheGround(EnRailgibud* this, PlayStat
         rockFragmentAccel.z = Rand_Centered();
         rockFragmentVelocity.y += Rand_Centered() * 4.0f;
         EffectSsHahen_Spawn(play, &rockFragmentPos, &rockFragmentVelocity, &rockFragmentAccel, 0,
-                            (Rand_Next() & 7) + 10, -1, 10, NULL);
+                            (Rand_Next() & 7) + 10, HAHEN_OBJECT_DEFAULT, 10, NULL);
         EnRailgibud_SpawnDust(play, &rockFragmentPos, 10.0f, 10, 150, 0);
     }
 }
@@ -968,14 +968,14 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, PlayState* play) {
         }
     } else {
         switch (Message_GetState(&play->msgCtx)) {
-            case 5:
+            case TEXT_STATE_5:
                 if (Message_ShouldAdvance(play)) {
                     Message_StartTextbox(play, 0x13B3, &this->actor);
                     this->textId = 0x13B3;
                 }
                 break;
 
-            case 6:
+            case TEXT_STATE_DONE:
                 if (Message_ShouldAdvance(play)) {
                     this->textId = 0;
                     this->isInvincible = false;
@@ -983,11 +983,11 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, PlayState* play) {
                 }
                 break;
 
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
+            case TEXT_STATE_NONE:
+            case TEXT_STATE_1:
+            case TEXT_STATE_CLOSING:
+            case TEXT_STATE_3:
+            case TEXT_STATE_CHOICE:
                 break;
         }
     }
@@ -1112,6 +1112,7 @@ void EnRailgibud_InitCutsceneGibdo(EnRailgibud* this, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
+
     if (gSaveContext.save.entranceIndex != 0x2090) { // NOT Cutscene: Music Box House Opens
         Actor_MarkForDeath(&this->actor);
     }

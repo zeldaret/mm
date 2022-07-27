@@ -90,7 +90,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    3,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -223,7 +223,7 @@ s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
     }
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
-        phi_a3 = GET_CUR_EQUIP_VALUE(EQUIP_SWORD);
+        phi_a3 = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD);
         if (INV_CONTENT(ITEM_SWORD_GREAT_FAIRY) == ITEM_SWORD_GREAT_FAIRY) {
             phi_a3 += 4;
         }
@@ -238,9 +238,9 @@ s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
     }
 
     if (isItemFound) {
-        func_801149A0(itemId2, slotId);
+        Inventory_DeleteItem(itemId2, slotId);
         this->unk_3E8 = object_thiefbird_DL_0033B0;
-        if (Message_GetState(&play->msgCtx) == 0) {
+        if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
             Message_StartTextbox(play, 0xF4, NULL);
         }
         itemId1 = ITEM_BOTTLE;
@@ -255,16 +255,16 @@ s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
 
         itemId1 = phi_a3 + (ITEM_SWORD_KOKIRI - 1);
         if (phi_a3 == 4) {
-            func_801149A0(ITEM_SWORD_GREAT_FAIRY, SLOT_SWORD_GREAT_FAIRY);
+            Inventory_DeleteItem(ITEM_SWORD_GREAT_FAIRY, SLOT_SWORD_GREAT_FAIRY);
             this->unk_3E8 = object_thiefbird_DL_003D58;
             itemId1 = ITEM_SWORD_GREAT_FAIRY;
         } else {
             CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
-            SET_EQUIP_VALUE(EQUIP_SWORD, 0);
+            SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, EQUIP_VALUE_SWORD_NONE);
             this->unk_3E8 = D_80C13680[phi_a3 - 1];
         }
 
-        if (Message_GetState(&play->msgCtx) == 0) {
+        if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
             Message_StartTextbox(play, 0xF5, NULL);
         }
     } else {
@@ -404,7 +404,7 @@ s32 func_80C10E98(PlayState* play) {
 
     AMMO(ITEM_BOMB) -= spB0 * 5;
     AMMO(ITEM_BOW) -= spAC * 10;
-    func_801159EC(-((phi_s0_2 * 50) + (spA0 * 20) + (phi_s2 * 5) + spA8));
+    Rupees_ChangeBy(-((phi_s0_2 * 50) + (spA0 * 20) + (phi_s2 * 5) + spA8));
     return true;
 }
 
@@ -776,7 +776,7 @@ void func_80C12378(EnThiefbird* this, PlayState* play) {
 }
 
 void func_80C1242C(EnThiefbird* this) {
-    Animation_Change(&this->skelAnime, &object_thiefbird_Anim_000278, 2.0f, 0.0f, 0.0f, 0, -4.0f);
+    Animation_Change(&this->skelAnime, &object_thiefbird_Anim_000278, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f);
     this->actor.flags |= ACTOR_FLAG_10;
     this->collider.base.acFlags |= AC_ON;
     this->actionFunc = func_80C124B0;
@@ -837,7 +837,7 @@ void func_80C126D8(EnThiefbird* this, PlayState* play) {
 
 void func_80C12744(EnThiefbird* this) {
     Animation_MorphToLoop(&this->skelAnime, &object_thiefbird_Anim_000604, -4.0f);
-    Animation_Change(&this->skelAnime, &object_thiefbird_Anim_000604, 1.0f, 0.0f, 0.0f, 1, -4.0f);
+    Animation_Change(&this->skelAnime, &object_thiefbird_Anim_000604, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -4.0f);
     this->unk_190 = 0;
     this->collider.base.acFlags |= AC_ON;
     this->actor.flags |= ACTOR_FLAG_10;

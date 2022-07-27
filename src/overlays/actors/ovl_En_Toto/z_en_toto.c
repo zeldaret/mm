@@ -139,7 +139,7 @@ static EnTotoText D_80BA50BC[] = {
 };
 
 static EnTotoUnkStruct2 D_80BA50DC[] = {
-    { 0x2B2F, 0x2B30, 0X2B31, { 0xFF96, 0x0016, 0xFE16 } },
+    { 0x2B2F, 0x2B30, 0x2B31, { 0xFF96, 0x0016, 0xFE16 } },
     { 0x2B26, 0x2B27, 0x2B28, { 0x0072, 0x0016, 0xFE3C } },
     { 0x2B29, 0x2B2A, 0x2B2B, { 0xFF67, 0x0016, 0xFE6E } },
     { 0x2B2C, 0x2B2D, 0x2B2E, { 0xFFF1, 0x0016, 0xFE74 } },
@@ -408,21 +408,21 @@ s32 func_80BA407C(EnToto* this, PlayState* play) {
 }
 
 s32 func_80BA40D4(EnToto* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         return 1;
     }
     return 0;
 }
 
 s32 func_80BA4128(EnToto* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 2) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         return 1;
     }
     return 0;
 }
 
 s32 func_80BA415C(EnToto* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 4 && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex != 0) {
             func_8019F230();
         } else {
@@ -464,14 +464,14 @@ s32 func_80BA42BC(EnToto* this, PlayState* play) {
             }
         }
     }
-    func_80122744(play, this->unk2BC, phi_s0, end - phi_s0);
+    func_80122744(play, &this->unk_2BC, phi_s0, end - phi_s0);
     this->spotlights = Actor_Spawn(&play->actorCtx, play, ACTOR_DM_CHAR07, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0xF02);
     return 0;
 }
 
 s32 func_80BA43F4(EnToto* this, PlayState* play) {
     func_80BA3C88(this);
-    if (func_80122760(play, this->unk2BC, 60.0f)) {
+    if (func_80122760(play, &this->unk_2BC, 60.0f)) {
         func_800B7298(play, NULL, 0x13);
         return func_80BA4204(this, play);
     }

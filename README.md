@@ -28,6 +28,7 @@ This is a WIP **decompilation** of ***The Legend of Zelda: Majora's Mask***. The
 The only version currently supported is N64 US, but we intend to eventually support every retail version of the original game (i.e. not versions of MM3D, which is a totally different game).
 
 It currently builds the following ROM:
+
 * mm.us.rev1.rom.z64 `md5: 2a0a8acb61538235bc1094d297fb6556`
 
 **This repo does not include any assets or assembly code necessary for compiling the ROM. A prior copy of the game is required to extract the required assets.**
@@ -38,7 +39,6 @@ Please refer to the following for more information:
 - [Discord](https://discord.zelda64.dev/)
 - [How to Contribute](CONTRIBUTING.md)
 
-
 ## Installation
 
 ### Windows
@@ -47,11 +47,13 @@ For Windows 10, install WSL and a distribution by following this
 [Windows Subsystem for Linux Installation Guide](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
 We recommend using Debian or Ubuntu 20.04 Linux distributions.
 
-
 ### MacOS
 
 Preparation is covered in a [separate document](docs/BUILDING_MACOS.md).
 
+### Docker
+
+Preparation is covered in [Building Docker](docs/BUILDING_DOCKER.md).
 
 ### Linux (Native or under WSL / VM)
 
@@ -127,12 +129,11 @@ md5sum: WARNING: 1 computed checksum did NOT match
 
 This means that something is wrong with the ROM's contents. Either the baserom files are incorrect due to a bad ROM, or some of the code is not matching.
 
-Running `make init` will also make the `./expected` directory and copy all of the files there, which will be useful when running the diff script. The diff script is useful in decompiling functions and can be ran with this command: `./tools/asm-differ/diff.py -wmo3 <insert_function_here>`
+Running `make init` will also make the `./expected` directory and copy all of the files there, which will be useful when running the diff script. The diff script is useful in decompiling functions and can be run with this command: `./tools/asm-differ/diff.py -wmo3 <insert_function_here>`
 
-**Note**: to speed up the build, you can pass `-jN` to `make setup` and `make`, where N is the number of threads to use in the build, e.g. `make -j4`. The generally-accepted wisdom is to use the number of virtual cores your computer has, which is the output of `nproc` (which should be installed as part of `coreutils`). 
+**Note**: to speed up the build, you can pass `-jN` to `make setup` and `make`, where N is the number of threads to use in the build, e.g. `make -j4`. The generally-accepted wisdom is to use the number of virtual cores your computer has, which is the output of `nproc` (which should be installed as part of `coreutils`).
 The disadvantage that the ordering of the terminal output is scrambled, so for debugging it is best to stick to one thread (i.e. not pass `-jN`).
 (`-j` also exists, which uses unlimited jobs, but is generally slower.)
-
 
 ## Contributing
 
@@ -143,4 +144,4 @@ Please note that is is our strict policy that *Anyone who wishes to contribute t
 
 Most discussions happen on our [Discord Server](https://discord.zelda64.dev), where you are welcome to ask if you need help getting started, or if you have any questions regarding this project or ZeldaRET's other decompilation projects.
 
-For more information on getting started, see our [Contributing Guide](CONTRIBUTING.md), [Style Guide](docs/STYLE.md) and our [Code Review Guidelines](docs/REVIEWING.md) to see what code quality guidelines we follow.
+For more information on getting started, see our [Contributing Guide](docs/CONTRIBUTING.md), [Style Guide](docs/STYLE.md) and our [Code Review Guidelines](docs/REVIEWING.md) to see what code quality guidelines we follow.

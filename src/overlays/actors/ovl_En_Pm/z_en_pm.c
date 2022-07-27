@@ -833,7 +833,7 @@ s32 func_80AF81E8(EnPm* this, PlayState* play) {
         case 4:
         case 6:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), this->actor.child);
             }
             this->unk_378++;
             ret = true;
@@ -845,7 +845,7 @@ s32 func_80AF81E8(EnPm* this, PlayState* play) {
             if ((gSaveContext.save.weekEventReg[86] & 8) && (this->unk_378 == 3)) {
                 ActorCutscene_Stop(sp2A);
             } else {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), &this->actor);
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), &this->actor);
             }
             this->unk_378++;
             ret = true;
@@ -875,7 +875,7 @@ s32 func_80AF8348(EnPm* this, PlayState* play) {
         case 4:
         case 6:
         case 8:
-            Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), &this->actor);
+            Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), &this->actor);
             this->unk_378++;
             ret = true;
             break;
@@ -885,7 +885,7 @@ s32 func_80AF8348(EnPm* this, PlayState* play) {
         case 5:
         case 7:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), this->actor.child);
             }
             this->unk_378++;
             ret = true;
@@ -1132,11 +1132,11 @@ void func_80AF8BA8(s32 arg0) {
 
 void func_80AF8C68(EnPm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 sp28 = Message_GetState(&play->msgCtx);
-    u16 temp_a0 = play->msgCtx.currentTextId;
+    s32 talkState = Message_GetState(&play->msgCtx);
+    u16 textId = play->msgCtx.currentTextId;
 
-    if ((player->targetActor == &this->actor) && ((temp_a0 < 255) || (temp_a0 > 512)) && (sp28 == 3) &&
-        (this->unk_388 == 3)) {
+    if ((player->targetActor == &this->actor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
+        (this->prevTalkState == TEXT_STATE_3)) {
         if ((play->state.frames % 3) == 0) {
             if (this->unk_360 == 120.0f) {
                 this->unk_360 = 0.0f;
@@ -1149,7 +1149,7 @@ void func_80AF8C68(EnPm* this, PlayState* play) {
     }
     Math_SmoothStepToF(&this->unk_364, this->unk_360, 0.8f, 40.0f, 10.0f);
     Matrix_Translate(this->unk_364, 0.0f, 0.0f, MTXMODE_APPLY);
-    this->unk_388 = sp28;
+    this->prevTalkState = talkState;
 }
 
 s32 func_80AF8D84(EnPm* this, PlayState* play) {
@@ -1167,20 +1167,20 @@ s32 func_80AF8D84(EnPm* this, PlayState* play) {
 
 s32 func_80AF8DD4(EnPm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    u16 temp = play->msgCtx.currentTextId;
+    u16 textId = play->msgCtx.currentTextId;
     s32 pad;
 
     if (player->stateFlags1 & (0x400 | 0x40)) {
         this->unk_356 |= 0x400;
-        if (this->unk_358 != temp) {
+        if (this->unk_358 != textId) {
             if ((this->unk_384 == 0) || (this->unk_384 == 1)) {
                 func_80AF7E98(this, 7);
             }
-            if ((temp == 0x277C) || (temp == 0x277D)) {
+            if ((textId == 0x277C) || (textId == 0x277D)) {
                 func_80AF7E98(this, 10);
             }
         }
-        this->unk_358 = temp;
+        this->unk_358 = textId;
     } else {
         if (this->unk_356 & 0x400) {
             this->unk_358 = 0;
@@ -1196,7 +1196,7 @@ s32 func_80AF8DD4(EnPm* this, PlayState* play) {
     return 0;
 }
 
-s32 func_80AF8ED4(EnPm* this, PlayState* play, ScheduleResult* arg2, u8 actorCat, s16 actorId) {
+s32 func_80AF8ED4(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput, u8 actorCat, s16 actorId) {
     u8 sp4F = this->actor.params & 0xFF;
     Vec3s* sp48;
     Vec3f sp3C;
@@ -1207,8 +1207,8 @@ s32 func_80AF8ED4(EnPm* this, PlayState* play, ScheduleResult* arg2, u8 actorCat
 
     this->timePath = NULL;
     sp2C = func_80AF7CB0(this, play, actorCat, actorId);
-    if (D_80AFB430[arg2->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp4F, D_80AFB430[arg2->result]);
+    if (D_80AFB430[scheduleOutput->result] >= 0) {
+        this->timePath = SubS_GetAdditionalPath(play, sp4F, D_80AFB430[scheduleOutput->result]);
     }
 
     if ((sp2C != NULL) && (sp2C->update != NULL)) {
@@ -1226,7 +1226,7 @@ s32 func_80AF8ED4(EnPm* this, PlayState* play, ScheduleResult* arg2, u8 actorCat
     return ret;
 }
 
-s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 sp56 = SCHEDULE_TIME_NOW;
     u8 sp55 = this->actor.params & 0xFF;
     EnDoor* door;
@@ -1237,9 +1237,9 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleResult* arg2) {
     s32 ret = false;
 
     this->timePath = NULL;
-    door = func_80AF7D60(play, arg2->result);
-    if (D_80AFB430[arg2->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp55, D_80AFB430[arg2->result]);
+    door = func_80AF7D60(play, scheduleOutput->result);
+    if (D_80AFB430[scheduleOutput->result] >= 0) {
+        this->timePath = SubS_GetAdditionalPath(play, sp55, D_80AFB430[scheduleOutput->result]);
     }
 
     if ((door != NULL) && (door->dyna.actor.update != NULL)) {
@@ -1258,8 +1258,8 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleResult* arg2) {
                 this->unk_260 = 0x4B;
             }
 
-            this->unk_36C = arg2->time1 - arg2->time0;
-            this->unk_36E = sp56 - arg2->time0;
+            this->unk_36C = scheduleOutput->time1 - scheduleOutput->time0;
+            this->unk_36E = sp56 - scheduleOutput->time0;
             this->actor.flags &= ~ACTOR_FLAG_1;
             if (gSaveContext.save.weekEventReg[90] & 8) {
                 this->unk_356 |= 0x800;
@@ -1274,17 +1274,18 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 sp2E = SCHEDULE_TIME_NOW;
     u16 phi_v1;
     u8 sp2B = this->actor.params & 0xFF;
-    s32 pad;
+    u16 tmp;
+    s16 pad;
     s32 ret = false;
 
     this->timePath = NULL;
 
-    if (D_80AFB430[arg2->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp2B, D_80AFB430[arg2->result]);
+    if (D_80AFB430[scheduleOutput->result] >= 0) {
+        this->timePath = SubS_GetAdditionalPath(play, sp2B, D_80AFB430[scheduleOutput->result]);
     }
 
     if ((this->timePath != NULL) && (this->timePath->count < 3)) {
@@ -1295,18 +1296,18 @@ s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleResult* arg2) {
         if ((this->unk_258 < 38) && (this->unk_258 != 0) && (this->timePathTimeSpeed >= 0)) {
             phi_v1 = sp2E;
         } else {
-            phi_v1 = arg2->time0;
+            phi_v1 = scheduleOutput->time0;
         }
 
-        if (arg2->time1 < phi_v1) {
-            this->timePathTotalTime = (phi_v1 - arg2->time1) + 0xFFFF;
+        if (scheduleOutput->time1 < phi_v1) {
+            this->timePathTotalTime = (phi_v1 - scheduleOutput->time1) + 0xFFFF;
         } else {
-            this->timePathTotalTime = arg2->time1 - phi_v1;
+            this->timePathTotalTime = scheduleOutput->time1 - phi_v1;
         }
 
         this->timePathElapsedTime = sp2E - phi_v1;
-        phi_v1 = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
-        this->timePathWaypointTime = this->timePathTotalTime / phi_v1;
+        tmp = phi_v1 = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
+        this->timePathWaypointTime = this->timePathTotalTime / tmp;
         this->timePathWaypoint =
             (this->timePathElapsedTime / this->timePathWaypointTime) + (SUBS_TIME_PATHING_ORDER - 1);
         this->unk_356 &= ~8;
@@ -1316,7 +1317,7 @@ s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleResult* arg2) {
             Flags_UnsetSwitch(play, 0);
         }
 
-        switch (arg2->result) {
+        switch (scheduleOutput->result) {
             case 83:
             case 84:
             case 85:
@@ -1355,7 +1356,7 @@ s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80AF94AC(EnPm* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80AF94AC(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u8 sp4F = this->actor.params & 0xFF;
     Vec3f sp40;
     Vec3f sp34;
@@ -1364,8 +1365,8 @@ s32 func_80AF94AC(EnPm* this, PlayState* play, ScheduleResult* arg2) {
     s32 ret = false;
 
     this->timePath = NULL;
-    if (D_80AFB430[arg2->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp4F, D_80AFB430[arg2->result]);
+    if (D_80AFB430[scheduleOutput->result] >= 0) {
+        this->timePath = SubS_GetAdditionalPath(play, sp4F, D_80AFB430[scheduleOutput->result]);
     }
 
     if ((this->timePath != 0) && (this->timePath->count >= 2)) {
@@ -1376,7 +1377,7 @@ s32 func_80AF94AC(EnPm* this, PlayState* play, ScheduleResult* arg2) {
         Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
         Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
         Math_Vec3f_Copy(&this->actor.prevPos, &sp40);
-        if (arg2->result == 24) {
+        if (scheduleOutput->result == 24) {
             Flags_UnsetSwitch(play, 0);
             Flags_UnsetSwitch(play, 1);
             this->unk_394 = EXCH_ITEM_NONE;
@@ -1388,7 +1389,7 @@ s32 func_80AF94AC(EnPm* this, PlayState* play, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u8 sp4F = this->actor.params & 0xFF;
     Vec3f sp40;
     Vec3f sp34;
@@ -1397,13 +1398,13 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleResult* arg2) {
     s32 ret = false;
     s32 phi_a3 = -1;
 
-    switch (arg2->result) {
+    switch (scheduleOutput->result) {
         case 3:
         case 4:
         case 5:
         case 6:
         case 7:
-            phi_a3 = arg2->result - 3;
+            phi_a3 = scheduleOutput->result - 3;
             break;
 
         case 19:
@@ -1416,7 +1417,7 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleResult* arg2) {
     }
 
     this->timePath = NULL;
-    phi_a3 = D_80AFB430[arg2->result];
+    phi_a3 = D_80AFB430[scheduleOutput->result];
     if (phi_a3 >= 0) {
         this->timePath = SubS_GetAdditionalPath(play, sp4F, phi_a3);
     }
@@ -1430,7 +1431,7 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleResult* arg2) {
         Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
         Math_Vec3f_Copy(&this->actor.prevPos, &sp40);
 
-        switch (arg2->result) {
+        switch (scheduleOutput->result) {
             case 27:
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROOM_CARTAIN);
                 Flags_SetSwitch(play, 0);
@@ -1462,7 +1463,7 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleResult* arg2) {
                 gSaveContext.save.weekEventReg[60] |= 4;
 
             default:
-                if (arg2->result == 0x1D) {
+                if (scheduleOutput->result == 29) {
                     this->actor.world.rot.y = BINANG_ROT180(this->actor.world.rot.y);
                 }
                 SubS_UpdateFlags(&this->unk_356, 3, 7);
@@ -1475,7 +1476,7 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80AF98A0(EnPm* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80AF98A0(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_MM3, 116.0f, 26.0f, -219.0f, 0, -0x3F46, 0,
@@ -1486,7 +1487,7 @@ s32 func_80AF98A0(EnPm* this, PlayState* play, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80AF992C(EnPm* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80AF992C(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     static Vec3f D_80AFB8EC = { 116.0f, 26.0f, -219.0f };
     static Vec3s D_80AFB8F8 = { 0x0000, 0xC0BA, 0x0000 };
     s32 pad;
@@ -1498,7 +1499,7 @@ s32 func_80AF992C(EnPm* this, PlayState* play, ScheduleResult* arg2) {
     this->actor.targetMode = 6;
     this->actor.gravity = -1.0f;
     this->unk_368 = 80.0f;
-    if (arg2->result == 14) {
+    if (scheduleOutput->result == 14) {
         this->unk_356 &= ~0x200;
         func_80AF7E98(this, 13);
     } else {
@@ -1508,10 +1509,10 @@ s32 func_80AF992C(EnPm* this, PlayState* play, ScheduleResult* arg2) {
     return true;
 }
 
-s32 func_80AF9A0C(EnPm* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80AF9A0C(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
-    if (func_80AF8ED4(this, play, arg2, ACTORCAT_NPC, ACTOR_EN_AN)) {
+    if (func_80AF8ED4(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_AN)) {
         SubS_UpdateFlags(&this->unk_356, 3, 7);
         this->unk_356 |= 0x20;
         this->unk_356 |= 0x9000;
@@ -1526,10 +1527,10 @@ s32 func_80AF9A0C(EnPm* this, PlayState* play, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80AF9AB0(EnPm* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80AF9AB0(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
-    if (func_80AF8ED4(this, play, arg2, ACTORCAT_NPC, ACTOR_EN_TEST3)) {
+    if (func_80AF8ED4(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_TEST3)) {
         SubS_UpdateFlags(&this->unk_356, 3, 7);
         this->unk_356 |= 0x20;
         this->unk_356 |= 0x9000;
@@ -1544,10 +1545,10 @@ s32 func_80AF9AB0(EnPm* this, PlayState* play, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80AF9B54(EnPm* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80AF9B54(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
-    if (func_80AF8ED4(this, play, arg2, ACTORCAT_NPC, ACTOR_EN_AL)) {
+    if (func_80AF8ED4(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_AL)) {
         SubS_UpdateFlags(&this->unk_356, 3, 7);
         this->unk_356 |= 0x9000;
         this->unk_356 |= 0x20;
@@ -1562,7 +1563,7 @@ s32 func_80AF9B54(EnPm* this, PlayState* play, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret;
 
     this->actor.flags |= ACTOR_FLAG_1;
@@ -1571,25 +1572,25 @@ s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleResult* arg2) {
     this->unk_356 = 0;
     this->unk_368 = 40.0f;
 
-    switch (arg2->result) {
+    switch (scheduleOutput->result) {
         case 16:
-            ret = func_80AF9A0C(this, play, arg2);
+            ret = func_80AF9A0C(this, play, scheduleOutput);
             break;
 
         case 17:
-            ret = func_80AF9AB0(this, play, arg2);
+            ret = func_80AF9AB0(this, play, scheduleOutput);
             break;
 
         case 28:
-            ret = func_80AF9B54(this, play, arg2);
+            ret = func_80AF9B54(this, play, scheduleOutput);
             break;
 
         case 24:
-            ret = func_80AF94AC(this, play, arg2);
+            ret = func_80AF94AC(this, play, scheduleOutput);
             break;
 
         case 29:
-            ret = func_80AF95E8(this, play, arg2);
+            ret = func_80AF95E8(this, play, scheduleOutput);
             break;
 
         case 1:
@@ -1604,7 +1605,7 @@ s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleResult* arg2) {
         case 35:
         case 36:
         case 37:
-            ret = func_80AF9008(this, play, arg2);
+            ret = func_80AF9008(this, play, scheduleOutput);
             break;
 
         case 3:
@@ -1617,11 +1618,11 @@ s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleResult* arg2) {
         case 23:
         case 25:
         case 27:
-            ret = func_80AF95E8(this, play, arg2);
+            ret = func_80AF95E8(this, play, scheduleOutput);
             break;
 
         case 8:
-            ret = func_80AF98A0(this, play, arg2);
+            ret = func_80AF98A0(this, play, scheduleOutput);
             break;
 
         case 9:
@@ -1629,7 +1630,7 @@ s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleResult* arg2) {
         case 20:
         case 21:
         case 22:
-            ret = func_80AF992C(this, play, arg2);
+            ret = func_80AF992C(this, play, scheduleOutput);
             break;
 
         case 38:
@@ -1686,7 +1687,7 @@ s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleResult* arg2) {
         case 89:
         case 90:
         case 91:
-            ret = func_80AF91E8(this, play, arg2);
+            ret = func_80AF91E8(this, play, scheduleOutput);
             break;
 
         default:
@@ -1699,7 +1700,7 @@ s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleResult* arg2) {
 s32 func_80AF9D04(EnPm* this, PlayState* play) {
     EnDoor* door = (EnDoor*)func_80AF7D60(play, this->unk_258);
     Vec3f sp38;
-    Vec3f* sp28;
+    s32 pad;
     f32 temp;
 
     if (!SubS_InCsMode(play) && (this->timePathTimeSpeed != 0)) {
@@ -1988,7 +1989,7 @@ void func_80AFA4D0(EnPm* this, PlayState* play) {
     };
     u16 time = gSaveContext.save.time;
     u16 sp3C = 0;
-    ScheduleResult sp2C;
+    ScheduleOutput sp2C;
 
     this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
     if (this->unk_38C != 0) {

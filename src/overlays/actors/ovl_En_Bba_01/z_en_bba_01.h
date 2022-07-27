@@ -8,7 +8,6 @@ struct EnBba01;
 typedef void (*EnBba01ActionFunc)(struct EnBba01*, PlayState*);
 
 #define ENBBA01_GET_PATH(thisx) (((thisx)->params & 0x7E00) >> 9)
-#define ENBBA01_NO_PATH 0x3F
 
 typedef struct EnBba01 {
     /* 0x000 */ EnHy enHy;
