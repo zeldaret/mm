@@ -13,6 +13,7 @@
 #include "overlays/actors/ovl_En_Ishi/z_en_ishi.h"
 #include "overlays/actors/ovl_En_Test3/z_en_test3.h"
 #include "overlays/actors/ovl_En_Test7/z_en_test7.h"
+#include "overlays/actors/ovl_En_Torch2/z_en_torch2.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -355,7 +356,7 @@ void func_8082DD2C(PlayState* play, Player* arg1) {
     func_8082DC38(arg1);
     arg1->unk_AA5 = 0;
     func_8082DC64(play, arg1);
-    func_800E0238(Play_GetCamera(play, 0));
+    func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
     arg1->stateFlags1 &= ~0x306004;
     arg1->stateFlags2 &= ~0x90;
     arg1->unk_ADD = 0;
@@ -481,7 +482,7 @@ typedef struct struct_8082E224_arg1 {
     /* 0x2 */ s16 unk_2; // negative marks the end
 } struct_8082E224_arg1;  // size = 0x4
 
-void func_8082E224(Player* arg0, struct_8082E224_arg1* arg1);
+void func_8082E224(Player* this, struct_8082E224_arg1* arg1);
 #if NON_MATCHING
 // regalloc around } while ((temp_v0 >= 0) != 0);
 void func_8082E224(Player* arg0, struct_8082E224_arg1* arg1) {
@@ -974,6 +975,7 @@ loop_8:
     return -1;
 }
 #else
+s32 func_8082ED94(Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082ED94.s")
 #endif
 
@@ -2563,12 +2565,41 @@ s32 func_80832F24(Player* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80832F78.s")
 
+s32 func_80833058(PlayState* play, Player* this, s8* arg2, UNK_TYPE arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80833058.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808331FC.s")
 
-void func_808332A0(PlayState* play, Player* this, s32 arg2, s32 arg3);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808332A0.s")
+void func_808332A0(PlayState* play, Player* this, s32 arg2, s32 arg3) {
+    if (arg2 != 0) {
+        this->unk_B08[0] = 0.0f;
+    } else {
+        this->unk_B08[0] = 0.5f;
+    }
+
+    this->stateFlags1 |= PLAYER_STATE1_1000;
+    if ((this->actor.id == ACTOR_PLAYER) && ((arg3 != 0) || (this->transformation == PLAYER_FORM_HUMAN))) {
+        s16 var_v1;
+        Actor* actor;
+
+        var_v1 = 0;
+        if (arg3 != 0) {
+            if (this->unk_730 != NULL) {
+                var_v1 = Math_Vec3f_Pitch(this->bodyPartsPos, &this->unk_730->focus.pos);
+            }
+            if (gSaveContext.save.playerData.magic == 0) {
+                return;
+            }
+        }
+
+        actor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_M_THUNDER, this->bodyPartsPos[0].x, this->bodyPartsPos[0].y, this->bodyPartsPos[0].z, var_v1, 0, 0, (this->itemActionParam - 3) | arg2);
+
+        if ((actor != NULL) && (arg3 != 0)) {
+            func_80115DB4(play, 1, 7);
+            this->unk_D57 = 4;
+        }
+    }
+}
 
 s32 func_808333CC(Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808333CC.s")
@@ -2602,6 +2633,7 @@ void func_808335B0(PlayState* play, Player* this) {
     func_808334D4(play, this);
 }
 
+PlayerMeleeWeaponAnimation func_808335F4(Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808335F4.s")
 
 void func_80833728(Player* this, s32 arg1, s32 arg2, s32 arg3);
@@ -4396,6 +4428,7 @@ s32 func_8083E404(Player* this, f32 arg1, s16 arg2) {
     return 0;
 }
 
+s32 func_8083E514(Player* this, f32* arg2, s16* arg3, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083E514.s")
 
 s32 func_8083E758(Player* this, f32* arg1, s16* arg2) {
@@ -5516,7 +5549,8 @@ void func_808442D8(PlayState* play, Player* this) {
     }
 
     if (var_fa0 > 0.0f) {
-        func_800B0EB0(play, &this->meleeWeaponInfo[0].tip, &D_8085D364, &D_8085D370, &D_8085D37C, &D_8085D380, (var_fa0 * 200.0f), 0, 8);
+        func_800B0EB0(play, &this->meleeWeaponInfo[0].tip, &D_8085D364, &D_8085D370, &D_8085D37C, &D_8085D380,
+                      (var_fa0 * 200.0f), 0, 8);
         if (((play->roomCtx.currRoom.enablePosLights != 0)) || (gGameInfo->data[0x23D] != 0)) {
             temp_fv1 = (Rand_ZeroOne() * 30.0f) + 225.0f;
             Lights_PointSetColorAndRadius(&this->lightInfo, temp_fv1, temp_fv1 * 0.7f, 0, var_fa0 * 300.0f);
@@ -5555,12 +5589,13 @@ void func_80844D80(PlayState* play, Player* this) {
     Math_Vec3f_Diff(&this->meleeWeaponInfo[0].tip, &this->meleeWeaponInfo[0].base, &sp7C);
     Math_Vec3f_SumScaled(&this->meleeWeaponInfo[0].base, &sp7C, 0.3f, &spA0);
 
-    for (i = 0; i< 2; i++) {
+    for (i = 0; i < 2; i++) {
         Math_Vec3f_SumScaled(&this->meleeWeaponInfo[0].base, &sp7C, Rand_ZeroOne(), &pos);
         Math_Vec3f_AddRand(&pos, 15.0f, &pos);
         Math_Vec3f_DistXYZAndStoreNormDiff(&spA0, &pos, 1.7f, &velocity);
         Math_Vec3f_ScaleAndStore(&velocity, 0.01f, &accel);
-        EffectSsKirakira_SpawnDispersed(play, &pos, &velocity, &accel, &D_8085D3F4, &D_8085D3F8, Rand_S16Offset(-20, -120), 15);
+        EffectSsKirakira_SpawnDispersed(play, &pos, &velocity, &accel, &D_8085D3F4, &D_8085D3F8,
+                                        Rand_S16Offset(-20, -120), 15);
     }
 }
 
@@ -6583,6 +6618,7 @@ void Player_Destroy(Actor* thisx, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847190.s")
 
+void func_8084748C(Player* this, f32* arg1, f32 arg2, s16 arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084748C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808475B4.s")
@@ -6603,7 +6639,7 @@ void func_808477D0(PlayState* play, Player* this, Input* input, f32 arg3) {
     LinkAnimation_Update(play, &this->skelAnime);
 }
 
-void func_80854614(Player *this, PlayState *play);
+void func_80854614(Player* this, PlayState* play);
 
 s32 func_80847880(PlayState* play, Player* this) {
     if (play->unk_1887C != 0) {
@@ -6652,7 +6688,8 @@ void func_808479F4(PlayState* play, Player* this, f32 arg2) {
 }
 
 void func_80847A50(Player* this) {
-    func_800B8E58(this, ((this->unk_AE7 != 0) ? NA_SE_PL_WALK_METAL1 : NA_SE_PL_WALK_LADDER) + this->ageProperties->unk_94);
+    func_800B8E58(this,
+                  ((this->unk_AE7 != 0) ? NA_SE_PL_WALK_METAL1 : NA_SE_PL_WALK_LADDER) + this->ageProperties->unk_94);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847A94.s")
@@ -6681,31 +6718,163 @@ void func_80847E2C(Player* arg0, f32 arg1, f32 arg2) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847E2C.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847ED4.s")
+s32 func_80847ED4(Player* this) {
+    return this->interactRangeActor != NULL && this->interactRangeActor->id == ACTOR_EN_ZOG &&
+           CHECK_BTN_ALL(D_80862B44->cur.button, BTN_A);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847F1C.s")
+extern Vec3f D_8085D5D0;
+
+void func_80847F1C(Player* this) {
+    s32 pad;
+    f32 yPos;
+    s16 yaw;
+    Actor* interactRangeActor = this->interactRangeActor;
+
+    if (func_80847ED4(this) != 0) {
+        yPos = this->actor.world.pos.y;
+        yaw = this->currentYaw - interactRangeActor->shape.rot.y;
+        Lib_Vec3f_TranslateAndRotateY(&interactRangeActor->world.pos, interactRangeActor->shape.rot.y, &D_8085D5D0,
+                                      &this->actor.world.pos);
+        this->actor.world.pos.y = yPos;
+        this->actor.shape.rot.y = interactRangeActor->shape.rot.y;
+
+        interactRangeActor->speedXZ = Math_CosS(ABS_ALT(yaw)) * this->linearVelocity * 0.5f;
+        if (interactRangeActor->speedXZ < 0.0f) {
+            interactRangeActor->speedXZ = 0.0f;
+        }
+        func_8083133C(this);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847FF8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80848048.s")
+void func_80848048(PlayState* play, Player* this) {
+    func_80831494(play, this, func_80851588, 0);
+    func_8082E634(play, this, &gameplay_keep_Linkanim_00DFD0);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80848094.s")
+s32 func_80848094(PlayState* play, Player* this, f32* arg2, s16* arg3) {
+    LinkAnimationHeader* anim;
+    s16 temp_v0 = this->currentYaw - *arg3;
+    s32 temp_v0_2;
+
+    if (ABS_ALT(temp_v0) > 0x6000) {
+        anim = &gameplay_keep_Linkanim_00E000;
+        if (Math_StepToF(&this->linearVelocity, 0.0f, 1.0f)) {
+            this->currentYaw = *arg3;
+        } else {
+            *arg2 = 0.0f;
+            *arg3 = this->currentYaw;
+        }
+    } else {
+        temp_v0_2 = func_8083E514(this, arg2, arg3, play);
+        if (temp_v0_2 > 0) {
+            anim = &gameplay_keep_Linkanim_00DFD0;
+        } else if (temp_v0_2 < 0) {
+            anim = &gameplay_keep_Linkanim_00DFB8;
+        } else {
+            s16 diff = BINANG_SUB(this->actor.shape.rot.y, *arg3);
+
+            if (diff > 0) {
+                anim = &gameplay_keep_Linkanim_00DFB0;
+            } else {
+                anim = &gameplay_keep_Linkanim_00DFA8;
+            }
+        }
+    }
+
+    if (anim != this->skelAnime.animation) {
+        func_8082E634(play, this, anim);
+        return true;
+    }
+    return false;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808481CC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80848250.s")
+void func_80848250(PlayState* play, Player* this) {
+    this->unk_B2A = 0;
+    this->stateFlags1 &= ~(PLAYER_STATE1_400 | PLAYER_STATE1_800);
+    this->getItemId = GI_NONE;
+    func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80848294.s")
+void func_80848294(PlayState* play, Player* this) {
+    func_80848250(play, this);
+    func_8082DC28(this);
+    func_80839E74(this, play);
+    this->currentYaw = this->actor.shape.rot.y;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808482E0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808484CC.s")
+extern struct_8082E224_arg1 D_8085D5DC;
+extern struct_8082E224_arg1 D_8085D5E0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808484F0.s")
+void func_808484CC(Player* arg0) {
+    func_8082E224(arg0, &D_8085D5E0);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80848570.s")
+void func_808484F0(Player* arg0) {
+    arg0->unk_B08[0] += arg0->unk_B08[1];
+    arg0->unk_B08[1] -= arg0->unk_B08[0] * 5.0f;
+    arg0->unk_B08[1] *= 0.3f;
+    if (fabsf(arg0->unk_B08[1]) < 0.00001f) {
+        arg0->unk_B08[1] = 0.0f;
+        if (fabsf(arg0->unk_B08[0]) < 0.00001f) {
+            arg0->unk_B08[0] = 0.0f;
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80848640.s")
+s32 func_80848570(Player* this, PlayState* play) {
+    if (!func_8083A6C0(play, this)) {
+        if (func_808396B8(play, this)) {
+            PlayerMeleeWeaponAnimation meleeWeaponAnimation = func_808335F4(this);
+
+            func_80833864(play, this, meleeWeaponAnimation);
+            if ((meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H) ||
+                ((this->transformation == PLAYER_FORM_FIERCE_DEITY) && func_8082FBE8(this))) {
+                this->stateFlags2 |= PLAYER_STATE2_20000;
+                func_808332A0(play, this, 0, meleeWeaponAnimation < PLAYER_MWA_SPIN_ATTACK_1H);
+            }
+        } else {
+            return false;
+        }
+    }
+    return true;
+}
+
+void func_80848640(PlayState* play, Player* this) {
+    EnTorch2* torch2;
+    Actor* effChange;
+
+    torch2 = (EnTorch2*)play->actorCtx.unk_254[this->transformation];
+    if (torch2 != NULL) {
+        Math_Vec3f_Copy(&torch2->actor.home.pos, &this->actor.world.pos);
+        torch2->actor.home.rot.y = this->actor.shape.rot.y;
+        torch2->state = 0;
+        torch2->framesUntilNextState = 20;
+    } else {
+        torch2 = (EnTorch2*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TORCH2, this->actor.world.pos.x,
+                                        this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
+                                        this->transformation);
+    }
+
+    if (torch2 != NULL) {
+        play->actorCtx.unk_254[this->transformation] = (Actor*)torch2;
+        Play_SetupRespawnPoint(&play->state, this->transformation + 3, 0xBFF);
+    }
+
+    effChange = Actor_Spawn(&play->actorCtx, play, ACTOR_EFF_CHANGE, this->actor.world.pos.x, this->actor.world.pos.y,
+                            this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
+                            (((void)0, gSaveContext.save.playerForm) << 3) | this->transformation);
+    if (effChange != NULL) {
+        //! @bug
+        func_800B8E58((Player*)effChange, NA_SE_PL_TRANSFORM);
+    }
+}
 
 s32 func_80848780(Player* this, PlayState* play) {
     if (func_80830B88(play, this)) {
@@ -6721,13 +6890,69 @@ s32 func_808487B8(Player* this, PlayState* play) {
     return false;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80848808.s")
+s32 func_80848808(Player* this, PlayState* play) {
+    if (LinkAnimation_Update(play, &this->unk_284) ||
+        ((func_8082F524(this, this->heldItemId) == this->itemActionParam) &&
+         (D_80862B48 = D_80862B48 || ((this->modelAnimType != PLAYER_ANIMTYPE_3) &&
+                                        (this->itemActionParam != PLAYER_AP_STICK) && (play->unk_1887C == 0))))) {
+        func_8082F43C(play, this, D_8085C9F0[this->itemActionParam]);
+        this->unk_ACC = 0;
+        this->unk_AA4 = 0;
+        D_80862B4C = D_80862B48;
+        return this->unk_AC4(this, play);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084894C.s")
+    if (func_8082ED94(this) != 0) {
+        func_80830D40(play, this);
+        func_8082DB18(play, this, func_8082ED20(this));
+        this->unk_AA4 = 0;
+    } else {
+        func_80830D40(play, this);
+    }
+    return true;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80848A0C.s")
+s32 func_8084894C(Player* this, PlayState* play) {
+    LinkAnimation_Update(play, &this->unk_284);
+    if (!CHECK_BTN_ALL(D_80862B44->cur.button, BTN_R)) {
+        func_80830CE8(play, this);
+    } else {
+        this->stateFlags1 |= PLAYER_STATE1_400000;
+        Player_SetModelsForHoldingShield(this);
+        if ((this->transformation == PLAYER_FORM_ZORA) && CHECK_BTN_ALL(D_80862B44->cur.button, BTN_B)) {
+            func_8082F164(this, BTN_R | BTN_B);
+        }
+    }
+    return true;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80848AB0.s")
+s32 func_80848A0C(Player* this, PlayState* play) {
+    if (LinkAnimation_Update(play, &this->unk_284)) {
+        LinkAnimationHeader* anim;
+        f32 lastFrame;
+
+        anim = func_80830A58(play, this);
+        lastFrame = Animation_GetLastFrame(anim);
+        LinkAnimation_Change(play, &this->unk_284, anim, 1.0f, lastFrame, lastFrame, 2, 0.0f);
+    }
+
+    this->stateFlags1 |= PLAYER_STATE1_400000;
+    Player_SetModelsForHoldingShield(this);
+    return true;
+}
+
+s32 func_80848AB0(Player* this, PlayState* play) {
+    // possibly a case of if ((D_80862B48 = D_80862B4C) || LinkAnimation_Update(play, &this->unk_284))
+    D_80862B48 = D_80862B4C;
+    if ((D_80862B48 != 0) || LinkAnimation_Update(play, &this->unk_284)) {
+        func_8082F43C(play, this, D_8085C9F0[this->itemActionParam]);
+        LinkAnimation_PlayLoop(play, &this->unk_284, D_8085BE84[this->modelAnimType]);
+        this->unk_AA4 = 0;
+        this->unk_AC4(this, play);
+        return false;
+    }
+    return true;
+}
 
 s32 func_80848B6C(Player* this, PlayState* play) {
     if (this->unk_B28 >= 0) {
@@ -6746,7 +6971,12 @@ s32 func_80848B6C(Player* this, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80848E4C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80849054.s")
+s32 func_80849054(Player* this, PlayState* play) {
+    if (!(this->actor.bgCheckFlags & 1) || LinkAnimation_Update(play, &this->unk_284)) {
+        func_8082F43C(play, this, func_80848B6C);
+    }
+    return true;
+}
 
 s32 func_808490B4(Player* this, PlayState* play) {
     Actor* heldActor = this->heldActor;
@@ -6789,17 +7019,76 @@ s32 func_808491B4(Player* this, PlayState* play) {
     return false;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084923C.s")
+s32 func_8084923C(Player* this, PlayState* play) {
+    if (LinkAnimation_Update(play, &this->unk_284)) {
+        func_8082F43C(play, this, func_808492C4);
+        LinkAnimation_PlayLoop(play, &this->unk_284, &gameplay_keep_Linkanim_00E3C0);
+    }
+    if (this->unk_284.animation == &gameplay_keep_Linkanim_00E3C0) {
+        func_80831010(this, play);
+    }
+    return true;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808492C4.s")
+s32 func_808492C4(Player* this, PlayState* play) {
+    LinkAnimation_Update(play, &this->unk_284);
+    func_80831010(this, play);
+    if (D_80862B4C == 0) {
+        func_8082F43C(play, this, func_8084933C);
+        LinkAnimation_PlayOnce(play, &this->unk_284, &gameplay_keep_Linkanim_00E398);
+    }
+    return true;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084933C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80849570.s")
+s32 func_80849570(Player* this, PlayState* play) {
+    if (func_80830B88(play, this)) {
+        return true;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80849620.s")
+    if (this->stateFlags3 & PLAYER_STATE3_800000) {
+        func_8082F43C(play, this, func_80849620);
+        LinkAnimation_PlayOnce(play, &this->unk_284, &gameplay_keep_Linkanim_00E3A0);
+        this->stateFlags3 &= ~PLAYER_STATE3_800000;
+        func_800B8E58(this, NA_SE_PL_CATCH_BOOMERANG);
+        func_8082DF8C(this, NA_SE_VO_LI_SWORD_N);
+        return true;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808496AC.s")
+    return false;
+}
+
+s32 func_80849620(Player* this, PlayState* play) {
+    if (!func_808491B4(this, play) && LinkAnimation_Update(play, &this->unk_284)) {
+        if (this->stateFlags1 & PLAYER_STATE1_2000000) {
+            func_8082F43C(play, this, func_80849570);
+            this->unk_ACC = 0;
+        } else {
+            func_8082F43C(play, this, func_80848780);
+        }
+    }
+    return true;
+}
+
+void func_808496AC(Player* this, PlayState* play) {
+    LinkAnimation_Update(play, &this->skelAnime);
+    func_808323C0(this, play->playerActorCsIds[2]);
+
+    if (DECR(this->unk_AE8) == 0) {
+        if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
+            func_80838760(this);
+            func_80831494(play, this, func_80849FE0, 0);
+            this->stateFlags1 &= ~PLAYER_STATE1_20000000;
+        }
+    } else if (this->unk_AE8 == 30) {
+        if (Message_GetState(&play->msgCtx) != TEXT_STATE_NONE) {
+            this->unk_AE8 += 1;
+        } else {
+            Message_StartTextbox(play, 0xC03, NULL);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808497A0.s")
 
@@ -6810,6 +7099,8 @@ s32 func_808491B4(Player* this, PlayState* play) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80849FE0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084A26C.s")
+
+extern s8 D_8085D004[];
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084A5C0.s")
 
@@ -6823,7 +7114,20 @@ s32 func_808491B4(Player* this, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084AC84.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084AEEC.s")
+extern s8 D_8085D01C[];
+
+void func_8084AEEC(Player* this, PlayState* play) {
+    this->stateFlags2 |= PLAYER_STATE2_20;
+    LinkAnimation_Update(play, &this->skelAnime);
+    func_80832F24(this);
+    if (!func_80847880(play, this)) {
+        if ((func_80833058(play, this, D_8085D01C, 0) == 0) || (func_8084AEEC == this->unk_748)) {
+            if (!CHECK_BTN_ALL(D_80862B44->cur.button, BTN_B)) {
+                func_80839E74(this, play);
+            }
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084AF9C.s")
 
@@ -6833,7 +7137,24 @@ s32 func_808491B4(Player* this, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084B3B8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084B4A8.s")
+void func_8084B4A8(Player* this, PlayState* play) {
+    if (this->skelAnime.animation == &gameplay_keep_Linkanim_00DB10) {
+        if (LinkAnimation_Update(play, &this->skelAnime)) {
+            func_8082E794(this);
+            func_8082E438(play, this, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_31, this->modelAnimType));
+        }
+    } else {
+        func_8082E67C(play, this, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_32, this->modelAnimType));
+    }
+
+    if (DECR(this->unk_AE8) == 0) {
+        if (func_80838A90(this, play) == 0) {
+            func_80836A98(this, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_33, this->modelAnimType), play);
+        }
+        this->actor.flags &= ~ACTOR_FLAG_100;
+        func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084B5C0.s")
 
