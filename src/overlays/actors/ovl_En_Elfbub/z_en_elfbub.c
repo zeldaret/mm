@@ -161,7 +161,7 @@ void EnElfbub_Draw(Actor* thisx, PlayState* play2) {
     Matrix_RotateZS(this->zRot * -1, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, object_bubble_DL_001000);
+    gSPDisplayList(POLY_XLU_DISP++, gBubbleDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
