@@ -4,6 +4,14 @@
 #include "global.h"
 #include "objects/object_pst/object_pst.h"
 
+typedef enum {
+    /* 0 */ POSTBOX_SOUTH_UPPER_CLOCKTOWN,
+    /* 1 */ POSTBOX_NORTH_CLOCKTOWN,
+    /* 2 */ POSTBOX_EAST_UPPER_CLOCKTOWN,
+    /* 3 */ POSTBOX_EAST_LOWER_CLOCKTOWN,
+    /* 4 */ POSTBOX_SOUTH_LOWER_CLOCKTOWN,
+} PostboxType;
+
 struct EnPst;
 
 typedef void (*EnPstActionFunc)(struct EnPst*, PlayState*);

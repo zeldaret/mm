@@ -29,14 +29,6 @@ typedef enum {
     /* 1 */ POSTBOX_BEHAVIOUR_TAKE_ITEM,
 } PostboxBehaviour;
 
-typedef enum {
-    /* 0 */ POSTBOX_SOUTH_UPPER_CLOCKTOWN,
-    /* 1 */ POSTBOX_NORTH_CLOCKTOWN,
-    /* 2 */ POSTBOX_EAST_UPPER_CLOCKTOWN,
-    /* 3 */ POSTBOX_EAST_LOWER_CLOCKTOWN,
-    /* 4 */ POSTBOX_SOUTH_LOWER_CLOCKTOWN,
-} PostboxParams;
-
 static u8 D_80B2C200[] = {
     /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 31, 9, 35, 0x9 - 0x6),
     /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
@@ -334,6 +326,9 @@ s32 EnPst_ProcessScheduleOutput(EnPst* this, PlayState* play, ScheduleOutput* sc
     return ret;
 }
 
+/* The postbox does not have any necessary custom logic when following their schedule,
+ * instead it is all done in the process step. This is why this function is empty
+ */
 void EnPst_HandleSchedule(EnPst* this, PlayState* play) {
 }
 
