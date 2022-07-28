@@ -1213,7 +1213,7 @@ typedef enum {
     /* 0x5B */ TATL_HINT_ID_SKULLFISH = 0x5B,
     /* 0x5C */ TATL_HINT_ID_DESBREKO,
     /* 0x5F */ TATL_HINT_ID_GEKKO = 0x5F,
-    /* 0x5F */ TATL_HINT_ID_MUSHROOM = 0x64,
+    /* 0x64 */ TATL_HINT_ID_MUSHROOM = 0x64,
     /* 0xFF */ TATL_HINT_ID_DEFAULT = 0xFF
 } TatlHintId;
 
