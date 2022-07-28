@@ -10,8 +10,8 @@ typedef void (*ObjUsiyaneActionFunc)(struct ObjUsiyane*, PlayState*);
 #define OBJUSIYANE_GET_F(thisx) ((thisx)->params & 0xF)
 
 enum {
-    OBJUSIYANE_F_0,
-    OBJUSIYANE_F_1,
+    /* 0 */ OBJUSIYANE_F_0,
+    /* 1 */ OBJUSIYANE_F_1,
 };
 
 typedef struct {

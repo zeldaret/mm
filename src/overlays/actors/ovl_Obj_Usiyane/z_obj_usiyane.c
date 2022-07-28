@@ -28,12 +28,6 @@ const ActorInit Obj_Usiyane_InitVars = {
     (ActorFunc)ObjUsiyane_Draw,
 };
 
-// TODO: See if this is just a PosRot
-typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ Vec3s unk_0C;
-} ObjUsiyaneStruct2; // size = 0x14
-
 PosRot D_80C08660[] = {
     { { 800.0f, -940.0f, 2000.0f }, { 0, 0, 0x2AF8 } },
     { { 560.0f, -790.0f, -2000.0f }, { 0, 0, 0x2EE0 } },
@@ -101,9 +95,9 @@ void func_80C07DC4(ObjUsiyane* this, PlayState* play) {
 }
 
 void func_80C07DFC(Vec3f* arg0, Vec3s* arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 arg5, Vec3f* arg6, Vec3s* arg7) {
-    f32 temp_fv0;
+    f32 temp_fv0 = (f32)arg4 / arg5;
 
-    temp_fv0 = (f32)arg4 / arg5;
+    // VEC3F_LERPIMPDST
     arg6->x = ((arg2->x - arg0->x) * temp_fv0) + arg0->x;
     arg6->y = ((arg2->y - arg0->y) * temp_fv0) + arg0->y;
     arg6->z = ((arg2->z - arg0->z) * temp_fv0) + arg0->z;
