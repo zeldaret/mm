@@ -1191,7 +1191,7 @@ void EnPametfrog_SetupCallSnapper(EnPametfrog* this, PlayState* play) {
     // Zooms in on Gekko
     Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &subCamEye);
     this->timer = 0;
-    this->actor.hintId = 0x5F;
+    this->actor.hintId = TATL_ENEMY_GEKKO;
     this->actionFunc = EnPametfrog_CallSnapper;
 }
 

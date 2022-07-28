@@ -154,9 +154,9 @@ void EnKarebaba_Init(Actor* thisx, PlayState* play) {
 
     this->unk_22C = NULL;
     if (this->actor.params == ENKAREBABA_2) {
-        this->actor.hintId = 2;
+        this->actor.hintId = TATL_ENEMY_MINI_BABA;
     } else {
-        this->actor.hintId = 9;
+        this->actor.hintId = TATL_ENEMY_WILTED_DEKU_BABA;
     }
 
     if (this->actor.params == ENKAREBABA_0) {

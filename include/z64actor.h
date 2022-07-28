@@ -1184,7 +1184,10 @@ typedef enum {
 } ClearTagType;
 
 typedef enum {
+    /* 0x02 */ TATL_ENEMY_MINI_BABA = 0x02,
+    /* 0x04 */ TATL_ENEMY_MAD_JELLY,
     /* 0x04 */ TATL_ENEMY_SKULLTULA = 0x04,
+    /* 0x0B */ TATL_ENEMY_WILTED_DEKU_BABA = 0x09,
     /* 0x0B */ TATL_ENEMY_NEJIRON = 0x0B,
     /* 0x0E */ TATL_ENEMY_DEEP_PYTHON = 0x0E,
     /* 0x11 */ TATL_ENEMY_FIRE_KEESE = 0x11,
@@ -1194,7 +1197,9 @@ typedef enum {
     /* 0x19 */ TATL_ENEMY_WART = 0x19,
     /* 0x1F */ TATL_ENEMY_SKULLWALLTULA = 0x1F,
     /* 0x20 */ TATL_ENEMY_GOLD_SKULLTULA,
-    /* 0x2A */ TATL_ENEMY_REDEAD = 0x2A,
+    /* 0x28 */ TATL_ENEMY_GYORG = 0x28, // "If you go near it..."
+    /* 0x29 */ TATL_ENEMY_GYORG_STUNNED, // "What are you doing?!""
+    /* 0x2A */ TATL_ENEMY_REDEAD,
     /* 0x2D */ TATL_ENEMY_GIBDO = 0x2D,
     /* 0x2E */ TATL_ENEMY_TWINMOLD,
     /* 0x35 */ TATL_ENEMY_IRON_KNUCKLE = 0x35,
@@ -1205,8 +1210,9 @@ typedef enum {
     /* 0x55 */ TATL_ENEMY_STALCHILD = 0x55,
     /* 0x56 */ TATL_ENEMY_ICE_KEESE,
     /* 0x57 */ TATL_ENEMY_WHITE_WOLFOS,
-    /* 0x5C */ TATL_ENEMY_SKULLFISH = 0x5B,
+    /* 0x5B */ TATL_ENEMY_SKULLFISH = 0x5B,
     /* 0x5C */ TATL_ENEMY_DESBREKO,
+    /* 0xFF */ TATL_ENEMY_GEKKO = 0x5F,
     /* 0xFF */ TATL_ENEMY_DEFAULT = 0xFF
 } TatlEnemy;
 
