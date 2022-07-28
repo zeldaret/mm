@@ -24,19 +24,19 @@ typedef struct {
 } EnZowStruct; // size = 0x38
 
 typedef struct EnZow {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ SkelAnime skelAnime;
-    /* 0x0188 */ ColliderCylinder collider;
-    /* 0x01D4 */ Vec3s jointTable[20];
-    /* 0x024C */ Vec3s morphTable[20];
-    /* 0x02C4 */ s16 unk_2C4;
-    /* 0x02C6 */ s16 unk_2C6;
-    /* 0x02C8 */ s16 unk_2C8;
-    /* 0x02CA */ u16 unk_2CA;
-    /* 0x02CC */ s16 unk_2CC;
-    /* 0x02CE */ s16 unk_2CE;
-    /* 0x02D0 */ EnZowStruct unk_2D0[15];
-    /* 0x0618 */ EnZowActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ ColliderCylinder collider;
+    /* 0x1D4 */ Vec3s jointTable[20];
+    /* 0x24C */ Vec3s morphTable[20];
+    /* 0x2C4 */ s16 unk_2C4;
+    /* 0x2C6 */ s16 unk_2C6;
+    /* 0x2C8 */ s16 unk_2C8;
+    /* 0x2CA */ u16 unk_2CA;
+    /* 0x2CC */ s16 unk_2CC;
+    /* 0x2CE */ s16 unk_2CE;
+    /* 0x2D0 */ EnZowStruct unk_2D0[15];
+    /* 0x618 */ EnZowActionFunc actionFunc;
 } EnZow; // size = 0x61C
 
 extern const ActorInit En_Zow_InitVars;

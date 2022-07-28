@@ -296,7 +296,7 @@ static ColliderJntSphElementInit D_80A07A40[11] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80A07BCC = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    11, D_80A07A40, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80A07A40, // sJntSphElementsInit,
 };
 
 // static ColliderCylinderInit sCylinderInit = {
@@ -317,7 +317,7 @@ static ColliderJntSphElementInit D_80A07C08[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80A07C2C = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_80A07C08, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80A07C08, // sJntSphElementsInit,
 };
 
 // static ColliderQuadInit sQuadInit = {
@@ -385,7 +385,7 @@ static ColliderJntSphElementInit D_80A07CDC[11] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80A07E68 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    11, D_80A07CDC, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80A07CDC, // sJntSphElementsInit,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

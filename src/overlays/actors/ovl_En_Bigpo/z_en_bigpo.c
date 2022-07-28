@@ -271,14 +271,14 @@ void EnBigpo_UpdateSpin(EnBigpo* this) {
 void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, PlayState* play) {
     Camera* subCam;
 
-    if (this->cutsceneSubCamId != CAM_ID_MAIN) {
-        subCam = Play_GetCamera(play, this->cutsceneSubCamId);
+    if (this->subCamId != SUB_CAM_ID_DONE) {
+        subCam = Play_GetCamera(play, this->subCamId);
         subCam->eye.y -= this->actor.velocity.y;
         if (this->actor.velocity.y > 0.0f) {
             subCam->eye.x -= 1.5f * Math_SinS(this->actor.yawTowardsPlayer);
             subCam->eye.z -= 1.5f * Math_CosS(this->actor.yawTowardsPlayer);
         }
-        Play_CameraSetAtEye(play, this->cutsceneSubCamId, &this->actor.focus.pos, &subCam->eye);
+        Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &subCam->eye);
     }
 }
 
@@ -303,7 +303,7 @@ void EnBigpo_WaitCutsceneQueue(EnBigpo* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
         func_800B724C(play, &this->actor, 7);
-        this->cutsceneSubCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
         if (this->actor.params == ENBIGPO_REGULAR) { // and SUMMONED, got switched earlier
             EnBigpo_SpawnCutsceneStage1(this, play);
         } else { // ENBIGPO_REVEALEDFIRE
@@ -332,13 +332,13 @@ void EnBigpo_SpawnCutsceneStage1(EnBigpo* this, PlayState* play) {
     this->actor.scale.y = 0.015f;
     this->actor.scale.z = 0.0f;
 
-    if (this->cutsceneSubCamId != CAM_ID_MAIN) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         Vec3f subCamEye;
 
         subCamEye.x = ((this->actor.world.pos.x - this->fires[0].pos.x) * 1.8f) + this->actor.world.pos.x;
         subCamEye.y = this->actor.world.pos.y + 150.0f;
         subCamEye.z = ((this->actor.world.pos.z - this->fires[0].pos.z) * 1.8f) + this->actor.world.pos.z;
-        Play_CameraSetAtEye(play, this->cutsceneSubCamId, &this->actor.focus.pos, &subCamEye);
+        Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
     }
     this->actionFunc = EnBigpo_SpawnCutsceneStage2;
 }
@@ -459,9 +459,9 @@ void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->idleTimer--;
     if (this->idleTimer == 0) {
-        subCam = Play_GetCamera(play, this->cutsceneSubCamId);
+        subCam = Play_GetCamera(play, this->subCamId);
         Play_CameraSetAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
-        this->cutsceneSubCamId = CAM_ID_MAIN;
+        this->subCamId = SUB_CAM_ID_DONE;
         if (this->actor.params == ENBIGPO_SUMMONED) {
             dampe = SubS_FindActor(play, NULL, ACTORCAT_NPC, ACTOR_EN_TK);
             if (dampe != NULL) {
@@ -953,12 +953,11 @@ void EnBigpo_SetupFlameCirclePositions(EnBigpo* this, PlayState* play) {
         EnBigpo_SetupFlameCircleCutscene(firePo);
     }
 
-    // Setup sub camera
-    if (this->cutsceneSubCamId != CAM_ID_MAIN) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         subCamEye.x = (Math_SinS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.x;
         subCamEye.y = this->actor.world.pos.y + 150.0f;
         subCamEye.z = (Math_CosS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.z;
-        Play_CameraSetAtEye(play, this->cutsceneSubCamId, &this->actor.focus.pos, &subCamEye);
+        Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
     }
 
     this->actionFunc = EnBigpo_DoNothing;

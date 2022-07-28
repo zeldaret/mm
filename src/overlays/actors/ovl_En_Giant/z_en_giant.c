@@ -96,7 +96,7 @@ void EnGiant_ChangeAnimation(EnGiant* this, s16 newAnimationId) {
         if ((this->animationId == GIANT_ANIMATION_WALKING_LOOP && newAnimationId != GIANT_ANIMATION_WALKING_LOOP) ||
             (newAnimationId == GIANT_ANIMATION_WALKING_LOOP && this->animationId != GIANT_ANIMATION_WALKING_LOOP)) {
             Animation_Change(&this->skelAnime, sAnimations[newAnimationId], 1.0f, 0.0f,
-                             Animation_GetLastFrame(&sAnimations[newAnimationId]->common), 2, 10.0f);
+                             Animation_GetLastFrame(&sAnimations[newAnimationId]->common), ANIMMODE_ONCE, 10.0f);
         } else {
             Animation_PlayOnce(&this->skelAnime, sAnimations[newAnimationId]);
         }
@@ -193,7 +193,7 @@ void EnGiant_Init(Actor* thisx, PlayState* play) {
         this->actionFunc = EnGiant_PerformClockTowerSuccessActions;
         Animation_Change(&this->skelAnime, &gGiantRaisedArmsStartAnim, 0.0f,
                          Animation_GetLastFrame(&gGiantRaisedArmsStartAnim) - 1.0f,
-                         Animation_GetLastFrame(&gGiantRaisedArmsStartAnim), 2, 0.0f);
+                         Animation_GetLastFrame(&gGiantRaisedArmsStartAnim), ANIMMODE_ONCE, 0.0f);
         this->actor.draw = EnGiant_Draw;
         this->actor.velocity.y = 0.0f;
         this->actor.terminalVelocity = 0.0f;
@@ -204,7 +204,7 @@ void EnGiant_Init(Actor* thisx, PlayState* play) {
         Actor_SetScale(&this->actor, 0.32f);
         this->actionFunc = EnGiant_PlayClockTowerFailureAnimation;
         Animation_Change(&this->skelAnime, &gGiantStruggleLoopAnim, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&gGiantStruggleStartAnim), 0, 0.0f);
+                         Animation_GetLastFrame(&gGiantStruggleStartAnim), ANIMMODE_LOOP, 0.0f);
         this->actor.draw = EnGiant_Draw;
         this->actor.velocity.y = 0.0f;
         this->actor.terminalVelocity = 0.0f;
@@ -305,7 +305,7 @@ void EnGiant_ChangeAnimationBasedOnCsAction(EnGiant* this) {
         case GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER:
             Animation_Change(&this->skelAnime, &gGiantRaisedArmsStartAnim, 0.0f,
                              Animation_GetLastFrame(&gGiantRaisedArmsStartAnim) - 1.0f,
-                             Animation_GetLastFrame(&gGiantRaisedArmsStartAnim), 2, 0.0f);
+                             Animation_GetLastFrame(&gGiantRaisedArmsStartAnim), ANIMMODE_ONCE, 0.0f);
             break;
     }
 }

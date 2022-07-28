@@ -57,6 +57,17 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
+static AnimationHeader* sAnimations[] = {
+    &object_daiku_Anim_002FA0, &object_daiku_Anim_00ACD0, &object_daiku_Anim_00C92C,
+    &object_daiku_Anim_000C44, &object_daiku_Anim_00C234, &object_daiku_Anim_000600,
+    &object_daiku_Anim_001114, &object_daiku_Anim_00B690, &object_daiku_Anim_00BEAC,
+};
+
+static u8 sAnimModes[] = {
+    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE,
+    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
+};
+
 void EnDaiku_Init(Actor* thisx, PlayState* play) {
     EnDaiku* this = THIS;
 
@@ -119,17 +130,8 @@ void EnDaiku_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_8094373C(EnDaiku* this, s32 arg1) {
-    static AnimationHeader* D_809440A4[] = {
-        &object_daiku_Anim_002FA0, &object_daiku_Anim_00ACD0, &object_daiku_Anim_00C92C,
-        &object_daiku_Anim_000C44, &object_daiku_Anim_00C234, &object_daiku_Anim_000600,
-        &object_daiku_Anim_001114, &object_daiku_Anim_00B690, &object_daiku_Anim_00BEAC,
-    };
-    static u8 D_809440C8[] = {
-        0, 0, 0, 0, 2, 0, 0, 2, 2,
-    };
-
-    this->unk_284 = Animation_GetLastFrame(D_809440A4[arg1]);
-    Animation_Change(&this->skelAnime, D_809440A4[arg1], 1.0f, 0.0f, this->unk_284, D_809440C8[arg1], -4.0f);
+    this->unk_284 = Animation_GetLastFrame(sAnimations[arg1]);
+    Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f, this->unk_284, sAnimModes[arg1], -4.0f);
 }
 
 void func_809437C8(EnDaiku* this) {
@@ -242,7 +244,7 @@ void func_80943BDC(EnDaiku* this, PlayState* play) {
         }
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         func_80943820(this);
     }

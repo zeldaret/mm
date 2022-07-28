@@ -27,10 +27,10 @@
         <TextureAnimation Name="object_stk2_Matanimheader_009F60" Offset="0x9F60" />
 
         <!-- Clock Tower Ocarina Animations -->
-        <Animation Name="object_stk2_Anim_00A104" Offset="0xA104" />
-        <Animation Name="object_stk2_Anim_00A2BC" Offset="0xA2BC" />
-        <Animation Name="object_stk2_Anim_00A4C4" Offset="0xA4C4" />
-        <Animation Name="object_stk2_Anim_00A6D4" Offset="0xA6D4" />
+        <Animation Name="gClockTowerOcarinaOfTimeFallAnim" Offset="0xA104" /> <!-- Original name is "ok_otosu" ("to fall") -->
+        <Animation Name="gClockTowerOcarinaOfTimeHitGroundAnim" Offset="0xA2BC" /> <!-- Original name is "ok_rakka" ("falling down (from a high place)") -->
+        <Animation Name="gClockTowerOcarinaOfTimeTurnAroundAnim" Offset="0xA4C4" /> <!-- Original name is "ok_skypon" ("pon" = onomatopoeic for lightly hitting something, probably representing the sound that plays) -->
+        <Animation Name="gClockTowerOcarinaOfTimeJuggleAnim" Offset="0xA6D4" /> <!-- Original name is "ok_skypon_loop" -->
 
         <!-- Clock Tower Ocarina Limb DisplayLists -->
         <DList Name="gClockTowerOcarinaOfTimeDL" Offset="0xA840" />
@@ -96,7 +96,7 @@
         <Animation Name="gSkullKidHoldUpMaskStartAnim" Offset="0x322FC" /> <!-- Original name is "stk_kakageru" ("holding up/hoisting something") -->
         <Animation Name="gSkullKidHoldUpMaskLoopAnim" Offset="0x32AE0" /> <!-- Original name is "stk_kakageru_loop" -->
         <Animation Name="gSkullKidHuddleWithFairiesAnim" Offset="0x3323C" /> <!-- Original name is "stk_miwoyoseau" ("huddling next to others to keep warm") -->
-        <Animation Name="gSkullKidDroppedFromMaskAnim" Offset="0x34FD8" /> <!-- Original name is "stk_rakka" ("falling down (from a high place)")-->
+        <Animation Name="gSkullKidDroppedFromMaskAnim" Offset="0x34FD8" /> <!-- Original name is "stk_rakka" ("falling down (from a high place)") -->
         <Animation Name="gSkullKidDrawAnim" Offset="0x36964" /> <!-- Original name is "stk_rakugaki" ("graffiti") -->
         <Animation Name="gSkullKidCartwheelAnim" Offset="0x37B94" /> <!-- Original name is "stk_sokuten" ("cartwheel") -->
         <Animation Name="gSkullKidDangleFromMaskStartAnim" Offset="0x3967C" /> <!-- Original name is "stk_tyubura" ("to dangle in midair") -->

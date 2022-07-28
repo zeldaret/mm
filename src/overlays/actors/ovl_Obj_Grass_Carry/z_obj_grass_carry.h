@@ -10,13 +10,13 @@ struct ObjGrassStruct1_1;
 typedef void (*ObjGrassCarryActionFunc)(struct ObjGrassCarry*, PlayState*);
 
 typedef struct ObjGrassCarry {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ColliderCylinder collider;
-    /* 0x0190 */ struct ObjGrass* unk_190;
-    /* 0x0194 */ struct ObjGrassStruct1_1* unk_194;
-    /* 0x0198 */ s16 unk_198;
-    /* 0x019A */ s16 unk_19A;
-    /* 0x019C */ ObjGrassCarryActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ColliderCylinder collider;
+    /* 0x190 */ struct ObjGrass* unk_190;
+    /* 0x194 */ struct ObjGrassStruct1_1* unk_194;
+    /* 0x198 */ s16 unk_198;
+    /* 0x19A */ s16 unk_19A;
+    /* 0x19C */ ObjGrassCarryActionFunc actionFunc;
 } ObjGrassCarry; // size = 0x1A0
 
 extern const ActorInit Obj_Grass_Carry_InitVars;

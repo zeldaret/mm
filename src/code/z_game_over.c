@@ -36,8 +36,8 @@ void GameOver_Update(PlayState* play) {
                     CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_GILDED &&
                     CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_DEITY) {
 
-                    if (gSaveContext.buttonStatus[0] != BTN_ENABLED) {
-                        CUR_FORM_EQUIP(EQUIP_SLOT_B) = gSaveContext.buttonStatus[0];
+                    if (gSaveContext.buttonStatus[EQUIP_SLOT_B] != BTN_ENABLED) {
+                        CUR_FORM_EQUIP(EQUIP_SLOT_B) = gSaveContext.buttonStatus[EQUIP_SLOT_B];
                     } else {
                         CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
                     }
@@ -52,11 +52,11 @@ void GameOver_Update(PlayState* play) {
             gSaveContext.eventInf[1] = 0;
             gSaveContext.eventInf[2] = 0;
             gSaveContext.eventInf[3] = 0;
-            gSaveContext.buttonStatus[0] = BTN_ENABLED;
-            gSaveContext.buttonStatus[1] = BTN_ENABLED;
-            gSaveContext.buttonStatus[2] = BTN_ENABLED;
-            gSaveContext.buttonStatus[3] = BTN_ENABLED;
-            gSaveContext.buttonStatus[4] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
             gSaveContext.unk_3F1E = 0;
             gSaveContext.unk_3F20 = 0;
             gSaveContext.unk_3F22 = 0;
@@ -72,8 +72,8 @@ void GameOver_Update(PlayState* play) {
                 if (gSaveContext.respawnFlag != -7) {
                     gSaveContext.respawnFlag = -6;
                 }
-                gSaveContext.nextTransition = 2;
-                gSaveContext.save.playerData.health = 48;
+                gSaveContext.nextTransitionType = TRANS_TYPE_02;
+                gSaveContext.save.playerData.health = 0x30;
                 gameOverCtx->state++;
                 if (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU) {
                     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;

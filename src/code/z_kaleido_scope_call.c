@@ -1,5 +1,6 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 void (*sKaleidoScopeUpdateFunc)(PlayState* play);
 void (*sKaleidoScopeDrawFunc)(PlayState* play);
@@ -33,7 +34,7 @@ void KaleidoScopeCall_Update(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     KaleidoMgrOverlay* kaleidoScopeOvl = &gKaleidoMgrOverlayTable[KALEIDO_OVL_KALEIDO_SCOPE];
 
-    if ((play->pauseCtx.state != 0) || (play->pauseCtx.debugState != 0)) {
+    if ((play->pauseCtx.state != 0) || (play->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
         if (pauseCtx->state == 1 || pauseCtx->state == 19) {
             if (ShrinkWindow_GetLetterboxMagnitude() == 0) {
                 R_PAUSE_MENU_MODE = 1;
@@ -62,7 +63,7 @@ void KaleidoScopeCall_Update(PlayState* play) {
             if (gKaleidoMgrCurOvl == kaleidoScopeOvl) {
                 sKaleidoScopeUpdateFunc(play);
 
-                if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugState == 0)) {
+                if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
                     KaleidoManager_ClearOvl(kaleidoScopeOvl);
                     KaleidoScopeCall_LoadPlayer();
                 }

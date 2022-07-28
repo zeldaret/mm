@@ -558,8 +558,8 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
         case 1:
             Cutscene_Start(play, &play->csCtx);
             this->subCamId = Play_CreateSubCamera(play);
-            Play_CameraChangeStatus(play, CAM_ID_MAIN, 1);
-            Play_CameraChangeStatus(play, this->subCamId, 7);
+            Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_CameraChangeStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
             func_800B7298(play, &this->actor, 4);
             mainCam = Play_GetCamera(play, CAM_ID_MAIN);
             this->subCamEye.x = mainCam->eye.x;
@@ -579,7 +579,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
             }
 
             player->actor.speedXZ = 0.0f;
-            if (Message_GetState(&play->msgCtx) == 0) {
+            if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                 mainCam = Play_GetCamera(play, CAM_ID_MAIN);
                 mainCam->eye = this->subCamEye;
                 mainCam->eyeNext = this->subCamEye;
@@ -588,13 +588,13 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
                 Cutscene_End(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 6);
                 this->cameraState = 0;
-                this->subCamId = CAM_ID_MAIN;
+                this->subCamId = SUB_CAM_ID_DONE;
                 this->activeTimer = 20;
             }
             break;
     }
 
-    if (this->subCamId != CAM_ID_MAIN) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }

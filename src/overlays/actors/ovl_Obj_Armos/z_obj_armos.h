@@ -23,19 +23,19 @@ enum {
 };
 
 typedef struct ObjArmos {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ SkelAnime skelAnime;
-    /* 0x01A0 */ Vec3s jointTable[OBJECT_AM_LIMB_MAX];
-    /* 0x01F4 */ Vec3s morphTable[OBJECT_AM_LIMB_MAX];
-    /* 0x0248 */ ObjArmosActionFunc actionFunc;
-    /* 0x024C */ u32 unk_24C;
-    /* 0x0250 */ Vec3f unk_250;
-    /* 0x025C */ f32* unk_25C;
-    /* 0x0260 */ f32 unk_260;
-    /* 0x0264 */ s16 unk_264;
-    /* 0x0266 */ s16 unk_266[4];
-    /* 0x026E */ s16 unk_26E;
-    /* 0x0270 */ s16 unk_270;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ SkelAnime skelAnime;
+    /* 0x1A0 */ Vec3s jointTable[OBJECT_AM_LIMB_MAX];
+    /* 0x1F4 */ Vec3s morphTable[OBJECT_AM_LIMB_MAX];
+    /* 0x248 */ ObjArmosActionFunc actionFunc;
+    /* 0x24C */ u32 unk_24C;
+    /* 0x250 */ Vec3f unk_250;
+    /* 0x25C */ f32* unk_25C;
+    /* 0x260 */ f32 unk_260;
+    /* 0x264 */ s16 unk_264;
+    /* 0x266 */ s16 unk_266[4];
+    /* 0x26E */ s16 unk_26E;
+    /* 0x270 */ s16 unk_270;
 } ObjArmos; // size = 0x274
 
 extern const ActorInit Obj_Armos_InitVars;
