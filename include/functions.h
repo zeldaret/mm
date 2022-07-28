@@ -2004,7 +2004,6 @@ s32 func_80127438(PlayState* play, Player* player, s32 maskId);
 s32 func_80128640(PlayState* play, Player* player, Gfx* dlist);
 void func_80128B74(PlayState* play, Player* player, s32 limbIndex);
 void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor);
-
 void PreNMI_Stop(PreNMIContext* prenmiCtx);
 void PreNMI_Update(PreNMIContext* prenmiCtx);
 void PreNMI_Draw(PreNMIContext* prenmiCtx);

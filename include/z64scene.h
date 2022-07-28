@@ -5,6 +5,7 @@
 #include "z64dma.h"
 #include "z64cutscene.h"
 #include "unk.h"
+#include "z64object.h"
 
 #define SPAWN_ROT_FLAGS(rotation, flags) (((rotation) << 7) | (flags))
 
