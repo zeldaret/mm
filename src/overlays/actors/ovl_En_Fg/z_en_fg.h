@@ -9,32 +9,32 @@ typedef void (*EnFgActionFunc)(struct EnFg*, PlayState*);
 
 // Based on the envColor data. Related to params but mostly unused.
 typedef enum {
-    /* 0x00 */ FG_YELLOW,
-    /* 0x01 */ FG_CYAN,
-    /* 0x02 */ FG_PINK,
-    /* 0x03 */ FG_BLUE,
-    /* 0x04 */ FG_WHITE,
-    /* 0x05 */ FG_BLACK, // All frogs are blackened when hit by an explosion
+    /* 0x0 */ FG_YELLOW,
+    /* 0x1 */ FG_CYAN,
+    /* 0x2 */ FG_PINK,
+    /* 0x3 */ FG_BLUE,
+    /* 0x4 */ FG_WHITE,
+    /* 0x5 */ FG_BLACK, // All frogs are blackened when hit by an explosion
 } FrogType;
 
 typedef enum {
-    /* 0x00 */ FG_DMGEFFECT_NONE,
-    /* 0x01 */ FG_DMGEFFECT_EXPLOSION, // Bomb or bombchu, not powderkeg
-    /* 0x02 */ FG_DMGEFFECT_DEKUSTICK,
-    /* 0x03 */ FG_DMGEFFECT_HOOKSHOT,
-    /* 0x04 */ FG_DMGEFFECT_ARROW,
-    /* 0x05 */ FG_DMGEFFECT_ICEARROW,
+    /* 0x0 */ FG_DMGEFFECT_NONE,
+    /* 0x1 */ FG_DMGEFFECT_EXPLOSION, // Bomb or bombchu, not powderkeg
+    /* 0x2 */ FG_DMGEFFECT_DEKUSTICK,
+    /* 0x3 */ FG_DMGEFFECT_HOOKSHOT,
+    /* 0x4 */ FG_DMGEFFECT_ARROW,
+    /* 0x5 */ FG_DMGEFFECT_ICEARROW,
 } FrogDamageEffect;
 
 typedef struct {
-    /* 0x0000 */ u8 type;
-    /* 0x0001 */ u8 timer;
-    /* 0x0004 */ f32 xyScale;
-    /* 0x0008 */ UNK_TYPE1 unk_08[0xC];
-    /* 0x0014 */ Vec3f pos;
-    /* 0x0020 */ Vec3f unk_20; // Likely acceleration, set to 0 but unused
-    /* 0x002C */ Vec3f velocity;
-    /* 0x0038 */ UNK_TYPE1 unk_38[0x4];
+    /* 0x00 */ u8 type;
+    /* 0x01 */ u8 timer;
+    /* 0x04 */ f32 xyScale;
+    /* 0x08 */ UNK_TYPE1 unk_08[0xC];
+    /* 0x14 */ Vec3f pos;
+    /* 0x20 */ Vec3f unk_20; // Likely acceleration, set to 0 but unused
+    /* 0x2C */ Vec3f velocity;
+    /* 0x38 */ UNK_TYPE1 unk_38[0x4];
 } EnFgEffectDust; // size = 0x3C
 
 typedef struct EnFg {

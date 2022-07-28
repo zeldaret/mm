@@ -77,7 +77,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_2,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -319,7 +319,7 @@ void func_808F374C(EnIn* this, PlayState* play) {
         this->unk488 %= ARRAY_COUNT(sAnimations);
         this->unk486 = this->unk488;
         Animation_Change(&this->skelAnime, sAnimations[this->unk488], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimations[this->unk488]), 2, -10.0f);
+                         Animation_GetLastFrame(sAnimations[this->unk488]), ANIMMODE_ONCE, -10.0f);
     }
 }
 
@@ -458,84 +458,82 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
     u16 textId = 0;
 
     if (Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER) {
-        s32 requiredScopeTemp;
-
         if (!(gSaveContext.save.weekEventReg[63] & 0x40)) {
-            return 0x34A9;
+            textId = 0x34A9;
         } else if (this->unk4AC & 8) {
-            return 0x34B1;
+            textId = 0x34B1;
         } else {
             textId = 0x34AF;
         }
-    } else {
-        switch (arg2) {
-            case 0:
-                if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
-                    (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
-                    textId = 0x345C;
-                } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
-                    textId = 0x3460;
-                } else if (!(gSaveContext.save.weekEventReg[15] & 8)) {
-                    textId = 0x3458;
-                } else {
-                    textId = 0x345B;
-                }
-                break;
-            case 1:
-                if (!(gSaveContext.save.weekEventReg[15] & 0x10)) {
-                    textId = 0x3463;
-                } else {
-                    textId = 0x346B;
-                }
-                break;
-            case 3:
-                if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
-                    textId = 0x3485;
-                } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
-                           gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
-                    textId = 0x3484;
-                } else if (!(gSaveContext.save.weekEventReg[56] & 4)) {
-                    textId = 0x346D;
-                } else {
-                    textId = 0x3482;
-                }
-                break;
-            case 4:
-                if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
-                    gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
-                    textId = 0x348A;
-                } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
-                    textId = 0x348B;
-                } else if (!(gSaveContext.save.weekEventReg[16] & 1)) {
-                    textId = 0x3486;
-                } else {
-                    textId = 0x3489;
-                }
-                break;
-            case 5:
-                if (func_808F33B8()) {
-                    textId = 0x34B3;
-                } else if (!(gSaveContext.save.weekEventReg[16] & 2)) {
-                    textId = 0x348E;
-                } else {
-                    textId = 0x3493;
-                }
-                break;
-            case 7:
-                if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
-                    textId = 0x34A8;
-                } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
-                           gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
-                    textId = 0x34A7;
-                } else if (!(gSaveContext.save.weekEventReg[16] & 4)) {
-                    textId = 0x3495;
-                } else {
-                    textId = 0x34A5;
-                }
-        }
-        if (textId == 0) {
-            textId = 1;
-        }
+        return textId;
+    }
+
+    switch (arg2) {
+        case 0:
+            if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
+                (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
+                textId = 0x345C;
+            } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+                textId = 0x3460;
+            } else if (!(gSaveContext.save.weekEventReg[15] & 8)) {
+                textId = 0x3458;
+            } else {
+                textId = 0x345B;
+            }
+            break;
+        case 1:
+            if (!(gSaveContext.save.weekEventReg[15] & 0x10)) {
+                textId = 0x3463;
+            } else {
+                textId = 0x346B;
+            }
+            break;
+        case 3:
+            if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+                textId = 0x3485;
+            } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
+                       gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
+                textId = 0x3484;
+            } else if (!(gSaveContext.save.weekEventReg[56] & 4)) {
+                textId = 0x346D;
+            } else {
+                textId = 0x3482;
+            }
+            break;
+        case 4:
+            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA || gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
+                textId = 0x348A;
+            } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+                textId = 0x348B;
+            } else if (!(gSaveContext.save.weekEventReg[16] & 1)) {
+                textId = 0x3486;
+            } else {
+                textId = 0x3489;
+            }
+            break;
+        case 5:
+            if (func_808F33B8()) {
+                textId = 0x34B3;
+            } else if (!(gSaveContext.save.weekEventReg[16] & 2)) {
+                textId = 0x348E;
+            } else {
+                textId = 0x3493;
+            }
+            break;
+        case 7:
+            if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+                textId = 0x34A8;
+            } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
+                       gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
+                textId = 0x34A7;
+            } else if (!(gSaveContext.save.weekEventReg[16] & 4)) {
+                textId = 0x3495;
+            } else {
+                textId = 0x34A5;
+            }
+    }
+    if (textId == 0) {
+        textId = 1;
     }
     return textId;
 }
@@ -579,7 +577,7 @@ s32 func_808F4150(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx)
     if (msgCtx->choiceIndex == 0) {
         func_8019F208();
         if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
-            func_801159EC(-play->msgCtx.unk1206C);
+            Rupees_ChangeBy(-play->msgCtx.unk1206C);
             if (!(gSaveContext.save.weekEventReg[57] & 1)) {
                 func_808F4108(this, play, 0x3474);
             } else if (this->unk4AC & 8) {
@@ -605,7 +603,7 @@ s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx,
     if (msgCtx->choiceIndex == 0) {
         func_8019F208();
         if (gSaveContext.save.playerData.rupees >= fee) {
-            func_801159EC(-fee);
+            Rupees_ChangeBy(-fee);
             if (!(gSaveContext.save.weekEventReg[57] & 1)) {
                 if (arg4 != 0) {
                     Actor_ContinueText(play, &this->actor, 0x3474);
@@ -750,10 +748,10 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     if (msgCtx->choiceIndex == 0) {
                         func_8019F208();
                         if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
-                            if (Interface_HasEmptyBottle()) {
+                            if (Inventory_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
                                 Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
-                                func_801159EC(-play->msgCtx.unk1206C);
+                                Rupees_ChangeBy(-play->msgCtx.unk1206C);
                                 ret = true;
                             } else {
                                 Actor_ContinueText(play, &this->actor, 0x3469);
@@ -822,8 +820,8 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     SET_RACE_FLAGS(RACE_FLAG_START);
                     func_800FD750(NA_BGM_HORSE);
                     play->nextEntranceIndex = 0xCE50;
-                    play->unk_1887F = 5;
-                    play->sceneLoadFlag = 0x14;
+                    play->transitionType = TRANS_TYPE_05;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
                     gSaveContext.save.weekEventReg[57] |= 1;
                     break;
                 case 0x3478:
@@ -896,7 +894,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
                 case 0x347E:
                     func_808F35D8(this, play);
-                    if (Interface_HasEmptyBottle()) {
+                    if (Inventory_HasEmptyBottle()) {
                         this->actionFunc = func_808F3B40;
                         Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
                         ret = true;
@@ -1002,10 +1000,10 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     if (msgCtx->choiceIndex == 0) {
                         func_8019F208();
                         if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
-                            if (Interface_HasEmptyBottle()) {
+                            if (Inventory_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
                                 Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
-                                func_801159EC(-play->msgCtx.unk1206C);
+                                Rupees_ChangeBy(-play->msgCtx.unk1206C);
                                 ret = true;
                             } else {
                                 Actor_ContinueText(play, &this->actor, 0x3469);
@@ -1069,8 +1067,8 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     SET_RACE_FLAGS(RACE_FLAG_START);
                     func_800FD750(NA_BGM_HORSE);
                     play->nextEntranceIndex = 0xCE50;
-                    play->unk_1887F = 5;
-                    play->sceneLoadFlag = 0x14;
+                    play->transitionType = TRANS_TYPE_05;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
                     gSaveContext.save.weekEventReg[57] |= 1;
                     break;
                 case 0x349D:
@@ -1100,7 +1098,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
                 case 0x34A1:
                     func_808F35D8(this, play);
-                    if (Interface_HasEmptyBottle()) {
+                    if (Inventory_HasEmptyBottle()) {
                         this->actionFunc = func_808F3B40;
                         Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
                         ret = true;
@@ -1183,12 +1181,12 @@ s32 func_808F5674(PlayState* play, EnIn* this, s32 arg2) {
     s32 ret = false;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 2:
+        case TEXT_STATE_CLOSING:
             func_808F4054(play, this, arg2, this->actor.textId);
             ret = true;
             break;
-        case 4:
-        case 5:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play) && func_808F4414(play, this, arg2)) {
                 func_801477B4(play);
                 ret = true;
@@ -1376,7 +1374,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         this->unk488 = 1;
         Animation_Change(&this->skelAnime, &object_in_Anim_016A60, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&object_in_Anim_016A60), 2, 0.0f);
+                         Animation_GetLastFrame(&object_in_Anim_016A60), ANIMMODE_ONCE, 0.0f);
         Actor_SetScale(&this->actor, 0.01f);
         this->unk23C = 0;
         this->unk23D = 1;
@@ -1475,23 +1473,22 @@ void EnIn_Update(Actor* thisx, PlayState* play) {
 
 void func_808F6334(EnIn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 newUnk4C8;
+    s32 talkState = Message_GetState(&play->msgCtx);
 
-    newUnk4C8 = Message_GetState(&play->msgCtx);
     this->unk4C4 += this->unk4C0 != 0.0f ? 40.0f : -40.0f;
     this->unk4C4 = CLAMP(this->unk4C4, 0.0f, 80.0f);
 
     Matrix_Translate(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
-    if (&this->actor == player->targetActor &&
-        !(play->msgCtx.currentTextId >= 0xFF && play->msgCtx.currentTextId <= 0x200) && newUnk4C8 == 3 &&
-        this->unk4C8 == 3) {
+    if ((&this->actor == player->targetActor) &&
+        !((play->msgCtx.currentTextId >= 0xFF) && (play->msgCtx.currentTextId <= 0x200)) &&
+        (talkState == TEXT_STATE_3) && (this->prevTalkState == TEXT_STATE_3)) {
         if (!(play->state.frames & 1)) {
             this->unk4C0 = this->unk4C0 != 0.0f ? 0.0f : 1.0f;
         }
     } else {
         this->unk4C0 = 0.0f;
     }
-    this->unk4C8 = newUnk4C8;
+    this->prevTalkState = talkState;
 }
 
 s32 EnIn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

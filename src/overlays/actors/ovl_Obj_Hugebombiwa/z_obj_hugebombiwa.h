@@ -20,13 +20,13 @@ typedef struct {
 } EnHugebombiwaStruct; // size = 0x28
 
 typedef struct ObjHugebombiwa {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ColliderCylinder collider;
-    /* 0x0190 */ EnHugebombiwaStruct unk_190[20];
-    /* 0x04B0 */ s16 unk_4B0;
-    /* 0x04B2 */ s8 unk_4B2;
-    /* 0x04B3 */ s8 unk_4B3;
-    /* 0x04B4 */ ObjHugebombiwaActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ColliderCylinder collider;
+    /* 0x190 */ EnHugebombiwaStruct unk_190[20];
+    /* 0x4B0 */ s16 unk_4B0;
+    /* 0x4B2 */ s8 unk_4B2;
+    /* 0x4B3 */ s8 unk_4B3;
+    /* 0x4B4 */ ObjHugebombiwaActionFunc actionFunc;
 } ObjHugebombiwa; // size = 0x4B8
 
 extern const ActorInit Obj_Hugebombiwa_InitVars;

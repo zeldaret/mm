@@ -245,7 +245,7 @@ void EnKusa_DropCollectible(EnKusa* this, PlayState* play) {
     s32 collectableParams;
 
     if ((GET_KUSA_TYPE(&this->actor) == ENKUSA_TYPE_GRASS) || (GET_KUSA_TYPE(&this->actor) == ENKUSA_TYPE_BUSH)) {
-        if (!(KUSA_GET_PARAMS_0C(&this->actor))) {
+        if (!KUSA_GET_PARAMS_0C(&this->actor)) {
             Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos,
                                        KUSA_GET_RAND_COLLECTIBLE_ID(&this->actor) * 0x10);
         }

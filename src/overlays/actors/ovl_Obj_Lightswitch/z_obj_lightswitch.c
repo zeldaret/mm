@@ -62,7 +62,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_2,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -100,9 +100,9 @@ void ObjLightswitch_UpdateSwitchFlags(ObjLightswitch* this, PlayState* play, s32
     if (this) {}
 
     if (set) {
-        Flags_SetSwitch(play, GET_LIGHTSWITCH_SWITCHFLAG(this));
+        Flags_SetSwitch(play, GET_LIGHTSWITCH_SWITCHFLAG(&this->actor));
     } else {
-        Flags_UnsetSwitch(play, GET_LIGHTSWITCH_SWITCHFLAG(this));
+        Flags_UnsetSwitch(play, GET_LIGHTSWITCH_SWITCHFLAG(&this->actor));
     }
 }
 
@@ -150,13 +150,13 @@ void ObjLightswitch_Init(Actor* thisx, PlayState* play) {
     u32 isSwitchActivated;
     s32 isTriggered;
 
-    isSwitchActivated = Flags_GetSwitch(play, GET_LIGHTSWITCH_SWITCHFLAG(this));
+    isSwitchActivated = Flags_GetSwitch(play, GET_LIGHTSWITCH_SWITCHFLAG(&this->actor));
     isTriggered = false;
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Actor_SetFocus(&this->actor, 0.0f);
 
     if (isSwitchActivated) {
-        if (GET_LIGHTSWITCH_TYPE(this) == LIGHTSWITCH_TYPE_FAKE) {
+        if (GET_LIGHTSWITCH_TYPE(&this->actor) == LIGHTSWITCH_TYPE_FAKE) {
             isTriggered = true;
         } else {
             ObjLightSwitch_SetupEnabled(this);
@@ -167,7 +167,7 @@ void ObjLightswitch_Init(Actor* thisx, PlayState* play) {
 
     ObjLightswitch_InitCollider(this, play);
 
-    if (GET_LIGHTSWITCH_INVISIBLE(this)) {
+    if (GET_LIGHTSWITCH_INVISIBLE(&this->actor)) {
         // the stone tower exterior switch is part of the scene mesh, the actor is invisble on top
         this->actor.draw = NULL;
     }
@@ -209,7 +209,7 @@ void ObjLightswitch_SetupIdle(ObjLightswitch* this) {
 }
 
 void ObjLightswitch_Idle(ObjLightswitch* this, PlayState* play) {
-    s32 actorType = GET_LIGHTSWITCH_TYPE(this);
+    s32 actorType = GET_LIGHTSWITCH_TYPE(&this->actor);
 
     if (this->hitState >= 10) {
         if (actorType == LIGHTSWITCH_TYPE_FAKE) {
@@ -260,11 +260,11 @@ void ObjLightSwitch_SetupEnabled(ObjLightswitch* this) {
 }
 
 void ObjLightSwitch_Enabled(ObjLightswitch* this, PlayState* play) {
-    s32 actorType = GET_LIGHTSWITCH_TYPE(this);
+    s32 actorType = GET_LIGHTSWITCH_TYPE(&this->actor);
 
     if (actorType == LIGHTSWITCH_TYPE_REGULAR) {
         // switch can be disabled outside of this actor by flag
-        if (!Flags_GetSwitch(play, GET_LIGHTSWITCH_SWITCHFLAG(this))) {
+        if (!Flags_GetSwitch(play, GET_LIGHTSWITCH_SWITCHFLAG(&this->actor))) {
             ObjLightSwitch_SetupDisabled(this);
         }
     } else if (actorType == LIGHTSWITCH_TYPE_FLIP) {
@@ -329,7 +329,7 @@ void ObjLightswitch_Update(Actor* thisx, PlayState* play) {
         // dmgFlags enum doesn't exist yet, 0x2000 is light arrows
         if ((this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x2000) != 0) {
             this->hitState = 10;
-        } else if (GET_LIGHTSWITCH_TYPE(this) == LIGHTSWITCH_TYPE_FLIP) {
+        } else if (GET_LIGHTSWITCH_TYPE(&this->actor) == LIGHTSWITCH_TYPE_FLIP) {
             if (this->hitState == 0) {
                 if ((this->previousACFlags & AC_HIT) == 0) {
                     this->hitState = 1;
@@ -438,7 +438,7 @@ void ObjLightswitch_Draw(Actor* thisx, PlayState* play) {
     ObjLightswitch* this = THIS;
     s32 alpha = (u8)(this->colorAlpha >> 6);
 
-    if ((GET_LIGHTSWITCH_TYPE(this) == LIGHTSWITCH_TYPE_FAKE) && (alpha > 0) && (alpha < 255)) {
+    if ((GET_LIGHTSWITCH_TYPE(&this->actor) == LIGHTSWITCH_TYPE_FAKE) && (alpha > 0) && (alpha < 255)) {
         ObjLightSwitch_DrawXlu(this, play);
     } else {
         ObjLightSwitch_DrawOpa(this, play);

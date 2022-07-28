@@ -5,6 +5,7 @@
  */
 
 #include "z_en_hint_skb.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_skb/object_skb.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
@@ -84,7 +85,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    2,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -223,7 +224,8 @@ void func_80C1FF88(EnHintSkb* this, PlayState* play) {
 }
 
 void func_80C2003C(EnHintSkb* this) {
-    Animation_Change(&this->skelAnime, &object_skb_Anim_002190, -0.4f, this->skelAnime.curFrame - 1.0f, 0.0f, 3, 0.0f);
+    Animation_Change(&this->skelAnime, &object_skb_Anim_002190, -0.4f, this->skelAnime.curFrame - 1.0f, 0.0f,
+                     ANIMMODE_ONCE_INTERP, 0.0f);
     this->collider.base.atFlags &= ~AT_BOUNCED;
     this->actionFunc = func_80C200B8;
 }
@@ -423,29 +425,29 @@ void func_80C208D0(EnHintSkb* this, PlayState* play) {
     this->unk_3DE = 0;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 3:
+        case TEXT_STATE_3:
             if ((play->gameplayFrames % 2) != 0) {
                 this->unk_3DE = 1;
             }
             break;
 
-        case 4:
+        case TEXT_STATE_CHOICE:
             func_80C20B88(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             func_80C20C24(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 func_80C2075C(this);
             }
             break;
 
-        case 0:
-        case 1:
-        case 2:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
             break;
     }
 
@@ -707,8 +709,10 @@ void func_80C20E90(EnHintSkb* this, PlayState* play) {
                 this->unk_3E8 |= 1;
 
             case 15:
-                if ((player->swordAnimation == 4) || (player->swordAnimation == 11) || (player->swordAnimation == 22) ||
-                    (player->swordAnimation == 23)) {
+                if ((player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_SLASH_1H) ||
+                    (player->meleeWeaponAnimation == PLAYER_MWA_LEFT_COMBO_2H) ||
+                    (player->meleeWeaponAnimation == PLAYER_MWA_BACKSLASH_RIGHT) ||
+                    (player->meleeWeaponAnimation == PLAYER_MWA_BACKSLASH_LEFT)) {
                     this->unk_3E8 |= 1;
                 }
 
@@ -816,7 +820,8 @@ void func_80C215E4(PlayState* play, EnHintSkb* this, Vec3f* arg2) {
 
     sp50.y += (Rand_ZeroOne() - 0.5f) * 4.0f;
 
-    EffectSsHahen_Spawn(play, &sp5C, &sp50, &sp44, 0, ((Rand_ZeroOne() * 5.0f) + 12.0f) * 0.8f, -1, 10, NULL);
+    EffectSsHahen_Spawn(play, &sp5C, &sp50, &sp44, 0, ((Rand_ZeroOne() * 5.0f) + 12.0f) * 0.8f, HAHEN_OBJECT_DEFAULT,
+                        10, NULL);
     func_800BBFB0(play, &sp5C, 10.0f, 1, 150, 0, 1);
 }
 
