@@ -61,7 +61,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -90,7 +90,7 @@ void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2) {
         path = &play->setupPathList[path->unk1];
     }
 
-    for (i = 0; i < EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor); i++) {
+    for (i = 0; i < EN_SYATEKI_CROW_GET_NUMBER(&this->actor); i++) {
         path = &play->setupPathList[path->unk1];
     }
 
@@ -102,7 +102,7 @@ void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2) {
     this->unk_23C.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
     ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
 
-    if ((path == NULL) || (EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor) >= 0x80)) {
+    if ((path == NULL) || (EN_SYATEKI_CROW_GET_NUMBER(&this->actor) >= 0x80)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -136,14 +136,14 @@ void func_809CA5D4(EnSyatekiCrow* this) {
 void func_809CA67C(EnSyatekiCrow* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if ((syatekiMan->unk_26A == 1) && (this->unk_1C2 == 1) &&
-        (syatekiMan->unk_274 & (1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor)))) {
+    if ((syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) && (this->unk_1C2 == 1) &&
+        (syatekiMan->guayFlags & (1 << EN_SYATEKI_CROW_GET_NUMBER(&this->actor)))) {
         func_809CA71C(this);
-    } else if (syatekiMan->unk_26A != 1) {
+    } else if (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING) {
         this->unk_1C2 = 1;
     }
 
-    if ((syatekiMan->unk_274 == 0) && (syatekiMan->unk_274 == 0)) {
+    if ((syatekiMan->guayFlags == 0) && (syatekiMan->guayFlags == 0)) {
         this->unk_1C2 = 1;
     }
 }
@@ -185,7 +185,7 @@ void func_809CA8E4(EnSyatekiCrow* this, PlayState* play) {
     f32 sp30;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if (syatekiMan->unk_26A != 1) {
+    if (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING) {
         func_809CA5D4(this);
         return;
     }
@@ -207,13 +207,13 @@ void func_809CA8E4(EnSyatekiCrow* this, PlayState* play) {
         this->unk_1CC++;
     } else {
         this->unk_1C2 = 0;
-        syatekiMan->unk_274 &= ~(1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor));
+        syatekiMan->guayFlags &= ~(1 << EN_SYATEKI_CROW_GET_NUMBER(&this->actor));
         func_809CA5D4(this);
     }
 
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.yOffset = (fabsf(this->skelAnime.curFrame - 3.0f) * 150.0f) + 1700.0f;
-    if ((syatekiMan->unk_26C % 90) == 0) {
+    if ((syatekiMan->perGameVar1.guaySpawnTimer % 90) == 0) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_CRY);
     }
 }
@@ -221,11 +221,11 @@ void func_809CA8E4(EnSyatekiCrow* this, PlayState* play) {
 void func_809CAAF8(EnSyatekiCrow* this) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    syatekiMan->unk_280 += 60;
+    syatekiMan->score += 60;
     this->unk_1C2 = 0;
     this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
     this->actor.velocity.y = 0.0f;
-    Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, 1, -3.0f);
+    Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
     this->actor.bgCheckFlags &= ~1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_DEAD);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
@@ -245,8 +245,8 @@ void func_809CABC0(EnSyatekiCrow* this, PlayState* play) {
 
     if (this->unk_1C4 > 20) {
         func_800B3030(play, &this->actor.world.pos, &D_809CB050, &D_809CB050, this->actor.scale.x * 10000.0f, 0, 0);
-        syatekiMan->unk_27A++;
-        syatekiMan->unk_274 &= ~(1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor));
+        syatekiMan->guayHitCounter++;
+        syatekiMan->guayFlags &= ~(1 << EN_SYATEKI_CROW_GET_NUMBER(&this->actor));
         func_809CA5D4(this);
     }
 

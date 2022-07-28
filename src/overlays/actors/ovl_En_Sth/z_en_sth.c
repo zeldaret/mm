@@ -179,8 +179,8 @@ s32 func_80B6703C(EnSth* this, PlayState* play) {
 
 void func_80B670A4(EnSth* this, s16 arg1) {
     if ((arg1 >= 0) && (arg1 < ARRAY_COUNT(D_80B6D1C8)) && (arg1 != this->unk_29A)) {
-        Animation_Change(&this->skelAnime, D_80B6D1C8[arg1], 1.0f, 0.0f, Animation_GetLastFrame(D_80B6D1C8[arg1]), 0,
-                         -5.0f);
+        Animation_Change(&this->skelAnime, D_80B6D1C8[arg1], 1.0f, 0.0f, Animation_GetLastFrame(D_80B6D1C8[arg1]),
+                         ANIMMODE_LOOP, -5.0f);
         this->unk_29A = arg1;
     }
 }
@@ -200,7 +200,7 @@ void func_80B67148(EnSth* this, PlayState* play) {
 void func_80B671A0(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actionFunc = func_80B67208;
         func_801477B4(play);
     }
@@ -312,7 +312,7 @@ void func_80B67540(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1134:
@@ -382,7 +382,7 @@ void func_80B67540(EnSth* this, PlayState* play) {
             }
             break;
 
-        case 2:
+        case TEXT_STATE_CLOSING:
             this->actionFunc = func_80B677BC;
             this->unk_29C |= 2;
             break;
@@ -403,7 +403,7 @@ void func_80B677BC(EnSth* this, PlayState* play) {
 void func_80B67838(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actionFunc = func_80B678A8;
         func_801477B4(play);
     }
@@ -494,7 +494,7 @@ void func_80B67C1C(EnSth* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x90C:
                 func_80B670A4(this, 2);

@@ -36,13 +36,13 @@
         <DList Name="gAniLeftCalfDL" Offset="0x5928" />
         <DList Name="gAniLeftThighDL" Offset="0x5C50" />
         <DList Name="gAniPelvisDL" Offset="0x5D60" />
-        <Texture Name="gAniGeneralTlut" OutName="ani_general_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5E58" />
+        <Texture Name="gAniGeneralTLUT" OutName="ani_general_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5E58" />
         <Texture Name="gAniUnkGradientTex" OutName="ani_unk_gradient1" Format="ci8" Width="8" Height="8" Offset="0x6058" />
         <Texture Name="gAniFingersTex" OutName="ani_fingers" Format="ci8" Width="8" Height="8" Offset="0x6098" />
         <Texture Name="gAniShirtEdgeTex" OutName="ani_shirt_edge" Format="i8" Width="8" Height="8" Offset="0x60D8" />
         <Texture Name="gAniSandleBuckleTex" OutName="ani_sandle_buckle" Format="ci8" Width="16" Height="16" Offset="0x6118" />
         <Texture Name="gAniPantsTex" OutName="ani_pants" Format="ci8" Width="16" Height="16" Offset="0x6218" />
-        <Texture Name="gAniEyeTlut" OutName="ani_eye_tlut" Format="rgba16" Width="16" Height="12" Offset="0x6318" />
+        <Texture Name="gAniEyeTLUT" OutName="ani_eye_tlut" Format="rgba16" Width="16" Height="12" Offset="0x6318" />
         <Texture Name="gAniOpenEyeTex" OutName="ani_open_eye" Format="ci8" Width="32" Height="32" Offset="0x6498" TlutOffset="0x6318" />
         <Texture Name="gAniMouthTex" OutName="ani_mouth" Format="ci8" Width="16" Height="16" Offset="0x6898" />
         <Texture Name="gAniUnkGradient2Tex" OutName="ani_unk_gradient2" Format="ci8" Width="8" Height="8" Offset="0x6998" />

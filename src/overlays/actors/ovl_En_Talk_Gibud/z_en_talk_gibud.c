@@ -609,7 +609,7 @@ void EnTalkGibud_Dead(EnTalkGibud* this, PlayState* play) {
 
 void EnTalkGibud_SetupRevive(EnTalkGibud* this) {
     Animation_Change(&this->skelAnime, &gGibdoRedeadDeathAnim, -1.0f, Animation_GetLastFrame(&gGibdoRedeadDeathAnim),
-                     0.0f, 2, -8.0f);
+                     0.0f, ANIMMODE_ONCE, -8.0f);
     this->actor.flags |= ACTOR_FLAG_1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_REVERSE);
     this->deathTimer = 0;
@@ -714,7 +714,7 @@ s32 EnTalkGibud_PresentedItemMatchesRequest(EnTalkGibud* this, PlayState* play, 
                 return EN_TALK_GIBUD_REQUESTED_ITEM_NOT_ENOUGH_AMMO;
             }
         }
-        if (Interface_HasItemInBottle(requestedItem->item)) {
+        if (Inventory_HasItemInBottle(requestedItem->item)) {
             return EN_TALK_GIBUD_REQUESTED_ITEM_MET;
         }
     }
@@ -796,31 +796,31 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
     EnTalkGibudRequestedItem* requestedItem;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-        case 12:
-        case 13:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_7:
+        case TEXT_STATE_8:
+        case TEXT_STATE_9:
+        case TEXT_STATE_10:
+        case TEXT_STATE_11:
+        case TEXT_STATE_12:
+        case TEXT_STATE_13:
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             EnTalkGibud_GetNextTextBoxId(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 if (this->textId == 0x138A) {
                     // Remove the requested item/amount from the player's inventory
                     requestedItem = &sRequestedItemTable[this->requestedItemIndex];
                     if (!requestedItem->isBottledItem) {
-                        func_80115A14(requestedItem->item, -requestedItem->amount);
+                        Inventory_ChangeAmmo(requestedItem->item, -requestedItem->amount);
                     } else {
                         func_80123D50(play, player, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
                     }
@@ -834,7 +834,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
             }
             break;
 
-        case 16:
+        case TEXT_STATE_16:
             EnTalkGibud_CheckPresentedItem(this, play);
             break;
     }

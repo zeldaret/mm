@@ -8,9 +8,9 @@ struct EnViewer;
 typedef void (*EnViewerActionFunc)(struct EnViewer*, PlayState*);
 
 typedef struct EnViewer {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ EnViewerActionFunc actionFunc;
-    /* 0x0148 */ char unk_148[0x10];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ EnViewerActionFunc actionFunc;
+    /* 0x148 */ char unk_148[0x10];
 } EnViewer; // size = 0x158
 
 extern const ActorInit En_Viewer_InitVars;

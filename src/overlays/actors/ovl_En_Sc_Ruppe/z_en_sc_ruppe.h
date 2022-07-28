@@ -10,9 +10,9 @@ struct EnScRuppe;
 typedef void (*EnScRuppeActionFunc)(struct EnScRuppe*, PlayState*);
 
 typedef struct EnScRuppe {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ColliderCylinder collider;
-    /* 0x0190 */ EnScRuppeActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ColliderCylinder collider;
+    /* 0x190 */ EnScRuppeActionFunc actionFunc;
     /* 0x194 */ s16 ruppeDisplayTime;
     /* 0x196 */ s16 ruppeIndex;
 } EnScRuppe; // size = 0x198

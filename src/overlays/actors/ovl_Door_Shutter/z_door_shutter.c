@@ -288,7 +288,7 @@ f32 func_808A0D90(PlayState* play, DoorShutter* this, f32 arg2, f32 arg3, f32 ar
 s32 func_808A0E28(DoorShutter* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (!Player_InCsMode(&play->state)) {
+    if (!Player_InCsMode(play)) {
         ShutterInfo* shutterInfo = &D_808A21B0[this->unk_164];
         f32 temp_f0 = func_808A0D90(play, this, 0.0f, shutterInfo->unk_0A, shutterInfo->unk_0B);
 
@@ -405,7 +405,7 @@ void func_808A1288(DoorShutter* this, PlayState* play) {
         this->unk_164 = sp38;
         this->unk_168 = 0.0f;
 
-        func_800DFFAC(play->cameraPtrs[CAM_ID_MAIN], &this->actor, player->unk_3BA, this->unk_168, 12, sp34, 10);
+        Camera_ChangeDoorCam(play->cameraPtrs[CAM_ID_MAIN], &this->actor, player->unk_3BA, this->unk_168, 12, sp34, 10);
     }
 }
 
@@ -569,7 +569,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
     if (DoorShutter_SetupDoor(this, play) && !(player->stateFlags1 & 0x800)) {
         DoorShutter_SetupAction(this, func_808A1C50);
         if (ActorCutscene_GetCurrentIndex() == 0x7D) {
-            func_801226E0(play, ((void)0, gSaveContext.respawn[RESTART_MODE_DOWN].data));
+            func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));
             player->unk_A86 = -1;
             func_800B7298(play, NULL, 0x73);
         }
@@ -608,7 +608,7 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
             Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 45.0f, 10, 8.0f, 500, 10, 0);
         }
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BIGWALL_BOUND);
-        quake = Quake_Add(Play_GetCamera(play, 0), 3);
+        quake = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
         Quake_SetSpeed(quake, -32536);
         Quake_SetQuakeValues(quake, 2, 0, 0, 0);
         Quake_SetCountdown(quake, 10);
@@ -643,7 +643,7 @@ s32 func_808A1D68(DoorShutter* this, PlayState* play) {
     s32 temp_a0;
     s32 temp_a1;
 
-    if (Player_InCsMode(&play->state)) {
+    if (Player_InCsMode(play)) {
         return true;
     }
 

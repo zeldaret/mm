@@ -102,7 +102,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -683,7 +683,7 @@ void EnSsh_Wait(EnSsh* this, PlayState* play) {
 void EnSsh_Talk(EnSsh* this, PlayState* play) {
     EnSsh_Bob(this, play);
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x904:
             case 0x905:

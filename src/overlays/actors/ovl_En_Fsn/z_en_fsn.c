@@ -53,20 +53,20 @@ typedef enum {
 } EnFsnCutsceneState;
 
 typedef enum {
-    /* 00 */ FSN_ANIMATION_IDLE,
-    /* 01 */ FSN_ANIMATION_SCRATCH_BACK,
-    /* 02 */ FSN_ANIMATION_TURN_AROUND_FORWARD,
-    /* 03 */ FSN_ANIMATION_TURN_AROUND_REVERSE,
-    /* 04 */ FSN_ANIMATION_HANDS_ON_COUNTER_START,
-    /* 05 */ FSN_ANIMATION_HANDS_ON_COUNTER_LOOP,
-    /* 06 */ FSN_ANIMATION_HAND_ON_FACE_START,
-    /* 07 */ FSN_ANIMATION_HAND_ON_FACE_LOOP,
-    /* 08 */ FSN_ANIMATION_LEAN_FORWARD_START,
-    /* 09 */ FSN_ANIMATION_LEAN_FORWARD_LOOP,
-    /* 10 */ FSN_ANIMATION_SLAM_COUNTER_START,
-    /* 11 */ FSN_ANIMATION_SLAM_COUNTER_LOOP,
-    /* 12 */ FSN_ANIMATION_MAKE_OFFER,
-    /* 13 */ FSN_ANIMATION_MAX
+    /*  0 */ FSN_ANIM_IDLE,
+    /*  1 */ FSN_ANIM_SCRATCH_BACK,
+    /*  2 */ FSN_ANIM_TURN_AROUND_FORWARD,
+    /*  3 */ FSN_ANIM_TURN_AROUND_REVERSE,
+    /*  4 */ FSN_ANIM_HANDS_ON_COUNTER_START,
+    /*  5 */ FSN_ANIM_HANDS_ON_COUNTER_LOOP,
+    /*  6 */ FSN_ANIM_HAND_ON_FACE_START,
+    /*  7 */ FSN_ANIM_HAND_ON_FACE_LOOP,
+    /*  8 */ FSN_ANIM_LEAN_FORWARD_START,
+    /*  9 */ FSN_ANIM_LEAN_FORWARD_LOOP,
+    /* 10 */ FSN_ANIM_SLAM_COUNTER_START,
+    /* 11 */ FSN_ANIM_SLAM_COUNTER_LOOP,
+    /* 12 */ FSN_ANIM_MAKE_OFFER,
+    /* 13 */ FSN_ANIM_MAX
 } FsnAnimation;
 
 const ActorInit En_Fsn_InitVars = {
@@ -209,7 +209,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_HandleSetupResumeInteraction(EnFsn* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 6 && Message_ShouldAdvance(play) &&
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play) &&
         this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
         Actor_ProcessTalkRequest(&this->actor, &play->state);
         func_800B85E0(&this->actor, play, 400.0f, EXCH_ITEM_MINUS1);
@@ -392,7 +392,7 @@ void EnFsn_EndInteraction(EnFsn* this, PlayState* play) {
     }
     Actor_ProcessTalkRequest(&this->actor, &play->state);
     play->msgCtx.msgMode = 0x43;
-    play->msgCtx.unk12023 = 4;
+    play->msgCtx.stateTimer = 4;
     Interface_ChangeAlpha(50);
     this->drawCursor = 0;
     this->stickLeftPrompt.isEnabled = false;
@@ -416,7 +416,7 @@ s32 EnFsn_TestEndInteraction(EnFsn* this, PlayState* play, Input* input) {
 
 s32 EnFsn_TestCancelOption(EnFsn* this, PlayState* play, Input* input) {
     if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
-        this->actionFunc = this->tmpActionFunc;
+        this->actionFunc = this->prevActionFunc;
         func_80151938(play, this->items[this->cursorIdx]->actor.textId);
         return true;
     }
@@ -467,7 +467,7 @@ s32 EnFsn_HasPlayerSelectedItem(EnFsn* this, PlayState* play, Input* input) {
     }
     if (EnFsn_TestItemSelected(play)) {
         if (!this->items[this->cursorIdx]->isOutOfStock) {
-            this->tmpActionFunc = this->actionFunc;
+            this->prevActionFunc = this->actionFunc;
             func_80151938(play, this->items[this->cursorIdx]->choiceTextId);
             play_sound(NA_SE_SY_DECIDE);
             this->stickLeftPrompt.isEnabled = false;
@@ -711,7 +711,7 @@ void EnFsn_InitShop(EnFsn* this, PlayState* play) {
         this->stickAnimTween = this->arrowAnimTween = 0.0f;
     }
     this->blinkTimer = 20;
-    this->animationIndex = FSN_ANIMATION_HANDS_ON_COUNTER_START;
+    this->animationIndex = FSN_ANIM_HANDS_ON_COUNTER_START;
     this->eyeTextureIdx = 0;
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
     this->actionFunc = EnFsn_Idle;
@@ -720,11 +720,11 @@ void EnFsn_InitShop(EnFsn* this, PlayState* play) {
 void EnFsn_Idle(EnFsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (this->animationIndex == FSN_ANIMATION_HANDS_ON_COUNTER_START) {
+    if (this->animationIndex == FSN_ANIM_HANDS_ON_COUNTER_START) {
         s16 curFrame = this->skelAnime.curFrame;
         s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
         if (curFrame == frameCount) {
-            this->animationIndex = FSN_ANIMATION_HANDS_ON_COUNTER_LOOP;
+            this->animationIndex = FSN_ANIM_HANDS_ON_COUNTER_LOOP;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         }
         return;
@@ -762,24 +762,24 @@ void EnFsn_Haggle(EnFsn* this, PlayState* play) {
 
     if (this->flags & ENFSN_ANGRY) {
         this->flags &= ~ENFSN_ANGRY;
-        this->animationIndex = FSN_ANIMATION_SLAM_COUNTER_LOOP;
+        this->animationIndex = FSN_ANIM_SLAM_COUNTER_LOOP;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
     } else {
-        if (this->animationIndex == FSN_ANIMATION_SLAM_COUNTER_LOOP && Animation_OnFrame(&this->skelAnime, 18.0f)) {
+        if (this->animationIndex == FSN_ANIM_SLAM_COUNTER_LOOP && Animation_OnFrame(&this->skelAnime, 18.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
         }
         if (this->flags & ENFSN_CALM_DOWN) {
             this->flags &= ~ENFSN_CALM_DOWN;
-            this->animationIndex = FSN_ANIMATION_HANDS_ON_COUNTER_LOOP;
+            this->animationIndex = FSN_ANIM_HANDS_ON_COUNTER_LOOP;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         } else if (this->flags & ENFSN_OFFER_FINAL_PRICE) {
             this->flags &= ~ENFSN_OFFER_FINAL_PRICE;
-            this->animationIndex = FSN_ANIMATION_MAKE_OFFER;
+            this->animationIndex = FSN_ANIM_MAKE_OFFER;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         } else {
-            if (this->animationIndex == FSN_ANIMATION_MAKE_OFFER) {
+            if (this->animationIndex == FSN_ANIM_MAKE_OFFER) {
                 if (curFrame == frameCount) {
-                    this->animationIndex = FSN_ANIMATION_HANDS_ON_COUNTER_LOOP;
+                    this->animationIndex = FSN_ANIM_HANDS_ON_COUNTER_LOOP;
                     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
                 } else {
                     if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
@@ -822,7 +822,7 @@ void EnFsn_StartBuying(EnFsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     EnFsn_HandleLookToShopkeeperBuyingCutscene(this);
-    if (talkState == 5 && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (this->actor.textId) {
             case 0x29CC:
                 this->actor.textId = 0x29CD;
@@ -849,7 +849,7 @@ void EnFsn_StartBuying(EnFsn* this, PlayState* play) {
 void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (talkState == 5) {
+    if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             switch (this->actor.textId) {
                 case 0x29CC:
@@ -880,7 +880,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
                     break;
             }
         }
-    } else if (talkState == 4) {
+    } else if (talkState == TEXT_STATE_CHOICE) {
         func_8011552C(play, 6);
         if (!EnFsn_TestEndInteraction(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
@@ -919,7 +919,7 @@ void EnFsn_DeterminePrice(EnFsn* this, PlayState* play) {
     s32 itemActionParam;
     u8 buttonItem;
 
-    if (Message_GetState(&play->msgCtx) == 16) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
         itemActionParam = func_80123810(play);
         if (itemActionParam > PLAYER_AP_NONE) {
             if (player->heldItemButton == 0) {
@@ -955,12 +955,12 @@ void EnFsn_MakeOffer(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     Player* player = GET_PLAYER(play);
 
-    if (talkState == 4 && Message_ShouldAdvance(play)) {
+    if (talkState == TEXT_STATE_CHOICE && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 func_8019F208();
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENFSN_CUTSCENESTATE_STOPPED;
@@ -1106,7 +1106,7 @@ void EnFsn_BrowseShelf(EnFsn* this, PlayState* play) {
         this->drawCursor = 0xFF;
         this->stickLeftPrompt.isEnabled = true;
         EnFsn_UpdateCursorPos(this, play);
-        if (talkstate == 5) {
+        if (talkstate == TEXT_STATE_5) {
             func_8011552C(play, 6);
             if (!EnFsn_HasPlayerSelectedItem(this, play, CONTROLLER1(&play->state))) {
                 EnFsn_CursorLeftRight(this);
@@ -1160,7 +1160,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
             item->buyFanfareFunc(play, item);
             Actor_PickUp(&this->actor, play, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             Interface_ChangeAlpha(50);
             this->drawCursor = 0;
             this->shopItemSelectedTween = 0.0f;
@@ -1191,13 +1191,13 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
 void EnFsn_SetupEndInteraction(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if ((talkState == 5 || talkState == 6) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (play->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, play);
             } else {
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
             }
         } else {
             EnFsn_EndInteraction(this, play);
@@ -1208,7 +1208,7 @@ void EnFsn_SetupEndInteraction(EnFsn* this, PlayState* play) {
 void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (EnFsn_TakeItemOffShelf(this) && talkState == 4) {
+    if (EnFsn_TakeItemOffShelf(this) && (talkState == TEXT_STATE_CHOICE)) {
         func_8011552C(play, 6);
         if (!EnFsn_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
@@ -1217,7 +1217,7 @@ void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
                     break;
                 case 1:
                     func_8019F230();
-                    this->actionFunc = this->tmpActionFunc;
+                    this->actionFunc = this->prevActionFunc;
                     func_80151938(play, this->items[this->cursorIdx]->actor.textId);
             }
         }
@@ -1225,8 +1225,8 @@ void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_PlayerCannotBuy(EnFsn* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
-        this->actionFunc = this->tmpActionFunc;
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        this->actionFunc = this->prevActionFunc;
         func_80151938(play, this->items[this->cursorIdx]->actor.textId);
     }
 }
@@ -1246,7 +1246,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, PlayState* play) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (talkState == 4) {
+    if (talkState == TEXT_STATE_CHOICE) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -1263,13 +1263,13 @@ void EnFsn_AskCanBuyMore(EnFsn* this, PlayState* play) {
                     break;
             }
         }
-    } else if ((talkState == 5 || talkState == 6) && Message_ShouldAdvance(play)) {
+    } else if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (play->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, play);
             } else {
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
             }
         } else {
             EnFsn_EndInteraction(this, play);
@@ -1292,7 +1292,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, PlayState* play) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (talkState == 4) {
+    if (talkState == TEXT_STATE_CHOICE) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -1310,13 +1310,13 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, PlayState* play) {
                     break;
             }
         }
-    } else if ((talkState == 5 || talkState == 6) && Message_ShouldAdvance(play)) {
+    } else if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (play->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, play);
             } else {
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
             }
         } else {
             EnFsn_EndInteraction(this, play);
@@ -1328,7 +1328,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     u8 cursorIdx;
 
-    if (talkState == 4) {
+    if (talkState == TEXT_STATE_CHOICE) {
         func_8011552C(play, 6);
         if (!EnFsn_TestEndInteraction(this, play, CONTROLLER1(&play->state)) &&
             (!Message_ShouldAdvance(play) || !EnFsn_FacingShopkeeperDialogResult(this, play)) &&
@@ -1342,7 +1342,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, PlayState* play) {
                 play_sound(NA_SE_SY_CURSOR);
             }
         }
-    } else if (talkState == 5 && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actor.textId = 0x29D6;
         Message_StartTextbox(play, this->actor.textId, &this->actor);
         if (play) {}
@@ -1350,7 +1350,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_SetupEndInteractionImmediately(EnFsn* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         EnFsn_EndInteraction(this, play);
     }
 }
@@ -1366,16 +1366,16 @@ void EnFsn_IdleBackroom(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_ConverseBackroom(EnFsn* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->flags & ENFSN_END_CONVERSATION) {
             this->flags &= ~ENFSN_END_CONVERSATION;
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->actionFunc = EnFsn_IdleBackroom;
         } else if (this->flags & ENFSN_GIVE_ITEM) {
             this->flags &= ~ENFSN_GIVE_ITEM;
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->actionFunc = EnFsn_GiveItem;
         } else {
             EnFsn_HandleConversationBackroom(this, play);
@@ -1430,7 +1430,7 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
         this->eyeTextureIdx = 0;
         this->actor.flags |= ACTOR_FLAG_1;
         this->actor.targetMode = 0;
-        this->animationIndex = FSN_ANIMATION_IDLE;
+        this->animationIndex = FSN_ANIM_IDLE;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         this->actionFunc = EnFsn_IdleBackroom;
     }

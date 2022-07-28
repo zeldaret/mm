@@ -24,8 +24,8 @@ void func_80AECB0C(EnTk* this, PlayState* play);
 void func_80AECB6C(EnTk* this, PlayState* play);
 void func_80AECE0C(EnTk* this, PlayState* play);
 s32 func_80AECE60(EnTk* this, PlayState* play);
-s32 func_80AED354(EnTk* this, PlayState* play, ScheduleResult* arg2);
-s32 func_80AED38C(EnTk* this, PlayState* play, ScheduleResult* arg2);
+s32 func_80AED354(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput);
+s32 func_80AED38C(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput);
 void func_80AED4F8(EnTk* this, PlayState* play);
 void func_80AED610(EnTk* this, PlayState* play);
 void func_80AED898(EnTk* this, PlayState* play);
@@ -227,7 +227,7 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_tk_Skel_00B9E8, NULL, this->jointTable, this->morphTable, 18);
     Animation_Change(&this->skelAnime, &object_tk_Anim_0030A4, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&object_tk_Anim_0030A4.common), 0, 0.0f);
+                     Animation_GetLastFrame(&object_tk_Anim_0030A4.common), ANIMMODE_LOOP, 0.0f);
     this->unk_318 = 0;
     this->unk_2D4 = -1;
     Actor_SetScale(&this->actor, 0.01f);
@@ -291,7 +291,7 @@ void func_80AECA3C(EnTk* this, PlayState* play) {
 void func_80AECA90(EnTk* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         play->msgCtx.msgMode = 0;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         func_80AEDE10(this, play);
     } else if (this->actor.xzDistToPlayer < 100.0f) {
         func_800B8614(&this->actor, play, 100.0f);
@@ -312,13 +312,13 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
     s32 temp3;
     f32 sp48;
     f32 sp44;
-    ScheduleResult sp34;
+    ScheduleOutput sp34;
     u8 temp4;
 
     this->actor.textId = 0;
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         play->msgCtx.msgMode = 0;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         func_80AED4F8(this, play);
         return;
     }
@@ -411,7 +411,7 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
         this->unk_3CE |= 4;
     }
 
-    if ((play->unk_18B4A != 0) || (this->timePathTimeSpeed == 0)) {
+    if ((play->transitionMode != TRANS_MODE_OFF) || (this->timePathTimeSpeed == 0)) {
         sp78 = this->timePathElapsedTime;
         sp74 = this->timePathWaypoint;
         timePathTargetPos = this->actor.world.pos;
@@ -429,7 +429,7 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp94, &sp88);
     }
 
-    if ((play->unk_18B4A != 0) || (this->timePathTimeSpeed == 0)) {
+    if ((play->transitionMode != TRANS_MODE_OFF) || (this->timePathTimeSpeed == 0)) {
         this->timePathElapsedTime = sp78;
         this->timePathWaypoint = sp74;
         this->timePathTargetPos = timePathTargetPos;
@@ -492,22 +492,23 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
     return false;
 }
 
-s32 func_80AED354(EnTk* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80AED354(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 phi_v1 = false;
 
-    if (arg2->result != 0) {
-        phi_v1 = func_80AED38C(this, play, arg2);
+    if (scheduleOutput->result != 0) {
+        phi_v1 = func_80AED38C(this, play, scheduleOutput);
     }
     return phi_v1;
 }
 
-s32 func_80AED38C(EnTk* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80AED38C(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 sp1E = SCHEDULE_TIME_NOW;
     u8 params = ENTK_GET_F800(&this->actor);
     u16 phi_a1;
-    s32 idx = arg2->result - 1;
+    s32 index = scheduleOutput->result - 1;
+    u16 tmp;
 
-    this->timePath = SubS_GetAdditionalPath(play, params, D_80AEF8E8[idx + 1]);
+    this->timePath = SubS_GetAdditionalPath(play, params, D_80AEF8E8[index + 1]);
     if (this->timePath == NULL) {
         return false;
     }
@@ -515,13 +516,13 @@ s32 func_80AED38C(EnTk* this, PlayState* play, ScheduleResult* arg2) {
     if ((this->unk_3CC <= 0) && (this->unk_3CC != 0) && (this->timePathTimeSpeed >= 0)) {
         phi_a1 = sp1E;
     } else {
-        phi_a1 = arg2->time0;
+        phi_a1 = scheduleOutput->time0;
     }
 
-    this->timePathTotalTime = arg2->time1 - phi_a1;
+    this->timePathTotalTime = scheduleOutput->time1 - phi_a1;
     this->timePathElapsedTime = sp1E - phi_a1;
-    phi_a1 = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
-    this->timePathWaypointTime = this->timePathTotalTime / phi_a1;
+    tmp = phi_a1 = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
+    this->timePathWaypointTime = this->timePathTotalTime / tmp;
     this->timePathWaypoint = (this->timePathElapsedTime / this->timePathWaypointTime) + (SUBS_TIME_PATHING_ORDER - 1);
     this->unk_3CE &= ~4;
     this->unk_3CE &= ~8;
@@ -554,7 +555,7 @@ void func_80AED610(EnTk* this, PlayState* play) {
     }
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
+        case TEXT_STATE_NONE:
             if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer - 0x1555, 0x71C)) {
                 if (Player_GetMask(play) == PLAYER_MASK_CAPTAIN) {
                     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 4, &this->unk_2D4);
@@ -571,14 +572,14 @@ void func_80AED610(EnTk* this, PlayState* play) {
                 break;
             }
 
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
 
-        case 4:
-        case 5:
-        case 6:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_5:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x13FD:
@@ -593,7 +594,7 @@ void func_80AED610(EnTk* this, PlayState* play) {
                         break;
 
                     case 0x1413:
-                        func_801159EC(30);
+                        Rupees_ChangeBy(30);
                         gSaveContext.save.weekEventReg[60] |= 2;
                         func_80151938(play, 0x13FF);
                         break;
@@ -691,7 +692,7 @@ void func_80AED940(EnTk* this, PlayState* play) {
         this->unk_2CA &= ~0x80;
         this->actor.flags &= ~ACTOR_FLAG_10000;
         play->msgCtx.msgMode = 0;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         func_80AEDE10(this, play);
     } else if (!(this->unk_2CA & 0x80)) {
         if (this->actor.xzDistToPlayer < 100.0f) {
@@ -794,7 +795,7 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
     }
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
+        case TEXT_STATE_NONE:
             switch (this->unk_2E6) {
                 case 0x1404:
                 case 0x1405:
@@ -820,14 +821,14 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
             }
             break;
 
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
 
-        case 4:
-        case 5:
-        case 6:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_5:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1404:
@@ -1189,7 +1190,7 @@ void func_80AEED38(EnTk* this, PlayState* play) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
 
-    if (Message_GetState(&play->msgCtx) == 0 && !Play_InCsMode(play) && (this->unk_2C6-- <= 0)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) && !Play_InCsMode(play) && (this->unk_2C6-- <= 0)) {
         Message_StartTextbox(play, 0x140C, NULL);
         this->unk_2CA |= 0x4000;
         this->unk_2C6 = 200;

@@ -80,7 +80,7 @@ void EnZos_Init(Actor* thisx, PlayState* play) {
     this->unk_2B6 = 0;
     this->actor.terminalVelocity = -4.0f;
     this->actor.gravity = -4.0f;
-    func_80BBAE84(this, 0, 2);
+    func_80BBAE84(this, 0, ANIMMODE_ONCE);
 
     switch (ENZOS_GET_F(&this->actor)) {
         case ENZOS_F_1:
@@ -93,12 +93,12 @@ void EnZos_Init(Actor* thisx, PlayState* play) {
             } else {
                 this->actionFunc = func_80BBC14C;
             }
-            func_80BBAE84(this, 0, 2);
+            func_80BBAE84(this, 0, ANIMMODE_ONCE);
             break;
 
         case ENZOS_F_2:
             this->actionFunc = func_80BBC37C;
-            func_80BBAE84(this, 7, 2);
+            func_80BBAE84(this, 7, ANIMMODE_ONCE);
             this->unk_2BC = -1;
             this->unk_2B6 |= 0x40;
             break;
@@ -153,19 +153,19 @@ s32 func_80BBAFFC(EnZos* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         switch ((s16)Rand_ZeroFloat(4.0f)) {
             case 0:
-                func_80BBAE84(this, 7, 2);
+                func_80BBAE84(this, 7, ANIMMODE_ONCE);
                 break;
 
             case 1:
-                func_80BBAE84(this, 8, 2);
+                func_80BBAE84(this, 8, ANIMMODE_ONCE);
                 break;
 
             case 2:
-                func_80BBAE84(this, 11, 2);
+                func_80BBAE84(this, 11, ANIMMODE_ONCE);
                 break;
 
             default:
-                func_80BBAE84(this, 12, 2);
+                func_80BBAE84(this, 12, ANIMMODE_ONCE);
                 break;
         }
         return true;
@@ -176,9 +176,9 @@ s32 func_80BBAFFC(EnZos* this, PlayState* play) {
 void func_80BBB0D4(EnZos* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (Rand_ZeroFloat(1.0f) < 0.9f) {
-            func_80BBAE84(this, 0, 2);
+            func_80BBAE84(this, 0, ANIMMODE_ONCE);
         } else {
-            func_80BBAE84(this, 1, 2);
+            func_80BBAE84(this, 1, ANIMMODE_ONCE);
         }
         SkelAnime_Update(&this->skelAnime);
     }
@@ -190,31 +190,31 @@ void func_80BBB15C(EnZos* this, PlayState* play) {
     if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
         if (this->unk_2B6 & 8) {
             textId = 0x1235;
-            func_80BBAE84(this, 6, 0);
+            func_80BBAE84(this, 6, ANIMMODE_LOOP);
             this->unk_2B6 |= 2;
         } else if (this->unk_2B6 & 4) {
             textId = 0x123E;
-            func_80BBAE84(this, 6, 0);
+            func_80BBAE84(this, 6, ANIMMODE_LOOP);
             this->unk_2B6 |= 2;
         } else if (gSaveContext.save.weekEventReg[40] & 0x20) {
             textId = 0x1236;
-            func_80BBAE84(this, 6, 0);
+            func_80BBAE84(this, 6, ANIMMODE_LOOP);
             this->unk_2B6 |= 0x80;
         } else {
             textId = 0x1231;
-            func_80BBAE84(this, 6, 0);
+            func_80BBAE84(this, 6, ANIMMODE_LOOP);
             this->unk_2B6 |= 0x80;
         }
     } else {
         this->unk_2B6 &= ~2;
         if (gSaveContext.save.weekEventReg[39] & 0x10) {
             textId = 0x1243;
-            func_80BBAE84(this, 6, 0);
+            func_80BBAE84(this, 6, ANIMMODE_LOOP);
             this->unk_2B6 |= 0x80;
         } else {
             textId = 0x1244;
             gSaveContext.save.weekEventReg[39] |= 0x10;
-            func_80BBAE84(this, 4, 0);
+            func_80BBAE84(this, 4, ANIMMODE_LOOP);
             this->unk_2B6 |= 0x10;
         }
     }
@@ -232,7 +232,7 @@ void func_80BBB2C4(EnZos* this, PlayState* play) {
 }
 
 void func_80BBB354(EnZos* this, PlayState* play) {
-    s32 item;
+    s32 getItemId;
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
@@ -242,11 +242,11 @@ void func_80BBB354(EnZos* this, PlayState* play) {
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
     } else {
         if (gSaveContext.save.weekEventReg[39] & 0x20) {
-            item = GI_RUPEE_PURPLE;
+            getItemId = GI_RUPEE_PURPLE;
         } else {
-            item = GI_HEART_PIECE;
+            getItemId = GI_HEART_PIECE;
         }
-        Actor_PickUp(&this->actor, play, item, 10000.0f, 50.0f);
+        Actor_PickUp(&this->actor, play, getItemId, 10000.0f, 50.0f);
     }
 }
 
@@ -261,11 +261,11 @@ void func_80BBB414(EnZos* this, PlayState* play) {
 
             switch (action) {
                 case 1:
-                    func_80BBAE84(this, 1, 0);
+                    func_80BBAE84(this, 1, ANIMMODE_LOOP);
                     break;
 
                 case 2:
-                    func_80BBAE84(this, 10, 0);
+                    func_80BBAE84(this, 10, ANIMMODE_LOOP);
                     break;
             }
         }
@@ -301,11 +301,11 @@ void func_80BBB574(EnZos* this, PlayState* play) {
         }
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x124B:
                 if (this->unk_2B8 == 9) {
-                    play->msgCtx.unk11F10 = 0;
+                    play->msgCtx.msgLength = 0;
                     this->unk_2B6 |= 0x20;
                 } else {
                     func_80151938(play, 0x124C);
@@ -313,14 +313,14 @@ void func_80BBB574(EnZos* this, PlayState* play) {
                 break;
 
             case 0x124C:
-                play->msgCtx.unk11F10 = 0;
+                play->msgCtx.msgLength = 0;
                 this->actionFunc = func_80BBB4CC;
-                func_80BBAE84(this, 10, 0);
+                func_80BBAE84(this, 10, ANIMMODE_LOOP);
                 break;
 
             case 0x124D:
                 this->unk_2B6 &= ~0x10;
-                func_80BBAE84(this, 6, 0);
+                func_80BBAE84(this, 6, ANIMMODE_LOOP);
                 func_80151938(play, 0x124E);
                 break;
 
@@ -339,14 +339,14 @@ void func_80BBB718(EnZos* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if (Message_GetState(&play->msgCtx) == 0x10) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
         sp24 = func_80123810(play);
         if (sp24 > 0) {
             func_801477B4(play);
 
             if (sp24 == 25) {
                 player->actor.textId = 0x1232;
-                func_80BBAE84(this, 5, 0);
+                func_80BBAE84(this, 5, ANIMMODE_LOOP);
                 this->unk_2B6 |= 8;
                 gSaveContext.save.weekEventReg[40] |= 0x20;
             } else if (gSaveContext.save.weekEventReg[39] & 8) {
@@ -354,7 +354,7 @@ void func_80BBB718(EnZos* this, PlayState* play) {
             } else {
                 player->actor.textId = 0x1237;
                 gSaveContext.save.weekEventReg[39] |= 8;
-                func_80BBAE84(this, 4, 0);
+                func_80BBAE84(this, 4, ANIMMODE_LOOP);
                 this->unk_2B6 |= 4;
             }
             this->actionFunc = func_80BBB8AC;
@@ -364,7 +364,7 @@ void func_80BBB718(EnZos* this, PlayState* play) {
             } else {
                 func_80151938(play, 0x1237);
                 gSaveContext.save.weekEventReg[39] |= 8;
-                func_80BBAE84(this, 4, 0);
+                func_80BBAE84(this, 4, ANIMMODE_LOOP);
                 this->unk_2B6 |= 4;
             }
             this->actionFunc = func_80BBB8AC;
@@ -382,11 +382,11 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x1000, 0x200);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if ((this->unk_2B6 & 0x80) && (this->actor.yawTowardsPlayer == this->actor.shape.rot.y)) {
-            func_80BBAE84(this, 3, 0);
+            func_80BBAE84(this, 3, ANIMMODE_LOOP);
         }
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x1237:
                 player->exchangeItemId = 0;
@@ -402,7 +402,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 
             case 0x1244:
                 this->unk_2B6 &= ~0x10;
-                func_80BBAE84(this, 6, 0);
+                func_80BBAE84(this, 6, ANIMMODE_LOOP);
                 func_80151938(play, play->msgCtx.currentTextId + 1);
                 break;
 
@@ -412,18 +412,18 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 
             case 0x1239:
             case 0x1246:
-                func_80BBAE84(this, 6, 0);
+                func_80BBAE84(this, 6, ANIMMODE_LOOP);
                 func_80151938(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1233:
-                func_80BBAE84(this, 5, 0);
+                func_80BBAE84(this, 5, ANIMMODE_LOOP);
                 func_80151938(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1245:
             case 0x1248:
-                func_80BBAE84(this, 3, 0);
+                func_80BBAE84(this, 3, ANIMMODE_LOOP);
                 func_80151938(play, play->msgCtx.currentTextId + 1);
                 break;
 
@@ -434,7 +434,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 
             case 0x1243:
             case 0x1249:
-                func_80BBAE84(this, 2, 0);
+                func_80BBAE84(this, 2, ANIMMODE_LOOP);
                 func_801477B4(play);
                 this->actionFunc = func_80BBBDE0;
                 this->unk_2B6 |= 1;
@@ -443,7 +443,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
             case 0x1234:
             case 0x123D:
             case 0x1242:
-                func_80BBAE84(this, 2, 0);
+                func_80BBAE84(this, 2, ANIMMODE_LOOP);
                 Actor_ProcessTalkRequest(&this->actor, &play->state);
                 func_801477B4(play);
                 this->actionFunc = func_80BBBDE0;
@@ -451,7 +451,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
                 break;
 
             case 0x1236:
-                func_80BBAE84(this, 2, 0);
+                func_80BBAE84(this, 2, ANIMMODE_LOOP);
                 func_801477B4(play);
                 this->actionFunc = func_80BBBDE0;
                 this->unk_2B6 |= 1;
@@ -473,17 +473,17 @@ void func_80BBBB84(EnZos* this, PlayState* play) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             Message_StartTextbox(play, 0x1248, &this->actor);
             this->actionFunc = func_80BBB8AC;
-            func_80BBAE84(this, 6, 0);
+            func_80BBAE84(this, 6, ANIMMODE_LOOP);
             this->unk_2B6 |= 2;
         } else if (gSaveContext.save.weekEventReg[41] & 0x10) {
             Message_StartTextbox(play, 0x124A, &this->actor);
             this->actionFunc = func_80BBB8AC;
-            func_80BBAE84(this, 6, 0);
+            func_80BBAE84(this, 6, ANIMMODE_LOOP);
         } else {
             gSaveContext.save.weekEventReg[41] |= 0x10;
             Message_StartTextbox(play, 0x124B, &this->actor);
             this->actionFunc = func_80BBB574;
-            func_80BBAE84(this, 9, 2);
+            func_80BBAE84(this, 9, ANIMMODE_ONCE);
             this->unk_2B6 |= 0x10;
         }
     } else {
@@ -494,7 +494,7 @@ void func_80BBBB84(EnZos* this, PlayState* play) {
 void func_80BBBCBC(EnZos* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        func_80BBAE84(this, 5, 0);
+        func_80BBAE84(this, 5, ANIMMODE_LOOP);
         Message_StartTextbox(play, 0x124D, &this->actor);
         this->actionFunc = func_80BBB574;
     } else {
@@ -519,7 +519,7 @@ void func_80BBBDE0(EnZos* this, PlayState* play) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x1000, 0x200);
         this->actor.world.rot.y = thisx->shape.rot.y;
         if (this->actor.home.rot.y == thisx->shape.rot.y) {
-            func_80BBAE84(this, 0, 2);
+            func_80BBAE84(this, 0, ANIMMODE_ONCE);
             this->unk_2B6 &= ~1;
         }
     }
@@ -567,10 +567,10 @@ void func_80BBBFBC(EnZos* this, PlayState* play) {
             textId = 0x1259;
             gSaveContext.save.weekEventReg[78] |= 0x80;
         }
-        func_80BBAE84(this, 5, 0);
+        func_80BBAE84(this, 5, ANIMMODE_LOOP);
     } else {
         textId = 0x1258;
-        func_80BBAE84(this, 6, 0);
+        func_80BBAE84(this, 6, ANIMMODE_LOOP);
     }
     Message_StartTextbox(play, textId, &this->actor);
 }
@@ -581,17 +581,17 @@ void func_80BBC070(EnZos* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
-                func_80BBAE84(this, 2, 0);
+                func_80BBAE84(this, 2, ANIMMODE_LOOP);
                 func_801477B4(play);
                 this->actionFunc = func_80BBC14C;
                 this->unk_2B6 |= 1;
             }
             break;
 
-        case 2:
-            func_80BBAE84(this, 2, 0);
+        case TEXT_STATE_CLOSING:
+            func_80BBAE84(this, 2, ANIMMODE_LOOP);
             this->actionFunc = func_80BBC14C;
             this->unk_2B6 |= 1;
             break;
@@ -605,7 +605,7 @@ void func_80BBC14C(EnZos* this, PlayState* play) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x1000, 0x200);
         this->actor.world.rot.y = thisx->shape.rot.y;
         if (this->actor.home.rot.y == this->actor.shape.rot.y) {
-            func_80BBAE84(this, 0, 2);
+            func_80BBAE84(this, 0, ANIMMODE_ONCE);
             this->unk_2B6 &= ~1;
         }
     }
@@ -628,7 +628,7 @@ void func_80BBC24C(EnZos* this, PlayState* play) {
     func_80BBB0D4(this, play);
     if (gSaveContext.save.weekEventReg[79] & 1) {
         this->actionFunc = func_80BBC22C;
-        func_80BBAE84(this, 7, 2);
+        func_80BBAE84(this, 7, ANIMMODE_ONCE);
     }
 }
 
