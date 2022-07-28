@@ -248,7 +248,11 @@ As such, if you only want to learn one of these, learn merging.
 If the two branches have both touched the same or nearby lines, git will not know which you want to keep. It will therefore pause the merge/rebase and tell you to decide. You will find a section of the file that looks like this:
 
 ```bash
+<<<<<<< A
+Some code
+=======
 Some other code
+>>>>>>> B
 ```
 
 from which you should pick one (or combine parts of both as appropriate), then delete the rest. (You definitely do not want the git artefacts left in!)
