@@ -106,7 +106,7 @@ static DamageTable sDamageTable = {
     /* Deku spin      */ DMG_ENTRY(1, KEESE_DMGEFF_NONE),
     /* Deku bubble    */ DMG_ENTRY(1, KEESE_DMGEFF_NONE),
     /* Deku launch    */ DMG_ENTRY(2, KEESE_DMGEFF_NONE),
-    /* UNK_DMG_TATL_ENEMY_KEESE   */ DMG_ENTRY(0, KEESE_DMGEFF_STUN),
+    /* UNK_DMG_TATL_HINT_ID_KEESE   */ DMG_ENTRY(0, KEESE_DMGEFF_STUN),
     /* Zora barrier   */ DMG_ENTRY(0, KEESE_DMGEFF_ELECTRIC),
     /* Normal shield  */ DMG_ENTRY(0, KEESE_DMGEFF_NONE),
     /* Light ray      */ DMG_ENTRY(0, KEESE_DMGEFF_NONE),
@@ -149,19 +149,19 @@ void EnFirefly_Init(Actor* thisx, PlayState* play) {
         this->auraType = KEESE_AURA_FIRE;
         this->timer = Rand_S16Offset(20, 60);
         this->actor.shape.rot.x = 0x1554;
-        this->actor.hintId = TATL_ENEMY_FIRE_KEESE; // Fire Keese
+        this->actor.hintId = TATL_HINT_ID_FIRE_KEESE; // Fire Keese
         this->maxAltitude = this->actor.home.pos.y;
         this->actionFunc = EnFirefly_FlyIdle;
     } else if (this->actor.params == KEESE_ICE_FLY) {
         this->auraType = KEESE_AURA_ICE;
         this->collider.info.toucher.effect = 2;    // Freeze
-        this->actor.hintId = TATL_ENEMY_ICE_KEESE; // Ice Keese
+        this->actor.hintId = TATL_HINT_ID_ICE_KEESE; // Ice Keese
         this->maxAltitude = this->actor.home.pos.y + 100.0f;
         this->actionFunc = EnFirefly_FlyIdle;
     } else {
         this->auraType = KEESE_AURA_NONE;
         this->collider.info.toucher.effect = 0; // Nothing
-        this->actor.hintId = TATL_ENEMY_KEESE;  // Keese
+        this->actor.hintId = TATL_HINT_ID_KEESE;  // Keese
         this->maxAltitude = this->actor.home.pos.y + 100.0f;
         this->actionFunc = EnFirefly_Perch;
     }
@@ -188,7 +188,7 @@ void EnFirefly_Extinguish(EnFirefly* this) {
     this->currentType = KEESE_NORMAL;
     this->collider.info.toucher.effect = 0; // Nothing
     this->auraType = KEESE_AURA_NONE;
-    this->actor.hintId = TATL_ENEMY_KEESE; // Keese
+    this->actor.hintId = TATL_HINT_ID_KEESE; // Keese
 }
 
 void EnFirefly_Ignite(EnFirefly* this) {
@@ -196,7 +196,7 @@ void EnFirefly_Ignite(EnFirefly* this) {
         this->currentType = KEESE_FIRE;
         this->collider.info.toucher.effect = 1; // Fire
         this->auraType = KEESE_AURA_FIRE;
-        this->actor.hintId = TATL_ENEMY_FIRE_KEESE; // Fire Keese
+        this->actor.hintId = TATL_HINT_ID_FIRE_KEESE; // Fire Keese
     }
 }
 

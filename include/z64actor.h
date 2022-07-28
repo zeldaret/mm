@@ -1184,36 +1184,37 @@ typedef enum {
 } ClearTagType;
 
 typedef enum {
-    /* 0x02 */ TATL_ENEMY_MINI_BABA = 0x02,
-    /* 0x04 */ TATL_ENEMY_MAD_JELLY,
-    /* 0x04 */ TATL_ENEMY_SKULLTULA = 0x04,
-    /* 0x0B */ TATL_ENEMY_WILTED_DEKU_BABA = 0x09,
-    /* 0x0B */ TATL_ENEMY_NEJIRON = 0x0B,
-    /* 0x0E */ TATL_ENEMY_DEEP_PYTHON = 0x0E,
-    /* 0x11 */ TATL_ENEMY_FIRE_KEESE = 0x11,
-    /* 0x12 */ TATL_ENEMY_KEESE,
-    /* 0x13 */ TATL_ENEMY_ARMOS,
-    /* 0x16 */ TATL_ENEMY_SHABOM = 0x16,
-    /* 0x19 */ TATL_ENEMY_WART = 0x19,
-    /* 0x1F */ TATL_ENEMY_SKULLWALLTULA = 0x1F,
-    /* 0x20 */ TATL_ENEMY_GOLD_SKULLTULA,
-    /* 0x28 */ TATL_ENEMY_GYORG = 0x28, // "If you go near it..."
-    /* 0x29 */ TATL_ENEMY_GYORG_STUNNED, // "What are you doing?!""
-    /* 0x2A */ TATL_ENEMY_REDEAD,
-    /* 0x2D */ TATL_ENEMY_GIBDO = 0x2D,
-    /* 0x2E */ TATL_ENEMY_TWINMOLD,
-    /* 0x35 */ TATL_ENEMY_IRON_KNUCKLE = 0x35,
-    /* 0x47 */ TATL_ENEMY_LEEVER = 0x47,
-    /* 0x48 */ TATL_ENEMY_PEAHAT,
-    /* 0x49 */ TATL_ENEMY_PEAHAT_LARVA,
-    /* 0x4C */ TATL_ENEMY_WOLFOS = 0x4C,
-    /* 0x55 */ TATL_ENEMY_STALCHILD = 0x55,
-    /* 0x56 */ TATL_ENEMY_ICE_KEESE,
-    /* 0x57 */ TATL_ENEMY_WHITE_WOLFOS,
-    /* 0x5B */ TATL_ENEMY_SKULLFISH = 0x5B,
-    /* 0x5C */ TATL_ENEMY_DESBREKO,
-    /* 0xFF */ TATL_ENEMY_GEKKO = 0x5F,
-    /* 0xFF */ TATL_ENEMY_DEFAULT = 0xFF
-} TatlEnemy;
+    /* 0x02 */ TATL_HINT_ID_MINI_BABA = 0x02,
+    /* 0x04 */ TATL_HINT_ID_MAD_JELLY,
+    /* 0x04 */ TATL_HINT_ID_SKULLTULA = 0x04,
+    /* 0x0B */ TATL_HINT_ID_WILTED_DEKU_BABA = 0x09,
+    /* 0x0B */ TATL_HINT_ID_NEJIRON = 0x0B,
+    /* 0x0E */ TATL_HINT_ID_DEEP_PYTHON = 0x0E,
+    /* 0x11 */ TATL_HINT_ID_FIRE_KEESE = 0x11,
+    /* 0x12 */ TATL_HINT_ID_KEESE,
+    /* 0x13 */ TATL_HINT_ID_ARMOS,
+    /* 0x16 */ TATL_HINT_ID_SHABOM = 0x16,
+    /* 0x19 */ TATL_HINT_ID_WART = 0x19,
+    /* 0x1F */ TATL_HINT_ID_SKULLWALLTULA = 0x1F,
+    /* 0x20 */ TATL_HINT_ID_GOLD_SKULLTULA,
+    /* 0x28 */ TATL_HINT_ID_GYORG = 0x28, // "If you go near it..."
+    /* 0x29 */ TATL_HINT_ID_GYORG_STUNNED, // "What are you doing?!""
+    /* 0x2A */ TATL_HINT_ID_REDEAD,
+    /* 0x2D */ TATL_HINT_ID_GIBDO = 0x2D,
+    /* 0x2E */ TATL_HINT_ID_TWINMOLD,
+    /* 0x35 */ TATL_HINT_ID_IRON_KNUCKLE = 0x35,
+    /* 0x47 */ TATL_HINT_ID_LEEVER = 0x47,
+    /* 0x48 */ TATL_HINT_ID_PEAHAT,
+    /* 0x49 */ TATL_HINT_ID_PEAHAT_LARVA,
+    /* 0x4C */ TATL_HINT_ID_WOLFOS = 0x4C,
+    /* 0x55 */ TATL_HINT_ID_STALCHILD = 0x55,
+    /* 0x56 */ TATL_HINT_ID_ICE_KEESE,
+    /* 0x57 */ TATL_HINT_ID_WHITE_WOLFOS,
+    /* 0x5B */ TATL_HINT_ID_SKULLFISH = 0x5B,
+    /* 0x5C */ TATL_HINT_ID_DESBREKO,
+    /* 0x5F */ TATL_HINT_ID_GEKKO = 0x5F,
+    /* 0x5F */ TATL_HINT_ID_MUSHROOM = 0x64,
+    /* 0xFF */ TATL_HINT_ID_DEFAULT = 0xFF
+} TatlHintId;
 
 #endif

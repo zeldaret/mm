@@ -765,7 +765,7 @@ void EnBigslime_BreakIntoMinislime(EnBigslime* this, PlayState* play) {
     this->actor.colChkInfo.mass = 50;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_400);
     this->actor.flags |= ACTOR_FLAG_200;
-    this->actor.hintId = TATL_ENEMY_GEKKO;
+    this->actor.hintId = TATL_HINT_ID_GEKKO;
     this->gekkoRot.x = 0;
     this->gekkoRot.y = 0;
     this->actor.bgCheckFlags &= ~1;
@@ -2308,7 +2308,7 @@ void EnBigslime_FormBigslime(EnBigslime* this, PlayState* play) {
 
     if (this->minislimeCounter == MINISLIME_NUM_SPAWN) {
         this->minislimeState = MINISLIME_INACTIVE_STATE;
-        this->actor.hintId = TATL_ENEMY_MAD_JELLY;
+        this->actor.hintId = TATL_HINT_ID_MAD_JELLY;
         EnBigslime_SetupMoveOnCeiling(this);
     }
 }
