@@ -200,7 +200,7 @@ void func_80A2778C(EnBigpamet* this) {
 
     for (ptr = &this->unk_2FC[0], i = 0; i < ARRAY_COUNT(this->unk_2FC); i++, ptr++) {
         temp_s2 = (s32)Rand_Next() >> 0x10;
-        temp_s1 = Rand_S16Offset(6144, 10240);
+        temp_s1 = Rand_S16Offset(0x1800, 0x2800);
         temp_fs1 = Rand_ZeroFloat(5.0f) + 7.0f;
 
         ptr->unk_0C.x = (temp_fs1 * Math_CosS(temp_s1)) * Math_SinS(temp_s2);
@@ -267,7 +267,7 @@ void func_80A27B58(EnBigpamet* this) {
 
     for (ptr = &this->unk_2FC[0], i = 0; i < ARRAY_COUNT(this->unk_2FC); i++, ptr++) {
         temp_s1 = (s32)randPlusMinusPoint5Scaled(20480.0f) + this->actor.wallYaw;
-        temp_s2 = Rand_S16Offset(4096, 12288);
+        temp_s2 = Rand_S16Offset(0x1000, 0x3000);
 
         temp_fs2 = Math_SinS(temp_s2);
         temp_fs3 = Math_CosS(temp_s2);
