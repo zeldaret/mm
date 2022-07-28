@@ -109,7 +109,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
         case 0:
             if (func_80C22400(this, sp2A)) {
                 if ((sp2C != NULL) && (sp2C->update != NULL)) {
-                    Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), sp2C);
+                    Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), sp2C);
                 }
                 this->unk_1A4++;
                 ret = true;
@@ -118,7 +118,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
 
         case 1:
             if ((sp30 != NULL) && (sp30->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(func_80C2247C(this, 0))),
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(func_80C2247C(this, 0))),
                                       sp30);
             }
             this->unk_1A4++;
@@ -161,9 +161,9 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             func_800B7298(play, &this->actor, 7);
             play->nextEntranceIndex = 0xBC50;
             gSaveContext.nextCutsceneIndex = 0;
-            play->sceneLoadFlag = 0x14;
-            play->unk_1887F = 2;
-            gSaveContext.nextTransition = 6;
+            play->transitionTrigger = 0x14;
+            play->transitionType = 2;
+            gSaveContext.nextTransitionType = 6;
             this->unk_1A4++;
             break;
     }
@@ -175,9 +175,9 @@ s32 func_80C227E8(DmTag* this, PlayState* play) {
         func_800B7298(play, &this->actor, 7);
         play->nextEntranceIndex = 0xBC40;
         gSaveContext.nextCutsceneIndex = 0;
-        play->sceneLoadFlag = 0x14;
-        play->unk_1887F = 2;
-        gSaveContext.nextTransition = 6;
+        play->transitionTrigger = 0x14;
+        play->transitionType = 2;
+        gSaveContext.nextTransitionType = 6;
         this->unk_1A4++;
     }
     return false;
