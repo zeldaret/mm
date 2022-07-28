@@ -240,7 +240,7 @@ void DmTag_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((play->sceneNum == SCENE_YADOYA) && (play->curSpawn == 4)) {
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         this->unk_18E = 2;
         this->unk_18C = 0;
         SubS_UpdateFlags(&this->unk_18C, 4, 7);
