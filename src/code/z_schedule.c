@@ -6,7 +6,7 @@
     (dest) = (temp) * (0x10000 / 60 / 24.0f);        \
     (dest) = SCHEDULE_CONVERT_TIME(dest);
 
-s32 Schedule_CheckFlagS(PlayState* play, u8** script, ScheduleResult* result) {
+s32 Schedule_CheckFlagS(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckFlagS* cmd = (ScheduleCmdCheckFlagS*)*script;
     u16 flag = (cmd->flagByte << 8) | cmd->flagMask;
 
@@ -17,7 +17,7 @@ s32 Schedule_CheckFlagS(PlayState* play, u8** script, ScheduleResult* result) {
     return false;
 }
 
-s32 Schedule_CheckFlagL(PlayState* play, u8** script, ScheduleResult* result) {
+s32 Schedule_CheckFlagL(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckFlagL* cmd = (ScheduleCmdCheckFlagL*)*script;
     u16 flag = (cmd->flagByte << 8) | cmd->flagMask;
 
@@ -28,7 +28,7 @@ s32 Schedule_CheckFlagL(PlayState* play, u8** script, ScheduleResult* result) {
     return false;
 }
 
-s32 Schedule_CheckTimeRangeS(PlayState* play, u8** script, ScheduleResult* result) {
+s32 Schedule_CheckTimeRangeS(PlayState* play, u8** script, ScheduleOutput* output) {
     s32 inRange = false;
     ScheduleCmdCheckTimeRangeS* cmd = (ScheduleCmdCheckTimeRangeS*)*script;
     f32 f;
@@ -54,7 +54,7 @@ s32 Schedule_CheckTimeRangeS(PlayState* play, u8** script, ScheduleResult* resul
     return false;
 }
 
-s32 Schedule_CheckTimeRangeL(PlayState* play, u8** script, ScheduleResult* result) {
+s32 Schedule_CheckTimeRangeL(PlayState* play, u8** script, ScheduleOutput* output) {
     s32 inRange = false;
     ScheduleCmdCheckTimeRangeL* cmd = (ScheduleCmdCheckTimeRangeL*)*script;
     f32 f;
@@ -80,33 +80,33 @@ s32 Schedule_CheckTimeRangeL(PlayState* play, u8** script, ScheduleResult* resul
     return false;
 }
 
-s32 Schedule_ReturnValueL(PlayState* play, u8** script, ScheduleResult* result) {
+s32 Schedule_ReturnValueL(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdReturnValueL* cmd = (ScheduleCmdReturnValueL*)*script;
 
     //! @bug result is a u8, value is truncated
-    result->result = (cmd->retH << 8) | cmd->retL;
-    result->hasResult = true;
+    output->result = (cmd->retH << 8) | cmd->retL;
+    output->hasResult = true;
 
     return true;
 }
 
-s32 Schedule_ReturnNone(PlayState* play, u8** script, ScheduleResult* result) {
-    result->hasResult = false;
+s32 Schedule_ReturnNone(PlayState* play, u8** script, ScheduleOutput* output) {
+    output->hasResult = false;
 
     return true;
 }
 
-s32 Schedule_ReturnEmpty(PlayState* play, u8** script, ScheduleResult* result) {
-    result->hasResult = true;
+s32 Schedule_ReturnEmpty(PlayState* play, u8** script, ScheduleOutput* output) {
+    output->hasResult = true;
 
     return true;
 }
 
-s32 Schedule_Nop(PlayState* play, u8** script, ScheduleResult* result) {
+s32 Schedule_Nop(PlayState* play, u8** script, ScheduleOutput* output) {
     return false;
 }
 
-s32 Schedule_CheckMiscS(PlayState* play, u8** script, ScheduleResult* result) {
+s32 Schedule_CheckMiscS(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckMiscS* cmd = (ScheduleCmdCheckMiscS*)*script;
 
     if (((cmd->which == SCHEDULE_CHECK_MISC_ROOM_KEY) && (INV_CONTENT(ITEM_ROOM_KEY) == ITEM_ROOM_KEY)) ||
@@ -119,16 +119,16 @@ s32 Schedule_CheckMiscS(PlayState* play, u8** script, ScheduleResult* result) {
     return false;
 }
 
-s32 Schedule_ReturnValueS(PlayState* play, u8** script, ScheduleResult* result) {
+s32 Schedule_ReturnValueS(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdReturnValueS* cmd = (ScheduleCmdReturnValueS*)*script;
 
-    result->result = cmd->result;
-    result->hasResult = true;
+    output->result = cmd->result;
+    output->hasResult = true;
 
     return true;
 }
 
-s32 Schedule_CheckNotInSceneS(PlayState* play, u8** script, ScheduleResult* result) {
+s32 Schedule_CheckNotInSceneS(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckNotInSceneS* cmd = (ScheduleCmdCheckNotInSceneS*)*script;
     s16 scene = (cmd->sceneH << 8) | cmd->sceneL;
 
@@ -139,7 +139,7 @@ s32 Schedule_CheckNotInSceneS(PlayState* play, u8** script, ScheduleResult* resu
     return false;
 }
 
-s32 Schedule_CheckNotInSceneL(PlayState* play, u8** script, ScheduleResult* result) {
+s32 Schedule_CheckNotInSceneL(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckNotInSceneL* cmd = (ScheduleCmdCheckNotInSceneL*)*script;
     s16 scene = (cmd->sceneH << 8) | cmd->sceneL;
 
@@ -150,7 +150,7 @@ s32 Schedule_CheckNotInSceneL(PlayState* play, u8** script, ScheduleResult* resu
     return false;
 }
 
-s32 Schedule_CheckNotInDayS(PlayState* play, u8** script, ScheduleResult* result) {
+s32 Schedule_CheckNotInDayS(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckNotInDayS* cmd = (ScheduleCmdCheckNotInDayS*)*script;
     s16 day = (cmd->dayH << 8) | cmd->dayL;
 
@@ -161,7 +161,7 @@ s32 Schedule_CheckNotInDayS(PlayState* play, u8** script, ScheduleResult* result
     return false;
 }
 
-s32 Schedule_CheckNotInDayL(PlayState* play, u8** script, ScheduleResult* result) {
+s32 Schedule_CheckNotInDayL(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckNotInDayL* cmd = (ScheduleCmdCheckNotInDayL*)*script;
     s16 day = (cmd->dayH << 8) | cmd->dayL;
 
@@ -172,7 +172,7 @@ s32 Schedule_CheckNotInDayL(PlayState* play, u8** script, ScheduleResult* result
     return false;
 }
 
-s32 Schedule_ReturnTime(PlayState* play, u8** script, ScheduleResult* result) {
+s32 Schedule_ReturnTime(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdReturnTime* cmd = (ScheduleCmdReturnTime*)*script;
     f32 f;
     u16 time0;
@@ -183,15 +183,15 @@ s32 Schedule_ReturnTime(PlayState* play, u8** script, ScheduleResult* result) {
     SCHEDULE_CALC_TIME(cmd->time1Hr, cmd->time1Min, time1, f);
     time1--;
 
-    result->result = cmd->result;
-    result->time0 = time0;
-    result->time1 = time1;
-    result->hasResult = true;
+    output->result = cmd->result;
+    output->time0 = time0;
+    output->time1 = time1;
+    output->hasResult = true;
 
     return true;
 }
 
-s32 Schedule_CheckBeforeTimeS(PlayState* play, u8** script, ScheduleResult* result) {
+s32 Schedule_CheckBeforeTimeS(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckBeforeTimeS* cmd = (ScheduleCmdCheckBeforeTimeS*)*script;
     f32 f;
     u16 testTime;
@@ -208,7 +208,7 @@ s32 Schedule_CheckBeforeTimeS(PlayState* play, u8** script, ScheduleResult* resu
     return false;
 }
 
-s32 Schedule_CheckBeforeTimeL(PlayState* play, u8** script, ScheduleResult* result) {
+s32 Schedule_CheckBeforeTimeL(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckBeforeTimeL* cmd = (ScheduleCmdCheckBeforeTimeL*)*script;
     f32 f;
     u16 testTime;
@@ -225,21 +225,21 @@ s32 Schedule_CheckBeforeTimeL(PlayState* play, u8** script, ScheduleResult* resu
     return false;
 }
 
-s32 Schedule_BranchS(PlayState* play, u8** script, ScheduleResult* result) {
+s32 Schedule_BranchS(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdBranchS* cmd = (ScheduleCmdBranchS*)*script;
 
     *script += cmd->offset;
     return false;
 }
 
-s32 Schedule_BranchL(PlayState* play, u8** script, ScheduleResult* result) {
+s32 Schedule_BranchL(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdBranchL* cmd = (ScheduleCmdBranchL*)*script;
 
     *script += (s16)((cmd->offsetH << 8) | cmd->offsetL);
     return false;
 }
 
-static s32 (*sScheduleCmdFuncs[])(PlayState*, u8**, ScheduleResult*) = {
+static s32 (*sScheduleCmdFuncs[])(PlayState*, u8**, ScheduleOutput*) = {
     Schedule_CheckFlagS,       Schedule_CheckFlagL,     Schedule_CheckTimeRangeS,  Schedule_CheckTimeRangeL,
     Schedule_ReturnValueL,     Schedule_ReturnNone,     Schedule_ReturnEmpty,      Schedule_Nop,
     Schedule_CheckMiscS,       Schedule_ReturnValueS,   Schedule_CheckNotInSceneS, Schedule_CheckNotInSceneL,
@@ -269,15 +269,15 @@ static u8 sScheduleCmdSizes[] = {
     sizeof(ScheduleCmdBranchL),
 };
 
-s32 Schedule_RunScript(PlayState* play, u8* script, ScheduleResult* result) {
+s32 Schedule_RunScript(PlayState* play, u8* script, ScheduleOutput* output) {
     u8 size;
     s32 stop;
 
     do {
         size = sScheduleCmdSizes[*script];
-        stop = (*sScheduleCmdFuncs[*script])(play, &script, result);
+        stop = (*sScheduleCmdFuncs[*script])(play, &script, output);
         script += size;
     } while (!stop);
 
-    return result->hasResult;
+    return output->hasResult;
 }

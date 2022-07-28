@@ -439,9 +439,9 @@ void func_80BDD490(EnZow* this, PlayState* play) {
     this->actor.velocity.y = 0.0f;
     if (this->actor.xzDistToPlayer > 440.0f) {
         this->actionFunc = func_80BDD350;
-        func_80BDD04C(this, 2, 2);
+        func_80BDD04C(this, 2, ANIMMODE_ONCE);
     } else if (this->unk_2CA & 2) {
-        func_80BDD04C(this, 0, 0);
+        func_80BDD04C(this, 0, ANIMMODE_LOOP);
     }
 
     if ((play->gameplayFrames & 7) == 0) {
@@ -459,7 +459,7 @@ void func_80BDD570(EnZow* this, PlayState* play) {
     func_80BDD490(this, play);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x12E8:
@@ -487,7 +487,7 @@ void func_80BDD570(EnZow* this, PlayState* play) {
             }
             break;
 
-        case 2:
+        case TEXT_STATE_CLOSING:
             this->actionFunc = func_80BDD634;
             break;
     }
@@ -513,7 +513,7 @@ void func_80BDD6BC(EnZow* this, PlayState* play) {
     if (this->actor.depthInWater < 54.0f) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
         func_80BDCDA8(this, this->unk_2D0);
-        func_80BDD04C(this, 1, 2);
+        func_80BDD04C(this, 1, ANIMMODE_ONCE);
         this->actor.flags |= ACTOR_FLAG_1;
         this->actor.velocity.y = 0.0f;
         this->actionFunc = func_80BDD634;

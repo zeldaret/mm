@@ -32,13 +32,13 @@ typedef struct EnFish2 {
     /* 0x02C0 */ s32 unk_2C0;
     /* 0x02C4 */ s32 unk_2C4;
     /* 0x02C8 */ u8 unk_2C8;
-    /* 0x02CA */ s16 unk_2CA;
+    /* 0x02CA */ s16 subCamId;
     /* 0x02CC */ f32 unk_2CC;
     /* 0x02D0 */ char unk_2D0[0x4];
     /* 0x02D4 */ f32 unk_2D4;
     /* 0x02D8 */ f32 unk_2D8;
-    /* 0x02DC */ Vec3f unk_2DC;
-    /* 0x02E8 */ Vec3f unk_2E8;
+    /* 0x02DC */ Vec3f subCamEye;
+    /* 0x02E8 */ Vec3f subCamAt;
     /* 0x02F4 */ Vec3f unk_2F4;
     /* 0x0300 */ Vec3f unk_300;
     /* 0x030C */ Vec3f unk_30C;

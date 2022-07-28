@@ -9,18 +9,33 @@ struct Boss02;
 typedef void (*Boss02ActionFunc)(struct Boss02*, PlayState*);
 
 typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ Vec3f unk_18;
-    /* 0x24 */ u8 unk_24;
-    /* 0x26 */ s16 unk_26;
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ u8 type;
+    /* 0x26 */ s16 timer;
     /* 0x28 */ UNK_TYPE1 unk_28[0x4];
-    /* 0x2C */ s16 unk_2C;
-    /* 0x2E */ s16 unk_2E;
-    /* 0x30 */ s16 unk_30;
-    /* 0x34 */ f32 unk_34;
-    /* 0x38 */ f32 unk_38;
-} Boss02Effects; // size = 0x3C
+    /* 0x2C */ s16 alpha;
+    /* 0x2E */ s16 rotX;
+    /* 0x30 */ s16 rotY;
+    /* 0x34 */ f32 scale;
+    /* 0x38 */ f32 targetScale;
+} TwinmoldEffect; // size = 0x3C
+
+typedef enum {
+    /* 0 */ TWINMOLD_EFFECT_NONE,
+    /* 1 */ TWINMOLD_EFFECT_SAND,       // The sand kicked up when Twinmold touches the ground
+    /* 2 */ TWINMOLD_EFFECT_BLACK_DUST, // Unused
+    /* 3 */ TWINMOLD_EFFECT_FRAGMENT,   // The fragments that fly off when the parts of Twinmold explode
+    /* 4 */ TWINMOLD_EFFECT_FLASH,      // The flashes of light that appear when the parts of Twinmold explode
+} TwinmoldEffectType;
+
+typedef enum {
+    /*   0 */ TWINMOLD_RED,
+    /*  35 */ TWINMOLD_BLUE = 35,
+    /* 100 */ TWINMOLD_TAIL = 100,
+    /* 200 */ TWINMOLD_STATIC = 200,
+} TwinmoldParams;
 
 typedef struct Boss02 {
     /* 0x0000 */ Actor actor;
@@ -60,7 +75,7 @@ typedef struct Boss02 {
     /* 0x15D4 */ Vec3s jointTable[TWINMOLD_HEAD_LIMB_MAX];
     /* 0x1622 */ Vec3s morphTable[TWINMOLD_HEAD_LIMB_MAX];
     /* 0x1670 */ Boss02ActionFunc actionFunc;
-    /* 0x1674 */ struct Boss02* unk_1674; // points to the other's instance
+    /* 0x1674 */ struct Boss02* otherTwinmold; // points to the other's instance
     /* 0x1678 */ s32 unk_1678;
     /* 0x167C */ Vec3f unk_167C;
     /* 0x1688 */ ColliderJntSph colliderSphere1;
@@ -73,14 +88,14 @@ typedef struct Boss02 {
     /* 0x1D1A */ s16 unk_1D1A;
     /* 0x1D1C */ u32 unk_1D1C;
     /* 0x1D20 */ s16 unk_1D20;
-    /* 0x1D22 */ s16 unk_1D22;
-    /* 0x1D24 */ Vec3f unk_1D24;
-    /* 0x1D30 */ Vec3f unk_1D30;
-    /* 0x1D3C */ Vec3f unk_1D3C;
-    /* 0x1D48 */ Vec3f unk_1D48;
+    /* 0x1D22 */ s16 subCamId;
+    /* 0x1D24 */ Vec3f subCamEye;
+    /* 0x1D30 */ Vec3f subCamAt;
+    /* 0x1D3C */ Vec3f subCamUp;
+    /* 0x1D48 */ Vec3f subCamAtNext;
     /* 0x1D54 */ f32 unk_1D54;
     /* 0x1D58 */ f32 unk_1D58;
-    /* 0x1D5C */ f32 unk_1D5C;
+    /* 0x1D5C */ f32 subCamAtVel;
     /* 0x1D60 */ UNK_TYPE1 unk1D60[0x4];
     /* 0x1D64 */ f32 unk_1D64;
     /* 0x1D68 */ f32 unk_1D68;

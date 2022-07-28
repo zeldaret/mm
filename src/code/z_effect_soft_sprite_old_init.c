@@ -32,7 +32,7 @@
 #include "overlays/effects/ovl_Effect_Ss_Stick/z_eff_ss_stick.h"
 #include "overlays/effects/ovl_Effect_Ss_Stone1/z_eff_ss_stone1.h"
 
-void EffectSs_DrawGEffect(PlayState* play, EffectSs* this, void* texture) {
+void EffectSs_DrawGEffect(PlayState* play, EffectSs* this, TexturePtr texture) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     f32 scale;
     MtxF mfTrans;
@@ -41,7 +41,7 @@ void EffectSs_DrawGEffect(PlayState* play, EffectSs* this, void* texture) {
     MtxF mfTrans11DA0;
     s32 pad1;
     Mtx* mtx;
-    void* object = play->objectCtx.status[this->rgObjBankIdx].segment;
+    void* object = play->objectCtx.status[this->rgObjBankIndex].segment;
 
     OPEN_DISPS(gfxCtx);
 
@@ -335,7 +335,7 @@ void EffectSsGSpk_SpawnAccel(PlayState* play, Actor* actor, Vec3f* pos, Vec3f* v
     initParams.actor = actor;
     initParams.scale = scale;
     initParams.scaleStep = scaleStep;
-    initParams.updateMode = 0;
+    initParams.updateMode = GSPK_UPDATEMODE_NORMAL;
 
     EffectSs_Spawn(play, EFFECT_SS_G_SPK, 128, &initParams);
 }
@@ -353,7 +353,7 @@ void EffectSsGSpk_SpawnNoAccel(PlayState* play, Actor* actor, Vec3f* pos, Vec3f*
     initParams.actor = actor;
     initParams.scale = scale;
     initParams.scaleStep = scaleStep;
-    initParams.updateMode = 1;
+    initParams.updateMode = GSPK_UPDATEMODE_NO_ACCEL;
 
     EffectSs_Spawn(play, EFFECT_SS_G_SPK, 128, &initParams);
 }
@@ -529,7 +529,7 @@ void EffectSsDtBubble_SpawnCustomColor(PlayState* play, Vec3f* pos, Vec3f* veloc
  *     - due to how life is implemented it is capped at 200. Any value over 200 is accepted, but the fragment will
  *       only live for 200 frames
  */
-void EffectSsHahen_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 unused, s16 scale, s16 objId,
+void EffectSsHahen_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 flags, s16 scale, s16 objId,
                          s16 life, Gfx* dList) {
     EffectSsHahenInitParams initParams;
 
@@ -537,7 +537,7 @@ void EffectSsHahen_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* ac
     Math_Vec3f_Copy(&initParams.velocity, velocity);
     Math_Vec3f_Copy(&initParams.accel, accel);
     initParams.dList = dList;
-    initParams.unused = unused;
+    initParams.flags = flags;
     initParams.scale = scale;
     initParams.objId = objId;
     initParams.life = life;
@@ -554,7 +554,7 @@ void EffectSsHahen_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* ac
  *     - due to how life is implemented it is capped at 200. Any value over 200 is accepted, but the fragment will
  *       only live for 200 frames
  */
-void EffectSsHahen_SpawnBurst(PlayState* play, Vec3f* pos, f32 burstScale, s16 unused, s16 scale, s16 randScaleRange,
+void EffectSsHahen_SpawnBurst(PlayState* play, Vec3f* pos, f32 burstScale, s16 flags, s16 scale, s16 randScaleRange,
                               s16 count, s16 objId, s16 life, Gfx* dList) {
     s32 i;
     Vec3f velocity;
@@ -568,7 +568,7 @@ void EffectSsHahen_SpawnBurst(PlayState* play, Vec3f* pos, f32 burstScale, s16 u
         velocity.z = (Rand_ZeroOne() - 0.5f) * burstScale;
         velocity.y = ((Rand_ZeroOne() * 0.5f) + 0.5f) * burstScale;
 
-        EffectSsHahen_Spawn(play, pos, &velocity, &accel, unused, Rand_S16Offset(scale, randScaleRange), objId, life,
+        EffectSsHahen_Spawn(play, pos, &velocity, &accel, flags, Rand_S16Offset(scale, randScaleRange), objId, life,
                             dList);
     }
 }
@@ -576,7 +576,7 @@ void EffectSsHahen_SpawnBurst(PlayState* play, Vec3f* pos, f32 burstScale, s16 u
 void func_800B2364(PlayState* play, Vec3f* pos, Gfx* dList) {
     Vec3f accel = { 0.0f, -2.0f, 0.0f };
 
-    EffectSsHahen_Spawn(play, pos, &gZeroVec3f, &accel, 1, 5, 1, 10, dList);
+    EffectSsHahen_Spawn(play, pos, &gZeroVec3f, &accel, HAHEN_SMALL, 5, GAMEPLAY_KEEP, 10, dList);
 }
 
 // EffectSsStick Spawn Functions
@@ -631,10 +631,10 @@ void EffectSsStone1_Spawn(PlayState* play, Vec3f* pos, s32 reg0) {
     EffectSs_Spawn(play, EFFECT_SS_STONE1, 128, &initParams);
 }
 
-// EffectSsHitMark Spawn Functions
+// EffectSsHitmark Spawn Functions
 
-void EffectSsHitMark_Spawn(PlayState* play, s32 type, s16 scale, Vec3f* pos) {
-    EffectSsHitMarkInitParams initParams;
+void EffectSsHitmark_Spawn(PlayState* play, s32 type, s16 scale, Vec3f* pos) {
+    EffectSsHitmarkInitParams initParams;
 
     initParams.type = type;
     initParams.scale = scale;
@@ -643,12 +643,12 @@ void EffectSsHitMark_Spawn(PlayState* play, s32 type, s16 scale, Vec3f* pos) {
     EffectSs_Spawn(play, EFFECT_SS_HITMARK, 128, &initParams);
 }
 
-void EffectSsHitMark_SpawnFixedScale(PlayState* play, s32 type, Vec3f* pos) {
-    EffectSsHitMark_Spawn(play, type, 300, pos);
+void EffectSsHitmark_SpawnFixedScale(PlayState* play, s32 type, Vec3f* pos) {
+    EffectSsHitmark_Spawn(play, type, 300, pos);
 }
 
-void EffectSsHitMark_SpawnCustomScale(PlayState* play, s32 type, s16 scale, Vec3f* pos) {
-    EffectSsHitMark_Spawn(play, type, scale, pos);
+void EffectSsHitmark_SpawnCustomScale(PlayState* play, s32 type, s16 scale, Vec3f* pos) {
+    EffectSsHitmark_Spawn(play, type, scale, pos);
 }
 
 // EffectSsFhgFlash Spawn Functions

@@ -221,36 +221,36 @@ s16 func_80BECF6C(Path* path) {
 s32 func_80BECFBC(EnAkindonuts* this) {
     switch (ENAKINDONUTS_GET_3(&this->actor)) {
         case 0:
-            return 0x98;
+            return GI_DEED_SWAMP;
 
         case 1:
-            return 0x99;
+            return GI_DEED_MOUNTAIN;
 
         case 2:
-            return 0x9A;
+            return GI_DEED_OCEAN;
 
         case 3:
-            func_801149A0(ITEM_DEED_OCEAN, SLOT(ITEM_DEED_OCEAN));
-            return 0x7;
+            Inventory_DeleteItem(ITEM_DEED_OCEAN, SLOT(ITEM_DEED_OCEAN));
+            return GI_RUPEE_HUGE;
     }
-    return 0;
+    return GI_NONE;
 }
 
 s32 func_80BED034(EnAkindonuts* this) {
     switch (ENAKINDONUTS_GET_3(&this->actor)) {
         case 0:
-            return 0x35;
+            return GI_MAGIC_BEANS;
 
         case 1:
-            return 0x1D;
+            return GI_BOMB_BAG_40;
 
         case 2:
-            return 0x5C;
+            return GI_POTION_GREEN;
 
         case 3:
-            return 0x5D;
+            return GI_POTION_BLUE;
     }
-    return 0;
+    return GI_NONE;
 }
 
 void func_80BED090(PlayState* play) {
@@ -296,7 +296,7 @@ s32 func_80BED140(PlayState* play) {
 }
 
 s32 func_80BED208(EnAkindonuts* this) {
-    if (INV_CONTENT(ITEM_MAGIC_BEANS) != 10U) {
+    if ((u32)INV_CONTENT(ITEM_MAGIC_BEANS) != ITEM_MAGIC_BEANS) {
         return 0;
     }
 
@@ -332,7 +332,7 @@ s32 func_80BED27C(EnAkindonuts* this) {
 }
 
 s32 func_80BED2FC(EnAkindonuts* this) {
-    if (!Interface_HasEmptyBottle()) {
+    if (!Inventory_HasEmptyBottle()) {
         return 2;
     }
 
@@ -346,7 +346,7 @@ s32 func_80BED2FC(EnAkindonuts* this) {
 }
 
 s32 func_80BED35C(EnAkindonuts* this) {
-    if (!Interface_HasEmptyBottle()) {
+    if (!Inventory_HasEmptyBottle()) {
         return 2;
     }
 
@@ -426,7 +426,7 @@ void func_80BED3BC(EnAkindonuts* this, PlayState* play) {
                         this->unk_32C &= ~0x1;
                         this->unk_32C |= 0x40;
                         play->msgCtx.msgMode = 0x43;
-                        play->msgCtx.unk12023 = 4;
+                        play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
                         return;
@@ -509,7 +509,7 @@ void func_80BED680(EnAkindonuts* this, PlayState* play) {
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
                         play->msgCtx.msgMode = 0x43;
-                        play->msgCtx.unk12023 = 4;
+                        play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
                         return;
@@ -604,7 +604,7 @@ void func_80BED8A4(EnAkindonuts* this, PlayState* play) {
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
                         play->msgCtx.msgMode = 0x43;
-                        play->msgCtx.unk12023 = 4;
+                        play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
                         return;
@@ -687,7 +687,7 @@ void func_80BEDB88(EnAkindonuts* this, PlayState* play) {
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
                         play->msgCtx.msgMode = 0x43;
-                        play->msgCtx.unk12023 = 4;
+                        play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
                         return;
@@ -777,7 +777,7 @@ void func_80BEDDAC(EnAkindonuts* this, PlayState* play) {
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
                         play->msgCtx.msgMode = 0x43;
-                        play->msgCtx.unk12023 = 4;
+                        play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
                         return;
@@ -855,7 +855,7 @@ void func_80BEE070(EnAkindonuts* this, PlayState* play) {
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
                         play->msgCtx.msgMode = 0x43;
-                        play->msgCtx.unk12023 = 4;
+                        play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x161A;
                         this->actionFunc = func_80BEF360;
                         return;
@@ -938,7 +938,7 @@ void func_80BEE274(EnAkindonuts* this, PlayState* play) {
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
                         play->msgCtx.msgMode = 0x43;
-                        play->msgCtx.unk12023 = 4;
+                        play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x1629;
                         this->actionFunc = func_80BEF360;
                         return;
@@ -1016,7 +1016,7 @@ void func_80BEE530(EnAkindonuts* this, PlayState* play) {
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
                         play->msgCtx.msgMode = 0x43;
-                        play->msgCtx.unk12023 = 4;
+                        play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
                         return;
@@ -1240,14 +1240,14 @@ void func_80BEEE10(EnAkindonuts* this, PlayState* play) {
 }
 
 void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (temp_v0 == 5) {
+    if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_32C & 1) {
                 this->unk_32C &= ~0x1;
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->unk_33C = 0;
                 this->actionFunc = func_80BEEE10;
             } else if (this->unk_32C & 0x20) {
@@ -1255,7 +1255,7 @@ void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
                 this->actor.flags &= ~ACTOR_FLAG_1;
                 this->unk_32C &= ~0x4;
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->unk_338 = 8;
                 this->unk_33C = 0;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->unk_338);
@@ -1264,7 +1264,7 @@ void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
                 this->unk_2DC(this, play);
             }
         }
-    } else if (temp_v0 == 4) {
+    } else if (talkState == TEXT_STATE_CHOICE) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -1279,22 +1279,22 @@ void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
                     break;
             }
         }
-    } else if (temp_v0 == 16) {
+    } else if (talkState == TEXT_STATE_16) {
         func_80BEE73C(this, play);
     }
 }
 
 void func_80BEF18C(EnAkindonuts* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
-        play->msgCtx.unk12023 = 4;
+        play->msgCtx.stateTimer = 4;
         this->unk_33C = 0;
         this->actionFunc = func_80BEEE10;
     }
 }
 
 void func_80BEF20C(EnAkindonuts* this, PlayState* play) {
-    u8 sp27 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
     s16 sp24 = this->skelAnime.curFrame;
     s16 sp22 = Animation_GetLastFrame(&sAnimations[this->unk_338].animation->common);
 
@@ -1310,11 +1310,11 @@ void func_80BEF20C(EnAkindonuts* this, PlayState* play) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 6);
     }
 
-    if ((sp27 == 5) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_32C & 1) {
             this->unk_32C &= ~0x1;
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->actionFunc = func_80BEF360;
         } else {
             this->unk_2DC(this, play);
@@ -1326,7 +1326,7 @@ void func_80BEF360(EnAkindonuts* this, PlayState* play) {
     if (this->unk_32C & 0x40) {
         if (Actor_HasParent(&this->actor, play)) {
             this->actor.parent = NULL;
-            func_801159EC(this->unk_364);
+            Rupees_ChangeBy(this->unk_364);
             this->unk_32C &= ~0x40;
             this->actionFunc = func_80BEF450;
         } else {
@@ -1341,7 +1341,7 @@ void func_80BEF360(EnAkindonuts* this, PlayState* play) {
 }
 
 void func_80BEF450(EnAkindonuts* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         func_800B85E0(&this->actor, play, 400.0f, -1);
         this->actionFunc = func_80BEF4B8;
     }

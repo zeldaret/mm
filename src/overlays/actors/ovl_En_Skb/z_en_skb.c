@@ -106,7 +106,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    2,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -363,14 +363,14 @@ void func_80995068(EnSkb* this, PlayState* play) {
 
 void func_80995190(EnSkb* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
+        case TEXT_STATE_CHOICE:
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 Message_StartTextbox(play, 0x13F7, &this->actor);
                 if (this->unk_3DE == 2) {
@@ -379,7 +379,7 @@ void func_80995190(EnSkb* this, PlayState* play) {
             }
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 this->actionFunc = func_80995244;
             }
@@ -536,7 +536,7 @@ void func_80995818(EnSkb* this, PlayState* play) {
 
 void func_809958F4(EnSkb* this) {
     Animation_Change(&this->skelAnime, &object_skb_Anim_003584, -1.0f, Animation_GetLastFrame(&object_skb_Anim_003584),
-                     0.0f, 2, -4.0f);
+                     0.0f, ANIMMODE_ONCE, -4.0f);
     this->unk_3E4 = 0;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
@@ -620,7 +620,8 @@ void func_80995C84(EnSkb* this, PlayState* play) {
 }
 
 void func_80995D3C(EnSkb* this) {
-    Animation_Change(&this->skelAnime, &object_skb_Anim_002190, -0.4f, this->skelAnime.curFrame - 1.0f, 0.0f, 3, 0.0f);
+    Animation_Change(&this->skelAnime, &object_skb_Anim_002190, -0.4f, this->skelAnime.curFrame - 1.0f, 0.0f,
+                     ANIMMODE_ONCE_INTERP, 0.0f);
     this->collider.base.atFlags &= ~AT_BOUNCED;
     this->unk_3DE = 4;
     this->unk_3E4 = 0;
@@ -798,7 +799,7 @@ void func_80996474(EnSkb* this) {
 }
 
 void func_809964A0(EnSkb* this, PlayState* play) {
-    if ((this->unk_3D0++ < 19) ^ 1) {
+    if (this->unk_3D0++ >= 19) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -961,8 +962,10 @@ void func_8099672C(EnSkb* this, PlayState* play) {
                     this->unk_3D8 |= 1;
 
                 case 15:
-                    if ((player->swordAnimation == 4) || (player->swordAnimation == 11) ||
-                        (player->swordAnimation == 22) || (player->swordAnimation == 23)) {
+                    if ((player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_SLASH_1H) ||
+                        (player->meleeWeaponAnimation == PLAYER_MWA_LEFT_COMBO_2H) ||
+                        (player->meleeWeaponAnimation == PLAYER_MWA_BACKSLASH_RIGHT) ||
+                        (player->meleeWeaponAnimation == PLAYER_MWA_BACKSLASH_LEFT)) {
                         this->unk_3D8 |= 1;
                     }
 

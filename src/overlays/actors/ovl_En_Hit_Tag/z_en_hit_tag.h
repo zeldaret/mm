@@ -10,9 +10,9 @@ typedef void (*EnHitTagActionFunc)(struct EnHitTag*, PlayState*);
 #define ENHITTAG_GET_SWITCHFLAG(thisx) (s32)(((thisx)->params & 0xFE00) >> 9)
 
 typedef struct EnHitTag {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ColliderCylinder collider;
-    /* 0x0190 */ EnHitTagActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ColliderCylinder collider;
+    /* 0x190 */ EnHitTagActionFunc actionFunc;
 } EnHitTag; // size = 0x194
 
 extern const ActorInit En_Hit_Tag_InitVars;

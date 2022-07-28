@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_shutter.h"
+#include "objects/object_f53_obj/object_f53_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -12,10 +13,9 @@
 
 void ObjShutter_Init(Actor* thisx, PlayState* play);
 void ObjShutter_Destroy(Actor* thisx, PlayState* play);
-void ObjShutter_Update(Actor* thisx, PlayState* play);
+void ObjShutter_Update(Actor* thisx, PlayState* play2);
 void ObjShutter_Draw(Actor* thisx, PlayState* play);
 
-#if 0
 const ActorInit Obj_Shutter_InitVars = {
     ACTOR_OBJ_SHUTTER,
     ACTORCAT_PROP,
@@ -28,14 +28,66 @@ const ActorInit Obj_Shutter_InitVars = {
     (ActorFunc)ObjShutter_Draw,
 };
 
-#endif
+void ObjShutter_Init(Actor* thisx, PlayState* play) {
+}
 
-extern UNK_TYPE D_060011E0;
+void ObjShutter_Destroy(Actor* thisx, PlayState* play) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Shutter/ObjShutter_Init.s")
+static u8 sScheduleScript[] = {
+    /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 0, 20, 0, 0x9 - 0x6),
+    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(2),
+    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(1),
+};
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Shutter/ObjShutter_Destroy.s")
+void ObjShutter_Update(Actor* thisx, PlayState* play2) {
+    ObjShutter* this = THIS;
+    PlayState* play = play2;
+    ScheduleOutput scheduleOutput;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Shutter/ObjShutter_Update.s")
+    Schedule_RunScript(play, sScheduleScript, &scheduleOutput);
+    if (scheduleOutput.result == 1) {
+        if (this->scheduleResult != scheduleOutput.result) {
+            this->actor.velocity.y = 0.0f;
+        }
+        if ((this->verticalOffset >= 80.0f) || (this->scheduleResult == 0)) {
+            this->actor.velocity.y = 0.0f;
+            this->verticalOffset = 80.0f;
+        } else {
+            this->verticalOffset += 10.0f;
+        }
+    } else {
+        if (this->scheduleResult != scheduleOutput.result) {
+            this->actor.velocity.y = 0.0f;
+        }
+        if (this->verticalOffset != 0.0f) {
+            this->actor.velocity.y -= 3.0f;
+            this->verticalOffset += this->actor.velocity.y;
+            if (this->verticalOffset <= 0.0f) {
+                this->actor.velocity.y = fabsf(this->actor.velocity.y) * 0.8f;
+                if ((s32)this->actor.velocity.y == 0) {
+                    this->actor.velocity.y = 0.0f;
+                    this->verticalOffset = 0.0f;
+                }
+            }
+        }
+    }
+    this->scheduleResult = scheduleOutput.result;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Shutter/ObjShutter_Draw.s")
+void ObjShutter_Draw(Actor* thisx, PlayState* play) {
+    ObjShutter* this = THIS;
+
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->verticalOffset, this->actor.world.pos.z,
+                     MTXMODE_NEW);
+    Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, gBankShutterDL);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
