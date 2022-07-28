@@ -1,0 +1,94 @@
+﻿<Root>
+    <File Name="object_dnq" Segment="6">
+        <Animation Name="object_dnq_Anim_0006F0" Offset="0x6F0" />
+        <Animation Name="object_dnq_Anim_000BF8" Offset="0xBF8" />
+        <Animation Name="object_dnq_Anim_001100" Offset="0x1100" />
+        <Animation Name="object_dnq_Anim_001AEC" Offset="0x1AEC" />
+        <Animation Name="object_dnq_Anim_002690" Offset="0x2690" />
+        <Animation Name="object_dnq_Anim_003408" Offset="0x3408" />
+        <Animation Name="object_dnq_Anim_003DBC" Offset="0x3DBC" />
+        <Animation Name="object_dnq_Anim_0047B8" Offset="0x47B8" />
+        <Animation Name="object_dnq_Anim_004EA0" Offset="0x4EA0" />
+        <Animation Name="object_dnq_Anim_005284" Offset="0x5284" />
+        <Animation Name="object_dnq_Anim_005A14" Offset="0x5A14" />
+        <Animation Name="object_dnq_Anim_005E18" Offset="0x5E18" />
+        <Animation Name="object_dnq_Anim_006984" Offset="0x6984" />
+        <Animation Name="object_dnq_Anim_007528" Offset="0x7528" />
+        <Animation Name="object_dnq_Anim_008328" Offset="0x8328" />
+        <Texture Name="object_dnq_Tex_008340" OutName="tex_008340" Format="rgba16" Width="16" Height="16" Offset="0x8340" />
+        <Texture Name="object_dnq_Tex_008540" OutName="tex_008540" Format="rgba16" Width="16" Height="16" Offset="0x8540" />
+        <Texture Name="object_dnq_Tex_008740" OutName="tex_008740" Format="rgba16" Width="32" Height="32" Offset="0x8740" />
+        <Texture Name="object_dnq_Tex_008F40" OutName="tex_008F40" Format="rgba16" Width="32" Height="64" Offset="0x8F40" />
+        <Texture Name="object_dnq_Tex_009F40" OutName="tex_009F40" Format="rgba16" Width="32" Height="32" Offset="0x9F40" />
+        <Texture Name="object_dnq_Tex_00A740" OutName="tex_00A740" Format="rgba16" Width="16" Height="16" Offset="0xA740" />
+        <Texture Name="object_dnq_Tex_00A940" OutName="tex_00A940" Format="rgba16" Width="8" Height="8" Offset="0xA940" />
+        <Texture Name="object_dnq_Tex_00A9C0" OutName="tex_00A9C0" Format="rgba16" Width="16" Height="16" Offset="0xA9C0" />
+        <Texture Name="object_dnq_Tex_00ABC0" OutName="tex_00ABC0" Format="rgba16" Width="8" Height="8" Offset="0xABC0" />
+        <Texture Name="object_dnq_Tex_00AC40" OutName="tex_00AC40" Format="rgba16" Width="8" Height="8" Offset="0xAC40" />
+        <DList Name="object_dnq_DL_00C9B0" Offset="0xC9B0" />
+        <DList Name="object_dnq_DL_00CB70" Offset="0xCB70" />
+        <DList Name="object_dnq_DL_00CC10" Offset="0xCC10" />
+        <DList Name="object_dnq_DL_00CE38" Offset="0xCE38" />
+        <DList Name="object_dnq_DL_00CED0" Offset="0xCED0" />
+        <DList Name="object_dnq_DL_00CFA8" Offset="0xCFA8" />
+        <DList Name="object_dnq_DL_00D050" Offset="0xD050" />
+        <DList Name="object_dnq_DL_00D140" Offset="0xD140" />
+        <DList Name="object_dnq_DL_00D230" Offset="0xD230" />
+        <DList Name="object_dnq_DL_00D2E8" Offset="0xD2E8" />
+        <DList Name="object_dnq_DL_00D3D8" Offset="0xD3D8" />
+        <DList Name="object_dnq_DL_00D4C8" Offset="0xD4C8" />
+        <DList Name="object_dnq_DL_00D668" Offset="0xD668" />
+        <DList Name="object_dnq_DL_00D758" Offset="0xD758" />
+        <DList Name="object_dnq_DL_00D848" Offset="0xD848" />
+        <DList Name="object_dnq_DL_00D938" Offset="0xD938" />
+        <DList Name="object_dnq_DL_00DA28" Offset="0xDA28" />
+        <DList Name="object_dnq_DL_00DB00" Offset="0xDB00" />
+        <DList Name="object_dnq_DL_00DCA8" Offset="0xDCA8" />
+        <DList Name="object_dnq_DL_00DD50" Offset="0xDD50" />
+        <DList Name="object_dnq_DL_00DE40" Offset="0xDE40" />
+        <DList Name="object_dnq_DL_00DF30" Offset="0xDF30" />
+        <DList Name="object_dnq_DL_00DFE8" Offset="0xDFE8" />
+        <DList Name="object_dnq_DL_00E0D8" Offset="0xE0D8" />
+        <DList Name="object_dnq_DL_00E1C8" Offset="0xE1C8" />
+        <DList Name="object_dnq_DL_00E318" Offset="0xE318" />
+        <DList Name="object_dnq_DL_00E420" Offset="0xE420" />
+        <DList Name="object_dnq_DL_00E538" Offset="0xE538" />
+        <DList Name="object_dnq_DL_00E630" Offset="0xE630" />
+        <DList Name="object_dnq_DL_00E738" Offset="0xE738" />
+        <DList Name="object_dnq_DL_00E850" Offset="0xE850" />
+        <Limb Name="object_dnq_Standardlimb_00E948" Type="Standard" EnumName="OBJECT_DNQ_LIMB_01" Offset="0xE948" />
+        <Limb Name="object_dnq_Standardlimb_00E954" Type="Standard" EnumName="OBJECT_DNQ_LIMB_02" Offset="0xE954" />
+        <Limb Name="object_dnq_Standardlimb_00E960" Type="Standard" EnumName="OBJECT_DNQ_LIMB_03" Offset="0xE960" />
+        <Limb Name="object_dnq_Standardlimb_00E96C" Type="Standard" EnumName="OBJECT_DNQ_LIMB_04" Offset="0xE96C" />
+        <Limb Name="object_dnq_Standardlimb_00E978" Type="Standard" EnumName="OBJECT_DNQ_LIMB_05" Offset="0xE978" />
+        <Limb Name="object_dnq_Standardlimb_00E984" Type="Standard" EnumName="OBJECT_DNQ_LIMB_06" Offset="0xE984" />
+        <Limb Name="object_dnq_Standardlimb_00E990" Type="Standard" EnumName="OBJECT_DNQ_LIMB_07" Offset="0xE990" />
+        <Limb Name="object_dnq_Standardlimb_00E99C" Type="Standard" EnumName="OBJECT_DNQ_LIMB_08" Offset="0xE99C" />
+        <Limb Name="object_dnq_Standardlimb_00E9A8" Type="Standard" EnumName="OBJECT_DNQ_LIMB_09" Offset="0xE9A8" />
+        <Limb Name="object_dnq_Standardlimb_00E9B4" Type="Standard" EnumName="OBJECT_DNQ_LIMB_0A" Offset="0xE9B4" />
+        <Limb Name="object_dnq_Standardlimb_00E9C0" Type="Standard" EnumName="OBJECT_DNQ_LIMB_0B" Offset="0xE9C0" />
+        <Limb Name="object_dnq_Standardlimb_00E9CC" Type="Standard" EnumName="OBJECT_DNQ_LIMB_0C" Offset="0xE9CC" />
+        <Limb Name="object_dnq_Standardlimb_00E9D8" Type="Standard" EnumName="OBJECT_DNQ_LIMB_0D" Offset="0xE9D8" />
+        <Limb Name="object_dnq_Standardlimb_00E9E4" Type="Standard" EnumName="OBJECT_DNQ_LIMB_0E" Offset="0xE9E4" />
+        <Limb Name="object_dnq_Standardlimb_00E9F0" Type="Standard" EnumName="OBJECT_DNQ_LIMB_0F" Offset="0xE9F0" />
+        <Limb Name="object_dnq_Standardlimb_00E9FC" Type="Standard" EnumName="OBJECT_DNQ_LIMB_10" Offset="0xE9FC" />
+        <Limb Name="object_dnq_Standardlimb_00EA08" Type="Standard" EnumName="OBJECT_DNQ_LIMB_11" Offset="0xEA08" />
+        <Limb Name="object_dnq_Standardlimb_00EA14" Type="Standard" EnumName="OBJECT_DNQ_LIMB_12" Offset="0xEA14" />
+        <Limb Name="object_dnq_Standardlimb_00EA20" Type="Standard" EnumName="OBJECT_DNQ_LIMB_13" Offset="0xEA20" />
+        <Limb Name="object_dnq_Standardlimb_00EA2C" Type="Standard" EnumName="OBJECT_DNQ_LIMB_14" Offset="0xEA2C" />
+        <Limb Name="object_dnq_Standardlimb_00EA38" Type="Standard" EnumName="OBJECT_DNQ_LIMB_15" Offset="0xEA38" />
+        <Limb Name="object_dnq_Standardlimb_00EA44" Type="Standard" EnumName="OBJECT_DNQ_LIMB_16" Offset="0xEA44" />
+        <Limb Name="object_dnq_Standardlimb_00EA50" Type="Standard" EnumName="OBJECT_DNQ_LIMB_17" Offset="0xEA50" />
+        <Limb Name="object_dnq_Standardlimb_00EA5C" Type="Standard" EnumName="OBJECT_DNQ_LIMB_18" Offset="0xEA5C" />
+        <Limb Name="object_dnq_Standardlimb_00EA68" Type="Standard" EnumName="OBJECT_DNQ_LIMB_19" Offset="0xEA68" />
+        <Limb Name="object_dnq_Standardlimb_00EA74" Type="Standard" EnumName="OBJECT_DNQ_LIMB_1A" Offset="0xEA74" />
+        <Limb Name="object_dnq_Standardlimb_00EA80" Type="Standard" EnumName="OBJECT_DNQ_LIMB_1B" Offset="0xEA80" />
+        <Limb Name="object_dnq_Standardlimb_00EA8C" Type="Standard" EnumName="OBJECT_DNQ_LIMB_1C" Offset="0xEA8C" />
+        <Limb Name="object_dnq_Standardlimb_00EA98" Type="Standard" EnumName="OBJECT_DNQ_LIMB_1D" Offset="0xEA98" />
+        <Limb Name="object_dnq_Standardlimb_00EAA4" Type="Standard" EnumName="OBJECT_DNQ_LIMB_1E" Offset="0xEAA4" />
+        <Limb Name="object_dnq_Standardlimb_00EAB0" Type="Standard" EnumName="OBJECT_DNQ_LIMB_1F" Offset="0xEAB0" />
+        <Limb Name="object_dnq_Standardlimb_00EABC" Type="Standard" EnumName="OBJECT_DNQ_LIMB_20" Offset="0xEABC" />
+        <Skeleton Name="object_dnq_Skel_00EB48" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DNQ_LIMB_NONE" LimbMax="OBJECT_DNQ_LIMB_MAX" EnumName="object_dnq_Limbs" Offset="0xEB48" />
+        <Animation Name="object_dnq_Anim_00F504" Offset="0xF504" />
+    </File>
+</Root>

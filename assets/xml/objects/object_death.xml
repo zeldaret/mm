@@ -1,0 +1,85 @@
+﻿<Root>
+    <File Name="object_death" Segment="6">
+        <Animation Name="object_death_Anim_000E64" Offset="0xE64" />
+        <Animation Name="object_death_Anim_0015B4" Offset="0x15B4" />
+        <Animation Name="object_death_Anim_001834" Offset="0x1834" />
+        <Animation Name="object_death_Anim_001F80" Offset="0x1F80" />
+        <Animation Name="object_death_Anim_002DE8" Offset="0x2DE8" />
+        <Animation Name="object_death_Anim_00352C" Offset="0x352C" />
+        <Animation Name="object_death_Anim_003CAC" Offset="0x3CAC" />
+        <DList Name="object_death_DL_006B80" Offset="0x6B80" />
+        <DList Name="object_death_DL_006D18" Offset="0x6D18" />
+        <DList Name="object_death_DL_006E08" Offset="0x6E08" />
+        <DList Name="object_death_DL_006F88" Offset="0x6F88" />
+        <DList Name="object_death_DL_0073D0" Offset="0x73D0" />
+        <DList Name="object_death_DL_0074B8" Offset="0x74B8" />
+        <DList Name="object_death_DL_007560" Offset="0x7560" />
+        <DList Name="object_death_DL_007638" Offset="0x7638" />
+        <DList Name="object_death_DL_007710" Offset="0x7710" />
+        <DList Name="object_death_DL_007818" Offset="0x7818" />
+        <DList Name="object_death_DL_007998" Offset="0x7998" />
+        <DList Name="object_death_DL_007A40" Offset="0x7A40" />
+        <DList Name="object_death_DL_007CD0" Offset="0x7CD0" />
+        <DList Name="object_death_DL_007ED0" Offset="0x7ED0" />
+        <DList Name="object_death_DL_0082C0" Offset="0x82C0" />
+        <DList Name="object_death_DL_008370" Offset="0x8370" />
+        <DList Name="object_death_DL_008428" Offset="0x8428" />
+        <DList Name="object_death_DL_0084E0" Offset="0x84E0" />
+        <DList Name="object_death_DL_008598" Offset="0x8598" />
+        <DList Name="object_death_DL_008638" Offset="0x8638" />
+        <Texture Name="object_death_Tex_008788" OutName="tex_008788" Format="rgba16" Width="32" Height="32" Offset="0x8788" />
+        <Texture Name="object_death_Tex_008F88" OutName="tex_008F88" Format="rgba16" Width="8" Height="8" Offset="0x8F88" />
+        <Texture Name="object_death_Tex_009008" OutName="tex_009008" Format="rgba16" Width="8" Height="16" Offset="0x9008" />
+        <Texture Name="object_death_Tex_009108" OutName="tex_009108" Format="rgba16" Width="8" Height="8" Offset="0x9108" />
+        <Texture Name="object_death_Tex_009188" OutName="tex_009188" Format="rgba16" Width="16" Height="8" Offset="0x9188" />
+        <Texture Name="object_death_Tex_009288" OutName="tex_009288" Format="rgba16" Width="8" Height="8" Offset="0x9288" />
+        <Texture Name="object_death_Tex_009308" OutName="tex_009308" Format="rgba16" Width="8" Height="8" Offset="0x9308" />
+        <Texture Name="object_death_Tex_009388" OutName="tex_009388" Format="rgba16" Width="16" Height="16" Offset="0x9388" />
+        <Texture Name="object_death_Tex_009588" OutName="tex_009588" Format="rgba16" Width="4" Height="8" Offset="0x9588" />
+        <Texture Name="object_death_Tex_0095C8" OutName="tex_0095C8" Format="rgba16" Width="16" Height="16" Offset="0x95C8" />
+        <Texture Name="object_death_Tex_0097C8" OutName="tex_0097C8" Format="rgba16" Width="4" Height="8" Offset="0x97C8" />
+        <Texture Name="object_death_Tex_009808" OutName="tex_009808" Format="i4" Width="16" Height="16" Offset="0x9808" />
+        <DList Name="object_death_DL_009988" Offset="0x9988" />
+        <Texture Name="object_death_Tex_009AA0" OutName="tex_009AA0" Format="i4" Width="16" Height="16" Offset="0x9AA0" />
+        <DList Name="object_death_DL_009BA0" Offset="0x9BA0" />
+        <Texture Name="object_death_Tex_009C40" OutName="tex_009C40" Format="rgba16" Width="16" Height="16" Offset="0x9C40" />
+        <DList Name="object_death_DL_009F10" Offset="0x9F10" />
+        <DList Name="object_death_DL_009F88" Offset="0x9F88" />
+        <DList Name="object_death_DL_00A088" Offset="0xA088" />
+        <DList Name="object_death_DL_00A188" Offset="0xA188" />
+        <DList Name="object_death_DL_00A288" Offset="0xA288" />
+        <DList Name="object_death_DL_00A388" Offset="0xA388" />
+        <DList Name="object_death_DL_00A488" Offset="0xA488" />
+        <DList Name="object_death_DL_00A588" Offset="0xA588" />
+        <DList Name="object_death_DL_00A688" Offset="0xA688" />
+        <DList Name="object_death_DL_00A788" Offset="0xA788" />
+        <Texture Name="object_death_Tex_00A7B8" OutName="tex_00A7B8" Format="rgba16" Width="32" Height="16" Offset="0xA7B8" />
+        <Limb Name="object_death_Standardlimb_00ABB8" Type="Standard" EnumName="OBJECT_DEATH_LIMB_01" Offset="0xABB8" />
+        <Limb Name="object_death_Standardlimb_00ABC4" Type="Standard" EnumName="OBJECT_DEATH_LIMB_02" Offset="0xABC4" />
+        <Limb Name="object_death_Standardlimb_00ABD0" Type="Standard" EnumName="OBJECT_DEATH_LIMB_03" Offset="0xABD0" />
+        <Limb Name="object_death_Standardlimb_00ABDC" Type="Standard" EnumName="OBJECT_DEATH_LIMB_04" Offset="0xABDC" />
+        <Limb Name="object_death_Standardlimb_00ABE8" Type="Standard" EnumName="OBJECT_DEATH_LIMB_05" Offset="0xABE8" />
+        <Limb Name="object_death_Standardlimb_00ABF4" Type="Standard" EnumName="OBJECT_DEATH_LIMB_06" Offset="0xABF4" />
+        <Limb Name="object_death_Standardlimb_00AC00" Type="Standard" EnumName="OBJECT_DEATH_LIMB_07" Offset="0xAC00" />
+        <Limb Name="object_death_Standardlimb_00AC0C" Type="Standard" EnumName="OBJECT_DEATH_LIMB_08" Offset="0xAC0C" />
+        <Limb Name="object_death_Standardlimb_00AC18" Type="Standard" EnumName="OBJECT_DEATH_LIMB_09" Offset="0xAC18" />
+        <Limb Name="object_death_Standardlimb_00AC24" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0A" Offset="0xAC24" />
+        <Limb Name="object_death_Standardlimb_00AC30" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0B" Offset="0xAC30" />
+        <Limb Name="object_death_Standardlimb_00AC3C" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0C" Offset="0xAC3C" />
+        <Limb Name="object_death_Standardlimb_00AC48" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0D" Offset="0xAC48" />
+        <Limb Name="object_death_Standardlimb_00AC54" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0E" Offset="0xAC54" />
+        <Limb Name="object_death_Standardlimb_00AC60" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0F" Offset="0xAC60" />
+        <Limb Name="object_death_Standardlimb_00AC6C" Type="Standard" EnumName="OBJECT_DEATH_LIMB_10" Offset="0xAC6C" />
+        <Limb Name="object_death_Standardlimb_00AC78" Type="Standard" EnumName="OBJECT_DEATH_LIMB_11" Offset="0xAC78" />
+        <Limb Name="object_death_Standardlimb_00AC84" Type="Standard" EnumName="OBJECT_DEATH_LIMB_12" Offset="0xAC84" />
+        <Limb Name="object_death_Standardlimb_00AC90" Type="Standard" EnumName="OBJECT_DEATH_LIMB_13" Offset="0xAC90" />
+        <Limb Name="object_death_Standardlimb_00AC9C" Type="Standard" EnumName="OBJECT_DEATH_LIMB_14" Offset="0xAC9C" />
+        <Limb Name="object_death_Standardlimb_00ACA8" Type="Standard" EnumName="OBJECT_DEATH_LIMB_15" Offset="0xACA8" />
+        <Skeleton Name="object_death_Skel_00AD08" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DEATH_LIMB_NONE" LimbMax="OBJECT_DEATH_LIMB_MAX" EnumName="object_death_Limbs" Offset="0xAD08" />
+        <Animation Name="object_death_Anim_00B284" Offset="0xB284" />
+        <Animation Name="object_death_Anim_00B508" Offset="0xB508" />
+        <Animation Name="object_death_Anim_00CB2C" Offset="0xCB2C" />
+        <TextureAnimation Name="object_death_Matanimheader_00CB84" Offset="0xCB84" />
+        <TextureAnimation Name="object_death_Matanimheader_00CBC0" Offset="0xCBC0" />
+    </File>
+</Root>

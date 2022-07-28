@@ -1,0 +1,78 @@
+﻿<Root>
+    <File Name="object_geldb" Segment="6">
+        <Animation Name="object_geldb_Anim_000734" Offset="0x734" />
+        <Animation Name="object_geldb_Anim_000CB0" Offset="0xCB0" />
+        <Animation Name="object_geldb_Anim_000EE0" Offset="0xEE0" />
+        <Animation Name="object_geldb_Anim_0014CC" Offset="0x14CC" />
+        <Animation Name="object_geldb_Anim_001AC8" Offset="0x1AC8" />
+        <Animation Name="object_geldb_Anim_001DFC" Offset="0x1DFC" />
+        <Animation Name="object_geldb_Anim_001EFC" Offset="0x1EFC" />
+        <Animation Name="object_geldb_Anim_0028A0" Offset="0x28A0" />
+        <Texture Name="object_geldb_TLUT_0028B0" OutName="tlut_0028B0" Format="rgba16" Width="16" Height="16" Offset="0x28B0" />
+        <Texture Name="object_geldb_Tex_002AB0" OutName="tex_002AB0" Format="ci8" Width="8" Height="8" Offset="0x2AB0" />
+        <Texture Name="object_geldb_Tex_002AF0" OutName="tex_002AF0" Format="ci8" Width="8" Height="8" Offset="0x2AF0" />
+        <Texture Name="object_geldb_Tex_002B30" OutName="tex_002B30" Format="ci8" Width="16" Height="16" Offset="0x2B30" />
+        <Texture Name="object_geldb_Tex_002C30" OutName="tex_002C30" Format="i8" Width="16" Height="16" Offset="0x2C30" />
+        <Texture Name="object_geldb_Tex_002D30" OutName="tex_002D30" Format="ci8" Width="16" Height="16" Offset="0x2D30" />
+        <Texture Name="object_geldb_Tex_002E30" OutName="tex_002E30" Format="i8" Width="16" Height="16" Offset="0x2E30" />
+        <Texture Name="object_geldb_Tex_002F30" OutName="tex_002F30" Format="i8" Width="8" Height="16" Offset="0x2F30" />
+        <DList Name="object_geldb_DL_004C90" Offset="0x4C90" />
+        <DList Name="object_geldb_DL_005110" Offset="0x5110" />
+        <DList Name="object_geldb_DL_005248" Offset="0x5248" />
+        <DList Name="object_geldb_DL_005470" Offset="0x5470" />
+        <DList Name="object_geldb_DL_0055A8" Offset="0x55A8" />
+        <DList Name="object_geldb_DL_0057D0" Offset="0x57D0" />
+        <DList Name="object_geldb_DL_0059F0" Offset="0x59F0" />
+        <DList Name="object_geldb_DL_005AF0" Offset="0x5AF0" />
+        <DList Name="object_geldb_DL_005D60" Offset="0x5D60" />
+        <DList Name="object_geldb_DL_005E60" Offset="0x5E60" />
+        <!-- <Texture Name="object_geldb_TLUT_0060E0" OutName="tlut_0060E0" Format="rgba16" Width="16" Height="16" Offset="0x60E0" /> -->
+        <!-- <Blob Name="object_geldb_Blob_0062E0" Size="0x38" Offset="0x62E0" /> -->
+        <Texture Name="object_geldb_Tex_006318" OutName="tex_006318" Format="ci8" Width="8" Height="16" Offset="0x6318" />
+        <!-- <Blob Name="object_geldb_Blob_006398" Size="0x400" Offset="0x6398" /> -->
+        <Texture Name="object_geldb_Tex_006798" OutName="tex_006798" Format="i8" Width="16" Height="16" Offset="0x6798" />
+        <Texture Name="object_geldb_Tex_006898" OutName="tex_006898" Format="ci8" Width="8" Height="16" Offset="0x6898" />
+        <Texture Name="object_geldb_Tex_006918" OutName="tex_006918" Format="ci8" Width="8" Height="8" Offset="0x6918" />
+        <!-- <Blob Name="object_geldb_Blob_006958" Size="0x400" Offset="0x6958" /> -->
+        <Texture Name="object_geldb_Tex_006D58" OutName="tex_006D58" Format="i8" Width="8" Height="16" Offset="0x6D58" />
+        <Texture Name="object_geldb_Tex_006DD8" OutName="tex_006DD8" Format="ci8" Width="16" Height="16" Offset="0x6DD8" />
+        <Texture Name="object_geldb_Tex_006ED8" OutName="tex_006ED8" Format="ci8" Width="16" Height="16" Offset="0x6ED8" />
+        <Texture Name="object_geldb_Tex_006FD8" OutName="tex_006FD8" Format="ci8" Width="16" Height="16" Offset="0x6FD8" />
+        <!-- <Blob Name="object_geldb_Blob_0070D8" Size="0x400" Offset="0x70D8" /> -->
+        <DList Name="object_geldb_DL_0092F8" Offset="0x92F8" />
+        <DList Name="object_geldb_DL_0094B8" Offset="0x94B8" />
+        <DList Name="object_geldb_DL_009678" Offset="0x9678" />
+        <DList Name="object_geldb_DL_009810" Offset="0x9810" />
+        <DList Name="object_geldb_DL_0099E8" Offset="0x99E8" />
+        <DList Name="object_geldb_DL_009B80" Offset="0x9B80" />
+        <DList Name="object_geldb_DL_009D58" Offset="0x9D58" />
+        <DList Name="object_geldb_DL_009E10" Offset="0x9E10" />
+        <DList Name="object_geldb_DL_009F00" Offset="0x9F00" />
+        <Limb Name="object_geldb_Standardlimb_00A698" Type="Standard" EnumName="OBJECT_GELDB_LIMB_01" Offset="0xA698" />
+        <Limb Name="object_geldb_Standardlimb_00A6A4" Type="Standard" EnumName="OBJECT_GELDB_LIMB_02" Offset="0xA6A4" />
+        <Limb Name="object_geldb_Standardlimb_00A6B0" Type="Standard" EnumName="OBJECT_GELDB_LIMB_03" Offset="0xA6B0" />
+        <Limb Name="object_geldb_Standardlimb_00A6BC" Type="Standard" EnumName="OBJECT_GELDB_LIMB_04" Offset="0xA6BC" />
+        <Limb Name="object_geldb_Standardlimb_00A6C8" Type="Standard" EnumName="OBJECT_GELDB_LIMB_05" Offset="0xA6C8" />
+        <Limb Name="object_geldb_Standardlimb_00A6D4" Type="Standard" EnumName="OBJECT_GELDB_LIMB_06" Offset="0xA6D4" />
+        <Limb Name="object_geldb_Standardlimb_00A6E0" Type="Standard" EnumName="OBJECT_GELDB_LIMB_07" Offset="0xA6E0" />
+        <Limb Name="object_geldb_Standardlimb_00A6EC" Type="Standard" EnumName="OBJECT_GELDB_LIMB_08" Offset="0xA6EC" />
+        <Limb Name="object_geldb_Standardlimb_00A6F8" Type="Standard" EnumName="OBJECT_GELDB_LIMB_09" Offset="0xA6F8" />
+        <Limb Name="object_geldb_Standardlimb_00A704" Type="Standard" EnumName="OBJECT_GELDB_LIMB_0A" Offset="0xA704" />
+        <Limb Name="object_geldb_Standardlimb_00A710" Type="Standard" EnumName="OBJECT_GELDB_LIMB_0B" Offset="0xA710" />
+        <Limb Name="object_geldb_Standardlimb_00A71C" Type="Standard" EnumName="OBJECT_GELDB_LIMB_0C" Offset="0xA71C" />
+        <Limb Name="object_geldb_Standardlimb_00A728" Type="Standard" EnumName="OBJECT_GELDB_LIMB_0D" Offset="0xA728" />
+        <Limb Name="object_geldb_Standardlimb_00A734" Type="Standard" EnumName="OBJECT_GELDB_LIMB_0E" Offset="0xA734" />
+        <Limb Name="object_geldb_Standardlimb_00A740" Type="Standard" EnumName="OBJECT_GELDB_LIMB_0F" Offset="0xA740" />
+        <Limb Name="object_geldb_Standardlimb_00A74C" Type="Standard" EnumName="OBJECT_GELDB_LIMB_10" Offset="0xA74C" />
+        <Limb Name="object_geldb_Standardlimb_00A758" Type="Standard" EnumName="OBJECT_GELDB_LIMB_11" Offset="0xA758" />
+        <Limb Name="object_geldb_Standardlimb_00A764" Type="Standard" EnumName="OBJECT_GELDB_LIMB_12" Offset="0xA764" />
+        <Limb Name="object_geldb_Standardlimb_00A770" Type="Standard" EnumName="OBJECT_GELDB_LIMB_13" Offset="0xA770" />
+        <Limb Name="object_geldb_Standardlimb_00A77C" Type="Standard" EnumName="OBJECT_GELDB_LIMB_14" Offset="0xA77C" />
+        <Limb Name="object_geldb_Standardlimb_00A788" Type="Standard" EnumName="OBJECT_GELDB_LIMB_15" Offset="0xA788" />
+        <Limb Name="object_geldb_Standardlimb_00A794" Type="Standard" EnumName="OBJECT_GELDB_LIMB_16" Offset="0xA794" />
+        <Limb Name="object_geldb_Standardlimb_00A7A0" Type="Standard" EnumName="OBJECT_GELDB_LIMB_17" Offset="0xA7A0" />
+        <Skeleton Name="object_geldb_Skel_00A808" Type="Flex" LimbType="Standard" LimbNone="OBJECT_GELDB_LIMB_NONE" LimbMax="OBJECT_GELDB_LIMB_MAX" EnumName="object_geldb_Limbs" Offset="0xA808" />
+        <Animation Name="object_geldb_Anim_00AA8C" Offset="0xAA8C" />
+        <Animation Name="object_geldb_Anim_00B0E4" Offset="0xB0E4" />
+    </File>
+</Root>

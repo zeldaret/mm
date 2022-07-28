@@ -1,0 +1,106 @@
+﻿<Root>
+    <File Name="object_eg" Segment="6">
+        <DList Name="object_eg_DL_000040" Offset="0x40" />
+        <Texture Name="object_eg_Tex_0000C0" OutName="tex_0000C0" Format="ia8" Width="64" Height="64" Offset="0xC0" />
+        <!-- <Blob Name="object_eg_Blob_0010C0" Size="0x10" Offset="0x10C0" /> -->
+        <DList Name="object_eg_DL_001170" Offset="0x1170" />
+        <Texture Name="object_eg_Tex_001210" OutName="tex_001210" Format="rgba16" Width="8" Height="16" Offset="0x1210" />
+        <DList Name="object_eg_DL_0013B0" Offset="0x13B0" />
+        <Texture Name="object_eg_Tex_001450" OutName="tex_001450" Format="rgba16" Width="8" Height="16" Offset="0x1450" />
+        <DList Name="object_eg_DL_001690" Offset="0x1690" />
+        <DList Name="object_eg_DL_001698" Offset="0x1698" />
+        <Collision Name="object_eg_Colheader_001820" Offset="0x1820" />
+        <DList Name="object_eg_DL_001910" Offset="0x1910" />
+        <DList Name="object_eg_DL_001918" Offset="0x1918" />
+        <Texture Name="object_eg_Tex_0019B0" OutName="tex_0019B0" Format="rgba16" Width="16" Height="16" Offset="0x19B0" />
+        <!-- <Blob Name="object_eg_Blob_001BB0" Size="0x10" Offset="0x1BB0" /> -->
+        <DList Name="object_eg_DL_001BF0" Offset="0x1BF0" />
+        <DList Name="object_eg_DL_001BF8" Offset="0x1BF8" />
+        <Texture Name="object_eg_Tex_001C78" OutName="tex_001C78" Format="rgba16" Width="16" Height="16" Offset="0x1C78" />
+        <!-- <Blob Name="object_eg_Blob_001E80" Size="0x18" Offset="0x1E80" /> -->
+        <Animation Name="object_eg_Anim_002460" Offset="0x2460" />
+        <!-- <Blob Name="object_eg_Blob_002470" Size="0x1D00" Offset="0x2470" /> -->
+        <DList Name="object_eg_DL_0041F0" Offset="0x41F0" />
+        <!-- <Blob Name="object_eg_Blob_004280" Size="0xE80" Offset="0x4280" /> -->
+        <Texture Name="object_eg_Tex_005100" OutName="tex_005100" Format="rgba16" Width="8" Height="8" Offset="0x5100" />
+        <!-- <Blob Name="object_eg_Blob_005180" Size="0x800" Offset="0x5180" /> -->
+        <DList Name="object_eg_DL_007C80" Offset="0x7C80" />
+        <DList Name="object_eg_DL_007DF8" Offset="0x7DF8" />
+        <DList Name="object_eg_DL_007EB0" Offset="0x7EB0" />
+        <DList Name="object_eg_DL_007FF0" Offset="0x7FF0" />
+        <DList Name="object_eg_DL_008180" Offset="0x8180" />
+        <DList Name="object_eg_DL_0082F0" Offset="0x82F0" />
+        <DList Name="object_eg_DL_008430" Offset="0x8430" />
+        <DList Name="object_eg_DL_0085C0" Offset="0x85C0" />
+        <DList Name="object_eg_DL_008730" Offset="0x8730" />
+        <DList Name="object_eg_DL_0088E0" Offset="0x88E0" />
+        <DList Name="object_eg_DL_0089F8" Offset="0x89F8" />
+        <DList Name="object_eg_DL_008A40" Offset="0x8A40" />
+        <DList Name="object_eg_DL_008A88" Offset="0x8A88" />
+        <DList Name="object_eg_DL_008B28" Offset="0x8B28" />
+        <DList Name="object_eg_DL_008C28" Offset="0x8C28" />
+        <DList Name="object_eg_DL_008D28" Offset="0x8D28" />
+        <DList Name="object_eg_DL_008E40" Offset="0x8E40" />
+        <DList Name="object_eg_DL_008ED8" Offset="0x8ED8" />
+        <DList Name="object_eg_DL_0090A0" Offset="0x90A0" />
+        <DList Name="object_eg_DL_0091B8" Offset="0x91B8" />
+        <DList Name="object_eg_DL_009250" Offset="0x9250" />
+        <DList Name="object_eg_DL_009418" Offset="0x9418" />
+        <TextureAnimation Name="object_eg_Matanimheader_0094E4" Offset="0x94E4" />
+        <Limb Name="object_eg_Standardlimb_0094F4" Type="Standard" EnumName="OBJECT_EG_LIMB_01" Offset="0x94F4" />
+        <Limb Name="object_eg_Standardlimb_009500" Type="Standard" EnumName="OBJECT_EG_LIMB_02" Offset="0x9500" />
+        <Limb Name="object_eg_Standardlimb_00950C" Type="Standard" EnumName="OBJECT_EG_LIMB_03" Offset="0x950C" />
+        <Limb Name="object_eg_Standardlimb_009518" Type="Standard" EnumName="OBJECT_EG_LIMB_04" Offset="0x9518" />
+        <Limb Name="object_eg_Standardlimb_009524" Type="Standard" EnumName="OBJECT_EG_LIMB_05" Offset="0x9524" />
+        <Limb Name="object_eg_Standardlimb_009530" Type="Standard" EnumName="OBJECT_EG_LIMB_06" Offset="0x9530" />
+        <Limb Name="object_eg_Standardlimb_00953C" Type="Standard" EnumName="OBJECT_EG_LIMB_07" Offset="0x953C" />
+        <Limb Name="object_eg_Standardlimb_009548" Type="Standard" EnumName="OBJECT_EG_LIMB_08" Offset="0x9548" />
+        <Limb Name="object_eg_Standardlimb_009554" Type="Standard" EnumName="OBJECT_EG_LIMB_09" Offset="0x9554" />
+        <Limb Name="object_eg_Standardlimb_009560" Type="Standard" EnumName="OBJECT_EG_LIMB_0A" Offset="0x9560" />
+        <Limb Name="object_eg_Standardlimb_00956C" Type="Standard" EnumName="OBJECT_EG_LIMB_0B" Offset="0x956C" />
+        <Limb Name="object_eg_Standardlimb_009578" Type="Standard" EnumName="OBJECT_EG_LIMB_0C" Offset="0x9578" />
+        <Limb Name="object_eg_Standardlimb_009584" Type="Standard" EnumName="OBJECT_EG_LIMB_0D" Offset="0x9584" />
+        <Limb Name="object_eg_Standardlimb_009590" Type="Standard" EnumName="OBJECT_EG_LIMB_0E" Offset="0x9590" />
+        <Limb Name="object_eg_Standardlimb_00959C" Type="Standard" EnumName="OBJECT_EG_LIMB_0F" Offset="0x959C" />
+        <Limb Name="object_eg_Standardlimb_0095A8" Type="Standard" EnumName="OBJECT_EG_LIMB_10" Offset="0x95A8" />
+        <Limb Name="object_eg_Standardlimb_0095B4" Type="Standard" EnumName="OBJECT_EG_LIMB_11" Offset="0x95B4" />
+        <Limb Name="object_eg_Standardlimb_0095C0" Type="Standard" EnumName="OBJECT_EG_LIMB_12" Offset="0x95C0" />
+        <Limb Name="object_eg_Standardlimb_0095CC" Type="Standard" EnumName="OBJECT_EG_LIMB_13" Offset="0x95CC" />
+        <Limb Name="object_eg_Standardlimb_0095D8" Type="Standard" EnumName="OBJECT_EG_LIMB_14" Offset="0x95D8" />
+        <Limb Name="object_eg_Standardlimb_0095E4" Type="Standard" EnumName="OBJECT_EG_LIMB_15" Offset="0x95E4" />
+        <Limb Name="object_eg_Standardlimb_0095F0" Type="Standard" EnumName="OBJECT_EG_LIMB_16" Offset="0x95F0" />
+        <Limb Name="object_eg_Standardlimb_0095FC" Type="Standard" EnumName="OBJECT_EG_LIMB_17" Offset="0x95FC" />
+        <Skeleton Name="object_eg_Skel_009664" Type="Flex" LimbType="Standard" LimbNone="OBJECT_EG_LIMB_NONE" LimbMax="OBJECT_EG_LIMB_MAX" EnumName="object_eg_Limbs" Offset="0x9664" />
+        <Animation Name="object_eg_Anim_009D2C" Offset="0x9D2C" />
+        <Animation Name="object_eg_Anim_00A204" Offset="0xA204" />
+        <Animation Name="object_eg_Anim_00A484" Offset="0xA484" />
+        <Animation Name="object_eg_Anim_00A73C" Offset="0xA73C" />
+        <Animation Name="object_eg_Anim_00ADF8" Offset="0xADF8" />
+        <Animation Name="object_eg_Anim_00BC60" Offset="0xBC60" />
+        <Animation Name="object_eg_Anim_00BEB8" Offset="0xBEB8" />
+        <Animation Name="object_eg_Anim_00C434" Offset="0xC434" />
+        <Animation Name="object_eg_Anim_00C9B4" Offset="0xC9B4" />
+        <Animation Name="object_eg_Anim_00CC4C" Offset="0xCC4C" />
+        <Animation Name="object_eg_Anim_00CE54" Offset="0xCE54" />
+        <Animation Name="object_eg_Anim_00D3D8" Offset="0xD3D8" />
+        <DList Name="object_eg_DL_00DCC0" Offset="0xDCC0" />
+        <Texture Name="object_eg_Tex_00DEA8" OutName="tex_00DEA8" Format="i4" Width="64" Height="64" Offset="0xDEA8" />
+        <Animation Name="object_eg_Anim_00EA10" Offset="0xEA10" />
+        <Animation Name="object_eg_Anim_00EE4C" Offset="0xEE4C" />
+        <Animation Name="object_eg_Anim_00F524" Offset="0xF524" />
+        <Animation Name="object_eg_Anim_00FB0C" Offset="0xFB0C" />
+        <Animation Name="object_eg_Anim_0100C0" Offset="0x100C0" />
+        <DList Name="object_eg_DL_010240" Offset="0x10240" />
+        <Texture Name="object_eg_Tex_010310" OutName="tex_010310" Format="rgba16" Width="36" Height="36" Offset="0x10310" />
+        <!-- <Blob Name="object_eg_Blob_010D30" Size="0x1000" Offset="0x10D30" /> -->
+        <Texture Name="object_eg_Tex_011D30" OutName="tex_011D30" Format="rgba16" Width="8" Height="16" Offset="0x11D30" />
+        <Texture Name="object_eg_Tex_011E30" OutName="tex_011E30" Format="rgba16" Width="16" Height="16" Offset="0x11E30" />
+        <Texture Name="object_eg_Tex_012030" OutName="tex_012030" Format="rgba16" Width="4" Height="4" Offset="0x12030" />
+        <Texture Name="object_eg_Tex_012050" OutName="tex_012050" Format="rgba16" Width="8" Height="16" Offset="0x12050" />
+        <Texture Name="object_eg_Tex_012150" OutName="tex_012150" Format="rgba16" Width="8" Height="8" Offset="0x12150" />
+        <Texture Name="object_eg_Tex_0121D0" OutName="tex_0121D0" Format="i4" Width="16" Height="32" Offset="0x121D0" />
+        <Texture Name="object_eg_Tex_0122D0" OutName="tex_0122D0" Format="rgba16" Width="16" Height="32" Offset="0x122D0" />
+        <!-- <Blob Name="object_eg_Blob_0126D0" Size="0xA20" Offset="0x126D0" /> -->
+        <Texture Name="object_eg_Tex_0130F0" OutName="tex_0130F0" Format="i4" Width="16" Height="32" Offset="0x130F0" />
+    </File>
+</Root>

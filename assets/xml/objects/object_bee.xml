@@ -1,0 +1,28 @@
+﻿<Root>
+    <File Name="object_bee" Segment="6">
+        <Animation Name="object_bee_Anim_00005C" Offset="0x5C" />
+        <DList Name="object_bee_DL_000550" Offset="0x550" />
+        <DList Name="object_bee_DL_000780" Offset="0x780" />
+        <DList Name="object_bee_DL_000848" Offset="0x848" />
+        <DList Name="object_bee_DL_000918" Offset="0x918" />
+        <DList Name="object_bee_DL_0009D0" Offset="0x9D0" />
+        <Texture Name="object_bee_TLUT_000A88" OutName="tlut_000A88" Format="rgba16" Width="4" Height="4" Offset="0xA88" />
+        <Texture Name="object_bee_TLUT_000AA8" OutName="tlut_000AA8" Format="rgba16" Width="4" Height="4" Offset="0xAA8" />
+        <Texture Name="object_bee_TLUT_000AC8" OutName="tlut_000AC8" Format="rgba16" Width="4" Height="4" Offset="0xAC8" />
+        <Texture Name="object_bee_TLUT_000AE8" OutName="tlut_000AE8" Format="rgba16" Width="4" Height="4" Offset="0xAE8" />
+        <Texture Name="object_bee_Tex_000B08" OutName="tex_000B08" Format="ci4" Width="32" Height="32" Offset="0xB08" />
+        <Texture Name="object_bee_Tex_000D08" OutName="tex_000D08" Format="ci4" Width="32" Height="32" Offset="0xD08" />
+        <Texture Name="object_bee_Tex_000F08" OutName="tex_000F08" Format="ci4" Width="32" Height="32" Offset="0xF08" />
+        <Texture Name="object_bee_Tex_001108" OutName="tex_001108" Format="ci4" Width="32" Height="32" Offset="0x1108" />
+        <Limb Name="object_bee_Standardlimb_001308" Type="Standard" EnumName="OBJECT_BEE_LIMB_01" Offset="0x1308" />
+        <Limb Name="object_bee_Standardlimb_001314" Type="Standard" EnumName="OBJECT_BEE_LIMB_02" Offset="0x1314" />
+        <Limb Name="object_bee_Standardlimb_001320" Type="Standard" EnumName="OBJECT_BEE_LIMB_03" Offset="0x1320" />
+        <Limb Name="object_bee_Standardlimb_00132C" Type="Standard" EnumName="OBJECT_BEE_LIMB_04" Offset="0x132C" />
+        <Limb Name="object_bee_Standardlimb_001338" Type="Standard" EnumName="OBJECT_BEE_LIMB_05" Offset="0x1338" />
+        <Limb Name="object_bee_Standardlimb_001344" Type="Standard" EnumName="OBJECT_BEE_LIMB_06" Offset="0x1344" />
+        <Limb Name="object_bee_Standardlimb_001350" Type="Standard" EnumName="OBJECT_BEE_LIMB_07" Offset="0x1350" />
+        <Limb Name="object_bee_Standardlimb_00135C" Type="Standard" EnumName="OBJECT_BEE_LIMB_08" Offset="0x135C" />
+        <Limb Name="object_bee_Standardlimb_001368" Type="Standard" EnumName="OBJECT_BEE_LIMB_09" Offset="0x1368" />
+        <Skeleton Name="object_bee_Skel_001398" Type="Normal" LimbType="Standard" LimbNone="OBJECT_BEE_LIMB_NONE" LimbMax="OBJECT_BEE_LIMB_MAX" EnumName="object_bee_Limbs" Offset="0x1398" />
+    </File>
+</Root>
