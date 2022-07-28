@@ -10,9 +10,9 @@
 
 #define THIS ((BgDanpeiMovebg*)thisx)
 
-void BgDanpeiMovebg_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgDanpeiMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgDanpeiMovebg_Update(Actor* thisx, GlobalContext* globalCtx);
+void BgDanpeiMovebg_Init(Actor* thisx, PlayState* play);
+void BgDanpeiMovebg_Destroy(Actor* thisx, PlayState* play);
+void BgDanpeiMovebg_Update(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Bg_Danpei_Movebg_InitVars = {

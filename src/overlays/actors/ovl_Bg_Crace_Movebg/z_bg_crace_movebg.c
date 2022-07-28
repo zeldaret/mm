@@ -10,10 +10,10 @@
 
 #define THIS ((BgCraceMovebg*)thisx)
 
-void BgCraceMovebg_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgCraceMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgCraceMovebg_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgCraceMovebg_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgCraceMovebg_Init(Actor* thisx, PlayState* play);
+void BgCraceMovebg_Destroy(Actor* thisx, PlayState* play);
+void BgCraceMovebg_Update(Actor* thisx, PlayState* play);
+void BgCraceMovebg_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Bg_Crace_Movebg_InitVars = {

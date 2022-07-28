@@ -5,7 +5,7 @@
 
 struct ObjHgdoor;
 
-typedef void (*ObjHgdoorActionFunc)(struct ObjHgdoor*, GlobalContext*);
+typedef void (*ObjHgdoorActionFunc)(struct ObjHgdoor*, PlayState*);
 
 #define OBJHGDOOR_IS_RIGHT_DOOR(thisx) \
     ((thisx)->params & 0x8000) // door on the right when looking at the cabinet

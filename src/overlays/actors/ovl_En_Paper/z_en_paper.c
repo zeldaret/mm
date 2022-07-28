@@ -10,13 +10,13 @@
 
 #define THIS ((EnPaper*)thisx)
 
-void EnPaper_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnPaper_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnPaper_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnPaper_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnPaper_Init(Actor* thisx, PlayState* play);
+void EnPaper_Destroy(Actor* thisx, PlayState* play);
+void EnPaper_Update(Actor* thisx, PlayState* play);
+void EnPaper_Draw(Actor* thisx, PlayState* play);
 
-void func_80C1F480(EnPaper* this, GlobalContext* globalCtx);
-void func_80C1F4FC(EnPaper* this, GlobalContext* globalCtx);
+void func_80C1F480(EnPaper* this, PlayState* play);
+void func_80C1F4FC(EnPaper* this, PlayState* play);
 
 #if 0
 const ActorInit En_Paper_InitVars = {

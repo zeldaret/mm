@@ -12,10 +12,10 @@
 
 #define THIS ((EnWiz*)thisx)
 
-void EnWiz_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnWiz_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnWiz_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnWiz_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnWiz_Init(Actor* thisx, PlayState* play);
+void EnWiz_Destroy(Actor* thisx, PlayState* play);
+void EnWiz_Update(Actor* thisx, PlayState* play);
+void EnWiz_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Wiz_InitVars = {
@@ -77,7 +77,7 @@ static ColliderJntSphElementInit D_80A48B50[10] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80A48CB8 = {
     { COLTYPE_HIT2, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    10, D_80A48B50, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80A48B50, // sJntSphElementsInit,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

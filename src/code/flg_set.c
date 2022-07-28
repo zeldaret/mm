@@ -10,6 +10,7 @@
  *  Hold Start and press B: clear all weekEventReg and eventInf flags
  */
 #include "global.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 static FlagSetEntry sFlagEntries[] = {
     { &gSaveContext.save.weekEventReg[0], "week_event_reg[0]" },
@@ -134,8 +135,8 @@ static u32 sCurrentBit = 0;
 static s32 sTimer = 0;
 
 void FlagSet_Update(GameState* gameState) {
-    GlobalContext* globalCtx = (GlobalContext*)gameState;
-    Input* input = CONTROLLER1(globalCtx);
+    PlayState* play = (PlayState*)gameState;
+    Input* input = CONTROLLER1(&play->state);
 
     /* Intra-byte navigation */
 
@@ -255,7 +256,7 @@ void FlagSet_Update(GameState* gameState) {
 
         // Pressing B will exit
     } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
-        globalCtx->pauseCtx.debugState = 0;
+        play->pauseCtx.debugEditor = DEBUG_EDITOR_NONE;
     }
 }
 

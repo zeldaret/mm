@@ -5,7 +5,7 @@
 
 struct BgCtowerRot;
 
-typedef void (*BgCtowerRotActionFunc)(struct BgCtowerRot*, GlobalContext*);
+typedef void (*BgCtowerRotActionFunc)(struct BgCtowerRot*, PlayState*);
 
 typedef enum {
     /* 0 */ BGCTOWERROT_CORRIDOR,

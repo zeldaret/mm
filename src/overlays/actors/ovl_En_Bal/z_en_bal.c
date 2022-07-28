@@ -10,10 +10,10 @@
 
 #define THIS ((EnBal*)thisx)
 
-void EnBal_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnBal_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBal_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnBal_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnBal_Init(Actor* thisx, PlayState* play);
+void EnBal_Destroy(Actor* thisx, PlayState* play);
+void EnBal_Update(Actor* thisx, PlayState* play);
+void EnBal_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Bal_InitVars = {
@@ -78,7 +78,7 @@ static ColliderJntSphElementInit D_80A63D0C[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80A63D30 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_80A63D0C, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80A63D0C, // sJntSphElementsInit,
 };
 
 #endif

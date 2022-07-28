@@ -10,14 +10,14 @@
 
 #define THIS ((EnBubble*)thisx)
 
-void EnBubble_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnBubble_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBubble_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnBubble_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnBubble_Init(Actor* thisx, PlayState* play);
+void EnBubble_Destroy(Actor* thisx, PlayState* play);
+void EnBubble_Update(Actor* thisx, PlayState* play);
+void EnBubble_Draw(Actor* thisx, PlayState* play);
 
-void func_808A029C(EnBubble* this, GlobalContext* globalCtx);
-void func_808A0350(EnBubble* this, GlobalContext* globalCtx);
-void func_808A03E8(EnBubble* this, GlobalContext* globalCtx);
+void func_808A029C(EnBubble* this, PlayState* play);
+void func_808A0350(EnBubble* this, PlayState* play);
+void func_808A03E8(EnBubble* this, PlayState* play);
 
 #if 0
 const ActorInit En_Bubble_InitVars = {
@@ -47,7 +47,7 @@ static ColliderJntSphElementInit D_808A0700[2] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_808A0748 = {
     { COLTYPE_HIT6, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    2, D_808A0700, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_808A0700, // sJntSphElementsInit,
 };
 
 // sColChkInfoInit

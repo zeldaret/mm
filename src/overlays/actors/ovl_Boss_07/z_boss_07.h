@@ -13,7 +13,7 @@ struct Boss07;
 
 #define MAJORA_LIMB_COUNT MAX(MAJORAS_MASK_LIMB_MAX, MAX(MAJORAS_INCARNATION_LIMB_MAX, MAJORAS_WRATH_LIMB_MAX))
 
-typedef void (*Boss07ActionFunc)(struct Boss07*, GlobalContext*);
+typedef void (*Boss07ActionFunc)(struct Boss07*, struct PlayState*);
 
 typedef struct {
     Vec3f base;

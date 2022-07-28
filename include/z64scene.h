@@ -260,7 +260,7 @@ typedef union {
 typedef struct {
     /* 0x00 */ s8 num;
     /* 0x01 */ u8 unk1;
-    /* 0x02 */ u8 unk2;
+    /* 0x02 */ u8 unk2; // 3: Room is hot
     /* 0x03 */ u8 unk3;
     /* 0x04 */ s8 echo;
     /* 0x05 */ u8 unk5;
@@ -377,7 +377,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u16 keyFrameLength;
-    /* 0x4 */ void* textureList;
+    /* 0x4 */ TexturePtr* textureList;
     /* 0x8 */ u8* textureIndexList;
 } AnimatedMatTexCycleParams; // size = 0xC
 
@@ -489,19 +489,20 @@ typedef struct {
     /* 0x08 */ UNK_TYPE2 unk8;
 } MinimapChest; // size = 0xA
 
+// TODO: consider merging with bgCamInfo?
 typedef struct {
-    /* 0x0 */ s16 setting;
-    /* 0x2 */ s16 numData;
-    /* 0x4 */ Vec3s* data;
-} CsCamData; // size = 0x8
+    /* 0x0 */ s16 setting; // camera setting described by CameraSettingType enum
+    /* 0x2 */ s16 count;
+    /* 0x4 */ Vec3s* actorCsCamFuncData; // s16 data grouped in threes
+} ActorCsCamInfo; // size = 0x8
 
-typedef CsCamData CsCameraEntry; // TODO: Remove once ZAPD updates its structs
+typedef ActorCsCamInfo CsCameraEntry; // TODO: Remove once ZAPD updates its structs
 
 typedef union {
     /* Command: N/A  */ SCmdBase              base;
     /* Command: 0x00 */ SCmdSpawnList         spawnList;
     /* Command: 0x01 */ SCmdActorList         actorList;
-    /* Command: 0x02 */ SCmdCsCameraList      csCameraList;
+    /* Command: 0x02 */ SCmdCsCameraList      actorCsCamList;
     /* Command: 0x03 */ SCmdColHeader         colHeader;
     /* Command: 0x04 */ SCmdRoomList          roomList;
     /* Command: 0x05 */ SCmdWindSettings      windSettings;

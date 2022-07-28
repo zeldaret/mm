@@ -5,8 +5,8 @@
 
 struct EnDnq;
 
-typedef void (*EnDnqActionFunc)(struct EnDnq*, GlobalContext*);
-typedef void (*EnDnqFunc)(GlobalContext*, struct EnDnq*);
+typedef void (*EnDnqActionFunc)(struct EnDnq*, PlayState*);
+typedef void (*EnDnqFunc)(PlayState*, struct EnDnq*);
 
 typedef struct EnDnq {
     /* 0x000 */ Actor actor;
