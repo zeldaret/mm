@@ -930,7 +930,7 @@ s32 func_800B648C(PlayState* play, s32 arg1, s32 arg2, f32 arg3, Vec3f* arg4) {
     return true;
 }
 
-f32 func_800B64FC(PlayState* play, f32 arg1, Vec3f* arg2, u32* arg3) {
+f32 func_800B64FC(PlayState* play, f32 arg1, Vec3f* arg2, s32* arg3) {
     f32 temp_f8;
 
     if ((play->actorCtx.unk1F5 == 0) || (arg1 == 0.0f)) {

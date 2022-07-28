@@ -1394,7 +1394,7 @@ void Boss07_Wrath_Grab(Boss07* this, PlayState* play) {
 }
 
 void Boss07_Wrath_GrabPlayer(Boss07* this, PlayState* play) {
-    u32 sp2C;
+    s32 sp2C;
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
@@ -1420,7 +1420,7 @@ void Boss07_Wrath_ThrowPlayer(Boss07* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 phi_f0;
     f32 phi_f2;
-    u32 sp30;
+    s32 sp30;
 
     SkelAnime_Update(&this->skelAnime);
     this->unk_15A = 20;
@@ -1655,7 +1655,7 @@ void Boss07_Wrath_Damaged(Boss07* this, PlayState* play) {
 
 void Boss07_Wrath_WhipCollisionCheck(Vec3f* arg0, f32 arg1, Boss07* this, PlayState* play) {
     s32 i;
-    u32 sp98 = -1;
+    s32 sp98 = -1;
     Player* player = GET_PLAYER(play);
     f32 dx;
     f32 dy;
@@ -2865,7 +2865,7 @@ void Boss07_Incarnation_SetupRun(Boss07* this, PlayState* play) {
 void Boss07_Incarnation_Run(Boss07* this, PlayState* play) {
     f32 sp34;
     f32 sp30;
-    u32 sp2C;
+    s32 sp2C;
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST2_WALK_OLD - SFX_FLAG);
     this->unk_AB40++;
@@ -5384,7 +5384,7 @@ void Boss07_Top_Collide(Boss07* this, PlayState* play) {
 }
 
 void Boss07_Top_CollisionCheck(Boss07* this, PlayState* play) {
-    u32 sp3C;
+    s32 sp3C;
     s32 sp38 = 0;
     Player* player = GET_PLAYER(play);
     s32 pad[3];
@@ -5497,7 +5497,7 @@ void Boss07_Static_Update(Actor* thisx, PlayState* play2) {
 
     if (sHeartbeatTimer != 0) {
         sHeartbeatTimer--;
-    dummy_label:;
+    dummy_label:; //!@fake
         play_sound(NA_SE_EN_LAST2_HEARTBEAT_OLD - SFX_FLAG);
     }
     if (this->unk_1808 != 0) {
