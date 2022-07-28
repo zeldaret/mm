@@ -463,17 +463,14 @@ wordReplace = {
     "Play_CameraSetFov": "Play_SetCameraFov",
     "Play_CameraSetRoll": "Play_SetCameraRoll",
     "func_801699D4": "Play_CopyCamera",
-<<<<<<< HEAD
     "func_80169AC0": "Play_ChangeCameraSetting",
     "Play_CameraChangeSetting": "Play_ChangeCameraSetting",
-    "func_80169C64": "Play_GetCsCamDataSetting",
-    "func_80169C84": "Play_GetCsCamDataVec3s",
-=======
-    "func_80169AC0": "Play_CameraChangeSetting",
-    "func_80169BC4": "Play_CameraGetUID",
+    "func_80169BC4": "Play_GetCameraUID",
+    "Play_CameraGetUID": "Play_GetCameraUID",
     "func_80169C64": "Play_GetActorCsCamSetting",
+    "Play_GetCsCamDataSetting": "Play_GetActorCsCamSetting",
     "func_80169C84": "Play_GetActorCsCamFuncData",
->>>>>>> master
+    "Play_GetCsCamDataVec3s": "Play_GetActorCsCamFuncData",
     "convert_scene_number_among_shared_scenes": "Play_GetOriginalSceneNumber",
     "func_80169D40": "Play_SaveCycleSceneFlags",
     "func_80169DCC": "Play_SetRespawnData",
