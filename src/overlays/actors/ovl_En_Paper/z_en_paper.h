@@ -21,7 +21,7 @@ typedef struct EnPaper {
     /* 0x144 */ EnPaperActionFunc actionFunc;
     /* 0x148 */ EnPaperStruct unk_148[60];
     /* 0xD78 */ Vec3f unk_D78;
-    /* 0xD84 */ s16 unk_D84;
+    /* 0xD84 */ s16 timer;
 } EnPaper; // size = 0xD88
 
 extern const ActorInit En_Paper_InitVars;

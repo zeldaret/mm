@@ -41,7 +41,7 @@ void EnPaper_Init(Actor* thisx, PlayState* play) {
     EnPaper* this = THIS;
 
     Actor_SetScale(&this->actor, 0.01f);
-    this->unk_D84 = 70;
+    this->timer = 70;
     this->unk_D78 = D_80C1FC60;
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     func_80C1F46C(this);
@@ -153,10 +153,10 @@ void EnPaper_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     func_80C1F87C(this);
-    if (this->unk_D84 == 0) {
+    if (this->timer == 0) {
         Actor_MarkForDeath(&this->actor);
     } else {
-        this->unk_D84--;
+        this->timer--;
     }
 }
 
