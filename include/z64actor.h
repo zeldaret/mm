@@ -407,7 +407,7 @@ typedef enum {
     /* 32 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE
 } ActorDrawDamageEffectType;
 
-typedef enum {
+typedef enum ActorID {
     /* 0x000 */ ACTOR_PLAYER,
     /* 0x001 */ ACTOR_EN_TEST,
     /* 0x002 */ ACTOR_EN_GIRLA,

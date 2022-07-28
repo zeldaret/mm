@@ -849,7 +849,7 @@ typedef struct Player {
     /* 0xB7C */ f32 unk_B7C;
     /* 0xB80 */ f32 unk_B80;
     /* 0xB84 */ s16 unk_B84;
-    /* 0xB86 */ s16 unk_B86;
+    /* 0xB86 */ s16 unk_B86[1]; // unknown length
     /* 0xB88 */ s16 unk_B88;
     /* 0xB8A */ s16 unk_B8A;
     /* 0xB8C */ s16 unk_B8C;
