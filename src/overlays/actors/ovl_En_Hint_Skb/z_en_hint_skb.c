@@ -587,7 +587,7 @@ void func_80C20D64(EnHintSkb* this, PlayState* play) {
             if (Player_GetMask(play) == PLAYER_MASK_CAPTAIN) {
                 this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
                 this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
-                this->actor.hintId = TATL_HINT_ID_DEFAULT;
+                this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
                 if (this->actionFunc == func_80C1FE80) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 12);

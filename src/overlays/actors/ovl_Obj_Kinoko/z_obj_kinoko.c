@@ -41,7 +41,7 @@ void ObjKinoko_Update(Actor* thisx, PlayState* play) {
 
     if (player->currentMask != PLAYER_MASK_SCENTS) {
         thisx->draw = NULL;
-        thisx->hintId = TATL_HINT_ID_DEFAULT;
+        thisx->hintId = TATL_HINT_ID_NONE;
         thisx->flags &= ~ACTOR_FLAG_1;
     } else {
         thisx->draw = ObjKinoko_Draw;

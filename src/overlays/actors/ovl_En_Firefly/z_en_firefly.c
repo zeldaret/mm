@@ -106,7 +106,7 @@ static DamageTable sDamageTable = {
     /* Deku spin      */ DMG_ENTRY(1, KEESE_DMGEFF_NONE),
     /* Deku bubble    */ DMG_ENTRY(1, KEESE_DMGEFF_NONE),
     /* Deku launch    */ DMG_ENTRY(2, KEESE_DMGEFF_NONE),
-    /* UNK_DMG_TATL_HINT_ID_KEESE   */ DMG_ENTRY(0, KEESE_DMGEFF_STUN),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, KEESE_DMGEFF_STUN),
     /* Zora barrier   */ DMG_ENTRY(0, KEESE_DMGEFF_ELECTRIC),
     /* Normal shield  */ DMG_ENTRY(0, KEESE_DMGEFF_NONE),
     /* Light ray      */ DMG_ENTRY(0, KEESE_DMGEFF_NONE),

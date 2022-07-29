@@ -76,7 +76,7 @@ static CollisionCheckInfoInit D_80A5844C = { 1, 30, 30, 50 };
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A58464[] = {
-    ICHAIN_S8(hintId, 97, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_REAL_BOMBCHU, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 15, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 5000, ICHAIN_STOP),
 };
