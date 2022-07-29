@@ -24,12 +24,12 @@ typedef struct DmChar09 {
     /* 0x204 */ f32 unk204;
     /* 0x208 */ f32 unk208;
     /* 0x20C */ f32 unk20C;
-    /* 0x210 */ f32 unk210;
+    /* 0x210 */ f32 speed;
     /* 0x214 */ s32 unk214;
     /* 0x218 */ s32 unk218;
     /* 0x21C */ s32 unk21C;
     /* 0x220 */ s32 unk220;
-    /* 0x224 */ unkStruct* unk224;
+    /* 0x224 */ Vec3s* unk224;
     /* 0x228 */ s16 unk228;
     /* 0x22A */ s16 unk22A;
     /* 0x22C */ char pad22C[2];
