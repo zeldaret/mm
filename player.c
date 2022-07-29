@@ -52,15 +52,31 @@ struct _struct_D_8085D848_0x54 {
 ? func_8019FD90(?, ?);                              /* extern */
 ? func_801A01C4();                                  /* extern */
 ? func_801A3CF4(s8);                                /* extern */
-void func_8085A364(PlayState* arg0, Player* arg1, void* arg2); /* static */
-void func_8085A40C(PlayState* arg0, Player* arg1, s32 arg2); /* static */
-void func_8085A4A4(PlayState* arg0, Player* arg1, ? arg2); /* static */
-void func_8085A530(PlayState* arg0, s32 arg1, ? arg2); /* static */
-void func_8085A5DC(PlayState* arg0, void* arg1, ? arg2); /* static */
-void func_8085A66C(PlayState* arg0, Player* arg1, ? arg2); /* static */
-void func_8085A6C0(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2); /* static */
-void func_8085A710(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2); /* static */
-void func_8085A768(PlayState* arg0, Player* arg1, ? arg2); /* static */
+s16 func_80832660(s16* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5); /* static */
+void func_80832888(Player* arg0, PlayState* arg1);  /* static */
+s32 func_80832CAC(PlayState* arg0, PlayState* arg1, f32* arg2, s16* arg3, f32 arg4, f32); /* static */
+void func_80833A64(Player* arg0);                   /* static */
+void func_808354A4(PlayState* arg0, s32 arg1, s32 arg2, u32); /* static */
+s32 func_8083562C(PlayState* arg0, Actor* arg1, CollisionPoly* arg2, s32 arg3); /* static */
+s32 func_808370D4(PlayState* arg0, Player* arg1);   /* static */
+void func_80837134(PlayState* arg0, Player* arg1, s16*); /* static */
+s32 func_80837DEC(Actor* arg0, PlayState* arg1, u8); /* static */
+void func_8083827C(Player* arg0, PlayState* arg1);  /* static */
+void func_8083C8E8(Player* arg0, PlayState* arg1);  /* static */
+? func_8083CF68(PlayState* arg0, Player* arg1);     /* static */
+void func_8083D168(PlayState* arg0, Player* arg1, u8* arg2); /* static */
+s32 func_8083D860(Player* arg0, PlayState* arg1, PlayState*); /* static */
+? func_8083DD1C(PlayState* arg0, Actor* arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5); /* static */
+void func_8083EBD0(PlayState* arg0, Player* arg1);  /* static */
+void func_8083EE60(Player* arg0, PlayState* arg1);  /* static */
+void func_808426F0(PlayState* arg0, Player* arg1);  /* static */
+void func_80844784(PlayState* arg0, Player* arg1);  /* static */
+s32 func_80847A94(PlayState* arg0, Player* arg1, s32 arg2, f32* arg3); /* static */
+s32 func_80847BF0(Player* arg0, PlayState* arg1);   /* static */
+void func_808481CC(PlayState* arg0, Player* arg1, f32 arg2); /* static */
+void func_80854CD0(f32 arg0, u8* arg2, u8* arg3, u8* arg4, u8* arg5, void* arg6, void* arg7, void* arg8, void* arg9, void* argA, ?* argB, ?* argC, ?* argC); /* static */
+void func_80854EFC(void* arg0, f32 arg1, s16* arg2, struct _struct_D_8085D848_0x54*); /* static */
+void func_808550D0(Player* arg1, f32 arg2, void* arg3, s32 arg4, s32); /* static */
 extern ? D_0400CF48;
 extern ? D_0400CF58;
 extern ? D_0400D028;
@@ -118,7 +134,41 @@ static s32 D_8085C84C[0x1E] = {
     0x0400D0B0,
     0x0400D0B0,
 };
-static ? D_8085C928;                                /* unable to generate initializer */
+static struct_8082E224_arg1 D_8085C8C4 = { 0x680E, -0x2008 };
+static struct_8082E224_arg1 D_8085C8C8 = { 0x680F, -0x2012 };
+static struct_8082E224_arg1 D_8085C8CC = { 0x6809, -0x200D };
+static struct_8082E224_arg1 D_8085C8D0 = { 0x6809, -0x200A };
+static struct_8082E224_arg1 D_8085C8D4[5] = {
+    { 0x871, 0x82C },
+    { 0x871, 0x830 },
+    { 0x871, 0x834 },
+    { 0x871, 0x838 },
+    { 0x871, -0x83C },
+};
+static struct_8082E224_arg1 D_8085C8E8[6] = {
+    { 0, 0x4019 },
+    { 0, 0x401E },
+    { 0, 0x402C },
+    { 0, 0x4030 },
+    { 0, 0x4034 },
+    { 0, 0xBFC8 },
+};
+static struct_8082E224_arg1 D_8085C900[3] = { { 0x181F, 0x810 }, { 0x181F, 0x814 }, { 0x181F, -0x846 } };
+static struct_8082E224_arg1 D_8085C90C[4] = {
+    { 0x1812, 0x80A },
+    { 0x6814, 0x200A },
+    { 0x1801, 0x816 },
+    { 0x6800, -0x2016 },
+};
+static struct_8082E224_arg1 D_8085C91C[2] = { { 0x1801, 0x827 }, { 0x6800, -0x2027 } };
+static struct_8082E224_arg1 D_8085C924 = { 0x6811, -0x2014 };
+static struct_8082E224_arg1 D_8085C928[5] = {
+    { 0x68E0, 0x804 },
+    { 0x68E0, 0x80C },
+    { 0x68E0, 0x81E },
+    { 0x68E0, 0x83D },
+    { 0x68E0, -0x844 },
+};
 static struct _struct_D_8085CC88_0x8 D_8085CC88[0xF] = {
     { (LinkAnimationHeader* )0x0400DC70, 0xC },
     { (LinkAnimationHeader* )0x0400DD90, 6 },
@@ -332,8 +382,7 @@ static Vec3f D_8085D960 = { -30.0f, 50.0f, 0.0f };
 static Vec3f D_8085D96C = { 30.0f, 50.0f, 0.0f };
 static Vec3f D_8085D978 = { -30.0f, 60.0f, 0.0f };
 static Vec3f D_8085D984 = { 30.0f, 60.0f, 0.0f };
-static struct _struct_D_8085DA94_0x8 D_8085DA94[0x8C]; /* unable to generate initializer */
-static struct _struct_D_8085DEF4_0x8 D_8085DEF4[0x8C]; /* unable to generate initializer */
+static ? ovl_player_actor_Reloc;                    /* unable to generate initializer; const */
 PlayerAgeProperties D_8085BA38[5] = {
     {
         84.0f,
@@ -1134,6 +1183,20 @@ struct_8085C3F4 D_8085C3F4[0xB9] = {
     { 0x31, 0xA0, 0x2E, 0xB8, 2, 0x4D },
     { 0x31, 0xA0, 0x2E, 0xB9, 2, 0x4D },
 };
+struct_8082E224_arg1* D_8085C93C[0xC] = {
+    &D_8085C8C4,
+    &D_8085C8C8,
+    &D_8085C8CC,
+    &D_8085C8D0,
+    D_8085C8D4,
+    D_8085C8E8,
+    D_8085C900,
+    D_8085C90C,
+    D_8085C91C,
+    &D_8085C924,
+    D_8085C928,
+    NULL,
+};
 u8 D_8085C96C[0x20] = {
     0,
     0,
@@ -1712,37 +1775,51 @@ Vec3f D_8085D940;                                   /* unable to generate initia
 f32 D_8085D948 = 0.0f;
 Vec3f D_8085D94C;                                   /* unable to generate initializer */
 f32 D_8085D954 = 0.0f;
-void (*D_8085D990[0x14])(PlayState*, Player*, LinkAnimationHeader*) = {
+void (*D_8085D990[0x14])(PlayState*, Player*, void*) = {
     NULL,
-    func_80858DB4,
-    func_80858DDC,
-    func_80858E40,
-    func_80858E60,
-    func_80858E80,
-    func_80858EA0,
-    func_80858EFC,
-    func_80858F1C,
-    func_80858F3C,
-    func_80858F5C,
-    func_80858FBC,
-    func_80859028,
-    func_808591BC,
-    func_80858DFC,
-    func_80858F7C,
-    func_80858F9C,
-    func_80859168,
-    func_80859210,
-    func_80858EC0,
+    ((void (*)(PlayState*, Player*, void*)) func_80858DB4),
+    ((void (*)(PlayState*, Player*, void*)) func_80858DDC),
+    ((void (*)(PlayState*, Player*, void*)) func_80858E40),
+    ((void (*)(PlayState*, Player*, void*)) func_80858E60),
+    ((void (*)(PlayState*, Player*, void*)) func_80858E80),
+    ((void (*)(PlayState*, Player*, void*)) func_80858EA0),
+    ((void (*)(PlayState*, Player*, void*)) func_80858EFC),
+    ((void (*)(PlayState*, Player*, void*)) func_80858F1C),
+    ((void (*)(PlayState*, Player*, void*)) func_80858F3C),
+    ((void (*)(PlayState*, Player*, void*)) func_80858F5C),
+    ((void (*)(PlayState*, Player*, void*)) func_80858FBC),
+    ((void (*)(PlayState*, Player*, void*)) func_80859028),
+    ((void (*)(PlayState*, Player*, void*)) func_808591BC),
+    ((void (*)(PlayState*, Player*, void*)) func_80858DFC),
+    ((void (*)(PlayState*, Player*, void*)) func_80858F7C),
+    ((void (*)(PlayState*, Player*, void*)) func_80858F9C),
+    ((void (*)(PlayState*, Player*, void*)) func_80859168),
+    ((void (*)(PlayState*, Player*, void*)) func_80859210),
+    ((void (*)(PlayState*, Player*, void*)) func_80858EC0),
 };
+struct_8082E224_arg1 D_8085D9E0 = { 0, 0x2822 };
+struct_8082E224_arg1 D_8085D9F0 = { 0x681E, 0x2007 };
+struct_8082E224_arg1 D_8085D9FC = { 0x820, -0x180E };
+struct_8082E224_arg1 D_8085DA00 = { 0x9BA, 0x806 };
 struct_8082E224_arg1 D_8085DA08 = { 0x820, -0x181A };
+struct_8082E224_arg1 D_8085DA0C = { 0, 0x4010 };
 struct_8082E224_arg1 D_8085DA14 = { 0, 0x3837 };
+struct_8082E224_arg1 D_8085DA1C = { 0x6848, 0x804 };
+struct_8082E224_arg1 D_8085DA28 = { 0x820, -0x181C };
+struct_8082E224_arg1 D_8085DA2C = { 0x6848, 0x801 };
 struct_8082E224_arg1 D_8085DA38 = { 0x850, 0x1001 };
 struct_8082E224_arg1 D_8085DA48 = { 0, 0x3001 };
+struct_8082E224_arg1 D_8085DA50 = { 0, 0x300A };
+struct_8082E224_arg1 D_8085DA70 = { 0, 0x302A };
+struct_8082E224_arg1 D_8085DA78 = { 0x850, -0x1002 };
 struct_8082E224_arg1 D_8085DA7C = { 0x6806, -0x2005 };
+struct_8082E224_arg1 D_8085DA80 = { 0x6808, -0x2001 };
 struct_8082E224_arg1 D_8085DA84 = { 0x6803, -0x200D };
 struct_8082E224_arg1 D_8085DA88 = { 0, -0x281A };
 struct_8082E224_arg1 D_8085DA8C = { 0x6816, -0x2004 };
 struct_8082E224_arg1 D_8085DA90 = { 0x832, -0x812 };
+struct_8085DA94 D_8085DA94[0x8C];                   /* unable to generate initializer */
+struct_8085DA94 D_8085DEF4[0x8C];                   /* unable to generate initializer */
 LinkAnimationHeader* D_8085E354[5] = {
     (LinkAnimationHeader* )0x0400E4B8,
     (LinkAnimationHeader* )0x0400E4B8,
@@ -2327,7 +2404,7 @@ void func_8082EEA4(Player* this, s32 arg1) {
 
     temp_v0 = D_8085C96C[arg1];
     if (temp_v0 != 0) {
-        func_8082E224(this, *(&D_8085C928 + 0x10 + (temp_v0 * 4)));
+        func_8082E224(this, (struct_8082E224_arg1* ) (D_8085C928 + 0x10)[temp_v0]);
     }
 }
 
@@ -4405,10 +4482,10 @@ void func_808339B4(Player* this, s32 invincibilityTimer) {
     this->unk_B5F = 0;
 }
 
-s32 func_808339D4(PlayState* play, Player* this, s32 arg2) {
+s32 func_808339D4(PlayState* play, Player* this, s32 damage) {
     s32 var_a2;
 
-    var_a2 = arg2;
+    var_a2 = damage;
     if ((this->invincibilityTimer != 0) || ((this->stateFlags3 << 9) < 0) || (this->actor.id != 0)) {
         return 1;
     }
@@ -19900,9 +19977,9 @@ void func_808591BC(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     }
 }
 
-void func_80859210(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+void func_80859210(PlayState* play, Player* this, struct_8082E224_arg1* arg2) {
     LinkAnimation_Update(play, &this->skelAnime);
-    func_8082E224(this, (struct_8082E224_arg1* ) anim);
+    func_8082E224(this, arg2);
 }
 
 void func_80859248(Player* this) {
@@ -20315,109 +20392,109 @@ void func_8085A330(PlayState* play, Player* this, s32 arg2) {
     func_8082DBC0(play, this, D_8085D17C[this->transformation]);
 }
 
-void func_8085A364(PlayState* arg0, Player* arg1, void* arg2) {
+void func_8085A364(PlayState* play, Player* this, void* arg2) {
     void* temp_v0;
 
-    func_80859BA8(arg0, arg1, arg2);
-    if (LinkAnimation_Update(arg0, &arg1->skelAnime) != 0) {
-        func_8082EB18(arg0, arg1, &D_0400D100);
+    func_80859BA8(play, this, arg2);
+    if (LinkAnimation_Update(play, &this->skelAnime) != 0) {
+        func_8082EB18(play, this, &D_0400D100);
     }
-    temp_v0 = arg1->skelAnime.animation;
+    temp_v0 = this->skelAnime.animation;
     if (&D_0400D0B8 == temp_v0) {
-        func_8082E224(arg1, &D_8085DA48);
+        func_8082E224(this, &D_8085DA48);
         return;
     }
     if (&D_0400D028 == temp_v0) {
-        func_800B8F98(&arg1->actor, 0x1C0U);
+        func_800B8F98(&this->actor, 0x1C0U);
         return;
     }
-    func_80858FE8(arg1);
+    func_80858FE8(this);
 }
 
-void func_8085A40C(PlayState* arg0, Player* arg1, s32 arg2) {
+void func_8085A40C(PlayState* play, Player* this, void* arg2) {
     void* temp_v0;
 
-    if (LinkAnimation_Update(arg0, arg1 + 0x240) != 0) {
-        func_80859CA0(arg0, arg1, arg2);
+    if (LinkAnimation_Update(play, &this->skelAnime) != 0) {
+        func_80859CA0(play, this, (s32) arg2);
         return;
     }
-    temp_v0 = arg1->skelAnime.animation;
+    temp_v0 = this->skelAnime.animation;
     if (&D_0400CF58 == temp_v0) {
-        func_8082E224(arg1, &D_8085DA88);
+        func_8082E224(this, &D_8085DA88);
         return;
     }
     if (&D_0400D090 == temp_v0) {
-        func_8082E224(arg1, &D_8085DA8C);
+        func_8082E224(this, &D_8085DA8C);
     }
 }
 
-void func_8085A4A4(PlayState* arg0, Player* arg1, ? arg2) {
-    if ((LinkAnimation_Update(arg0, arg1 + 0x240) != 0) && (arg1->unk_AE8 == 0) && (arg1->actor.bgCheckFlags & 1)) {
-        func_8082DB18(arg0, arg1, &D_0400DAD8);
-        arg1->unk_AE8 = 1;
+void func_8085A4A4(PlayState* play, Player* this, void* arg2) {
+    if ((LinkAnimation_Update(play, &this->skelAnime) != 0) && (this->unk_AE8 == 0) && (this->actor.bgCheckFlags & 1)) {
+        func_8082DB18(play, this, &D_0400DAD8);
+        this->unk_AE8 = 1;
     }
-    if (arg1->unk_AE8 != 0) {
-        func_80832F24(arg1);
+    if (this->unk_AE8 != 0) {
+        func_80832F24(this);
     }
 }
 
-void func_8085A530(PlayState* arg0, s32 arg1, ? arg2) {
+void func_8085A530(PlayState* play, Player* this, void* arg2) {
     f32 sp28;
     f32 var_fv0;
 
-    if (arg0->sceneNum == 0x70) {
+    if (play->sceneNum == 0x70) {
         var_fv0 = (f32) gGameInfo->data[0x398];
     } else {
         var_fv0 = 0.0f;
     }
     sp28 = var_fv0;
-    LinkAnimation_Change(arg0, arg1 + 0x240, &D_0400DCA8, 1.0f, var_fv0, (f32) Animation_GetLastFrame(&D_0400DCA8), (u8) 2, -8.0f);
+    LinkAnimation_Change(play, &this->skelAnime, &D_0400DCA8, 1.0f, var_fv0, (f32) Animation_GetLastFrame(&D_0400DCA8), (u8) 2, -8.0f);
 }
 
-void func_8085A5DC(PlayState* arg0, void* arg1, ? arg2) {
+void func_8085A5DC(PlayState* play, Player* this, void* arg2) {
     SkelAnime* sp28;
     SkelAnime* temp_a1;
     s16 temp_v0;
 
-    temp_a1 = arg1 + 0x240;
+    temp_a1 = &this->skelAnime;
     sp28 = temp_a1;
-    if (LinkAnimation_Update(arg0, temp_a1) != 0) {
-        temp_v0 = arg1->unk_AE8;
-        arg1->unk_AE8 = (s16) (temp_v0 + 1);
+    if (LinkAnimation_Update(play, temp_a1) != 0) {
+        temp_v0 = this->unk_AE8;
+        this->unk_AE8 = temp_v0 + 1;
         if (((temp_v0 < 0x15) ^ 1) != 0) {
-            LinkAnimation_Change(arg0, temp_a1, &D_0400E410, 1.0f, 0.0f, 0.0f, (u8) 0, -16.0f);
+            LinkAnimation_Change(play, temp_a1, &D_0400E410, 1.0f, 0.0f, 0.0f, (u8) 0, -16.0f);
         }
     }
 }
 
-void func_8085A66C(PlayState* arg0, Player* arg1, ? arg2) {
-    if (func_801242B4(arg1) != 0) {
-        func_8085929C(arg0, arg1, 0);
+void func_8085A66C(PlayState* play, Player* this, void* arg2) {
+    if (func_801242B4(this) != 0) {
+        func_8085929C(play, this, 0);
         return;
     }
-    func_80858E40(arg0, arg1, &D_0400D638);
+    func_80858E40(play, this, &D_0400D638);
 }
 
-void func_8085A6C0(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2) {
-    if (func_801242B4(arg1) != 0) {
-        func_80859300(arg0, arg1, 0);
+void func_8085A6C0(PlayState* play, Player* this, void* arg2) {
+    if (func_801242B4(this) != 0) {
+        func_80859300(play, this, 0);
         return;
     }
-    func_80858FBC(arg0, arg1, arg2);
+    func_80858FBC(play, this, (LinkAnimationHeader* ) arg2);
 }
 
-void func_8085A710(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2) {
-    func_80858FBC(arg0, arg1, arg2);
-    if (func_8083D23C(arg1, arg0) != 0) {
-        arg0->csCtx.state = 3;
+void func_8085A710(PlayState* play, Player* this, void* arg2) {
+    func_80858FBC(play, this, (LinkAnimationHeader* ) arg2);
+    if (func_8083D23C(this, play) != 0) {
+        play->csCtx.state = 3;
         ActorCutscene_Stop(ActorCutscene_GetCurrentIndex());
     }
 }
 
-void func_8085A768(PlayState* arg0, Player* arg1, ? arg2) {
-    func_80838830(arg1, 0x215);
-    func_80858E40(arg0, arg1, &D_0400DCA8);
-    arg1->stateFlags2 &= 0xFEFFFFFF;
+void func_8085A768(PlayState* play, Player* this, void* arg2) {
+    func_80838830(this, 0x215);
+    func_80858E40(play, this, &D_0400DCA8);
+    this->stateFlags2 &= 0xFEFFFFFF;
 }
 
 void func_8085A7C0(PlayState* play, Player* this, s32 arg2) {
@@ -20447,7 +20524,7 @@ void func_8085A7C0(PlayState* play, Player* this, s32 arg2) {
                 this->unk_AE8 = 1;
                 return;
             }
-            Actor_PickUp(&this->actor, play, 0xAB, 9999.9f, 9999.9f);
+            Actor_PickUp(&this->actor, play, GI_PENDANT_OF_MEMORIES, 9999.9f, 9999.9f);
         }
     } else if (LinkAnimation_OnFrame(temp_a2, 4.0f) != 0) {
         gSaveContext.save.weekEventReg[0x32] |= 0x80;
@@ -20537,7 +20614,7 @@ void func_8085AB58(Player* this, CsCmdActorAction* playerAction) {
     this->currentYaw = temp_v0;
 }
 
-void func_8085ABA8(Player* arg0, CsCmdActorAction* arg1) {
+void func_8085ABA8(Player* this, CsCmdActorAction* playerAction) {
     f32 temp_fa0;
     f32 temp_fa1;
     f32 temp_fv0;
@@ -20545,12 +20622,12 @@ void func_8085ABA8(Player* arg0, CsCmdActorAction* arg1) {
     s16 temp_v0;
     s16 var_v1;
 
-    temp_fv1 = (f32) (arg1->startPos.x - (s32) arg0->actor.world.pos.x);
-    temp_fa0 = (f32) (arg1->startPos.y - (s32) arg0->actor.world.pos.y);
-    temp_v0 = arg1->rot.y - arg0->actor.shape.rot.y;
-    temp_fa1 = (f32) (arg1->startPos.z - (s32) arg0->actor.world.pos.z);
+    temp_fv1 = (f32) (playerAction->startPos.x - (s32) this->actor.world.pos.x);
+    temp_fa0 = (f32) (playerAction->startPos.y - (s32) this->actor.world.pos.y);
+    temp_v0 = playerAction->rot.y - this->actor.shape.rot.y;
+    temp_fa1 = (f32) (playerAction->startPos.z - (s32) this->actor.world.pos.z);
     temp_fv0 = sqrtf((temp_fv1 * temp_fv1) + (temp_fa0 * temp_fa0) + (temp_fa1 * temp_fa1));
-    if (arg0->linearVelocity == 0.0f) {
+    if (this->linearVelocity == 0.0f) {
         if (!(temp_fv0 > 50.0f)) {
             var_v1 = temp_v0;
             if (temp_v0 < 0) {
@@ -20561,33 +20638,33 @@ void func_8085ABA8(Player* arg0, CsCmdActorAction* arg1) {
             }
         } else {
 block_5:
-            func_8085AB58(arg0, arg1);
+            func_8085AB58(this, playerAction);
         }
     }
-    arg0->skelAnime.moveFlags = 0;
-    func_8082E784(arg0);
+    this->skelAnime.moveFlags = 0;
+    func_8082E784(this);
 }
 
-void func_8085AC9C(PlayState* arg0, Player* arg1, CsCmdActorAction* arg3) {
+void func_8085AC9C(PlayState* play, Player* this, CsCmdActorAction* actorAction, struct_8085DA94* arg3) {
     Vec3s* temp_v0_2;
     s8 temp_v0;
 
-    temp_v0 = arg3->unk_0;
+    temp_v0 = arg3->type;
     if (temp_v0 > 0) {
-        D_8085D990[temp_v0](arg0, arg1, arg3->unk_4);
+        D_8085D990[temp_v0](play, this, arg3->ptr);
     } else if (temp_v0 < 0) {
-        ((? (*)()) arg3->unk_4)();
+        ((? (*)()) arg3->ptr)();
     }
-    if ((D_80862B6C & 4) && !(arg1->skelAnime.moveFlags & 4)) {
-        temp_v0_2 = arg1->skelAnime.morphTable;
-        temp_v0_2->y = (s16) (s32) ((f32) temp_v0_2->y / arg1->ageProperties->unk_08);
+    if ((D_80862B6C & 4) && !(this->skelAnime.moveFlags & 4)) {
+        temp_v0_2 = this->skelAnime.morphTable;
+        temp_v0_2->y = (s16) (s32) ((f32) temp_v0_2->y / this->ageProperties->unk_08);
         D_80862B6C = 0;
     }
 }
 
-void func_8085AD5C(PlayState* arg0, Player* arg1, s32 arg2) {
+void func_8085AD5C(PlayState* play, Player* this, s32 arg2) {
     if ((arg2 != 1) && (arg2 != 7) && (arg2 != 0x14) && (arg2 != 6)) {
-        func_8082DCA0(arg0, arg1);
+        func_8082DCA0(play, this);
     }
 }
 
@@ -20687,7 +20764,7 @@ block_12:
         } else {
             var_v1_3 = temp_v0_3;
         }
-        func_8085AC9C(play, this, sp3C, (struct _struct_D_8085DA94_0x8* ) &D_8085DEF4[var_v1_3]);
+        func_8085AC9C(play, this, sp3C, &D_8085DEF4[var_v1_3]);
         temp_v0_4 = (u16) sp3C->rot.x;
         if (temp_v0_4 != 0) {
             Math_SmoothStepToS(&this->actor.focus.rot.x, (s16) temp_v0_4, 4, 0x2710, (s16) 0);
@@ -20707,7 +20784,7 @@ void func_8085B08C(Player* arg0, PlayState* arg1) {
         func_8085AD5C(arg1, arg0, (s32) temp_a2);
         func_8085AC9C(arg1, arg0, NULL, &D_8085DA94[arg0->csMode]);
     }
-    func_8085AC9C(arg1, arg0, NULL, (struct _struct_D_8085DA94_0x8* ) &D_8085DEF4[arg0->csMode]);
+    func_8085AC9C(arg1, arg0, NULL, &D_8085DEF4[arg0->csMode]);
 }
 
 s32 func_8085B134(PlayState* play) {
@@ -20738,22 +20815,22 @@ s32 func_8085B1F0(PlayState* play, Player* player) {
     return 0;
 }
 
-s32 func_8085B28C(PlayState* play, Player* player, s32 mode) {
+s32 func_8085B28C(PlayState* play, Player* this, s32 mode) {
     Player* var_s0;
     s16 temp_v0;
 
     var_s0 = play->actorCtx.player;
-    if (player != NULL) {
+    if (this != NULL) {
         if (mode == 0) {
-            return (s32) player->unk_748 == (s32) func_8084E034;
+            return (s32) this->unk_748 == (s32) func_8084E034;
         }
-        temp_v0 = player->actor.id;
+        temp_v0 = this->actor.id;
         if ((temp_v0 == 0x159) && (mode < 0)) {
-            func_8083B0E4(play, player, player->actor.home.rot.y);
+            func_8083B0E4(play, this, this->actor.home.rot.y);
             goto block_11;
         }
         if (temp_v0 == 0x159) {
-            var_s0 = player;
+            var_s0 = this;
         }
         goto block_8;
     }
@@ -20761,7 +20838,7 @@ block_8:
     if ((var_s0->actor.id == 0x159) || (Player_InBlockingCsMode(play, var_s0) == 0)) {
         func_8082DE50(play, var_s0);
         func_80831494(play, var_s0, func_8085B08C, 0);
-        var_s0->unk_398 = &player->actor;
+        var_s0->unk_398 = &this->actor;
         var_s0->csMode = (u8) mode;
         func_8082DAD4(var_s0);
         return 1;
