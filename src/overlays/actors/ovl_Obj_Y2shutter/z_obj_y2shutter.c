@@ -47,8 +47,8 @@ typedef enum {
 } ShutterType;
 
 ShutterInfo sShutterInfo[] = {
-    { gPirateBarredShutterDL, &gPirateBarredShutterColHeader, 120.0f, 20.0f, 3.0f, -20.0f, 3.0f, 4, 8, 160 },
-    { gPirateGratedShutterDL, &gPirateGratedShutterColHeader, 150.0f, 1.0f, 0.04f, -1.0f, 0.04f, 6, 0xC, 160 },
+    { gPirateBarredShutterDL, &gPirateBarredShutterCol, 120.0f, 20.0f, 3.0f, -20.0f, 3.0f, 4, 8, 160 },
+    { gPirateGratedShutterDL, &gPirateGratedShutterCol, 150.0f, 1.0f, 0.04f, -1.0f, 0.04f, 6, 0xC, 160 },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -111,7 +111,7 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
             s16 cutscene = this->dyna.actor.cutscene;
 
             if (this->unk_15C == 0) {
-                if ((cutscene >= 0) && (!ActorCutscene_GetCanPlayNext(cutscene))) {
+                if ((cutscene >= 0) && !ActorCutscene_GetCanPlayNext(cutscene)) {
                     ActorCutscene_SetIntentToPlay(cutscene);
                 } else if (cutscene >= 0) {
                     ActorCutscene_StartAndSetUnkLinkFields(cutscene, &this->dyna.actor);
