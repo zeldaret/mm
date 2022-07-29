@@ -1475,8 +1475,128 @@ s32 func_8082FDC4(void) {
 void func_8082FE0C(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082FE0C.s")
 
+extern s8 D_8085CD00[];
+#if 0
+s8 D_8085CD00[0x24] = {
+    8,
+    -5,
+    -3,
+    -6,
+    8,
+    0xB,
+    5,
+    0,
+    -1,
+    4,
+    5,
+    9,
+    3,
+    1,
+    0,
+    2,
+    3,
+    9,
+    6,
+    -4,
+    -2,
+    7,
+    6,
+    0xA,
+    8,
+    -5,
+    -3,
+    -6,
+    8,
+    0xB,
+    8,
+    -5,
+    -3,
+    -6,
+    8,
+    0xB,
+};
+#endif
+
+typedef struct struct_8085CC88 {
+    /* 0x0 */ LinkAnimationHeader* unk_0;
+    /* 0x4 */ u8 unk_4;
+} struct_8085CC88; // size = 0x8
+
+extern struct_8085CC88 D_8085CC88[0xF];
+#if 0
+struct_8085CC88 D_8085CC88[0xF] = {
+    { (LinkAnimationHeader* )0x0400DC70, 0xC },
+    { (LinkAnimationHeader* )0x0400DD90, 6 },
+    { (LinkAnimationHeader* )0x0400D9B8, 8 },
+    { (LinkAnimationHeader* )0x0400DDA0, 8 },
+    { (LinkAnimationHeader* )0x0400D820, 8 },
+    { (LinkAnimationHeader* )0x0400DC50, 0xA },
+    { (LinkAnimationHeader* )0x0400D9A8, 7 },
+    { (LinkAnimationHeader* )0x0400D9B0, 0xB },
+    { (LinkAnimationHeader* )0x0400DC70, 0xC },
+    { (LinkAnimationHeader* )0x0400DD88, 4 },
+    { (LinkAnimationHeader* )0x0400DD48, 4 },
+    { (LinkAnimationHeader* )0x0400DC58, 4 },
+    { (LinkAnimationHeader* )0x0400D3E0, 5 },
+    { (LinkAnimationHeader* )0x0400DC68, 0xD },
+    { (LinkAnimationHeader* )0x0400E350, 4 },
+};
+#endif
+
+s32 func_80848808(Player *this, PlayState *play);
+
 void func_808302CC(Player* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808302CC.s")
+void func_808302CC(Player* this, PlayState* play) {
+    LinkAnimationHeader* anim;
+    s32 pad[3];
+    u8 nextModelAnimType;
+    s32 var_v1;
+    s8 actionParam;
+    s32 pad3;
+    f32 startFrame;
+    f32 endFrame;
+    f32 frameSpeed;
+
+    actionParam = func_8082F524(this, this->heldItemId);
+    func_8082F43C(play, this, func_80848808);
+
+    nextModelAnimType = gPlayerModelTypes[this->nextModelGroup].modelAnimType;
+    var_v1 = D_8085CD00[(gPlayerModelTypes[this->modelGroup].modelAnimType * 6) + nextModelAnimType];
+
+    if ((actionParam == PLAYER_AP_ZORA_FINS) || (this->itemActionParam == PLAYER_AP_ZORA_FINS)) {
+        var_v1 = (actionParam == PLAYER_AP_NONE) ? -0xE : 0xE;
+    } else if ((actionParam == PLAYER_AP_BOTTLE) || (actionParam == PLAYER_AP_11) || ((actionParam== PLAYER_AP_NONE) && ((this->itemActionParam == PLAYER_AP_BOTTLE) || (this->itemActionParam == PLAYER_AP_11)))) {
+        var_v1 =  (actionParam == PLAYER_AP_NONE) ? -0xD : 0xD;
+    }
+
+    if (var_v1 < 0) {
+        this->unk_14E = -var_v1;
+    } else {
+        this->unk_14E = var_v1;
+    }
+
+    anim = D_8085CC88[this->unk_14E].unk_0;
+    if ((anim == &gameplay_keep_Linkanim_00DC50) && (this->currentShield == PLAYER_SHIELD_NONE)) {
+        anim = &gameplay_keep_Linkanim_00DC60;
+    }
+
+    endFrame = Animation_GetLastFrame(anim);
+    if (var_v1 >= 0) {
+        frameSpeed = 1.2f;
+        startFrame = 0.0f;
+    } else {
+        frameSpeed = -1.2f;
+        startFrame = endFrame;
+        endFrame = 0.0f;
+    }
+
+    if (actionParam != PLAYER_AP_NONE) {
+        frameSpeed *= 2.0f;
+    }
+
+    LinkAnimation_Change(play, &this->unk_284, anim, frameSpeed, startFrame, endFrame, 2, 0.0f);
+    this->stateFlags3 &= ~PLAYER_STATE3_40000000;
+}
 
 void func_808304BC(Player* this, PlayState* play) {
     if ((this->actor.id == ACTOR_PLAYER) && !(this->stateFlags3 & PLAYER_STATE3_40000000)) {

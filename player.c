@@ -1,9 +1,3 @@
-struct _struct_D_8085CC88_0x8 {
-    /* 0x0 */ LinkAnimationHeader* unk_0;           /* inferred */
-    /* 0x4 */ u8 unk_4;                             /* inferred */
-    /* 0x5 */ char pad_5[3];                        /* maybe part of unk_4[4]? */
-};                                                  /* size = 0x8 */
-
 struct _struct_D_8085CF88_0x10 {
     /* 0x00 */ u8 unk_0;                            /* inferred */
     /* 0x01 */ char pad_1[1];
@@ -79,26 +73,157 @@ void func_80854EFC(void* arg0, f32 arg1, s16* arg2, struct _struct_D_8085D848_0x
 void func_808550D0(Player* arg1, f32 arg2, void* arg3, s32 arg4, s32); /* static */
 extern ? D_0400CF48;
 extern ? D_0400CF58;
+extern LinkAnimationHeader D_0400CF98;
 extern ? D_0400D028;
 extern ? D_0400D030;
 extern ? D_0400D090;
+extern LinkAnimationHeader D_0400D0A8;
+extern LinkAnimationHeader D_0400D0B0;
 extern ? D_0400D0B8;
+extern LinkAnimationHeader D_0400D0C8;
+extern LinkAnimationHeader D_0400D0D0;
+extern LinkAnimationHeader D_0400D100;
 extern ? D_0400D108;
+extern LinkAnimationHeader D_0400D218;
+extern ? D_0400D220;
+extern LinkAnimationHeader D_0400D228;
 extern LinkAnimationHeader D_0400D2D0;
+extern LinkAnimationHeader D_0400D3E8;
+extern LinkAnimationHeader D_0400D3F8;
+extern LinkAnimationHeader D_0400D420;
+extern LinkAnimationHeader D_0400D488;
+extern LinkAnimationHeader D_0400D490;
+extern LinkAnimationHeader D_0400D4A8;
+extern LinkAnimationHeader D_0400D4B0;
+extern LinkAnimationHeader D_0400D4B8;
+extern LinkAnimationHeader D_0400D4C0;
+extern LinkAnimationHeader D_0400D4D8;
+extern LinkAnimationHeader D_0400D4F0;
+extern LinkAnimationHeader D_0400D4F8;
+extern LinkAnimationHeader D_0400D500;
 extern LinkAnimationHeader D_0400D520;
+extern LinkAnimationHeader D_0400D5A8;
+extern LinkAnimationHeader D_0400D5B0;
+extern LinkAnimationHeader D_0400D638;
+extern LinkAnimationHeader D_0400D660;
+extern LinkAnimationHeader D_0400D698;
 extern ? D_0400D728;
+extern LinkAnimationHeader D_0400D8B0;
+extern LinkAnimationHeader D_0400D9C8;
+extern LinkAnimationHeader D_0400D9D0;
+extern LinkAnimationHeader D_0400D9D8;
+extern LinkAnimationHeader D_0400DA60;
+extern LinkAnimationHeader D_0400DA68;
+extern LinkAnimationHeader D_0400DA70;
+extern LinkAnimationHeader D_0400DA88;
+extern LinkAnimationHeader D_0400DAA0;
+extern LinkAnimationHeader D_0400DAA8;
+extern LinkAnimationHeader D_0400DAC0;
+extern LinkAnimationHeader D_0400DAC8;
+extern LinkAnimationHeader D_0400DAD0;
+extern LinkAnimationHeader D_0400DAD8;
+extern LinkAnimationHeader D_0400DAE0;
+extern LinkAnimationHeader D_0400DAF0;
+extern LinkAnimationHeader D_0400DB10;
+extern LinkAnimationHeader D_0400DB18;
+extern LinkAnimationHeader D_0400DB30;
+extern LinkAnimationHeader D_0400DB68;
+extern LinkAnimationHeader D_0400DBB0;
+extern LinkAnimationHeader D_0400DBE8;
+extern LinkAnimationHeader D_0400DC20;
+extern LinkAnimationHeader D_0400DC28;
+extern LinkAnimationHeader D_0400DC30;
+extern LinkAnimationHeader D_0400DC48;
 extern ? D_0400DC50;
+extern LinkAnimationHeader D_0400DC60;
+extern LinkAnimationHeader D_0400DC78;
+extern LinkAnimationHeader D_0400DC80;
+extern LinkAnimationHeader D_0400DC88;
+extern LinkAnimationHeader D_0400DCA8;
+extern LinkAnimationHeader D_0400DCD0;
 extern LinkAnimationHeader D_0400DCD8;
+extern LinkAnimationHeader D_0400DCF8;
+extern LinkAnimationHeader D_0400DD10;
+extern LinkAnimationHeader D_0400DD30;
+extern LinkAnimationHeader D_0400DD38;
+extern LinkAnimationHeader D_0400DD40;
 extern ? D_0400DD50;
 extern ? D_0400DD58;
 extern ? D_0400DD68;
+extern LinkAnimationHeader D_0400DD70;
+extern LinkAnimationHeader D_0400DD78;
+extern LinkAnimationHeader D_0400DD80;
 extern LinkAnimationHeader D_0400DDB0;
+extern LinkAnimationHeader D_0400DDF0;
+extern LinkAnimationHeader D_0400DDF8;
+extern LinkAnimationHeader D_0400DE00;
+extern LinkAnimationHeader D_0400DE08;
+extern LinkAnimationHeader D_0400DE10;
+extern LinkAnimationHeader D_0400DE28;
+extern LinkAnimationHeader D_0400DE30;
 extern LinkAnimationHeader D_0400DE48;
+extern LinkAnimationHeader D_0400DE50;
 extern LinkAnimationHeader D_0400DE58;
+extern LinkAnimationHeader D_0400DE60;
+extern LinkAnimationHeader D_0400DEA0;
+extern LinkAnimationHeader D_0400DEA8;
+extern LinkAnimationHeader D_0400DF78;
+extern LinkAnimationHeader D_0400DF90;
+extern LinkAnimationHeader D_0400DF98;
+extern LinkAnimationHeader D_0400DFA0;
+extern LinkAnimationHeader D_0400DFA8;
+extern LinkAnimationHeader D_0400DFB0;
+extern LinkAnimationHeader D_0400DFB8;
+extern LinkAnimationHeader D_0400DFC0;
+extern LinkAnimationHeader D_0400DFC8;
+extern LinkAnimationHeader D_0400DFD0;
+extern LinkAnimationHeader D_0400DFD8;
+extern LinkAnimationHeader D_0400DFE0;
+extern LinkAnimationHeader D_0400DFE8;
+extern LinkAnimationHeader D_0400DFF0;
+extern LinkAnimationHeader D_0400DFF8;
+extern LinkAnimationHeader D_0400E000;
+extern LinkAnimationHeader D_0400E008;
+extern LinkAnimationHeader D_0400E050;
+extern LinkAnimationHeader D_0400E060;
+extern LinkAnimationHeader D_0400E070;
+extern LinkAnimationHeader D_0400E080;
+extern LinkAnimationHeader D_0400E088;
+extern LinkAnimationHeader D_0400E098;
 extern ? D_0400E118;
 extern ? D_0400E120;
 extern ? D_0400E150;
+extern LinkAnimationHeader D_0400E1F0;
+extern LinkAnimationHeader D_0400E200;
+extern LinkAnimationHeader D_0400E208;
+extern LinkAnimationHeader D_0400E260;
+extern LinkAnimationHeader D_0400E270;
+extern LinkAnimationHeader D_0400E278;
+extern LinkAnimationHeader D_0400E290;
+extern LinkAnimationHeader D_0400E298;
+extern LinkAnimationHeader D_0400E2A0;
+extern LinkAnimationHeader D_0400E2B8;
+extern LinkAnimationHeader D_0400E2C0;
+extern LinkAnimationHeader D_0400E2C8;
 extern LinkAnimationHeader D_0400E2D0;
+extern LinkAnimationHeader D_0400E2D8;
+extern LinkAnimationHeader D_0400E2E8;
+extern LinkAnimationHeader D_0400E2F0;
+extern LinkAnimationHeader D_0400E2F8;
+extern ? D_0400E318;
+extern ? D_0400E330;
+extern ? D_0400E348;
+extern LinkAnimationHeader D_0400E398;
+extern LinkAnimationHeader D_0400E3A0;
+extern LinkAnimationHeader D_0400E3A8;
+extern LinkAnimationHeader D_0400E3B0;
+extern LinkAnimationHeader D_0400E3B8;
+extern LinkAnimationHeader D_0400E3C0;
+extern LinkAnimationHeader D_0400E3D8;
+extern LinkAnimationHeader D_0400E408;
+extern LinkAnimationHeader D_0400E410;
+extern LinkAnimationHeader D_0400E418;
+extern ? D_0400E430;
 static u8 D_8085B9F0[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 };
 static u8 D_8085BA08[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 };
 static u8 D_8085BA20[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0 };
@@ -169,24 +294,6 @@ static struct_8082E224_arg1 D_8085C928[5] = {
     { 0x68E0, 0x83D },
     { 0x68E0, -0x844 },
 };
-static struct _struct_D_8085CC88_0x8 D_8085CC88[0xF] = {
-    { (LinkAnimationHeader* )0x0400DC70, 0xC },
-    { (LinkAnimationHeader* )0x0400DD90, 6 },
-    { (LinkAnimationHeader* )0x0400D9B8, 8 },
-    { (LinkAnimationHeader* )0x0400DDA0, 8 },
-    { (LinkAnimationHeader* )0x0400D820, 8 },
-    { (LinkAnimationHeader* )0x0400DC50, 0xA },
-    { (LinkAnimationHeader* )0x0400D9A8, 7 },
-    { (LinkAnimationHeader* )0x0400D9B0, 0xB },
-    { (LinkAnimationHeader* )0x0400DC70, 0xC },
-    { (LinkAnimationHeader* )0x0400DD88, 4 },
-    { (LinkAnimationHeader* )0x0400DD48, 4 },
-    { (LinkAnimationHeader* )0x0400DC58, 4 },
-    { (LinkAnimationHeader* )0x0400D3E0, 5 },
-    { (LinkAnimationHeader* )0x0400DC68, 0xD },
-    { (LinkAnimationHeader* )0x0400E350, 4 },
-};
-static ? D_8085CD00;                                /* unable to generate initializer */
 static ? D_8085CE30;                                /* unable to generate initializer */
 static ? D_8085CE60;                                /* unable to generate initializer */
 static struct _struct_D_8085CF88_0x10 D_8085CF88[2]; /* unable to generate initializer */
@@ -1487,6 +1594,61 @@ void (*D_8085CB3C[0x53])(PlayState*, Player*) = {
     func_8082F594,
     func_8082F594,
     func_8082F594,
+};
+struct_8085CC88 D_8085CC88[0xF] = {
+    { (LinkAnimationHeader* )0x0400DC70, 0xC },
+    { (LinkAnimationHeader* )0x0400DD90, 6 },
+    { (LinkAnimationHeader* )0x0400D9B8, 8 },
+    { (LinkAnimationHeader* )0x0400DDA0, 8 },
+    { (LinkAnimationHeader* )0x0400D820, 8 },
+    { (LinkAnimationHeader* )0x0400DC50, 0xA },
+    { (LinkAnimationHeader* )0x0400D9A8, 7 },
+    { (LinkAnimationHeader* )0x0400D9B0, 0xB },
+    { (LinkAnimationHeader* )0x0400DC70, 0xC },
+    { (LinkAnimationHeader* )0x0400DD88, 4 },
+    { (LinkAnimationHeader* )0x0400DD48, 4 },
+    { (LinkAnimationHeader* )0x0400DC58, 4 },
+    { (LinkAnimationHeader* )0x0400D3E0, 5 },
+    { (LinkAnimationHeader* )0x0400DC68, 0xD },
+    { (LinkAnimationHeader* )0x0400E350, 4 },
+};
+s8 D_8085CD00[0x24] = {
+    8,
+    -5,
+    -3,
+    -6,
+    8,
+    0xB,
+    5,
+    0,
+    -1,
+    4,
+    5,
+    9,
+    3,
+    1,
+    0,
+    2,
+    3,
+    9,
+    6,
+    -4,
+    -2,
+    7,
+    6,
+    0xA,
+    8,
+    -5,
+    -3,
+    -6,
+    8,
+    0xB,
+    8,
+    -5,
+    -3,
+    -6,
+    8,
+    0xB,
 };
 struct_8085CD24 D_8085CD24[3] = { { 6, 9 }, { 0xC, 9 }, { 7, 0x6A } };
 struct_8085CD30 D_8085CD30[0x10] = {
@@ -3069,7 +3231,7 @@ void func_808302CC(Player* this, PlayState* play) {
 
     sp37 = func_8082F524(this, (s32) this->heldItemId);
     func_8082F43C(play, this, func_80848808);
-    var_v1 = *(&D_8085CD00 + ((gPlayerModelTypes[this->modelGroup].modelAnimType * 6) + gPlayerModelTypes[this->nextModelGroup].modelAnimType));
+    var_v1 = D_8085CD00[(gPlayerModelTypes[this->modelGroup].modelAnimType * 6) + gPlayerModelTypes[this->nextModelGroup].modelAnimType];
     if ((sp37 == 8) || (temp_v0 = this->itemActionParam, (temp_v0 == 8))) {
         if (sp37 == 0) {
             var_v1 = -0xE;
