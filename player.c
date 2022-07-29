@@ -306,9 +306,6 @@ static s8 D_8085D028[0xC] = { 0, 0xB, 1, 2, 3, 0xC, 5, 4, 9, 8, 7, -6 };
 static s8 D_8085D034[0x10] = { 0xD, 1, 2, 3, 0xC, 5, 4, 9, 0xA, 0xB, 8, 7, -6, 0, 0, 0 };
 static s8 D_8085D044[4] = { 0xA, 8, -7, 0 };
 static s8 D_8085D050[4] = { 0xD, 2, -4, 0 };
-static ? D_8085D090;                                /* unable to generate initializer */
-static ? D_8085D094;                                /* unable to generate initializer */
-static ? D_8085D097;                                /* unable to generate initializer */
 static struct _struct_D_8085D09C_0x8 D_8085D09C[7] = {
     { 0x100, 2, 2, 0, 0 },
     { 0x200, 4, 8, 1, 2 },
@@ -1794,6 +1791,9 @@ s32 (*D_8085D054[0xF])(Player*, PlayState*) = {
     func_80838A90,
     func_8083A0CC,
 };
+s8 D_8085D090[4] = { 0xC, 4, 4, 8 };
+s8 D_8085D094[3] = { 0x1B, 0x1C, 0x1D };
+s8 D_8085D097[5] = { 0x18, 0x19, 0x1A, 0, 0 };
 Vec3f D_8085D100 = { 0.0f, 50.0f, 0.0f };
 Vec3f D_8085D10C;                                   /* unable to generate initializer */
 f32 D_8085D114 = 20.0f;
@@ -4352,15 +4352,15 @@ block_19:
     return 0;
 }
 
-s32 func_808331FC(PlayState* arg0, Player* arg1, SkelAnime* arg2, f32 arg3) {
+s32 func_808331FC(PlayState* play, Player* this, SkelAnime* skelAnime, f32 frame) {
     f32 sp24;
     s16 sp22;
 
-    if ((arg2->endFrame - arg3) <= arg2->curFrame) {
-        if (func_80833058(arg0, arg1, D_8085D01C, 1) != 0) {
+    if ((skelAnime->endFrame - frame) <= skelAnime->curFrame) {
+        if (func_80833058(play, this, D_8085D01C, 1) != 0) {
             return 0;
         }
-        if ((D_80862B04 != 0) || (func_80832F78(arg1, &sp24, &sp22, 0.018f, arg0) != 0)) {
+        if ((D_80862B04 != 0) || (func_80832F78(this, &sp24, &sp22, 0.018f, play) != 0)) {
             return 1;
         }
         goto block_6;
@@ -4487,23 +4487,23 @@ void func_808335B0(PlayState* play, Player* this) {
 enum PlayerMeleeWeaponAnimation func_808335F4(Player* this) {
     s32 sp1C;
     enum PlayerMeleeWeaponAnimation sp18;
-    ?* var_a1;
     s8 temp_a1;
     s8 temp_v0_2;
     s8 var_v1;
     s8 var_v1_2;
+    s8* var_a1;
     u8 temp_v0;
 
     temp_v0 = this->transformation;
     temp_a1 = this->unk_AE3[this->unk_ADE];
     if ((temp_v0 == 2) || (temp_v0 == 1)) {
         if (temp_v0 == 2) {
-            var_a1 = &D_8085D094;
+            var_a1 = D_8085D094;
         } else {
-            var_a1 = &D_8085D097;
+            var_a1 = D_8085D097;
         }
         temp_v0_2 = this->unk_ADD;
-        var_v1 = *(var_a1 + temp_v0_2);
+        var_v1 = var_a1[temp_v0_2];
         if (temp_v0_2 != 0) {
             this->meleeWeaponAnimation = var_v1;
             if (temp_v0_2 >= 2) {
@@ -4521,7 +4521,7 @@ enum PlayerMeleeWeaponAnimation func_808335F4(Player* this) {
                 }
                 var_v1_2 = 4;
             } else {
-                var_v1_2 = *(&D_8085D090 + temp_a1);
+                var_v1_2 = D_8085D090[temp_a1];
                 if (var_v1_2 == 0xC) {
                     this->stateFlags2 |= 0x40000000;
                     sp18 = (enum PlayerMeleeWeaponAnimation) var_v1_2;
