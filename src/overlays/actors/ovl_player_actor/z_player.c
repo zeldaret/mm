@@ -8884,31 +8884,186 @@ void func_80858FBC(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     LinkAnimation_Update(play, &this->skelAnime);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80858FE8.s")
+void func_80858FE8(Player* this) {
+    if (this->skelAnime.animation == &gameplay_keep_Linkanim_00E120) {
+        func_8082E094(this, 0xD0U);
+        func_800B8E58(this, NA_SE_VO_LK_DRAGGED_DAMAGE - SFX_FLAG);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80859028.s")
+extern struct_8082E224_arg1 D_8085DA08;
+extern struct_8082E224_arg1 D_8085DA14;
+extern struct_8082E224_arg1 D_8085DA38;
+extern struct_8082E224_arg1 D_8085DA48;
+extern struct_8082E224_arg1 D_8085DA7C;
+extern struct_8082E224_arg1 D_8085DA84;
+extern struct_8082E224_arg1 D_8085DA88;
+extern struct_8082E224_arg1 D_8085DA8C;
+extern struct_8082E224_arg1 D_8085DA90;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80859168.s")
+void func_80859028(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+    void* temp_v0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808591BC.s")
+    if (LinkAnimation_Update(play, &this->skelAnime) != 0) {
+        func_80858D48(play, this, anim);
+        this->unk_AE8 = 1;
+    }
+    if (this->skelAnime.animation == &gameplay_keep_Linkanim_00E150) {
+        func_8082E224(this, &D_8085DA08);
+        return;
+    }
+    if (this->skelAnime.animation == &gameplay_keep_Linkanim_00E118) {
+        func_8082E224(this, &D_8085DA14);
+        return;
+    }
+    if (this->skelAnime.animation == &gameplay_keep_Linkanim_00E430) {
+        func_8082E224(this, &D_8085DA38);
+        return;
+    }
+    if (this->skelAnime.animation == &gameplay_keep_Linkanim_00D030) {
+        func_8082E224(this, &D_8085DA7C);
+        return;
+    }
+    if (this->skelAnime.animation == &gameplay_keep_Linkanim_00CF48) {
+        func_8082E224(this, &D_8085DA84);
+        return;
+    }
+    if (this->skelAnime.animation == &gameplay_keep_Linkanim_00D108) {
+        func_8082E224(this, &D_8085DA90);
+        return;
+    }
+    func_80858FE8(this);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80859210.s")
+void func_80859168(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+    if (LinkAnimation_Update(play, &this->skelAnime) != 0) {
+        func_8082E794(this);
+        func_8082DB60(play, this, anim);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80859248.s")
+void func_808591BC(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+    if (LinkAnimation_Update(play, &this->skelAnime) != 0) {
+        func_8082EB18(play, this, anim);
+        this->unk_AE8 = 1;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8085929C.s")
+void func_80859210(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+    LinkAnimation_Update(play, &this->skelAnime);
+    // TODO: check wtf is going on here
+    func_8082E224(this, (struct_8082E224_arg1* ) anim);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80859300.s")
+void func_80859248(Player* this) {
+    if ((this->unk_398 == NULL) || (this->unk_398->update == NULL)) {
+        this->unk_398 = NULL;
+    }
+    this->unk_730 = this->unk_398;
+    if (this->unk_398 != NULL) {
+        this->actor.shape.rot.y = func_8083C62C(this, 0);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80859414.s")
+void func_8085929C(PlayState* play, Player* this, UNK_TYPE arg2) {
+    this->stateFlags1 |= PLAYER_STATE1_8000000;
+    this->stateFlags2 |= PLAYER_STATE2_400;
+    this->stateFlags1 &= ~(PLAYER_STATE1_40000 | PLAYER_STATE1_80000);
+    func_8082DB3C(play, this, &gameplay_keep_Linkanim_00DFD0);
+    this->linearVelocity = 0.0f;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808594D0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808595B8.s")
+void func_80859300(PlayState* play, Player* this, UNK_TYPE arg2) {
+    this->actor.gravity = 0.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8085968C.s")
+    if (this->unk_AE7 == 0) {
+        if ((this->transformation == PLAYER_FORM_DEKU) || func_8083B3B4(play, this, NULL)) {
+            this->unk_AE7 = 1;
+        } else {
+            func_808477D0(play, this, NULL, fabsf(this->actor.velocity.y));
+            Math_ScaledStepToS(&this->unk_AAA, -0x2710, 0x320);
+            func_8084748C(this, &this->actor.velocity.y, 4.0f, this->currentYaw);
+        }
+    } else {
+        if (LinkAnimation_Update(play, &this->skelAnime)) {
+            if (this->unk_AE7 == 1) {
+                func_8082E634(play, this, &D_0400E000);
+            } else {
+                func_8082DB3C(play, this, &D_0400E000);
+            }
+        }
+        func_808475B4(this);
+        func_8084748C(this, &this->linearVelocity, 0.0f, this->actor.shape.rot.y);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80859708.s")
+void func_80859414(PlayState* play, Player* this, UNK_TYPE arg2) {
+    func_80859248(this);
+
+    if (func_801242B4(this)) {
+        func_80859300(play, this, 0);
+    } else {
+        LinkAnimation_Update(play, &this->skelAnime);
+        if ((func_801240DC(this) != 0) || (this->stateFlags1 & PLAYER_STATE1_800)) {
+            func_8083216C(this, play);
+        } else if ((this->interactRangeActor != NULL) && (this->interactRangeActor->textId == 0xFFFF)) {
+            func_8083D23C(this, play);
+        }
+    }
+}
+
+void func_808594D0(PlayState* play, Player* this, UNK_TYPE arg2) {
+    if (this->stateFlags1 & PLAYER_STATE1_8000000) {
+        func_8085929C(play, this, 0);
+    } else {
+        LinkAnimationHeader* anim = GET_PLAYER_ANIM(PLAYER_ANIMGROUP_43, this->modelAnimType);
+
+        if ((this->unk_396 == 6) || (this->unk_396 == 0x2E)) {
+            func_8082DB18(play, this, anim);
+        } else {
+            func_8082E784(this);
+            LinkAnimation_Change(play, &this->skelAnime, anim, 2.0f / 3.0f, 0.0f, Animation_GetLastFrame(anim), 0, -4.0f);
+        }
+        func_8082DABC(this);
+    }
+}
+
+void func_808595B8(PlayState* play, Player* this, UNK_TYPE arg2) {
+    if (func_80847880(play, this)) {
+        return;
+    }
+
+    if ((this->csMode == 0x14) && (play->csCtx.state == 0)) {
+        func_800B7298(play, NULL, 6);
+    } else if (this->stateFlags1 & PLAYER_STATE1_8000000) {
+        func_80859300(play, this, 0);
+        this->actor.velocity.y = 0.0f;
+    } else {
+        LinkAnimation_Update(play, &this->skelAnime);
+        if ((func_801240DC(this) != 0) || (this->stateFlags1 & 0x800)) {
+            func_8083216C(this, play);
+        }
+    }
+}
+
+void func_8085968C(PlayState* play, Player* this, UNK_TYPE arg2) {
+    if (this->actor.id == ACTOR_EN_TEST3) {
+        func_80838830(this, OBJECT_GI_MSSA);
+        this->stateFlags1 |= PLAYER_STATE1_400;
+    }
+
+    func_8082DB90(play, this, (this->transformation == PLAYER_FORM_DEKU) ? &D_0400E2B8 : &D_0400D5A8);
+}
+
+void func_80859708(PlayState* play, Player* this, UNK_TYPE arg2) {
+    LinkAnimation_Update(play, &this->skelAnime);
+    if ((this->actor.id == ACTOR_EN_TEST3) && Animation_OnFrame(&this->skelAnime, 20.0f)) {
+        this->unk_B2A = 0x3A;
+        func_80151BB4(play, 0x1B);
+        func_801A3098(0x37);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8085978C.s")
 
