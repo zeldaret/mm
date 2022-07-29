@@ -354,27 +354,27 @@ void func_8012300C(PlayState* play, s32 arg1) {
     player->unk_B2B = arg1;
 }
 
-void func_8012301C(Player* player, PlayState* play2) {
+void func_8012301C(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    s32 pad;
+    Player* this = (Player*)thisx;
 
-    player->unk_AE7++;
+    this->unk_AE7++;
 
-    if (player->unk_AE7 == 2) {
+    if (this->unk_AE7 == 2) {
         s16 objectId = gPlayerFormObjectIndices[GET_PLAYER_FORM];
 
         gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = objectId;
-        func_8012F73C(&play->objectCtx, player->actor.objBankIndex, objectId);
-        player->actor.objBankIndex = Object_GetIndex(&play->objectCtx, GAMEPLAY_KEEP);
-    } else if (player->unk_AE7 >= 3) {
+        func_8012F73C(&play->objectCtx, this->actor.objBankIndex, objectId);
+        this->actor.objBankIndex = Object_GetIndex(&play->objectCtx, GAMEPLAY_KEEP);
+    } else if (this->unk_AE7 >= 3) {
         s32 objBankIndex = Object_GetIndex(&play->objectCtx, gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId);
 
         if (Object_IsLoaded(&play->objectCtx, objBankIndex)) {
-            player->actor.objBankIndex = objBankIndex;
-            player->actor.shape.rot.z = GET_PLAYER_FORM + 1;
-            player->actor.init = PlayerCall_Init;
-            player->actor.update = PlayerCall_Update;
-            player->actor.draw = PlayerCall_Draw;
+            this->actor.objBankIndex = objBankIndex;
+            this->actor.shape.rot.z = GET_PLAYER_FORM + 1;
+            this->actor.init = PlayerCall_Init;
+            this->actor.update = PlayerCall_Update;
+            this->actor.draw = PlayerCall_Draw;
             gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
         }
     }
@@ -3319,7 +3319,7 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else if (dlist == object_link_zora_DL_00E2A0) { // zora guitar
-        s16 sp26 = Math_SinS(player->unk_B86) * (ABS_ALT(player->unk_AB2.x) * ((f32)(IREG(52) + 20)) / 100.0f);
+        s16 sp26 = Math_SinS(player->unk_B86[0]) * (ABS_ALT(player->unk_AB2.x) * ((f32)(IREG(52) + 20)) / 100.0f);
         s16 sp24 = Math_SinS(player->unk_B88) * (ABS_ALT(player->unk_AB2.y) * ((f32)(IREG(53) + 15)) / 100.0f);
 
         OPEN_DISPS(play->state.gfxCtx);
