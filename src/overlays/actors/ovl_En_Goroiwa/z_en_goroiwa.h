@@ -54,31 +54,31 @@ typedef struct {
 } EnGoroiwaStruct; // size = 0x30
 
 typedef struct EnGoroiwa {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ColliderJntSph collider;
-    /* 0x0164 */ ColliderJntSphElement colliderElements[1];
-    /* 0x01A4 */ EnGoroiwaActionFunc actionFunc;
-    /* 0x01A8 */ Vec3f unk_1A8;
-    /* 0x01B4 */ Vec3f unk_1B4;
-    /* 0x01C0 */ f32 unk_1C0;
-    /* 0x01C4 */ f32 unk_1C4;
-    /* 0x01C8 */ s16 unk_1C8;
-    /* 0x01CA */ s16 unk_1CA;
-    /* 0x01CC */ s16 unk_1CC;
-    /* 0x01CE */ s16 unk_1CE;
-    /* 0x01D0 */ Vec3s* unk_1D0;
-    /* 0x01D4 */ s16 unk_1D4;
-    /* 0x01D6 */ s16 unk_1D6;
-    /* 0x01D8 */ s16 unk_1D8;
-    /* 0x01DA */ s16 unk_1DA;
-    /* 0x01DC */ f32 unk_1DC;
-    /* 0x01E0 */ f32 unk_1E0;
-    /* 0x01E4 */ s8 unk_1E4;
-    /* 0x01E5 */ u8 unk_1E5;
-    /* 0x01E6 */ s8 unk_1E6;
-    /* 0x01E7 */ s8 unk_1E7;
-    /* 0x01E8 */ EnGoroiwaStruct unk_1E8[2];
-    /* 0x0248 */ s32 unk_248;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ColliderJntSph collider;
+    /* 0x164 */ ColliderJntSphElement colliderElements[1];
+    /* 0x1A4 */ EnGoroiwaActionFunc actionFunc;
+    /* 0x1A8 */ Vec3f unk_1A8;
+    /* 0x1B4 */ Vec3f unk_1B4;
+    /* 0x1C0 */ f32 unk_1C0;
+    /* 0x1C4 */ f32 unk_1C4;
+    /* 0x1C8 */ s16 unk_1C8;
+    /* 0x1CA */ s16 unk_1CA;
+    /* 0x1CC */ s16 unk_1CC;
+    /* 0x1CE */ s16 unk_1CE;
+    /* 0x1D0 */ Vec3s* unk_1D0;
+    /* 0x1D4 */ s16 unk_1D4;
+    /* 0x1D6 */ s16 unk_1D6;
+    /* 0x1D8 */ s16 unk_1D8;
+    /* 0x1DA */ s16 unk_1DA;
+    /* 0x1DC */ f32 unk_1DC;
+    /* 0x1E0 */ f32 unk_1E0;
+    /* 0x1E4 */ s8 unk_1E4;
+    /* 0x1E5 */ u8 unk_1E5;
+    /* 0x1E6 */ s8 unk_1E6;
+    /* 0x1E7 */ s8 unk_1E7;
+    /* 0x1E8 */ EnGoroiwaStruct unk_1E8[2];
+    /* 0x248 */ s32 unk_248;
 } EnGoroiwa; // size = 0x24C
 
 extern const ActorInit En_Goroiwa_InitVars;

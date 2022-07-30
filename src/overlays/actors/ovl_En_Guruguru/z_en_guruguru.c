@@ -63,7 +63,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static AnimationHeader* D_80BC79CC[] = { &object_fu_Anim_000B04, &object_fu_Anim_00057C };
-static u8 D_80BC79D4[] = { 0 };
+static u8 D_80BC79D4[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
 static f32 D_80BC79D8[] = { 1.0f, 1.0f };
 static TexturePtr sEyeTextures[] = { object_fu_Tex_005F20, object_fu_Tex_006320 };
 static TexturePtr sMouthTextures[] = { object_fu_Tex_006720, object_fu_Tex_006920 };
@@ -191,7 +191,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
     } else if (this->unusedTimer == 0) {
         this->unusedTimer = 6;
-        if (Message_GetState(&play->msgCtx) != 5) {
+        if (Message_GetState(&play->msgCtx) != TEXT_STATE_5) {
             if (this->unk266 == 0) {
                 if (this->headZRotTarget != 0) {
                     this->headZRotTarget = 0;
@@ -207,7 +207,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
             }
         }
     }
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         this->headZRotTarget = 0;
         if ((this->textIdIndex == 13) || (this->textIdIndex == 14)) {

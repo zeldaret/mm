@@ -133,7 +133,7 @@ void* gItemIcons[] = {
     0x08021000,        // ITEM_ZORA_EGG
     0x08022000,        // ITEM_GOLD_DUST
     0x08023000,        // ITEM_MUSHROOM
-    0x08024000,        // ITEM_SEA_HORSE
+    0x08024000,        // ITEM_SEAHORSE
     0x08025000,        // ITEM_CHATEAU
     0x08026000,        // ITEM_HYLIAN_LOACH
     0x08027000,        // ITEM_OBABA_DRINK
@@ -145,7 +145,7 @@ void* gItemIcons[] = {
     0x0802D000,        // ITEM_ROOM_KEY
     0x0802E000,        // ITEM_LETTER_MAMA
     0x0802F000,        // ITEM_LETTER_TO_KAFEI
-    0x08030000,        // ITEM_PENDANT_MEMORIES
+    0x08030000,        // ITEM_PENDANT_OF_MEMORIES
     0x08031000,        // ITEM_TINGLE_MAP
     0x08032000,        // ITEM_MASK_DEKU
     0x08033000,        // ITEM_MASK_GORON
@@ -268,7 +268,7 @@ u8 gItemSlots[] = {
     SLOT_BOTTLE_1,           // ITEM_ZORA_EGG
     SLOT_BOTTLE_1,           // ITEM_GOLD_DUST
     SLOT_BOTTLE_1,           // ITEM_MUSHROOM
-    SLOT_BOTTLE_1,           // ITEM_SEA_HORSE
+    SLOT_BOTTLE_1,           // ITEM_SEAHORSE
     SLOT_BOTTLE_1,           // ITEM_CHATEAU
     SLOT_BOTTLE_1,           // ITEM_HYLIAN_LOACH
     SLOT_BOTTLE_1,           // ITEM_OBABA_DRINK
@@ -280,7 +280,7 @@ u8 gItemSlots[] = {
     SLOT_TRADE_KEY_MAMA,     // ITEM_ROOM_KEY
     SLOT_TRADE_KEY_MAMA,     // ITEM_LETTER_MAMA
     SLOT_TRADE_COUPLE,       // ITEM_LETTER_TO_KAFEI
-    SLOT_TRADE_COUPLE,       // ITEM_PENDANT_MEMORIES
+    SLOT_TRADE_COUPLE,       // ITEM_PENDANT_OF_MEMORIES
     SLOT_TRADE_COUPLE,       // ITEM_TINGLE_MAP
     SLOT_MASK_DEKU,          // ITEM_MASK_DEKU
     SLOT_MASK_GORON,         // ITEM_MASK_GORON
@@ -348,7 +348,7 @@ s16 gItemPrices[] = {
     20,  // ITEM_ZORA_EGG
     200, // ITEM_GOLD_DUST
     5,   // ITEM_MUSHROOM
-    0,   // ITEM_SEA_HORSE
+    0,   // ITEM_SEAHORSE
     200, // ITEM_CHATEAU
     20,  // ITEM_HYLIAN_LOACH
     0,   // ITEM_OBABA_DRINK
@@ -360,7 +360,7 @@ s16 gItemPrices[] = {
     0,   // ITEM_ROOM_KEY
     0,   // ITEM_LETTER_MAMA
     0,   // ITEM_LETTER_KAFEI
-    0,   // ITEM_PENDANT_MEMORIES
+    0,   // ITEM_PENDANT_OF_MEMORIES
     0,   // ITEM_TINGLE_MAP
 };
 
@@ -481,8 +481,8 @@ s32 Inventory_GetBtnBItem(PlayState* play) {
         return ITEM_NONE;
     } else if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_NONE) {
         if (play->interfaceCtx.unk_21C != 0) {
-            if (play->interfaceCtx.unk_21E != 0) {
-                return play->interfaceCtx.unk_21E;
+            if (play->interfaceCtx.bButtonDoAction != 0) {
+                return play->interfaceCtx.bButtonDoAction;
             }
         }
         return ITEM_NONE;
@@ -495,7 +495,7 @@ s32 Inventory_GetBtnBItem(PlayState* play) {
  * Only changes shield
  */
 void Inventory_ChangeEquipment(s16 value) {
-    SET_EQUIP_VALUE(EQUIP_SHIELD, value);
+    SET_EQUIP_VALUE(EQUIP_TYPE_SHIELD, value);
 }
 
 /**
@@ -504,8 +504,8 @@ void Inventory_ChangeEquipment(s16 value) {
 u8 Inventory_DeleteEquipment(PlayState* play, s16 equipment) {
     Player* player = GET_PLAYER(play);
 
-    if (GET_CUR_EQUIP_VALUE(EQUIP_SHIELD) != 0) {
-        SET_EQUIP_VALUE(EQUIP_SHIELD, 0);
+    if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD) != EQUIP_VALUE_SHIELD_NONE) {
+        SET_EQUIP_VALUE(EQUIP_TYPE_SHIELD, EQUIP_VALUE_SHIELD_NONE);
         Player_SetEquipmentData(play, player);
         return true;
     }

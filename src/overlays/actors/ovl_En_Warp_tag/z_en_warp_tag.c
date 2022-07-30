@@ -91,7 +91,7 @@ void EnWarpTag_CheckDungeonKeepObject(EnWarptag* this, PlayState* play) {
 }
 
 void EnWarpTag_WaitForPlayer(EnWarptag* this, PlayState* play) {
-    if (!Player_InCsMode(&play->state) && (this->dyna.actor.xzDistToPlayer <= 30.0f) &&
+    if (!Player_InCsMode(play) && (this->dyna.actor.xzDistToPlayer <= 30.0f) &&
         (this->dyna.actor.playerHeightRel <= 10.0f)) {
         if (GET_WARPTAG_INVISIBLE(&this->dyna.actor)) {
             func_800B7298(play, NULL, 0x51);
@@ -243,7 +243,7 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
     if (this->grottoExitDelay++ == 10) {
         play->nextEntranceIndex = play->setupExitList[GET_WARPTAG_EXIT_INDEX(&this->dyna.actor)];
         Scene_SetExitFade(play);
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
         func_8019F128(NA_SE_OC_SECRET_HOLE_OUT);
         func_801A4058(5);
         if (1) {}
@@ -264,7 +264,7 @@ void EnWarpTag_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C28C(play->state.gfxCtx);
-    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWarpTagRainbowAnimMat));
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWarpTagRainbowTexAnim));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gSPDisplayList(POLY_OPA_DISP++, gWarpTagGoronTrialBaseDL);

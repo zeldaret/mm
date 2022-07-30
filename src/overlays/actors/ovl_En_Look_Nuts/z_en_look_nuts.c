@@ -139,7 +139,7 @@ void EnLookNuts_Destroy(Actor* thisx, PlayState* play) {
 
 void EnLookNuts_SetupPatrol(EnLookNuts* this) {
     Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 0, -10.0f);
+                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), ANIMMODE_LOOP, -10.0f);
     this->state = PALACE_GUARD_PATROLLING;
     this->actionFunc = EnLookNuts_Patrol;
 }
@@ -189,7 +189,7 @@ void EnLookNuts_Patrol(EnLookNuts* this, PlayState* play) {
 
 void EnLookNuts_SetupStandAndWait(EnLookNuts* this) {
     Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 2, -10.0f);
+                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), ANIMMODE_ONCE, -10.0f);
     this->waitTimer = Rand_S16Offset(1, 3);
     this->headRotTarget.y = 10000.0f;
 
@@ -262,7 +262,7 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, PlayState* play) {
 
 void EnLookNuts_DetectedPlayer(EnLookNuts* this, PlayState* play) {
     Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 2.0f, 0.0f,
-                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 0, -10.0f);
+                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), ANIMMODE_LOOP, -10.0f);
     this->state = PALACE_GUARD_RUNNING_TO_PLAYER;
     this->eventTimer = 300;
     Message_StartTextbox(play, 0x833, &this->actor);
@@ -285,7 +285,7 @@ void EnLookNuts_RunToPlayer(EnLookNuts* this, PlayState* play) {
 
 void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this) {
     Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 2, -10.0f);
+                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), ANIMMODE_ONCE, -10.0f);
     this->state = PALACE_GUARD_CAUGHT_PLAYER;
     this->actionFunc = EnLookNuts_SendPlayerToSpawn;
 }
@@ -293,12 +293,12 @@ void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this) {
 void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(this->spawnIndex);
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(play);
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
         gSaveContext.save.weekEventReg[17] |= 4;
     }
 }

@@ -247,10 +247,10 @@ void func_80B35450(EnGg* this, PlayState* play) {
 }
 
 void func_80B3556C(EnGg* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_2E6 == 4) {
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->unk_308 = 0;
             this->actor.flags &= ~ACTOR_FLAG_80;
             func_80B35250(this);
@@ -399,7 +399,7 @@ void func_80B359DC(EnGg* this, PlayState* play) {
         }
 
         if ((player->transformation == PLAYER_FORM_HUMAN) && (play->msgCtx.ocarinaMode == 3) &&
-            (play->msgCtx.unk1202E == 7)) {
+            (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
             if (!(gSaveContext.save.weekEventReg[19] & 0x80)) {
                 gSaveContext.save.weekEventReg[19] |= 0x80;
             }

@@ -40,8 +40,8 @@ extern const ActorInit Obj_Lightswitch_InitVars;
 #define LIGHTSWITCH_TYPE_UNK2 2
 #define LIGHTSWITCH_TYPE_FAKE 3
 
-#define GET_LIGHTSWITCH_TYPE(this) (((this)->actor.params >> 4) & 0x3)
-#define GET_LIGHTSWITCH_INVISIBLE(this) (((this)->actor.params >> 3) & 1)
-#define GET_LIGHTSWITCH_SWITCHFLAG(this) (((this)->actor.params >> 8) & 0x7F)
+#define GET_LIGHTSWITCH_TYPE(thisx) (((thisx)->params >> 4) & 0x3)
+#define GET_LIGHTSWITCH_INVISIBLE(thisx) (((thisx)->params >> 3) & 1)
+#define GET_LIGHTSWITCH_SWITCHFLAG(thisx) (((thisx)->params >> 8) & 0x7F)
 
 #endif // Z_OBJ_LIGHTSWITCH_H

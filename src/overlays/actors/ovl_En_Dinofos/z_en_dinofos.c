@@ -180,7 +180,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    9,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -362,11 +362,11 @@ void func_8089A9B0(EnDinofos* this, PlayState* play) {
 }
 
 void func_8089ABF4(EnDinofos* this, PlayState* play) {
-    if (this->subCamId != CAM_ID_MAIN) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         Camera* subCam = Play_GetCamera(play, this->subCamId);
 
         Play_CameraSetAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
-        this->subCamId = CAM_ID_MAIN;
+        this->subCamId = SUB_CAM_ID_DONE;
         ActorCutscene_Stop(this->actor.cutscene);
         if (this->actor.colChkInfo.health == 0) {
             func_800B724C(play, &this->actor, 6);
@@ -438,7 +438,7 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
         return true;
     }
 
-    if ((this->actor.xzDistToPlayer < 100.0f) && (player->swordState != 0) && this->actor.isTargeted &&
+    if ((this->actor.xzDistToPlayer < 100.0f) && (player->meleeWeaponState != 0) && this->actor.isTargeted &&
         (Rand_ZeroOne() < 0.5f) && func_8089A968(this) && Player_IsFacingActor(&this->actor, 0x2000, play)) {
         if (Rand_ZeroOne() < 0.5f) {
             func_8089C024(this, 2);
@@ -467,7 +467,7 @@ void func_8089B100(EnDinofos* this, PlayState* play) {
 
     Animation_Change(&this->skelAnime, &object_dinofos_Anim_001CCC, 1.0f,
                      Animation_GetLastFrame(&object_dinofos_Anim_001CCC),
-                     Animation_GetLastFrame(&object_dinofos_Anim_001CCC), 2, 0.0f);
+                     Animation_GetLastFrame(&object_dinofos_Anim_001CCC), ANIMMODE_ONCE, 0.0f);
     func_800BE33C(&subCam->eye, &subCam->at, &this->unk_29A, true);
     Math_Vec3f_Diff(&this->actor.world.pos, &player->actor.world.pos, &sp3C);
     this->unk_2BC.x = player->actor.world.pos.x + (0.4f * sp3C.x);
@@ -715,7 +715,7 @@ void func_8089BBB4(EnDinofos* this, PlayState* play) {
             this->skelAnime.playSpeed = this->actor.speedXZ * 0.166666671634f;
         } else {
             Animation_Change(&this->skelAnime, &object_dinofos_Anim_00D62C, this->actor.speedXZ * 0.166666671634f, 0.0f,
-                             0.0f, 0, -4.0f);
+                             0.0f, ANIMMODE_LOOP, -4.0f);
         }
 
         this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
@@ -864,7 +864,7 @@ void func_8089C2A8(EnDinofos* this, PlayState* play) {
     if ((this->actor.velocity.y < 0.0f) && (this->skelAnime.animation == &object_dinofos_Anim_001CCC)) {
         this->colliderQuad.base.atFlags |= AT_ON;
         this->colliderJntSph.base.acFlags |= AC_ON;
-        Animation_Change(&this->skelAnime, &object_dinofos_Anim_0025B4, 1.0f, 7.0f, 13.0f, 2, -2.0f);
+        Animation_Change(&this->skelAnime, &object_dinofos_Anim_0025B4, 1.0f, 7.0f, 13.0f, ANIMMODE_ONCE, -2.0f);
     }
 
     if (this->actor.bgCheckFlags & 1) {
@@ -935,7 +935,8 @@ void func_8089C56C(EnDinofos* this, PlayState* play) {
 }
 
 void func_8089C690(EnDinofos* this) {
-    Animation_Change(&this->skelAnime, &object_dinofos_Anim_0025B4, -1.0f, this->skelAnime.curFrame, 0.0f, 2, 0.0f);
+    Animation_Change(&this->skelAnime, &object_dinofos_Anim_0025B4, -1.0f, this->skelAnime.curFrame, 0.0f,
+                     ANIMMODE_ONCE, 0.0f);
     this->colliderQuad.base.atFlags &= ~(AT_ON | AT_BOUNCED);
     if (this->actionFunc != func_8089C2A8) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1166,8 +1167,8 @@ void func_8089D11C(EnDinofos* this, s16 arg1) {
     } else {
         this->actor.speedXZ = 15.0f;
     }
-    Animation_Change(&this->skelAnime, &object_dinofos_Anim_00D62C, this->actor.speedXZ * (1.0f / 7.5f), 0.0f, 0.0f, 0,
-                     -4.0f);
+    Animation_Change(&this->skelAnime, &object_dinofos_Anim_00D62C, this->actor.speedXZ * (1.0f / 7.5f), 0.0f, 0.0f,
+                     ANIMMODE_LOOP, -4.0f);
     this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
     this->unk_292 = 10;
     this->unk_2A4 = 0.0f;
@@ -1209,7 +1210,7 @@ void func_8089D318(EnDinofos* this, PlayState* play) {
         } else {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         }
-        this->subCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
         if (this->actor.colChkInfo.health == 0) {
             subCamEye.x = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + this->actor.focus.pos.x;
             subCamEye.y = this->actor.focus.pos.y;

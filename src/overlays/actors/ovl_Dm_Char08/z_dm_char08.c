@@ -20,7 +20,7 @@ void func_80AAFAC4(DmChar08* this, PlayState* play);
 void DmChar08_WaitForSong(DmChar08* this, PlayState* play);
 void func_80AAF8F4(DmChar08* this, PlayState* play);
 void func_80AAFAE4(DmChar08* this, PlayState* play);
-void func_80AAFE78(DmChar08* this, PlayState* play);
+void DmChar08_DoNothing(DmChar08* this, PlayState* play);
 void func_80AAFA18(DmChar08* this, PlayState* play);
 void DmChar08_SetupAppearCs(DmChar08* this, PlayState* play);
 void func_80AAF884(DmChar08* this, PlayState* play);
@@ -125,7 +125,7 @@ void DmChar08_UpdateEyes(DmChar08* this) {
     }
 }
 
-void DmChar08_SetAnimation(SkelAnime* skelAnime, AnimationInfo* entry, u16 index) {
+void DmChar08_ChangeAnimation(SkelAnime* skelAnime, AnimationInfo* entry, u16 index) {
     f32 endFrame;
 
     entry += index;
@@ -227,11 +227,11 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
             this->eyeMode = TURTLE_EYEMODE_0;
             this->unk_207 = 0;
             this->unk_208 = 0;
-            this->actionFunc = func_80AAFE78;
+            this->actionFunc = DmChar08_DoNothing;
             this->unk_1F0 = 1.0f;
             break;
     }
-    DmChar08_SetAnimation(&this->skelAnime, &sLargeTurtleAnimationInfo[this->animIndex], 0);
+    DmChar08_ChangeAnimation(&this->skelAnime, &sLargeTurtleAnimationInfo[this->animIndex], 0);
 }
 
 void DmChar08_Destroy(Actor* thisx, PlayState* play) {
@@ -248,7 +248,7 @@ void DmChar08_WaitForSong(DmChar08* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Player* player2 = GET_PLAYER(play);
 
-    if ((player2->stateFlags2 & 0x8000000) &&
+    if ((player2->stateFlags2 & PLAYER_STATE2_8000000) &&
         ((player2->actor.world.pos.x > -5780.0f) && (player2->actor.world.pos.x < -5385.0f) &&
          (player2->actor.world.pos.z > 1120.0f) && (player2->actor.world.pos.z < 2100.0f))) {
         if (!sBigTurtleOcarinaSoundLatch) {
@@ -259,7 +259,7 @@ void DmChar08_WaitForSong(DmChar08* this, PlayState* play) {
         sBigTurtleOcarinaSoundLatch = false;
     }
     if ((player->transformation == PLAYER_FORM_ZORA) && (play->msgCtx.ocarinaMode == 3) &&
-        (play->msgCtx.unk1202E == 2)) {
+        (play->msgCtx.lastPlayedSong == OCARINA_SONG_NEW_WAVE)) {
         if ((player2->actor.world.pos.x > -5780.0f) && (player2->actor.world.pos.x < -5385.0f)) {
             if ((player2->actor.world.pos.z > 1120.0f) && (player2->actor.world.pos.z < 2100.0f)) {
                 this->actionFunc = DmChar08_SetupAppearCs;
@@ -328,7 +328,7 @@ void func_80AAFA18(DmChar08* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(nextCs) != 0) {
         gSaveContext.save.weekEventReg[53] |= 0x40;
         ActorCutscene_Start(nextCs, &this->dyna.actor);
-        this->actionFunc = func_80AAFE78;
+        this->actionFunc = DmChar08_DoNothing;
     } else {
         ActorCutscene_SetIntentToPlay(nextCs);
     }
@@ -351,7 +351,7 @@ void func_80AAFB04(DmChar08* this, PlayState* play) {
 
     if ((fabsf(this->dyna.actor.xzDistToPlayer) < 200.0f) && (player->actor.world.pos.y > 0.0f)) {
         play->nextEntranceIndex = 0x6A70;
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = 0x14;
         Scene_SetExitFade(play);
         this->actionFunc = func_80AAFB94;
     }
@@ -389,10 +389,12 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
                     case 0:
                         return;
                     case 1:
+                        // "Why so slow?" ...
                         Message_StartTextbox(play, 0x102A, &this->dyna.actor);
                         this->unk_206++;
                         return;
                     case 2:
+                        // "Heh, heh, heh.  Of course I know your name."...
                         if (Message_GetState(&play->msgCtx) == 2) {
                             Message_StartTextbox(play, 0x102B, &this->dyna.actor);
                             this->unk_206 = 0;
@@ -404,6 +406,7 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
                     case 0:
                         return;
                     case 1:
+                        //"...Are you going to the temple again?"...
                         Message_StartTextbox(play, 0x103B, &this->dyna.actor);
                         this->unk_206++;
                         return;
@@ -435,7 +438,7 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
     }
 }
 
-void func_80AAFE78(DmChar08* this, PlayState* play) {
+void DmChar08_DoNothing(DmChar08* this, PlayState* play) {
 }
 
 void func_80AAFE88(DmChar08* this, PlayState* play) {
@@ -529,7 +532,7 @@ void func_80AAFE88(DmChar08* this, PlayState* play) {
 void func_80AB01E8(DmChar08* this, PlayState* play) {
     if (this->animIndex != this->unk_203) {
         this->unk_203 = this->animIndex;
-        DmChar08_SetAnimation(&this->skelAnime, &sLargeTurtleAnimationInfo[this->animIndex], 0);
+        DmChar08_ChangeAnimation(&this->skelAnime, &sLargeTurtleAnimationInfo[this->animIndex], 0);
     }
 }
 
@@ -538,43 +541,50 @@ void func_80AB023C(DmChar08* this, PlayState* play) {
         this->unk_1FC = play->msgCtx.currentTextId;
         this->unk_208 = 0;
         switch (play->msgCtx.currentTextId) {
-            case 0x1025:
+            case 0x1025: //"Mm...Mm...Yeeeaaawn!  I slept quite well!"
                 this->unk_207 = 1;
                 return;
-            case 0x1026:
+            case 0x1026: // "I just realized this when I opened my eyes. The passing of days is quite quick. Isn't it,
+                         // Lulu?"
                 this->unk_207 = 2;
                 return;
-            case 0x1027:
+            case 0x1027: //"Yes, Lulu. It's nothing to be surprised at. Although my eyes were closed in sleep, I still
+                         //see everything that occurs in this ocean..."
                 this->unk_207 = 3;
                 return;
-            case 0x1028:
+            case 0x1028: // "...Hmm. It seems Lulu is confused. Regrettably, there is no time for idle conversation. Now
+                         // then, proud Zora warrior..."
                 this->unk_207 = 4;
                 return;
-            case 0x1029:
+            case 0x1029: // "The open seas of Great Bay have need of your might. Quickly. Climb onto my back."
                 this->unk_207 = 10;
                 return;
-            case 0x102C:
+            case 0x102C: // "You seem to be having a bit of trouble... Are you still not used to your Zora body? Perhaps
+                         // it would be quicker to give up."
                 this->unk_207 = 5;
                 return;
-            case 0x102D:
+            case 0x102D: // "If you are once again ready to depart, then climb onto my back. Ready, [Link]?"
                 this->unk_207 = 8;
                 return;
-            case 0x102A:
+            case 0x102A: // "Why so slow? Hurry up and fire your hookshot into the palm tree on my back, [Link]."
                 this->unk_207 = 6;
                 return;
-            case 0x102B:
+            case 0x102B: // "Heh, heh, heh.  Of course I know your name.  Didn't I say that all is seen by me?"
                 this->unk_207 = 2;
                 return;
-            case 0x102E:
+            case 0x102E: // "What's wrong?  Returning to shore?  Hyeh, hyeh."
                 this->unk_207 = 9;
                 return;
-            case 0x102F:
+            case 0x102F: //"It is not shameful to retreat. That in and of itself is a strategy. All right. Climb onto my
+                         //back."
                 this->unk_207 = 7;
                 return;
-            case 0x103B:
+            case 0x103B: // "...Are you going to the temple again?  If there is something left to do, then quickly climb
+                         // onto my back."
                 this->unk_207 = 6;
                 return;
-            case 0x1030:
+            case 0x1030: // "Now I can continue resting in peace. I too must abide the laws of ancient times and again
+                         // merely watch from my deep slumber."...
                 this->unk_207 = 4;
                 break;
         }

@@ -199,7 +199,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
             } else if (player->itemActionParam == PLAYER_AP_STICK) {
                 Vec3f stickTipSeparationVec;
 
-                Math_Vec3f_Diff(&player->swordInfo[0].tip, &thisx->world.pos, &stickTipSeparationVec);
+                Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &thisx->world.pos, &stickTipSeparationVec);
                 stickTipSeparationVec.y -= OBJ_SYOKUDAI_STICK_IGNITION_HEIGHT;
                 if (SQXYZ(stickTipSeparationVec) < SQ(OBJ_SYOKUDAI_STICK_IGNITION_RADIUS)) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_STICK;

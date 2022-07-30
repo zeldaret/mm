@@ -134,10 +134,10 @@ s32 EnBba01_TestIsTalking(EnBba01* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->enHy.actor, &play->state)) {
         isTalking = true;
         this->enHy.textId = 0x10B9; // Invalid textId, produces empty textbox
-        this->enHy.tmptrackTarget = this->enHy.trackTarget;
-        this->enHy.tmpHeadRot = this->enHy.headRot;
-        this->enHy.tmpTorsoRot = this->enHy.torsoRot;
-        this->enHy.tmpActionFunc = this->enHy.actionFunc;
+        this->enHy.prevTrackTarget = this->enHy.trackTarget;
+        this->enHy.prevHeadRot = this->enHy.headRot;
+        this->enHy.prevTorsoRot = this->enHy.torsoRot;
+        this->enHy.prevActionFunc = this->enHy.actionFunc;
         this->enHy.actionFunc = EnBba01_Talk;
     }
     return isTalking;
@@ -162,7 +162,7 @@ void EnBba01_FinishInit(EnHy* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_1;
         this->actor.draw = EnBba01_Draw;
         this->waitingOnInit = false;
-        if (ENBBA01_GET_PATH(&this->actor) == ENBBA01_NO_PATH) {
+        if (ENBBA01_GET_PATH(&this->actor) == 0x3F) {
             this->actionFunc = EnBba01_FaceFoward;
         } else {
             this->actionFunc = EnBba01_Walk;
@@ -185,24 +185,26 @@ void EnBba01_Talk(EnHy* this, PlayState* play) {
     u8 talkState;
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xFA0, 1);
+
     talkState = Message_GetState(&play->msgCtx);
-    this->inMsgState3 = (talkState == 3) ? true : false;
+    this->inMsgState3 = (talkState == TEXT_STATE_3) ? true : false;
 
     switch (talkState) {
-        case 0:
+        case TEXT_STATE_NONE:
             yaw = ABS_ALT(this->actor.shape.rot.y - this->actor.yawTowardsPlayer);
             if (yaw < 0x64) {
                 Message_StartTextbox(play, this->textId, NULL);
             }
             break;
-        case 2:
+
+        case TEXT_STATE_CLOSING:
             this->actor.textId = 0;
-            this->trackTarget = this->tmptrackTarget;
-            this->headRot = this->tmpHeadRot;
-            this->torsoRot = this->tmpTorsoRot;
+            this->trackTarget = this->prevTrackTarget;
+            this->headRot = this->prevHeadRot;
+            this->torsoRot = this->prevTorsoRot;
             this->actor.shape.rot.y = this->actor.world.rot.y;
-            this->actionFunc = this->tmpActionFunc;
-            this->tmpActionFunc = NULL;
+            this->actionFunc = this->prevActionFunc;
+            this->prevActionFunc = NULL;
             break;
     }
 }
@@ -225,7 +227,7 @@ void EnBba01_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->enHy.collider, &this->enHy.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->enHy.actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->enHy.actor.flags &= ~ACTOR_FLAG_1;
-    this->enHy.path = SubS_GetPathByIndex(play, ENBBA01_GET_PATH(&this->enHy.actor), ENBBA01_NO_PATH);
+    this->enHy.path = SubS_GetPathByIndex(play, ENBBA01_GET_PATH(&this->enHy.actor), 0x3F);
     this->enHy.waitingOnInit = true;
     Actor_SetScale(&this->enHy.actor, 0.01f);
     this->enHy.actionFunc = EnBba01_FinishInit;

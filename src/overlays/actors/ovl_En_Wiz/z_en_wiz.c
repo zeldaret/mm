@@ -77,7 +77,7 @@ static ColliderJntSphElementInit D_80A48B50[10] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80A48CB8 = {
     { COLTYPE_HIT2, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    10, D_80A48B50, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80A48B50, // sJntSphElementsInit,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

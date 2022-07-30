@@ -1,5 +1,8 @@
 ﻿<Root>
     <File Name="object_kamejima" Segment="6">
+        <Array Name="object_kamejima_Vtx_000000" Count="20" Offset="0x0">
+            <Vtx/>
+        </Array>
         <DList Name="object_kamejima_DL_000140" Offset="0x140" />
         <Texture Name="object_kamejima_Tex_0002D8" OutName="tex_0002D8" Format="i8" Width="32" Height="64" Offset="0x2D8" />
         <Texture Name="object_kamejima_Tex_000AD8" OutName="tex_000AD8" Format="i8" Width="64" Height="64" Offset="0xAD8" />
