@@ -216,7 +216,7 @@ typedef enum {
     /* 7 */ EN_PP_ANIM_TURN_TO_FACE_PLAYER,
     /* 8 */ EN_PP_ANIM_JUMP,
     /* 9 */ EN_PP_ANIM_LAND
-} EnPpAnimations;
+} EnPpAnimation;
 
 static AnimationHeader* sAnimations[] = {
     &gHiploopIdleAnim,   &gHiploopWalkAnim, &gHiploopWindUpAnim, &gHiploopChargeAnim, &gHiploopAttackAnim,
