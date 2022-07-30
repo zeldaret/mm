@@ -5,7 +5,7 @@
  */
 
 #include "z_dm_char09.h"
-
+#include "objects/object_bee/object_bee.h"
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((DmChar09*)thisx)
@@ -22,7 +22,8 @@ void func_80AB2268(DmChar09* this, PlayState* play);
 void func_80AB24BC(DmChar09* this, PlayState* play);
 s32 func_80AB25D8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void func_80AB1FA0(DmChar09* this, s32 arg1);
-#if 0
+
+#if 1
 const ActorInit Dm_Char09_InitVars = {
     ACTOR_DM_CHAR09,
     ACTORCAT_ITEMACTION,
@@ -34,19 +35,13 @@ const ActorInit Dm_Char09_InitVars = {
     (ActorFunc)DmChar09_Update,
     (ActorFunc)DmChar09_Draw,
 };
-s32 D_80AB26B0 = 0x0600005C; // object_bee_Anim_00005C
+AnimationInfo D_80AB26B0[1] = { { &object_bee_Anim_00005C, 1.0f, 0.0f, -1.0f, 0, 0.0f } }; // object_bee_Anim_00005C
 #endif
 
 extern UNK_TYPE D_0600005C;
 extern SkeletonHeader D_06001398;
-extern f32 D_80AB26D0;
-extern f32 D_80AB26D4;
-extern f32 D_80AB26D8;
-extern f32 D_80AB26DC;
-extern f32 D_80AB26E0;
-extern f32 D_80AB26E4;
-extern f32 D_80AB26E8;
-extern UNK_TYPE D_80AB26B0;
+extern AnimationInfo D_80AB26B0[];
+//extern AnimationInfo D_80AB26B0;
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char09/func_80AB1E10.s")
 
 //void func_80AB1E10(SkelAnime *arg0, s32 arg1, s32 arg2) {
@@ -73,7 +68,7 @@ void DmChar09_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     SkelAnime_Init(play, &this->skelAnime, &D_06001398, (AnimationHeader*)&D_0600005C, &this->unk188, &this->unk1C4,
                    0xA);
-    func_80AB1E10(&this->skelAnime, &D_80AB26B0, 0);
+    func_80AB1E10(&this->skelAnime, D_80AB26B0, 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->unk228 = Rand_ZeroOne() * 65535.0f;
     this->unk22A = Rand_ZeroOne() * 65535.0f;
