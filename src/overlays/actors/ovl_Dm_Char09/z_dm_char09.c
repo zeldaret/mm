@@ -30,7 +30,9 @@ const ActorInit Dm_Char09_InitVars = {
     (ActorFunc)DmChar09_Draw,
 };
 
-static AnimationInfo sAnimations[] = { { &object_bee_Anim_00005C, 1.0f, 0.0f, -1.0f, 0, 0.0f }, };
+static AnimationInfo sAnimations[] = {
+    { &object_bee_Anim_00005C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+};
 
 void DmChar09_ChangeAnimation(SkelAnime* skelAnime, AnimationInfo* animation, u16 index) {
     f32 frameCount;
@@ -138,7 +140,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
         csIndex = 1;
     }
 
-    if (Cutscene_CheckActorAction(play, 0x1F7) && (csIndex != 0)) {
+    if (Cutscene_CheckActorAction(play, 0x1F7) && (csIndex)) {
         actionIndex = Cutscene_GetActorActionIndex(play, 0x1F7);
         if (this->unk_22F != play->csCtx.actorActions[actionIndex]->action) {
             this->unk_22F = play->csCtx.actorActions[actionIndex]->action;
