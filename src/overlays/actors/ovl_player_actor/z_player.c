@@ -3192,8 +3192,158 @@ void func_80833AA0(Player* this, PlayState* play) {
     }
 }
 
+
+void func_808546D0(Player* this, PlayState* play);
+void func_80854800(Player* this, PlayState* play);
+void func_80851B58(Player* this, PlayState* play);
+void func_8084BBF0(Player* this, PlayState* play);
+
+extern LinkAnimationHeader* D_8085D0D4[];
+extern LinkAnimationHeader* D_8085D0E4[];
+
+#if 0
+void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 arg3, f32 arg4, s16 arg5, s32 arg6) {
+    LinkAnimationHeader* sp2C;
+    LinkAnimationHeader** sp28;
+    LinkAnimationHeader** var_v1;
+    LinkAnimationHeader** var_v1_2;
+    s16 temp_v1;
+    s16 var_v0;
+    s16 var_v0_2;
+    s16 var_v0_3;
+
+    sp2C = NULL;
+    if (this->stateFlags1 & 0x2000) {
+        func_80833A64(this);
+    }
+    this->unk_B64 = 0;
+    func_800B8E58(this, 0x83FU);
+    if ((func_808339D4(play, this, -(s32) this->actor.colChkInfo.damage) != 0) || ((this->stateFlags2 &= ~0x80, ((this->actor.bgCheckFlags & 1) == 0)) && !(this->stateFlags1 & 0x8000000))) {
+        if (this->actor.colChkInfo.damage != 0) {
+            func_80833998(this, arg6);
+        }
+        if (!(this->stateFlags2 & 0x10)) {
+            if (arg2 == 3) {
+                func_80831494(play, this, func_808546D0, 0);
+                sp2C = &gameplay_keep_Linkanim_00DCD0;
+                func_8082DAD4(this);
+                this->actor.velocity.y = 0.0f;
+                Player_RequestRumble(play, this, 0xFFU, 0xAU, (u8) 0x28, 0);
+                func_800B8E58(this, 0x874U);
+                func_8082DF8C(this, 0x6806U);
+                goto block_47;
+            }
+            if (arg2 == 4) {
+                func_80831494(play, this, func_80854800, 0);
+                func_8082DB60(play, this, &gameplay_keep_Linkanim_00DC20);
+                func_8082DAD4(this);
+                this->unk_AE8 = 0x14;
+                this->actor.velocity.y = 0.0f;
+                Player_RequestRumble(play, this, 0xFFU, 0x50U, (u8) 0x96, 0);
+                goto block_47;
+            }
+            arg5 -= this->actor.shape.rot.y;
+            if (this->stateFlags1 & 0x8000000) {
+                func_80831494(play, this, func_80851B58, 0);
+                Player_RequestRumble(play, this, 0xB4U, 0x14U, (u8) 0x32, 0);
+                if (arg2 == 1) {
+                    this->linearVelocity = arg3 * 1.5f;
+                    this->actor.velocity.y = arg4 * 0.7f;
+                } else {
+                    this->linearVelocity = 4.0f;
+                    this->actor.velocity.y = 0.0f;
+                }
+                func_8082DF8C(this, 0x6805U);
+                sp2C = &gameplay_keep_Linkanim_00DFF8;
+                goto block_43;
+            }
+            if ((arg2 == 1) || (arg2 == 2) || !(this->actor.bgCheckFlags & 1) || (this->stateFlags1 & 0x206004)) {
+                func_80831494(play, this, func_8084BC64, 0);
+                this->stateFlags3 |= 2;
+                Player_RequestRumble(play, this, 0xFFU, 0x14U, (u8) 0x96, 0);
+                func_8082DAD4(this);
+                if (arg2 == 2) {
+                    this->unk_AE8 = 4;
+                    this->actor.speedXZ = 3.0f;
+                    this->linearVelocity = 3.0f;
+                    this->actor.velocity.y = 6.0f;
+                    func_8082E5A8(play, this, (D_8085BE84 + 0x48)[this->modelAnimType]);
+                    func_8082DF8C(this, 0x6805U);
+                } else {
+                    this->actor.speedXZ = arg3;
+                    this->linearVelocity = arg3;
+                    var_v0 = arg5;
+                    this->actor.velocity.y = arg4;
+                    if (arg5 < 0) {
+                        var_v0 = -arg5;
+                    }
+                    if (var_v0 >= 0x4001) {
+                        sp2C = &gameplay_keep_Linkanim_00DC78;
+                    } else {
+                        sp2C = &gameplay_keep_Linkanim_00DAD0;
+                    }
+                    func_8082DF8C(this, 0x6808U);
+                }
+                this->actor.bgCheckFlags &= 0xFFFE;
+                goto block_43;
+            }
+            if ((this->linearVelocity > 4.0f) && (func_80123420(this) == 0)) {
+                this->unk_B64 = 0x14;
+                Player_RequestRumble(play, this, 0x78U, 0x14U, (u8) 0xA, 0);
+                func_8082DF8C(this, 0x6805U);
+                return;
+            }
+            sp28 = D_8085D0D4;
+            func_80831494(play, this, func_8084BBF0, 0);
+            func_8082FC60(this);
+            if ((s32) this->actor.colChkInfo.damage < 5) {
+                sp28 = D_8085D0D4;
+                Player_RequestRumble(play, this, 0x78U, 0x14U, (u8) 0xA, 0);
+                var_v1 = D_8085D0D4;
+            } else {
+                Player_RequestRumble(play, this, 0xB4U, 0x14U, (u8) 0x64, 0);
+                var_v1 = D_8085D0E4;
+                this->linearVelocity = 23.0f;
+            }
+            var_v0_2 = arg5;
+            if (arg5 < 0) {
+                var_v0_2 = -arg5;
+            }
+            if (var_v0_2 < 0x4001) {
+                var_v1 += 8;
+            }
+            sp28 = var_v1;
+            var_v1_2 = var_v1;
+            if (func_80123420(this) != 0) {
+                var_v1_2 += 4;
+            }
+            sp2C = *var_v1_2;
+            func_8082DF8C(this, 0x6805U);
+block_43:
+            var_v0_3 = arg5;
+            this->actor.shape.rot.y += arg5;
+            temp_v1 = this->actor.shape.rot.y;
+            this->currentYaw = temp_v1;
+            this->actor.world.rot.y = temp_v1;
+            if (arg5 < 0) {
+                var_v0_3 = -arg5;
+            }
+            if (var_v0_3 >= 0x4001) {
+                this->actor.shape.rot.y = temp_v1 + 0x8000;
+            }
+block_47:
+            func_8082DE50(play, this);
+            this->stateFlags1 |= 0x04000000;
+            if (sp2C != NULL) {
+                func_8082DB90(play, this, sp2C);
+            }
+        }
+    }
+}
+#else
 void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 arg3, f32 arg4, s16 arg5, s32 arg6);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80833B18.s")
+#endif
 
 s32 func_808340AC(s32 arg0) {
     s32 temp_v0 = arg0 - 2;
@@ -4603,7 +4753,6 @@ void func_808497A0(Player* this, PlayState* play);
 void func_8084D4EC(Player* this, PlayState* play);
 
 void func_8084E724(Player* this, PlayState* play);
-void func_80851B58(Player* this, PlayState* play);
 void func_80851588(Player* this, PlayState* play);
 void func_808519FC(Player* this, PlayState* play);
 
