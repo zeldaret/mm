@@ -46,15 +46,15 @@ def get_tidy_version(tidy_executable: str):
     return int(match.group(1))
 
 
-CLANG_FORMAT = get_clang_executable([f"clang-format-{CLANG_VER}", "clang-format"])
+CLANG_FORMAT = get_clang_executable([f"clang-format-{CLANG_VER}"])
 if CLANG_FORMAT is None:
     sys.exit(f"Error: neither clang-format nor clang-format-{CLANG_VER} found")
 
-CLANG_TIDY = get_clang_executable([f"clang-tidy-{CLANG_VER}", "clang-tidy"])
+CLANG_TIDY = get_clang_executable([f"clang-tidy-{CLANG_VER}"])
 if CLANG_TIDY is None:
     sys.exit(f"Error: neither clang-tidy nor clang-tidy-{CLANG_VER} found")
 
-CLANG_APPLY_REPLACEMENTS = get_clang_executable([f"clang-apply-replacements-{CLANG_VER}", "clang-apply-replacements"])
+CLANG_APPLY_REPLACEMENTS = get_clang_executable([f"clang-apply-replacements-{CLANG_VER}"])
 
 # Try to detect the clang-tidy version and add --fix-notes for version 13+
 # This is used to ensure all fixes are applied properly in recent versions
