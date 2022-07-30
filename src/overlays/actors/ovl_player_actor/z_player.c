@@ -151,7 +151,7 @@ void func_8082DAD4(Player* this) {
 s32 func_8082DAFC(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return CHECK_FLAG_ALL(player->actor.flags, 0x100);
+    return CHECK_FLAG_ALL(player->actor.flags, ACTOR_FLAG_100);
 }
 
 void func_8082DB18(PlayState* play, Player* this, LinkAnimationHeader* anim) {
@@ -1545,7 +1545,6 @@ struct_8085CC88 D_8085CC88[0xF] = {
 
 s32 func_80848808(Player* this, PlayState* play);
 
-void func_808302CC(Player* this, PlayState* play);
 void func_808302CC(Player* this, PlayState* play) {
     LinkAnimationHeader* anim;
     s32 pad[3];
@@ -2503,8 +2502,6 @@ void func_80852B28(Player* this, PlayState* play);
 
 extern u8 D_8085B9F0[];
 
-s32 func_8083216C(Player* this, PlayState* play);
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083216C.s")
 s32 func_8083216C(Player* this, PlayState* play) {
     if (!(this->stateFlags1 & PLAYER_STATE1_800000) && (this->actor.parent != NULL) && Player_IsHoldingHookshot(this)) {
         func_80831494(play, this, func_80855E08, 1);
@@ -2668,8 +2665,93 @@ s16 func_80832754(Player* this, s32 arg1) {
     return var_s1;
 }
 
-void func_80832888(Player* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80832888.s")
+void func_808573A4(Player* this, PlayState* play);
+
+void func_80832888(Player* this, PlayState* play) {
+    s32 var_v1 = 0;
+    Actor* var_v1_2;
+    s32 temp_v0;
+    s32 temp_v0_3;
+    s32 var_a1;
+
+    temp_v0 = CHECK_BTN_ALL(D_80862B44->cur.button, BTN_Z);
+    if (temp_v0 == 0) {
+        this->stateFlags1 &= ~PLAYER_STATE1_40000000;
+    }
+
+    if ((play->csCtx.state != 0) || (this->csMode != 0) || (this->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) || (this->stateFlags3 & PLAYER_STATE3_80)) {
+        this->unk_738 = 0;
+    } else if ((temp_v0 != 0) || (this->stateFlags2 & PLAYER_STATE2_2000) || (this->unk_A78 != NULL)) {
+        if (this->unk_738 <= 5) {
+            this->unk_738 = 5;
+        } else {
+            this->unk_738--;
+        }
+    } else if (this->stateFlags1 & PLAYER_STATE1_20000) {
+        this->unk_738 = 0;
+    } else if (this->unk_738 != 0) {
+        this->unk_738--;
+    }
+
+    if (this->unk_738 > 5) {
+        var_v1 = 1;
+    }
+
+    temp_v0_3 = func_8082DAFC(play);
+    if (temp_v0_3 || (this->unk_738 != 0) || (this->stateFlags1 & (PLAYER_STATE1_1000 | PLAYER_STATE1_2000000))) {
+        if (!temp_v0_3) {
+            if (!(this->stateFlags1 & PLAYER_STATE1_2000000) && ((this->itemActionParam != PLAYER_AP_FISHING_POLE) || (this->unk_B28 == 0)) && CHECK_BTN_ALL(D_80862B44->press.button, BTN_Z)) {
+                var_v1_2 = (this == GET_PLAYER(play)) ? play->actorCtx.targetContext.arrowPointedActor : &GET_PLAYER(play)->actor;
+                var_a1 = gSaveContext.options.zTargetSetting != 0 || this != GET_PLAYER(play);
+                this->stateFlags1 |= PLAYER_STATE1_8000;
+                if ((this->currentMask != PLAYER_MASK_GIANT) && (var_v1_2 != NULL) && !(var_v1_2->flags & ACTOR_FLAG_8000000) && !(this->stateFlags3 & (PLAYER_STATE3_200 | PLAYER_STATE3_2000))) {
+                    if ((var_v1_2 == this->unk_730) && (this == GET_PLAYER(play))) {
+                        var_v1_2 = play->actorCtx.targetContext.unk_94;
+                    }
+
+                    if ((var_v1_2 != NULL) && (( (var_v1_2 != this->unk_730)) || (var_v1_2->flags & ACTOR_FLAG_80000))) {
+                        var_v1_2->flags &= ~ACTOR_FLAG_80000;
+                        if (var_a1 == 0) {
+                            this->stateFlags2 |= PLAYER_STATE2_2000;
+                        }
+                        this->unk_730 = var_v1_2;
+                        this->unk_738 = 0xF;
+                        this->stateFlags2 &= ~(PLAYER_STATE2_2 | PLAYER_STATE2_200000);
+                    } else if (var_a1 == 0) {
+                        func_80123DA4(this);
+                    }
+                    this->stateFlags1 &= ~PLAYER_STATE1_40000000;
+                } else if (!(this->stateFlags1 & (PLAYER_STATE1_20000 | PLAYER_STATE1_40000000)) && (func_808573A4 != this->unk_748)) {
+                    func_8083133C(this);
+                }
+            }
+
+            if (this->unk_730 != NULL) {
+                if ((this == GET_PLAYER(play)) && (this->unk_730 != this->unk_A78) && (func_800B83F8(this->unk_730, this, var_v1) != 0)) {
+                    func_80123DA4(this);
+                    this->stateFlags1 |= PLAYER_STATE1_40000000;
+                } else if (this->unk_730 != NULL) {
+                    this->unk_730->targetPriority = 0x28;
+                }
+            } else if (this->unk_A78 != NULL) {
+                this->unk_730 = this->unk_A78;
+            }
+        }
+
+        if ((this->unk_730 != NULL) && !(this->stateFlags3 & (PLAYER_STATE1_200 | PLAYER_STATE1_2000))) {
+            this->stateFlags1 &= ~(PLAYER_STATE1_10000 | PLAYER_STATE1_20000);
+            if ((this->stateFlags1 & PLAYER_STATE1_800) || !CHECK_FLAG_ALL(this->unk_730->flags, ACTOR_FLAG_1 | ACTOR_FLAG_4)) {
+                this->stateFlags1 |= PLAYER_STATE1_10000;
+            }
+        } else if (this->stateFlags1 & PLAYER_STATE1_20000) {
+            this->stateFlags2 &= ~PLAYER_STATE1_2000;
+        } else {
+            func_80123DC0(this);
+        }
+    } else {
+        func_80123DC0(this);
+    }
+}
 
 s32 func_80832CAC(PlayState* play, Player* this, f32* arg2, s16* arg3, f32 arg4) {
     f32 new_var;
@@ -2764,8 +2846,83 @@ s32 func_80832F78(Player* this, f32* arg1, s16* arg2, f32 arg3, PlayState* play)
     return true;
 }
 
-s32 func_80833058(PlayState* play, Player* this, s8* arg2, UNK_TYPE arg3);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80833058.s")
+
+s32 func_80839518(Player* this, PlayState* play);
+s32 func_808365DC(Player* this, PlayState* play);
+s32 func_8083D23C(Player* this, PlayState* play);
+s32 func_8083CCB4(Player* this, PlayState* play);
+s32 func_808391D8(Player* this, PlayState* play);
+s32 func_8083DFC4(Player* this, PlayState* play);
+s32 func_8083A114(Player* this, PlayState* play);
+s32 func_80848570(Player* this, PlayState* play);
+s32 func_8083A580(Player* this, PlayState* play);
+s32 func_8083D78C(Player* this, PlayState* play);
+s32 func_80839B18(Player* this, PlayState* play);
+s32 func_8083A274(Player* this, PlayState* play);
+s32 func_80834DFC(Player* this, PlayState* play);
+s32 func_80838A90(Player* this, PlayState* play);
+s32 func_8083A0CC(Player* this, PlayState* play);
+
+extern s32 (*D_8085D054[0xF])(Player* this, PlayState* play);
+#if 0
+s32 (*D_8085D054[])(Player*, PlayState*) = {
+    func_80839518,
+    func_808365DC,
+    func_8083D23C,
+    func_8083CCB4,
+    func_808391D8,
+    func_8083DFC4,
+    func_8083A114,
+    func_80848570,
+    func_8083A580,
+    func_8083D78C,
+    func_80839B18,
+    func_8083A274,
+    func_80834DFC,
+    func_80838A90,
+    func_8083A0CC,
+};
+#endif
+
+s32 func_80833058(PlayState* play, Player* this, s8* arg2, s32 arg3) {
+    if (!(this->stateFlags1 & (PLAYER_STATE1_1 | PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) && !func_8082DA90(play)) {
+        if (arg3 != 0) {
+            D_80862B04 = func_8083216C(this, play);
+            if (func_80852B28 == this->unk_748) {
+                return true;
+            }
+        }
+
+        if (func_801240DC(this)) {
+            this->unk_AA6 |= 0x41;
+            return true;
+        }
+
+        if (!(this->stateFlags3 & PLAYER_STATE3_40000000) && (func_80848808 != this->unk_AC4)) {
+            s8 var_v0 = *arg2;
+
+            while (var_v0 >= 0) {
+                if (D_8085D054[var_v0](this, play) != 0) {
+                    return true;
+                }
+                var_v0 = arg2[1];
+                arg2 += 1;
+            }
+
+            if (D_8085D054[-var_v0](this, play) != 0) {
+                return true;
+            }
+        }
+
+        if (func_8083213C(this)) {
+            return true;
+        }
+    } else if (this->stateFlags1 & 0x800) {
+        func_8083216C(this, play);
+    }
+
+    return false;
+}
 
 extern s8 D_8085D01C[0xC];
 
@@ -3326,43 +3483,6 @@ void func_8083604C(PlayState* play, Player* this, Actor* door) {
 // doorType not PLAYER_DOORTYPE_2 neither PLAYER_DOORTYPE_4
 void func_80836258(PlayState* play, Player* this, Actor* door);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80836258.s")
-
-s32 func_80839518(Player* this, PlayState* play);
-s32 func_808365DC(Player* this, PlayState* play);
-s32 func_8083D23C(Player* this, PlayState* play);
-s32 func_8083CCB4(Player* this, PlayState* play);
-s32 func_808391D8(Player* this, PlayState* play);
-s32 func_8083DFC4(Player* this, PlayState* play);
-s32 func_8083A114(Player* this, PlayState* play);
-s32 func_80848570(Player* this, PlayState* play);
-s32 func_8083A580(Player* this, PlayState* play);
-s32 func_8083D78C(Player* this, PlayState* play);
-s32 func_80839B18(Player* this, PlayState* play);
-s32 func_8083A274(Player* this, PlayState* play);
-s32 func_80834DFC(Player* this, PlayState* play);
-s32 func_80838A90(Player* this, PlayState* play);
-s32 func_8083A0CC(Player* this, PlayState* play);
-
-extern s32 (*D_8085D054[0xF])(Player* this, PlayState* play);
-#if 0
-s32 (*D_8085D054[])(Player*, PlayState*) = {
-    func_80839518,
-    func_808365DC,
-    func_8083D23C,
-    func_8083CCB4,
-    func_808391D8,
-    func_8083DFC4,
-    func_8083A114,
-    func_80848570,
-    func_8083A580,
-    func_8083D78C,
-    func_80839B18,
-    func_8083A274,
-    func_80834DFC,
-    func_80838A90,
-    func_8083A0CC,
-};
-#endif
 
 void func_8085437C(Player* this, PlayState* play);
 
@@ -3999,8 +4119,6 @@ void func_80839A10(PlayState* play, Player* this) {
         func_801A3098(NA_BGM_KAMARO_DANCE);
     }
 }
-
-void func_808573A4(Player* this, PlayState* play);
 
 #ifdef NON_MATCHING
 s32 func_80839A84(PlayState* play, Player* this) {
