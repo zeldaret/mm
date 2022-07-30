@@ -549,7 +549,7 @@ void func_80AB023C(DmChar08* this, PlayState* play) {
                 this->unk_207 = 2;
                 return;
             case 0x1027: //"Yes, Lulu. It's nothing to be surprised at. Although my eyes were closed in sleep, I still
-                         //see everything that occurs in this ocean..."
+                         // see everything that occurs in this ocean..."
                 this->unk_207 = 3;
                 return;
             case 0x1028: // "...Hmm. It seems Lulu is confused. Regrettably, there is no time for idle conversation. Now
@@ -576,7 +576,7 @@ void func_80AB023C(DmChar08* this, PlayState* play) {
                 this->unk_207 = 9;
                 return;
             case 0x102F: //"It is not shameful to retreat. That in and of itself is a strategy. All right. Climb onto my
-                         //back."
+                         // back."
                 this->unk_207 = 7;
                 return;
             case 0x103B: // "...Are you going to the temple again?  If there is something left to do, then quickly climb
