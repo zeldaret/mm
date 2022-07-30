@@ -25,7 +25,7 @@ typedef struct DmChar09 {
     /* 0x224 */ Vec3s* unk_224;
     /* 0x228 */ s16 unk_228;
     /* 0x22A */ s16 unk_22A;
-    /* 0x22C */ char pad22C[2];
+    /* 0x22C */ UNK_TYPE1 pad22C[2];
     /* 0x22E */ u8 unk_22E;
     /* 0x22F */ u8 unk_22F;
 } DmChar09; // size = 0x230

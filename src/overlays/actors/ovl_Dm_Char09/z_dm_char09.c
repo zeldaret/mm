@@ -30,7 +30,7 @@ const ActorInit Dm_Char09_InitVars = {
     (ActorFunc)DmChar09_Draw,
 };
 
-static AnimationInfo sAnimations[] = { { &object_bee_Anim_00005C, 1.0f, 0.0f, -1.0f, 0, 0.0f } };
+static AnimationInfo sAnimations[] = { { &object_bee_Anim_00005C, 1.0f, 0.0f, -1.0f, 0, 0.0f }, };
 
 void DmChar09_ChangeAnimation(SkelAnime* skelAnime, AnimationInfo* animation, u16 index) {
     f32 frameCount;
