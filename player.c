@@ -4941,7 +4941,7 @@ s32 func_808341F4(PlayState* play, Player* this) {
     if (var_s3 != 0) {
         func_800B8E58(this, 0x2031U);
         if (!(play->gameplayFrames & 3)) {
-            func_8085B3E0(play, -1);
+            Player_InflictDamage(play, -1);
         }
     } else {
         this->isBurning = 0;
@@ -5026,7 +5026,7 @@ s32 func_80834600(Player* this, PlayState* play) {
 
     if (this->unk_D6A != 0) {
         if (Player_InBlockingCsMode(play, this) == 0) {
-            func_8085B3E0(play, -0x10);
+            Player_InflictDamage(play, -0x10);
             this->unk_D6A = 0;
         }
         goto block_95;
@@ -5994,7 +5994,7 @@ s32 func_80836F10(PlayState* play, Player* this) {
         func_800B8E58(this, 0x83EU);
         temp_s0 = &D_8085D13C[sp28];
         func_8082DF8C(this, temp_s0->unk_4);
-        if (func_8085B3E0(play, (s32) temp_s0->unk_0) != 0) {
+        if (Player_InflictDamage(play, (s32) temp_s0->unk_0) != 0) {
             return -1;
         }
         func_80833998(this, 0x28);
@@ -10369,7 +10369,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     play->grabPlayer = func_8085B1F0;
     play->startPlayerCutscene = func_8085B28C;
     play->func_18780 = func_8085B384;
-    play->damagePlayer = func_8085B3E0;
+    play->damagePlayer = Player_InflictDamage;
     play->talkWithPlayer = func_8085B460;
     play->unk_1878C = func_8085B74C;
     play->unk_18790 = (void (*)(PlayState*, s16, Actor*)) func_8085B820;
@@ -18142,7 +18142,7 @@ void func_808546D0(Player* arg0, PlayState* arg1) {
                 arg0->unk_AE7 = 1;
                 arg0->linearVelocity = 0.0f;
             } else if (!(arg1->gameplayFrames & 3)) {
-                func_8085B3E0(arg1, -1);
+                Player_InflictDamage(arg1, -1);
             }
         }
         arg0->stateFlags2 |= 0x4000;
@@ -21012,7 +21012,7 @@ void func_8085B384(Player* player, PlayState* play) {
     player->currentYaw = player->actor.shape.rot.y;
 }
 
-s32 func_8085B3E0(PlayState* play, s32 damage) {
+s32 Player_InflictDamage(PlayState* play, s32 damage) {
     Player* sp1C;
     Player* temp_a3;
 

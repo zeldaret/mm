@@ -45,7 +45,7 @@ extern Vec3f D_8085D340;
 s32 func_8085B1F0(PlayState* play, Player* player);
 s32 func_8085B28C(PlayState* play, Player* player, s32 mode);
 void func_8085B384(Player* player, PlayState* play);
-s32 func_8085B3E0(PlayState* play, s32 damage);
+s32 Player_InflictDamage(PlayState* play, s32 damage);
 void func_8085B460(PlayState* play, Actor* actor);
 void func_8085B74C(PlayState* play);
 void func_8085B820(PlayState* play, s16 arg1);
@@ -3378,8 +3378,74 @@ void func_80834140(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     }
 }
 
-s32 func_808341F4(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808341F4.s")
+s32 func_808341F4(PlayState* play, Player* this) {
+    f32 temp_fv0;
+    f32 flameScale;
+    f32 flameIntensity;
+    s32 i;
+    s32 timerStep;
+    s32 spawnedFlame;
+    s32 var_v0;
+    s32 var_v1;
+    u8* timerPtr;
+
+    spawnedFlame = false;
+    timerPtr = this->flameTimers;
+    if ((this->transformation == PLAYER_FORM_ZORA) || (this->transformation == PLAYER_FORM_DEKU)) {
+        timerStep = 0;
+        if (this->actor.bgCheckFlags & 1) {
+            if (this->cylinder.base.ocFlags1 & 2) {
+                Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
+                this->linearVelocity = 0.0f;
+            }
+            func_80834140(play, this, &gameplay_keep_Linkanim_00D698);
+        }
+    } else {
+        if (this->transformation == PLAYER_FORM_GORON) {
+            var_v1 = 20;
+        } else {
+            var_v1 = (s32) (this->linearVelocity * 0.4f) + 1;
+        }
+
+        if (this->stateFlags2 & 8) {
+            var_v0 = 100;
+        } else {
+            var_v0 = 0;
+        }
+
+        timerStep = var_v0 + var_v1;
+    }
+
+    for(i = 0; i < PLAYER_BODYPART_MAX; i++, timerPtr++) {
+        if (*timerPtr <= timerStep) {
+            *timerPtr = 0;
+        } else {
+            spawnedFlame = true;
+            *timerPtr -= timerStep;
+            if (*timerPtr > 20.0f) {
+                temp_fv0 = (*timerPtr - 20.0f) * 0.01f;
+                flameScale = CLAMP(temp_fv0, 0.19999999f, 0.2f);
+            } else {
+                flameScale = *timerPtr * 0.01f;
+            }
+
+            flameIntensity = (*timerPtr - 25.0f) * 0.02f;
+            flameIntensity = CLAMP(flameIntensity, 0.0f, 1.0f);
+            EffectSsFireTail_SpawnFlameOnPlayer(play, flameScale, i, flameIntensity);
+        }
+    }
+
+    if (spawnedFlame) {
+        func_800B8E58(this, NA_SE_EV_TORCH - SFX_FLAG);
+        if ((play->gameplayFrames % 4) == 0) {
+            Player_InflictDamage(play, -1);
+        }
+    } else {
+        this->isBurning = false;
+    }
+
+    return this->stateFlags1 & PLAYER_STATE1_80;
+}
 
 s32 func_808344C0(PlayState* play, Player* this) {
     s32 i = 0;
@@ -5750,7 +5816,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     play->grabPlayer = func_8085B1F0;
     play->startPlayerCutscene = func_8085B28C;
     play->func_18780 = func_8085B384;
-    play->damagePlayer = func_8085B3E0;
+    play->damagePlayer = Player_InflictDamage;
     play->talkWithPlayer = func_8085B460;
     play->unk_1878C = func_8085B74C;
     play->unk_18790 = func_8085B820;
@@ -8973,7 +9039,7 @@ void func_808546D0(Player* this, PlayState* play) {
                 this->unk_AE7 = 1;
                 this->linearVelocity = 0.0f;
             } else if (play->gameplayFrames % 4 == 0) {
-                func_8085B3E0(play, -1);
+                Player_InflictDamage(play, -1);
             }
         }
 
@@ -10612,7 +10678,7 @@ void func_8085B384(Player* player, PlayState* play) {
     player->currentYaw = player->actor.shape.rot.y;
 }
 
-s32 func_8085B3E0(PlayState* play, s32 damage) {
+s32 Player_InflictDamage(PlayState* play, s32 damage) {
     Player* player = GET_PLAYER(play);
 
     if ((player->stateFlags2 & PLAYER_STATE2_80) || !Player_InBlockingCsMode(play, player)) {
