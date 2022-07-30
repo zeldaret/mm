@@ -62,20 +62,20 @@ EnDoorEtcInfo sObjInfo[] = {
     { SCENE_MITURIN, 1, OBJECT_NUMA_OBJ },
     { -1, 0, GAMEPLAY_KEEP },
     { -1, 0xD, GAMEPLAY_FIELD_KEEP },
-    { 0, 0, 0 },
-    { 0, 0, 0 },
-    { 0, 0, 0 },
-    { 0, 0, 0 },
-    { 0, 0, 0 },
-    { 0, 0, 0 },
-    { 0, 0, 0 },
-    { 0, 0, 0 },
-    { 0, 0, 0 },
-    { 0, 0, 0 },
-    { 0, 0, 0 },
-    { 0, 0, 0 },
-    { 0, 0, 0 },
-    { 0, 0, 0 },
+    { 0, 0, OBJECT_UNSET_0 },
+    { 0, 0, OBJECT_UNSET_0 },
+    { 0, 0, OBJECT_UNSET_0 },
+    { 0, 0, OBJECT_UNSET_0 },
+    { 0, 0, OBJECT_UNSET_0 },
+    { 0, 0, OBJECT_UNSET_0 },
+    { 0, 0, OBJECT_UNSET_0 },
+    { 0, 0, OBJECT_UNSET_0 },
+    { 0, 0, OBJECT_UNSET_0 },
+    { 0, 0, OBJECT_UNSET_0 },
+    { 0, 0, OBJECT_UNSET_0 },
+    { 0, 0, OBJECT_UNSET_0 },
+    { 0, 0, OBJECT_UNSET_0 },
+    { 0, 0, OBJECT_UNSET_0 },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -140,7 +140,7 @@ s32 EnDoorEtc_IsDistanceGreater(Vec3f* a, Vec3f* b, f32 c) {
 
 void func_80AC20A8(EnDoorEtc* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
-        this->actor.flags &= ~FLAGS;
+        this->actor.flags &= ~ACTOR_FLAG_10;
         this->actor.objBankIndex = this->objectIndex;
         this->actionFunc = func_80AC2354;
         this->actor.draw = EnDoorEtc_Draw;
@@ -153,14 +153,14 @@ void func_80AC2118(EnDoorEtc* this, PlayState* play) {
     } else {
         this->angle = 0;
         this->actionFunc = func_80AC21A0;
-        this->unk_1F4 &= 0xFFFE;
+        this->unk_1F4 &= ~1;
     }
 }
 
 void func_80AC2154(EnDoorEtc* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
-    } else if (this->angle >= -0x3FFF) {
+    } else if (this->angle > -0x4000) {
         this->angle -= 0x800;
     } else {
         this->angle = -0x4000;
@@ -206,19 +206,19 @@ void func_80AC21A0(EnDoorEtc* this, PlayState* play) {
 }
 
 void func_80AC2354(EnDoorEtc* this, PlayState* play) {
-    Actor* var_s0 = play->actorCtx.actorLists[0xA].first;
+    Actor* door = play->actorCtx.actorLists[ACTORCAT_DOOR].first;
 
-    while (var_s0 != NULL) {
-        if ((var_s0->id != 5) ||
-            (EnDoorEtc_IsDistanceGreater(&var_s0->world.pos, &this->actor.world.pos, 10.0f) == 0)) {
-            var_s0 = var_s0->next;
+    while (door != NULL) {
+        if ((door->id != ACTOR_EN_DOOR) ||
+            !EnDoorEtc_IsDistanceGreater(&door->world.pos, &this->actor.world.pos, 10.0f)) {
+            door = door->next;
         } else {
-            this->actor.world.pos.x = var_s0->world.pos.x;
-            this->actor.world.pos.y = var_s0->world.pos.y;
-            this->actor.world.pos.z = var_s0->world.pos.z;
-            this->actor.shape.rot.y = var_s0->shape.rot.y;
-            this->actor.world.rot.y = var_s0->world.rot.y;
-            Actor_MarkForDeath(var_s0);
+            this->actor.world.pos.x = door->world.pos.x;
+            this->actor.world.pos.y = door->world.pos.y;
+            this->actor.world.pos.z = door->world.pos.z;
+            this->actor.shape.rot.y = door->shape.rot.y;
+            this->actor.world.rot.y = door->world.rot.y;
+            Actor_MarkForDeath(door);
             this->actionFunc = func_80AC21A0;
             this->actor.textId = 0x239B;
             Actor_SetFocus(&this->actor, 70.0f);
