@@ -201,7 +201,7 @@ void DmChar09_Update(Actor* thisx, PlayState* play) {
     func_80AB2268(this, play);
     func_80AB24BC(this, play);
     if ((play->csCtx.state != 0) && (this->unk_22E) && (this->actor.params & 0x100)) {
-        Actor_PlaySfxAtPos(&this->actor, 0x304A);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK + SFX_FLAG);
     }
 }
 
