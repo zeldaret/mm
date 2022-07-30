@@ -1614,7 +1614,7 @@ void EnPp_Draw(Actor* thisx, PlayState* play) {
             pos.y = this->actor.floorHeight;
             pos.z += (Math_CosS(this->actor.world.rot.y) * -13.0f);
             func_800C0094(this->actor.floorPoly, pos.x, pos.y, pos.z, &mtxF);
-            
+
             Matrix_Mult(&mtxF, MTXMODE_NEW);
             Matrix_Scale(0.5f, 1.0f, 0.5f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
