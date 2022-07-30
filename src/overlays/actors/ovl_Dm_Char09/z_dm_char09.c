@@ -148,122 +148,72 @@ void func_80AB1FDC(DmChar09* this, PlayState* play) {
 void func_80AB2258(DmChar09* this, PlayState* play) {
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char09/func_80AB2268.s")
-/*
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char09/func_80AB2268.s")
 void func_80AB2268(DmChar09 *this, PlayState *play) {
     Path *path;
-    //Path *temp_v1;
-    Path *temp_v1_2;
-    Path *temp_v1_3;
     f32 temp_ft1;
-    s32 temp_a0_2;
-    s32 temp_a0_3;
-    s32 temp_v0;
-    u16 action;
-    u16 temp_a2;
-    u16 temp_t5;
-    u8 phi_v1;
-    s32 phi_a3;
-    s32 phi_a0;
-    s32 phi_a0_2;
-    Path *phi_v1_2;
     s32 i;
-    s32 i2;
-
-    phi_v1 = 0U;
-    phi_a3 = 0;
+    s32 temp_v0;
+    s32 phi_a3 = 0;
+    s32 pathnum;
+    u8 phi_v1 = 0;
+    u16 action;
+    
     if ((this->actor.params & 0xF) == 0) {
         if (play->csCtx.currentCsIndex == 1) {
-            phi_v1 = 1U;
+            phi_v1 = 1;
         }
     } else if (play->csCtx.currentCsIndex == 0) {
         phi_v1 = 1;
     }
     if ((Cutscene_CheckActorAction(play, 0x1F7U) != 0) && (phi_v1 != 0)) {
         temp_v0 = Cutscene_GetActorActionIndex(play, 0x1F7U);
-        //action = play->csCtx.actorActions[temp_v0]->action;
-        //temp_a0 = play + (temp_v0 * 4);
-        //temp_t0 = temp_v0;
-        //temp_a1 = play->csCtx.actorActions[temp_v0]->action;
         if (this->unk22F != play->csCtx.actorActions[temp_v0]->action) {
-            this->unk22F = (u8) play->csCtx.actorActions[temp_v0]->action;
-            //temp_a2 = *temp_a0->unk1F4C;
-            //temp_a2 = action;
-            switch (play->csCtx.actorActions[temp_v0]->action) {                   
-            case 3:
-                phi_a3 = 1;
-                break;
-            case 4:
-                phi_a3 = 2;
-                break;
-            case 5:
-                phi_a3 = 3;
-                break;
+            this->unk22F =  play->csCtx.actorActions[temp_v0]->action;
+            switch (play->csCtx.actorActions[temp_v0]->action) {  
+                case 2:
+                    phi_a3 = 0;
+                    break;
+                case 3:
+                    phi_a3 = 1;
+                    break;
+                case 4:
+                    phi_a3 = 2;
+                    break;
+                case 5:
+                    phi_a3 = 3;
+                    break;
             }
-        //case 2:
-            if ((s32) play->csCtx.actorActions[temp_v0]->action > 2) {
-                //path = &play->setupPathList[((s16) this->actor.params >> 4) & 0xF];
-                //temp_v1 = &path[((s16) this->actor.params >> 4) & 0xF];
-                //phi_a0 = 0;
-                //phi_a0_2 = 0;
-                //phi_v1_2 = temp_v1;
-                //phi_v1_3 = temp_v1;
-                //phi_v1_4 = temp_v1;
-                if (phi_a3 > 0) {
-                    //temp_v0_2 = phi_a3 & 3;
-                    if (phi_a3 & 3 != 0) {
-                        i = 0;
-                        //for (i = 0; i < phi_a3; i++)
-                        do 
-                        {
-                            //temp_a0_2 = phi_a0 + 1;
-                            temp_v1_2 = &play->setupPathList[((s16) this->actor.params >> 4) & 0xF];
-                            i++;
-                            //phi_a0 = temp_a0_2;
-                            //phi_a0_2 = temp_a0_2;
-                            //phi_v1_2 = temp_v1_2;
-                            //phi_v1_3 = temp_v1_2;
-                            //phi_v1_4 = temp_v1_2;
-                        } while (phi_a3 & 3 != i);
-                        //if (temp_a0_2 != phi_a3) {
-                       // }
-                    } else {
-                        for (i = 0; i < phi_a3;i++)
-                        //do 
-                        {
-                            //temp_a0_3 = phi_a0_2 + 4;
-                            temp_v1_3 = &play->setupPathList[((s16) this->actor.params >> 4) & 0xF];
-                            //phi_a0_2 = temp_a0_3;
-                            //phi_v1_2 = temp_v1_3;
-                            //phi_v1_4 = temp_v1_3;
-                        } //while (temp_a0_3 != phi_a3);
-                    }
-                }
-                this->unk224 = Lib_SegmentedToVirtual(phi_v1_2->points);
-                this->unk21C = 0;
-                this->unk214 = (s32) phi_v1_2->count;
-                this->unk220 = 1;
-                this->unk218 = phi_v1_2->count - 1;
-                this->unk22E = 1;
-                temp_t5 = (u16) play->csCtx.actorActions[temp_v0]->rot.z;
-                temp_ft1 = (f32) temp_t5;
-                //phi_ft1 = temp_ft1;
+        
+            if (play->csCtx.actorActions[temp_v0]->action >= 2) {
+                pathnum = ((s16) this->actor.params >> 4) & 0xF;
+                path = &play->setupPathList[pathnum];
 
-                //if ((s32) temp_t5 < 0) {
-                  //  phi_ft1 = temp_ft1 + 4294967296.0f;
-                //}
-                this->speed = temp_ft1 * 0.00390625f;
+                for(i = 0; i < phi_a3; i++) {
+                    pathnum = path->unk1;
+                    path = &play->setupPathList[pathnum];   
+                }
+                
+                this->unk224 = Lib_SegmentedToVirtual(path->points);
+                this->unk214 = path->count;
+                this->unk21C = 0;
+                this->unk218 = path->count - 1;
+                this->unk220 = 1;
+                this->unk22E = 1;
+
+                this->speed = (u16) play->csCtx.actorActions[temp_v0]->rot.z * 0.00390625f;
                 this->actionFunc = func_80AB1FDC;
-                return;
+            } else {
+                this->unk22E = 0;
+                this->actionFunc = func_80AB2258;
             }
-            this->unk22E = 0;
-            this->actionFunc = func_80AB2258;
         }
     } else {
         this->unk22F = 0x63;
     }
 }
-*/
+
+
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char09/func_80AB24BC.s")
 
 void func_80AB24BC(DmChar09* this, PlayState* play) {
