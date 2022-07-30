@@ -5,6 +5,7 @@
  */
 
 #include "z_en_twig.h"
+#include "assets/objects/object_twig/object_twig.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -44,10 +45,11 @@ static s32 sCurrentRing;
 static s16 sRingCount;
 static s16 sRingNotCollected[25];
 
-extern Gfx D_060014C8[];
-extern Gfx D_06001C38[];
-
-static CollisionHeader* sColHeaders[] = { NULL, 0x060020A0, 0x060016C0 };
+static CollisionHeader* sColHeaders[] = {
+    NULL,
+    &object_twig_Colheader_0020A0,
+    &object_twig_Colheader_0016C0,
+};
 
 static s16 sRingsHaveSpawned = 0;
 
@@ -142,10 +144,10 @@ void func_80AC0AC8(EnTwig* this, PlayState* play) {
         }
     }
     SubS_ConstructPlane(&this->dyna.actor.world.pos, &D_80AC10D0, &this->dyna.actor.shape.rot, &sp4C);
-    if ((sCurrentRing == GET_PARAM3(this)) && Math3D_LineSegVsPlane(sp4C.normal.x, sp4C.normal.y, sp4C.normal.z, sp4C.originDist,
-                                                          &this->unk_180, &player->bodyPartsPos[0], &sp40, 0)) {
-        if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &sp40) <=
-            SQ(this->dyna.actor.scale.x * 0.345f * 40.0f)) {
+    if ((sCurrentRing == GET_PARAM3(this)) &&
+        Math3D_LineSegVsPlane(sp4C.normal.x, sp4C.normal.y, sp4C.normal.z, sp4C.originDist, &this->unk_180,
+                              &player->bodyPartsPos[0], &sp40, 0)) {
+        if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &sp40) <= SQ(this->dyna.actor.scale.x * 0.345f * 40.0f)) {
             func_80AC0CC4(this, play);
             return;
         }
@@ -234,10 +236,10 @@ void EnTwig_Draw(EnTwig* thisx, PlayState* play) {
 
     switch (this->unk_160) {
         case 1:
-            Gfx_DrawDListOpa(play, D_06001C38);
+            Gfx_DrawDListOpa(play, object_twig_DL_001C38);
             break;
         case 2:
-            Gfx_DrawDListOpa(play, D_060014C8);
+            Gfx_DrawDListOpa(play, object_twig_DL_0014C8);
             break;
     }
 }

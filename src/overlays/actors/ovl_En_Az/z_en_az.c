@@ -5,6 +5,7 @@
  */
 
 #include "z_en_az.h"
+#include "assets/objects/object_az/object_az.h"
 #include "overlays/actors/ovl_En_Twig/z_en_twig.h"
 #include "overlays/actors/ovl_En_Fish/z_en_fish.h"
 
@@ -41,10 +42,10 @@ void func_80A95E88(EnAz* this, PlayState* play);
 void func_80A95F94(EnAz* this, PlayState* play);
 void func_80A95FE8(EnAz* this, PlayState* play);
 
-void func_80A979DC(EnAz* this, PlayState* play); //
+void func_80A979DC(EnAz* this, PlayState* play);
 void func_80A979F4(EnAz* this, PlayState* play);
 
-void func_80A97A28(EnAz* this, PlayState* play); //
+void func_80A97A28(EnAz* this, PlayState* play);
 void func_80A97A40(EnAz* this, PlayState* play);
 
 void func_80A97A9C(EnAz* this, PlayState* play);
@@ -61,11 +62,13 @@ void func_80A97EAC(EnAz* this, PlayState* play);
 void func_80A97F9C(EnAz* this, PlayState* play);
 
 static AnimationSpeedInfo D_80A99010[14] = {
-    { 0x600BCFC, 1.0f, 0, -10.0f }, { 0x600C94C, 1.0f, 0, -5.0f }, { 0x6008960, 1.0f, 0, -5.0f },
-    { 0x6008BB4, 1.0f, 0, -5.0f },  { 0x600925C, 1.0f, 0, -5.0f }, { 0x6009B4C, 1.0f, 0, -5.0f },
-    { 0x60086AC, 1.0f, 0, -5.0f },  { 0x6007D3C, 1.0f, 0, -5.0f }, { 0x6008EAC, 2.0f, 0, -5.0f },
-    { 0x600A25C, 1.0f, 0, -5.0f },  { 0x600AAEC, 1.0f, 0, -5.0f }, { 0x600B94C, 1.0f, 2, -5.0f },
-    { 0x600C0A0, 1.0f, 0, -5.0f },  { 0x600C47C, 1.0f, 0, -5.0f },
+    { &object_az_Anim_00BCFC, 1.0f, 0, -10.0f }, { &object_az_Anim_00C94C, 1.0f, 0, -5.0f },
+    { &object_az_Anim_008960, 1.0f, 0, -5.0f },  { &object_az_Anim_008BB4, 1.0f, 0, -5.0f },
+    { &object_az_Anim_00925C, 1.0f, 0, -5.0f },  { &object_az_Anim_009B4C, 1.0f, 0, -5.0f },
+    { &object_az_Anim_0086AC, 1.0f, 0, -5.0f },  { &object_az_Anim_007D3C, 1.0f, 0, -5.0f },
+    { &object_az_Anim_008EAC, 2.0f, 0, -5.0f },  { &object_az_Anim_00A25C, 1.0f, 0, -5.0f },
+    { &object_az_Anim_00AAEC, 1.0f, 0, -5.0f },  { &object_az_Anim_00B94C, 1.0f, 2, -5.0f },
+    { &object_az_Anim_00C0A0, 1.0f, 0, -5.0f },  { &object_az_Anim_00C47C, 1.0f, 0, -5.0f },
 };
 
 const ActorInit En_Az_InitVars = {
@@ -102,15 +105,9 @@ static ColliderCylinderInit sCylinderInit = {
 
 static EnAz* D_80A9913C = NULL;
 
-static Vec3f D_80A99E80; // path point?
-static f32 D_80A99E8C; // player distance to path point?
+static Vec3f D_80A99E80;  // path point?
+static f32 D_80A99E8C;    // player distance to path point?
 static f32 D_80A99E90[2]; // unused?
-
-extern Gfx D_0601AD00[];
-extern FlexSkeletonHeader D_06007438;
-extern FlexSkeletonHeader D_06017990;
-extern AnimationHeader D_0600C94C;
-extern Gfx D_0601ABF0[];
 
 void func_80A94A30(EnAz* this) {
     this->actor.velocity.y += this->actor.gravity;
@@ -235,12 +232,12 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
     }
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     if (this->unk_374 & 2) {
-        SkelAnime_InitFlex(play, &this->skelAnime, &D_06007438, &D_0600C94C, this->jointTable, this->morphTable,
-                         0x18);
+        SkelAnime_InitFlex(play, &this->skelAnime, &object_az_Skel_007438, &object_az_Anim_00C94C, this->jointTable,
+                           this->morphTable, 0x18);
         Actor_SetScale(&this->actor, 0.012f);
     } else {
-        SkelAnime_InitFlex(play, &this->skelAnime, &D_06017990, &D_0600C94C, this->jointTable, this->morphTable,
-                         0x18);
+        SkelAnime_InitFlex(play, &this->skelAnime, &object_az_Skel_017990, &object_az_Anim_00C94C, this->jointTable,
+                           this->morphTable, 0x18);
     }
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     if (this->unk_374 & 2) {
@@ -254,9 +251,9 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
         this->unk_376 |= 0x100;
     }
     Animation_Change(&this->skelAnime, D_80A99010[0].animation, 1.0f,
-                         Animation_GetLastFrame(&D_80A99010[0].animation->common) * Rand_ZeroOne(),
-                         Animation_GetLastFrame(&D_80A99010[0].animation->common), D_80A99010[0].mode,
-                         D_80A99010[0].morphFrames);
+                     Animation_GetLastFrame(&D_80A99010[0].animation->common) * Rand_ZeroOne(),
+                     Animation_GetLastFrame(&D_80A99010[0].animation->common), D_80A99010[0].mode,
+                     D_80A99010[0].morphFrames);
     this->unk_37E = 0;
     this->unk_380 = 0;
     this->unk_384 = 0;
@@ -311,7 +308,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
             }
             if (this->unk_374 & 1) {
                 SubS_CopyPointFromPathList(play->setupPathList, GET_PARAM2(thisx),
-                              play->setupPathList[GET_PARAM2(thisx)].count - 1, &D_80A99E80);
+                                           play->setupPathList[GET_PARAM2(thisx)].count - 1, &D_80A99E80);
             }
             if (gSaveContext.save.weekEventReg[24] & 4) {
                 if (this->unk_374 & 2) {
@@ -362,8 +359,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
     if (sp4E >= 0) {
         this->brother = NULL;
         do {
-            this->brother =
-                (EnAz*)SubS_FindActor(play, &this->brother->actor, ACTORCAT_NPC, ACTOR_EN_AZ);
+            this->brother = (EnAz*)SubS_FindActor(play, &this->brother->actor, ACTORCAT_NPC, ACTOR_EN_AZ);
             if (this->brother != NULL) {
                 if (sp4E == GET_PARAM1(&this->brother->actor)) {
                     break;
@@ -398,7 +394,7 @@ f32 func_80A954AC(EnAz* this) {
 }
 
 s32 func_80A95534(PlayState* play, ActorPathing* arg1) {
-    EnAz* temp_s0 = (EnAz*) arg1->actor;
+    EnAz* temp_s0 = (EnAz*)arg1->actor;
     s32 ret = 0;
 
     temp_s0->actor.world.rot.x = 0;
@@ -471,7 +467,7 @@ s32 func_80A95730(PlayState* play, ActorPathing* arg1) {
 }
 
 s32 func_80A958B0(PlayState* play, ActorPathing* arg1) {
-    EnAz* temp_s0 = (EnAz*) arg1->actor;
+    EnAz* temp_s0 = (EnAz*)arg1->actor;
     s32 ret = false;
     f32 pad;
     f32 phi_f0;
@@ -518,7 +514,7 @@ s32 func_80A958B0(PlayState* play, ActorPathing* arg1) {
 }
 
 s32 func_80A95B34(PlayState* play, ActorPathing* arg1) {
-    EnAz* temp_s0 = (EnAz*) arg1->actor;
+    EnAz* temp_s0 = (EnAz*)arg1->actor;
     s32 ret;
 
     if (temp_s0->unk_374 & 0x100) {
@@ -581,7 +577,7 @@ void func_80A95DA0(EnAz* this, PlayState* play) {
     ActorPathing* sp40 = &this->unk_300;
 
     SubS_ActorPathing_Init(play, &this->actor.world.pos, &this->actor, sp40, play->setupPathList,
-                  this->actor.params & 0xFF, 0, 0, 1, 1);
+                           this->actor.params & 0xFF, 0, 0, 1, 1);
     this->unk_36C = 4.0f;
     this->actor.speedXZ = 4.0f;
     this->actor.gravity = 0.0f;
@@ -594,11 +590,11 @@ void func_80A95DA0(EnAz* this, PlayState* play) {
 }
 
 void func_80A95E88(EnAz* this, PlayState* play) {
-    SubS_ActorPathing_Update(play, &this->unk_300, func_80A982E0, func_80A95B34, SubS_ActorPathing_MoveWithGravity, SubS_ActorPathing_SetNextPoint);
+    SubS_ActorPathing_Update(play, &this->unk_300, func_80A982E0, func_80A95B34, SubS_ActorPathing_MoveWithGravity,
+                             SubS_ActorPathing_SetNextPoint);
     if (this->actor.depthInWater > 8.0f) {
         if (this->unk_374 & 2) {
-            if ((this->skelAnime.curFrame < this->skelAnime.playSpeed) &&
-                (this->skelAnime.curFrame >= 0.0f)) {
+            if ((this->skelAnime.curFrame < this->skelAnime.playSpeed) && (this->skelAnime.curFrame >= 0.0f)) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BEAVER_SWIM_HAND);
             }
         } else {
@@ -1234,7 +1230,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
                 }
             } else {
                 Actor_PickUp(&this->actor, play, this->unk_3CC, this->actor.xzDistToPlayer,
-                              this->actor.playerHeightRel);
+                             this->actor.playerHeightRel);
             }
         }
         if (this->unk_378 == 9) {
@@ -1430,7 +1426,7 @@ void func_80A97E48(EnAz* this, PlayState* play) {
 
 void func_80A97EAC(EnAz* this, PlayState* play) {
     SubS_ActorPathing_Init(play, &this->actor.world.pos, &this->actor, &this->unk_300, play->setupPathList,
-                  this->actor.params & 0xFF, 0, 0, 1, 0);
+                           this->actor.params & 0xFF, 0, 0, 1, 0);
     this->unk_36C = 8.0f;
     this->actor.speedXZ = 8.0f;
     this->actor.gravity = 0.0f;
@@ -1455,9 +1451,11 @@ void func_80A97F9C(EnAz* this, PlayState* play) {
         this->unk_374 |= 0x1000;
     }
     if (!(this->unk_300.flags & 0x20)) {
-        SubS_ActorPathing_Update(play, &this->unk_300, func_80A982E0, func_80A95B34, SubS_ActorPathing_MoveWithGravity, SubS_ActorPathing_SetNextPoint);
+        SubS_ActorPathing_Update(play, &this->unk_300, func_80A982E0, func_80A95B34, SubS_ActorPathing_MoveWithGravity,
+                                 SubS_ActorPathing_SetNextPoint);
     }
-    if (!(this->unk_374 & 0x10) && SurfaceType_IsHorseBlocked(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
+    if (!(this->unk_374 & 0x10) &&
+        SurfaceType_IsHorseBlocked(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
         this->unk_374 |= 0x10;
     }
     if (SurfaceType_IsHorseBlocked(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
@@ -1492,8 +1490,7 @@ void func_80A97F9C(EnAz* this, PlayState* play) {
         }
         if (this->actor.depthInWater > 8.0f) {
             if (this->unk_374 & 2) {
-                if ((this->skelAnime.curFrame < this->skelAnime.playSpeed) &&
-                    (this->skelAnime.curFrame >= 0.0f)) {
+                if ((this->skelAnime.curFrame < this->skelAnime.playSpeed) && (this->skelAnime.curFrame >= 0.0f)) {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BEAVER_SWIM_HAND);
                 }
             } else {
@@ -1505,7 +1502,7 @@ void func_80A97F9C(EnAz* this, PlayState* play) {
 }
 
 void func_80A982E0(PlayState* play, ActorPathing* arg1) {
-    EnAz* temp_v1 = (EnAz*) arg1->actor;
+    EnAz* temp_v1 = (EnAz*)arg1->actor;
     Vec3f sp28;
 
     arg1->curPoint.x = arg1->points[arg1->curPointIndex].x;
@@ -1599,10 +1596,11 @@ void EnAz_Update(Actor* thisx, PlayState* play2) {
 }
 
 static Gfx* D_80A9916C[5] = {
-    0x601A600, 0x601A730, 0x601A860, 0x601A990, 0x601AAC0,
+    object_az_DL_01A600, object_az_DL_01A730, object_az_DL_01A860, object_az_DL_01A990, object_az_DL_01AAC0,
 };
 static AnimatedMaterial* D_80A99180[5] = {
-    0x601A6E8, 0x601A818, 0x601A948, 0x601AA78, 0x601ABA8,
+    object_az_Matanimheader_01A6E8, object_az_Matanimheader_01A818, object_az_Matanimheader_01A948,
+    object_az_Matanimheader_01AA78, object_az_Matanimheader_01ABA8,
 };
 static u8 D_80A99194[5] = { 95, 135, 175, 215, 255 };
 static u8 D_80A9919C[5] = { 31, 45, 58, 73, 85 };
@@ -1680,8 +1678,17 @@ static Vec3f D_80A993D0[3] = {
     { 1.2f, 1.2f, 120.0f },
     { 1.35f, 1.35f, 240.0f },
 };
-static Gfx* D_80A993F4[4] = { 0x600F918, 0x6010118, 0x6010918, 0x6011118 };
-static Gfx* D_80A99404[3] = { 0x6016018, 0x6016818, 0x6017018 };
+static TexturePtr D_80A993F4[4] = {
+    object_az_Tex_00F918,
+    object_az_Tex_010118,
+    object_az_Tex_010918,
+    object_az_Tex_011118,
+};
+static TexturePtr D_80A99404[3] = {
+    object_az_Tex_016018,
+    object_az_Tex_016818,
+    object_az_Tex_017018,
+};
 
 void EnAz_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
@@ -1693,13 +1700,13 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
 
     if (this->unk_374 & 2) {
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                         func_80A98DA4, func_80A98E48, &this->actor);
+                              func_80A98DA4, func_80A98E48, &this->actor);
     } else {
         OPEN_DISPS(play->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 8, Lib_SegmentedToVirtual(D_80A993F4[this->unk_37E]));
         gSPSegment(POLY_OPA_DISP++, 9, Lib_SegmentedToVirtual(D_80A99404[this->unk_380]));
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                         func_80A98DA4, func_80A98E48, &this->actor);
+                              func_80A98DA4, func_80A98E48, &this->actor);
         CLOSE_DISPS(play->state.gfxCtx);
     }
     OPEN_DISPS(play->state.gfxCtx);
@@ -1747,13 +1754,13 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
                 gSPSegment(POLY_XLU_DISP++, 8, Gfx_PrimColor(play->state.gfxCtx, 0x80, 255, 255, 255, 85));
             }
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), 2);
-            gSPDisplayList(POLY_XLU_DISP++, D_0601ABF0);
+            gSPDisplayList(POLY_XLU_DISP++, object_az_DL_01ABF0);
             Matrix_Pop();
             Matrix_Translate(0.0f, 2000.0f, -2100.0f, 1);
             Matrix_RotateZS(D_80A993D0[this->unk_384].z * (0x10000 / 360.0f), 1);
             Matrix_Scale(D_80A993D0[this->unk_384].x, D_80A993D0[this->unk_384].y, 0.0f, 1);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), 2);
-            gSPDisplayList(POLY_XLU_DISP++, D_0601AD00);
+            gSPDisplayList(POLY_XLU_DISP++, object_az_DL_01AD00);
         }
     }
     CLOSE_DISPS(play->state.gfxCtx);
