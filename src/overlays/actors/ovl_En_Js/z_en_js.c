@@ -85,12 +85,12 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gMoonChildSkel, &gMoonChildStandingAnim, this->jointTable,
-                       this->morphTable, OBJECT_OB_LIMB_MAX);
+                       this->morphTable, MOONCHILD_OB_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &gMoonChildStandingAnim);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     this->actionFunc = func_8096971C;
-    this->maskDlSelector = 0;
+    this->maskType = 0;
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
@@ -109,14 +109,14 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
 
     switch (ENJS_GET_TYPE(&this->actor)) {
         case 0:
-            this->maskDlSelector = 0;
+            this->maskType = 0;
             this->actionFunc = func_8096A6F4;
 
             Animation_PlayLoop(&this->skelAnime, &gMoonChildSittingAnim);
             func_8016566C(0x3C);
 
             if (gSaveContext.save.weekEventReg[84] & 0x20) {
-                Inventory_DeleteItem(0x35, gItemSlots[0x35]);
+                Inventory_DeleteItem(ITEM_MASK_FIERCE_DEITY, SLOT(ITEM_MASK_FIERCE_DEITY));
                 gSaveContext.save.weekEventReg[84] &= (u8)~0x20;
                 break;
             }
@@ -126,7 +126,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
         case 2:
         case 3:
         case 4:
-            this->maskDlSelector = ENJS_GET_TYPE(&this->actor);
+            this->maskType = ENJS_GET_TYPE(&this->actor);
             func_80968B8C(this, play);
             this->actionFunc = func_80969B5C;
             func_80968A5C(this);
@@ -139,7 +139,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
         case 6:
         case 7:
         case 8:
-            this->maskDlSelector = ENJS_GET_TYPE(&this->actor) - 4;
+            this->maskType = ENJS_GET_TYPE(&this->actor) - 4;
             this->actionFunc = func_8096A104;
             break;
     }
@@ -191,16 +191,14 @@ s32 func_80968B8C(EnJs* this, PlayState* play) {
     Path* path;
     f32 f0;
     f32 f2;
-    s32 params;
+    s32 pathIndex = ENJS_GET_PATH_INDEX(&this->actor);
     s32 i;
-    f32 sp18;
+    f32 sp18 = 0.0f;
     Vec3s* phi_a0;
 
-    sp18 = 0.0f;
-
-    params = ENJS_GET_PATH_INDEX(&this->actor) >> 0xA;
-    if (params != 0x3F) {
-        this->path = play->setupPathList + params;
+    pathIndex = ENJS_GET_PATH_INDEX(&this->actor);
+    if (pathIndex != 0x3F) {
+        this->path = &play->setupPathList[pathIndex];
         if (this->path != NULL) {
             path = this->path;
 
@@ -497,7 +495,7 @@ void func_80969530(EnJs* this, PlayState* play) {
     this->actionFunc = func_8096A6F4;
     if ((this->actor.home.rot.y == this->actor.shape.rot.y) && (this->unk_2B8 & 0x10)) {
         Animation_Change(&this->skelAnime, &gMoonChildGettingUpAnim, -1.0f,
-                         Animation_GetLastFrame(&gMoonChildGettingUpAnim) - 1.0f, 0.0f, 2, -10.0f);
+                         Animation_GetLastFrame(&gMoonChildGettingUpAnim) - 1.0f, 0.0f, ANIMMODE_ONCE, -10.0f);
         this->unk_2B8 &= ~0x10;
         this->unk_2B8 |= 8;
     }
@@ -575,7 +573,7 @@ void func_80969898(EnJs* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x2215)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
@@ -589,7 +587,7 @@ void func_80969898(EnJs* this, PlayState* play) {
                 }
             }
             break;
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x220C:
@@ -686,7 +684,7 @@ void func_80969C54(EnJs* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (Message_GetState(&play->msgCtx) == 0x10) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
         item = func_80123810(play);
         if (item != 0) {
             this->actionFunc = func_80969DA4;
@@ -721,7 +719,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play) &&
                 ((play->msgCtx.currentTextId == 0x2219) || (play->msgCtx.currentTextId == 0x221E))) {
                 switch (play->msgCtx.choiceIndex) {
@@ -739,7 +737,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                 }
             }
             break;
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x221B:
@@ -839,7 +837,7 @@ void func_8096A184(EnJs* this, PlayState* play) {
 
     if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
         textId = 0x220B;
-    } else if (func_80968E38(0) >= 0x14) {
+    } else if (func_80968E38(0) >= 20) {
         textId = 0x2202;
     } else {
         textId = 0x21FC;
@@ -858,7 +856,7 @@ void func_8096A1E8(EnJs* this, PlayState* play) {
         gSaveContext.save.weekEventReg[84] |= 0x20;
         func_809696EC(this, 0);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -882,7 +880,7 @@ void func_8096A38C(EnJs* this, PlayState* play) {
         this->unk_2B8 |= 2;
     }
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
@@ -934,7 +932,7 @@ void func_8096A38C(EnJs* this, PlayState* play) {
                 }
             }
             break;
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x2202:
@@ -985,7 +983,7 @@ void func_8096A6F4(EnJs* this, PlayState* play) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x400, 0x100);
         if ((this->actor.home.rot.y == this->actor.shape.rot.y) && (this->unk_2B8 & 0x10)) {
             Animation_Change(&this->skelAnime, &gMoonChildGettingUpAnim, -1.0f,
-                             Animation_GetLastFrame(&gMoonChildGettingUpAnim) - 1.0f, 0.0f, 2, -10.0f);
+                             Animation_GetLastFrame(&gMoonChildGettingUpAnim) - 1.0f, 0.0f, ANIMMODE_ONCE, -10.0f);
             this->unk_2B8 &= ~0x10;
             this->unk_2B8 |= 8;
         }
@@ -1023,12 +1021,10 @@ void EnJs_Update(Actor* thisx, PlayState* play) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
             ActorCutscene_SetIntentToPlay(this->cutscenes[this->cutsceneIndex]);
+        } else if (ActorCutscene_GetCanPlayNext(this->cutscenes[this->cutsceneIndex])) {
+            ActorCutscene_Start(this->cutscenes[this->cutsceneIndex], &this->actor);
         } else {
-            if (ActorCutscene_GetCanPlayNext(this->cutscenes[this->cutsceneIndex])) {
-                ActorCutscene_Start(this->cutscenes[this->cutsceneIndex], &this->actor);
-            } else {
-                ActorCutscene_SetIntentToPlay(this->cutscenes[this->cutsceneIndex]);
-            }
+            ActorCutscene_SetIntentToPlay(this->cutscenes[this->cutsceneIndex]);
         }
     }
 }
@@ -1039,18 +1035,18 @@ void func_8096A9F4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
 
     if (limbIndex == MOONCHILD_LIMB_HEAD) {
         Matrix_MultVec3f(&D_8096AC30, &thisx->focus.pos);
-        if ((this->maskDlSelector >= 0) && (this->maskDlSelector < 5)) {
+        if ((this->maskType >= 0) && (this->maskType < 5)) {
             OPEN_DISPS(play->state.gfxCtx);
 
-            if (this->maskDlSelector != 0) {
-                Matrix_Scale(D_8096ABE0[this->maskDlSelector], D_8096ABE0[this->maskDlSelector],
-                             D_8096ABE0[this->maskDlSelector], MTXMODE_APPLY);
+            if (this->maskType != 0) {
+                Matrix_Scale(D_8096ABE0[this->maskType], D_8096ABE0[this->maskType], D_8096ABE0[this->maskType],
+                             MTXMODE_APPLY);
                 Matrix_RotateZYX(0, -0x4000, -0x36B0, MTXMODE_APPLY);
             }
-            Matrix_Translate(D_8096ABF4[this->maskDlSelector], D_8096AC08[this->maskDlSelector],
-                             D_8096AC1C[this->maskDlSelector], MTXMODE_APPLY);
+            Matrix_Translate(D_8096ABF4[this->maskType], D_8096AC08[this->maskType], D_8096AC1C[this->maskType],
+                             MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, D_8096ABCC[this->maskDlSelector]);
+            gSPDisplayList(POLY_OPA_DISP++, D_8096ABCC[this->maskType]);
         }
         CLOSE_DISPS(play->state.gfxCtx);
     }
