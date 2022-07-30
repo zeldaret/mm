@@ -11,7 +11,7 @@ pipeline {
         stage('Check formatting') {
             steps {
                 echo 'Checking formatting...'
-                sh 'bash -c "tools/check_format.sh 2>&1 >(tee tools/check_format.txt)"'
+                sh 'bash -c "tools/check_format.sh -j8 2>&1 >(tee tools/check_format.txt)"'
             }
         }
         stage('Check relocs') {
