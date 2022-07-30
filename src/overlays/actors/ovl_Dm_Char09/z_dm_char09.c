@@ -5,7 +5,7 @@
  */
 
 #include "z_dm_char09.h"
-#include "objects/object_bee/object_bee.h"
+
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((DmChar09*)thisx)
@@ -15,15 +15,9 @@ void DmChar09_Destroy(Actor* thisx, PlayState* play);
 void DmChar09_Update(Actor* thisx, PlayState* play);
 void DmChar09_Draw(Actor* thisx, PlayState* play);
 
-void func_80AB1E10(SkelAnime* skelAnime, AnimationInfo* animation, u16 index);
-void func_80AB1FDC(DmChar09* this, PlayState* play);
-void func_80AB2258(DmChar09* this, PlayState* play);
+void DmChar09_DoNothing(DmChar09* this, PlayState* play);
 void func_80AB2268(DmChar09* this, PlayState* play);
-void func_80AB24BC(DmChar09* this, PlayState* play);
-s32 func_80AB25D8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-void func_80AB1FA0(DmChar09* this, s32 arg1);
 
-#if 1
 const ActorInit Dm_Char09_InitVars = {
     ACTOR_DM_CHAR09,
     ACTORCAT_ITEMACTION,
@@ -35,17 +29,10 @@ const ActorInit Dm_Char09_InitVars = {
     (ActorFunc)DmChar09_Update,
     (ActorFunc)DmChar09_Draw,
 };
-AnimationInfo D_80AB26B0[1] = { { &object_bee_Anim_00005C, 1.0f, 0.0f, -1.0f, 0, 0.0f } }; // object_bee_Anim_00005C
-#endif
 
-extern UNK_TYPE D_0600005C;
-extern SkeletonHeader D_06001398;
-extern AnimationInfo D_80AB26B0[];
-//extern AnimationInfo D_80AB26B0;
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char09/func_80AB1E10.s")
+static AnimationInfo sAnimations[] = { { &object_bee_Anim_00005C, 1.0f, 0.0f, -1.0f, 0, 0.0f } };
 
-//void func_80AB1E10(SkelAnime *arg0, s32 arg1, s32 arg2) {
-void func_80AB1E10(SkelAnime* skelAnime, AnimationInfo* animation, u16 index) {
+void DmChar09_ChangeAnimation(SkelAnime* skelAnime, AnimationInfo* animation, u16 index) {
     f32 frameCount;
 
     animation += index;
@@ -60,33 +47,25 @@ void func_80AB1E10(SkelAnime* skelAnime, AnimationInfo* animation, u16 index) {
                      animation->mode, animation->morphFrames);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char09/DmChar09_Init.s")
-
 void DmChar09_Init(Actor* thisx, PlayState* play) {
     DmChar09* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
-    SkelAnime_Init(play, &this->skelAnime, &D_06001398, (AnimationHeader*)&D_0600005C, &this->unk188, &this->unk1C4,
-                   0xA);
-    func_80AB1E10(&this->skelAnime, D_80AB26B0, 0);
+    SkelAnime_Init(play, &this->skelAnime, &object_bee_Skel_001398, &object_bee_Anim_00005C, this->jointTable,
+                   this->morphTable, OBJECT_BEE_LIMB_MAX);
+    DmChar09_ChangeAnimation(&this->skelAnime, sAnimations, 0);
     Actor_SetScale(&this->actor, 0.01f);
-    this->unk228 = Rand_ZeroOne() * 65535.0f;
-    this->unk22A = Rand_ZeroOne() * 65535.0f;
-    this->actionFunc = func_80AB2258;
+    this->unk_228 = Rand_ZeroOne() * 65535.0f;
+    this->unk_22A = Rand_ZeroOne() * 65535.0f;
+    this->actionFunc = DmChar09_DoNothing;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char09/DmChar09_Destroy.s")
 
 void DmChar09_Destroy(Actor* thisx, PlayState* play) {
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char09/func_80AB1FA0.s")
-
-void func_80AB1FA0(DmChar09 *this, s32 arg1) {
-    Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->unk224[arg1]);
+void func_80AB1FA0(DmChar09* this, s32 arg1) {
+    Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->unk_224[arg1]);
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char09/func_80AB1FDC.s")
 
 void func_80AB1FDC(DmChar09* this, PlayState* play) {
     Actor* thisx = &this->actor;
@@ -99,7 +78,7 @@ void func_80AB1FDC(DmChar09* this, PlayState* play) {
     Vec3s* temp_v1;
 
     Math_Vec3f_Copy(&sp40, &thisx->world.pos);
-    Math_Vec3s_ToVec3f(&sp58, this->unk224 + this->unk21C + this->unk220);
+    Math_Vec3s_ToVec3f(&sp58, this->unk_224 + this->unk_21C + this->unk_220);
     Math_Vec3f_Diff(&sp58, &thisx->world.pos, &thisx->velocity);
     sp54 = Math3D_Vec3fMagnitude(&thisx->velocity);
     if ((sp54 < (this->speed * 8.0f)) && (this->speed > 2.0f)) {
@@ -116,110 +95,103 @@ void func_80AB1FDC(DmChar09* this, PlayState* play) {
         thisx->world.pos.y += thisx->velocity.y;
         thisx->world.pos.z += thisx->velocity.z;
     } else {
-        this->unk21C += this->unk220;
+        this->unk_21C += this->unk_220;
         thisx->speedXZ *= 0.4f;
         phi_a1 = 1;
-        if (((this->unk21C >= this->unk218) && (this->unk220 > 0)) || ((this->unk21C <= 0) && (this->unk220 < 0))) {
-            temp_v1 = this->unk224 + this->unk218;
-            if (((this->unk224->x == temp_v1->x) && (this->unk224->y == temp_v1->y)) &&
-                (this->unk224->z == temp_v1->z)) {
-                this->unk21C = 0;
-                this->unk220 = 1;
+        if (((this->unk_21C >= this->unk_218) && (this->unk_220 > 0)) ||
+            ((this->unk_21C <= 0) && (this->unk_220 < 0))) {
+            temp_v1 = this->unk_224 + this->unk_218;
+            if (((this->unk_224->x == temp_v1->x) && (this->unk_224->y == temp_v1->y)) &&
+                (this->unk_224->z == temp_v1->z)) {
+                this->unk_21C = 0;
+                this->unk_220 = 1;
             } else {
                 phi_a1 = 0;
                 this->actionFunc = func_80AB2268;
             }
         }
-        if (phi_a1 != 0) {
-            func_80AB1FA0(this, this->unk21C);
+        if (phi_a1) {
+            func_80AB1FA0(this, this->unk_21C);
         }
     }
     Math_SmoothStepToS(&thisx->world.rot.y, Math_Vec3f_Yaw(&thisx->world.pos, &sp40) + 0x7FFF, 1, 0x7D0, 0);
     thisx->shape.rot.y = thisx->world.rot.y;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char09/func_80AB2258.s")
-
-void func_80AB2258(DmChar09* this, PlayState* play) {
+void DmChar09_DoNothing(DmChar09* this, PlayState* play) {
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char09/func_80AB2268.s")
-void func_80AB2268(DmChar09 *this, PlayState *play) {
-    Path *path;
-    f32 temp_ft1;
+void func_80AB2268(DmChar09* this, PlayState* play) {
+    Path* path;
+    s32 pad;
     s32 i;
-    s32 temp_v0;
-    s32 phi_a3 = 0;
+    s32 actionIndex;
+    s32 action = 0;
     s32 pathnum;
-    u8 phi_v1 = 0;
-    u16 action;
-    
-    if ((this->actor.params & 0xF) == 0) {
+    u8 csIndex = 0;
+
+    if (!(this->actor.params & 0xF)) {
         if (play->csCtx.currentCsIndex == 1) {
-            phi_v1 = 1;
+            csIndex = 1;
         }
     } else if (play->csCtx.currentCsIndex == 0) {
-        phi_v1 = 1;
+        csIndex = 1;
     }
-    if ((Cutscene_CheckActorAction(play, 0x1F7U) != 0) && (phi_v1 != 0)) {
-        temp_v0 = Cutscene_GetActorActionIndex(play, 0x1F7U);
-        if (this->unk22F != play->csCtx.actorActions[temp_v0]->action) {
-            this->unk22F =  play->csCtx.actorActions[temp_v0]->action;
-            switch (play->csCtx.actorActions[temp_v0]->action) {  
+
+    if (Cutscene_CheckActorAction(play, 0x1F7) && (csIndex != 0)) {
+        actionIndex = Cutscene_GetActorActionIndex(play, 0x1F7);
+        if (this->unk_22F != play->csCtx.actorActions[actionIndex]->action) {
+            this->unk_22F = play->csCtx.actorActions[actionIndex]->action;
+            switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 2:
-                    phi_a3 = 0;
+                    action = 0;
                     break;
                 case 3:
-                    phi_a3 = 1;
+                    action = 1;
                     break;
                 case 4:
-                    phi_a3 = 2;
+                    action = 2;
                     break;
                 case 5:
-                    phi_a3 = 3;
+                    action = 3;
                     break;
             }
-        
-            if (play->csCtx.actorActions[temp_v0]->action >= 2) {
-                pathnum = ((s16) this->actor.params >> 4) & 0xF;
+
+            if (play->csCtx.actorActions[actionIndex]->action >= 2) {
+                pathnum = (this->actor.params >> 4) & 0xF;
                 path = &play->setupPathList[pathnum];
 
-                for(i = 0; i < phi_a3; i++) {
+                for (i = 0; i < action; i++) {
                     pathnum = path->unk1;
-                    path = &play->setupPathList[pathnum];   
+                    path = &play->setupPathList[pathnum];
                 }
-                
-                this->unk224 = Lib_SegmentedToVirtual(path->points);
-                this->unk214 = path->count;
-                this->unk21C = 0;
-                this->unk218 = path->count - 1;
-                this->unk220 = 1;
-                this->unk22E = 1;
 
-                this->speed = (u16) play->csCtx.actorActions[temp_v0]->rot.z * 0.00390625f;
+                this->unk_224 = Lib_SegmentedToVirtual(path->points);
+                this->unk_214 = path->count;
+                this->unk_21C = 0;
+                this->unk_218 = path->count - 1;
+                this->unk_220 = 1;
+                this->unk_22E = 1;
+
+                this->speed = (u16)play->csCtx.actorActions[actionIndex]->rot.z * 0.00390625f;
                 this->actionFunc = func_80AB1FDC;
             } else {
-                this->unk22E = 0;
-                this->actionFunc = func_80AB2258;
+                this->unk_22E = 0;
+                this->actionFunc = DmChar09_DoNothing;
             }
         }
     } else {
-        this->unk22F = 0x63;
+        this->unk_22F = 0x63;
     }
 }
 
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char09/func_80AB24BC.s")
-
 void func_80AB24BC(DmChar09* this, PlayState* play) {
-    this->unk228 += 0xBB8;
-    this->unk22A += 0x1388;
-    this->unk204 = Math_SinS(this->unk228) * 150.0f;
-    this->unk208 = Math_SinS(this->unk22A) * 150.0f;
-    this->unk20C = Math_SinS(this->unk228) * 150.0f;
+    this->unk_228 += 0xBB8;
+    this->unk_22A += 0x1388;
+    this->unk_204 = Math_SinS(this->unk_228) * 150.0f;
+    this->unk_208 = Math_SinS(this->unk_22A) * 150.0f;
+    this->unk_20C = Math_SinS(this->unk_228) * 150.0f;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char09/DmChar09_Update.s")
 
 void DmChar09_Update(Actor* thisx, PlayState* play) {
     DmChar09* this = THIS;
@@ -228,29 +200,25 @@ void DmChar09_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     func_80AB2268(this, play);
     func_80AB24BC(this, play);
-    if ((play->csCtx.state != 0) && (this->unk22E != 0) && (this->actor.params & 0x100)) {
+    if ((play->csCtx.state != 0) && (this->unk_22E) && (this->actor.params & 0x100)) {
         Actor_PlaySfxAtPos(&this->actor, 0x304A);
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char09/func_80AB25D8.s")
-
-s32 func_80AB25D8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 DmChar09_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     DmChar09* this = THIS;
 
-    Matrix_Translate(this->unk204, this->unk208, this->unk20C, MTXMODE_APPLY);
+    Matrix_Translate(this->unk_204, this->unk_208, this->unk_20C, MTXMODE_APPLY);
     return 0;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char09/DmChar09_Draw.s")
 
 void DmChar09_Draw(Actor* thisx, PlayState* play) {
     DmChar09* this = THIS;
 
-    if ((play->csCtx.state != 0) && (this->unk22E != 0)) {
+    if ((play->csCtx.state != 0) && this->unk_22E) {
         func_8012C28C(play->state.gfxCtx);
         func_8012C2DC(play->state.gfxCtx);
-        SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80AB25D8, NULL,
+        SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, DmChar09_OverrideLimbDraw, NULL,
                           &this->actor);
     }
 }
