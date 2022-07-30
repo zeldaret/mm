@@ -27,16 +27,21 @@ const ActorInit Dm_Al_InitVars = {
     (ActorFunc)DmAl_Draw,
 };
 
+typedef enum {
+    /* 0x0 */ MADAME_AROMA_ANIM_0,
+    /* 0x1 */ MADAME_AROMA_ANIM_1
+} DmAlAnimation;
+
 static AnimationInfoS sAnimationInfos[] = {
     { &object_al_Anim_00DBE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
-s32 DmAl_ChangeAnimation(DmAl* this, s32 animationIndex) {
+s32 DmAl_ChangeAnimation(DmAl* this, s32 animIndex) {
     s32 didAnimationChange = false;
 
-    if (animationIndex != this->animationIndex) {
-        this->animationIndex = animationIndex;
-        didAnimationChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfos, animationIndex);
+    if (animIndex != this->animIndex) {
+        this->animIndex = animIndex;
+        didAnimationChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfos, animIndex);
     }
     return didAnimationChange;
 }
@@ -50,7 +55,7 @@ void func_80C1BDD8(DmAl* this, PlayState* play) {
         if (!this->unk_45C) {
             this->action = 0xFF;
             this->unk_45C = true;
-            this->animationIndex2 = this->animationIndex;
+            this->animIndex2 = this->animIndex;
         }
         if (Cutscene_CheckActorAction(play, 0x232)) {
             actionIndex = Cutscene_GetActorActionIndex(play, 0x232);
@@ -63,7 +68,7 @@ void func_80C1BDD8(DmAl* this, PlayState* play) {
         }
     } else if (this->unk_45C) {
         this->unk_45C = false;
-        DmAl_ChangeAnimation(this, this->animationIndex2);
+        DmAl_ChangeAnimation(this, this->animIndex2);
     }
 }
 
@@ -73,8 +78,8 @@ void DmAl_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gMadameAromaSkel, NULL, this->jointTable, this->morphTable,
                        MADAME_AROMA_LIMB_MAX);
-    this->animationIndex = -1;
-    DmAl_ChangeAnimation(this, MADAME_AROMA_ANIMATION_0);
+    this->animIndex = -1;
+    DmAl_ChangeAnimation(this, MADAME_AROMA_ANIM_0);
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80C1BDD8;

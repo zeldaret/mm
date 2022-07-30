@@ -277,29 +277,29 @@ void func_80BCF95C(EnHg* this, PlayState* play) {
             this->cutscenes[3] = play->csCtx.actorActions[actionIndex]->action;
             switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 1:
-                    this->currentAnimation = 0;
+                    this->animIndex = 0;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
                     break;
                 case 2:
                     this->cutscenes[2] = 0;
-                    this->currentAnimation = 3;
+                    this->animIndex = 3;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
                     break;
                 case 3:
                     this->cutscenes[2] = 0;
-                    this->currentAnimation = 5;
+                    this->animIndex = 5;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
                     break;
                 case 4:
                     this->cutscenes[2] = 0;
-                    this->currentAnimation = 7;
+                    this->animIndex = 7;
                     if ((this->unk218 == 1) || (this->unk218 == 3)) {
                         func_8019F128(NA_SE_EN_HALF_REDEAD_TRANS);
                     }
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 7);
                     break;
                 case 5:
-                    this->currentAnimation = 1;
+                    this->animIndex = 1;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
                     break;
                 case 6:
@@ -309,19 +309,19 @@ void func_80BCF95C(EnHg* this, PlayState* play) {
             }
         } else {
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                switch (this->currentAnimation) {
+                switch (this->animIndex) {
                     case 3:
-                        this->currentAnimation = 4;
+                        this->animIndex = 4;
                         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
                         break;
                     case 5:
-                        this->currentAnimation = 6;
+                        this->animIndex = 6;
                         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
                         break;
                 }
             }
         }
-        switch (this->currentAnimation) {
+        switch (this->animIndex) {
             case 3:
             case 4:
                 func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);

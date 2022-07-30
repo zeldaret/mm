@@ -243,30 +243,30 @@ void EnMa4_Destroy(Actor* thisx, PlayState* play) {
 
 // Running in circles in the ranch
 void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
-    static s32 sCurrentAnim = 9;
+    static s32 sAnimIndex = 9;
     static s32 D_80AC0250 = 0;
     static s16 D_80AC0254 = 10;
     Vec3f sp34;
     s32 pad;
     s16 sp2E;
 
-    if (sCurrentAnim != 9 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        if (sCurrentAnim == 3) {
+    if (sAnimIndex != 9 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        if (sAnimIndex == 3) {
             if (D_80AC0250 < 3) {
                 D_80AC0250++;
             } else {
                 D_80AC0250 = 0;
                 EnMa4_ChangeAnim(this, 13);
-                sCurrentAnim = 13;
+                sAnimIndex = 13;
             }
         } else {
             this->actor.speedXZ = 2.7f;
             EnMa4_ChangeAnim(this, 9);
-            sCurrentAnim = 9;
+            sAnimIndex = 9;
         }
     }
 
-    if (sCurrentAnim == 13 && Animation_OnFrame(&this->skelAnime, 37.0f)) {
+    if (sAnimIndex == 13 && Animation_OnFrame(&this->skelAnime, 37.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROMANI_BOW_FLICK);
     }
 
@@ -282,7 +282,7 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
             this->actor.speedXZ = 0.0f;
             D_80AC0254 = 2;
             EnMa4_ChangeAnim(this, 3);
-            sCurrentAnim = 3;
+            sAnimIndex = 3;
         } else {
             if (D_80AC0254 > 0) {
                 D_80AC0254--;

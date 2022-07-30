@@ -122,7 +122,7 @@ typedef enum {
     /* 0x6 */ ENKAKASI_ANIM_WAVE,               // "wave" short sideways shake, stops early, partial? unused?
     /* 0x7 */ ENKAKASI_ANIM_SLOWROLL,           // partial bounch, ends looking left, OFFER anim takes over
     /* 0x8 */ ENKAKASI_ANIM_IDLE,               // slow stretching wiggle, ends in regular position
-} EnKakasi_Animations;
+} EnKakasi_Animation;
 
 static AnimationHeader* kakasiAnimations[] = {
     &object_ka_Anim_007444, &object_ka_Anim_00686C, &object_ka_Anim_0081A4,

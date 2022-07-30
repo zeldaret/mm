@@ -23,12 +23,12 @@ void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play);
 s32 EnDemoheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
 typedef enum {
-    /*  0 */ DEMOHEISHI_ANIMATION_STAND_HAND_ON_HIP,
-    /*  1 */ DEMOHEISHI_ANIMATION_CHEER_WITH_SPEAR,
-    /*  2 */ DEMOHEISHI_ANIMATION_WAVE,
-    /*  3 */ DEMOHEISHI_ANIMATION_SIT_AND_REACH,
-    /*  4 */ DEMOHEISHI_ANIMATION_STAND_UP
-} EnDemoheishiAnimationIndex;
+    /*  0 */ DEMOHEISHI_ANIM_STAND_HAND_ON_HIP,
+    /*  1 */ DEMOHEISHI_ANIM_CHEER_WITH_SPEAR,
+    /*  2 */ DEMOHEISHI_ANIM_WAVE,
+    /*  3 */ DEMOHEISHI_ANIM_SIT_AND_REACH,
+    /*  4 */ DEMOHEISHI_ANIM_STAND_UP
+} EnDemoheishiAnimation;
 
 const ActorInit En_Demo_heishi_InitVars = {
     ACTOR_EN_DEMO_HEISHI,
@@ -114,7 +114,7 @@ void EnDemoheishi_SetHeadRotation(EnDemoheishi* this) {
 }
 
 void EnDemoheishi_SetupIdle(EnDemoheishi* this) {
-    EnDemoheishi_ChangeAnimation(this, DEMOHEISHI_ANIMATION_STAND_HAND_ON_HIP);
+    EnDemoheishi_ChangeAnimation(this, DEMOHEISHI_ANIM_STAND_HAND_ON_HIP);
     this->textIdIndex = 0;
     this->actor.textId = sTextIds[this->textIdIndex];
     this->isTalking = false;

@@ -100,13 +100,12 @@ typedef struct EnNiw {
 // the attacking cuccos are not here, they are a different actor: [ ovl_En_Attack_Niw ]
 
 typedef enum {
-    /* 0 */ NIW_ANIMATION_STILL,
-    /* 1 */ NIW_ANIMATION_HEAD_PECKING, // forward and backward, feeding
-    /* 2 */ NIW_ANIMATION_PECKING_AND_WAVING, // wings move along their axis, like human hand waving
-    /* 3 */ NIW_ANIMATION_PECKING_AND_FORFLAPPING, // (unused) low (yaw based) flapping, forward and back
-    /* 4 */ NIW_ANIMATION_FREEZE, // used during Cucco Storm
-    /* 5 */ NIW_ANIMATION_PECKING_SLOW_FORFLAPPING, // wing speed half that of 3
-
+    /* 0 */ NIW_ANIM_STILL,
+    /* 1 */ NIW_ANIM_HEAD_PECKING, // forward and backward, feeding
+    /* 2 */ NIW_ANIM_PECKING_AND_WAVING, // wings move along their axis, like human hand waving
+    /* 3 */ NIW_ANIM_PECKING_AND_FORFLAPPING, // (unused) low (yaw based) flapping, forward and back
+    /* 4 */ NIW_ANIM_FREEZE, // used during Cucco Storm
+    /* 5 */ NIW_ANIM_PECKING_SLOW_FORFLAPPING, // wing speed half that of 3
 } EnNiwHeadAndWingAnimationState;
 
 

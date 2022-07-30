@@ -1121,9 +1121,9 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
         }
     }
 
-    if (this->currentAnimIndex == OBJ_UM_ANIM_TROT) {
+    if (this->animIndex == OBJ_UM_ANIM_TROT) {
         this->dyna.actor.speedXZ = 4.0f;
-    } else if (this->currentAnimIndex == OBJ_UM_ANIM_GALLOP) {
+    } else if (this->animIndex == OBJ_UM_ANIM_GALLOP) {
         this->dyna.actor.speedXZ = 8.0f;
     }
 
@@ -1627,7 +1627,7 @@ void func_80B7AF30(ObjUm* this, PlayState* play) {
 
 void ObjUm_DefaultAnim(ObjUm* this, PlayState* play) {
     Animation_PlayOnce(&this->skelAnime, &gUmTrotAnim);
-    this->currentAnimIndex = OBJ_UM_ANIM_TROT;
+    this->animIndex = OBJ_UM_ANIM_TROT;
 }
 
 typedef struct {
@@ -1669,9 +1669,9 @@ void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, ObjUmAnimimations index) {
         index = OBJ_UM_ANIM_MINUS_1;
     }
 
-    changeAnim = (index != this->currentAnimIndex);
+    changeAnim = (index != this->animIndex);
     if (SkelAnime_Update(&this->skelAnime) || changeAnim) {
-        this->currentAnimIndex = index;
+        this->animIndex = index;
 
         if (index != OBJ_UM_ANIM_MINUS_1) {
             if (this->donkey != NULL) {

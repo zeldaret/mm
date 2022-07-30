@@ -21,12 +21,12 @@ void EnHeishi_SetupIdle(EnHeishi* this);
 void EnHeishi_Idle(EnHeishi* this, PlayState* play);
 
 typedef enum {
-    /* 0 */ HEISHI_ANIMATION_STAND_HAND_ON_HIP,
-    /* 1 */ HEISHI_ANIMATION_CHEER_WITH_SPEAR,
-    /* 2 */ HEISHI_ANIMATION_WAVE,
-    /* 3 */ HEISHI_ANIMATION_SIT_AND_REACH,
-    /* 4 */ HEISHI_ANIMATION_STAND_UP
-} EnHeishiAnimationIndex;
+    /* 0 */ HEISHI_ANIM_STAND_HAND_ON_HIP,
+    /* 1 */ HEISHI_ANIM_CHEER_WITH_SPEAR,
+    /* 2 */ HEISHI_ANIM_WAVE,
+    /* 3 */ HEISHI_ANIM_SIT_AND_REACH,
+    /* 4 */ HEISHI_ANIM_STAND_UP
+} EnHeishiAnimation;
 
 const ActorInit En_Heishi_InitVars = {
     ACTOR_EN_HEISHI,
@@ -131,7 +131,7 @@ void EnHeishi_SetHeadRotation(EnHeishi* this) {
 }
 
 void EnHeishi_SetupIdle(EnHeishi* this) {
-    s8 animIndex = HEISHI_ANIMATION_STAND_HAND_ON_HIP;
+    s8 animIndex = HEISHI_ANIM_STAND_HAND_ON_HIP;
 
     EnHeishi_ChangeAnimation(this, animIndex);
     this->unk278 = animIndex;

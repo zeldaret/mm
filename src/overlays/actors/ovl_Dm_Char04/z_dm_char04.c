@@ -90,11 +90,11 @@ void func_80AABE34(DmChar04* this, PlayState* play) {
             if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
                 this->csAction = play->csCtx.actorActions[actionIndex]->action;
                 if (play->csCtx.actorActions[actionIndex]->action == 1) {
-                    this->animationIndex = 0;
+                    this->animIndex = 0;
                 } else {
-                    this->animationIndex = 0;
+                    this->animIndex = 0;
                 }
-                DmChar04_ChangeAnim(&this->skelAnime, &sAnimations[this->animationIndex], 0);
+                DmChar04_ChangeAnim(&this->skelAnime, &sAnimations[this->animIndex], 0);
             }
         }
         Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);

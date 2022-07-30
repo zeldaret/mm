@@ -45,7 +45,7 @@ s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
     s32 isChanged = false;
 
-    if (animIndex >= ENHY_ANIMATION_AOB_0 && animIndex < ENHY_ANIMATION_MAX) {
+    if (animIndex >= ENHY_ANIM_AOB_0 && animIndex < ENHY_ANIM_MAX) {
         isChanged = true;
         frameCount = sAnimations[animIndex].frameCount;
         if (frameCount < 0) {

@@ -786,7 +786,7 @@ void EnTrt_IdleSleeping(EnTrt* this, PlayState* play) {
     if (DECR(this->timer) == 0) {
         this->timer = 40;
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 1);
-        this->animationIndex = 1;
+        this->animIndex = 1;
         this->actionFunc = EnTrt_IdleAwake;
         this->blinkFunc = EnTrt_OpenThenCloseEyes;
     }
@@ -832,7 +832,7 @@ void EnTrt_IdleAwake(EnTrt* this, PlayState* play) {
     if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(150, 100);
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 2);
-        this->animationIndex = 2;
+        this->animIndex = 2;
         this->sleepSoundTimer = 10;
         this->actor.textId = 0;
         this->actionFunc = EnTrt_IdleSleeping;
@@ -852,10 +852,10 @@ void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
-        if (this->animationIndex != 5) {
+        if (this->animIndex != 5) {
             if (curFrame == animLastFrame) {
                 EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 3);
-                this->animationIndex = 3;
+                this->animIndex = 3;
                 this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;
                 this->timer = 10;
                 this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
@@ -870,7 +870,7 @@ void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
         this->timer = Rand_S16Offset(40, 20);
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
         Message_StartTextbox(play, this->textId, &this->actor);
-        this->animationIndex = 5;
+        this->animIndex = 5;
         switch (this->textId) {
             case 0x834:
                 if (!(gSaveContext.save.weekEventReg[12] & 8) && !(gSaveContext.save.weekEventReg[84] & 0x40) &&
@@ -911,7 +911,7 @@ void EnTrt_Surprised(EnTrt* this, PlayState* play) {
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
         if (DECR(this->timer) == 0) {
             EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 4);
-            this->animationIndex = 4;
+            this->animIndex = 4;
             this->blinkFunc = EnTrt_OpenEyes2;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_SURPRISED);
             this->timer = 30;
@@ -921,7 +921,7 @@ void EnTrt_Surprised(EnTrt* this, PlayState* play) {
         this->timer = Rand_S16Offset(40, 20);
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
         Message_StartTextbox(play, this->textId, &this->actor);
-        this->animationIndex = 5;
+        this->animIndex = 5;
         this->actionFunc = EnTrt_TryToGiveRedPotionAfterSurprised;
     }
 }

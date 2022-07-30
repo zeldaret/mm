@@ -88,7 +88,7 @@ typedef enum {
     /*  3 */ TOILET_HAND_ANIM_THUMBS_UP,      // Right
     /*  4 */ TOILET_HAND_ANIM_OPEN_HAND,
     /*  5 */ TOILET_HAND_ANIM_FIST // i.e. holding the reward
-} ToiletHandAnimations;
+} ToiletHandAnimation;
 
 static AnimationInfoS sAnimationInfos[] = {
     /* 0 */ { &gToiletHandWaitingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -109,16 +109,15 @@ s32 EnBjt_ChangeAnimation(EnBjt* this, s32 animIndex) {
     s32 changed = false;
 
     if ((animIndex == TOILET_HAND_ANIM_WAITING) || (animIndex == TOILET_HAND_ANIM_WAITING_MORPH)) {
-        if (!((this->curAnimIndex == TOILET_HAND_ANIM_WAITING) ||
-              (this->curAnimIndex == TOILET_HAND_ANIM_WAITING_MORPH))) {
+        if (!((this->animIndex == TOILET_HAND_ANIM_WAITING) || (this->animIndex == TOILET_HAND_ANIM_WAITING_MORPH))) {
             changeAnim = true;
         }
-    } else if (this->curAnimIndex != animIndex) {
+    } else if (this->animIndex != animIndex) {
         changeAnim = true;
     }
 
     if (changeAnim) {
-        this->curAnimIndex = animIndex;
+        this->animIndex = animIndex;
         changed = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfos, animIndex);
         this->animPlaySpeed = this->skelAnime.playSpeed;
     }
@@ -422,7 +421,7 @@ void EnBjt_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gToiletHandSkel, NULL, this->jointTable, this->morphTable,
                        TOILET_HAND_LIMB_MAX);
 
-    this->curAnimIndex = TOILET_HAND_ANIM_NONE;
+    this->animIndex = TOILET_HAND_ANIM_NONE;
     EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_WAITING);
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);

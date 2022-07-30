@@ -48,7 +48,7 @@ typedef enum {
     /* 5 */ ZELDA_ANIM_PLAYING_OCARINA_START,
     /* 6 */ ZELDA_ANIM_PLAYING_OCARINA,
     /* 7 */ ZELDA_ANIM_MAX,
-} DmZlAnimations;
+} DmZlAnimation;
 
 static TexturePtr sMouthTextures[] = {
     gZl4MouthNeutralTex,
@@ -112,13 +112,13 @@ void DmZl_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     DmZl* this = THIS;
 
-    this->animationIndex = ZELDA_ANIM_FACING_AWAY;
+    this->animIndex = ZELDA_ANIM_FACING_AWAY;
     this->unk_2BA = 0;
     this->actor.targetArrowOffset = 1000.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     // these three set to NULL should mean they are dynamically allocated
     SkelAnime_InitFlex(play, &this->skelAnime, &gZl4Skeleton, NULL, NULL, NULL, 0);
-    DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animationIndex], 0);
+    DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animIndex], 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmZl_DoNothing;
 }
@@ -135,26 +135,26 @@ void DmZl_UpdateCutscene(DmZl* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, 0x66)) {
         actionIndex = Cutscene_GetActorActionIndex(play, 0x66);
         if (play->csCtx.frames == play->csCtx.actorActions[actionIndex]->startFrame) {
-            s16 nextAnimationIndex = ZELDA_ANIM_FACING_AWAY;
+            s16 nextAnimIndex = ZELDA_ANIM_FACING_AWAY;
 
             switch (play->csCtx.actorActions[actionIndex]->action) {
                 default:
                 case 1:
                     break;
                 case 2:
-                    nextAnimationIndex = ZELDA_ANIM_TURNING_TOWARD_PLAYER;
+                    nextAnimIndex = ZELDA_ANIM_TURNING_TOWARD_PLAYER;
                     break;
                 case 3:
-                    nextAnimationIndex = ZELDA_ANIM_GIVING_OCARINA_START;
+                    nextAnimIndex = ZELDA_ANIM_GIVING_OCARINA_START;
                     break;
                 case 4:
-                    nextAnimationIndex = ZELDA_ANIM_PLAYING_OCARINA_START;
+                    nextAnimIndex = ZELDA_ANIM_PLAYING_OCARINA_START;
                     break;
             }
 
-            if (nextAnimationIndex != this->animationIndex) {
-                this->animationIndex = nextAnimationIndex;
-                DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animationIndex], 0);
+            if (nextAnimIndex != this->animIndex) {
+                this->animIndex = nextAnimIndex;
+                DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animIndex], 0);
             }
         }
 
@@ -162,13 +162,13 @@ void DmZl_UpdateCutscene(DmZl* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        actionIndex = this->animationIndex;
+        actionIndex = this->animIndex;
 
         if ((actionIndex == ZELDA_ANIM_TURNING_TOWARD_PLAYER) || (actionIndex == ZELDA_ANIM_GIVING_OCARINA_START) ||
             (actionIndex == ZELDA_ANIM_PLAYING_OCARINA_START)) {
             // these animations don't loop at the end, they lead into the next animation
-            this->animationIndex++;
-            DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animationIndex], 0);
+            this->animIndex++;
+            DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animIndex], 0);
         }
     }
 }
@@ -245,7 +245,7 @@ void DmZl_UpdateFace(DmZl* this) {
             break;
     }
 
-    if (this->animationIndex == ZELDA_ANIM_PLAYING_OCARINA) {
+    if (this->animIndex == ZELDA_ANIM_PLAYING_OCARINA) {
         this->eyeTextureIndexLeft = this->eyeTextureIndexRight = ZELDA_EYE_CLOSED;
     }
 }
@@ -267,8 +267,7 @@ void DmZl_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     DmZl* this = THIS;
 
     if (limbIndex == ZL4_LIMB_RIGHT_HAND) {
-        if ((this->animationIndex >= ZELDA_ANIM_GIVING_OCARINA_START) &&
-            (this->animationIndex <= ZELDA_ANIM_PLAYING_OCARINA)) {
+        if ((this->animIndex >= ZELDA_ANIM_GIVING_OCARINA_START) && (this->animIndex <= ZELDA_ANIM_PLAYING_OCARINA)) {
             OPEN_DISPS(play->state.gfxCtx);
 
             gSPDisplayList(POLY_OPA_DISP++, gDmZl4OcarinaDL);

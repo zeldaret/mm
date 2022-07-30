@@ -93,7 +93,7 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actionFunc = EnYb_Idle;
-    this->currentAnimIndex = 3; // gets overwritten to 2 in EnYb_SetAnimation later
+    this->animIndex = 3; // gets overwritten to 2 in EnYb_SetAnimation later
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
@@ -147,7 +147,7 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
     EnYb* this = THIS;
 
     if (this->alpha > 0) {
-        if (this->currentAnimIndex == 2) {
+        if (this->animIndex == 2) {
             f32 tempScale = (((27.0f - this->shadowPos.y) + this->actor.world.pos.y) * ((1 / 2.25f) * 0.001f)) + 0.01f;
             this->actor.scale.x = tempScale;
         }
@@ -169,7 +169,7 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
 
 void EnYb_SetAnimation(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 transitionRate) {
     if (animIndex >= 0 && animIndex < 3) {
-        if (animIndex != this->currentAnimIndex || animMode != ANIMMODE_LOOP) {
+        if (animIndex != this->animIndex || animMode != ANIMMODE_LOOP) {
             if (animIndex > 0) {
                 if (animMode == ANIMMODE_LOOP) {
                     LinkAnimation_Change(play, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
@@ -190,7 +190,7 @@ void EnYb_SetAnimation(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, 
                 Animation_Change(&this->skelAnime, gYbUnusedAnimations[animIndex], 1.0f, 0.0f,
                                  Animation_GetLastFrame(animationPtr), animMode, transitionRate);
             }
-            this->currentAnimIndex = animIndex;
+            this->animIndex = animIndex;
         }
     }
 }
@@ -205,7 +205,7 @@ s32 EnYb_CanTalk(EnYb* this, PlayState* play) {
 }
 
 void EnYb_UpdateAnimation(EnYb* this, PlayState* play) {
-    if (this->currentAnimIndex <= 0) {
+    if (this->animIndex <= 0) {
         SkelAnime_Update(&this->skelAnime);
     } else {
         LinkAnimation_Update(play, &this->skelAnime);
