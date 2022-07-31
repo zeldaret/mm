@@ -281,7 +281,7 @@ void func_8082DF2C(PlayState* play) {
     }
 }
 
-void Player_RequestRumble(PlayState* play, Player* this, u8 sourceIntensity, u8 decayTimer, u8 decayStep, s32 distSq) {
+void Player_RequestRumble(PlayState* play, Player* this, s32 sourceIntensity, s32 decayTimer, s32 decayStep, s32 distSq) {
     if (this == GET_PLAYER(play)) {
         Rumble_Request(distSq, sourceIntensity, decayTimer, decayStep);
     }
@@ -4265,11 +4265,7 @@ void func_80836A98(Player* this, LinkAnimationHeader* anim, PlayState* play) {
     func_80836A5C(this, play);
     func_8082EC9C(play, this, anim);
 }
-/*
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80836AD8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80836B3C.s")
-*/
 void func_8084C6EC(Player* this, PlayState* play);
 
 void func_80836AD8(PlayState* play, Player* this) {
@@ -4354,7 +4350,7 @@ s32 func_80836DC0(PlayState* play, Player* this) {
     return false;
 }
 
-void func_80836EA0(PlayState* play, s16 quakeSpeed, s16 verticalMag, s16 quakeCountdown) {
+void func_80836EA0(PlayState* play, u16 quakeSpeed, s16 verticalMag, s16 quakeCountdown) {
     s16 quake = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
 
     Quake_SetSpeed(quake, quakeSpeed);
@@ -4362,7 +4358,67 @@ void func_80836EA0(PlayState* play, s16 quakeSpeed, s16 verticalMag, s16 quakeCo
     Quake_SetCountdown(quake, quakeCountdown);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80836F10.s")
+
+typedef struct struct_8085D13C {
+    /* 0x0 */ s8 damage;
+    /* 0x1 */ u8 sourceIntensity;
+    /* 0x2 */ u8 decayTimer;
+    /* 0x3 */ u8 decayStep;
+    /* 0x4 */ u16 unk_4;
+} struct_8085D13C; // size = 0x6
+
+extern struct struct_8085D13C D_8085D13C[2];
+
+s32 func_80836F10(PlayState* play, Player* this) {
+    s32 var_s0;
+
+    if ((D_80862B08 == 6) || (D_80862B08 == 9) || (this->csMode != 0)) {
+        var_s0 = 0;
+    } else {
+        var_s0 = this->unk_B6A;
+    }
+
+    Math_StepToF(&this->linearVelocity, 0.0f, 1.0f);
+    this->stateFlags1 &= ~(PLAYER_STATE1_40000 | PLAYER_STATE1_80000);
+
+    if (var_s0 >= 400) {
+        s32 index;
+        struct_8085D13C* entry;
+
+        if (this->unk_B6A < 800) {
+            index = 0;
+        } else {
+            index = 1;
+        }
+
+        func_800B8E58(this, NA_SE_PL_BODY_HIT);
+
+        entry = &D_8085D13C[index];
+        func_8082DF8C(this, entry->unk_4);
+
+        if (Player_InflictDamage(play, entry->damage)) {
+            return -1;
+        }
+
+        func_80833998(this, 40);
+        func_80836EA0(play, 0x80C7, 2, 30);
+        Player_RequestRumble(play, this, entry->sourceIntensity, entry->decayTimer, entry->decayStep, SQ(0));
+        return index + 1;
+    }
+
+    if (var_s0 > 200) {
+        var_s0 = var_s0 * 2;
+        var_s0 = CLAMP_MAX(var_s0, 255);
+
+        Player_RequestRumble(play, this, var_s0, var_s0 * 0.1f, var_s0, SQ(0));
+        if (D_80862B08 == 6) {
+            func_8082DF8C(this, NA_SE_VO_LI_CLIMB_END);
+        }
+    }
+
+    func_8082E1BC(this);
+    return 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808370D4.s")
 
