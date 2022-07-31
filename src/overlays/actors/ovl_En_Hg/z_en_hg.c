@@ -101,7 +101,7 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, 0x80,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &object_harfgibud_Anim_00260C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &object_harfgibud_Anim_009D44, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &object_harfgibud_Anim_00A164, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
@@ -148,7 +148,7 @@ void EnHg_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80BCF354(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80BCF398;
 }
 
@@ -166,7 +166,7 @@ void func_80BCF398(EnHg* this, PlayState* play) {
 }
 
 void func_80BCF468(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
     this->actionFunc = func_80BCF4AC;
 }
 
@@ -190,7 +190,7 @@ void func_80BCF4AC(EnHg* this, PlayState* play) {
 }
 
 void func_80BCF5F0(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80BCF634;
 }
 
@@ -203,7 +203,7 @@ void func_80BCF634(EnHg* this, PlayState* play) {
 }
 
 void func_80BCF68C(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
     this->actionFunc = func_80BCF6D0;
 }
 
@@ -278,17 +278,17 @@ void func_80BCF95C(EnHg* this, PlayState* play) {
             switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     this->animIndex = 0;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
                     break;
                 case 2:
                     this->cutscenes[2] = 0;
                     this->animIndex = 3;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                     break;
                 case 3:
                     this->cutscenes[2] = 0;
                     this->animIndex = 5;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
                     break;
                 case 4:
                     this->cutscenes[2] = 0;
@@ -296,11 +296,11 @@ void func_80BCF95C(EnHg* this, PlayState* play) {
                     if ((this->unk218 == 1) || (this->unk218 == 3)) {
                         func_8019F128(NA_SE_EN_HALF_REDEAD_TRANS);
                     }
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 7);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 7);
                     break;
                 case 5:
                     this->animIndex = 1;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                     break;
                 case 6:
                     gSaveContext.save.weekEventReg[75] |= 0x20;
@@ -312,11 +312,11 @@ void func_80BCF95C(EnHg* this, PlayState* play) {
                 switch (this->animIndex) {
                     case 3:
                         this->animIndex = 4;
-                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
+                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
                         break;
                     case 5:
                         this->animIndex = 6;
-                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
+                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
                         break;
                 }
             }

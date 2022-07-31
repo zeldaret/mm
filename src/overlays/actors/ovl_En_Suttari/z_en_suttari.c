@@ -49,7 +49,7 @@ const ActorInit En_Suttari_InitVars = {
     (ActorFunc)EnSuttari_Draw,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &object_boj_Anim_00071C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &object_boj_Anim_0128F4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &object_boj_Anim_011F84, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
@@ -250,7 +250,7 @@ s32 func_80BAA904(EnSuttari* this, PlayState* play) {
 
 void func_80BAA9B4(EnSuttari* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animIndex].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     switch (this->textId) {
         case 0x1454:
@@ -263,13 +263,13 @@ void func_80BAA9B4(EnSuttari* this) {
         case 0x145B:
             if ((this->animIndex != 8) && (curFrame == frameCount)) {
                 this->animIndex = 8;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             }
             break;
         default:
             if ((this->animIndex != 1) && (curFrame == frameCount)) {
                 this->animIndex = 1;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             }
     }
 }
@@ -278,7 +278,7 @@ void func_80BAAA94(EnSuttari* this) {
     switch (this->textId) {
         case 0x29E5:
             this->animIndex = 1;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             break;
         case 0x29E9:
             this->enFsn->flags |= ENFSN_ANGRY;
@@ -291,11 +291,11 @@ void func_80BAAA94(EnSuttari* this) {
             break;
         case 0x29EC:
             this->animIndex = 7;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             break;
         case 0x29ED:
             this->animIndex = 1;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             break;
     }
 }
@@ -417,14 +417,14 @@ void func_80BAAB78(EnSuttari* this, PlayState* play) {
 
 void func_80BAAF1C(EnSuttari* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animIndex].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (this->animIndex == 5) {
         this->animIndex = 3;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
     } else if ((this->animIndex == 3) && (curFrame == frameCount)) {
         this->animIndex = 6;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->flags1 &= ~0x100;
     }
 }
@@ -842,7 +842,7 @@ s32 func_80BAC220(EnSuttari* this, PlayState* play) {
 void func_80BAC2FC(EnSuttari* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animIndex].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     switch (this->unk428) {
         case 12:
@@ -853,7 +853,7 @@ void func_80BAC2FC(EnSuttari* this, PlayState* play) {
         case 15:
             if ((this->animIndex == 1) && (curFrame == frameCount)) {
                 this->animIndex = 2;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             }
             if (!(gSaveContext.save.weekEventReg[83] & 4) && !(this->flags1 & 0x1000)) {
                 if (ActorCutscene_GetCanPlayNext(this->cutscenes[0])) {
@@ -886,7 +886,7 @@ void func_80BAC2FC(EnSuttari* this, PlayState* play) {
             this->enFsn->flags &= ~ENFSN_HAGGLE;
             if (this->animIndex != 2) {
                 this->animIndex = 2;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             }
             func_80BAC220(this, play);
             break;
@@ -917,7 +917,7 @@ void func_80BAC2FC(EnSuttari* this, PlayState* play) {
             if (!(gSaveContext.save.weekEventReg[33] & 8)) {
                 if (this->animIndex == 2 || this->animIndex == 1) {
                     this->animIndex = 5;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
                 }
                 this->flags1 |= 0x10;
                 if (this->flags2 & 2) {
@@ -946,7 +946,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
         this->flags1 |= 1;
         if (gSaveContext.save.day == 1 || gSaveContext.save.day == 2) {
             this->animIndex = 2;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->flags1 |= 0x80;
             this->actionFunc = func_80BACA14;
             return;
@@ -954,7 +954,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
                    !(gSaveContext.save.weekEventReg[61] & 8) && !(gSaveContext.save.weekEventReg[33] & 8) &&
                    (gSaveContext.save.weekEventReg[51] & 8)) {
             this->animIndex = 2;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = func_80BACEE0;
             return;
         }
@@ -970,7 +970,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
         this->flags1 |= 0x80;
         this->flags1 |= 8;
         this->animIndex = 1;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = func_80BAD004;
         return;
     } else if (play->sceneNum == SCENE_ICHIBA) {
@@ -979,7 +979,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
             return;
         }
         this->animIndex = 0;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->flags1 |= 2;
         this->actionFunc = func_80BAD5F8;
         return;
@@ -989,7 +989,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
             return;
         }
         this->animIndex = 0;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->cutscenes[0] = this->actor.cutscene;
         this->cutscenes[1] = ActorCutscene_GetAdditionalCutscene(this->cutscenes[0]);
         this->flags1 |= 4;
@@ -1009,7 +1009,7 @@ void func_80BACA14(EnSuttari* this, PlayState* play) {
 
     if (this->animIndex == 1 || this->animIndex == 8) {
         this->animIndex = 2;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
     }
     func_80BABA90(this, 0, 0);
     func_80BAB434(this);
@@ -1245,11 +1245,11 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
 void func_80BAD5F8(EnSuttari* this, PlayState* play) {
     ScheduleOutput scheduleOutput;
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animIndex].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if ((curFrame == frameCount) && (this->animIndex == 0) && (this->flags1 & 0x20)) {
         this->animIndex = 2;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
     }
     this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
     if (!Schedule_RunScript(play, D_80BAE820, &scheduleOutput) ||
@@ -1280,14 +1280,14 @@ void func_80BAD5F8(EnSuttari* this, PlayState* play) {
 void func_80BAD7F8(EnSuttari* this, PlayState* play) {
     ScheduleOutput scheduleOutput;
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animIndex].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (this->enFsn == NULL) {
         this->enFsn = (EnFsn*)EnSuttari_GetActorById(play, ACTOR_EN_FSN);
     } else {
         if ((this->flags1 & 0x2000) && (this->animIndex == 1) && (curFrame == frameCount)) {
             this->animIndex = 2;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
         this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
         if (!Schedule_RunScript(play, D_80BAE820, &scheduleOutput) ||
@@ -1329,14 +1329,14 @@ void func_80BADA08(EnSuttari* this, PlayState* play) {
 void func_80BADA9C(EnSuttari* this, PlayState* play) {
     u8 talkstate = Message_GetState(&play->msgCtx);
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animIndex].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (this->flags1 & 1) {
         this->unk3F2 = this->headRot.y;
         func_80BAA9B4(this);
     } else if ((this->animIndex == 7) && (curFrame == frameCount)) {
         this->animIndex = 1;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
     }
     if (talkstate == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {

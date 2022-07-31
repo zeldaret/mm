@@ -81,7 +81,7 @@ const ActorInit En_Fsn_InitVars = {
     (ActorFunc)EnFsn_Draw,
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gFsnIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gFsnScratchBackAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gFsnTurnAroundAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -713,7 +713,7 @@ void EnFsn_InitShop(EnFsn* this, PlayState* play) {
     this->blinkTimer = 20;
     this->animIndex = FSN_ANIM_HANDS_ON_COUNTER_START;
     this->eyeTextureIdx = 0;
-    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
     this->actionFunc = EnFsn_Idle;
 }
 
@@ -722,10 +722,10 @@ void EnFsn_Idle(EnFsn* this, PlayState* play) {
 
     if (this->animIndex == FSN_ANIM_HANDS_ON_COUNTER_START) {
         s16 curFrame = this->skelAnime.curFrame;
-        s16 frameCount = Animation_GetLastFrame(sAnimations[this->animIndex].animation);
+        s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
         if (curFrame == frameCount) {
             this->animIndex = FSN_ANIM_HANDS_ON_COUNTER_LOOP;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
         return;
     }
@@ -758,12 +758,12 @@ void EnFsn_Idle(EnFsn* this, PlayState* play) {
 
 void EnFsn_Haggle(EnFsn* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animIndex].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (this->flags & ENFSN_ANGRY) {
         this->flags &= ~ENFSN_ANGRY;
         this->animIndex = FSN_ANIM_SLAM_COUNTER_LOOP;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
     } else {
         if (this->animIndex == FSN_ANIM_SLAM_COUNTER_LOOP && Animation_OnFrame(&this->skelAnime, 18.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
@@ -771,16 +771,16 @@ void EnFsn_Haggle(EnFsn* this, PlayState* play) {
         if (this->flags & ENFSN_CALM_DOWN) {
             this->flags &= ~ENFSN_CALM_DOWN;
             this->animIndex = FSN_ANIM_HANDS_ON_COUNTER_LOOP;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         } else if (this->flags & ENFSN_OFFER_FINAL_PRICE) {
             this->flags &= ~ENFSN_OFFER_FINAL_PRICE;
             this->animIndex = FSN_ANIM_MAKE_OFFER;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         } else {
             if (this->animIndex == FSN_ANIM_MAKE_OFFER) {
                 if (curFrame == frameCount) {
                     this->animIndex = FSN_ANIM_HANDS_ON_COUNTER_LOOP;
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
                 } else {
                     if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
@@ -1431,7 +1431,7 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_1;
         this->actor.targetMode = 0;
         this->animIndex = FSN_ANIM_IDLE;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnFsn_IdleBackroom;
     }
 }

@@ -32,7 +32,7 @@ typedef enum {
     /* 0x1 */ MADAME_AROMA_ANIM_1
 } DmAlAnimation;
 
-static AnimationInfoS sAnimationInfos[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_al_Anim_00DBE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
@@ -41,7 +41,7 @@ s32 DmAl_ChangeAnimation(DmAl* this, s32 animIndex) {
 
     if (animIndex != this->animIndex) {
         this->animIndex = animIndex;
-        didAnimationChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfos, animIndex);
+        didAnimationChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
     }
     return didAnimationChange;
 }

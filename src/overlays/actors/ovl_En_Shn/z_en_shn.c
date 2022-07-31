@@ -62,7 +62,7 @@ const ActorInit En_Shn_InitVars = {
     (ActorFunc)EnShn_Draw,
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, 0 },
     { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, -4 },
     { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, 0 },
@@ -85,7 +85,7 @@ s32 func_80AE615C(EnShn* this, s32 arg1) {
     }
     if (phi_v0 != 0) {
         this->unk_2E8 = arg1;
-        phi_v1 = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
+        phi_v1 = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
         this->playSpeed = this->skelAnime.playSpeed;
     }
     return phi_v1;

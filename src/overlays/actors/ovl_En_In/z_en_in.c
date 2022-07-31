@@ -118,7 +118,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_in_Anim_001D10, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_in_Anim_001D10, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_in_Anim_014F8C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -152,13 +152,13 @@ s32 func_808F30B0(SkelAnime* skelAnime, s16 animIndex) {
 
     if (animIndex >= 0 && animIndex < 18) {
         ret = true;
-        frameCount = sAnimations[animIndex].frameCount;
+        frameCount = sAnimationInfo[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(sAnimations[animIndex].animation);
+            frameCount = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
         }
-        Animation_Change(skelAnime, sAnimations[animIndex].animation, sAnimations[animIndex].playSpeed,
-                         sAnimations[animIndex].startFrame, frameCount, sAnimations[animIndex].mode,
-                         sAnimations[animIndex].morphFrames);
+        Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed,
+                         sAnimationInfo[animIndex].startFrame, frameCount, sAnimationInfo[animIndex].mode,
+                         sAnimationInfo[animIndex].morphFrames);
     }
     return ret;
 }
@@ -298,7 +298,7 @@ void func_808F3690(EnIn* this, PlayState* play) {
 }
 
 void func_808F374C(EnIn* this, PlayState* play) {
-    AnimationHeader* sAnimations[] = {
+    AnimationHeader* sAnimationInfo[] = {
         &object_in_Anim_015E38, &object_in_Anim_016A60, &object_in_Anim_0177AC, &object_in_Anim_016484,
         &object_in_Anim_0170DC, &object_in_Anim_018240, &object_in_Anim_0187C8, &object_in_Anim_0198A8,
     };
@@ -316,10 +316,10 @@ void func_808F374C(EnIn* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_CRY_0);
     }
     if (SkelAnime_Update(&this->skelAnime)) {
-        this->unk488 %= ARRAY_COUNT(sAnimations);
+        this->unk488 %= ARRAY_COUNT(sAnimationInfo);
         this->unk486 = this->unk488;
-        Animation_Change(&this->skelAnime, sAnimations[this->unk488], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimations[this->unk488]), ANIMMODE_ONCE, -10.0f);
+        Animation_Change(&this->skelAnime, sAnimationInfo[this->unk488], 1.0f, 0.0f,
+                         Animation_GetLastFrame(sAnimationInfo[this->unk488]), ANIMMODE_ONCE, -10.0f);
     }
 }
 

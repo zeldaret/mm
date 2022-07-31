@@ -29,7 +29,7 @@ const ActorInit Dm_Zl_InitVars = {
     (ActorFunc)DmZl_Draw,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &gDmZl4FacingAwayHandsOverEmblemLoop, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f },
     { &gDmZl4TurningAround2Anim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, -10.0f },
     { &gDmZl4HandsOverEmblemLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f },
@@ -98,14 +98,15 @@ typedef enum {
 /**
  * This function is always called with unusedExtraOffset = 0.
  */
-void DmZl_ChangeAnimation(SkelAnime* skelAnime, AnimationInfo animation[], u16 unusedExtraOffset) {
+void DmZl_ChangeAnimation(SkelAnime* skelAnime, AnimationInfo animationInfo[], u16 unusedExtraOffset) {
     f32 endFrame;
 
-    animation += unusedExtraOffset;
-    endFrame = (animation->frameCount < 0.0f) ? Animation_GetLastFrame(animation->animation) : animation->frameCount;
+    animationInfo += unusedExtraOffset;
+    endFrame = (animationInfo->frameCount < 0.0f) ? Animation_GetLastFrame(animationInfo->animation)
+                                                  : animationInfo->frameCount;
 
-    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, endFrame,
-                     animation->mode, animation->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame, endFrame,
+                     animationInfo->mode, animationInfo->morphFrames);
 }
 
 void DmZl_Init(Actor* thisx, PlayState* play) {
@@ -118,7 +119,7 @@ void DmZl_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     // these three set to NULL should mean they are dynamically allocated
     SkelAnime_InitFlex(play, &this->skelAnime, &gZl4Skeleton, NULL, NULL, NULL, 0);
-    DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animIndex], 0);
+    DmZl_ChangeAnimation(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmZl_DoNothing;
 }
@@ -154,7 +155,7 @@ void DmZl_UpdateCutscene(DmZl* this, PlayState* play) {
 
             if (nextAnimIndex != this->animIndex) {
                 this->animIndex = nextAnimIndex;
-                DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animIndex], 0);
+                DmZl_ChangeAnimation(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
             }
         }
 
@@ -168,7 +169,7 @@ void DmZl_UpdateCutscene(DmZl* this, PlayState* play) {
             (actionIndex == ZELDA_ANIM_PLAYING_OCARINA_START)) {
             // these animations don't loop at the end, they lead into the next animation
             this->animIndex++;
-            DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animIndex], 0);
+            DmZl_ChangeAnimation(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
         }
     }
 }

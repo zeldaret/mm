@@ -104,7 +104,7 @@ const ActorInit En_Ossan_InitVars = {
     (ActorFunc)NULL,
 };
 
-static AnimationInfoS sCuriosityShopManAnimations[] = {
+static AnimationInfoS sCuriosityShopManAnimationInfo[] = {
     { &gFsnIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gFsnScratchBackAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gFsnTurnAroundAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -120,7 +120,7 @@ static AnimationInfoS sCuriosityShopManAnimations[] = {
     { &gFsnMakeOfferAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
-static AnimationInfoS sPartTimerAnimations[] = {
+static AnimationInfoS sPartTimerAnimationInfo[] = {
     { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -10 },
     { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -10 },
     { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -137,7 +137,7 @@ static AnimationInfoS sPartTimerAnimations[] = {
 
 static s16 sObjectIds[] = { OBJECT_FSN, OBJECT_ANI };
 
-static AnimationInfoS* sAnimations[] = { sCuriosityShopManAnimations, sPartTimerAnimations };
+static AnimationInfoS* sAnimationInfo[] = { sCuriosityShopManAnimationInfo, sPartTimerAnimationInfo };
 
 static f32 sActorScales[] = { 0.01f, 0.01f };
 
@@ -389,7 +389,7 @@ void EnOssan_Idle(EnOssan* this, PlayState* play) {
 }
 
 void EnOssan_BeginInteraction(EnOssan* this, PlayState* play) {
-    AnimationInfoS* animations = sAnimations[this->actor.params];
+    AnimationInfoS* animations = sAnimationInfo[this->actor.params];
     s16 curFrame = this->skelAnime.curFrame;
     s16 frameCount = Animation_GetLastFrame(animations[this->animIndex].animation);
 
@@ -557,7 +557,7 @@ u8 EnOssan_CursorLeft(EnOssan* this, u8 cursorIdx, u8 shelfSlotMax) {
 }
 
 void EnOssan_Hello(EnOssan* this, PlayState* play) {
-    AnimationInfoS* animations = sAnimations[this->actor.params];
+    AnimationInfoS* animations = sAnimationInfo[this->actor.params];
     u8 talkState = Message_GetState(&play->msgCtx);
     s32 pad;
     Player* player = GET_PLAYER(play);
@@ -591,7 +591,7 @@ void EnOssan_Hello(EnOssan* this, PlayState* play) {
 }
 
 s32 EnOssan_FacingShopkeeperDialogResult(EnOssan* this, PlayState* play) {
-    AnimationInfoS* animations = sAnimations[this->actor.params];
+    AnimationInfoS* animations = sAnimationInfo[this->actor.params];
     Player* player = GET_PLAYER(play);
 
     switch (play->msgCtx.choiceIndex) {
@@ -663,7 +663,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play) {
 }
 
 void EnOssan_TalkToShopkeeper(EnOssan* this, PlayState* play) {
-    AnimationInfoS* animations = sAnimations[this->actor.params];
+    AnimationInfoS* animations = sAnimationInfo[this->actor.params];
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if ((this->animIndex == ANI_ANIM_APOLOGY_LOOP) && (this->actor.params == ENOSSAN_PART_TIME_WORKER)) {
@@ -1527,7 +1527,7 @@ void EnOssan_InitShop(EnOssan* this, PlayState* play) {
 
         Actor_SetScale(&this->actor, sActorScales[this->actor.params]);
         this->animIndex = 1; // FSN_ANIM_SCRATCH_BACK and ANI_ANIM_STANDING_NORMAL_LOOP_2
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations[this->actor.params], 1);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo[this->actor.params], 1);
         EnOssan_SpawnShopItems(this, play, shopItems);
         this->blinkTimer = 20;
         this->eyeTexIndex = 0;

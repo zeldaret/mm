@@ -38,7 +38,7 @@ typedef enum {
     /* 3 */ DMCHAR02_ANIM_FALL,
 } DmChar02Animation;
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &gClockTowerOcarinaOfTimeHitGroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &gClockTowerOcarinaOfTimeTurnAroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &gClockTowerOcarinaOfTimeJuggleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
@@ -88,7 +88,7 @@ void DmChar02_Init(Actor* thisx, PlayState* play) {
         this->actor.targetArrowOffset = 3000.0f;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gClockTowerOcarinaOfTimeSkel, NULL, NULL, NULL, 0);
-        DmChar02_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+        DmChar02_ChangeAnimation(&this->skelAnime, sAnimationInfo, 0);
         Actor_SetScale(&this->actor, 0.01f);
         this->actionFunc = DmChar02_PerformCutsceneActions;
     } else {
@@ -126,7 +126,7 @@ void DmChar02_PerformCutsceneActions(DmChar02* this, PlayState* play) {
             }
 
             if (shouldChangeAnimation) {
-                DmChar02_ChangeAnimation(&this->skelAnime, &sAnimations[this->animIndex], 0);
+                DmChar02_ChangeAnimation(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
             }
         }
 
@@ -136,7 +136,7 @@ void DmChar02_PerformCutsceneActions(DmChar02* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (this->animIndex == DMCHAR02_ANIM_TURN_AROUND) {
             this->animIndex++;
-            DmChar02_ChangeAnimation(&this->skelAnime, &sAnimations[this->animIndex], 0);
+            DmChar02_ChangeAnimation(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
         }
     }
 }

@@ -81,7 +81,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_ah_Anim_001860, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_ah_Anim_001860, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_ah_Anim_002280, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -146,7 +146,7 @@ s32 func_80BD2B0C(EnAh* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_300 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
         this->unk_2DC = this->skelAnime.playSpeed;
     }
     return ret;

@@ -133,7 +133,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gGoronElderIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -10 },
     { &gGoronElderWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -10 },
     { &gGoronElderWavingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -10 },
@@ -297,19 +297,19 @@ void EnJg_SetupTalk(EnJg* this, PlayState* play) {
     switch (this->textId) {
         case 0xDAC: // What was I doing?
             this->animIndex = EN_JG_ANIM_SHAKING_HEAD;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_Talk;
             break;
 
         case 0xDAD: // I must hurry!
             this->animIndex = EN_JG_ANIM_SURPRISE_START;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_AlternateTalkOrWalkInPlace;
             break;
 
         case 0xDB7: // You're Darmani!
             this->animIndex = EN_JG_ANIM_SURPRISE_START;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_Talk;
             break;
 
@@ -320,7 +320,7 @@ void EnJg_SetupTalk(EnJg* this, PlayState* play) {
         case 0xDBD: // "...What?"
         case 0xDC4: // It's so cold I can't play
             this->animIndex = EN_JG_ANIM_IDLE;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_Talk;
             break;
 
@@ -329,14 +329,14 @@ void EnJg_SetupTalk(EnJg* this, PlayState* play) {
         case 0xDBC: // Following me won't do you any good
         case 0xDC6: // I am counting on you
             this->animIndex = EN_JG_ANIM_ANGRY;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_Talk;
             break;
 
         case 0xDB4: // This is our problem (first)
         case 0xDB5: // This is our problem (repeat)
             this->animIndex = EN_JG_ANIM_WAVING;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_Talk;
             break;
     }
@@ -417,12 +417,12 @@ void EnJg_GoronShrineCheer(EnJg* this, PlayState* play) {
 void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animIndex].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (this->animIndex == EN_JG_ANIM_SURPRISE_START) {
         if (currentFrame == lastFrame) {
             this->animIndex = EN_JG_ANIM_SURPRISE_LOOP;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
     } else if (this->animIndex == EN_JG_ANIM_SURPRISE_LOOP) {
         if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
@@ -430,7 +430,7 @@ void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, PlayState* play) {
             play->msgCtx.stateTimer = 4;
             this->flags &= ~FLAG_LOOKING_AT_PLAYER;
             this->animIndex = EN_JG_ANIM_WALK;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_Walk;
         }
     } else if (this->animIndex == EN_JG_ANIM_WALK) {
@@ -472,12 +472,12 @@ void EnJg_Walk(EnJg* this, PlayState* play) {
 void EnJg_Talk(EnJg* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animIndex].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
     u16 temp;
 
     if ((this->animIndex == EN_JG_ANIM_SURPRISE_START) && (currentFrame == lastFrame)) {
         this->animIndex = EN_JG_ANIM_SURPRISE_LOOP;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
     }
 
     if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
@@ -532,7 +532,7 @@ void EnJg_SetupWalk(EnJg* this, PlayState* play) {
     if (this->animIndex != EN_JG_ANIM_WALK) {
         this->animIndex = EN_JG_ANIM_WALK;
         this->freezeTimer = 1000;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnJg_Walk;
     } else {
         this->freezeTimer = 1000;
@@ -542,7 +542,7 @@ void EnJg_SetupWalk(EnJg* this, PlayState* play) {
 
 void EnJg_Freeze(EnJg* this, PlayState* play) {
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animIndex].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (this->action == EN_JG_ACTION_SPAWNING) {
         this->action = EN_JG_ACTION_FROZEN_OR_NON_FIRST_THAW;
@@ -552,7 +552,7 @@ void EnJg_Freeze(EnJg* this, PlayState* play) {
                                     this->actor.world.pos.y, this->actor.world.pos.z, this->actor.world.rot.x,
                                     this->actor.world.rot.y, this->actor.world.rot.z, 0xFF50);
         this->animIndex = EN_JG_ANIM_FROZEN_LOOP;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnJg_FrozenIdle;
     } else if (this->animIndex == EN_JG_ANIM_FROZEN_START) {
         this->action = EN_JG_ACTION_FROZEN_OR_NON_FIRST_THAW;
@@ -562,7 +562,7 @@ void EnJg_Freeze(EnJg* this, PlayState* play) {
                                         this->actor.world.pos.y, this->actor.world.pos.z, this->actor.world.rot.x,
                                         this->actor.world.rot.y, this->actor.world.rot.z, 0xFF50);
             this->animIndex = EN_JG_ANIM_FROZEN_LOOP;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_FrozenIdle;
         }
     }
@@ -580,11 +580,11 @@ void EnJg_FrozenIdle(EnJg* this, PlayState* play) {
                 // Otherwise, he immediately begins walking after being
                 // thawed out.
                 if (this->textId == 0xDAC) {
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
                     this->actionFunc = EnJg_Idle;
                 } else {
                     this->freezeTimer = 1000;
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
                     this->actionFunc = EnJg_Walk;
                 }
             }
@@ -674,7 +674,7 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
                     break;
             }
 
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->cutsceneAnimIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->cutsceneAnimIndex);
         }
 
         if ((!(this->flags & FLAG_DRUM_SPAWNED)) &&
@@ -899,7 +899,7 @@ void EnJg_SpawnBreath(EnJg* this, PlayState* play) {
  */
 void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, PlayState* play) {
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animIndex].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->flags |= FLAG_LOOKING_AT_PLAYER;
@@ -926,7 +926,7 @@ void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, PlayState* play
         this->freezeTimer--;
         if ((this->freezeTimer <= 0) && (currentFrame == lastFrame)) {
             this->animIndex = EN_JG_ANIM_FROZEN_START;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             Audio_PlaySfxAtPos(&sSfxPos, NA_SE_EV_FREEZE_S);
             this->actionFunc = EnJg_Freeze;
         }
@@ -953,7 +953,7 @@ void EnJg_Init(Actor* thisx, PlayState* play) {
             // This is the elder that appears in the cutscene for learning the full Goron Lullaby.
             this->animIndex = EN_JG_ANIM_IDLE;
             this->action = EN_JG_ACTION_LULLABY_INTRO_CS;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_LullabyIntroCutsceneAction;
         } else {
             // This is the elder that appears in Mountain Village or the Path to Goron Village in winter.
@@ -962,14 +962,14 @@ void EnJg_Init(Actor* thisx, PlayState* play) {
             this->action = EN_JG_ACTION_SPAWNING;
             this->freezeTimer = 1000;
             this->textId = 0xDAC; // What was I doing?
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_Freeze;
         }
     } else {
         // This is the elder that appears in Goron Shrine in spring.
         this->animIndex = EN_JG_ANIM_IDLE;
         this->cutscene = this->actor.cutscene;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animIndex);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnJg_GoronShrineIdle;
     }
 }

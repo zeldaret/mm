@@ -90,7 +90,7 @@ typedef enum {
     /*  5 */ TOILET_HAND_ANIM_FIST // i.e. holding the reward
 } ToiletHandAnimation;
 
-static AnimationInfoS sAnimationInfos[] = {
+static AnimationInfoS sAnimationInfo[] = {
     /* 0 */ { &gToiletHandWaitingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     /* 1 */ { &gToiletHandWaitingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     /* 2 */ { &gToiletHandWaggingFingerAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
@@ -118,7 +118,7 @@ s32 EnBjt_ChangeAnimation(EnBjt* this, s32 animIndex) {
 
     if (changeAnim) {
         this->animIndex = animIndex;
-        changed = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfos, animIndex);
+        changed = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->animPlaySpeed = this->skelAnime.playSpeed;
     }
 

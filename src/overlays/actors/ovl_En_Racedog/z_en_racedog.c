@@ -223,7 +223,7 @@ typedef enum {
     /* 16 */ RACEDOG_ANIM_MAX
 } RacedogAnimation;
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
     { &gDogRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         { &gDogBarkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
     { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },        { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },
@@ -354,8 +354,8 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     sSelectedDogInfo = sDogInfo[(s16)((gSaveContext.eventInf[0] & 0xF8) >> 3)];
     this->selectedDogIndex = sSelectedDogInfo.index;
 
-    EnRacedog_ChangeAnimation(&this->skelAnime, sAnimations, RACEDOG_ANIM_IDLE);
-    sAnimations[RACEDOG_ANIM_IDLE].playSpeed = Rand_ZeroFloat(0.5f) + 1.0f;
+    EnRacedog_ChangeAnimation(&this->skelAnime, sAnimationInfo, RACEDOG_ANIM_IDLE);
+    sAnimationInfo[RACEDOG_ANIM_IDLE].playSpeed = Rand_ZeroFloat(0.5f) + 1.0f;
     this->actionFunc = EnRacedog_RaceStart;
 }
 
@@ -376,7 +376,7 @@ void EnRacedog_RaceStart(EnRacedog* this, PlayState* play) {
             play_sound(NA_SE_SY_START_SHOT);
         }
 
-        EnRacedog_ChangeAnimation(&this->skelAnime, sAnimations, RACEDOG_ANIM_RUN);
+        EnRacedog_ChangeAnimation(&this->skelAnime, sAnimationInfo, RACEDOG_ANIM_RUN);
         this->actionFunc = EnRacedog_Race;
     }
 }
@@ -601,9 +601,9 @@ void EnRacedog_CheckForFinish(EnRacedog* this) {
  */
 void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this) {
     if (this->actor.speedXZ < 3.0f) {
-        sAnimations[RACEDOG_ANIM_RUN].playSpeed = 0.9f;
+        sAnimationInfo[RACEDOG_ANIM_RUN].playSpeed = 0.9f;
     } else {
-        sAnimations[RACEDOG_ANIM_RUN].playSpeed = 1.0f;
+        sAnimationInfo[RACEDOG_ANIM_RUN].playSpeed = 1.0f;
     }
 }
 

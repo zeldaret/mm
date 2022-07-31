@@ -88,7 +88,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0),
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gZoraIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gZoraIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gZoraSurfacingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
@@ -106,15 +106,15 @@ s32 EnZo_SetAnimation(SkelAnime* skelAnime, s16 index) {
     s16 frameCount;
     s32 didChange = false;
 
-    if ((index >= 0) && (index < ARRAY_COUNT(sAnimations))) {
+    if ((index >= 0) && (index < ARRAY_COUNT(sAnimationInfo))) {
         didChange = true;
-        frameCount = sAnimations[index].frameCount;
+        frameCount = sAnimationInfo[index].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(sAnimations[index].animation);
+            frameCount = Animation_GetLastFrame(sAnimationInfo[index].animation);
         }
-        Animation_Change(skelAnime, sAnimations[index].animation, sAnimations[index].playSpeed,
-                         sAnimations[index].startFrame, frameCount, sAnimations[index].mode,
-                         sAnimations[index].morphFrames);
+        Animation_Change(skelAnime, sAnimationInfo[index].animation, sAnimationInfo[index].playSpeed,
+                         sAnimationInfo[index].startFrame, frameCount, sAnimationInfo[index].mode,
+                         sAnimationInfo[index].morphFrames);
     }
     return didChange;
 }

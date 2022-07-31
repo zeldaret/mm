@@ -64,7 +64,7 @@ void EnTrt_Blink(EnTrt* this);
 void EnTrt_OpenEyes2(EnTrt* this);
 void EnTrt_NodOff(EnTrt* this);
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_trt_Anim_00DE68, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
     { &object_trt_Anim_00EE98, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
     { &object_trt_Anim_00FD34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -785,7 +785,7 @@ void EnTrt_IdleSleeping(EnTrt* this, PlayState* play) {
     }
     if (DECR(this->timer) == 0) {
         this->timer = 40;
-        EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 1);
+        EnTrt_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
         this->animIndex = 1;
         this->actionFunc = EnTrt_IdleAwake;
         this->blinkFunc = EnTrt_OpenThenCloseEyes;
@@ -821,7 +821,7 @@ void EnTrt_IdleAwake(EnTrt* this, PlayState* play) {
         if (player->transformation == PLAYER_FORM_HUMAN) {
             this->flags |= ENTRT_MET;
         }
-        EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 2);
+        EnTrt_ChangeAnim(&this->skelAnime, sAnimationInfo, 2);
         this->blinkFunc = EnTrt_EyesClosed;
         this->timer = 45;
         this->actionFunc = EnTrt_BeginInteraction;
@@ -831,7 +831,7 @@ void EnTrt_IdleAwake(EnTrt* this, PlayState* play) {
     }
     if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(150, 100);
-        EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 2);
+        EnTrt_ChangeAnim(&this->skelAnime, sAnimationInfo, 2);
         this->animIndex = 2;
         this->sleepSoundTimer = 10;
         this->actor.textId = 0;
@@ -854,7 +854,7 @@ void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
         if (this->animIndex != 5) {
             if (curFrame == animLastFrame) {
-                EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 3);
+                EnTrt_ChangeAnim(&this->skelAnime, sAnimationInfo, 3);
                 this->animIndex = 3;
                 this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;
                 this->timer = 10;
@@ -868,7 +868,7 @@ void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
         }
     } else if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(40, 20);
-        EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
+        EnTrt_ChangeAnim(&this->skelAnime, sAnimationInfo, 5);
         Message_StartTextbox(play, this->textId, &this->actor);
         this->animIndex = 5;
         switch (this->textId) {
@@ -910,7 +910,7 @@ void EnTrt_Surprised(EnTrt* this, PlayState* play) {
         }
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
         if (DECR(this->timer) == 0) {
-            EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 4);
+            EnTrt_ChangeAnim(&this->skelAnime, sAnimationInfo, 4);
             this->animIndex = 4;
             this->blinkFunc = EnTrt_OpenEyes2;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_SURPRISED);
@@ -919,7 +919,7 @@ void EnTrt_Surprised(EnTrt* this, PlayState* play) {
         }
     } else if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(40, 20);
-        EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
+        EnTrt_ChangeAnim(&this->skelAnime, sAnimationInfo, 5);
         Message_StartTextbox(play, this->textId, &this->actor);
         this->animIndex = 5;
         this->actionFunc = EnTrt_TryToGiveRedPotionAfterSurprised;
