@@ -848,8 +848,8 @@ typedef struct Player {
     /* 0xB4C */ s16 unk_B4C;
     /* 0xB4E */ s16 unk_B4E;
     /* 0xB50 */ f32 unk_B50;
-    /* 0xB54 */ f32 unk_B54;
-    /* 0xB58 */ f32 unk_B58;
+    /* 0xB54 */ f32 wallHeight; // height used to determine whether link can climb or grab a ledge at the top
+    /* 0xB58 */ f32 wallDistance; // distance to the colliding wall plane
     /* 0xB5C */ u8 unk_B5C;
     /* 0xB5D */ u8 unk_B5D;
     /* 0xB5E */ u8 unk_B5E;

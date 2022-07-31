@@ -13,14 +13,6 @@ struct _struct_D_8085CF88_0x10 {
     /* 0x0C */ char pad_C[4];                       /* maybe part of unk_B[5]? */
 };                                                  /* size = 0x10 */
 
-struct _struct_D_8085D09C_0x8 {
-    /* 0x0 */ s32 unk_0;                            /* inferred */
-    /* 0x4 */ u8 unk_4;                             /* inferred */
-    /* 0x5 */ u8 unk_5;                             /* inferred */
-    /* 0x6 */ u8 unk_6;                             /* inferred */
-    /* 0x7 */ u8 unk_7;                             /* inferred */
-};                                                  /* size = 0x8 */
-
 struct _struct_D_8085D13C_0x6 {
     /* 0x0 */ s8 unk_0;                             /* inferred */
     /* 0x1 */ u8 unk_1;                             /* inferred */
@@ -35,8 +27,6 @@ struct _struct_D_8085D848_0x54 {
     /* 0x24 */ char pad_24[0x30];                   /* maybe part of unk_18[5]? */
 };                                                  /* size = 0x54 */
 
-? EffectSsFhgFlash_SpawnShock(PlayState*, Player*, f32*, s16, s32); /* extern */
-? EffectSsFireTail_SpawnFlameOnPlayer(f32, f32, PlayState*, f32, s16, f32); /* extern */
 ? func_801155B4(PlayState*, s16, s16, Player*);     /* extern */
 ? func_80115764(PlayState*, ?);                     /* extern */
 ? func_80165DCC(?);                                 /* extern */
@@ -46,7 +36,6 @@ struct _struct_D_8085D848_0x54 {
 ? func_8019FD90(?, ?);                              /* extern */
 ? func_801A01C4();                                  /* extern */
 ? func_801A3CF4(s8);                                /* extern */
-void func_80833A64(Player* arg0);                   /* static */
 void func_808354A4(PlayState* arg0, s32 arg1, s32 arg2, u32); /* static */
 s32 func_8083562C(PlayState* arg0, Actor* arg1, CollisionPoly* arg2, s32 arg3); /* static */
 s32 func_808370D4(PlayState* arg0, Player* arg1);   /* static */
@@ -306,27 +295,6 @@ static s8 D_8085D028[0xC] = { 0, 0xB, 1, 2, 3, 0xC, 5, 4, 9, 8, 7, -6 };
 static s8 D_8085D034[0x10] = { 0xD, 1, 2, 3, 0xC, 5, 4, 9, 0xA, 0xB, 8, 7, -6, 0, 0, 0 };
 static s8 D_8085D044[4] = { 0xA, 8, -7, 0 };
 static s8 D_8085D050[4] = { 0xD, 2, -4, 0 };
-static struct _struct_D_8085D09C_0x8 D_8085D09C[7] = {
-    { 0x100, 2, 2, 0, 0 },
-    { 0x200, 4, 8, 1, 2 },
-    { 0x200, 4, 8, 2, 4 },
-    { 0x200, 4, 8, 3, 6 },
-    { 0x200, 4, 8, 4, 8 },
-    { 2, 0, 0, 2, 4 },
-    { 0x800000, 1, 2, 0, 0 },
-};
-static LinkAnimationHeader* D_8085D0D4[4] = {
-    (LinkAnimationHeader* )0x0400DCA0,
-    (LinkAnimationHeader* )0x0400DC98,
-    (LinkAnimationHeader* )0x0400DB00,
-    (LinkAnimationHeader* )0x0400DAF8,
-};
-static LinkAnimationHeader* D_8085D0E4[4] = {
-    (LinkAnimationHeader* )0x0400DC90,
-    (LinkAnimationHeader* )0x0400D418,
-    (LinkAnimationHeader* )0x0400DAE8,
-    (LinkAnimationHeader* )0x0400D3F0,
-};
 static s32 D_8085D0F4 = 0x20101;
 static ? D_8085D0F8;                                /* unable to generate initializer */
 static LinkAnimationHeader* D_8085D118[3] = {
@@ -1794,6 +1762,27 @@ s32 (*D_8085D054[0xF])(Player*, PlayState*) = {
 s8 D_8085D090[4] = { 0xC, 4, 4, 8 };
 s8 D_8085D094[3] = { 0x1B, 0x1C, 0x1D };
 s8 D_8085D097[5] = { 0x18, 0x19, 0x1A, 0, 0 };
+struct_8085D09C D_8085D09C[7] = {
+    { 0x100, 2, 2, 0, 0 },
+    { 0x200, 4, 8, 1, 2 },
+    { 0x200, 4, 8, 2, 4 },
+    { 0x200, 4, 8, 3, 6 },
+    { 0x200, 4, 8, 4, 8 },
+    { 2, 0, 0, 2, 4 },
+    { 0x800000, 1, 2, 0, 0 },
+};
+LinkAnimationHeader* D_8085D0D4[4] = {
+    (LinkAnimationHeader* )0x0400DCA0,
+    (LinkAnimationHeader* )0x0400DC98,
+    (LinkAnimationHeader* )0x0400DB00,
+    (LinkAnimationHeader* )0x0400DAF8,
+};
+LinkAnimationHeader* D_8085D0E4[4] = {
+    (LinkAnimationHeader* )0x0400DC90,
+    (LinkAnimationHeader* )0x0400D418,
+    (LinkAnimationHeader* )0x0400DAE8,
+    (LinkAnimationHeader* )0x0400D3F0,
+};
 Vec3f D_8085D100 = { 0.0f, 50.0f, 0.0f };
 Vec3f D_8085D10C;                                   /* unable to generate initializer */
 f32 D_8085D114 = 20.0f;
@@ -4544,22 +4533,22 @@ block_16:
     return (enum PlayerMeleeWeaponAnimation) var_v1;
 }
 
-void func_80833728(Player* this, s32 arg1, s32 arg2, s32 arg3) {
-    this->meleeWeaponQuads[arg1].info.toucher.dmgFlags = (u32) arg2;
-    this->meleeWeaponQuads[arg1].info.toucher.damage = (u8) arg3;
-    if (arg2 == 2) {
-        this->meleeWeaponQuads[arg1].info.toucherFlags = 0x15;
+void func_80833728(Player* this, s32 index, u32 dmgFlags, s32 damage) {
+    this->meleeWeaponQuads[index].info.toucher.dmgFlags = dmgFlags;
+    this->meleeWeaponQuads[index].info.toucher.damage = (u8) damage;
+    if (dmgFlags == 2) {
+        this->meleeWeaponQuads[index].info.toucherFlags = 0x15;
         return;
     }
-    this->meleeWeaponQuads[arg1].info.toucherFlags = 5;
+    this->meleeWeaponQuads[index].info.toucherFlags = 5;
 }
 
 void func_8083375C(Player* this, enum PlayerMeleeWeaponAnimation meleeWeaponAnimation) {
-    struct _struct_D_8085D09C_0x8* sp24;
+    struct_8085D09C* sp24;
     s32 sp20;
     enum PlayerMeleeWeaponAnimation var_a1;
     s32 var_a0;
-    struct _struct_D_8085D09C_0x8* var_v0;
+    struct_8085D09C* var_v0;
     u8 var_a3;
     u8 var_v1;
 
@@ -4593,8 +4582,8 @@ void func_8083375C(Player* this, enum PlayerMeleeWeaponAnimation meleeWeaponAnim
     }
     sp20 = (s32) var_a3;
     sp24 = var_v0;
-    func_80833728(this, 0, var_v0->unk_0, (s32) var_a3);
-    func_80833728(this, 1, var_v0->unk_0, (s32) var_a3);
+    func_80833728(this, 0, (u32) var_v0->dmgFlags, (s32) var_a3);
+    func_80833728(this, 1, (u32) var_v0->dmgFlags, (s32) var_a3);
 }
 
 void func_80833864(PlayState* play, Player* this, enum PlayerMeleeWeaponAnimation meleeWeaponAnimation) {
@@ -4663,7 +4652,7 @@ void func_80833A64(Player* arg0) {
 
     temp_t6 = arg0->skelAnime.jointTable;
     arg0->unk_278 = (unaligned s32) temp_t6->unk_0;
-    arg0->skelAnime.prevTransl.z = temp_t6->z;
+    arg0->skelAnime.prevTransl.z = (s16) (u16) temp_t6->z;
     func_8082E820(arg0, 3);
 }
 
@@ -4933,7 +4922,7 @@ s32 func_808341F4(PlayState* play, Player* this) {
                 }
                 var_fv0 = var_fv1;
             }
-            EffectSsFireTail_SpawnFlameOnPlayer(temp_fa0, var_fa1, play, var_fa1, var_s0, var_fv0);
+            EffectSsFireTail_SpawnFlameOnPlayer(play, var_fa1, var_s0, var_fv0);
         }
         var_s0 += 1;
         var_s1 += 1;
@@ -11363,7 +11352,7 @@ void func_808445C4(PlayState* play, Player* this) {
         sp3C = (randPlusMinusPoint5Scaled(5.0f) + sp38->x) - this->actor.world.pos.x;
         sp40 = (randPlusMinusPoint5Scaled(5.0f) + sp38->y) - this->actor.world.pos.y;
         sp44 = (randPlusMinusPoint5Scaled(5.0f) + sp38->z) - this->actor.world.pos.z;
-        EffectSsFhgFlash_SpawnShock(play, this, &sp3C, unksp36, 1);
+        EffectSsFhgFlash_SpawnShock(play, &this->actor, (Vec3f* ) &sp3C, unksp36, (u8) 1);
         func_800B8F98(&this->actor, 0x68U);
     }
 }

@@ -134,6 +134,13 @@ void func_808548B8(Player* this, PlayState* play);
 void func_8084FE7C(Player* this, PlayState* play);
 void func_808505D0(Player* this, PlayState* play);
 
+void func_808497A0(Player* this, PlayState* play);
+void func_8084D4EC(Player* this, PlayState* play);
+
+void func_8084E724(Player* this, PlayState* play);
+void func_80851588(Player* this, PlayState* play);
+void func_808519FC(Player* this, PlayState* play);
+
 s32 func_8082DA90(PlayState* play) {
     return play->transitionTrigger != TRANS_TRIGGER_OFF || play->transitionMode != TRANS_MODE_OFF;
 }
@@ -2213,7 +2220,7 @@ s32 func_80831494(PlayState* play, Player* this, void (*arg2)(Player*, PlayState
     return 1;
 }
 #else
-s32 func_80831494(PlayState* play, Player* this, void (*arg2)(Player*, PlayState* play), s32 arg3);
+s32 func_80831494(PlayState* play, Player* this, void (*arg2)(Player* this, PlayState* play), s32 arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80831494.s")
 #endif
 
@@ -2679,7 +2686,8 @@ void func_80832888(Player* this, PlayState* play) {
         this->stateFlags1 &= ~PLAYER_STATE1_40000000;
     }
 
-    if ((play->csCtx.state != 0) || (this->csMode != 0) || (this->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) || (this->stateFlags3 & PLAYER_STATE3_80)) {
+    if ((play->csCtx.state != 0) || (this->csMode != 0) ||
+        (this->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) || (this->stateFlags3 & PLAYER_STATE3_80)) {
         this->unk_738 = 0;
     } else if ((temp_v0 != 0) || (this->stateFlags2 & PLAYER_STATE2_2000) || (this->unk_A78 != NULL)) {
         if (this->unk_738 <= 5) {
@@ -2700,16 +2708,21 @@ void func_80832888(Player* this, PlayState* play) {
     temp_v0_3 = func_8082DAFC(play);
     if (temp_v0_3 || (this->unk_738 != 0) || (this->stateFlags1 & (PLAYER_STATE1_1000 | PLAYER_STATE1_2000000))) {
         if (!temp_v0_3) {
-            if (!(this->stateFlags1 & PLAYER_STATE1_2000000) && ((this->itemActionParam != PLAYER_AP_FISHING_POLE) || (this->unk_B28 == 0)) && CHECK_BTN_ALL(D_80862B44->press.button, BTN_Z)) {
-                var_v1_2 = (this == GET_PLAYER(play)) ? play->actorCtx.targetContext.arrowPointedActor : &GET_PLAYER(play)->actor;
+            if (!(this->stateFlags1 & PLAYER_STATE1_2000000) &&
+                ((this->itemActionParam != PLAYER_AP_FISHING_POLE) || (this->unk_B28 == 0)) &&
+                CHECK_BTN_ALL(D_80862B44->press.button, BTN_Z)) {
+                var_v1_2 = (this == GET_PLAYER(play)) ? play->actorCtx.targetContext.arrowPointedActor
+                                                      : &GET_PLAYER(play)->actor;
                 var_a1 = gSaveContext.options.zTargetSetting != 0 || this != GET_PLAYER(play);
                 this->stateFlags1 |= PLAYER_STATE1_8000;
-                if ((this->currentMask != PLAYER_MASK_GIANT) && (var_v1_2 != NULL) && !(var_v1_2->flags & ACTOR_FLAG_8000000) && !(this->stateFlags3 & (PLAYER_STATE3_200 | PLAYER_STATE3_2000))) {
+                if ((this->currentMask != PLAYER_MASK_GIANT) && (var_v1_2 != NULL) &&
+                    !(var_v1_2->flags & ACTOR_FLAG_8000000) &&
+                    !(this->stateFlags3 & (PLAYER_STATE3_200 | PLAYER_STATE3_2000))) {
                     if ((var_v1_2 == this->unk_730) && (this == GET_PLAYER(play))) {
                         var_v1_2 = play->actorCtx.targetContext.unk_94;
                     }
 
-                    if ((var_v1_2 != NULL) && (( (var_v1_2 != this->unk_730)) || (var_v1_2->flags & ACTOR_FLAG_80000))) {
+                    if ((var_v1_2 != NULL) && (((var_v1_2 != this->unk_730)) || (var_v1_2->flags & ACTOR_FLAG_80000))) {
                         var_v1_2->flags &= ~ACTOR_FLAG_80000;
                         if (var_a1 == 0) {
                             this->stateFlags2 |= PLAYER_STATE2_2000;
@@ -2721,13 +2734,15 @@ void func_80832888(Player* this, PlayState* play) {
                         func_80123DA4(this);
                     }
                     this->stateFlags1 &= ~PLAYER_STATE1_40000000;
-                } else if (!(this->stateFlags1 & (PLAYER_STATE1_20000 | PLAYER_STATE1_40000000)) && (func_808573A4 != this->unk_748)) {
+                } else if (!(this->stateFlags1 & (PLAYER_STATE1_20000 | PLAYER_STATE1_40000000)) &&
+                           (func_808573A4 != this->unk_748)) {
                     func_8083133C(this);
                 }
             }
 
             if (this->unk_730 != NULL) {
-                if ((this == GET_PLAYER(play)) && (this->unk_730 != this->unk_A78) && (func_800B83F8(this->unk_730, this, var_v1) != 0)) {
+                if ((this == GET_PLAYER(play)) && (this->unk_730 != this->unk_A78) &&
+                    (func_800B83F8(this->unk_730, this, var_v1) != 0)) {
                     func_80123DA4(this);
                     this->stateFlags1 |= PLAYER_STATE1_40000000;
                 } else if (this->unk_730 != NULL) {
@@ -2740,7 +2755,8 @@ void func_80832888(Player* this, PlayState* play) {
 
         if ((this->unk_730 != NULL) && !(this->stateFlags3 & (PLAYER_STATE1_200 | PLAYER_STATE1_2000))) {
             this->stateFlags1 &= ~(PLAYER_STATE1_10000 | PLAYER_STATE1_20000);
-            if ((this->stateFlags1 & PLAYER_STATE1_800) || !CHECK_FLAG_ALL(this->unk_730->flags, ACTOR_FLAG_1 | ACTOR_FLAG_4)) {
+            if ((this->stateFlags1 & PLAYER_STATE1_800) ||
+                !CHECK_FLAG_ALL(this->unk_730->flags, ACTOR_FLAG_1 | ACTOR_FLAG_4)) {
                 this->stateFlags1 |= PLAYER_STATE1_10000;
             }
         } else if (this->stateFlags1 & PLAYER_STATE1_20000) {
@@ -2845,7 +2861,6 @@ s32 func_80832F78(Player* this, f32* arg1, s16* arg2, f32 arg3, PlayState* play)
     *arg2 += Camera_GetInputDirYaw(play->cameraPtrs[play->activeCamId]);
     return true;
 }
-
 
 s32 func_80839518(Player* this, PlayState* play);
 s32 func_808365DC(Player* this, PlayState* play);
@@ -3107,7 +3122,6 @@ void func_8083375C(Player* this, PlayerMeleeWeaponAnimation meleeWeaponAnimation
     func_80833728(this, 1, var_v0->dmgFlags, damage);
 }
 
-
 typedef struct struct_8085CD30 {
     /* 0x00 */ LinkAnimationHeader* unk_0;
     /* 0x04 */ LinkAnimationHeader* unk_4;
@@ -3123,7 +3137,8 @@ void func_80833864(PlayState* play, Player* this, PlayerMeleeWeaponAnimation mel
     func_80831494(play, this, func_808548B8, 0);
     this->unk_AE8 = 0;
 
-    if ((meleeWeaponAnimation < PLAYER_MWA_FLIPSLASH_FINISH) || (meleeWeaponAnimation > PLAYER_MWA_ZORA_JUMPKICK_FINISH)) {
+    if ((meleeWeaponAnimation < PLAYER_MWA_FLIPSLASH_FINISH) ||
+        (meleeWeaponAnimation > PLAYER_MWA_ZORA_JUMPKICK_FINISH)) {
         func_8082DC38(this);
     }
 
@@ -3140,7 +3155,8 @@ void func_80833864(PlayState* play, Player* this, PlayerMeleeWeaponAnimation mel
     func_8082DB90(play, this, D_8085CD30[meleeWeaponAnimation].unk_0);
     this->unk_ADC = this->skelAnime.animLength + 4.0f;
 
-    if ((meleeWeaponAnimation < PLAYER_MWA_FLIPSLASH_START) || (meleeWeaponAnimation > PLAYER_MWA_ZORA_JUMPKICK_START)) {
+    if ((meleeWeaponAnimation < PLAYER_MWA_FLIPSLASH_START) ||
+        (meleeWeaponAnimation > PLAYER_MWA_ZORA_JUMPKICK_START)) {
         func_8082E920(play, this, (1 | 8 | 0x10));
     }
     this->currentYaw = this->actor.shape.rot.y;
@@ -3161,7 +3177,8 @@ void func_808339B4(Player* this, s32 invincibilityTimer) {
 }
 
 s32 func_808339D4(PlayState* play, Player* this, s32 damage) {
-    if ((this->invincibilityTimer != 0) || (this->stateFlags3 &  PLAYER_STATE3_400000) || (this->actor.id != ACTOR_PLAYER)) {
+    if ((this->invincibilityTimer != 0) || (this->stateFlags3 & PLAYER_STATE3_400000) ||
+        (this->actor.id != ACTOR_PLAYER)) {
         return 1;
     }
 
@@ -3191,7 +3208,6 @@ void func_80833AA0(Player* this, PlayState* play) {
         this->unk_AA5 = 0;
     }
 }
-
 
 void func_808546D0(Player* this, PlayState* play);
 void func_80854800(Player* this, PlayState* play);
@@ -3404,7 +3420,7 @@ s32 func_808341F4(PlayState* play, Player* this) {
         if (this->transformation == PLAYER_FORM_GORON) {
             var_v1 = 20;
         } else {
-            var_v1 = (s32) (this->linearVelocity * 0.4f) + 1;
+            var_v1 = (s32)(this->linearVelocity * 0.4f) + 1;
         }
 
         if (this->stateFlags2 & 8) {
@@ -3416,7 +3432,7 @@ s32 func_808341F4(PlayState* play, Player* this) {
         timerStep = var_v0 + var_v1;
     }
 
-    for(i = 0; i < PLAYER_BODYPART_MAX; i++, timerPtr++) {
+    for (i = 0; i < PLAYER_BODYPART_MAX; i++, timerPtr++) {
         if (*timerPtr <= timerStep) {
             *timerPtr = 0;
         } else {
@@ -3484,8 +3500,172 @@ void func_808345C8(void) {
     }
 }
 
+extern s32 D_8085D0F4;
+
+void func_8084B5C0(Player* this, PlayState* play);
+void func_80854C70(Player* this, PlayState* play);
+void func_8084BAA4(Player* this, PlayState* play);
+
+extern LinkAnimationHeader* D_8085D294[];
+
+extern LinkAnimationHeader* D_8085CFCC[2];
+extern LinkAnimationHeader* D_8085CFD4[2];
+extern LinkAnimationHeader* D_8085CFDC[2];
+
+#if 0
+s32 func_80834600(Player* this, PlayState* play) {
+    s32 sp70;
+    //s32 sp6C;
+    s32 sp64;
+    Actor* sp60;
+    s32 sp5C;
+    s32 sp58;
+    u32 sp54;
+    LinkAnimationHeader* var_a2;
+    s32 var_a1;
+    s32 var_a2_3;
+    s32 var_v0;
+    u8 var_v1_2;
+
+    if (this->unk_D6A != 0) {
+        if (!Player_InBlockingCsMode(play, this)) {
+            Player_InflictDamage(play, -0x10);
+            this->unk_D6A = 0;
+        }
+    } else {
+        var_v0 = 0;
+        if ((Player_GetHeight(this) - 8.0f) < (this->unk_AB8 * this->actor.scale.y)) {
+            var_v0 = 1;
+        }
+
+        if ((var_v0 != 0) || (this->actor.bgCheckFlags & 0x100) || ((D_80862B08 == 9)) || (this->stateFlags2 & 0x80000000)) {
+            sp70 = var_v0;
+            func_8082DF8C(this, 0x6805U);
+            if (var_v0 != 0) {
+                func_80169FDC(&play->state);
+                func_808345C8();
+                Scene_SetExitFade(play);
+            } else {
+                func_80169EFC(&play->state);
+                func_808345C8();
+            }
+            func_8082DF8C(this, 0x680CU);
+            play->unk_18845 = 1;
+            play_sound(0x5801U);
+        } else {
+            if ((this->unk_B75 != 0) && (((s32) this->unk_B75 >= 3) || (this->invincibilityTimer == 0))) {
+                //sp6C = D_8085D0F4;
+                u8 sp6C[] = {2, 1, 1};
+                if (func_8083456C(play, this) == 0) {
+                    if (this->unk_B75 == 4) {
+                        this->unk_B65 = 0x28;
+                    }
+                    this->actor.colChkInfo.damage += this->unk_B74;
+                    func_80833B18(play, this, sp6C[this->unk_B75-1], this->unk_B78, this->unk_B7C, this->unk_B76, 0x14);
+                }
+            } else {
+                if ((this->shieldQuad.base.acFlags & 0x80) || (this->shieldCylinder.base.acFlags & 0x80) || (((this->invincibilityTimer < 0)) && (this->cylinder.base.acFlags & 2) && ((this->cylinder.info.acHitInfo != NULL)) && (this->cylinder.info.acHitInfo->toucher.dmgFlags != 0x20000000))) {
+                    Player_RequestRumble(play, this, 0xB4U, 0x14U, (u8) 0x64, 0);
+                    if ((this->invincibilityTimer >= 0) && (Player_IsGoronOrDeku(this) == 0)) {
+                        sp64 = func_8084B5C0 == this->unk_748;
+                        if (func_801242B4(this) == 0) {
+                            func_80831494(play, this, func_8084BAA4, 0);
+                        }
+                        this->unk_AE7 = (s8) sp64;
+                        if (!sp64) {
+                            func_8082F43C(play, this, func_80848A0C);
+                            if (this->unk_B40 < 0.5f) {
+                                var_a2 = D_8085CFD4[Player_IsHoldingTwoHandedWeapon(this)];
+                            } else {
+                                var_a2 = D_8085CFCC[Player_IsHoldingTwoHandedWeapon(this)];
+                            }
+                            LinkAnimation_PlayOnce(play, &this->unk_284, var_a2);
+                        } else {
+                            func_8082DB18(play, this, D_8085CFDC[Player_IsHoldingTwoHandedWeapon(this)]);
+                        }
+                    }
+                    if (!(this->stateFlags1 & 0x206004)) {
+                        this->linearVelocity = -18.0f;
+                        this->currentYaw = this->actor.shape.rot.y;
+                    }
+                    return 0;
+                }
+
+                if ((this->unk_D6B != 0) || (this->invincibilityTimer > 0) || (this->stateFlags1 & 0x4000000) || (this->csMode != 0) || (this->meleeWeaponQuads[0].base.atFlags & 2) || (this->meleeWeaponQuads[1].base.atFlags & 2) || (this->cylinder.base.atFlags & 2) || (this->shieldCylinder.base.atFlags & 2)) {
+                    return 0;
+                }
+
+                if (this->cylinder.base.acFlags & 2) {
+                    sp60 = this->cylinder.base.ac;
+                    if (sp60->flags & 0x01000000) {
+                        func_800B8E58(this, 0x83EU);
+                    }
+
+                    if (this->actor.colChkInfo.acHitEffect == 2) {
+                        sp5C = 3;
+                        goto block_66;
+                    }
+                    if (this->actor.colChkInfo.acHitEffect == 3) {
+                        sp5C = 4;
+                        goto block_66;
+                    }
+                    sp5C = 1;
+                    if (this->actor.colChkInfo.acHitEffect == 7) {
+                        this->unk_B65 = 0x28;
+                        goto block_66;
+                    }
+                    if (this->actor.colChkInfo.acHitEffect == 9) {
+                        if (func_80834534(play, this) == 0) {
+                            goto block_66;
+                        }
+                    } else {
+                        if (((this->actor.colChkInfo.acHitEffect == 4) && (this->currentMask != 0x14)) || (this->stateFlags3 & 0x1000)) {
+                            goto block_66;
+                        }
+                        sp5C = 0;
+                        if (func_8083456C(play, this) == 0) {
+            block_66:
+                            func_80833B18(play, this, sp5C, 4.0f, 5.0f, (s16) Actor_YawBetweenActors(sp60, &this->actor), 20);
+                        }
+                    }
+                } else {
+                    if (this->invincibilityTimer != 0) {
+                        return 0;
+                    }
+
+                    sp58 = func_808340AC(D_80862B08);
+                    sp54 = SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+                    var_a1 = 0;
+                    if ((sp58 < 0) || ((sp54 == 0) && (this->transformation == 1) && !(this->actor.depthInWater > 0.0f))) {
+                        var_a1 = (this->actor.wallPoly != NULL) && SurfaceType_IsWallDamage(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId);
+                        if (var_a1 == 0) {
+                            return 0;
+                        }
+                    }
+
+                    if (var_a1 != 0) {
+                        var_v1_2 = this->actor.wallBgId;
+                    } else {
+                        var_v1_2 = this->actor.floorBgId;
+                    }
+
+                    if (((this->transformation == 3) || (this->transformation == 2)) && (sp58 >= 0) && (sp54 == 0) && !(this->stateFlags1 & 0x8000000) && (this->actor.bgCheckFlags & 1) && (this->actor.depthInWater < -30.0f)) {
+                        func_80834534(play, this);
+                    } else {
+                        this->actor.colChkInfo.damage = 4;
+                        func_80833B18(play, this, (var_v1_2 == 0x32) ? 0 : 1, 4.0f, 5.0f, (var_a1 != 0) ? this->actor.wallYaw : this->actor.shape.rot.y, 0x14);
+                    }
+                }
+            }
+        }
+    }
+
+    return 1;
+}
+#else
 s32 func_80834600(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80834600.s")
+#endif
 
 void func_80834CD0(Player* this, f32 arg1, u16 sfxId) {
     this->actor.velocity.y = arg1 * D_8085C3E4;
@@ -3512,7 +3692,106 @@ void func_80834DB8(Player* this, LinkAnimationHeader* anim, f32 arg2, PlayState*
     func_80834D50(play, this, anim, arg2, 0x6800);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80834DFC.s")
+s32 func_80834DFC(Player* this, PlayState* play) {
+    if ((this->transformation != PLAYER_FORM_GORON) &&
+        ((this->transformation != PLAYER_FORM_DEKU) || func_801242B4(this) || (this->unk_B5C < 4)) &&
+        !(this->stateFlags1 & PLAYER_STATE1_800) && (this->unk_B5C >= 2) &&
+        (!(this->stateFlags1 & PLAYER_STATE1_8000000) || (this->wallHeight < this->ageProperties->unk_14))) {
+        s32 var_v1 = false;
+        LinkAnimationHeader* anim;
+        f32 wallHeight;
+
+        if (func_801242B4(this)) {
+            f32 depth = (this->transformation == PLAYER_FORM_FIERCE_DEITY) ? 80.0f : 50.0f;
+
+            if (this->actor.depthInWater < depth) {
+                if ((this->unk_B5C < 2) || (this->ageProperties->unk_10 < this->wallHeight)) {
+                    return false;
+                }
+            } else if ((this->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER) || (this->unk_B5C >= 3)) {
+                return false;
+            }
+        } else if (!(this->actor.bgCheckFlags & 1) ||
+                   ((this->ageProperties->unk_14 <= this->wallHeight) && (this->stateFlags1 & PLAYER_STATE1_8000000))) {
+            return false;
+        }
+
+        if ((this->actor.wallBgId != 0x32) && (D_80862B0C & 0x40)) {
+            if (this->unk_B5D >= 6) {
+                this->stateFlags2 |= PLAYER_STATE2_4;
+                if (CHECK_BTN_ALL(D_80862B44->press.button, BTN_A)) {
+                    var_v1 = true;
+                }
+            }
+        } else if ((this->unk_B5D >= 6) || CHECK_BTN_ALL(D_80862B44->press.button, BTN_A)) {
+            var_v1 = true;
+        }
+
+        if (var_v1) {
+            func_80831494(play, this, func_8084D4EC, 0);
+            wallHeight = this->wallHeight;
+
+            if (this->ageProperties->unk_14 <= wallHeight) {
+                anim = &gameplay_keep_Linkanim_00DA70;
+                this->linearVelocity = 1.0f;
+            } else {
+                CollisionPoly* poly;
+                s32 bgId;
+                f32 wallPolyNormalX = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.x);
+                f32 wallPolyNormalZ = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.z);
+                f32 var_fv1 = this->wallDistance + 0.5f; // wallDistance
+                f32 yIntersect;
+                s32 pad;
+
+                this->stateFlags1 |= PLAYER_STATE1_4;
+
+                if (func_801242B4(this)) {
+                    wallHeight -= 60.0f * this->ageProperties->unk_08;
+                    anim = &gameplay_keep_Linkanim_00DFC8;
+                    this->stateFlags1 &= ~PLAYER_STATE1_8000000;
+                } else if (this->ageProperties->unk_18 <= wallHeight) {
+                    wallHeight -= 59.0f * this->ageProperties->unk_08;
+                    anim = &gameplay_keep_Linkanim_00DA68;
+                } else {
+                    wallHeight -= 41.0f * this->ageProperties->unk_08;
+                    anim = &gameplay_keep_Linkanim_00DA60;
+                }
+
+                this->unk_ABC -= wallHeight * 100.0f;
+
+                this->actor.world.pos.x -= var_fv1 * wallPolyNormalX;
+                this->actor.world.pos.y += this->wallHeight + 10.0f;
+                this->actor.world.pos.z -= var_fv1 * wallPolyNormalZ;
+
+                yIntersect =
+                    BgCheck_EntityRaycastFloor5(&play->colCtx, &poly, &bgId, &this->actor, &this->actor.world.pos);
+                if ((this->actor.world.pos.y - yIntersect) <= 20.0f) {
+                    this->actor.world.pos.y = yIntersect;
+                    if (bgId != 0x32) {
+                        DynaPolyActor_SetRidingMovingStateByIndex(&play->colCtx, bgId);
+                    }
+                }
+
+                func_8082DAD4(this);
+                this->actor.velocity.y = 0.0f;
+            }
+
+            this->actor.bgCheckFlags |= 1;
+            LinkAnimation_PlayOnceSetSpeed(play, &this->skelAnime, anim, 1.3f);
+            AnimationContext_DisableQueue(play);
+            this->actor.shape.rot.y = this->currentYaw = this->actor.wallYaw + 0x8000;
+            return true;
+        }
+    } else if ((this->actor.bgCheckFlags & 1) && (this->unk_B5C == 1) && (this->unk_B5D >= 3)) {
+        f32 temp = (this->wallHeight * 0.08f) + 5.5f;
+
+        func_80834DB8(this, &gameplay_keep_Linkanim_00DCD8, temp, play);
+        this->linearVelocity = 2.5f;
+        return true;
+    }
+
+    return false;
+}
 
 void func_80835324(PlayState* play, Player* this, f32 arg2, s16 arg3) {
     func_80831494(play, this, func_8084D820, 0);
@@ -4815,13 +5094,6 @@ void func_8083B930(PlayState* play, Player* this) {
     func_80123140(play, this);
 }
 
-void func_808497A0(Player* this, PlayState* play);
-void func_8084D4EC(Player* this, PlayState* play);
-
-void func_8084E724(Player* this, PlayState* play);
-void func_80851588(Player* this, PlayState* play);
-void func_808519FC(Player* this, PlayState* play);
-
 void func_8083BB4C(PlayState* play, Player* this) {
     f32 sp1C = this->actor.depthInWater - this->ageProperties->unk_2C;
 
@@ -5457,11 +5729,6 @@ s32 func_80840094(PlayState* play, Player* this) {
     func_8083FF30(play, this);
     return func_8083FFEC(play, this);
 }
-
-void func_8084B5C0(Player* this, PlayState* play);
-void func_80854C70(Player* this, PlayState* play);
-
-extern LinkAnimationHeader* D_8085D294[];
 
 void func_808400CC(PlayState* play, Player* this) {
     if (func_8084B5C0 != this->unk_748) {
@@ -8026,7 +8293,6 @@ void func_8084CA24(Player* this, PlayState* play) {
         }
     }
 }
-
 
 s32 func_8083CBC4(Player* this, f32 arg1, s16 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6);
 s32 func_80836F10(PlayState* play, Player* this);
