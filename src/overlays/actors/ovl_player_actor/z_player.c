@@ -3820,7 +3820,36 @@ s32 func_80835428(PlayState* play, Player* this) {
     return false;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808354A4.s")
+extern u16 D_8085D0F8[];
+
+// subfunction of OoT's func_80839034 (?)
+void func_808354A4(PlayState* play, s32 arg1, s32 arg2) {
+    play->nextEntranceIndex = play->setupExitList[arg1];
+
+    if (play->nextEntranceIndex == 0xFFFF) {
+        gSaveContext.respawnFlag = 4;
+        play->nextEntranceIndex = gSaveContext.respawn[3].entranceIndex;
+        play->transitionType = 3;
+        gSaveContext.nextTransitionType = 3;
+    } else if (play->nextEntranceIndex >= 0xFE00) {
+        // TODO: what? I hope this symbol is fake...
+        //! FAKE
+        play->nextEntranceIndex = D_8085D0F8[(D_8085B9F0 - 0xE6F4)[play->nextEntranceIndex ^ 0] + play->curSpawn];
+
+        Scene_SetExitFade(play);
+    } else {
+        if (arg2 != 0) {
+            gSaveContext.respawn[0].entranceIndex = play->nextEntranceIndex;
+            func_80169EFC(&play->state);
+            gSaveContext.respawnFlag = -2;
+        }
+
+        gSaveContext.unk_3DBB = 1;
+        Scene_SetExitFade(play);
+    }
+
+    play->transitionTrigger = 0x14;
+}
 
 void func_808355D8(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     func_80833AA0(this, play);
