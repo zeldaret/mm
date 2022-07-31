@@ -3859,23 +3859,25 @@ void func_808355D8(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     func_8082E1F0(this, NA_SE_IT_DEKUNUTS_FLOWER_CLOSE);
 }
 
+// related to grottos (?)
 s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) {
     u32 var_a3; // sp3C
     u32 temp_v0_3;
     s32 sp34;
     s32 sp30;
 
-    if ((this == GET_PLAYER(play)) && !(this->stateFlags1 & 0x80) && (func_8082DA90(play) == 0) && (this->csMode == 0) && !(this->stateFlags1 & 1)) {
+    if ((this == GET_PLAYER(play)) && !(this->stateFlags1 & PLAYER_STATE1_80) && !func_8082DA90(play) && (this->csMode == 0) && !(this->stateFlags1 & PLAYER_STATE1_1)) {
         var_a3 = 0;
-        if (((poly != NULL) && (var_a3 = SurfaceType_GetSceneExitIndex(&play->colCtx, poly, bgId), (var_a3 != 0)) && (((play->sceneNum != 0x6B) && (play->sceneNum != 0x3E)) || ((s32) var_a3 < 3)) && (((play->sceneNum != 0x45) && (play->sceneNum != 0)) || ((s32) var_a3 < 0x15)) && ((play->sceneNum != 0x4D) || ((s32) var_a3 < 6))) || ((func_808340D4(D_80862B08) != 0) && (this->unk_D5E == 0xC))) {
+        if (((poly != NULL) && (var_a3 = SurfaceType_GetSceneExitIndex(&play->colCtx, poly, bgId), (var_a3 != 0)) && (((play->sceneNum != SCENE_GORONRACE) && (play->sceneNum != SCENE_DEKU_KING)) || ((s32) var_a3 < 3)) && (((play->sceneNum != SCENE_20SICHITAI) && (play->sceneNum != SCENE_20SICHITAI2)) || ((s32) var_a3 < 0x15)) && ((play->sceneNum != SCENE_11GORONNOSATO) || ((s32) var_a3 < 6))) || (func_808340D4(D_80862B08) && (this->unk_D5E == 0xC))) {
             sp34 = this->unk_D68 - (s32) this->actor.world.pos.y;
-            if (!(this->stateFlags1 & 0x28800000) && !(this->actor.bgCheckFlags & 1) && (sp34 < 0x190) && (D_80862B18 > 100.0f)) {
+            if (!(this->stateFlags1 & (PLAYER_STATE1_800000 | PLAYER_STATE1_8000000 | PLAYER_STATE1_20000000)) && !(this->actor.bgCheckFlags & 1) && (sp34 < 0x190) && (D_80862B18 > 100.0f)) {
                 if ((this->unk_D5E != 5) && (this->unk_D5E != 0xC)) {
                     this->linearVelocity = 0.0f;
                 }
-                return 0;
+
+                return false;
             } else {
-                if (this->stateFlags3 & 0x01000000) {
+                if (this->stateFlags3 & PLAYER_STATE3_1000000) {
                     func_808355D8(play, this, &gameplay_keep_Linkanim_00E2D8);
                 }
 
@@ -3884,15 +3886,16 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
                     Scene_SetExitFade(play);
                 } else {
                     func_808354A4(play, var_a3 - 1, SurfaceType_GetSlope(&play->colCtx, poly, bgId) == 2);
-                    if ((this->stateFlags1 & 0x8000000) && (this->unk_D5E == 5)) {
-                        func_8019F128(0x5807U);
+                    if ((this->stateFlags1 & PLAYER_STATE1_8000000) && (this->unk_D5E == 5)) {
+                        func_8019F128(NA_SE_OC_TUNAMI);
                         func_801A4058(5);
                         gSaveContext.seqIndex = 0xFF;
                         gSaveContext.nightSeqIndex = 0xFF;
                     } else if (!(this->actor.bgCheckFlags & 1) && (this->unk_D5E == 0xC)) {
-                        func_8019F128(0x5803U);
+                        func_8019F128(NA_SE_OC_SECRET_WARP_IN);
                     }
-                    if (this->stateFlags1 & 0x800000) {
+
+                    if (this->stateFlags1 & PLAYER_STATE1_800000) {
                         if (D_801BDAA0 != 0) {
                             D_801BDAA0 = 0;
                         } else {
@@ -3900,10 +3903,10 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
                         }
                     }
                 }
-                
-                if (!(this->stateFlags1 & 0x28800000) && (temp_v0_3 = func_800C99D4(&play->colCtx, poly, bgId), (temp_v0_3 != 0xA)) && ((sp34 < 0x64) || (this->actor.bgCheckFlags & 1))) {
+
+                if (!(this->stateFlags1 & (PLAYER_STATE1_800000 | PLAYER_STATE1_8000000 | PLAYER_STATE1_20000000)) && (temp_v0_3 = func_800C99D4(&play->colCtx, poly, bgId), (temp_v0_3 != 0xA)) && ((sp34 < 0x64) || (this->actor.bgCheckFlags & 1))) {
                     if (temp_v0_3 == 0xB) {
-                        func_8019F128(0x5805U);
+                        func_8019F128(NA_SE_OC_SECRET_HOLE_OUT);
                         func_801A4058(5);
                         gSaveContext.seqIndex = 0xFF;
                         gSaveContext.nightSeqIndex = 0xFF;
@@ -3913,23 +3916,24 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
                 } else if (!(this->actor.bgCheckFlags & 1)) {
                     func_8082DABC(this);
                 }
-                Camera_ChangeSetting(Play_GetCamera(play, 0), 0x50);
-                this->stateFlags1 |= 0x20000001;
-                return 1;
+
+                Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), 0x50);
+                this->stateFlags1 |= PLAYER_STATE1_1 | PLAYER_STATE1_20000000;
+                return true;
             }
         } else {
-
-            if ((this->stateFlags1 & 0x8000000) && (this->actor.floorPoly == NULL)) {
+            if ((this->stateFlags1 & PLAYER_STATE1_8000000) && (this->actor.floorPoly == NULL)) {
                 BgCheck_EntityRaycastFloor7(&play->colCtx, &this->actor.floorPoly, &sp30, &this->actor, &this->actor.world.pos);
                 if (this->actor.floorPoly == NULL) {
                     func_80169EFC(&play->state);
-                    return 0;
+                    return false;
                 }
+                //! FAKE
                 if (0) { }
             }
 
-            if (!(this->stateFlags1 & 0x80000000)) {
-                if (((this->actor.world.pos.y < -4000.0f) || (((this->unk_D5E == 5) || (this->unk_D5E == 0xC) || (this->unk_D5E == 0xD)) && ((D_80862B18 < 100.0f) || (this->unk_B6A >= 0x191))))) {
+            if (!(this->stateFlags1 & PLAYER_STATE1_80000000)) {
+                if (((this->actor.world.pos.y < -4000.0f) || (((this->unk_D5E == 5) || (this->unk_D5E == 0xC) || (this->unk_D5E == 0xD)) && ((D_80862B18 < 100.0f) || (this->unk_B6A > 0x190))))) {
                     if (this->actor.bgCheckFlags & 1) {
                         if (this->unk_D5E == 5) {
                             func_80169FDC(&play->state);
@@ -3937,18 +3941,20 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
                         } else {
                             func_80169EFC(&play->state);
                         }
-                        if (SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, (s32) this->actor.floorBgId) == 0) {
+                        if (!SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
                             gSaveContext.respawnFlag = -5;
                         }
+
                         play->transitionType = 4;
-                        play_sound(0x5801U);
+                        play_sound(NA_SE_OC_ABYSS);
                     } else {
-                        if (this->stateFlags3 & 0x01000000) {
+                        if (this->stateFlags3 & PLAYER_STATE3_1000000) {
                             func_808355D8(play, this, &gameplay_keep_Linkanim_00E2D8);
                         }
+
                         if (this->unk_D5E == 0xD) {
                             func_80831494(play, this, func_808497A0, 0);
-                            this->stateFlags1 |= 0x20000000;
+                            this->stateFlags1 |= PLAYER_STATE1_20000000;
                         } else {
                             func_80834104(play, this);
                             this->unk_AE8 = 0x270F;
@@ -3961,13 +3967,13 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
                     }
                 }
             }
+
             this->unk_D68 = this->actor.world.pos.y;
         }
-        if (((!func_808497A0) && (!func_808497A0)) && (!func_808497A0)) {}
     }
-    return 0;
-}
 
+    return false;
+}
 
 void func_80835BC8(Player* this, Vec3f* translation, Vec3f* src, Vec3f* dst) {
     Lib_Vec3f_TranslateAndRotateY(translation, this->actor.shape.rot.y, src, dst);
