@@ -1029,7 +1029,7 @@ void EnPp_Dead(EnPp* this, PlayState* play) {
             return;
         }
 
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, 0xB, 2, 0.7f, 0.4f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.7f, 0.4f);
         this->drawDmgEffTimer = 0;
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
@@ -1607,7 +1607,7 @@ void EnPp_Draw(Actor* thisx, PlayState* play) {
             OPEN_DISPS(play->state.gfxCtx);
 
             func_8012C448(play->state.gfxCtx);
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0x00, 0x00, 0x00, 0xFF);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 255);
 
             Math_Vec3f_Copy(&pos, &this->actor.world.pos);
             pos.x += (Math_SinS(this->actor.world.rot.y) * -13.0f);
