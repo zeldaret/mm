@@ -10,6 +10,7 @@
 #include "overlays/actors/ovl_Arms_Hook/z_arms_hook.h"
 #include "overlays/actors/ovl_Door_Spiral/z_door_spiral.h"
 #include "overlays/actors/ovl_Door_Shutter/z_door_shutter.h"
+#include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Ishi/z_en_ishi.h"
 #include "overlays/actors/ovl_En_Test3/z_en_test3.h"
 #include "overlays/actors/ovl_En_Test7/z_en_test7.h"
@@ -2271,7 +2272,7 @@ s32 func_80831814(Player* this, PlayState* play, s32 arg2) {
 void func_808318C0(PlayState* play) {
     if (func_80115DB4(play, 0, 3) != 0) {
         if (play->actorCtx.unk3 != 0) {
-            func_800B90F4(play);
+            Actor_DisableLens(play);
         } else {
             play->actorCtx.unk3 = 1;
         }
@@ -4059,7 +4060,7 @@ void func_80835EAC(PlayState* play, Player* this, DoorSpiral* door) {
 
     Camera_ChangeSetting(Play_GetCamera(play, 0), 0x50);
     this->unk_3BA = play->doorCtx.transitionActorList[(s32) door->actor.params >> 0xA].sides[0].bgCamDataId;
-    func_800B90F4(play);
+    Actor_DisableLens(play);
     this->unk_B72 = 2;
 }
 #else
@@ -4108,7 +4109,7 @@ void func_8083604C(PlayState* play, Player* this, Actor* door) {
         this->unk_3BA = (s16)play->doorCtx.transitionActorList[DOORSHUTTER_GET_FC00(door)]
                             .sides[this->doorDirection > 0 ? 0 : 1]
                             .bgCamDataId;
-        func_800B90F4(play);
+        Actor_DisableLens(play);
     }
 }
 
@@ -4724,6 +4725,7 @@ void func_80837CEC(PlayState* play, Player* this, CollisionPoly* arg2, f32 arg3,
     func_8082E6D0(this);
 }
 
+s32 func_80837DEC(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80837DEC.s")
 
 void func_8084F3DC(Player* this, PlayState* play);
@@ -4748,6 +4750,7 @@ s32 func_808381F8(PlayState* play, Player* this) {
     return fabsf(yIntersect - this->actor.world.pos.y) < 10.0f;
 }
 
+void func_8083827C(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083827C.s")
 
 void func_8083868C(PlayState* play, Player* this) {
@@ -4823,7 +4826,7 @@ void func_808388B8(PlayState* play, Player* this, PlayerTransformation playerFor
 
     D_80862B50 = play->envCtx.lightSettings;
     this->actor.velocity.y = 0.0f;
-    func_800B90F4(play);
+    Actor_DisableLens(play);
 }
 
 void func_808389BC(PlayState* play, Player* this) {
@@ -4995,9 +4998,8 @@ s32 func_80839A84(PlayState* play, Player* this);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80839B18.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80839CD8.s")
-
 void func_80839CD8(Player* this, PlayState* play);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80839CD8.s")
 
 void func_80839E3C(Player* this, PlayState* play) {
     func_808369F4(this, play);
@@ -5592,7 +5594,40 @@ void func_8083C85C(Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083C85C.s")
 #endif
 
+#ifdef NON_EQUIVALENT
+// may be equivalent
+void func_8083C8E8(Player* this, PlayState* play) {
+    if ((func_800B7128(this) == 0) && (func_8082EF20(this) == 0) && ((this->linearVelocity > 5.0f) || (D_80862B3C != 0.0f))) {
+        s16 var_a3; // sp24
+        s16 var_a1;
+        s16 var_a1_2;
+        float new_var;
+
+        new_var = this->linearVelocity * 200.0f;
+        var_a3 = BINANG_SUB(this->currentYaw, this->actor.shape.rot.y) * this->linearVelocity * 0.1f;
+
+        var_a1_2 = CLAMP((s16) new_var, -0xFA0, 0xFA0);
+        var_a1 = var_a1_2;
+
+        var_a1_2 = var_a1 + (s32) (D_80862B3C * -500.0f);
+
+        var_a1_2 = CLAMP(var_a1_2, -0x2EE0, 0x2EE0);
+
+        var_a3 = CLAMP(-var_a3, -0xFA0, 0xFA0);
+
+        Math_ScaledStepToS(&this->unk_AB2.x, var_a1_2, 0x384);
+        this->unk_AAC.x = (-(f32) this->unk_AB2.x * 0.5f);
+        Math_ScaledStepToS(&this->unk_AAC.z, var_a3, 0x12C);
+        Math_ScaledStepToS(&this->unk_AB2.z, var_a3, 0xC8);
+        this->unk_AA6 |= 0x168;
+    } else {
+        func_8083C6E8(this, play);
+    }
+}
+#else
+void func_8083C8E8(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083C8E8.s")
+#endif
 
 void func_8083CB04(Player* this, f32 arg1, s16 arg2, f32 arg3, f32 arg4, s16 arg5) {
     Math_AsymStepToF(&this->linearVelocity, arg1, arg3, arg4);
@@ -5603,12 +5638,116 @@ void func_8083CB58(Player* this, f32 arg1, s16 arg2) {
     func_8083CB04(this, arg1, arg2, REG(19) / 100.0f, 1.5f, REG(27));
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083CBC4.s")
+s32 func_8083CBC4(Player* this, f32 arg1, s16 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6) {
+    s16 temp_v0 = this->currentYaw - arg2;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083CCB4.s")
+    if ((this->unk_B50 * 1.5f) < fabsf(this->linearVelocity)) {
+        arg5 *= 4.0f;
+        arg3 *= 4.0f;
+    }
 
+    if (ABS_ALT(temp_v0) > 0x6000) {
+        if (Math_StepToF(&this->linearVelocity, 0.0f, arg3) == 0) {
+            return false;
+        }
+
+        this->currentYaw = arg2;
+    } else {
+        Math_AsymStepToF(&this->linearVelocity, arg1, arg4, arg5);
+        Math_ScaledStepToS(&this->currentYaw, arg2, arg6);
+    }
+
+    return true;
+}
+
+extern u16 D_8085D252[PLAYER_FORM_MAX];
+extern u16 D_8085D25C[];
+
+typedef struct struct_8085D224 {
+    /* 0x0 */ LinkAnimationHeader* anim;
+    /* 0x4 */ f32 unk_4;
+    /* 0x8 */ f32 unk_8;
+} struct_8085D224; // size = 0xC
+
+extern struct_8085D224 D_8085D224[];
+extern struct_8085D224 D_8085D23C[];
+
+// Player_MountHorse
+s32 func_8083CCB4(Player* this, PlayState* play) {
+    EnHorse* rideActor = this->rideActor;
+
+    if (rideActor != NULL) {
+        if ((rideActor->type != HORSE_TYPE_2) && (this->transformation != PLAYER_FORM_FIERCE_DEITY)) {
+            if (CHECK_BTN_ALL(D_80862B44->press.button, BTN_A)) {
+                if (ActorCutscene_GetCanPlayNext(0x7C)) {
+                    rideActor->actor.textId = D_8085D252[this->transformation];
+                    func_8085B460(play, rideActor);
+                    return true;
+                }
+            }
+
+            ActorCutscene_SetIntentToPlay(0x7C);
+        } else if ((rideActor->type == HORSE_TYPE_2) && (this->transformation != PLAYER_FORM_HUMAN)) {
+            if (CHECK_BTN_ALL(D_80862B44->press.button, BTN_A)) {
+                if (ActorCutscene_GetCanPlayNext(0x7C)) {
+                    rideActor->actor.textId = D_8085D25C[this->transformation];
+                    func_8085B460(play, rideActor);
+                    return true;
+                }
+            }
+
+            ActorCutscene_SetIntentToPlay(0x7C);
+        } else {
+            if (CHECK_BTN_ALL(D_80862B44->press.button, BTN_A)) {
+                s32 pad[2];
+                f32 sp28 = Math_CosS(rideActor->actor.shape.rot.y);
+                f32 sp24 = Math_SinS(rideActor->actor.shape.rot.y);
+                struct_8085D224* entry;
+                f32 temp_fv0;
+                f32 temp_fv1;
+
+                func_80832558(play, this, func_80837BD0);
+
+                this->stateFlags1 |= PLAYER_STATE1_800000;
+                this->actor.bgCheckFlags &= ~0x20;
+                this->isBurning = false;
+
+                if (this->transformation == PLAYER_FORM_FIERCE_DEITY) {
+                    entry = &D_8085D224;
+                } else {
+                    entry = &D_8085D23C;
+                }
+                if (this->mountSide >= 0) {
+                    entry++;
+                }
+
+                temp_fv0 = entry->unk_4;
+                temp_fv1 = entry->unk_8;
+                this->actor.world.pos.x = rideActor->actor.world.pos.x + rideActor->riderPos.x + ((temp_fv0 * sp28) + (temp_fv1 * sp24));
+                this->actor.world.pos.z = rideActor->actor.world.pos.z + rideActor->riderPos.z + ((temp_fv1 * sp28) - (temp_fv0 * sp24));
+                this->unk_B48 = rideActor->actor.world.pos.y - this->actor.world.pos.y;
+
+                this->currentYaw = this->actor.shape.rot.y = rideActor->actor.shape.rot.y;
+
+                Actor_MountHorse(play, this, rideActor);
+                func_8082DB18(play, this, entry->anim);
+                func_8082E920(play, this, 1 | 2 | 8 | 0x10 | 0x80);
+                this->actor.parent = this->rideActor;
+                func_8082DAD4(this);
+                Actor_DisableLens(play);
+
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+s32 func_8083CF68(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083CF68.s")
 
+void func_8083D168(PlayState* play, Player* this, struct_8085C3F4* arg2);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083D168.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083D23C.s")
@@ -5649,6 +5788,7 @@ s32 func_8083D78C(Player* this, PlayState* play) {
     return false;
 }
 
+s32 func_8083D860(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083D860.s")
 
 void func_8084FC0C(Player* this, PlayState* play);
@@ -5658,6 +5798,7 @@ void func_8083DCC4(Player* this, LinkAnimationHeader* anim, PlayState* play) {
     LinkAnimation_PlayOnceSetSpeed(play, &this->skelAnime, anim, 1.3333334f);
 }
 
+s32 func_8083DD1C(PlayState* play, Player* this, f32 arg2, f32 arg3, f32 arg4, f32 arg5);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083DD1C.s")
 
 void func_8083DEE4(PlayState* play, Player* this);
@@ -5865,8 +6006,10 @@ void func_8083EA44(Player* this, f32 arg1);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083EA44.s")
 #endif
 
+void func_8083EBD0(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083EBD0.s")
 
+void func_8083EE60(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083EE60.s")
 
 void func_8084A794(Player* this, PlayState* play);
@@ -6724,6 +6867,7 @@ void func_808425B4(Player* this) {
     this->unk_AA6 = 0;
 }
 
+void func_808426F0(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808426F0.s")
 
 s32 func_808430E0(Player* this) {
@@ -6904,6 +7048,7 @@ void func_808446F4(PlayState* play, Player* this) {
     }
 }
 
+void func_80844784(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80844784.s")
 
 void func_80844D80(PlayState* play, Player* this) {
@@ -8020,8 +8165,10 @@ void func_80847A50(Player* this) {
                   ((this->unk_AE7 != 0) ? NA_SE_PL_WALK_METAL1 : NA_SE_PL_WALK_LADDER) + this->ageProperties->unk_94);
 }
 
+s32 func_80847A94(PlayState* play, Player* this, s32 arg2, f32* arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847A94.s")
 
+s32 func_80847BF0(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847BF0.s")
 
 #if 0
@@ -8121,6 +8268,7 @@ s32 func_80848094(PlayState* play, Player* this, f32* arg2, s16* arg3) {
     return false;
 }
 
+void func_808481CC(PlayState* play, Player* this, f32 arg2);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808481CC.s")
 
 void func_80848250(PlayState* play, Player* this) {
@@ -8651,7 +8799,6 @@ void func_8084CA24(Player* this, PlayState* play) {
     }
 }
 
-s32 func_8083CBC4(Player* this, f32 arg1, s16 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6);
 s32 func_80836F10(PlayState* play, Player* this);
 
 void func_8084CB58(Player* this, PlayState* play) {
@@ -9696,8 +9843,10 @@ void func_80854C70(Player* this, PlayState* play) {
     }
 }
 
+// declaration is messy
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80854CD0.s")
 
+// declaration is messy
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80854EFC.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808550D0.s")
@@ -9707,6 +9856,7 @@ void func_80855218(PlayState* play, Player* this, s32 arg2);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808553F4.s")
 
+void func_80855818(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80855818.s")
 
 void func_80855A7C(Player* this, PlayState* play) {
