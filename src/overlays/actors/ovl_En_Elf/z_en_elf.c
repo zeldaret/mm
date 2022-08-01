@@ -662,7 +662,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
         return;
     }
 
-    if (Player_InCsMode(&play->state)) {
+    if (Player_InCsMode(play)) {
         if ((this->fairyFlags & 0x4000) && (this->fairyFlags & 0x100) && func_8088DCA4(this)) {
             return;
         }
@@ -673,7 +673,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
 
     if ((this->fairyFlags & 0x1000) && (heightDiff > 0.0f) && (heightDiff < 60.0f) &&
         !func_8088C804(&this->actor.world.pos, &refActor->actor.world.pos, 10.0f)) {
-        func_80115908(play, 0x80);
+        Health_ChangeBy(play, 0x80);
         if (this->fairyFlags & 0x200) {
             Parameter_AddMagic(play, ((void)0, gSaveContext.unk_3F30) +
                                          (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
@@ -1359,7 +1359,7 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
     func_8088FA38(this, play);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
                 if (play->msgCtx.currentTextId == 0x202) {
                     switch (play->msgCtx.choiceIndex) {
@@ -1385,10 +1385,10 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
             }
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
-                    case 576:
+                    case 0x240:
                         func_80151938(play, 0x245);
                         break;
 
@@ -1434,7 +1434,7 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
             }
             break;
 
-        case 2:
+        case TEXT_STATE_CLOSING:
             func_8088FDCC(this);
             break;
     }
@@ -1555,7 +1555,7 @@ s32 EnElf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
         if (this->fairyFlags & 0x200) {
             scale *= 2.0f;
         }
-        scale *= this->actor.scale.x * 124.99999f;
+        scale *= this->actor.scale.x * (1.0f / 0.008f);
 
         Matrix_MultVec3f(&zeroVec, &sp34);
         Matrix_Translate(sp34.x, sp34.y, sp34.z, MTXMODE_NEW);

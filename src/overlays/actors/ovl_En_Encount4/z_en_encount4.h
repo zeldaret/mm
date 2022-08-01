@@ -13,7 +13,8 @@ typedef struct EnEncount4 {
     /* 0x0148 */ char unk_148[0x4];
     /* 0x014C */ s16 unk_14C;
     /* 0x014E */ s16 unk_14E;
-    /* 0x0150 */ char unk_150[0x8];
+    /* 0x0150 */ s16 unk_150;
+    /* 0x0152 */ char unk_152[0x6];
 } EnEncount4; // size = 0x158
 
 extern const ActorInit En_Encount4_InitVars;

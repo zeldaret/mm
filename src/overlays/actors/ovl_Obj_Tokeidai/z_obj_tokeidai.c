@@ -456,13 +456,13 @@ void ObjTokeidai_TowerOpening_EndCutscene(ObjTokeidai* this, PlayState* play) {
             gSaveContext.save.cutscene = 0;
             gSaveContext.nextCutsceneIndex = 0;
             gSaveContext.respawnFlag = 2;
-            play->sceneLoadFlag = 0x14;
-            play->nextEntranceIndex = gSaveContext.respawn[RESTART_MODE_RETURN].entranceIndex;
-            play->unk_1887F = 2;
-            if (gSaveContext.respawn[RESTART_MODE_RETURN].playerParams == 0xCFF) {
-                gSaveContext.nextTransition = 0x15;
+            play->transitionTrigger = TRANS_TRIGGER_START;
+            play->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_RETURN].entranceIndex;
+            play->transitionType = TRANS_TYPE_02;
+            if (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams == 0xCFF) {
+                gSaveContext.nextTransitionType = TRANS_TYPE_21;
             } else {
-                gSaveContext.nextTransition = 2;
+                gSaveContext.nextTransitionType = TRANS_TYPE_02;
             }
         }
         this->actionFunc = ObjTokeidai_DoNothing;

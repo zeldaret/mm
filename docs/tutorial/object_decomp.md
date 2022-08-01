@@ -74,7 +74,6 @@ The first argument of `gsDPLoadTextureBlock` tells you the offset, the second th
 
 The following is a list of the texture formats the Nintendo 64 supports, with their gfxdis names and ZAPD format names.
 
-
 | Format name                                     | Typing in `gsDPLoadTextureBlock` | "Format" in xml |
 | ----------------------------------------------- | -------------------------------- | --------------- |
 | 4-bit intensity (I)                             | `G_IM_FMT_I, G_IM_SIZ_4b`        | i4              |
@@ -111,6 +110,7 @@ If in doubt, look at completed objects in the repo, and if still in doubt, ask.
 ## Tools
 
 We are very fortunate that several nice tools have been written recently that are excellent for documenting asset files:
+
 - [Z64Utils](https://github.com/Random06457/Z64Utils/releases), for looking at displaylists, textures they reference, the skeleton, animations, etc.
 - [Texture64](https://github.com/queueRAM/Texture64/releases), for looking at textures in all the common N64 formats (needed since Z64Utils cannot interpret textures not explicitly referenced in displaylists currently)
 
@@ -149,6 +149,7 @@ For CI4 and CI8 textures, you might see improper-looking textures like so:
 ![An improper-looking CI8 texture](images/broken_texture.png)
 
 The reason this happens is because ZAPD couldn't determine the TLUT for the texture, so it couldn't use the proper palette. To fix this, you can supply a `TlutOffset` to the texture like so:
+
 ```xml
 <Texture Name="gGiantFaceEyeOpenTex" OutName="giant_face_eye_open" Format="ci8" Width="32" Height="64" Offset="0x5A80" TlutOffset="0x5380" />
 ```

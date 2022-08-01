@@ -62,7 +62,7 @@ typedef struct EnSGoro {
     /* 0x2E8 */ Vec3s headRotate;
     /* 0x2F0 */ Vec3f bodyTranslate;
     /* 0x2FC */ Vec3s bodyRotate;
-	/* 0x302 */ UNK_TYPE2 unk_302; //Probably padding
+    /* 0x302 */ UNK_TYPE2 unk_302; //Probably padding
     /* 0x304 */ u16 textID;
     /* 0x306 */ s16 snorePhase;
     /* 0x308 */ s32 animInfoIndex;

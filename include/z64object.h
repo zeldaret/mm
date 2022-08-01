@@ -207,7 +207,7 @@ typedef enum {
     /* 0x0C3 */ OBJECT_GI_SHIELD_3,
     /* 0x0C4 */ OBJECT_UNSET_C4,
     /* 0x0C5 */ OBJECT_UNSET_C5,
-    /* 0x0C6 */ OBJECT_GI_MAGIC_BEANS,
+    /* 0x0C6 */ OBJECT_GI_BEAN,
     /* 0x0C7 */ OBJECT_GI_FISH,
     /* 0x0C8 */ OBJECT_UNSET_C8,
     /* 0x0C9 */ OBJECT_UNSET_C9,

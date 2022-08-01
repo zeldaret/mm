@@ -254,7 +254,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                         u8 i;
 
                         if (hitItem->toucher.dmgFlags & 0x200) {
-                            this->cutType = sCutTypes[player->swordAnimation];
+                            this->cutType = sCutTypes[player->meleeWeaponAnimation];
                         } else if (hitItem->toucher.dmgFlags & 0x10) {
                             this->invincibilityTimer = 0;
                             this->cutType = this->unk_19A + 3;
@@ -831,7 +831,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                     break;
 
                 case 1:
-                    if ((play->msgCtx.ocarinaMode == 4) && (play->msgCtx.unk1202E == 7)) {
+                    if ((play->msgCtx.ocarinaMode == 4) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
                         this->actionState = ENKANBAN_REPAIR;
                         this->bounceX = 1;
                         play_sound(NA_SE_SY_TRE_BOX_APPEAR);

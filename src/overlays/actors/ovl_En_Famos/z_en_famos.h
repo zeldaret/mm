@@ -9,10 +9,10 @@ struct EnFamos;
 typedef void (*EnFamosActionFunc)(struct EnFamos*, PlayState*);
 
 typedef struct EnFamosRock {
-    /* 00 */ Vec3f pos;
-    /* 0C */ Vec3f velocity;
-    /* 18 */ Vec3s rotation;
-    /* 20 */ f32   scale;
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3s rotation;
+    /* 0x20 */ f32   scale;
 } EnFamosRock; // size = 0x24
 
 #define GET_FAMOS_PATH(thisx) (thisx->params)

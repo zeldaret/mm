@@ -96,14 +96,14 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = -5.0f;
 
     switch (ENZORAEGG_GET_1F(&this->actor)) {
-        case ENZORAEGG_1F_0:
+        case ENZORAEGG_1F_00:
             if (Flags_GetSwitch(play, ENZORAEGG_GET_FE00(&this->actor))) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
             break;
 
-        case ENZORAEGG_1F_17:
+        case ENZORAEGG_1F_11:
             if (func_80B319A8(play) >= 7) {
                 Actor_MarkForDeath(&this->actor);
                 this->actor.home.rot.z = 1;
@@ -111,26 +111,26 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
             }
             break;
 
-        case ENZORAEGG_1F_3:
-        case ENZORAEGG_1F_4:
-        case ENZORAEGG_1F_5:
-        case ENZORAEGG_1F_6:
-        case ENZORAEGG_1F_7:
-        case ENZORAEGG_1F_8:
-        case ENZORAEGG_1F_9:
+        case ENZORAEGG_1F_03:
+        case ENZORAEGG_1F_04:
+        case ENZORAEGG_1F_05:
+        case ENZORAEGG_1F_06:
+        case ENZORAEGG_1F_07:
+        case ENZORAEGG_1F_08:
+        case ENZORAEGG_1F_09:
             if (gSaveContext.save.weekEventReg[19] & 0x40) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
             break;
 
+        case ENZORAEGG_1F_0A:
+        case ENZORAEGG_1F_0B:
+        case ENZORAEGG_1F_0C:
+        case ENZORAEGG_1F_0D:
+        case ENZORAEGG_1F_0E:
+        case ENZORAEGG_1F_0F:
         case ENZORAEGG_1F_10:
-        case ENZORAEGG_1F_11:
-        case ENZORAEGG_1F_12:
-        case ENZORAEGG_1F_13:
-        case ENZORAEGG_1F_14:
-        case ENZORAEGG_1F_15:
-        case ENZORAEGG_1F_16:
             if (!(gSaveContext.save.weekEventReg[19] & 0x40)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
@@ -139,49 +139,49 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
     }
 
     switch (ENZORAEGG_GET_1F(&this->actor)) {
-        case ENZORAEGG_1F_0:
+        case ENZORAEGG_1F_00:
             this->actionFunc = func_80B320E0;
             this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
             this->actor.targetMode = 3;
             break;
 
-        case ENZORAEGG_1F_1:
+        case ENZORAEGG_1F_01:
             this->actionFunc = func_80B322BC;
             func_80B31590(this);
             break;
 
-        case ENZORAEGG_1F_2:
+        case ENZORAEGG_1F_02:
             this->actionFunc = func_80B32390;
             func_80B31590(this);
             break;
 
-        case ENZORAEGG_1F_3:
-        case ENZORAEGG_1F_4:
-        case ENZORAEGG_1F_5:
-        case ENZORAEGG_1F_6:
-        case ENZORAEGG_1F_7:
-        case ENZORAEGG_1F_8:
-        case ENZORAEGG_1F_9:
-            this->actorActionCmd = sp40[(ENZORAEGG_GET_1F(&this->actor)) - ENZORAEGG_1F_3];
+        case ENZORAEGG_1F_03:
+        case ENZORAEGG_1F_04:
+        case ENZORAEGG_1F_05:
+        case ENZORAEGG_1F_06:
+        case ENZORAEGG_1F_07:
+        case ENZORAEGG_1F_08:
+        case ENZORAEGG_1F_09:
+            this->actorActionCmd = sp40[(ENZORAEGG_GET_1F(&this->actor)) - ENZORAEGG_1F_03];
             Animation_PlayOnce(&this->skelAnime, &object_zoraegg_Anim_001E08);
             this->unk_1EC = 1;
             this->unk_1EE = 0;
             this->unk_1EF = 0;
             this->actionFunc = func_80B32B10;
-            if (((ENZORAEGG_GET_1F(&this->actor)) - ENZORAEGG_1F_3) >= func_80B319A8(play)) {
+            if (((ENZORAEGG_GET_1F(&this->actor)) - ENZORAEGG_1F_03) >= func_80B319A8(play)) {
                 this->actionFunc = func_80B32B3C;
                 this->actor.draw = NULL;
             }
             break;
 
+        case ENZORAEGG_1F_0A:
+        case ENZORAEGG_1F_0B:
+        case ENZORAEGG_1F_0C:
+        case ENZORAEGG_1F_0D:
+        case ENZORAEGG_1F_0E:
+        case ENZORAEGG_1F_0F:
         case ENZORAEGG_1F_10:
-        case ENZORAEGG_1F_11:
-        case ENZORAEGG_1F_12:
-        case ENZORAEGG_1F_13:
-        case ENZORAEGG_1F_14:
-        case ENZORAEGG_1F_15:
-        case ENZORAEGG_1F_16:
-            this->actorActionCmd = sp40[(ENZORAEGG_GET_1F(&this->actor)) - ENZORAEGG_1F_10];
+            this->actorActionCmd = sp40[(ENZORAEGG_GET_1F(&this->actor)) - ENZORAEGG_1F_0A];
             this->unk_1EC = 2;
             this->actionFunc = func_80B324B0;
             Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004FE4);
@@ -190,7 +190,7 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
             this->unk_1EA |= 3;
             break;
 
-        case ENZORAEGG_1F_17:
+        case ENZORAEGG_1F_11:
             Actor_SetScale(&this->actor, 0.0006f);
             this->actionFunc = func_80B32D08;
             this->actor.world.pos.y -= this->actor.shape.yOffset * this->actor.scale.y;
@@ -251,7 +251,7 @@ Actor* func_80B31CB4(PlayState* play) {
     Actor* actor = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
     while (actor != NULL) {
-        if ((actor->id == ACTOR_EN_ZORAEGG) && (ENZORAEGG_GET_1F(actor) == ENZORAEGG_1F_17) &&
+        if ((actor->id == ACTOR_EN_ZORAEGG) && (ENZORAEGG_GET_1F(actor) == ENZORAEGG_1F_11) &&
             (actor->home.rot.z == 0)) {
             actor->home.rot.z = 1;
             return actor;
@@ -265,7 +265,7 @@ Actor* func_80B31D14(PlayState* play) {
     Actor* actor = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
     while (actor != NULL) {
-        if ((actor->id == ACTOR_EN_ZORAEGG) && (ENZORAEGG_GET_1F(actor) == ENZORAEGG_1F_3)) {
+        if ((actor->id == ACTOR_EN_ZORAEGG) && (ENZORAEGG_GET_1F(actor) == ENZORAEGG_1F_03)) {
             return actor;
         }
         actor = actor->next;
@@ -326,7 +326,7 @@ void func_80B32084(EnZoraegg* this, PlayState* play) {
 }
 
 void func_80B32094(EnZoraegg* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 2) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         this->actionFunc = func_80B320E0;
     }
     func_80B31C40(this, play);
@@ -472,7 +472,7 @@ void func_80B326F4(EnZoraegg* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, this->actorActionCmd) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCmd)]->action == 3)) {
         Animation_Change(&this->skelAnime, &object_zoraegg_Anim_004D20, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&object_zoraegg_Anim_004D20), 2, 5.0f);
+                         Animation_GetLastFrame(&object_zoraegg_Anim_004D20), ANIMMODE_ONCE, 5.0f);
         this->unk_1E8 = 0;
         this->actionFunc = func_80B32644;
         gSaveContext.save.weekEventReg[19] |= 0x40;
@@ -493,7 +493,7 @@ void func_80B32820(EnZoraegg* this, PlayState* play) {
         if (this->unk_1E8 >= 2) {
             this->actionFunc = func_80B326F4;
             Animation_Change(&this->skelAnime, &object_zoraegg_Anim_005098, 1.0f, 0.0f,
-                             Animation_GetLastFrame(&object_zoraegg_Anim_005098), 0, 10.0f);
+                             Animation_GetLastFrame(&object_zoraegg_Anim_005098), ANIMMODE_LOOP, 10.0f);
             this->unk_1E8 = 0;
             SkelAnime_Update(&this->skelAnime);
             return;

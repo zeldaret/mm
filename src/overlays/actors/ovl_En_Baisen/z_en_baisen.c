@@ -59,7 +59,7 @@ static u16 sTextIds[] = { 0x2ABD, 0x2ABB, 0x2AD5, 0x2AD6, 0x2AD7, 0x2AD8, 0x2AC6
 
 static AnimationHeader* D_80BE8E4C[] = { &object_bai_Anim_0011C0, &object_bai_Anim_0008B4, &object_bai_Anim_008198 };
 
-static u8 animModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
+static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
 
 void EnBaisen_Init(Actor* thisx, PlayState* play) {
     EnBaisen* this = THIS;
@@ -104,7 +104,7 @@ void EnBaisen_ChangeAnimation(EnBaisen* this, s32 animIndex) {
     this->animIndex = animIndex;
     this->frameCount = Animation_GetLastFrame(D_80BE8E4C[animIndex]);
     Animation_Change(&this->skelAnime, D_80BE8E4C[this->animIndex], 1.0f, 0.0f, this->frameCount,
-                     animModes[this->animIndex], -10.0f);
+                     sAnimModes[this->animIndex], -10.0f);
 }
 
 void func_80BE871C(EnBaisen* this) {
@@ -222,7 +222,7 @@ void func_80BE8AAC(EnBaisen* this, PlayState* play) {
             EnBaisen_ChangeAnimation(this, 0);
         }
     }
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         this->textIdIndex++;
         if (this->textIdIndex < 6) {
