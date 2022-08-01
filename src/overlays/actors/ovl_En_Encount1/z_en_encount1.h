@@ -8,10 +8,10 @@
 #define ENENCOUNT1_GET_PATH(thisx) ((thisx)->params & 0x3F)
 
 typedef enum EnEncount1Enemy {
-    /* 0x0 */ GRASSHOPPER,
-    /* 0x1 */ WALLMASTER,
-    /* 0x2 */ SKULLFISH,
-    /* 0x3 */ SKULLFISH_2,
+    /* 0x0 */ EN_ENCOUNT1_GRASSHOPPER,
+    /* 0x1 */ EN_ENCOUNT1_WALLMASTER,
+    /* 0x2 */ EN_ENCOUNT1_SKULLFISH,
+    /* 0x3 */ EN_ENCOUNT1_SKULLFISH_2,
 } EnEncount1Enemy;
 
 struct EnEncount1;

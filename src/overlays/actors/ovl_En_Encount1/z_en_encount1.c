@@ -1,7 +1,7 @@
 /*
  * File: z_en_encount1.c
  * Overlay: ovl_En_Encount1
- * Description: Spawner for Dragonflies, Skullfish, and Wallmasters
+ * Description: Spawner for Dragonflies, EN_ENCOUNT1_SKULLFISH, and Wallmasters
  */
 
 #include "z_en_encount1.h"
@@ -57,7 +57,7 @@ void EnEncount1_Init(Actor* thisx, PlayState* play) {
     if (this->actor.world.rot.z < 0) {
         this->unk_160 = -1.0f;
     }
-    if (this->actorType == SKULLFISH_2) {
+    if (this->actorType == EN_ENCOUNT1_SKULLFISH_2) {
         this->unk_15A = ENENCOUNT1_GET_PATH(&this->actor);
         this->path = SubS_GetPathByIndex(play, this->unk_15A, 0x3F);
         this->unk_154 = -1;
@@ -90,7 +90,7 @@ void func_808E0954(EnEncount1* this, PlayState* play) {
 
     this->unk_156 = 0;
     switch (this->actorType) {
-        case GRASSHOPPER:
+        case EN_ENCOUNT1_GRASSHOPPER:
             sp64 = randPlusMinusPoint5Scaled(40.0f) + 200.0f;
             sp5E = player->actor.shape.rot.y;
             if (this->unk_14E & 1) {
@@ -109,11 +109,11 @@ void func_808E0954(EnEncount1* this, PlayState* play) {
             spawnPos.y = temp_fv0_2;
             break;
 
-        case WALLMASTER:
+        case EN_ENCOUNT1_WALLMASTER:
             Math_Vec3f_Copy(&spawnPos, &player->actor.world.pos);
             break;
 
-        case SKULLFISH:
+        case EN_ENCOUNT1_SKULLFISH:
             sp64 = randPlusMinusPoint5Scaled(250.0f) + 500.0f;
             sp5E = player->actor.shape.rot.y;
             spawnPos.x = player->actor.world.pos.x + Math_SinS(sp5E) * sp64 + randPlusMinusPoint5Scaled(40.0f);
@@ -126,7 +126,7 @@ void func_808E0954(EnEncount1* this, PlayState* play) {
             }
             break;
 
-        case SKULLFISH_2:
+        case EN_ENCOUNT1_SKULLFISH_2:
             if ((this->path != NULL) && (!SubS_CopyPointFromPath(this->path, 0, &spawnPos))) {
                 Actor_MarkForDeath(&this->actor);
             }
