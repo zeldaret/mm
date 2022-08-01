@@ -189,37 +189,37 @@ void func_8082DC28(Player* this) {
 }
 
 void func_8082DC38(Player* this) {
-    this->stateFlags2 &= ~0x20000;
-    this->meleeWeaponState = 0;
+    this->stateFlags2 &= ~PLAYER_STATE2_20000;
+    this->meleeWeaponState = PLAYER_MWA_FORWARD_SLASH_1H;
     this->meleeWeaponInfo[2].active = false;
     this->meleeWeaponInfo[1].active = false;
     this->meleeWeaponInfo[0].active = false;
 }
 
 void func_8082DC64(PlayState* play, Player* this) {
-    if ((this->unk_3BC != -1) && (play->cameraPtrs[this->unk_3BC] != 0)) {
-        this->unk_3BC = -1;
+    if ((this->subCamId != CAM_ID_NONE) && (play->cameraPtrs[this->subCamId] != NULL)) {
+        this->subCamId = CAM_ID_NONE;
     }
-    this->stateFlags2 &= ~0xC00;
+
+    this->stateFlags2 &= ~(PLAYER_STATE2_400 | PLAYER_STATE2_800);
 }
 
 void func_8082DCA0(PlayState* play, Player* this) {
-    Actor* heldActor;
+    Actor* heldActor = this->heldActor;
 
-    heldActor = this->heldActor;
     if (heldActor != NULL) {
         if (!Player_IsHoldingHookshot(this)) {
             this->actor.child = NULL;
             this->heldActor = NULL;
             this->interactRangeActor = NULL;
             heldActor->parent = NULL;
-            this->stateFlags1 &= ~0x800;
+            this->stateFlags1 &= ~PLAYER_STATE1_800;
         }
     }
 
     if (Player_GetExplosiveHeld(this) >= 0) {
-        func_8082F8BC(play, this, 0);
-        this->heldItemId = 0xFE;
+        func_8082F8BC(play, this, PLAYER_AP_NONE);
+        this->heldItemId = ITEM_FE;
     }
 }
 
@@ -3569,7 +3569,7 @@ s32 func_80834600(Player* this, PlayState* play) {
                 u8 sp6C[] = {2, 1, 1};
                 if (func_8083456C(play, this) == 0) {
                     if (this->unk_B75 == 4) {
-                        this->unk_B65 = 0x28;
+                        this->shockTimer = 0x28;
                     }
                     this->actor.colChkInfo.damage += this->unk_B74;
                     func_80833B18(play, this, sp6C[this->unk_B75-1], this->unk_B78, this->unk_B7C, this->unk_B76, 0x14);
@@ -3622,7 +3622,7 @@ s32 func_80834600(Player* this, PlayState* play) {
                     }
                     sp5C = 1;
                     if (this->actor.colChkInfo.acHitEffect == 7) {
-                        this->unk_B65 = 0x28;
+                        this->shockTimer = 0x28;
                         goto block_66;
                     }
                     if (this->actor.colChkInfo.acHitEffect == 9) {
@@ -6905,7 +6905,7 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawFeet, this->ageProperties->unk_04);
     }
 
-    this->unk_3BC = -1;
+    this->subCamId = CAM_ID_NONE;
     Collider_InitAndSetCylinder(play, &this->cylinder, &this->actor, &D_8085C2EC);
     Collider_InitAndSetCylinder(play, &this->shieldCylinder, &this->actor, &D_8085C318);
     Collider_InitAndSetQuad(play, &this->meleeWeaponQuads[0], &this->actor, &D_8085C344);
@@ -7593,7 +7593,7 @@ void func_80844EF8(Player* player, PlayState* play, Input* input) {
             player->unk_B28 = temp_v0_9 + 1;
         }
     }
-    if (player->unk_B65 != 0) {
+    if (player->shockTimer != 0) {
         func_808445C4(play, &player->actor);
     }
     if (player->isBurning != 0) {
@@ -7731,7 +7731,7 @@ void func_80844EF8(Player* player, PlayState* play, Input* input) {
                                 var_a2_2 = &gameplay_keep_Linkanim_00DFE8;
                             } else {
                                 var_v0_2 = &gameplay_keep_Linkanim_00D698;
-                                if (player->unk_B65 != 0) {
+                                if (player->shockTimer != 0) {
                                     var_v0_2 = &gameplay_keep_Linkanim_00DC28;
                                 }
                                 var_a2_2 = var_v0_2;
@@ -7783,7 +7783,7 @@ void func_80844EF8(Player* player, PlayState* play, Input* input) {
                 func_8085AACC(play, player, 0, play);
             }
         } else {
-            player->unk_395 = 0;
+            player->prevCsMode = 0;
         }
         func_8083BF54(play, &player->actor);
         Lights_PointSetPosition((LightInfo* ) sp2C, (s16) (s32) player->actor.world.pos.x, (s16) (s32) (player->actor.world.pos.y + 40.0f), (s16) (s32) player->actor.world.pos.z);
@@ -10029,7 +10029,7 @@ void func_80854010(Player* this, PlayState* play) {
 void func_808540A0(Player* this, PlayState* play) {
     func_80831494(play, this, func_80854010, 0);
     this->unk_AE8 = 0x28;
-    Actor_Spawn(&play->actorCtx, play, 0x49, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0x10);
+    Actor_Spawn(&play->actorCtx, play, ACTOR_DEMO_KANKYO, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0x10);
 }
 
 void func_8085AB58(Player* this, CsCmdActorAction* playerAction);
@@ -10206,7 +10206,8 @@ void func_80854800(Player* this, PlayState* play) {
             func_80836988(this, play);
         }
     }
-    this->unk_B65 = 0x28;
+
+    this->shockTimer = 40;
     func_800B8F98(&this->actor, this->ageProperties->unk_92 + (NA_SE_VO_LI_TAKEN_AWAY - SFX_FLAG));
 }
 
@@ -11748,11 +11749,11 @@ void func_8085ADA0(PlayState* play, Player* this, UNK_TYPE arg2);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8085ADA0.s")
 
 void func_8085B08C(Player* this, PlayState* play) {
-    if (this->csMode != this->unk_395) {
+    if (this->csMode != this->prevCsMode) {
         D_80862B6C = this->skelAnime.moveFlags;
         func_8082E794(this);
 
-        this->unk_395 = this->csMode;
+        this->prevCsMode = this->csMode;
         func_8085AD5C(play, this, this->csMode);
         func_8085AC9C(play, this, NULL, &D_8085DA94[this->csMode]);
     }

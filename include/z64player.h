@@ -750,7 +750,7 @@ typedef struct Player {
     /* 0x38C */ s8 mountSide;
     /* 0x390 */ Actor* rideActor;
     /* 0x394 */ u8 csMode;
-    /* 0x395 */ u8 unk_395; // prevCsMode?
+    /* 0x395 */ u8 prevCsMode;
     /* 0x396 */ u8 unk_396;
     /* 0x397 */ u8 unk_397; // PlayerDoorType enum
     /* 0x398 */ Actor* unk_398;
@@ -760,7 +760,7 @@ typedef struct Player {
     /* 0x3AC */ Vec3f unk_3AC;
     /* 0x3B8 */ u16 unk_3B8;
     /* 0x3BA */ s16 unk_3BA;
-    /* 0x3BC */ s16 unk_3BC;
+    /* 0x3BC */ s16 subCamId;
     /* 0x3BE */ char unk_3BE[2];
     /* 0x3C0 */ Vec3f unk_3C0;
     /* 0x3CC */ s16 unk_3CC;
@@ -857,7 +857,7 @@ typedef struct Player {
     /* 0xB60 */ u16 unk_B60; // blast mask timer?
     /* 0xB62 */ s16 unk_B62;
     /* 0xB64 */ u8 unk_B64;
-    /* 0xB65 */ u8 unk_B65;
+    /* 0xB65 */ u8 shockTimer;
     /* 0xB66 */ u8 unk_B66;
     /* 0xB67 */ u8 unk_B67; // deku hop timer?
     /* 0xB68 */ s16 unk_B68;

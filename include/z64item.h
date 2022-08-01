@@ -285,6 +285,7 @@ typedef enum {
     /* 0xF2 */ ITEM_F2,
     /* 0xFC */ ITEM_FC = 0xFC,
     /* 0xFD */ ITEM_FD,
+    /* 0xFE */ ITEM_FE,
     /* 0xFF */ ITEM_NONE = 0xFF
 } ItemID;
 
