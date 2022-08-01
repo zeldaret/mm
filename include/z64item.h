@@ -300,6 +300,7 @@ typedef enum {
     /* 0x2A */ GI_NUTS_10 = 0x2A,
     /* 0x32 */ GI_SHIELD_HERO = 0x32,
     /* 0x33 */ GI_SHIELD_MIRROR,
+	/* 0x34 */ GI_POWDER_KEG,
     /* 0x35 */ GI_MAGIC_BEANS = 0x35,
     /* 0x36 */ GI_BOMBCHUS_1,
     /* 0x3A */ GI_BOMBCHUS_5 = 0x3A,

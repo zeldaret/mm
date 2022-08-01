@@ -177,7 +177,7 @@ Actor* EnJg_GetShrineGoronToFocusOn(PlayState* play, u8 focusedShrineGoronParam)
 
     while (actorIterator != NULL) {
         if ((actorIterator->id == ACTOR_EN_S_GORO) &&
-            (EN_S_GORO_GET_PARAM_F(actorIterator) == focusedShrineGoronParam)) {
+            (EN_S_GORO_GET_MAIN_TYPE(actorIterator) == focusedShrineGoronParam)) {
             return actorIterator;
         }
 
