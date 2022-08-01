@@ -122,9 +122,9 @@ typedef enum {
     /* 0x6 */ ENKAKASI_ANIM_WAVE,               // "wave" short sideways shake, stops early, partial? unused?
     /* 0x7 */ ENKAKASI_ANIM_SLOWROLL,           // partial bounch, ends looking left, OFFER anim takes over
     /* 0x8 */ ENKAKASI_ANIM_IDLE,               // slow stretching wiggle, ends in regular position
-} EnKakasi_Animation;
+} EnKakasiAnimation;
 
-static AnimationHeader* kakasiAnimations[] = {
+static AnimationHeader* sAnimations[] = {
     &object_ka_Anim_007444, &object_ka_Anim_00686C, &object_ka_Anim_0081A4,
     &object_ka_Anim_007B90, &object_ka_Anim_0071EC, &object_ka_Anim_007444,
     &object_ka_Anim_00686C, &object_ka_Anim_0081A4, &object_ka_Anim_000214,
@@ -197,9 +197,9 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
 
 void EnKakasi_SetAnimation(EnKakasi* this, s32 index) {
     this->animIndex = index;
-    this->animeFrameCount = Animation_GetLastFrame(&kakasiAnimations[this->animIndex]->common);
+    this->animeFrameCount = Animation_GetLastFrame(&sAnimations[this->animIndex]->common);
     // 1: regular playback speed, 0: starting frame
-    Animation_Change(&this->skelanime, kakasiAnimations[this->animIndex], 1.0f, 0.0f, this->animeFrameCount,
+    Animation_Change(&this->skelanime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animeFrameCount,
                      sAnimModes[this->animIndex], -4.0f);
 }
 

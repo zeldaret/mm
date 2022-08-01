@@ -72,9 +72,11 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static AnimationInfo sAnimationInfo[] = {
-    { &object_js_Anim_000C7C, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &object_js_Anim_000F4C, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &object_js_Anim_00016C, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &object_js_Anim_0003DC, 1.0f, 0.0f, 0.0f, 2, -8.0f },
-    { &object_js_Anim_000AD4, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_js_Anim_000C7C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_js_Anim_000F4C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_js_Anim_00016C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_js_Anim_0003DC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &object_js_Anim_000AD4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
 };
 
 s16 D_80B27CE0[][3] = {

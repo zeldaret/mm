@@ -64,10 +64,14 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static AnimationInfo sAnimationInfo[] = {
-    { &object_mm_Anim_002238, 1.0f, 0.0f, 0.0f, 0, -7.0f },  { &object_mm_Anim_00A4E0, -1.0f, 0.0f, 0.0f, 2, -7.0f },
-    { &object_mm_Anim_00C640, 1.0f, 0.0f, 0.0f, 0, -7.0f },  { &object_mm_Anim_00A4E0, 1.0f, 0.0f, 0.0f, 2, -7.0f },
-    { &object_mm_Anim_000468, 1.0f, 0.0f, 0.0f, 0, -7.0f },  { &object_mm_Anim_00CD90, 1.0f, 0.0f, 0.0f, 0, -12.0f },
-    { &object_mm_Anim_00DA50, 1.0f, 0.0f, 0.0f, 0, -12.0f }, { &object_mm_Anim_00DA50, 1.0f, 0.0f, 10.0f, 2, -10.0f },
+    { &object_mm_Anim_002238, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -7.0f },
+    { &object_mm_Anim_00A4E0, -1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -7.0f },
+    { &object_mm_Anim_00C640, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -7.0f },
+    { &object_mm_Anim_00A4E0, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -7.0f },
+    { &object_mm_Anim_000468, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -7.0f },
+    { &object_mm_Anim_00CD90, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -12.0f },
+    { &object_mm_Anim_00DA50, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -12.0f },
+    { &object_mm_Anim_00DA50, 1.0f, 0.0f, 10.0f, ANIMMODE_ONCE, -10.0f },
 };
 
 #include "overlays/ovl_En_Mm3/ovl_En_Mm3.c"

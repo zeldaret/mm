@@ -63,10 +63,10 @@ const ActorInit En_Shn_InitVars = {
 };
 
 static AnimationInfoS sAnimationInfo[] = {
-    { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, 0 },
-    { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, -4 },
-    { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, 0 },
-    { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, -4 },
+    { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 static s32 D_80AE7258[] = { 0, 2, 3, 8, 10, 1 };

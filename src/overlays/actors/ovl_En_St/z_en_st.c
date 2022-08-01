@@ -447,7 +447,7 @@ s32 func_808A6064(EnSt* this) {
 }
 
 void func_808A60E0(EnSt* this) {
-    s32 idx = (this->unk_2C8 > 0.0f) ? 2 : 6;
+    s32 animIndex = (this->unk_2C8 > 0.0f) ? 2 : 6;
     f32 sp20 = (this->unk_2C8 > 0.0f) ? 4.0f : 9.0f;
     f32 sp1C;
     u16 sfxId = (this->unk_2C8 < 0.0f) ? NA_SE_EN_STALTU_DOWN : NA_SE_EN_STALTU_UP;
@@ -455,7 +455,7 @@ void func_808A60E0(EnSt* this) {
     sp1C = this->skelAnime.curFrame / (this->skelAnime.animLength - 1.0f);
 
     if (sp1C == 1.0f) {
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, idx);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         Actor_PlaySfxAtPos(&this->actor, sfxId);
     }
 
@@ -535,9 +535,9 @@ void func_808A6468(EnSt* this, PlayState* play) {
 }
 
 void func_808A650C(EnSt* this) {
-    s32 idx = (this->unk_2C8 > 0.0f) ? 2 : 6;
+    s32 animIndex = (this->unk_2C8 > 0.0f) ? 2 : 6;
 
-    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, idx);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
     this->unk_2CC = 0.0f;
     this->unk_2D4 = 0.0f;
     this->unk_2D8 = 0.0f;

@@ -298,7 +298,7 @@ void func_808F3690(EnIn* this, PlayState* play) {
 }
 
 void func_808F374C(EnIn* this, PlayState* play) {
-    AnimationHeader* sAnimationInfo[] = {
+    AnimationHeader* sAnimations[] = {
         &object_in_Anim_015E38, &object_in_Anim_016A60, &object_in_Anim_0177AC, &object_in_Anim_016484,
         &object_in_Anim_0170DC, &object_in_Anim_018240, &object_in_Anim_0187C8, &object_in_Anim_0198A8,
     };
@@ -316,10 +316,10 @@ void func_808F374C(EnIn* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_CRY_0);
     }
     if (SkelAnime_Update(&this->skelAnime)) {
-        this->unk488 %= ARRAY_COUNT(sAnimationInfo);
+        this->unk488 %= ARRAY_COUNT(sAnimations);
         this->unk486 = this->unk488;
-        Animation_Change(&this->skelAnime, sAnimationInfo[this->unk488], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimationInfo[this->unk488]), ANIMMODE_ONCE, -10.0f);
+        Animation_Change(&this->skelAnime, sAnimations[this->unk488], 1.0f, 0.0f,
+                         Animation_GetLastFrame(sAnimations[this->unk488]), ANIMMODE_ONCE, -10.0f);
     }
 }
 

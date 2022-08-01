@@ -28,8 +28,8 @@ const ActorInit Dm_Al_InitVars = {
 };
 
 typedef enum {
-    /* 0x0 */ MADAME_AROMA_ANIM_0,
-    /* 0x1 */ MADAME_AROMA_ANIM_1
+    /* 0 */ MADAME_AROMA_ANIM_0,
+    /* 1 */ MADAME_AROMA_ANIM_1
 } DmAlAnimation;
 
 static AnimationInfoS sAnimationInfo[] = {

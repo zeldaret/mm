@@ -60,16 +60,16 @@ typedef enum {
 } EnOssanCutsceneState;
 
 typedef enum {
-    /* 00 */ FSN_ANIM_IDLE,
-    /* 01 */ FSN_ANIM_SCRATCH_BACK,
-    /* 02 */ FSN_ANIM_TURN_AROUND_FORWARD,
-    /* 03 */ FSN_ANIM_TURN_AROUND_REVERSE,
-    /* 04 */ FSN_ANIM_HANDS_ON_COUNTER_START,
-    /* 05 */ FSN_ANIM_HANDS_ON_COUNTER_LOOP,
-    /* 06 */ FSN_ANIM_HAND_ON_FACE_START,
-    /* 07 */ FSN_ANIM_HAND_ON_FACE_LOOP,
-    /* 08 */ FSN_ANIM_LEAN_FORWARD_START,
-    /* 09 */ FSN_ANIM_LEAN_FORWARD_LOOP,
+    /*  0 */ FSN_ANIM_IDLE,
+    /*  1 */ FSN_ANIM_SCRATCH_BACK,
+    /*  2 */ FSN_ANIM_TURN_AROUND_FORWARD,
+    /*  3 */ FSN_ANIM_TURN_AROUND_REVERSE,
+    /*  4 */ FSN_ANIM_HANDS_ON_COUNTER_START,
+    /*  5 */ FSN_ANIM_HANDS_ON_COUNTER_LOOP,
+    /*  6 */ FSN_ANIM_HAND_ON_FACE_START,
+    /*  7 */ FSN_ANIM_HAND_ON_FACE_LOOP,
+    /*  8 */ FSN_ANIM_LEAN_FORWARD_START,
+    /*  9 */ FSN_ANIM_LEAN_FORWARD_LOOP,
     /* 10 */ FSN_ANIM_SLAM_COUNTER_START,
     /* 11 */ FSN_ANIM_SLAM_COUNTER_LOOP,
     /* 12 */ FSN_ANIM_MAKE_OFFER,
@@ -77,16 +77,16 @@ typedef enum {
 } FsnAnimation;
 
 typedef enum {
-    /* 00 */ ANI_ANIM_STANDING_NORMAL_LOOP_1,
-    /* 01 */ ANI_ANIM_STANDING_NORMAL_LOOP_2,
-    /* 02 */ ANI_ANIM_STANDING_NORMAL_ONCE_FORWARD_1,
-    /* 03 */ ANI_ANIM_STANDING_NORMAL_ONCE_REVERSE,
-    /* 04 */ ANI_ANIM_STANDING_NORMAL_ONCE_FORWARD_2,
-    /* 05 */ ANI_ANIM_STANDING_NORMAL_LOOP_3,
-    /* 06 */ ANI_ANIM_STANDING_NORMAL_ONCE_FORWARD_3,
-    /* 07 */ ANI_ANIM_STANDING_NORMAL_LOOP_4,
-    /* 08 */ ANI_ANIM_APOLOGY_START,
-    /* 09 */ ANI_ANIM_APOLOGY_LOOP,
+    /*  0 */ ANI_ANIM_STANDING_NORMAL_LOOP_1,
+    /*  1 */ ANI_ANIM_STANDING_NORMAL_LOOP_2,
+    /*  2 */ ANI_ANIM_STANDING_NORMAL_ONCE_FORWARD_1,
+    /*  3 */ ANI_ANIM_STANDING_NORMAL_ONCE_REVERSE,
+    /*  4 */ ANI_ANIM_STANDING_NORMAL_ONCE_FORWARD_2,
+    /*  5 */ ANI_ANIM_STANDING_NORMAL_LOOP_3,
+    /*  6 */ ANI_ANIM_STANDING_NORMAL_ONCE_FORWARD_3,
+    /*  7 */ ANI_ANIM_STANDING_NORMAL_LOOP_4,
+    /*  8 */ ANI_ANIM_APOLOGY_START,
+    /*  9 */ ANI_ANIM_APOLOGY_LOOP,
     /* 10 */ ANI_ANIM_STANDING_NORMAL_ONCE_FORWARD_4,
     /* 11 */ ANI_ANIM_STANDING_NORMAL_LOOP_5,
     /* 12 */ ANI_ANIM_MAX
@@ -389,9 +389,9 @@ void EnOssan_Idle(EnOssan* this, PlayState* play) {
 }
 
 void EnOssan_BeginInteraction(EnOssan* this, PlayState* play) {
-    AnimationInfoS* animations = sAnimationInfo[this->actor.params];
+    AnimationInfoS* animationInfo = sAnimationInfo[this->actor.params];
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(animations[this->animIndex].animation);
+    s16 frameCount = Animation_GetLastFrame(animationInfo[this->animIndex].animation);
 
     if (this->animIndex == FSN_ANIM_TURN_AROUND_REVERSE) {
         frameCount = 0;
@@ -409,19 +409,19 @@ void EnOssan_BeginInteraction(EnOssan* this, PlayState* play) {
             switch (this->animIndex) {
                 case FSN_ANIM_SCRATCH_BACK:
                     this->animIndex = FSN_ANIM_TURN_AROUND_FORWARD;
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, FSN_ANIM_TURN_AROUND_FORWARD);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animationInfo, FSN_ANIM_TURN_AROUND_FORWARD);
                     break;
                 case FSN_ANIM_TURN_AROUND_FORWARD:
                     EnOssan_SetHaveMet(this);
                     this->textId = EnOssan_CuriosityShopMan_GetWelcome(this, play);
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, this->animIndex);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animationInfo, this->animIndex);
                     break;
                 case FSN_ANIM_HANDS_ON_COUNTER_START:
                 case FSN_ANIM_HAND_ON_FACE_START:
                 case FSN_ANIM_LEAN_FORWARD_START:
                 case FSN_ANIM_SLAM_COUNTER_START:
                     this->animIndex++;
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, this->animIndex);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animationInfo, this->animIndex);
                     Message_StartTextbox(play, this->textId, &this->actor);
                     EnOssan_SetupStartShopping(play, this, false);
                     break;
@@ -430,16 +430,16 @@ void EnOssan_BeginInteraction(EnOssan* this, PlayState* play) {
                 case FSN_ANIM_LEAN_FORWARD_LOOP:
                 case FSN_ANIM_SLAM_COUNTER_LOOP:
                     this->animIndex = FSN_ANIM_TURN_AROUND_REVERSE;
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, FSN_ANIM_TURN_AROUND_REVERSE);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animationInfo, FSN_ANIM_TURN_AROUND_REVERSE);
                     break;
                 case FSN_ANIM_TURN_AROUND_REVERSE:
                     this->animIndex = FSN_ANIM_SCRATCH_BACK;
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, FSN_ANIM_SCRATCH_BACK);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animationInfo, FSN_ANIM_SCRATCH_BACK);
                     EnOssan_SetupAction(this, EnOssan_Idle);
                     break;
                 default:
                     this->animIndex = FSN_ANIM_SCRATCH_BACK;
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, FSN_ANIM_SCRATCH_BACK);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animationInfo, FSN_ANIM_SCRATCH_BACK);
                     EnOssan_SetupAction(this, EnOssan_Idle);
                     break;
             }
@@ -557,7 +557,7 @@ u8 EnOssan_CursorLeft(EnOssan* this, u8 cursorIdx, u8 shelfSlotMax) {
 }
 
 void EnOssan_Hello(EnOssan* this, PlayState* play) {
-    AnimationInfoS* animations = sAnimationInfo[this->actor.params];
+    AnimationInfoS* animationInfo = sAnimationInfo[this->actor.params];
     u8 talkState = Message_GetState(&play->msgCtx);
     s32 pad;
     Player* player = GET_PLAYER(play);
@@ -566,7 +566,7 @@ void EnOssan_Hello(EnOssan* this, PlayState* play) {
     if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if ((this->animIndex == ANI_ANIM_APOLOGY_LOOP) && (this->actor.params == ENOSSAN_PART_TIME_WORKER)) {
             this->animIndex = ANI_ANIM_STANDING_NORMAL_LOOP_2;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 1);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, animationInfo, 1);
         }
         this->flags &= ~LOOKED_AT_PLAYER;
         if (player->transformation == PLAYER_FORM_DEKU) {
@@ -583,7 +583,7 @@ void EnOssan_Hello(EnOssan* this, PlayState* play) {
     if ((talkState == TEXT_STATE_10) && (this->actor.params == ENOSSAN_PART_TIME_WORKER) &&
         (player->transformation == PLAYER_FORM_ZORA) && Message_ShouldAdvance(play)) {
         this->animIndex = ANI_ANIM_APOLOGY_LOOP;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, ANI_ANIM_APOLOGY_LOOP);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, animationInfo, ANI_ANIM_APOLOGY_LOOP);
     }
     if ((this->animIndex == FSN_ANIM_SLAM_COUNTER_LOOP) && Animation_OnFrame(&this->skelAnime, 18.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
@@ -591,7 +591,7 @@ void EnOssan_Hello(EnOssan* this, PlayState* play) {
 }
 
 s32 EnOssan_FacingShopkeeperDialogResult(EnOssan* this, PlayState* play) {
-    AnimationInfoS* animations = sAnimationInfo[this->actor.params];
+    AnimationInfoS* animationInfo = sAnimationInfo[this->actor.params];
     Player* player = GET_PLAYER(play);
 
     switch (play->msgCtx.choiceIndex) {
@@ -599,7 +599,7 @@ s32 EnOssan_FacingShopkeeperDialogResult(EnOssan* this, PlayState* play) {
             func_8019F208();
             if ((this->actor.params == ENOSSAN_PART_TIME_WORKER) && (player->transformation == PLAYER_FORM_ZORA)) {
                 this->animIndex = ANI_ANIM_APOLOGY_LOOP;
-                SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 9);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, animationInfo, 9);
             }
             EnOssan_SetupAction(this, EnOssan_TalkToShopkeeper);
             func_80151938(play, sTalkOptionTextIds[this->actor.params]);
@@ -663,12 +663,12 @@ void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play) {
 }
 
 void EnOssan_TalkToShopkeeper(EnOssan* this, PlayState* play) {
-    AnimationInfoS* animations = sAnimationInfo[this->actor.params];
+    AnimationInfoS* animationInfo = sAnimationInfo[this->actor.params];
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if ((this->animIndex == ANI_ANIM_APOLOGY_LOOP) && (this->actor.params == ENOSSAN_PART_TIME_WORKER)) {
             this->animIndex = ANI_ANIM_STANDING_NORMAL_LOOP_2;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 1);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, animationInfo, 1);
         }
         EnOssan_StartShopping(play, this);
     }

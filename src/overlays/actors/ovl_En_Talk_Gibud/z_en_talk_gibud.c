@@ -89,7 +89,7 @@ typedef enum {
     /* 11 */ EN_TALK_GIBUD_ANIM_DANCE_SQUAT,
     /* 12 */ EN_TALK_GIBUD_ANIM_DANCE_PIROUETTE,
     /* 13 */ EN_TALK_GIBUD_ANIM_DANCE_CLAP,
-} EnTalkGibudAnimations;
+} EnTalkGibudAnimation;
 
 typedef enum {
     /* 0 */ EN_TALK_GIBUD_TYPE_GIBDO,

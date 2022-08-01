@@ -9979,7 +9979,7 @@
     0x809CCD14:("D_809CCD14","f32","",0x4),
     0x809CDC30:("En_Bji_01_InitVars","ActorInit","",0x20),
     0x809CDC50:("D_809CDC50","UNK_TYPE1","",0x1),
-    0x809CDC7C:("D_809CDC7C","UNK_TYPE1","",0x1),
+    0x809CDC7C:("sAnimationInfo","UNK_TYPE1","",0x1),
     0x809CDCBC:("D_809CDCBC","UNK_TYPE1","",0x1),
     0x809CDCC8:("D_809CDCC8","UNK_TYPE1","",0x1),
     0x809CDCD4:("D_809CDCD4","UNK_TYPE1","",0x1),

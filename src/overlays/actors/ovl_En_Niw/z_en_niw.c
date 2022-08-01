@@ -363,7 +363,7 @@ void EnNiw_Idle(EnNiw* this, PlayState* play) {
     f32 posZ2;
     f32 posX1 = randPlusMinusPoint5Scaled(100.0f);
     f32 posZ1 = randPlusMinusPoint5Scaled(100.0f);
-    s16 nextAnimation;
+    s16 nextAnimIndex;
 
     if (this->niwType == NIW_TYPE_REGULAR) {
         if (Actor_HasParent(&this->actor, play)) {                    // picked up
@@ -382,7 +382,7 @@ void EnNiw_Idle(EnNiw* this, PlayState* play) {
         this->unkIdleTimer2 = 10;
     }
 
-    nextAnimation = NIW_ANIM_STILL; // probably a scoped variable here, where their scope was different
+    nextAnimIndex = NIW_ANIM_STILL; // probably a scoped variable here, where their scope was different
     if (this->unkIdleTimer2 != 0) {
         if (Rand_ZeroFloat(3.99f) < 1.0f) {
             this->headRotationToggle++;
@@ -423,7 +423,7 @@ void EnNiw_Idle(EnNiw* this, PlayState* play) {
 
     if (this->unkIdleTimer != 0) {
         Math_ApproachZeroF(&this->targetLimbRots[9], 0.5f, 4000.0f); // head rot
-        nextAnimation = NIW_ANIM_HEAD_PECKING;
+        nextAnimIndex = NIW_ANIM_HEAD_PECKING;
         Math_ApproachF(&this->actor.world.pos.x, this->unk2B0.x, 1.0f, this->unk300);
         Math_ApproachF(&this->actor.world.pos.z, this->unk2B0.z, 1.0f, this->unk300);
         Math_ApproachF(&this->unk300, 3.0f, 1.0f, 0.3f);
@@ -447,7 +447,7 @@ void EnNiw_Idle(EnNiw* this, PlayState* play) {
         Math_ApproachF(&this->unk304, 10000.0f, 1.0f, 1000.0f);
     }
 
-    EnNiw_AnimateWingHead(this, play, nextAnimation);
+    EnNiw_AnimateWingHead(this, play, nextAnimIndex);
 }
 
 void EnNiw_Held(EnNiw* this, PlayState* play) {
@@ -597,7 +597,7 @@ void EnNiw_Trigger(EnNiw* this, PlayState* play) {
     }
 
     this->cuccoStormTimer = 10;
-    this->niwState = this->nextAnimation = state; // NIW_ANIM_HEAD_PECKING
+    this->niwState = this->nextAnimIndex = state; // NIW_ANIM_HEAD_PECKING
     this->actionFunc = EnNiw_Upset;
 }
 
@@ -607,12 +607,12 @@ void EnNiw_Upset(EnNiw* this, PlayState* play) {
     if (this->cuccoStormTimer == 0) {
         this->cuccoStormTimer = 60;
         this->unkTimer24C = 10;
-        this->nextAnimation = NIW_ANIM_FREEZE;
+        this->nextAnimIndex = NIW_ANIM_FREEZE;
         this->niwState = NIW_STATE_ANGRY2;
         this->actionFunc = EnNiw_SetupCuccoStorm;
     }
 
-    EnNiw_AnimateWingHead(this, play, this->nextAnimation);
+    EnNiw_AnimateWingHead(this, play, this->nextAnimIndex);
 }
 
 // the long crow with head back before they descend
@@ -640,7 +640,7 @@ void EnNiw_SetupCuccoStorm(EnNiw* this, PlayState* play) {
         this->actionFunc = EnNiw_CuccoStorm;
     }
 
-    EnNiw_AnimateWingHead(this, play, this->nextAnimation);
+    EnNiw_AnimateWingHead(this, play, this->nextAnimIndex);
 }
 
 void EnNiw_CuccoStorm(EnNiw* this, PlayState* play) {
@@ -877,7 +877,7 @@ void EnNiw_Update(Actor* thisx, PlayState* play) {
         this->headRotY = 0.0f;
 
         // clang-format off
-        this->isStormActive = this->unusedCounter28C = this->unk292 = this->unk29E = this->unk298 = this->isRunningRight = this->nextAnimation = 0;
+        this->isStormActive = this->unusedCounter28C = this->unk292 = this->unk29E = this->unk298 = this->isRunningRight = this->nextAnimIndex = 0;
         // clang-format on
 
         for (i = 0; i < 10; i++) {
