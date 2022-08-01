@@ -33,7 +33,6 @@ const ActorInit Dm_Hina_InitVars = {
     (ActorFunc)DmHina_Draw,
 };
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Hina/DmHina_Init.s")
 void DmHina_Init(Actor* thisx, PlayState* play) {
     DmHina* this = THIS;
 
