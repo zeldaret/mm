@@ -15,7 +15,7 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play);
 void EnDoorEtc_Destroy(Actor* thisx, PlayState* play);
 void EnDoorEtc_Update(Actor* thisx, PlayState* play);
 
-void func_80AC20A8(EnDoorEtc* this, PlayState* play);
+void EnDoorEtc_WaitForObject(EnDoorEtc* this, PlayState* play);
 void func_80AC21A0(EnDoorEtc* this, PlayState* play);
 void func_80AC2354(EnDoorEtc* this, PlayState* play);
 void EnDoorEtc_Draw(Actor* thisx, PlayState* play);
@@ -101,7 +101,7 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
             break;
         }
     }
-    if ((i >= 0xF) && (Object_GetIndex(&play->objectCtx, 2) >= 0)) {
+    if ((i >= 0xF) && (Object_GetIndex(&play->objectCtx, GAMEPLAY_FIELD_KEEP) >= 0)) {
         objectInfo++;
     }
     objectIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
@@ -111,14 +111,14 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
         this->objectIndex = objectIndex;
         this->dListIndex = objectInfo->dListIndex;
         if (this->actor.objBankIndex == this->objectIndex) {
-            func_80AC20A8(this, play);
+            EnDoorEtc_WaitForObject(this, play);
         } else {
-            this->actionFunc = func_80AC20A8;
+            this->actionFunc = EnDoorEtc_WaitForObject;
         }
     }
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.colChkInfo.mass = 0xFF;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 }
 
 void EnDoorEtc_Destroy(Actor* thisx, PlayState* play) {
@@ -138,7 +138,7 @@ s32 EnDoorEtc_IsDistanceGreater(Vec3f* a, Vec3f* b, f32 c) {
     return ((SQ(dx) + SQ(dy) + SQ(dz)) < (SQ(c)));
 }
 
-void func_80AC20A8(EnDoorEtc* this, PlayState* play) {
+void EnDoorEtc_WaitForObject(EnDoorEtc* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
         this->actor.flags &= ~ACTOR_FLAG_10;
         this->actor.objBankIndex = this->objectIndex;
@@ -184,11 +184,7 @@ void func_80AC21A0(EnDoorEtc* this, PlayState* play) {
             if (playerOffsetFromDoor.z > 0.0f) {
                 var_v0 = 0x8000 - var_v0;
             }
-            if (var_v0 < 0) {
-                var_v1 = -var_v0;
-            } else {
-                var_v1 = var_v0;
-            }
+            var_v1 = ABS_ALT(var_v0);
             if (var_v1 < 0x3000) {
                 player->doorDirection = playerOffsetFromDoor.z >= 0.0f ? 1.0f : -1.0f;
                 player->doorActor = &this->actor;
@@ -196,7 +192,7 @@ void func_80AC21A0(EnDoorEtc* this, PlayState* play) {
             }
         }
     }
-    if ((this->actor.textId == 0x239B) && (Flags_GetSwitch(play, ENDOORETC_GET_SWITCHFLAG(&this->actor)) != 0)) {
+    if ((this->actor.textId == 0x239B) && Flags_GetSwitch(play, ENDOORETC_GET_SWITCHFLAG(&this->actor))) {
         Flags_UnsetSwitch(play, ENDOORETC_GET_SWITCHFLAG(&this->actor));
         this->actionFunc = func_80AC2154;
         this->actor.textId = 0x1800; // "It won't budge!"

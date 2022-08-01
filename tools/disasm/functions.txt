@@ -11903,7 +11903,7 @@
     0x80AC1ED0:("EnDoorEtc_Init",),
     0x80AC2018:("EnDoorEtc_Destroy",),
     0x80AC2044:("EnDoorEtc_IsDistanceGreater",),
-    0x80AC20A8:("func_80AC20A8",),
+    0x80AC20A8:("EnDoorEtc_WaitForObject",),
     0x80AC2118:("func_80AC2118",),
     0x80AC2154:("func_80AC2154",),
     0x80AC21A0:("func_80AC21A0",),
