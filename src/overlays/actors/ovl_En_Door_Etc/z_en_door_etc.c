@@ -172,20 +172,20 @@ void func_80AC21A0(EnDoorEtc* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f playerOffsetFromDoor;
     s32 pad;
-    s16 var_v0;
-    s32 var_v1;
+    s16 yawDiff;
+    s32 yawDiffAbs;
 
     Actor_OffsetOfPointInActorCoords(&this->actor, &playerOffsetFromDoor, &player->actor.world.pos);
     if (this->unk_1A1 == 0) {
         if ((Player_InCsMode(play) == 0) &&
             ((fabsf(playerOffsetFromDoor.y) < 20.0f) && fabsf(playerOffsetFromDoor.x) < 20.0f) &&
             (fabsf(playerOffsetFromDoor.z) < 50.0f)) {
-            var_v0 = player->actor.shape.rot.y - this->actor.shape.rot.y;
+            yawDiff = player->actor.shape.rot.y - this->actor.shape.rot.y;
             if (playerOffsetFromDoor.z > 0.0f) {
-                var_v0 = 0x8000 - var_v0;
+                yawDiff = 0x8000 - yawDiff;
             }
-            var_v1 = ABS_ALT(var_v0);
-            if (var_v1 < 0x3000) {
+            yawDiffAbs = ABS_ALT(yawDiff);
+            if (yawDiffAbs < 0x3000) {
                 player->doorDirection = playerOffsetFromDoor.z >= 0.0f ? 1.0f : -1.0f;
                 player->doorActor = &this->actor;
                 player->doorType = -1;
