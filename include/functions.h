@@ -3286,7 +3286,7 @@ void Audio_PlaySfxForRiver(Vec3f* pos, f32 freqScale);
 // void Audio_StepFreqLerp(void);
 void func_801A0124(Vec3f* pos, u8 arg1);
 void func_801A0184(void);
-// void func_801A01C4(void);
+void func_801A01C4(void);
 void func_801A0204(s8 seqId);
 void func_801A0238(s32 arg0, s32 arg1);
 // void Audio_SetGanonsTowerBgmVolumeLevel(void);
