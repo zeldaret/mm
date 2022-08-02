@@ -9555,15 +9555,11 @@ s32 func_80848E4C(Player* this, PlayState* play) {
         return 1;
     }
 
-    if (!func_80830B88(play, this)) {
-        if (((this->unk_B28 >= 0) || (D_80862B4C == 0)) &&
-            ((!animFinished && (this->transformation == PLAYER_FORM_DEKU)) || (D_80862B48 == 0))) {
-            if (func_80830F9C(play)) {
-                goto block_11;
-            }
-            goto block_20;
-        }
-    block_11:
+    if (!func_80830B88(play, this) &&
+        ((((this->unk_B28 < 0) && (D_80862B4C != 0)) ||
+          ((animFinished || (this->transformation != PLAYER_FORM_DEKU)) && (D_80862B48 != 0))) ||
+         func_80830F9C(play))) {
+
         this->unk_B28 = ABS_ALT(this->unk_B28);
         if (func_808306F8(this, play)) {
             if (Player_IsHoldingHookshot(this)) {
@@ -9575,7 +9571,6 @@ s32 func_80848E4C(Player* this, PlayState* play) {
             }
         }
     } else {
-    block_20:
         if (this->unk_ACC != 0) {
             this->unk_ACC--;
         }
