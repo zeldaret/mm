@@ -30,7 +30,7 @@ const ActorInit Dm_Char09_InitVars = {
     (ActorFunc)DmChar09_Draw,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &object_bee_Anim_00005C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
 };
 
@@ -55,7 +55,7 @@ void DmChar09_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_bee_Skel_001398, &object_bee_Anim_00005C, this->jointTable,
                    this->morphTable, OBJECT_BEE_LIMB_MAX);
-    DmChar09_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+    DmChar09_ChangeAnimation(&this->skelAnime, sAnimationInfo, 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_228 = Rand_ZeroOne() * 65535.0f;
     this->unk_22A = Rand_ZeroOne() * 65535.0f;
@@ -99,7 +99,7 @@ void func_80AB1FDC(DmChar09* this, PlayState* play) {
     } else {
         this->unk_21C += this->unk_220;
         thisx->speedXZ *= 0.4f;
-        phi_a1 = 1;
+        phi_a1 = true;
         if (((this->unk_21C >= this->unk_218) && (this->unk_220 > 0)) ||
             ((this->unk_21C <= 0) && (this->unk_220 < 0))) {
             temp_v1 = this->unk_224 + this->unk_218;
@@ -108,7 +108,7 @@ void func_80AB1FDC(DmChar09* this, PlayState* play) {
                 this->unk_21C = 0;
                 this->unk_220 = 1;
             } else {
-                phi_a1 = 0;
+                phi_a1 = false;
                 this->actionFunc = func_80AB2268;
             }
         }
@@ -132,7 +132,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
     s32 pathnum;
     u8 csIndex = 0;
 
-    if (!(this->actor.params & 0xF)) {
+    if (!DMCHAR09_GET_F(&this->actor)) {
         if (play->csCtx.currentCsIndex == 1) {
             csIndex = 1;
         }
@@ -160,7 +160,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
             }
 
             if (play->csCtx.actorActions[actionIndex]->action >= 2) {
-                pathnum = (this->actor.params >> 4) & 0xF;
+                pathnum = DMCHAR09_GET_PATH(&this->actor);
                 path = &play->setupPathList[pathnum];
 
                 for (i = 0; i < action; i++) {
@@ -202,7 +202,7 @@ void DmChar09_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     func_80AB2268(this, play);
     func_80AB24BC(this, play);
-    if ((play->csCtx.state != 0) && (this->unk_22E) && (this->actor.params & 0x100)) {
+    if ((play->csCtx.state != 0) && (this->unk_22E) && DMCHAR09_GET_100(thisx)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK + SFX_FLAG);
     }
 }
@@ -211,7 +211,7 @@ s32 DmChar09_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
     DmChar09* this = THIS;
 
     Matrix_Translate(this->unk_204, this->unk_208, this->unk_20C, MTXMODE_APPLY);
-    return 0;
+    return false;
 }
 
 void DmChar09_Draw(Actor* thisx, PlayState* play) {
