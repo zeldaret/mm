@@ -7,8 +7,7 @@ struct OceffWipe7;
 
 typedef struct OceffWipe7 {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ s16 counter;                         /* inferred */
-    /* 0x146 */ char pad146[2];
+    /* 0x144 */ s16 counter;
 } OceffWipe7; // size = 0x148
 
 extern const ActorInit Oceff_Wipe7_InitVars;

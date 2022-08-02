@@ -15,7 +15,6 @@ void OceffWipe7_Destroy(Actor* thisx, PlayState* play);
 void OceffWipe7_Update(Actor* thisx, PlayState* play);
 void OceffWipe7_Draw(Actor* thisx, PlayState* play);
 
-#if 1
 const ActorInit Oceff_Wipe7_InitVars = {
     ACTOR_OCEFF_WIPE7,
     ACTORCAT_ITEMACTION,
@@ -28,42 +27,35 @@ const ActorInit Oceff_Wipe7_InitVars = {
     (ActorFunc)OceffWipe7_Draw,
 };
 
-#endif
-
 #include "assets/overlays/ovl_Oceff_Wipe7/ovl_Oceff_Wipe7.c"
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe7/OceffWipe7_Init.s")
+s32 D_80BCEB10;
 
-void OceffWipe7_Init(Actor *thisx, PlayState *play) {
-    OceffWipe7 *this = THIS;
+void OceffWipe7_Init(Actor* thisx, PlayState* play) {
+    OceffWipe7* this = THIS;
 
     Actor_SetScale(&this->actor, 1.0f);
     this->counter = 0;
     this->actor.world.pos = GET_ACTIVE_CAM(play)->eye;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe7/OceffWipe7_Destroy.s")
+void OceffWipe7_Destroy(Actor* thisx, PlayState* play) {
+    OceffWipe7* this = THIS;
 
-void OceffWipe7_Destroy(Actor *thisx, PlayState *play) {
-    OceffWipe7 *this = THIS;
     func_80115D5C(&play->state);
     play->msgCtx.unk120B0 = 0;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe7/OceffWipe7_Update.s")
-
-void OceffWipe7_Update(Actor *thisx, PlayState *play) {
-    OceffWipe7 *this = THIS;
+void OceffWipe7_Update(Actor* thisx, PlayState* play) {
+    OceffWipe7* this = THIS;
 
     this->actor.world.pos = GET_ACTIVE_CAM(play)->eye;
-    if (this->counter < 0x64) {
+    if (this->counter < 100) {
         this->counter++;
     } else {
         Actor_MarkForDeath(&this->actor);
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe7/OceffWipe7_Draw.s")
 
 void OceffWipe7_Draw(Actor* thisx, PlayState* play) {
     OceffWipe7* this = THIS;
@@ -92,7 +84,7 @@ void OceffWipe7_Draw(Actor* thisx, PlayState* play) {
         alpha = 255;
     }
 
-    for (i = 1; i < 22; i += 2) {
+    for (i = 1; i < ARRAY_COUNT(gOceff7Vtx); i += 2) {
         gOceff7Vtx[i].v.cn[3] = alpha;
     }
 
