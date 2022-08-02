@@ -29,23 +29,23 @@ const ActorInit Oceff_Wipe_InitVars = {
 
 s32 D_80977200;
 
-void OceffWipe_Init(Actor *thisx, PlayState *play) {
-    OceffWipe *this = THIS;
+void OceffWipe_Init(Actor* thisx, PlayState* play) {
+    OceffWipe* this = THIS;
 
     Actor_SetScale(&this->actor, 0.1f);
     this->counter = 0;
     this->actor.world.pos = GET_ACTIVE_CAM(play)->eye;
 }
 
-void OceffWipe_Destroy(Actor *thisx, PlayState *play) {
-    OceffWipe *this = THIS;
+void OceffWipe_Destroy(Actor* thisx, PlayState* play) {
+    OceffWipe* this = THIS;
 
     func_80115D5C(&play->state);
     play->msgCtx.unk120B0 = 0;
 }
 
-void OceffWipe_Update(Actor *thisx, PlayState *play) {
-    OceffWipe *this = THIS;
+void OceffWipe_Update(Actor* thisx, PlayState* play) {
+    OceffWipe* this = THIS;
 
     this->actor.world.pos = GET_ACTIVE_CAM(play)->eye;
     if (this->counter < 100) {
@@ -108,8 +108,7 @@ void OceffWipe_Draw(Actor* thisx, PlayState* play) {
     Matrix_RotateXS(0x708, MTXMODE_APPLY);
     Matrix_Translate(0.0f, 0.0f, -z, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     if (this->actor.params != OCEFF_WIPE_ZL) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 170, 255, 255, 255);
