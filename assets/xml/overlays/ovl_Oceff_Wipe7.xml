@@ -1,0 +1,9 @@
+<Root>
+    <File Name="ovl_Oceff_Wipe7" BaseAddress="0x80BCDCB0" RangeStart="0xB30" RangeEnd="0xDB8">
+        <TextureAnimation Name="ovl_Oceff_Wipe7_Matanimheader_000B38" Offset="0xB38" />
+        <Array Name="gOceff7Vtx" Count="22" Offset="0xB40">
+            <Vtx/>
+        </Array>
+        <DList Name="gOceff7DL" Offset="0xCA0"/>
+    </File>
+</Root>
