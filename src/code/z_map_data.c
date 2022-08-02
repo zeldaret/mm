@@ -7,17 +7,13 @@ extern s32 D_801BF15C[5];
 
 extern T_801BF170 D_801BF170[];
 
-typedef struct {
-    char unk0[4];
-} T_801BED40; //size 0x04
-
-extern T_801BED40 D_801BED40[];
+extern Color_RGBA8 D_801BED40[];
 
 extern s32 D_801BF3B4[];
 extern s32 D_801BEFC8[];
 
-void func_801094A0(s32 arg0, T_801BED40* arg1) {
-    *arg1 = D_801BED40[arg0];
+void func_801094A0(s32 arg0, Color_RGBA8* color) {
+    *color = D_801BED40[arg0];
 }
 
 void func_801094C8(s32 arg0, s32 *arg1, s32 *arg2) {

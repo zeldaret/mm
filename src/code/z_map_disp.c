@@ -1,7 +1,6 @@
 #include "global.h"
 #include "z64map.h"
 
-void func_801031D0(PlayState* play, s32, s32, s32, s32, f32);
 void func_80103090(MinimapEntry*, s32*, s32*);
 void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot);
 void func_80106644(PlayState* play, s32 x, s32 z, s32 rot);
@@ -97,7 +96,70 @@ void func_801030F4(MinimapEntry* arg0, s32* arg1, s32* arg2) {
     }
 }
 
+void func_801098A0(u16, s32*);
+s32 func_80109908(u16);
+
+#ifdef NON_MATCHING
+// https://decomp.me/scratch/XPZfI
+void func_801031D0(PlayState* play, TexturePtr arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5) {
+    MinimapEntry* spCC;
+    s32 spC8;
+    s32 spC4;
+    s16 var_a0_4;
+    s16 var_a3;
+    s32 var_t0;
+    s32 var_t1;
+    s32 var_v1_4;
+    s32 var_v1_5;
+    Color_RGBA8 spAC;
+    s32 spA8;
+
+    spCC = &D_801BEBB8.unk0->entry[arg4];
+    if ((spCC->unk0 != 0xFFFF) && (arg1 != 0)) {
+        func_80103090(spCC, &spC8, &spC4);
+        OPEN_DISPS(play->state.gfxCtx);
+        func_8012C654(play->state.gfxCtx);
+        func_801094A0(func_80109908(spCC->unk0), &spAC);
+        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, spAC.r, spAC.g, spAC.b, (s32)(play->interfaceCtx.minimapAlpha * arg5 * spAC.a / 255.0f));
+        func_801098A0(spCC->unk0, &spA8);
+        switch (spA8) {
+        case 1:
+            gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+            gDPLoadTextureBlock_4b(OVERLAY_DISP++, arg1, G_IM_FMT_IA, spC8, spC4, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK , G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            break;
+        case 3:
+            gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0);
+            gDPLoadTextureBlock_4b(OVERLAY_DISP++, arg1, G_IM_FMT_I, spC8, spC4, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK , G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            break;
+        default:
+        case 0:
+            gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+            gDPLoadTextureBlock_4b(OVERLAY_DISP++, arg1, G_IM_FMT_I, spC8, spC4, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK , G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            break;
+        }
+
+        var_t1 = (spCC->unk8 & 1) ? (spC8 - 1) << 5 : 0;
+        var_t0 = (spCC->unk8 & 2) ? 0 : (spC4 - 1) << 5;
+
+        var_v1_4 = (spCC->unk8 & 1) ? -1 : 1;
+        var_a3 = var_v1_4 << 0xA;
+        var_v1_5 = (spCC->unk8 & 2) ? 1 : -1;
+
+        if ((spCC->unk8 & 1) != 0) {
+            var_a3 = var_a3 & 0xFFFF;
+        }
+        if ((spCC->unk8 & 2) != 0) {
+            var_a0_4 = var_v1_5 << 0xA;
+        } else {
+            var_a0_4 = (var_v1_5 << 0xA) & 0xFFFF;
+        }
+        gSPTextureRectangle(OVERLAY_DISP++, arg2 << 2, arg3 << 2, (spC8 + arg2) << 2, (arg3 + spC4) << 2, G_TX_RENDERTILE, var_t1, var_t0, var_a3, var_a0_4);
+        CLOSE_DISPS(play->state.gfxCtx);
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_801031D0.s")
+#endif
 
 s32 func_801039EC(PlayState *play) {
     if (play->sceneNum == SCENE_35TAKI) {
@@ -114,6 +176,7 @@ s32 func_80103A10(PlayState* play) {
 }
 
 #ifdef NON_MATCHING
+// https://decomp.me/scratch/TR5Jq
 void func_80103A58(PlayState *play, Actor *actor) {
     MinimapEntry *spDC;
     s32 spD8;
@@ -245,6 +308,7 @@ void func_8010439C(PlayState *play) {
 }
 
 #ifdef NON_MATCHING
+// https://decomp.me/scratch/vbnTA
 void func_801045AC(PlayState* play, Actor* actor) { //4729
     MinimapEntry* sp7C;
     s32 sp78;
@@ -428,6 +492,7 @@ s32 func_80105328(s32 arg0) {
 }
 
 #ifdef NON_MATCHING
+// https://decomp.me/scratch/F3QhH
 void func_8010534C(PlayState* play) {
     T_801F53B0* var_s0;
     s16 temp_a0;
@@ -612,21 +677,22 @@ extern s32 D_801F5834;
     | (a)) \
 
 #ifdef NON_MATCHING
+// https://decomp.me/scratch/3cGkW
 void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5, s32 arg6) {
     s32 var_a0;
-    s32 var_a0_2;
-    s32 var_a0_3;
-    s32 var_a0_4;
     s32 var_a1_2;
     s32 var_a1_4;
     s32 var_a1_5;
-    s32 var_s2;
     s32 var_v1;
-    s32 var_v1_2;
-    s32 var_v1_3;
+    s32 var_s2;
     TexturePtr temp_s1;
+    s32 temp1;
+    s32 temp2;
 
-    D_801BECC4[1] = COLOR16(0, ((D_801F5834 * -120.0f) / 40.0f) + 200.0f, ((D_801F5834 * 115.0f) / 40.0f) + 140.0f, 1);
+    temp1 = ((D_801F5834 * -120.0f / 40.0f) + 200.0f) * 31.0f / 255.0f;
+    temp2 = ((D_801F5834 * 115.0f / 40.0f) + 140.0f) * 31.0f / 255.0f;
+
+    D_801BECC4[1] = (temp1 << 6) | (temp2 << 1) | 1; //COLOR16(0, ((D_801F5834 * -120.0f) / 40.0f) + 200.0f, ((D_801F5834 * 115.0f) / 40.0f) + 140.0f, 1);
     //  (
     //     0 << 11
     //     | ((s32) (((((D_801F5834 * -120.0f) / 40.0f) + 200.0f) * 31.0f) / 255.0f) << 6) 
@@ -659,6 +725,7 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
         s32 sp110;
         s32 sp10C;
         MinimapEntry* sp108;
+        s32 pad104;
         s32 sp100;
         s32 spFC;
         s32 spF8;
@@ -666,10 +733,13 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
         s32 spF0;
         s32 spEC;
         s32 spE8;
+        s32 padE4;
+        s32 padE0;
     
         sp108 = &D_801BEBB8.unk0->entry[var_s2];
         if ((sp108->unk0 != 0xFFFF) && (sp108->unk0 < 0x162)) {
-            if ((D_801BEBB8.unk42 >= D_801BEBB8.unk3C[var_s2]) && ((D_801BEBB8.unk3C[var_s2] + ((sp108->unk8 >> 2) & 7)) >= D_801BEBB8.unk42)) {
+            if ((D_801BEBB8.unk42 >= D_801BEBB8.unk3C[var_s2]) 
+            && ((D_801BEBB8.unk3C[var_s2] + ((sp108->unk8 >> 2) & 7)) >= D_801BEBB8.unk42)) {
                 temp_s1 = D_801F57B4[var_s2];
                 if (temp_s1 != NULL) {
                     spE8 = func_80109BA0(sp108->unk0);
@@ -695,8 +765,9 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
                             spFC = 0;
                             spF4 = 0x400;
                         }
-                        spF0 = (s32) (((((f32) sp108->unk2 - (f32) D_801BEBB8.unk38) * arg5) - (f32) sp110) + (f32) ((arg3 / 2) + arg1));
-                        spEC = (s32) (((((f32) sp108->unk6 - (f32) D_801BEBB8.unk3A) * arg5) - (f32) sp10C) + (f32) ((arg4 / 2) + arg2));
+                        spF0 = ((sp108->unk2 - (f32) D_801BEBB8.unk38) * arg5 - sp110) + ((arg3 / 2) + arg1);
+                        spEC = ((sp108->unk6 - (f32) D_801BEBB8.unk3A) * arg5 - sp10C) + ((arg4 / 2) + arg2);
+
                         if (var_s2 == play->roomCtx.currRoom.num) {
                             if (Map_IsInBossArea(play) != 0) {
                                 gDPLoadTextureBlock_4b(POLY_OPA_DISP++, temp_s1, G_IM_FMT_CI, sp118, sp114, 1, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK , G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);

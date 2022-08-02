@@ -72,9 +72,9 @@ typedef struct {
     /* 0x0A */ s16 unkA;
     /* 0x0C */ s16 unkC;
     /* 0x0E */ s16 unkE;
-    /* 0x10 */ s32 unk10;
+    /* 0x10 */ TexturePtr unk10;
     /* 0x14 */ s32 unk14; //unk4 same type as unk14
-    /* 0x18 */ s32 unk18;
+    /* 0x18 */ TexturePtr unk18;
     /* 0x1C */ s16 unk1C; //same as 0C
     /* 0x1E */ s16 unk1E; //same as 0E
     /* 0x20 */ s32 unk20;

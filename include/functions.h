@@ -1728,7 +1728,7 @@ void func_80106644(PlayState* play, s32 x, s32 z, s32 rot);
 s32 func_80109124(s16 arg0);
 // void func_801091F0(void);
 // void func_80109428(void);
-// void func_801094A0(void);
+void func_801094A0(s32 arg0, Color_RGBA8* color);
 // void func_801094C8(void);
 // void func_801094F8(void);
 // void func_80109528(void);
