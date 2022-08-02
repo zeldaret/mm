@@ -584,6 +584,8 @@ s32 func_8082ECCC(Player* this) {
     return this->stateFlags1 & PLAYER_STATE1_1000000;
 }
 
+#if 0
+// OoT:
 typedef struct GetItemEntry {
     /* 0x00 */ u8 itemId;
     /* 0x01 */ u8 field; // various bit-packed data
@@ -591,18 +593,19 @@ typedef struct GetItemEntry {
     /* 0x03 */ u8 textId;
     /* 0x04 */ u16 objectId;
 } GetItemEntry; // size = 0x06
+#endif
 
-typedef struct {
-    /* 0x0 */ u8 unk_0;
+typedef struct GetItemEntry {
+    /* 0x0 */ u8 itemId;
     /* 0x1 */ u8 unk_1;
     /* 0x2 */ s8 unk_2;
-    /* 0x3 */ u8 unk_3;
+    /* 0x3 */ u8 textId;
     /* 0x4 */ u16 unk_4;
-} struct_8085C3F4; // size = 0x6
+} GetItemEntry; // size = 0x6
 
-extern struct_8085C3F4 D_8085C3F4[GI_MAX - 1];
+extern GetItemEntry sGetItemTable[GI_MAX - 1];
 #if 0
-struct_8085C3F4 D_8085C3F4[0xB9] = {
+GetItemEntry sGetItemTable[0xB9] = {
     { 0x84, 0, 0xB0, -0x3C, 1, 0x3F },
     { 0x85, 1, 0xAF, 2, 1, 0x3F },
     { 0x86, 2, 0xAE, 3, 1, 0x3F },
@@ -792,7 +795,7 @@ struct_8085C3F4 D_8085C3F4[0xB9] = {
 #endif
 
 void func_8082ECE0(Player* this) {
-    struct_8085C3F4* temp = &D_8085C3F4[this->getItemId - 1];
+    GetItemEntry* temp = &sGetItemTable[this->getItemId - 1];
 
     this->unk_B2A = ABS_ALT(temp->unk_2);
 }
@@ -6013,11 +6016,11 @@ s32 func_8083CF68(PlayState* play, Player* this) {
     return false;
 }
 
-void func_8083D168(PlayState* play, Player* this, struct_8085C3F4* arg2) {
+void func_8083D168(PlayState* play, Player* this, GetItemEntry* arg2) {
     s32 temp_v1 = arg2->unk_1 & 0x1F;
 
     if ((arg2->unk_1 & 0x80) || ((Item_DropCollectible(play, &this->actor.world.pos, temp_v1 | 0x8000), (temp_v1 != 4)) && (temp_v1 != 8) && (temp_v1 != 9) && (temp_v1 != 0xA) && (temp_v1 != 0) && (temp_v1 != 1) && (temp_v1 != 2) && (temp_v1 != 0x14) && (temp_v1 != 0x13))) {
-        Item_Give(play, (u8) arg2->unk_0);
+        Item_Give(play, arg2->itemId);
         play_sound((this->getItemId < 0) ? NA_SE_SY_GET_BOXITEM : NA_SE_SY_GET_ITEM);
     }
 }
@@ -6027,14 +6030,14 @@ void func_8083D168(PlayState* play, Player* this, struct_8085C3F4* arg2) {
 s32 func_8083D23C(Player* this, PlayState* play) {
     Actor* sp2C;
     LinkAnimationHeader* var_a2;
-    struct_8085C3F4* var_v1;
+    GetItemEntry* var_v1;
 
     if (gSaveContext.save.playerData.health != 0) {
         sp2C = this->interactRangeActor;
         if (sp2C != NULL) {
             if (this->getItemId > 0) {
                 if (this->getItemId < 0xBA) {
-                    var_v1 = &D_8085C3F4[this->getItemId-1];
+                    var_v1 = &sGetItemTable[this->getItemId-1];
                     sp2C->parent = &this->actor;
                     if ((Item_CheckObtainability(var_v1->unk_0) == 0xFF) || (var_v1->unk_4 == 0xB0)) {
                         func_8082DCA0(play, this);
@@ -6066,14 +6069,14 @@ s32 func_8083D23C(Player* this, PlayState* play) {
                         if (~(D_80862B44->press.button | 0xFFFF7FFF) == 0) {
                             EnBox* chest = (EnBox*)sp2C;
 
-                            var_v1 = &D_8085C3F4[-this->getItemId-1];
+                            var_v1 = &sGetItemTable[-this->getItemId-1];
                             if ((var_v1->unk_0 != 0xFF) && (((Item_CheckObtainability(var_v1->unk_0) == 0xFF) && (var_v1->unk_1 & 0x40)) || (((Item_CheckObtainability(var_v1->unk_0) != 0xFF)) && (var_v1->unk_1 & 0x20)))) {
                                 if (var_v1->unk_0 == 0x44) {
                                     this->getItemId = -0xA;
                                 } else {
                                     this->getItemId = -2;
                                 }
-                                var_v1 = &D_8085C3F4[-this->getItemId-1];
+                                var_v1 = &sGetItemTable[-this->getItemId-1];
                             }
 
                             func_80832558(play, this, func_80837C78);
@@ -7874,8 +7877,31 @@ void func_808442D8(PlayState* play, Player* this) {
     }
 }
 
-void func_808445C4(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808445C4.s")
+void func_808445C4(PlayState* play, Player* this) {
+    this->shockTimer--;
+    this->unk_B66 += this->shockTimer;
+    if (this->unk_B66 > 20) {
+        Vec3f pos;
+        Vec3f* bodyPartsPos;
+        s32 scale;
+        s32 randIndex;
+
+        this->unk_B66 -= 20;
+        scale = this->shockTimer * 2;
+        if (scale > 40) {
+            scale = 40;
+        }
+
+        randIndex = Rand_ZeroFloat(PLAYER_BODYPART_MAX - 0.1f);
+        bodyPartsPos = randIndex + this->bodyPartsPos;
+
+        pos.x = (randPlusMinusPoint5Scaled(5.0f) + bodyPartsPos->x) - this->actor.world.pos.x;
+        pos.y = (randPlusMinusPoint5Scaled(5.0f) + bodyPartsPos->y) - this->actor.world.pos.y;
+        pos.z = (randPlusMinusPoint5Scaled(5.0f) + bodyPartsPos->z) - this->actor.world.pos.z;
+        EffectSsFhgFlash_SpawnShock(play, &this->actor, &pos, scale, 1);
+        func_800B8F98(&this->actor, NA_SE_PL_SPARK - SFX_FLAG);
+    }
+}
 
 void func_808446F4(PlayState* play, Player* this) {
     f32 var_fv0;
@@ -8934,8 +8960,33 @@ void Player_Destroy(Actor* thisx, PlayState* play) {
 s32 func_80847190(PlayState* play, Player* this, s32 arg2);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847190.s")
 
+#ifdef NON_EQUIVALENT
+// float fun
+void func_8084748C(Player* this, f32* arg1, f32 arg2, s16 arg3) {
+    f32 temp_fv0;
+    f32 temp_fv1;
+    f32 var_fv1;
+
+    temp_fv1 = this->skelAnime.curFrame - 10.0f;
+    temp_fv0 = (gGameInfo->data[0x2D] / 100.0f) * 0.8f;
+    if (temp_fv0 < *arg1) {
+        *arg1 = temp_fv0;
+    }
+
+    if ((temp_fv1 > 0.0f) && (temp_fv1 < 16.0f)) {
+        var_fv1 = fabsf(temp_fv1) * 0.5f;
+    } else {
+        arg2 = 0.0f;
+        var_fv1 = 0.0f;
+    }
+
+    Math_AsymStepToF(arg1, arg2 * 0.8f, var_fv1, (fabsf(*arg1) * 0.02f) + 0.05f);
+    Math_ScaledStepToS(&this->currentYaw, arg3, 0x640);
+}
+#else
 void func_8084748C(Player* this, f32* arg1, f32 arg2, s16 arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084748C.s")
+#endif
 
 void func_808475B4(Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808475B4.s")
@@ -9009,8 +9060,38 @@ void func_80847A50(Player* this) {
                   ((this->unk_AE7 != 0) ? NA_SE_PL_WALK_METAL1 : NA_SE_PL_WALK_LADDER) + this->ageProperties->unk_94);
 }
 
-s32 func_80847A94(PlayState* play, Player* this, s32 arg2, f32* arg3);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847A94.s")
+extern Vec3f D_8085D588[];
+extern Vec3f D_8085D5A0[];
+extern Vec3f D_8085D5B8[];
+
+// related to mounting/unmounting the horse
+s32 func_80847A94(PlayState* play, Player* this, s32 arg2, f32* arg3) {
+    Actor* rideActor = this->rideActor;
+    f32 sp60;
+    f32 sp5C;
+    Vec3f sp50;
+    Vec3f sp44;
+    CollisionPoly* sp40;
+    CollisionPoly* sp3C;
+    s32 sp38;
+    s32 sp34;
+
+    sp60 = rideActor->world.pos.y + 20.0f;
+    sp5C = rideActor->world.pos.y - 20.0f;
+
+    *arg3 = func_80835CD8(play, this, &D_8085D588[arg2], &sp50, &sp3C, &sp34);
+    if ((sp5C < *arg3) && (*arg3 < sp60)) {
+        if (!func_80835D58(play, this, &D_8085D5A0[arg2], &sp40, &sp38, &sp44)) {
+            if (!func_80835D58(play, this, &D_8085D5B8[arg2], &sp40, &sp38, &sp44)) {
+                this->actor.floorPoly = sp3C;
+                this->actor.floorBgId = sp38;
+                this->unk_B72 = SurfaceType_GetSfx(&play->colCtx, sp3C, sp34);
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
 s32 func_80847BF0(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847BF0.s")
@@ -9067,8 +9148,16 @@ void func_80847F1C(Player* this) {
     }
 }
 
-void func_80847FF8(Player* this, f32* arg1, f32 arg2, UNK_TYPE arg3);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847FF8.s")
+extern struct_8082E224_arg1 D_8085D5DC;
+#if 0
+struct_8082E224_arg1 D_8085D5DC = { 0x839, -0x800 };
+#endif
+
+void func_80847FF8(Player* this, f32* arg1, f32 arg2, s16 arg3) {
+    func_8084748C(this, arg1, arg2, arg3);
+    func_8082E224(this, &D_8085D5DC);
+    func_80847F1C(this);
+}
 
 void func_80848048(PlayState* play, Player* this) {
     func_80831494(play, this, func_80851588, 0);
@@ -9112,8 +9201,14 @@ s32 func_80848094(PlayState* play, Player* this, f32* arg2, s16* arg3) {
     return false;
 }
 
-void func_808481CC(PlayState* play, Player* this, f32 arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808481CC.s")
+void func_808481CC(PlayState* play, Player* this, f32 arg2) {
+    f32 sp2C;
+    s16 sp2A;
+
+    func_80832F78(this, &sp2C, &sp2A, 0.0f, play);
+    func_8084748C(this, &this->linearVelocity, sp2C / 2.0f, sp2A);
+    func_8084748C(this, &this->actor.velocity.y, arg2, this->currentYaw);
+}
 
 void func_80848250(PlayState* play, Player* this) {
     this->unk_B2A = 0;
@@ -9129,8 +9224,57 @@ void func_80848294(PlayState* play, Player* this) {
     this->currentYaw = this->actor.shape.rot.y;
 }
 
-s32 func_808482E0(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808482E0.s")
+// Player_GetItem?
+s32 func_808482E0(PlayState* play, Player* this) {
+    if (this->getItemId == GI_NONE) {
+        return true;
+    }
+
+    if (this->unk_AE7 == 0) {
+        GetItemEntry* giEntry = &sGetItemTable[this->getItemId - 1];
+
+        this->unk_AE7 = 1;
+        Message_StartTextbox(play, giEntry->textId, &this->actor);
+        Item_Give(play, giEntry->itemId);
+
+        if ((this->getItemId >= GI_MASK_DEKU) && (this->getItemId <= GI_MASK_KAFEIS_MASK)) {
+            func_801A3098(NA_BGM_GET_NEW_MASK);
+        } else if (((this->getItemId >= GI_RUPEE_GREEN) && (this->getItemId <= GI_RUPEE_10)) || (this->getItemId == GI_RECOVERY_HEART)) {
+            play_sound(NA_SE_SY_GET_BOXITEM);
+        } else {
+            s32 seqId;
+
+            if ((this->getItemId == GI_HEART_CONTAINER) || ((this->getItemId == GI_HEART_PIECE) && EQ_MAX_QUEST_HEART_PIECE_COUNT)) {
+                seqId = NA_BGM_GET_HEART | 0x900;
+            } else {
+                s32 var_v1;
+
+                if ((this->getItemId == GI_HEART_PIECE) || ((this->getItemId >= GI_RUPEE_PURPLE) && (this->getItemId <= GI_RUPEE_HUGE))) {
+                    var_v1 = NA_BGM_GET_SMALL_ITEM;
+                } else {
+                    var_v1 = NA_BGM_GET_ITEM | 0x900;
+                }
+                seqId = var_v1;
+            }
+
+            func_801A3098(seqId);
+        }
+    } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
+        if (this->getItemId == GI_OCARINA) {
+            // zelda teaching song of time cs?
+            play->nextEntranceIndex = 0x1C00;
+            gSaveContext.nextCutsceneIndex = 0xFFF2;
+            play->transitionTrigger = 0x14;
+            play->transitionType = 3;
+            gSaveContext.nextTransitionType = 3;
+            this->stateFlags1 &= ~PLAYER_STATE1_20000000;
+            func_8085B28C(play, NULL, 7);
+        }
+        this->getItemId = GI_NONE;
+    }
+
+    return false;
+}
 
 extern struct_8082E224_arg1 D_8085D5DC;
 extern struct_8082E224_arg1 D_8085D5E0;

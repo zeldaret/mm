@@ -996,7 +996,7 @@ ColliderQuadInit D_8085C394 = {
 f32 D_8085C3E4 = 1.0f;
 f32 D_8085C3E8 = 1.0f;
 u16 D_8085C3EC[4] = { 0x680F, 0x680E, 0x6811, 0x6808 };
-struct_8085C3F4 D_8085C3F4[0xB9] = {
+struct_8085C3F4 sGetItemTable[0xB9] = {
     { 0x84, 0, 0xB0, 0xC4, 0x13F },
     { 0x85, 1, 0xAF, 2, 0x13F },
     { 0x86, 2, 0xAE, 3, 0x13F },
@@ -2456,7 +2456,7 @@ s32 func_8082ECCC(Player* this) {
 void func_8082ECE0(Player* this) {
     s8 temp_v1;
 
-    temp_v1 = ((this->getItemId * 6) - 6 + D_8085C3F4)->unk_2;
+    temp_v1 = ((this->getItemId * 6) - 6 + sGetItemTable)->unk_2;
     if (temp_v1 < 0) {
         this->unk_B2A = -temp_v1;
         return;
@@ -8588,7 +8588,7 @@ s32 func_8083D23C(Player* this, PlayState* play) {
             temp_v0 = this->getItemId;
             if (temp_v0 > 0) {
                 if (temp_v0 < 0xBA) {
-                    temp_a2 = (temp_v0 * 6) - 6 + D_8085C3F4;
+                    temp_a2 = (temp_v0 * 6) - 6 + sGetItemTable;
                     temp_t7->parent = &this->actor;
                     sp28 = temp_a2;
                     if ((Item_CheckObtainability(temp_a2->unk_0) == 0xFF) || ((s16) temp_a2->unk_4 == 0xB0)) {
@@ -8620,7 +8620,7 @@ s32 func_8083D23C(Player* this, PlayState* play) {
                 if (!(temp_v1 & 0x800)) {
                     if (temp_v0 != 0) {
                         if (~(D_80862B44->press.button | 0xFFFF7FFF) == 0) {
-                            var_v1 = (temp_v0 * -6) - 6 + D_8085C3F4;
+                            var_v1 = (temp_v0 * -6) - 6 + sGetItemTable;
                             temp_a0 = var_v1->unk_0;
                             if ((temp_a0 != 0xFF) && (((sp24 = var_v1, temp_v1_2 = var_v1, (Item_CheckObtainability(temp_a0) == 0xFF)) && (temp_v1_2->unk_1 & 0x40)) || ((sp24 = temp_v1_2, var_v1 = temp_v1_2, (Item_CheckObtainability(temp_v1_2->unk_0) != 0xFF)) && (var_v1->unk_1 & 0x20)))) {
                                 if (temp_v1_2->unk_0 == 0x44) {
@@ -8628,7 +8628,7 @@ s32 func_8083D23C(Player* this, PlayState* play) {
                                 } else {
                                     this->getItemId = -2;
                                 }
-                                var_v1 = (this->getItemId * -6) - 6 + D_8085C3F4;
+                                var_v1 = (this->getItemId * -6) - 6 + sGetItemTable;
                             }
                             sp24 = var_v1;
                             func_80832558(play, this, func_80837C78);
@@ -12969,7 +12969,7 @@ s32 func_808482E0(PlayState* play, Player* this) {
         return 1;
     }
     if (this->unk_AE7 == 0) {
-        temp_v0 = (temp_v1 * 6) - 6 + D_8085C3F4;
+        temp_v0 = (temp_v1 * 6) - 6 + sGetItemTable;
         this->unk_AE7 = 1;
         sp1C = temp_v0;
         Message_StartTextbox(play, (u16) temp_v0->unk_3, &this->actor);
@@ -17788,7 +17788,7 @@ void func_80853A5C(Player* arg0, PlayState* arg1) {
             }
             func_8085B460(arg1, temp_a1_2);
         } else {
-            sp28 = (*(&D_8085D1A4 + temp_v0) * 6) - 6 + D_8085C3F4;
+            sp28 = (*(&D_8085D1A4 + temp_v0) * 6) - 6 + sGetItemTable;
             if (Player_ActionToBottle(arg0, (enum PlayerActionParam) arg0->heldItemActionParam) < 0) {
                 temp_v0_3 = sp28->unk_2;
                 if (temp_v0_3 < 0) {
@@ -17815,7 +17815,7 @@ void func_80853A5C(Player* arg0, PlayState* arg1) {
         if ((Player_ActionToBottle(arg0, (enum PlayerActionParam) arg0->heldItemActionParam) >= 0) && (LinkAnimation_OnFrame(sp20, 36.0f) != 0)) {
             Player_SetModels(arg0, PLAYER_MODELGROUP_BOTTLE);
         } else if (LinkAnimation_OnFrame(sp20, 2.0f) != 0) {
-            func_80838830(arg0, ((*(&D_8085D1A4 + arg0->heldItemActionParam) * 6) - 6 + D_8085C3F4)->unk_4);
+            func_80838830(arg0, ((*(&D_8085D1A4 + arg0->heldItemActionParam) * 6) - 6 + sGetItemTable)->unk_4);
         }
         func_8082E224(arg0, &D_8085D840);
     }
