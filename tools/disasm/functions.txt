@@ -9866,7 +9866,7 @@
     0x80A1EE1C:("ObjSpinyroll_Draw",),
     0x80A1F410:("DmHina_Init",),
     0x80A1F460:("DmHina_Destroy",),
-    0x80A1F470:("func_80A1F470",),
+    0x80A1F470:("DmHina_WaitForPlayer",),
     0x80A1F56C:("DmHina_AwaitMessageBoxClosing",),
     0x80A1F5AC:("DmHina_SetupSubCamera",),
     0x80A1F63C:("DmHina_MoveSubCamera",),

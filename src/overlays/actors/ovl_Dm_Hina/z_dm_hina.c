@@ -16,7 +16,7 @@ void DmHina_Destroy(Actor* thisx, PlayState* play);
 void DmHina_Update(Actor* thisx, PlayState* play);
 void DmHina_Draw(Actor* thisx, PlayState* play);
 
-void func_80A1F470(DmHina* this, PlayState* play);
+void DmHina_WaitForPlayer(DmHina* this, PlayState* play);
 void DmHina_AwaitMessageBoxClosing(DmHina* this, PlayState* play);
 void DmHina_SetupSubCamera(DmHina* this, PlayState* play);
 void DmHina_MoveSubCamera(DmHina* this, PlayState* play);
@@ -37,7 +37,7 @@ void DmHina_Init(Actor* thisx, PlayState* play) {
     DmHina* this = THIS;
 
     this->isVisible = true;
-    this->actionFunc = func_80A1F470;
+    this->actionFunc = DmHina_WaitForPlayer;
     this->blueWarpPosY = this->actor.world.pos.y;
     this->unk_148 = 0.0f;
     this->unk_15C = 1.0f;
@@ -49,15 +49,14 @@ void DmHina_Init(Actor* thisx, PlayState* play) {
 void DmHina_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_80A1F470(DmHina* this, PlayState* play) {
-    Player* player;
+void DmHina_WaitForPlayer(DmHina* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
-    player = GET_PLAYER(play);
     Math_SmoothStepToF(&this->unk_148, 0.6f, 0.5f, 0.05f, 0.001f);
-    this->unk_154 = Math_SinS((play->gameplayFrames * 0x708)) * 8.0f;
+    this->bob = Math_SinS((play->gameplayFrames * 1800)) * 8.0f;
     if ((player->stateFlags1 & 0x400) && (this->actor.xzDistToPlayer < 80.0f)) {
         this->isVisible = false;
-        this->unk_154 = 0.0f;
+        this->bob = 0.0f;
         this->actor.world.pos.y += 40.0f;
         this->actionFunc = DmHina_AwaitMessageBoxClosing;
     }
@@ -87,7 +86,7 @@ void DmHina_MoveSubCamera(DmHina* this, PlayState* play) {
     this->subCamEye.y = this->blueWarpPosY + 260.0f;
     this->subCamEye.z = this->actor.world.pos.z + 100.0f;
     this->subCamAt.x = this->actor.world.pos.x;
-    this->subCamAt.y = this->actor.world.pos.y + (this->unk_154 * this->unk_15C) + (40.0f * this->unk_15C);
+    this->subCamAt.y = this->actor.world.pos.y + (this->bob * this->unk_15C) + (40.0f * this->unk_15C);
     this->subCamAt.z = this->actor.world.pos.z;
     Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     Math_SmoothStepToF(&this->actor.world.pos.y, this->blueWarpPosY + 300.0f, 0.5f, 2.0f, 0.1f);
@@ -95,7 +94,7 @@ void DmHina_MoveSubCamera(DmHina* this, PlayState* play) {
         this->csState = 1;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_OC_WHITE_OUT_INTO_KYOJIN);
     }
-    Actor_PlaySfxAtPos(&this->actor, 0x219B);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MASK_RISING - SFX_FLAG);
 }
 
 void func_80A1F75C(DmHina* this, PlayState* play) {
@@ -112,7 +111,7 @@ void func_80A1F75C(DmHina* this, PlayState* play) {
             Math_SmoothStepToF(&this->scale, 1.0f, 0.4f, 0.05f, 0.001f);
             this->lightOrbAlpha = this->scale * 255.0f;
 
-            this->unk_150 = Math_SinS(play->state.frames * 0x1F40);
+            this->envColorB = Math_SinS(play->state.frames * 8000);
 
             for (i = 0; i < 3; i++) {
                 light1Color = this->scale * -255.0f;
@@ -146,10 +145,10 @@ void func_80A1F9AC(DmHina* this, PlayState* play) {
 
         func_8012C2DC(play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, (u8)(this->scale * 100.0f) + 155, this->lightOrbAlpha);
-        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, (u8)(this->unk_150 * 100.0f) + 50, 0);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, (u8)(this->envColorB * 100.0f) + 50, 0);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrb1DL);
         Matrix_Translate(this->actor.world.pos.x,
-                         this->actor.world.pos.y + (this->unk_154 * this->unk_15C) + (40.0f * this->unk_15C),
+                         this->actor.world.pos.y + (this->bob * this->unk_15C) + (40.0f * this->unk_15C),
                          this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(this->scale * 20.0f, this->scale * 20.0f, this->scale * 20.0f, MTXMODE_APPLY);
@@ -167,7 +166,7 @@ void DmHina_Draw(Actor* thisx, PlayState* play) {
 
     if (this->isVisible) {
         Matrix_Translate(this->actor.world.pos.x,
-                         this->actor.world.pos.y + (this->unk_154 * this->unk_15C) + (40.0f * this->unk_15C),
+                         this->actor.world.pos.y + (this->bob * this->unk_15C) + (40.0f * this->unk_15C),
                          this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_RotateZYX(0, play->gameplayFrames * 1000, 0, MTXMODE_APPLY);
         scale = this->unk_148 * (1.0f - this->scale) * this->unk_15C;
