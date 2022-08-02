@@ -7,6 +7,9 @@ struct EnAz;
 
 typedef void (*EnAzActionFunc)(struct EnAz*, PlayState*);
 
+#define BEAVER_GET_PARAM1(thisx) (((thisx)->params >> 8) & 0xF)
+#define BEAVER_GET_PARAM2(thisx) ((thisx)->params & 0xFF)
+
 typedef struct EnAz {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ EnAzActionFunc actionFunc;
@@ -19,7 +22,7 @@ typedef struct EnAz {
     /* 0x02FC */ s32 animIndex;
     /* 0x0300 */ ActorPathing unk_300;
     /* 0x036C */ f32 unk_36C;
-    /* 0x0370 */ char unk370[4];
+    /* 0x0370 */ UNK_TYPE1 unk370[4];
     /* 0x0374 */ u16 unk_374; // flags of some sort
     /* 0x0376 */ u16 unk_376; // flags of some sort
     /* 0x0378 */ u8 unk_378; // cutscene state?
@@ -30,18 +33,18 @@ typedef struct EnAz {
     /* 0x0382 */ s16 unk_382;
     /* 0x0384 */ s16 unk_384;
     /* 0x0388 */ struct EnAz* brother;
-    /* 0x038C */ char unk38C[0x10];
+    /* 0x038C */ UNK_TYPE1 unk38C[0x10];
     /* 0x039C */ s16 unk_39C;
     /* 0x039E */ s16 unk_39E; // some sort of rotation
-    /* 0x03A0 */ char unk3A0[4];
+    /* 0x03A0 */ UNK_TYPE1 unk3A0[4];
     /* 0x03A4 */ f32 unk_3A4;
     /* 0x03A8 */ Vec3f unk_3A8;
     /* 0x03B4 */ Vec3f unk_3B4; // translation 
     /* 0x03C0 */ s16 unk_3C0; // seems to do nothing
     /* 0x03C2 */ s16 unk_3C2;
     /* 0x03C4 */ s16 unk_3C4;
-    /* 0x03C6 */ char unk3C6[6];
-    /* 0x03CC */ s32 unk_3CC;
+    /* 0x03C6 */ UNK_TYPE1 unk3C6[6];
+    /* 0x03CC */ s32 getItemId;
     /* 0x03D0 */ s16 unk_3D0;
     /* 0x03D2 */ u16 unk_3D2;
     /* 0x03D4 */ s16 unk_3D4;

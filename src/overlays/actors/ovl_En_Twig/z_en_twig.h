@@ -7,17 +7,21 @@ struct EnTwig;
 
 typedef void (*EnTwigActionFunc)(struct EnTwig*, PlayState*);
 
+#define RACERING_GET_PARAM1(thisx) ((thisx)->params & 0xF)
+#define RACERING_GET_PARAM2(thisx) (((thisx)->params >> 4) & 0x1F)
+#define RACERING_GET_PARAM3(thisx) (((thisx)->params >> 9) & 0x7F)
+
 typedef struct EnTwig {
     /* 0x0000 */ DynaPolyActor dyna;
     /* 0x015C */ EnTwigActionFunc actionFunc;
     /* 0x0160 */ s32 unk_160;
-    /* 0x0160 */ char unk164[8];
+    /* 0x0160 */ UNK_TYPE1 unk164[8];
     /* 0x016C */ s32 unk_16C;
     /* 0x0170 */ f32 unk_170;
     /* 0x0174 */ f32 unk_174;
     /* 0x0178 */ s16 unk_178;
     /* 0x017A */ u16 unk_17A;
-    /* 0x017C */ char unk17C[4];
+    /* 0x017C */ UNK_TYPE1 unk17C[4];
     /* 0x0180 */ Vec3f unk_180;
 } EnTwig; // size = 0x18C
 

@@ -11,10 +11,6 @@
 
 #define THIS ((EnTwig*)thisx)
 
-#define GET_PARAM1(ring) ((ring)->dyna.actor.params & 0xF)
-#define GET_PARAM2(ring) (((ring)->dyna.actor.params >> 4) & 0x1F)
-#define GET_PARAM3(ring) (((ring)->dyna.actor.params >> 9) & 0x7F)
-
 void EnTwig_Init(Actor* thisx, PlayState* play);
 void EnTwig_Destroy(Actor* thisx, PlayState* play);
 void EnTwig_Update(Actor* this, PlayState* play);
@@ -51,7 +47,7 @@ static CollisionHeader* sColHeaders[] = {
     &object_twig_Colheader_0016C0,
 };
 
-static s16 sRingsHaveSpawned = 0;
+static s16 sRingsHaveSpawned = false;
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 40, ICHAIN_CONTINUE),
@@ -66,7 +62,7 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
     s32 i;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    this->unk_160 = GET_PARAM1(this);
+    this->unk_160 = RACERING_GET_PARAM1(&this->dyna.actor);
     DynaPolyActor_Init(&this->dyna, 1);
     if (sColHeaders[this->unk_160] != NULL) {
         DynaPolyActor_LoadMesh(play, &this->dyna, sColHeaders[this->unk_160]);
@@ -84,7 +80,7 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
                 }
                 sRingsHaveSpawned = true;
             }
-            if (GET_PARAM2(this) != 0) {
+            if (RACERING_GET_PARAM2(&this->dyna.actor) != 0) {
                 if (!(gSaveContext.save.weekEventReg[24] & 4)) {
                     Actor_MarkForDeath(&this->dyna.actor);
                     return;
@@ -135,7 +131,7 @@ void func_80AC0AC8(EnTwig* this, PlayState* play) {
     Plane sp4C;
     Vec3f sp40;
 
-    if (sCurrentRing == GET_PARAM3(this)) {
+    if (sCurrentRing == RACERING_GET_PARAM3(&this->dyna.actor)) {
         if (this->unk_17A == 3) {
             this->unk_17A = 0;
             this->dyna.actor.shape.rot.z += 0x2000;
@@ -144,7 +140,7 @@ void func_80AC0AC8(EnTwig* this, PlayState* play) {
         }
     }
     SubS_ConstructPlane(&this->dyna.actor.world.pos, &D_80AC10D0, &this->dyna.actor.shape.rot, &sp4C);
-    if ((sCurrentRing == GET_PARAM3(this)) &&
+    if ((sCurrentRing == RACERING_GET_PARAM3(&this->dyna.actor)) &&
         Math3D_LineSegVsPlane(sp4C.normal.x, sp4C.normal.y, sp4C.normal.z, sp4C.originDist, &this->unk_180,
                               &player->bodyPartsPos[0], &sp40, 0)) {
         if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &sp40) <= SQ(this->dyna.actor.scale.x * 0.345f * 40.0f)) {
@@ -191,10 +187,10 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
         Actor_SetScale(&this->dyna.actor, this->dyna.actor.scale.x);
     }
     if (this->dyna.actor.scale.x <= 0.0f) {
-        s32 phi_s0;
+        s32 j;
         Vec3f sp6C;
 
-        for (phi_s0 = 0; phi_s0 < 7; phi_s0++) {
+        for (j = 0; j < 7; j++) {
             sp6C.x = (Rand_Centered() * 10.0f) + this->dyna.actor.world.pos.x;
             sp6C.y = (Rand_Centered() * 10.0f) + this->dyna.actor.world.pos.y;
             sp6C.z = (Rand_Centered() * 10.0f) + this->dyna.actor.world.pos.z;
@@ -202,9 +198,9 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
                                             (s32)(Rand_ZeroOne() * 10.0f) + 20);
         }
         play_sound(NA_SE_SY_GET_ITEM);
-        play->interfaceCtx.unk_25C += -1;
-        sRingNotCollected[GET_PARAM3(this)] = true;
-        if (sCurrentRing == GET_PARAM3(this)) {
+        play->interfaceCtx.unk_25C--;
+        sRingNotCollected[RACERING_GET_PARAM3(&this->dyna.actor)] = true;
+        if (sCurrentRing == RACERING_GET_PARAM3(&this->dyna.actor)) {
             s32 i;
 
             for (i = 0; i < sRingCount; i++) {
@@ -220,7 +216,7 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
-    this->unk_170 += 0.002746582f;
+    this->unk_170 += 180.0f / 0x10000;
     this->unk_174 += 0.15f;
 }
 
