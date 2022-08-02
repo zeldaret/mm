@@ -15,7 +15,6 @@ void OceffWipe4_Destroy(Actor* thisx, PlayState* play);
 void OceffWipe4_Update(Actor* thisx, PlayState* play);
 void OceffWipe4_Draw(Actor* thisx, PlayState* play);
 
-#if 0
 const ActorInit Oceff_Wipe4_InitVars = {
     ACTOR_OCEFF_WIPE4,
     ACTORCAT_ITEMACTION,
@@ -28,12 +27,87 @@ const ActorInit Oceff_Wipe4_InitVars = {
     (ActorFunc)OceffWipe4_Draw,
 };
 
-#endif
+#include "assets/overlays/ovl_Oceff_Wipe4/ovl_Oceff_Wipe4.c"
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe4/OceffWipe4_Init.s")
+s32 D_8099E780;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe4/OceffWipe4_Destroy.s")
+void OceffWipe4_Init(Actor* thisx, PlayState* play) {
+    OceffWipe4* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe4/OceffWipe4_Update.s")
+    Actor_SetScale(&this->actor, 0.1f);
+    this->counter = 0;
+    this->actor.world.pos = GET_ACTIVE_CAM(play)->eye;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe4/OceffWipe4_Draw.s")
+void OceffWipe4_Destroy(Actor* thisx, PlayState* play) {
+    OceffWipe4* this = THIS;
+
+    func_80115D5C(&play->state);
+    play->msgCtx.unk120B0 = 0;
+}
+
+void OceffWipe4_Update(Actor* thisx, PlayState* play) {
+    OceffWipe4* this = THIS;
+
+    this->actor.world.pos = GET_ACTIVE_CAM(play)->eye;
+    if (this->counter < 50) {
+        this->counter++;
+    } else {
+        Actor_MarkForDeath(&this->actor);
+    }
+}
+
+void OceffWipe4_Draw(Actor* thisx, PlayState* play) {
+    u32 scroll = play->state.frames & 0xFFF;
+    OceffWipe4* this = THIS;
+    f32 z;
+    u8 alpha;
+    s32 pad[2];
+    Vec3f eye;
+    Vtx* vtxPtr;
+    Vec3f vec;
+
+    eye = GET_ACTIVE_CAM(play)->eye;
+    Camera_GetQuakeOffset(&vec, GET_ACTIVE_CAM(play));
+    if (this->counter < 16) {
+        z = Math_SinS(this->counter * 1024) * 1220.0f;
+    } else {
+        z = 1220.0f;
+    }
+
+    vtxPtr = sFrustumVtx;
+    if (this->counter >= 30) {
+        alpha = 12 * (50 - this->counter);
+    } else {
+        alpha = 255;
+    }
+
+    vtxPtr[1].v.cn[3] = vtxPtr[3].v.cn[3] = vtxPtr[5].v.cn[3] = vtxPtr[7].v.cn[3] = vtxPtr[9].v.cn[3] =
+        vtxPtr[11].v.cn[3] = vtxPtr[13].v.cn[3] = vtxPtr[15].v.cn[3] = vtxPtr[17].v.cn[3] = vtxPtr[19].v.cn[3] =
+            vtxPtr[21].v.cn[3] = alpha;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C2DC(play->state.gfxCtx);
+
+    Matrix_Translate(eye.x + vec.x, eye.y + vec.y, eye.z + vec.z, MTXMODE_NEW);
+    Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
+    Matrix_ReplaceRotation(&play->billboardMtxF);
+    Matrix_RotateXS(0x708, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, -z, MTXMODE_APPLY);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    if (this->actor.params == OCEFF_WIPE4_UNUSED) {
+        gSPDisplayList(POLY_XLU_DISP++, sUnusedMaterialDL);
+    } else {
+        gSPDisplayList(POLY_XLU_DISP++, sMaterialDL);
+    }
+
+    gSPDisplayList(POLY_XLU_DISP++, sMaterial2DL);
+    gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, scroll * 2, scroll * (-2), 32,
+                                                     64, 1, scroll * (-1), scroll, 32, 32));
+    gSPDisplayList(POLY_XLU_DISP++, &sMaterial2DL[11]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
