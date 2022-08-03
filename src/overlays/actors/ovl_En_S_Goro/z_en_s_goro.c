@@ -787,7 +787,7 @@ s32 EnSGoro_CheckLullaby(EnSGoro* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3)) {
-        if (play->msgCtx.unk1202E == 1) {
+        if (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) {
             this->animInfoIndex = EN_S_GORO_ANIM_ROLLUP;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
 
@@ -1151,7 +1151,7 @@ void EnSGoro_SpringShrineGoron_Talk(EnSGoro* this, PlayState* play) {
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_ENGAGED;
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->actionFunc = EnSGoro_SpringShrineGoron_Idle;
             return;
         }
@@ -1239,7 +1239,7 @@ void EnSGoro_ShopGoron_Talk(EnSGoro* this, PlayState* play) {
         this->textID = EnSGoro_BombshopGoron_NextTextID(this, play);
         if ((this->textID == 0x675) || (this->textID == 0x676)) {
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             Actor_PickUp(&this->actor, play, GI_POWDER_KEG, 300.0f, 300.0f);
             this->actionFunc = EnSGoro_ShopGoron_TakePayment;
         } else {
@@ -1254,7 +1254,7 @@ void EnSGoro_ShopGoron_Talk(EnSGoro* this, PlayState* play) {
 void EnSGoro_ShopGoron_TakePayment(EnSGoro* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        func_801159EC(this->powderKegPrice * -1);
+        Rupees_ChangeBy(this->powderKegPrice * -1);
         this->actionFunc = EnSGoro_ShopGoron_FinishTransaction;
     } else {
         Actor_PickUp(&this->actor, play, GI_POWDER_KEG, 300.0f, 300.0f);
@@ -1284,7 +1284,7 @@ void EnSGoro_SleepTalkAction(EnSGoro* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == 6) {
         if (Message_ShouldAdvance(play)) {
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->actionFunc = EnSGoro_SleepAction;
         }
     }
