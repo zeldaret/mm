@@ -156,8 +156,9 @@ s32 EnBubble_Explosion(EnBubble* this, PlayState* play) {
 u32 func_8089F8BC(EnBubble* this) {
     if (DECR(this->explosionCountdown)) {
         return -1;
+    } else {
+        return func_8089F5D0(this);
     }
-    return func_8089F5D0(this);
 }
 
 s32 func_8089F908(EnBubble* this) {
@@ -166,8 +167,9 @@ s32 func_8089F908(EnBubble* this) {
 
     if (DECR(this->explosionCountdown) != 0) {
         return false;
+    } else {
+        return true;
     }
-    return true;
 }
 
 void EnBubble_Vec3fNormalizedReflect(Vec3f* vec1, Vec3f* vec2, Vec3f* ret) {
@@ -298,7 +300,7 @@ u32 func_8089FF30(EnBubble* this) {
     return true;
 }
 
-s32 EnBubble_DetectPop(EnBubble* this, PlayState* play) {
+s32 EnBubble_IsPopped(EnBubble* this, PlayState* play) {
     if (DECR(this->unk200) != 0 || this->actionFunc == EnBubble_Pop) {
         return false;
     }
@@ -356,7 +358,7 @@ void EnBubble_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnBubble_Wait(EnBubble* this, PlayState* play) {
-    if (EnBubble_DetectPop(this, play) != 0) {
+    if (EnBubble_IsPopped(this, play)) {
         this->explosionCountdown = func_8089F59C(this);
         this->actionFunc = EnBubble_Pop;
     } else {

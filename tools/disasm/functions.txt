@@ -5632,7 +5632,7 @@
     0x8089F9E4:("EnBubble_Vec3fNormalize",),
     0x8089FA54:("EnBubble_Fly",),
     0x8089FF30:("func_8089FF30",),
-    0x8089FFCC:("EnBubble_DetectPop",),
+    0x8089FFCC:("EnBubble_IsPopped",),
     0x808A005C:("func_808A005C",),
     0x808A0170:("EnBubble_Init",),
     0x808A0270:("EnBubble_Destroy",),
