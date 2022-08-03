@@ -7,7 +7,8 @@ struct OceffWipe5;
 
 typedef struct OceffWipe5 {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x4];
+    /* 0x144 */ s16 unk144;                         /* inferred */
+    /* 0x146 */ char pad146[2];
 } OceffWipe5; // size = 0x148
 
 extern const ActorInit Oceff_Wipe5_InitVars;

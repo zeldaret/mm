@@ -30,10 +30,36 @@ const ActorInit Oceff_Wipe5_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe5/OceffWipe5_Init.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe5/OceffWipe5_Init.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe5/OceffWipe5_Destroy.s")
+void OceffWipe5_Init(Actor *thisx, PlayState *play) {
+    OceffWipe5 *this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe5/OceffWipe5_Update.s")
+    Actor_SetScale(&this->actor, 1.0f);
+    this->unk144 = 0;
+    this->actor.world.pos = play->cameraPtrs[play->activeCamId]->eye;
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe5/OceffWipe5_Destroy.s")
+
+void OceffWipe5_Destroy(Actor *thisx, PlayState *play) {
+    OceffWipe5 *this = THIS;
+
+    func_80115D5C(&play->state);
+    play->msgCtx.unk120B0 = 0;
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe5/OceffWipe5_Update.s")
+
+void OceffWipe5_Update(Actor *thisx, PlayState *play) {
+    OceffWipe5 *this = THIS;
+
+    this->actor.world.pos = GET_ACTIVE_CAM(play)->eye;
+    if (this->unk144 < 800) {
+        this->unk144++;
+    } else {
+        Actor_MarkForDeath(&this->actor);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe5/OceffWipe5_Draw.s")
