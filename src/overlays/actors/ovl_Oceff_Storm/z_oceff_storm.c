@@ -44,8 +44,32 @@ void OceffStorm_SetupAction(OceffStorm* this, OceffStormActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/func_8098176C.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/func_8098176C.s")
 
+s32 func_8098176C(PlayState* play) {
+    s32 phi_v1 = 0;
+
+    switch (play->sceneNum) {
+        case SCENE_13HUBUKINOMITI:
+        case SCENE_11GORONNOSATO:
+        case SCENE_10YUKIYAMANOMURA:
+        case SCENE_14YUKIDAMANOMITI:
+        case SCENE_12HAKUGINMAE:
+        case SCENE_17SETUGEN:
+        case SCENE_GORONRACE:
+            if (gSaveContext.sceneSetupIndex == 0) {
+                phi_v1 = 1;
+            }
+            break;
+        case SCENE_10YUKIYAMANOMURA2:
+            if (gSaveContext.sceneSetupIndex == 1) {
+                phi_v1 = 1;
+            }
+            break;
+        
+    }
+    return phi_v1;
+}
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/OceffStorm_Init.s")
 
 void OceffStorm_Init(Actor* thisx, PlayState* play) {
@@ -184,7 +208,7 @@ extern Gfx* D_809831E8;
 extern Gfx* D_80983290;
 extern Vtx* D_80983038;
 
-void OceffStorm_Draw(Actor *thisx, PlayState *play) {
+void OceffStorm_Draw(Actor* thisx, PlayState* play) {
     u32 scroll = play->state.frames & 0xFFF;
     OceffStorm* this = (OceffStorm*)thisx;
     Vtx* vtxPtr = &D_80983038;
@@ -201,8 +225,7 @@ void OceffStorm_Draw(Actor *thisx, PlayState *play) {
     vtxPtr[0].v.cn[3] = vtxPtr[6].v.cn[3] = vtxPtr[16].v.cn[3] = vtxPtr[25].v.cn[3] = this->vtxAlpha >> 1;
     vtxPtr[10].v.cn[3] = vtxPtr[22].v.cn[3] = this->vtxAlpha;
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gSPDisplayList(POLY_XLU_DISP++, &D_809831E8);
     gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, scroll * 4, (0 - scroll) * 8,
