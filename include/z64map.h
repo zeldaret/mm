@@ -59,6 +59,11 @@ typedef struct {
 /* z_map_disp */
 
 typedef struct {
+    /* 0x00 */ UNK_TYPE1 unk0[8];
+    /* 0x08 */ s32 unk8; // G_IM_SIZ
+} T_801BEAE0;
+
+typedef struct {
     /* 0x00 */ s16 unk0;
     /* 0x00 */ s16 unk2;
     /* 0x00 */ s16 unk4;
@@ -91,7 +96,8 @@ typedef struct {
     /* 0x42 */ s16 unk42;
     /* 0x44 */ s16 unk44;
     /* 0x48 */ s16* unk48;
-    /* 0x4C */ char unk4C[0x0C];
+    /* 0x4C */ s16 unk4C;
+    /* 0x4E */ char unk4E[0x0A];
     /* 0x58 */ s16 unk58;
 } T_801BEBB8;
 
@@ -111,9 +117,31 @@ typedef struct{
     /* 0x0E */ u16 unkE;
 } T_801F53B0;
 
+typedef struct {
+    /* 0x00 */ s32 unk0[5];
+} T_801BEC70;
+
+typedef struct {
+    s16 unk0;
+    s32 unk4;
+    s32 unk8;
+} T_801BED24; // size 0x0C
+
+typedef struct {
+    /* 0x000 */ s32 unk0;
+    /* 0x004 */ s32 unk4[32];
+    /* 0x084 */ s32 unk84[32];
+    /* 0x104 */ s32 unk104[32];
+    /* 0x184 */ s32 unk184;
+} T_801F56B0;
+
 /* z_map_data */
+s32 func_80109CBC(s32);
+s32 func_80109A98(s32);
 s32 func_801096D4(s32 arg0);
 void func_8010983C(s32 arg0, s32 *arg1);
 void func_801097C8(s32 arg0, s32* arg1, s32* arg2);
 void func_80109754(s32 arg0, s32 *arg1, s32 *arg2);
+
+void func_80178E3C(u8*, s32, s32, s32);
 #endif

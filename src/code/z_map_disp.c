@@ -19,35 +19,40 @@ s16 func_80106D08(s16);
 void func_80109D40(s32, s32*, s32*, void*);
 void func_80109DD8(s32, s32*, s32*);
 
-extern T_801BEBB8 D_801BEBB8;
-extern s32 D_801BEC1C; //current scene's no. of rooms
-extern T_801BEC5C D_801BEC5C[5];
-extern TexturePtr D_801BEB38;
+extern T_801BEAE0   D_801BEAE0;
+extern s32          D_801BEAD8; // G_IM_SIZ
+extern u32          D_801BEAF8;
+extern s32          D_801BEB08;
+extern u32          D_801BEB18;
+extern u32          D_801BEB28;
+extern TexturePtr   D_801BEB38;
+extern T_801BEBB8   D_801BEBB8;
+extern s16          D_801BEC10;
+extern MinimapList  D_801BEC14; //D_801F5130
+extern s32          D_801BEC1C; //current scene's no. of rooms
+extern u8           D_801BEC24;
+extern Color_RGBA8  D_801BEC2C[]; // cat colors
+extern T_801BEC5C   D_801BEC5C[5];
+extern T_801BEC70   D_801BEC70;
+extern u16          D_801BEC84[0x10]; //palette 0
+extern u16          D_801BECA4[0x10]; //palette 1
+extern u16          D_801BECC4[0x10]; //palette 2
+extern T_801BED24   D_801BED24[2];
 
-extern MinimapList D_801BEC14;
 extern MinimapEntry D_801F5130[0x50];
+extern T_801F53B0   D_801F53B0[];
+extern T_801F56B0   D_801F56B0;
+extern TexturePtr   D_801F57B4[32]; //unconfirmed length
+extern s32          D_801F5834;
 
-typedef struct {
-    /* 0x00 */ UNK_TYPE1 unk0[8];
-    /* 0x08 */ s32 unk8; // G_IM_SIZ
-} T_801BEAE0;
+extern TexturePtr   D_02003F20;
+extern Gfx          D_0401ED00[];
 
-extern Gfx D_0401ED00[];
-extern T_801BEAE0 D_801BEAE0;
-
-extern u32 D_801BEAF8;
-extern s32 D_801BEB08;
-extern u32 D_801BEB18;
-extern u32 D_801BEB28;
-extern s32 D_801BEAD8; // G_IM_SIZ
-extern Color_RGBA8 D_801BEC2C[]; // cat colors
-
-extern u8 D_801BEC24;
-extern T_801F53B0 D_801F53B0[];
-
-extern TexturePtr D_02003F20;
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80102E40.s")
+void func_80102E40(s32 arg0, s32 arg1) {
+    if (func_80109A98(arg1) != 0) {
+        func_80178E3C(_map_i_staticSegmentRomStart, arg1, arg0, func_80109A98(arg1));
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80102E90.s")
 
@@ -480,9 +485,18 @@ void func_80104F34(PlayState* play) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80105294.s")
+s32 func_80105294(void) {
+    T_801BEC70 sp4 = D_801BEC70;
+    
+    if ((D_801BEBB8.unk0 == NULL) || (D_801BEBB8.unk58 < 0) || (D_801BEBB8.unk58 >= 5) || (D_801BEC1C == 0)) {
+        return 0x7B;
+    }
+    return sp4.unk0[D_801BEBB8.unk58];
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80105318.s")
+s16 func_80105318(void) {
+    return D_801BEC10;
+}
 
 s32 func_80105328(s32 arg0) {
     if (((((u16)arg0) >> 7) & 7) == 5) {
@@ -652,23 +666,111 @@ void func_80106644(PlayState *play, s32 x, s32 z, s32 rot) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80106644.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_8010683C.s")
+void func_8010683C(void) {
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_801068B4.s")
+    D_801F56B0.unk0 = 0;
+    for (i = 0; i < 32; i++)
+    {
+        D_801F56B0.unk4[i] = 0;
+        D_801F56B0.unk84[i] = 0;
+        D_801F56B0.unk104[i] = 0;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_801068D8.s")
+    D_801F56B0.unk184 = 0;
+    D_801BEBB8.unk20 &= ~1;
+}
 
+void func_801068B4(s32 arg0) {
+    func_8010683C();
+}
+
+void func_801068D8(s32 arg0) {
+    func_8010683C();
+}
+
+#ifdef NON_MATCHING
+s32 func_801068FC(s32 arg0, s32 arg1) {
+    s32 sp3C;
+    s32 temp_s2;
+    s32 temp_v0;
+    s32 temp_v0_2;
+    s32 var_s1;
+    s32 var_s1_2;
+    s32 var_s1_3;
+    s32 var_s2;
+    s32 var_s3;
+    s32 var_s4;
+    u16 temp_a0;
+    u16 temp_a0_2;
+
+    sp3C = arg1;
+    if ((D_801BEBB8.unk0 == NULL) || (D_801BEC1C == 0)) {
+        return sp3C;
+    }
+    D_801F56B0.unk0 = 0;
+
+    for (var_s4 = 0; var_s4 < D_801BEC1C; var_s4++) {
+        var_s2 = 0;
+        temp_a0 = D_801BEBB8.unk0->entry[var_s4].unk0;
+        if (temp_a0 == 0xFFFF) {
+            continue;
+        } else {
+            temp_v0 = func_80109BA0((s32) temp_a0);
+            if (temp_v0 == -1) {
+                continue;
+            } else {
+                for (var_s1 = 0; var_s1 < D_801F56B0.unk0; var_s1++) {
+                    if (temp_v0 == D_801F56B0.unk4[var_s1]) {
+                        var_s2 = 1;
+                        break;
+                    }
+                }
+                if (var_s2 == 0) {
+                    D_801F56B0.unk4[D_801F56B0.unk0] = temp_v0;
+                    D_801F56B0.unk0 += 1;
+                }
+            }
+        }
+    }
+    for (var_s1_2 = 0; var_s1_2 < D_801F56B0.unk0; var_s1_2++) {
+        temp_s2 = D_801F56B0.unk4[var_s1_2];
+        func_80102E40(D_801F56B0.unk84[var_s1_2], temp_s2);
+        if (var_s1_2 + 1 < D_801F56B0.unk0) {
+            D_801F56B0.unk84[var_s1_2 + 1] = (func_80109CBC(temp_s2) + D_801F56B0.unk84[var_s1_2] + 0xF) & ~0xF;
+        } else {
+            sp3C = func_80109CBC(temp_s2) + D_801F56B0.unk84[var_s1_2];
+        }
+    }
+    for (var_s4 = 0; var_s4 < D_801BEC1C; var_s4++) {
+        var_s3 = 0;
+        temp_a0_2 = D_801BEBB8.unk0->entry[var_s4].unk0;
+        if (temp_a0_2 == 0xFFFF) {
+            D_801F56B0.unk104[var_s4] = 0;
+        } else {
+            temp_v0_2 = func_80109BA0((s32) temp_a0_2);
+            for (var_s1_3 = 0; var_s1_3 < D_801F56B0.unk0; var_s1_3++) {
+                if (temp_v0_2 == D_801F56B0.unk4[var_s1_3]) {
+                    var_s3 = 1;
+                    break;
+                }
+            }
+            if (var_s3 == 0) {
+                D_801F56B0.unk104[var_s4] = 0;
+            } else {
+                D_801F56B0.unk104[var_s4] = D_801F56B0.unk84[var_s1_3];
+            }
+        }
+    }
+    return sp3C;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_801068FC.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80106BEC.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80106D08.s")
-
-extern u16 D_801BEC84[0x10]; //palette 0
-extern u16 D_801BECA4[0x10]; //palette 1
-extern u16 D_801BECC4[0x10]; //palette 2
-extern TexturePtr D_801F57B4[32]; //unconfirmed length
-extern s32 D_801F5834;
 
 #define COLOR16(r, g, b, a) (s16) \
     ( ((s32) (((r) * 31.0f) / 255.0f) << 11) \
@@ -812,14 +914,6 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80109124.s")
 
-typedef struct {
-    s16 unk0;
-    s32 unk4;
-    s32 unk8;
-} T_801BED24; // size 0x0C
-
-extern T_801BED24 D_801BED24[2];
-
 #ifdef NON_MATCHING
 void func_801091F0(PlayState* play) {
     s32 var_t2;
@@ -881,4 +975,17 @@ void func_801091F0(PlayState* play) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_801091F0.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80109428.s")
+void func_80109428(s32 arg0) {
+    D_801BEBB8.unk4C++;
+    if (!(D_801BEBB8.unk20 & 1)) {
+        D_801F56B0.unk184++;
+        if (D_801F56B0.unk184 >= 0x29) {
+            D_801BEBB8.unk20 |= 1;
+        }
+    } else {
+        D_801F56B0.unk184--;
+        if (D_801F56B0.unk184 < 0) {
+            D_801BEBB8.unk20 &= ~1;
+        }
+    }
+}
