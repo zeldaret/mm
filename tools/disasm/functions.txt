@@ -8248,7 +8248,7 @@
     0x80981928:("func_80981928",),
     0x80981B48:("func_80981B48",),
     0x80981B68:("OceffStorm_Update",),
-    0x80981BB8:("func_80981BB8",),
+    0x80981BB8:("OceffStorm_Draw2",),
     0x80981D68:("OceffStorm_Draw",),
     0x80983520:("ObjDemo_Init",),
     0x80983634:("func_80983634",),

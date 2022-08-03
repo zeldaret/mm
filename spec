@@ -1967,7 +1967,7 @@ beginseg
     name "ovl_Oceff_Storm"
     compress
     include "build/src/overlays/actors/ovl_Oceff_Storm/z_oceff_storm.o"
-    include "build/data/ovl_Oceff_Storm/ovl_Oceff_Storm.data.o"
+    //include "build/data/ovl_Oceff_Storm/ovl_Oceff_Storm.data.o"
     include "build/data/ovl_Oceff_Storm/ovl_Oceff_Storm.reloc.o"
 endseg
 
