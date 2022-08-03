@@ -15,11 +15,10 @@ void OceffStorm_Destroy(Actor* thisx, PlayState* play);
 void OceffStorm_Update(Actor* thisx, PlayState* play);
 void OceffStorm_Draw(Actor* thisx, PlayState* play);
 
-void func_80981928(OceffStorm* this, PlayState* play);
+void OceffStorm_DefaultAction(OceffStorm* this, PlayState* play);
 void func_80981B48(OceffStorm* this, PlayState* play);
 void OceffStorm_Draw2(Actor* thisx, PlayState* play);
 
-#if 1
 const ActorInit Oceff_Storm_InitVars = {
     ACTOR_OCEFF_STORM,
     ACTORCAT_ITEMACTION,
@@ -31,9 +30,6 @@ const ActorInit Oceff_Storm_InitVars = {
     (ActorFunc)OceffStorm_Update,
     (ActorFunc)OceffStorm_Draw,
 };
-
-#endif
-
 
 void OceffStorm_SetupAction(OceffStorm* this, OceffStormActionFunc actionFunc) {
     this->actionFunc = actionFunc;
@@ -68,7 +64,8 @@ void OceffStorm_Init(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
     OceffStorm* this = THIS;
 
-    OceffStorm_SetupAction(this, func_80981928);
+    OceffStorm_SetupAction(this, OceffStorm_DefaultAction);
+
     this->posYOffAdd = 0;
     this->counter = 0;
     this->primColorAlpha = 0;
@@ -77,6 +74,7 @@ void OceffStorm_Init(Actor* thisx, PlayState* play) {
     this->actor.scale.z = 0.0f;
     this->actor.scale.x = 0.0f;
     this->posYOff = this->posYOffAdd;
+
     if (this->actor.params == 1) {
         OceffStorm_SetupAction(this, func_80981B48);
         this->actor.draw = OceffStorm_Draw2;
@@ -98,21 +96,21 @@ void OceffStorm_Destroy(Actor* thisx, PlayState* play) {
     func_80115D5C(&play->state);
 }
 
-void func_80981928(OceffStorm* this, PlayState* play) {
-    f32 phi_fv1;
+void OceffStorm_DefaultAction(OceffStorm* this, PlayState* play) {
+    f32 cylinderScale;
 
     switch (gSaveContext.save.playerForm) {
         default:
-            phi_fv1 = 1.0f;
+            cylinderScale = 1.0f;
             break;
         case PLAYER_FORM_DEKU:
-            phi_fv1 = 1.3f;
+            cylinderScale = 1.3f;
             break;
         case PLAYER_FORM_ZORA:
-            phi_fv1 = 1.2f;
+            cylinderScale = 1.2f;
             break;
         case PLAYER_FORM_GORON:
-            phi_fv1 = 2.0f;
+            cylinderScale = 2.0f;
             break;
     }
 
@@ -129,12 +127,12 @@ void func_80981928(OceffStorm* this, PlayState* play) {
         if (this->vtxAlpha <= 200) {
             this->vtxAlpha += 10;
         }
-        this->actor.scale.x = this->actor.scale.z = 0.4f * phi_fv1;
+        this->actor.scale.x = this->actor.scale.z = 0.4f * cylinderScale;
         this->actor.scale.y = 0.3f;
     } else if (this->counter > 40) {
         this->vtxAlpha = (60 - this->counter) * 10;
     } else {
-        this->actor.scale.x = this->actor.scale.z = 0.4f * phi_fv1;
+        this->actor.scale.x = this->actor.scale.z = 0.4f * cylinderScale;
         this->vtxAlpha = -1;
     }
     if (this->counter > 40) {
