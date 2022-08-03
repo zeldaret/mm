@@ -13,7 +13,7 @@ void SaveContext_Init(void) {
     gSaveContext.cutsceneTrigger = 0;
     gSaveContext.unk_3F4D = 0;
     gSaveContext.nextDayTime = 0xFFFF;
-    gSaveContext.environmentTime = 0;
+    gSaveContext.skyboxTime = 0;
     gSaveContext.dogIsLost = true;
     gSaveContext.nextTransitionType = TRANS_NEXT_TYPE_DEFAULT;
     gSaveContext.unk_3F26 = 50;

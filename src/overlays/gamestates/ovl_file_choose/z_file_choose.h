@@ -112,13 +112,4 @@ typedef struct FileChooseContext {
     /* 0x24550 */ s16  unk_24550;
 } FileChooseContext; // size = 0x24558
 
-// TODO: Confirm those values has the same meaning as their OoT counterparts
-typedef enum {
-    /* 0x00 */ PAUSE_0, // PAUSE_ITEM
-    /* 0x01 */ PAUSE_1, // PAUSE_MAP
-    /* 0x02 */ PAUSE_2, // PAUSE_QUEST
-    /* 0x03 */ PAUSE_3, // PAUSE_EQUIP
-    /* 0x04 */ PAUSE_4  // PAUSE_WORLD_MAP
-} PauseMenuPage;
-
 #endif

@@ -5,7 +5,7 @@
  */
 
 #include "z_en_ma_yto.h"
-#include "objects/object_ma2/object_ma2.h"
+#include "overlays/actors/ovl_En_Ma_Yts/z_en_ma_yts.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
@@ -106,30 +106,41 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
 };
 
 static AnimationSpeedInfo sAnimationInfo[] = {
-    { &object_ma2_Anim_00A174, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_00A174, 1.0f, ANIMMODE_LOOP, -6.0f },  //
-    { &object_ma2_Anim_00AF7C, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_ma2_Anim_00AF7C, 1.0f, ANIMMODE_ONCE, -6.0f },  //
-    { &object_ma2_Anim_000CC0, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_000CC0, 1.0f, ANIMMODE_LOOP, -6.0f },  //
-    { &object_ma2_Anim_016720, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_016720, 1.0f, ANIMMODE_LOOP, -8.0f },  //
-    { &object_ma2_Anim_005314, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_005314, 1.0f, ANIMMODE_LOOP, -8.0f },  //
-    { &object_ma2_Anim_0093E8, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_0093E8, 1.0f, ANIMMODE_LOOP, -10.0f }, //
-    { &object_ma2_Anim_007E28, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_007E28, 1.0f, ANIMMODE_LOOP, -8.0f },  //
-    { &object_ma2_Anim_0070EC, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_0070EC, 1.0f, ANIMMODE_LOOP, -8.0f },  //
-    { &object_ma2_Anim_003D54, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_003D54, 1.0f, ANIMMODE_LOOP, -8.0f },  //
-    { &object_ma2_Anim_001FD0, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_001FD0, 1.0f, ANIMMODE_LOOP, -8.0f },  //
-    { &object_ma2_Anim_0030B4, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_0030B4, 1.0f, ANIMMODE_LOOP, -8.0f },  //
-    { &object_ma2_Anim_004370, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_004370, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &gCremiaIdleAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaIdleAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gCremiaSpreadArmsStartAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gCremiaSpreadArmsStartAnim, 1.0f, ANIMMODE_ONCE, -6.0f },
+    { &gCremiaSpreadArmsLoopAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaSpreadArmsLoopAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gCremiaWalkAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaWalkAnim, 1.0f, ANIMMODE_LOOP, -8.0f },
+    { &gCremiaThinkAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaThinkAnim, 1.0f, ANIMMODE_LOOP, -8.0f },
+    { &gCremiaPetCowAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaPetCowAnim, 1.0f, ANIMMODE_LOOP, -10.0f },
+    { &gCremiaSittingPetCowAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaSittingPetCowAnim, 1.0f, ANIMMODE_LOOP, -8.0f },
+    { &gCremiaSittingAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaSittingAnim, 1.0f, ANIMMODE_LOOP, -8.0f },
+    { &gCremiaSittingLookDownAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaSittingLookDownAnim, 1.0f, ANIMMODE_LOOP, -8.0f },
+    { &gCremiaHugStartAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaHugStartAnim, 1.0f, ANIMMODE_LOOP, -8.0f },
+    { &gCremiaHugLoopAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaHugLoopAnim, 1.0f, ANIMMODE_LOOP, -8.0f },
+    { &gCremiaClapAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaClapAnim, 1.0f, ANIMMODE_LOOP, -8.0f },
 };
 
 static TexturePtr sMouthTextures[] = {
-    object_ma2_Tex_014AD8,
-    object_ma2_Tex_014ED8,
-    object_ma2_Tex_0152D8,
-    object_ma2_Tex_0156D8,
+    gCremiaMouthNormalTex,
+    gCremiaMouthSlightSmileTex,
+    gCremiaMouthFrownTex,
+    gCremiaMouthHangingOpenTex,
 };
 
 static TexturePtr sEyesTextures[] = {
-    object_ma2_Tex_011AD8, object_ma2_Tex_0122D8, object_ma2_Tex_012AD8,
-    object_ma2_Tex_0132D8, object_ma2_Tex_013AD8, object_ma2_Tex_0142D8,
+    gCremiaEyeOpenTex, gCremiaEyeHalfTex, gCremiaEyeClosedTex, gCremiaEyeHappyTex, gCremiaEyeAngryTex, gCremiaEyeSadTex,
 };
 
 void EnMaYto_Init(Actor* thisx, PlayState* play) {
@@ -157,8 +168,7 @@ void EnMaYto_Init(Actor* thisx, PlayState* play) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_ma2_Skel_015C28, NULL, this->jointTable, this->morphTable,
-                       MA2_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gCremiaSkel, NULL, this->jointTable, this->morphTable, CREMIA_LIMB_MAX);
     EnMaYto_InitAnimation(this, play);
 
     Collider_InitCylinder(play, &this->collider);
@@ -432,7 +442,7 @@ void EnMaYto_DefaultDialogueHandler(EnMaYto* this, PlayState* play) {
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x3000, 0x100);
-    if (this->textId == 0x3395 && this->skelAnime.animation == &object_ma2_Anim_00AF7C &&
+    if (this->textId == 0x3395 && this->skelAnime.animation == &gCremiaSpreadArmsStartAnim &&
         Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         EnMaYto_ChangeAnim(this, 4);
     }
@@ -1049,7 +1059,7 @@ void EnMaYto_WarmFuzzyFeelingCs(EnMaYto* this, PlayState* play) {
         }
 
         Cutscene_ActorTranslateAndYaw(&this->actor, play, csActionIndex);
-        if (D_80B915F0 == 2 && this->skelAnime.animation == &object_ma2_Anim_001FD0 &&
+        if (D_80B915F0 == 2 && this->skelAnime.animation == &gCremiaHugStartAnim &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             EnMaYto_ChangeAnim(this, 20);
         }
@@ -1425,20 +1435,19 @@ s32 EnMaYto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
     EnMaYto* this = THIS;
     Vec3s sp4;
 
-    if (limbIndex == MA2_LIMB_HEAD) {
+    if (limbIndex == CREMIA_LIMB_HEAD) {
         sp4 = this->unk_1D8.unk_08;
 
         rot->x += sp4.y;
         rot->z += sp4.x;
-    } else if (limbIndex == MA2_LIMB_TORSO) {
-        if (this->skelAnime.animation != &object_ma2_Anim_007E28 &&
-            this->skelAnime.animation != &object_ma2_Anim_003D54) {
+    } else if (limbIndex == CREMIA_LIMB_TORSO) {
+        if (this->skelAnime.animation != &gCremiaSittingPetCowAnim &&
+            this->skelAnime.animation != &gCremiaSittingLookDownAnim) {
             sp4 = this->unk_1D8.unk_0E;
 
             rot->x += sp4.y;
-            if (this->skelAnime.animation == &object_ma2_Anim_00A174 ||
-                this->skelAnime.animation == &object_ma2_Anim_0070EC ||
-                this->skelAnime.animation == &object_ma2_Anim_003D54) {
+            if (this->skelAnime.animation == &gCremiaIdleAnim || this->skelAnime.animation == &gCremiaSittingAnim ||
+                this->skelAnime.animation == &gCremiaSittingLookDownAnim) {
                 rot->z += sp4.x;
             }
         }
@@ -1449,7 +1458,7 @@ s32 EnMaYto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 void EnMaYto_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnMaYto* this = THIS;
 
-    if (limbIndex == MA2_LIMB_HEAD) {
+    if (limbIndex == CREMIA_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
     }
 }
@@ -1461,7 +1470,7 @@ void EnMaYto_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     if (this->type == MA_YTO_TYPE_BARN && (gSaveContext.save.weekEventReg[22] & 1)) { // Aliens defeated
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, gCremiaWoodenBox);
+        gSPDisplayList(POLY_OPA_DISP++, gCremiaWoodenBoxDL);
     }
     func_8012C28C(play->state.gfxCtx);
 

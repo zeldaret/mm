@@ -131,7 +131,7 @@ void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
     }
 
     this->unk_1E4 = Lib_SegmentedToVirtual(path->points);
-    this->unk_1E8 = EN_SYATEKI_DEKUNUTS_GET_PARAM_F0(&this->actor);
+    this->unk_1E8 = EN_SYATEKI_DEKUNUTS_GET_NUMBER(&this->actor);
     this->unk_1EA = path->count;
     this->unk_1D8 = 0;
     this->unk_1DC = 0;
@@ -166,13 +166,14 @@ void func_80A2BE54(EnSyatekiDekunuts* this) {
 void func_80A2BF18(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if ((syatekiMan->unk_26A == 1) && (this->unk_1E2 == 1) && ((syatekiMan->unk_272 & (1 << this->unk_1E8)) != 0)) {
+    if ((syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) && (this->unk_1E2 == 1) &&
+        ((syatekiMan->dekuScrubFlags & (1 << this->unk_1E8)) != 0)) {
         func_80A2BFC4(this);
-    } else if (syatekiMan->unk_26A != 1) {
+    } else if (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING) {
         this->unk_1E2 = 1;
     }
 
-    if ((syatekiMan->unk_272 == 0) && (syatekiMan->unk_274 == 0) &&
+    if ((syatekiMan->dekuScrubFlags == 0) && (syatekiMan->guayFlags == 0) &&
         (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) != 1)) {
         this->unk_1E2 = 1;
     }
@@ -189,9 +190,9 @@ void func_80A2BFC4(EnSyatekiDekunuts* this) {
     this->actor.world.pos = this->actor.prevPos = sp14;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
-    this->unk_1EE = 140 - (syatekiMan->unk_27C * 20);
+    this->unk_1EE = 140 - (syatekiMan->currentWave * 20);
 
-    if ((syatekiMan->unk_27C & 1) != 0) {
+    if ((syatekiMan->currentWave & 1) != 0) {
         this->unk_1F0 = 1;
         this->unk_1F2 = 0;
     } else {
@@ -260,7 +261,7 @@ void func_80A2C27C(EnSyatekiDekunuts* this) {
 void func_80A2C2E0(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if ((this->unk_1EE < this->unk_1D8) || (syatekiMan->unk_26A != 1)) {
+    if ((this->unk_1EE < this->unk_1D8) || (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING)) {
         func_80A2C3AC(this);
     }
 
@@ -270,7 +271,7 @@ void func_80A2C2E0(EnSyatekiDekunuts* this, PlayState* play) {
 void func_80A2C33C(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if ((gSaveContext.unk_3DE0[1] <= 0) || (syatekiMan->unk_26A != 1)) {
+    if ((gSaveContext.unk_3DE0[1] <= 0) || (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING)) {
         func_80A2C3AC(this);
     }
 
@@ -287,7 +288,7 @@ void func_80A2C3AC(EnSyatekiDekunuts* this) {
 void func_80A2C3F0(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if (syatekiMan->unk_26A == 1) {
+    if (syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) {
         if (this->unk_1D8 > 160 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_1D8 = 0;
             func_80A2C150(this);
@@ -319,12 +320,12 @@ void func_80A2C4D0(EnSyatekiDekunuts* this, PlayState* play) {
 
     if (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) == 1) {
         EffectSsExtra_Spawn(play, &this->actor.world.pos, &D_80A2CBA0, &D_80A2CBAC, 5, 2);
-        syatekiMan->unk_280 += 100;
-        syatekiMan->unk_26E++;
+        syatekiMan->score += 100;
+        syatekiMan->perGameVar2.bonusDekuScrubHitCounter++;
     } else {
         EffectSsExtra_Spawn(play, &this->actor.world.pos, &D_80A2CBA0, &D_80A2CBAC, 5, 0);
-        syatekiMan->unk_280 += 30;
-        syatekiMan->unk_278++;
+        syatekiMan->score += 30;
+        syatekiMan->dekuScrubHitCounter++;
     }
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DAMAGE);
@@ -356,7 +357,7 @@ void func_80A2C5DC(EnSyatekiDekunuts* this, PlayState* play) {
             EffectSsHahen_SpawnBurst(play, &sp40, 3.0f, 0, 12, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
             if (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) != 1) {
-                syatekiMan->unk_272 &= ~(1 << this->unk_1E8);
+                syatekiMan->dekuScrubFlags &= ~(1 << this->unk_1E8);
             }
 
             func_80A2BE54(this);

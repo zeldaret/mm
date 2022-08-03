@@ -275,9 +275,9 @@ void func_80998040(EnGs* this, PlayState* play) {
 void func_8099807C(EnGs* this, PlayState* play) {
     switch (play->msgCtx.ocarinaMode) {
         case 3:
-            switch (play->msgCtx.unk1202E) {
-                case 7:
-                case 8:
+            switch (play->msgCtx.lastPlayedSong) {
+                case OCARINA_SONG_HEALING:
+                case OCARINA_SONG_EPONAS:
                     if (!Flags_GetSwitch(play, this->unk_196)) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.world.pos.x,
                                     this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 2);
@@ -286,7 +286,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
                     }
                     break;
 
-                case 10:
+                case OCARINA_SONG_STORMS:
                     if (!Flags_GetSwitch(play, this->unk_196)) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.world.pos.x,
                                     this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 7);
@@ -295,7 +295,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
                     }
                     break;
 
-                case 0:
+                case OCARINA_SONG_SONATA:
                     if ((this->actor.params == ENGS_1) && (gSaveContext.save.playerForm == PLAYER_FORM_DEKU)) {
                         this->unk_194 = 1;
                         this->unk_19C = 5;
@@ -305,7 +305,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
                     }
                     break;
 
-                case 2:
+                case OCARINA_SONG_NEW_WAVE:
                     if ((this->actor.params == ENGS_1) && (gSaveContext.save.playerForm == PLAYER_FORM_ZORA)) {
                         this->unk_194 = 3;
                         this->unk_19C = 5;
@@ -315,7 +315,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
                     }
                     break;
 
-                case 1:
+                case OCARINA_SONG_GORON_LULLABY:
                     if ((this->actor.params == ENGS_1) && (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
                         this->unk_194 = 2;
                         this->unk_19C = 5;
@@ -657,7 +657,7 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
 
     if (this->unk_19D == 2) {
         this->unk_19E[0].y += (s32)(this->unk_1DC * (0x10000 / 360.0f));
-        if ((this->unk_1D4++ <= 40) ^ 1) {
+        if (this->unk_1D4++ > 40) {
             this->unk_1DC = this->unk_1B0[0].y - 1.0f;
             this->unk_1E0 = 1.5f;
             this->unk_1E4 = this->unk_1B0[1].y - 1.0f;
@@ -825,7 +825,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
 
         func_800B9010(&this->actor, NA_SE_EV_FIRE_PILLAR - SFX_FLAG);
 
-        if ((this->unk_1D4++ < 40) ^ 1) {
+        if (this->unk_1D4++ >= 40) {
             this->unk_19A |= 0x10;
 
             this->actor.uncullZoneForward = 12000.0f;

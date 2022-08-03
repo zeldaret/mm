@@ -870,7 +870,6 @@ extern EffectShieldParticleInit shieldParticleInitWood;
 
 extern u8 D_801BB12C;
 
-extern s801BB170 D_801BB170[118];
 // extern UNK_TYPE1 D_801BC210;
 extern Gfx D_801BC240[9];
 extern Gfx D_801BC288[3];
@@ -917,7 +916,7 @@ extern u8 kanfontOrdering[92];
 // extern UNK_TYPE1 D_801BDBA0;
 // extern UNK_TYPE1 D_801BDBA4;
 // extern UNK_TYPE1 D_801BDBA8;
-extern u8 D_801BDBB0;
+extern u8 gWeatherMode;
 // extern UNK_TYPE1 D_801BDBB4;
 // extern UNK_TYPE1 D_801BDBB8;
 // extern UNK_TYPE1 D_801BDBBC;
