@@ -268,7 +268,7 @@ asm/non_matchings/code/z_actor/Actor_IsFacingPlayer.s,Actor_IsFacingPlayer,0x800
 asm/non_matchings/code/z_actor/Actor_ActorAIsFacingActorB.s,Actor_ActorAIsFacingActorB,0x800B742C,0x18
 asm/non_matchings/code/z_actor/Actor_IsFacingAndNearPlayer.s,Actor_IsFacingAndNearPlayer,0x800B748C,0x20
 asm/non_matchings/code/z_actor/Actor_ActorAIsFacingAndNearActorB.s,Actor_ActorAIsFacingAndNearActorB,0x800B750C,0x25
-asm/non_matchings/code/z_actor/func_800B75A0.s,func_800B75A0,0x800B75A0,0x1F
+asm/non_matchings/code/z_actor/Actor_GetSlopeDirection.s,Actor_GetSlopeDirection,0x800B75A0,0x1F
 asm/non_matchings/code/z_actor/func_800B761C.s,func_800B761C,0x800B761C,0x17
 asm/non_matchings/code/z_actor/func_800B7678.s,func_800B7678,0x800B7678,0x90
 asm/non_matchings/code/z_actor/Actor_UpdateBgCheckInfo.s,Actor_UpdateBgCheckInfo,0x800B78B8,0x153

@@ -576,9 +576,9 @@ ItemID func_8012364C(PlayState* play, Player* player, s32 arg2) {
 
 u16 sCItemButtons[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
 
-s32 func_80123810(PlayState* play) {
+PlayerActionParam func_80123810(PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 temp_v0;
+    PlayerActionParam actionParam;
     ItemID itemId;
     s32 i;
 
@@ -602,19 +602,19 @@ s32 func_80123810(PlayState* play) {
             play->interfaceCtx.unk_224 = 0;
             Interface_ChangeAlpha(play->msgCtx.unk_120BC);
 
-            if ((itemId >= ITEM_FD) || (temp_v0 = play->unk_18794(play, player, itemId, i), (temp_v0 < 0))) {
+            if ((itemId >= ITEM_FD) || (actionParam = play->unk_18794(play, player, itemId), (actionParam < PLAYER_AP_NONE))) {
                 play_sound(NA_SE_SY_ERROR);
                 return -1;
             } else {
                 s32 pad;
 
                 player->heldItemButton = i;
-                return temp_v0;
+                return actionParam;
             }
         }
     }
 
-    return 0;
+    return PLAYER_AP_NONE;
 }
 
 // Used to map action params to model groups

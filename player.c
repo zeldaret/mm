@@ -2695,7 +2695,7 @@ loop_1:
     }
 }
 
-enum PlayerActionParam func_8082F524(Player* this, s32 item) {
+enum PlayerActionParam Player_ItemToActionParam(Player* this, s32 item) {
     if (item >= 0xFD) {
         return PLAYER_AP_NONE;
     }
@@ -2956,14 +2956,14 @@ void func_8082FC60(Player* this) {
 }
 
 s32 func_8082FC78(Player* this, s32 item) {
-    if ((item < 0xFD) && (func_8082F524(this, item) == this->heldItemActionParam)) {
+    if ((item < 0xFD) && (Player_ItemToActionParam(this, item) == this->heldItemActionParam)) {
         return 1;
     }
     return 0;
 }
 
 s32 func_8082FCC4(Player* this, s32 item, enum PlayerActionParam actionParam) {
-    if ((item < 0xFD) && (func_8082F524(this, item) == actionParam)) {
+    if ((item < 0xFD) && (Player_ItemToActionParam(this, item) == actionParam)) {
         return 1;
     }
     return 0;
@@ -3058,7 +3058,7 @@ void func_8082FE0C(Player* this, PlayState* play) {
                     } else {
                         var_a2 = gSaveContext.save.equips.buttonItems[0][temp_v1];
                     }
-                    temp_v1_2 = func_8082F524(this, var_a2 & 0xFF) - 0x3A;
+                    temp_v1_2 = Player_ItemToActionParam(this, var_a2 & 0xFF) - 0x3A;
                     var_a0 = temp_v1_2;
                     if ((temp_v1_2 < 0) || (temp_v1_2 >= 0x18)) {
                         var_a0 = this->currentMask - 1;
@@ -3147,7 +3147,7 @@ loop_53:
                 }
             }
             temp_v0_6 = func_8012364C(play, this, var_a3_2);
-            if ((temp_v0_6 < 0xFD) && (func_8082F524(this, temp_v0_6) == this->itemActionParam)) {
+            if ((temp_v0_6 < 0xFD) && (Player_ItemToActionParam(this, temp_v0_6) == this->itemActionParam)) {
                 D_80862B4C = 1;
             }
         } else if (temp_v0_5 == ITEM_F0) {
@@ -3169,7 +3169,7 @@ loop_53:
             }
             sp3C = temp_v0_5;
             sp38 = var_a3;
-            if ((func_80124110(this, func_8082F524(this, temp_v0_5)) != 0) && (gSaveContext.jinxTimer != 0)) {
+            if ((func_80124110(this, Player_ItemToActionParam(this, temp_v0_5)) != 0) && (gSaveContext.jinxTimer != 0)) {
                 if (Message_GetState(&play->msgCtx) == 0) {
                     Message_StartTextbox(play, 0xF7U, NULL);
                 }
@@ -3193,7 +3193,7 @@ void func_808302CC(Player* this, PlayState* play) {
     s8 temp_v0;
     s8 var_v1;
 
-    sp37 = func_8082F524(this, (s32) this->heldItemId);
+    sp37 = Player_ItemToActionParam(this, (s32) this->heldItemId);
     func_8082F43C(play, this, func_80848808);
     var_v1 = D_8085CD00[(gPlayerModelTypes[this->modelGroup].modelAnimType * 6) + gPlayerModelTypes[this->nextModelGroup].modelAnimType];
     if ((sp37 == 8) || (temp_v0 = this->itemActionParam, (temp_v0 == 8))) {
@@ -3867,7 +3867,7 @@ s32 func_80832090(Player* this) {
     if (((s32) this->unk_748 != (s32) func_8084D770) || ((var_v0 = (this->stateFlags3 & 0x40000000) != 0, (var_v0 != 0)) && ((temp_v1 = this->heldItemId, ((temp_v1 == 0xFC) != 0)) || (var_v0 = temp_v1 == 0xFF, (var_v0 != 0))))) {
         var_v0 = ((s32) this->unk_AC4 == (s32) func_80848808) == 0;
         if (var_v0 == 0) {
-            var_v0 = func_8082F524(this, (s32) this->heldItemId) == this->itemActionParam;
+            var_v0 = Player_ItemToActionParam(this, (s32) this->heldItemId) == this->itemActionParam;
         }
     }
     return var_v0;
@@ -5489,7 +5489,7 @@ void func_80835BF8(Vec3f* arg0, s16 arg1, f32 arg2, Vec3f* arg3) {
     arg3->z = (Math_CosS(arg1) * arg2) + arg0->z;
 }
 
-void func_80835C64(PlayState* play, Player* this, Vec3f* translation, Vec3f* arg3, s32 elfParams) {
+void Player_SpawnFairy(PlayState* play, Player* this, Vec3f* translation, Vec3f* arg3, s32 elfParams) {
     Vec3f sp34;
 
     func_80835BC8(this, translation, arg3, &sp34);
@@ -8508,7 +8508,7 @@ s32 func_8083CF68(PlayState* play, Player* this) {
             sp24 = func_80857BE8;
             sp28 = func_80853D68;
             sp56 = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
-            func_800B75A0(this->actor.floorPoly, &sp48, &sp46);
+            Actor_GetSlopeDirection(this->actor.floorPoly, &sp48, &sp46);
             temp_v0_2 = sp46 - sp56;
             var_v1 = temp_v0_2;
             if (temp_v0_2 < 0) {
@@ -9921,7 +9921,7 @@ void func_80840770(PlayState* play, Player* this) {
             func_80838760(this);
             this->unk_AE8 = 0x3C;
             this->unk_A86 = (s8) play->playerActorCsIds[7];
-            func_80835C64(play, this, &this->actor.world.pos, &D_8085D2A4, 5);
+            Player_SpawnFairy(play, this, &this->actor.world.pos, &D_8085D2A4, 5);
             func_800B8E58(this, 0x20A8U);
             return;
         }
@@ -10330,10 +10330,10 @@ void Player_Init(Actor* thisx, PlayState* play) {
     Player* this = (Player* ) thisx;
 
     play->playerInit = Player_InitCommon;
-    play->playerUpdate = func_80844EF8;
+    play->playerUpdate = Player_UpdateCommon;
     play->unk_18770 = func_8085B170;
-    play->startPlayerFishing = func_8085B134;
-    play->grabPlayer = func_8085B1F0;
+    play->startPlayerFishing = Player_StartFishing;
+    play->grabPlayer = Player_GrabPlayer;
     play->startPlayerCutscene = func_8085B28C;
     play->func_18780 = func_8085B384;
     play->damagePlayer = Player_InflictDamage;
@@ -10535,7 +10535,7 @@ block_10:
     }
     D_8085D2CC[var_v0_3](play, this);
     if ((this->actor.draw != NULL) && (gSaveContext.save.hasTatl != 0) && ((temp_v0_7 = gSaveContext.gameMode, (temp_v0_7 == 0)) || (temp_v0_7 == 3)) && (play->sceneNum != 8)) {
-        func_80835C64(play, this, &this->actor.world.pos, &D_8085D340, 0);
+        Player_SpawnFairy(play, this, &this->actor.world.pos, &D_8085D340, 0);
         this->tatlActor = M2C_ERROR(Read from unset register $v0);
         temp_v1_3 = gSaveContext.dogParams;
         if (temp_v1_3 != 0) {
@@ -11506,7 +11506,7 @@ void func_80844D80(PlayState* play, Player* this) {
     } while (var_s1 != 2);
 }
 
-void func_80844EF8(Player* player, PlayState* play, Input* input) {
+void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
     s32 sp58;
     f32 sp50;
     f32 sp44;
@@ -12061,7 +12061,7 @@ void Player_Update(Actor* thisx, PlayState* play) {
         }
     }
     sp38 = &play->actorCtx.unk_26C;
-    func_80844EF8(this, play, (Input* ) &sp44);
+    Player_UpdateCommon(this, play, (Input* ) &sp44);
     play->actorCtx.unk268 = 0;
     bzero(sp38, 0x18);
     gGameInfo->data[0x214] = (s16) (s32) this->actor.world.pos.x;
@@ -13105,7 +13105,7 @@ s32 func_80848808(Player* this, PlayState* play) {
 
     if (LinkAnimation_Update(play, &this->unk_284) == 0) {
         temp_v1 = this->itemActionParam;
-        if (func_8082F524(this, (s32) this->heldItemId) == temp_v1) {
+        if (Player_ItemToActionParam(this, (s32) this->heldItemId) == temp_v1) {
             var_v0 = D_80862B48 != 0;
             if (var_v0 == 0) {
                 var_v0 = this->modelAnimType != 3;
@@ -15583,7 +15583,7 @@ void func_8084E724(Player* arg0, PlayState* arg1) {
         func_8083216C(arg0, arg1);
     }
     temp_v1 = arg0->unk_AA5;
-    if (((temp_v1 == 2) && !(arg1->actorCtx.unk5 & 4)) || ((temp_v1 != 2) && ((arg0->csMode != 0) || (temp_v1 == 0) || ((s32) temp_v1 >= 5) || (func_8082FB68(arg0) != 0) || (arg0->unk_730 != NULL) || (func_8083868C(arg1, arg0), (M2C_ERROR(Read from unset register $v0) == 0)) || ((arg0->unk_AA5 == 3) && (((func_8082F524(arg0, Inventory_GetBtnBItem(arg1)) != arg0->itemActionParam) && (D_80862B44->press.button & 0x4000)) || (D_80862B44->press.button & 0x8010) || (func_80123434(arg0) != 0) || ((func_800B7128(arg0) == 0) && (func_8082EF20(arg0) == 0)))) || ((arg0->unk_AA5 == 1) && (D_80862B44->press.button & 0xC01F)) || (func_808391D8(arg0, arg1) != 0)))) {
+    if (((temp_v1 == 2) && !(arg1->actorCtx.unk5 & 4)) || ((temp_v1 != 2) && ((arg0->csMode != 0) || (temp_v1 == 0) || ((s32) temp_v1 >= 5) || (func_8082FB68(arg0) != 0) || (arg0->unk_730 != NULL) || (func_8083868C(arg1, arg0), (M2C_ERROR(Read from unset register $v0) == 0)) || ((arg0->unk_AA5 == 3) && (((Player_ItemToActionParam(arg0, Inventory_GetBtnBItem(arg1)) != arg0->itemActionParam) && (D_80862B44->press.button & 0x4000)) || (D_80862B44->press.button & 0x8010) || (func_80123434(arg0) != 0) || ((func_800B7128(arg0) == 0) && (func_8082EF20(arg0) == 0)))) || ((arg0->unk_AA5 == 1) && (D_80862B44->press.button & 0xC01F)) || (func_808391D8(arg0, arg1) != 0)))) {
         func_80839ED0(arg0, arg1);
         play_sound(0x4813U);
     } else {
@@ -17706,7 +17706,7 @@ void func_80853754(Player* arg0, PlayState* arg1) {
             func_800B8E58(arg0, 0x20A8U);
             sp2C = 1;
         }
-        func_80835C64(arg1, arg0, &arg0->leftHandWorld.pos, &D_8085D7EC, sp2C);
+        Player_SpawnFairy(arg1, arg0, &arg0->leftHandWorld.pos, &D_8085D7EC, sp2C);
     }
 }
 
@@ -17870,7 +17870,7 @@ void func_80853D68(Player* arg0, PlayState* arg1) {
             return;
         }
         sp54 = temp_a3;
-        func_800B75A0(temp_a3, &sp38, &sp46);
+        Actor_GetSlopeDirection(temp_a3, &sp38, &sp46);
         var_v0 = sp46;
         if (arg0->unk_AE7 != 0) {
             var_v0 = sp46 + 0x8000;
@@ -19791,7 +19791,7 @@ block_62:
                     spBC = arg0->linearVelocity;
                     arg0->actor.home.rot.y = arg0->currentYaw;
                     arg0->currentYaw = sp90;
-                    func_800B75A0(arg0->actor.floorPoly, &sp94, &sp92);
+                    Actor_GetSlopeDirection(arg0->actor.floorPoly, &sp94, &sp92);
                     var_fa1_2 = sqrtf((sp38 * sp38) + (sp34 * sp34));
                     if (arg0->unk_B88 != 0) {
                         var_a0_2 = sp8E;
@@ -20913,7 +20913,7 @@ void func_8085B08C(Player* arg0, PlayState* arg1) {
     func_8085AC9C(arg1, arg0, NULL, &D_8085DEF4[arg0->csMode]);
 }
 
-s32 func_8085B134(PlayState* play) {
+s32 Player_StartFishing(PlayState* play) {
     Player* sp1C;
     Player* temp_a1;
 
@@ -20933,7 +20933,7 @@ void func_8085B170(PlayState* play, Player* player) {
     func_8082DF8C(player, 0x680DU);
 }
 
-s32 func_8085B1F0(PlayState* play, Player* player) {
+s32 Player_GrabPlayer(PlayState* play, Player* player) {
     if ((Player_InBlockingCsMode(play, player) == 0) && (player->invincibilityTimer >= 0) && (func_801240DC(player) == 0) && !(player->stateFlags1 & 0xB06080) && !(player->stateFlags2 & 0x80) && !(player->stateFlags3 & 0x80)) {
         func_8085B170(play, player);
         return 1;
@@ -21104,7 +21104,7 @@ enum PlayerActionParam func_8085B854(PlayState* play, Player* player, s32 itemId
     enum PlayerActionParam temp_v0;
     enum PlayerActionParam var_v1;
 
-    temp_v0 = func_8082F524(player, itemId);
+    temp_v0 = Player_ItemToActionParam(player, itemId);
     var_v1 = temp_v0;
     if ((temp_v0 >= 0x3A) && (temp_v0 < 0x52) && (temp_v0 == (player->currentMask + 0x39))) {
         var_v1 = PLAYER_AP_NONE;

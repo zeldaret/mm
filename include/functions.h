@@ -668,7 +668,7 @@ s32 Actor_ActorAIsFacingActorB(Actor* actorA, Actor* actorB, s16 maxAngleDiff);
 s32 Actor_IsFacingAndNearPlayer(Actor* actor, f32 range, s16 maxAngleDiff);
 s32 Actor_ActorAIsFacingAndNearActorB(Actor* actorA, Actor* actorB, f32 range, s16 maxAngleDiff);
 
-void func_800B75A0(CollisionPoly* poly, Vec3f* normal, s16* azimuth);
+void Actor_GetSlopeDirection(CollisionPoly* floorPoly, Vec3f* slopeNormal, s16* downwardSlopeYaw);
 void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight, f32 wallCheckRadius, f32 ceilingCheckHeight, u32 flags);
 Hilite* Hilite_DrawOpa(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx);
 void func_800B8050(Actor* actor, PlayState* play, s32 flag);
@@ -1956,7 +1956,7 @@ s32 Player_IsGoronOrDeku(Player* player);
 s32 func_801234D4(PlayState* play);
 s32 func_80123590(PlayState* play, Actor* actor);
 ItemID func_8012364C(PlayState* play, Player* player, s32 arg2);
-s32 func_80123810(PlayState* play);
+PlayerActionParam func_80123810(PlayState* play);
 PlayerModelGroup Player_ActionToModelGroup(Player* player, PlayerActionParam actionParam);
 void Player_SetModelsForHoldingShield(Player* player);
 void Player_SetModels(Player* player, PlayerModelGroup modelGroup);
