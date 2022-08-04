@@ -469,14 +469,6 @@ typedef struct {
     /* 0x04 */ Vec3s* points; // Segment Address to the array of points
 } Path; // size = 0x8
 
-typedef struct {
-    /* 0x00 */ UNK_TYPE2 unk0;
-    /* 0x02 */ UNK_TYPE2 unk2;
-    /* 0x04 */ UNK_TYPE2 unk4;
-    /* 0x06 */ UNK_TYPE2 unk6;
-    /* 0x08 */ UNK_TYPE2 unk8;
-} MinimapChest; // size = 0xA
-
 // TODO: consider merging with bgCamInfo?
 typedef struct {
     /* 0x0 */ s16 setting; // camera setting described by CameraSettingType enum

@@ -1682,7 +1682,7 @@ s16 func_80105318(void);
 // void func_80105328(void);
 // void func_8010534C(void);
 void func_8010549C(PlayState* play, void* segmentAddress);
-void func_8010565C(PlayState* play, u8 num, void* segmentAddress);
+void func_8010565C(PlayState* play, s32 num, void* segmentAddress);
 void func_80105818(PlayState* play, u32 uParm2, TransitionActorEntry* puParm3);
 void func_80105A40(void);
 void func_80105B34(PlayState* play);

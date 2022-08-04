@@ -23,6 +23,14 @@ typedef struct {
     /* 0x04 */ s16 unk4;
 } MinimapList2; // size  = 0x8
 
+typedef struct {
+    /* 0x00 */ UNK_TYPE2 unk0;
+    /* 0x02 */ UNK_TYPE2 unk2;
+    /* 0x04 */ UNK_TYPE2 unk4;
+    /* 0x06 */ UNK_TYPE2 unk6;
+    /* 0x08 */ UNK_TYPE2 unk8;
+} MinimapChest; // size = 0xA
+
 /* z_map_data */
 
 typedef struct {
@@ -64,13 +72,6 @@ typedef struct {
 } T_801BEAE0;
 
 typedef struct {
-    /* 0x00 */ s16 unk0;
-    /* 0x00 */ s16 unk2;
-    /* 0x00 */ s16 unk4;
-    /* 0x00 */ s16 unk6;
-} T_801BEBB8_unk48;
-
-typedef struct {
     /* 0x00 */ MinimapList2* unk0; //unk0 -> sub1 -> s16[5]
     /* 0x04 */ s32 unk4;
     /* 0x08 */ s16 unk8;
@@ -84,7 +85,8 @@ typedef struct {
     /* 0x1E */ s16 unk1E; //same as 0E
     /* 0x20 */ s32 unk20;
     /* 0x24 */ s32 unk24;
-    /* 0x28 */ char unk28[8];
+    /* 0x28 */ void* unk28;
+    /* 0x2C */ void* unk2C; 
     /* 0x30 */ s16 unk30; //scene minBounds.x
     /* 0x32 */ s16 unk32; //scene minBounds.z
     /* 0x34 */ s16 unk34; //scene boundsWidth.x
@@ -97,8 +99,11 @@ typedef struct {
     /* 0x44 */ s16 unk44;
     /* 0x48 */ s16* unk48;
     /* 0x4C */ s16 unk4C;
-    /* 0x4E */ char unk4E[0x0A];
+    /* 0x4E */ char unk4E[0x02];
+    /* 0x50 */ s32 unk50; //num chests
+    /* 0x54 */ MinimapChest* unk54;
     /* 0x58 */ s16 unk58;
+    /* 0x5A */ s16 unk5A;
 } T_801BEBB8;
 
 typedef struct {
@@ -138,6 +143,7 @@ typedef struct {
 /* z_map_data */
 s32 func_80109CBC(s32);
 s32 func_80109A98(s32);
+s32 func_80109AD8(s32);
 s32 func_801096D4(s32 arg0);
 void func_8010983C(s32 arg0, s32 *arg1);
 void func_801097C8(s32 arg0, s32* arg1, s32* arg2);

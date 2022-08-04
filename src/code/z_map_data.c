@@ -12,6 +12,8 @@ extern Color_RGBA8 D_801BED40[];
 extern s32 D_801BF3B4[];
 extern s32 D_801BEFC8[];
 
+s32 func_80109A98(s32);
+
 void func_801094A0(s32 arg0, Color_RGBA8* color) {
     *color = D_801BED40[arg0];
 }
@@ -183,8 +185,6 @@ u8 func_80109A00(s32 arg0) {
 s16 func_80109A20(s32 arg0) {
     return D_801BF170[arg0].unk8;
 }
-
-s32 func_80109A98(s32);                             /* extern */
 
 s32 func_80109A40(s32 arg0) {
     s32 temp_s2;

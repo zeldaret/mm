@@ -3164,7 +3164,6 @@ extern s16 D_801F4E7A;
 // extern LightsBuffer sLightsBuffer;
 // extern UNK_TYPE1 D_801F5130;
 // extern UNK_TYPE1 D_801F5270;
-// extern UNK_TYPE1 D_801F528E;
 // extern UNK_TYPE1 D_801F53B0;
 // extern UNK_TYPE1 D_801F56B0;
 // extern UNK_TYPE1 D_801F5730;
