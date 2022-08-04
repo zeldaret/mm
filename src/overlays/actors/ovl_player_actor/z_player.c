@@ -11912,53 +11912,13 @@ void func_80851BD4(Player* this, PlayState* play) {
     func_8084748C(this, &this->linearVelocity, 0.0f, this->actor.shape.rot.y);
 }
 
-#ifdef NON_EQUIVALENT
 s32 func_80851C40(PlayState* play, Player* this) {
-    #if 0
-    s32 var_v0;
-
-    if (play->sceneNum == 0x15) {
-        var_v0 = Audio_IsSequencePlaying(0x54U) != 0;
-        if (var_v0 == 0) {
-            goto block_3;
-        }
-    } else {
-block_3:
-        if ((play->sceneNum == 0x15) || (var_v0 = this->csMode == 0x44, (var_v0 == 0))) {
-            var_v0 = play->msgCtx.msgMode == 0x12;
-            if (var_v0 == 0) {
-                var_v0 = play->msgCtx.msgMode == 0x13;
-                if (var_v0 == 0) {
-                    var_v0 = play->msgCtx.msgMode == 0x14;
-                    if (var_v0 == 0) {
-                        var_v0 = play->msgCtx.ocarinaMode != 1;
-                        if (var_v0 != 0) {
-                            var_v0 = this->csMode == 5;
-                            if (var_v0 == 0) {
-                                var_v0 = play->msgCtx.ocarinaMode == 3;
-                                if (var_v0 == 0) {
-                                    var_v0 = play->msgCtx.ocarinaAction == 0x32;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return var_v0;
-    #endif
-
     return ((play->sceneNum == SCENE_MILK_BAR) && Audio_IsSequencePlaying(NA_BGM_BALLAD_OF_THE_WIND_FISH)) || (
-        ((play->sceneNum != SCENE_MILK_BAR) || (this->csMode == 0x44)) && (
+        ((play->sceneNum != SCENE_MILK_BAR) && (this->csMode == 0x44)) || (
             ( play->msgCtx.msgMode == 0x12) || (play->msgCtx.msgMode == 0x13) || (play->msgCtx.msgMode == 0x14) || ((play->msgCtx.ocarinaMode != 1) && ((this->csMode == 5) || (play->msgCtx.ocarinaMode == 3) ||  play->msgCtx.ocarinaAction == 0x32))
         )
     );
 }
-#else
-s32 func_80851C40(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80851C40.s")
-#endif
 
 void func_80851D30(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80851D30.s")
