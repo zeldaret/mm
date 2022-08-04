@@ -29,7 +29,7 @@ void EnYb_TeachingDance(EnYb* this, PlayState* play);
 void EnYb_WaitForMidnight(EnYb* this, PlayState* play);
 
 void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play);
-void EnYb_SetAnimation(PlayState*, EnYb*, s16, u8, f32);
+void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 morphFrames);
 s32 EnYb_CanTalk(EnYb* this, PlayState* play);
 
 const ActorInit En_Yb_InitVars = {
@@ -93,11 +93,11 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actionFunc = EnYb_Idle;
-    this->animIndex = 3; // gets overwritten to 2 in EnYb_SetAnimation later
+    this->animIndex = 3; // gets overwritten to 2 in EnYb_ChangeAnim later
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
-    EnYb_SetAnimation(play, this, 2, ANIMMODE_LOOP, 0.0f);
+    EnYb_ChangeAnim(play, this, 2, ANIMMODE_LOOP, 0.0f);
 
     tempCutscene = this->actor.cutscene;
     for (i = 0; i < ARRAY_COUNT(this->cutscenes); i++) {
@@ -167,19 +167,19 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
     }
 }
 
-void EnYb_SetAnimation(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 transitionRate) {
+void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 morphFrames) {
     if (animIndex >= 0 && animIndex < 3) {
         if (animIndex != this->animIndex || animMode != ANIMMODE_LOOP) {
             if (animIndex > 0) {
                 if (animMode == ANIMMODE_LOOP) {
                     LinkAnimation_Change(play, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
                                          Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), ANIMMODE_LOOP,
-                                         transitionRate);
+                                         morphFrames);
                 } else {
                     // unused case, (only called once with animMode = ANIMMODE_LOOP)
                     LinkAnimation_Change(play, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
                                          Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), ANIMMODE_LOOP,
-                                         transitionRate);
+                                         morphFrames);
                 }
             } else {
                 // unused case, (only called once with animIndex = 2)
@@ -188,7 +188,7 @@ void EnYb_SetAnimation(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, 
                 if (1) {}
 
                 Animation_Change(&this->skelAnime, gYbUnusedAnimations[animIndex], 1.0f, 0.0f,
-                                 Animation_GetLastFrame(animationPtr), animMode, transitionRate);
+                                 Animation_GetLastFrame(animationPtr), animMode, morphFrames);
             }
             this->animIndex = animIndex;
         }
