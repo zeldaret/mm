@@ -293,7 +293,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
 }
 
 void func_809CD634(EnBji01* this, PlayState* play) {
-    func_801A5BD0(0x6F);
+    Audio_SetSfxBanksMute(0x6F);
     Audio_QueueSeqCmd(0xE0000101);
     play->nextEntranceIndex = 0x54A0; /* Termina Field from telescope */
     gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = play->nextEntranceIndex;
@@ -350,7 +350,7 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
             break;
         case 0x4C20: /* Observatory from Termina Field telescope */
             this->actor.flags |= ACTOR_FLAG_10000;
-            func_801A5BD0(0);
+            Audio_SetSfxBanksMute(0);
             Audio_QueueSeqCmd(0xE0000100);
             this->actor.params = SHIKASHI_TYPE_LOOKED_THROUGH_TELESCOPE;
             func_809CCE98(this, play);

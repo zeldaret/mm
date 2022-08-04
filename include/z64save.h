@@ -143,8 +143,8 @@ typedef struct Save {
     /* 0x00F8 */ PermanentSceneFlags permanentSceneFlags[120];
     /* 0x0E18 */ u8 unk_E18[0x54];
     /* 0x0E6C */ u32 dekuPlaygroundHighScores[3];
-    /* 0x0E78 */ u32 pictoFlags0;
-    /* 0x0E7C */ u32 pictoFlags1;
+    /* 0x0E78 */ u32 pictoFlags0;                       // Flags set by `PictoActor`s if pictograph is valid
+    /* 0x0E7C */ u32 pictoFlags1;                       // Flags set by Snap_ValidatePictograph() to record errors; volatile since that function is run many times in succession
     /* 0x0E80 */ u32 unk_E80;
     /* 0x0E84 */ u32 unk_E84;
     /* 0x0E88 */ u32 unk_E88[7];                        // Invadepoh flags
@@ -167,7 +167,7 @@ typedef struct Save {
     /* 0x0F60 */ u32 mapsVisible;                       // "cloud_clear"
     /* 0x0F64 */ u8 unk_F64;                            // "oca_rec_flag"                   has scarecrows song
     /* 0x0F65 */ u8 unk_F65;                            // "oca_rec_flag8"                  scarecrows song set?
-    /* 0x0F66 */ u8 scarecrowsSong[128];
+    /* 0x0F66 */ u8 scarecrowSpawnSong[128];
     /* 0x0FE6 */ s8 bombersCaughtNum;                   // "aikotoba_index"
     /* 0x0FE7 */ s8 bombersCaughtOrder[5];              // "aikotoba_table"
     /* 0x0FEC */ s8 lotteryCodes[3][3];                 // "numbers_table", Preset lottery codes
