@@ -13204,7 +13204,7 @@
     0x80B1E234:("EnPp_Destroy",),
     0x80B1E29C:("EnPp_PointlessPosCheck",),
     0x80B1E3D4:("EnPp_SpawnDust",),
-    0x80B1E5A8:("EnPp_ChangeAnimation",),
+    0x80B1E5A8:("EnPp_ChangeAnim",),
     0x80B1E680:("EnPp_PlaySfxForAnimation",),
     0x80B1E778:("EnPp_CheckCollision",),
     0x80B1E958:("EnPp_SetupIdle",),

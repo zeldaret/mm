@@ -414,12 +414,12 @@ void EnPp_SpawnDust(EnPp* this, PlayState* play) {
     }
 }
 
-void EnPp_ChangeAnimation(EnPp* this, s32 index) {
+void EnPp_ChangeAnim(EnPp* this, s32 animIndex) {
     f32 morphFrames = -10.0f;
     f32 playSpeed;
     f32 startFrame;
 
-    this->animIndex = index;
+    this->animIndex = animIndex;
     this->endFrame = Animation_GetLastFrame(sAnimations[this->animIndex]);
 
     if (this->animIndex >= EN_PP_ANIM_WIND_UP) {
@@ -539,7 +539,7 @@ void EnPp_Idle(EnPp* this, PlayState* play) {
             this->targetRotY = Math_Vec3f_Yaw(&this->actor.world.pos, &posToLookAt);
             this->actor.speedXZ = 0.0f;
             if (this->animIndex != EN_PP_ANIM_IDLE) {
-                EnPp_ChangeAnimation(this, EN_PP_ANIM_IDLE);
+                EnPp_ChangeAnim(this, EN_PP_ANIM_IDLE);
             }
         }
 
@@ -550,13 +550,13 @@ void EnPp_Idle(EnPp* this, PlayState* play) {
         if (EnPp_CheckCollision(this, play) != EN_PP_COLLISION_RESULT_OK) {
             this->timer = 0;
             if (this->animIndex != EN_PP_ANIM_WALK) {
-                EnPp_ChangeAnimation(this, EN_PP_ANIM_WALK);
+                EnPp_ChangeAnim(this, EN_PP_ANIM_WALK);
             }
 
             Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 1, 0x258, 0);
         } else if ((this->secondaryTimer == 0) && (this->timer != 0)) {
             if (this->animIndex == EN_PP_ANIM_IDLE) {
-                EnPp_ChangeAnimation(this, EN_PP_ANIM_WALK);
+                EnPp_ChangeAnim(this, EN_PP_ANIM_WALK);
             }
 
             if ((this->maskBounceRotationalVelocity < 0x64) &&
@@ -574,7 +574,7 @@ void EnPp_Idle(EnPp* this, PlayState* play) {
 void EnPp_SetupCharge(EnPp* this) {
     this->secondaryTimer = this->timer = 0;
     this->actionVar.isCharging = false;
-    EnPp_ChangeAnimation(this, EN_PP_ANIM_TURN_TO_FACE_PLAYER);
+    EnPp_ChangeAnim(this, EN_PP_ANIM_TURN_TO_FACE_PLAYER);
     this->action = EN_PP_ACTION_CHARGE;
     this->actionFunc = EnPp_Charge;
 }
@@ -620,12 +620,12 @@ void EnPp_Charge(EnPp* this, PlayState* play) {
             this->actionVar.isCharging = true;
         }
     } else if (this->animIndex == EN_PP_ANIM_TURN_TO_FACE_PLAYER) {
-        EnPp_ChangeAnimation(this, EN_PP_ANIM_WIND_UP);
+        EnPp_ChangeAnim(this, EN_PP_ANIM_WIND_UP);
     } else if (this->animIndex == EN_PP_ANIM_WIND_UP) {
         if (this->endFrame <= curFrame) {
             this->chargeAndBounceSpeed = 14.0f;
             this->timer = 20;
-            EnPp_ChangeAnimation(this, EN_PP_ANIM_CHARGE);
+            EnPp_ChangeAnim(this, EN_PP_ANIM_CHARGE);
         }
     } else if (this->animIndex == EN_PP_ANIM_CHARGE) {
         if (EnPp_CheckCollision(this, play) != EN_PP_COLLISION_RESULT_OK) {
@@ -679,7 +679,7 @@ void EnPp_Charge(EnPp* this, PlayState* play) {
 }
 
 void EnPp_SetupAttack(EnPp* this) {
-    EnPp_ChangeAnimation(this, EN_PP_ANIM_ATTACK);
+    EnPp_ChangeAnim(this, EN_PP_ANIM_ATTACK);
     this->hornColliderOn = true;
     this->action = EN_PP_ACTION_ATTACK;
     this->actor.speedXZ = 0.0f;
@@ -710,7 +710,7 @@ void EnPp_SetupBounced(EnPp* this) {
     this->timer = 10;
     this->targetPos.x += distanceFromWorldPos.x;
     this->targetPos.z += distanceFromWorldPos.z;
-    EnPp_ChangeAnimation(this, EN_PP_ANIM_DAMAGE);
+    EnPp_ChangeAnim(this, EN_PP_ANIM_DAMAGE);
     this->actor.speedXZ = 0.0f;
     this->action = EN_PP_ACTION_BOUNCED;
     this->chargeAndBounceSpeed = 14.0f;
@@ -736,7 +736,7 @@ void EnPp_SetupRoar(EnPp* this) {
     this->timer = 20;
     this->secondaryTimer = 0;
     this->chargeAndBounceSpeed = 14.0f;
-    EnPp_ChangeAnimation(this, EN_PP_ANIM_ROAR);
+    EnPp_ChangeAnim(this, EN_PP_ANIM_ROAR);
     this->action = EN_PP_ACTION_ROAR;
     this->actionFunc = EnPp_Roar;
 }
@@ -796,7 +796,7 @@ void EnPp_SetupJump(EnPp* this) {
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 20.0f;
     this->actor.gravity = -3.0f;
-    EnPp_ChangeAnimation(this, EN_PP_ANIM_JUMP);
+    EnPp_ChangeAnim(this, EN_PP_ANIM_JUMP);
 
     if (this->chargesInStraightLines) {
         yawDiff = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.home.rot.y));
@@ -838,7 +838,7 @@ void EnPp_Jump(EnPp* this, PlayState* play) {
     if (!this->actionVar.hasLandedFromJump) {
         if (this->actor.bgCheckFlags & 1) {
             this->actionVar.hasLandedFromJump = true;
-            EnPp_ChangeAnimation(this, EN_PP_ANIM_LAND);
+            EnPp_ChangeAnim(this, EN_PP_ANIM_LAND);
         }
     } else if (this->endFrame <= curFrame) {
         EnPp_SetupIdle(this);
@@ -916,7 +916,7 @@ void EnPp_SetupDamaged(EnPp* this, PlayState* play) {
 
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
     this->secondaryTimer = 0;
-    EnPp_ChangeAnimation(this, EN_PP_ANIM_DAMAGE);
+    EnPp_ChangeAnim(this, EN_PP_ANIM_DAMAGE);
     this->targetRotY = this->actor.yawTowardsPlayer + 0x8000;
     this->action = EN_PP_ACTION_DAMAGED;
     if (EnPp_CheckCollision(this, play) == EN_PP_COLLISION_RESULT_ABOUT_TO_RUN_OFF_LEDGE) {
@@ -990,7 +990,7 @@ void EnPp_SetupDead(EnPp* this, PlayState* play) {
     }
 
     this->maskBounceRotationalVelocity = this->actionVar.isCharging = 0;
-    EnPp_ChangeAnimation(this, EN_PP_ANIM_DAMAGE);
+    EnPp_ChangeAnim(this, EN_PP_ANIM_DAMAGE);
     this->timer = 15;
     if (((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) ||
          (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) &&
@@ -1099,7 +1099,7 @@ void EnPp_Mask_SetupDetach(EnPp* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_8000000;
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->actionVar.maskDetachState = EN_PP_MASK_DETACH_STATE_START;
-        EnPp_ChangeAnimation(this, EN_PP_ANIM_IDLE);
+        EnPp_ChangeAnim(this, EN_PP_ANIM_IDLE);
         SkelAnime_Update(&this->skelAnime);
         this->action = EN_PP_ACTION_MASK_DETACH;
         this->actionFunc = EnPp_Mask_Detach;
@@ -1165,7 +1165,7 @@ void EnPp_Mask_Detach(EnPp* this, PlayState* play) {
 }
 
 void EnPp_BodyPart_SetupMove(EnPp* this) {
-    EnPp_ChangeAnimation(this, EN_PP_ANIM_DAMAGE);
+    EnPp_ChangeAnim(this, EN_PP_ANIM_DAMAGE);
     this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 13.0f;
     this->actor.gravity = -2.0f;
     this->timer = Rand_S16Offset(30, 30);
@@ -1353,7 +1353,7 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
         this->actor.speedXZ = 0.0f;
         if (this->action == EN_PP_ACTION_CHARGE) {
             this->actionVar.isCharging = false;
-            EnPp_ChangeAnimation(this, EN_PP_ANIM_TURN_TO_FACE_PLAYER);
+            EnPp_ChangeAnim(this, EN_PP_ANIM_TURN_TO_FACE_PLAYER);
             this->maskBounceRotationalVelocity = 0x1B58;
         }
 
