@@ -2,15 +2,14 @@
 #define Z_EN_DNQ_H
 
 #include "global.h"
+#include "z64snap.h"
 
 struct EnDnq;
 
 typedef void (*EnDnqActionFunc)(struct EnDnq*, PlayState*);
-typedef void (*EnDnqFunc)(PlayState*, struct EnDnq*);
 
 typedef struct EnDnq {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ EnDnqFunc unk_144;
+    /* 0x000 */ PictoActor picto;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ EnDnqActionFunc actionFunc;
     /* 0x190 */ ColliderCylinder collider;
