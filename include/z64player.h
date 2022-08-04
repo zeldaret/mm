@@ -860,8 +860,8 @@ typedef struct Player {
     /* 0xB65 */ u8 shockTimer;
     /* 0xB66 */ u8 unk_B66;
     /* 0xB67 */ u8 unk_B67; // deku hop timer?
-    /* 0xB68 */ s16 unk_B68;
-    /* 0xB6A */ s16 unk_B6A;
+    /* 0xB68 */ s16 fallStartHeight; // last truncated Y position before falling
+    /* 0xB6A */ s16 fallDistance; // truncated Y distance the player has fallen so far (positive is down)
     /* 0xB6C */ s16 unk_B6C;
     /* 0xB6E */ s16 unk_B6E;
     /* 0xB70 */ s16 unk_B70;

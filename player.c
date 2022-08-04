@@ -224,14 +224,6 @@ static ? D_8085CE30;                                /* unable to generate initia
 static ? D_8085CE60;                                /* unable to generate initializer */
 static struct _struct_D_8085CF88_0x10 D_8085CF88[2]; /* unable to generate initializer */
 static ? D_8085CFB8;                                /* unable to generate initializer */
-static s8 D_8085CFE4[8] = { 0xD, 2, 4, 9, 0xA, 0xB, 8, -7 };
-static s8 D_8085CFEC[0xC] = { 0xD, 1, 2, 5, 3, 4, 9, 0xA, 0xB, 7, 8, -6 };
-static s8 D_8085CFF8[0xC] = { 0xD, 1, 2, 3, 4, 9, 0xA, 0xB, 8, 7, -6, 0 };
-static s8 D_8085D00C[0xC] = { 0xD, 2, 4, 9, 0xA, 0xB, 0xC, 8, -7, 0, 0, 0 };
-static s8 D_8085D018 = -7;
-static s8 D_8085D028[0xC] = { 0, 0xB, 1, 2, 3, 0xC, 5, 4, 9, 8, 7, -6 };
-static s8 D_8085D034[0x10] = { 0xD, 1, 2, 3, 0xC, 5, 4, 9, 0xA, 0xB, 8, 7, -6, 0, 0, 0 };
-static s8 D_8085D044[4] = { 0xA, 8, -7, 0 };
 static s8 D_8085D050[4] = { 0xD, 2, -4, 0 };
 static LinkAnimationHeader* D_8085D118[3] = {
     (LinkAnimationHeader* )0x0400E1B8,
@@ -292,16 +284,6 @@ static struct_80124618 D_8085D4E0[6] = {
     { 7, { 0x50, 0x5A, 0x50 } },
     { 9, { 0x64, 0x64, 0x64 } },
 };
-static struct _struct_D_8085D588_0xC D_8085D588[2]; /* unable to generate initializer */
-static ? D_8085D5A0;                                /* unable to generate initializer */
-static ? D_8085D5B8;                                /* unable to generate initializer */
-static LinkAnimationHeader* D_8085D5E4[3] = {
-    (LinkAnimationHeader* )0x0400D9E8,
-    (LinkAnimationHeader* )0x0400D528,
-    (LinkAnimationHeader* )0x0400E2F8,
-};
-static ? D_8085D5F0;                                /* unable to generate initializer */
-static u16 D_8085D5FA[5] = { 0xE2F8, 0x1830, 0x9BF, 0, 0 };
 static struct_8082E224_arg1 D_8085D61C[4] = { { 0x6800, 0x2001 }, { 0x800, 0x1806 }, { 0x83C, 0x806 }, { 0, -0x2812 } };
 static Vec3f D_8085D62C;                            /* type too large by 8; unable to generate initializer */
 static f32 D_8085D630 = 0.0f;
@@ -996,193 +978,6 @@ ColliderQuadInit D_8085C394 = {
 f32 D_8085C3E4 = 1.0f;
 f32 D_8085C3E8 = 1.0f;
 u16 D_8085C3EC[4] = { 0x680F, 0x680E, 0x6811, 0x6808 };
-struct_8085C3F4 sGetItemTable[0xB9] = {
-    { 0x84, 0, 0xB0, 0xC4, 0x13F },
-    { 0x85, 1, 0xAF, 2, 0x13F },
-    { 0x86, 2, 0xAE, 3, 0x13F },
-    { 0x87, 2, 0xAE, 4, 0x13F },
-    { 0x88, 0x14, 0xAC, 5, 0x13F },
-    { 0x89, 0x14, 0xAB, 6, 0x13F },
-    { 0x8A, 0x13, 0xBD, 7, 0x13F },
-    { 0x5A, 0xA0, 0x21, 8, 0xA8 },
-    { 0x5B, 0xA0, 0x22, 9, 0xA8 },
-    { 0x83, 0x80, 9, 0xA, 0x90 },
-    { 0x83, 0xA0, 9, 0xB, 0x90 },
-    { 0x7B, 0xA0, 0x14, 0xC, 0x96 },
-    { 0x6F, 0xA0, 0x13, 0xD, 0x96 },
-    { 0x79, 0x6F, -0x1D, 0xE, 0xA4 },
-    { 0x7A, 0x6E, -0x1E, 0xF, 0xA4 },
-    { 0x83, 0x80, 9, 0x10, 0x90 },
-    { 0xFF, 0, 0, 0x11, 0 },
-    { 0x83, 0x80, 9, 0x12, 0x90 },
-    { 0x83, 0x80, 9, 0x13, 0x90 },
-    { 6, 0x59, -0x1F, 0x14, 0xA5 },
-    { 0x8F, 0x59, -0x1F, 0x15, 0xA5 },
-    { 0x90, 0x59, -0x1F, 0x16, 0xA5 },
-    { 0x91, 0x59, -0x1F, 0x17, 0xA5 },
-    { 0x92, 0x59, -0x1F, 0x18, 0xA5 },
-    { 8, 0xD, -0x1B, 0x19, 0x9F },
-    { 0x98, 0xC0, -0x27, 0x1A, 0xB0 },
-    { 0x56, 0xA0, 0x18, 0x1B, 0x98 },
-    { 0x57, 0xA0, 0x19, 0x1C, 0x98 },
-    { 0x58, 0xA0, 0x1A, 0x1D, 0x98 },
-    { 0x93, 0x48, -0x24, 0x1E, 0xAF },
-    { 0x94, 0x49, -0x25, 0x1F, 0xAF },
-    { 0x95, 0x4A, -0x26, 0x20, 0xAF },
-    { 0x95, 0x4A, -0x26, 0x21, 0xAF },
-    { 1, 0xA0, 0x2F, 0x22, 0xBF },
-    { 0x54, 0xA0, 0x16, 0x23, 0x97 },
-    { 0x55, 0xA0, 0x17, 0x24, 0x97 },
-    { 2, 0xA0, 0x48, 0x25, 0x121 },
-    { 3, 0xA0, 0x49, 0x26, 0x121 },
-    { 4, 0xA0, 0x4A, 0x27, 0x121 },
-    { 9, 0xC, -0x12, 0x28, 0x94 },
-    { 0x8D, 0xC, -0x12, 0x29, 0x94 },
-    { 0x8E, 0xC, -0x12, 0x2A, 0x94 },
-    { 0x9D, 0xA0, -0x12, 0x2B, 0x94 },
-    { 0x9D, 0xA0, -0x12, 0x2C, 0x94 },
-    { 0x9E, 0xA0, -0x12, 0x2D, 0x94 },
-    { 0x97, 0xC0, -0x27, 0x2E, 0xB0 },
-    { 0x9B, 0xA0, -0x1B, 0x2F, 0x9F },
-    { 0x9B, 0xA0, -0x1B, 0x30, 0x9F },
-    { 0x9C, 0xA0, -0x1B, 0x31, 0x9F },
-    { 0x51, 0xA0, -0x28, 0x32, 0xB3 },
-    { 0x52, 0xA0, 0x34, 0x33, 0xC3 },
-    { 0xC, 0x80, 0x5E, 0x34, 0x1CA },
-    { 0xA, 0x80, -0x35, 0x35, 0xC6 },
-    { 0x99, 0xC0, -0x27, 0x36, 0xB0 },
-    { 0x4D, 0xA0, 0x56, 0x37, 0x148 },
-    { 0x4E, 0xA0, 0x67, 0x38, 0x1F9 },
-    { 0x4F, 0xA0, 0x68, 0x39, 0x1FA },
-    { 0x9A, 0xC0, -0x27, 0x3A, 0xB0 },
-    { 0x10, 0xA0, 0x69, 0x3B, 0x1FB },
-    { 0x78, 0xA0, -2, 0x3C, 0x86 },
-    { 0x74, 0xA0, 0xA, 0x3D, 0x92 },
-    { 0x76, 0xA0, 0x1C, 0x3E, 0xA0 },
-    { 0x75, 0xA0, 0xB, 0x3F, 0x91 },
-    { 0xFF, 0, 0, 0x40, 0 },
-    { 0xF, 0xA0, 0x29, 0x41, 0xB4 },
-    { 0xE, 0xA0, 0x30, 0x42, 0xC0 },
-    { 0xD, 0xA0, 0x75, 0x43, 0x228 },
-    { 0xD, 0, 0, 0x44, 0 },
-    { 0x83, 0x80, 9, 0x45, 0x90 },
-    { 0xFF, 0, 0, 0x46, 0 },
-    { 0xFF, 0, 0, 0x47, 0 },
-    { 0xFF, 0, 0, 0x48, 0 },
-    { 0xFF, 0, 0, 0x49, 0 },
-    { 0xFF, 0, 0, 0x4A, 0 },
-    { 0xFF, 0, 0, 0x4B, 0 },
-    { 0, 0xA0, 0x2B, 0x4C, 0xB5 },
-    { 0xFF, 0, 0, 0x4D, 0 },
-    { 0xFF, 0, 0, 0x4E, 0 },
-    { 0xFF, 0, 0, 0x4F, 0 },
-    { 0x6D, 0x80, 0xC, 0x50, 0x253 },
-    { 0xFF, 0xA0, 0x20, 0x51, 0xA0 },
-    { 0x6E, 0x80, 0xB5, 0x52, 0x125 },
-    { 0xFF, 0, 0, 0x53, 0 },
-    { 0xFF, 0, 0, 0x54, 0 },
-    { 0x5D, 0x80, 0x5D, 0x55, 0 },
-    { 0x5E, 0x80, 0x64, 0x56, 0 },
-    { 0x5F, 0x80, 0x65, 0x57, 0 },
-    { 0x60, 0x80, 0x66, 0x58, 0 },
-    { 0x11, 0x80, 0x58, 0x59, 0x196 },
-    { 0x12, 0x80, 1, 0x5A, 0x9E },
-    { 0x13, 0x80, 0x32, 0x5B, 0xC1 },
-    { 0x14, 0x80, 0x31, 0x5C, 0xC1 },
-    { 0x15, 0x80, 0x33, 0x5D, 0xC1 },
-    { 0x16, 0x80, 0x3C, 0x5E, 0x272 },
-    { 0x16, 0x80, 1, 0x5F, 0x9E },
-    { 0x18, 0x80, 0x2C, 0x60, 0xB6 },
-    { 0x19, 0x80, 0x2C, 0x61, 0xB6 },
-    { 0x1A, 0x80, 0x36, 0x62, 0xC7 },
-    { 0x1B, 0x80, 0x4C, 0x63, 0x137 },
-    { 0x1C, 0, 0, 0x64, 0 },
-    { 0x12, 0x80, 1, 0x65, 0x9E },
-    { 0x1E, 0x80, 0x53, 0x66, 0x139 },
-    { 0x1F, 0, 0, 0x67, 0 },
-    { 0x20, 0, 0, 0x68, 0 },
-    { 0x21, 0x80, 0x59, 0x69, 0x1AE },
-    { 0x22, 0x80, 0x60, 0x6A, 0x1E9 },
-    { 0x23, 0x80, 0x70, 0x6B, 0x21D },
-    { 0xFF, 0, 0, 0x6C, 0 },
-    { 0x12, 0x80, 1, 0x6D, 0x9E },
-    { 0x24, 0x80, 0x60, 0x6E, 0x1E9 },
-    { 0x25, 0x80, 0x74, 0x6F, 0x227 },
-    { 0x12, 0x80, 1, 0x70, 0x9E },
-    { 0xFF, 0, 0, 0x71, 0 },
-    { 0xFF, 0, 0, 0x72, 0 },
-    { 0xFF, 0, 0, 0x73, 0 },
-    { 0xFF, 0, 0, 0x74, 0 },
-    { 0xFF, 0, 0, 0x75, 0 },
-    { 0xFF, 0, 0, 0x76, 0 },
-    { 0xFF, 0, 0, 0x77, 0 },
-    { 0x32, 0xA0, 0x5C, 0x78, 0x1BD },
-    { 0x33, 0xA0, 0x45, 0x79, 0x119 },
-    { 0x34, 0xA0, 0x46, 0x7A, 0x11A },
-    { 0x35, 0xA0, 0x76, 0x7B, 0x242 },
-    { 0x44, 0xA0, 0x3E, 0x7C, 0x102 },
-    { 0x49, 0xA0, 0x73, 0x7D, 0x226 },
-    { 0x38, 0xA0, 0x11, 0x7E, 0x265 },
-    { 0x39, 0xA0, 0x3F, 0x7F, 0x103 },
-    { 0x3A, 0xA0, 0x2D, 0x80, 0x100 },
-    { 0x3B, 0xA0, 0x6A, 0x81, 0x209 },
-    { 0x3C, 0xA0, 0x71, 0x82, 0x21F },
-    { 0x3D, 0xA0, 0xF, 0x83, 0x259 },
-    { 0x3E, 0xA0, 0x72, 0x84, 0x225 },
-    { 0x3F, 0xA0, 4, 0x85, 0x282 },
-    { 0x40, 0xA0, 0x6B, 0x86, 0x20A },
-    { 0x41, 0xA0, 0x6C, 0x87, 0x20B },
-    { 0x42, 0xA0, 0x23, 0x88, 0x266 },
-    { 0x43, 0xA0, 3, 0x89, 0x27D },
-    { 0x36, 0xA0, 0x40, 0x8A, 0x104 },
-    { 0x45, 0xA0, 0xD, 0x8B, 0x254 },
-    { 0x46, 0xA0, 0x10, 0x8C, 0x25A },
-    { 0x47, 0xA0, 0x3B, 0x8D, 0x26D },
-    { 0x48, 0xA0, 0x3D, 0x8E, 0x27E },
-    { 0x37, 0xA0, 0xE, 0x8F, 0x258 },
-    { 0xFF, 0, 0, 0x90, 0 },
-    { 0x9F, 0x80, 0x74, 0x91, 0x227 },
-    { 0xA0, 0x80, 0x2C, 0x92, 0xB6 },
-    { 0xA1, 0x80, 0x5F, 0x93, 0x1E8 },
-    { 0xA2, 0x80, 0x62, 0x94, 0x1EF },
-    { 0xA3, 0x80, 0x63, 0x95, 0x1F0 },
-    { 0x28, 0x80, 0x5A, 0x96, 0x1B1 },
-    { 0x29, 0x80, 0x5B, 0x97, 0x1B2 },
-    { 0x2A, 0x80, 0x41, 0x98, 0x1B2 },
-    { 0x2B, 0x80, 0x42, 0x99, 0x1B2 },
-    { 0x2C, 0x80, 0x44, 0x9A, 0x1B2 },
-    { 0x10, 0xA0, 0x69, 0x9B, 0x1FB },
-    { 0x4D, 0xA0, 0x56, 0x9C, 0x148 },
-    { 0x4E, 0xA0, 0x67, 0x9D, 0x1F9 },
-    { 0x4F, 0xA0, 0x68, 0x9E, 0x1FA },
-    { 0x51, 0xA0, -0x28, 0x9F, 0xB3 },
-    { 0x2D, 0x80, 0x6D, 0xA0, 0x20F },
-    { 0x2E, 0x80, 0x37, 0xA1, 0x245 },
-    { 0xFF, 0, 0, 0xA2, 0 },
-    { 0xFF, 0, 0, 0xA3, 0 },
-    { 0xFF, 0x80, 0x2D, 0xA4, 0x100 },
-    { 0xFF, 0, 0, 0xA5, 0 },
-    { 0xFF, 0, 0, 0xA6, 0 },
-    { 0xFF, 0, 0, 0xA7, 0 },
-    { 0xFF, 0, 0, 0xA8, 0 },
-    { 0x12, 0x80, 1, 0xA9, 0x9E },
-    { 0x2F, 0x80, 0x6E, 0xAA, 0x210 },
-    { 0x30, 0x80, 0x6F, 0xAB, 0x215 },
-    { 0xFF, 0, 0, 0xAC, 0 },
-    { 0xFF, 0, 0, 0xAD, 0 },
-    { 0xFF, 0, 0, 0xAE, 0 },
-    { 0xFF, 0, 0, 0xAF, 0 },
-    { 0xFF, 0, 0, 0xB0, 0 },
-    { 0xFF, 0, 0, 0xB1, 0 },
-    { 0xFF, 0, 0, 0xB2, 0 },
-    { 0xFF, 0x80, 0x3A, 0xB3, 0x26B },
-    { 0x31, 0xA0, 0x2E, 0xB4, 0x24D },
-    { 0x31, 0xA0, 0x2E, 0xB5, 0x24D },
-    { 0x31, 0xA0, 0x2E, 0xB6, 0x24D },
-    { 0x31, 0xA0, 0x2E, 0xB7, 0x24D },
-    { 0x31, 0xA0, 0x2E, 0xB8, 0x24D },
-    { 0x31, 0xA0, 0x2E, 0xB9, 0x24D },
-};
 LinkAnimationHeader* D_8085C84C[0x1E] = {
     (LinkAnimationHeader* )0x0400DF30,
     (LinkAnimationHeader* )0x0400DEE8,
@@ -1705,8 +1500,16 @@ LinkAnimationHeader* D_8085CFC4[2] = { (LinkAnimationHeader* )0x0400D458, (LinkA
 LinkAnimationHeader* D_8085CFCC[2] = { (LinkAnimationHeader* )0x0400D400, (LinkAnimationHeader* )0x0400D408 };
 LinkAnimationHeader* D_8085CFD4[2] = { (LinkAnimationHeader* )0x0400D400, (LinkAnimationHeader* )0x0400D410 };
 LinkAnimationHeader* D_8085CFDC[2] = { (LinkAnimationHeader* )0x0400DBE0, (LinkAnimationHeader* )0x0400D818 };
+s8 D_8085CFE4[8] = { 0xD, 2, 4, 9, 0xA, 0xB, 8, -7 };
+s8 D_8085CFEC[0xC] = { 0xD, 1, 2, 5, 3, 4, 9, 0xA, 0xB, 7, 8, -6 };
+s8 D_8085CFF8[0xC] = { 0xD, 1, 2, 3, 4, 9, 0xA, 0xB, 8, 7, -6, 0 };
 s8 D_8085D004[8] = { 0xD, 2, 4, 9, 0xA, 0xB, 8, -7 };
+s8 D_8085D00C[0xC] = { 0xD, 2, 4, 9, 0xA, 0xB, 0xC, 8, -7, 0, 0, 0 };
+s8 D_8085D018[4] = { -7, 0, 0, 0 };
 s8 D_8085D01C[0xC] = { 0, 0xB, 1, 2, 3, 5, 4, 9, 8, 7, -6, 0 };
+s8 D_8085D028[0xC] = { 0, 0xB, 1, 2, 3, 0xC, 5, 4, 9, 8, 7, -6 };
+s8 D_8085D034[0x10] = { 0xD, 1, 2, 3, 0xC, 5, 4, 9, 0xA, 0xB, 8, 7, -6, 0, 0, 0 };
+s8 D_8085D044[4] = { 0xA, 8, -7, 0 };
 s8 D_8085D048[8] = { 0, 0xC, 5, 4, -0xE, 0, 0, 0 };
 s32 (*D_8085D054[0xF])(Player*, PlayState*) = {
     func_80839518,
@@ -1849,9 +1652,19 @@ struct_80124618* D_8085D568[3] = { D_8085D510, D_8085D520, D_8085D530 };
 Gfx* D_8085D574[3] = { (Gfx* )0x06009C48, (Gfx* )0x06009AB8, (Gfx* )0x06009DB8 };
 Color_RGB8 D_8085D580 = { 0xFF, 0xFF, 0xFF };
 Color_RGB8 D_8085D584 = { 0x50, 0x50, 0xC8 };
+Vec3f D_8085D588[2] = { { 30.0f, 0.0f, 0.0f }, { -30.0f, 0.0f, 0.0f } };
+Vec3f D_8085D5A0[2] = { { 60.0f, 20.0f, 0.0f }, { -60.0f, 20.0f, 0.0f } };
+Vec3f D_8085D5B8[2] = { { 60.0f, -20.0f, 0.0f }, { -60.0f, -20.0f, 0.0f } };
 Vec3f D_8085D5D0 = { 0.0f, 0.0f, -30.0f };
 struct_8082E224_arg1 D_8085D5DC = { 0x839, -0x800 };
 struct_8082E224_arg1 D_8085D5E0 = { 0x184E, -0x83C };
+LinkAnimationHeader* D_8085D5E4[3] = {
+    (LinkAnimationHeader* )0x0400D9E8,
+    (LinkAnimationHeader* )0x0400D528,
+    (LinkAnimationHeader* )0x0400E2F8,
+};
+LinkAnimationHeader* D_8085D5F0[2] = { (LinkAnimationHeader* )0x0400D9E0, (LinkAnimationHeader* )0x0400D508 };
+u16 D_8085D5FA[5] = { 0xE2F8, 0x1830, 0x9BF, 0, 0 };
 struct_8082E224_arg1 D_8085D604[2] = { { 0, 0x4014 }, { 0, 0xBFE2 } };
 struct_8082E224_arg1 D_8085D60C[4] = { { 0x850, 0x103C }, { 0, 0x408C }, { 0, 0x40A4 }, { 0, 0xBF56 } };
 struct_8082E224_arg1 D_8085D650[2] = { { 0x840, 0x1003 }, { 0x840, -0x1015 } };
@@ -1988,6 +1801,193 @@ s32 D_80862B48;
 s32 D_80862B4C;
 EnvLightSettings D_80862B50;
 s32 D_80862B6C;
+GetItemEntry sGetItemTable[0xB9] = {
+    { 0x84, 0, 0xB0, 0xC4, 0x13F },
+    { 0x85, 1, 0xAF, 2, 0x13F },
+    { 0x86, 2, 0xAE, 3, 0x13F },
+    { 0x87, 2, 0xAE, 4, 0x13F },
+    { 0x88, 0x14, 0xAC, 5, 0x13F },
+    { 0x89, 0x14, 0xAB, 6, 0x13F },
+    { 0x8A, 0x13, 0xBD, 7, 0x13F },
+    { 0x5A, 0xA0, 0x21, 8, 0xA8 },
+    { 0x5B, 0xA0, 0x22, 9, 0xA8 },
+    { 0x83, 0x80, 9, 0xA, 0x90 },
+    { 0x83, 0xA0, 9, 0xB, 0x90 },
+    { 0x7B, 0xA0, 0x14, 0xC, 0x96 },
+    { 0x6F, 0xA0, 0x13, 0xD, 0x96 },
+    { 0x79, 0x6F, -0x1D, 0xE, 0xA4 },
+    { 0x7A, 0x6E, -0x1E, 0xF, 0xA4 },
+    { 0x83, 0x80, 9, 0x10, 0x90 },
+    { 0xFF, 0, 0, 0x11, 0 },
+    { 0x83, 0x80, 9, 0x12, 0x90 },
+    { 0x83, 0x80, 9, 0x13, 0x90 },
+    { 6, 0x59, -0x1F, 0x14, 0xA5 },
+    { 0x8F, 0x59, -0x1F, 0x15, 0xA5 },
+    { 0x90, 0x59, -0x1F, 0x16, 0xA5 },
+    { 0x91, 0x59, -0x1F, 0x17, 0xA5 },
+    { 0x92, 0x59, -0x1F, 0x18, 0xA5 },
+    { 8, 0xD, -0x1B, 0x19, 0x9F },
+    { 0x98, 0xC0, -0x27, 0x1A, 0xB0 },
+    { 0x56, 0xA0, 0x18, 0x1B, 0x98 },
+    { 0x57, 0xA0, 0x19, 0x1C, 0x98 },
+    { 0x58, 0xA0, 0x1A, 0x1D, 0x98 },
+    { 0x93, 0x48, -0x24, 0x1E, 0xAF },
+    { 0x94, 0x49, -0x25, 0x1F, 0xAF },
+    { 0x95, 0x4A, -0x26, 0x20, 0xAF },
+    { 0x95, 0x4A, -0x26, 0x21, 0xAF },
+    { 1, 0xA0, 0x2F, 0x22, 0xBF },
+    { 0x54, 0xA0, 0x16, 0x23, 0x97 },
+    { 0x55, 0xA0, 0x17, 0x24, 0x97 },
+    { 2, 0xA0, 0x48, 0x25, 0x121 },
+    { 3, 0xA0, 0x49, 0x26, 0x121 },
+    { 4, 0xA0, 0x4A, 0x27, 0x121 },
+    { 9, 0xC, -0x12, 0x28, 0x94 },
+    { 0x8D, 0xC, -0x12, 0x29, 0x94 },
+    { 0x8E, 0xC, -0x12, 0x2A, 0x94 },
+    { 0x9D, 0xA0, -0x12, 0x2B, 0x94 },
+    { 0x9D, 0xA0, -0x12, 0x2C, 0x94 },
+    { 0x9E, 0xA0, -0x12, 0x2D, 0x94 },
+    { 0x97, 0xC0, -0x27, 0x2E, 0xB0 },
+    { 0x9B, 0xA0, -0x1B, 0x2F, 0x9F },
+    { 0x9B, 0xA0, -0x1B, 0x30, 0x9F },
+    { 0x9C, 0xA0, -0x1B, 0x31, 0x9F },
+    { 0x51, 0xA0, -0x28, 0x32, 0xB3 },
+    { 0x52, 0xA0, 0x34, 0x33, 0xC3 },
+    { 0xC, 0x80, 0x5E, 0x34, 0x1CA },
+    { 0xA, 0x80, -0x35, 0x35, 0xC6 },
+    { 0x99, 0xC0, -0x27, 0x36, 0xB0 },
+    { 0x4D, 0xA0, 0x56, 0x37, 0x148 },
+    { 0x4E, 0xA0, 0x67, 0x38, 0x1F9 },
+    { 0x4F, 0xA0, 0x68, 0x39, 0x1FA },
+    { 0x9A, 0xC0, -0x27, 0x3A, 0xB0 },
+    { 0x10, 0xA0, 0x69, 0x3B, 0x1FB },
+    { 0x78, 0xA0, -2, 0x3C, 0x86 },
+    { 0x74, 0xA0, 0xA, 0x3D, 0x92 },
+    { 0x76, 0xA0, 0x1C, 0x3E, 0xA0 },
+    { 0x75, 0xA0, 0xB, 0x3F, 0x91 },
+    { 0xFF, 0, 0, 0x40, 0 },
+    { 0xF, 0xA0, 0x29, 0x41, 0xB4 },
+    { 0xE, 0xA0, 0x30, 0x42, 0xC0 },
+    { 0xD, 0xA0, 0x75, 0x43, 0x228 },
+    { 0xD, 0, 0, 0x44, 0 },
+    { 0x83, 0x80, 9, 0x45, 0x90 },
+    { 0xFF, 0, 0, 0x46, 0 },
+    { 0xFF, 0, 0, 0x47, 0 },
+    { 0xFF, 0, 0, 0x48, 0 },
+    { 0xFF, 0, 0, 0x49, 0 },
+    { 0xFF, 0, 0, 0x4A, 0 },
+    { 0xFF, 0, 0, 0x4B, 0 },
+    { 0, 0xA0, 0x2B, 0x4C, 0xB5 },
+    { 0xFF, 0, 0, 0x4D, 0 },
+    { 0xFF, 0, 0, 0x4E, 0 },
+    { 0xFF, 0, 0, 0x4F, 0 },
+    { 0x6D, 0x80, 0xC, 0x50, 0x253 },
+    { 0xFF, 0xA0, 0x20, 0x51, 0xA0 },
+    { 0x6E, 0x80, 0xB5, 0x52, 0x125 },
+    { 0xFF, 0, 0, 0x53, 0 },
+    { 0xFF, 0, 0, 0x54, 0 },
+    { 0x5D, 0x80, 0x5D, 0x55, 0 },
+    { 0x5E, 0x80, 0x64, 0x56, 0 },
+    { 0x5F, 0x80, 0x65, 0x57, 0 },
+    { 0x60, 0x80, 0x66, 0x58, 0 },
+    { 0x11, 0x80, 0x58, 0x59, 0x196 },
+    { 0x12, 0x80, 1, 0x5A, 0x9E },
+    { 0x13, 0x80, 0x32, 0x5B, 0xC1 },
+    { 0x14, 0x80, 0x31, 0x5C, 0xC1 },
+    { 0x15, 0x80, 0x33, 0x5D, 0xC1 },
+    { 0x16, 0x80, 0x3C, 0x5E, 0x272 },
+    { 0x16, 0x80, 1, 0x5F, 0x9E },
+    { 0x18, 0x80, 0x2C, 0x60, 0xB6 },
+    { 0x19, 0x80, 0x2C, 0x61, 0xB6 },
+    { 0x1A, 0x80, 0x36, 0x62, 0xC7 },
+    { 0x1B, 0x80, 0x4C, 0x63, 0x137 },
+    { 0x1C, 0, 0, 0x64, 0 },
+    { 0x12, 0x80, 1, 0x65, 0x9E },
+    { 0x1E, 0x80, 0x53, 0x66, 0x139 },
+    { 0x1F, 0, 0, 0x67, 0 },
+    { 0x20, 0, 0, 0x68, 0 },
+    { 0x21, 0x80, 0x59, 0x69, 0x1AE },
+    { 0x22, 0x80, 0x60, 0x6A, 0x1E9 },
+    { 0x23, 0x80, 0x70, 0x6B, 0x21D },
+    { 0xFF, 0, 0, 0x6C, 0 },
+    { 0x12, 0x80, 1, 0x6D, 0x9E },
+    { 0x24, 0x80, 0x60, 0x6E, 0x1E9 },
+    { 0x25, 0x80, 0x74, 0x6F, 0x227 },
+    { 0x12, 0x80, 1, 0x70, 0x9E },
+    { 0xFF, 0, 0, 0x71, 0 },
+    { 0xFF, 0, 0, 0x72, 0 },
+    { 0xFF, 0, 0, 0x73, 0 },
+    { 0xFF, 0, 0, 0x74, 0 },
+    { 0xFF, 0, 0, 0x75, 0 },
+    { 0xFF, 0, 0, 0x76, 0 },
+    { 0xFF, 0, 0, 0x77, 0 },
+    { 0x32, 0xA0, 0x5C, 0x78, 0x1BD },
+    { 0x33, 0xA0, 0x45, 0x79, 0x119 },
+    { 0x34, 0xA0, 0x46, 0x7A, 0x11A },
+    { 0x35, 0xA0, 0x76, 0x7B, 0x242 },
+    { 0x44, 0xA0, 0x3E, 0x7C, 0x102 },
+    { 0x49, 0xA0, 0x73, 0x7D, 0x226 },
+    { 0x38, 0xA0, 0x11, 0x7E, 0x265 },
+    { 0x39, 0xA0, 0x3F, 0x7F, 0x103 },
+    { 0x3A, 0xA0, 0x2D, 0x80, 0x100 },
+    { 0x3B, 0xA0, 0x6A, 0x81, 0x209 },
+    { 0x3C, 0xA0, 0x71, 0x82, 0x21F },
+    { 0x3D, 0xA0, 0xF, 0x83, 0x259 },
+    { 0x3E, 0xA0, 0x72, 0x84, 0x225 },
+    { 0x3F, 0xA0, 4, 0x85, 0x282 },
+    { 0x40, 0xA0, 0x6B, 0x86, 0x20A },
+    { 0x41, 0xA0, 0x6C, 0x87, 0x20B },
+    { 0x42, 0xA0, 0x23, 0x88, 0x266 },
+    { 0x43, 0xA0, 3, 0x89, 0x27D },
+    { 0x36, 0xA0, 0x40, 0x8A, 0x104 },
+    { 0x45, 0xA0, 0xD, 0x8B, 0x254 },
+    { 0x46, 0xA0, 0x10, 0x8C, 0x25A },
+    { 0x47, 0xA0, 0x3B, 0x8D, 0x26D },
+    { 0x48, 0xA0, 0x3D, 0x8E, 0x27E },
+    { 0x37, 0xA0, 0xE, 0x8F, 0x258 },
+    { 0xFF, 0, 0, 0x90, 0 },
+    { 0x9F, 0x80, 0x74, 0x91, 0x227 },
+    { 0xA0, 0x80, 0x2C, 0x92, 0xB6 },
+    { 0xA1, 0x80, 0x5F, 0x93, 0x1E8 },
+    { 0xA2, 0x80, 0x62, 0x94, 0x1EF },
+    { 0xA3, 0x80, 0x63, 0x95, 0x1F0 },
+    { 0x28, 0x80, 0x5A, 0x96, 0x1B1 },
+    { 0x29, 0x80, 0x5B, 0x97, 0x1B2 },
+    { 0x2A, 0x80, 0x41, 0x98, 0x1B2 },
+    { 0x2B, 0x80, 0x42, 0x99, 0x1B2 },
+    { 0x2C, 0x80, 0x44, 0x9A, 0x1B2 },
+    { 0x10, 0xA0, 0x69, 0x9B, 0x1FB },
+    { 0x4D, 0xA0, 0x56, 0x9C, 0x148 },
+    { 0x4E, 0xA0, 0x67, 0x9D, 0x1F9 },
+    { 0x4F, 0xA0, 0x68, 0x9E, 0x1FA },
+    { 0x51, 0xA0, -0x28, 0x9F, 0xB3 },
+    { 0x2D, 0x80, 0x6D, 0xA0, 0x20F },
+    { 0x2E, 0x80, 0x37, 0xA1, 0x245 },
+    { 0xFF, 0, 0, 0xA2, 0 },
+    { 0xFF, 0, 0, 0xA3, 0 },
+    { 0xFF, 0x80, 0x2D, 0xA4, 0x100 },
+    { 0xFF, 0, 0, 0xA5, 0 },
+    { 0xFF, 0, 0, 0xA6, 0 },
+    { 0xFF, 0, 0, 0xA7, 0 },
+    { 0xFF, 0, 0, 0xA8, 0 },
+    { 0x12, 0x80, 1, 0xA9, 0x9E },
+    { 0x2F, 0x80, 0x6E, 0xAA, 0x210 },
+    { 0x30, 0x80, 0x6F, 0xAB, 0x215 },
+    { 0xFF, 0, 0, 0xAC, 0 },
+    { 0xFF, 0, 0, 0xAD, 0 },
+    { 0xFF, 0, 0, 0xAE, 0 },
+    { 0xFF, 0, 0, 0xAF, 0 },
+    { 0xFF, 0, 0, 0xB0, 0 },
+    { 0xFF, 0, 0, 0xB1, 0 },
+    { 0xFF, 0, 0, 0xB2, 0 },
+    { 0xFF, 0x80, 0x3A, 0xB3, 0x26B },
+    { 0x31, 0xA0, 0x2E, 0xB4, 0x24D },
+    { 0x31, 0xA0, 0x2E, 0xB5, 0x24D },
+    { 0x31, 0xA0, 0x2E, 0xB6, 0x24D },
+    { 0x31, 0xA0, 0x2E, 0xB7, 0x24D },
+    { 0x31, 0xA0, 0x2E, 0xB8, 0x24D },
+    { 0x31, 0xA0, 0x2E, 0xB9, 0x24D },
+};
 
 s32 func_8082DA90(PlayState* play) {
     s32 var_v0;
@@ -5165,7 +5165,7 @@ void func_80834CD0(Player* this, f32 arg1, u16 sfxId) {
         func_8082DF8C(this, sfxId);
     }
     this->stateFlags1 |= 0x40000;
-    this->unk_B68 = (s16) (s32) this->actor.world.pos.y;
+    this->fallStartHeight = (s16) (s32) this->actor.world.pos.y;
 }
 
 void func_80834D50(PlayState* play, Player* this, LinkAnimationHeader* anim, f32 arg3, u16 sfxId) {
@@ -5440,7 +5440,7 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
             }
         } else {
 block_56:
-            if (((this->stateFlags1 << 0) >= 0) && ((this->actor.world.pos.y < -4000.0f) || (((temp_v0_4 = this->unk_D5E, (temp_v0_4 == 5)) || (temp_v0_4 == 0xC) || (temp_v0_4 == 0xD)) && ((D_80862B18 < 100.0f) || (this->unk_B6A >= 0x191))))) {
+            if (((this->stateFlags1 << 0) >= 0) && ((this->actor.world.pos.y < -4000.0f) || (((temp_v0_4 = this->unk_D5E, (temp_v0_4 == 5)) || (temp_v0_4 == 0xC) || (temp_v0_4 == 0xD)) && ((D_80862B18 < 100.0f) || (this->fallDistance >= 0x191))))) {
                 if (this->actor.bgCheckFlags & 1) {
                     sp28 = &play->colCtx;
                     if (this->unk_D5E == 5) {
@@ -5948,12 +5948,12 @@ s32 func_80836F10(PlayState* play, Player* this) {
     if ((temp_v0 == 6) || (temp_v0 == 9) || (this->csMode != 0)) {
         var_s0 = 0;
     } else {
-        var_s0 = this->unk_B6A;
+        var_s0 = this->fallDistance;
     }
     Math_StepToF(&this->linearVelocity, 0.0f, 1.0f);
     this->stateFlags1 &= 0xFFF3FFFF;
     if (var_s0 >= 0x190) {
-        if (this->unk_B6A < 0x320) {
+        if (this->fallDistance < 0x320) {
             sp28 = 0;
         } else {
             sp28 = 1;
@@ -5987,7 +5987,7 @@ s32 func_808370D4(PlayState* play, Player* this) {
     s32 var_v0;
 
     var_v0 = 0;
-    if ((this->unk_B6A < 0x320) && (this->unk_AE3[this->unk_ADE] == 0) && !(this->stateFlags1 & 0x800)) {
+    if ((this->fallDistance < 0x320) && (this->unk_AE3[this->unk_ADE] == 0) && !(this->stateFlags1 & 0x800)) {
         func_80836B3C(play, this, 0.0f);
         var_v0 = 1;
     }
@@ -6038,7 +6038,7 @@ void func_80837134(PlayState* play, Player* this) {
             func_8082FC60(this);
             goto block_19;
         }
-        if (this->unk_B6A < 0x51) {
+        if (this->fallDistance < 0x51) {
             sp2C = (D_8085BE84 + 0x150)[this->modelAnimType];
             goto block_19;
         }
@@ -6505,7 +6505,7 @@ void func_8083827C(Player* this, PlayState* play) {
 
     temp_v0 = this->stateFlags1;
     temp_ft1 = (s32) this->actor.world.pos.y;
-    this->unk_B6A = this->unk_B68 - temp_ft1;
+    this->fallDistance = this->fallStartHeight - temp_ft1;
     if (!(temp_v0 & 0x28000000) && (((temp_v0 << 0) < 0) || !(this->stateFlags3 & 0x2200)) && !(this->actor.bgCheckFlags & 1)) {
         if (func_80835428(play, this) == 0) {
             temp_a0 = D_80862B1C;
@@ -6562,7 +6562,7 @@ block_45:
             }
         }
     } else {
-        this->unk_B68 = (s16) temp_ft1;
+        this->fallStartHeight = (s16) temp_ft1;
         this->unk_B67 = 5;
     }
 }
@@ -7903,7 +7903,7 @@ void func_8083B850(PlayState* play, Player* this) {
 void func_8083B8D0(PlayState* play, Player* this) {
     if (func_80837730(play, this, this->actor.velocity.y, 0x1F4) != 0) {
         func_800B8E58(this, 0x2889U);
-        if (this->unk_B6A >= 0x321) {
+        if (this->fallDistance >= 0x321) {
             func_8082DF8C(this, 0x6804U);
         }
     }
@@ -8547,7 +8547,7 @@ block_16:
     return 0;
 }
 
-void func_8083D168(PlayState* play, Player* this, struct_8085C3F4* arg2) {
+void func_8083D168(PlayState* play, Player* this, GetItemEntry* arg2) {
     s32 sp1C;
     s32 temp_v1;
     s32 var_v0;
@@ -8556,7 +8556,7 @@ void func_8083D168(PlayState* play, Player* this, struct_8085C3F4* arg2) {
     temp_v0 = arg2->unk_1;
     temp_v1 = temp_v0 & 0x1F;
     if ((temp_v0 & 0x80) || ((sp1C = temp_v1, Item_DropCollectible(play, &this->actor.world.pos, temp_v1 | 0x8000), (temp_v1 != 4)) && (temp_v1 != 8) && (temp_v1 != 9) && (temp_v1 != 0xA) && (temp_v1 != 0) && (temp_v1 != 1) && (temp_v1 != 2) && (temp_v1 != 0x14) && (temp_v1 != 0x13))) {
-        Item_Give(play, arg2->unk_0);
+        Item_Give(play, arg2->itemId);
         var_v0 = 0x4824;
         if (this->getItemId < 0) {
             var_v0 = 0x4831;
@@ -8567,14 +8567,14 @@ void func_8083D168(PlayState* play, Player* this, struct_8085C3F4* arg2) {
 
 s32 func_8083D23C(Player* this, PlayState* play) {
     Actor* sp2C;
-    struct_8085C3F4* sp28;
+    GetItemEntry* sp28;
     u8* sp24;
     Actor* temp_t7;
+    GetItemEntry* temp_a2;
     LinkAnimationHeader* var_a2;
     s16 temp_v0;
     s16 temp_v0_2;
     s16 temp_v0_3;
-    struct_8085C3F4* temp_a2;
     u32 temp_v1;
     u8 temp_a0;
     u8 temp_a0_2;
@@ -8591,7 +8591,7 @@ s32 func_8083D23C(Player* this, PlayState* play) {
                     temp_a2 = (temp_v0 * 6) - 6 + sGetItemTable;
                     temp_t7->parent = &this->actor;
                     sp28 = temp_a2;
-                    if ((Item_CheckObtainability(temp_a2->unk_0) == 0xFF) || ((s16) temp_a2->unk_4 == 0xB0)) {
+                    if ((Item_CheckObtainability(temp_a2->itemId) == 0xFF) || ((s16) temp_a2->unk_4 == 0xB0)) {
                         sp28 = temp_a2;
                         func_8082DCA0(play, this);
                         func_80838830(this, (s16) temp_a2->unk_4);
@@ -10093,7 +10093,7 @@ void func_80840F34(Player* this) {
     Math_StepToF(this->unk_B08, var_fv0, 0.02f);
 }
 
-s32 func_80840F90(PlayState* play, Player* this, CsCmdActorAction* playerAction, f32 arg3, s32 arg4, s32 arg5) {
+s32 func_80840F90(PlayState* play, Player* this, CsCmdActorAction* playerAction, f32 arg3, s16 arg4, s32 arg5) {
     f32 sp34;
     f32 sp28;
     s32 sp24;
@@ -10120,14 +10120,14 @@ s32 func_80840F90(PlayState* play, Player* this, CsCmdActorAction* playerAction,
         temp_fa0 = (f32) playerAction->endPos.z - this->actor.world.pos.z;
         temp_ft5 = sqrtf((temp_fa1 * temp_fa1) + (temp_fa0 * temp_fa0)) / temp_ft4;
         sp28 = temp_ft5;
-        (s16) arg4 = Math_FAtan2F(temp_fa0, temp_fa1);
+        arg4 = Math_FAtan2F(temp_fa0, temp_fa1);
         if (arg5 == 1) {
             temp_fv1 = (f32) (playerAction->endPos.x - playerAction->startPos.x);
             temp_fa0_2 = (f32) (playerAction->endPos.z - playerAction->startPos.z);
             temp_ft1 = (s32) ((((sqrtf((temp_fv1 * temp_fv1) + (temp_fa0_2 * temp_fa0_2)) / temp_ft4) / (f32) (playerAction->endFrame - playerAction->startFrame)) / 1.5f) * 4.0f);
             if (temp_ft1 >= temp_v1) {
                 var_fa0 = 0.0f;
-                (s16) arg4 = this->actor.shape.rot.y;
+                arg4 = this->actor.shape.rot.y;
             } else {
                 var_fa0 = temp_ft5 / (f32) ((temp_v1 - temp_ft1) + 1);
             }
@@ -10138,7 +10138,7 @@ s32 func_80840F90(PlayState* play, Player* this, CsCmdActorAction* playerAction,
     this->stateFlags2 |= 0x20;
     arg3 = var_fa0;
     func_8083F57C(this, play);
-    func_8083CB58(this, arg3, (s16) arg4);
+    func_8083CB58(this, arg3, arg4);
     if ((arg3 == 0.0f) && (this->linearVelocity == 0.0f)) {
         func_80839CD8(this, play);
     }
@@ -10159,7 +10159,7 @@ s32 func_808411D4(PlayState* play, Player* this, f32* arg2, s32 arg3) {
         *arg2 = 0.0f;
         var_v1 = this->actor.shape.rot.y;
     }
-    if (func_80840F90(play, this, NULL, *arg2, (s32) var_v1, 2) != 0) {
+    if (func_80840F90(play, this, NULL, *arg2, (s16) (s32) var_v1, 2) != 0) {
         return 0;
     }
     return sp2C;
@@ -10219,7 +10219,7 @@ void func_80841528(PlayState* play, Player* this) {
     func_80834DB8(this, &D_0400DCD8, 12.0f, play);
     func_80831494(play, this, func_8085439C, 0);
     this->stateFlags1 |= 0x20000000;
-    this->unk_B68 = (s16) (s32) this->actor.world.pos.y;
+    this->fallStartHeight = (s16) (s32) this->actor.world.pos.y;
 }
 
 void func_808415A0(PlayState* play, Player* this) {
@@ -10496,7 +10496,7 @@ block_10:
                     Math_Vec3f_Copy(&this->actor.prevPos, &sp40->pos);
                     Math_Vec3f_Copy(&this->actor.focus.pos, &sp40->pos);
                     var_v1 = (SaveContext* ) temp_v1_2;
-                    this->unk_B68 = (s16) (s32) this->actor.world.pos.y;
+                    this->fallStartHeight = (s16) (s32) this->actor.world.pos.y;
                     temp_v0_6 = var_v1->respawn[0].yaw;
                     this->actor.shape.rot.y = temp_v0_6;
                     this->currentYaw = temp_v0_6;
@@ -11790,7 +11790,7 @@ void func_80844EF8(Player* player, PlayState* play, Input* input) {
                     if ((player->actor.parent == NULL) && ((func_8082DA90(play) != 0) || (player->unk_D6B != 0) || (func_80834600(player, play) == 0))) {
                         func_8083827C(player, play);
                     } else {
-                        player->unk_B68 = (s16) (s32) player->actor.world.pos.y;
+                        player->fallStartHeight = (s16) (s32) player->actor.world.pos.y;
                     }
                     func_808446F4(play, player);
                 }
@@ -12047,7 +12047,7 @@ void Player_Update(Actor* thisx, PlayState* play) {
         sp44.unk_14 = (s32) (unaligned s32) play->actorCtx.unk_26C.rel.stick_x;
     } else if ((this->csMode == 5) || (this->stateFlags1 & 0x20000020) || (this != play->actorCtx.player) || (func_8082DA90(play) != 0) || (gSaveContext.save.playerData.health == 0)) {
         bzero(&sp44, 0x18);
-        this->unk_B68 = (s16) (s32) this->actor.world.pos.y;
+        this->fallStartHeight = (s16) (s32) this->actor.world.pos.y;
     } else {
         sp44.unk_0 = (s32) (unaligned s32) play->unk_14;
         sp44.unk_4 = (s32) (unaligned s32) play->state.input[0].cur.errno;
@@ -12714,9 +12714,9 @@ s32 func_80847A94(PlayState* play, Player* this, s32 arg2, f32* arg3) {
     sp60 = temp_fv0 + 20.0f;
     sp5C = temp_fv0 - 20.0f;
     sp30 = arg2 * 0xC;
-    temp_fv0_2 = func_80835CD8(play, this, (Vec3f* ) &D_8085D588[arg2], &sp50, &sp3C, &sp34);
+    temp_fv0_2 = func_80835CD8(play, this, &D_8085D588[arg2], &sp50, &sp3C, &sp34);
     *arg3 = temp_fv0_2;
-    if ((sp5C < temp_fv0_2) && (*arg3 < sp60) && (func_80835D58(play, this, sp30 + &D_8085D5A0, &sp40, &sp38, &sp44) == 0) && (func_80835D58(play, this, sp30 + &D_8085D5B8, &sp40, &sp38, &sp44) == 0)) {
+    if ((sp5C < temp_fv0_2) && (*arg3 < sp60) && (func_80835D58(play, this, sp30 + D_8085D5A0, &sp40, &sp38, &sp44) == 0) && (func_80835D58(play, this, sp30 + D_8085D5B8, &sp40, &sp38, &sp44) == 0)) {
         this->actor.floorPoly = sp3C;
         this->actor.floorBgId = (u8) sp38;
         this->unk_B72 = SurfaceType_GetSfx(&play->colCtx, sp3C, sp34);
@@ -12879,8 +12879,8 @@ void func_80847F1C(Player* this) {
     }
 }
 
-void func_80847FF8(Player* this, f32* arg1, f32 arg2, s32 arg3) {
-    func_8084748C(this, arg1, arg2, (s16) arg3);
+void func_80847FF8(Player* this, f32* arg1, f32 arg2, s16 arg3) {
+    func_8084748C(this, arg1, arg2, arg3);
     func_8082E224(this, &D_8085D5DC);
     func_80847F1C(this);
 }
@@ -13234,7 +13234,7 @@ s32 func_80848BF4(Player* this, PlayState* play) {
         temp_a1_2 = &this->unk_284;
         sp24 = temp_a1_2;
         if (LinkAnimation_Update(play, temp_a1_2) != 0) {
-            LinkAnimation_PlayLoop(play, sp24, *(&D_8085D5F0 + (sp2C * 4)));
+            LinkAnimation_PlayLoop(play, sp24, D_8085D5F0[sp2C]);
             this->unk_ACE = 1;
         } else if (this->unk_ACE == 1) {
             this->unk_ACE = 2;
@@ -13364,7 +13364,7 @@ s32 func_808490B4(Player* this, PlayState* play) {
         if ((sp24->id == 0x11) && (this->actor.velocity.y <= 0.0f)) {
             this->actor.terminalVelocity = -2.0f;
             this->actor.gravity = -0.5f;
-            this->unk_B68 = (s16) (s32) this->actor.world.pos.y;
+            this->fallStartHeight = (s16) (s32) this->actor.world.pos.y;
         }
         return 1;
     }
@@ -14066,7 +14066,7 @@ void func_8084AB4C(Player* arg0, PlayState* arg1) {
     if ((arg0 != arg1->actorCtx.player) && (arg0->unk_730 == NULL)) {
         sp32 = arg0->actor.home.rot.y;
     }
-    if (func_80833058(arg1, arg0, &D_8085D018, 1) == 0) {
+    if (func_80833058(arg1, arg0, D_8085D018, 1) == 0) {
         if (sp34 != 0.0f) {
             arg0->actor.shape.rot.y = sp32;
             func_8083A794(arg0, arg1);
@@ -14618,7 +14618,7 @@ void func_8084C16C(Player* arg0, PlayState* arg1) {
         if ((((arg0->stateFlags2 & 0x80000) && ((temp_v0 = arg0->unk_AE7, (temp_v0 == 2)) || (temp_v0 >= 4))) || (func_80839770(arg0, arg1) == 0)) && (arg0->actor.velocity.y < 0.0f)) {
             temp_v0_2 = arg0->unk_AE8;
             if (temp_v0_2 >= 0) {
-                if ((arg0->actor.bgCheckFlags & 8) || (temp_v0_2 == 0) || (arg0->unk_B6A > 0)) {
+                if ((arg0->actor.bgCheckFlags & 8) || (temp_v0_2 == 0) || (arg0->fallDistance > 0)) {
                     if ((D_80862B18 > 800.0f) || (arg0->stateFlags3 & 0x10000)) {
                         func_80840980(arg0, 0x6807U);
                         arg0->stateFlags3 &= 0xFFFEFFFF;
@@ -14627,7 +14627,7 @@ void func_8084C16C(Player* arg0, PlayState* arg1) {
                     arg0->unk_AE8 = -1;
                 }
             } else {
-                if ((temp_v0_2 == -1) && (arg0->unk_B6A >= 0x79) && (D_80862B18 > 280.0f)) {
+                if ((temp_v0_2 == -1) && (arg0->fallDistance >= 0x79) && (D_80862B18 > 280.0f)) {
                     arg0->unk_AE8 = -2;
                     func_80840980(arg0, 0x6808U);
                 }
@@ -14738,7 +14738,7 @@ void func_8084C94C(Player* arg0, PlayState* arg1) {
     }
     Math_StepToF(&arg0->linearVelocity, 0.0f, 0.05f);
     if (arg0->actor.bgCheckFlags & 1) {
-        if (arg0->unk_B6A >= 0x190) {
+        if (arg0->fallDistance >= 0x190) {
             arg0->actor.colChkInfo.damage = 0x10;
             func_80833B18(arg1, arg0, 1, 4.0f, 5.0f, (s16) (s32) arg0->actor.shape.rot.y, 0x14);
             return;
@@ -15921,7 +15921,7 @@ void func_8084F4E8(Player* arg0, PlayState* arg1) {
     var_t0 = temp_v0->rel.stick_y;
     var_t1 = temp_v0->rel.stick_x;
     arg0->stateFlags2 |= 0x40;
-    arg0->unk_B68 = (s16) (s32) arg0->actor.world.pos.y;
+    arg0->fallStartHeight = (s16) (s32) arg0->actor.world.pos.y;
     if (arg0->unk_AE7 != 0) {
         var_v1 = var_t0;
         if (var_t0 < 0) {
@@ -16770,7 +16770,7 @@ void func_808513EC(Player* arg0, PlayState* arg1) {
 block_15:
                 func_808353DC(arg1, arg0);
             }
-            func_80847FF8(arg0, &arg0->linearVelocity, sp34, (s32) sp32);
+            func_80847FF8(arg0, &arg0->linearVelocity, sp34, sp32);
         }
     }
 }
@@ -16791,7 +16791,7 @@ void func_80851588(Player* arg0, PlayState* arg1) {
         } else {
             func_80848094(arg1, arg0, &sp2C, &sp2A);
         }
-        func_80847FF8(arg0, &arg0->linearVelocity, sp2C, (s32) sp2A);
+        func_80847FF8(arg0, &arg0->linearVelocity, sp2C, sp2A);
     }
 }
 
@@ -19231,7 +19231,7 @@ void func_80856918(Player* arg0, PlayState* arg1) {
                     }
                     arg0->actor.gravity = var_ft1;
                 }
-                arg0->unk_B68 = (s16) (s32) arg0->actor.world.pos.y;
+                arg0->fallStartHeight = (s16) (s32) arg0->actor.world.pos.y;
                 func_80832F78(arg0, &sp6C, &sp66, 0.0f, arg1);
                 if (sp6C == 0.0f) {
                     sp68 = 0.1f;
@@ -20335,16 +20335,16 @@ void func_80859A44(PlayState* play, Player* this, s32 arg2) {
 }
 
 void func_80859AD0(PlayState* play, Player* this, void* arg2) {
-    func_80840F90(play, this, (CsCmdActorAction* ) arg2, 0.0f, 0, 0);
+    func_80840F90(play, this, (CsCmdActorAction* ) arg2, 0.0f, (s16) 0, 0);
 }
 
 void func_80859AF8(PlayState* play, Player* this, void* arg2) {
     this->actor.shape.face = 0xF;
-    func_80840F90(play, this, (CsCmdActorAction* ) arg2, 0.0f, 0, 0);
+    func_80840F90(play, this, (CsCmdActorAction* ) arg2, 0.0f, (s16) 0, 0);
 }
 
 void func_80859B28(PlayState* play, Player* this, void* arg2) {
-    func_80840F90(play, this, (CsCmdActorAction* ) arg2, 0.0f, 0, 1);
+    func_80840F90(play, this, (CsCmdActorAction* ) arg2, 0.0f, (s16) 0, 1);
 }
 
 void func_80859B54(PlayState* play, Player* this, s32 arg2) {
