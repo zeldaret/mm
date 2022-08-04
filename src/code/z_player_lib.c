@@ -602,7 +602,7 @@ PlayerActionParam func_80123810(PlayState* play) {
             play->interfaceCtx.unk_224 = 0;
             Interface_ChangeAlpha(play->msgCtx.unk_120BC);
 
-            if ((itemId >= ITEM_FD) || (actionParam = play->unk_18794(play, player, itemId), (actionParam < PLAYER_AP_NONE))) {
+            if ((itemId >= ITEM_FD) || ((actionParam = play->unk_18794(play, player, itemId)) < PLAYER_AP_NONE)) {
                 play_sound(NA_SE_SY_ERROR);
                 return -1;
             } else {

@@ -419,7 +419,7 @@ typedef struct {
     /* 0x28 */ f32 unk_28;
     /* 0x2C */ f32 unk_2C;
     /* 0x30 */ f32 unk_30;
-    /* 0x34 */ f32 unk_34;
+    /* 0x34 */ f32 unk_34; // player's height?
     /* 0x38 */ f32 unk_38;
     /* 0x3C */ f32 unk_3C;
     /* 0x40 */ f32 unk_40;

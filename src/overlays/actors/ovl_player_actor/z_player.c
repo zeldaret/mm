@@ -4942,13 +4942,14 @@ void func_8083827C(Player* this, PlayState* play) {
                                 }
                             }
                         }
-                        func_808373F8(play, this, 0x6814U);
+                        func_808373F8(play, this, NA_SE_VO_LI_AUTO_JUMP);
                         return;
                     }
                 }
             }
         }
 
+        // Checking if the ledge is tall enough for Player to hang from
         if ((D_80862B1C == 9) || (D_80862B18 <= this->ageProperties->unk_34) || !func_80837DEC(this, play)) {
             func_8082DB3C(play, this, &gameplay_keep_Linkanim_00DD30);
         }
