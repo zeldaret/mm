@@ -7539,7 +7539,7 @@
     0x809455A0:("ItemInbox_Draw",),
     0x80945650:("EnGe1_Init",),
     0x809457C0:("EnGe1_Destroy",),
-    0x809457EC:("EnGe1_SetAnimation",),
+    0x809457EC:("EnGe1_ChangeAnim",),
     0x80945924:("EnGe1_LookAtPlayer",),
     0x80945A00:("EnGe1_ShadowDraw",),
     0x80945A9C:("EnGe1_SetupPath",),
