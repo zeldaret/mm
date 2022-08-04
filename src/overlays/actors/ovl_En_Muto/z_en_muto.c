@@ -16,7 +16,7 @@ void EnMuto_Destroy(Actor* thisx, PlayState* play);
 void EnMuto_Update(Actor* thisx, PlayState* play);
 void EnMuto_Draw(Actor* thisx, PlayState* play);
 
-void EnMuto_ChangeAnim(EnMuto* this, s32 arg1);
+void EnMuto_ChangeAnim(EnMuto* this, s32 animIndex);
 void EnMuto_SetHeadRotation(EnMuto* this);
 void EnMuto_SetupIdle(EnMuto* this);
 void EnMuto_Idle(EnMuto* this, PlayState* play);
@@ -101,12 +101,12 @@ void EnMuto_Destroy(Actor* thisx, PlayState* play) {
 
 void EnMuto_ChangeAnim(EnMuto* this, s32 animIndex) {
     static AnimationHeader* sAnimations[] = { &object_toryo_Anim_000E50, &object_toryo_Anim_000E50 };
-    static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_ONCE };
+    static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_ONCE };
 
     this->animIndex = animIndex;
     this->frameIndex = Animation_GetLastFrame(&sAnimations[animIndex]->common);
     Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->frameIndex,
-                     sAnimationModes[this->animIndex], -4.0f);
+                     sAnimModes[this->animIndex], -4.0f);
 }
 
 void EnMuto_SetHeadRotation(EnMuto* this) {

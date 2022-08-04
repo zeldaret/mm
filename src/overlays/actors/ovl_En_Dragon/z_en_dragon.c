@@ -262,9 +262,9 @@ static AnimationHeader* sAnimations[] = {
     &gDeepPythonSmallSideSwayAnim,
 };
 
-static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
+static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
 
-void EnDragon_ChangeAnimation(EnDragon* this, s32 animIndex) {
+void EnDragon_ChangeAnim(EnDragon* this, s32 animIndex) {
     f32 startFrame;
 
     this->animIndex = animIndex;
@@ -275,7 +275,7 @@ void EnDragon_ChangeAnimation(EnDragon* this, s32 animIndex) {
     }
 
     Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, startFrame, this->endFrame,
-                     sAnimationModes[this->animIndex], -4.0f);
+                     sAnimModes[this->animIndex], -4.0f);
 }
 
 static Color_RGBA8 sBubblePrimColors[] = {
@@ -329,7 +329,7 @@ void EnDragon_RetreatOnceTimerEnds(EnDragon* this, PlayState* play) {
 }
 
 void EnDragon_SetupRetreatOrIdle(EnDragon* this) {
-    EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIM_IDLE);
+    EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_IDLE);
     this->state = 0;
     this->unk_2CC = 0;
     this->hasGrabbedPlayer = false;
@@ -398,7 +398,7 @@ void EnDragon_Extend(EnDragon* this, PlayState* play) {
             if ((fabsf(this->actor.world.pos.x - extendedPos.x) < 4.0f) &&
                 (fabsf(this->actor.world.pos.z - extendedPos.z) < 4.0f)) {
                 if (this->animIndex != DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY) {
-                    EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY);
+                    EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY);
                 }
 
                 this->state = DEEP_PYTHON_EXTEND_STATE_FULLY_EXTENDED;
@@ -420,7 +420,7 @@ void EnDragon_Extend(EnDragon* this, PlayState* play) {
             // Player is in front of the jaw
             if ((this->endFrame <= currentFrame) && (this->largeSwayWaitTimer == 0)) {
                 if (this->animIndex != DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY) {
-                    EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY);
+                    EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY);
                 }
 
                 this->state = DEEP_PYTHON_EXTEND_STATE_REPEAT_LARGE_SWAY;
@@ -430,7 +430,7 @@ void EnDragon_Extend(EnDragon* this, PlayState* play) {
         } else {
             // Player is in behind the jaw
             if (this->state == DEEP_PYTHON_EXTEND_STATE_REPEAT_LARGE_SWAY) {
-                EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIM_SMALL_SIDE_SWAY);
+                EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_SMALL_SIDE_SWAY);
                 this->largeSwayWaitTimer = Rand_ZeroFloat(20.0f) + this->endFrame;
                 this->state = DEEP_PYTHON_EXTEND_STATE_REPEAT_SMALL_SWAY;
             }
@@ -471,7 +471,7 @@ void EnDragon_SetupGrab(EnDragon* this, PlayState* play) {
         this->state = DEEP_PYTHON_GRAB_STATE_START;
         this->grabTimer = 0;
         this->hasGrabbedPlayer = false;
-        EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIM_IDLE);
+        EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_IDLE);
         this->actionFunc = EnDragon_Grab;
     }
 }
@@ -549,7 +549,7 @@ void EnDragon_Grab(EnDragon* this, PlayState* play) {
 
 void EnDragon_SetupAttack(EnDragon* this) {
     if (this->animIndex != DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY) {
-        EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY);
+        EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY);
     }
 
     this->behindJawRetreatTimer = 0;
@@ -604,7 +604,7 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
     if ((this->state <= DEEP_PYTHON_ATTACK_STATE_START) && (this->endFrame <= currentFrame)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BITE);
         if (this->animIndex != DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY) {
-            EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY);
+            EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY);
         }
 
         this->state++;

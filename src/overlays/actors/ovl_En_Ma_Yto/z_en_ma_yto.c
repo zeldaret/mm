@@ -59,7 +59,7 @@ void EnMaYto_PostMilkRunEnd(EnMaYto* this, PlayState* play);
 void EnMaYto_DefaultStartDialogue(EnMaYto* this, PlayState* play);
 void EnMaYto_DinnerStartDialogue(EnMaYto* this, PlayState* play);
 void EnMaYto_BarnStartDialogue(EnMaYto* this, PlayState* play);
-void EnMaYto_ChangeAnim(EnMaYto* this, s32 index);
+void EnMaYto_ChangeAnim(EnMaYto* this, s32 animIndex);
 void EnMaYto_UpdateEyes(EnMaYto* this);
 void func_80B90E50(EnMaYto* this, s16);
 void EnMaYto_SetRomaniFaceExpression(EnMaYto* this, s16 overrideEyeTexIndex, s16 mouthTexIndex);
@@ -1270,10 +1270,10 @@ void EnMaYto_BarnStartDialogue(EnMaYto* this, PlayState* play) {
     }
 }
 
-void EnMaYto_ChangeAnim(EnMaYto* this, s32 index) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[index].animation, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[index].animation), sAnimationInfo[index].mode,
-                     sAnimationInfo[index].morphFrames);
+void EnMaYto_ChangeAnim(EnMaYto* this, s32 animIndex) {
+    Animation_Change(&this->skelAnime, sAnimationInfo[animIndex].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationInfo[animIndex].animation), sAnimationInfo[animIndex].mode,
+                     sAnimationInfo[animIndex].morphFrames);
 }
 
 void func_80B90C78(EnMaYto* this, PlayState* play) {

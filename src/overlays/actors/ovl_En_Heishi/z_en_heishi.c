@@ -15,7 +15,7 @@ void EnHeishi_Destroy(Actor* thisx, PlayState* play);
 void EnHeishi_Update(Actor* thisx, PlayState* play);
 void EnHeishi_Draw(Actor* thisx, PlayState* play);
 
-void EnHeishi_ChangeAnimation(EnHeishi* this, s32 animIndex);
+void EnHeishi_ChangeAnim(EnHeishi* this, s32 animIndex);
 void EnHeishi_SetHeadRotation(EnHeishi* this);
 void EnHeishi_SetupIdle(EnHeishi* this);
 void EnHeishi_Idle(EnHeishi* this, PlayState* play);
@@ -99,7 +99,7 @@ void EnHeishi_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->colliderCylinder);
 }
 
-void EnHeishi_ChangeAnimation(EnHeishi* this, s32 animIndex) {
+void EnHeishi_ChangeAnim(EnHeishi* this, s32 animIndex) {
     static AnimationHeader* sAnimations[] = {
         &gSoldierStandHandOnHip, &gSoldierCheerWithSpear, &gSoldierWave, &gSoldierSitAndReach, &gSoldierStandUp,
     };
@@ -133,7 +133,7 @@ void EnHeishi_SetHeadRotation(EnHeishi* this) {
 void EnHeishi_SetupIdle(EnHeishi* this) {
     s8 animIndex = HEISHI_ANIM_STAND_HAND_ON_HIP;
 
-    EnHeishi_ChangeAnimation(this, animIndex);
+    EnHeishi_ChangeAnim(this, animIndex);
     this->unk278 = animIndex;
     this->actionFunc = EnHeishi_Idle;
 }

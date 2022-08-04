@@ -30,10 +30,10 @@ const ActorInit Dm_Char04_InitVars = {
     (ActorFunc)DmChar04_Draw,
 };
 
-void DmChar04_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animation, u16 index) {
+void DmChar04_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animation, u16 animIndex) {
     f32 endFrame;
 
-    animation += index;
+    animation += animIndex;
 
     if (animation->frameCount < 0.0f) {
         endFrame = Animation_GetLastFrame(animation->animation);

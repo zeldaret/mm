@@ -15,7 +15,7 @@ void EnDemoheishi_Destroy(Actor* thisx, PlayState* play);
 void EnDemoheishi_Update(Actor* thisx, PlayState* play);
 void EnDemoheishi_Draw(Actor* thisx, PlayState* play);
 
-void EnDemoheishi_ChangeAnimation(EnDemoheishi* this, s32 animIndex);
+void EnDemoheishi_ChangeAnim(EnDemoheishi* this, s32 animIndex);
 void EnDemoheishi_SetupIdle(EnDemoheishi* this);
 void EnDemoheishi_Idle(EnDemoheishi* this, PlayState* play);
 void EnDemoheishi_SetupTalk(EnDemoheishi* this);
@@ -83,7 +83,7 @@ void EnDemoheishi_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->colliderCylinder);
 }
 
-void EnDemoheishi_ChangeAnimation(EnDemoheishi* this, s32 animIndex) {
+void EnDemoheishi_ChangeAnim(EnDemoheishi* this, s32 animIndex) {
     static AnimationHeader* sAnimations[] = {
         &gSoldierStandHandOnHip, &gSoldierCheerWithSpear, &gSoldierWave, &gSoldierSitAndReach, &gSoldierStandUp,
     };
@@ -114,7 +114,7 @@ void EnDemoheishi_SetHeadRotation(EnDemoheishi* this) {
 }
 
 void EnDemoheishi_SetupIdle(EnDemoheishi* this) {
-    EnDemoheishi_ChangeAnimation(this, DEMOHEISHI_ANIM_STAND_HAND_ON_HIP);
+    EnDemoheishi_ChangeAnim(this, DEMOHEISHI_ANIM_STAND_HAND_ON_HIP);
     this->textIdIndex = 0;
     this->actor.textId = sTextIds[this->textIdIndex];
     this->isTalking = false;

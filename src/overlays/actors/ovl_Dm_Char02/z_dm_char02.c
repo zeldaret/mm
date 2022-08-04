@@ -45,19 +45,19 @@ static AnimationInfo sAnimationInfo[] = {
     { &gClockTowerOcarinaOfTimeFallAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
 };
 
-void DmChar02_ChangeAnimation(SkelAnime* skelAnime, AnimationInfo* animation, u16 index) {
+void DmChar02_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
     f32 frameCount;
 
-    animation += index;
+    animationInfo += animIndex;
 
-    if (animation->frameCount < 0.0f) {
-        frameCount = Animation_GetLastFrame(animation->animation);
+    if (animationInfo->frameCount < 0.0f) {
+        frameCount = Animation_GetLastFrame(animationInfo->animation);
     } else {
-        frameCount = animation->frameCount;
+        frameCount = animationInfo->frameCount;
     }
 
-    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, frameCount,
-                     animation->mode, animation->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
+                     frameCount, animationInfo->mode, animationInfo->morphFrames);
 }
 
 void DmChar02_PlaySfxForDroppingOcarinaCutscene(DmChar02* this, PlayState* play) {
@@ -88,7 +88,7 @@ void DmChar02_Init(Actor* thisx, PlayState* play) {
         this->actor.targetArrowOffset = 3000.0f;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gClockTowerOcarinaOfTimeSkel, NULL, NULL, NULL, 0);
-        DmChar02_ChangeAnimation(&this->skelAnime, sAnimationInfo, 0);
+        DmChar02_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
         Actor_SetScale(&this->actor, 0.01f);
         this->actionFunc = DmChar02_PerformCutsceneActions;
     } else {
@@ -126,7 +126,7 @@ void DmChar02_PerformCutsceneActions(DmChar02* this, PlayState* play) {
             }
 
             if (shouldChangeAnimation) {
-                DmChar02_ChangeAnimation(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
+                DmChar02_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
             }
         }
 
@@ -136,7 +136,7 @@ void DmChar02_PerformCutsceneActions(DmChar02* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (this->animIndex == DMCHAR02_ANIM_TURN_AROUND) {
             this->animIndex++;
-            DmChar02_ChangeAnimation(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
+            DmChar02_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
         }
     }
 }

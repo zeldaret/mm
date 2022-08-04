@@ -91,16 +91,16 @@ static AnimationHeader* sAnimations[] = {
     &gGiantSmallCallStartAnim, &gGiantSmallCallLoopAnim, &gGiantSmallCallEndAnim,
 };
 
-void EnGiant_ChangeAnimation(EnGiant* this, s16 newAnimIndex) {
-    if (newAnimIndex >= GIANT_ANIM_LOOK_UP_START && newAnimIndex < GIANT_ANIM_MAX) {
-        if ((this->animIndex == GIANT_ANIM_WALKING_LOOP && newAnimIndex != GIANT_ANIM_WALKING_LOOP) ||
-            (newAnimIndex == GIANT_ANIM_WALKING_LOOP && this->animIndex != GIANT_ANIM_WALKING_LOOP)) {
-            Animation_Change(&this->skelAnime, sAnimations[newAnimIndex], 1.0f, 0.0f,
-                             Animation_GetLastFrame(&sAnimations[newAnimIndex]->common), ANIMMODE_ONCE, 10.0f);
+void EnGiant_ChangeAnim(EnGiant* this, s16 animIndex) {
+    if (animIndex >= GIANT_ANIM_LOOK_UP_START && animIndex < GIANT_ANIM_MAX) {
+        if ((this->animIndex == GIANT_ANIM_WALKING_LOOP && animIndex != GIANT_ANIM_WALKING_LOOP) ||
+            (animIndex == GIANT_ANIM_WALKING_LOOP && this->animIndex != GIANT_ANIM_WALKING_LOOP)) {
+            Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
+                             Animation_GetLastFrame(&sAnimations[animIndex]->common), ANIMMODE_ONCE, 10.0f);
         } else {
-            Animation_PlayOnce(&this->skelAnime, sAnimations[newAnimIndex]);
+            Animation_PlayOnce(&this->skelAnime, sAnimations[animIndex]);
         }
-        this->animIndex = newAnimIndex;
+        this->animIndex = animIndex;
     }
 }
 
@@ -153,7 +153,7 @@ void EnGiant_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.32f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gGiantSkel, &gGiantLargeStrideAnim, this->jointTable, this->morphTable,
                        GIANT_LIMB_MAX);
-    EnGiant_ChangeAnimation(this, GIANT_ANIM_IDLE_LOOP);
+    EnGiant_ChangeAnim(this, GIANT_ANIM_IDLE_LOOP);
     this->csAction = GIANT_CS_ACTION_NONE;
     this->actionFunc = EnGiant_PerformCutsceneActions;
     this->actor.draw = NULL;
@@ -251,9 +251,9 @@ void EnGiant_ChangeToStartOrLoopAnimation(EnGiant* this, s16 requestedAnimIndex)
 
     if (this->animIndex != nextAnimIndex) {
         if (this->animIndex != requestedAnimIndex) {
-            EnGiant_ChangeAnimation(this, requestedAnimIndex);
+            EnGiant_ChangeAnim(this, requestedAnimIndex);
         } else {
-            EnGiant_ChangeAnimation(this, nextAnimIndex);
+            EnGiant_ChangeAnim(this, nextAnimIndex);
         }
     }
 }
@@ -261,45 +261,45 @@ void EnGiant_ChangeToStartOrLoopAnimation(EnGiant* this, s16 requestedAnimIndex)
 /**
  * Immediately switches to the specified animation for this cutscene action.
  */
-void EnGiant_ChangeAnimationBasedOnCsAction(EnGiant* this) {
+void EnGiant_ChangeAnimBasedOnCsAction(EnGiant* this) {
     switch (this->csAction) {
         case GIANT_CS_ACTION_IDLE:
-            EnGiant_ChangeAnimation(this, GIANT_ANIM_IDLE_LOOP);
+            EnGiant_ChangeAnim(this, GIANT_ANIM_IDLE_LOOP);
             break;
         case GIANT_CS_ACTION_WALKING:
-            EnGiant_ChangeAnimation(this, GIANT_ANIM_WALKING_LOOP);
+            EnGiant_ChangeAnim(this, GIANT_ANIM_WALKING_LOOP);
             break;
         case GIANT_CS_ACTION_STRUGGLING:
-            EnGiant_ChangeAnimation(this, GIANT_ANIM_STRUGGLE_START);
+            EnGiant_ChangeAnim(this, GIANT_ANIM_STRUGGLE_START);
             break;
         case GIANT_CS_ACTION_FALLING_OVER:
-            EnGiant_ChangeAnimation(this, GIANT_ANIM_FALLING_OVER);
+            EnGiant_ChangeAnim(this, GIANT_ANIM_FALLING_OVER);
             break;
         case GIANT_CS_ACTION_IDLE_FADE_IN:
-            EnGiant_ChangeAnimation(this, GIANT_ANIM_IDLE_LOOP);
+            EnGiant_ChangeAnim(this, GIANT_ANIM_IDLE_LOOP);
             this->alpha = 0;
             break;
         case GIANT_CS_ACTION_TALKING:
-            EnGiant_ChangeAnimation(this, GIANT_ANIM_BIG_CALL_START);
+            EnGiant_ChangeAnim(this, GIANT_ANIM_BIG_CALL_START);
             break;
         case GIANT_CS_ACTION_DONE_TALKING:
-            EnGiant_ChangeAnimation(this, GIANT_ANIM_BIG_CALL_END);
+            EnGiant_ChangeAnim(this, GIANT_ANIM_BIG_CALL_END);
             break;
         case GIANT_CS_ACTION_TEACHING_OATH_TO_ORDER:
-            EnGiant_ChangeAnimation(this, GIANT_ANIM_SMALL_CALL_START);
+            EnGiant_ChangeAnim(this, GIANT_ANIM_SMALL_CALL_START);
             break;
         case GIANT_CS_ACTION_PLAYER_LEARNED_OATH_TO_ORDER:
-            EnGiant_ChangeAnimation(this, GIANT_ANIM_SMALL_CALL_END);
+            EnGiant_ChangeAnim(this, GIANT_ANIM_SMALL_CALL_END);
             break;
         case GIANT_CS_ACTION_UNKNOWN_12:
-            EnGiant_ChangeAnimation(this, GIANT_ANIM_IDLE_LOOP);
+            EnGiant_ChangeAnim(this, GIANT_ANIM_IDLE_LOOP);
             break;
         case GIANT_CS_ACTION_UNKNOWN_13:
-            EnGiant_ChangeAnimation(this, GIANT_ANIM_WALKING_LOOP);
+            EnGiant_ChangeAnim(this, GIANT_ANIM_WALKING_LOOP);
             break;
         case GIANT_CS_ACTION_UNKNOWN_14:
             if (this->animIndex != GIANT_ANIM_WALKING_LOOP) {
-                EnGiant_ChangeAnimation(this, GIANT_ANIM_WALKING_LOOP);
+                EnGiant_ChangeAnim(this, GIANT_ANIM_WALKING_LOOP);
             }
             break;
         case GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER:
@@ -337,7 +337,7 @@ void EnGiant_UpdateAlpha(EnGiant* this) {
 void EnGiant_PlayAndUpdateAnimation(EnGiant* this) {
     if (SkelAnime_Update(&this->skelAnime) &&
         (this->animIndex != GIANT_ANIM_FALLING_OVER || this->csAction != GIANT_CS_ACTION_FALLING_OVER)) {
-        EnGiant_ChangeAnimation(this, this->animIndex);
+        EnGiant_ChangeAnim(this, this->animIndex);
         switch (this->csAction) {
             case GIANT_CS_ACTION_LOOKING_UP:
                 EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIM_LOOK_UP_START);
@@ -353,14 +353,14 @@ void EnGiant_PlayAndUpdateAnimation(EnGiant* this) {
                 EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIM_FALLING_OVER);
                 break;
             case GIANT_CS_ACTION_TALKING:
-                EnGiant_ChangeAnimation(this, GIANT_ANIM_BIG_CALL_LOOP);
+                EnGiant_ChangeAnim(this, GIANT_ANIM_BIG_CALL_LOOP);
                 break;
             case GIANT_CS_ACTION_DONE_TALKING:
             case GIANT_CS_ACTION_PLAYER_LEARNED_OATH_TO_ORDER:
-                EnGiant_ChangeAnimation(this, GIANT_ANIM_IDLE_LOOP);
+                EnGiant_ChangeAnim(this, GIANT_ANIM_IDLE_LOOP);
                 break;
             case GIANT_CS_ACTION_TEACHING_OATH_TO_ORDER:
-                EnGiant_ChangeAnimation(this, GIANT_ANIM_SMALL_CALL_LOOP);
+                EnGiant_ChangeAnim(this, GIANT_ANIM_SMALL_CALL_LOOP);
                 break;
         }
         SkelAnime_Update(&this->skelAnime);
@@ -405,7 +405,7 @@ void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, PlayState* play) {
             play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCommand)]->action) {
             this->csAction =
                 play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCommand)]->action;
-            EnGiant_ChangeAnimationBasedOnCsAction(this);
+            EnGiant_ChangeAnimBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
     }
@@ -430,7 +430,7 @@ void EnGiant_PerformCutsceneActions(EnGiant* this, PlayState* play) {
             play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCommand)]->action) {
             this->csAction =
                 play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCommand)]->action;
-            EnGiant_ChangeAnimationBasedOnCsAction(this);
+            EnGiant_ChangeAnimBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
     }

@@ -238,10 +238,10 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
-void EnRacedog_ChangeAnimation(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 index) {
+void EnRacedog_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 animIndex) {
     f32 frameCount;
 
-    animationInfo += index;
+    animationInfo += animIndex;
     if (animationInfo->frameCount < 0) {
         frameCount = Animation_GetLastFrame(animationInfo->animation);
     } else {
@@ -354,7 +354,7 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     sSelectedDogInfo = sDogInfo[(s16)((gSaveContext.eventInf[0] & 0xF8) >> 3)];
     this->selectedDogIndex = sSelectedDogInfo.index;
 
-    EnRacedog_ChangeAnimation(&this->skelAnime, sAnimationInfo, RACEDOG_ANIM_IDLE);
+    EnRacedog_ChangeAnim(&this->skelAnime, sAnimationInfo, RACEDOG_ANIM_IDLE);
     sAnimationInfo[RACEDOG_ANIM_IDLE].playSpeed = Rand_ZeroFloat(0.5f) + 1.0f;
     this->actionFunc = EnRacedog_RaceStart;
 }
@@ -376,7 +376,7 @@ void EnRacedog_RaceStart(EnRacedog* this, PlayState* play) {
             play_sound(NA_SE_SY_START_SHOT);
         }
 
-        EnRacedog_ChangeAnimation(&this->skelAnime, sAnimationInfo, RACEDOG_ANIM_RUN);
+        EnRacedog_ChangeAnim(&this->skelAnime, sAnimationInfo, RACEDOG_ANIM_RUN);
         this->actionFunc = EnRacedog_Race;
     }
 }

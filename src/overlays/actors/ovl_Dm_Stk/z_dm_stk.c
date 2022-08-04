@@ -318,16 +318,16 @@ void DmStk_LoadObjectForAnimation(DmStk* this, PlayState* play) {
 /**
  * This function is always called with unusedExtraOffset = 0.
  */
-void DmStk_ChangeAnimation(DmStk* this, PlayState* play, SkelAnime* skelAnime, AnimationInfo* animation,
-                           u16 unusedExtraOffset) {
+void DmStk_ChangeAnim(DmStk* this, PlayState* play, SkelAnime* skelAnime, AnimationInfo* animationInfo,
+                      u16 unusedExtraOffset) {
     DmStk_LoadObjectForAnimation(this, play);
 
-    animation += unusedExtraOffset;
+    animationInfo += unusedExtraOffset;
 
-    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame,
-                     (animation->frameCount < 0.0f) ? Animation_GetLastFrame(&animation->animation->common)
-                                                    : animation->frameCount,
-                     animation->mode, animation->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
+                     (animationInfo->frameCount < 0.0f) ? Animation_GetLastFrame(animationInfo->animation)
+                                                        : animationInfo->frameCount,
+                     animationInfo->mode, animationInfo->morphFrames);
 }
 
 /**
@@ -1121,7 +1121,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
         this->csAction = 99;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gSkullKidSkel, NULL, NULL, NULL, 0);
-        DmStk_ChangeAnimation(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
+        DmStk_ChangeAnim(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
     }
 
     Actor_SetScale(&this->actor, 0.01f);
@@ -1200,7 +1200,7 @@ void DmStk_ClockTower_WaitForIntroCutsceneVersion1ToEnd(DmStk* this, PlayState* 
     if (play->csCtx.state == 0) {
         this->animIndex = SK_ANIM_CALL_DOWN_MOON_LOOP;
         this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
-        DmStk_ChangeAnimation(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
+        DmStk_ChangeAnim(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
         this->actionFunc = DmStk_ClockTower_IdleWithOcarina;
     }
 }
@@ -1217,7 +1217,7 @@ void DmStk_ClockTower_StartIntroCutsceneVersion2(DmStk* this, PlayState* play) {
 void DmStk_ClockTower_WaitForIntroCutsceneVersion2ToEnd(DmStk* this, PlayState* play) {
     if (play->csCtx.state == 0) {
         this->animIndex = SK_ANIM_FLOATING_ARMS_CROSSED;
-        DmStk_ChangeAnimation(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
+        DmStk_ChangeAnim(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
         this->actionFunc = DmStk_ClockTower_Idle;
     }
 }
@@ -1278,7 +1278,7 @@ void DmStk_ClockTower_DeflectHit(DmStk* this, PlayState* play) {
     }
 
     this->animIndex = SK_ANIM_DEFLECT_ATTACK;
-    DmStk_ChangeAnimation(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
+    DmStk_ChangeAnim(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
     this->actionFunc = DmStk_ClockTower_WaitForDeflectionToEnd;
 }
@@ -1291,7 +1291,7 @@ void DmStk_ClockTower_WaitForDeflectionToEnd(DmStk* this, PlayState* play) {
     DmStk_ClockTower_AdjustHeightAndRotation(this, play);
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->animIndex = SK_ANIM_FLOATING_ARMS_CROSSED;
-        DmStk_ChangeAnimation(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
+        DmStk_ChangeAnim(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
         this->actionFunc = DmStk_ClockTower_Idle;
     }
 
@@ -1576,7 +1576,7 @@ void DmStk_UpdateCutscenes(DmStk* this, PlayState* play) {
                         break;
                 }
 
-                DmStk_ChangeAnimation(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
+                DmStk_ChangeAnim(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
             }
         }
 
@@ -1665,14 +1665,14 @@ void DmStk_UpdateCutscenes(DmStk* this, PlayState* play) {
             case SK_ANIM_LOOK_LEFT_START:
             case SK_ANIM_SNIFF:
                 this->animIndex++;
-                DmStk_ChangeAnimation(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
+                DmStk_ChangeAnim(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                 break;
 
             case SK_ANIM_LOWER_MASK:
                 this->animIndex = SK_ANIM_IDLE;
                 this->maskType = SK_MASK_TYPE_NORMAL;
                 this->handType = SK_HAND_TYPE_DEFAULT;
-                DmStk_ChangeAnimation(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
+                DmStk_ChangeAnim(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                 break;
         }
     }

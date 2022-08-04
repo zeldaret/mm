@@ -36,7 +36,7 @@ static AnimationInfoS sAnimationInfo[] = {
     { &object_al_Anim_00DBE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
-s32 DmAl_ChangeAnimation(DmAl* this, s32 animIndex) {
+s32 DmAl_ChangeAnim(DmAl* this, s32 animIndex) {
     s32 didAnimationChange = false;
 
     if (animIndex != this->animIndex) {
@@ -62,13 +62,13 @@ void func_80C1BDD8(DmAl* this, PlayState* play) {
             csAction = play->csCtx.actorActions[actionIndex]->action;
             if (this->action != (u8)csAction) {
                 this->action = csAction;
-                DmAl_ChangeAnimation(this, D_80C1C280[csAction]);
+                DmAl_ChangeAnim(this, D_80C1C280[csAction]);
             }
             Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
         }
     } else if (this->unk_45C) {
         this->unk_45C = false;
-        DmAl_ChangeAnimation(this, this->animIndex2);
+        DmAl_ChangeAnim(this, this->animIndex2);
     }
 }
 
@@ -79,7 +79,7 @@ void DmAl_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gMadameAromaSkel, NULL, this->jointTable, this->morphTable,
                        MADAME_AROMA_LIMB_MAX);
     this->animIndex = -1;
-    DmAl_ChangeAnimation(this, MADAME_AROMA_ANIM_0);
+    DmAl_ChangeAnim(this, MADAME_AROMA_ANIM_0);
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80C1BDD8;

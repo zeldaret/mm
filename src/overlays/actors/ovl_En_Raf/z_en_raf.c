@@ -260,33 +260,33 @@ void EnRaf_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnRaf_ChangeAnimation(EnRaf* this, s32 index) {
+void EnRaf_ChangeAnim(EnRaf* this, s32 animIndex) {
     static AnimationHeader* sAnimations[] = {
         &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadCloseAnim,    &gCarnivorousLilyPadChewAnim,
         &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadConvulseAnim, &gCarnivorousLilyPadDeathAnim,
     };
-    static u8 sAnimationModes[] = {
+    static u8 sAnimModes[] = {
         ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE,
     };
     f32 startFrame = 0.0f;
     f32 playSpeed = 1.0f;
 
-    this->endFrame = Animation_GetLastFrame(sAnimations[index]);
-    if (index == EN_RAF_ANIM_IDLE) {
+    this->endFrame = Animation_GetLastFrame(sAnimations[animIndex]);
+    if (animIndex == EN_RAF_ANIM_IDLE) {
         startFrame = this->endFrame;
-    } else if (index == EN_RAF_ANIM_CLOSE) {
+    } else if (animIndex == EN_RAF_ANIM_CLOSE) {
         playSpeed = 2.0f;
     }
 
-    Animation_Change(&this->skelAnime, sAnimations[index], playSpeed, startFrame, this->endFrame,
-                     sAnimationModes[index], -4.0f);
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], playSpeed, startFrame, this->endFrame,
+                     sAnimModes[animIndex], -4.0f);
 }
 
 void EnRaf_SetupIdle(EnRaf* this) {
     Vec3f targetLimbScale = { 1.0f, 1.0f, 1.0f };
     s32 i;
 
-    EnRaf_ChangeAnimation(this, EN_RAF_ANIM_IDLE);
+    EnRaf_ChangeAnim(this, EN_RAF_ANIM_IDLE);
 
     for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT; i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT; i++) {
         Math_Vec3f_Copy(&this->targetLimbScale[i], &targetLimbScale);
@@ -358,7 +358,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
 }
 
 void EnRaf_SetupGrab(EnRaf* this) {
-    EnRaf_ChangeAnimation(this, EN_RAF_ANIM_CLOSE);
+    EnRaf_ChangeAnim(this, EN_RAF_ANIM_CLOSE);
     this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_GRAB;
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_DRINK);
     this->action = EN_RAF_ACTION_GRAB;
@@ -387,7 +387,7 @@ void EnRaf_Grab(EnRaf* this, PlayState* play) {
 void EnRaf_SetupChew(EnRaf* this) {
     s32 i;
 
-    EnRaf_ChangeAnimation(this, EN_RAF_ANIM_CHEW);
+    EnRaf_ChangeAnim(this, EN_RAF_ANIM_CHEW);
     this->chewCount = 0;
     for (i = 0; i < ARRAY_COUNT(this->chewLimbRot); i++) {
         this->chewLimbRot[i].x = Rand_S16Offset(8, 8) << 8;
@@ -461,7 +461,7 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
 void EnRaf_SetupThrow(EnRaf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    EnRaf_ChangeAnimation(this, EN_RAF_ANIM_SPIT);
+    EnRaf_ChangeAnim(this, EN_RAF_ANIM_SPIT);
     player->actor.freezeTimer = 10;
     this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW;
     this->action = EN_RAF_ACTION_THROW;
@@ -557,7 +557,7 @@ void EnRaf_PostDetonation(EnRaf* this, PlayState* play) {
 }
 
 void EnRaf_SetupConvulse(EnRaf* this) {
-    EnRaf_ChangeAnimation(this, EN_RAF_ANIM_CONVULSE);
+    EnRaf_ChangeAnim(this, EN_RAF_ANIM_CONVULSE);
     this->chewCount = 0;
     this->action = EN_RAF_ACTION_CONVULSE;
     this->actionFunc = EnRaf_Convulse;
@@ -584,7 +584,7 @@ void EnRaf_Convulse(EnRaf* this, PlayState* play) {
 }
 
 void EnRaf_SetupDissolve(EnRaf* this) {
-    EnRaf_ChangeAnimation(this, EN_RAF_ANIM_DEATH);
+    EnRaf_ChangeAnim(this, EN_RAF_ANIM_DEATH);
     this->action = EN_RAF_ACTION_DISSOLVE;
     this->dissolveTimer = 0;
     this->actionFunc = EnRaf_Dissolve;
@@ -671,7 +671,7 @@ void EnRaf_Dormant(EnRaf* this, PlayState* play) {
         DECR(this->reviveTimer);
 
         if (this->reviveTimer == 0) {
-            EnRaf_ChangeAnimation(this, EN_RAF_ANIM_SPIT);
+            EnRaf_ChangeAnim(this, EN_RAF_ANIM_SPIT);
 
             for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT;
                  i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT; i++) {
