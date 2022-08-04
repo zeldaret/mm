@@ -1703,7 +1703,7 @@ void Boss07_Wrath_WhipCollisionCheck(Vec3f* arg0, f32 arg1, Boss07* this, PlaySt
 
                         player->actor.parent = &this->actor;
                         Audio_PlaySfxGeneral(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4, &D_801DB4B0,
-                                             &D_801DB4B0, &D_801DB4B8);
+                                             &D_801DB4B0, &gSfxDefaultReverb);
                         this->unk_F7C = 0;
                         this->unk_F7E = ((this->actor.xzDistToPlayer - 300.0f) / 22.0f) + 10.0f;
                         dx1 = player->actor.world.pos.x - this->rightWhip.basePos.x;
