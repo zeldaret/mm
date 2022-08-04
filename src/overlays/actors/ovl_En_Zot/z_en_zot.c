@@ -1105,14 +1105,14 @@ void func_80B98AD0(EnZot* this, PlayState* play) {
                 func_801477B4(play);
                 this->actionFunc = func_80B98CA8;
                 gSaveContext.save.weekEventReg[41] &= (u8)~0x20;
-                AudioOcarina_SetInstrumentId(OCARINA_INSTRUMENT_OFF);
+                AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 break;
 
             case 0x12BA:
                 func_801477B4(play);
                 this->actionFunc = func_80B98CA8;
                 gSaveContext.save.weekEventReg[41] |= 0x20;
-                AudioOcarina_SetInstrumentId(OCARINA_INSTRUMENT_OFF);
+                AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 break;
 
             default:

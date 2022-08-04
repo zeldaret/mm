@@ -640,7 +640,7 @@ beginseg
     include "build/src/code/audio/audio_init_params.o"
     include "build/src/code/jpegutils.o"
     include "build/src/code/jpegdecoder.o"
-    include_readonly "build/src/code/z_game_over.o"
+    include_data_with_rodata "build/src/code/z_game_over.o"
     include "build/src/code/z_construct.o"
     include "build/data/code/audio_tables.rodata.o"
     include "build/data/code/aspMain.rodata.o"
@@ -1720,8 +1720,7 @@ beginseg
     name "ovl_Shot_Sun"
     compress
     include "build/src/overlays/actors/ovl_Shot_Sun/z_shot_sun.o"
-    include "build/data/ovl_Shot_Sun/ovl_Shot_Sun.data.o"
-    include "build/data/ovl_Shot_Sun/ovl_Shot_Sun.reloc.o"
+    include "build/src/overlays/actors/ovl_Shot_Sun/ovl_Shot_Sun_reloc.o"
 endseg
 
 beginseg
@@ -2970,9 +2969,7 @@ beginseg
     name "ovl_Bg_Crace_Movebg"
     compress
     include "build/src/overlays/actors/ovl_Bg_Crace_Movebg/z_bg_crace_movebg.o"
-    include "build/data/ovl_Bg_Crace_Movebg/ovl_Bg_Crace_Movebg.data.o"
-    include "build/data/ovl_Bg_Crace_Movebg/ovl_Bg_Crace_Movebg.bss.o"
-    include "build/data/ovl_Bg_Crace_Movebg/ovl_Bg_Crace_Movebg.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Crace_Movebg/ovl_Bg_Crace_Movebg_reloc.o"
 endseg
 
 beginseg
