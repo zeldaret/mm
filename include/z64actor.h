@@ -10,6 +10,7 @@
 
 // This value is hardcoded to be the size of ovl_Arrow_Fire which currently is the biggest actor that uses the AM_FIELD.
 #define AM_FIELD_SIZE SEGMENT_SIZE(ovl_Arrow_Fire)
+
 #define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
 
@@ -222,6 +223,7 @@ typedef struct {
     /* 0x158 */ u8 stateFlags;
     /* 0x15A */ s16 pad15A;
 } DynaPolyActor; // size = 0x15C
+
 
 typedef enum {
     /* 0x00 */ ITEM00_RUPEE_GREEN,
