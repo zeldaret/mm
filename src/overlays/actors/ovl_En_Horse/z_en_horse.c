@@ -2909,7 +2909,7 @@ void EnHorse_UpdateHorsebackArchery(EnHorse* this, PlayState* play) {
         this->hbaTimer++;
     }
 
-    sp28 = Audio_IsSequencePlaying(0x41);
+    sp28 = Audio_IsSequencePlaying(NA_BGM_HORSE_GOAL);
     EnHorse_UpdateHbaRaceInfo(this, play, &sHbaInfo);
 
     if (((this->hbaFlags & 1) || (this->hbaTimer > 45)) && (sp28 != 1) && (gSaveContext.minigameState != 3)) {
