@@ -81,7 +81,7 @@ static AnimationHeader* sAnimations[] = {
     &object_cs_Anim_0031C4, &object_cs_Anim_010B68,
 };
 
-static u8 sAnimModes[] = {
+static u8 sAnimationModes[] = {
     ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
     ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
     ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
@@ -177,8 +177,8 @@ void EnBomjimb_Destroy(Actor* thisx, PlayState* play) {
 void func_80C0113C(EnBomjimb* this, s32 arg1, f32 arg2) {
     this->unk_2DC = arg1;
     this->unk_2B8 = Animation_GetLastFrame(sAnimations[arg1]);
-    Animation_Change(&this->skelAnime, sAnimations[this->unk_2DC], arg2, 0.0f, this->unk_2B8, sAnimModes[this->unk_2DC],
-                     -4.0f);
+    Animation_Change(&this->skelAnime, sAnimations[this->unk_2DC], arg2, 0.0f, this->unk_2B8,
+                     sAnimationModes[this->unk_2DC], -4.0f);
 }
 
 void func_80C011CC(EnBomjimb* this) {

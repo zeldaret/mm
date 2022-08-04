@@ -103,7 +103,7 @@ void EnHeishi_ChangeAnim(EnHeishi* this, s32 animIndex) {
     static AnimationHeader* sAnimations[] = {
         &gSoldierStandHandOnHip, &gSoldierCheerWithSpear, &gSoldierWave, &gSoldierSitAndReach, &gSoldierStandUp,
     };
-    static u8 sAnimModes[] = {
+    static u8 sAnimationModes[] = {
         ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
         ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
         ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
@@ -112,7 +112,7 @@ void EnHeishi_ChangeAnim(EnHeishi* this, s32 animIndex) {
     this->animIndex = animIndex;
     this->frameCount = Animation_GetLastFrame(sAnimations[this->animIndex]);
     Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->frameCount,
-                     sAnimModes[this->animIndex], -10.0f);
+                     sAnimationModes[this->animIndex], -10.0f);
 }
 
 void EnHeishi_SetHeadRotation(EnHeishi* this) {

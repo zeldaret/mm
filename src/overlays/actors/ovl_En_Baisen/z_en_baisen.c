@@ -59,7 +59,7 @@ static u16 sTextIds[] = { 0x2ABD, 0x2ABB, 0x2AD5, 0x2AD6, 0x2AD7, 0x2AD8, 0x2AC6
 
 static AnimationHeader* sAnimations[] = { &object_bai_Anim_0011C0, &object_bai_Anim_0008B4, &object_bai_Anim_008198 };
 
-static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
+static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
 
 void EnBaisen_Init(Actor* thisx, PlayState* play) {
     EnBaisen* this = THIS;
@@ -104,7 +104,7 @@ void EnBaisen_ChangeAnim(EnBaisen* this, s32 animIndex) {
     this->animIndex = animIndex;
     this->frameCount = Animation_GetLastFrame(sAnimations[animIndex]);
     Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->frameCount,
-                     sAnimModes[this->animIndex], -10.0f);
+                     sAnimationModes[this->animIndex], -10.0f);
 }
 
 void func_80BE871C(EnBaisen* this) {

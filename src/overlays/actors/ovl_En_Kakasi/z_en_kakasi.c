@@ -130,7 +130,7 @@ static AnimationHeader* sAnimations[] = {
     &object_ka_Anim_00686C, &object_ka_Anim_0081A4, &object_ka_Anim_000214,
 };
 
-static u8 sAnimModes[] = {
+static u8 sAnimationModes[] = {
     ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
     ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE,
 };
@@ -200,7 +200,7 @@ void EnKakasi_SetAnimation(EnKakasi* this, s32 index) {
     this->animeFrameCount = Animation_GetLastFrame(&sAnimations[this->animIndex]->common);
     // 1: regular playback speed, 0: starting frame
     Animation_Change(&this->skelanime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animeFrameCount,
-                     sAnimModes[this->animIndex], -4.0f);
+                     sAnimationModes[this->animIndex], -4.0f);
 }
 
 /*

@@ -72,7 +72,7 @@ static AnimationHeader* sAnimations[] = {
     &gDekuPalaceGuardWalkAnim,
 };
 
-static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
+static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
 
 static TexturePtr sEyeTextures[] = {
     gDekuPalaceGuardEyeOpenTex,
@@ -132,7 +132,7 @@ void EnGuardNuts_ChangeAnim(EnGuardNuts* this, s32 animIndex) {
     this->animIndex = animIndex;
     this->animFrameCount = Animation_GetLastFrame(sAnimations[this->animIndex]);
     Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animFrameCount,
-                     sAnimModes[this->animIndex], -2.0f);
+                     sAnimationModes[this->animIndex], -2.0f);
 }
 
 void EnGuardNuts_SetupWait(EnGuardNuts* this) {

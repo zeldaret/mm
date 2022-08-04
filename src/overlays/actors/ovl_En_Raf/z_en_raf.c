@@ -265,7 +265,7 @@ void EnRaf_ChangeAnim(EnRaf* this, s32 animIndex) {
         &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadCloseAnim,    &gCarnivorousLilyPadChewAnim,
         &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadConvulseAnim, &gCarnivorousLilyPadDeathAnim,
     };
-    static u8 sAnimModes[] = {
+    static u8 sAnimationModes[] = {
         ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE,
     };
     f32 startFrame = 0.0f;
@@ -279,7 +279,7 @@ void EnRaf_ChangeAnim(EnRaf* this, s32 animIndex) {
     }
 
     Animation_Change(&this->skelAnime, sAnimations[animIndex], playSpeed, startFrame, this->endFrame,
-                     sAnimModes[animIndex], -4.0f);
+                     sAnimationModes[animIndex], -4.0f);
 }
 
 void EnRaf_SetupIdle(EnRaf* this) {

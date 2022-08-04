@@ -32,7 +32,7 @@ const ActorInit Dm_Char03_InitVars = {
     (ActorFunc)DmChar03_Draw,
 };
 
-AnimationInfo sAnimations[] = { { &object_osn_Anim_020530, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f } };
+AnimationInfo sAnimationInfo[] = { { &object_osn_Anim_020530, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f } };
 
 void DmChar03_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
     f32 frame;
@@ -56,7 +56,7 @@ void DmChar03_Init(Actor* thisx, PlayState* play) {
     this->unk_18E = false;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gDekuMaskSkel, NULL, NULL, NULL, 0);
-    DmChar03_ChangeAnim(&this->skelAnime, sAnimations, 0);
+    DmChar03_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmChar03_DoNothing;
 }
@@ -119,7 +119,7 @@ void func_80AAB710(DmChar03* this, PlayState* play) {
             }
 
             if (shouldChangeAnim) {
-                DmChar03_ChangeAnim(&this->skelAnime, &sAnimations[this->animIndex], 0);
+                DmChar03_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
             }
         }
         Cutscene_ActorTranslateAndYaw(&this->actor, play, index);

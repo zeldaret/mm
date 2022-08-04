@@ -262,7 +262,7 @@ static AnimationHeader* sAnimations[] = {
     &gDeepPythonSmallSideSwayAnim,
 };
 
-static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
+static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
 
 void EnDragon_ChangeAnim(EnDragon* this, s32 animIndex) {
     f32 startFrame;
@@ -275,7 +275,7 @@ void EnDragon_ChangeAnim(EnDragon* this, s32 animIndex) {
     }
 
     Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, startFrame, this->endFrame,
-                     sAnimModes[this->animIndex], -4.0f);
+                     sAnimationModes[this->animIndex], -4.0f);
 }
 
 static Color_RGBA8 sBubblePrimColors[] = {
