@@ -1,3 +1,13 @@
+/**
+ * @file code_80140E80.c
+ * @brief Copies images between color images (generally framebuffers), possibly with scaling. Used for several
+ * transition effects, and in z_play to shrink the screen at the end of the First and Second Days.
+ *
+ * 
+ *
+ * @note to use the functions in this file, with the exception of the general-purpose func_80141778(), you must load the
+ * S2DEX2 microcode first, and re-load the 3D microcode afterwards for the rest of the drawing in the frame.
+ */
 #include "global.h"
 
 // ucode.h
@@ -5,14 +15,6 @@
 
 // macros.h
 #define CLAMP_ALT(x, min, max) ((x) > (max) ? (max) : (x) < (min) ? (min) : (x))
-
-typedef struct {
-    /* 0x00 */ u8 unk00;
-    /* 0x04 */ f32 unk04;
-    /* 0x08 */ f32 lodProportion;
-    /* 0x0C */ Color_RGBA8_u32 primColor;
-    /* 0x10*/ Color_RGBA8_u32 envColor;
-} Struct_80140E80; // size = 0x14
 
 // Init
 void func_80140E80(Struct_80140E80* this) {
@@ -24,20 +26,34 @@ void func_80140EA0(Struct_80140E80* this) {
 }
 
 // internal, only used in func_80141008
-void func_80140EAC(Gfx** gfxP, uObjBg* bg, void* img, s32 width, s32 height, s32 flag) {
+/**
+ * Draw a bg to the specified color image.
+ *
+ * @param gfxP Pointer to current displaylist
+ * @param bg BG object to draw
+ * @param img Pointer to topleft of destination color image
+ * @param width Output width in pixels
+ * @param height Output height in pixels
+ * @param scalable Whether to use the scalable BG mode
+ */
+void func_80140EAC(Gfx** gfxP, uObjBg* bg, void* img, s32 width, s32 height, s32 scalable) {
     Gfx* gfx = *gfxP;
 
     gDPPipeSync(gfx++);
+    // Set up color image to draw bg to
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, width, img);
     gDPSetScissor(gfx++, 0, 0, 0, width, height);
-    gSPObjRenderMode(gfx++, G_OBJRM_ANTIALIAS | G_OBJRM_BILERP);
 
-    if (!!(flag & 1) != 0) {
+    // Draw bg in appropriate type
+    gSPObjRenderMode(gfx++, G_OBJRM_ANTIALIAS | G_OBJRM_BILERP);
+    if (!!(scalable & 1) != 0) {
         gSPBgRectCopy(gfx++, bg);
     } else {
         gSPBgRect1Cyc(gfx++, bg);
     }
+
     gDPPipeSync(gfx++);
+    // Reset the color image and scissor to frame's defaults
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, D_0F000000);
     gSPDisplayList(gfx++, &D_0E000000.setScissor[0]);
 
@@ -45,24 +61,41 @@ void func_80140EAC(Gfx** gfxP, uObjBg* bg, void* img, s32 width, s32 height, s32
 }
 
 // internal
-void func_80141008(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f32 frameX, f32 frameY, f32 arg7,
-                   f32 arg8, s32 flag) {
-    Gfx* gfx;
+/**
+ * Set up a BG from a specified source image and draw it to the specified color image with func_80140EAC(), using the
+ * BG's settings
+ *
+ * @param gfxP Pointer to current displaylist
+ * @param source Beginning of texture to draw
+ * @param img  Pointer to topleft of destination color image
+ * @param width Output width in pixels
+ * @param height Output height in pixels
+ * @param x left of image drawn
+ * @param y top of image drawn
+ * @param scaleX Amount to rescale the image, (dsdx). No effect if `scalable` is off.
+ * @param scaleY Amount to rescale the image, (dtdy). No effect if `scalable` is off.
+ * @param scalable Whether to use the scalable BG mode
+ */
+void func_80141008(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f32 x, f32 y, f32 scaleX, f32 scaleY,
+                   s32 scalable) {
+    Gfx* gfx = *gfxP;
     Gfx* gfxTemp;
     uObjBg* bg;
 
-    gfxTemp = gfx = *gfxP;
+    // Allocate for BG
+    gfxTemp = gfx;
     bg = Graph_DlistAlloc(&gfxTemp, sizeof(uObjBg));
     gfx = gfxTemp;
 
+    // Set up BG
     bg->b.imageX = 0;
-    bg->b.imageW = width * 4;
-    bg->b.frameX = frameX * 4.0f;
-    bg->b.frameW = width * 4;
+    bg->b.imageW = width << 2;
+    bg->b.frameX = x * 4;
+    bg->b.frameW = width << 2;
     bg->b.imageY = 0;
-    bg->b.imageH = height * 4;
-    bg->b.frameY = frameY * 4.0f;
-    bg->b.frameH = height * 4;
+    bg->b.imageH = height << 2;
+    bg->b.frameY = y * 4;
+    bg->b.frameH = height << 2;
     bg->b.imageLoad = G_BGLT_LOADTILE;
     bg->b.imageFmt = G_IM_FMT_RGBA;
     bg->b.imageSiz = G_IM_SIZ_16b;
@@ -70,32 +103,45 @@ void func_80141008(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f
     bg->b.imageFlip = 0;
     bg->b.imagePtr = source;
 
-    // so flag is to do with whether it is scalable
-    if (!!(flag & 1) != 0) {
+    if (!!(scalable & 1) != 0) {
         guS2DInitBg(bg);
     } else {
-        bg->s.scaleW = (s32)(0x400 / arg7);
-        bg->s.scaleH = (s32)(0x400 / arg8);
+        bg->s.scaleW = (s32)((1 << 10) / scaleX);
+        bg->s.scaleH = (s32)((1 << 10) / scaleY);
         bg->s.imageYorig = bg->b.imageY;
     }
 
-    func_80140EAC(&gfx, bg, img, width, height, flag);
+    // draw BG to `img`
+    func_80140EAC(&gfx, bg, img, width, height, scalable);
+
     *gfxP = gfx;
 }
 
 // used in FbdemoWipe5 and internally
 // "default settings" wrapper for func_80141008
-void func_8014116C(Gfx** gfxP, void* source, void* img, s32 width, s32 height, s32 flag) {
-    func_80141008(gfxP, source, img, width, height, 0.0f, 0.0f, 1.0f, 1.0f, flag);
+/**
+ * Set up a BG from a specified source image and draw it to the specified color image with func_80140EAC(), using the
+ * BG's settings. Position uses the default (0,0), and no rescaling is done.
+ *
+ * @see func_80141008() for arguments.
+ */
+void func_8014116C(Gfx** gfxP, void* source, void* img, s32 width, s32 height, s32 scalable) {
+    func_80141008(gfxP, source, img, width, height, 0.0f, 0.0f, 1.0f, 1.0f, scalable);
 }
 
-// wrapper for func_80141008, used in func_80141200
-void func_801411B4(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f32 frameX, f32 frameY, f32 arg7,
-                   f32 arg8, s32 flag) {
-    func_80141008(gfxP, source, img, width, height, frameX, frameY, arg7, arg8, flag);
+// wrapper for func_80141008 with general arguments, used in func_80141200
+/**
+ * Set up a BG from a specified source image and draw it to the specified color image with func_80140EAC(). Fully
+ * general settings are available.
+ *
+ * @see func_80141008() for arguments.
+ */
+void func_801411B4(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f32 x, f32 y, f32 scaleX, f32 scaleY,
+                   s32 scalable) {
+    func_80141008(gfxP, source, img, width, height, x, y, scaleX, scaleY, scalable);
 }
 
-#define gDPSetPrimColor_u32(pkt, m, l, d)                                                       \
+#define gDPSetPrimColor_u32(pkt, m, l, d)                                                      \
     _DW({                                                                                      \
         Gfx* _g = (Gfx*)(pkt);                                                                 \
                                                                                                \
@@ -109,31 +155,30 @@ void func_80141200(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
     s32 pad[3];
 
     gDPPipeSync(gfx++);
+
     gDPSetOtherMode(gfx++,
                     G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE |
                         G_TD_CLAMP | G_TP_NONE | G_CYC_COPY | G_PM_NPRIMITIVE,
                     G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2);
-
     func_8014116C(&gfx, source, img, width, height, 1);
 
     gDPPipeSync(gfx++);
+
     gDPSetOtherMode(gfx++,
                     G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE |
                         G_TD_CLAMP | G_TP_NONE | G_CYC_FILL | G_PM_NPRIMITIVE,
                     G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2);
-
     {
         s32 color = GPACK_RGBA5551(this->primColor.r, this->primColor.g, (u32)this->primColor.b, 1);
 
         gDPSetFillColor(gfx++, (color << 0x10) | color);
     }
-
     gDPFillRectangle(gfx++, 0, 0, width - 1, height - 1);
 
     gDPPipeSync(gfx++);
 
     {
-        s32 lodFrac = (s32)(this->lodProportion * 255.0f);
+        s32 lodFrac = this->lodProportion * 255.0f;
 
         gDPSetPrimColor_u32(gfx++, 0, lodFrac, this->primColor.rgba);
     }
@@ -157,9 +202,8 @@ void func_80141200(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
                           ENVIRONMENT, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, ENVIRONMENT, TEXEL0,
                           ENVIRONMENT);
     }
-
     {
-        f32 var_fv1 = CLAMP_ALT(this->unk04, 0.032f, 1.0f);
+        f32 var_fv1 = CLAMP_ALT(this->unk_04, 0.032f, 1.0f);
 
         func_801411B4(&gfx, img, source, width, height, width * 0.5f * (1.0f - var_fv1),
                       height * 0.5f * (1.0f - var_fv1), var_fv1, var_fv1, 0);
@@ -172,11 +216,11 @@ void func_80141200(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
 
 // internal, used in func_80141778
 void func_8014151C(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s32 width, s32 height) {
-    if (this->unk04 < 1.0f) {
+    if (this->unk_04 < 1.0f) {
         Gfx* gfx = *gfxP;
         u32 color;
 
-        if (this->unk04 > 0.032f) {
+        if (this->unk_04 > 0.032f) {
             func_80141200(this, &gfx, source, img, width, height);
         } else {
             gDPPipeSync(gfx++);
@@ -223,7 +267,7 @@ void func_80141778(Struct_80140E80* this, Gfx** gfxP, void* img) {
 
     gSPLoadUcodeL(gfx++, gspS2DEX2_fifo);
 
-    switch (this->unk00) {
+    switch (this->unk_00) {
         case 1:
             func_8014151C(this, &gfx, D_0F000000, img, gScreenWidth, gScreenHeight);
             break;

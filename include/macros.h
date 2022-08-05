@@ -69,6 +69,8 @@
 
 #define CHECK_FLAG_ALL(flags, mask) (((flags) & (mask)) == (mask))
 
+#define RGBA8(r, g, b, a) ((((r) & 0xFF) << 24) | (((g) & 0xFF) << 16) | (((b) & 0xFF) << 8) | (((a) & 0xFF) << 0))
+
 extern GraphicsContext* __gfxCtx;
 
 #define WORK_DISP __gfxCtx->work.p

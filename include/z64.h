@@ -1099,7 +1099,9 @@ struct PlayState {
     /* 0x18B4C */ PreRender pauseBgPreRender;
     /* 0x18B9C */ char unk_18B9C[0x2B8];
     /* 0x18E54 */ SceneTableEntry* loadedScene;
-    /* 0x18E58 */ char unk_18E58[0x10];
+    /* 0x18E58 */ char unk_18E58[0x8];
+    /* 0x18E60 */ void* unk_18E60;
+    /* 0x18E64 */ char unk_18E64[0x4];
     /* 0x18E68 */ s32 unk_18E68;
     /* 0x18E6C */ char unk_18E6C[0x3EC];
 }; // size = 0x19258
@@ -1147,6 +1149,14 @@ typedef struct {
     /* 0x10 */ u16* tlut;
     /* 0x14 */ Gfx* dList;
 } VisMono; // size = 0x18
+
+typedef struct {
+    /* 0x00 */ u8 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 lodProportion;
+    /* 0x0C */ Color_RGBA8_u32 primColor;
+    /* 0x10 */ Color_RGBA8_u32 envColor;
+} Struct_80140E80; // size = 0x14
 
 typedef struct DebugDispObject {
     /* 0x00 */ Vec3f pos;
