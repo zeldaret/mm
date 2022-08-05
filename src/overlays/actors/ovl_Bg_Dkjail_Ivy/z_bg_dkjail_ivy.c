@@ -205,7 +205,7 @@ void BgDkjailIvy_Draw(Actor* thisx, PlayState* play) {
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0xFF, 255, 255, 255, this->alpha);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, &object_dkjail_obj_DL_000080);
+    gSPDisplayList(POLY_XLU_DISP++, &gDkjailIvyDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
