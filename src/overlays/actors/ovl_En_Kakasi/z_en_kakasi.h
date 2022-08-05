@@ -2,15 +2,14 @@
 #define Z_EN_KAKASI_H
 
 #include "global.h"
+#include "z64snap.h"
 
 struct EnKakasi;
 
 typedef void (*EnKakasiActionFunc)(struct EnKakasi*, PlayState*);
-typedef void (*EnKakasiUnkFunc)(PlayState*, struct EnKakasi*);
 
 typedef struct EnKakasi {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ EnKakasiUnkFunc unkFunc; // used for one z_snap calling function?
+    /* 0x000 */ PictoActor picto;
     /* 0x148 */ EnKakasiActionFunc actionFunc;
     /* 0x14C */ SkelAnime skelanime;
     /* 0x190 */ s16 unk190; // camera index for song teaching angles?
