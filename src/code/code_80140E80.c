@@ -3,18 +3,15 @@
  * @brief Copies images between color images (generally framebuffers), possibly with scaling. Used for several
  * transition effects, and in z_play to shrink the screen at the end of the First and Second Days.
  *
- * 
  *
- * @note to use the functions in this file, with the exception of the general-purpose func_80141778(), you must load the
- * S2DEX2 microcode first, and re-load the 3D microcode afterwards for the rest of the drawing in the frame.
+ *
+ * @note to use the functions in this file, with the exception of func_80141778(), it is necessary to load the S2DEX2
+ * microcode first, and then re-load the 3D microcode afterwards for the rest of the drawing in the frame.
  */
 #include "global.h"
 
 // ucode.h
 #define SP_UCODE_DATA_SIZE 0x800
-
-// macros.h
-#define CLAMP_ALT(x, min, max) ((x) > (max) ? (max) : (x) < (min) ? (min) : (x))
 
 // Init
 void func_80140E80(Struct_80140E80* this) {
