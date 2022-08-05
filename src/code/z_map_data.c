@@ -40,8 +40,8 @@ s16 func_8010956C(s32 arg0) {
     return D_801BED4C[arg0].unkA;
 }
 
-s32 func_8010958C(s32 arg0) {
-    return D_801BED4C[arg0].unk0;
+TexturePtr func_8010958C(s32 arg0) {
+    return D_801BED4C[arg0].lmapTex;
 }
 
 void func_801095AC(s32 arg0, s32 *arg1, s32 *arg2) {

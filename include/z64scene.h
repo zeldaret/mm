@@ -4,7 +4,6 @@
 #include "ultra64.h"
 #include "z64dma.h"
 #include "z64cutscene.h"
-#include "z64map.h"
 #include "unk.h"
 
 #define SPAWN_ROT_FLAGS(rotation, flags) (((rotation) << 7) | (flags))
@@ -304,6 +303,32 @@ typedef struct {
     /* 0x00 */ u8 numTransitionActors;
     /* 0x04 */ TransitionActorEntry* transitionActorList;
 } DoorContext;
+
+typedef struct {
+    /* 0x00 */ u16 unk0;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ UNK_TYPE2 unk4;
+    /* 0x06 */ s16 unk6;
+    /* 0x08 */ u16 unk8;
+} MinimapEntry; // size = 0xA
+
+typedef struct {
+    /* 0x00 */ MinimapEntry* entry;
+    /* 0x04 */ s32 unk4;
+} MinimapList; // size  = 0x8
+
+typedef struct {
+    /* 0x00 */ MinimapEntry* entry;
+    /* 0x04 */ s16 unk4;
+} MinimapList2; // size  = 0x8
+
+typedef struct {
+    /* 0x00 */ UNK_TYPE2 unk0;
+    /* 0x02 */ UNK_TYPE2 unk2;
+    /* 0x04 */ UNK_TYPE2 unk4;
+    /* 0x06 */ UNK_TYPE2 unk6;
+    /* 0x08 */ UNK_TYPE2 unk8;
+} MinimapChest; // size = 0xA
 
 typedef struct {
     /* 0x0 */ s16 id;

@@ -1,40 +1,14 @@
 #ifndef Z64MAP_H
 #define Z64MAP_H
 #include "ultra64.h"
-
+#include "z64scene.h"
 #define FLOOR_INDEX_MAX 4
 
 /* z_scene */
-typedef struct {
-    /* 0x00 */ u16 unk0;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ UNK_TYPE2 unk4;
-    /* 0x06 */ s16 unk6;
-    /* 0x08 */ u16 unk8;
-} MinimapEntry; // size = 0xA
-
-typedef struct {
-    /* 0x00 */ MinimapEntry* entry;
-    /* 0x04 */ s32 unk4;
-} MinimapList; // size  = 0x8
-
-typedef struct {
-    /* 0x00 */ MinimapEntry* entry;
-    /* 0x04 */ s16 unk4;
-} MinimapList2; // size  = 0x8
-
-typedef struct {
-    /* 0x00 */ UNK_TYPE2 unk0;
-    /* 0x02 */ UNK_TYPE2 unk2;
-    /* 0x04 */ UNK_TYPE2 unk4;
-    /* 0x06 */ UNK_TYPE2 unk6;
-    /* 0x08 */ UNK_TYPE2 unk8;
-} MinimapChest; // size = 0xA
-
 /* z_map_data */
 
 typedef struct {
-    /* 0x00 */ s32 unk0;
+    /* 0x00 */ TexturePtr lmapTex; //minimap texture
     /* 0x04 */ u8 unk4;
     /* 0x05 */ u8 unk5;
     /* 0x06 */ u8 unk6;
@@ -78,15 +52,15 @@ typedef struct {
     /* 0x0A */ s16 unkA;
     /* 0x0C */ s16 unkC;
     /* 0x0E */ s16 unkE;
-    /* 0x10 */ TexturePtr unk10;
+    /* 0x10 */ TexturePtr unk10; // gameplay cur minimap room
     /* 0x14 */ s32 unk14; //unk4 same type as unk14
     /* 0x18 */ TexturePtr unk18;
     /* 0x1C */ s16 unk1C; //same as 0C
     /* 0x1E */ s16 unk1E; //same as 0E
     /* 0x20 */ s32 unk20;
     /* 0x24 */ s32 unk24;
-    /* 0x28 */ void* unk28;
-    /* 0x2C */ void* unk2C; 
+    /* 0x28 */ TexturePtr unk28; //unk type
+    /* 0x2C */ TexturePtr unk2C; //unk type
     /* 0x30 */ s16 unk30; //scene minBounds.x
     /* 0x32 */ s16 unk32; //scene minBounds.z
     /* 0x34 */ s16 unk34; //scene boundsWidth.x
@@ -111,17 +85,6 @@ typedef struct {
     /* 0x02 */ s16 unk2;
 } T_801BEC5C;
 
-typedef struct{
-    /* 0x00 */ s16 unk0;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ s16 unk4;
-    /* 0x06 */ UNK_TYPE2 unk6;
-    /* 0x08 */ s16 unk8;
-    /* 0x0A */ UNK_TYPE2 unkA;
-    /* 0x0C */ UNK_TYPE2 unkC;
-    /* 0x0E */ u16 unkE;
-} T_801F53B0;
-
 typedef struct {
     /* 0x00 */ s32 unk0[5];
 } T_801BEC70;
@@ -141,6 +104,9 @@ typedef struct {
 } T_801F56B0;
 
 /* z_map_data */
+TexturePtr func_8010958C(s32);
+
+s32 func_80109714(s32);
 s32 func_80109CBC(s32);
 s32 func_80109A98(s32);
 s32 func_80109AD8(s32);
