@@ -256,8 +256,7 @@ void Cutscene_Command_Misc(PlayState* play2, CutsceneContext* csCtx, CsCmdBase* 
             }
             break;
         case 0x13:
-            // AudioOcarina_PlayLongScarecrowAfterCredits
-            func_8019D758();
+            AudioOcarina_PlayLongScarecrowAfterCredits();
             csCtx->frames = cmd->startFrame - 1;
             break;
         case 0x14:

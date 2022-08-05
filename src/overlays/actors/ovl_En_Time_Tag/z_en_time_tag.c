@@ -103,7 +103,7 @@ void func_80AC9FE4(EnTimeTag* this, PlayState* play) {
 void func_80ACA0A8(EnTimeTag* this, PlayState* play) {
     EnTimeTag* this2 = this;
 
-    if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.unk1202E == 4)) {
+    if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_OATH)) {
         if (this->actor.cutscene != -1) {
             this->actionFunc = func_80AC9FE4;
             ActorCutscene_SetIntentToPlay(this2->actor.cutscene);

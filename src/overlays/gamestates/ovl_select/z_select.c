@@ -208,7 +208,7 @@ static SceneSelectEntry sScenes[] = {
     { " 30-1:" GFXP_HIRAGANA "ﾘｮｳｼ ﾉ ｲｴ", MapSelect_LoadGame, ENTRANCE(FISHERMANS_HUT, 0) },
 
     // "30-2: Pointed Rock" (Twin Pillars)
-    { " 30-2:" GFXP_HIRAGANA "ﾄﾝｶﾞﾘ ｲﾜ", MapSelect_LoadGame, ENTRANCE(PINACCLE_ROCK, 0) },
+    { " 30-2:" GFXP_HIRAGANA "ﾄﾝｶﾞﾘ ｲﾜ", MapSelect_LoadGame, ENTRANCE(PINNACLE_ROCK, 0) },
 
     // "31: Cape" (Great Bay Coast - River Area)
     { " 31:" GFXP_HIRAGANA "ﾐｻｷ", MapSelect_LoadGame, ENTRANCE(ZORA_CAPE, 0) },
