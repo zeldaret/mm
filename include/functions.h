@@ -2271,7 +2271,7 @@ void func_80140900(void* arg0);
 void func_80140CE0(void* arg0);
 void func_80140D04(void* arg0);
 void func_80140D10(void* arg0, Gfx** gfx, u32 arg2);
-void func_80140E80(void* param_1);
+// void func_80140E80(void* param_1);
 // void func_80140EA0(void);
 // void func_80140EAC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_80141008(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
