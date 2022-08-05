@@ -41,11 +41,6 @@ const ActorInit Obj_Y2shutter_InitVars = {
     (ActorFunc)ObjY2shutter_Draw,
 };
 
-typedef enum {
-    /* 0x0 */ BARRED_SHUTTER,
-    /* 0x1 */ GRATED_SHUTTER,
-} ShutterType;
-
 ShutterInfo sShutterInfo[] = {
     { gPirateBarredShutterDL, &gPirateBarredShutterCol, 120.0f, 20.0f, 3.0f, -20.0f, 3.0f, 4, 8, 160 },
     { gPirateGratedShutterDL, &gPirateGratedShutterCol, 150.0f, 1.0f, 0.04f, -1.0f, 0.04f, 6, 0xC, 160 },
