@@ -236,7 +236,7 @@ void EnNwc_CheckFound(EnNwc* this, PlayState* play) {
         }
 
         EnNwc_ChangeState(this, NWC_STATE_FOLLOWING);
-        func_801A0868(&D_801DB4A4, NA_SE_SY_CHICK_JOIN_CHIME, currentChickCount);
+        func_801A0868(&gSfxDefaultPos, NA_SE_SY_CHICK_JOIN_CHIME, currentChickCount);
     }
 }
 
