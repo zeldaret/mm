@@ -1722,7 +1722,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
             Vec3f sp98;
             f32 sp94;
 
-            Matrix_Translate(0.0f, 0.0f, -2000.0f, 1);
+            Matrix_Translate(0.0f, 0.0f, -2000.0f, MTXMODE_APPLY);
             for (i = 0; i < ARRAY_COUNT(D_80A99180); i++) {
                 Matrix_Push();
                 func_80A98F94(D_80A9930C[i], this->unk_39C, &sp94);
