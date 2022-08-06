@@ -1,7 +1,7 @@
 /*
  * File: z_en_encount1.c
  * Overlay: ovl_En_Encount1
- * Description: Spawner for Dragonflies, EN_ENCOUNT1_SKULLFISH, and Wallmasters
+ * Description: Spawner for Dragonflies, Skullfish, and Wallmasters
  */
 
 #include "z_en_encount1.h"
@@ -78,8 +78,8 @@ void func_808E0954(EnEncount1* this, PlayState* play) {
     CollisionPoly* sp54;
     s32 sp50;
 
-    if (((this->unk_14E >= this->unk_14C) || ((0.0f < this->unk_160) && (this->unk_160 < this->actor.xzDistToPlayer)) ||
-         ((0 < this->unk_154) && (this->unk_154 <= this->unk_152)))) {
+    if (((this->unk_14E >= this->unk_14C) || ((this->unk_160 > 0.0f) && (this->unk_160 < this->actor.xzDistToPlayer)) ||
+         ((this->unk_154 > 0) && (this->unk_154 <= this->unk_152)))) {
         return;
     } else if (this->unk_156 != 0) {
         this->unk_156++;
