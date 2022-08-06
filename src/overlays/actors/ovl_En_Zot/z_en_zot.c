@@ -5,6 +5,7 @@
  */
 
 #include "z_en_zot.h"
+#include "z64snap.h"
 #include "objects/object_zo/object_zo.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
@@ -955,8 +956,9 @@ void func_80B985EC(EnZot* this, PlayState* play) {
         itemActionParam = func_80123810(play);
         if (itemActionParam > PLAYER_AP_NONE) {
             func_801477B4(play);
-            if ((itemActionParam == PLAYER_AP_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) && func_8013A4C4(4)) {
-                if (func_8013A4C4(5) && func_8013A4C4(6)) {
+            if ((itemActionParam == PLAYER_AP_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) &&
+                Snap_CheckFlag(PICTOGRAPH_LULU_HEAD)) {
+                if (Snap_CheckFlag(PICTOGRAPH_LULU_RIGHT_ARM) && Snap_CheckFlag(PICTOGRAPH_LULU_LEFT_ARM)) {
                     player->actor.textId = 0x12AE;
                 } else {
                     player->actor.textId = 0x12AC;
@@ -1103,14 +1105,14 @@ void func_80B98AD0(EnZot* this, PlayState* play) {
                 func_801477B4(play);
                 this->actionFunc = func_80B98CA8;
                 gSaveContext.save.weekEventReg[41] &= (u8)~0x20;
-                AudioOcarina_SetInstrumentId(OCARINA_INSTRUMENT_OFF);
+                AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 break;
 
             case 0x12BA:
                 func_801477B4(play);
                 this->actionFunc = func_80B98CA8;
                 gSaveContext.save.weekEventReg[41] |= 0x20;
-                AudioOcarina_SetInstrumentId(OCARINA_INSTRUMENT_OFF);
+                AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 break;
 
             default:
