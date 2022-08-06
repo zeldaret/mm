@@ -161,11 +161,13 @@ void EnMThunder_Destroy(Actor* thisx, PlayState* play) {
         func_80115D5C(&play->state);
     }
     Collider_DestroyCylinder(play, &this->unk144);
-    func_808B5890(play, 0);
+    func_808B5890(play, 0.0f);
     LightContext_RemoveLight(play, &play->lightCtx, this->unk190);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B5890.s")
+void func_808B5890(PlayState* play, f32 arg1) {
+    func_800FD2B4(play, arg1, 850.0f, 0.2f, 0.0f);
+}
 
 void func_808B58CC(EnMThunder* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
@@ -397,7 +399,15 @@ void func_808B6310(EnMThunder* this, PlayState* play) {
     func_808B5EEC(this, play);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/EnMThunder_Update.s")
+void EnMThunder_Update(Actor* thisx, PlayState* play) {
+    EnMThunder* this = THIS;
+
+    this->actionFunc(this, play);
+    func_808B5890(play, this->unk1B4);
+    Lights_PointNoGlowSetInfo(&this->unk194, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                              this->unk1A4 * 255.0f, this->unk1A4 * 255.0f, this->unk1A4 * 100.0f,
+                              this->unk1A4 * 800.0f);
+}
 
 void func_808B65BC(Actor* thisx, PlayState* play) {
     EnMThunder* this = THIS;
