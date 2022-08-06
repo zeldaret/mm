@@ -49,6 +49,7 @@ extern ColliderCylinderInit D_808B7120;
 
 extern u8 D_808B714C[];
 // extern u8 D_808B7150[];
+extern u16 D_808B7154[];
 
 void func_808B53C0(EnMThunder* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
@@ -155,9 +156,117 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B5890.s")
 
+void func_808B58CC(EnMThunder* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B58CC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B5984.s")
+void func_808B5984(EnMThunder* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+    Actor* child = this->actor.child;
+
+    this->unk1B0 = player->unk_B08[0];
+    this->actor.world.pos = player->bodyPartsPos[0];
+
+    this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
+
+    if ((this->unk1C2 == 0) && (player->unk_B08[0] >= 0.1f)) {
+        if ((gSaveContext.unk_3F28 != 0) || ((ENMTHUNDER_GET_MAGIC_COST(&this->actor) != 0) &&
+                                             !func_80115DB4(play, ENMTHUNDER_GET_MAGIC_COST(&this->actor), 4))) {
+            func_808B58CC(this, play);
+            this->actionFunc = func_808B58CC;
+            this->unk1C0 = 0;
+            this->unk1B4 = 0.0f;
+            this->unk1A4 = 0.0f;
+            return;
+        }
+        this->unk1C2 = 1;
+    }
+
+    if (player->unk_B08[0] >= 0.1f) {
+        Rumble_Request(0.0f, (s32)(player->unk_B08[0] * 150.0f), 2, (s32)(player->unk_B08[0] * 150.0f));
+    }
+    if (player->stateFlags2 & PLAYER_STATE2_20000) {
+        if ((child != NULL) && (child->update != NULL)) {
+            child->parent = NULL;
+        }
+        if (player->unk_B08[0] <= 0.15f) {
+            if ((player->unk_B08[0] >= 0.1f) && (player->meleeWeaponAnimation >= 30)) {
+                Audio_PlaySfxGeneral(0x1823, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
+                                     &gSfxDefaultReverb);
+                Audio_PlaySfxGeneral(0x1818, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
+                                     &gSfxDefaultReverb);
+            }
+            Actor_MarkForDeath(&this->actor);
+            return;
+        }
+        player->stateFlags2 &= ~PLAYER_STATE2_20000;
+        if (ENMTHUNDER_GET_MAGIC_COST(&this->actor) != 0) {
+            gSaveContext.unk_3F28 = 1;
+        }
+        if (player->unk_B08[0] < 0.85f) {
+            this->unk144.info.toucher.damage = D_808B714C[this->unk1BF];
+            this->unk1BE = 1;
+            if (this->unk1BF == 3) {
+                this->unk1C1 = 4;
+            } else if (this->unk1BF == 2) {
+                this->unk1C1 = 3;
+            } else {
+                this->unk1C1 = 2;
+            }
+        } else {
+            this->unk144.info.toucher.damage = D_808B714C[this->unk1BF + 4];
+            this->unk1BE = 0;
+            if (this->unk1BF == 3) {
+                this->unk1C1 = 6;
+            } else if (this->unk1BF == 2) {
+                this->unk1C1 = 4;
+            } else {
+                this->unk1C1 = 3;
+            }
+        }
+        if (player->meleeWeaponAnimation < 30) {
+            this->unk1BE += 2;
+            this->actionFunc = func_808B60D4;
+            this->unk1BC = 1;
+        } else {
+            this->actionFunc = func_808B5F68;
+            this->unk1BC = 8;
+        }
+        Audio_PlaySfxGeneral(D_808B7154[this->unk1BE], &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
+                             &gSfxDefaultReverb);
+        this->unk1A4 = 1.0f;
+        return;
+    }
+    if (!(player->stateFlags1 & PLAYER_STATE1_1000)) {
+        if (this->actor.child != NULL) {
+            this->actor.child->parent = NULL;
+        }
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+    if (player->unk_B08[0] > 0.15f) {
+        this->unk1C0 = 0xFF;
+        if (this->actor.child == NULL) {
+            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_DUST, this->actor.world.pos.x,
+                               this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, 2);
+        }
+        this->unk1B4 += (((player->unk_B08[0] - 0.15f) * 1.5f) - this->unk1B4) * 0.5f;
+    } else if (player->unk_B08[0] > .1f) {
+        this->unk1C0 = (s32)((player->unk_B08[0] - .1f) * 255.0f * 20.0f);
+        this->unk1A4 = (player->unk_B08[0] - .1f) * 10.0f;
+    } else {
+        this->unk1C0 = 0;
+    }
+    if (player->unk_B08[0] > 0.85f) {
+        func_8019F900(&player->actor.projectedPos, 2);
+    } else if (player->unk_B08[0] > 0.15f) {
+        func_8019F900(&player->actor.projectedPos, 1);
+    } else if (player->unk_B08[0] > 0.1f) {
+        func_8019F900(&player->actor.projectedPos, 0);
+    }
+    if (Play_InCsMode(play)) {
+        Actor_MarkForDeath(&this->actor);
+    }
+}
 
 void func_808B5EEC(EnMThunder* this, PlayState* play) {
     if (this->unk1BC < 2) {
