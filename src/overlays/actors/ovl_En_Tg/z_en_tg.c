@@ -34,8 +34,7 @@ const ActorInit En_Tg_InitVars = {
     (ActorFunc)EnTg_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_809901C0 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_HIT0,
         AT_NONE,
@@ -56,10 +55,10 @@ static ColliderCylinderInit D_809901C0 = {
 };
 
 // sColChkInfoInit
-static CollisionCheckInfoInit2 D_809901EC = { 0, 0, 0, 0, MASS_IMMOVABLE };
+static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 // static DamageTable sDamageTable = {
-static DamageTable D_809901F8 = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(0, 0x0),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -94,7 +93,7 @@ static DamageTable D_809901F8 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfoS D_80990218 = { &object_mu_Anim_0053E0, 1.0f, 0, -1, 0, 0 };
+static AnimationInfoS sAnimations = { &object_mu_Anim_0053E0, 1.0f, 0, -1, 0, 0 };
 static Vec3f D_80990228 = { 0.0f, 0.0f, 0.0f };
 static Vec3f D_80990234 = { 0.0f, 1.5f, 0.0f };
 static Vec3f D_80990240 = { 0.0f, 0.0f, 0.0f };
@@ -136,10 +135,10 @@ void EnTg_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_mu_Skel_00B2B0, NULL, this->jointTable, this->morphTable,
                        21);
-    func_8098F800(&this->skelAnime, &D_80990218, 0);
+    func_8098F800(&this->skelAnime, &sAnimations, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_809901C0);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &D_809901F8, &D_809901EC);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_8098FA70;
     this->actor.gravity = -4.0f;
