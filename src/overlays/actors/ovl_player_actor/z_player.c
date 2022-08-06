@@ -12619,7 +12619,7 @@ u8 D_8085D1A4[PLAYER_AP_MAX] = {
     GI_OCARINA, // PLAYER_AP_OCARINA
     GI_BOTTLE, // PLAYER_AP_BOTTLE
     GI_FISH, // PLAYER_AP_BOTTLE_FISH
-    GI_BOTTLE_SPRING_WATER, // PLAYER_AP_BOTTLE_SPRING_WATER
+    GI_75, // PLAYER_AP_BOTTLE_SPRING_WATER
     GI_ICE_TRAP, // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
     GI_ZORA_EGG, // PLAYER_AP_BOTTLE_ZORA_EGG
     GI_GOLD_DUST, // PLAYER_AP_BOTTLE_DEKU_PRINCESS
@@ -12737,7 +12737,6 @@ void func_80853A5C(Player* this, PlayState* play) {
         this->actor.shape.rot.y = this->currentYaw;
     }
 }
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80853A5C.s")
 
 void func_80853CC0(Player* arg0, PlayState* arg1) {
     arg0->stateFlags2 |= (PLAYER_STATE2_20 | PLAYER_STATE2_40);

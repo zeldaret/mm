@@ -382,7 +382,7 @@ typedef enum GetItemID {
     /* 0x6E */ GI_SEAHORSE,
     /* 0x6F */ GI_CHATEAU_BOTTLE,
     /* 0x70 */ GI_70,
-    /* 0x75 */ GI_BOTTLE_SPRING_WATER = 0x75,
+    /* 0x75 */ GI_75 = 0x75,
     /* 0x76 */ GI_ICE_TRAP,
     /* 0x78 */ GI_MASK_DEKU = 0x78,
     /* 0x79 */ GI_MASK_GORON,
