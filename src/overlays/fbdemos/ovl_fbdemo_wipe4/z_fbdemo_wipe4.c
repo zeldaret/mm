@@ -6,6 +6,13 @@
 
 #include "z_fbdemo_wipe4.h"
 
+#define THIS ((TransitionWipe4*)thisx)
+
+// TODO: determine how generic these macros are. Requires rest of the fbdemos decompiled.
+#define TW4_SET_PARAMS (1 << 7)
+#define TW4_GET_COLORTYPE(type) (((type) >> 1) & 3)
+#define TW4_GET_SPEEDTYPE(type) ((type)&1)
+
 void* TransitionWipe4_Init(void* thisx);
 void TransitionWipe4_Destroy(void* thisx);
 void TransitionWipe4_Update(void* thisx, s32 updateRate);
@@ -16,35 +23,115 @@ void TransitionWipe4_SetColor(void* thisx, u32 color);
 void TransitionWipe4_SetEnvColor(void* thisx, u32 color);
 s32 TransitionWipe4_IsDone(void* thisx);
 
-#if 0
 TransitionInit TransitionWipe4_InitVars = {
-    TransitionWipe4_Init,
-    TransitionWipe4_Destroy,
-    TransitionWipe4_Update,
-    TransitionWipe4_Draw,
-    TransitionWipe4_Start,
-    TransitionWipe4_SetType,
-    TransitionWipe4_SetColor,
-    TransitionWipe4_SetEnvColor,
-    TransitionWipe4_IsDone,
+    TransitionWipe4_Init,     TransitionWipe4_Destroy,     TransitionWipe4_Update,
+    TransitionWipe4_Draw,     TransitionWipe4_Start,       TransitionWipe4_SetType,
+    TransitionWipe4_SetColor, TransitionWipe4_SetEnvColor, TransitionWipe4_IsDone,
 };
 
-#endif
+void TransitionWipe4_Start(void* thisx) {
+    TransitionWipe4* this = (TransitionWipe4*)thisx;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe4/TransitionWipe4_Start.s")
+    this->isDone = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe4/TransitionWipe4_Init.s")
+    switch (this->speedType) {
+        default:
+            this->baseSpeed = 0.2f;
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe4/TransitionWipe4_Destroy.s")
+        case 0:
+            this->baseSpeed = 0.1f;
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe4/TransitionWipe4_Update.s")
+        case 1:
+            this->baseSpeed = 0.05f;
+            break;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe4/TransitionWipe4_Draw.s")
+    switch (this->colorType) {
+        default:
+            this->primColor.rgba = RGBA8(160, 160, 160, 255);
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe4/TransitionWipe4_IsDone.s")
+        case 0:
+            this->primColor.rgba = RGBA8(0, 0, 0, 255);
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe4/TransitionWipe4_SetType.s")
+        case 1:
+            this->primColor.rgba = RGBA8(160, 160, 160, 255);
+            break;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe4/TransitionWipe4_SetColor.s")
+void* TransitionWipe4_Init(void* thisx) {
+    TransitionWipe4* this = (TransitionWipe4*)thisx;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe4/TransitionWipe4_SetEnvColor.s")
+    bzero(this, sizeof(TransitionWipe4));
+
+    return this;
+}
+
+void TransitionWipe4_Destroy(void* thisx) {
+}
+
+void TransitionWipe4_Update(void* thisx, s32 updateRate) {
+    TransitionWipe4* this = (TransitionWipe4*)thisx;
+
+    this->progress += (this->baseSpeed * 3.0f) / updateRate;
+    if (this->progress >= 1.0f) {
+        this->progress = 1.0f;
+        this->isDone = true;
+    }
+}
+
+// Use of THIS in this function is required to match
+void TransitionWipe4_Draw(void* thisx, Gfx** gfxP) {
+    Gfx* gfx;
+    Struct_80140E80* var_a3;
+
+    var_a3 = &THIS->bg;
+    gfx = *gfxP;
+    var_a3->primColor.rgba = THIS->primColor.rgba;
+
+    if (THIS->direction != 0) {
+        var_a3->unk_04 = THIS->progress;
+        var_a3->lodProportion = 1.0f - THIS->progress;
+    } else {
+        var_a3->unk_04 = 1.0f - THIS->progress;
+        var_a3->lodProportion = THIS->progress;
+    }
+
+    func_80141778(var_a3, &gfx, SysCfb_GetZBuffer());
+    *gfxP = gfx;
+}
+
+s32 TransitionWipe4_IsDone(void* thisx) {
+    TransitionWipe4* this = (TransitionWipe4*)thisx;
+
+    return this->isDone;
+}
+
+void TransitionWipe4_SetType(void* thisx, s32 type) {
+    TransitionWipe4* this = (TransitionWipe4*)thisx;
+
+    if (type & TW4_SET_PARAMS) {
+        this->colorType = TW4_GET_COLORTYPE(type);
+        this->speedType = TW4_GET_SPEEDTYPE(type);
+    } else if (type == 1) {
+        this->direction = 1;
+    } else {
+        this->direction = 0;
+    }
+}
+
+void TransitionWipe4_SetColor(void* thisx, u32 color) {
+    TransitionWipe4* this = (TransitionWipe4*)thisx;
+
+    this->primColor.rgba = color;
+}
+
+void TransitionWipe4_SetEnvColor(void* thisx, u32 color) {
+    TransitionWipe4* this = (TransitionWipe4*)thisx;
+
+    this->envColor.rgba = color;
+}
