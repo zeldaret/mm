@@ -67,7 +67,7 @@ void OceffWipe7_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     Vec3f quakeOffset;
     s32 pad2;
-    
+
     Camera_GetQuakeOffset(&quakeOffset, GET_ACTIVE_CAM(play));
 
     if (this->counter < 32) {
