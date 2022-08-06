@@ -101,8 +101,8 @@ void BgDkjailIvy_IvyCutEffects(BgDkjailIvy* this, PlayState* play) {
         spC8.y += this->dyna.actor.world.pos.y;
         spC8.z += this->dyna.actor.world.pos.z;
 
-        EffectSsKakera_Spawn(play, &spC8, &spBC, &spC8, -0x82, 0x40, 0x28, 0, 0, sLeafScales[i & 3], 0, 0, 44, -1, 1,
-                             sLeafDlists[(s32)Rand_Next() > 0]);
+        EffectSsKakera_Spawn(play, &spC8, &spBC, &spC8, -0x82, 0x40, 0x28, 0, 0, sLeafScales[i & 3], 0, 0, 44, -1,
+                             GAMEPLAY_KEEP, sLeafDlists[(s32)Rand_Next() > 0]);
 
         if ((i > 20) && ((i & 1) != 0)) {
             spB0.x = (Rand_ZeroOne() - 0.5f) * 0.2f;
@@ -178,7 +178,7 @@ void func_80ADE7E0(BgDkjailIvy* this) {
 }
 
 void BgDkjailIvy_FadeOut(BgDkjailIvy* this, PlayState* play) {
-    if (this->alpha >= 9) {
+    if (this->alpha > 8) {
         this->alpha -= 8;
     } else {
         this->alpha = 0;
