@@ -169,6 +169,13 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/EnMThunder_Update.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B65BC.s")
+void func_808B65BC(Actor* thisx, PlayState* play) {
+    EnMThunder* this = THIS;
+
+    this->actionFunc(this, play);
+    Lights_PointNoGlowSetInfo(&this->unk194, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                              this->unk1A4 * 255.0f, this->unk1A4 * 255.0f, this->unk1A4 * 100.0f,
+                              this->unk1A4 * 800.0f);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/EnMThunder_Draw.s")
