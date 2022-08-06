@@ -235,10 +235,6 @@ static LinkAnimationHeader* D_8085D124[3] = {
     (LinkAnimationHeader* )0x0400E3D0,
     (LinkAnimationHeader* )0x0400E288,
 };
-static Vec3f D_8085D130 = { 0.0f, 0.0f, 0.0f };
-static Vec3f D_8085D154 = { 0.0f, 0.0f, 100.0f };
-static ? D_8085D1A4;                                /* unable to generate initializer */
-static LinkAnimationHeader* D_8085D1F8[2] = { (LinkAnimationHeader* )0x0400DCA8, (LinkAnimationHeader* )0x0400DE98 };
 static Vec3f D_8085D27C = { 0.0f, 0.0f, 0.0f };
 static Vec3f D_8085D288 = { 0.0f, 0.0f, 0.0f };
 static s32 D_8085D338 = 0xF64;
@@ -284,7 +280,6 @@ static struct_80124618 D_8085D4E0[6] = {
     { 7, { 0x50, 0x5A, 0x50 } },
     { 9, { 0x64, 0x64, 0x64 } },
 };
-static struct_8082E224_arg1 D_8085D61C[4] = { { 0x6800, 0x2001 }, { 0x800, 0x1806 }, { 0x83C, 0x806 }, { 0, -0x2812 } };
 static Vec3f D_8085D62C;                            /* type too large by 8; unable to generate initializer */
 static f32 D_8085D630 = 0.0f;
 static f32 D_8085D634 = 0.0f;
@@ -292,9 +287,6 @@ static Vec3f D_8085D638;                            /* type too large by 4; unab
 static f32 D_8085D640 = 0.0f;
 static Vec3f D_8085D644;                            /* type too large by 4; unable to generate initializer */
 static f32 D_8085D64C = 0.0f;
-static ? D_8085D66C;                                /* unable to generate initializer */
-static ? D_8085D674;                                /* unable to generate initializer */
-static struct_8082E224_arg1 D_8085D67C = { 0x80A, 0x500A };
 static void* D_8085D680[9] = {
     (void* )0x080A5014,
     (void* )0x080AAFE2,
@@ -336,12 +328,8 @@ static struct_8082E224_arg1 D_8085D6E8[8] = {
     { 0x872, 0x884 },
     { 0x872, -0x888 },
 };
-static struct_8082E224_arg1 D_8085D73C[4] = { { 0, 0x3857 }, { 0x6804, 0x2057 }, { 0x6814, 0x2045 }, { 0, -0x287B } };
-static struct_8082E224_arg1 D_8085D74C[4] = { { 0x6814, 0x200D }, { 0, 0x380D }, { 0, 0x2849 }, { 0, -0x2878 } };
 static ? D_8085D76D;                                /* unable to generate initializer */
 static ? D_8085D797;                                /* unable to generate initializer */
-static ? D_8085D798;                                /* unable to generate initializer */
-static struct_8082E224_arg1 D_8085D840 = { 0x877, -0x81E };
 static ? D_8085D844;                                /* unable to generate initializer */
 static struct _struct_D_8085D848_0x54 D_8085D848[2]; /* unable to generate initializer */
 static struct_8082E224_arg1 D_8085D8F0[5] = {
@@ -1557,8 +1545,10 @@ u16 D_8085D0F8[4] = { 0x1000, 0, 0, 0 };
 Vec3f D_8085D100 = { 0.0f, 50.0f, 0.0f };
 Vec3f D_8085D10C;                                   /* unable to generate initializer */
 f32 D_8085D114 = 20.0f;
+Vec3f D_8085D130 = { 0.0f, 0.0f, 0.0f };
 struct_8085D13C D_8085D13C[2] = { { -8, 0xB4, 0x28, 0x64, 0x681A }, { -0x10, 0xFF, 0x8C, 0x96, 0x681A } };
 Vec3f D_8085D148 = { 0.0f, 50.0f, 0.0f };
+Vec3f D_8085D154 = { 0.0f, 0.0f, 100.0f };
 LinkAnimationHeader* D_8085D160[5] = {
     (LinkAnimationHeader* )0x0400E400,
     (LinkAnimationHeader* )0x0400E210,
@@ -1581,6 +1571,93 @@ LinkAnimationHeader* D_8085D190[5] = {
     (LinkAnimationHeader* )0x0400E2A8,
     (LinkAnimationHeader* )0x0400DDB8,
 };
+u8 D_8085D1A4[0x54] = {
+    0,
+    0,
+    0,
+    0x37,
+    0x38,
+    0x39,
+    0x3B,
+    0x19,
+    0x37,
+    0x22,
+    0x25,
+    0x26,
+    0x27,
+    0x41,
+    0x14,
+    0x34,
+    0x1A,
+    0x40,
+    0x28,
+    0x43,
+    0x4C,
+    0x5A,
+    0x62,
+    0x75,
+    0x76,
+    0x69,
+    0x6A,
+    0x6C,
+    0x6E,
+    0x6B,
+    0x70,
+    0x5F,
+    0x63,
+    0x65,
+    0x66,
+    0x5B,
+    0x5D,
+    0x5C,
+    0x61,
+    0x61,
+    0x91,
+    0x5E,
+    0x96,
+    0x97,
+    0xA0,
+    0xAA,
+    0x35,
+    0x98,
+    0x99,
+    0x9A,
+    0x96,
+    0xA1,
+    0xA7,
+    0xA8,
+    0xAB,
+    0xAB,
+    0xAB,
+    0xAB,
+    0x8A,
+    0x8F,
+    0x7E,
+    0x7F,
+    0x80,
+    0x81,
+    0x82,
+    0x83,
+    0x84,
+    0x85,
+    0x86,
+    0x87,
+    0x88,
+    0x89,
+    0x7C,
+    0x8B,
+    0x8C,
+    0x8D,
+    0x8E,
+    0x7D,
+    0x7B,
+    0x79,
+    0x7A,
+    0x78,
+    0x42,
+    0,
+};
+LinkAnimationHeader* D_8085D1F8[2] = { (LinkAnimationHeader* )0x0400DCA8, (LinkAnimationHeader* )0x0400DE98 };
 struct _struct_D_8085D200_0xC D_8085D200[2] = {
     { (LinkAnimationHeader* )0x0400D4A0, (LinkAnimationHeader* )0x0400D498, 2, 3 },
     { (LinkAnimationHeader* )0x0400D4D0, (LinkAnimationHeader* )0x0400D4C8, 5, 3 },
@@ -1667,9 +1744,13 @@ LinkAnimationHeader* D_8085D5F0[2] = { (LinkAnimationHeader* )0x0400D9E0, (LinkA
 u16 D_8085D5FA[5] = { 0xE2F8, 0x1830, 0x9BF, 0, 0 };
 struct_8082E224_arg1 D_8085D604[2] = { { 0, 0x4014 }, { 0, 0xBFE2 } };
 struct_8082E224_arg1 D_8085D60C[4] = { { 0x850, 0x103C }, { 0, 0x408C }, { 0, 0x40A4 }, { 0, 0xBF56 } };
+struct_8082E224_arg1 D_8085D61C[4] = { { 0x6800, 0x2001 }, { 0x800, 0x1806 }, { 0x83C, 0x806 }, { 0, -0x2812 } };
 struct_8082E224_arg1 D_8085D650[2] = { { 0x840, 0x1003 }, { 0x840, -0x1015 } };
 struct_8082E224_arg1 D_8085D658[2] = { { 0x840, 0x1004 }, { 0x840, -0x1018 } };
 Vec3f D_8085D660 = { 0.0f, 26.800001f, -60.0f };
+f32 D_8085D66C[2] = { 11.0f, 21.0f };
+f32 D_8085D674[2] = { 40.0f, 50.0f };
+struct_8082E224_arg1 D_8085D67C[1] = { { 0x80A, 0x500A } };
 struct_8082E224_arg1 D_8085D708[3] = { { 0, 0x2800 }, { 0x833, 0x80A }, { 0x830, -0x819 } };
 struct_8085D714 D_8085D714[5] = {
     { 1, (LinkAnimationHeader* )0x0400E1C8 },
@@ -1678,12 +1759,30 @@ struct_8085D714 D_8085D714[5] = {
     { 0, (LinkAnimationHeader* )0x0400E1E8 },
     { 0, (LinkAnimationHeader* )0x0400E1E0 },
 };
+struct_8082E224_arg1 D_8085D73C[4] = { { 0, 0x3857 }, { 0x6804, 0x2057 }, { 0x6814, 0x2045 }, { 0, -0x287B } };
+struct_8082E224_arg1 D_8085D74C[4] = { { 0x6814, 0x200D }, { 0, 0x380D }, { 0, 0x2849 }, { 0, -0x2878 } };
 struct_8082E224_arg1 D_8085D75C[2] = { { 0x6814, 0x2005 }, { 0, -0x280F } };
 Vec3f D_8085D764;                                   /* unable to generate initializer */
 Vec3f D_8085D770 = { 0.0f, 0.0f, 2.0f };
 Vec3f D_8085D77C = { 0.0f, 0.0f, -0.2f };
 Color_RGBA8 D_8085D788 = { 0xFF, 0xFF, 0xFF, 0xFF };
 Color_RGBA8 D_8085D78C = { 0xFF, 0xFF, 0xFF, 0xFF };
+struct_8085D798 D_8085D798[0xE] = {
+    { 0x10, 2, 0x16, 0x29, 0x5E },
+    { 0x17, -1, 0x1A, 0x16, 0x62 },
+    { 0x16, -1, 0x1B, 0x20, 0x63 },
+    { 0x17B, -1, 0x1B, 0x20, 0x63 },
+    { 0x18B, 0, 0x1F, 0x17, 0x67 },
+    { 0x18B, 1, 0x20, 0x18, 0x68 },
+    { 0x1FE, -1, 0x20, 0x18, 0x68 },
+    { 0x1F5, -1, 0x21, 0x19, 0x69 },
+    { 0x1FC, -1, 0x17, 0x1A, 0x5F },
+    { 0x205, -1, 0x24, 0x1D, 0x6E },
+    { 0x23B, -1, 0x23, 0x1D, 0x6B },
+    { 0x1F3, -1, 0x1D, 0x21, 0x65 },
+    { 0x208, -1, 0x1E, 0x22, 0x66 },
+    { 0x10, 6, 0x16, 0x29, 0x5E },
+};
 Vec3f D_8085D7EC = { 0.0f, 0.0f, 5.0f };
 Vec3f D_8085D7F8;                                   /* unable to generate initializer */
 f32 D_8085D800 = 30.0f;
@@ -1702,6 +1801,7 @@ struct_8085D80C D_8085D80C[0xB] = {
     { 0x17B, 0 },
 };
 struct_8082E224_arg1 D_8085D838[2] = { { 0x6814, 0x2026 }, { 0x286C, -0x828 } };
+struct_8082E224_arg1 D_8085D840 = { 0x877, -0x81E };
 Vec3f D_8085D918;                                   /* unable to generate initializer */
 f32 D_8085D91C = 0.5f;
 Vec3f D_8085D924;                                   /* unable to generate initializer */
@@ -6567,7 +6667,7 @@ block_45:
     }
 }
 
-void func_8083868C(PlayState* play, Player* this) {
+s32 func_8083868C(PlayState* play, Player* this) {
     s32 sp1C;
     Camera* var_v0;
     s32 var_v1;
@@ -6595,7 +6695,7 @@ void func_8083868C(PlayState* play, Player* this) {
         sp1C = var_v1;
         var_v0 = Play_GetCamera(play, this->unk_D8E);
     }
-    Camera_ChangeMode(var_v0, (s16) var_v1);
+    return Camera_ChangeMode(var_v0, (s16) var_v1);
 }
 
 void func_80838760(Player* this) {
@@ -6862,8 +6962,7 @@ block_39:
                 func_8082DAD4(this);
                 return 1;
             }
-            func_8083868C(play, this);
-            if (M2C_ERROR(Read from unset register $v0) != 0) {
+            if (func_8083868C(play, this) != 0) {
                 func_80838760(this);
                 if ((this->stateFlags1 << 8) >= 0) {
                     func_80831494(play, this, func_8084E724, 1);
@@ -10340,7 +10439,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     play->talkWithPlayer = func_8085B460;
     play->unk_1878C = func_8085B74C;
     play->unk_18790 = (void (*)(PlayState*, s16, Actor*)) func_8085B820;
-    play->unk_18794 = (s32 (*)(PlayState*, Player*, s32, s32)) func_8085B854;
+    play->unk_18794 = func_8085B854;
     play->setPlayerTalkAnim = (s32 (*)(PlayState*, void*, s32)) func_8085B930;
     gActorOverlayTable->initInfo->objectId = 1;
     temp_v0 = this->actor.shape.rot.x;
@@ -15583,7 +15682,7 @@ void func_8084E724(Player* arg0, PlayState* arg1) {
         func_8083216C(arg0, arg1);
     }
     temp_v1 = arg0->unk_AA5;
-    if (((temp_v1 == 2) && !(arg1->actorCtx.unk5 & 4)) || ((temp_v1 != 2) && ((arg0->csMode != 0) || (temp_v1 == 0) || ((s32) temp_v1 >= 5) || (func_8082FB68(arg0) != 0) || (arg0->unk_730 != NULL) || (func_8083868C(arg1, arg0), (M2C_ERROR(Read from unset register $v0) == 0)) || ((arg0->unk_AA5 == 3) && (((Player_ItemToActionParam(arg0, Inventory_GetBtnBItem(arg1)) != arg0->itemActionParam) && (D_80862B44->press.button & 0x4000)) || (D_80862B44->press.button & 0x8010) || (func_80123434(arg0) != 0) || ((func_800B7128(arg0) == 0) && (func_8082EF20(arg0) == 0)))) || ((arg0->unk_AA5 == 1) && (D_80862B44->press.button & 0xC01F)) || (func_808391D8(arg0, arg1) != 0)))) {
+    if (((temp_v1 == 2) && !(arg1->actorCtx.unk5 & 4)) || ((temp_v1 != 2) && ((arg0->csMode != 0) || (temp_v1 == 0) || ((s32) temp_v1 >= 5) || (func_8082FB68(arg0) != 0) || (arg0->unk_730 != NULL) || (func_8083868C(arg1, arg0) == 0) || ((arg0->unk_AA5 == 3) && (((Player_ItemToActionParam(arg0, Inventory_GetBtnBItem(arg1)) != arg0->itemActionParam) && (D_80862B44->press.button & 0x4000)) || (D_80862B44->press.button & 0x8010) || (func_80123434(arg0) != 0) || ((func_800B7128(arg0) == 0) && (func_8082EF20(arg0) == 0)))) || ((arg0->unk_AA5 == 1) && (D_80862B44->press.button & 0xC01F)) || (func_808391D8(arg0, arg1) != 0)))) {
         func_80839ED0(arg0, arg1);
         play_sound(0x4813U);
     } else {
@@ -16104,16 +16203,16 @@ block_63:
 }
 
 void func_8084FC0C(Player* arg0, PlayState* arg1) {
-    ?* sp40;
+    f32* sp40;
     CollisionPoly* sp3C;
     s32 sp38;
     f32 sp34;
     f32 sp30;
     f32 sp2C;
     SkelAnime* sp28;                                /* compiler-managed */
-    ?* var_v1;
     CollisionContext* temp_a0;
     SkelAnime* temp_a2;
+    f32* var_v1;
     s32 temp_v0;
 
     temp_a2 = &arg0->skelAnime;
@@ -16129,10 +16228,10 @@ void func_8084FC0C(Player* arg0, PlayState* arg1) {
         arg0->stateFlags1 &= 0xFFDFFFFF;
         return;
     }
-    var_v1 = &D_8085D66C;
+    var_v1 = D_8085D66C;
     if (arg0->unk_AE8 != 0) {
-        func_8082E224(arg0, &D_8085D67C);
-        var_v1 = &D_8085D674;
+        func_8082E224(arg0, D_8085D67C);
+        var_v1 = D_8085D674;
     }
     sp40 = var_v1;
     if ((LinkAnimation_OnFrame(sp28, var_v1->unk_0) != 0) || (LinkAnimation_OnFrame(sp28, var_v1->unk_4) != 0)) {
@@ -17609,13 +17708,13 @@ void func_80853194(Player* arg0, PlayState* arg1) {
 
 void func_808534C0(Player* arg0, PlayState* arg1) {
     struct _struct_D_8085D200_0xC* sp24;
-    ?* var_v1;
     Actor* temp_a1;
     Actor* temp_t1;
     f32 var_ft2;
     s32 temp_ft5;
     s32 var_t0;
     s8 temp_v0;
+    struct_8085D798* var_v1;
     u8 temp_t3;
 
     sp24 = &D_8085D200[arg0->unk_AE8];
@@ -17655,11 +17754,11 @@ void func_808534C0(Player* arg0, PlayState* arg1) {
                 }
                 if (func_8012364C(arg1, arg0, (s32) arg0->heldItemButton) == ITEM_BOTTLE) {
                     temp_t1 = arg0->interactRangeActor;
-                    var_v1 = &D_8085D798;
+                    var_v1 = D_8085D798;
                     var_t0 = 0;
                     if (temp_t1 != NULL) {
 loop_20:
-                        if ((var_v1->unk_0 != temp_t1->id) || ((temp_v0 = var_v1->unk_2, (temp_v0 >= 0)) && (temp_v0 != temp_t1->params))) {
+                        if ((var_v1->actorId != temp_t1->id) || ((temp_v0 = var_v1->actorParams, (temp_v0 >= 0)) && (temp_v0 != temp_t1->params))) {
                             var_t0 += 1;
                             var_v1 += 6;
                             if (var_t0 != 0xE) {
@@ -17671,7 +17770,7 @@ loop_20:
                             arg0->unk_AE8 = 0;
                             arg0->stateFlags1 |= 0x30000000;
                             temp_t1->parent = &arg0->actor;
-                            func_80123D50(arg1, arg0, (s32) var_v1->unk_3, (enum PlayerActionParam) var_v1->unk_4);
+                            func_80123D50(arg1, arg0, (s32) var_v1->itemId, (enum PlayerActionParam) var_v1->actionParam);
                             func_8082DB90(arg1, arg0, sp24->unk_4);
                         }
                     }
@@ -17788,7 +17887,7 @@ void func_80853A5C(Player* arg0, PlayState* arg1) {
             }
             func_8085B460(arg1, temp_a1_2);
         } else {
-            sp28 = (*(&D_8085D1A4 + temp_v0) * 6) - 6 + sGetItemTable;
+            sp28 = (D_8085D1A4[temp_v0] * 6) - 6 + sGetItemTable;
             if (Player_ActionToBottle(arg0, (enum PlayerActionParam) arg0->heldItemActionParam) < 0) {
                 temp_v0_3 = sp28->unk_2;
                 if (temp_v0_3 < 0) {
@@ -17815,7 +17914,7 @@ void func_80853A5C(Player* arg0, PlayState* arg1) {
         if ((Player_ActionToBottle(arg0, (enum PlayerActionParam) arg0->heldItemActionParam) >= 0) && (LinkAnimation_OnFrame(sp20, 36.0f) != 0)) {
             Player_SetModels(arg0, PLAYER_MODELGROUP_BOTTLE);
         } else if (LinkAnimation_OnFrame(sp20, 2.0f) != 0) {
-            func_80838830(arg0, ((*(&D_8085D1A4 + arg0->heldItemActionParam) * 6) - 6 + sGetItemTable)->unk_4);
+            func_80838830(arg0, ((D_8085D1A4[arg0->heldItemActionParam] * 6) - 6 + sGetItemTable)->unk_4);
         }
         func_8082E224(arg0, &D_8085D840);
     }
