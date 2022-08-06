@@ -410,8 +410,8 @@ typedef enum {
 } ActorDrawDamageEffectType;
 
 
-#define DEFINE_ACTOR(name, enumValue, allocType, nameString) enumValue,
-#define DEFINE_ACTOR_INTERNAL(name, enumValue, allocType, nameString) enumValue,
+#define DEFINE_ACTOR(_0, enumValue, _2, _3) enumValue,
+#define DEFINE_ACTOR_INTERNAL(_0, enumValue, _2, _3) enumValue,
 #define DEFINE_ACTOR_UNSET(enumValue) enumValue,
 
 typedef enum ActorID {
