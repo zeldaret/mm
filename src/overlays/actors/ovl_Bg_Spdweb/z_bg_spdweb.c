@@ -338,7 +338,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
         if (this->unk_164 > 3.0f) {
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WEB_VIBRATION);
         } else {
-            func_801A75E8(NA_SE_EV_WEB_VIBRATION);
+            Audio_StopSfxById(NA_SE_EV_WEB_VIBRATION);
         }
     }
 

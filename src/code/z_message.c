@@ -1,5 +1,6 @@
 #include "global.h"
 #include "message_data_static.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 #if 0
 
@@ -279,7 +280,7 @@ void func_8014D62C(PlayState* play, s32* arg1, f32* arg2, s16* arg3) {
     if ((func_8010A0A4(play) != 0) || (play->sceneNum == 0x4F)) {
         phi_v0 = 0xA;
     } else {
-        phi_v0 = play->pauseCtx.unk_238[4];
+        phi_v0 = play->pauseCtx.unk_238[PAUSE_WORLD_MAP];
     }
     temp_s6 = *(&D_801D0250 + (phi_v0 * 2));
     phi_s0 = 0;

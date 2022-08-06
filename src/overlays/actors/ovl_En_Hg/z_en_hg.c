@@ -357,7 +357,8 @@ void func_80BCFC0C(EnHg* this, PlayState* play) {
             D_80BD00C8 = false;
         }
         if (play->msgCtx.ocarinaMode == 3) {
-            if (play->msgCtx.unk1202E == 7 && gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+            if (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING &&
+                gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
                 if (INV_CONTENT(ITEM_MASK_GIBDO) == ITEM_MASK_GIBDO) {
                     this->unk218 = 3;
                 } else {

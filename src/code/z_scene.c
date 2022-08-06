@@ -173,9 +173,9 @@ void Scene_HeaderCmdActorList(PlayState* play, SceneCmd* cmd) {
     play->actorCtx.unkC = 0;
 }
 
-// SceneTableEntry Header Command 0x02: List of cameras for actor cutscenes
+// SceneTableEntry Header Command 0x02: List of camera data for actor cutscenes
 void Scene_HeaderCmdActorCutsceneCamList(PlayState* play, SceneCmd* cmd) {
-    play->csCamData = Lib_SegmentedToVirtual(cmd->csCameraList.segment);
+    play->actorCsCamList = Lib_SegmentedToVirtual(cmd->actorCsCamList.segment);
 }
 
 // SceneTableEntry Header Command 0x03: Collision Header
@@ -192,8 +192,8 @@ void Scene_HeaderCmdColHeader(PlayState* play, SceneCmd* cmd) {
         colHeader->surfaceTypeList = Lib_SegmentedToVirtual(colHeader->surfaceTypeList);
     }
 
-    if (colHeader->cameraDataList != NULL) {
-        colHeader->cameraDataList = Lib_SegmentedToVirtual(colHeader->cameraDataList);
+    if (colHeader->bgCamList != NULL) {
+        colHeader->bgCamList = Lib_SegmentedToVirtual(colHeader->bgCamList);
     }
 
     if (colHeader->waterBoxes != NULL) {
