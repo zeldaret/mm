@@ -1890,7 +1890,7 @@ void Rupees_ChangeBy(s16 rupeeChange);
 void Inventory_ChangeAmmo(s16 item, s16 ammoChange);
 void Parameter_AddMagic(PlayState* play, s16 arg1);
 void func_80115D5C(GameState* gamestate);
-// void func_80115DB4(void);
+s32 func_80115DB4(PlayState* play, s16 magicToConsume, s16 type);
 // void func_80116088(void);
 // void func_80116114(void);
 // void func_80116348(void);
