@@ -1601,8 +1601,12 @@ static AnimatedMaterial* D_80A99180[5] = {
     object_az_Matanimheader_01A6E8, object_az_Matanimheader_01A818, object_az_Matanimheader_01A948,
     object_az_Matanimheader_01AA78, object_az_Matanimheader_01ABA8,
 };
-static u8 D_80A99194[5] = { 95, 135, 175, 215, 255 };
-static u8 D_80A9919C[5] = { 31, 45, 58, 73, 85 };
+static u8 D_80A99194[5] = {
+    95, 135, 175, 215, 255,
+};
+static u8 D_80A9919C[5] = {
+    31, 45, 58, 73, 85,
+};
 static struct_80124618 D_80A991A4[5][9] = {
     {
         { 0, { 200, 160, 160 } },
@@ -1769,20 +1773,20 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
 s32 func_80A98DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnAz* this = THIS;
 
-    if ((limbIndex == 0) && (play->gameplayFrames & 1)) {
+    if ((limbIndex == OBJECT_AZ_1_LIMB_NONE) && ((play->gameplayFrames % 2) != 0)) {
         *dList = NULL;
     }
-    if (limbIndex == 0) {
+    if (limbIndex == OBJECT_AZ_1_LIMB_NONE) {
         rot->x = rot->x;
         rot->y = rot->y;
         rot->z = rot->z;
     }
-    if (limbIndex == 3) {
+    if (limbIndex == OBJECT_AZ_1_LIMB_03) {
         rot->y -= this->unk_39E;
     } else {
         // this space intentionally left blank
     }
-    if (limbIndex == 5) {
+    if (limbIndex == OBJECT_AZ_1_LIMB_05) {
         rot->x += this->unk_3D4;
         rot->y -= this->unk_3D6;
     }
@@ -1795,7 +1799,7 @@ void func_80A98E48(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
     static Vec3f D_80A99428 = { -1200.0f, 0.0f, 1000.0f };
     EnAz* this = THIS;
 
-    if (limbIndex == 3) {
+    if (limbIndex == OBJECT_AZ_1_LIMB_03) {
         Matrix_MultVec3f(&D_80A99410, &this->unk_3A8);
         Math_SmoothStepToF(&this->unk_3A4, this->unk_3A8.y - this->actor.world.pos.y, 0.8f, 10.0f, 0.01f);
         if (this->unk_374 & 2) {
@@ -1821,8 +1825,6 @@ void func_80A98EFC(EnAz* this, PlayState* play, u16 textId, s32 arg3, s32 arg4) 
     }
     this->unk_378 = 0;
 }
-
-#define LERPWEIGHT(frame, prevFrame, nextFrame) (((frame) - (prevFrame)) / ((nextFrame) - (prevFrame)))
 
 void func_80A98F94(struct_80A98F94* yData, f32 frame, f32* yInterp) {
     f32 nextFrame;
