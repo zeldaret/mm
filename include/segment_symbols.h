@@ -76,9 +76,9 @@ DECLARE_OVERLAY_SEGMENT(daytelop)
 DECLARE_OVERLAY_SEGMENT(kaleido_scope)
 DECLARE_OVERLAY_SEGMENT(player_actor)
 
-#define DEFINE_ACTOR(name, _1, _2, _3) DECLARE_OVERLAY_SEGMENT(name)
-#define DEFINE_ACTOR_INTERNAL(_0, _1, _2, _3)
-#define DEFINE_ACTOR_UNSET(_0)
+#define DEFINE_ACTOR(name, enumValue, allocType, nameString) DECLARE_OVERLAY_SEGMENT(name)
+#define DEFINE_ACTOR_INTERNAL(name, enumValue, allocType, nameString)
+#define DEFINE_ACTOR_UNSET(enumValue)
 
 #include "tables/actor_table.h"
 
