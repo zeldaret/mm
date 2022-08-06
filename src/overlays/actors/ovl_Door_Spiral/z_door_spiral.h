@@ -7,6 +7,9 @@ struct DoorSpiral;
 
 typedef void (*DoorSpiralActionFunc)(struct DoorSpiral*, PlayState*);
 
+#define DOORSPIRAL_GET_ORIENTATION_PARAM(this) ((((Actor*)(this))->params >> 7) & 0x1)
+#define DOORSPIRAL_GET_UNK145_PARAM(this) ((((Actor*)(this))->params >> 8) & 0x3)
+
 typedef struct DoorSpiral {
     /* 0x000 */ Actor actor;
     /* 0x144 */ u8 shouldClimb; // Flag used to determine if the player should climb the stairs

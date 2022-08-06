@@ -13,6 +13,7 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Boom/z_en_boom.h"
 #include "overlays/actors/ovl_En_Box/z_en_box.h"
+#include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Ishi/z_en_ishi.h"
 #include "overlays/actors/ovl_En_Test3/z_en_test3.h"
@@ -4065,13 +4066,13 @@ s32 func_80835DF8(PlayState* play, Player* this, CollisionPoly** outPoly, s32* o
 #ifdef NON_MATCHING
 // Matches but in-static data
 /**
- * PLAYER_DOORTYPE_4: DoorSpiral
+ * PLAYER_DOORTYPE_STAIRCASE: DoorSpiral
  */
-void func_80835EAC(PlayState* play, Player* this, DoorSpiral* door) {
-    static Vec3f D_8085D10C = {20.0f, 0.0f , 20.0f};
-    s32 pad;
+void func_80835EAC(PlayState* play, Player* this, Actor* door) {
+    static Vec3f D_8085D10C = { 20.0f, 0.0f, 20.0f };
+    DoorSpiral* doorStaircase = (DoorSpiral*)door;
 
-    this->currentYaw = door->actor.home.rot.y + 0x8000;
+    this->currentYaw = doorStaircase->actor.home.rot.y + 0x8000;
     this->actor.shape.rot.y = this->currentYaw;
     if (this->linearVelocity <= 0.0f) {
         this->linearVelocity = 0.1f;
@@ -4081,13 +4082,13 @@ void func_80835EAC(PlayState* play, Player* this, DoorSpiral* door) {
     this->unk_397 = this->doorType;
     this->unk_AE7 = 0;
     this->stateFlags1 |= PLAYER_STATE1_20000000;
-    func_80835BF8(&door->actor.world.pos, door->actor.shape.rot.y, -140.0f, &this->unk_3A0);
+    func_80835BF8(&doorStaircase->actor.world.pos, doorStaircase->actor.shape.rot.y, -140.0f, &this->unk_3A0);
 
     D_8085D10C.x = (this->doorDirection != 0) ? -400.0f : 400.0f;
     D_8085D10C.z = 200.0f;
     func_80835BC8(this, &this->unk_3A0, &D_8085D10C, &this->unk_3AC);
 
-    door->shouldClimb = true;
+    doorStaircase->shouldClimb = true;
     func_8082DAD4(this);
 
     if (this->doorTimer != 0) {
@@ -4099,7 +4100,8 @@ void func_80835EAC(PlayState* play, Player* this, DoorSpiral* door) {
     }
 
     Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), 0x50);
-    this->unk_3BA = (s16) play->doorCtx.transitionActorList[(s32) (u16) door->actor.params >> 0xA].sides[0].bgCamDataId;
+    this->unk_3BA =
+        play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorStaircase->actor)].sides[0].bgCamDataId;
     Actor_DisableLens(play);
     this->unk_B72 = 2;
 }
@@ -4108,18 +4110,18 @@ extern Vec3f D_8085D10C;
 #if 0
 Vec3f D_8085D10C = {20.0f, 0.0f , 20.0f};
 #endif
-void func_80835EAC(PlayState* play, Player* this, DoorSpiral* door);
+void func_80835EAC(PlayState* play, Player* this, Actor* door);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80835EAC.s")
 #endif
 
 /**
- * PLAYER_DOORTYPE_2: DoorShutter, BgOpenShutter
+ * PLAYER_DOORTYPE_SLIDING: DoorShutter, BgOpenShutter
  */
 void func_8083604C(PlayState* play, Player* this, Actor* door) {
-    s32 pad;
+    DoorSlidingActor* doorSliding = (DoorSlidingActor*)door;
     Vec3f sp38;
 
-    this->currentYaw = door->home.rot.y;
+    this->currentYaw = doorSliding->dyna.actor.home.rot.y;
     if (this->doorDirection > 0) {
         this->currentYaw -= 0x8000;
     }
@@ -4132,14 +4134,16 @@ void func_8083604C(PlayState* play, Player* this, Actor* door) {
     this->unk_AE7 = 0;
     this->unk_397 = this->doorType;
     this->stateFlags1 |= PLAYER_STATE1_20000000;
-    Actor_OffsetOfPointInActorCoords(door, &sp38, &this->actor.world.pos);
+    Actor_OffsetOfPointInActorCoords(&doorSliding->dyna.actor, &sp38, &this->actor.world.pos);
 
-    func_80835BF8(&this->actor.world.pos, door->shape.rot.y, (42.0f - fabsf(sp38.z)) * this->doorDirection,
-                  &this->actor.world.pos);
-    func_80835BF8(&this->actor.world.pos, door->shape.rot.y, this->doorDirection * 20.0f, &this->unk_3A0);
-    func_80835BF8(&this->actor.world.pos, door->shape.rot.y, this->doorDirection * -120.0f, &this->unk_3AC);
+    func_80835BF8(&this->actor.world.pos, doorSliding->dyna.actor.shape.rot.y,
+                  (42.0f - fabsf(sp38.z)) * this->doorDirection, &this->actor.world.pos);
+    func_80835BF8(&this->actor.world.pos, doorSliding->dyna.actor.shape.rot.y, this->doorDirection * 20.0f,
+                  &this->unk_3A0);
+    func_80835BF8(&this->actor.world.pos, doorSliding->dyna.actor.shape.rot.y, this->doorDirection * -120.0f,
+                  &this->unk_3AC);
 
-    ((DoorShutter*)door)->unk_15C = 1;
+    doorSliding->unk_15C = 1;
     func_8082DAD4(this);
 
     if (this->doorTimer != 0) {
@@ -4150,26 +4154,19 @@ void func_8083604C(PlayState* play, Player* this, Actor* door) {
         this->linearVelocity = 0.1f;
     }
 
-    if (door->category == ACTORCAT_DOOR) {
-        this->unk_3BA = (s16)play->doorCtx.transitionActorList[DOORSHUTTER_GET_FC00(door)]
+    if (doorSliding->dyna.actor.category == ACTORCAT_DOOR) {
+        this->unk_3BA = (s16)play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorSliding->dyna.actor)]
                             .sides[this->doorDirection > 0 ? 0 : 1]
                             .bgCamDataId;
         Actor_DisableLens(play);
     }
 }
 
-typedef struct {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ UNK_TYPE1 unk_144[0x5C];
-    /* 0x1A0 */ u8 unk_1A0;
-    /* 0x1A1 */ u8 unk_1A1;
-} DoorActorUnk2;
-
 extern LinkAnimationHeader* D_8085D118[];
 extern LinkAnimationHeader* D_8085D124[];
 
 /**
- * PLAYER_DOORTYPE_MINUS_1: EnDoorEtc, DoorShutter, EnDoor
+ * PLAYER_DOORTYPE_MINUS_1: EnDoor, EnDoorEtc, DoorShutter
  * PLAYER_DOORTYPE_0:
  * PLAYER_DOORTYPE_1: EnDoor
  * PLAYER_DOORTYPE_3:
@@ -4179,14 +4176,14 @@ void func_80836258(PlayState* play, Player* this, Actor* door) {
     s32 temp = this->transformation - 1;
     LinkAnimationHeader* sp60;
     f32 temp_fv0; // sp5C
-    s32 pad;
+    DoorBaseActor* doorNormal = (DoorBaseActor*)door;
     CollisionPoly* sp54;
     s32 sp50;
     Vec3f sp44;
     s32 sp40;
     Camera* temp_a0_2;
 
-    ((DoorActorUnk2*)door)->unk_1A0 = this->transformation;
+    doorNormal->animIndex = this->transformation;
 
     if (this->doorDirection < 0) {
         if (this->transformation == PLAYER_FORM_FIERCE_DEITY) {
@@ -4197,7 +4194,7 @@ void func_80836258(PlayState* play, Player* this, Actor* door) {
             sp60 = D_8085D118[temp];
         }
     } else {
-        ((DoorActorUnk2*)door)->unk_1A0 += 5;
+        doorNormal->animIndex += 5;
 
         if (this->transformation == PLAYER_FORM_FIERCE_DEITY) {
             sp60 = GET_PLAYER_ANIM(PLAYER_ANIMGROUP_10, this->modelAnimType);
@@ -4212,14 +4209,15 @@ void func_80836258(PlayState* play, Player* this, Actor* door) {
     this->stateFlags2 |= PLAYER_STATE2_800000;
     func_8082DE14(play, this);
     if (this->doorDirection < 0) {
-        this->actor.shape.rot.y = door->shape.rot.y;
+        this->actor.shape.rot.y = doorNormal->dyna.actor.shape.rot.y;
     } else {
-        this->actor.shape.rot.y = door->shape.rot.y - 0x8000;
+        this->actor.shape.rot.y = doorNormal->dyna.actor.shape.rot.y - 0x8000;
     }
 
     this->currentYaw = this->actor.shape.rot.y;
     temp_fv0 = this->doorDirection * 22.0f;
-    func_80835BF8(&door->world.pos, door->shape.rot.y, temp_fv0, &this->actor.world.pos);
+    func_80835BF8(&doorNormal->dyna.actor.world.pos, doorNormal->dyna.actor.shape.rot.y, temp_fv0,
+                  &this->actor.world.pos);
     func_8082EC9C(play, this, sp60);
 
     if (this->doorTimer != 0) {
@@ -4228,15 +4226,15 @@ void func_80836258(PlayState* play, Player* this, Actor* door) {
 
     func_8082DAD4(this);
     func_8082E920(play, this, 0x28F);
-    ((DoorActorUnk2*)door)->unk_1A1 = 1;
+    doorNormal->unk_1A1 = 1;
     if (this->doorType != PLAYER_DOORTYPE_3) {
-        sp40 = ((s16)door->params >> 7) & 7;
+        sp40 = ENDOOR_GET_PARAMS_7(&doorNormal->dyna.actor);
         this->stateFlags1 |= PLAYER_STATE1_20000000;
 
         if (this->actor.category == ACTORCAT_PLAYER) {
             Actor_DisableLens(play);
-            func_80835BF8(&door->world.pos, door->shape.rot.y, -temp_fv0, &sp44);
-            sp44.y = door->world.pos.y + 10.0f;
+            func_80835BF8(&doorNormal->dyna.actor.world.pos, doorNormal->dyna.actor.shape.rot.y, -temp_fv0, &sp44);
+            sp44.y = doorNormal->dyna.actor.world.pos.y + 10.0f;
             BgCheck_EntityRaycastFloor5(&play->colCtx, &sp54, &sp50, &this->actor, &sp44);
 
             if (func_8083562C(play, this, sp54, 0x32)) {
@@ -4245,8 +4243,8 @@ void func_80836258(PlayState* play, Player* this, Actor* door) {
                 this->unk_AE7 = 38.0f * D_8085C3E8;
                 temp_a0_2 = Play_GetCamera(play, 0);
 
-                Camera_ChangeDoorCam(temp_a0_2, door,
-                                     play->doorCtx.transitionActorList[(s32)(u16)door->params >> 0xA]
+                Camera_ChangeDoorCam(temp_a0_2, &doorNormal->dyna.actor,
+                                     play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorNormal->dyna.actor)]
                                          .sides[(this->doorDirection > 0) ? 0 : 1]
                                          .bgCamDataId,
                                      0.0f, this->unk_AE7, 26.0f * D_8085C3E8, 10.0f * D_8085C3E8);
@@ -4265,7 +4263,7 @@ s32 func_808365DC(Player* this, PlayState* play) {
               ((this->doorType > 0) && ActorCutscene_GetCanPlayNext(0x7D))) &&
              (!(this->stateFlags1 & PLAYER_STATE1_800) &&
               (CHECK_BTN_ALL(D_80862B44->press.button, BTN_A) || (func_8085437C == this->unk_748) ||
-               (this->doorType == PLAYER_DOORTYPE_4) || (this->doorType == PLAYER_DOORTYPE_5))))) {
+               (this->doorType == PLAYER_DOORTYPE_STAIRCASE) || (this->doorType == PLAYER_DOORTYPE_5))))) {
             Actor* doorActor = this->doorActor;
             Actor* var_v0_3;
 
@@ -4279,9 +4277,9 @@ s32 func_808365DC(Player* this, PlayState* play) {
 
             gSaveContext.respawn[RESPAWN_MODE_DOWN].data = 0;
 
-            if (this->doorType == PLAYER_DOORTYPE_4) {
-                func_80835EAC(play, this, (DoorSpiral*)doorActor);
-            } else if (this->doorType == PLAYER_DOORTYPE_2) {
+            if (this->doorType == PLAYER_DOORTYPE_STAIRCASE) {
+                func_80835EAC(play, this, doorActor);
+            } else if (this->doorType == PLAYER_DOORTYPE_SLIDING) {
                 func_8083604C(play, this, doorActor);
             } else {
                 func_80836258(play, this, doorActor);
@@ -4294,8 +4292,8 @@ s32 func_808365DC(Player* this, PlayState* play) {
 
             if (this->actor.category == ACTORCAT_PLAYER) {
                 if ((this->doorType < PLAYER_DOORTYPE_3) && (doorActor->category == ACTORCAT_DOOR) &&
-                    ((this->doorType != PLAYER_DOORTYPE_1) || ((((s16)doorActor->params >> 7) & 7) != 7))) {
-                    s8 roomNum = play->doorCtx.transitionActorList[(s32)(doorActor->params & 0xFFFF) >> 0xA]
+                    ((this->doorType != PLAYER_DOORTYPE_1) || (ENDOOR_GET_PARAMS_7(doorActor) != 7))) {
+                    s8 roomNum = play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(doorActor)]
                                      .sides[(this->doorDirection > 0) ? 0 : 1]
                                      .room;
 
@@ -7456,7 +7454,7 @@ s32 func_80840A30(PlayState* play, Player* this, f32* arg2, f32 arg3) {
         }
     block_12:
         if (!func_8082DA90(play)) {
-            if (this->doorType == PLAYER_DOORTYPE_4) {
+            if (this->doorType == PLAYER_DOORTYPE_STAIRCASE) {
                 func_8085B384(this, play);
                 return true;
             }
@@ -11429,25 +11427,21 @@ void func_8084D770(Player* this, PlayState* play) {
 void func_8084D820(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084D820.s")
 
-typedef struct {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ UNK_TYPE1 unk_144[0x60];
-    /* 0x1A4 */ u8 unk_1A4;
-} DoorActorUnk;
-
 // door stuff
 void func_8084E034(Player* this, PlayState* play) {
     Actor* doorActor = this->doorActor;
     s32 sp38;
     s32 animFinished;
-    CollisionPoly* polu;
+    CollisionPoly* poly;
     s32 bgId;
 
-    sp38 = (doorActor != NULL) && (((DoorActorUnk*)doorActor)->unk_1A4 == 7);
+    //! @bug Incorrect struct access: `doorActor` can be either a `EnDoor` (correct access), `EnDoorEtc` (reads `angle`
+    //! as a s16 instead of a u8) or a `DoorShutter` (OoB read)
+    sp38 = (doorActor != NULL) && (((EnDoor*)doorActor)->unk_1A4 == 7);
     this->stateFlags2 |= PLAYER_STATE2_20;
 
     if (DECR(this->unk_AE7) == 0) {
-        func_80835DF8(play, this, &polu, &bgId);
+        func_80835DF8(play, this, &poly, &bgId);
     }
 
     animFinished = LinkAnimation_Update(play, &this->skelAnime);

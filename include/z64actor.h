@@ -1183,4 +1183,21 @@ typedef enum {
     /* 0xC8 */ CLEAR_TAG_SMOKE = 200
 } ClearTagType;
 
+typedef struct DoorBaseActor {
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ SkelAnime skelAnime;
+    /* 0x1A0 */ u8 animIndex;
+    /* 0x1A1 */ u8 unk_1A1;
+    /* 0x1A2 */ s8 requiredObjBankIndex;
+    /* 0x1A3 */ s8 dlIndex;
+} DoorBaseActor; // size = 0x1A4
+
+typedef struct DoorSlidingActor {
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ s16 unk_15C;
+    /* 0x15E */ s16 unk_15E;
+} DoorSlidingActor; // size = 0x160
+
+#define DOOR_GET_TRANSITION_ID(thisx) ((u16)(thisx)->params >> 10)
+
 #endif

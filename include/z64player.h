@@ -199,9 +199,9 @@ typedef enum PlayerDoorType {
     /* -1 */ PLAYER_DOORTYPE_MINUS_1 = -1, // PLAYER_DOORTYPE_AJAR = -1,
     /*  0 */ PLAYER_DOORTYPE_0, // PLAYER_DOORTYPE_NONE,
     /*  1 */ PLAYER_DOORTYPE_1, // PLAYER_DOORTYPE_HANDLE,
-    /*  2 */ PLAYER_DOORTYPE_2, // PLAYER_DOORTYPE_SLIDING,
+    /*  2 */ PLAYER_DOORTYPE_SLIDING,
     /*  3 */ PLAYER_DOORTYPE_3, // PLAYER_DOORTYPE_FAKE
-    /*  4 */ PLAYER_DOORTYPE_4,
+    /*  4 */ PLAYER_DOORTYPE_STAIRCASE,
     /*  5 */ PLAYER_DOORTYPE_5
 } PlayerDoorType;
 
@@ -427,7 +427,7 @@ typedef struct {
     /* 0x4A */ Vec3s unk_4A[4];
     /* 0x62 */ Vec3s unk_62[4];
     /* 0x7A */ Vec3s unk_7A[4];
-    /* 0x92 */ u16 unk_92;
+    /* 0x92 */ u16 unk_92; // voice sfx offset?
     /* 0x94 */ u16 unk_94;
     /* 0x98 */ f32 unk_98;
     /* 0x9C */ f32 unk_9C;

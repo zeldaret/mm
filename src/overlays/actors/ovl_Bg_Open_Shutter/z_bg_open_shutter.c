@@ -67,10 +67,10 @@ s8 func_80ACABA8(BgOpenShutter* this, PlayState* play) {
     f32 temp_fv0;
     s16 temp_v0;
 
-    if (!Player_InCsMode(play) && (this->dyna.actor.xzDistToPlayer < 100.0f)) {
-        temp_fv0 = func_80ACAB10(play, &this->dyna.actor, 0.0f, 65.0f, 15.0f);
+    if (!Player_InCsMode(play) && (this->door.dyna.actor.xzDistToPlayer < 100.0f)) {
+        temp_fv0 = func_80ACAB10(play, &this->door.dyna.actor, 0.0f, 65.0f, 15.0f);
         if (fabsf(temp_fv0) < 50.0f) {
-            temp_v0 = player->actor.shape.rot.y - this->dyna.actor.shape.rot.y;
+            temp_v0 = player->actor.shape.rot.y - this->door.dyna.actor.shape.rot.y;
             if (temp_fv0 > 0.0f) {
                 temp_v0 = (0x8000 - temp_v0);
             }
@@ -90,52 +90,52 @@ s8 func_80ACABA8(BgOpenShutter* this, PlayState* play) {
 void BgOpenShutter_Init(Actor* thisx, PlayState* play) {
     BgOpenShutter* this = THIS;
 
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(play, &this->dyna, &object_open_obj_Colheader_001640);
+    Actor_ProcessInitChain(&this->door.dyna.actor, sInitChain);
+    DynaPolyActor_Init(&this->door.dyna, 1);
+    DynaPolyActor_LoadMesh(play, &this->door.dyna, &object_open_obj_Colheader_001640);
     this->actionFunc = func_80ACAD88;
 }
 
 void BgOpenShutter_Destroy(Actor* thisx, PlayState* play) {
     BgOpenShutter* this = THIS;
-    s32 params = BGOPENSHUTTER_GET_A(thisx);
+    s32 transition = DOOR_GET_TRANSITION_ID(thisx);
 
-    play->doorCtx.transitionActorList[params].id = -play->doorCtx.transitionActorList[params].id;
-    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+    play->doorCtx.transitionActorList[transition].id = -play->doorCtx.transitionActorList[transition].id;
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->door.dyna.bgId);
 }
 
 void func_80ACAD88(BgOpenShutter* this, PlayState* play) {
     s32 quake;
 
-    if (this->unk_15C != 0) {
+    if (this->door.unk_15C != 0) {
         Player* player = GET_PLAYER(play);
 
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
-        Camera_ChangeDoorCam(play->cameraPtrs[CAM_ID_MAIN], &this->dyna.actor, player->unk_3BA, 0.0f, 12, 15, 10);
+        Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
+        Camera_ChangeDoorCam(play->cameraPtrs[CAM_ID_MAIN], &this->door.dyna.actor, player->unk_3BA, 0.0f, 12, 15, 10);
         this->unk_164 = 0;
         this->actionFunc = func_80ACAE5C;
-        this->dyna.actor.velocity.y = 0.0f;
+        this->door.dyna.actor.velocity.y = 0.0f;
     } else {
         Player* player = GET_PLAYER(play);
 
         quake = func_80ACABA8(this, play);
         if (quake > 0) {
-            player->doorType = PLAYER_DOORTYPE_2;
+            player->doorType = PLAYER_DOORTYPE_SLIDING;
             player->doorDirection = quake;
-            player->doorActor = &this->dyna.actor;
+            player->doorActor = &this->door.dyna.actor;
             func_80122F28(player);
         }
     }
 }
 
 void func_80ACAE5C(BgOpenShutter* this, PlayState* play) {
-    Math_StepToF(&this->dyna.actor.velocity.y, 15.0f, 3.0f);
-    if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 120.0f,
-                     this->dyna.actor.velocity.y)) {
+    Math_StepToF(&this->door.dyna.actor.velocity.y, 15.0f, 3.0f);
+    if (Math_StepToF(&this->door.dyna.actor.world.pos.y, this->door.dyna.actor.home.pos.y + 120.0f,
+                     this->door.dyna.actor.velocity.y)) {
         this->unk_164++;
     }
     if (this->unk_164 >= 10) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
+        Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
         this->actionFunc = func_80ACAEF0;
     }
 }
@@ -144,17 +144,19 @@ void func_80ACAEF0(BgOpenShutter* this, PlayState* play) {
     s32 pad;
     s16 quake;
 
-    Math_StepToF(&this->dyna.actor.velocity.y, 20.0f, 8.0f);
-    if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y, this->dyna.actor.velocity.y)) {
-        this->dyna.actor.floorHeight = this->dyna.actor.home.pos.y;
-        Actor_SpawnFloorDustRing(play, &this->dyna.actor, &this->dyna.actor.world.pos, 60.0f, 10, 8.0f, 500, 10, true);
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
+    Math_StepToF(&this->door.dyna.actor.velocity.y, 20.0f, 8.0f);
+    if (Math_StepToF(&this->door.dyna.actor.world.pos.y, this->door.dyna.actor.home.pos.y,
+                     this->door.dyna.actor.velocity.y)) {
+        this->door.dyna.actor.floorHeight = this->door.dyna.actor.home.pos.y;
+        Actor_SpawnFloorDustRing(play, &this->door.dyna.actor, &this->door.dyna.actor.world.pos, 60.0f, 10, 8.0f, 500,
+                                 10, true);
+        Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_BIGWALL_BOUND);
         quake = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
         Quake_SetSpeed(quake, -0x7F18);
         Quake_SetQuakeValues(quake, 2, 0, 0, 0);
         Quake_SetCountdown(quake, 10);
-        Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 180, 20, 100);
-        this->unk_15C = 0;
+        Rumble_Request(this->door.dyna.actor.xyzDistToPlayerSq, 180, 20, 100);
+        this->door.unk_15C = 0;
         this->actionFunc = func_80ACAD88;
     }
 }
@@ -168,14 +170,14 @@ void BgOpenShutter_Update(Actor* thisx, PlayState* play2) {
         index = Cutscene_GetActorActionIndex(play, 0x7C);
         if (play->csCtx.actorActions[index]->action == BGOPENSHUTTER_DOOR_OPEN) {
             if (this->actionFunc == func_80ACAD88) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
+                Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
                 this->actionFunc = func_80ACAE5C;
-                this->dyna.actor.velocity.y = 0.0f;
+                this->door.dyna.actor.velocity.y = 0.0f;
             }
             this->unk_164 = 0;
         } else if (play->csCtx.actorActions[index]->action == BGOPENSHUTTER_DOOR_CLOSED) {
             if (this->actionFunc == func_80ACAE5C) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
+                Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
                 this->actionFunc = func_80ACAEF0;
             }
         }
