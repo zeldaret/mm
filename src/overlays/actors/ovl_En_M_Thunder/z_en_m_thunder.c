@@ -18,6 +18,8 @@ void EnMThunder_Draw(Actor* thisx, PlayState* play);
 
 void func_808B65BC(Actor* thisx, PlayState* play);
 
+void func_808B5890(PlayState* play, f32 arg1);
+
 void func_808B5984(EnMThunder* this, PlayState* play);
 void func_808B5F68(EnMThunder* this, PlayState* play);
 void func_808B60D4(EnMThunder* this, PlayState* play);
@@ -152,7 +154,16 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
     this->actor.child = NULL;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/EnMThunder_Destroy.s")
+void EnMThunder_Destroy(Actor* thisx, PlayState* play) {
+    EnMThunder* this = THIS;
+
+    if (this->unk1C2 != 0) {
+        func_80115D5C(&play->state);
+    }
+    Collider_DestroyCylinder(play, &this->unk144);
+    func_808B5890(play, 0);
+    LightContext_RemoveLight(play, &play->lightCtx, this->unk190);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B5890.s")
 
