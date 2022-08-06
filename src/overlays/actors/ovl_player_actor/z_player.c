@@ -4157,89 +4157,64 @@ void func_80836258(PlayState* play, Player* this, Actor* door);
 
 void func_8085437C(Player* this, PlayState* play);
 
-#if 0
 // door stuff
 s32 func_808365DC(Player* this, PlayState* play) {
-    Actor* temp_s0;
-    Actor* var_v0_3;
-    s32 var_v0_2;
-    s8 temp_a2;
-    s8 var_v0;
-    u8 var_v1;
+    if ((gSaveContext.save.playerData.health != 0) && (this->doorType != PLAYER_DOORTYPE_0)) {
+        if ((this->actor.category != ACTORCAT_PLAYER) ||
+            ((((this->doorType < 0) && ActorCutscene_GetCanPlayNext(0x7C)) ||
+              ((this->doorType > 0) && ActorCutscene_GetCanPlayNext(0x7D))) &&
+             (!(this->stateFlags1 & PLAYER_STATE1_800) &&
+              (CHECK_BTN_ALL(D_80862B44->press.button, BTN_A) || (func_8085437C == this->unk_748) ||
+               (this->doorType == PLAYER_DOORTYPE_4) || (this->doorType == PLAYER_DOORTYPE_5))))) {
+            Actor* doorActor = this->doorActor;
+            Actor* var_v0_3;
 
-    if (gSaveContext.save.playerData.health != 0) {
-        var_v0 = this->doorType;
-        if (var_v0 != 0) {
-            if (this->actor.category == 2) {
-                if (var_v0 < 0) {
-                    if (ActorCutscene_GetCanPlayNext(0x7C) == 0) {
-                        var_v0 = this->doorType;
-                        goto block_6;
-                    }
-                    goto block_8;
-                }
-            block_6:
-                if ((var_v0 > 0) && (ActorCutscene_GetCanPlayNext(0x7D) != 0)) {
-            block_8:
-                    if (!(this->stateFlags1 & 0x800) && ((CHECK_BTN_ALL(D_80862B44->press.button, BTN_A)) || (this->unk_748 == func_8085437C) || (this->doorType == 4) || (this->doorType == 5))) {
-                        goto block_13;
-                    }
-                }
-                goto block_39;
-            }
-
-        block_13:
-            temp_s0 = this->doorActor;
             if (this->doorType < 0) {
-                func_8085B460(play, temp_s0);
-                if (temp_s0->textId == 0x1821) {
-                    temp_s0->flags |= 0x100;
+                func_8085B460(play, doorActor);
+                if (doorActor->textId == 0x1821) {
+                    doorActor->flags |= ACTOR_FLAG_100;
                 }
-                return 1;
+                return true;
             }
-            gSaveContext.respawn[0].data = 0;
 
-            if (this->doorType == 4) {
-                func_80835EAC(play, this, (DoorSpiral* ) temp_s0);
-            } else if (this->doorType == 2) {
-                func_8083604C(play, this, temp_s0);
+            gSaveContext.respawn[RESPAWN_MODE_DOWN].data = 0;
+
+            if (this->doorType == PLAYER_DOORTYPE_4) {
+                func_80835EAC(play, this, (DoorSpiral*)doorActor);
+            } else if (this->doorType == PLAYER_DOORTYPE_2) {
+                func_8083604C(play, this, doorActor);
             } else {
-                func_80836258(play, this, temp_s0);
+                func_80836258(play, this, doorActor);
             }
-            var_v1 = this->actor.category;
-            if (var_v1 == 2) {
+
+            if (this->actor.category == ACTORCAT_PLAYER) {
                 this->unk_A86 = 0x7D;
-                ActorCutscene_Start((s16) this->unk_A86, &this->actor);
-                var_v1 = this->actor.category;
+                ActorCutscene_Start(this->unk_A86, &this->actor);
             }
-            if (var_v1 == 2) {
-                if ((this->doorType < 3) && (temp_s0->category == 0xA) && ((this->doorType != 1) || ((((s16) temp_s0->params >> 7) & 7) != 7))) {
-                    if (this->doorDirection > 0) {
-                        var_v0_2 = 0;
-                    } else {
-                        var_v0_2 = 1;
-                    }
-                    temp_a2 = play->doorCtx.transitionActorList[(s32) (temp_s0->params & 0xFFFF) >> 0xA].sides[var_v0_2].room;
-                    if ((temp_a2 >= 0) && (temp_a2 != play->roomCtx.currRoom.num)) {
-                        Room_StartRoomTransition(play, &play->roomCtx, (s32) temp_a2);
+
+            if (this->actor.category == ACTORCAT_PLAYER) {
+                if ((this->doorType < PLAYER_DOORTYPE_3) && (doorActor->category == ACTORCAT_DOOR) &&
+                    ((this->doorType != PLAYER_DOORTYPE_1) || ((((s16)doorActor->params >> 7) & 7) != 7))) {
+                    s8 roomNum = play->doorCtx.transitionActorList[(s32)(doorActor->params & 0xFFFF) >> 0xA]
+                                  .sides[(this->doorDirection > 0) ? 0 : 1]
+                                  .room;
+
+                    if ((roomNum >= 0) && (roomNum != play->roomCtx.currRoom.num)) {
+                        Room_StartRoomTransition(play, &play->roomCtx, roomNum);
                     }
                 }
             }
-            var_v0_3 = temp_s0->child;
-            temp_s0->room = play->roomCtx.currRoom.num;
-            if ((var_v0_3 != NULL) || (var_v0_3 = temp_s0->parent, (var_v0_3 != NULL))) {
+
+            doorActor->room = play->roomCtx.currRoom.num;
+            if (((var_v0_3 = doorActor->child) != NULL) || ((var_v0_3 = doorActor->parent) != NULL)) {
                 var_v0_3->room = play->roomCtx.currRoom.num;
             }
-            return 1;
+            return true;
         }
     }
-block_39:
-    return 0;
+
+    return false;
 }
-#else
-s32 func_808365DC(Player* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808365DC.s")
-#endif
 
 void func_80849A9C(Player* this, PlayState* play);
 void func_80849DD0(Player* this, PlayState* play);
@@ -11354,9 +11329,60 @@ void func_8084D770(Player* this, PlayState* play) {
 void func_8084D820(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084D820.s")
 
+typedef struct {
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ UNK_TYPE1 unk_144[0x60];
+    /* 0x1A4 */ u8 unk_1A4;
+} DoorActorUnk;
+
 // door stuff
-void func_8084E034(Player* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084E034.s")
+void func_8084E034(Player* this, PlayState* play) {
+    Actor* doorActor = this->doorActor;
+    s32 sp38;
+    s32 animFinished;
+    CollisionPoly* polu;
+    s32 bgId;
+
+    sp38 = (doorActor != NULL) && (((DoorActorUnk*)doorActor)->unk_1A4 == 7);
+    this->stateFlags2 |= PLAYER_STATE2_20;
+
+    if (DECR(this->unk_AE7) == 0) {
+        func_80835DF8(play, this, &polu, &bgId);
+    }
+
+    animFinished = LinkAnimation_Update(play, &this->skelAnime);
+    func_8083216C(this, play);
+
+    if (animFinished) {
+        if (this->unk_AE8 == 0) {
+            if (DECR(this->doorTimer) == 0) {
+                this->unk_AE8 = 1;
+                this->skelAnime.endFrame = this->skelAnime.animLength - 1.0f;
+            }
+        } else {
+            func_80838760(this);
+            func_80839E74(this, play);
+
+            if ((this->actor.category == ACTORCAT_PLAYER) && !sp38) {
+                if (play->roomCtx.prevRoom.num >= 0) {
+                    func_8012EBF8(play, &play->roomCtx);
+                }
+
+                func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
+                Play_SetupRespawnPoint(&play->state, 0, 0xBFF);
+            }
+        }
+    } else if (!(this->stateFlags1 & PLAYER_STATE1_20000000) && LinkAnimation_OnFrame(&this->skelAnime, 15.0f)) {
+        func_80838760(this);
+        play->func_18780(this, play);
+    } else if (sp38 && LinkAnimation_OnFrame(&this->skelAnime, 15.0f)) {
+        s16 doorRot = (this->doorDirection < 0) ? doorActor->world.rot.x : doorActor->world.rot.z;
+
+        if (doorRot != 0) {
+            func_808354A4(play, doorRot - 1, 0);
+        }
+    }
+}
 
 // grab/hold an actor (?)
 void func_8084E25C(Player* this, PlayState* play) {
