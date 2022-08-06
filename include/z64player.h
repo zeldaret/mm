@@ -449,8 +449,6 @@ typedef struct {
 } WeaponInfo; // size = 0x1C
 
 
-typedef void (*PlayerFuncD58)(struct PlayState*, struct Player*);
-
 typedef struct {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 alpha;
@@ -670,7 +668,10 @@ typedef struct struct_80122744_arg1 {
 #define PLAYER_STATE3_80000000   (1 << 31)
 
 
-typedef void (*PlayerFunc748)(struct Player*, struct PlayState*);
+typedef void (*PlayerActionFunc)(struct Player* this, struct PlayState* play);
+typedef s32 (*PlayerFuncAC4)(struct Player* this, struct PlayState* play);
+typedef void (*PlayerFuncD58)(struct PlayState* play, struct Player* this);
+
 
 typedef struct Player {
     /* 0x000 */ Actor actor;
@@ -778,7 +779,7 @@ typedef struct Player {
     /* 0x734 */ char unk_734[4];
     /* 0x738 */ s32 unk_738;
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];
-    /* 0x748 */ PlayerFunc748 unk_748;
+    /* 0x748 */ PlayerActionFunc actionFunc;
     /* 0x74C */ u8 unk_74C[0x9F];
     /* 0x7EB */ u8 unk_7EB[0x9F];
     /* 0x88A */ UNK_TYPE1 unk_88A[0x9F];
@@ -812,7 +813,7 @@ typedef struct Player {
     /* 0xAB8 */ f32 unk_AB8;
     /* 0xABC */ f32 unk_ABC;
     /* 0xAC0 */ f32 unk_AC0;
-    /* 0xAC4 */ s32 (*unk_AC4)(struct Player*, struct PlayState*);
+    /* 0xAC4 */ PlayerFuncAC4 unk_AC4;
     /* 0xAC8 */ f32 unk_AC8;
     /* 0xACC */ s16 unk_ACC;
     /* 0xACE */ s8 unk_ACE;
@@ -873,8 +874,7 @@ typedef struct Player {
     /* 0xB7C */ f32 unk_B7C;
     /* 0xB80 */ f32 unk_B80;
     /* 0xB84 */ s16 unk_B84;
-    /* 0xB86 */ s16 unk_B86[1]; // unknown length
-    /* 0xB88 */ s16 unk_B88;
+    /* 0xB86 */ s16 unk_B86[2]; // unknown length
     /* 0xB8A */ s16 unk_B8A;
     /* 0xB8C */ s16 unk_B8C;
     /* 0xB8E */ s16 unk_B8E;

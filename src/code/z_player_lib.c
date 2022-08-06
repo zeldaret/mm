@@ -2003,7 +2003,7 @@ s32 func_80125580(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                 Player_DrawZoraShield(play, player);
                 Matrix_Pop();
             }
-            Matrix_RotateZS(player->unk_B88, 1);
+            Matrix_RotateZS(player->unk_B86[1], 1);
             Matrix_RotateZYX(rot->x, rot->y, rot->z, 1);
             func_80125318(pos, rot);
         } else if (player->stateFlags3 & PLAYER_STATE3_2000) {
@@ -3320,7 +3320,7 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
         CLOSE_DISPS(play->state.gfxCtx);
     } else if (dlist == object_link_zora_DL_00E2A0) { // zora guitar
         s16 sp26 = Math_SinS(player->unk_B86[0]) * (ABS_ALT(player->unk_AB2.x) * ((f32)(IREG(52) + 20)) / 100.0f);
-        s16 sp24 = Math_SinS(player->unk_B88) * (ABS_ALT(player->unk_AB2.y) * ((f32)(IREG(53) + 15)) / 100.0f);
+        s16 sp24 = Math_SinS(player->unk_B86[1]) * (ABS_ALT(player->unk_AB2.y) * ((f32)(IREG(53) + 15)) / 100.0f);
 
         OPEN_DISPS(play->state.gfxCtx);
 
