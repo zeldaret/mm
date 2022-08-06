@@ -2182,7 +2182,10 @@ s32 AudioOcarina_MemoryGameGenerateNotes(void) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019F638.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019F780.s")
+void func_8019F780(Vec3f* arg0, u16 sfxId, f32 arg2) {
+    func_8019F5AC(arg2);
+    Audio_PlaySfxGeneral(sfxId, arg0, 4, &sSfxSyncedFreq, &sSfxSyncedVolume, &D_801DB4B8);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019F7D8.s")
 
