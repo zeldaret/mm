@@ -175,13 +175,40 @@ void func_808B5EEC(EnMThunder* this, PlayState* play) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B5F68.s")
+void func_808B5F68(EnMThunder* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+
+    if (Math_StepToF(&this->unk1A4, 0.0f, 0.0625f)) {
+        Actor_MarkForDeath(&this->actor);
+    } else {
+        Math_SmoothStepToF(&this->actor.scale.x, (s32)this->unk1C1, 0.6f, 0.8f, 0.0f);
+        Actor_SetScale(&this->actor, this->actor.scale.x);
+        this->unk144.dim.radius = this->actor.scale.x * 30.0f;
+        Collider_UpdateCylinder(&this->actor, &this->unk144);
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->unk144.base);
+    }
+
+    if (this->unk1BC > 0) {
+        this->actor.world.pos.x = player->bodyPartsPos[0].x;
+        this->actor.world.pos.z = player->bodyPartsPos[0].z;
+        this->unk1BC--;
+    }
+    if (this->unk1A4 > (6.0f / 10.0f)) {
+        this->unk1A8 = 1.0f;
+    } else {
+        this->unk1A8 = this->unk1A4 * (10.0f / 6.0f);
+    }
+    func_808B5EEC(this, play);
+    if (Play_InCsMode(play)) {
+        Actor_MarkForDeath(&this->actor);
+    }
+}
 
 void func_808B60D4(EnMThunder* this, PlayState* play) {
     s32 pad[2];
     f32 sp2C;
 
-    if (this->unk1A4 > 0.9f) {
+    if (this->unk1A4 > (9.0f / 10.0f)) {
         this->unk1A8 = 1.0f;
     } else {
         this->unk1A8 = this->unk1A4 * (10.0f / 9.0f);
@@ -226,7 +253,7 @@ void func_808B6310(EnMThunder* this, PlayState* play) {
         Actor_SetScale(&this->actor, this->actor.scale.x);
     }
 
-    if (this->unk1A4 > 0.6f) {
+    if (this->unk1A4 > (6.0f / 10.0f)) {
         this->unk1A8 = 1.0f;
     } else {
         this->unk1A8 = this->unk1A4 * (10.0f / 6.0f);
