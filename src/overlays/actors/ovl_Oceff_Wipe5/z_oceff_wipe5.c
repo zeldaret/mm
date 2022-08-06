@@ -118,7 +118,7 @@ void OceffWipe5_Draw(Actor* thisx, PlayState* play) {
     gDPSetEnvColor(POLY_XLU_DISP++, sEnvColors[colorIndex], sEnvColors[colorIndex + 1], sEnvColors[colorIndex + 2],
                    255);
 
-    AnimatedMat_Draw(play, ovl_Oceff_Wipe5_Matanimheader_000448);
+    AnimatedMat_Draw(play, gOceff5TexAnim);
 
     gSPDisplayList(POLY_XLU_DISP++, &gOceff5DL);
 
