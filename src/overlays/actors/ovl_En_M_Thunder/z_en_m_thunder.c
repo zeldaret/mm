@@ -16,9 +16,12 @@ void EnMThunder_Destroy(Actor* thisx, PlayState* play);
 void EnMThunder_Update(Actor* thisx, PlayState* play);
 void EnMThunder_Draw(Actor* thisx, PlayState* play);
 
+void func_808B65BC(Actor* thisx, PlayState* play);
+
 void func_808B5984(EnMThunder* this, PlayState* play);
 void func_808B5F68(EnMThunder* this, PlayState* play);
 void func_808B60D4(EnMThunder* this, PlayState* play);
+void func_808B6310(EnMThunder* this, PlayState* play);
 
 #if 0
 const ActorInit En_M_Thunder_InitVars = {
@@ -45,10 +48,22 @@ static ColliderCylinderInit D_808B7120 = {
 extern ColliderCylinderInit D_808B7120;
 
 extern u8 D_808B714C[];
-extern u8 D_808B7150[];
+// extern u8 D_808B7150[];
 
-void func_808B53C0(EnMThunder* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B53C0.s")
+void func_808B53C0(EnMThunder* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+
+    this->actor.update = func_808B65BC;
+    this->unk1C2 = 0;
+    this->unk1BE = 1;
+    this->unk1C1 = 2;
+    this->actionFunc = func_808B6310;
+    this->unk1BC = 8;
+    this->unk1A4 = 1.0f;
+    Audio_PlaySfxGeneral(NA_SE_IT_ROLLING_CUT_LV1, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
+                         &gSfxDefaultReverb);
+    this->actor.child = NULL;
+}
 
 void EnMThunder_Init(Actor* thisx, PlayState* play) {
     s32 pad;
