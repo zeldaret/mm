@@ -1132,6 +1132,37 @@ typedef struct {
     /* 0x4 */ u8 entryIndex;
 } ActiveSfx; // size = 0x08
 
+// SfxParams bit-packing
+
+#define SFX_PARAM_01_SHIFT 0
+#define SFX_PARAM_01_MASK_UPPER (4 << SFX_PARAM_01_SHIFT)
+#define SFX_PARAM_01_MASK (7 << SFX_PARAM_01_SHIFT) // Same as OoT, 8 instead of 4
+
+#define SFX_FLAG_3 (1 << 3) // Same as OoT
+#define SFX_FLAG_4 (1 << 4) // Same as OoT
+#define SFX_FLAG_5 (1 << 5) // Same as OoT
+
+#define SFX_PARAM_67_SHIFT 6
+#define SFX_PARAM_67_MASK (3 << SFX_PARAM_67_SHIFT)
+
+#define SFX_FLAG_8 (1 << 8) // New to MM
+#define SFX_FLAG_9 (1 << 9) // Same as OoT
+#define SFX_FLAG_10_SHIFT 10 // Unused
+#define SFX_FLAG_10 (1 << SFX_FLAG_10_SHIFT)
+#define SFX_FLAG_11 (1 << 11) // Same as OoT
+
+#define SFX_FLAG_12 (1 << 12) // Same as OoT
+#define SFX_FLAG_13 (1 << 13) // Same as OoT
+#define SFX_FLAG_14 (1 << 14) // Same as OoT
+#define SFX_FLAG_15 (1 << 15) // Same as OoT
+
+#define SFX_FLAG2_0 (1 << 0) // OoT SFX_FLAG_2
+#define SFX_FLAG2_2 (1 << 2) // Unused
+#define SFX_FLAG2_4 (1 << 4) // Unused
+#define SFX_FLAG2_5 (1 << 5) // New to MM
+#define SFX_FLAG2_6 (1 << 6) // Unused
+#define SFX_FLAG2_7 (1 << 7) // New to MM
+
 typedef struct {
     /* 0x0 */ u8 importance;
     /* 0x1 */ u8 flags;

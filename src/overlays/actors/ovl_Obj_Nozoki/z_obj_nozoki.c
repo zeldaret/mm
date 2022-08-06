@@ -362,7 +362,7 @@ void func_80BA2C94(ObjNozoki* this, PlayState* play) {
 
     play->roomCtx.unk7A[0] = this->dyna.actor.velocity.x;
 
-    func_8019FAD8(&D_801DB4A4, NA_SE_EV_SECOM_CONVEYOR - SFX_FLAG, this->dyna.actor.speedXZ);
+    func_8019FAD8(&gSfxDefaultPos, NA_SE_EV_SECOM_CONVEYOR - SFX_FLAG, this->dyna.actor.speedXZ);
 }
 
 void func_80BA3044(ObjNozoki* this, PlayState* play) {
