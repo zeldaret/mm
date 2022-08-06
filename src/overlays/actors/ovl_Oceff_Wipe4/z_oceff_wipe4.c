@@ -63,12 +63,11 @@ void OceffWipe4_Draw(Actor* thisx, PlayState* play) {
     f32 z;
     u8 alpha;
     s32 pad[2];
-    Vec3f eye;
+    Vec3f eye = GET_ACTIVE_CAM(play)->eye;
     Vtx* vtxPtr;
-    Vec3f vec;
+    Vec3f quakeOffset;
 
-    eye = GET_ACTIVE_CAM(play)->eye;
-    Camera_GetQuakeOffset(&vec, GET_ACTIVE_CAM(play));
+    Camera_GetQuakeOffset(&quakeOffset, GET_ACTIVE_CAM(play));
     if (this->counter < 16) {
         z = Math_SinS(this->counter * 1024) * 1220.0f;
     } else {
@@ -90,7 +89,7 @@ void OceffWipe4_Draw(Actor* thisx, PlayState* play) {
 
     func_8012C2DC(play->state.gfxCtx);
 
-    Matrix_Translate(eye.x + vec.x, eye.y + vec.y, eye.z + vec.z, MTXMODE_NEW);
+    Matrix_Translate(eye.x + quakeOffset.x, eye.y + quakeOffset.y, eye.z + quakeOffset.z, MTXMODE_NEW);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     Matrix_ReplaceRotation(&play->billboardMtxF);
     Matrix_RotateXS(0x708, MTXMODE_APPLY);
@@ -105,8 +104,8 @@ void OceffWipe4_Draw(Actor* thisx, PlayState* play) {
     }
 
     gSPDisplayList(POLY_XLU_DISP++, sMaterial2DL);
-    gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, scroll * 2, scroll * (-2), 32,
-                                                     64, 1, scroll * (-1), scroll, 32, 32));
+    gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, scroll * 2, scroll * -2, 32,
+                                                     64, 1, scroll * -1, scroll, 32, 32));
     gSPDisplayList(POLY_XLU_DISP++, &sMaterial2DL[11]);
 
     CLOSE_DISPS(play->state.gfxCtx);
