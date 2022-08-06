@@ -5,7 +5,6 @@
 #include "z64math.h"
 #include "z64animation.h"
 #include "z64collision_check.h"
-#include "z64scene.h"
 #include "unk.h"
 
 // This value is hardcoded to be the size of ovl_Arrow_Fire which currently is the biggest actor that uses the AM_FIELD.
@@ -84,7 +83,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ s16 unk_0; // frame?
-    /* 0x2 */ Vec3s unk_2; // pos?
+    /* 0x2 */ Vec3s unk_2; // scale
 } struct_80124618; // size = 0x8
 
 typedef struct {
