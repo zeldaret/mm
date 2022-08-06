@@ -13,17 +13,18 @@
 
 // Actor Overlay Table definition
 #define DEFINE_ACTOR(name, enumValue, allocType, nameString) \
-    { SEGMENT_ROM_START(ovl_##name),          \
-      SEGMENT_ROM_END(ovl_##name),            \
-      SEGMENT_START(ovl_##name),              \
-      SEGMENT_END(ovl_##name),                \
-      NULL,                                   \
-      &name##_InitVars,                       \
-      NULL,                                   \
-      allocType,                              \
+    { SEGMENT_ROM_START(ovl_##name),                         \
+      SEGMENT_ROM_END(ovl_##name),                           \
+      SEGMENT_START(ovl_##name),                             \
+      SEGMENT_END(ovl_##name),                               \
+      NULL,                                                  \
+      &name##_InitVars,                                      \
+      NULL,                                                  \
+      allocType,                                             \
       0 },
 
-#define DEFINE_ACTOR_INTERNAL(name, enumValue, allocType, nameString) { 0, 0, NULL, NULL, NULL, &name##_InitVars, NULL, allocType, 0 },
+#define DEFINE_ACTOR_INTERNAL(name, enumValue, allocType, nameString) \
+    { 0, 0, NULL, NULL, NULL, &name##_InitVars, NULL, allocType, 0 },
 
 #define DEFINE_ACTOR_UNSET(enumValue) { 0 },
 
