@@ -156,8 +156,21 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B5890.s")
 
-void func_808B58CC(EnMThunder* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B58CC.s")
+void func_808B58CC(EnMThunder* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+
+    if (player->stateFlags2 & PLAYER_STATE2_20000) {
+        if (player->meleeWeaponAnimation >= 30) {
+            Audio_PlaySfxGeneral(NA_SE_IT_ROLLING_CUT, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
+                                 &gSfxDefaultReverb);
+            Audio_PlaySfxGeneral(NA_SE_IT_SWORD_SWING_HARD, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
+                                 &gSfxDefaultReverb);
+        }
+        Actor_MarkForDeath(&this->actor);
+    } else if (!(player->stateFlags1 & PLAYER_STATE1_1000)) {
+        Actor_MarkForDeath(&this->actor);
+    }
+}
 
 void func_808B5984(EnMThunder* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
@@ -165,7 +178,6 @@ void func_808B5984(EnMThunder* this, PlayState* play) {
 
     this->unk1B0 = player->unk_B08[0];
     this->actor.world.pos = player->bodyPartsPos[0];
-
     this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
 
     if ((this->unk1C2 == 0) && (player->unk_B08[0] >= 0.1f)) {
@@ -184,16 +196,17 @@ void func_808B5984(EnMThunder* this, PlayState* play) {
     if (player->unk_B08[0] >= 0.1f) {
         Rumble_Request(0.0f, (s32)(player->unk_B08[0] * 150.0f), 2, (s32)(player->unk_B08[0] * 150.0f));
     }
+
     if (player->stateFlags2 & PLAYER_STATE2_20000) {
         if ((child != NULL) && (child->update != NULL)) {
             child->parent = NULL;
         }
         if (player->unk_B08[0] <= 0.15f) {
             if ((player->unk_B08[0] >= 0.1f) && (player->meleeWeaponAnimation >= 30)) {
-                Audio_PlaySfxGeneral(0x1823, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
+                Audio_PlaySfxGeneral(NA_SE_IT_ROLLING_CUT, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
                                      &gSfxDefaultReverb);
-                Audio_PlaySfxGeneral(0x1818, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                                     &gSfxDefaultReverb);
+                Audio_PlaySfxGeneral(NA_SE_IT_SWORD_SWING_HARD, &player->actor.projectedPos, 4, &D_801DB4B0,
+                                     &D_801DB4B0, &gSfxDefaultReverb);
             }
             Actor_MarkForDeath(&this->actor);
             return;
@@ -236,6 +249,7 @@ void func_808B5984(EnMThunder* this, PlayState* play) {
         this->unk1A4 = 1.0f;
         return;
     }
+
     if (!(player->stateFlags1 & PLAYER_STATE1_1000)) {
         if (this->actor.child != NULL) {
             this->actor.child->parent = NULL;
@@ -243,6 +257,7 @@ void func_808B5984(EnMThunder* this, PlayState* play) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
+
     if (player->unk_B08[0] > 0.15f) {
         this->unk1C0 = 0xFF;
         if (this->actor.child == NULL) {
@@ -263,6 +278,7 @@ void func_808B5984(EnMThunder* this, PlayState* play) {
     } else if (player->unk_B08[0] > 0.1f) {
         func_8019F900(&player->actor.projectedPos, 0);
     }
+
     if (Play_InCsMode(play)) {
         Actor_MarkForDeath(&this->actor);
     }
