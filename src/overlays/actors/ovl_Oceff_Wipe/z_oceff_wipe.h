@@ -4,8 +4,8 @@
 #include "global.h"
 
 typedef enum {
-    /* 0x00 */ OCEFF_WIPE_ZL,
-    /* 0x01 */ OCEFF_WIPE_SOT
+    /* 0x0 */ OCEFF_WIPE_ZL,
+    /* 0x1 */ OCEFF_WIPE_SOT
 } OceffWipeType;
 
 struct OceffWipe;

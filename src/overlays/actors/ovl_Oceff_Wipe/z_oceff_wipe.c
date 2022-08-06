@@ -69,12 +69,11 @@ void OceffWipe_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     u8 alphaTable[3];
     s32 i;
-    Vec3f eye;
+    Vec3f eye = GET_ACTIVE_CAM(play)->eye;
     Vtx* vtxPtr;
-    Vec3f vec;
+    Vec3f quakeOffset;
 
-    eye = GET_ACTIVE_CAM(play)->eye;
-    Camera_GetQuakeOffset(&vec, GET_ACTIVE_CAM(play));
+    Camera_GetQuakeOffset(&quakeOffset, GET_ACTIVE_CAM(play));
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -86,12 +85,12 @@ void OceffWipe_Draw(Actor* thisx, PlayState* play) {
 
     if (this->counter >= 80) {
         alphaTable[0] = 0;
-        alphaTable[1] = (0x64 - this->counter) * 8;
-        alphaTable[2] = (0x64 - this->counter) * 12;
+        alphaTable[1] = (100 - this->counter) * 8;
+        alphaTable[2] = (100 - this->counter) * 12;
     } else {
         alphaTable[0] = 0;
-        alphaTable[1] = 0xA0;
-        alphaTable[2] = 0xFF;
+        alphaTable[1] = 160;
+        alphaTable[2] = 255;
     }
 
     for (i = 0; i < 20; i++) {
@@ -102,7 +101,7 @@ void OceffWipe_Draw(Actor* thisx, PlayState* play) {
 
     func_8012C2DC(play->state.gfxCtx);
 
-    Matrix_Translate(eye.x + vec.x, eye.y + vec.y, eye.z + vec.z, MTXMODE_NEW);
+    Matrix_Translate(eye.x + quakeOffset.x, eye.y + quakeOffset.y, eye.z + quakeOffset.z, MTXMODE_NEW);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     Matrix_ReplaceRotation(&play->billboardMtxF);
     Matrix_RotateXS(0x708, MTXMODE_APPLY);
@@ -118,10 +117,10 @@ void OceffWipe_Draw(Actor* thisx, PlayState* play) {
         gDPSetEnvColor(POLY_XLU_DISP++, 100, 0, 255, 128);
     }
 
-    gSPDisplayList(POLY_XLU_DISP++, sMaterialDL);
-    gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, 0 - scroll, scroll * (-2), 32,
-                                                     32, 1, 0 - scroll, scroll * (-2), 32, 32));
-    gSPDisplayList(POLY_XLU_DISP++, sFrustumDL);
+    gSPDisplayList(POLY_XLU_DISP++, sFrustumMaterialDL);
+    gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, 0 - scroll, scroll * -2, 32,
+                                                     32, 1, 0 - scroll, scroll * -2, 32, 32));
+    gSPDisplayList(POLY_XLU_DISP++, sFrustumModelDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
