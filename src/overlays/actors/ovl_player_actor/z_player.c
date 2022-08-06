@@ -2514,7 +2514,8 @@ s32 func_80832090(Player* this) {
     return (((func_8084D770 == this->unk_748) == 0) ||
             (((this->stateFlags3 & PLAYER_STATE3_40000000)) &&
              ((this->heldItemId == ITEM_FC) || (this->heldItemId == ITEM_NONE)))) &&
-           (((func_80848808 == this->unk_AC4) == 0) || Player_ItemToActionParam(this, this->heldItemId) == this->itemActionParam);
+           (((func_80848808 == this->unk_AC4) == 0) ||
+            Player_ItemToActionParam(this, this->heldItemId) == this->itemActionParam);
 }
 
 void func_8084AC84(Player* this, PlayState* play);
@@ -11489,8 +11490,9 @@ void func_8084E724(Player* this, PlayState* play) {
     new_var = temp_v1;
     // if (((temp_v1 == 2) && !(play->actorCtx.unk5 & 4)) || ((temp_v1 != 2) && ((this->csMode != 0) || (temp_v1 == 0)
     // || ((s32) temp_v1 >= 5) || (func_8082FB68(this) != 0) || (this->unk_730 != NULL) || (func_8083868C(play, this) ==
-    // 0) || ((this->unk_AA5 == 3) && (((Player_ItemToActionParam(this, Inventory_GetBtnBItem(play)) != this->itemActionParam) &&
-    // (D_80862B44->press.button & 0x4000)) || (D_80862B44->press.button & 0x8010) || (func_80123434(this) != 0) ||
+    // 0) || ((this->unk_AA5 == 3) && (((Player_ItemToActionParam(this, Inventory_GetBtnBItem(play)) !=
+    // this->itemActionParam) && (D_80862B44->press.button & 0x4000)) || (D_80862B44->press.button & 0x8010) ||
+    // (func_80123434(this) != 0) ||
     // ((func_800B7128(this) == 0) && (func_8082EF20(this) == 0)))) || ((this->unk_AA5 == 1) &&
     // (D_80862B44->press.button & 0xC01F)) || (func_808391D8(this, play) != 0))))
     if (((temp_v1 == 2) && (!(play->actorCtx.unk5 & 4))) ||
@@ -11498,11 +11500,12 @@ void func_8084E724(Player* this, PlayState* play) {
          (((((((((this->csMode != 0) || (new_var == 0)) || (((s32)temp_v1) >= 5)) || (func_8082FB68(this) != 0)) ||
               (this->unk_730 != NULL)) ||
              (func_8083868C(play, this) == 0)) ||
-            ((this->unk_AA5 == 3) && (((((Player_ItemToActionParam(this, Inventory_GetBtnBItem(play)) != this->itemActionParam) &&
-                                         (D_80862B44->press.button & 0x4000)) ||
-                                        (D_80862B44->press.button & 0x8010)) ||
-                                       (func_80123434(this) != 0)) ||
-                                      ((func_800B7128(this) == 0) && (func_8082EF20(this) == 0))))) ||
+            ((this->unk_AA5 == 3) &&
+             (((((Player_ItemToActionParam(this, Inventory_GetBtnBItem(play)) != this->itemActionParam) &&
+                 (D_80862B44->press.button & 0x4000)) ||
+                (D_80862B44->press.button & 0x8010)) ||
+               (func_80123434(this) != 0)) ||
+              ((func_800B7128(this) == 0) && (func_8082EF20(this) == 0))))) ||
            ((this->unk_AA5 == 1) && (D_80862B44->press.button & 0xC01F))) ||
           (func_808391D8(this, play) != 0)))) {
         func_80839ED0(this, play);
@@ -12280,13 +12283,15 @@ void func_80852C04(Player* this, PlayState* play) {
             if (func_808482E0(play, this) && (this->unk_AE8 == 1)) {
                 Player_SetModels(this, Player_ActionToModelGroup(this, this->heldItemActionParam));
 
-                if ((this->unk_B2A == 0x5D) || (this->unk_B2A == 0x64) || (this->unk_B2A == 0x65) || (this->unk_B2A == 0x66)) {
+                if ((this->unk_B2A == 0x5D) || (this->unk_B2A == 0x64) || (this->unk_B2A == 0x65) ||
+                    (this->unk_B2A == 0x66)) {
                     func_80838760(this);
                     func_80848250(play, this);
                     this->stateFlags1 &= ~PLAYER_STATE1_20000000;
                     func_8085B28C(play, NULL, 0x5D);
                 } else {
-                    s32 var_a2 = ((this->targetActor != NULL) && (this->exchangeItemId < EXCH_ITEM_NONE)) || (this->stateFlags3 & PLAYER_STATE3_20);
+                    s32 var_a2 = ((this->targetActor != NULL) && (this->exchangeItemId < EXCH_ITEM_NONE)) ||
+                                 (this->stateFlags3 & PLAYER_STATE3_20);
 
                     if (var_a2 || (gSaveContext.healthAccumulator == 0)) {
                         func_80838760(this);
@@ -12305,7 +12310,8 @@ void func_80852C04(Player* this, PlayState* play) {
         } else {
             func_8082E794(this);
 
-            if ((this->getItemId == GI_STRAY_FAIRY) || (this->getItemId == GI_SKULL_TOKEN) || (this->getItemId == GI_ICE_TRAP)) {
+            if ((this->getItemId == GI_STRAY_FAIRY) || (this->getItemId == GI_SKULL_TOKEN) ||
+                (this->getItemId == GI_ICE_TRAP)) {
                 func_80838760(this);
                 this->stateFlags1 &= ~(PLAYER_STATE1_400 | PLAYER_STATE1_800);
                 if (this->getItemId == GI_STRAY_FAIRY) {
@@ -12316,9 +12322,13 @@ void func_80852C04(Player* this, PlayState* play) {
                 }
             } else {
                 if (this->skelAnime.animation == &gameplay_keep_Linkanim_00DB18) {
-                    func_8082DB90(play, this, (this->transformation == PLAYER_FORM_DEKU) ? &gameplay_keep_Linkanim_00E2C0 : &gameplay_keep_Linkanim_00D5B0);
+                    func_8082DB90(play, this,
+                                  (this->transformation == PLAYER_FORM_DEKU) ? &gameplay_keep_Linkanim_00E2C0
+                                                                             : &gameplay_keep_Linkanim_00D5B0);
                 } else {
-                    func_8082DB90(play, this, (this->transformation == PLAYER_FORM_DEKU) ? &gameplay_keep_Linkanim_00E2B8 : &gameplay_keep_Linkanim_00D5A8);
+                    func_8082DB90(play, this,
+                                  (this->transformation == PLAYER_FORM_DEKU) ? &gameplay_keep_Linkanim_00E2B8
+                                                                             : &gameplay_keep_Linkanim_00D5A8);
                 }
 
                 func_8082E920(play, this, (1 | 2 | 4 | 8 | 0x10 | 0x80));
@@ -12334,9 +12344,12 @@ void func_80852C04(Player* this, PlayState* play) {
             func_8082E224(this, D_8085D74C);
         }
     } else {
-        if ((this->skelAnime.animation == &gameplay_keep_Linkanim_00D5B0) || (this->skelAnime.animation == &gameplay_keep_Linkanim_00E2C0)) {
-            Math_ScaledStepToS(&this->actor.shape.rot.y, BINANG_ADD(Camera_GetCamDirYaw(play->cameraPtrs[play->activeCamId]), 0x8000), 0xFA0);
-        } else if ((this->skelAnime.animation == &gameplay_keep_Linkanim_00E2B8) && LinkAnimation_OnFrame(&this->skelAnime, 10.0f)) {
+        if ((this->skelAnime.animation == &gameplay_keep_Linkanim_00D5B0) ||
+            (this->skelAnime.animation == &gameplay_keep_Linkanim_00E2C0)) {
+            Math_ScaledStepToS(&this->actor.shape.rot.y,
+                               BINANG_ADD(Camera_GetCamDirYaw(play->cameraPtrs[play->activeCamId]), 0x8000), 0xFA0);
+        } else if ((this->skelAnime.animation == &gameplay_keep_Linkanim_00E2B8) &&
+                   LinkAnimation_OnFrame(&this->skelAnime, 10.0f)) {
             func_8082E1BC(this);
         }
 
@@ -12424,7 +12437,7 @@ void func_808534C0(Player* this, PlayState* play) {
             func_808323C0(this, play->playerActorCsIds[3]);
 
             if (this->unk_AE8 == 0) {
-                Message_StartTextbox(play, D_8085D798[this->unk_AE7-1].textId, &this->actor);
+                Message_StartTextbox(play, D_8085D798[this->unk_AE7 - 1].textId, &this->actor);
 
                 func_801A3098(NA_BGM_GET_ITEM | 0x900);
                 this->unk_AE8 = 1;
@@ -12447,7 +12460,7 @@ void func_808534C0(Player* this, PlayState* play) {
         if (this->unk_AE7 == 0) {
             s32 temp_ft5 = this->skelAnime.curFrame - sp24->unk_8;
 
-            if ((temp_ft5 >= 0) && ((s32) sp24->unk_9 >= temp_ft5)) {
+            if ((temp_ft5 >= 0) && ((s32)sp24->unk_9 >= temp_ft5)) {
                 if ((this->unk_AE8 != 0) && (temp_ft5 == 0)) {
                     func_800B8E58(this, NA_SE_IT_SCOOP_UP_WATER);
                 }
@@ -12460,7 +12473,8 @@ void func_808534C0(Player* this, PlayState* play) {
                         s32 i;
 
                         for (i = 0; i < ARRAY_COUNT(D_8085D798); i++) {
-                            if (((interactRangeActor->id == entry->actorId) && ( (entry->actorParams < 0) || (interactRangeActor->params == entry->actorParams)))) {
+                            if (((interactRangeActor->id == entry->actorId) &&
+                                 ((entry->actorParams < 0) || (interactRangeActor->params == entry->actorParams)))) {
                                 break;
                             }
                             entry++;
@@ -12686,7 +12700,7 @@ void func_80853A5C(Player* this, PlayState* play) {
             }
             func_8085B460(play, targetActor);
         } else {
-            GetItemEntry* giEntry = &sGetItemTable[D_8085D1A4[this->exchangeItemId]-1];
+            GetItemEntry* giEntry = &sGetItemTable[D_8085D1A4[this->exchangeItemId] - 1];
 
             if (Player_ActionToBottle(this, this->heldItemActionParam) < 0) {
                 this->unk_B2A = ABS_ALT(giEntry->unk_2);
@@ -12707,10 +12721,11 @@ void func_80853A5C(Player* this, PlayState* play) {
             }
         }
     } else if (this->unk_AE8 >= 0) {
-        if ((Player_ActionToBottle(this, this->heldItemActionParam) >= 0) && LinkAnimation_OnFrame(&this->skelAnime, 36.0f)) {
+        if ((Player_ActionToBottle(this, this->heldItemActionParam) >= 0) &&
+            LinkAnimation_OnFrame(&this->skelAnime, 36.0f)) {
             Player_SetModels(this, PLAYER_MODELGROUP_BOTTLE);
         } else if (LinkAnimation_OnFrame(&this->skelAnime, 2.0f)) {
-            GetItemEntry* giEntry = &sGetItemTable[D_8085D1A4[this->heldItemActionParam] -1];
+            GetItemEntry* giEntry = &sGetItemTable[D_8085D1A4[this->heldItemActionParam] - 1];
 
             func_80838830(this, giEntry->unk_4);
         }
@@ -14578,7 +14593,8 @@ void func_8085B460(PlayState* play, Actor* actor) {
     player = GET_PLAYER(play);
 
     func_808323C0(player, 0x7C);
-    if ((player->targetActor != NULL) || (actor == player->tatlActor) || CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_1 | ACTOR_FLAG_40000)) {
+    if ((player->targetActor != NULL) || (actor == player->tatlActor) ||
+        CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_1 | ACTOR_FLAG_40000)) {
         actor->flags |= ACTOR_FLAG_100;
     }
 
@@ -14620,11 +14636,14 @@ void func_8085B460(PlayState* play, Actor* actor) {
                 }
             } else {
                 func_80832558(play, player, func_80837B60);
-                func_8082DB90(play, player, (actor->xzDistToPlayer < (actor->colChkInfo.cylRadius + 40)) ? &gameplay_keep_Linkanim_00DB10 : &gameplay_keep_Linkanim_00DEA0);
+                func_8082DB90(play, player,
+                              (actor->xzDistToPlayer < (actor->colChkInfo.cylRadius + 40))
+                                  ? &gameplay_keep_Linkanim_00DB10
+                                  : &gameplay_keep_Linkanim_00DEA0);
             }
 
             if (player->skelAnime.animation == &gameplay_keep_Linkanim_00DB10) {
-                func_8082E920(play, player, 1| 8 | 0x10);
+                func_8082E920(play, player, 1 | 8 | 0x10);
             }
             func_8082DAD4(player);
         }
