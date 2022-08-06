@@ -159,13 +159,29 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B5984.s")
 
+void func_808B5EEC(EnMThunder* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B5EEC.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B5F68.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B60D4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B6310.s")
+void func_808B6310(EnMThunder* this, PlayState* play) {
+    if (Math_StepToF(&this->unk1A4, 0.0f, 0.0625f)) {
+        Actor_MarkForDeath(&this->actor);
+    } else {
+        Math_SmoothStepToF(&this->actor.scale.x, (s32)this->unk1C1, 0.6f, 0.8f, 0.0f);
+        Actor_SetScale(&this->actor, this->actor.scale.x);
+    }
+
+    if (this->unk1A4 > 0.6f) {
+        this->unk1A8 = 1.0f;
+    } else {
+        this->unk1A8 = this->unk1A4 * (5.0f / 3.0f);
+    }
+    func_808B5EEC(this, play);
+}
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B6310.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/EnMThunder_Update.s")
 
