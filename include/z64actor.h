@@ -1229,7 +1229,8 @@ typedef enum {
     /* 0x28 */ TATL_HINT_ID_GYORG, // "if you go near, you'll be eaten!"
     /* 0x29 */ TATL_HINT_ID_GYORG_STUNNED, // "Jump in and attack it!"
     /* 0x2A */ TATL_HINT_ID_REDEAD,
-    /* 0x2C */ TATL_HINT_ID_BLACK_BOE = 0x2C,
+    /* 0x2B */ TATL_HINT_ID_2B,
+    /* 0x2C */ TATL_HINT_ID_BLACK_BOE,
     /* 0x2D */ TATL_HINT_ID_GIBDO,
     /* 0x2E */ TATL_HINT_ID_TWINMOLD,
     /* 0x2F */ TATL_HINT_ID_WEARING_GIANTS_MASK, // Twinmold, JP Ver. only
@@ -1239,13 +1240,21 @@ typedef enum {
     /* 0x33 */ TATL_HINT_ID_MAJORAS_INCARNATION,
     /* 0x34 */ TATL_HINT_ID_MAJORAS_WRATH,
     /* 0x35 */ TATL_HINT_ID_IRON_KNUCKLE,
-    /* 0x37 */ TATL_HINT_ID_LIKE_LIKE = 0x37,
-    /* 0x39 */ TATL_HINT_ID_BEAMOS = 0x39,
+    /* 0x36 */ TATL_HINT_ID_36, // Empty
+    /* 0x37 */ TATL_HINT_ID_LIKE_LIKE,
+    /* 0x38 */ TATL_HINT_ID_38, // Empty
+    /* 0x39 */ TATL_HINT_ID_BEAMOS,
     /* 0x3A */ TATL_HINT_ID_3A, // Empty
     /* 0x3B */ TATL_HINT_ID_FREEZARD,
     /* 0x3C */ TATL_HINT_ID_WHITE_BOE,
-    /* 0x42 */ TATL_HINT_ID_OCTOROK = 0x42,
-    /* 0x44 */ TATL_HINT_ID_POE = 0x44,
+    /* 0x3D */ TATL_HINT_ID_3D, // Empty
+    /* 0x3E */ TATL_HINT_ID_3E, // Empty
+    /* 0x3F */ TATL_HINT_ID_3F, // Empty
+    /* 0x40 */ TATL_HINT_ID_40, // Empty
+    /* 0x41 */ TATL_HINT_ID_41, // Empty
+    /* 0x42 */ TATL_HINT_ID_OCTOROK,
+    /* 0x43 */ TATL_HINT_ID_43, // Empty
+    /* 0x44 */ TATL_HINT_ID_POE,
     /* 0x45 */ TATL_HINT_ID_GEKKO_SNAPPER,
     /* 0x46 */ TATL_HINT_ID_BLUE_TEKTITE,
     /* 0x47 */ TATL_HINT_ID_LEEVER,
@@ -1255,7 +1264,9 @@ typedef enum {
     /* 0x4B */ TATL_HINT_ID_WIZROBE,
     /* 0x4C */ TATL_HINT_ID_WOLFOS,
     /* 0x4D */ TATL_HINT_ID_MAD_SCRUB,
-    /* 0x50 */ TATL_HINT_ID_MEG = 0x50,
+    /* 0x4E */ TATL_HINT_ID_4E, // Empty
+    /* 0x4F */ TATL_HINT_ID_4F, // Empty
+    /* 0x50 */ TATL_HINT_ID_MEG,
     /* 0x51 */ TATL_HINT_ID_JO,
     /* 0x52 */ TATL_HINT_ID_BETH,
     /* 0x53 */ TATL_HINT_ID_AMY,
