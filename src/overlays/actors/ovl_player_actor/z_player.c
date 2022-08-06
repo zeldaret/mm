@@ -4062,31 +4062,31 @@ s32 func_80835DF8(PlayState* play, Player* this, CollisionPoly** outPoly, s32* o
     return false;
 }
 
-extern Vec3f D_8085D10C;
-extern f32 D_8085D114;
-#if 0
+#ifdef NON_MATCHING
+// Matches but in-static data
+/**
+ * PLAYER_DOORTYPE_4: DoorSpiral
+ */
 void func_80835EAC(PlayState* play, Player* this, DoorSpiral* door) {
+    static Vec3f D_8085D10C = {20.0f, 0.0f , 20.0f};
+    s32 pad;
+
     this->currentYaw = door->actor.home.rot.y + 0x8000;
     this->actor.shape.rot.y = this->currentYaw;
-
     if (this->linearVelocity <= 0.0f) {
         this->linearVelocity = 0.1f;
     }
-
     func_80835324(play, this, 50.0f, this->actor.shape.rot.y);
-    this->unk_AE7 = 0;
-    this->stateFlags1 |= 0x20000000;
+
     this->unk_397 = this->doorType;
+    this->unk_AE7 = 0;
+    this->stateFlags1 |= PLAYER_STATE1_20000000;
     func_80835BF8(&door->actor.world.pos, door->actor.shape.rot.y, -140.0f, &this->unk_3A0);
 
-    if (this->doorDirection != 0) {
-        D_8085D10C.x = -400.0f;
-    } else {
-        D_8085D10C.x = 400.0f;
-    }
-    D_8085D114 = 200.0f;
-
+    D_8085D10C.x = (this->doorDirection != 0) ? -400.0f : 400.0f;
+    D_8085D10C.z = 200.0f;
     func_80835BC8(this, &this->unk_3A0, &D_8085D10C, &this->unk_3AC);
+
     door->shouldClimb = true;
     func_8082DAD4(this);
 
@@ -4098,18 +4098,23 @@ void func_80835EAC(PlayState* play, Player* this, DoorSpiral* door) {
         this->linearVelocity = 0.1f;
     }
 
-    Camera_ChangeSetting(Play_GetCamera(play, 0), 0x50);
-    this->unk_3BA = play->doorCtx.transitionActorList[(s32) door->actor.params >> 0xA].sides[0].bgCamDataId;
+    Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), 0x50);
+    this->unk_3BA = (s16) play->doorCtx.transitionActorList[(s32) (u16) door->actor.params >> 0xA].sides[0].bgCamDataId;
     Actor_DisableLens(play);
     this->unk_B72 = 2;
 }
 #else
-// doorType == PLAYER_DOORTYPE_4
+extern Vec3f D_8085D10C;
+#if 0
+Vec3f D_8085D10C = {20.0f, 0.0f , 20.0f};
+#endif
 void func_80835EAC(PlayState* play, Player* this, DoorSpiral* door);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80835EAC.s")
 #endif
 
-// doorType == PLAYER_DOORTYPE_2
+/**
+ * PLAYER_DOORTYPE_2: DoorShutter, BgOpenShutter
+ */
 void func_8083604C(PlayState* play, Player* this, Actor* door) {
     s32 pad;
     Vec3f sp38;
@@ -4163,7 +4168,13 @@ typedef struct {
 extern LinkAnimationHeader* D_8085D118[];
 extern LinkAnimationHeader* D_8085D124[];
 
-// doorType not PLAYER_DOORTYPE_2 neither PLAYER_DOORTYPE_4
+/**
+ * PLAYER_DOORTYPE_MINUS_1: EnDoorEtc, DoorShutter, EnDoor
+ * PLAYER_DOORTYPE_0:
+ * PLAYER_DOORTYPE_1: EnDoor
+ * PLAYER_DOORTYPE_3:
+ * PLAYER_DOORTYPE_5: EnDoor
+ */
 void func_80836258(PlayState* play, Player* this, Actor* door) {
     s32 temp = this->transformation - 1;
     LinkAnimationHeader* sp60;

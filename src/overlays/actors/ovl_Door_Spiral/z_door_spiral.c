@@ -296,7 +296,7 @@ void DoorSpiral_PlayerClimb(DoorSpiral* this, PlayState* play) {
 
     if (!(player->stateFlags1 & PLAYER_STATE1_20000000)) {
         DoorSpiral_SetupAction(this, DoorSpiral_WaitForObject);
-        this->shouldClimb = 0;
+        this->shouldClimb = false;
     }
 }
 
