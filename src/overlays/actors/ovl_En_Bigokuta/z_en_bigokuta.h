@@ -2,16 +2,15 @@
 #define Z_EN_BIGOKUTA_H
 
 #include "global.h"
+#include "z64snap.h"
 #include "assets/objects/object_bigokuta/object_bigokuta.h"
 
 struct EnBigokuta;
 
 typedef void (*EnBigokutaActionFunc)(struct EnBigokuta*, PlayState*);
-typedef void (*EnBigokutaUnkFunc)(PlayState*, struct EnBigokuta*);
 
 typedef struct EnBigokuta {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ EnBigokutaUnkFunc unkFunc; // possibly something to do with photographing
+    /* 0x000 */ PictoActor picto;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ EnBigokutaActionFunc actionFunc;
     /* 0x190 */ u8 drawDmgEffType;
