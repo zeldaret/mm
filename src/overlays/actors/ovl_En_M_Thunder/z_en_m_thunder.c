@@ -6,6 +6,7 @@
 
 #include "z_en_m_thunder.h"
 #include "z64rumble.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -52,6 +53,7 @@ extern ColliderCylinderInit D_808B7120;
 extern u8 D_808B714C[];
 // extern u8 D_808B7150[];
 extern u16 D_808B7154[];
+extern f32 D_808B715C[];
 
 void func_808B53C0(EnMThunder* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
@@ -418,4 +420,98 @@ void func_808B65BC(Actor* thisx, PlayState* play) {
                               this->unk1A4 * 800.0f);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/EnMThunder_Draw.s")
+void EnMThunder_Draw(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    EnMThunder* this = THIS;
+    Player* player = GET_PLAYER(play);
+    f32 scale;
+    s32 spA4;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C2DC(play->state.gfxCtx);
+    Matrix_Scale(0.02f, 0.02f, 0.02f, MTXMODE_APPLY);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    switch (this->unk1BE) {
+        case 0:
+        case 1:
+            gSPSegment(POLY_XLU_DISP++, 0x08,
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0xFF - ((u16)(s32)(this->unk1AC * 30.0f) & 0xFF), 0, 64,
+                                        32, 1, 0xFF - ((u16)(s32)(this->unk1AC * 20.0f) & 0xFF), 0, 8, 8));
+            break;
+
+        case 2:
+        case 3:
+            gSPSegment(POLY_XLU_DISP++, 0x08,
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 16, 64, 1, 0,
+                                        0x1FF - ((u16)(s32)(this->unk1AC * 10.0f) & 0x1FF), 32, 128));
+            break;
+
+        default:
+            break;
+    }
+
+    switch (this->unk1BE) {
+        case 0:
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 170, (u16)(this->unk1A8 * 255.0f));
+            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025DD0);
+            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025EF0);
+            break;
+
+        case 1:
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, (u16)(this->unk1A8 * 255.0f));
+            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025850);
+            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025970);
+            break;
+
+        case 3:
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, (u16)(this->unk1A8 * 255.0f));
+            gDPSetEnvColor(POLY_XLU_DISP++, 0, 100, 255, 128);
+            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_027CA0);
+            break;
+
+        case 2:
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 0, 255, 255, (u16)(this->unk1A8 * 255.0f));
+            gDPSetEnvColor(POLY_XLU_DISP++, 200, 200, 200, 128);
+            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_027CA0);
+            break;
+
+        default:
+            break;
+    }
+
+    Matrix_Mult(&player->mf_CC4, MTXMODE_NEW);
+
+    if (this->unk1BF == 2) {
+        Matrix_Translate(0.0f, 220.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Scale(-1.2f, -0.8f, -0.6f, MTXMODE_APPLY);
+        Matrix_RotateXS(0x4000, MTXMODE_APPLY);
+    } else {
+        Matrix_Translate(0.0f, 220.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Scale(-0.7f, -0.6f, -0.4f, MTXMODE_APPLY);
+        Matrix_RotateXS(0x4000, MTXMODE_APPLY);
+    }
+    if (this->unk1B0 >= 0.85f) {
+        scale = (D_808B715C[play->gameplayFrames & 7] * 6.0f) + 1.0f;
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 170, this->unk1C0);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 100, 0, 128);
+        spA4 = 40;
+    } else {
+        scale = (D_808B715C[play->gameplayFrames & 7] * 2.0f) + 1.0f;
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, this->unk1C0);
+        gDPSetEnvColor(POLY_XLU_DISP++, 0, 100, 255, 128);
+        spA4 = 20;
+    }
+
+    Matrix_Scale(1.0f, scale, scale, MTXMODE_APPLY);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPSegment(POLY_XLU_DISP++, 0x09,
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, (play->gameplayFrames * 5) & 0xFF, 0, 32, 32, 1,
+                                (play->gameplayFrames * 20) & 0xFF, (play->gameplayFrames * spA4) & 0xFF, 8, 8));
+    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0268F0);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
