@@ -63,12 +63,11 @@ void OceffWipe2_Draw(Actor* thisx, PlayState* play) {
     f32 z;
     u8 alpha;
     s32 pad[2];
-    Vec3f eye;
+    Vec3f eye = GET_ACTIVE_CAM(play)->eye;
     Vtx* vtxPtr;
-    Vec3f vec;
+    Vec3f quakeOffset;
 
-    eye = GET_ACTIVE_CAM(play)->eye;
-    Camera_GetQuakeOffset(&vec, GET_ACTIVE_CAM(play));
+    Camera_GetQuakeOffset(&quakeOffset, GET_ACTIVE_CAM(play));
 
     vtxPtr = sFrustumVtx;
 
@@ -92,7 +91,7 @@ void OceffWipe2_Draw(Actor* thisx, PlayState* play) {
 
     func_8012C2DC(play->state.gfxCtx);
 
-    Matrix_Translate(eye.x + vec.x, eye.y + vec.y, eye.z + vec.z, MTXMODE_NEW);
+    Matrix_Translate(eye.x + quakeOffset.x, eye.y + quakeOffset.y, eye.z + quakeOffset.z, MTXMODE_NEW);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     Matrix_ReplaceRotation(&play->billboardMtxF);
     Matrix_RotateXS(0x708, MTXMODE_APPLY);
@@ -101,10 +100,10 @@ void OceffWipe2_Draw(Actor* thisx, PlayState* play) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 170, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 100, 0, 128);
-    gSPDisplayList(POLY_XLU_DISP++, sMaterialDL);
+    gSPDisplayList(POLY_XLU_DISP++, sFrustumMaterialDL);
     gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, scroll * 6, scroll * (-6), 64,
                                                      64, 1, scroll * (-6), 0, 64, 64));
-    gSPDisplayList(POLY_XLU_DISP++, sFrustumDL);
+    gSPDisplayList(POLY_XLU_DISP++, sFrustumModelDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

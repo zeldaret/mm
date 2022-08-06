@@ -5,7 +5,7 @@
         <Array Name="sFrustumVtx" Count="22" Offset="0x1420">
             <Vtx/>
         </Array>
-        <DList Name="sMaterialDL" Offset="0x1580"/>
-        <DList Name="sFrustumDL" Offset="0x1628"/>
+        <DList Name="sFrustumMaterialDL" Offset="0x1580"/>
+        <DList Name="sFrustumModelDL" Offset="0x1628"/>
     </File>
 </Root>
