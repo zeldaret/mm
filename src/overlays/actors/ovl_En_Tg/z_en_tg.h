@@ -30,7 +30,7 @@ typedef struct EnTg {
     /* 0x02EC */ s16 unk2EC;
     /* 0x02EE */ char unk2EE[0x2];
     /* 0x02F0 */ EnTgIdk unk2F0;
-    /* 0x0330 */char unk330[0x21C];
+    /* 0x0330 */ char unk330[0x21C];
 } EnTg; // size = 0x548
 // TODO: This doesn't add up right, but compiles/matches...
 
