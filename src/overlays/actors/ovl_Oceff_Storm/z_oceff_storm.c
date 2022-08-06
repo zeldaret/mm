@@ -36,7 +36,7 @@ void OceffStorm_SetupAction(OceffStorm* this, OceffStormActionFunc actionFunc) {
 }
 
 s32 func_8098176C(PlayState* play) {
-    s32 phi_v1 = 0;
+    s32 phi_v1 = false;
 
     switch (play->sceneNum) {
         case SCENE_13HUBUKINOMITI:
@@ -47,12 +47,12 @@ s32 func_8098176C(PlayState* play) {
         case SCENE_17SETUGEN:
         case SCENE_GORONRACE:
             if (gSaveContext.sceneSetupIndex == 0) {
-                phi_v1 = 1;
+                phi_v1 = true;
             }
             break;
         case SCENE_10YUKIYAMANOMURA2:
             if (gSaveContext.sceneSetupIndex == 1) {
-                phi_v1 = 1;
+                phi_v1 = true;
             }
             break;
     }
@@ -83,7 +83,7 @@ void OceffStorm_Init(Actor* thisx, PlayState* play) {
         this->actor.world.pos.x = player->bodyPartsPos[0].x;
         this->actor.world.pos.z = player->bodyPartsPos[0].z;
         gSaveContext.jinxTimer = 0;
-        if ((play->interfaceCtx.restrictions.songOfStorms == 0) && (!func_8098176C(play))) {
+        if ((play->interfaceCtx.restrictions.songOfStorms == 0) && !func_8098176C(play)) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_OKARINA_EFFECT, this->actor.world.pos.x,
                         this->actor.world.pos.y - 30.0f, this->actor.world.pos.z, 0, 0, 0, 1);
         }
