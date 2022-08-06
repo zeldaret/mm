@@ -58,7 +58,7 @@ void ObjUm_Update(Actor* thisx, PlayState* play);
 void ObjUm_Draw(Actor* thisx, PlayState* play);
 
 void ObjUm_DefaultAnim(ObjUm* this, PlayState* play);
-void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimimation index);
+void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation index);
 void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc);
 
 const ActorInit Obj_Um_InitVars = {
@@ -1643,7 +1643,7 @@ struct_80B7C25C sUmAnims[] = {
     { &gUmLookBackAnim, false }, // OBJ_UM_ANIM_LOOK_BACK
 };
 
-void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimimation animIndex) {
+void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex) {
     s32 changeAnim;
     s32 temp;
     s32 indexTemp = animIndex;

@@ -6703,7 +6703,7 @@
     0x808F25A4:("EnKarebaba_Update",),
     0x808F280C:("func_808F280C",),
     0x808F28F8:("EnKarebaba_Draw",),
-    0x808F30B0:("func_808F30B0",),
+    0x808F30B0:("EnIn_ChangeAnim",),
     0x808F3178:("func_808F3178",),
     0x808F322C:("func_808F322C",),
     0x808F32A0:("func_808F32A0",),

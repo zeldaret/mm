@@ -93,8 +93,8 @@ static AnimationHeader* sAnimations[] = {
 
 void EnGiant_ChangeAnim(EnGiant* this, s16 animIndex) {
     if (animIndex >= GIANT_ANIM_LOOK_UP_START && animIndex < GIANT_ANIM_MAX) {
-        if ((this->animIndex == GIANT_ANIM_WALKING_LOOP && animIndex != GIANT_ANIM_WALKING_LOOP) ||
-            (animIndex == GIANT_ANIM_WALKING_LOOP && this->animIndex != GIANT_ANIM_WALKING_LOOP)) {
+        if (((this->animIndex == GIANT_ANIM_WALKING_LOOP) && (animIndex != GIANT_ANIM_WALKING_LOOP)) ||
+            ((animIndex == GIANT_ANIM_WALKING_LOOP) && (this->animIndex != GIANT_ANIM_WALKING_LOOP))) {
             Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
                              Animation_GetLastFrame(&sAnimations[animIndex]->common), ANIMMODE_ONCE, 10.0f);
         } else {
