@@ -159,8 +159,21 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B5984.s")
 
-void func_808B5EEC(EnMThunder* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B5EEC.s")
+void func_808B5EEC(EnMThunder* this, PlayState* play) {
+    if (this->unk1BC < 2) {
+        if (this->unk1C0 < 40) {
+            this->unk1C0 = 0;
+        } else {
+            this->unk1C0 -= 40;
+        }
+    }
+    this->unk1AC += 2.0f * this->unk1A8;
+    if (this->unk1B4 < this->unk1A4) {
+        this->unk1B4 = F32_LERPIMP(this->unk1B4, this->unk1A4, 0.1f);
+    } else {
+        this->unk1B4 = this->unk1A4;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B5F68.s")
 
@@ -181,7 +194,6 @@ void func_808B6310(EnMThunder* this, PlayState* play) {
     }
     func_808B5EEC(this, play);
 }
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/func_808B6310.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_M_Thunder/EnMThunder_Update.s")
 
