@@ -26,7 +26,6 @@ void func_808B5F68(EnMThunder* this, PlayState* play);
 void func_808B60D4(EnMThunder* this, PlayState* play);
 void func_808B6310(EnMThunder* this, PlayState* play);
 
-#if 0
 const ActorInit En_M_Thunder_InitVars = {
     ACTOR_EN_M_THUNDER,
     ACTORCAT_ITEMACTION,
@@ -41,19 +40,28 @@ const ActorInit En_M_Thunder_InitVars = {
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_808B7120 = {
-    { COLTYPE_NONE, AT_ON | AT_TYPE_PLAYER, AC_NONE, OC1_NONE, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK2, { 0x01000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_ON, OCELEM_ON, },
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_PLAYER,
+        AC_NONE,
+        OC1_NONE,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK2,
+        { 0x01000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NONE,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 200, 200, 0, { 0, 0, 0 } },
 };
 
-#endif
-
-extern ColliderCylinderInit D_808B7120;
-
-extern u8 D_808B714C[];
-// extern u8 D_808B7150[];
-extern u16 D_808B7154[];
-extern f32 D_808B715C[];
+u8 D_808B714C[] = { 1, 2, 3, 4, 1, 2, 3, 4 };
+u16 D_808B7154[] = { NA_SE_IT_ROLLING_CUT_LV2, NA_SE_IT_ROLLING_CUT_LV1, NA_SE_IT_ROLLING_CUT_LV2, NA_SE_IT_ROLLING_CUT_LV1 };
+f32 D_808B715C[] = { 0.1f, 0.15f, 0.2f, 0.25f, 0.3f, 0.25f, 0.2f, 0.15f, 0.0f };
 
 void func_808B53C0(EnMThunder* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
@@ -307,7 +315,9 @@ void func_808B5EEC(EnMThunder* this, PlayState* play) {
             this->unk1C0 -= 40;
         }
     }
+
     this->unk1AC += 2.0f * this->unk1A8;
+
     if (this->unk1B4 < this->unk1A4) {
         this->unk1B4 = F32_LERPIMP(this->unk1B4, this->unk1A4, 0.1f);
     } else {
@@ -333,12 +343,15 @@ void func_808B5F68(EnMThunder* this, PlayState* play) {
         this->actor.world.pos.z = player->bodyPartsPos[0].z;
         this->unk1BC--;
     }
+
     if (this->unk1A4 > (6.0f / 10.0f)) {
         this->unk1A8 = 1.0f;
     } else {
         this->unk1A8 = this->unk1A4 * (10.0f / 6.0f);
     }
+
     func_808B5EEC(this, play);
+
     if (Play_InCsMode(play)) {
         Actor_MarkForDeath(&this->actor);
     }
