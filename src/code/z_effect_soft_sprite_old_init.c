@@ -780,15 +780,15 @@ void EffectSsIcePiece_SpawnBurst(PlayState* play, Vec3f* refPos, f32 scale) {
 
 // EffectSsEnIce Spawn Functions
 
-void EffectSsEnIce_SpawnFlyingVec3f(PlayState* play, Actor* actor, Vec3f* pos, Color_RGBA8* prim, Color_RGBA8* env,
-                                    f32 scale) {
+void EffectSsEnIce_SpawnFlying(PlayState* play, Actor* actor, Vec3f* pos, Color_RGBA8* prim, Color_RGBA8* env,
+                               f32 scale) {
     EffectSsEnIceInitParams initParams;
 
     initParams.actor = actor;
     Math_Vec3f_Copy(&initParams.pos, pos);
     Color_RGBA8_Copy(&initParams.primColor, prim);
     Color_RGBA8_Copy(&initParams.envColor, env);
-    initParams.type = 0;
+    initParams.type = ENICE_TYPE_FLYING;
     initParams.scale = scale;
 
     if (actor != NULL) {
@@ -802,7 +802,7 @@ void func_800B2B44(PlayState* play, Actor* actor, Vec3f* pos, f32 scale) {
     static Color_RGBA8 primColor = { 150, 150, 150, 250 };
     static Color_RGBA8 envColor = { 235, 245, 255, 255 };
 
-    EffectSsEnIce_SpawnFlyingVec3f(play, actor, pos, &primColor, &envColor, scale);
+    EffectSsEnIce_SpawnFlying(play, actor, pos, &primColor, &envColor, scale);
 }
 
 void func_800B2B7C(PlayState* play, Actor* actor, Vec3s* arg2, f32 scale) {
@@ -823,7 +823,7 @@ void EffectSsEnIce_Spawn(PlayState* play, Vec3f* pos, f32 scale, Vec3f* velocity
     Color_RGBA8_Copy(&initParams.envColor, envColor);
     initParams.scale = scale;
     initParams.life = life;
-    initParams.type = 1;
+    initParams.type = ENICE_TYPE_NORMAL;
 
     EffectSs_Spawn(play, EFFECT_SS_EN_ICE, 128, &initParams);
 }
