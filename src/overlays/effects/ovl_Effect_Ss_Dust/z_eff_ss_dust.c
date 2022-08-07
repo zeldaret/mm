@@ -25,7 +25,7 @@
 
 u32 EffectSsDust_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
 void EffectSsDust_Update(PlayState* play, u32 index, EffectSs* this);
-void EffectSsBlast_UpdateFire(PlayState* play, u32 index, EffectSs* this);
+void EffectSsDust_UpdateFire(PlayState* play, u32 index, EffectSs* this);
 void EffectSsDust_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_Dust_InitVars = {
@@ -35,7 +35,7 @@ const EffectSsInit Effect_Ss_Dust_InitVars = {
 
 static EffectSsUpdateFunc sUpdateFuncs[] = {
     EffectSsDust_Update,
-    EffectSsBlast_UpdateFire,
+    EffectSsDust_UpdateFire,
 };
 
 static TexturePtr sDustTextures[] = {
@@ -149,7 +149,7 @@ void EffectSsDust_Update(PlayState* play, u32 index, EffectSs* this) {
 }
 
 // this update mode is unused in the original game
-void EffectSsBlast_UpdateFire(PlayState* play, u32 index, EffectSs* this) {
+void EffectSsDust_UpdateFire(PlayState* play, u32 index, EffectSs* this) {
     this->accel.x = (Rand_ZeroOne() * 0.4f) - 0.2f;
     this->accel.z = (Rand_ZeroOne() * 0.4f) - 0.2f;
 
