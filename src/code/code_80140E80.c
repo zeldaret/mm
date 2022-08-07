@@ -1,6 +1,7 @@
 /**
  * @file code_80140E80.c
- * @brief Copies images between color images (generally framebuffers), possibly with scaling and colour interpolation.
+ * @brief Copies images between color images (generally framebuffers), possibly with filling, scaling, and colour interpolation.
+ * 
  * Used for several transition effects, and in z_play to shrink the screen at the end of the First and Second Days.
  *
  *
@@ -19,8 +20,8 @@ typedef enum {
 
 typedef enum {
     /* 0 */ FB_MODE_DO_NOTHING, // Do nothing but waste time loading microcode
-    /* 1 */ FB_MODE_1,
-    /* 2 */ FB_MODE_2
+    /* 1 */ FB_MODE_GENERAL, // Interpolation, filling and scaling
+    /* 2 */ FB_MODE_INTERPOLATE
 } FbMode;
 
 // ucode.h
@@ -76,7 +77,7 @@ void func_80140EAC(Gfx** gfxP, uObjBg* bg, void* img, s32 width, s32 height, s32
 // internal
 /**
  * Set up a BG from a specified source image and draw it to the specified color image with func_80140EAC(), using the
- * BG's settings
+ * BG's settings. Use func_8014116C() or func_801411B4()
  *
  * @param[out] gfxP     Pointer to current displaylist
  * @param[in] source    Pointer to beginning of source color image
@@ -154,6 +155,7 @@ void func_801411B4(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f
     func_80141008(gfxP, source, img, width, height, x, y, scaleX, scaleY, cycleFlag);
 }
 
+// TODO work out what to do with this.
 #define gDPSetPrimColor_u32(pkt, m, l, d)                                                      \
     _DW({                                                                                      \
         Gfx* _g = (Gfx*)(pkt);                                                                 \
@@ -170,9 +172,9 @@ void func_801411B4(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f
         _g->words.w1 = (unsigned int)(d);                                        \
     })
 
-// internal
+// internal, used in func_8014151C
 /**
- * Most general .
+ * Most general redrawing function.
  * 
  *  - Copies `source` to `img`,
  *  - fills the current framebuffer with `this->primColor`,
@@ -219,7 +221,8 @@ void func_80141200(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
     gDPFillRectangle(gfx++, 0, 0, width - 1, height - 1);
 
     gDPPipeSync(gfx++);
-    // Set lod and primColor from struct, perform interpolation, draw image with scaling (this is the most general )
+    // Set lod and primColor from struct, perform interpolation, draw image with scaling (this is the most general
+    // alteration this system can carry out).
     {
         s32 lodFrac = this->lodProportion * 255;
 
@@ -359,11 +362,11 @@ void func_80141778(Struct_80140E80* this, Gfx** gfxP, void* img) {
     gSPLoadUcodeL(gfx++, gspS2DEX2_fifo);
 
     switch (this->mode) {
-        case FB_MODE_1:
+        case FB_MODE_GENERAL:
             func_8014151C(this, &gfx, D_0F000000, img, gScreenWidth, gScreenHeight);
             break;
 
-        case FB_MODE_2:
+        case FB_MODE_INTERPOLATE:
             func_80141678(this, &gfx, D_0F000000, gScreenWidth, gScreenHeight);
             break;
 
