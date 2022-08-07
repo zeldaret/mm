@@ -3271,7 +3271,7 @@ extern volatile OSTime sRSPOtherTotalTime;
 extern volatile OSTime gRDPTotalTime;
 // extern UNK_TYPE1 D_801FBB28;
 extern OSViMode D_801FBB30;
-extern u32* gFramebuffers[2];
+extern uintptr_t* gFramebuffers[2];
 extern OSViMode* D_801FBB88;
 extern u16* gZBufferPtr;
 extern void* D_801FBB90;

@@ -1463,7 +1463,7 @@ void Font_LoadCharNES(PlayState* play, u8 codePointIndex, s32 offset);
 void Font_LoadMessageBoxEndIcon(Font* font, u16 icon);
 void Font_LoadOrderedFont(Font* font);
 // void func_800F5090(void);
-// void func_800F50D4(void);
+s32 func_800F50D4(s32);
 void Kankyo_Init(PlayState* play, EnvironmentContext* envCtx);
 u32 func_800F5954(u8* param_1, u32 param_2, u32 param_3, u8 param_4, u8 param_5);
 f32 Environment_LerpWeight(u16 max, u16 min, u16 val);
@@ -2375,7 +2375,7 @@ s32 func_8013FD74(View* view);
 s32 func_80140024(View* view);
 s32 func_801400CC(View* view, Gfx** gfxp);
 void func_80140260(OSViMode* vimode);
-// void func_8014026C(OSViMode* param_1, UNK_TYPE1 param_2, s32 param_3, s32 param_4, s32 param_5, s32 param_6, s32 param_7, s32 param_8, UNK_TYPE4 param_9, s32 param_10, s16 param_11, u32 param_12, UNK_TYPE4 param_13);
+void func_8014026C(OSViMode* param_1, UNK_TYPE1 param_2, s32 param_3, s32 param_4, s32 param_5, s32 param_6, s32 param_7, s32 param_8, UNK_TYPE4 param_9, s32 param_10, s16 param_11, u32 param_12, UNK_TYPE4 param_13);
 // void func_80140730(void);
 // void func_80140810(void);
 void func_80140898(void* arg0);
@@ -2809,15 +2809,19 @@ void SpeedMeter_DrawAllocEntries(void* displayList, GraphicsContext* gfxCtx, Gam
 void func_801780F0(Mtx* param_1, f32 param_2, f32 param_3, f32 param_4, f32 param_5, f32 param_6, f32 param_7);
 // void func_801781EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_8017842C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
-// void func_80178750(void);
+
+
+//SYSCFB start. TODO header
+void func_80178750(void);
 // void func_80178818(void);
 void func_80178978(void);
 // void func_801789D4(void);
-u32 SysCfb_GetFbPtr(s32 index);
-u32 SysCfb_GetZBuffer(void);
+uintptr_t SysCfb_GetFbPtr(s32 index);
+u16* SysCfb_GetZBuffer(void);
 // UNK_TYPE4 func_80178A24(void);
-// void func_80178A34(void);
+u16 func_80178A34(s32 arg0, s32 arg1);
 s32 func_80178A94(s32 param_1, s32 param_2);
+
 // void func_80178AC0(void);
 // void func_80178C80(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_80178D7C(void);
