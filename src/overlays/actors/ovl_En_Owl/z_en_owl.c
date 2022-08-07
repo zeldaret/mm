@@ -324,7 +324,7 @@ void func_8095ACEC(EnOwl* this) {
 }
 
 void func_8095AD54(EnOwl* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 4) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case OWL_REPEAT:
                 func_80151938(play, 0x7D1);
@@ -340,14 +340,14 @@ void func_8095AD54(EnOwl* this, PlayState* play) {
 }
 
 void func_8095AE00(EnOwl* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_80151938(play, 0x7D2);
         this->actionFunc = func_8095AD54;
     }
 }
 
 void func_8095AE60(EnOwl* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_80151938(play, 0x7D1);
         this->actionFunc = func_8095AE00;
     }
@@ -363,7 +363,7 @@ void func_8095AEC0(EnOwl* this, PlayState* play) {
 
 void func_8095AF2C(EnOwl* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 if (play->msgCtx.currentTextId == 0xBFE) {
                     func_8095ACEC(this);
@@ -375,7 +375,7 @@ void func_8095AF2C(EnOwl* this, PlayState* play) {
             }
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             func_8095ACEC(this);
             this->actionFunc = func_8095ABF0;
             break;
@@ -457,7 +457,7 @@ void func_8095B2F8(EnOwl* this, PlayState* play) {
     if ((this->actor.shape.rot.y == this->unk_3EC) && (this->actionFlags & 1)) {
         this->actionFunc = func_8095B254;
         Animation_Change(this->skelAnime3, this->skelAnime3->animation, 1.0f, 19.0f,
-                         Animation_GetLastFrame(&object_owl_Anim_001168), 2, 0.0f);
+                         Animation_GetLastFrame(&object_owl_Anim_001168), ANIMMODE_ONCE, 0.0f);
         this->unk_414 = func_8095C484;
     }
 
@@ -467,7 +467,7 @@ void func_8095B2F8(EnOwl* this, PlayState* play) {
 void func_8095B3DC(EnOwl* this, PlayState* play) {
     if (this->actionFlags & 1) {
         this->actionFunc = func_8095B2F8;
-        Animation_Change(this->skelAnime3, &object_owl_Anim_001168, 1.0f, 0.0f, 35.0f, 2, 0.0f);
+        Animation_Change(this->skelAnime3, &object_owl_Anim_001168, 1.0f, 0.0f, 35.0f, ANIMMODE_ONCE, 0.0f);
         this->unk_414 = func_8095C408;
         this->unk_3EC = 0x5500;
         this->actor.world.pos.y += 100.0f;
@@ -524,7 +524,7 @@ void func_8095B650(EnOwl* this, PlayState* play) {
 void func_8095B6C8(EnOwl* this, PlayState* play) {
     if (this->actionFlags & 1) {
         Animation_Change(this->skelAnime3, &object_owl_Anim_00CB94, -1.0f,
-                         Animation_GetLastFrame(&object_owl_Anim_00CB94), 0.0f, 2, 0.0f);
+                         Animation_GetLastFrame(&object_owl_Anim_00CB94), 0.0f, ANIMMODE_ONCE, 0.0f);
         this->unk_414 = func_8095C484;
         this->actionFunc = func_8095B650;
     }
@@ -596,7 +596,7 @@ void func_8095B960(EnOwl* this, PlayState* play) {
 void func_8095B9FC(EnOwl* this, PlayState* play) {
     if (this->actionFlags & 1) {
         this->actionFunc = func_8095B960;
-        Animation_Change(this->skelAnime3, &object_owl_Anim_001168, 1.0f, 0.0f, 35.0f, 2, 0.0f);
+        Animation_Change(this->skelAnime3, &object_owl_Anim_001168, 1.0f, 0.0f, 35.0f, ANIMMODE_ONCE, 0.0f);
         this->unk_414 = func_8095C408;
         func_8095B0C8(this);
     }
@@ -606,7 +606,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
     func_8095A920(this, play);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xBEC:
@@ -645,7 +645,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
             }
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xBEA:
@@ -803,7 +803,7 @@ void func_8095C258(EnOwl* this) {
         this->unk_414 = func_8095C328;
         this->unk_3EA = 6;
         Animation_Change(this->skelAnime3, &object_owl_Anim_001ADC, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&object_owl_Anim_001ADC), 2, 5.0f);
+                         Animation_GetLastFrame(&object_owl_Anim_001ADC), ANIMMODE_ONCE, 5.0f);
     }
 }
 
@@ -812,19 +812,19 @@ void func_8095C328(EnOwl* this) {
         if (this->unk_3EA > 0) {
             this->unk_3EA--;
             Animation_Change(this->skelAnime3, this->skelAnime3->animation, 1.0f, 0.0f,
-                             Animation_GetLastFrame(this->skelAnime3->animation), 2, 0.0f);
+                             Animation_GetLastFrame(this->skelAnime3->animation), ANIMMODE_ONCE, 0.0f);
         } else {
             this->unk_3EA = 160;
             this->unk_414 = func_8095C258;
             Animation_Change(this->skelAnime3, &object_owl_Anim_00C6D4, 1.0f, 0.0f,
-                             Animation_GetLastFrame(&object_owl_Anim_00C6D4), 0, 5.0f);
+                             Animation_GetLastFrame(&object_owl_Anim_00C6D4), ANIMMODE_LOOP, 5.0f);
         }
     }
 }
 
 void func_8095C408(EnOwl* this) {
     if (SkelAnime_Update(this->skelAnime3)) {
-        Animation_Change(this->skelAnime3, this->skelAnime3->animation, 1.0f, 18.0f, 35.0f, 2, 0.0f);
+        Animation_Change(this->skelAnime3, this->skelAnime3->animation, 1.0f, 18.0f, 35.0f, ANIMMODE_ONCE, 0.0f);
         this->actionFlags |= 1;
     } else {
         this->actionFlags &= ~1;
@@ -834,7 +834,7 @@ void func_8095C408(EnOwl* this) {
 void func_8095C484(EnOwl* this) {
     if (SkelAnime_Update(this->skelAnime3)) {
         Animation_Change(this->skelAnime3, this->skelAnime3->animation, 1.0f, 0.0f,
-                         Animation_GetLastFrame(this->skelAnime3->animation), 2, 0.0f);
+                         Animation_GetLastFrame(this->skelAnime3->animation), ANIMMODE_ONCE, 0.0f);
         this->actionFlags |= 1;
     } else {
         this->actionFlags &= ~1;
@@ -1193,7 +1193,8 @@ void func_8095D074(Actor* thisx, PlayState* play) {
 void EnOwl_ChangeMode(EnOwl* this, EnOwlActionFunc actionFunc, EnOwlFunc unkFunc, SkelAnime* skelAnime,
                       AnimationHeader* animation, f32 morphFrames) {
     this->skelAnime3 = skelAnime;
-    Animation_Change(this->skelAnime3, animation, 1.0f, 0.0f, Animation_GetLastFrame(animation), 2, morphFrames);
+    Animation_Change(this->skelAnime3, animation, 1.0f, 0.0f, Animation_GetLastFrame(animation), ANIMMODE_ONCE,
+                     morphFrames);
     this->actionFunc = actionFunc;
     this->unk_414 = unkFunc;
 }

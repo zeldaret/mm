@@ -129,8 +129,8 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
     s32 grottoType = DOORANA_GET_TYPE(&this->actor);
 
     if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.001f)) {
-        if (this->actor.targetMode != 0 && play->sceneLoadFlag == 0 && play->unk_18B4A == 0 &&
-            (player->stateFlags1 & 0x80000000) && player->unk_AE7 == 0) {
+        if ((this->actor.targetMode != 0) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
+            (play->transitionMode == TRANS_MODE_OFF) && (player->stateFlags1 & 0x80000000) && (player->unk_AE7 == 0)) {
 
             if (grottoType == DOORANA_TYPE_VISIBLE_SCENE_EXIT) {
                 s32 exitIndex = DOORANA_GET_EXIT_INDEX(&this->actor);

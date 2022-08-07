@@ -96,7 +96,7 @@ static f32 sTranslucencyPlaneDistance = 100.0f;
 static f32 sTransparencyPlaneDistance = 50.0f;
 
 void EnHoll_SetupAction(EnHoll* this) {
-    this->type = EN_HOLL_GET_TYPE(this);
+    this->type = EN_HOLL_GET_TYPE(&this->actor);
     this->actionFunc = sActionFuncs[this->type];
     if (EN_HOLL_IS_VISIBLE(this)) {
         this->alpha = 255;
@@ -128,7 +128,7 @@ void EnHoll_Destroy(Actor* thisx, PlayState* play) {
     EnHoll* this = THIS;
 
     if (!EN_HOLL_IS_SCENE_CHANGER(this)) {
-        u32 enHollId = EN_HOLL_GET_ID_CAST(this);
+        u32 enHollId = EN_HOLL_GET_ID(&this->actor);
 
         play->doorCtx.transitionActorList[enHollId].id = -play->doorCtx.transitionActorList[enHollId].id;
         if (this == sInstancePlayingSound) {
@@ -152,7 +152,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
 
     if (this->type == EN_HOLL_TYPE_DEFAULT) {
         u32 actorCtxBitmask = (play->actorCtx.unkC & 0x2AA) >> 1 | (play->actorCtx.unkC & 0x155);
-        u32 zActorBitmask = D_801AED48[EN_HOLL_GET_Z_ACTOR_BITMASK_INDEX(this)];
+        u32 zActorBitmask = D_801AED48[EN_HOLL_GET_Z_ACTOR_BITMASK_INDEX(&this->actor)];
 
         if (!(actorCtxBitmask & zActorBitmask)) {
             Actor_MarkForDeath(&this->actor);
@@ -162,7 +162,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
             func_800B9010(&this->actor, NA_SE_EV_INVISIBLE_MONKEY - SFX_FLAG);
         }
     }
-    if ((play->sceneLoadFlag != 0) || (play->unk_18B4A != 0)) {
+    if ((play->transitionTrigger != TRANS_TRIGGER_OFF) || (play->transitionMode != TRANS_MODE_OFF)) {
         this->alpha = 255;
     } else {
         f32 enHollBottom = EN_HOLL_BOTTOM_DEFAULT;
@@ -177,7 +177,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
         if ((enHollBottom < transformedPlayerPos.y) && (transformedPlayerPos.y < EN_HOLL_TOP_DEFAULT) &&
             (fabsf(transformedPlayerPos.x) < enHollHalfwidth) &&
             (playerDistFromCentralPlane < sActivationPlaneDistance)) {
-            u32 enHollId = EN_HOLL_GET_ID_AND(this);
+            u32 enHollId = EN_HOLL_GET_ID(&this->actor);
 
             if (sLoadingPlaneDistance < playerDistFromCentralPlane) {
                 if ((play->roomCtx.prevRoom.num >= 0) && (play->roomCtx.unk31 == 0)) {
@@ -188,10 +188,10 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
                     func_8012EBF8(play, &play->roomCtx);
                 }
             } else if (this->type == EN_HOLL_TYPE_SCENE_CHANGER) {
-                play->nextEntranceIndex = play->setupExitList[EN_HOLL_GET_EXIT_LIST_INDEX(this)];
+                play->nextEntranceIndex = play->setupExitList[EN_HOLL_GET_EXIT_LIST_INDEX(&this->actor)];
                 gSaveContext.unk_3DBB = 1;
                 Scene_SetExitFade(play);
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 play->unk_1878C(play);
             } else {
                 this->actor.room = play->doorCtx.transitionActorList[enHollId].sides[this->playerSide ^ 1].room;
@@ -232,7 +232,7 @@ void EnHoll_TransparentIdle(EnHoll* this, PlayState* play) {
         if (playerDistFromCentralPlane = fabsf(transformedPlayerPos.z),
             playerDistFromCentralPlane < EN_HOLL_ACTIVATION_PLANE_DISTANCE &&
                 playerDistFromCentralPlane > EN_HOLL_LOADING_PLANE_DISTANCE) {
-            s32 enHollId = EN_HOLL_GET_ID_CAST(this);
+            s32 enHollId = EN_HOLL_GET_ID(&this->actor);
             s32 playerSide = (transformedPlayerPos.z < 0.0f) ? EN_HOLL_BEHIND : EN_HOLL_BEFORE;
             TransitionActorEntry* transitionActorEntry = &play->doorCtx.transitionActorList[enHollId];
             s8 room = transitionActorEntry->sides[playerSide].room;
@@ -259,7 +259,7 @@ void EnHoll_VerticalBgCoverIdle(EnHoll* this, PlayState* play) {
             play->bgCoverAlpha = EN_HOLL_SCALE_BG_COVER_ALPHA(playerDistFromCentralPlane);
         }
         if (playerDistFromCentralPlane > EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL) {
-            s32 enHollId = EN_HOLL_GET_ID_CAST(this);
+            s32 enHollId = EN_HOLL_GET_ID(&this->actor);
             s32 playerSide = (this->actor.playerHeightRel > 0.0f) ? EN_HOLL_ABOVE : EN_HOLL_BELOW;
 
             this->actor.room = play->doorCtx.transitionActorList[enHollId].sides[playerSide].room;
@@ -283,7 +283,7 @@ void EnHoll_VerticalIdle(EnHoll* this, PlayState* play) {
 
         if (playerDistFromCentralPlane < EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL &&
             playerDistFromCentralPlane > EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL) {
-            s32 enHollId = EN_HOLL_GET_ID_CAST(this);
+            s32 enHollId = EN_HOLL_GET_ID(&this->actor);
             s32 playerSide = (this->actor.playerHeightRel > 0.0f) ? EN_HOLL_ABOVE : EN_HOLL_BELOW;
 
             this->actor.room = play->doorCtx.transitionActorList[enHollId].sides[playerSide].room;
@@ -309,7 +309,8 @@ void EnHoll_Update(Actor* thisx, PlayState* play) {
     EnHoll* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if ((play->sceneLoadFlag == 0) && (play->unk_18B4A == 0) && !(player->stateFlags1 & 0x200)) {
+    if ((play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
+        !(player->stateFlags1 & 0x200)) {
         this->actionFunc(this, play);
     }
 }

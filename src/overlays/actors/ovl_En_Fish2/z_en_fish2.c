@@ -95,7 +95,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    2,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -107,7 +107,9 @@ void func_80B28370(EnFish2* this, s32 arg0) {
         &object_fb_Anim_0013AC, &object_fb_Anim_0007D4, &object_fb_Anim_0006D8,
         &object_fb_Anim_0006D8, &object_fb_Anim_001174, &object_fb_Anim_000ACC,
     };
-    static u8 D_80B2B3A0[] = { 0, 0, 2, 2, 2, 2 };
+    static u8 D_80B2B3A0[] = {
+        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE,
+    };
     f32 sp34;
 
     this->unk_2AC = arg0;
@@ -433,7 +435,7 @@ void func_80B29128(EnFish2* this) {
 }
 
 void func_80B2913C(EnFish2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         func_80B28B5C(this);
     }
@@ -793,13 +795,13 @@ void func_80B2A01C(EnFish2* this, PlayState* play) {
 }
 
 void func_80B2A094(EnFish2* this, PlayState* play) {
-    Vec3f sp2C;
+    Vec3f subCamEye;
 
     if (this->unk_2B4 == 0) {
         D_80B2B2E4 = 1;
     }
 
-    this->unk_2CA = ActorCutscene_GetCurrentCamera(this->unk_2BA[0]);
+    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->unk_2BA[0]);
 
     if (D_80B2B2EC != 0) {
         D_80B2B2EC++;
@@ -811,17 +813,17 @@ void func_80B2A094(EnFish2* this, PlayState* play) {
     }
 
     if ((this->unk_350 != NULL) && (this->unk_350->update != NULL)) {
-        Math_Vec3f_Copy(&sp2C, &this->unk_350->world.pos);
-        sp2C.x += Math_SinS(-0x3A98) * 110.0f;
-        sp2C.z += Math_CosS(-0x3A98) * 110.0f;
-        Math_Vec3f_Copy(&this->unk_2DC, &sp2C);
-        Math_Vec3f_Copy(&sp2C, &this->unk_350->world.pos);
-        sp2C.x += Math_SinS(-0x3A98) * 10.0f;
-        sp2C.z += Math_CosS(-0x3A98) * 10.0f;
-        Math_Vec3f_Copy(&this->unk_2E8, &sp2C);
+        Math_Vec3f_Copy(&subCamEye, &this->unk_350->world.pos);
+        subCamEye.x += Math_SinS(-0x3A98) * 110.0f;
+        subCamEye.z += Math_CosS(-0x3A98) * 110.0f;
+        Math_Vec3f_Copy(&this->subCamEye, &subCamEye);
+        Math_Vec3f_Copy(&subCamEye, &this->unk_350->world.pos);
+        subCamEye.x += Math_SinS(-0x3A98) * 10.0f;
+        subCamEye.z += Math_CosS(-0x3A98) * 10.0f;
+        Math_Vec3f_Copy(&this->subCamAt, &subCamEye);
     }
 
-    Play_CameraSetAtEye(play, this->unk_2CA, &this->unk_2E8, &this->unk_2DC);
+    Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     if ((this->unk_350 == NULL) || (this->unk_350->update == NULL)) {
         this->unk_350 = NULL;
         this->unk_2B0++;
@@ -833,29 +835,29 @@ void func_80B2A094(EnFish2* this, PlayState* play) {
 }
 
 void func_80B2A23C(EnFish2* this, PlayState* play) {
-    Vec3f sp2C;
+    Vec3f subCamAt;
 
-    Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
+    Math_Vec3f_Copy(&subCamAt, &this->actor.world.pos);
     if (D_80B2B2E4 == 2) {
-        sp2C.x += (Math_SinS(-0x3A98) * 180.0f);
-        sp2C.y += 90.0f;
-        sp2C.z += Math_CosS(-0x3A98) * 180.0f;
-        Math_Vec3f_Copy(&this->unk_2DC, &sp2C);
-        Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
-        sp2C.y += 70.0f;
-        Math_Vec3f_Copy(&this->unk_2E8, &sp2C);
+        subCamAt.x += (Math_SinS(-0x3A98) * 180.0f);
+        subCamAt.y += 90.0f;
+        subCamAt.z += Math_CosS(-0x3A98) * 180.0f;
+        Math_Vec3f_Copy(&this->subCamEye, &subCamAt);
+        Math_Vec3f_Copy(&subCamAt, &this->actor.world.pos);
+        subCamAt.y += 70.0f;
+        Math_Vec3f_Copy(&this->subCamAt, &subCamAt);
     } else if (D_80B2B2F4 != NULL) {
-        Math_Vec3f_Copy(&sp2C, &D_80B2B2F4->world.pos);
-        sp2C.x += Math_SinS(-0x3A98) * 110.0f;
-        sp2C.z += Math_CosS(-0x3A98) * 110.0f;
-        Math_Vec3f_Copy(&this->unk_2DC, &sp2C);
-        Math_Vec3f_Copy(&sp2C, &D_80B2B2F4->world.pos);
-        sp2C.x += Math_SinS(-0x3A98) * 10.0f;
-        sp2C.z += Math_CosS(-0x3A98) * 10.0f;
-        Math_Vec3f_Copy(&this->unk_2E8, &sp2C);
+        Math_Vec3f_Copy(&subCamAt, &D_80B2B2F4->world.pos);
+        subCamAt.x += Math_SinS(-0x3A98) * 110.0f;
+        subCamAt.z += Math_CosS(-0x3A98) * 110.0f;
+        Math_Vec3f_Copy(&this->subCamEye, &subCamAt);
+        Math_Vec3f_Copy(&subCamAt, &D_80B2B2F4->world.pos);
+        subCamAt.x += Math_SinS(-0x3A98) * 10.0f;
+        subCamAt.z += Math_CosS(-0x3A98) * 10.0f;
+        Math_Vec3f_Copy(&this->subCamAt, &subCamAt);
     }
 
-    Play_CameraSetAtEye(play, this->unk_2CA, &this->unk_2E8, &this->unk_2DC);
+    Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
 
     if ((this->unk_2B4 == 0) && (D_80B2B2E4 == 3)) {
         D_80B2B2E0 = D_80B2B2EC = D_80B2B2E4 = 0;

@@ -60,7 +60,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -283,7 +283,7 @@ void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 255, sPtr->alpha);
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
-            Matrix_RotateZF(DEGTORAD(play->state.frames * 20.0f), MTXMODE_APPLY);
+            Matrix_RotateZF(DEGF_TO_RADF(play->state.frames * 20.0f), MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB58);
         }

@@ -4,12 +4,14 @@ PROGRAMS := vtxdis
 
 all: $(PROGRAMS)
 	$(MAKE) -C ZAPD
+	$(MAKE) -C fado
 	$(MAKE) -C buildtools
 	$(MAKE) -C z64compress
 
 clean:
 	$(RM) $(PROGRAMS)
 	$(MAKE) -C ZAPD clean
+	$(MAKE) -C fado clean
 	$(MAKE) -C buildtools clean
 	$(MAKE) -C z64compress clean
 

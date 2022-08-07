@@ -357,7 +357,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
                         this->isNewAccount = true;
                     }
 
-                    func_801159EC((s16)-play->msgCtx.bankRupeesSelected);
+                    Rupees_ChangeBy(-play->msgCtx.bankRupeesSelected);
                     this->previousBankValue = gSaveContext.save.bankRupees & 0xFFFF;
                     gSaveContext.save.bankRupees =
                         ((gSaveContext.save.bankRupees & 0xFFFF) + play->msgCtx.bankRupeesSelected) |
@@ -425,7 +425,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
                         (((gSaveContext.save.bankRupees & 0xFFFF) - play->msgCtx.bankRupeesSelected) -
                          this->serviceFee) |
                         (gSaveContext.save.bankRupees & 0xFFFF0000);
-                    func_801159EC(play->msgCtx.bankRupeesSelected);
+                    Rupees_ChangeBy(play->msgCtx.bankRupeesSelected);
                 }
             } else {
                 func_8019F230();
@@ -472,25 +472,30 @@ void EnGinkoMan_SetupDialogue(EnGinkoMan* this) {
 
 void EnGinkoMan_Dialogue(EnGinkoMan* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 2:
+        case TEXT_STATE_CLOSING:
             EnGinkoMan_SetupIdle(this);
             break;
-        case 4:
+
+        case TEXT_STATE_CHOICE:
             EnGinkoMan_WaitForDialogueInput(this, play);
             break;
-        case 5:
+
+        case TEXT_STATE_5:
             EnGinkoMan_DepositDialogue(this, play);
             break;
-        case 6:
+
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 this->isStampChecked = false;
                 EnGinkoMan_SetupIdle(this);
             }
             break;
-        case 14:
+
+        case TEXT_STATE_14:
             EnGinkoMan_WaitForRupeeCount(this, play);
             break;
-        case 0:
+
+        case TEXT_STATE_NONE:
         default:
             break;
     }
@@ -547,7 +552,7 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
 
         EnGinkoMan_SetupDialogue(this);
     } else if (this->curTextId == 0x45D) { // saved up 5000 rupees for HP
-        if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
+        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
             if (!(gSaveContext.save.weekEventReg[59] & 8)) {
                 gSaveContext.save.weekEventReg[59] |= 8;
             }

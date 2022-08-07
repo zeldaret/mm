@@ -65,30 +65,30 @@
         <Texture Name="gGekkoSpots3Tex" OutName="gekko_spots_3" Format="ci8" Width="32" Height="32" Offset="0xD828" />
         <Texture Name="gGekkoSwirlTex" OutName="gekko_swirl" Format="ci8" Width="16" Height="32" Offset="0xDC28" />
         
-        <Limb Name="gGekkoRootLimb" Type="Standard" Offset="0xDE28" />
-        <Limb Name="gGekkoWaistLimb" Type="Standard" Offset="0xDE34" />
-        <Limb Name="gGekkoLeftThighLimb" Type="Standard" Offset="0xDE40" />
-        <Limb Name="gGekkoLeftShinLimb" Type="Standard" Offset="0xDE4C" />
-        <Limb Name="gGekkoLeftAnkleLimb" Type="Standard" Offset="0xDE58" />
-        <Limb Name="gGekkoLeftFootLimb" Type="Standard" Offset="0xDE64" />
-        <Limb Name="gGekkoRightThighLimb" Type="Standard" Offset="0xDE70" />
-        <Limb Name="gGekkoRightShinLimb" Type="Standard" Offset="0xDE7C" />
-        <Limb Name="gGekkoRightAnkleLimb" Type="Standard" Offset="0xDE88" />
-        <Limb Name="gGekkoRightFootLimb" Type="Standard" Offset="0xDE94" />
-        <Limb Name="gGekkoTorsoLimb" Type="Standard" Offset="0xDEA0" />
-        <Limb Name="gGekkoLeftUpperArmLimb" Type="Standard" Offset="0xDEAC" />
-        <Limb Name="gGekkoLeftForearmLimb" Type="Standard" Offset="0xDEB8" />
-        <Limb Name="gGekkoLeftWristLimb" Type="Standard" Offset="0xDEC4" />
-        <Limb Name="gGekkoLeftHandLimb" Type="Standard" Offset="0xDED0" />
-        <Limb Name="gGekkoRightUpperArmLimb" Type="Standard" Offset="0xDEDC" />
-        <Limb Name="gGekkoRightForearmLimb" Type="Standard" Offset="0xDEE8" />
-        <Limb Name="gGekkoRightWristLimb" Type="Standard" Offset="0xDEF4" />
-        <Limb Name="gGekkoRightHandLimb" Type="Standard" Offset="0xDF00" />
-        <Limb Name="gGekkoHeadLimb" Type="Standard" Offset="0xDF0C" />
-        <Limb Name="gGekkoJawLimb" Type="Standard" Offset="0xDF18" />
-        <Limb Name="gGekkoLeftEyeLimb" Type="Standard" Offset="0xDF24" />
-        <Limb Name="gGekkoRightEyeLimb" Type="Standard" Offset="0xDF30" />
-        <Skeleton Name="gGekkoSkel" Type="Flex" LimbType="Standard" Offset="0xDF98" />
+        <Limb Name="gGekkoRootLimb" Type="Standard" EnumName="GEKKO_LIMB_ROOT" Offset="0xDE28" />
+        <Limb Name="gGekkoWaistLimb" Type="Standard" EnumName="GEKKO_LIMB_WAIST" Offset="0xDE34" />
+        <Limb Name="gGekkoLeftThighLimb" Type="Standard" EnumName="GEKKO_LIMB_LEFT_THIGH" Offset="0xDE40" />
+        <Limb Name="gGekkoLeftShinLimb" Type="Standard" EnumName="GEKKO_LIMB_LEFT_SHIN" Offset="0xDE4C" />
+        <Limb Name="gGekkoLeftAnkleLimb" Type="Standard" EnumName="GEKKO_LIMB_LEFT_ANKLE" Offset="0xDE58" />
+        <Limb Name="gGekkoLeftFootLimb" Type="Standard" EnumName="GEKKO_LIMB_LEFT_FOOT" Offset="0xDE64" />
+        <Limb Name="gGekkoRightThighLimb" Type="Standard" EnumName="GEKKO_LIMB_RIGHT_THIGH" Offset="0xDE70" />
+        <Limb Name="gGekkoRightShinLimb" Type="Standard" EnumName="GEKKO_LIMB_RIGHT_SHIN" Offset="0xDE7C" />
+        <Limb Name="gGekkoRightAnkleLimb" Type="Standard" EnumName="GEKKO_LIMB_RIGHT_ANKLE" Offset="0xDE88" />
+        <Limb Name="gGekkoRightFootLimb" Type="Standard" EnumName="GEKKO_LIMB_RIGHT_FOOT" Offset="0xDE94" />
+        <Limb Name="gGekkoTorsoLimb" Type="Standard" EnumName="GEKKO_LIMB_TORSO" Offset="0xDEA0" />
+        <Limb Name="gGekkoLeftUpperArmLimb" Type="Standard" EnumName="GEKKO_LIMB_LEFT_UPPER_ARM" Offset="0xDEAC" />
+        <Limb Name="gGekkoLeftForearmLimb" Type="Standard" EnumName="GEKKO_LIMB_LEFT_FOREARM" Offset="0xDEB8" />
+        <Limb Name="gGekkoLeftWristLimb" Type="Standard" EnumName="GEKKO_LIMB_LEFT_WRIST" Offset="0xDEC4" />
+        <Limb Name="gGekkoLeftHandLimb" Type="Standard" EnumName="GEKKO_LIMB_LEFT_HAND" Offset="0xDED0" />
+        <Limb Name="gGekkoRightUpperArmLimb" Type="Standard" EnumName="GEKKO_LIMB_RIGHT_UPPER_ARM" Offset="0xDEDC" />
+        <Limb Name="gGekkoRightForearmLimb" Type="Standard" EnumName="GEKKO_LIMB_RIGHT_FOREARM" Offset="0xDEE8" />
+        <Limb Name="gGekkoRightWristLimb" Type="Standard" EnumName="GEKKO_LIMB_RIGHT_WRIST" Offset="0xDEF4" />
+        <Limb Name="gGekkoRightHandLimb" Type="Standard" EnumName="GEKKO_LIMB_RIGHT_HAND" Offset="0xDF00" />
+        <Limb Name="gGekkoHeadLimb" Type="Standard" EnumName="GEKKO_LIMB_HEAD" Offset="0xDF0C" />
+        <Limb Name="gGekkoJawLimb" Type="Standard" EnumName="GEKKO_LIMB_JAW" Offset="0xDF18" />
+        <Limb Name="gGekkoLeftEyeLimb" Type="Standard" EnumName="GEKKO_LIMB_LEFT_EYE" Offset="0xDF24" />
+        <Limb Name="gGekkoRightEyeLimb" Type="Standard" EnumName="GEKKO_LIMB_RIGHT_EYE" Offset="0xDF30" />
+        <Skeleton Name="gGekkoSkel" Type="Flex" LimbType="Standard" LimbNone="GEKKO_LIMB_NONE" LimbMax="GEKKO_LIMB_MAX" EnumName="GekkoLimbs" Offset="0xDF98" />
 
         <Animation Name="gGekkoWindupPunchAnim" Offset="0xF048" />
         <Animation Name="gGekkoSwimUpAnim" Offset="0xF3F0" />
