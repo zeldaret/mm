@@ -74,7 +74,7 @@ void OceffWipe4_Draw(Actor* thisx, PlayState* play) {
         z = 1220.0f;
     }
 
-    vtxPtr = sFrustumVtx;
+    vtxPtr = sOceffWipe4FrustumVtx;
     if (this->counter >= 30) {
         alpha = 12 * (50 - this->counter);
     } else {
@@ -98,15 +98,15 @@ void OceffWipe4_Draw(Actor* thisx, PlayState* play) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     if (this->actor.params == OCEFF_WIPE4_UNUSED) {
-        gSPDisplayList(POLY_XLU_DISP++, sUnusedMaterialDL);
+        gSPDisplayList(POLY_XLU_DISP++, sOceffWipe4UnusedMaterialDL);
     } else {
-        gSPDisplayList(POLY_XLU_DISP++, sMaterialDL);
+        gSPDisplayList(POLY_XLU_DISP++, sOceffWipe4MaterialDL);
     }
 
-    gSPDisplayList(POLY_XLU_DISP++, sMaterial2DL);
+    gSPDisplayList(POLY_XLU_DISP++, sOceffWipe4Material2DL);
     gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, scroll * 2, scroll * -2, 32,
                                                      64, 1, scroll * -1, scroll, 32, 32));
-    gSPDisplayList(POLY_XLU_DISP++, &sMaterial2DL[11]);
+    gSPDisplayList(POLY_XLU_DISP++, &sOceffWipe4Material2DL[11]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
