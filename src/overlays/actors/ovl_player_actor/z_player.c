@@ -3153,11 +3153,8 @@ Color_RGBA8 D_8085E3A8 = { 0, 0x80, 0x80, 0 };
 extern LinkAnimationHeader* D_8085BE84[PLAYER_ANIMGROUP_MAX * PLAYER_ANIMTYPE_MAX];
 
 extern f32 D_8085D3FC[2];
-extern Input* D_80862B44;
 
-extern Vec3f D_80862AF0; /* type too large by 8 */
-extern f32 D_80862AF4;
-extern f32 D_80862AF8;
+extern Vec3f D_80862AF0;
 extern f32 D_80862AFC;
 extern s16 D_80862B00;
 extern s16 D_80862B02;
@@ -3202,6 +3199,57 @@ extern Color_RGBA8 D_8085D3F8;
 extern f32 D_8085D3FC[2];
 extern f32 D_8085D404[3];
 extern f32 D_8085D410[3];
+
+// bss
+
+Vec3f D_80862AF0;
+
+f32 D_80862AFC;
+
+s16 D_80862B00;
+
+s16 D_80862B02;
+
+s32 D_80862B04;
+
+s32 D_80862B08;
+
+s32 D_80862B0C;
+
+u32 D_80862B10;
+
+s16 D_80862B14;
+
+s16 D_80862B16;
+
+f32 D_80862B18;
+
+s32 D_80862B1C;
+
+s32 D_80862B20;
+
+s32 D_80862B24;
+
+s16 D_80862B28;
+
+s32 D_80862B2C;
+
+Vec3f D_80862B30;
+
+f32 D_80862B3C;
+
+u32 D_80862B40;
+
+Input* D_80862B44;
+
+s32 D_80862B48;
+
+s32 D_80862B4C;
+
+EnvLightSettings D_80862B50;
+
+s32 D_80862B6C;
+
 
 s32 func_8082DA90(PlayState* play) {
     return play->transitionTrigger != TRANS_TRIGGER_OFF || play->transitionMode != TRANS_MODE_OFF;
@@ -11571,6 +11619,9 @@ void Player_Update(Actor* thisx, PlayState* play) {
     MREG(55) = this->actor.world.rot.y;
 }
 #else
+#if 0
+Vec3f D_80862AF0;
+#endif
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/Player_Update.s")
 #endif
 
@@ -16451,7 +16502,7 @@ void func_808573A4(Player* arg0, PlayState* arg1) {
         func_800B8F98(&arg0->actor, func_8082E078(arg0, NA_SE_PL_SLIP_LEVEL - SFX_FLAG));
     }
 }
-#else;
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808573A4.s")
 #endif
 
