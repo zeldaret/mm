@@ -445,7 +445,7 @@ void EnFg_UpdateDust(EnFgEffectDust* dustEffect) {
 }
 
 TexturePtr sDustTex[] = {
-    gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
+    gEffDust8Tex, gEffDust7Tex, gEffDust6Tex, gEffDust5Tex, gEffDust4Tex, gEffDust3Tex, gEffDust2Tex, gEffDust1Tex,
 };
 
 void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect) {

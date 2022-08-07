@@ -39,7 +39,7 @@ static EffectSsUpdateFunc sUpdateFuncs[] = {
 };
 
 static TexturePtr dustTextures[] = {
-    gDust1Tex, gDust2Tex, gDust3Tex, gDust4Tex, gDust5Tex, gDust6Tex, gDust7Tex, gDust8Tex,
+    gEffDust1Tex, gEffDust2Tex, gEffDust3Tex, gEffDust4Tex, gEffDust5Tex, gEffDust6Tex, gEffDust7Tex, gEffDust8Tex,
 };
 
 u32 EffectSsDust_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
@@ -53,7 +53,7 @@ u32 EffectSsDust_Init(PlayState* play, u32 index, EffectSs* this, void* initPara
     this->update = sUpdateFuncs[initParams->updateMode];
     this->draw = EffectSsDust_Draw;
 
-    if (initParams->drawFlags & 4) {
+    if (initParams->drawFlags & DUST_DRAWFLAG_RAND_COLOR_OFFSET) {
         s32 randColorOffset = Rand_ZeroOne() * 20.0f - 10.0f;
 
         this->rPrimColorR = initParams->primColor.r + randColorOffset;
@@ -110,15 +110,15 @@ void EffectSsDust_Draw(PlayState* play, u32 index, EffectSs* this) {
         POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
         gDPPipeSync(POLY_XLU_DISP++);
 
-        if (this->rDrawFlags & 1) {
+        if (this->rDrawFlags & DUST_DRAWFLAG1) {
             gDPSetCombineLERP(POLY_XLU_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0,
                               COMBINED, 0, SHADE, 0, 0, 0, 0, COMBINED);
             gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_CLD_SURF2);
             gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
-        } else if (this->rDrawFlags & 2) {
+        } else if (this->rDrawFlags & DUST_DRAWFLAG2) {
             gDPSetRenderMode(POLY_XLU_DISP++, G_RM_PASS, G_RM_ZB_CLD_SURF2);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
-        } else {
+        } else { // DUST_DRAWFLAG0
             gSPClearGeometryMode(POLY_XLU_DISP++, G_LIGHTING);
         }
 
