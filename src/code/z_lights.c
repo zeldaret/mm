@@ -380,20 +380,20 @@ void Lights_GlowCheck(PlayState* play) {
 
         if (light->info->type == LIGHT_POINT_GLOW) {
             Vec3f pos;
-            Vec3f multDest;
-            f32 wDest;
+            Vec3f projectedPos;
+            f32 invW;
 
             pos.x = params->x;
             pos.y = params->y;
             pos.z = params->z;
-            Actor_GetProjectedPos(play, &pos, &multDest, &wDest);
+            Actor_GetProjectedPos(play, &pos, &projectedPos, &invW);
 
             params->drawGlow = 0;
 
-            if ((multDest.z > 1) && (fabsf(multDest.x * wDest) < 1) && (fabsf(multDest.y * wDest) < 1)) {
-                s32 wX = multDest.x * wDest * 160 + 160;
-                s32 wY = multDest.y * wDest * -120 + 120;
-                s32 wZ = (s32)((multDest.z * wDest) * 16352) + 16352;
+            if ((projectedPos.z > 1) && (fabsf(projectedPos.x * invW) < 1) && (fabsf(projectedPos.y * invW) < 1)) {
+                s32 wX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
+                s32 wY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
+                s32 wZ = (s32)((projectedPos.z * invW) * 16352) + 16352;
                 s32 zBuf = func_80178A94(wX, wY);
 
                 if (wZ < zBuf) {

@@ -173,9 +173,9 @@ void Scene_HeaderCmdActorList(PlayState* play, SceneCmd* cmd) {
     play->actorCtx.unkC = 0;
 }
 
-// SceneTableEntry Header Command 0x02: List of cameras for actor cutscenes
+// SceneTableEntry Header Command 0x02: List of camera data for actor cutscenes
 void Scene_HeaderCmdActorCutsceneCamList(PlayState* play, SceneCmd* cmd) {
-    play->csCamData = Lib_SegmentedToVirtual(cmd->csCameraList.segment);
+    play->actorCsCamList = Lib_SegmentedToVirtual(cmd->actorCsCamList.segment);
 }
 
 // SceneTableEntry Header Command 0x03: Collision Header
@@ -192,8 +192,8 @@ void Scene_HeaderCmdColHeader(PlayState* play, SceneCmd* cmd) {
         colHeader->surfaceTypeList = Lib_SegmentedToVirtual(colHeader->surfaceTypeList);
     }
 
-    if (colHeader->cameraDataList != NULL) {
-        colHeader->cameraDataList = Lib_SegmentedToVirtual(colHeader->cameraDataList);
+    if (colHeader->bgCamList != NULL) {
+        colHeader->bgCamList = Lib_SegmentedToVirtual(colHeader->bgCamList);
     }
 
     if (colHeader->waterBoxes != NULL) {
@@ -237,9 +237,9 @@ void Scene_HeaderCmdRoomBehavior(PlayState* play, SceneCmd* cmd) {
     play->roomCtx.currRoom.unk3 = cmd->roomBehavior.gpFlag1;
     play->roomCtx.currRoom.unk2 = cmd->roomBehavior.gpFlag2 & 0xFF;
     play->roomCtx.currRoom.unk5 = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
-    play->msgCtx.unk12044 = (cmd->roomBehavior.gpFlag2 >> 0xa) & 1;
-    play->roomCtx.currRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xb) & 1;
-    play->envCtx.unk_E2 = (cmd->roomBehavior.gpFlag2 >> 0xc) & 1;
+    play->msgCtx.unk12044 = (cmd->roomBehavior.gpFlag2 >> 0xA) & 1;
+    play->roomCtx.currRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xB) & 1;
+    play->envCtx.unk_E2 = (cmd->roomBehavior.gpFlag2 >> 0xC) & 1;
 }
 
 // SceneTableEntry Header Command 0x0A: Mesh Header
@@ -376,7 +376,7 @@ void Scene_HeaderCmdSkyboxDisables(PlayState* play, SceneCmd* cmd) {
 // SceneTableEntry Header Command 0x10: Time Settings
 void Scene_HeaderCmdTimeSettings(PlayState* play, SceneCmd* cmd) {
     if (cmd->timeSettings.hour != 0xFF && cmd->timeSettings.min != 0xFF) {
-        gSaveContext.environmentTime = gSaveContext.save.time =
+        gSaveContext.skyboxTime = gSaveContext.save.time =
             (u16)(((cmd->timeSettings.hour + (cmd->timeSettings.min / 60.0f)) * 60.0f) / 0.021972656f);
     }
 
@@ -398,20 +398,17 @@ void Scene_HeaderCmdTimeSettings(PlayState* play, SceneCmd* cmd) {
     play->envCtx.unk_8 = (Math_CosS(((void)0, gSaveContext.save.time) - 0x8000) * 120.0f) * 25.0f;
     play->envCtx.unk_C = (Math_CosS(((void)0, gSaveContext.save.time) - 0x8000) * 20.0f) * 25.0f;
 
-    if (play->envCtx.timeIncrement == 0 && gSaveContext.save.cutscene < 0xFFF0) {
-        gSaveContext.environmentTime = gSaveContext.save.time;
+    if ((play->envCtx.timeIncrement == 0) && (gSaveContext.save.cutscene < 0xFFF0)) {
+        gSaveContext.skyboxTime = gSaveContext.save.time;
 
-        if (gSaveContext.environmentTime >= CLOCK_TIME(4, 0) && gSaveContext.environmentTime < CLOCK_TIME(6, 30)) {
-            gSaveContext.environmentTime = CLOCK_TIME(5, 0);
-        } else if (gSaveContext.environmentTime >= CLOCK_TIME(6, 30) &&
-                   gSaveContext.environmentTime < CLOCK_TIME(8, 0)) {
-            gSaveContext.environmentTime = CLOCK_TIME(8, 0);
-        } else if (gSaveContext.environmentTime >= CLOCK_TIME(16, 0) &&
-                   gSaveContext.environmentTime < CLOCK_TIME(17, 0)) {
-            gSaveContext.environmentTime = CLOCK_TIME(17, 0);
-        } else if (gSaveContext.environmentTime >= CLOCK_TIME(18, 0) &&
-                   gSaveContext.environmentTime < CLOCK_TIME(19, 0)) {
-            gSaveContext.environmentTime = CLOCK_TIME(19, 0);
+        if ((gSaveContext.skyboxTime >= CLOCK_TIME(4, 0)) && (gSaveContext.skyboxTime < CLOCK_TIME(6, 30))) {
+            gSaveContext.skyboxTime = CLOCK_TIME(5, 0);
+        } else if ((gSaveContext.skyboxTime >= CLOCK_TIME(6, 30)) && (gSaveContext.skyboxTime < CLOCK_TIME(8, 0))) {
+            gSaveContext.skyboxTime = CLOCK_TIME(8, 0);
+        } else if ((gSaveContext.skyboxTime >= CLOCK_TIME(16, 0)) && (gSaveContext.skyboxTime < CLOCK_TIME(17, 0))) {
+            gSaveContext.skyboxTime = CLOCK_TIME(17, 0);
+        } else if ((gSaveContext.skyboxTime >= CLOCK_TIME(18, 0)) && (gSaveContext.skyboxTime < CLOCK_TIME(19, 0))) {
+            gSaveContext.skyboxTime = CLOCK_TIME(19, 0);
         }
     }
 }

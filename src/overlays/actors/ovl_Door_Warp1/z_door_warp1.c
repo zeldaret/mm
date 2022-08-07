@@ -446,7 +446,8 @@ void func_808B977C(DoorWarp1* this, PlayState* play) {
     if (func_808B866C(this, play) && !Play_InCsMode(play)) {
         Player* player = GET_PLAYER(play);
 
-        Audio_PlaySfxGeneral(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+        Audio_PlaySfxGeneral(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
+                             &gSfxDefaultReverb);
         func_800B7298(play, &this->dyna.actor, 9);
         player->unk_3A0.x = this->dyna.actor.world.pos.x;
         player->unk_3A0.z = this->dyna.actor.world.pos.z;
@@ -546,7 +547,7 @@ void func_808B9CE8(DoorWarp1* this, PlayState* play) {
     }
 
     if (!Actor_HasParent(&this->dyna.actor, play)) {
-        Actor_PickUp(&this->dyna.actor, play, func_808B849C(this, play) + 84, 30.0f, 80.0f);
+        Actor_PickUp(&this->dyna.actor, play, (GI_REMAINS_ODOLWA - 1) + func_808B849C(this, play), 30.0f, 80.0f);
         return;
     }
 
@@ -619,7 +620,8 @@ void func_808B9FD0(DoorWarp1* this, PlayState* play) {
         ActorCutscene_SetIntentToPlay(play->playerActorCsIds[9]);
     } else {
         ActorCutscene_Start(play->playerActorCsIds[9], NULL);
-        Audio_PlaySfxGeneral(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+        Audio_PlaySfxGeneral(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
+                             &gSfxDefaultReverb);
         Animation_ChangeImpl(&this->skelAnime, &object_warp1_Anim_001374, 1.0f,
                              Animation_GetLastFrame(&object_warp1_Anim_001374.common),
                              Animation_GetLastFrame(&object_warp1_Anim_001374.common), 2, 40.0f, 1);

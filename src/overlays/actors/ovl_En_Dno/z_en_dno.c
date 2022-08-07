@@ -146,20 +146,20 @@ void func_80A715DC(EnDno* this, PlayState* play) {
     Vec3f sp70;
 
     do {
-        crace = (BgCraceMovebg*)SubS_FindActor(play, &crace->actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
+        crace = (BgCraceMovebg*)SubS_FindActor(play, &crace->dyna.actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (crace != NULL) {
-            if (ENDNO_GET_F(&crace->actor) == ENDNO_GET_F_0 && !(crace->unk_170 & 1)) {
-                if (SubS_LineSegVsPlane(&crace->actor.home.pos, &crace->actor.home.rot, &D_80A73B2C,
+            if (ENDNO_GET_F(&crace->dyna.actor) == ENDNO_GET_F_0 && !(crace->unk170 & 1)) {
+                if (SubS_LineSegVsPlane(&crace->dyna.actor.home.pos, &crace->dyna.actor.home.rot, &D_80A73B2C,
                                         &this->actor.prevPos, &this->actor.world.pos, &sp88)) {
-                    Math_Vec3f_Diff(&this->actor.world.pos, &crace->actor.home.pos, &sp7C);
-                    Matrix_RotateYS(-crace->actor.home.rot.y, MTXMODE_NEW);
+                    Math_Vec3f_Diff(&this->actor.world.pos, &crace->dyna.actor.home.pos, &sp7C);
+                    Matrix_RotateYS(-crace->dyna.actor.home.rot.y, MTXMODE_NEW);
                     Matrix_MultVec3f(&sp7C, &sp70);
                     if ((fabsf(sp70.x) < 100.0f) && (sp70.y >= -10.0f) && (sp70.y <= 180.0f) && (sp70.z < 0.0f)) {
-                        crace->unk_170 |= 1;
+                        crace->unk170 |= 1;
                     }
                 }
             }
-            crace = (BgCraceMovebg*)crace->actor.next;
+            crace = (BgCraceMovebg*)crace->dyna.actor.next;
         }
     } while (crace != NULL);
 }
@@ -610,11 +610,11 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                 case 0x802:
                     if (Message_ShouldAdvance(play)) {
                         if (INV_CONTENT(ITEM_MASK_SCENTS) == ITEM_MASK_SCENTS) {
-                            this->unk_458 = GI_RUPEE_RED;
+                            this->getItemId = GI_RUPEE_RED;
                         } else {
-                            this->unk_458 = GI_MASK_SCENTS;
+                            this->getItemId = GI_MASK_SCENTS;
                         }
-                        Actor_PickUp(&this->actor, play, this->unk_458, 60.0f, 60.0f);
+                        Actor_PickUp(&this->actor, play, this->getItemId, 60.0f, 60.0f);
                         func_801477B4(play);
                         func_80A72B84(this, play);
                     }
@@ -678,7 +678,7 @@ void func_80A72BA4(EnDno* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80A72598;
     } else {
-        Actor_PickUp(&this->actor, play, this->unk_458, 60.0f, 60.0f);
+        Actor_PickUp(&this->actor, play, this->getItemId, 60.0f, 60.0f);
     }
 }
 
