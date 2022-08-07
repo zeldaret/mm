@@ -39,7 +39,6 @@ Week Event Flags:
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 #define THIS ((EnSGoro*)thisx)
 
-#define EN_S_GORO_EYETEX_INDEX_MAX 3
 #define EN_S_GORO_ROLLEDUP_YOFFSET 14.0f
 #define EN_S_GORO_OFTYPE_WSHRINE (EN_S_GORO_GET_MAIN_TYPE(&this->actor) < 3)
 
@@ -925,7 +924,7 @@ void EnSGoro_UpdateEyes(EnSGoro* this) {
     if (this->actionFlags & EN_S_GORO_ACTIONFLAG_EYESOPEN) {
         if (DECR(this->eyeTimer) == 0) {
             this->eyeTexIndex++;
-            if (this->eyeTexIndex >= EN_S_GORO_EYETEX_INDEX_MAX) {
+            if (this->eyeTexIndex > EN_S_GORO_EYETEX_CLOSED) {
                 this->eyeTimer = Rand_S16Offset(30, 30);
                 this->eyeTexIndex = EN_S_GORO_EYETEX_OPEN;
             }

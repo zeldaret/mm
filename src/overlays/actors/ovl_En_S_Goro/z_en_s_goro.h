@@ -21,7 +21,7 @@ typedef struct EnSGoro {
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ u16 actionFlags;
     /* 0x1DE */ u16 bombbuyFlags;
-    /* 0x1E0 */ UNK_TYPE1 unk_1E0[0xC]; //No idea what this is.
+    /* 0x1E0 */ UNK_TYPE1 unk_1E0[0xC];
     /* 0x1EC */ s16 eyeTexIndex;
     /* 0x1EE */ s16 eyeTimer;
     /* 0x1F0 */ s16 loseAttentionTimer;
