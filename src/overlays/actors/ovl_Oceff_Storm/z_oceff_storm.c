@@ -175,7 +175,7 @@ void OceffStorm_Draw2(Actor* thisx, PlayState* play) {
     gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 200, 200, 150, this->primColorAlpha);
-    gSPDisplayList(POLY_XLU_DISP++, &sMaterialDL);
+    gSPDisplayList(POLY_XLU_DISP++, &sOceffStormMaterialDL);
     gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, 0, scroll * 8, scroll * 4, 0x40, 0x40, 1,
                                                      scroll * 4, scroll * 4, 0x40, 0x40));
     gSPTextureRectangle(POLY_XLU_DISP++, 0, 0, 0x0500, 0x03C0, G_TX_RENDERTILE, 0, 0, 0x008C, -0x008C);
@@ -186,7 +186,7 @@ void OceffStorm_Draw2(Actor* thisx, PlayState* play) {
 void OceffStorm_Draw(Actor* thisx, PlayState* play) {
     u32 scroll = play->state.frames & 0xFFF;
     OceffStorm* this = (OceffStorm*)thisx;
-    Vtx* vtxPtr = sCylinderVtx;
+    Vtx* vtxPtr = sOceffStormCylinderVtx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -202,10 +202,10 @@ void OceffStorm_Draw(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(POLY_XLU_DISP++, &sCylinderMaterialDL);
+    gSPDisplayList(POLY_XLU_DISP++, &sOceffStormCylinderMaterialDL);
     gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, scroll * 4, (0 - scroll) * 8,
                                                      32, 32, 1, scroll * 8, (0 - scroll) * 12, 32, 32));
-    gSPDisplayList(POLY_XLU_DISP++, &sCylinderModelDL);
+    gSPDisplayList(POLY_XLU_DISP++, &sOceffStormCylinderModelDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 
