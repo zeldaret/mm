@@ -45,8 +45,8 @@ void DmChar09_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16
         frameCount = animationInfo->frameCount;
     }
 
-    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame, frameCount,
-                     animationInfo->mode, animationInfo->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
+                     frameCount, animationInfo->mode, animationInfo->morphFrames);
 }
 
 void DmChar09_Init(Actor* thisx, PlayState* play) {
