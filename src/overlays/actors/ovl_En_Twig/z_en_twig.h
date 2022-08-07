@@ -7,9 +7,9 @@ struct EnTwig;
 
 typedef void (*EnTwigActionFunc)(struct EnTwig*, PlayState*);
 
-#define RACERING_GET_PARAM1(thisx) ((thisx)->params & 0xF)
-#define RACERING_GET_PARAM2(thisx) (((thisx)->params >> 4) & 0x1F)
-#define RACERING_GET_PARAM3(thisx) (((thisx)->params >> 9) & 0x7F)
+#define RACERING_GET_PARAM_F(thisx) ((thisx)->params & 0xF)
+#define RACERING_GET_PARAM_1F0(thisx) (((thisx)->params >> 4) & 0x1F)
+#define RACERING_GET_PARAM_FE0(thisx) (((thisx)->params >> 9) & 0x7F)
 
 typedef struct EnTwig {
     /* 0x000 */ DynaPolyActor dyna;

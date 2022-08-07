@@ -137,7 +137,7 @@ void func_80A94B20(PlayState* play) {
     do {
         ring = SubS_FindActor(play, ring, ACTORCAT_MISC, ACTOR_EN_TWIG);
         if (ring != NULL) {
-            if (RACERING_GET_PARAM1(ring) == 1) {
+            if (RACERING_GET_PARAM_F(ring) == 1) {
                 Actor_MarkForDeath(ring);
             }
             ring = ring->next;
@@ -153,7 +153,7 @@ s32 func_80A94B98(EnAz* this, PlayState* play) {
     do {
         if (1) {}
         ring = (EnTwig*)SubS_FindActor(play, misc, ACTORCAT_MISC, ACTOR_EN_TWIG);
-        if ((ring != NULL) && (RACERING_GET_PARAM1(&ring->dyna.actor) == 1) && !(ring->unk_16C & 1)) {
+        if ((ring != NULL) && (RACERING_GET_PARAM_F(&ring->dyna.actor) == 1) && !(ring->unk_16C & 1)) {
             ret = true;
             break;
         }
@@ -181,7 +181,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
     this->unk_374 = 0;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 1;
-    switch (BEAVER_GET_PARAM1(thisx)) {
+    switch (BEAVER_GET_PARAM_F00(thisx)) {
         case 0:
             phi_v1 = (gSaveContext.save.entranceIndex == 0x8E00) && (gSaveContext.save.weekEventReg[93] & 1);
             phi_v1 = !phi_v1;
@@ -215,9 +215,9 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
-    this->unk_2F8 = D_80A9915C[BEAVER_GET_PARAM1(thisx)];
-    if (BEAVER_GET_PARAM1(thisx) >= 0) {
-        sp4E = D_80A9914C[BEAVER_GET_PARAM1(thisx)];
+    this->unk_2F8 = D_80A9915C[BEAVER_GET_PARAM_F00(thisx)];
+    if (BEAVER_GET_PARAM_F00(thisx) >= 0) {
+        sp4E = D_80A9914C[BEAVER_GET_PARAM_F00(thisx)];
     } else {
         sp4E = -1;
     }
@@ -305,8 +305,8 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
                 }
             }
             if (this->unk_374 & 1) {
-                SubS_CopyPointFromPathList(play->setupPathList, BEAVER_GET_PARAM2(thisx),
-                                           play->setupPathList[BEAVER_GET_PARAM2(thisx)].count - 1, &D_80A99E80);
+                SubS_CopyPointFromPathList(play->setupPathList, BEAVER_GET_PARAM_FF(thisx),
+                                           play->setupPathList[BEAVER_GET_PARAM_FF(thisx)].count - 1, &D_80A99E80);
             }
             if (gSaveContext.save.weekEventReg[24] & 4) {
                 if (this->unk_374 & 2) {
@@ -359,7 +359,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
         do {
             this->brother = (EnAz*)SubS_FindActor(play, &this->brother->actor, ACTORCAT_NPC, ACTOR_EN_AZ);
             if (this->brother != NULL) {
-                if (sp4E == BEAVER_GET_PARAM1(&this->brother->actor)) {
+                if (sp4E == BEAVER_GET_PARAM_F00(&this->brother->actor)) {
                     break;
                 }
                 this->brother = (EnAz*)this->brother->actor.next;
@@ -575,7 +575,7 @@ void func_80A95DA0(EnAz* this, PlayState* play) {
     ActorPathing* sp40 = &this->unk_300;
 
     SubS_ActorPathing_Init(play, &this->actor.world.pos, &this->actor, sp40, play->setupPathList,
-                           this->actor.params & 0xFF, 0, 0, 1, 1);
+                           BEAVER_GET_PARAM_FF(&this->actor), 0, 0, 1, 1);
     this->unk_36C = 4.0f;
     this->actor.speedXZ = 4.0f;
     this->actor.gravity = 0.0f;
@@ -1425,7 +1425,7 @@ void func_80A97E48(EnAz* this, PlayState* play) {
 
 void func_80A97EAC(EnAz* this, PlayState* play) {
     SubS_ActorPathing_Init(play, &this->actor.world.pos, &this->actor, &this->unk_300, play->setupPathList,
-                           this->actor.params & 0xFF, 0, 0, 1, 0);
+                           BEAVER_GET_PARAM_FF(&this->actor), 0, 0, 1, 0);
     this->unk_36C = 8.0f;
     this->actor.speedXZ = 8.0f;
     this->actor.gravity = 0.0f;
@@ -1449,7 +1449,7 @@ void func_80A97F9C(EnAz* this, PlayState* play) {
         SQ(1000.0f)) {
         this->unk_374 |= 0x1000;
     }
-    if (!(this->unk_300.flags & 0x20)) {
+    if (!(this->unk_300.flags & ACTOR_PATHING_REACHED_END_PERMANENT)) {
         SubS_ActorPathing_Update(play, &this->unk_300, func_80A982E0, func_80A95B34, SubS_ActorPathing_MoveWithGravity,
                                  SubS_ActorPathing_SetNextPoint);
     }

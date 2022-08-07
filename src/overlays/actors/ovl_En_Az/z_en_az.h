@@ -7,8 +7,8 @@ struct EnAz;
 
 typedef void (*EnAzActionFunc)(struct EnAz*, PlayState*);
 
-#define BEAVER_GET_PARAM1(thisx) (((thisx)->params >> 8) & 0xF)
-#define BEAVER_GET_PARAM2(thisx) ((thisx)->params & 0xFF)
+#define BEAVER_GET_PARAM_F00(thisx) (((thisx)->params >> 8) & 0xF)
+#define BEAVER_GET_PARAM_FF(thisx) ((thisx)->params & 0xFF)
 
 typedef struct EnAz {
     /* 0x000 */ Actor actor;

@@ -62,7 +62,7 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
     s32 i;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    this->unk_160 = RACERING_GET_PARAM1(&this->dyna.actor);
+    this->unk_160 = RACERING_GET_PARAM_F(&this->dyna.actor);
     DynaPolyActor_Init(&this->dyna, 1);
     if (sColHeaders[this->unk_160] != NULL) {
         DynaPolyActor_LoadMesh(play, &this->dyna, sColHeaders[this->unk_160]);
@@ -80,7 +80,7 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
                 }
                 sRingsHaveSpawned = true;
             }
-            if (RACERING_GET_PARAM2(&this->dyna.actor) != 0) {
+            if (RACERING_GET_PARAM_1F0(&this->dyna.actor) != 0) {
                 if (!(gSaveContext.save.weekEventReg[24] & 4)) {
                     Actor_MarkForDeath(&this->dyna.actor);
                     return;
@@ -131,7 +131,7 @@ void func_80AC0AC8(EnTwig* this, PlayState* play) {
     Plane sp4C;
     Vec3f sp40;
 
-    if (sCurrentRing == RACERING_GET_PARAM3(&this->dyna.actor)) {
+    if (sCurrentRing == RACERING_GET_PARAM_FE0(&this->dyna.actor)) {
         if (this->unk_17A == 3) {
             this->unk_17A = 0;
             this->dyna.actor.shape.rot.z += 0x2000;
@@ -140,7 +140,7 @@ void func_80AC0AC8(EnTwig* this, PlayState* play) {
         }
     }
     SubS_ConstructPlane(&this->dyna.actor.world.pos, &D_80AC10D0, &this->dyna.actor.shape.rot, &sp4C);
-    if ((sCurrentRing == RACERING_GET_PARAM3(&this->dyna.actor)) &&
+    if ((sCurrentRing == RACERING_GET_PARAM_FE0(&this->dyna.actor)) &&
         Math3D_LineSegVsPlane(sp4C.normal.x, sp4C.normal.y, sp4C.normal.z, sp4C.originDist, &this->unk_180,
                               &player->bodyPartsPos[0], &sp40, 0)) {
         if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &sp40) <= SQ(this->dyna.actor.scale.x * 0.345f * 40.0f)) {
@@ -199,8 +199,8 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
         }
         play_sound(NA_SE_SY_GET_ITEM);
         play->interfaceCtx.unk_25C--;
-        sRingNotCollected[RACERING_GET_PARAM3(&this->dyna.actor)] = true;
-        if (sCurrentRing == RACERING_GET_PARAM3(&this->dyna.actor)) {
+        sRingNotCollected[RACERING_GET_PARAM_FE0(&this->dyna.actor)] = true;
+        if (sCurrentRing == RACERING_GET_PARAM_FE0(&this->dyna.actor)) {
             s32 i;
 
             for (i = 0; i < sRingCount; i++) {
