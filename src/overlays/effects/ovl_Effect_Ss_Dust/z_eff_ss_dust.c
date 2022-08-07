@@ -1,7 +1,7 @@
 /*
  * File: z_eff_ss_dust.c
  * Overlay: ovl_Effect_Ss_Dust
- * Description:
+ * Description: Dust Particle Effect
  */
 
 #include "z_eff_ss_dust.h"
