@@ -427,8 +427,8 @@ typedef struct {
     /* 0x4A */ Vec3s unk_4A[4];
     /* 0x62 */ Vec3s unk_62[4];
     /* 0x7A */ Vec3s unk_7A[4];
-    /* 0x92 */ u16 unk_92; // voice sfx offset?
-    /* 0x94 */ u16 unk_94;
+    /* 0x92 */ u16 unk_92; // voice sfx offset
+    /* 0x94 */ u16 unk_94; // (?) sfx offset
     /* 0x98 */ f32 unk_98;
     /* 0x9C */ f32 unk_9C;
     /* 0xA0 */ LinkAnimationHeader* unk_A0;
@@ -752,11 +752,10 @@ typedef struct Player {
     /* 0x390 */ Actor* rideActor;
     /* 0x394 */ u8 csMode;
     /* 0x395 */ u8 prevCsMode;
-    /* 0x396 */ u8 unk_396;
+    /* 0x396 */ u8 unk_396; // currentActorActionId?
     /* 0x397 */ u8 unk_397; // PlayerDoorType enum
     /* 0x398 */ Actor* unk_398;
-    /* 0x39C */ s16 unk_39C;
-    /* 0x39E */ s16 unk_39E;
+    /* 0x39C */ UNK_TYPE1 unk_39C[0x4];
     /* 0x3A0 */ Vec3f unk_3A0;
     /* 0x3AC */ Vec3f unk_3AC;
     /* 0x3B8 */ u16 unk_3B8;
@@ -796,7 +795,7 @@ typedef struct Player {
     /* 0xA84 */ s16 tatlTextId;
     /* 0xA86 */ s8 unk_A86;
     /* 0xA87 */ s8 exchangeItemId;
-    /* 0xA88 */ Actor* targetActor;
+    /* 0xA88 */ Actor* targetActor; // TODO: rename to talkActor or similar
     /* 0xA8C */ f32 targetActorDistance;
     /* 0xA90 */ Actor* unk_A90;
     /* 0xA94 */ f32 unk_A94;
@@ -866,7 +865,7 @@ typedef struct Player {
     /* 0xB6C */ s16 unk_B6C;
     /* 0xB6E */ s16 unk_B6E;
     /* 0xB70 */ s16 unk_B70;
-    /* 0xB72 */ u16 unk_B72; // floor type?
+    /* 0xB72 */ u16 unk_B72; // floor sfx
     /* 0xB74 */ u8 unk_B74;
     /* 0xB75 */ u8 unk_B75;
     /* 0xB76 */ s16 unk_B76;
@@ -896,7 +895,7 @@ typedef struct Player {
     /* 0xD5F */ u8 unk_D5F;
     /* 0xD60 */ f32 unk_D60;
     /* 0xD64 */ s16 unk_D64;
-    /* 0xD66 */ u16 unk_D66;
+    /* 0xD66 */ u16 unk_D66; // sfx
     /* 0xD68 */ s16 unk_D68;
     /* 0xD6A */ s8 unk_D6A;
     /* 0xD6B */ u8 unk_D6B;
