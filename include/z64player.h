@@ -405,6 +405,11 @@ typedef enum {
     /* 0x12 */ PLAYER_BODYPART_MAX
 } PlayerBodyPart;
 
+typedef struct PlayerAnimationFrame {
+    /* 0x000 */ Vec3s frameTable[PLAYER_LIMB_MAX];
+    /* 0x108 */ s16 faceInfo;
+} PlayerAnimationFrame; // size = 0x10A
+
 typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
