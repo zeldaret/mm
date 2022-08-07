@@ -2565,8 +2565,7 @@ beginseg
     name "ovl_En_Bigpamet"
     compress
     include "build/src/overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.o"
-    include "build/data/ovl_En_Bigpamet/ovl_En_Bigpamet.data.o"
-    include "build/data/ovl_En_Bigpamet/ovl_En_Bigpamet.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bigpamet/ovl_En_Bigpamet_reloc.o"
 endseg
 
 beginseg
