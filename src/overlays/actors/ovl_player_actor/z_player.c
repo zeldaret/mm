@@ -74,7 +74,7 @@ void func_808519FC(Player* this, PlayState* play);
 
 typedef struct struct_8082E224_arg1 {
     /* 0x0 */ u16 sfxId;
-    /* 0x2 */ s16 unk_2; // negative marks the end
+    /* 0x2 */ s16 flags; // negative marks the end
 } struct_8082E224_arg1;  // size = 0x4
 
 /* action funcs */
@@ -923,7 +923,7 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
         // unk_04;
         60.0f,
         // unk_08;
-        0.64705884f,
+        11.0f / 17.0f,
         // unk_0C;
         71.0f,
         // unk_10;
@@ -945,7 +945,7 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
         // unk_30;
         48.0f,
         // unk_34; // height?
-        45.29412f,
+        11.0f / 17.0f * 70.0f,
         // unk_38;
         14.0f,
         // unk_3C;
@@ -1300,9 +1300,11 @@ struct_8082E224_arg1 D_8085C8E8[] = {
     { 0, 0x4019 }, { 0, 0x401E }, { 0, 0x402C }, { 0, 0x4030 }, { 0, 0x4034 }, { 0, -0x4038 },
 };
 
-struct_8082E224_arg1 D_8085C900[] = { { NA_SE_IT_SHIELD_SWING, 0x810 },
-                                      { NA_SE_IT_SHIELD_SWING, 0x814 },
-                                      { NA_SE_IT_SHIELD_SWING, -0x846 } };
+struct_8082E224_arg1 D_8085C900[] = {
+    { NA_SE_IT_SHIELD_SWING, 0x810 },
+    { NA_SE_IT_SHIELD_SWING, 0x814 },
+    { NA_SE_IT_SHIELD_SWING, -0x846 },
+};
 
 struct_8082E224_arg1 D_8085C90C[] = {
     { NA_SE_IT_HAMMER_SWING, 0x80A },
@@ -1311,15 +1313,20 @@ struct_8082E224_arg1 D_8085C90C[] = {
     { NA_SE_VO_LI_SWORD_N, -0x2016 },
 };
 
-struct_8082E224_arg1 D_8085C91C[] = { { NA_SE_IT_SWORD_SWING, 0x827 }, { NA_SE_VO_LI_SWORD_N, -0x2027 } };
-struct_8082E224_arg1 D_8085C924[] = { { NA_SE_VO_LI_RELAX, -0x2014 } };
+struct_8082E224_arg1 D_8085C91C[] = {
+    { NA_SE_IT_SWORD_SWING, 0x827 },
+    { NA_SE_VO_LI_SWORD_N, -0x2027 },
+};
+struct_8082E224_arg1 D_8085C924[] = {
+    { NA_SE_VO_LI_RELAX, -0x2014 },
+};
 
 struct_8082E224_arg1 D_8085C928[] = {
     { NA_SE_VO_LI_POO_WAIT, 0x804 }, { NA_SE_VO_LI_POO_WAIT, 0x80C },  { NA_SE_VO_LI_POO_WAIT, 0x81E },
     { NA_SE_VO_LI_POO_WAIT, 0x83D }, { NA_SE_VO_LI_POO_WAIT, -0x844 },
 };
 
-struct_8082E224_arg1* D_8085C93C[0xC] = {
+struct_8082E224_arg1* D_8085C93C[] = {
     D_8085C8C4, D_8085C8C8, D_8085C8CC, D_8085C8D0, D_8085C8D4, D_8085C8E8,
     D_8085C900, D_8085C90C, D_8085C91C, D_8085C924, D_8085C928, NULL,
 };
@@ -2143,9 +2150,13 @@ Vec3f D_8085D5A0[2] = { { 60.0f, 20.0f, 0.0f }, { -60.0f, 20.0f, 0.0f } };
 Vec3f D_8085D5B8[2] = { { 60.0f, -20.0f, 0.0f }, { -60.0f, -20.0f, 0.0f } };
 Vec3f D_8085D5D0 = { 0.0f, 0.0f, -30.0f };
 
-struct_8082E224_arg1 D_8085D5DC[] = { { NA_SE_PL_SWIM, -0x800 } };
+struct_8082E224_arg1 D_8085D5DC[] = {
+    { NA_SE_PL_SWIM, -0x800 },
+};
 
-struct_8082E224_arg1 D_8085D5E0[] = { { 0x184E, -0x83C } };
+struct_8082E224_arg1 D_8085D5E0[] = {
+    { NA_SE_IT_MASTER_SWORD_SWING, -0x83C },
+};
 
 LinkAnimationHeader* D_8085D5E4[3] = {
     (LinkAnimationHeader*)0x0400D9E8,
@@ -2161,9 +2172,23 @@ LinkAnimationHeader* D_8085D5F0[3] = {
 
 u16 D_8085D5FC[4] = { 0x1830, 0x9BF, 0, 0 };
 
-struct_8082E224_arg1 D_8085D604[] = { { 0, 0x4014 },    { 0, 0xBFE2 }, { 0x850, 0x103C },  { 0, 0x408C },
-                                      { 0, 0x40A4 },    { 0, 0xBF56 }, { 0x6800, 0x2001 }, { 0x800, 0x1806 },
-                                      { 0x83C, 0x806 }, { 0, -0x2812 } };
+struct_8082E224_arg1 D_8085D604[] = {
+    { 0, 0x4014 },
+    { 0, -0x401E },
+};
+
+struct_8082E224_arg1 D_8085D60C[] = {
+    { NA_SE_PL_BOUND, 0x103C },
+    { 0, 0x408C },
+    { 0, 0x40A4 },
+    { 0, -0x40AA },
+};
+struct_8082E224_arg1 D_8085D61C[] = {
+    { NA_SE_VO_LI_SWORD_N, 0x2001 },
+    { NA_SE_PL_WALK_GROUND, 0x1806 },
+    { NA_SE_PL_ROLL, 0x806 },
+    { 0, -0x2812 },
+};
 
 Vec3f D_8085D62C = { 0.0f, 0.0f, 0.0f };
 
@@ -2171,16 +2196,23 @@ Vec3f D_8085D638 = { 0.0f, 0.0f, 0.0f };
 
 Vec3f D_8085D644 = { 0.0f, 0.0f, 0.0f };
 
-struct_8082E224_arg1 D_8085D650[2] = { { 0x840, 0x1003 }, { 0x840, -0x1015 } };
-struct_8082E224_arg1 D_8085D658[2] = { { 0x840, 0x1004 }, { 0x840, -0x1018 } };
+struct_8082E224_arg1 D_8085D650[] = {
+    { NA_SE_PL_SLIP, 0x1003 },
+    { NA_SE_PL_SLIP, -0x1015 },
+};
+struct_8082E224_arg1 D_8085D658[] = {
+    { NA_SE_PL_SLIP, 0x1004 },
+    { NA_SE_PL_SLIP, -0x1018 },
+};
 
 Vec3f D_8085D660 = { 0.0f, 26.800001f, -60.0f };
 f32 D_8085D66C[2] = { 11.0f, 21.0f };
 f32 D_8085D674[2] = { 40.0f, 50.0f };
+
 struct_8082E224_arg1 D_8085D67C[] = {
-    { 0x80A, 0x500A },
-    { 0x080A, 0x5014 },
-    { 0x080A, 0xAFE2 },
+    { NA_SE_PL_WALK_LADDER, 0x500A },
+    { NA_SE_PL_WALK_LADDER, 0x5014 },
+    { NA_SE_PL_WALK_LADDER, -0x501E },
 };
 
 LinkAnimationHeader* D_8085D688[] = {
@@ -2210,12 +2242,17 @@ s16 D_8085D6DC[2] = { 0x203A, 0x192A };
 
 Vec3s D_8085D6E0 = { -0x45, 0x1BEA, -0x10A };
 
-struct_8082E224_arg1 D_8085D6E8[8] = {
-    { 0x871, 0x830 }, { 0x871, 0x83A }, { 0x871, 0x844 }, { 0x872, 0x85C },
-    { 0x872, 0x86E }, { 0x872, 0x87E }, { 0x872, 0x884 }, { 0x872, -0x888 },
+struct_8082E224_arg1 D_8085D6E8[] = {
+    { NA_SE_PL_CALM_HIT, 0x830 }, { NA_SE_PL_CALM_HIT, 0x83A },  { NA_SE_PL_CALM_HIT, 0x844 },
+    { NA_SE_PL_CALM_PAT, 0x85C }, { NA_SE_PL_CALM_PAT, 0x86E },  { NA_SE_PL_CALM_PAT, 0x87E },
+    { NA_SE_PL_CALM_PAT, 0x884 }, { NA_SE_PL_CALM_PAT, -0x888 },
 };
 
-struct_8082E224_arg1 D_8085D708[3] = { { 0, 0x2800 }, { 0x833, 0x80A }, { 0x830, -0x819 } };
+struct_8082E224_arg1 D_8085D708[] = {
+    { 0, 0x2800 },
+    { NA_SE_PL_GET_OFF_HORSE, 0x80A },
+    { NA_SE_PL_SLIPDOWN, -0x819 },
+};
 
 struct_8085D714 D_8085D714[5] = {
     { 1, (LinkAnimationHeader*)0x0400E1C8 }, { 1, (LinkAnimationHeader*)0x0400E1D8 },
@@ -2223,9 +2260,22 @@ struct_8085D714 D_8085D714[5] = {
     { 0, (LinkAnimationHeader*)0x0400E1E0 },
 };
 
-struct_8082E224_arg1 D_8085D73C[4] = { { 0, 0x3857 }, { 0x6804, 0x2057 }, { 0x6814, 0x2045 }, { 0, -0x287B } };
-struct_8082E224_arg1 D_8085D74C[4] = { { 0x6814, 0x200D }, { 0, 0x380D }, { 0, 0x2849 }, { 0, -0x2878 } };
-struct_8082E224_arg1 D_8085D75C[2] = { { 0x6814, 0x2005 }, { 0, -0x280F } };
+struct_8082E224_arg1 D_8085D73C[] = {
+    { 0, 0x3857 },
+    { NA_SE_VO_LI_CLIMB_END, 0x2057 },
+    { NA_SE_VO_LI_AUTO_JUMP, 0x2045 },
+    { 0, -0x287B },
+};
+struct_8082E224_arg1 D_8085D74C[] = {
+    { NA_SE_VO_LI_AUTO_JUMP, 0x200D },
+    { 0, 0x380D },
+    { 0, 0x2849 },
+    { 0, -0x2878 },
+};
+struct_8082E224_arg1 D_8085D75C[] = {
+    { NA_SE_VO_LI_AUTO_JUMP, 0x2005 },
+    { 0, -0x280F },
+};
 
 Vec3f D_8085D764 = { 0.0f, 24.0f, 19.0f };
 Vec3f D_8085D770 = { 0.0f, 0.0f, 2.0f };
@@ -2277,8 +2327,13 @@ struct_8085D80C D_8085D80C[] = {
     { ACTOR_EN_MUSHI2, 0 },     // PLAYER_AP_BOTTLE_BUG
 };
 
-struct_8082E224_arg1 D_8085D838[2] = { { 0x6814, 0x2026 }, { 0x286C, -0x828 } };
-struct_8082E224_arg1 D_8085D840[1] = { { 0x877, -0x81E } };
+struct_8082E224_arg1 D_8085D838[] = {
+    { NA_SE_VO_LI_AUTO_JUMP, 0x2026 },
+    { NA_SE_EV_BOTTLE_CAP_OPEN, -0x828 },
+};
+struct_8082E224_arg1 D_8085D840[] = {
+    { NA_SE_PL_PUT_OUT_ITEM, -0x81E },
+};
 
 u8 D_8085D844[4] = { 0, 0, 0, 0 };
 
@@ -2309,14 +2364,17 @@ struct_8085D848 D_8085D848[2] = {
     },
 };
 
-struct_8082E224_arg1 D_8085D8F0[5] = {
-    { 0x877, 0x802 }, { 0x1856, 0x804 }, { 0x874, 0x80B }, { 0x9AA, 0x81E }, { 0x1858, -0x814 },
+struct_8082E224_arg1 D_8085D8F0[] = {
+    { NA_SE_PL_PUT_OUT_ITEM, 0x802 },    { NA_SE_IT_SET_TRANSFORM_MASK, 0x804 },     { NA_SE_PL_FREEZE_S, 0x80B },
+    { NA_SE_PL_TRANSFORM_VOICE, 0x81E }, { NA_SE_IT_TRANSFORM_MASK_BROKEN, -0x814 },
 };
-struct_8082E224_arg1 D_8085D904[1] = { { 0x1856, -0x808 } };
+struct_8082E224_arg1 D_8085D904[] = {
+    { NA_SE_IT_SET_TRANSFORM_MASK, -0x808 },
+};
 
-u16 D_8085D908[4] = { 0x1E80, 0x1E20, 0x1E40, 0x1E10 };
+u16 D_8085D908[] = { 0x1E80, 0x1E20, 0x1E40, 0x1E10 };
 
-struct_8085D910 D_8085D910[2] = { { 0x10, 0xA, 0x3B, 0x3F }, { 9, 0x32, 0xA, 0xD } };
+struct_8085D910 D_8085D910[] = { { 0x10, 0xA, 0x3B, 0x3F }, { 9, 0x32, 0xA, 0xD } };
 
 Vec3f D_8085D918 = { 0.0f, 0.5f, 0.0f };
 
@@ -2360,37 +2418,91 @@ void (*D_8085D990[0x14])(PlayState*, Player*, void*) = {
     /* 19 */ (void*)func_80858EC0,
 };
 
-struct_8082E224_arg1 D_8085D9E0[4] = { { 0, 0x2822 }, { 0x871, 0x82D }, { 0x871, 0x833 }, { 0x871, -0x840 } };
-struct_8082E224_arg1 D_8085D9F0[3] = { { 0x681E, 0x2007 }, { 0x850, 0x1012 }, { 0x6806, -0x2012 } };
-struct_8082E224_arg1 D_8085D9FC[1] = { { 0x820, -0x180E } };
-struct_8082E224_arg1 D_8085DA00[2] = { { 0x9BA, 0x806 }, { 0x6840, -0x812 } };
-struct_8082E224_arg1 D_8085DA08[1] = { { 0x820, -0x181A } };
-struct_8082E224_arg1 D_8085DA0C[2] = { { 0, 0x4010 }, { 0, -0x3824 } };
-
-struct_8082E224_arg1 D_8085DA14[2] = { { 0, 0x3837 }, { 0x6841, -0x837 } };
-struct_8082E224_arg1 D_8085DA1C[3] = { { 0x6848, 0x804 }, { 0x850, 0x1010 }, { 0x6805, -0x2010 } };
-
-struct_8082E224_arg1 D_8085DA28[1] = { { 0x820, -0x181C } };
-
-struct_8082E224_arg1 D_8085DA2C[3] = { { 0x6848, 0x801 }, { 0, 0x382A }, { 0x6808, -0x202C } };
-
-struct_8082E224_arg1 D_8085DA38[4] = { { 0x850, 0x1001 }, { 0x6805, 0x2001 }, { 0x820, 0x1827 }, { 0, -0x2831 } };
-
-struct_8082E224_arg1 D_8085DA48[2] = { { 0, 0x3001 }, { 0, -0x3005 } };
-
-struct_8082E224_arg1 D_8085DA50[8] = {
-    { 0, 0x300A }, { 0, 0x300D },     { 0, 0x3010 },      { 0, 0x3013 },
-    { 0, 0x3016 }, { 0x840, 0x1016 }, { 0x6805, 0x2037 }, { 0, -0x283E },
+struct_8082E224_arg1 D_8085D9E0[] = {
+    { 0, 0x2822 }, { NA_SE_PL_CALM_HIT, 0x82D }, { NA_SE_PL_CALM_HIT, 0x833 }, { NA_SE_PL_CALM_HIT, -0x840 }
+};
+struct_8082E224_arg1 D_8085D9F0[] = {
+    { NA_SE_VO_LI_DEMO_DAMAGE, 0x2007 },
+    { NA_SE_PL_BOUND, 0x1012 },
+    { NA_SE_VO_LI_FREEZE, -0x2012 },
+};
+struct_8082E224_arg1 D_8085D9FC[] = {
+    { NA_SE_PL_LAND_GROUND, -0x180E },
+};
+struct_8082E224_arg1 D_8085DA00[] = {
+    { NA_SE_PL_GET_UP, 0x806 },
+    { NA_SE_VO_LK_WAKE_UP, -0x812 },
+};
+struct_8082E224_arg1 D_8085DA08[] = {
+    { NA_SE_PL_LAND_GROUND, -0x181A },
+};
+struct_8082E224_arg1 D_8085DA0C[] = {
+    { 0, 0x4010 },
+    { 0, -0x3824 },
+};
+struct_8082E224_arg1 D_8085DA14[] = {
+    { 0, 0x3837 },
+    { NA_SE_VO_LK_CATCH_DEMO, -0x837 },
+};
+struct_8082E224_arg1 D_8085DA1C[] = {
+    { NA_SE_VO_LK_USING_UP_ENERGY, 0x804 },
+    { NA_SE_PL_BOUND, 0x1010 },
+    { NA_SE_VO_LI_DAMAGE_S, -0x2010 },
+};
+struct_8082E224_arg1 D_8085DA28[] = {
+    { NA_SE_PL_LAND_GROUND, -0x181C },
+};
+struct_8082E224_arg1 D_8085DA2C[] = {
+    { NA_SE_VO_LK_USING_UP_ENERGY, 0x801 },
+    { 0, 0x382A },
+    { NA_SE_VO_LI_FALL_L, -0x202C },
+};
+struct_8082E224_arg1 D_8085DA38[] = {
+    { NA_SE_PL_BOUND, 0x1001 },
+    { NA_SE_VO_LI_DAMAGE_S, 0x2001 },
+    { NA_SE_PL_LAND_GROUND, 0x1827 },
+    { 0, -0x2831 },
+};
+struct_8082E224_arg1 D_8085DA48[] = {
+    { 0, 0x3001 },
+    { 0, -0x3005 },
+};
+struct_8082E224_arg1 D_8085DA50[] = {
+    { 0, 0x300A },
+    { 0, 0x300D },
+    { 0, 0x3010 },
+    { 0, 0x3013 },
+    { 0, 0x3016 },
+    { NA_SE_PL_SLIP, 0x1016 },
+    { NA_SE_VO_LI_DAMAGE_S, 0x2037 },
+    { 0, -0x283E },
 };
 
-struct_8082E224_arg1 D_8085DA70[2] = { { 0, 0x302A }, { 0, -0x3030 } };
-struct_8082E224_arg1 D_8085DA78[1] = { { 0x850, -0x1002 } };
-struct_8082E224_arg1 D_8085DA7C[1] = { { 0x6806, -0x2005 } };
-struct_8082E224_arg1 D_8085DA80[1] = { { 0x6808, -0x2001 } };
-struct_8082E224_arg1 D_8085DA84[1] = { { 0x6803, -0x200D } };
-struct_8082E224_arg1 D_8085DA88[1] = { { 0, -0x281A } };
-struct_8082E224_arg1 D_8085DA8C[1] = { { 0x6816, -0x2004 } };
-struct_8082E224_arg1 D_8085DA90[1] = { { 0x832, -0x812 } };
+struct_8082E224_arg1 D_8085DA70[] = {
+    { 0, 0x302A },
+    { 0, -0x3030 },
+};
+struct_8082E224_arg1 D_8085DA78[] = {
+    { NA_SE_PL_BOUND, -0x1002 },
+};
+struct_8082E224_arg1 D_8085DA7C[] = {
+    { NA_SE_VO_LI_FREEZE, -0x2005 },
+};
+struct_8082E224_arg1 D_8085DA80[] = {
+    { NA_SE_VO_LI_FALL_L, -0x2001 },
+};
+struct_8082E224_arg1 D_8085DA84[] = {
+    { NA_SE_VO_LI_HANG, -0x200D },
+};
+struct_8082E224_arg1 D_8085DA88[] = {
+    { 0, -0x281A },
+};
+struct_8082E224_arg1 D_8085DA8C[] = {
+    { NA_SE_VO_LI_SURPRISE, -0x2004 },
+};
+struct_8082E224_arg1 D_8085DA90[] = {
+    { NA_SE_PL_SIT_ON_HORSE, -0x812 },
+};
 
 struct_8085DA94 D_8085DA94[] = {
     { 0x00000000, { NULL } },  { -1, { func_808594D0 } }, { 0x00000000, { NULL } },  { 0x00000000, { NULL } },
@@ -2784,7 +2896,7 @@ void func_8082E224(Player* arg0, struct_8082E224_arg1* arg1) {
     s32 temp_v0;
 
     do {
-        s32 var_s0 = ABS_ALT(arg1->unk_2);
+        s32 var_s0 = ABS_ALT(arg1->flags);
         s32 temp_v0_3;
 
         temp_v0_3 = var_s0 & 0x7800;
@@ -2806,12 +2918,12 @@ void func_8082E224(Player* arg0, struct_8082E224_arg1* arg1) {
             } else if (temp_v0_3 == 0x4000) {
                 func_8082E12C(arg0, 0.0f);
             } else if (temp_v0_3 == 0x4800) {
-                func_8019F638(&arg0->actor.projectedPos, arg0->ageProperties->unk_94 + 0x80A, 0.0f);
+                func_8019F638(&arg0->actor.projectedPos, arg0->ageProperties->unk_94 + NA_SE_PL_WALK_LADDER, 0.0f);
             } else if (temp_v0_3 == 0x5000) {
                 func_800B8E58(arg0, arg1->sfxId + arg0->ageProperties->unk_94);
             }
         }
-        temp_v0 = arg1->unk_2;
+        temp_v0 = arg1->flags;
         arg1 += 1;
     } while ((temp_v0 >= 0) != 0);
 }
@@ -3076,9 +3188,6 @@ loop_8:
 s32 func_8082ED94(Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082ED94.s")
 #endif
-
-extern u8 D_8085C96C[];
-extern struct_8082E224_arg1* D_8085C93C[];
 
 void func_8082EEA4(Player* this, s32 arg1) {
     u8 temp_v0 = D_8085C96C[arg1];
@@ -11402,8 +11511,6 @@ void func_80847F1C(Player* this) {
     }
 }
 
-extern struct_8082E224_arg1 D_8085D5DC[];
-
 void func_80847FF8(Player* this, f32* arg1, f32 arg2, s16 arg3) {
     func_8084748C(this, arg1, arg2, arg3);
     func_8082E224(this, D_8085D5DC);
@@ -11529,9 +11636,6 @@ s32 func_808482E0(PlayState* play, Player* this) {
 
     return false;
 }
-
-extern struct_8082E224_arg1 D_8085D5DC[];
-extern struct_8082E224_arg1 D_8085D5E0[];
 
 void func_808484CC(Player* this) {
     func_8082E224(this, D_8085D5E0);
@@ -12759,7 +12863,7 @@ void func_8084BFDC(Player* this, PlayState* play) {
             func_80840770(play, this);
         }
     } else if (this->skelAnime.animation == &gameplay_keep_Linkanim_00D698) {
-        func_8082E224(this, &D_8085D604[2]);
+        func_8082E224(this, D_8085D60C);
     } else if ((this->skelAnime.animation == &gameplay_keep_Linkanim_00DC28) &&
                LinkAnimation_OnFrame(&this->skelAnime, 88.0f)) {
         func_8082E094(this, NA_SE_PL_BOUND);
@@ -12940,7 +13044,7 @@ void func_8084C6EC(Player* this, PlayState* play) {
                                                 ? NA_SE_PL_ROLL_SNOW_DUST - SFX_FLAG
                                                 : NA_SE_PL_ROLL_DUST - SFX_FLAG);
             }
-            func_8082E224(this, &D_8085D604[6]);
+            func_8082E224(this, D_8085D61C);
         }
     }
 }
@@ -13580,9 +13684,6 @@ void func_8084ED9C(Player* arg0, PlayState* arg1) {
     }
 }
 
-extern struct_8082E224_arg1 D_8085D650[];
-extern struct_8082E224_arg1 D_8085D658[];
-
 void func_8084EE50(Player* arg0, PlayState* arg1) {
     arg0->stateFlags2 |= (PLAYER_STATE1_1 | PLAYER_STATE1_40 | PLAYER_STATE1_100);
 
@@ -13749,10 +13850,6 @@ void func_8084F3DC(Player* arg0, PlayState* arg1) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084F4E8.s")
 
-extern struct_8082E224_arg1 D_8085D67C[];
-extern f32 D_8085D66C[];
-extern f32 D_8085D674[];
-
 void func_8084FC0C(Player* this, PlayState* play) {
     s32 temp_v0;
 
@@ -13815,13 +13912,11 @@ s32 func_8084FE48(Player* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084FE7C.s")
 
-extern struct_8082E224_arg1 D_8085D708[];
-
 void func_808505D0(Player* this, PlayState* play) {
-    this->stateFlags2 |= 0x40;
+    this->stateFlags2 |= PLAYER_STATE2_40;
     func_80847E2C(this, 1.0f, 10.0f);
 
-    if (LinkAnimation_Update(play, &this->skelAnime) != 0) {
+    if (LinkAnimation_Update(play, &this->skelAnime)) {
         Actor* rideActor = this->rideActor;
 
         Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), 1);
@@ -13839,9 +13934,9 @@ void func_808505D0(Player* this, PlayState* play) {
         }
     } else {
         if (this->mountSide < 0) {
-            D_8085D708[0].unk_2 = 0x2828;
+            D_8085D708[0].flags = 0x2828;
         } else {
-            D_8085D708[0].unk_2 = 0x281D;
+            D_8085D708[0].flags = 0x281D;
         }
 
         func_8082E224(this, D_8085D708);
@@ -14245,9 +14340,6 @@ void func_80852B28(Player* this, PlayState* arg1) {
     }
 }
 
-extern struct_8082E224_arg1 D_8085D73C[];
-extern struct_8082E224_arg1 D_8085D74C[];
-
 void func_80852C04(Player* this, PlayState* play) {
     func_8083249C(this);
 
@@ -14335,8 +14427,6 @@ void func_80852C04(Player* this, PlayState* play) {
         }
     }
 }
-
-extern struct_8082E224_arg1 D_8085D75C[];
 
 void func_80852FD4(Player* this, PlayState* play) {
     if (LinkAnimation_Update(play, &this->skelAnime)) {
@@ -14473,10 +14563,6 @@ void func_80853754(Player* this, PlayState* play) {
     }
 }
 
-extern s8 D_8085D804[];
-extern struct_8085D80C D_8085D80C[];
-extern struct_8082E224_arg1 D_8085D838[];
-
 #ifdef NON_MATCHING
 // Matches, but requires in-function static data
 void func_80853850(Player* this, PlayState* play) {
@@ -14531,7 +14617,6 @@ Vec3f D_8085D7F8 = { 10.0f, 26.800001f, 30.0f };
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80853850.s")
 #endif
 
-extern struct_8082E224_arg1 D_8085D840[];
 extern u8 D_8085D1A4[PLAYER_AP_MAX];
 
 void func_80853A5C(Player* this, PlayState* play) {
@@ -14848,9 +14933,6 @@ void func_808550D0(PlayState* play, Player* this, f32 arg2, f32 arg3, s32 arg4) 
 
 extern struct_8085D910 D_8085D910[];
 extern u16 D_8085D908[];
-
-extern struct_8082E224_arg1 D_8085D8F0[];
-extern struct_8082E224_arg1 D_8085D904[];
 
 void func_80855218(PlayState* play, Player* this, UNK_PTR arg2) {
     if (LinkAnimation_Update(play, &this->skelAnime) && (this->skelAnime.animation == &gameplay_keep_Linkanim_00D0C8)) {
@@ -15864,16 +15946,6 @@ void func_80858FE8(Player* this) {
     }
 }
 
-extern struct_8082E224_arg1 D_8085DA08[];
-extern struct_8082E224_arg1 D_8085DA14[];
-extern struct_8082E224_arg1 D_8085DA38[];
-extern struct_8082E224_arg1 D_8085DA48[];
-extern struct_8082E224_arg1 D_8085DA7C[];
-extern struct_8082E224_arg1 D_8085DA84[];
-extern struct_8082E224_arg1 D_8085DA88[];
-extern struct_8082E224_arg1 D_8085DA8C[];
-extern struct_8082E224_arg1 D_8085DA90[];
-
 void func_80859028(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     void* temp_v0;
 
@@ -16497,22 +16569,6 @@ void func_8085ABA8(Player* this, CsCmdActorAction* playerAction) {
     this->skelAnime.moveFlags = 0;
     func_8082E784(this);
 }
-
-// extern struct_8085DA94 D_8085DA94[0x8C];
-// extern struct_8085DA94 D_8085DEF4[0x8C];
-
-extern struct_8082E224_arg1 D_8085DA70[];
-extern struct_8082E224_arg1 D_8085D9E0[];
-extern struct_8082E224_arg1 D_8085D9F0[];
-extern struct_8082E224_arg1 D_8085DA00[];
-extern struct_8082E224_arg1 D_8085DA2C[];
-extern struct_8082E224_arg1 D_8085DA50[];
-extern struct_8082E224_arg1 D_8085D9FC[];
-extern struct_8082E224_arg1 D_8085DA1C[];
-extern struct_8082E224_arg1 D_8085DA0C[];
-extern struct_8082E224_arg1 D_8085DA28[];
-extern struct_8082E224_arg1 D_8085DA78[];
-extern struct_8082E224_arg1 D_8085DA80[];
 
 void func_8085AC9C(PlayState* play, Player* this, CsCmdActorAction* actorAction, struct_8085DA94* arg3) {
     if (arg3->type > 0) {
