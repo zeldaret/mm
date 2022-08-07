@@ -33,7 +33,7 @@ const EffectSsInit Effect_Ss_Dead_Dd_InitVars = {
 u32 EffectSsDeadDd_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsDeadDdInitParams* initParams = PARAMS;
 
-    if (initParams->type == 0) {
+    if (initParams->type == DEADDD_TYPE_0) {
         this->pos = initParams->pos;
         this->velocity = initParams->velocity;
         this->accel = initParams->accel;
@@ -58,7 +58,7 @@ u32 EffectSsDeadDd_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
         this->rEnvColorG = initParams->envColor.g;
         this->rEnvColorB = initParams->envColor.b;
 
-    } else if (initParams->type == 1) {
+    } else if (initParams->type == DEADDD_TYPE_1) {
         s32 i;
 
         this->life = initParams->life;

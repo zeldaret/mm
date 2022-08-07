@@ -978,7 +978,7 @@ void EffectSsDeadDd_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* a
     initParams.envColor.r = env->r;
     initParams.envColor.g = env->g;
     initParams.envColor.b = env->b;
-    initParams.type = 0;
+    initParams.type = DEADDD_TYPE_0;
     initParams.alphaStep = alphaStep;
     initParams.life = life;
 
