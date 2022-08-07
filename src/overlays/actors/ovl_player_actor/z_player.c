@@ -3019,8 +3019,64 @@ void func_808332A0(PlayState* play, Player* this, s32 arg2, s32 arg3) {
     }
 }
 
-s32 func_808333CC(Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808333CC.s")
+s32 func_808333CC(Player* this) {
+    s8 sp24[4];
+    s32 i;
+    s32 j;
+    s8 temp_a0;
+    s8 temp_v1;
+    s8* var_v0;
+    s8* var_v1;
+
+    var_v0 = this->unk_ADF;
+    var_v1 = sp24;
+    if (this->itemActionParam == PLAYER_AP_STICK) {
+        return 0;
+    }
+
+    i = 0;
+
+    if (!this) {}
+
+    while (true) {
+        temp_a0 = *var_v0;
+        i++;
+        var_v0++;
+        *var_v1 = temp_a0;
+        if (temp_a0 < 0) {
+            return 0;
+        }
+
+        *var_v1 *= 2;
+        var_v1++;
+
+        if (i >= ARRAY_COUNT(this->unk_ADF)) {
+            temp_v1 = sp24[0] - sp24[1];
+            if (ABS_ALT(temp_v1) < 0xA) {
+                return 0;
+            }
+
+            var_v1 = &sp24[1];
+            j = 1;
+
+            //if (((!i) && (!i)) && (!i)) {}
+
+            while (true) {
+                j++;
+                temp_a0 = var_v1[0] - var_v1[1];
+
+                if ((ABS_ALT(temp_a0) < 0xA) || ((temp_a0 * temp_v1) < 0)) {
+                    return 0;
+                }
+
+                var_v1++;
+                if (j == ARRAY_COUNT(sp24)-1) {
+                    return 1;
+                }
+            }
+        }
+    }
+}
 
 extern LinkAnimationHeader* D_8085CF50[2];
 extern LinkAnimationHeader* D_8085CF58[2];
@@ -5806,8 +5862,100 @@ s32 func_8083A878(PlayState* play, Player* this, f32 arg2) {
     return true;
 }
 
+#ifdef NON_MATCHING
+// regalloc
+void func_8083A98C(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    Player* this = THIS;
+    s32 sp1C;
+    f32 temp_fa0;
+    f32 temp_fv1;
+    s16 temp_a1;
+    s16 temp_t1;
+    s16 temp_v0_2;
+    s16 temp_v0_3;
+    s16 temp_v1_2;
+    s16 temp_v1_4;
+    s32 var_v0_5;
+    s16 var_v1;
+
+    if (play->csCtx.state != 0) {
+        return;
+    }
+
+    if (DECR(this->unk_AE8) != 0) {
+        sp1C = (play->sceneNum != SCENE_AYASHIISHOP) ? 6 : 0xF;
+
+        if (this->unk_AE8 == 1) {
+            Message_StartTextbox(play, (play->sceneNum == SCENE_AYASHIISHOP) ? 0x2A00 : 0x5E6, NULL);
+        }
+    } else {
+        D_80862B44 = play->state.input;
+        if (play->view.fovy >= 25.0f) {
+            s32 temp;
+
+            temp_v1_2 = thisx->focus.rot.x;
+            temp_t1 = thisx->focus.rot.y;
+
+            temp_v0_2 = play->state.input[0].rel.stick_y * 4;
+
+            thisx->focus.rot.x += CLAMP(temp_v0_2, -0x12C, 0x12C);
+
+            thisx->focus.rot.x = CLAMP(thisx->focus.rot.x, -0x2EE0, 0x2EE0);
+
+            temp_a1 = thisx->shape.rot.y;
+
+            temp_v0_3 = D_80862B44->rel.stick_x * -4;
+            temp = (s16) (thisx->focus.rot.y - temp_a1);
+            var_v0_5 = CLAMP(temp_v0_3, -0x12C, 0x12C);
+
+            temp_v1_4 = temp + var_v0_5;
+            var_v1 = CLAMP(temp_v1_4, -0x3E80, 0x3E80);
+            thisx->focus.rot.y = temp_a1 + var_v1;
+            if (play->sceneNum == SCENE_00KEIKOKU) {
+                temp_fv1 = (s16) (thisx->focus.rot.x - temp_v1_2);
+                temp_fa0 = (s16) (thisx->focus.rot.y - temp_t1);
+                func_8019FAD8(&D_801DB4A4, NA_SE_PL_TELESCOPE_MOVEMENT - SFX_FLAG, sqrtf(SQ(temp_fv1) + SQ(temp_fa0)) / 300.0f);
+            }
+        }
+
+        if (play->sceneNum == SCENE_AYASHIISHOP) {
+            sp1C = 0xF;
+        } else if (CHECK_BTN_ALL(D_80862B44->cur.button, BTN_A)) {
+            sp1C = 0xA;
+        } else {
+            sp1C = 0;
+        }
+
+        if (CHECK_BTN_ALL(D_80862B44->press.button, BTN_B)) {
+            func_801477B4(play);
+
+            if (play->sceneNum == SCENE_00KEIKOKU) {
+                gSaveContext.respawn[0].entranceIndex = 0x4C20;
+            } else {
+                u16 var_v0_7;
+
+                if (play->sceneNum == SCENE_AYASHIISHOP) {
+                    var_v0_7 = 0xE30;
+                } else {
+                    var_v0_7 = 0x4080;
+                }
+                gSaveContext.respawn[0].entranceIndex = var_v0_7;
+            }
+
+            func_80169EFC(&play->state);
+            gSaveContext.respawnFlag = -2;
+            play->transitionType = 0x15;
+        }
+    }
+
+    Camera_ChangeSetting(Play_GetCamera(play, 0), 0x3E);
+    Camera_ChangeMode(Play_GetCamera(play, 0), sp1C);
+}
+#else
 void func_8083A98C(Actor* thisx, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083A98C.s")
+#endif
 
 void func_8083AD04(PlayState* play, Player* this) {
     this->actor.update = func_8083A98C;
@@ -6554,8 +6702,133 @@ s32 func_8083D78C(Player* this, PlayState* play) {
     return false;
 }
 
+#ifdef NON_EQUIVALENT
+s32 func_8083D860(Player* this, PlayState* play) {
+    s32 var_t0; // sp84
+    s32 temp_t2; // sp80
+    CollisionPoly* sp7C;
+    f32 var_fa1; // sp78
+    f32 var_ft4; // sp74
+
+    f32 var_ft5; // sp6C
+    Vec3f sp48[3];
+
+    f32 sp40;
+    Vec3f* sp3C;
+
+    f32 sp34;
+    f32 sp30;
+    f32 temp_fv0_4; // sp2C
+    LinkAnimationHeader* var_a2; // sp28
+
+
+    if ((this->wallHeight >= 79.0f) && ((!(this->stateFlags1 & 0x8000000)) || (this->currentBoots == 5) || (this->actor.depthInWater < this->ageProperties->unk_2C))) {
+        var_t0 = (D_80862B0C & 8) ? 2 : 0;
+
+        temp_t2 = D_80862B0C & 2;
+        if ((var_t0 != 0) || (temp_t2 != 0) || (func_800C9AE4(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId) != 0)) {
+            f32 var_fv0;
+            f32 var_fv1;
+
+            var_fv1 = 0.0f;
+            var_ft5 = 0.0f;
+            sp7C = this->actor.wallPoly;
+            if (var_t0 != 0) {
+                var_fa1 = this->actor.world.pos.x;
+                var_ft4 = this->actor.world.pos.z;
+            } else {
+                s32 var_v1;
+                f32 zMax; // var_fa0;
+                f32 xMin; // var_fa1_2;
+                f32 zMin; // var_ft4_2
+                f32 yMin; // var_ft5_2
+                f32 xMax; // var_fv1_2
+
+                sp3C = sp48;
+                CollisionPoly_GetVerticesByBgId(sp7C, this->actor.wallBgId, &play->colCtx, sp48);
+                xMin = xMax = sp48[0].x;
+                zMin = zMax = sp48[0].z;
+                yMin = sp48[0].y;
+
+                for (var_v1 = 1; var_v1 < ARRAY_COUNT(sp48); var_v1++) {
+                    sp3C += 1;
+
+                    if (sp3C->x < xMin) {
+                        xMin = sp3C->x;
+                    } else if (xMax < sp3C->x) {
+                        xMax = sp3C->x;
+                    }
+
+                    if (sp3C->z < zMin) {
+                        zMin = sp3C->z;
+                    } else if (zMax < sp3C->z) {
+                        zMax = sp3C->z;
+                    }
+
+                    if (sp3C->y < yMin) {
+                        yMin = sp3C->y;
+                    }
+                }
+
+                var_fa1 = (xMin + xMax) * 0.5f;
+                var_ft4 = (zMin + zMax) * 0.5f;
+                sp40 = this->actor.world.pos.y - yMin;
+
+                //if (1) { }
+
+                var_fv1 = fabsf(((this->actor.world.pos.x - var_fa1) * COLPOLY_GET_NORMAL(sp7C->normal.z)) - ((this->actor.world.pos.z - var_ft4) * COLPOLY_GET_NORMAL(sp7C->normal.x)));
+                var_ft5 = ((s32) ((sp40 / 15.0f) + 0.5f) * 15.0f) - sp40;
+            }
+
+            if (var_fv1 < 8.0f) {
+                sp34 = COLPOLY_GET_NORMAL(sp7C->normal.x);
+                sp30 = COLPOLY_GET_NORMAL(sp7C->normal.z);
+                temp_fv0_4 = this->wallDistance;
+                func_80832558(play, this, func_80837C20);
+
+                this->stateFlags1 |= PLAYER_STATE1_200000;
+                this->stateFlags1 &= ~PLAYER_STATE1_8000000;
+
+                if ((var_t0 != 0) || (temp_t2 != 0)) {
+                    this->unk_AE7 = var_t0;
+
+                    if (var_t0 != 0) {
+                        var_a2 = (this->actor.bgCheckFlags & 1) ? &gameplay_keep_Linkanim_00DAA0 : &gameplay_keep_Linkanim_00DA88;
+                        var_fv0 = (this->ageProperties->unk_3C + 4.0f) - temp_fv0_4;
+                    } else {
+                        var_a2 = this->ageProperties->unk_AC;
+                        var_fv0 = 20.5f;
+                    }
+
+                    this->unk_AE8 = -2;
+                    this->actor.world.pos.y += var_ft5;
+
+                    this->actor.shape.rot.y = this->currentYaw = this->actor.wallYaw + 0x8000;
+                } else {
+                    var_a2 = this->ageProperties->unk_B0;
+                    var_fv0 = (this->ageProperties->unk_38 - this->ageProperties->unk_3C) + 17.0f;
+
+                    this->unk_AE8 = -4;
+                    this->currentYaw = this->actor.shape.rot.y = this->actor.wallYaw;
+                }
+
+                this->actor.world.pos.x = (var_fv0 * sp34) + var_fa1;
+                this->actor.world.pos.z = (var_fv0 * sp30) + var_ft4;
+                func_8082DAD4(this);
+                Math_Vec3f_Copy(&this->actor.prevPos, &this->actor.world.pos);
+                func_8082DB18(play, this, var_a2);
+                func_8082E920(play, this, 0x9F);
+                return 1;
+            }
+        }
+    }
+
+    return 0;
+}
+#else
 s32 func_8083D860(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083D860.s")
+#endif
 
 void func_8084FC0C(Player* this, PlayState* play);
 
