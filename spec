@@ -5003,8 +5003,7 @@ beginseg
     name "ovl_Bg_Last_Bwall"
     compress
     include "build/src/overlays/actors/ovl_Bg_Last_Bwall/z_bg_last_bwall.o"
-    include "build/data/ovl_Bg_Last_Bwall/ovl_Bg_Last_Bwall.data.o"
-    include "build/data/ovl_Bg_Last_Bwall/ovl_Bg_Last_Bwall.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Last_Bwall/ovl_Bg_Last_Bwall_reloc.o"
 endseg
 
 beginseg
