@@ -5095,8 +5095,7 @@ beginseg
     name "ovl_En_Paper"
     compress
     include "build/src/overlays/actors/ovl_En_Paper/z_en_paper.o"
-    include "build/data/ovl_En_Paper/ovl_En_Paper.data.o"
-    include "build/data/ovl_En_Paper/ovl_En_Paper.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Paper/ovl_En_Paper_reloc.o"
 endseg
 
 beginseg
