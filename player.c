@@ -1635,7 +1635,7 @@ LinkAnimationHeader* D_8085D294[4] = {
 Vec3f D_8085D2A4 = { 0.0f, 0.0f, 5.0f };
 u8 D_8085D2B0[4] = { 0x4E, 0x4D, 0, 0 };
 Vec3f D_8085D2B4 = { -1.0f, 69.0f, 20.0f };
-InitChainEntry D_8085D2C0[1];                       /* unable to generate initializer */
+InitChainEntry sInitChain[1];                       /* unable to generate initializer */
 Vec3s D_8085D2C4 = { -0x39, 0xD31, 0 };
 void (*D_8085D2CC[0x10])(PlayState*, Player*) = {
     func_808412A0,
@@ -10565,7 +10565,7 @@ void func_80841744(PlayState* play, Player* this) {
 }
 
 void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHeader) {
-    Actor_ProcessInitChain(&this->actor, D_8085D2C0);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     this->currentYaw = this->actor.world.rot.y;
     if ((((s32) (this->actor.params & 0xF00) >> 8) != 0xC) && ((gSaveContext.respawnFlag != 2) || (gSaveContext.respawn[1].playerParams != 0xCFF))) {
         func_808309CC(play, this);

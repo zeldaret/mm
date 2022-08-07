@@ -5064,7 +5064,7 @@
     0x8085D2A4:("D_8085D2A4","UNK_TYPE1","",0x1),
     0x8085D2B0:("D_8085D2B0","UNK_TYPE1","",0x1),
     0x8085D2B4:("D_8085D2B4","UNK_TYPE1","",0x1),
-    0x8085D2C0:("D_8085D2C0","ActorInitVar","",0x4),
+    0x8085D2C0:("sInitChain","ActorInitVar","",0x4),
     0x8085D2C4:("D_8085D2C4","UNK_TYPE4","",0x4),
     0x8085D2CC:("D_8085D2CC","UNK_PTR","",0x4),
     0x8085D30C:("D_8085D30C","EffectBlureInit2","",0x24),

@@ -2023,8 +2023,7 @@ u8 D_8085D2B0[] = {
 
 Vec3f D_8085D2B4 = { -1.0f, 69.0f, 20.0f };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_8085D2C0[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
@@ -2100,28 +2099,28 @@ f32 D_8085D410[3] = { 0.5f, 1.0f, 3.0f };
 
 Vec3f D_8085D41C = { 0.0f, 0.0f, -30.0f };
 
-static struct_80124618 D_8085D428[5] = {
+struct_80124618 D_8085D428[5] = {
     { 0, { 0, 0, 0 } },          { 1, { 0x50, 0xAA, 0x50 } }, { 3, { 0x64, 0x50, 0x64 } },
     { 7, { 0x64, 0x64, 0x64 } }, { 8, { 0x64, 0x64, 0x64 } },
 };
 
-static struct_80124618 D_8085D450[5] = {
+struct_80124618 D_8085D450[5] = {
     { 0, { 0, 0, 0 } },          { 1, { 0x50, 0xAA, 0x50 } }, { 3, { 0x64, 0x50, 0x64 } },
     { 7, { 0x64, 0x64, 0x64 } }, { 8, { 0x64, 0x64, 0x64 } },
 };
 
-static struct_80124618 D_8085D478[2] = { { 0, { 0, 0, 0 } }, { 8, { 0, 0, 0 } } };
+struct_80124618 D_8085D478[2] = { { 0, { 0, 0, 0 } }, { 8, { 0, 0, 0 } } };
 
-static struct_80124618 D_8085D488[5] = {
+struct_80124618 D_8085D488[5] = {
     { 0, { 0x64, 0x64, 0x64 } }, { 1, { 0x64, 0x3C, 0x64 } }, { 3, { 0x64, 0x8C, 0x64 } },
     { 7, { 0x64, 0x50, 0x64 } }, { 9, { 0x64, 0x64, 0x64 } },
 };
 
-static struct_80124618 D_8085D4B0[6] = {
+struct_80124618 D_8085D4B0[6] = {
     { 0, { 0x64, 0x64, 0x64 } }, { 1, { 0x64, 0x46, 0x64 } }, { 3, { 0x64, 0x78, 0x64 } },
     { 6, { 0x64, 0x50, 0x64 } }, { 8, { 0x64, 0x64, 0x64 } }, { 9, { 0x64, 0x64, 0x64 } },
 };
-static struct_80124618 D_8085D4E0[6] = {
+struct_80124618 D_8085D4E0[6] = {
     { 0, { 0, 0, 0 } },          { 1, { 0, 0, 0 } },          { 3, { 0x64, 0x82, 0x64 } },
     { 5, { 0x82, 0x82, 0x82 } }, { 7, { 0x50, 0x5A, 0x50 } }, { 9, { 0x64, 0x64, 0x64 } },
 };
@@ -3020,7 +3019,6 @@ LinkAnimationHeader* func_8082ED20(Player* this) {
 }
 
 #ifdef NON_EQUIVALENT
-extern void* D_8085C84C[0x1E];
 s32 func_8082ED94(Player* arg0) {
     s32 var_v1;
     s32* temp_v0;
@@ -9622,7 +9620,7 @@ void func_80841744(PlayState* play, Player* this) {
     this->unk_B08[7] = 8.0f;
 }
 
-extern InitChainEntry D_8085D2C0[];
+extern InitChainEntry sInitChain[];
 
 extern Vec3s D_8085D2C4;
 extern Vec3s D_8085D2C4;
@@ -9634,7 +9632,7 @@ extern ColliderQuadInit D_8085C394;
 extern FlexSkeletonHeader D_060177B8;
 
 void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHeader) {
-    Actor_ProcessInitChain(&this->actor, D_8085D2C0);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     this->currentYaw = this->actor.world.rot.y;
 
     if ((((this->actor.params & 0xF00) >> 8) != 0xC) &&
@@ -9678,14 +9676,13 @@ extern EffectTireMarkInit D_8085D330;
 extern Color_RGBA8 D_8085D338;
 extern Color_RGBA8 D_8085D33C;
 
-#if 0
-void Player_Init(Actor* thisx, PlayState* play) {
+void Player_Init(Actor *thisx, PlayState *play) {
+    s32 pad;
+    Player* this = THIS;
+    s8 temp_v0_2;
     s32 var_a2; // sp60
     s32 var_a1;
     s32 var_v0_3;
-    s8 temp_v0_2;
-    EffectTireMark* temp_v0_3;
-    Player* this = (Player* ) thisx;
 
     play->playerInit = Player_InitCommon;
     play->playerUpdate = Player_UpdateCommon;
@@ -9768,6 +9765,8 @@ void Player_Init(Actor* thisx, PlayState* play) {
     Player_InitCommon(this, play, gPlayerSkeletons[this->transformation]);
 
     if (this->actor.shape.rot.z != 0) {
+        EffectTireMark* temp_v0_3;
+
         this->actor.shape.rot.z = 0;
         func_8082F938(play, this, 0, 4);
 
@@ -9824,8 +9823,8 @@ void Player_Init(Actor* thisx, PlayState* play) {
     play->unk_1887C = 0;
     play->unk_1887D = 0;
     play->unk_1887E = 0;
-    this->giObjectSegment = ZeldaArena_Malloc(0x2000U);
-    this->maskObjectSegment = ZeldaArena_Malloc(0x3800U);
+    this->giObjectSegment = ZeldaArena_Malloc(0x2000);
+    this->maskObjectSegment = ZeldaArena_Malloc(0x3800);
 
     Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0xFF, 0x80, 0, -1);
     this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
@@ -9872,7 +9871,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
 
     var_a1 = ((var_a2 == 4) || (gSaveContext.respawnFlag == -4)) ? 1 : 0 ;
     if (func_801226E0(play, var_a1) == 0) {
-        gSaveContext.respawn[0].playerParams = (this->actor.params & 0xFF) | 0xD00;
+        gSaveContext.respawn[0].playerParams = (thisx->params & 0xFF) | 0xD00;
     }
 
     gSaveContext.respawn[0].data = 1;
@@ -9908,9 +9907,6 @@ void Player_Init(Actor* thisx, PlayState* play) {
     this->unk_3CF = 0;
     MREG(64) = 0;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/Player_Init.s")
-#endif
 
 void func_80842510(s16* arg0) {
     s16 temp_ft0;
