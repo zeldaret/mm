@@ -3219,8 +3219,7 @@ beginseg
     name "ovl_Bg_Hakugin_Elvpole"
     compress
     include "build/src/overlays/actors/ovl_Bg_Hakugin_Elvpole/z_bg_hakugin_elvpole.o"
-    include "build/data/ovl_Bg_Hakugin_Elvpole/ovl_Bg_Hakugin_Elvpole.data.o"
-    include "build/data/ovl_Bg_Hakugin_Elvpole/ovl_Bg_Hakugin_Elvpole.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Hakugin_Elvpole/ovl_Bg_Hakugin_Elvpole_reloc.o"
 endseg
 
 beginseg
