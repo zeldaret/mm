@@ -124,12 +124,7 @@ static ColliderCylinderInit sCylinderInit = {
         BUMP_ON,
         OCELEM_ON,
     },
-    {
-        0,
-        0,
-        0,
-        { 0, 0, 0 }
-    },
+    { 0, 0, 0, { 0, 0, 0 } },
 };
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
@@ -632,11 +627,11 @@ u16 EnSGoro_BombshopGoron_NextTextId(EnSGoro* this, PlayState* play) {
         case 0x664:
             this->actionFlags |= EN_S_GORO_ACTIONFLAG_HANDTAP;
             return 0x665;
-			
+
         case 0x665:
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_HANDTAP;
             return 0x666;
-			
+
         case 0x666:
             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
             this->actionFlags |= EN_S_GORO_ACTIONFLAG_TIRED;
@@ -645,11 +640,11 @@ u16 EnSGoro_BombshopGoron_NextTextId(EnSGoro* this, PlayState* play) {
         case 0x668:
             this->actionFlags |= EN_S_GORO_ACTIONFLAG_HANDTAP;
             return 0x669;
-			
+
         case 0x669:
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_HANDTAP;
             return 0x66A;
-			
+
         case 0x66A:
             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
             this->actionFlags |= EN_S_GORO_ACTIONFLAG_TIRED;
@@ -658,43 +653,43 @@ u16 EnSGoro_BombshopGoron_NextTextId(EnSGoro* this, PlayState* play) {
         case 0x677:
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_HANDTAP;
             return 0x678;
-			
+
         case 0x678:
             return 0x670;
-			
+
         case 0x66E:
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_HANDTAP;
             return 0x66F;
-			
+
         case 0x66F:
             return 0x670;
-			
+
         case 0x679:
             return 0x670;
-			
+
         case 0x67A:
             return 0x670;
 
         case 0x67E:
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_HANDTAP;
             return 0x67F;
-			
+
         case 0x67F:
             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
             return 0x680;
-			
+
         case 0x67B:
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_HANDTAP;
             return 0x67C;
-			
+
         case 0x67C:
             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
             return 0x67D;
-			
+
         case 0x681:
             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
             return 0x682;
-			
+
         case 0x683:
             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
             return 0x684;
@@ -765,7 +760,7 @@ void EnSGoro_UpdateSleeping(EnSGoro* this, PlayState* play) {
     this->scaleFactor = Math_SinS(this->snorePhase) * 0.01f * 0.1f;
     this->actor.scale.y = 0.01f - this->scaleFactor;
     this->actor.scale.z = 0.01f - this->scaleFactor;
-    this->actor.scale.x = this->scaleFactor + 0.01f;
+    this->actor.scale.x = 0.01f + this->scaleFactor;
 
     if (!(this->actionFlags & EN_S_GORO_ACTIONFLAG_SUPPRESS_SNORE)) {
         if (this->snorePhase == 0) {
@@ -777,7 +772,7 @@ void EnSGoro_UpdateSleeping(EnSGoro* this, PlayState* play) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SNORE1);
             }
         }
-    } else if (gSaveContext.save.weekEventReg[22] & 4){
+    } else if (gSaveContext.save.weekEventReg[22] & 4) {
         this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_SUPPRESS_SNORE;
     }
 
@@ -824,6 +819,13 @@ s32 EnSGoro_CheckLullaby(EnSGoro* this, PlayState* play) {
 
             actorType = EN_S_GORO_GET_MAIN_TYPE(&this->actor);
             this->snorePhase = 0x400 << (actorType + 1);
+
+            /*
+             * Should be:
+             *	if ((actorType % 2) == 0)
+             * However, the original code checks the negative case whereas the above does not.
+             * So unfortunately, this is the only way to get it to match.
+             */
             if (!(actorType % 2)) {
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_SNOREPHASE;
             }
@@ -849,6 +851,13 @@ s32 EnSGoro_CheckGKBehavior(EnSGoro* this, PlayState* play) {
 
         actorType = EN_S_GORO_GET_MAIN_TYPE(&this->actor);
         this->snorePhase = 0x400 << (actorType + 1);
+
+        /*
+         * Should be:
+         *	if ((actorType % 2) == 0)
+         * However, the original code checks the negative case whereas the above does not.
+         * So unfortunately, this is the only way to get it to match.
+         */
         if (!(actorType % 2)) {
             this->actionFlags |= EN_S_GORO_ACTIONFLAG_SNOREPHASE;
         }
@@ -913,17 +922,8 @@ void EnSGoro_UpdateCollider(EnSGoro* this, PlayState* play) {
 }
 
 void EnSGoro_UpdateEyes(EnSGoro* this) {
-    s16 eyeCtr;
-
     if (this->actionFlags & EN_S_GORO_ACTIONFLAG_EYESOPEN) {
-        if (this->eyeTimer == 0) {
-            eyeCtr = 0;
-        } else {
-            this->eyeTimer--;
-            eyeCtr = this->eyeTimer;
-        }
-
-        if (eyeCtr == 0) {
+        if (DECR(this->eyeTimer) == 0) {
             this->eyeTexIndex++;
             if (this->eyeTexIndex >= EN_S_GORO_EYETEX_INDEX_MAX) {
                 this->eyeTimer = Rand_S16Offset(30, 30);
@@ -980,15 +980,7 @@ s32 EnSGoro_UpdateRotationToPlayer(EnSGoro* this, PlayState* play) {
 }
 
 s32 EnSGoro_UpdateAttentionTarget(EnSGoro* this, PlayState* play) {
-    s16 delayCounter;
-
-    if (this->loseAttentionTimer == 0) {
-        delayCounter = 0;
-    } else {
-        delayCounter = --this->loseAttentionTimer;
-    }
-
-    if (delayCounter != 0) {
+    if (DECR(this->loseAttentionTimer) != 0) {
         // EnSGoro is in the process of returning to idle position from previously looking at the player.
         if ((this->actionFlags & EN_S_GORO_ACTIONFLAG_EARSCOVERED) &&
             (this->actionFlags & EN_S_GORO_ACTIONFLAG_EYESOPEN)) {
@@ -1062,57 +1054,51 @@ void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
         switch (EN_S_GORO_GET_MAIN_TYPE(&this->actor)) {
             case EN_S_GORO_TYPE_SHRINE_WINTER_A:
                 this->actionFunc = EnSGoro_WinterShrineGoron_Idle;
-                return;
+                break;
             case EN_S_GORO_TYPE_SHRINE_WINTER_B:
                 this->actionFunc = EnSGoro_WinterShrineGoron_Idle;
-                return;
+                break;
             case EN_S_GORO_TYPE_SHRINE_WINTER_C:
                 this->actionFunc = EnSGoro_WinterShrineGoron_Idle;
-                return;
+                break;
             case EN_S_GORO_TYPE_SHRINE_SPRING_A:
                 if (EnSGoro_FindGoronElder(this, play)) {
                     this->actionFunc = EnSGoro_SpringShrineGoron_Idle;
-                    return;
                 }
-                return;
+                break;
             case EN_S_GORO_TYPE_SHRINE_SPRING_B:
                 if (EnSGoro_FindGoronElder(this, play)) {
                     this->actionFunc = EnSGoro_SpringShrineGoron_Idle;
-                    return;
                 }
-                return;
+                break;
             case EN_S_GORO_TYPE_SHRINE_SPRING_C:
                 if (EnSGoro_FindGoronElder(this, play)) {
                     this->actionFunc = EnSGoro_SpringShrineGoron_Idle;
-                    return;
                 }
-                return;
+                break;
             case EN_S_GORO_TYPE_SHRINE_SPRING_D:
                 if (EnSGoro_FindGoronElder(this, play)) {
                     this->actionFunc = EnSGoro_SpringShrineGoron_Idle;
-                    return;
                 }
-                return;
+                break;
             case EN_S_GORO_TYPE_SHRINE_SPRING_E:
                 if (EnSGoro_FindGoronElder(this, play)) {
                     this->actionFunc = EnSGoro_SpringShrineGoron_Idle;
-                    return;
                 }
-                return;
+                break;
             case EN_S_GORO_TYPE_SHRINE_SPRING_F:
                 if (EnSGoro_FindGoronElder(this, play)) {
                     this->actionFunc = EnSGoro_SpringShrineGoron_Idle;
-                    return;
                 }
-                return;
+                break;
             case EN_S_GORO_TYPE_BOMBSHOP:
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_ROLLEDUP;
                 this->actionFunc = EnSGoro_ShopGoron_Idle;
                 this->actor.shape.yOffset = EN_S_GORO_ROLLEDUP_YOFFSET;
-                return;
+                break;
             default:
                 Actor_MarkForDeath(&this->actor);
-                return;
+                break;
         }
     }
 }
@@ -1286,8 +1272,8 @@ void EnSGoro_ShopGoron_FinishTransaction(EnSGoro* this, PlayState* play) {
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnSGoro_ShopGoron_Talk;
     } else {
-	    func_800B85E0(&this->actor, play, 400.0f, -1);
-	}
+        func_800B85E0(&this->actor, play, 400.0f, -1);
+    }
 }
 
 void EnSGoro_Sleep(EnSGoro* this, PlayState* play) {
