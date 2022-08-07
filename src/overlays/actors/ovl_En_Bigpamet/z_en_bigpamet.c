@@ -313,8 +313,8 @@ void func_80A27DD8(EnBigpamet* this, PlayState* play) {
     sp8C.y = this->actor.world.pos.y;
     sp8C.z = (Math_CosS(this->actor.wallYaw + 0x8000) * 50.0f) + this->actor.world.pos.z;
 
-    sp8C.x += ((this->actor.world.pos.x - sp8C.x) * 0.3f);
-    sp8C.z += ((this->actor.world.pos.z - sp8C.z) * 0.3f);
+    sp8C.x += (this->actor.world.pos.x - sp8C.x) * 0.3f;
+    sp8C.z += (this->actor.world.pos.z - sp8C.z) * 0.3f;
 
     for (i = 0; i < 4; i++) {
         temp_fs0 = Rand_ZeroFloat(60.0f) + 50.0f;
