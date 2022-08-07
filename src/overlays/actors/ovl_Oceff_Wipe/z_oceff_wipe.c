@@ -94,7 +94,7 @@ void OceffWipe_Draw(Actor* thisx, PlayState* play) {
     }
 
     for (i = 0; i < 20; i++) {
-        vtxPtr = sFrustumVtx;
+        vtxPtr = sOceffWipeFrustumVtx;
         vtxPtr[i * 2 + 0].v.cn[3] = alphaTable[(sAlphaIndices[i] & 0xF0) >> 4];
         vtxPtr[i * 2 + 1].v.cn[3] = alphaTable[sAlphaIndices[i] & 0xF];
     }
@@ -117,10 +117,10 @@ void OceffWipe_Draw(Actor* thisx, PlayState* play) {
         gDPSetEnvColor(POLY_XLU_DISP++, 100, 0, 255, 128);
     }
 
-    gSPDisplayList(POLY_XLU_DISP++, sFrustumMaterialDL);
+    gSPDisplayList(POLY_XLU_DISP++, sOceffWipeFrustumMaterialDL);
     gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, 0 - scroll, scroll * -2, 32,
                                                      32, 1, 0 - scroll, scroll * -2, 32, 32));
-    gSPDisplayList(POLY_XLU_DISP++, sFrustumModelDL);
+    gSPDisplayList(POLY_XLU_DISP++, sOceffWipeFrustumModelDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
