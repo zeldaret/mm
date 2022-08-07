@@ -31,22 +31,22 @@ const ActorInit Dm_Char09_InitVars = {
 };
 
 static AnimationInfo sAnimationInfo[] = {
-    { &object_bee_Anim_00005C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_bee_Anim_00005C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
-void DmChar09_ChangeAnimation(SkelAnime* skelAnime, AnimationInfo* animation, u16 index) {
+void DmChar09_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
     f32 frameCount;
 
-    animation += index;
+    animationInfo += animIndex;
 
-    if (animation->frameCount < 0.0f) {
-        frameCount = Animation_GetLastFrame(animation->animation);
+    if (animationInfo->frameCount < 0.0f) {
+        frameCount = Animation_GetLastFrame(animationInfo->animation);
     } else {
-        frameCount = animation->frameCount;
+        frameCount = animationInfo->frameCount;
     }
 
-    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, frameCount,
-                     animation->mode, animation->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame, frameCount,
+                     animationInfo->mode, animationInfo->morphFrames);
 }
 
 void DmChar09_Init(Actor* thisx, PlayState* play) {
@@ -55,7 +55,7 @@ void DmChar09_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_bee_Skel_001398, &object_bee_Anim_00005C, this->jointTable,
                    this->morphTable, OBJECT_BEE_LIMB_MAX);
-    DmChar09_ChangeAnimation(&this->skelAnime, sAnimationInfo, 0);
+    DmChar09_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_228 = Rand_ZeroOne() * 65535.0f;
     this->unk_22A = Rand_ZeroOne() * 65535.0f;
@@ -128,7 +128,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
     s32 pad;
     s32 i;
     s32 actionIndex;
-    s32 action = 0;
+    s32 max = 0;
     s32 pathnum;
     u8 csIndex = 0;
 
@@ -140,22 +140,22 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
         csIndex = 1;
     }
 
-    if (Cutscene_CheckActorAction(play, 0x1F7) && (csIndex)) {
+    if (Cutscene_CheckActorAction(play, 0x1F7) && csIndex) {
         actionIndex = Cutscene_GetActorActionIndex(play, 0x1F7);
         if (this->unk_22F != play->csCtx.actorActions[actionIndex]->action) {
             this->unk_22F = play->csCtx.actorActions[actionIndex]->action;
             switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 2:
-                    action = 0;
+                    max = 0;
                     break;
                 case 3:
-                    action = 1;
+                    max = 1;
                     break;
                 case 4:
-                    action = 2;
+                    max = 2;
                     break;
                 case 5:
-                    action = 3;
+                    max = 3;
                     break;
             }
 
@@ -163,7 +163,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
                 pathnum = DMCHAR09_GET_PATH(&this->actor);
                 path = &play->setupPathList[pathnum];
 
-                for (i = 0; i < action; i++) {
+                for (i = 0; i < max; i++) {
                     pathnum = path->unk1;
                     path = &play->setupPathList[pathnum];
                 }
@@ -173,12 +173,12 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
                 this->unk_21C = 0;
                 this->unk_218 = path->count - 1;
                 this->unk_220 = 1;
-                this->unk_22E = 1;
+                this->unk_22E = true;
 
                 this->speed = (u16)play->csCtx.actorActions[actionIndex]->rot.z * 0.00390625f;
                 this->actionFunc = func_80AB1FDC;
             } else {
-                this->unk_22E = 0;
+                this->unk_22E = false;
                 this->actionFunc = DmChar09_DoNothing;
             }
         }
@@ -202,7 +202,7 @@ void DmChar09_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     func_80AB2268(this, play);
     func_80AB24BC(this, play);
-    if ((play->csCtx.state != 0) && (this->unk_22E) && DMCHAR09_GET_100(thisx)) {
+    if ((play->csCtx.state != 0) && this->unk_22E && DMCHAR09_GET_100(thisx)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK + SFX_FLAG);
     }
 }

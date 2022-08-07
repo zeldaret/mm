@@ -11656,7 +11656,7 @@
     0x80AB0E7C:("func_80AB0E7C",),
     0x80AB0F90:("func_80AB0F90",),
     0x80AB1124:("DmChar08_Draw",),
-    0x80AB1E10:("DmChar09_ChangeAnimation",),
+    0x80AB1E10:("DmChar09_ChangeAnim",),
     0x80AB1EAC:("DmChar09_Init",),
     0x80AB1F90:("DmChar09_Destroy",),
     0x80AB1FA0:("func_80AB1FA0",),
