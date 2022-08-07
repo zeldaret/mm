@@ -99,11 +99,8 @@ static Vec3f D_80990234 = { 0.0f, 1.5f, 0.0f };
 static Vec3f D_80990240 = { 0.0f, 0.0f, 0.0f };
 static Vec3f D_8099024C = { 0.0f, 0.0f, 0.0f };
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F800.s")
-// Called in EnTg_Init
-// Similar to DmZl_ChangeAnimation
 // EnTg_ChangeAnimation - func_8098F800
-void func_8098F800(SkelAnime* skelAnime, AnimationInfoS* animation, s16 unusedExtraOffset) {
+void EnTg_ChangeAnimation(SkelAnime* skelAnime, AnimationInfoS* animation, s16 unusedExtraOffset) {
     f32 endFrame;
 
     animation += unusedExtraOffset;
@@ -137,7 +134,7 @@ void EnTg_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_mu_Skel_00B2B0, NULL, this->jointTable, this->morphTable, 21);
-    func_8098F800(&this->skelAnime, &sAnimations, 0);
+    EnTg_ChangeAnimation(&this->skelAnime, &sAnimations, 0);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
