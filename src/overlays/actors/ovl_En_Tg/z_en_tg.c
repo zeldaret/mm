@@ -100,17 +100,20 @@ static Vec3f D_80990240 = { 0.0f, 0.0f, 0.0f };
 static Vec3f D_8099024C = { 0.0f, 0.0f, 0.0f };
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F800.s")
-void func_8098F800(SkelAnime* skelAnime, AnimationInfoS* animation, s16 idx) {
-    f32 phi_f0;
+// Called in EnTg_Init
+// Similar to DmZl_ChangeAnimation
+// EnTg_ChangeAnimation - func_8098F800
+void func_8098F800(SkelAnime* skelAnime, AnimationInfoS* animation, s16 unusedExtraOffset) {
+    f32 endFrame;
 
-    animation += idx;
+    animation += unusedExtraOffset;
 
     if (animation->frameCount < 0) {
-        phi_f0 = (f32)Animation_GetLastFrame(animation->animation);
+        endFrame = (f32)Animation_GetLastFrame(animation->animation);
     } else {
-        phi_f0 = animation->frameCount;
+        endFrame = animation->frameCount;
     }
-    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, phi_f0,
+    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, endFrame,
                      animation->mode, animation->morphFrames);
 }
 
