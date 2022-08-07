@@ -72,6 +72,14 @@ void func_808505D0(Player* this, PlayState* play);
 
 void func_808519FC(Player* this, PlayState* play);
 
+
+typedef struct struct_8082E224_arg1 {
+    /* 0x0 */ u16 sfxId;
+    /* 0x2 */ s16 unk_2; // negative marks the end
+} struct_8082E224_arg1;  // size = 0x4
+
+
+
 /* action funcs */
 void func_808496AC(Player* this, PlayState* play);
 void func_808497A0(Player* this, PlayState* play);
@@ -168,6 +176,248 @@ void func_808573A4(Player* this, PlayState* play);
 void func_80857BE8(Player* this, PlayState* play);
 void func_8085B08C(Player* this, PlayState* play);
 
+
+s32 func_80839518(Player* this, PlayState* play);
+s32 func_808365DC(Player* this, PlayState* play);
+s32 func_8083D23C(Player* this, PlayState* play);
+s32 func_8083CCB4(Player* this, PlayState* play);
+s32 func_808391D8(Player* this, PlayState* play);
+s32 func_8083DFC4(Player* this, PlayState* play);
+s32 func_8083A114(Player* this, PlayState* play);
+s32 func_80848570(Player* this, PlayState* play);
+s32 func_8083A580(Player* this, PlayState* play);
+s32 func_8083D78C(Player* this, PlayState* play);
+s32 func_80839B18(Player* this, PlayState* play);
+s32 func_8083A274(Player* this, PlayState* play);
+s32 func_80834DFC(Player* this, PlayState* play);
+s32 func_80838A90(Player* this, PlayState* play);
+s32 func_8083A0CC(Player* this, PlayState* play);
+
+
+
+
+s32 func_80848780(Player* this, PlayState* play);
+s32 func_808487B8(Player* this, PlayState* play);
+s32 func_80848B6C(Player* this, PlayState* play);
+s32 func_808490B4(Player* this, PlayState* play);
+s32 func_808491B4(Player* this, PlayState* play);
+s32 func_80848808(Player* this, PlayState* play);
+s32 func_8084894C(Player* this, PlayState* play);
+s32 func_80848A0C(Player* this, PlayState* play);
+s32 func_80848AB0(Player* this, PlayState* play);
+s32 func_80848E4C(Player* this, PlayState* play);
+s32 func_80849054(Player* this, PlayState* play);
+s32 func_8084923C(Player* this, PlayState* play);
+s32 func_808492C4(Player* this, PlayState* play);
+s32 func_8084933C(Player* this, PlayState* play);
+s32 func_80849570(Player* this, PlayState* play);
+s32 func_80849620(Player* this, PlayState* play);
+
+
+
+
+void func_808412A0(PlayState* play, Player* this);
+void func_80841408(PlayState* play, Player* this);
+void func_808412BC(PlayState* play, Player* this);
+void func_808414E0(PlayState* play, Player* this);
+void func_80841528(PlayState* play, Player* this);
+void func_808415E4(PlayState* play, Player* this);
+void func_80841624(PlayState* play, Player* this);
+void func_808415A0(PlayState* play, Player* this);
+void func_80841744(PlayState* play, Player* this);
+void func_80841744(PlayState* play, Player* this);
+void func_8083ADF0(PlayState* play, Player* this);
+void func_8083AD8C(PlayState* play, Player* this);
+void func_8083AD04(PlayState* play, Player* this);
+void func_8083ADB8(PlayState* play, Player* this);
+void func_8083ADF0(PlayState* play, Player* this);
+void func_8083AE38(PlayState* play, Player* this);
+
+
+
+void func_80859F4C(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_80859FCC(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_80859FF4(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A120(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A144(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A19C(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A1D4(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A24C(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A2AC(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A330(PlayState* play, Player* this, UNK_TYPE arg2);
+
+void func_80859EBC(PlayState* play, Player* this, s32 arg2);
+
+void func_80859414(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_80859AD0(PlayState* play, Player* this, void* arg2);
+void func_80859B28(PlayState* play, Player* this, void* arg2);
+void func_8085ADA0(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085AACC(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_808595B8(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_80859890(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_80859C60(PlayState* play, Player* this, void* arg2);
+void func_8085A710(PlayState* play, Player* this, void* arg2);
+void func_808595B8(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_80859D70(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A6C0(PlayState* play, Player* this, void* arg2);
+void func_80859FF4(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A04C(PlayState* play, Player* this, CsCmdActorAction* playerAction);
+void func_8085A144(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A1D4(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A364(PlayState* play, Player* this, void* arg2);
+void func_808599DC(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A40C(PlayState* play, Player* this, void* arg2);
+void func_80859708(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A2AC(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A940(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A4A4(PlayState* play, Player* this, void* arg2);
+void func_8085A5DC(PlayState* play, Player* this, void* arg2);
+void func_8085AA84(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A7C0(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085AA10(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_808599DC(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_80859AF8(PlayState* play, Player* this, void* arg2);
+void func_80859A44(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_80859D44(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_80859EBC(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_80859F4C(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_80859F4C(PlayState* play, Player* this, UNK_TYPE arg2);
+
+void func_8085A768(PlayState* play, Player* this, void* arg2);
+void func_8085AA60(PlayState* play, Player* this, UNK_TYPE arg2);
+
+
+void func_808594D0(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_808594D0(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085978C(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_80859B54(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_80859CA0(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_808594D0(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_80859CFC(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A66C(PlayState* play, Player* this, void* arg2);
+void func_80859FCC(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A120(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A19C(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085978C(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085968C(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A24C(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A330(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A8C4(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_8085A530(PlayState* play, Player* this, void* arg2);
+void func_8085A768(PlayState* play, Player* this, void* arg2);
+void func_8085AA60(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_80859990(PlayState* play, Player* this, UNK_TYPE arg2);
+void func_80859A10(PlayState* play, Player* this, UNK_TYPE arg2);
+
+
+// ActionParams
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F5A4(PlayState* play, Player* this);
+void func_8082F8A0(PlayState* play, Player* this);
+void func_8082F5C0(PlayState* play, Player* this);
+void func_8082F5C0(PlayState* play, Player* this);
+void func_8082F5C0(PlayState* play, Player* this);
+void func_8082F5C0(PlayState* play, Player* this);
+void func_8082F7F4(PlayState* play, Player* this);
+void func_8082F62C(PlayState* play, Player* this);
+void func_8082F62C(PlayState* play, Player* this);
+void func_8082F62C(PlayState* play, Player* this);
+void func_8082F8A0(PlayState* play, Player* this);
+void func_8082F5C0(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+void func_8082F594(PlayState* play, Player* this);
+
+
+
+void func_80858DB4(PlayState* play, Player* this, LinkAnimationHeader* anim);
+void func_80858DDC(PlayState* play, Player* this, LinkAnimationHeader* anim);
+void func_80858E40(PlayState* play, Player* this, LinkAnimationHeader* anim);
+void func_80858E60(PlayState* play, Player* this, LinkAnimationHeader* anim);
+void func_80858E80(PlayState* play, Player* this, LinkAnimationHeader* anim);
+void func_80858EA0(PlayState* play, Player* this, LinkAnimationHeader* anim);
+void func_80858EFC(PlayState* play, Player* this, LinkAnimationHeader* anim);
+void func_80858F1C(PlayState* play, Player* this, LinkAnimationHeader* anim);
+void func_80858F3C(PlayState* play, Player* this, LinkAnimationHeader* anim);
+void func_80858F5C(PlayState* play, Player* this, LinkAnimationHeader* anim);
+void func_80858FBC(PlayState* play, Player* this, LinkAnimationHeader* anim);
+void func_80859028(PlayState* play, Player* this, LinkAnimationHeader* anim);
+void func_808591BC(PlayState* play, Player* this, LinkAnimationHeader* anim);
+void func_80858DFC(PlayState* play, Player* this, LinkAnimationHeader* anim);
+void func_80858F7C(PlayState* play, Player* this, LinkAnimationHeader* anim);
+void func_80858F9C(PlayState* play, Player* this, LinkAnimationHeader* anim);
+void func_80859168(PlayState* play, Player* this, LinkAnimationHeader* anim);
+void func_80859210(PlayState* play, Player* this, struct_8082E224_arg1* arg2);
+void func_80858EC0(PlayState* play, Player* this, LinkAnimationHeader* anim);
+
+
 typedef struct struct_8085C2A4 {
     /* 0x0 */ LinkAnimationHeader* unk_0;
     /* 0x4 */ LinkAnimationHeader* unk_4;
@@ -193,12 +443,157 @@ typedef struct struct_8085CF88 {
     /* 0x0F */ UNK_TYPE1 unk_F;
 } struct_8085CF88; // size = 0x10
 
+
+typedef struct struct_8085DA94 {
+    /* 0x0 */ s8 type;
+    /* 0x4 */ union {
+        void* ptr;
+        void (*func)(PlayState*, Player*, CsCmdActorAction*);
+    };
+} struct_8085DA94; // size = 0x8
+
+typedef struct struct_8085E368 {
+    /* 0x0 */ s16 unk_0; /* inferred */
+    /* 0x2 */ s16 unk_2; /* inferred */
+    /* 0x4 */ s16 unk_4; /* inferred */
+    /* 0x6 */ s16 unk_6; /* inferred */
+    /* 0x8 */ s16 unk_8; /* inferred */
+    /* 0xA */ s16 unk_A; /* inferred */
+} struct_8085E368;       // size = 0xC
+
+typedef struct struct_8085D910 {
+    /* 0x0 */ u8 unk_0;
+    /* 0x1 */ u8 unk_1;
+    /* 0x2 */ u8 unk_2;
+    /* 0x3 */ u8 unk_3;
+} struct_8085D910; // size = 0x4
+
+typedef struct struct_8085D848_unk_00 {
+    /* 0x00 */ s16 unk_00; /* inferred */
+    /* 0x02 */ u8 unk_02;  /* inferred */
+    /* 0x03 */ u8 unk_03;
+    /* 0x04 */ u8 unk_04;
+    /* 0x05 */ u8 unk_05;
+    /* 0x06 */ u8 unk_06;
+    /* 0x07 */ u8 unk_07;
+} struct_8085D848_unk_00; // size = 0x08
+
+typedef struct struct_8085D848_unk_18 {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ u8 unk_0C;
+    /* 0x0D */ u8 unk_0D;
+    /* 0x0E */ u8 unk_0E;
+    /* 0x0F */ UNK_TYPE1 unk_0F[1];
+    /* 0x10 */ s16 unk_10;
+    /* 0x12 */ UNK_TYPE1 unk_12[2];
+} struct_8085D848_unk_18; // size = 0x14
+
+typedef struct struct_8085D848 {
+    /* 0x00 */ struct_8085D848_unk_00 unk_00[3];
+    /* 0x18 */ struct_8085D848_unk_18 unk_18[3];
+} struct_8085D848; // size = 0x54
+
+typedef struct struct_8085D80C {
+    /* 0x0 */ s16 actorId;
+    /* 0x2 */ s16 params;
+} struct_8085D80C; // size = 0x4
+
+typedef struct struct_8085D798 {
+    /* 0x0 */ s16 actorId;
+    /* 0x2 */ s8 actorParams;
+    /* 0x3 */ u8 itemId;
+    /* 0x4 */ u8 actionParam;
+    /* 0x5 */ u8 textId;
+} struct_8085D798; // size = 0x6
+
+typedef struct struct_8085D714 {
+    /* 0x0 */ u8 unk_0;
+    /* 0x4 */ LinkAnimationHeader* unk_4;
+} struct_8085D714; // size = 0x8
+
+typedef struct struct_8085D224 {
+    /* 0x0 */ LinkAnimationHeader* anim;
+    /* 0x4 */ f32 unk_4;
+    /* 0x8 */ f32 unk_8;
+} struct_8085D224; // size = 0xC
+
+typedef struct struct_8085D13C {
+    /* 0x0 */ s8 damage;
+    /* 0x1 */ u8 sourceIntensity;
+    /* 0x2 */ u8 decayTimer;
+    /* 0x3 */ u8 decayStep;
+    /* 0x4 */ u16 unk_4;
+} struct_8085D13C; // size = 0x6
+
+typedef struct struct_8085CD30 {
+    /* 0x00 */ LinkAnimationHeader* unk_0;
+    /* 0x04 */ LinkAnimationHeader* unk_4;
+    /* 0x08 */ LinkAnimationHeader* unk_8;
+    /* 0x0C */ u8 unk_C;
+    /* 0x0D */ u8 unk_D;
+} struct_8085CD30; // size = 0x10
+
+typedef struct struct_8085D09C {
+    /* 0x0 */ s32 dmgFlags;
+    /* 0x4 */ u8 unk_4;
+    /* 0x5 */ u8 unk_5;
+    /* 0x6 */ u8 unk_6;
+    /* 0x7 */ u8 unk_7;
+} struct_8085D09C; // size = 0x8
+
+typedef struct struct_8085CC88 {
+    /* 0x0 */ LinkAnimationHeader* unk_0;
+    /* 0x4 */ u8 unk_4;
+} struct_8085CC88; // size = 0x8
+
+typedef struct {
+    /* 0x0 */ u8 itemId;
+    /* 0x2 */ s16 actorId;
+} struct_8085CD24; // size = 0x4
+
+typedef struct {
+    /* 0x0 */ Color_RGB8 unk_0;
+    /* 0x3 */ Color_RGB8 unk_3;
+    /* 0x6 */ Color_RGB8 unk_6;
+    /* 0xA */ s16 unk_A;
+    /* 0xC */ s16 unk_C;
+} struct_8082F02C_arg1; // size = 0xE
+
+#if 0
+// OoT:
+typedef struct GetItemEntry {
+    /* 0x00 */ u8 itemId;
+    /* 0x01 */ u8 field; // various bit-packed data
+    /* 0x02 */ s8 gi;    // defines the draw id and chest opening animation
+    /* 0x03 */ u8 textId;
+    /* 0x04 */ u16 objectId;
+} GetItemEntry; // size = 0x06
+#endif
+
+typedef struct GetItemEntry {
+    /* 0x0 */ u8 itemId;
+    /* 0x1 */ u8 unk_1;
+    /* 0x2 */ s8 unk_2;
+    /* 0x3 */ u8 textId;
+    /* 0x4 */ u16 objectId;
+} GetItemEntry; // size = 0x6
+
+
+
+struct _struct_D_8085D200_0xC {
+    /* 0x0 */ LinkAnimationHeader* unk_0; /* inferred */
+    /* 0x4 */ LinkAnimationHeader* unk_4; /* inferred */
+    /* 0x8 */ u8 unk_8;                   /* inferred */
+    /* 0x9 */ u8 unk_9;                   /* inferred */
+};                                        /* size = 0xC */
+
+
 extern struct_8085CF88 D_8085CF88[];
 
 // TODO: less dumb name
 #define SFX_VOICE_BANK_SIZE 0x20
 
-#if 0
+#if 1
 
 u8 D_8085B9F0[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, };
 u8 D_8085BA08[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, };
@@ -967,191 +1362,191 @@ f32 D_8085C3E8 = 1.0f;
 u16 D_8085C3EC[] = { NA_SE_VO_LI_SWEAT, NA_SE_VO_LI_SNEEZE, NA_SE_VO_LI_RELAX, NA_SE_VO_LI_FALL_L };
 
 GetItemEntry sGetItemTable[0xB9] = {
-    { 0x84, 0, 0xB0, -0x3C, 1, 0x3F },
-    { 0x85, 1, 0xAF, 2, 1, 0x3F },
-    { 0x86, 2, 0xAE, 3, 1, 0x3F },
-    { 0x87, 2, 0xAE, 4, 1, 0x3F },
-    { 0x88, 0x14, 0xAC, 5, 1, 0x3F },
-    { 0x89, 0x14, 0xAB, 6, 1, 0x3F },
-    { 0x8A, 0x13, 0xBD, 7, 1, 0x3F },
-    { 0x5A, 0xA0, 0x21, 8, 0, 0xA8 },
-    { 0x5B, 0xA0, 0x22, 9, 0, 0xA8 },
-    { 0x83, 0x80, 9, 0xA, 0, 0x90 },
-    { 0x83, 0xA0, 9, 0xB, 0, 0x90 },
-    { 0x7B, 0xA0, 0x14, 0xC, 0, 0x96 },
-    { 0x6F, 0xA0, 0x13, 0xD, 0, 0x96 },
-    { 0x79, 0x6F, -0x1D, 0xE, 0, 0xA4 },
-    { 0x7A, 0x6E, -0x1E, 0xF, 0, 0xA4 },
-    { 0x83, 0x80, 9, 0x10, 0, 0x90 },
-    { -1, 0, 0, 0x11, 0, 0 },
-    { 0x83, 0x80, 9, 0x12, 0, 0x90 },
-    { 0x83, 0x80, 9, 0x13, 0, 0x90 },
-    { 6, 0x59, -0x1F, 0x14, 0, 0xA5 },
-    { 0x8F, 0x59, -0x1F, 0x15, 0, 0xA5 },
-    { 0x90, 0x59, -0x1F, 0x16, 0, 0xA5 },
-    { 0x91, 0x59, -0x1F, 0x17, 0, 0xA5 },
-    { 0x92, 0x59, -0x1F, 0x18, 0, 0xA5 },
-    { 8, 0xD, -0x1B, 0x19, 0, 0x9F },
-    { 0x98, 0xC0, -0x27, 0x1A, 0, 0xB0 },
-    { 0x56, 0xA0, 0x18, 0x1B, 0, 0x98 },
-    { 0x57, 0xA0, 0x19, 0x1C, 0, 0x98 },
-    { 0x58, 0xA0, 0x1A, 0x1D, 0, 0x98 },
-    { 0x93, 0x48, -0x24, 0x1E, 0, 0xAF },
-    { 0x94, 0x49, -0x25, 0x1F, 0, 0xAF },
-    { 0x95, 0x4A, -0x26, 0x20, 0, 0xAF },
-    { 0x95, 0x4A, -0x26, 0x21, 0, 0xAF },
-    { 1, 0xA0, 0x2F, 0x22, 0, 0xBF },
-    { 0x54, 0xA0, 0x16, 0x23, 0, 0x97 },
-    { 0x55, 0xA0, 0x17, 0x24, 0, 0x97 },
-    { 2, 0xA0, 0x48, 0x25, 1, 0x21 },
-    { 3, 0xA0, 0x49, 0x26, 1, 0x21 },
-    { 4, 0xA0, 0x4A, 0x27, 1, 0x21 },
-    { 9, 0xC, -0x12, 0x28, 0, 0x94 },
-    { 0x8D, 0xC, -0x12, 0x29, 0, 0x94 },
-    { 0x8E, 0xC, -0x12, 0x2A, 0, 0x94 },
-    { 0x9D, 0xA0, -0x12, 0x2B, 0, 0x94 },
-    { 0x9D, 0xA0, -0x12, 0x2C, 0, 0x94 },
-    { 0x9E, 0xA0, -0x12, 0x2D, 0, 0x94 },
-    { 0x97, 0xC0, -0x27, 0x2E, 0, 0xB0 },
-    { 0x9B, 0xA0, -0x1B, 0x2F, 0, 0x9F },
-    { 0x9B, 0xA0, -0x1B, 0x30, 0, 0x9F },
-    { 0x9C, 0xA0, -0x1B, 0x31, 0, 0x9F },
-    { 0x51, 0xA0, -0x28, 0x32, 0, 0xB3 },
-    { 0x52, 0xA0, 0x34, 0x33, 0, -0x3D },
-    { 0xC, 0x80, 0x5E, 0x34, 1, -0x36 },
-    { 0xA, 0x80, -0x35, 0x35, 0, -0x3A },
-    { 0x99, 0xC0, -0x27, 0x36, 0, 0xB0 },
-    { 0x4D, 0xA0, 0x56, 0x37, 1, 0x48 },
-    { 0x4E, 0xA0, 0x67, 0x38, 1, -7 },
-    { 0x4F, 0xA0, 0x68, 0x39, 1, -6 },
-    { 0x9A, 0xC0, -0x27, 0x3A, 0, 0xB0 },
-    { 0x10, 0xA0, 0x69, 0x3B, 1, -5 },
-    { 0x78, 0xA0, -2, 0x3C, 0, 0x86 },
-    { 0x74, 0xA0, 0xA, 0x3D, 0, 0x92 },
-    { 0x76, 0xA0, 0x1C, 0x3E, 0, 0xA0 },
-    { 0x75, 0xA0, 0xB, 0x3F, 0, 0x91 },
-    { -1, 0, 0, 0x40, 0, 0 },
-    { 0xF, 0xA0, 0x29, 0x41, 0, 0xB4 },
-    { 0xE, 0xA0, 0x30, 0x42, 0, 0xC0 },
-    { 0xD, 0xA0, 0x75, 0x43, 2, 0x28 },
-    { 0xD, 0, 0, 0x44, 0, 0 },
-    { 0x83, 0x80, 9, 0x45, 0, 0x90 },
-    { -1, 0, 0, 0x46, 0, 0 },
-    { -1, 0, 0, 0x47, 0, 0 },
-    { -1, 0, 0, 0x48, 0, 0 },
-    { -1, 0, 0, 0x49, 0, 0 },
-    { -1, 0, 0, 0x4A, 0, 0 },
-    { -1, 0, 0, 0x4B, 0, 0 },
-    { 0, 0xA0, 0x2B, 0x4C, 0, 0xB5 },
-    { -1, 0, 0, 0x4D, 0, 0 },
-    { -1, 0, 0, 0x4E, 0, 0 },
-    { -1, 0, 0, 0x4F, 0, 0 },
-    { 0x6D, 0x80, 0xC, 0x50, 2, 0x53 },
-    { -1, 0xA0, 0x20, 0x51, 0, 0xA0 },
-    { 0x6E, 0x80, 0xB5, 0x52, 1, 0x25 },
-    { -1, 0, 0, 0x53, 0, 0 },
-    { -1, 0, 0, 0x54, 0, 0 },
-    { 0x5D, 0x80, 0x5D, 0x55, 0, 0 },
-    { 0x5E, 0x80, 0x64, 0x56, 0, 0 },
-    { 0x5F, 0x80, 0x65, 0x57, 0, 0 },
-    { 0x60, 0x80, 0x66, 0x58, 0, 0 },
-    { 0x11, 0x80, 0x58, 0x59, 1, 0x96 },
-    { 0x12, 0x80, 1, 0x5A, 0, 0x9E },
-    { 0x13, 0x80, 0x32, 0x5B, 0, -0x3F },
-    { 0x14, 0x80, 0x31, 0x5C, 0, -0x3F },
-    { 0x15, 0x80, 0x33, 0x5D, 0, -0x3F },
-    { 0x16, 0x80, 0x3C, 0x5E, 2, 0x72 },
-    { 0x16, 0x80, 1, 0x5F, 0, 0x9E },
-    { 0x18, 0x80, 0x2C, 0x60, 0, 0xB6 },
-    { 0x19, 0x80, 0x2C, 0x61, 0, 0xB6 },
-    { 0x1A, 0x80, 0x36, 0x62, 0, -0x39 },
-    { 0x1B, 0x80, 0x4C, 0x63, 1, 0x37 },
-    { 0x1C, 0, 0, 0x64, 0, 0 },
-    { 0x12, 0x80, 1, 0x65, 0, 0x9E },
-    { 0x1E, 0x80, 0x53, 0x66, 1, 0x39 },
-    { 0x1F, 0, 0, 0x67, 0, 0 },
-    { 0x20, 0, 0, 0x68, 0, 0 },
-    { 0x21, 0x80, 0x59, 0x69, 1, 0xAE },
-    { 0x22, 0x80, 0x60, 0x6A, 1, -0x17 },
-    { 0x23, 0x80, 0x70, 0x6B, 2, 0x1D },
-    { -1, 0, 0, 0x6C, 0, 0 },
-    { 0x12, 0x80, 1, 0x6D, 0, 0x9E },
-    { 0x24, 0x80, 0x60, 0x6E, 1, -0x17 },
-    { 0x25, 0x80, 0x74, 0x6F, 2, 0x27 },
-    { 0x12, 0x80, 1, 0x70, 0, 0x9E },
-    { -1, 0, 0, 0x71, 0, 0 },
-    { -1, 0, 0, 0x72, 0, 0 },
-    { -1, 0, 0, 0x73, 0, 0 },
-    { -1, 0, 0, 0x74, 0, 0 },
-    { -1, 0, 0, 0x75, 0, 0 },
-    { -1, 0, 0, 0x76, 0, 0 },
-    { -1, 0, 0, 0x77, 0, 0 },
-    { 0x32, 0xA0, 0x5C, 0x78, 1, 0xBD },
-    { 0x33, 0xA0, 0x45, 0x79, 1, 0x19 },
-    { 0x34, 0xA0, 0x46, 0x7A, 1, 0x1A },
-    { 0x35, 0xA0, 0x76, 0x7B, 2, 0x42 },
-    { 0x44, 0xA0, 0x3E, 0x7C, 1, 2 },
-    { 0x49, 0xA0, 0x73, 0x7D, 2, 0x26 },
-    { 0x38, 0xA0, 0x11, 0x7E, 2, 0x65 },
-    { 0x39, 0xA0, 0x3F, 0x7F, 1, 3 },
-    { 0x3A, 0xA0, 0x2D, 0x80, 1, 0 },
-    { 0x3B, 0xA0, 0x6A, 0x81, 2, 9 },
-    { 0x3C, 0xA0, 0x71, 0x82, 2, 0x1F },
-    { 0x3D, 0xA0, 0xF, 0x83, 2, 0x59 },
-    { 0x3E, 0xA0, 0x72, 0x84, 2, 0x25 },
-    { 0x3F, 0xA0, 4, 0x85, 2, 0x82 },
-    { 0x40, 0xA0, 0x6B, 0x86, 2, 0xA },
-    { 0x41, 0xA0, 0x6C, 0x87, 2, 0xB },
-    { 0x42, 0xA0, 0x23, 0x88, 2, 0x66 },
-    { 0x43, 0xA0, 3, 0x89, 2, 0x7D },
-    { 0x36, 0xA0, 0x40, 0x8A, 1, 4 },
-    { 0x45, 0xA0, 0xD, 0x8B, 2, 0x54 },
-    { 0x46, 0xA0, 0x10, 0x8C, 2, 0x5A },
-    { 0x47, 0xA0, 0x3B, 0x8D, 2, 0x6D },
-    { 0x48, 0xA0, 0x3D, 0x8E, 2, 0x7E },
-    { 0x37, 0xA0, 0xE, 0x8F, 2, 0x58 },
-    { -1, 0, 0, 0x90, 0, 0 },
-    { 0x9F, 0x80, 0x74, 0x91, 2, 0x27 },
-    { 0xA0, 0x80, 0x2C, 0x92, 0, 0xB6 },
-    { 0xA1, 0x80, 0x5F, 0x93, 1, -0x18 },
-    { 0xA2, 0x80, 0x62, 0x94, 1, -0x11 },
-    { 0xA3, 0x80, 0x63, 0x95, 1, -0x10 },
-    { 0x28, 0x80, 0x5A, 0x96, 1, 0xB1 },
-    { 0x29, 0x80, 0x5B, 0x97, 1, 0xB2 },
-    { 0x2A, 0x80, 0x41, 0x98, 1, 0xB2 },
-    { 0x2B, 0x80, 0x42, 0x99, 1, 0xB2 },
-    { 0x2C, 0x80, 0x44, 0x9A, 1, 0xB2 },
-    { 0x10, 0xA0, 0x69, 0x9B, 1, -5 },
-    { 0x4D, 0xA0, 0x56, 0x9C, 1, 0x48 },
-    { 0x4E, 0xA0, 0x67, 0x9D, 1, -7 },
-    { 0x4F, 0xA0, 0x68, 0x9E, 1, -6 },
-    { 0x51, 0xA0, -0x28, 0x9F, 0, 0xB3 },
-    { 0x2D, 0x80, 0x6D, 0xA0, 2, 0xF },
-    { 0x2E, 0x80, 0x37, 0xA1, 2, 0x45 },
-    { -1, 0, 0, 0xA2, 0, 0 },
-    { -1, 0, 0, 0xA3, 0, 0 },
-    { -1, 0x80, 0x2D, 0xA4, 1, 0 },
-    { -1, 0, 0, 0xA5, 0, 0 },
-    { -1, 0, 0, 0xA6, 0, 0 },
-    { -1, 0, 0, 0xA7, 0, 0 },
-    { -1, 0, 0, 0xA8, 0, 0 },
-    { 0x12, 0x80, 1, 0xA9, 0, 0x9E },
-    { 0x2F, 0x80, 0x6E, 0xAA, 2, 0x10 },
-    { 0x30, 0x80, 0x6F, 0xAB, 2, 0x15 },
-    { -1, 0, 0, 0xAC, 0, 0 },
-    { -1, 0, 0, 0xAD, 0, 0 },
-    { -1, 0, 0, 0xAE, 0, 0 },
-    { -1, 0, 0, 0xAF, 0, 0 },
-    { -1, 0, 0, 0xB0, 0, 0 },
-    { -1, 0, 0, 0xB1, 0, 0 },
-    { -1, 0, 0, 0xB2, 0, 0 },
-    { -1, 0x80, 0x3A, 0xB3, 2, 0x6B },
-    { 0x31, 0xA0, 0x2E, 0xB4, 2, 0x4D },
-    { 0x31, 0xA0, 0x2E, 0xB5, 2, 0x4D },
-    { 0x31, 0xA0, 0x2E, 0xB6, 2, 0x4D },
-    { 0x31, 0xA0, 0x2E, 0xB7, 2, 0x4D },
-    { 0x31, 0xA0, 0x2E, 0xB8, 2, 0x4D },
-    { 0x31, 0xA0, 0x2E, 0xB9, 2, 0x4D },
+    { 0x84, 0, 0xB0, 0xC4, 0x13F },
+    { 0x85, 1, 0xAF, 2, 0x13F },
+    { 0x86, 2, 0xAE, 3, 0x13F },
+    { 0x87, 2, 0xAE, 4, 0x13F },
+    { 0x88, 0x14, 0xAC, 5, 0x13F },
+    { 0x89, 0x14, 0xAB, 6, 0x13F },
+    { 0x8A, 0x13, 0xBD, 7, 0x13F },
+    { 0x5A, 0xA0, 0x21, 8, 0xA8 },
+    { 0x5B, 0xA0, 0x22, 9, 0xA8 },
+    { 0x83, 0x80, 9, 0xA, 0x90 },
+    { 0x83, 0xA0, 9, 0xB, 0x90 },
+    { 0x7B, 0xA0, 0x14, 0xC, 0x96 },
+    { 0x6F, 0xA0, 0x13, 0xD, 0x96 },
+    { 0x79, 0x6F, -0x1D, 0xE, 0xA4 },
+    { 0x7A, 0x6E, -0x1E, 0xF, 0xA4 },
+    { 0x83, 0x80, 9, 0x10, 0x90 },
+    { 0xFF, 0, 0, 0x11, 0 },
+    { 0x83, 0x80, 9, 0x12, 0x90 },
+    { 0x83, 0x80, 9, 0x13, 0x90 },
+    { 6, 0x59, -0x1F, 0x14, 0xA5 },
+    { 0x8F, 0x59, -0x1F, 0x15, 0xA5 },
+    { 0x90, 0x59, -0x1F, 0x16, 0xA5 },
+    { 0x91, 0x59, -0x1F, 0x17, 0xA5 },
+    { 0x92, 0x59, -0x1F, 0x18, 0xA5 },
+    { 8, 0xD, -0x1B, 0x19, 0x9F },
+    { 0x98, 0xC0, -0x27, 0x1A, 0xB0 },
+    { 0x56, 0xA0, 0x18, 0x1B, 0x98 },
+    { 0x57, 0xA0, 0x19, 0x1C, 0x98 },
+    { 0x58, 0xA0, 0x1A, 0x1D, 0x98 },
+    { 0x93, 0x48, -0x24, 0x1E, 0xAF },
+    { 0x94, 0x49, -0x25, 0x1F, 0xAF },
+    { 0x95, 0x4A, -0x26, 0x20, 0xAF },
+    { 0x95, 0x4A, -0x26, 0x21, 0xAF },
+    { 1, 0xA0, 0x2F, 0x22, 0xBF },
+    { 0x54, 0xA0, 0x16, 0x23, 0x97 },
+    { 0x55, 0xA0, 0x17, 0x24, 0x97 },
+    { 2, 0xA0, 0x48, 0x25, 0x121 },
+    { 3, 0xA0, 0x49, 0x26, 0x121 },
+    { 4, 0xA0, 0x4A, 0x27, 0x121 },
+    { 9, 0xC, -0x12, 0x28, 0x94 },
+    { 0x8D, 0xC, -0x12, 0x29, 0x94 },
+    { 0x8E, 0xC, -0x12, 0x2A, 0x94 },
+    { 0x9D, 0xA0, -0x12, 0x2B, 0x94 },
+    { 0x9D, 0xA0, -0x12, 0x2C, 0x94 },
+    { 0x9E, 0xA0, -0x12, 0x2D, 0x94 },
+    { 0x97, 0xC0, -0x27, 0x2E, 0xB0 },
+    { 0x9B, 0xA0, -0x1B, 0x2F, 0x9F },
+    { 0x9B, 0xA0, -0x1B, 0x30, 0x9F },
+    { 0x9C, 0xA0, -0x1B, 0x31, 0x9F },
+    { 0x51, 0xA0, -0x28, 0x32, 0xB3 },
+    { 0x52, 0xA0, 0x34, 0x33, 0xC3 },
+    { 0xC, 0x80, 0x5E, 0x34, 0x1CA },
+    { 0xA, 0x80, -0x35, 0x35, 0xC6 },
+    { 0x99, 0xC0, -0x27, 0x36, 0xB0 },
+    { 0x4D, 0xA0, 0x56, 0x37, 0x148 },
+    { 0x4E, 0xA0, 0x67, 0x38, 0x1F9 },
+    { 0x4F, 0xA0, 0x68, 0x39, 0x1FA },
+    { 0x9A, 0xC0, -0x27, 0x3A, 0xB0 },
+    { 0x10, 0xA0, 0x69, 0x3B, 0x1FB },
+    { 0x78, 0xA0, -2, 0x3C, 0x86 },
+    { 0x74, 0xA0, 0xA, 0x3D, 0x92 },
+    { 0x76, 0xA0, 0x1C, 0x3E, 0xA0 },
+    { 0x75, 0xA0, 0xB, 0x3F, 0x91 },
+    { 0xFF, 0, 0, 0x40, 0 },
+    { 0xF, 0xA0, 0x29, 0x41, 0xB4 },
+    { 0xE, 0xA0, 0x30, 0x42, 0xC0 },
+    { 0xD, 0xA0, 0x75, 0x43, 0x228 },
+    { 0xD, 0, 0, 0x44, 0 },
+    { 0x83, 0x80, 9, 0x45, 0x90 },
+    { 0xFF, 0, 0, 0x46, 0 },
+    { 0xFF, 0, 0, 0x47, 0 },
+    { 0xFF, 0, 0, 0x48, 0 },
+    { 0xFF, 0, 0, 0x49, 0 },
+    { 0xFF, 0, 0, 0x4A, 0 },
+    { 0xFF, 0, 0, 0x4B, 0 },
+    { 0, 0xA0, 0x2B, 0x4C, 0xB5 },
+    { 0xFF, 0, 0, 0x4D, 0 },
+    { 0xFF, 0, 0, 0x4E, 0 },
+    { 0xFF, 0, 0, 0x4F, 0 },
+    { 0x6D, 0x80, 0xC, 0x50, 0x253 },
+    { 0xFF, 0xA0, 0x20, 0x51, 0xA0 },
+    { 0x6E, 0x80, 0xB5, 0x52, 0x125 },
+    { 0xFF, 0, 0, 0x53, 0 },
+    { 0xFF, 0, 0, 0x54, 0 },
+    { 0x5D, 0x80, 0x5D, 0x55, 0 },
+    { 0x5E, 0x80, 0x64, 0x56, 0 },
+    { 0x5F, 0x80, 0x65, 0x57, 0 },
+    { 0x60, 0x80, 0x66, 0x58, 0 },
+    { 0x11, 0x80, 0x58, 0x59, 0x196 },
+    { 0x12, 0x80, 1, 0x5A, 0x9E },
+    { 0x13, 0x80, 0x32, 0x5B, 0xC1 },
+    { 0x14, 0x80, 0x31, 0x5C, 0xC1 },
+    { 0x15, 0x80, 0x33, 0x5D, 0xC1 },
+    { 0x16, 0x80, 0x3C, 0x5E, 0x272 },
+    { 0x16, 0x80, 1, 0x5F, 0x9E },
+    { 0x18, 0x80, 0x2C, 0x60, 0xB6 },
+    { 0x19, 0x80, 0x2C, 0x61, 0xB6 },
+    { 0x1A, 0x80, 0x36, 0x62, 0xC7 },
+    { 0x1B, 0x80, 0x4C, 0x63, 0x137 },
+    { 0x1C, 0, 0, 0x64, 0 },
+    { 0x12, 0x80, 1, 0x65, 0x9E },
+    { 0x1E, 0x80, 0x53, 0x66, 0x139 },
+    { 0x1F, 0, 0, 0x67, 0 },
+    { 0x20, 0, 0, 0x68, 0 },
+    { 0x21, 0x80, 0x59, 0x69, 0x1AE },
+    { 0x22, 0x80, 0x60, 0x6A, 0x1E9 },
+    { 0x23, 0x80, 0x70, 0x6B, 0x21D },
+    { 0xFF, 0, 0, 0x6C, 0 },
+    { 0x12, 0x80, 1, 0x6D, 0x9E },
+    { 0x24, 0x80, 0x60, 0x6E, 0x1E9 },
+    { 0x25, 0x80, 0x74, 0x6F, 0x227 },
+    { 0x12, 0x80, 1, 0x70, 0x9E },
+    { 0xFF, 0, 0, 0x71, 0 },
+    { 0xFF, 0, 0, 0x72, 0 },
+    { 0xFF, 0, 0, 0x73, 0 },
+    { 0xFF, 0, 0, 0x74, 0 },
+    { 0xFF, 0, 0, 0x75, 0 },
+    { 0xFF, 0, 0, 0x76, 0 },
+    { 0xFF, 0, 0, 0x77, 0 },
+    { 0x32, 0xA0, 0x5C, 0x78, 0x1BD },
+    { 0x33, 0xA0, 0x45, 0x79, 0x119 },
+    { 0x34, 0xA0, 0x46, 0x7A, 0x11A },
+    { 0x35, 0xA0, 0x76, 0x7B, 0x242 },
+    { 0x44, 0xA0, 0x3E, 0x7C, 0x102 },
+    { 0x49, 0xA0, 0x73, 0x7D, 0x226 },
+    { 0x38, 0xA0, 0x11, 0x7E, 0x265 },
+    { 0x39, 0xA0, 0x3F, 0x7F, 0x103 },
+    { 0x3A, 0xA0, 0x2D, 0x80, 0x100 },
+    { 0x3B, 0xA0, 0x6A, 0x81, 0x209 },
+    { 0x3C, 0xA0, 0x71, 0x82, 0x21F },
+    { 0x3D, 0xA0, 0xF, 0x83, 0x259 },
+    { 0x3E, 0xA0, 0x72, 0x84, 0x225 },
+    { 0x3F, 0xA0, 4, 0x85, 0x282 },
+    { 0x40, 0xA0, 0x6B, 0x86, 0x20A },
+    { 0x41, 0xA0, 0x6C, 0x87, 0x20B },
+    { 0x42, 0xA0, 0x23, 0x88, 0x266 },
+    { 0x43, 0xA0, 3, 0x89, 0x27D },
+    { 0x36, 0xA0, 0x40, 0x8A, 0x104 },
+    { 0x45, 0xA0, 0xD, 0x8B, 0x254 },
+    { 0x46, 0xA0, 0x10, 0x8C, 0x25A },
+    { 0x47, 0xA0, 0x3B, 0x8D, 0x26D },
+    { 0x48, 0xA0, 0x3D, 0x8E, 0x27E },
+    { 0x37, 0xA0, 0xE, 0x8F, 0x258 },
+    { 0xFF, 0, 0, 0x90, 0 },
+    { 0x9F, 0x80, 0x74, 0x91, 0x227 },
+    { 0xA0, 0x80, 0x2C, 0x92, 0xB6 },
+    { 0xA1, 0x80, 0x5F, 0x93, 0x1E8 },
+    { 0xA2, 0x80, 0x62, 0x94, 0x1EF },
+    { 0xA3, 0x80, 0x63, 0x95, 0x1F0 },
+    { 0x28, 0x80, 0x5A, 0x96, 0x1B1 },
+    { 0x29, 0x80, 0x5B, 0x97, 0x1B2 },
+    { 0x2A, 0x80, 0x41, 0x98, 0x1B2 },
+    { 0x2B, 0x80, 0x42, 0x99, 0x1B2 },
+    { 0x2C, 0x80, 0x44, 0x9A, 0x1B2 },
+    { 0x10, 0xA0, 0x69, 0x9B, 0x1FB },
+    { 0x4D, 0xA0, 0x56, 0x9C, 0x148 },
+    { 0x4E, 0xA0, 0x67, 0x9D, 0x1F9 },
+    { 0x4F, 0xA0, 0x68, 0x9E, 0x1FA },
+    { 0x51, 0xA0, -0x28, 0x9F, 0xB3 },
+    { 0x2D, 0x80, 0x6D, 0xA0, 0x20F },
+    { 0x2E, 0x80, 0x37, 0xA1, 0x245 },
+    { 0xFF, 0, 0, 0xA2, 0 },
+    { 0xFF, 0, 0, 0xA3, 0 },
+    { 0xFF, 0x80, 0x2D, 0xA4, 0x100 },
+    { 0xFF, 0, 0, 0xA5, 0 },
+    { 0xFF, 0, 0, 0xA6, 0 },
+    { 0xFF, 0, 0, 0xA7, 0 },
+    { 0xFF, 0, 0, 0xA8, 0 },
+    { 0x12, 0x80, 1, 0xA9, 0x9E },
+    { 0x2F, 0x80, 0x6E, 0xAA, 0x210 },
+    { 0x30, 0x80, 0x6F, 0xAB, 0x215 },
+    { 0xFF, 0, 0, 0xAC, 0 },
+    { 0xFF, 0, 0, 0xAD, 0 },
+    { 0xFF, 0, 0, 0xAE, 0 },
+    { 0xFF, 0, 0, 0xAF, 0 },
+    { 0xFF, 0, 0, 0xB0, 0 },
+    { 0xFF, 0, 0, 0xB1, 0 },
+    { 0xFF, 0, 0, 0xB2, 0 },
+    { 0xFF, 0x80, 0x3A, 0xB3, 0x26B },
+    { 0x31, 0xA0, 0x2E, 0xB4, 0x24D },
+    { 0x31, 0xA0, 0x2E, 0xB5, 0x24D },
+    { 0x31, 0xA0, 0x2E, 0xB6, 0x24D },
+    { 0x31, 0xA0, 0x2E, 0xB7, 0x24D },
+    { 0x31, 0xA0, 0x2E, 0xB8, 0x24D },
+    { 0x31, 0xA0, 0x2E, 0xB9, 0x24D },
 };
 
 LinkAnimationHeader* D_8085C84C[] = {
@@ -1207,9 +1602,10 @@ struct_8082E224_arg1 D_8085C8E8[] = {
     { 0, 0x402C },
     { 0, 0x4030 },
     { 0, 0x4034 },
-    { 0, 0xBFC8 },
-    { NA_SE_IT_SHIELD_SWING, 0x810 }, { NA_SE_IT_SHIELD_SWING, 0x814 }, { NA_SE_IT_SHIELD_SWING, -0x846 }
+    { 0, -0x4038 },
 };
+
+struct_8082E224_arg1 D_8085C900[] = { { NA_SE_IT_SHIELD_SWING, 0x810 }, { NA_SE_IT_SHIELD_SWING, 0x814 }, { NA_SE_IT_SHIELD_SWING, -0x846 } };
 
 struct_8082E224_arg1 D_8085C90C[] = {
     { NA_SE_IT_HAMMER_SWING, 0x80A },
@@ -1319,7 +1715,7 @@ s8 D_8085C99C[] = {
     PLAYER_AP_BOTTLE_ZORA_EGG, // ITEM_ZORA_EGG,
     PLAYER_AP_BOTTLE_GOLD_DUST, // ITEM_GOLD_DUST,
     PLAYER_AP_BOTTLE_MUSHROOM, // ITEM_MUSHROOM,
-    PLAYER_AP_BOTTLE_SEA_HORSE, // ITEM_SEA_HORSE,
+    PLAYER_AP_BOTTLE_SEAHORSE, // ITEM_SEA_HORSE,
     PLAYER_AP_BOTTLE_CHATEAU, // ITEM_CHATEAU,
     PLAYER_AP_BOTTLE_HYLIAN_LOACH, // ITEM_HYLIAN_LOACH,
     PLAYER_AP_BOTTLE_POE, // ITEM_OBABA_DRINK, // !
@@ -1331,7 +1727,7 @@ s8 D_8085C99C[] = {
     PLAYER_AP_ROOM_KEY, // ITEM_ROOM_KEY,
     PLAYER_AP_LETTER_MAMA, // ITEM_LETTER_MAMA,
     PLAYER_AP_LETTER_TO_KAFEI, // ITEM_LETTER_TO_KAFEI,
-    PLAYER_AP_PENDANT_MEMORIES, // ITEM_PENDANT_MEMORIES,
+    PLAYER_AP_PENDANT_OF_MEMORIES, // ITEM_PENDANT_MEMORIES,
     PLAYER_AP_38, // ITEM_TINGLE_MAP, // !
     PLAYER_AP_MASK_DEKU, // ITEM_MASK_DEKU,
     PLAYER_AP_MASK_GORON, // ITEM_MASK_GORON,
@@ -1366,8 +1762,7 @@ s8 D_8085C99C[] = {
     PLAYER_AP_SWORD_GREAT_FAIRY, // ITEM_SWORD_DEITY,
 };
 
-
-extern PlayerFuncAC4 D_8085C9F0[PLAYER_AP_MAX] = {
+PlayerFuncAC4 D_8085C9F0[PLAYER_AP_MAX] = {
     func_80848780, // PLAYER_AP_NONE
     func_80848780, // PLAYER_AP_LAST_USED
     func_80848780, // PLAYER_AP_FISHING_POLE
@@ -1815,15 +2210,27 @@ u8 D_8085CF84[] = {
     PLAYER_MWA_BIG_SPIN_2H,
 };
 
-glabel D_8085CF88
-/* 02F4F8 8085CF88 */ .word 0xFFFFFFFF
-/* 02F4FC 8085CF8C */ .word 0xFFFFFF40
-/* 02F500 8085CF90 */ .word 0xFFFFFF00
-/* 02F504 8085CF94 */ .word 0xFFFFFF00
-/* 02F508 8085CF98 */ .word 0xA5B9FFB9
-/* 02F50C 8085CF9C */ .word 0xCDE1FF32
-/* 02F510 8085CFA0 */ .word 0xFFFFFF00
-/* 02F514 8085CFA4 */ .word 0xFFFFFF00
+struct_8085CF88 D_8085CF88[2] = {
+    { 0xFF, -1, 0xFF, 0xFF, 0xFF, -1, 0xFF, 0x40, -1, -1, 0xFF, 0, -1, -1, -1, 0 },
+    {
+        0xA5,
+        0xB9,
+        0xFF,
+        0xB9,
+        0xCD,
+        -0x1F,
+        0xFF,
+        0x32,
+        -1,
+        -1,
+        0xFF,
+        0,
+        -1,
+        -1,
+        -1,
+        0,
+    },
+};
 
 u16 D_8085CFA8[] = { BTN_B, BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT, };
 
@@ -1844,57 +2251,18 @@ LinkAnimationHeader* D_8085CFCC[2] = { (LinkAnimationHeader* )0x0400D400, (LinkA
 LinkAnimationHeader* D_8085CFD4[2] = { (LinkAnimationHeader* )0x0400D400, (LinkAnimationHeader* )0x0400D410 };
 LinkAnimationHeader* D_8085CFDC[2] = { (LinkAnimationHeader* )0x0400DBE0, (LinkAnimationHeader* )0x0400D818 };
 
-glabel D_8085CFE4
-/* 02F554 8085CFE4 */ .word 0x0D020409
-/* 02F558 8085CFE8 */ .word 0x0A0B08F9
-
-glabel D_8085CFEC
-/* 02F55C 8085CFEC */ .word 0x0D010205
-/* 02F560 8085CFF0 */ .word 0x0304090A
-/* 02F564 8085CFF4 */ .word 0x0B0708FA
-
-glabel D_8085CFF8
-/* 02F568 8085CFF8 */ .word 0x0D010203
-/* 02F56C 8085CFFC */ .word 0x04090A0B
-/* 02F570 8085D000 */ .word 0x0807FA00
-
-glabel D_8085D004
-/* 02F574 8085D004 */ .word 0x0D020409
-/* 02F578 8085D008 */ .word 0x0A0B08F9
-
-glabel D_8085D00C
-/* 02F57C 8085D00C */ .word 0x0D020409
-/* 02F580 8085D010 */ .word 0x0A0B0C08
-/* 02F584 8085D014 */ .word 0xF9000000
-
-glabel D_8085D018
-/* 02F588 8085D018 */ .word 0xF9000000
-
-glabel D_8085D01C
-/* 02F58C 8085D01C */ .word 0x000B0102
-/* 02F590 8085D020 */ .word 0x03050409
-/* 02F594 8085D024 */ .word 0x0807FA00
-
-glabel D_8085D028
-/* 02F598 8085D028 */ .word 0x000B0102
-/* 02F59C 8085D02C */ .word 0x030C0504
-/* 02F5A0 8085D030 */ .word 0x090807FA
-
-glabel D_8085D034
-/* 02F5A4 8085D034 */ .word 0x0D010203
-/* 02F5A8 8085D038 */ .word 0x0C050409
-/* 02F5AC 8085D03C */ .word 0x0A0B0807
-/* 02F5B0 8085D040 */ .word 0xFA000000
-
-glabel D_8085D044
-/* 02F5B4 8085D044 */ .word 0x0A08F900
-
-glabel D_8085D048
-/* 02F5B8 8085D048 */ .word 0x000C0504
-/* 02F5BC 8085D04C */ .word 0xF2000000
-
-glabel D_8085D050
-/* 02F5C0 8085D050 */ .word 0x0D02FC00
+s8 D_8085CFE4[8] = { 0xD, 2, 4, 9, 0xA, 0xB, 8, -7 };
+s8 D_8085CFEC[0xC] = { 0xD, 1, 2, 5, 3, 4, 9, 0xA, 0xB, 7, 8, -6 };
+s8 D_8085CFF8[0xC] = { 0xD, 1, 2, 3, 4, 9, 0xA, 0xB, 8, 7, -6, 0 };
+s8 D_8085D004[8] = { 0xD, 2, 4, 9, 0xA, 0xB, 8, -7 };
+s8 D_8085D00C[0xC] = { 0xD, 2, 4, 9, 0xA, 0xB, 0xC, 8, -7, 0, 0, 0 };
+s8 D_8085D018[4] = { -7, 0, 0, 0 };
+s8 D_8085D01C[0xC] = { 0, 0xB, 1, 2, 3, 5, 4, 9, 8, 7, -6, 0 };
+s8 D_8085D028[0xC] = { 0, 0xB, 1, 2, 3, 0xC, 5, 4, 9, 8, 7, -6 };
+s8 D_8085D034[0x10] = { 0xD, 1, 2, 3, 0xC, 5, 4, 9, 0xA, 0xB, 8, 7, -6, 0, 0, 0 };
+s8 D_8085D044[4] = { 0xA, 8, -7, 0 };
+s8 D_8085D048[8] = { 0, 0xC, 5, 4, -0xE, 0, 0, 0 };
+s8 D_8085D050[4] = { 0xD, 2, -4, 0 };
 
 s32 (*D_8085D054[])(Player*, PlayState*) = {
     func_80839518,
@@ -1915,94 +2283,79 @@ s32 (*D_8085D054[])(Player*, PlayState*) = {
 };
 
 s8 D_8085D090[] = { PLAYER_MWA_STAB_1H, PLAYER_MWA_RIGHT_SLASH_1H, PLAYER_MWA_RIGHT_SLASH_1H, PLAYER_MWA_LEFT_SLASH_1H };
-s8 D_8085D094[] = { PLAYER_MWA_ZORA_PUNCH_LEFT, PLAYER_MWA_ZORA_PUNCH_COMBO, PLAYER_MWA_ZORA_PUNCH_KICK };
-s8 D_8085D097[] = { PLAYER_MWA_GORON_PUNCH_LEFT, PLAYER_MWA_GORON_PUNCH_RIGHT, PLAYER_MWA_GORON_PUNCH_BUTT };
+
+s8 D_8085D094[][3] = {
+    { PLAYER_MWA_ZORA_PUNCH_LEFT, PLAYER_MWA_ZORA_PUNCH_COMBO, PLAYER_MWA_ZORA_PUNCH_KICK },
+    { PLAYER_MWA_GORON_PUNCH_LEFT, PLAYER_MWA_GORON_PUNCH_RIGHT, PLAYER_MWA_GORON_PUNCH_BUTT },
+};
 
 struct_8085D09C D_8085D09C[] = {
     { 0x100, 2, 2, 0, 0 }, { 0x200, 4, 8, 1, 2 }, { 0x200, 4, 8, 2, 4 },    { 0x200, 4, 8, 3, 6 },
     { 0x200, 4, 8, 4, 8 }, { 2, 0, 0, 2, 4 },     { 0x800000, 1, 2, 0, 0 },
 };
 
-glabel D_8085D0D4
-/* 02F644 8085D0D4 */ .word 0x0400DCA0
-/* 02F648 8085D0D8 */ .word 0x0400DC98
-/* 02F64C 8085D0DC */ .word 0x0400DB00
-/* 02F650 8085D0E0 */ .word 0x0400DAF8
+LinkAnimationHeader* D_8085D0D4[4] = {
+    (LinkAnimationHeader* )0x0400DCA0,
+    (LinkAnimationHeader* )0x0400DC98,
+    (LinkAnimationHeader* )0x0400DB00,
+    (LinkAnimationHeader* )0x0400DAF8,
+};
+LinkAnimationHeader* D_8085D0E4[4] = {
+    (LinkAnimationHeader* )0x0400DC90,
+    (LinkAnimationHeader* )0x0400D418,
+    (LinkAnimationHeader* )0x0400DAE8,
+    (LinkAnimationHeader* )0x0400D3F0,
+};
 
-glabel D_8085D0E4
-/* 02F654 8085D0E4 */ .word 0x0400DC90
-/* 02F658 8085D0E8 */ .word 0x0400D418
-/* 02F65C 8085D0EC */ .word 0x0400DAE8
-/* 02F660 8085D0F0 */ .word 0x0400D3F0
-
-glabel D_8085D0F4
-/* 02F664 8085D0F4 */ .word 0x00020101
-
-glabel D_8085D0F8
-/* 02F668 8085D0F8 */ .word 0x10000000
-/* 02F66C 8085D0FC */ .word 0x00000000
-
-glabel D_8085D100
-/* 02F670 8085D100 */ .word 0x00000000
-/* 02F674 8085D104 */ .word 0x42480000
-/* 02F678 8085D108 */ .word 0x00000000
+s32 D_8085D0F4 = 0x20101;
+u16 D_8085D0F8[4] = { 0x1000, 0, 0, 0 };
+Vec3f D_8085D100 = { 0.0f, 50.0f, 0.0f };
 
 Vec3f D_8085D10C = {20.0f, 0.0f , 20.0f};
 
-glabel D_8085D118
-/* 02F688 8085D118 */ .word 0x0400E1B8
-/* 02F68C 8085D11C */ .word 0x0400E3C8
-/* 02F690 8085D120 */ .word 0x0400E280
+LinkAnimationHeader* D_8085D118[3] = {
+    (LinkAnimationHeader* )0x0400E1B8,
+    (LinkAnimationHeader* )0x0400E3C8,
+    (LinkAnimationHeader* )0x0400E280,
+};
+LinkAnimationHeader* D_8085D124[3] = {
+    (LinkAnimationHeader* )0x0400E1C0,
+    (LinkAnimationHeader* )0x0400E3D0,
+    (LinkAnimationHeader* )0x0400E288,
+};
 
-glabel D_8085D124
-/* 02F694 8085D124 */ .word 0x0400E1C0
-/* 02F698 8085D128 */ .word 0x0400E3D0
-/* 02F69C 8085D12C */ .word 0x0400E288
+Vec3f D_8085D130 = { 0.0f, 0.0f, 0.0f };
 
-glabel D_8085D130
-/* 02F6A0 8085D130 */ .word 0x00000000
-/* 02F6A4 8085D134 */ .word 0x00000000
-/* 02F6A8 8085D138 */ .word 0x00000000
+struct_8085D13C D_8085D13C[2] = { { -8, 0xB4, 0x28, 0x64, 0x681A }, { -0x10, 0xFF, 0x8C, 0x96, 0x681A } };
 
-glabel D_8085D13C
-/* 02F6AC 8085D13C */ .word 0xF8B42864
-/* 02F6B0 8085D140 */ .word 0x681AF0FF
-/* 02F6B4 8085D144 */ .word 0x8C96681A
+Vec3f D_8085D148 = { 0.0f, 50.0f, 0.0f };
 
-glabel D_8085D148
-/* 02F6B8 8085D148 */ .word 0x00000000
-/* 02F6BC 8085D14C */ .word 0x42480000
-/* 02F6C0 8085D150 */ .word 0x00000000
+Vec3f D_8085D154 = { 0.0f, 0.0f, 100.0f };
 
-glabel D_8085D154
-/* 02F6C4 8085D154 */ .word 0x00000000
-/* 02F6C8 8085D158 */ .word 0x00000000
-/* 02F6CC 8085D15C */ .word 0x42C80000
+LinkAnimationHeader* D_8085D160[5] = {
+    (LinkAnimationHeader* )0x0400E400,
+    (LinkAnimationHeader* )0x0400E210,
+    (LinkAnimationHeader* )0x0400E400,
+    (LinkAnimationHeader* )0x0400E2E0,
+    (LinkAnimationHeader* )0x0400D0C8,
+};
 
-glabel D_8085D160
-/* 02F6D0 8085D160 */ .word 0x0400E400
-/* 02F6D4 8085D164 */ .word 0x0400E210
-/* 02F6D8 8085D168 */ .word 0x0400E400
-/* 02F6DC 8085D16C */ .word 0x0400E2E0
-/* 02F6E0 8085D170 */ .word 0x0400D0C8
+u8 D_8085D174[8] = { 0x64, 0xC8, 0x50, 0x14, 0x32, 0, 0, 0 };
 
-glabel D_8085D174
-/* 02F6E4 8085D174 */ .word 0x64C85014
-/* 02F6E8 8085D178 */ .word 0x32000000
-
-glabel D_8085D17C
-/* 02F6EC 8085D17C */ .word 0x0400DDB0
-/* 02F6F0 8085D180 */ .word 0x0400E1F8
-/* 02F6F4 8085D184 */ .word 0x0400E3E8
-/* 02F6F8 8085D188 */ .word 0x0400E2B0
-/* 02F6FC 8085D18C */ .word 0x0400DDB0
-
-glabel D_8085D190
-/* 02F700 8085D190 */ .word 0x0400DDB8
-/* 02F704 8085D194 */ .word 0x0400E1F0
-/* 02F708 8085D198 */ .word 0x0400E3E0
-/* 02F70C 8085D19C */ .word 0x0400E2A8
-/* 02F710 8085D1A0 */ .word 0x0400DDB8
+LinkAnimationHeader* D_8085D17C[5] = {
+    (LinkAnimationHeader* )0x0400DDB0,
+    (LinkAnimationHeader* )0x0400E1F8,
+    (LinkAnimationHeader* )0x0400E3E8,
+    (LinkAnimationHeader* )0x0400E2B0,
+    (LinkAnimationHeader* )0x0400DDB0,
+};
+LinkAnimationHeader* D_8085D190[5] = {
+    (LinkAnimationHeader* )0x0400DDB8,
+    (LinkAnimationHeader* )0x0400E1F0,
+    (LinkAnimationHeader* )0x0400E3E0,
+    (LinkAnimationHeader* )0x0400E2A8,
+    (LinkAnimationHeader* )0x0400DDB8,
+};
 
 u8 D_8085D1A4[PLAYER_AP_MAX] = {
     GI_NONE, // PLAYER_AP_NONE
@@ -2090,75 +2443,41 @@ u8 D_8085D1A4[PLAYER_AP_MAX] = {
     GI_LENS, // PLAYER_AP_LENS
 };
 
-glabel D_8085D1F8
-/* 02F768 8085D1F8 */ .word 0x0400DCA8
-/* 02F76C 8085D1FC */ .word 0x0400DE98
+LinkAnimationHeader* D_8085D1F8[2] = { (LinkAnimationHeader* )0x0400DCA8, (LinkAnimationHeader* )0x0400DE98 };
 
-glabel D_8085D200
-/* 02F770 8085D200 */ .word 0x0400D4A0
-/* 02F774 8085D204 */ .word 0x0400D498
-/* 02F778 8085D208 */ .word 0x02030000
-/* 02F77C 8085D20C */ .word 0x0400D4D0
-/* 02F780 8085D210 */ .word 0x0400D4C8
-/* 02F784 8085D214 */ .word 0x05030000
+struct _struct_D_8085D200_0xC D_8085D200[2] = {
+    { (LinkAnimationHeader* )0x0400D4A0, (LinkAnimationHeader* )0x0400D498, 2, 3 },
+    { (LinkAnimationHeader* )0x0400D4D0, (LinkAnimationHeader* )0x0400D4C8, 5, 3 },
+};
 
-glabel D_8085D218
-/* 02F788 8085D218 */ .word 0x00000000
-/* 02F78C 8085D21C */ .word 0x42C80000
-/* 02F790 8085D220 */ .word 0x42200000
+Vec3f D_8085D218 = { 0.0f, 100.0f, 40.0f };
 
-glabel D_8085D224
-/* 02F794 8085D224 */ .word 0x0400E068
-/* 02F798 8085D228 */ .word 0x420CAE14
-/* 02F79C 8085D22C */ .word 0x40D3851E
-/* 02F7A0 8085D230 */ .word 0x0400E078
-/* 02F7A4 8085D234 */ .word 0xC208A3D7
-/* 02F7A8 8085D238 */ .word 0x40FD1EB8
+// maybe this is 2 arrays of 2 elements?
+struct_8085D224 D_8085D224[4] = {
+    { (LinkAnimationHeader* )0x0400E068, 35.17f, 6.6099997f },
+    { (LinkAnimationHeader* )0x0400E078, -34.16f, 7.91f },
+    { (LinkAnimationHeader* )0x0400D0E8, 22.718237f, 2.3294117f },
+    { (LinkAnimationHeader* )0x0400D0F0, -22.0f, 1.9800001f },
+};
 
-glabel D_8085D23C
-/* 02F7AC 8085D23C */ .half 0x0400
-/* 02F7AE 8085D23E */ .half 0xD0E8
-/* 02F7B0 8085D240 */ .half 0x41B5
-/* 02F7B2 8085D242 */ .half 0xBEF3
-/* 02F7B4 8085D244 */ .half 0x4015
-/* 02F7B6 8085D246 */ .half 0x1515
-/* 02F7B8 8085D248 */ .half 0x0400
-/* 02F7BA 8085D24A */ .half 0xD0F0
-/* 02F7BC 8085D24C */ .half 0xC1B0
-/* 02F7BE 8085D24E */ .half 0x0000
-/* 02F7C0 8085D250 */ .half 0x3FFD
+u16 D_8085D254[] = { 0x1804, 0x1805, 0x1806, 0x1806 };
 
-glabel D_8085D252
-/* 02F7C2 8085D252 */ .half 0x70A5
-/* 02F7C4 8085D254 */ .half 0x1804
-/* 02F7C6 8085D256 */ .half 0x1805
-/* 02F7C8 8085D258 */ .half 0x1806
-/* 02F7CA 8085D25A */ .half 0x1806
+u16 D_8085D25C[] = { 0x1804, 0x1804, 0x1805, 0x1806 };
 
-glabel D_8085D25C
-/* 02F7CC 8085D25C */ .word 0x18041804
-/* 02F7D0 8085D260 */ .word 0x18051806
+LinkAnimationHeader* D_8085D264[2] = { (LinkAnimationHeader* )0x0400DC00, (LinkAnimationHeader* )0x0400DEC0 };
 
-glabel D_8085D264
-/* 02F7D4 8085D264 */ .word 0x0400DC00
-/* 02F7D8 8085D268 */ .word 0x0400DEC0
-
-glabel D_8085D26C
-/* 02F7DC 8085D26C */ .word 0xFFFFFFFF
-
-glabel D_8085D270
-/* 02F7E0 8085D270 */ .word 0x00000000
-/* 02F7E4 8085D274 */ .word 0x3D23D70A
-/* 02F7E8 8085D278 */ .word 0x00000000
+Color_RGBA8 D_8085D26C = { 0xFF, 0xFF, 0xFF, 0xFF };
+Vec3f D_8085D270 = { 0.0f, 0.04f, 0.0f };
 
 Vec3f D_8085D27C = {0.0f, 0.0f, 0.0f};
 Vec3f D_8085D288 = {0.0f, 0.0f, 0.0f};
 
-glabel D_8085D294
-/* 02F804 8085D294 */ .word 0x0400D8F0
-/* 02F808 8085D298 */ .word 0x0400D900
-/* 02F80C 8085D29C */ .word 0x0400D8E8
-/* 02F810 8085D2A0 */ .word 0x0400D8F8
+LinkAnimationHeader* D_8085D294[4] = {
+    (LinkAnimationHeader* )0x0400D8F0,
+    (LinkAnimationHeader* )0x0400D900,
+    (LinkAnimationHeader* )0x0400D8E8,
+    (LinkAnimationHeader* )0x0400D8F8,
+};
 
 Vec3f D_8085D2A4 = { 0.0f, 0.0f, 5.0f };
 
@@ -2166,36 +2485,33 @@ u8 D_8085D2B0[] = {
     ITEM_SWORD_RAZOR, ITEM_SWORD_KOKIRI, ITEM_OCARINA, ITEM_OCARINA,
 };
 
-glabel D_8085D2B4
-/* 02F824 8085D2B4 */ .word 0xBF800000
-/* 02F828 8085D2B8 */ .word 0x428A0000
-/* 02F82C 8085D2BC */ .word 0x41A00000
+Vec3f D_8085D2B4 = { -1.0f, 69.0f, 20.0f };
 
-glabel D_8085D2C0
-/* 02F830 8085D2C0 */ .word 0x305401F4
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_8085D2C0[] = {
+    ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
+};
 
-glabel D_8085D2C4
-/* 02F834 8085D2C4 */ .word 0xFFC70D31
-/* 02F838 8085D2C8 */ .word 0x00000000
+Vec3s D_8085D2C4 = { -0x39, 0xD31, 0 };
 
-glabel D_8085D2CC
-/* 02F83C 8085D2CC */ .word func_808412A0
-/* 02F840 8085D2D0 */ .word func_80841408
-/* 02F844 8085D2D4 */ .word func_808412BC
-/* 02F848 8085D2D8 */ .word func_808414E0
-/* 02F84C 8085D2DC */ .word func_80841528
-/* 02F850 8085D2E0 */ .word func_808415E4
-/* 02F854 8085D2E4 */ .word func_80841624
-/* 02F858 8085D2E8 */ .word func_808415A0
-/* 02F85C 8085D2EC */ .word func_80841744
-/* 02F860 8085D2F0 */ .word func_80841744
-/* 02F864 8085D2F4 */ .word func_8083ADF0
-/* 02F868 8085D2F8 */ .word func_8083AD8C
-/* 02F86C 8085D2FC */ .word func_8083AD04
-/* 02F870 8085D300 */ .word func_8083ADB8
-/* 02F874 8085D304 */ .word func_8083ADF0
-/* 02F878 8085D308 */ .word func_8083AE38
-
+void (*D_8085D2CC[0x10])(PlayState*, Player*) = {
+    func_808412A0,
+    func_80841408,
+    func_808412BC,
+    func_808414E0,
+    func_80841528,
+    func_808415E4,
+    func_80841624,
+    func_808415A0,
+    func_80841744,
+    func_80841744,
+    func_8083ADF0,
+    func_8083AD8C,
+    func_8083AD04,
+    func_8083ADB8,
+    func_8083ADF0,
+    func_8083AE38,
+};
 
 EffectBlureInit2 D_8085D30C = {
     0,
@@ -2218,12 +2534,14 @@ Color_RGBA8 D_8085D33C = { 0, 0, 0, 0x96 };
 
 Vec3f D_8085D340 = { 0.0f, 50.0f, 0.0f };
 
-glabel D_8085D34C
-/* 02F8BC 8085D34C */ .word 0x1B1C1D1E
-/* 02F8C0 8085D350 */ .word 0x1F202122
+u8 D_8085D34C[] = {
+    0x1B, 0x1C, 0x1D, 0x1E,
+    0x1F, 0x20, 0x21, 0x22,
+};
 
-glabel D_8085D354
-/* 02F8C4 8085D354 */ .word 0x1B1C0000
+u8 D_8085D354[] = {
+    0x1B, 0x1C, 0x00, 0x00,
+};
 
 Vec3f D_8085D358 = { 0.0f, 0.0f, 0.0f };
 
@@ -2421,11 +2739,7 @@ LinkAnimationHeader* D_8085D5F0[3] = {
     (LinkAnimationHeader* )0x0400E2F8,
 };
 
-glabel D_8085D5FC
-/* 02FB6C 8085D5FC */ .half 0x1830
-/* 02FB6E 8085D5FE */ .half 0x09BF
-/* 02FB70 8085D600 */ .half 0x0000
-/* 02FB72 8085D602 */ .half 0x0000
+u16 D_8085D5FC[4] = { 0x1830, 0x9BF, 0, 0 };
 
 struct_8082E224_arg1 D_8085D604[] = { { 0, 0x4014 }, { 0, 0xBFE2 }, { 0x850, 0x103C }, { 0, 0x408C }, { 0, 0x40A4 }, { 0, 0xBF56 }, { 0x6800, 0x2001 }, { 0x800, 0x1806 }, { 0x83C, 0x806 }, { 0, -0x2812 } };
 
@@ -2435,64 +2749,60 @@ Vec3f D_8085D638 = { 0.0f, 0.0f, 0.0f };
 
 Vec3f D_8085D644 = { 0.0f, 0.0f, 0.0f };
 
-glabel D_8085D650
-/* 02FBC0 8085D650 */ .word 0x08401003
-/* 02FBC4 8085D654 */ .word 0x0840EFEB
-
-glabel D_8085D658
-/* 02FBC8 8085D658 */ .word 0x08401004
-/* 02FBCC 8085D65C */ .word 0x0840EFE8
+struct_8082E224_arg1 D_8085D650[2] = { { 0x840, 0x1003 }, { 0x840, -0x1015 } };
+struct_8082E224_arg1 D_8085D658[2] = { { 0x840, 0x1004 }, { 0x840, -0x1018 } };
 
 Vec3f D_8085D660 = { 0.0f, 26.800001f, -60.0f };
 f32 D_8085D66C[2] = { 11.0f, 21.0f };
 f32 D_8085D674[2] = { 40.0f, 50.0f };
-struct_8082E224_arg1 D_8085D67C[1] = { { 0x80A, 0x500A } };
+struct_8082E224_arg1 D_8085D67C[] = {
+    { 0x80A, 0x500A },
+    { 0x080A, 0x5014 },
+    { 0x080A, 0xAFE2 },
+};
 
-glabel D_8085D680
-/* 02FBF0 8085D680 */ .word 0x080A5014
-/* 02FBF4 8085D684 */ .word 0x080AAFE2
-/* 02FBF8 8085D688 */ .word 0x0400E048
-/* 02FBFC 8085D68C */ .word 0x0400E040
-/* 02FC00 8085D690 */ .word 0x0400E050
-/* 02FC04 8085D694 */ .word 0x0400E030
-/* 02FC08 8085D698 */ .word 0x0400E010
-/* 02FC0C 8085D69C */ .word 0x0400E020
-/* 02FC10 8085D6A0 */ .word 0x0400E028
+LinkAnimationHeader* D_8085D688[] = {
+    (void* )0x0400E048,
+    (void* )0x0400E040,
+    (void* )0x0400E050,
+    (void* )0x0400E030,
+    (void* )0x0400E010,
+    (void* )0x0400E020,
+    (void* )0x0400E028,
+};
+LinkAnimationHeader* D_8085D6A4[] = {
+    NULL,
+    NULL,
+    (LinkAnimationHeader* )0x0400E058,
+    (LinkAnimationHeader* )0x0400E058,
+    (LinkAnimationHeader* )0x0400E058,
+    (LinkAnimationHeader* )0x0400E038,
+    (LinkAnimationHeader* )0x0400E018,
+    (LinkAnimationHeader* )0x0400E018,
+    (LinkAnimationHeader* )0x0400E018,
+    NULL,
+    NULL,
+};
+LinkAnimationHeader* D_8085D6D0[] = {
+    (LinkAnimationHeader* )0x0400E098,
+    (LinkAnimationHeader* )0x0400E088,
+    (LinkAnimationHeader* )0x0400E090,
+};
 
-glabel D_8085D6A4
-/* 02FC14 8085D6A4 */ .word 0x00000000
-/* 02FC18 8085D6A8 */ .word 0x00000000
-/* 02FC1C 8085D6AC */ .word 0x0400E058
-/* 02FC20 8085D6B0 */ .word 0x0400E058
-/* 02FC24 8085D6B4 */ .word 0x0400E058
-/* 02FC28 8085D6B8 */ .word 0x0400E038
-/* 02FC2C 8085D6BC */ .word 0x0400E018
-/* 02FC30 8085D6C0 */ .word 0x0400E018
-/* 02FC34 8085D6C4 */ .word 0x0400E018
-/* 02FC38 8085D6C8 */ .word 0x00000000
-/* 02FC3C 8085D6CC */ .word 0x00000000
+s16 D_8085D6DC[2] = { 0x203A, 0x192A };
 
-glabel D_8085D6D0
-/* 02FC40 8085D6D0 */ .word 0x0400E098
-/* 02FC44 8085D6D4 */ .word 0x0400E088
-/* 02FC48 8085D6D8 */ .word 0x0400E090
+Vec3s D_8085D6E0 = { -0x45, 0x1BEA, -0x10A };
 
-glabel D_8085D6DC
-/* 02FC4C 8085D6DC */ .word 0x203A192A
-
-glabel D_8085D6E0
-/* 02FC50 8085D6E0 */ .word 0xFFBB1BEA
-/* 02FC54 8085D6E4 */ .word 0xFEF60000
-
-glabel D_8085D6E8
-/* 02FC58 8085D6E8 */ .word 0x08710830
-/* 02FC5C 8085D6EC */ .word 0x0871083A
-/* 02FC60 8085D6F0 */ .word 0x08710844
-/* 02FC64 8085D6F4 */ .word 0x0872085C
-/* 02FC68 8085D6F8 */ .word 0x0872086E
-/* 02FC6C 8085D6FC */ .word 0x0872087E
-/* 02FC70 8085D700 */ .word 0x08720884
-/* 02FC74 8085D704 */ .word 0x0872F778
+struct_8082E224_arg1 D_8085D6E8[8] = {
+    { 0x871, 0x830 },
+    { 0x871, 0x83A },
+    { 0x871, 0x844 },
+    { 0x872, 0x85C },
+    { 0x872, 0x86E },
+    { 0x872, 0x87E },
+    { 0x872, 0x884 },
+    { 0x872, -0x888 },
+};
 
 struct_8082E224_arg1 D_8085D708[3] = { { 0, 0x2800 }, { 0x833, 0x80A }, { 0x830, -0x819 } };
 
@@ -2508,39 +2818,18 @@ struct_8082E224_arg1 D_8085D73C[4] = { { 0, 0x3857 }, { 0x6804, 0x2057 }, { 0x68
 struct_8082E224_arg1 D_8085D74C[4] = { { 0x6814, 0x200D }, { 0, 0x380D }, { 0, 0x2849 }, { 0, -0x2878 } };
 struct_8082E224_arg1 D_8085D75C[2] = { { 0x6814, 0x2005 }, { 0, -0x280F } };
 
-glabel D_8085D764
-/* 02FCD4 8085D764 */ .byte 0x00
-/* 02FCD5 8085D765 */ .byte 0x00
-/* 02FCD6 8085D766 */ .byte 0x00
-/* 02FCD7 8085D767 */ .byte 0x00
-/* 02FCD8 8085D768 */ .byte 0x41
-/* 02FCD9 8085D769 */ .byte 0xC0
-/* 02FCDA 8085D76A */ .byte 0x00
-/* 02FCDB 8085D76B */ .byte 0x00
-/* 02FCDC 8085D76C */ .byte 0x41
-
-glabel D_8085D76D
-/* 02FCDD 8085D76D */ .byte 0x98
-/* 02FCDE 8085D76E */ .byte 0x00
-/* 02FCDF 8085D76F */ .byte 0x00
-
+Vec3f D_8085D764 = { 0.0f, 24.0f, 19.0f };
 Vec3f D_8085D770 = { 0.0f, 0.0f, 2.0f };
 Vec3f D_8085D77C = { 0.0f, 0.0f, -0.2f };
 
 Color_RGBA8 D_8085D788 = { 0xFF, 0xFF, 0xFF, 0xFF };
 Color_RGBA8 D_8085D78C = { 0xFF, 0xFF, 0xFF, 0xFF };
 
-glabel D_8085D790
-/* 02FD00 8085D790 */ .byte 0x01
-/* 02FD01 8085D791 */ .byte 0x03
-/* 02FD02 8085D792 */ .byte 0x02
-/* 02FD03 8085D793 */ .byte 0x04
-/* 02FD04 8085D794 */ .byte 0x04
-/* 02FD05 8085D795 */ .byte 0x03
-/* 02FD06 8085D796 */ .byte 0x00
+// unused?
+u32 D_8085D790 = 0x01030204;
 
-glabel D_8085D797
-/* 02FD07 8085D797 */ .byte 0x00
+// unused?
+u32 D_8085D794 = 0x04030000;
 
 struct_8085D798 D_8085D798[] = {
     { ACTOR_EN_ELF, 2, ITEM_FAIRY, PLAYER_AP_BOTTLE_FAIRY, 0x5E },
@@ -2561,10 +2850,7 @@ struct_8085D798 D_8085D798[] = {
 
 Vec3f D_8085D7EC = { 0.0f, 0.0f, 5.0f };
 
-glabel D_8085D7F8
-/* 02FD68 8085D7F8 */ .word 0x41200000
-/* 02FD6C 8085D7FC */ .word 0x41D66667
-/* 02FD70 8085D800 41F00000 */ .float 30.0
+Vec3f D_8085D7F8 = { 10.0f, 26.800001f, 30.0f };
 
 s8 D_8085D804[8] = { 0x2D, 0x4B, 0x37, 0x23, 0x28, 0, 0, 0 };
 
@@ -2585,8 +2871,7 @@ struct_8085D80C D_8085D80C[] = {
 struct_8082E224_arg1 D_8085D838[2] = { { 0x6814, 0x2026 }, { 0x286C, -0x828 } };
 struct_8082E224_arg1 D_8085D840[1] = { { 0x877, -0x81E } };
 
-glabel D_8085D844
-/* 02FDB4 8085D844 */ .word 0x00000000
+u8 D_8085D844[4] = { 0, 0, 0, 0 };
 
 struct_8085D848 D_8085D848[2] = {
     {
@@ -2626,9 +2911,7 @@ struct_8082E224_arg1 D_8085D904[1] = { { 0x1856, -0x808 } };
 
 u16 D_8085D908[4] = { 0x1E80, 0x1E20, 0x1E40, 0x1E10 };
 
-glabel D_8085D910
-/* 02FE80 8085D910 */ .word 0x100A3B3F
-/* 02FE84 8085D914 */ .word 0x09320A0D
+struct_8085D910 D_8085D910[2] = { { 0x10, 0xA, 0x3B, 0x3F }, { 9, 0x32, 0xA, 0xD } };
 
 Vec3f D_8085D918 = {0.0f, 0.5f, 0.0f};
 
@@ -2649,27 +2932,27 @@ Vec3f D_8085D96C = { 30.0f, 50.0f, 0.0f };
 Vec3f D_8085D978 = { -30.0f, 60.0f, 0.0f };
 Vec3f D_8085D984 = { 30.0f, 60.0f, 0.0f };
 
-void (*D_8085D990[0x14])(PlayState*, Player*, LinkAnimationHeader*) = {
+void (*D_8085D990[0x14])(PlayState*, Player*, void*) = {
     /*  0 */ NULL,
-    /*  1 */ func_80858DB4,
-    /*  2 */ func_80858DDC,
-    /*  3 */ func_80858E40,
-    /*  4 */ func_80858E60,
-    /*  5 */ func_80858E80,
-    /*  6 */ func_80858EA0,
-    /*  7 */ func_80858EFC,
-    /*  8 */ func_80858F1C,
-    /*  9 */ func_80858F3C,
-    /* 10 */ func_80858F5C,
-    /* 11 */ func_80858FBC,
-    /* 12 */ func_80859028,
-    /* 13 */ func_808591BC,
-    /* 14 */ func_80858DFC,
-    /* 15 */ func_80858F7C,
-    /* 16 */ func_80858F9C,
-    /* 17 */ func_80859168,
-    /* 18 */ func_80859210,
-    /* 19 */ func_80858EC0,
+    /*  1 */ (void*)func_80858DB4,
+    /*  2 */ (void*)func_80858DDC,
+    /*  3 */ (void*)func_80858E40,
+    /*  4 */ (void*)func_80858E60,
+    /*  5 */ (void*)func_80858E80,
+    /*  6 */ (void*)func_80858EA0,
+    /*  7 */ (void*)func_80858EFC,
+    /*  8 */ (void*)func_80858F1C,
+    /*  9 */ (void*)func_80858F3C,
+    /* 10 */ (void*)func_80858F5C,
+    /* 11 */ (void*)func_80858FBC,
+    /* 12 */ (void*)func_80859028,
+    /* 13 */ (void*)func_808591BC,
+    /* 14 */ (void*)func_80858DFC,
+    /* 15 */ (void*)func_80858F7C,
+    /* 16 */ (void*)func_80858F9C,
+    /* 17 */ (void*)func_80859168,
+    /* 18 */ (void*)func_80859210,
+    /* 19 */ (void*)func_80858EC0,
 };
 
 struct_8082E224_arg1 D_8085D9E0[4] = { { 0, 0x2822 }, { 0x871, 0x82D }, { 0x871, 0x833 }, { 0x871, -0x840 } };
@@ -2701,315 +2984,299 @@ struct_8082E224_arg1 D_8085DA50[8] = {
     { 0, -0x283E },
 };
 
-glabel D_8085DA70
-/* 02FFE0 8085DA70 */ .word 0x0000302A
-/* 02FFE4 8085DA74 */ .word 0x0000CFD0
+struct_8082E224_arg1 D_8085DA70[2] = { { 0, 0x302A }, { 0, -0x3030 } };
+struct_8082E224_arg1 D_8085DA78[1] = { { 0x850, -0x1002 } };
+struct_8082E224_arg1 D_8085DA7C[1] = { { 0x6806, -0x2005 } };
+struct_8082E224_arg1 D_8085DA80[1] = { { 0x6808, -0x2001 } };
+struct_8082E224_arg1 D_8085DA84[1] = { { 0x6803, -0x200D } };
+struct_8082E224_arg1 D_8085DA88[1] = { { 0, -0x281A } };
+struct_8082E224_arg1 D_8085DA8C[1] = { { 0x6816, -0x2004 } };
+struct_8082E224_arg1 D_8085DA90[1] = { { 0x832, -0x812 } };
 
-glabel D_8085DA78
-/* 02FFE8 8085DA78 */ .word 0x0850EFFE
-
-glabel D_8085DA7C
-/* 02FFEC 8085DA7C */ .word 0x6806DFFB
-
-glabel D_8085DA80
-/* 02FFF0 8085DA80 */ .word 0x6808DFFF
-
-glabel D_8085DA84
-/* 02FFF4 8085DA84 */ .word 0x6803DFF3
-
-glabel D_8085DA88
-/* 02FFF8 8085DA88 */ .word 0x0000D7E6
-
-glabel D_8085DA8C
-/* 02FFFC 8085DA8C */ .word 0x6816DFFC
-
-glabel D_8085DA90
-/* 030000 8085DA90 */ .word 0x0832F7EE
-
-struct_8085DA94 D_8085DA94[0x8C] = {
-    { 0x00000000, NULL },
-    { -1, func_808594D0 },
-    { 0x00000000, NULL },
-    { 0x00000000, NULL },
-    { 0x03, 0x0400D568 },
-    { 0x00000000, NULL },
-    { 0x00000000, NULL },
-    { -1, func_808594D0 },
-    { 0x02, 0x0400D5A0 },
-    { -1, func_8085978C },
-    { 0x03, 0x0400D680 },
-    { 0x05, 0x0400D1C0 },
-    { 0x07, 0x0400D1C8 },
-    { 0x02, 0x0400D560 },
-    { 0x00000000, NULL },
-    { 0x03, 0x0400D5D0 },
-    { -1, func_80859B54 },
-    { 0x02, 0x0400DDA8 },
-    { 0x10, 0x0400DCB0 },
-    { -1, func_80859CA0 },
-    { -1, func_808594D0 },
-    { 0x03, 0x0400D190 },
-    { 0x06, 0x0400E168 },
-    { 0x03, 0x0400D640 },
-    { 0x03, 0x0400DF38 },
-    { -1, func_80859CFC },
-    { -1, func_8085A66C },
-    { 0x03, 0x0400D688 },
-    { 0x03, 0x0400D610 },
-    { 0x03, 0x0400D620 },
-    { 0x03, 0x0400D628 },
-    { 0x06, 0x0400D310 },
-    { -1, func_80859FCC },
-    { 0x03, 0x0400D2D0 },
-    { 0x04, 0x0400D2C8 },
-    { 0x03, 0x0400D2B8 },
-    { -1, func_8085A120 },
-    { -1, func_8085A19C },
-    { 0x06, 0x0400D278 },
-    { 0x06, 0x0400D288 },
-    { 0x05, 0x0400E428 },
-    { 0x05, 0x0400D060 },
-    { 0x05, 0x0400E148 },
-    { 0x05, 0x0400E150 },
-    { 0x07, 0x0400D068 },
-    { 0x05, 0x0400E420 },
-    { 0x05, 0x0400E430 },
-    { 0x05, 0x0400E440 },
-    { 0x03, 0x0400CF68 },
-    { 0x05, 0x0400D2F0 },
-    { 0x05, 0x0400E468 },
-    { 0x05, 0x0400E460 },
-    { 0x05, 0x0400E140 },
-    { 0x05, 0x0400E118 },
-    { 0x04, 0x0400E120 },
-    { 0x05, 0x0400E110 },
-    { 0x0E, 0x0400E140 },
-    { 0x05, 0x0400D0E0 },
-    { -1, func_8085978C },
-    { 0x05, 0x0400D0A0 },
-    { 0x02, 0x0400D080 },
-    { 0x07, 0x0400D0B8 },
-    { 0x05, 0x0400D0C0 },
-    { 0x03, 0x0400CF60 },
-    { 0x03, 0x0400CF48 },
-    { 0x03, 0x0400CF58 },
-    { 0x03, 0x0400CF40 },
-    { -1, func_8085968C },
-    { -1, func_8085A24C },
-    { -1, func_8085A330 },
-    { 0x07, 0x0400D0D8 },
-    { 0x05, 0x0400D090 },
-    { 0x05, 0x0400D088 },
-    { 0x03, 0x0400CF88 },
-    { 0x03, 0x0400CF90 },
-    { 0x03, 0x0400CF78 },
-    { 0x03, 0x0400CF80 },
-    { 0x07, 0x0400D308 },
-    { 0x05, 0x0400D300 },
-    { 0x03, 0x0400D018 },
-    { 0x04, 0x0400D028 },
-    { 0x03, 0x0400CFE0 },
-    { 0x04, 0x0400D058 },
-    { 0x03, 0x0400D030 },
-    { 0x05, 0x0400CFB0 },
-    { 0x03, 0x0400CFC8 },
-    { 0x04, 0x0400D040 },
-    { 0x05, 0x0400D1D0 },
-    { 0x03, 0x0400CFD8 },
-    { 0x04, 0x0400CFC0 },
-    { 0x04, 0x0400CFB8 },
-    { 0x04, 0x0400D050 },
-    { 0x04, 0x0400D048 },
-    { -1, func_8085A8C4 },
-    { 0x03, 0x0400D000 },
-    { 0x03, 0x0400D010 },
-    { 0x09, 0x0400DAD0 },
-    { -1, func_8085A530 },
-    { 0x0F, 0x0400D0A8 },
-    { 0x07, 0x0400D098 },
-    { 0x03, 0x0400CFA0 },
-    { 0x03, 0x0400CFF0 },
-    { -1, func_8085A768 },
-    { -1, func_8085AA60 },
-    { 0x05, 0x0400D070 },
-    { 0x05, 0x0400D358 },
-    { 0x05, 0x0400D330 },
-    { 0x05, 0x0400D340 },
-    { 0x05, 0x0400D350 },
-    { 0x05, 0x0400D328 },
-    { 0x07, 0x0400D368 },
-    { 0x03, 0x0400D9F8 },
-    { 0x05, 0x0400D108 },
-    { 0x05, 0x0400D118 },
-    { 0x04, 0x0400CF98 },
-    { 0x02, 0x0400D5B8 },
-    { 0x07, 0x0400E010 },
-    { 0x05, 0x0400D0F8 },
-    { 0x07, 0x0400D2D8 },
-    { 0x07, 0x0400D2E0 },
-    { 0x07, 0x0400D2E8 },
-    { -1, func_80859990 },
-    { 0x00000000, NULL },
-    { -1, func_80859A10 },
-    { 0x07, 0x0400D158 },
-    { 0x05, 0x0400D160 },
-    { 0x05, 0x0400D168 },
-    { 0x03, 0x0400D5C0 },
-    { 0x04, 0x0400D668 },
-    { 0x03, 0x0400E470 },
-    { 0x03, 0x0400E478 },
-    { 0x03, 0x0400E4C0 },
-    { 0x03, 0x0400E480 },
-    { 0x03, 0x0400E490 },
-    { 0x03, 0x0400E488 },
-    { 0x03, 0x0400E498 },
-    { 0x03, 0x0400E4B0 },
-    { 0x03, 0x0400D660 },
-    { 0x03, 0x0400DA00 },
-    { 0x03, 0x0400DA08 },
+struct_8085DA94 D_8085DA94[] = {
+    { 0x00000000, { NULL } },
+    { -1, { func_808594D0 } },
+    { 0x00000000, { NULL } },
+    { 0x00000000, { NULL } },
+    { 0x03, { 0x0400D568 } },
+    { 0x00000000, { NULL } },
+    { 0x00000000, { NULL } },
+    { -1, { func_808594D0 } },
+    { 0x02, { 0x0400D5A0 } },
+    { -1, { func_8085978C } },
+    { 0x03, { 0x0400D680 } },
+    { 0x05, { 0x0400D1C0 } },
+    { 0x07, { 0x0400D1C8 } },
+    { 0x02, { 0x0400D560 } },
+    { 0x00000000, { NULL } },
+    { 0x03, { 0x0400D5D0 } },
+    { -1, { func_80859B54 } },
+    { 0x02, { 0x0400DDA8 } },
+    { 0x10, { 0x0400DCB0 } },
+    { -1, { func_80859CA0 } },
+    { -1, { func_808594D0 } },
+    { 0x03, { 0x0400D190 } },
+    { 0x06, { 0x0400E168 } },
+    { 0x03, { 0x0400D640 } },
+    { 0x03, { 0x0400DF38 } },
+    { -1, { func_80859CFC } },
+    { -1, { func_8085A66C } },
+    { 0x03, { 0x0400D688 } },
+    { 0x03, { 0x0400D610 } },
+    { 0x03, { 0x0400D620 } },
+    { 0x03, { 0x0400D628 } },
+    { 0x06, { 0x0400D310 } },
+    { -1, { func_80859FCC } },
+    { 0x03, { 0x0400D2D0 } },
+    { 0x04, { 0x0400D2C8 } },
+    { 0x03, { 0x0400D2B8 } },
+    { -1, { func_8085A120 } },
+    { -1, { func_8085A19C } },
+    { 0x06, { 0x0400D278 } },
+    { 0x06, { 0x0400D288 } },
+    { 0x05, { 0x0400E428 } },
+    { 0x05, { 0x0400D060 } },
+    { 0x05, { 0x0400E148 } },
+    { 0x05, { 0x0400E150 } },
+    { 0x07, { 0x0400D068 } },
+    { 0x05, { 0x0400E420 } },
+    { 0x05, { 0x0400E430 } },
+    { 0x05, { 0x0400E440 } },
+    { 0x03, { 0x0400CF68 } },
+    { 0x05, { 0x0400D2F0 } },
+    { 0x05, { 0x0400E468 } },
+    { 0x05, { 0x0400E460 } },
+    { 0x05, { 0x0400E140 } },
+    { 0x05, { 0x0400E118 } },
+    { 0x04, { 0x0400E120 } },
+    { 0x05, { 0x0400E110 } },
+    { 0x0E, { 0x0400E140 } },
+    { 0x05, { 0x0400D0E0 } },
+    { -1, { func_8085978C } },
+    { 0x05, { 0x0400D0A0 } },
+    { 0x02, { 0x0400D080 } },
+    { 0x07, { 0x0400D0B8 } },
+    { 0x05, { 0x0400D0C0 } },
+    { 0x03, { 0x0400CF60 } },
+    { 0x03, { 0x0400CF48 } },
+    { 0x03, { 0x0400CF58 } },
+    { 0x03, { 0x0400CF40 } },
+    { -1, { func_8085968C } },
+    { -1, { func_8085A24C } },
+    { -1, { func_8085A330 } },
+    { 0x07, { 0x0400D0D8 } },
+    { 0x05, { 0x0400D090 } },
+    { 0x05, { 0x0400D088 } },
+    { 0x03, { 0x0400CF88 } },
+    { 0x03, { 0x0400CF90 } },
+    { 0x03, { 0x0400CF78 } },
+    { 0x03, { 0x0400CF80 } },
+    { 0x07, { 0x0400D308 } },
+    { 0x05, { 0x0400D300 } },
+    { 0x03, { 0x0400D018 } },
+    { 0x04, { 0x0400D028 } },
+    { 0x03, { 0x0400CFE0 } },
+    { 0x04, { 0x0400D058 } },
+    { 0x03, { 0x0400D030 } },
+    { 0x05, { 0x0400CFB0 } },
+    { 0x03, { 0x0400CFC8 } },
+    { 0x04, { 0x0400D040 } },
+    { 0x05, { 0x0400D1D0 } },
+    { 0x03, { 0x0400CFD8 } },
+    { 0x04, { 0x0400CFC0 } },
+    { 0x04, { 0x0400CFB8 } },
+    { 0x04, { 0x0400D050 } },
+    { 0x04, { 0x0400D048 } },
+    { -1, { func_8085A8C4 } },
+    { 0x03, { 0x0400D000 } },
+    { 0x03, { 0x0400D010 } },
+    { 0x09, { 0x0400DAD0 } },
+    { -1, { func_8085A530 } },
+    { 0x0F, { 0x0400D0A8 } },
+    { 0x07, { 0x0400D098 } },
+    { 0x03, { 0x0400CFA0 } },
+    { 0x03, { 0x0400CFF0 } },
+    { -1, { func_8085A768 } },
+    { -1, { func_8085AA60 } },
+    { 0x05, { 0x0400D070 } },
+    { 0x05, { 0x0400D358 } },
+    { 0x05, { 0x0400D330 } },
+    { 0x05, { 0x0400D340 } },
+    { 0x05, { 0x0400D350 } },
+    { 0x05, { 0x0400D328 } },
+    { 0x07, { 0x0400D368 } },
+    { 0x03, { 0x0400D9F8 } },
+    { 0x05, { 0x0400D108 } },
+    { 0x05, { 0x0400D118 } },
+    { 0x04, { 0x0400CF98 } },
+    { 0x02, { 0x0400D5B8 } },
+    { 0x07, { 0x0400E010 } },
+    { 0x05, { 0x0400D0F8 } },
+    { 0x07, { 0x0400D2D8 } },
+    { 0x07, { 0x0400D2E0 } },
+    { 0x07, { 0x0400D2E8 } },
+    { -1, { func_80859990 } },
+    { 0x00000000, { NULL } },
+    { -1, { func_80859A10 } },
+    { 0x07, { 0x0400D158 } },
+    { 0x05, { 0x0400D160 } },
+    { 0x05, { 0x0400D168 } },
+    { 0x03, { 0x0400D5C0 } },
+    { 0x04, { 0x0400D668 } },
+    { 0x03, { 0x0400E470 } },
+    { 0x03, { 0x0400E478 } },
+    { 0x03, { 0x0400E4C0 } },
+    { 0x03, { 0x0400E480 } },
+    { 0x03, { 0x0400E490 } },
+    { 0x03, { 0x0400E488 } },
+    { 0x03, { 0x0400E498 } },
+    { 0x03, { 0x0400E4B0 } },
+    { 0x03, { 0x0400D660 } },
+    { 0x03, { 0x0400DA00 } },
+    { 0x03, { 0x0400DA08 } },
 };
 
 struct_8085DA94 D_8085DEF4[0x8C] = {
-    { 0x00, 0x00000000 },
-    { -1, func_80859414 },
-    { -1, func_80859AD0 },
-    { -1, func_80859B28 },
-    { 0x0B, 0x00000000 },
-    { -1, func_8085ADA0 },
-    { -1, func_8085AACC },
-    { -1, func_808595B8 },
-    { 0x12, D_8085DA70 },
-    { -1, func_80859890 },
-    { -1, func_80859C60 },
-    { 0x12, D_8085D9E0 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x00, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x11, 0x0400DDB8 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { -1, func_8085A710 },
-    { -1, func_808595B8 },
-    { 0x0C, 0x0400D198 },
-    { -1, func_80859D70 },
-    { 0x0C, 0x0400D648 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { -1, func_8085A6C0 },
-    { 0x0C, 0x0400D690 },
-    { 0x0C, 0x0400D618 },
-    { 0x0C, 0x0400D630 },
-    { 0x0C, 0x0400D298 },
-    { 0x0C, 0x0400D318 },
-    { -1, func_80859FF4 },
-    { -1, func_8085A04C },
-    { 0x0B, 0x00000000 },
-    { 0x0C, 0x0400D2C0 },
-    { -1, func_8085A144 },
-    { -1, func_8085A1D4 },
-    { 0x0C, 0x0400D280 },
-    { 0x0C, 0x0400D290 },
-    { 0x12, D_8085D9F0 },
-    { 0x0B, 0x00000000 },
-    { 0x12, D_8085DA00 },
-    { 0x0D, 0x0400E158 },
-    { -1, func_8085A364 },
-    { 0x12, D_8085DA2C },
-    { 0x0C, 0x0400E438 },
-    { 0x0C, 0x0400E448 },
-    { 0x0C, 0x0400CF70 },
-    { 0x0C, 0x0400D2F8 },
-    { 0x12, D_8085DA50 },
-    { 0x0B, 0x00000000 },
-    { 0x12, D_8085D9FC },
-    { 0x0C, 0x0400E120 },
-    { -1, func_8085A364 },
-    { 0x12, D_8085DA1C },
-    { 0x0B, 0x00000000 },
-    { 0x12, D_8085DA0C },
-    { -1, func_808599DC },
-    { 0x0B, 0x00000000 },
-    { 0x12, D_8085DA28 },
-    { -1, func_8085A364 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0C, 0x0400CF50 },
-    { -1, func_8085A40C },
-    { 0x0B, 0x00000000 },
-    { -1, func_80859708 },
-    { -1, func_8085A2AC },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { -1, func_8085A40C },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x12, D_8085DA78 },
-    { 0x0C, 0x0400D020 },
-    { -1, func_8085A364 },
-    { 0x0C, 0x0400CFE8 },
-    { 0x0B, 0x00000000 },
-    { 0x0C, 0x0400D038 },
-    { 0x12, D_8085DA80 },
-    { 0x0C, 0x0400CFD0 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { -1, func_8085A940 },
-    { 0x0C, 0x0400D008 },
-    { 0x0B, 0x00000000 },
-    { -1, func_8085A4A4 },
-    { -1, func_8085A5DC },
-    { -1, func_8085AA84 },
-    { 0x0B, 0x00000000 },
-    { 0x0C, 0x0400CFA8 },
-    { 0x0C, 0x0400CFF8 },
-    { -1, func_8085A7C0 },
-    { 0x0B, 0x00000000 },
-    { 0x0D, 0x0400D078 },
-    { 0x0D, 0x0400D360 },
-    { 0x0D, 0x0400D338 },
-    { 0x0D, 0x0400D348 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0C, 0x0400D9F0 },
-    { 0x0D, 0x0400D110 },
-    { 0x0D, 0x0400D120 },
-    { 0x0B, 0x00000000 },
-    { -1, func_8085AA10 },
-    { 0x0B, 0x00000000 },
-    { -1, func_8085A364 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { -1, func_808599DC },
-    { -1, func_80859AF8 },
-    { -1, func_80859A44 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0C, 0x0400D5C8 },
-    { 0x0B, 0x00000000 },
-    { 0x0C, 0x0400E4A8 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { -1, func_80859D44 },
-    { 0x0B, 0x00000000 },
-    { 0x0C, 0x0400E4A0 },
-    { -1, func_80859EBC },
-    { -1, func_80859F4C },
-    { -1, func_80859F4C },
+    { 0x00, { 0x00000000}  },
+    { -1, { func_80859414}  },
+    { -1, { func_80859AD0 }  },
+    { -1, { func_80859B28 }  },
+    { 0x0B, { 0x00000000 }  },
+    { -1, { func_8085ADA0 }  },
+    { -1, { func_8085AACC }  },
+    { -1, { func_808595B8 }  },
+    { 0x12, { D_8085DA70 }  },
+    { -1, { func_80859890 }  },
+    { -1, { func_80859C60 }  },
+    { 0x12, { D_8085D9E0 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x00, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x11, { 0x0400DDB8 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { -1, { func_8085A710 }  },
+    { -1, { func_808595B8 }  },
+    { 0x0C, { 0x0400D198 }  },
+    { -1, { func_80859D70 }  },
+    { 0x0C, { 0x0400D648 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { -1, { func_8085A6C0 }  },
+    { 0x0C, { 0x0400D690 }  },
+    { 0x0C, { 0x0400D618 }  },
+    { 0x0C, { 0x0400D630 }  },
+    { 0x0C, { 0x0400D298 }  },
+    { 0x0C, { 0x0400D318 }  },
+    { -1, { func_80859FF4 }  },
+    { -1, { func_8085A04C }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0C, { 0x0400D2C0 }  },
+    { -1, { func_8085A144 }  },
+    { -1, { func_8085A1D4 }  },
+    { 0x0C, { 0x0400D280 }  },
+    { 0x0C, { 0x0400D290 }  },
+    { 0x12, { D_8085D9F0 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x12, { D_8085DA00 }  },
+    { 0x0D, { 0x0400E158 }  },
+    { -1, { func_8085A364 }  },
+    { 0x12, { D_8085DA2C }  },
+    { 0x0C, { 0x0400E438 }  },
+    { 0x0C, { 0x0400E448 }  },
+    { 0x0C, { 0x0400CF70 }  },
+    { 0x0C, { 0x0400D2F8 }  },
+    { 0x12, { D_8085DA50 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x12, { D_8085D9FC }  },
+    { 0x0C, { 0x0400E120 }  },
+    { -1, { func_8085A364 }  },
+    { 0x12, { D_8085DA1C }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x12, { D_8085DA0C }  },
+    { -1, { func_808599DC }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x12, { D_8085DA28 }  },
+    { -1, { func_8085A364 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0C, { 0x0400CF50 }  },
+    { -1, { func_8085A40C }  },
+    { 0x0B, { 0x00000000 }  },
+    { -1, { func_80859708 }  },
+    { -1, { func_8085A2AC }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { -1, { func_8085A40C }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x12, { D_8085DA78 }  },
+    { 0x0C, { 0x0400D020 }  },
+    { -1, { func_8085A364 }  },
+    { 0x0C, { 0x0400CFE8 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0C, { 0x0400D038 }  },
+    { 0x12, { D_8085DA80 }  },
+    { 0x0C, { 0x0400CFD0 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { -1, { func_8085A940 }  },
+    { 0x0C, { 0x0400D008 }  },
+    { 0x0B, { 0x00000000 }  },
+    { -1, { func_8085A4A4 }  },
+    { -1, { func_8085A5DC }  },
+    { -1, { func_8085AA84 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0C, { 0x0400CFA8 }  },
+    { 0x0C, { 0x0400CFF8 }  },
+    { -1, { func_8085A7C0 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0D, { 0x0400D078 }  },
+    { 0x0D, { 0x0400D360 }  },
+    { 0x0D, { 0x0400D338 }  },
+    { 0x0D, { 0x0400D348 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0C, { 0x0400D9F0 }  },
+    { 0x0D, { 0x0400D110 }  },
+    { 0x0D, { 0x0400D120 }  },
+    { 0x0B, { 0x00000000 }  },
+    { -1, { func_8085AA10 }  },
+    { 0x0B, { 0x00000000 }  },
+    { -1, { func_8085A364 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { -1, { func_808599DC }  },
+    { -1, { func_80859AF8 }  },
+    { -1, { func_80859A44 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0C, { 0x0400D5C8 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0C, { 0x0400E4A8 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0B, { 0x00000000 }  },
+    { -1, { func_80859D44 }  },
+    { 0x0B, { 0x00000000 }  },
+    { 0x0C, { 0x0400E4A0 }  },
+    { -1, { func_80859EBC }  },
+    { -1, { func_80859F4C }  },
+    { -1, { func_80859F4C }  },
 };
 
 LinkAnimationHeader* D_8085E354[] = {
@@ -3059,6 +3326,8 @@ extern Color_RGBA8 D_8085D3F8;
 extern f32 D_8085D3FC[2];
 extern f32 D_8085D404[3];
 extern f32 D_8085D410[3];
+
+extern Vec3s D_8085D6E0;
 
 // bss
 #if 1
@@ -3324,11 +3593,6 @@ void func_8082E1F0(Player* this, u16 sfxId) {
     this->stateFlags2 |= 8;
 }
 
-typedef struct struct_8082E224_arg1 {
-    /* 0x0 */ u16 sfxId;
-    /* 0x2 */ s16 unk_2; // negative marks the end
-} struct_8082E224_arg1;  // size = 0x4
-
 void func_8082E224(Player* this, struct_8082E224_arg1* arg1);
 #ifdef NON_MATCHING
 // regalloc around } while ((temp_v0 >= 0) != 0);
@@ -3549,25 +3813,6 @@ s32 func_8082ECCC(Player* this) {
     return this->stateFlags1 & PLAYER_STATE1_1000000;
 }
 
-#if 0
-// OoT:
-typedef struct GetItemEntry {
-    /* 0x00 */ u8 itemId;
-    /* 0x01 */ u8 field; // various bit-packed data
-    /* 0x02 */ s8 gi;    // defines the draw id and chest opening animation
-    /* 0x03 */ u8 textId;
-    /* 0x04 */ u16 objectId;
-} GetItemEntry; // size = 0x06
-#endif
-
-typedef struct GetItemEntry {
-    /* 0x0 */ u8 itemId;
-    /* 0x1 */ u8 unk_1;
-    /* 0x2 */ s8 unk_2;
-    /* 0x3 */ u8 textId;
-    /* 0x4 */ u16 objectId;
-} GetItemEntry; // size = 0x6
-
 extern GetItemEntry sGetItemTable[GI_MAX - 1];
 
 void func_8082ECE0(Player* this) {
@@ -3691,14 +3936,6 @@ LinkAnimationHeader* func_8082EFE4(Player* this) {
     }
     return GET_PLAYER_ANIM(PLAYER_ANIMGROUP_22, this->modelAnimType);
 }
-
-typedef struct {
-    /* 0x0 */ Color_RGB8 unk_0;
-    /* 0x3 */ Color_RGB8 unk_3;
-    /* 0x6 */ Color_RGB8 unk_6;
-    /* 0xA */ s16 unk_A;
-    /* 0xC */ s16 unk_C;
-} struct_8082F02C_arg1; // size = 0xE
 
 void func_8082F02C(PlayState* play, struct_8082F02C_arg1* arg1, f32 arg2) {
     func_800FD59C(play, &arg1->unk_0, arg2);
@@ -3883,11 +4120,6 @@ void func_8082F5FC(Player* this, Actor* actor) {
     this->leftHandWorld.rot.y = actor->shape.rot.y - this->actor.shape.rot.y;
     this->stateFlags1 |= PLAYER_STATE1_800;
 }
-
-typedef struct {
-    /* 0x0 */ u8 itemId;
-    /* 0x2 */ s16 actorId;
-} struct_8085CD24; // size = 0x4
 
 extern struct_8085CD24 D_8085CD24[];
 
@@ -4089,11 +4321,6 @@ void func_8082FE0C(Player* this, PlayState* play);
 
 extern s8 D_8085CD00[];
 
-typedef struct struct_8085CC88 {
-    /* 0x0 */ LinkAnimationHeader* unk_0;
-    /* 0x4 */ u8 unk_4;
-} struct_8085CC88; // size = 0x8
-
 extern struct_8085CC88 D_8085CC88[0xF];
 
 s32 func_80848808(Player* this, PlayState* play);
@@ -4286,23 +4513,6 @@ void func_808308DC(PlayState* play, Player* this) {
         }
     }
 }
-
-s32 func_80848780(Player* this, PlayState* play);
-s32 func_808487B8(Player* this, PlayState* play);
-s32 func_80848B6C(Player* this, PlayState* play);
-s32 func_808490B4(Player* this, PlayState* play);
-s32 func_808491B4(Player* this, PlayState* play);
-s32 func_80848808(Player* this, PlayState* play);
-s32 func_8084894C(Player* this, PlayState* play);
-s32 func_80848A0C(Player* this, PlayState* play);
-s32 func_80848AB0(Player* this, PlayState* play);
-s32 func_80848E4C(Player* this, PlayState* play);
-s32 func_80849054(Player* this, PlayState* play);
-s32 func_8084923C(Player* this, PlayState* play);
-s32 func_808492C4(Player* this, PlayState* play);
-s32 func_8084933C(Player* this, PlayState* play);
-s32 func_80849570(Player* this, PlayState* play);
-s32 func_80849620(Player* this, PlayState* play);
 
 // returns bool
 extern PlayerFuncAC4 D_8085C9F0[PLAYER_AP_MAX];
@@ -5311,23 +5521,7 @@ s32 func_80832F78(Player* this, f32* arg1, s16* arg2, f32 arg3, PlayState* play)
     return true;
 }
 
-s32 func_80839518(Player* this, PlayState* play);
-s32 func_808365DC(Player* this, PlayState* play);
-s32 func_8083D23C(Player* this, PlayState* play);
-s32 func_8083CCB4(Player* this, PlayState* play);
-s32 func_808391D8(Player* this, PlayState* play);
-s32 func_8083DFC4(Player* this, PlayState* play);
-s32 func_8083A114(Player* this, PlayState* play);
-s32 func_80848570(Player* this, PlayState* play);
-s32 func_8083A580(Player* this, PlayState* play);
-s32 func_8083D78C(Player* this, PlayState* play);
-s32 func_80839B18(Player* this, PlayState* play);
-s32 func_8083A274(Player* this, PlayState* play);
-s32 func_80834DFC(Player* this, PlayState* play);
-s32 func_80838A90(Player* this, PlayState* play);
-s32 func_8083A0CC(Player* this, PlayState* play);
-
-extern s32 (*D_8085D054[0xF])(Player* this, PlayState* play);
+//extern s32 (*D_8085D054[0xF])(Player* this, PlayState* play);
 
 s32 func_80833058(PlayState* play, Player* this, s8* arg2, s32 arg3) {
     if (!(this->stateFlags1 & (PLAYER_STATE1_1 | PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) && !func_8082DA90(play)) {
@@ -5505,10 +5699,6 @@ void func_808335B0(PlayState* play, Player* this) {
     func_808334D4(play, this);
 }
 
-extern s8 D_8085D090[];
-extern s8 D_8085D094[];
-extern s8 D_8085D097[];
-
 PlayerMeleeWeaponAnimation func_808335F4(Player* this) {
     s32 temp_a1;
     PlayerMeleeWeaponAnimation meleeWeaponAnimation;
@@ -5518,7 +5708,7 @@ PlayerMeleeWeaponAnimation func_808335F4(Player* this) {
         s32 requiredScopeTemp;
 
         // yikes
-        meleeWeaponAnimation = ((this->transformation == PLAYER_FORM_ZORA) ? D_8085D094 : D_8085D097)[this->unk_ADD];
+        meleeWeaponAnimation = ((this->transformation == PLAYER_FORM_ZORA) ? D_8085D094[0] : D_8085D094[1])[this->unk_ADD];
 
         if (this->unk_ADD != 0) {
             this->meleeWeaponAnimation = meleeWeaponAnimation;
@@ -5564,14 +5754,6 @@ void func_80833728(Player* this, s32 index, u32 dmgFlags, s32 damage) {
     }
 }
 
-typedef struct struct_8085D09C {
-    /* 0x0 */ s32 dmgFlags;
-    /* 0x4 */ u8 unk_4;
-    /* 0x5 */ u8 unk_5;
-    /* 0x6 */ u8 unk_6;
-    /* 0x7 */ u8 unk_7;
-} struct_8085D09C; // size = 0x8
-
 extern struct_8085D09C D_8085D09C[];
 
 void func_8083375C(Player* this, PlayerMeleeWeaponAnimation meleeWeaponAnimation) {
@@ -5593,14 +5775,6 @@ void func_8083375C(Player* this, PlayerMeleeWeaponAnimation meleeWeaponAnimation
     func_80833728(this, 0, var_v0->dmgFlags, damage);
     func_80833728(this, 1, var_v0->dmgFlags, damage);
 }
-
-typedef struct struct_8085CD30 {
-    /* 0x00 */ LinkAnimationHeader* unk_0;
-    /* 0x04 */ LinkAnimationHeader* unk_4;
-    /* 0x08 */ LinkAnimationHeader* unk_8;
-    /* 0x0C */ u8 unk_C;
-    /* 0x0D */ u8 unk_D;
-} struct_8085CD30; // size = 0x10
 
 extern struct_8085CD30 D_8085CD30[0x10];
 
@@ -6898,15 +7072,7 @@ void func_80836EA0(PlayState* play, u16 quakeSpeed, s16 verticalMag, s16 quakeCo
     Quake_SetCountdown(quake, quakeCountdown);
 }
 
-typedef struct struct_8085D13C {
-    /* 0x0 */ s8 damage;
-    /* 0x1 */ u8 sourceIntensity;
-    /* 0x2 */ u8 decayTimer;
-    /* 0x3 */ u8 decayStep;
-    /* 0x4 */ u16 unk_4;
-} struct_8085D13C; // size = 0x6
-
-extern struct struct_8085D13C D_8085D13C[2];
+extern struct struct_8085D13C D_8085D13C[];
 
 s32 func_80836F10(PlayState* play, Player* this) {
     s32 var_s0;
@@ -8122,14 +8288,6 @@ s32 func_8083A658(PlayState* play, Player* this) {
     return false;
 }
 
-struct _struct_D_8085D200_0xC {
-    /* 0x0 */ LinkAnimationHeader* unk_0; /* inferred */
-    /* 0x4 */ LinkAnimationHeader* unk_4; /* inferred */
-    /* 0x8 */ u8 unk_8;                   /* inferred */
-    /* 0x9 */ u8 unk_9;                   /* inferred */
-    /* 0xA */ char pad_A[2];              /* maybe part of unk_9[3]? */
-};                                        /* size = 0xC */
-
 extern struct _struct_D_8085D200_0xC D_8085D200[];
 
 s32 func_8083A6C0(PlayState* play, Player* this) {
@@ -8306,23 +8464,6 @@ void func_8083AD04(PlayState* play, Player* this) {
 void func_8083AD8C(PlayState* play, Player* this) {
     func_8085B384(this, play);
 }
-
-void func_808412A0(PlayState* play, Player* this);
-void func_80841408(PlayState* play, Player* this);
-void func_808412BC(PlayState* play, Player* this);
-void func_808414E0(PlayState* play, Player* this);
-void func_80841528(PlayState* play, Player* this);
-void func_808415E4(PlayState* play, Player* this);
-void func_80841624(PlayState* play, Player* this);
-void func_808415A0(PlayState* play, Player* this);
-void func_80841744(PlayState* play, Player* this);
-void func_80841744(PlayState* play, Player* this);
-void func_8083ADF0(PlayState* play, Player* this);
-void func_8083AD8C(PlayState* play, Player* this);
-void func_8083AD04(PlayState* play, Player* this);
-void func_8083ADB8(PlayState* play, Player* this);
-void func_8083ADF0(PlayState* play, Player* this);
-void func_8083AE38(PlayState* play, Player* this);
 
 void func_8083ADB8(PlayState* play, Player* this) {
     if (func_8083A878(play, this, 180.0f)) {
@@ -8733,17 +8874,10 @@ s32 func_8083CBC4(Player* this, f32 arg1, s16 arg2, f32 arg3, f32 arg4, f32 arg5
     return true;
 }
 
-extern u16 D_8085D252[PLAYER_FORM_MAX];
+extern u16 D_8085D254[];
 extern u16 D_8085D25C[];
 
-typedef struct struct_8085D224 {
-    /* 0x0 */ LinkAnimationHeader* anim;
-    /* 0x4 */ f32 unk_4;
-    /* 0x8 */ f32 unk_8;
-} struct_8085D224; // size = 0xC
-
 extern struct_8085D224 D_8085D224[];
-extern struct_8085D224 D_8085D23C[];
 
 // Player_MountHorse
 s32 func_8083CCB4(Player* this, PlayState* play) {
@@ -8753,7 +8887,7 @@ s32 func_8083CCB4(Player* this, PlayState* play) {
         if ((rideActor->type != HORSE_TYPE_2) && (this->transformation != PLAYER_FORM_FIERCE_DEITY)) {
             if (CHECK_BTN_ALL(D_80862B44->press.button, BTN_A)) {
                 if (ActorCutscene_GetCanPlayNext(0x7C)) {
-                    rideActor->actor.textId = D_8085D252[this->transformation];
+                    rideActor->actor.textId = D_8085D254[this->transformation-1];
                     func_8085B460(play, &rideActor->actor);
                     return true;
                 }
@@ -8786,9 +8920,9 @@ s32 func_8083CCB4(Player* this, PlayState* play) {
                 this->isBurning = false;
 
                 if (this->transformation == PLAYER_FORM_FIERCE_DEITY) {
-                    entry = D_8085D224;
+                    entry = &D_8085D224[0];
                 } else {
-                    entry = D_8085D23C;
+                    entry = &D_8085D224[2];
                 }
                 if (this->mountSide >= 0) {
                     entry++;
@@ -13397,8 +13531,6 @@ void func_8084BE40(Player* this, PlayState* play) {
     }
 }
 
-extern struct_8082E224_arg1 D_8085D604[2];
-
 void func_8084BF28(Player* this, PlayState* play) {
     this->stateFlags2 |= PLAYER_STATE2_20;
 
@@ -14817,11 +14949,6 @@ void func_80851EAC(Player* this) {
     this->unk_B08[2] = 0.0f;
 }
 
-typedef struct struct_8085D714 {
-    /* 0x0 */ u8 unk_0;
-    /* 0x4 */ LinkAnimationHeader* unk_4;
-} struct_8085D714; // size = 0x8
-
 extern struct_8085D714 D_8085D714[];
 
 #ifdef NON_MATCHING
@@ -15056,14 +15183,6 @@ void func_808530E0(PlayState* play, Player* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80853194.s")
 
-typedef struct struct_8085D798 {
-    /* 0x0 */ s16 actorId;
-    /* 0x2 */ s8 actorParams;
-    /* 0x3 */ u8 itemId;
-    /* 0x4 */ u8 actionParam;
-    /* 0x5 */ u8 textId;
-} struct_8085D798; // size = 0x6
-
 extern struct_8085D798 D_8085D798[0xE];
 
 void func_808534C0(Player* this, PlayState* play) {
@@ -15160,11 +15279,6 @@ void func_80853754(Player* this, PlayState* play) {
         Player_SpawnFairy(play, this, &this->leftHandWorld.pos, &D_8085D7EC, sp2C);
     }
 }
-
-typedef struct struct_8085D80C {
-    /* 0x0 */ s16 actorId;
-    /* 0x2 */ s16 params;
-} struct_8085D80C; // size = 0x4
 
 extern s8 D_8085D804[];
 extern struct_8085D80C D_8085D80C[];
@@ -15511,31 +15625,6 @@ void func_80854C70(Player* this, PlayState* play) {
 // declaration is messy
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80854CD0.s")
 
-typedef struct struct_8085D848_unk_00 {
-    /* 0x00 */ s16 unk_00; /* inferred */
-    /* 0x02 */ u8 unk_02;  /* inferred */
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 unk_07;
-} struct_8085D848_unk_00; // size = 0x08
-
-typedef struct struct_8085D848_unk_18 {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ u8 unk_0C;
-    /* 0x0D */ u8 unk_0D;
-    /* 0x0E */ u8 unk_0E;
-    /* 0x0F */ UNK_TYPE1 unk_0F[1];
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ UNK_TYPE1 unk_12[2];
-} struct_8085D848_unk_18; // size = 0x14
-
-typedef struct struct_8085D848 {
-    /* 0x00 */ struct_8085D848_unk_00 unk_00[3];
-    /* 0x18 */ struct_8085D848_unk_18 unk_18[3];
-} struct_8085D848; // size = 0x54
-
 extern struct struct_8085D848 D_8085D848[];
 
 extern u8 D_8085D844[];
@@ -15563,13 +15652,6 @@ void func_808550D0(PlayState* play, Player* this, f32 arg2, f32 arg3, s32 arg4) 
     Lights_PointNoGlowSetInfo(&this->lightInfo, sp3C.x, sp3C.y, sp3C.z, var_s0->unk_0C, var_s0->unk_0D, var_s0->unk_0E,
                               var_s0->unk_10 * arg3);
 }
-
-typedef struct struct_8085D910 {
-    /* 0x0 */ u8 unk_0;
-    /* 0x1 */ u8 unk_1;
-    /* 0x2 */ u8 unk_2;
-    /* 0x3 */ u8 unk_3;
-} struct_8085D910; // size = 0x4
 
 extern struct_8085D910 D_8085D910[];
 extern u16 D_8085D908[];
@@ -16499,27 +16581,7 @@ void func_80857AEC(PlayState* play, Player* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80857BE8.s")
 
-extern void (*D_8085D990[0x14])(PlayState* play, Player* this, void* anim);
-
-void func_80858DB4(PlayState* play, Player* this, LinkAnimationHeader* anim);
-void func_80858DDC(PlayState* play, Player* this, LinkAnimationHeader* anim);
-void func_80858E40(PlayState* play, Player* this, LinkAnimationHeader* anim);
-void func_80858E60(PlayState* play, Player* this, LinkAnimationHeader* anim);
-void func_80858E80(PlayState* play, Player* this, LinkAnimationHeader* anim);
-void func_80858EA0(PlayState* play, Player* this, LinkAnimationHeader* anim);
-void func_80858EFC(PlayState* play, Player* this, LinkAnimationHeader* anim);
-void func_80858F1C(PlayState* play, Player* this, LinkAnimationHeader* anim);
-void func_80858F3C(PlayState* play, Player* this, LinkAnimationHeader* anim);
-void func_80858F5C(PlayState* play, Player* this, LinkAnimationHeader* anim);
-void func_80858FBC(PlayState* play, Player* this, LinkAnimationHeader* anim);
-void func_80859028(PlayState* play, Player* this, LinkAnimationHeader* anim);
-void func_808591BC(PlayState* play, Player* this, LinkAnimationHeader* anim);
-void func_80858DFC(PlayState* play, Player* this, LinkAnimationHeader* anim);
-void func_80858F7C(PlayState* play, Player* this, LinkAnimationHeader* anim);
-void func_80858F9C(PlayState* play, Player* this, LinkAnimationHeader* anim);
-void func_80859168(PlayState* play, Player* this, LinkAnimationHeader* anim);
-void func_80859210(PlayState* play, Player* this, struct_8082E224_arg1* arg2);
-void func_80858EC0(PlayState* play, Player* this, LinkAnimationHeader* anim);
+//extern void (*D_8085D990[0x14])(PlayState* play, Player* this, void* anim);
 
 void func_80858C84(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     func_8082E784(this);
@@ -16940,15 +17002,6 @@ void func_80859D44(PlayState* play, Player* this, UNK_TYPE arg2) {
     LinkAnimation_Update(play, &this->skelAnime);
 }
 
-typedef struct struct_8085E368 {
-    /* 0x0 */ s16 unk_0; /* inferred */
-    /* 0x2 */ s16 unk_2; /* inferred */
-    /* 0x4 */ s16 unk_4; /* inferred */
-    /* 0x6 */ s16 unk_6; /* inferred */
-    /* 0x8 */ s16 unk_8; /* inferred */
-    /* 0xA */ s16 unk_A; /* inferred */
-} struct_8085E368;       // size = 0xC
-
 extern LinkAnimationHeader* D_8085E354[PLAYER_FORM_MAX];
 extern struct_8085E368 D_8085E368[];
 
@@ -16984,17 +17037,6 @@ void func_80859EBC(PlayState* play, Player* this, s32 arg2) {
         func_808484CC(this);
     }
 }
-
-void func_80859F4C(PlayState* play, Player* this, UNK_TYPE arg2);
-void func_80859FCC(PlayState* play, Player* this, UNK_TYPE arg2);
-void func_80859FF4(PlayState* play, Player* this, UNK_TYPE arg2);
-void func_8085A120(PlayState* play, Player* this, UNK_TYPE arg2);
-void func_8085A144(PlayState* play, Player* this, UNK_TYPE arg2);
-void func_8085A19C(PlayState* play, Player* this, UNK_TYPE arg2);
-void func_8085A1D4(PlayState* play, Player* this, UNK_TYPE arg2);
-void func_8085A24C(PlayState* play, Player* this, UNK_TYPE arg2);
-void func_8085A2AC(PlayState* play, Player* this, UNK_TYPE arg2);
-void func_8085A330(PlayState* play, Player* this, UNK_TYPE arg2);
 
 void func_80859F4C(PlayState* play, Player* this, UNK_TYPE arg2) {
     if (LinkAnimation_Update(play, &this->skelAnime) != 0) {
@@ -17264,16 +17306,8 @@ void func_8085ABA8(Player* this, CsCmdActorAction* playerAction) {
     func_8082E784(this);
 }
 
-typedef struct struct_8085DA94 {
-    /* 0x0 */ s8 type;
-    /* 0x4 */ union {
-        void* ptr;
-        void (*func)(PlayState*, Player*, CsCmdActorAction*);
-    };
-} struct_8085DA94; // size = 0x8
-
-extern struct_8085DA94 D_8085DA94[0x8C];
-extern struct_8085DA94 D_8085DEF4[0x8C];
+//extern struct_8085DA94 D_8085DA94[0x8C];
+//extern struct_8085DA94 D_8085DEF4[0x8C];
 
 extern struct_8082E224_arg1 D_8085DA70[];
 extern struct_8082E224_arg1 D_8085D9E0[];

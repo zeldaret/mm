@@ -154,141 +154,10 @@ extern LinkAnimationHeader D_0400E418;
 extern ? D_0400E430;
 extern ? D_04050D10;
 extern Gfx D_040528B0;
-static u8 D_8085BA08[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 };
-static u8 D_8085BA20[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0 };
-static struct_8082E224_arg1 D_8085C8C4 = { 0x680E, -0x2008 };
-static struct_8082E224_arg1 D_8085C8C8 = { 0x680F, -0x2012 };
-static struct_8082E224_arg1 D_8085C8CC = { 0x6809, -0x200D };
-static struct_8082E224_arg1 D_8085C8D0 = { 0x6809, -0x200A };
-static struct_8082E224_arg1 D_8085C8D4[5] = {
-    { 0x871, 0x82C },
-    { 0x871, 0x830 },
-    { 0x871, 0x834 },
-    { 0x871, 0x838 },
-    { 0x871, -0x83C },
-};
-static struct_8082E224_arg1 D_8085C8E8[6] = {
-    { 0, 0x4019 },
-    { 0, 0x401E },
-    { 0, 0x402C },
-    { 0, 0x4030 },
-    { 0, 0x4034 },
-    { 0, 0xBFC8 },
-};
-static struct_8082E224_arg1 D_8085C900[3] = { { 0x181F, 0x810 }, { 0x181F, 0x814 }, { 0x181F, -0x846 } };
-static struct_8082E224_arg1 D_8085C90C[4] = {
-    { 0x1812, 0x80A },
-    { 0x6814, 0x200A },
-    { 0x1801, 0x816 },
-    { 0x6800, -0x2016 },
-};
-static struct_8082E224_arg1 D_8085C91C[2] = { { 0x1801, 0x827 }, { 0x6800, -0x2027 } };
-static struct_8082E224_arg1 D_8085C924 = { 0x6811, -0x2014 };
-static struct_8082E224_arg1 D_8085C928[5] = {
-    { 0x68E0, 0x804 },
-    { 0x68E0, 0x80C },
-    { 0x68E0, 0x81E },
-    { 0x68E0, 0x83D },
-    { 0x68E0, -0x844 },
-};
-static ? D_8085CE30;                                /* unable to generate initializer */
-static ? D_8085CE60;                                /* unable to generate initializer */
-static ? D_8085CFB0;                                /* unable to generate initializer */
-static ? D_8085CFB8;                                /* unable to generate initializer */
-static s8 D_8085D050[4] = { 0xD, 2, -4, 0 };
-static Vec3f D_8085D10C = { 20.0f, 0.0f, 20.0f };
-static Vec3f D_8085D27C = { 0.0f, 0.0f, 0.0f };
-static Vec3f D_8085D288 = { 0.0f, 0.0f, 0.0f };
-static ? D_8085D34C;                                /* unable to generate initializer */
-static ? D_8085D354;                                /* unable to generate initializer */
-static Vec3f D_8085D358 = { 0.0f, 0.0f, 0.0f };
-static struct_80124618 D_8085D428[5] = {
-    { 0, { 0, 0, 0 } },
-    { 1, { 0x50, 0xAA, 0x50 } },
-    { 3, { 0x64, 0x50, 0x64 } },
-    { 7, { 0x64, 0x64, 0x64 } },
-    { 8, { 0x64, 0x64, 0x64 } },
-};
-static struct_80124618 D_8085D450[5] = {
-    { 0, { 0, 0, 0 } },
-    { 1, { 0x50, 0xAA, 0x50 } },
-    { 3, { 0x64, 0x50, 0x64 } },
-    { 7, { 0x64, 0x64, 0x64 } },
-    { 8, { 0x64, 0x64, 0x64 } },
-};
-static struct_80124618 D_8085D478[2] = { { 0, { 0, 0, 0 } }, { 8, { 0, 0, 0 } } };
-static struct_80124618 D_8085D488[5] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 1, { 0x64, 0x3C, 0x64 } },
-    { 3, { 0x64, 0x8C, 0x64 } },
-    { 7, { 0x64, 0x50, 0x64 } },
-    { 9, { 0x64, 0x64, 0x64 } },
-};
-static struct_80124618 D_8085D4B0[6] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 1, { 0x64, 0x46, 0x64 } },
-    { 3, { 0x64, 0x78, 0x64 } },
-    { 6, { 0x64, 0x50, 0x64 } },
-    { 8, { 0x64, 0x64, 0x64 } },
-    { 9, { 0x64, 0x64, 0x64 } },
-};
-static struct_80124618 D_8085D4E0[6] = {
-    { 0, { 0, 0, 0 } },
-    { 1, { 0, 0, 0 } },
-    { 3, { 0x64, 0x82, 0x64 } },
-    { 5, { 0x82, 0x82, 0x82 } },
-    { 7, { 0x50, 0x5A, 0x50 } },
-    { 9, { 0x64, 0x64, 0x64 } },
-};
-static ? D_8085D5FC;                                /* unable to generate initializer */
-static Vec3f D_8085D62C = { 0.0f, 0.0f, 0.0f };
-static Vec3f D_8085D638 = { 0.0f, 0.0f, 0.0f };
-static Vec3f D_8085D644 = { 0.0f, 0.0f, 0.0f };
-static void* D_8085D680[9] = {
-    (void* )0x080A5014,
-    (void* )0x080AAFE2,
-    (void* )0x0400E048,
-    (void* )0x0400E040,
-    (void* )0x0400E050,
-    (void* )0x0400E030,
-    (void* )0x0400E010,
-    (void* )0x0400E020,
-    (void* )0x0400E028,
-};
-static LinkAnimationHeader* D_8085D6A4[0xB] = {
-    NULL,
-    NULL,
-    (LinkAnimationHeader* )0x0400E058,
-    (LinkAnimationHeader* )0x0400E058,
-    (LinkAnimationHeader* )0x0400E058,
-    (LinkAnimationHeader* )0x0400E038,
-    (LinkAnimationHeader* )0x0400E018,
-    (LinkAnimationHeader* )0x0400E018,
-    (LinkAnimationHeader* )0x0400E018,
-    NULL,
-    NULL,
-};
-static LinkAnimationHeader* D_8085D6D0[3] = {
-    (LinkAnimationHeader* )0x0400E098,
-    (LinkAnimationHeader* )0x0400E088,
-    (LinkAnimationHeader* )0x0400E090,
-};
-static s16 D_8085D6DC[2] = { 0x203A, 0x192A };
-static ? D_8085D6E0;                                /* unable to generate initializer */
-static struct_8082E224_arg1 D_8085D6E8[8] = {
-    { 0x871, 0x830 },
-    { 0x871, 0x83A },
-    { 0x871, 0x844 },
-    { 0x872, 0x85C },
-    { 0x872, 0x86E },
-    { 0x872, 0x87E },
-    { 0x872, 0x884 },
-    { 0x872, -0x888 },
-};
-static ? D_8085D790;                                /* unable to generate initializer */
-static ? D_8085D794;                                /* unable to generate initializer */
 static ? ovl_player_actor_Reloc;                    /* unable to generate initializer; const */
 u8 D_8085B9F0[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 };
+u8 D_8085BA08[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 };
+u8 D_8085BA20[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0 };
 PlayerAgeProperties D_8085BA38[5] = {
     {
         84.0f,
@@ -938,17 +807,52 @@ LinkAnimationHeader* D_8085C84C[0x1E] = {
     (LinkAnimationHeader* )0x0400D0B0,
     (LinkAnimationHeader* )0x0400D0B0,
 };
+struct_8082E224_arg1 D_8085C8C4[1] = { { 0x680E, -0x2008 } };
+struct_8082E224_arg1 D_8085C8C8[1] = { { 0x680F, -0x2012 } };
+struct_8082E224_arg1 D_8085C8CC[1] = { { 0x6809, -0x200D } };
+struct_8082E224_arg1 D_8085C8D0[1] = { { 0x6809, -0x200A } };
+struct_8082E224_arg1 D_8085C8D4[5] = {
+    { 0x871, 0x82C },
+    { 0x871, 0x830 },
+    { 0x871, 0x834 },
+    { 0x871, 0x838 },
+    { 0x871, -0x83C },
+};
+struct_8082E224_arg1 D_8085C8E8[6] = {
+    { 0, 0x4019 },
+    { 0, 0x401E },
+    { 0, 0x402C },
+    { 0, 0x4030 },
+    { 0, 0x4034 },
+    { 0, 0xBFC8 },
+};
+struct_8082E224_arg1 D_8085C900[3] = { { 0x181F, 0x810 }, { 0x181F, 0x814 }, { 0x181F, -0x846 } };
+struct_8082E224_arg1 D_8085C90C[4] = {
+    { 0x1812, 0x80A },
+    { 0x6814, 0x200A },
+    { 0x1801, 0x816 },
+    { 0x6800, -0x2016 },
+};
+struct_8082E224_arg1 D_8085C91C[2] = { { 0x1801, 0x827 }, { 0x6800, -0x2027 } };
+struct_8082E224_arg1 D_8085C924[1] = { { 0x6811, -0x2014 } };
+struct_8082E224_arg1 D_8085C928[5] = {
+    { 0x68E0, 0x804 },
+    { 0x68E0, 0x80C },
+    { 0x68E0, 0x81E },
+    { 0x68E0, 0x83D },
+    { 0x68E0, -0x844 },
+};
 struct_8082E224_arg1* D_8085C93C[0xC] = {
-    &D_8085C8C4,
-    &D_8085C8C8,
-    &D_8085C8CC,
-    &D_8085C8D0,
+    D_8085C8C4,
+    D_8085C8C8,
+    D_8085C8CC,
+    D_8085C8D0,
     D_8085C8D4,
     D_8085C8E8,
     D_8085C900,
     D_8085C90C,
     D_8085C91C,
-    &D_8085C924,
+    D_8085C924,
     D_8085C928,
     NULL,
 };
@@ -1413,6 +1317,82 @@ struct_8085CD30 D_8085CD30[0x10] = {
         8,
     },
 };
+u32 D_8085CE30[0xC] = {
+    0x0400D850,
+    0x0400D840,
+    0x0400D840,
+    0x07630000,
+    0x0400D720,
+    0x0400D730,
+    0x0400D730,
+    0x07630000,
+    0x0400E3F0,
+    0x0400E3F8,
+    0x0400E3F8,
+    0x08630000,
+};
+u32 D_8085CE60[0x3C] = {
+    0x0400D840,
+    0x0400D848,
+    0x0400D848,
+    0x01020000,
+    0x0400D730,
+    0x0400D728,
+    0x0400D728,
+    0x01020000,
+    0x0400E3F8,
+    0x0400E410,
+    0x0400DF18,
+    0x01020000,
+    0x0400D950,
+    0x0400D958,
+    0x0400D958,
+    0x01050000,
+    0x0400D940,
+    0x0400D948,
+    0x0400D948,
+    0x01040000,
+    0x0400E218,
+    0x0400E228,
+    0x0400E220,
+    0x06080000,
+    0x0400E230,
+    0x0400E240,
+    0x0400E238,
+    0x0C120000,
+    0x0400E248,
+    0x0400E258,
+    0x0400E250,
+    0x080E0000,
+    0x0400E308,
+    0x0400E318,
+    0x0400E310,
+    0x02050000,
+    0x0400E320,
+    0x0400E330,
+    0x0400E328,
+    0x03080000,
+    0x0400E338,
+    0x0400E348,
+    0x0400E340,
+    0x030A0000,
+    0x0400D908,
+    0x0400D910,
+    0x0400D440,
+    0xC0000,
+    0x0400D760,
+    0x0400D768,
+    0x0400D3B8,
+    0xF0000,
+    0x0400D7E0,
+    0x0400D7E8,
+    0x0400D440,
+    0x100000,
+    0x0400D7E0,
+    0x0400D7E8,
+    0x0400D3B8,
+    0x100000,
+};
 LinkAnimationHeader* D_8085CF50[2] = { (LinkAnimationHeader* )0x0400D8C8, (LinkAnimationHeader* )0x0400D740 };
 LinkAnimationHeader* D_8085CF58[2] = { (LinkAnimationHeader* )0x0400D8C0, (LinkAnimationHeader* )0x0400D740 };
 LinkAnimationHeader* D_8085CF60[2] = { (LinkAnimationHeader* )0x0400D8D0, (LinkAnimationHeader* )0x0400D748 };
@@ -1443,6 +1423,8 @@ struct_8085CF88 D_8085CF88[2] = {
     },
 };
 u16 D_8085CFA8[4] = { 0x4000, 2, 4, 1 };
+u8 D_8085CFB0[8] = { 8, 0x60, 0, 0, 0x18, 0x27, 0, 0 };
+u8 D_8085CFB8[4] = { 4, 4, 8, 2 };
 LinkAnimationHeader* D_8085CFBC[2] = { (LinkAnimationHeader* )0x0400D470, (LinkAnimationHeader* )0x0400D478 };
 LinkAnimationHeader* D_8085CFC4[2] = { (LinkAnimationHeader* )0x0400D458, (LinkAnimationHeader* )0x0400D460 };
 LinkAnimationHeader* D_8085CFCC[2] = { (LinkAnimationHeader* )0x0400D400, (LinkAnimationHeader* )0x0400D408 };
@@ -1459,6 +1441,7 @@ s8 D_8085D028[0xC] = { 0, 0xB, 1, 2, 3, 0xC, 5, 4, 9, 8, 7, -6 };
 s8 D_8085D034[0x10] = { 0xD, 1, 2, 3, 0xC, 5, 4, 9, 0xA, 0xB, 8, 7, -6, 0, 0, 0 };
 s8 D_8085D044[4] = { 0xA, 8, -7, 0 };
 s8 D_8085D048[8] = { 0, 0xC, 5, 4, -0xE, 0, 0, 0 };
+s8 D_8085D050[4] = { 0xD, 2, -4, 0 };
 s32 (*D_8085D054[0xF])(Player*, PlayState*) = {
     func_80839518,
     func_808365DC,
@@ -1477,8 +1460,7 @@ s32 (*D_8085D054[0xF])(Player*, PlayState*) = {
     func_8083A0CC,
 };
 s8 D_8085D090[4] = { 0xC, 4, 4, 8 };
-s8 D_8085D094[3] = { 0x1B, 0x1C, 0x1D };
-s8 D_8085D097[5] = { 0x18, 0x19, 0x1A, 0, 0 };
+s8 D_8085D094[2][3] = { { 0x1B, 0x1C, 0x1D }, { 0x18, 0x19, 0x1A } };
 struct_8085D09C D_8085D09C[7] = {
     { 0x100, 2, 2, 0, 0 },
     { 0x200, 4, 8, 1, 2 },
@@ -1503,6 +1485,7 @@ LinkAnimationHeader* D_8085D0E4[4] = {
 s32 D_8085D0F4 = 0x20101;
 u16 D_8085D0F8[4] = { 0x1000, 0, 0, 0 };
 Vec3f D_8085D100 = { 0.0f, 50.0f, 0.0f };
+Vec3f D_8085D10C = { 20.0f, 0.0f, 20.0f };
 LinkAnimationHeader* D_8085D118[3] = {
     (LinkAnimationHeader* )0x0400E1B8,
     (LinkAnimationHeader* )0x0400E3C8,
@@ -1630,16 +1613,19 @@ struct _struct_D_8085D200_0xC D_8085D200[2] = {
     { (LinkAnimationHeader* )0x0400D4D0, (LinkAnimationHeader* )0x0400D4C8, 5, 3 },
 };
 Vec3f D_8085D218 = { 0.0f, 100.0f, 40.0f };
-struct_8085D224 D_8085D224[2] = {
+struct_8085D224 D_8085D224[4] = {
     { (LinkAnimationHeader* )0x0400E068, 35.17f, 6.6099997f },
     { (LinkAnimationHeader* )0x0400E078, -34.16f, 7.91f },
+    { (LinkAnimationHeader* )0x0400D0E8, 22.718237f, 2.3294117f },
+    { (LinkAnimationHeader* )0x0400D0F0, -22.0f, 1.9800001f },
 };
-struct_8085D224 D_8085D23C[1] = { { (LinkAnimationHeader* )0x0400D0E8, 22.718237f, 2.3294117f } };
-u16 D_8085D252[5] = { 0x70A5, 0x1804, 0x1805, 0x1806, 0x1806 };
+u16 D_8085D254[4] = { 0x1804, 0x1805, 0x1806, 0x1806 };
 u16 D_8085D25C[4] = { 0x1804, 0x1804, 0x1805, 0x1806 };
 LinkAnimationHeader* D_8085D264[2] = { (LinkAnimationHeader* )0x0400DC00, (LinkAnimationHeader* )0x0400DEC0 };
 Color_RGBA8 D_8085D26C = { 0xFF, 0xFF, 0xFF, 0xFF };
 Vec3f D_8085D270 = { 0.0f, 0.04f, 0.0f };
+Vec3f D_8085D27C = { 0.0f, 0.0f, 0.0f };
+Vec3f D_8085D288 = { 0.0f, 0.0f, 0.0f };
 LinkAnimationHeader* D_8085D294[4] = {
     (LinkAnimationHeader* )0x0400D8F0,
     (LinkAnimationHeader* )0x0400D900,
@@ -1688,6 +1674,9 @@ EffectTireMarkInit D_8085D330 = { 0, 0x3F, { 0, 0, 0xF, 0x64 } };
 Color_RGBA8 D_8085D338 = { 0, 0, 0xF, 0x64 };
 Color_RGBA8 D_8085D33C = { 0, 0, 0, 0x96 };
 Vec3f D_8085D340 = { 0.0f, 50.0f, 0.0f };
+u8 D_8085D34C[8] = { 0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22 };
+u8 D_8085D354[4] = { 0x1B, 0x1C, 0, 0 };
+Vec3f D_8085D358 = { 0.0f, 0.0f, 0.0f };
 Vec3f D_8085D364 = { 0.0f, 0.5f, 0.0f };
 Vec3f D_8085D370 = { 0.0f, 0.5f, 0.0f };
 Color_RGBA8 D_8085D37C = { 0xFF, 0xFF, 0x64, 0xFF };
@@ -1793,6 +1782,44 @@ f32 D_8085D3FC[2] = { 0.005f, 0.05f };
 f32 D_8085D404[3] = { 2.0f, 4.0f, 11.0f };
 f32 D_8085D410[3] = { 0.5f, 1.0f, 3.0f };
 Vec3f D_8085D41C = { 0.0f, 0.0f, -30.0f };
+struct_80124618 D_8085D428[5] = {
+    { 0, { 0, 0, 0 } },
+    { 1, { 0x50, 0xAA, 0x50 } },
+    { 3, { 0x64, 0x50, 0x64 } },
+    { 7, { 0x64, 0x64, 0x64 } },
+    { 8, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_8085D450[5] = {
+    { 0, { 0, 0, 0 } },
+    { 1, { 0x50, 0xAA, 0x50 } },
+    { 3, { 0x64, 0x50, 0x64 } },
+    { 7, { 0x64, 0x64, 0x64 } },
+    { 8, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_8085D478[2] = { { 0, { 0, 0, 0 } }, { 8, { 0, 0, 0 } } };
+struct_80124618 D_8085D488[5] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 1, { 0x64, 0x3C, 0x64 } },
+    { 3, { 0x64, 0x8C, 0x64 } },
+    { 7, { 0x64, 0x50, 0x64 } },
+    { 9, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_8085D4B0[6] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 1, { 0x64, 0x46, 0x64 } },
+    { 3, { 0x64, 0x78, 0x64 } },
+    { 6, { 0x64, 0x50, 0x64 } },
+    { 8, { 0x64, 0x64, 0x64 } },
+    { 9, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_8085D4E0[6] = {
+    { 0, { 0, 0, 0 } },
+    { 1, { 0, 0, 0 } },
+    { 3, { 0x64, 0x82, 0x64 } },
+    { 5, { 0x82, 0x82, 0x82 } },
+    { 7, { 0x50, 0x5A, 0x50 } },
+    { 9, { 0x64, 0x64, 0x64 } },
+};
 struct_80124618 D_8085D510[2] = { { 0, { 0, 0x32, 0 } }, { 1, { 0, 0x32, 0 } } };
 struct_80124618 D_8085D520[2] = { { 0, { 0x64, 0x78, 0x64 } }, { 1, { 0x64, 0x78, 0x64 } } };
 struct_80124618 D_8085D530[2] = { { 0, { 0xA0, 0x78, 0xA0 } }, { 1, { 0xA0, 0x78, 0xA0 } } };
@@ -1819,13 +1846,67 @@ LinkAnimationHeader* D_8085D5F0[3] = {
     (LinkAnimationHeader* )0x0400D508,
     (LinkAnimationHeader* )0x0400E2F8,
 };
-struct_8082E224_arg1 D_8085D604[2] = { { 0, 0x4014 }, { 0, 0xBFE2 } };
+u16 D_8085D5FC[4] = { 0x1830, 0x9BF, 0, 0 };
+struct_8082E224_arg1 D_8085D604[0xA] = {
+    { 0, 0x4014 },
+    { 0, 0xBFE2 },
+    { 0x850, 0x103C },
+    { 0, 0x408C },
+    { 0, 0x40A4 },
+    { 0, 0xBF56 },
+    { 0x6800, 0x2001 },
+    { 0x800, 0x1806 },
+    { 0x83C, 0x806 },
+    { 0, -0x2812 },
+};
+Vec3f D_8085D62C = { 0.0f, 0.0f, 0.0f };
+Vec3f D_8085D638 = { 0.0f, 0.0f, 0.0f };
+Vec3f D_8085D644 = { 0.0f, 0.0f, 0.0f };
 struct_8082E224_arg1 D_8085D650[2] = { { 0x840, 0x1003 }, { 0x840, -0x1015 } };
 struct_8082E224_arg1 D_8085D658[2] = { { 0x840, 0x1004 }, { 0x840, -0x1018 } };
 Vec3f D_8085D660 = { 0.0f, 26.800001f, -60.0f };
 f32 D_8085D66C[2] = { 11.0f, 21.0f };
 f32 D_8085D674[2] = { 40.0f, 50.0f };
-struct_8082E224_arg1 D_8085D67C[1] = { { 0x80A, 0x500A } };
+struct_8082E224_arg1 D_8085D67C[3] = { { 0x80A, 0x500A }, { 0x80A, 0x5014 }, { 0x80A, 0xAFE2 } };
+LinkAnimationHeader* D_8085D688[7] = {
+    (LinkAnimationHeader* )0x0400E048,
+    (LinkAnimationHeader* )0x0400E040,
+    (LinkAnimationHeader* )0x0400E050,
+    (LinkAnimationHeader* )0x0400E030,
+    (LinkAnimationHeader* )0x0400E010,
+    (LinkAnimationHeader* )0x0400E020,
+    (LinkAnimationHeader* )0x0400E028,
+};
+LinkAnimationHeader* D_8085D6A4[0xB] = {
+    NULL,
+    NULL,
+    (LinkAnimationHeader* )0x0400E058,
+    (LinkAnimationHeader* )0x0400E058,
+    (LinkAnimationHeader* )0x0400E058,
+    (LinkAnimationHeader* )0x0400E038,
+    (LinkAnimationHeader* )0x0400E018,
+    (LinkAnimationHeader* )0x0400E018,
+    (LinkAnimationHeader* )0x0400E018,
+    NULL,
+    NULL,
+};
+LinkAnimationHeader* D_8085D6D0[3] = {
+    (LinkAnimationHeader* )0x0400E098,
+    (LinkAnimationHeader* )0x0400E088,
+    (LinkAnimationHeader* )0x0400E090,
+};
+s16 D_8085D6DC[2] = { 0x203A, 0x192A };
+Vec3s D_8085D6E0 = { -0x45, 0x1BEA, -0x10A };
+struct_8082E224_arg1 D_8085D6E8[8] = {
+    { 0x871, 0x830 },
+    { 0x871, 0x83A },
+    { 0x871, 0x844 },
+    { 0x872, 0x85C },
+    { 0x872, 0x86E },
+    { 0x872, 0x87E },
+    { 0x872, 0x884 },
+    { 0x872, -0x888 },
+};
 struct_8082E224_arg1 D_8085D708[3] = { { 0, 0x2800 }, { 0x833, 0x80A }, { 0x830, -0x819 } };
 struct_8085D714 D_8085D714[5] = {
     { 1, (LinkAnimationHeader* )0x0400E1C8 },
@@ -1842,6 +1923,8 @@ Vec3f D_8085D770 = { 0.0f, 0.0f, 2.0f };
 Vec3f D_8085D77C = { 0.0f, 0.0f, -0.2f };
 Color_RGBA8 D_8085D788 = { 0xFF, 0xFF, 0xFF, 0xFF };
 Color_RGBA8 D_8085D78C = { 0xFF, 0xFF, 0xFF, 0xFF };
+u32 D_8085D790 = 0x01030204;
+u32 D_8085D794 = 0x04030000;
 struct_8085D798 D_8085D798[0xE] = {
     { 0x10, 2, 0x16, 0x29, 0x5E },
     { 0x17, -1, 0x1A, 0x16, 0x62 },
@@ -3536,7 +3619,7 @@ s32 func_808306F8(Player* this, PlayState* play) {
             if (this->unk_B28 >= 0) {
                 var_t0 = temp_v0_3;
                 if ((temp_v0_3 >= 0) && (temp_v0_3 < 3)) {
-                    if (gSaveContext.save.playerData.magic < (s32) *(&D_8085CFB8 + temp_v0_3)) {
+                    if (gSaveContext.save.playerData.magic < (s32) D_8085CFB8[temp_v0_3]) {
                         var_t0 = -1;
                         sp4C = ITEM_ARROW_FIRE;
                     }
@@ -3549,7 +3632,7 @@ s32 func_808306F8(Player* this, PlayState* play) {
                 temp_v0_4 = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, 0xF, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, (s16) 0, (s16) (s32) this->actor.shape.rot.y, (s16) 0, sp4C);
                 this->heldActor = temp_v0_4;
                 if ((temp_v0_4 != NULL) && (var_t0 >= 0)) {
-                    func_80115DB4(play, (s16) *(&D_8085CFB8 + var_t0), 0);
+                    func_80115DB4(play, (s16) D_8085CFB8[var_t0], 0);
                 }
             }
         }
@@ -4673,11 +4756,11 @@ void func_808335B0(PlayState* play, Player* this) {
 enum PlayerMeleeWeaponAnimation func_808335F4(Player* this) {
     s32 sp1C;
     enum PlayerMeleeWeaponAnimation sp18;
+    s8 (*var_a1)[3];
     s8 temp_a1;
     s8 temp_v0_2;
     s8 var_v1;
     s8 var_v1_2;
-    s8* var_a1;
     u8 temp_v0;
 
     temp_v0 = this->transformation;
@@ -4686,10 +4769,10 @@ enum PlayerMeleeWeaponAnimation func_808335F4(Player* this) {
         if (temp_v0 == 2) {
             var_a1 = D_8085D094;
         } else {
-            var_a1 = D_8085D097;
+            var_a1 = D_8085D094 + 3;
         }
         temp_v0_2 = this->unk_ADD;
-        var_v1 = var_a1[temp_v0_2];
+        var_v1 = (*var_a1)[temp_v0_2];
         if (temp_v0_2 != 0) {
             this->meleeWeaponAnimation = var_v1;
             if (temp_v0_2 >= 2) {
@@ -4807,7 +4890,7 @@ void func_80833864(PlayState* play, Player* this, enum PlayerMeleeWeaponAnimatio
     sp24 = temp_v0;
     func_8082DB90(play, this, temp_v0->unk_0);
     this->unk_ADC = (s8) (s32) (this->skelAnime.animLength + 4.0f);
-    if (((u32) temp_v0 < (u32) &D_8085CE30) || ((u32) temp_v0 >= (u32) &D_8085CE60)) {
+    if (((u32) temp_v0 < (u32) D_8085CE30) || ((u32) temp_v0 >= (u32) D_8085CE60)) {
         func_8082E920(play, this, 0x19);
     }
     this->currentYaw = this->actor.shape.rot.y;
@@ -8645,7 +8728,7 @@ s32 func_8083CCB4(Player* this, PlayState* play) {
             if (~(D_80862B44->press.button | 0xFFFF7FFF) == 0) {
                 sp34 = temp_a3;
                 if (ActorCutscene_GetCanPlayNext(0x7C) != 0) {
-                    temp_a3->textId = D_8085D252[this->transformation];
+                    temp_a3->textId = *(D_8085D224 + 0x2E + (this->transformation * 2));
                     func_8085B460(play, temp_a3);
                     return 1;
                 }
@@ -8676,7 +8759,7 @@ s32 func_8083CCB4(Player* this, PlayState* play) {
             if (this->transformation == 0) {
                 var_v0 = D_8085D224;
             } else {
-                var_v0 = D_8085D23C;
+                var_v0 = D_8085D224 + 0x18;
             }
             if (this->mountSide >= 0) {
                 var_v0 += 0xC;
@@ -10956,7 +11039,7 @@ void func_808426F0(PlayState* play, Player* this) {
                     } else {
                         temp_t3 = temp_t2 & 0x800;
                         if (temp_a2_2 & 0x200000) {
-                            var_t0_2 = *(&D_8085D34C + this->unk_B67);
+                            var_t0_2 = D_8085D34C[this->unk_B67];
                         } else if (((temp_t3 == 0) || (sp34 == NULL)) && (temp_t5 != NULL) && (this->getItemId < 0)) {
                             var_t0_2 = 4;
                         } else if ((var_t1 == 0) && (this->stateFlags2 & 1)) {
@@ -11023,7 +11106,7 @@ block_91:
                                         }
                                         var_v0 = var_t1_3;
                                     }
-                                    var_t0_2 = *(&D_8085D354 + var_v0);
+                                    var_t0_2 = D_8085D354[var_v0];
                                 } else if (temp_a2_2 & 0x100) {
                                     var_t0_2 = 5;
                                 } else if (temp_a2_2 & 0x1000) {
@@ -13224,25 +13307,25 @@ s32 func_808482E0(PlayState* play, Player* this) {
     return 0;
 }
 
-void func_808484CC(Player* arg0) {
-    func_8082E224(arg0, D_8085D5E0);
+void func_808484CC(Player* this) {
+    func_8082E224(this, D_8085D5E0);
 }
 
-void func_808484F0(Player* arg0) {
+void func_808484F0(Player* this) {
     f32 temp_fa0;
     f32 temp_fv1;
     s32 temp_cond;
 
-    temp_fa0 = arg0->unk_B08[1];
-    arg0->unk_B08[0] += temp_fa0;
-    temp_fv1 = arg0->unk_B08[0];
-    arg0->unk_B08[1] = temp_fa0 - (temp_fv1 * 5.0f);
-    arg0->unk_B08[1] *= 0.3f;
-    if (fabsf(arg0->unk_B08[1]) < 0.00001f) {
+    temp_fa0 = this->unk_B08[1];
+    this->unk_B08[0] += temp_fa0;
+    temp_fv1 = this->unk_B08[0];
+    this->unk_B08[1] = temp_fa0 - (temp_fv1 * 5.0f);
+    this->unk_B08[1] *= 0.3f;
+    if (fabsf(this->unk_B08[1]) < 0.00001f) {
         temp_cond = fabsf(temp_fv1) < 0.00001f;
-        arg0->unk_B08[1] = 0.0f;
+        this->unk_B08[1] = 0.0f;
         if (temp_cond) {
-            arg0->unk_B08[0] = 0.0f;
+            this->unk_B08[0] = 0.0f;
         }
     }
 }
@@ -16482,7 +16565,7 @@ void func_8084FE7C(Player* this, PlayState* play) {
         Actor_SetCameraHorseSetting(play, this);
         temp_v0 = this->unk_AE8;
         this->unk_278 = (unaligned s32) D_8085D6E0.unk_0;
-        this->skelAnime.prevTransl.z = (s16) D_8085D6E0.unk_4;
+        this->skelAnime.prevTransl.z = (s16) (u16) D_8085D6E0.z;
         if ((temp_v0 < 0) || ((temp_v1_2 = sp4C->unk_20C, ((temp_v0 & 0xFFFF) != temp_v1_2)) && ((temp_v1_2 >= 2) || (temp_v0 >= 2)))) {
             var_v1 = sp4C->unk_20C;
             if (var_v1 < 2) {
@@ -16497,7 +16580,7 @@ void func_8084FE7C(Player* this, PlayState* play) {
                 func_8082DB18(play, this, D_8085D6D0[var_v0_2]);
                 var_v1 = 1;
             } else {
-                this->skelAnime.animation = D_8085D680[var_v1];
+                this->skelAnime.animation = (void* ) (D_8085D67C + 4)[var_v1];
                 if (temp_v0 >= 0) {
                     sp44 = var_v1;
                     Animation_SetMorph(play, &this->skelAnime, 8.0f);
