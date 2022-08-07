@@ -565,7 +565,7 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)(160.0f * temp_f2));
 
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
-            
+
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gEffDustDL);
         }
