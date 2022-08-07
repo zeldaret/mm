@@ -2047,8 +2047,7 @@ beginseg
     name "ovl_Obj_Mure3"
     compress
     include "build/src/overlays/actors/ovl_Obj_Mure3/z_obj_mure3.o"
-    include "build/data/ovl_Obj_Mure3/ovl_Obj_Mure3.data.o"
-    include "build/data/ovl_Obj_Mure3/ovl_Obj_Mure3.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Mure3/ovl_Obj_Mure3_reloc.o"
 endseg
 
 beginseg
