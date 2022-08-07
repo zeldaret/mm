@@ -72,7 +72,7 @@ void OceffWipe3_Draw(Actor* thisx, PlayState* play) {
 
     vtxPtr = sOceffWipe3FrustumVtx;
 
-    if (this->counter < 0x20) {
+    if (this->counter < 32) {
         z = Math_SinS(this->counter << 9) * 1220.0f;
     } else {
         z = 1220.0f;
