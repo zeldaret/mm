@@ -1,7 +1,7 @@
 /*
  * File: z_eff_ss_dt_bubble.c
  * Overlay: ovl_Effect_Ss_Dt_Bubble
- * Description:
+ * Description: Non-Water Bubbles (a random mix of translucent and opaque)
  */
 
 #include "z_eff_ss_dt_bubble.h"
@@ -109,13 +109,8 @@ void EffectSsDtBubble_Draw(PlayState* play, u32 index, EffectSs* this) {
 }
 
 void EffectSsDtBubble_Update(PlayState* play, u32 index, EffectSs* this) {
-    f32 rand;
-
-    if (this->rRandXZ == 1) {
-        rand = Rand_ZeroOne();
-        this->pos.x += (rand * 2.0f) - 1.0f;
-
-        rand = Rand_ZeroOne();
-        this->pos.z += (rand * 2.0f) - 1.0f;
+    if (this->rRandXZ == true) {
+        this->pos.x += (Rand_ZeroOne() * 2.0f) - 1.0f;
+        this->pos.z += (Rand_ZeroOne() * 2.0f) - 1.0f;
     }
 }

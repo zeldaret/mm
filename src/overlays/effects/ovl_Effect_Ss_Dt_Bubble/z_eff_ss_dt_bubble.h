@@ -3,6 +3,13 @@
 
 #include "global.h"
 
+typedef enum {
+    /* 0 */ DTBUBBLE_COLOR_PROFILE_0,
+    /* 1 */ DTBUBBLE_COLOR_PROFILE_1,
+    /* 2 */ DTBUBBLE_COLOR_PROFILE_2,
+    /* 3 */ DTBUBBLE_COLOR_PROFILE_3
+} DtBubbleColorProfile;
+
 typedef struct {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3f velocity;

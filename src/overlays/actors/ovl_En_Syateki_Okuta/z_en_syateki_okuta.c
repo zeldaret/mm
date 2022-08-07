@@ -285,7 +285,7 @@ void func_80A365EC(EnSyatekiOkuta* this, PlayState* play) {
                 sp84.y = Rand_ZeroOne() * 7.0f;
                 sp84.z = (Rand_ZeroOne() - 0.5f) * 7.0f;
                 EffectSsDtBubble_SpawnCustomColor(play, &this->actor.world.pos, &sp84, &D_80A37B98, &D_80A37BA4,
-                                                  &D_80A37BA8, Rand_S16Offset(100, 50), 25, 0);
+                                                  &D_80A37BA8, Rand_S16Offset(100, 50), 25, false);
             }
 
             func_80A362F8(this);
