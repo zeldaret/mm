@@ -17,7 +17,6 @@ void EnTg_Destroy(Actor* thisx, PlayState* play);
 void EnTg_Update(Actor* thisx, PlayState* play);
 void EnTg_Draw(Actor* thisx, PlayState* play);
 
-// TODO: this is supposed to be ?? : void func_8098FA70(EnTg* this, PlayState* play);
 void func_8098FA70(EnTg* this, PlayState* play);
 void func_8098FEA8(PlayState* play, EnTgIdk* ptr, s32 len);
 void func_8099000C(PlayState* play, EnTgIdk* ptr, s32 len);
@@ -177,19 +176,19 @@ void EnTg_Update(Actor* thisx, PlayState* play) {
     func_8098F8A8(this, play);
 }
 
-// s32 EnTg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor*
-// thisx); #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_OverrideLimbDraw.s")
-s32 EnTg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+// EnTg_OverrideLimbDraw
+// func_8098FBB4
+s32 func_8098FBB4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTg* this = THIS;
     return 0;
 }
 
-// void EnTg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_PostLimbDraw.s")
-void EnTg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+// EnTg_PostLimbDraw
+// func_8098FBD0
+void func_8098FBD0(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnTg* this = THIS;
 
-    Vec3f sp18 = D_80990228;
+    Vec3f sp18 = D_80990228; //{ 0.0f, 0.0f, 0.0f };
 
     if (limbIndex == 9) {
         Matrix_MultVec3f(&sp18, &this->actor.focus.pos);
@@ -214,7 +213,7 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(play->state.gfxCtx, 0xFF, 0xFF, 0xFF, 0));
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32)this->skelAnime.dListCount,
-                          EnTg_OverrideLimbDraw, EnTg_PostLimbDraw, &this->actor);
+                          func_8098FBB4, func_8098FBD0, &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
