@@ -9676,11 +9676,11 @@ extern EffectTireMarkInit D_8085D330;
 extern Color_RGBA8 D_8085D338;
 extern Color_RGBA8 D_8085D33C;
 
-void Player_Init(Actor *thisx, PlayState *play) {
+void Player_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     Player* this = THIS;
-    s8 temp_v0_2;
-    s32 var_a2; // sp60
+    s8 objBankIndex;
+    s32 respawnFlag;
     s32 var_a1;
     s32 var_v0_3;
 
@@ -9704,9 +9704,10 @@ void Player_Init(Actor *thisx, PlayState *play) {
 
     if (this->actor.shape.rot.x != 0) {
         this->transformation = this->actor.shape.rot.x - 1;
-        temp_v0_2 = Object_GetIndex(&play->objectCtx, gPlayerFormObjectIndices[this->transformation]);
-        this->actor.objBankIndex = temp_v0_2;
-        if (temp_v0_2 < 0) {
+
+        objBankIndex = Object_GetIndex(&play->objectCtx, gPlayerFormObjectIndices[this->transformation]);
+        this->actor.objBankIndex = objBankIndex;
+        if (objBankIndex < 0) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
@@ -9723,6 +9724,7 @@ void Player_Init(Actor *thisx, PlayState *play) {
             this->currentMask = this->transformation + PLAYER_MASK_FIERCE_DEITY;
             gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
         }
+
         Inventory_UpdateDeitySwordEquip(play);
 
         this->unk_B28 = 0;
@@ -9730,9 +9732,13 @@ void Player_Init(Actor *thisx, PlayState *play) {
         this->unk_B92 = 0;
         this->unk_B94 = 0;
         this->unk_B96 = 0;
-        this->stateFlags1 &= 0xFCFFEFF7;
-        this->stateFlags2 &= 0xBEFDFFFF;
-        this->stateFlags3 &= 0xFC424437;
+        this->stateFlags1 &= ~(PLAYER_STATE1_8 | PLAYER_STATE1_1000 | PLAYER_STATE1_1000000 | PLAYER_STATE1_2000000);
+        this->stateFlags2 &= ~(PLAYER_STATE2_20000 | PLAYER_STATE2_1000000 | PLAYER_STATE2_40000000);
+        this->stateFlags3 &=
+            ~(PLAYER_STATE3_8 | PLAYER_STATE3_40 | PLAYER_STATE3_80 | PLAYER_STATE3_100 | PLAYER_STATE3_200 |
+              PLAYER_STATE3_800 | PLAYER_STATE3_1000 | PLAYER_STATE3_2000 | PLAYER_STATE3_8000 | PLAYER_STATE3_10000 |
+              PLAYER_STATE3_40000 | PLAYER_STATE3_80000 | PLAYER_STATE3_100000 | PLAYER_STATE3_200000 |
+              PLAYER_STATE3_800000 | PLAYER_STATE3_1000000 | PLAYER_STATE3_2000000);
         this->unk_B08[0] = 0.0f;
         this->unk_B08[1] = 0.0f;
     }
@@ -9765,16 +9771,16 @@ void Player_Init(Actor *thisx, PlayState *play) {
     Player_InitCommon(this, play, gPlayerSkeletons[this->transformation]);
 
     if (this->actor.shape.rot.z != 0) {
-        EffectTireMark* temp_v0_3;
+        EffectTireMark* effect;
 
         this->actor.shape.rot.z = 0;
         func_8082F938(play, this, 0, 4);
 
-        temp_v0_3 = Effect_GetByIndex(this->meleeWeaponEffectIndex[2]);
+        effect = Effect_GetByIndex(this->meleeWeaponEffectIndex[2]);
         if (this->transformation == PLAYER_FORM_GORON) {
-            temp_v0_3->color = D_8085D338;
+            effect->color = D_8085D338;
         } else {
-            temp_v0_3->color = D_8085D33C;
+            effect->color = D_8085D33C;
         }
 
         if ((this->csMode == 9) || (this->csMode == 0x5D)) {
@@ -9787,7 +9793,8 @@ void Player_Init(Actor *thisx, PlayState *play) {
             if (this->prevMask != PLAYER_MASK_NONE) {
                 func_8082DB90(play, this, &gameplay_keep_Linkanim_00D0A8);
             } else if (this->transformation == PLAYER_FORM_HUMAN) {
-                LinkAnimation_Change(play, &this->skelAnime, D_8085D160[this->transformation], -0.6666667f, 9.0f, 0.0f, ANIMMODE_ONCE, 0.0f);
+                LinkAnimation_Change(play, &this->skelAnime, D_8085D160[this->transformation], -2.0f / 3.0f, 9.0f, 0.0f,
+                                     ANIMMODE_ONCE, 0.0f);
             } else {
                 func_8082DB60(play, this, &gameplay_keep_Linkanim_00D0D0);
             }
@@ -9816,7 +9823,7 @@ void Player_Init(Actor *thisx, PlayState *play) {
         this->actor.shape.rot.x = 0;
         this->csMode = 0x44;
         Player_SetAction(play, this, func_8085B08C, 0);
-        this->stateFlags1 |= 0x20000000;
+        this->stateFlags1 |= PLAYER_STATE1_20000000;
         return;
     }
 
@@ -9826,30 +9833,31 @@ void Player_Init(Actor *thisx, PlayState *play) {
     this->giObjectSegment = ZeldaArena_Malloc(0x2000);
     this->maskObjectSegment = ZeldaArena_Malloc(0x3800);
 
-    Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0xFF, 0x80, 0, -1);
+    Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y,
+                              this->actor.world.pos.z, 0xFF, 0x80, 0, -1);
     this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     Play_AssignPlayerActorCsIdsFromScene(&play->state, this->actor.cutscene);
 
-    var_a2 = gSaveContext.respawnFlag;
-    if (var_a2 != 0) {
-        if (var_a2 == -3) {
-            this->actor.params = gSaveContext.respawn[3].playerParams;
+    respawnFlag = gSaveContext.respawnFlag;
+    if (respawnFlag != 0) {
+        if (respawnFlag == -3) {
+            this->actor.params = gSaveContext.respawn[RESPAWN_MODE_UNK_3].playerParams;
         } else {
-            if ((var_a2 == 1) || (var_a2 == -1)) {
+            if ((respawnFlag == 1) || (respawnFlag == -1)) {
                 this->unk_D6A = -2;
             }
 
-            if (var_a2 != -7) {
+            if (respawnFlag != -7) {
                 s32 respawnIndex;
 
-                if ((var_a2 == -8) || (var_a2 == -5) || (var_a2 == -4)) {
-                    var_a2 = 1;
+                if ((respawnFlag == -8) || (respawnFlag == -5) || (respawnFlag == -4)) {
+                    respawnFlag = 1;
                 }
 
-                if ((var_a2 < 0) && (var_a2 != -1) && (var_a2 != -6)) {
-                    respawnIndex = 0;
+                if ((respawnFlag < 0) && (respawnFlag != -1) && (respawnFlag != -6)) {
+                    respawnIndex = RESPAWN_MODE_DOWN;
                 } else {
-                    respawnIndex = (var_a2 < 0) ? 2 : var_a2 - 1;
+                    respawnIndex = (respawnFlag < 0) ? RESPAWN_MODE_TOP : respawnFlag - 1;
 
                     Math_Vec3f_Copy(&this->actor.world.pos, &gSaveContext.respawn[respawnIndex].pos);
                     Math_Vec3f_Copy(&this->actor.home.pos, &this->actor.world.pos);
@@ -9869,13 +9877,13 @@ void Player_Init(Actor *thisx, PlayState *play) {
         }
     }
 
-    var_a1 = ((var_a2 == 4) || (gSaveContext.respawnFlag == -4)) ? 1 : 0 ;
+    var_a1 = ((respawnFlag == 4) || (gSaveContext.respawnFlag == -4)) ? 1 : 0;
     if (func_801226E0(play, var_a1) == 0) {
         gSaveContext.respawn[0].playerParams = (thisx->params & 0xFF) | 0xD00;
     }
 
     gSaveContext.respawn[0].data = 1;
-    if (var_a2 == 0) {
+    if (respawnFlag == 0) {
         gSaveContext.respawn[2] = gSaveContext.respawn[0];
     }
     gSaveContext.respawn[2].playerParams = (gSaveContext.respawn[2].playerParams & 0xFF) | 0xD00;
@@ -9886,18 +9894,23 @@ void Player_Init(Actor *thisx, PlayState *play) {
     }
 
     D_8085D2CC[var_v0_3](play, this);
-    if ((this->actor.draw != NULL) && gSaveContext.save.hasTatl && ((gSaveContext.gameMode == 0) || (gSaveContext.gameMode == 3)) && (play->sceneNum != 8)) {
+    if ((this->actor.draw != NULL) && gSaveContext.save.hasTatl &&
+        ((gSaveContext.gameMode == 0) || (gSaveContext.gameMode == 3)) && (play->sceneNum != SCENE_SPOT00)) {
         this->tatlActor = Player_SpawnFairy(play, this, &this->actor.world.pos, &D_8085D340, 0);
+
         if (gSaveContext.dogParams != 0) {
             gSaveContext.dogParams |= 0x8000;
         }
+
         if (gSaveContext.powderKegTimer != 0) {
             this->nextModelGroup = Player_ActionToModelGroup(this, PLAYER_AP_POWDER_KEG);
-            this->heldItemId = 0xC;
+            this->heldItemId = ITEM_POWDER_KEG;
             func_8082F8BC(play, this, PLAYER_AP_POWDER_KEG);
             func_808313F0(this, play);
         } else if (gSaveContext.unk_1014 != 0) {
-            func_8082F5FC(this, Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_MM, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, 0x8000));
+            func_8082F5FC(this, Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_MM,
+                                                   this->actor.world.pos.x, this->actor.world.pos.y,
+                                                   this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, 0x8000));
             func_808313F0(this, play);
         }
     }
