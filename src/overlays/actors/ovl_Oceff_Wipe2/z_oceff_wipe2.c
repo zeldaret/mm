@@ -69,7 +69,7 @@ void OceffWipe2_Draw(Actor* thisx, PlayState* play) {
 
     Camera_GetQuakeOffset(&quakeOffset, GET_ACTIVE_CAM(play));
 
-    vtxPtr = sFrustumVtx;
+    vtxPtr = sOceffWipe2FrustumVtx;
 
     if (this->timer < 32) {
         z = Math_SinS(this->timer << 9) * 1220.0f;
@@ -100,10 +100,10 @@ void OceffWipe2_Draw(Actor* thisx, PlayState* play) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 170, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 100, 0, 128);
-    gSPDisplayList(POLY_XLU_DISP++, sFrustumMaterialDL);
+    gSPDisplayList(POLY_XLU_DISP++, sOceffWipe2FrustumMaterialDL);
     gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, scroll * 6, scroll * (-6), 64,
                                                      64, 1, scroll * (-6), 0, 64, 64));
-    gSPDisplayList(POLY_XLU_DISP++, sFrustumModelDL);
+    gSPDisplayList(POLY_XLU_DISP++, sOceffWipe2FrustumModelDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
