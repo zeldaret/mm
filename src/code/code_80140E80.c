@@ -213,6 +213,9 @@ void func_80141200(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
 
         gDPSetFillColor(gfx++, (color << 0x10) | color);
     }
+    //! @bug func_8014116C() sets the current color image back to the frame's default framebuffer at the end, so this
+    //! will always fill in the default framebuffer, whatever are used as `source` and `img`. This does not arise
+    //! in-game since this function is always used with `source = D_0F000000`.
     gDPFillRectangle(gfx++, 0, 0, width - 1, height - 1);
 
     gDPPipeSync(gfx++);
@@ -296,6 +299,7 @@ void func_8014151C(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
             );
             color = GPACK_RGBA5551(this->primColor.r, this->primColor.g, (u32)this->primColor.b, 1);
             gDPSetFillColor(gfx++, (color << 0x10) | color);
+            //! @bug See corresponding note in func_80141200()
             gDPFillRectangle(gfx++, 0, 0, width - 1, height - 1);
 
             gDPPipeSync(gfx++);
@@ -307,7 +311,7 @@ void func_8014151C(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
 
 // internal, used in func_80141778, mode 2
 /**
- * Draw `img` to `img`, using texel color to interpolate between envColor (the new black) and primColor (the new white)
+ * Redraw `img` in-place, using texel color to interpolate between envColor (the new black) and primColor (the new white)
  * 
  * @param[in]     this 
  * @param[in,out] gfxP   Pointer to current displaylist
