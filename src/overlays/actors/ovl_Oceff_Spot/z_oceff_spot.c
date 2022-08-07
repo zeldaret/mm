@@ -45,7 +45,7 @@ void OceffSpot_SetupAction(OceffSpot* this, OceffSpotActionFunc actionFunc) {
 }
 
 void OceffSpot_Init(Actor* thisx, PlayState* play2) {
-    PlayState* play = (PlayState*)play2;
+    PlayState* play = play2;
     OceffSpot* this = THIS;
     Player* player = GET_PLAYER(play);
 
