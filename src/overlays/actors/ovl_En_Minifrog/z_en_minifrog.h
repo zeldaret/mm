@@ -5,9 +5,9 @@
 
 struct EnMinifrog;
 
-typedef void (*EnMinifrogActionFunc)(struct EnMinifrog*, GlobalContext*);
+typedef void (*EnMinifrogActionFunc)(struct EnMinifrog*, PlayState*);
 
-#define EN_MINIFROG_IS_RETURNED(this) ((((this)->actor.params)&0xF0) >> 4)
+#define EN_MINIFROG_IS_RETURNED(thisx) ((((thisx)->params) & 0xF0) >> 4)
 
 typedef enum {
     /* 0x00 */ MINIFROG_YELLOW,         // Mountain Village

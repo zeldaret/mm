@@ -133,7 +133,7 @@ void* gItemIcons[] = {
     0x08021000,        // ITEM_ZORA_EGG
     0x08022000,        // ITEM_GOLD_DUST
     0x08023000,        // ITEM_MUSHROOM
-    0x08024000,        // ITEM_SEA_HORSE
+    0x08024000,        // ITEM_SEAHORSE
     0x08025000,        // ITEM_CHATEAU
     0x08026000,        // ITEM_HYLIAN_LOACH
     0x08027000,        // ITEM_OBABA_DRINK
@@ -145,7 +145,7 @@ void* gItemIcons[] = {
     0x0802D000,        // ITEM_ROOM_KEY
     0x0802E000,        // ITEM_LETTER_MAMA
     0x0802F000,        // ITEM_LETTER_TO_KAFEI
-    0x08030000,        // ITEM_PENDANT_MEMORIES
+    0x08030000,        // ITEM_PENDANT_OF_MEMORIES
     0x08031000,        // ITEM_TINGLE_MAP
     0x08032000,        // ITEM_MASK_DEKU
     0x08033000,        // ITEM_MASK_GORON
@@ -268,7 +268,7 @@ u8 gItemSlots[] = {
     SLOT_BOTTLE_1,           // ITEM_ZORA_EGG
     SLOT_BOTTLE_1,           // ITEM_GOLD_DUST
     SLOT_BOTTLE_1,           // ITEM_MUSHROOM
-    SLOT_BOTTLE_1,           // ITEM_SEA_HORSE
+    SLOT_BOTTLE_1,           // ITEM_SEAHORSE
     SLOT_BOTTLE_1,           // ITEM_CHATEAU
     SLOT_BOTTLE_1,           // ITEM_HYLIAN_LOACH
     SLOT_BOTTLE_1,           // ITEM_OBABA_DRINK
@@ -280,7 +280,7 @@ u8 gItemSlots[] = {
     SLOT_TRADE_KEY_MAMA,     // ITEM_ROOM_KEY
     SLOT_TRADE_KEY_MAMA,     // ITEM_LETTER_MAMA
     SLOT_TRADE_COUPLE,       // ITEM_LETTER_TO_KAFEI
-    SLOT_TRADE_COUPLE,       // ITEM_PENDANT_MEMORIES
+    SLOT_TRADE_COUPLE,       // ITEM_PENDANT_OF_MEMORIES
     SLOT_TRADE_COUPLE,       // ITEM_TINGLE_MAP
     SLOT_MASK_DEKU,          // ITEM_MASK_DEKU
     SLOT_MASK_GORON,         // ITEM_MASK_GORON
@@ -348,7 +348,7 @@ s16 gItemPrices[] = {
     20,  // ITEM_ZORA_EGG
     200, // ITEM_GOLD_DUST
     5,   // ITEM_MUSHROOM
-    0,   // ITEM_SEA_HORSE
+    0,   // ITEM_SEAHORSE
     200, // ITEM_CHATEAU
     20,  // ITEM_HYLIAN_LOACH
     0,   // ITEM_OBABA_DRINK
@@ -360,7 +360,7 @@ s16 gItemPrices[] = {
     0,   // ITEM_ROOM_KEY
     0,   // ITEM_LETTER_MAMA
     0,   // ITEM_LETTER_KAFEI
-    0,   // ITEM_PENDANT_MEMORIES
+    0,   // ITEM_PENDANT_OF_MEMORIES
     0,   // ITEM_TINGLE_MAP
 };
 
@@ -474,15 +474,15 @@ u16 gScenesPerRegion[11][27] = {
     },
 };
 
-s32 Inventory_GetBtnBItem(GlobalContext* globalCtx) {
+s32 Inventory_GetBtnBItem(PlayState* play) {
     if (gSaveContext.buttonStatus[0] == BTN_DISABLED) {
         return ITEM_NONE;
     } else if (gSaveContext.unk_1015 == ITEM_NONE) {
         return ITEM_NONE;
     } else if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_NONE) {
-        if (globalCtx->interfaceCtx.unk_21C != 0) {
-            if (globalCtx->interfaceCtx.unk_21E != 0) {
-                return globalCtx->interfaceCtx.unk_21E;
+        if (play->interfaceCtx.unk_21C != 0) {
+            if (play->interfaceCtx.bButtonDoAction != 0) {
+                return play->interfaceCtx.bButtonDoAction;
             }
         }
         return ITEM_NONE;
@@ -495,18 +495,18 @@ s32 Inventory_GetBtnBItem(GlobalContext* globalCtx) {
  * Only changes shield
  */
 void Inventory_ChangeEquipment(s16 value) {
-    SET_EQUIP_VALUE(EQUIP_SHIELD, value);
+    SET_EQUIP_VALUE(EQUIP_TYPE_SHIELD, value);
 }
 
 /**
  * Only deletes shield, equipment argument unused and is a remnant of OoT
  */
-u8 Inventory_DeleteEquipment(GlobalContext* globalCtx, s16 equipment) {
-    Player* player = GET_PLAYER(globalCtx);
+u8 Inventory_DeleteEquipment(PlayState* play, s16 equipment) {
+    Player* player = GET_PLAYER(play);
 
-    if (CUR_EQUIP_VALUE_VOID(EQUIP_SHIELD) != 0) {
-        SET_EQUIP_VALUE(EQUIP_SHIELD, 0);
-        Player_SetEquipmentData(globalCtx, player);
+    if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD) != EQUIP_VALUE_SHIELD_NONE) {
+        SET_EQUIP_VALUE(EQUIP_TYPE_SHIELD, EQUIP_VALUE_SHIELD_NONE);
+        Player_SetEquipmentData(play, player);
         return true;
     }
 
@@ -514,12 +514,12 @@ u8 Inventory_DeleteEquipment(GlobalContext* globalCtx, s16 equipment) {
 }
 
 void Inventory_ChangeUpgrade(s16 upgrade, u32 value) {
-    u32 upgrades = gSaveContext.inventory.upgrades;
+    u32 upgrades = gSaveContext.save.inventory.upgrades;
 
     upgrades &= gUpgradeNegMasks[upgrade];
     upgrades |= value << gUpgradeShifts[upgrade];
 
-    gSaveContext.inventory.upgrades = upgrades;
+    gSaveContext.save.inventory.upgrades = upgrades;
 }
 
 s32 Inventory_IsMapVisible(s16 sceneNum) {
@@ -546,7 +546,7 @@ s32 Inventory_IsMapVisible(s16 sceneNum) {
         }
     }
 
-    if (gSaveContext.scenesVisible[index] & gBitFlags[sceneNum - (index << 5)]) {
+    if (gSaveContext.save.scenesVisible[index] & gBitFlags[sceneNum - (index << 5)]) {
         return true;
     }
 
@@ -659,23 +659,23 @@ void Inventory_SetMapVisibility(s16 tingleIndex) {
                 index = 6;
             }
 
-            gSaveContext.scenesVisible[index] =
-                gSaveContext.scenesVisible[index] | gBitFlags[(s16)(*tingleMapSceneIndices)[i] - (index << 5)];
+            gSaveContext.save.scenesVisible[index] =
+                gSaveContext.save.scenesVisible[index] | gBitFlags[(s16)(*tingleMapSceneIndices)[i] - (index << 5)];
             i++;
         }
 
         if ((*tingleMapSceneIndices) == sScenesPerTingleMap[0]) {
-            gSaveContext.mapsVisible |= 3;
+            gSaveContext.save.mapsVisible |= 3;
         } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[1]) {
-            gSaveContext.mapsVisible |= 0x1C;
+            gSaveContext.save.mapsVisible |= 0x1C;
         } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[2]) {
-            gSaveContext.mapsVisible |= 0xE0;
+            gSaveContext.save.mapsVisible |= 0xE0;
         } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[3]) {
-            gSaveContext.mapsVisible |= 0x100;
+            gSaveContext.save.mapsVisible |= 0x100;
         } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[4]) {
-            gSaveContext.mapsVisible |= 0x1E00;
+            gSaveContext.save.mapsVisible |= 0x1E00;
         } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[5]) {
-            gSaveContext.mapsVisible |= 0x6000;
+            gSaveContext.save.mapsVisible |= 0x6000;
         }
     }
 
@@ -688,40 +688,43 @@ void Inventory_SetMapVisibility(s16 tingleIndex) {
 void Inventory_SaveDekuPlaygroundHighScore(s16 timerId) {
     s16 i;
 
-    gSaveContext.dekuPlaygroundHighScores[CURRENT_DAY - 1] = gSaveContext.unk_3DE0[timerId];
+    gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1] = gSaveContext.unk_3DE0[timerId];
 
     for (i = 0; i < 8; i++) {
-        gSaveContext.inventory.dekuPlaygroundPlayerName[CURRENT_DAY - 1][i] = gSaveContext.playerName[i];
+        gSaveContext.save.inventory.dekuPlaygroundPlayerName[CURRENT_DAY - 1][i] =
+            gSaveContext.save.playerData.playerName[i];
     }
 }
 
 void Inventory_IncrementSkullTokenCount(s16 sceneIndex) {
     if (sceneIndex == SCENE_KINSTA1) {
         // Swamp Spider House (increment high bits of skullTokenCount)
-        gSaveContext.skullTokenCount = ((u16)(((gSaveContext.skullTokenCount & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
-                                       (gSaveContext.skullTokenCount & 0xFFFF);
+        gSaveContext.save.skullTokenCount =
+            ((u16)(((gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
+            (gSaveContext.save.skullTokenCount & 0xFFFF);
     } else {
         // Ocean Spider House (increment low bits of skullTokenCount)
-        gSaveContext.skullTokenCount =
-            (((u16)gSaveContext.skullTokenCount + 1) & 0xFFFF) | (gSaveContext.skullTokenCount & 0xFFFF0000);
+        gSaveContext.save.skullTokenCount =
+            (((u16)gSaveContext.save.skullTokenCount + 1) & 0xFFFF) | (gSaveContext.save.skullTokenCount & 0xFFFF0000);
     }
 }
 
 s16 Inventory_GetSkullTokenCount(s16 sceneIndex) {
     if (sceneIndex == SCENE_KINSTA1) {
         // Swamp Spider House
-        return (gSaveContext.skullTokenCount & 0xFFFF0000) >> 0x10;
+        return (gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10;
     } else {
         // Ocean Spider House
-        return gSaveContext.skullTokenCount & 0xFFFF;
+        return gSaveContext.save.skullTokenCount & 0xFFFF;
     }
 }
 
-void Inventory_SaveLotteryCodeGuess(GlobalContext* globalCtx) {
+void Inventory_SaveLotteryCodeGuess(PlayState* play) {
     u16 lotteryCodeGuess;
 
-    lotteryCodeGuess = ((globalCtx->msgCtx.unk12054 & 0xF) << 8);  // First Digit
-    lotteryCodeGuess |= ((globalCtx->msgCtx.unk12056 & 0xF) << 4); // Second Digit
-    lotteryCodeGuess |= (globalCtx->msgCtx.unk12058 & 0xF);        // Third Digit
-    gSaveContext.lotteryCodeGuess = (gSaveContext.lotteryCodeGuess & 0xFFFF0000) | (lotteryCodeGuess & 0xFFFF);
+    lotteryCodeGuess = ((play->msgCtx.unk12054[0] & 0xF) << 8);  // First Digit
+    lotteryCodeGuess |= ((play->msgCtx.unk12054[1] & 0xF) << 4); // Second Digit
+    lotteryCodeGuess |= (play->msgCtx.unk12054[2] & 0xF);        // Third Digit
+    gSaveContext.save.lotteryCodeGuess =
+        (gSaveContext.save.lotteryCodeGuess & 0xFFFF0000) | (lotteryCodeGuess & 0xFFFF);
 }

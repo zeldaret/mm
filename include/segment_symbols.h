@@ -1,7 +1,8 @@
-#ifndef _SEGMENT_SYMBOLS_H_
-#define _SEGMENT_SYMBOLS_H_
+#ifndef SEGMENT_SYMBOLS_H
+#define SEGMENT_SYMBOLS_H
 
-#include "z64.h"
+#include "libc/stddef.h"
+#include "PR/ultratypes.h"
 
 #define DECLARE_SEGMENT(name)          \
     extern u8 _##name##SegmentStart[]; \

@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "overlays/actors/ovl_En_GirlA/z_en_girla.h"
+#include "objects/object_fsn/object_fsn.h"
 
 #define ENFSN_IS_BACKROOM(thisx) ((thisx)->params & 1)
 #define ENFSN_IS_SHOP(thisx) (!((thisx)->params & 1))
@@ -14,21 +15,21 @@
 
 struct EnFsn;
 
-typedef void (*EnFsnActionFunc)(struct EnFsn*, GlobalContext*);
+typedef void (*EnFsnActionFunc)(struct EnFsn*, PlayState*);
 
 typedef struct EnFsn {
     /* 0x000 */ Actor actor;
     /* 0x144 */ UNK_TYPE1 pad144[0x4C];
     /* 0x190 */ SkelAnime skelAnime;
     /* 0x1D4 */ EnFsnActionFunc actionFunc;
-    /* 0x1D8 */ EnFsnActionFunc tmpActionFunc; // Used to return to correct browsing function
+    /* 0x1D8 */ EnFsnActionFunc prevActionFunc; // Used to return to correct browsing function
     /* 0x1DC */ ColliderCylinder collider;
     /* 0x228 */ s16 limbRotYTable[19];
     /* 0x24E */ s16 limbRotZTable[19];
     /* 0x274 */ Vec3s headRot;
     /* 0x27A */ Vec3s unk27A; // Set but never used
-    /* 0x280 */ Vec3s jointTable[19];
-    /* 0x2F2 */ Vec3s morphTable[19];
+    /* 0x280 */ Vec3s jointTable[FSN_LIMB_MAX + 1]; // Note: adding 1 to FSN_LIMB_MAX due to bug in object_fsn, see bug in object_fsn.xml
+    /* 0x2F2 */ Vec3s morphTable[FSN_LIMB_MAX + 1];
     /* 0x364 */ s16 eyeTextureIdx;
     /* 0x366 */ s16 blinkTimer;
     /* 0x368 */ s16 cutsceneState;
@@ -63,7 +64,7 @@ typedef struct EnFsn {
     /* 0x444 */ u8 arrowAnimState;
     /* 0x445 */ u8 stickAnimState;
     /* 0x448 */ f32 shopItemSelectedTween;
-    /* 0x44C */ s16 animationIdx;
+    /* 0x44C */ s16 animationIndex;
     /* 0x44E */ u16 flags;
 } EnFsn; // size = 0x450
 

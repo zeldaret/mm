@@ -10,12 +10,12 @@
 
 #define THIS ((ObjDowsing*)thisx)
 
-void ObjDowsing_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjDowsing_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjDowsing_Update(Actor* thisx, GlobalContext* globalCtx);
+void ObjDowsing_Init(Actor* thisx, PlayState* play);
+void ObjDowsing_Destroy(Actor* thisx, PlayState* play);
+void ObjDowsing_Update(Actor* thisx, PlayState* play);
 
-s32 ObjDowsing_GetFlag(ObjDowsing* this, GlobalContext* globalCtx);
-s32 ObjDowsing_CheckValidSpawn(ObjDowsing* this, GlobalContext* globalCtx);
+s32 ObjDowsing_GetFlag(ObjDowsing* this, PlayState* play);
+s32 ObjDowsing_CheckValidSpawn(ObjDowsing* this, PlayState* play);
 
 const ActorInit Obj_Dowsing_InitVars = {
     ACTOR_OBJ_DOWSING,
@@ -29,42 +29,42 @@ const ActorInit Obj_Dowsing_InitVars = {
     (ActorFunc)NULL,
 };
 
-s32 ObjDowsing_GetFlag(ObjDowsing* this, GlobalContext* globalCtx) {
+s32 ObjDowsing_GetFlag(ObjDowsing* this, PlayState* play) {
     s32 type = DOWSING_GET_TYPE(&this->actor);
     s32 flag = DOWSING_GET_FLAG(&this->actor);
 
     if (type == DOWSING_COLLECTIBLE) {
-        return Flags_GetCollectible(globalCtx, flag);
+        return Flags_GetCollectible(play, flag);
     } else if (type == DOWSING_CHEST) {
-        return Flags_GetTreasure(globalCtx, flag);
+        return Flags_GetTreasure(play, flag);
     } else if (type == DOWSING_SWITCH) {
-        return Flags_GetSwitch(globalCtx, flag);
+        return Flags_GetSwitch(play, flag);
     } else {
         return 0;
     }
 }
 
-s32 ObjDowsing_CheckValidSpawn(ObjDowsing* this, GlobalContext* globalCtx) {
-    if (ObjDowsing_GetFlag(this, globalCtx)) {
+s32 ObjDowsing_CheckValidSpawn(ObjDowsing* this, PlayState* play) {
+    if (ObjDowsing_GetFlag(this, play)) {
         Actor_MarkForDeath(&this->actor);
         return true;
     }
     return false;
 }
 
-void ObjDowsing_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjDowsing_Init(Actor* thisx, PlayState* play) {
     ObjDowsing* this = THIS;
 
-    ObjDowsing_CheckValidSpawn(this, globalCtx);
+    ObjDowsing_CheckValidSpawn(this, play);
 }
 
-void ObjDowsing_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjDowsing_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void ObjDowsing_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjDowsing_Update(Actor* thisx, PlayState* play) {
     ObjDowsing* this = THIS;
 
-    if (!ObjDowsing_CheckValidSpawn(this, globalCtx)) {
-        func_800B8C50(thisx, globalCtx);
+    if (!ObjDowsing_CheckValidSpawn(this, play)) {
+        func_800B8C50(thisx, play);
     }
 }

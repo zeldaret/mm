@@ -5,7 +5,7 @@
 
 struct EnTg;
 
-typedef void (*EnTgActionFunc)(struct EnTg*, GlobalContext*);
+typedef void (*EnTgActionFunc)(struct EnTg*, PlayState*);
 
 typedef struct EnTgIdk {
     /* 0x00 */ u8 unk0;

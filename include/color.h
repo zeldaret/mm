@@ -19,6 +19,12 @@ typedef struct {
     /* 0x3 */ u8 a;
 } Color_RGBA8; // size = 0x4
 
+typedef struct {
+    /* 0x0 */ s16 r;
+    /* 0x2 */ s16 g;
+    /* 0x4 */ s16 b;
+} Color_RGB16; // size = 0x6
+
 // only use when necessary for alignment purposes
 typedef union {
     struct {

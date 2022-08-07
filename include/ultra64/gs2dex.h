@@ -20,7 +20,7 @@ extern "C" {
  *	Background
  *---------------------------------------------------------------------------*/
 #define	G_BGLT_LOADBLOCK	0x0033
-#define	G_BGLT_LOADTILE		0xfff4
+#define	G_BGLT_LOADTILE		0xFFF4
 
 #define	G_BG_FLAG_FLIPS		0x01
 #define	G_BG_FLAG_FLIPT		0x10
@@ -155,7 +155,7 @@ typedef union {
  *	Loading into TMEM
  *---------------------------------------------------------------------------*/
 #define	G_OBJLT_TXTRBLOCK	0x00001033
-#define	G_OBJLT_TXTRTILE	0x00fc1034
+#define	G_OBJLT_TXTRTILE	0x00FC1034
 #define	G_OBJLT_TLUT		0x00000030
 
 #define	GS_TB_TSIZE(pix,siz)	(GS_PIX2TMEM((pix),(siz))-1)
@@ -220,9 +220,9 @@ typedef	struct	{
  *===========================================================================*/
 /* GBI Header */
 #ifdef	F3DEX_GBI_2
-#define	G_OBJ_RECTANGLE_R	0xda
-#define	G_OBJ_MOVEMEM		0xdc
-#define	G_RDPHALF_0		0xe4
+#define	G_OBJ_RECTANGLE_R	0xDA
+#define	G_OBJ_MOVEMEM		0xDC
+#define	G_RDPHALF_0		0xE4
 #define	G_OBJ_RECTANGLE		0x01
 #define	G_OBJ_SPRITE		0x02
 #define	G_SELECT_DL		0x04
@@ -231,22 +231,22 @@ typedef	struct	{
 #define	G_OBJ_LDTX_RECT		0x07
 #define	G_OBJ_LDTX_RECT_R	0x08
 #define	G_BG_1CYC		0x09
-#define	G_BG_COPY		0x0a
-#define	G_OBJ_RENDERMODE	0x0b
+#define	G_BG_COPY		0x0A
+#define	G_OBJ_RENDERMODE	0x0B
 #else
 #define	G_BG_1CYC		0x01
 #define	G_BG_COPY		0x02
 #define	G_OBJ_RECTANGLE		0x03
 #define	G_OBJ_SPRITE		0x04
 #define	G_OBJ_MOVEMEM		0x05
-#define	G_SELECT_DL		0xb0
-#define	G_OBJ_RENDERMODE	0xb1
-#define	G_OBJ_RECTANGLE_R	0xb2
-#define	G_OBJ_LOADTXTR		0xc1
-#define	G_OBJ_LDTX_SPRITE	0xc2
-#define	G_OBJ_LDTX_RECT		0xc3
-#define	G_OBJ_LDTX_RECT_R	0xc4
-#define	G_RDPHALF_0		0xe4
+#define	G_SELECT_DL		0xB0
+#define	G_OBJ_RENDERMODE	0xB1
+#define	G_OBJ_RECTANGLE_R	0xB2
+#define	G_OBJ_LOADTXTR		0xC1
+#define	G_OBJ_LDTX_SPRITE	0xC2
+#define	G_OBJ_LDTX_RECT		0xC3
+#define	G_OBJ_LDTX_RECT_R	0xC4
+#define	G_RDPHALF_0		0xE4
 #endif
 
 /*---------------------------------------------------------------------------*
@@ -293,16 +293,16 @@ typedef	struct	{
  *	Select Display List
  *---------------------------------------------------------------------------*/
 #define	gSPSelectDL(pkt, mptr, sid, flag, mask)	\
-{	gDma1p((pkt), G_RDPHALF_0, (flag), (u32)(mptr) & 0xffff, (sid)); \
+{	gDma1p((pkt), G_RDPHALF_0, (flag), (u32)(mptr) & 0xFFFF, (sid)); \
 	gDma1p((pkt), G_SELECT_DL, (mask), (u32)(mptr) >> 16, G_DL_PUSH); }
 #define	gsSPSelectDL(mptr, sid, flag, mask)	\
-{	gsDma1p(G_RDPHALF_0, (flag), (u32)(mptr) & 0xffff, (sid)); \
+{	gsDma1p(G_RDPHALF_0, (flag), (u32)(mptr) & 0xFFFF, (sid)); \
 	gsDma1p(G_SELECT_DL, (mask), (u32)(mptr) >> 16, G_DL_PUSH); }
 #define	gSPSelectBranchDL(pkt, mptr, sid, flag, mask)	\
-{	gDma1p((pkt), G_RDPHALF_0, (flag), (u32)(mptr) & 0xffff, (sid)); \
+{	gDma1p((pkt), G_RDPHALF_0, (flag), (u32)(mptr) & 0xFFFF, (sid)); \
 	gDma1p((pkt), G_SELECT_DL, (mask), (u32)(mptr) >> 16, G_DL_NOPUSH); }
 #define	gsSPSelectBranchDL(mptr, sid, flag, mask)	\
-{	gsDma1p(G_RDPHALF_0, (flag), (u32)(mptr) & 0xffff, (sid)); \
+{	gsDma1p(G_RDPHALF_0, (flag), (u32)(mptr) & 0xFFFF, (sid)); \
 	gsDma1p(G_SELECT_DL, (mask), (u32)(mptr) >> 16, G_DL_NOPUSH); }
 
 /*---------------------------------------------------------------------------*
