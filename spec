@@ -1872,8 +1872,7 @@ beginseg
     name "ovl_Effect_Ss_Fhg_Flash"
     compress
     include "build/src/overlays/effects/ovl_Effect_Ss_Fhg_Flash/z_eff_ss_fhg_flash.o"
-    include "build/data/ovl_Effect_Ss_Fhg_Flash/ovl_Effect_Ss_Fhg_Flash.data.o"
-    include "build/data/ovl_Effect_Ss_Fhg_Flash/ovl_Effect_Ss_Fhg_Flash.reloc.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Fhg_Flash/ovl_Effect_Ss_Fhg_Flash_reloc.o"
 endseg
 
 beginseg

@@ -659,15 +659,15 @@ void EffectSsHitmark_SpawnCustomScale(PlayState* play, s32 type, s16 scale, Vec3
  * param determines where the ligntning should go
  * 0: dont attach to any actor. spawns at the position specified by pos
  * 1: spawn at one of Player's body parts, chosen at random
- * 2: spawn at one of Phantom Ganon's body parts, chosen at random
+ * 2 - 6: spawn at one of Goht's body parts
  */
-void EffectSsFhgFlash_SpawnShock(PlayState* play, Actor* actor, Vec3f* pos, s16 scale, u8 param) {
+void EffectSsFhgFlash_SpawnShock(PlayState* play, Actor* actor, Vec3f* pos, s16 scale, u8 params) {
     EffectSsFhgFlashInitParams initParams;
 
     initParams.actor = actor;
     Math_Vec3f_Copy(&initParams.pos, pos);
     initParams.scale = scale;
-    initParams.param = param;
+    initParams.params = params;
     initParams.type = FHGFLASH_SHOCK;
 
     EffectSs_Spawn(play, EFFECT_SS_FHG_FLASH, 128, &initParams);
