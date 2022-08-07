@@ -872,14 +872,14 @@ void EffectSsFireTail_SpawnFlameOnPlayer(PlayState* play, f32 scale, s16 bodyPar
 
 // EffectSsEnFire Spawn Functions
 
-void EffectSsEnFire_SpawnVec3f(PlayState* play, Actor* actor, Vec3f* pos, s16 scale, s16 arg4, s16 flags,
+void EffectSsEnFire_SpawnVec3f(PlayState* play, Actor* actor, Vec3f* pos, s16 scale, s16 params, s16 flags,
                                s16 bodyPart) {
     EffectSsEnFireInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
     initParams.actor = actor;
     initParams.scale = scale;
-    initParams.unk_12 = arg4;
+    initParams.params = params;
     initParams.flags = flags;
     initParams.bodyPart = bodyPart;
 
@@ -890,7 +890,7 @@ void EffectSsEnFire_SpawnVec3f(PlayState* play, Actor* actor, Vec3f* pos, s16 sc
     EffectSs_Spawn(play, EFFECT_SS_EN_FIRE, 128, &initParams);
 }
 
-void EffectSsEnFire_SpawnVec3s(PlayState* play, Actor* actor, Vec3s* pos, s16 scale, s16 arg4, s16 flags,
+void EffectSsEnFire_SpawnVec3s(PlayState* play, Actor* actor, Vec3s* pos, s16 scale, s16 params, s16 flags,
                                s16 bodyPart) {
     EffectSsEnFireInitParams initParams;
 
@@ -899,8 +899,8 @@ void EffectSsEnFire_SpawnVec3s(PlayState* play, Actor* actor, Vec3s* pos, s16 sc
     initParams.pos.z = pos->z;
     initParams.actor = actor;
     initParams.scale = scale;
-    initParams.unk_12 = arg4;
-    initParams.flags = flags | 0x8000;
+    initParams.params = params;
+    initParams.flags = flags | ENFIRE_FLAGS_BODYPART_POS_VEC3S;
     initParams.bodyPart = bodyPart;
 
     if (actor != NULL) {

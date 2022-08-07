@@ -1345,9 +1345,9 @@
         <Texture Name="gameplay_keep_Tex_07D350" OutName="tex_07D350" Format="i8" Width="16" Height="32" Offset="0x7D350" />
         <DList Name="gEffFire1DL" Offset="0x7D590" />
         <DList Name="gEffFire2DL" Offset="0x7D650" />
-        <Texture Name="gGameplayKeepFlameRippleTex" OutName="gameplay_keep_flame_ripple" Format="i4" Width="32" Height="64" Offset="0x7D710" />
-        <Texture Name="gameplay_keep_Tex_07DB10" OutName="tex_07DB10" Format="i4" Width="32" Height="64" Offset="0x7DB10" />
-        <Texture Name="gGameplayKeepFlameOutlineTex" OutName="gameplay_keep_flame_outline" Format="i8" Width="32" Height="64" Offset="0x7DF10" />
+        <Texture Name="gEffFireMask1Tex" OutName="eff_fire_mask_1" Format="i4" Width="32" Height="64" Offset="0x7D710" />
+        <Texture Name="gEffFireMask2Tex" OutName="eff_fire_mask_2" Format="i4" Width="32" Height="64" Offset="0x7DB10" />
+        <Texture Name="gEffFireTex" OutName="eff_fire" Format="i8" Width="32" Height="64" Offset="0x7DF10" />
         <DList Name="gameplay_keep_DL_07E8C0" Offset="0x7E8C0" />
         <Texture Name="gameplay_keep_Tex_07EA08" OutName="tex_07EA08" Format="i8" Width="32" Height="64" Offset="0x7EA08" />
         <TextureAnimation Name="gameplay_keep_Matanimheader_07F218" Offset="0x7F218" />
