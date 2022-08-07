@@ -171,1481 +171,1513 @@ void func_808573A4(Player* this, PlayState* play);
 void func_80857BE8(Player* this, PlayState* play);
 void func_8085B08C(Player* this, PlayState* play);
 
+
+
+typedef struct struct_8085C2A4 {
+    /* 0x0 */ LinkAnimationHeader* unk_0;
+    /* 0x4 */ LinkAnimationHeader* unk_4;
+    /* 0x8 */ LinkAnimationHeader* unk_8;
+} struct_8085C2A4; // size = 0xC
+
+
+typedef struct struct_8085CF88 {
+    /* 0x00 */ u8 unk_0;                            /* inferred */
+    /* 0x01 */ char pad_1[1];
+    /* 0x02 */ u8 unk_2;                            /* inferred */
+    /* 0x03 */ u8 unk_3;                            /* inferred */
+    /* 0x04 */ u8 unk_4;                            /* inferred */
+    /* 0x05 */ char pad_5[1];
+    /* 0x06 */ u8 unk_6;                            /* inferred */
+    /* 0x07 */ u8 unk_7;                            /* inferred */
+    /* 0x08 */ char pad_8[2];
+    /* 0x0A */ u8 unk_A;                            /* inferred */
+    /* 0x0B */ u8 unk_B;                            /* inferred */
+    /* 0x0C */ char pad_C[4];
+} struct_8085CF88; // size = 0x10
+
+extern struct_8085CF88 D_8085CF88[];
+
 #if 0
 
-glabel D_8085B9F0
-/* 02DF60 8085B9F0 */ .word 0x00000000
-/* 02DF64 8085B9F4 */ .word 0x00000000
-/* 02DF68 8085B9F8 */ .word 0x00000101
-/* 02DF6C 8085B9FC */ .word 0x01010101
-/* 02DF70 8085BA00 */ .word 0x01010101
-/* 02DF74 8085BA04 */ .word 0x01010000
+u8 D_8085B9F0[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, };
+u8 D_8085BA08[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, };
+u8 D_8085BA20[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, };
 
-glabel D_8085BA08
-/* 02DF78 8085BA08 */ .word 0x00000000
-/* 02DF7C 8085BA0C */ .word 0x00000000
-/* 02DF80 8085BA10 */ .word 0x00000000
-/* 02DF84 8085BA14 */ .word 0x00000101
-/* 02DF88 8085BA18 */ .word 0x01000000
-/* 02DF8C 8085BA1C */ .word 0x00000000
+PlayerAgeProperties D_8085BA38[5] = {
+    {
+        84.0f,
+        90.0f,
+        1.5f,
+        166.5f,
+        105.0f,
+        119.100006f,
+        88.5f,
+        61.5f,
+        28.5f,
+        54.0f,
+        75.0f,
+        84.0f,
+        102.0f,
+        70.0f,
+        27.0f,
+        24.75f,
+        105.0f,
+        { 9, 0x123F, 0x167 },
+        {
+            { 8, 0x1256, 0x17C },
+            { 9, 0x17EA, 0x167 },
+            { 8, 0x1256, 0x17C },
+            { 9, 0x17EA, 0x167 },
+        },
+        {
+            { 9, 0x17EA, 0x167 },
+            { 9, 0x1E0D, 0x17C },
+            { 9, 0x17EA, 0x167 },
+            { 9, 0x1E0D, 0x17C },
+        },
+        {
+            { 8, 0x1256, 0x17C },
+            { 9, 0x17EA, 0x167 },
+            { -0x638, 0x1256, 0x17C },
+            { -0x637, 0x17EA, 0x167 },
+        },
+        0,
+        0x80,
+        33.0f,
+        44.15145f,
+        (LinkAnimationHeader* )0x0400D540,
+        (LinkAnimationHeader* )0x0400D548,
+        (LinkAnimationHeader* )0x0400D660,
+        (LinkAnimationHeader* )0x0400DB90,
+        (LinkAnimationHeader* )0x0400DB98,
+        {
+            (LinkAnimationHeader* )0x0400DBA0,
+            (LinkAnimationHeader* )0x0400DBA8,
+            (LinkAnimationHeader* )0x0400DAB0,
+            (LinkAnimationHeader* )0x0400DAB8,
+        },
+        { (LinkAnimationHeader* )0x0400DA90, (LinkAnimationHeader* )0x0400DA98 },
+        { (LinkAnimationHeader* )0x0400DB70, (LinkAnimationHeader* )0x0400DB78 },
+        { (LinkAnimationHeader* )0x0400DB88, (LinkAnimationHeader* )0x0400DB80 },
+    },
+    {
+        70.0f,
+        90.0f,
+        0.74f,
+        111.0f,
+        70.0f,
+        79.4f,
+        59.0f,
+        41.0f,
+        19.0f,
+        36.0f,
+        50.0f,
+        56.0f,
+        68.0f,
+        70.0f,
+        19.5f,
+        18.2f,
+        80.0f,
+        { 0x17, 0xF3B, 0xDF },
+        {
+            { 0x18, 0xF3B, 0xDF },
+            { 0x17, 0x14CF, 0xDF },
+            { 0x18, 0xF3B, 0xDF },
+            { 0x17, 0x14CF, 0xDF },
+        },
+        {
+            { 0x17, 0x14CF, 0xDF },
+            { 0x18, 0x1AF2, 0xDF },
+            { 0x17, 0x14CF, 0xDF },
+            { 0x18, 0x1AF2, 0xDF },
+        },
+        {
+            { 8, 0x1256, 0x17C },
+            { 9, 0x17EA, 0x167 },
+            { -0x638, 0x1256, 0x17C },
+            { -0x637, 0x17EA, 0x167 },
+        },
+        0xC0,
+        0x150,
+        -25.0f,
+        42.0f,
+        (LinkAnimationHeader* )0x0400E170,
+        (LinkAnimationHeader* )0x0400D548,
+        (LinkAnimationHeader* )0x0400D660,
+        (LinkAnimationHeader* )0x0400E198,
+        (LinkAnimationHeader* )0x0400E1A0,
+        {
+            (LinkAnimationHeader* )0x0400E1A8,
+            (LinkAnimationHeader* )0x0400E1B0,
+            (LinkAnimationHeader* )0x0400E1A8,
+            (LinkAnimationHeader* )0x0400E1B0,
+        },
+        { (LinkAnimationHeader* )0x0400DA90, (LinkAnimationHeader* )0x0400DA98 },
+        { (LinkAnimationHeader* )0x0400E178, (LinkAnimationHeader* )0x0400E180 },
+        { (LinkAnimationHeader* )0x0400E190, (LinkAnimationHeader* )0x0400E188 },
+    },
+    {
+        56.0f,
+        90.0f,
+        1.0f,
+        111.0f,
+        70.0f,
+        79.4f,
+        59.0f,
+        41.0f,
+        19.0f,
+        36.0f,
+        50.0f,
+        56.0f,
+        68.0f,
+        70.0f,
+        18.0f,
+        23.0f,
+        70.0f,
+        { 0x17, 0x1323, -0x6D },
+        {
+            { 0x17, 0x1323, -0x58 },
+            { 0x17, 0x18B7, -0x6D },
+            { 0x17, 0x1323, -0x58 },
+            { 0x17, 0x18B7, -0x6D },
+        },
+        {
+            { 0x17, 0x18B7, -0x6D },
+            { 0x18, 0x1EDA, -0x58 },
+            { 0x17, 0x18B7, -0x6D },
+            { 0x18, 0x1EDA, -0x58 },
+        },
+        {
+            { 8, 0x1256, 0x17C },
+            { 9, 0x17EA, 0x167 },
+            { -0x638, 0x1256, 0x17C },
+            { -0x637, 0x17EA, 0x167 },
+        },
+        0xA0,
+        0x120,
+        22.0f,
+        36.0f,
+        (LinkAnimationHeader* )0x0400E300,
+        (LinkAnimationHeader* )0x0400D548,
+        (LinkAnimationHeader* )0x0400D660,
+        (LinkAnimationHeader* )0x0400E378,
+        (LinkAnimationHeader* )0x0400E380,
+        {
+            (LinkAnimationHeader* )0x0400E388,
+            (LinkAnimationHeader* )0x0400E390,
+            (LinkAnimationHeader* )0x0400DAB0,
+            (LinkAnimationHeader* )0x0400DAB8,
+        },
+        { (LinkAnimationHeader* )0x0400DA90, (LinkAnimationHeader* )0x0400DA98 },
+        { (LinkAnimationHeader* )0x0400E358, (LinkAnimationHeader* )0x0400E360 },
+        { (LinkAnimationHeader* )0x0400E370, (LinkAnimationHeader* )0x0400E368 },
+    },
+    {
+        35.0f,
+        50.0f,
+        0.3f,
+        71.0f,
+        50.0f,
+        49.0f,
+        39.0f,
+        27.0f,
+        19.0f,
+        8.0f,
+        13.6f,
+        24.0f,
+        24.0f,
+        70.0f,
+        14.0f,
+        12.0f,
+        55.0f,
+        { -0x18, 0xDED, 0x36C },
+        {
+            { -0x18, 0xD92, 0x35E },
+            { -0x18, 0x1371, 0x3A9 },
+            { 8, 0x1256, 0x17C },
+            { 9, 0x17EA, 0x167 },
+        },
+        {
+            { -0x18, 0x1371, 0x3A9 },
+            { -0x18, 0x195F, 0x3A9 },
+            { 9, 0x17EA, 0x167 },
+            { 9, 0x1E0D, 0x17C },
+        },
+        {
+            { 8, 0x1256, 0x17C },
+            { 9, 0x17EA, 0x167 },
+            { -0x638, 0x1256, 0x17C },
+            { -0x637, 0x17EA, 0x167 },
+        },
+        0x80,
+        0xF0,
+        -21.0f,
+        33.0f,
+        (LinkAnimationHeader* )0x0400E268,
+        (LinkAnimationHeader* )0x0400D548,
+        (LinkAnimationHeader* )0x0400D660,
+        (LinkAnimationHeader* )0x0400D1F8,
+        (LinkAnimationHeader* )0x0400D200,
+        {
+            (LinkAnimationHeader* )0x0400D208,
+            (LinkAnimationHeader* )0x0400D210,
+            (LinkAnimationHeader* )0x0400DAB0,
+            (LinkAnimationHeader* )0x0400DAB8,
+        },
+        { (LinkAnimationHeader* )0x0400DA90, (LinkAnimationHeader* )0x0400DA98 },
+        { (LinkAnimationHeader* )0x0400D1D8, (LinkAnimationHeader* )0x0400D1E0 },
+        { (LinkAnimationHeader* )0x0400D1F0, (LinkAnimationHeader* )0x0400D1E8 },
+    },
+    {
+        40.0f,
+        60.0f,
+        0.64705884f,
+        71.0f,
+        50.0f,
+        49.0f,
+        39.0f,
+        27.0f,
+        19.0f,
+        22.0f,
+        32.4f,
+        32.0f,
+        48.0f,
+        45.29412f,
+        14.0f,
+        12.0f,
+        55.0f,
+        { -0x18, 0xDED, 0x36C },
+        {
+            { -0x18, 0xD92, 0x35E },
+            { -0x18, 0x1371, 0x3A9 },
+            { 8, 0x1256, 0x17C },
+            { 9, 0x17EA, 0x167 },
+        },
+        {
+            { -0x18, 0x1371, 0x3A9 },
+            { -0x18, 0x195F, 0x3A9 },
+            { 9, 0x17EA, 0x167 },
+            { 9, 0x1E0D, 0x17C },
+        },
+        {
+            { 8, 0x1256, 0x17C },
+            { 9, 0x17EA, 0x167 },
+            { -0x638, 0x1256, 0x17C },
+            { -0x637, 0x17EA, 0x167 },
+        },
+        0x20,
+        0,
+        22.0f,
+        29.4343f,
+        (LinkAnimationHeader* )0x0400D128,
+        (LinkAnimationHeader* )0x0400D170,
+        (LinkAnimationHeader* )0x0400D1B8,
+        (LinkAnimationHeader* )0x0400D1F8,
+        (LinkAnimationHeader* )0x0400D200,
+        {
+            (LinkAnimationHeader* )0x0400D208,
+            (LinkAnimationHeader* )0x0400D210,
+            (LinkAnimationHeader* )0x0400DAB0,
+            (LinkAnimationHeader* )0x0400DAB8,
+        },
+        { (LinkAnimationHeader* )0x0400DA90, (LinkAnimationHeader* )0x0400DA98 },
+        { (LinkAnimationHeader* )0x0400D1D8, (LinkAnimationHeader* )0x0400D1E0 },
+        { (LinkAnimationHeader* )0x0400D1F0, (LinkAnimationHeader* )0x0400D1E8 },
+    },
+};
 
-glabel D_8085BA20
-/* 02DF90 8085BA20 */ .word 0x00000000
-/* 02DF94 8085BA24 */ .word 0x00000000
-/* 02DF98 8085BA28 */ .word 0x00000000
-/* 02DF9C 8085BA2C */ .word 0x00000000
-/* 02DFA0 8085BA30 */ .word 0x00010101
-/* 02DFA4 8085BA34 */ .word 0x00000000
+LinkAnimationHeader* D_8085BE84[PLAYER_ANIMGROUP_MAX * PLAYER_ANIMTYPE_MAX] = {
+    (LinkAnimationHeader* )0x0400DF28,
+    (LinkAnimationHeader* )0x0400DF20,
+    (LinkAnimationHeader* )0x0400DF20,
+    (LinkAnimationHeader* )0x0400D988,
+    (LinkAnimationHeader* )0x0400DF28,
+    (LinkAnimationHeader* )0x0400DF28,
+    (LinkAnimationHeader* )0x0400DF70,
+    (LinkAnimationHeader* )0x0400DF48,
+    (LinkAnimationHeader* )0x0400DF48,
+    (LinkAnimationHeader* )0x0400D9A0,
+    (LinkAnimationHeader* )0x0400DF70,
+    (LinkAnimationHeader* )0x0400DF70,
+    (LinkAnimationHeader* )0x0400DE40,
+    (LinkAnimationHeader* )0x0400D918,
+    (LinkAnimationHeader* )0x0400DE38,
+    (LinkAnimationHeader* )0x0400D920,
+    (LinkAnimationHeader* )0x0400DE40,
+    (LinkAnimationHeader* )0x0400DE40,
+    (LinkAnimationHeader* )0x0400DBB8,
+    (LinkAnimationHeader* )0x0400D808,
+    (LinkAnimationHeader* )0x0400DBB8,
+    (LinkAnimationHeader* )0x0400D810,
+    (LinkAnimationHeader* )0x0400DBB8,
+    (LinkAnimationHeader* )0x0400DBB8,
+    (LinkAnimationHeader* )0x0400DF08,
+    (LinkAnimationHeader* )0x0400D468,
+    (LinkAnimationHeader* )0x0400D468,
+    (LinkAnimationHeader* )0x0400D970,
+    (LinkAnimationHeader* )0x0400DF08,
+    (LinkAnimationHeader* )0x0400DF08,
+    (LinkAnimationHeader* )0x0400DF18,
+    (LinkAnimationHeader* )0x0400D480,
+    (LinkAnimationHeader* )0x0400D480,
+    (LinkAnimationHeader* )0x0400D980,
+    (LinkAnimationHeader* )0x0400DF18,
+    (LinkAnimationHeader* )0x0400DF18,
+    (LinkAnimationHeader* )0x0400D960,
+    (LinkAnimationHeader* )0x0400DEE0,
+    (LinkAnimationHeader* )0x0400DEE0,
+    (LinkAnimationHeader* )0x0400D960,
+    (LinkAnimationHeader* )0x0400D960,
+    (LinkAnimationHeader* )0x0400D960,
+    (LinkAnimationHeader* )0x0400DD98,
+    (LinkAnimationHeader* )0x0400D860,
+    (LinkAnimationHeader* )0x0400D860,
+    (LinkAnimationHeader* )0x0400DD98,
+    (LinkAnimationHeader* )0x0400DD98,
+    (LinkAnimationHeader* )0x0400DD98,
+    (LinkAnimationHeader* )0x0400D578,
+    (LinkAnimationHeader* )0x0400D570,
+    (LinkAnimationHeader* )0x0400D570,
+    (LinkAnimationHeader* )0x0400D578,
+    (LinkAnimationHeader* )0x0400D578,
+    (LinkAnimationHeader* )0x0400D578,
+    (LinkAnimationHeader* )0x0400D140,
+    (LinkAnimationHeader* )0x0400D140,
+    (LinkAnimationHeader* )0x0400D140,
+    (LinkAnimationHeader* )0x0400D140,
+    (LinkAnimationHeader* )0x0400D140,
+    (LinkAnimationHeader* )0x0400D140,
+    (LinkAnimationHeader* )0x0400D588,
+    (LinkAnimationHeader* )0x0400D580,
+    (LinkAnimationHeader* )0x0400D580,
+    (LinkAnimationHeader* )0x0400D588,
+    (LinkAnimationHeader* )0x0400D588,
+    (LinkAnimationHeader* )0x0400D588,
+    (LinkAnimationHeader* )0x0400D148,
+    (LinkAnimationHeader* )0x0400D148,
+    (LinkAnimationHeader* )0x0400D148,
+    (LinkAnimationHeader* )0x0400D148,
+    (LinkAnimationHeader* )0x0400D148,
+    (LinkAnimationHeader* )0x0400D148,
+    (LinkAnimationHeader* )0x0400DB28,
+    (LinkAnimationHeader* )0x0400DB20,
+    (LinkAnimationHeader* )0x0400DB20,
+    (LinkAnimationHeader* )0x0400DB28,
+    (LinkAnimationHeader* )0x0400DB28,
+    (LinkAnimationHeader* )0x0400DB28,
+    (LinkAnimationHeader* )0x0400DD18,
+    (LinkAnimationHeader* )0x0400DD10,
+    (LinkAnimationHeader* )0x0400DD10,
+    (LinkAnimationHeader* )0x0400DD18,
+    (LinkAnimationHeader* )0x0400DD18,
+    (LinkAnimationHeader* )0x0400DD18,
+    (LinkAnimationHeader* )0x0400DE70,
+    (LinkAnimationHeader* )0x0400DE68,
+    (LinkAnimationHeader* )0x0400DE68,
+    (LinkAnimationHeader* )0x0400DE70,
+    (LinkAnimationHeader* )0x0400DE70,
+    (LinkAnimationHeader* )0x0400DE70,
+    (LinkAnimationHeader* )0x0400DD28,
+    (LinkAnimationHeader* )0x0400DD20,
+    (LinkAnimationHeader* )0x0400DD20,
+    (LinkAnimationHeader* )0x0400D858,
+    (LinkAnimationHeader* )0x0400DD28,
+    (LinkAnimationHeader* )0x0400DD28,
+    (LinkAnimationHeader* )0x0400DCC0,
+    (LinkAnimationHeader* )0x0400DCB8,
+    (LinkAnimationHeader* )0x0400DCB8,
+    (LinkAnimationHeader* )0x0400DCC8,
+    (LinkAnimationHeader* )0x0400DCC0,
+    (LinkAnimationHeader* )0x0400DCC0,
+    (LinkAnimationHeader* )0x0400DF58,
+    (LinkAnimationHeader* )0x0400DF50,
+    (LinkAnimationHeader* )0x0400DF50,
+    (LinkAnimationHeader* )0x0400D990,
+    (LinkAnimationHeader* )0x0400DF58,
+    (LinkAnimationHeader* )0x0400DF58,
+    (LinkAnimationHeader* )0x0400DF68,
+    (LinkAnimationHeader* )0x0400DF60,
+    (LinkAnimationHeader* )0x0400DF60,
+    (LinkAnimationHeader* )0x0400D998,
+    (LinkAnimationHeader* )0x0400DF68,
+    (LinkAnimationHeader* )0x0400DF68,
+    (LinkAnimationHeader* )0x0400DBD8,
+    (LinkAnimationHeader* )0x0400DBC0,
+    (LinkAnimationHeader* )0x0400DBC0,
+    (LinkAnimationHeader* )0x0400DBD8,
+    (LinkAnimationHeader* )0x0400D510,
+    (LinkAnimationHeader* )0x0400DBD8,
+    (LinkAnimationHeader* )0x0400DBF8,
+    (LinkAnimationHeader* )0x0400DBF0,
+    (LinkAnimationHeader* )0x0400DBF0,
+    (LinkAnimationHeader* )0x0400DBF8,
+    (LinkAnimationHeader* )0x0400D518,
+    (LinkAnimationHeader* )0x0400DBF8,
+    (LinkAnimationHeader* )0x0400DBD0,
+    (LinkAnimationHeader* )0x0400DBC8,
+    (LinkAnimationHeader* )0x0400DBC8,
+    (LinkAnimationHeader* )0x0400DBD0,
+    (LinkAnimationHeader* )0x0400DBD0,
+    (LinkAnimationHeader* )0x0400DBD0,
+    (LinkAnimationHeader* )0x0400DE90,
+    (LinkAnimationHeader* )0x0400DE88,
+    (LinkAnimationHeader* )0x0400DE88,
+    (LinkAnimationHeader* )0x0400D938,
+    (LinkAnimationHeader* )0x0400DE90,
+    (LinkAnimationHeader* )0x0400DE90,
+    (LinkAnimationHeader* )0x0400DE78,
+    (LinkAnimationHeader* )0x0400D448,
+    (LinkAnimationHeader* )0x0400D448,
+    (LinkAnimationHeader* )0x0400D928,
+    (LinkAnimationHeader* )0x0400DE78,
+    (LinkAnimationHeader* )0x0400DE78,
+    (LinkAnimationHeader* )0x0400DE80,
+    (LinkAnimationHeader* )0x0400D450,
+    (LinkAnimationHeader* )0x0400D450,
+    (LinkAnimationHeader* )0x0400D930,
+    (LinkAnimationHeader* )0x0400DE80,
+    (LinkAnimationHeader* )0x0400DE80,
+    (LinkAnimationHeader* )0x0400DA80,
+    (LinkAnimationHeader* )0x0400DA78,
+    (LinkAnimationHeader* )0x0400DA78,
+    (LinkAnimationHeader* )0x0400DA80,
+    (LinkAnimationHeader* )0x0400DA80,
+    (LinkAnimationHeader* )0x0400DA80,
+    (LinkAnimationHeader* )0x0400DF00,
+    (LinkAnimationHeader* )0x0400DF00,
+    (LinkAnimationHeader* )0x0400DF00,
+    (LinkAnimationHeader* )0x0400D968,
+    (LinkAnimationHeader* )0x0400D968,
+    (LinkAnimationHeader* )0x0400D968,
+    (LinkAnimationHeader* )0x0400DF10,
+    (LinkAnimationHeader* )0x0400DF10,
+    (LinkAnimationHeader* )0x0400DF10,
+    (LinkAnimationHeader* )0x0400D978,
+    (LinkAnimationHeader* )0x0400D978,
+    (LinkAnimationHeader* )0x0400D978,
+    (LinkAnimationHeader* )0x0400DEB8,
+    (LinkAnimationHeader* )0x0400DEB0,
+    (LinkAnimationHeader* )0x0400DEB0,
+    (LinkAnimationHeader* )0x0400DEB8,
+    (LinkAnimationHeader* )0x0400DEB8,
+    (LinkAnimationHeader* )0x0400DEB8,
+    (LinkAnimationHeader* )0x0400DE20,
+    (LinkAnimationHeader* )0x0400DE18,
+    (LinkAnimationHeader* )0x0400DE18,
+    (LinkAnimationHeader* )0x0400DE20,
+    (LinkAnimationHeader* )0x0400DE20,
+    (LinkAnimationHeader* )0x0400DE20,
+    (LinkAnimationHeader* )0x0400DB08,
+    (LinkAnimationHeader* )0x0400DB08,
+    (LinkAnimationHeader* )0x0400DB08,
+    (LinkAnimationHeader* )0x0400DB08,
+    (LinkAnimationHeader* )0x0400DB08,
+    (LinkAnimationHeader* )0x0400DB08,
+    (LinkAnimationHeader* )0x0400DB50,
+    (LinkAnimationHeader* )0x0400DB38,
+    (LinkAnimationHeader* )0x0400DB38,
+    (LinkAnimationHeader* )0x0400DB50,
+    (LinkAnimationHeader* )0x0400DB50,
+    (LinkAnimationHeader* )0x0400DB50,
+    (LinkAnimationHeader* )0x0400DB60,
+    (LinkAnimationHeader* )0x0400DB58,
+    (LinkAnimationHeader* )0x0400DB58,
+    (LinkAnimationHeader* )0x0400DB60,
+    (LinkAnimationHeader* )0x0400DB60,
+    (LinkAnimationHeader* )0x0400DB60,
+    (LinkAnimationHeader* )0x0400DB48,
+    (LinkAnimationHeader* )0x0400DB40,
+    (LinkAnimationHeader* )0x0400DB40,
+    (LinkAnimationHeader* )0x0400DB48,
+    (LinkAnimationHeader* )0x0400DB48,
+    (LinkAnimationHeader* )0x0400DB48,
+    (LinkAnimationHeader* )0x0400DDD8,
+    (LinkAnimationHeader* )0x0400DDD0,
+    (LinkAnimationHeader* )0x0400DDD0,
+    (LinkAnimationHeader* )0x0400DDD8,
+    (LinkAnimationHeader* )0x0400DDD8,
+    (LinkAnimationHeader* )0x0400DDD8,
+    (LinkAnimationHeader* )0x0400DDE8,
+    (LinkAnimationHeader* )0x0400DDE0,
+    (LinkAnimationHeader* )0x0400DDE0,
+    (LinkAnimationHeader* )0x0400DDE8,
+    (LinkAnimationHeader* )0x0400DDE8,
+    (LinkAnimationHeader* )0x0400DDE8,
+    (LinkAnimationHeader* )0x0400DDC8,
+    (LinkAnimationHeader* )0x0400DDC0,
+    (LinkAnimationHeader* )0x0400DDC0,
+    (LinkAnimationHeader* )0x0400DDC8,
+    (LinkAnimationHeader* )0x0400DDC8,
+    (LinkAnimationHeader* )0x0400DDC8,
+    (LinkAnimationHeader* )0x0400DC40,
+    (LinkAnimationHeader* )0x0400DC38,
+    (LinkAnimationHeader* )0x0400DC38,
+    (LinkAnimationHeader* )0x0400DC40,
+    (LinkAnimationHeader* )0x0400DC40,
+    (LinkAnimationHeader* )0x0400DC40,
+    (LinkAnimationHeader* )0x0400DCE8,
+    (LinkAnimationHeader* )0x0400DCE0,
+    (LinkAnimationHeader* )0x0400DCE0,
+    (LinkAnimationHeader* )0x0400DCE8,
+    (LinkAnimationHeader* )0x0400DCE8,
+    (LinkAnimationHeader* )0x0400DCE8,
+    (LinkAnimationHeader* )0x0400DD08,
+    (LinkAnimationHeader* )0x0400DD00,
+    (LinkAnimationHeader* )0x0400DD00,
+    (LinkAnimationHeader* )0x0400DD08,
+    (LinkAnimationHeader* )0x0400DD08,
+    (LinkAnimationHeader* )0x0400DD08,
+    (LinkAnimationHeader* )0x0400DCF8,
+    (LinkAnimationHeader* )0x0400DCF0,
+    (LinkAnimationHeader* )0x0400DCF0,
+    (LinkAnimationHeader* )0x0400DCF8,
+    (LinkAnimationHeader* )0x0400DCF8,
+    (LinkAnimationHeader* )0x0400DCF8,
+    (LinkAnimationHeader* )0x0400DC10,
+    (LinkAnimationHeader* )0x0400DC08,
+    (LinkAnimationHeader* )0x0400DC08,
+    (LinkAnimationHeader* )0x0400DC18,
+    (LinkAnimationHeader* )0x0400DC10,
+    (LinkAnimationHeader* )0x0400DC10,
+    (LinkAnimationHeader* )0x0400DED0,
+    (LinkAnimationHeader* )0x0400DEC8,
+    (LinkAnimationHeader* )0x0400DEC8,
+    (LinkAnimationHeader* )0x0400DED8,
+    (LinkAnimationHeader* )0x0400DED0,
+    (LinkAnimationHeader* )0x0400DED0,
+    (LinkAnimationHeader* )0x0400E450,
+    (LinkAnimationHeader* )0x0400E108,
+    (LinkAnimationHeader* )0x0400E108,
+    (LinkAnimationHeader* )0x0400E450,
+    (LinkAnimationHeader* )0x0400E450,
+    (LinkAnimationHeader* )0x0400E450,
+};
 
-glabel D_8085BA38
-/* 02DFA8 8085BA38 */ .word 0x42A80000
-/* 02DFAC 8085BA3C */ .word 0x42B40000
-/* 02DFB0 8085BA40 */ .word 0x3FC00000
-/* 02DFB4 8085BA44 */ .word 0x43268000
-/* 02DFB8 8085BA48 */ .word 0x42D20000
-/* 02DFBC 8085BA4C */ .word 0x42EE3334
-/* 02DFC0 8085BA50 */ .word 0x42B10000
-/* 02DFC4 8085BA54 */ .word 0x42760000
-/* 02DFC8 8085BA58 */ .word 0x41E40000
-/* 02DFCC 8085BA5C */ .word 0x42580000
-/* 02DFD0 8085BA60 */ .word 0x42960000
-/* 02DFD4 8085BA64 */ .word 0x42A80000
-/* 02DFD8 8085BA68 */ .word 0x42CC0000
-/* 02DFDC 8085BA6C */ .word 0x428C0000
-/* 02DFE0 8085BA70 */ .word 0x41D80000
-/* 02DFE4 8085BA74 */ .word 0x41C60000
-/* 02DFE8 8085BA78 */ .word 0x42D20000
-/* 02DFEC 8085BA7C */ .word 0x0009123F
-/* 02DFF0 8085BA80 */ .word 0x01670008
-/* 02DFF4 8085BA84 */ .word 0x1256017C
-/* 02DFF8 8085BA88 */ .word 0x000917EA
-/* 02DFFC 8085BA8C */ .word 0x01670008
-/* 02E000 8085BA90 */ .word 0x1256017C
-/* 02E004 8085BA94 */ .word 0x000917EA
-/* 02E008 8085BA98 */ .word 0x01670009
-/* 02E00C 8085BA9C */ .word 0x17EA0167
-/* 02E010 8085BAA0 */ .word 0x00091E0D
-/* 02E014 8085BAA4 */ .word 0x017C0009
-/* 02E018 8085BAA8 */ .word 0x17EA0167
-/* 02E01C 8085BAAC */ .word 0x00091E0D
-/* 02E020 8085BAB0 */ .word 0x017C0008
-/* 02E024 8085BAB4 */ .word 0x1256017C
-/* 02E028 8085BAB8 */ .word 0x000917EA
-/* 02E02C 8085BABC */ .word 0x0167F9C8
-/* 02E030 8085BAC0 */ .word 0x1256017C
-/* 02E034 8085BAC4 */ .word 0xF9C917EA
-/* 02E038 8085BAC8 */ .word 0x01670000
-/* 02E03C 8085BACC */ .word 0x00800000
-/* 02E040 8085BAD0 */ .word 0x42040000
-/* 02E044 8085BAD4 */ .word 0x42309B16
-/* 02E048 8085BAD8 */ .word 0x0400D540
-/* 02E04C 8085BADC */ .word 0x0400D548
-/* 02E050 8085BAE0 */ .word 0x0400D660
-/* 02E054 8085BAE4 */ .word 0x0400DB90
-/* 02E058 8085BAE8 */ .word 0x0400DB98
-/* 02E05C 8085BAEC */ .word 0x0400DBA0
-/* 02E060 8085BAF0 */ .word 0x0400DBA8
-/* 02E064 8085BAF4 */ .word 0x0400DAB0
-/* 02E068 8085BAF8 */ .word 0x0400DAB8
-/* 02E06C 8085BAFC */ .word 0x0400DA90
-/* 02E070 8085BB00 */ .word 0x0400DA98
-/* 02E074 8085BB04 */ .word 0x0400DB70
-/* 02E078 8085BB08 */ .word 0x0400DB78
-/* 02E07C 8085BB0C */ .word 0x0400DB88
-/* 02E080 8085BB10 */ .word 0x0400DB80
-/* 02E084 8085BB14 */ .word 0x428C0000
-/* 02E088 8085BB18 */ .word 0x42B40000
-/* 02E08C 8085BB1C */ .word 0x3F3D70A4
-/* 02E090 8085BB20 */ .word 0x42DE0000
-/* 02E094 8085BB24 */ .word 0x428C0000
-/* 02E098 8085BB28 */ .word 0x429ECCCD
-/* 02E09C 8085BB2C */ .word 0x426C0000
-/* 02E0A0 8085BB30 */ .word 0x42240000
-/* 02E0A4 8085BB34 */ .word 0x41980000
-/* 02E0A8 8085BB38 */ .word 0x42100000
-/* 02E0AC 8085BB3C */ .word 0x42480000
-/* 02E0B0 8085BB40 */ .word 0x42600000
-/* 02E0B4 8085BB44 */ .word 0x42880000
-/* 02E0B8 8085BB48 */ .word 0x428C0000
-/* 02E0BC 8085BB4C */ .word 0x419C0000
-/* 02E0C0 8085BB50 */ .word 0x4191999A
-/* 02E0C4 8085BB54 */ .word 0x42A00000
-/* 02E0C8 8085BB58 */ .word 0x00170F3B
-/* 02E0CC 8085BB5C */ .word 0x00DF0018
-/* 02E0D0 8085BB60 */ .word 0x0F3B00DF
-/* 02E0D4 8085BB64 */ .word 0x001714CF
-/* 02E0D8 8085BB68 */ .word 0x00DF0018
-/* 02E0DC 8085BB6C */ .word 0x0F3B00DF
-/* 02E0E0 8085BB70 */ .word 0x001714CF
-/* 02E0E4 8085BB74 */ .word 0x00DF0017
-/* 02E0E8 8085BB78 */ .word 0x14CF00DF
-/* 02E0EC 8085BB7C */ .word 0x00181AF2
-/* 02E0F0 8085BB80 */ .word 0x00DF0017
-/* 02E0F4 8085BB84 */ .word 0x14CF00DF
-/* 02E0F8 8085BB88 */ .word 0x00181AF2
-/* 02E0FC 8085BB8C */ .word 0x00DF0008
-/* 02E100 8085BB90 */ .word 0x1256017C
-/* 02E104 8085BB94 */ .word 0x000917EA
-/* 02E108 8085BB98 */ .word 0x0167F9C8
-/* 02E10C 8085BB9C */ .word 0x1256017C
-/* 02E110 8085BBA0 */ .word 0xF9C917EA
-/* 02E114 8085BBA4 */ .word 0x016700C0
-/* 02E118 8085BBA8 */ .word 0x01500000
-/* 02E11C 8085BBAC */ .word 0xC1C80000
-/* 02E120 8085BBB0 */ .word 0x42280000
-/* 02E124 8085BBB4 */ .word 0x0400E170
-/* 02E128 8085BBB8 */ .word 0x0400D548
-/* 02E12C 8085BBBC */ .word 0x0400D660
-/* 02E130 8085BBC0 */ .word 0x0400E198
-/* 02E134 8085BBC4 */ .word 0x0400E1A0
-/* 02E138 8085BBC8 */ .word 0x0400E1A8
-/* 02E13C 8085BBCC */ .word 0x0400E1B0
-/* 02E140 8085BBD0 */ .word 0x0400E1A8
-/* 02E144 8085BBD4 */ .word 0x0400E1B0
-/* 02E148 8085BBD8 */ .word 0x0400DA90
-/* 02E14C 8085BBDC */ .word 0x0400DA98
-/* 02E150 8085BBE0 */ .word 0x0400E178
-/* 02E154 8085BBE4 */ .word 0x0400E180
-/* 02E158 8085BBE8 */ .word 0x0400E190
-/* 02E15C 8085BBEC */ .word 0x0400E188
-/* 02E160 8085BBF0 */ .word 0x42600000
-/* 02E164 8085BBF4 */ .word 0x42B40000
-/* 02E168 8085BBF8 */ .word 0x3F800000
-/* 02E16C 8085BBFC */ .word 0x42DE0000
-/* 02E170 8085BC00 */ .word 0x428C0000
-/* 02E174 8085BC04 */ .word 0x429ECCCD
-/* 02E178 8085BC08 */ .word 0x426C0000
-/* 02E17C 8085BC0C */ .word 0x42240000
-/* 02E180 8085BC10 */ .word 0x41980000
-/* 02E184 8085BC14 */ .word 0x42100000
-/* 02E188 8085BC18 */ .word 0x42480000
-/* 02E18C 8085BC1C */ .word 0x42600000
-/* 02E190 8085BC20 */ .word 0x42880000
-/* 02E194 8085BC24 */ .word 0x428C0000
-/* 02E198 8085BC28 */ .word 0x41900000
-/* 02E19C 8085BC2C */ .word 0x41B80000
-/* 02E1A0 8085BC30 */ .word 0x428C0000
-/* 02E1A4 8085BC34 */ .word 0x00171323
-/* 02E1A8 8085BC38 */ .word 0xFF930017
-/* 02E1AC 8085BC3C */ .word 0x1323FFA8
-/* 02E1B0 8085BC40 */ .word 0x001718B7
-/* 02E1B4 8085BC44 */ .word 0xFF930017
-/* 02E1B8 8085BC48 */ .word 0x1323FFA8
-/* 02E1BC 8085BC4C */ .word 0x001718B7
-/* 02E1C0 8085BC50 */ .word 0xFF930017
-/* 02E1C4 8085BC54 */ .word 0x18B7FF93
-/* 02E1C8 8085BC58 */ .word 0x00181EDA
-/* 02E1CC 8085BC5C */ .word 0xFFA80017
-/* 02E1D0 8085BC60 */ .word 0x18B7FF93
-/* 02E1D4 8085BC64 */ .word 0x00181EDA
-/* 02E1D8 8085BC68 */ .word 0xFFA80008
-/* 02E1DC 8085BC6C */ .word 0x1256017C
-/* 02E1E0 8085BC70 */ .word 0x000917EA
-/* 02E1E4 8085BC74 */ .word 0x0167F9C8
-/* 02E1E8 8085BC78 */ .word 0x1256017C
-/* 02E1EC 8085BC7C */ .word 0xF9C917EA
-/* 02E1F0 8085BC80 */ .word 0x016700A0
-/* 02E1F4 8085BC84 */ .word 0x01200000
-/* 02E1F8 8085BC88 */ .word 0x41B00000
-/* 02E1FC 8085BC8C */ .word 0x42100000
-/* 02E200 8085BC90 */ .word 0x0400E300
-/* 02E204 8085BC94 */ .word 0x0400D548
-/* 02E208 8085BC98 */ .word 0x0400D660
-/* 02E20C 8085BC9C */ .word 0x0400E378
-/* 02E210 8085BCA0 */ .word 0x0400E380
-/* 02E214 8085BCA4 */ .word 0x0400E388
-/* 02E218 8085BCA8 */ .word 0x0400E390
-/* 02E21C 8085BCAC */ .word 0x0400DAB0
-/* 02E220 8085BCB0 */ .word 0x0400DAB8
-/* 02E224 8085BCB4 */ .word 0x0400DA90
-/* 02E228 8085BCB8 */ .word 0x0400DA98
-/* 02E22C 8085BCBC */ .word 0x0400E358
-/* 02E230 8085BCC0 */ .word 0x0400E360
-/* 02E234 8085BCC4 */ .word 0x0400E370
-/* 02E238 8085BCC8 */ .word 0x0400E368
-/* 02E23C 8085BCCC */ .word 0x420C0000
-/* 02E240 8085BCD0 */ .word 0x42480000
-/* 02E244 8085BCD4 */ .word 0x3E99999A
-/* 02E248 8085BCD8 */ .word 0x428E0000
-/* 02E24C 8085BCDC */ .word 0x42480000
-/* 02E250 8085BCE0 */ .word 0x42440000
-/* 02E254 8085BCE4 */ .word 0x421C0000
-/* 02E258 8085BCE8 */ .word 0x41D80000
-/* 02E25C 8085BCEC */ .word 0x41980000
-/* 02E260 8085BCF0 */ .word 0x41000000
-/* 02E264 8085BCF4 */ .word 0x4159999A
-/* 02E268 8085BCF8 */ .word 0x41C00000
-/* 02E26C 8085BCFC */ .word 0x41C00000
-/* 02E270 8085BD00 */ .word 0x428C0000
-/* 02E274 8085BD04 */ .word 0x41600000
-/* 02E278 8085BD08 */ .word 0x41400000
-/* 02E27C 8085BD0C */ .word 0x425C0000
-/* 02E280 8085BD10 */ .word 0xFFE80DED
-/* 02E284 8085BD14 */ .word 0x036CFFE8
-/* 02E288 8085BD18 */ .word 0x0D92035E
-/* 02E28C 8085BD1C */ .word 0xFFE81371
-/* 02E290 8085BD20 */ .word 0x03A90008
-/* 02E294 8085BD24 */ .word 0x1256017C
-/* 02E298 8085BD28 */ .word 0x000917EA
-/* 02E29C 8085BD2C */ .word 0x0167FFE8
-/* 02E2A0 8085BD30 */ .word 0x137103A9
-/* 02E2A4 8085BD34 */ .word 0xFFE8195F
-/* 02E2A8 8085BD38 */ .word 0x03A90009
-/* 02E2AC 8085BD3C */ .word 0x17EA0167
-/* 02E2B0 8085BD40 */ .word 0x00091E0D
-/* 02E2B4 8085BD44 */ .word 0x017C0008
-/* 02E2B8 8085BD48 */ .word 0x1256017C
-/* 02E2BC 8085BD4C */ .word 0x000917EA
-/* 02E2C0 8085BD50 */ .word 0x0167F9C8
-/* 02E2C4 8085BD54 */ .word 0x1256017C
-/* 02E2C8 8085BD58 */ .word 0xF9C917EA
-/* 02E2CC 8085BD5C */ .word 0x01670080
-/* 02E2D0 8085BD60 */ .word 0x00F00000
-/* 02E2D4 8085BD64 */ .word 0xC1A80000
-/* 02E2D8 8085BD68 */ .word 0x42040000
-/* 02E2DC 8085BD6C */ .word 0x0400E268
-/* 02E2E0 8085BD70 */ .word 0x0400D548
-/* 02E2E4 8085BD74 */ .word 0x0400D660
-/* 02E2E8 8085BD78 */ .word 0x0400D1F8
-/* 02E2EC 8085BD7C */ .word 0x0400D200
-/* 02E2F0 8085BD80 */ .word 0x0400D208
-/* 02E2F4 8085BD84 */ .word 0x0400D210
-/* 02E2F8 8085BD88 */ .word 0x0400DAB0
-/* 02E2FC 8085BD8C */ .word 0x0400DAB8
-/* 02E300 8085BD90 */ .word 0x0400DA90
-/* 02E304 8085BD94 */ .word 0x0400DA98
-/* 02E308 8085BD98 */ .word 0x0400D1D8
-/* 02E30C 8085BD9C */ .word 0x0400D1E0
-/* 02E310 8085BDA0 */ .word 0x0400D1F0
-/* 02E314 8085BDA4 */ .word 0x0400D1E8
-/* 02E318 8085BDA8 */ .word 0x42200000
-/* 02E31C 8085BDAC */ .word 0x42700000
-/* 02E320 8085BDB0 */ .word 0x3F25A5A6
-/* 02E324 8085BDB4 */ .word 0x428E0000
-/* 02E328 8085BDB8 */ .word 0x42480000
-/* 02E32C 8085BDBC */ .word 0x42440000
-/* 02E330 8085BDC0 */ .word 0x421C0000
-/* 02E334 8085BDC4 */ .word 0x41D80000
-/* 02E338 8085BDC8 */ .word 0x41980000
-/* 02E33C 8085BDCC */ .word 0x41B00000
-/* 02E340 8085BDD0 */ .word 0x4201999A
-/* 02E344 8085BDD4 */ .word 0x42000000
-/* 02E348 8085BDD8 */ .word 0x42400000
-/* 02E34C 8085BDDC */ .word 0x42352D2E
-/* 02E350 8085BDE0 */ .word 0x41600000
-/* 02E354 8085BDE4 */ .word 0x41400000
-/* 02E358 8085BDE8 */ .word 0x425C0000
-/* 02E35C 8085BDEC */ .word 0xFFE80DED
-/* 02E360 8085BDF0 */ .word 0x036CFFE8
-/* 02E364 8085BDF4 */ .word 0x0D92035E
-/* 02E368 8085BDF8 */ .word 0xFFE81371
-/* 02E36C 8085BDFC */ .word 0x03A90008
-/* 02E370 8085BE00 */ .word 0x1256017C
-/* 02E374 8085BE04 */ .word 0x000917EA
-/* 02E378 8085BE08 */ .word 0x0167FFE8
-/* 02E37C 8085BE0C */ .word 0x137103A9
-/* 02E380 8085BE10 */ .word 0xFFE8195F
-/* 02E384 8085BE14 */ .word 0x03A90009
-/* 02E388 8085BE18 */ .word 0x17EA0167
-/* 02E38C 8085BE1C */ .word 0x00091E0D
-/* 02E390 8085BE20 */ .word 0x017C0008
-/* 02E394 8085BE24 */ .word 0x1256017C
-/* 02E398 8085BE28 */ .word 0x000917EA
-/* 02E39C 8085BE2C */ .word 0x0167F9C8
-/* 02E3A0 8085BE30 */ .word 0x1256017C
-/* 02E3A4 8085BE34 */ .word 0xF9C917EA
-/* 02E3A8 8085BE38 */ .word 0x01670020
-/* 02E3AC 8085BE3C */ .word 0x00000000
-/* 02E3B0 8085BE40 */ .word 0x41B00000
-/* 02E3B4 8085BE44 */ .word 0x41EB7972
-/* 02E3B8 8085BE48 */ .word 0x0400D128
-/* 02E3BC 8085BE4C */ .word 0x0400D170
-/* 02E3C0 8085BE50 */ .word 0x0400D1B8
-/* 02E3C4 8085BE54 */ .word 0x0400D1F8
-/* 02E3C8 8085BE58 */ .word 0x0400D200
-/* 02E3CC 8085BE5C */ .word 0x0400D208
-/* 02E3D0 8085BE60 */ .word 0x0400D210
-/* 02E3D4 8085BE64 */ .word 0x0400DAB0
-/* 02E3D8 8085BE68 */ .word 0x0400DAB8
-/* 02E3DC 8085BE6C */ .word 0x0400DA90
-/* 02E3E0 8085BE70 */ .word 0x0400DA98
-/* 02E3E4 8085BE74 */ .word 0x0400D1D8
-/* 02E3E8 8085BE78 */ .word 0x0400D1E0
-/* 02E3EC 8085BE7C */ .word 0x0400D1F0
-/* 02E3F0 8085BE80 */ .word 0x0400D1E8
 
-glabel D_8085BE84
-/* 02E3F4 8085BE84 */ .word 0x0400DF28
-/* 02E3F8 8085BE88 */ .word 0x0400DF20
-/* 02E3FC 8085BE8C */ .word 0x0400DF20
-/* 02E400 8085BE90 */ .word 0x0400D988
-/* 02E404 8085BE94 */ .word 0x0400DF28
-/* 02E408 8085BE98 */ .word 0x0400DF28
-/* 02E40C 8085BE9C */ .word 0x0400DF70
-/* 02E410 8085BEA0 */ .word 0x0400DF48
-/* 02E414 8085BEA4 */ .word 0x0400DF48
-/* 02E418 8085BEA8 */ .word 0x0400D9A0
-/* 02E41C 8085BEAC */ .word 0x0400DF70
-/* 02E420 8085BEB0 */ .word 0x0400DF70
-/* 02E424 8085BEB4 */ .word 0x0400DE40
-/* 02E428 8085BEB8 */ .word 0x0400D918
-/* 02E42C 8085BEBC */ .word 0x0400DE38
-/* 02E430 8085BEC0 */ .word 0x0400D920
-/* 02E434 8085BEC4 */ .word 0x0400DE40
-/* 02E438 8085BEC8 */ .word 0x0400DE40
-/* 02E43C 8085BECC */ .word 0x0400DBB8
-/* 02E440 8085BED0 */ .word 0x0400D808
-/* 02E444 8085BED4 */ .word 0x0400DBB8
-/* 02E448 8085BED8 */ .word 0x0400D810
-/* 02E44C 8085BEDC */ .word 0x0400DBB8
-/* 02E450 8085BEE0 */ .word 0x0400DBB8
-/* 02E454 8085BEE4 */ .word 0x0400DF08
-/* 02E458 8085BEE8 */ .word 0x0400D468
-/* 02E45C 8085BEEC */ .word 0x0400D468
-/* 02E460 8085BEF0 */ .word 0x0400D970
-/* 02E464 8085BEF4 */ .word 0x0400DF08
-/* 02E468 8085BEF8 */ .word 0x0400DF08
-/* 02E46C 8085BEFC */ .word 0x0400DF18
-/* 02E470 8085BF00 */ .word 0x0400D480
-/* 02E474 8085BF04 */ .word 0x0400D480
-/* 02E478 8085BF08 */ .word 0x0400D980
-/* 02E47C 8085BF0C */ .word 0x0400DF18
-/* 02E480 8085BF10 */ .word 0x0400DF18
-/* 02E484 8085BF14 */ .word 0x0400D960
-/* 02E488 8085BF18 */ .word 0x0400DEE0
-/* 02E48C 8085BF1C */ .word 0x0400DEE0
-/* 02E490 8085BF20 */ .word 0x0400D960
-/* 02E494 8085BF24 */ .word 0x0400D960
-/* 02E498 8085BF28 */ .word 0x0400D960
-/* 02E49C 8085BF2C */ .word 0x0400DD98
-/* 02E4A0 8085BF30 */ .word 0x0400D860
-/* 02E4A4 8085BF34 */ .word 0x0400D860
-/* 02E4A8 8085BF38 */ .word 0x0400DD98
-/* 02E4AC 8085BF3C */ .word 0x0400DD98
-/* 02E4B0 8085BF40 */ .word 0x0400DD98
-/* 02E4B4 8085BF44 */ .word 0x0400D578
-/* 02E4B8 8085BF48 */ .word 0x0400D570
-/* 02E4BC 8085BF4C */ .word 0x0400D570
-/* 02E4C0 8085BF50 */ .word 0x0400D578
-/* 02E4C4 8085BF54 */ .word 0x0400D578
-/* 02E4C8 8085BF58 */ .word 0x0400D578
-/* 02E4CC 8085BF5C */ .word 0x0400D140
-/* 02E4D0 8085BF60 */ .word 0x0400D140
-/* 02E4D4 8085BF64 */ .word 0x0400D140
-/* 02E4D8 8085BF68 */ .word 0x0400D140
-/* 02E4DC 8085BF6C */ .word 0x0400D140
-/* 02E4E0 8085BF70 */ .word 0x0400D140
-/* 02E4E4 8085BF74 */ .word 0x0400D588
-/* 02E4E8 8085BF78 */ .word 0x0400D580
-/* 02E4EC 8085BF7C */ .word 0x0400D580
-/* 02E4F0 8085BF80 */ .word 0x0400D588
-/* 02E4F4 8085BF84 */ .word 0x0400D588
-/* 02E4F8 8085BF88 */ .word 0x0400D588
-/* 02E4FC 8085BF8C */ .word 0x0400D148
-/* 02E500 8085BF90 */ .word 0x0400D148
-/* 02E504 8085BF94 */ .word 0x0400D148
-/* 02E508 8085BF98 */ .word 0x0400D148
-/* 02E50C 8085BF9C */ .word 0x0400D148
-/* 02E510 8085BFA0 */ .word 0x0400D148
-/* 02E514 8085BFA4 */ .word 0x0400DB28
-/* 02E518 8085BFA8 */ .word 0x0400DB20
-/* 02E51C 8085BFAC */ .word 0x0400DB20
-/* 02E520 8085BFB0 */ .word 0x0400DB28
-/* 02E524 8085BFB4 */ .word 0x0400DB28
-/* 02E528 8085BFB8 */ .word 0x0400DB28
-/* 02E52C 8085BFBC */ .word 0x0400DD18
-/* 02E530 8085BFC0 */ .word 0x0400DD10
-/* 02E534 8085BFC4 */ .word 0x0400DD10
-/* 02E538 8085BFC8 */ .word 0x0400DD18
-/* 02E53C 8085BFCC */ .word 0x0400DD18
-/* 02E540 8085BFD0 */ .word 0x0400DD18
-/* 02E544 8085BFD4 */ .word 0x0400DE70
-/* 02E548 8085BFD8 */ .word 0x0400DE68
-/* 02E54C 8085BFDC */ .word 0x0400DE68
-/* 02E550 8085BFE0 */ .word 0x0400DE70
-/* 02E554 8085BFE4 */ .word 0x0400DE70
-/* 02E558 8085BFE8 */ .word 0x0400DE70
-/* 02E55C 8085BFEC */ .word 0x0400DD28
-/* 02E560 8085BFF0 */ .word 0x0400DD20
-/* 02E564 8085BFF4 */ .word 0x0400DD20
-/* 02E568 8085BFF8 */ .word 0x0400D858
-/* 02E56C 8085BFFC */ .word 0x0400DD28
-/* 02E570 8085C000 */ .word 0x0400DD28
-/* 02E574 8085C004 */ .word 0x0400DCC0
-/* 02E578 8085C008 */ .word 0x0400DCB8
-/* 02E57C 8085C00C */ .word 0x0400DCB8
-/* 02E580 8085C010 */ .word 0x0400DCC8
-/* 02E584 8085C014 */ .word 0x0400DCC0
-/* 02E588 8085C018 */ .word 0x0400DCC0
-/* 02E58C 8085C01C */ .word 0x0400DF58
-/* 02E590 8085C020 */ .word 0x0400DF50
-/* 02E594 8085C024 */ .word 0x0400DF50
-/* 02E598 8085C028 */ .word 0x0400D990
-/* 02E59C 8085C02C */ .word 0x0400DF58
-/* 02E5A0 8085C030 */ .word 0x0400DF58
-/* 02E5A4 8085C034 */ .word 0x0400DF68
-/* 02E5A8 8085C038 */ .word 0x0400DF60
-/* 02E5AC 8085C03C */ .word 0x0400DF60
-/* 02E5B0 8085C040 */ .word 0x0400D998
-/* 02E5B4 8085C044 */ .word 0x0400DF68
-/* 02E5B8 8085C048 */ .word 0x0400DF68
-/* 02E5BC 8085C04C */ .word 0x0400DBD8
-/* 02E5C0 8085C050 */ .word 0x0400DBC0
-/* 02E5C4 8085C054 */ .word 0x0400DBC0
-/* 02E5C8 8085C058 */ .word 0x0400DBD8
-/* 02E5CC 8085C05C */ .word 0x0400D510
-/* 02E5D0 8085C060 */ .word 0x0400DBD8
-/* 02E5D4 8085C064 */ .word 0x0400DBF8
-/* 02E5D8 8085C068 */ .word 0x0400DBF0
-/* 02E5DC 8085C06C */ .word 0x0400DBF0
-/* 02E5E0 8085C070 */ .word 0x0400DBF8
-/* 02E5E4 8085C074 */ .word 0x0400D518
-/* 02E5E8 8085C078 */ .word 0x0400DBF8
-/* 02E5EC 8085C07C */ .word 0x0400DBD0
-/* 02E5F0 8085C080 */ .word 0x0400DBC8
-/* 02E5F4 8085C084 */ .word 0x0400DBC8
-/* 02E5F8 8085C088 */ .word 0x0400DBD0
-/* 02E5FC 8085C08C */ .word 0x0400DBD0
-/* 02E600 8085C090 */ .word 0x0400DBD0
-/* 02E604 8085C094 */ .word 0x0400DE90
-/* 02E608 8085C098 */ .word 0x0400DE88
-/* 02E60C 8085C09C */ .word 0x0400DE88
-/* 02E610 8085C0A0 */ .word 0x0400D938
-/* 02E614 8085C0A4 */ .word 0x0400DE90
-/* 02E618 8085C0A8 */ .word 0x0400DE90
-/* 02E61C 8085C0AC */ .word 0x0400DE78
-/* 02E620 8085C0B0 */ .word 0x0400D448
-/* 02E624 8085C0B4 */ .word 0x0400D448
-/* 02E628 8085C0B8 */ .word 0x0400D928
-/* 02E62C 8085C0BC */ .word 0x0400DE78
-/* 02E630 8085C0C0 */ .word 0x0400DE78
-/* 02E634 8085C0C4 */ .word 0x0400DE80
-/* 02E638 8085C0C8 */ .word 0x0400D450
-/* 02E63C 8085C0CC */ .word 0x0400D450
-/* 02E640 8085C0D0 */ .word 0x0400D930
-/* 02E644 8085C0D4 */ .word 0x0400DE80
-/* 02E648 8085C0D8 */ .word 0x0400DE80
-/* 02E64C 8085C0DC */ .word 0x0400DA80
-/* 02E650 8085C0E0 */ .word 0x0400DA78
-/* 02E654 8085C0E4 */ .word 0x0400DA78
-/* 02E658 8085C0E8 */ .word 0x0400DA80
-/* 02E65C 8085C0EC */ .word 0x0400DA80
-/* 02E660 8085C0F0 */ .word 0x0400DA80
-/* 02E664 8085C0F4 */ .word 0x0400DF00
-/* 02E668 8085C0F8 */ .word 0x0400DF00
-/* 02E66C 8085C0FC */ .word 0x0400DF00
-/* 02E670 8085C100 */ .word 0x0400D968
-/* 02E674 8085C104 */ .word 0x0400D968
-/* 02E678 8085C108 */ .word 0x0400D968
-/* 02E67C 8085C10C */ .word 0x0400DF10
-/* 02E680 8085C110 */ .word 0x0400DF10
-/* 02E684 8085C114 */ .word 0x0400DF10
-/* 02E688 8085C118 */ .word 0x0400D978
-/* 02E68C 8085C11C */ .word 0x0400D978
-/* 02E690 8085C120 */ .word 0x0400D978
-/* 02E694 8085C124 */ .word 0x0400DEB8
-/* 02E698 8085C128 */ .word 0x0400DEB0
-/* 02E69C 8085C12C */ .word 0x0400DEB0
-/* 02E6A0 8085C130 */ .word 0x0400DEB8
-/* 02E6A4 8085C134 */ .word 0x0400DEB8
-/* 02E6A8 8085C138 */ .word 0x0400DEB8
-/* 02E6AC 8085C13C */ .word 0x0400DE20
-/* 02E6B0 8085C140 */ .word 0x0400DE18
-/* 02E6B4 8085C144 */ .word 0x0400DE18
-/* 02E6B8 8085C148 */ .word 0x0400DE20
-/* 02E6BC 8085C14C */ .word 0x0400DE20
-/* 02E6C0 8085C150 */ .word 0x0400DE20
-/* 02E6C4 8085C154 */ .word 0x0400DB08
-/* 02E6C8 8085C158 */ .word 0x0400DB08
-/* 02E6CC 8085C15C */ .word 0x0400DB08
-/* 02E6D0 8085C160 */ .word 0x0400DB08
-/* 02E6D4 8085C164 */ .word 0x0400DB08
-/* 02E6D8 8085C168 */ .word 0x0400DB08
-/* 02E6DC 8085C16C */ .word 0x0400DB50
-/* 02E6E0 8085C170 */ .word 0x0400DB38
-/* 02E6E4 8085C174 */ .word 0x0400DB38
-/* 02E6E8 8085C178 */ .word 0x0400DB50
-/* 02E6EC 8085C17C */ .word 0x0400DB50
-/* 02E6F0 8085C180 */ .word 0x0400DB50
-/* 02E6F4 8085C184 */ .word 0x0400DB60
-/* 02E6F8 8085C188 */ .word 0x0400DB58
-/* 02E6FC 8085C18C */ .word 0x0400DB58
-/* 02E700 8085C190 */ .word 0x0400DB60
-/* 02E704 8085C194 */ .word 0x0400DB60
-/* 02E708 8085C198 */ .word 0x0400DB60
-/* 02E70C 8085C19C */ .word 0x0400DB48
-/* 02E710 8085C1A0 */ .word 0x0400DB40
-/* 02E714 8085C1A4 */ .word 0x0400DB40
-/* 02E718 8085C1A8 */ .word 0x0400DB48
-/* 02E71C 8085C1AC */ .word 0x0400DB48
-/* 02E720 8085C1B0 */ .word 0x0400DB48
-/* 02E724 8085C1B4 */ .word 0x0400DDD8
-/* 02E728 8085C1B8 */ .word 0x0400DDD0
-/* 02E72C 8085C1BC */ .word 0x0400DDD0
-/* 02E730 8085C1C0 */ .word 0x0400DDD8
-/* 02E734 8085C1C4 */ .word 0x0400DDD8
-/* 02E738 8085C1C8 */ .word 0x0400DDD8
-/* 02E73C 8085C1CC */ .word 0x0400DDE8
-/* 02E740 8085C1D0 */ .word 0x0400DDE0
-/* 02E744 8085C1D4 */ .word 0x0400DDE0
-/* 02E748 8085C1D8 */ .word 0x0400DDE8
-/* 02E74C 8085C1DC */ .word 0x0400DDE8
-/* 02E750 8085C1E0 */ .word 0x0400DDE8
-/* 02E754 8085C1E4 */ .word 0x0400DDC8
-/* 02E758 8085C1E8 */ .word 0x0400DDC0
-/* 02E75C 8085C1EC */ .word 0x0400DDC0
-/* 02E760 8085C1F0 */ .word 0x0400DDC8
-/* 02E764 8085C1F4 */ .word 0x0400DDC8
-/* 02E768 8085C1F8 */ .word 0x0400DDC8
-/* 02E76C 8085C1FC */ .word 0x0400DC40
-/* 02E770 8085C200 */ .word 0x0400DC38
-/* 02E774 8085C204 */ .word 0x0400DC38
-/* 02E778 8085C208 */ .word 0x0400DC40
-/* 02E77C 8085C20C */ .word 0x0400DC40
-/* 02E780 8085C210 */ .word 0x0400DC40
-/* 02E784 8085C214 */ .word 0x0400DCE8
-/* 02E788 8085C218 */ .word 0x0400DCE0
-/* 02E78C 8085C21C */ .word 0x0400DCE0
-/* 02E790 8085C220 */ .word 0x0400DCE8
-/* 02E794 8085C224 */ .word 0x0400DCE8
-/* 02E798 8085C228 */ .word 0x0400DCE8
-/* 02E79C 8085C22C */ .word 0x0400DD08
-/* 02E7A0 8085C230 */ .word 0x0400DD00
-/* 02E7A4 8085C234 */ .word 0x0400DD00
-/* 02E7A8 8085C238 */ .word 0x0400DD08
-/* 02E7AC 8085C23C */ .word 0x0400DD08
-/* 02E7B0 8085C240 */ .word 0x0400DD08
-/* 02E7B4 8085C244 */ .word 0x0400DCF8
-/* 02E7B8 8085C248 */ .word 0x0400DCF0
-/* 02E7BC 8085C24C */ .word 0x0400DCF0
-/* 02E7C0 8085C250 */ .word 0x0400DCF8
-/* 02E7C4 8085C254 */ .word 0x0400DCF8
-/* 02E7C8 8085C258 */ .word 0x0400DCF8
-/* 02E7CC 8085C25C */ .word 0x0400DC10
-/* 02E7D0 8085C260 */ .word 0x0400DC08
-/* 02E7D4 8085C264 */ .word 0x0400DC08
-/* 02E7D8 8085C268 */ .word 0x0400DC18
-/* 02E7DC 8085C26C */ .word 0x0400DC10
-/* 02E7E0 8085C270 */ .word 0x0400DC10
-/* 02E7E4 8085C274 */ .word 0x0400DED0
-/* 02E7E8 8085C278 */ .word 0x0400DEC8
-/* 02E7EC 8085C27C */ .word 0x0400DEC8
-/* 02E7F0 8085C280 */ .word 0x0400DED8
-/* 02E7F4 8085C284 */ .word 0x0400DED0
-/* 02E7F8 8085C288 */ .word 0x0400DED0
-/* 02E7FC 8085C28C */ .word 0x0400E450
-/* 02E800 8085C290 */ .word 0x0400E108
-/* 02E804 8085C294 */ .word 0x0400E108
-/* 02E808 8085C298 */ .word 0x0400E450
-/* 02E80C 8085C29C */ .word 0x0400E450
-/* 02E810 8085C2A0 */ .word 0x0400E450
+struct_8085C2A4 D_8085C2A4[6] = {
+    {
+        (LinkAnimationHeader* )0x0400D828,
+        (LinkAnimationHeader* )0x0400D838,
+        (LinkAnimationHeader* )0x0400D830,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D770,
+        (LinkAnimationHeader* )0x0400D780,
+        (LinkAnimationHeader* )0x0400D778,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D7F0,
+        (LinkAnimationHeader* )0x0400D800,
+        (LinkAnimationHeader* )0x0400D7F8,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D7A8,
+        (LinkAnimationHeader* )0x0400D7B8,
+        (LinkAnimationHeader* )0x0400D7B0,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DD50,
+        (LinkAnimationHeader* )0x0400DD58,
+        (LinkAnimationHeader* )0x0400DD58,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DD60,
+        (LinkAnimationHeader* )0x0400DD68,
+        (LinkAnimationHeader* )0x0400DD68,
+    },
+};
 
-glabel D_8085C2A4
-/* 02E814 8085C2A4 */ .word 0x0400D828
-/* 02E818 8085C2A8 */ .word 0x0400D838
-/* 02E81C 8085C2AC */ .word 0x0400D830
-/* 02E820 8085C2B0 */ .word 0x0400D770
-/* 02E824 8085C2B4 */ .word 0x0400D780
-/* 02E828 8085C2B8 */ .word 0x0400D778
-/* 02E82C 8085C2BC */ .word 0x0400D7F0
-/* 02E830 8085C2C0 */ .word 0x0400D800
-/* 02E834 8085C2C4 */ .word 0x0400D7F8
-/* 02E838 8085C2C8 */ .word 0x0400D7A8
-/* 02E83C 8085C2CC */ .word 0x0400D7B8
-/* 02E840 8085C2D0 */ .word 0x0400D7B0
-/* 02E844 8085C2D4 */ .word 0x0400DD50
-/* 02E848 8085C2D8 */ .word 0x0400DD58
-/* 02E84C 8085C2DC */ .word 0x0400DD58
-/* 02E850 8085C2E0 */ .word 0x0400DD60
-/* 02E854 8085C2E4 */ .word 0x0400DD68
-/* 02E858 8085C2E8 */ .word 0x0400DD68
+ColliderCylinderInit D_8085C2EC = {
+    { 5, 0, 0x11, 0x39, 8, 1 },
+    { 1, { 0, 0, 0 }, { 0xF7CFFFFF, 0, 0 }, 0, 1, 1 },
+    { 0xC, 0x3C, 0, { 0, 0, 0 } },
+};
 
-glabel D_8085C2EC
-/* 02E85C 8085C2EC */ .word 0x05001139
-/* 02E860 8085C2F0 */ .word 0x08010000
-/* 02E864 8085C2F4 */ .word 0x01000000
-/* 02E868 8085C2F8 */ .word 0x00000000
-/* 02E86C 8085C2FC */ .word 0x00000000
-/* 02E870 8085C300 */ .word 0xF7CFFFFF
-/* 02E874 8085C304 */ .word 0x00000000
-/* 02E878 8085C308 */ .word 0x00010100
-/* 02E87C 8085C30C */ .word 0x000C003C
-/* 02E880 8085C310 */ .word 0x00000000
-/* 02E884 8085C314 */ .word 0x00000000
+ColliderCylinderInit D_8085C318 = {
+    { 9, 9, 0x15, 0, 8, 1 },
+    { 2, { 0x100000, 0, 2 }, { 0xD7CFFFFF, 0, 0 }, 0, 1, 1 },
+    { 0x19, 0x3C, 0, { 0, 0, 0 } },
+};
 
-glabel D_8085C318
-/* 02E888 8085C318 */ .word 0x09091500
-/* 02E88C 8085C31C */ .word 0x08010000
-/* 02E890 8085C320 */ .word 0x02000000
-/* 02E894 8085C324 */ .word 0x00100000
-/* 02E898 8085C328 */ .word 0x00020000
-/* 02E89C 8085C32C */ .word 0xD7CFFFFF
-/* 02E8A0 8085C330 */ .word 0x00000000
-/* 02E8A4 8085C334 */ .word 0x00010100
-/* 02E8A8 8085C338 */ .word 0x0019003C
-/* 02E8AC 8085C33C */ .word 0x00000000
-/* 02E8B0 8085C340 */ .word 0x00000000
+ColliderQuadInit D_8085C344 = {
+    { 0xA, 9, 0, 0, 8, 3 },
+    { 2, { 0, 0, 1 }, { 0xF7CFFFFF, 0, 0 }, 1, 0, 0 },
+    {
+        {
+            { 0.0f, 0.0f, 0.0f },
+            { 0.0f, 0.0f, 0.0f },
+            { 0.0f, 0.0f, 0.0f },
+            { 0.0f, 0.0f, 0.0f },
+        },
+    },
+};
 
-glabel D_8085C344
-/* 02E8B4 8085C344 */ .word 0x0A090000
-/* 02E8B8 8085C348 */ .word 0x08030000
-/* 02E8BC 8085C34C */ .word 0x02000000
-/* 02E8C0 8085C350 */ .word 0x00000000
-/* 02E8C4 8085C354 */ .word 0x00010000
-/* 02E8C8 8085C358 */ .word 0xF7CFFFFF
-/* 02E8CC 8085C35C */ .word 0x00000000
-/* 02E8D0 8085C360 */ .word 0x01000000
-/* 02E8D4 8085C364 */ .word 0x00000000
-/* 02E8D8 8085C368 */ .word 0x00000000
-/* 02E8DC 8085C36C */ .word 0x00000000
-/* 02E8E0 8085C370 */ .word 0x00000000
-/* 02E8E4 8085C374 */ .word 0x00000000
-/* 02E8E8 8085C378 */ .word 0x00000000
-/* 02E8EC 8085C37C */ .word 0x00000000
-/* 02E8F0 8085C380 */ .word 0x00000000
-/* 02E8F4 8085C384 */ .word 0x00000000
-/* 02E8F8 8085C388 */ .word 0x00000000
-/* 02E8FC 8085C38C */ .word 0x00000000
-/* 02E900 8085C390 */ .word 0x00000000
+ColliderQuadInit D_8085C394 = {
+    { 9, 9, 0x15, 0, 8, 3 },
+    { 2, { 0x100000, 0, 0 }, { 0xD7CFFFFF, 0, 0 }, 1, 1, 0 },
+    {
+        {
+            { 0.0f, 0.0f, 0.0f },
+            { 0.0f, 0.0f, 0.0f },
+            { 0.0f, 0.0f, 0.0f },
+            { 0.0f, 0.0f, 0.0f },
+        },
+    },
+};
 
-glabel D_8085C394
-/* 02E904 8085C394 */ .word 0x09091500
-/* 02E908 8085C398 */ .word 0x08030000
-/* 02E90C 8085C39C */ .word 0x02000000
-/* 02E910 8085C3A0 */ .word 0x00100000
-/* 02E914 8085C3A4 */ .word 0x00000000
-/* 02E918 8085C3A8 */ .word 0xD7CFFFFF
-/* 02E91C 8085C3AC */ .word 0x00000000
-/* 02E920 8085C3B0 */ .word 0x01010000
-/* 02E924 8085C3B4 */ .word 0x00000000
-/* 02E928 8085C3B8 */ .word 0x00000000
-/* 02E92C 8085C3BC */ .word 0x00000000
-/* 02E930 8085C3C0 */ .word 0x00000000
-/* 02E934 8085C3C4 */ .word 0x00000000
-/* 02E938 8085C3C8 */ .word 0x00000000
-/* 02E93C 8085C3CC */ .word 0x00000000
-/* 02E940 8085C3D0 */ .word 0x00000000
-/* 02E944 8085C3D4 */ .word 0x00000000
-/* 02E948 8085C3D8 */ .word 0x00000000
-/* 02E94C 8085C3DC */ .word 0x00000000
-/* 02E950 8085C3E0 */ .word 0x00000000
+f32 D_8085C3E4 = 1.0f;
+f32 D_8085C3E8 = 1.0f;
 
-glabel D_8085C3E4
-/* 02E954 8085C3E4 3F800000 */ .float 1.0
+u16 D_8085C3EC[] = { NA_SE_VO_LI_SWEAT, NA_SE_VO_LI_SNEEZE, NA_SE_VO_LI_RELAX, NA_SE_VO_LI_FALL_L };
 
-glabel D_8085C3E8
-/* 02E958 8085C3E8 3F800000 */ .float 1.0
+GetItemEntry sGetItemTable[0xB9] = {
+    { 0x84, 0, 0xB0, -0x3C, 1, 0x3F },
+    { 0x85, 1, 0xAF, 2, 1, 0x3F },
+    { 0x86, 2, 0xAE, 3, 1, 0x3F },
+    { 0x87, 2, 0xAE, 4, 1, 0x3F },
+    { 0x88, 0x14, 0xAC, 5, 1, 0x3F },
+    { 0x89, 0x14, 0xAB, 6, 1, 0x3F },
+    { 0x8A, 0x13, 0xBD, 7, 1, 0x3F },
+    { 0x5A, 0xA0, 0x21, 8, 0, 0xA8 },
+    { 0x5B, 0xA0, 0x22, 9, 0, 0xA8 },
+    { 0x83, 0x80, 9, 0xA, 0, 0x90 },
+    { 0x83, 0xA0, 9, 0xB, 0, 0x90 },
+    { 0x7B, 0xA0, 0x14, 0xC, 0, 0x96 },
+    { 0x6F, 0xA0, 0x13, 0xD, 0, 0x96 },
+    { 0x79, 0x6F, -0x1D, 0xE, 0, 0xA4 },
+    { 0x7A, 0x6E, -0x1E, 0xF, 0, 0xA4 },
+    { 0x83, 0x80, 9, 0x10, 0, 0x90 },
+    { -1, 0, 0, 0x11, 0, 0 },
+    { 0x83, 0x80, 9, 0x12, 0, 0x90 },
+    { 0x83, 0x80, 9, 0x13, 0, 0x90 },
+    { 6, 0x59, -0x1F, 0x14, 0, 0xA5 },
+    { 0x8F, 0x59, -0x1F, 0x15, 0, 0xA5 },
+    { 0x90, 0x59, -0x1F, 0x16, 0, 0xA5 },
+    { 0x91, 0x59, -0x1F, 0x17, 0, 0xA5 },
+    { 0x92, 0x59, -0x1F, 0x18, 0, 0xA5 },
+    { 8, 0xD, -0x1B, 0x19, 0, 0x9F },
+    { 0x98, 0xC0, -0x27, 0x1A, 0, 0xB0 },
+    { 0x56, 0xA0, 0x18, 0x1B, 0, 0x98 },
+    { 0x57, 0xA0, 0x19, 0x1C, 0, 0x98 },
+    { 0x58, 0xA0, 0x1A, 0x1D, 0, 0x98 },
+    { 0x93, 0x48, -0x24, 0x1E, 0, 0xAF },
+    { 0x94, 0x49, -0x25, 0x1F, 0, 0xAF },
+    { 0x95, 0x4A, -0x26, 0x20, 0, 0xAF },
+    { 0x95, 0x4A, -0x26, 0x21, 0, 0xAF },
+    { 1, 0xA0, 0x2F, 0x22, 0, 0xBF },
+    { 0x54, 0xA0, 0x16, 0x23, 0, 0x97 },
+    { 0x55, 0xA0, 0x17, 0x24, 0, 0x97 },
+    { 2, 0xA0, 0x48, 0x25, 1, 0x21 },
+    { 3, 0xA0, 0x49, 0x26, 1, 0x21 },
+    { 4, 0xA0, 0x4A, 0x27, 1, 0x21 },
+    { 9, 0xC, -0x12, 0x28, 0, 0x94 },
+    { 0x8D, 0xC, -0x12, 0x29, 0, 0x94 },
+    { 0x8E, 0xC, -0x12, 0x2A, 0, 0x94 },
+    { 0x9D, 0xA0, -0x12, 0x2B, 0, 0x94 },
+    { 0x9D, 0xA0, -0x12, 0x2C, 0, 0x94 },
+    { 0x9E, 0xA0, -0x12, 0x2D, 0, 0x94 },
+    { 0x97, 0xC0, -0x27, 0x2E, 0, 0xB0 },
+    { 0x9B, 0xA0, -0x1B, 0x2F, 0, 0x9F },
+    { 0x9B, 0xA0, -0x1B, 0x30, 0, 0x9F },
+    { 0x9C, 0xA0, -0x1B, 0x31, 0, 0x9F },
+    { 0x51, 0xA0, -0x28, 0x32, 0, 0xB3 },
+    { 0x52, 0xA0, 0x34, 0x33, 0, -0x3D },
+    { 0xC, 0x80, 0x5E, 0x34, 1, -0x36 },
+    { 0xA, 0x80, -0x35, 0x35, 0, -0x3A },
+    { 0x99, 0xC0, -0x27, 0x36, 0, 0xB0 },
+    { 0x4D, 0xA0, 0x56, 0x37, 1, 0x48 },
+    { 0x4E, 0xA0, 0x67, 0x38, 1, -7 },
+    { 0x4F, 0xA0, 0x68, 0x39, 1, -6 },
+    { 0x9A, 0xC0, -0x27, 0x3A, 0, 0xB0 },
+    { 0x10, 0xA0, 0x69, 0x3B, 1, -5 },
+    { 0x78, 0xA0, -2, 0x3C, 0, 0x86 },
+    { 0x74, 0xA0, 0xA, 0x3D, 0, 0x92 },
+    { 0x76, 0xA0, 0x1C, 0x3E, 0, 0xA0 },
+    { 0x75, 0xA0, 0xB, 0x3F, 0, 0x91 },
+    { -1, 0, 0, 0x40, 0, 0 },
+    { 0xF, 0xA0, 0x29, 0x41, 0, 0xB4 },
+    { 0xE, 0xA0, 0x30, 0x42, 0, 0xC0 },
+    { 0xD, 0xA0, 0x75, 0x43, 2, 0x28 },
+    { 0xD, 0, 0, 0x44, 0, 0 },
+    { 0x83, 0x80, 9, 0x45, 0, 0x90 },
+    { -1, 0, 0, 0x46, 0, 0 },
+    { -1, 0, 0, 0x47, 0, 0 },
+    { -1, 0, 0, 0x48, 0, 0 },
+    { -1, 0, 0, 0x49, 0, 0 },
+    { -1, 0, 0, 0x4A, 0, 0 },
+    { -1, 0, 0, 0x4B, 0, 0 },
+    { 0, 0xA0, 0x2B, 0x4C, 0, 0xB5 },
+    { -1, 0, 0, 0x4D, 0, 0 },
+    { -1, 0, 0, 0x4E, 0, 0 },
+    { -1, 0, 0, 0x4F, 0, 0 },
+    { 0x6D, 0x80, 0xC, 0x50, 2, 0x53 },
+    { -1, 0xA0, 0x20, 0x51, 0, 0xA0 },
+    { 0x6E, 0x80, 0xB5, 0x52, 1, 0x25 },
+    { -1, 0, 0, 0x53, 0, 0 },
+    { -1, 0, 0, 0x54, 0, 0 },
+    { 0x5D, 0x80, 0x5D, 0x55, 0, 0 },
+    { 0x5E, 0x80, 0x64, 0x56, 0, 0 },
+    { 0x5F, 0x80, 0x65, 0x57, 0, 0 },
+    { 0x60, 0x80, 0x66, 0x58, 0, 0 },
+    { 0x11, 0x80, 0x58, 0x59, 1, 0x96 },
+    { 0x12, 0x80, 1, 0x5A, 0, 0x9E },
+    { 0x13, 0x80, 0x32, 0x5B, 0, -0x3F },
+    { 0x14, 0x80, 0x31, 0x5C, 0, -0x3F },
+    { 0x15, 0x80, 0x33, 0x5D, 0, -0x3F },
+    { 0x16, 0x80, 0x3C, 0x5E, 2, 0x72 },
+    { 0x16, 0x80, 1, 0x5F, 0, 0x9E },
+    { 0x18, 0x80, 0x2C, 0x60, 0, 0xB6 },
+    { 0x19, 0x80, 0x2C, 0x61, 0, 0xB6 },
+    { 0x1A, 0x80, 0x36, 0x62, 0, -0x39 },
+    { 0x1B, 0x80, 0x4C, 0x63, 1, 0x37 },
+    { 0x1C, 0, 0, 0x64, 0, 0 },
+    { 0x12, 0x80, 1, 0x65, 0, 0x9E },
+    { 0x1E, 0x80, 0x53, 0x66, 1, 0x39 },
+    { 0x1F, 0, 0, 0x67, 0, 0 },
+    { 0x20, 0, 0, 0x68, 0, 0 },
+    { 0x21, 0x80, 0x59, 0x69, 1, 0xAE },
+    { 0x22, 0x80, 0x60, 0x6A, 1, -0x17 },
+    { 0x23, 0x80, 0x70, 0x6B, 2, 0x1D },
+    { -1, 0, 0, 0x6C, 0, 0 },
+    { 0x12, 0x80, 1, 0x6D, 0, 0x9E },
+    { 0x24, 0x80, 0x60, 0x6E, 1, -0x17 },
+    { 0x25, 0x80, 0x74, 0x6F, 2, 0x27 },
+    { 0x12, 0x80, 1, 0x70, 0, 0x9E },
+    { -1, 0, 0, 0x71, 0, 0 },
+    { -1, 0, 0, 0x72, 0, 0 },
+    { -1, 0, 0, 0x73, 0, 0 },
+    { -1, 0, 0, 0x74, 0, 0 },
+    { -1, 0, 0, 0x75, 0, 0 },
+    { -1, 0, 0, 0x76, 0, 0 },
+    { -1, 0, 0, 0x77, 0, 0 },
+    { 0x32, 0xA0, 0x5C, 0x78, 1, 0xBD },
+    { 0x33, 0xA0, 0x45, 0x79, 1, 0x19 },
+    { 0x34, 0xA0, 0x46, 0x7A, 1, 0x1A },
+    { 0x35, 0xA0, 0x76, 0x7B, 2, 0x42 },
+    { 0x44, 0xA0, 0x3E, 0x7C, 1, 2 },
+    { 0x49, 0xA0, 0x73, 0x7D, 2, 0x26 },
+    { 0x38, 0xA0, 0x11, 0x7E, 2, 0x65 },
+    { 0x39, 0xA0, 0x3F, 0x7F, 1, 3 },
+    { 0x3A, 0xA0, 0x2D, 0x80, 1, 0 },
+    { 0x3B, 0xA0, 0x6A, 0x81, 2, 9 },
+    { 0x3C, 0xA0, 0x71, 0x82, 2, 0x1F },
+    { 0x3D, 0xA0, 0xF, 0x83, 2, 0x59 },
+    { 0x3E, 0xA0, 0x72, 0x84, 2, 0x25 },
+    { 0x3F, 0xA0, 4, 0x85, 2, 0x82 },
+    { 0x40, 0xA0, 0x6B, 0x86, 2, 0xA },
+    { 0x41, 0xA0, 0x6C, 0x87, 2, 0xB },
+    { 0x42, 0xA0, 0x23, 0x88, 2, 0x66 },
+    { 0x43, 0xA0, 3, 0x89, 2, 0x7D },
+    { 0x36, 0xA0, 0x40, 0x8A, 1, 4 },
+    { 0x45, 0xA0, 0xD, 0x8B, 2, 0x54 },
+    { 0x46, 0xA0, 0x10, 0x8C, 2, 0x5A },
+    { 0x47, 0xA0, 0x3B, 0x8D, 2, 0x6D },
+    { 0x48, 0xA0, 0x3D, 0x8E, 2, 0x7E },
+    { 0x37, 0xA0, 0xE, 0x8F, 2, 0x58 },
+    { -1, 0, 0, 0x90, 0, 0 },
+    { 0x9F, 0x80, 0x74, 0x91, 2, 0x27 },
+    { 0xA0, 0x80, 0x2C, 0x92, 0, 0xB6 },
+    { 0xA1, 0x80, 0x5F, 0x93, 1, -0x18 },
+    { 0xA2, 0x80, 0x62, 0x94, 1, -0x11 },
+    { 0xA3, 0x80, 0x63, 0x95, 1, -0x10 },
+    { 0x28, 0x80, 0x5A, 0x96, 1, 0xB1 },
+    { 0x29, 0x80, 0x5B, 0x97, 1, 0xB2 },
+    { 0x2A, 0x80, 0x41, 0x98, 1, 0xB2 },
+    { 0x2B, 0x80, 0x42, 0x99, 1, 0xB2 },
+    { 0x2C, 0x80, 0x44, 0x9A, 1, 0xB2 },
+    { 0x10, 0xA0, 0x69, 0x9B, 1, -5 },
+    { 0x4D, 0xA0, 0x56, 0x9C, 1, 0x48 },
+    { 0x4E, 0xA0, 0x67, 0x9D, 1, -7 },
+    { 0x4F, 0xA0, 0x68, 0x9E, 1, -6 },
+    { 0x51, 0xA0, -0x28, 0x9F, 0, 0xB3 },
+    { 0x2D, 0x80, 0x6D, 0xA0, 2, 0xF },
+    { 0x2E, 0x80, 0x37, 0xA1, 2, 0x45 },
+    { -1, 0, 0, 0xA2, 0, 0 },
+    { -1, 0, 0, 0xA3, 0, 0 },
+    { -1, 0x80, 0x2D, 0xA4, 1, 0 },
+    { -1, 0, 0, 0xA5, 0, 0 },
+    { -1, 0, 0, 0xA6, 0, 0 },
+    { -1, 0, 0, 0xA7, 0, 0 },
+    { -1, 0, 0, 0xA8, 0, 0 },
+    { 0x12, 0x80, 1, 0xA9, 0, 0x9E },
+    { 0x2F, 0x80, 0x6E, 0xAA, 2, 0x10 },
+    { 0x30, 0x80, 0x6F, 0xAB, 2, 0x15 },
+    { -1, 0, 0, 0xAC, 0, 0 },
+    { -1, 0, 0, 0xAD, 0, 0 },
+    { -1, 0, 0, 0xAE, 0, 0 },
+    { -1, 0, 0, 0xAF, 0, 0 },
+    { -1, 0, 0, 0xB0, 0, 0 },
+    { -1, 0, 0, 0xB1, 0, 0 },
+    { -1, 0, 0, 0xB2, 0, 0 },
+    { -1, 0x80, 0x3A, 0xB3, 2, 0x6B },
+    { 0x31, 0xA0, 0x2E, 0xB4, 2, 0x4D },
+    { 0x31, 0xA0, 0x2E, 0xB5, 2, 0x4D },
+    { 0x31, 0xA0, 0x2E, 0xB6, 2, 0x4D },
+    { 0x31, 0xA0, 0x2E, 0xB7, 2, 0x4D },
+    { 0x31, 0xA0, 0x2E, 0xB8, 2, 0x4D },
+    { 0x31, 0xA0, 0x2E, 0xB9, 2, 0x4D },
+};
 
-glabel D_8085C3EC
-/* 02E95C 8085C3EC */ .word 0x680F680E
-/* 02E960 8085C3F0 */ .word 0x68116808
+LinkAnimationHeader* D_8085C84C[] = {
+    (LinkAnimationHeader* )0x0400DF30,
+    (LinkAnimationHeader* )0x0400DEE8,
+    (LinkAnimationHeader* )0x0400DF40,
+    (LinkAnimationHeader* )0x0400DEF8,
+    (LinkAnimationHeader* )0x0400DF38,
+    (LinkAnimationHeader* )0x0400DEF0,
+    (LinkAnimationHeader* )0x0400DF38,
+    (LinkAnimationHeader* )0x0400DEF0,
+    (LinkAnimationHeader* )0x0400E100,
+    (LinkAnimationHeader* )0x0400E0C0,
+    (LinkAnimationHeader* )0x0400E100,
+    (LinkAnimationHeader* )0x0400E0C0,
+    (LinkAnimationHeader* )0x0400E100,
+    (LinkAnimationHeader* )0x0400E0C0,
+    (LinkAnimationHeader* )0x0400E0C8,
+    (LinkAnimationHeader* )0x0400E0A0,
+    (LinkAnimationHeader* )0x0400E0D0,
+    (LinkAnimationHeader* )0x0400E0A8,
+    (LinkAnimationHeader* )0x0400E0F0,
+    (LinkAnimationHeader* )0x0400E0F0,
+    (LinkAnimationHeader* )0x0400E0D8,
+    (LinkAnimationHeader* )0x0400E0B0,
+    (LinkAnimationHeader* )0x0400E0E0,
+    (LinkAnimationHeader* )0x0400E0B8,
+    (LinkAnimationHeader* )0x0400E0E8,
+    (LinkAnimationHeader* )0x0400E0E8,
+    (LinkAnimationHeader* )0x0400E0F8,
+    (LinkAnimationHeader* )0x0400E0F8,
+    (LinkAnimationHeader* )0x0400D0B0,
+    (LinkAnimationHeader* )0x0400D0B0,
+};
 
-glabel sGetItemTable
-/* 02E964 8085C3F4 */ .word 0x8400B0C4
-/* 02E968 8085C3F8 */ .word 0x013F8501
-/* 02E96C 8085C3FC */ .word 0xAF02013F
-/* 02E970 8085C400 */ .word 0x8602AE03
-/* 02E974 8085C404 */ .word 0x013F8702
-/* 02E978 8085C408 */ .word 0xAE04013F
-/* 02E97C 8085C40C */ .word 0x8814AC05
-/* 02E980 8085C410 */ .word 0x013F8914
-/* 02E984 8085C414 */ .word 0xAB06013F
-/* 02E988 8085C418 */ .word 0x8A13BD07
-/* 02E98C 8085C41C */ .word 0x013F5AA0
-/* 02E990 8085C420 */ .word 0x210800A8
-/* 02E994 8085C424 */ .word 0x5BA02209
-/* 02E998 8085C428 */ .word 0x00A88380
-/* 02E99C 8085C42C */ .word 0x090A0090
-/* 02E9A0 8085C430 */ .word 0x83A0090B
-/* 02E9A4 8085C434 */ .word 0x00907BA0
-/* 02E9A8 8085C438 */ .word 0x140C0096
-/* 02E9AC 8085C43C */ .word 0x6FA0130D
-/* 02E9B0 8085C440 */ .word 0x0096796F
-/* 02E9B4 8085C444 */ .word 0xE30E00A4
-/* 02E9B8 8085C448 */ .word 0x7A6EE20F
-/* 02E9BC 8085C44C */ .word 0x00A48380
-/* 02E9C0 8085C450 */ .word 0x09100090
-/* 02E9C4 8085C454 */ .word 0xFF000011
-/* 02E9C8 8085C458 */ .word 0x00008380
-/* 02E9CC 8085C45C */ .word 0x09120090
-/* 02E9D0 8085C460 */ .word 0x83800913
-/* 02E9D4 8085C464 */ .word 0x00900659
-/* 02E9D8 8085C468 */ .word 0xE11400A5
-/* 02E9DC 8085C46C */ .word 0x8F59E115
-/* 02E9E0 8085C470 */ .word 0x00A59059
-/* 02E9E4 8085C474 */ .word 0xE11600A5
-/* 02E9E8 8085C478 */ .word 0x9159E117
-/* 02E9EC 8085C47C */ .word 0x00A59259
-/* 02E9F0 8085C480 */ .word 0xE11800A5
-/* 02E9F4 8085C484 */ .word 0x080DE519
-/* 02E9F8 8085C488 */ .word 0x009F98C0
-/* 02E9FC 8085C48C */ .word 0xD91A00B0
-/* 02EA00 8085C490 */ .word 0x56A0181B
-/* 02EA04 8085C494 */ .word 0x009857A0
-/* 02EA08 8085C498 */ .word 0x191C0098
-/* 02EA0C 8085C49C */ .word 0x58A01A1D
-/* 02EA10 8085C4A0 */ .word 0x00989348
-/* 02EA14 8085C4A4 */ .word 0xDC1E00AF
-/* 02EA18 8085C4A8 */ .word 0x9449DB1F
-/* 02EA1C 8085C4AC */ .word 0x00AF954A
-/* 02EA20 8085C4B0 */ .word 0xDA2000AF
-/* 02EA24 8085C4B4 */ .word 0x954ADA21
-/* 02EA28 8085C4B8 */ .word 0x00AF01A0
-/* 02EA2C 8085C4BC */ .word 0x2F2200BF
-/* 02EA30 8085C4C0 */ .word 0x54A01623
-/* 02EA34 8085C4C4 */ .word 0x009755A0
-/* 02EA38 8085C4C8 */ .word 0x17240097
-/* 02EA3C 8085C4CC */ .word 0x02A04825
-/* 02EA40 8085C4D0 */ .word 0x012103A0
-/* 02EA44 8085C4D4 */ .word 0x49260121
-/* 02EA48 8085C4D8 */ .word 0x04A04A27
-/* 02EA4C 8085C4DC */ .word 0x0121090C
-/* 02EA50 8085C4E0 */ .word 0xEE280094
-/* 02EA54 8085C4E4 */ .word 0x8D0CEE29
-/* 02EA58 8085C4E8 */ .word 0x00948E0C
-/* 02EA5C 8085C4EC */ .word 0xEE2A0094
-/* 02EA60 8085C4F0 */ .word 0x9DA0EE2B
-/* 02EA64 8085C4F4 */ .word 0x00949DA0
-/* 02EA68 8085C4F8 */ .word 0xEE2C0094
-/* 02EA6C 8085C4FC */ .word 0x9EA0EE2D
-/* 02EA70 8085C500 */ .word 0x009497C0
-/* 02EA74 8085C504 */ .word 0xD92E00B0
-/* 02EA78 8085C508 */ .word 0x9BA0E52F
-/* 02EA7C 8085C50C */ .word 0x009F9BA0
-/* 02EA80 8085C510 */ .word 0xE530009F
-/* 02EA84 8085C514 */ .word 0x9CA0E531
-/* 02EA88 8085C518 */ .word 0x009F51A0
-/* 02EA8C 8085C51C */ .word 0xD83200B3
-/* 02EA90 8085C520 */ .word 0x52A03433
-/* 02EA94 8085C524 */ .word 0x00C30C80
-/* 02EA98 8085C528 */ .word 0x5E3401CA
-/* 02EA9C 8085C52C */ .word 0x0A80CB35
-/* 02EAA0 8085C530 */ .word 0x00C699C0
-/* 02EAA4 8085C534 */ .word 0xD93600B0
-/* 02EAA8 8085C538 */ .word 0x4DA05637
-/* 02EAAC 8085C53C */ .word 0x01484EA0
-/* 02EAB0 8085C540 */ .word 0x673801F9
-/* 02EAB4 8085C544 */ .word 0x4FA06839
-/* 02EAB8 8085C548 */ .word 0x01FA9AC0
-/* 02EABC 8085C54C */ .word 0xD93A00B0
-/* 02EAC0 8085C550 */ .word 0x10A0693B
-/* 02EAC4 8085C554 */ .word 0x01FB78A0
-/* 02EAC8 8085C558 */ .word 0xFE3C0086
-/* 02EACC 8085C55C */ .word 0x74A00A3D
-/* 02EAD0 8085C560 */ .word 0x009276A0
-/* 02EAD4 8085C564 */ .word 0x1C3E00A0
-/* 02EAD8 8085C568 */ .word 0x75A00B3F
-/* 02EADC 8085C56C */ .word 0x0091FF00
-/* 02EAE0 8085C570 */ .word 0x00400000
-/* 02EAE4 8085C574 */ .word 0x0FA02941
-/* 02EAE8 8085C578 */ .word 0x00B40EA0
-/* 02EAEC 8085C57C */ .word 0x304200C0
-/* 02EAF0 8085C580 */ .word 0x0DA07543
-/* 02EAF4 8085C584 */ .word 0x02280D00
-/* 02EAF8 8085C588 */ .word 0x00440000
-/* 02EAFC 8085C58C */ .word 0x83800945
-/* 02EB00 8085C590 */ .word 0x0090FF00
-/* 02EB04 8085C594 */ .word 0x00460000
-/* 02EB08 8085C598 */ .word 0xFF000047
-/* 02EB0C 8085C59C */ .word 0x0000FF00
-/* 02EB10 8085C5A0 */ .word 0x00480000
-/* 02EB14 8085C5A4 */ .word 0xFF000049
-/* 02EB18 8085C5A8 */ .word 0x0000FF00
-/* 02EB1C 8085C5AC */ .word 0x004A0000
-/* 02EB20 8085C5B0 */ .word 0xFF00004B
-/* 02EB24 8085C5B4 */ .word 0x000000A0
-/* 02EB28 8085C5B8 */ .word 0x2B4C00B5
-/* 02EB2C 8085C5BC */ .word 0xFF00004D
-/* 02EB30 8085C5C0 */ .word 0x0000FF00
-/* 02EB34 8085C5C4 */ .word 0x004E0000
-/* 02EB38 8085C5C8 */ .word 0xFF00004F
-/* 02EB3C 8085C5CC */ .word 0x00006D80
-/* 02EB40 8085C5D0 */ .word 0x0C500253
-/* 02EB44 8085C5D4 */ .word 0xFFA02051
-/* 02EB48 8085C5D8 */ .word 0x00A06E80
-/* 02EB4C 8085C5DC */ .word 0xB5520125
-/* 02EB50 8085C5E0 */ .word 0xFF000053
-/* 02EB54 8085C5E4 */ .word 0x0000FF00
-/* 02EB58 8085C5E8 */ .word 0x00540000
-/* 02EB5C 8085C5EC */ .word 0x5D805D55
-/* 02EB60 8085C5F0 */ .word 0x00005E80
-/* 02EB64 8085C5F4 */ .word 0x64560000
-/* 02EB68 8085C5F8 */ .word 0x5F806557
-/* 02EB6C 8085C5FC */ .word 0x00006080
-/* 02EB70 8085C600 */ .word 0x66580000
-/* 02EB74 8085C604 */ .word 0x11805859
-/* 02EB78 8085C608 */ .word 0x01961280
-/* 02EB7C 8085C60C */ .word 0x015A009E
-/* 02EB80 8085C610 */ .word 0x1380325B
-/* 02EB84 8085C614 */ .word 0x00C11480
-/* 02EB88 8085C618 */ .word 0x315C00C1
-/* 02EB8C 8085C61C */ .word 0x1580335D
-/* 02EB90 8085C620 */ .word 0x00C11680
-/* 02EB94 8085C624 */ .word 0x3C5E0272
-/* 02EB98 8085C628 */ .word 0x1680015F
-/* 02EB9C 8085C62C */ .word 0x009E1880
-/* 02EBA0 8085C630 */ .word 0x2C6000B6
-/* 02EBA4 8085C634 */ .word 0x19802C61
-/* 02EBA8 8085C638 */ .word 0x00B61A80
-/* 02EBAC 8085C63C */ .word 0x366200C7
-/* 02EBB0 8085C640 */ .word 0x1B804C63
-/* 02EBB4 8085C644 */ .word 0x01371C00
-/* 02EBB8 8085C648 */ .word 0x00640000
-/* 02EBBC 8085C64C */ .word 0x12800165
-/* 02EBC0 8085C650 */ .word 0x009E1E80
-/* 02EBC4 8085C654 */ .word 0x53660139
-/* 02EBC8 8085C658 */ .word 0x1F000067
-/* 02EBCC 8085C65C */ .word 0x00002000
-/* 02EBD0 8085C660 */ .word 0x00680000
-/* 02EBD4 8085C664 */ .word 0x21805969
-/* 02EBD8 8085C668 */ .word 0x01AE2280
-/* 02EBDC 8085C66C */ .word 0x606A01E9
-/* 02EBE0 8085C670 */ .word 0x2380706B
-/* 02EBE4 8085C674 */ .word 0x021DFF00
-/* 02EBE8 8085C678 */ .word 0x006C0000
-/* 02EBEC 8085C67C */ .word 0x1280016D
-/* 02EBF0 8085C680 */ .word 0x009E2480
-/* 02EBF4 8085C684 */ .word 0x606E01E9
-/* 02EBF8 8085C688 */ .word 0x2580746F
-/* 02EBFC 8085C68C */ .word 0x02271280
-/* 02EC00 8085C690 */ .word 0x0170009E
-/* 02EC04 8085C694 */ .word 0xFF000071
-/* 02EC08 8085C698 */ .word 0x0000FF00
-/* 02EC0C 8085C69C */ .word 0x00720000
-/* 02EC10 8085C6A0 */ .word 0xFF000073
-/* 02EC14 8085C6A4 */ .word 0x0000FF00
-/* 02EC18 8085C6A8 */ .word 0x00740000
-/* 02EC1C 8085C6AC */ .word 0xFF000075
-/* 02EC20 8085C6B0 */ .word 0x0000FF00
-/* 02EC24 8085C6B4 */ .word 0x00760000
-/* 02EC28 8085C6B8 */ .word 0xFF000077
-/* 02EC2C 8085C6BC */ .word 0x000032A0
-/* 02EC30 8085C6C0 */ .word 0x5C7801BD
-/* 02EC34 8085C6C4 */ .word 0x33A04579
-/* 02EC38 8085C6C8 */ .word 0x011934A0
-/* 02EC3C 8085C6CC */ .word 0x467A011A
-/* 02EC40 8085C6D0 */ .word 0x35A0767B
-/* 02EC44 8085C6D4 */ .word 0x024244A0
-/* 02EC48 8085C6D8 */ .word 0x3E7C0102
-/* 02EC4C 8085C6DC */ .word 0x49A0737D
-/* 02EC50 8085C6E0 */ .word 0x022638A0
-/* 02EC54 8085C6E4 */ .word 0x117E0265
-/* 02EC58 8085C6E8 */ .word 0x39A03F7F
-/* 02EC5C 8085C6EC */ .word 0x01033AA0
-/* 02EC60 8085C6F0 */ .word 0x2D800100
-/* 02EC64 8085C6F4 */ .word 0x3BA06A81
-/* 02EC68 8085C6F8 */ .word 0x02093CA0
-/* 02EC6C 8085C6FC */ .word 0x7182021F
-/* 02EC70 8085C700 */ .word 0x3DA00F83
-/* 02EC74 8085C704 */ .word 0x02593EA0
-/* 02EC78 8085C708 */ .word 0x72840225
-/* 02EC7C 8085C70C */ .word 0x3FA00485
-/* 02EC80 8085C710 */ .word 0x028240A0
-/* 02EC84 8085C714 */ .word 0x6B86020A
-/* 02EC88 8085C718 */ .word 0x41A06C87
-/* 02EC8C 8085C71C */ .word 0x020B42A0
-/* 02EC90 8085C720 */ .word 0x23880266
-/* 02EC94 8085C724 */ .word 0x43A00389
-/* 02EC98 8085C728 */ .word 0x027D36A0
-/* 02EC9C 8085C72C */ .word 0x408A0104
-/* 02ECA0 8085C730 */ .word 0x45A00D8B
-/* 02ECA4 8085C734 */ .word 0x025446A0
-/* 02ECA8 8085C738 */ .word 0x108C025A
-/* 02ECAC 8085C73C */ .word 0x47A03B8D
-/* 02ECB0 8085C740 */ .word 0x026D48A0
-/* 02ECB4 8085C744 */ .word 0x3D8E027E
-/* 02ECB8 8085C748 */ .word 0x37A00E8F
-/* 02ECBC 8085C74C */ .word 0x0258FF00
-/* 02ECC0 8085C750 */ .word 0x00900000
-/* 02ECC4 8085C754 */ .word 0x9F807491
-/* 02ECC8 8085C758 */ .word 0x0227A080
-/* 02ECCC 8085C75C */ .word 0x2C9200B6
-/* 02ECD0 8085C760 */ .word 0xA1805F93
-/* 02ECD4 8085C764 */ .word 0x01E8A280
-/* 02ECD8 8085C768 */ .word 0x629401EF
-/* 02ECDC 8085C76C */ .word 0xA3806395
-/* 02ECE0 8085C770 */ .word 0x01F02880
-/* 02ECE4 8085C774 */ .word 0x5A9601B1
-/* 02ECE8 8085C778 */ .word 0x29805B97
-/* 02ECEC 8085C77C */ .word 0x01B22A80
-/* 02ECF0 8085C780 */ .word 0x419801B2
-/* 02ECF4 8085C784 */ .word 0x2B804299
-/* 02ECF8 8085C788 */ .word 0x01B22C80
-/* 02ECFC 8085C78C */ .word 0x449A01B2
-/* 02ED00 8085C790 */ .word 0x10A0699B
-/* 02ED04 8085C794 */ .word 0x01FB4DA0
-/* 02ED08 8085C798 */ .word 0x569C0148
-/* 02ED0C 8085C79C */ .word 0x4EA0679D
-/* 02ED10 8085C7A0 */ .word 0x01F94FA0
-/* 02ED14 8085C7A4 */ .word 0x689E01FA
-/* 02ED18 8085C7A8 */ .word 0x51A0D89F
-/* 02ED1C 8085C7AC */ .word 0x00B32D80
-/* 02ED20 8085C7B0 */ .word 0x6DA0020F
-/* 02ED24 8085C7B4 */ .word 0x2E8037A1
-/* 02ED28 8085C7B8 */ .word 0x0245FF00
-/* 02ED2C 8085C7BC */ .word 0x00A20000
-/* 02ED30 8085C7C0 */ .word 0xFF0000A3
-/* 02ED34 8085C7C4 */ .word 0x0000FF80
-/* 02ED38 8085C7C8 */ .word 0x2DA40100
-/* 02ED3C 8085C7CC */ .word 0xFF0000A5
-/* 02ED40 8085C7D0 */ .word 0x0000FF00
-/* 02ED44 8085C7D4 */ .word 0x00A60000
-/* 02ED48 8085C7D8 */ .word 0xFF0000A7
-/* 02ED4C 8085C7DC */ .word 0x0000FF00
-/* 02ED50 8085C7E0 */ .word 0x00A80000
-/* 02ED54 8085C7E4 */ .word 0x128001A9
-/* 02ED58 8085C7E8 */ .word 0x009E2F80
-/* 02ED5C 8085C7EC */ .word 0x6EAA0210
-/* 02ED60 8085C7F0 */ .word 0x30806FAB
-/* 02ED64 8085C7F4 */ .word 0x0215FF00
-/* 02ED68 8085C7F8 */ .word 0x00AC0000
-/* 02ED6C 8085C7FC */ .word 0xFF0000AD
-/* 02ED70 8085C800 */ .word 0x0000FF00
-/* 02ED74 8085C804 */ .word 0x00AE0000
-/* 02ED78 8085C808 */ .word 0xFF0000AF
-/* 02ED7C 8085C80C */ .word 0x0000FF00
-/* 02ED80 8085C810 */ .word 0x00B00000
-/* 02ED84 8085C814 */ .word 0xFF0000B1
-/* 02ED88 8085C818 */ .word 0x0000FF00
-/* 02ED8C 8085C81C */ .word 0x00B20000
-/* 02ED90 8085C820 */ .word 0xFF803AB3
-/* 02ED94 8085C824 */ .word 0x026B31A0
-/* 02ED98 8085C828 */ .word 0x2EB4024D
-/* 02ED9C 8085C82C */ .word 0x31A02EB5
-/* 02EDA0 8085C830 */ .word 0x024D31A0
-/* 02EDA4 8085C834 */ .word 0x2EB6024D
-/* 02EDA8 8085C838 */ .word 0x31A02EB7
-/* 02EDAC 8085C83C */ .word 0x024D31A0
-/* 02EDB0 8085C840 */ .word 0x2EB8024D
-/* 02EDB4 8085C844 */ .word 0x31A02EB9
-/* 02EDB8 8085C848 */ .word 0x024D0000
+struct_8082E224_arg1 D_8085C8C4[] = {{ 0x680E, -0x2008 },};
+struct_8082E224_arg1 D_8085C8C8[] = {{ 0x680F, -0x2012 },};
+struct_8082E224_arg1 D_8085C8CC[] = {{ 0x6809, -0x200D },};
+struct_8082E224_arg1 D_8085C8D0[] = {{ 0x6809, -0x200A },};
 
-glabel D_8085C84C
-/* 02EDBC 8085C84C */ .word 0x0400DF30
-/* 02EDC0 8085C850 */ .word 0x0400DEE8
-/* 02EDC4 8085C854 */ .word 0x0400DF40
-/* 02EDC8 8085C858 */ .word 0x0400DEF8
-/* 02EDCC 8085C85C */ .word 0x0400DF38
-/* 02EDD0 8085C860 */ .word 0x0400DEF0
-/* 02EDD4 8085C864 */ .word 0x0400DF38
-/* 02EDD8 8085C868 */ .word 0x0400DEF0
-/* 02EDDC 8085C86C */ .word 0x0400E100
-/* 02EDE0 8085C870 */ .word 0x0400E0C0
-/* 02EDE4 8085C874 */ .word 0x0400E100
-/* 02EDE8 8085C878 */ .word 0x0400E0C0
-/* 02EDEC 8085C87C */ .word 0x0400E100
-/* 02EDF0 8085C880 */ .word 0x0400E0C0
-/* 02EDF4 8085C884 */ .word 0x0400E0C8
-/* 02EDF8 8085C888 */ .word 0x0400E0A0
-/* 02EDFC 8085C88C */ .word 0x0400E0D0
-/* 02EE00 8085C890 */ .word 0x0400E0A8
-/* 02EE04 8085C894 */ .word 0x0400E0F0
-/* 02EE08 8085C898 */ .word 0x0400E0F0
-/* 02EE0C 8085C89C */ .word 0x0400E0D8
-/* 02EE10 8085C8A0 */ .word 0x0400E0B0
-/* 02EE14 8085C8A4 */ .word 0x0400E0E0
-/* 02EE18 8085C8A8 */ .word 0x0400E0B8
-/* 02EE1C 8085C8AC */ .word 0x0400E0E8
-/* 02EE20 8085C8B0 */ .word 0x0400E0E8
-/* 02EE24 8085C8B4 */ .word 0x0400E0F8
-/* 02EE28 8085C8B8 */ .word 0x0400E0F8
-/* 02EE2C 8085C8BC */ .word 0x0400D0B0
-/* 02EE30 8085C8C0 */ .word 0x0400D0B0
+struct_8082E224_arg1 D_8085C8D4[] = {
+    { 0x871, 0x82C },
+    { 0x871, 0x830 },
+    { 0x871, 0x834 },
+    { 0x871, 0x838 },
+    { 0x871, -0x83C },
+};
 
-glabel D_8085C8C4
-/* 02EE34 8085C8C4 */ .word 0x680EDFF8
 
-glabel D_8085C8C8
-/* 02EE38 8085C8C8 */ .word 0x680FDFEE
+struct_8082E224_arg1 D_8085C8E8[] = {
+    { 0, 0x4019 },
+    { 0, 0x401E },
+    { 0, 0x402C },
+    { 0, 0x4030 },
+    { 0, 0x4034 },
+    { 0, 0xBFC8 },
+    { 0x181F, 0x810 }, { 0x181F, 0x814 }, { 0x181F, -0x846 }
+};
 
-glabel D_8085C8CC
-/* 02EE3C 8085C8CC */ .word 0x6809DFF3
+struct_8082E224_arg1 D_8085C90C[] = {
+    { 0x1812, 0x80A },
+    { 0x6814, 0x200A },
+    { 0x1801, 0x816 },
+    { 0x6800, -0x2016 },
+};
 
-glabel D_8085C8D0
-/* 02EE40 8085C8D0 */ .word 0x6809DFF6
 
-glabel D_8085C8D4
-/* 02EE44 8085C8D4 */ .word 0x0871082C
-/* 02EE48 8085C8D8 */ .word 0x08710830
-/* 02EE4C 8085C8DC */ .word 0x08710834
-/* 02EE50 8085C8E0 */ .word 0x08710838
-/* 02EE54 8085C8E4 */ .word 0x0871F7C4
+struct_8082E224_arg1 D_8085C91C[] = { { 0x1801, 0x827 }, { 0x6800, -0x2027 } };
+struct_8082E224_arg1 D_8085C924[] = { { 0x6811, -0x2014 } };
 
-glabel D_8085C8E8
-/* 02EE58 8085C8E8 */ .word 0x00004019
-/* 02EE5C 8085C8EC */ .word 0x0000401E
-/* 02EE60 8085C8F0 */ .word 0x0000402C
-/* 02EE64 8085C8F4 */ .word 0x00004030
-/* 02EE68 8085C8F8 */ .word 0x00004034
-/* 02EE6C 8085C8FC */ .word 0x0000BFC8
+struct_8082E224_arg1 D_8085C928[] = {
+    { 0x68E0, 0x804 },
+    { 0x68E0, 0x80C },
+    { 0x68E0, 0x81E },
+    { 0x68E0, 0x83D },
+    { 0x68E0, -0x844 },
+};
 
-glabel D_8085C900
-/* 02EE70 8085C900 */ .word 0x181F0810
-/* 02EE74 8085C904 */ .word 0x181F0814
-/* 02EE78 8085C908 */ .word 0x181FF7BA
+struct_8082E224_arg1* D_8085C93C[0xC] = {
+    D_8085C8C4,
+    D_8085C8C8,
+    D_8085C8CC,
+    D_8085C8D0,
+    D_8085C8D4,
+    D_8085C8E8,
+    D_8085C900,
+    D_8085C90C,
+    D_8085C91C,
+    D_8085C924,
+    D_8085C928,
+    NULL,
+};
 
-glabel D_8085C90C
-/* 02EE7C 8085C90C */ .word 0x1812080A
-/* 02EE80 8085C910 */ .word 0x6814200A
-/* 02EE84 8085C914 */ .word 0x18010816
-/* 02EE88 8085C918 */ .word 0x6800DFEA
+u8 D_8085C96C[0x20] = {
+    0,
+    0,
+    1,
+    1,
+    2,
+    2,
+    2,
+    2,
+    0xA,
+    0xA,
+    0xA,
+    0xA,
+    0xA,
+    0xA,
+    3,
+    3,
+    4,
+    4,
+    8,
+    8,
+    5,
+    5,
+    6,
+    6,
+    7,
+    7,
+    9,
+    9,
+    0xB,
+    0xB,
+    0,
+    0,
+};
 
-glabel D_8085C91C
-/* 02EE8C 8085C91C */ .word 0x18010827
-/* 02EE90 8085C920 */ .word 0x6800DFD9
+struct_8082F02C_arg1 D_8085C98C = { { 0, 0, 0 }, { 0xFF, 0xFF, 0x9B }, { 0x14, 0x14, 0x32 }, 0x3AC, 0x1388 };
 
-glabel D_8085C924
-/* 02EE94 8085C924 */ .word 0x6811DFEC
+s8 D_8085C99C[] = {
+    PLAYER_AP_OCARINA, // ITEM_OCARINA,
+    PLAYER_AP_BOW, // ITEM_BOW,
+    PLAYER_AP_BOW_FIRE, // ITEM_ARROW_FIRE,
+    PLAYER_AP_BOW_ICE, // ITEM_ARROW_ICE,
+    PLAYER_AP_BOW_LIGHT, // ITEM_ARROW_LIGHT,
+    PLAYER_AP_PICTO_BOX, // ITEM_OCARINA_FAIRY,
+    PLAYER_AP_BOMB, // ITEM_BOMB,
+    PLAYER_AP_BOMBCHU, // ITEM_BOMBCHU,
+    PLAYER_AP_STICK, // ITEM_STICK,
+    PLAYER_AP_NUT, // ITEM_NUT,
+    PLAYER_AP_MAGIC_BEANS, // ITEM_MAGIC_BEANS,
+    PLAYER_AP_PICTO_BOX, // ITEM_SLINGSHOT,
+    PLAYER_AP_POWDER_KEG, // ITEM_POWDER_KEG,
+    PLAYER_AP_PICTO_BOX, // ITEM_PICTO_BOX,
+    PLAYER_AP_LENS, // ITEM_LENS,
+    PLAYER_AP_HOOKSHOT, // ITEM_HOOKSHOT,
+    PLAYER_AP_SWORD_GREAT_FAIRY, // ITEM_SWORD_GREAT_FAIRY,
+    PLAYER_AP_PICTO_BOX, // ITEM_LONGSHOT, // OoT Leftover
+    PLAYER_AP_BOTTLE, // ITEM_BOTTLE,
+    PLAYER_AP_BOTTLE_POTION_RED, // ITEM_POTION_RED,
+    PLAYER_AP_BOTTLE_POTION_GREEN, // ITEM_POTION_GREEN,
+    PLAYER_AP_BOTTLE_POTION_BLUE, // ITEM_POTION_BLUE,
+    PLAYER_AP_BOTTLE_FAIRY, // ITEM_FAIRY,
+    PLAYER_AP_BOTTLE_DEKU_PRINCESS, // ITEM_DEKU_PRINCESS,
+    PLAYER_AP_BOTTLE_MILK, // ITEM_MILK_BOTTLE,
+    PLAYER_AP_BOTTLE_MILK_HALF, // ITEM_MILK_HALF,
+    PLAYER_AP_BOTTLE_FISH, // ITEM_FISH,
+    PLAYER_AP_BOTTLE_BUG, // ITEM_BUG,
+    PLAYER_AP_BOTTLE_BUG, // ITEM_BLUE_FIRE, // !
+    PLAYER_AP_BOTTLE_POE, // ITEM_POE,
+    PLAYER_AP_BOTTLE_BIG_POE, // ITEM_BIG_POE,
+    PLAYER_AP_BOTTLE_SPRING_WATER, // ITEM_SPRING_WATER,
+    PLAYER_AP_BOTTLE_HOT_SPRING_WATER, // ITEM_HOT_SPRING_WATER,
+    PLAYER_AP_BOTTLE_ZORA_EGG, // ITEM_ZORA_EGG,
+    PLAYER_AP_BOTTLE_GOLD_DUST, // ITEM_GOLD_DUST,
+    PLAYER_AP_BOTTLE_MUSHROOM, // ITEM_MUSHROOM,
+    PLAYER_AP_BOTTLE_SEA_HORSE, // ITEM_SEA_HORSE,
+    PLAYER_AP_BOTTLE_CHATEAU, // ITEM_CHATEAU,
+    PLAYER_AP_BOTTLE_HYLIAN_LOACH, // ITEM_HYLIAN_LOACH,
+    PLAYER_AP_BOTTLE_POE, // ITEM_OBABA_DRINK, // !
+    PLAYER_AP_MOON_TEAR, // ITEM_MOON_TEAR,
+    PLAYER_AP_DEED_LAND, // ITEM_DEED_LAND,
+    PLAYER_AP_DEED_SWAMP, // ITEM_DEED_SWAMP,
+    PLAYER_AP_DEED_MOUNTAIN, // ITEM_DEED_MOUNTAIN,
+    PLAYER_AP_DEED_OCEAN, // ITEM_DEED_OCEAN,
+    PLAYER_AP_ROOM_KEY, // ITEM_ROOM_KEY,
+    PLAYER_AP_LETTER_MAMA, // ITEM_LETTER_MAMA,
+    PLAYER_AP_LETTER_TO_KAFEI, // ITEM_LETTER_TO_KAFEI,
+    PLAYER_AP_PENDANT_MEMORIES, // ITEM_PENDANT_MEMORIES,
+    PLAYER_AP_38, // ITEM_TINGLE_MAP, // !
+    PLAYER_AP_MASK_DEKU, // ITEM_MASK_DEKU,
+    PLAYER_AP_MASK_GORON, // ITEM_MASK_GORON,
+    PLAYER_AP_MASK_ZORA, // ITEM_MASK_ZORA,
+    PLAYER_AP_MASK_FIERCE_DEITY, // ITEM_MASK_FIERCE_DEITY,
+    PLAYER_AP_MASK_TRUTH, // ITEM_MASK_TRUTH,
+    PLAYER_AP_MASK_KAFEIS_MASK, // ITEM_MASK_KAFEIS_MASK,
+    PLAYER_AP_MASK_ALL_NIGHT, // ITEM_MASK_ALL_NIGHT,
+    PLAYER_AP_MASK_BUNNY, // ITEM_MASK_BUNNY,
+    PLAYER_AP_MASK_KEATON, // ITEM_MASK_KEATON,
+    PLAYER_AP_MASK_GARO, // ITEM_MASK_GARO,
+    PLAYER_AP_MASK_ROMANI, // ITEM_MASK_ROMANI,
+    PLAYER_AP_MASK_CIRCUS_LEADER, // ITEM_MASK_CIRCUS_LEADER,
+    PLAYER_AP_MASK_POSTMAN, // ITEM_MASK_POSTMAN,
+    PLAYER_AP_MASK_COUPLE, // ITEM_MASK_COUPLE,
+    PLAYER_AP_MASK_GREAT_FAIRY, // ITEM_MASK_GREAT_FAIRY,
+    PLAYER_AP_MASK_GIBDO, // ITEM_MASK_GIBDO,
+    PLAYER_AP_MASK_DON_GERO, // ITEM_MASK_DON_GERO,
+    PLAYER_AP_MASK_KAMARO, // ITEM_MASK_KAMARO,
+    PLAYER_AP_MASK_CAPTAIN, // ITEM_MASK_CAPTAIN,
+    PLAYER_AP_MASK_STONE, // ITEM_MASK_STONE,
+    PLAYER_AP_MASK_BREMEN, // ITEM_MASK_BREMEN,
+    PLAYER_AP_MASK_BLAST, // ITEM_MASK_BLAST,
+    PLAYER_AP_MASK_SCENTS, // ITEM_MASK_SCENTS,
+    PLAYER_AP_MASK_GIANT, // ITEM_MASK_GIANT,
+    PLAYER_AP_BOW_FIRE, // ITEM_BOW_ARROW_FIRE,
+    PLAYER_AP_BOW_ICE, // ITEM_BOW_ARROW_ICE,
+    PLAYER_AP_BOW_LIGHT, // ITEM_BOW_ARROW_LIGHT,
+    PLAYER_AP_SWORD_KOKIRI, // ITEM_SWORD_KOKIRI,
+    PLAYER_AP_SWORD_RAZOR, // ITEM_SWORD_RAZOR,
+    PLAYER_AP_SWORD_GILDED, // ITEM_SWORD_GILDED,
+    PLAYER_AP_SWORD_GREAT_FAIRY, // ITEM_SWORD_DEITY,
+};
 
-glabel D_8085C928
-/* 02EE98 8085C928 */ .word 0x68E00804
-/* 02EE9C 8085C92C */ .word 0x68E0080C
-/* 02EEA0 8085C930 */ .word 0x68E0081E
-/* 02EEA4 8085C934 */ .word 0x68E0083D
-/* 02EEA8 8085C938 */ .word 0x68E0F7BC
 
-glabel D_8085C93C
-/* 02EEAC 8085C93C */ .word D_8085C8C4
-/* 02EEB0 8085C940 */ .word D_8085C8C8
-/* 02EEB4 8085C944 */ .word D_8085C8CC
-/* 02EEB8 8085C948 */ .word D_8085C8D0
-/* 02EEBC 8085C94C */ .word D_8085C8D4
-/* 02EEC0 8085C950 */ .word D_8085C8E8
-/* 02EEC4 8085C954 */ .word D_8085C900
-/* 02EEC8 8085C958 */ .word D_8085C90C
-/* 02EECC 8085C95C */ .word D_8085C91C
-/* 02EED0 8085C960 */ .word D_8085C924
-/* 02EED4 8085C964 */ .word D_8085C928
-/* 02EED8 8085C968 */ .word 0x00000000
+extern PlayerFuncAC4 D_8085C9F0[PLAYER_AP_MAX] = {
+    func_80848780, // PLAYER_AP_NONE
+    func_80848780, // PLAYER_AP_LAST_USED
+    func_80848780, // PLAYER_AP_FISHING_POLE
+    func_808487B8, // PLAYER_AP_SWORD_KOKIRI
+    func_808487B8, // PLAYER_AP_SWORD_RAZOR
+    func_808487B8, // PLAYER_AP_SWORD_GILDED
+    func_808487B8, // PLAYER_AP_SWORD_GREAT_FAIRY
+    func_80848780, // PLAYER_AP_STICK
+    func_80848780, // PLAYER_AP_ZORA_FINS
+    func_80848B6C, // PLAYER_AP_BOW
+    func_80848B6C, // PLAYER_AP_BOW_FIRE
+    func_80848B6C, // PLAYER_AP_BOW_ICE
+    func_80848B6C, // PLAYER_AP_BOW_LIGHT
+    func_80848B6C, // PLAYER_AP_HOOKSHOT
+    func_808490B4, // PLAYER_AP_BOMB
+    func_808490B4, // PLAYER_AP_POWDER_KEG
+    func_808490B4, // PLAYER_AP_BOMBCHU
+    func_808491B4, // PLAYER_AP_11
+    func_80848B6C, // PLAYER_AP_NUT
+    func_80848780, // PLAYER_AP_PICTO_BOX
+    func_80848780, // PLAYER_AP_OCARINA
+    func_80848780, // PLAYER_AP_BOTTLE
+    func_80848780, // PLAYER_AP_BOTTLE_FISH
+    func_80848780, // PLAYER_AP_BOTTLE_SPRING_WATER
+    func_80848780, // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
+    func_80848780, // PLAYER_AP_BOTTLE_ZORA_EGG
+    func_80848780, // PLAYER_AP_BOTTLE_DEKU_PRINCESS
+    func_80848780, // PLAYER_AP_BOTTLE_GOLD_DUST
+    func_80848780, // PLAYER_AP_BOTTLE_1C
+    func_80848780, // PLAYER_AP_BOTTLE_SEA_HORSE
+    func_80848780, // PLAYER_AP_BOTTLE_MUSHROOM
+    func_80848780, // PLAYER_AP_BOTTLE_HYLIAN_LOACH
+    func_80848780, // PLAYER_AP_BOTTLE_BUG
+    func_80848780, // PLAYER_AP_BOTTLE_POE
+    func_80848780, // PLAYER_AP_BOTTLE_BIG_POE
+    func_80848780, // PLAYER_AP_BOTTLE_POTION_RED
+    func_80848780, // PLAYER_AP_BOTTLE_POTION_BLUE
+    func_80848780, // PLAYER_AP_BOTTLE_POTION_GREEN
+    func_80848780, // PLAYER_AP_BOTTLE_MILK
+    func_80848780, // PLAYER_AP_BOTTLE_MILK_HALF
+    func_80848780, // PLAYER_AP_BOTTLE_CHATEAU
+    func_80848780, // PLAYER_AP_BOTTLE_FAIRY
+    func_80848780, // PLAYER_AP_MOON_TEAR
+    func_80848780, // PLAYER_AP_DEED_LAND
+    func_80848780, // PLAYER_AP_ROOM_KEY
+    func_80848780, // PLAYER_AP_LETTER_TO_KAFEI
+    func_80848780, // PLAYER_AP_MAGIC_BEANS
+    func_80848780, // PLAYER_AP_DEED_SWAMP
+    func_80848780, // PLAYER_AP_DEED_MOUNTAIN
+    func_80848780, // PLAYER_AP_DEED_OCEAN
+    func_80848780, // PLAYER_AP_32
+    func_80848780, // PLAYER_AP_LETTER_MAMA
+    func_80848780, // PLAYER_AP_34
+    func_80848780, // PLAYER_AP_35
+    func_80848780, // PLAYER_AP_PENDANT_MEMORIES
+    func_80848780, // PLAYER_AP_37
+    func_80848780, // PLAYER_AP_38
+    func_80848780, // PLAYER_AP_39
+    func_80848780, // PLAYER_AP_MASK_TRUTH
+    func_80848780, // PLAYER_AP_MASK_KAFEIS_MASK
+    func_80848780, // PLAYER_AP_MASK_ALL_NIGHT
+    func_80848780, // PLAYER_AP_MASK_BUNNY
+    func_80848780, // PLAYER_AP_MASK_KEATON
+    func_80848780, // PLAYER_AP_MASK_GARO
+    func_80848780, // PLAYER_AP_MASK_ROMANI
+    func_80848780, // PLAYER_AP_MASK_CIRCUS_LEADER
+    func_80848780, // PLAYER_AP_MASK_POSTMAN
+    func_80848780, // PLAYER_AP_MASK_COUPLE
+    func_80848780, // PLAYER_AP_MASK_GREAT_FAIRY
+    func_80848780, // PLAYER_AP_MASK_GIBDO
+    func_80848780, // PLAYER_AP_MASK_DON_GERO
+    func_80848780, // PLAYER_AP_MASK_KAMARO
+    func_80848780, // PLAYER_AP_MASK_CAPTAIN
+    func_80848780, // PLAYER_AP_MASK_STONE
+    func_80848780, // PLAYER_AP_MASK_BREMEN
+    func_80848780, // PLAYER_AP_MASK_BLAST
+    func_80848780, // PLAYER_AP_MASK_SCENTS
+    func_80848780, // PLAYER_AP_MASK_GIANT
+    func_80848780, // PLAYER_AP_MASK_FIERCE_DEITY
+    func_80848780, // PLAYER_AP_MASK_GORON
+    func_80848780, // PLAYER_AP_MASK_ZORA
+    func_80848780, // PLAYER_AP_MASK_DEKU
+    func_80848780, // PLAYER_AP_LENS
+};
 
-glabel D_8085C96C
-/* 02EEDC 8085C96C */ .word 0x00000101
-/* 02EEE0 8085C970 */ .word 0x02020202
-/* 02EEE4 8085C974 */ .word 0x0A0A0A0A
-/* 02EEE8 8085C978 */ .word 0x0A0A0303
-/* 02EEEC 8085C97C */ .word 0x04040808
-/* 02EEF0 8085C980 */ .word 0x05050606
-/* 02EEF4 8085C984 */ .word 0x07070909
-/* 02EEF8 8085C988 */ .word 0x0B0B0000
+void (*D_8085CB3C[0x53])(PlayState*, Player*) = {
+    func_8082F594, // PLAYER_AP_NONE
+    func_8082F594, // PLAYER_AP_LAST_USED
+    func_8082F594, // PLAYER_AP_FISHING_POLE
+    func_8082F594, // PLAYER_AP_SWORD_KOKIRI
+    func_8082F594, // PLAYER_AP_SWORD_RAZOR
+    func_8082F594, // PLAYER_AP_SWORD_GILDED
+    func_8082F594, // PLAYER_AP_SWORD_GREAT_FAIRY
+    func_8082F5A4, // PLAYER_AP_STICK
+    func_8082F8A0, // PLAYER_AP_ZORA_FINS
+    func_8082F5C0, // PLAYER_AP_BOW
+    func_8082F5C0, // PLAYER_AP_BOW_FIRE
+    func_8082F5C0, // PLAYER_AP_BOW_ICE
+    func_8082F5C0, // PLAYER_AP_BOW_LIGHT
+    func_8082F7F4, // PLAYER_AP_HOOKSHOT
+    func_8082F62C, // PLAYER_AP_BOMB
+    func_8082F62C, // PLAYER_AP_POWDER_KEG
+    func_8082F62C, // PLAYER_AP_BOMBCHU
+    func_8082F8A0, // PLAYER_AP_11
+    func_8082F5C0, // PLAYER_AP_NUT
+    func_8082F594, // PLAYER_AP_PICTO_BOX
+    func_8082F594, // PLAYER_AP_OCARINA
+    func_8082F594, // PLAYER_AP_BOTTLE
+    func_8082F594, // PLAYER_AP_BOTTLE_FISH
+    func_8082F594, // PLAYER_AP_BOTTLE_SPRING_WATER
+    func_8082F594, // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
+    func_8082F594, // PLAYER_AP_BOTTLE_ZORA_EGG
+    func_8082F594, // PLAYER_AP_BOTTLE_DEKU_PRINCESS
+    func_8082F594, // PLAYER_AP_BOTTLE_GOLD_DUST
+    func_8082F594, // PLAYER_AP_BOTTLE_1C
+    func_8082F594, // PLAYER_AP_BOTTLE_SEA_HORSE
+    func_8082F594, // PLAYER_AP_BOTTLE_MUSHROOM
+    func_8082F594, // PLAYER_AP_BOTTLE_HYLIAN_LOACH
+    func_8082F594, // PLAYER_AP_BOTTLE_BUG
+    func_8082F594, // PLAYER_AP_BOTTLE_POE
+    func_8082F594, // PLAYER_AP_BOTTLE_BIG_POE
+    func_8082F594, // PLAYER_AP_BOTTLE_POTION_RED
+    func_8082F594, // PLAYER_AP_BOTTLE_POTION_BLUE
+    func_8082F594, // PLAYER_AP_BOTTLE_POTION_GREEN
+    func_8082F594, // PLAYER_AP_BOTTLE_MILK
+    func_8082F594, // PLAYER_AP_BOTTLE_MILK_HALF
+    func_8082F594, // PLAYER_AP_BOTTLE_CHATEAU
+    func_8082F594, // PLAYER_AP_BOTTLE_FAIRY
+    func_8082F594, // PLAYER_AP_MOON_TEAR
+    func_8082F594, // PLAYER_AP_DEED_LAND
+    func_8082F594, // PLAYER_AP_ROOM_KEY
+    func_8082F594, // PLAYER_AP_LETTER_TO_KAFEI
+    func_8082F594, // PLAYER_AP_MAGIC_BEANS
+    func_8082F594, // PLAYER_AP_DEED_SWAMP
+    func_8082F594, // PLAYER_AP_DEED_MOUNTAIN
+    func_8082F594, // PLAYER_AP_DEED_OCEAN
+    func_8082F594, // PLAYER_AP_32
+    func_8082F594, // PLAYER_AP_LETTER_MAMA
+    func_8082F594, // PLAYER_AP_34
+    func_8082F594, // PLAYER_AP_35
+    func_8082F594, // PLAYER_AP_PENDANT_MEMORIES
+    func_8082F594, // PLAYER_AP_37
+    func_8082F594, // PLAYER_AP_38
+    func_8082F594, // PLAYER_AP_39
+    func_8082F594, // PLAYER_AP_MASK_TRUTH
+    func_8082F594, // PLAYER_AP_MASK_KAFEIS_MASK
+    func_8082F594, // PLAYER_AP_MASK_ALL_NIGHT
+    func_8082F594, // PLAYER_AP_MASK_BUNNY
+    func_8082F594, // PLAYER_AP_MASK_KEATON
+    func_8082F594, // PLAYER_AP_MASK_GARO
+    func_8082F594, // PLAYER_AP_MASK_ROMANI
+    func_8082F594, // PLAYER_AP_MASK_CIRCUS_LEADER
+    func_8082F594, // PLAYER_AP_MASK_POSTMAN
+    func_8082F594, // PLAYER_AP_MASK_COUPLE
+    func_8082F594, // PLAYER_AP_MASK_GREAT_FAIRY
+    func_8082F594, // PLAYER_AP_MASK_GIBDO
+    func_8082F594, // PLAYER_AP_MASK_DON_GERO
+    func_8082F594, // PLAYER_AP_MASK_KAMARO
+    func_8082F594, // PLAYER_AP_MASK_CAPTAIN
+    func_8082F594, // PLAYER_AP_MASK_STONE
+    func_8082F594, // PLAYER_AP_MASK_BREMEN
+    func_8082F594, // PLAYER_AP_MASK_BLAST
+    func_8082F594, // PLAYER_AP_MASK_SCENTS
+    func_8082F594, // PLAYER_AP_MASK_GIANT
+    func_8082F594, // PLAYER_AP_MASK_FIERCE_DEITY
+    func_8082F594, // PLAYER_AP_MASK_GORON
+    func_8082F594, // PLAYER_AP_MASK_ZORA
+    func_8082F594, // PLAYER_AP_MASK_DEKU
+    func_8082F594, // PLAYER_AP_LENS
+};
 
-glabel D_8085C98C
-/* 02EEFC 8085C98C */ .word 0x000000FF
-/* 02EF00 8085C990 */ .word 0xFF9B1414
-/* 02EF04 8085C994 */ .word 0x320003AC
-/* 02EF08 8085C998 */ .word 0x13880000
 
-glabel D_8085C99C
-/* 02EF0C 8085C99C */ .word 0x14090A0B
-/* 02EF10 8085C9A0 */ .word 0x0C130E10
-/* 02EF14 8085C9A4 */ .word 0x07122E13
-/* 02EF18 8085C9A8 */ .word 0x0F13520D
-/* 02EF1C 8085C9AC */ .word 0x06131523
-/* 02EF20 8085C9B0 */ .word 0x2524291A
-/* 02EF24 8085C9B4 */ .word 0x26271620
-/* 02EF28 8085C9B8 */ .word 0x20212217
-/* 02EF2C 8085C9BC */ .word 0x18191B1E
-/* 02EF30 8085C9C0 */ .word 0x1D281F21
-/* 02EF34 8085C9C4 */ .word 0x2A2B2F30
-/* 02EF38 8085C9C8 */ .word 0x312C332D
-/* 02EF3C 8085C9CC */ .word 0x3638514F
-/* 02EF40 8085C9D0 */ .word 0x504E3A3B
-/* 02EF44 8085C9D4 */ .word 0x3C3D3E3F
-/* 02EF48 8085C9D8 */ .word 0x40414243
-/* 02EF4C 8085C9DC */ .word 0x44454647
-/* 02EF50 8085C9E0 */ .word 0x48494A4B
-/* 02EF54 8085C9E4 */ .word 0x4C4D0A0B
-/* 02EF58 8085C9E8 */ .word 0x0C030405
-/* 02EF5C 8085C9EC */ .word 0x06000000
+struct_8085CC88 D_8085CC88[0xF] = {
+    { (LinkAnimationHeader* )0x0400DC70, 0xC },
+    { (LinkAnimationHeader* )0x0400DD90, 6 },
+    { (LinkAnimationHeader* )0x0400D9B8, 8 },
+    { (LinkAnimationHeader* )0x0400DDA0, 8 },
+    { (LinkAnimationHeader* )0x0400D820, 8 },
+    { (LinkAnimationHeader* )0x0400DC50, 0xA },
+    { (LinkAnimationHeader* )0x0400D9A8, 7 },
+    { (LinkAnimationHeader* )0x0400D9B0, 0xB },
+    { (LinkAnimationHeader* )0x0400DC70, 0xC },
+    { (LinkAnimationHeader* )0x0400DD88, 4 },
+    { (LinkAnimationHeader* )0x0400DD48, 4 },
+    { (LinkAnimationHeader* )0x0400DC58, 4 },
+    { (LinkAnimationHeader* )0x0400D3E0, 5 },
+    { (LinkAnimationHeader* )0x0400DC68, 0xD },
+    { (LinkAnimationHeader* )0x0400E350, 4 },
+};
 
-glabel D_8085C9F0
-/* 02EF60 8085C9F0 */ .word func_80848780
-/* 02EF64 8085C9F4 */ .word func_80848780
-/* 02EF68 8085C9F8 */ .word func_80848780
-/* 02EF6C 8085C9FC */ .word func_808487B8
-/* 02EF70 8085CA00 */ .word func_808487B8
-/* 02EF74 8085CA04 */ .word func_808487B8
-/* 02EF78 8085CA08 */ .word func_808487B8
-/* 02EF7C 8085CA0C */ .word func_80848780
-/* 02EF80 8085CA10 */ .word func_80848780
-/* 02EF84 8085CA14 */ .word func_80848B6C
-/* 02EF88 8085CA18 */ .word func_80848B6C
-/* 02EF8C 8085CA1C */ .word func_80848B6C
-/* 02EF90 8085CA20 */ .word func_80848B6C
-/* 02EF94 8085CA24 */ .word func_80848B6C
-/* 02EF98 8085CA28 */ .word func_808490B4
-/* 02EF9C 8085CA2C */ .word func_808490B4
-/* 02EFA0 8085CA30 */ .word func_808490B4
-/* 02EFA4 8085CA34 */ .word func_808491B4
-/* 02EFA8 8085CA38 */ .word func_80848B6C
-/* 02EFAC 8085CA3C */ .word func_80848780
-/* 02EFB0 8085CA40 */ .word func_80848780
-/* 02EFB4 8085CA44 */ .word func_80848780
-/* 02EFB8 8085CA48 */ .word func_80848780
-/* 02EFBC 8085CA4C */ .word func_80848780
-/* 02EFC0 8085CA50 */ .word func_80848780
-/* 02EFC4 8085CA54 */ .word func_80848780
-/* 02EFC8 8085CA58 */ .word func_80848780
-/* 02EFCC 8085CA5C */ .word func_80848780
-/* 02EFD0 8085CA60 */ .word func_80848780
-/* 02EFD4 8085CA64 */ .word func_80848780
-/* 02EFD8 8085CA68 */ .word func_80848780
-/* 02EFDC 8085CA6C */ .word func_80848780
-/* 02EFE0 8085CA70 */ .word func_80848780
-/* 02EFE4 8085CA74 */ .word func_80848780
-/* 02EFE8 8085CA78 */ .word func_80848780
-/* 02EFEC 8085CA7C */ .word func_80848780
-/* 02EFF0 8085CA80 */ .word func_80848780
-/* 02EFF4 8085CA84 */ .word func_80848780
-/* 02EFF8 8085CA88 */ .word func_80848780
-/* 02EFFC 8085CA8C */ .word func_80848780
-/* 02F000 8085CA90 */ .word func_80848780
-/* 02F004 8085CA94 */ .word func_80848780
-/* 02F008 8085CA98 */ .word func_80848780
-/* 02F00C 8085CA9C */ .word func_80848780
-/* 02F010 8085CAA0 */ .word func_80848780
-/* 02F014 8085CAA4 */ .word func_80848780
-/* 02F018 8085CAA8 */ .word func_80848780
-/* 02F01C 8085CAAC */ .word func_80848780
-/* 02F020 8085CAB0 */ .word func_80848780
-/* 02F024 8085CAB4 */ .word func_80848780
-/* 02F028 8085CAB8 */ .word func_80848780
-/* 02F02C 8085CABC */ .word func_80848780
-/* 02F030 8085CAC0 */ .word func_80848780
-/* 02F034 8085CAC4 */ .word func_80848780
-/* 02F038 8085CAC8 */ .word func_80848780
-/* 02F03C 8085CACC */ .word func_80848780
-/* 02F040 8085CAD0 */ .word func_80848780
-/* 02F044 8085CAD4 */ .word func_80848780
-/* 02F048 8085CAD8 */ .word func_80848780
-/* 02F04C 8085CADC */ .word func_80848780
-/* 02F050 8085CAE0 */ .word func_80848780
-/* 02F054 8085CAE4 */ .word func_80848780
-/* 02F058 8085CAE8 */ .word func_80848780
-/* 02F05C 8085CAEC */ .word func_80848780
-/* 02F060 8085CAF0 */ .word func_80848780
-/* 02F064 8085CAF4 */ .word func_80848780
-/* 02F068 8085CAF8 */ .word func_80848780
-/* 02F06C 8085CAFC */ .word func_80848780
-/* 02F070 8085CB00 */ .word func_80848780
-/* 02F074 8085CB04 */ .word func_80848780
-/* 02F078 8085CB08 */ .word func_80848780
-/* 02F07C 8085CB0C */ .word func_80848780
-/* 02F080 8085CB10 */ .word func_80848780
-/* 02F084 8085CB14 */ .word func_80848780
-/* 02F088 8085CB18 */ .word func_80848780
-/* 02F08C 8085CB1C */ .word func_80848780
-/* 02F090 8085CB20 */ .word func_80848780
-/* 02F094 8085CB24 */ .word func_80848780
-/* 02F098 8085CB28 */ .word func_80848780
-/* 02F09C 8085CB2C */ .word func_80848780
-/* 02F0A0 8085CB30 */ .word func_80848780
-/* 02F0A4 8085CB34 */ .word func_80848780
-/* 02F0A8 8085CB38 */ .word func_80848780
+s8 D_8085CD00[0x24] = {
+    8,
+    -5,
+    -3,
+    -6,
+    8,
+    0xB,
+    5,
+    0,
+    -1,
+    4,
+    5,
+    9,
+    3,
+    1,
+    0,
+    2,
+    3,
+    9,
+    6,
+    -4,
+    -2,
+    7,
+    6,
+    0xA,
+    8,
+    -5,
+    -3,
+    -6,
+    8,
+    0xB,
+    8,
+    -5,
+    -3,
+    -6,
+    8,
+    0xB,
+};
 
-glabel D_8085CB3C
-/* 02F0AC 8085CB3C */ .word func_8082F594
-/* 02F0B0 8085CB40 */ .word func_8082F594
-/* 02F0B4 8085CB44 */ .word func_8082F594
-/* 02F0B8 8085CB48 */ .word func_8082F594
-/* 02F0BC 8085CB4C */ .word func_8082F594
-/* 02F0C0 8085CB50 */ .word func_8082F594
-/* 02F0C4 8085CB54 */ .word func_8082F594
-/* 02F0C8 8085CB58 */ .word func_8082F5A4
-/* 02F0CC 8085CB5C */ .word func_8082F8A0
-/* 02F0D0 8085CB60 */ .word func_8082F5C0
-/* 02F0D4 8085CB64 */ .word func_8082F5C0
-/* 02F0D8 8085CB68 */ .word func_8082F5C0
-/* 02F0DC 8085CB6C */ .word func_8082F5C0
-/* 02F0E0 8085CB70 */ .word func_8082F7F4
-/* 02F0E4 8085CB74 */ .word func_8082F62C
-/* 02F0E8 8085CB78 */ .word func_8082F62C
-/* 02F0EC 8085CB7C */ .word func_8082F62C
-/* 02F0F0 8085CB80 */ .word func_8082F8A0
-/* 02F0F4 8085CB84 */ .word func_8082F5C0
-/* 02F0F8 8085CB88 */ .word func_8082F594
-/* 02F0FC 8085CB8C */ .word func_8082F594
-/* 02F100 8085CB90 */ .word func_8082F594
-/* 02F104 8085CB94 */ .word func_8082F594
-/* 02F108 8085CB98 */ .word func_8082F594
-/* 02F10C 8085CB9C */ .word func_8082F594
-/* 02F110 8085CBA0 */ .word func_8082F594
-/* 02F114 8085CBA4 */ .word func_8082F594
-/* 02F118 8085CBA8 */ .word func_8082F594
-/* 02F11C 8085CBAC */ .word func_8082F594
-/* 02F120 8085CBB0 */ .word func_8082F594
-/* 02F124 8085CBB4 */ .word func_8082F594
-/* 02F128 8085CBB8 */ .word func_8082F594
-/* 02F12C 8085CBBC */ .word func_8082F594
-/* 02F130 8085CBC0 */ .word func_8082F594
-/* 02F134 8085CBC4 */ .word func_8082F594
-/* 02F138 8085CBC8 */ .word func_8082F594
-/* 02F13C 8085CBCC */ .word func_8082F594
-/* 02F140 8085CBD0 */ .word func_8082F594
-/* 02F144 8085CBD4 */ .word func_8082F594
-/* 02F148 8085CBD8 */ .word func_8082F594
-/* 02F14C 8085CBDC */ .word func_8082F594
-/* 02F150 8085CBE0 */ .word func_8082F594
-/* 02F154 8085CBE4 */ .word func_8082F594
-/* 02F158 8085CBE8 */ .word func_8082F594
-/* 02F15C 8085CBEC */ .word func_8082F594
-/* 02F160 8085CBF0 */ .word func_8082F594
-/* 02F164 8085CBF4 */ .word func_8082F594
-/* 02F168 8085CBF8 */ .word func_8082F594
-/* 02F16C 8085CBFC */ .word func_8082F594
-/* 02F170 8085CC00 */ .word func_8082F594
-/* 02F174 8085CC04 */ .word func_8082F594
-/* 02F178 8085CC08 */ .word func_8082F594
-/* 02F17C 8085CC0C */ .word func_8082F594
-/* 02F180 8085CC10 */ .word func_8082F594
-/* 02F184 8085CC14 */ .word func_8082F594
-/* 02F188 8085CC18 */ .word func_8082F594
-/* 02F18C 8085CC1C */ .word func_8082F594
-/* 02F190 8085CC20 */ .word func_8082F594
-/* 02F194 8085CC24 */ .word func_8082F594
-/* 02F198 8085CC28 */ .word func_8082F594
-/* 02F19C 8085CC2C */ .word func_8082F594
-/* 02F1A0 8085CC30 */ .word func_8082F594
-/* 02F1A4 8085CC34 */ .word func_8082F594
-/* 02F1A8 8085CC38 */ .word func_8082F594
-/* 02F1AC 8085CC3C */ .word func_8082F594
-/* 02F1B0 8085CC40 */ .word func_8082F594
-/* 02F1B4 8085CC44 */ .word func_8082F594
-/* 02F1B8 8085CC48 */ .word func_8082F594
-/* 02F1BC 8085CC4C */ .word func_8082F594
-/* 02F1C0 8085CC50 */ .word func_8082F594
-/* 02F1C4 8085CC54 */ .word func_8082F594
-/* 02F1C8 8085CC58 */ .word func_8082F594
-/* 02F1CC 8085CC5C */ .word func_8082F594
-/* 02F1D0 8085CC60 */ .word func_8082F594
-/* 02F1D4 8085CC64 */ .word func_8082F594
-/* 02F1D8 8085CC68 */ .word func_8082F594
-/* 02F1DC 8085CC6C */ .word func_8082F594
-/* 02F1E0 8085CC70 */ .word func_8082F594
-/* 02F1E4 8085CC74 */ .word func_8082F594
-/* 02F1E8 8085CC78 */ .word func_8082F594
-/* 02F1EC 8085CC7C */ .word func_8082F594
-/* 02F1F0 8085CC80 */ .word func_8082F594
-/* 02F1F4 8085CC84 */ .word func_8082F594
+struct_8085CD24 D_8085CD24[] = {
+    { ITEM_BOMB, ACTOR_EN_BOM }, // PLAYER_AP_BOMB
+    { ITEM_POWDER_KEG, ACTOR_EN_BOM }, // PLAYER_AP_POWDER_KEG
+    { ITEM_BOMBCHU, ACTOR_EN_BOM_CHU }, // PLAYER_AP_BOMBCHU
+};
 
-glabel D_8085CC88
-/* 02F1F8 8085CC88 */ .word 0x0400DC70
-/* 02F1FC 8085CC8C */ .word 0x0C000000
-/* 02F200 8085CC90 */ .word 0x0400DD90
-/* 02F204 8085CC94 */ .word 0x06000000
-/* 02F208 8085CC98 */ .word 0x0400D9B8
-/* 02F20C 8085CC9C */ .word 0x08000000
-/* 02F210 8085CCA0 */ .word 0x0400DDA0
-/* 02F214 8085CCA4 */ .word 0x08000000
-/* 02F218 8085CCA8 */ .word 0x0400D820
-/* 02F21C 8085CCAC */ .word 0x08000000
-/* 02F220 8085CCB0 */ .word 0x0400DC50
-/* 02F224 8085CCB4 */ .word 0x0A000000
-/* 02F228 8085CCB8 */ .word 0x0400D9A8
-/* 02F22C 8085CCBC */ .word 0x07000000
-/* 02F230 8085CCC0 */ .word 0x0400D9B0
-/* 02F234 8085CCC4 */ .word 0x0B000000
-/* 02F238 8085CCC8 */ .word 0x0400DC70
-/* 02F23C 8085CCCC */ .word 0x0C000000
-/* 02F240 8085CCD0 */ .word 0x0400DD88
-/* 02F244 8085CCD4 */ .word 0x04000000
-/* 02F248 8085CCD8 */ .word 0x0400DD48
-/* 02F24C 8085CCDC */ .word 0x04000000
-/* 02F250 8085CCE0 */ .word 0x0400DC58
-/* 02F254 8085CCE4 */ .word 0x04000000
-/* 02F258 8085CCE8 */ .word 0x0400D3E0
-/* 02F25C 8085CCEC */ .word 0x05000000
-/* 02F260 8085CCF0 */ .word 0x0400DC68
-/* 02F264 8085CCF4 */ .word 0x0D000000
-/* 02F268 8085CCF8 */ .word 0x0400E350
-/* 02F26C 8085CCFC */ .word 0x04000000
+struct_8085CD30 D_8085CD30[0x10] = {
+    {
+        (LinkAnimationHeader* )0x0400D868,
+        (LinkAnimationHeader* )0x0400D878,
+        (LinkAnimationHeader* )0x0400D870,
+        1,
+        4,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D6E0,
+        (LinkAnimationHeader* )0x0400D6E8,
+        (LinkAnimationHeader* )0x0400D398,
+        1,
+        4,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D880,
+        (LinkAnimationHeader* )0x0400D888,
+        (LinkAnimationHeader* )0x0400D428,
+        0,
+        5,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D6F0,
+        (LinkAnimationHeader* )0x0400D6F8,
+        (LinkAnimationHeader* )0x0400D3A0,
+        1,
+        7,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D788,
+        (LinkAnimationHeader* )0x0400D790,
+        (LinkAnimationHeader* )0x0400D3C0,
+        1,
+        4,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D6A0,
+        (LinkAnimationHeader* )0x0400D6A8,
+        (LinkAnimationHeader* )0x0400D378,
+        0,
+        5,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D798,
+        (LinkAnimationHeader* )0x0400D7A0,
+        (LinkAnimationHeader* )0x0400D3C8,
+        2,
+        8,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D6B0,
+        (LinkAnimationHeader* )0x0400D6B8,
+        (LinkAnimationHeader* )0x0400D380,
+        3,
+        8,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D7C0,
+        (LinkAnimationHeader* )0x0400D7C8,
+        (LinkAnimationHeader* )0x0400D3D0,
+        0,
+        4,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D6C0,
+        (LinkAnimationHeader* )0x0400D6C8,
+        (LinkAnimationHeader* )0x0400D388,
+        0,
+        5,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D7D0,
+        (LinkAnimationHeader* )0x0400D7D8,
+        (LinkAnimationHeader* )0x0400D3D8,
+        0,
+        6,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D6D0,
+        (LinkAnimationHeader* )0x0400D6D8,
+        (LinkAnimationHeader* )0x0400D390,
+        1,
+        5,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D890,
+        (LinkAnimationHeader* )0x0400D898,
+        (LinkAnimationHeader* )0x0400D430,
+        0,
+        3,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D700,
+        (LinkAnimationHeader* )0x0400D708,
+        (LinkAnimationHeader* )0x0400D3A8,
+        0,
+        3,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D8A0,
+        (LinkAnimationHeader* )0x0400D8A8,
+        (LinkAnimationHeader* )0x0400D438,
+        1,
+        9,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D710,
+        (LinkAnimationHeader* )0x0400D718,
+        (LinkAnimationHeader* )0x0400D3B0,
+        1,
+        8,
+    },
+};
 
-glabel D_8085CD00
-/* 02F270 8085CD00 */ .word 0x08FBFDFA
-/* 02F274 8085CD04 */ .word 0x080B0500
-/* 02F278 8085CD08 */ .word 0xFF040509
-/* 02F27C 8085CD0C */ .word 0x03010002
-/* 02F280 8085CD10 */ .word 0x030906FC
-/* 02F284 8085CD14 */ .word 0xFE07060A
-/* 02F288 8085CD18 */ .word 0x08FBFDFA
-/* 02F28C 8085CD1C */ .word 0x080B08FB
-/* 02F290 8085CD20 */ .word 0xFDFA080B
+// TODO
+u32 D_8085CE30[] = {
+    0x0400D850,
+    0x0400D840,
+    0x0400D840,
+    0x07630000,
+    0x0400D720,
+    0x0400D730,
+    0x0400D730,
+    0x07630000,
+    0x0400E3F0,
+    0x0400E3F8,
+    0x0400E3F8,
+    0x08630000,
+};
 
-glabel D_8085CD24
-/* 02F294 8085CD24 */ .word 0x06000009
-/* 02F298 8085CD28 */ .word 0x0C000009
-/* 02F29C 8085CD2C */ .word 0x0700006A
+// TODO
+u32 D_8085CE60[] = {
+    0x0400D840,
+    0x0400D848,
+    0x0400D848,
+    0x01020000,
+    0x0400D730,
+    0x0400D728,
+    0x0400D728,
+    0x01020000,
+    0x0400E3F8,
+    0x0400E410,
+    0x0400DF18,
+    0x01020000,
+    0x0400D950,
+    0x0400D958,
+    0x0400D958,
+    0x01050000,
+    0x0400D940,
+    0x0400D948,
+    0x0400D948,
+    0x01040000,
+    0x0400E218,
+    0x0400E228,
+    0x0400E220,
+    0x06080000,
+    0x0400E230,
+    0x0400E240,
+    0x0400E238,
+    0x0C120000,
+    0x0400E248,
+    0x0400E258,
+    0x0400E250,
+    0x080E0000,
+    0x0400E308,
+    0x0400E318,
+    0x0400E310,
+    0x02050000,
+    0x0400E320,
+    0x0400E330,
+    0x0400E328,
+    0x03080000,
+    0x0400E338,
+    0x0400E348,
+    0x0400E340,
+    0x030A0000,
+    0x0400D908,
+    0x0400D910,
+    0x0400D440,
+    0x000C0000,
+    0x0400D760,
+    0x0400D768,
+    0x0400D3B8,
+    0x000F0000,
+    0x0400D7E0,
+    0x0400D7E8,
+    0x0400D440,
+    0x00100000,
+    0x0400D7E0,
+    0x0400D7E8,
+    0x0400D3B8,
+    0x00100000,
+};
 
-glabel D_8085CD30
-/* 02F2A0 8085CD30 */ .word 0x0400D868
-/* 02F2A4 8085CD34 */ .word 0x0400D878
-/* 02F2A8 8085CD38 */ .word 0x0400D870
-/* 02F2AC 8085CD3C */ .word 0x01040000
-/* 02F2B0 8085CD40 */ .word 0x0400D6E0
-/* 02F2B4 8085CD44 */ .word 0x0400D6E8
-/* 02F2B8 8085CD48 */ .word 0x0400D398
-/* 02F2BC 8085CD4C */ .word 0x01040000
-/* 02F2C0 8085CD50 */ .word 0x0400D880
-/* 02F2C4 8085CD54 */ .word 0x0400D888
-/* 02F2C8 8085CD58 */ .word 0x0400D428
-/* 02F2CC 8085CD5C */ .word 0x00050000
-/* 02F2D0 8085CD60 */ .word 0x0400D6F0
-/* 02F2D4 8085CD64 */ .word 0x0400D6F8
-/* 02F2D8 8085CD68 */ .word 0x0400D3A0
-/* 02F2DC 8085CD6C */ .word 0x01070000
-/* 02F2E0 8085CD70 */ .word 0x0400D788
-/* 02F2E4 8085CD74 */ .word 0x0400D790
-/* 02F2E8 8085CD78 */ .word 0x0400D3C0
-/* 02F2EC 8085CD7C */ .word 0x01040000
-/* 02F2F0 8085CD80 */ .word 0x0400D6A0
-/* 02F2F4 8085CD84 */ .word 0x0400D6A8
-/* 02F2F8 8085CD88 */ .word 0x0400D378
-/* 02F2FC 8085CD8C */ .word 0x00050000
-/* 02F300 8085CD90 */ .word 0x0400D798
-/* 02F304 8085CD94 */ .word 0x0400D7A0
-/* 02F308 8085CD98 */ .word 0x0400D3C8
-/* 02F30C 8085CD9C */ .word 0x02080000
-/* 02F310 8085CDA0 */ .word 0x0400D6B0
-/* 02F314 8085CDA4 */ .word 0x0400D6B8
-/* 02F318 8085CDA8 */ .word 0x0400D380
-/* 02F31C 8085CDAC */ .word 0x03080000
-/* 02F320 8085CDB0 */ .word 0x0400D7C0
-/* 02F324 8085CDB4 */ .word 0x0400D7C8
-/* 02F328 8085CDB8 */ .word 0x0400D3D0
-/* 02F32C 8085CDBC */ .word 0x00040000
-/* 02F330 8085CDC0 */ .word 0x0400D6C0
-/* 02F334 8085CDC4 */ .word 0x0400D6C8
-/* 02F338 8085CDC8 */ .word 0x0400D388
-/* 02F33C 8085CDCC */ .word 0x00050000
-/* 02F340 8085CDD0 */ .word 0x0400D7D0
-/* 02F344 8085CDD4 */ .word 0x0400D7D8
-/* 02F348 8085CDD8 */ .word 0x0400D3D8
-/* 02F34C 8085CDDC */ .word 0x00060000
-/* 02F350 8085CDE0 */ .word 0x0400D6D0
-/* 02F354 8085CDE4 */ .word 0x0400D6D8
-/* 02F358 8085CDE8 */ .word 0x0400D390
-/* 02F35C 8085CDEC */ .word 0x01050000
-/* 02F360 8085CDF0 */ .word 0x0400D890
-/* 02F364 8085CDF4 */ .word 0x0400D898
-/* 02F368 8085CDF8 */ .word 0x0400D430
-/* 02F36C 8085CDFC */ .word 0x00030000
-/* 02F370 8085CE00 */ .word 0x0400D700
-/* 02F374 8085CE04 */ .word 0x0400D708
-/* 02F378 8085CE08 */ .word 0x0400D3A8
-/* 02F37C 8085CE0C */ .word 0x00030000
-/* 02F380 8085CE10 */ .word 0x0400D8A0
-/* 02F384 8085CE14 */ .word 0x0400D8A8
-/* 02F388 8085CE18 */ .word 0x0400D438
-/* 02F38C 8085CE1C */ .word 0x01090000
-/* 02F390 8085CE20 */ .word 0x0400D710
-/* 02F394 8085CE24 */ .word 0x0400D718
-/* 02F398 8085CE28 */ .word 0x0400D3B0
-/* 02F39C 8085CE2C */ .word 0x01080000
+LinkAnimationHeader* D_8085CF50[] = { (LinkAnimationHeader* )0x0400D8C8, (LinkAnimationHeader* )0x0400D740 };
+LinkAnimationHeader* D_8085CF58[] = { (LinkAnimationHeader* )0x0400D8C0, (LinkAnimationHeader* )0x0400D740 };
+LinkAnimationHeader* D_8085CF60[] = { (LinkAnimationHeader* )0x0400D8D0, (LinkAnimationHeader* )0x0400D748 };
+LinkAnimationHeader* D_8085CF68[] = { (LinkAnimationHeader* )0x0400D8D8, (LinkAnimationHeader* )0x0400D750 };
+LinkAnimationHeader* D_8085CF70[] = { (LinkAnimationHeader* )0x0400D8E0, (LinkAnimationHeader* )0x0400D758 };
+LinkAnimationHeader* D_8085CF78[] = { (LinkAnimationHeader* )0x0400D8B8, (LinkAnimationHeader* )0x0400D738 };
 
-glabel D_8085CE30
-/* 02F3A0 8085CE30 */ .word 0x0400D850
-/* 02F3A4 8085CE34 */ .word 0x0400D840
-/* 02F3A8 8085CE38 */ .word 0x0400D840
-/* 02F3AC 8085CE3C */ .word 0x07630000
-/* 02F3B0 8085CE40 */ .word 0x0400D720
-/* 02F3B4 8085CE44 */ .word 0x0400D730
-/* 02F3B8 8085CE48 */ .word 0x0400D730
-/* 02F3BC 8085CE4C */ .word 0x07630000
-/* 02F3C0 8085CE50 */ .word 0x0400E3F0
-/* 02F3C4 8085CE54 */ .word 0x0400E3F8
-/* 02F3C8 8085CE58 */ .word 0x0400E3F8
-/* 02F3CC 8085CE5C */ .word 0x08630000
 
-glabel D_8085CE60
-/* 02F3D0 8085CE60 */ .word 0x0400D840
-/* 02F3D4 8085CE64 */ .word 0x0400D848
-/* 02F3D8 8085CE68 */ .word 0x0400D848
-/* 02F3DC 8085CE6C */ .word 0x01020000
-/* 02F3E0 8085CE70 */ .word 0x0400D730
-/* 02F3E4 8085CE74 */ .word 0x0400D728
-/* 02F3E8 8085CE78 */ .word 0x0400D728
-/* 02F3EC 8085CE7C */ .word 0x01020000
-/* 02F3F0 8085CE80 */ .word 0x0400E3F8
-/* 02F3F4 8085CE84 */ .word 0x0400E410
-/* 02F3F8 8085CE88 */ .word 0x0400DF18
-/* 02F3FC 8085CE8C */ .word 0x01020000
-/* 02F400 8085CE90 */ .word 0x0400D950
-/* 02F404 8085CE94 */ .word 0x0400D958
-/* 02F408 8085CE98 */ .word 0x0400D958
-/* 02F40C 8085CE9C */ .word 0x01050000
-/* 02F410 8085CEA0 */ .word 0x0400D940
-/* 02F414 8085CEA4 */ .word 0x0400D948
-/* 02F418 8085CEA8 */ .word 0x0400D948
-/* 02F41C 8085CEAC */ .word 0x01040000
-/* 02F420 8085CEB0 */ .word 0x0400E218
-/* 02F424 8085CEB4 */ .word 0x0400E228
-/* 02F428 8085CEB8 */ .word 0x0400E220
-/* 02F42C 8085CEBC */ .word 0x06080000
-/* 02F430 8085CEC0 */ .word 0x0400E230
-/* 02F434 8085CEC4 */ .word 0x0400E240
-/* 02F438 8085CEC8 */ .word 0x0400E238
-/* 02F43C 8085CECC */ .word 0x0C120000
-/* 02F440 8085CED0 */ .word 0x0400E248
-/* 02F444 8085CED4 */ .word 0x0400E258
-/* 02F448 8085CED8 */ .word 0x0400E250
-/* 02F44C 8085CEDC */ .word 0x080E0000
-/* 02F450 8085CEE0 */ .word 0x0400E308
-/* 02F454 8085CEE4 */ .word 0x0400E318
-/* 02F458 8085CEE8 */ .word 0x0400E310
-/* 02F45C 8085CEEC */ .word 0x02050000
-/* 02F460 8085CEF0 */ .word 0x0400E320
-/* 02F464 8085CEF4 */ .word 0x0400E330
-/* 02F468 8085CEF8 */ .word 0x0400E328
-/* 02F46C 8085CEFC */ .word 0x03080000
-/* 02F470 8085CF00 */ .word 0x0400E338
-/* 02F474 8085CF04 */ .word 0x0400E348
-/* 02F478 8085CF08 */ .word 0x0400E340
-/* 02F47C 8085CF0C */ .word 0x030A0000
-/* 02F480 8085CF10 */ .word 0x0400D908
-/* 02F484 8085CF14 */ .word 0x0400D910
-/* 02F488 8085CF18 */ .word 0x0400D440
-/* 02F48C 8085CF1C */ .word 0x000C0000
-/* 02F490 8085CF20 */ .word 0x0400D760
-/* 02F494 8085CF24 */ .word 0x0400D768
-/* 02F498 8085CF28 */ .word 0x0400D3B8
-/* 02F49C 8085CF2C */ .word 0x000F0000
-/* 02F4A0 8085CF30 */ .word 0x0400D7E0
-/* 02F4A4 8085CF34 */ .word 0x0400D7E8
-/* 02F4A8 8085CF38 */ .word 0x0400D440
-/* 02F4AC 8085CF3C */ .word 0x00100000
-/* 02F4B0 8085CF40 */ .word 0x0400D7E0
-/* 02F4B4 8085CF44 */ .word 0x0400D7E8
-/* 02F4B8 8085CF48 */ .word 0x0400D3B8
-/* 02F4BC 8085CF4C */ .word 0x00100000
-
-glabel D_8085CF50
-/* 02F4C0 8085CF50 */ .word 0x0400D8C8
-/* 02F4C4 8085CF54 */ .word 0x0400D740
-
-glabel D_8085CF58
-/* 02F4C8 8085CF58 */ .word 0x0400D8C0
-/* 02F4CC 8085CF5C */ .word 0x0400D740
-
-glabel D_8085CF60
-/* 02F4D0 8085CF60 */ .word 0x0400D8D0
-/* 02F4D4 8085CF64 */ .word 0x0400D748
-
-glabel D_8085CF68
-/* 02F4D8 8085CF68 */ .word 0x0400D8D8
-/* 02F4DC 8085CF6C */ .word 0x0400D750
-
-glabel D_8085CF70
-/* 02F4E0 8085CF70 */ .word 0x0400D8E0
-/* 02F4E4 8085CF74 */ .word 0x0400D758
-
-glabel D_8085CF78
-/* 02F4E8 8085CF78 */ .word 0x0400D8B8
-/* 02F4EC 8085CF7C */ .word 0x0400D738
-
-glabel D_8085CF80
-/* 02F4F0 8085CF80 */ .word 0x1E1F0000
-
-glabel D_8085CF84
-/* 02F4F4 8085CF84 */ .word 0x20210000
+u8 D_8085CF80[] = {
+    PLAYER_MWA_SPIN_ATTACK_1H,
+    PLAYER_MWA_SPIN_ATTACK_2H,
+};
+u8 D_8085CF84[] = {
+    PLAYER_MWA_BIG_SPIN_1H,
+    PLAYER_MWA_BIG_SPIN_2H,
+};
 
 glabel D_8085CF88
 /* 02F4F8 8085CF88 */ .word 0xFFFFFFFF
@@ -1657,13 +1689,9 @@ glabel D_8085CF88
 /* 02F510 8085CFA0 */ .word 0xFFFFFF00
 /* 02F514 8085CFA4 */ .word 0xFFFFFF00
 
-glabel D_8085CFA8
-/* 02F518 8085CFA8 */ .half 0x4000
-/* 02F51A 8085CFAA */ .half 0x0002
-/* 02F51C 8085CFAC */ .half 0x0004
+u16 D_8085CFA8[] = { BTN_B, BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT, };
 
-glabel D_8085CFAE
-/* 02F51E 8085CFAE */ .half 0x0001
+glabel D_8085CFB0
 /* 02F520 8085CFB0 */ .half 0x0860
 /* 02F522 8085CFB2 */ .half 0x0000
 /* 02F524 8085CFB4 */ .half 0x1827
@@ -1744,53 +1772,32 @@ glabel D_8085D048
 glabel D_8085D050
 /* 02F5C0 8085D050 */ .word 0x0D02FC00
 
-glabel D_8085D054
-/* 02F5C4 8085D054 */ .word func_80839518
-/* 02F5C8 8085D058 */ .word func_808365DC
-/* 02F5CC 8085D05C */ .word func_8083D23C
-/* 02F5D0 8085D060 */ .word func_8083CCB4
-/* 02F5D4 8085D064 */ .word func_808391D8
-/* 02F5D8 8085D068 */ .word func_8083DFC4
-/* 02F5DC 8085D06C */ .word func_8083A114
-/* 02F5E0 8085D070 */ .word func_80848570
-/* 02F5E4 8085D074 */ .word func_8083A580
-/* 02F5E8 8085D078 */ .word func_8083D78C
-/* 02F5EC 8085D07C */ .word func_80839B18
-/* 02F5F0 8085D080 */ .word func_8083A274
-/* 02F5F4 8085D084 */ .word func_80834DFC
-/* 02F5F8 8085D088 */ .word func_80838A90
-/* 02F5FC 8085D08C */ .word func_8083A0CC
+s32 (*D_8085D054[])(Player*, PlayState*) = {
+    func_80839518,
+    func_808365DC,
+    func_8083D23C,
+    func_8083CCB4,
+    func_808391D8,
+    func_8083DFC4,
+    func_8083A114,
+    func_80848570,
+    func_8083A580,
+    func_8083D78C,
+    func_80839B18,
+    func_8083A274,
+    func_80834DFC,
+    func_80838A90,
+    func_8083A0CC,
+};
 
-glabel D_8085D090
-/* 02F600 8085D090 */ .word 0x0C040408
+s8 D_8085D090[] = { PLAYER_MWA_STAB_1H, PLAYER_MWA_RIGHT_SLASH_1H, PLAYER_MWA_RIGHT_SLASH_1H, PLAYER_MWA_LEFT_SLASH_1H };
+s8 D_8085D094[] = { PLAYER_MWA_ZORA_PUNCH_LEFT, PLAYER_MWA_ZORA_PUNCH_COMBO, PLAYER_MWA_ZORA_PUNCH_KICK };
+s8 D_8085D097[] = { PLAYER_MWA_GORON_PUNCH_LEFT, PLAYER_MWA_GORON_PUNCH_RIGHT, PLAYER_MWA_GORON_PUNCH_BUTT };
 
-glabel D_8085D094
-/* 02F604 8085D094 */ .byte 0x1B
-/* 02F605 8085D095 */ .byte 0x1C
-/* 02F606 8085D096 */ .byte 0x1D
-
-glabel D_8085D097
-/* 02F607 8085D097 */ .byte 0x18
-/* 02F608 8085D098 */ .byte 0x19
-/* 02F609 8085D099 */ .byte 0x1A
-/* 02F60A 8085D09A */ .byte 0x00
-/* 02F60B 8085D09B */ .byte 0x00
-
-glabel D_8085D09C
-/* 02F60C 8085D09C */ .word 0x00000100
-/* 02F610 8085D0A0 */ .word 0x02020000
-/* 02F614 8085D0A4 */ .word 0x00000200
-/* 02F618 8085D0A8 */ .word 0x04080102
-/* 02F61C 8085D0AC */ .word 0x00000200
-/* 02F620 8085D0B0 */ .word 0x04080204
-/* 02F624 8085D0B4 */ .word 0x00000200
-/* 02F628 8085D0B8 */ .word 0x04080306
-/* 02F62C 8085D0BC */ .word 0x00000200
-/* 02F630 8085D0C0 */ .word 0x04080408
-/* 02F634 8085D0C4 */ .word 0x00000002
-/* 02F638 8085D0C8 */ .word 0x00000204
-/* 02F63C 8085D0CC */ .word 0x00800000
-/* 02F640 8085D0D0 */ .word 0x01020000
+struct_8085D09C D_8085D09C[] = {
+    { 0x100, 2, 2, 0, 0 }, { 0x200, 4, 8, 1, 2 }, { 0x200, 4, 8, 2, 4 },    { 0x200, 4, 8, 3, 6 },
+    { 0x200, 4, 8, 4, 8 }, { 2, 0, 0, 2, 4 },     { 0x800000, 1, 2, 0, 0 },
+};
 
 glabel D_8085D0D4
 /* 02F644 8085D0D4 */ .word 0x0400DCA0
@@ -1816,10 +1823,7 @@ glabel D_8085D100
 /* 02F674 8085D104 */ .word 0x42480000
 /* 02F678 8085D108 */ .word 0x00000000
 
-glabel D_8085D10C
-/* 02F67C 8085D10C 41A00000 */ .float 20.0
-/* 02F680 8085D110 00000000 */ .float 0.0
-/* 02F684 8085D114 41A00000 */ .float 20.0
+Vec3f D_8085D10C = {20.0f, 0.0f , 20.0f};
 
 glabel D_8085D118
 /* 02F688 8085D118 */ .word 0x0400E1B8
@@ -1876,28 +1880,91 @@ glabel D_8085D190
 /* 02F70C 8085D19C */ .word 0x0400E2A8
 /* 02F710 8085D1A0 */ .word 0x0400DDB8
 
-glabel D_8085D1A4
-/* 02F714 8085D1A4 */ .word 0x00000037
-/* 02F718 8085D1A8 */ .word 0x38393B19
-/* 02F71C 8085D1AC */ .word 0x37222526
-/* 02F720 8085D1B0 */ .word 0x27411434
-/* 02F724 8085D1B4 */ .word 0x1A402843
-/* 02F728 8085D1B8 */ .word 0x4C5A6275
-/* 02F72C 8085D1BC */ .word 0x76696A6C
-/* 02F730 8085D1C0 */ .word 0x6E6B705F
-/* 02F734 8085D1C4 */ .word 0x6365665B
-/* 02F738 8085D1C8 */ .word 0x5D5C6161
-/* 02F73C 8085D1CC */ .word 0x915E9697
-/* 02F740 8085D1D0 */ .word 0xA0AA3598
-/* 02F744 8085D1D4 */ .word 0x999A96A1
-/* 02F748 8085D1D8 */ .word 0xA7A8ABAB
-/* 02F74C 8085D1DC */ .word 0xABAB8A8F
-/* 02F750 8085D1E0 */ .word 0x7E7F8081
-/* 02F754 8085D1E4 */ .word 0x82838485
-/* 02F758 8085D1E8 */ .word 0x86878889
-/* 02F75C 8085D1EC */ .word 0x7C8B8C8D
-/* 02F760 8085D1F0 */ .word 0x8E7D7B79
-/* 02F764 8085D1F4 */ .word 0x7A784200
+u8 D_8085D1A4[PLAYER_AP_MAX] = {
+    GI_NONE, // PLAYER_AP_NONE
+    GI_NONE, // PLAYER_AP_LAST_USED
+    GI_NONE, // PLAYER_AP_FISHING_POLE
+    GI_SWORD_KOKIRI, // PLAYER_AP_SWORD_KOKIRI
+    GI_SWORD_RAZOR, // PLAYER_AP_SWORD_RAZOR
+    GI_SWORD_GILDED, // PLAYER_AP_SWORD_GILDED
+    GI_SWORD_GREAT_FAIRY, // PLAYER_AP_SWORD_GREAT_FAIRY
+    GI_STICKS_1, // PLAYER_AP_STICK
+    GI_SWORD_KOKIRI, // PLAYER_AP_ZORA_FINS
+    GI_QUIVER_30, // PLAYER_AP_BOW
+    GI_ARROW_FIRE, // PLAYER_AP_BOW_FIRE
+    GI_ARROW_ICE, // PLAYER_AP_BOW_ICE
+    GI_ARROW_LIGHT, // PLAYER_AP_BOW_LIGHT
+    GI_HOOKSHOT, // PLAYER_AP_HOOKSHOT
+    GI_BOMBS_1, // PLAYER_AP_BOMB
+    GI_POWDER_KEG, // PLAYER_AP_POWDER_KEG
+    GI_BOMBCHUS_10, // PLAYER_AP_BOMBCHU
+    GI_40, // PLAYER_AP_11
+    GI_NUTS_1, // PLAYER_AP_NUT
+    GI_PICTO_BOX, // PLAYER_AP_PICTO_BOX
+    GI_OCARINA, // PLAYER_AP_OCARINA
+    GI_BOTTLE, // PLAYER_AP_BOTTLE
+    GI_FISH, // PLAYER_AP_BOTTLE_FISH
+    GI_75, // PLAYER_AP_BOTTLE_SPRING_WATER
+    GI_ICE_TRAP, // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
+    GI_ZORA_EGG, // PLAYER_AP_BOTTLE_ZORA_EGG
+    GI_GOLD_DUST, // PLAYER_AP_BOTTLE_DEKU_PRINCESS
+    GI_6C, // PLAYER_AP_BOTTLE_GOLD_DUST
+    GI_SEAHORSE, // PLAYER_AP_BOTTLE_1C
+    GI_MUSHROOM, // PLAYER_AP_BOTTLE_SEAHORSE
+    GI_70, // PLAYER_AP_BOTTLE_MUSHROOM
+    GI_DEKU_PRINCESS, // PLAYER_AP_BOTTLE_HYLIAN_LOACH
+    GI_BUG, // PLAYER_AP_BOTTLE_BUG
+    GI_POE, // PLAYER_AP_BOTTLE_POE
+    GI_BIG_POE, // PLAYER_AP_BOTTLE_BIG_POE
+    GI_POTION_RED, // PLAYER_AP_BOTTLE_POTION_RED
+    GI_POTION_BLUE, // PLAYER_AP_BOTTLE_POTION_BLUE
+    GI_POTION_GREEN, // PLAYER_AP_BOTTLE_POTION_GREEN
+    GI_MILK_HALF, // PLAYER_AP_BOTTLE_MILK
+    GI_MILK_HALF, // PLAYER_AP_BOTTLE_MILK_HALF
+    GI_CHATEAU, // PLAYER_AP_BOTTLE_CHATEAU
+    GI_FAIRY, // PLAYER_AP_BOTTLE_FAIRY
+    GI_MOON_TEAR, // PLAYER_AP_MOON_TEAR
+    GI_DEED_LAND, // PLAYER_AP_DEED_LAND
+    GI_ROOM_KEY, // PLAYER_AP_ROOM_KEY
+    GI_LETTER_TO_KAFEI, // PLAYER_AP_LETTER_TO_KAFEI
+    GI_MAGIC_BEANS, // PLAYER_AP_MAGIC_BEANS
+    GI_DEED_SWAMP, // PLAYER_AP_DEED_SWAMP
+    GI_DEED_MOUNTAIN, // PLAYER_AP_DEED_MOUNTAIN
+    GI_DEED_OCEAN, // PLAYER_AP_DEED_OCEAN
+    GI_MOON_TEAR, // PLAYER_AP_32
+    GI_LETTER_TO_MAMA, // PLAYER_AP_LETTER_MAMA
+    GI_A7, // PLAYER_AP_34
+    GI_A8, // PLAYER_AP_35
+    GI_PENDANT_OF_MEMORIES, // PLAYER_AP_PENDANT_OF_MEMORIES
+    GI_PENDANT_OF_MEMORIES, // PLAYER_AP_37
+    GI_PENDANT_OF_MEMORIES, // PLAYER_AP_38
+    GI_PENDANT_OF_MEMORIES, // PLAYER_AP_39
+    GI_MASK_TRUTH, // PLAYER_AP_MASK_TRUTH
+    GI_MASK_KAFEIS_MASK, // PLAYER_AP_MASK_KAFEIS_MASK
+    GI_MASK_ALL_NIGHT, // PLAYER_AP_MASK_ALL_NIGHT
+    GI_MASK_BUNNY, // PLAYER_AP_MASK_BUNNY
+    GI_MASK_KEATON, // PLAYER_AP_MASK_KEATON
+    GI_MASK_GARO, // PLAYER_AP_MASK_GARO
+    GI_MASK_ROMANI, // PLAYER_AP_MASK_ROMANI
+    GI_MASK_CIRCUS_LEADER, // PLAYER_AP_MASK_CIRCUS_LEADER
+    GI_MASK_POSTMAN, // PLAYER_AP_MASK_POSTMAN
+    GI_MASK_COUPLE, // PLAYER_AP_MASK_COUPLE
+    GI_MASK_GREAT_FAIRY, // PLAYER_AP_MASK_GREAT_FAIRY
+    GI_MASK_GIBDO, // PLAYER_AP_MASK_GIBDO
+    GI_MASK_DON_GERO, // PLAYER_AP_MASK_DON_GERO
+    GI_MASK_KAMARO, // PLAYER_AP_MASK_KAMARO
+    GI_MASK_CAPTAIN, // PLAYER_AP_MASK_CAPTAIN
+    GI_MASK_STONE, // PLAYER_AP_MASK_STONE
+    GI_MASK_BREMEN, // PLAYER_AP_MASK_BREMEN
+    GI_MASK_BLAST, // PLAYER_AP_MASK_BLAST
+    GI_MASK_SCENTS, // PLAYER_AP_MASK_SCENTS
+    GI_MASK_GIANT, // PLAYER_AP_MASK_GIANT
+    GI_MASK_FIERCE_DEITY, // PLAYER_AP_MASK_FIERCE_DEITY
+    GI_MASK_GORON, // PLAYER_AP_MASK_GORON
+    GI_MASK_ZORA, // PLAYER_AP_MASK_ZORA
+    GI_MASK_DEKU, // PLAYER_AP_MASK_DEKU
+    GI_LENS, // PLAYER_AP_LENS
+};
 
 glabel D_8085D1F8
 /* 02F768 8085D1F8 */ .word 0x0400DCA8
@@ -1960,15 +2027,8 @@ glabel D_8085D270
 /* 02F7E4 8085D274 */ .word 0x3D23D70A
 /* 02F7E8 8085D278 */ .word 0x00000000
 
-glabel D_8085D27C
-/* 02F7EC 8085D27C 00000000 */ .float 0.0
-/* 02F7F0 8085D280 00000000 */ .float 0.0
-/* 02F7F4 8085D284 00000000 */ .float 0.0
-
-glabel D_8085D288
-/* 02F7F8 8085D288 */ .word 0x00000000
-/* 02F7FC 8085D28C */ .word 0x00000000
-/* 02F800 8085D290 */ .word 0x00000000
+Vec3f D_8085D27C = {0.0f, 0.0f, 0.0f};
+Vec3f D_8085D288 = {0.0f, 0.0f, 0.0f};
 
 glabel D_8085D294
 /* 02F804 8085D294 */ .word 0x0400D8F0
@@ -1976,13 +2036,11 @@ glabel D_8085D294
 /* 02F80C 8085D29C */ .word 0x0400D8E8
 /* 02F810 8085D2A0 */ .word 0x0400D8F8
 
-glabel D_8085D2A4
-/* 02F814 8085D2A4 */ .word 0x00000000
-/* 02F818 8085D2A8 */ .word 0x00000000
-/* 02F81C 8085D2AC */ .word 0x40A00000
+Vec3f D_8085D2A4 = { 0.0f, 0.0f, 5.0f };
 
-glabel D_8085D2B0
-/* 02F820 8085D2B0 */ .word 0x4E4D0000
+u8 D_8085D2B0[] = {
+    ITEM_SWORD_RAZOR, ITEM_SWORD_KOKIRI, ITEM_OCARINA, ITEM_OCARINA,
+};
 
 glabel D_8085D2B4
 /* 02F824 8085D2B4 */ .word 0xBF800000
@@ -2278,8 +2336,7 @@ glabel D_8085D5D0
 /* 02FB44 8085D5D4 */ .word 0x00000000
 /* 02FB48 8085D5D8 */ .word 0xC1F00000
 
-glabel D_8085D5DC
-/* 02FB4C 8085D5DC */ .word 0x0839F800
+struct_8082E224_arg1 D_8085D5DC = { 0x839, -0x800 };
 
 glabel D_8085D5E0
 /* 02FB50 8085D5E0 */ .word 0x184EF7C4
@@ -2490,28 +2547,22 @@ glabel D_8085D78C
 glabel D_8085D797
 /* 02FD07 8085D797 */ .byte 0x00
 
-glabel D_8085D798
-/* 02FD08 8085D798 */ .word 0x00100216
-/* 02FD0C 8085D79C */ .word 0x295E0017
-/* 02FD10 8085D7A0 */ .word 0xFF1A1662
-/* 02FD14 8085D7A4 */ .word 0x0016FF1B
-/* 02FD18 8085D7A8 */ .word 0x2063017B
-/* 02FD1C 8085D7AC */ .word 0xFF1B2063
-/* 02FD20 8085D7B0 */ .word 0x018B001F
-/* 02FD24 8085D7B4 */ .word 0x1767018B
-/* 02FD28 8085D7B8 */ .word 0x01201868
-/* 02FD2C 8085D7BC */ .word 0x01FEFF20
-/* 02FD30 8085D7C0 */ .word 0x186801F5
-/* 02FD34 8085D7C4 */ .word 0xFF211969
-/* 02FD38 8085D7C8 */ .word 0x01FCFF17
-/* 02FD3C 8085D7CC */ .word 0x1A5F0205
-/* 02FD40 8085D7D0 */ .word 0xFF241D6E
-/* 02FD44 8085D7D4 */ .word 0x023BFF23
-/* 02FD48 8085D7D8 */ .word 0x1D6B01F3
-/* 02FD4C 8085D7DC */ .word 0xFF1D2165
-/* 02FD50 8085D7E0 */ .word 0x0208FF1E
-/* 02FD54 8085D7E4 */ .word 0x22660010
-/* 02FD58 8085D7E8 */ .word 0x0616295E
+struct_8085D798 D_8085D798[] = {
+    { ACTOR_EN_ELF, 2, ITEM_FAIRY, PLAYER_AP_BOTTLE_FAIRY, 0x5E },
+    { ACTOR_EN_FISH, -1, ITEM_FISH, PLAYER_AP_BOTTLE_FISH, 0x62 },
+    { ACTOR_EN_INSECT, -1, ITEM_BUG, PLAYER_AP_BOTTLE_BUG, 0x63 },
+    { ACTOR_EN_MUSHI2, -1, ITEM_BUG, PLAYER_AP_BOTTLE_BUG, 0x63 },
+    { ACTOR_EN_TEST5, 0, ITEM_SPRING_WATER, PLAYER_AP_BOTTLE_SPRING_WATER, 0x67 },
+    { ACTOR_EN_TEST5, 1, ITEM_HOT_SPRING_WATER, PLAYER_AP_BOTTLE_HOT_SPRING_WATER, 0x68 },
+    { ACTOR_BG_GORON_OYU, -1, ITEM_HOT_SPRING_WATER, PLAYER_AP_BOTTLE_HOT_SPRING_WATER, 0x68 },
+    { ACTOR_EN_ZORAEGG, -1, ITEM_ZORA_EGG, PLAYER_AP_BOTTLE_ZORA_EGG, 0x69 },
+    { ACTOR_EN_DNP, -1, ITEM_DEKU_PRINCESS, PLAYER_AP_BOTTLE_DEKU_PRINCESS, 0x5F },
+    { ACTOR_EN_OT, -1, ITEM_SEAHORSE, PLAYER_AP_BOTTLE_SEAHORSE, 0x6E },
+    { ACTOR_OBJ_KINOKO, -1, ITEM_MUSHROOM, PLAYER_AP_BOTTLE_SEAHORSE, 0x6B },
+    { ACTOR_EN_POH, -1, ITEM_POE, PLAYER_AP_BOTTLE_POE, 0x65 },
+    { ACTOR_EN_BIGPO, -1, ITEM_BIG_POE, PLAYER_AP_BOTTLE_BIG_POE, 0x66 },
+    { ACTOR_EN_ELF, 6, ITEM_FAIRY, PLAYER_AP_BOTTLE_FAIRY, 0x5E },
+};
 
 glabel D_8085D7EC
 /* 02FD5C 8085D7EC */ .word 0x00000000
@@ -2529,18 +2580,19 @@ glabel D_8085D804
 /* 02FD74 8085D804 */ .word 0x2D4B3723
 /* 02FD78 8085D808 */ .word 0x28000000
 
-glabel D_8085D80C
-/* 02FD7C 8085D80C */ .word 0x00170000
-/* 02FD80 8085D810 */ .word 0x01AF0000
-/* 02FD84 8085D814 */ .word 0x01AF0001
-/* 02FD88 8085D818 */ .word 0x01F50011
-/* 02FD8C 8085D81C */ .word 0x01FC0001
-/* 02FD90 8085D820 */ .word 0x017B0000
-/* 02FD94 8085D824 */ .word 0x017B0000
-/* 02FD98 8085D828 */ .word 0x02058000
-/* 02FD9C 8085D82C */ .word 0x017B0000
-/* 02FDA0 8085D830 */ .word 0x017B0000
-/* 02FDA4 8085D834 */ .word 0x017B0000
+struct_8085D80C D_8085D80C[] = {
+    { ACTOR_EN_FISH, 0 }, // PLAYER_AP_BOTTLE_FISH
+    { ACTOR_OBJ_AQUA, 0 }, // PLAYER_AP_BOTTLE_SPRING_WATER
+    { ACTOR_OBJ_AQUA, 1 }, // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
+    { ACTOR_EN_ZORAEGG, 0x11 }, // PLAYER_AP_BOTTLE_ZORA_EGG
+    { ACTOR_EN_DNP, 1 }, // PLAYER_AP_BOTTLE_DEKU_PRINCESS
+    { ACTOR_EN_MUSHI2, 0 }, // PLAYER_AP_BOTTLE_GOLD_DUST
+    { ACTOR_EN_MUSHI2, 0 }, // PLAYER_AP_BOTTLE_1C
+    { ACTOR_EN_OT, 0x8000 }, // PLAYER_AP_BOTTLE_SEAHORSE
+    { ACTOR_EN_MUSHI2, 0 }, // PLAYER_AP_BOTTLE_MUSHROOM
+    { ACTOR_EN_MUSHI2, 0 }, // PLAYER_AP_BOTTLE_HYLIAN_LOACH
+    { ACTOR_EN_MUSHI2, 0 }, // PLAYER_AP_BOTTLE_BUG
+};
 
 glabel D_8085D838
 /* 02FDA8 8085D838 */ .word 0x68142026
@@ -2678,27 +2730,28 @@ glabel D_8085D984
 /* 02FEF8 8085D988 */ .word 0x42700000
 /* 02FEFC 8085D98C */ .word 0x00000000
 
-glabel D_8085D990
-/* 02FF00 8085D990 */ .word 0x00000000
-/* 02FF04 8085D994 */ .word func_80858DB4
-/* 02FF08 8085D998 */ .word func_80858DDC
-/* 02FF0C 8085D99C */ .word func_80858E40
-/* 02FF10 8085D9A0 */ .word func_80858E60
-/* 02FF14 8085D9A4 */ .word func_80858E80
-/* 02FF18 8085D9A8 */ .word func_80858EA0
-/* 02FF1C 8085D9AC */ .word func_80858EFC
-/* 02FF20 8085D9B0 */ .word func_80858F1C
-/* 02FF24 8085D9B4 */ .word func_80858F3C
-/* 02FF28 8085D9B8 */ .word func_80858F5C
-/* 02FF2C 8085D9BC */ .word func_80858FBC
-/* 02FF30 8085D9C0 */ .word func_80859028
-/* 02FF34 8085D9C4 */ .word func_808591BC
-/* 02FF38 8085D9C8 */ .word func_80858DFC
-/* 02FF3C 8085D9CC */ .word func_80858F7C
-/* 02FF40 8085D9D0 */ .word func_80858F9C
-/* 02FF44 8085D9D4 */ .word func_80859168
-/* 02FF48 8085D9D8 */ .word func_80859210
-/* 02FF4C 8085D9DC */ .word func_80858EC0
+void (*D_8085D990[0x14])(PlayState*, Player*, LinkAnimationHeader*) = {
+    /*  0 */ NULL,
+    /*  1 */ func_80858DB4,
+    /*  2 */ func_80858DDC,
+    /*  3 */ func_80858E40,
+    /*  4 */ func_80858E60,
+    /*  5 */ func_80858E80,
+    /*  6 */ func_80858EA0,
+    /*  7 */ func_80858EFC,
+    /*  8 */ func_80858F1C,
+    /*  9 */ func_80858F3C,
+    /* 10 */ func_80858F5C,
+    /* 11 */ func_80858FBC,
+    /* 12 */ func_80859028,
+    /* 13 */ func_808591BC,
+    /* 14 */ func_80858DFC,
+    /* 15 */ func_80858F7C,
+    /* 16 */ func_80858F9C,
+    /* 17 */ func_80859168,
+    /* 18 */ func_80859210,
+    /* 19 */ func_80858EC0,
+};
 
 glabel D_8085D9E0
 /* 02FF50 8085D9E0 */ .word 0x00002822
@@ -2787,600 +2840,311 @@ glabel D_8085DA8C
 glabel D_8085DA90
 /* 030000 8085DA90 */ .word 0x0832F7EE
 
-glabel D_8085DA94
-/* 030004 8085DA94 */ .word 0x00000000
-/* 030008 8085DA98 */ .word 0x00000000
-/* 03000C 8085DA9C */ .word 0xFF000000
-/* 030010 8085DAA0 */ .word func_808594D0
-/* 030014 8085DAA4 */ .word 0x00000000
-/* 030018 8085DAA8 */ .word 0x00000000
-/* 03001C 8085DAAC */ .word 0x00000000
-/* 030020 8085DAB0 */ .word 0x00000000
-/* 030024 8085DAB4 */ .word 0x03000000
-/* 030028 8085DAB8 */ .word 0x0400D568
-/* 03002C 8085DABC */ .word 0x00000000
-/* 030030 8085DAC0 */ .word 0x00000000
-/* 030034 8085DAC4 */ .word 0x00000000
-/* 030038 8085DAC8 */ .word 0x00000000
-/* 03003C 8085DACC */ .word 0xFF000000
-/* 030040 8085DAD0 */ .word func_808594D0
-/* 030044 8085DAD4 */ .word 0x02000000
-/* 030048 8085DAD8 */ .word 0x0400D5A0
-/* 03004C 8085DADC */ .word 0xFF000000
-/* 030050 8085DAE0 */ .word func_8085978C
-/* 030054 8085DAE4 */ .word 0x03000000
-/* 030058 8085DAE8 */ .word 0x0400D680
-/* 03005C 8085DAEC */ .word 0x05000000
-/* 030060 8085DAF0 */ .word 0x0400D1C0
-/* 030064 8085DAF4 */ .word 0x07000000
-/* 030068 8085DAF8 */ .word 0x0400D1C8
-/* 03006C 8085DAFC */ .word 0x02000000
-/* 030070 8085DB00 */ .word 0x0400D560
-/* 030074 8085DB04 */ .word 0x00000000
-/* 030078 8085DB08 */ .word 0x00000000
-/* 03007C 8085DB0C */ .word 0x03000000
-/* 030080 8085DB10 */ .word 0x0400D5D0
-/* 030084 8085DB14 */ .word 0xFF000000
-/* 030088 8085DB18 */ .word func_80859B54
-/* 03008C 8085DB1C */ .word 0x02000000
-/* 030090 8085DB20 */ .word 0x0400DDA8
-/* 030094 8085DB24 */ .word 0x10000000
-/* 030098 8085DB28 */ .word 0x0400DCB0
-/* 03009C 8085DB2C */ .word 0xFF000000
-/* 0300A0 8085DB30 */ .word func_80859CA0
-/* 0300A4 8085DB34 */ .word 0xFF000000
-/* 0300A8 8085DB38 */ .word func_808594D0
-/* 0300AC 8085DB3C */ .word 0x03000000
-/* 0300B0 8085DB40 */ .word 0x0400D190
-/* 0300B4 8085DB44 */ .word 0x06000000
-/* 0300B8 8085DB48 */ .word 0x0400E168
-/* 0300BC 8085DB4C */ .word 0x03000000
-/* 0300C0 8085DB50 */ .word 0x0400D640
-/* 0300C4 8085DB54 */ .word 0x03000000
-/* 0300C8 8085DB58 */ .word 0x0400DF38
-/* 0300CC 8085DB5C */ .word 0xFF000000
-/* 0300D0 8085DB60 */ .word func_80859CFC
-/* 0300D4 8085DB64 */ .word 0xFF000000
-/* 0300D8 8085DB68 */ .word func_8085A66C
-/* 0300DC 8085DB6C */ .word 0x03000000
-/* 0300E0 8085DB70 */ .word 0x0400D688
-/* 0300E4 8085DB74 */ .word 0x03000000
-/* 0300E8 8085DB78 */ .word 0x0400D610
-/* 0300EC 8085DB7C */ .word 0x03000000
-/* 0300F0 8085DB80 */ .word 0x0400D620
-/* 0300F4 8085DB84 */ .word 0x03000000
-/* 0300F8 8085DB88 */ .word 0x0400D628
-/* 0300FC 8085DB8C */ .word 0x06000000
-/* 030100 8085DB90 */ .word 0x0400D310
-/* 030104 8085DB94 */ .word 0xFF000000
-/* 030108 8085DB98 */ .word func_80859FCC
-/* 03010C 8085DB9C */ .word 0x03000000
-/* 030110 8085DBA0 */ .word 0x0400D2D0
-/* 030114 8085DBA4 */ .word 0x04000000
-/* 030118 8085DBA8 */ .word 0x0400D2C8
-/* 03011C 8085DBAC */ .word 0x03000000
-/* 030120 8085DBB0 */ .word 0x0400D2B8
-/* 030124 8085DBB4 */ .word 0xFF000000
-/* 030128 8085DBB8 */ .word func_8085A120
-/* 03012C 8085DBBC */ .word 0xFF000000
-/* 030130 8085DBC0 */ .word func_8085A19C
-/* 030134 8085DBC4 */ .word 0x06000000
-/* 030138 8085DBC8 */ .word 0x0400D278
-/* 03013C 8085DBCC */ .word 0x06000000
-/* 030140 8085DBD0 */ .word 0x0400D288
-/* 030144 8085DBD4 */ .word 0x05000000
-/* 030148 8085DBD8 */ .word 0x0400E428
-/* 03014C 8085DBDC */ .word 0x05000000
-/* 030150 8085DBE0 */ .word 0x0400D060
-/* 030154 8085DBE4 */ .word 0x05000000
-/* 030158 8085DBE8 */ .word 0x0400E148
-/* 03015C 8085DBEC */ .word 0x05000000
-/* 030160 8085DBF0 */ .word 0x0400E150
-/* 030164 8085DBF4 */ .word 0x07000000
-/* 030168 8085DBF8 */ .word 0x0400D068
-/* 03016C 8085DBFC */ .word 0x05000000
-/* 030170 8085DC00 */ .word 0x0400E420
-/* 030174 8085DC04 */ .word 0x05000000
-/* 030178 8085DC08 */ .word 0x0400E430
-/* 03017C 8085DC0C */ .word 0x05000000
-/* 030180 8085DC10 */ .word 0x0400E440
-/* 030184 8085DC14 */ .word 0x03000000
-/* 030188 8085DC18 */ .word 0x0400CF68
-/* 03018C 8085DC1C */ .word 0x05000000
-/* 030190 8085DC20 */ .word 0x0400D2F0
-/* 030194 8085DC24 */ .word 0x05000000
-/* 030198 8085DC28 */ .word 0x0400E468
-/* 03019C 8085DC2C */ .word 0x05000000
-/* 0301A0 8085DC30 */ .word 0x0400E460
-/* 0301A4 8085DC34 */ .word 0x05000000
-/* 0301A8 8085DC38 */ .word 0x0400E140
-/* 0301AC 8085DC3C */ .word 0x05000000
-/* 0301B0 8085DC40 */ .word 0x0400E118
-/* 0301B4 8085DC44 */ .word 0x04000000
-/* 0301B8 8085DC48 */ .word 0x0400E120
-/* 0301BC 8085DC4C */ .word 0x05000000
-/* 0301C0 8085DC50 */ .word 0x0400E110
-/* 0301C4 8085DC54 */ .word 0x0E000000
-/* 0301C8 8085DC58 */ .word 0x0400E140
-/* 0301CC 8085DC5C */ .word 0x05000000
-/* 0301D0 8085DC60 */ .word 0x0400D0E0
-/* 0301D4 8085DC64 */ .word 0xFF000000
-/* 0301D8 8085DC68 */ .word func_8085978C
-/* 0301DC 8085DC6C */ .word 0x05000000
-/* 0301E0 8085DC70 */ .word 0x0400D0A0
-/* 0301E4 8085DC74 */ .word 0x02000000
-/* 0301E8 8085DC78 */ .word 0x0400D080
-/* 0301EC 8085DC7C */ .word 0x07000000
-/* 0301F0 8085DC80 */ .word 0x0400D0B8
-/* 0301F4 8085DC84 */ .word 0x05000000
-/* 0301F8 8085DC88 */ .word 0x0400D0C0
-/* 0301FC 8085DC8C */ .word 0x03000000
-/* 030200 8085DC90 */ .word 0x0400CF60
-/* 030204 8085DC94 */ .word 0x03000000
-/* 030208 8085DC98 */ .word 0x0400CF48
-/* 03020C 8085DC9C */ .word 0x03000000
-/* 030210 8085DCA0 */ .word 0x0400CF58
-/* 030214 8085DCA4 */ .word 0x03000000
-/* 030218 8085DCA8 */ .word 0x0400CF40
-/* 03021C 8085DCAC */ .word 0xFF000000
-/* 030220 8085DCB0 */ .word func_8085968C
-/* 030224 8085DCB4 */ .word 0xFF000000
-/* 030228 8085DCB8 */ .word func_8085A24C
-/* 03022C 8085DCBC */ .word 0xFF000000
-/* 030230 8085DCC0 */ .word func_8085A330
-/* 030234 8085DCC4 */ .word 0x07000000
-/* 030238 8085DCC8 */ .word 0x0400D0D8
-/* 03023C 8085DCCC */ .word 0x05000000
-/* 030240 8085DCD0 */ .word 0x0400D090
-/* 030244 8085DCD4 */ .word 0x05000000
-/* 030248 8085DCD8 */ .word 0x0400D088
-/* 03024C 8085DCDC */ .word 0x03000000
-/* 030250 8085DCE0 */ .word 0x0400CF88
-/* 030254 8085DCE4 */ .word 0x03000000
-/* 030258 8085DCE8 */ .word 0x0400CF90
-/* 03025C 8085DCEC */ .word 0x03000000
-/* 030260 8085DCF0 */ .word 0x0400CF78
-/* 030264 8085DCF4 */ .word 0x03000000
-/* 030268 8085DCF8 */ .word 0x0400CF80
-/* 03026C 8085DCFC */ .word 0x07000000
-/* 030270 8085DD00 */ .word 0x0400D308
-/* 030274 8085DD04 */ .word 0x05000000
-/* 030278 8085DD08 */ .word 0x0400D300
-/* 03027C 8085DD0C */ .word 0x03000000
-/* 030280 8085DD10 */ .word 0x0400D018
-/* 030284 8085DD14 */ .word 0x04000000
-/* 030288 8085DD18 */ .word 0x0400D028
-/* 03028C 8085DD1C */ .word 0x03000000
-/* 030290 8085DD20 */ .word 0x0400CFE0
-/* 030294 8085DD24 */ .word 0x04000000
-/* 030298 8085DD28 */ .word 0x0400D058
-/* 03029C 8085DD2C */ .word 0x03000000
-/* 0302A0 8085DD30 */ .word 0x0400D030
-/* 0302A4 8085DD34 */ .word 0x05000000
-/* 0302A8 8085DD38 */ .word 0x0400CFB0
-/* 0302AC 8085DD3C */ .word 0x03000000
-/* 0302B0 8085DD40 */ .word 0x0400CFC8
-/* 0302B4 8085DD44 */ .word 0x04000000
-/* 0302B8 8085DD48 */ .word 0x0400D040
-/* 0302BC 8085DD4C */ .word 0x05000000
-/* 0302C0 8085DD50 */ .word 0x0400D1D0
-/* 0302C4 8085DD54 */ .word 0x03000000
-/* 0302C8 8085DD58 */ .word 0x0400CFD8
-/* 0302CC 8085DD5C */ .word 0x04000000
-/* 0302D0 8085DD60 */ .word 0x0400CFC0
-/* 0302D4 8085DD64 */ .word 0x04000000
-/* 0302D8 8085DD68 */ .word 0x0400CFB8
-/* 0302DC 8085DD6C */ .word 0x04000000
-/* 0302E0 8085DD70 */ .word 0x0400D050
-/* 0302E4 8085DD74 */ .word 0x04000000
-/* 0302E8 8085DD78 */ .word 0x0400D048
-/* 0302EC 8085DD7C */ .word 0xFF000000
-/* 0302F0 8085DD80 */ .word func_8085A8C4
-/* 0302F4 8085DD84 */ .word 0x03000000
-/* 0302F8 8085DD88 */ .word 0x0400D000
-/* 0302FC 8085DD8C */ .word 0x03000000
-/* 030300 8085DD90 */ .word 0x0400D010
-/* 030304 8085DD94 */ .word 0x09000000
-/* 030308 8085DD98 */ .word 0x0400DAD0
-/* 03030C 8085DD9C */ .word 0xFF000000
-/* 030310 8085DDA0 */ .word func_8085A530
-/* 030314 8085DDA4 */ .word 0x0F000000
-/* 030318 8085DDA8 */ .word 0x0400D0A8
-/* 03031C 8085DDAC */ .word 0x07000000
-/* 030320 8085DDB0 */ .word 0x0400D098
-/* 030324 8085DDB4 */ .word 0x03000000
-/* 030328 8085DDB8 */ .word 0x0400CFA0
-/* 03032C 8085DDBC */ .word 0x03000000
-/* 030330 8085DDC0 */ .word 0x0400CFF0
-/* 030334 8085DDC4 */ .word 0xFF000000
-/* 030338 8085DDC8 */ .word func_8085A768
-/* 03033C 8085DDCC */ .word 0xFF000000
-/* 030340 8085DDD0 */ .word func_8085AA60
-/* 030344 8085DDD4 */ .word 0x05000000
-/* 030348 8085DDD8 */ .word 0x0400D070
-/* 03034C 8085DDDC */ .word 0x05000000
-/* 030350 8085DDE0 */ .word 0x0400D358
-/* 030354 8085DDE4 */ .word 0x05000000
-/* 030358 8085DDE8 */ .word 0x0400D330
-/* 03035C 8085DDEC */ .word 0x05000000
-/* 030360 8085DDF0 */ .word 0x0400D340
-/* 030364 8085DDF4 */ .word 0x05000000
-/* 030368 8085DDF8 */ .word 0x0400D350
-/* 03036C 8085DDFC */ .word 0x05000000
-/* 030370 8085DE00 */ .word 0x0400D328
-/* 030374 8085DE04 */ .word 0x07000000
-/* 030378 8085DE08 */ .word 0x0400D368
-/* 03037C 8085DE0C */ .word 0x03000000
-/* 030380 8085DE10 */ .word 0x0400D9F8
-/* 030384 8085DE14 */ .word 0x05000000
-/* 030388 8085DE18 */ .word 0x0400D108
-/* 03038C 8085DE1C */ .word 0x05000000
-/* 030390 8085DE20 */ .word 0x0400D118
-/* 030394 8085DE24 */ .word 0x04000000
-/* 030398 8085DE28 */ .word 0x0400CF98
-/* 03039C 8085DE2C */ .word 0x02000000
-/* 0303A0 8085DE30 */ .word 0x0400D5B8
-/* 0303A4 8085DE34 */ .word 0x07000000
-/* 0303A8 8085DE38 */ .word 0x0400E010
-/* 0303AC 8085DE3C */ .word 0x05000000
-/* 0303B0 8085DE40 */ .word 0x0400D0F8
-/* 0303B4 8085DE44 */ .word 0x07000000
-/* 0303B8 8085DE48 */ .word 0x0400D2D8
-/* 0303BC 8085DE4C */ .word 0x07000000
-/* 0303C0 8085DE50 */ .word 0x0400D2E0
-/* 0303C4 8085DE54 */ .word 0x07000000
-/* 0303C8 8085DE58 */ .word 0x0400D2E8
-/* 0303CC 8085DE5C */ .word 0xFF000000
-/* 0303D0 8085DE60 */ .word func_80859990
-/* 0303D4 8085DE64 */ .word 0x00000000
-/* 0303D8 8085DE68 */ .word 0x00000000
-/* 0303DC 8085DE6C */ .word 0xFF000000
-/* 0303E0 8085DE70 */ .word func_80859A10
-/* 0303E4 8085DE74 */ .word 0x07000000
-/* 0303E8 8085DE78 */ .word 0x0400D158
-/* 0303EC 8085DE7C */ .word 0x05000000
-/* 0303F0 8085DE80 */ .word 0x0400D160
-/* 0303F4 8085DE84 */ .word 0x05000000
-/* 0303F8 8085DE88 */ .word 0x0400D168
-/* 0303FC 8085DE8C */ .word 0x03000000
-/* 030400 8085DE90 */ .word 0x0400D5C0
-/* 030404 8085DE94 */ .word 0x04000000
-/* 030408 8085DE98 */ .word 0x0400D668
-/* 03040C 8085DE9C */ .word 0x03000000
-/* 030410 8085DEA0 */ .word 0x0400E470
-/* 030414 8085DEA4 */ .word 0x03000000
-/* 030418 8085DEA8 */ .word 0x0400E478
-/* 03041C 8085DEAC */ .word 0x03000000
-/* 030420 8085DEB0 */ .word 0x0400E4C0
-/* 030424 8085DEB4 */ .word 0x03000000
-/* 030428 8085DEB8 */ .word 0x0400E480
-/* 03042C 8085DEBC */ .word 0x03000000
-/* 030430 8085DEC0 */ .word 0x0400E490
-/* 030434 8085DEC4 */ .word 0x03000000
-/* 030438 8085DEC8 */ .word 0x0400E488
-/* 03043C 8085DECC */ .word 0x03000000
-/* 030440 8085DED0 */ .word 0x0400E498
-/* 030444 8085DED4 */ .word 0x03000000
-/* 030448 8085DED8 */ .word 0x0400E4B0
-/* 03044C 8085DEDC */ .word 0x03000000
-/* 030450 8085DEE0 */ .word 0x0400D660
-/* 030454 8085DEE4 */ .word 0x03000000
-/* 030458 8085DEE8 */ .word 0x0400DA00
-/* 03045C 8085DEEC */ .word 0x03000000
-/* 030460 8085DEF0 */ .word 0x0400DA08
+struct_8085DA94 D_8085DA94[0x8C] = {
+    { 0x00000000, NULL },
+    { -1, func_808594D0 },
+    { 0x00000000, NULL },
+    { 0x00000000, NULL },
+    { 0x03, 0x0400D568 },
+    { 0x00000000, NULL },
+    { 0x00000000, NULL },
+    { -1, func_808594D0 },
+    { 0x02, 0x0400D5A0 },
+    { -1, func_8085978C },
+    { 0x03, 0x0400D680 },
+    { 0x05, 0x0400D1C0 },
+    { 0x07, 0x0400D1C8 },
+    { 0x02, 0x0400D560 },
+    { 0x00000000, NULL },
+    { 0x03, 0x0400D5D0 },
+    { -1, func_80859B54 },
+    { 0x02, 0x0400DDA8 },
+    { 0x10, 0x0400DCB0 },
+    { -1, func_80859CA0 },
+    { -1, func_808594D0 },
+    { 0x03, 0x0400D190 },
+    { 0x06, 0x0400E168 },
+    { 0x03, 0x0400D640 },
+    { 0x03, 0x0400DF38 },
+    { -1, func_80859CFC },
+    { -1, func_8085A66C },
+    { 0x03, 0x0400D688 },
+    { 0x03, 0x0400D610 },
+    { 0x03, 0x0400D620 },
+    { 0x03, 0x0400D628 },
+    { 0x06, 0x0400D310 },
+    { -1, func_80859FCC },
+    { 0x03, 0x0400D2D0 },
+    { 0x04, 0x0400D2C8 },
+    { 0x03, 0x0400D2B8 },
+    { -1, func_8085A120 },
+    { -1, func_8085A19C },
+    { 0x06, 0x0400D278 },
+    { 0x06, 0x0400D288 },
+    { 0x05, 0x0400E428 },
+    { 0x05, 0x0400D060 },
+    { 0x05, 0x0400E148 },
+    { 0x05, 0x0400E150 },
+    { 0x07, 0x0400D068 },
+    { 0x05, 0x0400E420 },
+    { 0x05, 0x0400E430 },
+    { 0x05, 0x0400E440 },
+    { 0x03, 0x0400CF68 },
+    { 0x05, 0x0400D2F0 },
+    { 0x05, 0x0400E468 },
+    { 0x05, 0x0400E460 },
+    { 0x05, 0x0400E140 },
+    { 0x05, 0x0400E118 },
+    { 0x04, 0x0400E120 },
+    { 0x05, 0x0400E110 },
+    { 0x0E, 0x0400E140 },
+    { 0x05, 0x0400D0E0 },
+    { -1, func_8085978C },
+    { 0x05, 0x0400D0A0 },
+    { 0x02, 0x0400D080 },
+    { 0x07, 0x0400D0B8 },
+    { 0x05, 0x0400D0C0 },
+    { 0x03, 0x0400CF60 },
+    { 0x03, 0x0400CF48 },
+    { 0x03, 0x0400CF58 },
+    { 0x03, 0x0400CF40 },
+    { -1, func_8085968C },
+    { -1, func_8085A24C },
+    { -1, func_8085A330 },
+    { 0x07, 0x0400D0D8 },
+    { 0x05, 0x0400D090 },
+    { 0x05, 0x0400D088 },
+    { 0x03, 0x0400CF88 },
+    { 0x03, 0x0400CF90 },
+    { 0x03, 0x0400CF78 },
+    { 0x03, 0x0400CF80 },
+    { 0x07, 0x0400D308 },
+    { 0x05, 0x0400D300 },
+    { 0x03, 0x0400D018 },
+    { 0x04, 0x0400D028 },
+    { 0x03, 0x0400CFE0 },
+    { 0x04, 0x0400D058 },
+    { 0x03, 0x0400D030 },
+    { 0x05, 0x0400CFB0 },
+    { 0x03, 0x0400CFC8 },
+    { 0x04, 0x0400D040 },
+    { 0x05, 0x0400D1D0 },
+    { 0x03, 0x0400CFD8 },
+    { 0x04, 0x0400CFC0 },
+    { 0x04, 0x0400CFB8 },
+    { 0x04, 0x0400D050 },
+    { 0x04, 0x0400D048 },
+    { -1, func_8085A8C4 },
+    { 0x03, 0x0400D000 },
+    { 0x03, 0x0400D010 },
+    { 0x09, 0x0400DAD0 },
+    { -1, func_8085A530 },
+    { 0x0F, 0x0400D0A8 },
+    { 0x07, 0x0400D098 },
+    { 0x03, 0x0400CFA0 },
+    { 0x03, 0x0400CFF0 },
+    { -1, func_8085A768 },
+    { -1, func_8085AA60 },
+    { 0x05, 0x0400D070 },
+    { 0x05, 0x0400D358 },
+    { 0x05, 0x0400D330 },
+    { 0x05, 0x0400D340 },
+    { 0x05, 0x0400D350 },
+    { 0x05, 0x0400D328 },
+    { 0x07, 0x0400D368 },
+    { 0x03, 0x0400D9F8 },
+    { 0x05, 0x0400D108 },
+    { 0x05, 0x0400D118 },
+    { 0x04, 0x0400CF98 },
+    { 0x02, 0x0400D5B8 },
+    { 0x07, 0x0400E010 },
+    { 0x05, 0x0400D0F8 },
+    { 0x07, 0x0400D2D8 },
+    { 0x07, 0x0400D2E0 },
+    { 0x07, 0x0400D2E8 },
+    { -1, func_80859990 },
+    { 0x00000000, NULL },
+    { -1, func_80859A10 },
+    { 0x07, 0x0400D158 },
+    { 0x05, 0x0400D160 },
+    { 0x05, 0x0400D168 },
+    { 0x03, 0x0400D5C0 },
+    { 0x04, 0x0400D668 },
+    { 0x03, 0x0400E470 },
+    { 0x03, 0x0400E478 },
+    { 0x03, 0x0400E4C0 },
+    { 0x03, 0x0400E480 },
+    { 0x03, 0x0400E490 },
+    { 0x03, 0x0400E488 },
+    { 0x03, 0x0400E498 },
+    { 0x03, 0x0400E4B0 },
+    { 0x03, 0x0400D660 },
+    { 0x03, 0x0400DA00 },
+    { 0x03, 0x0400DA08 },
+};
 
-glabel D_8085DEF4
-/* 030464 8085DEF4 */ .word 0x00000000
-/* 030468 8085DEF8 */ .word 0x00000000
-/* 03046C 8085DEFC */ .word 0xFF000000
-/* 030470 8085DF00 */ .word func_80859414
-/* 030474 8085DF04 */ .word 0xFF000000
-/* 030478 8085DF08 */ .word func_80859AD0
-/* 03047C 8085DF0C */ .word 0xFF000000
-/* 030480 8085DF10 */ .word func_80859B28
-/* 030484 8085DF14 */ .word 0x0B000000
-/* 030488 8085DF18 */ .word 0x00000000
-/* 03048C 8085DF1C */ .word 0xFF000000
-/* 030490 8085DF20 */ .word func_8085ADA0
-/* 030494 8085DF24 */ .word 0xFF000000
-/* 030498 8085DF28 */ .word func_8085AACC
-/* 03049C 8085DF2C */ .word 0xFF000000
-/* 0304A0 8085DF30 */ .word func_808595B8
-/* 0304A4 8085DF34 */ .word 0x12000000
-/* 0304A8 8085DF38 */ .word D_8085DA70
-/* 0304AC 8085DF3C */ .word 0xFF000000
-/* 0304B0 8085DF40 */ .word func_80859890
-/* 0304B4 8085DF44 */ .word 0xFF000000
-/* 0304B8 8085DF48 */ .word func_80859C60
-/* 0304BC 8085DF4C */ .word 0x12000000
-/* 0304C0 8085DF50 */ .word D_8085D9E0
-/* 0304C4 8085DF54 */ .word 0x0B000000
-/* 0304C8 8085DF58 */ .word 0x00000000
-/* 0304CC 8085DF5C */ .word 0x0B000000
-/* 0304D0 8085DF60 */ .word 0x00000000
-/* 0304D4 8085DF64 */ .word 0x00000000
-/* 0304D8 8085DF68 */ .word 0x00000000
-/* 0304DC 8085DF6C */ .word 0x0B000000
-/* 0304E0 8085DF70 */ .word 0x00000000
-/* 0304E4 8085DF74 */ .word 0x11000000
-/* 0304E8 8085DF78 */ .word 0x0400DDB8
-/* 0304EC 8085DF7C */ .word 0x0B000000
-/* 0304F0 8085DF80 */ .word 0x00000000
-/* 0304F4 8085DF84 */ .word 0x0B000000
-/* 0304F8 8085DF88 */ .word 0x00000000
-/* 0304FC 8085DF8C */ .word 0xFF000000
-/* 030500 8085DF90 */ .word func_8085A710
-/* 030504 8085DF94 */ .word 0xFF000000
-/* 030508 8085DF98 */ .word func_808595B8
-/* 03050C 8085DF9C */ .word 0x0C000000
-/* 030510 8085DFA0 */ .word 0x0400D198
-/* 030514 8085DFA4 */ .word 0xFF000000
-/* 030518 8085DFA8 */ .word func_80859D70
-/* 03051C 8085DFAC */ .word 0x0C000000
-/* 030520 8085DFB0 */ .word 0x0400D648
-/* 030524 8085DFB4 */ .word 0x0B000000
-/* 030528 8085DFB8 */ .word 0x00000000
-/* 03052C 8085DFBC */ .word 0x0B000000
-/* 030530 8085DFC0 */ .word 0x00000000
-/* 030534 8085DFC4 */ .word 0xFF000000
-/* 030538 8085DFC8 */ .word func_8085A6C0
-/* 03053C 8085DFCC */ .word 0x0C000000
-/* 030540 8085DFD0 */ .word 0x0400D690
-/* 030544 8085DFD4 */ .word 0x0C000000
-/* 030548 8085DFD8 */ .word 0x0400D618
-/* 03054C 8085DFDC */ .word 0x0C000000
-/* 030550 8085DFE0 */ .word 0x0400D630
-/* 030554 8085DFE4 */ .word 0x0C000000
-/* 030558 8085DFE8 */ .word 0x0400D298
-/* 03055C 8085DFEC */ .word 0x0C000000
-/* 030560 8085DFF0 */ .word 0x0400D318
-/* 030564 8085DFF4 */ .word 0xFF000000
-/* 030568 8085DFF8 */ .word func_80859FF4
-/* 03056C 8085DFFC */ .word 0xFF000000
-/* 030570 8085E000 */ .word func_8085A04C
-/* 030574 8085E004 */ .word 0x0B000000
-/* 030578 8085E008 */ .word 0x00000000
-/* 03057C 8085E00C */ .word 0x0C000000
-/* 030580 8085E010 */ .word 0x0400D2C0
-/* 030584 8085E014 */ .word 0xFF000000
-/* 030588 8085E018 */ .word func_8085A144
-/* 03058C 8085E01C */ .word 0xFF000000
-/* 030590 8085E020 */ .word func_8085A1D4
-/* 030594 8085E024 */ .word 0x0C000000
-/* 030598 8085E028 */ .word 0x0400D280
-/* 03059C 8085E02C */ .word 0x0C000000
-/* 0305A0 8085E030 */ .word 0x0400D290
-/* 0305A4 8085E034 */ .word 0x12000000
-/* 0305A8 8085E038 */ .word D_8085D9F0
-/* 0305AC 8085E03C */ .word 0x0B000000
-/* 0305B0 8085E040 */ .word 0x00000000
-/* 0305B4 8085E044 */ .word 0x12000000
-/* 0305B8 8085E048 */ .word D_8085DA00
-/* 0305BC 8085E04C */ .word 0x0D000000
-/* 0305C0 8085E050 */ .word 0x0400E158
-/* 0305C4 8085E054 */ .word 0xFF000000
-/* 0305C8 8085E058 */ .word func_8085A364
-/* 0305CC 8085E05C */ .word 0x12000000
-/* 0305D0 8085E060 */ .word D_8085DA2C
-/* 0305D4 8085E064 */ .word 0x0C000000
-/* 0305D8 8085E068 */ .word 0x0400E438
-/* 0305DC 8085E06C */ .word 0x0C000000
-/* 0305E0 8085E070 */ .word 0x0400E448
-/* 0305E4 8085E074 */ .word 0x0C000000
-/* 0305E8 8085E078 */ .word 0x0400CF70
-/* 0305EC 8085E07C */ .word 0x0C000000
-/* 0305F0 8085E080 */ .word 0x0400D2F8
-/* 0305F4 8085E084 */ .word 0x12000000
-/* 0305F8 8085E088 */ .word D_8085DA50
-/* 0305FC 8085E08C */ .word 0x0B000000
-/* 030600 8085E090 */ .word 0x00000000
-/* 030604 8085E094 */ .word 0x12000000
-/* 030608 8085E098 */ .word D_8085D9FC
-/* 03060C 8085E09C */ .word 0x0C000000
-/* 030610 8085E0A0 */ .word 0x0400E120
-/* 030614 8085E0A4 */ .word 0xFF000000
-/* 030618 8085E0A8 */ .word func_8085A364
-/* 03061C 8085E0AC */ .word 0x12000000
-/* 030620 8085E0B0 */ .word D_8085DA1C
-/* 030624 8085E0B4 */ .word 0x0B000000
-/* 030628 8085E0B8 */ .word 0x00000000
-/* 03062C 8085E0BC */ .word 0x12000000
-/* 030630 8085E0C0 */ .word D_8085DA0C
-/* 030634 8085E0C4 */ .word 0xFF000000
-/* 030638 8085E0C8 */ .word func_808599DC
-/* 03063C 8085E0CC */ .word 0x0B000000
-/* 030640 8085E0D0 */ .word 0x00000000
-/* 030644 8085E0D4 */ .word 0x12000000
-/* 030648 8085E0D8 */ .word D_8085DA28
-/* 03064C 8085E0DC */ .word 0xFF000000
-/* 030650 8085E0E0 */ .word func_8085A364
-/* 030654 8085E0E4 */ .word 0x0B000000
-/* 030658 8085E0E8 */ .word 0x00000000
-/* 03065C 8085E0EC */ .word 0x0B000000
-/* 030660 8085E0F0 */ .word 0x00000000
-/* 030664 8085E0F4 */ .word 0x0C000000
-/* 030668 8085E0F8 */ .word 0x0400CF50
-/* 03066C 8085E0FC */ .word 0xFF000000
-/* 030670 8085E100 */ .word func_8085A40C
-/* 030674 8085E104 */ .word 0x0B000000
-/* 030678 8085E108 */ .word 0x00000000
-/* 03067C 8085E10C */ .word 0xFF000000
-/* 030680 8085E110 */ .word func_80859708
-/* 030684 8085E114 */ .word 0xFF000000
-/* 030688 8085E118 */ .word func_8085A2AC
-/* 03068C 8085E11C */ .word 0x0B000000
-/* 030690 8085E120 */ .word 0x00000000
-/* 030694 8085E124 */ .word 0x0B000000
-/* 030698 8085E128 */ .word 0x00000000
-/* 03069C 8085E12C */ .word 0xFF000000
-/* 0306A0 8085E130 */ .word func_8085A40C
-/* 0306A4 8085E134 */ .word 0x0B000000
-/* 0306A8 8085E138 */ .word 0x00000000
-/* 0306AC 8085E13C */ .word 0x0B000000
-/* 0306B0 8085E140 */ .word 0x00000000
-/* 0306B4 8085E144 */ .word 0x0B000000
-/* 0306B8 8085E148 */ .word 0x00000000
-/* 0306BC 8085E14C */ .word 0x0B000000
-/* 0306C0 8085E150 */ .word 0x00000000
-/* 0306C4 8085E154 */ .word 0x0B000000
-/* 0306C8 8085E158 */ .word 0x00000000
-/* 0306CC 8085E15C */ .word 0x0B000000
-/* 0306D0 8085E160 */ .word 0x00000000
-/* 0306D4 8085E164 */ .word 0x12000000
-/* 0306D8 8085E168 */ .word D_8085DA78
-/* 0306DC 8085E16C */ .word 0x0C000000
-/* 0306E0 8085E170 */ .word 0x0400D020
-/* 0306E4 8085E174 */ .word 0xFF000000
-/* 0306E8 8085E178 */ .word func_8085A364
-/* 0306EC 8085E17C */ .word 0x0C000000
-/* 0306F0 8085E180 */ .word 0x0400CFE8
-/* 0306F4 8085E184 */ .word 0x0B000000
-/* 0306F8 8085E188 */ .word 0x00000000
-/* 0306FC 8085E18C */ .word 0x0C000000
-/* 030700 8085E190 */ .word 0x0400D038
-/* 030704 8085E194 */ .word 0x12000000
-/* 030708 8085E198 */ .word D_8085DA80
-/* 03070C 8085E19C */ .word 0x0C000000
-/* 030710 8085E1A0 */ .word 0x0400CFD0
-/* 030714 8085E1A4 */ .word 0x0B000000
-/* 030718 8085E1A8 */ .word 0x00000000
-/* 03071C 8085E1AC */ .word 0x0B000000
-/* 030720 8085E1B0 */ .word 0x00000000
-/* 030724 8085E1B4 */ .word 0x0B000000
-/* 030728 8085E1B8 */ .word 0x00000000
-/* 03072C 8085E1BC */ .word 0x0B000000
-/* 030730 8085E1C0 */ .word 0x00000000
-/* 030734 8085E1C4 */ .word 0x0B000000
-/* 030738 8085E1C8 */ .word 0x00000000
-/* 03073C 8085E1CC */ .word 0x0B000000
-/* 030740 8085E1D0 */ .word 0x00000000
-/* 030744 8085E1D4 */ .word 0x0B000000
-/* 030748 8085E1D8 */ .word 0x00000000
-/* 03074C 8085E1DC */ .word 0xFF000000
-/* 030750 8085E1E0 */ .word func_8085A940
-/* 030754 8085E1E4 */ .word 0x0C000000
-/* 030758 8085E1E8 */ .word 0x0400D008
-/* 03075C 8085E1EC */ .word 0x0B000000
-/* 030760 8085E1F0 */ .word 0x00000000
-/* 030764 8085E1F4 */ .word 0xFF000000
-/* 030768 8085E1F8 */ .word func_8085A4A4
-/* 03076C 8085E1FC */ .word 0xFF000000
-/* 030770 8085E200 */ .word func_8085A5DC
-/* 030774 8085E204 */ .word 0xFF000000
-/* 030778 8085E208 */ .word func_8085AA84
-/* 03077C 8085E20C */ .word 0x0B000000
-/* 030780 8085E210 */ .word 0x00000000
-/* 030784 8085E214 */ .word 0x0C000000
-/* 030788 8085E218 */ .word 0x0400CFA8
-/* 03078C 8085E21C */ .word 0x0C000000
-/* 030790 8085E220 */ .word 0x0400CFF8
-/* 030794 8085E224 */ .word 0xFF000000
-/* 030798 8085E228 */ .word func_8085A7C0
-/* 03079C 8085E22C */ .word 0x0B000000
-/* 0307A0 8085E230 */ .word 0x00000000
-/* 0307A4 8085E234 */ .word 0x0D000000
-/* 0307A8 8085E238 */ .word 0x0400D078
-/* 0307AC 8085E23C */ .word 0x0D000000
-/* 0307B0 8085E240 */ .word 0x0400D360
-/* 0307B4 8085E244 */ .word 0x0D000000
-/* 0307B8 8085E248 */ .word 0x0400D338
-/* 0307BC 8085E24C */ .word 0x0D000000
-/* 0307C0 8085E250 */ .word 0x0400D348
-/* 0307C4 8085E254 */ .word 0x0B000000
-/* 0307C8 8085E258 */ .word 0x00000000
-/* 0307CC 8085E25C */ .word 0x0B000000
-/* 0307D0 8085E260 */ .word 0x00000000
-/* 0307D4 8085E264 */ .word 0x0B000000
-/* 0307D8 8085E268 */ .word 0x00000000
-/* 0307DC 8085E26C */ .word 0x0C000000
-/* 0307E0 8085E270 */ .word 0x0400D9F0
-/* 0307E4 8085E274 */ .word 0x0D000000
-/* 0307E8 8085E278 */ .word 0x0400D110
-/* 0307EC 8085E27C */ .word 0x0D000000
-/* 0307F0 8085E280 */ .word 0x0400D120
-/* 0307F4 8085E284 */ .word 0x0B000000
-/* 0307F8 8085E288 */ .word 0x00000000
-/* 0307FC 8085E28C */ .word 0xFF000000
-/* 030800 8085E290 */ .word func_8085AA10
-/* 030804 8085E294 */ .word 0x0B000000
-/* 030808 8085E298 */ .word 0x00000000
-/* 03080C 8085E29C */ .word 0xFF000000
-/* 030810 8085E2A0 */ .word func_8085A364
-/* 030814 8085E2A4 */ .word 0x0B000000
-/* 030818 8085E2A8 */ .word 0x00000000
-/* 03081C 8085E2AC */ .word 0x0B000000
-/* 030820 8085E2B0 */ .word 0x00000000
-/* 030824 8085E2B4 */ .word 0x0B000000
-/* 030828 8085E2B8 */ .word 0x00000000
-/* 03082C 8085E2BC */ .word 0xFF000000
-/* 030830 8085E2C0 */ .word func_808599DC
-/* 030834 8085E2C4 */ .word 0xFF000000
-/* 030838 8085E2C8 */ .word func_80859AF8
-/* 03083C 8085E2CC */ .word 0xFF000000
-/* 030840 8085E2D0 */ .word func_80859A44
-/* 030844 8085E2D4 */ .word 0x0B000000
-/* 030848 8085E2D8 */ .word 0x00000000
-/* 03084C 8085E2DC */ .word 0x0B000000
-/* 030850 8085E2E0 */ .word 0x00000000
-/* 030854 8085E2E4 */ .word 0x0B000000
-/* 030858 8085E2E8 */ .word 0x00000000
-/* 03085C 8085E2EC */ .word 0x0C000000
-/* 030860 8085E2F0 */ .word 0x0400D5C8
-/* 030864 8085E2F4 */ .word 0x0B000000
-/* 030868 8085E2F8 */ .word 0x00000000
-/* 03086C 8085E2FC */ .word 0x0C000000
-/* 030870 8085E300 */ .word 0x0400E4A8
-/* 030874 8085E304 */ .word 0x0B000000
-/* 030878 8085E308 */ .word 0x00000000
-/* 03087C 8085E30C */ .word 0x0B000000
-/* 030880 8085E310 */ .word 0x00000000
-/* 030884 8085E314 */ .word 0x0B000000
-/* 030888 8085E318 */ .word 0x00000000
-/* 03088C 8085E31C */ .word 0x0B000000
-/* 030890 8085E320 */ .word 0x00000000
-/* 030894 8085E324 */ .word 0xFF000000
-/* 030898 8085E328 */ .word func_80859D44
-/* 03089C 8085E32C */ .word 0x0B000000
-/* 0308A0 8085E330 */ .word 0x00000000
-/* 0308A4 8085E334 */ .word 0x0C000000
-/* 0308A8 8085E338 */ .word 0x0400E4A0
-/* 0308AC 8085E33C */ .word 0xFF000000
-/* 0308B0 8085E340 */ .word func_80859EBC
-/* 0308B4 8085E344 */ .word 0xFF000000
-/* 0308B8 8085E348 */ .word func_80859F4C
-/* 0308BC 8085E34C */ .word 0xFF000000
-/* 0308C0 8085E350 */ .word func_80859F4C
+struct_8085DA94 D_8085DEF4[0x8C] = {
+    { 0x00, 0x00000000 },
+    { -1, func_80859414 },
+    { -1, func_80859AD0 },
+    { -1, func_80859B28 },
+    { 0x0B, 0x00000000 },
+    { -1, func_8085ADA0 },
+    { -1, func_8085AACC },
+    { -1, func_808595B8 },
+    { 0x12, D_8085DA70 },
+    { -1, func_80859890 },
+    { -1, func_80859C60 },
+    { 0x12, D_8085D9E0 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x00, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x11, 0x0400DDB8 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { -1, func_8085A710 },
+    { -1, func_808595B8 },
+    { 0x0C, 0x0400D198 },
+    { -1, func_80859D70 },
+    { 0x0C, 0x0400D648 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { -1, func_8085A6C0 },
+    { 0x0C, 0x0400D690 },
+    { 0x0C, 0x0400D618 },
+    { 0x0C, 0x0400D630 },
+    { 0x0C, 0x0400D298 },
+    { 0x0C, 0x0400D318 },
+    { -1, func_80859FF4 },
+    { -1, func_8085A04C },
+    { 0x0B, 0x00000000 },
+    { 0x0C, 0x0400D2C0 },
+    { -1, func_8085A144 },
+    { -1, func_8085A1D4 },
+    { 0x0C, 0x0400D280 },
+    { 0x0C, 0x0400D290 },
+    { 0x12, D_8085D9F0 },
+    { 0x0B, 0x00000000 },
+    { 0x12, D_8085DA00 },
+    { 0x0D, 0x0400E158 },
+    { -1, func_8085A364 },
+    { 0x12, D_8085DA2C },
+    { 0x0C, 0x0400E438 },
+    { 0x0C, 0x0400E448 },
+    { 0x0C, 0x0400CF70 },
+    { 0x0C, 0x0400D2F8 },
+    { 0x12, D_8085DA50 },
+    { 0x0B, 0x00000000 },
+    { 0x12, D_8085D9FC },
+    { 0x0C, 0x0400E120 },
+    { -1, func_8085A364 },
+    { 0x12, D_8085DA1C },
+    { 0x0B, 0x00000000 },
+    { 0x12, D_8085DA0C },
+    { -1, func_808599DC },
+    { 0x0B, 0x00000000 },
+    { 0x12, D_8085DA28 },
+    { -1, func_8085A364 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x0C, 0x0400CF50 },
+    { -1, func_8085A40C },
+    { 0x0B, 0x00000000 },
+    { -1, func_80859708 },
+    { -1, func_8085A2AC },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { -1, func_8085A40C },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x12, D_8085DA78 },
+    { 0x0C, 0x0400D020 },
+    { -1, func_8085A364 },
+    { 0x0C, 0x0400CFE8 },
+    { 0x0B, 0x00000000 },
+    { 0x0C, 0x0400D038 },
+    { 0x12, D_8085DA80 },
+    { 0x0C, 0x0400CFD0 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { -1, func_8085A940 },
+    { 0x0C, 0x0400D008 },
+    { 0x0B, 0x00000000 },
+    { -1, func_8085A4A4 },
+    { -1, func_8085A5DC },
+    { -1, func_8085AA84 },
+    { 0x0B, 0x00000000 },
+    { 0x0C, 0x0400CFA8 },
+    { 0x0C, 0x0400CFF8 },
+    { -1, func_8085A7C0 },
+    { 0x0B, 0x00000000 },
+    { 0x0D, 0x0400D078 },
+    { 0x0D, 0x0400D360 },
+    { 0x0D, 0x0400D338 },
+    { 0x0D, 0x0400D348 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x0C, 0x0400D9F0 },
+    { 0x0D, 0x0400D110 },
+    { 0x0D, 0x0400D120 },
+    { 0x0B, 0x00000000 },
+    { -1, func_8085AA10 },
+    { 0x0B, 0x00000000 },
+    { -1, func_8085A364 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { -1, func_808599DC },
+    { -1, func_80859AF8 },
+    { -1, func_80859A44 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x0C, 0x0400D5C8 },
+    { 0x0B, 0x00000000 },
+    { 0x0C, 0x0400E4A8 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { 0x0B, 0x00000000 },
+    { -1, func_80859D44 },
+    { 0x0B, 0x00000000 },
+    { 0x0C, 0x0400E4A0 },
+    { -1, func_80859EBC },
+    { -1, func_80859F4C },
+    { -1, func_80859F4C },
+};
 
-glabel D_8085E354
-/* 0308C4 8085E354 */ .word 0x0400E4B8
-/* 0308C8 8085E358 */ .word 0x0400E4B8
-/* 0308CC 8085E35C */ .word 0x0400E4B8
-/* 0308D0 8085E360 */ .word 0x0400E4B8
-/* 0308D4 8085E364 */ .word 0x0400E160
+LinkAnimationHeader* D_8085E354[] = {
+    (LinkAnimationHeader* )0x0400E4B8,
+    (LinkAnimationHeader* )0x0400E4B8,
+    (LinkAnimationHeader* )0x0400E4B8,
+    (LinkAnimationHeader* )0x0400E4B8,
+    (LinkAnimationHeader* )0x0400E160,
+};
 
-glabel D_8085E368
-/* 0308D8 8085E368 */ .word 0xFF3802BC
-/* 0308DC 8085E36C */ .word 0x00640320
-/* 0308E0 8085E370 */ .word 0x02580320
-/* 0308E4 8085E374 */ .word 0xFF3802BC
-/* 0308E8 8085E378 */ .word 0x00640320
-/* 0308EC 8085E37C */ .word 0x02580320
-/* 0308F0 8085E380 */ .word 0xFF3802BC
-/* 0308F4 8085E384 */ .word 0x00640320
-/* 0308F8 8085E388 */ .word 0x02580320
-/* 0308FC 8085E38C */ .word 0xFF3802BC
-/* 030900 8085E390 */ .word 0x00640320
-/* 030904 8085E394 */ .word 0x02580320
-/* 030908 8085E398 */ .word 0xFF3801F4
-/* 03090C 8085E39C */ .word 0x00000258
-/* 030910 8085E3A0 */ .word 0x01900258
+struct_8085E368 D_8085E368[] = {
+    { -0xC8, 0x2BC, 0x64, 0x320, 0x258, 0x320 },
+    { -0xC8, 0x2BC, 0x64, 0x320, 0x258, 0x320 },
+    { -0xC8, 0x2BC, 0x64, 0x320, 0x258, 0x320 },
+    { -0xC8, 0x2BC, 0x64, 0x320, 0x258, 0x320 },
+    { -0xC8, 0x1F4, 0, 0x258, 0x190, 0x258 },
+};
 
-glabel D_8085E3A4
-/* 030914 8085E3A4 */ .word 0xFFFFFF00
+Color_RGBA8 D_8085E3A4 = { 0xFF, 0xFF, 0xFF, 0 };
 
-glabel D_8085E3A8
-/* 030918 8085E3A8 */ .word 0x00808000
-/* 03091C 8085E3AC */ .word 0x00000000
+Color_RGBA8 D_8085E3A8 = { 0, 0x80, 0x80, 0 };
 
 #endif
 
@@ -3607,9 +3371,8 @@ void func_8082DF8C(Player* this, u16 arg1) {
 
 void func_8082E00C(Player* this) {
     s32 i;
-    u16* var_s0;
+    u16* var_s0 = D_8085C3EC;
 
-    var_s0 = D_8085C3EC;
     for (i = 0; i < ARRAY_COUNT(D_8085C3EC); i++) {
         func_801A75E8(*var_s0 + this->ageProperties->unk_92);
         var_s0 += 1;
@@ -3899,195 +3662,6 @@ typedef struct GetItemEntry {
 } GetItemEntry; // size = 0x6
 
 extern GetItemEntry sGetItemTable[GI_MAX - 1];
-#if 0
-GetItemEntry sGetItemTable[0xB9] = {
-    { 0x84, 0, 0xB0, -0x3C, 1, 0x3F },
-    { 0x85, 1, 0xAF, 2, 1, 0x3F },
-    { 0x86, 2, 0xAE, 3, 1, 0x3F },
-    { 0x87, 2, 0xAE, 4, 1, 0x3F },
-    { 0x88, 0x14, 0xAC, 5, 1, 0x3F },
-    { 0x89, 0x14, 0xAB, 6, 1, 0x3F },
-    { 0x8A, 0x13, 0xBD, 7, 1, 0x3F },
-    { 0x5A, 0xA0, 0x21, 8, 0, 0xA8 },
-    { 0x5B, 0xA0, 0x22, 9, 0, 0xA8 },
-    { 0x83, 0x80, 9, 0xA, 0, 0x90 },
-    { 0x83, 0xA0, 9, 0xB, 0, 0x90 },
-    { 0x7B, 0xA0, 0x14, 0xC, 0, 0x96 },
-    { 0x6F, 0xA0, 0x13, 0xD, 0, 0x96 },
-    { 0x79, 0x6F, -0x1D, 0xE, 0, 0xA4 },
-    { 0x7A, 0x6E, -0x1E, 0xF, 0, 0xA4 },
-    { 0x83, 0x80, 9, 0x10, 0, 0x90 },
-    { -1, 0, 0, 0x11, 0, 0 },
-    { 0x83, 0x80, 9, 0x12, 0, 0x90 },
-    { 0x83, 0x80, 9, 0x13, 0, 0x90 },
-    { 6, 0x59, -0x1F, 0x14, 0, 0xA5 },
-    { 0x8F, 0x59, -0x1F, 0x15, 0, 0xA5 },
-    { 0x90, 0x59, -0x1F, 0x16, 0, 0xA5 },
-    { 0x91, 0x59, -0x1F, 0x17, 0, 0xA5 },
-    { 0x92, 0x59, -0x1F, 0x18, 0, 0xA5 },
-    { 8, 0xD, -0x1B, 0x19, 0, 0x9F },
-    { 0x98, 0xC0, -0x27, 0x1A, 0, 0xB0 },
-    { 0x56, 0xA0, 0x18, 0x1B, 0, 0x98 },
-    { 0x57, 0xA0, 0x19, 0x1C, 0, 0x98 },
-    { 0x58, 0xA0, 0x1A, 0x1D, 0, 0x98 },
-    { 0x93, 0x48, -0x24, 0x1E, 0, 0xAF },
-    { 0x94, 0x49, -0x25, 0x1F, 0, 0xAF },
-    { 0x95, 0x4A, -0x26, 0x20, 0, 0xAF },
-    { 0x95, 0x4A, -0x26, 0x21, 0, 0xAF },
-    { 1, 0xA0, 0x2F, 0x22, 0, 0xBF },
-    { 0x54, 0xA0, 0x16, 0x23, 0, 0x97 },
-    { 0x55, 0xA0, 0x17, 0x24, 0, 0x97 },
-    { 2, 0xA0, 0x48, 0x25, 1, 0x21 },
-    { 3, 0xA0, 0x49, 0x26, 1, 0x21 },
-    { 4, 0xA0, 0x4A, 0x27, 1, 0x21 },
-    { 9, 0xC, -0x12, 0x28, 0, 0x94 },
-    { 0x8D, 0xC, -0x12, 0x29, 0, 0x94 },
-    { 0x8E, 0xC, -0x12, 0x2A, 0, 0x94 },
-    { 0x9D, 0xA0, -0x12, 0x2B, 0, 0x94 },
-    { 0x9D, 0xA0, -0x12, 0x2C, 0, 0x94 },
-    { 0x9E, 0xA0, -0x12, 0x2D, 0, 0x94 },
-    { 0x97, 0xC0, -0x27, 0x2E, 0, 0xB0 },
-    { 0x9B, 0xA0, -0x1B, 0x2F, 0, 0x9F },
-    { 0x9B, 0xA0, -0x1B, 0x30, 0, 0x9F },
-    { 0x9C, 0xA0, -0x1B, 0x31, 0, 0x9F },
-    { 0x51, 0xA0, -0x28, 0x32, 0, 0xB3 },
-    { 0x52, 0xA0, 0x34, 0x33, 0, -0x3D },
-    { 0xC, 0x80, 0x5E, 0x34, 1, -0x36 },
-    { 0xA, 0x80, -0x35, 0x35, 0, -0x3A },
-    { 0x99, 0xC0, -0x27, 0x36, 0, 0xB0 },
-    { 0x4D, 0xA0, 0x56, 0x37, 1, 0x48 },
-    { 0x4E, 0xA0, 0x67, 0x38, 1, -7 },
-    { 0x4F, 0xA0, 0x68, 0x39, 1, -6 },
-    { 0x9A, 0xC0, -0x27, 0x3A, 0, 0xB0 },
-    { 0x10, 0xA0, 0x69, 0x3B, 1, -5 },
-    { 0x78, 0xA0, -2, 0x3C, 0, 0x86 },
-    { 0x74, 0xA0, 0xA, 0x3D, 0, 0x92 },
-    { 0x76, 0xA0, 0x1C, 0x3E, 0, 0xA0 },
-    { 0x75, 0xA0, 0xB, 0x3F, 0, 0x91 },
-    { -1, 0, 0, 0x40, 0, 0 },
-    { 0xF, 0xA0, 0x29, 0x41, 0, 0xB4 },
-    { 0xE, 0xA0, 0x30, 0x42, 0, 0xC0 },
-    { 0xD, 0xA0, 0x75, 0x43, 2, 0x28 },
-    { 0xD, 0, 0, 0x44, 0, 0 },
-    { 0x83, 0x80, 9, 0x45, 0, 0x90 },
-    { -1, 0, 0, 0x46, 0, 0 },
-    { -1, 0, 0, 0x47, 0, 0 },
-    { -1, 0, 0, 0x48, 0, 0 },
-    { -1, 0, 0, 0x49, 0, 0 },
-    { -1, 0, 0, 0x4A, 0, 0 },
-    { -1, 0, 0, 0x4B, 0, 0 },
-    { 0, 0xA0, 0x2B, 0x4C, 0, 0xB5 },
-    { -1, 0, 0, 0x4D, 0, 0 },
-    { -1, 0, 0, 0x4E, 0, 0 },
-    { -1, 0, 0, 0x4F, 0, 0 },
-    { 0x6D, 0x80, 0xC, 0x50, 2, 0x53 },
-    { -1, 0xA0, 0x20, 0x51, 0, 0xA0 },
-    { 0x6E, 0x80, 0xB5, 0x52, 1, 0x25 },
-    { -1, 0, 0, 0x53, 0, 0 },
-    { -1, 0, 0, 0x54, 0, 0 },
-    { 0x5D, 0x80, 0x5D, 0x55, 0, 0 },
-    { 0x5E, 0x80, 0x64, 0x56, 0, 0 },
-    { 0x5F, 0x80, 0x65, 0x57, 0, 0 },
-    { 0x60, 0x80, 0x66, 0x58, 0, 0 },
-    { 0x11, 0x80, 0x58, 0x59, 1, 0x96 },
-    { 0x12, 0x80, 1, 0x5A, 0, 0x9E },
-    { 0x13, 0x80, 0x32, 0x5B, 0, -0x3F },
-    { 0x14, 0x80, 0x31, 0x5C, 0, -0x3F },
-    { 0x15, 0x80, 0x33, 0x5D, 0, -0x3F },
-    { 0x16, 0x80, 0x3C, 0x5E, 2, 0x72 },
-    { 0x16, 0x80, 1, 0x5F, 0, 0x9E },
-    { 0x18, 0x80, 0x2C, 0x60, 0, 0xB6 },
-    { 0x19, 0x80, 0x2C, 0x61, 0, 0xB6 },
-    { 0x1A, 0x80, 0x36, 0x62, 0, -0x39 },
-    { 0x1B, 0x80, 0x4C, 0x63, 1, 0x37 },
-    { 0x1C, 0, 0, 0x64, 0, 0 },
-    { 0x12, 0x80, 1, 0x65, 0, 0x9E },
-    { 0x1E, 0x80, 0x53, 0x66, 1, 0x39 },
-    { 0x1F, 0, 0, 0x67, 0, 0 },
-    { 0x20, 0, 0, 0x68, 0, 0 },
-    { 0x21, 0x80, 0x59, 0x69, 1, 0xAE },
-    { 0x22, 0x80, 0x60, 0x6A, 1, -0x17 },
-    { 0x23, 0x80, 0x70, 0x6B, 2, 0x1D },
-    { -1, 0, 0, 0x6C, 0, 0 },
-    { 0x12, 0x80, 1, 0x6D, 0, 0x9E },
-    { 0x24, 0x80, 0x60, 0x6E, 1, -0x17 },
-    { 0x25, 0x80, 0x74, 0x6F, 2, 0x27 },
-    { 0x12, 0x80, 1, 0x70, 0, 0x9E },
-    { -1, 0, 0, 0x71, 0, 0 },
-    { -1, 0, 0, 0x72, 0, 0 },
-    { -1, 0, 0, 0x73, 0, 0 },
-    { -1, 0, 0, 0x74, 0, 0 },
-    { -1, 0, 0, 0x75, 0, 0 },
-    { -1, 0, 0, 0x76, 0, 0 },
-    { -1, 0, 0, 0x77, 0, 0 },
-    { 0x32, 0xA0, 0x5C, 0x78, 1, 0xBD },
-    { 0x33, 0xA0, 0x45, 0x79, 1, 0x19 },
-    { 0x34, 0xA0, 0x46, 0x7A, 1, 0x1A },
-    { 0x35, 0xA0, 0x76, 0x7B, 2, 0x42 },
-    { 0x44, 0xA0, 0x3E, 0x7C, 1, 2 },
-    { 0x49, 0xA0, 0x73, 0x7D, 2, 0x26 },
-    { 0x38, 0xA0, 0x11, 0x7E, 2, 0x65 },
-    { 0x39, 0xA0, 0x3F, 0x7F, 1, 3 },
-    { 0x3A, 0xA0, 0x2D, 0x80, 1, 0 },
-    { 0x3B, 0xA0, 0x6A, 0x81, 2, 9 },
-    { 0x3C, 0xA0, 0x71, 0x82, 2, 0x1F },
-    { 0x3D, 0xA0, 0xF, 0x83, 2, 0x59 },
-    { 0x3E, 0xA0, 0x72, 0x84, 2, 0x25 },
-    { 0x3F, 0xA0, 4, 0x85, 2, 0x82 },
-    { 0x40, 0xA0, 0x6B, 0x86, 2, 0xA },
-    { 0x41, 0xA0, 0x6C, 0x87, 2, 0xB },
-    { 0x42, 0xA0, 0x23, 0x88, 2, 0x66 },
-    { 0x43, 0xA0, 3, 0x89, 2, 0x7D },
-    { 0x36, 0xA0, 0x40, 0x8A, 1, 4 },
-    { 0x45, 0xA0, 0xD, 0x8B, 2, 0x54 },
-    { 0x46, 0xA0, 0x10, 0x8C, 2, 0x5A },
-    { 0x47, 0xA0, 0x3B, 0x8D, 2, 0x6D },
-    { 0x48, 0xA0, 0x3D, 0x8E, 2, 0x7E },
-    { 0x37, 0xA0, 0xE, 0x8F, 2, 0x58 },
-    { -1, 0, 0, 0x90, 0, 0 },
-    { 0x9F, 0x80, 0x74, 0x91, 2, 0x27 },
-    { 0xA0, 0x80, 0x2C, 0x92, 0, 0xB6 },
-    { 0xA1, 0x80, 0x5F, 0x93, 1, -0x18 },
-    { 0xA2, 0x80, 0x62, 0x94, 1, -0x11 },
-    { 0xA3, 0x80, 0x63, 0x95, 1, -0x10 },
-    { 0x28, 0x80, 0x5A, 0x96, 1, 0xB1 },
-    { 0x29, 0x80, 0x5B, 0x97, 1, 0xB2 },
-    { 0x2A, 0x80, 0x41, 0x98, 1, 0xB2 },
-    { 0x2B, 0x80, 0x42, 0x99, 1, 0xB2 },
-    { 0x2C, 0x80, 0x44, 0x9A, 1, 0xB2 },
-    { 0x10, 0xA0, 0x69, 0x9B, 1, -5 },
-    { 0x4D, 0xA0, 0x56, 0x9C, 1, 0x48 },
-    { 0x4E, 0xA0, 0x67, 0x9D, 1, -7 },
-    { 0x4F, 0xA0, 0x68, 0x9E, 1, -6 },
-    { 0x51, 0xA0, -0x28, 0x9F, 0, 0xB3 },
-    { 0x2D, 0x80, 0x6D, 0xA0, 2, 0xF },
-    { 0x2E, 0x80, 0x37, 0xA1, 2, 0x45 },
-    { -1, 0, 0, 0xA2, 0, 0 },
-    { -1, 0, 0, 0xA3, 0, 0 },
-    { -1, 0x80, 0x2D, 0xA4, 1, 0 },
-    { -1, 0, 0, 0xA5, 0, 0 },
-    { -1, 0, 0, 0xA6, 0, 0 },
-    { -1, 0, 0, 0xA7, 0, 0 },
-    { -1, 0, 0, 0xA8, 0, 0 },
-    { 0x12, 0x80, 1, 0xA9, 0, 0x9E },
-    { 0x2F, 0x80, 0x6E, 0xAA, 2, 0x10 },
-    { 0x30, 0x80, 0x6F, 0xAB, 2, 0x15 },
-    { -1, 0, 0, 0xAC, 0, 0 },
-    { -1, 0, 0, 0xAD, 0, 0 },
-    { -1, 0, 0, 0xAE, 0, 0 },
-    { -1, 0, 0, 0xAF, 0, 0 },
-    { -1, 0, 0, 0xB0, 0, 0 },
-    { -1, 0, 0, 0xB1, 0, 0 },
-    { -1, 0, 0, 0xB2, 0, 0 },
-    { -1, 0x80, 0x3A, 0xB3, 2, 0x6B },
-    { 0x31, 0xA0, 0x2E, 0xB4, 2, 0x4D },
-    { 0x31, 0xA0, 0x2E, 0xB5, 2, 0x4D },
-    { 0x31, 0xA0, 0x2E, 0xB6, 2, 0x4D },
-    { 0x31, 0xA0, 0x2E, 0xB7, 2, 0x4D },
-    { 0x31, 0xA0, 0x2E, 0xB8, 2, 0x4D },
-    { 0x31, 0xA0, 0x2E, 0xB9, 2, 0x4D },
-};
-#endif
 
 void func_8082ECE0(Player* this) {
     GetItemEntry* temp = &sGetItemTable[this->getItemId - 1];
@@ -4361,91 +3935,6 @@ void func_8082F470(PlayState* play, Player* this, s32 arg2) {
 // sItemActionParams
 extern s8 D_8085C99C[];
 
-#if 0
-s8 D_8085C99C[] = {
-    PLAYER_AP_OCARINA, // ITEM_OCARINA,
-    PLAYER_AP_BOW, // ITEM_BOW,
-    PLAYER_AP_BOW_FIRE, // ITEM_ARROW_FIRE,
-    PLAYER_AP_BOW_ICE, // ITEM_ARROW_ICE,
-    PLAYER_AP_BOW_LIGHT, // ITEM_ARROW_LIGHT,
-    PLAYER_AP_PICTO_BOX, // ITEM_OCARINA_FAIRY,
-    PLAYER_AP_BOMB, // ITEM_BOMB,
-    PLAYER_AP_BOMBCHU, // ITEM_BOMBCHU,
-    PLAYER_AP_STICK, // ITEM_STICK,
-    PLAYER_AP_NUT, // ITEM_NUT,
-    PLAYER_AP_MAGIC_BEANS, // ITEM_MAGIC_BEANS,
-    PLAYER_AP_PICTO_BOX, // ITEM_SLINGSHOT,
-    PLAYER_AP_POWDER_KEG, // ITEM_POWDER_KEG,
-    PLAYER_AP_PICTO_BOX, // ITEM_PICTO_BOX,
-    PLAYER_AP_LENS, // ITEM_LENS,
-    PLAYER_AP_HOOKSHOT, // ITEM_HOOKSHOT,
-    PLAYER_AP_SWORD_GREAT_FAIRY, // ITEM_SWORD_GREAT_FAIRY,
-    PLAYER_AP_PICTO_BOX, // ITEM_LONGSHOT, // OoT Leftover
-    PLAYER_AP_BOTTLE, // ITEM_BOTTLE,
-    PLAYER_AP_BOTTLE_POTION_RED, // ITEM_POTION_RED,
-    PLAYER_AP_BOTTLE_POTION_GREEN, // ITEM_POTION_GREEN,
-    PLAYER_AP_BOTTLE_POTION_BLUE, // ITEM_POTION_BLUE,
-    PLAYER_AP_BOTTLE_FAIRY, // ITEM_FAIRY,
-    PLAYER_AP_BOTTLE_DEKU_PRINCESS, // ITEM_DEKU_PRINCESS,
-    PLAYER_AP_BOTTLE_MILK, // ITEM_MILK_BOTTLE,
-    PLAYER_AP_BOTTLE_MILK_HALF, // ITEM_MILK_HALF,
-    PLAYER_AP_BOTTLE_FISH, // ITEM_FISH,
-    PLAYER_AP_BOTTLE_BUG, // ITEM_BUG,
-    PLAYER_AP_BOTTLE_BUG, // ITEM_BLUE_FIRE, // !
-    PLAYER_AP_BOTTLE_POE, // ITEM_POE,
-    PLAYER_AP_BOTTLE_BIG_POE, // ITEM_BIG_POE,
-    PLAYER_AP_BOTTLE_SPRING_WATER, // ITEM_SPRING_WATER,
-    PLAYER_AP_BOTTLE_HOT_SPRING_WATER, // ITEM_HOT_SPRING_WATER,
-    PLAYER_AP_BOTTLE_ZORA_EGG, // ITEM_ZORA_EGG,
-    PLAYER_AP_BOTTLE_GOLD_DUST, // ITEM_GOLD_DUST,
-    PLAYER_AP_BOTTLE_MUSHROOM, // ITEM_MUSHROOM,
-    PLAYER_AP_BOTTLE_SEA_HORSE, // ITEM_SEA_HORSE,
-    PLAYER_AP_BOTTLE_CHATEAU, // ITEM_CHATEAU,
-    PLAYER_AP_BOTTLE_HYLIAN_LOACH, // ITEM_HYLIAN_LOACH,
-    PLAYER_AP_BOTTLE_POE, // ITEM_OBABA_DRINK, // !
-    PLAYER_AP_MOON_TEAR, // ITEM_MOON_TEAR,
-    PLAYER_AP_DEED_LAND, // ITEM_DEED_LAND,
-    PLAYER_AP_DEED_SWAMP, // ITEM_DEED_SWAMP,
-    PLAYER_AP_DEED_MOUNTAIN, // ITEM_DEED_MOUNTAIN,
-    PLAYER_AP_DEED_OCEAN, // ITEM_DEED_OCEAN,
-    PLAYER_AP_ROOM_KEY, // ITEM_ROOM_KEY,
-    PLAYER_AP_LETTER_MAMA, // ITEM_LETTER_MAMA,
-    PLAYER_AP_LETTER_TO_KAFEI, // ITEM_LETTER_TO_KAFEI,
-    PLAYER_AP_PENDANT_MEMORIES, // ITEM_PENDANT_MEMORIES,
-    PLAYER_AP_38, // ITEM_TINGLE_MAP, // !
-    PLAYER_AP_MASK_DEKU, // ITEM_MASK_DEKU,
-    PLAYER_AP_MASK_GORON, // ITEM_MASK_GORON,
-    PLAYER_AP_MASK_ZORA, // ITEM_MASK_ZORA,
-    PLAYER_AP_MASK_FIERCE_DEITY, // ITEM_MASK_FIERCE_DEITY,
-    PLAYER_AP_MASK_TRUTH, // ITEM_MASK_TRUTH,
-    PLAYER_AP_MASK_KAFEIS_MASK, // ITEM_MASK_KAFEIS_MASK,
-    PLAYER_AP_MASK_ALL_NIGHT, // ITEM_MASK_ALL_NIGHT,
-    PLAYER_AP_MASK_BUNNY, // ITEM_MASK_BUNNY,
-    PLAYER_AP_MASK_KEATON, // ITEM_MASK_KEATON,
-    PLAYER_AP_MASK_GARO, // ITEM_MASK_GARO,
-    PLAYER_AP_MASK_ROMANI, // ITEM_MASK_ROMANI,
-    PLAYER_AP_MASK_CIRCUS_LEADER, // ITEM_MASK_CIRCUS_LEADER,
-    PLAYER_AP_MASK_POSTMAN, // ITEM_MASK_POSTMAN,
-    PLAYER_AP_MASK_COUPLE, // ITEM_MASK_COUPLE,
-    PLAYER_AP_MASK_GREAT_FAIRY, // ITEM_MASK_GREAT_FAIRY,
-    PLAYER_AP_MASK_GIBDO, // ITEM_MASK_GIBDO,
-    PLAYER_AP_MASK_DON_GERO, // ITEM_MASK_DON_GERO,
-    PLAYER_AP_MASK_KAMARO, // ITEM_MASK_KAMARO,
-    PLAYER_AP_MASK_CAPTAIN, // ITEM_MASK_CAPTAIN,
-    PLAYER_AP_MASK_STONE, // ITEM_MASK_STONE,
-    PLAYER_AP_MASK_BREMEN, // ITEM_MASK_BREMEN,
-    PLAYER_AP_MASK_BLAST, // ITEM_MASK_BLAST,
-    PLAYER_AP_MASK_SCENTS, // ITEM_MASK_SCENTS,
-    PLAYER_AP_MASK_GIANT, // ITEM_MASK_GIANT,
-    PLAYER_AP_BOW_FIRE, // ITEM_BOW_ARROW_FIRE,
-    PLAYER_AP_BOW_ICE, // ITEM_BOW_ARROW_ICE,
-    PLAYER_AP_BOW_LIGHT, // ITEM_BOW_ARROW_LIGHT,
-    PLAYER_AP_SWORD_KOKIRI, // ITEM_SWORD_KOKIRI,
-    PLAYER_AP_SWORD_RAZOR, // ITEM_SWORD_RAZOR,
-    PLAYER_AP_SWORD_GILDED, // ITEM_SWORD_GILDED,
-    PLAYER_AP_SWORD_GREAT_FAIRY, // ITEM_SWORD_DEITY,
-};
-#endif
 
 PlayerActionParam Player_ItemToActionParam(Player* this, ItemID item) {
     if (item >= ITEM_FD) {
@@ -4495,13 +3984,6 @@ typedef struct {
 } struct_8085CD24; // size = 0x4
 
 extern struct_8085CD24 D_8085CD24[];
-#if 0
-struct_8085CD24 D_8085CD24[] = {
-    { ITEM_BOMB, ACTOR_EN_BOM }, // PLAYER_AP_BOMB
-    { ITEM_POWDER_KEG, ACTOR_EN_BOM }, // PLAYER_AP_POWDER_KEG
-    { ITEM_BOMBCHU, ACTOR_EN_BOM_CHU }, // PLAYER_AP_BOMBCHU
-};
-#endif
 
 void func_8082F62C(PlayState* play, Player* this) {
     s32 explosiveType;
@@ -4567,94 +4049,6 @@ void func_8082F8A0(PlayState* play, Player* this) {
 }
 
 extern void (*D_8085CB3C[PLAYER_AP_MAX])(PlayState* play, Player* this);
-
-#if 0
-void (*D_8085CB3C[0x53])(PlayState*, Player*) = {
-    func_8082F594, // PLAYER_AP_NONE
-    func_8082F594, // PLAYER_AP_LAST_USED
-    func_8082F594, // PLAYER_AP_FISHING_POLE
-    func_8082F594, // PLAYER_AP_SWORD_KOKIRI
-    func_8082F594, // PLAYER_AP_SWORD_RAZOR
-    func_8082F594, // PLAYER_AP_SWORD_GILDED
-    func_8082F594, // PLAYER_AP_SWORD_GREAT_FAIRY
-    func_8082F5A4, // PLAYER_AP_STICK
-    func_8082F8A0, // PLAYER_AP_ZORA_FINS
-    func_8082F5C0, // PLAYER_AP_BOW
-    func_8082F5C0, // PLAYER_AP_BOW_FIRE
-    func_8082F5C0, // PLAYER_AP_BOW_ICE
-    func_8082F5C0, // PLAYER_AP_BOW_LIGHT
-    func_8082F7F4, // PLAYER_AP_HOOKSHOT
-    func_8082F62C, // PLAYER_AP_BOMB
-    func_8082F62C, // PLAYER_AP_POWDER_KEG
-    func_8082F62C, // PLAYER_AP_BOMBCHU
-    func_8082F8A0, // PLAYER_AP_11
-    func_8082F5C0, // PLAYER_AP_NUT
-    func_8082F594, // PLAYER_AP_PICTO_BOX
-    func_8082F594, // PLAYER_AP_OCARINA
-    func_8082F594, // PLAYER_AP_BOTTLE
-    func_8082F594, // PLAYER_AP_BOTTLE_FISH
-    func_8082F594, // PLAYER_AP_BOTTLE_SPRING_WATER
-    func_8082F594, // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
-    func_8082F594, // PLAYER_AP_BOTTLE_ZORA_EGG
-    func_8082F594, // PLAYER_AP_BOTTLE_DEKU_PRINCESS
-    func_8082F594, // PLAYER_AP_BOTTLE_GOLD_DUST
-    func_8082F594, // PLAYER_AP_BOTTLE_1C
-    func_8082F594, // PLAYER_AP_BOTTLE_SEA_HORSE
-    func_8082F594, // PLAYER_AP_BOTTLE_MUSHROOM
-    func_8082F594, // PLAYER_AP_BOTTLE_HYLIAN_LOACH
-    func_8082F594, // PLAYER_AP_BOTTLE_BUG
-    func_8082F594, // PLAYER_AP_BOTTLE_POE
-    func_8082F594, // PLAYER_AP_BOTTLE_BIG_POE
-    func_8082F594, // PLAYER_AP_BOTTLE_POTION_RED
-    func_8082F594, // PLAYER_AP_BOTTLE_POTION_BLUE
-    func_8082F594, // PLAYER_AP_BOTTLE_POTION_GREEN
-    func_8082F594, // PLAYER_AP_BOTTLE_MILK
-    func_8082F594, // PLAYER_AP_BOTTLE_MILK_HALF
-    func_8082F594, // PLAYER_AP_BOTTLE_CHATEAU
-    func_8082F594, // PLAYER_AP_BOTTLE_FAIRY
-    func_8082F594, // PLAYER_AP_MOON_TEAR
-    func_8082F594, // PLAYER_AP_DEED_LAND
-    func_8082F594, // PLAYER_AP_ROOM_KEY
-    func_8082F594, // PLAYER_AP_LETTER_TO_KAFEI
-    func_8082F594, // PLAYER_AP_MAGIC_BEANS
-    func_8082F594, // PLAYER_AP_DEED_SWAMP
-    func_8082F594, // PLAYER_AP_DEED_MOUNTAIN
-    func_8082F594, // PLAYER_AP_DEED_OCEAN
-    func_8082F594, // PLAYER_AP_32
-    func_8082F594, // PLAYER_AP_LETTER_MAMA
-    func_8082F594, // PLAYER_AP_34
-    func_8082F594, // PLAYER_AP_35
-    func_8082F594, // PLAYER_AP_PENDANT_MEMORIES
-    func_8082F594, // PLAYER_AP_37
-    func_8082F594, // PLAYER_AP_38
-    func_8082F594, // PLAYER_AP_39
-    func_8082F594, // PLAYER_AP_MASK_TRUTH
-    func_8082F594, // PLAYER_AP_MASK_KAFEIS_MASK
-    func_8082F594, // PLAYER_AP_MASK_ALL_NIGHT
-    func_8082F594, // PLAYER_AP_MASK_BUNNY
-    func_8082F594, // PLAYER_AP_MASK_KEATON
-    func_8082F594, // PLAYER_AP_MASK_GARO
-    func_8082F594, // PLAYER_AP_MASK_ROMANI
-    func_8082F594, // PLAYER_AP_MASK_CIRCUS_LEADER
-    func_8082F594, // PLAYER_AP_MASK_POSTMAN
-    func_8082F594, // PLAYER_AP_MASK_COUPLE
-    func_8082F594, // PLAYER_AP_MASK_GREAT_FAIRY
-    func_8082F594, // PLAYER_AP_MASK_GIBDO
-    func_8082F594, // PLAYER_AP_MASK_DON_GERO
-    func_8082F594, // PLAYER_AP_MASK_KAMARO
-    func_8082F594, // PLAYER_AP_MASK_CAPTAIN
-    func_8082F594, // PLAYER_AP_MASK_STONE
-    func_8082F594, // PLAYER_AP_MASK_BREMEN
-    func_8082F594, // PLAYER_AP_MASK_BLAST
-    func_8082F594, // PLAYER_AP_MASK_SCENTS
-    func_8082F594, // PLAYER_AP_MASK_GIANT
-    func_8082F594, // PLAYER_AP_MASK_FIERCE_DEITY
-    func_8082F594, // PLAYER_AP_MASK_GORON
-    func_8082F594, // PLAYER_AP_MASK_ZORA
-    func_8082F594, // PLAYER_AP_MASK_DEKU
-    func_8082F594, // PLAYER_AP_LENS
-};
-#endif
 
 #ifdef NON_MATCHING
 void func_8082F8BC(PlayState* play, Player* this, PlayerActionParam actionParam) {
@@ -4771,9 +4165,6 @@ s32 func_8082FD0C(Player* this, PlayerActionParam actionParam) {
 }
 
 extern u16 D_8085CFA8[4];
-#if 0
-u16 D_8085CFA8[] = { BTN_B, BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT, };
-#endif
 
 s32 func_8082FDC4(void) {
     s32 i;
@@ -4791,46 +4182,6 @@ void func_8082FE0C(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082FE0C.s")
 
 extern s8 D_8085CD00[];
-#if 0
-s8 D_8085CD00[0x24] = {
-    8,
-    -5,
-    -3,
-    -6,
-    8,
-    0xB,
-    5,
-    0,
-    -1,
-    4,
-    5,
-    9,
-    3,
-    1,
-    0,
-    2,
-    3,
-    9,
-    6,
-    -4,
-    -2,
-    7,
-    6,
-    0xA,
-    8,
-    -5,
-    -3,
-    -6,
-    8,
-    0xB,
-    8,
-    -5,
-    -3,
-    -6,
-    8,
-    0xB,
-};
-#endif
 
 typedef struct struct_8085CC88 {
     /* 0x0 */ LinkAnimationHeader* unk_0;
@@ -4838,25 +4189,6 @@ typedef struct struct_8085CC88 {
 } struct_8085CC88; // size = 0x8
 
 extern struct_8085CC88 D_8085CC88[0xF];
-#if 0
-struct_8085CC88 D_8085CC88[0xF] = {
-    { (LinkAnimationHeader* )0x0400DC70, 0xC },
-    { (LinkAnimationHeader* )0x0400DD90, 6 },
-    { (LinkAnimationHeader* )0x0400D9B8, 8 },
-    { (LinkAnimationHeader* )0x0400DDA0, 8 },
-    { (LinkAnimationHeader* )0x0400D820, 8 },
-    { (LinkAnimationHeader* )0x0400DC50, 0xA },
-    { (LinkAnimationHeader* )0x0400D9A8, 7 },
-    { (LinkAnimationHeader* )0x0400D9B0, 0xB },
-    { (LinkAnimationHeader* )0x0400DC70, 0xC },
-    { (LinkAnimationHeader* )0x0400DD88, 4 },
-    { (LinkAnimationHeader* )0x0400DD48, 4 },
-    { (LinkAnimationHeader* )0x0400DC58, 4 },
-    { (LinkAnimationHeader* )0x0400D3E0, 5 },
-    { (LinkAnimationHeader* )0x0400DC68, 0xD },
-    { (LinkAnimationHeader* )0x0400E350, 4 },
-};
-#endif
 
 s32 func_80848808(Player* this, PlayState* play);
 
@@ -4967,9 +4299,6 @@ s32 func_808305BC(PlayState* arg0, Player* arg1, ItemID* item, s32* arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808305BC.s")
 #endif
 
-// todo: fix
-extern u16 D_8085CFAE[];
-
 #if 0
 s32 func_808306F8(Player* arg0, PlayState* arg1) {
     s32 sp50;
@@ -5071,94 +4400,6 @@ s32 func_80849620(Player* this, PlayState* play);
 
 // returns bool
 extern PlayerFuncAC4 D_8085C9F0[PLAYER_AP_MAX];
-
-#if 0
-extern PlayerFuncAC4 D_8085C9F0[PLAYER_AP_MAX] = {
-    func_80848780, // PLAYER_AP_NONE
-    func_80848780, // PLAYER_AP_LAST_USED
-    func_80848780, // PLAYER_AP_FISHING_POLE
-    func_808487B8, // PLAYER_AP_SWORD_KOKIRI
-    func_808487B8, // PLAYER_AP_SWORD_RAZOR
-    func_808487B8, // PLAYER_AP_SWORD_GILDED
-    func_808487B8, // PLAYER_AP_SWORD_GREAT_FAIRY
-    func_80848780, // PLAYER_AP_STICK
-    func_80848780, // PLAYER_AP_ZORA_FINS
-    func_80848B6C, // PLAYER_AP_BOW
-    func_80848B6C, // PLAYER_AP_BOW_FIRE
-    func_80848B6C, // PLAYER_AP_BOW_ICE
-    func_80848B6C, // PLAYER_AP_BOW_LIGHT
-    func_80848B6C, // PLAYER_AP_HOOKSHOT
-    func_808490B4, // PLAYER_AP_BOMB
-    func_808490B4, // PLAYER_AP_POWDER_KEG
-    func_808490B4, // PLAYER_AP_BOMBCHU
-    func_808491B4, // PLAYER_AP_11
-    func_80848B6C, // PLAYER_AP_NUT
-    func_80848780, // PLAYER_AP_PICTO_BOX
-    func_80848780, // PLAYER_AP_OCARINA
-    func_80848780, // PLAYER_AP_BOTTLE
-    func_80848780, // PLAYER_AP_BOTTLE_FISH
-    func_80848780, // PLAYER_AP_BOTTLE_SPRING_WATER
-    func_80848780, // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
-    func_80848780, // PLAYER_AP_BOTTLE_ZORA_EGG
-    func_80848780, // PLAYER_AP_BOTTLE_DEKU_PRINCESS
-    func_80848780, // PLAYER_AP_BOTTLE_GOLD_DUST
-    func_80848780, // PLAYER_AP_BOTTLE_1C
-    func_80848780, // PLAYER_AP_BOTTLE_SEA_HORSE
-    func_80848780, // PLAYER_AP_BOTTLE_MUSHROOM
-    func_80848780, // PLAYER_AP_BOTTLE_HYLIAN_LOACH
-    func_80848780, // PLAYER_AP_BOTTLE_BUG
-    func_80848780, // PLAYER_AP_BOTTLE_POE
-    func_80848780, // PLAYER_AP_BOTTLE_BIG_POE
-    func_80848780, // PLAYER_AP_BOTTLE_POTION_RED
-    func_80848780, // PLAYER_AP_BOTTLE_POTION_BLUE
-    func_80848780, // PLAYER_AP_BOTTLE_POTION_GREEN
-    func_80848780, // PLAYER_AP_BOTTLE_MILK
-    func_80848780, // PLAYER_AP_BOTTLE_MILK_HALF
-    func_80848780, // PLAYER_AP_BOTTLE_CHATEAU
-    func_80848780, // PLAYER_AP_BOTTLE_FAIRY
-    func_80848780, // PLAYER_AP_MOON_TEAR
-    func_80848780, // PLAYER_AP_DEED_LAND
-    func_80848780, // PLAYER_AP_ROOM_KEY
-    func_80848780, // PLAYER_AP_LETTER_TO_KAFEI
-    func_80848780, // PLAYER_AP_MAGIC_BEANS
-    func_80848780, // PLAYER_AP_DEED_SWAMP
-    func_80848780, // PLAYER_AP_DEED_MOUNTAIN
-    func_80848780, // PLAYER_AP_DEED_OCEAN
-    func_80848780, // PLAYER_AP_32
-    func_80848780, // PLAYER_AP_LETTER_MAMA
-    func_80848780, // PLAYER_AP_34
-    func_80848780, // PLAYER_AP_35
-    func_80848780, // PLAYER_AP_PENDANT_MEMORIES
-    func_80848780, // PLAYER_AP_37
-    func_80848780, // PLAYER_AP_38
-    func_80848780, // PLAYER_AP_39
-    func_80848780, // PLAYER_AP_MASK_TRUTH
-    func_80848780, // PLAYER_AP_MASK_KAFEIS_MASK
-    func_80848780, // PLAYER_AP_MASK_ALL_NIGHT
-    func_80848780, // PLAYER_AP_MASK_BUNNY
-    func_80848780, // PLAYER_AP_MASK_KEATON
-    func_80848780, // PLAYER_AP_MASK_GARO
-    func_80848780, // PLAYER_AP_MASK_ROMANI
-    func_80848780, // PLAYER_AP_MASK_CIRCUS_LEADER
-    func_80848780, // PLAYER_AP_MASK_POSTMAN
-    func_80848780, // PLAYER_AP_MASK_COUPLE
-    func_80848780, // PLAYER_AP_MASK_GREAT_FAIRY
-    func_80848780, // PLAYER_AP_MASK_GIBDO
-    func_80848780, // PLAYER_AP_MASK_DON_GERO
-    func_80848780, // PLAYER_AP_MASK_KAMARO
-    func_80848780, // PLAYER_AP_MASK_CAPTAIN
-    func_80848780, // PLAYER_AP_MASK_STONE
-    func_80848780, // PLAYER_AP_MASK_BREMEN
-    func_80848780, // PLAYER_AP_MASK_BLAST
-    func_80848780, // PLAYER_AP_MASK_SCENTS
-    func_80848780, // PLAYER_AP_MASK_GIANT
-    func_80848780, // PLAYER_AP_MASK_FIERCE_DEITY
-    func_80848780, // PLAYER_AP_MASK_GORON
-    func_80848780, // PLAYER_AP_MASK_ZORA
-    func_80848780, // PLAYER_AP_MASK_DEKU
-    func_80848780, // PLAYER_AP_LENS
-};
-#endif
 
 void func_808309CC(PlayState* play, Player* this) {
     if (func_80848808 == this->unk_AC4) {
@@ -6180,25 +5421,6 @@ s32 func_80838A90(Player* this, PlayState* play);
 s32 func_8083A0CC(Player* this, PlayState* play);
 
 extern s32 (*D_8085D054[0xF])(Player* this, PlayState* play);
-#if 0
-s32 (*D_8085D054[])(Player*, PlayState*) = {
-    func_80839518,
-    func_808365DC,
-    func_8083D23C,
-    func_8083CCB4,
-    func_808391D8,
-    func_8083DFC4,
-    func_8083A114,
-    func_80848570,
-    func_8083A580,
-    func_8083D78C,
-    func_80839B18,
-    func_8083A274,
-    func_80834DFC,
-    func_80838A90,
-    func_8083A0CC,
-};
-#endif
 
 s32 func_80833058(PlayState* play, Player* this, s8* arg2, s32 arg3) {
     if (!(this->stateFlags1 & (PLAYER_STATE1_1 | PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) && !func_8082DA90(play)) {
@@ -6380,12 +5602,6 @@ extern s8 D_8085D090[];
 extern s8 D_8085D094[];
 extern s8 D_8085D097[];
 
-#if 0
-s8 D_8085D090[] = { PLAYER_MWA_STAB_1H, PLAYER_MWA_RIGHT_SLASH_1H, PLAYER_MWA_RIGHT_SLASH_1H, PLAYER_MWA_LEFT_SLASH_1H };
-s8 D_8085D094[] = { PLAYER_MWA_ZORA_PUNCH_LEFT, PLAYER_MWA_ZORA_PUNCH_COMBO, PLAYER_MWA_ZORA_PUNCH_KICK };
-s8 D_8085D097[] = { PLAYER_MWA_GORON_PUNCH_LEFT, PLAYER_MWA_GORON_PUNCH_RIGHT, PLAYER_MWA_GORON_PUNCH_BUTT };
-#endif
-
 PlayerMeleeWeaponAnimation func_808335F4(Player* this) {
     s32 temp_a1;
     PlayerMeleeWeaponAnimation meleeWeaponAnimation;
@@ -6450,12 +5666,6 @@ typedef struct struct_8085D09C {
 } struct_8085D09C; // size = 0x8
 
 extern struct_8085D09C D_8085D09C[];
-#if 0
-struct_8085D09C D_8085D09C[] = {
-    { 0x100, 2, 2, 0, 0 }, { 0x200, 4, 8, 1, 2 }, { 0x200, 4, 8, 2, 4 },    { 0x200, 4, 8, 3, 6 },
-    { 0x200, 4, 8, 4, 8 }, { 2, 0, 0, 2, 4 },     { 0x800000, 1, 2, 0, 0 },
-};
-#endif
 
 void func_8083375C(Player* this, PlayerMeleeWeaponAnimation meleeWeaponAnimation) {
     struct_8085D09C* var_v0 = D_8085D09C;
@@ -7850,12 +7060,6 @@ s32 func_808370D4(PlayState* play, Player* this) {
     }
     return false;
 }
-
-typedef struct struct_8085C2A4 {
-    /* 0x0 */ LinkAnimationHeader* unk_0;
-    /* 0x4 */ LinkAnimationHeader* unk_4;
-    /* 0x8 */ LinkAnimationHeader* unk_8;
-} struct_8085C2A4; // size = 0xC
 
 extern struct_8085C2A4 D_8085C2A4[];
 
@@ -10677,11 +9881,6 @@ s32 func_8083F8A8(PlayState* play, Player* this, f32 radius, s32 countMax, f32 r
 extern Vec3f D_8085D27C;
 extern Vec3f D_8085D288;
 
-#if 0
-Vec3f D_8085D27C = {0.0f, 0.0f, 0.0f};
-Vec3f D_8085D288 = {0.0f, 0.0f, 0.0f};
-#endif
-
 s32 func_8083F8A8(PlayState* play, Player* this, f32 radius, s32 countMax, f32 randAccelWeight, s32 scale,
                   s32 scaleStep, s32 useLighting);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083F8A8.s")
@@ -10835,10 +10034,6 @@ s32 func_808401F4(PlayState* play, Player* this);
 
 extern Vec3f D_8085D2A4;
 
-#if 0
-Vec3f D_8085D2A4 = { 0.0f, 0.0f, 5.0f };
-#endif
-
 void func_80840770(PlayState* play, Player* this) {
     if (this->unk_AE8 != 0) {
         if (this->unk_AE8 > 0) {
@@ -10970,16 +10165,7 @@ block_29:
 
 extern u8 D_8085CF80[]; // PlayerMeleeWeaponAnimation
 extern u8 D_8085CF84[]; // PlayerMeleeWeaponAnimation
-#if 0
-u8 D_8085CF80[] = {
-    PLAYER_MWA_SPIN_ATTACK_1H,
-    PLAYER_MWA_SPIN_ATTACK_2H,
-};
-u8 D_8085CF84[] = {
-    PLAYER_MWA_BIG_SPIN_1H,
-    PLAYER_MWA_BIG_SPIN_2H,
-};
-#endif
+
 
 s32 func_80840CD4(Player* this, PlayState* arg1) {
     if (func_808387A0(arg1, this)) {
@@ -11114,11 +10300,6 @@ void func_808412BC(PlayState* play, Player* this) {
 }
 
 extern u8 D_8085D2B0[];
-#if 0
-u8 D_8085D2B0[] = {
-    ITEM_SWORD_RAZOR, ITEM_SWORD_KOKIRI, ITEM_OCARINA, ITEM_OCARINA,
-};
-#endif
 
 void func_80841358(PlayState* arg0, Player* this, s32 arg2) {
     ItemID item;
@@ -13012,9 +12193,6 @@ void func_80847F1C(Player* this) {
 }
 
 extern struct_8082E224_arg1 D_8085D5DC;
-#if 0
-struct_8082E224_arg1 D_8085D5DC = { 0x839, -0x800 };
-#endif
 
 void func_80847FF8(Player* this, f32* arg1, f32 arg2, s16 arg3) {
     func_8084748C(this, arg1, arg2, arg3);
@@ -15982,24 +15160,6 @@ typedef struct struct_8085D798 {
 } struct_8085D798; // size = 0x6
 
 extern struct_8085D798 D_8085D798[0xE];
-#if 0
-struct_8085D798 D_8085D798[] = {
-    { ACTOR_EN_ELF, 2, ITEM_FAIRY, PLAYER_AP_BOTTLE_FAIRY, 0x5E },
-    { ACTOR_EN_FISH, -1, ITEM_FISH, PLAYER_AP_BOTTLE_FISH, 0x62 },
-    { ACTOR_EN_INSECT, -1, ITEM_BUG, PLAYER_AP_BOTTLE_BUG, 0x63 },
-    { ACTOR_EN_MUSHI2, -1, ITEM_BUG, PLAYER_AP_BOTTLE_BUG, 0x63 },
-    { ACTOR_EN_TEST5, 0, ITEM_SPRING_WATER, PLAYER_AP_BOTTLE_SPRING_WATER, 0x67 },
-    { ACTOR_EN_TEST5, 1, ITEM_HOT_SPRING_WATER, PLAYER_AP_BOTTLE_HOT_SPRING_WATER, 0x68 },
-    { ACTOR_BG_GORON_OYU, -1, ITEM_HOT_SPRING_WATER, PLAYER_AP_BOTTLE_HOT_SPRING_WATER, 0x68 },
-    { ACTOR_EN_ZORAEGG, -1, ITEM_ZORA_EGG, PLAYER_AP_BOTTLE_ZORA_EGG, 0x69 },
-    { ACTOR_EN_DNP, -1, ITEM_DEKU_PRINCESS, PLAYER_AP_BOTTLE_DEKU_PRINCESS, 0x5F },
-    { ACTOR_EN_OT, -1, ITEM_SEAHORSE, PLAYER_AP_BOTTLE_SEAHORSE, 0x6E },
-    { ACTOR_OBJ_KINOKO, -1, ITEM_MUSHROOM, PLAYER_AP_BOTTLE_SEAHORSE, 0x6B },
-    { ACTOR_EN_POH, -1, ITEM_POE, PLAYER_AP_BOTTLE_POE, 0x65 },
-    { ACTOR_EN_BIGPO, -1, ITEM_BIG_POE, PLAYER_AP_BOTTLE_BIG_POE, 0x66 },
-    { ACTOR_EN_ELF, 6, ITEM_FAIRY, PLAYER_AP_BOTTLE_FAIRY, 0x5E },
-};
-#endif
 
 void func_808534C0(Player* this, PlayState* play) {
     struct _struct_D_8085D200_0xC* sp24 = &D_8085D200[this->unk_AE8];
@@ -16105,21 +15265,6 @@ extern s8 D_8085D804[];
 extern f32 D_8085D800;
 extern Vec3f D_8085D7F8;
 extern struct_8085D80C D_8085D80C[];
-#if 0
-struct_8085D80C D_8085D80C[] = {
-    { ACTOR_EN_FISH, 0 }, // PLAYER_AP_BOTTLE_FISH
-    { ACTOR_OBJ_AQUA, 0 }, // PLAYER_AP_BOTTLE_SPRING_WATER
-    { ACTOR_OBJ_AQUA, 1 }, // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
-    { ACTOR_EN_ZORAEGG, 0x11 }, // PLAYER_AP_BOTTLE_ZORA_EGG
-    { ACTOR_EN_DNP, 1 }, // PLAYER_AP_BOTTLE_DEKU_PRINCESS
-    { ACTOR_EN_MUSHI2, 0 }, // PLAYER_AP_BOTTLE_GOLD_DUST
-    { ACTOR_EN_MUSHI2, 0 }, // PLAYER_AP_BOTTLE_1C
-    { ACTOR_EN_OT, 0x8000 }, // PLAYER_AP_BOTTLE_SEAHORSE
-    { ACTOR_EN_MUSHI2, 0 }, // PLAYER_AP_BOTTLE_MUSHROOM
-    { ACTOR_EN_MUSHI2, 0 }, // PLAYER_AP_BOTTLE_HYLIAN_LOACH
-    { ACTOR_EN_MUSHI2, 0 }, // PLAYER_AP_BOTTLE_BUG
-};
-#endif
 extern struct_8082E224_arg1 D_8085D838[];
 
 void func_80853850(Player* this, PlayState* play) {
@@ -16168,93 +15313,6 @@ void func_80853850(Player* this, PlayState* play) {
 
 extern struct_8082E224_arg1 D_8085D840;
 extern u8 D_8085D1A4[PLAYER_AP_MAX];
-#if 0
-u8 D_8085D1A4[PLAYER_AP_MAX] = {
-    GI_NONE, // PLAYER_AP_NONE
-    GI_NONE, // PLAYER_AP_LAST_USED
-    GI_NONE, // PLAYER_AP_FISHING_POLE
-    GI_SWORD_KOKIRI, // PLAYER_AP_SWORD_KOKIRI
-    GI_SWORD_RAZOR, // PLAYER_AP_SWORD_RAZOR
-    GI_SWORD_GILDED, // PLAYER_AP_SWORD_GILDED
-    GI_SWORD_GREAT_FAIRY, // PLAYER_AP_SWORD_GREAT_FAIRY
-    GI_STICKS_1, // PLAYER_AP_STICK
-    GI_SWORD_KOKIRI, // PLAYER_AP_ZORA_FINS
-    GI_QUIVER_30, // PLAYER_AP_BOW
-    GI_ARROW_FIRE, // PLAYER_AP_BOW_FIRE
-    GI_ARROW_ICE, // PLAYER_AP_BOW_ICE
-    GI_ARROW_LIGHT, // PLAYER_AP_BOW_LIGHT
-    GI_HOOKSHOT, // PLAYER_AP_HOOKSHOT
-    GI_BOMBS_1, // PLAYER_AP_BOMB
-    GI_POWDER_KEG, // PLAYER_AP_POWDER_KEG
-    GI_BOMBCHUS_10, // PLAYER_AP_BOMBCHU
-    GI_40, // PLAYER_AP_11
-    GI_NUTS_1, // PLAYER_AP_NUT
-    GI_PICTO_BOX, // PLAYER_AP_PICTO_BOX
-    GI_OCARINA, // PLAYER_AP_OCARINA
-    GI_BOTTLE, // PLAYER_AP_BOTTLE
-    GI_FISH, // PLAYER_AP_BOTTLE_FISH
-    GI_75, // PLAYER_AP_BOTTLE_SPRING_WATER
-    GI_ICE_TRAP, // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
-    GI_ZORA_EGG, // PLAYER_AP_BOTTLE_ZORA_EGG
-    GI_GOLD_DUST, // PLAYER_AP_BOTTLE_DEKU_PRINCESS
-    GI_6C, // PLAYER_AP_BOTTLE_GOLD_DUST
-    GI_SEAHORSE, // PLAYER_AP_BOTTLE_1C
-    GI_MUSHROOM, // PLAYER_AP_BOTTLE_SEAHORSE
-    GI_70, // PLAYER_AP_BOTTLE_MUSHROOM
-    GI_DEKU_PRINCESS, // PLAYER_AP_BOTTLE_HYLIAN_LOACH
-    GI_BUG, // PLAYER_AP_BOTTLE_BUG
-    GI_POE, // PLAYER_AP_BOTTLE_POE
-    GI_BIG_POE, // PLAYER_AP_BOTTLE_BIG_POE
-    GI_POTION_RED, // PLAYER_AP_BOTTLE_POTION_RED
-    GI_POTION_BLUE, // PLAYER_AP_BOTTLE_POTION_BLUE
-    GI_POTION_GREEN, // PLAYER_AP_BOTTLE_POTION_GREEN
-    GI_MILK_HALF, // PLAYER_AP_BOTTLE_MILK
-    GI_MILK_HALF, // PLAYER_AP_BOTTLE_MILK_HALF
-    GI_CHATEAU, // PLAYER_AP_BOTTLE_CHATEAU
-    GI_FAIRY, // PLAYER_AP_BOTTLE_FAIRY
-    GI_MOON_TEAR, // PLAYER_AP_MOON_TEAR
-    GI_DEED_LAND, // PLAYER_AP_DEED_LAND
-    GI_ROOM_KEY, // PLAYER_AP_ROOM_KEY
-    GI_LETTER_TO_KAFEI, // PLAYER_AP_LETTER_TO_KAFEI
-    GI_MAGIC_BEANS, // PLAYER_AP_MAGIC_BEANS
-    GI_DEED_SWAMP, // PLAYER_AP_DEED_SWAMP
-    GI_DEED_MOUNTAIN, // PLAYER_AP_DEED_MOUNTAIN
-    GI_DEED_OCEAN, // PLAYER_AP_DEED_OCEAN
-    GI_MOON_TEAR, // PLAYER_AP_32
-    GI_LETTER_TO_MAMA, // PLAYER_AP_LETTER_MAMA
-    GI_A7, // PLAYER_AP_34
-    GI_A8, // PLAYER_AP_35
-    GI_PENDANT_OF_MEMORIES, // PLAYER_AP_PENDANT_OF_MEMORIES
-    GI_PENDANT_OF_MEMORIES, // PLAYER_AP_37
-    GI_PENDANT_OF_MEMORIES, // PLAYER_AP_38
-    GI_PENDANT_OF_MEMORIES, // PLAYER_AP_39
-    GI_MASK_TRUTH, // PLAYER_AP_MASK_TRUTH
-    GI_MASK_KAFEIS_MASK, // PLAYER_AP_MASK_KAFEIS_MASK
-    GI_MASK_ALL_NIGHT, // PLAYER_AP_MASK_ALL_NIGHT
-    GI_MASK_BUNNY, // PLAYER_AP_MASK_BUNNY
-    GI_MASK_KEATON, // PLAYER_AP_MASK_KEATON
-    GI_MASK_GARO, // PLAYER_AP_MASK_GARO
-    GI_MASK_ROMANI, // PLAYER_AP_MASK_ROMANI
-    GI_MASK_CIRCUS_LEADER, // PLAYER_AP_MASK_CIRCUS_LEADER
-    GI_MASK_POSTMAN, // PLAYER_AP_MASK_POSTMAN
-    GI_MASK_COUPLE, // PLAYER_AP_MASK_COUPLE
-    GI_MASK_GREAT_FAIRY, // PLAYER_AP_MASK_GREAT_FAIRY
-    GI_MASK_GIBDO, // PLAYER_AP_MASK_GIBDO
-    GI_MASK_DON_GERO, // PLAYER_AP_MASK_DON_GERO
-    GI_MASK_KAMARO, // PLAYER_AP_MASK_KAMARO
-    GI_MASK_CAPTAIN, // PLAYER_AP_MASK_CAPTAIN
-    GI_MASK_STONE, // PLAYER_AP_MASK_STONE
-    GI_MASK_BREMEN, // PLAYER_AP_MASK_BREMEN
-    GI_MASK_BLAST, // PLAYER_AP_MASK_BLAST
-    GI_MASK_SCENTS, // PLAYER_AP_MASK_SCENTS
-    GI_MASK_GIANT, // PLAYER_AP_MASK_GIANT
-    GI_MASK_FIERCE_DEITY, // PLAYER_AP_MASK_FIERCE_DEITY
-    GI_MASK_GORON, // PLAYER_AP_MASK_GORON
-    GI_MASK_ZORA, // PLAYER_AP_MASK_ZORA
-    GI_MASK_DEKU, // PLAYER_AP_MASK_DEKU
-    GI_LENS, // PLAYER_AP_LENS
-};
-#endif
 
 void func_80853A5C(Player* this, PlayState* play) {
     this->stateFlags2 |= PLAYER_STATE2_20;
@@ -17517,30 +16575,6 @@ void func_80857AEC(PlayState* play, Player* this) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80857BE8.s")
 
 extern void (*D_8085D990[0x14])(PlayState* play, Player* this, void* anim);
-#if 0
-void (*D_8085D990[0x14])(PlayState*, Player*, LinkAnimationHeader*) = {
-    /*  0 */ NULL,
-    /*  1 */ func_80858DB4,
-    /*  2 */ func_80858DDC,
-    /*  3 */ func_80858E40,
-    /*  4 */ func_80858E60,
-    /*  5 */ func_80858E80,
-    /*  6 */ func_80858EA0,
-    /*  7 */ func_80858EFC,
-    /*  8 */ func_80858F1C,
-    /*  9 */ func_80858F3C,
-    /* 10 */ func_80858F5C,
-    /* 11 */ func_80858FBC,
-    /* 12 */ func_80859028,
-    /* 13 */ func_808591BC,
-    /* 14 */ func_80858DFC,
-    /* 15 */ func_80858F7C,
-    /* 16 */ func_80858F9C,
-    /* 17 */ func_80859168,
-    /* 18 */ func_80859210,
-    /* 19 */ func_80858EC0,
-};
-#endif
 
 void func_80858DB4(PlayState* play, Player* this, LinkAnimationHeader* anim);
 void func_80858DDC(PlayState* play, Player* this, LinkAnimationHeader* anim);
@@ -18314,151 +17348,6 @@ typedef struct struct_8085DA94 {
 extern struct_8085DA94 D_8085DA94[0x8C];
 extern struct_8085DA94 D_8085DEF4[0x8C];
 
-#if 0
-struct_8085DA94 D_8085DA94[0x8C] = {
-    { 0x00000000, NULL },
-    { -1, func_808594D0 },
-    { 0x00000000, NULL },
-    { 0x00000000, NULL },
-    { 0x03, 0x0400D568 },
-    { 0x00000000, NULL },
-    { 0x00000000, NULL },
-    { -1, func_808594D0 },
-    { 0x02, 0x0400D5A0 },
-    { -1, func_8085978C },
-    { 0x03, 0x0400D680 },
-    { 0x05, 0x0400D1C0 },
-    { 0x07, 0x0400D1C8 },
-    { 0x02, 0x0400D560 },
-    { 0x00000000, NULL },
-    { 0x03, 0x0400D5D0 },
-    { -1, func_80859B54 },
-    { 0x02, 0x0400DDA8 },
-    { 0x10, 0x0400DCB0 },
-    { -1, func_80859CA0 },
-    { -1, func_808594D0 },
-    { 0x03, 0x0400D190 },
-    { 0x06, 0x0400E168 },
-    { 0x03, 0x0400D640 },
-    { 0x03, 0x0400DF38 },
-    { -1, func_80859CFC },
-    { -1, func_8085A66C },
-    { 0x03, 0x0400D688 },
-    { 0x03, 0x0400D610 },
-    { 0x03, 0x0400D620 },
-    { 0x03, 0x0400D628 },
-    { 0x06, 0x0400D310 },
-    { -1, func_80859FCC },
-    { 0x03, 0x0400D2D0 },
-    { 0x04, 0x0400D2C8 },
-    { 0x03, 0x0400D2B8 },
-    { -1, func_8085A120 },
-    { -1, func_8085A19C },
-    { 0x06, 0x0400D278 },
-    { 0x06, 0x0400D288 },
-    { 0x05, 0x0400E428 },
-    { 0x05, 0x0400D060 },
-    { 0x05, 0x0400E148 },
-    { 0x05, 0x0400E150 },
-    { 0x07, 0x0400D068 },
-    { 0x05, 0x0400E420 },
-    { 0x05, 0x0400E430 },
-    { 0x05, 0x0400E440 },
-    { 0x03, 0x0400CF68 },
-    { 0x05, 0x0400D2F0 },
-    { 0x05, 0x0400E468 },
-    { 0x05, 0x0400E460 },
-    { 0x05, 0x0400E140 },
-    { 0x05, 0x0400E118 },
-    { 0x04, 0x0400E120 },
-    { 0x05, 0x0400E110 },
-    { 0x0E, 0x0400E140 },
-    { 0x05, 0x0400D0E0 },
-    { -1, func_8085978C },
-    { 0x05, 0x0400D0A0 },
-    { 0x02, 0x0400D080 },
-    { 0x07, 0x0400D0B8 },
-    { 0x05, 0x0400D0C0 },
-    { 0x03, 0x0400CF60 },
-    { 0x03, 0x0400CF48 },
-    { 0x03, 0x0400CF58 },
-    { 0x03, 0x0400CF40 },
-    { -1, func_8085968C },
-    { -1, func_8085A24C },
-    { -1, func_8085A330 },
-    { 0x07, 0x0400D0D8 },
-    { 0x05, 0x0400D090 },
-    { 0x05, 0x0400D088 },
-    { 0x03, 0x0400CF88 },
-    { 0x03, 0x0400CF90 },
-    { 0x03, 0x0400CF78 },
-    { 0x03, 0x0400CF80 },
-    { 0x07, 0x0400D308 },
-    { 0x05, 0x0400D300 },
-    { 0x03, 0x0400D018 },
-    { 0x04, 0x0400D028 },
-    { 0x03, 0x0400CFE0 },
-    { 0x04, 0x0400D058 },
-    { 0x03, 0x0400D030 },
-    { 0x05, 0x0400CFB0 },
-    { 0x03, 0x0400CFC8 },
-    { 0x04, 0x0400D040 },
-    { 0x05, 0x0400D1D0 },
-    { 0x03, 0x0400CFD8 },
-    { 0x04, 0x0400CFC0 },
-    { 0x04, 0x0400CFB8 },
-    { 0x04, 0x0400D050 },
-    { 0x04, 0x0400D048 },
-    { -1, func_8085A8C4 },
-    { 0x03, 0x0400D000 },
-    { 0x03, 0x0400D010 },
-    { 0x09, 0x0400DAD0 },
-    { -1, func_8085A530 },
-    { 0x0F, 0x0400D0A8 },
-    { 0x07, 0x0400D098 },
-    { 0x03, 0x0400CFA0 },
-    { 0x03, 0x0400CFF0 },
-    { -1, func_8085A768 },
-    { -1, func_8085AA60 },
-    { 0x05, 0x0400D070 },
-    { 0x05, 0x0400D358 },
-    { 0x05, 0x0400D330 },
-    { 0x05, 0x0400D340 },
-    { 0x05, 0x0400D350 },
-    { 0x05, 0x0400D328 },
-    { 0x07, 0x0400D368 },
-    { 0x03, 0x0400D9F8 },
-    { 0x05, 0x0400D108 },
-    { 0x05, 0x0400D118 },
-    { 0x04, 0x0400CF98 },
-    { 0x02, 0x0400D5B8 },
-    { 0x07, 0x0400E010 },
-    { 0x05, 0x0400D0F8 },
-    { 0x07, 0x0400D2D8 },
-    { 0x07, 0x0400D2E0 },
-    { 0x07, 0x0400D2E8 },
-    { -1, func_80859990 },
-    { 0x00000000, NULL },
-    { -1, func_80859A10 },
-    { 0x07, 0x0400D158 },
-    { 0x05, 0x0400D160 },
-    { 0x05, 0x0400D168 },
-    { 0x03, 0x0400D5C0 },
-    { 0x04, 0x0400D668 },
-    { 0x03, 0x0400E470 },
-    { 0x03, 0x0400E478 },
-    { 0x03, 0x0400E4C0 },
-    { 0x03, 0x0400E480 },
-    { 0x03, 0x0400E490 },
-    { 0x03, 0x0400E488 },
-    { 0x03, 0x0400E498 },
-    { 0x03, 0x0400E4B0 },
-    { 0x03, 0x0400D660 },
-    { 0x03, 0x0400DA00 },
-    { 0x03, 0x0400DA08 },
-};
-#endif
-
 extern struct_8082E224_arg1 D_8085DA70;
 extern struct_8082E224_arg1 D_8085D9E0;
 extern struct_8082E224_arg1 D_8085D9F0;
@@ -18471,151 +17360,6 @@ extern struct_8082E224_arg1 D_8085DA0C;
 extern struct_8082E224_arg1 D_8085DA28;
 extern struct_8082E224_arg1 D_8085DA78;
 extern struct_8082E224_arg1 D_8085DA80;
-
-#if 0
-struct_8085DA94 D_8085DEF4[0x8C] = {
-    { 0x00, 0x00000000 },
-    { -1, func_80859414 },
-    { -1, func_80859AD0 },
-    { -1, func_80859B28 },
-    { 0x0B, 0x00000000 },
-    { -1, func_8085ADA0 },
-    { -1, func_8085AACC },
-    { -1, func_808595B8 },
-    { 0x12, D_8085DA70 },
-    { -1, func_80859890 },
-    { -1, func_80859C60 },
-    { 0x12, D_8085D9E0 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x00, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x11, 0x0400DDB8 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { -1, func_8085A710 },
-    { -1, func_808595B8 },
-    { 0x0C, 0x0400D198 },
-    { -1, func_80859D70 },
-    { 0x0C, 0x0400D648 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { -1, func_8085A6C0 },
-    { 0x0C, 0x0400D690 },
-    { 0x0C, 0x0400D618 },
-    { 0x0C, 0x0400D630 },
-    { 0x0C, 0x0400D298 },
-    { 0x0C, 0x0400D318 },
-    { -1, func_80859FF4 },
-    { -1, func_8085A04C },
-    { 0x0B, 0x00000000 },
-    { 0x0C, 0x0400D2C0 },
-    { -1, func_8085A144 },
-    { -1, func_8085A1D4 },
-    { 0x0C, 0x0400D280 },
-    { 0x0C, 0x0400D290 },
-    { 0x12, D_8085D9F0 },
-    { 0x0B, 0x00000000 },
-    { 0x12, D_8085DA00 },
-    { 0x0D, 0x0400E158 },
-    { -1, func_8085A364 },
-    { 0x12, D_8085DA2C },
-    { 0x0C, 0x0400E438 },
-    { 0x0C, 0x0400E448 },
-    { 0x0C, 0x0400CF70 },
-    { 0x0C, 0x0400D2F8 },
-    { 0x12, D_8085DA50 },
-    { 0x0B, 0x00000000 },
-    { 0x12, D_8085D9FC },
-    { 0x0C, 0x0400E120 },
-    { -1, func_8085A364 },
-    { 0x12, D_8085DA1C },
-    { 0x0B, 0x00000000 },
-    { 0x12, D_8085DA0C },
-    { -1, func_808599DC },
-    { 0x0B, 0x00000000 },
-    { 0x12, D_8085DA28 },
-    { -1, func_8085A364 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0C, 0x0400CF50 },
-    { -1, func_8085A40C },
-    { 0x0B, 0x00000000 },
-    { -1, func_80859708 },
-    { -1, func_8085A2AC },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { -1, func_8085A40C },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x12, D_8085DA78 },
-    { 0x0C, 0x0400D020 },
-    { -1, func_8085A364 },
-    { 0x0C, 0x0400CFE8 },
-    { 0x0B, 0x00000000 },
-    { 0x0C, 0x0400D038 },
-    { 0x12, D_8085DA80 },
-    { 0x0C, 0x0400CFD0 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { -1, func_8085A940 },
-    { 0x0C, 0x0400D008 },
-    { 0x0B, 0x00000000 },
-    { -1, func_8085A4A4 },
-    { -1, func_8085A5DC },
-    { -1, func_8085AA84 },
-    { 0x0B, 0x00000000 },
-    { 0x0C, 0x0400CFA8 },
-    { 0x0C, 0x0400CFF8 },
-    { -1, func_8085A7C0 },
-    { 0x0B, 0x00000000 },
-    { 0x0D, 0x0400D078 },
-    { 0x0D, 0x0400D360 },
-    { 0x0D, 0x0400D338 },
-    { 0x0D, 0x0400D348 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0C, 0x0400D9F0 },
-    { 0x0D, 0x0400D110 },
-    { 0x0D, 0x0400D120 },
-    { 0x0B, 0x00000000 },
-    { -1, func_8085AA10 },
-    { 0x0B, 0x00000000 },
-    { -1, func_8085A364 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { -1, func_808599DC },
-    { -1, func_80859AF8 },
-    { -1, func_80859A44 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0C, 0x0400D5C8 },
-    { 0x0B, 0x00000000 },
-    { 0x0C, 0x0400E4A8 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { 0x0B, 0x00000000 },
-    { -1, func_80859D44 },
-    { 0x0B, 0x00000000 },
-    { 0x0C, 0x0400E4A0 },
-    { -1, func_80859EBC },
-    { -1, func_80859F4C },
-    { -1, func_80859F4C },
-};
-#endif
 
 void func_8085AC9C(PlayState* play, Player* this, CsCmdActorAction* actorAction, struct_8085DA94* arg3) {
     if (arg3->type > 0) {
