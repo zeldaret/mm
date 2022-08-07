@@ -5,7 +5,7 @@
  */
 
 #include "z_en_twig.h"
-#include "assets/objects/object_twig/object_twig.h"
+#include "objects/object_twig/object_twig.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
