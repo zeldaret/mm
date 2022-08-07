@@ -5,7 +5,7 @@
 
 typedef enum {
     /* 0 */ DEADDD_TYPE_0,
-    /* 1 */ DEADDD_TYPE_1
+    /* 1 */ DEADDD_TYPE_1 // Unused
 } DeadDDType;
 
 typedef struct {
