@@ -62,23 +62,23 @@ typedef struct {
 } EnKusa2UnkBssStruct; // size = 0x1740
 
 typedef struct EnKusa2 {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ColliderCylinder collider;
-    /* 0x0190 */ EnKusa2ActionFunc actionFunc;
-    /* 0x0194 */ struct EnKusa2* unk_194[9];
-    /* 0x01B8 */ EnKusa2UnkBssSubStruct* unk_1B8;
-    /* 0x01BC */ s16 unk_1BC;
-    /* 0x01BE */ s8 unk_1BE;
-    /* 0x01C0 */ struct EnKusa2* unk_1C0;
-    /* 0x01C4 */ s16 unk_1C4;
-    /* 0x01C6 */ UNK_TYPE1 unk1C6[0x2];
-    /* 0x01C8 */ s16 unk_1C8;
-    /* 0x01CA */ s16 unk_1CA;
-    /* 0x01CC */ s16 unk_1CC;
-    /* 0x01CE */ s8 unk_1CE;
-    /* 0x01CF */ u8 unk_1CF;
-    /* 0x01D0 */ s8 unk_1D0;
-    /* 0x01D1 */ s8 unk_1D1;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ColliderCylinder collider;
+    /* 0x190 */ EnKusa2ActionFunc actionFunc;
+    /* 0x194 */ struct EnKusa2* unk_194[9];
+    /* 0x1B8 */ EnKusa2UnkBssSubStruct* unk_1B8;
+    /* 0x1BC */ s16 unk_1BC;
+    /* 0x1BE */ s8 unk_1BE;
+    /* 0x1C0 */ struct EnKusa2* unk_1C0;
+    /* 0x1C4 */ s16 unk_1C4;
+    /* 0x1C6 */ UNK_TYPE1 unk1C6[0x2];
+    /* 0x1C8 */ s16 unk_1C8;
+    /* 0x1CA */ s16 unk_1CA;
+    /* 0x1CC */ s16 unk_1CC;
+    /* 0x1CE */ s8 unk_1CE;
+    /* 0x1CF */ u8 unk_1CF;
+    /* 0x1D0 */ s8 unk_1D0;
+    /* 0x1D1 */ s8 unk_1D1;
 } EnKusa2; // size = 0x1D4
 
 extern const ActorInit En_Kusa2_InitVars;

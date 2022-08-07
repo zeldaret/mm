@@ -21,20 +21,20 @@ enum {
 };
 
 typedef struct DemoSyoten {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ SkeletonInfo unk_144;
-    /* 0x0174 */ Vec3s unk_174[51];
-    /* 0x02A6 */ s16 unk_2A6[153];
-    /* 0x03D8 */ f32 unk_3D8;
-    /* 0x03DC */ Gfx* unk_3DC;
-    /* 0x03E0 */ AnimatedMaterial* unk_3E0;
-    /* 0x03E4 */ u16 unk_3E4;
-    /* 0x03E6 */ s16 unk_3E6;
-    /* 0x03E8 */ Path* unk_3E8;
-    /* 0x03EC */ s32 unk_3EC;
-    /* 0x03F0 */ u16 unk_3F0;
-    /* 0x03F2 */ u16 unk_3F2;
-    /* 0x03F4 */ DemoSyotenActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkeletonInfo unk_144;
+    /* 0x174 */ Vec3s unk_174[51];
+    /* 0x2A6 */ Vec3s unk_2A6[51];
+    /* 0x3D8 */ f32 unk_3D8;
+    /* 0x3DC */ Gfx* unk_3DC;
+    /* 0x3E0 */ AnimatedMaterial* unk_3E0;
+    /* 0x3E4 */ u16 unk_3E4;
+    /* 0x3E6 */ s16 unk_3E6;
+    /* 0x3E8 */ Path* unk_3E8;
+    /* 0x3EC */ s32 unk_3EC;
+    /* 0x3F0 */ u16 unk_3F0;
+    /* 0x3F2 */ u16 unk_3F2;
+    /* 0x3F4 */ DemoSyotenActionFunc actionFunc;
 } DemoSyoten; // size = 0x3F8
 
 extern const ActorInit Demo_Syoten_InitVars;

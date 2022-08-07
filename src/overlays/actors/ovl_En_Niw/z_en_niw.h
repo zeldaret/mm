@@ -9,15 +9,15 @@ struct EnNiw;
 typedef void (*EnNiwActionFunc)(struct EnNiw*, PlayState*);
 
 typedef struct {
-    /* 0x0000 */ u8 isEnabled;
-    /* 0x0004 */ Vec3f pos;
-    /* 0x0010 */ Vec3f vel;
-    /* 0x001C */ Vec3f accel;
-    /* 0x0028 */ s16 life;
-    /* 0x002A */ s16 zRotStart;
-    /* 0x002C */ f32 scale;
-    /* 0x0030 */ f32 zRot;
-    /* 0x0034 */ u8 timer;
+    /* 0x00 */ u8 isEnabled;
+    /* 0x04 */ Vec3f pos;
+    /* 0x10 */ Vec3f vel;
+    /* 0x1C */ Vec3f accel;
+    /* 0x28 */ s16 life;
+    /* 0x2A */ s16 zRotStart;
+    /* 0x2C */ f32 scale;
+    /* 0x30 */ f32 zRot;
+    /* 0x34 */ u8 timer;
 } EnNiwFeather; // size = 0x38
 
 #define NIW_FEATHER_COUNT 20

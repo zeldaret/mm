@@ -75,7 +75,7 @@ void func_80C06640(ObjMoonStone* this, PlayState* play) {
     sp1A -= player->actor.shape.rot.y;
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actor.colChkInfo.health = 1;
-        Message_StartTextbox(play, 0x5E3U, &this->actor);
+        Message_StartTextbox(play, 0x5E3, &this->actor);
         func_80C066F8(this);
     } else {
         s32 phi_v0 = ABS_ALT(sp1A);
@@ -127,7 +127,7 @@ void func_80C0685C(ObjMoonStone* this) {
 }
 
 void func_80C06870(ObjMoonStone* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 6 && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         gSaveContext.save.weekEventReg[74] |= 0x40;
         Actor_MarkForDeath(&this->actor);
     }
@@ -148,11 +148,11 @@ void ObjMoonStone_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     func_8012C28C(play->state.gfxCtx);
     func_8012C2DC(play->state.gfxCtx);
-    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_gi_reserve00_Matanimheader_001C60));
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gGiMoonsTearTexAnim));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_gi_reserve00_DL_000D78);
+    gSPDisplayList(POLY_OPA_DISP++, gGiMoonsTearItemDL);
     Matrix_ReplaceRotation(&play->billboardMtxF);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, object_gi_reserve00_DL_000C80);
+    gSPDisplayList(POLY_XLU_DISP++, gGiMoonsTearGlowDL);
     CLOSE_DISPS(play->state.gfxCtx);
 }

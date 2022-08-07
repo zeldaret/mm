@@ -430,7 +430,7 @@ void func_80962588(EnFu* this, PlayState* play) {
         if (play->msgCtx.choiceIndex == 0) {
             if (gSaveContext.save.playerData.rupees >= 10) {
                 func_8019F208();
-                func_801159EC(-10);
+                Rupees_ChangeBy(-10);
                 func_80963DE4(this, play);
             } else {
                 play_sound(NA_SE_SY_ERROR);
@@ -577,24 +577,24 @@ void func_809628BC(EnFu* this) {
 }
 
 void func_809628D0(EnFu* this, PlayState* play) {
-    u8 sp27 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    switch (sp27) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
+    switch (talkState) {
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
 
-        case 4:
+        case TEXT_STATE_CHOICE:
             func_80962588(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             func_80962660(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 this->unk_54A = 1;
                 switch (this->unk_552) {
@@ -617,7 +617,7 @@ void func_809628D0(EnFu* this, PlayState* play) {
             break;
     }
 
-    if (sp27 != 3) {
+    if (talkState != TEXT_STATE_3) {
         func_80964190(this, play);
         func_8096426C(this, play);
     }
@@ -840,8 +840,9 @@ void func_80963350(EnFu* this, PlayState* play) {
     static s32 D_80964C24 = 0;
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
-    if ((this->unk_54A == 0) && (((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) ||
-                                 ((Message_GetState(&play->msgCtx) == 2) && (play->msgCtx.unk12023 == 1)))) {
+    if ((this->unk_54A == 0) &&
+        (((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) ||
+         ((Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) && (play->msgCtx.stateTimer == 1)))) {
         func_801477B4(play);
         this->unk_54A = 2;
         D_80964C24 = 1;
@@ -1162,11 +1163,11 @@ void func_80963F44(EnFu* this, PlayState* play) {
 
 void func_80963F88(EnFu* this, PlayState* play) {
     if (this->unk_542 == 1) {
-        func_800DFAC8(play->cameraPtrs[CAM_ID_MAIN], 75);
+        Camera_ChangeSetting(play->cameraPtrs[CAM_ID_MAIN], CAM_SET_HONEY_AND_DARLING_2);
         play->unk_1887E = 0;
     } else if (this->unk_542 == 2) {
         play->unk_1887D = 0;
-        func_800DFAC8(play->cameraPtrs[CAM_ID_MAIN], 75);
+        Camera_ChangeSetting(play->cameraPtrs[CAM_ID_MAIN], CAM_SET_HONEY_AND_DARLING_2);
     }
 }
 

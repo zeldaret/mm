@@ -8,10 +8,10 @@ struct ObjTaru;
 typedef void (*ObjTaruActionFunc)(struct ObjTaru*, PlayState*);
 
 typedef struct ObjTaru {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x64];
-    /* 0x01A8 */ ObjTaruActionFunc actionFunc;
-    /* 0x01AC */ char unk_1AC[0x4];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ char unk_144[0x64];
+    /* 0x1A8 */ ObjTaruActionFunc actionFunc;
+    /* 0x1AC */ char unk_1AC[0x4];
 } ObjTaru; // size = 0x1B0
 
 extern const ActorInit Obj_Taru_InitVars;

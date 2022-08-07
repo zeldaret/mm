@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_switch.h"
+#include "z64rumble.h"
 #include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -410,7 +411,7 @@ void ObjSwitch_Init(Actor* thisx, PlayState* play) {
         }
     }
     if (type == OBJSWITCH_TYPE_CRYSTAL) {
-        sCrystalSwitchAnimatedMat = Lib_SegmentedToVirtual(&gCrystalSwitchAnimatedMat);
+        sCrystalSwitchAnimatedMat = Lib_SegmentedToVirtual(&gCrystalSwitchTexAnim);
     }
     if (OBJ_SWITCH_IS_FROZEN(&this->dyna.actor)) {
         ObjSwitch_EyeSwitchFrozenInit(this);
@@ -563,7 +564,7 @@ void ObjSwitch_FloorSwitchPushDown(ObjSwitch* this, PlayState* play) {
     this->dyna.actor.scale.y -= 0.0495f;
     if (this->dyna.actor.scale.y <= this->floorSwitchDownScale) {
         ObjSwitch_PlayFootSwitchSfx(this);
-        func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
+        Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         ObjSwitch_StopCutscene(this);
         ObjSwitch_FloorSwitchDownInit(this);
     }
@@ -594,7 +595,7 @@ void ObjSwitch_FloorSwitchDown(ObjSwitch* this, PlayState* play) {
         case OBJSWITCH_SUBTYPE_RESET:
         case OBJSWITCH_SUBTYPE_RESET_INVERTED:
             if (!DynaPolyActor_IsInSwitchPressedState(&this->dyna) &&
-                (Player_InCsMode(&play->state) == 0 || play->sceneNum == SCENE_SECOM)) {
+                (!Player_InCsMode(play) || play->sceneNum == SCENE_SECOM)) {
                 if (this->floorSwitchReleaseTimer <= 0) {
                     if (subType == OBJSWITCH_SUBTYPE_RESET) {
                         ObjSwitch_SetSwitchFlagState(this, play, false);
@@ -864,7 +865,7 @@ void ObjSwitch_LargeFloorSwitchPushDown(ObjSwitch* this, PlayState* play) {
     this->dyna.actor.scale.y -= 0.074250005f;
     if (this->dyna.actor.scale.y <= 33.0f / 2000.0f) {
         ObjSwitch_PlayFootSwitchSfx(this);
-        func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
+        Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         ObjSwitch_StopCutscene(this);
         ObjSwitch_LargeFloorSwitchDownInit(this);
     }
@@ -884,7 +885,7 @@ void ObjSwitch_LargeFloorSwitchDown(ObjSwitch* this, PlayState* play) {
             ObjSwitch_LargeFloorSwitchRiseUpInit(this);
         }
     } else if (subType == OBJSWITCH_SUBTYPE_RESET || subType == OBJSWITCH_SUBTYPE_RESET_INVERTED) {
-        if (!DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna) && !Player_InCsMode(&play->state)) {
+        if (!DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna) && !Player_InCsMode(play)) {
             if (this->floorSwitchReleaseTimer <= 0) {
                 if (OBJ_SWITCH_GET_SUBTYPE(&this->dyna.actor) == OBJSWITCH_SUBTYPE_RESET) {
                     ObjSwitch_SetSwitchFlagState(this, play, false);
@@ -944,7 +945,7 @@ void ObjSwitch_Update(Actor* thisx, PlayState* play) {
             break;
         case OBJSWITCH_TYPE_CRYSTAL:
         case OBJSWITCH_TYPE_CRYSTAL_TARGETABLE:
-            if (!Player_InCsMode(&play->state)) {
+            if (!Player_InCsMode(play)) {
                 if (this->disableCrystalSwitchTimer > 0) {
                     this->disableCrystalSwitchTimer--;
                 }
