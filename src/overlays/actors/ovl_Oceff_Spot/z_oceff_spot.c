@@ -67,7 +67,7 @@ void OceffSpot_Init(Actor* thisx, PlayState* play2) {
 }
 
 void OceffSpot_Destroy(Actor* thisx, PlayState* play2) {
-    PlayState* play = (PlayState*)play2;
+    PlayState* play = play2;
     OceffSpot* this = THIS;
 
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode1);
@@ -80,7 +80,7 @@ void OceffSpot_End(OceffSpot* this, PlayState* play) {
         this->unk16C -= 0.05f;
     } else {
         Actor_MarkForDeath(&this->actor);
-        if ((gGameInfo->data[0xF] != 0x190) && (play->msgCtx.unk12046 == 0)) {
+        if ((REG(15) != 0x190) && (play->msgCtx.unk12046 == 0)) {
             if ((play->msgCtx.ocarinaAction != 0x39) || (play->msgCtx.ocarinaMode != 0xA)) {
                 gSaveContext.sunsSongState = SUNSSONG_START;
             }
@@ -163,10 +163,10 @@ void OceffSpot_Draw(Actor* thisx, PlayState* play) {
     func_8012C2DC(play->state.gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, &sCylinderMaterialDL);
-    gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, 0, scroll * 2, scroll * -2, 0x20, 0x20, 1, 0U,
+    gSPDisplayList(POLY_XLU_DISP++, &sOceffSpotCylinderMaterialDL);
+    gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, 0, scroll * 2, scroll * -2, 0x20, 0x20, 1, 0,
                                                      scroll * -8, 0x20, 0x20));
-    gSPDisplayList(POLY_XLU_DISP++, &sCylinderModelDL);
+    gSPDisplayList(POLY_XLU_DISP++, &sOceffSpotCylinderModelDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
