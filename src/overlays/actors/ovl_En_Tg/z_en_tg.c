@@ -18,9 +18,9 @@ void EnTg_Update(Actor* thisx, PlayState* play);
 void EnTg_Draw(Actor* thisx, PlayState* play);
 
 // TODO: this is supposed to be ?? : void func_8098FA70(EnTg* this, PlayState* play);
-void func_8098FA70(EnTg* this, GlobalContext* globalCtx);
-void func_8098FEA8(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len);
-void func_8099000C(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len);
+void func_8098FA70(EnTg* this, PlayState* play);
+void func_8098FEA8(PlayState* play, EnTgIdk* ptr, s32 len);
+void func_8099000C(PlayState* play, EnTgIdk* ptr, s32 len);
 void func_8098FD50(EnTg* this, EnTgIdk* ptr, Vec3f* arg2, s32 arg3);
 
 const ActorInit En_Tg_InitVars = {
@@ -116,29 +116,28 @@ void func_8098F800(SkelAnime* skelAnime, AnimationInfoS* animation, s16 idx) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F8A8.s")
-void func_8098F8A8(EnTg* this, GlobalContext* globalCtx) {
+void func_8098F8A8(EnTg* this, PlayState* play) {
     this->collider.dim.pos.x = (s16)this->actor.world.pos.x;
     this->collider.dim.pos.y = (s16)this->actor.world.pos.y;
     this->collider.dim.pos.z = (s16)this->actor.world.pos.z;
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F928.s")
-void func_8098F928(EnTg* this, GlobalContext* globalCtx) {
+void func_8098F928(EnTg* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Init.s")
-void EnTg_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnTg_Init(Actor* thisx, PlayState* play) {
     EnTg* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_mu_Skel_00B2B0, NULL, this->jointTable, this->morphTable,
-                       21);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_mu_Skel_00B2B0, NULL, this->jointTable, this->morphTable, 21);
     func_8098F800(&this->skelAnime, &sAnimations, 0);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_8098FA70;
@@ -146,14 +145,14 @@ void EnTg_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Destroy.s")
-void EnTg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnTg_Destroy(Actor* thisx, PlayState* play) {
     EnTg* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FA70.s")
-void func_8098FA70(EnTg* this, GlobalContext* globalCtx) {
+void func_8098FA70(EnTg* this, PlayState* play) {
     Vec3f sp24;
 
     this->actor.shape.rot.y += sREG(0) + 0x258; // 0x258 = 600
@@ -168,56 +167,56 @@ void func_8098FA70(EnTg* this, GlobalContext* globalCtx) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Update.s")
-void EnTg_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnTg_Update(Actor* thisx, PlayState* play) {
     EnTg* this = THIS;
 
-    this->actionFunc(this, globalCtx);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4U);
-    func_8098F928(this, globalCtx);
-    func_8098FEA8(globalCtx, &this->unk2F0, 0xA);
-    func_8098F8A8(this, globalCtx);
+    this->actionFunc(this, play);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4U);
+    func_8098F928(this, play);
+    func_8098FEA8(play, &this->unk2F0, 0xA);
+    func_8098F8A8(this, play);
 }
 
-// s32 EnTg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor*
+// s32 EnTg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor*
 // thisx); #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_OverrideLimbDraw.s")
-s32 EnTg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnTg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTg* this = THIS;
     return 0;
 }
 
-// void EnTg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
+// void EnTg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_PostLimbDraw.s")
-void EnTg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnTg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnTg* this = THIS;
 
     Vec3f sp18 = D_80990228;
 
     if (limbIndex == 9) {
-        Matrix_MultiplyVector3fByState(&sp18, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sp18, &this->actor.focus.pos);
     }
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Draw.s")
-void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnTg_Draw(Actor* thisx, PlayState* play) {
     EnTg* this = THIS;
 
     GraphicsContext* gfxCtx;
 
-    Matrix_StatePush();
-    func_8099000C(globalCtx, &this->unk2F0, 0xA);
-    Matrix_StatePop();
+    Matrix_Push();
+    func_8099000C(play, &this->unk2F0, 0xA);
+    Matrix_Pop();
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(globalCtx->state.gfxCtx, 0, 0x32, 0xA0, 0));
-    gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(globalCtx->state.gfxCtx, 0xFF, 0xFF, 0xFF, 0));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(play->state.gfxCtx, 0, 0x32, 0xA0, 0));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(play->state.gfxCtx, 0xFF, 0xFF, 0xFF, 0));
 
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                          (s32)this->skelAnime.dListCount, EnTg_OverrideLimbDraw, EnTg_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32)this->skelAnime.dListCount,
+                          EnTg_OverrideLimbDraw, EnTg_PostLimbDraw, &this->actor);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FD50.s")
@@ -246,9 +245,9 @@ void func_8098FD50(EnTg* this, EnTgIdk* ptr, Vec3f* arg2, s32 len) {
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FEA8.s")
 // Looks just like func_809647EC in z_en_fu.c
-void func_8098FEA8(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len) {
+void func_8098FEA8(PlayState* play, EnTgIdk* ptr, s32 len) {
     Vec3f sp44 = D_8099024C;
-    s16 yaw = Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx));
+    s16 yaw = Camera_GetInputDirYaw(GET_ACTIVE_CAM(play));
     s32 i;
 
     for (i = 0; i < len; i++, ptr++) {
@@ -259,24 +258,24 @@ void func_8098FEA8(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len) {
             ptr->unk14.y += ptr->unk2C.y;
             ptr->unk14.x += 2.0f * Math_SinS(ptr->unk38);
             ptr->unk14.z += 2.0f * Math_CosS(ptr->unk38);
-            Matrix_StatePush();
-            Matrix_InsertTranslation(ptr->unk14.x, ptr->unk14.y, ptr->unk14.z, MTXMODE_NEW);
-            Matrix_RotateY(yaw, MTXMODE_APPLY);
-            Matrix_MultiplyVector3fByState(&sp44, &ptr->unk14);
-            Matrix_StatePop();
+            Matrix_Push();
+            Matrix_Translate(ptr->unk14.x, ptr->unk14.y, ptr->unk14.z, MTXMODE_NEW);
+            Matrix_RotateYS(yaw, MTXMODE_APPLY);
+            Matrix_MultVec3f(&sp44, &ptr->unk14);
+            Matrix_Pop();
             ptr->unk38 += 6000;
         }
     }
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8099000C.s")
-void func_8099000C(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len) {
+void func_8099000C(PlayState* play, EnTgIdk* ptr, s32 len) {
     s32 i;
     s32 flag = false;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
+    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
 
     for (i = 0; i < len; i++, ptr++) {
@@ -285,16 +284,15 @@ void func_8099000C(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len) {
                 gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0A0);
                 flag = true;
             }
-            Matrix_InsertTranslation(ptr->unk14.x, ptr->unk14.y, ptr->unk14.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(ptr->unk14.x, ptr->unk14.y, ptr->unk14.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(ptr->unk4, ptr->unk4, ptr->unk4, MTXMODE_APPLY);
 
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0E0);
         }
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
