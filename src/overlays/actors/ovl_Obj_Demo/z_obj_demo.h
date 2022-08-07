@@ -3,14 +3,18 @@
 
 #include "global.h"
 
+#define OBJDEMO_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define OBJDEMO_FF_FF 0xFF
 struct ObjDemo;
 
 typedef void (*ObjDemoActionFunc)(struct ObjDemo*, PlayState*);
 
 typedef struct ObjDemo {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ObjDemoActionFunc actionFunc;
-    /* 0x0148 */ char unk_148[0xC];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ObjDemoActionFunc actionFunc;
+    /* 0x148 */ s32 unk_148;
+    /* 0x14C */ f32 xzRange;
+    /* 0x150 */ f32 yRange;
 } ObjDemo; // size = 0x154
 
 extern const ActorInit Obj_Demo_InitVars;

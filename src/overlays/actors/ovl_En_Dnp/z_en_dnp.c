@@ -296,7 +296,7 @@ void func_80B3D2D4(EnDnp* this, PlayState* play) {
 void func_80B3D338(EnDnp* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((this->unk_32E != 0) && (Message_GetState(&play->msgCtx) == 2)) {
+    if ((this->unk_32E != 0) && (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING)) {
         Actor_MarkForDeath(&this->actor);
     } else if (this->unk_32E == 0) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -364,7 +364,7 @@ void EnDnp_Init(Actor* thisx, PlayState* play) {
         this->actor.world.rot.x = this->actor.shape.rot.x;
         this->actor.cutscene = 0x10;
         this->actionFunc = func_80B3D47C;
-    } else if (((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_0) && !Interface_HasItemInBottle(ITEM_DEKU_PRINCESS) &&
+    } else if (((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_0) && !Inventory_HasItemInBottle(ITEM_DEKU_PRINCESS) &&
                 !(gSaveContext.save.weekEventReg[23] & 0x20)) ||
                ((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_2) && (gSaveContext.save.weekEventReg[23] & 0x20))) {
         Actor_SetScale(&this->actor, 0.0085f);

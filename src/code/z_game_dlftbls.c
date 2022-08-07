@@ -15,7 +15,7 @@
 
 GameStateOverlay gGameStateOverlayTable[] = {
     GAMESTATE_OVERLAY_INTERNAL(TitleSetup_Init, TitleSetup_Destroy, sizeof(GameState)),
-    GAMESTATE_OVERLAY(select, Select_Init, Select_Destroy, sizeof(SelectContext)),
+    GAMESTATE_OVERLAY(select, MapSelect_Init, MapSelect_Destroy, sizeof(MapSelectState)),
     GAMESTATE_OVERLAY(title, Title_Init, Title_Destroy, sizeof(TitleContext)),
     GAMESTATE_OVERLAY_INTERNAL(Play_Init, Play_Fini, sizeof(PlayState)),
     GAMESTATE_OVERLAY(opening, Opening_Init, Opening_Destroy, sizeof(OpeningContext)),

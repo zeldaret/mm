@@ -4,8 +4,8 @@
  * Description: Ikana Graveyard - Circle of Stalchildren
  */
 
-#include "overlays/actors/ovl_Obj_Hakaisi/z_obj_hakaisi.h"
 #include "z_en_rail_skb.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_skb/object_skb.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
@@ -112,7 +112,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    2,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -513,26 +513,26 @@ void func_80B717E0(EnRailSkb* this, PlayState* play) {
     this->unk_3FA = 0;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
-        case 1:
-        case 2:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
             break;
 
-        case 3:
+        case TEXT_STATE_3:
             if ((play->gameplayFrames % 2) != 0) {
                 this->unk_3FA = 1;
             }
             break;
 
-        case 4:
+        case TEXT_STATE_CHOICE:
             func_80B72100(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             func_80B71F3C(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 func_80B71650(this);
             }
@@ -848,7 +848,7 @@ void func_80B72430(EnRailSkb* this, PlayState* play, s32 arg2) {
 
         sp50.y += Rand_Centered() * 4.0f;
 
-        EffectSsHahen_Spawn(play, &sp5C, &sp50, &sp44, 0, (Rand_Next() & 7) + 10, -1, 10, NULL);
+        EffectSsHahen_Spawn(play, &sp5C, &sp50, &sp44, 0, (Rand_Next() & 7) + 10, HAHEN_OBJECT_DEFAULT, 10, NULL);
         func_800BBFB0(play, &sp5C, 10.0f, 1, 150, 0, 1);
     }
 }
@@ -1035,8 +1035,10 @@ void func_80B72970(EnRailSkb* this, PlayState* play) {
                 this->unk_402 |= 1;
 
             case 15:
-                if ((player->swordAnimation == 4) || (player->swordAnimation == 11) || (player->swordAnimation == 22) ||
-                    (player->swordAnimation == 23)) {
+                if ((player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_SLASH_1H) ||
+                    (player->meleeWeaponAnimation == PLAYER_MWA_LEFT_COMBO_2H) ||
+                    (player->meleeWeaponAnimation == PLAYER_MWA_BACKSLASH_RIGHT) ||
+                    (player->meleeWeaponAnimation == PLAYER_MWA_BACKSLASH_LEFT)) {
                     this->unk_402 |= 1;
                 }
 

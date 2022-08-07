@@ -8,9 +8,9 @@ struct EnPaper;
 typedef void (*EnPaperActionFunc)(struct EnPaper*, PlayState*);
 
 typedef struct EnPaper {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ EnPaperActionFunc actionFunc;
-    /* 0x0148 */ char unk_148[0xC40];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ EnPaperActionFunc actionFunc;
+    /* 0x148 */ char unk_148[0xC40];
 } EnPaper; // size = 0xD88
 
 extern const ActorInit En_Paper_InitVars;

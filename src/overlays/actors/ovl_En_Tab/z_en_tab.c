@@ -261,7 +261,7 @@ void func_80BE09A8(EnTab* this, PlayState* play) {
 
 void func_80BE0A98(EnTab* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 sp20 = Message_GetState(&play->msgCtx);
+    s32 talkState = Message_GetState(&play->msgCtx);
 
     this->unk_308 += (this->unk_304 != 0.0f) ? 40.0f : -40.0f;
     this->unk_308 = CLAMP(this->unk_308, 0.0f, 80.0f);
@@ -269,8 +269,8 @@ void func_80BE0A98(EnTab* this, PlayState* play) {
     Matrix_Translate(this->unk_308, 0.0f, 0.0f, MTXMODE_APPLY);
 
     if ((&this->actor == player->targetActor) &&
-        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (sp20 == 3) &&
-        (this->unk_334 == 3)) {
+        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_3) &&
+        (this->prevTalkState == TEXT_STATE_3)) {
         if ((play->state.frames % 2) == 0) {
             if (this->unk_304 != 0.0f) {
                 this->unk_304 = 0.0f;
@@ -281,7 +281,7 @@ void func_80BE0A98(EnTab* this, PlayState* play) {
     } else {
         this->unk_304 = 0.0f;
     }
-    this->unk_334 = sp20;
+    this->prevTalkState = talkState;
 }
 
 s32 func_80BE0C04(EnTab* this, Actor* actor, f32 arg2) {
@@ -314,7 +314,7 @@ s32 func_80BE0C04(EnTab* this, Actor* actor, f32 arg2) {
 }
 
 s32 func_80BE0D38(EnTab* this, PlayState* play) {
-    return Interface_HasEmptyBottle();
+    return Inventory_HasEmptyBottle();
 }
 
 s32 func_80BE0D60(EnTab* this, PlayState* play) {
@@ -366,7 +366,7 @@ s32* func_80BE0E04(EnTab* this, PlayState* play) {
     return NULL;
 }
 
-s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
     EnGm* sp28 = func_80BE04E0(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
 
@@ -385,7 +385,7 @@ s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80BE0FC4(EnTab* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BE0FC4(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 pad;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BE1B04);
@@ -399,18 +399,18 @@ s32 func_80BE0FC4(EnTab* this, PlayState* play, ScheduleResult* arg2) {
     return true;
 }
 
-s32 func_80BE1060(EnTab* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BE1060(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret;
 
     this->unk_2FC = 0;
 
-    switch (arg2->result) {
+    switch (scheduleOutput->result) {
         case 1:
-            ret = func_80BE0F04(this, play, arg2);
+            ret = func_80BE0F04(this, play, scheduleOutput);
             break;
 
         case 2:
-            ret = func_80BE0FC4(this, play, arg2);
+            ret = func_80BE0FC4(this, play, scheduleOutput);
             break;
 
         default:
@@ -472,7 +472,7 @@ void func_80BE1224(EnTab* this, PlayState* play) {
 }
 
 void func_80BE127C(EnTab* this, PlayState* play) {
-    ScheduleResult sp18;
+    ScheduleOutput sp18;
 
     this->unk_31A = REG(15) + ((void)0, gSaveContext.save.daySpeed);
 
@@ -581,7 +581,7 @@ void EnTab_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     }
 }
 
-void EnTab_TransformDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
+void EnTab_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnTab* this = THIS;
     s32 rotStep;
     s32 overrideStep;
@@ -624,7 +624,7 @@ void EnTab_Draw(Actor* thisx, PlayState* play) {
 
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnTab_OverrideLimbDraw, EnTab_PostLimbDraw,
-                                       EnTab_TransformDraw, &this->actor);
+                                       EnTab_TransformLimbDraw, &this->actor);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
