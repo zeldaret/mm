@@ -168,7 +168,7 @@ typedef struct AnimationContext {
 
 typedef struct {
     /* 0x000 */ AnimationHeaderCommon common;
-    /* 0x004 */ u32 segment;
+    /* 0x004 */ uintptr_t segment;
 } LinkAnimationHeader; // size = 0x8
 
 typedef struct SkelAnime {
