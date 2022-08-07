@@ -38,7 +38,7 @@ static EffectSsUpdateFunc sUpdateFuncs[] = {
     EffectSsBlast_UpdateFire,
 };
 
-static TexturePtr dustTextures[] = {
+static TexturePtr sDustTextures[] = {
     gEffDust1Tex, gEffDust2Tex, gEffDust3Tex, gEffDust4Tex, gEffDust5Tex, gEffDust6Tex, gEffDust7Tex, gEffDust8Tex,
 };
 
@@ -106,7 +106,7 @@ void EffectSsDust_Draw(PlayState* play, u32 index, EffectSs* this) {
     if (mtx != NULL) {
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPPipeSync(POLY_XLU_DISP++);
-        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(dustTextures[this->rTexIndex]));
+        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[this->rTexIndex]));
         POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
         gDPPipeSync(POLY_XLU_DISP++);
 
