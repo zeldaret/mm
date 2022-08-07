@@ -1,7 +1,10 @@
-/*
- * File: z_fbdemo_wipe4.c
+/**
+ * @file z_fbdemo_wipe4.c
  * Overlay: ovl_fbdemo_wipe4
  * Description:
+ *
+ * @note The bug in TransitionWipe4_Draw() makes this transition do nothing apart from increase its timer until it is
+ * finished.
  */
 
 #include "z_fbdemo_wipe4.h"
@@ -86,21 +89,21 @@ void TransitionWipe4_Update(void* thisx, s32 updateRate) {
 
 // Use of THIS in this function is required to match
 void TransitionWipe4_Draw(void* thisx, Gfx** gfxP) {
-    Gfx* gfx;
-    Struct_80140E80* var_a3;
+    Gfx* gfx = *gfxP;
+    Struct_80140E80* var_a3 = &THIS->bg;
 
-    var_a3 = &THIS->bg;
-    gfx = *gfxP;
     var_a3->primColor.rgba = THIS->primColor.rgba;
 
     if (THIS->direction != 0) {
-        var_a3->unk_04 = THIS->progress;
+        var_a3->scale = THIS->progress;
         var_a3->lodProportion = 1.0f - THIS->progress;
     } else {
-        var_a3->unk_04 = 1.0f - THIS->progress;
+        var_a3->scale = 1.0f - THIS->progress;
         var_a3->lodProportion = THIS->progress;
     }
 
+    //! @bug (Possibly) Since var_a3->mode is never set after being initialised to 0, the switch in func_80141778() does
+    //! nothing, so this function call does nothing but change to the sprite microcode, then back to 3D microcode.
     func_80141778(var_a3, &gfx, SysCfb_GetZBuffer());
     *gfxP = gfx;
 }
