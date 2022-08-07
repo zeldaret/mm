@@ -21,45 +21,45 @@ f32 func_8018B0F0(f32 arg0) {
 void func_8018B10C(void) {
     s32 i;
 
-    gAudioContext.unk_3520[255] = func_8018B0F0(0.25f);
-    gAudioContext.unk_3520[254] = func_8018B0F0(0.33f);
-    gAudioContext.unk_3520[253] = func_8018B0F0(0.5f);
-    gAudioContext.unk_3520[252] = func_8018B0F0(0.66f);
-    gAudioContext.unk_3520[251] = func_8018B0F0(0.75f);
+    gAudioContext.adsrDecayTable[255] = func_8018B0F0(0.25f);
+    gAudioContext.adsrDecayTable[254] = func_8018B0F0(0.33f);
+    gAudioContext.adsrDecayTable[253] = func_8018B0F0(0.5f);
+    gAudioContext.adsrDecayTable[252] = func_8018B0F0(0.66f);
+    gAudioContext.adsrDecayTable[251] = func_8018B0F0(0.75f);
 
     for (i = 128; i < 251; i++) {
-        gAudioContext.unk_3520[i] = func_8018B0F0(251 - i);
+        gAudioContext.adsrDecayTable[i] = func_8018B0F0(251 - i);
     }
 
     for (i = 16; i < 128; i++) {
-        gAudioContext.unk_3520[i] = func_8018B0F0(4 * (143 - i));
+        gAudioContext.adsrDecayTable[i] = func_8018B0F0(4 * (143 - i));
     }
 
     for (i = 1; i < 16; i++) {
-        gAudioContext.unk_3520[i] = func_8018B0F0(60 * (23 - i));
+        gAudioContext.adsrDecayTable[i] = func_8018B0F0(60 * (23 - i));
     }
 
-    gAudioContext.unk_3520[0] = 0.0f;
+    gAudioContext.adsrDecayTable[0] = 0.0f;
 }
 
 void AudioHeap_ResetLoadStatus(void) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(gAudioContext.fontLoadStatus); i++) {
-        if (gAudioContext.fontLoadStatus[i] != LOAD_STATUS_5) {
-            gAudioContext.fontLoadStatus[i] = LOAD_STATUS_0;
+        if (gAudioContext.fontLoadStatus[i] != LOAD_STATUS_PERMANENT) {
+            gAudioContext.fontLoadStatus[i] = LOAD_STATUS_NOT_LOADED;
         }
     }
 
     for (i = 0; i < ARRAY_COUNT(gAudioContext.sampleFontLoadStatus); i++) {
-        if (gAudioContext.sampleFontLoadStatus[i] != LOAD_STATUS_5) {
-            gAudioContext.sampleFontLoadStatus[i] = LOAD_STATUS_0;
+        if (gAudioContext.sampleFontLoadStatus[i] != LOAD_STATUS_PERMANENT) {
+            gAudioContext.sampleFontLoadStatus[i] = LOAD_STATUS_NOT_LOADED;
         }
     }
 
     for (i = 0; i < ARRAY_COUNT(gAudioContext.seqLoadStatus); i++) {
-        if (gAudioContext.seqLoadStatus[i] != LOAD_STATUS_5) {
-            gAudioContext.seqLoadStatus[i] = LOAD_STATUS_0;
+        if (gAudioContext.seqLoadStatus[i] != LOAD_STATUS_PERMANENT) {
+            gAudioContext.seqLoadStatus[i] = LOAD_STATUS_NOT_LOADED;
         }
     }
 }
@@ -302,7 +302,7 @@ void AudioHeap_PopCache(s32 tableType) {
         AudioHeap_DiscardFont(persistent->entries[persistent->numEntries - 1].id);
     }
 
-    loadStatus[persistent->entries[persistent->numEntries - 1].id] = LOAD_STATUS_0;
+    loadStatus[persistent->entries[persistent->numEntries - 1].id] = LOAD_STATUS_NOT_LOADED;
     persistent->numEntries--;
 }
 
@@ -409,12 +409,12 @@ void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id) {
         }
 
         loadStatusEntry0 =
-            (temporaryCache->entries[0].id == -1) ? LOAD_STATUS_0 : loadStatus[temporaryCache->entries[0].id];
+            (temporaryCache->entries[0].id == -1) ? LOAD_STATUS_NOT_LOADED : loadStatus[temporaryCache->entries[0].id];
         loadStatusEntry1 =
-            (temporaryCache->entries[1].id == -1) ? LOAD_STATUS_0 : loadStatus[temporaryCache->entries[1].id];
+            (temporaryCache->entries[1].id == -1) ? LOAD_STATUS_NOT_LOADED : loadStatus[temporaryCache->entries[1].id];
 
         if (tableType == FONT_TABLE) {
-            if (loadStatusEntry0 == LOAD_STATUS_4) {
+            if (loadStatusEntry0 == LOAD_STATUS_MAYBE_DISCARDABLE) {
                 for (i = 0; i < gAudioContext.numNotes; i++) {
                     if ((gAudioContext.notes[i].playbackState.fontId == temporaryCache->entries[0].id) &&
                         gAudioContext.notes[i].noteSubEu.bitField0.enabled) {
@@ -423,12 +423,12 @@ void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id) {
                 }
 
                 if (i == gAudioContext.numNotes) {
-                    AudioLoad_SetFontLoadStatus(temporaryCache->entries[0].id, LOAD_STATUS_3);
-                    loadStatusEntry0 = LOAD_STATUS_3;
+                    AudioLoad_SetFontLoadStatus(temporaryCache->entries[0].id, LOAD_STATUS_DISCARDABLE);
+                    loadStatusEntry0 = LOAD_STATUS_DISCARDABLE;
                 }
             }
 
-            if (loadStatusEntry1 == LOAD_STATUS_4) {
+            if (loadStatusEntry1 == LOAD_STATUS_MAYBE_DISCARDABLE) {
                 for (i = 0; i < gAudioContext.numNotes; i++) {
                     if ((gAudioContext.notes[i].playbackState.fontId == temporaryCache->entries[1].id) &&
                         gAudioContext.notes[i].noteSubEu.bitField0.enabled) {
@@ -437,26 +437,26 @@ void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id) {
                 }
 
                 if (i == gAudioContext.numNotes) {
-                    AudioLoad_SetFontLoadStatus(temporaryCache->entries[1].id, LOAD_STATUS_3);
-                    loadStatusEntry1 = LOAD_STATUS_3;
+                    AudioLoad_SetFontLoadStatus(temporaryCache->entries[1].id, LOAD_STATUS_DISCARDABLE);
+                    loadStatusEntry1 = LOAD_STATUS_DISCARDABLE;
                 }
             }
         }
 
-        if (loadStatusEntry0 == LOAD_STATUS_0) {
+        if (loadStatusEntry0 == LOAD_STATUS_NOT_LOADED) {
             temporaryCache->nextSide = 0;
-        } else if (loadStatusEntry1 == LOAD_STATUS_0) {
+        } else if (loadStatusEntry1 == LOAD_STATUS_NOT_LOADED) {
             temporaryCache->nextSide = 1;
-        } else if ((loadStatusEntry0 == LOAD_STATUS_3) && (loadStatusEntry1 == LOAD_STATUS_3)) {
+        } else if ((loadStatusEntry0 == LOAD_STATUS_DISCARDABLE) && (loadStatusEntry1 == LOAD_STATUS_DISCARDABLE)) {
             // Use the opposite side from last time.
-        } else if (loadStatusEntry0 == LOAD_STATUS_3) {
+        } else if (loadStatusEntry0 == LOAD_STATUS_DISCARDABLE) {
             temporaryCache->nextSide = 0;
-        } else if (loadStatusEntry1 == LOAD_STATUS_3) {
+        } else if (loadStatusEntry1 == LOAD_STATUS_DISCARDABLE) {
             temporaryCache->nextSide = 1;
         } else {
             // Check if there is a side which isn't in active use, if so, evict that one.
             if (tableType == SEQUENCE_TABLE) {
-                if (loadStatusEntry0 == LOAD_STATUS_2) {
+                if (loadStatusEntry0 == LOAD_STATUS_COMPLETE) {
                     for (i = 0; i < gAudioContext.audioBufferParameters.numSequencePlayers; i++) {
                         if (gAudioContext.seqPlayers[i].enabled &&
                             gAudioContext.seqPlayers[i].seqId == temporaryCache->entries[0].id) {
@@ -470,7 +470,7 @@ void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id) {
                     }
                 }
 
-                if (loadStatusEntry1 == LOAD_STATUS_2) {
+                if (loadStatusEntry1 == LOAD_STATUS_COMPLETE) {
                     for (i = 0; i < gAudioContext.audioBufferParameters.numSequencePlayers; i++) {
                         if (gAudioContext.seqPlayers[i].enabled &&
                             gAudioContext.seqPlayers[i].seqId == temporaryCache->entries[1].id) {
@@ -484,7 +484,7 @@ void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id) {
                     }
                 }
             } else if (tableType == FONT_TABLE) {
-                if (loadStatusEntry0 == LOAD_STATUS_2) {
+                if (loadStatusEntry0 == LOAD_STATUS_COMPLETE) {
                     for (i = 0; i < gAudioContext.numNotes; i++) {
                         if ((gAudioContext.notes[i].playbackState.fontId == temporaryCache->entries[0].id) &&
                             gAudioContext.notes[i].noteSubEu.bitField0.enabled) {
@@ -497,7 +497,7 @@ void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id) {
                     }
                 }
 
-                if (loadStatusEntry1 == LOAD_STATUS_2) {
+                if (loadStatusEntry1 == LOAD_STATUS_COMPLETE) {
                     for (i = 0; i < gAudioContext.numNotes; i++) {
                         if ((gAudioContext.notes[i].playbackState.fontId == temporaryCache->entries[1].id) &&
                             gAudioContext.notes[i].noteSubEu.bitField0.enabled) {
@@ -514,15 +514,15 @@ void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id) {
             // No such luck. Evict the side that wasn't chosen last time, except
             // if it is being loaded into.
             if (temporaryCache->nextSide == 0) {
-                if (loadStatusEntry0 == LOAD_STATUS_1) {
-                    if (loadStatusEntry1 == LOAD_STATUS_1) {
+                if (loadStatusEntry0 == LOAD_STATUS_IN_PROGRESS) {
+                    if (loadStatusEntry1 == LOAD_STATUS_IN_PROGRESS) {
                         goto fail;
                     }
                     temporaryCache->nextSide = 1;
                 }
             } else {
-                if (loadStatusEntry1 == LOAD_STATUS_1) {
-                    if (loadStatusEntry0 == LOAD_STATUS_1) {
+                if (loadStatusEntry1 == LOAD_STATUS_IN_PROGRESS) {
+                    if (loadStatusEntry0 == LOAD_STATUS_IN_PROGRESS) {
                         goto fail;
                     }
                     temporaryCache->nextSide = 0;
@@ -544,7 +544,7 @@ void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id) {
                 AudioHeap_DiscardSampleBank(temporaryCache->entries[side].id);
             }
 
-            loadStatus[temporaryCache->entries[side].id] = LOAD_STATUS_0;
+            loadStatus[temporaryCache->entries[side].id] = LOAD_STATUS_NOT_LOADED;
 
             if (tableType == FONT_TABLE) {
                 AudioHeap_DiscardFont(temporaryCache->entries[side].id);
@@ -564,7 +564,7 @@ void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id) {
                         AudioHeap_DiscardSampleBank(temporaryCache->entries[1].id);
                     }
 
-                    loadStatus[temporaryCache->entries[1].id] = LOAD_STATUS_0;
+                    loadStatus[temporaryCache->entries[1].id] = LOAD_STATUS_NOT_LOADED;
 
                     switch (tableType) {
                         case SEQUENCE_TABLE:
@@ -594,7 +594,7 @@ void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id) {
                         AudioHeap_DiscardSampleBank(temporaryCache->entries[0].id);
                     }
 
-                    loadStatus[temporaryCache->entries[0].id] = LOAD_STATUS_0;
+                    loadStatus[temporaryCache->entries[0].id] = LOAD_STATUS_NOT_LOADED;
 
                     switch (tableType) {
                         case SEQUENCE_TABLE:
@@ -1042,8 +1042,8 @@ void AudioHeap_Init(void) {
             AudioHeap_AllocDmaMemoryZeroed(&gAudioContext.miscPool, gAudioContext.maxAudioCmds * sizeof(u64));
     }
 
-    // Initialize unk_3520 (fadeOutVelocities for ADSR)
-    gAudioContext.unk_3520 = AudioHeap_Alloc(&gAudioContext.miscPool, 0x100 * sizeof(f32));
+    // Initialize adsrDecayTable (fadeOutVelocities for ADSR)
+    gAudioContext.adsrDecayTable = AudioHeap_Alloc(&gAudioContext.miscPool, 0x100 * sizeof(f32));
     func_8018B10C();
 
     // Initialize reverbs

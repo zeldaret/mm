@@ -34,25 +34,25 @@
         <Texture Name="gBigOctoEyeShellTex" OutName="big_octo_eye_shell" Format="rgba16" Width="16" Height="16" Offset="0x6590" />
         <Texture Name="gBigOctoSnoutEdgeTex" OutName="big_octo_snout_edge" Format="rgba16" Width="8" Height="16" Offset="0x6790" />
         <Texture Name="gBigOctoArmBottomTex" OutName="big_octo_arm_bottom" Format="rgba16" Width="16" Height="16" Offset="0x6890" />
-        <Limb Name="gBigOctoBodyLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_01" Offset="0x6A90" />
-        <Limb Name="gBigOctoFrontRightArmBaseLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_02" Offset="0x6A9C" />
-        <Limb Name="gBigOctoFrontRightArmEndLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_03" Offset="0x6AA8" />
-        <Limb Name="gBigOctoFrontLeftArmBaseLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_04" Offset="0x6AB4" />
-        <Limb Name="gBigOctoFrontLeftArmEndLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_05" Offset="0x6AC0" />
-        <Limb Name="gBigOctoBackLeftArmBaseLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_06" Offset="0x6ACC" />
-        <Limb Name="gBigOctoBackLeftArmEndLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_07" Offset="0x6AD8" />
-        <Limb Name="gBigOctoBackRightArmBaseLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_08" Offset="0x6AE4" />
-        <Limb Name="gBigOctoBackRightArmEndLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_09" Offset="0x6AF0" />
-        <Limb Name="gBigOctoHeadShellLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_0A" Offset="0x6AFC" />
-        <Limb Name="gBigOctoLeftTentacleBaseLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_0B" Offset="0x6B08" />
-        <Limb Name="gBigOctoLeftTentacleTipLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_0C" Offset="0x6B14" />
-        <Limb Name="gBigOctoRightTentacleBaseLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_0D" Offset="0x6B20" />
-        <Limb Name="gBigOctoRightTentacleTipLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_0E" Offset="0x6B2C" />
-        <Limb Name="gBigOctoLeftWeakPointLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_0F" Offset="0x6B38" />
-        <Limb Name="gBigOctoRightWeakPointLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_10" Offset="0x6B44" />
-        <Limb Name="gBigOctoCenterSnoutLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_11" Offset="0x6B50" />
-        <Limb Name="gBigOctoRightSnoutLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_12" Offset="0x6B5C" />
-        <Limb Name="gBigOctoLeftSnoutLimb" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_13" Offset="0x6B68" />
-        <Skeleton Name="gBigOctoSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BIGOKUTA_LIMB_NONE" LimbMax="OBJECT_BIGOKUTA_LIMB_MAX" EnumName="object_bigokuta_Limbs" Offset="0x6BC0" />
+        <Limb Name="gBigOctoBodyLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_BODY" Offset="0x6A90" />
+        <Limb Name="gBigOctoFrontRightArmBaseLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_RIGHT_FRONT_ARM_BASE" Offset="0x6A9C" />
+        <Limb Name="gBigOctoFrontRightArmEndLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_RIGHT_FRONT_ARM_END" Offset="0x6AA8" />
+        <Limb Name="gBigOctoFrontLeftArmBaseLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_LEFT_FRONT_ARM_BASE" Offset="0x6AB4" />
+        <Limb Name="gBigOctoFrontLeftArmEndLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_LEFT_FRONT_ARM_END" Offset="0x6AC0" />
+        <Limb Name="gBigOctoBackLeftArmBaseLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_RIGHT_BACK_ARM_BASE" Offset="0x6ACC" />
+        <Limb Name="gBigOctoBackLeftArmEndLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_RIGHT_BACK_ARM_END" Offset="0x6AD8" />
+        <Limb Name="gBigOctoBackRightArmBaseLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_LEFT_BACK_ARM_BASE" Offset="0x6AE4" />
+        <Limb Name="gBigOctoBackRightArmEndLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_LEFT_BACK_ARM_END" Offset="0x6AF0" />
+        <Limb Name="gBigOctoHeadShellLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_HEAD" Offset="0x6AFC" />
+        <Limb Name="gBigOctoLeftTentacleBaseLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_LEFT_TENTACLE_BASE" Offset="0x6B08" />
+        <Limb Name="gBigOctoLeftTentacleTipLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_LEFT_TENTACLE_TIP" Offset="0x6B14" />
+        <Limb Name="gBigOctoRightTentacleBaseLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_RIGHT_TENTACLE_BASE" Offset="0x6B20" />
+        <Limb Name="gBigOctoRightTentacleTipLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_RIGHT_TENTACLE_TIP" Offset="0x6B2C" />
+        <Limb Name="gBigOctoLeftWeakPointLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_LEFT_WEAK_POINT" Offset="0x6B38" />
+        <Limb Name="gBigOctoRightWeakPointLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_RIGHT_WEAK_POINT" Offset="0x6B44" />
+        <Limb Name="gBigOctoCenterSnoutLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_CENTER_SNOUT" Offset="0x6B50" />
+        <Limb Name="gBigOctoRightSnoutLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_RIGHT_SNOUT" Offset="0x6B5C" />
+        <Limb Name="gBigOctoLeftSnoutLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_LEFT_SNOUT" Offset="0x6B68" />
+        <Skeleton Name="gBigOctoSkel" Type="Flex" LimbType="Standard" LimbNone="BIGOKUTA_LIMB_NONE" LimbMax="BIGOKUTA_LIMB_MAX" EnumName="BigokutaLimbs" Offset="0x6BC0" />
     </File>
 </Root>

@@ -512,7 +512,7 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
     f32 temp_f2;
     f32 tempf;
 
-    if ((play->cameraPtrs[CAM_ID_MAIN]->flags2 & 0x100) || ((u8)play->envCtx.unk_E2 == 0)) {
+    if ((play->cameraPtrs[CAM_ID_MAIN]->stateFlags & CAM_STATE_UNDERWATER) || ((u8)play->envCtx.unk_E2 == 0)) {
         return;
     }
 
@@ -599,7 +599,7 @@ void func_808DD970(Actor* thisx, PlayState* play2) {
 
         phi_f26 = CLAMP_MAX(phi_f26, 1.0f);
 
-        if (!(play->cameraPtrs[CAM_ID_MAIN]->flags2 & 0x100) || (phi_f26 == 0.0f)) {
+        if (!(play->cameraPtrs[CAM_ID_MAIN]->stateFlags & CAM_STATE_UNDERWATER) || (phi_f26 == 0.0f)) {
             return;
         }
     }
@@ -644,7 +644,7 @@ f32 func_808DDE74(void) {
 }
 
 #ifdef NON_MATCHING
-// play->envCtx.unk_F2[1] needs to be laoded into s0 and then copied to s7
+// play->envCtx.unk_F2[1] needs to be loaded into s0 and then copied to s7
 void func_808DDE9C(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     ObjectKankyo* this = THIS;

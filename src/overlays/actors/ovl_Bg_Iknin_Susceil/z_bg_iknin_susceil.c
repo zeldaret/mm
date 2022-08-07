@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_iknin_susceil.h"
+#include "z64rumble.h"
 #include "objects/object_ikninside_obj/object_ikninside_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -75,11 +76,11 @@ void func_80C0A86C(BgIkninSusceil* this, PlayState* play, s16 verticalMag, s16 c
     Quake_SetQuakeValues(quake, verticalMag, 0, 0, 0);
     Quake_SetCountdown(quake, countdown);
     if (arg4 == 1) {
-        func_8013ECE0(10000.0f, 255, 20, 150);
+        Rumble_Request(SQ(100.0f), 255, 20, 150);
     } else if (arg4 == 2) {
-        func_8013ECE0(10000.0f, 180, 20, 100);
+        Rumble_Request(SQ(100.0f), 180, 20, 100);
     } else if (arg4 == 3) {
-        func_8013ECE0(10000.0f, 120, 20, 10);
+        Rumble_Request(SQ(100.0f), 120, 20, 10);
     }
 }
 

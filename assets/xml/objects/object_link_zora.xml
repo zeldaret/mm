@@ -56,7 +56,14 @@
         <DList Name="object_link_zora_DL_010978" Offset="0x10978" />
         <DList Name="object_link_zora_DL_010D08" Offset="0x10D08" />
         <DList Name="object_link_zora_DL_0110A8" Offset="0x110A8" />
-        <!-- <Blob Name="object_link_zora_Blob_011710" Size="0x50" Offset="0x11710" /> -->
+
+        <Array Name="object_link_zora_Vtx_011210" Count="80" Offset="0x011210">
+            <Vtx/>
+        </Array>
+        <Array Name="object_link_zora_U8_011710" Count="80" Offset="0x011710">
+            <Scalar Type="x8"/>
+        </Array>
+
         <DList Name="object_link_zora_DL_011760" Offset="0x11760" />
         <DList Name="object_link_zora_DL_011A58" Offset="0x11A58" />
         <Texture Name="object_link_zora_Tex_011A60" OutName="tex_011A60" Format="i8" Width="64" Height="32" Offset="0x11A60" />
