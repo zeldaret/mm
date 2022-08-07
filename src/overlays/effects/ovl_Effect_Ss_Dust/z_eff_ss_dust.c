@@ -139,10 +139,10 @@ void EffectSsDust_Update(PlayState* play, u32 index, EffectSs* this) {
         if (this->rLifespan >= 5) {
             this->rTexIndex = this->rLifespan - this->life;
         } else {
-            this->rTexIndex = ((this->rLifespan - this->life) * (8 / this->rLifespan));
+            this->rTexIndex = ((this->rLifespan - this->life) * (ARRAY_COUNT(sDustTextures) / this->rLifespan));
         }
     } else {
-        this->rTexIndex = 7;
+        this->rTexIndex = ARRAY_COUNT(sDustTextures) - 1;
     }
 
     this->rScale += this->rScaleStep;
@@ -184,7 +184,7 @@ void EffectSsDust_UpdateFire(PlayState* play, u32 index, EffectSs* this) {
             break;
     }
 
-    if (this->rTexIndex < 7) {
+    if (this->rTexIndex < (ARRAY_COUNT(sDustTextures) - 1)) {
         this->rTexIndex++;
     }
 
