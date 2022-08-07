@@ -809,7 +809,7 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
             if ((&this->actor != player->actor.parent) && (play->grabPlayer(play, player) != 0)) {
                 player->actor.parent = &this->actor;
                 Audio_PlaySfxGeneral(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                                     &D_801DB4B8);
+                                     &gSfxDefaultReverb);
                 Boss03_SetupChewPlayer(this, play);
             }
         } else {

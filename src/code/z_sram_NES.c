@@ -1000,10 +1000,10 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
         }
 
         if (gSaveContext.save.unk_F65) {
-            Lib_MemCpy(gScarecrowSpawnSongPtr, gSaveContext.save.scarecrowsSong,
-                       sizeof(gSaveContext.save.scarecrowsSong));
+            Lib_MemCpy(gScarecrowSpawnSongPtr, gSaveContext.save.scarecrowSpawnSong,
+                       sizeof(gSaveContext.save.scarecrowSpawnSong));
 
-            for (i = 0; i != ARRAY_COUNT(gSaveContext.save.scarecrowsSong); i++) {}
+            for (i = 0; i != ARRAY_COUNT(gSaveContext.save.scarecrowSpawnSong); i++) {}
         }
 
         fileNum = gSaveContext.fileNum;

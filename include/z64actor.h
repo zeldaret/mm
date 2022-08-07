@@ -9,6 +9,7 @@
 
 // This value is hardcoded to be the size of ovl_Arrow_Fire which currently is the biggest actor that uses the AM_FIELD.
 #define AM_FIELD_SIZE SEGMENT_SIZE(ovl_Arrow_Fire)
+
 #define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
 
@@ -31,18 +32,18 @@ typedef struct {
 } DamageTable; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ u8 health;
-    /* 0x02 */ s16 cylRadius;
-    /* 0x04 */ s16 cylHeight;
-    /* 0x06 */ u8 mass;
-} CollisionCheckInfoInit;
+    /* 0x0 */ u8 health;
+    /* 0x2 */ s16 cylRadius;
+    /* 0x4 */ s16 cylHeight;
+    /* 0x6 */ u8 mass;
+} CollisionCheckInfoInit; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8 health;
-    /* 0x02 */ s16 cylRadius;
-    /* 0x04 */ s16 cylHeight;
-    /* 0x06 */ s16 cylYShift;
-    /* 0x08 */ u8 mass;
+    /* 0x0 */ u8 health;
+    /* 0x2 */ s16 cylRadius;
+    /* 0x4 */ s16 cylHeight;
+    /* 0x6 */ s16 cylYShift;
+    /* 0x8 */ u8 mass;
 } CollisionCheckInfoInit2; // size = 0xC
 
 typedef struct {
@@ -222,6 +223,7 @@ typedef struct {
     /* 0x15A */ s16 pad15A;
 } DynaPolyActor; // size = 0x15C
 
+
 typedef enum {
     /* 0x00 */ ITEM00_RUPEE_GREEN,
     /* 0x01 */ ITEM00_RUPEE_BLUE,
@@ -396,8 +398,8 @@ typedef struct ActorContext {
 } ActorContext; // size = 0x284
 
 typedef enum {
-    /* 00 */ ACTOR_DRAW_DMGEFF_FIRE,
-    /* 01 */ ACTOR_DRAW_DMGEFF_BLUE_FIRE,
+    /*  0 */ ACTOR_DRAW_DMGEFF_FIRE,
+    /*  1 */ ACTOR_DRAW_DMGEFF_BLUE_FIRE,
     /* 10 */ ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX = 10,
     /* 11 */ ACTOR_DRAW_DMGEFF_FROZEN_SFX,
     /* 20 */ ACTOR_DRAW_DMGEFF_LIGHT_ORBS = 20,
