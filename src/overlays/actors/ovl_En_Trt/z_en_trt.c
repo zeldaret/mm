@@ -1441,7 +1441,7 @@ void EnTrt_LookToShopkeeperFromShelf(EnTrt* this, PlayState* play) {
 }
 
 void EnTrt_InitShopkeeper(EnTrt* this, PlayState* play) {
-    SkelAnime_InitFlex(play, &this->skelAnime, &gTrtSkel, &object_trt_Anim_00FD34, NULL, NULL, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gKotakeSkel, &object_trt_Anim_00FD34, NULL, NULL, 0);
     if (!(gSaveContext.save.weekEventReg[12] & 8) && !(gSaveContext.save.weekEventReg[84] & 0x40) &&
         (gSaveContext.save.day >= 2)) {
         this->actor.draw = NULL;
@@ -1723,7 +1723,7 @@ s32 EnTrt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
         this->items[i]->actor.scale.z = 0.2f;
     }
 
-    if (limbIndex == TRT_LIMB_BROOM) {
+    if (limbIndex == KOTAKE_LIMB_BROOM) {
         *dList = NULL;
     }
     return false;
@@ -1737,7 +1737,7 @@ void EnTrt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     if (this->flags & ENTRT_FULLY_AWAKE) {
         overrideRot = true;
     }
-    if (limbIndex == TRT_LIMB_HEAD) {
+    if (limbIndex == KOTAKE_LIMB_HEAD) {
         EnTrt_UpdateLimb(this->headPitch, this->headYaw, &this->headPos, &this->headRot, overrideRot);
         Matrix_Translate(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -1750,7 +1750,7 @@ void EnTrt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 void EnTrt_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnTrt* this = THIS;
 
-    if (limbIndex == TRT_LIMB_HEAD) {
+    if (limbIndex == KOTAKE_LIMB_HEAD) {
         Matrix_Translate(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateYS(this->headRot.y, MTXMODE_APPLY);
@@ -1760,7 +1760,7 @@ void EnTrt_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 void EnTrt_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr sEyeTextures[] = { gTrtEyeOpenTex, gTrtEyeHalfTex, gTrtEyeClosedTex };
+    static TexturePtr sEyeTextures[] = { gKotakeEyeOpenTex, gKotakeEyeHalfTex, gKotakeEyeClosedTex };
     EnTrt* this = THIS;
     s32 pad;
 

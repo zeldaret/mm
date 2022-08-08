@@ -539,7 +539,7 @@ void func_80AD4608(EnTrt2* this) {
 }
 
 void func_80AD469C(EnTrt2* this, PlayState* play) {
-    SkelAnime_InitFlex(play, &this->skelAnime, &gTrtSkel, &object_trt_Anim_000A44, NULL, NULL, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gKotakeSkel, &object_trt_Anim_000A44, NULL, NULL, 0);
     this->actor.draw = func_80AD56E8;
 }
 
@@ -876,7 +876,7 @@ void func_80AD5394(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
 s32 EnTrt2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTrt2* this = THIS;
 
-    if ((limbIndex == TRT_LIMB_TORSO_LIMB) || (limbIndex == TRT_LIMB_LEFT_HAND) || (limbIndex == TRT_LIMB_RIGHT_HAND)) {
+    if ((limbIndex == KOTAKE_LIMB_TORSO_LIMB) || (limbIndex == KOTAKE_LIMB_LEFT_HAND) || (limbIndex == KOTAKE_LIMB_RIGHT_HAND)) {
         rot->y += (s16)Math_SinS(this->unk_33C[limbIndex]) * 200;
         rot->z += (s16)Math_CosS(this->unk_372[limbIndex]) * 200;
     }
@@ -892,7 +892,7 @@ void EnTrt2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
         phi_v0 = true;
     }
 
-    if (limbIndex == TRT_LIMB_HEAD) {
+    if (limbIndex == KOTAKE_LIMB_HEAD) {
         func_80AD5394(this->unk_3D4, this->unk_3D6, &this->unk_3C8, &this->unk_3C2, phi_v0);
         Matrix_Translate(this->unk_3C8.x, this->unk_3C8.y, this->unk_3C8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -906,7 +906,7 @@ void EnTrt2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 void EnTrt2_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnTrt2* this = THIS;
 
-    if (limbIndex == TRT_LIMB_HEAD) {
+    if (limbIndex == KOTAKE_LIMB_HEAD) {
         Matrix_Translate(this->unk_3C8.x, this->unk_3C8.y, this->unk_3C8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateYS(this->unk_3C2.y, MTXMODE_APPLY);
@@ -917,9 +917,9 @@ void EnTrt2_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 
 void func_80AD56E8(Actor* thisx, PlayState* play) {
     static TexturePtr D_80AD5978[] = {
-        gTrtEyeOpenTex,
-        gTrtEyeHalfTex,
-        gTrtEyeClosedTex,
+        gKotakeEyeOpenTex,
+        gKotakeEyeHalfTex,
+        gKotakeEyeClosedTex,
     };
     s32 pad;
     EnTrt2* this = THIS;
