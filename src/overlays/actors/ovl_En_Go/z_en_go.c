@@ -363,12 +363,11 @@ void func_80A118F8(EnGoStruct* ptr, Vec3f arg1) {
     Vec3f spA8;
     f32 temp_f20;
 
-    for (i = 0; i < 16 ; i++, ptr++) {
+    for (i = 0; i < 16; i++, ptr++) {
         if (ptr->unk_00 == 0) {
-            
             ptr->unk_10 = arg1;
             ptr->unk_10.y += 56.0f;
-            
+
             ptr->unk_04.x = (Rand_ZeroOne() - 0.5f) * 5460.0f;
             ptr->unk_04.y = (Rand_ZeroOne() - 0.5f) * 5460.0f;
             ptr->unk_04.z = (Rand_ZeroOne() - 0.5f) * 5460.0f;
@@ -383,7 +382,7 @@ void func_80A118F8(EnGoStruct* ptr, Vec3f arg1) {
 
             ptr->unk_01 = ptr->unk_02 = 1;
             ptr->unk_00 = D_80A1667C[i];
-            
+
             spB4.x = ((Rand_ZeroOne() - 0.5f) * 80.0f) + ptr->unk_10.x;
             spB4.y = ((Rand_ZeroOne() - 0.5f) * 40.0f) + ptr->unk_10.y;
             spB4.z = ((Rand_ZeroOne() - 0.5f) * 80.0f) + ptr->unk_10.z;

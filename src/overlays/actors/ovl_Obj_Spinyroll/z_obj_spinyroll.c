@@ -303,14 +303,11 @@ s32 func_80A1E074(ObjSpinyroll* this, PlayState* play, Vec3f* arg2, s32 arg3) {
         temp = D_80A1F1F4[i];
         temp_f22 = temp * this->unk_4C4.x;
         temp_f24 = temp * this->unk_4C4.z;
-        
 
         for (j = 0; j < ptr->unk_F4; j++) {
             temp_s1 = &ptr->unk_00[i][j];
-            spC8.x =
-                (temp_s1->unk_00 * Math_CosS(this->dyna.actor.world.rot.y)) + this->dyna.actor.world.pos.x;
-            spC8.z =
-                (temp_s1->unk_00 * -Math_SinS(this->dyna.actor.world.rot.y)) + this->dyna.actor.world.pos.z;
+            spC8.x = (temp_s1->unk_00 * Math_CosS(this->dyna.actor.world.rot.y)) + this->dyna.actor.world.pos.x;
+            spC8.z = (temp_s1->unk_00 * -Math_SinS(this->dyna.actor.world.rot.y)) + this->dyna.actor.world.pos.z;
 
             spBC.x = temp_f22 + spC8.x;
             spBC.z = temp_f24 + spC8.z;

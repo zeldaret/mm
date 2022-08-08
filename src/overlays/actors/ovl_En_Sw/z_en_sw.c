@@ -959,7 +959,6 @@ void func_808DACF4(EnSw* this, PlayState* play) {
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) == 0) {
         Vec3f sp38;
-        
 
         temp = this->skelAnime.endFrame - this->skelAnime.curFrame;
         this->unk_44C = 0.1f * temp;

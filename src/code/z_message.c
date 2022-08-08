@@ -275,7 +275,7 @@ void func_8014D62C(PlayState* play, s32* arg1, f32* arg2, s16* arg3) {
 
     temp_s6 = D_801D0250[phi_v0];
 
-    for(phi_s0 = 0; phi_s0 < temp_s6; phi_s0++, temp_s1++, temp_s2 += 0x80) {
+    for (phi_s0 = 0; phi_s0 < temp_s6; phi_s0++, temp_s1++, temp_s2 += 0x80) {
         msgCtx->decodedBuffer.wchar[temp_s1] = D_801D0188[phi_v0][phi_s0];
         Font_LoadChar(play, D_801D0188[phi_v0][phi_s0], temp_s2);
     }
@@ -285,7 +285,7 @@ void func_8014D62C(PlayState* play, s32* arg1, f32* arg2, s16* arg3) {
 
     *arg3 = temp_s1;
     *arg1 = temp_s2;
-    *arg2 = sp3C;    
+    *arg2 = sp3C;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D7B4.s")

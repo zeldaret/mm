@@ -1162,8 +1162,8 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
     s32 j;
     s32 pad;
     s32 totalEntries;
-    u32 cmdType; // sp5C
-    s32 cmdEntries;       // sp58
+    u32 cmdType;    // sp5C
+    s32 cmdEntries; // sp58
     s32 pad2;
     s32 cutsceneEndFrame; // sp50
     CsCmdBase* cmd;

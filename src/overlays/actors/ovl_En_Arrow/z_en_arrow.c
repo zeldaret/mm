@@ -328,7 +328,6 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
     f32 temp_f12_2;
     s32 sp50;
 
-
     if ((DECR(this->unk_260) == 0) ||
         ((this->actor.params == ENARROW_7) &&
          ((this->unk_262 != 0) || (phi_a2 = (this->collider.base.atFlags & AT_HIT) != 0)))) {
@@ -466,9 +465,8 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             Actor_MoveWithGravity(&this->actor);
         }
 
-        
-        if ((this->unk_262 = BgCheck_ProjectileLineTest(&play->colCtx, &this->actor.prevPos, &this->actor.world.pos, &sp9C,
-                                                   &this->actor.wallPoly, true, true, true, true, &spA8))) {
+        if ((this->unk_262 = BgCheck_ProjectileLineTest(&play->colCtx, &this->actor.prevPos, &this->actor.world.pos,
+                                                        &sp9C, &this->actor.wallPoly, true, true, true, true, &spA8))) {
             func_800B90AC(play, &this->actor, this->actor.wallPoly, spA8, &sp9C);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp9C);
             this->actor.wallBgId = spA8;
