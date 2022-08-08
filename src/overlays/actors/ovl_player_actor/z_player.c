@@ -3722,7 +3722,6 @@ s32 func_808305BC(PlayState* arg0, Player* arg1, ItemID* item, s32* arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808305BC.s")
 #endif
 
-#ifdef NON_MATCHING
 // Player_ShootArrow?
 s32 func_808306F8(Player* this, PlayState* play) {
     if ((this->itemActionParam >= PLAYER_AP_BOW_FIRE) && (this->itemActionParam <= PLAYER_AP_BOW_LIGHT) && (gSaveContext.unk_3F28 != 0)) {
@@ -3734,11 +3733,10 @@ s32 func_808306F8(Player* this, PlayState* play) {
         this->unk_ACC = 14;
 
         if (this->unk_B28 >= 0) {
-            s32 temp_v0_3;
             s32 var_v1;
             ItemID item;//sp50;
-            s32 var_t0; // sp48
             s32 sp4C;
+            s32 var_t0; // sp48
 
             var_v1 = ABS_ALT(this->unk_B28);
             if (var_v1 != 2) {
@@ -3746,11 +3744,10 @@ s32 func_808306F8(Player* this, PlayState* play) {
             }
 
             if (!Player_IsHoldingHookshot(this) && (func_808305BC(play, this, &item, &sp4C) > 0)) {
-                temp_v0_3 = sp4C - 3;
                 if (this->unk_B28 >= 0) {
-                    var_t0 = temp_v0_3;
-                    if ((temp_v0_3 >= 0) && (temp_v0_3 < 3)) {
-                        if (((void)0, gSaveContext.save.playerData.magic) < D_8085CFB8[temp_v0_3]) {
+                    var_t0 = sp4C - 3;
+                    if ((sp4C - 3 >= 0) && (sp4C - 3 < 3)) {
+                        if (((void)0, gSaveContext.save.playerData.magic) < D_8085CFB8[var_t0]) {
                             sp4C = 2;
                             var_t0 = -1;
                         }
@@ -3774,11 +3771,6 @@ s32 func_808306F8(Player* this, PlayState* play) {
 
     return false;
 }
-#else
-// bool
-s32 func_808306F8(Player* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808306F8.s")
-#endif
 
 void func_808308DC(PlayState* play, Player* this) {
     s32 isGoronOrDeku = (this->transformation == PLAYER_FORM_GORON) || (this->transformation == PLAYER_FORM_DEKU);
