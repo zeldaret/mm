@@ -1254,7 +1254,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
                     func_80A97114(this, play);
                     this->unk_378 = 2;
                 } else if (func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
-                                         -1)) {
+                                         EXCH_ITEM_MINUS1)) {
                     this->actor.textId = func_80A973B4(this, play);
                 }
             } else {
