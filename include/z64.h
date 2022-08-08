@@ -39,6 +39,7 @@
 #include "z64light.h"
 #include "z64map.h"
 #include "z64math.h"
+#include "z64message.h"
 #include "z64object.h"
 #include "z64ocarina.h"
 #include "z64player.h"
@@ -48,6 +49,7 @@
 #include "z64skin.h"
 #include "z64subs.h"
 #include "z64transition.h"
+#include "z64view.h"
 #include "regs.h"
 
 #define Z_THREAD_ID_IDLE     1
@@ -96,17 +98,17 @@ typedef struct {
 } AnimatedMaterial; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ Vec3s pos;
-    /* 0x06 */ s16   unk_06;
-    /* 0x08 */ Gfx*  opa;
-    /* 0x0C */ Gfx*  xlu;
-} PolygonDlist2; // size = 0x8
+    /* 0x0 */ Vec3s pos;
+    /* 0x6 */ s16   unk_06;
+    /* 0x8 */ Gfx*  opa;
+    /* 0xC */ Gfx*  xlu;
+} PolygonDlist2; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u8    type;
-    /* 0x01 */ u8    num; // number of dlist entries
-    /* 0x04 */ void* start;
-    /* 0x08 */ void* end;
+    /* 0x0 */ u8    type;
+    /* 0x1 */ u8    num; // number of dlist entries
+    /* 0x4 */ void* start;
+    /* 0x8 */ void* end;
 } PolygonType2; // size = 0xC
 
 typedef struct {
@@ -154,7 +156,7 @@ typedef struct {
     /* 0xA */ u8 colorsIndex;
     /* 0xB */ u8 flags;
     /* 0xC */ u8 lightParamsIndex;
-} FireObjInitParams; // size = 0xD
+} FireObjInitParams; // size = 0x10
 
 typedef struct FireObjColors {
     /* 0x0 */ Color_RGBA8 primColor;
@@ -167,25 +169,6 @@ typedef struct FireObjLightParams {
     /* 0x2 */ Color_RGB8 color;
     /* 0x5 */ Color_RGB8 maxColorAdj;
 } FireObjLightParams; // size = 0x8
-
-#define FONT_CHAR_TEX_WIDTH  16
-#define FONT_CHAR_TEX_HEIGHT 16
-//! @TODO: Make this use `sizeof(AnyFontTextureSymbol)`
-#define FONT_CHAR_TEX_SIZE ((16 * 16) / 2) // 16x16 I4 texture
-
-// Font textures are loaded into here
-typedef struct {
-    /* 0x00000 */ u8 charBuf[2][FONT_CHAR_TEX_SIZE * 120];
-    /* 0x07800 */ u8 iconBuf[FONT_CHAR_TEX_SIZE];
-    /* 0x07880 */ u8 fontBuf[FONT_CHAR_TEX_SIZE * 320];
-    /* 0x11880 */ union {
-        u8 schar[640];
-        u16 wchar[640];
-    } msgBuf;
-    /* 0x11D80 */ u8* messageStart;
-    /* 0x11D84 */ u8* messageEnd;
-    /* 0x11D88 */ u8 unk_11D88; // current Char Buffer ?
-} Font; // size = 0x11D8C
 
 // Game Info aka. Static Context
 // Data normally accessed through REG macros (see regs.h)
@@ -200,17 +183,17 @@ typedef struct {
 } GameInfo; // size = 0x15D4
 
 typedef struct {
-    /* 0x0000 */ u32    size;
-    /* 0x0004 */ void*  bufp;
-    /* 0x0008 */ void*  head;
-    /* 0x000C */ void*  tail;
+    /* 0x0 */ u32    size;
+    /* 0x4 */ void*  bufp;
+    /* 0x8 */ void*  head;
+    /* 0xC */ void*  tail;
 } TwoHeadArena; // size = 0x10
 
 typedef struct {
-    /* 0x0000 */ u32    size;
-    /* 0x0004 */ Gfx*   bufp;
-    /* 0x0008 */ Gfx*   p;
-    /* 0x000C */ Gfx*   d;
+    /* 0x0 */ u32    size;
+    /* 0x4 */ Gfx*   bufp;
+    /* 0x8 */ Gfx*   p;
+    /* 0xC */ Gfx*   d;
 } TwoHeadGfxArena; // size = 0x10
 
 typedef struct {
@@ -309,13 +292,6 @@ typedef struct {
     /* 0x2 */ s8 pillarboxTarget;
     /* 0x3 */ s8 pillarboxMagnitude;
 } ShrinkWindowContext; // size = 0x4
-
-typedef struct {
-    /* 0x0 */ s32 topY;
-    /* 0x4 */ s32 bottomY;
-    /* 0x8 */ s32 leftX;
-    /* 0xC */ s32 rightX;
-} Viewport; // size = 0x10
 
 typedef void(*osCreateThread_func)(void*);
 
@@ -422,34 +398,6 @@ typedef struct {
     /* 0x10 */ Vec3f projectedPos;
 } SoundSource; // size = 0x1C
 
-typedef struct {
-    /* 0x000 */ u32 magic;
-    /* 0x004 */ GraphicsContext* gfxCtx;
-    /* 0x008 */ Viewport viewport;
-    /* 0x018 */ f32 fovy;
-    /* 0x01C */ f32 zNear;
-    /* 0x020 */ f32 zFar;
-    /* 0x024 */ f32 scale;
-    /* 0x028 */ Vec3f eye;
-    /* 0x034 */ Vec3f at;
-    /* 0x040 */ Vec3f up;
-    /* 0x04C */ UNK_TYPE1 pad4C[0x4];
-    /* 0x050 */ Vp vp;
-    /* 0x060 */ Mtx projection;
-    /* 0x0A0 */ Mtx viewing;
-    /* 0x0E0 */ Mtx unkE0;
-    /* 0x120 */ Mtx* projectionPtr;
-    /* 0x124 */ Mtx* viewingPtr;
-    /* 0x128 */ Vec3f distortionDirRot;
-    /* 0x134 */ Vec3f distortionScale;
-    /* 0x140 */ f32 distortionSpeed;
-    /* 0x144 */ Vec3f curDistortionDirRot;
-    /* 0x150 */ Vec3f curDistortionScale;
-    /* 0x15C */ u16 normal;
-    /* 0x160 */ u32 flags; // bit 3: Render to an orthographic perspective
-    /* 0x164 */ s32 unk164;
-} View; // size = 0x168
-
 typedef void(*fault_update_input_func)(Input* input);
 
 typedef struct {
@@ -476,7 +424,7 @@ typedef struct {
     /* 0x1D0 */ OSMesgQueue loadQueue;
     /* 0x1E8 */ OSMesg loadMsg;
     /* 0x1EC */ u16 state;
-    /* 0x1EE */ u16 debugState;
+    /* 0x1EE */ u16 debugEditor;
     /* 0x1F0 */ u8 unk_1F0;
     /* 0x1F4 */ Vec3f eye;
     /* 0x200 */ u16 unk_200;
@@ -494,8 +442,8 @@ typedef struct {
     /* 0x226 */ s16 offsetY;
     /* 0x228 */ s32 unk_228;
     /* 0x22C */ s32 unk_22C;
-    /* 0x230 */ s32 unk_230;
-    /* 0x234 */ s32 unk_234;
+    /* 0x230 */ s32 stickRelX;
+    /* 0x234 */ s32 stickRelY;
     /* 0x238 */ s16 unk_238[5];
     /* 0x242 */ s16 unk_242[5];
     /* 0x24C */ s16 unk_24C[5];
@@ -715,29 +663,29 @@ typedef struct {
 } EnvironmentContext; // size = 0x100
 
 typedef struct {
-    /* 0x00000 */ View view;
-    /* 0x00168 */ void* skyboxStaticSegment[4];
-    /* 0x00178 */ void* skyboxPaletteStaticSegment;
-    /* 0x0017C */ Gfx* dListBuf;
-    /* 0x00180 */ Gfx* roomDL;
-    /* 0x00184 */ Vtx* roomVtx;
-    /* 0x00188 */ DmaRequest unk188;
-    /* 0x001A8 */ DmaRequest unk1A8;
-    /* 0x001C8 */ DmaRequest unk1C8;
-    /* 0x001E8 */ OSMesgQueue loadQueue;
-    /* 0x00200 */ OSMesg loadMsg;
-    /* 0x00204 */ s16 skyboxShouldDraw;
-    /* 0x00208 */ f32 rotX;
-    /* 0x0020C */ f32 rotY;
-    /* 0x00210 */ f32 rotZ;
-    /* 0x00214 */ Vec3f eye;
-    /* 0x00220 */ s16 angle;
-    /* 0x00222 */ u8 primR;
-    /* 0x00223 */ u8 primG;
-    /* 0x00224 */ u8 primB;
-    /* 0x00225 */ u8 envR;
-    /* 0x00226 */ u8 envG;
-    /* 0x00227 */ u8 envB;
+    /* 0x000 */ View view;
+    /* 0x168 */ void* skyboxStaticSegment[4];
+    /* 0x178 */ void* skyboxPaletteStaticSegment;
+    /* 0x17C */ Gfx* dListBuf;
+    /* 0x180 */ Gfx* roomDL;
+    /* 0x184 */ Vtx* roomVtx;
+    /* 0x188 */ DmaRequest unk188;
+    /* 0x1A8 */ DmaRequest unk1A8;
+    /* 0x1C8 */ DmaRequest unk1C8;
+    /* 0x1E8 */ OSMesgQueue loadQueue;
+    /* 0x200 */ OSMesg loadMsg;
+    /* 0x204 */ s16 skyboxShouldDraw;
+    /* 0x208 */ f32 rotX;
+    /* 0x20C */ f32 rotY;
+    /* 0x210 */ f32 rotZ;
+    /* 0x214 */ Vec3f eye;
+    /* 0x220 */ s16 angle;
+    /* 0x222 */ u8 primR;
+    /* 0x223 */ u8 primG;
+    /* 0x224 */ u8 primB;
+    /* 0x225 */ u8 envR;
+    /* 0x226 */ u8 envG;
+    /* 0x227 */ u8 envB;
 } SkyboxContext; // size = 0x228
 
 typedef enum {
@@ -745,8 +693,8 @@ typedef enum {
 } SkyboxId;
 
 typedef struct ListAlloc {
-    /* 0x00 */ struct ListAlloc* prev;
-    /* 0x04 */ struct ListAlloc* next;
+    /* 0x0 */ struct ListAlloc* prev;
+    /* 0x4 */ struct ListAlloc* next;
 } ListAlloc; // size = 0x8
 
 typedef struct {
@@ -791,102 +739,63 @@ typedef struct {
     /* 0x24 */ u32 flags;
 } PreRenderParams; // size = 0x28
 
-typedef struct {
-    /* 0x00 */ u8 unk00;
-    /* 0x01 */ u8 unk01;
-} MsgCtx11F00;
+#define TRANS_TRIGGER_OFF 0 // transition is not active
+#define TRANS_TRIGGER_START 20 // start transition (exiting an area)
+#define TRANS_TRIGGER_END -20 // transition is ending (arriving in a new area)
 
-typedef struct {
-    /* 0x00000 */ View view;
-    /* 0x00168 */ Font font;
-    /* 0x11EF4 */ char unk_11EF4[0x4];
-    /* 0x11EF8 */ UNK_PTR unk11EF8;
-    /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x4];
-    /* 0x11F00 */ MsgCtx11F00* unk11F00;
-    /* 0x11F04 */ u16 currentTextId;
-    /* 0x11F06 */ UNK_TYPE1 pad11F06[0x4];
-    /* 0x11F0A */ u8 unk11F0A;
-    /* 0x11F0B */ UNK_TYPE1 pad11F0B[0x5];
-    /* 0x11F10 */ s32 unk11F10;
-    /* 0x11F14 */ UNK_TYPE1 pad11F14[0x6];
-    /* 0x11F1A */ s16 unk11F1A[3];
-    /* 0x11F20 */ UNK_TYPE1 pad11F20[0x2];
-    /* 0x11F22 */ u8 msgMode;
-    /* 0x11F23 */ UNK_TYPE1 pad11F23;
-    /* 0x11F24 */ union {
-        u8  schar[206];
-        u16 wchar[103];
-    } decodedBuffer;
-    /* 0x11FF2 */ u16 unk11FF2;
-    /* 0x11FF4 */ s16 unk11FF4;
-    /* 0x11FF6 */ s16 unk11FF6;
-    /* 0x11FF8 */ UNK_TYPE1 unk11FF8[0x6];
-    /* 0x11FFE */ s16 unk11FFE[0x3];
-    /* 0x12004 */ s16 unk12004;
-    /* 0x12006 */ s16 unk12006;
-    /* 0x12008 */ u8 unk12008[0x16];
-    /* 0x1201E */ s16 unk1201E;
-    /* 0x12020 */ u8 unk12020;
-    /* 0x12021 */ u8 choiceIndex;
-    /* 0x12022 */ u8 unk12022;
-    /* 0x12023 */ u8 unk12023;
-    /* 0x12024 */ s16 unk12024;
-    /* 0x12026 */ u16 unk12026;
-    /* 0x12028 */ u16 songPlayed;
-    /* 0x1202A */ u16 ocarinaMode;
-    /* 0x1202C */ u16 ocarinaAction;
-    /* 0x1202E */ u16 unk1202E;
-    /* 0x12030 */ s16 unk_12030;
-    /* 0x12032 */ UNK_TYPE1 unk_12032[0x2];
-    /* 0x12034 */ UNK_TYPE1 pad12034[0x6];
-    /* 0x1203A */ s16 unk1203A;
-    /* 0x1203C */ s16 unk1203C;
-    /* 0x1203E */ s16 pad1203E;
-    /* 0x12040 */ Actor* unkActor;
-    /* 0x12044 */ s16 unk12044;
-    /* 0x12046 */ s16 unk12046;
-    /* 0x12048 */ u8 unk12048; // EnKakasi
-    /* 0x12049 */ UNK_TYPE1 pad12049[0x1];
-    /* 0x1204A */ s16 unk1204A[0x5];
-    /* 0x12054 */ s16 unk12054[3]; // First, second and third digits in lottery code guess
-    /* 0x1205A */ UNK_TYPE1 pad1205A[0xE];
-    /* 0x12068 */ s16 unk12068;
-    /* 0x1206A */ s16 unk1206A;
-    /* 0x1206C */ s32 unk1206C;
-    /* 0x12070 */ s32 unk12070;
-    /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
-    /* 0x12078 */ s32 bankRupeesSelected;
-    /* 0x1207C */ s32 bankRupees;
-    /* 0x12080 */ MessageTableEntry* messageEntryTable;
-    /* 0x12084 */ MessageTableEntry* messageEntryTableNes;
-    /* 0x12088 */ UNK_TYPE4 unk12088;
-    /* 0x1208C */ MessageTableEntry* messageTableStaff;
-    /* 0x12090 */ s16 unk12090;
-    /* 0x12092 */ s16 unk12092;
-    /* 0x12094 */ s8 unk12094;
-    /* 0x12095 */ UNK_TYPE1 unk12095[0x3];
-    /* 0x12098 */ f32 unk12098; // Text_Scale?
-    /* 0x1209C */ s16 unk1209C;
-    /* 0x1209E */ UNK_TYPE1 unk1209E[0x2];
-    /* 0x120A0 */ s32 unk120A0;
-    /* 0x120A4 */ UNK_TYPE1 unk120A4[0xC];
-    /* 0x120B0 */ u8 unk120B0;
-    /* 0x120B1 */ u8 unk120B1;
-    /* 0x120B2 */ u8 unk120B2[0xC];
-    /* 0x120BE */ s16 unk120BE;
-    /* 0x120C0 */ s16 unk120C0;
-    /* 0x120C2 */ s16 unk120C2;
-    /* 0x120C4 */ s32 unk120C4;
-    /* 0x120C8 */ s16 unk120C8;
-    /* 0x120CA */ s16 unk120CA;
-    /* 0x120CC */ s16 unk120CC;
-    /* 0x120CE */ s16 unk120CE;
-    /* 0x120D0 */ s16 unk120D0;
-    /* 0x120D2 */ s16 unk120D2;
-    /* 0x120D4 */ s16 unk120D4;
-    /* 0x120D6 */ s16 unk120D6;
-    /* 0x120D8 */ UNK_TYPE1 pad120D8[0x8];
-} MessageContext; // size = 0x120E0
+typedef enum {
+    /*  0 */ TRANS_MODE_OFF,
+    /*  1 */ TRANS_MODE_01,
+    /*  2 */ TRANS_MODE_02,
+    /*  3 */ TRANS_MODE_03,
+    /*  4 */ TRANS_MODE_04,
+    /*  5 */ TRANS_MODE_05,
+    /*  6 */ TRANS_MODE_06,
+    /*  7 */ TRANS_MODE_07,
+    /*  8 */ TRANS_MODE_08,
+    /*  9 */ TRANS_MODE_09,
+    /* 10 */ TRANS_MODE_10,
+    /* 11 */ TRANS_MODE_11,
+    /* 12 */ TRANS_MODE_12,
+    /* 13 */ TRANS_MODE_13,
+    /* 14 */ TRANS_MODE_14,
+    /* 15 */ TRANS_MODE_15,
+    /* 16 */ TRANS_MODE_16,
+    /* 17 */ TRANS_MODE_17
+} TransitionMode;
+
+typedef enum {
+    /*  0 */ TRANS_TYPE_00,
+    /*  1 */ TRANS_TYPE_01,
+    /*  2 */ TRANS_TYPE_02,
+    /*  3 */ TRANS_TYPE_03,
+    /*  4 */ TRANS_TYPE_04,
+    /*  5 */ TRANS_TYPE_05,
+    /*  6 */ TRANS_TYPE_06,
+    /*  7 */ TRANS_TYPE_07,
+    /*  8 */ TRANS_TYPE_08,
+    /*  9 */ TRANS_TYPE_09, 
+    /* 10 */ TRANS_TYPE_10,
+    /* 11 */ TRANS_TYPE_11,
+    /* 12 */ TRANS_TYPE_12,
+    /* 13 */ TRANS_TYPE_13,
+    /* 14 */ TRANS_TYPE_14,
+    /* 15 */ TRANS_TYPE_15,
+    /* 16 */ TRANS_TYPE_16,
+    /* 17 */ TRANS_TYPE_17,
+    /* 18 */ TRANS_TYPE_18,
+    /* 19 */ TRANS_TYPE_19,
+    /* 20 */ TRANS_TYPE_20,
+    /* 21 */ TRANS_TYPE_21,
+    /* 64 */ TRANS_TYPE_64 = 64,
+    /* 70 */ TRANS_TYPE_70 = 70,
+    /* 72 */ TRANS_TYPE_72 = 72,
+    /* 73 */ TRANS_TYPE_73,
+    /* 80 */ TRANS_TYPE_80 = 80,
+    /* 86 */ TRANS_TYPE_86 = 86
+} TransitionType;
+
+#define TRANS_NEXT_TYPE_DEFAULT 0xFF
 
 typedef struct FaultAddrConvClient {
     /* 0x0 */ struct FaultAddrConvClient* next;
@@ -992,21 +901,7 @@ typedef void (*ColChkApplyFunc)(PlayState*, CollisionCheckContext*, Collider*);
 typedef void (*ColChkVsFunc)(PlayState*, CollisionCheckContext*, Collider*, Collider*);
 typedef s32 (*ColChkLineFunc)(PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
-typedef void(*draw_func)(PlayState* play, s16 index);
-
 typedef void(*room_draw_func)(PlayState* play, Room* room, u32 flags);
-
-typedef struct {
-    /* 0x00 */ draw_func unk0;
-    /* 0x04 */ u32 unk4;
-    /* 0x08 */ u32 unk8;
-    /* 0x0C */ u32 unkC;
-    /* 0x10 */ u32 unk10;
-    /* 0x14 */ u32 unk14;
-    /* 0x18 */ u32 unk18;
-    /* 0x1C */ u32 unk1C;
-    /* 0x20 */ u32 unk20;
-} s801BB170; // size = 0x24
 
 typedef struct {
     /* 0x00 */ Vec3f atOffset;
@@ -1108,7 +1003,7 @@ struct FireObjLight {
     /* 0x00 */ LightNode* light;
     /* 0x04 */ LightInfo lightInfo;
     /* 0x12 */ u8 lightParamsIndex;
-}; // size = 0x13
+}; // size = 0x14
 
 #define OS_SC_RETRACE_MSG       1
 #define OS_SC_DONE_MSG          2
@@ -1167,22 +1062,21 @@ struct FireObj {
 }; // size = 0x8B
 
 typedef struct {
-    /* 0x00 */ u8   seqIndex;
-    /* 0x01 */ u8   nightSeqIndex;
-    /* 0x02 */ u8   unk_02;
+    /* 0x0 */ u8   seqIndex;
+    /* 0x1 */ u8   nightSeqIndex;
+    /* 0x2 */ u8   unk_02;
 } SoundContext; // size = 0x3
 
 typedef struct {
-    /* 0x00 */ s32 enabled;
-    /* 0x04 */ s32 timer;
+    /* 0x0 */ s32 enabled;
+    /* 0x4 */ s32 timer;
 } FrameAdvanceContext; // size = 0x8
 
 typedef enum {
-    /* 00 */ GAMEOVER_INACTIVE,
-    /* 01 */ GAMEOVER_DEATH_START,
-    /* 02 */ GAMEOVER_DEATH_WAIT_GROUND,    // wait for player to fall and hit the ground
-    /* 03 */ GAMEOVER_DEATH_FADE_OUT,       // wait before fading out
-
+    /*  0 */ GAMEOVER_INACTIVE,
+    /*  1 */ GAMEOVER_DEATH_START,
+    /*  2 */ GAMEOVER_DEATH_WAIT_GROUND,    // wait for player to fall and hit the ground
+    /*  3 */ GAMEOVER_DEATH_FADE_OUT,       // wait before fading out
     /* 20 */ GAMEOVER_REVIVE_START = 20,
     /* 21 */ GAMEOVER_REVIVE_RUMBLE,
     /* 22 */ GAMEOVER_REVIVE_WAIT_GROUND,   // wait for player to fall and hit the ground
@@ -1191,8 +1085,8 @@ typedef enum {
 } GameOverState;
 
 typedef struct {
-    /* 0x00 */ u16 state;
-} GameOverContext; // size = 0x02
+    /* 0x0 */ u16 state;
+} GameOverContext; // size = 0x2
 
 struct PlayState {
     /* 0x00000 */ GameState state;
@@ -1252,7 +1146,7 @@ struct PlayState {
     /* 0x1884C */ RomFile* roomList;
     /* 0x18850 */ ActorEntry* linkActorEntry;
     /* 0x18854 */ ActorEntry* setupActorList;
-    /* 0x18858 */ CsCamData* csCamData;
+    /* 0x18858 */ ActorCsCamInfo* actorCsCamList;
     /* 0x1885C */ EntranceEntry* setupEntranceList;
     /* 0x18860 */ u16* setupExitList;
     /* 0x18864 */ Path* setupPathList;
@@ -1260,20 +1154,20 @@ struct PlayState {
     /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
     /* 0x18870 */ void* specialEffects;
     /* 0x18874 */ u8 skyboxId;
-    /* 0x18875 */ s8 sceneLoadFlag; // "fade_direction"
+    /* 0x18875 */ s8 transitionTrigger; // "fade_direction"
     /* 0x18876 */ s16 unk_18876;
     /* 0x18878 */ s16 bgCoverAlpha;
     /* 0x1887A */ u16 nextEntranceIndex;
     /* 0x1887C */ s8 unk_1887C; // shootingGalleryStatus?
     /* 0x1887D */ s8 unk_1887D;
     /* 0x1887E */ s8 unk_1887E;
-    /* 0x1887F */ u8 unk_1887F; // fadeTransition
+    /* 0x1887F */ u8 transitionType; // fadeTransition
     /* 0x18880 */ u8 unk_18880;
     /* 0x18884 */ CollisionCheckContext colChkCtx;
     /* 0x18B20 */ u16 envFlags[20];
     /* 0x18B48 */ u8 curSpawn;
     /* 0x18B49 */ u8 unk_18B49;
-    /* 0x18B4A */ u8 unk_18B4A;
+    /* 0x18B4A */ u8 transitionMode;
     /* 0x18B4C */ PreRender pauseBgPreRender;
     /* 0x18B9C */ char unk_18B9C[0x2B8];
     /* 0x18E54 */ SceneTableEntry* loadedScene;
@@ -1304,17 +1198,17 @@ typedef struct {
 } struct_800BD888_arg1; // size = 0x28
 
 typedef struct {
-    /* 0x00 */ u32 type;
-    /* 0x04 */ u32 setScissor;
-    /* 0x08 */ Color_RGBA8 color;
-    /* 0x0C */ Color_RGBA8 envColor;
+    /* 0x0 */ u32 type;
+    /* 0x4 */ u32 setScissor;
+    /* 0x8 */ Color_RGBA8 color;
+    /* 0xC */ Color_RGBA8 envColor;
 } struct_801F8010; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u32 useRgba;
-    /* 0x04 */ u32 setScissor;
-    /* 0x08 */ Color_RGBA8 primColor;
-    /* 0x08 */ Color_RGBA8 envColor;
+    /* 0x0 */ u32 useRgba;
+    /* 0x4 */ u32 setScissor;
+    /* 0x8 */ Color_RGBA8 primColor;
+    /* 0xC */ Color_RGBA8 envColor;
 } struct_801F8020; // size = 0x10
 
 typedef struct {
@@ -1342,9 +1236,9 @@ typedef struct {
 } TargetRangeParams; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8* value;
-    /* 0x04 */ const char* name;
-} FlagSetEntry; // size = 0x08
+    /* 0x0 */ u8* value;
+    /* 0x4 */ const char* name;
+} FlagSetEntry; // size = 0x8
 
 // TODO: Dedicated Header?
 #define FRAM_BASE_ADDRESS 0x08000000           // FRAM Base Address in Cart Memory
@@ -1357,21 +1251,21 @@ enum fram_command {
        Writes Contents in FLASHRAM_MODE_WRITE
        After execution, sets FRAM_MODE to FRAM_MODE_NOP */
     FRAM_COMMAND_EXECUTE = 0xD2000000,
-    /* flashram->erase_offset = (command & 0xffff) * 128; */
+    /* flashram->erase_offset = (command & 0xFFFF) * 128; */
     FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET = 0x4B000000,
     /* flashram->mode = FLASHRAM_MODE_ERASE;
-       flashram->status = 0x1111800800c20000LL; */
+       flashram->status = 0x1111800800C20000LL; */
     FRAM_COMMAND_SET_MODE_ERASE_AND_STATUS = 0x78000000,
-    /* flashram->erase_offset = (command & 0xffff) * 128;
-       flashram->status = 0x1111800400c20000LL; */
+    /* flashram->erase_offset = (command & 0xFFFF) * 128;
+       flashram->status = 0x1111800400C20000LL; */
     FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET_AND_STATUS = 0xA5000000,
     /* flashram->mode = FLASHRAM_MODE_WRITE; */
     FRAM_COMMAND_SET_MODE_WRITE = 0xB4000000,
     /* flashram->mode = FLASHRAM_MODE_STATUS;
-       flashram->status = 0x1111800100c20000LL; */
+       flashram->status = 0x1111800100C20000LL; */
     FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS = 0xE1000000,
     /* flashram->mode = FLASHRAM_MODE_READ;
-       flashram->status = 0x11118004f0000000LL; */
+       flashram->status = 0x11118004F0000000LL; */
     FRAM_COMMAND_SET_MODE_READ_AND_STATUS = 0xF0000000,
     /* unk */
     FRAM_COMMAND_UNK_ERASE_OPERATION = 0x3C000000

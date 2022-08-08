@@ -9,7 +9,6 @@ struct EnZo;
 typedef void (*EnZoActionFunc)(struct EnZo*, PlayState*);
 
 #define ENZO_GET_PATH(thisx) (((thisx)->params & 0x7E00) >> 9)
-#define ENZO_NO_PATH 0x3F
 
 typedef struct EnZo {
     /* 0x000 */ Actor actor;

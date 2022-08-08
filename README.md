@@ -37,7 +37,7 @@ Please refer to the following for more information:
 
 - [Website](https://zelda64.dev/)
 - [Discord](https://discord.zelda64.dev/)
-- [How to Contribute](CONTRIBUTING.md)
+- [How to Contribute](docs/CONTRIBUTING.md)
 
 ## Installation
 
@@ -129,7 +129,7 @@ md5sum: WARNING: 1 computed checksum did NOT match
 
 This means that something is wrong with the ROM's contents. Either the baserom files are incorrect due to a bad ROM, or some of the code is not matching.
 
-Running `make init` will also make the `./expected` directory and copy all of the files there, which will be useful when running the diff script. The diff script is useful in decompiling functions and can be ran with this command: `./tools/asm-differ/diff.py -wmo3 <insert_function_here>`
+Running `make init` will also make the `./expected` directory and copy all of the files there, which will be useful when running the diff script. The diff script is useful in decompiling functions and can be run with this command: `./tools/asm-differ/diff.py -wmo3 <insert_function_here>`
 
 **Note**: to speed up the build, you can pass `-jN` to `make setup` and `make`, where N is the number of threads to use in the build, e.g. `make -j4`. The generally-accepted wisdom is to use the number of virtual cores your computer has, which is the output of `nproc` (which should be installed as part of `coreutils`).
 The disadvantage that the ordering of the terminal output is scrambled, so for debugging it is best to stick to one thread (i.e. not pass `-jN`).
@@ -144,4 +144,4 @@ Please note that is is our strict policy that *Anyone who wishes to contribute t
 
 Most discussions happen on our [Discord Server](https://discord.zelda64.dev), where you are welcome to ask if you need help getting started, or if you have any questions regarding this project or ZeldaRET's other decompilation projects.
 
-For more information on getting started, see our [Contributing Guide](CONTRIBUTING.md), [Style Guide](docs/STYLE.md) and our [Code Review Guidelines](docs/REVIEWING.md) to see what code quality guidelines we follow.
+For more information on getting started, see our [Contributing Guide](docs/CONTRIBUTING.md), [Style Guide](docs/STYLE.md) and our [Code Review Guidelines](docs/REVIEWING.md) to see what code quality guidelines we follow.

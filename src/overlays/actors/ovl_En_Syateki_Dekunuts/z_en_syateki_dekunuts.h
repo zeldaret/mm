@@ -5,8 +5,9 @@
 #include "objects/object_dekunuts/object_dekunuts.h"
 
 #define EN_SYATEKI_DEKUNUTS_GET_PARAM_F(thisx) ((thisx)->params & 0xF)
-#define EN_SYATEKI_DEKUNUTS_GET_PARAM_F0(thisx) (((thisx)->params & 0xF0) >> 4)
+#define EN_SYATEKI_DEKUNUTS_GET_NUMBER(thisx) (((thisx)->params & 0xF0) >> 4)
 #define EN_SYATEKI_DEKUNUTS_GET_PARAM_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
+#define EN_SYATEKI_DEKUNUTS_PARAMS(unkFF00, number, unkF) (((unkFF00 << 8) & 0xFF00) | ((number << 4) & 0xF0) | (unkF & 0xF))
 
 struct EnSyatekiDekunuts;
 

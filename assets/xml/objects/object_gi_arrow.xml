@@ -1,7 +1,13 @@
 ﻿<Root>
+    <!-- Dependencies -->
+    <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
+
+    <!-- Get Item Draw: Arrow -->
     <File Name="object_gi_arrow" Segment="6">
-        <DList Name="object_gi_arrow_DL_000340" Offset="0x340" />
-        <DList Name="object_gi_arrow_DL_000B90" Offset="0xB90" />
-        <DList Name="object_gi_arrow_DL_001830" Offset="0x1830" />
+
+        <!-- Arrow Drop Display Lists -->
+        <DList Name="gGiArrowSmallDL" Offset="0x340" />
+        <DList Name="gGiArrowMediumDL" Offset="0xB90" />
+        <DList Name="gGiArrowLargeDL" Offset="0x1830" />
     </File>
 </Root>
