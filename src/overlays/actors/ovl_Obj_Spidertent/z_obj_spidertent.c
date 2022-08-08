@@ -700,7 +700,6 @@ void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
     s32 i;
     s32 j;
     s32 pad;
-    
 
     this->unk_3C6++;
 
@@ -786,7 +785,7 @@ void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
                 if ((this->unk_3B0[j] < 5.0f) || (this->unk_3C0 & (1 << j))) {
                     continue;
                 }
-                if(func_80B2FB94(&this->unk_3A4, this->unk_3B0[j], triNorm, &sp60, &sp5C)) {
+                if (func_80B2FB94(&this->unk_3A4, this->unk_3B0[j], triNorm, &sp60, &sp5C)) {
                     func_80B300F4(this, play, triNorm, &sp60, sp5C, j);
                 }
             }
