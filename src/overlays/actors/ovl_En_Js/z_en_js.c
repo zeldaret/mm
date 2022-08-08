@@ -74,8 +74,6 @@ static f32 D_8096AC1C[] = { 0.0f, 700.0f, 900.0f, 900.0f, 900.0f };
 
 static Vec3f D_8096AC30 = { 500.0f, -500.0f, 0.0f };
 
-extern ColliderCylinderInit sCylinderInit;
-
 void EnJs_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     s16 cs;
@@ -85,7 +83,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gMoonChildSkel, &gMoonChildStandingAnim, this->jointTable,
-                       this->morphTable, MOONCHILD_OB_LIMB_MAX);
+                       this->morphTable, MOONCHILD_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &gMoonChildStandingAnim);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 

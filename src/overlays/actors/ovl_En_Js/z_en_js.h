@@ -16,8 +16,8 @@ typedef struct EnJs {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ ColliderCylinder collider;
-    /* 0x1D4 */ Vec3s jointTable[MOONCHILD_OB_LIMB_MAX];
-    /* 0x240 */ Vec3s morphTable[MOONCHILD_OB_LIMB_MAX];
+    /* 0x1D4 */ Vec3s jointTable[MOONCHILD_LIMB_MAX];
+    /* 0x240 */ Vec3s morphTable[MOONCHILD_LIMB_MAX];
     /* 0x2AC */ Path* path;
     /* 0x2B0 */ s32 unk_2B0;
     /* 0x2B4 */ f32 unk_2B4;
