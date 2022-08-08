@@ -3486,21 +3486,16 @@ void func_8082F8A0(PlayState* play, Player* this) {
 
 extern void (*D_8085CB3C[PLAYER_AP_MAX])(PlayState* play, Player* this);
 
-#ifdef NON_MATCHING
 void func_8082F8BC(PlayState* play, Player* this, PlayerActionParam actionParam) {
-    this->itemActionParam = actionParam;
-    this->heldItemActionParam = actionParam;
-    this->stateFlags1 &= ~0x1000008;
+    this->heldItemActionParam = this->itemActionParam = actionParam;
+    this->modelGroup = this->nextModelGroup;
+    this->stateFlags1 &= ~(PLAYER_STATE1_1000000 | PLAYER_STATE1_8);
     this->unk_B08[0] = 0.0f;
     this->unk_B08[1] = 0.0f;
     this->unk_B28 = 0;
-    this->modelGroup = this->nextModelGroup;
     D_8085CB3C[actionParam](play, this);
     Player_SetModelGroup(this, this->modelGroup);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F8BC.s")
-#endif
 
 void func_8082F938(PlayState* play, Player* this, UNK_TYPE arg2, UNK_TYPE arg3);
 // has a loop unroll
@@ -15818,8 +15813,8 @@ void func_80857BE8(Player* this, PlayState* play) {
     Vec3f sp94;
     s16 sp92;
     s16 sp90;
-    s16 temp_a0; // sp8E
-    f32 temp_fa0; // sp88
+    s16 temp_a0;   // sp8E
+    f32 temp_fa0;  // sp88
     f32 var_fv1_7; // sp84
     f32 sp80;
     s16 temp_ft1_2; // sp7C
@@ -15884,7 +15879,7 @@ void func_80857BE8(Player* this, PlayState* play) {
             this->unk_B8C = 4;
             this->currentYaw += 0x8000 - (((temp_v0 >= 0) ? 1 : -1) * ((var_a2 + 0x100) & ~0x1FF) * 2);
 
-            this->actor.shape.rot.y = this->actor.home.rot.y =this->currentYaw;
+            this->actor.shape.rot.y = this->actor.home.rot.y = this->currentYaw;
             func_800B8E58(this, 0x185E);
         }
     }
@@ -15907,7 +15902,9 @@ void func_80857BE8(Player* this, PlayState* play) {
         spE4 = 18.0f;
         Math_StepToC(&this->unk_AE7, 4, 1);
 
-        if ((this->stateFlags3 & PLAYER_STATE3_80000) && (!CHECK_BTN_ALL(D_80862B44->cur.button, BTN_A) || (gSaveContext.save.playerData.magic == 0) || ((this->unk_AE7 == 4) && (this->unk_B08[0] < 12.0f)))) {
+        if ((this->stateFlags3 & PLAYER_STATE3_80000) &&
+            (!CHECK_BTN_ALL(D_80862B44->cur.button, BTN_A) || (gSaveContext.save.playerData.magic == 0) ||
+             ((this->unk_AE7 == 4) && (this->unk_B08[0] < 12.0f)))) {
             if (Math_StepToS(&this->unk_B86[1], 0, 1) != 0) {
                 this->stateFlags3 &= ~PLAYER_STATE3_80000;
                 func_80115D5C(&play->state);
@@ -15922,7 +15919,7 @@ void func_80857BE8(Player* this, PlayState* play) {
         }
     }
 
-    spDC = (s32) (spE4 * 900.0f);
+    spDC = (s32)(spE4 * 900.0f);
 
     Math_AsymStepToF(&this->unk_B08[2], (this->unk_B8A != 0) ? 1.0f : 0.0f, 0.8f, 0.05f);
     if (this->actor.bgCheckFlags & 1) {
@@ -15935,7 +15932,8 @@ void func_80857BE8(Player* this, PlayState* play) {
                 this->unk_ABC = 0.0f;
                 this->unk_B48 = 0.14f;
             }
-        } else if ((this->unk_B86[1] == 0) && CHECK_BTN_ALL(D_80862B44->press.button, BTN_B) && (Inventory_GetBtnBItem(play) < 0xFD)) {
+        } else if ((this->unk_B86[1] == 0) && CHECK_BTN_ALL(D_80862B44->press.button, BTN_B) &&
+                   (Inventory_GetBtnBItem(play) < 0xFD)) {
             func_80857640(this, 14.0f, 0x1F40);
         } else {
             sp90 = this->currentYaw;
@@ -15969,7 +15967,7 @@ void func_80857BE8(Player* this, PlayState* play) {
             var_a0 = spBC * 500.0f;
             var_a0 = CLAMP_MIN(var_a0, 0);
 
-            var_v1_3 = (s32) (spE4 * 400.0f) - var_a0;
+            var_v1_3 = (s32)(spE4 * 400.0f) - var_a0;
             var_v1_3 = CLAMP_MIN(var_v1_3, 0);
 
             spDC = CLAMP_MIN(spDC, var_a0);
@@ -15998,7 +15996,8 @@ void func_80857BE8(Player* this, PlayState* play) {
                     spDC = -0xFA0;
                 }
             } else {
-                if (((this->unk_B72 == 0xE) || (this->unk_B72 == 0xF) || (this->unk_B72 == 1) || (D_80862B08 == 5)) && (var_v1_3 >= 0x7D0)) {
+                if (((this->unk_B72 == 0xE) || (this->unk_B72 == 0xF) || (this->unk_B72 == 1) || (D_80862B08 == 5)) &&
+                    (var_v1_3 >= 0x7D0)) {
                     var_fv1_7 = 0.08f;
                 } else {
                     var_fv1_7 = this->unk_AE8 * 0.0003f;
@@ -16006,7 +16005,8 @@ void func_80857BE8(Player* this, PlayState* play) {
 
                 var_fa0 = (Math_SinS(this->unk_B6C) * 8.0f) + 0.6f;
                 if (this->unk_B86[1] == 0) {
-                    if ((gSaveContext.unk_3F28 == 0) && (gSaveContext.save.playerData.magic >= 2) && (this->unk_AE8 >= 0x36B0)) {
+                    if ((gSaveContext.unk_3F28 == 0) && (gSaveContext.save.playerData.magic >= 2) &&
+                        (this->unk_AE8 >= 0x36B0)) {
                         this->unk_AE7 += 1;
                         sp80 = var_fa0;
                         func_800B8F98(&this->actor, 0xEBU);
@@ -16022,11 +16022,11 @@ void func_80857BE8(Player* this, PlayState* play) {
                 var_fa0 = CLAMP_MIN(var_fa0, 0.0f);
 
                 Math_AsymStepToF(&this->linearVelocity, spE4, var_fv1_7, var_fa0);
-                var_a2_2 = (s16) (fabsf(this->actor.speedXZ) * 20.0f) + 0x12C;
+                var_a2_2 = (s16)(fabsf(this->actor.speedXZ) * 20.0f) + 0x12C;
                 var_a2_2 = CLAMP_MIN(var_a2_2, 0x64);
 
-                temp_ft1_2 = (s32) (BINANG_SUB(spE2, this->currentYaw) * -0.5f);
-                this->unk_B08[1] += (f32) (SQ(temp_ft1_2)) * 8e-9f;
+                temp_ft1_2 = (s32)(BINANG_SUB(spE2, this->currentYaw) * -0.5f);
+                this->unk_B08[1] += (f32)(SQ(temp_ft1_2)) * 8e-9f;
                 Math_ScaledStepToS(&this->currentYaw, spE2, var_a2_2);
                 sp6C = func_80835D2C(play, this, &D_8085D978, &sp70);
                 var_fa1 = func_80835D2C(play, this, &D_8085D984, &sp70) - sp6C;
@@ -16085,9 +16085,10 @@ void func_80857BE8(Player* this, PlayState* play) {
 
                 if (this->unk_AE8 == 0) {
                     temp_v0_10 = this->unk_B86[0];
-                    temp_ft3_2 = (s32) (var_fv0 * 800.0f);
+                    temp_ft3_2 = (s32)(var_fv0 * 800.0f);
                     this->unk_B86[0] += temp_ft3_2;
-                    if ((this->actor.bgCheckFlags & 1) && (temp_ft3_2 != 0) && (((temp_v0_10 + temp_ft3_2) * temp_v0_10) <= 0)) {
+                    if ((this->actor.bgCheckFlags & 1) && (temp_ft3_2 != 0) &&
+                        (((temp_v0_10 + temp_ft3_2) * temp_v0_10) <= 0)) {
                         func_8019F780(&this->actor.projectedPos, func_8082E078(this, 0x990), var_fv0);
                     }
                 }
@@ -16113,8 +16114,10 @@ void func_80857BE8(Player* this, PlayState* play) {
             this->actor.velocity.y = Math_SinS(this->unk_B6C) * this->unk_B08[0];
         }
 
-        if ((this->unk_B86[1] != 0) || (func_800C9C24(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId, 1) != 0)) {
-            func_800AE930(&play->colCtx, Effect_GetByIndex(this->meleeWeaponEffectIndex[2]), &this->actor.world.pos, 15.0f, this->actor.shape.rot.y, this->actor.floorPoly, this->actor.floorBgId);
+        if ((this->unk_B86[1] != 0) ||
+            (func_800C9C24(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId, 1) != 0)) {
+            func_800AE930(&play->colCtx, Effect_GetByIndex(this->meleeWeaponEffectIndex[2]), &this->actor.world.pos,
+                          15.0f, this->actor.shape.rot.y, this->actor.floorPoly, this->actor.floorBgId);
         } else {
             func_800AEF44(Effect_GetByIndex(this->meleeWeaponEffectIndex[2]));
         }
@@ -16161,7 +16164,8 @@ void func_80857BE8(Player* this, PlayState* play) {
 
         Math_ScaledStepToS(this->unk_B86, 0, ABS_ALT(this->unk_AE8));
         if ((this->actor.bgCheckFlags & 1) && (((this->unk_AE8 + temp_a3) * temp_a3) <= 0)) {
-            func_8019F780(&this->actor.projectedPos, func_8082E078(this, (this->unk_B86[1] != 0) ? 0x980 : 0x990), this->unk_B08[0]);
+            func_8019F780(&this->actor.projectedPos, func_8082E078(this, (this->unk_B86[1] != 0) ? 0x980 : 0x990),
+                          this->unk_B08[0]);
         }
     }
 
