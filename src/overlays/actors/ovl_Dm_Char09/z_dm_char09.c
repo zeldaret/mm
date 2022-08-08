@@ -130,17 +130,17 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
     s32 actionIndex;
     s32 max = 0;
     s32 pathnum;
-    u8 csIndex = 0;
+    u8 temp = false;
 
     if (!DMCHAR09_GET_F(&this->actor)) {
         if (play->csCtx.currentCsIndex == 1) {
-            csIndex = 1;
+            temp = true;
         }
     } else if (play->csCtx.currentCsIndex == 0) {
-        csIndex = 1;
+        temp = true;
     }
 
-    if (Cutscene_CheckActorAction(play, 0x1F7) && csIndex) {
+    if (Cutscene_CheckActorAction(play, 0x1F7) && temp) {
         actionIndex = Cutscene_GetActorActionIndex(play, 0x1F7);
         if (this->unk_22F != play->csCtx.actorActions[actionIndex]->action) {
             this->unk_22F = play->csCtx.actorActions[actionIndex]->action;
