@@ -4,10 +4,10 @@
 #include "global.h"
 
 typedef enum {
-    /* 0 */ DTBUBBLE_COLOR_PROFILE_0,
-    /* 1 */ DTBUBBLE_COLOR_PROFILE_1,
-    /* 2 */ DTBUBBLE_COLOR_PROFILE_2,
-    /* 3 */ DTBUBBLE_COLOR_PROFILE_3
+    /* 0 */ DTBUBBLE_COLOR_PROFILE_RED,
+    /* 1 */ DTBUBBLE_COLOR_PROFILE_GREEN,
+    /* 2 */ DTBUBBLE_COLOR_PROFILE_BLUE,
+    /* 3 */ DTBUBBLE_COLOR_PROFILE_CLEAR
 } DtBubbleColorProfile;
 
 typedef struct {

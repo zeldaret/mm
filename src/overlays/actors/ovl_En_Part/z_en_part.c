@@ -97,7 +97,7 @@ void func_808654C4(EnPart* this, PlayState* play) {
                     effectVelocity.y = Rand_ZeroOne() + 1.0f;
                     effectScale = Rand_S16Offset(80, 100);
                     EffectSsDtBubble_SpawnColorProfile(play, &effectPos, &effectVelocity, &gZeroVec3f, effectScale, 25,
-                                                       DTBUBBLE_COLOR_PROFILE_0, true);
+                                                       DTBUBBLE_COLOR_PROFILE_RED, true);
                 }
                 break;
         }
