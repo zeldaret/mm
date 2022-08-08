@@ -9526,7 +9526,7 @@ void func_8083EA44(Player* this, f32 arg1) {
     }
 }
 
-void func_8083EBD0(PlayState* play, Player* this) {
+void Player_ChooseIdleAnim(PlayState* play, Player* this) {
     LinkAnimationHeader* sp44;
     u32 sp40;
     s32 sp38;
@@ -14103,7 +14103,7 @@ void func_80849FE0(Player* this, PlayState* play) {
             temp_v0_3->y = (temp_v0_3->y + ((this->unk_AE8 & 1) * 0x50)) - 0x28;
         } else {
             func_8082E794(this);
-            func_8083EBD0(play, this);
+            Player_ChooseIdleAnim(play, this);
         }
         this->stateFlags3 &= ~8;
     }

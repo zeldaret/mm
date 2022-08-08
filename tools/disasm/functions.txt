@@ -4557,7 +4557,7 @@
     0x8083E958:("func_8083E958",),
     0x8083E9C4:("func_8083E9C4",),
     0x8083EA44:("func_8083EA44",),
-    0x8083EBD0:("func_8083EBD0",),
+    0x8083EBD0:("Player_ChooseIdleAnim",),
     0x8083EE60:("func_8083EE60",),
     0x8083F144:("func_8083F144",),
     0x8083F190:("func_8083F190",),

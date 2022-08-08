@@ -1264,17 +1264,22 @@ GetItemEntry sGetItemTable[0xB9] = {
     { 0x31, 0xA0, 0x2E, 0xB9, 0x24D },
 };
 
-LinkAnimationHeader* D_8085C84C[] = {
-    (LinkAnimationHeader*)0x0400DF30, (LinkAnimationHeader*)0x0400DEE8, (LinkAnimationHeader*)0x0400DF40,
-    (LinkAnimationHeader*)0x0400DEF8, (LinkAnimationHeader*)0x0400DF38, (LinkAnimationHeader*)0x0400DEF0,
-    (LinkAnimationHeader*)0x0400DF38, (LinkAnimationHeader*)0x0400DEF0, (LinkAnimationHeader*)0x0400E100,
-    (LinkAnimationHeader*)0x0400E0C0, (LinkAnimationHeader*)0x0400E100, (LinkAnimationHeader*)0x0400E0C0,
-    (LinkAnimationHeader*)0x0400E100, (LinkAnimationHeader*)0x0400E0C0, (LinkAnimationHeader*)0x0400E0C8,
-    (LinkAnimationHeader*)0x0400E0A0, (LinkAnimationHeader*)0x0400E0D0, (LinkAnimationHeader*)0x0400E0A8,
-    (LinkAnimationHeader*)0x0400E0F0, (LinkAnimationHeader*)0x0400E0F0, (LinkAnimationHeader*)0x0400E0D8,
-    (LinkAnimationHeader*)0x0400E0B0, (LinkAnimationHeader*)0x0400E0E0, (LinkAnimationHeader*)0x0400E0B8,
-    (LinkAnimationHeader*)0x0400E0E8, (LinkAnimationHeader*)0x0400E0E8, (LinkAnimationHeader*)0x0400E0F8,
-    (LinkAnimationHeader*)0x0400E0F8, (LinkAnimationHeader*)0x0400D0B0, (LinkAnimationHeader*)0x0400D0B0,
+LinkAnimationHeader* D_8085C84C[][2] = {
+    { (LinkAnimationHeader*)0x0400DF30, (LinkAnimationHeader*)0x0400DEE8 },
+    { (LinkAnimationHeader*)0x0400DF40, (LinkAnimationHeader*)0x0400DEF8 },
+    { (LinkAnimationHeader*)0x0400DF38, (LinkAnimationHeader*)0x0400DEF0 },
+    { (LinkAnimationHeader*)0x0400DF38, (LinkAnimationHeader*)0x0400DEF0 },
+    { (LinkAnimationHeader*)0x0400E100, (LinkAnimationHeader*)0x0400E0C0 },
+    { (LinkAnimationHeader*)0x0400E100, (LinkAnimationHeader*)0x0400E0C0 },
+    { (LinkAnimationHeader*)0x0400E100, (LinkAnimationHeader*)0x0400E0C0 },
+    { (LinkAnimationHeader*)0x0400E0C8, (LinkAnimationHeader*)0x0400E0A0 },
+    { (LinkAnimationHeader*)0x0400E0D0, (LinkAnimationHeader*)0x0400E0A8 },
+    { (LinkAnimationHeader*)0x0400E0F0, (LinkAnimationHeader*)0x0400E0F0 },
+    { (LinkAnimationHeader*)0x0400E0D8, (LinkAnimationHeader*)0x0400E0B0 },
+    { (LinkAnimationHeader*)0x0400E0E0, (LinkAnimationHeader*)0x0400E0B8 },
+    { (LinkAnimationHeader*)0x0400E0E8, (LinkAnimationHeader*)0x0400E0E8 },
+    { (LinkAnimationHeader*)0x0400E0F8, (LinkAnimationHeader*)0x0400E0F8 },
+    { (LinkAnimationHeader*)0x0400D0B0, (LinkAnimationHeader*)0x0400D0B0 },
 };
 
 struct_8082E224_arg1 D_8085C8C4[] = {
@@ -3111,9 +3116,9 @@ s32 func_8082ECCC(Player* this) {
 extern GetItemEntry sGetItemTable[GI_MAX - 1];
 
 void func_8082ECE0(Player* this) {
-    GetItemEntry* temp = &sGetItemTable[this->getItemId - 1];
+    GetItemEntry* giEntry = &sGetItemTable[this->getItemId - 1];
 
-    this->unk_B2A = ABS_ALT(temp->unk_2);
+    this->unk_B2A = ABS_ALT(giEntry->unk_2);
 }
 
 LinkAnimationHeader* func_8082ED20(Player* this) {
@@ -8022,7 +8027,6 @@ void func_8083BB4C(PlayState* play, Player* this) {
                    (((func_80850D68 != this->actionFunc) && !(this->stateFlags3 & PLAYER_STATE3_8000)) ||
                     (this->actor.bgCheckFlags & 1))) {
             if (this->skelAnime.moveFlags == 0) {
-                this = this;
                 func_8083B0E4(play, this, this->actor.shape.rot.y);
             }
             func_8083B32C(play, this, this->actor.velocity.y);
@@ -8884,94 +8888,70 @@ void func_8083EA44(Player* this, f32 arg1);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083EA44.s")
 #endif
 
-extern LinkAnimationHeader* D_8085C84C[];
+void Player_ChooseIdleAnim(PlayState* play, Player* this) {
+    LinkAnimationHeader* anim;
+    u32 healthIsCritical;
+    LinkAnimationHeader** animPtr;
+    s32 animIndex;
+    s32 rand;
+    f32 morphFrames;
+    s16 lastFrame;
 
-#ifdef NON_MATCHING
-// regalloc and gotos
-void func_8083EBD0(PlayState* play, Player* this) {
-    LinkAnimationHeader* var_a2; // sp44
-    u32 sp40;
-    s32 pad;
-    s32 var_a1;   // sp38
-    s32 var_v1_2; // sp34
-    LinkAnimationHeader** var_v0;
-    f32 var_fv0;
-    s16 temp_ft1;
-    s32 temp_ft2;
-    s8 temp_v0_4;
-    u32 temp_v1;
-    u32 var_v1;
-    u8 temp_a1;
-
-    if (this->actor.id != 0) {
-        temp_v1 = (s32)this->actor.colChkInfo.health < 0x64;
-        if (temp_v1 != 0) {
-            sp40 = temp_v1;
-            goto block_3;
-        }
-        goto block_10;
-    }
-block_3:
-    var_v1 = sp40;
-    if ((this->actor.id == 0) &&
-        ((this->unk_730 != NULL) || ((this->transformation != 0) && (this->transformation != 4)) ||
-         (this->currentMask == 0x13) ||
-         ((var_v1 = LifeMeter_IsCritical(), (var_v1 == 0)) &&
-          (temp_v0_4 = (this->unk_AA4 + 1) & 1, this->unk_AA4 = temp_v0_4, (temp_v0_4 != 0))))) {
-    block_10:
-        this->stateFlags2 &= 0xEFFFFFFF;
-        var_a2 = func_8082ED20(this);
+    if (((this->actor.id != ACTOR_PLAYER) && !(healthIsCritical = (this->actor.colChkInfo.health < 0x64))) ||
+        ((this->actor.id == ACTOR_PLAYER) &&
+         (((this->unk_730 != NULL) ||
+           ((this->transformation != PLAYER_FORM_FIERCE_DEITY) && (this->transformation != PLAYER_FORM_HUMAN)) ||
+           (this->currentMask == PLAYER_MASK_SCENTS)) ||
+          (!(healthIsCritical = LifeMeter_IsCritical()) && (this->unk_AA4 = ((this->unk_AA4 + 1) & 1)))))) {
+        this->stateFlags2 &= ~PLAYER_STATE2_10000000;
+        anim = func_8082ED20(this);
     } else {
-        this->stateFlags2 |= 0x10000000;
-        if (this->stateFlags1 & 0x800) {
-            var_a2 = func_8082ED20(this);
+        this->stateFlags2 |= PLAYER_STATE2_10000000;
+
+        if (this->stateFlags1 & PLAYER_STATE1_800) {
+            anim = func_8082ED20(this);
         } else {
-            var_a1 = play->roomCtx.currRoom.unk2;
-            if (var_v1 != 0) {
-                var_a1 = 7;
+            animIndex = play->roomCtx.currRoom.unk2;
+
+            if (healthIsCritical) {
                 if (this->unk_AA4 >= 0) {
+                    animIndex = 7;
                     this->unk_AA4 = -1;
                 } else {
-                    var_a1 = 8;
+                    animIndex = 8;
                 }
             } else {
-                temp_ft2 = (s32)(Rand_ZeroOne() * 5.0f);
-                var_v1_2 = temp_ft2;
-                if ((temp_ft2 < 4) &&
-                    (((temp_ft2 != 0) && (temp_ft2 != 3)) ||
-                     ((this->rightHandType == 8) && ((temp_ft2 == 3) || (Player_GetMeleeWeaponHeld(this) != 0))))) {
-                    if (var_v1_2 == 0) {
-                        if (Player_IsHoldingTwoHandedWeapon(this) != 0) {
-                            var_v1_2 = 4;
+                rand = Rand_ZeroOne() * 5.0f;
+                if (rand < 4) {
+                    if (((rand != 0) && (rand != 3)) || ((this->rightHandType == PLAYER_MODELTYPE_RH_SHIELD) &&
+                                                         ((rand == 3) || (Player_GetMeleeWeaponHeld(this) != 0)))) {
+                        if ((rand == 0) && Player_IsHoldingTwoHandedWeapon(this)) {
+                            rand = 4;
                         }
+                        animIndex = rand + 9;
                     }
-                    var_a1 = var_v1_2 + 9;
                 }
             }
 
-            var_v0 = &D_8085C84C[var_a1 * 2];
-            if (this->modelAnimType != 1) {
-                var_v0++;
+            animPtr = &D_8085C84C[animIndex][0];
+            if (this->modelAnimType != PLAYER_ANIMTYPE_1) {
+                animPtr = &D_8085C84C[animIndex][1];
             }
-            var_a2 = *var_v0;
+            anim = *animPtr;
         }
     }
 
-    temp_ft1 = Animation_GetLastFrame(var_a2);
-    if ((this->skelAnime.animation == var_a2) || (this->skelAnime.animation == &gameplay_keep_Linkanim_00E318) ||
+    lastFrame = Animation_GetLastFrame(anim);
+    if ((this->skelAnime.animation == anim) || (this->skelAnime.animation == &gameplay_keep_Linkanim_00E318) ||
         (this->skelAnime.animation == &gameplay_keep_Linkanim_00E330) ||
         (this->skelAnime.animation == &gameplay_keep_Linkanim_00E348)) {
-        var_fv0 = 0.0f;
+        morphFrames = 0.0f;
     } else {
-        var_fv0 = -6.0f;
+        morphFrames = -6.0f;
     }
-    LinkAnimation_Change(play, &this->skelAnime, var_a2, 0.6666667f * D_8085C3E4, 0.0f, (f32)temp_ft1, ANIMMODE_ONCE,
-                         var_fv0);
+
+    LinkAnimation_Change(play, &this->skelAnime, anim, (2.0f / 3.0f) * D_8085C3E4, 0.0f, lastFrame, 2, morphFrames);
 }
-#else
-void func_8083EBD0(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083EBD0.s")
-#endif
 
 void func_8083EE60(Player* this, PlayState* play) {
     f32 temp_fv0;
@@ -12229,7 +12209,7 @@ void func_80849FE0(Player* this, PlayState* play) {
             this->skelAnime.jointTable[0].y = (this->skelAnime.jointTable[0].y + ((this->unk_AE8 & 1) * 0x50)) - 0x28;
         } else {
             func_8082E794(this);
-            func_8083EBD0(play, this);
+            Player_ChooseIdleAnim(play, this);
         }
         this->stateFlags3 &= ~PLAYER_STATE3_8;
     }
