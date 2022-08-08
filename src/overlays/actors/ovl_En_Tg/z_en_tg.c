@@ -125,6 +125,8 @@ void EnTg_UpdateCollider(EnTg* this, PlayState* play) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F928.s")
+// Maybe UpdateSkelAnime? or is some kind of animation playing?
+// also could be Idle?
 void func_8098F928(EnTg* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
@@ -152,6 +154,7 @@ void EnTg_Destroy(Actor* thisx, PlayState* play) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FA70.s")
+// ActionFunc
 void func_8098FA70(EnTg* this, PlayState* play) {
     Vec3f sp24;
 
@@ -245,6 +248,7 @@ void func_8098FD50(EnTg* this, EnTgIdk* ptr, Vec3f* arg2, s32 len) {
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FEA8.s")
 // Looks just like func_809647EC in z_en_fu.c
+// Called in Update
 void func_8098FEA8(PlayState* play, EnTgIdk* ptr, s32 len) {
     Vec3f sp44 = D_8099024C;
     s16 yaw = Camera_GetInputDirYaw(GET_ACTIVE_CAM(play));
@@ -269,6 +273,7 @@ void func_8098FEA8(PlayState* play, EnTgIdk* ptr, s32 len) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8099000C.s")
+// Called in Draw
 void func_8099000C(PlayState* play, EnTgIdk* ptr, s32 len) {
     s32 i;
     s32 flag = false;
