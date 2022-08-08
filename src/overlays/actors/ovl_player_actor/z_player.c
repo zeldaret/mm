@@ -8807,7 +8807,7 @@ s32 func_8083E9C4(f32 arg0, f32 arg1, f32 arg2, f32 arg3) {
 
 void func_8083EA44(Player* this, f32 arg1) {
     s32 sp24;
-    f32 updateScale = SREG(30) * 0.5f;
+    f32 updateScale = R_UPDATE_RATE * 0.5f;
 
     arg1 *= updateScale;
     if (arg1 < -7.25f) {
@@ -8904,7 +8904,7 @@ void func_8083EE60(Player* this, PlayState* play) {
     f32 var_fs0;
 
     if (this->unk_B34 < 1.0f) {
-        f32 temp_fs0 = SREG(30) / 2.0f;
+        f32 temp_fs0 = R_UPDATE_RATE / 2.0f;
 
         func_8083EA44(this, REG(35) / 1000.0f);
         LinkAnimation_LoadToJoint(play, &this->skelAnime, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_30, this->modelAnimType),
@@ -9044,7 +9044,7 @@ void func_8083F57C(Player* this, PlayState* play) {
     if (this->unk_B34 < 1.0f) {
         f32 temp_fs0;
 
-        temp_fs0 = SREG(30) * 0.5f;
+        temp_fs0 = R_UPDATE_RATE * 0.5f;
         func_8083EA44(this, REG(35) / 1000.0f);
         LinkAnimation_LoadToJoint(play, &this->skelAnime, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_1, this->modelAnimType),
                                   this->unk_B38);
@@ -9491,7 +9491,7 @@ s32 func_80840F90(PlayState* play, Player* this, CsCmdActorAction* playerAction,
     }
 
     if (arg5 != 2) {
-        temp_ft4 = SREG(30) / 2.0f;
+        temp_ft4 = R_UPDATE_RATE / 2.0f;
         temp_fa1 = playerAction->endPos.x - this->actor.world.pos.x;
         temp_fa0 = playerAction->endPos.z - this->actor.world.pos.z;
         temp_v1 = (playerAction->endFrame - play->csCtx.frames) + 1;
