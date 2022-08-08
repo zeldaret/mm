@@ -3691,36 +3691,37 @@ void func_808304BC(Player* this, PlayState* play) {
 
 #ifdef NON_MATCHING
 // missing instruction
-s32 func_808305BC(PlayState* arg0, Player* arg1, ItemID* item, s32* arg3) {
-    if (arg1->itemActionParam == PLAYER_AP_NUT) {
+s32 func_808305BC(PlayState* play, Player* this, ItemID* item, s32* typeParam) {
+    if (this->itemActionParam == PLAYER_AP_NUT) {
         *item = ITEM_NUT;
-        *arg3 = (arg1->transformation == PLAYER_FORM_DEKU) ? 7 : 6;
+        *typeParam = (this->transformation == PLAYER_FORM_DEKU) ? 7 : 6;
     } else {
         *item = ITEM_BOW;
-        *arg3 = (arg1->stateFlags1 & PLAYER_STATE1_800000) ? 1 : arg1->itemActionParam - 7;
+        *typeParam =
+            (this->stateFlags1 & PLAYER_STATE1_800000) ? ENARROW_1 : this->itemActionParam - PLAYER_AP_BOW + ENARROW_2;
     }
 
-    if (arg1->transformation == PLAYER_FORM_DEKU) {
+    if (this->transformation == PLAYER_FORM_DEKU) {
         if ((gSaveContext.save.playerData.magic >= 2) ||
-            ((gSaveContext.save.weekEventReg[8] & 1) && (arg0->sceneNum == SCENE_BOWLING))) {
+            ((gSaveContext.save.weekEventReg[8] & 1) && (play->sceneNum == SCENE_BOWLING))) {
             return 1;
         }
         return 0;
     }
-    if (arg1->stateFlags3 & PLAYER_STATE3_400) {
+    if (this->stateFlags3 & PLAYER_STATE3_400) {
         return 1;
     }
     if (gSaveContext.minigameState == 1) {
-        return arg0->interfaceCtx.hbaAmmo;
+        return play->interfaceCtx.hbaAmmo;
     }
-    if (arg0->unk_1887C != 0) {
-        return arg0->unk_1887C;
+    if (play->unk_1887C != 0) {
+        return play->unk_1887C;
     }
 
     return AMMO(*item);
 }
 #else
-s32 func_808305BC(PlayState* arg0, Player* arg1, ItemID* item, s32* arg3);
+s32 func_808305BC(PlayState* play, Player* this, ItemID* item, s32* typeParam);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808305BC.s")
 #endif
 
@@ -3865,7 +3866,6 @@ void func_80830B38(Player* this) {
     func_800B8E58(this, sfxId);
 }
 
-// bool
 s32 func_80830B88(PlayState* play, Player* this) {
     if (CHECK_BTN_ALL(D_80862B44->cur.button, BTN_R)) {
         if (!(this->stateFlags1 & (PLAYER_STATE1_400000 | PLAYER_STATE1_800000 | PLAYER_STATE1_20000000))) {
@@ -3928,48 +3928,26 @@ s32 func_80830DF0(Player* this, PlayState* play) {
     return true;
 }
 
-#ifdef NON_MATCHING
-// swapped instructions
 s32 func_80830E30(Player* this, PlayState* play) {
-    LinkAnimationHeader* var_a2;
-
     if ((this->itemActionParam == 0x11) || (this->transformation == 2)) {
         func_8082F43C(play, this, func_8084923C);
 
-        if (this->meleeWeaponAnimation == 0x1B) {
-            var_a2 = &gameplay_keep_Linkanim_00E3A8;
-        } else {
-            LinkAnimationHeader* var_v0;
-
-            if (this->meleeWeaponAnimation == 0x1C) {
-                var_v0 = &gameplay_keep_Linkanim_00E3B0;
-            } else {
-                var_v0 = &gameplay_keep_Linkanim_00E3B8;
-            }
-            var_a2 = var_v0;
-        }
-
-        LinkAnimation_PlayOnce(play, &this->unk_284, var_a2);
+        LinkAnimation_PlayOnce(play, &this->unk_284,
+                               (this->meleeWeaponAnimation == 0x1B)
+                                   ? &gameplay_keep_Linkanim_00E3A8
+                                   : ((this->meleeWeaponAnimation == 0x1C) ? &gameplay_keep_Linkanim_00E3B0
+                                                                           : &gameplay_keep_Linkanim_00E3B8));
         this->unk_ACC = 0xA;
     } else {
         if (!func_808306F8(this, play)) {
             return false;
         }
 
-        if (Player_IsHoldingHookshot(this)) {
-            var_a2 = &gameplay_keep_Linkanim_00D9D8;
-        } else {
-            LinkAnimationHeader* var_v0_2;
-
-            if (this->transformation == 3) {
-                var_v0_2 = &gameplay_keep_Linkanim_00E2F8;
-            } else {
-                var_v0_2 = &gameplay_keep_Linkanim_00D4F0;
-            }
-            var_a2 = var_v0_2;
-        }
-
-        LinkAnimation_PlayOnce(play, &this->unk_284, var_a2);
+        LinkAnimation_PlayOnce(
+            play, &this->unk_284,
+            (Player_IsHoldingHookshot(this))
+                ? &gameplay_keep_Linkanim_00D9D8
+                : ((this->transformation == 3) ? &gameplay_keep_Linkanim_00E2F8 : &gameplay_keep_Linkanim_00D4F0));
     }
 
     if (this->stateFlags1 & PLAYER_STATE1_800000) {
@@ -3980,10 +3958,6 @@ s32 func_80830E30(Player* this, PlayState* play) {
 
     return true;
 }
-#else
-s32 func_80830E30(Player* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80830E30.s")
-#endif
 
 s32 func_80830F9C(PlayState* play) {
     return play->unk_1887C > 0 && CHECK_BTN_ALL(D_80862B44->press.button, BTN_B);
