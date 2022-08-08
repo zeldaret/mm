@@ -3929,30 +3929,31 @@ s32 func_80830DF0(Player* this, PlayState* play) {
 }
 
 s32 func_80830E30(Player* this, PlayState* play) {
-    if ((this->itemActionParam == 0x11) || (this->transformation == 2)) {
+    if ((this->itemActionParam == PLAYER_AP_11) || (this->transformation == PLAYER_FORM_ZORA)) {
         func_8082F43C(play, this, func_8084923C);
 
         LinkAnimation_PlayOnce(play, &this->unk_284,
-                               (this->meleeWeaponAnimation == 0x1B)
+                               (this->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_LEFT)
                                    ? &gameplay_keep_Linkanim_00E3A8
-                                   : ((this->meleeWeaponAnimation == 0x1C) ? &gameplay_keep_Linkanim_00E3B0
-                                                                           : &gameplay_keep_Linkanim_00E3B8));
+                                   : ((this->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_COMBO)
+                                          ? &gameplay_keep_Linkanim_00E3B0
+                                          : &gameplay_keep_Linkanim_00E3B8));
         this->unk_ACC = 0xA;
     } else {
         if (!func_808306F8(this, play)) {
             return false;
         }
 
-        LinkAnimation_PlayOnce(
-            play, &this->unk_284,
-            (Player_IsHoldingHookshot(this))
-                ? &gameplay_keep_Linkanim_00D9D8
-                : ((this->transformation == 3) ? &gameplay_keep_Linkanim_00E2F8 : &gameplay_keep_Linkanim_00D4F0));
+        LinkAnimation_PlayOnce(play, &this->unk_284,
+                               (Player_IsHoldingHookshot(this))
+                                   ? &gameplay_keep_Linkanim_00D9D8
+                                   : ((this->transformation == PLAYER_FORM_DEKU) ? &gameplay_keep_Linkanim_00E2F8
+                                                                                 : &gameplay_keep_Linkanim_00D4F0));
     }
 
     if (this->stateFlags1 & PLAYER_STATE1_800000) {
         Player_AnimationPlayLoop(play, this, &gameplay_keep_Linkanim_00E050);
-    } else if ((this->actor.bgCheckFlags & 1) && (this->transformation != 2)) {
+    } else if ((this->actor.bgCheckFlags & 1) && (this->transformation != PLAYER_FORM_ZORA)) {
         Player_AnimationPlayLoop(play, this, func_8082ED20(this));
     }
 
