@@ -28,8 +28,8 @@ typedef struct {
 } ObjSpinyrollStruct; // size = 0x78
 
 typedef struct {
-    /* 0x00 */ ObjSpinyrollStruct unk_00[2];
-    /* 0xF0 */ ObjSpinyrollStruct* unk_F0;
+    /* 0x00 */ ObjSpinyrollSubStruct unk_00[2][10];
+    /* 0xF0 */ ObjSpinyrollSubStruct* unk_F0;
     /* 0xF4 */ s32 unk_F4;
 } ObjSpinyrollStruct2; // size = 0xF8?
 

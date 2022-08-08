@@ -650,17 +650,16 @@ void func_808DDE9C(Actor* thisx, PlayState* play2) {
     ObjectKankyo* this = THIS;
     Player* player = GET_PLAYER(play);
     s32 i;
-    s16 temp;
+    u8 phi_s5;
+    u16 end = play->envCtx.unk_F2[1];
     f32 temp_f12;
     f32 temp_f20;
     f32 temp_f22;
     f32 temp_f2;
-    u8 phi_s5;
-    s32 end = play->envCtx.unk_F2[1];
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (end != 0) {
+    if (end) {
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 150, 255, 255, 25);
         POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);

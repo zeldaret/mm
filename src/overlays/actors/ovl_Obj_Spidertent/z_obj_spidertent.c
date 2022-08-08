@@ -762,10 +762,10 @@ void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
         func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 
-    if (this->unk_3C1 >= 0x20) {
+    if (this->unk_3C1 >= 32) {
         if (this->unk_3C7 > 0) {
             this->unk_3C7--;
-        } else if (this->unk_3C1 >= 0x33) {
+        } else if (this->unk_3C1 > 50) {
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_EXTINCT);
             this->unk_3C7 = Rand_S16Offset(2, 2);
         } else {
