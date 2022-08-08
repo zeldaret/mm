@@ -3134,64 +3134,25 @@ LinkAnimationHeader* func_8082ED20(Player* this) {
     return GET_PLAYER_ANIM(PLAYER_ANIMGROUP_0, this->modelAnimType);
 }
 
-#ifdef NON_EQUIVALENT
-s32 func_8082ED94(Player* arg0) {
-    s32 var_v1;
-    s32* temp_v0;
-    s32* temp_v0_2;
-    s32* var_v0;
-    void* temp_a1;
-    void* temp_a1_2;
+s32 func_8082ED94(Player* this) {
+    LinkAnimationHeader** entry;
     s32 i;
 
-    temp_a1 = arg0->skelAnime.animation;
-    if ((&gameplay_keep_Linkanim_00DD58 != temp_a1) && (&gameplay_keep_Linkanim_00DD68 != temp_a1) &&
-        (((func_8082ED20(arg0) != arg0->skelAnime.animation)) ||
-         (&gameplay_keep_Linkanim_00D0B0 == arg0->skelAnime.animation))) {
-#if 0
-        temp_v0 = D_8085C84C + 4;
-        if (temp_a1_2 == *D_8085C84C) {
-            return 1;
-        }
-        var_v0 = temp_v0 + 4;
-        var_v1 = 2;
-        if (temp_a1_2 == *temp_v0) {
-            return 2;
-        }
-loop_8:
-        if (temp_a1_2 == var_v0->unk_0) {
-            return var_v1 + 1;
-        }
-        temp_v0_2 = var_v0 + 4;
-        if (temp_a1_2 == var_v0->unk_4) {
-            return var_v1 + 2;
-        }
-        temp_v0_3 = temp_v0_2 + 4;
-        if (temp_a1_2 == temp_v0_2->unk_4) {
-            return var_v1 + 3;
-        }
-        if (temp_a1_2 == temp_v0_3->unk_4) {
-            return var_v1 + 4;
-        }
-        var_v1 += 4;
-        var_v0 = temp_v0_3 + 4 + 4;
-        if (var_v1 == 0x1E) {
-            return 0;
-        }
-        goto loop_8;
-#endif
-        for (i = 0; i < ARRAY_COUNT(D_8085C84C); i++) {
-            if (arg0->skelAnime.animation == D_8085C84C[i]) {
+    if ((this->skelAnime.animation != &gameplay_keep_Linkanim_00DD58) &&
+        (this->skelAnime.animation != &gameplay_keep_Linkanim_00DD68) &&
+        (((this->skelAnime.animation != func_8082ED20(this))) ||
+         (this->skelAnime.animation == &gameplay_keep_Linkanim_00D0B0))) {
+        for (i = 0, entry = &D_8085C84C[0][0]; i < 30; i++) {
+            if (this->skelAnime.animation == *entry) {
                 return i + 1;
             }
+            entry++;
         }
+        return 0;
     }
+
     return -1;
 }
-#else
-s32 func_8082ED94(Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082ED94.s")
-#endif
 
 void func_8082EEA4(Player* this, s32 arg1) {
     u8 temp_v0 = D_8085C96C[arg1];
