@@ -1866,11 +1866,10 @@ u16 D_8085CFA8[] = {
 };
 
 // unused?
-u8 D_8085CFB0[] = {
-    0x08, 0x60, 0x00, 0x00, 0x18, 0x27, 0x00, 0x00,
+u16 D_8085CFB0[] = {
+    0x0860, 0x0000, 0x1827, 0x0000,
 };
 
-// wrong access?
 u8 D_8085CFB8[] = {
     0x04,
     0x04,
@@ -3723,60 +3722,57 @@ s32 func_808305BC(PlayState* arg0, Player* arg1, ItemID* item, s32* arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808305BC.s")
 #endif
 
-#if 0
-s32 func_808306F8(Player* arg0, PlayState* arg1) {
-    s32 sp50;
-    s32 sp4C;
-    s32 sp48;
-    Actor* temp_v0_4;
-    s16 temp_v0_2;
-    s16 var_v1;
-    s32 temp_v0_3;
-    s32 var_t0;
-    s8 temp_v0;
+#ifdef NON_MATCHING
+// Player_ShootArrow?
+s32 func_808306F8(Player* this, PlayState* play) {
+    if ((this->itemActionParam >= PLAYER_AP_BOW_FIRE) && (this->itemActionParam <= PLAYER_AP_BOW_LIGHT) && (gSaveContext.unk_3F28 != 0)) {
+        play_sound(NA_SE_SY_ERROR);
+    } else {
+        func_8082F43C(play, this, func_80848BF4);
 
-    temp_v0 = arg0->itemActionParam;
-    if ((temp_v0 >= 0xA) && (temp_v0 < 0xD) && (gSaveContext.unk_3F28 != 0)) {
-        play_sound(0x4806U);
-        return 0;
-    }
-    func_8082F43C(arg1, arg0, func_80848BF4);
-    temp_v0_2 = arg0->unk_B28;
-    arg0->stateFlags3 |= 0x40;
-    arg0->unk_ACC = 0xE;
-    if (temp_v0_2 >= 0) {
-        if (temp_v0_2 < 0) {
-            var_v1 = -temp_v0_2;
-        } else {
-            var_v1 = temp_v0_2;
-        }
-        if (var_v1 != 2) {
-            func_800B8E58(arg0, D_8085CFAE[var_v1]);
-        }
-        if ((Player_IsHoldingHookshot(arg0) == 0) && (func_808305BC(arg1, arg0, &sp50, &sp4C) > 0)) {
-            temp_v0_3 = sp4C - 3;
-            if (arg0->unk_B28 >= 0) {
-                var_t0 = temp_v0_3;
-                if ((temp_v0_3 >= 0) && (temp_v0_3 < 3)) {
-                    if (gSaveContext.save.playerData.magic < (s32) *(&D_8085CFB8 + temp_v0_3)) {
+        this->stateFlags3 |= PLAYER_STATE3_40;
+        this->unk_ACC = 14;
+
+        if (this->unk_B28 >= 0) {
+            s32 temp_v0_3;
+            s32 var_v1;
+            ItemID item;//sp50;
+            s32 var_t0; // sp48
+            s32 sp4C;
+
+            var_v1 = ABS_ALT(this->unk_B28);
+            if (var_v1 != 2) {
+                func_800B8E58(this, D_8085CFB0[var_v1-1]);
+            }
+
+            if (!Player_IsHoldingHookshot(this) && (func_808305BC(play, this, &item, &sp4C) > 0)) {
+                temp_v0_3 = sp4C - 3;
+                if (this->unk_B28 >= 0) {
+                    var_t0 = temp_v0_3;
+                    if ((temp_v0_3 >= 0) && (temp_v0_3 < 3)) {
+                        if (((void)0, gSaveContext.save.playerData.magic) < D_8085CFB8[temp_v0_3]) {
+                            sp4C = 2;
+                            var_t0 = -1;
+                        }
+                    } else if ((sp4C == 7) && (!(gSaveContext.save.weekEventReg[8] & 1) || (play->sceneNum != SCENE_BOWLING))) {
+                        var_t0 = 3;
+                    } else {
                         var_t0 = -1;
-                        sp4C = 2;
                     }
-                } else if ((sp4C == 7) && (!(gSaveContext.save.weekEventReg[8] & 1) || (arg1->sceneNum != 0x11))) {
-                    var_t0 = 3;
-                } else {
-                    var_t0 = -1;
-                }
-                sp48 = var_t0;
-                temp_v0_4 = Actor_SpawnAsChild(&arg1->actorCtx, &arg0->actor, arg1, 0xF, arg0->actor.world.pos.x, arg0->actor.world.pos.y, arg0->actor.world.pos.z, (s16) 0, (s16) (s32) arg0->actor.shape.rot.y, (s16) 0, sp4C);
-                arg0->heldActor = temp_v0_4;
-                if ((temp_v0_4 != NULL) && (var_t0 >= 0)) {
-                    func_80115DB4(arg1, (s16) *(&D_8085CFB8 + var_t0), 0);
+
+                    this->heldActor = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_ARROW, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, sp4C);
+
+                    if ((this->heldActor != NULL) && (var_t0 >= 0)) {
+                        func_80115DB4(play, D_8085CFB8[var_t0], 0);
+                    }
                 }
             }
         }
+
+        return true;
     }
-    return 1;
+
+    return false;
 }
 #else
 // bool

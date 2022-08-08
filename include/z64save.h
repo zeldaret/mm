@@ -226,7 +226,7 @@ typedef struct SaveContext {
     /* 0x3F22 */ u16 unk_3F22;                          // "prev_alpha_type"
     /* 0x3F24 */ u16 unk_3F24;                          // "alpha_count"
     /* 0x3F26 */ u16 unk_3F26;                          // "last_time_type"
-    /* 0x3F28 */ s16 unk_3F28;                          // "magic_flag"
+    /* 0x3F28 */ s16 unk_3F28;                          // "magic_flag" // magicState
     /* 0x3F2A */ s16 unk_3F2A;                          // "recovery_magic_flag"
     /* 0x3F2C */ s16 unk_3F2C;                          // "keep_magic_flag"
     /* 0x3F2E */ s16 unk_3F2E;                          // "magic_now_max"
