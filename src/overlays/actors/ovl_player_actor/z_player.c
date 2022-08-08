@@ -3148,6 +3148,7 @@ s32 func_8082ED94(Player* this) {
             }
             entry++;
         }
+
         return 0;
     }
 
@@ -8804,16 +8805,17 @@ s32 func_8083E9C4(f32 arg0, f32 arg1, f32 arg2, f32 arg3) {
     return false;
 }
 
-#ifdef NON_EQUIVALENT
-// not sure about equivalency. there are a few extra instructions
 void func_8083EA44(Player* this, f32 arg1) {
     s32 sp24;
-    f32 new_var;
+    f32 updateScale = SREG(30) * 0.5f;
 
-    new_var = SREG(30) * 0.5f;
-
-    arg1 *= new_var;
-    arg1 = CLAMP(arg1, -7.25f, 7.25f);
+    arg1 *= updateScale;
+    if (arg1 < -7.25f) {
+        arg1 = -7.25f;
+    } else if (arg1 > 7.25f) {
+        arg1 = 7.25f;
+    }
+    
     sp24 = func_8083E9C4(this->unk_B38, arg1, 29.0f, 10.0f);
 
     if (sp24 || func_8083E9C4(this->unk_B38, arg1, 29.0f, 24.0f)) {
@@ -8821,11 +8823,7 @@ void func_8083EA44(Player* this, f32 arg1) {
         if (this->linearVelocity > 4.0f) {
             this->stateFlags2 |= 8;
         }
-        if (sp24) {
-            this->actor.shape.unk_17 = 1;
-        } else {
-            this->actor.shape.unk_17 = 2;
-        }
+         this->actor.shape.unk_17 = sp24 ? 1 : 2;
     }
 
     this->unk_B38 += arg1;
@@ -8835,10 +8833,6 @@ void func_8083EA44(Player* this, f32 arg1) {
         this->unk_B38 -= 29.0f;
     }
 }
-#else
-void func_8083EA44(Player* this, f32 arg1);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083EA44.s")
-#endif
 
 void Player_ChooseIdleAnim(PlayState* play, Player* this) {
     LinkAnimationHeader* anim;
