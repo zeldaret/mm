@@ -10,6 +10,7 @@
 #include "overlays/actors/ovl_Arms_Hook/z_arms_hook.h"
 #include "overlays/actors/ovl_Door_Spiral/z_door_spiral.h"
 #include "overlays/actors/ovl_Door_Shutter/z_door_shutter.h"
+#include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Boom/z_en_boom.h"
 #include "overlays/actors/ovl_En_Box/z_en_box.h"
@@ -1865,16 +1866,17 @@ u16 D_8085CFA8[] = {
     BTN_CRIGHT,
 };
 
-// unused?
 u16 D_8085CFB0[] = {
-    0x0860, 0x0000, 0x1827, 0x0000,
+    NA_SE_PL_BOW_DRAW,
+    0,
+    NA_SE_IT_HOOKSHOT_READY,
 };
 
-u8 D_8085CFB8[] = {
-    0x04,
-    0x04,
-    0x08,
-    0x02,
+u8 sMagicArrowCosts[] = {
+    4, // ENARROW_3
+    4, // ENARROW_4
+    8, // ENARROW_5
+    2, // ENARROW_6
 };
 
 LinkAnimationHeader* D_8085CFBC[2] = { (LinkAnimationHeader*)0x0400D470, (LinkAnimationHeader*)0x0400D478 };
@@ -3722,9 +3724,10 @@ s32 func_808305BC(PlayState* arg0, Player* arg1, ItemID* item, s32* arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808305BC.s")
 #endif
 
-// Player_ShootArrow?
+// Draw bow or hookshot / first person items?
 s32 func_808306F8(Player* this, PlayState* play) {
-    if ((this->itemActionParam >= PLAYER_AP_BOW_FIRE) && (this->itemActionParam <= PLAYER_AP_BOW_LIGHT) && (gSaveContext.unk_3F28 != 0)) {
+    if ((this->itemActionParam >= PLAYER_AP_BOW_FIRE) && (this->itemActionParam <= PLAYER_AP_BOW_LIGHT) &&
+        (gSaveContext.unk_3F28 != 0)) {
         play_sound(NA_SE_SY_ERROR);
     } else {
         func_8082F43C(play, this, func_80848BF4);
@@ -3733,34 +3736,38 @@ s32 func_808306F8(Player* this, PlayState* play) {
         this->unk_ACC = 14;
 
         if (this->unk_B28 >= 0) {
-            s32 var_v1;
-            ItemID item;//sp50;
-            s32 sp4C;
-            s32 var_t0; // sp48
+            s32 var_v1 = ABS_ALT(this->unk_B28);
+            ItemID item;
+            s32 arrowType;
+            s32 magicArrowType;
 
-            var_v1 = ABS_ALT(this->unk_B28);
             if (var_v1 != 2) {
-                func_800B8E58(this, D_8085CFB0[var_v1-1]);
+                func_800B8E58(this, D_8085CFB0[var_v1 - 1]);
             }
 
-            if (!Player_IsHoldingHookshot(this) && (func_808305BC(play, this, &item, &sp4C) > 0)) {
+            if (!Player_IsHoldingHookshot(this) && (func_808305BC(play, this, &item, &arrowType) > 0)) {
                 if (this->unk_B28 >= 0) {
-                    var_t0 = sp4C - 3;
-                    if ((sp4C - 3 >= 0) && (sp4C - 3 < 3)) {
-                        if (((void)0, gSaveContext.save.playerData.magic) < D_8085CFB8[var_t0]) {
-                            sp4C = 2;
-                            var_t0 = -1;
+                    magicArrowType = arrowType - ENARROW_3;
+
+                    if ((arrowType - ENARROW_3 >= ENARROW_3 - ENARROW_3) &&
+                        (arrowType - ENARROW_3 <= ENARROW_5 - ENARROW_3)) {
+                        if (((void)0, gSaveContext.save.playerData.magic) < sMagicArrowCosts[magicArrowType]) {
+                            arrowType = ENARROW_2;
+                            magicArrowType = -1;
                         }
-                    } else if ((sp4C == 7) && (!(gSaveContext.save.weekEventReg[8] & 1) || (play->sceneNum != SCENE_BOWLING))) {
-                        var_t0 = 3;
+                    } else if ((arrowType == ENARROW_7) &&
+                               (!(gSaveContext.save.weekEventReg[8] & 1) || (play->sceneNum != SCENE_BOWLING))) {
+                        magicArrowType = ENARROW_3;
                     } else {
-                        var_t0 = -1;
+                        magicArrowType = -1;
                     }
 
-                    this->heldActor = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_ARROW, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, sp4C);
+                    this->heldActor = Actor_SpawnAsChild(
+                        &play->actorCtx, &this->actor, play, ACTOR_EN_ARROW, this->actor.world.pos.x,
+                        this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, arrowType);
 
-                    if ((this->heldActor != NULL) && (var_t0 >= 0)) {
-                        func_80115DB4(play, D_8085CFB8[var_t0], 0);
+                    if ((this->heldActor != NULL) && (magicArrowType >= 0)) {
+                        func_80115DB4(play, sMagicArrowCosts[magicArrowType], 0);
                     }
                 }
             }

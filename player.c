@@ -1410,7 +1410,7 @@ struct_8085CF88 D_8085CF88[2] = {
 };
 u16 D_8085CFA8[4] = { 0x4000, 2, 4, 1 };
 u8 D_8085CFB0[8] = { 8, 0x60, 0, 0, 0x18, 0x27, 0, 0 };
-u8 D_8085CFB8[4] = { 4, 4, 8, 2 };
+u8 sMagicArrowCosts[4] = { 4, 4, 8, 2 };
 LinkAnimationHeader* D_8085CFBC[2] = { (LinkAnimationHeader* )0x0400D470, (LinkAnimationHeader* )0x0400D478 };
 LinkAnimationHeader* D_8085CFC4[2] = { (LinkAnimationHeader* )0x0400D458, (LinkAnimationHeader* )0x0400D460 };
 LinkAnimationHeader* D_8085CFCC[2] = { (LinkAnimationHeader* )0x0400D400, (LinkAnimationHeader* )0x0400D408 };
@@ -3596,7 +3596,7 @@ s32 func_808306F8(Player* this, PlayState* play) {
             if (this->unk_B28 >= 0) {
                 var_t0 = temp_v0_3;
                 if ((temp_v0_3 >= 0) && (temp_v0_3 < 3)) {
-                    if (gSaveContext.save.playerData.magic < (s32) D_8085CFB8[temp_v0_3]) {
+                    if (gSaveContext.save.playerData.magic < (s32) sMagicArrowCosts[temp_v0_3]) {
                         var_t0 = -1;
                         sp4C = ITEM_ARROW_FIRE;
                     }
@@ -3609,7 +3609,7 @@ s32 func_808306F8(Player* this, PlayState* play) {
                 temp_v0_4 = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, 0xF, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, (s16) 0, (s16) (s32) this->actor.shape.rot.y, (s16) 0, sp4C);
                 this->heldActor = temp_v0_4;
                 if ((temp_v0_4 != NULL) && (var_t0 >= 0)) {
-                    func_80115DB4(play, (s16) D_8085CFB8[var_t0], 0);
+                    func_80115DB4(play, (s16) sMagicArrowCosts[var_t0], 0);
                 }
             }
         }
