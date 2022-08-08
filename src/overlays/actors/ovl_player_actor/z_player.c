@@ -8815,7 +8815,7 @@ void func_8083EA44(Player* this, f32 arg1) {
     } else if (arg1 > 7.25f) {
         arg1 = 7.25f;
     }
-    
+
     sp24 = func_8083E9C4(this->unk_B38, arg1, 29.0f, 10.0f);
 
     if (sp24 || func_8083E9C4(this->unk_B38, arg1, 29.0f, 24.0f)) {
@@ -8823,7 +8823,7 @@ void func_8083EA44(Player* this, f32 arg1) {
         if (this->linearVelocity > 4.0f) {
             this->stateFlags2 |= 8;
         }
-         this->actor.shape.unk_17 = sp24 ? 1 : 2;
+        this->actor.shape.unk_17 = sp24 ? 1 : 2;
     }
 
     this->unk_B38 += arg1;
@@ -9351,75 +9351,66 @@ void func_808409A8(PlayState* play, Player* this, f32 speedXZ, f32 yVelocity) {
     }
 }
 
-// TODO: remove gotos
+// Check if bonked and if so, rumble, play sound, etc.
 s32 func_80840A30(PlayState* play, Player* this, f32* arg2, f32 arg3) {
-    Actor* var_a3; // sp2C
-    DynaPolyActor* temp_v0_3;
-    s16 temp_v0_2;
+    Actor* cylinderOc;
 
-    var_a3 = NULL;
+    cylinderOc = NULL;
     if (arg3 <= *arg2) {
-        if (!(this->actor.bgCheckFlags & 0x200) || (D_80862B24 >= 0x1C00)) {
-            if (this->cylinder.base.ocFlags1 & 2) {
-                var_a3 = this->cylinder.base.oc;
-                if (var_a3 != NULL) {
-                    if (var_a3->id != ACTOR_EN_TWIG) {
-                        if ((var_a3->id == ACTOR_EN_WOOD02) || (var_a3->id == ACTOR_EN_SNOWWD) ||
-                            (var_a3->id == ACTOR_OBJ_TREE)) {
-                            temp_v0_2 = this->actor.world.rot.y - var_a3->yawTowardsPlayer;
-                            if (ABS_ALT(temp_v0_2) > 0x6000) {
-                                goto block_12;
-                            }
-                            goto block_29;
-                        }
-                        goto block_29;
-                    }
-                    goto block_12;
+        // If interacting with a wall and close to facing it
+        if (((this->actor.bgCheckFlags & 0x200) && (D_80862B24 < 0x1C00)) ||
+            // or, impacting something's cylinder
+            (((this->cylinder.base.ocFlags1 & OC1_HIT) && (cylinderOc = this->cylinder.base.oc) != NULL) &&
+             // and that something is a Beaver Race ring,
+             ((cylinderOc->id == ACTOR_EN_TWIG) ||
+              // or something is a tree and `this` is close to facing it (note the this actor's facing direction would
+              // be antiparallel to the cylinder's actor's yaw if this was directly facing it)
+              (((cylinderOc->id == ACTOR_EN_WOOD02) || (cylinderOc->id == ACTOR_EN_SNOWWD) ||
+                (cylinderOc->id == ACTOR_OBJ_TREE)) &&
+               (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, cylinderOc->yawTowardsPlayer)) > 0x6000))))) {
+
+            if (!func_8082DA90(play)) {
+                if (this->doorType == PLAYER_DOORTYPE_STAIRCASE) {
+                    func_8085B384(this, play);
+                    return true;
                 }
-            }
-            goto block_29;
-        }
-    block_12:
-        if (!func_8082DA90(play)) {
-            if (this->doorType == PLAYER_DOORTYPE_STAIRCASE) {
-                func_8085B384(this, play);
+
+                if (cylinderOc != NULL) {
+                    cylinderOc->home.rot.y = 1;
+                } else if (this->actor.wallBgId != BGCHECK_SCENE) { // i.e. was an actor
+                    DynaPolyActor* wallPolyActor = DynaPoly_GetActor(&play->colCtx, this->actor.wallBgId);
+
+                    // Large crates, barrels and palm trees
+                    if ((wallPolyActor != NULL) &&
+                        ((wallPolyActor->actor.id == ACTOR_OBJ_KIBAKO2) ||
+                         (wallPolyActor->actor.id == ACTOR_OBJ_TARU) || (wallPolyActor->actor.id == ACTOR_OBJ_YASI))) {
+                        wallPolyActor->actor.home.rot.z = 1;
+                    }
+                }
+
+                if (!(this->stateFlags3 & PLAYER_STATE3_1000)) {
+                    if ((this->stateFlags3 & PLAYER_STATE3_8000) && (func_8084CA24 != this->actionFunc)) {
+                        Player_SetAction(play, this, func_80851B58, 0);
+                        func_8082DB90(play, this, &gameplay_keep_Linkanim_00DFF8);
+                        func_8082DD2C(play, this);
+                        this->linearVelocity *= 0.2f;
+                    } else {
+                        Player_SetAction(play, this, func_8084C6EC, 0);
+                        Player_AnimationPlayOnce(play, this, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_16, this->modelAnimType));
+                        this->unk_AE8 = 1;
+                    }
+                }
+
+                this->linearVelocity = -this->linearVelocity;
+                func_80836EA0(play, 33267, 3, 12);
+                Player_RequestRumble(play, this, 255, 20, 150, SQ(0));
+                func_800B648C(play, 2, 2, 100.0f, &this->actor.world.pos);
+                func_800B8E58(this, NA_SE_PL_BODY_HIT);
+                func_8082DF8C(this, NA_SE_VO_LI_CLIMB_END);
                 return true;
             }
-
-            if (var_a3 != NULL) {
-                var_a3->home.rot.y = 1;
-            } else if (this->actor.wallBgId != 0x32) {
-                temp_v0_3 = DynaPoly_GetActor(&play->colCtx, this->actor.wallBgId);
-                if ((temp_v0_3 != NULL) &&
-                    ((temp_v0_3->actor.id == ACTOR_OBJ_KIBAKO2) || (temp_v0_3->actor.id == ACTOR_OBJ_TARU) ||
-                     (temp_v0_3->actor.id == ACTOR_OBJ_YASI))) {
-                    temp_v0_3->actor.home.rot.z = 1;
-                }
-            }
-
-            if (!(this->stateFlags3 & PLAYER_STATE3_1000)) {
-                if ((this->stateFlags3 & PLAYER_STATE3_8000) && (func_8084CA24 != this->actionFunc)) {
-                    Player_SetAction(play, this, func_80851B58, 0);
-                    func_8082DB90(play, this, &gameplay_keep_Linkanim_00DFF8);
-                    func_8082DD2C(play, this);
-                    this->linearVelocity *= 0.2f;
-                } else {
-                    Player_SetAction(play, this, func_8084C6EC, 0);
-                    Player_AnimationPlayOnce(play, this, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_16, this->modelAnimType));
-                    this->unk_AE8 = 1;
-                }
-            }
-
-            this->linearVelocity = -this->linearVelocity;
-            func_80836EA0(play, 0x81F3U, 3, 12);
-            Player_RequestRumble(play, this, 255, 20, 150, SQ(0));
-            func_800B648C(play, 2, 2, 100.0f, &this->actor.world.pos);
-            func_800B8E58(this, NA_SE_PL_BODY_HIT);
-            func_8082DF8C(this, NA_SE_VO_LI_CLIMB_END);
-            return true;
         }
     }
-block_29:
     return false;
 }
 

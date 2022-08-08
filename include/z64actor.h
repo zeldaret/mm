@@ -208,7 +208,7 @@ typedef enum {
  * 0x040 : Has touched water (actor is responsible for unsetting this the frame it touches the water)
  * 0x080 : Similar to & 0x1 but with no velocity check and is cleared every frame
  * 0x100 : Crushed between a floor and ceiling (triggers a void for player)
- * 0x200 : Unknown (only set/used by player so far)
+ * 0x200 : Only set/used by player, related to interacting with walls
  */
 
 typedef struct {
