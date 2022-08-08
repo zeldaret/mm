@@ -2901,47 +2901,41 @@ void func_8082E1F0(Player* this, u16 sfxId) {
     this->stateFlags2 |= 8;
 }
 
-void func_8082E224(Player* this, struct_8082E224_arg1* arg1);
-#ifdef NON_MATCHING
-// regalloc around } while ((temp_v0 >= 0) != 0);
-void func_8082E224(Player* arg0, struct_8082E224_arg1* arg1) {
-    s32 temp_v0;
+void func_8082E224(Player* this, struct_8082E224_arg1* entry) {
+    s32 cond;
 
     do {
-        s32 var_s0 = ABS_ALT(arg1->flags);
-        s32 temp_v0_3;
+        s32 data = ABS_ALT(entry->flags);
+        s32 flags = data & 0x7800;
 
-        temp_v0_3 = var_s0 & 0x7800;
-        if (LinkAnimation_OnFrame(&arg0->skelAnime, fabsf((f32)(var_s0 & 0x7FF)))) {
-            if (temp_v0_3 == 0x800) {
-                func_800B8E58(arg0, arg1->sfxId);
-            } else if (temp_v0_3 == 0x1000) {
-                func_8082E094(arg0, arg1->sfxId);
-            } else if (temp_v0_3 == 0x1800) {
-                func_8082E0F4(arg0, arg1->sfxId);
-            } else if (temp_v0_3 == 0x2000) {
-                func_8082DF8C(arg0, arg1->sfxId);
-            } else if (temp_v0_3 == 0x2800) {
-                func_8082E1BC(arg0);
-            } else if (temp_v0_3 == 0x3000) {
-                func_8082E12C(arg0, 6.0f);
-            } else if (temp_v0_3 == 0x3800) {
-                func_8082E188(arg0);
-            } else if (temp_v0_3 == 0x4000) {
-                func_8082E12C(arg0, 0.0f);
-            } else if (temp_v0_3 == 0x4800) {
-                func_8019F638(&arg0->actor.projectedPos, arg0->ageProperties->unk_94 + NA_SE_PL_WALK_LADDER, 0.0f);
-            } else if (temp_v0_3 == 0x5000) {
-                func_800B8E58(arg0, arg1->sfxId + arg0->ageProperties->unk_94);
+        if (LinkAnimation_OnFrame(&this->skelAnime, fabsf(data & 0x7FF))) {
+            if (flags == 0x800) {
+                func_800B8E58(this, entry->sfxId);
+            } else if (flags == 0x1000) {
+                func_8082E094(this, entry->sfxId);
+            } else if (flags == 0x1800) {
+                func_8082E0F4(this, entry->sfxId);
+            } else if (flags == 0x2000) {
+                func_8082DF8C(this, entry->sfxId);
+            } else if (flags == 0x2800) {
+                func_8082E1BC(this);
+            } else if (flags == 0x3000) {
+                func_8082E12C(this, 6.0f);
+            } else if (flags == 0x3800) {
+                func_8082E188(this);
+            } else if (flags == 0x4000) {
+                func_8082E12C(this, 0.0f);
+            } else if (flags == 0x4800) {
+                func_8019F638(&this->actor.projectedPos, this->ageProperties->unk_94 + NA_SE_PL_WALK_LADDER, 0.0f);
+            } else if (flags == 0x5000) {
+                func_800B8E58(this, entry->sfxId + this->ageProperties->unk_94);
             }
         }
-        temp_v0 = arg1->flags;
-        arg1 += 1;
-    } while ((temp_v0 >= 0) != 0);
+
+        cond = entry->flags >= 0;
+        entry++;
+    } while (cond);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082E224.s")
-#endif
 
 void func_8082E438(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     LinkAnimation_Change(play, &this->skelAnime, anim, 3.0f / 3.0f, 0.0f, Animation_GetLastFrame(anim), ANIMMODE_ONCE,
