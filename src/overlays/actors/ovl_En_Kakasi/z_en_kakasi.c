@@ -309,7 +309,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
                 gSaveContext.save.weekEventReg[83] &= (u8)~1;
                 this->talkState = TEXT_STATE_5;
                 player->stateFlags1 |= PLAYER_STATE1_20;
-                this->actor.flags |= ACTOR_FLAG_10000;
+                this->picto.actor.flags |= ACTOR_FLAG_10000;
             }
 
             if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {

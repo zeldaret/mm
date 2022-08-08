@@ -2843,7 +2843,7 @@ void func_8082E00C(Player* this) {
     u16* sfxIdPtr = D_8085C3EC;
 
     for (i = 0; i < ARRAY_COUNT(D_8085C3EC); i++) {
-        func_801A75E8(*sfxIdPtr + this->ageProperties->unk_92);
+        Audio_StopSfxById(*sfxIdPtr + this->ageProperties->unk_92);
         sfxIdPtr++;
     }
 }
@@ -4118,7 +4118,7 @@ s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc,
     play->actorCtx.unk5 &= ~4;
 
     if (this->actor.flags & ACTOR_FLAG_20000000) {
-        AudioOcarina_SetInstrumentId(OCARINA_INSTRUMENT_OFF);
+        AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
         this->actor.flags &= ~ACTOR_FLAG_20000000;
     } else if ((func_80857BE8 == this->actionFunc) || (func_808561B0 == this->actionFunc)) {
         this->actor.shape.shadowDraw = ActorShadow_DrawFeet;
@@ -7692,7 +7692,7 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
             if (play->sceneNum == SCENE_00KEIKOKU) {
                 temp_fv1 = (s16)(thisx->focus.rot.x - temp_v1_2);
                 temp_fa0 = (s16)(thisx->focus.rot.y - temp_t1);
-                func_8019FAD8(&D_801DB4A4, NA_SE_PL_TELESCOPE_MOVEMENT - SFX_FLAG,
+                func_8019FAD8(&gSfxDefaultPos, NA_SE_PL_TELESCOPE_MOVEMENT - SFX_FLAG,
                               sqrtf(SQ(temp_fv1) + SQ(temp_fa0)) / 300.0f);
             }
         }
@@ -15047,10 +15047,10 @@ block_17:
                 }
 
                 if (this->transformation == 4) {
-                    func_801A75E8(0x9AAU);
-                    func_801A75E8(0x1858U);
+                    Audio_StopSfxById(0x9AAU);
+                    Audio_StopSfxById(0x1858U);
                 } else {
-                    func_801A75E8(0x9A4U);
+                    Audio_StopSfxById(0x9A4U);
                 }
             }
             func_800B8E58(this, 0x484FU);
