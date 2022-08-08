@@ -3689,8 +3689,6 @@ void func_808304BC(Player* this, PlayState* play) {
     }
 }
 
-#ifdef NON_MATCHING
-// missing instruction
 s32 func_808305BC(PlayState* play, Player* this, ItemID* item, s32* typeParam) {
     if (this->itemActionParam == PLAYER_AP_NUT) {
         *item = ITEM_NUT;
@@ -3702,11 +3700,10 @@ s32 func_808305BC(PlayState* play, Player* this, ItemID* item, s32* typeParam) {
     }
 
     if (this->transformation == PLAYER_FORM_DEKU) {
-        if ((gSaveContext.save.playerData.magic >= 2) ||
-            ((gSaveContext.save.weekEventReg[8] & 1) && (play->sceneNum == SCENE_BOWLING))) {
-            return 1;
-        }
-        return 0;
+        return ((gSaveContext.save.playerData.magic >= 2) ||
+                ((gSaveContext.save.weekEventReg[8] & 1) && (play->sceneNum == SCENE_BOWLING)))
+                   ? 1
+                   : 0;
     }
     if (this->stateFlags3 & PLAYER_STATE3_400) {
         return 1;
@@ -3720,10 +3717,6 @@ s32 func_808305BC(PlayState* play, Player* this, ItemID* item, s32* typeParam) {
 
     return AMMO(*item);
 }
-#else
-s32 func_808305BC(PlayState* play, Player* this, ItemID* item, s32* typeParam);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808305BC.s")
-#endif
 
 // Draw bow or hookshot / first person items?
 s32 func_808306F8(Player* this, PlayState* play) {
