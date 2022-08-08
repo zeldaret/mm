@@ -78,8 +78,11 @@ typedef enum AnimSfxType {
 #define ANIMSFX_CONTINUE (1)
 #define ANIMSFX_STOP (0)
 
+#define ANIMSFX_FLAGS(type, frame, cont) \
+    (((ANIMSFX_##cont) == ANIMSFX_STOP ? -1 : 1) * (ANIMSFX_SHIFT_TYPE(type) | ((frame)&0x7FF)))
+
 #define ANIMSFX(type, frame, sfxId, cont) \
-    { (sfxId), (((ANIMSFX_##cont) == ANIMSFX_STOP ? -1 : 1) * (ANIMSFX_SHIFT_TYPE(type) | ((frame)&0x7FF))) }
+    { (sfxId), ANIMSFX_FLAGS(type, frame, cont) }
 
 #define ANIMSFX_GET_TYPE(data) ((data)&0x7800)
 #define ANIMSFX_GET_FRAME(data) ((data)&0x7FF)
@@ -10018,7 +10021,7 @@ void func_808426F0(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808426F0.s")
 
 s32 func_808430E0(Player* this) {
-    if ((this->transformation == PLAYER_FORM_DEKU) && (this->actor.bgCheckFlags & 1) && (func_8083784C(this) != 0)) {
+    if ((this->transformation == PLAYER_FORM_DEKU) && (this->actor.bgCheckFlags & 1) && func_8083784C(this)) {
         this->actor.bgCheckFlags &= ~1;
     }
     if (this->actor.bgCheckFlags & 1) {
@@ -13870,9 +13873,9 @@ void func_808505D0(Player* this, PlayState* play) {
         }
     } else {
         if (this->mountSide < 0) {
-            D_8085D708[0].flags = 0x2828;
+            D_8085D708[0].flags = ANIMSFX_FLAGS(ANIMSFX_TYPE_5, 40, CONTINUE);
         } else {
-            D_8085D708[0].flags = 0x281D;
+            D_8085D708[0].flags = ANIMSFX_FLAGS(ANIMSFX_TYPE_5, 29, CONTINUE);
         }
 
         Player_PlayAnimSfx(this, D_8085D708);
