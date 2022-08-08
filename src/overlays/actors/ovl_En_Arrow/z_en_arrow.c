@@ -442,7 +442,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                 this->actor.shape.rot.x = this->actor.world.rot.x;
 
                 this->bubble.unk_14C += (s16)(this->bubble.unk_144 * (500.0f + Rand_ZeroFloat(1400.0f)));
-                this->actor.shape.rot.y = this->actor.world.rot.y += (s16)(500.0f * Math_SinS(this->bubble.unk_14C));
+                this->actor.world.rot.y += (s16)(500.0f * Math_SinS(this->bubble.unk_14C));
 
                 this->actor.shape.rot.y = this->actor.world.rot.y;
 
