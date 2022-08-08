@@ -383,7 +383,7 @@ typedef enum {
 
 // Taken from OoT
 // TODO: check if those values are the same.
-typedef enum {
+typedef enum PlayerBodyPart {
     /* 0x00 */ PLAYER_BODYPART_WAIST,      // PLAYER_LIMB_WAIST
     /* 0x01 */ PLAYER_BODYPART_R_THIGH,    // PLAYER_LIMB_R_THIGH
     /* 0x02 */ PLAYER_BODYPART_R_SHIN,     // PLAYER_LIMB_R_SHIN
@@ -631,7 +631,7 @@ typedef struct struct_80122744_arg1 {
 #define PLAYER_STATE3_400        (1 << 10)
 // 
 #define PLAYER_STATE3_800        (1 << 11)
-// being curled?
+// goron curled?
 #define PLAYER_STATE3_1000       (1 << 12)
 // 
 #define PLAYER_STATE3_2000       (1 << 13)
