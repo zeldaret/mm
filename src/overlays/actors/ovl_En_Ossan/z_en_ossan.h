@@ -35,7 +35,7 @@ typedef struct EnOssan {
     /* 0x230 */ f32 cursorAnimTween;
     /* 0x234 */ u8 cursorAnimState;
     /* 0x235 */ u8 drawCursor;
-    /* 0x236 */ u8 cursorIdx;
+    /* 0x236 */ u8 cursorIndex;
     /* 0x238 */ StickDirectionPrompt stickLeftPrompt;
     /* 0x270 */ StickDirectionPrompt stickRightPrompt;
     /* 0x2A8 */ f32 arrowAnimTween;

@@ -100,6 +100,6 @@
         <Limb Name="gTrtTeethLimb" Type="Standard" EnumName="TRT_LIMB_TEETH" Offset="0xFE64" />
         <Limb Name="gTrtLeftHairPieceStartLimb" Type="Standard" EnumName="TRT_LIMB_LEFT_HAIR_PIECE_START" Offset="0xFE70" />
         <Limb Name="gTrtLeftHairPieceEndLimb" Type="Standard" EnumName="TRT_LIMB_LEFT_HAIR_PIECE_END" Offset="0xFE7C" />
-        <Skeleton Name="gTrtSkel" Type="Flex" LimbType="Standard" LimbNone="TRT_LIMB_NONE" LimbMax="TRT_LIMB_MAX" EnumName="TrtLimbs" Offset="0xFEF0" />
+        <Skeleton Name="gTrtSkel" Type="Flex" LimbType="Standard" LimbNone="TRT_LIMB_NONE" LimbMax="TRT_LIMB_MAX" EnumName="TrtLimb" Offset="0xFEF0" />
     </File>
 </Root>
