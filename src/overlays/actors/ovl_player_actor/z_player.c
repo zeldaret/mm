@@ -9353,9 +9353,8 @@ void func_808409A8(PlayState* play, Player* this, f32 speedXZ, f32 yVelocity) {
 
 // Check if bonked and if so, rumble, play sound, etc.
 s32 func_80840A30(PlayState* play, Player* this, f32* arg2, f32 arg3) {
-    Actor* cylinderOc;
+    Actor* cylinderOc = NULL;
 
-    cylinderOc = NULL;
     if (arg3 <= *arg2) {
         // If interacting with a wall and close to facing it
         if (((this->actor.bgCheckFlags & 0x200) && (D_80862B24 < 0x1C00)) ||
