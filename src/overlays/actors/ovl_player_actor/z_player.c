@@ -5601,7 +5601,7 @@ s32 func_80834DFC(Player* this, PlayState* play) {
             return false;
         }
 
-        if ((this->actor.wallBgId != 0x32) && (D_80862B0C & 0x40)) {
+        if ((this->actor.wallBgId != BGCHECK_SCENE) && (D_80862B0C & 0x40)) {
             if (this->unk_B5D >= 6) {
                 this->stateFlags2 |= PLAYER_STATE2_4;
                 if (CHECK_BTN_ALL(D_80862B44->press.button, BTN_A)) {
@@ -5652,7 +5652,7 @@ s32 func_80834DFC(Player* this, PlayState* play) {
                     BgCheck_EntityRaycastFloor5(&play->colCtx, &poly, &bgId, &this->actor, &this->actor.world.pos);
                 if ((this->actor.world.pos.y - yIntersect) <= 20.0f) {
                     this->actor.world.pos.y = yIntersect;
-                    if (bgId != 0x32) {
+                    if (bgId != BGCHECK_SCENE) {
                         DynaPolyActor_SetRidingMovingStateByIndex(&play->colCtx, bgId);
                     }
                 }
@@ -8604,7 +8604,7 @@ s32 func_8083DFC4(Player* this, PlayState* play) {
             if (CHECK_BTN_ALL(D_80862B44->cur.button, BTN_A)) {
                 DynaPolyActor* dyna;
 
-                if ((this->actor.wallBgId != 0x32) &&
+                if ((this->actor.wallBgId != BGCHECK_SCENE) &&
                     ((dyna = DynaPoly_GetActor(&play->colCtx, this->actor.wallBgId)) != NULL)) {
                     this->rightHandActor = &dyna->actor;
                 } else {
@@ -8625,7 +8625,7 @@ s32 func_8083E14C(PlayState* play, Player* this) {
         ((this->stateFlags2 & PLAYER_STATE2_10) || CHECK_BTN_ALL(D_80862B44->cur.button, BTN_A))) {
         DynaPolyActor* var_v1 = NULL;
 
-        if (this->actor.wallBgId != 0x32) {
+        if (this->actor.wallBgId != BGCHECK_SCENE) {
             var_v1 = DynaPoly_GetActor(&play->colCtx, this->actor.wallBgId);
         }
 
@@ -11307,7 +11307,7 @@ s32 func_80847994(PlayState* play, Player* this) {
 }
 
 void func_808479F4(PlayState* play, Player* this, f32 arg2) {
-    if (this->actor.wallBgId != 0x32) {
+    if (this->actor.wallBgId != BGCHECK_SCENE) {
         DynaPolyActor* actor = DynaPoly_GetActor(&play->colCtx, this->actor.wallBgId);
 
         if (actor != NULL) {
@@ -15231,7 +15231,7 @@ void func_808561B0(Player* this, PlayState* play) {
             this->actor.scale.z = this->actor.scale.x = 0.01f - (this->unk_B48 * -0.000015f);
 
             this->actor.shape.rot.y += (s16)(this->unk_B48 * 130.0f);
-            if (this->actor.floorBgId != 0x32) {
+            if (this->actor.floorBgId != BGCHECK_SCENE) {
                 dyna = DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId);
 
                 if (dyna != NULL) {
@@ -15271,7 +15271,7 @@ void func_808561B0(Player* this, PlayState* play) {
             sp38 = (this->unk_AE8 >= 0xA);
             var_v1 = -1;
             var_fv0 = this->unk_B48 * this->actor.scale.y;
-            if (this->actor.floorBgId != 0x32) {
+            if (this->actor.floorBgId != BGCHECK_SCENE) {
                 dyna = DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId);
                 var_v1 = 0;
                 if ((dyna != NULL) && (dyna->actor.id == ACTOR_OBJ_ETCETERA) && (dyna->actor.params & 0x100)) {
