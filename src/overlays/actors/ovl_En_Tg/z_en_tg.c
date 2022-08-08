@@ -18,9 +18,9 @@ void EnTg_Update(Actor* thisx, PlayState* play);
 void EnTg_Draw(Actor* thisx, PlayState* play);
 
 void func_8098FA70(EnTg* this, PlayState* play);
-void func_8098FEA8(PlayState* play, EnTgIdk* ptr, s32 len);
-void func_8099000C(PlayState* play, EnTgIdk* ptr, s32 len);
-void func_8098FD50(EnTg* this, EnTgIdk* ptr, Vec3f* arg2, s32 arg3);
+void func_8098FEA8(PlayState* play, EnTgUnkStruct* enTgUnkStruct, s32 len);
+void func_8099000C(PlayState* play, EnTgUnkStruct* enTgUnkStruct, s32 len);
+void func_8098FD50(EnTg* this, EnTgUnkStruct* enTgUnkStruct, Vec3f* arg2, s32 arg3);
 
 const ActorInit En_Tg_InitVars = {
     ACTOR_EN_TG,
@@ -162,10 +162,10 @@ void func_8098FA70(EnTg* this, PlayState* play) {
     this->actor.world.rot = this->actor.shape.rot;
 
     if (DECR(this->unk2EC) == 0) {
-        this->unk2EC = 0xC;
+        this->unk2EC = 12;
         sp24 = this->actor.world.pos;
         sp24.y += 62.0f;
-        func_8098FD50(this, &this->unk2F0, &sp24, 0xA);
+        func_8098FD50(this, &this->enTgUnkStruct, &sp24, 10);
     }
 }
 
@@ -176,7 +176,7 @@ void EnTg_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4U);
     func_8098F928(this, play);
-    func_8098FEA8(play, &this->unk2F0, 0xA);
+    func_8098FEA8(play, &this->enTgUnkStruct, 0xA);
     EnTg_UpdateCollider(this, play);
 }
 
@@ -206,7 +206,7 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
     GraphicsContext* gfxCtx;
 
     Matrix_Push();
-    func_8099000C(play, &this->unk2F0, 0xA);
+    func_8099000C(play, &this->enTgUnkStruct, 0xA);
     Matrix_Pop();
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -223,58 +223,58 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FD50.s")
-void func_8098FD50(EnTg* this, EnTgIdk* ptr, Vec3f* arg2, s32 len) {
+void func_8098FD50(EnTg* this, EnTgUnkStruct* enTgUnkStruct, Vec3f* arg2, s32 len) {
     Vec3f sp2C = D_80990234;
     Vec3f sp20 = D_80990240;
     s32 i = 0;
 
-    while ((i < len) && (ptr->unk0 != 0)) {
+    while ((i < len) && (enTgUnkStruct->unk0 != 0)) {
         i++;
-        ptr++;
+        enTgUnkStruct++;
     }
 
     if (i < len) {
-        ptr->unk0 = 1;
-        ptr->unk14 = *arg2;
-        ptr->unk2C = sp2C;
-        ptr->unk20 = sp20;
-        ptr->unk4 = 0.01f;
+        enTgUnkStruct->unk0 = 1;
+        enTgUnkStruct->unk14 = *arg2;
+        enTgUnkStruct->unk2C = sp2C;
+        enTgUnkStruct->unk20 = sp20;
+        enTgUnkStruct->unk4 = 0.01f;
 
-        ptr->unk14.x += 4.0f * Math_SinS(this->actor.shape.rot.y);
-        ptr->unk14.z += 4.0f * Math_CosS(this->actor.shape.rot.y);
-        ptr->unk1 = 0x10;
+        enTgUnkStruct->unk14.x += 4.0f * Math_SinS(this->actor.shape.rot.y);
+        enTgUnkStruct->unk14.z += 4.0f * Math_CosS(this->actor.shape.rot.y);
+        enTgUnkStruct->unk1 = 0x10;
     }
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FEA8.s")
 // Looks just like func_809647EC in z_en_fu.c
 // Called in Update
-void func_8098FEA8(PlayState* play, EnTgIdk* ptr, s32 len) {
+void func_8098FEA8(PlayState* play, EnTgUnkStruct* enTgUnkStruct, s32 len) {
     Vec3f sp44 = D_8099024C;
     s16 yaw = Camera_GetInputDirYaw(GET_ACTIVE_CAM(play));
     s32 i;
 
-    for (i = 0; i < len; i++, ptr++) {
-        if (ptr->unk0 == 1) {
-            if (DECR(ptr->unk1) == 0) {
-                ptr->unk0 = 0U;
+    for (i = 0; i < len; i++, enTgUnkStruct++) {
+        if (enTgUnkStruct->unk0 == 1) {
+            if (DECR(enTgUnkStruct->unk1) == 0) {
+                enTgUnkStruct->unk0 = 0U;
             }
-            ptr->unk14.y += ptr->unk2C.y;
-            ptr->unk14.x += 2.0f * Math_SinS(ptr->unk38);
-            ptr->unk14.z += 2.0f * Math_CosS(ptr->unk38);
+            enTgUnkStruct->unk14.y += enTgUnkStruct->unk2C.y;
+            enTgUnkStruct->unk14.x += 2.0f * Math_SinS(enTgUnkStruct->unk38);
+            enTgUnkStruct->unk14.z += 2.0f * Math_CosS(enTgUnkStruct->unk38);
             Matrix_Push();
-            Matrix_Translate(ptr->unk14.x, ptr->unk14.y, ptr->unk14.z, MTXMODE_NEW);
+            Matrix_Translate(enTgUnkStruct->unk14.x, enTgUnkStruct->unk14.y, enTgUnkStruct->unk14.z, MTXMODE_NEW);
             Matrix_RotateYS(yaw, MTXMODE_APPLY);
-            Matrix_MultVec3f(&sp44, &ptr->unk14);
+            Matrix_MultVec3f(&sp44, &enTgUnkStruct->unk14);
             Matrix_Pop();
-            ptr->unk38 += 6000;
+            enTgUnkStruct->unk38 += 6000;
         }
     }
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8099000C.s")
 // Called in Draw
-void func_8099000C(PlayState* play, EnTgIdk* ptr, s32 len) {
+void func_8099000C(PlayState* play, EnTgUnkStruct* enTgUnkStruct, s32 len) {
     s32 i;
     s32 flag = false;
 
@@ -283,15 +283,15 @@ void func_8099000C(PlayState* play, EnTgIdk* ptr, s32 len) {
     POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
 
-    for (i = 0; i < len; i++, ptr++) {
-        if (ptr->unk0 == 1) {
+    for (i = 0; i < len; i++, enTgUnkStruct++) {
+        if (enTgUnkStruct->unk0 == 1) {
             if (!flag) {
                 gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0A0);
                 flag = true;
             }
-            Matrix_Translate(ptr->unk14.x, ptr->unk14.y, ptr->unk14.z, MTXMODE_NEW);
+            Matrix_Translate(enTgUnkStruct->unk14.x, enTgUnkStruct->unk14.y, enTgUnkStruct->unk14.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
-            Matrix_Scale(ptr->unk4, ptr->unk4, ptr->unk4, MTXMODE_APPLY);
+            Matrix_Scale(enTgUnkStruct->unk4, enTgUnkStruct->unk4, enTgUnkStruct->unk4, MTXMODE_APPLY);
 
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
