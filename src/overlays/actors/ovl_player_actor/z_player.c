@@ -38,11 +38,6 @@ void Player_Destroy(Actor* thisx, PlayState* play);
 void Player_Update(Actor* thisx, PlayState* play);
 void Player_Draw(Actor* thisx, PlayState* play);
 
-extern void (*D_8085D2CC[0x10])(PlayState* play, Player* this);
-extern PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX];
-extern LinkAnimationHeader* D_8085D160[PLAYER_FORM_MAX];
-extern Vec3f D_8085D340;
-
 s32 Player_GrabPlayer(PlayState* play, Player* player);
 s32 func_8085B28C(PlayState* play, Player* player, s32 mode);
 void func_8085B384(Player* player, PlayState* play);
@@ -565,8 +560,6 @@ struct _struct_D_8085D200_0xC {
     /* 0x8 */ u8 unk_8;                   /* inferred */
     /* 0x9 */ u8 unk_9;                   /* inferred */
 };                                        /* size = 0xC */
-
-extern struct_8085CF88 D_8085CF88[];
 
 // TODO: less dumb name
 #define SFX_VOICE_BANK_SIZE 0x20
@@ -1125,42 +1118,88 @@ struct_8085C2A4 D_8085C2A4[6] = {
     },
 };
 
+// sCylinderInit
 ColliderCylinderInit D_8085C2EC = {
-    { 5, 0, 0x11, 0x39, 8, 1 },
-    { 1, { 0, 0, 0 }, { 0xF7CFFFFF, 0, 0 }, 0, 1, 1 },
-    { 0xC, 0x3C, 0, { 0, 0, 0 } },
+    {
+        COLTYPE_HIT5,
+        AT_NONE,
+        AC_ON | AC_TYPE_ENEMY,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_PLAYER,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK1,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
+    { 12, 60, 0, { 0, 0, 0 } },
 };
 
+// sShieldCylinderInit
 ColliderCylinderInit D_8085C318 = {
-    { 9, 9, 0x15, 0, 8, 1 },
-    { 2, { 0x100000, 0, 2 }, { 0xD7CFFFFF, 0, 0 }, 0, 1, 1 },
-    { 0x19, 0x3C, 0, { 0, 0, 0 } },
+    {
+        COLTYPE_METAL,
+        AT_ON | AT_TYPE_PLAYER,
+        AC_ON | AC_HARD | AC_TYPE_ENEMY,
+        OC1_NONE,
+        OC2_TYPE_PLAYER,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK2,
+        { 0x00100000, 0x00, 0x02 },
+        { 0xD7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
+    { 25, 60, 0, { 0, 0, 0 } },
 };
 
+// sMeleeWeaponQuadInit
 ColliderQuadInit D_8085C344 = {
-    { 0xA, 9, 0, 0, 8, 3 },
-    { 2, { 0, 0, 1 }, { 0xF7CFFFFF, 0, 0 }, 1, 0, 0 },
     {
-        {
-            { 0.0f, 0.0f, 0.0f },
-            { 0.0f, 0.0f, 0.0f },
-            { 0.0f, 0.0f, 0.0f },
-            { 0.0f, 0.0f, 0.0f },
-        },
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_PLAYER,
+        AC_NONE,
+        OC1_NONE,
+        OC2_TYPE_PLAYER,
+        COLSHAPE_QUAD,
     },
+    {
+        ELEMTYPE_UNK2,
+        { 0x00000000, 0x00, 0x01 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_NONE,
+        OCELEM_NONE,
+    },
+    { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
+// sShieldQuadInit
 ColliderQuadInit D_8085C394 = {
-    { 9, 9, 0x15, 0, 8, 3 },
-    { 2, { 0x100000, 0, 0 }, { 0xD7CFFFFF, 0, 0 }, 1, 1, 0 },
     {
-        {
-            { 0.0f, 0.0f, 0.0f },
-            { 0.0f, 0.0f, 0.0f },
-            { 0.0f, 0.0f, 0.0f },
-            { 0.0f, 0.0f, 0.0f },
-        },
+        COLTYPE_METAL,
+        AT_ON | AT_TYPE_PLAYER,
+        AC_ON | AC_HARD | AC_TYPE_ENEMY,
+        OC1_NONE,
+        OC2_TYPE_PLAYER,
+        COLSHAPE_QUAD,
     },
+    {
+        ELEMTYPE_UNK2,
+        { 0x00100000, 0x00, 0x00 },
+        { 0xD7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_NONE,
+    },
+    { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
 f32 D_8085C3E4 = 1.0f;
@@ -2010,7 +2049,8 @@ u16 D_8085D25C[] = { 0x1804, 0x1804, 0x1805, 0x1806 };
 
 LinkAnimationHeader* D_8085D264[2] = { (LinkAnimationHeader*)0x0400DC00, (LinkAnimationHeader*)0x0400DEC0 };
 
-Color_RGBA8 D_8085D26C = { 0xFF, 0xFF, 0xFF, 0xFF };
+Color_RGBA8 D_8085D26C = { 255, 255, 255, 255 };
+
 Vec3f D_8085D270 = { 0.0f, 0.04f, 0.0f };
 
 Vec3f D_8085D27C = { 0.0f, 0.0f, 0.0f };
@@ -2038,7 +2078,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
-Vec3s D_8085D2C4 = { -0x39, 0xD31, 0 };
+Vec3s D_8085D2C4 = { -57, 3377, 0 };
 
 void (*D_8085D2CC[0x10])(PlayState*, Player*) = {
     func_808412A0, func_80841408, func_808412BC, func_808414E0, func_80841528, func_808415E4,
@@ -2046,24 +2086,18 @@ void (*D_8085D2CC[0x10])(PlayState*, Player*) = {
     func_8083AD04, func_8083ADB8, func_8083ADF0, func_8083AE38,
 };
 
+// sBlureInit
 EffectBlureInit2 D_8085D30C = {
-    0,
-    8,
-    0,
-    { 0xFF, 0xFF, 0xFF, 0xFF },
-    { 0xFF, 0xFF, 0xFF, 0x40 },
-    { 0xFF, 0xFF, 0xFF, 0 },
-    { 0xFF, 0xFF, 0xFF, 0 },
-    4,
-    0,
-    2,
-    0,
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
+    0, 8, 0, { 255, 255, 255, 255 }, { 255, 255, 255, 64 }, { 255, 255, 255, 0 }, { 255, 255, 255, 0 }, 4,
+    0, 2, 0, { 0, 0, 0, 0 },         { 0, 0, 0, 0 },
 };
-EffectTireMarkInit D_8085D330 = { 0, 0x3F, { 0, 0, 0xF, 0x64 } };
-Color_RGBA8 D_8085D338 = { 0, 0, 0xF, 0x64 };
-Color_RGBA8 D_8085D33C = { 0, 0, 0, 0x96 };
+
+// sTireMarkInit ?
+EffectTireMarkInit D_8085D330 = { 0, 63, { 0, 0, 15, 100 } };
+
+Color_RGBA8 D_8085D338 = { 0, 0, 15, 100 };
+
+Color_RGBA8 D_8085D33C = { 0, 0, 0, 150 };
 
 Vec3f D_8085D340 = { 0.0f, 50.0f, 0.0f };
 
@@ -2084,9 +2118,9 @@ Vec3f D_8085D364 = { 0.0f, 0.5f, 0.0f };
 
 Vec3f D_8085D370 = { 0.0f, 0.5f, 0.0f };
 
-Color_RGBA8 D_8085D37C = { 0xFF, 0xFF, 0x64, 0xFF };
+Color_RGBA8 D_8085D37C = { 255, 255, 100, 255 };
 
-Color_RGBA8 D_8085D380 = { 0xFF, 0x32, 0, 0 };
+Color_RGBA8 D_8085D380 = { 255, 50, 0, 0 };
 
 s8 D_8085D384[0x5C] = {
     0,    2,    2,    4,    3,    0x38, 8,    0,    0,    0x87, 0x15, 0x3D, 0x3E, 0x3C, 0x3F,  0x40, 0x41, 0x42, 0x46,
@@ -2098,9 +2132,9 @@ s8 D_8085D384[0x5C] = {
 
 f32 D_8085D3E0[PLAYER_FORM_MAX] = { 0.8f, 0.6f, 0.8f, 1.5f, 1.0f };
 
-Color_RGBA8 D_8085D3F4 = { 0x64, 0xFF, 0xFF, 0 };
+Color_RGBA8 D_8085D3F4 = { 100, 255, 255, 0 };
 
-Color_RGBA8 D_8085D3F8 = { 0, 0x64, 0x64, 0 };
+Color_RGBA8 D_8085D3F8 = { 0, 100, 100, 0 };
 
 f32 D_8085D3FC[2] = { 0.005f, 0.05f };
 
@@ -2285,8 +2319,8 @@ Vec3f D_8085D764 = { 0.0f, 24.0f, 19.0f };
 Vec3f D_8085D770 = { 0.0f, 0.0f, 2.0f };
 Vec3f D_8085D77C = { 0.0f, 0.0f, -0.2f };
 
-Color_RGBA8 D_8085D788 = { 0xFF, 0xFF, 0xFF, 0xFF };
-Color_RGBA8 D_8085D78C = { 0xFF, 0xFF, 0xFF, 0xFF };
+Color_RGBA8 D_8085D788 = { 255, 255, 255, 255 };
+Color_RGBA8 D_8085D78C = { 255, 255, 255, 255 };
 
 // unused?
 u32 D_8085D790 = 0x01030204;
@@ -2384,10 +2418,10 @@ Vec3f D_8085D918 = { 0.0f, 0.5f, 0.0f };
 
 Vec3f D_8085D924 = { 0.0f, 0.5f, 0.0f };
 
-Color_RGBA8 D_8085D930 = { 0xFF, 0xFF, 0x37, 0xFF };
-Color_RGBA8 D_8085D934 = { 0x64, 0x32, 0, 0 };
-Color_RGBA8 D_8085D938 = { 0xFF, 0xC8, 0xC8, 0 };
-Color_RGBA8 D_8085D93C = { 0xFF, 0xFF, 0, 0 };
+Color_RGBA8 D_8085D930 = { 255, 255, 55, 255 };
+Color_RGBA8 D_8085D934 = { 100, 50, 0, 0 };
+Color_RGBA8 D_8085D938 = { 255, 200, 200, 0 };
+Color_RGBA8 D_8085D93C = { 255, 255, 0, 0 };
 
 Vec3f D_8085D940 = { 0.0f, 0.3f, 0.0f };
 
@@ -2595,39 +2629,13 @@ struct_8085E368 D_8085E368[] = {
     { -0xC8, 0x1F4, 0, 0x258, 0x190, 0x258 },
 };
 
-Color_RGBA8 D_8085E3A4 = { 0xFF, 0xFF, 0xFF, 0 };
+Color_RGBA8 D_8085E3A4 = { 255, 255, 255, 0 };
 
-Color_RGBA8 D_8085E3A8 = { 0, 0x80, 0x80, 0 };
+Color_RGBA8 D_8085E3A8 = { 0, 128, 128, 0 };
 
 #endif
 
 #define GET_PLAYER_ANIM(group, type) D_8085BE84[group * PLAYER_ANIMTYPE_MAX + type]
-
-extern LinkAnimationHeader* D_8085BE84[PLAYER_ANIMGROUP_MAX * PLAYER_ANIMTYPE_MAX];
-
-extern f32 D_8085D3FC[2];
-
-extern f32 D_8085C3E4;
-
-extern f32 D_8085D404[3];
-extern f32 D_8085C3E8;
-extern u16 D_8085C3EC[4];
-
-extern u8 D_8085D174[];
-
-extern Vec3f D_8085D364;
-extern Vec3f D_8085D370;
-extern Color_RGBA8 D_8085D37C;
-extern Color_RGBA8 D_8085D380;
-extern s8 D_8085D384[];
-extern f32 D_8085D3E0[5];
-extern Color_RGBA8 D_8085D3F4;
-extern Color_RGBA8 D_8085D3F8;
-extern f32 D_8085D3FC[2];
-extern f32 D_8085D404[3];
-extern f32 D_8085D410[3];
-
-extern Vec3s D_8085D6E0;
 
 // bss
 #if 1
@@ -2683,7 +2691,7 @@ extern s32 D_80862B6C;
 #endif
 
 s32 func_8082DA90(PlayState* play) {
-    return play->transitionTrigger != TRANS_TRIGGER_OFF || play->transitionMode != TRANS_MODE_OFF;
+    return (play->transitionTrigger != TRANS_TRIGGER_OFF) || (play->transitionMode != TRANS_MODE_OFF);
 }
 
 void func_8082DABC(Player* this) {
@@ -3113,8 +3121,6 @@ s32 func_8082ECCC(Player* this) {
     return this->stateFlags1 & PLAYER_STATE1_1000000;
 }
 
-extern GetItemEntry sGetItemTable[GI_MAX - 1];
-
 void func_8082ECE0(Player* this) {
     GetItemEntry* giEntry = &sGetItemTable[this->getItemId - 1];
 
@@ -3286,8 +3292,6 @@ void func_8082F164(Player* arg0, u16 button) {
     }
 }
 
-extern struct_8082F02C_arg1 D_8085C98C;
-
 #ifdef NON_MATCHING
 // stack
 void func_8082F1AC(PlayState* play, Player* this) {
@@ -3416,8 +3420,6 @@ void func_8082F5FC(Player* this, Actor* actor) {
     this->leftHandWorld.rot.y = actor->shape.rot.y - this->actor.shape.rot.y;
     this->stateFlags1 |= PLAYER_STATE1_800;
 }
-
-extern struct_8085CD24 D_8085CD24[];
 
 void func_8082F62C(PlayState* play, Player* this) {
     s32 explosiveType;
@@ -9139,9 +9141,6 @@ void func_8083F828(Vec3f* arg0, Vec3f* arg1, f32 arg2, f32 arg3, f32 arg4) {
     arg1->z = randPlusMinusPoint5Scaled(arg3) + arg0->z;
 }
 
-extern Color_RGBA8 D_8085D26C;
-extern Vec3f D_8085D270;
-
 #ifdef NON_MATCHING
 // Matches, but requires in-function static data
 s32 func_8083F8A8(PlayState* play, Player* this, f32 radius, s32 countMax, f32 randAccelWeight, s32 scale,
@@ -9708,15 +9707,6 @@ void func_80841744(PlayState* play, Player* this) {
     this->unk_B08[7] = 8.0f;
 }
 
-extern InitChainEntry sInitChain[];
-
-extern Vec3s D_8085D2C4;
-extern Vec3s D_8085D2C4;
-
-extern ColliderCylinderInit D_8085C2EC;
-extern ColliderCylinderInit D_8085C318;
-extern ColliderQuadInit D_8085C344;
-extern ColliderQuadInit D_8085C394;
 extern FlexSkeletonHeader D_060177B8;
 
 void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHeader) {
@@ -9757,12 +9747,6 @@ void func_80841A50(PlayState* play, Player* this) {
         this->unk_3CF = 1;
     }
 }
-
-extern EffectBlureInit2 D_8085D30C;
-extern EffectTireMarkInit D_8085D330;
-
-extern Color_RGBA8 D_8085D338;
-extern Color_RGBA8 D_8085D33C;
 
 void Player_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -13764,8 +13748,8 @@ void func_8084F1B8(Player* this, PlayState* play) {
 
     if (LinkAnimation_Update(play, &this->skelAnime)) {
         Player_AnimationPlayLoop(play, this,
-                      (this->unk_AE7 > 0) ? &gameplay_keep_Linkanim_00DC48
-                                          : GET_PLAYER_ANIM(PLAYER_ANIMGROUP_39, this->modelAnimType));
+                                 (this->unk_AE7 > 0) ? &gameplay_keep_Linkanim_00DC48
+                                                     : GET_PLAYER_ANIM(PLAYER_ANIMGROUP_39, this->modelAnimType));
     } else if (this->unk_AE7 == 0) {
         f32 frame;
 
@@ -14425,12 +14409,6 @@ void func_80852FD4(Player* this, PlayState* play) {
         func_808484CC(this);
     }
 }
-
-extern Vec3f D_8085D764;
-extern Vec3f D_8085D770;
-extern Vec3f D_8085D77C;
-extern Color_RGBA8 D_8085D788;
-extern Color_RGBA8 D_8085D78C;
 
 void func_808530E0(PlayState* play, Player* this) {
     Vec3f pos;
@@ -15254,11 +15232,6 @@ void func_80856074(PlayState* play, Player* this) {
     }
 }
 
-extern Vec3f D_8085D918;
-extern Vec3f D_8085D924;
-extern Color_RGBA8 D_8085D930;
-extern Color_RGBA8 D_8085D934;
-
 #ifdef NON_MATCHING
 // matches, but requires in-function static data
 void func_80856110(PlayState* play, Player* this, f32 arg2, f32 arg3, f32 arg4, s16 scale, s16 scaleStep, s16 life) {
@@ -15405,12 +15378,6 @@ void func_808561B0(Player* this, PlayState* play) {
         }
     }
 }
-
-extern Color_RGBA8 D_8085D938;
-extern Color_RGBA8 D_8085D93C;
-
-extern Vec3f D_8085D940;
-extern Vec3f D_8085D94C;
 
 void func_808566C0(PlayState* play, Player* this, s32 arg2, f32 arg3, f32 arg4, f32 arg5, s32 life) {
     Color_RGBA8 primColor = D_8085D938;
@@ -16619,12 +16586,6 @@ void func_80859CFC(PlayState* play, Player* this, UNK_TYPE arg2) {
 void func_80859D44(PlayState* play, Player* this, UNK_TYPE arg2) {
     LinkAnimation_Update(play, &this->skelAnime);
 }
-
-extern LinkAnimationHeader* D_8085E354[PLAYER_FORM_MAX];
-extern struct_8085E368 D_8085E368[];
-
-extern Color_RGBA8 D_8085E3A4;
-extern Color_RGBA8 D_8085E3A8;
 
 void func_80859D70(PlayState* play, Player* this, UNK_TYPE arg2) {
     struct_8085E368* temp_s0;
