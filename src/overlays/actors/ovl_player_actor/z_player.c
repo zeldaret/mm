@@ -4214,161 +4214,117 @@ void func_80831944(PlayState* play, Player* this) {
 }
 
 #if 0
-? func_8082E1F0(Player*, ?, s32, PlayState*);       /* extern */
-? func_8082F470(PlayState*, Player*, s32);          /* extern */
-s32 Player_ItemToActionParam(Player*, s32);                    /* extern */
-? func_808317C4(Player*, s32, PlayerModelIndices*); /* extern */
-s32 func_80831814(Player*, PlayState*, ?, PlayState*); /* extern */
-? func_808318C0(PlayState*);                        /* extern */
-? func_8083A658(PlayState*, Player*, s32, PlayState*); /* extern */
-extern ? D_8085CD00;
-extern ? D_8085CD24;
-
-void func_80831990(PlayState* play, Player* arg1, s32 arg2) {
+void func_80831990(PlayState* play, Player* this, ItemID item) {
     CollisionPoly* sp5C;
     s32 sp58;
     f32 sp54;
     s32 sp40;
     s32 sp3C;
-    s32 temp_s1;
-    s32 temp_v0;
+    PlayerActionParam temp_s1;
+    s32 temp_a2;
     s32 temp_v0_2;
-    s32 var_a2;
     s32 var_v0;
     s32 var_v1;
     s32 var_v1_2;
-    s8 temp_v1;
-    u8 temp_v0_3;
-    u8 temp_v0_4;
-    u8 temp_v0_5;
     u8 temp_v1_2;
 
-    temp_v0 = Player_ItemToActionParam(arg1, arg2);
-    temp_s1 = temp_v0;
-    if (arg1->heldItemActionParam == arg1->itemActionParam) {
-        if ((arg1->stateFlags1 & 0x400000) && (Player_ActionToMeleeWeapon(temp_v0) == 0) && (temp_s1 != PLAYER_AP_NONE)) {
+    temp_s1 = Player_ItemToActionParam(this, item);
+    if (this->heldItemActionParam == this->itemActionParam) {
+        if ((this->stateFlags1 & 0x400000) && (Player_ActionToMeleeWeapon(temp_s1) == 0) && (temp_s1 != PLAYER_AP_NONE)) {
             goto block_5;
         }
         goto block_8;
     }
 block_5:
-    if ((arg1->heldItemActionParam < 0) && ((Player_ActionToMeleeWeapon(temp_s1) != 0) || (temp_s1 == PLAYER_AP_NONE))) {
+    if ((this->heldItemActionParam < 0) && ((Player_ActionToMeleeWeapon(temp_s1) != 0) || (temp_s1 == PLAYER_AP_NONE))) {
 block_8:
-        var_a2 = temp_s1 < 0x3A;
-        if (temp_s1 != PLAYER_AP_NONE) {
-            if ((arg1->stateFlags1 * 0x10) >= 0) {
-                var_a2 ^= 1;
-                goto block_18;
-            }
-            if (temp_s1 == PLAYER_AP_MASK_ZORA) {
-                var_a2 ^= 1;
-                goto block_18;
-            }
-            if (arg1->currentBoots >= 5) {
-                var_a2 ^= 1;
-                if (arg1->actor.bgCheckFlags & 1) {
-                    goto block_17;
-                }
-            }
-        } else {
-block_17:
-block_18:
-            var_v1 = var_a2;
-            if (var_a2 != 0) {
+        if ((temp_s1 == PLAYER_AP_NONE) || !(this->stateFlags1 & 0x8000000) || (temp_s1 == PLAYER_AP_MASK_ZORA) || ((this->currentBoots >= 5) && (this->actor.bgCheckFlags & 1))) {
+            temp_a2 = (temp_s1 < 0x3A) ^ 1;
+            var_v1 = temp_a2;
+            if (temp_a2 != 0) {
                 var_v1 = temp_s1 < 0x52;
                 if (var_v1 != 0) {
-                    var_v1 = arg1->transformation != 4;
+                    var_v1 = this->transformation != 4;
                     if (var_v1 == 0) {
                         var_v1 = (temp_s1 < 0x4D) ^ 1;
                     }
                 }
             }
-            if ((var_v1 != 0) || (((arg1->actor.flags & 0x100) == 0x100) && (temp_s1 != PLAYER_AP_NONE)) || (temp_s1 == PLAYER_AP_OCARINA) || ((temp_s1 >= 0x16) && (temp_s1 < 0x3A)) || ((temp_s1 == PLAYER_AP_PICTO_BOX) && (arg1->targetActor != NULL) && (arg1->exchangeItemId > 0))) {
+
+            if ((var_v1 != 0) || (((this->actor.flags & 0x100) == 0x100) && (temp_s1 != PLAYER_AP_NONE)) || (temp_s1 == PLAYER_AP_OCARINA) || ((temp_s1 >= 0x16) && (temp_s1 < 0x3A)) || ((temp_s1 == PLAYER_AP_PICTO_BOX) && (this->targetActor != NULL) && (this->exchangeItemId > 0))) {
                 if (var_v1 != 0) {
-                    var_v0 = temp_s1 - 0x4E;
-                    if (temp_s1 < 0x4E) {
-                        var_v0 = 4;
-                    }
-                    if (((arg1->currentMask != 0x14) && (temp_s1 == PLAYER_AP_MASK_GIANT) && ((gSaveContext.unk_3F28 != 0) || (gSaveContext.save.playerData.magic == 0))) || (((arg1->stateFlags1 * 0x10) >= 0) && (BgCheck_EntityCheckCeiling(&arg0->colCtx, &sp54, &arg1->actor.world.pos, D_8085BA38[var_v0].unk_00, &sp5C, &sp58, &arg1->actor) != 0))) {
+                    var_v0 = (temp_s1 < 0x4E) ? 4 : temp_s1 - 0x4E;
+
+                    if (((this->currentMask != 0x14) && (temp_s1 == PLAYER_AP_MASK_GIANT) && ((gSaveContext.unk_3F28 != 0) || (gSaveContext.save.playerData.magic == 0))) || (!(this->stateFlags1 & 0x8000000) && (BgCheck_EntityCheckCeiling(&play->colCtx, &sp54, &this->actor.world.pos, D_8085BA38[var_v0].unk_00, &sp5C, &sp58, &this->actor) != 0))) {
                         play_sound(0x4806U);
                         return;
                     }
-                    goto block_41;
                 }
-block_41:
+
                 if ((temp_s1 == PLAYER_AP_MAGIC_BEANS) && (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] == 0)) {
                     play_sound(0x4806U);
-                    return;
+                } else {
+                    this->heldItemActionParam = (s8) temp_s1;
+                    this->unk_AA5 = 5;
                 }
-                arg1->heldItemActionParam = (s8) temp_s1;
-                arg1->unk_AA5 = 5;
                 return;
             }
-            if (((temp_s1 == PLAYER_AP_STICK) && (gSaveContext.save.inventory.ammo[gItemSlots[8]] == 0)) || (((temp_v1 = arg0->unk_1887D, (temp_v1 != 0)) || (arg0->unk_1887E != 0)) && (arg0->actorCtx.actorLists[3].length >= 5)) || ((temp_v1 == 0) && (arg0->unk_1887E == 0) && (sp3C = var_a2, temp_v0_2 = Player_ActionToExplosive(arg1, temp_s1), (temp_v0_2 >= 0)) && ((gSaveContext.save.inventory.ammo[gItemSlots[*(&D_8085CD24 + (temp_v0_2 * 4))]] == 0) || (arg0->actorCtx.actorLists[3].length >= 3)))) {
+            if (((temp_s1 == PLAYER_AP_STICK) && (gSaveContext.save.inventory.ammo[gItemSlots[8]] == 0)) || (( (play->unk_1887D != 0) || (play->unk_1887E != 0)) && (play->actorCtx.actorLists[3].length >= 5)) || ((play->unk_1887D == 0) && (play->unk_1887E == 0) && (sp3C = temp_a2, temp_v0_2 = Player_ActionToExplosive(this, temp_s1), (temp_v0_2 >= 0)) && ((gSaveContext.save.inventory.ammo[gItemSlots[D_8085CD24[temp_v0_2].itemId]] == 0) || (play->actorCtx.actorLists[3].length >= 3)))) {
                 play_sound(0x4806U);
                 return;
             }
             if (temp_s1 == PLAYER_AP_LENS) {
-                func_808318C0(arg0);
+                func_808318C0(play);
                 return;
             }
             if (temp_s1 == PLAYER_AP_PICTO_BOX) {
-                if (func_80831814(arg1, arg0, 2, arg0) == 0) {
+                if (func_80831814(this, play, 2) == 0) {
                     play_sound(0x4806U);
                 }
-            } else {
-                temp_v0_3 = arg1->transformation;
-                if ((temp_s1 == PLAYER_AP_NUT) && ((temp_v0_3 != 3) || (arg1->heldItemButton != 0))) {
-                    if (gSaveContext.save.inventory.ammo[gItemSlots[9]] != 0) {
-                        func_8083A658(arg0, arg1, var_a2, arg0);
-                        return;
-                    }
-                    play_sound(0x4806U);
+            } else if ((temp_s1 == PLAYER_AP_NUT) && ((this->transformation != 3) || (this->heldItemButton != 0))) {
+                if (gSaveContext.save.inventory.ammo[gItemSlots[9]] != 0) {
+                    func_8083A658(play, this);
                     return;
                 }
-                if ((temp_v0_3 == 4) && (var_a2 != 0) && (temp_s1 < 0x4D)) {
-                    temp_v0_4 = arg1->currentMask;
-                    temp_v1_2 = temp_s1 - 0x39;
-                    arg1->prevMask = temp_v0_4;
-                    if (temp_v1_2 == temp_v0_4) {
-                        arg1->currentMask = 0;
-                        func_8082E1F0(arg1, 0x834, var_a2, arg0);
-                    } else {
-                        arg1->currentMask = temp_v1_2;
-                        func_8082E1F0(arg1, 0x835, var_a2, arg0);
-                    }
-                    gSaveContext.save.equippedMask = arg1->currentMask;
-                    return;
-                }
-                if ((temp_s1 != arg1->itemActionParam) || ((arg1->heldActor == NULL) && (Player_ActionToExplosive(arg1, temp_s1) >= 0))) {
-                    temp_v0_5 = Player_ActionToModelGroup(arg1, temp_s1);
-                    arg1->nextModelGroup = temp_v0_5;
-                    var_v1_2 = arg1->transformation != 1;
-                    if (var_v1_2 == 0) {
-                        var_v1_2 = temp_s1 == PLAYER_AP_POWDER_KEG;
-                    }
-                    if ((var_v1_2 != 0) && (arg1->itemActionParam >= 0) && (arg2 != arg1->heldItemId) && (*(&D_8085CD00 + ((gPlayerModelTypes[arg1->modelGroup].modelAnimType * 6) + gPlayerModelTypes[temp_v0_5 & 0xFF].modelAnimType)) != 0)) {
-                        arg1->heldItemId = (u8) arg2;
-                        arg1->stateFlags3 |= 0x40000000;
-                        return;
-                    }
-                    sp40 = var_v1_2;
-                    func_808317C4(arg1, 5, gPlayerModelTypes);
-                    func_8082DCA0(arg0, arg1);
-                    func_8082F470(arg0, arg1, temp_s1);
-                    if (var_v1_2 == 0) {
-                        D_80862B48 = 1;
-                        D_80862B4C = 1;
-                    }
+                play_sound(0x4806U);
+            } else if ((this->transformation == 4) && (temp_a2 != 0) && (temp_s1 < 0x4D)) {
+                temp_v1_2 = temp_s1 - 0x39;
+                this->prevMask = this->currentMask;
+                if (temp_v1_2 == this->currentMask) {
+                    this->currentMask = 0;
+                    func_8082E1F0(this, 0x834U);
                 } else {
+                    this->currentMask = temp_v1_2;
+                    func_8082E1F0(this, 0x835U);
+                }
+                gSaveContext.save.equippedMask = this->currentMask;
+            } else if ((temp_s1 != this->itemActionParam) || ((this->heldActor == NULL) && (Player_ActionToExplosive(this, temp_s1) >= 0))) {
+                this->nextModelGroup = Player_ActionToModelGroup(this, temp_s1);
+
+                var_v1_2 = this->transformation != 1;
+                if (var_v1_2 == 0) {
+                    var_v1_2 = temp_s1 == PLAYER_AP_POWDER_KEG;
+                }
+                if ((var_v1_2 != 0) && (this->itemActionParam >= 0) && (item != this->heldItemId) && (D_8085CD00[(gPlayerModelTypes[this->modelGroup].modelAnimType * 6) + gPlayerModelTypes[this->nextModelGroup].modelAnimType] != 0)) {
+                    this->heldItemId = (u8) item;
+                    this->stateFlags3 |= 0x40000000;
+                    return;
+                }
+                sp40 = var_v1_2;
+                func_808317C4(this);
+                func_8082DCA0(play, this);
+                func_8082F470(play, this, temp_s1);
+                if (var_v1_2 == 0) {
                     D_80862B48 = 1;
                     D_80862B4C = 1;
                 }
+            } else {
+                D_80862B48 = 1;
+                D_80862B4C = 1;
             }
         }
     }
 }
-
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80831990.s")
 #endif
