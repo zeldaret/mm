@@ -114,11 +114,12 @@ void EnTg_ChangeAnimation(SkelAnime* skelAnime, AnimationInfoS* animation, s16 u
                      animation->mode, animation->morphFrames);
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F8A8.s")
-void func_8098F8A8(EnTg* this, PlayState* play) {
-    this->collider.dim.pos.x = (s16)this->actor.world.pos.x;
-    this->collider.dim.pos.y = (s16)this->actor.world.pos.y;
-    this->collider.dim.pos.z = (s16)this->actor.world.pos.z;
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_UpdateCollider.s")
+// EnTg_UpdateCollider - EnTg_UpdateCollider
+void EnTg_UpdateCollider(EnTg* this, PlayState* play) {
+    this->collider.dim.pos.x = this->actor.world.pos.x;
+    this->collider.dim.pos.y = this->actor.world.pos.y;
+    this->collider.dim.pos.z = this->actor.world.pos.z;
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
@@ -173,7 +174,7 @@ void EnTg_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4U);
     func_8098F928(this, play);
     func_8098FEA8(play, &this->unk2F0, 0xA);
-    func_8098F8A8(this, play);
+    EnTg_UpdateCollider(this, play);
 }
 
 // EnTg_OverrideLimbDraw

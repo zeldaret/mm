@@ -8413,7 +8413,7 @@
     0x8098F680:("func_8098F680",),
     0x8098F6FC:("ObjMure3_Update",),
     0x8098F800:("EnTg_ChangeAnimation",),
-    0x8098F8A8:("func_8098F8A8",),
+    0x8098F8A8:("EnTg_UpdateCollider",),
     0x8098F928:("func_8098F928",),
     0x8098F954:("EnTg_Init",),
     0x8098FA44:("EnTg_Destroy",),
