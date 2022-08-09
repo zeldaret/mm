@@ -294,21 +294,33 @@ void EnRat_ChooseDirection(EnRat* this) {
         }
     } else {
         if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) > 50.0f) {
-            Vec3f homeTemp; // also used as a temp for a different calculation
-            Vec3f worldTemp;
-            Vec3f forwardPos;
-            Vec3f surfaceNormal;
+            Vec3f homeInHome;
+            Vec3f worldInHome;
+            Vec3f worldForwardInHome;
+            Vec3f upInHome;
 
+            // Set up matrix to unrotate, to make the "home rot" the new basis triad
             Matrix_RotateZS(-this->actor.home.rot.z, MTXMODE_NEW);
             Matrix_RotateXS(-this->actor.home.rot.x, MTXMODE_APPLY);
             Matrix_RotateYS(-this->actor.home.rot.y, MTXMODE_APPLY);
-            Matrix_MultVec3f(&this->axisUp, &surfaceNormal);
-            Math_Vec3f_Sum(&this->actor.world.pos, &this->axisForwards, &homeTemp);
-            Matrix_MultVec3f(&homeTemp, &forwardPos);
-            Matrix_MultVec3f(&this->actor.home.pos, &homeTemp);
-            Matrix_MultVec3f(&this->actor.world.pos, &worldTemp);
-            angle = Math_Vec3f_Yaw(&worldTemp, &homeTemp) - Math_Vec3f_Yaw(&worldTemp, &forwardPos);
-            if (surfaceNormal.y < -0.25f) {
+
+            // Unrotate axisUp into "home rot" triad and store in upfInHome
+            Matrix_MultVec3f(&this->axisUp, &upInHome);
+
+            // Move world.pos forward by axisForwards and store in homeInHome
+            Math_Vec3f_Sum(&this->actor.world.pos, &this->axisForwards, &homeInHome);
+
+            // Unrotate homeInHome into "home rot" triad and store in worldForwardInHome
+            Matrix_MultVec3f(&homeInHome, &worldForwardInHome);
+
+            // Unrotate home into "home rot" triad
+            Matrix_MultVec3f(&this->actor.home.pos, &homeInHome);
+
+            // Unrotate world into "home rot" triad
+            Matrix_MultVec3f(&this->actor.world.pos, &worldInHome);
+
+            angle = Math_Vec3f_Yaw(&worldInHome, &homeInHome) - Math_Vec3f_Yaw(&worldInHome, &worldForwardInHome);
+            if (upInHome.y < -0.25f) {
                 angle -= 0x8000;
             }
 
