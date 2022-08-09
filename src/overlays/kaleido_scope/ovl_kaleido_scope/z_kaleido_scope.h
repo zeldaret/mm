@@ -25,6 +25,7 @@ typedef enum {
 
 // NES
 void func_80821984(PlayState* play, s16 cursorSpecialPos);
+void KaleidoScope_DrawQuadTextureRGBA32(GraphicsContext* gfxCtx, void* texture, u16 width, u16 height, u16 point);
 
 // Map
 void func_8081FB1C(PlayState* play);

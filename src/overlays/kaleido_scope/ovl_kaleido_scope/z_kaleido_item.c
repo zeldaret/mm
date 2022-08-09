@@ -15,11 +15,9 @@ extern UNK_TYPE D_0B000000;
 extern UNK_TYPE D_0C000000;
 extern UNK_TYPE D_0C006C00;
 
-s32 D_8082B3C0 = 0;
-
-s32 D_8082B3C4 = 0;
-
-s16 D_8082B3C8 = 10;
+s16 sEquipState = 0;
+s16 sEquipAnimTimer = 0;
+s16 sEquipMoveTimer = 10;
 
 u8 gSlotTransformReqs[5][24] = {
     {
@@ -49,29 +47,8 @@ s16 D_8082B444[] = {
 };
 
 s16 D_8082B454[] = {
-    0x0055, 0x0075, 0x0075, 0x0075, 0x0075, 0x0075, 0x0096, 0x0096, 0x00FF, 0x0064,
-    0x00FF, 0x0000, 0x0000, 0x0064, 0x00FF, 0x0000, 0x0000, 0x00FF, 0x0064, 0x0000,
+    0x0055, 0x0075, 0x0075, 0x0075, 0x0075, 0x0075, 0x0096, 0x0096,
 };
-
-u8 D_8082B47C[] = {
-    0x35, 0x33, 0x34, 0x32, 0xFF,
-};
-
-s16 D_8082B484[] = {
-    0x0294,
-    0x0384,
-    0x0474,
-    0x0000,
-};
-
-s16 D_8082B48C[] = {
-    0x044C,
-    0x0398,
-    0x044C,
-    0x0000,
-};
-
-s32 D_8082B494[] = { 0, 0, 0 };
 
 Gfx* func_8010CD98(Gfx* displayListHead, void* texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
                    s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy);
@@ -94,7 +71,7 @@ void KaleidoScope_DrawAmmoCount(PauseContext* pauseCtx, GraphicsContext* gfxCtx,
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    if (!gSlotTransformReqs[((void)0, gSaveContext.save.playerForm)][gItemSlots[item]]) {
+    if (!gSlotTransformReqs[((void)0, gSaveContext.save.playerForm)][SLOT(item)]) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 100, 100, 100, pauseCtx->alpha);
     } else {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
@@ -132,9 +109,104 @@ void KaleidoScope_SetCursorVtx(PauseContext* pauseCtx, u16 index, Vtx* vtx) {
     pauseCtx->cursorVtx[0].v.ob[1] = vtx[index].v.ob[1];
 }
 
-void func_8081B6EC(GraphicsContext* gfxCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081B6EC.s")
+// Part of KaleidoScope_DrawItemSelect
+s16 sMagicArrowEffectsR[] = { 255, 100, 255 };
+s16 sMagicArrowEffectsG[] = { 0, 100, 255 };
+s16 sMagicArrowEffectsB[] = { 0, 255, 100 };
+void func_8081B6EC(PlayState* play) {
+    PauseContext* pauseCtx = &play->pauseCtx;
+    u16 i;
+    u16 j;
 
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C8AC(play->state.gfxCtx);
+
+    gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
+
+    for (i = 0, j = 24 * 4; i < 3; i++, j += 4) {
+        if (GET_CUR_FORM_BTN_ITEM(i + 1) != ITEM_NONE) {
+            if (GET_CUR_FORM_BTN_SLOT(i + 1) < 24) {
+                gSPVertex(POLY_OPA_DISP++, &pauseCtx->itemVtx[j], 4, 0);
+                POLY_OPA_DISP = func_8010DC58(POLY_OPA_DISP, gEquippedItemOutlineTex, 32, 32, 0);
+            }
+        }
+    }
+
+    gDPPipeSync(POLY_OPA_DISP++);
+    gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+
+    for (j = 0, i = 0; i < 24; i++, j += 4) {
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
+
+        if (((void)0, gSaveContext.save.inventory.items[i]) != ITEM_NONE) {
+            if ((pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_ITEM) && (pauseCtx->cursorSpecialPos == 0) &&
+                gSlotTransformReqs[(void)0, gSaveContext.save.playerForm][i]) {
+                if ((sEquipState == 2) && (i == 3)) {
+
+                    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sMagicArrowEffectsR[pauseCtx->equipTargetItem - 0xB5],
+                                    sMagicArrowEffectsG[pauseCtx->equipTargetItem - 0xB5],
+                                    sMagicArrowEffectsB[pauseCtx->equipTargetItem - 0xB5], pauseCtx->alpha);
+
+                    pauseCtx->itemVtx[j + 0].v.ob[0] = pauseCtx->itemVtx[j + 2].v.ob[0] =
+                        pauseCtx->itemVtx[j + 0].v.ob[0] - 2;
+                    pauseCtx->itemVtx[j + 1].v.ob[0] = pauseCtx->itemVtx[j + 3].v.ob[0] =
+                        pauseCtx->itemVtx[j + 0].v.ob[0] + 0x20;
+                    pauseCtx->itemVtx[j + 0].v.ob[1] = pauseCtx->itemVtx[j + 1].v.ob[1] =
+                        pauseCtx->itemVtx[j + 0].v.ob[1] + 2;
+                    pauseCtx->itemVtx[j + 2].v.ob[1] = pauseCtx->itemVtx[j + 3].v.ob[1] =
+                        pauseCtx->itemVtx[j + 0].v.ob[1] - 0x20;
+
+                } else if (i == pauseCtx->cursorSlot[0]) {
+                    pauseCtx->itemVtx[j + 0].v.ob[0] = pauseCtx->itemVtx[j + 2].v.ob[0] =
+                        pauseCtx->itemVtx[j + 0].v.ob[0] - 2;
+                    pauseCtx->itemVtx[j + 1].v.ob[0] = pauseCtx->itemVtx[j + 3].v.ob[0] =
+                        pauseCtx->itemVtx[j + 0].v.ob[0] + 0x20;
+                    pauseCtx->itemVtx[j + 0].v.ob[1] = pauseCtx->itemVtx[j + 1].v.ob[1] =
+                        pauseCtx->itemVtx[j + 0].v.ob[1] + 2;
+                    pauseCtx->itemVtx[j + 2].v.ob[1] = pauseCtx->itemVtx[j + 3].v.ob[1] =
+                        pauseCtx->itemVtx[j + 0].v.ob[1] - 0x20;
+                }
+            }
+
+            gSPVertex(POLY_OPA_DISP++, &pauseCtx->itemVtx[j + 0], 4, 0);
+            KaleidoScope_DrawQuadTextureRGBA32(play->state.gfxCtx,
+                                               gItemIcons[((void)0, gSaveContext.save.inventory.items[i])], 32, 32, 0);
+        }
+    }
+
+    if (pauseCtx->pageIndex == 0) {
+        if ((pauseCtx->state == 6) && ((pauseCtx->unk_200 == 0) || (pauseCtx->unk_200 == 3)) &&
+            (pauseCtx->state != 7) && ((pauseCtx->state < 8) || (pauseCtx->state >= 0x13))) {
+            func_8012C628(play->state.gfxCtx);
+            gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+
+            for (j = 0, i = 0; i < 24; i++) {
+                if (gAmmoItems[i] != ITEM_NONE) {
+                    if (((void)0, gSaveContext.save.inventory.items[i]) != ITEM_NONE) {
+                        KaleidoScope_DrawAmmoCount(pauseCtx, play->state.gfxCtx,
+                                                   ((void)0, gSaveContext.save.inventory.items[i]), j);
+                    }
+                    j++;
+                }
+            }
+            func_8012C8AC(play->state.gfxCtx);
+        }
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+u8 D_8082B47C[] = {
+    ITEM_MASK_FIERCE_DEITY, ITEM_MASK_GORON, ITEM_MASK_ZORA, ITEM_MASK_DEKU, ITEM_NONE,
+};
+// KaleidoScope_DrawItemSelect
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081BCA8.s")
 
+s16 sCButtonPosX[] = { 660, 900, 1140 };
+s16 sCButtonPosY[] = { 1100, 920, 1100 };
+s32 D_8082B494 = 0;
+// KaleidoScope_UpdateItemEquip
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081C684.s")
