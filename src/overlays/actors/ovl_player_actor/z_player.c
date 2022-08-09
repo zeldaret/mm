@@ -304,7 +304,6 @@ void func_8085A66C(PlayState* play, Player* this, void* arg2);
 void func_80859FCC(PlayState* play, Player* this, UNK_TYPE arg2);
 void func_8085A120(PlayState* play, Player* this, UNK_TYPE arg2);
 void func_8085A19C(PlayState* play, Player* this, UNK_TYPE arg2);
-void func_8085978C(PlayState* play, Player* this, UNK_TYPE arg2);
 void func_8085968C(PlayState* play, Player* this, UNK_TYPE arg2);
 void func_8085A24C(PlayState* play, Player* this, UNK_TYPE arg2);
 void func_8085A330(PlayState* play, Player* this, UNK_TYPE arg2);
@@ -16900,7 +16899,6 @@ void func_80859708(PlayState* play, Player* this, UNK_TYPE arg2) {
     }
 }
 
-// unused
 void func_8085978C(PlayState* play, Player* this, UNK_TYPE arg2) {
     f32 temp_fv0;
     s16 temp_v0;
@@ -16926,7 +16924,6 @@ void func_8085978C(PlayState* play, Player* this, UNK_TYPE arg2) {
     }
 }
 
-// unused
 void func_80859890(PlayState* play, Player* this, UNK_TYPE arg2) {
     f32 sp24;
     s16 temp_v1 = MREG(64);
@@ -16957,7 +16954,6 @@ void func_80859890(PlayState* play, Player* this, UNK_TYPE arg2) {
     }
 }
 
-// unused
 void func_80859990(PlayState* play, Player* this, UNK_TYPE arg2) {
     this->linearVelocity = 2.5f;
     func_80835BF8(&this->actor.world.pos, this->actor.shape.rot.y, 180.0f, &this->unk_3A0);
@@ -17557,9 +17553,7 @@ s32 Player_InflictDamage(PlayState* play, s32 damage) {
 // Start talking with the given actor
 void func_8085B460(PlayState* play, Actor* actor) {
     s32 pad;
-    Player* player;
-
-    player = GET_PLAYER(play);
+    Player* player = GET_PLAYER(play);
 
     func_808323C0(player, 0x7C);
     if ((player->targetActor != NULL) || (actor == player->tatlActor) ||
@@ -17628,9 +17622,8 @@ void func_8085B460(PlayState* play, Actor* actor) {
 void func_8085B74C(PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 temp_fv1;
-    f32 linearVelocity;
+    f32 linearVelocity = player->linearVelocity;
 
-    linearVelocity = player->linearVelocity;
     if (linearVelocity < 0.0f) {
         linearVelocity = -linearVelocity;
         player->actor.world.rot.y += 0x8000;
