@@ -10192,7 +10192,7 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         player->unk_D6A++;
         if (player->unk_D6A == 0) {
             player->unk_D6A = 1;
-            play_sound(0x5806U);
+            play_sound(NA_SE_OC_REVENGE);
         }
     }
 
@@ -10237,31 +10237,33 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         func_80844D80(play, player);
     }
     if (player->transformation == 2) {
-        s32 var_v0 = (player->stateFlags1 & 0x8000000) ? 1 : 0;
+        s32 var_v0 = (player->stateFlags1 & PLAYER_STATE1_8000000) ? 1 : 0;
 
         Math_StepToF(&player->unk_B08[2], var_v0, D_8085D3FC[var_v0]);
     }
     func_80832888(player, play);
     if (play->roomCtx.currRoom.enablePosLights != 0) {
-        Lights_PointSetColorAndRadius(&player->lightInfo, 0xFFU, 0xFFU, 0xFFU, (s16)0x3C);
+        Lights_PointSetColorAndRadius(&player->lightInfo, 255, 255, 255, 60);
     } else {
         player->lightInfo.params.point.radius = -1;
     }
 
-    if ((player->itemActionParam == 7) && (player->unk_B28 != 0)) {
+    if ((player->itemActionParam == PLAYER_AP_STICK) && (player->unk_B28 != 0)) {
         func_808442D8(play, player);
-    } else if (player->itemActionParam == 2) {
+    } else if (player->itemActionParam == PLAYER_AP_FISHING_POLE) {
         if (player->unk_B28 < 0) {
             player->unk_B28++;
         }
     }
+
     if (player->shockTimer != 0) {
         func_808445C4(play, player);
     }
-    if (player->isBurning != 0) {
+    if (player->isBurning) {
         func_808341F4(play, player);
     }
-    if (player->stateFlags2 & 0x8000) {
+
+    if (player->stateFlags2 & PLAYER_STATE2_8000) {
         if (!(player->actor.bgCheckFlags & 1)) {
             func_8082DABC(player);
             Actor_MoveWithGravity(&player->actor);
@@ -10274,29 +10276,29 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         s32 pad;
 
         if (player->currentBoots != player->prevBoots) {
-            if (player->currentBoots == 5) {
-                if (player->stateFlags1 & 0x8000000) {
+            if (player->currentBoots == PLAYER_BOOTS_ZORA_UNDERWATER) {
+                if (player->stateFlags1 & PLAYER_STATE1_8000000) {
                     func_8082DC64(play, player);
                     if (player->ageProperties->unk_2C < player->actor.depthInWater) {
-                        player->stateFlags2 |= 0x400;
+                        player->stateFlags2 |= PLAYER_STATE2_400;
                     }
                 }
-            } else if ((player->stateFlags1 & 0x8000000) &&
-                       ((player->prevBoots == 5) || (player->actor.bgCheckFlags & 1))) {
+            } else if ((player->stateFlags1 & PLAYER_STATE1_8000000) &&
+                       ((player->prevBoots == PLAYER_BOOTS_ZORA_UNDERWATER) || (player->actor.bgCheckFlags & 1))) {
                 func_8083B930(play, player);
-                player->stateFlags2 &= ~0x400;
+                player->stateFlags2 &= ~PLAYER_STATE2_400;
                 if (func_808508C8 == player->actionFunc) {
-                    player->unk_AE8 = 0x14;
+                    player->unk_AE8 = 20;
                 }
             }
             player->prevBoots = player->currentBoots;
         }
-        if ((player->actor.parent == NULL) && (player->stateFlags1 & 0x800000)) {
+        if ((player->actor.parent == NULL) && (player->stateFlags1 & PLAYER_STATE1_800000)) {
             player->actor.parent = player->rideActor;
             func_80837BD0(play, player);
             player->unk_AE8 = -1;
             Player_AnimationPlayOnce(play, player, &gameplay_keep_Linkanim_00E088);
-            func_8082E920(play, player, 0x9B);
+            func_8082E920(play, player, 1 | 2 | 8 | 0x10 | 0x80);
         }
 
         if (player->unk_ADC == 0) {
@@ -10307,7 +10309,7 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
             player->unk_ADC--;
         }
 
-        if (!(player->stateFlags3 & 0x2000)) {
+        if (!(player->stateFlags3 & PLAYER_STATE3_2000)) {
             Math_ScaledStepToS(&player->unk_AAA, 0, 0x190);
         }
 
@@ -10318,22 +10320,23 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         }
 
         player->actor.shape.face = ((play->gameplayFrames & 0x20) ? 0 : 3) + player->blinkInfo.eyeTexIndex;
-        if (player->currentMask == 4) {
+        if (player->currentMask == PLAYER_FORM_HUMAN) {
             func_80124420(player);
         }
-        if (func_800B7118(player) != 0) {
+
+        if (func_800B7118(player)) {
             func_808484F0(player);
         }
 
         if ((play->unk_18844 == 0) && !(player->skelAnime.moveFlags & 0x80)) {
-            if (!(player->stateFlags1 & 2) && (player->actor.parent == NULL)) {
+            if (!(player->stateFlags1 & PLAYER_STATE1_2) && (player->actor.parent == NULL)) {
                 func_80844784(play, player);
             }
             func_80843178(play, player);
         } else {
             D_80862B08 = 0;
             player->unk_D5E = 0;
-            if (player->stateFlags1 & 0x800000) {
+            if (player->stateFlags1 & PLAYER_STATE1_800000) {
                 player->actor.floorPoly = player->rideActor->floorPoly;
                 player->actor.floorBgId = player->rideActor->floorBgId;
             }
@@ -10343,14 +10346,14 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
 
         func_8083562C(play, player, player->actor.floorPoly, player->actor.floorBgId);
         if (D_80862B10 != 0) {
-            f32 var_fv1; // sp50
+            f32 var_fv1;
             s32 pad2;
 
             D_80862B10--;
             if (D_80862B14 == 0) {
                 var_fv1 = D_8085D404[D_80862B10];
-                if (!(player->stateFlags1 & 0x8000000)) {
-                    var_fv1 *= 0.25f;
+                if (!(player->stateFlags1 & PLAYER_STATE1_8000000)) {
+                    var_fv1 /= 4.0f;
                 }
             } else {
                 var_fv1 = D_8085D410[D_80862B10];
@@ -10358,23 +10361,23 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
 
             Math_StepToF(&player->unk_B80, var_fv1, var_fv1 * 0.1f);
             Math_ScaledStepToS(&player->unk_B84, D_80862B16,
-                               ((player->stateFlags1 & 0x8000000) ? 400.0f : 800.0f) * var_fv1);
+                               ((player->stateFlags1 & PLAYER_STATE1_8000000) ? 400.0f : 800.0f) * var_fv1);
         } else if (player->unk_B80 != 0.0f) {
-            Math_StepToF(&player->unk_B80, 0.0f, (player->stateFlags1 & 0x8000000) ? 0.5f : 2.0f);
+            Math_StepToF(&player->unk_B80, 0.0f, (player->stateFlags1 & PLAYER_STATE1_8000000) ? 0.5f : 2.0f);
         }
-        if (!(player->stateFlags1 & 0x20000080) && !(player->stateFlags3 & 0x80) &&
-            (func_80854430 != player->actionFunc)) {
+        if (!(player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) &&
+            !(player->stateFlags3 & PLAYER_STATE3_80) && (func_80854430 != player->actionFunc)) {
             func_8083BB4C(play, player);
-            if (Play_InCsMode(play) == 0) {
-                if ((player->actor.id == 0) && !(player->stateFlags1 & 0x80000000) &&
-                    (gSaveContext.save.playerData.health == 0) &&
-                    (func_808323C0(player, play->playerActorCsIds[6]) != 0)) {
-                    if (player->stateFlags3 & 0x01000000) {
+            if (!Play_InCsMode(play)) {
+                if ((player->actor.id == ACTOR_PLAYER) && !(player->stateFlags1 & PLAYER_STATE1_80000000) &&
+                    (gSaveContext.save.playerData.health == 0) && func_808323C0(player, play->playerActorCsIds[6])) {
+                    if (player->stateFlags3 & PLAYER_STATE3_1000000) {
                         func_808355D8(play, player, &gameplay_keep_Linkanim_00E2D8);
-                    } else if (player->stateFlags1 & 0x206004) {
+                    } else if (player->stateFlags1 &
+                               (PLAYER_STATE1_4 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_200000)) {
                         func_8082DD2C(play, player);
                         func_80833AA0(player, play);
-                    } else if ((player->actor.bgCheckFlags & 1) || (player->stateFlags1 & 0x8000000)) {
+                    } else if ((player->actor.bgCheckFlags & 1) || (player->stateFlags1 & PLAYER_STATE1_8000000)) {
                         func_80831F34(play, player,
                                       func_801242B4(player)
                                           ? &gameplay_keep_Linkanim_00DFE8
@@ -10383,11 +10386,12 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
                     }
                 } else {
                     if ((player->actor.parent == NULL) &&
-                        ((func_8082DA90(play) != 0) || (player->unk_D6B != 0) || (func_80834600(player, play) == 0))) {
+                        (func_8082DA90(play) || (player->unk_D6B != 0) || !func_80834600(player, play))) {
                         func_8083827C(player, play);
                     } else {
                         player->fallStartHeight = player->actor.world.pos.y;
                     }
+
                     func_808446F4(play, player);
                 }
             }
@@ -10397,14 +10401,16 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         }
 
         if (play->csCtx.state != 0) {
-            if ((player->csMode != 5) && !(player->stateFlags1 & 0x800000)) {
-                if (!(player->stateFlags2 & 0x80) && (player->actor.id == 0)) {
+            if ((player->csMode != 5) && !(player->stateFlags1 & PLAYER_STATE1_800000)) {
+                if (!(player->stateFlags2 & PLAYER_STATE2_80) && (player->actor.id == ACTOR_PLAYER)) {
                     if ((play->csCtx.playerAction != NULL) && (D_8085D384[play->csCtx.playerAction->action] != 0)) {
-                        func_800B7298(play, NULL, 5U);
+                        func_800B7298(play, NULL, 5);
                         func_8082DABC(player);
                         // Can't be player->csMode == 0
-                    } else if ((!player->csMode) && !(player->stateFlags2 & 0x08000400) && (play->csCtx.state != 3)) {
-                        func_800B7298(play, NULL, 0x14U);
+                    } else if ((!player->csMode) &&
+                               !(player->stateFlags2 & (PLAYER_STATE2_400 | PLAYER_STATE2_8000000)) &&
+                               (play->csCtx.state != CS_STATE_3)) {
+                        func_800B7298(play, NULL, 0x14);
                         func_8082DABC(player);
                     }
                 }
@@ -10413,7 +10419,9 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
 
         // Can't be != 0
         if (player->csMode) {
-            if ((player->csMode != 6) || !(player->stateFlags1 & 0x04206004)) {
+            if ((player->csMode != 6) ||
+                !(player->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 |
+                                         PLAYER_STATE1_200000 | PLAYER_STATE1_4000000))) {
                 if (func_8085B08C != player->actionFunc) {
                     player->unk_AA5 = 4;
                     if (player->csMode == 5) {
@@ -10435,22 +10443,24 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         if (((player->unk_730 == NULL) || (player->unk_730 == player->targetActor) ||
              (player->unk_730->hintId == 0xFF)) &&
             (player->tatlTextId == 0)) {
-            player->stateFlags2 &= 0xFFDFFFFD;
+            player->stateFlags2 &= ~(PLAYER_STATE2_2 | PLAYER_STATE2_200000);
         }
-        player->stateFlags1 &= 0xFFBFEFEF;
-        player->stateFlags2 &= 0xFBBEAC92;
-        player->stateFlags3 &= 0xE1EFE6AF;
+
+        // TODO
+        player->stateFlags1 &= ~0x401010;
+        player->stateFlags2 &= ~0x441536D;
+        player->stateFlags3 &= ~0x1E101950;
         func_808425B4(player);
         func_8082EB38(play, player);
 
-        D_8085C3E4 = (player->stateFlags1 & 0x8000000) ? 0.5f : 1.0f;
+        D_8085C3E4 = (player->stateFlags1 & PLAYER_STATE1_8000000) ? 0.5f : 1.0f;
         D_8085C3E8 = 1.0f / D_8085C3E4;
 
         D_80862B48 = D_80862B4C = 0;
 
         var_v1 = Play_InCsMode(play);
-        D_80862B2C = (s32)player->currentMask;
-        if (!(player->stateFlags3 & 4)) {
+        D_80862B2C = player->currentMask;
+        if (!(player->stateFlags3 & PLAYER_STATE3_4)) {
             player->actionFunc(player, play);
         }
 
@@ -10466,18 +10476,18 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         }
 
         func_80832578(player, play);
-        if (player->actor.flags & 0x100) {
+        if (player->actor.flags & ACTOR_FLAG_100) {
             player->targetActorDistance = 0.0f;
         } else {
             player->targetActor = NULL;
             player->exchangeItemId = 0;
             player->targetActorDistance = FLT_MAX;
         }
-        if (!(player->actor.flags & 0x20000000) && (player->unk_AA5 != 5)) {
+        if (!(player->actor.flags & ACTOR_FLAG_20000000) && (player->unk_AA5 != 5)) {
             player->unk_A90 = NULL;
             player->unk_A94 = FLT_MAX;
         }
-        if (!(player->stateFlags1 & 0x800)) {
+        if (!(player->stateFlags1 & PLAYER_STATE1_800)) {
             player->interactRangeActor = NULL;
             player->getItemDirection = 0x6000;
         }
@@ -10494,18 +10504,19 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
 
         Math_StepToF(&player->windSpeed, 0.0f, 0.5f);
         if ((player->unk_B62 != 0) || ((gSaveContext.unk_3F28 == 0) && (gSaveContext.save.playerData.magic != 0) &&
-                                       (player->stateFlags1 & 0x10))) {
+                                       (player->stateFlags1 & PLAYER_STATE1_10))) {
             func_8082F1AC(play, player);
         }
+
         temp_fv0 = player->actor.world.pos.y - player->actor.prevPos.y;
         var_fv1_2 = temp_fv0 + ((player->bodyPartsPos[6].y + player->bodyPartsPos[3].y) * 0.5f);
         temp_fv0 += player->bodyPartsPos[7].y + 10.0f;
 
         if (player->cylinder.info.toucher.dmgFlags == 0x80000) {
-            player->cylinder.dim.height = 0x50;
+            player->cylinder.dim.height = 80;
             var_fv1_2 = ((temp_fv0 + var_fv1_2) * 0.5f) - 40.0f;
         } else {
-            player->cylinder.dim.height = (s16)(temp_fv0 - var_fv1_2);
+            player->cylinder.dim.height = temp_fv0 - var_fv1_2;
 
             if (player->cylinder.dim.height < 0) {
                 temp_fa0 = temp_fv0;
@@ -10522,30 +10533,29 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
             player->shieldCylinder.info.toucher.dmgFlags = 0x80000;
             player->shieldCylinder.info.toucherFlags = 1;
             player->shieldCylinder.info.bumperFlags = 0;
-            player->shieldCylinder.dim.height = 0x50;
-            player->shieldCylinder.dim.radius = 0x32;
-            player->shieldCylinder.dim.yShift =
-                (s16)(s32)((((temp_fv0 + var_fv1_2) * 0.5f) - 40.0f) - player->actor.world.pos.y);
+            player->shieldCylinder.dim.height = 80;
+            player->shieldCylinder.dim.radius = 50;
+            player->shieldCylinder.dim.yShift = ((temp_fv0 + var_fv1_2) * 0.5f - 40.0f) - player->actor.world.pos.y;
 
             Collider_UpdateCylinder(&player->actor, &player->shieldCylinder);
             CollisionCheck_SetAT(play, &play->colChkCtx, &player->shieldCylinder.base);
-        } else if (player->stateFlags1 & 0x400000) {
-            if ((player->transformation == 1) || (player->transformation == 3)) {
+        } else if (player->stateFlags1 & PLAYER_STATE1_400000) {
+            if ((player->transformation == PLAYER_FORM_GORON) || (player->transformation == PLAYER_FORM_DEKU)) {
                 player->shieldCylinder.base.acFlags = 0x15;
                 player->shieldCylinder.info.toucher.dmgFlags = 0x100000;
                 player->shieldCylinder.info.toucherFlags = 0;
                 player->shieldCylinder.info.bumperFlags = 1;
 
                 if (player->transformation == 1) {
-                    player->shieldCylinder.dim.height = 0x23;
+                    player->shieldCylinder.dim.height = 35;
                 } else {
-                    player->shieldCylinder.dim.height = 0x1E;
+                    player->shieldCylinder.dim.height = 30;
                 }
 
                 if (player->transformation == 1) {
-                    player->shieldCylinder.dim.radius = 0x1E;
+                    player->shieldCylinder.dim.radius = 30;
                 } else {
-                    player->shieldCylinder.dim.radius = 0x14;
+                    player->shieldCylinder.dim.radius = 20;
                 }
 
                 player->shieldCylinder.dim.yShift = 0;
@@ -10554,13 +10564,15 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
                 player->cylinder.dim.yShift = 0;
                 player->cylinder.dim.height = player->shieldCylinder.dim.height;
             } else {
-                player->cylinder.dim.height = (s16)(s32)((f32)player->cylinder.dim.height * 0.8f);
+                player->cylinder.dim.height = player->cylinder.dim.height * 0.8f;
             }
         }
 
         Collider_UpdateCylinder(&player->actor, &player->cylinder);
-        if (!(player->stateFlags2 & 0x4000)) {
-            if (!(player->stateFlags1 & 0x806084) && !(player->stateFlags3 & 0x10000000)) {
+        if (!(player->stateFlags2 & PLAYER_STATE2_4000)) {
+            if (!(player->stateFlags1 & (PLAYER_STATE3_4 | PLAYER_STATE3_80 | PLAYER_STATE3_2000 | PLAYER_STATE3_4000 |
+                                         PLAYER_STATE3_800000)) &&
+                !(player->stateFlags3 & PLAYER_STATE3_10000000)) {
                 if ((func_808561B0 != player->actionFunc) && (func_80853D68 != player->actionFunc) &&
                     (player->actor.draw != NULL)) {
                     if ((player->actor.id != 0) && (player->csMode == 0x6E)) {
@@ -10569,7 +10581,8 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
                     CollisionCheck_SetOC(play, &play->colChkCtx, &player->cylinder.base);
                 }
             }
-            if (!(player->stateFlags1 & 0x04000080) && (player->invincibilityTimer <= 0)) {
+            if (!(player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_4000000)) &&
+                (player->invincibilityTimer <= 0)) {
                 if ((func_808561B0 != player->actionFunc) &&
                     ((func_80857BE8 != player->actionFunc) || (player->unk_AE7 != 1))) {
                     if (player->cylinder.base.atFlags != 0) {
@@ -10579,19 +10592,21 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
                 }
             }
         }
+
         AnimationContext_SetNextQueue(play);
     }
 
     func_801229FC(player);
     Math_Vec3f_Copy(&player->actor.home.pos, &player->actor.world.pos);
 
-    if ((player->stateFlags1 & 0x30000080) || (player != GET_PLAYER(play))) {
-        player->actor.colChkInfo.mass = 0xFF;
+    if ((player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000)) ||
+        (player != GET_PLAYER(play))) {
+        player->actor.colChkInfo.mass = MASS_IMMOVABLE;
     } else {
         player->actor.colChkInfo.mass = D_8085D174[player->transformation];
     }
 
-    player->stateFlags3 &= ~0x404;
+    player->stateFlags3 &= ~(PLAYER_STATE3_4 | PLAYER_STATE3_400);
     Collider_ResetCylinderAC(play, &player->cylinder.base);
     Collider_ResetCylinderAC(play, &player->shieldCylinder.base);
     Collider_ResetCylinderAT(play, &player->shieldCylinder.base);
@@ -10599,7 +10614,8 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
     Collider_ResetQuadAT(play, &player->meleeWeaponQuads[1].base);
     Collider_ResetQuadAC(play, &player->shieldQuad.base);
 
-    if (!(player->actor.bgCheckFlags & 1) || (player->actor.bgCheckFlags & 2) || (player->actor.floorBgId != 0x32)) {
+    if (!(player->actor.bgCheckFlags & 1) || (player->actor.bgCheckFlags & 2) ||
+        (player->actor.floorBgId != BGCHECK_SCENE)) {
         player->unk_AC0 = 0.0f;
     }
     player->actor.shape.yOffset = player->unk_ABC + player->unk_AC0;
