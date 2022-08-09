@@ -21,6 +21,7 @@ CHECK_NEWF = "int"
 BINANG_SUB = "int"
 BINANG_ADD = "int"
 NULL = "int"
+GET_PLAYER = "int"
 
 [decompme.compilers]
 "tools/ido_recomp/linux/7.1/cc" = "ido7.1"

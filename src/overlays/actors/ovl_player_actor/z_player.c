@@ -10033,8 +10033,272 @@ s32 func_808430E0(Player* this) {
     return true;
 }
 
+#ifdef NON_MATCHING
+// float regalloc and in-function static data
+void func_80843178(PlayState* play, Player* this) {
+    u8 spC7;
+    CollisionPoly* spC0;
+    f32 temp_fv0; // spBC
+    f32 temp_fv0_3;
+    f32 temp_fv1; // spB4
+    u32 var_v1; // spB0
+    s32 spAC;
+
+    spC7 = 0;
+    spAC = (func_8084D820 == this->actionFunc) && (this->unk_397 == 4);
+    D_80862B1C = this->unk_D5E;
+
+    temp_fv0 = this->ageProperties->unk_38;
+    temp_fv1 = this->ageProperties->unk_00;
+
+    if (this->stateFlags1 & (PLAYER_STATE1_20000000 | PLAYER_STATE1_80000000)) {
+        if ((!(this->stateFlags1 & PLAYER_STATE1_80) && !(this->stateFlags2 & PLAYER_STATE1_4000) && (this->stateFlags1 & PLAYER_STATE1_80000000)) || spAC) {
+            var_v1 = 0x38;
+            this->actor.bgCheckFlags &= ~1;
+        } else {
+            if ((this->stateFlags1 & 1) && (play->roomCtx.currRoom.unk3 != 1) && ((this->unk_D68 - (s32) this->actor.world.pos.y) >= 0x64)) {
+                var_v1 = 0x39;
+            } else if (!(this->stateFlags1 & PLAYER_STATE1_1) && ( (func_8084E034 == this->actionFunc) || (func_8084D820 == this->actionFunc))) {
+                var_v1 = 0x3C;
+                this->actor.bgCheckFlags &= ~(8 | 0x200);
+            } else {
+                var_v1 = 0x3F;
+            }
+        }
+    } else {
+        if (func_808561B0 == this->actionFunc) {
+            var_v1 = 0x814;
+        } else if ((this->stateFlags3 & (PLAYER_STATE3_1000 | PLAYER_STATE3_80000)) && (this->linearVelocity >= 8.0f)) {
+            var_v1 = 0x337;
+        } else {
+            var_v1 = 0x3F;
+        }
+    }
+
+    if (this->stateFlags3 & PLAYER_STATE3_1) {
+        var_v1 &= ~6;
+    }
+    if (var_v1 & 4) {
+        this->stateFlags3 |= PLAYER_STATE3_10;
+    }
+
+    if (func_801242B4(this)) {
+        var_v1 &= ~0x18;
+    }
+
+    Actor_UpdateBgCheckInfo(play, &this->actor, 26.800001f, temp_fv0, temp_fv1, var_v1);
+
+    this->unk_AC0 -= (this->actor.world.pos.y - this->actor.prevPos.y) / this->actor.scale.y;
+    this->unk_AC0 = CLAMP(this->unk_AC0, -1000.0f, 1000.0f);
+
+    if (this->actor.bgCheckFlags & 0x10) {
+        this->actor.velocity.y = 0.0f;
+    }
+
+    D_80862B18 = this->actor.world.pos.y - this->actor.floorHeight;
+    D_80862B10 = 0;
+    spC0 = this->actor.floorPoly;
+
+    if ((spC0 != NULL) && (var_v1 & 4)) {
+        this->unk_D5E = func_800C9B40(&play->colCtx, spC0, this->actor.floorBgId);
+        if (this == GET_PLAYER(play)) {
+            func_801A3CF4(SurfaceType_GetEcho(&play->colCtx, spC0,  this->actor.floorBgId));
+            if (this->actor.floorBgId == 0x32) {
+                func_800FAAB4(play, SurfaceType_GetLightSettingIndex(&play->colCtx, spC0, this->actor.floorBgId));
+            } else {
+                DynaPolyActor_SetRidingRotatingStateByIndex(&play->colCtx, this->actor.floorBgId);
+            }
+        }
+
+        D_80862B10 = SurfaceType_GetConveyorSpeed(&play->colCtx, spC0, this->actor.floorBgId);
+        if (D_80862B10 != 0) {
+            D_80862B14 = SurfaceType_GetConveyorType(&play->colCtx, spC0, (s32) this->actor.floorBgId);
+            if (((D_80862B14 == 0) && (this->actor.depthInWater > 20.0f)) || ((D_80862B14 != 0) && (this->actor.bgCheckFlags & 1))) {
+                D_80862B16 = SurfaceType_GetConveyorDirection(&play->colCtx, spC0, this->actor.floorBgId) << 0xA;
+            } else {
+                D_80862B10 = 0;
+            }
+        }
+    }
+
+    this->actor.bgCheckFlags &= ~0x200;
+    if (this->actor.bgCheckFlags & 8) {
+        static Vec3f D_8085D358 = { 0.0f, 0.0f, 0.0f };
+        CollisionPoly* spA8;
+        s32 spA4;
+        s16 temp_v1_3; // spA2
+        f32 sp9C;
+
+        D_8085D358.y = 17.800001f;
+        D_8085D358.z = this->ageProperties->unk_38 + 10.0f;
+        if (func_80835D58(play, this, &D_8085D358, &spA8, &spA4, &D_80862B30) != 0) {
+            this->actor.bgCheckFlags |= 0x200;
+            if (spA8 != this->actor.wallPoly) {
+                this->actor.wallPoly = spA8;
+                this->actor.wallBgId = spA4;
+                this->actor.wallYaw = Math_FAtan2F(spA8->normal.z, spA8->normal.x);
+            }
+        }
+
+        temp_v1_3 = this->actor.shape.rot.y - BINANG_ADD(this->actor.wallYaw, 0x8000);
+        D_80862B0C = func_800C9A4C(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId);
+        D_80862B20 = ABS_ALT(temp_v1_3);
+        temp_v1_3 = BINANG_SUB(this->currentYaw, BINANG_ADD(this->actor.wallYaw, 0x8000));
+        D_80862B24 = ABS_ALT(temp_v1_3);
+
+        temp_fv0_3 = D_80862B24 * 0.00008f;
+        if (!(this->actor.bgCheckFlags & 1) || (temp_fv0_3 >= 1.0f)) {
+            this->unk_B50 = gGameInfo->data[0x2D] / 100.0f;
+        } else {
+            sp9C = (gGameInfo->data[0x2D] / 100.0f) * temp_fv0_3;
+
+            this->unk_B50 = sp9C;
+            if (sp9C < 0.1f) {
+                this->unk_B50 = 0.1f;
+            }
+        }
+
+        if ((this->actor.bgCheckFlags & 0x200) && (D_80862B20 < 0x3000)) {
+            CollisionPoly* sp98 = this->actor.wallPoly;
+
+            if (ABS_ALT(sp98->normal.y) < 0x258) {
+                f32 sp94;
+                f32 sp90;
+                f32 sp8C;
+                f32 temp_fv1_3;
+                CollisionPoly* sp84;
+                CollisionPoly* sp80;
+                s32 sp7C;
+                Vec3f sp70;
+                f32 temp_fv0_5; // sp6C
+                f32 sp68;
+                s32 temp_v1_6;
+
+                sp94 = COLPOLY_GET_NORMAL(sp98->normal.x);
+                sp90 = COLPOLY_GET_NORMAL(sp98->normal.y);
+                sp8C = COLPOLY_GET_NORMAL(sp98->normal.z);
+
+                this->wallDistance = Math3D_UDistPlaneToPos(sp94, sp90, sp8C, sp98->dist, &this->actor.world.pos);
+                temp_fv1_3 = this->wallDistance + 10.0f;
+                sp70.x = this->actor.world.pos.x - (temp_fv1_3 * sp94);
+                sp70.z = this->actor.world.pos.z - (temp_fv1_3 * sp8C);
+                sp70.y = this->actor.world.pos.y + this->ageProperties->unk_0C;
+                temp_fv0_5 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp84, &sp7C, &this->actor, &sp70);
+
+                this->wallHeight = temp_fv0_5 - this->actor.world.pos.y;
+                if ((this->wallHeight < 17.800001f) || ((BgCheck_EntityCheckCeiling(&play->colCtx, &sp68, &this->actor.world.pos, (temp_fv0_5 - this->actor.world.pos.y) + 20.0f, &sp80, &sp7C, &this->actor) != 0))) {
+                    this->wallHeight = 399.96002f;
+                } else {
+                    D_8085D358.y = (temp_fv0_5 + 5.0f) - this->actor.world.pos.y;
+
+                    if ((func_80835D58(play, this, &D_8085D358, &sp80, &sp7C, &D_80862B30)) && 
+                        (temp_v1_6 = this->actor.wallYaw - Math_FAtan2F(sp80->normal.z, sp80->normal.x),
+                        ABS_ALT(temp_v1_6) < 0x4000) && !(func_800C9AB0(&play->colCtx, sp80, sp7C))) {
+                        this->wallHeight = 399.96002f;
+                    } else if (func_800C9A7C(&play->colCtx, sp98, this->actor.wallBgId) == 0) {
+                        if (this->ageProperties->unk_1C <= this->wallHeight) {
+                            if (ABS_ALT(sp84->normal.y) > 0x5DC0) {
+                                if ((this->ageProperties->unk_14 <= this->wallHeight) || func_801242B4(this)) {
+                                    spC7 = 4;
+                                } else if (this->ageProperties->unk_18 <= this->wallHeight) {
+                                    spC7 = 3;
+                                } else {
+                                    spC7 = 2;
+                                }
+                            }
+                        } else {
+                            spC7 = 1;
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        this->unk_B50 = gGameInfo->data[0x2D] / 100.0f;
+        this->wallHeight = 0.0f;
+        this->unk_B5D = 0;
+    }
+
+    if (spC7 == this->unk_B5C) {
+        if (this->linearVelocity != 0.0f) {
+            if (this->unk_B5D < 0x64) {
+                this->unk_B5D++;
+            }
+        }
+    } else {
+        this->unk_B5C = spC7;
+        this->unk_B5D = 0;
+    }
+
+    D_80862B08 = func_800C99D4(&play->colCtx, spC0, this->actor.floorBgId);
+    if (this->actor.bgCheckFlags & 1) {
+        f32 sp60;
+        f32 sp5C;
+        f32 sp58;
+        f32 sp54;
+        s32 pad;
+        f32 sp4C;
+
+        D_80862B40 = SurfaceType_GetSlope(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        if (func_808430E0(this) == 0) {
+            sp5C = COLPOLY_GET_NORMAL(spC0->normal.y);
+
+            if (this->actor.floorBgId != 0x32) {
+                DynaPolyActor_SetRidingMovingStateByIndex(&play->colCtx, this->actor.floorBgId);
+            } else if (!(this->actor.bgCheckFlags & 2) && (this->actor.depthInWater <= 24.0f) && (D_80862B40 != 1) && (D_80862B10 == 0) && (sp5C > 0.5f)) {
+                if (ActorCutscene_GetCurrentIndex() != play->playerActorCsIds[8]) {
+                    func_80841A50(play, this);
+                }
+            }
+
+            sp60 = COLPOLY_GET_NORMAL(spC0->normal.x);
+            sp5C = 1.0f / sp5C;
+            sp58 = COLPOLY_GET_NORMAL(spC0->normal.z);
+
+            sp54 = Math_SinS(this->currentYaw);
+            sp4C = Math_CosS(this->currentYaw);
+            this->unk_B6C = Math_FAtan2F(1.0f, (-(sp60 * sp54) - (sp58 * sp4C)) * sp5C);
+            this->unk_B6E = Math_FAtan2F(1.0f, (-(sp60 * sp4C) - (sp58 * sp54)) * sp5C);
+            sp54 = Math_SinS(this->actor.shape.rot.y);
+            sp4C = Math_CosS(this->actor.shape.rot.y);
+            D_80862B28 = Math_FAtan2F(1.0f, (-(sp60 * sp54) - (sp58 * sp4C)) * sp5C);
+            func_8083CF68(play, this);
+        }
+    } else {
+        func_808430E0(this);
+        D_80862B40 = 0;
+    }
+
+    if (spC0 != NULL) {
+        this->unk_D66 = this->unk_B72;
+        if (spAC != 0) {
+            this->unk_B72 = 2;
+            return;
+        }
+
+        if (this->actor.bgCheckFlags & 0x20) {
+            if (this->actor.depthInWater < 50.0f) {
+                if (this->actor.depthInWater < 20.0f) {
+                     this->unk_B72 = (D_80862B08 == 0xD) ? 3 : 4;
+                } else {
+                     this->unk_B72 = (D_80862B08 == 0xD) ? 13 : 5;
+                }
+
+                return;
+            }
+        }
+
+        if (this->stateFlags2 & PLAYER_STATE2_200) {
+            this->unk_B72 = 1;
+        } else if (COLPOLY_GET_NORMAL(spC0->normal.y) > 0.5f) {
+            this->unk_B72 = SurfaceType_GetSfx(&play->colCtx, spC0, this->actor.floorBgId);
+        }
+    }
+}
+#else
 void func_80843178(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80843178.s")
+#endif
 
 void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
     u8 seqMode;
@@ -11731,7 +11995,6 @@ s32 func_80848B6C(Player* this, PlayState* play) {
 
 extern LinkAnimationHeader* D_8085D5E4[];
 extern LinkAnimationHeader* D_8085D5F0[];
-extern u16 D_8085D5FC[];
 
 s32 func_80848BF4(Player* this, PlayState* play) {
     s32 index;
