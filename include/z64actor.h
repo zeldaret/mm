@@ -1202,4 +1202,9 @@ typedef struct DoorSlidingActor {
 
 #define DOOR_GET_TRANSITION_ID(thisx) ((u16)(thisx)->params >> 10)
 
+typedef struct BlinkInfo {
+    /* 0x0 */ s16 eyeTexIndex;
+    /* 0x2 */ s16 blinkTimer;
+} BlinkInfo; // size = 0x4
+
 #endif

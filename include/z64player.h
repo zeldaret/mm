@@ -739,8 +739,7 @@ typedef struct Player {
     /* 0x2C8 */ SkelAnime unk_2C8;
     /* 0x30C */ Vec3s jointTable[5];
     /* 0x32A */ Vec3s morphTable[5];
-    /* 0x348 */ s16 eyeTexId;
-    /* 0x34A */ s16 eyeAnimTimer;
+    /* 0x348 */ BlinkInfo blinkInfo;
     /* 0x34C */ Actor* heldActor;
     /* 0x350 */ PosRot leftHandWorld;
     /* 0x364 */ Actor* rightHandActor;

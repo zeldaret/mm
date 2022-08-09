@@ -10311,13 +10311,13 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
             Math_ScaledStepToS(&player->unk_AAA, 0, 0x190);
         }
 
-        if ((player->transformation > 0) && (player->transformation < 4)) {
-            func_800BBB74(&player->eyeTexId, 20, 80, 3);
+        if ((player->transformation >= PLAYER_FORM_GORON) && (player->transformation <= PLAYER_FORM_DEKU)) {
+            func_800BBB74(&player->blinkInfo, 20, 80, 3);
         } else {
-            func_800BBAC0(&player->eyeTexId, 20, 80, 6);
+            func_800BBAC0(&player->blinkInfo, 20, 80, 6);
         }
 
-        player->actor.shape.face = ((play->gameplayFrames & 0x20) ? 0 : 3) + player->eyeTexId;
+        player->actor.shape.face = ((play->gameplayFrames & 0x20) ? 0 : 3) + player->blinkInfo.eyeTexIndex;
         if (player->currentMask == 4) {
             func_80124420(player);
         }

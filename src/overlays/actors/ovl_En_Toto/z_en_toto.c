@@ -214,7 +214,7 @@ void func_80BA383C(EnToto* this, PlayState* play) {
         }
         Animation_PlayOnce(&this->skelAnime, D_80BA5078[this->unk2B4]);
     }
-    func_800BBB74(this->unk260, 0x14, 0x50, 3);
+    func_800BBB74(&this->blinkInfo, 20, 80, 3);
 }
 
 void func_80BA3930(EnToto* this, PlayState* play) {
@@ -316,7 +316,7 @@ void func_80BA3D38(EnToto* this, PlayState* play) {
     this->text = ENTOTO_WEEK_EVENT_FLAGS ? D_80BA50BC : D_80BA5088;
     func_80BA4C0C(this, play);
     play->actorCtx.unk5 |= 0x20;
-    this->unk260[0] = 0;
+    this->blinkInfo.eyeTexIndex = 0;
 }
 
 void func_80BA3DBC(EnToto* this, PlayState* play) {
@@ -727,7 +727,7 @@ void EnToto_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C28C(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp4C[this->unk260[0]]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp4C[this->blinkInfo.eyeTexIndex]));
     Scene_SetRenderModeXlu(play, 0, 1);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           NULL, &this->actor);

@@ -3519,49 +3519,50 @@ void Enemy_StartFinishingBlow(PlayState* play, Actor* actor) {
 }
 
 // blinking routine
-s16 func_800BBAC0(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
-    if (DECR(arg0[1]) == 0) {
-        arg0[1] = Rand_S16Offset(arg1, arg2);
+s16 func_800BBAC0(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3) {
+    if (DECR(info->blinkTimer) == 0) {
+        info->blinkTimer = Rand_S16Offset(arg1, arg2);
     }
 
-    if (arg0[1] - arg3 > 0) {
-        arg0[0] = 0;
-    } else if ((arg0[1] - arg3 >= -1) || (arg0[1] < 2)) {
-        arg0[0] = 1;
+    if (info->blinkTimer - arg3 > 0) {
+        info->eyeTexIndex = 0;
+    } else if ((info->blinkTimer - arg3 >= -1) || (info->blinkTimer < 2)) {
+        info->eyeTexIndex = 1;
     } else {
-        arg0[0] = 2;
+        info->eyeTexIndex = 2;
     }
 
-    return arg0[0];
+    return info->eyeTexIndex;
 }
 
 // blinking routine
-s16 func_800BBB74(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
-    if (DECR(arg0[1]) == 0) {
-        arg0[1] = Rand_S16Offset(arg1, arg2);
+s16 func_800BBB74(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3) {
+    if (DECR(info->blinkTimer) == 0) {
+        info->blinkTimer = Rand_S16Offset(arg1, arg2);
     }
 
-    if (arg0[1] - arg3 > 0) {
-        arg0[0] = 0;
-    } else if (arg0[1] - arg3 == 0) {
-        arg0[0] = 1;
+    if (info->blinkTimer - arg3 > 0) {
+        info->eyeTexIndex = 0;
+    } else if (info->blinkTimer - arg3 == 0) {
+        info->eyeTexIndex = 1;
     } else {
-        arg0[0] = 2;
+        info->eyeTexIndex = 2;
     }
 
-    return arg0[0];
+    return info->eyeTexIndex;
 }
 
 // unused blinking routine
-s16 func_800BBC20(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
-    if (DECR(arg0[1]) == 0) {
-        arg0[1] = Rand_S16Offset(arg1, arg2);
-        arg0[0]++;
-        if ((arg0[0] % 3) == 0) {
-            arg0[0] = (s32)(Rand_ZeroOne() * arg3) * 3;
+s16 func_800BBC20(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3) {
+    if (DECR(info->blinkTimer) == 0) {
+        info->blinkTimer = Rand_S16Offset(arg1, arg2);
+        info->eyeTexIndex++;
+        if ((info->eyeTexIndex % 3) == 0) {
+            info->eyeTexIndex = (s32)(Rand_ZeroOne() * arg3) * 3;
         }
     }
-    return arg0[0];
+
+    return info->eyeTexIndex;
 }
 
 void Actor_SpawnBodyParts(Actor* actor, PlayState* play, s32 arg2, Gfx** dList) {
