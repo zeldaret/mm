@@ -9466,8 +9466,6 @@ s32 func_808430E0(Player* this) {
     return true;
 }
 
-#ifdef NON_MATCHING
-// float regalloc and in-function static data
 void func_80843178(PlayState* play, Player* this) {
     u8 spC7;
     CollisionPoly* spC0;
@@ -9588,10 +9586,10 @@ void func_80843178(PlayState* play, Player* this) {
         if (!(this->actor.bgCheckFlags & 1) || (temp_fv0_3 >= 1.0f)) {
             this->unk_B50 = gGameInfo->data[0x2D] / 100.0f;
         } else {
-            sp9C = (gGameInfo->data[0x2D] / 100.0f) * temp_fv0_3;
+            temp_fv1 = (gGameInfo->data[0x2D] / 100.0f) * temp_fv0_3;
 
-            this->unk_B50 = sp9C;
-            if (sp9C < 0.1f) {
+            this->unk_B50 = temp_fv1;
+            if (temp_fv1 < 0.1f) {
                 this->unk_B50 = 0.1f;
             }
         }
@@ -9738,12 +9736,6 @@ void func_80843178(PlayState* play, Player* this) {
         }
     }
 }
-#else
-Vec3f D_8085D358 = { 0.0f, 0.0f, 0.0f };
-
-void func_80843178(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80843178.s")
-#endif
 
 Vec3f D_8085D364 = { 0.0f, 0.5f, 0.0f };
 
@@ -10319,9 +10311,9 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         }
 
         if ((player->transformation > 0) && (player->transformation < 4)) {
-            func_800BBB74(&player->eyeTexId, 0x14, 0x50, 3);
+            func_800BBB74(&player->eyeTexId, 20, 80, 3);
         } else {
-            func_800BBAC0(&player->eyeTexId, 0x14, 0x50, 6);
+            func_800BBAC0(&player->eyeTexId, 20, 80, 6);
         }
 
         player->actor.shape.face = ((play->gameplayFrames & 0x20) ? 0 : 3) + player->eyeTexId;
