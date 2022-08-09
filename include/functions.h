@@ -2593,7 +2593,7 @@ void* Play_LoadScene(PlayState* play, RomFile* entry);
 void func_8016927C(PlayState* play, s16 sParm2);
 // void func_801692C4(PlayState* play, UNK_TYPE1 uParm2);
 // void Play_SceneInit(PlayState* play, s32 sceneIndex, UNK_TYPE1 param_3);
-void Play_GetScreenPos(PlayState* play, Vec3f* src, Vec3f* dest);
+void Play_GetScreenPos(PlayState* play, Vec3f* worldPos, Vec3f* screenPos);
 s16 Play_CreateSubCamera(PlayState* play);
 s16 Play_GetActiveCamId(PlayState* play);
 s32 Play_ChangeCameraStatus(PlayState* play, s16 camId, s16 status);

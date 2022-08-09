@@ -74,13 +74,14 @@ s32 Play_InCsMode(PlayState* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_SceneInit.s")
 
-void Play_GetScreenPos(PlayState* this, Vec3f* worldPos, Vec3f* projectedPos) {
+void Play_GetScreenPos(PlayState* this, Vec3f* worldPos, Vec3f* screenPos) {
     f32 invW;
 
-    Actor_GetProjectedPos(this, worldPos, projectedPos, &invW);
+    // screenPos temporarily stores the projectedPos
+    Actor_GetProjectedPos(this, worldPos, screenPos, &invW);
 
-    projectedPos->x = (SCREEN_WIDTH / 2) + (projectedPos->x * invW * (SCREEN_WIDTH / 2));
-    projectedPos->y = (SCREEN_HEIGHT / 2) - (projectedPos->y * invW * (SCREEN_HEIGHT / 2));
+    screenPos->x = (SCREEN_WIDTH / 2) + (screenPos->x * invW * (SCREEN_WIDTH / 2));
+    screenPos->y = (SCREEN_HEIGHT / 2) - (screenPos->y * invW * (SCREEN_HEIGHT / 2));
 }
 
 s16 Play_CreateSubCamera(PlayState* this) {
