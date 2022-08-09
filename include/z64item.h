@@ -563,7 +563,8 @@ typedef enum {
     /* 0x73 */ GID_CHATEAU,
     /* 0x74 */ GID_PICTO_BOX,
     /* 0x75 */ GID_MASK_FIERCE_DEITY,
-    /* 0x76 */ GID_MAX
+    /* 0x76 */ GID_MAX,
+    /* 0xFF */ GID_NONE = -1
 } GetItemDrawID;
 
 // This enum may not be real, and actionparam is just used directly.
