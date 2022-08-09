@@ -968,14 +968,14 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, PlayState* play) {
         }
     } else {
         switch (Message_GetState(&play->msgCtx)) {
-            case 5:
+            case TEXT_STATE_5:
                 if (Message_ShouldAdvance(play)) {
                     Message_StartTextbox(play, 0x13B3, &this->actor);
                     this->textId = 0x13B3;
                 }
                 break;
 
-            case 6:
+            case TEXT_STATE_DONE:
                 if (Message_ShouldAdvance(play)) {
                     this->textId = 0;
                     this->isInvincible = false;
@@ -983,11 +983,11 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, PlayState* play) {
                 }
                 break;
 
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
+            case TEXT_STATE_NONE:
+            case TEXT_STATE_1:
+            case TEXT_STATE_CLOSING:
+            case TEXT_STATE_3:
+            case TEXT_STATE_CHOICE:
                 break;
         }
     }

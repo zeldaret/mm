@@ -1,53 +1,70 @@
 ﻿<Root>
+    <!-- Po Sisters (Jo, Beth, Ami, and Meg) that you fight as a minigame in Ikana for a HP -->
+    <!-- Joelle is red, Beth is blue, Ami is green, and Meg is purple -->
     <File Name="object_po_sisters" Segment="6">
-        <Animation Name="object_po_sisters_Anim_000114" Offset="0x114" />
-        <Animation Name="object_po_sisters_Anim_000680" Offset="0x680" />
-        <Animation Name="object_po_sisters_Anim_0008C0" Offset="0x8C0" />
-        <Animation Name="object_po_sisters_Anim_000A54" Offset="0xA54" />
-        <Animation Name="object_po_sisters_Anim_000D40" Offset="0xD40" />
-        <Animation Name="object_po_sisters_Anim_00119C" Offset="0x119C" />
-        <Animation Name="object_po_sisters_Anim_0014CC" Offset="0x14CC" />
-        <DList Name="object_po_sisters_DL_001CB0" Offset="0x1CB0" />
-        <DList Name="object_po_sisters_DL_001DE0" Offset="0x1DE0" />
-        <DList Name="object_po_sisters_DL_0024A8" Offset="0x24A8" />
-        <DList Name="object_po_sisters_DL_002570" Offset="0x2570" />
-        <DList Name="object_po_sisters_DL_0025E8" Offset="0x25E8" />
-        <DList Name="object_po_sisters_DL_002680" Offset="0x2680" />
-        <DList Name="object_po_sisters_DL_002718" Offset="0x2718" />
-        <DList Name="object_po_sisters_DL_0027B0" Offset="0x27B0" />
-        <DList Name="object_po_sisters_DL_002870" Offset="0x2870" />
-        <DList Name="object_po_sisters_DL_002EB8" Offset="0x2EB8" />
-        <DList Name="object_po_sisters_DL_002F88" Offset="0x2F88" />
-        <DList Name="object_po_sisters_DL_003628" Offset="0x3628" />
-        <DList Name="object_po_sisters_DL_003880" Offset="0x3880" />
-        <DList Name="object_po_sisters_DL_003DC8" Offset="0x3DC8" />
-        <DList Name="object_po_sisters_DL_004020" Offset="0x4020" />
-        <DList Name="object_po_sisters_DL_0046E0" Offset="0x46E0" />
-        <Texture Name="object_po_sisters_Tex_0048D8" OutName="tex_0048D8" Format="rgba16" Width="16" Height="16" Offset="0x48D8" />
-        <Texture Name="object_po_sisters_Tex_004AD8" OutName="tex_004AD8" Format="rgba16" Width="32" Height="32" Offset="0x4AD8" />
-        <Texture Name="object_po_sisters_Tex_0052D8" OutName="tex_0052D8" Format="rgba16" Width="32" Height="16" Offset="0x52D8" />
-        <Texture Name="object_po_sisters_Tex_0056D8" OutName="tex_0056D8" Format="rgba16" Width="16" Height="16" Offset="0x56D8" />
-        <Texture Name="object_po_sisters_Tex_0058D8" OutName="tex_0058D8" Format="rgba16" Width="4" Height="4" Offset="0x58D8" />
-        <Texture Name="object_po_sisters_Tex_0058F8" OutName="tex_0058F8" Format="rgba16" Width="16" Height="16" Offset="0x58F8" />
-        <Texture Name="object_po_sisters_Tex_005AF8" OutName="tex_005AF8" Format="rgba16" Width="16" Height="16" Offset="0x5AF8" />
-        <Texture Name="object_po_sisters_Tex_005CF8" OutName="tex_005CF8" Format="rgba16" Width="8" Height="8" Offset="0x5CF8" />
-        <Texture Name="object_po_sisters_Tex_005D78" OutName="tex_005D78" Format="rgba16" Width="16" Height="16" Offset="0x5D78" />
-        <Texture Name="object_po_sisters_Tex_005F78" OutName="tex_005F78" Format="rgba16" Width="16" Height="8" Offset="0x5F78" />
-        <Texture Name="object_po_sisters_Tex_006078" OutName="tex_006078" Format="rgba16" Width="16" Height="16" Offset="0x6078" />
-        <Texture Name="object_po_sisters_Tex_006278" OutName="tex_006278" Format="rgba16" Width="8" Height="8" Offset="0x6278" />
-        <Texture Name="object_po_sisters_Tex_0062F8" OutName="tex_0062F8" Format="rgba16" Width="4" Height="4" Offset="0x62F8" />
-        <Texture Name="object_po_sisters_Tex_006318" OutName="tex_006318" Format="rgba16" Width="16" Height="16" Offset="0x6318" />
-        <Limb Name="object_po_sisters_Standardlimb_006518" Type="Standard" EnumName="OBJECT_PO_SISTERS_LIMB_01" Offset="0x6518" />
-        <Limb Name="object_po_sisters_Standardlimb_006524" Type="Standard" EnumName="OBJECT_PO_SISTERS_LIMB_02" Offset="0x6524" />
-        <Limb Name="object_po_sisters_Standardlimb_006530" Type="Standard" EnumName="OBJECT_PO_SISTERS_LIMB_03" Offset="0x6530" />
-        <Limb Name="object_po_sisters_Standardlimb_00653C" Type="Standard" EnumName="OBJECT_PO_SISTERS_LIMB_04" Offset="0x653C" />
-        <Limb Name="object_po_sisters_Standardlimb_006548" Type="Standard" EnumName="OBJECT_PO_SISTERS_LIMB_05" Offset="0x6548" />
-        <Limb Name="object_po_sisters_Standardlimb_006554" Type="Standard" EnumName="OBJECT_PO_SISTERS_LIMB_06" Offset="0x6554" />
-        <Limb Name="object_po_sisters_Standardlimb_006560" Type="Standard" EnumName="OBJECT_PO_SISTERS_LIMB_07" Offset="0x6560" />
-        <Limb Name="object_po_sisters_Standardlimb_00656C" Type="Standard" EnumName="OBJECT_PO_SISTERS_LIMB_08" Offset="0x656C" />
-        <Limb Name="object_po_sisters_Standardlimb_006578" Type="Standard" EnumName="OBJECT_PO_SISTERS_LIMB_09" Offset="0x6578" />
-        <Limb Name="object_po_sisters_Standardlimb_006584" Type="Standard" EnumName="OBJECT_PO_SISTERS_LIMB_0A" Offset="0x6584" />
-        <Limb Name="object_po_sisters_Standardlimb_006590" Type="Standard" EnumName="OBJECT_PO_SISTERS_LIMB_0B" Offset="0x6590" />
-        <Skeleton Name="object_po_sisters_Skel_0065C8" Type="Normal" LimbType="Standard" LimbNone="OBJECT_PO_SISTERS_LIMB_NONE" LimbMax="OBJECT_PO_SISTERS_LIMB_MAX" EnumName="object_po_sisters_Limbs" Offset="0x65C8" />
+        <!-- PoSister Animations -->
+        <Animation Name="gPoSistersAttackAnim" Offset="0x114" />
+        <Animation Name="gPoeSistersMegCryAnim" Offset="0x680" />
+        <Animation Name="gPoeSistersDamagedAnim" Offset="0x8C0" />
+        <Animation Name="gPoSistersFleeAnim" Offset="0xA54" />
+        <Animation Name="gPoeSistersFloatAnim" Offset="0xD40" />
+        <Animation Name="gPoeSistersAppearDisappearAnim" Offset="0x119C" />
+        <Animation Name="gPoeSistersSwayAnim" Offset="0x14CC" />
+
+        <!-- PoSister DisplayLists -->
+        <DList Name="gPoSistersMegFaceDL" Offset="0x1CB0" />
+        <DList Name="gPoSistersMegBodyDL" Offset="0x1DE0" />
+        <DList Name="gPoSistersLowerBodyDL" Offset="0x24A8" />
+        <!--- unknown? wont draw, DL contents doesn't give enough hints -->
+        <DList Name="gPoSisters_DL_002570" Offset="0x2570" />
+        <DList Name="gPoSistersDrawArmShortDL" Offset="0x25E8" />
+        <DList Name="gPoSistersDrawArmMedDL" Offset="0x2680" />
+        <DList Name="gPoSistersDrawArmLongDL" Offset="0x2718" />
+        <DList Name="gPoSistersDrawTorchDL" Offset="0x27B0" />
+        <!--- unknown? wont draw, DL contents doesn't give enough hints -->
+        <DList Name="gPoSisters_DL_002870" Offset="0x2870" />
+        <DList Name="gPoSistersJoelleFaceDL" Offset="0x2EB8" />
+        <DList Name="gPoSistersJoelleBodyDL" Offset="0x2F88" />
+        <DList Name="gPoSistersBethBodyDL" Offset="0x3628" />
+        <DList Name="gPoSistersBethFaceDL" Offset="0x3880" />
+        <DList Name="gPoSistersAmyBodyDL" Offset="0x3DC8" />
+        <DList Name="gPoSistersAmyFaceDL" Offset="0x4020" />
+        <DList Name="gPoSistersBurnBodyDL" Offset="0x46E0" />
+
+        <!-- PoSister Textures -->
+        <Texture Name="gPoSistersTorchTex" OutName="torch" Format="rgba16" Width="16" Height="16" Offset="0x48D8" />
+        <Texture Name="gPoSistersTatteredRobeTex" OutName="tattered_robe" Format="rgba16" Width="32" Height="32" Offset="0x4AD8" />
+        <Texture Name="gPoSistersArmTex" OutName="arm" Format="rgba16" Width="32" Height="16" Offset="0x52D8" />
+        <Texture Name="gPoSistersMegJoelleEyeTex" OutName="meg_joelle_eye" Format="rgba16" Width="16" Height="16" Offset="0x56D8" />
+        <Texture Name="gPoSistersMainRobeGradientTex" OutName="robe_gradient" Format="rgba16" Width="4" Height="4" Offset="0x58D8" />
+        <Texture Name="gPoSistersMegTiaraTex" OutName="meg_tiara" Format="rgba16" Width="16" Height="16" Offset="0x58F8" />
+        <Texture Name="gPoSistersMegHairTex" OutName="meg_hair" Format="rgba16" Width="16" Height="16" Offset="0x5AF8" />
+        <Texture Name="gPoSistersJoelleHairBandtex" OutName="joelle_hair_tie" Format="rgba16" Width="8" Height="8" Offset="0x5CF8" />
+        <Texture Name="gPoSistersJoelleAmyHairTex" OutName="joelle_amy_hair" Format="rgba16" Width="16" Height="16" Offset="0x5D78" />
+        <Texture Name="gPoSistersBethAmyEyesTex" OutName="beth_amy_eye" Format="rgba16" Width="16" Height="8" Offset="0x5F78" />
+        <Texture Name="gPoSistersBethHatAndHairTex" OutName="beth_hat_and_hair" Format="rgba16" Width="16" Height="16" Offset="0x6078" />
+        <Texture Name="gPoSistersBethHatEdgeTex" OutName="beth_hat_edge" Format="rgba16" Width="8" Height="8" Offset="0x6278" />
+        <Texture Name="gPoSistersAmyHairTieTex" OutName="amy_hair_tie" Format="rgba16" Width="4" Height="4" Offset="0x62F8" />
+        <Texture Name="gPoSistersCrispBodyTex" OutName="crisp_body" Format="rgba16" Width="16" Height="16" Offset="0x6318" />
+
+
+        <!-- PoSister Limbs -->
+        <Limb Name="gPoSistersMainRootLimb" Type="Standard" EnumName="POSISTERS_LIMB_ROOT" Offset="0x6518" />
+        <Limb Name="gPoSistersLeftArmLimb" Type="Standard" EnumName="POSISTERS_LIMB_LEFT_ARM" Offset="0x6524" />
+        <!--- won't draw, uses gPoSisters_DL_002870 -->
+        <Limb Name="gPoSisters_limb_006530" Type="Standard" EnumName="POSISTERS_LIMB_UNK3" Offset="0x6530" />
+        <Limb Name="gPoSistersRightUpperArmLimb" Type="Standard" EnumName="POSISTERS_LIMB_RIGHT_UPPER_ARM" Offset="0x653C" />
+        <Limb Name="gPoSistersRightForArmLimb" Type="Standard" EnumName="POSISTERS_LIMB_RIGHT_FORARM" Offset="0x6548" />
+        <!--- no DL -->
+        <Limb Name="gPoSisters_limb_006554" Type="Standard" EnumName="POSISTERS_LIMB_UNK6" Offset="0x6554" />
+        <!--- won't draw, uses gPoSisters_DL_002570 -->
+        <Limb Name="gPoSisters_limb_006560" Type="Standard" EnumName="POSISTERS_LIMB_UNK7" Offset="0x6560" />
+        <Limb Name="gPoSistersTorchLimb" Type="Standard" EnumName="POSISTERS_LIMB_TORCH" Offset="0x656C" />
+        <Limb Name="gPoSistersMainBodyLimb" Type="Standard" EnumName="POSISTERS_LIMB_MAIN_BODY" Offset="0x6578" />
+        <Limb Name="gPoSistersFaceLimb" Type="Standard" EnumName="POSISTERS_LIMB_FACE" Offset="0x6584" />
+        <Limb Name="gPoSistersLowerBodyLimb" Type="Standard" EnumName="POSISTERS_LIMB_LOWER_BODY" Offset="0x6590" />
+
+        <!-- PoSister Skeleton -->
+        <Skeleton Name="gPoSistersSkel" Type="Normal" LimbType="Standard" LimbNone="POSISTERS_LIMB_NONE" LimbMax="POSISTERS_LIMB_MAX" EnumName="PoSistersLimbs" Offset="0x65C8" />
     </File>
 </Root>

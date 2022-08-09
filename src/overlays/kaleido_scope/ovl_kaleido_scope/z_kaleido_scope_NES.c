@@ -412,7 +412,7 @@ void KaleidoScope_HandlePageToggles(PlayState* play, Input* input) {
 
     if (1) {}
 
-    if ((pauseCtx->debugState == 0) && (pauseCtx->unk_2B9 == 0)) {
+    if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->unk_2B9 == 0)) {
         if (CHECK_BTN_ALL(input->cur.button, BTN_DRIGHT) || CHECK_BTN_ALL(input->press.button, BTN_R)) {
             if (interfaceCtx->unk_212 == 6) {
                 func_8011552C(play, 0x15);

@@ -1,7 +1,7 @@
 /*
  * File: z_kaleido_debug.c
  * Overlay: ovl_kaleido_scope
- * Description: Debug Menu
+ * Description: Inventory Editor
  */
 
 #include "z_kaleido_scope.h"
@@ -10,30 +10,90 @@
 s16 sCurSection = 0;
 s16 sCurRow = 0;
 
+// These defines must line up with the indices of sSectionPositions
+#define INV_EDITOR_SECTION_RUPEE 0
+#define INV_EDITOR_SECTION_HEALTH_CAPACITY 1
+#define INV_EDITOR_SECTION_HEALTH 2
+#define INV_EDITOR_SECTION_ITEMS 3
+#define INV_EDITOR_SECTION_MASKS 27
+#define INV_EDITOR_SECTION_BOSS 51
+#define INV_EDITOR_SECTION_SWORD 55
+#define INV_EDITOR_SECTION_SHIELD 56
+#define INV_EDITOR_SECTION_SONGS 57
+#define INV_EDITOR_SECTION_LULLABY_INTRO 69
+#define INV_EDITOR_SECTION_NOTEBOOK 70
+#define INV_EDITOR_SECTION_QUIVER 71
+#define INV_EDITOR_SECTION_BOMB_BAG 72
+#define INV_EDITOR_SECTION_SWAMP_GOLD_SKULLS 73
+#define INV_EDITOR_SECTION_OCEAN_GOLD_SKULLS 74
+#define INV_EDITOR_SECTION_HEART_PIECE_COUNT 75
+#define INV_EDITOR_SECTION_SMALL_KEYS 76
+#define INV_EDITOR_SECTION_DUNGEON_ITEMS 80
+#define INV_EDITOR_SECTION_STRAY_FAIRIES 84
+#define INV_EDITOR_SECTION_DOUBLE_DEFENSE 88
+
+// Geometry of the highlights for the selected section
 typedef struct {
-    /* 0 */ s16 x;
-    /* 1 */ s16 y;
+    /* 0 */ s16 screenX;
+    /* 1 */ s16 screenY;
     /* 2 */ s16 width;
 } SectionPosition;
 
+// clang-format off
 SectionPosition sSectionPositions[] = {
-    { 65, 14, 41 },   { 145, 14, 21 },  { 193, 14, 35 },  { 42, 37, 22 },   { 65, 37, 22 },   { 88, 37, 22 },
-    { 111, 37, 22 },  { 134, 37, 22 },  { 157, 37, 22 },  { 42, 51, 22 },   { 65, 51, 22 },   { 88, 51, 22 },
-    { 111, 51, 22 },  { 134, 51, 22 },  { 157, 51, 22 },  { 42, 65, 22 },   { 65, 65, 22 },   { 88, 65, 22 },
-    { 111, 65, 22 },  { 134, 65, 22 },  { 157, 65, 22 },  { 42, 80, 22 },   { 65, 80, 22 },   { 88, 80, 22 },
-    { 111, 80, 22 },  { 134, 80, 22 },  { 157, 80, 22 },  { 202, 37, 14 },  { 215, 37, 14 },  { 229, 37, 14 },
-    { 243, 37, 14 },  { 257, 37, 14 },  { 271, 37, 14 },  { 202, 51, 14 },  { 215, 51, 14 },  { 229, 51, 14 },
-    { 243, 51, 14 },  { 257, 51, 14 },  { 271, 51, 14 },  { 202, 65, 14 },  { 215, 65, 14 },  { 229, 65, 14 },
-    { 243, 65, 14 },  { 257, 65, 14 },  { 271, 65, 14 },  { 202, 80, 14 },  { 215, 80, 14 },  { 229, 80, 14 },
-    { 243, 80, 14 },  { 257, 80, 14 },  { 271, 80, 14 },  { 42, 111, 14 },  { 54, 111, 14 },  { 66, 111, 14 },
-    { 78, 111, 14 },  { 114, 99, 14 },  { 142, 99, 14 },  { 188, 99, 14 },  { 202, 99, 14 },  { 216, 99, 14 },
-    { 230, 99, 14 },  { 244, 99, 14 },  { 258, 99, 14 },  { 188, 113, 14 }, { 202, 113, 14 }, { 216, 113, 14 },
-    { 230, 113, 14 }, { 244, 113, 14 }, { 258, 113, 14 }, { 272, 113, 14 }, { 54, 141, 14 },  { 112, 134, 14 },
-    { 155, 134, 14 }, { 194, 130, 32 }, { 194, 144, 32 }, { 262, 134, 14 }, { 43, 168, 14 },  { 55, 168, 14 },
-    { 67, 168, 14 },  { 79, 168, 14 },  { 127, 168, 14 }, { 139, 168, 14 }, { 151, 168, 14 }, { 163, 168, 14 },
-    { 202, 168, 22 }, { 223, 168, 22 }, { 244, 168, 22 }, { 265, 168, 22 }, { 42, 202, 14 },  { 73, 202, 14 },
-    { 136, 202, 38 }, { 214, 202, 74 }, { 214, 202, 74 },
+    // Rupees (0)
+    { 65, 14, 41 },
+    // Health Capacity (1)
+    { 145, 14, 21 },
+    // Health (2)
+    { 193, 14, 35 },
+    // Items (3)
+    { 42, 37, 22 },   { 65, 37, 22 },   { 88, 37, 22 }, { 111, 37, 22 },  { 134, 37, 22 },  { 157, 37, 22 }, // row 1
+    { 42, 51, 22 },   { 65, 51, 22 },   { 88, 51, 22 }, { 111, 51, 22 },  { 134, 51, 22 },  { 157, 51, 22 }, // row 2
+    { 42, 65, 22 },   { 65, 65, 22 },   { 88, 65, 22 }, { 111, 65, 22 },  { 134, 65, 22 },  { 157, 65, 22 }, // row 3
+    { 42, 80, 22 },   { 65, 80, 22 },   { 88, 80, 22 }, { 111, 80, 22 },  { 134, 80, 22 },  { 157, 80, 22 }, // row 4
+    // Masks (27)
+    { 202, 37, 14 },  { 215, 37, 14 },  { 229, 37, 14 }, { 243, 37, 14 },  { 257, 37, 14 },  { 271, 37, 14 }, // row 1
+    { 202, 51, 14 },  { 215, 51, 14 },  { 229, 51, 14 }, { 243, 51, 14 },  { 257, 51, 14 },  { 271, 51, 14 }, // row 2
+    { 202, 65, 14 },  { 215, 65, 14 },  { 229, 65, 14 }, { 243, 65, 14 },  { 257, 65, 14 },  { 271, 65, 14 }, // row 3
+    { 202, 80, 14 },  { 215, 80, 14 },  { 229, 80, 14 }, { 243, 80, 14 },  { 257, 80, 14 },  { 271, 80, 14 }, // row 4
+    // Boss (51)
+    { 42, 111, 14 },  { 54, 111, 14 },  { 66, 111, 14 }, { 78, 111, 14 },
+    // Sword (55)
+    { 114, 99, 14 },
+    // Shield (56)
+    { 142, 99, 14 },
+    // Songs (57)
+    { 188, 99, 14 },  { 202, 99, 14 },  { 216, 99, 14 }, { 230, 99, 14 },  { 244, 99, 14 },  { 258, 99, 14 },
+    { 188, 113, 14 }, { 202, 113, 14 }, { 216, 113, 14 }, { 230, 113, 14 }, { 244, 113, 14 }, { 258, 113, 14 },
+    // Goron Lullaby Intro (69)
+    { 272, 113, 14 },
+    // Bombers Notebook (70)
+    { 54, 141, 14 },
+    // Quiver Upgrade (71)
+    { 112, 134, 14 },
+    // Bomb Bag Upgrade (72)
+    { 155, 134, 14 },
+    // Gold Skulltula Count (73)
+    { 194, 130, 32 }, { 194, 144, 32 },
+    // Heart Piece Count (75)
+    { 262, 134, 14 },
+    // Small Keys (76)
+    { 43, 168, 14 },  { 55, 168, 14 }, { 67, 168, 14 },  { 79, 168, 14 },
+    // Dungeon Items (80)
+    { 127, 168, 14 }, { 139, 168, 14 }, { 151, 168, 14 }, { 163, 168, 14 },
+    // Stray Fairies (84)
+    { 202, 168, 22 }, { 223, 168, 22 }, { 244, 168, 22 }, { 265, 168, 22 },
+    // Life (88)
+    { 42, 202, 14 },
+    // Magic
+    { 73, 202, 14 },
+    // Lottery
+    { 136, 202, 38 },
+    // Gold Color/Bombers Code (not highlighted properly)
+    { 214, 202, 74 }, { 214, 202, 74 },
 };
+// clang-format on
 
 s16 sSlotItems[] = {
     // Items Row 1
@@ -95,10 +155,27 @@ s16 sSlotItems[] = {
 };
 
 s16 sRowFirstSections[] = {
-    0, 1, 2, 3, 27, 51, 55, 56, 57, 70, 71, 72, 73, 75, 76, 80, 84, 88,
+    INV_EDITOR_SECTION_RUPEE,
+    INV_EDITOR_SECTION_HEALTH_CAPACITY,
+    INV_EDITOR_SECTION_HEALTH,
+    INV_EDITOR_SECTION_ITEMS,
+    INV_EDITOR_SECTION_MASKS,
+    INV_EDITOR_SECTION_BOSS,
+    INV_EDITOR_SECTION_SWORD,
+    INV_EDITOR_SECTION_SHIELD,
+    INV_EDITOR_SECTION_SONGS,
+    INV_EDITOR_SECTION_NOTEBOOK,
+    INV_EDITOR_SECTION_QUIVER,
+    INV_EDITOR_SECTION_BOMB_BAG,
+    INV_EDITOR_SECTION_SWAMP_GOLD_SKULLS,
+    INV_EDITOR_SECTION_HEART_PIECE_COUNT,
+    INV_EDITOR_SECTION_SMALL_KEYS,
+    INV_EDITOR_SECTION_DUNGEON_ITEMS,
+    INV_EDITOR_SECTION_STRAY_FAIRIES,
+    INV_EDITOR_SECTION_DOUBLE_DEFENSE,
 };
 
-void KaleidoScope_DrawDebugEditorText(Gfx** gfxp) {
+void KaleidoScope_DrawInventoryEditorText(Gfx** gfxp) {
     GfxPrint printer;
     s32 pad[2];
 
@@ -256,15 +333,15 @@ void KaleidoScope_DrawDigit(PlayState* play, s32 digit, s32 rectLeft, s32 rectTo
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void KaleidoScope_DrawDebugEditor(PlayState* play) {
+void KaleidoScope_DrawInventoryEditor(PlayState* play) {
     Gfx* gfx;
     Gfx* gfxRef;
     s32 counterDigits[4];
     s16 slot;
     s16 i;
     s16 j;
-    s32 x;
-    s32 y;
+    s32 rectLeft;
+    s32 rectTop;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -282,7 +359,7 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
     gfx = Graph_GfxPlusOne(gfxRef);
     gSPDisplayList(OVERLAY_DISP++, gfx);
 
-    KaleidoScope_DrawDebugEditorText(&gfx);
+    KaleidoScope_DrawInventoryEditorText(&gfx);
 
     gSPEndDisplayList(gfx++);
     Graph_BranchDlist(gfxRef, gfx);
@@ -293,7 +370,7 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
     // Current Health Quarter (X / 4)
-    KaleidoScope_DrawDigit(play, (((void)0, gSaveContext.save.playerData.health) % 16) / 4, 217, 15);
+    KaleidoScope_DrawDigit(play, (((void)0, gSaveContext.save.playerData.health) % 0x10) / 4, 217, 15);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -316,8 +393,9 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
         counterDigits[3] -= 10;
     }
 
-    for (i = 0, x = 68; i < 4; i++, x += 9) {
-        KaleidoScope_DrawDigit(play, counterDigits[i], x, 15);
+    // Loop over columns (i)
+    for (i = 0, rectLeft = 68; i < 4; i++, rectLeft += 9) {
+        KaleidoScope_DrawDigit(play, counterDigits[i], rectLeft, 15);
     }
 
     // Health capacity
@@ -342,9 +420,11 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
     KaleidoScope_DrawDigit(play, counterDigits[2], 195, 15);
     KaleidoScope_DrawDigit(play, counterDigits[3], 204, 15);
 
-    // Inventory
-    for (slot = 0, i = 0, y = 38; i < 4; i++, y += 14) {
-        for (j = 0, x = 44; j < 6; j++, slot++, x += 23) {
+    // Items
+    // Loop over rows (i)
+    for (slot = 0, i = 0, rectTop = 38; i < 4; i++, rectTop += 14) {
+        // Loop over columns (j)
+        for (j = 0, rectLeft = 44; j < 6; j++, slot++, rectLeft += 23) {
             counterDigits[3] = 0;
             counterDigits[2] = 0;
             if ((slot == SLOT_BOW) || ((slot >= SLOT_BOMB) && (slot <= SLOT_NUT)) || (slot == SLOT_POWDER_KEG) ||
@@ -368,25 +448,28 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
             }
 
             if (counterDigits[2] != 0) {
-                KaleidoScope_DrawDigit(play, counterDigits[2], x, y);
+                KaleidoScope_DrawDigit(play, counterDigits[2], rectLeft, rectTop);
             }
-            KaleidoScope_DrawDigit(play, counterDigits[3], x + 9, y);
+            KaleidoScope_DrawDigit(play, counterDigits[3], rectLeft + 9, rectTop);
         }
     }
 
     // Masks
-    for (slot = 0, i = 0, y = 38; i < 4; i++, y += 14) {
-        for (j = 0, x = 204; j < 6; j++, slot++, x += 14) {
+    // Loop over rows (i)
+    for (slot = 0, i = 0, rectTop = 38; i < 4; i++, rectTop += 14) {
+        // Loop over columns (j)
+        for (j = 0, rectLeft = 204; j < 6; j++, slot++, rectLeft += 14) {
             counterDigits[2] = 0;
 
             if (gSaveContext.save.inventory.items[SLOT_MASK_POSTMAN + slot] != ITEM_NONE) {
                 counterDigits[2] = 1;
             }
-            KaleidoScope_DrawDigit(play, counterDigits[2], x, y);
+            KaleidoScope_DrawDigit(play, counterDigits[2], rectLeft, rectTop);
         }
     }
 
     // Boss Remains
+    // Loop over columns (i), (counterDigits[1] stores rectLeft)
     for (counterDigits[1] = 44, i = 0; i < 4; i++) {
         counterDigits[2] = 0;
         if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA + i)) {
@@ -403,7 +486,9 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
     KaleidoScope_DrawDigit(play, GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD), 145, 100);
 
     // Songs
+    // Loop over rows (j), (counterDigits[3] stores rectTop)
     for (counterDigits[3] = 100, j = 0, slot = 0; j < 2; j++) {
+        // Loop over columns (i), (counterDigits[1] stores rectLeft)
         for (counterDigits[1] = 190, i = 0; i < 6; i++, slot++) {
             counterDigits[2] = 0;
             if (CHECK_QUEST_ITEM(QUEST_SONG_SONATA + slot)) {
@@ -475,9 +560,10 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
     KaleidoScope_DrawDigit(play, counterDigits[3], 214, 144);
 
     // Heart Pieces
-    KaleidoScope_DrawDigit(play, (GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) >> QUEST_HEART_PIECE_COUNT, 264, 134);
+    KaleidoScope_DrawDigit(play, GET_QUEST_HEART_PIECE_COUNT, 264, 134);
 
     // Keys
+    // Loop over columns (i), (counterDigits[1] stores rectLeft)
     for (counterDigits[1] = 45, i = 0; i < 4; i++) {
         counterDigits[2] = 0;
 
@@ -495,6 +581,7 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
     }
 
     // Dungeon Items
+    // Loop over columns (i), (counterDigits[1] stores rectLeft)
     for (counterDigits[1] = 129, i = 0; i < 4; i++) {
         counterDigits[2] = gSaveContext.save.inventory.dungeonItems[i] & gEquipMasks[0];
         KaleidoScope_DrawDigit(play, counterDigits[2], counterDigits[1], 168);
@@ -502,6 +589,7 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
     }
 
     // Stray Fairies
+    // Loop over columns (i), (counterDigits[1] stores rectLeft)
     for (counterDigits[1] = 202, i = 0; i < 4; i++) {
         counterDigits[3] = gSaveContext.save.inventory.strayFairies[i];
         counterDigits[2] = counterDigits[3] / 10;
@@ -521,6 +609,7 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
     KaleidoScope_DrawDigit(play, gSaveContext.save.playerData.doubleDefense, 75, 202);
 
     // Lottery
+    // Loop over columns (i), (counterDigits[1] stores rectLeft)
     for (counterDigits[1] = 139, i = 0; i < 3; i++) {
         counterDigits[2] = gSaveContext.save.lotteryCodes[0][i];
 
@@ -535,6 +624,7 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
     }
 
     // Oceanside Spider House Mask Order
+    // Loop over columns (i), (counterDigits[1] stores rectLeft)
     for (counterDigits[1] = 217, i = 0; i < 6; i++) {
         counterDigits[2] = gSaveContext.save.spiderHouseMaskOrder[i];
         KaleidoScope_DrawDigit(play, counterDigits[2], counterDigits[1], 186);
@@ -543,6 +633,7 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
     }
 
     // Bombers code
+    // Loop over columns (i), (counterDigits[1] stores rectLeft)
     for (counterDigits[1] = 220, i = 0; i < 5; i++) {
         counterDigits[2] = gSaveContext.save.bomberCode[i];
         KaleidoScope_DrawDigit(play, counterDigits[2], counterDigits[1], 210);
@@ -550,20 +641,20 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
         counterDigits[1] += 12;
     }
 
-    // Draw a blue rectangle over the currently selected option
+    // Draws a highlight on the selected section
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 200, 120);
 
-    gDPFillRectangle(POLY_OPA_DISP++, sSectionPositions[sCurSection].x, sSectionPositions[sCurSection].y,
-                     sSectionPositions[sCurSection].x + sSectionPositions[sCurSection].width,
-                     sSectionPositions[sCurSection].y + 15);
+    gDPFillRectangle(POLY_OPA_DISP++, sSectionPositions[sCurSection].screenX, sSectionPositions[sCurSection].screenY,
+                     sSectionPositions[sCurSection].screenX + sSectionPositions[sCurSection].width,
+                     sSectionPositions[sCurSection].screenY + 15);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void KaleidoScope_UpdateDebugEditor(PlayState* play) {
+void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
     static s32 sPrevDBtnInput = 0;
     static s32 sHeldDBtnTimer = 0;
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -604,18 +695,18 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
     } else if (CHECK_BTN_ANY(dBtnInput, BTN_DLEFT)) {
         sCurSection--;
         if (sCurSection < 0) {
-            sCurSection = 92;
+            sCurSection = ARRAY_COUNT(sSectionPositions) - 1;
         }
     } else if (CHECK_BTN_ANY(dBtnInput, BTN_DRIGHT)) {
         sCurSection++;
-        if (sCurSection > 92) {
+        if (sCurSection > (ARRAY_COUNT(sSectionPositions) - 1)) {
             sCurSection = 0;
         }
     }
 
     // Handles the logic to change values based on the selected section
     switch (sCurSection) {
-        case 0:
+        case INV_EDITOR_SECTION_RUPEE:
             // Rupees
             if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
                 gSaveContext.save.playerData.rupees -= 100;
@@ -640,8 +731,8 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
             }
             break;
 
-        case 1:
-            // Health capacity
+        case INV_EDITOR_SECTION_HEALTH_CAPACITY:
+            // Health Capacity
             if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                 gSaveContext.save.playerData.healthCapacity -= 0x10;
                 if (gSaveContext.save.playerData.healthCapacity < 0x30) {
@@ -656,7 +747,7 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
             }
             break;
 
-        case 2:
+        case INV_EDITOR_SECTION_HEALTH:
             // Health
             if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                 Health_ChangeBy(play, -4);
@@ -669,24 +760,24 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
             }
             break;
 
-        case 75:
-            // Heart Pieces
+        case INV_EDITOR_SECTION_HEART_PIECE_COUNT:
+            // Heart Piece Count
             if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                if (((gSaveContext.save.inventory.questItems & 0xF0000000) >> QUEST_HEART_PIECE_COUNT) != 0) {
-                    gSaveContext.save.inventory.questItems -= (1 << QUEST_HEART_PIECE_COUNT);
+                if (GET_QUEST_HEART_PIECE_COUNT != 0) {
+                    DECREMENT_QUEST_HEART_PIECE_COUNT;
                 }
             } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
                        CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
-                if ((gSaveContext.save.inventory.questItems & 0xF0000000) <= (4 << QUEST_HEART_PIECE_COUNT)) {
-                    gSaveContext.save.inventory.questItems += (1 << QUEST_HEART_PIECE_COUNT);
+                if (LEQ_MAX_QUEST_HEART_PIECE_COUNT) {
+                    INCREMENT_QUEST_HEART_PIECE_COUNT;
                 }
             }
             break;
 
         default:
-            if (sCurSection <= 50) {
-                // Inventory
-                slot = sCurSection - 3;
+            if (sCurSection < INV_EDITOR_SECTION_BOSS) {
+                // Items
+                slot = sCurSection - INV_EDITOR_SECTION_ITEMS;
                 if ((slot == SLOT_BOW) || ((slot >= SLOT_BOMB) && (slot <= SLOT_NUT)) || (slot == SLOT_POWDER_KEG) ||
                     (slot == SLOT_MAGIC_BEANS)) {
                     if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
@@ -753,9 +844,9 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                         }
                     } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                         if (INV_CONTENT(ITEM_LETTER_TO_KAFEI) == ITEM_NONE) {
-                            gSaveContext.save.inventory.items[slot] = ITEM_PENDANT_MEMORIES;
-                        } else if ((INV_CONTENT(ITEM_LETTER_TO_KAFEI) >= ITEM_PENDANT_MEMORIES) &&
-                                   (INV_CONTENT(ITEM_LETTER_TO_KAFEI) <= ITEM_PENDANT_MEMORIES)) {
+                            gSaveContext.save.inventory.items[slot] = ITEM_PENDANT_OF_MEMORIES;
+                        } else if ((INV_CONTENT(ITEM_LETTER_TO_KAFEI) >= ITEM_PENDANT_OF_MEMORIES) &&
+                                   (INV_CONTENT(ITEM_LETTER_TO_KAFEI) <= ITEM_PENDANT_OF_MEMORIES)) {
                             gSaveContext.save.inventory.items[slot] = INV_CONTENT(ITEM_LETTER_TO_KAFEI) - 1;
                         }
                     }
@@ -791,7 +882,7 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                     }
                 }
 
-            } else if (sCurSection == 55) {
+            } else if (sCurSection == INV_EDITOR_SECTION_SWORD) {
                 // Sword
                 value = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD);
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
@@ -824,7 +915,7 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
 
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
 
-            } else if (sCurSection == 56) {
+            } else if (sCurSection == INV_EDITOR_SECTION_SHIELD) {
                 // Shield
                 value = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD);
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
@@ -844,7 +935,7 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                     SET_EQUIP_VALUE(EQUIP_TYPE_SHIELD, value);
                 }
 
-            } else if (sCurSection == 71) {
+            } else if (sCurSection == INV_EDITOR_SECTION_QUIVER) {
                 // Quiver
                 value = GET_CUR_UPG_VALUE(UPG_QUIVER);
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
@@ -862,7 +953,7 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                     Inventory_ChangeUpgrade(UPG_QUIVER, value);
                 }
 
-            } else if (sCurSection == 72) {
+            } else if (sCurSection == INV_EDITOR_SECTION_BOMB_BAG) {
                 // Bomb Bag
                 value = GET_CUR_UPG_VALUE(UPG_BOMB_BAG);
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
@@ -880,7 +971,7 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                     Inventory_ChangeUpgrade(UPG_BOMB_BAG, value);
                 }
 
-            } else if (sCurSection == 73) {
+            } else if (sCurSection == INV_EDITOR_SECTION_SWAMP_GOLD_SKULLS) {
                 // Gold Skulls (Swamp Spider House)
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     if (((gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10) != 0) {
@@ -895,7 +986,7 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                         (gSaveContext.save.skullTokenCount & 0xFFFF);
                 }
 
-            } else if (sCurSection == 74) {
+            } else if (sCurSection == INV_EDITOR_SECTION_OCEAN_GOLD_SKULLS) {
                 // Gold Skulls (Oceans Spider House)
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     if (((u16)gSaveContext.save.skullTokenCount) != 0) {
@@ -908,28 +999,30 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                                                         (gSaveContext.save.skullTokenCount & 0xFFFF0000);
                 }
 
-            } else if (sCurSection == 70) {
+            } else if (sCurSection == INV_EDITOR_SECTION_NOTEBOOK) {
                 // Bombers Notebook
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     gSaveContext.save.inventory.questItems ^= gBitFlags[QUEST_BOMBERS_NOTEBOOK];
                 }
 
-            } else if (sCurSection == 69) {
+            } else if (sCurSection == INV_EDITOR_SECTION_LULLABY_INTRO) {
                 // Goron Lullaby Intro
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     gSaveContext.save.inventory.questItems ^= gBitFlags[QUEST_SONG_LULLABY_INTRO];
                 }
 
-            } else if (sCurSection <= 68) {
-                // Songs
-                slot = sCurSection - 51;
+            } else if (sCurSection < INV_EDITOR_SECTION_LULLABY_INTRO) {
+                // Boss Remains and Songs
+                //! Note: quest items must align with section, and all cases below INV_EDITOR_SECTION_LULLABY_INTRO must
+                //! have also been taken
+                slot = sCurSection - INV_EDITOR_SECTION_BOSS;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     gSaveContext.save.inventory.questItems ^= gBitFlags[slot];
                 }
 
-            } else if (sCurSection <= 79) {
-                // Keys
-                slot = sCurSection - 76;
+            } else if (sCurSection < INV_EDITOR_SECTION_DUNGEON_ITEMS) {
+                // Dungeon Small Keys
+                slot = sCurSection - INV_EDITOR_SECTION_SMALL_KEYS;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     DUNGEON_KEY_COUNT(slot)--;
                     if (DUNGEON_KEY_COUNT(slot) < 0) {
@@ -947,9 +1040,9 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                     }
                 }
 
-            } else if (sCurSection <= 83) {
+            } else if (sCurSection < INV_EDITOR_SECTION_STRAY_FAIRIES) {
                 // Dungeon Items
-                slot = sCurSection - 80;
+                slot = sCurSection - INV_EDITOR_SECTION_DUNGEON_ITEMS;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     // Map
                     gSaveContext.save.inventory.dungeonItems[slot] ^= 4;
@@ -963,9 +1056,9 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                     gSaveContext.save.inventory.dungeonItems[slot] ^= 1;
                 }
 
-            } else if (sCurSection <= 87) {
+            } else if (sCurSection < INV_EDITOR_SECTION_DOUBLE_DEFENSE) {
                 // Stray Fairies
-                slot = sCurSection - 84;
+                slot = sCurSection - INV_EDITOR_SECTION_STRAY_FAIRIES;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     gSaveContext.save.inventory.strayFairies[slot]--;
                     if (gSaveContext.save.inventory.strayFairies[slot] < 0) {
@@ -994,9 +1087,12 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
             break;
     }
 
-    if (pauseCtx->debugState == 1) {
-        pauseCtx->debugState = 2;
-    } else if ((pauseCtx->debugState == 2) && CHECK_BTN_ALL(input->press.button, BTN_L)) {
-        pauseCtx->debugState = 0;
+    // Handles exiting the inventory editor with the L button
+    // The editor is opened with `debugEditor` set to DEBUG_EDITOR_INVENTORY_INIT,
+    // and becomes closable after a frame once `debugEditor` is set to DEBUG_EDITOR_INVENTORY
+    if (pauseCtx->debugEditor == DEBUG_EDITOR_INVENTORY_INIT) {
+        pauseCtx->debugEditor = DEBUG_EDITOR_INVENTORY;
+    } else if ((pauseCtx->debugEditor == DEBUG_EDITOR_INVENTORY) && CHECK_BTN_ALL(input->press.button, BTN_L)) {
+        pauseCtx->debugEditor = DEBUG_EDITOR_NONE;
     }
 }

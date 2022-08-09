@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "system_malloc.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
@@ -67,7 +68,7 @@ GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
     if (gameStateInit == (GameStateFunc)TitleSetup_Init) {
         return &gGameStateOverlayTable[0];
     }
-    if (gameStateInit == (GameStateFunc)Select_Init) {
+    if (gameStateInit == (GameStateFunc)MapSelect_Init) {
         return &gGameStateOverlayTable[1];
     }
     if (gameStateInit == (GameStateFunc)Title_Init) {

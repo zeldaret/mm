@@ -256,7 +256,7 @@ s32 func_80B50854(EnGk* this, PlayState* play) {
     }
 
     if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
-        (play->msgCtx.unk1202E == 1)) {
+        (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY)) {
         Flags_SetSwitch(play, ENGK_GET_3F00(&this->actor));
         this->unk_2E4 = 3;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
@@ -456,9 +456,6 @@ s32 func_80B5100C(EnGk* this, PlayState* play) {
 }
 
 s32 func_80B5123C(EnGk* this, PlayState* play) {
-    s16 temp_v0;
-    s16 phi_v1;
-
     if (DECR(this->unk_34E) != 0) {
         this->unk_31E = 0;
         this->unk_320 = 0;
@@ -509,7 +506,7 @@ void func_80B51410(EnGk* this, PlayState* play) {
 
     if (this->actor.xzDistToPlayer < 100.0f) {
         if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
-            (play->msgCtx.unk1202E == 0xE)) {
+            (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY_INTRO)) {
             this->unk_1E4 |= 0x20;
         }
 
@@ -660,9 +657,9 @@ void func_80B51760(EnGk* this, PlayState* play) {
 }
 
 void func_80B51970(EnGk* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((temp_v0 == 6) || (temp_v0 == 5)) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_DONE) || (talkState == TEXT_STATE_5)) && Message_ShouldAdvance(play)) {
         if ((this->unk_31C == 0xE84) || (this->unk_31C == 0xE99)) {
             ActorCutscene_Stop(this->unk_318);
             this->unk_318 = ActorCutscene_GetAdditionalCutscene(this->unk_318);
@@ -710,9 +707,9 @@ void func_80B51970(EnGk* this, PlayState* play) {
 }
 
 void func_80B51B40(EnGk* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (temp_v0 == 6) {
+    if (talkState == TEXT_STATE_DONE) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_1E4 & 1) {
                 this->unk_1E4 &= ~1;
@@ -724,9 +721,9 @@ void func_80B51B40(EnGk* this, PlayState* play) {
 
                 if (this->unk_31C == 0xE8F) {
                     play->nextEntranceIndex = 0xD010;
-                    play->sceneLoadFlag = 0x14;
-                    play->unk_1887F = 3;
-                    gSaveContext.nextTransition = 3;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
+                    play->transitionType = TRANS_TYPE_03;
+                    gSaveContext.nextTransitionType = TRANS_TYPE_03;
                     Parameter_AddMagic(play, ((void)0, gSaveContext.unk_3F30) +
                                                  (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
                 } else {
@@ -741,7 +738,7 @@ void func_80B51B40(EnGk* this, PlayState* play) {
                 this->unk_1E4 |= 2;
             }
         }
-    } else if ((temp_v0 == 4) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 func_8019F208();
@@ -873,9 +870,9 @@ void func_80B5202C(EnGk* this, PlayState* play) {
 }
 
 void func_80B5216C(EnGk* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
-        play->msgCtx.unk12023 = 4;
+        play->msgCtx.stateTimer = 4;
         this->actionFunc = func_80B51698;
     }
 }
@@ -928,7 +925,7 @@ void func_80B52340(EnGk* this, PlayState* play) {
 }
 
 void func_80B52430(EnGk* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         switch (this->unk_31C) {
             case 0xE93:
                 this->unk_31C = 0xE89;
@@ -1027,7 +1024,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
                 Actor_MarkForDeath(&this->actor);
             } else {
                 this->unk_318 = this->actor.cutscene;
-                this->path = SubS_GetPathByIndex(play, ENGK_GET_F0(&this->actor), 15);
+                this->path = SubS_GetPathByIndex(play, ENGK_GET_F0(&this->actor), 0xF);
                 this->actionFunc = func_80B51760;
             }
         } else if (play->sceneNum == SCENE_GORONRACE) {

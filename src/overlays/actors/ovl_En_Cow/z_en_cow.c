@@ -200,7 +200,7 @@ void EnCow_UpdateAnimation(EnCow* this, PlayState* play) {
 }
 
 void EnCow_TalkEnd(EnCow* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_801477B4(play);
         this->actionFunc = EnCow_Idle;
@@ -224,7 +224,7 @@ void EnCow_GiveMilkWait(EnCow* this, PlayState* play) {
 }
 
 void EnCow_GiveMilk(EnCow* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_801477B4(play);
         this->actionFunc = EnCow_GiveMilkWait;
@@ -233,7 +233,7 @@ void EnCow_GiveMilk(EnCow* this, PlayState* play) {
 }
 
 void EnCow_CheckForEmptyBottle(EnCow* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (Inventory_HasEmptyBottle()) {
             func_80151938(play, 0x32C9); // Text to give milk.
             this->actionFunc = EnCow_GiveMilk;
