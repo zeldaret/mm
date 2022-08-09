@@ -270,7 +270,7 @@ void func_808595B8(PlayState* play, Player* this, UNK_TYPE arg2);
 void func_80859D70(PlayState* play, Player* this, UNK_TYPE arg2);
 void func_8085A6C0(PlayState* play, Player* this, void* arg2);
 void func_80859FF4(PlayState* play, Player* this, UNK_TYPE arg2);
-void func_8085A04C(PlayState* play, Player* this, CsCmdActorAction* playerAction);
+void func_8085A04C(PlayState* play, Player* this, void* arg);
 void func_8085A144(PlayState* play, Player* this, UNK_TYPE arg2);
 void func_8085A1D4(PlayState* play, Player* this, UNK_TYPE arg2);
 void func_8085A364(PlayState* play, Player* this, void* arg2);
@@ -9012,8 +9012,8 @@ void func_808412A0(PlayState* play, Player* this) {
 void func_808412BC(PlayState* play, Player* this) {
     Player_SetAction(play, this, func_80854118, 0);
     this->stateFlags1 |= PLAYER_STATE1_20000000;
-    LinkAnimation_Change(play, &this->skelAnime, &gameplay_keep_Linkanim_00DF78, 2.0f / 3.0f, 0.0f, 24.0f, ANIMMODE_ONCE,
-                         0.0f);
+    LinkAnimation_Change(play, &this->skelAnime, &gameplay_keep_Linkanim_00DF78, 2.0f / 3.0f, 0.0f, 24.0f,
+                         ANIMMODE_ONCE, 0.0f);
     this->actor.world.pos.y += 800.0f;
 }
 
@@ -16836,28 +16836,33 @@ void func_80859B54(PlayState* play, Player* this, UNK_TYPE arg2) {
     Player_SetModels(this, Player_ActionToModelGroup(this, this->heldItemActionParam));
 }
 
-/*
-void func_80859BA8(PlayState* arg0, Player* arg1, void* arg2) {
-    f32 sp4;
-    f32 temp_fa0;
+void func_80859BA8(PlayState* play, Player* this, void* arg) {
     f32 temp_ft1;
+    CsCmdActorAction* playerAction = arg;
     f32 temp_fv0;
     f32 temp_fv1;
-    u16 temp_v0;
+    f32 temp_fa0;
+    f32 xDiff;
+    f32 new_var;
+    f32 yDiff;
+    f32 zDiff;
 
-    temp_fv0 = (f32) arg2->unk_C;
-    temp_v0 = arg2->unk_2;
-    temp_fv1 = (f32) arg2->unk_10;
-    temp_fa0 = (f32) arg2->unk_14;
-    temp_ft1 = (f32) (arg0->csCtx.frames - temp_v0) / (f32) (arg2->unk_4 - temp_v0);
-    sp4 = temp_ft1;
-    arg1->actor.world.pos.x = (((f32) arg2->unk_18 - temp_fv0) * temp_ft1) + temp_fv0;
-    arg1->actor.world.pos.y = (((f32) arg2->unk_1C - temp_fv1) * sp4) + temp_fv1;
-    arg1->actor.world.pos.z = (((f32) arg2->unk_20 - temp_fa0) * sp4) + temp_fa0;
+    temp_fv0 = playerAction->startPos.x;
+    temp_fv1 = playerAction->startPos.y;
+    temp_fa0 = playerAction->startPos.z;
+
+    xDiff = playerAction->endPos.x - temp_fv0;
+    yDiff = playerAction->endPos.y - temp_fv1;
+    zDiff = playerAction->endPos.z - temp_fa0;
+
+    //! FAKE
+    temp_ft1 = (new_var = ((f32)(play->csCtx.frames - playerAction->startFrame)) /
+                          ((f32)(playerAction->endFrame - playerAction->startFrame)));
+
+    this->actor.world.pos.x = ((xDiff)*temp_ft1) + temp_fv0;
+    this->actor.world.pos.y = ((yDiff)*temp_ft1) + temp_fv1;
+    this->actor.world.pos.z = ((zDiff)*temp_ft1) + temp_fa0;
 }
-*/
-void func_80859BA8(PlayState* play, Player* this, CsCmdActorAction* playerAction);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80859BA8.s")
 
 void func_80859C60(PlayState* play, Player* this, UNK_PTR arg2) {
     if (arg2 != NULL) {
@@ -16925,8 +16930,8 @@ void func_80859F4C(PlayState* play, Player* this, UNK_TYPE arg2) {
 }
 
 void func_80859FCC(PlayState* play, Player* this, UNK_TYPE arg2) {
-    if (this->transformation != PLAYER_FORM_ZORA) {
-        gSaveContext.save.playerForm = PLAYER_FORM_ZORA;
+    if (this->transformation != PLAYER_FORM_DEKU) {
+        gSaveContext.save.playerForm = PLAYER_FORM_DEKU;
     }
 }
 
@@ -16938,27 +16943,26 @@ void func_80859FF4(PlayState* play, Player* this, UNK_TYPE arg2) {
     }
 }
 
-void func_8085A04C(PlayState* play, Player* this, CsCmdActorAction* playerAction) {
-    f32 temp_fv1 = playerAction->endPos.x;
-    f32 temp_fa0 = playerAction->endPos.y;
-    f32 temp_fa1 = playerAction->endPos.z;
-    f32 temp_fv0;
+void func_8085A04C(PlayState* play, Player* this, void* arg) {
+    CsCmdActorAction* playerAction = arg;
+    f32 xEnd = playerAction->endPos.x;
+    f32 yEnd = playerAction->endPos.y;
+    f32 zEnd = playerAction->endPos.z;
     f32 xDiff;
     f32 yDiff;
     f32 zDiff;
-    CsCmdActorAction *new_var;
+    f32 progress;
 
-    xDiff = playerAction->startPos.x - temp_fv1;
-    yDiff = playerAction->startPos.y - temp_fa0;
-    zDiff = playerAction->startPos.z - temp_fa1;
+    xDiff = playerAction->startPos.x - xEnd;
+    yDiff = playerAction->startPos.y - yEnd;
+    zDiff = playerAction->startPos.z - zEnd;
 
-    //! FAKE
-    new_var = playerAction;
-    temp_fv0 = ((f32) (new_var->endFrame - play->csCtx.frames)) / ((f32) (new_var->endFrame - new_var->startFrame));
+    progress = ((f32)(playerAction->endFrame - play->csCtx.frames)) /
+               ((f32)(playerAction->endFrame - playerAction->startFrame));
 
-    this->actor.world.pos.x = (xDiff * temp_fv0) + temp_fv1;
-    this->actor.world.pos.y = (yDiff * temp_fv0) + temp_fa0;
-    this->actor.world.pos.z = (zDiff * temp_fv0) + temp_fa1;
+    this->actor.world.pos.x = (xDiff * progress) + xEnd;
+    this->actor.world.pos.y = (yDiff * progress) + yEnd;
+    this->actor.world.pos.z = (zDiff * progress) + zEnd;
     LinkAnimation_Update(play, &this->skelAnime);
 }
 
