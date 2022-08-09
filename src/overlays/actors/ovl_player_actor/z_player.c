@@ -10041,7 +10041,7 @@ void func_80843178(PlayState* play, Player* this) {
     f32 temp_fv0; // spBC
     f32 temp_fv0_3;
     f32 temp_fv1; // spB4
-    u32 var_v1; // spB0
+    u32 var_v1;   // spB0
     s32 spAC;
 
     spC7 = 0;
@@ -10052,13 +10052,17 @@ void func_80843178(PlayState* play, Player* this) {
     temp_fv1 = this->ageProperties->unk_00;
 
     if (this->stateFlags1 & (PLAYER_STATE1_20000000 | PLAYER_STATE1_80000000)) {
-        if ((!(this->stateFlags1 & PLAYER_STATE1_80) && !(this->stateFlags2 & PLAYER_STATE1_4000) && (this->stateFlags1 & PLAYER_STATE1_80000000)) || spAC) {
+        if ((!(this->stateFlags1 & PLAYER_STATE1_80) && !(this->stateFlags2 & PLAYER_STATE1_4000) &&
+             (this->stateFlags1 & PLAYER_STATE1_80000000)) ||
+            spAC) {
             var_v1 = 0x38;
             this->actor.bgCheckFlags &= ~1;
         } else {
-            if ((this->stateFlags1 & 1) && (play->roomCtx.currRoom.unk3 != 1) && ((this->unk_D68 - (s32) this->actor.world.pos.y) >= 0x64)) {
+            if ((this->stateFlags1 & 1) && (play->roomCtx.currRoom.unk3 != 1) &&
+                ((this->unk_D68 - (s32)this->actor.world.pos.y) >= 0x64)) {
                 var_v1 = 0x39;
-            } else if (!(this->stateFlags1 & PLAYER_STATE1_1) && ( (func_8084E034 == this->actionFunc) || (func_8084D820 == this->actionFunc))) {
+            } else if (!(this->stateFlags1 & PLAYER_STATE1_1) &&
+                       ((func_8084E034 == this->actionFunc) || (func_8084D820 == this->actionFunc))) {
                 var_v1 = 0x3C;
                 this->actor.bgCheckFlags &= ~(8 | 0x200);
             } else {
@@ -10102,7 +10106,7 @@ void func_80843178(PlayState* play, Player* this) {
     if ((spC0 != NULL) && (var_v1 & 4)) {
         this->unk_D5E = func_800C9B40(&play->colCtx, spC0, this->actor.floorBgId);
         if (this == GET_PLAYER(play)) {
-            func_801A3CF4(SurfaceType_GetEcho(&play->colCtx, spC0,  this->actor.floorBgId));
+            func_801A3CF4(SurfaceType_GetEcho(&play->colCtx, spC0, this->actor.floorBgId));
             if (this->actor.floorBgId == 0x32) {
                 func_800FAAB4(play, SurfaceType_GetLightSettingIndex(&play->colCtx, spC0, this->actor.floorBgId));
             } else {
@@ -10112,8 +10116,9 @@ void func_80843178(PlayState* play, Player* this) {
 
         D_80862B10 = SurfaceType_GetConveyorSpeed(&play->colCtx, spC0, this->actor.floorBgId);
         if (D_80862B10 != 0) {
-            D_80862B14 = SurfaceType_GetConveyorType(&play->colCtx, spC0, (s32) this->actor.floorBgId);
-            if (((D_80862B14 == 0) && (this->actor.depthInWater > 20.0f)) || ((D_80862B14 != 0) && (this->actor.bgCheckFlags & 1))) {
+            D_80862B14 = SurfaceType_GetConveyorType(&play->colCtx, spC0, (s32)this->actor.floorBgId);
+            if (((D_80862B14 == 0) && (this->actor.depthInWater > 20.0f)) ||
+                ((D_80862B14 != 0) && (this->actor.bgCheckFlags & 1))) {
                 D_80862B16 = SurfaceType_GetConveyorDirection(&play->colCtx, spC0, this->actor.floorBgId) << 0xA;
             } else {
                 D_80862B10 = 0;
@@ -10186,14 +10191,18 @@ void func_80843178(PlayState* play, Player* this) {
                 temp_fv0_5 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp84, &sp7C, &this->actor, &sp70);
 
                 this->wallHeight = temp_fv0_5 - this->actor.world.pos.y;
-                if ((this->wallHeight < 17.800001f) || ((BgCheck_EntityCheckCeiling(&play->colCtx, &sp68, &this->actor.world.pos, (temp_fv0_5 - this->actor.world.pos.y) + 20.0f, &sp80, &sp7C, &this->actor) != 0))) {
+                if ((this->wallHeight < 17.800001f) ||
+                    ((BgCheck_EntityCheckCeiling(&play->colCtx, &sp68, &this->actor.world.pos,
+                                                 (temp_fv0_5 - this->actor.world.pos.y) + 20.0f, &sp80, &sp7C,
+                                                 &this->actor) != 0))) {
                     this->wallHeight = 399.96002f;
                 } else {
                     D_8085D358.y = (temp_fv0_5 + 5.0f) - this->actor.world.pos.y;
 
-                    if ((func_80835D58(play, this, &D_8085D358, &sp80, &sp7C, &D_80862B30)) && 
+                    if ((func_80835D58(play, this, &D_8085D358, &sp80, &sp7C, &D_80862B30)) &&
                         (temp_v1_6 = this->actor.wallYaw - Math_FAtan2F(sp80->normal.z, sp80->normal.x),
-                        ABS_ALT(temp_v1_6) < 0x4000) && !(func_800C9AB0(&play->colCtx, sp80, sp7C))) {
+                         ABS_ALT(temp_v1_6) < 0x4000) &&
+                        !(func_800C9AB0(&play->colCtx, sp80, sp7C))) {
                         this->wallHeight = 399.96002f;
                     } else if (func_800C9A7C(&play->colCtx, sp98, this->actor.wallBgId) == 0) {
                         if (this->ageProperties->unk_1C <= this->wallHeight) {
@@ -10245,7 +10254,8 @@ void func_80843178(PlayState* play, Player* this) {
 
             if (this->actor.floorBgId != 0x32) {
                 DynaPolyActor_SetRidingMovingStateByIndex(&play->colCtx, this->actor.floorBgId);
-            } else if (!(this->actor.bgCheckFlags & 2) && (this->actor.depthInWater <= 24.0f) && (D_80862B40 != 1) && (D_80862B10 == 0) && (sp5C > 0.5f)) {
+            } else if (!(this->actor.bgCheckFlags & 2) && (this->actor.depthInWater <= 24.0f) && (D_80862B40 != 1) &&
+                       (D_80862B10 == 0) && (sp5C > 0.5f)) {
                 if (ActorCutscene_GetCurrentIndex() != play->playerActorCsIds[8]) {
                     func_80841A50(play, this);
                 }
@@ -10279,9 +10289,9 @@ void func_80843178(PlayState* play, Player* this) {
         if (this->actor.bgCheckFlags & 0x20) {
             if (this->actor.depthInWater < 50.0f) {
                 if (this->actor.depthInWater < 20.0f) {
-                     this->unk_B72 = (D_80862B08 == 0xD) ? 3 : 4;
+                    this->unk_B72 = (D_80862B08 == 0xD) ? 3 : 4;
                 } else {
-                     this->unk_B72 = (D_80862B08 == 0xD) ? 13 : 5;
+                    this->unk_B72 = (D_80862B08 == 0xD) ? 13 : 5;
                 }
 
                 return;
