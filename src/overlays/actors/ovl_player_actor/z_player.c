@@ -5531,7 +5531,7 @@ void func_80834D50(PlayState* play, Player* this, LinkAnimationHeader* anim, f32
 }
 
 void func_80834DB8(Player* this, LinkAnimationHeader* anim, f32 arg2, PlayState* play) {
-    func_80834D50(play, this, anim, arg2, 0x6800);
+    func_80834D50(play, this, anim, arg2, NA_SE_VO_LI_SWORD_N);
 }
 
 s32 func_80834DFC(Player* this, PlayState* play) {
@@ -7099,7 +7099,88 @@ block_85:
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80838A90.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808391D8.s")
+s32 func_808391D8(Player* this, PlayState* play) {
+    Actor* sp2C;
+    Actor* var_a3;
+    Actor* var_a1;
+    s32 var_t1;
+    s32 var_t2;
+    s32 temp_t9;
+
+    if (gSaveContext.save.playerData.health != 0) {
+        var_a1 = NULL;
+        var_t1 = false;
+        sp2C = this->targetActor;
+        var_a3 = this->unk_730;
+        var_t2 = false;
+        if (this->tatlActor != NULL) {
+            var_t2 = (var_a3 != NULL) && (CHECK_FLAG_ALL(var_a3->flags, ACTOR_FLAG_1 | ACTOR_FLAG_40000) || (var_a3->hintId != 0xFF));
+
+            if (var_t2 || (this->tatlTextId != 0)) {
+                var_t1 = (this->tatlTextId < 0) && ((ABS_ALT(this->tatlTextId) & 0xFF00) != 0x10000);
+
+                if (var_t1 || !var_t2) {
+                    var_a1 = this->tatlActor;
+                    if (var_t1) {
+                        var_a3 = NULL;
+                        sp2C = NULL;
+                    }
+                } else {
+                    var_a1 = var_a3;
+                }
+            }
+        }
+
+        if ((sp2C != NULL) || (var_a1 != NULL)) {
+            if ((var_a3 == NULL) || (var_a3 == sp2C) || (var_a3 == var_a1)) {
+                if (!(this->stateFlags1 & 0x800) || ((this->heldActor != NULL) && (var_t1 || (sp2C == this->heldActor) || (var_a1 == this->heldActor) || ((sp2C != NULL) && (sp2C->flags & 0x10000))))) {
+                    if (((this->actor.bgCheckFlags & 1) || (this->stateFlags1 & 0x800000) || func_801242B4(this))) {
+                        if (sp2C != NULL) {
+                            if ((var_a3 == NULL) || (var_a3 == sp2C)) {
+                                this->stateFlags2 |= 2;
+                            }
+
+                            if (ActorCutscene_GetCanPlayNext(0x7C) == 0) {
+                                return 0;
+                            }
+
+                            if (CHECK_BTN_ALL(D_80862B44->press.button, BTN_A) || (sp2C->flags & 0x10000)) {
+                                var_a1 = NULL;
+                            } else if (var_a1 == NULL) {
+                                return 0;
+                            }
+                        }
+
+                        if (var_a1 != NULL) {
+                            if (!var_t1) {
+                                this->stateFlags2 |= 0x200000;
+                                if (!ActorCutscene_GetCanPlayNext(0x7C) || !CHECK_BTN_ALL(D_80862B44->press.button, BTN_CUP)) {
+                                    return 0;
+                                }
+                            }
+
+                            sp2C = var_a1;
+                            this->targetActor = NULL;
+
+                            if (var_t1 || !var_t2) {
+                                var_a1->textId = ABS_ALT(this->tatlTextId);
+                            } else if (var_a1->hintId != 0xFF) {
+                                var_a1->textId = var_a1->hintId + 0x1900;
+                            }
+                        }
+
+                        this->currentMask = D_80862B2C;
+                        gSaveContext.save.equippedMask = this->currentMask;
+                        func_8085B460(play, sp2C);
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
+}
 
 s32 func_80839518(Player* this, PlayState* play) {
     if (this->unk_AA5 != 0) {
@@ -11627,7 +11708,7 @@ s32 func_80848AB0(Player* this, PlayState* play) {
     D_80862B48 = D_80862B4C;
     if ((D_80862B48 != 0) || LinkAnimation_Update(play, &this->unk_284)) {
         func_8082F43C(play, this, D_8085C9F0[this->itemActionParam]);
-        LinkAnimation_PlayLoop(play, &this->unk_284, D_8085BE84[this->modelAnimType]);
+        LinkAnimation_PlayLoop(play, &this->unk_284, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_0, this->modelAnimType));
         this->unk_AA4 = 0;
         this->unk_AC4(this, play);
         return false;
