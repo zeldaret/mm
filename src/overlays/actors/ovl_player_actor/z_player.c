@@ -11086,33 +11086,27 @@ void Player_Destroy(Actor* thisx, PlayState* play) {
 s32 func_80847190(PlayState* play, Player* this, s32 arg2);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847190.s")
 
-#ifdef NON_EQUIVALENT
-// float fun
-void func_8084748C(Player* this, f32* arg1, f32 arg2, s16 arg3) {
-    f32 temp_fv0;
-    f32 temp_fv1;
-    f32 var_fv1;
+void func_8084748C(Player* this, f32* speed, f32 speedTarget, s16 yawTarget) {
+    f32 incrStep;
+    f32 maxSpeed;
 
-    temp_fv1 = this->skelAnime.curFrame - 10.0f;
-    temp_fv0 = (REG(45) / 100.0f) * 0.8f;
-    if (temp_fv0 < *arg1) {
-        *arg1 = temp_fv0;
+    incrStep = this->skelAnime.curFrame - 10.0f;
+
+    maxSpeed = (R_RUN_SPEED_LIMIT / 100.0f) * 0.8f;
+    if (*speed > maxSpeed) {
+        *speed = maxSpeed;
     }
 
-    if ((temp_fv1 > 0.0f) && (temp_fv1 < 16.0f)) {
-        var_fv1 = fabsf(temp_fv1) * 0.5f;
+    if ((0.0f < incrStep) && (incrStep < 16.0f)) {
+        incrStep = fabsf(incrStep) * 0.5f;
     } else {
-        arg2 = 0.0f;
-        var_fv1 = 0.0f;
+        speedTarget = 0.0f;
+        incrStep = 0.0f;
     }
 
-    Math_AsymStepToF(arg1, arg2 * 0.8f, var_fv1, (fabsf(*arg1) * 0.02f) + 0.05f);
-    Math_ScaledStepToS(&this->currentYaw, arg3, 0x640);
+    Math_AsymStepToF(speed, speedTarget * 0.8f, incrStep, (fabsf(*speed) * 0.02f) + 0.05f);
+    Math_ScaledStepToS(&this->currentYaw, yawTarget, 1600);
 }
-#else
-void func_8084748C(Player* this, f32* arg1, f32 arg2, s16 arg3);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084748C.s")
-#endif
 
 void func_808475B4(Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808475B4.s")
