@@ -7100,23 +7100,19 @@ block_85:
 #endif
 
 s32 func_808391D8(Player* this, PlayState* play) {
-    Actor* sp2C;
-    Actor* var_a3;
-    Actor* var_a1;
-    s32 var_t1;
-    s32 var_t2;
-    s32 temp_t9;
-
     if (gSaveContext.save.playerData.health != 0) {
-        var_a1 = NULL;
-        var_t1 = false;
-        sp2C = this->targetActor;
-        var_a3 = this->unk_730;
-        var_t2 = false;
+        Actor* sp2C = this->targetActor;
+        Actor* var_a3 = this->unk_730;
+        Actor* var_a1 = NULL;
+        s32 var_t1 = false;
+        s32 var_t2 = false;
+
         if (this->tatlActor != NULL) {
-            var_t2 = (var_a3 != NULL) && (CHECK_FLAG_ALL(var_a3->flags, ACTOR_FLAG_1 | ACTOR_FLAG_40000) || (var_a3->hintId != 0xFF));
+            var_t2 = (var_a3 != NULL) &&
+                     (CHECK_FLAG_ALL(var_a3->flags, ACTOR_FLAG_1 | ACTOR_FLAG_40000) || (var_a3->hintId != 0xFF));
 
             if (var_t2 || (this->tatlTextId != 0)) {
+                //! @bug ?
                 var_t1 = (this->tatlTextId < 0) && ((ABS_ALT(this->tatlTextId) & 0xFF00) != 0x10000);
 
                 if (var_t1 || !var_t2) {
@@ -7133,29 +7129,33 @@ s32 func_808391D8(Player* this, PlayState* play) {
 
         if ((sp2C != NULL) || (var_a1 != NULL)) {
             if ((var_a3 == NULL) || (var_a3 == sp2C) || (var_a3 == var_a1)) {
-                if (!(this->stateFlags1 & 0x800) || ((this->heldActor != NULL) && (var_t1 || (sp2C == this->heldActor) || (var_a1 == this->heldActor) || ((sp2C != NULL) && (sp2C->flags & 0x10000))))) {
-                    if (((this->actor.bgCheckFlags & 1) || (this->stateFlags1 & 0x800000) || func_801242B4(this))) {
+                if (!(this->stateFlags1 & PLAYER_STATE1_800) ||
+                    ((this->heldActor != NULL) && (var_t1 || (sp2C == this->heldActor) || (var_a1 == this->heldActor) ||
+                                                   ((sp2C != NULL) && (sp2C->flags & ACTOR_FLAG_10000))))) {
+                    if (((this->actor.bgCheckFlags & 1) || (this->stateFlags1 & PLAYER_STATE1_800000) ||
+                         func_801242B4(this))) {
                         if (sp2C != NULL) {
                             if ((var_a3 == NULL) || (var_a3 == sp2C)) {
-                                this->stateFlags2 |= 2;
+                                this->stateFlags2 |= PLAYER_STATE2_2;
                             }
 
-                            if (ActorCutscene_GetCanPlayNext(0x7C) == 0) {
-                                return 0;
+                            if (!ActorCutscene_GetCanPlayNext(0x7C)) {
+                                return false;
                             }
 
-                            if (CHECK_BTN_ALL(D_80862B44->press.button, BTN_A) || (sp2C->flags & 0x10000)) {
+                            if (CHECK_BTN_ALL(D_80862B44->press.button, BTN_A) || (sp2C->flags & ACTOR_FLAG_10000)) {
                                 var_a1 = NULL;
                             } else if (var_a1 == NULL) {
-                                return 0;
+                                return false;
                             }
                         }
 
                         if (var_a1 != NULL) {
                             if (!var_t1) {
-                                this->stateFlags2 |= 0x200000;
-                                if (!ActorCutscene_GetCanPlayNext(0x7C) || !CHECK_BTN_ALL(D_80862B44->press.button, BTN_CUP)) {
-                                    return 0;
+                                this->stateFlags2 |= PLAYER_STATE2_200000;
+                                if (!ActorCutscene_GetCanPlayNext(0x7C) ||
+                                    !CHECK_BTN_ALL(D_80862B44->press.button, BTN_CUP)) {
+                                    return false;
                                 }
                             }
 
