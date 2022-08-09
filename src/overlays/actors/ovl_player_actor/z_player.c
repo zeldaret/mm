@@ -11124,7 +11124,7 @@ void func_8084748C(Player* this, f32* speed, f32 speedTarget, s16 yawTarget) {
     }
 
     Math_AsymStepToF(speed, speedTarget * 0.8f, incrStep, (fabsf(*speed) * 0.02f) + 0.05f);
-    Math_ScaledStepToS(&this->currentYaw, yawTarget, 1600); // 1 ESS turn, also one unit frame of first-person rotation
+    Math_ScaledStepToS(&this->currentYaw, yawTarget, 1600); // 1 ESS turn, also one frame of first-person rotation
 }
 
 void func_808475B4(Player* this);
@@ -11233,31 +11233,25 @@ s32 func_80847A94(PlayState* play, Player* this, s32 arg2, f32* arg3) {
 s32 func_80847BF0(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847BF0.s")
 
-#if 0
-void func_80847E2C(Player* arg0, f32 arg1, f32 arg2) {
-    f32 var_fa0;
+// Used in 2 horse-related functions
+void func_80847E2C(Player* this, f32 arg1, f32 minFrame) {
+    f32 addend;
+    f32 dir;
 
-    if ((arg0->unk_B48 != 0.0f) && (arg2 <= arg0->skelAnime.curFrame)) {
-        if (arg1 < fabsf(arg0->unk_B48)) {
-            if (arg0->unk_B48 >= 0.0f) {
-                var_fa0 = 1 * arg1;
-            } else {
-                var_fa0 = -1 * arg1;
-            }
+    if ((this->unk_B48 != 0.0f) && (minFrame <= this->skelAnime.curFrame)) {
+        if (arg1 < fabsf(this->unk_B48)) {
+            dir = (this->unk_B48 >= 0.0f) ? 1 : -1;
+            addend = dir * arg1;
         } else {
-            var_fa0 = arg0->unk_B48;
+            addend = this->unk_B48;
         }
-        arg0->unk_B48 -= var_fa0;
-        arg0->actor.world.pos.y += var_fa0;
+        this->actor.world.pos.y += addend;
+        this->unk_B48 -= addend;
     }
 }
-#else
-void func_80847E2C(Player* this, f32 arg1, f32 arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847E2C.s")
-#endif
 
 s32 func_80847ED4(Player* this) {
-    return this->interactRangeActor != NULL && this->interactRangeActor->id == ACTOR_EN_ZOG &&
+    return (this->interactRangeActor != NULL) && (this->interactRangeActor->id == ACTOR_EN_ZOG) &&
            CHECK_BTN_ALL(D_80862B44->cur.button, BTN_A);
 }
 
@@ -13698,6 +13692,7 @@ void func_808505D0(Player* this, PlayState* play) {
         this->stateFlags1 &= ~PLAYER_STATE1_800000;
         this->actor.parent = NULL;
         D_801BDA9C = 0;
+
         if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA) || (DREG(1) != 0)) {
             gSaveContext.save.horseData.scene = play->sceneNum;
             gSaveContext.save.horseData.pos.x = rideActor->world.pos.x;
