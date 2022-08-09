@@ -4477,20 +4477,23 @@ s32 func_80832558(PlayState* play, Player* this, void (*arg2)(PlayState*, Player
     return func_808324EC(play, this, arg2, -1);
 }
 
-#if 0
+#ifdef NON_MATCHING
 void func_80832578(Player* this, PlayState* play) {
-    s16 sp26;
+    s16 sp26 = this->actor.shape.rot.y;
 
-    sp26 = this->actor.shape.rot.y;
-    if (!(this->stateFlags2 & 0x60)) {
-        if ((this->unk_730 != NULL) && ((play->actorCtx.targetContext.unk4B != 0) || (this != GET_PLAYER(play))) && (this->unk_730->id != 0x233)) {
-            Math_ScaledStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_730->focus.pos), 0xFA0);
-        } else if ((this->stateFlags1 & 0x20000) && !(this->stateFlags2 & 0x60)) {
+    if (!(this->stateFlags2 & (PLAYER_STATE2_20 | PLAYER_STATE2_40))) {
+        if ((this->unk_730 != NULL) && ((play->actorCtx.targetContext.unk4B != 0) || (this != GET_PLAYER(play))) &&
+            (this->unk_730->id != ACTOR_OBJ_NOZOKI)) {
+            Math_ScaledStepToS(&this->actor.shape.rot.y,
+                               Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_730->focus.pos), 0xFA0);
+        } else if ((this->stateFlags1 & PLAYER_STATE1_20000) &&
+                   !(this->stateFlags2 & (PLAYER_STATE2_20 | PLAYER_STATE2_40))) {
             Math_ScaledStepToS(&this->actor.shape.rot.y, this->targetYaw, 0xFA0);
         }
-    } else if (!(this->stateFlags2 & 0x40)) {
+    } else if (!(this->stateFlags2 & PLAYER_STATE2_40)) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, this->currentYaw, 0x7D0);
     }
+
     this->unk_B4C = this->actor.shape.rot.y - sp26;
 }
 #else
@@ -5066,152 +5069,145 @@ void func_80833AA0(Player* this, PlayState* play) {
     }
 }
 
-extern LinkAnimationHeader* D_8085D0D4[];
-extern LinkAnimationHeader* D_8085D0E4[];
+void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 velocity, f32 yVelocity, s16 arg5,
+                   s32 invincibilityTimer) {
+    LinkAnimationHeader* anim = NULL;
 
-#if 0
-void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 arg3, f32 arg4, s16 arg5, s32 arg6) {
-    LinkAnimationHeader* sp2C;
-    LinkAnimationHeader** sp28;
-    LinkAnimationHeader** var_v1;
-    LinkAnimationHeader** var_v1_2;
-    s16 temp_v1;
-    s16 var_v0;
-    s16 var_v0_2;
-    s16 var_v0_3;
-
-    sp2C = NULL;
-    if (this->stateFlags1 & 0x2000) {
+    if (this->stateFlags1 & PLAYER_STATE1_2000) {
         func_80833A64(this);
     }
+
     this->unk_B64 = 0;
-    func_800B8E58(this, 0x83FU);
-    if ((func_808339D4(play, this, -(s32) this->actor.colChkInfo.damage) != 0) || ((this->stateFlags2 &= ~0x80, ((this->actor.bgCheckFlags & 1) == 0)) && !(this->stateFlags1 & 0x8000000))) {
-        if (this->actor.colChkInfo.damage != 0) {
-            func_80833998(this, arg6);
-        }
-        if (!(this->stateFlags2 & 0x10)) {
-            if (arg2 == 3) {
-                Player_SetAction(play, this, func_808546D0, 0);
-                sp2C = &gameplay_keep_Linkanim_00DCD0;
-                func_8082DAD4(this);
-                this->actor.velocity.y = 0.0f;
-                Player_RequestRumble(play, this, 0xFFU, 0xAU, (u8) 0x28, 0);
-                func_800B8E58(this, 0x874U);
-                func_8082DF8C(this, 0x6806U);
-                goto block_47;
-            }
-            if (arg2 == 4) {
-                Player_SetAction(play, this, func_80854800, 0);
-                func_8082DB60(play, this, &gameplay_keep_Linkanim_00DC20);
-                func_8082DAD4(this);
-                this->unk_AE8 = 0x14;
-                this->actor.velocity.y = 0.0f;
-                Player_RequestRumble(play, this, 0xFFU, 0x50U, (u8) 0x96, 0);
-                goto block_47;
-            }
-            arg5 -= this->actor.shape.rot.y;
-            if (this->stateFlags1 & 0x8000000) {
-                Player_SetAction(play, this, func_80851B58, 0);
-                Player_RequestRumble(play, this, 0xB4U, 0x14U, (u8) 0x32, 0);
-                if (arg2 == 1) {
-                    this->linearVelocity = arg3 * 1.5f;
-                    this->actor.velocity.y = arg4 * 0.7f;
-                } else {
-                    this->linearVelocity = 4.0f;
-                    this->actor.velocity.y = 0.0f;
-                }
-                func_8082DF8C(this, 0x6805U);
-                sp2C = &gameplay_keep_Linkanim_00DFF8;
-                goto block_43;
-            }
-            if ((arg2 == 1) || (arg2 == 2) || !(this->actor.bgCheckFlags & 1) || (this->stateFlags1 & 0x206004)) {
-                Player_SetAction(play, this, func_8084BC64, 0);
-                this->stateFlags3 |= 2;
-                Player_RequestRumble(play, this, 0xFFU, 0x14U, (u8) 0x96, 0);
-                func_8082DAD4(this);
-                if (arg2 == 2) {
-                    this->unk_AE8 = 4;
-                    this->actor.speedXZ = 3.0f;
-                    this->linearVelocity = 3.0f;
-                    this->actor.velocity.y = 6.0f;
-                    func_8082E5A8(play, this, (D_8085BE84 + 0x48)[this->modelAnimType]);
-                    func_8082DF8C(this, 0x6805U);
-                } else {
-                    this->actor.speedXZ = arg3;
-                    this->linearVelocity = arg3;
-                    var_v0 = arg5;
-                    this->actor.velocity.y = arg4;
-                    if (arg5 < 0) {
-                        var_v0 = -arg5;
-                    }
-                    if (var_v0 >= 0x4001) {
-                        sp2C = &gameplay_keep_Linkanim_00DC78;
-                    } else {
-                        sp2C = &gameplay_keep_Linkanim_00DAD0;
-                    }
-                    func_8082DF8C(this, 0x6808U);
-                }
-                this->actor.bgCheckFlags &= 0xFFFE;
-                goto block_43;
-            }
-            if ((this->linearVelocity > 4.0f) && (func_80123420(this) == 0)) {
-                this->unk_B64 = 0x14;
-                Player_RequestRumble(play, this, 0x78U, 0x14U, (u8) 0xA, 0);
-                func_8082DF8C(this, 0x6805U);
-                return;
-            }
-            sp28 = D_8085D0D4;
-            Player_SetAction(play, this, func_8084BBF0, 0);
-            func_8082FC60(this);
-            if ((s32) this->actor.colChkInfo.damage < 5) {
-                sp28 = D_8085D0D4;
-                Player_RequestRumble(play, this, 0x78U, 0x14U, (u8) 0xA, 0);
-                var_v1 = D_8085D0D4;
-            } else {
-                Player_RequestRumble(play, this, 0xB4U, 0x14U, (u8) 0x64, 0);
-                var_v1 = D_8085D0E4;
-                this->linearVelocity = 23.0f;
-            }
-            var_v0_2 = arg5;
-            if (arg5 < 0) {
-                var_v0_2 = -arg5;
-            }
-            if (var_v0_2 < 0x4001) {
-                var_v1 += 8;
-            }
-            sp28 = var_v1;
-            var_v1_2 = var_v1;
-            if (func_80123420(this) != 0) {
-                var_v1_2 += 4;
-            }
-            sp2C = *var_v1_2;
-            func_8082DF8C(this, 0x6805U);
-block_43:
-            var_v0_3 = arg5;
-            this->actor.shape.rot.y += arg5;
-            temp_v1 = this->actor.shape.rot.y;
-            this->currentYaw = temp_v1;
-            this->actor.world.rot.y = temp_v1;
-            if (arg5 < 0) {
-                var_v0_3 = -arg5;
-            }
-            if (var_v0_3 >= 0x4001) {
-                this->actor.shape.rot.y = temp_v1 + 0x8000;
-            }
-block_47:
-            func_8082DE50(play, this);
-            this->stateFlags1 |= 0x04000000;
-            if (sp2C != NULL) {
-                func_8082DB90(play, this, sp2C);
-            }
+    func_800B8E58(this, NA_SE_PL_DAMAGE);
+
+    if (func_808339D4(play, this, -this->actor.colChkInfo.damage) == 0) {
+        this->stateFlags2 &= ~PLAYER_STATE2_80;
+        if ((this->actor.bgCheckFlags & 1) || (this->stateFlags1 & PLAYER_STATE1_8000000)) {
+            return;
         }
     }
+
+    if (this->actor.colChkInfo.damage != 0) {
+        func_80833998(this, invincibilityTimer);
+    }
+
+    if (this->stateFlags2 & PLAYER_STATE2_10) {
+        return;
+    }
+
+    if (arg2 == 3) {
+        Player_SetAction(play, this, func_808546D0, 0);
+        anim = &gameplay_keep_Linkanim_00DCD0;
+        func_8082DAD4(this);
+        this->actor.velocity.y = 0.0f;
+
+        Player_RequestRumble(play, this, 255, 10, 40, SQ(0));
+
+        func_800B8E58(this, NA_SE_PL_FREEZE_S);
+        func_8082DF8C(this, NA_SE_VO_LI_FREEZE);
+    } else if (arg2 == 4) {
+        Player_SetAction(play, this, func_80854800, 0);
+        func_8082DB60(play, this, &gameplay_keep_Linkanim_00DC20);
+        func_8082DAD4(this);
+        this->unk_AE8 = 0x14;
+        this->actor.velocity.y = 0.0f;
+
+        Player_RequestRumble(play, this, 255, 80, 150, SQ(0));
+    } else {
+        arg5 -= this->actor.shape.rot.y;
+
+        if (this->stateFlags1 & PLAYER_STATE1_8000000) {
+            Player_SetAction(play, this, func_80851B58, 0);
+            Player_RequestRumble(play, this, 180, 20, 50, SQ(0));
+
+            if (arg2 == 1) {
+                this->linearVelocity = velocity * 1.5f;
+                this->actor.velocity.y = yVelocity * 0.7f;
+            } else {
+                this->linearVelocity = 4.0f;
+                this->actor.velocity.y = 0.0f;
+            }
+
+            func_8082DF8C(this, NA_SE_VO_LI_DAMAGE_S);
+            anim = &gameplay_keep_Linkanim_00DFF8;
+        } else if ((arg2 == 1) || (arg2 == 2) || !(this->actor.bgCheckFlags & 1) ||
+                   (this->stateFlags1 &
+                    (PLAYER_STATE1_4 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_200000))) {
+            Player_SetAction(play, this, func_8084BC64, 0);
+
+            this->stateFlags3 |= PLAYER_STATE3_2;
+            Player_RequestRumble(play, this, 255, 20, 150, SQ(0));
+            func_8082DAD4(this);
+
+            if (arg2 == 2) {
+                this->unk_AE8 = 4;
+                this->actor.speedXZ = 3.0f;
+                this->linearVelocity = 3.0f;
+                this->actor.velocity.y = 6.0f;
+                func_8082E5A8(play, this, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_3, this->modelAnimType));
+                func_8082DF8C(this, NA_SE_VO_LI_DAMAGE_S);
+            } else {
+                this->actor.speedXZ = velocity;
+                this->linearVelocity = velocity;
+                this->actor.velocity.y = yVelocity;
+
+                if (ABS_ALT(arg5) > 0x4000) {
+                    anim = &gameplay_keep_Linkanim_00DC78;
+                } else {
+                    anim = &gameplay_keep_Linkanim_00DAD0;
+                }
+                func_8082DF8C(this, NA_SE_VO_LI_FALL_L);
+            }
+            this->actor.bgCheckFlags &= ~1;
+        } else if ((this->linearVelocity > 4.0f) && !func_80123420(this)) {
+            this->unk_B64 = 0x14;
+            Player_RequestRumble(play, this, 120, 20, 10, SQ(0));
+            func_8082DF8C(this, NA_SE_VO_LI_DAMAGE_S);
+
+            return;
+        } else {
+            LinkAnimationHeader** var_v1 = D_8085D0D4;
+
+            Player_SetAction(play, this, func_8084BBF0, 0);
+            func_8082FC60(this);
+
+            if (this->actor.colChkInfo.damage < 5) {
+                Player_RequestRumble(play, this, 120, 20, 10, SQ(0));
+            } else {
+                Player_RequestRumble(play, this, 180, 20, 100, SQ(0));
+                this->linearVelocity = 23.0f;
+
+                var_v1 = D_8085D0E4;
+            }
+
+            if (ABS_ALT(arg5) <= 0x4000) {
+                var_v1 += 2;
+            }
+
+            if (func_80123420(this)) {
+                var_v1++;
+            }
+
+            anim = *var_v1;
+            func_8082DF8C(this, NA_SE_VO_LI_DAMAGE_S);
+        }
+
+        this->actor.shape.rot.y += arg5;
+        this->currentYaw = this->actor.shape.rot.y;
+        this->actor.world.rot.y = this->actor.shape.rot.y;
+
+        if (ABS_ALT(arg5) > 0x4000) {
+            this->actor.shape.rot.y += 0x8000;
+        }
+    }
+
+    func_8082DE50(play, this);
+
+    this->stateFlags1 |= PLAYER_STATE1_4000000;
+    if (anim != NULL) {
+        func_8082DB90(play, this, anim);
+    }
 }
-#else
-void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 arg3, f32 arg4, s16 arg5, s32 arg6);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80833B18.s")
-#endif
 
 s32 func_808340AC(s32 arg0) {
     s32 temp_v0 = arg0 - 2;
@@ -5386,7 +5382,7 @@ s32 func_80834600(Player* this, PlayState* play) {
 
         if ((var_v0 != 0) || (this->actor.bgCheckFlags & 0x100) || ((D_80862B08 == 9)) || (this->stateFlags2 & 0x80000000)) {
             sp70 = var_v0;
-            func_8082DF8C(this, 0x6805U);
+            func_8082DF8C(this, NA_SE_VO_LI_DAMAGE_S);
             if (var_v0 != 0) {
                 func_80169FDC(&play->state);
                 func_808345C8();
