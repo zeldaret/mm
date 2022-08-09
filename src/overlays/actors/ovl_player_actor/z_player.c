@@ -666,24 +666,24 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
         // f32 unk_9C;
         44.15145f,
         // LinkAnimationHeader* unk_A0;
-        (LinkAnimationHeader*)0x0400D540,
+        &gameplay_keep_Linkanim_00D540,
         // LinkAnimationHeader* unk_A4;
-        (LinkAnimationHeader*)0x0400D548,
+        &gameplay_keep_Linkanim_00D548,
         // LinkAnimationHeader* unk_A8;
-        (LinkAnimationHeader*)0x0400D660,
+        &gameplay_keep_Linkanim_00D660,
         // LinkAnimationHeader* unk_AC;
-        (LinkAnimationHeader*)0x0400DB90,
+        &gameplay_keep_Linkanim_00DB90,
         // LinkAnimationHeader* unk_B0;
-        (LinkAnimationHeader*)0x0400DB98,
+        &gameplay_keep_Linkanim_00DB98,
         {
-            (LinkAnimationHeader*)0x0400DBA0,
-            (LinkAnimationHeader*)0x0400DBA8,
-            (LinkAnimationHeader*)0x0400DAB0,
-            (LinkAnimationHeader*)0x0400DAB8,
+            &gameplay_keep_Linkanim_00DBA0,
+            &gameplay_keep_Linkanim_00DBA8,
+            &gameplay_keep_Linkanim_00DAB0,
+            &gameplay_keep_Linkanim_00DAB8,
         },
-        { (LinkAnimationHeader*)0x0400DA90, (LinkAnimationHeader*)0x0400DA98 },
-        { (LinkAnimationHeader*)0x0400DB70, (LinkAnimationHeader*)0x0400DB78 },
-        { (LinkAnimationHeader*)0x0400DB88, (LinkAnimationHeader*)0x0400DB80 },
+        { &gameplay_keep_Linkanim_00DA90, &gameplay_keep_Linkanim_00DA98 },
+        { &gameplay_keep_Linkanim_00DB70, &gameplay_keep_Linkanim_00DB78 },
+        { &gameplay_keep_Linkanim_00DB88, &gameplay_keep_Linkanim_00DB80 },
     },
     {
         // unk_00;
@@ -749,24 +749,24 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
         // f32 unk_9C;
         42.0f,
         // LinkAnimationHeader* unk_A0;
-        (LinkAnimationHeader*)0x0400E170,
+        &gameplay_keep_Linkanim_00E170,
         // LinkAnimationHeader* unk_A4;
-        (LinkAnimationHeader*)0x0400D548,
+        &gameplay_keep_Linkanim_00D548,
         // LinkAnimationHeader* unk_A8;
-        (LinkAnimationHeader*)0x0400D660,
+        &gameplay_keep_Linkanim_00D660,
         // LinkAnimationHeader* unk_AC;
-        (LinkAnimationHeader*)0x0400E198,
+        &gameplay_keep_Linkanim_00E198,
         // LinkAnimationHeader* unk_B0;
-        (LinkAnimationHeader*)0x0400E1A0,
+        &gameplay_keep_Linkanim_00E1A0,
         {
-            (LinkAnimationHeader*)0x0400E1A8,
-            (LinkAnimationHeader*)0x0400E1B0,
-            (LinkAnimationHeader*)0x0400E1A8,
-            (LinkAnimationHeader*)0x0400E1B0,
+            &gameplay_keep_Linkanim_00E1A8,
+            &gameplay_keep_Linkanim_00E1B0,
+            &gameplay_keep_Linkanim_00E1A8,
+            &gameplay_keep_Linkanim_00E1B0,
         },
-        { (LinkAnimationHeader*)0x0400DA90, (LinkAnimationHeader*)0x0400DA98 },
-        { (LinkAnimationHeader*)0x0400E178, (LinkAnimationHeader*)0x0400E180 },
-        { (LinkAnimationHeader*)0x0400E190, (LinkAnimationHeader*)0x0400E188 },
+        { &gameplay_keep_Linkanim_00DA90, &gameplay_keep_Linkanim_00DA98 },
+        { &gameplay_keep_Linkanim_00E178, &gameplay_keep_Linkanim_00E180 },
+        { &gameplay_keep_Linkanim_00E190, &gameplay_keep_Linkanim_00E188 },
     },
     {
         // unk_00;
@@ -832,24 +832,24 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
         // f32 unk_9C;
         36.0f,
         // LinkAnimationHeader* unk_A0;
-        (LinkAnimationHeader*)0x0400E300,
+        &gameplay_keep_Linkanim_00E300,
         // LinkAnimationHeader* unk_A4;
-        (LinkAnimationHeader*)0x0400D548,
+        &gameplay_keep_Linkanim_00D548,
         // LinkAnimationHeader* unk_A8;
-        (LinkAnimationHeader*)0x0400D660,
+        &gameplay_keep_Linkanim_00D660,
         // LinkAnimationHeader* unk_AC;
-        (LinkAnimationHeader*)0x0400E378,
+        &gameplay_keep_Linkanim_00E378,
         // LinkAnimationHeader* unk_B0;
-        (LinkAnimationHeader*)0x0400E380,
+        &gameplay_keep_Linkanim_00E380,
         {
-            (LinkAnimationHeader*)0x0400E388,
-            (LinkAnimationHeader*)0x0400E390,
-            (LinkAnimationHeader*)0x0400DAB0,
-            (LinkAnimationHeader*)0x0400DAB8,
+            &gameplay_keep_Linkanim_00E388,
+            &gameplay_keep_Linkanim_00E390,
+            &gameplay_keep_Linkanim_00DAB0,
+            &gameplay_keep_Linkanim_00DAB8,
         },
-        { (LinkAnimationHeader*)0x0400DA90, (LinkAnimationHeader*)0x0400DA98 },
-        { (LinkAnimationHeader*)0x0400E358, (LinkAnimationHeader*)0x0400E360 },
-        { (LinkAnimationHeader*)0x0400E370, (LinkAnimationHeader*)0x0400E368 },
+        { &gameplay_keep_Linkanim_00DA90, &gameplay_keep_Linkanim_00DA98 },
+        { &gameplay_keep_Linkanim_00E358, &gameplay_keep_Linkanim_00E360 },
+        { &gameplay_keep_Linkanim_00E370, &gameplay_keep_Linkanim_00E368 },
     },
     {
         // unk_00;
@@ -915,24 +915,24 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
         // f32 unk_9C;
         33.0f,
         // LinkAnimationHeader* unk_A0;
-        (LinkAnimationHeader*)0x0400E268,
+        &gameplay_keep_Linkanim_00E268,
         // LinkAnimationHeader* unk_A4;
-        (LinkAnimationHeader*)0x0400D548,
+        &gameplay_keep_Linkanim_00D548,
         // LinkAnimationHeader* unk_A8;
-        (LinkAnimationHeader*)0x0400D660,
+        &gameplay_keep_Linkanim_00D660,
         // LinkAnimationHeader* unk_AC;
-        (LinkAnimationHeader*)0x0400D1F8,
+        &gameplay_keep_Linkanim_00D1F8,
         // LinkAnimationHeader* unk_B0;
-        (LinkAnimationHeader*)0x0400D200,
+        &gameplay_keep_Linkanim_00D200,
         {
-            (LinkAnimationHeader*)0x0400D208,
-            (LinkAnimationHeader*)0x0400D210,
-            (LinkAnimationHeader*)0x0400DAB0,
-            (LinkAnimationHeader*)0x0400DAB8,
+            &gameplay_keep_Linkanim_00D208,
+            &gameplay_keep_Linkanim_00D210,
+            &gameplay_keep_Linkanim_00DAB0,
+            &gameplay_keep_Linkanim_00DAB8,
         },
-        { (LinkAnimationHeader*)0x0400DA90, (LinkAnimationHeader*)0x0400DA98 },
-        { (LinkAnimationHeader*)0x0400D1D8, (LinkAnimationHeader*)0x0400D1E0 },
-        { (LinkAnimationHeader*)0x0400D1F0, (LinkAnimationHeader*)0x0400D1E8 },
+        { &gameplay_keep_Linkanim_00DA90, &gameplay_keep_Linkanim_00DA98 },
+        { &gameplay_keep_Linkanim_00D1D8, &gameplay_keep_Linkanim_00D1E0 },
+        { &gameplay_keep_Linkanim_00D1F0, &gameplay_keep_Linkanim_00D1E8 },
     },
     {
         // unk_00;
@@ -998,148 +998,148 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
         // f32 unk_9C;
         29.4343f,
         // LinkAnimationHeader* unk_A0;
-        (LinkAnimationHeader*)0x0400D128,
+        &gameplay_keep_Linkanim_00D128,
         // LinkAnimationHeader* unk_A4;
-        (LinkAnimationHeader*)0x0400D170,
+        &gameplay_keep_Linkanim_00D170,
         // LinkAnimationHeader* unk_A8;
-        (LinkAnimationHeader*)0x0400D1B8,
+        &gameplay_keep_Linkanim_00D1B8,
         // LinkAnimationHeader* unk_AC;
-        (LinkAnimationHeader*)0x0400D1F8,
+        &gameplay_keep_Linkanim_00D1F8,
         // LinkAnimationHeader* unk_B0;
-        (LinkAnimationHeader*)0x0400D200,
+        &gameplay_keep_Linkanim_00D200,
         {
-            (LinkAnimationHeader*)0x0400D208,
-            (LinkAnimationHeader*)0x0400D210,
-            (LinkAnimationHeader*)0x0400DAB0,
-            (LinkAnimationHeader*)0x0400DAB8,
+            &gameplay_keep_Linkanim_00D208,
+            &gameplay_keep_Linkanim_00D210,
+            &gameplay_keep_Linkanim_00DAB0,
+            &gameplay_keep_Linkanim_00DAB8,
         },
-        { (LinkAnimationHeader*)0x0400DA90, (LinkAnimationHeader*)0x0400DA98 },
-        { (LinkAnimationHeader*)0x0400D1D8, (LinkAnimationHeader*)0x0400D1E0 },
-        { (LinkAnimationHeader*)0x0400D1F0, (LinkAnimationHeader*)0x0400D1E8 },
+        { &gameplay_keep_Linkanim_00DA90, &gameplay_keep_Linkanim_00DA98 },
+        { &gameplay_keep_Linkanim_00D1D8, &gameplay_keep_Linkanim_00D1E0 },
+        { &gameplay_keep_Linkanim_00D1F0, &gameplay_keep_Linkanim_00D1E8 },
     },
 };
 
 LinkAnimationHeader* D_8085BE84[PLAYER_ANIMGROUP_MAX * PLAYER_ANIMTYPE_MAX] = {
-    (LinkAnimationHeader*)0x0400DF28, (LinkAnimationHeader*)0x0400DF20, (LinkAnimationHeader*)0x0400DF20,
-    (LinkAnimationHeader*)0x0400D988, (LinkAnimationHeader*)0x0400DF28, (LinkAnimationHeader*)0x0400DF28,
-    (LinkAnimationHeader*)0x0400DF70, (LinkAnimationHeader*)0x0400DF48, (LinkAnimationHeader*)0x0400DF48,
-    (LinkAnimationHeader*)0x0400D9A0, (LinkAnimationHeader*)0x0400DF70, (LinkAnimationHeader*)0x0400DF70,
-    (LinkAnimationHeader*)0x0400DE40, (LinkAnimationHeader*)0x0400D918, (LinkAnimationHeader*)0x0400DE38,
-    (LinkAnimationHeader*)0x0400D920, (LinkAnimationHeader*)0x0400DE40, (LinkAnimationHeader*)0x0400DE40,
-    (LinkAnimationHeader*)0x0400DBB8, (LinkAnimationHeader*)0x0400D808, (LinkAnimationHeader*)0x0400DBB8,
-    (LinkAnimationHeader*)0x0400D810, (LinkAnimationHeader*)0x0400DBB8, (LinkAnimationHeader*)0x0400DBB8,
-    (LinkAnimationHeader*)0x0400DF08, (LinkAnimationHeader*)0x0400D468, (LinkAnimationHeader*)0x0400D468,
-    (LinkAnimationHeader*)0x0400D970, (LinkAnimationHeader*)0x0400DF08, (LinkAnimationHeader*)0x0400DF08,
-    (LinkAnimationHeader*)0x0400DF18, (LinkAnimationHeader*)0x0400D480, (LinkAnimationHeader*)0x0400D480,
-    (LinkAnimationHeader*)0x0400D980, (LinkAnimationHeader*)0x0400DF18, (LinkAnimationHeader*)0x0400DF18,
-    (LinkAnimationHeader*)0x0400D960, (LinkAnimationHeader*)0x0400DEE0, (LinkAnimationHeader*)0x0400DEE0,
-    (LinkAnimationHeader*)0x0400D960, (LinkAnimationHeader*)0x0400D960, (LinkAnimationHeader*)0x0400D960,
-    (LinkAnimationHeader*)0x0400DD98, (LinkAnimationHeader*)0x0400D860, (LinkAnimationHeader*)0x0400D860,
-    (LinkAnimationHeader*)0x0400DD98, (LinkAnimationHeader*)0x0400DD98, (LinkAnimationHeader*)0x0400DD98,
-    (LinkAnimationHeader*)0x0400D578, (LinkAnimationHeader*)0x0400D570, (LinkAnimationHeader*)0x0400D570,
-    (LinkAnimationHeader*)0x0400D578, (LinkAnimationHeader*)0x0400D578, (LinkAnimationHeader*)0x0400D578,
-    (LinkAnimationHeader*)0x0400D140, (LinkAnimationHeader*)0x0400D140, (LinkAnimationHeader*)0x0400D140,
-    (LinkAnimationHeader*)0x0400D140, (LinkAnimationHeader*)0x0400D140, (LinkAnimationHeader*)0x0400D140,
-    (LinkAnimationHeader*)0x0400D588, (LinkAnimationHeader*)0x0400D580, (LinkAnimationHeader*)0x0400D580,
-    (LinkAnimationHeader*)0x0400D588, (LinkAnimationHeader*)0x0400D588, (LinkAnimationHeader*)0x0400D588,
-    (LinkAnimationHeader*)0x0400D148, (LinkAnimationHeader*)0x0400D148, (LinkAnimationHeader*)0x0400D148,
-    (LinkAnimationHeader*)0x0400D148, (LinkAnimationHeader*)0x0400D148, (LinkAnimationHeader*)0x0400D148,
-    (LinkAnimationHeader*)0x0400DB28, (LinkAnimationHeader*)0x0400DB20, (LinkAnimationHeader*)0x0400DB20,
-    (LinkAnimationHeader*)0x0400DB28, (LinkAnimationHeader*)0x0400DB28, (LinkAnimationHeader*)0x0400DB28,
-    (LinkAnimationHeader*)0x0400DD18, (LinkAnimationHeader*)0x0400DD10, (LinkAnimationHeader*)0x0400DD10,
-    (LinkAnimationHeader*)0x0400DD18, (LinkAnimationHeader*)0x0400DD18, (LinkAnimationHeader*)0x0400DD18,
-    (LinkAnimationHeader*)0x0400DE70, (LinkAnimationHeader*)0x0400DE68, (LinkAnimationHeader*)0x0400DE68,
-    (LinkAnimationHeader*)0x0400DE70, (LinkAnimationHeader*)0x0400DE70, (LinkAnimationHeader*)0x0400DE70,
-    (LinkAnimationHeader*)0x0400DD28, (LinkAnimationHeader*)0x0400DD20, (LinkAnimationHeader*)0x0400DD20,
-    (LinkAnimationHeader*)0x0400D858, (LinkAnimationHeader*)0x0400DD28, (LinkAnimationHeader*)0x0400DD28,
-    (LinkAnimationHeader*)0x0400DCC0, (LinkAnimationHeader*)0x0400DCB8, (LinkAnimationHeader*)0x0400DCB8,
-    (LinkAnimationHeader*)0x0400DCC8, (LinkAnimationHeader*)0x0400DCC0, (LinkAnimationHeader*)0x0400DCC0,
-    (LinkAnimationHeader*)0x0400DF58, (LinkAnimationHeader*)0x0400DF50, (LinkAnimationHeader*)0x0400DF50,
-    (LinkAnimationHeader*)0x0400D990, (LinkAnimationHeader*)0x0400DF58, (LinkAnimationHeader*)0x0400DF58,
-    (LinkAnimationHeader*)0x0400DF68, (LinkAnimationHeader*)0x0400DF60, (LinkAnimationHeader*)0x0400DF60,
-    (LinkAnimationHeader*)0x0400D998, (LinkAnimationHeader*)0x0400DF68, (LinkAnimationHeader*)0x0400DF68,
-    (LinkAnimationHeader*)0x0400DBD8, (LinkAnimationHeader*)0x0400DBC0, (LinkAnimationHeader*)0x0400DBC0,
-    (LinkAnimationHeader*)0x0400DBD8, (LinkAnimationHeader*)0x0400D510, (LinkAnimationHeader*)0x0400DBD8,
-    (LinkAnimationHeader*)0x0400DBF8, (LinkAnimationHeader*)0x0400DBF0, (LinkAnimationHeader*)0x0400DBF0,
-    (LinkAnimationHeader*)0x0400DBF8, (LinkAnimationHeader*)0x0400D518, (LinkAnimationHeader*)0x0400DBF8,
-    (LinkAnimationHeader*)0x0400DBD0, (LinkAnimationHeader*)0x0400DBC8, (LinkAnimationHeader*)0x0400DBC8,
-    (LinkAnimationHeader*)0x0400DBD0, (LinkAnimationHeader*)0x0400DBD0, (LinkAnimationHeader*)0x0400DBD0,
-    (LinkAnimationHeader*)0x0400DE90, (LinkAnimationHeader*)0x0400DE88, (LinkAnimationHeader*)0x0400DE88,
-    (LinkAnimationHeader*)0x0400D938, (LinkAnimationHeader*)0x0400DE90, (LinkAnimationHeader*)0x0400DE90,
-    (LinkAnimationHeader*)0x0400DE78, (LinkAnimationHeader*)0x0400D448, (LinkAnimationHeader*)0x0400D448,
-    (LinkAnimationHeader*)0x0400D928, (LinkAnimationHeader*)0x0400DE78, (LinkAnimationHeader*)0x0400DE78,
-    (LinkAnimationHeader*)0x0400DE80, (LinkAnimationHeader*)0x0400D450, (LinkAnimationHeader*)0x0400D450,
-    (LinkAnimationHeader*)0x0400D930, (LinkAnimationHeader*)0x0400DE80, (LinkAnimationHeader*)0x0400DE80,
-    (LinkAnimationHeader*)0x0400DA80, (LinkAnimationHeader*)0x0400DA78, (LinkAnimationHeader*)0x0400DA78,
-    (LinkAnimationHeader*)0x0400DA80, (LinkAnimationHeader*)0x0400DA80, (LinkAnimationHeader*)0x0400DA80,
-    (LinkAnimationHeader*)0x0400DF00, (LinkAnimationHeader*)0x0400DF00, (LinkAnimationHeader*)0x0400DF00,
-    (LinkAnimationHeader*)0x0400D968, (LinkAnimationHeader*)0x0400D968, (LinkAnimationHeader*)0x0400D968,
-    (LinkAnimationHeader*)0x0400DF10, (LinkAnimationHeader*)0x0400DF10, (LinkAnimationHeader*)0x0400DF10,
-    (LinkAnimationHeader*)0x0400D978, (LinkAnimationHeader*)0x0400D978, (LinkAnimationHeader*)0x0400D978,
-    (LinkAnimationHeader*)0x0400DEB8, (LinkAnimationHeader*)0x0400DEB0, (LinkAnimationHeader*)0x0400DEB0,
-    (LinkAnimationHeader*)0x0400DEB8, (LinkAnimationHeader*)0x0400DEB8, (LinkAnimationHeader*)0x0400DEB8,
-    (LinkAnimationHeader*)0x0400DE20, (LinkAnimationHeader*)0x0400DE18, (LinkAnimationHeader*)0x0400DE18,
-    (LinkAnimationHeader*)0x0400DE20, (LinkAnimationHeader*)0x0400DE20, (LinkAnimationHeader*)0x0400DE20,
-    (LinkAnimationHeader*)0x0400DB08, (LinkAnimationHeader*)0x0400DB08, (LinkAnimationHeader*)0x0400DB08,
-    (LinkAnimationHeader*)0x0400DB08, (LinkAnimationHeader*)0x0400DB08, (LinkAnimationHeader*)0x0400DB08,
-    (LinkAnimationHeader*)0x0400DB50, (LinkAnimationHeader*)0x0400DB38, (LinkAnimationHeader*)0x0400DB38,
-    (LinkAnimationHeader*)0x0400DB50, (LinkAnimationHeader*)0x0400DB50, (LinkAnimationHeader*)0x0400DB50,
-    (LinkAnimationHeader*)0x0400DB60, (LinkAnimationHeader*)0x0400DB58, (LinkAnimationHeader*)0x0400DB58,
-    (LinkAnimationHeader*)0x0400DB60, (LinkAnimationHeader*)0x0400DB60, (LinkAnimationHeader*)0x0400DB60,
-    (LinkAnimationHeader*)0x0400DB48, (LinkAnimationHeader*)0x0400DB40, (LinkAnimationHeader*)0x0400DB40,
-    (LinkAnimationHeader*)0x0400DB48, (LinkAnimationHeader*)0x0400DB48, (LinkAnimationHeader*)0x0400DB48,
-    (LinkAnimationHeader*)0x0400DDD8, (LinkAnimationHeader*)0x0400DDD0, (LinkAnimationHeader*)0x0400DDD0,
-    (LinkAnimationHeader*)0x0400DDD8, (LinkAnimationHeader*)0x0400DDD8, (LinkAnimationHeader*)0x0400DDD8,
-    (LinkAnimationHeader*)0x0400DDE8, (LinkAnimationHeader*)0x0400DDE0, (LinkAnimationHeader*)0x0400DDE0,
-    (LinkAnimationHeader*)0x0400DDE8, (LinkAnimationHeader*)0x0400DDE8, (LinkAnimationHeader*)0x0400DDE8,
-    (LinkAnimationHeader*)0x0400DDC8, (LinkAnimationHeader*)0x0400DDC0, (LinkAnimationHeader*)0x0400DDC0,
-    (LinkAnimationHeader*)0x0400DDC8, (LinkAnimationHeader*)0x0400DDC8, (LinkAnimationHeader*)0x0400DDC8,
-    (LinkAnimationHeader*)0x0400DC40, (LinkAnimationHeader*)0x0400DC38, (LinkAnimationHeader*)0x0400DC38,
-    (LinkAnimationHeader*)0x0400DC40, (LinkAnimationHeader*)0x0400DC40, (LinkAnimationHeader*)0x0400DC40,
-    (LinkAnimationHeader*)0x0400DCE8, (LinkAnimationHeader*)0x0400DCE0, (LinkAnimationHeader*)0x0400DCE0,
-    (LinkAnimationHeader*)0x0400DCE8, (LinkAnimationHeader*)0x0400DCE8, (LinkAnimationHeader*)0x0400DCE8,
-    (LinkAnimationHeader*)0x0400DD08, (LinkAnimationHeader*)0x0400DD00, (LinkAnimationHeader*)0x0400DD00,
-    (LinkAnimationHeader*)0x0400DD08, (LinkAnimationHeader*)0x0400DD08, (LinkAnimationHeader*)0x0400DD08,
-    (LinkAnimationHeader*)0x0400DCF8, (LinkAnimationHeader*)0x0400DCF0, (LinkAnimationHeader*)0x0400DCF0,
-    (LinkAnimationHeader*)0x0400DCF8, (LinkAnimationHeader*)0x0400DCF8, (LinkAnimationHeader*)0x0400DCF8,
-    (LinkAnimationHeader*)0x0400DC10, (LinkAnimationHeader*)0x0400DC08, (LinkAnimationHeader*)0x0400DC08,
-    (LinkAnimationHeader*)0x0400DC18, (LinkAnimationHeader*)0x0400DC10, (LinkAnimationHeader*)0x0400DC10,
-    (LinkAnimationHeader*)0x0400DED0, (LinkAnimationHeader*)0x0400DEC8, (LinkAnimationHeader*)0x0400DEC8,
-    (LinkAnimationHeader*)0x0400DED8, (LinkAnimationHeader*)0x0400DED0, (LinkAnimationHeader*)0x0400DED0,
-    (LinkAnimationHeader*)0x0400E450, (LinkAnimationHeader*)0x0400E108, (LinkAnimationHeader*)0x0400E108,
-    (LinkAnimationHeader*)0x0400E450, (LinkAnimationHeader*)0x0400E450, (LinkAnimationHeader*)0x0400E450,
+    &gameplay_keep_Linkanim_00DF28, &gameplay_keep_Linkanim_00DF20, &gameplay_keep_Linkanim_00DF20,
+    &gameplay_keep_Linkanim_00D988, &gameplay_keep_Linkanim_00DF28, &gameplay_keep_Linkanim_00DF28,
+    &gameplay_keep_Linkanim_00DF70, &gameplay_keep_Linkanim_00DF48, &gameplay_keep_Linkanim_00DF48,
+    &gameplay_keep_Linkanim_00D9A0, &gameplay_keep_Linkanim_00DF70, &gameplay_keep_Linkanim_00DF70,
+    &gameplay_keep_Linkanim_00DE40, &gameplay_keep_Linkanim_00D918, &gameplay_keep_Linkanim_00DE38,
+    &gameplay_keep_Linkanim_00D920, &gameplay_keep_Linkanim_00DE40, &gameplay_keep_Linkanim_00DE40,
+    &gameplay_keep_Linkanim_00DBB8, &gameplay_keep_Linkanim_00D808, &gameplay_keep_Linkanim_00DBB8,
+    &gameplay_keep_Linkanim_00D810, &gameplay_keep_Linkanim_00DBB8, &gameplay_keep_Linkanim_00DBB8,
+    &gameplay_keep_Linkanim_00DF08, &gameplay_keep_Linkanim_00D468, &gameplay_keep_Linkanim_00D468,
+    &gameplay_keep_Linkanim_00D970, &gameplay_keep_Linkanim_00DF08, &gameplay_keep_Linkanim_00DF08,
+    &gameplay_keep_Linkanim_00DF18, &gameplay_keep_Linkanim_00D480, &gameplay_keep_Linkanim_00D480,
+    &gameplay_keep_Linkanim_00D980, &gameplay_keep_Linkanim_00DF18, &gameplay_keep_Linkanim_00DF18,
+    &gameplay_keep_Linkanim_00D960, &gameplay_keep_Linkanim_00DEE0, &gameplay_keep_Linkanim_00DEE0,
+    &gameplay_keep_Linkanim_00D960, &gameplay_keep_Linkanim_00D960, &gameplay_keep_Linkanim_00D960,
+    &gameplay_keep_Linkanim_00DD98, &gameplay_keep_Linkanim_00D860, &gameplay_keep_Linkanim_00D860,
+    &gameplay_keep_Linkanim_00DD98, &gameplay_keep_Linkanim_00DD98, &gameplay_keep_Linkanim_00DD98,
+    &gameplay_keep_Linkanim_00D578, &gameplay_keep_Linkanim_00D570, &gameplay_keep_Linkanim_00D570,
+    &gameplay_keep_Linkanim_00D578, &gameplay_keep_Linkanim_00D578, &gameplay_keep_Linkanim_00D578,
+    &gameplay_keep_Linkanim_00D140, &gameplay_keep_Linkanim_00D140, &gameplay_keep_Linkanim_00D140,
+    &gameplay_keep_Linkanim_00D140, &gameplay_keep_Linkanim_00D140, &gameplay_keep_Linkanim_00D140,
+    &gameplay_keep_Linkanim_00D588, &gameplay_keep_Linkanim_00D580, &gameplay_keep_Linkanim_00D580,
+    &gameplay_keep_Linkanim_00D588, &gameplay_keep_Linkanim_00D588, &gameplay_keep_Linkanim_00D588,
+    &gameplay_keep_Linkanim_00D148, &gameplay_keep_Linkanim_00D148, &gameplay_keep_Linkanim_00D148,
+    &gameplay_keep_Linkanim_00D148, &gameplay_keep_Linkanim_00D148, &gameplay_keep_Linkanim_00D148,
+    &gameplay_keep_Linkanim_00DB28, &gameplay_keep_Linkanim_00DB20, &gameplay_keep_Linkanim_00DB20,
+    &gameplay_keep_Linkanim_00DB28, &gameplay_keep_Linkanim_00DB28, &gameplay_keep_Linkanim_00DB28,
+    &gameplay_keep_Linkanim_00DD18, &gameplay_keep_Linkanim_00DD10, &gameplay_keep_Linkanim_00DD10,
+    &gameplay_keep_Linkanim_00DD18, &gameplay_keep_Linkanim_00DD18, &gameplay_keep_Linkanim_00DD18,
+    &gameplay_keep_Linkanim_00DE70, &gameplay_keep_Linkanim_00DE68, &gameplay_keep_Linkanim_00DE68,
+    &gameplay_keep_Linkanim_00DE70, &gameplay_keep_Linkanim_00DE70, &gameplay_keep_Linkanim_00DE70,
+    &gameplay_keep_Linkanim_00DD28, &gameplay_keep_Linkanim_00DD20, &gameplay_keep_Linkanim_00DD20,
+    &gameplay_keep_Linkanim_00D858, &gameplay_keep_Linkanim_00DD28, &gameplay_keep_Linkanim_00DD28,
+    &gameplay_keep_Linkanim_00DCC0, &gameplay_keep_Linkanim_00DCB8, &gameplay_keep_Linkanim_00DCB8,
+    &gameplay_keep_Linkanim_00DCC8, &gameplay_keep_Linkanim_00DCC0, &gameplay_keep_Linkanim_00DCC0,
+    &gameplay_keep_Linkanim_00DF58, &gameplay_keep_Linkanim_00DF50, &gameplay_keep_Linkanim_00DF50,
+    &gameplay_keep_Linkanim_00D990, &gameplay_keep_Linkanim_00DF58, &gameplay_keep_Linkanim_00DF58,
+    &gameplay_keep_Linkanim_00DF68, &gameplay_keep_Linkanim_00DF60, &gameplay_keep_Linkanim_00DF60,
+    &gameplay_keep_Linkanim_00D998, &gameplay_keep_Linkanim_00DF68, &gameplay_keep_Linkanim_00DF68,
+    &gameplay_keep_Linkanim_00DBD8, &gameplay_keep_Linkanim_00DBC0, &gameplay_keep_Linkanim_00DBC0,
+    &gameplay_keep_Linkanim_00DBD8, &gameplay_keep_Linkanim_00D510, &gameplay_keep_Linkanim_00DBD8,
+    &gameplay_keep_Linkanim_00DBF8, &gameplay_keep_Linkanim_00DBF0, &gameplay_keep_Linkanim_00DBF0,
+    &gameplay_keep_Linkanim_00DBF8, &gameplay_keep_Linkanim_00D518, &gameplay_keep_Linkanim_00DBF8,
+    &gameplay_keep_Linkanim_00DBD0, &gameplay_keep_Linkanim_00DBC8, &gameplay_keep_Linkanim_00DBC8,
+    &gameplay_keep_Linkanim_00DBD0, &gameplay_keep_Linkanim_00DBD0, &gameplay_keep_Linkanim_00DBD0,
+    &gameplay_keep_Linkanim_00DE90, &gameplay_keep_Linkanim_00DE88, &gameplay_keep_Linkanim_00DE88,
+    &gameplay_keep_Linkanim_00D938, &gameplay_keep_Linkanim_00DE90, &gameplay_keep_Linkanim_00DE90,
+    &gameplay_keep_Linkanim_00DE78, &gameplay_keep_Linkanim_00D448, &gameplay_keep_Linkanim_00D448,
+    &gameplay_keep_Linkanim_00D928, &gameplay_keep_Linkanim_00DE78, &gameplay_keep_Linkanim_00DE78,
+    &gameplay_keep_Linkanim_00DE80, &gameplay_keep_Linkanim_00D450, &gameplay_keep_Linkanim_00D450,
+    &gameplay_keep_Linkanim_00D930, &gameplay_keep_Linkanim_00DE80, &gameplay_keep_Linkanim_00DE80,
+    &gameplay_keep_Linkanim_00DA80, &gameplay_keep_Linkanim_00DA78, &gameplay_keep_Linkanim_00DA78,
+    &gameplay_keep_Linkanim_00DA80, &gameplay_keep_Linkanim_00DA80, &gameplay_keep_Linkanim_00DA80,
+    &gameplay_keep_Linkanim_00DF00, &gameplay_keep_Linkanim_00DF00, &gameplay_keep_Linkanim_00DF00,
+    &gameplay_keep_Linkanim_00D968, &gameplay_keep_Linkanim_00D968, &gameplay_keep_Linkanim_00D968,
+    &gameplay_keep_Linkanim_00DF10, &gameplay_keep_Linkanim_00DF10, &gameplay_keep_Linkanim_00DF10,
+    &gameplay_keep_Linkanim_00D978, &gameplay_keep_Linkanim_00D978, &gameplay_keep_Linkanim_00D978,
+    &gameplay_keep_Linkanim_00DEB8, &gameplay_keep_Linkanim_00DEB0, &gameplay_keep_Linkanim_00DEB0,
+    &gameplay_keep_Linkanim_00DEB8, &gameplay_keep_Linkanim_00DEB8, &gameplay_keep_Linkanim_00DEB8,
+    &gameplay_keep_Linkanim_00DE20, &gameplay_keep_Linkanim_00DE18, &gameplay_keep_Linkanim_00DE18,
+    &gameplay_keep_Linkanim_00DE20, &gameplay_keep_Linkanim_00DE20, &gameplay_keep_Linkanim_00DE20,
+    &gameplay_keep_Linkanim_00DB08, &gameplay_keep_Linkanim_00DB08, &gameplay_keep_Linkanim_00DB08,
+    &gameplay_keep_Linkanim_00DB08, &gameplay_keep_Linkanim_00DB08, &gameplay_keep_Linkanim_00DB08,
+    &gameplay_keep_Linkanim_00DB50, &gameplay_keep_Linkanim_00DB38, &gameplay_keep_Linkanim_00DB38,
+    &gameplay_keep_Linkanim_00DB50, &gameplay_keep_Linkanim_00DB50, &gameplay_keep_Linkanim_00DB50,
+    &gameplay_keep_Linkanim_00DB60, &gameplay_keep_Linkanim_00DB58, &gameplay_keep_Linkanim_00DB58,
+    &gameplay_keep_Linkanim_00DB60, &gameplay_keep_Linkanim_00DB60, &gameplay_keep_Linkanim_00DB60,
+    &gameplay_keep_Linkanim_00DB48, &gameplay_keep_Linkanim_00DB40, &gameplay_keep_Linkanim_00DB40,
+    &gameplay_keep_Linkanim_00DB48, &gameplay_keep_Linkanim_00DB48, &gameplay_keep_Linkanim_00DB48,
+    &gameplay_keep_Linkanim_00DDD8, &gameplay_keep_Linkanim_00DDD0, &gameplay_keep_Linkanim_00DDD0,
+    &gameplay_keep_Linkanim_00DDD8, &gameplay_keep_Linkanim_00DDD8, &gameplay_keep_Linkanim_00DDD8,
+    &gameplay_keep_Linkanim_00DDE8, &gameplay_keep_Linkanim_00DDE0, &gameplay_keep_Linkanim_00DDE0,
+    &gameplay_keep_Linkanim_00DDE8, &gameplay_keep_Linkanim_00DDE8, &gameplay_keep_Linkanim_00DDE8,
+    &gameplay_keep_Linkanim_00DDC8, &gameplay_keep_Linkanim_00DDC0, &gameplay_keep_Linkanim_00DDC0,
+    &gameplay_keep_Linkanim_00DDC8, &gameplay_keep_Linkanim_00DDC8, &gameplay_keep_Linkanim_00DDC8,
+    &gameplay_keep_Linkanim_00DC40, &gameplay_keep_Linkanim_00DC38, &gameplay_keep_Linkanim_00DC38,
+    &gameplay_keep_Linkanim_00DC40, &gameplay_keep_Linkanim_00DC40, &gameplay_keep_Linkanim_00DC40,
+    &gameplay_keep_Linkanim_00DCE8, &gameplay_keep_Linkanim_00DCE0, &gameplay_keep_Linkanim_00DCE0,
+    &gameplay_keep_Linkanim_00DCE8, &gameplay_keep_Linkanim_00DCE8, &gameplay_keep_Linkanim_00DCE8,
+    &gameplay_keep_Linkanim_00DD08, &gameplay_keep_Linkanim_00DD00, &gameplay_keep_Linkanim_00DD00,
+    &gameplay_keep_Linkanim_00DD08, &gameplay_keep_Linkanim_00DD08, &gameplay_keep_Linkanim_00DD08,
+    &gameplay_keep_Linkanim_00DCF8, &gameplay_keep_Linkanim_00DCF0, &gameplay_keep_Linkanim_00DCF0,
+    &gameplay_keep_Linkanim_00DCF8, &gameplay_keep_Linkanim_00DCF8, &gameplay_keep_Linkanim_00DCF8,
+    &gameplay_keep_Linkanim_00DC10, &gameplay_keep_Linkanim_00DC08, &gameplay_keep_Linkanim_00DC08,
+    &gameplay_keep_Linkanim_00DC18, &gameplay_keep_Linkanim_00DC10, &gameplay_keep_Linkanim_00DC10,
+    &gameplay_keep_Linkanim_00DED0, &gameplay_keep_Linkanim_00DEC8, &gameplay_keep_Linkanim_00DEC8,
+    &gameplay_keep_Linkanim_00DED8, &gameplay_keep_Linkanim_00DED0, &gameplay_keep_Linkanim_00DED0,
+    &gameplay_keep_Linkanim_00E450, &gameplay_keep_Linkanim_00E108, &gameplay_keep_Linkanim_00E108,
+    &gameplay_keep_Linkanim_00E450, &gameplay_keep_Linkanim_00E450, &gameplay_keep_Linkanim_00E450,
 };
 
 struct_8085C2A4 D_8085C2A4[6] = {
     {
-        (LinkAnimationHeader*)0x0400D828,
-        (LinkAnimationHeader*)0x0400D838,
-        (LinkAnimationHeader*)0x0400D830,
+        &gameplay_keep_Linkanim_00D828,
+        &gameplay_keep_Linkanim_00D838,
+        &gameplay_keep_Linkanim_00D830,
     },
     {
-        (LinkAnimationHeader*)0x0400D770,
-        (LinkAnimationHeader*)0x0400D780,
-        (LinkAnimationHeader*)0x0400D778,
+        &gameplay_keep_Linkanim_00D770,
+        &gameplay_keep_Linkanim_00D780,
+        &gameplay_keep_Linkanim_00D778,
     },
     {
-        (LinkAnimationHeader*)0x0400D7F0,
-        (LinkAnimationHeader*)0x0400D800,
-        (LinkAnimationHeader*)0x0400D7F8,
+        &gameplay_keep_Linkanim_00D7F0,
+        &gameplay_keep_Linkanim_00D800,
+        &gameplay_keep_Linkanim_00D7F8,
     },
     {
-        (LinkAnimationHeader*)0x0400D7A8,
-        (LinkAnimationHeader*)0x0400D7B8,
-        (LinkAnimationHeader*)0x0400D7B0,
+        &gameplay_keep_Linkanim_00D7A8,
+        &gameplay_keep_Linkanim_00D7B8,
+        &gameplay_keep_Linkanim_00D7B0,
     },
     {
-        (LinkAnimationHeader*)0x0400DD50,
-        (LinkAnimationHeader*)0x0400DD58,
-        (LinkAnimationHeader*)0x0400DD58,
+        &gameplay_keep_Linkanim_00DD50,
+        &gameplay_keep_Linkanim_00DD58,
+        &gameplay_keep_Linkanim_00DD58,
     },
     {
-        (LinkAnimationHeader*)0x0400DD60,
-        (LinkAnimationHeader*)0x0400DD68,
-        (LinkAnimationHeader*)0x0400DD68,
+        &gameplay_keep_Linkanim_00DD60,
+        &gameplay_keep_Linkanim_00DD68,
+        &gameplay_keep_Linkanim_00DD68,
     },
 };
 
@@ -1429,21 +1429,21 @@ GetItemEntry sGetItemTable[0xB9] = {
 };
 
 LinkAnimationHeader* D_8085C84C[][2] = {
-    { (LinkAnimationHeader*)0x0400DF30, (LinkAnimationHeader*)0x0400DEE8 },
-    { (LinkAnimationHeader*)0x0400DF40, (LinkAnimationHeader*)0x0400DEF8 },
-    { (LinkAnimationHeader*)0x0400DF38, (LinkAnimationHeader*)0x0400DEF0 },
-    { (LinkAnimationHeader*)0x0400DF38, (LinkAnimationHeader*)0x0400DEF0 },
-    { (LinkAnimationHeader*)0x0400E100, (LinkAnimationHeader*)0x0400E0C0 },
-    { (LinkAnimationHeader*)0x0400E100, (LinkAnimationHeader*)0x0400E0C0 },
-    { (LinkAnimationHeader*)0x0400E100, (LinkAnimationHeader*)0x0400E0C0 },
-    { (LinkAnimationHeader*)0x0400E0C8, (LinkAnimationHeader*)0x0400E0A0 },
-    { (LinkAnimationHeader*)0x0400E0D0, (LinkAnimationHeader*)0x0400E0A8 },
-    { (LinkAnimationHeader*)0x0400E0F0, (LinkAnimationHeader*)0x0400E0F0 },
-    { (LinkAnimationHeader*)0x0400E0D8, (LinkAnimationHeader*)0x0400E0B0 },
-    { (LinkAnimationHeader*)0x0400E0E0, (LinkAnimationHeader*)0x0400E0B8 },
-    { (LinkAnimationHeader*)0x0400E0E8, (LinkAnimationHeader*)0x0400E0E8 },
-    { (LinkAnimationHeader*)0x0400E0F8, (LinkAnimationHeader*)0x0400E0F8 },
-    { (LinkAnimationHeader*)0x0400D0B0, (LinkAnimationHeader*)0x0400D0B0 },
+    { &gameplay_keep_Linkanim_00DF30, &gameplay_keep_Linkanim_00DEE8 },
+    { &gameplay_keep_Linkanim_00DF40, &gameplay_keep_Linkanim_00DEF8 },
+    { &gameplay_keep_Linkanim_00DF38, &gameplay_keep_Linkanim_00DEF0 },
+    { &gameplay_keep_Linkanim_00DF38, &gameplay_keep_Linkanim_00DEF0 },
+    { &gameplay_keep_Linkanim_00E100, &gameplay_keep_Linkanim_00E0C0 },
+    { &gameplay_keep_Linkanim_00E100, &gameplay_keep_Linkanim_00E0C0 },
+    { &gameplay_keep_Linkanim_00E100, &gameplay_keep_Linkanim_00E0C0 },
+    { &gameplay_keep_Linkanim_00E0C8, &gameplay_keep_Linkanim_00E0A0 },
+    { &gameplay_keep_Linkanim_00E0D0, &gameplay_keep_Linkanim_00E0A8 },
+    { &gameplay_keep_Linkanim_00E0F0, &gameplay_keep_Linkanim_00E0F0 },
+    { &gameplay_keep_Linkanim_00E0D8, &gameplay_keep_Linkanim_00E0B0 },
+    { &gameplay_keep_Linkanim_00E0E0, &gameplay_keep_Linkanim_00E0B8 },
+    { &gameplay_keep_Linkanim_00E0E8, &gameplay_keep_Linkanim_00E0E8 },
+    { &gameplay_keep_Linkanim_00E0F8, &gameplay_keep_Linkanim_00E0F8 },
+    { &gameplay_keep_Linkanim_00D0B0, &gameplay_keep_Linkanim_00D0B0 },
 };
 
 AnimSfxEntry D_8085C8C4[] = {
@@ -1768,14 +1768,14 @@ void (*D_8085CB3C[0x53])(PlayState*, Player*) = {
 };
 
 struct_8085CC88 D_8085CC88[0xF] = {
-    { (LinkAnimationHeader*)0x0400DC70, 0xC }, { (LinkAnimationHeader*)0x0400DD90, 6 },
-    { (LinkAnimationHeader*)0x0400D9B8, 8 },   { (LinkAnimationHeader*)0x0400DDA0, 8 },
-    { (LinkAnimationHeader*)0x0400D820, 8 },   { (LinkAnimationHeader*)0x0400DC50, 0xA },
-    { (LinkAnimationHeader*)0x0400D9A8, 7 },   { (LinkAnimationHeader*)0x0400D9B0, 0xB },
-    { (LinkAnimationHeader*)0x0400DC70, 0xC }, { (LinkAnimationHeader*)0x0400DD88, 4 },
-    { (LinkAnimationHeader*)0x0400DD48, 4 },   { (LinkAnimationHeader*)0x0400DC58, 4 },
-    { (LinkAnimationHeader*)0x0400D3E0, 5 },   { (LinkAnimationHeader*)0x0400DC68, 0xD },
-    { (LinkAnimationHeader*)0x0400E350, 4 },
+    { &gameplay_keep_Linkanim_00DC70, 0xC }, { &gameplay_keep_Linkanim_00DD90, 6 },
+    { &gameplay_keep_Linkanim_00D9B8, 8 },   { &gameplay_keep_Linkanim_00DDA0, 8 },
+    { &gameplay_keep_Linkanim_00D820, 8 },   { &gameplay_keep_Linkanim_00DC50, 0xA },
+    { &gameplay_keep_Linkanim_00D9A8, 7 },   { &gameplay_keep_Linkanim_00D9B0, 0xB },
+    { &gameplay_keep_Linkanim_00DC70, 0xC }, { &gameplay_keep_Linkanim_00DD88, 4 },
+    { &gameplay_keep_Linkanim_00DD48, 4 },   { &gameplay_keep_Linkanim_00DC58, 4 },
+    { &gameplay_keep_Linkanim_00D3E0, 5 },   { &gameplay_keep_Linkanim_00DC68, 0xD },
+    { &gameplay_keep_Linkanim_00E350, 4 },
 };
 
 s8 D_8085CD00[0x24] = {
@@ -1791,114 +1791,114 @@ struct_8085CD24 D_8085CD24[] = {
 
 struct_8085CD30 D_8085CD30[0x10] = {
     {
-        (LinkAnimationHeader*)0x0400D868,
-        (LinkAnimationHeader*)0x0400D878,
-        (LinkAnimationHeader*)0x0400D870,
+        &gameplay_keep_Linkanim_00D868,
+        &gameplay_keep_Linkanim_00D878,
+        &gameplay_keep_Linkanim_00D870,
         1,
         4,
     },
     {
-        (LinkAnimationHeader*)0x0400D6E0,
-        (LinkAnimationHeader*)0x0400D6E8,
-        (LinkAnimationHeader*)0x0400D398,
+        &gameplay_keep_Linkanim_00D6E0,
+        &gameplay_keep_Linkanim_00D6E8,
+        &gameplay_keep_Linkanim_00D398,
         1,
         4,
     },
     {
-        (LinkAnimationHeader*)0x0400D880,
-        (LinkAnimationHeader*)0x0400D888,
-        (LinkAnimationHeader*)0x0400D428,
+        &gameplay_keep_Linkanim_00D880,
+        &gameplay_keep_Linkanim_00D888,
+        &gameplay_keep_Linkanim_00D428,
         0,
         5,
     },
     {
-        (LinkAnimationHeader*)0x0400D6F0,
-        (LinkAnimationHeader*)0x0400D6F8,
-        (LinkAnimationHeader*)0x0400D3A0,
+        &gameplay_keep_Linkanim_00D6F0,
+        &gameplay_keep_Linkanim_00D6F8,
+        &gameplay_keep_Linkanim_00D3A0,
         1,
         7,
     },
     {
-        (LinkAnimationHeader*)0x0400D788,
-        (LinkAnimationHeader*)0x0400D790,
-        (LinkAnimationHeader*)0x0400D3C0,
+        &gameplay_keep_Linkanim_00D788,
+        &gameplay_keep_Linkanim_00D790,
+        &gameplay_keep_Linkanim_00D3C0,
         1,
         4,
     },
     {
-        (LinkAnimationHeader*)0x0400D6A0,
-        (LinkAnimationHeader*)0x0400D6A8,
-        (LinkAnimationHeader*)0x0400D378,
+        &gameplay_keep_Linkanim_00D6A0,
+        &gameplay_keep_Linkanim_00D6A8,
+        &gameplay_keep_Linkanim_00D378,
         0,
         5,
     },
     {
-        (LinkAnimationHeader*)0x0400D798,
-        (LinkAnimationHeader*)0x0400D7A0,
-        (LinkAnimationHeader*)0x0400D3C8,
+        &gameplay_keep_Linkanim_00D798,
+        &gameplay_keep_Linkanim_00D7A0,
+        &gameplay_keep_Linkanim_00D3C8,
         2,
         8,
     },
     {
-        (LinkAnimationHeader*)0x0400D6B0,
-        (LinkAnimationHeader*)0x0400D6B8,
-        (LinkAnimationHeader*)0x0400D380,
+        &gameplay_keep_Linkanim_00D6B0,
+        &gameplay_keep_Linkanim_00D6B8,
+        &gameplay_keep_Linkanim_00D380,
         3,
         8,
     },
     {
-        (LinkAnimationHeader*)0x0400D7C0,
-        (LinkAnimationHeader*)0x0400D7C8,
-        (LinkAnimationHeader*)0x0400D3D0,
+        &gameplay_keep_Linkanim_00D7C0,
+        &gameplay_keep_Linkanim_00D7C8,
+        &gameplay_keep_Linkanim_00D3D0,
         0,
         4,
     },
     {
-        (LinkAnimationHeader*)0x0400D6C0,
-        (LinkAnimationHeader*)0x0400D6C8,
-        (LinkAnimationHeader*)0x0400D388,
+        &gameplay_keep_Linkanim_00D6C0,
+        &gameplay_keep_Linkanim_00D6C8,
+        &gameplay_keep_Linkanim_00D388,
         0,
         5,
     },
     {
-        (LinkAnimationHeader*)0x0400D7D0,
-        (LinkAnimationHeader*)0x0400D7D8,
-        (LinkAnimationHeader*)0x0400D3D8,
+        &gameplay_keep_Linkanim_00D7D0,
+        &gameplay_keep_Linkanim_00D7D8,
+        &gameplay_keep_Linkanim_00D3D8,
         0,
         6,
     },
     {
-        (LinkAnimationHeader*)0x0400D6D0,
-        (LinkAnimationHeader*)0x0400D6D8,
-        (LinkAnimationHeader*)0x0400D390,
+        &gameplay_keep_Linkanim_00D6D0,
+        &gameplay_keep_Linkanim_00D6D8,
+        &gameplay_keep_Linkanim_00D390,
         1,
         5,
     },
     {
-        (LinkAnimationHeader*)0x0400D890,
-        (LinkAnimationHeader*)0x0400D898,
-        (LinkAnimationHeader*)0x0400D430,
+        &gameplay_keep_Linkanim_00D890,
+        &gameplay_keep_Linkanim_00D898,
+        &gameplay_keep_Linkanim_00D430,
         0,
         3,
     },
     {
-        (LinkAnimationHeader*)0x0400D700,
-        (LinkAnimationHeader*)0x0400D708,
-        (LinkAnimationHeader*)0x0400D3A8,
+        &gameplay_keep_Linkanim_00D700,
+        &gameplay_keep_Linkanim_00D708,
+        &gameplay_keep_Linkanim_00D3A8,
         0,
         3,
     },
     {
-        (LinkAnimationHeader*)0x0400D8A0,
-        (LinkAnimationHeader*)0x0400D8A8,
-        (LinkAnimationHeader*)0x0400D438,
+        &gameplay_keep_Linkanim_00D8A0,
+        &gameplay_keep_Linkanim_00D8A8,
+        &gameplay_keep_Linkanim_00D438,
         1,
         9,
     },
     {
-        (LinkAnimationHeader*)0x0400D710,
-        (LinkAnimationHeader*)0x0400D718,
-        (LinkAnimationHeader*)0x0400D3B0,
+        &gameplay_keep_Linkanim_00D710,
+        &gameplay_keep_Linkanim_00D718,
+        &gameplay_keep_Linkanim_00D3B0,
         1,
         8,
     },
@@ -1921,12 +1921,12 @@ u32 D_8085CE60[] = {
     0x0400D440, 0x00100000, 0x0400D7E0, 0x0400D7E8, 0x0400D3B8, 0x00100000,
 };
 
-LinkAnimationHeader* D_8085CF50[] = { (LinkAnimationHeader*)0x0400D8C8, (LinkAnimationHeader*)0x0400D740 };
-LinkAnimationHeader* D_8085CF58[] = { (LinkAnimationHeader*)0x0400D8C0, (LinkAnimationHeader*)0x0400D740 };
-LinkAnimationHeader* D_8085CF60[] = { (LinkAnimationHeader*)0x0400D8D0, (LinkAnimationHeader*)0x0400D748 };
-LinkAnimationHeader* D_8085CF68[] = { (LinkAnimationHeader*)0x0400D8D8, (LinkAnimationHeader*)0x0400D750 };
-LinkAnimationHeader* D_8085CF70[] = { (LinkAnimationHeader*)0x0400D8E0, (LinkAnimationHeader*)0x0400D758 };
-LinkAnimationHeader* D_8085CF78[] = { (LinkAnimationHeader*)0x0400D8B8, (LinkAnimationHeader*)0x0400D738 };
+LinkAnimationHeader* D_8085CF50[] = { &gameplay_keep_Linkanim_00D8C8, &gameplay_keep_Linkanim_00D740 };
+LinkAnimationHeader* D_8085CF58[] = { &gameplay_keep_Linkanim_00D8C0, &gameplay_keep_Linkanim_00D740 };
+LinkAnimationHeader* D_8085CF60[] = { &gameplay_keep_Linkanim_00D8D0, &gameplay_keep_Linkanim_00D748 };
+LinkAnimationHeader* D_8085CF68[] = { &gameplay_keep_Linkanim_00D8D8, &gameplay_keep_Linkanim_00D750 };
+LinkAnimationHeader* D_8085CF70[] = { &gameplay_keep_Linkanim_00D8E0, &gameplay_keep_Linkanim_00D758 };
+LinkAnimationHeader* D_8085CF78[] = { &gameplay_keep_Linkanim_00D8B8, &gameplay_keep_Linkanim_00D738 };
 
 u8 D_8085CF80[] = {
     PLAYER_MWA_SPIN_ATTACK_1H,
@@ -1979,11 +1979,11 @@ u8 sMagicArrowCosts[] = {
     2, // ENARROW_6
 };
 
-LinkAnimationHeader* D_8085CFBC[2] = { (LinkAnimationHeader*)0x0400D470, (LinkAnimationHeader*)0x0400D478 };
-LinkAnimationHeader* D_8085CFC4[2] = { (LinkAnimationHeader*)0x0400D458, (LinkAnimationHeader*)0x0400D460 };
-LinkAnimationHeader* D_8085CFCC[2] = { (LinkAnimationHeader*)0x0400D400, (LinkAnimationHeader*)0x0400D408 };
-LinkAnimationHeader* D_8085CFD4[2] = { (LinkAnimationHeader*)0x0400D400, (LinkAnimationHeader*)0x0400D410 };
-LinkAnimationHeader* D_8085CFDC[2] = { (LinkAnimationHeader*)0x0400DBE0, (LinkAnimationHeader*)0x0400D818 };
+LinkAnimationHeader* D_8085CFBC[2] = { &gameplay_keep_Linkanim_00D470, &gameplay_keep_Linkanim_00D478 };
+LinkAnimationHeader* D_8085CFC4[2] = { &gameplay_keep_Linkanim_00D458, &gameplay_keep_Linkanim_00D460 };
+LinkAnimationHeader* D_8085CFCC[2] = { &gameplay_keep_Linkanim_00D400, &gameplay_keep_Linkanim_00D408 };
+LinkAnimationHeader* D_8085CFD4[2] = { &gameplay_keep_Linkanim_00D400, &gameplay_keep_Linkanim_00D410 };
+LinkAnimationHeader* D_8085CFDC[2] = { &gameplay_keep_Linkanim_00DBE0, &gameplay_keep_Linkanim_00D818 };
 
 s8 D_8085CFE4[8] = { 0xD, 2, 4, 9, 0xA, 0xB, 8, -7 };
 s8 D_8085CFEC[0xC] = { 0xD, 1, 2, 5, 3, 4, 9, 0xA, 0xB, 7, 8, -6 };
@@ -2018,16 +2018,16 @@ struct_8085D09C D_8085D09C[] = {
 };
 
 LinkAnimationHeader* D_8085D0D4[4] = {
-    (LinkAnimationHeader*)0x0400DCA0,
-    (LinkAnimationHeader*)0x0400DC98,
-    (LinkAnimationHeader*)0x0400DB00,
-    (LinkAnimationHeader*)0x0400DAF8,
+    &gameplay_keep_Linkanim_00DCA0,
+    &gameplay_keep_Linkanim_00DC98,
+    &gameplay_keep_Linkanim_00DB00,
+    &gameplay_keep_Linkanim_00DAF8,
 };
 LinkAnimationHeader* D_8085D0E4[4] = {
-    (LinkAnimationHeader*)0x0400DC90,
-    (LinkAnimationHeader*)0x0400D418,
-    (LinkAnimationHeader*)0x0400DAE8,
-    (LinkAnimationHeader*)0x0400D3F0,
+    &gameplay_keep_Linkanim_00DC90,
+    &gameplay_keep_Linkanim_00D418,
+    &gameplay_keep_Linkanim_00DAE8,
+    &gameplay_keep_Linkanim_00D3F0,
 };
 
 s32 D_8085D0F4 = 0x20101;
@@ -2037,14 +2037,14 @@ Vec3f D_8085D100 = { 0.0f, 50.0f, 0.0f };
 Vec3f D_8085D10C = { 20.0f, 0.0f, 20.0f };
 
 LinkAnimationHeader* D_8085D118[3] = {
-    (LinkAnimationHeader*)0x0400E1B8,
-    (LinkAnimationHeader*)0x0400E3C8,
-    (LinkAnimationHeader*)0x0400E280,
+    &gameplay_keep_Linkanim_00E1B8,
+    &gameplay_keep_Linkanim_00E3C8,
+    &gameplay_keep_Linkanim_00E280,
 };
 LinkAnimationHeader* D_8085D124[3] = {
-    (LinkAnimationHeader*)0x0400E1C0,
-    (LinkAnimationHeader*)0x0400E3D0,
-    (LinkAnimationHeader*)0x0400E288,
+    &gameplay_keep_Linkanim_00E1C0,
+    &gameplay_keep_Linkanim_00E3D0,
+    &gameplay_keep_Linkanim_00E288,
 };
 
 Vec3f D_8085D130 = { 0.0f, 0.0f, 0.0f };
@@ -2056,19 +2056,19 @@ Vec3f D_8085D148 = { 0.0f, 50.0f, 0.0f };
 Vec3f D_8085D154 = { 0.0f, 0.0f, 100.0f };
 
 LinkAnimationHeader* D_8085D160[5] = {
-    (LinkAnimationHeader*)0x0400E400, (LinkAnimationHeader*)0x0400E210, (LinkAnimationHeader*)0x0400E400,
-    (LinkAnimationHeader*)0x0400E2E0, (LinkAnimationHeader*)0x0400D0C8,
+    &gameplay_keep_Linkanim_00E400, &gameplay_keep_Linkanim_00E210, &gameplay_keep_Linkanim_00E400,
+    &gameplay_keep_Linkanim_00E2E0, &gameplay_keep_Linkanim_00D0C8,
 };
 
 u8 D_8085D174[8] = { 0x64, 0xC8, 0x50, 0x14, 0x32, 0, 0, 0 };
 
 LinkAnimationHeader* D_8085D17C[5] = {
-    (LinkAnimationHeader*)0x0400DDB0, (LinkAnimationHeader*)0x0400E1F8, (LinkAnimationHeader*)0x0400E3E8,
-    (LinkAnimationHeader*)0x0400E2B0, (LinkAnimationHeader*)0x0400DDB0,
+    &gameplay_keep_Linkanim_00DDB0, &gameplay_keep_Linkanim_00E1F8, &gameplay_keep_Linkanim_00E3E8,
+    &gameplay_keep_Linkanim_00E2B0, &gameplay_keep_Linkanim_00DDB0,
 };
 LinkAnimationHeader* D_8085D190[5] = {
-    (LinkAnimationHeader*)0x0400DDB8, (LinkAnimationHeader*)0x0400E1F0, (LinkAnimationHeader*)0x0400E3E0,
-    (LinkAnimationHeader*)0x0400E2A8, (LinkAnimationHeader*)0x0400DDB8,
+    &gameplay_keep_Linkanim_00DDB8, &gameplay_keep_Linkanim_00E1F0, &gameplay_keep_Linkanim_00E3E0,
+    &gameplay_keep_Linkanim_00E2A8, &gameplay_keep_Linkanim_00DDB8,
 };
 
 u8 D_8085D1A4[PLAYER_AP_MAX] = {
@@ -2157,28 +2157,28 @@ u8 D_8085D1A4[PLAYER_AP_MAX] = {
     GI_LENS,                // PLAYER_AP_LENS
 };
 
-LinkAnimationHeader* D_8085D1F8[2] = { (LinkAnimationHeader*)0x0400DCA8, (LinkAnimationHeader*)0x0400DE98 };
+LinkAnimationHeader* D_8085D1F8[2] = { &gameplay_keep_Linkanim_00DCA8, &gameplay_keep_Linkanim_00DE98 };
 
 struct _struct_D_8085D200_0xC D_8085D200[2] = {
-    { (LinkAnimationHeader*)0x0400D4A0, (LinkAnimationHeader*)0x0400D498, 2, 3 },
-    { (LinkAnimationHeader*)0x0400D4D0, (LinkAnimationHeader*)0x0400D4C8, 5, 3 },
+    { &gameplay_keep_Linkanim_00D4A0, &gameplay_keep_Linkanim_00D498, 2, 3 },
+    { &gameplay_keep_Linkanim_00D4D0, &gameplay_keep_Linkanim_00D4C8, 5, 3 },
 };
 
 Vec3f D_8085D218 = { 0.0f, 100.0f, 40.0f };
 
 // maybe this is 2 arrays of 2 elements?
 struct_8085D224 D_8085D224[4] = {
-    { (LinkAnimationHeader*)0x0400E068, 35.17f, 6.6099997f },
-    { (LinkAnimationHeader*)0x0400E078, -34.16f, 7.91f },
-    { (LinkAnimationHeader*)0x0400D0E8, 22.718237f, 2.3294117f },
-    { (LinkAnimationHeader*)0x0400D0F0, -22.0f, 1.9800001f },
+    { &gameplay_keep_Linkanim_00E068, 35.17f, 6.6099997f },
+    { &gameplay_keep_Linkanim_00E078, -34.16f, 7.91f },
+    { &gameplay_keep_Linkanim_00D0E8, 22.718237f, 2.3294117f },
+    { &gameplay_keep_Linkanim_00D0F0, -22.0f, 1.9800001f },
 };
 
 u16 D_8085D254[] = { 0x1804, 0x1805, 0x1806, 0x1806 };
 
 u16 D_8085D25C[] = { 0x1804, 0x1804, 0x1805, 0x1806 };
 
-LinkAnimationHeader* D_8085D264[2] = { (LinkAnimationHeader*)0x0400DC00, (LinkAnimationHeader*)0x0400DEC0 };
+LinkAnimationHeader* D_8085D264[2] = { &gameplay_keep_Linkanim_00DC00, &gameplay_keep_Linkanim_00DEC0 };
 
 Color_RGBA8 D_8085D26C = { 255, 255, 255, 255 };
 
@@ -2188,10 +2188,10 @@ Vec3f D_8085D27C = { 0.0f, 0.0f, 0.0f };
 Vec3f D_8085D288 = { 0.0f, 0.0f, 0.0f };
 
 LinkAnimationHeader* D_8085D294[4] = {
-    (LinkAnimationHeader*)0x0400D8F0,
-    (LinkAnimationHeader*)0x0400D900,
-    (LinkAnimationHeader*)0x0400D8E8,
-    (LinkAnimationHeader*)0x0400D8F8,
+    &gameplay_keep_Linkanim_00D8F0,
+    &gameplay_keep_Linkanim_00D900,
+    &gameplay_keep_Linkanim_00D8E8,
+    &gameplay_keep_Linkanim_00D8F8,
 };
 
 Vec3f D_8085D2A4 = { 0.0f, 0.0f, 5.0f };
@@ -2328,15 +2328,15 @@ AnimSfxEntry D_8085D5E0[] = {
 };
 
 LinkAnimationHeader* D_8085D5E4[3] = {
-    (LinkAnimationHeader*)0x0400D9E8,
-    (LinkAnimationHeader*)0x0400D528,
-    (LinkAnimationHeader*)0x0400E2F8,
+    &gameplay_keep_Linkanim_00D9E8,
+    &gameplay_keep_Linkanim_00D528,
+    &gameplay_keep_Linkanim_00E2F8,
 };
 
 LinkAnimationHeader* D_8085D5F0[3] = {
-    (LinkAnimationHeader*)0x0400D9E0,
-    (LinkAnimationHeader*)0x0400D508,
-    (LinkAnimationHeader*)0x0400E2F8,
+    &gameplay_keep_Linkanim_00D9E0,
+    &gameplay_keep_Linkanim_00D508,
+    &gameplay_keep_Linkanim_00E2F8,
 };
 
 u16 D_8085D5FC[4] = { 0x1830, 0x9BF, 0, 0 };
@@ -2391,20 +2391,20 @@ LinkAnimationHeader* D_8085D688[] = {
 LinkAnimationHeader* D_8085D6A4[] = {
     NULL,
     NULL,
-    (LinkAnimationHeader*)0x0400E058,
-    (LinkAnimationHeader*)0x0400E058,
-    (LinkAnimationHeader*)0x0400E058,
-    (LinkAnimationHeader*)0x0400E038,
-    (LinkAnimationHeader*)0x0400E018,
-    (LinkAnimationHeader*)0x0400E018,
-    (LinkAnimationHeader*)0x0400E018,
+    &gameplay_keep_Linkanim_00E058,
+    &gameplay_keep_Linkanim_00E058,
+    &gameplay_keep_Linkanim_00E058,
+    &gameplay_keep_Linkanim_00E038,
+    &gameplay_keep_Linkanim_00E018,
+    &gameplay_keep_Linkanim_00E018,
+    &gameplay_keep_Linkanim_00E018,
     NULL,
     NULL,
 };
 LinkAnimationHeader* D_8085D6D0[] = {
-    (LinkAnimationHeader*)0x0400E098,
-    (LinkAnimationHeader*)0x0400E088,
-    (LinkAnimationHeader*)0x0400E090,
+    &gameplay_keep_Linkanim_00E098,
+    &gameplay_keep_Linkanim_00E088,
+    &gameplay_keep_Linkanim_00E090,
 };
 
 s16 D_8085D6DC[2] = { 0x203A, 0x192A };
@@ -2429,9 +2429,9 @@ AnimSfxEntry D_8085D708[] = {
 };
 
 struct_8085D714 D_8085D714[5] = {
-    { 1, (LinkAnimationHeader*)0x0400E1C8 }, { 1, (LinkAnimationHeader*)0x0400E1D8 },
-    { 1, (LinkAnimationHeader*)0x0400E1D0 }, { 0, (LinkAnimationHeader*)0x0400E1E8 },
-    { 0, (LinkAnimationHeader*)0x0400E1E0 },
+    { 1, &gameplay_keep_Linkanim_00E1C8 }, { 1, &gameplay_keep_Linkanim_00E1D8 },
+    { 1, &gameplay_keep_Linkanim_00E1D0 }, { 0, &gameplay_keep_Linkanim_00E1E8 },
+    { 0, &gameplay_keep_Linkanim_00E1E0 },
 };
 
 AnimSfxEntry D_8085D73C[] = {
@@ -2762,8 +2762,8 @@ struct_8085DA94 D_8085DEF4[0x8C] = {
 };
 
 LinkAnimationHeader* D_8085E354[] = {
-    (LinkAnimationHeader*)0x0400E4B8, (LinkAnimationHeader*)0x0400E4B8, (LinkAnimationHeader*)0x0400E4B8,
-    (LinkAnimationHeader*)0x0400E4B8, (LinkAnimationHeader*)0x0400E160,
+    &gameplay_keep_Linkanim_00E4B8, &gameplay_keep_Linkanim_00E4B8, &gameplay_keep_Linkanim_00E4B8,
+    &gameplay_keep_Linkanim_00E4B8, &gameplay_keep_Linkanim_00E160,
 };
 
 struct_8085E368 D_8085E368[] = {
