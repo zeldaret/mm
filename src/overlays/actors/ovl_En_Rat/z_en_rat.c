@@ -296,7 +296,7 @@ void EnRat_ChooseDirection(EnRat* this) {
         if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) > 50.0f) {
             Vec3f homeInHome;
             Vec3f worldInHome;
-            Vec3f worldForwardInHome;
+            Vec3f worldPlusForwardInHome;
             Vec3f upInHome;
 
             // Set up matrix to unrotate, to make the "home rot" the new basis triad
@@ -310,8 +310,8 @@ void EnRat_ChooseDirection(EnRat* this) {
             // Move world.pos forward by axisForwards and store in homeInHome
             Math_Vec3f_Sum(&this->actor.world.pos, &this->axisForwards, &homeInHome);
 
-            // Unrotate homeInHome into "home rot" triad and store in worldForwardInHome
-            Matrix_MultVec3f(&homeInHome, &worldForwardInHome);
+            // Unrotate homeInHome into "home rot" triad and store in worldPlusForwardInHome
+            Matrix_MultVec3f(&homeInHome, &worldPlusForwardInHome);
 
             // Unrotate home into "home rot" triad
             Matrix_MultVec3f(&this->actor.home.pos, &homeInHome);
@@ -319,7 +319,7 @@ void EnRat_ChooseDirection(EnRat* this) {
             // Unrotate world into "home rot" triad
             Matrix_MultVec3f(&this->actor.world.pos, &worldInHome);
 
-            angle = Math_Vec3f_Yaw(&worldInHome, &homeInHome) - Math_Vec3f_Yaw(&worldInHome, &worldForwardInHome);
+            angle = Math_Vec3f_Yaw(&worldInHome, &homeInHome) - Math_Vec3f_Yaw(&worldInHome, &worldPlusForwardInHome);
             if (upInHome.y < -0.25f) {
                 angle -= 0x8000;
             }
