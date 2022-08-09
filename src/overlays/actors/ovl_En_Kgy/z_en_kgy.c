@@ -240,11 +240,11 @@ void func_80B40EE8(EnKgy* this, PlayState* play) {
 
     if (this->unk_29C & 2) {
         Vec3f projectedPos;
-        f32 cappedInvW;
+        f32 invW;
         f32 temp_f0;
 
-        Actor_GetProjectedPos(play, &this->unk_2B4, &projectedPos, &cappedInvW);
-        temp_f0 = projectedPos.x * cappedInvW;
+        Actor_GetProjectedPos(play, &this->unk_2B4, &projectedPos, &invW);
+        temp_f0 = projectedPos.x * invW;
         if (this->unk_2E6 > 0) {
             this->unk_2E6--;
         }

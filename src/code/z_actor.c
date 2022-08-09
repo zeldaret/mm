@@ -391,9 +391,9 @@ void func_800B4B50(Actor* actor, Lights* mapper, PlayState* play) {
     }
 }
 
-void Actor_GetProjectedPos(PlayState* play, Vec3f* src, Vec3f* xyzDest, f32* cappedInvWDest) {
-    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, src, xyzDest, cappedInvWDest);
-    *cappedInvWDest = (*cappedInvWDest < 1.0f) ? 1.0f : (1.0f / *cappedInvWDest);
+void Actor_GetProjectedPos(PlayState* play, Vec3f* worldPos, Vec3f* projectedPos, f32* invW) {
+    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, worldPos, projectedPos, invW);
+    *invW = (*invW < 1.0f) ? 1.0f : (1.0f / *invW);
 }
 
 void Target_SetPos(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 z) {
@@ -415,7 +415,7 @@ TatlColor sTatlColorList[] = {
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         { { 255, 255, 0, 255 }, { 200, 155, 0, 0 } },
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },
-    { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } }
+    { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },
 };
 
 void func_800B4F78(TargetContext* targetCtx, s32 type, PlayState* play) {
@@ -476,9 +476,9 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
             TargetContextEntry* entry;
             s16 alpha = 255;
             f32 var1 = 1.0f;
-            Vec3f spBC;
+            Vec3f projectedPos;
             s32 spB8;
-            f32 cappedInvW;
+            f32 invW;
             s32 spB0;
             s32 spAC;
             f32 var2;
@@ -501,22 +501,22 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
                 alpha = targetCtx->unk48;
             }
 
-            Actor_GetProjectedPos(play, &targetCtx->targetCenterPos, &spBC, &cappedInvW);
+            Actor_GetProjectedPos(play, &targetCtx->targetCenterPos, &projectedPos, &invW);
 
-            spBC.x = ((SCREEN_WIDTH / 2) * (spBC.x * cappedInvW)) * var1;
-            spBC.x = CLAMP(spBC.x, -SCREEN_WIDTH, SCREEN_WIDTH);
+            projectedPos.x = ((SCREEN_WIDTH / 2) * (projectedPos.x * invW)) * var1;
+            projectedPos.x = CLAMP(projectedPos.x, -SCREEN_WIDTH, SCREEN_WIDTH);
 
-            spBC.y = ((SCREEN_HEIGHT / 2) * (spBC.y * cappedInvW)) * var1;
-            spBC.y = CLAMP(spBC.y, -SCREEN_HEIGHT, SCREEN_HEIGHT);
+            projectedPos.y = ((SCREEN_HEIGHT / 2) * (projectedPos.y * invW)) * var1;
+            projectedPos.y = CLAMP(projectedPos.y, -SCREEN_HEIGHT, SCREEN_HEIGHT);
 
-            spBC.z = spBC.z * var1;
+            projectedPos.z = projectedPos.z * var1;
 
             targetCtx->unk4C--;
             if (targetCtx->unk4C < 0) {
                 targetCtx->unk4C = 2;
             }
 
-            Target_SetPos(targetCtx, targetCtx->unk4C, spBC.x, spBC.y, spBC.z);
+            Target_SetPos(targetCtx, targetCtx->unk4C, projectedPos.x, projectedPos.y, projectedPos.z);
 
             if ((!(player->stateFlags1 & 0x40)) || (actor != player->unk_730)) {
                 OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 0x39);
@@ -585,7 +585,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
     Actor* sp68 = NULL;
     s32 category;
     Vec3f projectedPos;
-    f32 cappedInvW;
+    f32 invW;
 
     if ((player->unk_730 != 0) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->unk_94 = NULL;
@@ -637,9 +637,9 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
     }
 
     if (actor != NULL && targetCtx->unk4B == 0) {
-        Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &cappedInvW);
-        if ((projectedPos.z <= 0.0f) || (fabsf(projectedPos.x * cappedInvW) >= 1.0f) ||
-            (fabsf(projectedPos.y * cappedInvW) >= 1.0f)) {
+        Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &invW);
+        if ((projectedPos.z <= 0.0f) || (fabsf(projectedPos.x * invW) >= 1.0f) ||
+            (fabsf(projectedPos.y * invW) >= 1.0f)) {
             actor = NULL;
         }
     }
@@ -1960,23 +1960,23 @@ s32 func_800B886C(Actor* actor, PlayState* play) {
 
 void Actor_GetScreenPos(PlayState* play, Actor* actor, s16* x, s16* y) {
     Vec3f projectedPos;
-    f32 cappedInvW;
+    f32 invW;
 
-    Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &cappedInvW);
+    Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &invW);
 
-    *x = (projectedPos.x * cappedInvW * (SCREEN_WIDTH / 2)) + (SCREEN_WIDTH / 2);
-    *y = (projectedPos.y * cappedInvW * -(SCREEN_HEIGHT / 2)) + (SCREEN_HEIGHT / 2);
+    *x = PROJECTED_TO_SCREEN_X(projectedPos, invW);
+    *y = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
 }
 
 s32 Actor_OnScreen(PlayState* play, Actor* actor) {
     Vec3f projectedPos;
-    f32 cappedInvW;
+    f32 invW;
     s32 pad[2];
 
-    Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &cappedInvW);
+    Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &invW);
 
-    return (projectedPos.x * cappedInvW >= -1.0f) && (projectedPos.x * cappedInvW <= 1.0f) &&
-           (projectedPos.y * cappedInvW >= -1.0f) && (projectedPos.y * cappedInvW <= 1.0f);
+    return (projectedPos.x * invW >= -1.0f) && (projectedPos.x * invW <= 1.0f) && (projectedPos.y * invW >= -1.0f) &&
+           (projectedPos.y * invW <= 1.0f);
 }
 
 s32 Actor_HasParent(Actor* actor, PlayState* play) {
@@ -2127,7 +2127,7 @@ void func_800B8E58(Player* player, u16 sfxId) {
     if (player->currentMask == PLAYER_MASK_GIANT) {
         func_8019F170(&player->actor.projectedPos, sfxId);
     } else {
-        Audio_PlaySfxGeneral(sfxId, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+        Audio_PlaySfxGeneral(sfxId, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &gSfxDefaultReverb);
     }
 }
 
@@ -2567,13 +2567,13 @@ void func_800B9D1C(Actor* actor) {
 
     if (sfxId != 0) {
         if (actor->audioFlags & 2) {
-            Audio_PlaySfxGeneral(sfxId, &actor->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+            Audio_PlaySfxGeneral(sfxId, &actor->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &gSfxDefaultReverb);
         } else if (actor->audioFlags & 4) {
             play_sound(sfxId);
         } else if (actor->audioFlags & 8) {
             func_8019F128(sfxId);
         } else if (actor->audioFlags & 0x10) {
-            func_801A0810(&D_801DB4A4, NA_SE_SY_TIMER - SFX_FLAG, (sfxId - 1));
+            func_801A0810(&gSfxDefaultPos, NA_SE_SY_TIMER - SFX_FLAG, (sfxId - 1));
         } else if (actor->audioFlags & 1) {
             Audio_PlaySfxAtPos(&actor->projectedPos, sfxId);
         }
@@ -3152,10 +3152,10 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
             overlayEntry->numLoaded = 0;
         }
 
-        actorInit =
-            (uintptr_t)((overlayEntry->initInfo != NULL)
-                            ? (void*)(-OVERLAY_RELOCATION_OFFSET(overlayEntry) + (uintptr_t)overlayEntry->initInfo)
-                            : NULL);
+        actorInit = (uintptr_t)(
+            (overlayEntry->initInfo != NULL)
+                ? (void*)((uintptr_t)overlayEntry->initInfo - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
+                : NULL);
     }
 
     return actorInit;
@@ -4542,7 +4542,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                            Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, gameplayFrames & 0xFF, 32, 16, 1, 0,
                                             (gameplayFrames * 2) & 0xFF, 64, 32));
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, 255);
-                gSPDisplayList(POLY_XLU_DISP++, gFrozenIceDL);
+                gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment2MaterialDL);
 
                 effectAlphaScaled = effectAlpha * 255.0f;
 
@@ -4573,7 +4573,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gFrozenIceVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment2ModelDL);
                 }
 
                 limbPos = limbPosStart; // reset limbPos
@@ -4653,7 +4653,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
                 }
                 break;
 

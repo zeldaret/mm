@@ -183,19 +183,19 @@ void func_80C168D0(DemoSyoten* this, PlayState* play) {
     s32 pad;
     Path* path = this->unk_3E8;
     Vec3s* points;
-    Vec3f pos;
+    Vec3f worldPos;
     Vec3f projectedPos;
-    f32 cappedInvW;
+    f32 invW;
 
     if (path != NULL) {
         points = Lib_SegmentedToVirtual(this->unk_3E8->points);
         points += this->unk_3EC;
-        Math_Vec3s_ToVec3f(&pos, points);
-        Actor_GetProjectedPos(play, &pos, &projectedPos, &cappedInvW);
-        Math_Vec3f_Copy(&pos, &this->actor.projectedPos);
-        pos.z = pos.y;
+        Math_Vec3s_ToVec3f(&worldPos, points);
+        Actor_GetProjectedPos(play, &worldPos, &projectedPos, &invW);
+        Math_Vec3f_Copy(&worldPos, &this->actor.projectedPos);
+        worldPos.z = worldPos.y;
         projectedPos.z = projectedPos.y;
-        this->actor.shape.rot.z = -Math_Vec3f_Yaw(&projectedPos, &pos);
+        this->actor.shape.rot.z = -Math_Vec3f_Yaw(&projectedPos, &worldPos);
     }
 }
 

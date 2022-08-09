@@ -5,6 +5,7 @@
  */
 
 #include "z_en_tsn.h"
+#include "z64snap.h"
 #include "objects/object_tsn/object_tsn.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
@@ -324,12 +325,12 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
             this->actionFunc = func_80AE0704;
             if (sp24 == 19) {
                 if (CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
-                    if (func_8013A4C4(1 | 8)) {
+                    if (Snap_CheckFlag(PICTOGRAPH_PIRATE_GOOD)) {
                         player->actor.textId = 0x107B;
                         return;
                     }
 
-                    if (func_8013A4C4(1 | 2 | 8)) {
+                    if (Snap_CheckFlag(PICTOGRAPH_PIRATE_TOO_FAR)) {
                         player->actor.textId = 0x10A9;
                         return;
                     }
