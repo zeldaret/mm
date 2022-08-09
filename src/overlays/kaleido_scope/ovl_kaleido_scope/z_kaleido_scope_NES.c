@@ -726,7 +726,6 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808259D4.s")
 
 // OoT func_80823A0C
-#ifdef NON_EQUIVALENT
 s16 func_80825A50(PlayState* play, Vtx* vtx, s16 arg2, s16 arg3) {
     PauseContext* pauseCtx = &play->pauseCtx;
     GameOverContext* gameOverCtx = &play->gameOverCtx;
@@ -734,7 +733,6 @@ s16 func_80825A50(PlayState* play, Vtx* vtx, s16 arg2, s16 arg3) {
     s16* ptr2;
     s16* ptr3;
     s16* ptr4;
-
     s16 var_a2;
     s16 var_t3;
     s16 i;
@@ -748,33 +746,25 @@ s16 func_80825A50(PlayState* play, Vtx* vtx, s16 arg2, s16 arg3) {
 
         for (var_a2 = 80, j = 0; j < 5; j++, k += 4, var_a2 -= 32) {
             vtx[k + 0].v.ob[0] = vtx[k + 2].v.ob[0] = var_t3;
-
             vtx[k + 1].v.ob[0] = vtx[k + 3].v.ob[0] = vtx[k + 0].v.ob[0] + 80;
 
             vtx[k + 0].v.ob[1] = vtx[k + 1].v.ob[1] = var_a2 + pauseCtx->offsetY;
-
             vtx[k + 2].v.ob[1] = vtx[k + 3].v.ob[1] = vtx[k + 0].v.ob[1] - 32;
 
             vtx[k + 0].v.ob[2] = vtx[k + 1].v.ob[2] = vtx[k + 2].v.ob[2] = vtx[k + 3].v.ob[2] = 0;
 
-            vtx[k + 0].v.flag = 0;
-            vtx[k + 1].v.flag = 0;
-            vtx[k + 2].v.flag = 0;
-            vtx[k + 3].v.flag = 0;
+            vtx[k + 0].v.flag = vtx[k + 1].v.flag = vtx[k + 2].v.flag = vtx[k + 3].v.flag = 0;
 
-            vtx[k + 0].v.tc[0] = vtx[k + 0].v.tc[1] = vtx[k + 1].v.tc[1] = vtx[k + 2].v.tc[0] = 0;
-
+            vtx[k + 0].v.tc[0] = vtx[k + 0].v.tc[1] = 0;
+            vtx[k + 1].v.tc[1] = vtx[k + 2].v.tc[0] = 0;
             vtx[k + 1].v.tc[0] = vtx[k + 3].v.tc[0] = 0xA00;
-
             vtx[k + 2].v.tc[1] = vtx[k + 3].v.tc[1] = 0x400;
 
-            vtx[k + 0].v.cn[0] = vtx[k + 2].v.cn[0] = 0;
-            vtx[k + 0].v.cn[1] = vtx[k + 2].v.cn[1] = 0;
-            vtx[k + 0].v.cn[2] = vtx[k + 2].v.cn[2] = 0;
+            vtx[k + 0].v.cn[0] = vtx[k + 2].v.cn[0] = vtx[k + 0].v.cn[1] = vtx[k + 2].v.cn[1] = vtx[k + 0].v.cn[2] =
+                vtx[k + 2].v.cn[2] = 0;
 
-            vtx[k + 1].v.cn[0] = vtx[k + 3].v.cn[0] = 0;
-            vtx[k + 1].v.cn[1] = vtx[k + 3].v.cn[1] = 0;
-            vtx[k + 1].v.cn[2] = vtx[k + 3].v.cn[2] = 0;
+            vtx[k + 1].v.cn[0] = vtx[k + 3].v.cn[0] = vtx[k + 1].v.cn[1] = vtx[k + 3].v.cn[1] = vtx[k + 1].v.cn[2] =
+                vtx[k + 3].v.cn[2] = 0;
 
             vtx[k + 0].v.cn[3] = vtx[k + 2].v.cn[3] = vtx[k + 1].v.cn[3] = vtx[k + 3].v.cn[3] = pauseCtx->alpha;
         }
@@ -789,7 +779,7 @@ s16 func_80825A50(PlayState* play, Vtx* vtx, s16 arg2, s16 arg3) {
         for (i = 0; i < arg3; i++, k += 4) {
             vtx[k + 2].v.ob[0] = vtx[k + 0].v.ob[0] = ptr1[i];
 
-            vtx[k + 1].v.ob[0] = vtx[k + 3].v.ob[0] = ptr2[i] + vtx[k + 0].v.ob[0];
+            vtx[k + 1].v.ob[0] = vtx[k + 3].v.ob[0] = vtx[k + 0].v.ob[0] + ptr2[i];
 
             if ((pauseCtx->state < 8) || (pauseCtx->state >= 0x13)) {
                 vtx[k + 0].v.ob[1] = vtx[k + 1].v.ob[1] = ptr3[i] + pauseCtx->offsetY;
@@ -829,12 +819,8 @@ s16 func_80825A50(PlayState* play, Vtx* vtx, s16 arg2, s16 arg3) {
     }
     return k;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80825A50.s")
-#endif
 
-// KaleidoScope_InitVertices
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80825E28.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_InitVertices.s")
 
 // KaleidoScope_UpdateCursorSize
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808274DC.s")

@@ -4236,7 +4236,7 @@
     0x8082585C:("func_8082585C",),
     0x808259D4:("func_808259D4",),
     0x80825A50:("func_80825A50",),
-    0x80825E28:("func_80825E28",),
+    0x80825E28:("KaleidoScope_InitVertices",),
     0x808274DC:("func_808274DC",),
     0x80827A8C:("func_80827A8C",),
     0x80827E08:("KaleidoScope_DrawGameOver",),
