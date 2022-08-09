@@ -279,7 +279,7 @@ void func_80A1DFA0(ObjSpinyroll* this) {
 
 s32 func_80A1E074(ObjSpinyroll* this, PlayState* play, Vec3f* arg2, s32 arg3) {
     f32 temp_f0;
-    ObjSpinyrollStruct2* ptr = &this->unk_3A4;
+    ObjSpinyrollStruct* ptr = &this->unk_3A4;
     f32 temp_f20;
     s32 i;
     s32 j;
@@ -358,7 +358,7 @@ s32 func_80A1E394(CollisionContext* colCtx, f32* arg1, CollisionPoly** polyOut, 
 
 s32 func_80A1E3D8(ObjSpinyroll* this, PlayState* play, f32* arg2, s32 arg3) {
     f32 phi_f26;
-    ObjSpinyrollStruct2* spC8 = &this->unk_3A4;
+    ObjSpinyrollStruct* spC8 = &this->unk_3A4;
     f32 phi_f22;
     ObjSpinyrollColFunc spC0;
     s32 i;
