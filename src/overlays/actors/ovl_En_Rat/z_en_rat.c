@@ -294,21 +294,21 @@ void EnRat_ChooseDirection(EnRat* this) {
         }
     } else {
         if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) > 50.0f) {
-            Vec3f sp64;
-            Vec3f sp58;
-            Vec3f sp4C;
-            Vec3f sp40;
+            Vec3f homeTemp; // also used as a temp for a different calculation
+            Vec3f worldTemp;
+            Vec3f slightlyForwardPos;
+            Vec3f floorNormal;
 
             Matrix_RotateZS(-this->actor.home.rot.z, MTXMODE_NEW);
             Matrix_RotateXS(-this->actor.home.rot.x, MTXMODE_APPLY);
             Matrix_RotateYS(-this->actor.home.rot.y, MTXMODE_APPLY);
-            Matrix_MultVec3f(&this->axisUp, &sp40);
-            Math_Vec3f_Sum(&this->actor.world.pos, &this->axisForwards, &sp64);
-            Matrix_MultVec3f(&sp64, &sp4C);
-            Matrix_MultVec3f(&this->actor.home.pos, &sp64);
-            Matrix_MultVec3f(&this->actor.world.pos, &sp58);
-            angle = Math_Vec3f_Yaw(&sp58, &sp64) - Math_Vec3f_Yaw(&sp58, &sp4C);
-            if (sp40.y < -0.25f) {
+            Matrix_MultVec3f(&this->axisUp, &floorNormal);
+            Math_Vec3f_Sum(&this->actor.world.pos, &this->axisForwards, &homeTemp);
+            Matrix_MultVec3f(&homeTemp, &slightlyForwardPos);
+            Matrix_MultVec3f(&this->actor.home.pos, &homeTemp);
+            Matrix_MultVec3f(&this->actor.world.pos, &worldTemp);
+            angle = Math_Vec3f_Yaw(&worldTemp, &homeTemp) - Math_Vec3f_Yaw(&worldTemp, &slightlyForwardPos);
+            if (floorNormal.y < -0.25f) {
                 angle -= 0x8000;
             }
 
