@@ -10243,7 +10243,7 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
     }
     func_80832888(player, play);
     if (play->roomCtx.currRoom.enablePosLights != 0) {
-        Lights_PointSetColorAndRadius(&player->lightInfo, 0xFFU, 0xFFU, 0xFFU, (s16) 0x3C);
+        Lights_PointSetColorAndRadius(&player->lightInfo, 0xFFU, 0xFFU, 0xFFU, (s16)0x3C);
     } else {
         player->lightInfo.params.point.radius = -1;
     }
@@ -10281,7 +10281,8 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
                         player->stateFlags2 |= 0x400;
                     }
                 }
-            } else if ((player->stateFlags1 & 0x8000000) && ((player->prevBoots == 5) || (player->actor.bgCheckFlags & 1))) {
+            } else if ((player->stateFlags1 & 0x8000000) &&
+                       ((player->prevBoots == 5) || (player->actor.bgCheckFlags & 1))) {
                 func_8083B930(play, player);
                 player->stateFlags2 &= ~0x400;
                 if (func_808508C8 == player->actionFunc) {
@@ -10356,24 +10357,33 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
             }
 
             Math_StepToF(&player->unk_B80, var_fv1, var_fv1 * 0.1f);
-            Math_ScaledStepToS(&player->unk_B84, D_80862B16, ( (player->stateFlags1 & 0x8000000) ? 400.0f : 800.0f) * var_fv1);
+            Math_ScaledStepToS(&player->unk_B84, D_80862B16,
+                               ((player->stateFlags1 & 0x8000000) ? 400.0f : 800.0f) * var_fv1);
         } else if (player->unk_B80 != 0.0f) {
             Math_StepToF(&player->unk_B80, 0.0f, (player->stateFlags1 & 0x8000000) ? 0.5f : 2.0f);
         }
-        if (!(player->stateFlags1 & 0x20000080) && !(player->stateFlags3 & 0x80) && (func_80854430 != player->actionFunc)) {
+        if (!(player->stateFlags1 & 0x20000080) && !(player->stateFlags3 & 0x80) &&
+            (func_80854430 != player->actionFunc)) {
             func_8083BB4C(play, player);
             if (Play_InCsMode(play) == 0) {
-                if ((player->actor.id == 0) && !(player->stateFlags1 & 0x80000000) && (gSaveContext.save.playerData.health == 0) && (func_808323C0(player, play->playerActorCsIds[6]) != 0)) {
+                if ((player->actor.id == 0) && !(player->stateFlags1 & 0x80000000) &&
+                    (gSaveContext.save.playerData.health == 0) &&
+                    (func_808323C0(player, play->playerActorCsIds[6]) != 0)) {
                     if (player->stateFlags3 & 0x01000000) {
                         func_808355D8(play, player, &gameplay_keep_Linkanim_00E2D8);
                     } else if (player->stateFlags1 & 0x206004) {
                         func_8082DD2C(play, player);
                         func_80833AA0(player, play);
                     } else if ((player->actor.bgCheckFlags & 1) || (player->stateFlags1 & 0x8000000)) {
-                        func_80831F34(play, player, func_801242B4(player) ? &gameplay_keep_Linkanim_00DFE8 : ((player->shockTimer != 0) ? &gameplay_keep_Linkanim_00DC28 : &gameplay_keep_Linkanim_00D698));
+                        func_80831F34(play, player,
+                                      func_801242B4(player)
+                                          ? &gameplay_keep_Linkanim_00DFE8
+                                          : ((player->shockTimer != 0) ? &gameplay_keep_Linkanim_00DC28
+                                                                       : &gameplay_keep_Linkanim_00D698));
                     }
                 } else {
-                    if ((player->actor.parent == NULL) && ((func_8082DA90(play) != 0) || (player->unk_D6B != 0) || (func_80834600(player, play) == 0))) {
+                    if ((player->actor.parent == NULL) &&
+                        ((func_8082DA90(play) != 0) || (player->unk_D6B != 0) || (func_80834600(player, play) == 0))) {
                         func_8083827C(player, play);
                     } else {
                         player->fallStartHeight = player->actor.world.pos.y;
@@ -10381,7 +10391,8 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
                     func_808446F4(play, player);
                 }
             }
-        } else if (!(player->actor.bgCheckFlags & 1) && (func_8084D820 == player->actionFunc) && (player->unk_397 == 4)) {
+        } else if (!(player->actor.bgCheckFlags & 1) && (func_8084D820 == player->actionFunc) &&
+                   (player->unk_397 == 4)) {
             player->actor.world.pos.y = player->actor.prevPos.y;
         }
 
@@ -10391,7 +10402,7 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
                     if ((play->csCtx.playerAction != NULL) && (D_8085D384[play->csCtx.playerAction->action] != 0)) {
                         func_800B7298(play, NULL, 5U);
                         func_8082DABC(player);
-                    // Can't be player->csMode == 0
+                        // Can't be player->csMode == 0
                     } else if ((!player->csMode) && !(player->stateFlags2 & 0x08000400) && (play->csCtx.state != 3)) {
                         func_800B7298(play, NULL, 0x14U);
                         func_8082DABC(player);
@@ -10418,9 +10429,12 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         }
 
         func_8083BF54(play, player);
-        Lights_PointSetPosition(&player->lightInfo, player->actor.world.pos.x, player->actor.world.pos.y + 40.0f,  player->actor.world.pos.z);
+        Lights_PointSetPosition(&player->lightInfo, player->actor.world.pos.x, player->actor.world.pos.y + 40.0f,
+                                player->actor.world.pos.z);
 
-        if (((player->unk_730 == NULL) || (player->unk_730 == player->targetActor) || (player->unk_730->hintId == 0xFF)) && (player->tatlTextId == 0)) {
+        if (((player->unk_730 == NULL) || (player->unk_730 == player->targetActor) ||
+             (player->unk_730->hintId == 0xFF)) &&
+            (player->tatlTextId == 0)) {
             player->stateFlags2 &= 0xFFDFFFFD;
         }
         player->stateFlags1 &= 0xFFBFEFEF;
@@ -10435,7 +10449,7 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         D_80862B48 = D_80862B4C = 0;
 
         var_v1 = Play_InCsMode(play);
-        D_80862B2C = (s32) player->currentMask;
+        D_80862B2C = (s32)player->currentMask;
         if (!(player->stateFlags3 & 4)) {
             player->actionFunc(player, play);
         }
@@ -10447,7 +10461,8 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         Player_UpdateCamAndSeqModes(play, player);
 
         if (player->skelAnime.moveFlags & 8) {
-            AnimationContext_SetMoveActor(play, &player->actor, &player->skelAnime, (player->skelAnime.moveFlags & 4) ? 1.0f : player->ageProperties->unk_08);
+            AnimationContext_SetMoveActor(play, &player->actor, &player->skelAnime,
+                                          (player->skelAnime.moveFlags & 4) ? 1.0f : player->ageProperties->unk_08);
         }
 
         func_80832578(player, play);
@@ -10478,7 +10493,8 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         player->unk_A78 = NULL;
 
         Math_StepToF(&player->windSpeed, 0.0f, 0.5f);
-        if ((player->unk_B62 != 0) || ((gSaveContext.unk_3F28 == 0) && (gSaveContext.save.playerData.magic != 0) && (player->stateFlags1 & 0x10))) {
+        if ((player->unk_B62 != 0) || ((gSaveContext.unk_3F28 == 0) && (gSaveContext.save.playerData.magic != 0) &&
+                                       (player->stateFlags1 & 0x10))) {
             func_8082F1AC(play, player);
         }
         temp_fv0 = player->actor.world.pos.y - player->actor.prevPos.y;
@@ -10489,7 +10505,7 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
             player->cylinder.dim.height = 0x50;
             var_fv1_2 = ((temp_fv0 + var_fv1_2) * 0.5f) - 40.0f;
         } else {
-            player->cylinder.dim.height = (s16) (temp_fv0 - var_fv1_2);
+            player->cylinder.dim.height = (s16)(temp_fv0 - var_fv1_2);
 
             if (player->cylinder.dim.height < 0) {
                 temp_fa0 = temp_fv0;
@@ -10508,7 +10524,8 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
             player->shieldCylinder.info.bumperFlags = 0;
             player->shieldCylinder.dim.height = 0x50;
             player->shieldCylinder.dim.radius = 0x32;
-            player->shieldCylinder.dim.yShift = (s16) (s32) ((((temp_fv0 + var_fv1_2) * 0.5f) - 40.0f) - player->actor.world.pos.y);
+            player->shieldCylinder.dim.yShift =
+                (s16)(s32)((((temp_fv0 + var_fv1_2) * 0.5f) - 40.0f) - player->actor.world.pos.y);
 
             Collider_UpdateCylinder(&player->actor, &player->shieldCylinder);
             CollisionCheck_SetAT(play, &play->colChkCtx, &player->shieldCylinder.base);
@@ -10537,14 +10554,15 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
                 player->cylinder.dim.yShift = 0;
                 player->cylinder.dim.height = player->shieldCylinder.dim.height;
             } else {
-                player->cylinder.dim.height = (s16) (s32) ((f32) player->cylinder.dim.height * 0.8f);
+                player->cylinder.dim.height = (s16)(s32)((f32)player->cylinder.dim.height * 0.8f);
             }
         }
 
         Collider_UpdateCylinder(&player->actor, &player->cylinder);
         if (!(player->stateFlags2 & 0x4000)) {
             if (!(player->stateFlags1 & 0x806084) && !(player->stateFlags3 & 0x10000000)) {
-                if ((func_808561B0 != player->actionFunc) && (func_80853D68 != player->actionFunc) && (player->actor.draw != NULL)) {
+                if ((func_808561B0 != player->actionFunc) && (func_80853D68 != player->actionFunc) &&
+                    (player->actor.draw != NULL)) {
                     if ((player->actor.id != 0) && (player->csMode == 0x6E)) {
                         player->cylinder.dim.radius = 8;
                     }
@@ -10552,7 +10570,8 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
                 }
             }
             if (!(player->stateFlags1 & 0x04000080) && (player->invincibilityTimer <= 0)) {
-                if ((func_808561B0 != player->actionFunc) && ((func_80857BE8 != player->actionFunc) || (player->unk_AE7 != 1))) {
+                if ((func_808561B0 != player->actionFunc) &&
+                    ((func_80857BE8 != player->actionFunc) || (player->unk_AE7 != 1))) {
                     if (player->cylinder.base.atFlags != 0) {
                         CollisionCheck_SetAT(play, &play->colChkCtx, &player->cylinder.base);
                     }
@@ -11105,7 +11124,7 @@ void func_8084748C(Player* this, f32* speed, f32 speedTarget, s16 yawTarget) {
     }
 
     Math_AsymStepToF(speed, speedTarget * 0.8f, incrStep, (fabsf(*speed) * 0.02f) + 0.05f);
-    Math_ScaledStepToS(&this->currentYaw, yawTarget, 1600);
+    Math_ScaledStepToS(&this->currentYaw, yawTarget, 1600); // 1 ESS turn, also one unit frame of first-person rotation
 }
 
 void func_808475B4(Player* this);
