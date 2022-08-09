@@ -5157,8 +5157,7 @@ beginseg
     name "ovl_Obj_Swprize"
     compress
     include "build/src/overlays/actors/ovl_Obj_Swprize/z_obj_swprize.o"
-    include "build/data/ovl_Obj_Swprize/ovl_Obj_Swprize.data.o"
-    include "build/data/ovl_Obj_Swprize/ovl_Obj_Swprize.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Swprize/ovl_Obj_Swprize_reloc.o"
 endseg
 
 beginseg

@@ -14,12 +14,15 @@ void ObjSwprize_Init(Actor* thisx, PlayState* play);
 void ObjSwprize_Destroy(Actor* thisx, PlayState* play);
 void ObjSwprize_Update(Actor* thisx, PlayState* play);
 
+void ObjSwprize_DoNothing(ObjSwprize* this, PlayState* play);
 void func_80C25654(ObjSwprize* this, PlayState* play);
+void func_80C25640(ObjSwprize* this);
+void func_80C25698(ObjSwprize* this);
 void func_80C256AC(ObjSwprize* this, PlayState* play);
+void func_80C25710(ObjSwprize* this);
 void func_80C2572C(ObjSwprize* this, PlayState* play);
-void func_80C25794(ObjSwprize* this, PlayState* play);
+void func_80C25780(ObjSwprize* this);
 
-#if 0
 const ActorInit Obj_Swprize_InitVars = {
     ACTOR_OBJ_SWPRIZE,
     ACTORCAT_PROP,
@@ -32,30 +35,113 @@ const ActorInit Obj_Swprize_InitVars = {
     (ActorFunc)NULL,
 };
 
-#endif
+static s16 D_80C257F0[] = { 2, 0x14, 1, 8 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C25360.s")
+static s16 D_80C257F8[] = { -0x888, 0, 0x888 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C253D0.s")
+void func_80C25360(ObjSwprize* this, Vec3f* vec) {
+    Matrix_Push();
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_MultVecY(1.0f, vec);
+    Matrix_Pop();
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/ObjSwprize_Init.s")
+void func_80C253D0(ObjSwprize* this, PlayState* play) {
+    s32 i;
+    ObjSwprize* new_var;
+    Actor* collectible;
+    Vec3f sp78;
+    s32 type = OBJ_SWPRIZE_GET_TYPE(&this->actor);
+    u32 params = D_80C257F0[type];
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/ObjSwprize_Destroy.s")
+    func_80C25360(this, &sp78);
+    if (type == 2) {
+        new_var = this;
+        for (i = 0; i < 3; i++) {
+            collectible = Item_DropCollectible(play, &new_var->actor.world.pos, params);
+            if (collectible != NULL) {
+                if (sp78.y < 0.98f) {
+                    collectible->velocity.y = (sp78.y + 1.0f) * 4.0f;
+                    collectible->speedXZ = (2.0f * (1.0f - fabsf(sp78.y))) + 2.0f;
+                    collectible->world.rot.y = Math_FAtan2F(sp78.z, sp78.x) + D_80C257F8[i];
+                } else {
+                    collectible->world.rot.y = i * 0x5555;
+                }
+            }
+        }
+    } else {
+        collectible = Item_DropCollectible(play, &this->actor.world.pos, params);
+        if ((collectible != NULL) && (sp78.y < 0.98f)) {
+            collectible->velocity.y = (sp78.y + 1.0f) * 4.0f;
+            collectible->speedXZ = (2.0f * (1.0f - fabsf(sp78.y))) + 2.0f;
+            collectible->world.rot.y = Math_FAtan2F(sp78.z, sp78.x);
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C25640.s")
+void ObjSwprize_Init(Actor* thisx, PlayState* play) {
+    ObjSwprize* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C25654.s")
+    if (Flags_GetSwitch(play, OBJ_SWPRIZE_GET_SWITCH_FLAG(&this->actor))) {
+        func_80C25780(this);
+    } else {
+        func_80C25640(this);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C25698.s")
+void ObjSwprize_Destroy(Actor* thisx, PlayState* play) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C256AC.s")
+void func_80C25640(ObjSwprize* this) {
+    this->actionFunc = func_80C25654;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C25710.s")
+void func_80C25654(ObjSwprize* this, PlayState* play) {
+    if (Flags_GetSwitch(play, OBJ_SWPRIZE_GET_SWITCH_FLAG(&this->actor))) {
+        func_80C25698(this);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C2572C.s")
+void func_80C25698(ObjSwprize* this) {
+    this->actionFunc = func_80C256AC;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C25780.s")
+void func_80C256AC(ObjSwprize* this, PlayState* play) {
+    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+        func_80C253D0(this, play);
+        func_80C25710(this);
+    } else {
+        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C25794.s")
+void func_80C25710(ObjSwprize* this) {
+    this->timer = 40;
+    this->actionFunc = func_80C2572C;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/ObjSwprize_Update.s")
+void func_80C2572C(ObjSwprize* this, PlayState* play) {
+    if (this->timer > 0) {
+        this->timer--;
+        if (this->timer == 0) {
+            ActorCutscene_Stop(this->actor.cutscene);
+            func_80C25780(this);
+        }
+    }
+}
+
+void func_80C25780(ObjSwprize* this) {
+    this->actionFunc = ObjSwprize_DoNothing;
+}
+
+void ObjSwprize_DoNothing(ObjSwprize* this, PlayState* play) {
+}
+
+void ObjSwprize_Update(Actor* thisx, PlayState* play) {
+    ObjSwprize* this = THIS;
+
+    this->actionFunc(this, play);
+}
