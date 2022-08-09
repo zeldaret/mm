@@ -284,7 +284,7 @@ void EnRat_UpdateRotation(EnRat* this) {
  * is chasing after them) or at some other semi-random point (if the Bombchu is idle).
  */
 void EnRat_ChooseDirection(EnRat* this) {
-    Vec3f sp74;
+    Vec3f newAxisForwards;
     s16 angle;
 
     if (this->actionFunc != EnRat_Idle) {
@@ -296,7 +296,7 @@ void EnRat_ChooseDirection(EnRat* this) {
         if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) > 50.0f) {
             Vec3f homeTemp; // also used as a temp for a different calculation
             Vec3f worldTemp;
-            Vec3f slightlyForwardPos;
+            Vec3f floorTangent; // ends up being a position slightly "ahead" of world pos
             Vec3f floorNormal;
 
             Matrix_RotateZS(-this->actor.home.rot.z, MTXMODE_NEW);
@@ -304,10 +304,10 @@ void EnRat_ChooseDirection(EnRat* this) {
             Matrix_RotateYS(-this->actor.home.rot.y, MTXMODE_APPLY);
             Matrix_MultVec3f(&this->axisUp, &floorNormal);
             Math_Vec3f_Sum(&this->actor.world.pos, &this->axisForwards, &homeTemp);
-            Matrix_MultVec3f(&homeTemp, &slightlyForwardPos);
+            Matrix_MultVec3f(&homeTemp, &floorTangent);
             Matrix_MultVec3f(&this->actor.home.pos, &homeTemp);
             Matrix_MultVec3f(&this->actor.world.pos, &worldTemp);
-            angle = Math_Vec3f_Yaw(&worldTemp, &homeTemp) - Math_Vec3f_Yaw(&worldTemp, &slightlyForwardPos);
+            angle = Math_Vec3f_Yaw(&worldTemp, &homeTemp) - Math_Vec3f_Yaw(&worldTemp, &floorTangent);
             if (floorNormal.y < -0.25f) {
                 angle -= 0x8000;
             }
@@ -320,8 +320,8 @@ void EnRat_ChooseDirection(EnRat* this) {
 
     angle = CLAMP(angle, -0x800, 0x800);
     Matrix_RotateAxisF(angle * (M_PI / 0x8000), &this->axisUp, MTXMODE_NEW);
-    Matrix_MultVec3f(&this->axisForwards, &sp74);
-    Math_Vec3f_Copy(&this->axisForwards, &sp74);
+    Matrix_MultVec3f(&this->axisForwards, &newAxisForwards);
+    Math_Vec3f_Copy(&this->axisForwards, &newAxisForwards);
     Math3D_CrossProduct(&this->axisUp, &this->axisForwards, &this->axisLeft);
     this->shouldRotateOntoSurfaces = true;
 }
