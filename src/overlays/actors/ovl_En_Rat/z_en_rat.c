@@ -296,19 +296,19 @@ void EnRat_ChooseDirection(EnRat* this) {
         if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) > 50.0f) {
             Vec3f homeTemp; // also used as a temp for a different calculation
             Vec3f worldTemp;
-            Vec3f floorTangent; // ends up being a position slightly "ahead" of world pos
-            Vec3f floorNormal;
+            Vec3f surfaceTangent; // ends up being a position slightly "ahead" of world pos
+            Vec3f surfaceNormal;
 
             Matrix_RotateZS(-this->actor.home.rot.z, MTXMODE_NEW);
             Matrix_RotateXS(-this->actor.home.rot.x, MTXMODE_APPLY);
             Matrix_RotateYS(-this->actor.home.rot.y, MTXMODE_APPLY);
-            Matrix_MultVec3f(&this->axisUp, &floorNormal);
+            Matrix_MultVec3f(&this->axisUp, &surfaceNormal);
             Math_Vec3f_Sum(&this->actor.world.pos, &this->axisForwards, &homeTemp);
-            Matrix_MultVec3f(&homeTemp, &floorTangent);
+            Matrix_MultVec3f(&homeTemp, &surfaceTangent);
             Matrix_MultVec3f(&this->actor.home.pos, &homeTemp);
             Matrix_MultVec3f(&this->actor.world.pos, &worldTemp);
-            angle = Math_Vec3f_Yaw(&worldTemp, &homeTemp) - Math_Vec3f_Yaw(&worldTemp, &floorTangent);
-            if (floorNormal.y < -0.25f) {
+            angle = Math_Vec3f_Yaw(&worldTemp, &homeTemp) - Math_Vec3f_Yaw(&worldTemp, &surfaceTangent);
+            if (surfaceNormal.y < -0.25f) {
                 angle -= 0x8000;
             }
 
