@@ -15985,36 +15985,29 @@ void func_80857640(Player* this, f32 arg1, s32 arg2) {
     this->unk_B48 = 1.0f;
 }
 
-#ifdef NON_EQUIVALENT
-// dunno if equivalent
-void func_808576BC(PlayState* arg0, Player* arg1) {
-    s32 sp34;
-    f32 sp30;
+void func_808576BC(PlayState* play, Player* this) {
     s32 var_v0;
+    f32 sp30 = Math_CosS(this->currentYaw);
+    f32 temp = Math_SinS(this->currentYaw);
 
-    sp30 = Math_CosS(arg1->currentYaw);
-    var_v0 =
-        (s32)(((Math_SinS(arg1->currentYaw) * arg1->actor.velocity.x) + (arg1->actor.velocity.z * sp30)) * 800.0f) -
-        arg1->unk_AE8;
-
+    var_v0 = ((this->actor.velocity.x * (temp = temp)) + (this->actor.velocity.z * sp30)) * 800.0f;
+    var_v0 -= this->unk_AE8;
     var_v0 = ABS_ALT(var_v0);
-    if (var_v0 >= 0x7D1) {
-        if (var_v0 >= 0x1771) {
-            sp34 = var_v0;
-            func_800B8F98(arg1, NA_SE_PL_GORON_SLIP - SFX_FLAG);
-        }
 
-        if (func_8083F8A8(arg0, arg1, 12.0f, -1 - (var_v0 >> 0xC), (var_v0 >> 0xA) + 1.0f, (var_v0 >> 7) + 0xA0, 0x14,
-                          1) != 0) {
-            func_800B8E58(arg1, (arg1->unk_B72 == NA_SE_PL_WALK_SNOW - SFX_FLAG) ? NA_SE_PL_ROLL_SNOW_DUST - SFX_FLAG
-                                                                                 : NA_SE_PL_ROLL_DUST - SFX_FLAG);
-        }
+    if (var_v0 <= 0x7D0) {
+        return;
+    }
+
+    if (var_v0 > 0x1770) {
+        func_800B8F98(&this->actor, NA_SE_PL_GORON_SLIP - SFX_FLAG);
+    }
+
+    if (func_8083F8A8(play, this, 12.0f, -1 - (var_v0 >> 0xC), (var_v0 >> 0xA) + 1.0f, (var_v0 >> 7) + 0xA0, 0x14,
+                        1)) {
+        func_800B8E58(this, (this->unk_B72 == NA_SE_PL_WALK_SNOW - SFX_FLAG) ? NA_SE_PL_ROLL_SNOW_DUST - SFX_FLAG
+                                                                                : NA_SE_PL_ROLL_DUST - SFX_FLAG);
     }
 }
-#else
-void func_808576BC(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808576BC.s")
-#endif
 
 void func_808577E0(Player* this) {
     f32 temp_fa1 = ABS_ALT(this->unk_AE8) * 0.00004f;
