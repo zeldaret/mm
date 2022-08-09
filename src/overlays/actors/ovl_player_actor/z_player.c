@@ -8884,9 +8884,6 @@ s32 func_80840A30(PlayState* play, Player* this, f32* arg2, f32 arg3) {
     return false;
 }
 
-extern u8 D_8085CF80[]; // PlayerMeleeWeaponAnimation
-extern u8 D_8085CF84[]; // PlayerMeleeWeaponAnimation
-
 s32 func_80840CD4(Player* this, PlayState* arg1) {
     if (func_808387A0(arg1, this)) {
         this->stateFlags2 |= PLAYER_STATE2_20000;
@@ -9001,7 +8998,7 @@ s32 func_808411D4(PlayState* play, Player* this, f32* arg2, s32 arg3) {
         *arg2 = 0.0f;
         var_v1 = this->actor.shape.rot.y;
     }
-    if (func_80840F90(play, this, NULL, *arg2, var_v1, 2) != 0) {
+    if (func_80840F90(play, this, NULL, *arg2, var_v1, 2)) {
         return 0;
     }
     return sp2C;
@@ -9014,8 +9011,8 @@ void func_808412A0(PlayState* play, Player* this) {
 
 void func_808412BC(PlayState* play, Player* this) {
     Player_SetAction(play, this, func_80854118, 0);
-    this->stateFlags1 |= 0x20000000;
-    LinkAnimation_Change(play, &this->skelAnime, &gameplay_keep_Linkanim_00DF78, 0.6666667f, 0.0f, 24.0f, ANIMMODE_ONCE,
+    this->stateFlags1 |= PLAYER_STATE1_20000000;
+    LinkAnimation_Change(play, &this->skelAnime, &gameplay_keep_Linkanim_00DF78, 2.0f / 3.0f, 0.0f, 24.0f, ANIMMODE_ONCE,
                          0.0f);
     this->actor.world.pos.y += 800.0f;
 }
@@ -16880,7 +16877,7 @@ void func_80859CE0(PlayState* play, Player* this, s32 arg2) {
 }
 
 void func_80859CFC(PlayState* play, Player* this, UNK_TYPE arg2) {
-    func_80841358(play, this, 0);
+    func_80841358(play, this, false);
     func_8082DB90(play, this, &gameplay_keep_Linkanim_00D660);
 }
 
@@ -16912,7 +16909,7 @@ void func_80859EBC(PlayState* play, Player* this, s32 arg2) {
         func_8085AACC(play, this, arg2);
     } else if (this->unk_AE8 == 0) {
         Item_Give(play, ITEM_SWORD_RAZOR);
-        func_80841358(play, this, 0);
+        func_80841358(play, this, false);
     } else {
         func_808484CC(this);
     }
@@ -16922,14 +16919,14 @@ void func_80859F4C(PlayState* play, Player* this, UNK_TYPE arg2) {
     if (LinkAnimation_Update(play, &this->skelAnime) != 0) {
         func_8083FCF0(play, this, 0.0f, 99.0f, this->skelAnime.endFrame - 8.0f);
     }
-    if (this->itemActionParam != 5) {
-        func_80841358(play, this, 1);
+    if (this->itemActionParam != PLAYER_AP_SWORD_GILDED) {
+        func_80841358(play, this, true);
     }
 }
 
 void func_80859FCC(PlayState* play, Player* this, UNK_TYPE arg2) {
-    if (this->transformation != 3) {
-        gSaveContext.save.playerForm = 3;
+    if (this->transformation != PLAYER_FORM_ZORA) {
+        gSaveContext.save.playerForm = PLAYER_FORM_ZORA;
     }
 }
 
@@ -16941,8 +16938,29 @@ void func_80859FF4(PlayState* play, Player* this, UNK_TYPE arg2) {
     }
 }
 
-void func_8085A04C(PlayState* play, Player* this, CsCmdActorAction* playerAction);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8085A04C.s")
+void func_8085A04C(PlayState* play, Player* this, CsCmdActorAction* playerAction) {
+    f32 temp_fv1 = playerAction->endPos.x;
+    f32 temp_fa0 = playerAction->endPos.y;
+    f32 temp_fa1 = playerAction->endPos.z;
+    f32 temp_fv0;
+    f32 xDiff;
+    f32 yDiff;
+    f32 zDiff;
+    CsCmdActorAction *new_var;
+
+    xDiff = playerAction->startPos.x - temp_fv1;
+    yDiff = playerAction->startPos.y - temp_fa0;
+    zDiff = playerAction->startPos.z - temp_fa1;
+
+    //! FAKE
+    new_var = playerAction;
+    temp_fv0 = ((f32) (new_var->endFrame - play->csCtx.frames)) / ((f32) (new_var->endFrame - new_var->startFrame));
+
+    this->actor.world.pos.x = (xDiff * temp_fv0) + temp_fv1;
+    this->actor.world.pos.y = (yDiff * temp_fv0) + temp_fa0;
+    this->actor.world.pos.z = (zDiff * temp_fv0) + temp_fa1;
+    LinkAnimation_Update(play, &this->skelAnime);
+}
 
 void func_8085A120(PlayState* play, Player* this, UNK_TYPE arg2) {
     if (this->transformation != PLAYER_FORM_FIERCE_DEITY) {
