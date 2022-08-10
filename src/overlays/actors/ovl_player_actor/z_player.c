@@ -8884,10 +8884,131 @@ void func_808400CC(PlayState* play, Player* this) {
     func_80840094(play, this);
 }
 
-s32 func_808401F4(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808401F4.s")
+s32 func_808401F4(PlayState* play, Player* this) {
+    if (this->meleeWeaponState > 0) {
+        s32 temp_v0_3;
 
-extern Vec3f D_8085D2A4;
+        if (this->meleeWeaponAnimation < PLAYER_MWA_SPIN_ATTACK_1H) {
+            if (!(this->meleeWeaponQuads[0].base.atFlags & 4) && !(this->meleeWeaponQuads[1].base.atFlags & 4)) {
+                if (this->skelAnime.curFrame >= 2.0f) {
+                    CollisionPoly* poly;
+                    s32 bgId;
+                    Vec3f spC8;
+                    Vec3f pos;
+                    Vec3f spB0;
+                    Vec3f* var_a1;
+                    Vec3f* temp_a0 = &this->meleeWeaponInfo[0].tip;
+                    f32 var_fv1;
+
+                    if (this->linearVelocity >= 0.0f) {
+                        var_a1 = &this->meleeWeaponInfo[0].base;
+                        if ((this->transformation == PLAYER_FORM_GORON) || (this->actor.id == ACTOR_EN_TEST3)) {
+                            var_a1 = &this->unk_AF0[1];
+                        }
+
+                        var_fv1 = Math_Vec3f_DistXYZAndStoreDiff(temp_a0, var_a1, &spB0);
+                        if (var_fv1 != 0.0f) {
+                            var_fv1 = (var_fv1 + 10.0f) / var_fv1;
+                        }
+
+                        spC8.x = temp_a0->x + (spB0.x * var_fv1);
+                        spC8.y = temp_a0->y + (spB0.y * var_fv1);
+                        spC8.z = temp_a0->z + (spB0.z * var_fv1);
+                        if (BgCheck_EntityLineTest2(&play->colCtx, &spC8, temp_a0, &pos, &poly, 1, 0, 0, 1, &bgId,
+                                                    &this->actor)) {
+                            if (!SurfaceType_IsIgnoredByEntities(&play->colCtx, poly, bgId) &&
+                                (func_800C99D4(&play->colCtx, poly, bgId) != 6) &&
+                                !func_800B90AC(play, &this->actor, poly, bgId, &pos)) {
+                                if (this->transformation == PLAYER_FORM_GORON) {
+                                    MtxF sp64;
+                                    Vec3s actorRot;
+                                    DynaPolyActor* temp_v0;
+
+                                    func_8082DF2C(play);
+                                    func_8083FE90(play, this, NA_SE_IT_HAMMER_HIT);
+                                    if (this->transformation == 1) {
+                                        func_800B648C(play, 2, 2, 100.0f, &this->actor.world.pos);
+                                        func_800C0094(poly, pos.x, pos.y, pos.z, &sp64);
+                                        Matrix_MtxFToYXZRot(&sp64, &actorRot, true);
+                                        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TEST, pos.x, pos.y, pos.z,
+                                                    actorRot.x, actorRot.y, actorRot.z, 500);
+                                    }
+
+                                    if (bgId != BGCHECK_SCENE) {
+                                        temp_v0 = DynaPoly_GetActor(&play->colCtx, bgId);
+
+                                        if ((((this->meleeWeaponQuads[0].base.atFlags & 2) != 0) &&
+                                             (&temp_v0->actor == this->meleeWeaponQuads[0].base.at)) ||
+                                            ((this->meleeWeaponQuads[1].base.atFlags & 2) &&
+                                             (&temp_v0->actor == this->meleeWeaponQuads[1].base.at))) {
+                                            return false;
+                                        }
+                                    }
+
+                                    func_808400CC(play, this);
+                                    if (this->transformation != PLAYER_FORM_GORON) {
+                                        return true;
+                                    }
+                                    return false;
+                                }
+
+                                if (this->linearVelocity >= 0.0f) {
+                                    u32 temp_v0_2 = func_800C9BB8(&play->colCtx, poly, bgId);
+
+                                    if (temp_v0_2 == 0xA) {
+                                        CollisionCheck_SpawnShieldParticlesWood(play, &pos, &this->actor.projectedPos);
+                                    } else {
+                                        pos.x += 8.0f * COLPOLY_GET_NORMAL(poly->normal.x);
+                                        pos.y += 8.0f * COLPOLY_GET_NORMAL(poly->normal.y);
+                                        pos.x += 8.0f * COLPOLY_GET_NORMAL(poly->normal.z);
+                                        CollisionCheck_SpawnShieldParticles(play, &pos);
+
+                                        if (temp_v0_2 == 0xB) {
+                                            func_800B8E58(this, NA_SE_IT_WALL_HIT_SOFT);
+                                        } else {
+                                            func_800B8E58(this, NA_SE_IT_WALL_HIT_HARD);
+                                        }
+                                    }
+
+                                    func_80840094(play, this);
+                                    Player_RequestRumble(play, this, 180, 20, 100, SQ(0));
+                                    this->linearVelocity = -14.0f;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                func_808400CC(play, this);
+                func_8082DF2C(play);
+                return true;
+            }
+        }
+
+        temp_v0_3 = (this->meleeWeaponQuads[0].base.atFlags & 2) != 0;
+        if (temp_v0_3 || (this->meleeWeaponQuads[1].base.atFlags & 2)) {
+            if ((this->meleeWeaponAnimation < PLAYER_MWA_SPIN_ATTACK_1H) &&
+                (this->transformation != PLAYER_FORM_GORON)) {
+                Actor* temp_v1 = this->meleeWeaponQuads[temp_v0_3 ? 0 : 1].base.at;
+
+                if ((temp_v1 != NULL) && (temp_v1->id != ACTOR_EN_KANBAN)) {
+                    func_8082DF2C(play);
+                }
+            }
+
+            if (!func_8083FF30(play, this)) {
+                func_8083FFEC(play, this);
+                if (this->actor.colChkInfo.atHitEffect == 1) {
+                    this->actor.colChkInfo.damage = 8;
+                    func_80833B18(play, this, 4, 0.0f, 0.0f, this->actor.shape.rot.y, 20);
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
 
 void func_80840770(PlayState* play, Player* this) {
     if (this->unk_AE8 != 0) {
@@ -12964,7 +13085,7 @@ void func_8084C94C(Player* this, PlayState* play) {
     if (this->actor.bgCheckFlags & 1) {
         if (this->fallDistance >= 400) {
             this->actor.colChkInfo.damage = 0x10;
-            func_80833B18(play, this, 1, 4.0f, 5.0f, this->actor.shape.rot.y, 0x14);
+            func_80833B18(play, this, 1, 4.0f, 5.0f, this->actor.shape.rot.y, 20);
         } else {
             func_80836B3C(play, this, 4.0f);
         }
@@ -12983,7 +13104,7 @@ void func_8084CA24(Player* this, PlayState* play) {
         if (this->actor.bgCheckFlags & 1) {
             if (this->unk_AAA > 0x36B0) {
                 this->actor.colChkInfo.damage = 0x10;
-                func_80833B18(play, this, 1, 4.0f, 5.0f, this->actor.shape.rot.y, 0x14);
+                func_80833B18(play, this, 1, 4.0f, 5.0f, this->actor.shape.rot.y, 20);
             } else {
                 func_80836B3C(play, this, 4.0f);
             }

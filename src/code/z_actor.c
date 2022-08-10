@@ -2209,7 +2209,7 @@ void func_800B9098(Actor* actor) {
     actor->audioFlags |= 0x40;
 }
 
-s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgId, s32 arg4) {
+s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgId, Vec3f* arg4) {
     if (func_800C99D4(&play->colCtx, polygon, bgId) == 8) {
         return true;
     }
