@@ -3556,8 +3556,7 @@ beginseg
     name "ovl_Mir_Ray2"
     compress
     include "build/src/overlays/actors/ovl_Mir_Ray2/z_mir_ray2.o"
-    include "build/data/ovl_Mir_Ray2/ovl_Mir_Ray2.data.o"
-    include "build/data/ovl_Mir_Ray2/ovl_Mir_Ray2.reloc.o"
+    include "build/src/overlays/actors/ovl_Mir_Ray2/ovl_Mir_Ray2_reloc.o"
 endseg
 
 beginseg
