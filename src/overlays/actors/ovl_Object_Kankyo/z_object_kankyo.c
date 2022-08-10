@@ -501,8 +501,8 @@ void ObjectKankyo_Draw(Actor* thisx, PlayState* play) {
 void func_808DD3C8(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     ObjectKankyo* this = THIS;
-    Vec3f spC4;
-    Vec3f spB8;
+    Vec3f worldPos;
+    Vec3f screenPos;
     s16 i;
     u8 pad2;
     u8 spB4;
@@ -535,12 +535,14 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
     }
 
     for (i = 0; i < sp68; i++) {
-        spC4.x = this->unk_14C[i].unk_00 + this->unk_14C[i].unk_0C;
-        spC4.y = this->unk_14C[i].unk_04 + this->unk_14C[i].unk_10;
-        spC4.z = this->unk_14C[i].unk_08 + this->unk_14C[i].unk_14;
-        func_80169474(play, &spC4, &spB8);
+        worldPos.x = this->unk_14C[i].unk_00 + this->unk_14C[i].unk_0C;
+        worldPos.y = this->unk_14C[i].unk_04 + this->unk_14C[i].unk_10;
+        worldPos.z = this->unk_14C[i].unk_08 + this->unk_14C[i].unk_14;
 
-        if ((spB8.x >= 0.0f) && (spB8.x < 320.0f) && (spB8.y >= 0.0f) && (spB8.y < 240.0f)) {
+        Play_GetScreenPos(play, &worldPos, &screenPos);
+
+        if ((screenPos.x >= 0.0f) && (screenPos.x < SCREEN_WIDTH) && (screenPos.y >= 0.0f) &&
+            (screenPos.y < SCREEN_HEIGHT)) {
             if (!spB4) {
                 spB4 = true;
 
@@ -555,10 +557,10 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust5Tex));
             }
 
-            Matrix_Translate(spC4.x, spC4.y, spC4.z, MTXMODE_NEW);
+            Matrix_Translate(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
             tempf = (i & 7) * 0.008f;
             Matrix_Scale(0.05f + tempf, 0.05f + tempf, 0.05f + tempf, MTXMODE_APPLY);
-            temp_f2 = Math_Vec3f_DistXYZ(&spC4, &play->view.eye) / 300.0f;
+            temp_f2 = Math_Vec3f_DistXYZ(&worldPos, &play->view.eye) / 300.0f;
             temp_f2 = ((1.0f < temp_f2) ? 0.0f : (((1.0f - temp_f2) > 1.0f) ? 1.0f : 1.0f - temp_f2));
 
             gDPPipeSync(POLY_XLU_DISP++);
@@ -577,8 +579,8 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
 void func_808DD970(Actor* thisx, PlayState* play2) {
     f32 temp_f0;
     f32 temp_f20;
-    Vec3f spBC;
-    Vec3f spB0;
+    Vec3f worldPos;
+    Vec3f screenPos;
     f32 tempf;
     s16 i;
     f32 phi_f26;
@@ -607,15 +609,17 @@ void func_808DD970(Actor* thisx, PlayState* play2) {
     OPEN_DISPS(play->state.gfxCtx);
 
     for (i = 0; i < this->unk_114C; i++) {
-        spBC.x = this->unk_14C[i].unk_00 + this->unk_14C[i].unk_0C;
-        spBC.y = this->unk_14C[i].unk_04 + this->unk_14C[i].unk_10;
-        spBC.z = this->unk_14C[i].unk_08 + this->unk_14C[i].unk_14;
-        func_80169474(play, &spBC, &spB0);
+        worldPos.x = this->unk_14C[i].unk_00 + this->unk_14C[i].unk_0C;
+        worldPos.y = this->unk_14C[i].unk_04 + this->unk_14C[i].unk_10;
+        worldPos.z = this->unk_14C[i].unk_08 + this->unk_14C[i].unk_14;
 
-        if ((spB0.x >= 0.0f) && (spB0.x < 320.0f) && (spB0.y >= 0.0f) && (spB0.y < 240.0f)) {
-            Matrix_Translate(spBC.x, spBC.y, spBC.z, MTXMODE_NEW);
+        Play_GetScreenPos(play, &worldPos, &screenPos);
+
+        if ((screenPos.x >= 0.0f) && (screenPos.x < SCREEN_WIDTH) && (screenPos.y >= 0.0f) &&
+            (screenPos.y < SCREEN_HEIGHT)) {
+            Matrix_Translate(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
             Matrix_Scale(0.03f, 0.03f, 0.03f, MTXMODE_APPLY);
-            temp_f0 = Math_Vec3f_DistXYZ(&spBC, &play->view.eye);
+            temp_f0 = Math_Vec3f_DistXYZ(&worldPos, &play->view.eye);
             temp_f0 = (u8)(255.0f * phi_f26) * (1.0f - (temp_f0 / 300.0f));
 
             gDPPipeSync(POLY_XLU_DISP++);

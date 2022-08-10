@@ -1303,7 +1303,7 @@ void func_80123E90(PlayState* play, Actor* actor) {
     player->unk_730 = actor;
     player->unk_A78 = actor;
     player->stateFlags1 |= PLAYER_STATE1_10000;
-    Camera_SetViewParam(Play_GetCamera(play, CAM_ID_MAIN), 8, actor);
+    Camera_SetViewParam(Play_GetCamera(play, CAM_ID_MAIN), CAM_VIEW_TARGET, actor);
     Camera_ChangeMode(Play_GetCamera(play, CAM_ID_MAIN), CAM_MODE_FOLLOWTARGET);
 }
 
