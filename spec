@@ -5021,8 +5021,7 @@ beginseg
     name "ovl_Obj_Danpeilift"
     compress
     include "build/src/overlays/actors/ovl_Obj_Danpeilift/z_obj_danpeilift.o"
-    include "build/data/ovl_Obj_Danpeilift/ovl_Obj_Danpeilift.data.o"
-    include "build/data/ovl_Obj_Danpeilift/ovl_Obj_Danpeilift.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Danpeilift/ovl_Obj_Danpeilift_reloc.o"
 endseg
 
 beginseg
