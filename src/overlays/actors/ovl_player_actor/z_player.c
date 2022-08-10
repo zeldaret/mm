@@ -2543,7 +2543,7 @@ void func_8082F0E4(Player* this, u32 dmgFlags, s32 damage, s32 radius) {
         this->cylinder.base.acFlags = 0;
     } else {
         this->cylinder.base.colType = 0xA;
-        this->cylinder.info.bumper.dmgFlags = 0xF7CFFFFF;
+        this->cylinder.info.bumper.dmgFlags = ~0x8300000;
 
         if (dmgFlags & 0x80000) {
             this->cylinder.base.acFlags = 0;
@@ -3731,7 +3731,6 @@ s32 func_808323C0(Player* this, s16 csIndex) {
 s32 func_80832444(Player* this);
 s32 func_8083249C(Player* this);
 s32 func_808324EC(PlayState* play, Player* this, void (*arg2)(PlayState*, Player*), s32 arg3);
-void func_80832578(Player* this, PlayState* play);
 
 s32 func_80832444(Player* this) {
     if (this->unk_A86 >= 0) {
@@ -4953,8 +4952,8 @@ void func_808354A4(PlayState* play, s32 arg1, s32 arg2) {
     if (play->nextEntranceIndex == 0xFFFF) {
         gSaveContext.respawnFlag = 4;
         play->nextEntranceIndex = gSaveContext.respawn[3].entranceIndex;
-        play->transitionType = 3;
-        gSaveContext.nextTransitionType = 3;
+        play->transitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_03;
     } else if (play->nextEntranceIndex >= 0xFE00) {
         // TODO: what? I hope this symbol is fake...
         //! FAKE
@@ -4972,7 +4971,7 @@ void func_808354A4(PlayState* play, s32 arg1, s32 arg2) {
         Scene_SetExitFade(play);
     }
 
-    play->transitionTrigger = 0x14;
+    play->transitionTrigger = TRANS_TRIGGER_START;
 }
 
 void func_808355D8(PlayState* play, Player* this, LinkAnimationHeader* anim) {
@@ -5080,7 +5079,7 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
                             gSaveContext.respawnFlag = -5;
                         }
 
-                        play->transitionType = 4;
+                        play->transitionType = TRANS_TYPE_04;
                         play_sound(NA_SE_OC_ABYSS);
                     } else {
                         if (this->stateFlags3 & PLAYER_STATE3_1000000) {
@@ -7126,7 +7125,7 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
 
             func_80169EFC(&play->state);
             gSaveContext.respawnFlag = -2;
-            play->transitionType = 0x15;
+            play->transitionType = TRANS_TYPE_21;
         }
     }
 
@@ -7398,7 +7397,7 @@ void func_8083BB4C(PlayState* play, Player* this) {
                             play->nextEntranceIndex = 0xA810;
                         }
                         play->transitionTrigger = TRANS_TRIGGER_START;
-                        play->transitionType = 4;
+                        play->transitionType = TRANS_TYPE_04;
                         this->stateFlags1 |= PLAYER_STATE1_200;
                         play_sound(NA_SE_SY_DEKUNUTS_JUMP_FAILED);
                     } else if ((this->unk_3CF == 0) &&
@@ -11423,9 +11422,9 @@ s32 func_808482E0(PlayState* play, Player* this) {
             // zelda teaching song of time cs?
             play->nextEntranceIndex = 0x1C00;
             gSaveContext.nextCutsceneIndex = 0xFFF2;
-            play->transitionTrigger = 0x14;
-            play->transitionType = 3;
-            gSaveContext.nextTransitionType = 3;
+            play->transitionTrigger = TRANS_TRIGGER_START;
+            play->transitionType = TRANS_TYPE_03;
+            gSaveContext.nextTransitionType = TRANS_TYPE_03;
             this->stateFlags1 &= ~PLAYER_STATE1_20000000;
             func_8085B28C(play, NULL, 7);
         }
@@ -13960,7 +13959,7 @@ void func_808516B4(Player* this, PlayState* play) {
             this->unk_AE8 = this->actor.depthInWater;
             func_8082E634(play, this, &gameplay_keep_Linkanim_00DFD0);
         }
-    } else if (func_8083B3B4(play, this, D_80862B44) == 0) {
+    } else if (!func_8083B3B4(play, this, D_80862B44)) {
         f32 var_fv1 = (this->unk_AE8 * 0.018f) + 4.0f;
 
         if (this->stateFlags1 & PLAYER_STATE1_800) {
@@ -14610,11 +14609,11 @@ void func_8085421C(Player* this, PlayState* play) {
                 gSaveContext.respawnFlag = -5;
             }
 
-            play->transitionType = 4;
+            play->transitionType = TRANS_TYPE_04;
             play_sound(NA_SE_OC_ABYSS);
         } else {
-            play->transitionType = 2;
-            gSaveContext.nextTransitionType = 2;
+            play->transitionType = TRANS_TYPE_02;
+            gSaveContext.nextTransitionType = TRANS_TYPE_02;
             gSaveContext.seqIndex = 0xFF;
             gSaveContext.nightSeqIndex = 0xFF;
         }
