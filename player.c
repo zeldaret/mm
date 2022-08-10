@@ -1533,7 +1533,7 @@ LinkAnimationHeader* D_8085D0E4[4] = {
     (LinkAnimationHeader* )0x0400D3F0,
 };
 s32 D_8085D0F4 = 0x20101;
-u16 D_8085D0F8[4] = { 0x1000, 0, 0, 0 };
+u16 sReturnEntranceGroupData[4] = { 0x1000, 0, 0, 0 };
 Vec3f D_8085D100 = { 0.0f, 50.0f, 0.0f };
 LinkAnimationHeader* D_8085D118[3] = {
     (LinkAnimationHeader* )0x0400E1B8,
@@ -5659,7 +5659,7 @@ void func_808354A4(PlayState* play, s32 arg1, s32 arg2) {
         play->transitionType = 3;
         gSaveContext.nextTransitionType = 3;
     } else if ((s32) temp_a3 >= 0xFE00) {
-        play->nextEntranceIndex = *(D_8085D0F8 + (((D_8085B9F0 - 0xE6F4)[temp_a3] * 2) + (play->curSpawn * 2)));
+        play->nextEntranceIndex = *(sReturnEntranceGroupData + (((D_8085B9F0 - 0xE6F4)[temp_a3] * 2) + (play->curSpawn * 2)));
         Scene_SetExitFade(play);
     } else {
         if (arg2 != 0) {

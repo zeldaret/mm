@@ -1914,8 +1914,12 @@ s32 (*D_8085D054[])(Player*, PlayState*) = {
     func_80839B18, func_8083A274, func_80834DFC, func_80838A90, func_8083A0CC,
 };
 
-s8 D_8085D090[] = { PLAYER_MWA_STAB_1H, PLAYER_MWA_RIGHT_SLASH_1H, PLAYER_MWA_RIGHT_SLASH_1H,
-                    PLAYER_MWA_LEFT_SLASH_1H };
+s8 D_8085D090[] = {
+    PLAYER_MWA_STAB_1H,
+    PLAYER_MWA_RIGHT_SLASH_1H,
+    PLAYER_MWA_RIGHT_SLASH_1H,
+    PLAYER_MWA_LEFT_SLASH_1H,
+};
 
 s8 D_8085D094[][3] = {
     { PLAYER_MWA_ZORA_PUNCH_LEFT, PLAYER_MWA_ZORA_PUNCH_COMBO, PLAYER_MWA_ZORA_PUNCH_KICK },
@@ -1941,7 +1945,32 @@ LinkAnimationHeader* D_8085D0E4[4] = {
 };
 
 s32 D_8085D0F4 = 0x20101;
-u16 D_8085D0F8[4] = { 0x1000, 0, 0, 0 };
+
+/**
+ * The actual entrances each "return entrance" value can map to.
+ * This is used by scenes that are shared between locations.
+ *
+ * This 1D array is split into groups of entrances.
+ * The start of each group is indexed by `sReturnEntranceGroupIndices` values.
+ * The resulting groups are then indexed by the spawn value.
+ *
+ * The spawn value (`PlayState.curSpawn`) is set to a different value depending on the entrance used to enter the
+ * scene, which allows these dynamic "return entrances" to link back to the previous scene.
+ *
+ * Seems unused on MM
+ */
+u16 sReturnEntranceGroupData[] = {
+    // 0xFE00
+    /* 0 */ 0x1000,
+};
+
+/**
+ * The values are indices into `sReturnEntranceGroupData` marking the start of each group
+ */
+u8 sReturnEntranceGroupIndices[] = {
+    0, // 0xFE00
+};
+
 Vec3f D_8085D100 = { 0.0f, 50.0f, 0.0f };
 
 #endif
@@ -3666,8 +3695,6 @@ s32 func_8083213C(Player* this) {
     return func_8084AC84 == this->actionFunc || func_8084AEEC == this->actionFunc;
 }
 
-extern u8 D_8085B9F0[];
-
 s32 func_8083216C(Player* this, PlayState* play) {
     if (!(this->stateFlags1 & PLAYER_STATE1_800000) && (this->actor.parent != NULL) && Player_IsHoldingHookshot(this)) {
         Player_SetAction(play, this, func_80855E08, 1);
@@ -4943,26 +4970,22 @@ s32 func_80835428(PlayState* play, Player* this) {
     return false;
 }
 
-extern u16 D_8085D0F8[];
-
-// subfunction of OoT's func_80839034 (?)
+// subfunction of OoT's func_80839034
 void func_808354A4(PlayState* play, s32 arg1, s32 arg2) {
     play->nextEntranceIndex = play->setupExitList[arg1];
 
     if (play->nextEntranceIndex == 0xFFFF) {
         gSaveContext.respawnFlag = 4;
-        play->nextEntranceIndex = gSaveContext.respawn[3].entranceIndex;
+        play->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_UNK_3].entranceIndex;
         play->transitionType = TRANS_TYPE_03;
         gSaveContext.nextTransitionType = TRANS_TYPE_03;
     } else if (play->nextEntranceIndex >= 0xFE00) {
-        // TODO: what? I hope this symbol is fake...
-        //! FAKE
-        play->nextEntranceIndex = D_8085D0F8[(D_8085B9F0 - 0xE6F4)[play->nextEntranceIndex ^ 0] + play->curSpawn];
+        play->nextEntranceIndex = sReturnEntranceGroupData[sReturnEntranceGroupIndices[play->nextEntranceIndex - 0xFE00] + play->curSpawn];
 
         Scene_SetExitFade(play);
     } else {
-        if (arg2 != 0) {
-            gSaveContext.respawn[0].entranceIndex = play->nextEntranceIndex;
+        if (arg2) {
+            gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = play->nextEntranceIndex;
             func_80169EFC(&play->state);
             gSaveContext.respawnFlag = -2;
         }
@@ -13213,7 +13236,7 @@ void func_8084E034(Player* this, PlayState* play) {
         s16 doorRot = (this->doorDirection < 0) ? doorActor->world.rot.x : doorActor->world.rot.z;
 
         if (doorRot != 0) {
-            func_808354A4(play, doorRot - 1, 0);
+            func_808354A4(play, doorRot - 1, false);
         }
     }
 }
