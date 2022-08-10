@@ -71,7 +71,6 @@ static ColliderJntSphInit sJntSphInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 2, 25, 25, MASS_IMMOVABLE };
 
-
 void EnBubble_SetDimensions(EnBubble* this, f32 dim) {
     f32 x;
     f32 y;
@@ -99,7 +98,7 @@ void EnBubble_SetDimensions(EnBubble* this, f32 dim) {
 u32 func_8089F59C(EnBubble* this) {
     ColliderInfo* info = &this->colliderSphere.elements[0].info;
 
-    info->toucher.dmgFlags = 8;
+    info->toucher.dmgFlags = DMG_EXPLOSIVES;
     info->toucher.effect = 0;
     info->toucher.damage = 4;
     info->toucherFlags = TOUCH_ON;
