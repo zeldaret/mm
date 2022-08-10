@@ -1452,7 +1452,7 @@ LinkAnimationHeader* D_8085CF70[2] = { (LinkAnimationHeader* )0x0400D8E0, (LinkA
 LinkAnimationHeader* D_8085CF78[2] = { (LinkAnimationHeader* )0x0400D8B8, (LinkAnimationHeader* )0x0400D738 };
 u8 D_8085CF80[4] = { 0x1E, 0x1F, 0, 0 };
 u8 D_8085CF84[4] = { 0x20, 0x21, 0, 0 };
-struct_8085CF88 D_8085CF88[2] = {
+BlureColors D_8085CF88[2] = {
     { 0xFF, -1, 0xFF, 0xFF, 0xFF, -1, 0xFF, 0x40, -1, -1, 0xFF, 0, -1, -1, -1, 0 },
     {
         0xA5,
@@ -3142,7 +3142,7 @@ void func_8082F8BC(PlayState* play, Player* this, enum PlayerActionParam actionP
 void func_8082F938(PlayState* play, Player* this, s32 arg2, s32 arg3) {
     void* sp1C;
     s32 var_a2;
-    struct_8085CF88* var_v1;
+    BlureColors* var_v1;
     u8 temp_t3;
     void* temp_v0;
     void* var_a0;
