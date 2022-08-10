@@ -84,7 +84,7 @@ void EnMm3_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_mm_Skel_0096E8, &object_mm_Anim_00A4E0, this->jointTable,
                        this->morphTable, 16);
     Animation_Change(&this->skelAnime, &object_mm_Anim_00A4E0, -1.0f, Animation_GetLastFrame(&object_mm_Anim_00A4E0),
-                     0.0f, 2, 0.0f);
+                     0.0f, ANIMMODE_ONCE, 0.0f);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
@@ -148,7 +148,7 @@ void func_80A6F3B4(EnMm3* this, PlayState* play) {
                             func_8019F208();
                             Message_StartTextbox(play, 0x2790, &this->actor);
                             this->unk_2B4 = 0x2790;
-                            func_801159EC(-play->msgCtx.unk1206C);
+                            Rupees_ChangeBy(-play->msgCtx.unk1206C);
                         } else {
                             play_sound(NA_SE_SY_ERROR);
                             Message_StartTextbox(play, 0x279C, &this->actor);
@@ -174,7 +174,7 @@ void func_80A6F3B4(EnMm3* this, PlayState* play) {
                         func_8019F208();
                         Message_StartTextbox(play, 0x2790, &this->actor);
                         this->unk_2B4 = 0x2790;
-                        func_801159EC(-play->msgCtx.unk1206C);
+                        Rupees_ChangeBy(-play->msgCtx.unk1206C);
                     } else {
                         play_sound(NA_SE_SY_ERROR);
                         Message_StartTextbox(play, 0x279C, &this->actor);
@@ -314,24 +314,24 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
     this->unk_2B0 &= ~2;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
-        case 1:
-        case 2:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
             break;
 
-        case 3:
+        case TEXT_STATE_3:
             this->unk_2B0 |= 2;
             break;
 
-        case 4:
+        case TEXT_STATE_CHOICE:
             func_80A6F3B4(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             func_80A6F5E4(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 if (this->unk_2B4 == 0x2790) {
                     Player* player = GET_PLAYER(play);

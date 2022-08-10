@@ -5,6 +5,7 @@
 
 #include "global.h"
 #include "z64load.h"
+#include "z64rumble.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/actors/ovl_En_Box/z_en_box.h"
@@ -171,14 +172,14 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
         f32 alphaRatio;
 
         if ((actor->id == ACTOR_PLAYER) && (((Player*)actor)->stateFlags3 & 0x8000)) {
-            f32 tmpScaleZ = actor->scale.z;
+            f32 prevScaleZ = actor->scale.z;
 
             actor->scale.z += 0.03f * fabsf(Math_CosS(((Player*)actor)->unk_AAA));
             actor->shape.shadowScale *= 0.2f;
             alphaRatio = distToFloor * 0.03f;
             actor->shape.shadowAlpha = actor->shape.shadowAlpha * CLAMP_MAX(alphaRatio, 1.0f);
             ActorShadow_Draw(actor, mapper, play, gCircleShadowDL, NULL);
-            actor->scale.z = tmpScaleZ;
+            actor->scale.z = prevScaleZ;
         } else {
             actor->shape.shadowScale *= 0.3f;
             alphaRatio = (distToFloor - 20.0f) * 0.02f;
@@ -390,13 +391,9 @@ void func_800B4B50(Actor* actor, Lights* mapper, PlayState* play) {
     }
 }
 
-void Actor_GetProjectedPos(PlayState* play, Vec3f* arg1, Vec3f* arg2, f32* arg3) {
-    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, arg1, arg2, arg3);
-    if (*arg3 < 1.0f) {
-        *arg3 = 1.0f;
-    } else {
-        *arg3 = 1.0f / *arg3;
-    }
+void Actor_GetProjectedPos(PlayState* play, Vec3f* worldPos, Vec3f* projectedPos, f32* invW) {
+    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, worldPos, projectedPos, invW);
+    *invW = (*invW < 1.0f) ? 1.0f : (1.0f / *invW);
 }
 
 void Target_SetPos(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 z) {
@@ -418,7 +415,7 @@ TatlColor sTatlColorList[] = {
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         { { 255, 255, 0, 255 }, { 200, 155, 0, 0 } },
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },
-    { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } }
+    { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },
 };
 
 void func_800B4F78(TargetContext* targetCtx, s32 type, PlayState* play) {
@@ -479,9 +476,9 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
             TargetContextEntry* entry;
             s16 alpha = 255;
             f32 var1 = 1.0f;
-            Vec3f spBC;
+            Vec3f projectedPos;
             s32 spB8;
-            f32 spB4;
+            f32 invW;
             s32 spB0;
             s32 spAC;
             f32 var2;
@@ -504,22 +501,22 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
                 alpha = targetCtx->unk48;
             }
 
-            Actor_GetProjectedPos(play, &targetCtx->targetCenterPos, &spBC, &spB4);
+            Actor_GetProjectedPos(play, &targetCtx->targetCenterPos, &projectedPos, &invW);
 
-            spBC.x = (160 * (spBC.x * spB4)) * var1;
-            spBC.x = CLAMP(spBC.x, -320.0f, 320.0f);
+            projectedPos.x = ((SCREEN_WIDTH / 2) * (projectedPos.x * invW)) * var1;
+            projectedPos.x = CLAMP(projectedPos.x, -SCREEN_WIDTH, SCREEN_WIDTH);
 
-            spBC.y = (120 * (spBC.y * spB4)) * var1;
-            spBC.y = CLAMP(spBC.y, -240.0f, 240.0f);
+            projectedPos.y = ((SCREEN_HEIGHT / 2) * (projectedPos.y * invW)) * var1;
+            projectedPos.y = CLAMP(projectedPos.y, -SCREEN_HEIGHT, SCREEN_HEIGHT);
 
-            spBC.z = spBC.z * var1;
+            projectedPos.z = projectedPos.z * var1;
 
             targetCtx->unk4C--;
             if (targetCtx->unk4C < 0) {
                 targetCtx->unk4C = 2;
             }
 
-            Target_SetPos(targetCtx, targetCtx->unk4C, spBC.x, spBC.y, spBC.z);
+            Target_SetPos(targetCtx, targetCtx->unk4C, projectedPos.x, projectedPos.y, projectedPos.z);
 
             if ((!(player->stateFlags1 & 0x40)) || (actor != player->unk_730)) {
                 OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 0x39);
@@ -587,8 +584,8 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
     PlayState* play = (PlayState*)gameState;
     Actor* sp68 = NULL;
     s32 category;
-    Vec3f sp58;
-    f32 sp54;
+    Vec3f projectedPos;
+    f32 invW;
 
     if ((player->unk_730 != 0) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->unk_94 = NULL;
@@ -640,8 +637,9 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
     }
 
     if (actor != NULL && targetCtx->unk4B == 0) {
-        Actor_GetProjectedPos(play, &actor->focus.pos, &sp58, &sp54);
-        if ((sp58.z <= 0.0f) || (fabsf(sp58.x * sp54) >= 1.0f) || (fabsf(sp58.y * sp54) >= 1.0f)) {
+        Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &invW);
+        if ((projectedPos.z <= 0.0f) || (fabsf(projectedPos.x * invW) >= 1.0f) ||
+            (fabsf(projectedPos.y * invW) >= 1.0f)) {
             actor = NULL;
         }
     }
@@ -1342,7 +1340,7 @@ void Actor_SetCameraHorseSetting(PlayState* play, Player* player) {
         EnHorse* rideActor = (EnHorse*)player->rideActor;
 
         if ((rideActor != NULL) && !(rideActor->unk_1EC & 0x10)) {
-            func_800DFAC8(Play_GetCamera(play, CAM_ID_MAIN), 4);
+            Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), CAM_SET_HORSE);
         }
     }
 }
@@ -1855,8 +1853,7 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
 s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->actor.flags & ACTOR_FLAG_100) ||
-        ((exchangeItemId > EXCH_ITEM_NONE) && Player_InCsMode(&play->state)) ||
+    if ((player->actor.flags & ACTOR_FLAG_100) || ((exchangeItemId > EXCH_ITEM_NONE) && Player_InCsMode(play)) ||
         (!actor->isTargeted &&
          ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || ((actor->xzDistToPlayer > player->targetActorDistance)) ||
           (xzRange < actor->xzDistToPlayer)))) {
@@ -1886,7 +1883,7 @@ s32 func_800B863C(Actor* actor, PlayState* play) {
 }
 
 s32 Actor_TextboxIsClosing(Actor* actor, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 2) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         actor->flags &= ~ACTOR_FLAG_100;
         return true;
     }
@@ -1932,7 +1929,7 @@ s32 func_800B8718(Actor* actor, GameState* gameState) {
 s32 func_800B874C(Actor* actor, PlayState* play, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->actor.flags & ACTOR_FLAG_20000000) || Player_InCsMode(&play->state) ||
+    if ((player->actor.flags & ACTOR_FLAG_20000000) || Player_InCsMode(play) ||
         (yRange < fabsf(actor->playerHeightRel)) || ((player->unk_A94 < actor->xzDistToPlayer)) ||
         (xzRange < actor->xzDistToPlayer)) {
         return false;
@@ -1963,21 +1960,23 @@ s32 func_800B886C(Actor* actor, PlayState* play) {
 
 void Actor_GetScreenPos(PlayState* play, Actor* actor, s16* x, s16* y) {
     Vec3f projectedPos;
-    f32 w;
+    f32 invW;
 
-    Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &w);
-    *x = (projectedPos.x * w * (SCREEN_WIDTH / 2)) + (SCREEN_WIDTH / 2);
-    *y = (projectedPos.y * w * -(SCREEN_HEIGHT / 2)) + (SCREEN_HEIGHT / 2);
+    Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &invW);
+
+    *x = PROJECTED_TO_SCREEN_X(projectedPos, invW);
+    *y = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
 }
 
-s32 func_800B8934(PlayState* play, Actor* actor) {
-    Vec3f sp2C;
-    f32 sp28;
+s32 Actor_OnScreen(PlayState* play, Actor* actor) {
+    Vec3f projectedPos;
+    f32 invW;
     s32 pad[2];
 
-    Actor_GetProjectedPos(play, &actor->focus.pos, &sp2C, &sp28);
+    Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &invW);
 
-    return (sp2C.x * sp28 >= -1.0f) && (sp2C.x * sp28 <= 1.0f) && (sp2C.y * sp28 >= -1.0f) && (sp2C.y * sp28 <= 1.0f);
+    return (projectedPos.x * invW >= -1.0f) && (projectedPos.x * invW <= 1.0f) && (projectedPos.y * invW >= -1.0f) &&
+           (projectedPos.y * invW <= 1.0f);
 }
 
 s32 Actor_HasParent(Actor* actor, PlayState* play) {
@@ -2205,8 +2204,8 @@ void func_800B9098(Actor* actor) {
     actor->audioFlags |= 0x40;
 }
 
-s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 index, s32 arg4) {
-    if (func_800C99D4(&play->colCtx, polygon, index) == 8) {
+s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgId, s32 arg4) {
+    if (func_800C99D4(&play->colCtx, polygon, bgId) == 8) {
         return true;
     }
 
@@ -2509,10 +2508,10 @@ void Actor_Draw(PlayState* play, Actor* actor) {
     Lights_Draw(light, play->state.gfxCtx);
 
     if (actor->flags & ACTOR_FLAG_1000) {
-        Matrix_SetTranslateRotateYXZ(actor->world.pos.x + play->mainCamera.skyboxOffset.x,
+        Matrix_SetTranslateRotateYXZ(actor->world.pos.x + play->mainCamera.quakeOffset.x,
                                      actor->world.pos.y +
-                                         ((actor->shape.yOffset * actor->scale.y) + play->mainCamera.skyboxOffset.y),
-                                     actor->world.pos.z + play->mainCamera.skyboxOffset.z, &actor->shape.rot);
+                                         ((actor->shape.yOffset * actor->scale.y) + play->mainCamera.quakeOffset.y),
+                                     actor->world.pos.z + play->mainCamera.quakeOffset.z, &actor->shape.rot);
     } else {
         Matrix_SetTranslateRotateYXZ(actor->world.pos.x, actor->world.pos.y + (actor->shape.yOffset * actor->scale.y),
                                      actor->world.pos.z, &actor->shape.rot);
@@ -3155,10 +3154,10 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
             overlayEntry->numLoaded = 0;
         }
 
-        actorInit =
-            (uintptr_t)((overlayEntry->initInfo != NULL)
-                            ? (void*)(-OVERLAY_RELOCATION_OFFSET(overlayEntry) + (uintptr_t)overlayEntry->initInfo)
-                            : NULL);
+        actorInit = (uintptr_t)(
+            (overlayEntry->initInfo != NULL)
+                ? (void*)((uintptr_t)overlayEntry->initInfo - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
+                : NULL);
     }
 
     return actorInit;
@@ -3546,7 +3545,7 @@ void Actor_SpawnBodyParts(Actor* actor, PlayState* play, s32 arg2, Gfx** dList) 
             part = (EnPart*)spawnedPart;
 
             Matrix_MtxFToYXZRot(currentMatrix, &part->actor.shape.rot, false);
-            part->unk_150 = *dList;
+            part->dList = *dList;
             Math_Vec3f_Copy(&part->actor.scale, &actor->scale);
         }
     }
@@ -3795,11 +3794,12 @@ void func_800BC7D8(PlayState* play, s16 y, s16 countdown, s16 speed) {
     Quake_SetCountdown(idx, countdown);
 }
 
+// Actor_RequestRumble?
 void func_800BC848(Actor* actor, PlayState* play, s16 y, s16 countdown) {
     if (y >= 5) {
-        func_8013ECE0(actor->xyzDistToPlayerSq, 255, 20, 150);
+        Rumble_Request(actor->xyzDistToPlayerSq, 255, 20, 150);
     } else {
-        func_8013ECE0(actor->xyzDistToPlayerSq, 180, 20, 100);
+        Rumble_Request(actor->xyzDistToPlayerSq, 180, 20, 100);
     }
     func_800BC770(play, y, countdown);
 }
@@ -4058,7 +4058,7 @@ s32 func_800BD2B4(PlayState* play, Actor* actor, s16* arg2, f32 arg3, u16 (*text
     } else if (*arg2) {
         *arg2 = arg5(play, actor);
         return false;
-    } else if (!func_800B8934(play, actor)) {
+    } else if (!Actor_OnScreen(play, actor)) {
         return false;
     } else if (!func_800B8614(actor, play, arg3)) {
         return false;
@@ -4352,7 +4352,7 @@ s32 func_800BE184(PlayState* play, Actor* actor, f32 xzDist, s16 arg3, s16 arg4,
     s16 phi_v0 = BINANG_SUB(BINANG_ROT180(actor->yawTowardsPlayer), player->actor.shape.rot.y);
     s16 temp_t0 = actor->yawTowardsPlayer - arg5;
 
-    if ((actor->xzDistToPlayer <= xzDist) && (player->swordState != 0)) {
+    if ((actor->xzDistToPlayer <= xzDist) && (player->meleeWeaponState != 0)) {
         if ((arg4 >= ABS_ALT(phi_v0)) && (arg3 >= ABS_ALT(temp_t0))) {
             return true;
         }
@@ -4515,7 +4515,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
         currentMatrix = Matrix_GetCurrent();
 
         // Apply sfx along with damage effect
-        if ((actor != NULL) && (effectAlpha > 0.05f) && (play->gameOverCtx.state == 0)) {
+        if ((actor != NULL) && (effectAlpha > 0.05f) && (play->gameOverCtx.state == GAMEOVER_INACTIVE)) {
             if (type == ACTOR_DRAW_DMGEFF_FIRE) {
                 Actor_PlaySfxAtPos(actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
             } else if (type == ACTOR_DRAW_DMGEFF_BLUE_FIRE) {
@@ -4544,7 +4544,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                            Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, gameplayFrames & 0xFF, 32, 16, 1, 0,
                                             (gameplayFrames * 2) & 0xFF, 64, 32));
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, 255);
-                gSPDisplayList(POLY_XLU_DISP++, gFrozenIceDL);
+                gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment2MaterialDL);
 
                 effectAlphaScaled = effectAlpha * 255.0f;
 
@@ -4575,7 +4575,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gFrozenIceVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment2ModelDL);
                 }
 
                 limbPos = limbPosStart; // reset limbPos
@@ -4655,7 +4655,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
                 }
                 break;
 

@@ -31,45 +31,45 @@ typedef enum {
 } EnRdType;
 
 typedef struct EnRd {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ SkelAnime skelAnime;
-    /* 0x0188 */ EnRdActionFunc actionFunc;
-    /* 0x018C */ EnRdSetupDanceFunc setupDanceFunc;
-    /* 0x0190 */ ColliderCylinder collider;
-    /* 0x01DC */ Vec3f limbPos[15];
-    /* 0x0290 */ s32 limbIndex;
-    /* 0x0294 */ f32 drawDmgEffAlpha;
-    /* 0x0298 */ f32 drawDmgEffScale;
-    /* 0x029C */ Vec3s jointTable[REDEAD_LIMB_MAX];
-    /* 0x0338 */ Vec3s morphTable[REDEAD_LIMB_MAX];
-    /* 0x03D4 */ s16 headShakeTimer;
-    /* 0x03D6 */ union {
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ EnRdActionFunc actionFunc;
+    /* 0x18C */ EnRdSetupDanceFunc setupDanceFunc;
+    /* 0x190 */ ColliderCylinder collider;
+    /* 0x1DC */ Vec3f limbPos[15];
+    /* 0x290 */ s32 limbIndex;
+    /* 0x294 */ f32 drawDmgEffAlpha;
+    /* 0x298 */ f32 drawDmgEffScale;
+    /* 0x29C */ Vec3s jointTable[REDEAD_LIMB_MAX];
+    /* 0x338 */ Vec3s morphTable[REDEAD_LIMB_MAX];
+    /* 0x3D4 */ s16 headShakeTimer;
+    /* 0x3D6 */ union {
                     s16 animationJudderTimer;
                     s16 stunTimer;
                     s16 deathTimer;
                     s16 coffinRiseForwardAccelTimer;
                 };
-    /* 0x03D8 */ s16 headYRotation;
-    /* 0x03DA */ s16 upperBodyYRotation;
-    /* 0x03DC */ s16 flags;
-    /* 0x03DE */ s16 alpha;
-    /* 0x03E0 */ s16 sunsSongStunTimer;
-    /* 0x03E2 */ UNK_TYPE1 unk3E2[0x2];
-    /* 0x03E4 */ union {
+    /* 0x3D8 */ s16 headYRotation;
+    /* 0x3DA */ s16 upperBodyYRotation;
+    /* 0x3DC */ s16 flags;
+    /* 0x3DE */ s16 alpha;
+    /* 0x3E0 */ s16 sunsSongStunTimer;
+    /* 0x3E2 */ UNK_TYPE1 unk3E2[0x2];
+    /* 0x3E4 */ union {
                     s16 danceEndTimer;
                     s16 pirouetteRotationalVelocity;
                 };
-    /* 0x03E6 */ s16 drawDmgEffTimer;
-    /* 0x03E8 */ u8 drawDmgEffType;
-    /* 0x03E9 */ u8 stunnedBySunsSong;
-    /* 0x03EA */ u8 grabDamageTimer;
-    /* 0x03EB */ u8 grabState;
-    /* 0x03EC */ u8 isMourning;
-    /* 0x03ED */ u8 playerStunWaitTimer; // Cannot stun the player if this is non-zero
-    /* 0x03EE */ u8 grabWaitTimer; // Cannot grab the player if this is non-zero
-    /* 0x03EF */ u8 action;
-    /* 0x03F0 */ u8 damageEffect;
-    /* 0x03F1 */ s8 unk_3F1; // related to player->unk_ADD
+    /* 0x3E6 */ s16 drawDmgEffTimer;
+    /* 0x3E8 */ u8 drawDmgEffType;
+    /* 0x3E9 */ u8 stunnedBySunsSong;
+    /* 0x3EA */ u8 grabDamageTimer;
+    /* 0x3EB */ u8 grabState;
+    /* 0x3EC */ u8 isMourning;
+    /* 0x3ED */ u8 playerStunWaitTimer; // Cannot stun the player if this is non-zero
+    /* 0x3EE */ u8 grabWaitTimer; // Cannot grab the player if this is non-zero
+    /* 0x3EF */ u8 action;
+    /* 0x3F0 */ u8 damageEffect;
+    /* 0x3F1 */ s8 unk_3F1; // related to player->unk_ADD
 } EnRd; // size = 0x3F4
 
 extern const ActorInit En_Rd_InitVars;

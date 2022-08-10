@@ -119,7 +119,7 @@ void FireObj_UpdateStateTransitions(PlayState* play, FireObj* fire) {
         FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_3);
     }
     if ((fire->flags & 2) && (player->itemActionParam == PLAYER_AP_STICK)) {
-        Math_Vec3f_Diff(&player->swordInfo[0].tip, &fire->position, &dist);
+        Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &fire->position, &dist);
         if (Math3D_LengthSquared(&dist) < 400.0f) {
             sp40 = true;
         }
@@ -162,7 +162,8 @@ void FireObj_Draw(PlayState* play, FireObj* fire) {
         Matrix_Scale(fire->xScale, fire->yScale, 1.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
@@ -187,7 +188,7 @@ void FireObj_UpdateLight(PlayState* play, FireObjLight* light, FireObj* fire) {
     if (fire->state == FIRE_STATE_3) {
         Lights_PointSetColorAndRadius(&light->lightInfo, 0, 0, 0, -1);
     } else {
-        radius = ((fire->yScale * 140.0f * fire->sizeInv) + 60.0f);
+        radius = (fire->yScale * 140.0f * fire->sizeInv) + 60.0f;
 
         Lights_PointGlowSetInfo(&light->lightInfo, fire->position.x, (fire->position.y + (fire->yScale * 6500.0f)),
                                 fire->position.z,

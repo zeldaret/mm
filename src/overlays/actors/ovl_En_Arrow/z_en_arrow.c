@@ -135,7 +135,7 @@ void EnArrow_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyQuad(play, &this->collider);
 
     if ((this->unk_264 != NULL) && (this->unk_264->update != NULL)) {
-        this->unk_264->flags &= ~0x8000;
+        this->unk_264->flags &= ~ACTOR_FLAG_8000;
     }
 
     if ((this->actor.params >= ENARROW_3) && (this->actor.params < ENARROW_6) && (this->actor.child == NULL)) {
@@ -389,7 +389,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, sp82);
             Actor_MarkForDeath(&this->actor);
         } else {
-            EffectSsHitMark_SpawnCustomScale(play, 0, 150, &this->actor.world.pos);
+            EffectSsHitmark_SpawnCustomScale(play, 0, 150, &this->actor.world.pos);
 
             if (sp50 && (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4)) {
                 sp7C = this->collider.base.at;
@@ -496,14 +496,14 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                 this->unk_264->world.pos.z = ((sp54.z <= sp9C.z) ? 1.0f : -1.0f) + sp9C.z;
 
                 Math_Vec3f_Diff(&this->unk_264->world.pos, &this->actor.world.pos, &this->unk_268);
-                this->unk_264->flags &= ~0x8000;
+                this->unk_264->flags &= ~ACTOR_FLAG_8000;
                 this->unk_264 = NULL;
             } else {
                 Math_Vec3f_Sum(&this->actor.world.pos, &this->unk_268, &this->unk_264->world.pos);
             }
 
             if ((this->unk_262 != 0) && (this->unk_264 != NULL)) {
-                this->unk_264->flags &= ~0x8000;
+                this->unk_264->flags &= ~ACTOR_FLAG_8000;
                 this->unk_264 = NULL;
             }
         } else {
@@ -548,7 +548,7 @@ void EnArrow_Update(Actor* thisx, PlayState* play) {
 
     if ((this->unk_263 != 0) ||
         ((this->actor.params >= ENARROW_0) && ((this->actor.params == ENARROW_7) || (player->unk_D57 != 0))) ||
-        !func_80123358(play, player)) {
+        !Player_InBlockingCsMode(play, player)) {
         this->actionFunc(this, play);
     }
 
@@ -588,7 +588,7 @@ void func_8088B88C(PlayState* play, EnArrow* this, EnArrowUnkStruct* arg2) {
         Matrix_MultVec3f(&sp4C[1], &sp34);
         if (this->actor.params < ENARROW_8) {
             sp30 = this->actor.params < ENARROW_6;
-            if (this->unk_264 == 0) {
+            if (this->unk_264 == NULL) {
                 sp30 &= func_80126440(play, &this->collider, &this->unk_244, &sp40, &sp34);
             } else if (sp30 && (sp40.x == this->unk_244.tip.x) && (sp40.y == this->unk_244.tip.y) &&
                        (sp40.z == this->unk_244.tip.z) && (sp34.x == this->unk_244.base.x) &&

@@ -535,7 +535,8 @@ s32 func_80A1222C(EnGo* this, PlayState* play) {
     s32 ret = false;
 
     if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
-         (play->msgCtx.unk1202E == 1) && (this->unk_3EC == 0) && (this->actor.xzDistToPlayer < 400.0f)) ||
+         (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->unk_3EC == 0) &&
+         (this->actor.xzDistToPlayer < 400.0f)) ||
         (!(gSaveContext.save.weekEventReg[22] & 4) && (play->sceneNum == SCENE_16GORON_HOUSE) &&
          (gSaveContext.sceneSetupIndex == 0) && (this->unk_3EC == 0) && (play->csCtx.currentCsIndex == 1))) {
         ret = true;
@@ -744,10 +745,10 @@ s32 func_80A12A64(EnGo* this, PlayState* play) {
     }
 
     if (objIdx2 >= 0) {
-        gSegments[6] = PHYSICAL_TO_VIRTUAL2(play->objectCtx.status[objIdx2].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx2].segment);
         this->skelAnime.playSpeed = this->unk_398;
         ret = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = PHYSICAL_TO_VIRTUAL2(play->objectCtx.status[objIdx].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx].segment);
     }
 
     return ret;
@@ -790,11 +791,11 @@ s32 func_80A12C48(EnGo* this, PlayState* play, s32 arg2) {
     }
 
     if (objIdx2 >= 0) {
-        gSegments[6] = PHYSICAL_TO_VIRTUAL2(play->objectCtx.status[objIdx2].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx2].segment);
         this->unk_3DC = arg2;
         ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg2);
         this->unk_398 = this->skelAnime.playSpeed;
-        gSegments[6] = PHYSICAL_TO_VIRTUAL2(play->objectCtx.status[objIdx].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx].segment);
     }
 
     return ret;
@@ -1081,7 +1082,7 @@ void func_80A137C0(EnGo* this, PlayState* play, f32 arg2, f32 arg3) {
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, frames1, 0x20, 0x10, 1, 0, frames2, 0x40, 0x20));
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, (u8)arg3);
-        gSPDisplayList(POLY_XLU_DISP++, &gameplay_keep_DL_050D10);
+        gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment3DL);
 
         CLOSE_DISPS(play->state.gfxCtx);
 
@@ -1195,19 +1196,19 @@ s32 func_80A13B1C(EnGo* this, PlayState* play) {
             this->unk_3C0++;
             if (this->unk_3C0 >= 65) {
                 switch (player->transformation) {
-                    case 4:
+                    case PLAYER_FORM_HUMAN:
                         gSaveContext.save.weekEventReg[88] |= 0x80;
                         break;
 
-                    case 1:
+                    case PLAYER_FORM_GORON:
                         gSaveContext.save.weekEventReg[89] |= 4;
                         break;
 
-                    case 2:
+                    case PLAYER_FORM_ZORA:
                         gSaveContext.save.weekEventReg[89] |= 2;
                         break;
 
-                    case 3:
+                    case PLAYER_FORM_DEKU:
                         gSaveContext.save.weekEventReg[89] |= 1;
                         break;
                 }

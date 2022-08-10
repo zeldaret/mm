@@ -123,21 +123,21 @@ s32 func_80953BEC(BgIngate* this) {
 }
 
 s32 func_80953DA8(BgIngate* this, PlayState* play) {
-    Camera* camera = Play_GetCamera(play, CAM_ID_MAIN);
+    Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
     if (gSaveContext.eventInf[3] & 0x20) {
         func_800B7298(play, &this->dyna.actor, 7);
     } else {
         gSaveContext.eventInf[4] |= 2;
     }
-    func_800DFAC8(camera, 47);
+    Camera_ChangeSetting(mainCam, CAM_SET_BOAT_CRUISE);
     play->unk_1887C = 0x63;
 
     return false;
 }
 
 void func_80953E38(PlayState* play) {
-    func_800DFAC8(Play_GetCamera(play, CAM_ID_MAIN), 1);
+    Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), CAM_SET_NORMAL0);
 
     if (!(gSaveContext.eventInf[3] & 0x20)) {
         gSaveContext.eventInf[4] &= (u8)~2;
@@ -178,7 +178,7 @@ void func_80953F8C(BgIngate* this, PlayState* play) {
 
 void func_80953F9C(BgIngate* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    Camera* camera = Play_GetCamera(play, CAM_ID_MAIN);
+    Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
     if (!(gSaveContext.eventInf[4] & 1)) {
 
@@ -214,11 +214,11 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
     }
     if (ActorCutscene_GetCurrentIndex() != this->unk16E) {
         if (ActorCutscene_GetCurrentIndex() != -1) {
-            func_800DFAC8(camera, 1);
+            Camera_ChangeSetting(mainCam, CAM_SET_NORMAL0);
             player->stateFlags1 |= 0x20;
             play->actorCtx.unk5 &= ~0x4;
         } else {
-            func_800DFAC8(camera, 47);
+            Camera_ChangeSetting(mainCam, CAM_SET_BOAT_CRUISE);
             player->stateFlags1 &= ~0x20;
         }
     }
@@ -251,9 +251,9 @@ void func_809542A0(BgIngate* this, PlayState* play) {
         play->nextEntranceIndex = 0xA810;
     }
     gSaveContext.nextCutsceneIndex = 0;
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = 3;
-    gSaveContext.nextTransition = 3;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_03;
+    gSaveContext.nextTransitionType = TRANS_TYPE_03;
     this->actionFunc = func_80953F8C;
     gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
     func_800FE498();
@@ -273,7 +273,7 @@ void func_80954340(BgIngate* this, PlayState* play) {
 void func_809543D4(BgIngate* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((talkState == 4) || (talkState == 5)) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_CHOICE) || (talkState == TEXT_STATE_5)) && Message_ShouldAdvance(play)) {
         switch (this->dyna.actor.textId) {
             case 0x9E4:
                 this->dyna.actor.textId = 0x9E5;

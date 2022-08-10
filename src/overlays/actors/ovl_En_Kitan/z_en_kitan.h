@@ -8,9 +8,9 @@ struct EnKitan;
 typedef void (*EnKitanActionFunc)(struct EnKitan*, PlayState*);
 
 typedef struct EnKitan {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x194];
-    /* 0x02D8 */ EnKitanActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ char unk_144[0x194];
+    /* 0x2D8 */ EnKitanActionFunc actionFunc;
 } EnKitan; // size = 0x2DC
 
 extern const ActorInit En_Kitan_InitVars;

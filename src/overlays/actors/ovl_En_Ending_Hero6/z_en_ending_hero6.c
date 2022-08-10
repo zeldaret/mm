@@ -37,9 +37,9 @@ const ActorInit En_Ending_Hero6_InitVars = {
 };
 
 static FlexSkeletonHeader* sSkeletons[] = {
-    &object_dt_Skel_00B0CC,    &object_bai_Skel_007908,   &object_toryo_Skel_007150,
-    &gSoldierSkeleton,         &object_daiku_Skel_00A850, &object_daiku_Skel_00A850,
-    &object_daiku_Skel_00A850, &object_daiku_Skel_00A850, &object_daiku_Skel_00A850,
+    &object_dt_Skel_00B0CC,    &object_bai_Skel_007908,   &object_toryo_Skel_007150, &gSoldierSkel,
+    &object_daiku_Skel_00A850, &object_daiku_Skel_00A850, &object_daiku_Skel_00A850, &object_daiku_Skel_00A850,
+    &object_daiku_Skel_00A850,
 };
 
 static AnimationHeader* sAnimations[] = {
@@ -69,7 +69,7 @@ void EnEndingHero6_Destroy(Actor* thisx, PlayState* play) {
 void EnEndingHero6_InitSkelAnime(EnEndingHero6* this, s32 npcIndex) {
     this->animIndex = npcIndex;
     this->frameCount = Animation_GetLastFrame(sAnimations[npcIndex]);
-    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.f, this->frameCount, 0, 0.0f);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.f, this->frameCount, ANIMMODE_LOOP, 0.0f);
 }
 
 void EnEndingHero6_SetupIdle(EnEndingHero6* this) {
