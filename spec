@@ -5044,8 +5044,7 @@ beginseg
     name "ovl_Dm_Ah"
     compress
     include "build/src/overlays/actors/ovl_Dm_Ah/z_dm_ah.o"
-    include "build/data/ovl_Dm_Ah/ovl_Dm_Ah.data.o"
-    include "build/data/ovl_Dm_Ah/ovl_Dm_Ah.reloc.o"
+    include "build/src/overlays/actors/ovl_Dm_Ah/ovl_Dm_Ah_reloc.o"
 endseg
 
 beginseg
