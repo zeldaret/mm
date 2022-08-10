@@ -14141,40 +14141,14 @@ void func_80851EAC(Player* this) {
 
 extern struct_8085D714 D_8085D714[];
 
-#ifdef NON_MATCHING
 void func_80851EC8(PlayState* play, Player* this) {
-    s32 temp_v1;
-    f32* unk_B10;
-    s16* unk_B86;
-    struct_8085D714* arr;
-    s32 new_var;
+    struct_8085D714* temp3 = &D_8085D714[play->msgCtx.unk12048];
+    f32* temp2 = &this->unk_B08[play->msgCtx.unk12048] + 2; // TODO: investigate this array, this may be unk_B10
+    s16* temp_a3 = &this->unk_B86[temp3->unk_0];
 
-    temp_v1 = play->msgCtx.unk12048;
-
-    arr = D_8085D714;
-    arr += temp_v1;
-
-    if ((new_var = temp_v1)) {}
-
-    unk_B86 = this->unk_B86;
-    unk_B10 = &this->unk_B08[2];
-
-    unk_B86 += arr->unk_0;
-    unk_B10 += temp_v1;
-
-    // temp_v1 = play->msgCtx.unk12048;
-    *unk_B86 = (temp_v1 = play->msgCtx.unk12048);
-
-    *unk_B10 = 3.0f;
-    // this->unk_B86[D_8085D714[temp_v1].unk_0] = temp_v1;
-
-    //*unk_B86 = temp_v1;
-    // this->unk_B08[play->msgCtx.unk12048 + 2] = 3.0f;
+    temp_a3[0] = play->msgCtx.unk12048;
+    temp2[0] = 3.0f;
 }
-#else
-void func_80851EC8(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80851EC8.s")
-#endif
 
 void func_80851F18(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80851F18.s")
