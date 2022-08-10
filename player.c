@@ -1,4 +1,3 @@
-void func_80854CD0(f32 arg0, u8* arg2, u8* arg3, u8* arg4, u8* arg5, EnvLightSettings* arg6, u8* arg7, void* arg8, LightSettings* arg9, s16* argA, u8* argB, u8* argC, u8* argC); /* static */
 extern ? D_0400CF48;
 extern ? D_0400CF58;
 extern LinkAnimationHeader D_0400CF98;
@@ -167,6 +166,10 @@ static Vec3f D_8085D918 = { 0.0f, 0.5f, 0.0f };
 static Vec3f D_8085D924 = { 0.0f, 0.5f, 0.0f };
 static Color_RGBA8 D_8085D930 = { 0xFF, 0xFF, 0x37, 0xFF };
 static Color_RGBA8 D_8085D934 = { 0x64, 0x32, 0, 0 };
+static s32 D_8085D938 = 0xFFC8C800;
+static s32 D_8085D93C = 0xFFFF0000;
+static Vec3f D_8085D940 = { 0.0f, 0.3f, 0.0f };
+static Vec3f D_8085D94C = { 0.0f, -0.025f, 0.0f };
 static ? ovl_player_actor_Reloc;                    /* unable to generate initializer; const */
 u8 D_8085B9F0[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 };
 u8 D_8085BA08[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 };
@@ -2013,10 +2016,6 @@ AnimSfxEntry D_8085D8F0[5] = {
 AnimSfxEntry D_8085D904[1] = { { 0x1856, -0x808 } };
 u16 D_8085D908[4] = { 0x1E80, 0x1E20, 0x1E40, 0x1E10 };
 struct_8085D910 D_8085D910[2] = { { 0x10, 0xA, 0x3B, 0x3F }, { 9, 0x32, 0xA, 0xD } };
-Color_RGBA8 D_8085D938 = { 0xFF, 0xC8, 0xC8, 0 };
-Color_RGBA8 D_8085D93C = { 0xFF, 0xFF, 0, 0 };
-Vec3f D_8085D940 = { 0.0f, 0.3f, 0.0f };
-Vec3f D_8085D94C = { 0.0f, -0.025f, 0.0f };
 f32 D_8085D958[2] = { 600.0f, 960.0f };
 Vec3f D_8085D960 = { -30.0f, 50.0f, 0.0f };
 Vec3f D_8085D96C = { 30.0f, 50.0f, 0.0f };
@@ -12016,16 +12015,16 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         }
         temp_v0_12 = player->transformation;
         if (((s32) temp_v0_12 > 0) && ((s32) temp_v0_12 < 4)) {
-            func_800BBB74(&player->eyeTexId, 0x14, 0x50, 3);
+            func_800BBB74(&player->blinkInfo, 0x14, 0x50, 3);
         } else {
-            func_800BBAC0(&player->eyeTexId, 0x14, 0x50, 6);
+            func_800BBAC0(&player->blinkInfo, 0x14, 0x50, 6);
         }
         if (sp30->unk_840 & 0x20) {
             var_a2 = 0;
         } else {
             var_a2 = 3;
         }
-        player->actor.shape.face = var_a2 + player->eyeTexId;
+        player->actor.shape.face = var_a2 + player->blinkInfo.eyeTexIndex;
         if (player->currentMask == 4) {
             func_80124420(player);
         }
@@ -12821,20 +12820,20 @@ block_21:
     return func_80832754(this, var_a1);
 }
 
-void func_8084748C(Player* this, f32* arg1, f32 arg2, s16 arg3) {
+void func_8084748C(Player* this, f32* speed, f32 speedTarget, s16 yawTarget) {
     f32 temp_fv0;
     f32 temp_fv1;
     f32 var_fa0;
     f32 var_fa1;
     f32 var_fv1;
 
-    var_fa1 = arg2;
-    var_fa0 = *arg1;
+    var_fa1 = speedTarget;
+    var_fa0 = *speed;
     temp_fv1 = this->skelAnime.curFrame - 10.0f;
     temp_fv0 = ((f32) gGameInfo->data[0x2D] / 100.0f) * 0.8f;
     if (temp_fv0 < var_fa0) {
-        *arg1 = temp_fv0;
-        var_fa0 = *arg1;
+        *speed = temp_fv0;
+        var_fa0 = *speed;
     }
     if ((temp_fv1 > 0.0f) && (temp_fv1 < 16.0f)) {
         var_fv1 = fabsf(temp_fv1) * 0.5f;
@@ -12842,8 +12841,8 @@ void func_8084748C(Player* this, f32* arg1, f32 arg2, s16 arg3) {
         var_fa1 = 0.0f;
         var_fv1 = 0.0f;
     }
-    Math_AsymStepToF(arg1, var_fa1 * 0.8f, var_fv1, (fabsf(var_fa0) * 0.02f) + 0.05f);
-    Math_ScaledStepToS(&this->currentYaw, arg3, 0x640);
+    Math_AsymStepToF(speed, var_fa1 * 0.8f, var_fv1, (fabsf(var_fa0) * 0.02f) + 0.05f);
+    Math_ScaledStepToS(&this->currentYaw, yawTarget, 0x640);
 }
 
 void func_808475B4(Player* this) {
@@ -13130,12 +13129,12 @@ block_36:
     return 0;
 }
 
-void func_80847E2C(Player* this, f32 arg1, f32 arg2) {
+void func_80847E2C(Player* this, f32 arg1, f32 minFrame) {
     f32 temp_fv1;
     f32 var_fa0;
 
     temp_fv1 = this->unk_B48;
-    if ((temp_fv1 != 0.0f) && (arg2 <= this->skelAnime.curFrame)) {
+    if ((temp_fv1 != 0.0f) && (minFrame <= this->skelAnime.curFrame)) {
         if (arg1 < fabsf(temp_fv1)) {
             if (temp_fv1 >= 0.0f) {
                 var_fa0 = 1.0f * arg1;
@@ -18558,14 +18557,13 @@ void func_80854C70(Player* this, PlayState* play) {
     }
 }
 
-void func_80854CD0(f32 arg0, u8* arg1, u8* arg2, u8* arg3, u8* arg4, EnvLightSettings* arg5, u8* arg6, void* arg7, LightSettings* arg8, s16* arg9, u8* argA, u8* argB, u8* argC) {
-    EnvLightSettings* temp_t0;
-    EnvLightSettings* var_t0;
-    LightSettings* temp_t4;
-    LightSettings* var_t4;
+void func_80854CD0(f32 arg0, u16* arg1, u8* arg2, u8* arg3, u8* arg4, u16* arg5, u8* arg6, u8* arg7, u8* arg8, s16* arg9, u8* argA, u8* argB, u8* argC) {
     s16* temp_t5;
     s16* var_t5;
     s32 var_v0;
+    u16* temp_t0;
+    u16* var_a1;
+    u16* var_t0;
     u8 temp_s2;
     u8 temp_s2_2;
     u8 temp_t3;
@@ -18573,20 +18571,15 @@ void func_80854CD0(f32 arg0, u8* arg1, u8* arg2, u8* arg3, u8* arg4, EnvLightSet
     u8 temp_t7;
     u8 var_t6;
     u8 var_v1;
-    u8* temp_s0;
-    u8* temp_s1;
-    u8* temp_s3;
-    u8* temp_t1;
     u8* var_a0;
-    u8* var_a1;
     u8* var_a2;
     u8* var_a3;
     u8* var_s0;
     u8* var_s1;
     u8* var_s3;
     u8* var_t1;
-    void* temp_t2;
-    void* var_t2;
+    u8* var_t2;
+    u8* var_t4;
 
     var_a1 = arg1;
     var_a2 = arg2;
@@ -18620,34 +18613,28 @@ void func_80854CD0(f32 arg0, u8* arg1, u8* arg2, u8* arg3, u8* arg4, EnvLightSet
             var_s1 += 1;
             var_s3 += 1;
             var_a1->unk_-2 = (s16) (((s32) ((f32) (var_t6 - var_v1) * arg0) + var_v1) - temp_t7);
-            temp_t3 = var_t2->unk_-1;
-            var_t0->unk_-2 = (s16) (((s32) ((f32) (var_t1->unk_-1 - temp_t3) * arg0) + temp_t3) - var_t4->unk_-1);
-            temp_s2 = var_s1->unk_-1;
-            var_t5->unk_-2 = (s16) (((s32) ((f32) (var_s0->unk_-1 - temp_s2) * arg0) + temp_s2) - var_s3->unk_-1);
-            var_v1 = *var_a3;
-            var_t6 = *var_a2;
+            temp_t3 = var_t2[1].unk_-1;
+            var_t0->unk_-2 = (s16) (((s32) ((f32) (var_t1[1].unk_-1 - temp_t3) * arg0) + temp_t3) - var_t4[1].unk_-1);
+            temp_s2 = var_s1[1].unk_-1;
+            var_t5->unk_-2 = (s16) (((s32) ((f32) (var_s0[1].unk_-1 - temp_s2) * arg0) + temp_s2) - var_s3[1].unk_-1);
+            var_v1 = var_a3[1];
+            var_t6 = var_a2[1];
         } while (var_v0 != 3);
     }
     temp_t0 = var_t0 + 2;
-    temp_t1 = var_t1 + 1;
-    temp_t2 = var_t2 + 1;
-    temp_t4 = var_t4 + 1;
     temp_t5 = var_t5 + 2;
-    temp_s0 = var_s0 + 1;
-    temp_s1 = var_s1 + 1;
-    temp_s3 = var_s3 + 1;
     (var_a1 + 2)->unk_-2 = (s16) (((s32) ((f32) (var_t6 - var_v1) * arg0) + var_v1) - *var_a0);
-    temp_t3_2 = temp_t2->unk_-1;
-    temp_t0->unk_-2 = (s16) (((s32) ((f32) (temp_t1->unk_-1 - temp_t3_2) * arg0) + temp_t3_2) - temp_t4->unk_-1);
-    temp_s2_2 = temp_s1->unk_-1;
-    temp_t5->unk_-2 = (s16) (((s32) ((f32) (temp_s0->unk_-1 - temp_s2_2) * arg0) + temp_s2_2) - temp_s3->unk_-1);
-    argC = temp_s3;
-    argB = temp_s1;
-    argA = temp_s0;
+    temp_t3_2 = var_t2[1].unk_-1;
+    temp_t0->unk_-2 = (s16) (((s32) ((f32) (var_t1[1].unk_-1 - temp_t3_2) * arg0) + temp_t3_2) - var_t4[1].unk_-1);
+    temp_s2_2 = var_s1[1].unk_-1;
+    temp_t5->unk_-2 = (s16) (((s32) ((f32) (var_s0[1].unk_-1 - temp_s2_2) * arg0) + temp_s2_2) - var_s3[1].unk_-1);
+    argC = var_s3 + 1;
+    argB = var_s1 + 1;
+    argA = var_s0 + 1;
     arg9 = temp_t5;
-    arg8 = temp_t4;
-    arg7 = temp_t2;
-    arg6 = temp_t1;
+    arg8 = var_t4 + 1;
+    arg7 = var_t2 + 1;
+    arg6 = var_t1 + 1;
     arg5 = temp_t0;
     arg4 = var_a0 + 1;
 }
@@ -18705,7 +18692,7 @@ void func_80854EFC(PlayState* play, f32 arg1, struct_8085D848_unk_00* arg2) {
     }
     temp_t2 = *var_t0;
     play->envCtx.lightSettings.fogNear = ((s32) ((f32) (var_v1->unk_00 - temp_t2) * var_fa0) + temp_t2) - (s16) play->envCtx.unk_C4.fogNear;
-    func_80854CD0(var_fa0, (u8* ) play->envCtx.lightSettings.fogColor, &var_v1->unk_02, (u8* ) (var_t0 + 2), play->envCtx.unk_C4.fogColor, &play->envCtx.lightSettings, &var_v1->unk_05, var_t0 + 5, &play->envCtx.unk_C4, play->envCtx.lightSettings.diffuseColor1, var_t3, var_t4, play->envCtx.unk_C4.diffuseColor1);
+    func_80854CD0(var_fa0, (u16* ) play->envCtx.lightSettings.fogColor, &var_v1->unk_02, (u8* ) (var_t0 + 2), play->envCtx.unk_C4.fogColor, (u16* ) &play->envCtx.lightSettings, &var_v1->unk_05, var_t0 + 5, play->envCtx.unk_C4.ambientColor, play->envCtx.lightSettings.diffuseColor1, var_t3, var_t4, play->envCtx.unk_C4.diffuseColor1);
 }
 
 void func_808550D0(PlayState* play, Player* this, f32 arg2, f32 arg3, s32 arg4) {
@@ -19084,12 +19071,12 @@ void func_80855E08(Player* this, PlayState* play) {
     }
 }
 
-void func_80855F9C(PlayState* arg0, Player* this) {
+void func_80855F9C(PlayState* play, Player* this) {
     f32 sp24;
     s16 sp22;
 
     this->stateFlags2 |= 0x20;
-    func_80832F78(this, &sp24, &sp22, 0.018f, arg0);
+    func_80832F78(this, &sp24, &sp22, 0.018f, play);
     Math_ScaledStepToS(&this->currentYaw, sp22, 0x258);
 }
 
@@ -19282,8 +19269,8 @@ void func_808566C0(PlayState* play, Player* this, s32 arg2, f32 arg3, f32 arg4, 
     f32 var_fv1_2;
     s32 var_v0;
 
-    sp4C = (s32) D_8085D938;
-    sp48 = (s32) D_8085D93C;
+    sp4C = D_8085D938;
+    sp48 = D_8085D93C;
     if (Rand_ZeroOne() < 0.5f) {
         var_fv1 = -1.0f;
     } else {
@@ -20662,7 +20649,7 @@ void func_80859B54(PlayState* play, Player* this, s32 arg2) {
     Player_SetModels(this, Player_ActionToModelGroup(this, (enum PlayerActionParam) this->heldItemActionParam));
 }
 
-void func_80859BA8(PlayState* play, Player* this, CsCmdActorAction* playerAction) {
+void func_80859BA8(PlayState* play, Player* this, void* arg) {
     f32 sp4;
     f32 temp_fa0;
     f32 temp_ft1;
@@ -20670,20 +20657,20 @@ void func_80859BA8(PlayState* play, Player* this, CsCmdActorAction* playerAction
     f32 temp_fv1;
     u16 temp_v0;
 
-    temp_fv0 = (f32) playerAction->startPos.x;
-    temp_v0 = playerAction->startFrame;
-    temp_fv1 = (f32) playerAction->startPos.y;
-    temp_fa0 = (f32) playerAction->startPos.z;
-    temp_ft1 = (f32) (play->csCtx.frames - temp_v0) / (f32) (playerAction->endFrame - temp_v0);
+    temp_fv0 = (f32) arg->unk_C;
+    temp_v0 = arg->unk_2;
+    temp_fv1 = (f32) arg->unk_10;
+    temp_fa0 = (f32) arg->unk_14;
+    temp_ft1 = (f32) (play->csCtx.frames - temp_v0) / (f32) (arg->unk_4 - temp_v0);
     sp4 = temp_ft1;
-    this->actor.world.pos.x = (((f32) playerAction->endPos.x - temp_fv0) * temp_ft1) + temp_fv0;
-    this->actor.world.pos.y = (((f32) playerAction->endPos.y - temp_fv1) * sp4) + temp_fv1;
-    this->actor.world.pos.z = (((f32) playerAction->endPos.z - temp_fa0) * sp4) + temp_fa0;
+    this->actor.world.pos.x = (((f32) arg->unk_18 - temp_fv0) * temp_ft1) + temp_fv0;
+    this->actor.world.pos.y = (((f32) arg->unk_1C - temp_fv1) * sp4) + temp_fv1;
+    this->actor.world.pos.z = (((f32) arg->unk_20 - temp_fa0) * sp4) + temp_fa0;
 }
 
 void func_80859C60(PlayState* play, Player* this, void* arg2) {
     if (arg2 != NULL) {
-        func_80859BA8(play, this, (CsCmdActorAction* ) arg2);
+        func_80859BA8(play, this, arg2);
     }
     LinkAnimation_Update(play, &this->skelAnime);
 }
@@ -20762,7 +20749,7 @@ void func_80859FF4(PlayState* play, Player* this, s32 arg2) {
     }
 }
 
-void func_8085A04C(PlayState* play, Player* this, CsCmdActorAction* playerAction) {
+void func_8085A04C(PlayState* play, Player* this, void* arg) {
     f32 sp1C;
     f32 temp_fa0;
     f32 temp_fa1;
@@ -20770,14 +20757,14 @@ void func_8085A04C(PlayState* play, Player* this, CsCmdActorAction* playerAction
     f32 temp_fv1;
     u16 temp_v0;
 
-    temp_fv1 = (f32) playerAction->endPos.x;
-    temp_fa1 = (f32) playerAction->endPos.z;
-    temp_fa0 = (f32) playerAction->endPos.y;
-    sp1C = (f32) playerAction->startPos.z - temp_fa1;
-    temp_v0 = playerAction->endFrame;
-    temp_fv0 = (f32) (temp_v0 - play->csCtx.frames) / (f32) (temp_v0 - playerAction->startFrame);
-    this->actor.world.pos.x = (((f32) playerAction->startPos.x - temp_fv1) * temp_fv0) + temp_fv1;
-    this->actor.world.pos.y = (((f32) playerAction->startPos.y - temp_fa0) * temp_fv0) + temp_fa0;
+    temp_fv1 = (f32) arg->unk_18;
+    temp_fa1 = (f32) arg->unk_20;
+    temp_fa0 = (f32) arg->unk_1C;
+    sp1C = (f32) arg->unk_14 - temp_fa1;
+    temp_v0 = arg->unk_4;
+    temp_fv0 = (f32) (temp_v0 - play->csCtx.frames) / (f32) (temp_v0 - arg->unk_2);
+    this->actor.world.pos.x = (((f32) arg->unk_C - temp_fv1) * temp_fv0) + temp_fv1;
+    this->actor.world.pos.y = (((f32) arg->unk_10 - temp_fa0) * temp_fv0) + temp_fa0;
     this->actor.world.pos.z = (sp1C * temp_fv0) + temp_fa1;
     LinkAnimation_Update(play, &this->skelAnime);
 }
@@ -20830,7 +20817,7 @@ void func_8085A330(PlayState* play, Player* this, s32 arg2) {
 void func_8085A364(PlayState* play, Player* this, void* arg2) {
     void* temp_v0;
 
-    func_80859BA8(play, this, (CsCmdActorAction* ) arg2);
+    func_80859BA8(play, this, arg2);
     if (LinkAnimation_Update(play, &this->skelAnime) != 0) {
         func_8082EB18(play, this, &D_0400D100);
     }
