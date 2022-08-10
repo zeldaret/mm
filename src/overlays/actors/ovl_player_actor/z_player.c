@@ -14730,8 +14730,28 @@ void func_80854C70(Player* this, PlayState* play) {
     }
 }
 
-// declaration is messy
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80854CD0.s")
+void func_80854CD0(f32 arg0, u16* arg1, u8* arg2, u8* arg3, u8* arg4, u16* arg5, u8* arg6, u8* arg7, u8* arg8, s16* arg9, u8* argA, u8* argB, u8* argC) {
+    s32 i;
+
+    for (i = 0; i < 3; i++) {
+        *arg1 = ((s32) ((*arg2 - *arg3) * arg0) + *arg3) - *arg4;
+        *arg5 = ((s32) ((*arg6 - *arg7) * arg0) + *arg7) - *arg8;
+        *arg9 = ((s32) ((*argA - *argB) * arg0) + *argB) - *argC;
+
+        arg1++;
+        arg2++;
+        arg3++;
+        arg4++;
+        arg5++;
+        arg6++;
+        arg7++;
+        arg8++;
+        arg9++;
+        argA++;
+        argB++;
+        argC++;
+    }
+}
 
 extern struct struct_8085D848 D_8085D848[];
 
