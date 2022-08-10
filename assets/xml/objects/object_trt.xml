@@ -44,9 +44,9 @@
         <Texture Name="gKotakeFingerTLUT" OutName="kotake_finger_tlut" Format="rgba16" Width="16" Height="16" Offset="0x9278" />
         <Texture Name="gKotakeNeckTLUT" OutName="kotake_neck_tlut" Format="rgba16" Width="16" Height="16" Offset="0x9478" />
         <Texture Name="gKotakeNostrilsTLUT" OutName="kotake_nostrils_tlut" Format="rgba16" Width="16" Height="16" Offset="0x9678" />
-        <Texture Name="gKotakePatternColorfulTex" OutName="kotake_pattern_colorful" Format="rgba16" Width="32" Height="32" Offset="0x9878" />
+        <Texture Name="gKotakeGerudoFabricTex" OutName="kotake_gerudo_fabric" Format="rgba16" Width="32" Height="32" Offset="0x9878" />
         <Texture Name="gKotakeRobeTex" OutName="kotake_robe" Format="rgba16" Width="16" Height="16" Offset="0xA078" />
-        <Texture Name="gKotakePatternBWTex" OutName="kotake_pattern_bw" Format="rgba16" Width="16" Height="16" Offset="0xA278" />
+        <Texture Name="gKotakeGerudoRobePatternTex" OutName="kotake_gerudo_robe_pattern" Format="rgba16" Width="16" Height="16" Offset="0xA278" />
         <Texture Name="gKotakeRobeTrimTex" OutName="kotake_robe_trim" Format="rgba16" Width="16" Height="16" Offset="0xA478" />
         <Texture Name="gKotakeSkinTex" OutName="kotake_skin" Format="ci8" Width="16" Height="8" Offset="0xA678" />
         <Texture Name="gKotakeMouthTex" OutName="kotake_mouth" Format="ci8" Width="8" Height="8" Offset="0xA6F8" />
@@ -57,13 +57,13 @@
         <Texture Name="gKotakeFingerTex" OutName="kotake_finger" Format="ci8" Width="8" Height="16" Offset="0xAA38" />
         <Texture Name="gKotakeBroomHandleTex" OutName="kotake_broom_handle" Format="rgba16" Width="8" Height="8" Offset="0xAAB8" />->
         <Texture Name="gKotakeBroomHeadTex" OutName="kotake_broom_head" Format="rgba16" Width="16" Height="32" Offset="0xAB38" />
-        <Texture Name="gKotakeForheadJewelHolderTex" OutName="kotake_forehead_jewel_holder" Format="rgba16" Width="16" Height="8" Offset="0xAF38" />
+        <Texture Name="gKotakeJewelHolderTex" OutName="kotake_jewel_holder" Format="rgba16" Width="16" Height="8" Offset="0xAF38" />
         <Texture Name="gKotakeNeckTex" OutName="kotake_neck" Format="ci8" Width="8" Height="8" Offset="0xB038" />
         <Texture Name="gKotakeNostrilsTex" OutName="kotake_nostrils" Format="ci8" Width="8" Height="8" Offset="0xB078" />
         <Texture Name="gKotakeEyeOpenTex" OutName="kotake_eye_open" Format="rgba16" Width="32" Height="32" Offset="0xB0B8" />
         <Texture Name="gKotakeEyeHalfTex" OutName="kotake_eye_half" Format="rgba16" Width="32" Height="32" Offset="0xB8B8" />
         <Texture Name="gKotakeEyeClosedTex" OutName="kotake_eye_closed" Format="rgba16" Width="32" Height="32" Offset="0xC0B8" />
-        <Texture Name="gKotakeForeheadJewelTex" OutName="kotake_forehead_jewel" Format="rgba16" Width="8" Height="8" Offset="0xC8B8" />
+        <Texture Name="gKotakeJewelTex" OutName="kotake_jewel" Format="rgba16" Width="8" Height="8" Offset="0xC8B8" />
 
         <!-- Unused Eye TexAnim-->
         <TextureAnimation Name="gKotakeEyesTexAnim" Offset="0xC988" />
