@@ -1776,40 +1776,74 @@ struct_8085CD24 D_8085CD24[] = {
 };
 
 // AttackAnimInfo sMeleeAttackAnimInfo
-struct_8085CD30 D_8085CD30[] = {
+struct_8085CD30 D_8085CD30[PLAYER_MWA_MAX] = {
+    // PLAYER_MWA_FORWARD_SLASH_1H
     { &gameplay_keep_Linkanim_00D868, &gameplay_keep_Linkanim_00D878, &gameplay_keep_Linkanim_00D870, 1, 4 },
+    // PLAYER_MWA_FORWARD_SLASH_2H
     { &gameplay_keep_Linkanim_00D6E0, &gameplay_keep_Linkanim_00D6E8, &gameplay_keep_Linkanim_00D398, 1, 4 },
+    // PLAYER_MWA_FORWARD_COMBO_1H
     { &gameplay_keep_Linkanim_00D880, &gameplay_keep_Linkanim_00D888, &gameplay_keep_Linkanim_00D428, 0, 5 },
+    // PLAYER_MWA_FORWARD_COMBO_2H
     { &gameplay_keep_Linkanim_00D6F0, &gameplay_keep_Linkanim_00D6F8, &gameplay_keep_Linkanim_00D3A0, 1, 7 },
+    // PLAYER_MWA_RIGHT_SLASH_1H
     { &gameplay_keep_Linkanim_00D788, &gameplay_keep_Linkanim_00D790, &gameplay_keep_Linkanim_00D3C0, 1, 4 },
+    // PLAYER_MWA_RIGHT_SLASH_2H
     { &gameplay_keep_Linkanim_00D6A0, &gameplay_keep_Linkanim_00D6A8, &gameplay_keep_Linkanim_00D378, 0, 5 },
+    // PLAYER_MWA_RIGHT_COMBO_1H
     { &gameplay_keep_Linkanim_00D798, &gameplay_keep_Linkanim_00D7A0, &gameplay_keep_Linkanim_00D3C8, 2, 8 },
+    // PLAYER_MWA_RIGHT_COMBO_2H
     { &gameplay_keep_Linkanim_00D6B0, &gameplay_keep_Linkanim_00D6B8, &gameplay_keep_Linkanim_00D380, 3, 8 },
+    // PLAYER_MWA_LEFT_SLASH_1H
     { &gameplay_keep_Linkanim_00D7C0, &gameplay_keep_Linkanim_00D7C8, &gameplay_keep_Linkanim_00D3D0, 0, 4 },
+    // PLAYER_MWA_LEFT_SLASH_2H
     { &gameplay_keep_Linkanim_00D6C0, &gameplay_keep_Linkanim_00D6C8, &gameplay_keep_Linkanim_00D388, 0, 5 },
+    // PLAYER_MWA_LEFT_COMBO_1H
     { &gameplay_keep_Linkanim_00D7D0, &gameplay_keep_Linkanim_00D7D8, &gameplay_keep_Linkanim_00D3D8, 0, 6 },
+    // PLAYER_MWA_LEFT_COMBO_2H
     { &gameplay_keep_Linkanim_00D6D0, &gameplay_keep_Linkanim_00D6D8, &gameplay_keep_Linkanim_00D390, 1, 5 },
+    // PLAYER_MWA_STAB_1H
     { &gameplay_keep_Linkanim_00D890, &gameplay_keep_Linkanim_00D898, &gameplay_keep_Linkanim_00D430, 0, 3 },
+    // PLAYER_MWA_STAB_2H
     { &gameplay_keep_Linkanim_00D700, &gameplay_keep_Linkanim_00D708, &gameplay_keep_Linkanim_00D3A8, 0, 3 },
+    // PLAYER_MWA_STAB_COMBO_1H
     { &gameplay_keep_Linkanim_00D8A0, &gameplay_keep_Linkanim_00D8A8, &gameplay_keep_Linkanim_00D438, 1, 9 },
+    // PLAYER_MWA_STAB_COMBO_2H
     { &gameplay_keep_Linkanim_00D710, &gameplay_keep_Linkanim_00D718, &gameplay_keep_Linkanim_00D3B0, 1, 8 },
+    // PLAYER_MWA_FLIPSLASH_START
     { &gameplay_keep_Linkanim_00D850, &gameplay_keep_Linkanim_00D840, &gameplay_keep_Linkanim_00D840, 7, 99 },
+    // PLAYER_MWA_JUMPSLASH_START
     { &gameplay_keep_Linkanim_00D720, &gameplay_keep_Linkanim_00D730, &gameplay_keep_Linkanim_00D730, 7, 99 },
+    // PLAYER_MWA_ZORA_JUMPKICK_START
     { &gameplay_keep_Linkanim_00E3F0, &gameplay_keep_Linkanim_00E3F8, &gameplay_keep_Linkanim_00E3F8, 8, 99 },
+    // PLAYER_MWA_FLIPSLASH_FINISH
     { &gameplay_keep_Linkanim_00D840, &gameplay_keep_Linkanim_00D848, &gameplay_keep_Linkanim_00D848, 1, 2 },
+    // PLAYER_MWA_JUMPSLASH_FINISH
     { &gameplay_keep_Linkanim_00D730, &gameplay_keep_Linkanim_00D728, &gameplay_keep_Linkanim_00D728, 1, 2 },
+    // PLAYER_MWA_ZORA_JUMPKICK_FINISH
     { &gameplay_keep_Linkanim_00E3F8, &gameplay_keep_Linkanim_00E410, &gameplay_keep_Linkanim_00DF18, 1, 2 },
+    // PLAYER_MWA_BACKSLASH_RIGHT
     { &gameplay_keep_Linkanim_00D950, &gameplay_keep_Linkanim_00D958, &gameplay_keep_Linkanim_00D958, 1, 5 },
+    // PLAYER_MWA_BACKSLASH_LEFT
     { &gameplay_keep_Linkanim_00D940, &gameplay_keep_Linkanim_00D948, &gameplay_keep_Linkanim_00D948, 1, 4 },
+    // PLAYER_MWA_GORON_PUNCH_LEFT
     { &gameplay_keep_Linkanim_00E218, &gameplay_keep_Linkanim_00E228, &gameplay_keep_Linkanim_00E220, 6, 8 },
+    // PLAYER_MWA_GORON_PUNCH_RIGHT
     { &gameplay_keep_Linkanim_00E230, &gameplay_keep_Linkanim_00E240, &gameplay_keep_Linkanim_00E238, 12, 18 },
+    // PLAYER_MWA_GORON_PUNCH_BUTT
     { &gameplay_keep_Linkanim_00E248, &gameplay_keep_Linkanim_00E258, &gameplay_keep_Linkanim_00E250, 8, 14 },
+    // PLAYER_MWA_ZORA_PUNCH_LEFT
     { &gameplay_keep_Linkanim_00E308, &gameplay_keep_Linkanim_00E318, &gameplay_keep_Linkanim_00E310, 2, 5 },
+    // PLAYER_MWA_ZORA_PUNCH_COMBO
     { &gameplay_keep_Linkanim_00E320, &gameplay_keep_Linkanim_00E330, &gameplay_keep_Linkanim_00E328, 3, 8 },
+    // PLAYER_MWA_ZORA_PUNCH_KICK
     { &gameplay_keep_Linkanim_00E338, &gameplay_keep_Linkanim_00E348, &gameplay_keep_Linkanim_00E340, 3, 10 },
+    // PLAYER_MWA_SPIN_ATTACK_1H
     { &gameplay_keep_Linkanim_00D908, &gameplay_keep_Linkanim_00D910, &gameplay_keep_Linkanim_00D440, 0, 12 },
+    // PLAYER_MWA_SPIN_ATTACK_2H
     { &gameplay_keep_Linkanim_00D760, &gameplay_keep_Linkanim_00D768, &gameplay_keep_Linkanim_00D3B8, 0, 15 },
+    // PLAYER_MWA_BIG_SPIN_1H
     { &gameplay_keep_Linkanim_00D7E0, &gameplay_keep_Linkanim_00D7E8, &gameplay_keep_Linkanim_00D440, 0, 16 },
+    // PLAYER_MWA_BIG_SPIN_2H
     { &gameplay_keep_Linkanim_00D7E0, &gameplay_keep_Linkanim_00D7E8, &gameplay_keep_Linkanim_00D3B8, 0, 16 },
 };
 
@@ -4086,13 +4120,11 @@ s32 func_808333CC(Player* this) {
     s32 j;
     s8 temp_a0;
     s8 temp_v1;
-    s8* var_v0;
-    s8* var_v1;
+    s8* var_v0 = this->unk_ADF;
+    s8* var_v1 = sp24;
 
-    var_v0 = this->unk_ADF;
-    var_v1 = sp24;
     if (this->itemActionParam == PLAYER_AP_STICK) {
-        return 0;
+        return false;
     }
 
     i = 0;
@@ -4105,7 +4137,7 @@ s32 func_808333CC(Player* this) {
         var_v0++;
         *var_v1 = temp_a0;
         if (temp_a0 < 0) {
-            return 0;
+            return false;
         }
 
         *var_v1 *= 2;
@@ -4120,19 +4152,17 @@ s32 func_808333CC(Player* this) {
             var_v1 = &sp24[1];
             j = 1;
 
-            // if (((!i) && (!i)) && (!i)) {}
-
             while (true) {
                 j++;
                 temp_a0 = var_v1[0] - var_v1[1];
 
                 if ((ABS_ALT(temp_a0) < 0xA) || ((temp_a0 * temp_v1) < 0)) {
-                    return 0;
+                    return false;
                 }
 
                 var_v1++;
                 if (j == ARRAY_COUNT(sp24) - 1) {
-                    return 1;
+                    return true;
                 }
             }
         }
@@ -4185,7 +4215,7 @@ PlayerMeleeWeaponAnimation func_808335F4(Player* this) {
             }
         }
     } else {
-        if (func_808333CC(this) != 0) {
+        if (func_808333CC(this)) {
             meleeWeaponAnimation = PLAYER_MWA_SPIN_ATTACK_1H;
         } else {
             if (temp_a1 < 0) {
@@ -8412,7 +8442,7 @@ void func_8083F358(Player* this, s32 arg1, PlayState* play) {
     }
 
     Math_ScaledStepToS(&this->unk_B70, var_a1, 0x190);
-    if ((this->modelAnimType == 3) || ((this->unk_B70 == 0) && (this->unk_AB8 <= 0.0f))) {
+    if ((this->modelAnimType == PLAYER_ANIMTYPE_3) || ((this->unk_B70 == 0) && (this->unk_AB8 <= 0.0f))) {
         if (arg1 == 0) {
             LinkAnimation_LoadToJoint(play, &this->skelAnime, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_1, this->modelAnimType),
                                       this->unk_B38);
@@ -12861,12 +12891,12 @@ void func_8084CA24(Player* this, PlayState* play) {
 s32 func_80836F10(PlayState* play, Player* this);
 
 void func_8084CB58(Player* this, PlayState* play) {
-    struct_8085CD30* sp3C;
+    struct_8085CD30* sp3C = &D_8085CD30[this->meleeWeaponAnimation];
     f32 sp38;
     s16 sp36;
 
-    sp3C = &D_8085CD30[this->meleeWeaponAnimation];
-    this->stateFlags2 |= 0x20;
+    this->stateFlags2 |= PLAYER_STATE2_20;
+
     if (this->transformation == PLAYER_FORM_ZORA) {
         this->actor.gravity = -0.8f;
     } else {
@@ -14706,7 +14736,80 @@ void func_80854800(Player* this, PlayState* play) {
     func_800B8F98(&this->actor, this->ageProperties->unk_92 + (NA_SE_VO_LI_TAKEN_AWAY - SFX_FLAG));
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808548B8.s")
+void func_808548B8(Player* this, PlayState* play) {
+    struct_8085CD30* sp3C = &D_8085CD30[this->meleeWeaponAnimation];
+
+    if (this->skelAnime.curFrame < (this->skelAnime.endFrame - 6.0f)) {
+        this->stateFlags2 |= PLAYER_STATE2_20;
+    }
+
+    if (func_808401F4(play, this)) {
+        return;
+    }
+
+    if (this->linearVelocity >= 0.0f) {
+        func_8083FCF0(play, this, (this->transformation == PLAYER_FORM_GORON) ? 5.0f : 0.0f, sp3C->unk_C, sp3C->unk_D);
+    }
+
+    if ((this->meleeWeaponAnimation == PLAYER_MWA_GORON_PUNCH_LEFT) ||
+        (this->meleeWeaponAnimation == PLAYER_MWA_GORON_PUNCH_RIGHT)) {
+        this->unk_3D0.unk_00 = 3;
+    }
+
+    if ((this->stateFlags2 & PLAYER_STATE2_40000000) && LinkAnimation_OnFrame(&this->skelAnime, 0.0f)) {
+        this->linearVelocity = 15.0f;
+        this->stateFlags2 &= ~PLAYER_STATE2_40000000;
+    }
+
+    if (this->linearVelocity > 12.0f) {
+        func_8083FBC4(play, this);
+    }
+
+    Math_StepToF(&this->linearVelocity, 0.0f, 5.0f);
+    func_8083A548(this);
+
+    if (LinkAnimation_Update(play, &this->skelAnime) ||
+        ((this->meleeWeaponAnimation >= PLAYER_MWA_FLIPSLASH_FINISH) &&
+         (this->meleeWeaponAnimation <= PLAYER_MWA_ZORA_JUMPKICK_FINISH) && (this->skelAnime.curFrame > 2.0f) &&
+         func_808333CC(this))) {
+        D_80862B48 = this->unk_AE8;
+
+        if (!func_80848570(this, play)) {
+            LinkAnimationHeader* anim = func_80123420(this) ? sp3C->unk_8 : sp3C->unk_4;
+
+            func_8082DC38(this);
+
+            if (anim == NULL) {
+                this->skelAnime.moveFlags &= ~8;
+                func_8085B384(this, play);
+            } else {
+                u8 moveFlags = this->skelAnime.moveFlags;
+
+                if (this->transformation == PLAYER_FORM_ZORA) {
+                    if (func_8083A580(this, play)) {
+                        anim = this->unk_284.animation;
+                    }
+                    this->unk_ADC = 0;
+                } else if ((anim == &gameplay_keep_Linkanim_00D728) && (this->modelAnimType != PLAYER_ANIMTYPE_3)) {
+                    anim = &gameplay_keep_Linkanim_00D8B0;
+                }
+
+                this->skelAnime.moveFlags = 0;
+                Player_SetAction(play, this, func_80849FE0, 1);
+                func_8082EC9C(play, this, anim);
+                this->currentYaw = this->actor.shape.rot.y;
+                this->skelAnime.moveFlags = moveFlags;
+            }
+            this->stateFlags3 |= 8;
+        }
+    } else if (((this->transformation == PLAYER_FORM_ZORA) &&
+                (this->meleeWeaponAnimation != PLAYER_MWA_ZORA_PUNCH_KICK) &&
+                (this->meleeWeaponAnimation != PLAYER_MWA_ZORA_JUMPKICK_FINISH)) ||
+               ((this->transformation == PLAYER_FORM_GORON) &&
+                (this->meleeWeaponAnimation != PLAYER_MWA_GORON_PUNCH_BUTT))) {
+        this->unk_AE8 |= CHECK_BTN_ALL(D_80862B44->press.button, BTN_B) ? 1 : 0;
+    }
+}
 
 void func_80854C70(Player* this, PlayState* play) {
     LinkAnimation_Update(play, &this->skelAnime);
