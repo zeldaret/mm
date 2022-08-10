@@ -10399,8 +10399,116 @@ void func_808446F4(PlayState* play, Player* this) {
     }
 }
 
-void func_80844784(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80844784.s")
+void func_80844784(PlayState* play, Player* this) {
+    f32 var_fv0;
+    s16 var_a3;
+    f32 temp_ft4;
+    s32 temp_ft2;
+    f32 temp_fv1_2;
+    f32 sp58;
+    f32 sp54;
+    f32 sp50;
+    f32 sp4C;
+    f32 sp48;
+    f32 sp44;
+    f32 temp_fa0;
+    f32 temp_fa1;
+    s16 temp_v0;
+    f32 temp_fv0_2;
+
+    if ((this->actor.bgCheckFlags & 1) && (D_80862B08 == 5) && (this->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER)) {
+        var_a3 = this->currentYaw;
+        var_fv0 = this->linearVelocity;
+        temp_v0 = this->actor.world.rot.y - var_a3;
+
+        if ((ABS_ALT(temp_v0) > 0x6000) && (this->actor.speedXZ != 0.0f)) {
+            var_fv0 = 0.0f;
+            var_a3 += 0x8000;
+        }
+
+        if ((Math_StepToF(&this->actor.speedXZ, var_fv0, 0.35f) != 0) && (var_fv0 == 0.0f)) {
+            this->actor.world.rot.y = this->currentYaw;
+        }
+
+        if (this->linearVelocity != 0.0f) {
+            temp_ft2 = (fabsf(this->linearVelocity) * 700.0f) - (fabsf(this->actor.speedXZ) * 100.0f);
+            temp_ft2 = CLAMP(temp_ft2, 0, 0x546);
+
+            Math_ScaledStepToS(&this->actor.world.rot.y, var_a3, temp_ft2);
+        }
+        if ((this->linearVelocity == 0.0f) && (this->actor.speedXZ != 0.0f)) {
+            func_8019F780(&this->actor.projectedPos, func_8082E078(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG), this->actor.speedXZ);
+        }
+    } else {
+        this->actor.speedXZ = this->linearVelocity;
+        this->actor.world.rot.y = this->currentYaw;
+    }
+
+    Actor_UpdateVelocityWithGravity(&this->actor);
+    D_80862B3C = 0.0f;
+    if ((gSaveContext.save.playerData.health != 0) && ((this->unk_B80 != 0.0f) || (this->windSpeed != 0.0f) || (play->envCtx.windSpeed >= 50.0f)) && (!Player_InCsMode(play)) && !(this->stateFlags1 & 0x206004) && !(this->stateFlags3 & 0x100) && (func_8084D4EC != this->actionFunc) && (this->actor.id == ACTOR_PLAYER)) {
+        this->actor.velocity.x += this->unk_B80 * Math_SinS(this->unk_B84);
+        this->actor.velocity.z += this->unk_B80 * Math_CosS(this->unk_B84);
+        temp_fv1_2 = 10.0f - this->actor.velocity.y;
+        if (temp_fv1_2 > 0.0f) {
+            sp58 = D_8085D3E0[this->transformation];
+            sp54 = this->windSpeed * sp58;
+            sp50 = Math_SinS(this->windAngleX) * sp54;
+            sp4C = Math_CosS(this->windAngleX) * sp54;
+            sp48 = Math_SinS(this->windAngleY) * sp4C;
+            sp44 = Math_CosS(this->windAngleY) * sp4C;
+
+            if ((sp50 > 0.0f) && (this->transformation == 3) && !(this->actor.bgCheckFlags & 1)) {
+                if (Player_SetAction(play, this, func_80856918, 1)) {
+                    this->stateFlags3 |= PLAYER_STATE3_2000 | PLAYER_STATE3_1000000;
+                    func_8082E1F0(this, NA_SE_IT_DEKUNUTS_FLOWER_OPEN);
+                    func_8019FD90(4, 2);
+                }
+
+                this->unk_AE8 = 0x270F;
+                Math_Vec3f_Copy(this->unk_AF0, &this->actor.world.pos);
+            }
+
+            if (play->envCtx.windSpeed >= 50.0f) {
+                temp_fa0 = play->envCtx.windDir.x;
+                temp_fa1 = play->envCtx.windDir.y;
+                temp_ft4 = play->envCtx.windDir.z;
+
+                temp_fv0_2 = sqrtf(SQ(temp_fa0) + SQ(temp_fa1) + SQ(temp_ft4));
+                if (temp_fv0_2 != 0.0f) {
+                    temp_fv0_2 = ((play->envCtx.windSpeed - 50.0f) * 0.1f * sp58) / temp_fv0_2;
+
+                    sp48 -= temp_fa0 * temp_fv0_2;
+                    sp50 -= temp_fa1 * temp_fv0_2;
+                    sp44 -= temp_ft4 * temp_fv0_2;
+                }
+            }
+
+            if (temp_fv1_2 < sp50) {
+                temp_fv1_2 /= sp50;
+
+                sp48 *= temp_fv1_2;
+                sp50 *= temp_fv1_2;
+                sp44 *= temp_fv1_2;
+            }
+
+            if (this->actor.bgCheckFlags & 1) {
+                D_80862B3C = (sp44 * Math_CosS(this->currentYaw)) + (Math_SinS(this->currentYaw) * sp48);
+                if (fabsf(D_80862B3C) > 4.0f) {
+                    func_8083FBC4(play, this);
+                }
+
+                func_8019F780(&this->actor.projectedPos, func_8082E078(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG), fabsf(D_80862B3C));
+            }
+
+            this->actor.velocity.x += sp48;
+            this->actor.velocity.z += sp44;
+            this->actor.velocity.y += sp50;
+        }
+    }
+
+    Actor_UpdatePos(&this->actor);
+}
 
 void func_80844D80(PlayState* play, Player* this) {
     Vec3f pos;
