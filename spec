@@ -2124,8 +2124,7 @@ beginseg
     name "ovl_Obj_Makekinsuta"
     compress
     include "build/src/overlays/actors/ovl_Obj_Makekinsuta/z_obj_makekinsuta.o"
-    include "build/data/ovl_Obj_Makekinsuta/ovl_Obj_Makekinsuta.data.o"
-    include "build/data/ovl_Obj_Makekinsuta/ovl_Obj_Makekinsuta.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Makekinsuta/ovl_Obj_Makekinsuta_reloc.o"
 endseg
 
 beginseg
