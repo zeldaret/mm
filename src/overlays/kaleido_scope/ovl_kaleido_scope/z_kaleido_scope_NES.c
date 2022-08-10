@@ -17,6 +17,10 @@ extern UNK_TYPE D_0B000000;
 extern UNK_TYPE D_0C000000;
 extern UNK_TYPE D_0C006C00;
 
+// bss
+extern f32 D_8082DA60[4];
+extern f32 D_8082DA70[4];
+
 void* D_8082B700[] = {
     0x08064440, 0x0806E440, 0x08077A40, 0x08081040, 0x0808A640, 0x0D003A00, 0x0806EE40, 0x08078440,
     0x08081A40, 0x0808B040, 0x08065840, 0x0806F840, 0x08078E40, 0x08082440, 0x0808BA40,
@@ -1141,12 +1145,7 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
     }
 }
 
-// TODO: Import bss
-extern f32 D_8082DA60[4];
-extern f32 D_8082DA70[4];
-
-// KaleidoScope_UpdateCursorSize
-void func_808274DC(PlayState* play) {
+void KaleidoScope_UpdateCursorSize(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 index;
 
