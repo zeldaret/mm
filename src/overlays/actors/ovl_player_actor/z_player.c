@@ -63,6 +63,10 @@ void func_80836988(Player* this, PlayState* play);
 
 void func_808484F0(Player* this);
 
+void func_80838A20(PlayState* play, Player* this);
+void func_80839978(PlayState* play, Player* this);
+void func_80839A10(PlayState* play, Player* this);
+
 typedef enum AnimSfxType {
     /*  1 */ ANIMSFX_TYPE_1 = 1,
     /*  2 */ ANIMSFX_TYPE_2,
@@ -2911,8 +2915,6 @@ s32 func_8082FD0C(Player* this, PlayerActionParam actionParam) {
     return -1;
 }
 
-extern u16 D_8085CFA8[4];
-
 s32 func_8082FDC4(void) {
     s32 i;
 
@@ -2925,8 +2927,95 @@ s32 func_8082FDC4(void) {
     return i;
 }
 
-void func_8082FE0C(Player* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082FE0C.s")
+#define C_BTN_ITEM(btn)                                 \
+    ((gSaveContext.buttonStatus[(btn)] != BTN_DISABLED) \
+         ? BUTTON_ITEM_EQUIP(0, (btn))                  \
+         : ((gSaveContext.unk_3F22 == 0x10) ? BUTTON_ITEM_EQUIP(0, (btn)) : ITEM_NONE))
+
+void func_8082FE0C(Player* this, PlayState* play) {
+    if (((this->stateFlags1 & (PLAYER_STATE1_800 | PLAYER_STATE1_20000000)) ||
+         (this->stateFlags2 & PLAYER_STATE2_2000000) || (this->stateFlags3 & PLAYER_STATE3_20000000) ||
+         func_801240DC(this))) {
+        return;
+    }
+
+    if (this->transformation == PLAYER_FORM_HUMAN) {
+        if (this->currentMask != PLAYER_MASK_NONE) {
+            s32 pad = this->currentMask + PLAYER_AP_MASK_TRUTH - 1;
+            s32 temp_v0_2 = func_8082FD0C(this, pad);
+
+            if (temp_v0_2 < 0) {
+                s32 var_a0;
+
+                var_a0 = Player_ItemToActionParam(this, GET_CUR_FORM_BTN_ITEM(this->unk_154)) - PLAYER_AP_39 - 1;
+                if ((var_a0 < PLAYER_MASK_TRUTH - 1) || (var_a0 >= PLAYER_MASK_MAX - 1)) {
+                    var_a0 = this->currentMask - 1;
+                }
+                func_80831990(play, this, Player_MaskIdToItemId(var_a0));
+                return;
+            } else {
+
+                if ((this->currentMask == PLAYER_MASK_GIANT) && (gSaveContext.save.playerData.magic == 0)) {
+                    func_80838A20(play, this);
+                }
+                this->unk_154 = temp_v0_2;
+            }
+        }
+    }
+
+    if (((this->actor.id == ACTOR_PLAYER) && (this->heldItemActionParam >= PLAYER_AP_FISHING_POLE)) &&
+        !(((func_80124148(this) == 0) || (gSaveContext.jinxTimer == 0)) &&
+          (func_8082FC78(this, (gGameInfo->data[0x361] != 0) ? ITEM_FISHING_POLE : Inventory_GetBtnBItem(play)) ||
+           func_8082FC78(this, C_BTN_ITEM(EQUIP_SLOT_C_LEFT)) || func_8082FC78(this, C_BTN_ITEM(EQUIP_SLOT_C_DOWN)) ||
+           func_8082FC78(this, C_BTN_ITEM(EQUIP_SLOT_C_RIGHT))))) {
+        func_80831990(play, this, ITEM_NONE);
+    } else {
+        s32 pad2;
+        ItemID temp_v0_5;
+        s32 var_a3;
+        var_a3 = func_8082FDC4();
+
+        var_a3 = ((var_a3 >= 4) && (this->transformation == PLAYER_FORM_FIERCE_DEITY) &&
+                  (this->itemActionParam != PLAYER_AP_SWORD_GREAT_FAIRY))
+                     ? 0
+                     : var_a3;
+
+        temp_v0_5 = func_8012364C(play, this, var_a3);
+        if (temp_v0_5 >= ITEM_FD) {
+            for (var_a3 = 0; var_a3 < ARRAY_COUNT(D_8085CFA8); var_a3++) {
+                if (CHECK_BTN_ALL(D_80862B44->cur.button, D_8085CFA8[var_a3])) {
+                    break;
+                }
+            }
+
+            temp_v0_5 = func_8012364C(play, this, var_a3);
+            if ((temp_v0_5 < ITEM_FD) && (Player_ItemToActionParam(this, temp_v0_5) == this->itemActionParam)) {
+                D_80862B4C = 1;
+            }
+        } else if (temp_v0_5 == ITEM_F0) {
+            if (this->unk_B60 == 0) {
+                EnBom* temp_v0_7 = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.focus.pos.x,
+                                                       this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 0, 0);
+                if (temp_v0_7 != NULL) {
+                    temp_v0_7->timer = 0;
+                    this->unk_B60 = 0x136;
+                }
+            }
+        } else if (temp_v0_5 == ITEM_F1) {
+            func_80839978(play, this);
+        } else if (temp_v0_5 == ITEM_F2) {
+            func_80839A10(play, this);
+        } else if ((func_80124110(this, Player_ItemToActionParam(this, temp_v0_5)) != 0) &&
+                   (gSaveContext.jinxTimer != 0)) {
+            if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
+                Message_StartTextbox(play, 0xF7, NULL);
+            }
+        } else {
+            this->heldItemButton = var_a3;
+            func_80831990(play, this, temp_v0_5);
+        }
+    }
+}
 
 extern s8 D_8085CD00[];
 
@@ -4980,7 +5069,8 @@ void func_808354A4(PlayState* play, s32 arg1, s32 arg2) {
         play->transitionType = TRANS_TYPE_03;
         gSaveContext.nextTransitionType = TRANS_TYPE_03;
     } else if (play->nextEntranceIndex >= 0xFE00) {
-        play->nextEntranceIndex = sReturnEntranceGroupData[sReturnEntranceGroupIndices[play->nextEntranceIndex - 0xFE00] + play->curSpawn];
+        play->nextEntranceIndex =
+            sReturnEntranceGroupData[sReturnEntranceGroupIndices[play->nextEntranceIndex - 0xFE00] + play->curSpawn];
 
         Scene_SetExitFade(play);
     } else {

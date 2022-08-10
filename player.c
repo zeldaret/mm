@@ -1453,24 +1453,17 @@ LinkAnimationHeader* D_8085CF78[2] = { (LinkAnimationHeader* )0x0400D8B8, (LinkA
 u8 D_8085CF80[4] = { 0x1E, 0x1F, 0, 0 };
 u8 D_8085CF84[4] = { 0x20, 0x21, 0, 0 };
 BlureColors D_8085CF88[2] = {
-    { 0xFF, -1, 0xFF, 0xFF, 0xFF, -1, 0xFF, 0x40, -1, -1, 0xFF, 0, -1, -1, -1, 0 },
     {
-        0xA5,
-        0xB9,
-        0xFF,
-        0xB9,
-        0xCD,
-        -0x1F,
-        0xFF,
-        0x32,
-        -1,
-        -1,
-        0xFF,
-        0,
-        -1,
-        -1,
-        -1,
-        0,
+        { 0xFF, 0xFF, 0xFF, 0xFF },
+        { 0xFF, 0xFF, 0xFF, 0x40 },
+        { 0xFF, 0xFF, 0xFF, 0 },
+        { 0xFF, 0xFF, 0xFF, 0 },
+    },
+    {
+        { 0xA5, 0xB9, 0xFF, 0xB9 },
+        { 0xCD, 0xE1, 0xFF, 0x32 },
+        { 0xFF, 0xFF, 0xFF, 0 },
+        { 0xFF, 0xFF, 0xFF, 0 },
     },
 };
 u16 D_8085CFA8[4] = { 0x4000, 2, 4, 1 };
@@ -1533,7 +1526,6 @@ LinkAnimationHeader* D_8085D0E4[4] = {
     (LinkAnimationHeader* )0x0400D3F0,
 };
 s32 D_8085D0F4 = 0x20101;
-u16 sReturnEntranceGroupData[4] = { 0x1000, 0, 0, 0 };
 Vec3f D_8085D100 = { 0.0f, 50.0f, 0.0f };
 LinkAnimationHeader* D_8085D118[3] = {
     (LinkAnimationHeader* )0x0400E1B8,
@@ -1988,9 +1980,9 @@ struct_8085D848 D_8085D848[2] = {
             { 0x258, 0, 0, 0, 0, 0, 0xC8 },
         },
         {
-            { { -40.0f, 20.0f, -10.0f }, 0x78, 0xC8, 0xFF, { 0 }, 0x3E8, { 0, 0 } },
-            { { 0.0f, -10.0f, 0.0f }, 0xFF, 0xFF, 0xFF, { 0 }, 0x1388, { 0, 0 } },
-            { { -10.0f, 4.0f, 3.0f }, 0xC8, 0xC8, 0xFF, { 0 }, 0x1388, { 0, 0 } },
+            { { -40.0f, 20.0f, -10.0f }, 0x78, 0xC8, 0xFF, 0x3E8 },
+            { { 0.0f, -10.0f, 0.0f }, 0xFF, 0xFF, 0xFF, 0x1388 },
+            { { -10.0f, 4.0f, 3.0f }, 0xC8, 0xC8, 0xFF, 0x1388 },
         },
     },
     {
@@ -2000,9 +1992,9 @@ struct_8085D848 D_8085D848[2] = {
             { 0x258, 0, 0, 0, 0, 0, 0xC8 },
         },
         {
-            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, { 0 }, 0x64, { 0, 0 } },
-            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, { 0 }, 0x64, { 0, 0 } },
-            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, { 0 }, 0x64, { 0, 0 } },
+            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, 0x64 },
+            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, 0x64 },
+            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, 0x64 },
         },
     },
 };
@@ -2304,6 +2296,8 @@ GetItemEntry sGetItemTable[0xB9] = {
 };
 InitChainEntry sInitChain[1];                       /* unable to generate initializer */
 u8 sMagicArrowCosts[4] = { 4, 4, 8, 2 };
+u16 sReturnEntranceGroupData[1] = { 0x1000 };
+u8 sReturnEntranceGroupIndices[6] = { 0, 0, 0, 0, 0, 0 };
 
 s32 func_8082DA90(PlayState* play) {
     s32 var_v0;
@@ -2932,9 +2926,9 @@ void func_8082F0E4(Player* this, u32 dmgFlags, s32 damage, s32 radius) {
     this->cylinder.base.acFlags = 0x11;
 }
 
-void func_8082F164(Player* arg0, u16 button) {
-    if ((arg0->transformation == 2) && (~(D_80862B44->cur.button | ~(button & 0xFFFF)) == 0)) {
-        arg0->stateFlags1 |= 0x10;
+void func_8082F164(Player* this, u16 button) {
+    if ((this->transformation == 2) && (~(D_80862B44->cur.button | ~(button & 0xFFFF)) == 0)) {
+        this->stateFlags1 |= 0x10;
     }
 }
 
@@ -3139,10 +3133,10 @@ void func_8082F8BC(PlayState* play, Player* this, enum PlayerActionParam actionP
     Player_SetModelGroup(this, (enum PlayerModelGroup) this->modelGroup);
 }
 
-void func_8082F938(PlayState* play, Player* this, s32 arg2, s32 arg3) {
+void func_8082F938(PlayState* play, Player* this, s32 colorType, s32 elemDuration) {
     void* sp1C;
-    s32 var_a2;
     BlureColors* var_v1;
+    s32 var_a2;
     u8 temp_t3;
     void* temp_v0;
     void* var_a0;
@@ -3150,38 +3144,38 @@ void func_8082F938(PlayState* play, Player* this, s32 arg2, s32 arg3) {
 
     sp1C = Effect_GetByIndex(this->meleeWeaponEffectIndex[0]);
     temp_v0 = Effect_GetByIndex(this->meleeWeaponEffectIndex[1]);
-    var_v1 = &D_8085CF88[arg2];
+    var_v1 = &D_8085CF88[colorType];
     var_a2 = 0;
     var_a1 = temp_v0;
     var_a0 = sp1C;
     do {
         var_a2 += 2;
         var_a0 += 2;
-        var_a0->unk_18C = (u8) var_v1->unk_0;
-        temp_t3 = var_v1->unk_4;
+        var_a0->unk_18C = (u8) var_v1->p1StartColor[0];
+        temp_t3 = var_v1->p2StartColor[0];
         var_v1 += 2;
         var_a1 += 2;
         var_a0->unk_190 = temp_t3;
-        var_a0->unk_194 = (u8) var_v1->unk_6;
-        var_a0->unk_198 = (u8) var_v1->unk_A;
+        var_a0->unk_194 = (u8) var_v1->p2StartColor[2];
+        var_a0->unk_198 = (u8) var_v1->p1EndColor[2];
         var_a1->unk_18C = (u8) var_v1->unk_-2;
-        var_a1->unk_190 = (u8) var_v1->unk_2;
-        var_a1->unk_194 = (u8) var_v1->unk_6;
-        var_a1->unk_198 = (u8) var_v1->unk_A;
+        var_a1->unk_190 = (u8) var_v1->p1StartColor[2];
+        var_a1->unk_194 = (u8) var_v1->p2StartColor[2];
+        var_a1->unk_198 = (u8) var_v1->p1EndColor[2];
         var_a0->unk_18D = (u8) var_v1->unk_-1;
-        var_a0->unk_191 = (u8) var_v1->unk_3;
-        var_a0->unk_195 = (u8) var_v1->unk_7;
-        var_a0->unk_199 = (u8) var_v1->unk_B;
+        var_a0->unk_191 = (u8) var_v1->p1StartColor[3];
+        var_a0->unk_195 = (u8) var_v1->p2StartColor[3];
+        var_a0->unk_199 = (u8) var_v1->p1EndColor[3];
         var_a1->unk_18D = (u8) var_v1->unk_-1;
-        var_a1->unk_191 = (u8) var_v1->unk_3;
-        var_a1->unk_195 = (u8) var_v1->unk_7;
-        var_a1->unk_199 = (u8) var_v1->unk_B;
+        var_a1->unk_191 = (u8) var_v1->p1StartColor[3];
+        var_a1->unk_195 = (u8) var_v1->p2StartColor[3];
+        var_a1->unk_199 = (u8) var_v1->p1EndColor[3];
     } while (var_a2 != 4);
     if (this->transformation == 3) {
-        arg3 = 8;
+        elemDuration = 8;
     }
-    sp1C->unk_19F = (s8) arg3;
-    temp_v0->unk_19F = (s8) arg3;
+    sp1C->unk_19F = (s8) elemDuration;
+    temp_v0->unk_19F = (s8) elemDuration;
 }
 
 void func_8082FA5C(PlayState* play, Player* this, s32 meleeWeaponState) {
@@ -5659,7 +5653,7 @@ void func_808354A4(PlayState* play, s32 arg1, s32 arg2) {
         play->transitionType = 3;
         gSaveContext.nextTransitionType = 3;
     } else if ((s32) temp_a3 >= 0xFE00) {
-        play->nextEntranceIndex = *(sReturnEntranceGroupData + (((D_8085B9F0 - 0xE6F4)[temp_a3] * 2) + (play->curSpawn * 2)));
+        play->nextEntranceIndex = *(sReturnEntranceGroupData + (((sReturnEntranceGroupIndices - 0xFDFE)[temp_a3] * 2) + (play->curSpawn * 2)));
         Scene_SetExitFade(play);
     } else {
         if (arg2 != 0) {
@@ -8559,7 +8553,7 @@ block_5:
     }
 }
 
-s16 func_8083C62C(Player* this, s32 arg1) {
+s32 func_8083C62C(Player* this, s32 arg1) {
     f32 sp38;
     f32 sp34;
     f32 sp30;
@@ -18557,13 +18551,13 @@ void func_80854C70(Player* this, PlayState* play) {
     }
 }
 
-void func_80854CD0(f32 arg0, u16* arg1, u8* arg2, u8* arg3, u8* arg4, u16* arg5, u8* arg6, u8* arg7, u8* arg8, s16* arg9, u8* argA, u8* argB, u8* argC) {
+void func_80854CD0(f32 arg0, s16* arg1, u8* arg2, u8* arg3, u8* arg4, s16* arg5, u8* arg6, u8* arg7, u8* arg8, s16* arg9, u8* argA, u8* argB, u8* argC) {
+    s16* temp_t0;
     s16* temp_t5;
+    s16* var_a1;
+    s16* var_t0;
     s16* var_t5;
     s32 var_v0;
-    u16* temp_t0;
-    u16* var_a1;
-    u16* var_t0;
     u8 temp_s2;
     u8 temp_s2_2;
     u8 temp_t3;
@@ -18655,7 +18649,7 @@ void func_80854EFC(PlayState* play, f32 arg1, struct_8085D848_unk_00* arg2) {
     u8* var_t4;
 
     var_fa0 = arg1;
-    sp70 = (s16) play->envCtx.unk_C4.fogNear;
+    sp70 = play->envCtx.unk_C4.fogNear;
     var_t3 = D_8085D844;
     var_v1 = arg2;
     sp72 = play->envCtx.unk_C4.fogColor[0];
@@ -18691,8 +18685,8 @@ void func_80854EFC(PlayState* play, f32 arg1, struct_8085D848_unk_00* arg2) {
         }
     }
     temp_t2 = *var_t0;
-    play->envCtx.lightSettings.fogNear = ((s32) ((f32) (var_v1->unk_00 - temp_t2) * var_fa0) + temp_t2) - (s16) play->envCtx.unk_C4.fogNear;
-    func_80854CD0(var_fa0, (u16* ) play->envCtx.lightSettings.fogColor, &var_v1->unk_02, (u8* ) (var_t0 + 2), play->envCtx.unk_C4.fogColor, (u16* ) &play->envCtx.lightSettings, &var_v1->unk_05, var_t0 + 5, play->envCtx.unk_C4.ambientColor, play->envCtx.lightSettings.diffuseColor1, var_t3, var_t4, play->envCtx.unk_C4.diffuseColor1);
+    play->envCtx.lightSettings.fogNear = ((s32) ((f32) (var_v1->unk_00 - temp_t2) * var_fa0) + temp_t2) - play->envCtx.unk_C4.fogNear;
+    func_80854CD0(var_fa0, play->envCtx.lightSettings.fogColor, &var_v1->unk_02, (u8* ) (var_t0 + 2), play->envCtx.unk_C4.fogColor, play->envCtx.lightSettings.ambientColor, &var_v1->unk_05, var_t0 + 5, play->envCtx.unk_C4.ambientColor, play->envCtx.lightSettings.diffuseColor1, var_t3, var_t4, play->envCtx.unk_C4.diffuseColor1);
 }
 
 void func_808550D0(PlayState* play, Player* this, f32 arg2, f32 arg3, s32 arg4) {

@@ -280,9 +280,9 @@ typedef enum {
     /* 0xA1 */ ITEM_GOLD_DUST_2,
     /* 0xA2 */ ITEM_HYLIAN_LOACH_2,
     /* 0xA3 */ ITEM_SEAHORSE_CAUGHT,
-    /* 0xF0 */ ITEM_F0 = 0xF0,
-    /* 0xF1 */ ITEM_F1,
-    /* 0xF2 */ ITEM_F2,
+    /* 0xF0 */ ITEM_F0 = 0xF0, // PLAYER_MASK_BLAST
+    /* 0xF1 */ ITEM_F1, // PLAYER_MASK_BREMEN
+    /* 0xF2 */ ITEM_F2, // PLAYER_MASK_KAMARO
     /* 0xFC */ ITEM_FC = 0xFC,
     /* 0xFD */ ITEM_FD,
     /* 0xFE */ ITEM_FE,
