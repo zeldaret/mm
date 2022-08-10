@@ -7406,29 +7406,26 @@ void func_8083BB4C(PlayState* play, Player* this) {
 void func_8083BF54(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083BF54.s")
 
-#ifdef NON_MATCHING
-s16 func_8083C62C(Player* this, s32 arg1) {
-    Vec3f sp30;
-    s16 sp2E;
-    s16 sp2C;
-    Vec3f* sp28 = &this->unk_730->focus.pos;
+s32 func_8083C62C(Player* this, s32 arg1) {
+    Actor* actor = this->unk_730;
+    Vec3f headPos;
+    s16 pitchTarget;
+    s16 yawTarget;
 
-    sp30.x = this->actor.world.pos.x;
-    sp30.y = this->bodyPartsPos[7].y + 3.0f;
-    sp30.z = this->actor.world.pos.z;
+    headPos.x = this->actor.world.pos.x;
+    headPos.y = this->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
+    headPos.z = this->actor.world.pos.z;
 
-    sp2E = Math_Vec3f_Pitch(&sp30, sp28);
-    sp2C = Math_Vec3f_Yaw(&sp30, sp28);
-    Math_SmoothStepToS(&this->actor.focus.rot.y, sp2C, 4, 0x2710, 0);
-    Math_SmoothStepToS(&this->actor.focus.rot.x, sp2E, 4, 0x2710, 0);
+    pitchTarget = Math_Vec3f_Pitch(&headPos, &actor->focus.pos);
+    yawTarget = Math_Vec3f_Yaw(&headPos, &actor->focus.pos);
+
+    Math_SmoothStepToS(&this->actor.focus.rot.y, yawTarget, 4, 0x2710, 0);
+    Math_SmoothStepToS(&this->actor.focus.rot.x, pitchTarget, 4, 0x2710, 0);
+
     this->unk_AA6 |= 2;
 
     return func_80832754(this, arg1);
 }
-#else
-s16 func_8083C62C(Player* this, s32 arg1);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083C62C.s")
-#endif
 
 extern Vec3f D_8085D218;
 
