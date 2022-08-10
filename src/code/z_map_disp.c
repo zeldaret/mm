@@ -16,19 +16,20 @@ s32 func_80108A64(PlayState*);
 s32 func_80109BA0(s32);
 s16 func_80109F78(s32);
 
-s16 func_80106D08(s16);
 void func_80109D40(s32, s32*, s32*, void*);
 void func_80109DD8(s32, s32*, s32*);
 
-extern T_801BEAE0   D_801BEAE0;
 extern s32          D_801BEAD8; // G_IM_SIZ
-extern u32          D_801BEAF8;
-extern s32          D_801BEB08;
-extern u32          D_801BEB18;
-extern u32          D_801BEB28;
+extern T_801BEAE0   D_801BEAE0;
+extern u32          D_801BEAF8; // siz_INCR
+extern s32          D_801BEB08; // siz_SHIFT
+extern u32          D_801BEB18; // siz_BYTES
+extern u32          D_801BEB28; // siz_LINE_BYTES
 extern TexturePtr   D_801BEB38;
 extern T_801BEBB8   D_801BEBB8;
-extern s16          D_801BEBFA;
+extern s16          D_801BEBF8; // D_801BEBB8.unk40
+extern s16          D_801BEBFA; // D_801BEBB8.unk42
+extern s16          D_801BEBFC; // D_801BEBB8.unk44
 extern s16          D_801BEC10;
 extern MinimapList  D_801BEC14; //D_801F5130
 extern s32          D_801BEC1C; //current scene's no. of rooms
@@ -225,6 +226,26 @@ s32 func_80103A10(PlayState* play) {
     return true;
 }
 
+#define	gDPLoadTextureBlock_TEST(pkt, timg, fmt, siz_LOAD_BLOCK, siz_INCR, siz_SHIFT, siz_BYTES, siz_LINE_BYTES, siz, width, height,		\
+		pal, cms, cmt, masks, maskt, shifts, shiftt)		\
+_DW({									\
+	gDPSetTextureImage(pkt, fmt, siz_LOAD_BLOCK, 1, timg);	\
+	gDPSetTile(pkt, fmt, siz_LOAD_BLOCK, 0, 0, G_TX_LOADTILE, 	\
+		0 , cmt, maskt, shiftt, cms, masks, shifts);		\
+	gDPLoadSync(pkt);						\
+	gDPLoadBlock(pkt, G_TX_LOADTILE, 0, 0, 				\
+		(((width)*(height) + siz_INCR) >> siz_SHIFT) -1,	\
+		CALC_DXT(width, siz_BYTES)); 				\
+	gDPPipeSync(pkt);						\
+	gDPSetTile(pkt, fmt, siz,					\
+		(((width) * siz_LINE_BYTES)+7)>>3, 0,			\
+		G_TX_RENDERTILE, pal, cmt, maskt, shiftt, cms, masks,	\
+		shifts);						\
+	gDPSetTileSize(pkt, G_TX_RENDERTILE, 0, 0,			\
+		((width)-1) << G_TEXTURE_IMAGE_FRAC,			\
+		((height)-1) << G_TEXTURE_IMAGE_FRAC);			\
+})
+
 #ifdef NON_MATCHING
 // https://decomp.me/scratch/TR5Jq
 void func_80103A58(PlayState *play, Actor *actor) {
@@ -236,39 +257,37 @@ void func_80103A58(PlayState *play, Actor *actor) {
     s32 spC8;
     s32 spC4;
     f32 spC0;
-    u32 temp_v0_19;
+    u32 pad;
     s32 var_v0;
     Player *spB4;
-    u32 var_v1_2;
+    u32 pad2;
     s32 spAC;
     //GraphicsContext *spA8;
-    s16 spA2;
-    s16 temp_v1;
     
-    spB4 = GET_PLAYER(play);
     spDC = &D_801BEBB8.unk0->entry[D_801BEBB8.unk4];
+    spB4 = GET_PLAYER(play);
     if (spDC->unk0 != 0xFFFF) {
         func_801030F4(spDC, &spD0, &spCC);
         func_80103090(spDC, &spC8, &spC4);
-        temp_v1 = D_801BEBB8.unk0->unk4;
-        var_v0 = temp_v1;
-        if (temp_v1 == 0) {
+        var_v0 = D_801BEBB8.unk0->unk4;
+        if (D_801BEBB8.unk0->unk4 == 0) {
             var_v0 = 0x14;
-        } else if (temp_v1 == -1) {
+        } else if (D_801BEBB8.unk0->unk4 == -1) {
             func_801030B4(spDC, &spAC);
             var_v0 = spAC;
         }
         spC0 = 1.0f / (f32) var_v0;
         if (func_801039EC(play) == 0) {
-            spD8 = (((s32) ((actor->world.pos.x - (f32) spDC->unk2) * spC0) + D_801BEBB8.unk8 + D_801BEBB8.unkC) - D_801BEBB8.unk8) + spD0;
-            spD4 = ((s32) ((actor->world.pos.z - (f32) spDC->unk6) * spC0) + D_801BEBB8.unkA + D_801BEBB8.unkE) - D_801BEBB8.unkA + spCC;
+            spD8 = (s32) ((actor->world.pos.x - (f32) spDC->unk2) * spC0) + D_801BEBB8.unk8 + D_801BEBB8.unkC - D_801BEBB8.unk8 + spD0;
+            spD4 = (s32) ((actor->world.pos.z - (f32) spDC->unk6) * spC0) + D_801BEBB8.unkA + D_801BEBB8.unkE - D_801BEBB8.unkA + spCC;
         } else {
-            spD8 = (((D_801BEBB8.unk8 - (s32) ((actor->world.pos.x - (f32) spDC->unk2) * spC0)) + D_801BEBB8.unkC) - D_801BEBB8.unk8) + spD0;
-            spD4 = ((D_801BEBB8.unkA - (s32) ((actor->world.pos.z - (f32) spDC->unk6) * spC0)) + D_801BEBB8.unkE) - D_801BEBB8.unkA + spCC;
+            spD8 = - (s32) ((actor->world.pos.x - (f32) spDC->unk2) * spC0) + D_801BEBB8.unk8  + D_801BEBB8.unkC - D_801BEBB8.unk8 + spD0;
+            spD4 = - (s32) ((actor->world.pos.z - (f32) spDC->unk6) * spC0) + D_801BEBB8.unkA  + D_801BEBB8.unkE - D_801BEBB8.unkA + spCC;
         }
         if ((spD8 > 0) && (spD8 < 0x3FF) && (spD4 > 0) && (spD4 < 0x3FF)) {
             OPEN_DISPS(play->state.gfxCtx);
             if ((actor->category == ACTORCAT_PLAYER) && (actor->flags & 0x80000000)) {
+                s16 spA2;
                 func_8012C8D4(play->state.gfxCtx); 
                 gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
@@ -298,17 +317,39 @@ void func_80103A58(PlayState *play, Actor *actor) {
                         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, play->interfaceCtx.minimapAlpha);
                         gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, play->interfaceCtx.minimapAlpha);
                         gDPPipeSync(OVERLAY_DISP++);
-                        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_RGBA, D_801BEAE0.unk8, 1, &D_02003F20);
-                        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_RGBA, D_801BEAE0.unk8, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-                        gDPLoadSync(OVERLAY_DISP++);
-                        gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0,
-                         ((D_801BEAF8 + 0x40) >> D_801BEB08) - 1,
-                               (((D_801BEB18 * 8 >> 3 == 0)? 1 : D_801BEB18) + 0x7FF) 
-                            /   ((D_801BEB18 * 8 >> 3 == 0)? 1 : D_801BEB18));
-                        gDPPipeSync(OVERLAY_DISP++);                        
-                        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_RGBA, D_801BEAD8,
-                          ((D_801BEB28 * 8) + 7) >> 3, 0x0000, G_TX_RENDERTILE, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-                        gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 0x001C, 0x001C);
+
+                        gDPLoadTextureBlock_TEST(OVERLAY_DISP++, &D_02003F20, G_IM_FMT_RGBA,
+                         D_801BEAE0.unk8, D_801BEAF8, D_801BEB08, D_801BEB18, D_801BEB28, D_801BEAD8, 8, 8, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMASK,
+                        G_TX_NOMASK,
+                        G_TX_NOLOD,
+                        G_TX_NOLOD);
+
+                        // gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_RGBA, D_801BEAE0.unk8, 1, &D_02003F20);
+                        // gDPSetTile(OVERLAY_DISP++, G_IM_FMT_RGBA, D_801BEAE0.unk8, 0, 0x0000, G_TX_LOADTILE, 0,
+                        //     G_TX_NOMIRROR | G_TX_WRAP, // cmt
+                        //     G_TX_NOMASK, //maskt
+                        //     G_TX_NOLOD, //shiftt
+                        //     G_TX_NOMIRROR | G_TX_WRAP, //cms
+                        //     G_TX_NOMASK, //masks
+                        //     G_TX_NOLOD); //shifts
+                        // gDPLoadSync(OVERLAY_DISP++);
+                        // gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0,
+                        //  ((D_801BEAF8 + 0x40) >> D_801BEB08) - 1,
+                        //        (((D_801BEB18 * 8 >> 3 == 0)? 1 : D_801BEB18) + 0x7FF) 
+                        //     /   ((D_801BEB18 * 8 >> 3 == 0)? 1 : D_801BEB18));
+                        // gDPPipeSync(OVERLAY_DISP++);                        
+                        // gDPSetTile(OVERLAY_DISP++, G_IM_FMT_RGBA, D_801BEAD8,
+                        //   ((D_801BEB28 * 8) + 7) >> 3, 0x0000, G_TX_RENDERTILE, 0,
+                        //     G_TX_NOMIRROR | G_TX_WRAP, // cmt
+                        //     G_TX_NOMASK,
+                        //     G_TX_NOLOD, 
+                        //     G_TX_NOMIRROR | G_TX_WRAP, 
+                        //     G_TX_NOMASK, 
+                        //     G_TX_NOLOD);
+                        // gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 0x001C, 0x001C);
                         gSPTextureRectangle(OVERLAY_DISP++, (spD8 - 4) << 2, (spD4 - 4) << 2, (spD8 + 4) << 2, (spD4 + 4) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
                         return;
                     }
@@ -357,9 +398,7 @@ void func_8010439C(PlayState *play) {
     }
 }
 
-#ifdef NON_MATCHING
-// https://decomp.me/scratch/vbnTA
-void func_801045AC(PlayState* play, Actor* actor) { //4729
+void func_801045AC(PlayState* play, Actor* actor) {
     MinimapEntry* sp7C;
     s32 sp78;
     s32 sp74;
@@ -367,40 +406,38 @@ void func_801045AC(PlayState* play, Actor* actor) { //4729
     s32 sp6C;
     s32 sp68;
     s32 sp64;
-    f32 temp_fv1;
-    s16 temp_v0;
-    s16 temp_v0_5;
+    Player* player;
     f32 sp5C;
+    f32 temp_fv1;
     s32 var_v1;
-    s32 var_v1_2;
     f32 sp50;
-    s32 sp4C;
-    //GraphicsContext* sp48;
     
-    temp_fv1 = 0.0028571428f * fabsf(play->actorCtx.actorLists[2].first->world.pos.y - actor->world.pos.y);
-    sp50 = 1.0f - temp_fv1;
-    if (temp_fv1 > 1.0f) {
+    player = GET_PLAYER(play);
+    temp_fv1 = fabsf(player->actor.world.pos.y - actor->world.pos.y);
+    sp50 = 1.0f -  (1 / 350.0f) * temp_fv1;
+    if (sp50 < 0) {
         sp50 = 0.0f;
     }
     sp7C = &D_801BEBB8.unk0->entry[D_801BEBB8.unk4];
     if (sp7C->unk0 != 0xFFFF) {
         func_801030F4(sp7C, &sp70, &sp6C);
         func_80103090(sp7C, &sp68, &sp64);
-        temp_v0 = D_801BEBB8.unk0->unk4;
-        var_v1 = temp_v0;
-        if (temp_v0 == 0) {
+        
+        var_v1 = D_801BEBB8.unk0->unk4;
+        if (D_801BEBB8.unk0->unk4 == 0) {
             var_v1 = 0x14;
-        } else if (temp_v0 == -1) {
+        } else if (D_801BEBB8.unk0->unk4 == -1) {
+            s32 sp4C;
             func_801030B4(sp7C, &sp4C);
             var_v1 = sp4C;
         }
-        sp5C = 1.0f / (f32) var_v1;
+        sp5C = 1.0f / var_v1;
         if (func_801039EC(play) == 0) {
-            sp78 = (((s32) ((actor->world.pos.x - (f32) sp7C->unk2) * sp5C) + D_801BEBB8.unk8 + D_801BEBB8.unkC) - D_801BEBB8.unk8) + sp70;
-            sp74 = (((s32) ((actor->world.pos.z - (f32) sp7C->unk6) * sp5C) + D_801BEBB8.unkA + D_801BEBB8.unkE) - D_801BEBB8.unkA) + sp6C;
+            sp78 = (((s32) ((actor->world.pos.x - sp7C->unk2) * sp5C) + D_801BEBB8.unk8 + D_801BEBB8.unkC) - D_801BEBB8.unk8) + sp70;
+            sp74 = (((s32) ((actor->world.pos.z - sp7C->unk6) * sp5C) + D_801BEBB8.unkA + D_801BEBB8.unkE) - D_801BEBB8.unkA) + sp6C;
         } else {
-            sp78 = (((D_801BEBB8.unk8 - (s32) ((actor->world.pos.x - (f32) sp7C->unk2) * sp5C)) + D_801BEBB8.unkC) - D_801BEBB8.unk8) + sp70;
-            sp74 = (((D_801BEBB8.unkA - (s32) ((actor->world.pos.z - (f32) sp7C->unk6) * sp5C)) + D_801BEBB8.unkE) - D_801BEBB8.unkA) + sp6C;
+            sp78 = (((D_801BEBB8.unk8 - (s32) ((actor->world.pos.x - sp7C->unk2) * sp5C)) + D_801BEBB8.unkC) - D_801BEBB8.unk8) + sp70;
+            sp74 = (((D_801BEBB8.unkA - (s32) ((actor->world.pos.z - sp7C->unk6) * sp5C)) + D_801BEBB8.unkE) - D_801BEBB8.unkA) + sp6C;
         }
         if ((sp78 > 0) && (sp78 < 0x3FF) && (sp74 > 0) && (sp74 < 0x3FF) ) {
             OPEN_DISPS(play->state.gfxCtx);
@@ -408,30 +445,27 @@ void func_801045AC(PlayState* play, Actor* actor) { //4729
             gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
             
             if ((actor->category == 0xA) && (func_80103A10(play) != 0)) {
-                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, D_801BEC2C[actor->category].r, D_801BEC2C[actor->category].g, D_801BEC2C[actor->category].b, (s32)((D_801BEC2C[actor->category].a * (1.0f - ((f32) D_801BEBB8.unk24 * 0.05f)) * sp50 * (f32) play->interfaceCtx.minimapAlpha) / 255.0f));
-                temp_v0_5 = D_801BEBB8.unk0->unk4;
-                var_v1_2 = temp_v0_5;
-                if (temp_v0_5 == 0) {
-                    var_v1_2 = 0x14;
-                } else if (temp_v0_5 == -1) {
+                s32 pad;
+                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, D_801BEC2C[actor->category].r, D_801BEC2C[actor->category].g, D_801BEC2C[actor->category].b, (s32)((D_801BEC2C[actor->category].a * (1.0f - D_801BEBB8.unk24 * 0.05f) * sp50 * play->interfaceCtx.minimapAlpha) / 255.0f));
+
+                var_v1 = D_801BEBB8.unk0->unk4;
+                if (D_801BEBB8.unk0->unk4 == 0) {
+                    var_v1 = 0x14;
+                } else if (D_801BEBB8.unk0->unk4 == -1) {
                     s32 sp34;
-                    func_801030B4(sp7C, &sp34); // sp34 is local temp
-                    var_v1_2 = sp34;
+                    func_801030B4(sp7C, &sp34);
+                    var_v1 = sp34;
                 }
-                if (var_v1_2 <= 50) {
-                    gSPTextureRectangle(OVERLAY_DISP++, (sp78 - 2) * 4, (sp74 - 2) * 4, (sp78 + 2) * 4, (sp74 + 2) * 4, G_TX_RENDERTILE, 0, 0, 0x0001, 0x0001);
+                if (var_v1 <= 50) {
+                    gSPTextureRectangle(OVERLAY_DISP++, (sp78 - 2) << 2, (sp74 - 2) << 2, (sp78 + 2) << 2, (sp74 + 2) << 2, G_TX_RENDERTILE, 0, 0, 0x0001, 0x0001);
                 } else {
-                    gSPTextureRectangle(OVERLAY_DISP++, (sp78 - 1) * 4, (sp74 - 1) * 4, (sp78 + 1) * 4, (sp74 + 1) * 4, G_TX_RENDERTILE, 0, 0, 0x0001, 0x0001);
+                    gSPTextureRectangle(OVERLAY_DISP++, (sp78 - 1) << 2, (sp74 - 1) << 2, (sp78 + 1) << 2, (sp74 + 1) << 2, G_TX_RENDERTILE, 0, 0, 0x0001, 0x0001);
                 }
             }
             CLOSE_DISPS(play->state.gfxCtx);
         }
     }
 }
-#else
-void func_801045AC(PlayState* play, Actor* actor);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_801045AC.s")
-#endif
 
 void func_80104AE8(PlayState *play) {
     s32 i;
@@ -458,7 +492,7 @@ void func_80104AE8(PlayState *play) {
     }
 }
 
-#ifdef NON_MATCHING
+//Possible fakematch
 //https://decomp.me/scratch/kvGBZ
 void func_80104C80(PlayState* play) {
     s32 objBankIndex;
@@ -466,16 +500,13 @@ void func_80104C80(PlayState* play) {
     objBankIndex = Object_GetIndex(&play->objectCtx, GAMEPLAY_DANGEON_KEEP);
     if (objBankIndex < 0) {
         D_801BEBB8.unk20 |= 1;
-        return;
     }
-    do {
-
-    } while (!Object_IsLoaded(&play->objectCtx, objBankIndex));
+    else 
+    {
+    do { } while (!Object_IsLoaded(&play->objectCtx, objBankIndex));
+    }
+    if (&play->objectCtx) {}
 }
-#else
-void func_80104C80(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80104C80.s")
-#endif
 
 void func_80104CF4(PlayState* play) {
     s32 i;
@@ -894,7 +925,64 @@ void func_80105C40(s16 arg0) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80105C40.s")
 #endif
 
+#ifdef NON_MATCHING
+//https://decomp.me/scratch/WiRnZ
+void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot) {
+    MinimapEntry* sp6C;
+    s32 sp68;
+    s32 sp64;
+    s32 sp60;
+    s32 sp5C;
+    s32 sp58;
+    s32 sp54;
+    s32 var_v0;
+    f32 sp4C;
+    s32 sp48;
+
+    sp6C = &D_801BEBB8.unk0->entry[D_801BEBB8.unk4];
+    if (sp6C->unk0 != 0xFFFF) {
+        func_801030F4(sp6C, &sp60, &sp5C);
+        func_80103090(sp6C, &sp58, &sp54);
+        var_v0 = D_801BEBB8.unk0->unk4;
+        if (D_801BEBB8.unk0->unk4 == 0) {
+            var_v0 = 0x14;
+        } else if (D_801BEBB8.unk0->unk4 == -1) {
+            func_801030B4(sp6C, &sp48);
+            var_v0 = sp48;
+        }
+        sp4C = (1.0f / var_v0);
+        if (func_801039EC(play) == 0) {
+            sp68 = (s32) ((x - (f32)sp6C->unk2) * sp4C) + D_801BEBB8.unk8 + (D_801BEBB8.unkC - D_801BEBB8.unk8) + sp60;
+            sp64 = (s32) ((z - (f32)sp6C->unk6) * sp4C) + D_801BEBB8.unkA + (D_801BEBB8.unkE - D_801BEBB8.unkA) + sp5C;
+        } else {
+            sp68 =  - (s32) ((x - (f32)sp6C->unk2) * sp4C) + D_801BEBB8.unk8 + (D_801BEBB8.unkC - D_801BEBB8.unk8) + sp60;
+            sp64 =  - (s32) ((z - (f32)sp6C->unk6) * sp4C) + D_801BEBB8.unkA + (D_801BEBB8.unkE - D_801BEBB8.unkA) + sp5C;
+        }
+        if ((sp68 > 0) && (sp68 < 0x3FF) && (sp64 > 0) && (sp64 < 0x3FF)) {
+            OPEN_DISPS(play->state.gfxCtx);
+            func_8012C8D4(play->state.gfxCtx);
+            gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+            gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, 255);
+            gDPSetCombineMode(OVERLAY_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
+            gDPSetRenderMode(OVERLAY_DISP++, G_RM_AA_DEC_LINE, G_RM_NOOP2);
+            Matrix_Translate((f32) sp68 - 160.0f, 120.0f - (f32) sp64, 0.0f, MTXMODE_NEW);
+            Matrix_RotateXFApply(-1.6f);
+            if (func_801039EC(play) != 0) {
+                rot += 0x7FFF;
+            }
+            Matrix_RotateYF(rot / 10.0f, MTXMODE_APPLY);
+            Matrix_Scale(0.4f, 0.4f, 0.4f, MTXMODE_APPLY);
+            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0xFF, 200, 0, 0, play->interfaceCtx.minimapAlpha);
+            gSPDisplayList(OVERLAY_DISP++, D_0401ED00);
+            CLOSE_DISPS(play->state.gfxCtx);
+        }
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80105FE0.s")
+#endif
 
 s32 func_80106408(PlayState* play) {
     if ((gSaveContext.save.entranceIndex == 0x6400) && (Cutscene_GetSceneSetupIndex(play) != 0)) {
@@ -918,7 +1006,12 @@ s32 func_801064CC(PlayState* play) {
     return false;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80106530.s")
+s32 func_80106530(PlayState* play) {
+    if ((func_801064CC(play) == true) || !func_80106450(play)) {
+        return true;
+    }
+    return false;
+}
 
 s32 func_8010657C(s32 arg0, s32 arg1) {
     MinimapEntry* temp_v1;
@@ -1069,9 +1162,37 @@ s32 func_801068FC(s32 arg0, s32 arg1) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_801068FC.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80106BEC.s")
+s32 func_80106BEC(s32 arg0, f32 arg1) {
+    if (arg0 == 0) {
+        if ((D_801BEBB8.unk48[0] <= arg1) && ((D_801BEBB8.unk40 == 1) || (arg1 < D_801BEBB8.unk48[1]))) {
+            return 1;
+        }
+    }
+    else if (arg0 >= (D_801BEBB8.unk40 - 1)) {
+        if (D_801BEBB8.unk48[D_801BEBB8.unk40-1] <= arg1) {
+            return 1;
+        }
+    }
+    else if ((D_801BEBB8.unk48[arg0] <= arg1) && (arg1 < D_801BEBB8.unk48[arg0+1])) {
+        return 1;
+    }
+    return 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80106D08.s")
+s32 func_80106D08(s32 arg0) {
+    switch (arg0) {
+    case 0x1F:
+        return 0x1B;
+    case 0x44:
+        return 0x21;
+    case 0x5F:
+        return 0x49;
+    case 0x36:
+        return 0x16;
+    default:
+        return arg0;
+    }
+}
 
 #define COLOR16(r, g, b, a) (s16) \
     ( ((s32) (((r) * 31.0f) / 255.0f) << 11) \
@@ -1205,15 +1326,108 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80108558.s")
 
+u32 func_80108A10(s32); // returns TIMG for func_80108AF8
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80108A10.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80108A64.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80108AF8.s")
+//https://decomp.me/scratch/4gO7Z
+void func_80108AF8(PlayState* play) {
+    PauseContext* pauseCtx = &play->pauseCtx;
+    s32 temp_a0_2;
+    s32 temp_a2_2;
+    s16 a3;
+    s16 a2;
+    s32 pad;
+    s32 var_s1;
+    s32 spB4 = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_801090B0.s")
+    if ((D_801BEBB8.unk0 != NULL) && (D_801BEC1C != 0) && (func_80108A64(play) == 0)) {
+        if (Map_IsInBossArea(play) != 0) {
+            switch (play->sceneNum) {
+            case 0x1F:
+                spB4 = 0;
+                break;
+            case 0x44:
+                spB4 = 1;
+                break;
+            case 0x5F:
+                spB4 = 2;
+                break;
+            case 0x36:
+                spB4 = 3;
+                break;
+            }
+        } else {
+            spB4 = gSaveContext.mapIndex;
+        }
+        OPEN_DISPS(play->state.gfxCtx);
+        func_8012C628(play->state.gfxCtx);
+        gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 200, pauseCtx->alpha);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80109124.s")
+        for (var_s1 = 0; var_s1 < D_801BEBB8.unk40; var_s1++) {
+                if ((gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneNumber(func_80106D08(play->sceneNum))].unk_14 & gBitFlags[4 - var_s1])
+                     ||  CHECK_DUNGEON_ITEM2(2, spB4)) { 
+                    gDPLoadTextureBlock(POLY_OPA_DISP++, func_80108A10(D_801BEBB8.unk44 + var_s1), G_IM_FMT_IA, G_IM_SIZ_8b,
+                     24, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                    gSPTextureRectangle(POLY_OPA_DISP++, 0x0144, (125 - var_s1 * 15) << 2, 0x01A4, ((125 - var_s1 * 15) + 16) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+                }
+        }
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 150, 150, 255, pauseCtx->alpha);
+        gDPLoadTextureBlock(POLY_OPA_DISP++, func_80108A10((D_801BEBB8.unk44 - pauseCtx->unk_256) + 8), G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        
+        a3 = 80;
+        a2 = 106;
+        temp_a0_2 = (5 + (pauseCtx->unk_256 * 0xF));
+        temp_a2_2 = temp_a0_2 + 0x10;
+        if ((pauseCtx->unk_258 == 0) && (pauseCtx->unk_242[1] == 0)) {
+            a2++;
+            a3--;
+            temp_a2_2 += 4;
+            temp_a0_2 -= 4;
+            gSPTextureRectangle(POLY_OPA_DISP++, a3 << 2, (temp_a0_2) << 2, a2 << 2, (temp_a2_2) << 2, G_TX_RENDERTILE, 0, 0, 0x036E, 0x02AA);
+        } else {
+            gSPTextureRectangle(POLY_OPA_DISP++, (a3 + 1) << 2, temp_a0_2 << 2, (a2 - 1) << 2, temp_a2_2 << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+        }
+        func_8012C8AC(play->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
+    }
+}
+
+s32 func_801090B0(s32 arg0) {
+    if ((D_801BEBB8.unk0 == NULL) || (D_801BEC1C == 0)) {
+        return false;
+    }
+    if ((arg0 < 0) || (arg0 >= 6)) {
+        return false;
+    }
+    if (D_801BEBB8.unk48[arg0] != -0x7FFF) {
+        return true;
+    }
+    return false;
+}
+
+s32 func_80109124(s16 arg0) {
+    s32 i;
+
+    if ((D_801BEBB8.unk0 == NULL) || (D_801BEC1C == 0)) {
+        return -1;
+    }
+    if (D_801BEBB8.unk40 < 2) {
+        return 0;
+    }
+    if ((D_801BEBB8.unk48[1] - 5) >= arg0) {
+        return 0;
+    }
+    for (i = 1; i < D_801BEBB8.unk40; i++) {
+        if (((D_801BEBB8.unk48[i] - 5) < arg0) && ((D_801BEBB8.unk48[i + 1] - 5) >= arg0)) {
+            return i;
+        }
+    }
+    return D_801BEBB8.unk40 - 1;
+}
 
 #ifdef NON_MATCHING
 void func_801091F0(PlayState* play) {
