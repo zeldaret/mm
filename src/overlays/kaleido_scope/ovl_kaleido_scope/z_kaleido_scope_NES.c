@@ -796,23 +796,14 @@ s16 func_80825A50(PlayState* play, Vtx* vtx, s16 arg2, s16 arg3) {
             vtx[k + 0].v.flag = vtx[k + 1].v.flag = vtx[k + 2].v.flag = vtx[k + 3].v.flag = 0;
 
             vtx[k + 0].v.tc[0] = vtx[k + 0].v.tc[1] = vtx[k + 1].v.tc[1] = vtx[k + 2].v.tc[0] = 0;
-
             vtx[k + 1].v.tc[0] = vtx[k + 3].v.tc[0] = ptr2[i] << 5;
-
             vtx[k + 2].v.tc[1] = vtx[k + 3].v.tc[1] = ptr4[i] << 5;
 
-            vtx[k + 0].v.cn[0] = 255;
-            vtx[k + 2].v.cn[0] = 255;
-            vtx[k + 0].v.cn[1] = 255;
-            vtx[k + 2].v.cn[1] = 255;
-            vtx[k + 0].v.cn[2] = 255;
-            vtx[k + 2].v.cn[2] = 255;
-            vtx[k + 1].v.cn[0] = 255;
-            vtx[k + 3].v.cn[0] = 255;
-            vtx[k + 1].v.cn[1] = 255;
-            vtx[k + 3].v.cn[1] = 255;
-            vtx[k + 1].v.cn[2] = 255;
-            vtx[k + 3].v.cn[2] = 255;
+            vtx[k + 0].v.cn[0] = vtx[k + 2].v.cn[0] = vtx[k + 0].v.cn[1] = vtx[k + 2].v.cn[1] = vtx[k + 0].v.cn[2] =
+                vtx[k + 2].v.cn[2] = 255;
+
+            vtx[k + 1].v.cn[0] = vtx[k + 3].v.cn[0] = vtx[k + 1].v.cn[1] = vtx[k + 3].v.cn[1] = vtx[k + 1].v.cn[2] =
+                vtx[k + 3].v.cn[2] = 255;
 
             vtx[k + 0].v.cn[3] = vtx[k + 2].v.cn[3] = vtx[k + 1].v.cn[3] = vtx[k + 3].v.cn[3] = pauseCtx->alpha;
         }
@@ -820,7 +811,335 @@ s16 func_80825A50(PlayState* play, Vtx* vtx, s16 arg2, s16 arg3) {
     return k;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_InitVertices.s")
+void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
+    PauseContext* pauseCtx = &play->pauseCtx;
+    s16 i;
+    s16 j;
+    s16 k;
+    s16 var_a3;
+    s16 var_t3;
+
+    pauseCtx->offsetY = 0;
+
+    if ((pauseCtx->state == 4) || (pauseCtx->state == 0x16) || (pauseCtx->state >= 0x19) ||
+        ((pauseCtx->state == 7) && ((pauseCtx->unk_208 == 3) || (pauseCtx->unk_208 == 7)))) {
+        pauseCtx->offsetY = 80;
+    }
+
+    if (pauseCtx->pageIndex != 2) {
+        pauseCtx->itemPageVtx = GRAPH_ALLOC(gfxCtx, 0x3C0);
+        func_80825A50(play, pauseCtx->itemPageVtx, 1, 0);
+
+        pauseCtx->itemVtx = GRAPH_ALLOC(gfxCtx, 0x6C0);
+
+        for (k = 0, i = 0, var_t3 = 58; k < 4; k++, var_t3 -= 32) {
+            for (var_a3 = -96, j = 0; j < 6; j++, i += 4, var_a3 += 32) {
+                pauseCtx->itemVtx[i + 0].v.ob[0] = pauseCtx->itemVtx[i + 2].v.ob[0] = var_a3 + 2;
+                pauseCtx->itemVtx[i + 1].v.ob[0] = pauseCtx->itemVtx[i + 3].v.ob[0] =
+                    pauseCtx->itemVtx[i + 0].v.ob[0] + 28;
+
+                pauseCtx->itemVtx[i + 0].v.ob[1] = pauseCtx->itemVtx[i + 1].v.ob[1] = var_t3 + pauseCtx->offsetY - 2;
+                pauseCtx->itemVtx[i + 2].v.ob[1] = pauseCtx->itemVtx[i + 3].v.ob[1] =
+                    pauseCtx->itemVtx[i + 0].v.ob[1] - 28;
+
+                pauseCtx->itemVtx[i + 0].v.ob[2] = pauseCtx->itemVtx[i + 1].v.ob[2] = pauseCtx->itemVtx[i + 2].v.ob[2] =
+                    pauseCtx->itemVtx[i + 3].v.ob[2] = 0;
+
+                pauseCtx->itemVtx[i + 0].v.flag = pauseCtx->itemVtx[i + 1].v.flag = pauseCtx->itemVtx[i + 2].v.flag =
+                    pauseCtx->itemVtx[i + 3].v.flag = 0;
+
+                pauseCtx->itemVtx[i + 0].v.tc[0] = pauseCtx->itemVtx[i + 0].v.tc[1] = pauseCtx->itemVtx[i + 1].v.tc[1] =
+                    pauseCtx->itemVtx[i + 2].v.tc[0] = 0;
+
+                pauseCtx->itemVtx[i + 1].v.tc[0] = pauseCtx->itemVtx[i + 2].v.tc[1] = pauseCtx->itemVtx[i + 3].v.tc[0] =
+                    pauseCtx->itemVtx[i + 3].v.tc[1] = 0x400;
+
+                pauseCtx->itemVtx[i + 0].v.cn[0] = pauseCtx->itemVtx[i + 1].v.cn[0] = pauseCtx->itemVtx[i + 2].v.cn[0] =
+                    pauseCtx->itemVtx[i + 3].v.cn[0] = pauseCtx->itemVtx[i + 0].v.cn[1] =
+                        pauseCtx->itemVtx[i + 1].v.cn[1] = pauseCtx->itemVtx[i + 2].v.cn[1] =
+                            pauseCtx->itemVtx[i + 3].v.cn[1] = pauseCtx->itemVtx[i + 0].v.cn[2] =
+                                pauseCtx->itemVtx[i + 1].v.cn[2] = pauseCtx->itemVtx[i + 2].v.cn[2] =
+                                    pauseCtx->itemVtx[i + 3].v.cn[2] = 255;
+
+                pauseCtx->itemVtx[i + 0].v.cn[3] = pauseCtx->itemVtx[i + 1].v.cn[3] = pauseCtx->itemVtx[i + 2].v.cn[3] =
+                    pauseCtx->itemVtx[i + 3].v.cn[3] = 255;
+            }
+        }
+
+        for (j = 1; j < 4; j++, i += 4) {
+            if (GET_CUR_FORM_BTN_SLOT(j) != ITEM_NONE) {
+                k = GET_CUR_FORM_BTN_SLOT(j) << 2;
+
+                pauseCtx->itemVtx[i + 0].v.ob[0] = pauseCtx->itemVtx[i + 2].v.ob[0] = pauseCtx->itemVtx[k].v.ob[0] - 2;
+
+                pauseCtx->itemVtx[i + 1].v.ob[0] = pauseCtx->itemVtx[i + 3].v.ob[0] =
+                    pauseCtx->itemVtx[i + 0].v.ob[0] + 32;
+
+                pauseCtx->itemVtx[i + 0].v.ob[1] = pauseCtx->itemVtx[i + 1].v.ob[1] = pauseCtx->itemVtx[k].v.ob[1] + 2;
+
+                pauseCtx->itemVtx[i + 2].v.ob[1] = pauseCtx->itemVtx[i + 3].v.ob[1] =
+                    pauseCtx->itemVtx[i + 0].v.ob[1] - 32;
+
+                pauseCtx->itemVtx[i + 0].v.ob[2] = pauseCtx->itemVtx[i + 1].v.ob[2] = pauseCtx->itemVtx[i + 2].v.ob[2] =
+                    pauseCtx->itemVtx[i + 3].v.ob[2] = 0;
+
+                pauseCtx->itemVtx[i + 0].v.flag = pauseCtx->itemVtx[i + 1].v.flag = pauseCtx->itemVtx[i + 2].v.flag =
+                    pauseCtx->itemVtx[i + 3].v.flag = 0;
+
+                pauseCtx->itemVtx[i + 0].v.tc[0] = pauseCtx->itemVtx[i + 0].v.tc[1] = pauseCtx->itemVtx[i + 1].v.tc[1] =
+                    pauseCtx->itemVtx[i + 2].v.tc[0] = 0;
+
+                pauseCtx->itemVtx[i + 1].v.tc[0] = pauseCtx->itemVtx[i + 2].v.tc[1] = pauseCtx->itemVtx[i + 3].v.tc[0] =
+                    pauseCtx->itemVtx[i + 3].v.tc[1] = 0x400;
+
+                pauseCtx->itemVtx[i + 0].v.cn[0] = pauseCtx->itemVtx[i + 1].v.cn[0] = pauseCtx->itemVtx[i + 2].v.cn[0] =
+                    pauseCtx->itemVtx[i + 3].v.cn[0] = pauseCtx->itemVtx[i + 0].v.cn[1] =
+                        pauseCtx->itemVtx[i + 1].v.cn[1] = pauseCtx->itemVtx[i + 2].v.cn[1] =
+                            pauseCtx->itemVtx[i + 3].v.cn[1] = pauseCtx->itemVtx[i + 0].v.cn[2] =
+                                pauseCtx->itemVtx[i + 1].v.cn[2] = pauseCtx->itemVtx[i + 2].v.cn[2] =
+                                    pauseCtx->itemVtx[i + 3].v.cn[2] = 255;
+
+                pauseCtx->itemVtx[i + 0].v.cn[3] = pauseCtx->itemVtx[i + 1].v.cn[3] = pauseCtx->itemVtx[i + 2].v.cn[3] =
+                    pauseCtx->itemVtx[i + 3].v.cn[3] = pauseCtx->alpha;
+            } else {
+                pauseCtx->itemVtx[i + 2].v.ob[0] = -300;
+                pauseCtx->itemVtx[i + 0].v.ob[0] = pauseCtx->itemVtx[i + 2].v.ob[0];
+
+                pauseCtx->itemVtx[i + 1].v.ob[0] = pauseCtx->itemVtx[i + 3].v.ob[0] =
+                    pauseCtx->itemVtx[i + 0].v.ob[0] + 32;
+
+                pauseCtx->itemVtx[i + 0].v.ob[1] = pauseCtx->itemVtx[i + 1].v.ob[1] = 300;
+                pauseCtx->itemVtx[i + 2].v.ob[1] = pauseCtx->itemVtx[i + 3].v.ob[1] =
+                    pauseCtx->itemVtx[i + 0].v.ob[1] - 32;
+            }
+        }
+    }
+
+    if (pauseCtx->pageIndex != 3) {
+        if (sInDungeonScene == 0) {
+            pauseCtx->mapPageVtx = GRAPH_ALLOC(gfxCtx, 0x1080);
+            j = func_80825A50(play, pauseCtx->mapPageVtx, 4, 36);
+
+            for (i = 0, var_t3 = 59; i < 15; i++, j += 4, var_t3 -= 9) {
+                pauseCtx->mapPageVtx[j + 2].v.ob[0] = -109;
+                pauseCtx->mapPageVtx[j + 0].v.ob[0] = pauseCtx->mapPageVtx[j + 2].v.ob[0];
+
+                pauseCtx->mapPageVtx[j + 1].v.ob[0] = pauseCtx->mapPageVtx[j + 3].v.ob[0] =
+                    pauseCtx->mapPageVtx[j + 0].v.ob[0] + 216;
+
+                pauseCtx->mapPageVtx[j + 0].v.ob[1] = pauseCtx->mapPageVtx[j + 1].v.ob[1] = var_t3 + pauseCtx->offsetY;
+
+                pauseCtx->mapPageVtx[j + 2].v.ob[1] = pauseCtx->mapPageVtx[j + 3].v.ob[1] =
+                    pauseCtx->mapPageVtx[j + 0].v.ob[1] - 9;
+
+                pauseCtx->mapPageVtx[j + 0].v.ob[2] = pauseCtx->mapPageVtx[j + 1].v.ob[2] =
+                    pauseCtx->mapPageVtx[j + 2].v.ob[2] = pauseCtx->mapPageVtx[j + 3].v.ob[2] = 0;
+
+                pauseCtx->mapPageVtx[j + 0].v.flag = pauseCtx->mapPageVtx[j + 1].v.flag =
+                    pauseCtx->mapPageVtx[j + 2].v.flag = pauseCtx->mapPageVtx[j + 3].v.flag = 0;
+
+                pauseCtx->mapPageVtx[j + 0].v.tc[0] = pauseCtx->mapPageVtx[j + 0].v.tc[1] =
+                    pauseCtx->mapPageVtx[j + 1].v.tc[1] = pauseCtx->mapPageVtx[j + 2].v.tc[0] = 0;
+
+                pauseCtx->mapPageVtx[j + 1].v.tc[0] = pauseCtx->mapPageVtx[j + 3].v.tc[0] = 0x1B00;
+                pauseCtx->mapPageVtx[j + 2].v.tc[1] = pauseCtx->mapPageVtx[j + 3].v.tc[1] = 0x120;
+
+                pauseCtx->mapPageVtx[j + 0].v.cn[0] = pauseCtx->mapPageVtx[j + 2].v.cn[0] =
+                    pauseCtx->mapPageVtx[j + 0].v.cn[1] = pauseCtx->mapPageVtx[j + 2].v.cn[1] =
+                        pauseCtx->mapPageVtx[j + 0].v.cn[2] = pauseCtx->mapPageVtx[j + 2].v.cn[2] =
+                            pauseCtx->mapPageVtx[j + 1].v.cn[0] = pauseCtx->mapPageVtx[j + 3].v.cn[0] =
+                                pauseCtx->mapPageVtx[j + 1].v.cn[1] = pauseCtx->mapPageVtx[j + 3].v.cn[1] =
+                                    pauseCtx->mapPageVtx[j + 1].v.cn[2] = pauseCtx->mapPageVtx[j + 3].v.cn[2] =
+                                        pauseCtx->mapPageVtx[j + 0].v.cn[3] = pauseCtx->mapPageVtx[j + 2].v.cn[3] =
+                                            pauseCtx->mapPageVtx[j + 1].v.cn[3] = pauseCtx->mapPageVtx[j + 3].v.cn[3] =
+                                                pauseCtx->alpha;
+            }
+
+            pauseCtx->mapPageVtx[j - 2].v.ob[1] = pauseCtx->mapPageVtx[j - 1].v.ob[1] =
+                pauseCtx->mapPageVtx[j - 4].v.ob[1] - 2;
+
+            pauseCtx->mapPageVtx[j - 2].v.tc[1] = pauseCtx->mapPageVtx[j - 1].v.tc[1] = 0x40;
+
+        } else {
+            pauseCtx->mapPageVtx = GRAPH_ALLOC(gfxCtx, 0x540);
+            func_80825A50(play, pauseCtx->mapPageVtx, 2, 6);
+        }
+    }
+
+    if (pauseCtx->pageIndex != 0) {
+        pauseCtx->questPageVtx = GRAPH_ALLOC(gfxCtx, 0x3C0);
+        func_80825A50(play, pauseCtx->questPageVtx, 3, 0);
+
+        pauseCtx->questVtx = GRAPH_ALLOC(gfxCtx, 0x9C0);
+
+        for (k = 0, j = 0; j < 39; j++, k += 4) {
+            if (j < 6) {
+                pauseCtx->questVtx[k + 0].v.ob[0] = pauseCtx->questVtx[k + 2].v.ob[0] = D_8082BB74[j];
+
+                pauseCtx->questVtx[k + 1].v.ob[0] = pauseCtx->questVtx[k + 3].v.ob[0] =
+                    pauseCtx->questVtx[k + 0].v.ob[0] + D_8082BC14[j];
+
+                pauseCtx->questVtx[k + 0].v.ob[1] = pauseCtx->questVtx[k + 1].v.ob[1] =
+                    D_8082BBC4[j] + pauseCtx->offsetY;
+
+                pauseCtx->questVtx[k + 2].v.ob[1] = pauseCtx->questVtx[k + 3].v.ob[1] =
+                    pauseCtx->questVtx[k + 0].v.ob[1] - D_8082BC64[j];
+            } else {
+                pauseCtx->questVtx[k + 0].v.ob[0] = pauseCtx->questVtx[k + 2].v.ob[0] = D_8082BB74[j] + 2;
+
+                pauseCtx->questVtx[k + 1].v.ob[0] = pauseCtx->questVtx[k + 3].v.ob[0] =
+                    pauseCtx->questVtx[k + 0].v.ob[0] + D_8082BC14[j] - 4;
+
+                pauseCtx->questVtx[k + 0].v.ob[1] = pauseCtx->questVtx[k + 1].v.ob[1] =
+                    D_8082BBC4[j] + pauseCtx->offsetY - 2;
+
+                pauseCtx->questVtx[k + 2].v.ob[1] = pauseCtx->questVtx[k + 3].v.ob[1] =
+                    pauseCtx->questVtx[k + 0].v.ob[1] - D_8082BC64[j] + 4;
+            }
+
+            pauseCtx->questVtx[k + 0].v.ob[2] = pauseCtx->questVtx[k + 1].v.ob[2] = pauseCtx->questVtx[k + 2].v.ob[2] =
+                pauseCtx->questVtx[k + 3].v.ob[2] = 0;
+
+            pauseCtx->questVtx[k + 0].v.flag = pauseCtx->questVtx[k + 1].v.flag = pauseCtx->questVtx[k + 2].v.flag =
+                pauseCtx->questVtx[k + 3].v.flag = 0;
+
+            pauseCtx->questVtx[k + 0].v.tc[0] = pauseCtx->questVtx[k + 0].v.tc[1] = pauseCtx->questVtx[k + 1].v.tc[1] =
+                pauseCtx->questVtx[k + 2].v.tc[0] = 0;
+
+            pauseCtx->questVtx[k + 1].v.tc[0] = pauseCtx->questVtx[k + 3].v.tc[0] = D_8082BC14[j] << 5;
+            pauseCtx->questVtx[k + 2].v.tc[1] = pauseCtx->questVtx[k + 3].v.tc[1] = D_8082BC64[j] << 5;
+
+            pauseCtx->questVtx[k + 0].v.cn[0] = pauseCtx->questVtx[k + 1].v.cn[0] = pauseCtx->questVtx[k + 2].v.cn[0] =
+                pauseCtx->questVtx[k + 3].v.cn[0] = pauseCtx->questVtx[k + 0].v.cn[1] =
+                    pauseCtx->questVtx[k + 1].v.cn[1] = pauseCtx->questVtx[k + 2].v.cn[1] =
+                        pauseCtx->questVtx[k + 3].v.cn[1] = pauseCtx->questVtx[k + 0].v.cn[2] =
+                            pauseCtx->questVtx[k + 1].v.cn[2] = pauseCtx->questVtx[k + 2].v.cn[2] =
+                                pauseCtx->questVtx[k + 3].v.cn[2] = 255;
+
+            pauseCtx->questVtx[k + 0].v.cn[3] = pauseCtx->questVtx[k + 1].v.cn[3] = pauseCtx->questVtx[k + 2].v.cn[3] =
+                pauseCtx->questVtx[k + 3].v.cn[3] = pauseCtx->alpha;
+        }
+    }
+
+    if (pauseCtx->pageIndex != 1) {
+        pauseCtx->maskPageVtx = GRAPH_ALLOC(gfxCtx, 0x3C0);
+        func_80825A50(play, pauseCtx->maskPageVtx, 0, 0);
+
+        pauseCtx->maskVtx = GRAPH_ALLOC(gfxCtx, 0x6C0);
+
+        for (k = 0, i = 0, var_t3 = 58; k < 4; k++, var_t3 -= 32) {
+            for (var_a3 = -96, j = 0; j < 6; j++, i += 4, var_a3 += 32) {
+                pauseCtx->maskVtx[i + 0].v.ob[0] = pauseCtx->maskVtx[i + 2].v.ob[0] = var_a3 + 2;
+                pauseCtx->maskVtx[i + 1].v.ob[0] = pauseCtx->maskVtx[i + 3].v.ob[0] =
+                    pauseCtx->maskVtx[i + 0].v.ob[0] + 28;
+
+                pauseCtx->maskVtx[i + 0].v.ob[1] = pauseCtx->maskVtx[i + 1].v.ob[1] = var_t3 + pauseCtx->offsetY - 2;
+                pauseCtx->maskVtx[i + 2].v.ob[1] = pauseCtx->maskVtx[i + 3].v.ob[1] =
+                    pauseCtx->maskVtx[i + 0].v.ob[1] - 28;
+
+                pauseCtx->maskVtx[i + 0].v.ob[2] = pauseCtx->maskVtx[i + 1].v.ob[2] = pauseCtx->maskVtx[i + 2].v.ob[2] =
+                    pauseCtx->maskVtx[i + 3].v.ob[2] = 0;
+
+                pauseCtx->maskVtx[i + 0].v.flag = pauseCtx->maskVtx[i + 1].v.flag = pauseCtx->maskVtx[i + 2].v.flag =
+                    pauseCtx->maskVtx[i + 3].v.flag = 0;
+
+                pauseCtx->maskVtx[i + 0].v.tc[0] = pauseCtx->maskVtx[i + 0].v.tc[1] = pauseCtx->maskVtx[i + 1].v.tc[1] =
+                    pauseCtx->maskVtx[i + 2].v.tc[0] = 0;
+
+                pauseCtx->maskVtx[i + 1].v.tc[0] = pauseCtx->maskVtx[i + 2].v.tc[1] = pauseCtx->maskVtx[i + 3].v.tc[0] =
+                    pauseCtx->maskVtx[i + 3].v.tc[1] = 0x400;
+
+                pauseCtx->maskVtx[i + 0].v.cn[0] = pauseCtx->maskVtx[i + 1].v.cn[0] = pauseCtx->maskVtx[i + 2].v.cn[0] =
+                    pauseCtx->maskVtx[i + 3].v.cn[0] = pauseCtx->maskVtx[i + 0].v.cn[1] =
+                        pauseCtx->maskVtx[i + 1].v.cn[1] = pauseCtx->maskVtx[i + 2].v.cn[1] =
+                            pauseCtx->maskVtx[i + 3].v.cn[1] = pauseCtx->maskVtx[i + 0].v.cn[2] =
+                                pauseCtx->maskVtx[i + 1].v.cn[2] = pauseCtx->maskVtx[i + 2].v.cn[2] =
+                                    pauseCtx->maskVtx[i + 3].v.cn[2] = 255;
+
+                pauseCtx->maskVtx[i + 0].v.cn[3] = pauseCtx->maskVtx[i + 1].v.cn[3] = pauseCtx->maskVtx[i + 2].v.cn[3] =
+                    pauseCtx->maskVtx[i + 3].v.cn[3] = 255;
+            }
+        }
+
+        for (j = 1; j < 4; j++, i += 4) {
+            if (GET_CUR_FORM_BTN_SLOT(j) != ITEM_NONE) {
+                k = (GET_CUR_FORM_BTN_SLOT(j) << 2) - 0x60;
+
+                pauseCtx->maskVtx[i + 0].v.ob[0] = pauseCtx->maskVtx[i + 2].v.ob[0] = pauseCtx->maskVtx[k].v.ob[0] - 2;
+
+                pauseCtx->maskVtx[i + 1].v.ob[0] = pauseCtx->maskVtx[i + 3].v.ob[0] =
+                    pauseCtx->maskVtx[i + 0].v.ob[0] + 32;
+
+                pauseCtx->maskVtx[i + 0].v.ob[1] = pauseCtx->maskVtx[i + 1].v.ob[1] = pauseCtx->maskVtx[k].v.ob[1] + 2;
+
+                pauseCtx->maskVtx[i + 2].v.ob[1] = pauseCtx->maskVtx[i + 3].v.ob[1] =
+                    pauseCtx->maskVtx[i + 0].v.ob[1] - 32;
+
+                pauseCtx->maskVtx[i + 0].v.ob[2] = pauseCtx->maskVtx[i + 1].v.ob[2] = pauseCtx->maskVtx[i + 2].v.ob[2] =
+                    pauseCtx->maskVtx[i + 3].v.ob[2] = 0;
+
+                pauseCtx->maskVtx[i + 0].v.flag = pauseCtx->maskVtx[i + 1].v.flag = pauseCtx->maskVtx[i + 2].v.flag =
+                    pauseCtx->maskVtx[i + 3].v.flag = 0;
+
+                pauseCtx->maskVtx[i + 0].v.tc[0] = pauseCtx->maskVtx[i + 0].v.tc[1] = pauseCtx->maskVtx[i + 1].v.tc[1] =
+                    pauseCtx->maskVtx[i + 2].v.tc[0] = 0;
+
+                pauseCtx->maskVtx[i + 1].v.tc[0] = pauseCtx->maskVtx[i + 2].v.tc[1] = pauseCtx->maskVtx[i + 3].v.tc[0] =
+                    pauseCtx->maskVtx[i + 3].v.tc[1] = 0x400;
+
+                pauseCtx->maskVtx[i + 0].v.cn[0] = pauseCtx->maskVtx[i + 1].v.cn[0] = pauseCtx->maskVtx[i + 2].v.cn[0] =
+                    pauseCtx->maskVtx[i + 3].v.cn[0] = pauseCtx->maskVtx[i + 0].v.cn[1] =
+                        pauseCtx->maskVtx[i + 1].v.cn[1] = pauseCtx->maskVtx[i + 2].v.cn[1] =
+                            pauseCtx->maskVtx[i + 3].v.cn[1] = pauseCtx->maskVtx[i + 0].v.cn[2] =
+                                pauseCtx->maskVtx[i + 1].v.cn[2] = pauseCtx->maskVtx[i + 2].v.cn[2] =
+                                    pauseCtx->maskVtx[i + 3].v.cn[2] = 255;
+
+                pauseCtx->maskVtx[i + 0].v.cn[3] = pauseCtx->maskVtx[i + 1].v.cn[3] = pauseCtx->maskVtx[i + 2].v.cn[3] =
+                    pauseCtx->maskVtx[i + 3].v.cn[3] = pauseCtx->alpha;
+            } else {
+                pauseCtx->maskVtx[i + 2].v.ob[0] = -300;
+                pauseCtx->maskVtx[i + 0].v.ob[0] = pauseCtx->maskVtx[i + 2].v.ob[0];
+
+                pauseCtx->maskVtx[i + 1].v.ob[0] = pauseCtx->maskVtx[i + 3].v.ob[0] =
+                    pauseCtx->maskVtx[i + 0].v.ob[0] + 32;
+
+                pauseCtx->maskVtx[i + 0].v.ob[1] = pauseCtx->maskVtx[i + 1].v.ob[1] = 300;
+                pauseCtx->maskVtx[i + 2].v.ob[1] = pauseCtx->maskVtx[i + 3].v.ob[1] =
+                    pauseCtx->maskVtx[i + 0].v.ob[1] - 32;
+            }
+        }
+    }
+
+    pauseCtx->cursorVtx = GRAPH_ALLOC(play->state.gfxCtx, 20 * sizeof(Vtx));
+
+    for (i = 0; i < 20; i++) {
+        pauseCtx->cursorVtx[i].v.ob[0] = pauseCtx->cursorVtx[i].v.ob[1] = pauseCtx->cursorVtx[i].v.ob[2] = 0;
+
+        pauseCtx->cursorVtx[i].v.flag = 0;
+
+        pauseCtx->cursorVtx[i].v.tc[0] = pauseCtx->cursorVtx[i].v.tc[1] = 0;
+
+        pauseCtx->cursorVtx[i].v.cn[0] = pauseCtx->cursorVtx[i].v.cn[1] = pauseCtx->cursorVtx[i].v.cn[2] =
+            pauseCtx->cursorVtx[i].v.cn[3] = 255;
+    }
+
+    pauseCtx->cursorVtx[1].v.tc[0] = pauseCtx->cursorVtx[2].v.tc[1] = pauseCtx->cursorVtx[3].v.tc[0] =
+        pauseCtx->cursorVtx[3].v.tc[1] = pauseCtx->cursorVtx[5].v.tc[0] = pauseCtx->cursorVtx[6].v.tc[1] =
+            pauseCtx->cursorVtx[7].v.tc[0] = pauseCtx->cursorVtx[7].v.tc[1] = pauseCtx->cursorVtx[9].v.tc[0] =
+                pauseCtx->cursorVtx[10].v.tc[1] = pauseCtx->cursorVtx[11].v.tc[0] = pauseCtx->cursorVtx[11].v.tc[1] =
+                    pauseCtx->cursorVtx[13].v.tc[0] = pauseCtx->cursorVtx[14].v.tc[1] =
+                        pauseCtx->cursorVtx[15].v.tc[0] = pauseCtx->cursorVtx[15].v.tc[1] = 0x200;
+
+    pauseCtx->cursorVtx[17].v.tc[0] = pauseCtx->cursorVtx[18].v.tc[1] = pauseCtx->cursorVtx[19].v.tc[0] =
+        pauseCtx->cursorVtx[19].v.tc[1] = 0x400;
+
+    pauseCtx->unk_1A4 = GRAPH_ALLOC(gfxCtx, 0x1C0);
+
+    if ((pauseCtx->state == 7) || ((pauseCtx->state >= 8) && (pauseCtx->state < 0x13))) {
+        pauseCtx->unk_1A0 = GRAPH_ALLOC(gfxCtx, 0x500);
+        func_80825A50(play, pauseCtx->unk_1A0, 5, 5);
+    }
+}
 
 // KaleidoScope_UpdateCursorSize
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808274DC.s")
