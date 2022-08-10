@@ -484,9 +484,7 @@ typedef struct struct_8085D848_unk_18 {
     /* 0x0C */ u8 unk_0C;
     /* 0x0D */ u8 unk_0D;
     /* 0x0E */ u8 unk_0E;
-    /* 0x0F */ UNK_TYPE1 unk_0F[1];
     /* 0x10 */ s16 unk_10;
-    /* 0x12 */ UNK_TYPE1 unk_12[2];
 } struct_8085D848_unk_18; // size = 0x14
 
 typedef struct struct_8085D848 {
@@ -14412,9 +14410,9 @@ struct_8085D848 D_8085D848[2] = {
             { 0x258, 0, 0, 0, 0, 0, 0xC8 },
         },
         {
-            { { -40.0f, 20.0f, -10.0f }, 0x78, 0xC8, 0xFF, { 0 }, 0x3E8, { 0, 0 } },
-            { { 0.0f, -10.0f, 0.0f }, 0xFF, 0xFF, 0xFF, { 0 }, 0x1388, { 0, 0 } },
-            { { -10.0f, 4.0f, 3.0f }, 0xC8, 0xC8, 0xFF, { 0 }, 0x1388, { 0, 0 } },
+            { { -40.0f, 20.0f, -10.0f }, 0x78, 0xC8, 0xFF, 0x3E8 },
+            { { 0.0f, -10.0f, 0.0f }, 0xFF, 0xFF, 0xFF,    0x1388 },
+            { { -10.0f, 4.0f, 3.0f }, 0xC8, 0xC8, 0xFF,    0x1388 },
         },
     },
     {
@@ -14424,9 +14422,9 @@ struct_8085D848 D_8085D848[2] = {
             { 0x258, 0, 0, 0, 0, 0, 0xC8 },
         },
         {
-            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, { 0 }, 0x64, { 0, 0 } },
-            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, { 0 }, 0x64, { 0, 0 } },
-            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, { 0 }, 0x64, { 0, 0 } },
+            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, 0x64 },
+            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, 0x64 },
+            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, 0x64 },
         },
     },
 };
@@ -14730,13 +14728,14 @@ void func_80854C70(Player* this, PlayState* play) {
     }
 }
 
-void func_80854CD0(f32 arg0, u16* arg1, u8* arg2, u8* arg3, u8* arg4, u16* arg5, u8* arg6, u8* arg7, u8* arg8, s16* arg9, u8* argA, u8* argB, u8* argC) {
+void func_80854CD0(f32 arg0, s16* arg1, u8* arg2, u8* arg3, u8* arg4, s16* arg5, u8* arg6, u8* arg7, u8* arg8,
+                   s16* arg9, u8* argA, u8* argB, u8* argC) {
     s32 i;
 
     for (i = 0; i < 3; i++) {
-        *arg1 = ((s32) ((*arg2 - *arg3) * arg0) + *arg3) - *arg4;
-        *arg5 = ((s32) ((*arg6 - *arg7) * arg0) + *arg7) - *arg8;
-        *arg9 = ((s32) ((*argA - *argB) * arg0) + *argB) - *argC;
+        *arg1 = ((s32)((*arg2 - *arg3) * arg0) + *arg3) - *arg4;
+        *arg5 = ((s32)((*arg6 - *arg7) * arg0) + *arg7) - *arg8;
+        *arg9 = ((s32)((*argA - *argB) * arg0) + *argB) - *argC;
 
         arg1++;
         arg2++;
@@ -14753,12 +14752,59 @@ void func_80854CD0(f32 arg0, u16* arg1, u8* arg2, u8* arg3, u8* arg4, u16* arg5,
     }
 }
 
-extern struct struct_8085D848 D_8085D848[];
+#ifdef NON_MATCHING
+void func_80854EFC(PlayState* play, f32 arg1, struct_8085D848_unk_00* arg2) {
+    struct_8085D848_unk_00 sp70;
+    struct_8085D848_unk_00* var_t0;
+    struct_8085D848_unk_00* var_v1;
+    u8* var_t3;
+    u8* var_t4;
+    s32 pad[5];
 
-extern u8 D_8085D844[];
+    sp70.unk_00 = play->envCtx.unk_C4.fogNear;
+    sp70.unk_02 = play->envCtx.unk_C4.fogColor[0];
+    sp70.unk_03 = play->envCtx.unk_C4.fogColor[1];
+    sp70.unk_04 = play->envCtx.unk_C4.fogColor[2];
+    sp70.unk_05 = play->envCtx.unk_C4.ambientColor[0];
+    sp70.unk_06 = play->envCtx.unk_C4.ambientColor[1];
+    sp70.unk_07 = play->envCtx.unk_C4.ambientColor[2];
 
+    if (arg1 <= 1.0f) {
+        var_t4 = play->envCtx.unk_C4.diffuseColor1;
+        var_v1 = arg2;
+        var_t0 = &sp70;
+        var_t3 = D_8085D844;
+    } else if (arg1 <= 2.0f) {
+        arg1 -= 1.0f;
+        var_v1 = &arg2[1];
+        var_t0 = arg2;
+        var_t4 = D_8085D844;
+        var_t3 = D_8085D844;
+    } else if (arg1 <= 3.0f) {
+        arg1 -= 2.0f;
+        var_v1 = &arg2[2];
+        var_t0 = &arg2[1];
+        var_t4 = D_8085D844;
+        var_t3 = D_8085D844;
+    } else {
+        arg1 -= 3.0f;
+        var_v1 = &sp70;
+        var_t0 = &arg2[2];
+        var_t4 = D_8085D844;
+        var_t3 = play->envCtx.unk_C4.diffuseColor1;
+    }
+
+    play->envCtx.lightSettings.fogNear = play->envCtx.unk_C4.fogNear + (-(((s32) ((var_v1->unk_00 - var_t0->unk_00) * arg1)) + var_t0->unk_00));
+
+    func_80854CD0(arg1, play->envCtx.lightSettings.fogColor, &var_v1->unk_02, &var_t0->unk_02,
+                  play->envCtx.unk_C4.fogColor, play->envCtx.lightSettings.ambientColor, &var_v1->unk_05,
+                  &var_t0->unk_05, play->envCtx.unk_C4.ambientColor, play->envCtx.lightSettings.diffuseColor1, var_t3,
+                  var_t4, play->envCtx.unk_C4.diffuseColor1);
+}
+#else
 void func_80854EFC(PlayState* play, f32 arg1, struct_8085D848_unk_00 arg2[]);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80854EFC.s")
+#endif
 
 void func_808550D0(PlayState* play, Player* this, f32 arg2, f32 arg3, s32 arg4) {
     struct_8085D848* temp_a2 = &D_8085D848[arg4];
@@ -15724,7 +15770,6 @@ Color_RGBA8 D_8085E3A4 = { 255, 255, 255, 0 };
 
 Color_RGBA8 D_8085E3A8 = { 0, 128, 128, 0 };
 
-
 void func_8085687C(Player* this) {
 }
 
@@ -16018,10 +16063,9 @@ void func_808576BC(PlayState* play, Player* this) {
         func_800B8F98(&this->actor, NA_SE_PL_GORON_SLIP - SFX_FLAG);
     }
 
-    if (func_8083F8A8(play, this, 12.0f, -1 - (var_v0 >> 0xC), (var_v0 >> 0xA) + 1.0f, (var_v0 >> 7) + 0xA0, 0x14,
-                        1)) {
+    if (func_8083F8A8(play, this, 12.0f, -1 - (var_v0 >> 0xC), (var_v0 >> 0xA) + 1.0f, (var_v0 >> 7) + 0xA0, 0x14, 1)) {
         func_800B8E58(this, (this->unk_B72 == NA_SE_PL_WALK_SNOW - SFX_FLAG) ? NA_SE_PL_ROLL_SNOW_DUST - SFX_FLAG
-                                                                                : NA_SE_PL_ROLL_DUST - SFX_FLAG);
+                                                                             : NA_SE_PL_ROLL_DUST - SFX_FLAG);
     }
 }
 
