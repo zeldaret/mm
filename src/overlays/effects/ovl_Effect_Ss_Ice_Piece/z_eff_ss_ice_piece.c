@@ -71,7 +71,7 @@ void EffectSsIcePiece_Draw(PlayState* play, u32 index, EffectSs* this) {
     gSPSegment(
         POLY_XLU_DISP++, 0x08,
         Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, frames % 256, 0x20, 0x10, 1, 0, (2 * frames) % 256, 0x40, 0x20));
-    gSPDisplayList(POLY_XLU_DISP++, gEffIceFragmentDL);
+    gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment1DL);
 
     CLOSE_DISPS(gfxCtx);
 }
