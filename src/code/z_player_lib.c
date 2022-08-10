@@ -558,20 +558,14 @@ ItemID func_8012364C(PlayState* play, Player* player, s32 arg2) {
     }
 
     if (arg2 == 1) {
-        return (gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)
-               : (gSaveContext.unk_3F22 == 0x10)                              ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)
-                                                                              : ITEM_NONE;
+        return C_BTN_ITEM(EQUIP_SLOT_C_LEFT);
     }
 
     if (arg2 == 2) {
-        return (gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)
-               : (gSaveContext.unk_3F22 == 0x10)                              ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)
-                                                                              : ITEM_NONE;
+        return C_BTN_ITEM(EQUIP_SLOT_C_DOWN);
     }
 
-    return (gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)
-           : (gSaveContext.unk_3F22 == 0x10)                               ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)
-                                                                           : ITEM_NONE;
+    return C_BTN_ITEM(EQUIP_SLOT_C_RIGHT);
 }
 
 u16 sCItemButtons[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };

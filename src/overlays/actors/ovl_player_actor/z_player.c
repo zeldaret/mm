@@ -2927,11 +2927,6 @@ s32 func_8082FDC4(void) {
     return i;
 }
 
-#define C_BTN_ITEM(btn)                                 \
-    ((gSaveContext.buttonStatus[(btn)] != BTN_DISABLED) \
-         ? BUTTON_ITEM_EQUIP(0, (btn))                  \
-         : ((gSaveContext.unk_3F22 == 0x10) ? BUTTON_ITEM_EQUIP(0, (btn)) : ITEM_NONE))
-
 void func_8082FE0C(Player* this, PlayState* play) {
     if (((this->stateFlags1 & (PLAYER_STATE1_800 | PLAYER_STATE1_20000000)) ||
          (this->stateFlags2 & PLAYER_STATE2_2000000) || (this->stateFlags3 & PLAYER_STATE3_20000000) ||
@@ -2941,58 +2936,59 @@ void func_8082FE0C(Player* this, PlayState* play) {
 
     if (this->transformation == PLAYER_FORM_HUMAN) {
         if (this->currentMask != PLAYER_MASK_NONE) {
-            s32 pad = this->currentMask + PLAYER_AP_MASK_TRUTH - 1;
-            s32 temp_v0_2 = func_8082FD0C(this, pad);
+            PlayerActionParam maskActionParam = this->currentMask + PLAYER_AP_MASK_TRUTH - 1;
+            s32 btn;
 
-            if (temp_v0_2 < 0) {
-                s32 var_a0;
+            btn = func_8082FD0C(this, maskActionParam);
 
-                var_a0 = Player_ItemToActionParam(this, GET_CUR_FORM_BTN_ITEM(this->unk_154)) - PLAYER_AP_39 - 1;
-                if ((var_a0 < PLAYER_MASK_TRUTH - 1) || (var_a0 >= PLAYER_MASK_MAX - 1)) {
-                    var_a0 = this->currentMask - 1;
+            if (btn < 0) {
+                s32 maskIdMinusOne =
+                    Player_ItemToActionParam(this, GET_CUR_FORM_BTN_ITEM(this->unk_154)) - PLAYER_AP_39 - 1;
+
+                if ((maskIdMinusOne < PLAYER_MASK_TRUTH - 1) || (maskIdMinusOne >= PLAYER_MASK_MAX - 1)) {
+                    maskIdMinusOne = this->currentMask - 1;
                 }
-                func_80831990(play, this, Player_MaskIdToItemId(var_a0));
+                func_80831990(play, this, Player_MaskIdToItemId(maskIdMinusOne));
                 return;
             } else {
-
                 if ((this->currentMask == PLAYER_MASK_GIANT) && (gSaveContext.save.playerData.magic == 0)) {
                     func_80838A20(play, this);
                 }
-                this->unk_154 = temp_v0_2;
+
+                this->unk_154 = btn;
             }
         }
     }
 
     if (((this->actor.id == ACTOR_PLAYER) && (this->heldItemActionParam >= PLAYER_AP_FISHING_POLE)) &&
         !(((func_80124148(this) == 0) || (gSaveContext.jinxTimer == 0)) &&
-          (func_8082FC78(this, (gGameInfo->data[0x361] != 0) ? ITEM_FISHING_POLE : Inventory_GetBtnBItem(play)) ||
+          (func_8082FC78(this, (IREG(1) != 0) ? ITEM_FISHING_POLE : Inventory_GetBtnBItem(play)) ||
            func_8082FC78(this, C_BTN_ITEM(EQUIP_SLOT_C_LEFT)) || func_8082FC78(this, C_BTN_ITEM(EQUIP_SLOT_C_DOWN)) ||
            func_8082FC78(this, C_BTN_ITEM(EQUIP_SLOT_C_RIGHT))))) {
         func_80831990(play, this, ITEM_NONE);
     } else {
-        s32 pad2;
-        ItemID temp_v0_5;
-        s32 var_a3;
-        var_a3 = func_8082FDC4();
+        s32 pad;
+        ItemID item;
+        s32 i = func_8082FDC4();
 
-        var_a3 = ((var_a3 >= 4) && (this->transformation == PLAYER_FORM_FIERCE_DEITY) &&
-                  (this->itemActionParam != PLAYER_AP_SWORD_GREAT_FAIRY))
-                     ? 0
-                     : var_a3;
+        i = ((i >= 4) && (this->transformation == PLAYER_FORM_FIERCE_DEITY) &&
+             (this->itemActionParam != PLAYER_AP_SWORD_GREAT_FAIRY))
+                ? 0
+                : i;
 
-        temp_v0_5 = func_8012364C(play, this, var_a3);
-        if (temp_v0_5 >= ITEM_FD) {
-            for (var_a3 = 0; var_a3 < ARRAY_COUNT(D_8085CFA8); var_a3++) {
-                if (CHECK_BTN_ALL(D_80862B44->cur.button, D_8085CFA8[var_a3])) {
+        item = func_8012364C(play, this, i);
+        if (item >= ITEM_FD) {
+            for (i = 0; i < ARRAY_COUNT(D_8085CFA8); i++) {
+                if (CHECK_BTN_ALL(D_80862B44->cur.button, D_8085CFA8[i])) {
                     break;
                 }
             }
 
-            temp_v0_5 = func_8012364C(play, this, var_a3);
-            if ((temp_v0_5 < ITEM_FD) && (Player_ItemToActionParam(this, temp_v0_5) == this->itemActionParam)) {
+            item = func_8012364C(play, this, i);
+            if ((item < ITEM_FD) && (Player_ItemToActionParam(this, item) == this->itemActionParam)) {
                 D_80862B4C = 1;
             }
-        } else if (temp_v0_5 == ITEM_F0) {
+        } else if (item == ITEM_F0) {
             if (this->unk_B60 == 0) {
                 EnBom* temp_v0_7 = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.focus.pos.x,
                                                        this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 0, 0);
@@ -3001,18 +2997,17 @@ void func_8082FE0C(Player* this, PlayState* play) {
                     this->unk_B60 = 0x136;
                 }
             }
-        } else if (temp_v0_5 == ITEM_F1) {
+        } else if (item == ITEM_F1) {
             func_80839978(play, this);
-        } else if (temp_v0_5 == ITEM_F2) {
+        } else if (item == ITEM_F2) {
             func_80839A10(play, this);
-        } else if ((func_80124110(this, Player_ItemToActionParam(this, temp_v0_5)) != 0) &&
-                   (gSaveContext.jinxTimer != 0)) {
+        } else if ((func_80124110(this, Player_ItemToActionParam(this, item)) != 0) && (gSaveContext.jinxTimer != 0)) {
             if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                 Message_StartTextbox(play, 0xF7, NULL);
             }
         } else {
-            this->heldItemButton = var_a3;
-            func_80831990(play, this, temp_v0_5);
+            this->heldItemButton = i;
+            func_80831990(play, this, item);
         }
     }
 }
@@ -9710,9 +9705,9 @@ void func_80843178(PlayState* play, Player* this) {
 
         temp_fv0_3 = D_80862B24 * 0.00008f;
         if (!(this->actor.bgCheckFlags & 1) || (temp_fv0_3 >= 1.0f)) {
-            this->unk_B50 = gGameInfo->data[0x2D] / 100.0f;
+            this->unk_B50 = REG(45) / 100.0f;
         } else {
-            temp_fv1 = (gGameInfo->data[0x2D] / 100.0f) * temp_fv0_3;
+            temp_fv1 = (REG(45) / 100.0f) * temp_fv0_3;
 
             this->unk_B50 = temp_fv1;
             if (temp_fv1 < 0.1f) {
@@ -9780,7 +9775,7 @@ void func_80843178(PlayState* play, Player* this) {
             }
         }
     } else {
-        this->unk_B50 = gGameInfo->data[0x2D] / 100.0f;
+        this->unk_B50 = REG(45) / 100.0f;
         this->wallHeight = 0.0f;
         this->unk_B5D = 0;
     }

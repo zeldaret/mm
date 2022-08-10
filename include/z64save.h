@@ -323,6 +323,10 @@ typedef enum SunsSongState {
 #define GET_CUR_FORM_BTN_ITEM(btn) ((u8)((btn) == EQUIP_SLOT_B ? BUTTON_ITEM_EQUIP(CUR_FORM, btn) : BUTTON_ITEM_EQUIP(0, btn)))
 #define GET_CUR_FORM_BTN_SLOT(btn) ((u8)((btn) == EQUIP_SLOT_B ? C_SLOT_EQUIP(CUR_FORM, btn) : C_SLOT_EQUIP(0, btn)))
 
+#define C_BTN_ITEM(btn)                                 \
+    ((gSaveContext.buttonStatus[(btn)] != BTN_DISABLED) \
+         ? BUTTON_ITEM_EQUIP(0, (btn))                  \
+         : ((gSaveContext.unk_3F22 == 0x10) ? BUTTON_ITEM_EQUIP(0, (btn)) : ITEM_NONE))
 
 #define SET_CUR_FORM_BTN_ITEM(btn, item)             \
     if ((btn) == EQUIP_SLOT_B) {                     \
