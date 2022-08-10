@@ -9,11 +9,11 @@
 #define PAUSE_CURSOR_PAGE_RIGHT 11
 
 typedef enum {
-    /* 0x00 */ PAUSE_ITEM,
-    /* 0x01 */ PAUSE_MAP,
-    /* 0x02 */ PAUSE_QUEST,
-    /* 0x03 */ PAUSE_MASK,
-    /* 0x04 */ PAUSE_WORLD_MAP
+    /* 0 */ PAUSE_ITEM,
+    /* 1 */ PAUSE_MAP,
+    /* 2 */ PAUSE_QUEST,
+    /* 3 */ PAUSE_MASK,
+    /* 4 */ PAUSE_WORLD_MAP
 } PauseMenuPage;
 
 typedef enum {

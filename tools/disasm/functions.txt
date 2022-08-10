@@ -4238,7 +4238,7 @@
     0x80825A50:("func_80825A50",),
     0x80825E28:("KaleidoScope_InitVertices",),
     0x808274DC:("func_808274DC",),
-    0x80827A8C:("func_80827A8C",),
+    0x80827A8C:("KaleidoScope_DrawCursor",),
     0x80827E08:("KaleidoScope_DrawGameOver",),
     0x808283D8:("KaleidoScope_Draw",),
     0x808286D8:("KaleidoScope_GrayOutTextureRGBA32",),
