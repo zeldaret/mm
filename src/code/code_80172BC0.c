@@ -9,7 +9,7 @@ void AudioMgr_StopAllSfxExceptSystem(void) {
 
     for (bankIdPtr = sSfxBankIds; bankIdPtr < (sSfxBankIds + ARRAY_COUNT(sSfxBankIds)); bankIdPtr++) {
         if (*bankIdPtr != BANK_SYSTEM) {
-            Audio_StopSfxByBank(*bankIdPtr);
+            AudioSfx_StopByBank(*bankIdPtr);
         }
     }
 }

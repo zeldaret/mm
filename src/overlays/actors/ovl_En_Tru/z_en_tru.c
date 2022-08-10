@@ -994,7 +994,7 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
             break;
 
         case 2:
-            Audio_StopSfxById(NA_SE_EN_KOUME_MAGIC);
+            AudioSfx_StopById(NA_SE_EN_KOUME_MAGIC);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_AWAY);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_LAUGH);
             func_80A86924(this, 13);

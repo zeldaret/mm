@@ -3023,6 +3023,7 @@ void osFlashSectorEraseThrough(u32 pageNum);
 s32 osFlashWriteBuffer(OSIoMesg* mb, s32 priority, void* dramAddr, OSMesgQueue* mq);
 s32 osFlashWriteArray(u32 pageNum);
 s32 osFlashReadArray(OSIoMesg* mb, s32 priority, u32 pageNum, void* dramAddr, u32 pageCount, OSMesgQueue* mq);
+
 // void func_801877D0(void);
 // void func_80187B64(void);
 // void func_80187BEC(void);
@@ -3065,6 +3066,7 @@ s32 osFlashReadArray(OSIoMesg* mb, s32 priority, u32 pageNum, void* dramAddr, u3
 // void func_8018A808(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6);
 // void func_8018ACC4(void);
 // void func_8018AE34(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+
 void AudioHeap_DiscardFont(s32 fontId);
 void* AudioHeap_WritebackDCache(void* addr, size_t size);
 void* AudioHeap_AllocAttemptExternal(AudioAllocPool* pool, size_t size);
@@ -3084,6 +3086,7 @@ void* AudioHeap_AllocPermanent(s32 tableType, s32 id, size_t size);
 void* AudioHeap_AllocSampleCache(size_t size, s32 sampleBankId, void* sampleAddr, s8 medium, s32 cache);
 void AudioHeap_ApplySampleBankCache(s32 sampleBankId);
 void AudioHeap_SetReverbData(s32 reverbIndex, u32 dataType, s32 data, s32 flags);
+
 void AudioLoad_DecreaseSampleDmaTtls(void);
 void* AudioLoad_DmaSampleData(uintptr_t devAddr, size_t size, s32 arg2, u8* dmaIndexRef, s32 medium);
 void AudioLoad_InitSampleDmaBuffers(s32 numNotes);
@@ -3112,6 +3115,7 @@ void AudioLoad_LoadPermanentSamples(void);
 void AudioLoad_ScriptLoad(s32 tableType, s32 id, s8* isDone);
 void AudioLoad_ProcessScriptLoads(void);
 void AudioLoad_InitScriptLoads(void);
+
 AudioTask* func_80192BE0(void);
 // void func_80192C00(void);
 // void func_8019319C(void);
@@ -3120,10 +3124,10 @@ AudioTask* func_80192BE0(void);
 // void func_80193774(void);
 // void func_8019380C(void);
 // void func_80193858(void);
-// void func_8019387C(void);
-void Audio_QueueCmdS8(u32 opArgs, s8 data);
+void AudioThread_QueueCmdS32(u32 opArgs, s32 data);
+void AudioThread_QueueCmdS8(u32 opArgs, s8 data);
 // void func_801938D0(void);
-// void func_80193900(void);
+s32 AudioThread_ScheduleProcessCmds(void);
 // void func_80193990(void);
 // void func_801939A8(void);
 // void func_80193AEC(void);
@@ -3145,11 +3149,14 @@ void Audio_QueueCmdS8(u32 opArgs, s8 data);
 // void func_80194528(void);
 // void func_80194548(void);
 // void func_80194568(void);
-u32 Audio_NextRandom(void);
-void Audio_InitMesgQueues(void);
+u32 AudioThread_NextRandom(void);
+void AudioThread_InitMesgQueues(void);
+
 void Audio_InvalDCache(void* buf, size_t size);
 void Audio_WritebackDCache(void* buf, size_t size);
+
 s32 osAiSetNextBuffer(void* buf, u32 size);
+
 void AudioPlayback_NoteDisable(Note* note);
 void AudioPlayback_ProcessNotes(void);
 SoundFontSound* AudioPlayback_InstrumentGetSound(Instrument* instrument, s32 semitone);
@@ -3167,12 +3174,14 @@ void AudioPlayback_NotePoolFill(NotePool* pool, s32 count);
 void AudioPlayback_AudioListRemove(AudioListItem* item);
 Note* AudioPlayback_AllocNote(SequenceLayer* layer);
 void AudioPlayback_NoteInitAll(void);
+
 void AudioEffects_SequencePlayerProcessSound(SequencePlayer* seqPlayer);
 void AudioEffects_NoteVibratoUpdate(Note* note);
 void AudioEffects_NoteVibratoInit(Note* note);
 void AudioEffects_NotePortamentoInit(Note* note);
 void AudioEffects_AdsrInit(AdsrState* adsr, EnvelopePoint* envelope, s16* volOut);
 f32 AudioEffects_AdsrUpdate(AdsrState* adsr);
+
 void AudioSeq_SequenceChannelDisable(SequenceChannel* channel);
 void AudioSeq_SequencePlayerDisableAsFinished(SequencePlayer* seqPlayer);
 void AudioSeq_SequencePlayerDisable(SequencePlayer* seqPlayer);
@@ -3183,6 +3192,7 @@ void AudioSeq_SkipForwardSequence(SequencePlayer* seqPlayer);
 void AudioSeq_ResetSequencePlayer(SequencePlayer* seqPlayer);
 void AudioSeq_InitSequencePlayerChannels(s32 playerIndex);
 void AudioSeq_InitSequencePlayers(void);
+
 void func_8019AE40(s32 param_1, s32 param_2, u32 param_3, s32 param_4);
 void func_8019AEC0(UNK_PTR param_1, UNK_PTR param_2);
 
@@ -3205,27 +3215,17 @@ void AudioOcarina_PlayLongScarecrowAfterCredits(void);
 
 void func_8019E014(void);
 // void func_8019E110(void);
-// void func_8019E14C(void);
-// void func_8019E324(void);
-// void func_8019E4B0(void);
-// void func_8019E634(void);
-// void func_8019E864(void);
-// void func_8019EA40(void);
-void Audio_SetSfxProperties(u8 bankId, u8 entryIdx, u8 channelIdx);
-// void func_8019F024(void);
-// void func_8019F05C(void);
+void AudioSfx_SetProperties(u8 bankId, u8 entryIndex, u8 channelIndex);
 void play_sound(u16 sfxId);
 void func_8019F128(u16 sfxId);
 void func_8019F170(Vec3f* pos, u16 sfxId);
 void Audio_PlaySfxAtPos(Vec3f* pos, u16 sfxId);
 void func_8019F208(void); // decide sfx
 void func_8019F230(void); // cancel sfx
-// void func_8019F258(void);
-// void func_8019F300(void);
 void func_8019F420(Vec3f* pos, u16 sfxId);
 void func_8019F4AC(Vec3f* pos, u16 sfxId);
 void func_8019F540(s8 arg0);
-void func_8019F570(Vec3f* pos, s8 arg1);
+void AudioSfx_LowerSfxSettingsReverb(Vec3f* pos, s8 isReverbLowered);
 // void func_8019F5AC(void);
 // void func_8019F638(void);
 // void func_8019F780(void);
@@ -3257,7 +3257,7 @@ void func_801A0238(s32 arg0, s32 arg1);
 // void Audio_UpdateRiverSoundVolumes(void);
 // void func_801A0554(void);
 // void func_801A05F0(void);
-void func_801A0654(Vec3f* arg0, u16 sfxId, s32 arg2);
+void AudioSfx_SetChannelIO(Vec3f* pos, u16 sfxId, u8 ioData);
 void func_801A0810(Vec3f* arg0, u16 sfxId, u8 arg2);
 void func_801A0868(Vec3f* pos, u16 sfxId, u8 val);
 // void func_801A09D4(void);
@@ -3339,14 +3339,14 @@ void func_801A479C(Vec3f* arg0, u16 sfxId, s32 arg2);
 void func_801A47DC(u8 channelIndexRange, u8 port, u8 val);
 // void func_801A48E0(void);
 void func_801A4A28(u8 natureSeqId);
-// void func_801A4B80(void);
-void func_801A4C30(void);
-// void func_801A4C54(void);
+// void Audio_SetNatureAmbienceRandomBend(void);
+void Audio_Init(void);
 void func_801A4D00(void);
 // void func_801A4D50(void);
 // void func_801A4DA4(void);
 // void func_801A4DF4(void);
 // void func_801A4E64(void);
+
 // void func_801A4EB0(void);
 // void func_801A4EB8(void);
 // void func_801A4FD8(void);
@@ -3365,22 +3365,24 @@ UNK_TYPE func_801A51F0(UNK_TYPE arg0);
 // void func_801A5808(void);
 // void func_801A5A10(void);
 // void func_801A5A1C(void);
-void Audio_SetSfxBanksMute(u16 muteMask);
-void Audio_SetFlagForBgmVolumeLow(u8 channelIdx);
-void Audio_ClearFlagForBgmVolumeLow(u8 channelIdx);
-void Audio_PlaySfxGeneral(u16 sfxId, Vec3f* pos, u8 token, f32* freqScale, f32* vol, s8* reverbAdd);
-void Audio_ProcessSfxRequest(void);
-void Audio_StopSfxByBank(u8 bankId);
-void Audio_StopSfxByPosAndBank(u8 bankId, Vec3f* pos);
-void Audio_StopSfxByPos(Vec3f* pos);
-void Audio_StopSfxByPosAndId(Vec3f* pos, u16 sfxId);
-void Audio_StopSfxByTokenAndId(u8 token, u16 sfxId);
-void Audio_StopSfxById(u32 sfxId);
-void Audio_ProcessSfxRequests(void);
-void Audio_ProcessActiveSfxs(void);
-u8 Audio_IsSfxPlaying(u32 sfxId);
-void Audio_ResetSfxs(void);
-// void func_801A7B10(void);
+
+void AudioSfx_MuteBanks(u16 muteMask);
+void AudioSfx_LowerBgmVolume(u8 channelIndex);
+void AudioSfx_RestoreBgmVolume(u8 channelIndex);
+void AudioSfx_PlaySfx(u16 sfxId, Vec3f* pos, u8 token, f32* freqScale, f32* volume, s8* reverbAdd);
+void AudioSfx_ProcessRequest(void);
+void AudioSfx_StopByBank(u8 bankId);
+void AudioSfx_StopByPosAndBank(u8 bankId, Vec3f* pos);
+void AudioSfx_StopByPos(Vec3f* pos);
+void AudioSfx_StopByPosAndId(Vec3f* pos, u16 sfxId);
+void AudioSfx_StopByTokenAndId(u8 token, u16 sfxId);
+void AudioSfx_StopById(u32 sfxId);
+void AudioSfx_ProcessRequests(void);
+void AudioSfx_ProcessActiveSfx(void);
+u8 AudioSfx_IsPlaying(u32 sfxId);
+void AudioSfx_Reset(void);
+
+void Audio_StartSequence(u8 playerIndex, u8 seqId, u8 seqArgs, u16 fadeTimer);
 // void func_801A7D04(void);
 // void func_801A7D84(void);
 void Audio_QueueSeqCmd(u32 cmd);
