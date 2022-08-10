@@ -11498,8 +11498,46 @@ void func_8084748C(Player* this, f32* speed, f32 speedTarget, s16 yawTarget) {
     Math_ScaledStepToS(&this->currentYaw, yawTarget, 1600); // 1 ESS turn, also one frame of first-person rotation
 }
 
-void func_808475B4(Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808475B4.s")
+void func_808475B4(Player* this) {
+    f32 sp4;
+    f32 temp_fa1;
+    f32 temp_fv0;
+    f32 var_ft4 = -5.0f;
+    f32 var_ft5 = this->ageProperties->unk_28;
+    f32 var_ft5_4;
+
+    temp_fv0 = this->actor.depthInWater - var_ft5;
+    if (this->actor.velocity.y < 0.0f) {
+        var_ft5 += 1.0f;
+    }
+
+    if (this->actor.depthInWater < var_ft5) {
+        temp_fv0 = CLAMP(temp_fv0, -0.4f, -0.1f);
+        sp4 = temp_fv0 - ((this->actor.velocity.y <= 0.0f) ? 0.0f : this->actor.velocity.y * 0.5f);
+    } else {
+        if (!(this->stateFlags1 & PLAYER_STATE1_80) && (this->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&
+            (this->actor.velocity.y >= -5.0f)) {
+            sp4 = -0.3f;
+        } else if ((this->transformation == PLAYER_FORM_DEKU) && (this->actor.velocity.y < 0.0f)) {
+            var_ft4 = 0.0f;
+            sp4 = -this->actor.velocity.y;
+        } else {
+            var_ft4 = 2.0f;
+            var_ft5_4 = CLAMP(temp_fv0, 0.1f, 0.4f);
+            sp4 = ((this->actor.velocity.y >= 0.0f) ? 0.0f : this->actor.velocity.y * -0.3f) + var_ft5_4;
+        }
+
+        if (this->actor.depthInWater > 100.0f) {
+            this->stateFlags2 |= PLAYER_STATE2_400;
+        }
+    }
+
+    this->actor.velocity.y += sp4;
+    if (((this->actor.velocity.y - var_ft4) * sp4) > 0.0f) {
+        this->actor.velocity.y = var_ft4;
+    }
+    this->actor.gravity = 0.0f;
+}
 
 void func_808477D0(PlayState* play, Player* this, Input* input, f32 arg3) {
     f32 var_fv0;
