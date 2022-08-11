@@ -653,8 +653,6 @@ s32 func_80105328(s32 params) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-// https://decomp.me/scratch/F3QhH
 void func_8010534C(PlayState* play) {
     DoorContext* doorCtx; 
     TransitionActorEntry* var_s0;
@@ -667,6 +665,7 @@ void func_8010534C(PlayState* play) {
         if (func_80105328(D_801F53B0[var_s2].params) != 0) {
             if (ABS_ALT(D_801F53B0[var_s2].id) != 0x18) {
                 for (var_v0 = 0; var_v0 < D_801BEBB8.unk40; var_v0++) {
+                    s32 temp = (D_801BEBB8.unk48[var_v0] - 5); // needed for matching
                     if (
                         ( (var_v0 == D_801BEBB8.unk40 - 1) && (D_801F53B0[var_s2].pos.y >= (D_801BEBB8.unk48[var_v0] - 5)) ) 
                     || (
@@ -683,10 +682,6 @@ void func_8010534C(PlayState* play) {
     }
     D_801BEBB8.unk58 = 0;
 }
-#else
-void func_8010534C(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_8010534C.s")
-#endif
 
 #ifdef NON_MATCHING
 void func_8010549C(PlayState* globalCtx, void* segmentAddress) {
