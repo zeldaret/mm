@@ -7594,16 +7594,11 @@ void func_8083C6E8(Player* this, PlayState* play) {
     func_80832754(this, func_800B7128(this) || func_8082EF20(this));
 }
 
-#ifdef NON_MATCHING
 void func_8083C85C(Player* this) {
     Math_ScaledStepToS(&this->unk_AB2.x, D_80862B3C * -500.0f, 900);
-    this->unk_AA6 |= 0x48;
     this->unk_AAC.x = (-(f32)this->unk_AB2.x * 0.5f);
+    this->unk_AA6 |= 0x48;
 }
-#else
-void func_8083C85C(Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083C85C.s")
-#endif
 
 #ifdef NON_EQUIVALENT
 // may be equivalent
