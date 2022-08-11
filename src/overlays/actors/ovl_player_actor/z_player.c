@@ -2655,7 +2655,6 @@ void func_8082F43C(PlayState* play, Player* this, PlayerFuncAC4 arg2) {
     func_8082E00C(this);
 }
 
-// OoT: func_80833664
 void func_8082F470(PlayState* play, Player* this, s32 arg2) {
     LinkAnimationHeader* current = this->skelAnime.animation;
     LinkAnimationHeader** iter = &D_8085BE84[this->modelAnimType];
@@ -14964,7 +14963,64 @@ void func_80853CC0(Player* this, PlayState* play) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80853D68.s")
+void func_80853D68(Player* this, PlayState* play) {
+    CollisionPoly* floorPoly;
+    f32 var_fv0;
+    f32 temp_fv1;
+    f32 var_fa0;
+    s16 downwardSlopeYaw;
+    s16 var_v0;
+    Vec3f slopeNormal;
+
+    this->stateFlags2 |= (PLAYER_STATE2_20 | PLAYER_STATE2_40);
+    LinkAnimation_Update(play, &this->skelAnime);
+    func_8083FBC4(play, this);
+    func_8019F780(&this->actor.projectedPos, func_8082E078(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG), this->actor.speedXZ);
+
+    if (func_80838A90(this, play)) {
+        return;
+    }
+
+    if ((this->transformation == PLAYER_FORM_GORON) && func_8083A114(this, play)) {
+        return;
+    }
+
+    floorPoly = this->actor.floorPoly;
+    if (floorPoly == NULL) {
+        func_80833AA0(this, play);
+        return;
+    }
+
+    Actor_GetSlopeDirection(floorPoly, &slopeNormal, &downwardSlopeYaw);
+    var_v0 = downwardSlopeYaw;
+    if (this->unk_AE7 != 0) {
+        var_v0 = downwardSlopeYaw + 0x8000;
+    }
+    if (this->linearVelocity < 0.0f) {
+        downwardSlopeYaw += 0x8000;
+    }
+
+    var_fv0 = (1.0f - slopeNormal.y) * 40.0f;
+    var_fv0 = CLAMP(var_fv0, 0.0f, 10.0f);
+
+    temp_fv1 = var_fv0 * var_fv0 * 0.015f;
+    var_fa0 = slopeNormal.y * 0.01f;
+    if (SurfaceType_GetSlope(&play->colCtx, floorPoly, this->actor.floorBgId) != 1) {
+        var_fv0 = 0.0f;
+        var_fa0 = slopeNormal.y * 10.0f;
+    }
+    temp_fv1 = CLAMP_MIN(temp_fv1, 1.0f);
+
+    if (Math_AsymStepToF(&this->linearVelocity, var_fv0, temp_fv1, var_fa0) && (var_fv0 == 0.0f)) {
+        func_80836A98(this,
+                      (this->unk_AE7 == 0) ? GET_PLAYER_ANIM(PLAYER_ANIMGROUP_41, this->modelAnimType)
+                                           : GET_PLAYER_ANIM(PLAYER_ANIMGROUP_42, this->modelAnimType),
+                      play);
+    }
+
+    Math_SmoothStepToS(&this->currentYaw, downwardSlopeYaw, 0xA, 0xFA0, 0x320);
+    Math_ScaledStepToS(&this->actor.shape.rot.y, var_v0, 0x7D0);
+}
 
 void func_80859CE0(PlayState* play, Player* this, s32 arg2);
 
