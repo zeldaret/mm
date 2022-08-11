@@ -11017,7 +11017,7 @@ void Player_Update(Actor* thisx, PlayState* play) {
     if ((play->actorCtx.unk268 != 0) && (this == GET_PLAYER(play))) {
         input = play->actorCtx.unk_26C;
     } else if ((this->csMode == 5) || (this->stateFlags1 & 0x20000020) || (this != GET_PLAYER(play)) ||
-               (func_8082DA90(play) != 0) || (gSaveContext.save.playerData.health == 0)) {
+               func_8082DA90(play) || (gSaveContext.save.playerData.health == 0)) {
         bzero(&input, sizeof(Input));
         this->fallStartHeight = this->actor.world.pos.y;
     } else {
@@ -11673,8 +11673,50 @@ s32 func_80847A94(PlayState* play, Player* this, s32 arg2, f32* arg3) {
     return false;
 }
 
-s32 func_80847BF0(Player* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847BF0.s")
+s32 func_80847BF0(Player* this, PlayState* play) {
+    EnHorse* rideActor = (EnHorse*)this->rideActor;
+    s32 var_a2; // sp38
+    f32 sp34;
+
+    if (this->unk_AE8 < 0) {
+        this->unk_AE8 = 0x63;
+    } else {
+        var_a2 = (this->mountSide < 0) ? 0 : 1;
+
+        if (!func_80847A94(play, this, var_a2, &sp34)) {
+            var_a2 ^= 1;
+            if (!func_80847A94(play, this, var_a2, &sp34)) {
+                return false;
+            }
+
+            this->mountSide = -this->mountSide;
+        }
+
+        if (play->csCtx.state == CS_STATE_0) {
+            if (!func_8082DA90(play)) {
+                if (EN_HORSE_CHECK_1(rideActor) || EN_HORSE_CHECK_A(rideActor)) {
+                    this->stateFlags2 |= PLAYER_STATE2_400000;
+
+                    if (EN_HORSE_CHECK_1(rideActor) ||
+                        (EN_HORSE_CHECK_A(rideActor) && CHECK_BTN_ALL(D_80862B44->press.button, BTN_A))) {
+                        rideActor->actor.child = NULL;
+
+                        func_8083172C(play, this, func_808505D0, 0);
+                        this->unk_B48 = sp34 - rideActor->actor.world.pos.y;
+
+                        Player_AnimationPlayOnce(play, this,
+                                                 (this->mountSide < 0) ? &gameplay_keep_Linkanim_00E060
+                                                                       : &gameplay_keep_Linkanim_00E070);
+
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
+}
 
 // Used in 2 horse-related functions
 void func_80847E2C(Player* this, f32 arg1, f32 minFrame) {

@@ -232,6 +232,20 @@ typedef struct EnHorse {
     /* 0x590 */ s32 unk_590;
 } EnHorse; // size = 0x594
 
+
+#define EN_HORSE_CHECK_1(horseActor) \
+    (((horseActor)->stateFlags & ENHORSE_FLAG_6)  \
+        ? true                       \
+        : false)
+
+
+// TODO
+#define EN_HORSE_CHECK_A(horseActor)                                                                  \
+    (((((horseActor)->action == 7) || ((horseActor)->action == 0) || ((horseActor)->action == 8)) && \
+      !((horseActor)->stateFlags & 0x80000) && !((horseActor)->stateFlags & 0x2000000))              \
+         ? true                                                                                      \
+         : false)
+
 extern const ActorInit En_Horse_InitVars;
 
 #endif // Z_EN_HORSE_H
