@@ -7548,9 +7548,9 @@ extern Vec3f D_8085D218;
 void func_8083C6E8(Player* this, PlayState* play) {
     if (this->unk_730 != NULL) {
         if (func_800B7128(this) || func_8082EF20(this)) {
-            func_8083C62C(this, 1);
+            func_8083C62C(this, true);
         } else {
-            func_8083C62C(this, 0);
+            func_8083C62C(this, false);
         }
         return;
     }
@@ -8238,7 +8238,7 @@ s32 func_8083E514(Player* this, f32* arg2, s16* arg3, PlayState* play) {
         }
 
         if (this->unk_730 != NULL) {
-            func_8083C62C(this, 1);
+            func_8083C62C(this, true);
         } else {
             Math_SmoothStepToS(&this->actor.focus.rot.x, (D_80862B44->rel.stick_y * 240.0f), 0xE, 0xFA0, 0x1E);
             func_80832754(this, true);
@@ -10115,7 +10115,10 @@ LinkAnimationHeader* D_8085D6D0[] = {
     &gameplay_keep_Linkanim_00E090,
 };
 
-s16 D_8085D6DC[2] = { 0x203A, 0x192A };
+u8 D_8085D6DC[][2] = {
+    { 0x20, 0x3A },
+    { 0x19, 0x2A },
+};
 
 Vec3s D_8085D6E0 = { -0x45, 0x1BEA, -0x10A };
 
@@ -13604,7 +13607,7 @@ void func_8084D820(Player* this, PlayState* play) {
                     if (play->sceneNum == 0x45) {
                         play->unk_1887C = 0;
                     }
-                } else if (func_808391D8(this, play) == 0) {
+                } else if (!func_808391D8(this, play)) {
                     func_8083B2E4(this, play);
                 }
             }
@@ -13798,13 +13801,7 @@ void func_8084E724(Player* this, PlayState* play) {
 
     temp_v1 = this->unk_AA5;
     new_var = temp_v1;
-    // if (((temp_v1 == 2) && !(play->actorCtx.unk5 & 4)) || ((temp_v1 != 2) && ((this->csMode != 0) || (temp_v1 == 0)
-    // || ((s32) temp_v1 >= 5) || (func_8082FB68(this) != 0) || (this->unk_730 != NULL) || (func_8083868C(play, this) ==
-    // 0) || ((this->unk_AA5 == 3) && (((Player_ItemToActionParam(this, Inventory_GetBtnBItem(play)) !=
-    // this->itemActionParam) && (D_80862B44->press.button & 0x4000)) || (D_80862B44->press.button & 0x8010) ||
-    // (func_80123434(this) != 0) ||
-    // ((func_800B7128(this) == 0) && (func_8082EF20(this) == 0)))) || ((this->unk_AA5 == 1) &&
-    // (D_80862B44->press.button & 0xC01F)) || (func_808391D8(this, play) != 0))))
+
     if (((temp_v1 == 2) && (!(play->actorCtx.unk5 & 4))) ||
         ((temp_v1 != 2) &&
          (((((((((this->csMode != 0) || (new_var == 0)) || (((s32)temp_v1) >= 5)) || (func_8082FB68(this) != 0)) ||
@@ -13812,12 +13809,13 @@ void func_8084E724(Player* this, PlayState* play) {
              (func_8083868C(play, this) == 0)) ||
             ((this->unk_AA5 == 3) &&
              (((((Player_ItemToActionParam(this, Inventory_GetBtnBItem(play)) != this->itemActionParam) &&
-                 (D_80862B44->press.button & 0x4000)) ||
-                (D_80862B44->press.button & 0x8010)) ||
+                 CHECK_BTN_ANY(D_80862B44->press.button, BTN_B)) ||
+                CHECK_BTN_ANY(D_80862B44->press.button, BTN_R | BTN_A)) ||
                (func_80123434(this) != 0)) ||
-              ((func_800B7128(this) == 0) && (func_8082EF20(this) == 0))))) ||
-           ((this->unk_AA5 == 1) && (D_80862B44->press.button & 0xC01F))) ||
-          (func_808391D8(this, play) != 0)))) {
+              (!func_800B7128(this) && (func_8082EF20(this) == 0))))) ||
+           ((this->unk_AA5 == 1) && CHECK_BTN_ANY(D_80862B44->press.button, BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN |
+                                                                                BTN_CUP | BTN_R | BTN_B | BTN_A))) ||
+          func_808391D8(this, play)))) {
         func_80839ED0(this, play);
         play_sound(NA_SE_SY_CAMERA_ZOOM_UP);
     } else if ((DECR(this->unk_AE8) == 0) || (this->unk_AA5 != 3)) {
@@ -13884,7 +13882,7 @@ void func_8084E980(Player* this, PlayState* play) {
     }
 
     if (this->unk_730 != NULL) {
-        this->currentYaw = func_8083C62C(this, 0);
+        this->currentYaw = func_8083C62C(this, false);
         this->actor.shape.rot.y = this->currentYaw;
         if (this->unk_AE7 != 0) {
             if (!(this->stateFlags1 & PLAYER_STATE1_800)) {
@@ -14158,7 +14156,178 @@ s32 func_8084FE48(Player* this) {
     return this->unk_730 == NULL && !func_8082FC24(this);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084FE7C.s")
+void func_8084FE7C(Player* this, PlayState* play) {
+    EnHorse* rideActor = (EnHorse*)this->rideActor;
+
+    this->stateFlags2 |= PLAYER_STATE2_40;
+
+    func_80847E2C(this, 1.0f, 10.0f);
+    if (this->unk_AE8 == 0) {
+        if (LinkAnimation_Update(play, &this->skelAnime)) {
+            this->skelAnime.animation = &gameplay_keep_Linkanim_00E088;
+            this->unk_AE8 = 0x63;
+        } else {
+            s32 var_v0 = (this->mountSide < 0) ? 0 : 1;
+
+            if (LinkAnimation_OnFrame(&this->skelAnime, D_8085D6DC[var_v0][0])) {
+                Actor_SetCameraHorseSetting(play, this);
+                func_800B8E58(this, NA_SE_PL_CLIMB_CLIFF);
+            } else if (LinkAnimation_OnFrame(&this->skelAnime, D_8085D6DC[var_v0][1])) {
+                func_800B8E58(this, NA_SE_PL_SIT_ON_HORSE);
+            }
+        }
+    } else {
+        if (rideActor->actor.bgCheckFlags & 1) {
+            func_80841A50(play, this);
+        }
+
+        Actor_SetCameraHorseSetting(play, this);
+
+        this->skelAnime.prevTransl = D_8085D6E0;
+
+        if ((this->unk_AE8 < 0) || ((rideActor->animationIdx != (this->unk_AE8 & 0xFFFF)) &&
+                                    ((rideActor->animationIdx >= ENHORSE_ANIM_STOPPING) || (this->unk_AE8 >= 2)))) {
+            s32 animationIdx = rideActor->animationIdx;
+
+            if (animationIdx < ENHORSE_ANIM_STOPPING) {
+                f32 temp_fv0 = Rand_ZeroOne();
+                s32 index = 0;
+
+                animationIdx = ENHORSE_ANIM_WHINNEY;
+                if (temp_fv0 < 0.1f) {
+                    index = 2;
+                } else if (temp_fv0 < 0.2f) {
+                    index = 1;
+                }
+
+                Player_AnimationPlayOnce(play, this, D_8085D6D0[index]);
+            } else {
+                this->skelAnime.animation = D_8085D688[animationIdx - 2];
+                if (this->unk_AE8 >= 0) {
+                    Animation_SetMorph(play, &this->skelAnime, 8.0f);
+                }
+
+                if (animationIdx < ENHORSE_ANIM_WALK) {
+                    func_808309CC(play, this);
+                    this->unk_AE7 = 0;
+                }
+            }
+
+            this->unk_AE8 = animationIdx;
+        }
+
+        if (this->unk_AE8 == 1) {
+            if ((D_80862B04 != 0) || func_8082DAFC(play)) {
+                Player_AnimationPlayOnce(play, this, &gameplay_keep_Linkanim_00E098);
+            } else if (LinkAnimation_Update(play, &this->skelAnime)) {
+                this->unk_AE8 = 0x63;
+            } else if (this->skelAnime.animation == &gameplay_keep_Linkanim_00E088) {
+                Player_PlayAnimSfx(this, D_8085D6E8);
+            }
+        } else {
+            this->skelAnime.curFrame = rideActor->curFrame;
+            LinkAnimation_AnimateFrame(play, &this->skelAnime);
+        }
+
+        AnimationContext_SetCopyAll(play, this->skelAnime.limbCount, this->skelAnime.morphTable,
+                                    this->skelAnime.jointTable);
+
+        if ((play->csCtx.state != CS_STATE_0) || (this->csMode != 0)) {
+            this->unk_AA5 = 0;
+            this->unk_AE7 = 0;
+        } else if ((this->unk_AE8 < 2) || (this->unk_AE8 >= 4)) {
+            D_80862B04 = func_8083216C(this, play);
+            if (D_80862B04 != 0) {
+                this->unk_AE7 = 0;
+            }
+        }
+
+        this->actor.world.pos.x = rideActor->actor.world.pos.x + rideActor->riderPos.x;
+        this->actor.world.pos.y = rideActor->actor.world.pos.y + rideActor->riderPos.y - 27.0f;
+        this->actor.world.pos.z = rideActor->actor.world.pos.z + rideActor->riderPos.z;
+
+        this->currentYaw = this->actor.shape.rot.y = rideActor->actor.shape.rot.y;
+
+        if (D_80862B04 == 0) {
+            if (this->unk_AE7 != 0) {
+                if (LinkAnimation_Update(play, &this->unk_284)) {
+                    rideActor->stateFlags &= ~ENHORSE_FLAG_8;
+                    this->unk_AE7 = 0;
+                }
+
+                if (this->unk_284.animation == &gameplay_keep_Linkanim_00E080) {
+                    if (LinkAnimation_OnFrame(&this->unk_284, 23.0f)) {
+                        func_800B8E58(this, NA_SE_IT_LASH);
+                        func_8082DF8C(this, NA_SE_VO_LI_LASH);
+                    }
+
+                    AnimationContext_SetCopyAll(play, this->skelAnime.limbCount, this->skelAnime.jointTable,
+                                                this->unk_284.jointTable);
+                } else {
+                    if (LinkAnimation_OnFrame(&this->unk_284, 10.0f)) {
+                        func_800B8E58(this, NA_SE_IT_LASH);
+                        func_8082DF8C(this, NA_SE_VO_LI_LASH);
+                    }
+
+                    AnimationContext_SetCopyTrue(play, this->skelAnime.limbCount, this->skelAnime.jointTable,
+                                                 this->unk_284.jointTable, D_8085B9F0);
+                }
+            } else if (!CHECK_FLAG_ALL(this->actor.flags, 0x100)) {
+                LinkAnimationHeader* anim = NULL;
+
+                if (EN_HORSE_CHECK_3(rideActor)) {
+                    anim = &gameplay_keep_Linkanim_00E080;
+                } else if (EN_HORSE_CHECK_2(rideActor)) {
+                    if ((this->unk_AE8 >= 2) && (this->unk_AE8 != 0x63)) {
+                        anim = D_8085D6A4[this->unk_AE8];
+                    }
+                }
+
+                if (anim != NULL) {
+                    LinkAnimation_PlayOnce(play, &this->unk_284, anim);
+                    this->unk_AE7 = 1;
+                }
+            }
+        }
+
+        if (this->stateFlags1 & PLAYER_STATE1_100000) {
+            if (CHECK_BTN_ANY(D_80862B44->press.button, BTN_A) || !func_8084FE48(this)) {
+                this->unk_AA5 = 0;
+                this->stateFlags1 &= ~PLAYER_STATE1_100000;
+            } else {
+                func_8084FD7C(play, this, &rideActor->actor);
+            }
+        } else if ((this->csMode != 0) ||
+                   (!func_8082DAFC(play) && ((rideActor->actor.speedXZ != 0.0f) || !func_808391D8(this, play)) &&
+                    !func_80847BF0(this, play) && !func_80838A90(this, play))) {
+            if (this->unk_730 != NULL) {
+                if (func_800B7128(this)) {
+                    this->unk_AB2.y = func_8083C62C(this, true) - this->actor.shape.rot.y;
+                    this->unk_AB2.y = CLAMP(this->unk_AB2.y, -0x4AAA, 0x4AAA);
+                    this->actor.focus.rot.y = this->actor.shape.rot.y + this->unk_AB2.y;
+                    this->unk_AB2.y += 0xFA0;
+                    this->unk_AA6 |= 0x80;
+                } else {
+                    func_8083C62C(this, false);
+                }
+
+                this->unk_AA8 = 0;
+            } else if (func_8084FE48(this)) {
+                if (func_800B7128(this)) {
+                    func_80831010(this, play);
+                }
+
+                this->unk_B86[0] = 0xC;
+            } else if (func_800B7128(this)) {
+                func_8084FD7C(play, this, &rideActor->actor);
+            }
+        }
+    }
+
+    if (this->csMode == 6) {
+        this->csMode = 0;
+    }
+}
 
 void func_808505D0(Player* this, PlayState* play) {
     this->stateFlags2 |= PLAYER_STATE2_40;
