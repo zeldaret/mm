@@ -14473,8 +14473,36 @@ s32 func_80851C40(PlayState* play, Player* this) {
               ((this->csMode == 5) || (play->msgCtx.ocarinaMode == 3) || play->msgCtx.ocarinaAction == 0x32))));
 }
 
-void func_80851D30(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80851D30.s")
+// Deku playing the pipes? The loops both overwrite unk_AF0[0].y,z and unk_AF0[1].x,y,z
+void func_80851D30(PlayState* play, Player* this) {
+    f32* var_s0 = &this->unk_AF0[0].y; // TODO: what is going on around here in the struct?
+    Vec3f sp50;
+
+    if (func_80851C40(play, this)) {
+        s32 i;
+
+        if (this->skelAnime.mode != ANIMMODE_LOOP) {
+            func_8082DB60(play, this, D_8085D190[this->transformation]);
+        }
+        func_80124618(D_801C03A0, this->skelAnime.curFrame, &sp50);
+
+        for (i = 0; i < 5; i++) {
+            *var_s0 = sp50.x;
+            var_s0++;
+        }
+    } else if (play->msgCtx.ocarinaMode == 1) {
+        if (play->msgCtx.unk12048 != 0xFF) {
+            var_s0[play->msgCtx.unk12048] = 1.2f;
+            func_8082DB90(play, this, D_8085D190[this->transformation]);
+        } else {
+            s32 i;
+
+            for (i = 0; i < 5; i++) {
+                Math_StepToF(var_s0++, 1.0f, 0.04000001f);
+            }
+        }
+    }
+}
 
 void func_80851EAC(Player* this) {
     this->unk_B86[0] = -1;
@@ -14496,6 +14524,7 @@ void func_80851EC8(PlayState* play, Player* this) {
 void func_80851F18(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80851F18.s")
 
+// Goron playing the drums?
 void func_808521E0(PlayState* play, Player* this) {
     if (func_80851C40(play, this)) {
         if (this->skelAnime.animation != &gameplay_keep_Linkanim_00E1F0) {
@@ -14512,6 +14541,7 @@ void func_808521E0(PlayState* play, Player* this) {
     }
 }
 
+// Zora playing the guitar?
 void func_80852290(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80852290.s")
 
