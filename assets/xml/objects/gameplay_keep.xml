@@ -1087,7 +1087,7 @@
         <Texture Name="gameplay_keep_Tex_0443B0" OutName="tex_0443B0" Format="i8" Width="32" Height="32" Offset="0x443B0" />
         <Texture Name="gameplay_keep_Tex_0447B0" OutName="tex_0447B0" Format="i8" Width="32" Height="32" Offset="0x447B0" />
         <Texture Name="gameplay_keep_Tex_044BB0" OutName="tex_044BB0" Format="i8" Width="32" Height="32" Offset="0x44BB0" />
-        <Texture Name="gFrozenIceTex" OutName="frozen_ice" Format="i8" Width="32" Height="32" Offset="0x44FB0" />
+        <Texture Name="gEffIceFragmentTex" OutName="eff_ice_fragment" Format="i8" Width="32" Height="32" Offset="0x44FB0" />
         <Texture Name="gameplay_keep_Tex_0453B0" OutName="tex_0453B0" Format="i8" Width="32" Height="32" Offset="0x453B0" />
         <DList Name="gameplay_keep_DL_048DF0" Offset="0x48DF0" />
         <Texture Name="gameplay_keep_TLUT_04A460" OutName="tlut_04A460" Format="rgba16" Width="16" Height="16" Offset="0x4A460" />
@@ -1112,10 +1112,10 @@
         <Texture Name="gameplay_keep_Tex_04E220" OutName="tex_04E220" Format="i8" Width="64" Height="64" Offset="0x4E220" />
         <DList Name="gameplay_keep_DL_04F250" Offset="0x4F250" />
         <Texture Name="gameplay_keep_Tex_04F2C0" OutName="tex_04F2C0" Format="ia16" Width="32" Height="64" Offset="0x4F2C0" />
-        <DList Name="gEffIceFragmentDL" Offset="0x50550" />
-        <DList Name="gFrozenIceDL" Offset="0x50648" />
-        <DList Name="gFrozenIceVtxDL" Offset="0x506E0" />
-        <DList Name="gameplay_keep_DL_050D10" Offset="0x50D10" />
+        <DList Name="gEffIceFragment1DL" Offset="0x50550" />
+        <DList Name="gEffIceFragment2MaterialDL" Offset="0x50648" />
+        <DList Name="gEffIceFragment2ModelDL" Offset="0x506E0" />
+        <DList Name="gEffIceFragment3DL" Offset="0x50D10" />
         <Texture Name="gEffIceSmokeTex" OutName="eff_ice_smoke" Format="i4" Width="32" Height="32" Offset="0x50E80" />
         <DList Name="gEffIceSmokeDL" Offset="0x510B0" />
         <DList Name="gFrozenSteamDL" Offset="0x51180" />
@@ -1285,12 +1285,18 @@
         <Texture Name="gameplay_keep_Tex_0700B0" OutName="tex_0700B0" Format="rgba16" Width="16" Height="32" Offset="0x700B0" />
         <Texture Name="gameplay_keep_Tex_0704B0" OutName="tex_0704B0" Format="rgba16" Width="16" Height="16" Offset="0x704B0" />
         <DList Name="gameplay_keep_DL_0706E0" Offset="0x706E0" />
-        <DList Name="gameplay_keep_DL_070730" Offset="0x70730" />
-        <Texture Name="gameplay_keep_Tex_0707F0" OutName="tex_0707F0" Format="i4" Width="32" Height="32" Offset="0x707F0" />
-        <Texture Name="gameplay_keep_Tex_0709F0" OutName="tex_0709F0" Format="i4" Width="64" Height="64" Offset="0x709F0" />
-        <TextureAnimation Name="gameplay_keep_Matanimheader_0711F8" Offset="0x711F8" />
+
+        <!-- Popped Deku Bubbles (EffSsSbn) -->
+
+        <!-- Static Popped Bubbles, can't swap out textures (unused) -->
+        <DList Name="gEffPoppedDekuBubbleStaticDL" Offset="0x70730" />
+        <Texture Name="gEffPoppedDekuBubbleStaticMaskTex" OutName="eff_popped_deku_bubble_static_mask" Format="i4" Width="32" Height="32" Offset="0x707F0" />
+        <Texture Name="gEffPoppedDekuBubbleStaticTex" OutName="eff_popped_deku_bubble_static" Format="i4" Width="64" Height="64" Offset="0x709F0" />
+        <TextureAnimation Name="gEffPoppedDekuBubbleStaticTexAnim" Offset="0x711F8" />
+
+        <!-- Sliding Popped Deku Bubbles -->
         <DList Name="gEffPoppedDekuBubbleSlidingDL" Offset="0x71230" />
-        <TextureAnimation Name="gameplay_keep_Matanimheader_0712F8" Offset="0x712F8" />
+        <TextureAnimation Name="gEffPoppedDekuBubbleSlidingTexAnim" Offset="0x712F8" /> <!-- Unused -->
         <Texture Name="gEffPoppedDekuBubbleSliding1Tex" OutName="eff_popped_deku_bubble_sliding_1" Format="i4" Width="32" Height="64" Offset="0x71300" />
         <Texture Name="gEffPoppedDekuBubbleSliding2Tex" OutName="eff_popped_deku_bubble_sliding_2" Format="i4" Width="32" Height="64" Offset="0x71700" />
         <Texture Name="gEffPoppedDekuBubbleSliding3Tex" OutName="eff_popped_deku_bubble_sliding_3" Format="i4" Width="32" Height="64" Offset="0x71B00" />
@@ -1303,14 +1309,17 @@
         <Texture Name="gEffPoppedDekuBubbleSliding10Tex" OutName="eff_popped_deku_bubble_sliding_10" Format="i4" Width="32" Height="64" Offset="0x73700" />
         <Texture Name="gEffPoppedDekuBubbleSliding11Tex" OutName="eff_popped_deku_bubble_sliding_11" Format="i4" Width="32" Height="64" Offset="0x73B00" />
         <Texture Name="gEffPoppedDekuBubbleSliding12Tex" OutName="eff_popped_deku_bubble_sliding_12" Format="i4" Width="32" Height="64" Offset="0x73F00" />
+
+        <!-- Regular Popped Deku Bubbles -->
         <DList Name="gEffPoppedDekuBubbleDL" Offset="0x74330" />
-        <Blob Name="gameplay_keep_DL_0743F0" Size="0x10" Offset="0x743F0" />
+        <TextureAnimation Name="gEffPoppedDekuBubbleTexAnim" Offset="0x743F0" /> <!-- Empty and unused -->
         <Texture Name="gEffPoppedDekuBubble1Tex" OutName="eff_popped_deku_bubble_1" Format="i4" Width="32" Height="64" Offset="0x74400" />
         <Texture Name="gEffPoppedDekuBubble2Tex" OutName="eff_popped_deku_bubble_2" Format="i4" Width="32" Height="64" Offset="0x74800" />
         <Texture Name="gEffPoppedDekuBubble3Tex" OutName="eff_popped_deku_bubble_3" Format="i4" Width="32" Height="64" Offset="0x74C00" />
         <Texture Name="gEffPoppedDekuBubble4Tex" OutName="eff_popped_deku_bubble_4" Format="i4" Width="32" Height="64" Offset="0x75000" />
         <Texture Name="gEffPoppedDekuBubble5Tex" OutName="eff_popped_deku_bubble_5" Format="i4" Width="32" Height="64" Offset="0x75400" />
-        <Texture Name="gameplay_keep_Tex_075800" OutName="tex_075800" Format="i4" Width="32" Height="32" Offset="0x75800" />
+        <Texture Name="gEffPoppedDekuBubbleMaskTex" OutName="eff_popped_deku_bubble_mask" Format="i4" Width="32" Height="32" Offset="0x75800" /> <!-- Mask used for both normal and sliding bubbles -->
+
         <DList Name="gSquareShadowDL" Offset="0x75A40" />
         <Texture Name="gameplay_keep_Tex_075AA8" OutName="tex_075AA8" Format="i4" Width="16" Height="16" Offset="0x75AA8" />
         <DList Name="gFootShadowDL" Offset="0x75B30" />
@@ -1343,11 +1352,11 @@
         <DList Name="gameplay_keep_DL_07D260" Offset="0x7D260" />
         <DList Name="gameplay_keep_DL_07D348" Offset="0x7D348" />
         <Texture Name="gameplay_keep_Tex_07D350" OutName="tex_07D350" Format="i8" Width="16" Height="32" Offset="0x7D350" />
-        <DList Name="gGameplayKeepDrawFlameDL" Offset="0x7D590" />
-        <DList Name="gameplay_keep_DL_07D650" Offset="0x7D650" />
-        <Texture Name="gGameplayKeepFlameRippleTex" OutName="gameplay_keep_flame_ripple" Format="i4" Width="32" Height="64" Offset="0x7D710" />
-        <Texture Name="gameplay_keep_Tex_07DB10" OutName="tex_07DB10" Format="i4" Width="32" Height="64" Offset="0x7DB10" />
-        <Texture Name="gGameplayKeepFlameOutlineTex" OutName="gameplay_keep_flame_outline" Format="i8" Width="32" Height="64" Offset="0x7DF10" />
+        <DList Name="gEffFire1DL" Offset="0x7D590" />
+        <DList Name="gEffFire2DL" Offset="0x7D650" />
+        <Texture Name="gEffFireMask1Tex" OutName="eff_fire_mask_1" Format="i4" Width="32" Height="64" Offset="0x7D710" />
+        <Texture Name="gEffFireMask2Tex" OutName="eff_fire_mask_2" Format="i4" Width="32" Height="64" Offset="0x7DB10" />
+        <Texture Name="gEffFireTex" OutName="eff_fire" Format="i8" Width="32" Height="64" Offset="0x7DF10" />
         <DList Name="gameplay_keep_DL_07E8C0" Offset="0x7E8C0" />
         <Texture Name="gameplay_keep_Tex_07EA08" OutName="tex_07EA08" Format="i8" Width="32" Height="64" Offset="0x7EA08" />
         <TextureAnimation Name="gameplay_keep_Matanimheader_07F218" Offset="0x7F218" />

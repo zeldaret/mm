@@ -823,7 +823,7 @@ void func_80B2A094(EnFish2* this, PlayState* play) {
         Math_Vec3f_Copy(&this->subCamAt, &subCamEye);
     }
 
-    Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     if ((this->unk_350 == NULL) || (this->unk_350->update == NULL)) {
         this->unk_350 = NULL;
         this->unk_2B0++;
@@ -857,7 +857,7 @@ void func_80B2A23C(EnFish2* this, PlayState* play) {
         Math_Vec3f_Copy(&this->subCamAt, &subCamAt);
     }
 
-    Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
 
     if ((this->unk_2B4 == 0) && (D_80B2B2E4 == 3)) {
         D_80B2B2E0 = D_80B2B2EC = D_80B2B2E4 = 0;

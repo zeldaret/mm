@@ -190,11 +190,11 @@ s16 func_80BCAF0C(EnScopenuts* this) {
 }
 
 void func_80BCAFA8(EnScopenuts* this, PlayState* play) {
-    Vec3f sp1C;
+    Vec3f screenPos;
 
-    func_80169474(play, &this->actor.world.pos, &sp1C);
-    if ((sp1C.x >= 130.0f) && (sp1C.x < 190.0f) && (sp1C.y >= 90.0f)) {
-        if (sp1C.y < 150.0f) {
+    Play_GetScreenPos(play, &this->actor.world.pos, &screenPos);
+    if ((screenPos.x >= 130.0f) && (screenPos.x < (SCREEN_WIDTH - 130.0f)) && (screenPos.y >= 90.0f)) {
+        if (screenPos.y < (SCREEN_HEIGHT - 90.0f)) {
             this->actor.draw = EnScopenuts_Draw;
             this->unk_348 = 10;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 10);

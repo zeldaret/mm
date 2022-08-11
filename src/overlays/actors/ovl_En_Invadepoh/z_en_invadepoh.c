@@ -1370,10 +1370,10 @@ s32 func_80B456A8(PlayState* play, Vec3f* worldPos) {
 
     Actor_GetProjectedPos(play, worldPos, &projectedPos, &invW);
     if (((projectedPos.z > 1.0f) && (fabsf(projectedPos.x * invW) < 1.0f)) && (fabsf(projectedPos.y * invW) < 1.0f)) {
-        s32 wX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
-        s32 wY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
-        s32 wZ = (s32)(projectedPos.z * invW * 16352.0f) + 0x3FE0;
-        s32 zBuf = func_80178A94(wX, wY);
+        s32 screenPosX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
+        s32 screenPosY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
+        s32 wZ = (s32)(projectedPos.z * invW * 16352.0f) + 16352;
+        s32 zBuf = func_80178A94(screenPosX, screenPosY);
         if (wZ < zBuf) {
             return true;
         }
