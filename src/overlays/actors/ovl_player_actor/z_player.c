@@ -31,9 +31,6 @@
 
 #define THIS ((Player*)thisx)
 
-extern Gfx D_0600BDD8[];
-extern AnimationHeader D_060178D0;
-
 void Player_Init(Actor* thisx, PlayState* play);
 void Player_Destroy(Actor* thisx, PlayState* play);
 void Player_Update(Actor* thisx, PlayState* play);
@@ -9331,25 +9328,24 @@ void func_80841744(PlayState* play, Player* this) {
     this->unk_B08[7] = 8.0f;
 }
 
-extern FlexSkeletonHeader D_060177B8;
-
 void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHeader) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->currentYaw = this->actor.world.rot.y;
 
     if ((((this->actor.params & 0xF00) >> 8) != 0xC) &&
-        ((gSaveContext.respawnFlag != 2) || (gSaveContext.respawn[1].playerParams != 0xCFF))) {
+        ((gSaveContext.respawnFlag != 2) || (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams != 0xCFF))) {
         func_808309CC(play, this);
         SkelAnime_InitLink(play, &this->skelAnime, skelHeader, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_0, this->modelAnimType),
-                           9, (void*)this->unk_74C, (void*)this->unk_7EB, 0x16);
+                           9, (void*)this->unk_74C, (void*)this->unk_7EB, PLAYER_LIMB_MAX);
         this->skelAnime.baseTransl = D_8085D2C4;
 
         SkelAnime_InitLink(play, &this->unk_284, skelHeader, func_8082ED20(this), 9, (void*)this->unk_929,
-                           (void*)this->unk_9C8, 0x16);
+                           (void*)this->unk_9C8, PLAYER_LIMB_MAX);
         this->unk_284.baseTransl = D_8085D2C4;
 
         if (this->transformation == PLAYER_FORM_GORON) {
-            SkelAnime_InitFlex(play, &this->unk_2C8, &D_060177B8, &D_060178D0, this->jointTable, this->morphTable, 5);
+            SkelAnime_InitFlex(play, &this->unk_2C8, &object_link_goron_Skel_0177B8, &object_link_goron_Anim_0178D0,
+                               this->jointTable, this->morphTable, OBJECT_LINK_GORON_1_LIMB_MAX);
         }
 
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawFeet, this->ageProperties->unk_04);
@@ -11056,12 +11052,6 @@ void func_80846460(Player* this) {
     Math_Vec3f_Copy(&this->actor.shape.feetPos[1], pos);
 }
 
-extern Gfx D_0600C540[];
-extern UNK_TYPE D_06013138;
-extern Gfx D_060127B0[];
-extern Gfx D_060134D0[];
-extern UNK_TYPE D_06014684;
-
 void Player_Draw(Actor* thisx, PlayState* play) {
     Player* this = THIS;
     f32 one = 1.0f;
@@ -11151,7 +11141,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
             gDPSetEnvColor(POLY_OPA_DISP++, spBC.r, spBC.g, spBC.b, 255);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, D_0600BDD8);
+            gSPDisplayList(POLY_OPA_DISP++, gLinkGoronCurledDL);
 
             if (this->unk_B86[1] != 0) {
                 if (this->unk_B86[1] < 3) {
@@ -11160,7 +11150,8 @@ void Player_Draw(Actor* thisx, PlayState* play) {
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 }
-                gSPDisplayList(POLY_OPA_DISP++, D_0600C540);
+
+                gSPDisplayList(POLY_OPA_DISP++, object_link_goron_DL_00C540);
             }
 
             func_80122BA4(play, &this->unk_3D0, 1, 255);
@@ -11189,11 +11180,11 @@ void Player_Draw(Actor* thisx, PlayState* play) {
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&D_06013138));
+                    AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&object_link_goron_Matanimheader_013138));
                     gDPSetEnvColor(POLY_XLU_DISP++, 155, 0, 0, sp9B);
-                    gSPDisplayList(POLY_XLU_DISP++, D_060127B0);
-                    AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&D_06014684));
-                    gSPDisplayList(POLY_XLU_DISP++, D_060134D0);
+                    gSPDisplayList(POLY_XLU_DISP++, object_link_goron_DL_0127B0);
+                    AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&object_link_goron_Matanimheader_014684));
+                    gSPDisplayList(POLY_XLU_DISP++, object_link_goron_DL_0134D0);
                 }
             }
         } else if ((this->transformation == PLAYER_FORM_GORON) && (this->stateFlags1 & PLAYER_STATE1_400000)) {
