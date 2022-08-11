@@ -11205,6 +11205,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
             s32 lod = ((this->csMode != 0) || (this->actor.projectedPos.z < 320.0f)) ? 0 : 1;
             Vec3f sp74;
 
+            //! FAKE
             if (this->transformation == PLAYER_FORM_FIERCE_DEITY) {}
             if (this->stateFlags1 & PLAYER_STATE1_100000) {
                 SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &this->actor.focus.pos, &sp74);
