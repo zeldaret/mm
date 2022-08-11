@@ -3874,15 +3874,17 @@ s32 func_80832558(PlayState* play, Player* this, void (*arg2)(PlayState*, Player
     return func_808324EC(play, this, arg2, -1);
 }
 
-#ifdef NON_MATCHING
+// To do with turning, related to targeting
 void func_80832578(Player* this, PlayState* play) {
-    s16 sp26 = this->actor.shape.rot.y;
+    s16 previousYaw = this->actor.shape.rot.y;
 
     if (!(this->stateFlags2 & (PLAYER_STATE2_20 | PLAYER_STATE2_40))) {
-        if ((this->unk_730 != NULL) && ((play->actorCtx.targetContext.unk4B != 0) || (this != GET_PLAYER(play))) &&
-            (this->unk_730->id != ACTOR_OBJ_NOZOKI)) {
-            Math_ScaledStepToS(&this->actor.shape.rot.y,
-                               Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_730->focus.pos), 0xFA0);
+        Actor* unk_730 = this->unk_730;
+
+        if ((unk_730 != NULL) && ((play->actorCtx.targetContext.unk4B != 0) || (this != GET_PLAYER(play))) &&
+            (unk_730->id != ACTOR_OBJ_NOZOKI)) {
+            Math_ScaledStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &unk_730->focus.pos),
+                               0xFA0);
         } else if ((this->stateFlags1 & PLAYER_STATE1_20000) &&
                    !(this->stateFlags2 & (PLAYER_STATE2_20 | PLAYER_STATE2_40))) {
             Math_ScaledStepToS(&this->actor.shape.rot.y, this->targetYaw, 0xFA0);
@@ -3891,12 +3893,8 @@ void func_80832578(Player* this, PlayState* play) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, this->currentYaw, 0x7D0);
     }
 
-    this->unk_B4C = this->actor.shape.rot.y - sp26;
+    this->unk_B4C = this->actor.shape.rot.y - previousYaw;
 }
-#else
-void func_80832578(Player* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80832578.s")
-#endif
 
 s16 func_80832660(s16* pValue, s16 target, s16 step, s16 arg3, s16 arg4, s16 arg5) {
     s16 temp_v1;
