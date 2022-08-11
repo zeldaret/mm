@@ -1099,7 +1099,7 @@ void EnGs_Draw(Actor* thisx, PlayState* play) {
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, -frames * 20, 0x20, 0x80));
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
-        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
