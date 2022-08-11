@@ -11694,11 +11694,11 @@ s32 func_80847BF0(Player* this, PlayState* play) {
 
         if (play->csCtx.state == CS_STATE_0) {
             if (!func_8082DA90(play)) {
-                if (EN_HORSE_CHECK_1(rideActor) || EN_HORSE_CHECK_A(rideActor)) {
+                if (EN_HORSE_CHECK_1(rideActor) || EN_HORSE_CHECK_4(rideActor)) {
                     this->stateFlags2 |= PLAYER_STATE2_400000;
 
                     if (EN_HORSE_CHECK_1(rideActor) ||
-                        (EN_HORSE_CHECK_A(rideActor) && CHECK_BTN_ALL(D_80862B44->press.button, BTN_A))) {
+                        (EN_HORSE_CHECK_4(rideActor) && CHECK_BTN_ALL(D_80862B44->press.button, BTN_A))) {
                         rideActor->actor.child = NULL;
 
                         func_8083172C(play, this, func_808505D0, 0);
