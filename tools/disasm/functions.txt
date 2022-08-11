@@ -5237,7 +5237,7 @@
     0x8087DF64:("EnHorse_MountedIdle",),
     0x8087E080:("EnHorse_MountedIdleAnim",),
     0x8087E0A4:("EnHorse_MountedIdleWhinney",),
-    0x8087E18C:("EnHorse_MountedIdleWhinneying",),
+    0x8087E18C:("EnHorse_MountedIdleWhinnying",),
     0x8087E2A8:("EnHorse_StartTurning",),
     0x8087E350:("EnHorse_MountedTurn",),
     0x8087E564:("EnHorse_StartWalkingFromIdle",),

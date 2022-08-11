@@ -55,7 +55,7 @@ typedef enum EnHorseAction {
     /*  5 */ ENHORSE_ACT_5,
     /*  6 */ ENHORSE_ACT_6,
     /*  7 */ ENHORSE_ACT_MOUNTED_IDLE,
-    /*  8 */ ENHORSE_ACT_MOUNTED_IDLE_WHINNEYING,
+    /*  8 */ ENHORSE_ACT_MOUNTED_IDLE_WHINNYING,
     /*  9 */ ENHORSE_ACT_MOUNTED_TURN,
     /* 10 */ ENHORSE_ACT_MOUNTED_WALK,
     /* 11 */ ENHORSE_ACT_MOUNTED_TROT,
@@ -240,7 +240,7 @@ typedef struct EnHorse {
 
 #define EN_HORSE_CHECK_4(horseActor)                                                                         \
     (((((horseActor)->action == ENHORSE_ACT_MOUNTED_IDLE) || ((horseActor)->action == ENHORSE_ACT_FROZEN) || \
-       ((horseActor)->action == ENHORSE_ACT_MOUNTED_IDLE_WHINNEYING)) &&                                     \
+       ((horseActor)->action == ENHORSE_ACT_MOUNTED_IDLE_WHINNYING)) &&                                      \
       !((horseActor)->stateFlags & ENHORSE_FLAG_19) && !((horseActor)->stateFlags & ENHORSE_FLAG_25))        \
          ? true                                                                                              \
          : false)

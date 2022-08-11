@@ -1002,7 +1002,7 @@ void EnHorse_Frozen(EnHorse* this, PlayState* play) {
             }
         } else if (this->prevAction == ENHORSE_ACT_MOUNTED_IDLE) {
             EnHorse_ChangeIdleAnimation(this, 0, 0.0f);
-        } else if (this->prevAction == ENHORSE_ACT_MOUNTED_IDLE_WHINNEYING) {
+        } else if (this->prevAction == ENHORSE_ACT_MOUNTED_IDLE_WHINNYING) {
             EnHorse_ChangeIdleAnimation(this, 0, 0.0f);
         } else {
             EnHorse_ChangeIdleAnimation(this, 0, 0.0f);
@@ -1153,7 +1153,7 @@ void EnHorse_MountedIdleAnim(EnHorse* this) {
 void EnHorse_MountedIdleWhinney(EnHorse* this) {
     f32 curFrame;
 
-    this->action = ENHORSE_ACT_MOUNTED_IDLE_WHINNEYING;
+    this->action = ENHORSE_ACT_MOUNTED_IDLE_WHINNYING;
     this->animationIdx = ENHORSE_ANIM_WHINNEY;
     curFrame = this->skin.skelAnime.curFrame;
     Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, curFrame,
@@ -1167,7 +1167,7 @@ void EnHorse_MountedIdleWhinney(EnHorse* this) {
     }
 }
 
-void EnHorse_MountedIdleWhinneying(EnHorse* this, PlayState* play) {
+void EnHorse_MountedIdleWhinnying(EnHorse* this, PlayState* play) {
     f32 stickMag;
     s16 stickAngle = 0;
 
@@ -4141,7 +4141,7 @@ static EnHorseActionFunc sActionFuncs[] = {
     func_808819D8,                  // ENHORSE_ACT_5
     func_80881398,                  // ENHORSE_ACT_6
     EnHorse_MountedIdle,            // ENHORSE_ACT_MOUNTED_IDLE
-    EnHorse_MountedIdleWhinneying,  // ENHORSE_ACT_MOUNTED_IDLE_WHINNEYING
+    EnHorse_MountedIdleWhinnying,   // ENHORSE_ACT_MOUNTED_IDLE_WHINNYING
     EnHorse_MountedTurn,            // ENHORSE_ACT_MOUNTED_TURN
     EnHorse_MountedWalk,            // ENHORSE_ACT_MOUNTED_WALK
     EnHorse_MountedTrot,            // ENHORSE_ACT_MOUNTED_TROT
