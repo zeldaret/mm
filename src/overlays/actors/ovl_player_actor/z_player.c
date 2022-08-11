@@ -11062,8 +11062,6 @@ extern Gfx D_060127B0[];
 extern Gfx D_060134D0[];
 extern UNK_TYPE D_06014684;
 
-#ifdef NON_MATCHING
-//regalloc
 void Player_Draw(Actor* thisx, PlayState* play) {
     Player* this = (Player* ) thisx;
     f32 one = 1.0f;
@@ -11212,7 +11210,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
 
             if (this->stateFlags2 & PLAYER_STATE2_4000000) {
                 s16 temp_s0_2 = play->gameplayFrames * 600;
-                s16 sp70 = play->gameplayFrames * 1000;
+                s16 sp70 = (play->gameplayFrames * 1000) & 0xFFFF;
 
                 Matrix_Push();
                 this->actor.scale.y = -this->actor.scale.y;
@@ -11267,9 +11265,6 @@ void Player_Draw(Actor* thisx, PlayState* play) {
 
     play->actorCtx.unk5 &= ~8;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/Player_Draw.s")
-#endif
 
 void Player_Destroy(Actor* thisx, PlayState* play) {
     Player* this = (Player*)thisx;
