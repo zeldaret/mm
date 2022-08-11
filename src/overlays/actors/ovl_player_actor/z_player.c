@@ -13438,7 +13438,7 @@ void func_8084D770(Player* this, PlayState* play) {
 }
 
 #ifdef NON_MATCHING
-// mostly regalloc and some swapped instructions
+// in-function static
 void func_8084D820(Player* this, PlayState* play) {
     if (func_80838A90(this, play) == 0) {
         if ((this->stateFlags3 & 0x10) && !(this->actor.bgCheckFlags & 1)) {
@@ -13457,17 +13457,17 @@ void func_8084D820(Player* this, PlayState* play) {
             sp6C = 5.0f * D_8085C3E4;
             var_t0 = func_808411D4(play, this, &sp6C, -1);
             if (this->unk_397 == 4) {
-                if (gGameInfo->data[0x220] < 0) {
+                if (MREG(64) < 0) {
                     if (play->roomCtx.unk31 != 1) {
-                        gGameInfo->data[0x224] += gGameInfo->data[0x220];
-                        if (gGameInfo->data[0x224] < 0) {
-                            gGameInfo->data[0x224] = 0;
+                        MREG(68) += MREG(64);
+                        if (MREG(68) < 0) {
+                            MREG(68) = 0;
                         }
 
                         this->actor.world.pos.y += (this->doorDirection != 0) ? 3.0f : -3.0f;
                         this->actor.prevPos.y = this->actor.world.pos.y;
                     }
-                } else if (gGameInfo->data[0x220] == 0) {
+                } else if (MREG(64) == 0) {
                     CollisionPoly* sp64;
                     s32 sp60;
 
@@ -13503,31 +13503,22 @@ void func_8084D820(Player* this, PlayState* play) {
                     sp5C = gSaveContext.entranceSpeed;
                     sp58 = -1;
                 } else if (this->unk_397 == 4) {
-                    if (gGameInfo->data[0x220] == 0) {
-                        gGameInfo->data[0x220] = 0x10;
-                        gGameInfo->data[0x224] = 0;
+                    if (MREG(64) == 0) {
+                        MREG(64) = 0x10;
+                        MREG(68) = 0;
 
-                        gGameInfo->data[0x221] = gGameInfo->data[0x222] = gGameInfo->data[0x223] =
-                            gGameInfo->data[0x224];
-                    } else if (gGameInfo->data[0x220] >= 0) {
-                        gGameInfo->data[0x224] += gGameInfo->data[0x220];
-                        if (gGameInfo->data[0x224] >= 0x100) {
+                        MREG(65) = MREG(66) = MREG(67) = MREG(68);
+                    } else if (MREG(64) >= 0) {
+                        MREG(68) += MREG(64);
+                        if (MREG(68) >= 0x100) {
                             TransitionActorEntry* temp_v1_4; // sp50
+                            s32 roomNum;
 
                             temp_v1_4 = &play->doorCtx.transitionActorList[this->doorNext];
-                            gGameInfo->data[0x224] = 0xFF;
+                            roomNum = temp_v1_4->sides[0].room;
+                            MREG(68) = 0xFF;
 
-                            if ((temp_v1_4->sides[0].room != play->roomCtx.currRoom.num) &&
-                                (play->roomCtx.currRoom.num >= 0)) {
-                                /*
-                                temp_a1_2 = &play->roomCtx;
-                                temp_t9 = &play->roomCtx.prevRoom;
-                                temp_t9->unk_0 = (s32) temp_a1_2->unk_0;
-                                temp_t9->unk_4 = (s32) temp_a1_2->unk_4;
-                                temp_t9->mesh = temp_a1_2->currRoom.mesh;
-                                temp_t9->segment = temp_a1_2->currRoom.segment;
-                                temp_t9->unk_10 = (s32) temp_a1_2->unk_10;
-                                */
+                            if ((roomNum != play->roomCtx.currRoom.num) && (play->roomCtx.currRoom.num >= 0)) {
                                 play->roomCtx.prevRoom = play->roomCtx.currRoom;
 
                                 play->roomCtx.currRoom.num = -1;
@@ -13537,9 +13528,8 @@ void func_8084D820(Player* this, PlayState* play) {
                                 static Vec3f D_8085D62C = { 0.0f, 0.0f, 0.0f };
                                 static Vec3f D_8085D638 = { 0.0f, 0.0f, 0.0f };
                                 static Vec3f D_8085D644 = { 0.0f, 0.0f, 0.0f };
-                                s32 pad;
 
-                                gGameInfo->data[0x220] = -0x10;
+                                MREG(64) = -0x10;
                                 if (play->roomCtx.currRoom.num < 0) {
                                     Room_StartRoomTransition(play, &play->roomCtx, temp_v1_4->sides[0].room);
                                     play->roomCtx.prevRoom.num = -1;
@@ -13594,7 +13584,7 @@ void func_8084D820(Player* this, PlayState* play) {
                     Minimap_SavePlayerRoomInitInfo(play);
                 }
 
-                gGameInfo->data[0x220] = 0;
+                MREG(64) = 0;
                 func_800E0238(Play_GetCamera(play, 0));
                 func_80838760(this);
                 if (!(this->stateFlags3 & 0x20000)) {
