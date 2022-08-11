@@ -11473,27 +11473,23 @@ void Player_Destroy(Actor* thisx, PlayState* play) {
     func_80831454(this);
 }
 
-#ifdef NON_EQUIVALENT
-// Possibly equivalent
 s32 func_80847190(PlayState* play, Player* this, s32 arg2) {
+    s32 pad;
     s16 var_s0;
-    s32 sp2C;
-    s16 temp_s0_2;
-    s16 var_a1_6;
-    s8 temp_v0;
-    s8 temp_v0_4;
 
     if (!func_800B7128(this) && !func_8082EF20(this) && !arg2) {
-        s32 a1 = (s16)(D_80862B44->rel.stick_y * 0xF0);
+        var_s0 = (s16)(D_80862B44->rel.stick_y * 0xF0);
+        Math_SmoothStepToS(&this->actor.focus.rot.x, var_s0, 0xE, 0xFA0, 0x1E);
 
-        Math_SmoothStepToS(&this->actor.focus.rot.x, a1, 0xE, 0xFA0, 0x1E);
-        var_s0 = D_80862B44->rel.stick_x * -0x10;
+        var_s0 = (s16)(D_80862B44->rel.stick_x * -0x10);
         var_s0 = CLAMP(var_s0, -0xBB8, 0xBB8);
-        this->actor.focus.rot.y += var_s0;
+        this->actor.focus.rot.y += (s16)var_s0;
     } else {
-        temp_v0 = D_80862B44->rel.stick_y;
-        sp2C = (temp_v0 >= 0) ? 1 : -1;
-        this->actor.focus.rot.x += (s32)((1.0f - Math_CosS(temp_v0 * 0xC8)) * 1500.0f) * sp2C;
+        s16 temp3;
+
+        temp3 = ((D_80862B44->rel.stick_y >= 0) ? 1 : -1) *
+                (s32)((1.0f - Math_CosS(D_80862B44->rel.stick_y * 0xC8)) * 1500.0f);
+        this->actor.focus.rot.x += temp3;
 
         if (this->stateFlags1 & PLAYER_STATE1_800000) {
             this->actor.focus.rot.x = CLAMP(this->actor.focus.rot.x, -0x1F40, 0xFA0);
@@ -11501,22 +11497,18 @@ s32 func_80847190(PlayState* play, Player* this, s32 arg2) {
             this->actor.focus.rot.x = CLAMP(this->actor.focus.rot.x, -0x36B0, 0x36B0);
         }
 
-        temp_v0_4 = D_80862B44->rel.stick_x;
-        temp_s0_2 = this->actor.focus.rot.y - this->actor.shape.rot.y;
-        sp2C = (temp_v0_4 >= 0) ? 1 : -1;
-        var_a1_6 = temp_s0_2 + ((s32)((1.0f - Math_CosS(temp_v0_4 * 0xC8)) * -1500.0f) * sp2C);
+        var_s0 = this->actor.focus.rot.y - this->actor.shape.rot.y;
+        temp3 = ((D_80862B44->rel.stick_x >= 0) ? 1 : -1) *
+                (s32)((1.0f - Math_CosS(D_80862B44->rel.stick_x * 0xC8)) * -1500.0f);
+        var_s0 += temp3;
 
-        this->actor.focus.rot.y = CLAMP(var_a1_6, -0x4AAA, 0x4AAA) + this->actor.shape.rot.y;
+        this->actor.focus.rot.y = CLAMP(var_s0, -0x4AAA, 0x4AAA) + this->actor.shape.rot.y;
     }
 
     this->unk_AA6 |= 2;
 
     return func_80832754(this, (play->unk_1887C != 0) || func_800B7128(this) || func_8082EF20(this));
 }
-#else
-s32 func_80847190(PlayState* play, Player* this, s32 arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847190.s")
-#endif
 
 void func_8084748C(Player* this, f32* speed, f32 speedTarget, s16 yawTarget) {
     f32 incrStep;
