@@ -41,11 +41,6 @@ typedef struct {
 /* z_map_disp */
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE1 unk0[8];
-    /* 0x08 */ s32 unk8; // G_IM_SIZ
-} T_801BEAE0;
-
-typedef struct {
     /* 0x00 */ MinimapList2* unk0; //unk0 -> sub1 -> s16[5]
     /* 0x04 */ s32 unk4;
     /* 0x08 */ s16 unk8;
