@@ -30,6 +30,10 @@ void KaleidoScope_DrawQuadTextureRGBA32(GraphicsContext* gfxCtx, void* texture, 
 // Map
 void func_8081FB1C(PlayState* play);
 
+// Item
+void KaleidoScope_DrawItemSelect(PlayState* play);
+void KaleidoScope_UpdateItemEquip(PlayState* play);
+
 // Debug
 void KaleidoScope_DrawInventoryEditor(PlayState* play);
 void KaleidoScope_UpdateInventoryEditor(PlayState* play);
