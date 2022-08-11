@@ -3989,11 +3989,11 @@ void AudioSfx_ProcessSfxSettings(void) {
         sfxSettingsFlags = sSfxSettingsFlags;
 
         while (sfxSettingsFlags != 0) {
-            bankId = 2;
+            bankId = BANK_ENV;
             if ((sfxSettingsFlags & (1 << sfxSettingIndex))) {
 
                 found = false;
-                while ((bankId < 4) && !found) {
+                while ((bankId <= BANK_ENEMY) && !found) {
                     entryIndex = gSfxBanks[bankId]->next;
 
                     while (entryIndex != 0xFF) {
