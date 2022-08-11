@@ -278,7 +278,7 @@ wordReplace = {
     "Actor_IsFacingPlayerAndWithinRange": "Actor_IsFacingAndNearPlayer",
     "func_800BC8B8": "Actor_DrawDoorLock",
     "func_800B86C8": "Actor_ChangeFocus",
-    "func_800B90F4": "Actor_DisableLens",
+    "func_800B90F4": "Actor_DeactivateLens",
     "zelda_malloc": "ZeldaArena_Malloc",
     "zelda_mallocR": "ZeldaArena_MallocR",
     "zelda_realloc": "ZeldaArena_Realloc",

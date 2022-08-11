@@ -2211,7 +2211,7 @@ s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgI
     return false;
 }
 
-void Actor_DisableLens(PlayState* play) {
+void Actor_DeactivateLens(PlayState* play) {
     if (play->actorCtx.lensActive) {
         play->actorCtx.lensActive = false;
         Magic_Reset(play);
@@ -2903,7 +2903,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     if (play->actorCtx.lensActive) {
         Math_StepToC(&play->actorCtx.lensMaskSize, LENS_MASK_ACTIVE_SIZE, 20);
         if (GET_PLAYER(play)->stateFlags2 & 0x8000000) {
-            Actor_DisableLens(play);
+            Actor_DeactivateLens(play);
         }
     } else {
         Math_StepToC(&play->actorCtx.lensMaskSize, 0, 10);
