@@ -6820,26 +6820,21 @@ void func_80839A10(PlayState* play, Player* this) {
     }
 }
 
-#ifdef NON_MATCHING
 s32 func_80839A84(PlayState* play, Player* this) {
     if (this->transformation == PLAYER_FORM_DEKU) {
         if (func_80836DC0(play, this)) {
-            return true;
+            return 1;
         }
-
-        Player_SetAction(play, this, func_808573A4, 0);
-        this->unk_ADC = 4;
-        this->stateFlags1 &= ~(PLAYER_STATE1_20000 | PLAYER_STATE1_40000000);
-        func_808373A4(play, this);
-        return true;
+    } else {
+        return 0;
     }
 
-    return false;
+    Player_SetAction(play, this, func_808573A4, 0);
+    this->stateFlags1 &= ~(PLAYER_STATE1_20000 | PLAYER_STATE1_40000000);
+    this->unk_ADC = 4;
+    func_808373A4(play, this);
+    return 1;
 }
-#else
-s32 func_80839A84(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80839A84.s")
-#endif
 
 s32 func_80839B18(Player* this, PlayState* play) {
     if (CHECK_BTN_ALL(D_80862B44->press.button, BTN_A) && (play->roomCtx.currRoom.unk3 != 2) && (D_80862B08 != 7) &&
