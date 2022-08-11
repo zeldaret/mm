@@ -23,7 +23,7 @@ wordReplace = {
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
     "atan_flip": "Math_Acot2F",
     "atans": "Math_Atan2S",
-    
+
     # "SysMatrix_StateAlloc":                         "Matrix_StateAlloc",
     # "SysMatrix_StatePush":                          "Matrix_StatePush",
     # "SysMatrix_StatePop":                           "Matrix_StatePop",
@@ -139,6 +139,7 @@ wordReplace = {
     "Audio_PlaySoundAtPosition": "SoundSource_PlaySfxAtFixedWorldPos",
     "func_800F0590": "SoundSource_PlaySfxEachFrameAtFixedWorldPos",
     "func_8016970C": "Play_SetCameraAtEye",
+    "Play_CameraSetAtEye": "Play_SetCameraAtEye",
     "func_800BBA88": "Enemy_StartFinishingBlow",
     "ShrinkWindow_Step": "ShrinkWindow_Update",
     "ShrinkWindow_Fini": "ShrinkWindow_Destroy",
@@ -452,16 +453,24 @@ wordReplace = {
     "func_801694DC": "Play_CreateSubCamera",
     "Play_GetActiveCameraIndex": "Play_GetActiveCamId",
     "func_80169590": "Play_ChangeCameraStatus",
+    "Play_CameraChangeStatus": "Play_ChangeCameraStatus",
     "func_80169600": "Play_ClearCamera",
     "func_80169668": "Play_ClearAllSubCameras",
     "func_8016981C": "Play_SetCameraAtEyeUp",
     "func_80169940": "Play_SetCameraFov",
     "func_80169988": "Play_SetCameraRoll",
+    "Play_CameraSetAtEyeUp": "Play_SetCameraAtEyeUp",
+    "Play_CameraSetFov": "Play_SetCameraFov",
+    "Play_CameraSetRoll": "Play_SetCameraRoll",
     "func_801699D4": "Play_CopyCamera",
-    "func_80169AC0": "Play_CameraChangeSetting",
+    "func_80169AC0": "Play_ChangeCameraSetting",
+    "Play_CameraChangeSetting": "Play_ChangeCameraSetting",
     "func_80169BC4": "Play_GetCameraUID",
+    "Play_CameraGetUID": "Play_GetCameraUID",
     "func_80169C64": "Play_GetActorCsCamSetting",
+    "Play_GetCsCamDataSetting": "Play_GetActorCsCamSetting",
     "func_80169C84": "Play_GetActorCsCamFuncData",
+    "Play_GetCsCamDataVec3s": "Play_GetActorCsCamFuncData",
     "convert_scene_number_among_shared_scenes": "Play_GetOriginalSceneNumber",
     "func_80169D40": "Play_SaveCycleSceneFlags",
     "func_80169DCC": "Play_SetRespawnData",
@@ -576,6 +585,7 @@ wordReplace = {
     "func_800E8F08": "Actor_TrackNone",
     "func_800E8FA4": "Actor_TrackPoint",
     "func_800E9250": "Actor_TrackPlayer",
+    "func_800E8EA0": "Actor_ContinueText",
 
     "func_8010A000": "Map_GetDungeonOrBossAreaIndex",
     "func_8010A074": "Map_IsInDungeonOrBossArea",
@@ -590,6 +600,8 @@ wordReplace = {
     "func_8010A54C": "Minimap_Draw",
     "func_8010A580": "Map_Update",
 
+    "ActorCutscene_GetCurrentCamera": "ActorCutscene_GetCurrentSubCamId",
+
     # Structs
     "ActorAnimationEntry": "AnimationInfo",
     "ActorAnimationEntryS": "AnimationInfoS",
@@ -597,6 +609,7 @@ wordReplace = {
     "GlobalContext": "PlayState",
     "globalCtx": "play",
     "globalCtx2": "play2",
+    "ScheduleResult": "ScheduleOutput",
 
     # Struct members
     "skelAnime.unk03": "skelAnime.taper",
@@ -623,6 +636,7 @@ wordReplace = {
     "gSaveContext.playerForm": "gSaveContext.save.playerForm",
     "gSaveContext.day": "gSaveContext.save.day",
     "gSaveContext.isNight": "gSaveContext.save.isNight",
+    "gSaveContext.environmentTime": "gSaveContext.skyboxTime",
     "gSaveContext.naviTimer": "gSaveContext.save.playerData.tatlTimer",
     "gSaveContext.tatlTimer": "gSaveContext.save.playerData.tatlTimer",
     "gSaveContext.rupees": "gSaveContext.save.playerData.rupees",
@@ -675,10 +689,20 @@ wordReplace = {
     "globalCtx->envCtx.unk_DC": "play->envCtx.lightBlend",
     "globalCtx->interfaceCtx.unk_21E": "play->interfaceCtx.bButtonDoAction",
 
+    "play->msgCtx.unk11F04": "play->msgCtx.currentTextId",
+    "play->msgCtx.unk11F10": "play->msgCtx.msgLength",
+    "play->msgCtx.unk11F22": "play->msgCtx.msgMode",
+    "play->msgCtx.unk12023": "play->msgCtx.stateTimer",
     "play->msgCtx.unk1202A": "play->msgCtx.ocarinaMode",
     "play->msgCtx.unk1202C": "play->msgCtx.ocarinaAction",
-    "play->msgCtx.unk11F22": "play->msgCtx.msgMode",
-    "play->msgCtx.unk11F04": "play->msgCtx.currentTextId",
+
+    "play->sceneLoadFlag": "play->transitionTrigger",
+    "play->unk_18B4A": "play->transitionMode",
+    "play->unk_1887F": "play->transitionType",
+    "gSaveContext.nextTransition": "gSaveContext.nextTransitionType",
+    "gSaveContext.unk_3F48": "gSaveContext.cutsceneTransitionControl",
+    "gSaveContext.fadeDuration": "gSaveContext.transFadeDuration",
+    "gSaveContext.fadeSpeed": "gSaveContext.transWipeSpeed",
 
     "D_801D15B0" : "gZeroVec3f",
     "D_801D15BC" : "gZeroVec3s",

@@ -570,7 +570,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
             this->subCamAt.z = mainCam->at.z;
             Message_StartTextbox(play, 0xF, NULL);
             this->cameraState = 2;
-            func_8019FDC8(&D_801DB4A4, NA_SE_VO_NA_LISTEN, 0x20);
+            func_8019FDC8(&gSfxDefaultPos, NA_SE_VO_NA_LISTEN, 0x20);
         case 2:
             if (player->actor.world.pos.z > 0.0f) {
                 player->actor.world.pos.z = 290.0f;
@@ -579,7 +579,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
             }
 
             player->actor.speedXZ = 0.0f;
-            if (Message_GetState(&play->msgCtx) == 0) {
+            if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                 mainCam = Play_GetCamera(play, CAM_ID_MAIN);
                 mainCam->eye = this->subCamEye;
                 mainCam->eyeNext = this->subCamEye;

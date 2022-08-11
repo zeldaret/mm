@@ -820,8 +820,8 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     SET_RACE_FLAGS(RACE_FLAG_START);
                     func_800FD750(NA_BGM_HORSE);
                     play->nextEntranceIndex = 0xCE50;
-                    play->unk_1887F = 5;
-                    play->sceneLoadFlag = 0x14;
+                    play->transitionType = TRANS_TYPE_05;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
                     gSaveContext.save.weekEventReg[57] |= 1;
                     break;
                 case 0x3478:
@@ -1067,8 +1067,8 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     SET_RACE_FLAGS(RACE_FLAG_START);
                     func_800FD750(NA_BGM_HORSE);
                     play->nextEntranceIndex = 0xCE50;
-                    play->unk_1887F = 5;
-                    play->sceneLoadFlag = 0x14;
+                    play->transitionType = TRANS_TYPE_05;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
                     gSaveContext.save.weekEventReg[57] |= 1;
                     break;
                 case 0x349D:
@@ -1181,12 +1181,12 @@ s32 func_808F5674(PlayState* play, EnIn* this, s32 arg2) {
     s32 ret = false;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 2:
+        case TEXT_STATE_CLOSING:
             func_808F4054(play, this, arg2, this->actor.textId);
             ret = true;
             break;
-        case 4:
-        case 5:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play) && func_808F4414(play, this, arg2)) {
                 func_801477B4(play);
                 ret = true;
@@ -1240,7 +1240,7 @@ s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
         }
         return 0;
     }
-    if (!func_800B8934(play, &this->actor)) {
+    if (!Actor_OnScreen(play, &this->actor)) {
         return 0;
     }
     yawDiff = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y));
@@ -1473,23 +1473,22 @@ void EnIn_Update(Actor* thisx, PlayState* play) {
 
 void func_808F6334(EnIn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 newUnk4C8;
+    s32 talkState = Message_GetState(&play->msgCtx);
 
-    newUnk4C8 = Message_GetState(&play->msgCtx);
     this->unk4C4 += this->unk4C0 != 0.0f ? 40.0f : -40.0f;
     this->unk4C4 = CLAMP(this->unk4C4, 0.0f, 80.0f);
 
     Matrix_Translate(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
-    if (&this->actor == player->targetActor &&
-        !(play->msgCtx.currentTextId >= 0xFF && play->msgCtx.currentTextId <= 0x200) && newUnk4C8 == 3 &&
-        this->unk4C8 == 3) {
+    if ((&this->actor == player->targetActor) &&
+        !((play->msgCtx.currentTextId >= 0xFF) && (play->msgCtx.currentTextId <= 0x200)) &&
+        (talkState == TEXT_STATE_3) && (this->prevTalkState == TEXT_STATE_3)) {
         if (!(play->state.frames & 1)) {
             this->unk4C0 = this->unk4C0 != 0.0f ? 0.0f : 1.0f;
         }
     } else {
         this->unk4C0 = 0.0f;
     }
-    this->unk4C8 = newUnk4C8;
+    this->prevTalkState = talkState;
 }
 
 s32 EnIn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

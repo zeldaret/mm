@@ -1210,7 +1210,7 @@ void func_8089D318(EnDinofos* this, PlayState* play) {
         } else {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         }
-        this->subCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
         if (this->actor.colChkInfo.health == 0) {
             subCamEye.x = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + this->actor.focus.pos.x;
             subCamEye.y = this->actor.focus.pos.y;

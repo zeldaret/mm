@@ -381,20 +381,19 @@ void Lights_GlowCheck(PlayState* play) {
         if (light->info->type == LIGHT_POINT_GLOW) {
             Vec3f worldPos;
             Vec3f projectedPos;
-            f32 cappedInvW;
+            f32 invW;
 
             worldPos.x = params->x;
             worldPos.y = params->y;
             worldPos.z = params->z;
-            Actor_GetProjectedPos(play, &worldPos, &projectedPos, &cappedInvW);
+            Actor_GetProjectedPos(play, &worldPos, &projectedPos, &invW);
 
             params->drawGlow = 0;
 
-            if ((projectedPos.z > 1) && (fabsf(projectedPos.x * cappedInvW) < 1) &&
-                (fabsf(projectedPos.y * cappedInvW) < 1)) {
-                s32 screenPosX = projectedPos.x * cappedInvW * (SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 2);
-                s32 screenPosY = projectedPos.y * cappedInvW * -(SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 2);
-                s32 wZ = (s32)((projectedPos.z * cappedInvW) * 16352) + 16352;
+            if ((projectedPos.z > 1) && (fabsf(projectedPos.x * invW) < 1) && (fabsf(projectedPos.y * invW) < 1)) {
+                s32 screenPosX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
+                s32 screenPosY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
+                s32 wZ = (s32)((projectedPos.z * invW) * 16352.0f) + 16352;
                 s32 zBuf = func_80178A94(screenPosX, screenPosY);
 
                 if (wZ < zBuf) {

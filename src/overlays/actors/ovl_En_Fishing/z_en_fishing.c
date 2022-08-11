@@ -1127,8 +1127,8 @@ void EnFishing_UpdateEffects(FishingEffect* effect, PlayState* play) {
                     Message_StartTextbox(play, 0x40B3, NULL);
                 }
 
-                if ((effect->unk_2C >= 100) && (Message_GetState(&play->msgCtx) == 5)) {
-                    if (Message_ShouldAdvance(play) || Message_GetState(&play->msgCtx) == 0) {
+                if ((effect->unk_2C >= 100) && (Message_GetState(&play->msgCtx) == TEXT_STATE_5)) {
+                    if (Message_ShouldAdvance(play) || (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE)) {
                         func_801477B4(play);
                         Rupees_ChangeBy(-50);
                         effect->unk_2C = -1;
@@ -3055,7 +3055,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 this->unk_172[1] = 50;
             }
 
-            if (Message_GetState(&play->msgCtx) == 0) {
+            if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                 if ((gSaveContext.save.time >= CLOCK_TIME(18, 0)) && (gSaveContext.save.time <= 0xC01B)) {
                     this->unk_150 = 7;
                     this->unk_172[3] = Rand_ZeroFloat(150.0f) + 200.0f;
@@ -3855,7 +3855,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             if (this->unk_172[0] <= 50) {
                 switch (this->unk_1CD) {
                     case 0:
-                        if ((Message_GetState(&play->msgCtx) == 4) || Message_GetState(&play->msgCtx) == 0) {
+                        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) ||
+                            Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                             if (Message_ShouldAdvance(play)) {
                                 func_801477B4(play);
                                 if (play->msgCtx.choiceIndex == 0) {
@@ -3886,7 +3887,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                         }
                         break;
                     case 1:
-                        if ((Message_GetState(&play->msgCtx) == 4) || Message_GetState(&play->msgCtx) == 0) {
+                        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) ||
+                            Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                             if (Message_ShouldAdvance(play)) {
                                 func_801477B4(play);
                                 if (play->msgCtx.choiceIndex != 0) {
@@ -4707,7 +4709,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 1:
-            if ((Message_GetState(&play->msgCtx) == 4) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
                 func_801477B4(play);
 
                 switch (play->msgCtx.choiceIndex) {
@@ -4735,7 +4737,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 2:
-            if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
                 func_801477B4(play);
                 func_80151938(play, 0x407F);
                 this->unk_154 = 4;
@@ -4743,17 +4745,17 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 3:
-            if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
                 func_801477B4(play);
                 this->unk_154 = 0;
             }
-            if (Message_GetState(&play->msgCtx) == 6) {
+            if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) {
                 this->unk_154 = 0;
             }
             break;
 
         case 4:
-            if ((Message_GetState(&play->msgCtx) == 4) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
                 func_801477B4(play);
 
                 switch (play->msgCtx.choiceIndex) {
@@ -4770,7 +4772,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 5:
-            if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
                 func_801477B4(play);
 
                 play->interfaceCtx.unk_27E = 1;
@@ -4787,7 +4789,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
 
         case 10:
             if (D_8090CD0C != 0) {
-                if ((Message_GetState(&play->msgCtx) == 4) && Message_ShouldAdvance(play)) {
+                if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
                     func_801477B4(play);
 
                     switch (play->msgCtx.choiceIndex) {
@@ -4803,7 +4805,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                     }
                 }
             } else {
-                if ((Message_GetState(&play->msgCtx) == 4) && Message_ShouldAdvance(play)) {
+                if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
                     func_801477B4(play);
 
                     switch (play->msgCtx.choiceIndex) {
@@ -4875,7 +4877,8 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 11:
-            if (((Message_GetState(&play->msgCtx) == 5) || Message_GetState(&play->msgCtx) == 0) &&
+            if (((Message_GetState(&play->msgCtx) == TEXT_STATE_5) ||
+                 Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) &&
                 Message_ShouldAdvance(play)) {
                 s32 getItemId;
 
@@ -4935,7 +4938,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                     } else {
                         if ((D_809171CC >= 60.0f) && !(gSaveContext.save.unk_EE4 & 0x800)) {
                             gSaveContext.save.unk_EE4 |= 0x800;
-                            getItemId = GI_SCALE_GOLD;
+                            getItemId = GI_SKULL_TOKEN;
                             sSinkingLureLocation = Rand_ZeroFloat(3.999f) + 1.0f;
                         }
                     }
@@ -4951,14 +4954,14 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 20:
-            if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
                 func_801477B4(play);
                 this->unk_154 = 0;
             }
             break;
 
         case 21:
-            if ((Message_GetState(&play->msgCtx) == 4) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
                 func_801477B4(play);
 
                 switch (play->msgCtx.choiceIndex) {
@@ -4978,7 +4981,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 22:
-            if (Message_GetState(&play->msgCtx) == 0) {
+            if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                 this->unk_154 = 0;
                 if (D_8090CD0C != 0) {
                     D_8090CD08 = 1;
@@ -4994,13 +4997,13 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             if (Actor_HasParent(&this->actor, play)) {
                 this->unk_154 = 24;
             } else {
-                Actor_PickUp(&this->actor, play, GI_SCALE_GOLD, 2000.0f, 1000.0f);
+                Actor_PickUp(&this->actor, play, GI_SKULL_TOKEN, 2000.0f, 1000.0f);
             }
             break;
 
         case 24:
             D_8090CCF4 = false;
-            if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
                 if (D_809171D0 == 0) {
                     this->unk_154 = 0;
                 } else {
@@ -5050,13 +5053,13 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if ((D_8090CD04 != 0) || Message_GetState(&play->msgCtx)) {
+    if ((D_8090CD04 != 0) || Message_GetState(&play->msgCtx) != TEXT_STATE_NONE) {
         this->actor.flags &= ~ACTOR_FLAG_1;
     } else {
         this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_20);
     }
 
-    if ((this->actor.xzDistToPlayer < 120.0f) || Message_GetState(&play->msgCtx)) {
+    if ((this->actor.xzDistToPlayer < 120.0f) || Message_GetState(&play->msgCtx) != TEXT_STATE_NONE) {
         headRotTarget = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
     } else {
         headRotTarget = 0;
@@ -5294,12 +5297,11 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             D_8090CD4C = 11;
             Rumble_Override(0.0f, 150, 10, 10);
             // fallthrough
-
         case 11:
             player->actor.world.pos.z = 1360.0f;
             player->actor.speedXZ = 0.0f;
 
-            if (Message_GetState(&play->msgCtx) == 0) {
+            if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                 Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
                 mainCam->eye = sSubCamEye;
@@ -5334,7 +5336,6 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             D_80911F48 = 45.0f;
             D_8090CD50 = 10;
             // fallthrough
-
         case 21:
             if ((D_8090CD50 == 0) && Message_ShouldAdvance(play)) {
                 D_8090CD4C = 22;
@@ -5392,7 +5393,8 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             }
 
             if (D_8090CD50 == 0) {
-                if ((Message_GetState(&play->msgCtx) == 4) || Message_GetState(&play->msgCtx) == 0) {
+                if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) ||
+                    Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                     if (Message_ShouldAdvance(play)) {
                         Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
@@ -5483,7 +5485,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
         D_809171CB--;
     }
 
-    if ((D_809171CB == 1) && Message_GetState(&play->msgCtx) == 0 && ((D_8090CD00 & 0xFFF) == 0xFFF)) {
+    if ((D_809171CB == 1) && (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) && ((D_8090CD00 & 0xFFF) == 0xFFF)) {
         D_809171CB = 200;
 
         if (Rand_ZeroOne() < 0.5f) {
@@ -5536,7 +5538,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
         rot.x = 1.6707964f;
         rot.y = 1.0f;
-        rot.z = (Camera_GetInputDirYaw(mainCam) * -(M_PI / 32768)) + rot.y;
+        rot.z = (Camera_GetInputDirYaw(mainCam) * -(M_PI / 0x8000)) + rot.y;
 
         for (i = 0; i < (u8)D_8090CCD0; i++) {
             pos.x = randPlusMinusPoint5Scaled(700.0f) + play->view.eye.x;

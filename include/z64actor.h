@@ -9,6 +9,7 @@
 
 // This value is hardcoded to be the size of ovl_Arrow_Fire which currently is the biggest actor that uses the AM_FIELD.
 #define AM_FIELD_SIZE SEGMENT_SIZE(ovl_Arrow_Fire)
+
 #define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
 
@@ -31,18 +32,18 @@ typedef struct {
 } DamageTable; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ u8 health;
-    /* 0x02 */ s16 cylRadius;
-    /* 0x04 */ s16 cylHeight;
-    /* 0x06 */ u8 mass;
-} CollisionCheckInfoInit;
+    /* 0x0 */ u8 health;
+    /* 0x2 */ s16 cylRadius;
+    /* 0x4 */ s16 cylHeight;
+    /* 0x6 */ u8 mass;
+} CollisionCheckInfoInit; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8 health;
-    /* 0x02 */ s16 cylRadius;
-    /* 0x04 */ s16 cylHeight;
-    /* 0x06 */ s16 cylYShift;
-    /* 0x08 */ u8 mass;
+    /* 0x0 */ u8 health;
+    /* 0x2 */ s16 cylRadius;
+    /* 0x4 */ s16 cylHeight;
+    /* 0x6 */ s16 cylYShift;
+    /* 0x8 */ u8 mass;
 } CollisionCheckInfoInit2; // size = 0xC
 
 typedef struct {
@@ -222,11 +223,12 @@ typedef struct {
     /* 0x15A */ s16 pad15A;
 } DynaPolyActor; // size = 0x15C
 
+
 typedef enum {
     /* 0x00 */ ITEM00_RUPEE_GREEN,
     /* 0x01 */ ITEM00_RUPEE_BLUE,
     /* 0x02 */ ITEM00_RUPEE_RED,
-    /* 0x03 */ ITEM00_HEART,
+    /* 0x03 */ ITEM00_RECOVERY_HEART,
     /* 0x04 */ ITEM00_BOMBS_A,
     /* 0x05 */ ITEM00_ARROWS_10,
     /* 0x06 */ ITEM00_HEART_PIECE,
@@ -268,7 +270,7 @@ typedef struct EnItem00 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnItem00ActionFunc actionFunc;
     /* 0x148 */ s16 collectibleFlag;
-    /* 0x14A */ s16 unk14A;
+    /* 0x14A */ s16 getItemId;
     /* 0x14C */ s16 unk14C;
     /* 0x14E */ s16 unk14E;
     /* 0x150 */ s16 unk150;
@@ -396,8 +398,8 @@ typedef struct ActorContext {
 } ActorContext; // size = 0x284
 
 typedef enum {
-    /* 00 */ ACTOR_DRAW_DMGEFF_FIRE,
-    /* 01 */ ACTOR_DRAW_DMGEFF_BLUE_FIRE,
+    /*  0 */ ACTOR_DRAW_DMGEFF_FIRE,
+    /*  1 */ ACTOR_DRAW_DMGEFF_BLUE_FIRE,
     /* 10 */ ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX = 10,
     /* 11 */ ACTOR_DRAW_DMGEFF_FROZEN_SFX,
     /* 20 */ ACTOR_DRAW_DMGEFF_LIGHT_ORBS = 20,
@@ -1138,7 +1140,7 @@ typedef enum {
 #define ACTOR_FLAG_2000          (1 << 13)
 // 
 #define ACTOR_FLAG_4000          (1 << 14)
-// 
+//! Carried by arrow
 #define ACTOR_FLAG_8000          (1 << 15)
 // 
 #define ACTOR_FLAG_10000         (1 << 16)

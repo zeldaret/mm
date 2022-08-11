@@ -7548,7 +7548,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
             // Surpresses the interface for the first few frames of a scene
             sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_LARGE, CAM_HUD_ALPHA_2, 0);
             Camera_UpdateInterface(sCameraInterfaceFlags);
-        } else if ((camera->play->unk_18B4A != 0) && (camera->camId != CAM_ID_MAIN)) {
+        } else if ((camera->play->transitionMode != TRANS_MODE_OFF) && (camera->camId != CAM_ID_MAIN)) {
             sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_IGNORE, CAM_HUD_ALPHA_IGNORE, 0);
             Camera_UpdateInterface(sCameraInterfaceFlags);
         } else {

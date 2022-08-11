@@ -314,24 +314,24 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
     this->unk_2B0 &= ~2;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
-        case 1:
-        case 2:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
             break;
 
-        case 3:
+        case TEXT_STATE_3:
             this->unk_2B0 |= 2;
             break;
 
-        case 4:
+        case TEXT_STATE_CHOICE:
             func_80A6F3B4(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             func_80A6F5E4(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 if (this->unk_2B4 == 0x2790) {
                     Player* player = GET_PLAYER(play);
@@ -366,7 +366,7 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
 }
 
 void func_80A6FBA0(EnMm3* this) {
-    func_801A5BD0(0x6F);
+    Audio_SetSfxBanksMute(0x6F);
     func_801A0238(0, 5);
     gSaveContext.save.weekEventReg[63] |= 1;
     gSaveContext.save.weekEventReg[63] &= (u8)~2;
@@ -391,7 +391,7 @@ void func_80A6FBFC(EnMm3* this, PlayState* play) {
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        func_801A5BD0(0);
+        Audio_SetSfxBanksMute(0);
         func_801A0238(0x7F, 5);
         Message_StartTextbox(play, 0x2791, &this->actor);
         this->unk_2B4 = 0x2791;

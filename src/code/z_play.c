@@ -74,13 +74,14 @@ s32 Play_InCsMode(PlayState* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_SceneInit.s")
 
-void Play_GetScreenPos(PlayState* this, Vec3f* src, Vec3f* dest) {
-    f32 cappedInvW;
+void Play_GetScreenPos(PlayState* this, Vec3f* worldPos, Vec3f* screenPos) {
+    f32 invW;
 
-    Actor_GetProjectedPos(this, src, dest, &cappedInvW);
+    // screenPos temporarily stores the projectedPos
+    Actor_GetProjectedPos(this, worldPos, screenPos, &invW);
 
-    dest->x = (SCREEN_WIDTH / 2) + (dest->x * cappedInvW * (SCREEN_WIDTH / 2));
-    dest->y = (SCREEN_HEIGHT / 2) - (dest->y * cappedInvW * (SCREEN_HEIGHT / 2));
+    screenPos->x = (SCREEN_WIDTH / 2) + (screenPos->x * invW * (SCREEN_WIDTH / 2));
+    screenPos->y = (SCREEN_HEIGHT / 2) - (screenPos->y * invW * (SCREEN_HEIGHT / 2));
 }
 
 s16 Play_CreateSubCamera(PlayState* this) {
@@ -400,8 +401,8 @@ void func_80169EFC(GameState* thisx) {
     this->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex;
     gSaveContext.respawnFlag = 1;
     func_80169ECC(this);
-    this->sceneLoadFlag = 0x14;
-    this->unk_1887F = 2;
+    this->transitionTrigger = TRANS_TRIGGER_START;
+    this->transitionType = TRANS_TYPE_02;
 }
 
 // Gameplay_LoadToLastEntrance ?
@@ -412,8 +413,8 @@ void func_80169F78(GameState* thisx) {
     this->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_TOP].entranceIndex;
     gSaveContext.respawnFlag = -1;
     func_80169ECC(this);
-    this->sceneLoadFlag = 0x14;
-    this->unk_1887F = 2;
+    this->transitionTrigger = TRANS_TRIGGER_START;
+    this->transitionType = TRANS_TYPE_02;
 }
 
 // Gameplay_TriggerRespawn ?

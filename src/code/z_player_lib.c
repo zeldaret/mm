@@ -404,9 +404,9 @@ void func_80123140(PlayState* play, Player* player) {
 
 s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_20000000 | PLAYER_STATE1_200 | PLAYER_STATE1_80)) ||
-           player->csMode != 0 || play->sceneLoadFlag == 0x14 || play->unk_18B4A != 0 ||
-           (player->stateFlags1 & PLAYER_STATE1_1) || (player->stateFlags3 & PLAYER_STATE3_80) ||
-           play->actorCtx.unk268 != 0;
+           (player->csMode != 0) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
+           (play->transitionMode != TRANS_MODE_OFF) || (player->stateFlags1 & PLAYER_STATE1_1) ||
+           (player->stateFlags3 & PLAYER_STATE3_80) || (play->actorCtx.unk268 != 0);
 }
 
 s32 Player_InCsMode(PlayState* play) {

@@ -303,7 +303,7 @@ void EnBigpo_WaitCutsceneQueue(EnBigpo* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
         func_800B724C(play, &this->actor, 7);
-        this->subCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
         if (this->actor.params == ENBIGPO_REGULAR) { // and SUMMONED, got switched earlier
             EnBigpo_SpawnCutsceneStage1(this, play);
         } else { // ENBIGPO_REVEALEDFIRE
@@ -953,7 +953,6 @@ void EnBigpo_SetupFlameCirclePositions(EnBigpo* this, PlayState* play) {
         EnBigpo_SetupFlameCircleCutscene(firePo);
     }
 
-    // Setup sub camera
     if (this->subCamId != SUB_CAM_ID_DONE) {
         subCamEye.x = (Math_SinS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.x;
         subCamEye.y = this->actor.world.pos.y + 150.0f;
@@ -1445,7 +1444,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play) {
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        gSPDisplayList(POLY_XLU_DISP++, &gGameplayKeepDrawFlameDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -1472,7 +1471,7 @@ void EnBigpo_RevealedFire(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(POLY_XLU_DISP++, &gGameplayKeepDrawFlameDL);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
