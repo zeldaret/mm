@@ -6761,40 +6761,30 @@ s32 func_80839800(Player* this, PlayState* play) {
     return false;
 }
 
-#ifdef NON_MATCHING
 void func_80839860(Player* this, PlayState* play, s32 arg2) {
     s32 pad;
     f32 var_fv0;
 
-    if (!(arg2 & 1)) {
-        var_fv0 = 5.8f;
-    } else {
-        var_fv0 = 3.5f;
-    }
+    var_fv0 = (!(arg2 & 1) ? 5.8f : 3.5f);
 
     if (this->currentBoots == PLAYER_BOOTS_GIANT) {
         var_fv0 *= 0.5f;
     }
 
-    if (arg2) {}
+    //! FAKE
+    if (arg2 == 2) {}
 
     func_80834D50(play, this, D_8085C2A4[arg2].unk_0, var_fv0, NA_SE_VO_LI_SWORD_N);
 
     this->unk_AE8 = 1;
     this->unk_AE7 = arg2;
+
     this->currentYaw = this->actor.shape.rot.y + (arg2 << 0xE);
-    if (!(arg2 & 1)) {
-        this->linearVelocity = 6.0f;
-    } else {
-        this->linearVelocity = 8.5f;
-    }
+    this->linearVelocity = !(arg2 & 1) ? 6.0f : 8.5f;
+
     this->stateFlags2 |= PLAYER_STATE2_80000;
     func_800B8E58(this, ((arg2 << 0xE) == 0x8000) ? NA_SE_PL_ROLL : NA_SE_PL_SKIP);
 }
-#else
-void func_80839860(Player* this, PlayState* play, s32 arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80839860.s")
-#endif
 
 void func_80839978(PlayState* play, Player* this) {
     if (this->actor.bgCheckFlags & 1) {
