@@ -11063,7 +11063,7 @@ extern Gfx D_060134D0[];
 extern UNK_TYPE D_06014684;
 
 void Player_Draw(Actor* thisx, PlayState* play) {
-    Player* this = (Player* ) thisx;
+    Player* this = THIS;
     f32 one = 1.0f;
     s32 spEC = false;
 
@@ -11073,7 +11073,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
         struct_80124618** spE4;
         f32 spE0;
         Gfx** spDC;
-        s32 spD8;
+        s32 i;
 
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -11097,7 +11097,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
         spE4 = spE8;
         spDC = D_8085D574;
 
-        for (spD8 = 0; spD8 < 3; spD8++, spE4++, spDC++) {
+        for (i = 0; i < 3; i++, spE4++, spDC++) {
             Matrix_Push();
             func_80124618(*spE4, spE0, &this->unk_AF0[1]);
             Matrix_Scale(this->unk_AF0[1].x, this->unk_AF0[1].y, this->unk_AF0[1].z, MTXMODE_APPLY);
@@ -11123,13 +11123,15 @@ void Player_Draw(Actor* thisx, PlayState* play) {
         func_800B8050(&this->actor, play, 0);
         func_800B8118(&this->actor, play, 0);
         func_80122868(play, this);
+
         if (this->stateFlags3 & PLAYER_STATE3_1000) {
             Color_RGB8 spBC;
             f32 spB8 = this->unk_ABC + 1.0f;
             f32 spB4 = 1.0f - (this->unk_ABC * 0.5f);
 
             func_80846460(this);
-            Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + (1200.0f * this->actor.scale.y * spB8), this->actor.world.pos.z, MTXMODE_NEW);
+            Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + (1200.0f * this->actor.scale.y * spB8),
+                             this->actor.world.pos.z, MTXMODE_NEW);
 
             if (this->unk_B86[0] != 0) {
                 Matrix_RotateYS(this->unk_B28, MTXMODE_APPLY);
@@ -11140,7 +11142,8 @@ void Player_Draw(Actor* thisx, PlayState* play) {
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
             Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
 
-            Matrix_Scale(this->actor.scale.x * spB4 * 1.15f, this->actor.scale.y * spB8 * 1.15f, CLAMP_MIN(spB8, spB4) * this->actor.scale.z * 1.15f, MTXMODE_APPLY);
+            Matrix_Scale(this->actor.scale.x * spB4 * 1.15f, this->actor.scale.y * spB8 * 1.15f,
+                         CLAMP_MIN(spB8, spB4) * this->actor.scale.z * 1.15f, MTXMODE_APPLY);
             Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
             Scene_SetRenderModeXlu(play, 0, 1U);
             Lib_LerpRGB(&D_8085D580, &D_8085D584, this->unk_B08[2], &spBC);
@@ -11154,13 +11157,14 @@ void Player_Draw(Actor* thisx, PlayState* play) {
                 if (this->unk_B86[1] < 3) {
                     func_80124618(D_8085D540, this->unk_B86[1], this->unk_AF0);
                     Matrix_Scale(this->unk_AF0[0].x, this->unk_AF0[0].y, this->unk_AF0[0].z, MTXMODE_APPLY);
-                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
+                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 }
                 gSPDisplayList(POLY_OPA_DISP++, D_0600C540);
             }
 
-            func_80122BA4(play, &this->unk_3D0, 1, 0xFF);
-            func_80122BA4(play, &this->unk_3D0, 2, 0xFF);
+            func_80122BA4(play, &this->unk_3D0, 1, 255);
+            func_80122BA4(play, &this->unk_3D0, 2, 255);
 
             if (this->unk_B86[1] < 3) {
                 if (this->unk_AE7 >= 5) {
@@ -11174,7 +11178,6 @@ void Player_Draw(Actor* thisx, PlayState* play) {
                     } else {
                         sp9B = (200.0f * var_fa1);
                     }
-                    //sp9B = (this->unk_B86[1] != 0) ? (u8)((-this->unk_B86[1] * 0x55) + 0xFF) : (u8)((200.0f * var_fa1));
 
                     if (this->unk_B86[1] != 0) {
                         var_fa1 = 0.65f;
@@ -11184,7 +11187,8 @@ void Player_Draw(Actor* thisx, PlayState* play) {
 
                     Matrix_Scale(1.0f, var_fa1, var_fa1, MTXMODE_APPLY);
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
+                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                     AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&D_06013138));
                     gDPSetEnvColor(POLY_XLU_DISP++, 155, 0, 0, sp9B);
                     gSPDisplayList(POLY_XLU_DISP++, D_060127B0);
@@ -11194,13 +11198,14 @@ void Player_Draw(Actor* thisx, PlayState* play) {
             }
         } else if ((this->transformation == PLAYER_FORM_GORON) && (this->stateFlags1 & PLAYER_STATE1_400000)) {
             func_80846460(this);
-            SkelAnime_DrawFlexOpa(play, this->unk_2C8.skeleton, this->unk_2C8.jointTable, this->unk_2C8.dListCount, NULL, NULL, NULL);
+            SkelAnime_DrawFlexOpa(play, this->unk_2C8.skeleton, this->unk_2C8.jointTable, this->unk_2C8.dListCount,
+                                  NULL, NULL, NULL);
         } else {
             OverrideLimbDrawFlex sp84 = func_80125D4C;
-            s32 sp80 = ((this->csMode != 0) || (this->actor.projectedPos.z < 320.0f)) ? 0 : 1;
+            s32 lod = ((this->csMode != 0) || (this->actor.projectedPos.z < 320.0f)) ? 0 : 1;
             Vec3f sp74;
 
-            if (this->transformation == 0) {}
+            if (this->transformation == PLAYER_FORM_FIERCE_DEITY) {}
             if (this->stateFlags1 & PLAYER_STATE1_100000) {
                 SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &this->actor.focus.pos, &sp74);
                 if (sp74.z < -4.0f) {
@@ -11213,16 +11218,21 @@ void Player_Draw(Actor* thisx, PlayState* play) {
                 s16 sp70 = (play->gameplayFrames * 1000) & 0xFFFF;
 
                 Matrix_Push();
+
                 this->actor.scale.y = -this->actor.scale.y;
-                Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y + (2.0f * this->actor.depthInWater) + (this->unk_ABC * this->actor.scale.y), this->actor.world.pos.z, &this->actor.shape.rot);
+                Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x,
+                                             this->actor.world.pos.y + (2.0f * this->actor.depthInWater) +
+                                                 (this->unk_ABC * this->actor.scale.y),
+                                             this->actor.world.pos.z, &this->actor.shape.rot);
                 Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
                 Matrix_RotateXS(temp_s0_2, MTXMODE_APPLY);
                 Matrix_RotateYS(sp70, MTXMODE_APPLY);
                 Matrix_Scale(1.1f, 0.95f, 1.05f, MTXMODE_APPLY);
                 Matrix_RotateYS(-sp70, MTXMODE_APPLY);
                 Matrix_RotateXS(-temp_s0_2, MTXMODE_APPLY);
-                Player_DrawGameplay(play, this, sp80, gCullFrontDList, sp84);
+                Player_DrawGameplay(play, this, lod, gCullFrontDList, sp84);
                 this->actor.scale.y = -this->actor.scale.y;
+
                 Matrix_Pop();
             }
 
@@ -11230,7 +11240,8 @@ void Player_Draw(Actor* thisx, PlayState* play) {
 
             gSPClearGeometryMode(POLY_XLU_DISP++, G_CULL_BOTH);
 
-            if ((this->transformation == PLAYER_FORM_ZORA) && (this->unk_B62 != 0) && !(this->stateFlags3 & PLAYER_STATE3_8000)) {
+            if ((this->transformation == PLAYER_FORM_ZORA) && (this->unk_B62 != 0) &&
+                !(this->stateFlags3 & PLAYER_STATE3_8000)) {
                 Matrix_Push();
                 Matrix_RotateXS(-0x4000, MTXMODE_APPLY);
                 Matrix_Translate(0.0f, 0.0f, -1800.0f, MTXMODE_APPLY);
@@ -11238,14 +11249,16 @@ void Player_Draw(Actor* thisx, PlayState* play) {
                 Matrix_Pop();
             }
 
-            Player_DrawGameplay(play, this, sp80, gCullBackDList, sp84);
+            Player_DrawGameplay(play, this, lod, gCullBackDList, sp84);
         }
 
         func_801229A0(play, this);
         if (this->stateFlags2 & PLAYER_STATE2_4000) {
-            f32 temp_fa0 = this->unk_B48;; // sp64
+            f32 temp_fa0 = this->unk_B48;
 
-            gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0U, -(s32) play->gameplayFrames & 0x7F, 0x20, 0x20, 1, 0, ((s32) play->gameplayFrames * -2) & 0x7F, 0x20, 0x20));
+            gSPSegment(POLY_XLU_DISP++, 0x08,
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0U, -(s32)play->gameplayFrames & 0x7F, 0x20, 0x20, 1, 0,
+                                        ((s32)play->gameplayFrames * -2) & 0x7F, 0x20, 0x20));
 
             Matrix_Scale(temp_fa0, temp_fa0, temp_fa0, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -11254,6 +11267,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
 
             gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment3DL);
         }
+
         if (this->unk_B2A > 0) {
             Player_DrawGetItem(play, this);
         }
@@ -13498,7 +13512,8 @@ void func_8084D820(Player* this, PlayState* play) {
                         gGameInfo->data[0x220] = 0x10;
                         gGameInfo->data[0x224] = 0;
 
-                        gGameInfo->data[0x221] = gGameInfo->data[0x222] =gGameInfo->data[0x223] = gGameInfo->data[0x224];
+                        gGameInfo->data[0x221] = gGameInfo->data[0x222] = gGameInfo->data[0x223] =
+                            gGameInfo->data[0x224];
                     } else if (gGameInfo->data[0x220] >= 0) {
                         gGameInfo->data[0x224] += gGameInfo->data[0x220];
                         if (gGameInfo->data[0x224] >= 0x100) {
@@ -13507,7 +13522,8 @@ void func_8084D820(Player* this, PlayState* play) {
                             temp_v1_4 = &play->doorCtx.transitionActorList[this->doorNext];
                             gGameInfo->data[0x224] = 0xFF;
 
-                            if ((temp_v1_4->sides[0].room != play->roomCtx.currRoom.num) && (play->roomCtx.currRoom.num >= 0)) {
+                            if ((temp_v1_4->sides[0].room != play->roomCtx.currRoom.num) &&
+                                (play->roomCtx.currRoom.num >= 0)) {
                                 /*
                                 temp_a1_2 = &play->roomCtx;
                                 temp_t9 = &play->roomCtx.prevRoom;
@@ -13545,9 +13561,13 @@ void func_8084D820(Player* this, PlayState* play) {
                                 D_8085D62C.y = (this->doorDirection != 0) ? -75.0f : 75.0f;
                                 D_8085D62C.z = -240.0f;
                                 if (this->doorDirection != 0) {
-                                    Camera_ChangeDoorCam(play->cameraPtrs[0], &this->actor, -2, 0.0f, temp_v1_4->pos.x + 0x32, temp_v1_4->pos.y + 0x5F, temp_v1_4->pos.z - 0x32);
+                                    Camera_ChangeDoorCam(play->cameraPtrs[0], &this->actor, -2, 0.0f,
+                                                         temp_v1_4->pos.x + 0x32, temp_v1_4->pos.y + 0x5F,
+                                                         temp_v1_4->pos.z - 0x32);
                                 } else {
-                                    Camera_ChangeDoorCam(play->cameraPtrs[0], &this->actor, -2, 0.0f, temp_v1_4->pos.x - 0x32, temp_v1_4->pos.y + 5, temp_v1_4->pos.z - 0x32);
+                                    Camera_ChangeDoorCam(play->cameraPtrs[0], &this->actor, -2, 0.0f,
+                                                         temp_v1_4->pos.x - 0x32, temp_v1_4->pos.y + 5,
+                                                         temp_v1_4->pos.z - 0x32);
                                 }
 
                                 func_80835BC8(this, &this->actor.world.pos, &D_8085D62C, &this->actor.world.pos);
@@ -13572,9 +13592,10 @@ void func_8084D820(Player* this, PlayState* play) {
             }
 
             temp_v0_8 = func_808411D4(play, this, &sp5C, sp58);
-            if ((this->unk_AE8 == 0) || ((temp_v0_8 == 0) && (this->linearVelocity == 0.0f) && (Play_GetCamera(play, 0)->stateFlags & 0x10))) {
+            if ((this->unk_AE8 == 0) ||
+                ((temp_v0_8 == 0) && (this->linearVelocity == 0.0f) && (Play_GetCamera(play, 0)->stateFlags & 0x10))) {
                 if (this->unk_397 == 4) {
-                    Map_InitRoomData(play, (s16) play->roomCtx.currRoom.num);
+                    Map_InitRoomData(play, (s16)play->roomCtx.currRoom.num);
                     Minimap_SavePlayerRoomInitInfo(play);
                 }
 
@@ -13582,7 +13603,7 @@ void func_8084D820(Player* this, PlayState* play) {
                 func_800E0238(Play_GetCamera(play, 0));
                 func_80838760(this);
                 if (!(this->stateFlags3 & 0x20000)) {
-                    func_801226E0(play, ((void)0,gSaveContext.respawn[0].data));
+                    func_801226E0(play, ((void)0, gSaveContext.respawn[0].data));
                 }
 
                 if (play->unk_1887C != 0) {
