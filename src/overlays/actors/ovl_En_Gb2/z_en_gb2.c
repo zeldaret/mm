@@ -370,7 +370,7 @@ void func_80B0FE7C(PlayState* play) {
 }
 
 void func_80B0FEBC(EnGb2* this, PlayState* play) {
-    if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.unk1202E == 7)) {
+    if ((play->msgCtx.ocarinaMode == OCARINA_SONG_ELEGY) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
         play->msgCtx.ocarinaMode = 4;
         gSaveContext.eventInf[4] |= 0x80;
         this->unk_26E = 0x14D1;
