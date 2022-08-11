@@ -730,7 +730,8 @@ void DmStk_PlaySfxForEndingCutsceneSecondPart(DmStk* this, PlayState* play) {
             break;
 
         case 2000:
-            AudioSfx_MuteBanks(0x7F);
+            AudioSfx_MuteBanks((1 << BANK_PLAYER) | (1 << BANK_ITEM) | (1 << BANK_ENV) | (1 << BANK_ENEMY) |
+                               (1 << BANK_SYSTEM) | (1 << BANK_OCARINA) | (1 << BANK_VOICE));
             break;
     }
 

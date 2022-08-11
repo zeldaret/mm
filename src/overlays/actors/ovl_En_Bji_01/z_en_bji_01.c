@@ -293,7 +293,8 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
 }
 
 void func_809CD634(EnBji01* this, PlayState* play) {
-    AudioSfx_MuteBanks(0x6F);
+    AudioSfx_MuteBanks((1 << BANK_PLAYER) | (1 << BANK_ITEM) | (1 << BANK_ENV) | (1 << BANK_ENEMY) |
+                       (1 << BANK_OCARINA) | (1 << BANK_VOICE));
     Audio_QueueSeqCmd(0xE0000101);
     play->nextEntranceIndex = 0x54A0; /* Termina Field from telescope */
     gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = play->nextEntranceIndex;

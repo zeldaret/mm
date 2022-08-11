@@ -366,7 +366,8 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
 }
 
 void func_80A6FBA0(EnMm3* this) {
-    AudioSfx_MuteBanks(0x6F);
+    AudioSfx_MuteBanks((1 << BANK_PLAYER) | (1 << BANK_ITEM) | (1 << BANK_ENV) | (1 << BANK_ENEMY) |
+                       (1 << BANK_OCARINA) | (1 << BANK_VOICE));
     func_801A0238(0, 5);
     gSaveContext.save.weekEventReg[63] |= 1;
     gSaveContext.save.weekEventReg[63] &= (u8)~2;
