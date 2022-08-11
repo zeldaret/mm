@@ -3478,8 +3478,8 @@ asm/non_matchings/code/code_8019AF00/func_801A3098.s,func_801A3098,0x801A3098,0x
 asm/non_matchings/code/code_8019AF00/func_801A312C.s,func_801A312C,0x801A312C,0x30
 asm/non_matchings/code/code_8019AF00/func_801A31EC.s,func_801A31EC,0x801A31EC,0x13
 asm/non_matchings/code/code_8019AF00/func_801A3238.s,func_801A3238,0x801A3238,0x25
-asm/non_matchings/code/code_8019AF00/Audio_SetSequenceMode.s,Audio_SetSequenceMode,0x801A32CC,0xB1
-asm/non_matchings/code/code_8019AF00/Audio_SetBgmEnemyVolume.s,Audio_SetBgmEnemyVolume,0x801A3590,0x58
+asm/non_matchings/code/code_8019AF00/func_801A32CC.s,func_801A32CC,0x801A32CC,0xB1
+asm/non_matchings/code/code_8019AF00/func_801A3590.s,func_801A3590,0x801A3590,0x58
 asm/non_matchings/code/code_8019AF00/func_801A36F0.s,func_801A36F0,0x801A36F0,0x98
 asm/non_matchings/code/code_8019AF00/func_801A3950.s,func_801A3950,0x801A3950,0x2A
 asm/non_matchings/code/code_8019AF00/func_801A39F8.s,func_801A39F8,0x801A39F8,0x21

@@ -5286,6 +5286,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, sSubCamId, CAM_STATUS_ACTIVE);
             func_800B7298(play, &this->actor, 4);
+
             mainCam = Play_GetCamera(play, CAM_ID_MAIN);
             sSubCamEye.x = mainCam->eye.x;
             sSubCamEye.y = mainCam->eye.y;
@@ -5293,6 +5294,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             sSubCamAt.x = mainCam->at.x;
             sSubCamAt.y = mainCam->at.y;
             sSubCamAt.z = mainCam->at.z;
+
             Message_StartTextbox(play, 0x409E, NULL);
             D_8090CD4C = 11;
             Rumble_Override(0.0f, 150, 10, 10);
@@ -5307,6 +5309,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
                 mainCam->eye = sSubCamEye;
                 mainCam->eyeNext = sSubCamEye;
                 mainCam->at = sSubCamAt;
+
                 func_80169AFC(play, sSubCamId, 0);
                 Cutscene_End(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 6);
@@ -5324,6 +5327,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, sSubCamId, CAM_STATUS_ACTIVE);
             func_800B7298(play, &this->actor, 4);
+
             mainCam = Play_GetCamera(play, CAM_ID_MAIN);
             sSubCamEye.x = mainCam->eye.x;
             sSubCamEye.y = mainCam->eye.y;
