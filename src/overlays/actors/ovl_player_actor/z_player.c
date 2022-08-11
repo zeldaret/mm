@@ -16639,11 +16639,10 @@ void func_80857640(Player* this, f32 arg1, s32 arg2) {
 }
 
 void func_808576BC(PlayState* play, Player* this) {
-    s32 var_v0;
-    f32 sp30 = Math_CosS(this->currentYaw);
-    f32 temp = Math_SinS(this->currentYaw);
+    s32 var_v0 = ((this->actor.velocity.z * Math_CosS(this->currentYaw)) +
+                  (this->actor.velocity.x * Math_SinS(this->currentYaw))) *
+                 800.0f;
 
-    var_v0 = ((this->actor.velocity.x * (temp = temp)) + (this->actor.velocity.z * sp30)) * 800.0f;
     var_v0 -= this->unk_AE8;
     var_v0 = ABS_ALT(var_v0);
 
