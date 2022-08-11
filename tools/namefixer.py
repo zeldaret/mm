@@ -445,7 +445,7 @@ wordReplace = {
     "func_800DFCDC": "Camera_GetCamDirYaw",
     "func_800E0308": "Camera_SetTargetActor",
     "func_800E031C": "Camera_GetWaterYPos",
-    "func_800E02AC": "Camera_SetToTrackActor",
+    "func_800E02AC": "Camera_SetFocalActor",
     "func_800DFAC8": "Camera_ChangeSetting",
     "func_800DFC90": "Camera_GetCamDir",
     "func_800DFD04": "Camera_AddQuake",

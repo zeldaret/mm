@@ -308,8 +308,8 @@ void EnAni_Update(Actor* thisx, PlayState* play) {
         } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
             this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->actor.cutscene)),
-                                   &this->actor);
+            Camera_SetFocalActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->actor.cutscene)),
+                                 &this->actor);
         } else {
             ActorCutscene_SetIntentToPlay(this->actor.cutscene);
         }
