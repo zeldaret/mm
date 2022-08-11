@@ -60,7 +60,7 @@ SfxBankEntry* gSfxBanks[7] = {
     sSfxPlayerBank, sSfxItemBank, sSfxEnvironmentBank, sSfxEnemyBank, sSfxSystemBank, sSfxOcarinaBank, sSfxVoiceBank,
 };
 
-u8 sBankSizes[ARRAY_COUNT(gSfxBanks)] = {
+u8 sSfxBankSizes[ARRAY_COUNT(gSfxBanks)] = {
     ARRAY_COUNT(sSfxPlayerBank), ARRAY_COUNT(sSfxItemBank),   ARRAY_COUNT(sSfxEnvironmentBank),
     ARRAY_COUNT(sSfxEnemyBank),  ARRAY_COUNT(sSfxSystemBank), ARRAY_COUNT(sSfxOcarinaBank),
     ARRAY_COUNT(sSfxVoiceBank),
@@ -375,7 +375,7 @@ void AudioSfx_RemoveBankEntry(u8 bankId, u8 entryIndex) {
 }
 
 void AudioSfx_ChooseActiveSfx(u8 bankId) {
-    u8 numChosenSfx;
+    u8 numChosenSfx = 0;
     u8 numChannels;
     u8 entryIndex;
     u8 i;
@@ -391,7 +391,6 @@ void AudioSfx_ChooseActiveSfx(u8 bankId) {
     f32 entryPosY;
     f32 entryPosX;
 
-    numChosenSfx = 0;
     for (i = 0; i < MAX_CHANNELS_PER_BANK; i++) {
         chosenSfx[i].priority = 0x7FFFFFFF;
         chosenSfx[i].entryIndex = 0xFF;
@@ -643,7 +642,9 @@ void AudioSfx_PlayActiveSfx(u8 bankId) {
                                            ((sCurSfxPlayerChannelIndex & 0xFF) << 8) | 4,
                                        entry->sfxId & 0xFF);
 
-                if (gSfxBankHasMoreThan255Entries[bankId]) {
+                // If the sfx bank has more than 255 entries (greater than a u8 can store),
+                // then store the Id in upper and lower bits
+                if (gIsLargeSfxBank[bankId]) {
                     // Store upper bits
                     ioPort5Data = ((u8)((entry->sfxId & 0x300) >> 7) + (u8)((entry->sfxId & 0xFF) >> 7));
                 } else {
@@ -939,7 +940,7 @@ void AudioSfx_Reset(void) {
         gSfxBanks[bankId][0].prev = 0xFF;
         gSfxBanks[bankId][0].next = 0xFF;
 
-        for (i = 1; i < sBankSizes[bankId] - 1; i++) {
+        for (i = 1; i < sSfxBankSizes[bankId] - 1; i++) {
             gSfxBanks[bankId][i].prev = i - 1;
             gSfxBanks[bankId][i].next = i + 1;
         }
