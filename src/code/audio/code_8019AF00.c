@@ -3589,11 +3589,11 @@ s8 AudioSfx_ComputeReverb(u8 bankId, u8 entryIndex, u8 channelIndex) {
 
     reverb = (*entry->reverbAdd & 0x7F) + distAdd;
 
-    if (entry->state != 2) {
+    if (entry->state != SFX_STATE_READY) {
         reverb += scriptAdd;
     }
 
-    if ((bankId != BANK_OCARINA) || !((entry->sfxId & 0x3FF) < 2)) {
+    if ((bankId != BANK_OCARINA) || (SFX_INDEX(entry->sfxId) >= 2)) {
         reverb += sAudioEnvReverb + (sAudioCodeReverb & 0x3F) + sSpecReverb;
     }
 
@@ -3605,12 +3605,9 @@ s8 AudioSfx_ComputeReverb(u8 bankId, u8 entryIndex, u8 channelIndex) {
 }
 
 s8 AudioSfx_ComputePanSigned(f32 x, f32 z, u8 token) {
-    f32 absX;
-    f32 absZ;
+    f32 absX = ABS_ALT(x);
+    f32 absZ = ABS_ALT(z);
     f32 pan;
-
-    absX = ABS_ALT(x);
-    absZ = ABS_ALT(z);
 
     if (absX > 8000.0f) {
         absX = 8000.0f;
@@ -3631,12 +3628,11 @@ s8 AudioSfx_ComputePanSigned(f32 x, f32 z, u8 token) {
         pan = (x / (3.6f * absZ)) + 0.5f;
     }
 
-    if (absZ < 50.0f) {
-        if (absX < 50.0f) {
-            pan = ((pan - 0.5f) * SQ(absX / 50.0f)) + 0.5f;
-        }
+    if ((absZ < 50.0f) && (absX < 50.0f)) {
+        pan = ((pan - 0.5f) * SQ(absX / 50.0f)) + 0.5f;
     }
-    return (s8)((pan * 127.0f) + 0.5f);
+
+    return (pan * 127.0f) + 0.5f;
 }
 
 f32 AudioSfx_ComputeFreqScale(u8 bankId, u8 entryIndex) {
@@ -3681,17 +3677,15 @@ f32 AudioSfx_ComputeFreqScale(u8 bankId, u8 entryIndex) {
     }
 
     if ((applyRandScaling == true) && !(entry->sfxParams & SFX_PARAM_RAND_FREQ_SCALE)) {
-        freq *= (1.0293 - ((gAudioContext.audioRandom & 0xF) / 144.0f));
+        freq *= 1.0293 - ((gAudioContext.audioRandom & 0xF) / 144.0f);
     }
 
     dist = entry->dist;
-    if (!(entry->sfxParams & SFX_FLAG_VOLUME_NO_DIST)) {
-        if (!(entry->sfxParams & SFX_FLAG_FREQ_NO_DIST)) {
-            if (dist >= 10000.0f) {
-                freq += 0.2f;
-            } else {
-                freq += (0.2f * (dist / 10000.0f));
-            }
+    if (!(entry->sfxParams & SFX_FLAG_VOLUME_NO_DIST) && !(entry->sfxParams & SFX_FLAG_FREQ_NO_DIST)) {
+        if (dist >= 10000.0f) {
+            freq += 0.2f;
+        } else {
+            freq += (0.2f * (dist / 10000.0f));
         }
     }
 
@@ -3709,6 +3703,7 @@ u8 AudioSfx_ComputeSurroundSoundFilter(f32 behindScreenZ, SfxBankEntry* entry, s
     f32 distParam;
     f32 dist;
 
+    // Remnant of OoT
     if (*entry->posZ < behindScreenZ) {
         lowPassCutoff = 0;
     } else {
@@ -4585,10 +4580,12 @@ void AudioSfx_Init(u16 fadeTimer) {
 
     AudioThread_ScheduleProcessCmds();
     Audio_StartSequence(SEQ_PLAYER_SFX, NA_BGM_GENERAL_SFX, 0x70, fadeTimer);
+
     for (channelIndex = 0; channelIndex < ARRAY_COUNT(sSfxChannelState); channelIndex++) {
         AudioThread_QueueCmdS32(0x10 << 24 | SEQ_PLAYER_SFX << 16 | ((u8)(u32)channelIndex << 8),
                                 &sSfxChannelState[channelIndex]);
     }
+
     AudioThread_QueueCmdS32(0xE4000000, AudioSfx_SetFreqAndStereoBits);
     AudioThread_QueueCmdS32(0xE4000001, Audio_SetNatureAmbienceRandomBend);
 }
