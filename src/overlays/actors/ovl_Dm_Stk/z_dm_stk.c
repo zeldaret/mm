@@ -730,7 +730,7 @@ void DmStk_PlaySfxForEndingCutsceneSecondPart(DmStk* this, PlayState* play) {
             break;
 
         case 2000:
-            func_801A5BD0(0x7F);
+            Audio_SetSfxBanksMute(0x7F);
             break;
     }
 
@@ -1152,9 +1152,10 @@ void DmStk_WaitForTelescope(DmStk* this, PlayState* play) {
     Vec3f screenPos;
 
     if (!(gSaveContext.save.weekEventReg[74] & 0x20)) {
-        func_80169474(play, &this->actor.world.pos, &screenPos);
+        Play_GetScreenPos(play, &this->actor.world.pos, &screenPos);
         if (play->view.fovy < 25.0f) {
-            if ((screenPos.x >= 70.0f) && (screenPos.x < 250.0f) && (screenPos.y >= 30.0f) && (screenPos.y < 210.0f)) {
+            if ((screenPos.x >= 70.0f) && (screenPos.x < (SCREEN_WIDTH - 70.0f)) && (screenPos.y >= 30.0f) &&
+                (screenPos.y < (SCREEN_HEIGHT - 30.0f))) {
                 func_800FE484();
                 this->actionFunc = DmStk_StartTelescopeCutscene;
             }

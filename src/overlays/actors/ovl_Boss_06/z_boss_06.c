@@ -201,8 +201,8 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             Cutscene_Start(play, &play->csCtx);
             func_800B7298(play, &this->actor, 7);
             this->subCamId = Play_CreateSubCamera(play);
-            Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-            Play_CameraChangeStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
+            Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
             D_809F4970->unk_151 = 1;
             this->unk_1C9 = 1;
             this->unk_1C8 = 1;
@@ -340,7 +340,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
         ShrinkWindow_SetLetterboxTarget(27);
-        Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
 #else
@@ -625,7 +625,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
 
                     Matrix_Pop();
                 }

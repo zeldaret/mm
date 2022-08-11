@@ -652,7 +652,7 @@ void func_80962A10(EnFu* this, PlayState* play) {
     }
 
     if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && gSaveContext.save.playerData.isMagicAcquired) {
-        Magic_Add(play, MAGIC_ADD_TO_CAPACITY);
+        Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
     }
 
     func_80962F10(this);

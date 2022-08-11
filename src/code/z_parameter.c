@@ -1189,7 +1189,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
     switch (type) {
         case MAGIC_CONSUME_NOW:
         case MAGIC_CONSUME_NOW_ALT:
-            // Consume magic immediately
+            // Drank magic immediately
             // Ex. Deku Bubble
             if ((gSaveContext.magicState == MAGIC_STATE_IDLE) ||
                 (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS)) {
@@ -1197,7 +1197,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                     play->actorCtx.lensActive = false;
                 }
                 if (gSaveContext.save.weekEventReg[14] & 8) {
-                    // Consumed Chateau Romani
+                    // Drank Chateau Romani
                     magicToConsume = 0;
                 }
                 gSaveContext.magicToConsume = magicToConsume;
@@ -1217,7 +1217,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                     play->actorCtx.lensActive = false;
                 }
                 if (gSaveContext.save.weekEventReg[14] & 8) {
-                    // Consumed Chateau Romani
+                    // Drank Chateau Romani
                     magicToConsume = 0;
                 }
                 gSaveContext.magicToConsume = magicToConsume;
@@ -1295,7 +1295,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                     play->actorCtx.lensActive = false;
                 }
                 if (gSaveContext.save.weekEventReg[14] & 8) {
-                    // Consumed Chateau Romani
+                    // Drank Chateau Romani
                     magicToConsume = 0;
                 }
                 gSaveContext.save.playerData.magic -= magicToConsume;
@@ -1384,7 +1384,7 @@ void Magic_Update(PlayState* play) {
     s16 magicCapacityTarget;
 
     if (gSaveContext.save.weekEventReg[14] & 8) {
-        // Consumed Chateau Romani
+        // Drank Chateau Romani
         Magic_FlashMeterBorder();
     }
 
@@ -1596,7 +1596,7 @@ void Magic_DrawMeter(PlayState* play) {
             // Fill the rest of the meter with the normal magic color
             gDPPipeSync(OVERLAY_DISP++);
             if (gSaveContext.save.weekEventReg[14] & 8) {
-                // Blue magic (consumed Chateau Romani)
+                // Blue magic (drank Chateau Romani)
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 200, interfaceCtx->magicAlpha);
             } else {
                 // Green magic (default)
@@ -1610,7 +1610,7 @@ void Magic_DrawMeter(PlayState* play) {
         } else {
             // Fill the whole meter with the normal magic color
             if (gSaveContext.save.weekEventReg[14] & 8) {
-                // Blue magic (consumed Chateau Romani)
+                // Blue magic (drank Chateau Romani)
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 200, interfaceCtx->magicAlpha);
             } else {
                 // Green magic (default)
