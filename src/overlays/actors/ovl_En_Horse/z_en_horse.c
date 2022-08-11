@@ -653,10 +653,12 @@ void EnHorse_ResetRace(EnHorse* this, PlayState* play) {
 s32 EnHorse_PlayerCanMove(EnHorse* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->stateFlags1 & 1) || (func_800B7128(GET_PLAYER(play)) == true) || (player->stateFlags1 & 0x100000) ||
+    if ((player->stateFlags1 & PLAYER_STATE1_1) || (func_800B7128(GET_PLAYER(play)) == true) ||
+        (player->stateFlags1 & PLAYER_STATE1_100000) ||
         (((this->stateFlags & ENHORSE_FLAG_19) || (this->stateFlags & ENHORSE_FLAG_29)) && !this->inRace) ||
-        (this->action == 19) || (player->actor.flags & ACTOR_FLAG_100) || (play->csCtx.state != 0) ||
-        (ActorCutscene_GetCurrentIndex() != -1) || (player->stateFlags1 & 0x20) || (player->csMode != 0)) {
+        (this->action == ENHORSE_ACT_HBA) || (player->actor.flags & ACTOR_FLAG_100) ||
+        (play->csCtx.state != CS_STATE_0) || (ActorCutscene_GetCurrentIndex() != -1) ||
+        (player->stateFlags1 & PLAYER_STATE1_20) || (player->csMode != 0)) {
         return false;
     }
     return true;
@@ -983,7 +985,7 @@ void EnHorse_Frozen(EnHorse* this, PlayState* play) {
                 EnHorse_StartMountedIdleResetAnim(this);
             } else if (this->actor.params == ENHORSE_11) {
                 this->actor.params = ENHORSE_7;
-                if (play->csCtx.state != 0) {
+                if (play->csCtx.state != CS_STATE_0) {
                     EnHorse_StartMountedIdle(this);
                 } else {
                     this->actor.speedXZ = 8.0f;
@@ -1624,8 +1626,8 @@ void EnHorse_Reverse(EnHorse* this, PlayState* play) {
         } else if (stickMag < 10.0f) {
             stickAngle = -0x7FFF;
         }
-    } else if ((player->actor.flags & ACTOR_FLAG_100) || (play->csCtx.state != 0) ||
-               (ActorCutscene_GetCurrentIndex() != -1) || (player->stateFlags1 & 0x20)) {
+    } else if ((player->actor.flags & ACTOR_FLAG_100) || (play->csCtx.state != CS_STATE_0) ||
+               (ActorCutscene_GetCurrentIndex() != -1) || (player->stateFlags1 & PLAYER_STATE1_20)) {
         EnHorse_StartMountedIdleResetAnim(this);
         this->actor.speedXZ = 0.0f;
         return;
@@ -2758,7 +2760,7 @@ void EnHorse_CutsceneUpdate(EnHorse* this, PlayState* play) {
     s32 csFunctionIdx;
     CsCmdActorAction* playerAction = play->csCtx.playerAction;
 
-    if (play->csCtx.state == 3) {
+    if (play->csCtx.state == CS_STATE_3) {
         this->playerControlled = true;
         this->actor.params = ENHORSE_12;
         this->action = ENHORSE_ACT_IDLE;
@@ -4313,7 +4315,7 @@ void EnHorse_Update(Actor* thisx, PlayState* play2) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderCylinder2.base);
         }
 
-        if ((player->stateFlags1 & ENHORSE_BOOST) && (player->rideActor != NULL)) {
+        if ((player->stateFlags1 & PLAYER_STATE1_1) && (player->rideActor != NULL)) {
             EnHorse_UpdateConveyors(this, play);
         }
 
