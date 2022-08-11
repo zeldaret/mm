@@ -13433,7 +13433,183 @@ void func_8084D770(Player* this, PlayState* play) {
     }
 }
 
+#ifdef NON_MATCHING
+// mostly regalloc and some swapped instructions
+void func_8084D820(Player* this, PlayState* play) {
+    if (func_80838A90(this, play) == 0) {
+        if ((this->stateFlags3 & 0x10) && !(this->actor.bgCheckFlags & 1)) {
+            func_80833AA0(this, play);
+            this->stateFlags1 |= 0x20000000;
+        } else if (this->unk_AE8 == 0) {
+            LinkAnimation_Update(play, &this->skelAnime);
+            if (DECR(this->doorTimer) == 0) {
+                this->linearVelocity = 0.1f;
+                this->unk_AE8 = 1;
+            }
+        } else if (this->unk_AE7 == 0) {
+            f32 sp6C;
+            s32 var_t0; // sp68
+
+            sp6C = 5.0f * D_8085C3E4;
+            var_t0 = func_808411D4(play, this, &sp6C, -1);
+            if (this->unk_397 == 4) {
+                if (gGameInfo->data[0x220] < 0) {
+                    if (play->roomCtx.unk31 != 1) {
+                        gGameInfo->data[0x224] += gGameInfo->data[0x220];
+                        if (gGameInfo->data[0x224] < 0) {
+                            gGameInfo->data[0x224] = 0;
+                        }
+
+                        this->actor.world.pos.y += (this->doorDirection != 0) ? 3.0f : -3.0f;
+                        this->actor.prevPos.y = this->actor.world.pos.y;
+                    }
+                } else if (gGameInfo->data[0x220] == 0) {
+                    CollisionPoly* sp64;
+                    s32 sp60;
+
+                    if (func_80835DF8(play, this, &sp64, &sp60) != 0) {
+                        this->actor.floorPoly = sp64;
+                        this->actor.floorBgId = sp60;
+                    }
+                }
+            }
+
+            if (var_t0 < 0x1E) {
+                this->unk_AE7 = 1;
+                this->stateFlags1 |= 0x20000000;
+                this->unk_3A0.x = this->unk_3AC.x;
+                this->unk_3A0.z = this->unk_3AC.z;
+            }
+        } else {
+            f32 sp5C;
+            s32 sp58;
+            s32 temp_v0_8;
+
+            sp58 = 0x14;
+            sp5C = 5.0f;
+            if (this->stateFlags1 & 1) {
+                sp5C = gSaveContext.entranceSpeed;
+                if (D_80862B10 != 0) {
+                    this->unk_3A0.x = (Math_SinS(D_80862B16) * 400.0f) + this->actor.world.pos.x;
+                    this->unk_3A0.z = (Math_CosS(D_80862B16) * 400.0f) + this->actor.world.pos.z;
+                }
+            } else {
+                if (this->unk_AE8 < 0) {
+                    this->unk_AE8++;
+                    sp5C = gSaveContext.entranceSpeed;
+                    sp58 = -1;
+                } else if (this->unk_397 == 4) {
+                    if (gGameInfo->data[0x220] == 0) {
+                        gGameInfo->data[0x220] = 0x10;
+                        gGameInfo->data[0x224] = 0;
+
+                        gGameInfo->data[0x221] = gGameInfo->data[0x222] =gGameInfo->data[0x223] = gGameInfo->data[0x224];
+                    } else if (gGameInfo->data[0x220] >= 0) {
+                        gGameInfo->data[0x224] += gGameInfo->data[0x220];
+                        if (gGameInfo->data[0x224] >= 0x100) {
+                            TransitionActorEntry* temp_v1_4; // sp50
+
+                            temp_v1_4 = &play->doorCtx.transitionActorList[this->doorNext];
+                            gGameInfo->data[0x224] = 0xFF;
+
+                            if ((temp_v1_4->sides[0].room != play->roomCtx.currRoom.num) && (play->roomCtx.currRoom.num >= 0)) {
+                                /*
+                                temp_a1_2 = &play->roomCtx;
+                                temp_t9 = &play->roomCtx.prevRoom;
+                                temp_t9->unk_0 = (s32) temp_a1_2->unk_0;
+                                temp_t9->unk_4 = (s32) temp_a1_2->unk_4;
+                                temp_t9->mesh = temp_a1_2->currRoom.mesh;
+                                temp_t9->segment = temp_a1_2->currRoom.segment;
+                                temp_t9->unk_10 = (s32) temp_a1_2->unk_10;
+                                */
+                                play->roomCtx.prevRoom = play->roomCtx.currRoom;
+
+                                play->roomCtx.currRoom.num = -1;
+                                play->roomCtx.currRoom.segment = NULL;
+                                func_8012EBF8(play, &play->roomCtx);
+                            } else {
+                                static Vec3f D_8085D62C = { 0.0f, 0.0f, 0.0f };
+                                static Vec3f D_8085D638 = { 0.0f, 0.0f, 0.0f };
+                                static Vec3f D_8085D644 = { 0.0f, 0.0f, 0.0f };
+                                s32 pad;
+
+                                gGameInfo->data[0x220] = -0x10;
+                                if (play->roomCtx.currRoom.num < 0) {
+                                    Room_StartRoomTransition(play, &play->roomCtx, temp_v1_4->sides[0].room);
+                                    play->roomCtx.prevRoom.num = -1;
+                                    play->roomCtx.prevRoom.segment = NULL;
+                                }
+
+                                this->actor.world.pos.x = temp_v1_4->pos.x;
+                                this->actor.world.pos.y = temp_v1_4->pos.y;
+                                this->actor.world.pos.z = temp_v1_4->pos.z;
+
+                                this->actor.shape.rot.y = ((((temp_v1_4->rotY >> 7) & 0x1FF) / 180.0f) * 0x8000);
+
+                                D_8085D62C.x = (this->doorDirection != 0) ? -120.0f : 120.0f;
+                                D_8085D62C.y = (this->doorDirection != 0) ? -75.0f : 75.0f;
+                                D_8085D62C.z = -240.0f;
+                                if (this->doorDirection != 0) {
+                                    Camera_ChangeDoorCam(play->cameraPtrs[0], &this->actor, -2, 0.0f, temp_v1_4->pos.x + 0x32, temp_v1_4->pos.y + 0x5F, temp_v1_4->pos.z - 0x32);
+                                } else {
+                                    Camera_ChangeDoorCam(play->cameraPtrs[0], &this->actor, -2, 0.0f, temp_v1_4->pos.x - 0x32, temp_v1_4->pos.y + 5, temp_v1_4->pos.z - 0x32);
+                                }
+
+                                func_80835BC8(this, &this->actor.world.pos, &D_8085D62C, &this->actor.world.pos);
+
+                                D_8085D638.x = (this->doorDirection != 0) ? 130.0f : -130.0f;
+                                D_8085D638.z = 160.0f;
+                                func_80835BC8(this, &this->actor.world.pos, &D_8085D638, &this->unk_3A0);
+                                D_8085D644.z = 160.0f;
+                                func_80835BC8(this, &this->unk_3A0, &D_8085D644, &this->unk_3AC);
+
+                                this->actor.shape.rot.y += (this->doorDirection != 0) ? 0x4000 : -0x4000;
+                                this->unk_AE7 = 0;
+
+                                this->actor.world.rot.y = this->currentYaw = this->actor.shape.rot.y;
+                            }
+                        }
+
+                        this->actor.world.pos.y += (this->doorDirection != 0) ? 3.0f : -3.0f;
+                        this->actor.prevPos.y = this->actor.world.pos.y;
+                    }
+                }
+            }
+
+            temp_v0_8 = func_808411D4(play, this, &sp5C, sp58);
+            if ((this->unk_AE8 == 0) || ((temp_v0_8 == 0) && (this->linearVelocity == 0.0f) && (Play_GetCamera(play, 0)->stateFlags & 0x10))) {
+                if (this->unk_397 == 4) {
+                    Map_InitRoomData(play, (s16) play->roomCtx.currRoom.num);
+                    Minimap_SavePlayerRoomInitInfo(play);
+                }
+
+                gGameInfo->data[0x220] = 0;
+                func_800E0238(Play_GetCamera(play, 0));
+                func_80838760(this);
+                if (!(this->stateFlags3 & 0x20000)) {
+                    func_801226E0(play, ((void)0,gSaveContext.respawn[0].data));
+                }
+
+                if (play->unk_1887C != 0) {
+                    play->func_18780(this, play);
+                    Player_SetAction(play, this, func_80854430, 0);
+                    if (play->sceneNum == 0x45) {
+                        play->unk_1887C = 0;
+                    }
+                } else if (func_808391D8(this, play) == 0) {
+                    func_8083B2E4(this, play);
+                }
+            }
+        }
+    }
+
+    if (this->stateFlags1 & 0x800) {
+        func_8083216C(this, play);
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084D820.s")
+#endif
 
 // door stuff
 void func_8084E034(Player* this, PlayState* play) {
