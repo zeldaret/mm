@@ -511,7 +511,7 @@ typedef struct struct_8085D13C {
     /* 0x1 */ u8 sourceIntensity;
     /* 0x2 */ u8 decayTimer;
     /* 0x3 */ u8 decayStep;
-    /* 0x4 */ u16 unk_4;
+    /* 0x4 */ u16 sfxId;
 } struct_8085D13C; // size = 0x6
 
 typedef struct struct_8085CD30 {
@@ -1218,7 +1218,7 @@ ColliderQuadInit D_8085C394 = {
 f32 D_8085C3E4 = 1.0f;
 f32 D_8085C3E8 = 1.0f;
 
-u16 D_8085C3EC[] = { NA_SE_VO_LI_SWEAT, NA_SE_VO_LI_SNEEZE, NA_SE_VO_LI_RELAX, NA_SE_VO_LI_FALL_L };
+u16 D_8085C3EC[] = { NA_SE_VO_LI_SWEAT, NA_SE_VO_LI_SNEEZE, NA_SE_VO_LI_RELAX, NA_SE_VO_LI_FALL_L, };
 
 // TODO: consider what to do with the NONEs: cannot use a zero-argument macro like OoT since the text id is involved.
 #define GET_ITEM(itemId, objectId, drawId, textId, field, chestAnim) \
@@ -2210,9 +2210,8 @@ void func_8082E094(Player* this, u16 sfxId) {
     func_800B8E58(this, func_8082E078(this, sfxId));
 }
 
-// TODO: is arg1 an sfxId?
-u16 func_8082E0CC(Player* this, u16 arg1) {
-    return arg1 + this->unk_B72 + this->ageProperties->unk_94;
+u16 func_8082E0CC(Player* this, u16 sfxId) {
+    return sfxId + this->unk_B72 + this->ageProperties->unk_94;
 }
 
 void func_8082E0F4(Player* this, u16 sfxId) {
@@ -2225,17 +2224,17 @@ void func_8082E12C(Player* this, f32 arg1) {
     if (this->currentMask == PLAYER_MASK_GIANT) {
         sfxId = NA_SE_PL_GIANT_WALK;
     } else {
-        sfxId = func_8082E0CC(this, 0x800);
+        sfxId = func_8082E0CC(this, NA_SE_PL_WALK_GROUND);
     }
     func_8019F638(&this->actor.projectedPos, sfxId, arg1);
 }
 
 void func_8082E188(Player* this) {
-    func_800B8E58(this, func_8082E0CC(this, 0x810));
+    func_800B8E58(this, func_8082E0CC(this, NA_SE_PL_JUMP_GROUND));
 }
 
 void func_8082E1BC(Player* this) {
-    func_800B8E58(this, func_8082E0CC(this, 0x820));
+    func_800B8E58(this, func_8082E0CC(this, NA_SE_PL_LAND_GROUND));
 }
 
 void func_8082E1F0(Player* this, u16 sfxId) {
@@ -5618,7 +5617,10 @@ void func_80836C70(PlayState* play, Player* this, s32 bodyPartIndex) {
     }
 }
 
-struct_8085D13C D_8085D13C[2] = { { -8, 0xB4, 0x28, 0x64, 0x681A }, { -0x10, 0xFF, 0x8C, 0x96, 0x681A } };
+struct_8085D13C D_8085D13C[] = {
+    { -8, 0xB4, 0x28, 0x64, NA_SE_VO_LI_LAND_DAMAGE_S },
+    { -0x10, 0xFF, 0x8C, 0x96, NA_SE_VO_LI_LAND_DAMAGE_S },
+};
 
 Vec3f D_8085D148 = { 0.0f, 50.0f, 0.0f };
 
@@ -5790,8 +5792,6 @@ void func_80836EA0(PlayState* play, u16 quakeSpeed, s16 verticalMag, s16 quakeCo
     Quake_SetCountdown(quake, quakeCountdown);
 }
 
-extern struct struct_8085D13C D_8085D13C[];
-
 s32 func_80836F10(PlayState* play, Player* this) {
     s32 var_s0;
 
@@ -5817,7 +5817,7 @@ s32 func_80836F10(PlayState* play, Player* this) {
         func_800B8E58(this, NA_SE_PL_BODY_HIT);
 
         entry = &D_8085D13C[index];
-        func_8082DF8C(this, entry->unk_4);
+        func_8082DF8C(this, entry->sfxId);
 
         if (Player_InflictDamage(play, entry->damage)) {
             return -1;
@@ -5826,6 +5826,7 @@ s32 func_80836F10(PlayState* play, Player* this) {
         func_80833998(this, 40);
         func_80836EA0(play, 0x80C7, 2, 30);
         Player_RequestRumble(play, this, entry->sourceIntensity, entry->decayTimer, entry->decayStep, SQ(0));
+
         return index + 1;
     }
 
@@ -7304,7 +7305,7 @@ void func_8083B030(Player* this, PlayState* play) {
 
 void func_8083B090(Player* this, PlayState* play) {
     Player_SetAction(play, this, func_8084B3B8, 1);
-    LinkAnimation_PlayOnceSetSpeed(play, &this->skelAnime, &gameplay_keep_Linkanim_00D3E8, 2.0f);
+    LinkAnimation_PlayOnceSetSpeed(play, &this->skelAnime, &gameplay_keep_Linkanim_00D3E8, 6.0f / 3.0f);
 }
 
 void func_8083B0E4(PlayState* play, Player* this, s16 currentYaw) {
@@ -7338,15 +7339,14 @@ void func_8083B23C(Player* this, PlayState* play) {
 void func_8083B29C(Player* this, PlayState* play) {
     if (this->linearVelocity != 0.0f) {
         func_8083A794(this, play);
-        return;
+    } else {
+        func_8083B1A0(this, play);
     }
-    func_8083B1A0(this, play);
 }
 
 void func_8083B2E4(Player* this, PlayState* play) {
     if (this->linearVelocity != 0.0f) {
         func_8083A794(this, play);
-        return;
     } else {
         func_80836988(this, play);
     }
@@ -7961,7 +7961,7 @@ s32 func_8083CF68(PlayState* play, Player* this) {
                 this->currentYaw = downwardSlopeYaw;
                 if (D_80862B28 >= 0) {
                     this->unk_AE7 = 1;
-                    func_8082DF8C(this, 0x6803U);
+                    func_8082DF8C(this, NA_SE_VO_LI_HANG);
                 }
 
                 return true;
@@ -8255,7 +8255,7 @@ s32 func_8083D860(Player* this, PlayState* play);
 
 void func_8083DCC4(Player* this, LinkAnimationHeader* anim, PlayState* play) {
     func_8083172C(play, this, func_8084FC0C, 0);
-    LinkAnimation_PlayOnceSetSpeed(play, &this->skelAnime, anim, 1.3333334f);
+    LinkAnimation_PlayOnceSetSpeed(play, &this->skelAnime, anim, 4.0f / 3.0f);
 }
 
 s32 func_8083DD1C(PlayState* play, Player* this, f32 arg2, f32 arg3, f32 arg4, f32 arg5) {
@@ -9093,7 +9093,7 @@ s32 func_808401F4(PlayState* play, Player* this) {
 
                                     func_8082DF2C(play);
                                     func_8083FE90(play, this, NA_SE_IT_HAMMER_HIT);
-                                    if (this->transformation == 1) {
+                                    if (this->transformation == PLAYER_FORM_GORON) {
                                         func_800B648C(play, 2, 2, 100.0f, &this->actor.world.pos);
                                         func_800C0094(poly, pos.x, pos.y, pos.z, &sp64);
                                         Matrix_MtxFToYXZRot(&sp64, &actorRot, true);
@@ -9217,8 +9217,8 @@ void func_80840770(PlayState* play, Player* this) {
     }
 }
 
-void func_80840980(Player* this, u16 arg1) {
-    func_8082DF8C(this, arg1);
+void func_80840980(Player* this, u16 sfxId) {
+    func_8082DF8C(this, sfxId);
 }
 
 void func_808409A8(PlayState* play, Player* this, f32 speedXZ, f32 yVelocity) {
@@ -17450,7 +17450,7 @@ void func_80856918(Player* this, PlayState* play) {
                         this->actor.velocity.y = 6.0f;
                         this->stateFlags3 &= ~PLAYER_STATE3_200;
                         this->stateFlags3 |= PLAYER_STATE3_1000000;
-                        func_8082E1F0(this, 0x1850U);
+                        func_8082E1F0(this, NA_SE_IT_DEKUNUTS_FLOWER_OPEN);
                         func_8019FD90(4, 2);
                     }
                 }
