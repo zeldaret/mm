@@ -2207,7 +2207,7 @@
     0x80123BD4:("Player_SetModelGroup",),
     0x80123C58:("func_80123C58",),
     0x80123C90:("Player_SetEquipmentData",),
-    0x80123D50:("func_80123D50",),
+    0x80123D50:("Player_UpdateBottleHeld",),
     0x80123DA4:("func_80123DA4",),
     0x80123DC0:("func_80123DC0",),
     0x80123E90:("func_80123E90",),

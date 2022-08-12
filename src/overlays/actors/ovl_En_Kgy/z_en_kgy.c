@@ -743,7 +743,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
 
                         case 0xC46:
                         case 0xC55:
-                            func_80123D50(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+                            Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
                             player->exchangeItemId = EXCH_ITEM_NONE;
                             this->unk_29C &= ~0x8;
                             play->msgCtx.msgLength = 0;

@@ -1257,7 +1257,7 @@ void Player_SetEquipmentData(PlayState* play, Player* player) {
     }
 }
 
-void func_80123D50(PlayState* play, Player* player, ItemID itemId, PlayerActionParam actionParam) {
+void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemID itemId, PlayerActionParam actionParam) {
     Inventory_UpdateBottleItem(play, itemId, player->heldItemButton);
 
     if (itemId != ITEM_BOTTLE) {

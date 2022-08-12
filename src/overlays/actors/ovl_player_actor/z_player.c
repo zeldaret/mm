@@ -15509,9 +15509,9 @@ void func_80853194(Player* this, PlayState* play) {
                 this->unk_AE8 = 2;
             }
 
-            func_80123D50(play, this,
-                          (this->heldItemActionParam == PLAYER_AP_BOTTLE_MILK) ? ITEM_MILK_HALF : ITEM_BOTTLE,
-                          PLAYER_AP_BOTTLE);
+            Player_UpdateBottleHeld(play, this,
+                                    (this->heldItemActionParam == PLAYER_AP_BOTTLE_MILK) ? ITEM_MILK_HALF : ITEM_BOTTLE,
+                                    PLAYER_AP_BOTTLE);
         }
 
         func_8082DF8C(this, NA_SE_VO_LI_DRINK - SFX_FLAG);
@@ -15595,7 +15595,7 @@ void func_808534C0(Player* this, PlayState* play) {
                             this->unk_AE8 = 0;
                             this->stateFlags1 |= PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000;
                             interactRangeActor->parent = &this->actor;
-                            func_80123D50(play, this, entry->itemId, entry->actionParam);
+                            Player_UpdateBottleHeld(play, this, entry->itemId, entry->actionParam);
                             func_8082DB90(play, this, sp24->unk_4);
                         }
                     }
@@ -15623,7 +15623,7 @@ void func_80853754(Player* this, PlayState* play) {
         func_800B8E58(this, NA_SE_EV_BOTTLE_CAP_OPEN);
         func_8082DF8C(this, NA_SE_VO_LI_AUTO_JUMP);
         if (this->heldItemActionParam == PLAYER_AP_BOTTLE_FAIRY) {
-            func_80123D50(play, this, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+            Player_UpdateBottleHeld(play, this, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
             func_800B8E58(this, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
             sp2C = 1;
         }
@@ -15690,7 +15690,7 @@ void func_80853850(Player* this, PlayState* play) {
                     (Math_SinS(this->actor.shape.rot.y) * 5.0f) + this->leftHandWorld.pos.x, this->leftHandWorld.pos.y,
                     (Math_CosS(this->actor.shape.rot.y) * 5.0f) + this->leftHandWorld.pos.z, 0x4000,
                     this->actor.shape.rot.y, 0, sp4C->params);
-        func_80123D50(play, this, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+        Player_UpdateBottleHeld(play, this, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
     } else {
         Player_PlayAnimSfx(this, D_8085D838);
     }
