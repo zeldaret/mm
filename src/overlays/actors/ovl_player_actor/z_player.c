@@ -7544,30 +7544,27 @@ void func_8083BF54(PlayState* play, Player* this) {
         if (temp_v0 != 0) {
             if (D_80862B08 == 4) {
                 var_fa1 = 1300.0f;
-                var_a1 = 0xE9;
             } else if (D_80862B08 == 7) {
                 var_fa1 = 20000.0f;
-                var_a1 = 0xE9;
                 var_ft4 = 0.0f;
             } else {
-                var_ft4 *= 1.6f;
                 var_fa1 = 10000.0f;
-                var_a1 = 0xE9;
+                var_ft4 *= 1.6f;
             }
+            var_a1 = 0xE9;
         } else if (var_a2 != 0) {
             if (temp_a0 != 0) {
                 var_fa1 = 400.0f;
-                var_a1 = 0xEA;
                 var_ft4 *= 10.0f;
             } else {
                 var_fa1 = 1300.0f;
-                var_a1 = 0xEA;
                 var_ft4 = 0.0f;
             }
+            var_a1 = 0xEA;
         } else {
-            var_a1 = 0xE9;
             var_fa1 = (this->transformation == PLAYER_FORM_GORON) ? 10000.0f : 1000.0f;
             var_ft4 = 0.0f;
+            var_a1 = 0xE9;
         }
 
         temp_fv1_2 = this->unk_AB8;
@@ -7663,6 +7660,7 @@ void func_8083BF54(PlayState* play, Player* this) {
         }
     }
 }
+
 #else
 void func_8083BF54(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083BF54.s")
