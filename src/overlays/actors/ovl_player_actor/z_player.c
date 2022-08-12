@@ -3468,8 +3468,10 @@ void func_80831454(Player* this) {
     }
 }
 
-#ifdef NON_MATCHING
 s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc, s32 arg3) {
+    s32 i;
+    f32* ptr;
+
     if (actionFunc == this->actionFunc) {
         return false;
     }
@@ -3528,24 +3530,23 @@ s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc,
     this->unk_B8C = 0;
     this->unk_B8E = 0;
 
-    this->actor.shape.rot.z = 0;
+    // TODO: this->unk_B10?
+    // Also is there no other way to write this that works?
+    i = 0;
+    ptr = this->unk_B08 + 2;
+    do {
+        *ptr = 0.0f;
+        ptr++;
+        i++;
+    } while (i < 6);
 
-    this->unk_B08[2] = 0.0f;
-    this->unk_B08[3] = 0.0f;
-    this->unk_B08[4] = 0.0f;
-    this->unk_B08[5] = 0.0f;
-    this->unk_B08[6] = 0.0f;
-    this->unk_B08[7] = 0.0f;
+    this->actor.shape.rot.z = 0;
 
     func_8082F09C(this);
     func_8082E00C(this);
 
     return true;
 }
-#else
-s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc, s32 arg3);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/Player_SetAction.s")
-#endif
 
 void func_8083172C(PlayState* play, Player* this, PlayerActionFunc actionFunc, s32 arg3) {
     s32 moveFlags = this->skelAnime.moveFlags;
