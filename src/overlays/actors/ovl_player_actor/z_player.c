@@ -15429,13 +15429,96 @@ void func_808530E0(PlayState* play, Player* this) {
     func_800B0EB0(play, &pos, &velocity, &accel, &D_8085D788, &D_8085D78C, 40, 10, 10);
 }
 
-// unused?
-u32 D_8085D790 = 0x01030204;
+u8 D_8085D790[] = {
+    1,     // PLAYER_AP_BOTTLE_POTION_RED
+    1 | 2, // PLAYER_AP_BOTTLE_POTION_BLUE
+    2,     // PLAYER_AP_BOTTLE_POTION_GREEN
+    4,     // PLAYER_AP_BOTTLE_MILK
+    4,     // PLAYER_AP_BOTTLE_MILK_HALF
+    1 | 2, // PLAYER_AP_BOTTLE_CHATEAU
+};
 
-// unused?
-u32 D_8085D794 = 0x04030000;
+void func_80853194(Player* this, PlayState* play) {
+    func_808323C0(this, play->playerActorCsIds[2]);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80853194.s")
+    if (LinkAnimation_Update(play, &this->skelAnime)) {
+        if (this->unk_AE8 == 0) {
+            if (this->heldItemActionParam == PLAYER_AP_BOTTLE_POE) {
+                s32 health = Rand_S16Offset(-1, 3);
+
+                if (health == 0) {
+                    health = 3;
+                }
+                if ((health < 0) && (gSaveContext.save.playerData.health <= 0x10)) {
+                    health = 3;
+                }
+
+                if (health < 0) {
+                    Health_ChangeBy(play, -0x10);
+                } else {
+                    gSaveContext.healthAccumulator = health * 0x10;
+                }
+            } else {
+                s32 temp_v1 = D_8085D790[this->heldItemActionParam - PLAYER_AP_BOTTLE_POTION_RED];
+
+                if (temp_v1 & 1) {
+                    gSaveContext.healthAccumulator = 0x140;
+                }
+                if (temp_v1 & 2) {
+                    Parameter_AddMagic(play, ((void)0, gSaveContext.unk_3F30) +
+                                                 (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
+                }
+                if (temp_v1 & 4) {
+                    gSaveContext.healthAccumulator = 0x50;
+                }
+
+                if (this->heldItemActionParam == PLAYER_AP_BOTTLE_CHATEAU) {
+                    gSaveContext.save.weekEventReg[0xE] |= 8;
+                }
+
+                gSaveContext.jinxTimer = 0;
+            }
+
+            func_8082DB60(play, this,
+                          (this->transformation == PLAYER_FORM_DEKU) ? &gameplay_keep_Linkanim_00E290
+                                                                     : &gameplay_keep_Linkanim_00D4C0);
+            this->unk_AE8 = 1;
+
+        //! FAKE
+        dummy_label_235515:;
+        } else if (this->unk_AE8 < 0) {
+            this->unk_AE8++;
+            if (this->unk_AE8 == 0) {
+                this->unk_AE8 = 3;
+                this->skelAnime.endFrame = this->skelAnime.animLength - 1.0f;
+            } else if (this->unk_AE8 == -6) {
+                func_808530E0(play, this);
+            }
+        } else {
+            func_80838760(this);
+            func_80839E74(this, play);
+        }
+    } else if (this->unk_AE8 == 1) {
+        if ((gSaveContext.healthAccumulator == 0) && (gSaveContext.unk_3F28 != 9)) {
+            if (this->transformation == PLAYER_FORM_DEKU) {
+                LinkAnimation_Change(play, &this->skelAnime, &gameplay_keep_Linkanim_00E298, 2.0f / 3.0f, 0.0f, 5.0f, 2,
+                                     -6.0f);
+                this->unk_AE8 = -7;
+            } else {
+                func_8082E4A4(play, this, &gameplay_keep_Linkanim_00D4B0);
+                this->unk_AE8 = 2;
+            }
+
+            func_80123D50(play, this,
+                          (this->heldItemActionParam == PLAYER_AP_BOTTLE_MILK) ? ITEM_MILK_HALF : ITEM_BOTTLE,
+                          PLAYER_AP_BOTTLE);
+        }
+
+        func_8082DF8C(this, NA_SE_VO_LI_DRINK - SFX_FLAG);
+    } else if ((this->unk_AE8 == 2) && LinkAnimation_OnFrame(&this->skelAnime, 29.0f)) {
+        func_8082DF8C(this, NA_SE_VO_LI_BREATH_DRINK);
+    }
+}
 
 struct_8085D798 D_8085D798[] = {
     { ACTOR_EN_ELF, 2, ITEM_FAIRY, PLAYER_AP_BOTTLE_FAIRY, 0x5E },

@@ -169,6 +169,7 @@ static Vec3f D_8085D358 = { 0.0f, 0.0f, 0.0f };
 static Vec3f D_8085D62C = { 0.0f, 0.0f, 0.0f };
 static Vec3f D_8085D638 = { 0.0f, 0.0f, 0.0f };
 static Vec3f D_8085D644 = { 0.0f, 0.0f, 0.0f };
+static ? D_8085D797;                                /* unable to generate initializer */
 static Vec3f D_8085D7F8 = { 10.0f, 26.800001f, 30.0f };
 static ? D_8085D804;                                /* unable to generate initializer */
 static ? D_8085D80C;                                /* unable to generate initializer */
@@ -1959,8 +1960,7 @@ Vec3f D_8085D770 = { 0.0f, 0.0f, 2.0f };
 Vec3f D_8085D77C = { 0.0f, 0.0f, -0.2f };
 Color_RGBA8 D_8085D788 = { 0xFF, 0xFF, 0xFF, 0xFF };
 Color_RGBA8 D_8085D78C = { 0xFF, 0xFF, 0xFF, 0xFF };
-u32 D_8085D790 = 0x01030204;
-u32 D_8085D794 = 0x04030000;
+u8 D_8085D790[7] = { 1, 3, 2, 4, 4, 3, 0 };
 struct_8085D798 D_8085D798[0xE] = {
     { 0x10, 2, 0x16, 0x29, 0x5E },
     { 0x17, -1, 0x1A, 0x16, 0x62 },
@@ -17940,7 +17940,7 @@ void func_808534C0(Player* this, PlayState* play) {
         if (this->unk_AE7 != 0) {
             func_808323C0(this, play->playerActorCsIds[3]);
             if (this->unk_AE8 == 0) {
-                Message_StartTextbox(play, (u16) *(&D_8085D794 + 3 + (this->unk_AE7 * 6)), &this->actor);
+                Message_StartTextbox(play, (u16) *(&D_8085D797 + (this->unk_AE7 * 6)), &this->actor);
                 func_801A3098(0x922U);
                 this->unk_AE8 = 1;
                 return;
