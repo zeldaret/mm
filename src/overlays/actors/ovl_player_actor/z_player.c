@@ -14685,7 +14685,153 @@ void func_80850D20(PlayState* play, Player* this) {
     func_8083F8A8(play, this, 12.0f, -1, 1.0f, 160, 20, true);
 }
 
+#if 0
+void func_80850D68(Player* this, PlayState* play) {
+    f32 sp44;
+    s16 sp42;
+    s16 sp40;
+    s16 sp3C;
+    s16 sp3A;
+    SkelAnime* sp28;
+    DynaPolyActor* temp_v0_3;
+    SkelAnime* temp_a1;
+    s16 temp_a1_2;
+    s16 temp_t0;
+    s16 temp_t0_2;
+    s16 temp_v0;
+    s16 temp_v0_2;
+    s16 temp_v0_4;
+    s16 temp_v1;
+    s16 temp_v1_3;
+    s16 var_a1;
+    s16 var_t1;
+    s16 var_v0;
+    s16 var_v0_2;
+    u8 temp_a1_3;
+
+    this->stateFlags2 |= 0x20;
+
+    func_808475B4(this);
+    func_8082F164(this, BTN_R);
+
+    if ((func_80833058(play, this, D_8085D048, 0) == 0) && (func_8083B3B4(play, this, D_80862B44) == 0) && (func_80840A30(play, this, &this->linearVelocity, 0.0f) == 0)) {
+        sp44 = 0.0f;
+        if (this->unk_AE8 != 0) {
+            temp_a1 = &this->skelAnime;
+            if (((func_8082DA90(play) == 0) && (~(D_80862B44->cur.button | 0xFFFF7FFF) != 0)) || (this->currentBoots != 4)) {
+                this->unk_B86[0] = 1;
+            }
+            sp28 = temp_a1;
+            if (LinkAnimation_Update(play, temp_a1) != 0) {
+                temp_v1 = this->unk_AE8;
+                if (temp_v1 == 0) {
+                    var_v0 = 0;
+                } else {
+                    this->unk_AE8 = temp_v1 - 1;
+                    var_v0 = this->unk_AE8;
+                }
+                if (var_v0 == 0) {
+                    if (this->unk_B86[0] != 0) {
+                        this->stateFlags3 &= 0xFFFF7FFF;
+                        func_8082DB90(play, this, &gameplay_keep_Linkanim_00E408);
+                    } else {
+                        func_8082DB60(play, this, &gameplay_keep_Linkanim_00E3D8);
+                    }
+                } else {
+                    goto block_16;
+                }
+            } else {
+block_16:
+                func_80832F78(this, &sp44, &sp40, 0.0f, play);
+                Math_ScaledStepToS(&this->currentYaw, sp40, 0x640);
+                if (this->skelAnime.curFrame >= 13.0f) {
+                    sp44 = 12.0f;
+                    if (LinkAnimation_OnFrame(sp28, 13.0f) != 0) {
+                        this->unk_B48 = 16.0f;
+                    }
+                    this->stateFlags3 |= 0x8000;
+                } else {
+                    sp44 = 0.0f;
+                }
+            }
+            Math_SmoothStepToS(&this->unk_B86[1], (s16) (D_80862B44->rel.stick_x * 0xC8), 0xA, 0x3E8, (s16) 0x64);
+            Math_SmoothStepToS(&this->unk_B8E, this->unk_B86[1], (s16) (gGameInfo->data[0x388] + 1), gGameInfo->data[0x389], (s16) (s32) gGameInfo->data[0x38A]);
+        } else if (this->unk_B86[0] == 0) {
+            LinkAnimation_Update(play, &this->skelAnime);
+            if (((func_8082DA90(play) == 0) && (~(D_80862B44->cur.button | 0xFFFF7FFF) != 0)) || (this->currentBoots != 4) || (this->windSpeed > 9.0f)) {
+                this->stateFlags3 &= 0xFFFF7FFF;
+                func_8082DB90(play, this, &gameplay_keep_Linkanim_00E408);
+                this->unk_B86[0] = 1;
+            } else {
+                sp44 = 9.0f;
+                func_800B8F98(&this->actor, 0xEDU);
+            }
+            temp_v0 = this->unk_B8C;
+            var_a1 = D_80862B44->rel.stick_y * 0xC8;
+            if (temp_v0 != 0) {
+                this->unk_B8C = temp_v0 - 1;
+                temp_v1_3 = this->unk_B6C - 0xFA0;
+                if (temp_v1_3 < var_a1) {
+                    var_a1 = temp_v1_3;
+                }
+            }
+            if ((this->unk_AAA >= -0x1555) && (this->actor.depthInWater < (this->ageProperties->unk_24 + 10.0f)) && (var_a1 < 0x7D0)) {
+                var_a1 = 0x7D0;
+            }
+            Math_SmoothStepToS(&this->unk_AAA, var_a1, 4, 0xFA0, (s16) 0x190);
+            temp_a1_2 = D_80862B44->rel.stick_x * 0x64;
+            sp42 = temp_a1_2;
+            if ((Math_ScaledStepToS(&this->unk_B8A, temp_a1_2, 0x384) != 0) && (temp_a1_2 == 0)) {
+                Math_SmoothStepToS(&this->unk_B86[1], 0, 4, 0x5DC, (s16) 0x64);
+                Math_SmoothStepToS(&this->unk_B8E, this->unk_B86[1], (s16) (gGameInfo->data[0x38C] + 1), gGameInfo->data[0x38D], (s16) (s32) gGameInfo->data[0x38E]);
+            } else {
+                temp_v0_2 = this->unk_B86[1];
+                temp_t0 = this->unk_B8A;
+                if (temp_t0 < 0) {
+                    var_t1 = -0x3A98;
+                } else {
+                    var_t1 = 0x3A98;
+                }
+                this->unk_B86[1] = temp_v0_2 + temp_t0;
+                sp3C = temp_v0_2;
+                sp3A = var_t1;
+                Math_SmoothStepToS(&this->unk_B8E, this->unk_B86[1], (s16) (gGameInfo->data[0x38F] + 1), gGameInfo->data[0x390], (s16) (s32) gGameInfo->data[0x391]);
+                temp_t0_2 = this->unk_B8A;
+                var_v0_2 = temp_t0_2;
+                if (temp_t0_2 < 0) {
+                    var_v0_2 = -temp_t0_2;
+                }
+                if ((var_v0_2 >= 0xFA1) && ((((temp_v0_2 + temp_t0_2) - var_t1) * (temp_v0_2 - var_t1)) <= 0)) {
+                    func_800B8E58(this, 0x8EEU);
+                }
+            }
+            if (D_80862B18 < 20.0f) {
+                func_80850D20(play, this);
+            }
+        } else {
+            Math_SmoothStepToS(&this->unk_B86[1], 0, 4, 0xFA0, (s16) 0x190);
+            if (((this->skelAnime.curFrame <= 5.0f) || (func_80850734(play, this) == 0)) && (LinkAnimation_Update(play, &this->skelAnime) != 0)) {
+                func_808353DC(play, this);
+            }
+            func_8082F09C(this);
+        }
+        if ((this->unk_B8C < 8) && (this->actor.bgCheckFlags & 1)) {
+            temp_a1_3 = this->actor.floorBgId;
+            if ((temp_a1_3 == 0x32) || (temp_v0_3 = DynaPoly_GetActor(&play->colCtx, (s32) temp_a1_3), (temp_v0_3 == NULL)) || (temp_v0_3->actor.id != 0x1A5)) {
+                temp_v0_4 = this->unk_AAA;
+                this->unk_AAA = temp_v0_4 + ((-this->unk_B6C - temp_v0_4) * 2);
+                this->unk_B8C = 0xF;
+            }
+            func_80850D20(play, this);
+            func_800B8E58(this, 0x83BU);
+        }
+        func_80850BF8(this, sp44);
+        func_80850BA8(this);
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80850D68.s")
+#endif
 
 void func_808513EC(Player* this, PlayState* play) {
     f32 sp34;
