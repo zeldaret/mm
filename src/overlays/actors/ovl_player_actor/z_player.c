@@ -7521,23 +7521,24 @@ void func_8083BB4C(PlayState* play, Player* this) {
 
 void func_8083BF54(PlayState* play, Player* this) {
     Vec3f sp84;
-    s32 temp_v0; // real
-    s32 var_a2;  // sp7C
+    s32 temp_v0;
+    s32 var_a2;
 
     this->actor.terminalVelocity = -20.0f;
-    this->actor.gravity = gGameInfo->data[0x44] / 100.0f;
-    var_a2 = 0;
+    this->actor.gravity = REG(68) / 100.0f;
+
+    var_a2 = false;
     temp_v0 = func_808340D4(D_80862B08);
 
-    if ((temp_v0 != 0) || (((var_a2 = (D_80862B08 == 0xE) || (D_80862B08 == 0xF))) || (D_80862B08 == 0xD))) {
+    if (temp_v0 || (((var_a2 = (D_80862B08 == 0xE) || (D_80862B08 == 0xF))) || (D_80862B08 == 0xD))) {
         f32 temp_fv1_2;
         f32 var_fa1;
         f32 var_ft4;
         f32 var_fv0;
-        u16 var_a1; // real?
+        u16 sfxId;
 
         var_ft4 = fabsf(this->linearVelocity + D_80862B3C) * 20.0f;
-        if (temp_v0 != 0) {
+        if (temp_v0) {
             if (D_80862B08 == 4) {
                 var_fa1 = 1300.0f;
             } else if (D_80862B08 == 7) {
@@ -7547,35 +7548,33 @@ void func_8083BF54(PlayState* play, Player* this) {
                 var_fa1 = 10000.0f;
                 var_ft4 *= 1.6f;
             }
-            var_a1 = 0xE9;
-        } else if (var_a2 != 0) {
-            if ((D_80862B08 == 0xE) != 0) {
+            sfxId = NA_SE_PL_SINK_ON_SAND - SFX_FLAG;
+        } else if (var_a2) {
+            if (D_80862B08 == 0xE) {
                 var_fa1 = 400.0f;
                 var_ft4 *= 10.0f;
             } else {
                 var_fa1 = 1300.0f;
                 var_ft4 = 0.0f;
             }
-            var_a1 = 0xEA;
+            sfxId = NA_SE_PL_SINK_ON_SNOW - SFX_FLAG;
         } else {
             var_fa1 = (this->transformation == PLAYER_FORM_GORON) ? 10000.0f : 1000.0f;
             var_ft4 = 0.0f;
-            var_a1 = 0xE9;
+            sfxId = NA_SE_PL_SINK_ON_SAND - SFX_FLAG;
         }
 
         var_fa1 = CLAMP_MIN(var_fa1, this->unk_AB8);
 
-        var_fv0 = ((D_80862B08 == 0xE) != 0) ? 200.0f : (var_fa1 - this->unk_AB8) * 0.02f;
+        var_fv0 = (D_80862B08 == 0xE) ? 200.0f : (var_fa1 - this->unk_AB8) * 0.02f;
         var_fv0 = CLAMP(var_fv0, 0.0f, 300.0f);
 
         temp_fv1_2 = this->unk_AB8;
         this->unk_AB8 += var_fv0 - var_ft4;
-        // this->unk_AB8 = CLAMP(this->unk_AB8, 0.0f, var_fa1);
-        // var_ft4 = var_fa1;
         this->unk_AB8 = CLAMP(this->unk_AB8, 0.0f, var_fa1);
 
         if ((this->linearVelocity == 0.0f) && (fabsf(this->unk_AB8 - temp_fv1_2) > 2.0f)) {
-            func_800B8F98(&this->actor, var_a1);
+            func_800B8F98(&this->actor, sfxId);
         }
 
         this->actor.gravity -= this->unk_AB8 * 0.004f;
@@ -7583,17 +7582,16 @@ void func_8083BF54(PlayState* play, Player* this) {
         this->unk_AB8 = 0.0f;
     }
 
-    if ((this->stateFlags3 & 0x10) && (this->actor.bgCheckFlags & 0x20)) {
+    if ((this->stateFlags3 & PLAYER_STATE3_10) && (this->actor.bgCheckFlags & 0x20)) {
         if (this->actor.depthInWater < 50.0f) {
             f32 temp_fv1_5;
-            Vec3f* var_v1; // sp60
-            f32 var_fa0_3; // sp5C
+            Vec3f* bodyPartsPos;
+            f32 var_fa0_3;
             f32 var_ft4_2;
-            s32 var_t0; // sp54
 
-            var_ft4_2 =
-                (fabsf(this->bodyPartsPos[0].x - this->unk_D6C.x) + fabsf(this->bodyPartsPos[0].y - this->unk_D6C.y)) +
-                fabsf(this->bodyPartsPos[0].z - this->unk_D6C.z);
+            var_ft4_2 = fabsf(this->bodyPartsPos[0].x - this->unk_D6C.x) +
+                        fabsf(this->bodyPartsPos[0].y - this->unk_D6C.y) +
+                        fabsf(this->bodyPartsPos[0].z - this->unk_D6C.z);
             var_ft4_2 = CLAMP_MAX(var_ft4_2, 4.0f);
 
             this->unk_AEC += var_ft4_2;
@@ -7602,22 +7600,25 @@ void func_8083BF54(PlayState* play, Player* this) {
                 sp84.x = (Rand_ZeroOne() * 10.0f) + this->actor.world.pos.x;
                 sp84.y = this->actor.world.pos.y + this->actor.depthInWater;
                 sp84.z = (Rand_ZeroOne() * 10.0f) + this->actor.world.pos.z;
-                EffectSsGRipple_Spawn(play, &sp84, 0x64, 0x1F4, 0);
 
-                if ((this->linearVelocity > 4.0f) && (func_801242B4(this) == 0) &&
+                EffectSsGRipple_Spawn(play, &sp84, 100, 500, 0);
+
+                if ((this->linearVelocity > 4.0f) && !func_801242B4(this) &&
                     ((this->actor.world.pos.y + this->actor.depthInWater) < this->bodyPartsPos[0].y)) {
                     func_80837730(play, this, 20.0f,
-                                  (s32)((fabsf(this->linearVelocity) * 50.0f) + (this->actor.depthInWater * 5.0f)));
-                } else if (this->stateFlags3 & 0x8000) {
-                    var_fa0_3 = (this->actor.world.pos.y + this->actor.depthInWater) - 5.0f;
-                    var_v1 = this->bodyPartsPos;
+                                  (fabsf(this->linearVelocity) * 50.0f) + (this->actor.depthInWater * 5.0f));
+                } else if (this->stateFlags3 & PLAYER_STATE3_8000) {
+                    s32 i;
 
-                    for (var_t0 = 0; var_t0 < PLAYER_BODYPART_MAX; var_t0++, var_v1++) {
-                        temp_fv1_5 = var_v1->y - var_fa0_3;
+                    var_fa0_3 = (this->actor.world.pos.y + this->actor.depthInWater) - 5.0f;
+                    bodyPartsPos = this->bodyPartsPos;
+
+                    for (i = 0; i < PLAYER_BODYPART_MAX; i++, bodyPartsPos++) {
+                        temp_fv1_5 = bodyPartsPos->y - var_fa0_3;
 
                         if (temp_fv1_5 > 0.0f) {
                             func_80837730(play, this, 20.0f,
-                                          (fabsf(this->linearVelocity) * 20.0f + (temp_fv1_5 * 10.0f)));
+                                          fabsf(this->linearVelocity) * 20.0f + (temp_fv1_5 * 10.0f));
                         }
                     }
                 }
@@ -7625,32 +7626,28 @@ void func_8083BF54(PlayState* play, Player* this) {
         }
 
         if (this->ageProperties->unk_2C < this->actor.depthInWater) {
-            s32 var_v1_2; // sp50
-            s32 var_v0;   // sp4C
+            s32 numBubbles = 0;
+            s32 i;
             f32 var_fv1;
 
-            var_v1_2 = 0;
-
-            var_fv1 = (this->stateFlags1 & 0x04000000)
+            var_fv1 = (this->stateFlags1 & PLAYER_STATE3_4000000)
                           ? -fabsf(this->linearVelocity)
                           : ((func_80850D68 == this->actionFunc)
                                  ? (ABS_ALT(this->unk_B8A) * -0.004f) + (this->unk_B48 * -0.38f)
                                  : this->actor.velocity.y);
 
-            if (!D_80862B08) {}
-
             if ((var_fv1 > -1.0f) || ((this->currentBoots == 5) && (this->actor.bgCheckFlags & 1))) {
                 if (Rand_ZeroOne() < 0.2f) {
-                    var_v1_2 = 1;
+                    numBubbles = 1;
                 }
             } else {
-                var_v1_2 = var_fv1 * -0.3f;
-                if (var_v1_2 >= 9) {
-                    var_v1_2 = 8;
+                numBubbles = var_fv1 * -0.3f;
+                if (numBubbles >= 9) {
+                    numBubbles = 8;
                 }
             }
 
-            for (var_v0 = 0; var_v0 < var_v1_2; var_v0++) {
+            for (i = 0; i < numBubbles; i++) {
                 EffectSsBubble_Spawn(play, &this->actor.world.pos, 20.0f, 10.0f, 20.0f, 0.13f);
             }
         }
@@ -14718,7 +14715,7 @@ void func_80850D68(Player* this, PlayState* play) {
             }
 
             Math_SmoothStepToS(&this->unk_B86[1], (s16) (D_80862B44->rel.stick_x * 0xC8), 0xA, 0x3E8, (s16) 0x64);
-            Math_SmoothStepToS(&this->unk_B8E, this->unk_B86[1], (s16) (gGameInfo->data[0x388] + 1), gGameInfo->data[0x389], (s16) (s32) gGameInfo->data[0x38A]);
+            Math_SmoothStepToS(&this->unk_B8E, this->unk_B86[1], (s16) (IREG(40) + 1), IREG(41), (s16) (s32) IREG(42));
         } else if (this->unk_B86[0] == 0) {
             LinkAnimation_Update(play, &this->skelAnime);
             if (((func_8082DA90(play) == 0) && (~(D_80862B44->cur.button | 0xFFFF7FFF) != 0)) || (this->currentBoots != 4) || (this->windSpeed > 9.0f)) {
@@ -14746,12 +14743,12 @@ void func_80850D68(Player* this, PlayState* play) {
             temp_a1_2 = D_80862B44->rel.stick_x * 0x64;
             if ((Math_ScaledStepToS(&this->unk_B8A, temp_a1_2, 0x384) != 0) && (temp_a1_2 == 0)) {
                 Math_SmoothStepToS(&this->unk_B86[1], 0, 4, 0x5DC, (s16) 0x64);
-                Math_SmoothStepToS(&this->unk_B8E, this->unk_B86[1], (s16) (gGameInfo->data[0x38C] + 1), gGameInfo->data[0x38D], (s16) (s32) gGameInfo->data[0x38E]);
+                Math_SmoothStepToS(&this->unk_B8E, this->unk_B86[1], (s16) (IREG(44) + 1), IREG(45), (s16) (s32) IREG(46));
             } else {
                 temp_v0_2 = this->unk_B86[1];
                 var_t1 = (this->unk_B8A < 0) ? -0x3A98 : 0x3A98;
                 this->unk_B86[1] = temp_v0_2 + this->unk_B8A;
-                Math_SmoothStepToS(&this->unk_B8E, this->unk_B86[1], (s16) (gGameInfo->data[0x38F] + 1), gGameInfo->data[0x390], (s16) (s32) gGameInfo->data[0x391]);
+                Math_SmoothStepToS(&this->unk_B8E, this->unk_B86[1], (s16) (IREG(47) + 1), IREG(48), (s16) (s32) IREG(49));
 
                 if ((ABS_ALT(this->unk_B8A) > 0xFA0) && ((((temp_v0_2 + this->unk_B8A) - var_t1) * (temp_v0_2 - var_t1)) <= 0)) {
                     func_800B8E58(this, 0x8EEU);
