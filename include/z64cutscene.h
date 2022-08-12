@@ -5,11 +5,11 @@
 #include "unk.h"
 
 typedef struct {
-    /* 0x00 */ s8    continueFlag;
-    /* 0x01 */ s8    cameraRoll;
-    /* 0x02 */ u16   nextPointFrame;
-    /* 0x04 */ f32   viewAngle; // in degrees
-    /* 0x08 */ Vec3s pos;
+    /* 0x0 */ s8    continueFlag;
+    /* 0x1 */ s8    cameraRoll;
+    /* 0x2 */ u16   nextPointFrame;
+    /* 0x4 */ f32   viewAngle; // in degrees
+    /* 0x8 */ Vec3s pos;
 } CutsceneCameraPoint; // size = 0x10
 
 typedef struct {
@@ -86,13 +86,13 @@ typedef struct {
 } CsCmdTextbox; // size = 0xC
 
 typedef enum {
-    /*      0 */ CS_TEXTBOX_TYPE_DEFAULT,
-    /*      1 */ CS_TEXTBOX_TYPE_1,
-    /*      2 */ CS_TEXTBOX_TYPE_LEARN_SONG,
-    /*      3 */ CS_TEXTBOX_TYPE_3,
-    /*      4 */ CS_TEXTBOX_TYPE_BOSSES_REMAINS,
-    /*      5 */ CS_TEXTBOX_TYPE_ALL_NORMAL_MASKS,
-    /* 0xFFFF */ CS_TEXTBOX_TYPE_NONE = 0xFFFF
+    /* -1 */ CS_TEXTBOX_TYPE_NONE = -1,
+    /*  0 */ CS_TEXTBOX_TYPE_DEFAULT,
+    /*  1 */ CS_TEXTBOX_TYPE_1,
+    /*  2 */ CS_TEXTBOX_TYPE_LEARN_SONG,
+    /*  3 */ CS_TEXTBOX_TYPE_3,
+    /*  4 */ CS_TEXTBOX_TYPE_BOSSES_REMAINS,
+    /*  5 */ CS_TEXTBOX_TYPE_ALL_NORMAL_MASKS
 } CutsceneTextboxType;
 
 typedef struct {
