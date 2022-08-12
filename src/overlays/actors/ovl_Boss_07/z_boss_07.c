@@ -31,13 +31,13 @@ typedef struct {
     /* 0x04 */ Vec3f pos;
     /* 0x10 */ Vec3f vel;
     /* 0x1C */ Vec3f accel;
-    /* 0x28 */ char unk28[4];
+    /* 0x28 */ UNK_TYPE1 unk28[4];
     /* 0x2C */ s16 alpha;
-    /* 0x2E */ char unk2E[2];
+    /* 0x2E */ UNK_TYPE1 unk2E[2];
     /* 0x30 */ s16 isFading;
-    /* 0x32 */ char unk32[2];
+    /* 0x32 */ UNK_TYPE1 unk32[2];
     /* 0x34 */ f32 unk_34;
-    /* 0x38 */ char unk38[0x10];
+    /* 0x38 */ UNK_TYPE1 unk38[0x10];
 } Boss07Effect;
 
 #if 1 // function prototypes

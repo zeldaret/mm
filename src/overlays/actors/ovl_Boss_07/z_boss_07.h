@@ -160,7 +160,7 @@ typedef struct Boss07 {
     /* 0xAC08 */ f32 csCamRotVel;
     /* 0xAC0C */ f32 csCamSpeedMod;
     /* 0xAC10 */ Vec3f csCamEyeMod;
-    /* 0xAC1C */ char unkAC1C[4];
+    /* 0xAC1C */ UNK_TYPE1 unkAC1C[4];
 } Boss07; // size = 0xAC20
 
 extern const ActorInit Boss_07_InitVars;
