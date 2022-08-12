@@ -7524,7 +7524,7 @@ void func_8083BB4C(PlayState* play, Player* this) {
 void func_8083BF54(PlayState* play, Player* this) {
     Vec3f sp84;
     s32 temp_v0; // real
-    s32 var_a2; // sp7C
+    s32 var_a2;  // sp7C
 
     this->actor.terminalVelocity = -20.0f;
     this->actor.gravity = gGameInfo->data[0x44] / 100.0f;
@@ -7537,7 +7537,7 @@ void func_8083BF54(PlayState* play, Player* this) {
         f32 var_ft4;
         f32 var_fv0;
         s32 temp_a0; // ?
-        u16 var_a1; // real?
+        u16 var_a1;  // real?
 
         temp_a0 = D_80862B08 == 0xE;
         var_ft4 = fabsf(this->linearVelocity + D_80862B3C) * 20.0f;
@@ -7577,7 +7577,7 @@ void func_8083BF54(PlayState* play, Player* this) {
         var_fv0 = CLAMP(var_fv0, 0.0f, 300.0f);
 
         this->unk_AB8 = temp_fv1_2 + (var_fv0 - var_ft4);
-        //this->unk_AB8 = CLAMP(this->unk_AB8, 0.0f, var_fa1);
+        // this->unk_AB8 = CLAMP(this->unk_AB8, 0.0f, var_fa1);
         var_ft4 = var_fa1;
         this->unk_AB8 = CLAMP(this->unk_AB8, 0.0f, var_ft4);
 
@@ -7598,7 +7598,9 @@ void func_8083BF54(PlayState* play, Player* this) {
             s32 var_t0; // sp54
             f32 temp_fv1_5;
 
-            var_ft4_2 = (fabsf(this->bodyPartsPos[0].x - this->unk_D6C.x) + fabsf(this->bodyPartsPos[0].y - this->unk_D6C.y)) + fabsf(this->bodyPartsPos[0].z - this->unk_D6C.z);
+            var_ft4_2 =
+                (fabsf(this->bodyPartsPos[0].x - this->unk_D6C.x) + fabsf(this->bodyPartsPos[0].y - this->unk_D6C.y)) +
+                fabsf(this->bodyPartsPos[0].z - this->unk_D6C.z);
             var_ft4_2 = CLAMP_MAX(var_ft4_2, 4.0f);
 
             this->unk_AEC += var_ft4_2;
@@ -7609,8 +7611,10 @@ void func_8083BF54(PlayState* play, Player* this) {
                 sp84.z = (Rand_ZeroOne() * 10.0f) + this->actor.world.pos.z;
                 EffectSsGRipple_Spawn(play, &sp84, 0x64, 0x1F4, 0);
 
-                if ((this->linearVelocity > 4.0f) && (func_801242B4(this) == 0) && ((this->actor.world.pos.y + this->actor.depthInWater) < this->bodyPartsPos[0].y)) {
-                    func_80837730(play, this, 20.0f, (s32) ((fabsf(this->linearVelocity) * 50.0f) + (this->actor.depthInWater * 5.0f)));
+                if ((this->linearVelocity > 4.0f) && (func_801242B4(this) == 0) &&
+                    ((this->actor.world.pos.y + this->actor.depthInWater) < this->bodyPartsPos[0].y)) {
+                    func_80837730(play, this, 20.0f,
+                                  (s32)((fabsf(this->linearVelocity) * 50.0f) + (this->actor.depthInWater * 5.0f)));
                 } else if (this->stateFlags3 & 0x8000) {
                     var_fa0_3 = (this->actor.world.pos.y + this->actor.depthInWater) - 5.0f;
                     var_v1 = this->bodyPartsPos;
@@ -7619,7 +7623,8 @@ void func_8083BF54(PlayState* play, Player* this) {
                         temp_fv1_5 = var_v1->y - var_fa0_3;
 
                         if (temp_fv1_5 > 0.0f) {
-                            func_80837730(play, this, 20.0f, (fabsf(this->linearVelocity) * 20.0f + (temp_fv1_5 * 10.0f)));
+                            func_80837730(play, this, 20.0f,
+                                          (fabsf(this->linearVelocity) * 20.0f + (temp_fv1_5 * 10.0f)));
                         }
                     }
                 }
@@ -7628,12 +7633,16 @@ void func_8083BF54(PlayState* play, Player* this) {
 
         if (this->ageProperties->unk_2C < this->actor.depthInWater) {
             s32 var_v1_2; // sp50
-            s32 var_v0; // sp4C
+            s32 var_v0;   // sp4C
             f32 var_fv1;
 
             var_v1_2 = 0;
 
-            var_fv1 = (this->stateFlags1 & 0x04000000) ? -fabsf(this->linearVelocity) : ((func_80850D68 == this->actionFunc) ? (ABS_ALT(this->unk_B8A) * -0.004f) + (this->unk_B48 * -0.38f) : this->actor.velocity.y);
+            var_fv1 = (this->stateFlags1 & 0x04000000)
+                          ? -fabsf(this->linearVelocity)
+                          : ((func_80850D68 == this->actionFunc)
+                                 ? (ABS_ALT(this->unk_B8A) * -0.004f) + (this->unk_B48 * -0.38f)
+                                 : this->actor.velocity.y);
 
             if (!D_80862B08) {}
 
