@@ -1939,7 +1939,7 @@ void func_80122BA4(PlayState* play, struct_80122D44_arg1* arg1, s32 arg2, s32 al
 void func_80122C20(PlayState* play, struct_80122D44_arg1* arg1);
 void func_80122D44(PlayState* play, struct_80122D44_arg1* arg1);
 u8 Player_MaskIdToItemId(s32 maskIdMinusOne);
-u8 Player_GetCurMaskItemId(PlayState* play);
+s32 Player_GetCurMaskItemId(PlayState* play);
 void func_80122F28(Player* player);
 s32 func_80122F9C(PlayState* play);
 s32 func_80122FCC(PlayState* play);
@@ -2444,7 +2444,7 @@ void func_8014D304(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 // void func_8014D7B4(void);
 void func_80150A84(PlayState* play);
 void func_80150D08(PlayState* play, u32 uParm2);
-// void func_801514B0(void);
+void func_801514B0(PlayState* play, u16 arg1, u8 arg2);
 void Message_StartTextbox(PlayState* play, u16 textId, Actor* Actor);
 void func_80151938(PlayState* play, u16 textId);
 void func_80151A68(PlayState* play, u16 textId);

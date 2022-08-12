@@ -922,11 +922,7 @@ void EnFsn_DeterminePrice(EnFsn* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
         itemActionParam = func_80123810(play);
         if (itemActionParam > PLAYER_AP_NONE) {
-            if (player->heldItemButton == 0) {
-                buttonItem = CUR_FORM_EQUIP(player->heldItemButton);
-            } else {
-                buttonItem = gSaveContext.save.equips.buttonItems[0][player->heldItemButton];
-            }
+            buttonItem = GET_CUR_FORM_BTN_ITEM(player->heldItemButton);
             this->price = (buttonItem < ITEM_MOON_TEAR) ? gItemPrices[buttonItem] : 0;
             if (this->price > 0) {
                 player->actor.textId = 0x29EF;

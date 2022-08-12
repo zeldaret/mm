@@ -125,7 +125,7 @@ void func_8081FB1C(PlayState* play) {
                 do {
                     pauseCtx->cursorPoint[PAUSE_WORLD_MAP]++;
                     if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] >= 11) {
-                        func_80821984(play, PAUSE_CURSOR_PAGE_RIGHT);
+                        KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_RIGHT);
                         pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
                         break;
                     }
@@ -137,7 +137,7 @@ void func_8081FB1C(PlayState* play) {
                 do {
                     pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
                     if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] < 0) {
-                        func_80821984(play, PAUSE_CURSOR_PAGE_LEFT);
+                        KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
                         pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
                         break;
                     }
@@ -160,7 +160,7 @@ void func_8081FB1C(PlayState* play) {
                     do {
                         pauseCtx->cursorPoint[PAUSE_WORLD_MAP]++;
                         if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] >= 11) {
-                            func_80821984(play, PAUSE_CURSOR_PAGE_RIGHT);
+                            KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_RIGHT);
                             pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
                             break;
                         }
@@ -181,7 +181,7 @@ void func_8081FB1C(PlayState* play) {
                 do {
                     pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
                     if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] < 0) {
-                        func_80821984(play, PAUSE_CURSOR_PAGE_LEFT);
+                        KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
                         pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
                         break;
                     }

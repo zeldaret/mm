@@ -270,7 +270,7 @@ void func_80821958(s32 arg0, s32 arg1) {
     func_80178E3C(SEGMENT_ROM_START(item_name_static), arg1, arg0, 0x400);
 }
 
-void func_80821984(PlayState* play, s16 cursorSpecialPos) {
+void KaleidoScope_MoveCursorToSpecialPos(PlayState* play, s16 cursorSpecialPos) {
     PauseContext* pauseCtx = &play->pauseCtx;
 
     pauseCtx->cursorSlot[pauseCtx->pageIndex] = 0;
@@ -279,11 +279,11 @@ void func_80821984(PlayState* play, s16 cursorSpecialPos) {
 
     play_sound(NA_SE_SY_DECIDE);
 
-    gSaveContext.buttonStatus[0] = BTN_ENABLED;
-    gSaveContext.buttonStatus[1] = BTN_DISABLED;
-    gSaveContext.buttonStatus[2] = BTN_DISABLED;
-    gSaveContext.buttonStatus[3] = BTN_DISABLED;
-    gSaveContext.buttonStatus[4] = BTN_DISABLED;
+    gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+    gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_DISABLED;
+    gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_DISABLED;
+    gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
+    gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_DISABLED;
 
     gSaveContext.unk_3F22 = 0;
     Interface_ChangeAlpha(50);
@@ -302,11 +302,11 @@ void func_80821A04(PlayState* play) {
     pauseCtx->unk_298 = 4.0f;
 
     // TODO: indexing of D_801C6A98 is likely wrong
-    gSaveContext.buttonStatus[0] = BTN_ENABLED;
-    gSaveContext.buttonStatus[1] = D_801C6A98[pauseCtx->pageIndex + 1][1];
-    gSaveContext.buttonStatus[2] = D_801C6A98[pauseCtx->pageIndex + 1][1];
-    gSaveContext.buttonStatus[3] = D_801C6A98[pauseCtx->pageIndex + 1][1];
-    gSaveContext.buttonStatus[4] = BTN_ENABLED;
+    gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+    gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = D_801C6A98[pauseCtx->pageIndex + 1][1];
+    gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = D_801C6A98[pauseCtx->pageIndex + 1][1];
+    gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = D_801C6A98[pauseCtx->pageIndex + 1][1];
+    gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
 
     gSaveContext.unk_3F22 = 0;
 
@@ -339,11 +339,11 @@ void KaleidoScope_SwitchPage(PauseContext* pauseCtx, u8 pt) {
         pauseCtx->cursorSpecialPos = PAUSE_CURSOR_PAGE_LEFT;
     }
 
-    gSaveContext.buttonStatus[0] = BTN_ENABLED;
-    gSaveContext.buttonStatus[1] = BTN_DISABLED;
-    gSaveContext.buttonStatus[2] = BTN_DISABLED;
-    gSaveContext.buttonStatus[3] = BTN_DISABLED;
-    gSaveContext.buttonStatus[4] = BTN_DISABLED;
+    gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+    gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_DISABLED;
+    gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_DISABLED;
+    gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
+    gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_DISABLED;
 
     gSaveContext.unk_3F22 = 0;
     Interface_ChangeAlpha(50);
@@ -1158,8 +1158,8 @@ void KaleidoScope_UpdateCursorSize(PlayState* play) {
     if (pauseCtx->cursorSpecialPos == 0) {
         switch (pauseCtx->pageIndex) {
             case PAUSE_ITEM:
-                pauseCtx->unk_288 = D_8082BCB4[pauseCtx->unk_242[0]];
-                pauseCtx->unk_28C = D_8082BCCC[pauseCtx->unk_24C[0]];
+                pauseCtx->unk_288 = D_8082BCB4[pauseCtx->cursorX[0]];
+                pauseCtx->unk_28C = D_8082BCCC[pauseCtx->cursorY[0]];
                 pauseCtx->unk_290 = 15.0f;
                 pauseCtx->unk_294 = 15.0f;
                 break;
@@ -1220,8 +1220,8 @@ void KaleidoScope_UpdateCursorSize(PlayState* play) {
                 break;
 
             case PAUSE_MASK:
-                pauseCtx->unk_288 = D_8082BCB4[pauseCtx->unk_242[3]];
-                pauseCtx->unk_28C = D_8082BCCC[pauseCtx->unk_24C[3]];
+                pauseCtx->unk_288 = D_8082BCB4[pauseCtx->cursorX[3]];
+                pauseCtx->unk_28C = D_8082BCCC[pauseCtx->cursorY[3]];
                 pauseCtx->unk_290 = 15.0f;
                 pauseCtx->unk_294 = 15.0f;
                 break;
