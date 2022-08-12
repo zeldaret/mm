@@ -145,7 +145,6 @@ void func_809C42A8(EnEncount4* this, PlayState* play) {
         this->actionFunc = func_809C464C;
     } else if ((gSaveContext.save.weekEventReg[85] & 0x40) || (this->unk14C >= 2) ||
                (this->actor.xzDistToPlayer > 240.0f)) {
-        return;
     } else {
         pos.x = (Math_SinS(this->actor.world.rot.y) * 30.0f) + this->actor.world.pos.x;
         pos.y = actor->actor.floorHeight + 120.0f;
@@ -154,20 +153,19 @@ void func_809C42A8(EnEncount4* this, PlayState* play) {
         if (yIntersect <= BGCHECK_Y_MIN || (actor->actor.depthInWater != BGCHECK_Y_MIN &&
                                             (yIntersect < (actor->actor.world.pos.y - actor->actor.depthInWater)))) {
             return;
-        } else {
-            pos.y = yIntersect;
-            yRot = (s32)Rand_ZeroFloat(512.0f) + this->actor.world.rot.y + 0x3800;
-            if (this->unk14C != 0) {
-                yRot += 0x8000;
-            }
-            pos.x += Math_SinS(yRot) * (40.0f + randPlusMinusPoint5Scaled(40.0f));
-            pos.z += Math_CosS(yRot) * (40.0f + randPlusMinusPoint5Scaled(40.0f));
-            if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_SKB, pos.x, pos.y, pos.z, 0, 0, 0,
-                                   ENSKB_PARAMS_0) != NULL) {
-                this->unk14C++;
-                if (this->unk14C >= 2) {
-                    this->actionFunc = func_809C4598;
-                }
+        }
+        pos.y = yIntersect;
+        yRot = (s32)Rand_ZeroFloat(512.0f) + this->actor.world.rot.y + 0x3800;
+        if (this->unk14C != 0) {
+            yRot += 0x8000;
+        }
+        pos.x += Math_SinS(yRot) * (40.0f + randPlusMinusPoint5Scaled(40.0f));
+        pos.z += Math_CosS(yRot) * (40.0f + randPlusMinusPoint5Scaled(40.0f));
+        if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_SKB, pos.x, pos.y, pos.z, 0, 0, 0,
+                                ENSKB_PARAMS_0) != NULL) {
+            this->unk14C++;
+            if (this->unk14C >= 2) {
+                this->actionFunc = func_809C4598;
             }
         }
     }
