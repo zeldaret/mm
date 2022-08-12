@@ -8916,41 +8916,33 @@ u8 D_8085D354[] = {
     0x00,
 };
 
-#ifdef NON_MATCHING
 s32 func_8083FBC4(PlayState* play, Player* this) {
-    Vec3f* var_s0;
-    s32 var_s1;
-    s32 i;
-
     if ((this->unk_B72 == NA_SE_PL_WALK_GROUND - SFX_FLAG) || (this->unk_B72 == NA_SE_PL_WALK_SAND - SFX_FLAG)) {
-        var_s0 = &this->actor.shape.feetPos[0];
-        i = 0;
-        do {
-            func_800B1210(play, var_s0, &gZeroVec3f, &gZeroVec3f, 0x32, 0x1E);
-            i += 1;
-            var_s0 += 1;
-        } while (i != 2);
-        return 1;
+        Vec3f* feetPos = this->actor.shape.feetPos;
+        s32 i;
+
+        for (i = 0; i < ARRAY_COUNT(this->actor.shape.feetPos); i++) {
+            func_800B1210(play, feetPos, &gZeroVec3f, &gZeroVec3f, 50, 30);
+            feetPos++;
+        }
+
+        return true;
     }
 
     if (this->unk_B72 == NA_SE_PL_WALK_SNOW - SFX_FLAG) {
-        var_s0 = &this->actor.shape.feetPos[0];
-        i = 0;
-        do {
-            EffectSsDust_Spawn(play, 0, var_s0, &gZeroVec3f, &D_8085D270, &D_8085D26C, &D_8085D26C, 0x64, 0x28, 0x11,
-                               0);
-            i += 1;
-            var_s0 += 1;
-        } while (i != 2);
-        return 1;
+        Vec3f* feetPos = this->actor.shape.feetPos;
+        s32 i;
+
+        for (i = 0; i < ARRAY_COUNT(this->actor.shape.feetPos); i++) {
+            EffectSsDust_Spawn(play, 0, feetPos, &gZeroVec3f, &D_8085D270, &D_8085D26C, &D_8085D26C, 100, 40, 17, 0);
+            feetPos++;
+        }
+
+        return true;
     }
 
-    return 0;
+    return false;
 }
-#else
-s32 func_8083FBC4(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083FBC4.s")
-#endif
 
 s32 func_8083FCF0(PlayState* play, Player* this, f32 arg2, f32 arg3, f32 arg4) {
     if (arg4 < this->skelAnime.curFrame) {
