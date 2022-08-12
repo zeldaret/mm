@@ -8,16 +8,16 @@ struct EnTg;
 typedef void (*EnTgActionFunc)(struct EnTg*, PlayState*);
 
 typedef struct EnTgUnkStruct {
-    /* 0x00 */ u8 isSecondHeartSpawned;
-    /* 0x01 */ u8 unk1; // timer that counts down
+    /* 0x00 */ u8 isSecondHeartSpawned; // whether or not the second heart in the animation is spawned
+    /* 0x01 */ u8 secondHeartTimer;     // set to 16 and counts down
     /* 0x02 */ char unk2[0x2];
     /* 0x04 */ f32 scale;
     /* 0x08 */ char unk8[0xC];
-    /* 0x14 */ Vec3f unk14; // heart location?
-    /* 0x20 */ Vec3f unk20; // zeroVec, unused
-    /* 0x2C */ Vec3f unk2C;
-    /* 0x38 */ s16 unk38;
-} EnTgUnkStruct; // size = 0x40
+    /* 0x14 */ Vec3f secondHeartPos;
+    /* 0x20 */ Vec3f unusedZeroVec20; // set to zeroVec, never read
+    /* 0x2C */ Vec3f heartVelocity;   // set to {0, 1.5, 0}
+    /* 0x38 */ s16 unk38;             // only updated if isSecondHeartSpawned
+} EnTgUnkStruct;                      // size = 0x40
 
 typedef struct EnTg {
     /* 0x0000 */ Actor actor;
