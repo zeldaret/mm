@@ -736,7 +736,7 @@ void Boss07_Wrath_Intro(Boss07* this, PlayState* play) {
     Matrix_MultVec3f(&this->csCamNextAt, &this->csCamAt);
     if (this->csCamIndex != 0) {
         ShrinkWindow_SetLetterboxTarget(0x1B);
-        Play_CameraSetAtEye(play, this->csCamIndex, &this->csCamAt, &this->csCamEye);
+        Play_SetCameraAtEye(play, this->csCamIndex, &this->csCamAt, &this->csCamEye);
     }
 }
 
@@ -780,8 +780,8 @@ void Boss07_Wrath_Death(Boss07* this, PlayState* play) {
             Cutscene_Start(play, &play->csCtx);
             func_800B7298(play, &this->actor, 1);
             this->csCamIndex = Play_CreateSubCamera(play);
-            Play_CameraChangeStatus(play, 0, 1);
-            Play_CameraChangeStatus(play, this->csCamIndex, 7);
+            Play_ChangeCameraStatus(play, 0, 1);
+            Play_ChangeCameraStatus(play, this->csCamIndex, 7);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST3_DEAD_ROD);
         case 1:
             this->unk_ABC8 = 0;
@@ -986,7 +986,7 @@ void Boss07_Wrath_Death(Boss07* this, PlayState* play) {
         sp5C.x = this->csCamAt.x + spA8.x;
         sp5C.y = this->csCamAt.y + spA8.y;
         sp5C.z = this->csCamAt.z + spA8.z;
-        Play_CameraSetAtEye(play, this->csCamIndex, &sp5C, &this->csCamEye);
+        Play_SetCameraAtEye(play, this->csCamIndex, &sp5C, &this->csCamEye);
     }
     SkelAnime_Update(&this->skelAnime);
     this->unk_ABC8++;
@@ -2750,7 +2750,7 @@ void Boss07_Incarnation_Intro(Boss07* this, PlayState* play) {
     Matrix_MultVec3f(&this->csCamNextAt, &this->csCamAt);
     if (this->csCamIndex != 0) {
         ShrinkWindow_SetLetterboxTarget(0x1B);
-        Play_CameraSetAtEye(play, this->csCamIndex, &this->csCamAt, &this->csCamEye);
+        Play_SetCameraAtEye(play, this->csCamIndex, &this->csCamAt, &this->csCamEye);
     }
 }
 
@@ -3077,8 +3077,8 @@ void Boss07_Incarnation_Death(Boss07* this, PlayState* play) {
             Cutscene_Start(play, &play->csCtx);
             func_800B7298(play, &this->actor, 7);
             this->csCamIndex = Play_CreateSubCamera(play);
-            Play_CameraChangeStatus(play, 0, 1);
-            Play_CameraChangeStatus(play, this->csCamIndex, 7);
+            Play_ChangeCameraStatus(play, 0, 1);
+            Play_ChangeCameraStatus(play, this->csCamIndex, 7);
             this->unk_ABC8 = 0;
             this->csState = 10;
             func_8016566C(150);
@@ -3187,7 +3187,7 @@ void Boss07_Incarnation_Death(Boss07* this, PlayState* play) {
     this->unk_17F4 = (Math_CosS(this->unk_ABC8 * 0x2000) * 0.1f) + 1.0f;
     if (this->csCamIndex != 0) {
         ShrinkWindow_SetLetterboxTarget(0x1B);
-        Play_CameraSetAtEye(play, this->csCamIndex, &this->csCamAt, &this->csCamEye);
+        Play_SetCameraAtEye(play, this->csCamIndex, &this->csCamAt, &this->csCamEye);
     }
 }
 
@@ -4032,8 +4032,8 @@ void Boss07_Mask_Intro(Boss07* this, PlayState* play) {
                 Cutscene_Start(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 7);
                 this->csCamIndex = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, 0, 1);
-                Play_CameraChangeStatus(play, this->csCamIndex, 7);
+                Play_ChangeCameraStatus(play, 0, 1);
+                Play_ChangeCameraStatus(play, this->csCamIndex, 7);
                 this->unk_ABC8 = 0;
                 this->csState = 1;
                 this->unk_160 = KREG(76) + 150;
@@ -4243,7 +4243,7 @@ void Boss07_Mask_Intro(Boss07* this, PlayState* play) {
         sp50.x = this->csCamAt.x;
         sp50.y = this->csCamAt.y + sp8C;
         sp50.z = this->csCamAt.z;
-        Play_CameraSetAtEye(play, this->csCamIndex, &sp50, &this->csCamEye);
+        Play_SetCameraAtEye(play, this->csCamIndex, &sp50, &this->csCamEye);
     }
 }
 
@@ -4279,8 +4279,8 @@ void Boss07_Mask_Death(Boss07* this, PlayState* play) {
                 Cutscene_Start(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 1U);
                 this->csCamIndex = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, 0, 1);
-                Play_CameraChangeStatus(play, this->csCamIndex, 7);
+                Play_ChangeCameraStatus(play, 0, 1);
+                Play_ChangeCameraStatus(play, this->csCamIndex, 7);
                 this->unk_ABC8 = 0;
                 this->csState = 1;
                 this->csCamNextAt.z = 0.0f;
@@ -4334,7 +4334,7 @@ void Boss07_Mask_Death(Boss07* this, PlayState* play) {
         if (sp54.y < 30.0f) {
             sp54.y = 30.0f;
         }
-        Play_CameraSetAtEye(play, this->csCamIndex, &this->csCamAt, &sp54);
+        Play_SetCameraAtEye(play, this->csCamIndex, &this->csCamAt, &sp54);
     }
 }
 
@@ -5523,8 +5523,8 @@ void Boss07_Static_Update(Actor* thisx, PlayState* play2) {
                 Cutscene_Start(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 7);
                 this->csCamIndex = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, 0, 1);
-                Play_CameraChangeStatus(play, this->csCamIndex, 7);
+                Play_ChangeCameraStatus(play, 0, 1);
+                Play_ChangeCameraStatus(play, this->csCamIndex, 7);
                 this->unk_ABC8 = 0;
                 this->csState = 2;
                 func_8016566C(150);
@@ -5626,7 +5626,7 @@ void Boss07_Static_Update(Actor* thisx, PlayState* play2) {
             }
         }
         ShrinkWindow_SetLetterboxTarget(27);
-        Play_CameraSetAtEye(play, this->csCamIndex, &this->csCamAt, &this->csCamEye);
+        Play_SetCameraAtEye(play, this->csCamIndex, &this->csCamAt, &this->csCamEye);
     }
 }
 
