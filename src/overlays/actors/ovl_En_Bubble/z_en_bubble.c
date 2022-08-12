@@ -117,22 +117,20 @@ void EnBubble_DamagePlayer(EnBubble* this, PlayState* play) {
 }
 
 s32 EnBubble_Explosion(EnBubble* this, PlayState* play) {
-    static Vec3f sEffectAccel = { 0.0f, -0.5f, 0.0f };
     static Color_RGBA8 sEffectPrimColor = { 255, 255, 255, 255 };
     static Color_RGBA8 sEffectEnvColor = { 150, 150, 150, 0 };
-    u32 i;
-    Vec3f effectAccel;
+    s32 i;
+    Vec3f effectAccel = { 0.0f, -0.5f, 0.0f };
     Vec3f effectVel;
     Vec3f effectPos;
 
-    effectAccel = sEffectAccel;
     Math_SmoothStepToF(&this->modelWidth, 4.0f, 0.1f, 1000.0f, 0.0f);
     Math_SmoothStepToF(&this->modelHeight, 4.0f, 0.1f, 1000.0f, 0.0f);
     Math_SmoothStepToF(&this->modelRotSpeed, 54.0f, 0.1f, 1000.0f, 0.0f);
     Math_SmoothStepToF(&this->modelEllipticity, 0.2f, 0.1f, 1000.0f, 0.0f);
-    this->actor.shape.yOffset = ((this->modelHeight + 1.0f) * 16.0f);
+    this->actor.shape.yOffset = (this->modelHeight + 1.0f) * 16.0f;
 
-    if (DECR(this->explosionCountdown) != 0) {
+    if (DECR(this->explosionCountdown)) {
         return -1;
     }
     effectPos.x = this->actor.world.pos.x;
@@ -211,9 +209,9 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
         bumpActor = this->colliderSphere.base.ac;
         this->normalizedBumpVelocity = bumpActor->velocity;
         EnBubble_Vec3fNormalize(&this->normalizedBumpVelocity);
-        this->velocityFromBump.x += (this->normalizedBumpVelocity.x * 3.0f);
-        this->velocityFromBump.y += (this->normalizedBumpVelocity.y * 3.0f);
-        this->velocityFromBump.z += (this->normalizedBumpVelocity.z * 3.0f);
+        this->velocityFromBump.x += this->normalizedBumpVelocity.x * 3.0f;
+        this->velocityFromBump.y += this->normalizedBumpVelocity.y * 3.0f;
+        this->velocityFromBump.z += this->normalizedBumpVelocity.z * 3.0f;
     }
     this->yVelocity -= 0.1f;
     if (this->yVelocity < this->actor.terminalVelocity) {
@@ -239,20 +237,20 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
         EnBubble_Vec3fNormalizedReflect(&bounceDirection, &normal, &bounceDirection);
         this->bounceDirection = bounceDirection;
         bounceCount = this->bounceCount;
-        this->bounceCount = ++bounceCount;
         if (bounceCount > (s16)(Rand_ZeroOne() * 10.0f)) {
+            this->bounceCount = ++bounceCount;
             this->bounceCount = 0;
         }
         bounceSpeed = (this->bounceCount == 0) ? 3.6000001f : 3.0f;
         this->velocityFromBump.x = this->velocityFromBump.y = this->velocityFromBump.z = 0.0f;
-        this->velocityFromBounce.x = (this->bounceDirection.x * bounceSpeed);
-        this->velocityFromBounce.y = (this->bounceDirection.y * bounceSpeed);
-        this->velocityFromBounce.z = (this->bounceDirection.z * bounceSpeed);
+        this->velocityFromBounce.x = this->bounceDirection.x * bounceSpeed;
+        this->velocityFromBounce.y = this->bounceDirection.y * bounceSpeed;
+        this->velocityFromBounce.z = this->bounceDirection.z * bounceSpeed;
         this->yVelocity = 0.0f;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AWA_BOUND);
         this->modelRotSpeed = 128.0f;
         this->modelEllipticity = 0.48f;
-    } else if ((this->actor.bgCheckFlags & 0x20) && bounceDirection.y < 0.0f) {
+    } else if ((this->actor.bgCheckFlags & 0x20) && (bounceDirection.y < 0.0f)) {
         normal.x = normal.z = 0.0f;
         normal.y = 1.0f;
         EnBubble_Vec3fNormalizedReflect(&bounceDirection, &normal, &bounceDirection);
@@ -280,7 +278,7 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
     Math_ApproachF(&this->velocityFromBump.z, 0.0f, 0.3f, 0.1f);
 }
 
-u32 func_8089FF30(EnBubble* this) {
+s32 func_8089FF30(EnBubble* this) {
     if (((this->colliderSphere.base.acFlags & AC_HIT) != 0) == false) {
         return false;
     }
@@ -298,7 +296,7 @@ u32 func_8089FF30(EnBubble* this) {
 }
 
 s32 EnBubble_IsPopped(EnBubble* this, PlayState* play) {
-    if (DECR(this->timer) != 0 || (this->actionFunc == EnBubble_Pop)) {
+    if ((DECR(this->timer) != 0) || (this->actionFunc == EnBubble_Pop)) {
         return false;
     }
     if (this->colliderSphere.base.ocFlags2 & OC2_HIT_PLAYER) {
@@ -311,11 +309,10 @@ s32 EnBubble_IsPopped(EnBubble* this, PlayState* play) {
 }
 
 void func_808A005C(EnBubble* this) {
-    ColliderJntSphElementDim* dim;
+    ColliderJntSphElementDim* dim = &this->colliderSphere.elements[0].dim;
     Vec3f src;
     Vec3f dest;
 
-    dim = &this->colliderSphere.elements[0].dim;
     src.x = dim->modelSphere.center.x;
     src.y = dim->modelSphere.center.y;
     src.z = dim->modelSphere.center.z;

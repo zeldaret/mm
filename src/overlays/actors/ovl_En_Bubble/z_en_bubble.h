@@ -17,7 +17,7 @@ typedef struct EnBubble {
     /* 0x1F4 */ Vec3f unk1F8; // randomly generated, set but never used
     /* 0x200 */ s16 timer; // set to 8 when about to pop
     /* 0x202 */ s16 explosionCountdown;
-    /* 0x204 */ char pad204[4]; // unused
+    /* 0x204 */ UNK_TYPE1 pad204[4]; // unused
     /* 0x208 */ f32 modelRotSpeed;
     /* 0x20C */ f32 modelEllipticity;
     /* 0x210 */ f32 unk_210; // set to 1.0f, never used
