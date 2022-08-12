@@ -15220,9 +15220,68 @@ void func_808521E0(PlayState* play, Player* this) {
     }
 }
 
+#ifdef NON_MATCHING
 // Zora playing the guitar?
+void func_80852290(PlayState* play, Player* this) {
+    if (func_80851C40(play, this)) {
+        if (this->skelAnime.mode != 0) {
+            func_8082DB60(play, this, D_8085D190[this->transformation]);
+        }
+        this->unk_B8A = 8;
+    } else {
+        f32 sp3C;
+        s16 var_a1_3;
+        s16 sp38;
+
+        if ((play->msgCtx.ocarinaMode == 1) && (play->msgCtx.unk12048 != 0xFF)) {
+            if ((this->unk_A90 != NULL) && (this->unk_A94 < 0.0f)) {
+                this->unk_A90->flags |= ACTOR_FLAG_20000000;
+                this->unk_A94 = 0.0f;
+            }
+
+            func_8082DB90(play, this, D_8085D190[this->transformation]);
+            this->unk_B8A = 8;
+        }
+
+        D_80862B44 = play->state.input;
+        func_800FF3A0(&sp3C, &sp38, D_80862B44);
+
+        if ((s16) (sp38 + 0x4000) < 0) {
+            sp38 -= 0x8000;
+            sp3C = -sp3C;
+        }
+
+        sp38 = CLAMP(sp38, -0x1F40, 0x2EE0);
+
+        var_a1_3 = (sp3C * -100.0f);
+        var_a1_3 = CLAMP_MAX(var_a1_3, 0xFA0);
+        Math_SmoothStepToS(&this->unk_AB2.x, var_a1_3, 4, 0x7D0, 0);
+        Math_SmoothStepToS(&this->unk_AB2.y, sp38, 4, 0x7D0, 0);
+        this->unk_AAC.x = -this->unk_AB2.x;
+        this->unk_AA6 |= 0xC8;
+
+        var_a1_3 = ABS_ALT(this->unk_AB2.x);
+        if (var_a1_3 < 0x7D0) {
+            this->actor.shape.face = 0;
+        } else if (var_a1_3 < 0xFA0) {
+            this->actor.shape.face = 0xD;
+        } else {
+            this->actor.shape.face = 8;
+        }
+    }
+
+    if (DECR(this->unk_B8A) != 0) {
+        this->unk_B86[0] += (s32) (this->unk_AB2.x * 2.5f);
+        this->unk_B86[1] += (s32) (this->unk_AB2.y * 3.0f);
+    } else {
+        this->unk_B86[0] = 0;
+        this->unk_B86[1] = 0;
+    }
+}
+#else
 void func_80852290(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80852290.s")
+#endif
 
 void func_8085255C(PlayState* play, Player* this) {
     if (this->transformation == PLAYER_FORM_DEKU) {
