@@ -7519,8 +7519,6 @@ void func_8083BB4C(PlayState* play, Player* this) {
     }
 }
 
-#ifdef NON_MATCHING
-// float regalloc
 void func_8083BF54(PlayState* play, Player* this) {
     Vec3f sp84;
     s32 temp_v0; // real
@@ -7536,10 +7534,8 @@ void func_8083BF54(PlayState* play, Player* this) {
         f32 var_fa1;
         f32 var_ft4;
         f32 var_fv0;
-        s32 temp_a0; // ?
-        u16 var_a1;  // real?
+        u16 var_a1; // real?
 
-        temp_a0 = D_80862B08 == 0xE;
         var_ft4 = fabsf(this->linearVelocity + D_80862B3C) * 20.0f;
         if (temp_v0 != 0) {
             if (D_80862B08 == 4) {
@@ -7553,7 +7549,7 @@ void func_8083BF54(PlayState* play, Player* this) {
             }
             var_a1 = 0xE9;
         } else if (var_a2 != 0) {
-            if (temp_a0 != 0) {
+            if ((D_80862B08 == 0xE) != 0) {
                 var_fa1 = 400.0f;
                 var_ft4 *= 10.0f;
             } else {
@@ -7567,16 +7563,16 @@ void func_8083BF54(PlayState* play, Player* this) {
             var_a1 = 0xE9;
         }
 
-        temp_fv1_2 = this->unk_AB8;
-        var_fa1 = CLAMP_MIN(var_fa1, temp_fv1_2);
+        var_fa1 = CLAMP_MIN(var_fa1, this->unk_AB8);
 
-        var_fv0 = (temp_a0 != 0) ? 200.0f : (var_fa1 - temp_fv1_2) * 0.02f;
+        var_fv0 = ((D_80862B08 == 0xE) != 0) ? 200.0f : (var_fa1 - this->unk_AB8) * 0.02f;
         var_fv0 = CLAMP(var_fv0, 0.0f, 300.0f);
 
-        this->unk_AB8 = temp_fv1_2 + (var_fv0 - var_ft4);
+        temp_fv1_2 = this->unk_AB8;
+        this->unk_AB8 += var_fv0 - var_ft4;
         // this->unk_AB8 = CLAMP(this->unk_AB8, 0.0f, var_fa1);
-        var_ft4 = var_fa1;
-        this->unk_AB8 = CLAMP(this->unk_AB8, 0.0f, var_ft4);
+        // var_ft4 = var_fa1;
+        this->unk_AB8 = CLAMP(this->unk_AB8, 0.0f, var_fa1);
 
         if ((this->linearVelocity == 0.0f) && (fabsf(this->unk_AB8 - temp_fv1_2) > 2.0f)) {
             func_800B8F98(&this->actor, var_a1);
@@ -7589,11 +7585,11 @@ void func_8083BF54(PlayState* play, Player* this) {
 
     if ((this->stateFlags3 & 0x10) && (this->actor.bgCheckFlags & 0x20)) {
         if (this->actor.depthInWater < 50.0f) {
+            f32 temp_fv1_5;
             Vec3f* var_v1; // sp60
             f32 var_fa0_3; // sp5C
             f32 var_ft4_2;
             s32 var_t0; // sp54
-            f32 temp_fv1_5;
 
             var_ft4_2 =
                 (fabsf(this->bodyPartsPos[0].x - this->unk_D6C.x) + fabsf(this->bodyPartsPos[0].y - this->unk_D6C.y)) +
@@ -7660,11 +7656,6 @@ void func_8083BF54(PlayState* play, Player* this) {
         }
     }
 }
-
-#else
-void func_8083BF54(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083BF54.s")
-#endif
 
 s32 func_8083C62C(Player* this, s32 arg1) {
     Actor* actor = this->unk_730;
