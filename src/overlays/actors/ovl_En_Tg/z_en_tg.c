@@ -153,30 +153,28 @@ void EnTg_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FA70.s")
-// ActionFunc
+// TODO: Maybe EnTg_IdleSpin ?
 void func_8098FA70(EnTg* this, PlayState* play) {
-    Vec3f sp24;
+    Vec3f pos;
 
-    this->actor.shape.rot.y += sREG(0) + 0x258; // 0x258 = 600
+    this->actor.shape.rot.y += sREG(0) + 0x258; // TODO: watch this
     this->actor.world.rot = this->actor.shape.rot;
 
-    if (DECR(this->unk2EC) == 0) {
-        this->unk2EC = 12;
-        sp24 = this->actor.world.pos;
-        sp24.y += 62.0f;
-        func_8098FD50(this, &this->enTgUnkStruct, &sp24, 10);
+    if (DECR(this->spawnHeartTimer) == 0) {
+        this->spawnHeartTimer = 12;
+        pos = this->actor.world.pos;
+        pos.y += 62.0f; // TODO: figure out if this is for the heart?
+        func_8098FD50(this, &this->enTgUnkStruct, &pos, 10);
     }
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Update.s")
 void EnTg_Update(Actor* thisx, PlayState* play) {
     EnTg* this = THIS;
 
     this->actionFunc(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4U);
     func_8098F928(this, play);
-    func_8098FEA8(play, &this->enTgUnkStruct, 0xA);
+    func_8098FEA8(play, &this->enTgUnkStruct, 10);
     EnTg_UpdateCollider(this, play);
 }
 
@@ -198,8 +196,6 @@ void func_8098FBD0(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
         Matrix_MultVec3f(&sp18, &this->actor.focus.pos);
     }
 }
-
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Draw.s")
 void EnTg_Draw(Actor* thisx, PlayState* play) {
     EnTg* this = THIS;
 
@@ -222,27 +218,29 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FD50.s")
-void func_8098FD50(EnTg* this, EnTgUnkStruct* enTgUnkStruct, Vec3f* arg2, s32 len) {
-    Vec3f sp2C = D_80990234;
-    Vec3f sp20 = D_80990240;
+// TODO: called in action function
+void func_8098FD50(EnTg* this, EnTgUnkStruct* enTgUnkStruct, Vec3f* pos, s32 len) {
+    Vec3f sp2C = D_80990234;    // { 0.0f, 1.5f, 0.0f };
+    Vec3f zeroVec = D_80990240; // { 0.0f, 0.0f, 0.0f };
     s32 i = 0;
 
-    while ((i < len) && (enTgUnkStruct->unk0 != 0)) {
+    // len is 10, so every 10 frames
+    while ((i < len) && (enTgUnkStruct->isSecondHeartSpawned != 0)) {
         i++;
         enTgUnkStruct++;
     }
 
+    // hasn't been 10 frames, but isSecondHeartSpawned was non-zero
     if (i < len) {
-        enTgUnkStruct->unk0 = 1;
-        enTgUnkStruct->unk14 = *arg2;
+        enTgUnkStruct->isSecondHeartSpawned = 1;
+        enTgUnkStruct->unk14 = *pos; // actor->world.pos + 62
         enTgUnkStruct->unk2C = sp2C;
-        enTgUnkStruct->unk20 = sp20;
-        enTgUnkStruct->unk4 = 0.01f;
+        enTgUnkStruct->unk20 = zeroVec;
+        enTgUnkStruct->scale = 0.01f;
 
         enTgUnkStruct->unk14.x += 4.0f * Math_SinS(this->actor.shape.rot.y);
         enTgUnkStruct->unk14.z += 4.0f * Math_CosS(this->actor.shape.rot.y);
-        enTgUnkStruct->unk1 = 0x10;
+        enTgUnkStruct->unk1 = 16;
     }
 }
 
@@ -254,10 +252,11 @@ void func_8098FEA8(PlayState* play, EnTgUnkStruct* enTgUnkStruct, s32 len) {
     s16 yaw = Camera_GetInputDirYaw(GET_ACTIVE_CAM(play));
     s32 i;
 
+    // len is 10
     for (i = 0; i < len; i++, enTgUnkStruct++) {
-        if (enTgUnkStruct->unk0 == 1) {
+        if (enTgUnkStruct->isSecondHeartSpawned == 1) {
             if (DECR(enTgUnkStruct->unk1) == 0) {
-                enTgUnkStruct->unk0 = 0U;
+                enTgUnkStruct->isSecondHeartSpawned = 0U;
             }
             enTgUnkStruct->unk14.y += enTgUnkStruct->unk2C.y;
             enTgUnkStruct->unk14.x += 2.0f * Math_SinS(enTgUnkStruct->unk38);
@@ -284,14 +283,14 @@ void func_8099000C(PlayState* play, EnTgUnkStruct* enTgUnkStruct, s32 len) {
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
 
     for (i = 0; i < len; i++, enTgUnkStruct++) {
-        if (enTgUnkStruct->unk0 == 1) {
+        if (enTgUnkStruct->isSecondHeartSpawned == 1) {
             if (!flag) {
                 gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0A0);
                 flag = true;
             }
             Matrix_Translate(enTgUnkStruct->unk14.x, enTgUnkStruct->unk14.y, enTgUnkStruct->unk14.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
-            Matrix_Scale(enTgUnkStruct->unk4, enTgUnkStruct->unk4, enTgUnkStruct->unk4, MTXMODE_APPLY);
+            Matrix_Scale(enTgUnkStruct->scale, enTgUnkStruct->scale, enTgUnkStruct->scale, MTXMODE_APPLY);
 
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
