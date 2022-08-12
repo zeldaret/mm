@@ -12794,7 +12794,111 @@ void func_8084B4A8(Player* this, PlayState* play) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084B5C0.s")
+void func_8084B5C0(Player* this, PlayState* play) {
+    func_80832F24(this);
+
+    if (this->transformation == PLAYER_FORM_GORON) {
+        SkelAnime_Update(&this->unk_2C8);
+
+        if (!func_8083FE38(this, play)) {
+            if (!func_8083A274(this, play)) {
+                this->stateFlags1 &= ~PLAYER_STATE1_400000;
+
+                if (this->heldItemActionParam < PLAYER_AP_NONE) {
+                    func_80123C58(this);
+                }
+
+                func_80836A98(this, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_21, this->modelAnimType), play);
+                func_80830B38(this);
+            } else {
+                this->stateFlags1 |= PLAYER_STATE1_400000;
+            }
+        }
+
+        return;
+    }
+
+    if (LinkAnimation_Update(play, &this->skelAnime)) {
+        if (!Player_IsGoronOrDeku(this)) {
+            Player_AnimationPlayLoop(play, this, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_20, this->modelAnimType));
+        }
+
+        this->unk_AE8 = 1;
+        this->unk_AE7 = 0;
+    }
+
+    if (!Player_IsGoronOrDeku(this)) {
+        this->stateFlags1 |= PLAYER_STATE1_400000;
+        func_8083216C(this, play);
+        this->stateFlags1 &= ~PLAYER_STATE1_400000;
+        if (this->transformation == PLAYER_FORM_ZORA) {
+            func_8082F164(this, BTN_R | BTN_B);
+        }
+    }
+
+    if (this->unk_AE8 != 0) {
+        f32 yStick = D_80862B44->rel.stick_y * 180;
+        f32 xStick = D_80862B44->rel.stick_x * -120;
+        s16 temp_a0 = this->actor.shape.rot.y - Camera_GetInputDirYaw(play->cameraPtrs[play->activeCamId]);
+        s16 var_a1;
+        s16 temp_ft5;
+        s16 var_a2;
+        s16 var_a3;
+
+        var_a1 = (yStick * Math_CosS(temp_a0)) + (Math_SinS(temp_a0) * xStick);
+        temp_ft5 = (xStick * Math_CosS(temp_a0)) - (Math_SinS(temp_a0) * yStick);
+
+        var_a1 = CLAMP_MAX(var_a1, 0xDAC);
+        var_a2 = ABS_ALT(var_a1 - this->actor.focus.rot.x) * 0.25f;
+        var_a2 = CLAMP_MIN(var_a2, 0x64);
+
+        var_a3 = ABS_ALT(temp_ft5 - this->unk_AB2.y) * 0.25f;
+        var_a3 = CLAMP_MIN(var_a3, 0x32);
+        Math_ScaledStepToS(&this->actor.focus.rot.x, var_a1, var_a2);
+
+        this->unk_AB2.x = this->actor.focus.rot.x;
+        Math_ScaledStepToS(&this->unk_AB2.y, temp_ft5, var_a3);
+
+        if (this->unk_AE7 != 0) {
+            if (!func_808401F4(play, this)) {
+                if (this->skelAnime.curFrame < 2.0f) {
+                    func_8082FA5C(play, this, 1);
+                }
+            } else {
+                this->unk_AE8 = 1;
+                this->unk_AE7 = 0;
+            }
+        } else if (!func_8083FE38(this, play)) {
+            if (func_8083A274(this, play) != 0) {
+                func_8083FD80(this, play);
+            } else {
+                this->stateFlags1 &= ~PLAYER_STATE1_400000;
+                func_8082DC38(this);
+
+                if (Player_IsGoronOrDeku(this)) {
+                    func_80836A5C(this, play);
+                    LinkAnimation_Change(play, &this->skelAnime, this->skelAnime.animation, 1.0f,
+                                         Animation_GetLastFrame(this->skelAnime.animation), 0.0f, 2, 0.0f);
+                } else {
+                    if (this->heldItemActionParam < PLAYER_AP_NONE) {
+                        func_80123C58(this);
+                    }
+
+                    func_80836A98(this, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_21, this->modelAnimType), play);
+                }
+
+                func_800B8E58(this, NA_SE_IT_SHIELD_REMOVE);
+                return;
+            }
+        } else {
+            return;
+        }
+    }
+
+    this->stateFlags1 |= PLAYER_STATE1_400000;
+    Player_SetModelsForHoldingShield(this);
+    this->unk_AA6 |= 0xC1;
+}
 
 void func_8084BAA4(Player* this, PlayState* play) {
     func_80832F24(this);
