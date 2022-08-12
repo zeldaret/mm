@@ -36,9 +36,14 @@ typedef struct {
     /* 0x2E */ UNK_TYPE1 unk2E[2];
     /* 0x30 */ s16 isFading;
     /* 0x32 */ UNK_TYPE1 unk32[2];
-    /* 0x34 */ f32 unk_34;
+    /* 0x34 */ f32 scale;
     /* 0x38 */ UNK_TYPE1 unk38[0x10];
-} Boss07Effect;
+} Boss07Effect; // size = 0x48
+
+typedef enum {
+    /* 0 */ MAJORA_EFFECT_NONE,
+    /* 1 */ MAJORA_EFFECT_1
+} Boss07EffectType;
 
 #if 1 // function prototypes
 void func_809F4D10(Vec3f* arg0, f32 arg1);
@@ -222,17 +227,17 @@ f32 Boss07_RandZeroOne(void) {
     return fabsf(randFloat);
 }
 
-void Boss07_SpawnEffect(PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4) {
+void Boss07_SpawnEffect(PlayState* play, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 arg4) {
     s32 i;
     Boss07Effect* effect = (Boss07Effect*)play->specialEffects;
 
     for (i = 0; i < ARRAY_COUNT(sEffects); i++, effect++) {
-        if (effect->type == 0) {
-            effect->type = 1;
-            effect->pos = *arg1;
-            effect->vel = *arg2;
-            effect->accel = *arg3;
-            effect->unk_34 = arg4 / 1000.0f;
+        if (effect->type == MAJORA_EFFECT_NONE) {
+            effect->type = MAJORA_EFFECT_1;
+            effect->pos = *pos;
+            effect->vel = *vel;
+            effect->accel = *accel;
+            effect->scale = arg4 / 1000.0f;
             effect->isFading = 0;
             effect->alpha = 0;
             effect->scroll = Rand_ZeroFloat(1000.0f);
@@ -423,17 +428,13 @@ static Vec3s sRemainsEnd[REMAINS_COUNT] = {
     { -712, 0x5500, 416 },
 }; // y value here is y rotation, not position
 
-#ifdef NON_MATCHING
-// reordering when loading Boss07_Projectile_Update
 void Boss07_Init(Actor* thisx, PlayState* play2) {
     static s16 sRemainsParams[REMAINS_COUNT] = {
         MAJORA_REMAINS + REMAINS_ODOLWA,
         MAJORA_REMAINS + REMAINS_GYORG,
         MAJORA_REMAINS + REMAINS_GOHT,
         MAJORA_REMAINS + REMAINS_TWINMOLD,
-    };
-    static EffectTireMarkInit sTopTireMarkInit = { 0, 40, { 0, 0, 15, 200 } };
-    static EffectTireMarkInit sMaskTireMarkInit = { 0, 40, { 0, 0, 15, 200 } };
+    };    
     PlayState* play = play2;
     Boss07* this = THIS;
     s32 i;
@@ -446,164 +447,175 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         sKillProjectiles = false;
         play->envCtx.lightSettingOverride = 0;
         play->envCtx.unk_E0 = 2;
-    } else {
-        if (this->actor.params == MAJORA_BOSS) {
-            this->actor.params = MAJORA_MASK;
-            Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x,
-                        this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, MAJORA_STATIC);
-            play->specialEffects = (void*)sEffects;
+        return;
+    }
 
-            for (i = 0; i < ARRAY_COUNT(sEffects); i++) {
-                sEffects[i].type = 0;
-            }
-            for (i = 0; i < ARRAY_COUNT(sBossRemains); i++) {
-                sBossRemains[i] = NULL;
-            }
+    if (this->actor.params == MAJORA_BOSS) {
+        this->actor.params = MAJORA_MASK;
+        Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x,
+                    this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, MAJORA_STATIC);
+        play->specialEffects = (void*)sEffects;
+
+        for (i = 0; i < ARRAY_COUNT(sEffects); i++) {
+            sEffects[i].type = 0;
         }
-
-        this->actor.targetMode = 5;
-        this->actor.colChkInfo.mass = MASS_HEAVY;
-        this->actor.gravity = -2.5f;
-
-        if (this->actor.params >= MAJORA_REMAINS) {
-            this->actor.update = Boss07_Remains_Update;
-            this->actor.draw = Boss07_Remains_Draw;
-            if (1) {}
-            sBossRemains[this->actor.params - MAJORA_REMAINS] = this;
-            if (gSaveContext.eventInf[6] & 2) {
-                Actor_SetScale(&this->actor, 0.03f);
-                this->actor.world.pos.x = sRemainsEnd[this->actor.params - MAJORA_REMAINS].x;
-                this->actor.world.pos.y = 370.0f;
-                this->actor.world.pos.z = sRemainsEnd[this->actor.params - MAJORA_REMAINS].z;
-                this->actor.shape.rot.y = sRemainsEnd[this->actor.params - MAJORA_REMAINS].y;
-                Boss07_Remains_SetupFly(this, play);
-            } else {
-                Boss07_Remains_SetupIntro(this, play);
-            }
-            this->actor.flags &= ~1;
-            this->actor.colChkInfo.damageTable = &sRemainsDmgTable;
-        } else if (this->actor.params == MAJORA_TOP) {
-            this->actor.update = Boss07_Top_Update;
-            this->actor.draw = Boss07_Top_Draw;
-            Boss07_Top_SetupThrown(this, play);
-            this->actor.colChkInfo.damageTable = &sTopDmgTable;
-            ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, KREG(55) + 9.0f);
-            this->actor.shape.shadowAlpha = 180;
-            Collider_InitAndSetCylinder(play, &this->cyl2, &this->actor, &sTopCylInit);
-            Effect_Add(play, &this->effectIndex, 4, 0, 0, &sTopTireMarkInit);
-            this->actor.flags &= ~1;
-        } else if ((this->actor.params == MAJORA_REMAINS_SHOT) || (this->actor.params == MAJORA_INCARNATION_SHOT)) {
-            this->actor.update = Boss07_Projectile_Update;
-            this->actor.draw = Boss07_Projectile_Draw;
-            this->actor.flags &= ~1;
-            Collider_InitAndSetCylinder(play, &this->cyl2, &this->actor, &sShotCylInit);
-            func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
-            this->unk_181C = Rand_ZeroFloat(3.99f);
-        } else if ((this->actor.params == MAJORA_MASK) || (this->actor.params == MAJORA_MASK_CS)) {
-            this->actor.colChkInfo.damageTable = &sMaskDmgTable;
-            ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
-            SkelAnime_Init(play, &this->skelAnime, &gMajorasMaskSkel, &gMajorasMaskFloatingAnim, this->jointTable,
-                           this->morphTable, MAJORAS_MASK_LIMB_MAX);
-            if (this->actor.params == MAJORA_MASK) {
-                this->actor.update = Boss07_Mask_Update;
-                this->actor.draw = Boss07_Mask_Draw;
-                Effect_Add(play, &this->effectIndex, 4, 0, 0, &sMaskTireMarkInit);
-                sMajorasMask = this;
-                if (gSaveContext.eventInf[6] & 2) {
-                    this->actor.world.pos.x = 0.0f;
-                    this->actor.world.pos.y = sREG(17) + 277.0f;
-                    this->actor.world.pos.z = -922.5f;
-                    Boss07_Mask_SetupIdle(this, play);
-                    this->unk_164.x = 0.0f;
-                    this->unk_164.y = 200.0f;
-                    this->unk_164.z = 0.0f;
-                    this->unk_170 = 0.0f;
-                    this->timers[0] = 50;
-                    this->timers[2] = 200;
-                    this->unk_1888 = 50;
-                    this->actor.flags |= 1;
-                    sMusicStartTimer = 20;
-                } else {
-                    Boss07_Mask_SetupIntro(this, play);
-                }
-                Collider_InitAndSetQuad(play, &this->quad1, &this->actor, &sMaskQuadInit1);
-                Collider_InitAndSetQuad(play, &this->quad2, &this->actor, &sMaskQuadInit2);
-                this->actor.colChkInfo.health = 14;
-                for (i = 0; i < ARRAY_COUNT(sRemainsParams); i++) {
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, 0.0f, 0.0f, 0.0f, 0, 0, 0,
-                                sRemainsParams[i]);
-                }
-            }
-        } else if ((this->actor.params == MAJORA_INCARNATION) || (this->actor.params == MAJORA_AFTERIMAGE)) {
-            Actor_SetScale(&this->actor, 0.015000001f);
-            SkelAnime_InitFlex(play, &this->skelAnime, &gMajorasIncarnationSkel,
-                               &gMajorasIncarnationTauntDance1Anim, this->jointTable, this->morphTable,
-                               MAJORAS_INCARNATION_LIMB_MAX);
-            if (this->actor.params == MAJORA_AFTERIMAGE) {
-                this->timers[0] = this->actor.world.rot.z;
-                this->actor.world.rot.z = 0;
-                this->actor.update = Boss07_Afterimage_Update;
-                this->actor.draw = Boss07_Afterimage_Draw;
-                this->actor.flags &= ~1;
-            } else {
-                this->actor.colChkInfo.damageTable = &sIncarnationDmgTable;
-                this->actor.colChkInfo.health = 30;
-                this->actor.update = Boss07_Incarnation_Update;
-                this->actor.draw = Boss07_Incarnation_Draw;
-                Collider_InitAndSetJntSph(play, &this->sph1, &this->actor, &sIncarnationJntSphInit1,
-                                          this->sphElems1);
-                ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 80.0f);
-                this->csCamIndex = this->actor.shape.rot.z;
-                if (this->csCamIndex != 0) {
-                    Boss07_Incarnation_SetupIntro(this, play);
-                } else {
-                    Boss07_Incarnation_SetupTaunt(this, play);
-                    this->unk_14A = 1;
-                    for (i = 0; i < 4; i++) {
-                        this->unk_17B8[i] = 1.0f;
-                    }
-                    play->envCtx.lightBlend = 0.0f;
-                }
-                this->unk_17E0 = 1.0f;
-                this->unk_17E4 = 1.0f;
-                this->unk_17F0 = 1.0f;
-                this->unk_17F4 = 1.0f;
-            }
-        } else {
-            sMajorasWrath = this;
-            this->actor.colChkInfo.health = 40;
-            this->actor.colChkInfo.damageTable = &sWrathDmgTable;
-            Actor_SetScale(&this->actor, 0.01f);
-            this->csCamIndex = this->actor.shape.rot.z;
-            if (this->csCamIndex != 0) {
-                Boss07_Wrath_SetupIntro(this, play);
-            } else {
-                Boss07_Wrath_SetupIdle(this, play, 50);
-                this->whipScale = 1.0f;
-                Audio_QueueSeqCmd(0x8069);
-            }
-            SkelAnime_InitFlex(play, &this->skelAnime, &gMajorasWrathSkel, &gMajorasWrathIdleAnim,
-                               this->jointTable, this->morphTable, MAJORAS_WRATH_LIMB_MAX);
-            Collider_InitAndSetJntSph(play, &this->sph1, &this->actor, &sWrathJntSphInit1, this->sphElems1);
-            Collider_InitAndSetJntSph(play, &this->sph2, &this->actor, &sWrathJntSphInit2, this->sphElems2);
-            Collider_InitAndSetCylinder(play, &this->cyl1, &this->actor, &sWrathCylInit);
-
-            this->leftWhip.stiffness = this->rightWhip.stiffness = 0.7f;
-            this->leftWhip.drag = this->rightWhip.drag = 2.0f;
-            this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
-            this->leftWhip.tension = this->rightWhip.tension = 0.0f;
-
-            sWhipSegCount = 44;
-            this->unk_17E0 = 1.0f;
+        for (i = 0; i < ARRAY_COUNT(sBossRemains); i++) {
+            sBossRemains[i] = NULL;
         }
     }
+    this->actor.targetMode = 5;
+    this->actor.colChkInfo.mass = MASS_HEAVY;
+    this->actor.gravity = -2.5f;
+
+    if (thisx->params >= MAJORA_REMAINS) {
+        this->actor.update = Boss07_Remains_Update;
+        this->actor.draw = Boss07_Remains_Draw;
+
+        sBossRemains[thisx->params - MAJORA_REMAINS] = this;
+        if (gSaveContext.eventInf[6] & 2) {
+            Actor_SetScale(&this->actor, 0.03f);
+            this->actor.world.pos.x = sRemainsEnd[this->actor.params - MAJORA_REMAINS].x;
+            this->actor.world.pos.y = 370.0f;
+            this->actor.world.pos.z = sRemainsEnd[this->actor.params - MAJORA_REMAINS].z;
+            this->actor.shape.rot.y = sRemainsEnd[this->actor.params - MAJORA_REMAINS].y;
+            Boss07_Remains_SetupFly(this, play);
+        } else {
+            Boss07_Remains_SetupIntro(this, play);
+        }
+        this->actor.flags &= ~1;
+        this->actor.colChkInfo.damageTable = &sRemainsDmgTable;
+        return;
+    }
+
+    if (this->actor.params == MAJORA_TOP) {
+        static EffectTireMarkInit sTopTireMarkInit = { 0, 40, { 0, 0, 15, 200 } };
+
+        this->actor.update = Boss07_Top_Update;
+        this->actor.draw = Boss07_Top_Draw;
+        Boss07_Top_SetupThrown(this, play);
+        this->actor.colChkInfo.damageTable = &sTopDmgTable;
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, KREG(55) + 9.0f);
+        this->actor.shape.shadowAlpha = 180;
+        Collider_InitAndSetCylinder(play, &this->cyl2, &this->actor, &sTopCylInit);
+        Effect_Add(play, &this->effectIndex, 4, 0, 0, &sTopTireMarkInit);
+        this->actor.flags &= ~1;
+        return;
+    } 
+
+    if ((this->actor.params == MAJORA_REMAINS_SHOT) || (this->actor.params == MAJORA_INCARNATION_SHOT)) {
+        this->actor.update = Boss07_Projectile_Update;
+        this->actor.draw = Boss07_Projectile_Draw;
+        this->actor.flags &= ~1;
+        Collider_InitAndSetCylinder(play, &this->cyl2, &this->actor, &sShotCylInit);
+        func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
+        this->unk_181C = Rand_ZeroFloat(3.99f);
+        return;
+    }
+
+    if ((this->actor.params == MAJORA_MASK) || (this->actor.params == MAJORA_MASK_CS)) {
+        this->actor.colChkInfo.damageTable = &sMaskDmgTable;
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
+        SkelAnime_Init(play, &this->skelAnime, &gMajorasMaskSkel, &gMajorasMaskFloatingAnim, this->jointTable,
+                        this->morphTable, MAJORAS_MASK_LIMB_MAX);
+        if (this->actor.params == MAJORA_MASK) {
+            static EffectTireMarkInit sMaskTireMarkInit = { 0, 40, { 0, 0, 15, 200 } };
+
+            this->actor.update = Boss07_Mask_Update;
+            this->actor.draw = Boss07_Mask_Draw;
+            Effect_Add(play, &this->effectIndex, 4, 0, 0, &sMaskTireMarkInit);
+            sMajorasMask = this;
+            if (gSaveContext.eventInf[6] & 2) {
+                this->actor.world.pos.x = 0.0f;
+                this->actor.world.pos.y = sREG(17) + 277.0f;
+                this->actor.world.pos.z = -922.5f;
+                Boss07_Mask_SetupIdle(this, play);
+                this->unk_164.x = 0.0f;
+                this->unk_164.y = 200.0f;
+                this->unk_164.z = 0.0f;
+                this->unk_170 = 0.0f;
+                this->timers[0] = 50;
+                this->timers[2] = 200;
+                this->unk_1888 = 50;
+                this->actor.flags |= 1;
+                sMusicStartTimer = 20;
+            } else {
+                Boss07_Mask_SetupIntro(this, play);
+            }
+            Collider_InitAndSetQuad(play, &this->quad1, &this->actor, &sMaskQuadInit1);
+            Collider_InitAndSetQuad(play, &this->quad2, &this->actor, &sMaskQuadInit2);
+            this->actor.colChkInfo.health = 14;
+            for (i = 0; i < ARRAY_COUNT(sRemainsParams); i++) {
+                Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, 0.0f, 0.0f, 0.0f, 0, 0, 0,
+                            sRemainsParams[i]);
+            }
+        }
+        return;
+    }
+
+    if ((this->actor.params == MAJORA_INCARNATION) || (this->actor.params == MAJORA_AFTERIMAGE)) {
+        Actor_SetScale(&this->actor, 0.015000001f);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gMajorasIncarnationSkel,
+                            &gMajorasIncarnationTauntDance1Anim, this->jointTable, this->morphTable,
+                            MAJORAS_INCARNATION_LIMB_MAX);
+        if (this->actor.params == MAJORA_AFTERIMAGE) {
+            this->timers[0] = this->actor.world.rot.z;
+            this->actor.world.rot.z = 0;
+            this->actor.update = Boss07_Afterimage_Update;
+            this->actor.draw = Boss07_Afterimage_Draw;
+            this->actor.flags &= ~1;
+        } else {
+            this->actor.colChkInfo.damageTable = &sIncarnationDmgTable;
+            this->actor.colChkInfo.health = 30;
+            this->actor.update = Boss07_Incarnation_Update;
+            this->actor.draw = Boss07_Incarnation_Draw;
+            Collider_InitAndSetJntSph(play, &this->sph1, &this->actor, &sIncarnationJntSphInit1,
+                                        this->sphElems1);
+            ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 80.0f);
+            this->csCamIndex = this->actor.shape.rot.z;
+            if (this->csCamIndex != 0) {
+                Boss07_Incarnation_SetupIntro(this, play);
+            } else {
+                Boss07_Incarnation_SetupTaunt(this, play);
+                this->unk_14A = 1;
+                for (i = 0; i < 4; i++) {
+                    this->unk_17B8[i] = 1.0f;
+                }
+                play->envCtx.lightBlend = 0.0f;
+            }
+            this->unk_17E0 = 1.0f;
+            this->unk_17E4 = 1.0f;
+            this->unk_17F0 = 1.0f;
+            this->unk_17F4 = 1.0f;
+        }
+        return;
+    }
+
+    sMajorasWrath = this;
+    this->actor.colChkInfo.health = 40;
+    this->actor.colChkInfo.damageTable = &sWrathDmgTable;
+    Actor_SetScale(&this->actor, 0.01f);
+    this->csCamIndex = this->actor.shape.rot.z;
+    if (this->csCamIndex != 0) {
+        Boss07_Wrath_SetupIntro(this, play);
+    } else {
+        Boss07_Wrath_SetupIdle(this, play, 50);
+        this->whipScale = 1.0f;
+        Audio_QueueSeqCmd(NA_BGM_MAJORAS_WRATH | 0x8000);
+    }
+    SkelAnime_InitFlex(play, &this->skelAnime, &gMajorasWrathSkel, &gMajorasWrathIdleAnim,
+                        this->jointTable, this->morphTable, MAJORAS_WRATH_LIMB_MAX);
+    Collider_InitAndSetJntSph(play, &this->sph1, &this->actor, &sWrathJntSphInit1, this->sphElems1);
+    Collider_InitAndSetJntSph(play, &this->sph2, &this->actor, &sWrathJntSphInit2, this->sphElems2);
+    Collider_InitAndSetCylinder(play, &this->cyl1, &this->actor, &sWrathCylInit);
+
+    this->leftWhip.stiffness = this->rightWhip.stiffness = 0.7f;
+    this->leftWhip.drag = this->rightWhip.drag = 2.0f;
+    this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
+    this->leftWhip.tension = this->rightWhip.tension = 0.0f;
+
+    sWhipSegCount = 44;
+    this->unk_17E0 = 1.0f;    
 }
-#else
-static s16 sRemainsParams[4] = { 200, 201, 202, 203 };
-static EffectTireMarkInit sTopTireMarkInit = { 0, 40, { 0, 0, 15, 200 } };
-static EffectTireMarkInit sMaskTireMarkInit = { 0, 40, { 0, 0, 15, 200 } };
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/Boss07_Init.s")
-#endif
 
 void Boss07_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
@@ -702,7 +714,7 @@ void Boss07_Wrath_Intro(Boss07* this, PlayState* play) {
                     func_8019FE74(&gSfxVolume, 0.0f, 0x3C);
                 }
                 if (this->unk_ABC8 == 112) {
-                    Audio_QueueSeqCmd(0x8069);
+                    Audio_QueueSeqCmd(NA_BGM_MAJORAS_WRATH | 0x8000);
                 }
                 if (this->unk_ABC8 == 137) {
                     TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtxt,
@@ -743,7 +755,7 @@ void Boss07_Wrath_Intro(Boss07* this, PlayState* play) {
 void Boss07_Wrath_SetupDeath(Boss07* this, PlayState* play) {
     s32 i;
 
-    Audio_QueueSeqCmd(0x100100FF);
+    Audio_QueueSeqCmd(NA_BGM_STOP | 0x10000);
     Boss07_MovePlayer(play);
     this->actionFunc = Boss07_Wrath_Death;
     this->leftWhip.stiffness = this->rightWhip.stiffness = 0.7f;
@@ -2718,7 +2730,7 @@ void Boss07_Incarnation_Intro(Boss07* this, PlayState* play) {
                                        0x28);
             }
             if (this->unk_ABC8 == 20) {
-                Audio_QueueSeqCmd(0x806A);
+                Audio_QueueSeqCmd(NA_BGM_MAJORAS_INCARNATION | 0x8000);
                 this->unk_14A = 1;
                 play->envCtx.lightBlend = 0.0f;
             }
@@ -3297,7 +3309,7 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
         if (this->unk_148 || KREG(88)) {
             KREG(88) = false;
             this->unk_148 = false;
-            Audio_QueueSeqCmd(0x100100FF);
+            Audio_QueueSeqCmd(NA_BGM_STOP | 0x10000);
             Boss07_Incarnation_SetupDeath(this, play);
         }
     }
@@ -3507,7 +3519,7 @@ void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
     if (this->unk_148 || KREG(88)) {
         KREG(88) = false;
         this->unk_148 = false;
-        Audio_QueueSeqCmd(0x100100FF);
+        Audio_QueueSeqCmd(NA_BGM_STOP | 0x10000);
         Boss07_Mask_SetupDeath(this, play);
     }
 }
@@ -4126,7 +4138,7 @@ void Boss07_Mask_Intro(Boss07* this, PlayState* play) {
                     Boss07_Remains_SetupFly(sBossRemains[REMAINS_TWINMOLD], play);
                     this->csCamSpeedMod = 0.0f;
                     sMajoraStatic->unk_AB44 = 0.0f;
-                    Audio_QueueSeqCmd(0x100A00FF);
+                    Audio_QueueSeqCmd(NA_BGM_STOP | 0xA0000);
                 }
             }
             break;
@@ -4192,7 +4204,7 @@ void Boss07_Mask_Intro(Boss07* this, PlayState* play) {
                                            Lib_SegmentedToVirtual(&gMajorasMaskTitleCardTex), 0xA0, 0xB4, 0x80, 0x28);
                 }
                 if (this->unk_ABC8 == 30) {
-                    Audio_QueueSeqCmd(0x806B);
+                    Audio_QueueSeqCmd(NA_BGM_MAJORAS_MASK | 0x8000);
                 }
                 if (this->unk_ABC8 > 100) {
                     Math_ApproachF(&this->csCamEye.x, player->actor.world.pos.x + 40.0f, 0.1f,
@@ -4387,7 +4399,7 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
     if (sMusicStartTimer != 0) {
         sMusicStartTimer--;
         if (sMusicStartTimer == 0) {
-            Audio_QueueSeqCmd(0x806B);
+            Audio_QueueSeqCmd(NA_BGM_MAJORAS_MASK | 0x8000);
         }
     }
     Math_Vec3f_Copy(&sSfxPoint, &this->actor.projectedPos);
@@ -5643,7 +5655,7 @@ void Boss07_Static_UpdateEffects(PlayState* play) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(sEffects); i++, effect++) {
-        if (effect->type != 0) {
+        if (effect->type != MAJORA_EFFECT_NONE) {
             effect->scroll++;
 
             effect->pos.x += effect->vel.x;
@@ -5653,12 +5665,12 @@ void Boss07_Static_UpdateEffects(PlayState* play) {
             effect->vel.x += effect->accel.x;
             effect->vel.y += effect->accel.y;
             effect->vel.z += effect->accel.z;
-            if (effect->type == 1) {
+            if (effect->type == MAJORA_EFFECT_1) {
                 if (effect->isFading) {
                     effect->alpha -= (i % 8U) + 13;
                     if (effect->alpha <= 0) {
                         effect->alpha = 0;
-                        effect->type = 0;
+                        effect->type = MAJORA_EFFECT_NONE;
                     }
                 } else {
                     effect->alpha += 300;
@@ -5680,7 +5692,7 @@ void Boss07_Static_DrawEffects(PlayState* play) {
     OPEN_DISPS(gfxCtx);
     func_8012C2DC(play->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(sEffects); i++, effect++) {
-        if (effect->type > 0) {
+        if (effect->type > MAJORA_EFFECT_NONE) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 200, 20, 0, effect->alpha);
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 215, 255, 128);
@@ -5689,7 +5701,7 @@ void Boss07_Static_DrawEffects(PlayState* play) {
                                         (15 * -effect->scroll) % 0x100U, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
-            Matrix_Scale(effect->unk_34, effect->unk_34, 1.0f, MTXMODE_APPLY);
+            Matrix_Scale(effect->scale, effect->scale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gMajorasMaskFireDL);
         }
