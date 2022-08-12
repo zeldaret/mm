@@ -7363,9 +7363,79 @@ void func_8083B32C(PlayState* play, Player* this, f32 arg2) {
     func_80123140(play, this);
 }
 
-// boolean
-s32 func_8083B3B4(PlayState* play, Player* this, Input* input);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083B3B4.s")
+s32 func_8083B3B4(PlayState* play, Player* this, Input* input) {
+    if ((!(this->stateFlags1 & PLAYER_STATE1_400) && !(this->stateFlags2 & PLAYER_STATE2_400) &&
+         (this->transformation != PLAYER_FORM_ZORA)) &&
+        ((input == NULL) ||
+         ((((this->interactRangeActor == NULL) || (this->interactRangeActor->id != ACTOR_EN_ZOG)) &&
+           CHECK_BTN_ALL(input->press.button, BTN_A)) &&
+          ((ABS_ALT(this->unk_AAA) < 0x2EE0) && (this->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER) &&
+           ((s32)SurfaceType_GetConveyorSpeed(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) < 2))))) {
+        if (func_8085B08C != this->actionFunc) {
+            Player_SetAction(play, this, func_808516B4, 0);
+        }
+
+        Player_AnimationPlayOnce(play, this, &gameplay_keep_Linkanim_00DFE0);
+        this->unk_AAA = 0;
+        this->stateFlags2 |= PLAYER_STATE2_400;
+        this->actor.velocity.y = 0.0f;
+        if (input != NULL) {
+            this->stateFlags2 |= PLAYER_STATE2_800;
+            func_800B8E58(this, NA_SE_PL_DIVE_BUBBLE);
+        }
+
+        return true;
+    }
+
+    if ((this->transformation != PLAYER_FORM_DEKU) &&
+        ((this->stateFlags1 & PLAYER_STATE1_400) ||
+         ((this->stateFlags2 & PLAYER_STATE2_400) &&
+          (((func_80850D68 != this->actionFunc) && !(this->stateFlags3 & PLAYER_STATE3_8000)) ||
+           (this->unk_AAA < -0x1555)))) &&
+        ((this->actor.depthInWater - this->actor.velocity.y) < this->ageProperties->unk_30)) {
+        s32 temp_v0_3;
+        s16 sp2A;
+        f32 sp24;
+
+        this->stateFlags2 &= ~PLAYER_STATE2_400;
+        func_8082DC64(play, this);
+        temp_v0_3 = func_80837730(play, this, this->actor.velocity.y, 0x1F4);
+        if (this->stateFlags3 & PLAYER_STATE3_8000) {
+            sp2A = this->unk_B86[1];
+            sp24 = this->unk_B48 * 1.5f;
+            Player_SetAction(play, this, func_8084CA24, 1);
+            this->stateFlags3 |= PLAYER_STATE3_8000;
+            this->stateFlags1 &= ~PLAYER_STATE1_8000000;
+            sp24 = CLAMP_MAX(sp24, 13.5f);
+            this->linearVelocity = Math_CosS(this->unk_AAA) * sp24;
+            this->actor.velocity.y = -Math_SinS(this->unk_AAA) * sp24;
+            this->unk_B86[1] = sp2A;
+            func_800B8E58(this, NA_SE_EV_JUMP_OUT_WATER);
+            return true;
+        }
+
+        if (temp_v0_3) {
+            func_800B8E58(this, NA_SE_PL_FACE_UP);
+        } else {
+            func_800B8E58(this, NA_SE_PL_FACE_UP);
+        }
+
+        if (input != NULL) {
+            Player_SetAction(play, this, func_808519FC, 1);
+            if (this->stateFlags1 & PLAYER_STATE1_400) {
+                this->stateFlags1 |= (PLAYER_STATE1_400 | PLAYER_STATE1_800 | PLAYER_STATE1_20000000);
+            }
+            this->unk_AE8 = 2;
+        }
+
+        func_8082E438(play, this,
+                      (this->stateFlags1 & PLAYER_STATE1_800) ? &gameplay_keep_Linkanim_00DFF0
+                                                              : &gameplay_keep_Linkanim_00DFD8);
+        return true;
+    }
+
+    return false;
+}
 
 void func_8083B73C(PlayState* play, Player* this, s16 currentYaw) {
     Player_SetAction(play, this, func_808513EC, 0);
@@ -12169,20 +12239,20 @@ void func_808497A0(Player* this, PlayState* play) {
     LinkAnimation_Update(play, &this->skelAnime);
     func_8083216C(this, play);
 
-    if (gGameInfo->data[0x220] == 0) {
-        gGameInfo->data[0x220] = 0x14;
-        gGameInfo->data[0x224] = 0;
-        gGameInfo->data[0x221] = gGameInfo->data[0x222] = gGameInfo->data[0x223] = gGameInfo->data[0x224];
+    if (MREG(64) == 0) {
+        MREG(64) = 0x14;
+        MREG(68) = 0;
+        MREG(65) = MREG(66) = MREG(67) = MREG(68);
         play_sound(NA_SE_SY_DEKUNUTS_JUMP_FAILED);
-    } else if (gGameInfo->data[0x220] > 0) {
-        gGameInfo->data[0x224] += gGameInfo->data[0x220];
-        if (gGameInfo->data[0x224] > 0xFF) {
-            gGameInfo->data[0x224] = 0xFF;
+    } else if (MREG(64) > 0) {
+        MREG(68) += MREG(64);
+        if (MREG(68) > 0xFF) {
+            MREG(68) = 0xFF;
             if (this->unk_B86[0] == 0) {
                 this->unk_B86[0] = 1;
                 func_8082DE50(play, this);
             } else {
-                gGameInfo->data[0x220] = -0x14;
+                MREG(64) = -0x14;
                 this->stateFlags1 &= ~PLAYER_STATE1_8000000;
                 this->actor.bgCheckFlags &= ~1;
                 Player_SetEquipmentData(play, this);
@@ -12225,10 +12295,10 @@ void func_808497A0(Player* this, PlayState* play) {
     } else if (this->unk_AE8 > 0) {
         this->unk_AE8--;
     } else {
-        gGameInfo->data[0x224] += gGameInfo->data[0x220];
-        if (gGameInfo->data[0x224] < 0) {
-            gGameInfo->data[0x224] = 0;
-            gGameInfo->data[0x220] = 0;
+        MREG(68) += MREG(64);
+        if (MREG(68) < 0) {
+            MREG(68) = 0;
+            MREG(64) = 0;
             func_808339B4(this, -40);
             func_8085B384(this, play);
             this->actor.bgCheckFlags |= 1;
@@ -15246,7 +15316,7 @@ void func_80852290(PlayState* play, Player* this) {
         D_80862B44 = play->state.input;
         func_800FF3A0(&sp3C, &sp38, D_80862B44);
 
-        if ((s16) (sp38 + 0x4000) < 0) {
+        if ((s16)(sp38 + 0x4000) < 0) {
             sp38 -= 0x8000;
             sp3C = -sp3C;
         }
@@ -15271,8 +15341,8 @@ void func_80852290(PlayState* play, Player* this) {
     }
 
     if (DECR(this->unk_B8A) != 0) {
-        this->unk_B86[0] += (s32) (this->unk_AB2.x * 2.5f);
-        this->unk_B86[1] += (s32) (this->unk_AB2.y * 3.0f);
+        this->unk_B86[0] += (s32)(this->unk_AB2.x * 2.5f);
+        this->unk_B86[1] += (s32)(this->unk_AB2.y * 3.0f);
     } else {
         this->unk_B86[0] = 0;
         this->unk_B86[1] = 0;
