@@ -14671,113 +14671,140 @@ void func_80850D20(PlayState* play, Player* this) {
     func_8083F8A8(play, this, 12.0f, -1, 1.0f, 160, 20, true);
 }
 
-#if 0
+#ifdef NON_MATCHING
 void func_80850D68(Player* this, PlayState* play) {
     f32 sp44;
     s16 temp_a1_2; // sp42
     s16 sp40;
-    s16 temp_v0_2; // sp3C
-    s16 var_t1; // sp3A
-    DynaPolyActor* temp_v0_3;
-    s16 temp_v1_3;
     s16 var_a1;
+    s16 temp_v0_2; // sp3C
+    s16 var_t1;    // sp3A
+    s16 temp_v1_3;
 
-    this->stateFlags2 |= 0x20;
+    this->stateFlags2 |= PLAYER_STATE2_20;
 
     func_808475B4(this);
     func_8082F164(this, BTN_R);
 
-    if ((func_80833058(play, this, D_8085D048, 0) == 0) && (func_8083B3B4(play, this, D_80862B44) == 0) && (func_80840A30(play, this, &this->linearVelocity, 0.0f) == 0)) {
-        sp44 = 0.0f;
-        if (this->unk_AE8 != 0) {
-            if (((func_8082DA90(play) == 0) && (~(D_80862B44->cur.button | 0xFFFF7FFF) != 0)) || (this->currentBoots != 4)) {
-                this->unk_B86[0] = 1;
-            }
-            if (LinkAnimation_Update(play, &this->skelAnime) && (DECR(this->unk_AE8) == 0)) {
-                if (this->unk_B86[0] != 0) {
-                    this->stateFlags3 &= 0xFFFF7FFF;
-                    func_8082DB90(play, this, &gameplay_keep_Linkanim_00E408);
-                } else {
-                    func_8082DB60(play, this, &gameplay_keep_Linkanim_00E3D8);
-                }
-            } else {
-                func_80832F78(this, &sp44, &sp40, 0.0f, play);
-                Math_ScaledStepToS(&this->currentYaw, sp40, 0x640);
-                if (this->skelAnime.curFrame >= 13.0f) {
-                    sp44 = 12.0f;
-                    if (LinkAnimation_OnFrame(&this->skelAnime, 13.0f) != 0) {
-                        this->unk_B48 = 16.0f;
-                    }
-                    this->stateFlags3 |= 0x8000;
-                } else {
-                    sp44 = 0.0f;
-                }
-            }
+    if (func_80833058(play, this, D_8085D048, 0)) {
+        return;
+    }
 
-            Math_SmoothStepToS(&this->unk_B86[1], (s16) (D_80862B44->rel.stick_x * 0xC8), 0xA, 0x3E8, (s16) 0x64);
-            Math_SmoothStepToS(&this->unk_B8E, this->unk_B86[1], (s16) (IREG(40) + 1), IREG(41), (s16) (s32) IREG(42));
-        } else if (this->unk_B86[0] == 0) {
-            LinkAnimation_Update(play, &this->skelAnime);
-            if (((func_8082DA90(play) == 0) && (~(D_80862B44->cur.button | 0xFFFF7FFF) != 0)) || (this->currentBoots != 4) || (this->windSpeed > 9.0f)) {
-                this->stateFlags3 &= 0xFFFF7FFF;
+    if (func_8083B3B4(play, this, D_80862B44)) {
+        return;
+    }
+
+    if (func_80840A30(play, this, &this->linearVelocity, 0.0f)) {
+        return;
+    }
+
+    sp44 = 0.0f;
+
+    if (this->unk_AE8 != 0) {
+        if ((!func_8082DA90(play) && !CHECK_BTN_ALL(D_80862B44->cur.button, BTN_A)) ||
+            (this->currentBoots != PLAYER_BOOTS_ZORA_LAND)) {
+            this->unk_B86[0] = 1;
+        }
+
+        if (LinkAnimation_Update(play, &this->skelAnime) && (DECR(this->unk_AE8) == 0)) {
+            if (this->unk_B86[0] != 0) {
+                this->stateFlags3 &= ~PLAYER_STATE3_8000;
                 func_8082DB90(play, this, &gameplay_keep_Linkanim_00E408);
-                this->unk_B86[0] = 1;
             } else {
-                sp44 = 9.0f;
-                func_800B8F98(&this->actor, 0xEDU);
-            }
-
-            var_a1 = D_80862B44->rel.stick_y * 0xC8;
-            if (this->unk_B8C != 0) {
-                this->unk_B8C--;
-                temp_v1_3 = this->unk_B6C - 0xFA0;
-                if (temp_v1_3 < var_a1) {
-                    var_a1 = temp_v1_3;
-                }
-            }
-
-            if ((this->unk_AAA >= -0x1555) && (this->actor.depthInWater < (this->ageProperties->unk_24 + 10.0f)) && (var_a1 < 0x7D0)) {
-                var_a1 = 0x7D0;
-            }
-            Math_SmoothStepToS(&this->unk_AAA, var_a1, 4, 0xFA0, (s16) 0x190);
-            temp_a1_2 = D_80862B44->rel.stick_x * 0x64;
-            if ((Math_ScaledStepToS(&this->unk_B8A, temp_a1_2, 0x384) != 0) && (temp_a1_2 == 0)) {
-                Math_SmoothStepToS(&this->unk_B86[1], 0, 4, 0x5DC, (s16) 0x64);
-                Math_SmoothStepToS(&this->unk_B8E, this->unk_B86[1], (s16) (IREG(44) + 1), IREG(45), (s16) (s32) IREG(46));
-            } else {
-                temp_v0_2 = this->unk_B86[1];
-                var_t1 = (this->unk_B8A < 0) ? -0x3A98 : 0x3A98;
-                this->unk_B86[1] = temp_v0_2 + this->unk_B8A;
-                Math_SmoothStepToS(&this->unk_B8E, this->unk_B86[1], (s16) (IREG(47) + 1), IREG(48), (s16) (s32) IREG(49));
-
-                if ((ABS_ALT(this->unk_B8A) > 0xFA0) && ((((temp_v0_2 + this->unk_B8A) - var_t1) * (temp_v0_2 - var_t1)) <= 0)) {
-                    func_800B8E58(this, 0x8EEU);
-                }
-            }
-
-            if (D_80862B18 < 20.0f) {
-                func_80850D20(play, this);
+                func_8082DB60(play, this, &gameplay_keep_Linkanim_00E3D8);
             }
         } else {
-            Math_SmoothStepToS(&this->unk_B86[1], 0, 4, 0xFA0, (s16) 0x190);
-            if (((this->skelAnime.curFrame <= 5.0f) || (func_80850734(play, this) == 0)) && (LinkAnimation_Update(play, &this->skelAnime) != 0)) {
+            func_80832F78(this, &sp44, &sp40, 0.0f, play);
+            Math_ScaledStepToS(&this->currentYaw, sp40, 0x640);
+
+            if (this->skelAnime.curFrame >= 13.0f) {
+                sp44 = 12.0f;
+
+                if (LinkAnimation_OnFrame(&this->skelAnime, 13.0f) != 0) {
+                    this->unk_B48 = 16.0f;
+                }
+                this->stateFlags3 |= PLAYER_STATE3_8000;
+            } else {
+                sp44 = 0.0f;
+            }
+        }
+
+        Math_SmoothStepToS(&this->unk_B86[1], D_80862B44->rel.stick_x * 0xC8, 0xA, 0x3E8, 0x64);
+        Math_SmoothStepToS(&this->unk_B8E, this->unk_B86[1], IREG(40) + 1, IREG(41), IREG(42));
+    } else if (this->unk_B86[0] == 0) {
+        LinkAnimation_Update(play, &this->skelAnime);
+
+        if ((!func_8082DA90(play) && !CHECK_BTN_ALL(D_80862B44->cur.button, BTN_A)) ||
+            (this->currentBoots != PLAYER_BOOTS_ZORA_LAND) || (this->windSpeed > 9.0f)) {
+            this->stateFlags3 &= ~PLAYER_STATE3_8000;
+            func_8082DB90(play, this, &gameplay_keep_Linkanim_00E408);
+            this->unk_B86[0] = 1;
+        } else {
+            sp44 = 9.0f;
+            func_800B8F98(&this->actor, NA_SE_PL_ZORA_SWIM_LV - SFX_FLAG);
+        }
+
+        var_a1 = D_80862B44->rel.stick_y * 0xC8;
+        if (this->unk_B8C != 0) {
+            this->unk_B8C--;
+            temp_v1_3 = this->unk_B6C - 0xFA0;
+            if (temp_v1_3 < var_a1) {
+                var_a1 = temp_v1_3;
+            }
+        }
+
+        if ((this->unk_AAA >= -0x1555) && (this->actor.depthInWater < (this->ageProperties->unk_24 + 10.0f)) &&
+            (var_a1 < 0x7D0)) {
+            var_a1 = 0x7D0;
+        }
+
+        Math_SmoothStepToS(&this->unk_AAA, var_a1, 4, 0xFA0, 0x190);
+        temp_a1_2 = D_80862B44->rel.stick_x * 0x64;
+        if ((Math_ScaledStepToS(&this->unk_B8A, temp_a1_2, 0x384) != 0) && (temp_a1_2 == 0)) {
+            Math_SmoothStepToS(&this->unk_B86[1], 0, 4, 0x5DC, 0x64);
+            Math_SmoothStepToS(&this->unk_B8E, this->unk_B86[1], IREG(44) + 1, IREG(45), IREG(46));
+        } else {
+            temp_v0_2 = this->unk_B86[1];
+            var_t1 = (this->unk_B8A < 0) ? -0x3A98 : 0x3A98;
+            this->unk_B86[1] += this->unk_B8A;
+            Math_SmoothStepToS(&this->unk_B8E, this->unk_B86[1], IREG(47) + 1, IREG(48), IREG(49));
+
+            if ((ABS_ALT(this->unk_B8A) > 0xFA0) &&
+                ((((temp_v0_2 + this->unk_B8A) - var_t1) * (temp_v0_2 - var_t1)) <= 0)) {
+                func_800B8E58(this, NA_SE_PL_ZORA_SWIM_ROLL);
+            }
+        }
+
+        if (D_80862B18 < 20.0f) {
+            func_80850D20(play, this);
+        }
+    } else {
+        Math_SmoothStepToS(&this->unk_B86[1], 0, 4, 0xFA0, 0x190);
+        if ((this->skelAnime.curFrame <= 5.0f) || !func_80850734(play, this)) {
+            if (LinkAnimation_Update(play, &this->skelAnime)) {
                 func_808353DC(play, this);
             }
-            func_8082F09C(this);
         }
 
-        if ((this->unk_B8C < 8) && (this->actor.bgCheckFlags & 1)) {
-            if ((this->actor.floorBgId == 0x32) || (temp_v0_3 = DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId), (temp_v0_3 == NULL)) || (temp_v0_3->actor.id != 0x1A5)) {
-                this->unk_AAA += (-this->unk_B6C - this->unk_AAA) * 2;
-                this->unk_B8C = 0xF;
-            }
-
-            func_80850D20(play, this);
-            func_800B8E58(this, 0x83BU);
-        }
-        func_80850BF8(this, sp44);
-        func_80850BA8(this);
+        func_8082F09C(this);
     }
+
+    if ((this->unk_B8C < 8) && (this->actor.bgCheckFlags & 1)) {
+        DynaPolyActor* temp_v0_3;
+
+        if ((this->actor.floorBgId == 0x32) ||
+            ((temp_v0_3 = DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId)) == NULL) ||
+            (temp_v0_3->actor.id != ACTOR_EN_TWIG)) {
+            this->unk_AAA += (-this->unk_B6C - this->unk_AAA) * 2;
+            this->unk_B8C = 0xF;
+        }
+
+        func_80850D20(play, this);
+        func_800B8E58(this, NA_SE_PL_BODY_BOUND);
+    }
+
+    func_80850BF8(this, sp44);
+    func_80850BA8(this);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80850D68.s")
