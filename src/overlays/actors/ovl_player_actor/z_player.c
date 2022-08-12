@@ -12164,9 +12164,77 @@ void func_808496AC(Player* this, PlayState* play) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808497A0.s")
+void func_808497A0(Player* this, PlayState* play) {
+    this->stateFlags3 |= PLAYER_STATE3_10000000;
+    LinkAnimation_Update(play, &this->skelAnime);
+    func_8083216C(this, play);
 
-extern s8 D_8085CFE4[];
+    if (gGameInfo->data[0x220] == 0) {
+        gGameInfo->data[0x220] = 0x14;
+        gGameInfo->data[0x224] = 0;
+        gGameInfo->data[0x221] = gGameInfo->data[0x222] = gGameInfo->data[0x223] = gGameInfo->data[0x224];
+        play_sound(NA_SE_SY_DEKUNUTS_JUMP_FAILED);
+    } else if (gGameInfo->data[0x220] > 0) {
+        gGameInfo->data[0x224] += gGameInfo->data[0x220];
+        if (gGameInfo->data[0x224] > 0xFF) {
+            gGameInfo->data[0x224] = 0xFF;
+            if (this->unk_B86[0] == 0) {
+                this->unk_B86[0] = 1;
+                func_8082DE50(play, this);
+            } else {
+                gGameInfo->data[0x220] = -0x14;
+                this->stateFlags1 &= ~PLAYER_STATE1_8000000;
+                this->actor.bgCheckFlags &= ~1;
+                Player_SetEquipmentData(play, this);
+                this->prevBoots = this->currentBoots;
+
+                if (this->unk_3CF != 0) {
+                    Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_3C0);
+                    this->actor.shape.rot.y = this->unk_3CC;
+                } else {
+                    Math_Vec3f_Copy(&this->actor.world.pos, &gSaveContext.respawn[RESPAWN_MODE_DOWN].pos);
+                    this->actor.shape.rot.y = gSaveContext.respawn[RESPAWN_MODE_DOWN].yaw;
+                }
+
+                Math_Vec3f_Copy(&this->actor.prevPos, &this->actor.world.pos);
+                this->linearVelocity = 0.0f;
+                this->currentYaw = this->actor.shape.rot.y;
+                this->actor.velocity.y = 0.0f;
+                Player_AnimationPlayOnce(play, this, func_8082ED20(this));
+
+                if ((play->roomCtx.currRoom.num == this->unk_3CE) && (play->roomCtx.prevRoom.num < 0)) {
+                    this->unk_AE8 = 5;
+                } else {
+                    play->roomCtx.currRoom.num = -1;
+                    play->roomCtx.prevRoom.num = -1;
+                    play->roomCtx.currRoom.segment = NULL;
+                    play->roomCtx.prevRoom.segment = NULL;
+
+                    func_8012EBF8(play, &play->roomCtx);
+                    this->unk_AE8 = -1;
+                    this->unk_AE7 = this->unk_3CE;
+                }
+            }
+        }
+    } else if (this->unk_AE8 < 0) {
+        if (Room_StartRoomTransition(play, &play->roomCtx, this->unk_AE7) != 0) {
+            Map_InitRoomData(play, play->roomCtx.currRoom.num);
+            Minimap_SavePlayerRoomInitInfo(play);
+            this->unk_AE8 = 5;
+        }
+    } else if (this->unk_AE8 > 0) {
+        this->unk_AE8--;
+    } else {
+        gGameInfo->data[0x224] += gGameInfo->data[0x220];
+        if (gGameInfo->data[0x224] < 0) {
+            gGameInfo->data[0x224] = 0;
+            gGameInfo->data[0x220] = 0;
+            func_808339B4(this, -40);
+            func_8085B384(this, play);
+            this->actor.bgCheckFlags |= 1;
+        }
+    }
+}
 
 void func_80849A9C(Player* this, PlayState* play) {
     f32 sp44;
