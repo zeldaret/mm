@@ -71,6 +71,7 @@
         <Texture Name="gameplay_keep_Tex_00CA30" OutName="tex_00CA30" Format="rgba16" Width="16" Height="16" Offset="0xCA30" />
         <Texture Name="gDekuStickTex" OutName="tex_00CC30" Format="i8" Width="16" Height="16" Offset="0xCC30" />
         <Blob Name="gameplay_keep_Blob_00CD30" Size="0x210" Offset="0xCD30" />
+
         <PlayerAnimation Name="gameplay_keep_Linkanim_00CF40" Offset="0xCF40" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00CF48" Offset="0xCF48" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00CF50" Offset="0xCF50" />
@@ -766,6 +767,7 @@
         <PlayerAnimation Name="gameplay_keep_Linkanim_00E4E0" Offset="0xE4E0" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00E4E8" Offset="0xE4E8" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00E4F0" Offset="0xE4F0" />
+
         <DList Name="gameplay_keep_DL_00E5C0" Offset="0xE5C0" />
 
         <!-- Deku Flower -->
