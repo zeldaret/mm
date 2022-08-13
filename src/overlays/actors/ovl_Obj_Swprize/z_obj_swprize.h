@@ -13,7 +13,7 @@ typedef void (*ObjSwprizeActionFunc)(struct ObjSwprize*, PlayState*);
 typedef struct ObjSwprize {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ObjSwprizeActionFunc actionFunc;
-    /* 0x148 */ s16 timer;           
+    /* 0x148 */ s16 timer;
 } ObjSwprize; // size = 0x14C
 
 extern const ActorInit Obj_Swprize_InitVars;

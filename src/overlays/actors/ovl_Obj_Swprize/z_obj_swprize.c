@@ -49,30 +49,29 @@ void func_80C25360(ObjSwprize* this, Vec3f* vec) {
 }
 
 void func_80C253D0(ObjSwprize* this, PlayState* play) {
+    Actor* thisx = &this->actor;
     s32 i;
-    ObjSwprize* new_var;
     Actor* collectible;
     Vec3f sp78;
-    s32 type = OBJ_SWPRIZE_GET_TYPE(&this->actor);
-    u32 params = D_80C257F0[type];
+    s32 type = (thisx->params >> 8) & 3;
+    s32 temp_s0 = D_80C257F0[type];
 
     func_80C25360(this, &sp78);
     if (type == 2) {
-        new_var = this;
         for (i = 0; i < 3; i++) {
-            collectible = Item_DropCollectible(play, &new_var->actor.world.pos, params);
+            collectible = Item_DropCollectible(play, &thisx->world.pos, temp_s0);
             if (collectible != NULL) {
                 if (sp78.y < 0.98f) {
                     collectible->velocity.y = (sp78.y + 1.0f) * 4.0f;
                     collectible->speedXZ = (2.0f * (1.0f - fabsf(sp78.y))) + 2.0f;
                     collectible->world.rot.y = Math_FAtan2F(sp78.z, sp78.x) + D_80C257F8[i];
                 } else {
-                    collectible->world.rot.y = i * 0x5555;
+                    collectible->world.rot.y = i * (0x10000 / 3);
                 }
             }
         }
     } else {
-        collectible = Item_DropCollectible(play, &this->actor.world.pos, params);
+        collectible = Item_DropCollectible(play, &thisx->world.pos, temp_s0);
         if ((collectible != NULL) && (sp78.y < 0.98f)) {
             collectible->velocity.y = (sp78.y + 1.0f) * 4.0f;
             collectible->speedXZ = (2.0f * (1.0f - fabsf(sp78.y))) + 2.0f;
