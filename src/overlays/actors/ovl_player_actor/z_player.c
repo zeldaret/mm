@@ -8919,7 +8919,8 @@ void Player_ChooseIdleAnim(PlayState* play, Player* this) {
         morphFrames = -6.0f;
     }
 
-    LinkAnimation_Change(play, &this->skelAnime, anim, (2.0f / 3.0f) * D_8085C3E4, 0.0f, lastFrame, ANIMMODE_ONCE, morphFrames);
+    LinkAnimation_Change(play, &this->skelAnime, anim, (2.0f / 3.0f) * D_8085C3E4, 0.0f, lastFrame, ANIMMODE_ONCE,
+                         morphFrames);
 }
 
 void func_8083EE60(Player* this, PlayState* play) {
@@ -19183,18 +19184,15 @@ void func_8085AD5C(PlayState* play, Player* this, s32 arg2) {
     }
 }
 
-#ifdef NON_MATCHING
-// stack
 void func_8085ADA0(PlayState* play, Player* this, UNK_TYPE arg2) {
-    CsCmdActorAction* sp3C;
+    CsCmdActorAction* actorAction;
     u16 temp_t3;
-    s32 var_a0;
-    s32 var_v0; // sp30
-    u16 temp_v0_4;
     u8 var_v1;
+    s32 var_a0;
 
-    sp3C = (this->actor.id == ACTOR_EN_TEST3) ? play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x1FA)]
-                                              : play->csCtx.playerAction;
+    actorAction = (this->actor.id == ACTOR_EN_TEST3)
+                      ? play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x1FA)]
+                      : play->csCtx.playerAction;
 
     var_a0 = false;
 
@@ -19218,57 +19216,53 @@ void func_8085ADA0(PlayState* play, Player* this, UNK_TYPE arg2) {
         }
     }
 
-    if (!var_a0 && (sp3C == NULL)) {
+    if (!var_a0 && (actorAction == NULL)) {
         this->actor.flags &= ~ACTOR_FLAG_40;
         return;
     }
 
     var_v1 = this->unk_396;
     if (!var_a0) {
-        if (var_v1 != sp3C->action) {
-            var_v0 = D_8085D384[sp3C->action];
-            if ((var_v0 >= 0) && (D_801F4DE0 == 0)) {
-                if ((var_v0 == 2) || (var_v0 == 3)) {
-                    func_8085ABA8(this, sp3C);
+        if (var_v1 != actorAction->action) {
+            s32 index = D_8085D384[actorAction->action];
+
+            if ((index >= 0) && (D_801F4DE0 == 0)) {
+                if ((index == 2) || (index == 3)) {
+                    func_8085ABA8(this, actorAction);
                 } else {
-                    func_8085AB58(this, sp3C);
+                    func_8085AB58(this, actorAction);
                 }
             }
 
-            if (var_v0 == 0x6C) {
+            if (index == 0x6C) {
                 this->stateFlags3 |= PLAYER_STATE3_20000000;
-            } else if (var_v0 == 0x6E) {
+            } else if (index == 0x6E) {
                 this->stateFlags3 &= ~PLAYER_STATE3_20000000;
             }
 
             D_80862B6C = this->skelAnime.moveFlags;
             func_8082E794(this);
 
-            func_8085AD5C(play, this, ABS_ALT(var_v0));
+            func_8085AD5C(play, this, ABS_ALT(index));
 
-            func_8085AC9C(play, this, sp3C, &D_8085DA94[ABS_ALT(var_v0)]);
+            func_8085AC9C(play, this, actorAction, &D_8085DA94[ABS_ALT(index)]);
             this->unk_AE8 = 0;
             this->unk_AE7 = 0;
 
             //! FAKE
-            temp_t3 = sp3C->action;
+            temp_t3 = actorAction->action;
             this->unk_396 = (temp_t3 & 0xFF) & 0xFF;
             var_v1 = temp_t3 & 0xFF;
         }
     }
 
-    func_8085AC9C(play, this, sp3C, &D_8085DEF4[ABS_ALT(D_8085D384[var_v1])]);
+    func_8085AC9C(play, this, actorAction, &D_8085DEF4[ABS_ALT(D_8085D384[var_v1])]);
 
-    temp_v0_4 = (u16)sp3C->rot.x;
-    if (temp_v0_4 != 0) {
-        Math_SmoothStepToS(&this->actor.focus.rot.x, temp_v0_4, 4, 0x2710, 0);
+    if ((u16)actorAction->rot.x != 0) {
+        Math_SmoothStepToS(&this->actor.focus.rot.x, (u16)actorAction->rot.x, 4, 0x2710, 0);
         func_80832754(this, false);
     }
 }
-#else
-void func_8085ADA0(PlayState* play, Player* this, UNK_TYPE arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8085ADA0.s")
-#endif
 
 void func_8085B08C(Player* this, PlayState* play) {
     if (this->csMode != this->prevCsMode) {
