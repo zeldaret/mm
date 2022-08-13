@@ -2882,9 +2882,9 @@ struct_8085CC88 D_8085CC88[] = {
     { &gameplay_keep_Linkanim_00E350, 4 },
 };
 
-s8 D_8085CD00[6][6] = {
-    8, -5, -3, -6, 8, 0xB, 5, 0,  -1, 4,  5, 9,   3, 1,  0,  2,  3, 9,
-    6, -4, -2, 7,  6, 0xA, 8, -5, -3, -6, 8, 0xB, 8, -5, -3, -6, 8, 0xB,
+s8 D_8085CD00[PLAYER_ANIMTYPE_MAX][PLAYER_ANIMTYPE_MAX] = {
+    { 8, -5, -3, -6, 8, 0xB }, { 5, 0, -1, 4, 5, 9 },     { 3, 1, 0, 2, 3, 9 },
+    { 6, -4, -2, 7, 6, 0xA },  { 8, -5, -3, -6, 8, 0xB }, { 8, -5, -3, -6, 8, 0xB },
 };
 
 struct_8085CD24 D_8085CD24[] = {
@@ -3927,7 +3927,7 @@ void func_80831944(PlayState* play, Player* this) {
 }
 
 void func_80831990(PlayState* play, Player* this, ItemID item) {
-    enum PlayerActionParam actionParam = Player_ItemToActionParam(this, item);
+    PlayerActionParam actionParam = Player_ItemToActionParam(this, item);
 
     if ((((this->itemActionParam == this->heldItemActionParam) &&
           (!(this->stateFlags1 & PLAYER_STATE1_400000) || (Player_ActionToMeleeWeapon(actionParam) != 0) ||
@@ -3945,7 +3945,7 @@ void func_80831990(PlayState* play, Player* this, ItemID item) {
         f32 sp54;
         s32 explAction;
 
-        if (var_v1 || (((this->actor.flags & ACTOR_FLAG_100) == ACTOR_FLAG_100) && (actionParam != PLAYER_AP_NONE)) ||
+        if (var_v1 || (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_100) && (actionParam != PLAYER_AP_NONE)) ||
             (actionParam == PLAYER_AP_OCARINA) ||
             ((actionParam > PLAYER_AP_BOTTLE) && actionParam < PLAYER_AP_MASK_TRUTH) ||
             ((actionParam == PLAYER_AP_PICTO_BOX) && (this->targetActor != NULL) &&
@@ -7531,7 +7531,7 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
             func_801477B4(play);
 
             if (play->sceneNum == SCENE_00KEIKOKU) {
-                gSaveContext.respawn[0].entranceIndex = 0x4C20;
+                gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = 0x4C20;
             } else {
                 u16 var_v0_7;
 
@@ -7540,7 +7540,7 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
                 } else {
                     var_v0_7 = 0x4080;
                 }
-                gSaveContext.respawn[0].entranceIndex = var_v0_7;
+                gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = var_v0_7;
             }
 
             func_80169EFC(&play->state);
@@ -10108,14 +10108,15 @@ void Player_Init(Actor* thisx, PlayState* play) {
 
     var_a1 = ((respawnFlag == 4) || (gSaveContext.respawnFlag == -4)) ? 1 : 0;
     if (func_801226E0(play, var_a1) == 0) {
-        gSaveContext.respawn[0].playerParams = (thisx->params & 0xFF) | 0xD00;
+        gSaveContext.respawn[RESPAWN_MODE_DOWN].playerParams = (thisx->params & 0xFF) | 0xD00;
     }
 
-    gSaveContext.respawn[0].data = 1;
+    gSaveContext.respawn[RESPAWN_MODE_DOWN].data = 1;
     if (respawnFlag == 0) {
-        gSaveContext.respawn[2] = gSaveContext.respawn[0];
+        gSaveContext.respawn[RESPAWN_MODE_TOP] = gSaveContext.respawn[RESPAWN_MODE_DOWN];
     }
-    gSaveContext.respawn[2].playerParams = (gSaveContext.respawn[2].playerParams & 0xFF) | 0xD00;
+    gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams =
+        (gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams & 0xFF) | 0xD00;
 
     var_v0_3 = (this->actor.params & 0xF00) >> 8;
     if (((var_v0_3 == 5) || (var_v0_3 == 6)) && (gSaveContext.save.cutscene >= 0xFFF0)) {
@@ -14378,7 +14379,7 @@ void func_8084D820(Player* this, PlayState* play) {
                 func_800E0238(Play_GetCamera(play, 0));
                 func_80838760(this);
                 if (!(this->stateFlags3 & 0x20000)) {
-                    func_801226E0(play, ((void)0, gSaveContext.respawn[0].data));
+                    func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));
                 }
 
                 if (play->unk_1887C != 0) {
