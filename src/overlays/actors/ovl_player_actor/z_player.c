@@ -6842,7 +6842,8 @@ s32 func_80838A90(Player* this, PlayState* play) {
                     } else {
                         Actor* actorUnkA90 = this->unk_A90;
 
-                        if ((actorUnkA90 == NULL) || (actorUnkA90->id == ACTOR_EN_ZOT) || (actorUnkA90->cutscene == -1)) {
+                        if ((actorUnkA90 == NULL) || (actorUnkA90->id == ACTOR_EN_ZOT) ||
+                            (actorUnkA90->cutscene == -1)) {
                             if (!func_808323C0(this, play->playerActorCsIds[0])) {
                                 return false;
                             }
@@ -10134,8 +10135,8 @@ void func_808425B4(Player* this) {
  * Sets the DoAction for the interface A/B buttons, depending on a significant number of things
  */
 void Player_SetDoAction(PlayState* play, Player* this) {
-    s32 doActionB; // sp3C
-    s32 sp38;      // sp38
+    DoAction doActionB;
+    s32 sp38;
 
     if (this != GET_PLAYER(play)) {
         return;
@@ -10187,9 +10188,10 @@ void Player_SetDoAction(PlayState* play, Player* this) {
         s32 pad;
         s32 sp28 = this->unk_AE3[this->unk_ADE];
         s32 sp24;
-        s32 doActionA = ((this->transformation == PLAYER_FORM_GORON) && !(this->stateFlags1 & PLAYER_STATE1_400000))
-                            ? DO_ACTION_CURL
-                            : DO_ACTION_NONE;
+        DoAction doActionA =
+            ((this->transformation == PLAYER_FORM_GORON) && !(this->stateFlags1 & PLAYER_STATE1_400000))
+                ? DO_ACTION_CURL
+                : DO_ACTION_NONE;
 
         if (play->actorCtx.unk5 & 4) {
             doActionA = DO_ACTION_SNAP;

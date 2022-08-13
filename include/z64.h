@@ -484,7 +484,7 @@ typedef struct {
     /* 0x2CA */ s16 unk_2CA;
 } PauseContext; // size = 0x2D0
 
-typedef enum {
+typedef enum DoAction {
     /* 0x00 */ DO_ACTION_ATTACK,
     /* 0x01 */ DO_ACTION_CHECK,
     /* 0x02 */ DO_ACTION_ENTER,
