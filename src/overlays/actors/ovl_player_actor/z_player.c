@@ -2797,7 +2797,7 @@ s32 func_8082ED94(Player* this) {
         (this->skelAnime.animation != &gameplay_keep_Linkanim_00DD68) &&
         (((this->skelAnime.animation != func_8082ED20(this))) ||
          (this->skelAnime.animation == &gameplay_keep_Linkanim_00D0B0))) {
-        for (i = 0, entry = &sPlayerIdleAnimations[0][0]; i < 30; i++) {
+        for (i = 0, entry = &sPlayerIdleAnimations[0][0]; i < ARRAY_COUNT_2D(sPlayerIdleAnimations); i++) {
             if (this->skelAnime.animation == *entry) {
                 return i + 1;
             }
