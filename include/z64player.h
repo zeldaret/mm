@@ -623,7 +623,7 @@ typedef struct struct_80122744_arg1 {
 #define PLAYER_STATE3_40         (1 << 6)
 // 
 #define PLAYER_STATE3_80         (1 << 7)
-// 
+// Related to form Deku
 #define PLAYER_STATE3_100        (1 << 8)
 // 
 #define PLAYER_STATE3_200        (1 << 9)
@@ -643,7 +643,7 @@ typedef struct struct_80122744_arg1 {
 #define PLAYER_STATE3_10000      (1 << 16)
 // 
 #define PLAYER_STATE3_20000      (1 << 17)
-// 
+// Related to form Deku
 #define PLAYER_STATE3_40000      (1 << 18)
 // 
 #define PLAYER_STATE3_80000      (1 << 19)
