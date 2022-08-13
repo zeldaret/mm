@@ -224,22 +224,22 @@ void func_8098FD50(EnTg* this, EnTgHeartInfo* enTgHeartInfo, Vec3f* heartStartPo
     Vec3f zeroVec = D_80990240;          // { 0.0f, 0.0f, 0.0f };
     s32 i = 0;
 
-    while ((i < len) && enTgHeartInfo->isSecondHeartSpawned) {
+    while ((i < len) && enTgHeartInfo->isFirstHeartSpawned) {
         i++;
         enTgHeartInfo++;
     }
 
     if (i < len) {
-        enTgHeartInfo->isSecondHeartSpawned = true;
-        enTgHeartInfo->secondHeartPos = *heartStartPos; // actor->world.pos + 62
-        enTgHeartInfo->heartVelocity = heartVelocityVec;
+        enTgHeartInfo->isFirstHeartSpawned = true;
+        enTgHeartInfo->firstHeartPos = *heartStartPos; // actor->world.pos + 62
+        enTgHeartInfo->velocity = heartVelocityVec;
         enTgHeartInfo->unusedZeroVec20 = zeroVec;
         enTgHeartInfo->scale = 0.01f;
 
         // TODO: maybe affects the heart wiggly path? watch actor shape rot
-        enTgHeartInfo->secondHeartPos.x += 4.0f * Math_SinS(this->actor.shape.rot.y);
-        enTgHeartInfo->secondHeartPos.z += 4.0f * Math_CosS(this->actor.shape.rot.y);
-        enTgHeartInfo->secondHeartTimer = 16;
+        enTgHeartInfo->firstHeartPos.x += 4.0f * Math_SinS(this->actor.shape.rot.y);
+        enTgHeartInfo->firstHeartPos.z += 4.0f * Math_CosS(this->actor.shape.rot.y);
+        enTgHeartInfo->firstHeartTimer = 16;
     }
 }
 
@@ -253,20 +253,20 @@ void func_8098FEA8(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len) {
 
     // Every len frames, update heart position(s)?
     for (i = 0; i < len; i++, enTgHeartInfo++) {
-        if (enTgHeartInfo->isSecondHeartSpawned == 1) {
-            if (DECR(enTgHeartInfo->secondHeartTimer) == 0) {
-                enTgHeartInfo->isSecondHeartSpawned = false;
+        if (enTgHeartInfo->isFirstHeartSpawned == 1) {
+            if (DECR(enTgHeartInfo->firstHeartTimer) == 0) {
+                enTgHeartInfo->isFirstHeartSpawned = false;
             }
-            enTgHeartInfo->secondHeartPos.y += enTgHeartInfo->heartVelocity.y; // is always increased by 1.5f
-            enTgHeartInfo->secondHeartPos.x += 2.0f * Math_SinS(enTgHeartInfo->angle);
-            enTgHeartInfo->secondHeartPos.z += 2.0f * Math_CosS(enTgHeartInfo->angle);
+            enTgHeartInfo->firstHeartPos.y += enTgHeartInfo->velocity.y; // is always increased by 1.5f
+            enTgHeartInfo->firstHeartPos.x += 2.0f * Math_SinS(enTgHeartInfo->angle);
+            enTgHeartInfo->firstHeartPos.z += 2.0f * Math_CosS(enTgHeartInfo->angle);
             Matrix_Push();
-            Matrix_Translate(enTgHeartInfo->secondHeartPos.x, enTgHeartInfo->secondHeartPos.y,
-                             enTgHeartInfo->secondHeartPos.z, MTXMODE_NEW);
+            Matrix_Translate(enTgHeartInfo->firstHeartPos.x, enTgHeartInfo->firstHeartPos.y,
+                             enTgHeartInfo->firstHeartPos.z, MTXMODE_NEW);
             Matrix_RotateYS(yaw, MTXMODE_APPLY);
-            Matrix_MultVec3f(&zeroVec, &enTgHeartInfo->secondHeartPos);
+            Matrix_MultVec3f(&zeroVec, &enTgHeartInfo->firstHeartPos);
             Matrix_Pop();
-            enTgHeartInfo->angle += 6000;
+            enTgHeartInfo->angle += 0x1770;
         }
     }
 }
@@ -282,13 +282,13 @@ void func_8099000C(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len) {
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
 
     for (i = 0; i < len; i++, enTgHeartInfo++) {
-        if (enTgHeartInfo->isSecondHeartSpawned == 1) {
+        if (enTgHeartInfo->isFirstHeartSpawned == 1) {
             if (!flag) {
                 gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0A0); // TODO: figure out what this thing is in Z64Uils
                 flag = true;
             }
-            Matrix_Translate(enTgHeartInfo->secondHeartPos.x, enTgHeartInfo->secondHeartPos.y,
-                             enTgHeartInfo->secondHeartPos.z, MTXMODE_NEW);
+            Matrix_Translate(enTgHeartInfo->firstHeartPos.x, enTgHeartInfo->firstHeartPos.y,
+                             enTgHeartInfo->firstHeartPos.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(enTgHeartInfo->scale, enTgHeartInfo->scale, enTgHeartInfo->scale, MTXMODE_APPLY);
 
