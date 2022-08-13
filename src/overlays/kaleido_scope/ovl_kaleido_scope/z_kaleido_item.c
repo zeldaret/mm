@@ -7,38 +7,145 @@
 #include "z_kaleido_scope.h"
 #include "interface/parameter_static/parameter_static.h"
 
-extern UNK_TYPE D_02001360;
-extern UNK_TYPE D_0200B998;
-extern UNK_TYPE D_08062000;
-extern UNK_TYPE D_08064340;
-extern UNK_TYPE D_0B000000;
-extern UNK_TYPE D_0C000000;
-extern UNK_TYPE D_0C006C00;
-
 s16 sEquipState = 0;
 s16 sEquipAnimTimer = 0;
 s16 sEquipMoveTimer = 10;
 
 u8 gSlotTransformReqs[5][24] = {
+    // Fierce Deity
     {
-        false, false, false, false, false, false, false, false, false, false, false, false,
-        false, false, false, false, false, false, true,  true,  true,  true,  true,  true,
+        false, // SLOT_OCARINA
+        false, // SLOT_BOW
+        false, // SLOT_ARROW_FIRE
+        false, // SLOT_ARROW_ICE
+        false, // SLOT_ARROW_LIGHT
+        false, // SLOT_TRADE_DEED
+        false, // SLOT_BOMB
+        false, // SLOT_BOMBCHU
+        false, // SLOT_STICK
+        false, // SLOT_NUT
+        false, // SLOT_MAGIC_BEANS
+        false, // SLOT_TRADE_KEY_MAMA
+        false, // SLOT_POWDER_KEG
+        false, // SLOT_PICTO_BOX
+        false, // SLOT_LENS
+        false, // SLOT_HOOKSHOT
+        false, // SLOT_SWORD_GREAT_FAIRY
+        false, // SLOT_TRADE_COUPLE
+        true,  // SLOT_BOTTLE_1
+        true,  // SLOT_BOTTLE_2
+        true,  // SLOT_BOTTLE_3
+        true,  // SLOT_BOTTLE_4
+        true,  // SLOT_BOTTLE_5
+        true,  // SLOT_BOTTLE_6
     },
+    // Goron
     {
-        true, false, false, false, false, true, false, false, false, false, false, true,
-        true, true,  true,  false, false, true, true,  true,  true,  true,  true,  true,
+        true,  // SLOT_OCARINA
+        false, // SLOT_BOW
+        false, // SLOT_ARROW_FIRE
+        false, // SLOT_ARROW_ICE
+        false, // SLOT_ARROW_LIGHT
+        true,  // SLOT_TRADE_DEED
+        false, // SLOT_BOMB
+        false, // SLOT_BOMBCHU
+        false, // SLOT_STICK
+        false, // SLOT_NUT
+        false, // SLOT_MAGIC_BEANS
+        true,  // SLOT_TRADE_KEY_MAMA
+        true,  // SLOT_POWDER_KEG
+        true,  // SLOT_PICTO_BOX
+        true,  // SLOT_LENS
+        false, // SLOT_HOOKSHOT
+        false, // SLOT_SWORD_GREAT_FAIRY
+        true,  // SLOT_TRADE_COUPLE
+        true,  // SLOT_BOTTLE_1
+        true,  // SLOT_BOTTLE_2
+        true,  // SLOT_BOTTLE_3
+        true,  // SLOT_BOTTLE_4
+        true,  // SLOT_BOTTLE_5
+        true,  // SLOT_BOTTLE_6
     },
+    // Zora
     {
-        true,  false, false, false, false, true, false, false, false, false, false, true,
-        false, true,  true,  false, false, true, true,  true,  true,  true,  true,  true,
+        true,  // SLOT_OCARINA
+        false, // SLOT_BOW
+        false, // SLOT_ARROW_FIRE
+        false, // SLOT_ARROW_ICE
+        false, // SLOT_ARROW_LIGHT
+        true,  // SLOT_TRADE_DEED
+        false, // SLOT_BOMB
+        false, // SLOT_BOMBCHU
+        false, // SLOT_STICK
+        false, // SLOT_NUT
+        false, // SLOT_MAGIC_BEANS
+        true,  // SLOT_TRADE_KEY_MAMA
+        false, // SLOT_POWDER_KEG
+        true,  // SLOT_PICTO_BOX
+        true,  // SLOT_LENS
+        false, // SLOT_HOOKSHOT
+        false, // SLOT_SWORD_GREAT_FAIRY
+        true,  // SLOT_TRADE_COUPLE
+        true,  // SLOT_BOTTLE_1
+        true,  // SLOT_BOTTLE_2
+        true,  // SLOT_BOTTLE_3
+        true,  // SLOT_BOTTLE_4
+        true,  // SLOT_BOTTLE_5
+        true,  // SLOT_BOTTLE_6
     },
+    // Deku
     {
-        true,  false, false, false, false, true, false, false, false, true, false, true,
-        false, true,  true,  false, false, true, true,  true,  true,  true, true,  true,
+        true,  // SLOT_OCARINA
+        false, // SLOT_BOW
+        false, // SLOT_ARROW_FIRE
+        false, // SLOT_ARROW_ICE
+        false, // SLOT_ARROW_LIGHT
+        true,  // SLOT_TRADE_DEED
+        false, // SLOT_BOMB
+        false, // SLOT_BOMBCHU
+        false, // SLOT_STICK
+        true,  // SLOT_NUT
+        false, // SLOT_MAGIC_BEANS
+        true,  // SLOT_TRADE_KEY_MAMA
+        false, // SLOT_POWDER_KEG
+        true,  // SLOT_PICTO_BOX
+        true,  // SLOT_LENS
+        false, // SLOT_HOOKSHOT
+        false, // SLOT_SWORD_GREAT_FAIRY
+        true,  // SLOT_TRADE_COUPLE
+        true,  // SLOT_BOTTLE_1
+        true,  // SLOT_BOTTLE_2
+        true,  // SLOT_BOTTLE_3
+        true,  // SLOT_BOTTLE_4
+        true,  // SLOT_BOTTLE_5
+        true,  // SLOT_BOTTLE_6
     },
+    // Human
     {
-        true,  true, true, true, true, true, true, true, true, true, true, true,
-        false, true, true, true, true, true, true, true, true, true, true, true,
+        true,  // SLOT_OCARINA
+        true,  // SLOT_BOW
+        true,  // SLOT_ARROW_FIRE
+        true,  // SLOT_ARROW_ICE
+        true,  // SLOT_ARROW_LIGHT
+        true,  // SLOT_TRADE_DEED
+        true,  // SLOT_BOMB
+        true,  // SLOT_BOMBCHU
+        true,  // SLOT_STICK
+        true,  // SLOT_NUT
+        true,  // SLOT_MAGIC_BEANS
+        true,  // SLOT_TRADE_KEY_MAMA
+        false, // SLOT_POWDER_KEG
+        true,  // SLOT_PICTO_BOX
+        true,  // SLOT_LENS
+        true,  // SLOT_HOOKSHOT
+        true,  // SLOT_SWORD_GREAT_FAIRY
+        true,  // SLOT_TRADE_COUPLE
+        true,  // SLOT_BOTTLE_1
+        true,  // SLOT_BOTTLE_2
+        true,  // SLOT_BOTTLE_3
+        true,  // SLOT_BOTTLE_4
+        true,  // SLOT_BOTTLE_5
+        true,  // SLOT_BOTTLE_6
     },
 };
 
@@ -343,7 +450,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
             cursorY = 0;
 
             while (true) {
-                if (gSaveContext.save.inventory.items[cursorPoint] != 0xFF) {
+                if (gSaveContext.save.inventory.items[cursorPoint] != ITEM_NONE) {
                     pauseCtx->cursorPoint[PAUSE_ITEM] = cursorPoint;
                     pauseCtx->cursorX[PAUSE_ITEM] = cursorX;
                     pauseCtx->cursorY[PAUSE_ITEM] = cursorY;
@@ -533,5 +640,287 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
 
 s16 sCButtonPosX[] = { 660, 900, 1140 };
 s16 sCButtonPosY[] = { 1100, 920, 1100 };
-s32 D_8082B494 = 0;
+#ifdef NON_MATCHING
+void KaleidoScope_UpdateItemEquip(PlayState* play) {
+    static s16 D_8082B494 = 0;
+    PauseContext* pauseCtx = &play->pauseCtx;
+    Vtx* bowItemVtx;
+    u16 offsetX;
+    u16 offsetY;
+
+    if (sEquipState == 0) {
+        pauseCtx->equipAnimAlpha += 14;
+        if (pauseCtx->equipAnimAlpha > 255) {
+            pauseCtx->equipAnimAlpha = 254;
+            sEquipState++;
+        }
+        sEquipAnimTimer = 5;
+        return;
+    }
+
+    if (sEquipState == 2) {
+        D_8082B494--;
+
+        if (D_8082B494 == 0) {
+            pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
+            pauseCtx->equipTargetSlot = SLOT_BOW;
+            sEquipMoveTimer = 6;
+            pauseCtx->unk_2BA = 320;
+            pauseCtx->unk_2BC = 40;
+            sEquipState++;
+            play_sound(NA_SE_SY_SYNTH_MAGIC_ARROW);
+        }
+        return;
+    }
+
+    if (sEquipState == 1) {
+        bowItemVtx = &pauseCtx->itemVtx[4];
+        offsetX = ABS_ALT(pauseCtx->equipAnimX - bowItemVtx->v.ob[0] * 10) / sEquipMoveTimer;
+        offsetY = ABS_ALT(pauseCtx->equipAnimY - bowItemVtx->v.ob[1] * 10) / sEquipMoveTimer;
+    } else {
+        offsetX = ABS_ALT(pauseCtx->equipAnimX - sCButtonPosX[pauseCtx->equipTargetCBtn]) / sEquipMoveTimer;
+        offsetY = ABS_ALT(pauseCtx->equipAnimY - sCButtonPosY[pauseCtx->equipTargetCBtn]) / sEquipMoveTimer;
+    }
+
+    if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipAnimAlpha < 254)) {
+        pauseCtx->equipAnimAlpha += 14;
+        if (pauseCtx->equipAnimAlpha > 255) {
+            pauseCtx->equipAnimAlpha = 254;
+        }
+        sEquipAnimTimer = 5;
+        return;
+    }
+
+    if (sEquipAnimTimer == 0) {
+        pauseCtx->unk_2BA -= pauseCtx->unk_2BC / sEquipMoveTimer;
+        pauseCtx->unk_2BC -= pauseCtx->unk_2BC / sEquipMoveTimer;
+
+        if (sEquipState == 1) {
+            if (pauseCtx->equipAnimX >= (pauseCtx->itemVtx[4].v.ob[0] * 10)) {
+                pauseCtx->equipAnimX -= offsetX;
+            } else {
+                pauseCtx->equipAnimX += offsetX;
+            }
+
+            if (pauseCtx->equipAnimY >= (pauseCtx->itemVtx[4].v.ob[1] * 10)) {
+                pauseCtx->equipAnimY -= offsetY;
+            } else {
+                pauseCtx->equipAnimY += offsetY;
+            }
+        } else {
+            if (pauseCtx->equipAnimX >= sCButtonPosX[pauseCtx->equipTargetCBtn]) {
+                pauseCtx->equipAnimX -= offsetX;
+            } else {
+                pauseCtx->equipAnimX += offsetX;
+            }
+
+            if (pauseCtx->equipAnimY >= sCButtonPosY[pauseCtx->equipTargetCBtn]) {
+                pauseCtx->equipAnimY -= offsetY;
+            } else {
+                pauseCtx->equipAnimY += offsetY;
+            }
+        }
+
+        sEquipMoveTimer--;
+
+        if (sEquipMoveTimer == 0) {
+            if (sEquipState == 1) {
+                sEquipState++;
+                D_8082B494 = 4;
+                return;
+            }
+
+            if (pauseCtx->equipTargetCBtn == 0) {
+                if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN)) {
+                    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) != ITEM_NONE) {
+                        if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8) &&
+                            ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) == ITEM_BOW) ||
+                             ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) >= ITEM_BOW_ARROW_FIRE) &&
+                              (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) <= ITEM_BOW_ARROW_LIGHT)))) {
+                            pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
+                            pauseCtx->equipTargetSlot = SLOT_BOW;
+                        } else {
+                            BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT);
+                            C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN) = C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT);
+                            Interface_LoadItemIcon(play, EQUIP_SLOT_C_DOWN);
+                        }
+                    } else {
+                        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = ITEM_NONE;
+                        C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN) = SLOT_NONE;
+                    }
+                } else if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_RIGHT)) {
+                    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) != ITEM_NONE) {
+                        if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8) &&
+                            ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) == ITEM_BOW) ||
+                             ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) >= ITEM_BOW_ARROW_FIRE) &&
+                              (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) <= ITEM_BOW_ARROW_LIGHT)))) {
+                            pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
+                            pauseCtx->equipTargetSlot = SLOT_BOW;
+                        } else {
+                            BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) = BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT);
+                            C_SLOT_EQUIP(0, EQUIP_SLOT_C_RIGHT) = C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT);
+                            Interface_LoadItemIcon(play, EQUIP_SLOT_C_RIGHT);
+                        }
+                    } else {
+                        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) = ITEM_NONE;
+                        C_SLOT_EQUIP(0, EQUIP_SLOT_C_RIGHT) = SLOT_NONE;
+                    }
+                }
+
+                if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8)) {
+                    if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) == ITEM_BOW) ||
+                        ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) >= ITEM_BOW_ARROW_FIRE) &&
+                         (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) <= ITEM_BOW_ARROW_LIGHT))) {
+                        pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
+                        pauseCtx->equipTargetSlot = SLOT_BOW;
+                    }
+                } else if (pauseCtx->equipTargetItem == ITEM_BOW) {
+                    if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) >= ITEM_BOW_ARROW_FIRE) &&
+                        (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) <= ITEM_BOW_ARROW_LIGHT)) {
+                        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT);
+                        C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN) = C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT);
+                        Interface_LoadItemIcon(play, EQUIP_SLOT_C_DOWN);
+                    } else if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) >= ITEM_BOW_ARROW_FIRE) &&
+                               (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) <= ITEM_BOW_ARROW_LIGHT)) {
+                        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) = BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT);
+                        C_SLOT_EQUIP(0, EQUIP_SLOT_C_RIGHT) = C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT);
+                        Interface_LoadItemIcon(play, EQUIP_SLOT_C_RIGHT);
+                    }
+                }
+
+                BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) = pauseCtx->equipTargetItem;
+                C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT) = pauseCtx->equipTargetSlot;
+                Interface_LoadItemIconImpl(play, EQUIP_SLOT_C_LEFT);
+            } else if (pauseCtx->equipTargetCBtn == 1) {
+                if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT)) {
+                    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) != ITEM_NONE) {
+                        if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8) &&
+                            ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) == ITEM_BOW) ||
+                             ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) >= ITEM_BOW_ARROW_FIRE) &&
+                              (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) <= ITEM_BOW_ARROW_LIGHT)))) {
+                            pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
+                            pauseCtx->equipTargetSlot = SLOT_BOW;
+                        } else {
+                            BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) = BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN);
+                            C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT) = C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN);
+                            Interface_LoadItemIcon(play, EQUIP_SLOT_C_LEFT);
+                        }
+                    } else {
+                        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) = ITEM_NONE;
+                        C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT) = SLOT_NONE;
+                    }
+                } else if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_RIGHT)) {
+                    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) != ITEM_NONE) {
+                        if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8) &&
+                            ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) == ITEM_BOW) ||
+                             ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) >= ITEM_BOW_ARROW_FIRE) &&
+                              (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) <= ITEM_BOW_ARROW_LIGHT)))) {
+                            pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
+                            pauseCtx->equipTargetSlot = SLOT_BOW;
+                        } else {
+                            BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) = BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN);
+                            C_SLOT_EQUIP(0, EQUIP_SLOT_C_RIGHT) = C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN);
+                            Interface_LoadItemIcon(play, EQUIP_SLOT_C_RIGHT);
+                        }
+                    } else {
+                        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) = ITEM_NONE;
+                        C_SLOT_EQUIP(0, EQUIP_SLOT_C_RIGHT) = SLOT_NONE;
+                    }
+                }
+
+                if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8)) {
+                    if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) == ITEM_BOW) ||
+                        ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) >= ITEM_BOW_ARROW_FIRE) &&
+                         (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) <= ITEM_BOW_ARROW_LIGHT))) {
+                        pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
+                        pauseCtx->equipTargetSlot = SLOT_BOW;
+                    }
+                } else if (pauseCtx->equipTargetItem == ITEM_BOW) {
+                    if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) >= ITEM_BOW_ARROW_FIRE) &&
+                        (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) <= ITEM_BOW_ARROW_LIGHT)) {
+                        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) = BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN);
+                        Interface_LoadItemIcon(play, EQUIP_SLOT_C_LEFT);
+                    } else if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) >= ITEM_BOW_ARROW_FIRE) &&
+                               (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) <= ITEM_BOW_ARROW_LIGHT)) {
+                        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) = BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN);
+                        Interface_LoadItemIcon(play, EQUIP_SLOT_C_RIGHT);
+                    }
+                }
+                BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = pauseCtx->equipTargetItem;
+                C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN) = pauseCtx->equipTargetSlot;
+                Interface_LoadItemIconImpl(play, EQUIP_SLOT_C_DOWN);
+            } else {
+                if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT)) {
+                    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) != ITEM_NONE) {
+                        if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8) &&
+                            ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) == ITEM_BOW) ||
+                             ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) >= ITEM_BOW_ARROW_FIRE) &&
+                              (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) <= ITEM_BOW_ARROW_LIGHT)))) {
+                            pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
+                            pauseCtx->equipTargetSlot = SLOT_BOW;
+                        } else {
+                            BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) = BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT);
+                            C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT) = C_SLOT_EQUIP(0, EQUIP_SLOT_C_RIGHT);
+                            Interface_LoadItemIcon(play, EQUIP_SLOT_C_LEFT);
+                        }
+                    } else {
+                        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) = ITEM_NONE;
+                        C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT) = SLOT_NONE;
+                    }
+                } else if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN)) {
+                    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) != ITEM_NONE) {
+                        if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8) &&
+                            ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) == ITEM_BOW) ||
+                             ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) >= ITEM_BOW_ARROW_FIRE) &&
+                              (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) <= ITEM_BOW_ARROW_LIGHT)))) {
+                            pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
+                            pauseCtx->equipTargetSlot = SLOT_BOW;
+                        } else {
+                            BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT);
+                            C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN) = C_SLOT_EQUIP(0, EQUIP_SLOT_C_RIGHT);
+                            Interface_LoadItemIcon(play, EQUIP_SLOT_C_DOWN);
+                        }
+                    } else {
+                        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = ITEM_NONE;
+                        C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN) = SLOT_NONE;
+                    }
+                }
+
+                if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8)) {
+                    if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) == ITEM_BOW) ||
+                        ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) >= ITEM_BOW_ARROW_FIRE) &&
+                         (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) <= ITEM_BOW_ARROW_LIGHT))) {
+                        pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
+                        pauseCtx->equipTargetSlot = SLOT_BOW;
+                    }
+                } else if (pauseCtx->equipTargetItem == ITEM_BOW) {
+                    if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) >= ITEM_BOW_ARROW_FIRE) &&
+                        (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) <= ITEM_BOW_ARROW_LIGHT)) {
+                        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) = BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT);
+                        Interface_LoadItemIcon(play, EQUIP_SLOT_C_LEFT);
+                    } else if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) >= ITEM_BOW_ARROW_FIRE) &&
+                               (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) <= ITEM_BOW_ARROW_LIGHT)) {
+                        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT);
+                        Interface_LoadItemIcon(play, EQUIP_SLOT_C_DOWN);
+                    }
+                }
+                BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) = pauseCtx->equipTargetItem;
+                C_SLOT_EQUIP(0, EQUIP_SLOT_C_RIGHT) = pauseCtx->equipTargetSlot;
+                Interface_LoadItemIconImpl(play, EQUIP_SLOT_C_RIGHT);
+            }
+            pauseCtx->unk_200 = 0;
+            sEquipMoveTimer = 10;
+            pauseCtx->unk_2BA = 320;
+            pauseCtx->unk_2BC = 40;
+        }
+    } else {
+        sEquipAnimTimer--;
+        if (sEquipAnimTimer == 0) {
+            pauseCtx->equipAnimAlpha = 255;
+        }
+    }
+}
+#else
+s16 D_8082B494 = 0;
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_UpdateItemEquip.s")
+#endif
