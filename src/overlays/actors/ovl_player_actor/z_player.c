@@ -764,14 +764,77 @@ void func_8082DF2C(PlayState* play) {
     }
 }
 
-u8 D_8085B9F0[0x18] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+u8 D_8085B9F0[PLAYER_LIMB_MAX] = {
+    false, // PLAYER_LIMB_NONE
+    false, // PLAYER_LIMB_ROOT
+    false, // PLAYER_LIMB_WAIST
+    false, // PLAYER_LIMB_LOWER_ROOT
+    false, // PLAYER_LIMB_R_THIGH
+    false, // PLAYER_LIMB_R_SHIN
+    false, // PLAYER_LIMB_R_FOOT
+    false, // PLAYER_LIMB_L_THIGH
+    false, // PLAYER_LIMB_L_SHIN
+    false, // PLAYER_LIMB_L_FOOT
+    true,  // PLAYER_LIMB_UPPER_ROOT
+    true,  // PLAYER_LIMB_HEAD
+    true,  // PLAYER_LIMB_HAT
+    true,  // PLAYER_LIMB_COLLAR
+    true,  // PLAYER_LIMB_L_SHOULDER
+    true,  // PLAYER_LIMB_L_FOREARM
+    true,  // PLAYER_LIMB_L_HAND
+    true,  // PLAYER_LIMB_R_SHOULDER
+    true,  // PLAYER_LIMB_R_FOREARM
+    true,  // PLAYER_LIMB_R_HAND
+    true,  // PLAYER_LIMB_SHEATH
+    true,  // PLAYER_LIMB_TORSO
 };
-u8 D_8085BA08[0x18] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+u8 D_8085BA08[PLAYER_LIMB_MAX] = {
+    false, // PLAYER_LIMB_NONE
+    false, // PLAYER_LIMB_ROOT
+    false, // PLAYER_LIMB_WAIST
+    false, // PLAYER_LIMB_LOWER_ROOT
+    false, // PLAYER_LIMB_R_THIGH
+    false, // PLAYER_LIMB_R_SHIN
+    false, // PLAYER_LIMB_R_FOOT
+    false, // PLAYER_LIMB_L_THIGH
+    false, // PLAYER_LIMB_L_SHIN
+    false, // PLAYER_LIMB_L_FOOT
+    false, // PLAYER_LIMB_UPPER_ROOT
+    false, // PLAYER_LIMB_HEAD
+    false, // PLAYER_LIMB_HAT
+    false, // PLAYER_LIMB_COLLAR
+    true,  // PLAYER_LIMB_L_SHOULDER
+    true,  // PLAYER_LIMB_L_FOREARM
+    true,  // PLAYER_LIMB_L_HAND
+    false, // PLAYER_LIMB_R_SHOULDER
+    false, // PLAYER_LIMB_R_FOREARM
+    false, // PLAYER_LIMB_R_HAND
+    false, // PLAYER_LIMB_SHEATH
+    false, // PLAYER_LIMB_TORSO
 };
-u8 D_8085BA20[0x18] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
+u8 D_8085BA20[PLAYER_LIMB_MAX] = {
+    false, // PLAYER_LIMB_NONE
+    false, // PLAYER_LIMB_ROOT
+    false, // PLAYER_LIMB_WAIST
+    false, // PLAYER_LIMB_LOWER_ROOT
+    false, // PLAYER_LIMB_R_THIGH
+    false, // PLAYER_LIMB_R_SHIN
+    false, // PLAYER_LIMB_R_FOOT
+    false, // PLAYER_LIMB_L_THIGH
+    false, // PLAYER_LIMB_L_SHIN
+    false, // PLAYER_LIMB_L_FOOT
+    false, // PLAYER_LIMB_UPPER_ROOT
+    false, // PLAYER_LIMB_HEAD
+    false, // PLAYER_LIMB_HAT
+    false, // PLAYER_LIMB_COLLAR
+    false, // PLAYER_LIMB_L_SHOULDER
+    false, // PLAYER_LIMB_L_FOREARM
+    false, // PLAYER_LIMB_L_HAND
+    true,  // PLAYER_LIMB_R_SHOULDER
+    true,  // PLAYER_LIMB_R_FOREARM
+    true,  // PLAYER_LIMB_R_HAND
+    false, // PLAYER_LIMB_SHEATH
+    false, // PLAYER_LIMB_TORSO
 };
 
 void Player_RequestRumble(PlayState* play, Player* this, s32 sourceIntensity, s32 decayTimer, s32 decayStep,
@@ -5021,8 +5084,12 @@ void func_808345C8(void) {
     }
 }
 
-// u8[]?
-s32 D_8085D0F4 = 0x20101;
+u8 D_8085D0F4[] = {
+    0,
+    2,
+    1,
+    1,
+};
 
 #if 0
 s32 func_80834600(Player* this, PlayState* play) {
@@ -10188,7 +10255,7 @@ void Player_SetDoAction(PlayState* play, Player* this) {
     }
 
     // Set A do action
-    if ((Message_GetState(&play->msgCtx) == 0) ||
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) ||
         ((play->msgCtx.currentTextId >= 0x100) && (play->msgCtx.currentTextId <= 0x200)) ||
         ((play->msgCtx.currentTextId >= 0x1BB2) && (play->msgCtx.currentTextId < 0x1BB7))) {
         Actor* heldActor = this->heldActor;                   // sp34
@@ -11573,9 +11640,9 @@ struct_80124618* D_8085D568[3] = {
 };
 
 Gfx* D_8085D574[] = {
-    (Gfx*)0x06009C48,
-    (Gfx*)0x06009AB8,
-    (Gfx*)0x06009DB8,
+    object_link_nuts_DL_009C48,
+    object_link_nuts_DL_009AB8,
+    object_link_nuts_DL_009DB8,
 };
 
 Color_RGB8 D_8085D580 = { 255, 255, 255 };

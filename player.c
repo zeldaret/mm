@@ -31,7 +31,7 @@ extern LinkAnimationHeader D_0400D500;
 extern LinkAnimationHeader D_0400D520;
 extern LinkAnimationHeader D_0400D5A8;
 extern LinkAnimationHeader D_0400D5B0;
-extern LinkAnimationHeader D_0400D638;
+extern ? D_0400D638;
 extern LinkAnimationHeader D_0400D660;
 extern LinkAnimationHeader D_0400D698;
 extern ? D_0400D728;
@@ -163,8 +163,11 @@ extern ? D_06014684;
 extern FlexSkeletonHeader D_060177B8;
 extern AnimationHeader D_060178D0;
 static Vec3f D_8085D10C = { 20.0f, 0.0f, 20.0f };
+static Vec3f D_8085D130 = { 0.0f, 0.0f, 0.0f };
 static Vec3f D_8085D27C = { 0.0f, 0.0f, 0.0f };
 static Vec3f D_8085D288 = { 0.0f, 0.0f, 0.0f };
+static ? D_8085D34C;                                /* unable to generate initializer */
+static ? D_8085D354;                                /* unable to generate initializer */
 static Vec3f D_8085D358 = { 0.0f, 0.0f, 0.0f };
 static Vec3f D_8085D62C = { 0.0f, 0.0f, 0.0f };
 static Vec3f D_8085D638 = { 0.0f, 0.0f, 0.0f };
@@ -183,9 +186,9 @@ static s32 D_8085D93C = 0xFFFF0000;
 static Vec3f D_8085D940 = { 0.0f, 0.3f, 0.0f };
 static Vec3f D_8085D94C = { 0.0f, -0.025f, 0.0f };
 static ? ovl_player_actor_Reloc;                    /* unable to generate initializer; const */
-u8 D_8085B9F0[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 };
-u8 D_8085BA08[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 };
-u8 D_8085BA20[0x18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0 };
+u8 D_8085B9F0[0x16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+u8 D_8085BA08[0x16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0 };
+u8 D_8085BA20[0x16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0 };
 PlayerAgeProperties D_8085BA38[5] = {
     {
         84.0f,
@@ -468,271 +471,359 @@ PlayerAgeProperties D_8085BA38[5] = {
         { (LinkAnimationHeader* )0x0400D1F0, (LinkAnimationHeader* )0x0400D1E8 },
     },
 };
-LinkAnimationHeader* D_8085BE84[0x108] = {
-    (LinkAnimationHeader* )0x0400DF28,
-    (LinkAnimationHeader* )0x0400DF20,
-    (LinkAnimationHeader* )0x0400DF20,
-    (LinkAnimationHeader* )0x0400D988,
-    (LinkAnimationHeader* )0x0400DF28,
-    (LinkAnimationHeader* )0x0400DF28,
-    (LinkAnimationHeader* )0x0400DF70,
-    (LinkAnimationHeader* )0x0400DF48,
-    (LinkAnimationHeader* )0x0400DF48,
-    (LinkAnimationHeader* )0x0400D9A0,
-    (LinkAnimationHeader* )0x0400DF70,
-    (LinkAnimationHeader* )0x0400DF70,
-    (LinkAnimationHeader* )0x0400DE40,
-    (LinkAnimationHeader* )0x0400D918,
-    (LinkAnimationHeader* )0x0400DE38,
-    (LinkAnimationHeader* )0x0400D920,
-    (LinkAnimationHeader* )0x0400DE40,
-    (LinkAnimationHeader* )0x0400DE40,
-    (LinkAnimationHeader* )0x0400DBB8,
-    (LinkAnimationHeader* )0x0400D808,
-    (LinkAnimationHeader* )0x0400DBB8,
-    (LinkAnimationHeader* )0x0400D810,
-    (LinkAnimationHeader* )0x0400DBB8,
-    (LinkAnimationHeader* )0x0400DBB8,
-    (LinkAnimationHeader* )0x0400DF08,
-    (LinkAnimationHeader* )0x0400D468,
-    (LinkAnimationHeader* )0x0400D468,
-    (LinkAnimationHeader* )0x0400D970,
-    (LinkAnimationHeader* )0x0400DF08,
-    (LinkAnimationHeader* )0x0400DF08,
-    (LinkAnimationHeader* )0x0400DF18,
-    (LinkAnimationHeader* )0x0400D480,
-    (LinkAnimationHeader* )0x0400D480,
-    (LinkAnimationHeader* )0x0400D980,
-    (LinkAnimationHeader* )0x0400DF18,
-    (LinkAnimationHeader* )0x0400DF18,
-    (LinkAnimationHeader* )0x0400D960,
-    (LinkAnimationHeader* )0x0400DEE0,
-    (LinkAnimationHeader* )0x0400DEE0,
-    (LinkAnimationHeader* )0x0400D960,
-    (LinkAnimationHeader* )0x0400D960,
-    (LinkAnimationHeader* )0x0400D960,
-    (LinkAnimationHeader* )0x0400DD98,
-    (LinkAnimationHeader* )0x0400D860,
-    (LinkAnimationHeader* )0x0400D860,
-    (LinkAnimationHeader* )0x0400DD98,
-    (LinkAnimationHeader* )0x0400DD98,
-    (LinkAnimationHeader* )0x0400DD98,
-    (LinkAnimationHeader* )0x0400D578,
-    (LinkAnimationHeader* )0x0400D570,
-    (LinkAnimationHeader* )0x0400D570,
-    (LinkAnimationHeader* )0x0400D578,
-    (LinkAnimationHeader* )0x0400D578,
-    (LinkAnimationHeader* )0x0400D578,
-    (LinkAnimationHeader* )0x0400D140,
-    (LinkAnimationHeader* )0x0400D140,
-    (LinkAnimationHeader* )0x0400D140,
-    (LinkAnimationHeader* )0x0400D140,
-    (LinkAnimationHeader* )0x0400D140,
-    (LinkAnimationHeader* )0x0400D140,
-    (LinkAnimationHeader* )0x0400D588,
-    (LinkAnimationHeader* )0x0400D580,
-    (LinkAnimationHeader* )0x0400D580,
-    (LinkAnimationHeader* )0x0400D588,
-    (LinkAnimationHeader* )0x0400D588,
-    (LinkAnimationHeader* )0x0400D588,
-    (LinkAnimationHeader* )0x0400D148,
-    (LinkAnimationHeader* )0x0400D148,
-    (LinkAnimationHeader* )0x0400D148,
-    (LinkAnimationHeader* )0x0400D148,
-    (LinkAnimationHeader* )0x0400D148,
-    (LinkAnimationHeader* )0x0400D148,
-    (LinkAnimationHeader* )0x0400DB28,
-    (LinkAnimationHeader* )0x0400DB20,
-    (LinkAnimationHeader* )0x0400DB20,
-    (LinkAnimationHeader* )0x0400DB28,
-    (LinkAnimationHeader* )0x0400DB28,
-    (LinkAnimationHeader* )0x0400DB28,
-    (LinkAnimationHeader* )0x0400DD18,
-    (LinkAnimationHeader* )0x0400DD10,
-    (LinkAnimationHeader* )0x0400DD10,
-    (LinkAnimationHeader* )0x0400DD18,
-    (LinkAnimationHeader* )0x0400DD18,
-    (LinkAnimationHeader* )0x0400DD18,
-    (LinkAnimationHeader* )0x0400DE70,
-    (LinkAnimationHeader* )0x0400DE68,
-    (LinkAnimationHeader* )0x0400DE68,
-    (LinkAnimationHeader* )0x0400DE70,
-    (LinkAnimationHeader* )0x0400DE70,
-    (LinkAnimationHeader* )0x0400DE70,
-    (LinkAnimationHeader* )0x0400DD28,
-    (LinkAnimationHeader* )0x0400DD20,
-    (LinkAnimationHeader* )0x0400DD20,
-    (LinkAnimationHeader* )0x0400D858,
-    (LinkAnimationHeader* )0x0400DD28,
-    (LinkAnimationHeader* )0x0400DD28,
-    (LinkAnimationHeader* )0x0400DCC0,
-    (LinkAnimationHeader* )0x0400DCB8,
-    (LinkAnimationHeader* )0x0400DCB8,
-    (LinkAnimationHeader* )0x0400DCC8,
-    (LinkAnimationHeader* )0x0400DCC0,
-    (LinkAnimationHeader* )0x0400DCC0,
-    (LinkAnimationHeader* )0x0400DF58,
-    (LinkAnimationHeader* )0x0400DF50,
-    (LinkAnimationHeader* )0x0400DF50,
-    (LinkAnimationHeader* )0x0400D990,
-    (LinkAnimationHeader* )0x0400DF58,
-    (LinkAnimationHeader* )0x0400DF58,
-    (LinkAnimationHeader* )0x0400DF68,
-    (LinkAnimationHeader* )0x0400DF60,
-    (LinkAnimationHeader* )0x0400DF60,
-    (LinkAnimationHeader* )0x0400D998,
-    (LinkAnimationHeader* )0x0400DF68,
-    (LinkAnimationHeader* )0x0400DF68,
-    (LinkAnimationHeader* )0x0400DBD8,
-    (LinkAnimationHeader* )0x0400DBC0,
-    (LinkAnimationHeader* )0x0400DBC0,
-    (LinkAnimationHeader* )0x0400DBD8,
-    (LinkAnimationHeader* )0x0400D510,
-    (LinkAnimationHeader* )0x0400DBD8,
-    (LinkAnimationHeader* )0x0400DBF8,
-    (LinkAnimationHeader* )0x0400DBF0,
-    (LinkAnimationHeader* )0x0400DBF0,
-    (LinkAnimationHeader* )0x0400DBF8,
-    (LinkAnimationHeader* )0x0400D518,
-    (LinkAnimationHeader* )0x0400DBF8,
-    (LinkAnimationHeader* )0x0400DBD0,
-    (LinkAnimationHeader* )0x0400DBC8,
-    (LinkAnimationHeader* )0x0400DBC8,
-    (LinkAnimationHeader* )0x0400DBD0,
-    (LinkAnimationHeader* )0x0400DBD0,
-    (LinkAnimationHeader* )0x0400DBD0,
-    (LinkAnimationHeader* )0x0400DE90,
-    (LinkAnimationHeader* )0x0400DE88,
-    (LinkAnimationHeader* )0x0400DE88,
-    (LinkAnimationHeader* )0x0400D938,
-    (LinkAnimationHeader* )0x0400DE90,
-    (LinkAnimationHeader* )0x0400DE90,
-    (LinkAnimationHeader* )0x0400DE78,
-    (LinkAnimationHeader* )0x0400D448,
-    (LinkAnimationHeader* )0x0400D448,
-    (LinkAnimationHeader* )0x0400D928,
-    (LinkAnimationHeader* )0x0400DE78,
-    (LinkAnimationHeader* )0x0400DE78,
-    (LinkAnimationHeader* )0x0400DE80,
-    (LinkAnimationHeader* )0x0400D450,
-    (LinkAnimationHeader* )0x0400D450,
-    (LinkAnimationHeader* )0x0400D930,
-    (LinkAnimationHeader* )0x0400DE80,
-    (LinkAnimationHeader* )0x0400DE80,
-    (LinkAnimationHeader* )0x0400DA80,
-    (LinkAnimationHeader* )0x0400DA78,
-    (LinkAnimationHeader* )0x0400DA78,
-    (LinkAnimationHeader* )0x0400DA80,
-    (LinkAnimationHeader* )0x0400DA80,
-    (LinkAnimationHeader* )0x0400DA80,
-    (LinkAnimationHeader* )0x0400DF00,
-    (LinkAnimationHeader* )0x0400DF00,
-    (LinkAnimationHeader* )0x0400DF00,
-    (LinkAnimationHeader* )0x0400D968,
-    (LinkAnimationHeader* )0x0400D968,
-    (LinkAnimationHeader* )0x0400D968,
-    (LinkAnimationHeader* )0x0400DF10,
-    (LinkAnimationHeader* )0x0400DF10,
-    (LinkAnimationHeader* )0x0400DF10,
-    (LinkAnimationHeader* )0x0400D978,
-    (LinkAnimationHeader* )0x0400D978,
-    (LinkAnimationHeader* )0x0400D978,
-    (LinkAnimationHeader* )0x0400DEB8,
-    (LinkAnimationHeader* )0x0400DEB0,
-    (LinkAnimationHeader* )0x0400DEB0,
-    (LinkAnimationHeader* )0x0400DEB8,
-    (LinkAnimationHeader* )0x0400DEB8,
-    (LinkAnimationHeader* )0x0400DEB8,
-    (LinkAnimationHeader* )0x0400DE20,
-    (LinkAnimationHeader* )0x0400DE18,
-    (LinkAnimationHeader* )0x0400DE18,
-    (LinkAnimationHeader* )0x0400DE20,
-    (LinkAnimationHeader* )0x0400DE20,
-    (LinkAnimationHeader* )0x0400DE20,
-    (LinkAnimationHeader* )0x0400DB08,
-    (LinkAnimationHeader* )0x0400DB08,
-    (LinkAnimationHeader* )0x0400DB08,
-    (LinkAnimationHeader* )0x0400DB08,
-    (LinkAnimationHeader* )0x0400DB08,
-    (LinkAnimationHeader* )0x0400DB08,
-    (LinkAnimationHeader* )0x0400DB50,
-    (LinkAnimationHeader* )0x0400DB38,
-    (LinkAnimationHeader* )0x0400DB38,
-    (LinkAnimationHeader* )0x0400DB50,
-    (LinkAnimationHeader* )0x0400DB50,
-    (LinkAnimationHeader* )0x0400DB50,
-    (LinkAnimationHeader* )0x0400DB60,
-    (LinkAnimationHeader* )0x0400DB58,
-    (LinkAnimationHeader* )0x0400DB58,
-    (LinkAnimationHeader* )0x0400DB60,
-    (LinkAnimationHeader* )0x0400DB60,
-    (LinkAnimationHeader* )0x0400DB60,
-    (LinkAnimationHeader* )0x0400DB48,
-    (LinkAnimationHeader* )0x0400DB40,
-    (LinkAnimationHeader* )0x0400DB40,
-    (LinkAnimationHeader* )0x0400DB48,
-    (LinkAnimationHeader* )0x0400DB48,
-    (LinkAnimationHeader* )0x0400DB48,
-    (LinkAnimationHeader* )0x0400DDD8,
-    (LinkAnimationHeader* )0x0400DDD0,
-    (LinkAnimationHeader* )0x0400DDD0,
-    (LinkAnimationHeader* )0x0400DDD8,
-    (LinkAnimationHeader* )0x0400DDD8,
-    (LinkAnimationHeader* )0x0400DDD8,
-    (LinkAnimationHeader* )0x0400DDE8,
-    (LinkAnimationHeader* )0x0400DDE0,
-    (LinkAnimationHeader* )0x0400DDE0,
-    (LinkAnimationHeader* )0x0400DDE8,
-    (LinkAnimationHeader* )0x0400DDE8,
-    (LinkAnimationHeader* )0x0400DDE8,
-    (LinkAnimationHeader* )0x0400DDC8,
-    (LinkAnimationHeader* )0x0400DDC0,
-    (LinkAnimationHeader* )0x0400DDC0,
-    (LinkAnimationHeader* )0x0400DDC8,
-    (LinkAnimationHeader* )0x0400DDC8,
-    (LinkAnimationHeader* )0x0400DDC8,
-    (LinkAnimationHeader* )0x0400DC40,
-    (LinkAnimationHeader* )0x0400DC38,
-    (LinkAnimationHeader* )0x0400DC38,
-    (LinkAnimationHeader* )0x0400DC40,
-    (LinkAnimationHeader* )0x0400DC40,
-    (LinkAnimationHeader* )0x0400DC40,
-    (LinkAnimationHeader* )0x0400DCE8,
-    (LinkAnimationHeader* )0x0400DCE0,
-    (LinkAnimationHeader* )0x0400DCE0,
-    (LinkAnimationHeader* )0x0400DCE8,
-    (LinkAnimationHeader* )0x0400DCE8,
-    (LinkAnimationHeader* )0x0400DCE8,
-    (LinkAnimationHeader* )0x0400DD08,
-    (LinkAnimationHeader* )0x0400DD00,
-    (LinkAnimationHeader* )0x0400DD00,
-    (LinkAnimationHeader* )0x0400DD08,
-    (LinkAnimationHeader* )0x0400DD08,
-    (LinkAnimationHeader* )0x0400DD08,
-    (LinkAnimationHeader* )0x0400DCF8,
-    (LinkAnimationHeader* )0x0400DCF0,
-    (LinkAnimationHeader* )0x0400DCF0,
-    (LinkAnimationHeader* )0x0400DCF8,
-    (LinkAnimationHeader* )0x0400DCF8,
-    (LinkAnimationHeader* )0x0400DCF8,
-    (LinkAnimationHeader* )0x0400DC10,
-    (LinkAnimationHeader* )0x0400DC08,
-    (LinkAnimationHeader* )0x0400DC08,
-    (LinkAnimationHeader* )0x0400DC18,
-    (LinkAnimationHeader* )0x0400DC10,
-    (LinkAnimationHeader* )0x0400DC10,
-    (LinkAnimationHeader* )0x0400DED0,
-    (LinkAnimationHeader* )0x0400DEC8,
-    (LinkAnimationHeader* )0x0400DEC8,
-    (LinkAnimationHeader* )0x0400DED8,
-    (LinkAnimationHeader* )0x0400DED0,
-    (LinkAnimationHeader* )0x0400DED0,
-    (LinkAnimationHeader* )0x0400E450,
-    (LinkAnimationHeader* )0x0400E108,
-    (LinkAnimationHeader* )0x0400E108,
-    (LinkAnimationHeader* )0x0400E450,
-    (LinkAnimationHeader* )0x0400E450,
-    (LinkAnimationHeader* )0x0400E450,
+LinkAnimationHeader* D_8085BE84[0x2C][6] = {
+    {
+        (LinkAnimationHeader* )0x0400DF28,
+        (LinkAnimationHeader* )0x0400DF20,
+        (LinkAnimationHeader* )0x0400DF20,
+        (LinkAnimationHeader* )0x0400D988,
+        (LinkAnimationHeader* )0x0400DF28,
+        (LinkAnimationHeader* )0x0400DF28,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DF70,
+        (LinkAnimationHeader* )0x0400DF48,
+        (LinkAnimationHeader* )0x0400DF48,
+        (LinkAnimationHeader* )0x0400D9A0,
+        (LinkAnimationHeader* )0x0400DF70,
+        (LinkAnimationHeader* )0x0400DF70,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DE40,
+        (LinkAnimationHeader* )0x0400D918,
+        (LinkAnimationHeader* )0x0400DE38,
+        (LinkAnimationHeader* )0x0400D920,
+        (LinkAnimationHeader* )0x0400DE40,
+        (LinkAnimationHeader* )0x0400DE40,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DBB8,
+        (LinkAnimationHeader* )0x0400D808,
+        (LinkAnimationHeader* )0x0400DBB8,
+        (LinkAnimationHeader* )0x0400D810,
+        (LinkAnimationHeader* )0x0400DBB8,
+        (LinkAnimationHeader* )0x0400DBB8,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DF08,
+        (LinkAnimationHeader* )0x0400D468,
+        (LinkAnimationHeader* )0x0400D468,
+        (LinkAnimationHeader* )0x0400D970,
+        (LinkAnimationHeader* )0x0400DF08,
+        (LinkAnimationHeader* )0x0400DF08,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DF18,
+        (LinkAnimationHeader* )0x0400D480,
+        (LinkAnimationHeader* )0x0400D480,
+        (LinkAnimationHeader* )0x0400D980,
+        (LinkAnimationHeader* )0x0400DF18,
+        (LinkAnimationHeader* )0x0400DF18,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D960,
+        (LinkAnimationHeader* )0x0400DEE0,
+        (LinkAnimationHeader* )0x0400DEE0,
+        (LinkAnimationHeader* )0x0400D960,
+        (LinkAnimationHeader* )0x0400D960,
+        (LinkAnimationHeader* )0x0400D960,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DD98,
+        (LinkAnimationHeader* )0x0400D860,
+        (LinkAnimationHeader* )0x0400D860,
+        (LinkAnimationHeader* )0x0400DD98,
+        (LinkAnimationHeader* )0x0400DD98,
+        (LinkAnimationHeader* )0x0400DD98,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D578,
+        (LinkAnimationHeader* )0x0400D570,
+        (LinkAnimationHeader* )0x0400D570,
+        (LinkAnimationHeader* )0x0400D578,
+        (LinkAnimationHeader* )0x0400D578,
+        (LinkAnimationHeader* )0x0400D578,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D140,
+        (LinkAnimationHeader* )0x0400D140,
+        (LinkAnimationHeader* )0x0400D140,
+        (LinkAnimationHeader* )0x0400D140,
+        (LinkAnimationHeader* )0x0400D140,
+        (LinkAnimationHeader* )0x0400D140,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D588,
+        (LinkAnimationHeader* )0x0400D580,
+        (LinkAnimationHeader* )0x0400D580,
+        (LinkAnimationHeader* )0x0400D588,
+        (LinkAnimationHeader* )0x0400D588,
+        (LinkAnimationHeader* )0x0400D588,
+    },
+    {
+        (LinkAnimationHeader* )0x0400D148,
+        (LinkAnimationHeader* )0x0400D148,
+        (LinkAnimationHeader* )0x0400D148,
+        (LinkAnimationHeader* )0x0400D148,
+        (LinkAnimationHeader* )0x0400D148,
+        (LinkAnimationHeader* )0x0400D148,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DB28,
+        (LinkAnimationHeader* )0x0400DB20,
+        (LinkAnimationHeader* )0x0400DB20,
+        (LinkAnimationHeader* )0x0400DB28,
+        (LinkAnimationHeader* )0x0400DB28,
+        (LinkAnimationHeader* )0x0400DB28,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DD18,
+        (LinkAnimationHeader* )0x0400DD10,
+        (LinkAnimationHeader* )0x0400DD10,
+        (LinkAnimationHeader* )0x0400DD18,
+        (LinkAnimationHeader* )0x0400DD18,
+        (LinkAnimationHeader* )0x0400DD18,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DE70,
+        (LinkAnimationHeader* )0x0400DE68,
+        (LinkAnimationHeader* )0x0400DE68,
+        (LinkAnimationHeader* )0x0400DE70,
+        (LinkAnimationHeader* )0x0400DE70,
+        (LinkAnimationHeader* )0x0400DE70,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DD28,
+        (LinkAnimationHeader* )0x0400DD20,
+        (LinkAnimationHeader* )0x0400DD20,
+        (LinkAnimationHeader* )0x0400D858,
+        (LinkAnimationHeader* )0x0400DD28,
+        (LinkAnimationHeader* )0x0400DD28,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DCC0,
+        (LinkAnimationHeader* )0x0400DCB8,
+        (LinkAnimationHeader* )0x0400DCB8,
+        (LinkAnimationHeader* )0x0400DCC8,
+        (LinkAnimationHeader* )0x0400DCC0,
+        (LinkAnimationHeader* )0x0400DCC0,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DF58,
+        (LinkAnimationHeader* )0x0400DF50,
+        (LinkAnimationHeader* )0x0400DF50,
+        (LinkAnimationHeader* )0x0400D990,
+        (LinkAnimationHeader* )0x0400DF58,
+        (LinkAnimationHeader* )0x0400DF58,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DF68,
+        (LinkAnimationHeader* )0x0400DF60,
+        (LinkAnimationHeader* )0x0400DF60,
+        (LinkAnimationHeader* )0x0400D998,
+        (LinkAnimationHeader* )0x0400DF68,
+        (LinkAnimationHeader* )0x0400DF68,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DBD8,
+        (LinkAnimationHeader* )0x0400DBC0,
+        (LinkAnimationHeader* )0x0400DBC0,
+        (LinkAnimationHeader* )0x0400DBD8,
+        (LinkAnimationHeader* )0x0400D510,
+        (LinkAnimationHeader* )0x0400DBD8,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DBF8,
+        (LinkAnimationHeader* )0x0400DBF0,
+        (LinkAnimationHeader* )0x0400DBF0,
+        (LinkAnimationHeader* )0x0400DBF8,
+        (LinkAnimationHeader* )0x0400D518,
+        (LinkAnimationHeader* )0x0400DBF8,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DBD0,
+        (LinkAnimationHeader* )0x0400DBC8,
+        (LinkAnimationHeader* )0x0400DBC8,
+        (LinkAnimationHeader* )0x0400DBD0,
+        (LinkAnimationHeader* )0x0400DBD0,
+        (LinkAnimationHeader* )0x0400DBD0,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DE90,
+        (LinkAnimationHeader* )0x0400DE88,
+        (LinkAnimationHeader* )0x0400DE88,
+        (LinkAnimationHeader* )0x0400D938,
+        (LinkAnimationHeader* )0x0400DE90,
+        (LinkAnimationHeader* )0x0400DE90,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DE78,
+        (LinkAnimationHeader* )0x0400D448,
+        (LinkAnimationHeader* )0x0400D448,
+        (LinkAnimationHeader* )0x0400D928,
+        (LinkAnimationHeader* )0x0400DE78,
+        (LinkAnimationHeader* )0x0400DE78,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DE80,
+        (LinkAnimationHeader* )0x0400D450,
+        (LinkAnimationHeader* )0x0400D450,
+        (LinkAnimationHeader* )0x0400D930,
+        (LinkAnimationHeader* )0x0400DE80,
+        (LinkAnimationHeader* )0x0400DE80,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DA80,
+        (LinkAnimationHeader* )0x0400DA78,
+        (LinkAnimationHeader* )0x0400DA78,
+        (LinkAnimationHeader* )0x0400DA80,
+        (LinkAnimationHeader* )0x0400DA80,
+        (LinkAnimationHeader* )0x0400DA80,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DF00,
+        (LinkAnimationHeader* )0x0400DF00,
+        (LinkAnimationHeader* )0x0400DF00,
+        (LinkAnimationHeader* )0x0400D968,
+        (LinkAnimationHeader* )0x0400D968,
+        (LinkAnimationHeader* )0x0400D968,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DF10,
+        (LinkAnimationHeader* )0x0400DF10,
+        (LinkAnimationHeader* )0x0400DF10,
+        (LinkAnimationHeader* )0x0400D978,
+        (LinkAnimationHeader* )0x0400D978,
+        (LinkAnimationHeader* )0x0400D978,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DEB8,
+        (LinkAnimationHeader* )0x0400DEB0,
+        (LinkAnimationHeader* )0x0400DEB0,
+        (LinkAnimationHeader* )0x0400DEB8,
+        (LinkAnimationHeader* )0x0400DEB8,
+        (LinkAnimationHeader* )0x0400DEB8,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DE20,
+        (LinkAnimationHeader* )0x0400DE18,
+        (LinkAnimationHeader* )0x0400DE18,
+        (LinkAnimationHeader* )0x0400DE20,
+        (LinkAnimationHeader* )0x0400DE20,
+        (LinkAnimationHeader* )0x0400DE20,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DB08,
+        (LinkAnimationHeader* )0x0400DB08,
+        (LinkAnimationHeader* )0x0400DB08,
+        (LinkAnimationHeader* )0x0400DB08,
+        (LinkAnimationHeader* )0x0400DB08,
+        (LinkAnimationHeader* )0x0400DB08,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DB50,
+        (LinkAnimationHeader* )0x0400DB38,
+        (LinkAnimationHeader* )0x0400DB38,
+        (LinkAnimationHeader* )0x0400DB50,
+        (LinkAnimationHeader* )0x0400DB50,
+        (LinkAnimationHeader* )0x0400DB50,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DB60,
+        (LinkAnimationHeader* )0x0400DB58,
+        (LinkAnimationHeader* )0x0400DB58,
+        (LinkAnimationHeader* )0x0400DB60,
+        (LinkAnimationHeader* )0x0400DB60,
+        (LinkAnimationHeader* )0x0400DB60,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DB48,
+        (LinkAnimationHeader* )0x0400DB40,
+        (LinkAnimationHeader* )0x0400DB40,
+        (LinkAnimationHeader* )0x0400DB48,
+        (LinkAnimationHeader* )0x0400DB48,
+        (LinkAnimationHeader* )0x0400DB48,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DDD8,
+        (LinkAnimationHeader* )0x0400DDD0,
+        (LinkAnimationHeader* )0x0400DDD0,
+        (LinkAnimationHeader* )0x0400DDD8,
+        (LinkAnimationHeader* )0x0400DDD8,
+        (LinkAnimationHeader* )0x0400DDD8,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DDE8,
+        (LinkAnimationHeader* )0x0400DDE0,
+        (LinkAnimationHeader* )0x0400DDE0,
+        (LinkAnimationHeader* )0x0400DDE8,
+        (LinkAnimationHeader* )0x0400DDE8,
+        (LinkAnimationHeader* )0x0400DDE8,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DDC8,
+        (LinkAnimationHeader* )0x0400DDC0,
+        (LinkAnimationHeader* )0x0400DDC0,
+        (LinkAnimationHeader* )0x0400DDC8,
+        (LinkAnimationHeader* )0x0400DDC8,
+        (LinkAnimationHeader* )0x0400DDC8,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DC40,
+        (LinkAnimationHeader* )0x0400DC38,
+        (LinkAnimationHeader* )0x0400DC38,
+        (LinkAnimationHeader* )0x0400DC40,
+        (LinkAnimationHeader* )0x0400DC40,
+        (LinkAnimationHeader* )0x0400DC40,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DCE8,
+        (LinkAnimationHeader* )0x0400DCE0,
+        (LinkAnimationHeader* )0x0400DCE0,
+        (LinkAnimationHeader* )0x0400DCE8,
+        (LinkAnimationHeader* )0x0400DCE8,
+        (LinkAnimationHeader* )0x0400DCE8,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DD08,
+        (LinkAnimationHeader* )0x0400DD00,
+        (LinkAnimationHeader* )0x0400DD00,
+        (LinkAnimationHeader* )0x0400DD08,
+        (LinkAnimationHeader* )0x0400DD08,
+        (LinkAnimationHeader* )0x0400DD08,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DCF8,
+        (LinkAnimationHeader* )0x0400DCF0,
+        (LinkAnimationHeader* )0x0400DCF0,
+        (LinkAnimationHeader* )0x0400DCF8,
+        (LinkAnimationHeader* )0x0400DCF8,
+        (LinkAnimationHeader* )0x0400DCF8,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DC10,
+        (LinkAnimationHeader* )0x0400DC08,
+        (LinkAnimationHeader* )0x0400DC08,
+        (LinkAnimationHeader* )0x0400DC18,
+        (LinkAnimationHeader* )0x0400DC10,
+        (LinkAnimationHeader* )0x0400DC10,
+    },
+    {
+        (LinkAnimationHeader* )0x0400DED0,
+        (LinkAnimationHeader* )0x0400DEC8,
+        (LinkAnimationHeader* )0x0400DEC8,
+        (LinkAnimationHeader* )0x0400DED8,
+        (LinkAnimationHeader* )0x0400DED0,
+        (LinkAnimationHeader* )0x0400DED0,
+    },
+    {
+        (LinkAnimationHeader* )0x0400E450,
+        (LinkAnimationHeader* )0x0400E108,
+        (LinkAnimationHeader* )0x0400E108,
+        (LinkAnimationHeader* )0x0400E450,
+        (LinkAnimationHeader* )0x0400E450,
+        (LinkAnimationHeader* )0x0400E450,
+    },
 };
 struct_8085C2A4 D_8085C2A4[6] = {
     {
@@ -803,23 +894,6 @@ ColliderQuadInit D_8085C394 = {
 f32 D_8085C3E4 = 1.0f;
 f32 D_8085C3E8 = 1.0f;
 u16 D_8085C3EC[4] = { 0x680F, 0x680E, 0x6811, 0x6808 };
-LinkAnimationHeader* sPlayerIdleAnimations[0xF][2] = {
-    { (LinkAnimationHeader* )0x0400DF30, (LinkAnimationHeader* )0x0400DEE8 },
-    { (LinkAnimationHeader* )0x0400DF40, (LinkAnimationHeader* )0x0400DEF8 },
-    { (LinkAnimationHeader* )0x0400DF38, (LinkAnimationHeader* )0x0400DEF0 },
-    { (LinkAnimationHeader* )0x0400DF38, (LinkAnimationHeader* )0x0400DEF0 },
-    { (LinkAnimationHeader* )0x0400E100, (LinkAnimationHeader* )0x0400E0C0 },
-    { (LinkAnimationHeader* )0x0400E100, (LinkAnimationHeader* )0x0400E0C0 },
-    { (LinkAnimationHeader* )0x0400E100, (LinkAnimationHeader* )0x0400E0C0 },
-    { (LinkAnimationHeader* )0x0400E0C8, (LinkAnimationHeader* )0x0400E0A0 },
-    { (LinkAnimationHeader* )0x0400E0D0, (LinkAnimationHeader* )0x0400E0A8 },
-    { (LinkAnimationHeader* )0x0400E0F0, (LinkAnimationHeader* )0x0400E0F0 },
-    { (LinkAnimationHeader* )0x0400E0D8, (LinkAnimationHeader* )0x0400E0B0 },
-    { (LinkAnimationHeader* )0x0400E0E0, (LinkAnimationHeader* )0x0400E0B8 },
-    { (LinkAnimationHeader* )0x0400E0E8, (LinkAnimationHeader* )0x0400E0E8 },
-    { (LinkAnimationHeader* )0x0400E0F8, (LinkAnimationHeader* )0x0400E0F8 },
-    { (LinkAnimationHeader* )0x0400D0B0, (LinkAnimationHeader* )0x0400D0B0 },
-};
 AnimSfxEntry D_8085C8C4[1] = { { 0x680E, -0x2008 } };
 AnimSfxEntry D_8085C8C8[1] = { { 0x680F, -0x2012 } };
 AnimSfxEntry D_8085C8CC[1] = { { 0x6809, -0x200D } };
@@ -1537,7 +1611,7 @@ LinkAnimationHeader* D_8085D0E4[4] = {
     (LinkAnimationHeader* )0x0400DAE8,
     (LinkAnimationHeader* )0x0400D3F0,
 };
-s32 D_8085D0F4 = 0x20101;
+u8 D_8085D0F4[4] = { 0, 2, 1, 1 };
 Vec3f D_8085D100 = { 0.0f, 50.0f, 0.0f };
 LinkAnimationHeader* D_8085D118[3] = {
     (LinkAnimationHeader* )0x0400E1B8,
@@ -1549,7 +1623,6 @@ LinkAnimationHeader* D_8085D124[3] = {
     (LinkAnimationHeader* )0x0400E3D0,
     (LinkAnimationHeader* )0x0400E288,
 };
-Vec3f D_8085D130 = { 0.0f, 0.0f, 0.0f };
 struct_8085D13C D_8085D13C[2] = { { -8, 0xB4, 0x28, 0x64, 0x681A }, { -0x10, 0xFF, 0x8C, 0x96, 0x681A } };
 Vec3f D_8085D148 = { 0.0f, 50.0f, 0.0f };
 Vec3f D_8085D154 = { 0.0f, 0.0f, 100.0f };
@@ -1661,16 +1734,20 @@ u8 D_8085D1A4[0x53] = {
     0x42,
 };
 LinkAnimationHeader* D_8085D1F8[2] = { (LinkAnimationHeader* )0x0400DCA8, (LinkAnimationHeader* )0x0400DE98 };
-struct _struct_D_8085D200_0xC D_8085D200[2] = {
+struct_8085D200 D_8085D200[2] = {
     { (LinkAnimationHeader* )0x0400D4A0, (LinkAnimationHeader* )0x0400D498, 2, 3 },
     { (LinkAnimationHeader* )0x0400D4D0, (LinkAnimationHeader* )0x0400D4C8, 5, 3 },
 };
 Vec3f D_8085D218 = { 0.0f, 100.0f, 40.0f };
-struct_8085D224 D_8085D224[4] = {
-    { (LinkAnimationHeader* )0x0400E068, 35.17f, 6.6099997f },
-    { (LinkAnimationHeader* )0x0400E078, -34.16f, 7.91f },
-    { (LinkAnimationHeader* )0x0400D0E8, 22.718237f, 2.3294117f },
-    { (LinkAnimationHeader* )0x0400D0F0, -22.0f, 1.9800001f },
+struct_8085D224 D_8085D224[2][2] = {
+    {
+        { (LinkAnimationHeader* )0x0400E068, 35.17f, 6.6099997f },
+        { (LinkAnimationHeader* )0x0400E078, -34.16f, 7.91f },
+    },
+    {
+        { (LinkAnimationHeader* )0x0400D0E8, 22.718237f, 2.3294117f },
+        { (LinkAnimationHeader* )0x0400D0F0, -22.0f, 1.9800001f },
+    },
 };
 u16 D_8085D254[4] = { 0x1804, 0x1805, 0x1806, 0x1806 };
 u16 D_8085D25C[4] = { 0x1804, 0x1804, 0x1805, 0x1806 };
@@ -1724,8 +1801,6 @@ EffectTireMarkInit D_8085D330 = { 0, 0x3F, { 0, 0, 0xF, 0x64 } };
 Color_RGBA8 D_8085D338 = { 0, 0, 0xF, 0x64 };
 Color_RGBA8 D_8085D33C = { 0, 0, 0, 0x96 };
 Vec3f D_8085D340 = { 0.0f, 50.0f, 0.0f };
-u8 D_8085D34C[8] = { 0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22 };
-u8 D_8085D354[4] = { 0x1B, 0x1C, 0, 0 };
 Vec3f D_8085D364 = { 0.0f, 0.5f, 0.0f };
 Vec3f D_8085D370 = { 0.0f, 0.5f, 0.0f };
 Color_RGBA8 D_8085D37C = { 0xFF, 0xFF, 0x64, 0xFF };
@@ -2023,25 +2098,25 @@ Vec3f D_8085D978 = { -30.0f, 60.0f, 0.0f };
 Vec3f D_8085D984 = { 30.0f, 60.0f, 0.0f };
 void (*D_8085D990[0x14])(PlayState*, Player*, void*) = {
     NULL,
-    ((void (*)(PlayState*, Player*, void*)) func_80858DB4),
-    ((void (*)(PlayState*, Player*, void*)) func_80858DDC),
-    ((void (*)(PlayState*, Player*, void*)) func_80858E40),
-    ((void (*)(PlayState*, Player*, void*)) func_80858E60),
-    ((void (*)(PlayState*, Player*, void*)) func_80858E80),
-    ((void (*)(PlayState*, Player*, void*)) func_80858EA0),
-    ((void (*)(PlayState*, Player*, void*)) func_80858EFC),
-    ((void (*)(PlayState*, Player*, void*)) func_80858F1C),
-    ((void (*)(PlayState*, Player*, void*)) func_80858F3C),
-    ((void (*)(PlayState*, Player*, void*)) func_80858F5C),
-    ((void (*)(PlayState*, Player*, void*)) func_80858FBC),
-    ((void (*)(PlayState*, Player*, void*)) func_80859028),
-    ((void (*)(PlayState*, Player*, void*)) func_808591BC),
-    ((void (*)(PlayState*, Player*, void*)) func_80858DFC),
-    ((void (*)(PlayState*, Player*, void*)) func_80858F7C),
-    ((void (*)(PlayState*, Player*, void*)) func_80858F9C),
-    ((void (*)(PlayState*, Player*, void*)) func_80859168),
-    ((void (*)(PlayState*, Player*, void*)) func_80859210),
-    ((void (*)(PlayState*, Player*, void*)) func_80858EC0),
+    func_80858DB4,
+    func_80858DDC,
+    func_80858E40,
+    func_80858E60,
+    func_80858E80,
+    func_80858EA0,
+    func_80858EFC,
+    func_80858F1C,
+    func_80858F3C,
+    func_80858F5C,
+    func_80858FBC,
+    func_80859028,
+    func_808591BC,
+    func_80858DFC,
+    func_80858F7C,
+    func_80858F9C,
+    func_80859168,
+    func_80859210,
+    func_80858EC0,
 };
 AnimSfxEntry D_8085D9E0[4] = { { 0, 0x2822 }, { 0x871, 0x82D }, { 0x871, 0x833 }, { 0x871, -0x840 } };
 AnimSfxEntry D_8085D9F0[3] = { { 0x681E, 0x2007 }, { 0x850, 0x1012 }, { 0x6806, -0x2012 } };
@@ -2304,6 +2379,23 @@ GetItemEntry sGetItemTable[0xB9] = {
 };
 InitChainEntry sInitChain[1];                       /* unable to generate initializer */
 u8 sMagicArrowCosts[4] = { 4, 4, 8, 2 };
+LinkAnimationHeader* sPlayerIdleAnimations[0xF][2] = {
+    { (LinkAnimationHeader* )0x0400DF30, (LinkAnimationHeader* )0x0400DEE8 },
+    { (LinkAnimationHeader* )0x0400DF40, (LinkAnimationHeader* )0x0400DEF8 },
+    { (LinkAnimationHeader* )0x0400DF38, (LinkAnimationHeader* )0x0400DEF0 },
+    { (LinkAnimationHeader* )0x0400DF38, (LinkAnimationHeader* )0x0400DEF0 },
+    { (LinkAnimationHeader* )0x0400E100, (LinkAnimationHeader* )0x0400E0C0 },
+    { (LinkAnimationHeader* )0x0400E100, (LinkAnimationHeader* )0x0400E0C0 },
+    { (LinkAnimationHeader* )0x0400E100, (LinkAnimationHeader* )0x0400E0C0 },
+    { (LinkAnimationHeader* )0x0400E0C8, (LinkAnimationHeader* )0x0400E0A0 },
+    { (LinkAnimationHeader* )0x0400E0D0, (LinkAnimationHeader* )0x0400E0A8 },
+    { (LinkAnimationHeader* )0x0400E0F0, (LinkAnimationHeader* )0x0400E0F0 },
+    { (LinkAnimationHeader* )0x0400E0D8, (LinkAnimationHeader* )0x0400E0B0 },
+    { (LinkAnimationHeader* )0x0400E0E0, (LinkAnimationHeader* )0x0400E0B8 },
+    { (LinkAnimationHeader* )0x0400E0E8, (LinkAnimationHeader* )0x0400E0E8 },
+    { (LinkAnimationHeader* )0x0400E0F8, (LinkAnimationHeader* )0x0400E0F8 },
+    { (LinkAnimationHeader* )0x0400D0B0, (LinkAnimationHeader* )0x0400D0B0 },
+};
 u16 sReturnEntranceGroupData[1] = { 0x1000 };
 u8 sReturnEntranceGroupIndices[6] = { 0, 0, 0, 0, 0, 0 };
 
@@ -2511,8 +2603,8 @@ void func_8082E094(Player* this, u16 sfxId) {
     func_800B8E58(this, func_8082E078(this, sfxId & 0xFFFF) & 0xFFFF);
 }
 
-u16 func_8082E0CC(Player* this, u16 arg1) {
-    return ((arg1 & 0xFFFF) + this->unk_B72 + this->ageProperties->unk_94) & 0xFFFF;
+u16 func_8082E0CC(Player* this, u16 sfxId) {
+    return ((sfxId & 0xFFFF) + this->unk_B72 + this->ageProperties->unk_94) & 0xFFFF;
 }
 
 void func_8082E0F4(Player* this, u16 sfxId) {
@@ -2662,16 +2754,16 @@ void func_8082E794(Player* this) {
     }
 }
 
-void func_8082E820(Player* this, s32 arg1) {
+void func_8082E820(Player* this, s32 moveFlags) {
     Vec3f sp1C;
     f32 temp_ft2;
     f32 temp_ft5;
 
     this->unk_278 = (unaligned s32) this->unk_27E;
-    this->skelAnime.moveFlags = (u8) arg1;
+    this->skelAnime.moveFlags = (u8) moveFlags;
     this->skelAnime.prevTransl.z = (s16) (u16) this->skelAnime.baseTransl.z;
     SkelAnime_UpdateTranslation(&this->skelAnime, &sp1C, this->actor.shape.rot.y);
-    if (arg1 & 1) {
+    if (moveFlags & 1) {
         temp_ft2 = (bitwise f32) sp1C * this->ageProperties->unk_08;
         sp1C = temp_ft2;
         temp_ft5 = sp1C.z * this->ageProperties->unk_08;
@@ -2679,8 +2771,8 @@ void func_8082E820(Player* this, s32 arg1) {
         this->actor.world.pos.x += temp_ft2 * this->actor.scale.x;
         this->actor.world.pos.z += temp_ft5 * this->actor.scale.z;
     }
-    if (arg1 & 2) {
-        if (!(arg1 & 4)) {
+    if (moveFlags & 2) {
+        if (!(moveFlags & 4)) {
             sp1C.y *= this->ageProperties->unk_08;
         }
         this->actor.world.pos.y += sp1C.y * this->actor.scale.y;
@@ -2728,8 +2820,8 @@ void func_8082EA80(PlayState* play, Player* this, LinkAnimationHeader* anim, s32
     func_8082E920(play, this, moveFlags);
 }
 
-void func_8082EAC8(PlayState* play, Player* this, LinkAnimationHeader* anim, s32 arg3) {
-    func_8082EA80(play, this, anim, arg3, 1.0f);
+void func_8082EAC8(PlayState* play, Player* this, LinkAnimationHeader* anim, s32 moveFlags) {
+    func_8082EA80(play, this, anim, moveFlags, 1.0f);
 }
 
 void func_8082EAF0(PlayState* play, Player* this, LinkAnimationHeader* anim, s32 arg3) {
@@ -2795,7 +2887,7 @@ LinkAnimationHeader* func_8082ED20(Player* this) {
     if (this->currentMask == 0x13) {
         return &D_0400D0B0;
     }
-    return D_8085BE84[this->modelAnimType];
+    return (*D_8085BE84)[this->modelAnimType];
 }
 
 s32 func_8082ED94(Player* this) {
@@ -2854,9 +2946,9 @@ void func_8082EEA4(Player* this, s32 arg1) {
 
 LinkAnimationHeader* func_8082EEE0(Player* this) {
     if (this->unk_B64 != 0) {
-        return (D_8085BE84 + 0x48)[this->modelAnimType];
+        return (*(D_8085BE84 + 0x48))[this->modelAnimType];
     }
-    return (D_8085BE84 + 0x30)[this->modelAnimType];
+    return (*(D_8085BE84 + 0x30))[this->modelAnimType];
 }
 
 s32 func_8082EF20(Player* this) {
@@ -2873,21 +2965,21 @@ LinkAnimationHeader* func_8082EF54(Player* this) {
     if (func_8082EF20(this) != 0) {
         return &D_0400D490;
     }
-    return (D_8085BE84 + 0x78)[this->modelAnimType];
+    return (*(D_8085BE84 + 0x78))[this->modelAnimType];
 }
 
 LinkAnimationHeader* func_8082EF9C(Player* this) {
     if (func_8082EF20(this) != 0) {
         return &D_0400D488;
     }
-    return (D_8085BE84 + 0x60)[this->modelAnimType];
+    return (*(D_8085BE84 + 0x60))[this->modelAnimType];
 }
 
 LinkAnimationHeader* func_8082EFE4(Player* this) {
     if (func_800B7128(this) != 0) {
         return &D_0400D520;
     }
-    return (D_8085BE84 + 0x210)[this->modelAnimType];
+    return (*(D_8085BE84 + 0x210))[this->modelAnimType];
 }
 
 void func_8082F02C(PlayState* play, struct_8082F02C_arg1* arg1, f32 arg2) {
@@ -2995,7 +3087,7 @@ void func_8082F470(PlayState* play, Player* this, enum PlayerActionParam arg2) {
     LinkAnimationHeader** var_v0;
     s32 var_v1;
 
-    var_v0 = &D_8085BE84[this->modelAnimType];
+    var_v0 = &(*D_8085BE84)[this->modelAnimType];
     this->stateFlags1 &= 0xFEFFFFF7;
     var_v1 = 0;
 loop_1:
@@ -3531,7 +3623,7 @@ void func_808302CC(Player* this, PlayState* play) {
     } else {
         this->unk_14E = var_v1;
     }
-    var_a2 = D_8085CC88[this->unk_14E].unk_0;
+    var_a2 = D_8085CC88[this->unk_14E].anim;
     if ((var_a2 == &D_0400DC50) && (this->currentShield == 0)) {
         var_a2 = &D_0400DC60;
     }
@@ -3782,7 +3874,7 @@ void func_80830D40(PlayState* play, Player* this) {
     f32 var_fv0;
     u8 temp_t9;
 
-    temp_t9 = D_8085CC88[this->unk_14E].unk_4;
+    temp_t9 = D_8085CC88[this->unk_14E].frame;
     var_fv0 = (f32) temp_t9;
     if ((s32) temp_t9 < 0) {
         var_fv0 += 4294967296.0f;
@@ -4943,13 +5035,13 @@ s32 func_808339D4(PlayState* play, Player* this, s32 damage) {
     return Health_ChangeBy(play, (s16) var_a2);
 }
 
-void func_80833A64(Player* arg0) {
+void func_80833A64(Player* this) {
     Vec3s* temp_t6;
 
-    temp_t6 = arg0->skelAnime.jointTable;
-    arg0->unk_278 = (unaligned s32) temp_t6->unk_0;
-    arg0->skelAnime.prevTransl.z = (s16) (u16) temp_t6->z;
-    func_8082E820(arg0, 3);
+    temp_t6 = this->skelAnime.jointTable;
+    this->unk_278 = (unaligned s32) temp_t6->unk_0;
+    this->skelAnime.prevTransl.z = (s16) (u16) temp_t6->z;
+    func_8082E820(this, 3);
 }
 
 void func_80833AA0(Player* this, PlayState* play) {
@@ -5029,7 +5121,7 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 velocity, f32 yV
                     this->actor.speedXZ = 3.0f;
                     this->linearVelocity = 3.0f;
                     this->actor.velocity.y = 6.0f;
-                    func_8082E5A8(play, this, (D_8085BE84 + 0x48)[this->modelAnimType]);
+                    func_8082E5A8(play, this, (*(D_8085BE84 + 0x48))[this->modelAnimType]);
                     func_8082DF8C(this, 0x6805U);
                 } else {
                     this->actor.speedXZ = velocity;
@@ -5338,7 +5430,7 @@ s32 func_80834600(Player* this, PlayState* play) {
     }
     temp_v0 = this->unk_B75;
     if ((temp_v0 != 0) && (((s32) temp_v0 >= 3) || (this->invincibilityTimer == 0))) {
-        sp6C = D_8085D0F4;
+        sp6C = *D_8085D0F4;
         if (func_8083456C(play, this) == 0) {
             if (this->unk_B75 == 4) {
                 this->shockTimer = 0x28;
@@ -5959,9 +6051,9 @@ void func_80836258(PlayState* play, Player* this, Actor* door) {
     if (this->doorDirection < 0) {
         temp_v0_2 = this->transformation;
         if (temp_v0_2 == 0) {
-            sp60 = (D_8085BE84 + 0xC0)[this->modelAnimType];
+            sp60 = (*(D_8085BE84 + 0xC0))[this->modelAnimType];
         } else if (temp_v0_2 == 4) {
-            sp60 = (D_8085BE84 + 0xD8)[this->modelAnimType];
+            sp60 = (*(D_8085BE84 + 0xD8))[this->modelAnimType];
         } else {
             var_t4 = D_8085D118[temp_v1];
             goto block_11;
@@ -5970,9 +6062,9 @@ void func_80836258(PlayState* play, Player* this, Actor* door) {
         door->unk_1A0 = (u8) (door->unk_1A0 + 5);
         temp_v0_3 = this->transformation;
         if (temp_v0_3 == 0) {
-            sp60 = (D_8085BE84 + 0xF0)[this->modelAnimType];
+            sp60 = (*(D_8085BE84 + 0xF0))[this->modelAnimType];
         } else if (temp_v0_3 == 4) {
-            sp60 = (D_8085BE84 + 0x108)[this->modelAnimType];
+            sp60 = (*(D_8085BE84 + 0x108))[this->modelAnimType];
         } else {
             var_t4 = D_8085D124[temp_v1];
 block_11:
@@ -6185,10 +6277,10 @@ void func_80836B3C(PlayState* play, Player* this, f32 arg2) {
     this->actor.world.rot.y = temp_v0;
     if (this->transformation == 1) {
         func_80836AD8(play, this);
-        LinkAnimation_Change(play, &this->skelAnime, (D_8085BE84 + 0x168)[this->modelAnimType], 1.5f * D_8085C3E4, 0.0f, 6.0f, (u8) 2, 0.0f);
+        LinkAnimation_Change(play, &this->skelAnime, (*(D_8085BE84 + 0x168))[this->modelAnimType], 1.5f * D_8085C3E4, 0.0f, 6.0f, (u8) 2, 0.0f);
         return;
     }
-    sp34 = (D_8085BE84 + 0x168)[this->modelAnimType];
+    sp34 = (*(D_8085BE84 + 0x168))[this->modelAnimType];
     Player_SetAction(play, this, func_8084C6EC, 0);
     LinkAnimation_Change(play, &this->skelAnime, sp34, 1.25f * D_8085C3E4, arg2, (f32) Animation_GetLastFrame(sp34), (u8) 2, 0.0f);
 }
@@ -6278,7 +6370,7 @@ s32 func_80836F10(PlayState* play, Player* this) {
         }
         func_800B8E58(this, 0x83EU);
         temp_s0 = &D_8085D13C[sp28];
-        func_8082DF8C(this, temp_s0->unk_4);
+        func_8082DF8C(this, temp_s0->sfxId);
         if (Player_InflictDamage(play, (s32) temp_s0->damage) != 0) {
             return -1;
         }
@@ -6320,7 +6412,7 @@ void func_80837134(PlayState* play, Player* this) {
     s32 var_v1;
     void* temp_v0;
 
-    sp2C = (D_8085BE84 + 0x138)[this->modelAnimType];
+    sp2C = (*(D_8085BE84 + 0x138))[this->modelAnimType];
     this->stateFlags1 &= 0xFFF3FFFF;
     if (this->transformation == 3) {
         temp_v0 = this->skelAnime.animation;
@@ -6357,7 +6449,7 @@ void func_80837134(PlayState* play, Player* this) {
             goto block_19;
         }
         if (this->fallDistance < 0x51) {
-            sp2C = (D_8085BE84 + 0x150)[this->modelAnimType];
+            sp2C = (*(D_8085BE84 + 0x150))[this->modelAnimType];
             goto block_19;
         }
         if (func_808370D4(play, this) == 0) {
@@ -6365,7 +6457,7 @@ block_19:
             temp_v0_2 = func_80836F10(play, this);
             if (temp_v0_2 > 0) {
                 sp28 = temp_v0_2;
-                func_80836A98(this, (D_8085BE84 + 0x138)[this->modelAnimType], play);
+                func_80836A98(this, (*(D_8085BE84 + 0x138))[this->modelAnimType], play);
                 this->skelAnime.endFrame = 8.0f;
                 if (temp_v0_2 == 1) {
                     this->unk_AE8 = 0xA;
@@ -6574,7 +6666,7 @@ void func_808379C0(PlayState* play, Player* this) {
             this->currentYaw = temp_v0_2;
         } else {
             Player_SetAction(play, this, func_8084E25C, 0);
-            var_a2 = (D_8085BE84 + 0x120)[this->modelAnimType];
+            var_a2 = (*(D_8085BE84 + 0x120))[this->modelAnimType];
         }
         Player_AnimationPlayOnce(play, this, var_a2);
         return;
@@ -7152,7 +7244,7 @@ block_39:
                             func_8082E920(play, this, 0x19);
                         } else {
                             sp2C = var_v1;
-                            func_8082E438(play, this, (D_8085BE84 + 0x2E8)[this->modelAnimType]);
+                            func_8082E438(play, this, (*(D_8085BE84 + 0x2E8))[this->modelAnimType]);
                         }
                         var_v1 = sp2C;
                         this->stateFlags1 |= 0x20000000;
@@ -7522,14 +7614,14 @@ void func_80839CD8(Player* this, PlayState* play) {
     }
     if (var_fv0 < 14.0f) {
         var_fv0_2 = 11.0f - var_fv0;
-        var_a2 = (D_8085BE84 + 0x198)[this->modelAnimType];
+        var_a2 = (*(D_8085BE84 + 0x198))[this->modelAnimType];
         if (var_fv0_2 < 0.0f) {
             var_fv0_2 = -var_fv0_2 * 1.375f;
         }
         var_fv0_3 = var_fv0_2 / 11.0f;
     } else {
         var_fv0_4 = 26.0f - var_fv0;
-        var_a2 = (D_8085BE84 + 0x1B0)[this->modelAnimType];
+        var_a2 = (*(D_8085BE84 + 0x1B0))[this->modelAnimType];
         if (var_fv0_4 < 0.0f) {
             var_fv0_4 = -var_fv0_4 * 2.0f;
         }
@@ -7569,17 +7661,17 @@ void func_80839ED0(Player* this, PlayState* play) {
     this->stateFlags1 &= 0xFFEF9FFB;
 }
 
-s32 func_80839F98(PlayState* arg0, Player* arg1) {
+s32 func_80839F98(PlayState* play, Player* this) {
     s32 var_v0;
 
     var_v0 = 0;
-    if (!(arg1->stateFlags1 & 0x08000000)) {
-        if (arg1->linearVelocity != 0.0f) {
-            func_80836B3C(arg0, arg1, 0.0f);
+    if (!(this->stateFlags1 & 0x08000000)) {
+        if (this->linearVelocity != 0.0f) {
+            func_80836B3C(play, this, 0.0f);
             return 1;
         }
-        func_80836AD8(arg0, arg1);
-        LinkAnimation_Change(arg0, &arg1->skelAnime, &D_0400E208, 0.6666667f, 0.0f, 7.0f, (u8) 2, 0.0f);
+        func_80836AD8(play, this);
+        LinkAnimation_Change(play, &this->skelAnime, &D_0400E208, 0.6666667f, 0.0f, 7.0f, (u8) 2, 0.0f);
         var_v0 = 1;
         /* Duplicate return node #4. Try simplifying control flow for better match */
         return var_v0;
@@ -7653,7 +7745,7 @@ s32 func_8083A274(Player* this, PlayState* play) {
             if (this->transformation != 1) {
                 if (Player_IsGoronOrDeku(this) == 0) {
                     Player_SetModelsForHoldingShield(this);
-                    var_a2 = (D_8085BE84 + 0x1C8)[this->modelAnimType];
+                    var_a2 = (*(D_8085BE84 + 0x1C8))[this->modelAnimType];
                 } else {
                     var_a2 = &D_0400D218;
                     if (this->transformation == 3) {
@@ -7785,7 +7877,7 @@ void func_8083A794(Player* this, PlayState* play) {
         this->unk_B34 = 0.0f;
         this->unk_B38 = 0.0f;
         sp24 = func_8084AF9C;
-        func_8082E514(play, this, (D_8085BE84 + 0x30)[this->modelAnimType]);
+        func_8082E514(play, this, (*(D_8085BE84 + 0x30))[this->modelAnimType]);
     }
     sp24 = func_8084AF9C;
     if (func_8082FBE8(this) != 0) {
@@ -8021,7 +8113,7 @@ void func_8083AECC(Player* this, s16 currentYaw, PlayState* play) {
 
 void func_8083AF30(Player* this, PlayState* play) {
     Player_SetAction(play, this, func_8084A26C, 1);
-    func_8082E514(play, this, (D_8085BE84 + 0x18)[this->modelAnimType]);
+    func_8082E514(play, this, (*(D_8085BE84 + 0x18))[this->modelAnimType]);
 }
 
 void func_8083AF8C(Player* this, s16 currentYaw, PlayState* play) {
@@ -8033,7 +8125,7 @@ void func_8083AF8C(Player* this, s16 currentYaw, PlayState* play) {
 
 void func_8083B030(Player* this, PlayState* play) {
     Player_SetAction(play, this, func_8084A8E8, 1);
-    func_8082E514(play, this, (D_8085BE84 + 0x240)[this->modelAnimType]);
+    func_8082E514(play, this, (*(D_8085BE84 + 0x240))[this->modelAnimType]);
     this->unk_B38 = 0.0f;
 }
 
@@ -8047,7 +8139,7 @@ void func_8083B0E4(PlayState* play, Player* this, s16 currentYaw) {
     Player_SetAction(play, this, func_8084AB4C, 1);
     this->unk_B4E = 0x4B0;
     this->unk_B4E = (s16) (s32) ((f32) this->unk_B4E * D_8085C3E4);
-    LinkAnimation_Change(play, &this->skelAnime, (D_8085BE84 + 0x258)[this->modelAnimType], 1.0f, 0.0f, 0.0f, (u8) 0, -6.0f);
+    LinkAnimation_Change(play, &this->skelAnime, (*(D_8085BE84 + 0x258))[this->modelAnimType], 1.0f, 0.0f, 0.0f, (u8) 0, -6.0f);
 }
 
 void func_8083B1A0(Player* this, PlayState* play) {
@@ -8055,9 +8147,9 @@ void func_8083B1A0(Player* this, PlayState* play) {
 
     Player_SetAction(play, this, func_80849FE0, 1);
     if (this->unk_B40 < 0.5f) {
-        var_a2 = (D_8085BE84 + 0x288)[this->modelAnimType];
+        var_a2 = (*(D_8085BE84 + 0x288))[this->modelAnimType];
     } else {
-        var_a2 = (D_8085BE84 + 0x270)[this->modelAnimType];
+        var_a2 = (*(D_8085BE84 + 0x270))[this->modelAnimType];
     }
     Player_AnimationPlayOnce(play, this, var_a2);
     this->currentYaw = this->actor.shape.rot.y;
@@ -8065,7 +8157,7 @@ void func_8083B1A0(Player* this, PlayState* play) {
 
 void func_8083B23C(Player* this, PlayState* play) {
     Player_SetAction(play, this, func_80849A9C, 1);
-    func_8082E438(play, this, (D_8085BE84 + 0x90)[this->modelAnimType]);
+    func_8082E438(play, this, (*(D_8085BE84 + 0x90))[this->modelAnimType]);
     this->unk_AE8 = 1;
 }
 
@@ -8729,13 +8821,13 @@ s32 func_8083CCB4(Player* this, PlayState* play) {
     Actor* sp34;
     f32 sp28;
     f32 sp24;
-    struct_8085D224* sp20;
+    struct_8085D224 (*sp20)[2];
     Actor* temp_a3;
     f32 temp_fv0;
     f32 temp_fv1;
     s16 temp_v1;
     s32 temp_v0;
-    struct_8085D224* var_v0;
+    struct_8085D224 (*var_v0)[2];
 
     temp_a3 = this->rideActor;
     if (temp_a3 != NULL) {
@@ -8780,8 +8872,8 @@ s32 func_8083CCB4(Player* this, PlayState* play) {
             if (this->mountSide >= 0) {
                 var_v0 += 0xC;
             }
-            temp_fv0 = var_v0->unk_4;
-            temp_fv1 = var_v0->unk_8;
+            temp_fv0 = var_v0[0][0].unk_4;
+            temp_fv1 = var_v0[0][0].unk_8;
             this->actor.world.pos.x = temp_a3->world.pos.x + temp_a3->unk_258 + ((temp_fv0 * sp28) + (temp_fv1 * sp24));
             this->actor.world.pos.z = temp_a3->world.pos.z + temp_a3->unk_260 + ((temp_fv1 * sp28) - (temp_fv0 * sp24));
             this->unk_B48 = temp_a3->world.pos.y - this->actor.world.pos.y;
@@ -8790,7 +8882,7 @@ s32 func_8083CCB4(Player* this, PlayState* play) {
             this->currentYaw = temp_v1;
             sp20 = var_v0;
             Actor_MountHorse(play, this, temp_a3);
-            Player_AnimationPlayOnce(play, this, var_v0->anim);
+            Player_AnimationPlayOnce(play, this, var_v0[0][0].anim);
             func_8082E920(play, this, 0x9B);
             this->actor.parent = this->rideActor;
             func_8082DAD4(this);
@@ -9005,7 +9097,7 @@ block_46:
 
 void func_8083D6DC(Player* this, PlayState* play) {
     Player_SetAction(play, this, func_8084E65C, 1);
-    Player_AnimationPlayOnce(play, this, (D_8085BE84 + 0x2A0)[this->modelAnimType]);
+    Player_AnimationPlayOnce(play, this, (*(D_8085BE84 + 0x2A0))[this->modelAnimType]);
 }
 
 s32 func_8083D738(Player* this, Actor* heldActor) {
@@ -9026,7 +9118,7 @@ s32 func_8083D78C(Player* this, PlayState* play) {
             if (func_808313A8(play, this, temp_a2) == 0) {
                 if (func_8083D738(this, this->heldActor) == 0) {
                     Player_SetAction(play, this, func_8084E58C, 1);
-                    Player_AnimationPlayOnce(play, this, (D_8085BE84 + 0x2B8)[this->modelAnimType]);
+                    Player_AnimationPlayOnce(play, this, (*(D_8085BE84 + 0x2B8))[this->modelAnimType]);
                     return 1;
                 }
                 func_8083D6DC(this, play);
@@ -9318,7 +9410,7 @@ void func_8083E234(Player* this, PlayState* play) {
 
 void func_8083E28C(Player* this, PlayState* play) {
     Player_SetAction(play, this, func_8084EF9C, 0);
-    Player_AnimationPlayOnce(play, this, (D_8085BE84 + 0x330)[this->modelAnimType]);
+    Player_AnimationPlayOnce(play, this, (*(D_8085BE84 + 0x330))[this->modelAnimType]);
     this->stateFlags2 |= 0x10;
 }
 
@@ -9639,7 +9731,7 @@ void func_8083EE60(Player* this, PlayState* play) {
         temp_v0 = gGameInfo;
         temp_fs0 = (f32) temp_v0->data[0x7E] * 0.5f;
         func_8083EA44(this, (f32) temp_v0->data[0x23] / 1000.0f);
-        LinkAnimation_LoadToJoint(play, &this->skelAnime, (D_8085BE84 + 0x2D0)[this->modelAnimType], this->unk_B38);
+        LinkAnimation_LoadToJoint(play, &this->skelAnime, (*(D_8085BE84 + 0x2D0))[this->modelAnimType], this->unk_B38);
         this->unk_B34 += 1.0f * temp_fs0;
         if (this->unk_B34 >= 1.0f) {
             this->unk_B34 = 1.0f;
@@ -9652,7 +9744,7 @@ void func_8083EE60(Player* this, PlayState* play) {
         if (temp_fv0 < 0.0f) {
             var_fs0 = 1.0f;
             func_8083EA44(this, (((f32) temp_v0_2->data[0x24] / 1000.0f) * temp_fv1) + ((f32) temp_v0_2->data[0x23] / 1000.0f));
-            LinkAnimation_LoadToJoint(play, &this->skelAnime, (D_8085BE84 + 0x2D0)[this->modelAnimType], this->unk_B38);
+            LinkAnimation_LoadToJoint(play, &this->skelAnime, (*(D_8085BE84 + 0x2D0))[this->modelAnimType], this->unk_B38);
         } else {
             var_fs0 = ((f32) temp_v0_2->data[0x25] / 1000.0f) * temp_fv0;
             if (var_fs0 < 1.0f) {
@@ -9662,7 +9754,7 @@ void func_8083EE60(Player* this, PlayState* play) {
                 func_8083EA44(this, (((f32) temp_v0_2->data[0x26] / 1000.0f) * temp_fv0) + ((f32) temp_v0_2->data[0x27] / 100.0f));
             }
             temp_s1 = &this->skelAnime;
-            LinkAnimation_LoadToMorph(play, temp_s1, (D_8085BE84 + 0x2D0)[this->modelAnimType], this->unk_B38);
+            LinkAnimation_LoadToMorph(play, temp_s1, (*(D_8085BE84 + 0x2D0))[this->modelAnimType], this->unk_B38);
             LinkAnimation_LoadToJoint(play, temp_s1, &D_0400DAF0, this->unk_B38 * 0.55172414f);
         }
     }
@@ -9706,7 +9798,7 @@ void func_8083F27C(PlayState* play, Player* this) {
     LinkAnimationHeader** temp_v0;
     f32 temp_fv0;
 
-    temp_v0 = &D_8085BE84[this->modelAnimType];
+    temp_v0 = &(*D_8085BE84)[this->modelAnimType];
     temp_t0 = temp_v0->unk_228;
     sp34 = temp_v0->unk_240;
     this->skelAnime.animation = temp_t0;
@@ -9750,10 +9842,10 @@ void func_8083F358(Player* this, s32 arg1, PlayState* play) {
     temp_v1 = this->modelAnimType;
     if ((temp_v1 == 3) || ((temp_v0_2 = this->unk_B70, (temp_v0_2 == 0)) && (this->unk_AB8 <= 0.0f))) {
         if (arg1 == 0) {
-            LinkAnimation_LoadToJoint(play, &this->skelAnime, (D_8085BE84 + 0x18)[temp_v1], this->unk_B38);
+            LinkAnimation_LoadToJoint(play, &this->skelAnime, (*(D_8085BE84 + 0x18))[temp_v1], this->unk_B38);
             return;
         }
-        LinkAnimation_LoadToMorph(play, &this->skelAnime, (D_8085BE84 + 0x18)[temp_v1], this->unk_B38);
+        LinkAnimation_LoadToMorph(play, &this->skelAnime, (*(D_8085BE84 + 0x18))[temp_v1], this->unk_B38);
         return;
     }
     if (temp_v0_2 != 0) {
@@ -9772,11 +9864,11 @@ void func_8083F358(Player* this, s32 arg1, PlayState* play) {
     }
     if (arg1 == 0) {
         temp_fv0 = this->unk_B38;
-        LinkAnimation_BlendToJoint(play, &this->skelAnime, (D_8085BE84 + 0x18)[temp_v1], temp_fv0, var_v0, temp_fv0, var_fv1_2, (Vec3s* ) this->unk_88A);
+        LinkAnimation_BlendToJoint(play, &this->skelAnime, (*(D_8085BE84 + 0x18))[temp_v1], temp_fv0, var_v0, temp_fv0, var_fv1_2, (Vec3s* ) this->unk_88A);
         return;
     }
     temp_fv0_2 = this->unk_B38;
-    LinkAnimation_BlendToMorph(play, &this->skelAnime, (D_8085BE84 + 0x18)[temp_v1], temp_fv0_2, var_v0, temp_fv0_2, var_fv1_2, (Vec3s* ) this->unk_88A);
+    LinkAnimation_BlendToMorph(play, &this->skelAnime, (*(D_8085BE84 + 0x18))[temp_v1], temp_fv0_2, var_v0, temp_fv0_2, var_fv1_2, (Vec3s* ) this->unk_88A);
 }
 
 void func_8083F57C(Player* this, PlayState* play) {
@@ -9791,7 +9883,7 @@ void func_8083F57C(Player* this, PlayState* play) {
         temp_v0 = gGameInfo;
         temp_fs0 = (f32) temp_v0->data[0x7E] * 0.5f;
         func_8083EA44(this, (f32) temp_v0->data[0x23] / 1000.0f);
-        LinkAnimation_LoadToJoint(play, &this->skelAnime, (D_8085BE84 + 0x18)[this->modelAnimType], this->unk_B38);
+        LinkAnimation_LoadToJoint(play, &this->skelAnime, (*(D_8085BE84 + 0x18))[this->modelAnimType], this->unk_B38);
         this->unk_B34 += 1.0f * temp_fs0;
         if (this->unk_B34 >= 1.0f) {
             this->unk_B34 = 1.0f;
@@ -9910,29 +10002,29 @@ block_25:
     return 0;
 }
 
-s32 func_8083FBC4(PlayState* arg0, Player* arg1) {
+s32 func_8083FBC4(PlayState* play, Player* this) {
     Vec3f* var_s0;
     Vec3f* var_s0_2;
     s32 var_s1;
     s32 var_s1_2;
     u16 temp_v0;
 
-    temp_v0 = arg1->unk_B72;
-    var_s0 = arg1->actor.shape.feetPos;
+    temp_v0 = this->unk_B72;
+    var_s0 = this->actor.shape.feetPos;
     var_s1 = 0;
     if ((temp_v0 == 0) || (temp_v0 == 1)) {
         do {
-            func_800B1210(arg0, var_s0, &gZeroVec3f, &gZeroVec3f, (s16) 0x32, (s16) 0x1E);
+            func_800B1210(play, var_s0, &gZeroVec3f, &gZeroVec3f, (s16) 0x32, (s16) 0x1E);
             var_s1 += 1;
             var_s0 += 0xC;
         } while (var_s1 != 2);
         return 1;
     }
     if (temp_v0 == 0xE) {
-        var_s0_2 = arg1->actor.shape.feetPos;
+        var_s0_2 = this->actor.shape.feetPos;
         var_s1_2 = 0;
         do {
-            EffectSsDust_Spawn(arg0, 0U, var_s0_2, &gZeroVec3f, &D_8085D270, &D_8085D26C, &D_8085D26C, (s16) 0x64, (s16) 0x28, (s16) 0x11, (u8) 0);
+            EffectSsDust_Spawn(play, 0U, var_s0_2, &gZeroVec3f, &D_8085D270, &D_8085D26C, &D_8085D26C, (s16) 0x64, (s16) 0x28, (s16) 0x11, (u8) 0);
             var_s1_2 += 1;
             var_s0_2 += 0xC;
         } while (var_s1_2 != 2);
@@ -9963,10 +10055,10 @@ block_6:
     return 0;
 }
 
-s32 func_8083FD80(Player* this, PlayState* arg1) {
+s32 func_8083FD80(Player* this, PlayState* play) {
     if ((Player_IsGoronOrDeku(this) == 0) && (Player_GetMeleeWeaponHeld(this) != 0) && (this->transformation != 2) && (D_80862B48 != 0)) {
         func_8083375C(this, PLAYER_MWA_STAB_1H);
-        Player_AnimationPlayOnce(arg1, this, &D_0400DBE8);
+        Player_AnimationPlayOnce(play, this, &D_0400DBE8);
         this->unk_AE7 = 1;
         this->meleeWeaponAnimation = 0xC;
         this->currentYaw = this->actor.shape.rot.y + this->unk_AB2.y;
@@ -10248,8 +10340,8 @@ void func_80840770(PlayState* play, Player* this) {
     }
 }
 
-void func_80840980(Player* this, u16 arg1) {
-    func_8082DF8C(this, arg1 & 0xFFFF);
+void func_80840980(Player* this, u16 sfxId) {
+    func_8082DF8C(this, sfxId & 0xFFFF);
 }
 
 void func_808409A8(PlayState* play, Player* this, f32 speedXZ, f32 yVelocity) {
@@ -10332,7 +10424,7 @@ block_12:
                     this->linearVelocity *= 0.2f;
                 } else {
                     Player_SetAction(play, this, func_8084C6EC, 0);
-                    Player_AnimationPlayOnce(play, this, (D_8085BE84 + 0x180)[this->modelAnimType]);
+                    Player_AnimationPlayOnce(play, this, (*(D_8085BE84 + 0x180))[this->modelAnimType]);
                     this->unk_AE8 = 1;
                 }
             }
@@ -10350,11 +10442,11 @@ block_29:
     return 0;
 }
 
-s32 func_80840CD4(Player* this, PlayState* arg1) {
+s32 func_80840CD4(Player* this, PlayState* play) {
     u32 temp_t2;
     u8 var_a2;
 
-    if (func_808387A0(arg1, this) != 0) {
+    if (func_808387A0(play, this) != 0) {
         this->stateFlags2 |= 0x20000;
         goto block_10;
     }
@@ -10364,7 +10456,7 @@ s32 func_80840CD4(Player* this, PlayState* arg1) {
         } else {
             var_a2 = D_8085CF80[Player_IsHoldingTwoHandedWeapon(this)];
         }
-        func_80833864(arg1, this, (enum PlayerMeleeWeaponAnimation) var_a2);
+        func_80833864(play, this, (enum PlayerMeleeWeaponAnimation) var_a2);
         func_808339B4(this, -8);
         temp_t2 = this->stateFlags2 | 0x20000;
         this->stateFlags2 = temp_t2;
@@ -10494,7 +10586,7 @@ void func_808412BC(PlayState* play, Player* this) {
     this->actor.world.pos.y += 800.0f;
 }
 
-void func_80841358(PlayState* arg0, Player* this, s32 arg2) {
+void func_80841358(PlayState* play, Player* this, s32 arg2) {
     s32 sp24;
     enum PlayerActionParam sp20;
     u8 temp_v0;
@@ -10503,11 +10595,11 @@ void func_80841358(PlayState* arg0, Player* this, s32 arg2) {
     sp24 = (s32) temp_v0;
     sp20 = (enum PlayerActionParam) D_8085C99C[temp_v0];
     func_808317C4(this);
-    func_8082DCA0(arg0, this);
+    func_8082DCA0(play, this);
     this->heldItemId = (u8) sp24;
     this->nextModelGroup = Player_ActionToModelGroup(this, sp20);
-    func_8082F8BC(arg0, this, sp20);
-    func_808309CC(arg0, this);
+    func_8082F8BC(play, this, sp20);
+    func_808309CC(play, this);
     if (arg2 != 0) {
         func_800B8E58(this, 0x1803U);
     }
@@ -10552,14 +10644,14 @@ void func_808415E4(PlayState* play, Player* this) {
 void func_80841624(PlayState* play, Player* this) {
     if (gSaveContext.save.isOwlSave != 0) {
         Player_SetAction(play, this, func_808496AC, 0);
-        func_8082E514(play, this, (D_8085BE84 + 0x408)[this->modelAnimType]);
+        func_8082E514(play, this, (*(D_8085BE84 + 0x408))[this->modelAnimType]);
         this->stateFlags1 |= 0x20000000;
         this->unk_AE8 = 0x28;
         gSaveContext.save.isOwlSave = 0;
         return;
     }
     Player_SetAction(play, this, func_80849FE0, 0);
-    func_8082E514(play, this, (D_8085BE84 + 0x408)[this->modelAnimType]);
+    func_8082E514(play, this, (*(D_8085BE84 + 0x408))[this->modelAnimType]);
     this->stateFlags1 |= 0x20000000;
     this->stateFlags2 |= 0x20000000;
     Actor_Spawn(&play->actorCtx, play, 0x1CE, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, (s16) 0, (s16) 0, (s16) 0, -1);
@@ -10572,7 +10664,7 @@ void func_80841744(PlayState* play, Player* this) {
         this->heldItemActionParam = 0x14;
         Player_SetModels(this, Player_ActionToModelGroup(this, (enum PlayerActionParam) this->heldItemActionParam));
     } else {
-        func_8082DB60(play, this, (D_8085BE84 + 0x408)[this->modelAnimType]);
+        func_8082DB60(play, this, (*(D_8085BE84 + 0x408))[this->modelAnimType]);
     }
     this->stateFlags1 |= 0x20000000;
     this->unk_AE8 = 0x2710;
@@ -10585,7 +10677,7 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
     this->currentYaw = this->actor.world.rot.y;
     if ((((s32) (this->actor.params & 0xF00) >> 8) != 0xC) && ((gSaveContext.respawnFlag != 2) || (gSaveContext.respawn[1].playerParams != 0xCFF))) {
         func_808309CC(play, this);
-        SkelAnime_InitLink(play, &this->skelAnime, skelHeader, D_8085BE84[this->modelAnimType], 9, (Vec3s* ) this->unk_74C, (Vec3s* ) this->unk_7EB, 0x16);
+        SkelAnime_InitLink(play, &this->skelAnime, skelHeader, (*D_8085BE84)[this->modelAnimType], 9, (Vec3s* ) this->unk_74C, (Vec3s* ) this->unk_7EB, 0x16);
         this->unk_27E = (unaligned s32) D_8085D2C4.unk_0;
         this->skelAnime.baseTransl.z = (s16) (u16) D_8085D2C4.z;
         SkelAnime_InitLink(play, &this->unk_284, skelHeader, func_8082ED20(this), 9, (Vec3s* ) this->unk_929, (Vec3s* ) this->unk_9C8, 0x16);
@@ -11055,7 +11147,7 @@ void Player_SetDoAction(PlayState* play, Player* this) {
                     } else {
                         temp_t3 = temp_t2 & 0x800;
                         if (temp_a2_2 & 0x200000) {
-                            var_t0_2 = D_8085D34C[this->unk_B67];
+                            var_t0_2 = *(&D_8085D34C + this->unk_B67);
                         } else if (((temp_t3 == 0) || (sp34 == NULL)) && (temp_t5 != NULL) && (this->getItemId < 0)) {
                             var_t0_2 = 4;
                         } else if ((var_t1 == 0) && (this->stateFlags2 & 1)) {
@@ -11122,7 +11214,7 @@ block_91:
                                         }
                                         var_v0 = var_t1_3;
                                     }
-                                    var_t0_2 = D_8085D354[var_v0];
+                                    var_t0_2 = *(&D_8085D354 + var_v0);
                                 } else if (temp_a2_2 & 0x100) {
                                     var_t0_2 = 5;
                                 } else if (temp_a2_2 & 0x1000) {
@@ -13499,7 +13591,7 @@ s32 func_80848AB0(Player* this, PlayState* play) {
     if ((temp_t6 != 0) || (LinkAnimation_Update(play, &this->unk_284) != 0)) {
         sp24 = &this->unk_284;
         func_8082F43C(play, this, D_8085C9F0[this->itemActionParam]);
-        LinkAnimation_PlayLoop(play, sp24, D_8085BE84[this->modelAnimType]);
+        LinkAnimation_PlayLoop(play, sp24, (*D_8085BE84)[this->modelAnimType]);
         this->unk_AA4 = 0;
         this->unk_AC4(this, play);
         return 0;
@@ -14541,10 +14633,10 @@ void func_8084B4A8(Player* this, PlayState* play) {
     if (&D_0400DB10 == this->skelAnime.animation) {
         if (LinkAnimation_Update(play, &this->skelAnime) != 0) {
             func_8082E794(this);
-            func_8082E438(play, this, (D_8085BE84 + 0x2E8)[this->modelAnimType]);
+            func_8082E438(play, this, (*(D_8085BE84 + 0x2E8))[this->modelAnimType]);
         }
     } else {
-        func_8082E67C(play, this, (D_8085BE84 + 0x300)[this->modelAnimType]);
+        func_8082E67C(play, this, (*(D_8085BE84 + 0x300))[this->modelAnimType]);
     }
     temp_v0 = this->unk_AE8;
     if (temp_v0 == 0) {
@@ -14555,7 +14647,7 @@ void func_8084B4A8(Player* this, PlayState* play) {
     }
     if (var_v1 == 0) {
         if (func_80838A90(this, play) == 0) {
-            func_80836A98(this, (D_8085BE84 + 0x318)[this->modelAnimType], play);
+            func_80836A98(this, (*(D_8085BE84 + 0x318))[this->modelAnimType], play);
         }
         this->actor.flags &= ~0x100;
         func_800E0238(Play_GetCamera(play, 0));
@@ -14596,7 +14688,7 @@ void func_8084B5C0(Player* this, PlayState* play) {
                 if (this->heldItemActionParam < 0) {
                     func_80123C58(this);
                 }
-                func_80836A98(this, (D_8085BE84 + 0x1F8)[this->modelAnimType], play);
+                func_80836A98(this, (*(D_8085BE84 + 0x1F8))[this->modelAnimType], play);
                 func_80830B38(this);
                 return;
             }
@@ -14606,7 +14698,7 @@ void func_8084B5C0(Player* this, PlayState* play) {
         sp34 = temp_a1;
         if (LinkAnimation_Update(play, temp_a1) != 0) {
             if (Player_IsGoronOrDeku(this) == 0) {
-                Player_AnimationPlayLoop(play, this, (D_8085BE84 + 0x1E0)[this->modelAnimType]);
+                Player_AnimationPlayLoop(play, this, (*(D_8085BE84 + 0x1E0))[this->modelAnimType]);
             }
             this->unk_AE8 = 1;
             this->unk_AE7 = 0;
@@ -14685,7 +14777,7 @@ void func_8084B5C0(Player* this, PlayState* play) {
                     if (this->heldItemActionParam < 0) {
                         func_80123C58(this);
                     }
-                    func_80836A98(this, (D_8085BE84 + 0x1F8)[this->modelAnimType], play);
+                    func_80836A98(this, (*(D_8085BE84 + 0x1F8))[this->modelAnimType], play);
                 }
                 func_800B8E58(this, 0x1826U);
             }
@@ -14720,7 +14812,7 @@ void func_8084BAA4(Player* this, PlayState* play) {
         if ((temp_v0 != 0) && ((temp_v0 > 0) || (LinkAnimation_Update(play, sp30) != 0))) {
             Player_SetAction(play, this, func_8084B5C0, 1);
             Player_SetModelsForHoldingShield(this);
-            temp_a0 = (D_8085BE84 + 0x1C8)[this->modelAnimType];
+            temp_a0 = (*(D_8085BE84 + 0x1C8))[this->modelAnimType];
             sp38 = temp_a0;
             temp_fv0 = (f32) Animation_GetLastFrame(temp_a0);
             LinkAnimation_Change(play, sp30, sp38, 1.0f, temp_fv0, temp_fv0, (u8) 2, 0.0f);
@@ -14965,7 +15057,7 @@ void func_8084C16C(Player* this, PlayState* play) {
                                     func_8082DF8C(this, 0x6803U);
                                 }
                                 this->actor.world.pos.y += this->wallHeight;
-                                func_80837CEC(play, this, this->actor.wallPoly, this->wallDistance, (D_8085BE84 + 0x390)[this->modelAnimType]);
+                                func_80837CEC(play, this, this->actor.wallPoly, this->wallDistance, (*(D_8085BE84 + 0x390))[this->modelAnimType]);
                                 this->currentYaw += 0x8000;
                                 this->stateFlags1 |= 0x2000;
                                 this->actor.shape.rot.y = this->currentYaw;
@@ -15996,7 +16088,7 @@ void func_8084E980(Player* this, PlayState* play) {
                 var_v1 = -temp_v0;
             }
             if (var_v1 >= 0xFA1) {
-                LinkAnimation_Change(play, &this->unk_284, (D_8085BE84 + 0x258)[this->modelAnimType], 0.4f, 0.0f, (f32) Animation_GetLastFrame((D_8085BE84 + 0x258)[this->modelAnimType]), (u8) 2, -6.0f);
+                LinkAnimation_Change(play, &this->unk_284, (*(D_8085BE84 + 0x258))[this->modelAnimType], 0.4f, 0.0f, (f32) Animation_GetLastFrame((*(D_8085BE84 + 0x258))[this->modelAnimType]), (u8) 2, -6.0f);
                 this->unk_AE7 = 2;
             }
         }
@@ -16067,7 +16159,7 @@ void func_8084EF9C(Player* this, PlayState* play) {
     s32 temp_v0;
 
     this->stateFlags2 |= 0x141;
-    if (func_8082E67C(play, this, (D_8085BE84 + 0x348)[this->modelAnimType]) != 0) {
+    if (func_8082E67C(play, this, (*(D_8085BE84 + 0x348))[this->modelAnimType]) != 0) {
         this->unk_AE8 = 1;
     } else if (this->unk_AE8 == 0) {
         if (LinkAnimation_OnFrame(&this->skelAnime, 11.0f) != 0) {
@@ -16083,7 +16175,7 @@ void func_8084EF9C(Player* this, PlayState* play) {
         if (temp_v0 > 0) {
             func_8083E234(this, play);
         } else if (temp_v0 == 0) {
-            func_8083DF38(this, (D_8085BE84 + 0x360)[this->modelAnimType], play);
+            func_8083DF38(this, (*(D_8085BE84 + 0x360))[this->modelAnimType], play);
         } else {
             this->stateFlags2 |= 0x10;
         }
@@ -16120,7 +16212,7 @@ void func_8084F1B8(Player* this, PlayState* play) {
         if (this->unk_AE7 > 0) {
             var_a3 = &D_0400DC48;
         } else {
-            var_a3 = (D_8085BE84 + 0x3A8)[this->modelAnimType];
+            var_a3 = (*(D_8085BE84 + 0x3A8))[this->modelAnimType];
         }
         Player_AnimationPlayLoop(play, this, var_a3);
     } else if (this->unk_AE7 == 0) {
@@ -16143,9 +16235,9 @@ void func_8084F1B8(Player* this, PlayState* play) {
         func_80832F78(this, &sp3C, &sp3A, 0.0f, play);
         if (this->unk_ADF[this->unk_ADE] >= 0) {
             if (this->unk_AE7 > 0) {
-                var_a3_2 = (D_8085BE84 + 0x378)[this->modelAnimType];
+                var_a3_2 = (*(D_8085BE84 + 0x378))[this->modelAnimType];
             } else {
-                var_a3_2 = (D_8085BE84 + 0x3C0)[this->modelAnimType];
+                var_a3_2 = (*(D_8085BE84 + 0x3C0))[this->modelAnimType];
             }
             func_808381A0(this, var_a3_2, play);
             return;
@@ -16822,7 +16914,7 @@ void func_808508C8(Player* this, PlayState* play) {
         }
         if (this->currentBoots >= 5) {
             if (this->actor.bgCheckFlags & 1) {
-                func_80836A98(this, (D_8085BE84 + 0x150)[this->modelAnimType], play);
+                func_80836A98(this, (*(D_8085BE84 + 0x150))[this->modelAnimType], play);
                 func_8082E1BC(this);
             }
             goto block_24;
@@ -17517,23 +17609,23 @@ void func_8085255C(PlayState* play, Player* this) {
     }
 }
 
-void func_808525C4(PlayState* arg0, Player* arg1) {
+void func_808525C4(PlayState* play, Player* this) {
     s16 temp_v0;
     u8 temp_v1;
 
-    temp_v0 = arg1->unk_AE8;
-    arg1->unk_AE8 = temp_v0 + 1;
+    temp_v0 = this->unk_AE8;
+    this->unk_AE8 = temp_v0 + 1;
     if (((temp_v0 < 3) ^ 1) != 0) {
-        temp_v1 = arg1->transformation;
+        temp_v1 = this->transformation;
         if ((temp_v1 == 2) || (temp_v1 == 3)) {
-            func_8082E5A8(arg0, arg1, D_8085D190[temp_v1]);
+            func_8082E5A8(play, this, D_8085D190[temp_v1]);
         } else if (temp_v1 == 1) {
-            func_80851EAC(arg1);
-            func_8082DB60(arg0, arg1, &D_0400E200);
+            func_80851EAC(this);
+            func_8082DB60(play, this, &D_0400E200);
         } else {
-            func_8082DB60(arg0, arg1, D_8085D190[temp_v1]);
+            func_8082DB60(play, this, D_8085D190[temp_v1]);
         }
-        arg1->unk_B48 = 1.0f;
+        this->unk_B48 = 1.0f;
     }
 }
 
@@ -17924,7 +18016,7 @@ void func_80853194(Player* this, PlayState* play) {
 }
 
 void func_808534C0(Player* this, PlayState* play) {
-    struct _struct_D_8085D200_0xC* sp24;
+    struct_8085D200* sp24;
     Actor* temp_a1;
     Actor* temp_t1;
     f32 var_ft2;
@@ -18224,9 +18316,9 @@ void func_80853D68(Player* this, PlayState* play) {
         sp50 = var_fv0_2;
         if ((Math_AsymStepToF(&this->linearVelocity, var_fv0_2, var_fv1_2, var_fa0) != 0) && (var_fv0_2 == 0.0f)) {
             if (this->unk_AE7 == 0) {
-                var_a1 = (D_8085BE84 + 0x3D8)[this->modelAnimType];
+                var_a1 = (*(D_8085BE84 + 0x3D8))[this->modelAnimType];
             } else {
-                var_a1 = (D_8085BE84 + 0x3F0)[this->modelAnimType];
+                var_a1 = (*(D_8085BE84 + 0x3F0))[this->modelAnimType];
             }
             func_80836A98(this, var_a1, play);
         }
@@ -20282,66 +20374,66 @@ void func_80858D48(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     func_8082DABC(this);
 }
 
-void func_80858DB4(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+void func_80858DB4(PlayState* play, Player* this, void* anim) {
     func_8082DABC(this);
 }
 
-void func_80858DDC(PlayState* play, Player* this, LinkAnimationHeader* anim) {
-    func_80858C84(play, this, anim);
+void func_80858DDC(PlayState* play, Player* this, void* anim) {
+    func_80858C84(play, this, (LinkAnimationHeader* ) anim);
 }
 
-void func_80858DFC(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+void func_80858DFC(PlayState* play, Player* this, void* anim) {
     func_8082E784(this);
-    func_8082E5A8(play, this, anim);
+    func_8082E5A8(play, this, (LinkAnimationHeader* ) anim);
     func_8082DABC(this);
 }
 
-void func_80858E40(PlayState* play, Player* this, LinkAnimationHeader* anim) {
-    func_80858CC8(play, this, anim);
+void func_80858E40(PlayState* play, Player* this, void* anim) {
+    func_80858CC8(play, this, (LinkAnimationHeader* ) anim);
 }
 
-void func_80858E60(PlayState* play, Player* this, LinkAnimationHeader* anim) {
-    func_80858D48(play, this, anim);
+void func_80858E60(PlayState* play, Player* this, void* anim) {
+    func_80858D48(play, this, (LinkAnimationHeader* ) anim);
 }
 
-void func_80858E80(PlayState* play, Player* this, LinkAnimationHeader* anim) {
-    func_8082EA60(play, this, anim);
+void func_80858E80(PlayState* play, Player* this, void* anim) {
+    func_8082EA60(play, this, (LinkAnimationHeader* ) anim);
 }
 
-void func_80858EA0(PlayState* play, Player* this, LinkAnimationHeader* anim) {
-    func_8082EA10(play, this, anim, 0x9C);
+void func_80858EA0(PlayState* play, Player* this, void* anim) {
+    func_8082EA10(play, this, (LinkAnimationHeader* ) anim, 0x9C);
 }
 
-void func_80858EC0(PlayState* play, Player* this, LinkAnimationHeader* anim) {
-    Player_AnimationPlayOnceReverse(play, this, anim);
+void func_80858EC0(PlayState* play, Player* this, void* anim) {
+    Player_AnimationPlayOnceReverse(play, this, (LinkAnimationHeader* ) anim);
     func_8082E920(play, this, 0x9C);
 }
 
-void func_80858EFC(PlayState* play, Player* this, LinkAnimationHeader* anim) {
-    func_8082EB18(play, this, anim);
+void func_80858EFC(PlayState* play, Player* this, void* anim) {
+    func_8082EB18(play, this, (LinkAnimationHeader* ) anim);
 }
 
-void func_80858F1C(PlayState* play, Player* this, LinkAnimationHeader* anim) {
-    func_8082EAC8(play, this, anim, 0x9C);
+void func_80858F1C(PlayState* play, Player* this, void* anim) {
+    func_8082EAC8(play, this, (LinkAnimationHeader* ) anim, 0x9C);
 }
 
-void func_80858F3C(PlayState* play, Player* this, LinkAnimationHeader* anim) {
-    Player_AnimationPlayOnce(play, this, anim);
+void func_80858F3C(PlayState* play, Player* this, void* anim) {
+    Player_AnimationPlayOnce(play, this, (LinkAnimationHeader* ) anim);
 }
 
-void func_80858F5C(PlayState* play, Player* this, LinkAnimationHeader* anim) {
-    Player_AnimationPlayLoop(play, this, anim);
+void func_80858F5C(PlayState* play, Player* this, void* anim) {
+    Player_AnimationPlayLoop(play, this, (LinkAnimationHeader* ) anim);
 }
 
-void func_80858F7C(PlayState* play, Player* this, LinkAnimationHeader* anim) {
-    func_8082DB90(play, this, anim);
+void func_80858F7C(PlayState* play, Player* this, void* anim) {
+    func_8082DB90(play, this, (LinkAnimationHeader* ) anim);
 }
 
-void func_80858F9C(PlayState* play, Player* this, LinkAnimationHeader* anim) {
-    func_8082DB60(play, this, anim);
+void func_80858F9C(PlayState* play, Player* this, void* anim) {
+    func_8082DB60(play, this, (LinkAnimationHeader* ) anim);
 }
 
-void func_80858FBC(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+void func_80858FBC(PlayState* play, Player* this, void* anim) {
     LinkAnimation_Update(play, &this->skelAnime);
 }
 
@@ -20352,11 +20444,11 @@ void func_80858FE8(Player* this) {
     }
 }
 
-void func_80859028(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+void func_80859028(PlayState* play, Player* this, void* anim) {
     void* temp_v0;
 
     if (LinkAnimation_Update(play, &this->skelAnime) != 0) {
-        func_80858D48(play, this, anim);
+        func_80858D48(play, this, (LinkAnimationHeader* ) anim);
         this->unk_AE8 = 1;
     }
     temp_v0 = this->skelAnime.animation;
@@ -20387,23 +20479,23 @@ void func_80859028(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     func_80858FE8(this);
 }
 
-void func_80859168(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+void func_80859168(PlayState* play, Player* this, void* anim) {
     if (LinkAnimation_Update(play, &this->skelAnime) != 0) {
         func_8082E794(this);
-        func_8082DB60(play, this, anim);
+        func_8082DB60(play, this, (LinkAnimationHeader* ) anim);
     }
 }
 
-void func_808591BC(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+void func_808591BC(PlayState* play, Player* this, void* anim) {
     if (LinkAnimation_Update(play, &this->skelAnime) != 0) {
-        func_8082EB18(play, this, anim);
+        func_8082EB18(play, this, (LinkAnimationHeader* ) anim);
         this->unk_AE8 = 1;
     }
 }
 
-void func_80859210(PlayState* play, Player* this, AnimSfxEntry* arg2) {
+void func_80859210(PlayState* play, Player* this, void* anim) {
     LinkAnimation_Update(play, &this->skelAnime);
-    Player_PlayAnimSfx(this, arg2);
+    Player_PlayAnimSfx(this, (AnimSfxEntry* ) anim);
 }
 
 void func_80859248(Player* this) {
@@ -20483,7 +20575,7 @@ void func_808594D0(PlayState* play, Player* this, s32 arg2) {
         return;
     }
     temp_v0 = this->unk_396;
-    temp_a2 = (D_8085BE84 + 0x408)[this->modelAnimType];
+    temp_a2 = (*(D_8085BE84 + 0x408))[this->modelAnimType];
     if ((temp_v0 == 6) || (temp_v0 == 0x2E)) {
         Player_AnimationPlayOnce(play, this, temp_a2);
     } else {
@@ -20678,7 +20770,7 @@ void func_80859C60(PlayState* play, Player* this, void* arg2) {
 }
 
 void func_80859CA0(PlayState* play, Player* this, s32 arg2) {
-    func_8082E514(play, this, (D_8085BE84 + 0x408)[this->modelAnimType]);
+    func_8082E514(play, this, (*(D_8085BE84 + 0x408))[this->modelAnimType]);
     func_8082DABC(this);
 }
 
@@ -20904,11 +20996,11 @@ void func_8085A6C0(PlayState* play, Player* this, void* arg2) {
         func_80859300(play, this, 0);
         return;
     }
-    func_80858FBC(play, this, (LinkAnimationHeader* ) arg2);
+    func_80858FBC(play, this, arg2);
 }
 
 void func_8085A710(PlayState* play, Player* this, void* arg2) {
-    func_80858FBC(play, this, (LinkAnimationHeader* ) arg2);
+    func_80858FBC(play, this, arg2);
     if (func_8083D23C(this, play) != 0) {
         play->csCtx.state = 3;
         ActorCutscene_Stop(ActorCutscene_GetCurrentIndex());
