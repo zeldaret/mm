@@ -95,7 +95,7 @@ void EnBubble_SetDimensions(EnBubble* this, f32 dim) {
     this->unk1F8.z = z / norm;
 }
 
-u32 func_8089F59C(EnBubble* this) {
+s32 func_8089F59C(EnBubble* this) {
     ColliderInfo* info = &this->colliderSphere.elements[0].info;
 
     info->toucher.dmgFlags = DMG_EXPLOSIVES;
@@ -106,7 +106,7 @@ u32 func_8089F59C(EnBubble* this) {
     return 6;
 }
 
-u32 func_8089F5D0(EnBubble* this) {
+s32 func_8089F5D0(EnBubble* this) {
     EnBubble_SetDimensions(this, -1.0f);
     return 12;
 }
@@ -130,7 +130,7 @@ s32 EnBubble_Explosion(EnBubble* this, PlayState* play) {
     Math_SmoothStepToF(&this->modelEllipticity, 0.2f, 0.1f, 1000.0f, 0.0f);
     this->actor.shape.yOffset = (this->modelHeight + 1.0f) * 16.0f;
 
-    if (DECR(this->explosionCountdown)) {
+    if (DECR(this->explosionCountdown) != 0) {
         return -1;
     }
     effectPos.x = this->actor.world.pos.x;
@@ -148,7 +148,7 @@ s32 EnBubble_Explosion(EnBubble* this, PlayState* play) {
     return Rand_S16Offset(90, 60);
 }
 
-u32 func_8089F8BC(EnBubble* this) {
+s32 func_8089F8BC(EnBubble* this) {
     if (DECR(this->explosionCountdown)) {
         return -1;
     } else {
