@@ -2304,7 +2304,7 @@ AnimSfxEntry* D_8085C93C[] = {
 
 // Used to index into D_8085C93C
 u8 D_8085C96C[] = {
-    0, 0, 1, 1, 2, 2, 2, 2, 0xA, 0xA, 0xA, 0xA, 0xA, 0xA, 3, 3, 4, 4, 8, 8, 5, 5, 6, 6, 7, 7, 9, 9, 0xB, 0xB, 
+    0, 0, 1, 1, 2, 2, 2, 2, 0xA, 0xA, 0xA, 0xA, 0xA, 0xA, 3, 3, 4, 4, 8, 8, 5, 5, 6, 6, 7, 7, 9, 9, 0xB, 0xB,
 };
 
 s32 func_8082ED94(Player* this) {
@@ -2976,12 +2976,30 @@ struct_8085CD30 D_8085CD30[PLAYER_MWA_MAX] = {
     { &gameplay_keep_Linkanim_00D7E0, &gameplay_keep_Linkanim_00D7E8, &gameplay_keep_Linkanim_00D3B8, 0, 16 },
 };
 
-LinkAnimationHeader* D_8085CF50[] = { &gameplay_keep_Linkanim_00D8C8, &gameplay_keep_Linkanim_00D740, };
-LinkAnimationHeader* D_8085CF58[] = { &gameplay_keep_Linkanim_00D8C0, &gameplay_keep_Linkanim_00D740, };
-LinkAnimationHeader* D_8085CF60[] = { &gameplay_keep_Linkanim_00D8D0, &gameplay_keep_Linkanim_00D748, };
-LinkAnimationHeader* D_8085CF68[] = { &gameplay_keep_Linkanim_00D8D8, &gameplay_keep_Linkanim_00D750, };
-LinkAnimationHeader* D_8085CF70[] = { &gameplay_keep_Linkanim_00D8E0, &gameplay_keep_Linkanim_00D758, };
-LinkAnimationHeader* D_8085CF78[] = { &gameplay_keep_Linkanim_00D8B8, &gameplay_keep_Linkanim_00D738, };
+LinkAnimationHeader* D_8085CF50[] = {
+    &gameplay_keep_Linkanim_00D8C8,
+    &gameplay_keep_Linkanim_00D740,
+};
+LinkAnimationHeader* D_8085CF58[] = {
+    &gameplay_keep_Linkanim_00D8C0,
+    &gameplay_keep_Linkanim_00D740,
+};
+LinkAnimationHeader* D_8085CF60[] = {
+    &gameplay_keep_Linkanim_00D8D0,
+    &gameplay_keep_Linkanim_00D748,
+};
+LinkAnimationHeader* D_8085CF68[] = {
+    &gameplay_keep_Linkanim_00D8D8,
+    &gameplay_keep_Linkanim_00D750,
+};
+LinkAnimationHeader* D_8085CF70[] = {
+    &gameplay_keep_Linkanim_00D8E0,
+    &gameplay_keep_Linkanim_00D758,
+};
+LinkAnimationHeader* D_8085CF78[] = {
+    &gameplay_keep_Linkanim_00D8B8,
+    &gameplay_keep_Linkanim_00D738,
+};
 
 u8 D_8085CF80[] = {
     PLAYER_MWA_SPIN_ATTACK_1H,
@@ -3422,11 +3440,26 @@ void func_808309CC(PlayState* play, Player* this) {
     this->stateFlags3 &= ~PLAYER_STATE3_40000000;
 }
 
-LinkAnimationHeader* D_8085CFBC[2] = { &gameplay_keep_Linkanim_00D470, &gameplay_keep_Linkanim_00D478, };
-LinkAnimationHeader* D_8085CFC4[2] = { &gameplay_keep_Linkanim_00D458, &gameplay_keep_Linkanim_00D460, };
-LinkAnimationHeader* D_8085CFCC[2] = { &gameplay_keep_Linkanim_00D400, &gameplay_keep_Linkanim_00D408, };
-LinkAnimationHeader* D_8085CFD4[2] = { &gameplay_keep_Linkanim_00D400, &gameplay_keep_Linkanim_00D410, };
-LinkAnimationHeader* D_8085CFDC[2] = { &gameplay_keep_Linkanim_00DBE0, &gameplay_keep_Linkanim_00D818, };
+LinkAnimationHeader* D_8085CFBC[2] = {
+    &gameplay_keep_Linkanim_00D470,
+    &gameplay_keep_Linkanim_00D478,
+};
+LinkAnimationHeader* D_8085CFC4[2] = {
+    &gameplay_keep_Linkanim_00D458,
+    &gameplay_keep_Linkanim_00D460,
+};
+LinkAnimationHeader* D_8085CFCC[2] = {
+    &gameplay_keep_Linkanim_00D400,
+    &gameplay_keep_Linkanim_00D408,
+};
+LinkAnimationHeader* D_8085CFD4[2] = {
+    &gameplay_keep_Linkanim_00D400,
+    &gameplay_keep_Linkanim_00D410,
+};
+LinkAnimationHeader* D_8085CFDC[2] = {
+    &gameplay_keep_Linkanim_00DBE0,
+    &gameplay_keep_Linkanim_00D818,
+};
 
 LinkAnimationHeader* func_80830A58(PlayState* play, Player* this) {
     func_8082F43C(play, this, func_8084894C);
@@ -6561,12 +6594,12 @@ void func_80838A20(PlayState* play, Player* this) {
 }
 
 // sPlayerMass
-u8 D_8085D174[PLAYER_FORM_MAX] = { 
+u8 D_8085D174[PLAYER_FORM_MAX] = {
     100, // PLAYER_FORM_FIERCE_DEITY
     200, // PLAYER_FORM_GORON
-    80, // PLAYER_FORM_ZORA
-    20, // PLAYER_FORM_DEKU
-    50, // PLAYER_FORM_HUMAN
+    80,  // PLAYER_FORM_ZORA
+    20,  // PLAYER_FORM_DEKU
+    50,  // PLAYER_FORM_HUMAN
 };
 
 LinkAnimationHeader* D_8085D17C[PLAYER_FORM_MAX] = {
@@ -6664,7 +6697,10 @@ u8 D_8085D1A4[PLAYER_AP_MAX] = {
     GI_LENS,                // PLAYER_AP_LENS
 };
 
-LinkAnimationHeader* D_8085D1F8[] = { &gameplay_keep_Linkanim_00DCA8, &gameplay_keep_Linkanim_00DE98, };
+LinkAnimationHeader* D_8085D1F8[] = {
+    &gameplay_keep_Linkanim_00DCA8,
+    &gameplay_keep_Linkanim_00DE98,
+};
 
 // TODO: standarize
 #define BOTTLE_ACTION(item) ((item)-PLAYER_AP_BOTTLE)
@@ -8088,10 +8124,14 @@ s32 func_8083CBC4(Player* this, f32 arg1, s16 arg2, f32 arg3, f32 arg4, f32 arg5
 }
 
 struct_8085D224 D_8085D224[][2] = {
-    {{ &gameplay_keep_Linkanim_00E068, 35.17f, 6.6099997f },
-    { &gameplay_keep_Linkanim_00E078, -34.16f, 7.91f }},
-    {{ &gameplay_keep_Linkanim_00D0E8, 22.718237f, 2.3294117f },
-    { &gameplay_keep_Linkanim_00D0F0, -22.0f, 1.9800001f }},
+    {
+        { &gameplay_keep_Linkanim_00E068, 35.17f, 6.6099997f },
+        { &gameplay_keep_Linkanim_00E078, -34.16f, 7.91f },
+    },
+    {
+        { &gameplay_keep_Linkanim_00D0E8, 22.718237f, 2.3294117f },
+        { &gameplay_keep_Linkanim_00D0F0, -22.0f, 1.9800001f },
+    },
 };
 
 u16 D_8085D254[] = {
@@ -8182,7 +8222,10 @@ s32 func_8083CCB4(Player* this, PlayState* play) {
     return false;
 }
 
-LinkAnimationHeader* D_8085D264[] = { &gameplay_keep_Linkanim_00DC00, &gameplay_keep_Linkanim_00DEC0, };
+LinkAnimationHeader* D_8085D264[] = {
+    &gameplay_keep_Linkanim_00DC00,
+    &gameplay_keep_Linkanim_00DEC0,
+};
 
 s32 func_8083CF68(PlayState* play, Player* this) {
     if (!Player_InBlockingCsMode(play, this) && !(this->cylinder.base.ocFlags1 & 2)) {
@@ -11529,7 +11572,11 @@ struct_80124618* D_8085D568[3] = {
     D_8085D530,
 };
 
-Gfx* D_8085D574[3] = { (Gfx*)0x06009C48, (Gfx*)0x06009AB8, (Gfx*)0x06009DB8 };
+Gfx* D_8085D574[] = {
+    (Gfx*)0x06009C48,
+    (Gfx*)0x06009AB8,
+    (Gfx*)0x06009DB8,
+};
 
 Color_RGB8 D_8085D580 = { 255, 255, 255 };
 Color_RGB8 D_8085D584 = { 80, 80, 200 };
@@ -12566,7 +12613,8 @@ s32 func_8084933C(Player* this, PlayState* play) {
 
         temp = this->actor.shape.rot.y - 0x190;
         var_t0 = (this->unk_730 != NULL) ? this->actor.shape.rot.y + 0x36B0 : temp;
-        temp_v0_2 = (EnBoom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, sp54.x, sp54.y, sp54.z, this->actor.focus.rot.x, var_t0, 0, ZORA_BOOMERANG_LEFT);
+        temp_v0_2 = (EnBoom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, sp54.x, sp54.y, sp54.z,
+                                         this->actor.focus.rot.x, var_t0, 0, ZORA_BOOMERANG_LEFT);
         this->boomerangActor = &temp_v0_2->actor;
 
         if (temp_v0_2 != NULL) {
@@ -12581,7 +12629,8 @@ s32 func_8084933C(Player* this, PlayState* play) {
 
             temp = (this->actor.shape.rot.y + 0x190);
             var_t0 = (this->unk_730 != NULL) ? this->actor.shape.rot.y - 0x36B0 : temp;
-            temp_v0_4 = (EnBoom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, sp54.x, sp54.y, sp54.z, this->actor.focus.rot.x, var_t0, 0, ZORA_BOOMERANG_RIGHT);
+            temp_v0_4 = (EnBoom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, sp54.x, sp54.y, sp54.z,
+                                             this->actor.focus.rot.x, var_t0, 0, ZORA_BOOMERANG_RIGHT);
 
             if (temp_v0_4 != NULL) {
                 temp_v0_4->moveTo = this->unk_730;
@@ -12597,7 +12646,7 @@ s32 func_8084933C(Player* this, PlayState* play) {
             if (!func_80123420(this)) {
                 func_8083133C(this);
             }
-            
+
             this->unk_D57 = 20;
 
             func_800B8E58(this, 0x1805);
