@@ -163,7 +163,7 @@ void EnBoom_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_808A2918(EnBoom* this, PlayState* play) {
-    Actor* sp7C;
+    Actor* targetActor;
     Player* player = GET_PLAYER(play);
     s32 sp74;
     s16 sp72;
@@ -174,25 +174,26 @@ void func_808A2918(EnBoom* this, PlayState* play) {
     f32 sp64;
     f32 distXYZ;
 
-    sp7C = this->player;
+    targetActor = this->moveTo;
 
-    if (sp7C != NULL) {
-        sp72 = Actor_YawToPoint(&this->actor, &sp7C->focus.pos);
+    if (targetActor != NULL) {
+        sp72 = Actor_YawToPoint(&this->actor, &targetActor->focus.pos);
         sp70 = this->actor.world.rot.y - sp72;
-        sp6E = Actor_PitchToPoint(&this->actor, &sp7C->focus.pos);
+        sp6E = Actor_PitchToPoint(&this->actor, &targetActor->focus.pos);
         sp6C = this->actor.world.rot.x - sp6E;
 
-        sp64 = (200.0f - Math_Vec3f_DistXYZ(&this->actor.world.pos, &sp7C->focus.pos)) * 0.005f;
+        sp64 = (200.0f - Math_Vec3f_DistXYZ(&this->actor.world.pos, &targetActor->focus.pos)) * 0.005f;
         if (sp64 < 0.12f) {
             sp64 = 0.12f;
         }
 
-        if ((&player->actor != sp7C) && ((sp7C->update == NULL) || ((this->unk_1CF < 0) && (ABS_ALT(sp70) > 0x4000)))) {
-            this->player = NULL;
+        if ((&player->actor != targetActor) &&
+            ((targetActor->update == NULL) || ((this->unk_1CF < 0) && (ABS_ALT(sp70) > 0x4000)))) {
+            this->moveTo = NULL;
         } else {
             if (this->unk_1CE != 0) {
                 this->unk_1CE--;
-                this->actor.world.rot.y += (this->actor.params == 0) ? 0x190 : -0x190;
+                this->actor.world.rot.y += (this->actor.params == ZORA_BOOMERANG_LEFT) ? 0x190 : -0x190;
             } else {
                 if (this->unk_1CF > 0) {
                     this->unk_1CF--;
@@ -219,7 +220,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
                                                    (this->collider.base.at->id == ACTOR_EN_SI))) {
         this->unk_1C8 = this->collider.base.at;
         if (this->collider.base.at->id == ACTOR_EN_SI) {
-            this->collider.base.at->flags |= 0x2000;
+            this->collider.base.at->flags |= ACTOR_FLAG_2000;
         }
     }
 
@@ -241,7 +242,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
         if (sp74 != 0) {
             this->actor.world.rot.x = -this->actor.world.rot.x;
             this->actor.world.rot.y += 0x8000;
-            this->player = &player->actor;
+            this->moveTo = &player->actor;
             this->unk_1CC = 0;
         }
     }
@@ -249,34 +250,34 @@ void func_808A2918(EnBoom* this, PlayState* play) {
     if (this->unk_1CC <= 16) {
         distXYZ = Math_Vec3f_DistXYZ(&this->actor.world.pos, &player->actor.focus.pos);
 
-        if (&player->actor != this->player) {
-            if (this->player == 0) {
+        if (&player->actor != this->moveTo) {
+            if (this->moveTo == 0) {
                 this->unk_1CE = 8;
             }
-            this->player = &player->actor;
+            this->moveTo = &player->actor;
         }
 
         if (distXYZ < 40.0f) {
-            sp7C = this->unk_1C8;
-            if (sp7C != NULL) {
-                Math_Vec3f_Copy(&sp7C->world.pos, &player->actor.world.pos);
-                if (sp7C->id == ACTOR_EN_ITEM00) {
-                    sp7C->gravity = -0.9f;
-                    sp7C->bgCheckFlags &= ~3;
+            targetActor = this->unk_1C8;
+            if (targetActor != NULL) {
+                Math_Vec3f_Copy(&targetActor->world.pos, &player->actor.world.pos);
+                if (targetActor->id == ACTOR_EN_ITEM00) {
+                    targetActor->gravity = -0.9f;
+                    targetActor->bgCheckFlags &= ~3;
                 } else {
-                    sp7C->flags &= -0x2001;
+                    targetActor->flags &= ~ACTOR_FLAG_2000;
                 }
             }
             Actor_MarkForDeath(&this->actor);
         }
     }
 
-    sp7C = this->unk_1C8;
-    if (sp7C != NULL) {
-        if (sp7C->update == NULL) {
+    targetActor = this->unk_1C8;
+    if (targetActor != NULL) {
+        if (targetActor->update == NULL) {
             this->unk_1C8 = NULL;
         } else {
-            Math_Vec3f_Copy(&sp7C->world.pos, &this->actor.world.pos);
+            Math_Vec3f_Copy(&targetActor->world.pos, &this->actor.world.pos);
         }
     }
 }
@@ -297,7 +298,7 @@ void EnBoom_Update(Actor* thisx, PlayState* play) {
             Actor_SetFocus(&this->actor, 0.0f);
         }
 
-        if (this->actor.params != 0) {
+        if (this->actor.params != ZORA_BOOMERANG_LEFT) {
             this->unk_1CD--;
         } else {
             this->unk_1CD++;
@@ -325,7 +326,7 @@ void EnBoom_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
-    Matrix_RotateZS((this->actor.params != 0) ? 0x1F40 : -0x1F40, MTXMODE_APPLY);
+    Matrix_RotateZS((this->actor.params != ZORA_BOOMERANG_LEFT) ? 0x1F40 : -0x1F40, MTXMODE_APPLY);
     Matrix_RotateXS(this->actor.world.rot.x, MTXMODE_APPLY);
     Matrix_MultVec3f(&sp58->unk_04, &sp4C);
     Matrix_MultVec3f(&sp58->unk_10, &sp40);

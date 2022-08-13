@@ -12584,67 +12584,60 @@ s32 func_808492C4(Player* this, PlayState* play) {
     return true;
 }
 
-#if 0
+#ifdef NON_MATCHING
 s32 func_8084933C(Player* this, PlayState* play) {
-    Vec3f sp54;
-    s32 pad[2];
-    s32 var_t0;
-    s16 var_t0_2;
-    EnBoom* temp_v0_2;
-    EnBoom* temp_v0_4;
 
-    if (LinkAnimation_Update(play, &this->unk_284) != 0) {
+    if (LinkAnimation_Update(play, &this->unk_284)) {
         func_8082F43C(play, this, func_80849570);
         this->unk_ACC = 0;
-    } else if (LinkAnimation_OnFrame(&this->unk_284, 6.0f) != 0) {
-        func_80835BF8(&this->bodyPartsPos[0xC], this->actor.shape.rot.y, 0.0f, &sp54);
+    } else if (LinkAnimation_OnFrame(&this->unk_284, 6.0f)) {
+        Vec3f sp54;
+        EnBoom* temp_v0_4;
+        EnBoom* temp_v0_2;
+        s32 var_t0;
+        s16 temp;
 
+        func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_L_HAND], this->actor.shape.rot.y, 0.0f, &sp54);
         sp54.y = this->actor.world.pos.y + 50.0f;
 
-        if (this->unk_730 != NULL) {
-            var_t0 = this->actor.shape.rot.y + 0x36B0;
-        } else {
-            var_t0 = this->actor.shape.rot.y - 0x190;
-        }
-        temp_v0_2 = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, sp54.x, sp54.y, sp54.z, this->actor.focus.rot.x, var_t0, 0, 0);
-        //temp_v0_2 = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, sp54.x, sp54.y, sp54.z, this->actor.focus.rot.x, this->actor.shape.rot.y + ((this->unk_730 != NULL) ? 0x36B0 : - 0x190), 0, 0);
-        this->boomerangActor = temp_v0_2;
-        if (temp_v0_2 != NULL) {
-            s32 rotY;
+        temp = this->actor.shape.rot.y - 0x190;
+        var_t0 = (this->unk_730 != NULL) ? this->actor.shape.rot.y + 0x36B0 : temp;
+        temp_v0_2 = (EnBoom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, sp54.x, sp54.y, sp54.z, this->actor.focus.rot.x, var_t0, 0, ZORA_BOOMERANG_LEFT);
+        this->boomerangActor = &temp_v0_2->actor;
 
-            temp_v0_2->player = this->unk_730;
-            if (temp_v0_2->player != NULL) {
+        if (temp_v0_2 != NULL) {
+            temp_v0_2->moveTo = this->unk_730;
+            // Reordering here
+            if (temp_v0_2->moveTo != NULL) {
                 temp_v0_2->unk_1CF = 0x10;
             }
-            temp_v0_2->unk_1CC = (s8) (temp_v0_2->unk_1CF + 0x24);
-            temp_v0_2 = temp_v0_2;
-            func_80835BF8(&this->bodyPartsPos[0xF], this->actor.shape.rot.y, 0.0f, &sp54);
+            temp_v0_2->unk_1CC = temp_v0_2->unk_1CF + 0x24;
 
-            if (this->unk_730 != NULL) {
-                var_t0_2 = this->actor.shape.rot.y - 0x36B0;
-            } else {
-                var_t0_2 = this->actor.shape.rot.y + 0x190;
-            }
-            temp_v0_2 = temp_v0_2;
-            temp_v0_4 = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, sp54.x, sp54.y, sp54.z, (s16) (s32) this->actor.focus.rot.x, (s16) (s32) var_t0_2, (s16) 0, 1);
+            func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_R_HAND], this->actor.shape.rot.y, 0.0f, &sp54);
+
+            temp = (this->actor.shape.rot.y + 0x190);
+            var_t0 = (this->unk_730 != NULL) ? this->actor.shape.rot.y - 0x36B0 : temp;
+            temp_v0_4 = (EnBoom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, sp54.x, sp54.y, sp54.z, this->actor.focus.rot.x, var_t0, 0, ZORA_BOOMERANG_RIGHT);
+
             if (temp_v0_4 != NULL) {
-
-                temp_v0_4->player = this->unk_730;
-                if (temp_v0_4->player != NULL) {
+                temp_v0_4->moveTo = this->unk_730;
+                if (temp_v0_4->moveTo != NULL) {
                     temp_v0_4->unk_1CF = 0x10;
                 }
-                temp_v0_4->unk_1CC = (s8) (temp_v0_4->unk_1CF + 0x24);
-                temp_v0_2->actor.child = temp_v0_4;
-                temp_v0_4->actor.parent = temp_v0_2;
+                temp_v0_4->unk_1CC = temp_v0_4->unk_1CF + 0x24;
+                temp_v0_2->actor.child = &temp_v0_4->actor;
+                temp_v0_4->actor.parent = &temp_v0_2->actor;
             }
             this->stateFlags1 |= 0x02000000;
             this->stateFlags3 &= 0xFF7FFFFF;
-            if (func_80123420(this) == 0) {
+            if (!func_80123420(this)) {
                 func_8083133C(this);
             }
-            this->unk_D57 = 0x14;
-            func_800B8E58(this, 0x1805U);
-            func_8082DF8C(this, 0x6800U);
+            
+            this->unk_D57 = 20;
+
+            func_800B8E58(this, 0x1805);
+            func_8082DF8C(this, 0x6800);
         }
     }
     return 1;
