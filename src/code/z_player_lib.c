@@ -1878,13 +1878,13 @@ void func_801251C4(Player* player, Vec3f* arg1) {
     sp4C.y = player->actor.world.pos.y + 60.0f;
     sp4C.z = player->actor.world.pos.z;
     func_80124FF0(-20.0f, player->unk_B8C, &sp4C, player->actor.shape.rot.y, player->bodyPartsPos, arg1,
-                  &player->unk_B90, &player->unk_B08[2], 0.0f, 0x1F40, &player->unk_B92, &player->unk_B08[3], 0);
+                  &player->unk_B90, &player->unk_B10[0], 0.0f, 0x1F40, &player->unk_B92, &player->unk_B10[1], 0);
 
     sp40.x = (player->bodyPartsPos[6].x + player->bodyPartsPos[3].x) * 0.5f;
     sp40.y = (player->bodyPartsPos[6].y + player->bodyPartsPos[3].y) * 0.5f;
     sp40.z = (player->bodyPartsPos[6].z + player->bodyPartsPos[3].z) * 0.5f;
     func_80124FF0(-20.0f, player->unk_B90, arg1, (player->actor.shape.rot.y + player->unk_B92), &sp40, arg1,
-                  &player->unk_B94, &player->unk_B08[4], -1.9f, 0x1F40, &player->unk_B96, &player->unk_B08[5], 0);
+                  &player->unk_B94, &player->unk_B10[2], -1.9f, 0x1F40, &player->unk_B96, &player->unk_B10[3], 0);
 }
 
 void func_80125318(Vec3f* arg0, Vec3s* arg1) {
@@ -2082,7 +2082,7 @@ s32 func_80125580(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                     player->unk_AF0[0].y = 1.0f;
                 }
                 if (player->transformation == PLAYER_FORM_ZORA) {
-                    player->unk_AF0[0].y *= 1.0f + (0.29999995f * player->unk_B08[2]);
+                    player->unk_AF0[0].y *= 1.0f + (0.29999995f * player->unk_B10[0]);
                     player->unk_AF0[0].x = 1.0f;
                     player->unk_AF0[0].z = 1.0f;
                 }
@@ -2243,9 +2243,9 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
             *dList = player->waistDLists[D_801F59E4];
         } else if (limbIndex == PLAYER_LIMB_HAT) {
             if (player->transformation == PLAYER_FORM_ZORA) {
-                // Matrix_Scale((player->unk_B08[2] * 1.0f) + 1.0f, 1.0f, 1.0f, 1);
+                // Matrix_Scale((player->unk_B10[0] * 1.0f) + 1.0f, 1.0f, 1.0f, 1);
                 // super important (* 1)
-                Matrix_Scale((player->unk_B08[2] * 1) + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+                Matrix_Scale((player->unk_B10[0] * 1) + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
             }
         }
     }
@@ -3503,7 +3503,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
                 OPEN_DISPS(play->state.gfxCtx);
 
                 if (&gameplay_keep_Linkanim_00E200 == player->skelAnime.animation) {
-                    f32* phi_v0 = &player->unk_B08[2];
+                    f32* phi_v0 = &player->unk_B10[0];
 
                     for (i = 0; i < ARRAY_COUNT(sp178); i++) {
                         func_80124618(D_801C0510, *phi_v0, &sp178[i]);
@@ -3572,7 +3572,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
 
                     Matrix_Push();
                     Matrix_Translate(temp_s0_6->x, temp_s0_6->z, 0.0f, 1);
-                    Matrix_Scale(1.0f, 1.0f - player->unk_B08[5], 1.0f - player->unk_B08[4], 1);
+                    Matrix_Scale(1.0f, 1.0f - player->unk_B10[3], 1.0f - player->unk_B10[2], 1);
 
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
