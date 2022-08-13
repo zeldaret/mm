@@ -981,7 +981,8 @@ typedef struct Player {
     /* 0xAE8 */ s16 unk_AE8; // multipurpose timer
     /* 0xAEC */ f32 unk_AEC;
     /* 0xAF0 */ Vec3f unk_AF0[2];
-    /* 0xB08 */ f32 unk_B08[8]; // TODO: un-array this member, maybe it is a smaller array?
+    /* 0xB08 */ f32 unk_B08[2]; // TODO: un-array this member, maybe it is a smaller array?
+    /* 0xB10 */ f32 unk_B10[6]; // TODO: un-array this member, maybe it is a smaller array?
     /* 0xB28 */ s16 unk_B28; //Burning stick timer?
     /* 0xB2A */ s8 unk_B2A;
     /* 0xB2B */ s8 unk_B2B;

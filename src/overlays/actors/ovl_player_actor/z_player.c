@@ -15907,8 +15907,49 @@ void func_80851EC8(PlayState* play, Player* this) {
     temp2[0] = 3.0f;
 }
 
+#ifdef NON_MATCHING
+// regalloc and some reordering
+void func_80851F18(PlayState* play, Player* this) {
+    struct_8085D714* temp;
+    Vec3s* sp2C;
+    f32* temp_v0;
+    s32 i;
+    // s32 temp_t1;
+
+    // temp_t1 = this->unk_B86[0];
+    if (this->unk_B86[0] >= 0) {        
+        temp = D_8085D714 + this->unk_B86[0];
+        temp_v0 = &this->unk_B10[this->unk_B86[0]];
+        AnimationContext_SetLoadFrame(play, temp->unk_4, *temp_v0, this->skelAnime.limbCount, this->skelAnime.morphTable);
+        AnimationContext_SetCopyTrue(play, this->skelAnime.limbCount, this->skelAnime.jointTable, this->skelAnime.morphTable, D_8085BA08);
+    }
+    // temp_t1 = this->unk_B86[1];
+    if (this->unk_B86[1] >= 0) {        
+        temp = D_8085D714 + this->unk_B86[1];
+        temp_v0 = &this->unk_B10[this->unk_B86[1]];
+        sp2C = ((s32)this->unk_88A + 0xF) & ~0xF;
+        AnimationContext_SetLoadFrame(play, temp->unk_4, *temp_v0, (0,this->skelAnime.limbCount), sp2C);
+        AnimationContext_SetCopyTrue(play, this->skelAnime.limbCount, this->skelAnime.jointTable, sp2C, D_8085BA20);
+    }
+
+    temp_v0 = this->unk_B10;
+    for (i = 0; i < 5; i++) {
+        *temp_v0 += 1.0f;
+        if (*temp_v0 >= 9.0f) {
+            *temp_v0 = 8.0f;
+            if (this->unk_B86[0] == i) {
+                this->unk_B86[0] = -1;
+            } else if (this->unk_B86[1] == i) {
+                this->unk_B86[1] = -1;
+            }
+        }
+        temp_v0++;
+    }
+}
+#else
 void func_80851F18(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80851F18.s")
+#endif
 
 // Goron playing the drums?
 void func_808521E0(PlayState* play, Player* this) {
