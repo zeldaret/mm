@@ -567,12 +567,12 @@ typedef struct GetItemEntry {
     /* 0x4 */ u16 objectId;
 } GetItemEntry; // size = 0x6
 
-struct _struct_D_8085D200_0xC {
-    /* 0x0 */ LinkAnimationHeader* unk_0; /* inferred */
-    /* 0x4 */ LinkAnimationHeader* unk_4; /* inferred */
-    /* 0x8 */ u8 unk_8;                   /* inferred */
-    /* 0x9 */ u8 unk_9;                   /* inferred */
-};                                        /* size = 0xC */
+typedef struct struct_8085D200 {
+    /* 0x0 */ LinkAnimationHeader* unk_0;
+    /* 0x4 */ LinkAnimationHeader* unk_4;
+    /* 0x8 */ u8 unk_8;
+    /* 0x9 */ u8 unk_9;
+} struct_8085D200; // size = 0xC
 
 // TODO: less dumb name
 #define SFX_VOICE_BANK_SIZE 0x20
@@ -6030,7 +6030,7 @@ u8 D_8085D1A4[PLAYER_AP_MAX] = {
 
 LinkAnimationHeader* D_8085D1F8[2] = { &gameplay_keep_Linkanim_00DCA8, &gameplay_keep_Linkanim_00DE98 };
 
-struct _struct_D_8085D200_0xC D_8085D200[2] = {
+struct_8085D200 D_8085D200[] = {
     { &gameplay_keep_Linkanim_00D4A0, &gameplay_keep_Linkanim_00D498, 2, 3 },
     { &gameplay_keep_Linkanim_00D4D0, &gameplay_keep_Linkanim_00D4C8, 5, 3 },
 };
@@ -7356,8 +7356,6 @@ s32 func_8083A658(PlayState* play, Player* this) {
     }
     return false;
 }
-
-extern struct _struct_D_8085D200_0xC D_8085D200[];
 
 s32 func_8083A6C0(PlayState* play, Player* this) {
     if (D_80862B48 != 0) {
@@ -10629,112 +10627,6 @@ Color_RGBA8 D_8085D37C = { 255, 255, 100, 255 };
 
 Color_RGBA8 D_8085D380 = { 255, 50, 0, 0 };
 
-s8 D_8085D384[0x5C] = {
-    0,    2,    2,    4,    3,    0x38, 8,    0,    0,    0x87, 0x15, 0x3D, 0x3E, 0x3C, 0x3F,  0x40, 0x41, 0x42, 0x46,
-    0x13, 0x47, 0x48, 0x43, 0x49, 0x4A, 0x4B, 0x44, 0x45, 0x4C, 0x74, 0,    0x28, 0,    -0x34, 0x2A, 0x2B, 0x39, 0x51,
-    0x29, 0x35, 0x36, 0x2C, 0x37, 0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0x4D, 0x4E, 0x4F,  0x50, 0x51, 0x52, 0x53,
-    0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5E, 0x5F, 0x64, 0x65, 0x62, 0x63,  0x66, 0x67, 0x68, 0x70,
-    0x71, 0x75, 0x68, 0x68, 0x69, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x76, 0x77, 0x78, 0x72, 0x6F,  0x7A,
-};
-
-f32 D_8085D3E0[PLAYER_FORM_MAX] = { 0.8f, 0.6f, 0.8f, 1.5f, 1.0f };
-
-Color_RGBA8 D_8085D3F4 = { 100, 255, 255, 0 };
-
-Color_RGBA8 D_8085D3F8 = { 0, 100, 100, 0 };
-
-f32 D_8085D3FC[2] = { 0.005f, 0.05f };
-
-f32 D_8085D404[3] = { 2.0f, 4.0f, 11.0f };
-
-f32 D_8085D410[3] = { 0.5f, 1.0f, 3.0f };
-
-Vec3f D_8085D41C = { 0.0f, 0.0f, -30.0f };
-
-struct_80124618 D_8085D428[5] = {
-    { 0, { 0, 0, 0 } },          { 1, { 0x50, 0xAA, 0x50 } }, { 3, { 0x64, 0x50, 0x64 } },
-    { 7, { 0x64, 0x64, 0x64 } }, { 8, { 0x64, 0x64, 0x64 } },
-};
-
-struct_80124618 D_8085D450[5] = {
-    { 0, { 0, 0, 0 } },          { 1, { 0x50, 0xAA, 0x50 } }, { 3, { 0x64, 0x50, 0x64 } },
-    { 7, { 0x64, 0x64, 0x64 } }, { 8, { 0x64, 0x64, 0x64 } },
-};
-
-struct_80124618 D_8085D478[2] = { { 0, { 0, 0, 0 } }, { 8, { 0, 0, 0 } } };
-
-struct_80124618 D_8085D488[5] = {
-    { 0, { 0x64, 0x64, 0x64 } }, { 1, { 0x64, 0x3C, 0x64 } }, { 3, { 0x64, 0x8C, 0x64 } },
-    { 7, { 0x64, 0x50, 0x64 } }, { 9, { 0x64, 0x64, 0x64 } },
-};
-
-struct_80124618 D_8085D4B0[6] = {
-    { 0, { 0x64, 0x64, 0x64 } }, { 1, { 0x64, 0x46, 0x64 } }, { 3, { 0x64, 0x78, 0x64 } },
-    { 6, { 0x64, 0x50, 0x64 } }, { 8, { 0x64, 0x64, 0x64 } }, { 9, { 0x64, 0x64, 0x64 } },
-};
-struct_80124618 D_8085D4E0[6] = {
-    { 0, { 0, 0, 0 } },          { 1, { 0, 0, 0 } },          { 3, { 0x64, 0x82, 0x64 } },
-    { 5, { 0x82, 0x82, 0x82 } }, { 7, { 0x50, 0x5A, 0x50 } }, { 9, { 0x64, 0x64, 0x64 } },
-};
-
-struct_80124618 D_8085D510[2] = { { 0, { 0, 0x32, 0 } }, { 1, { 0, 0x32, 0 } } };
-struct_80124618 D_8085D520[2] = { { 0, { 0x64, 0x78, 0x64 } }, { 1, { 0x64, 0x78, 0x64 } } };
-struct_80124618 D_8085D530[2] = { { 0, { 0xA0, 0x78, 0xA0 } }, { 1, { 0xA0, 0x78, 0xA0 } } };
-struct_80124618 D_8085D540[2] = { { 0, { 0, 0, 0 } }, { 2, { 0x64, 0x64, 0x64 } } };
-struct_80124618* D_8085D550[3] = { D_8085D488, D_8085D4B0, D_8085D4E0 };
-struct_80124618* D_8085D55C[3] = { D_8085D428, D_8085D450, D_8085D478 };
-struct_80124618* D_8085D568[3] = { D_8085D510, D_8085D520, D_8085D530 };
-
-Gfx* D_8085D574[3] = { (Gfx*)0x06009C48, (Gfx*)0x06009AB8, (Gfx*)0x06009DB8 };
-
-Color_RGB8 D_8085D580 = { 0xFF, 0xFF, 0xFF };
-Color_RGB8 D_8085D584 = { 0x50, 0x50, 0xC8 };
-
-Vec3f D_8085D588[2] = { { 30.0f, 0.0f, 0.0f }, { -30.0f, 0.0f, 0.0f } };
-Vec3f D_8085D5A0[2] = { { 60.0f, 20.0f, 0.0f }, { -60.0f, 20.0f, 0.0f } };
-Vec3f D_8085D5B8[2] = { { 60.0f, -20.0f, 0.0f }, { -60.0f, -20.0f, 0.0f } };
-Vec3f D_8085D5D0 = { 0.0f, 0.0f, -30.0f };
-
-AnimSfxEntry D_8085D5DC[] = {
-    ANIMSFX(ANIMSFX_TYPE_1, 0, NA_SE_PL_SWIM, STOP),
-};
-
-AnimSfxEntry D_8085D5E0[] = {
-    ANIMSFX(ANIMSFX_TYPE_1, 60, NA_SE_IT_MASTER_SWORD_SWING, STOP),
-};
-
-LinkAnimationHeader* D_8085D5E4[3] = {
-    &gameplay_keep_Linkanim_00D9E8,
-    &gameplay_keep_Linkanim_00D528,
-    &gameplay_keep_Linkanim_00E2F8,
-};
-
-LinkAnimationHeader* D_8085D5F0[3] = {
-    &gameplay_keep_Linkanim_00D9E0,
-    &gameplay_keep_Linkanim_00D508,
-    &gameplay_keep_Linkanim_00E2F8,
-};
-
-u16 D_8085D5FC[4] = { 0x1830, 0x9BF, 0, 0 };
-
-AnimSfxEntry D_8085D604[] = {
-    ANIMSFX(ANIMSFX_TYPE_8, 20, 0, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_8, 30, 0, STOP),
-};
-
-AnimSfxEntry D_8085D60C[] = {
-    ANIMSFX(ANIMSFX_TYPE_2, 60, NA_SE_PL_BOUND, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_8, 140, 0, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_8, 164, 0, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_8, 170, 0, STOP),
-};
-AnimSfxEntry D_8085D61C[] = {
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 1, NA_SE_VO_LI_SWORD_N, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_3, 6, NA_SE_PL_WALK_GROUND, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_1, 6, NA_SE_PL_ROLL, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_5, 18, 0, STOP),
-};
-
 void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
     u8 seqMode;
     s32 pad[2];
@@ -10917,6 +10809,18 @@ void func_808446F4(PlayState* play, Player* this) {
     }
 }
 
+s8 D_8085D384[0x5C] = {
+    0,    2,    2,    4,    3,    0x38, 8,    0,    0,    0x87, 0x15, 0x3D, 0x3E, 0x3C, 0x3F,  0x40, 0x41, 0x42, 0x46,
+    0x13, 0x47, 0x48, 0x43, 0x49, 0x4A, 0x4B, 0x44, 0x45, 0x4C, 0x74, 0,    0x28, 0,    -0x34, 0x2A, 0x2B, 0x39, 0x51,
+    0x29, 0x35, 0x36, 0x2C, 0x37, 0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0x4D, 0x4E, 0x4F,  0x50, 0x51, 0x52, 0x53,
+    0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5E, 0x5F, 0x64, 0x65, 0x62, 0x63,  0x66, 0x67, 0x68, 0x70,
+    0x71, 0x75, 0x68, 0x68, 0x69, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x76, 0x77, 0x78, 0x72, 0x6F,  0x7A,
+};
+
+f32 D_8085D3E0[PLAYER_FORM_MAX] = {
+    0.8f, 0.6f, 0.8f, 1.5f, 1.0f,
+};
+
 void func_80844784(PlayState* play, Player* this) {
     f32 var_fv0;
     s16 var_a3;
@@ -11033,6 +10937,9 @@ void func_80844784(PlayState* play, Player* this) {
     Actor_UpdatePos(&this->actor);
 }
 
+Color_RGBA8 D_8085D3F4 = { 100, 255, 255, 0 };
+Color_RGBA8 D_8085D3F8 = { 0, 100, 100, 0 };
+
 void func_80844D80(PlayState* play, Player* this) {
     Vec3f pos;
     Vec3f spA0;
@@ -11054,7 +10961,9 @@ void func_80844D80(PlayState* play, Player* this) {
     }
 }
 
-void func_8085AACC(PlayState* play, Player* this, s32 arg2);
+f32 D_8085D3FC[] = { 0.005f, 0.05f };
+f32 D_8085D404[] = { 2.0f, 4.0f, 11.0f };
+f32 D_8085D410[] = { 0.5f, 1.0f, 3.0f };
 
 void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
     f32 temp_fv0;
@@ -11494,6 +11403,8 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
     player->actor.shape.yOffset = player->unk_ABC + player->unk_AC0;
 }
 
+Vec3f D_8085D41C = { 0.0f, 0.0f, -30.0f };
+
 #ifdef NON_MATCHING
 // in-function static bss
 void Player_Update(Actor* thisx, PlayState* play) {
@@ -11596,6 +11507,68 @@ void func_80846460(Player* this) {
     Math_Vec3f_Copy(this->actor.shape.feetPos, pos);
     Math_Vec3f_Copy(&this->actor.shape.feetPos[1], pos);
 }
+
+struct_80124618 D_8085D428[] = {
+    { 0, { 0, 0, 0 } },          { 1, { 0x50, 0xAA, 0x50 } }, { 3, { 0x64, 0x50, 0x64 } },
+    { 7, { 0x64, 0x64, 0x64 } }, { 8, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_8085D450[] = {
+    { 0, { 0, 0, 0 } },          { 1, { 0x50, 0xAA, 0x50 } }, { 3, { 0x64, 0x50, 0x64 } },
+    { 7, { 0x64, 0x64, 0x64 } }, { 8, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_8085D478[] = {
+    { 0, { 0, 0, 0 } },
+    { 8, { 0, 0, 0 } },
+};
+struct_80124618 D_8085D488[] = {
+    { 0, { 0x64, 0x64, 0x64 } }, { 1, { 0x64, 0x3C, 0x64 } }, { 3, { 0x64, 0x8C, 0x64 } },
+    { 7, { 0x64, 0x50, 0x64 } }, { 9, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_8085D4B0[] = {
+    { 0, { 0x64, 0x64, 0x64 } }, { 1, { 0x64, 0x46, 0x64 } }, { 3, { 0x64, 0x78, 0x64 } },
+    { 6, { 0x64, 0x50, 0x64 } }, { 8, { 0x64, 0x64, 0x64 } }, { 9, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_8085D4E0[] = {
+    { 0, { 0, 0, 0 } },          { 1, { 0, 0, 0 } },          { 3, { 0x64, 0x82, 0x64 } },
+    { 5, { 0x82, 0x82, 0x82 } }, { 7, { 0x50, 0x5A, 0x50 } }, { 9, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_8085D510[] = {
+    { 0, { 0, 0x32, 0 } },
+    { 1, { 0, 0x32, 0 } },
+};
+struct_80124618 D_8085D520[] = {
+    { 0, { 0x64, 0x78, 0x64 } },
+    { 1, { 0x64, 0x78, 0x64 } },
+};
+struct_80124618 D_8085D530[] = {
+    { 0, { 0xA0, 0x78, 0xA0 } },
+    { 1, { 0xA0, 0x78, 0xA0 } },
+};
+struct_80124618 D_8085D540[] = {
+    { 0, { 0, 0, 0 } },
+    { 2, { 0x64, 0x64, 0x64 } },
+};
+
+struct_80124618* D_8085D550[3] = {
+    D_8085D488,
+    D_8085D4B0,
+    D_8085D4E0,
+};
+struct_80124618* D_8085D55C[3] = {
+    D_8085D428,
+    D_8085D450,
+    D_8085D478,
+};
+struct_80124618* D_8085D568[3] = {
+    D_8085D510,
+    D_8085D520,
+    D_8085D530,
+};
+
+Gfx* D_8085D574[3] = { (Gfx*)0x06009C48, (Gfx*)0x06009AB8, (Gfx*)0x06009DB8 };
+
+Color_RGB8 D_8085D580 = { 255, 255, 255 };
+Color_RGB8 D_8085D584 = { 80, 80, 200 };
 
 void Player_Draw(Actor* thisx, PlayState* play) {
     Player* this = THIS;
@@ -12002,9 +11975,19 @@ void func_80847A50(Player* this) {
                   ((this->unk_AE7 != 0) ? NA_SE_PL_WALK_METAL1 : NA_SE_PL_WALK_LADDER) + this->ageProperties->unk_94);
 }
 
-extern Vec3f D_8085D588[];
-extern Vec3f D_8085D5A0[];
-extern Vec3f D_8085D5B8[];
+Vec3f D_8085D588[] = {
+    { 30.0f, 0.0f, 0.0f },
+    { -30.0f, 0.0f, 0.0f },
+};
+Vec3f D_8085D5A0[] = {
+    { 60.0f, 20.0f, 0.0f },
+    { -60.0f, 20.0f, 0.0f },
+};
+Vec3f D_8085D5B8[] = {
+    { 60.0f, -20.0f, 0.0f },
+    { -60.0f, -20.0f, 0.0f },
+};
+Vec3f D_8085D5D0 = { 0.0f, 0.0f, -30.0f };
 
 // related to mounting/unmounting the horse
 s32 func_80847A94(PlayState* play, Player* this, s32 arg2, f32* arg3) {
@@ -12102,8 +12085,6 @@ s32 func_80847ED4(Player* this) {
            CHECK_BTN_ALL(D_80862B44->cur.button, BTN_A);
 }
 
-extern Vec3f D_8085D5D0;
-
 void func_80847F1C(Player* this) {
     s32 pad;
     f32 yPos;
@@ -12125,6 +12106,10 @@ void func_80847F1C(Player* this) {
         func_8083133C(this);
     }
 }
+
+AnimSfxEntry D_8085D5DC[] = {
+    ANIMSFX(ANIMSFX_TYPE_1, 0, NA_SE_PL_SWIM, STOP),
+};
 
 void func_80847FF8(Player* this, f32* arg1, f32 arg2, s16 arg3) {
     func_8084748C(this, arg1, arg2, arg3);
@@ -12251,6 +12236,10 @@ s32 func_808482E0(PlayState* play, Player* this) {
 
     return false;
 }
+
+AnimSfxEntry D_8085D5E0[] = {
+    ANIMSFX(ANIMSFX_TYPE_1, 60, NA_SE_IT_MASTER_SWORD_SWING, STOP),
+};
 
 void func_808484CC(Player* this) {
     Player_PlayAnimSfx(this, D_8085D5E0);
@@ -12409,8 +12398,19 @@ s32 func_80848B6C(Player* this, PlayState* play) {
     return true;
 }
 
-extern LinkAnimationHeader* D_8085D5E4[];
-extern LinkAnimationHeader* D_8085D5F0[];
+LinkAnimationHeader* D_8085D5E4[] = {
+    &gameplay_keep_Linkanim_00D9E8,
+    &gameplay_keep_Linkanim_00D528,
+    &gameplay_keep_Linkanim_00E2F8,
+};
+
+LinkAnimationHeader* D_8085D5F0[] = {
+    &gameplay_keep_Linkanim_00D9E0,
+    &gameplay_keep_Linkanim_00D508,
+    &gameplay_keep_Linkanim_00E2F8,
+};
+
+u16 D_8085D5FC[] = { NA_SE_IT_BOW_FLICK, NA_SE_PL_DEKUNUTS_MISS_FIRE, 0, 0 };
 
 s32 func_80848BF4(Player* this, PlayState* play) {
     s32 index;
@@ -13603,6 +13603,11 @@ void func_8084BE40(Player* this, PlayState* play) {
     }
 }
 
+AnimSfxEntry D_8085D604[] = {
+    ANIMSFX(ANIMSFX_TYPE_8, 20, 0, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_8, 30, 0, STOP),
+};
+
 void func_8084BF28(Player* this, PlayState* play) {
     this->stateFlags2 |= PLAYER_STATE2_20;
 
@@ -13621,6 +13626,13 @@ void func_8084BF28(Player* this, PlayState* play) {
 
     Player_PlayAnimSfx(this, D_8085D604);
 }
+
+AnimSfxEntry D_8085D60C[] = {
+    ANIMSFX(ANIMSFX_TYPE_2, 60, NA_SE_PL_BOUND, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_8, 140, 0, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_8, 164, 0, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_8, 170, 0, STOP),
+};
 
 void func_8084BFDC(Player* this, PlayState* play) {
     if ((this->transformation != PLAYER_FORM_GORON) && (this->actor.depthInWater <= 0.0f)) {
@@ -13762,6 +13774,13 @@ void func_8084C16C(Player* this, PlayState* play) {
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084C16C.s")
 #endif
+
+AnimSfxEntry D_8085D61C[] = {
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 1, NA_SE_VO_LI_SWORD_N, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_3, 6, NA_SE_PL_WALK_GROUND, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_1, 6, NA_SE_PL_ROLL, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_5, 18, 0, STOP),
+};
 
 void func_8084C6EC(Player* this, PlayState* play) {
     s32 animFinished;
@@ -14934,8 +14953,8 @@ void func_8084F4E8(Player* this, PlayState* play) {
     }
 }
 
-f32 D_8085D66C[2] = { 11.0f, 21.0f };
-f32 D_8085D674[2] = { 40.0f, 50.0f };
+f32 D_8085D66C[] = { 11.0f, 21.0f };
+f32 D_8085D674[] = { 40.0f, 50.0f };
 
 AnimSfxEntry D_8085D67C[] = {
     ANIMSFX(ANIMSFX_TYPE_10, 10, NA_SE_PL_WALK_LADDER, CONTINUE),
@@ -16193,7 +16212,7 @@ struct_8085D798 D_8085D798[] = {
 };
 
 void func_808534C0(Player* this, PlayState* play) {
-    struct _struct_D_8085D200_0xC* sp24 = &D_8085D200[this->unk_AE8];
+    struct_8085D200* sp24 = &D_8085D200[this->unk_AE8];
 
     func_80832F24(this);
 
@@ -16354,53 +16373,6 @@ void func_80853850(Player* this, PlayState* play) {
 AnimSfxEntry D_8085D840[] = {
     ANIMSFX(ANIMSFX_TYPE_1, 30, NA_SE_PL_PUT_OUT_ITEM, STOP),
 };
-
-u8 D_8085D844[4] = { 0, 0, 0, 0 };
-
-struct_8085D848 D_8085D848[2] = {
-    {
-        {
-            { 0x28A, 0, 0, 0, 0xA, 0, 0x1E },
-            { 0x12C, 0xC8, 0xC8, 0xFF, 0, 0, 0 },
-            { 0x258, 0, 0, 0, 0, 0, 0xC8 },
-        },
-        {
-            { { -40.0f, 20.0f, -10.0f }, 0x78, 0xC8, 0xFF, 0x3E8 },
-            { { 0.0f, -10.0f, 0.0f }, 0xFF, 0xFF, 0xFF, 0x1388 },
-            { { -10.0f, 4.0f, 3.0f }, 0xC8, 0xC8, 0xFF, 0x1388 },
-        },
-    },
-    {
-        {
-            { 0x28A, 0, 0, 0, 0xA, 0, 0x1E },
-            { 0x12C, 0xC8, 0xC8, 0xFF, 0, 0, 0 },
-            { 0x258, 0, 0, 0, 0, 0, 0xC8 },
-        },
-        {
-            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, 0x64 },
-            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, 0x64 },
-            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, 0x64 },
-        },
-    },
-};
-
-AnimSfxEntry D_8085D8F0[] = {
-    ANIMSFX(ANIMSFX_TYPE_1, 2, NA_SE_PL_PUT_OUT_ITEM, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_1, 4, NA_SE_IT_SET_TRANSFORM_MASK, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_1, 11, NA_SE_PL_FREEZE_S, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_1, 30, NA_SE_PL_TRANSFORM_VOICE, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_1, 20, NA_SE_IT_TRANSFORM_MASK_BROKEN, STOP),
-};
-
-AnimSfxEntry D_8085D904[] = {
-    ANIMSFX(ANIMSFX_TYPE_1, 8, NA_SE_IT_SET_TRANSFORM_MASK, STOP),
-};
-
-u16 D_8085D908[] = { 0x1E80, 0x1E20, 0x1E40, 0x1E10 };
-
-struct_8085D910 D_8085D910[] = { { 0x10, 0xA, 0x3B, 0x3F }, { 9, 0x32, 0xA, 0xD } };
-
-extern u8 D_8085D1A4[PLAYER_AP_MAX];
 
 void func_80853A5C(Player* this, PlayState* play) {
     this->stateFlags2 |= PLAYER_STATE2_20;
@@ -16837,6 +16809,8 @@ void func_80854CD0(f32 arg0, s16* arg1, u8* arg2, u8* arg3, u8* arg4, s16* arg5,
     }
 }
 
+u8 D_8085D844[] = { 0, 0, 0 };
+
 #ifdef NON_MATCHING
 void func_80854EFC(PlayState* play, f32 arg1, struct_8085D848_unk_00* arg2) {
     struct_8085D848_unk_00 sp70;
@@ -16892,6 +16866,33 @@ void func_80854EFC(PlayState* play, f32 arg1, struct_8085D848_unk_00 arg2[]);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80854EFC.s")
 #endif
 
+struct_8085D848 D_8085D848[] = {
+    {
+        {
+            { 0x28A, 0, 0, 0, 0xA, 0, 0x1E },
+            { 0x12C, 0xC8, 0xC8, 0xFF, 0, 0, 0 },
+            { 0x258, 0, 0, 0, 0, 0, 0xC8 },
+        },
+        {
+            { { -40.0f, 20.0f, -10.0f }, 0x78, 0xC8, 0xFF, 0x3E8 },
+            { { 0.0f, -10.0f, 0.0f }, 0xFF, 0xFF, 0xFF, 0x1388 },
+            { { -10.0f, 4.0f, 3.0f }, 0xC8, 0xC8, 0xFF, 0x1388 },
+        },
+    },
+    {
+        {
+            { 0x28A, 0, 0, 0, 0xA, 0, 0x1E },
+            { 0x12C, 0xC8, 0xC8, 0xFF, 0, 0, 0 },
+            { 0x258, 0, 0, 0, 0, 0, 0xC8 },
+        },
+        {
+            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, 0x64 },
+            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, 0x64 },
+            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, 0x64 },
+        },
+    },
+};
+
 void func_808550D0(PlayState* play, Player* this, f32 arg2, f32 arg3, s32 arg4) {
     struct_8085D848* temp_a2 = &D_8085D848[arg4];
     struct_8085D848_unk_18* var_s0;
@@ -16913,8 +16914,17 @@ void func_808550D0(PlayState* play, Player* this, f32 arg2, f32 arg3, s32 arg4) 
                               var_s0->unk_10 * arg3);
 }
 
-extern struct_8085D910 D_8085D910[];
-extern u16 D_8085D908[];
+AnimSfxEntry D_8085D8F0[] = {
+    ANIMSFX(ANIMSFX_TYPE_1, 2, NA_SE_PL_PUT_OUT_ITEM, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_1, 4, NA_SE_IT_SET_TRANSFORM_MASK, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_1, 11, NA_SE_PL_FREEZE_S, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_1, 30, NA_SE_PL_TRANSFORM_VOICE, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_1, 20, NA_SE_IT_TRANSFORM_MASK_BROKEN, STOP),
+};
+
+AnimSfxEntry D_8085D904[] = {
+    ANIMSFX(ANIMSFX_TYPE_1, 8, NA_SE_IT_SET_TRANSFORM_MASK, STOP),
+};
 
 void func_80855218(PlayState* play, Player* this, UNK_PTR arg2) {
     if (LinkAnimation_Update(play, &this->skelAnime) && (this->skelAnime.animation == &gameplay_keep_Linkanim_00D0C8)) {
@@ -16953,6 +16963,9 @@ void func_80855218(PlayState* play, Player* this, UNK_PTR arg2) {
         }
     }
 }
+
+u16 D_8085D908[] = { 0x1E80, 0x1E20, 0x1E40, 0x1E10 };
+struct_8085D910 D_8085D910[] = { { 0x10, 0xA, 0x3B, 0x3F }, { 9, 0x32, 0xA, 0xD } };
 
 #ifdef NON_EQUIVALENT
 void func_808553F4(Player* this, PlayState* play) {
@@ -17435,427 +17448,6 @@ void func_808566C0(PlayState* play, Player* this, s32 arg2, f32 arg3, f32 arg4, 
     EffectSsKirakira_SpawnDispersed(play, &pos, &D_8085D940, &D_8085D94C, &primColor, &envColor, scale, life);
 }
 
-f32 D_8085D958[2] = { 600.0f, 960.0f };
-Vec3f D_8085D960 = { -30.0f, 50.0f, 0.0f };
-Vec3f D_8085D96C = { 30.0f, 50.0f, 0.0f };
-Vec3f D_8085D978 = { -30.0f, 60.0f, 0.0f };
-Vec3f D_8085D984 = { 30.0f, 60.0f, 0.0f };
-
-void (*D_8085D990[0x14])(PlayState*, Player*, void*) = {
-    /*  0 */ NULL,
-    /*  1 */ func_80858DB4,
-    /*  2 */ func_80858DDC,
-    /*  3 */ func_80858E40,
-    /*  4 */ func_80858E60,
-    /*  5 */ func_80858E80,
-    /*  6 */ func_80858EA0,
-    /*  7 */ func_80858EFC,
-    /*  8 */ func_80858F1C,
-    /*  9 */ func_80858F3C,
-    /* 10 */ func_80858F5C,
-    /* 11 */ func_80858FBC,
-    /* 12 */ func_80859028,
-    /* 13 */ func_808591BC,
-    /* 14 */ func_80858DFC,
-    /* 15 */ func_80858F7C,
-    /* 16 */ func_80858F9C,
-    /* 17 */ func_80859168,
-    /* 18 */ func_80859210,
-    /* 19 */ func_80858EC0,
-};
-
-AnimSfxEntry D_8085D9E0[] = {
-    ANIMSFX(ANIMSFX_TYPE_5, 34, 0, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_1, 45, NA_SE_PL_CALM_HIT, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_1, 51, NA_SE_PL_CALM_HIT, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_1, 64, NA_SE_PL_CALM_HIT, STOP),
-};
-AnimSfxEntry D_8085D9F0[] = {
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 7, NA_SE_VO_LI_DEMO_DAMAGE, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_2, 18, NA_SE_PL_BOUND, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 18, NA_SE_VO_LI_FREEZE, STOP),
-};
-AnimSfxEntry D_8085D9FC[] = {
-    ANIMSFX(ANIMSFX_TYPE_3, 14, NA_SE_PL_LAND_GROUND, STOP),
-};
-AnimSfxEntry D_8085DA00[] = {
-    ANIMSFX(ANIMSFX_TYPE_1, 6, NA_SE_PL_GET_UP, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_1, 18, NA_SE_VO_LK_WAKE_UP, STOP),
-};
-AnimSfxEntry D_8085DA08[] = {
-    ANIMSFX(ANIMSFX_TYPE_3, 26, NA_SE_PL_LAND_GROUND, STOP),
-};
-AnimSfxEntry D_8085DA0C[] = {
-    ANIMSFX(ANIMSFX_TYPE_8, 16, 0, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_7, 36, 0, STOP),
-};
-AnimSfxEntry D_8085DA14[] = {
-    ANIMSFX(ANIMSFX_TYPE_7, 55, 0, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_1, 55, NA_SE_VO_LK_CATCH_DEMO, STOP),
-};
-AnimSfxEntry D_8085DA1C[] = {
-    ANIMSFX(ANIMSFX_TYPE_1, 4, NA_SE_VO_LK_USING_UP_ENERGY, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_2, 16, NA_SE_PL_BOUND, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 16, NA_SE_VO_LI_DAMAGE_S, STOP),
-};
-AnimSfxEntry D_8085DA28[] = {
-    ANIMSFX(ANIMSFX_TYPE_3, 28, NA_SE_PL_LAND_GROUND, STOP),
-};
-AnimSfxEntry D_8085DA2C[] = {
-    ANIMSFX(ANIMSFX_TYPE_1, 1, NA_SE_VO_LK_USING_UP_ENERGY, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_7, 42, 0, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 44, NA_SE_VO_LI_FALL_L, STOP),
-};
-AnimSfxEntry D_8085DA38[] = {
-    ANIMSFX(ANIMSFX_TYPE_2, 1, NA_SE_PL_BOUND, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 1, NA_SE_VO_LI_DAMAGE_S, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_3, 39, NA_SE_PL_LAND_GROUND, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_5, 49, 0, STOP),
-};
-AnimSfxEntry D_8085DA48[] = {
-    ANIMSFX(ANIMSFX_TYPE_6, 1, 0, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_6, 5, 0, STOP),
-};
-AnimSfxEntry D_8085DA50[] = {
-    ANIMSFX(ANIMSFX_TYPE_6, 10, 0, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_6, 13, 0, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_6, 16, 0, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_6, 19, 0, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_6, 22, 0, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_2, 22, NA_SE_PL_SLIP, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 55, NA_SE_VO_LI_DAMAGE_S, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_5, 62, 0, STOP),
-};
-
-AnimSfxEntry D_8085DA70[] = {
-    ANIMSFX(ANIMSFX_TYPE_6, 42, 0, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_6, 48, 0, STOP),
-};
-AnimSfxEntry D_8085DA78[] = {
-    ANIMSFX(ANIMSFX_TYPE_2, 2, NA_SE_PL_BOUND, STOP),
-};
-AnimSfxEntry D_8085DA7C[] = {
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 5, NA_SE_VO_LI_FREEZE, STOP),
-};
-AnimSfxEntry D_8085DA80[] = {
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 1, NA_SE_VO_LI_FALL_L, STOP),
-};
-AnimSfxEntry D_8085DA84[] = {
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 13, NA_SE_VO_LI_HANG, STOP),
-};
-AnimSfxEntry D_8085DA88[] = {
-    ANIMSFX(ANIMSFX_TYPE_5, 26, 0, STOP),
-};
-AnimSfxEntry D_8085DA8C[] = {
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 4, NA_SE_VO_LI_SURPRISE, STOP),
-};
-AnimSfxEntry D_8085DA90[] = {
-    ANIMSFX(ANIMSFX_TYPE_1, 18, NA_SE_PL_SIT_ON_HORSE, STOP),
-};
-
-struct_8085DA94 D_8085DA94[140] = {
-    /*   0 */ { 0, { NULL } },
-    /*   1 */ { -1, { func_808594D0 } },
-    /*   2 */ { 0, { NULL } },
-    /*   3 */ { 0, { NULL } },
-    /*   4 */ { 3, { &gameplay_keep_Linkanim_00D568 } },
-    /*   5 */ { 0, { NULL } },
-    /*   6 */ { 0, { NULL } },
-    /*   7 */ { -1, { func_808594D0 } },
-    /*   8 */ { 2, { &gameplay_keep_Linkanim_00D5A0 } },
-    /*   9 */ { -1, { func_8085978C } },
-    /*  10 */ { 3, { &gameplay_keep_Linkanim_00D680 } },
-    /*  11 */ { 5, { &gameplay_keep_Linkanim_00D1C0 } },
-    /*  12 */ { 7, { &gameplay_keep_Linkanim_00D1C8 } },
-    /*  13 */ { 2, { &gameplay_keep_Linkanim_00D560 } },
-    /*  14 */ { 0, { NULL } },
-    /*  15 */ { 3, { &gameplay_keep_Linkanim_00D5D0 } },
-    /*  16 */ { -1, { func_80859B54 } },
-    /*  17 */ { 2, { &gameplay_keep_Linkanim_00DDA8 } },
-    /*  18 */ { 16, { &gameplay_keep_Linkanim_00DCB0 } },
-    /*  19 */ { -1, { func_80859CA0 } },
-    /*  20 */ { -1, { func_808594D0 } },
-    /*  21 */ { 3, { &gameplay_keep_Linkanim_00D190 } },
-    /*  22 */ { 6, { &gameplay_keep_Linkanim_00E168 } },
-    /*  23 */ { 3, { &gameplay_keep_Linkanim_00D640 } },
-    /*  24 */ { 3, { &gameplay_keep_Linkanim_00DF38 } },
-    /*  25 */ { -1, { func_80859CFC } },
-    /*  26 */ { -1, { func_8085A66C } },
-    /*  27 */ { 3, { &gameplay_keep_Linkanim_00D688 } },
-    /*  28 */ { 3, { &gameplay_keep_Linkanim_00D610 } },
-    /*  29 */ { 3, { &gameplay_keep_Linkanim_00D620 } },
-    /*  30 */ { 3, { &gameplay_keep_Linkanim_00D628 } },
-    /*  31 */ { 6, { &gameplay_keep_Linkanim_00D310 } },
-    /*  32 */ { -1, { func_80859FCC } },
-    /*  33 */ { 3, { &gameplay_keep_Linkanim_00D2D0 } },
-    /*  34 */ { 4, { &gameplay_keep_Linkanim_00D2C8 } },
-    /*  35 */ { 3, { &gameplay_keep_Linkanim_00D2B8 } },
-    /*  36 */ { -1, { func_8085A120 } },
-    /*  37 */ { -1, { func_8085A19C } },
-    /*  38 */ { 6, { &gameplay_keep_Linkanim_00D278 } },
-    /*  39 */ { 6, { &gameplay_keep_Linkanim_00D288 } },
-    /*  40 */ { 5, { &gameplay_keep_Linkanim_00E428 } },
-    /*  41 */ { 5, { &gameplay_keep_Linkanim_00D060 } },
-    /*  42 */ { 5, { &gameplay_keep_Linkanim_00E148 } },
-    /*  43 */ { 5, { &gameplay_keep_Linkanim_00E150 } },
-    /*  44 */ { 7, { &gameplay_keep_Linkanim_00D068 } },
-    /*  45 */ { 5, { &gameplay_keep_Linkanim_00E420 } },
-    /*  46 */ { 5, { &gameplay_keep_Linkanim_00E430 } },
-    /*  47 */ { 5, { &gameplay_keep_Linkanim_00E440 } },
-    /*  48 */ { 3, { &gameplay_keep_Linkanim_00CF68 } },
-    /*  49 */ { 5, { &gameplay_keep_Linkanim_00D2F0 } },
-    /*  50 */ { 5, { &gameplay_keep_Linkanim_00E468 } },
-    /*  51 */ { 5, { &gameplay_keep_Linkanim_00E460 } },
-    /*  52 */ { 5, { &gameplay_keep_Linkanim_00E140 } },
-    /*  53 */ { 5, { &gameplay_keep_Linkanim_00E118 } },
-    /*  54 */ { 4, { &gameplay_keep_Linkanim_00E120 } },
-    /*  55 */ { 5, { &gameplay_keep_Linkanim_00E110 } },
-    /*  56 */ { 14, { &gameplay_keep_Linkanim_00E140 } },
-    /*  57 */ { 5, { &gameplay_keep_Linkanim_00D0E0 } },
-    /*  58 */ { -1, { func_8085978C } },
-    /*  59 */ { 5, { &gameplay_keep_Linkanim_00D0A0 } },
-    /*  60 */ { 2, { &gameplay_keep_Linkanim_00D080 } },
-    /*  61 */ { 7, { &gameplay_keep_Linkanim_00D0B8 } },
-    /*  62 */ { 5, { &gameplay_keep_Linkanim_00D0C0 } },
-    /*  63 */ { 3, { &gameplay_keep_Linkanim_00CF60 } },
-    /*  64 */ { 3, { &gameplay_keep_Linkanim_00CF48 } },
-    /*  65 */ { 3, { &gameplay_keep_Linkanim_00CF58 } },
-    /*  66 */ { 3, { &gameplay_keep_Linkanim_00CF40 } },
-    /*  67 */ { -1, { func_8085968C } },
-    /*  68 */ { -1, { func_8085A24C } },
-    /*  69 */ { -1, { func_8085A330 } },
-    /*  70 */ { 7, { &gameplay_keep_Linkanim_00D0D8 } },
-    /*  71 */ { 5, { &gameplay_keep_Linkanim_00D090 } },
-    /*  72 */ { 5, { &gameplay_keep_Linkanim_00D088 } },
-    /*  73 */ { 3, { &gameplay_keep_Linkanim_00CF88 } },
-    /*  74 */ { 3, { &gameplay_keep_Linkanim_00CF90 } },
-    /*  75 */ { 3, { &gameplay_keep_Linkanim_00CF78 } },
-    /*  76 */ { 3, { &gameplay_keep_Linkanim_00CF80 } },
-    /*  77 */ { 7, { &gameplay_keep_Linkanim_00D308 } },
-    /*  78 */ { 5, { &gameplay_keep_Linkanim_00D300 } },
-    /*  79 */ { 3, { &gameplay_keep_Linkanim_00D018 } },
-    /*  80 */ { 4, { &gameplay_keep_Linkanim_00D028 } },
-    /*  81 */ { 3, { &gameplay_keep_Linkanim_00CFE0 } },
-    /*  82 */ { 4, { &gameplay_keep_Linkanim_00D058 } },
-    /*  83 */ { 3, { &gameplay_keep_Linkanim_00D030 } },
-    /*  84 */ { 5, { &gameplay_keep_Linkanim_00CFB0 } },
-    /*  85 */ { 3, { &gameplay_keep_Linkanim_00CFC8 } },
-    /*  86 */ { 4, { &gameplay_keep_Linkanim_00D040 } },
-    /*  87 */ { 5, { &gameplay_keep_Linkanim_00D1D0 } },
-    /*  88 */ { 3, { &gameplay_keep_Linkanim_00CFD8 } },
-    /*  89 */ { 4, { &gameplay_keep_Linkanim_00CFC0 } },
-    /*  90 */ { 4, { &gameplay_keep_Linkanim_00CFB8 } },
-    /*  91 */ { 4, { &gameplay_keep_Linkanim_00D050 } },
-    /*  92 */ { 4, { &gameplay_keep_Linkanim_00D048 } },
-    /*  93 */ { -1, { func_8085A8C4 } },
-    /*  94 */ { 3, { &gameplay_keep_Linkanim_00D000 } },
-    /*  95 */ { 3, { &gameplay_keep_Linkanim_00D010 } },
-    /*  96 */ { 9, { &gameplay_keep_Linkanim_00DAD0 } },
-    /*  97 */ { -1, { func_8085A530 } },
-    /*  98 */ { 15, { &gameplay_keep_Linkanim_00D0A8 } },
-    /*  99 */ { 7, { &gameplay_keep_Linkanim_00D098 } },
-    /* 100 */ { 3, { &gameplay_keep_Linkanim_00CFA0 } },
-    /* 101 */ { 3, { &gameplay_keep_Linkanim_00CFF0 } },
-    /* 102 */ { -1, { func_8085A768 } },
-    /* 103 */ { -1, { func_8085AA60 } },
-    /* 104 */ { 5, { &gameplay_keep_Linkanim_00D070 } },
-    /* 105 */ { 5, { &gameplay_keep_Linkanim_00D358 } },
-    /* 106 */ { 5, { &gameplay_keep_Linkanim_00D330 } },
-    /* 107 */ { 5, { &gameplay_keep_Linkanim_00D340 } },
-    /* 108 */ { 5, { &gameplay_keep_Linkanim_00D350 } },
-    /* 109 */ { 5, { &gameplay_keep_Linkanim_00D328 } },
-    /* 110 */ { 7, { &gameplay_keep_Linkanim_00D368 } },
-    /* 111 */ { 3, { &gameplay_keep_Linkanim_00D9F8 } },
-    /* 112 */ { 5, { &gameplay_keep_Linkanim_00D108 } },
-    /* 113 */ { 5, { &gameplay_keep_Linkanim_00D118 } },
-    /* 114 */ { 4, { &gameplay_keep_Linkanim_00CF98 } },
-    /* 115 */ { 2, { &gameplay_keep_Linkanim_00D5B8 } },
-    /* 116 */ { 7, { &gameplay_keep_Linkanim_00E010 } },
-    /* 117 */ { 5, { &gameplay_keep_Linkanim_00D0F8 } },
-    /* 118 */ { 7, { &gameplay_keep_Linkanim_00D2D8 } },
-    /* 119 */ { 7, { &gameplay_keep_Linkanim_00D2E0 } },
-    /* 120 */ { 7, { &gameplay_keep_Linkanim_00D2E8 } },
-    /* 121 */ { -1, { func_80859990 } },
-    /* 122 */ { 0, { NULL } },
-    /* 123 */ { -1, { func_80859A10 } },
-    /* 124 */ { 7, { &gameplay_keep_Linkanim_00D158 } },
-    /* 125 */ { 5, { &gameplay_keep_Linkanim_00D160 } },
-    /* 126 */ { 5, { &gameplay_keep_Linkanim_00D168 } },
-    /* 127 */ { 3, { &gameplay_keep_Linkanim_00D5C0 } },
-    /* 128 */ { 4, { &gameplay_keep_Linkanim_00D668 } },
-    /* 129 */ { 3, { &gameplay_keep_Linkanim_00E470 } },
-    /* 130 */ { 3, { &gameplay_keep_Linkanim_00E478 } },
-    /* 131 */ { 3, { &gameplay_keep_Linkanim_00E4C0 } },
-    /* 132 */ { 3, { &gameplay_keep_Linkanim_00E480 } },
-    /* 133 */ { 3, { &gameplay_keep_Linkanim_00E490 } },
-    /* 134 */ { 3, { &gameplay_keep_Linkanim_00E488 } },
-    /* 135 */ { 3, { &gameplay_keep_Linkanim_00E498 } },
-    /* 136 */ { 3, { &gameplay_keep_Linkanim_00E4B0 } },
-    /* 137 */ { 3, { &gameplay_keep_Linkanim_00D660 } },
-    /* 138 */ { 3, { &gameplay_keep_Linkanim_00DA00 } },
-    /* 139 */ { 3, { &gameplay_keep_Linkanim_00DA08 } },
-};
-
-struct_8085DA94 D_8085DEF4[140] = {
-    /*   0 */ { 0, { NULL } },
-    /*   1 */ { -1, { func_80859414 } },
-    /*   2 */ { -1, { func_80859AD0 } },
-    /*   3 */ { -1, { func_80859B28 } },
-    /*   4 */ { 11, { NULL } },
-    /*   5 */ { -1, { func_8085ADA0 } },
-    /*   6 */ { -1, { func_8085AACC } },
-    /*   7 */ { -1, { func_808595B8 } },
-    /*   8 */ { 18, { D_8085DA70 } },
-    /*   9 */ { -1, { func_80859890 } },
-    /*  10 */ { -1, { func_80859C60 } },
-    /*  11 */ { 18, { D_8085D9E0 } },
-    /*  12 */ { 11, { NULL } },
-    /*  13 */ { 11, { NULL } },
-    /*  14 */ { 0, { NULL } },
-    /*  15 */ { 11, { NULL } },
-    /*  16 */ { 17, { &gameplay_keep_Linkanim_00DDB8 } },
-    /*  17 */ { 11, { NULL } },
-    /*  18 */ { 11, { NULL } },
-    /*  19 */ { -1, { func_8085A710 } },
-    /*  20 */ { -1, { func_808595B8 } },
-    /*  21 */ { 12, { &gameplay_keep_Linkanim_00D198 } },
-    /*  22 */ { -1, { func_80859D70 } },
-    /*  23 */ { 12, { &gameplay_keep_Linkanim_00D648 } },
-    /*  24 */ { 11, { NULL } },
-    /*  25 */ { 11, { NULL } },
-    /*  26 */ { -1, { func_8085A6C0 } },
-    /*  27 */ { 12, { &gameplay_keep_Linkanim_00D690 } },
-    /*  28 */ { 12, { &gameplay_keep_Linkanim_00D618 } },
-    /*  29 */ { 12, { &gameplay_keep_Linkanim_00D630 } },
-    /*  30 */ { 12, { &gameplay_keep_Linkanim_00D298 } },
-    /*  31 */ { 12, { &gameplay_keep_Linkanim_00D318 } },
-    /*  32 */ { -1, { func_80859FF4 } },
-    /*  33 */ { -1, { func_8085A04C } },
-    /*  34 */ { 11, { NULL } },
-    /*  35 */ { 12, { &gameplay_keep_Linkanim_00D2C0 } },
-    /*  36 */ { -1, { func_8085A144 } },
-    /*  37 */ { -1, { func_8085A1D4 } },
-    /*  38 */ { 12, { &gameplay_keep_Linkanim_00D280 } },
-    /*  39 */ { 12, { &gameplay_keep_Linkanim_00D290 } },
-    /*  40 */ { 18, { D_8085D9F0 } },
-    /*  41 */ { 11, { NULL } },
-    /*  42 */ { 18, { D_8085DA00 } },
-    /*  43 */ { 13, { &gameplay_keep_Linkanim_00E158 } },
-    /*  44 */ { -1, { func_8085A364 } },
-    /*  45 */ { 18, { D_8085DA2C } },
-    /*  46 */ { 12, { &gameplay_keep_Linkanim_00E438 } },
-    /*  47 */ { 12, { &gameplay_keep_Linkanim_00E448 } },
-    /*  48 */ { 12, { &gameplay_keep_Linkanim_00CF70 } },
-    /*  49 */ { 12, { &gameplay_keep_Linkanim_00D2F8 } },
-    /*  50 */ { 18, { D_8085DA50 } },
-    /*  51 */ { 11, { NULL } },
-    /*  52 */ { 18, { D_8085D9FC } },
-    /*  53 */ { 12, { &gameplay_keep_Linkanim_00E120 } },
-    /*  54 */ { -1, { func_8085A364 } },
-    /*  55 */ { 18, { D_8085DA1C } },
-    /*  56 */ { 11, { NULL } },
-    /*  57 */ { 18, { D_8085DA0C } },
-    /*  58 */ { -1, { func_808599DC } },
-    /*  59 */ { 11, { NULL } },
-    /*  60 */ { 18, { D_8085DA28 } },
-    /*  61 */ { -1, { func_8085A364 } },
-    /*  62 */ { 11, { NULL } },
-    /*  63 */ { 11, { NULL } },
-    /*  64 */ { 12, { &gameplay_keep_Linkanim_00CF50 } },
-    /*  65 */ { -1, { func_8085A40C } },
-    /*  66 */ { 11, { NULL } },
-    /*  67 */ { -1, { func_80859708 } },
-    /*  68 */ { -1, { func_8085A2AC } },
-    /*  69 */ { 11, { NULL } },
-    /*  70 */ { 11, { NULL } },
-    /*  71 */ { -1, { func_8085A40C } },
-    /*  72 */ { 11, { NULL } },
-    /*  73 */ { 11, { NULL } },
-    /*  74 */ { 11, { NULL } },
-    /*  75 */ { 11, { NULL } },
-    /*  76 */ { 11, { NULL } },
-    /*  77 */ { 11, { NULL } },
-    /*  78 */ { 18, { D_8085DA78 } },
-    /*  79 */ { 12, { &gameplay_keep_Linkanim_00D020 } },
-    /*  80 */ { -1, { func_8085A364 } },
-    /*  81 */ { 12, { &gameplay_keep_Linkanim_00CFE8 } },
-    /*  82 */ { 11, { NULL } },
-    /*  83 */ { 12, { &gameplay_keep_Linkanim_00D038 } },
-    /*  84 */ { 18, { D_8085DA80 } },
-    /*  85 */ { 12, { &gameplay_keep_Linkanim_00CFD0 } },
-    /*  86 */ { 11, { NULL } },
-    /*  87 */ { 11, { NULL } },
-    /*  88 */ { 11, { NULL } },
-    /*  89 */ { 11, { NULL } },
-    /*  90 */ { 11, { NULL } },
-    /*  91 */ { 11, { NULL } },
-    /*  92 */ { 11, { NULL } },
-    /*  93 */ { -1, { func_8085A940 } },
-    /*  94 */ { 12, { &gameplay_keep_Linkanim_00D008 } },
-    /*  95 */ { 11, { NULL } },
-    /*  96 */ { -1, { func_8085A4A4 } },
-    /*  97 */ { -1, { func_8085A5DC } },
-    /*  98 */ { -1, { func_8085AA84 } },
-    /*  99 */ { 11, { NULL } },
-    /* 100 */ { 12, { &gameplay_keep_Linkanim_00CFA8 } },
-    /* 101 */ { 12, { &gameplay_keep_Linkanim_00CFF8 } },
-    /* 102 */ { -1, { func_8085A7C0 } },
-    /* 103 */ { 11, { NULL } },
-    /* 104 */ { 13, { &gameplay_keep_Linkanim_00D078 } },
-    /* 105 */ { 13, { &gameplay_keep_Linkanim_00D360 } },
-    /* 106 */ { 13, { &gameplay_keep_Linkanim_00D338 } },
-    /* 107 */ { 13, { &gameplay_keep_Linkanim_00D348 } },
-    /* 108 */ { 11, { NULL } },
-    /* 109 */ { 11, { NULL } },
-    /* 110 */ { 11, { NULL } },
-    /* 111 */ { 12, { &gameplay_keep_Linkanim_00D9F0 } },
-    /* 112 */ { 13, { &gameplay_keep_Linkanim_00D110 } },
-    /* 113 */ { 13, { &gameplay_keep_Linkanim_00D120 } },
-    /* 114 */ { 11, { NULL } },
-    /* 115 */ { -1, { func_8085AA10 } },
-    /* 116 */ { 11, { NULL } },
-    /* 117 */ { -1, { func_8085A364 } },
-    /* 118 */ { 11, { NULL } },
-    /* 119 */ { 11, { NULL } },
-    /* 120 */ { 11, { NULL } },
-    /* 121 */ { -1, { func_808599DC } },
-    /* 122 */ { -1, { func_80859AF8 } },
-    /* 123 */ { -1, { func_80859A44 } },
-    /* 124 */ { 11, { NULL } },
-    /* 125 */ { 11, { NULL } },
-    /* 126 */ { 11, { NULL } },
-    /* 127 */ { 12, { &gameplay_keep_Linkanim_00D5C8 } },
-    /* 128 */ { 11, { NULL } },
-    /* 129 */ { 12, { &gameplay_keep_Linkanim_00E4A8 } },
-    /* 130 */ { 11, { NULL } },
-    /* 131 */ { 11, { NULL } },
-    /* 132 */ { 11, { NULL } },
-    /* 133 */ { 11, { NULL } },
-    /* 134 */ { -1, { func_80859D44 } },
-    /* 135 */ { 11, { NULL } },
-    /* 136 */ { 12, { &gameplay_keep_Linkanim_00E4A0 } },
-    /* 137 */ { -1, { func_80859EBC } },
-    /* 138 */ { -1, { func_80859F4C } },
-    /* 139 */ { -1, { func_80859F4C } },
-};
-
-LinkAnimationHeader* D_8085E354[PLAYER_FORM_MAX] = {
-    &gameplay_keep_Linkanim_00E4B8, &gameplay_keep_Linkanim_00E4B8, &gameplay_keep_Linkanim_00E4B8,
-    &gameplay_keep_Linkanim_00E4B8, &gameplay_keep_Linkanim_00E160,
-};
-
-struct_8085E368 D_8085E368[PLAYER_FORM_MAX] = {
-    /* PLAYER_FORM_FIERCE_DEITY */ { { -200, 700, 100 }, { 800, 600, 800 } },
-    /* PLAYER_FORM_GORON        */ { { -200, 700, 100 }, { 800, 600, 800 } },
-    /* PLAYER_FORM_ZORA         */ { { -200, 700, 100 }, { 800, 600, 800 } },
-    /* PLAYER_FORM_DEKU         */ { { -200, 700, 100 }, { 800, 600, 800 } },
-    /* PLAYER_FORM_HUMAN        */ { { -200, 500, 0 }, { 600, 400, 600 } },
-};
-
-Color_RGBA8 D_8085E3A4 = { 255, 255, 255, 0 };
-
-Color_RGBA8 D_8085E3A8 = { 0, 128, 128, 0 };
-
 void func_8085687C(Player* this) {
 }
 
@@ -17876,6 +17468,10 @@ s32 func_80856888(f32* arg0, f32 arg1, f32 arg2) {
 
     return false;
 }
+
+f32 D_8085D958[] = { 600.0f, 960.0f };
+Vec3f D_8085D960 = { -30.0f, 50.0f, 0.0f };
+Vec3f D_8085D96C = { 30.0f, 50.0f, 0.0f };
 
 void func_80856918(Player* this, PlayState* play) {
     if ((this->boomerangActor != NULL) && (this->boomerangActor->update == NULL)) {
@@ -18220,6 +17816,9 @@ void func_80857AEC(PlayState* play, Player* this) {
         func_8082E1BC(this);
     }
 }
+
+Vec3f D_8085D978 = { -30.0f, 60.0f, 0.0f };
+Vec3f D_8085D984 = { 30.0f, 60.0f, 0.0f };
 
 #ifdef NON_EQUIVALENT
 void func_80857BE8(Player* this, PlayState* play) {
@@ -18697,6 +18296,118 @@ void func_80858FE8(Player* this) {
     }
 }
 
+void (*D_8085D990[])(PlayState*, Player*, void*) = {
+    /*  0 */ NULL,
+    /*  1 */ func_80858DB4,
+    /*  2 */ func_80858DDC,
+    /*  3 */ func_80858E40,
+    /*  4 */ func_80858E60,
+    /*  5 */ func_80858E80,
+    /*  6 */ func_80858EA0,
+    /*  7 */ func_80858EFC,
+    /*  8 */ func_80858F1C,
+    /*  9 */ func_80858F3C,
+    /* 10 */ func_80858F5C,
+    /* 11 */ func_80858FBC,
+    /* 12 */ func_80859028,
+    /* 13 */ func_808591BC,
+    /* 14 */ func_80858DFC,
+    /* 15 */ func_80858F7C,
+    /* 16 */ func_80858F9C,
+    /* 17 */ func_80859168,
+    /* 18 */ func_80859210,
+    /* 19 */ func_80858EC0,
+};
+
+AnimSfxEntry D_8085D9E0[] = {
+    ANIMSFX(ANIMSFX_TYPE_5, 34, 0, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_1, 45, NA_SE_PL_CALM_HIT, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_1, 51, NA_SE_PL_CALM_HIT, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_1, 64, NA_SE_PL_CALM_HIT, STOP),
+};
+AnimSfxEntry D_8085D9F0[] = {
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 7, NA_SE_VO_LI_DEMO_DAMAGE, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_2, 18, NA_SE_PL_BOUND, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 18, NA_SE_VO_LI_FREEZE, STOP),
+};
+AnimSfxEntry D_8085D9FC[] = {
+    ANIMSFX(ANIMSFX_TYPE_3, 14, NA_SE_PL_LAND_GROUND, STOP),
+};
+AnimSfxEntry D_8085DA00[] = {
+    ANIMSFX(ANIMSFX_TYPE_1, 6, NA_SE_PL_GET_UP, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_1, 18, NA_SE_VO_LK_WAKE_UP, STOP),
+};
+AnimSfxEntry D_8085DA08[] = {
+    ANIMSFX(ANIMSFX_TYPE_3, 26, NA_SE_PL_LAND_GROUND, STOP),
+};
+AnimSfxEntry D_8085DA0C[] = {
+    ANIMSFX(ANIMSFX_TYPE_8, 16, 0, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_7, 36, 0, STOP),
+};
+AnimSfxEntry D_8085DA14[] = {
+    ANIMSFX(ANIMSFX_TYPE_7, 55, 0, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_1, 55, NA_SE_VO_LK_CATCH_DEMO, STOP),
+};
+AnimSfxEntry D_8085DA1C[] = {
+    ANIMSFX(ANIMSFX_TYPE_1, 4, NA_SE_VO_LK_USING_UP_ENERGY, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_2, 16, NA_SE_PL_BOUND, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 16, NA_SE_VO_LI_DAMAGE_S, STOP),
+};
+AnimSfxEntry D_8085DA28[] = {
+    ANIMSFX(ANIMSFX_TYPE_3, 28, NA_SE_PL_LAND_GROUND, STOP),
+};
+AnimSfxEntry D_8085DA2C[] = {
+    ANIMSFX(ANIMSFX_TYPE_1, 1, NA_SE_VO_LK_USING_UP_ENERGY, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_7, 42, 0, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 44, NA_SE_VO_LI_FALL_L, STOP),
+};
+AnimSfxEntry D_8085DA38[] = {
+    ANIMSFX(ANIMSFX_TYPE_2, 1, NA_SE_PL_BOUND, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 1, NA_SE_VO_LI_DAMAGE_S, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_3, 39, NA_SE_PL_LAND_GROUND, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_5, 49, 0, STOP),
+};
+AnimSfxEntry D_8085DA48[] = {
+    ANIMSFX(ANIMSFX_TYPE_6, 1, 0, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_6, 5, 0, STOP),
+};
+AnimSfxEntry D_8085DA50[] = {
+    ANIMSFX(ANIMSFX_TYPE_6, 10, 0, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_6, 13, 0, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_6, 16, 0, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_6, 19, 0, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_6, 22, 0, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_2, 22, NA_SE_PL_SLIP, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 55, NA_SE_VO_LI_DAMAGE_S, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_5, 62, 0, STOP),
+};
+
+AnimSfxEntry D_8085DA70[] = {
+    ANIMSFX(ANIMSFX_TYPE_6, 42, 0, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_6, 48, 0, STOP),
+};
+AnimSfxEntry D_8085DA78[] = {
+    ANIMSFX(ANIMSFX_TYPE_2, 2, NA_SE_PL_BOUND, STOP),
+};
+AnimSfxEntry D_8085DA7C[] = {
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 5, NA_SE_VO_LI_FREEZE, STOP),
+};
+AnimSfxEntry D_8085DA80[] = {
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 1, NA_SE_VO_LI_FALL_L, STOP),
+};
+AnimSfxEntry D_8085DA84[] = {
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 13, NA_SE_VO_LI_HANG, STOP),
+};
+AnimSfxEntry D_8085DA88[] = {
+    ANIMSFX(ANIMSFX_TYPE_5, 26, 0, STOP),
+};
+AnimSfxEntry D_8085DA8C[] = {
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 4, NA_SE_VO_LI_SURPRISE, STOP),
+};
+AnimSfxEntry D_8085DA90[] = {
+    ANIMSFX(ANIMSFX_TYPE_1, 18, NA_SE_PL_SIT_ON_HORSE, STOP),
+};
+
 void func_80859028(PlayState* play, Player* this, void* anim) {
     if (LinkAnimation_Update(play, &this->skelAnime)) {
         func_80858D48(play, this, anim);
@@ -19009,6 +18720,308 @@ void func_80859CFC(PlayState* play, Player* this, UNK_TYPE arg2) {
 void func_80859D44(PlayState* play, Player* this, UNK_TYPE arg2) {
     LinkAnimation_Update(play, &this->skelAnime);
 }
+
+struct_8085DA94 D_8085DA94[140] = {
+    /*   0 */ { 0, { NULL } },
+    /*   1 */ { -1, { func_808594D0 } },
+    /*   2 */ { 0, { NULL } },
+    /*   3 */ { 0, { NULL } },
+    /*   4 */ { 3, { &gameplay_keep_Linkanim_00D568 } },
+    /*   5 */ { 0, { NULL } },
+    /*   6 */ { 0, { NULL } },
+    /*   7 */ { -1, { func_808594D0 } },
+    /*   8 */ { 2, { &gameplay_keep_Linkanim_00D5A0 } },
+    /*   9 */ { -1, { func_8085978C } },
+    /*  10 */ { 3, { &gameplay_keep_Linkanim_00D680 } },
+    /*  11 */ { 5, { &gameplay_keep_Linkanim_00D1C0 } },
+    /*  12 */ { 7, { &gameplay_keep_Linkanim_00D1C8 } },
+    /*  13 */ { 2, { &gameplay_keep_Linkanim_00D560 } },
+    /*  14 */ { 0, { NULL } },
+    /*  15 */ { 3, { &gameplay_keep_Linkanim_00D5D0 } },
+    /*  16 */ { -1, { func_80859B54 } },
+    /*  17 */ { 2, { &gameplay_keep_Linkanim_00DDA8 } },
+    /*  18 */ { 16, { &gameplay_keep_Linkanim_00DCB0 } },
+    /*  19 */ { -1, { func_80859CA0 } },
+    /*  20 */ { -1, { func_808594D0 } },
+    /*  21 */ { 3, { &gameplay_keep_Linkanim_00D190 } },
+    /*  22 */ { 6, { &gameplay_keep_Linkanim_00E168 } },
+    /*  23 */ { 3, { &gameplay_keep_Linkanim_00D640 } },
+    /*  24 */ { 3, { &gameplay_keep_Linkanim_00DF38 } },
+    /*  25 */ { -1, { func_80859CFC } },
+    /*  26 */ { -1, { func_8085A66C } },
+    /*  27 */ { 3, { &gameplay_keep_Linkanim_00D688 } },
+    /*  28 */ { 3, { &gameplay_keep_Linkanim_00D610 } },
+    /*  29 */ { 3, { &gameplay_keep_Linkanim_00D620 } },
+    /*  30 */ { 3, { &gameplay_keep_Linkanim_00D628 } },
+    /*  31 */ { 6, { &gameplay_keep_Linkanim_00D310 } },
+    /*  32 */ { -1, { func_80859FCC } },
+    /*  33 */ { 3, { &gameplay_keep_Linkanim_00D2D0 } },
+    /*  34 */ { 4, { &gameplay_keep_Linkanim_00D2C8 } },
+    /*  35 */ { 3, { &gameplay_keep_Linkanim_00D2B8 } },
+    /*  36 */ { -1, { func_8085A120 } },
+    /*  37 */ { -1, { func_8085A19C } },
+    /*  38 */ { 6, { &gameplay_keep_Linkanim_00D278 } },
+    /*  39 */ { 6, { &gameplay_keep_Linkanim_00D288 } },
+    /*  40 */ { 5, { &gameplay_keep_Linkanim_00E428 } },
+    /*  41 */ { 5, { &gameplay_keep_Linkanim_00D060 } },
+    /*  42 */ { 5, { &gameplay_keep_Linkanim_00E148 } },
+    /*  43 */ { 5, { &gameplay_keep_Linkanim_00E150 } },
+    /*  44 */ { 7, { &gameplay_keep_Linkanim_00D068 } },
+    /*  45 */ { 5, { &gameplay_keep_Linkanim_00E420 } },
+    /*  46 */ { 5, { &gameplay_keep_Linkanim_00E430 } },
+    /*  47 */ { 5, { &gameplay_keep_Linkanim_00E440 } },
+    /*  48 */ { 3, { &gameplay_keep_Linkanim_00CF68 } },
+    /*  49 */ { 5, { &gameplay_keep_Linkanim_00D2F0 } },
+    /*  50 */ { 5, { &gameplay_keep_Linkanim_00E468 } },
+    /*  51 */ { 5, { &gameplay_keep_Linkanim_00E460 } },
+    /*  52 */ { 5, { &gameplay_keep_Linkanim_00E140 } },
+    /*  53 */ { 5, { &gameplay_keep_Linkanim_00E118 } },
+    /*  54 */ { 4, { &gameplay_keep_Linkanim_00E120 } },
+    /*  55 */ { 5, { &gameplay_keep_Linkanim_00E110 } },
+    /*  56 */ { 14, { &gameplay_keep_Linkanim_00E140 } },
+    /*  57 */ { 5, { &gameplay_keep_Linkanim_00D0E0 } },
+    /*  58 */ { -1, { func_8085978C } },
+    /*  59 */ { 5, { &gameplay_keep_Linkanim_00D0A0 } },
+    /*  60 */ { 2, { &gameplay_keep_Linkanim_00D080 } },
+    /*  61 */ { 7, { &gameplay_keep_Linkanim_00D0B8 } },
+    /*  62 */ { 5, { &gameplay_keep_Linkanim_00D0C0 } },
+    /*  63 */ { 3, { &gameplay_keep_Linkanim_00CF60 } },
+    /*  64 */ { 3, { &gameplay_keep_Linkanim_00CF48 } },
+    /*  65 */ { 3, { &gameplay_keep_Linkanim_00CF58 } },
+    /*  66 */ { 3, { &gameplay_keep_Linkanim_00CF40 } },
+    /*  67 */ { -1, { func_8085968C } },
+    /*  68 */ { -1, { func_8085A24C } },
+    /*  69 */ { -1, { func_8085A330 } },
+    /*  70 */ { 7, { &gameplay_keep_Linkanim_00D0D8 } },
+    /*  71 */ { 5, { &gameplay_keep_Linkanim_00D090 } },
+    /*  72 */ { 5, { &gameplay_keep_Linkanim_00D088 } },
+    /*  73 */ { 3, { &gameplay_keep_Linkanim_00CF88 } },
+    /*  74 */ { 3, { &gameplay_keep_Linkanim_00CF90 } },
+    /*  75 */ { 3, { &gameplay_keep_Linkanim_00CF78 } },
+    /*  76 */ { 3, { &gameplay_keep_Linkanim_00CF80 } },
+    /*  77 */ { 7, { &gameplay_keep_Linkanim_00D308 } },
+    /*  78 */ { 5, { &gameplay_keep_Linkanim_00D300 } },
+    /*  79 */ { 3, { &gameplay_keep_Linkanim_00D018 } },
+    /*  80 */ { 4, { &gameplay_keep_Linkanim_00D028 } },
+    /*  81 */ { 3, { &gameplay_keep_Linkanim_00CFE0 } },
+    /*  82 */ { 4, { &gameplay_keep_Linkanim_00D058 } },
+    /*  83 */ { 3, { &gameplay_keep_Linkanim_00D030 } },
+    /*  84 */ { 5, { &gameplay_keep_Linkanim_00CFB0 } },
+    /*  85 */ { 3, { &gameplay_keep_Linkanim_00CFC8 } },
+    /*  86 */ { 4, { &gameplay_keep_Linkanim_00D040 } },
+    /*  87 */ { 5, { &gameplay_keep_Linkanim_00D1D0 } },
+    /*  88 */ { 3, { &gameplay_keep_Linkanim_00CFD8 } },
+    /*  89 */ { 4, { &gameplay_keep_Linkanim_00CFC0 } },
+    /*  90 */ { 4, { &gameplay_keep_Linkanim_00CFB8 } },
+    /*  91 */ { 4, { &gameplay_keep_Linkanim_00D050 } },
+    /*  92 */ { 4, { &gameplay_keep_Linkanim_00D048 } },
+    /*  93 */ { -1, { func_8085A8C4 } },
+    /*  94 */ { 3, { &gameplay_keep_Linkanim_00D000 } },
+    /*  95 */ { 3, { &gameplay_keep_Linkanim_00D010 } },
+    /*  96 */ { 9, { &gameplay_keep_Linkanim_00DAD0 } },
+    /*  97 */ { -1, { func_8085A530 } },
+    /*  98 */ { 15, { &gameplay_keep_Linkanim_00D0A8 } },
+    /*  99 */ { 7, { &gameplay_keep_Linkanim_00D098 } },
+    /* 100 */ { 3, { &gameplay_keep_Linkanim_00CFA0 } },
+    /* 101 */ { 3, { &gameplay_keep_Linkanim_00CFF0 } },
+    /* 102 */ { -1, { func_8085A768 } },
+    /* 103 */ { -1, { func_8085AA60 } },
+    /* 104 */ { 5, { &gameplay_keep_Linkanim_00D070 } },
+    /* 105 */ { 5, { &gameplay_keep_Linkanim_00D358 } },
+    /* 106 */ { 5, { &gameplay_keep_Linkanim_00D330 } },
+    /* 107 */ { 5, { &gameplay_keep_Linkanim_00D340 } },
+    /* 108 */ { 5, { &gameplay_keep_Linkanim_00D350 } },
+    /* 109 */ { 5, { &gameplay_keep_Linkanim_00D328 } },
+    /* 110 */ { 7, { &gameplay_keep_Linkanim_00D368 } },
+    /* 111 */ { 3, { &gameplay_keep_Linkanim_00D9F8 } },
+    /* 112 */ { 5, { &gameplay_keep_Linkanim_00D108 } },
+    /* 113 */ { 5, { &gameplay_keep_Linkanim_00D118 } },
+    /* 114 */ { 4, { &gameplay_keep_Linkanim_00CF98 } },
+    /* 115 */ { 2, { &gameplay_keep_Linkanim_00D5B8 } },
+    /* 116 */ { 7, { &gameplay_keep_Linkanim_00E010 } },
+    /* 117 */ { 5, { &gameplay_keep_Linkanim_00D0F8 } },
+    /* 118 */ { 7, { &gameplay_keep_Linkanim_00D2D8 } },
+    /* 119 */ { 7, { &gameplay_keep_Linkanim_00D2E0 } },
+    /* 120 */ { 7, { &gameplay_keep_Linkanim_00D2E8 } },
+    /* 121 */ { -1, { func_80859990 } },
+    /* 122 */ { 0, { NULL } },
+    /* 123 */ { -1, { func_80859A10 } },
+    /* 124 */ { 7, { &gameplay_keep_Linkanim_00D158 } },
+    /* 125 */ { 5, { &gameplay_keep_Linkanim_00D160 } },
+    /* 126 */ { 5, { &gameplay_keep_Linkanim_00D168 } },
+    /* 127 */ { 3, { &gameplay_keep_Linkanim_00D5C0 } },
+    /* 128 */ { 4, { &gameplay_keep_Linkanim_00D668 } },
+    /* 129 */ { 3, { &gameplay_keep_Linkanim_00E470 } },
+    /* 130 */ { 3, { &gameplay_keep_Linkanim_00E478 } },
+    /* 131 */ { 3, { &gameplay_keep_Linkanim_00E4C0 } },
+    /* 132 */ { 3, { &gameplay_keep_Linkanim_00E480 } },
+    /* 133 */ { 3, { &gameplay_keep_Linkanim_00E490 } },
+    /* 134 */ { 3, { &gameplay_keep_Linkanim_00E488 } },
+    /* 135 */ { 3, { &gameplay_keep_Linkanim_00E498 } },
+    /* 136 */ { 3, { &gameplay_keep_Linkanim_00E4B0 } },
+    /* 137 */ { 3, { &gameplay_keep_Linkanim_00D660 } },
+    /* 138 */ { 3, { &gameplay_keep_Linkanim_00DA00 } },
+    /* 139 */ { 3, { &gameplay_keep_Linkanim_00DA08 } },
+};
+
+struct_8085DA94 D_8085DEF4[140] = {
+    /*   0 */ { 0, { NULL } },
+    /*   1 */ { -1, { func_80859414 } },
+    /*   2 */ { -1, { func_80859AD0 } },
+    /*   3 */ { -1, { func_80859B28 } },
+    /*   4 */ { 11, { NULL } },
+    /*   5 */ { -1, { func_8085ADA0 } },
+    /*   6 */ { -1, { func_8085AACC } },
+    /*   7 */ { -1, { func_808595B8 } },
+    /*   8 */ { 18, { D_8085DA70 } },
+    /*   9 */ { -1, { func_80859890 } },
+    /*  10 */ { -1, { func_80859C60 } },
+    /*  11 */ { 18, { D_8085D9E0 } },
+    /*  12 */ { 11, { NULL } },
+    /*  13 */ { 11, { NULL } },
+    /*  14 */ { 0, { NULL } },
+    /*  15 */ { 11, { NULL } },
+    /*  16 */ { 17, { &gameplay_keep_Linkanim_00DDB8 } },
+    /*  17 */ { 11, { NULL } },
+    /*  18 */ { 11, { NULL } },
+    /*  19 */ { -1, { func_8085A710 } },
+    /*  20 */ { -1, { func_808595B8 } },
+    /*  21 */ { 12, { &gameplay_keep_Linkanim_00D198 } },
+    /*  22 */ { -1, { func_80859D70 } },
+    /*  23 */ { 12, { &gameplay_keep_Linkanim_00D648 } },
+    /*  24 */ { 11, { NULL } },
+    /*  25 */ { 11, { NULL } },
+    /*  26 */ { -1, { func_8085A6C0 } },
+    /*  27 */ { 12, { &gameplay_keep_Linkanim_00D690 } },
+    /*  28 */ { 12, { &gameplay_keep_Linkanim_00D618 } },
+    /*  29 */ { 12, { &gameplay_keep_Linkanim_00D630 } },
+    /*  30 */ { 12, { &gameplay_keep_Linkanim_00D298 } },
+    /*  31 */ { 12, { &gameplay_keep_Linkanim_00D318 } },
+    /*  32 */ { -1, { func_80859FF4 } },
+    /*  33 */ { -1, { func_8085A04C } },
+    /*  34 */ { 11, { NULL } },
+    /*  35 */ { 12, { &gameplay_keep_Linkanim_00D2C0 } },
+    /*  36 */ { -1, { func_8085A144 } },
+    /*  37 */ { -1, { func_8085A1D4 } },
+    /*  38 */ { 12, { &gameplay_keep_Linkanim_00D280 } },
+    /*  39 */ { 12, { &gameplay_keep_Linkanim_00D290 } },
+    /*  40 */ { 18, { D_8085D9F0 } },
+    /*  41 */ { 11, { NULL } },
+    /*  42 */ { 18, { D_8085DA00 } },
+    /*  43 */ { 13, { &gameplay_keep_Linkanim_00E158 } },
+    /*  44 */ { -1, { func_8085A364 } },
+    /*  45 */ { 18, { D_8085DA2C } },
+    /*  46 */ { 12, { &gameplay_keep_Linkanim_00E438 } },
+    /*  47 */ { 12, { &gameplay_keep_Linkanim_00E448 } },
+    /*  48 */ { 12, { &gameplay_keep_Linkanim_00CF70 } },
+    /*  49 */ { 12, { &gameplay_keep_Linkanim_00D2F8 } },
+    /*  50 */ { 18, { D_8085DA50 } },
+    /*  51 */ { 11, { NULL } },
+    /*  52 */ { 18, { D_8085D9FC } },
+    /*  53 */ { 12, { &gameplay_keep_Linkanim_00E120 } },
+    /*  54 */ { -1, { func_8085A364 } },
+    /*  55 */ { 18, { D_8085DA1C } },
+    /*  56 */ { 11, { NULL } },
+    /*  57 */ { 18, { D_8085DA0C } },
+    /*  58 */ { -1, { func_808599DC } },
+    /*  59 */ { 11, { NULL } },
+    /*  60 */ { 18, { D_8085DA28 } },
+    /*  61 */ { -1, { func_8085A364 } },
+    /*  62 */ { 11, { NULL } },
+    /*  63 */ { 11, { NULL } },
+    /*  64 */ { 12, { &gameplay_keep_Linkanim_00CF50 } },
+    /*  65 */ { -1, { func_8085A40C } },
+    /*  66 */ { 11, { NULL } },
+    /*  67 */ { -1, { func_80859708 } },
+    /*  68 */ { -1, { func_8085A2AC } },
+    /*  69 */ { 11, { NULL } },
+    /*  70 */ { 11, { NULL } },
+    /*  71 */ { -1, { func_8085A40C } },
+    /*  72 */ { 11, { NULL } },
+    /*  73 */ { 11, { NULL } },
+    /*  74 */ { 11, { NULL } },
+    /*  75 */ { 11, { NULL } },
+    /*  76 */ { 11, { NULL } },
+    /*  77 */ { 11, { NULL } },
+    /*  78 */ { 18, { D_8085DA78 } },
+    /*  79 */ { 12, { &gameplay_keep_Linkanim_00D020 } },
+    /*  80 */ { -1, { func_8085A364 } },
+    /*  81 */ { 12, { &gameplay_keep_Linkanim_00CFE8 } },
+    /*  82 */ { 11, { NULL } },
+    /*  83 */ { 12, { &gameplay_keep_Linkanim_00D038 } },
+    /*  84 */ { 18, { D_8085DA80 } },
+    /*  85 */ { 12, { &gameplay_keep_Linkanim_00CFD0 } },
+    /*  86 */ { 11, { NULL } },
+    /*  87 */ { 11, { NULL } },
+    /*  88 */ { 11, { NULL } },
+    /*  89 */ { 11, { NULL } },
+    /*  90 */ { 11, { NULL } },
+    /*  91 */ { 11, { NULL } },
+    /*  92 */ { 11, { NULL } },
+    /*  93 */ { -1, { func_8085A940 } },
+    /*  94 */ { 12, { &gameplay_keep_Linkanim_00D008 } },
+    /*  95 */ { 11, { NULL } },
+    /*  96 */ { -1, { func_8085A4A4 } },
+    /*  97 */ { -1, { func_8085A5DC } },
+    /*  98 */ { -1, { func_8085AA84 } },
+    /*  99 */ { 11, { NULL } },
+    /* 100 */ { 12, { &gameplay_keep_Linkanim_00CFA8 } },
+    /* 101 */ { 12, { &gameplay_keep_Linkanim_00CFF8 } },
+    /* 102 */ { -1, { func_8085A7C0 } },
+    /* 103 */ { 11, { NULL } },
+    /* 104 */ { 13, { &gameplay_keep_Linkanim_00D078 } },
+    /* 105 */ { 13, { &gameplay_keep_Linkanim_00D360 } },
+    /* 106 */ { 13, { &gameplay_keep_Linkanim_00D338 } },
+    /* 107 */ { 13, { &gameplay_keep_Linkanim_00D348 } },
+    /* 108 */ { 11, { NULL } },
+    /* 109 */ { 11, { NULL } },
+    /* 110 */ { 11, { NULL } },
+    /* 111 */ { 12, { &gameplay_keep_Linkanim_00D9F0 } },
+    /* 112 */ { 13, { &gameplay_keep_Linkanim_00D110 } },
+    /* 113 */ { 13, { &gameplay_keep_Linkanim_00D120 } },
+    /* 114 */ { 11, { NULL } },
+    /* 115 */ { -1, { func_8085AA10 } },
+    /* 116 */ { 11, { NULL } },
+    /* 117 */ { -1, { func_8085A364 } },
+    /* 118 */ { 11, { NULL } },
+    /* 119 */ { 11, { NULL } },
+    /* 120 */ { 11, { NULL } },
+    /* 121 */ { -1, { func_808599DC } },
+    /* 122 */ { -1, { func_80859AF8 } },
+    /* 123 */ { -1, { func_80859A44 } },
+    /* 124 */ { 11, { NULL } },
+    /* 125 */ { 11, { NULL } },
+    /* 126 */ { 11, { NULL } },
+    /* 127 */ { 12, { &gameplay_keep_Linkanim_00D5C8 } },
+    /* 128 */ { 11, { NULL } },
+    /* 129 */ { 12, { &gameplay_keep_Linkanim_00E4A8 } },
+    /* 130 */ { 11, { NULL } },
+    /* 131 */ { 11, { NULL } },
+    /* 132 */ { 11, { NULL } },
+    /* 133 */ { 11, { NULL } },
+    /* 134 */ { -1, { func_80859D44 } },
+    /* 135 */ { 11, { NULL } },
+    /* 136 */ { 12, { &gameplay_keep_Linkanim_00E4A0 } },
+    /* 137 */ { -1, { func_80859EBC } },
+    /* 138 */ { -1, { func_80859F4C } },
+    /* 139 */ { -1, { func_80859F4C } },
+};
+
+LinkAnimationHeader* D_8085E354[PLAYER_FORM_MAX] = {
+    &gameplay_keep_Linkanim_00E4B8, &gameplay_keep_Linkanim_00E4B8, &gameplay_keep_Linkanim_00E4B8,
+    &gameplay_keep_Linkanim_00E4B8, &gameplay_keep_Linkanim_00E160,
+};
+
+struct_8085E368 D_8085E368[PLAYER_FORM_MAX] = {
+    /* PLAYER_FORM_FIERCE_DEITY */ { { -200, 700, 100 }, { 800, 600, 800 } },
+    /* PLAYER_FORM_GORON        */ { { -200, 700, 100 }, { 800, 600, 800 } },
+    /* PLAYER_FORM_ZORA         */ { { -200, 700, 100 }, { 800, 600, 800 } },
+    /* PLAYER_FORM_DEKU         */ { { -200, 700, 100 }, { 800, 600, 800 } },
+    /* PLAYER_FORM_HUMAN        */ { { -200, 500, 0 }, { 600, 400, 600 } },
+};
+
+Color_RGBA8 D_8085E3A4 = { 255, 255, 255, 0 };
+Color_RGBA8 D_8085E3A8 = { 0, 128, 128, 0 };
 
 void func_80859D70(PlayState* play, Player* this, UNK_TYPE arg2) {
     struct_8085E368* posInfo;
