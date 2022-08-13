@@ -1,8 +1,6 @@
 #include "global.h"
-#include "prevent_bss_reordering.h"
 
 extern OSViMode D_801FBB30;
-extern s32 pad;
 extern uintptr_t* gFramebuffers[2];
 extern OSViMode* D_801FBB88;
 extern u16* gZBufferPtr;
@@ -45,14 +43,16 @@ void func_80178750(void) {
 }
 
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_cfb/func_80178818.s")
-/*void func_80178818(void) {
+void func_80178818(void) {
+    s32 width;
+    s32 height;
     gFramebuffers[1] = D_801FBBB4;
     gFramebuffers[0] = D_801FBBB8;
     gZBufferPtr = D_801FBBBC;
     D_801FBB90 = D_801FBBC0;
     gGfxSPTaskOutputBufferPtr = *gGfxSPTaskOutputBuffer2;
     gGfxSPTaskOutputBufferSize = gGfxSPTaskOutputBufferEnd2;
+    if(1){}
     D_801FBBCC = 576; //576P
     D_801FBBCE = 454;
     D_801FBBD0 = 30;
@@ -62,21 +62,26 @@ void func_80178750(void) {
     if ((D_801FBBCC == 640) && (D_801FBBCE == 480)) {
         D_801FBB88 = &osViModeNtscHpf1;
     } else {
-        func_8014026C(&D_801FBB30, -1, osTvType, 0, 1, 0, 1,  D_801FBBCC,  D_801FBBCE, 0x1E, D_801FBBCC - 610, 0xA, D_801FBBCE - 470);
+        l1:
+        width = D_801FBBCC - 610;
+        height = D_801FBBCE - 470;
+        func_8014026C(&D_801FBB30, -1, osTvType, 0, 1, 0, 1,  D_801FBBCC,  D_801FBBCE, 0x1E, width, 0xA, height);
         D_801FBB88 = &D_801FBB30;
     }
     D_801FBBD4 = 1;
-}*/
+}
 
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_cfb/func_80178978.s")
-/*void func_80178978(void) {
+
+//TODO Fake match
+extern u16 gFramebuffer1_[SCREEN_HEIGHT][SCREEN_WIDTH]; 
+void func_80178978(void) {
     D_801FBB9C = gFramebuffer1;
     D_801FBBA0 = gFramebuffer0;
-    D_801FBBB4 = gFramebuffer1;
+    D_801FBBB4 = gFramebuffer1_;
     D_801FBBB8 = D_80780000;
     func_80178750();
-}*/
+}
 
 //Unused
 void func_801789D4(void) {
