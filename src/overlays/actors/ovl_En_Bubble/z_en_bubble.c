@@ -237,8 +237,8 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
         EnBubble_Vec3fNormalizedReflect(&bounceDirection, &normal, &bounceDirection);
         this->bounceDirection = bounceDirection;
         bounceCount = this->bounceCount;
+        this->bounceCount = ++bounceCount;
         if (bounceCount > (s16)(Rand_ZeroOne() * 10.0f)) {
-            this->bounceCount = ++bounceCount;
             this->bounceCount = 0;
         }
         bounceSpeed = (this->bounceCount == 0) ? 3.6000001f : 3.0f;
