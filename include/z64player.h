@@ -820,7 +820,7 @@ typedef struct Player {
     /* 0xAC8 */ f32 unk_AC8;
     /* 0xACC */ s16 unk_ACC;
     /* 0xACE */ s8 unk_ACE;
-    /* 0xACF */ u8 unk_ACF;
+    /* 0xACF */ u8 putAwayCountdown; // Frames to wait before showing "Put Away" on A
     /* 0xAD0 */ f32 linearVelocity;
     /* 0xAD4 */ s16 currentYaw;
     /* 0xAD6 */ s16 targetYaw;

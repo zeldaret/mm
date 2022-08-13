@@ -7624,7 +7624,7 @@ s32 func_8083A114(Player* this, PlayState* play) {
                 return 1;
             }
 block_14:
-            if ((this->unk_ACF == 0) && (this->itemActionParam >= 3) && (this->transformation != 0)) {
+            if ((this->putAwayCountdown == 0) && (this->itemActionParam >= 3) && (this->transformation != 0)) {
                 func_80831990(play, this, ITEM_NONE);
             } else {
                 this->stateFlags2 ^= 0x100000;
@@ -11179,12 +11179,12 @@ block_136:
                 }
             }
             if (var_t0_2 != 0x13) {
-                this->unk_ACF = 0x14;
+                this->putAwayCountdown = 0x14;
             } else {
-                temp_v0_12 = this->unk_ACF;
+                temp_v0_12 = this->putAwayCountdown;
                 if (temp_v0_12 != 0) {
                     var_t0_2 = 0xA;
-                    this->unk_ACF = temp_v0_12 - 1;
+                    this->putAwayCountdown = temp_v0_12 - 1;
                 }
             }
             func_8011552C(play, var_t0_2 & 0xFFFF);

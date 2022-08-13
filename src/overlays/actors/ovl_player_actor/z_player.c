@@ -7257,7 +7257,7 @@ s32 func_8083A114(Player* this, PlayState* play) {
                 return true;
             }
 
-            if ((this->unk_ACF == 0) && (this->itemActionParam >= PLAYER_AP_SWORD_KOKIRI) &&
+            if ((this->putAwayCountdown == 0) && (this->itemActionParam >= PLAYER_AP_SWORD_KOKIRI) &&
                 (this->transformation != PLAYER_FORM_FIERCE_DEITY)) {
                 func_80831990(play, this, ITEM_NONE);
             } else {
@@ -10320,12 +10320,10 @@ void Player_SetDoAction(PlayState* play, Player* this) {
         }
 
         if (doActionA != DO_ACTION_PUT_AWAY) {
-            this->unk_ACF = 20;
-        } else {
-            if (this->unk_ACF != 0) {
-                doActionA = DO_ACTION_NONE;
-                this->unk_ACF--;
-            }
+            this->putAwayCountdown = 20;
+        } else if (this->putAwayCountdown != 0) {
+            doActionA = DO_ACTION_NONE;
+            this->putAwayCountdown--;
         }
 
         func_8011552C(play, doActionA);
