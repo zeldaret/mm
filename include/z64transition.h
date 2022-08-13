@@ -15,10 +15,10 @@ typedef struct {
     /* 0x18 */ void  (*setColor)(void* transition, u32 color);
     /* 0x1C */ void  (*setEnvColor)(void* transition, u32 color);
     /* 0x20 */ s32   (*isDone)(void* transition);
-} TransitionInit;
+} TransitionInit; // size = 0x24
 
 typedef struct {
-    /* 0x000 */ char unk_0[0xC];
+    /* 0x0 */ char unk_0[0xC];
 } TransitionFade; // size = 0xC
 
 extern const TransitionInit TransitionFade_InitVars;

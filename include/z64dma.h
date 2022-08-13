@@ -15,10 +15,10 @@ typedef struct {
 } DmaRequest; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ u32 vromStart;
-    /* 0x04 */ u32 vromEnd;
-    /* 0x08 */ u32 romStart;
-    /* 0x0C */ u32 romEnd;
+    /* 0x0 */ u32 vromStart;
+    /* 0x4 */ u32 vromEnd;
+    /* 0x8 */ u32 romStart;
+    /* 0xC */ u32 romEnd;
 } DmaEntry; // size = 0x10
 
 #endif
