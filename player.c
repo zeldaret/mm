@@ -803,7 +803,7 @@ ColliderQuadInit D_8085C394 = {
 f32 D_8085C3E4 = 1.0f;
 f32 D_8085C3E8 = 1.0f;
 u16 D_8085C3EC[4] = { 0x680F, 0x680E, 0x6811, 0x6808 };
-LinkAnimationHeader* D_8085C84C[0xF][2] = {
+LinkAnimationHeader* sPlayerIdleAnimations[0xF][2] = {
     { (LinkAnimationHeader* )0x0400DF30, (LinkAnimationHeader* )0x0400DEE8 },
     { (LinkAnimationHeader* )0x0400DF40, (LinkAnimationHeader* )0x0400DEF8 },
     { (LinkAnimationHeader* )0x0400DF38, (LinkAnimationHeader* )0x0400DEF0 },
@@ -2809,8 +2809,8 @@ s32 func_8082ED94(Player* this) {
 
     temp_a1 = this->skelAnime.animation;
     if ((&D_0400DD58 != temp_a1) && (&D_0400DD68 != temp_a1) && ((temp_a1_2 = this->skelAnime.animation, (func_8082ED20(this) != temp_a1_2)) || (&D_0400D0B0 == temp_a1_2))) {
-        temp_v0 = &D_8085C84C[0][1];
-        if (temp_a1_2 == D_8085C84C[0][0]) {
+        temp_v0 = &sPlayerIdleAnimations[0][1];
+        if (temp_a1_2 == sPlayerIdleAnimations[0][0]) {
             return 1;
         }
         var_v0 = temp_v0 + 4;
@@ -9607,7 +9607,7 @@ block_10:
                     var_a1 = var_v1_2 + 9;
                 }
             }
-            temp_v1_2 = D_8085C84C[var_a1];
+            temp_v1_2 = sPlayerIdleAnimations[var_a1];
             var_v0 = temp_v1_2;
             if (this->modelAnimType != 1) {
                 var_v0 = temp_v1_2 + 4;

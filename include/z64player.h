@@ -206,10 +206,10 @@ typedef enum PlayerDoorType {
 } PlayerDoorType;
 
 typedef enum PlayerAnimType {
-    /* 0 */ PLAYER_ANIMTYPE_0,
+    /* 0 */ PLAYER_ANIMTYPE_0, // DEFAULT
     /* 1 */ PLAYER_ANIMTYPE_1,
     /* 2 */ PLAYER_ANIMTYPE_2,
-    /* 3 */ PLAYER_ANIMTYPE_3,
+    /* 3 */ PLAYER_ANIMTYPE_3, // Two hand weapon
     /* 4 */ PLAYER_ANIMTYPE_4,
     /* 5 */ PLAYER_ANIMTYPE_5,
     /* 6 */ PLAYER_ANIMTYPE_MAX
@@ -231,15 +231,15 @@ typedef enum {
     /* 12 */ PLAYER_ANIMGROUP_12,
     /* 13 */ PLAYER_ANIMGROUP_13,
     /* 14 */ PLAYER_ANIMGROUP_14,
-    /* 15 */ PLAYER_ANIMGROUP_15,
-    /* 16 */ PLAYER_ANIMGROUP_16,
+    /* 15 */ PLAYER_ANIMGROUP_15, // ROLLING
+    /* 16 */ PLAYER_ANIMGROUP_16, // ROLLING_BONK
     /* 17 */ PLAYER_ANIMGROUP_17,
     /* 18 */ PLAYER_ANIMGROUP_18,
     /* 19 */ PLAYER_ANIMGROUP_19,
     /* 20 */ PLAYER_ANIMGROUP_20,
     /* 21 */ PLAYER_ANIMGROUP_21,
     /* 22 */ PLAYER_ANIMGROUP_22,
-    /* 23 */ PLAYER_ANIMGROUP_23,
+    /* 23 */ PLAYER_ANIMGROUP_23, // SIDE_WALK
     /* 24 */ PLAYER_ANIMGROUP_24,
     /* 25 */ PLAYER_ANIMGROUP_25,
     /* 26 */ PLAYER_ANIMGROUP_26,
@@ -483,7 +483,7 @@ typedef struct struct_80122744_arg1 {
 #define PLAYER_STATE1_4          (1 << 2)
 // 
 #define PLAYER_STATE1_8          (1 << 3)
-// 
+// Zora electric shield
 #define PLAYER_STATE1_10         (1 << 4)
 // 
 #define PLAYER_STATE1_20         (1 << 5)
@@ -537,7 +537,7 @@ typedef struct struct_80122744_arg1 {
 #define PLAYER_STATE1_20000000   (1 << 29)
 // 
 #define PLAYER_STATE1_40000000   (1 << 30)
-// 
+// Related to exit a grotto
 #define PLAYER_STATE1_80000000   (1 << 31)
 
 
@@ -599,15 +599,15 @@ typedef struct struct_80122744_arg1 {
 #define PLAYER_STATE2_8000000    (1 << 27)
 // 
 #define PLAYER_STATE2_10000000   (1 << 28)
-// 
+// Disable drawing player?
 #define PLAYER_STATE2_20000000   (1 << 29)
 // 
 #define PLAYER_STATE2_40000000   (1 << 30)
-// 
+// Void-out
 #define PLAYER_STATE2_80000000   (1 << 31)
 
 
-// 
+// Ignores collision with floor?
 #define PLAYER_STATE3_1          (1 << 0)
 // 
 #define PLAYER_STATE3_2          (1 << 1)
@@ -631,7 +631,7 @@ typedef struct struct_80122744_arg1 {
 #define PLAYER_STATE3_400        (1 << 10)
 // 
 #define PLAYER_STATE3_800        (1 << 11)
-// goron curled?
+// goron curled
 #define PLAYER_STATE3_1000       (1 << 12)
 // 
 #define PLAYER_STATE3_2000       (1 << 13)

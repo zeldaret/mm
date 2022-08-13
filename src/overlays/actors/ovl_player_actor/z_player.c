@@ -531,8 +531,8 @@ typedef struct struct_8085D09C {
 } struct_8085D09C; // size = 0x8
 
 typedef struct struct_8085CC88 {
-    /* 0x0 */ LinkAnimationHeader* unk_0;
-    /* 0x4 */ u8 unk_4;
+    /* 0x0 */ LinkAnimationHeader* anim;
+    /* 0x4 */ u8 frame;
 } struct_8085CC88; // size = 0x8
 
 typedef struct {
@@ -1007,98 +1007,405 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
     },
 };
 
-LinkAnimationHeader* D_8085BE84[PLAYER_ANIMGROUP_MAX * PLAYER_ANIMTYPE_MAX] = {
-    &gameplay_keep_Linkanim_00DF28, &gameplay_keep_Linkanim_00DF20, &gameplay_keep_Linkanim_00DF20,
-    &gameplay_keep_Linkanim_00D988, &gameplay_keep_Linkanim_00DF28, &gameplay_keep_Linkanim_00DF28,
-    &gameplay_keep_Linkanim_00DF70, &gameplay_keep_Linkanim_00DF48, &gameplay_keep_Linkanim_00DF48,
-    &gameplay_keep_Linkanim_00D9A0, &gameplay_keep_Linkanim_00DF70, &gameplay_keep_Linkanim_00DF70,
-    &gameplay_keep_Linkanim_00DE40, &gameplay_keep_Linkanim_00D918, &gameplay_keep_Linkanim_00DE38,
-    &gameplay_keep_Linkanim_00D920, &gameplay_keep_Linkanim_00DE40, &gameplay_keep_Linkanim_00DE40,
-    &gameplay_keep_Linkanim_00DBB8, &gameplay_keep_Linkanim_00D808, &gameplay_keep_Linkanim_00DBB8,
-    &gameplay_keep_Linkanim_00D810, &gameplay_keep_Linkanim_00DBB8, &gameplay_keep_Linkanim_00DBB8,
-    &gameplay_keep_Linkanim_00DF08, &gameplay_keep_Linkanim_00D468, &gameplay_keep_Linkanim_00D468,
-    &gameplay_keep_Linkanim_00D970, &gameplay_keep_Linkanim_00DF08, &gameplay_keep_Linkanim_00DF08,
-    &gameplay_keep_Linkanim_00DF18, &gameplay_keep_Linkanim_00D480, &gameplay_keep_Linkanim_00D480,
-    &gameplay_keep_Linkanim_00D980, &gameplay_keep_Linkanim_00DF18, &gameplay_keep_Linkanim_00DF18,
-    &gameplay_keep_Linkanim_00D960, &gameplay_keep_Linkanim_00DEE0, &gameplay_keep_Linkanim_00DEE0,
-    &gameplay_keep_Linkanim_00D960, &gameplay_keep_Linkanim_00D960, &gameplay_keep_Linkanim_00D960,
-    &gameplay_keep_Linkanim_00DD98, &gameplay_keep_Linkanim_00D860, &gameplay_keep_Linkanim_00D860,
-    &gameplay_keep_Linkanim_00DD98, &gameplay_keep_Linkanim_00DD98, &gameplay_keep_Linkanim_00DD98,
-    &gameplay_keep_Linkanim_00D578, &gameplay_keep_Linkanim_00D570, &gameplay_keep_Linkanim_00D570,
-    &gameplay_keep_Linkanim_00D578, &gameplay_keep_Linkanim_00D578, &gameplay_keep_Linkanim_00D578,
-    &gameplay_keep_Linkanim_00D140, &gameplay_keep_Linkanim_00D140, &gameplay_keep_Linkanim_00D140,
-    &gameplay_keep_Linkanim_00D140, &gameplay_keep_Linkanim_00D140, &gameplay_keep_Linkanim_00D140,
-    &gameplay_keep_Linkanim_00D588, &gameplay_keep_Linkanim_00D580, &gameplay_keep_Linkanim_00D580,
-    &gameplay_keep_Linkanim_00D588, &gameplay_keep_Linkanim_00D588, &gameplay_keep_Linkanim_00D588,
-    &gameplay_keep_Linkanim_00D148, &gameplay_keep_Linkanim_00D148, &gameplay_keep_Linkanim_00D148,
-    &gameplay_keep_Linkanim_00D148, &gameplay_keep_Linkanim_00D148, &gameplay_keep_Linkanim_00D148,
-    &gameplay_keep_Linkanim_00DB28, &gameplay_keep_Linkanim_00DB20, &gameplay_keep_Linkanim_00DB20,
-    &gameplay_keep_Linkanim_00DB28, &gameplay_keep_Linkanim_00DB28, &gameplay_keep_Linkanim_00DB28,
-    &gameplay_keep_Linkanim_00DD18, &gameplay_keep_Linkanim_00DD10, &gameplay_keep_Linkanim_00DD10,
-    &gameplay_keep_Linkanim_00DD18, &gameplay_keep_Linkanim_00DD18, &gameplay_keep_Linkanim_00DD18,
-    &gameplay_keep_Linkanim_00DE70, &gameplay_keep_Linkanim_00DE68, &gameplay_keep_Linkanim_00DE68,
-    &gameplay_keep_Linkanim_00DE70, &gameplay_keep_Linkanim_00DE70, &gameplay_keep_Linkanim_00DE70,
-    &gameplay_keep_Linkanim_00DD28, &gameplay_keep_Linkanim_00DD20, &gameplay_keep_Linkanim_00DD20,
-    &gameplay_keep_Linkanim_00D858, &gameplay_keep_Linkanim_00DD28, &gameplay_keep_Linkanim_00DD28,
-    &gameplay_keep_Linkanim_00DCC0, &gameplay_keep_Linkanim_00DCB8, &gameplay_keep_Linkanim_00DCB8,
-    &gameplay_keep_Linkanim_00DCC8, &gameplay_keep_Linkanim_00DCC0, &gameplay_keep_Linkanim_00DCC0,
-    &gameplay_keep_Linkanim_00DF58, &gameplay_keep_Linkanim_00DF50, &gameplay_keep_Linkanim_00DF50,
-    &gameplay_keep_Linkanim_00D990, &gameplay_keep_Linkanim_00DF58, &gameplay_keep_Linkanim_00DF58,
-    &gameplay_keep_Linkanim_00DF68, &gameplay_keep_Linkanim_00DF60, &gameplay_keep_Linkanim_00DF60,
-    &gameplay_keep_Linkanim_00D998, &gameplay_keep_Linkanim_00DF68, &gameplay_keep_Linkanim_00DF68,
-    &gameplay_keep_Linkanim_00DBD8, &gameplay_keep_Linkanim_00DBC0, &gameplay_keep_Linkanim_00DBC0,
-    &gameplay_keep_Linkanim_00DBD8, &gameplay_keep_Linkanim_00D510, &gameplay_keep_Linkanim_00DBD8,
-    &gameplay_keep_Linkanim_00DBF8, &gameplay_keep_Linkanim_00DBF0, &gameplay_keep_Linkanim_00DBF0,
-    &gameplay_keep_Linkanim_00DBF8, &gameplay_keep_Linkanim_00D518, &gameplay_keep_Linkanim_00DBF8,
-    &gameplay_keep_Linkanim_00DBD0, &gameplay_keep_Linkanim_00DBC8, &gameplay_keep_Linkanim_00DBC8,
-    &gameplay_keep_Linkanim_00DBD0, &gameplay_keep_Linkanim_00DBD0, &gameplay_keep_Linkanim_00DBD0,
-    &gameplay_keep_Linkanim_00DE90, &gameplay_keep_Linkanim_00DE88, &gameplay_keep_Linkanim_00DE88,
-    &gameplay_keep_Linkanim_00D938, &gameplay_keep_Linkanim_00DE90, &gameplay_keep_Linkanim_00DE90,
-    &gameplay_keep_Linkanim_00DE78, &gameplay_keep_Linkanim_00D448, &gameplay_keep_Linkanim_00D448,
-    &gameplay_keep_Linkanim_00D928, &gameplay_keep_Linkanim_00DE78, &gameplay_keep_Linkanim_00DE78,
-    &gameplay_keep_Linkanim_00DE80, &gameplay_keep_Linkanim_00D450, &gameplay_keep_Linkanim_00D450,
-    &gameplay_keep_Linkanim_00D930, &gameplay_keep_Linkanim_00DE80, &gameplay_keep_Linkanim_00DE80,
-    &gameplay_keep_Linkanim_00DA80, &gameplay_keep_Linkanim_00DA78, &gameplay_keep_Linkanim_00DA78,
-    &gameplay_keep_Linkanim_00DA80, &gameplay_keep_Linkanim_00DA80, &gameplay_keep_Linkanim_00DA80,
-    &gameplay_keep_Linkanim_00DF00, &gameplay_keep_Linkanim_00DF00, &gameplay_keep_Linkanim_00DF00,
-    &gameplay_keep_Linkanim_00D968, &gameplay_keep_Linkanim_00D968, &gameplay_keep_Linkanim_00D968,
-    &gameplay_keep_Linkanim_00DF10, &gameplay_keep_Linkanim_00DF10, &gameplay_keep_Linkanim_00DF10,
-    &gameplay_keep_Linkanim_00D978, &gameplay_keep_Linkanim_00D978, &gameplay_keep_Linkanim_00D978,
-    &gameplay_keep_Linkanim_00DEB8, &gameplay_keep_Linkanim_00DEB0, &gameplay_keep_Linkanim_00DEB0,
-    &gameplay_keep_Linkanim_00DEB8, &gameplay_keep_Linkanim_00DEB8, &gameplay_keep_Linkanim_00DEB8,
-    &gameplay_keep_Linkanim_00DE20, &gameplay_keep_Linkanim_00DE18, &gameplay_keep_Linkanim_00DE18,
-    &gameplay_keep_Linkanim_00DE20, &gameplay_keep_Linkanim_00DE20, &gameplay_keep_Linkanim_00DE20,
-    &gameplay_keep_Linkanim_00DB08, &gameplay_keep_Linkanim_00DB08, &gameplay_keep_Linkanim_00DB08,
-    &gameplay_keep_Linkanim_00DB08, &gameplay_keep_Linkanim_00DB08, &gameplay_keep_Linkanim_00DB08,
-    &gameplay_keep_Linkanim_00DB50, &gameplay_keep_Linkanim_00DB38, &gameplay_keep_Linkanim_00DB38,
-    &gameplay_keep_Linkanim_00DB50, &gameplay_keep_Linkanim_00DB50, &gameplay_keep_Linkanim_00DB50,
-    &gameplay_keep_Linkanim_00DB60, &gameplay_keep_Linkanim_00DB58, &gameplay_keep_Linkanim_00DB58,
-    &gameplay_keep_Linkanim_00DB60, &gameplay_keep_Linkanim_00DB60, &gameplay_keep_Linkanim_00DB60,
-    &gameplay_keep_Linkanim_00DB48, &gameplay_keep_Linkanim_00DB40, &gameplay_keep_Linkanim_00DB40,
-    &gameplay_keep_Linkanim_00DB48, &gameplay_keep_Linkanim_00DB48, &gameplay_keep_Linkanim_00DB48,
-    &gameplay_keep_Linkanim_00DDD8, &gameplay_keep_Linkanim_00DDD0, &gameplay_keep_Linkanim_00DDD0,
-    &gameplay_keep_Linkanim_00DDD8, &gameplay_keep_Linkanim_00DDD8, &gameplay_keep_Linkanim_00DDD8,
-    &gameplay_keep_Linkanim_00DDE8, &gameplay_keep_Linkanim_00DDE0, &gameplay_keep_Linkanim_00DDE0,
-    &gameplay_keep_Linkanim_00DDE8, &gameplay_keep_Linkanim_00DDE8, &gameplay_keep_Linkanim_00DDE8,
-    &gameplay_keep_Linkanim_00DDC8, &gameplay_keep_Linkanim_00DDC0, &gameplay_keep_Linkanim_00DDC0,
-    &gameplay_keep_Linkanim_00DDC8, &gameplay_keep_Linkanim_00DDC8, &gameplay_keep_Linkanim_00DDC8,
-    &gameplay_keep_Linkanim_00DC40, &gameplay_keep_Linkanim_00DC38, &gameplay_keep_Linkanim_00DC38,
-    &gameplay_keep_Linkanim_00DC40, &gameplay_keep_Linkanim_00DC40, &gameplay_keep_Linkanim_00DC40,
-    &gameplay_keep_Linkanim_00DCE8, &gameplay_keep_Linkanim_00DCE0, &gameplay_keep_Linkanim_00DCE0,
-    &gameplay_keep_Linkanim_00DCE8, &gameplay_keep_Linkanim_00DCE8, &gameplay_keep_Linkanim_00DCE8,
-    &gameplay_keep_Linkanim_00DD08, &gameplay_keep_Linkanim_00DD00, &gameplay_keep_Linkanim_00DD00,
-    &gameplay_keep_Linkanim_00DD08, &gameplay_keep_Linkanim_00DD08, &gameplay_keep_Linkanim_00DD08,
-    &gameplay_keep_Linkanim_00DCF8, &gameplay_keep_Linkanim_00DCF0, &gameplay_keep_Linkanim_00DCF0,
-    &gameplay_keep_Linkanim_00DCF8, &gameplay_keep_Linkanim_00DCF8, &gameplay_keep_Linkanim_00DCF8,
-    &gameplay_keep_Linkanim_00DC10, &gameplay_keep_Linkanim_00DC08, &gameplay_keep_Linkanim_00DC08,
-    &gameplay_keep_Linkanim_00DC18, &gameplay_keep_Linkanim_00DC10, &gameplay_keep_Linkanim_00DC10,
-    &gameplay_keep_Linkanim_00DED0, &gameplay_keep_Linkanim_00DEC8, &gameplay_keep_Linkanim_00DEC8,
-    &gameplay_keep_Linkanim_00DED8, &gameplay_keep_Linkanim_00DED0, &gameplay_keep_Linkanim_00DED0,
-    &gameplay_keep_Linkanim_00E450, &gameplay_keep_Linkanim_00E108, &gameplay_keep_Linkanim_00E108,
-    &gameplay_keep_Linkanim_00E450, &gameplay_keep_Linkanim_00E450, &gameplay_keep_Linkanim_00E450,
+LinkAnimationHeader* D_8085BE84[PLAYER_ANIMGROUP_MAX][PLAYER_ANIMTYPE_MAX] = {
+    // PLAYER_ANIMGROUP_0
+    {
+        &gameplay_keep_Linkanim_00DF28, // Default idle, looking forward
+        &gameplay_keep_Linkanim_00DF20, // Default idle, looking forward, sword and shield
+        &gameplay_keep_Linkanim_00DF20, // Default idle, looking forward, sword and shield
+        &gameplay_keep_Linkanim_00D988, // Default idle, looking forward, two hand weapon
+        &gameplay_keep_Linkanim_00DF28, // Default idle, looking forward
+        &gameplay_keep_Linkanim_00DF28, // Default idle, looking forward
+    },
+    // PLAYER_ANIMGROUP_1
+    {
+        &gameplay_keep_Linkanim_00DF70,
+        &gameplay_keep_Linkanim_00DF48,
+        &gameplay_keep_Linkanim_00DF48,
+        &gameplay_keep_Linkanim_00D9A0,
+        &gameplay_keep_Linkanim_00DF70,
+        &gameplay_keep_Linkanim_00DF70,
+    },
+    // PLAYER_ANIMGROUP_2
+    {
+        &gameplay_keep_Linkanim_00DE40, // Walking with empty hands
+        &gameplay_keep_Linkanim_00D918, // Walking with Sword and Shield in hands
+        &gameplay_keep_Linkanim_00DE38,
+        &gameplay_keep_Linkanim_00D920, // Walking with Two handed weapon
+        &gameplay_keep_Linkanim_00DE40, // Walking with empty hands
+        &gameplay_keep_Linkanim_00DE40, // Walking with empty hands
+    },
+    // PLAYER_ANIMGROUP_3
+    {
+        &gameplay_keep_Linkanim_00DBB8,
+        &gameplay_keep_Linkanim_00D808,
+        &gameplay_keep_Linkanim_00DBB8,
+        &gameplay_keep_Linkanim_00D810,
+        &gameplay_keep_Linkanim_00DBB8,
+        &gameplay_keep_Linkanim_00DBB8,
+    },
+    // PLAYER_ANIMGROUP_4
+    {
+        &gameplay_keep_Linkanim_00DF08,
+        &gameplay_keep_Linkanim_00D468,
+        &gameplay_keep_Linkanim_00D468,
+        &gameplay_keep_Linkanim_00D970,
+        &gameplay_keep_Linkanim_00DF08,
+        &gameplay_keep_Linkanim_00DF08,
+    },
+    // PLAYER_ANIMGROUP_5
+    {
+        &gameplay_keep_Linkanim_00DF18,
+        &gameplay_keep_Linkanim_00D480,
+        &gameplay_keep_Linkanim_00D480,
+        &gameplay_keep_Linkanim_00D980,
+        &gameplay_keep_Linkanim_00DF18,
+        &gameplay_keep_Linkanim_00DF18,
+    },
+    // PLAYER_ANIMGROUP_6
+    {
+        &gameplay_keep_Linkanim_00D960,
+        &gameplay_keep_Linkanim_00DEE0,
+        &gameplay_keep_Linkanim_00DEE0,
+        &gameplay_keep_Linkanim_00D960,
+        &gameplay_keep_Linkanim_00D960,
+        &gameplay_keep_Linkanim_00D960,
+    },
+    // PLAYER_ANIMGROUP_7
+    {
+        &gameplay_keep_Linkanim_00DD98,
+        &gameplay_keep_Linkanim_00D860,
+        &gameplay_keep_Linkanim_00D860,
+        &gameplay_keep_Linkanim_00DD98,
+        &gameplay_keep_Linkanim_00DD98,
+        &gameplay_keep_Linkanim_00DD98,
+    },
+    // PLAYER_ANIMGROUP_8
+    {
+        &gameplay_keep_Linkanim_00D578,
+        &gameplay_keep_Linkanim_00D570,
+        &gameplay_keep_Linkanim_00D570,
+        &gameplay_keep_Linkanim_00D578,
+        &gameplay_keep_Linkanim_00D578,
+        &gameplay_keep_Linkanim_00D578,
+    },
+    // PLAYER_ANIMGROUP_9
+    {
+        &gameplay_keep_Linkanim_00D140,
+        &gameplay_keep_Linkanim_00D140,
+        &gameplay_keep_Linkanim_00D140,
+        &gameplay_keep_Linkanim_00D140,
+        &gameplay_keep_Linkanim_00D140,
+        &gameplay_keep_Linkanim_00D140,
+    },
+    // PLAYER_ANIMGROUP_10
+    {
+        &gameplay_keep_Linkanim_00D588,
+        &gameplay_keep_Linkanim_00D580,
+        &gameplay_keep_Linkanim_00D580,
+        &gameplay_keep_Linkanim_00D588,
+        &gameplay_keep_Linkanim_00D588,
+        &gameplay_keep_Linkanim_00D588,
+    },
+    // PLAYER_ANIMGROUP_11
+    {
+        &gameplay_keep_Linkanim_00D148,
+        &gameplay_keep_Linkanim_00D148,
+        &gameplay_keep_Linkanim_00D148,
+        &gameplay_keep_Linkanim_00D148,
+        &gameplay_keep_Linkanim_00D148,
+        &gameplay_keep_Linkanim_00D148,
+    },
+    // PLAYER_ANIMGROUP_12
+    {
+        &gameplay_keep_Linkanim_00DB28, // Grabbing something from the floor
+        &gameplay_keep_Linkanim_00DB20, &gameplay_keep_Linkanim_00DB20,
+        &gameplay_keep_Linkanim_00DB28, // Grabbing something from the floor
+        &gameplay_keep_Linkanim_00DB28, // Grabbing something from the floor
+        &gameplay_keep_Linkanim_00DB28, // Grabbing something from the floor
+    },
+    // PLAYER_ANIMGROUP_13
+    {
+        &gameplay_keep_Linkanim_00DD18,
+        &gameplay_keep_Linkanim_00DD10,
+        &gameplay_keep_Linkanim_00DD10,
+        &gameplay_keep_Linkanim_00DD18,
+        &gameplay_keep_Linkanim_00DD18,
+        &gameplay_keep_Linkanim_00DD18,
+    },
+    // PLAYER_ANIMGROUP_14
+    {
+        &gameplay_keep_Linkanim_00DE70,
+        &gameplay_keep_Linkanim_00DE68,
+        &gameplay_keep_Linkanim_00DE68,
+        &gameplay_keep_Linkanim_00DE70,
+        &gameplay_keep_Linkanim_00DE70,
+        &gameplay_keep_Linkanim_00DE70,
+    },
+    // PLAYER_ANIMGROUP_15
+    {
+        &gameplay_keep_Linkanim_00DD28, // Rolling with nothing in hands
+        &gameplay_keep_Linkanim_00DD20, // Rolling with sword and shield
+        &gameplay_keep_Linkanim_00DD20, // Rolling with sword and shield
+        &gameplay_keep_Linkanim_00D858, // Rolling with two hand weapon
+        &gameplay_keep_Linkanim_00DD28, // Rolling with nothing in hands
+        &gameplay_keep_Linkanim_00DD28, // Rolling with nothing in hands
+    },
+    // PLAYER_ANIMGROUP_16
+    {
+        &gameplay_keep_Linkanim_00DCC0, // Rolling bonk
+        &gameplay_keep_Linkanim_00DCB8, // Rolling bonk swrod and shield
+        &gameplay_keep_Linkanim_00DCB8, // Rolling bonk swrod and shield
+        &gameplay_keep_Linkanim_00DCC8, // Rolling bonk two hand weapon
+        &gameplay_keep_Linkanim_00DCC0, // Rolling bonk
+        &gameplay_keep_Linkanim_00DCC0, // Rolling bonk
+    },
+    // PLAYER_ANIMGROUP_17
+    {
+        &gameplay_keep_Linkanim_00DF58,
+        &gameplay_keep_Linkanim_00DF50,
+        &gameplay_keep_Linkanim_00DF50,
+        &gameplay_keep_Linkanim_00D990,
+        &gameplay_keep_Linkanim_00DF58,
+        &gameplay_keep_Linkanim_00DF58,
+    },
+    // PLAYER_ANIMGROUP_18
+    {
+        &gameplay_keep_Linkanim_00DF68,
+        &gameplay_keep_Linkanim_00DF60,
+        &gameplay_keep_Linkanim_00DF60,
+        &gameplay_keep_Linkanim_00D998,
+        &gameplay_keep_Linkanim_00DF68,
+        &gameplay_keep_Linkanim_00DF68,
+    },
+    // PLAYER_ANIMGROUP_19
+    {
+        &gameplay_keep_Linkanim_00DBD8,
+        &gameplay_keep_Linkanim_00DBC0,
+        &gameplay_keep_Linkanim_00DBC0,
+        &gameplay_keep_Linkanim_00DBD8,
+        &gameplay_keep_Linkanim_00D510,
+        &gameplay_keep_Linkanim_00DBD8,
+    },
+    // PLAYER_ANIMGROUP_20
+    {
+        &gameplay_keep_Linkanim_00DBF8,
+        &gameplay_keep_Linkanim_00DBF0,
+        &gameplay_keep_Linkanim_00DBF0,
+        &gameplay_keep_Linkanim_00DBF8,
+        &gameplay_keep_Linkanim_00D518,
+        &gameplay_keep_Linkanim_00DBF8,
+    },
+    // PLAYER_ANIMGROUP_21
+    {
+        &gameplay_keep_Linkanim_00DBD0,
+        &gameplay_keep_Linkanim_00DBC8,
+        &gameplay_keep_Linkanim_00DBC8,
+        &gameplay_keep_Linkanim_00DBD0,
+        &gameplay_keep_Linkanim_00DBD0,
+        &gameplay_keep_Linkanim_00DBD0,
+    },
+    // PLAYER_ANIMGROUP_22
+    {
+        &gameplay_keep_Linkanim_00DE90,
+        &gameplay_keep_Linkanim_00DE88,
+        &gameplay_keep_Linkanim_00DE88,
+        &gameplay_keep_Linkanim_00D938,
+        &gameplay_keep_Linkanim_00DE90,
+        &gameplay_keep_Linkanim_00DE90,
+    },
+    // PLAYER_ANIMGROUP_23
+    {
+        &gameplay_keep_Linkanim_00DE78, // Side walking
+        &gameplay_keep_Linkanim_00D448, // Side walking with sword and shield in hands
+        &gameplay_keep_Linkanim_00D448, // Side walking with sword and shield in hands
+        &gameplay_keep_Linkanim_00D928,
+        &gameplay_keep_Linkanim_00DE78, // Side walking
+        &gameplay_keep_Linkanim_00DE78, // Side walking
+    },
+    // PLAYER_ANIMGROUP_24
+    {
+        &gameplay_keep_Linkanim_00DE80,
+        &gameplay_keep_Linkanim_00D450,
+        &gameplay_keep_Linkanim_00D450,
+        &gameplay_keep_Linkanim_00D930,
+        &gameplay_keep_Linkanim_00DE80,
+        &gameplay_keep_Linkanim_00DE80,
+    },
+    // PLAYER_ANIMGROUP_25
+    {
+        &gameplay_keep_Linkanim_00DA80,
+        &gameplay_keep_Linkanim_00DA78,
+        &gameplay_keep_Linkanim_00DA78,
+        &gameplay_keep_Linkanim_00DA80,
+        &gameplay_keep_Linkanim_00DA80,
+        &gameplay_keep_Linkanim_00DA80,
+    },
+    // PLAYER_ANIMGROUP_26
+    {
+        &gameplay_keep_Linkanim_00DF00,
+        &gameplay_keep_Linkanim_00DF00,
+        &gameplay_keep_Linkanim_00DF00,
+        &gameplay_keep_Linkanim_00D968,
+        &gameplay_keep_Linkanim_00D968,
+        &gameplay_keep_Linkanim_00D968,
+    },
+    // PLAYER_ANIMGROUP_27
+    {
+        &gameplay_keep_Linkanim_00DF10,
+        &gameplay_keep_Linkanim_00DF10,
+        &gameplay_keep_Linkanim_00DF10,
+        &gameplay_keep_Linkanim_00D978,
+        &gameplay_keep_Linkanim_00D978,
+        &gameplay_keep_Linkanim_00D978,
+    },
+    // PLAYER_ANIMGROUP_28
+    {
+        &gameplay_keep_Linkanim_00DEB8,
+        &gameplay_keep_Linkanim_00DEB0,
+        &gameplay_keep_Linkanim_00DEB0,
+        &gameplay_keep_Linkanim_00DEB8,
+        &gameplay_keep_Linkanim_00DEB8,
+        &gameplay_keep_Linkanim_00DEB8,
+    },
+    // PLAYER_ANIMGROUP_29
+    {
+        &gameplay_keep_Linkanim_00DE20,
+        &gameplay_keep_Linkanim_00DE18,
+        &gameplay_keep_Linkanim_00DE18,
+        &gameplay_keep_Linkanim_00DE20,
+        &gameplay_keep_Linkanim_00DE20,
+        &gameplay_keep_Linkanim_00DE20,
+    },
+    // PLAYER_ANIMGROUP_30
+    {
+        &gameplay_keep_Linkanim_00DB08,
+        &gameplay_keep_Linkanim_00DB08,
+        &gameplay_keep_Linkanim_00DB08,
+        &gameplay_keep_Linkanim_00DB08,
+        &gameplay_keep_Linkanim_00DB08,
+        &gameplay_keep_Linkanim_00DB08,
+    },
+    // PLAYER_ANIMGROUP_31
+    {
+        &gameplay_keep_Linkanim_00DB50,
+        &gameplay_keep_Linkanim_00DB38,
+        &gameplay_keep_Linkanim_00DB38,
+        &gameplay_keep_Linkanim_00DB50,
+        &gameplay_keep_Linkanim_00DB50,
+        &gameplay_keep_Linkanim_00DB50,
+    },
+    // PLAYER_ANIMGROUP_32
+    {
+        &gameplay_keep_Linkanim_00DB60,
+        &gameplay_keep_Linkanim_00DB58,
+        &gameplay_keep_Linkanim_00DB58,
+        &gameplay_keep_Linkanim_00DB60,
+        &gameplay_keep_Linkanim_00DB60,
+        &gameplay_keep_Linkanim_00DB60,
+    },
+    // PLAYER_ANIMGROUP_33
+    {
+        &gameplay_keep_Linkanim_00DB48,
+        &gameplay_keep_Linkanim_00DB40,
+        &gameplay_keep_Linkanim_00DB40,
+        &gameplay_keep_Linkanim_00DB48,
+        &gameplay_keep_Linkanim_00DB48,
+        &gameplay_keep_Linkanim_00DB48,
+    },
+    // PLAYER_ANIMGROUP_34
+    {
+        &gameplay_keep_Linkanim_00DDD8,
+        &gameplay_keep_Linkanim_00DDD0,
+        &gameplay_keep_Linkanim_00DDD0,
+        &gameplay_keep_Linkanim_00DDD8,
+        &gameplay_keep_Linkanim_00DDD8,
+        &gameplay_keep_Linkanim_00DDD8,
+    },
+    // PLAYER_ANIMGROUP_35
+    {
+        &gameplay_keep_Linkanim_00DDE8,
+        &gameplay_keep_Linkanim_00DDE0,
+        &gameplay_keep_Linkanim_00DDE0,
+        &gameplay_keep_Linkanim_00DDE8,
+        &gameplay_keep_Linkanim_00DDE8,
+        &gameplay_keep_Linkanim_00DDE8,
+    },
+    // PLAYER_ANIMGROUP_36
+    {
+        &gameplay_keep_Linkanim_00DDC8,
+        &gameplay_keep_Linkanim_00DDC0,
+        &gameplay_keep_Linkanim_00DDC0,
+        &gameplay_keep_Linkanim_00DDC8,
+        &gameplay_keep_Linkanim_00DDC8,
+        &gameplay_keep_Linkanim_00DDC8,
+    },
+    // PLAYER_ANIMGROUP_37
+    {
+        &gameplay_keep_Linkanim_00DC40,
+        &gameplay_keep_Linkanim_00DC38,
+        &gameplay_keep_Linkanim_00DC38,
+        &gameplay_keep_Linkanim_00DC40,
+        &gameplay_keep_Linkanim_00DC40,
+        &gameplay_keep_Linkanim_00DC40,
+    },
+    // PLAYER_ANIMGROUP_38
+    {
+        &gameplay_keep_Linkanim_00DCE8,
+        &gameplay_keep_Linkanim_00DCE0,
+        &gameplay_keep_Linkanim_00DCE0,
+        &gameplay_keep_Linkanim_00DCE8,
+        &gameplay_keep_Linkanim_00DCE8,
+        &gameplay_keep_Linkanim_00DCE8,
+    },
+    // PLAYER_ANIMGROUP_39
+    {
+        &gameplay_keep_Linkanim_00DD08,
+        &gameplay_keep_Linkanim_00DD00,
+        &gameplay_keep_Linkanim_00DD00,
+        &gameplay_keep_Linkanim_00DD08,
+        &gameplay_keep_Linkanim_00DD08,
+        &gameplay_keep_Linkanim_00DD08,
+    },
+    // PLAYER_ANIMGROUP_40
+    {
+        &gameplay_keep_Linkanim_00DCF8,
+        &gameplay_keep_Linkanim_00DCF0,
+        &gameplay_keep_Linkanim_00DCF0,
+        &gameplay_keep_Linkanim_00DCF8,
+        &gameplay_keep_Linkanim_00DCF8,
+        &gameplay_keep_Linkanim_00DCF8,
+    },
+    // PLAYER_ANIMGROUP_41
+    {
+        &gameplay_keep_Linkanim_00DC10,
+        &gameplay_keep_Linkanim_00DC08,
+        &gameplay_keep_Linkanim_00DC08,
+        &gameplay_keep_Linkanim_00DC18,
+        &gameplay_keep_Linkanim_00DC10,
+        &gameplay_keep_Linkanim_00DC10,
+    },
+    // PLAYER_ANIMGROUP_42
+    {
+        &gameplay_keep_Linkanim_00DED0,
+        &gameplay_keep_Linkanim_00DEC8,
+        &gameplay_keep_Linkanim_00DEC8,
+        &gameplay_keep_Linkanim_00DED8,
+        &gameplay_keep_Linkanim_00DED0,
+        &gameplay_keep_Linkanim_00DED0,
+    },
+    // PLAYER_ANIMGROUP_43
+    {
+        &gameplay_keep_Linkanim_00E450,
+        &gameplay_keep_Linkanim_00E108,
+        &gameplay_keep_Linkanim_00E108,
+        &gameplay_keep_Linkanim_00E450,
+        &gameplay_keep_Linkanim_00E450,
+        &gameplay_keep_Linkanim_00E450,
+    }
 };
 
-struct_8085C2A4 D_8085C2A4[6] = {
+struct_8085C2A4 D_8085C2A4[] = {
     {
         &gameplay_keep_Linkanim_00D828,
         &gameplay_keep_Linkanim_00D838,
@@ -1421,7 +1728,7 @@ GetItemEntry sGetItemTable[0xB9] = {
     /* 0xB9 */ GET_ITEM(ITEM_TINGLE_MAP, OBJECT_GI_FIELDMAP, GID_TINGLE_MAP, 0xB9, 0xA0, CHEST_ANIM_LONG),
 };
 
-LinkAnimationHeader* D_8085C84C[][2] = {
+LinkAnimationHeader* sPlayerIdleAnimations[][2] = {
     { &gameplay_keep_Linkanim_00DF30, &gameplay_keep_Linkanim_00DEE8 },
     { &gameplay_keep_Linkanim_00DF40, &gameplay_keep_Linkanim_00DEF8 },
     { &gameplay_keep_Linkanim_00DF38, &gameplay_keep_Linkanim_00DEF0 },
@@ -1502,7 +1809,9 @@ u8 D_8085C96C[0x20] = {
     0, 0, 1, 1, 2, 2, 2, 2, 0xA, 0xA, 0xA, 0xA, 0xA, 0xA, 3, 3, 4, 4, 8, 8, 5, 5, 6, 6, 7, 7, 9, 9, 0xB, 0xB, 0, 0,
 };
 
-struct_8082F02C_arg1 D_8085C98C = { { 0, 0, 0 }, { 0xFF, 0xFF, 0x9B }, { 0x14, 0x14, 0x32 }, 0x3AC, 0x1388 };
+struct_8082F02C_arg1 D_8085C98C = {
+    { 0, 0, 0 }, { 0xFF, 0xFF, 0x9B }, { 0x14, 0x14, 0x32 }, 0x3AC, 0x1388,
+};
 
 s8 D_8085C99C[] = {
     PLAYER_AP_OCARINA,                 // ITEM_OCARINA,
@@ -1674,7 +1983,7 @@ PlayerFuncAC4 D_8085C9F0[PLAYER_AP_MAX] = {
     func_80848780, // PLAYER_AP_LENS
 };
 
-void (*D_8085CB3C[0x53])(PlayState*, Player*) = {
+void (*D_8085CB3C[PLAYER_AP_MAX])(PlayState*, Player*) = {
     func_8082F594, // PLAYER_AP_NONE
     func_8082F594, // PLAYER_AP_LAST_USED
     func_8082F594, // PLAYER_AP_FISHING_POLE
@@ -1760,14 +2069,14 @@ void (*D_8085CB3C[0x53])(PlayState*, Player*) = {
     func_8082F594, // PLAYER_AP_LENS
 };
 
-struct_8085CC88 D_8085CC88[0xF] = {
-    { &gameplay_keep_Linkanim_00DC70, 0xC }, { &gameplay_keep_Linkanim_00DD90, 6 },
-    { &gameplay_keep_Linkanim_00D9B8, 8 },   { &gameplay_keep_Linkanim_00DDA0, 8 },
-    { &gameplay_keep_Linkanim_00D820, 8 },   { &gameplay_keep_Linkanim_00DC50, 0xA },
-    { &gameplay_keep_Linkanim_00D9A8, 7 },   { &gameplay_keep_Linkanim_00D9B0, 0xB },
-    { &gameplay_keep_Linkanim_00DC70, 0xC }, { &gameplay_keep_Linkanim_00DD88, 4 },
-    { &gameplay_keep_Linkanim_00DD48, 4 },   { &gameplay_keep_Linkanim_00DC58, 4 },
-    { &gameplay_keep_Linkanim_00D3E0, 5 },   { &gameplay_keep_Linkanim_00DC68, 0xD },
+struct_8085CC88 D_8085CC88[] = {
+    { &gameplay_keep_Linkanim_00DC70, 12 }, { &gameplay_keep_Linkanim_00DD90, 6 },
+    { &gameplay_keep_Linkanim_00D9B8, 8 },  { &gameplay_keep_Linkanim_00DDA0, 8 },
+    { &gameplay_keep_Linkanim_00D820, 8 },  { &gameplay_keep_Linkanim_00DC50, 10 },
+    { &gameplay_keep_Linkanim_00D9A8, 7 },  { &gameplay_keep_Linkanim_00D9B0, 11 },
+    { &gameplay_keep_Linkanim_00DC70, 12 }, { &gameplay_keep_Linkanim_00DD88, 4 },
+    { &gameplay_keep_Linkanim_00DD48, 4 },  { &gameplay_keep_Linkanim_00DC58, 4 },
+    { &gameplay_keep_Linkanim_00D3E0, 5 },  { &gameplay_keep_Linkanim_00DC68, 13 },
     { &gameplay_keep_Linkanim_00E350, 4 },
 };
 
@@ -1982,7 +2291,7 @@ Vec3f D_8085D100 = { 0.0f, 50.0f, 0.0f };
 
 #endif
 
-#define GET_PLAYER_ANIM(group, type) D_8085BE84[group * PLAYER_ANIMTYPE_MAX + type]
+#define GET_PLAYER_ANIM(group, type) D_8085BE84[group][type]
 
 // bss
 #if 1
@@ -2488,7 +2797,7 @@ s32 func_8082ED94(Player* this) {
         (this->skelAnime.animation != &gameplay_keep_Linkanim_00DD68) &&
         (((this->skelAnime.animation != func_8082ED20(this))) ||
          (this->skelAnime.animation == &gameplay_keep_Linkanim_00D0B0))) {
-        for (i = 0, entry = &D_8085C84C[0][0]; i < 30; i++) {
+        for (i = 0, entry = &sPlayerIdleAnimations[0][0]; i < 30; i++) {
             if (this->skelAnime.animation == *entry) {
                 return i + 1;
             }
@@ -2659,21 +2968,21 @@ void func_8082F43C(PlayState* play, Player* this, PlayerFuncAC4 arg2) {
 
 void func_8082F470(PlayState* play, Player* this, s32 arg2) {
     LinkAnimationHeader* current = this->skelAnime.animation;
-    LinkAnimationHeader** iter = &D_8085BE84[this->modelAnimType];
+    LinkAnimationHeader*(*iter)[PLAYER_ANIMTYPE_MAX] = (void*)&D_8085BE84[0][this->modelAnimType];
     s32 i;
 
     this->stateFlags1 &= ~(PLAYER_STATE1_8 | PLAYER_STATE1_1000000);
 
     for (i = 0; i < PLAYER_ANIMGROUP_MAX; i++) {
-        if (current == *iter) {
+        if (current == **iter) {
             break;
         }
-        iter += PLAYER_ANIMTYPE_MAX;
+        iter++;
     }
 
     func_8082F8BC(play, this, arg2);
     if (i < PLAYER_ANIMGROUP_MAX) {
-        this->skelAnime.animation = GET_PLAYER_ANIM(i, this->modelAnimType);
+        this->skelAnime.animation = ((LinkAnimationHeader**)D_8085BE84)[i * PLAYER_ANIMTYPE_MAX + this->modelAnimType];
     }
 }
 
@@ -2782,10 +3091,8 @@ void func_8082F7F4(PlayState* play, Player* this) {
 }
 
 void func_8082F8A0(PlayState* play, Player* this) {
-    this->stateFlags1 |= 0x01000000;
+    this->stateFlags1 |= PLAYER_STATE1_1000000;
 }
-
-extern void (*D_8085CB3C[PLAYER_AP_MAX])(PlayState* play, Player* this);
 
 void func_8082F8BC(PlayState* play, Player* this, PlayerActionParam actionParam) {
     this->heldItemActionParam = this->itemActionParam = actionParam;
@@ -3013,12 +3320,6 @@ void func_8082FE0C(Player* this, PlayState* play) {
     }
 }
 
-extern s8 D_8085CD00[];
-
-extern struct_8085CC88 D_8085CC88[0xF];
-
-s32 func_80848808(Player* this, PlayState* play);
-
 void func_808302CC(Player* this, PlayState* play) {
     LinkAnimationHeader* anim;
     s32 pad[3];
@@ -3050,7 +3351,7 @@ void func_808302CC(Player* this, PlayState* play) {
         this->unk_14E = var_v1;
     }
 
-    anim = D_8085CC88[this->unk_14E].unk_0;
+    anim = D_8085CC88[this->unk_14E].anim;
     if ((anim == &gameplay_keep_Linkanim_00DC50) && (this->currentShield == PLAYER_SHIELD_NONE)) {
         anim = &gameplay_keep_Linkanim_00DC60;
     }
@@ -3076,7 +3377,7 @@ void func_808302CC(Player* this, PlayState* play) {
 void func_808304BC(Player* this, PlayState* play) {
     if ((this->actor.id == ACTOR_PLAYER) && !(this->stateFlags3 & PLAYER_STATE3_40000000)) {
         if ((this->itemActionParam == this->heldItemActionParam) || (this->stateFlags1 & PLAYER_STATE1_400000)) {
-            if ((gSaveContext.save.playerData.health != 0) && (play->csCtx.state == 0)) {
+            if ((gSaveContext.save.playerData.health != 0) && (play->csCtx.state == CS_STATE_0)) {
                 if ((this->csMode == 0) && (play->unk_1887C == 0) && (play->activeCamId == 0)) {
                     if (!func_8082DA90(play) && (gSaveContext.unk_3DD0[4] != 5)) {
                         func_8082FE0C(this, play);
@@ -3196,9 +3497,6 @@ void func_808308DC(PlayState* play, Player* this) {
     }
 }
 
-// returns bool
-extern PlayerFuncAC4 D_8085C9F0[PLAYER_AP_MAX];
-
 void func_808309CC(PlayState* play, Player* this) {
     if (func_80848808 == this->unk_AC4) {
         func_808308DC(play, this);
@@ -3210,9 +3508,6 @@ void func_808309CC(PlayState* play, Player* this) {
     func_8082DCA0(play, this);
     this->stateFlags3 &= ~PLAYER_STATE3_40000000;
 }
-
-extern LinkAnimationHeader* D_8085CFBC[2];
-extern LinkAnimationHeader* D_8085CFC4[2];
 
 LinkAnimationHeader* func_80830A58(PlayState* play, Player* this) {
     func_8082F43C(play, this, func_8084894C);
@@ -3301,14 +3596,14 @@ void func_80830CE8(PlayState* play, Player* this) {
 }
 
 void func_80830D40(PlayState* play, Player* this) {
-    struct_8085CC88* new_var = &D_8085CC88[this->unk_14E];
-    f32 var_fv0;
+    struct_8085CC88* entry = &D_8085CC88[this->unk_14E];
+    f32 frame;
 
-    var_fv0 = new_var->unk_4;
+    frame = entry->frame;
     if (this->unk_284.playSpeed < 0.0f) {
-        var_fv0 -= 1.0f;
+        frame -= 1.0f;
     }
-    if (LinkAnimation_OnFrame(&this->unk_284, var_fv0)) {
+    if (LinkAnimation_OnFrame(&this->unk_284, frame)) {
         func_808308DC(play, this);
     }
     func_8082FB68(this);
@@ -3956,7 +4251,7 @@ void func_80832888(Player* this, PlayState* play) {
         this->stateFlags1 &= ~PLAYER_STATE1_40000000;
     }
 
-    if ((play->csCtx.state != 0) || (this->csMode != 0) ||
+    if ((play->csCtx.state != CS_STATE_0) || (this->csMode != 0) ||
         (this->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) || (this->stateFlags3 & PLAYER_STATE3_80)) {
         this->unk_738 = 0;
     } else if ((temp_v0 != 0) || (this->stateFlags2 & PLAYER_STATE2_2000) || (this->unk_A78 != NULL)) {
@@ -5858,8 +6153,6 @@ s32 func_808370D4(PlayState* play, Player* this) {
     return false;
 }
 
-extern struct_8085C2A4 D_8085C2A4[];
-
 void func_80837134(PlayState* play, Player* this) {
     LinkAnimationHeader* anim = GET_PLAYER_ANIM(PLAYER_ANIMGROUP_13, this->modelAnimType);
     s32 temp_v0_2; // sp28
@@ -7150,7 +7443,7 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
     s32 var_v0_5;
     s16 var_v1;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_0) {
         return;
     }
 
@@ -8609,9 +8902,9 @@ void Player_ChooseIdleAnim(PlayState* play, Player* this) {
                 }
             }
 
-            animPtr = &D_8085C84C[animIndex][0];
+            animPtr = &sPlayerIdleAnimations[animIndex][0];
             if (this->modelAnimType != PLAYER_ANIMTYPE_1) {
-                animPtr = &D_8085C84C[animIndex][1];
+                animPtr = &sPlayerIdleAnimations[animIndex][1];
             }
             anim = *animPtr;
         }
@@ -8626,7 +8919,7 @@ void Player_ChooseIdleAnim(PlayState* play, Player* this) {
         morphFrames = -6.0f;
     }
 
-    LinkAnimation_Change(play, &this->skelAnime, anim, (2.0f / 3.0f) * D_8085C3E4, 0.0f, lastFrame, 2, morphFrames);
+    LinkAnimation_Change(play, &this->skelAnime, anim, (2.0f / 3.0f) * D_8085C3E4, 0.0f, lastFrame, ANIMMODE_ONCE, morphFrames);
 }
 
 void func_8083EE60(Player* this, PlayState* play) {
@@ -10802,7 +11095,7 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
             player->actor.world.pos.y = player->actor.prevPos.y;
         }
 
-        if (play->csCtx.state != 0) {
+        if (play->csCtx.state != CS_STATE_0) {
             if ((player->csMode != 5) && !(player->stateFlags1 & PLAYER_STATE1_800000)) {
                 if (!(player->stateFlags2 & PLAYER_STATE2_80) && (player->actor.id == ACTOR_PLAYER)) {
                     if ((play->csCtx.playerAction != NULL) && (D_8085D384[play->csCtx.playerAction->action] != 0)) {
@@ -12068,7 +12361,6 @@ s32 func_808490B4(Player* this, PlayState* play) {
             LinkAnimation_PlayLoop(play, &this->unk_284, &gameplay_keep_Linkanim_00DB30);
         }
 
-        //! @bug: Not checking if heldActor is NULL
         if ((heldActor->id == ACTOR_EN_NIW) && (this->actor.velocity.y <= 0.0f)) {
             this->actor.terminalVelocity = -2.0f;
             this->actor.gravity = -0.5f;
@@ -16106,7 +16398,7 @@ void func_80854118(Player* this, PlayState* play) {
         Math_SmoothStepToF(&this->actor.velocity.y, 2.0f, 0.3f, 8.0f, 0.5f);
     }
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_0) {
         if (play->csCtx.playerAction != NULL) {
             s32 pad;
             f32 sp28 = this->actor.world.pos.y;
@@ -18364,7 +18656,7 @@ void func_808595B8(PlayState* play, Player* this, UNK_TYPE arg2) {
         return;
     }
 
-    if ((this->csMode == 0x14) && (play->csCtx.state == 0)) {
+    if ((this->csMode == 0x14) && (play->csCtx.state == CS_STATE_0)) {
         func_800B7298(play, NULL, 6);
     } else if (this->stateFlags1 & PLAYER_STATE1_8000000) {
         func_80859300(play, this, 0);
@@ -18745,7 +19037,7 @@ void func_8085A6C0(PlayState* play, Player* this, void* arg2) {
 void func_8085A710(PlayState* play, Player* this, void* arg2) {
     func_80858FBC(play, this, (LinkAnimationHeader*)arg2);
     if (func_8083D23C(this, play)) {
-        play->csCtx.state = 3;
+        play->csCtx.state = CS_STATE_3;
         ActorCutscene_Stop(ActorCutscene_GetCurrentIndex());
     }
 }
@@ -18906,7 +19198,7 @@ void func_8085ADA0(PlayState* play, Player* this, UNK_TYPE arg2) {
 
     var_a0 = false;
 
-    if ((play->csCtx.state == 0) || (play->csCtx.state == 3) || (play->csCtx.state == 4)) {
+    if ((play->csCtx.state == CS_STATE_0) || (play->csCtx.state == CS_STATE_3) || (play->csCtx.state == CS_STATE_4)) {
         if ((D_8085D384[this->unk_396] == 0x44) && (play->sceneNum == SCENE_OKUJOU)) {
             this->unk_AA5 = 5;
 
