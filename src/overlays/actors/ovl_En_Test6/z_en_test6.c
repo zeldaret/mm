@@ -577,7 +577,7 @@ void func_80A91760(EnTest6* this, PlayState* play) {
 
         VEC3F_LERPIMPDST(&subCamEye, &subCam->eye, &sp54, sp4C);
 
-        Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &subCamEye);
+        Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
     } else if ((this->unk_27A < 11) && (this->unk_27A > 0)) {
         subCam->fov += (mainCam->fov - subCam->fov) / this->unk_27A;
     }
@@ -593,9 +593,9 @@ void func_80A91760(EnTest6* this, PlayState* play) {
                (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_B))) {
         this->unk_286 = 1;
         if (ENTEST6_GET(&this->actor) == ENTEST6_25) {
-            func_801A75E8(NA_SE_SY_TIME_CONTROL_SLOW);
+            Audio_StopSfxById(NA_SE_SY_TIME_CONTROL_SLOW);
         } else if (ENTEST6_GET(&this->actor) == ENTEST6_24) {
-            func_801A75E8(NA_SE_SY_TIME_CONTROL_NORMAL);
+            Audio_StopSfxById(NA_SE_SY_TIME_CONTROL_NORMAL);
         }
     }
 
@@ -750,9 +750,9 @@ void func_80A92188(EnTest6* this, PlayState* play) {
     } else if (this->unk_27A < 16) {
         subCamId = ActorCutscene_GetCurrentSubCamId(play->playerActorCsIds[8]);
 
-        Play_CameraSetAtEyeUp(play, subCamId, &this->subCamAt, &this->subCamEye, &sSubCamUp);
-        Play_CameraSetFov(play, subCamId, this->subCamFov);
-        Play_CameraSetRoll(play, subCamId, 0);
+        Play_SetCameraAtEyeUp(play, subCamId, &this->subCamAt, &this->subCamEye, &sSubCamUp);
+        Play_SetCameraFov(play, subCamId, this->subCamFov);
+        Play_SetCameraRoll(play, subCamId, 0);
     }
 
     switch (this->unk_27A) {

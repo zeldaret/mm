@@ -1364,16 +1364,16 @@ void func_80B45648(EnInvadepoh* this) {
     }
 }
 
-s32 func_80B456A8(PlayState* play, Vec3f* vec) {
-    Vec3f multDest;
-    f32 wDest;
+s32 func_80B456A8(PlayState* play, Vec3f* worldPos) {
+    Vec3f projectedPos;
+    f32 invW;
 
-    Actor_GetProjectedPos(play, vec, &multDest, &wDest);
-    if (((multDest.z > 1.0f) && (fabsf(multDest.x * wDest) < 1.0f)) && (fabsf(multDest.y * wDest) < 1.0f)) {
-        s32 wX = (multDest.x * wDest * 160.0f) + 160.0f;
-        s32 wY = (multDest.y * wDest * -120.0f) + 120.0f;
-        s32 wZ = (s32)(multDest.z * wDest * 16352.0f) + 0x3FE0;
-        s32 zBuf = func_80178A94(wX, wY);
+    Actor_GetProjectedPos(play, worldPos, &projectedPos, &invW);
+    if (((projectedPos.z > 1.0f) && (fabsf(projectedPos.x * invW) < 1.0f)) && (fabsf(projectedPos.y * invW) < 1.0f)) {
+        s32 screenPosX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
+        s32 screenPosY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
+        s32 wZ = (s32)(projectedPos.z * invW * 16352.0f) + 16352;
+        s32 zBuf = func_80178A94(screenPosX, screenPosY);
         if (wZ < zBuf) {
             return true;
         }

@@ -365,7 +365,7 @@ void func_8089ABF4(EnDinofos* this, PlayState* play) {
     if (this->subCamId != SUB_CAM_ID_DONE) {
         Camera* subCam = Play_GetCamera(play, this->subCamId);
 
-        Play_CameraSetAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
+        Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
         ActorCutscene_Stop(this->actor.cutscene);
         if (this->actor.colChkInfo.health == 0) {
@@ -488,7 +488,7 @@ void func_8089B288(EnDinofos* this, PlayState* play) {
     this->unk_290--;
     Math_Vec3f_StepTo(&subCam->eye, &this->unk_2BC, this->unk_2AC);
     Math_Vec3f_StepTo(&subCam->at, &this->unk_2C8, this->unk_2A8);
-    Play_CameraSetAtEye(play, this->subCamId, &subCam->at, &subCam->eye);
+    Play_SetCameraAtEye(play, this->subCamId, &subCam->at, &subCam->eye);
     if (this->unk_290 == 0) {
         func_8089B320(this);
     }
@@ -522,7 +522,7 @@ void func_8089B3D4(EnDinofos* this, PlayState* play) {
         subCamAt.y = subCam->at.y;
     }
 
-    Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &subCam->eye);
+    Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCam->eye);
     if (this->actor.bgCheckFlags & 1) {
         func_8089B4A4(this);
     }
@@ -547,7 +547,7 @@ void func_8089B580(EnDinofos* this, PlayState* play) {
 
     this->unk_290++;
     if (this->unk_290 < 8) {
-        Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &subCam->eye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &subCam->eye);
     }
 
     if (this->skelAnime.curFrame > 35.0f) {
@@ -556,7 +556,7 @@ void func_8089B580(EnDinofos* this, PlayState* play) {
         }
 
         Math_Vec3f_StepTo(&subCam->eye, &this->unk_2BC, 10.0f);
-        Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &subCam->eye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &subCam->eye);
         if (this->skelAnime.curFrame <= 55.0f) {
             func_800B9010(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
         }
@@ -1215,7 +1215,7 @@ void func_8089D318(EnDinofos* this, PlayState* play) {
             subCamEye.x = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + this->actor.focus.pos.x;
             subCamEye.y = this->actor.focus.pos.y;
             subCamEye.z = (Math_CosS(this->actor.shape.rot.y) * 150.0f) + this->actor.focus.pos.z;
-            Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
+            Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
             func_8089CFAC(this);
         } else {
             func_8089B100(this, play);
