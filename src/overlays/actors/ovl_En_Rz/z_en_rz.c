@@ -31,7 +31,7 @@ void func_80BFC8F8(EnRz* this, PlayState* play);
 
 void func_80BFB780(EnRz* this, Lights* mapper, PlayState* play);
 void func_80BFB864(PlayState*, EnRz*, s32, s32, f32);
-void func_80BFBA50(EnRz* this, PlayState*);
+s32 func_80BFBA50(EnRz* this, PlayState*);
 Actor* func_80BFBDA0(EnRz* this, PlayState*);
 s32 func_80BFBCEC(EnRz* this, PlayState* play);
 void func_80BFBD54(EnRz* this, PlayState* play);
@@ -59,6 +59,7 @@ static ColliderCylinderInit D_80BFCCF4 = {
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 20, 40, 0, { 0, 0, 0 } },
 };
+static s32 D_80BFCD58[2] = { 0x0400DF28, 0x0400CF98 };
 
 static Vec3f D_80BFCD60 = { 500.0f, -500.0f, 0.0f };
 
@@ -79,6 +80,11 @@ extern Vec3f D_80BFCD60;
 extern void* D_80BFCCE0[3];
 extern void* D_80BFCCEC;
 extern void* D_80BFCCF0;
+
+static UNK_TYPE D_80BFCD20;                                /* unable to generate initializer */
+static UNK_TYPE D_80BFCD3C;
+
+extern LinkAnimationHeader D_80BFCD58[];
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rz/EnRz_Init.s")
 
@@ -106,7 +112,42 @@ void func_80BFB780(EnRz* this, Lights* mapper, PlayState* play) {
     this->actor.scale.x = 0.01f;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rz/func_80BFB864.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rz/func_80BFB864.s")
+
+void func_80BFB864(PlayState *arg0, EnRz *arg1, s32 arg2, s32 arg3, f32 arg4) {
+    s32 sp38;                                       /* compiler-managed */
+    s32 *sp34;
+    AnimationHeader **temp_v1_2;
+    f32 temp_fv0;
+    s32 *temp_v1;
+    s32 temp_a3;
+    ? *phi_v0;
+
+    temp_a3 = arg3 & 0xFF;
+    phi_v0 = &D_80BFCD3C;
+    if ((arg1->actor.params & 0x8000) == 0) {
+        phi_v0 = &D_80BFCD20;
+    }
+    if (((s16) arg2 >= 0) && ((s16) arg2 < 9) && (((s16) arg2 != arg1->unk422) || (temp_a3 != 0))) {
+        if ((s16) arg2 >= 7) {
+            temp_v1 = &D_80BFCD58[(s16) arg2];
+            sp34 = temp_v1;
+            sp38 = temp_a3;
+            temp_fv0 = (f32) Animation_GetLastFrame(temp_v1->unk-1C);
+            if (sp38 == 0) {
+                LinkAnimation_Change(arg0, &arg1->skelanime, temp_v1->unk-1C, 0.6666667f, 0.0f, temp_fv0, (u8) 0, arg4);
+            } else {
+                LinkAnimation_Change(arg0, &arg1->skelanime, temp_v1->unk-1C, 0.6666667f, 0.0f, temp_fv0, (u8) 0, arg4);
+            }
+        } else {
+            temp_v1_2 = phi_v0 + ((s16) arg2 * 4);
+            (s8) arg3 = (s8) temp_a3;
+            sp38 = temp_v1_2;
+            Animation_Change(&arg1->skelanime, *temp_v1_2, 1.0f, 0.0f, (f32) Animation_GetLastFrame(*temp_v1_2), (u8) (s32) (u8) arg3, arg4);
+        }
+        arg1->unk422 = (s16) arg2;
+    }
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rz/func_80BFB9E4.s")
 
@@ -120,39 +161,68 @@ void func_80BFBA1C(PlayState* arg0, EnRz* arg1, s16 arg2) {
     func_80BFB864(arg0, arg1, (s32)arg2, 0, 0.0f);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rz/func_80BFBA50.s")
-/*
-void func_80BFBA50(EnRz *this, PlayState *play) {
-    //Path *sp1C;
-    Path *path;
-    f32 temp_fv0;
-    f32 temp_fv1;
-    s32 params;
-    Vec3f *points;
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rz/func_80BFBA50.s")
 
-    params = (s32) (this->actor.params & 0x7E00) >> 9;
-    if ((params) != 0x3F) {
-        path = &play->setupPathList[params];
-        this->unk3B8 = path;
-        if (path != NULL) {
-            points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
-            temp_fv0 = (f32) points->x - this->actor.world.pos.x;
-            temp_fv1 = (f32) points->y - this->actor.world.pos.z;
-            if (((temp_fv0 * temp_fv0) + (temp_fv1 * temp_fv1)) < 100.0f) {
+s32 func_80BFBA50(EnRz* this, PlayState* play) {
+    if (EN_RZ_GET_PATH(&this->actor) != 0x3F) {
+        this->unk3B8 =  &play->setupPathList[EN_RZ_GET_PATH(&this->actor)];
+        if (this->unk3B8 != NULL) {
+            Path* path  = this->unk3B8;
+            Vec3s* points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+            f32 temp_fv0 = points->x - this->actor.world.pos.x;
+            f32 temp_fv1 = points->z - this->actor.world.pos.z;
+
+            if ((SQ(temp_fv0) + SQ(temp_fv1)) < SQ(10.0f)) {
                 this->unk3BC = 0;
-                this->unk420 &= 0xFFFE;
+                this->unk420 &= ~1;
             } else {
                 this->unk3BC = path->count - 1;
                 this->unk420 |= 1;
+                return 1;
             }
         }
     } else {
         this->unk3B8 = NULL;
         this->unk3BC = 0;
     }
+    return 0;
 }
-*/
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rz/func_80BFBB44.s")
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rz/func_80BFBB44.s")
+
+s32 func_80BFBB44(EnRz* this) {
+    Path* path;
+    Vec3s* pointPos;
+    f32 temp_fa0;
+    f32 temp_fa1;
+
+    path = this->unk3B8;
+    if (path == NULL) {
+        return true;
+    }
+
+    pointPos = &((Vec3s*)Lib_SegmentedToVirtual(path->points))[this->unk3BC];
+    temp_fa0 = pointPos->x - this->actor.world.pos.x;
+    temp_fa1 = pointPos->z - this->actor.world.pos.z;
+    this->actor.world.rot.y = Math_Atan2S(temp_fa0, temp_fa1);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 2000, 200);
+
+    if ((SQ(temp_fa0) + SQ(temp_fa1)) < SQ(10.0f)) {
+        if (this->unk420 & 1) {
+            this->unk3BC--;
+            if (this->unk3BC < 0) {
+                return 2;
+            }
+        } else {
+            this->unk3BC++;
+            if (this->unk3BC >= path->count) {
+                return 2;
+            }
+        }
+        return true;
+    }
+    return false;
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rz/func_80BFBC78.s")
 
@@ -170,11 +240,11 @@ s32 func_80BFBCEC(EnRz* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    if (this->actor.xzDistToPlayer < 100.0f) {
-        if ((Actor_IsFacingPlayer(&this->actor, 0x3000) != 0) && (player->stateFlags2 & 0x02000000)) {
-            return true;
-        }
+    if ((this->actor.xzDistToPlayer < 100.0f) && Actor_IsFacingPlayer(&this->actor, 0x3000) &&
+        (player->stateFlags2 & 0x02000000)) {
+        return true;
     }
+
     return false;
 }
 
@@ -225,7 +295,7 @@ void EnRz_Destroy(Actor* thisx, PlayState* play) {
 
 s32 func_80BFBE70(EnRz* this, PlayState* play) {
     u16 action;
-    if (((this->actor.params & 0x8000) == 0) && (this->unk422 == 4)) {
+    if (!(this->actor.params & 0x8000) && (this->unk422 == 4)) {
         func_800B9010(&this->actor, 0x2198);
     }
     if (Cutscene_CheckActorAction(play, this->unk426)) {

@@ -4,6 +4,7 @@
 #include "global.h"
 
 #define EN_RZ_GET_PARAM_F(thisx) ((thisx)->params & 0xF)
+#define EN_RZ_GET_PATH(thisx) (((thisx)->params & 0x7E00) >>9)
 
 struct EnRz;
 
