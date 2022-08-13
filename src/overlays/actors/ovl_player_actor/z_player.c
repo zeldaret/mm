@@ -10142,180 +10142,197 @@ void func_808425B4(Player* this) {
     this->unk_AA6 = 0;
 }
 
-// Sets the DoAction for the interface A button, depending on a significant number of things
-// Player_SetDoAction
-void func_808426F0(PlayState* play, Player* this) {
-    s32 sp3C;
-    s32 sp38;
+/**
+ * Sets the DoAction for the interface A/B buttons, depending on a significant number of things
+ */
+void Player_SetDoAction(PlayState* play, Player* this) {
+    s32 doActionB; // sp3C
+    s32 sp38;      // sp38
 
     if (this != GET_PLAYER(play)) {
         return;
     }
 
-    sp3C = -1;
+    doActionB = -1;
     sp38 = func_801242B4(this) || (func_8084CA24 == this->actionFunc);
 
-    if (this->transformation == 1) {
-        if (this->stateFlags3 & 0x80000) {
-            sp3C = 0xA;
-        } else if (this->stateFlags3 & 0x1000) {
-            sp3C = 0x27;
+    // Set B do action
+    if (this->transformation == PLAYER_FORM_GORON) {
+        if (this->stateFlags3 & PLAYER_STATE3_80000) {
+            doActionB = DO_ACTION_NONE;
+        } else if (this->stateFlags3 & PLAYER_STATE3_1000) {
+            doActionB = DO_ACTION_POUND;
         } else {
-            sp3C = 0x26;
+            doActionB = DO_ACTION_PUNCH;
         }
-    } else if (this->transformation == 2) {
-        if ((!(this->stateFlags1 & 0x8000000)) || (!sp38 && (this->actor.bgCheckFlags & 1))) {
-            sp3C = 0x26;
+    } else if (this->transformation == PLAYER_FORM_ZORA) {
+        if ((!(this->stateFlags1 & PLAYER_STATE1_8000000)) || (!sp38 && (this->actor.bgCheckFlags & 1))) {
+            doActionB = DO_ACTION_PUNCH;
         } else {
-            sp3C = 7;
+            doActionB = DO_ACTION_DIVE;
         }
-    } else if (this->transformation == 3) {
-        sp3C = 0x29;
+    } else if (this->transformation == PLAYER_FORM_DEKU) {
+        doActionB = DO_ACTION_SHOOT;
     } else { // PLAYER_FORM_HUMAN
-        if (this->currentMask == 0x12) {
-            sp3C = 0x18;
-        } else if (this->currentMask == 0x11) {
-            sp3C = 0x1A;
-        } else if (this->currentMask == 0xE) {
-            sp3C = 0x19;
+        if (this->currentMask == PLAYER_MASK_BLAST) {
+            doActionB = DO_ACTION_EXPLODE;
+        } else if (this->currentMask == PLAYER_MASK_BREMEN) {
+            doActionB = DO_ACTION_MARCH;
+        } else if (this->currentMask == PLAYER_MASK_KAMARO) {
+            doActionB = DO_ACTION_DANCE;
         }
     }
 
-    if (sp3C >= 0) {
-        func_801155B4(play, sp3C);
+    if (doActionB > -1) {
+        func_801155B4(play, doActionB);
     } else if (play->interfaceCtx.unk_21C != 0) {
         play->interfaceCtx.unk_21C = 0;
         play->interfaceCtx.bButtonDoAction = 0;
     }
 
+    // Set A do action
     if ((Message_GetState(&play->msgCtx) == 0) ||
         ((play->msgCtx.currentTextId >= 0x100) && (play->msgCtx.currentTextId <= 0x200)) ||
         ((play->msgCtx.currentTextId >= 0x1BB2) && (play->msgCtx.currentTextId < 0x1BB7))) {
-        Actor* sp34 = this->heldActor;
-        Actor* sp30 = this->interactRangeActor;
+        Actor* heldActor = this->heldActor;                   // sp34
+        Actor* interactRangeActor = this->interactRangeActor; // sp30
         s32 pad;
         s32 sp28 = this->unk_AE3[this->unk_ADE];
         s32 sp24;
-        s32 doAction = ((this->transformation == 1) && !(this->stateFlags1 & 0x400000)) ? 0x23 : 0xA;
+        s32 doActionA = ((this->transformation == PLAYER_FORM_GORON) && !(this->stateFlags1 & PLAYER_STATE1_400000))
+                            ? DO_ACTION_CURL
+                            : DO_ACTION_NONE;
 
         if (play->actorCtx.unk5 & 4) {
-            doAction = 0x17;
-        } else if (Player_InBlockingCsMode(play, this) || (this->actor.flags & 0x20000000) ||
-                   (this->stateFlags1 & 0x1000) || (this->stateFlags3 & 0x80000) ||
+            doActionA = DO_ACTION_SNAP;
+        } else if (Player_InBlockingCsMode(play, this) || (this->actor.flags & ACTOR_FLAG_20000000) ||
+                   (this->stateFlags1 & PLAYER_STATE1_1000) || (this->stateFlags3 & PLAYER_STATE3_80000) ||
                    (func_80854430 == this->actionFunc)) {
-            doAction = 0xA;
-        } else if (this->stateFlags1 & 0x100000) {
-            doAction = 3;
-        } else if ((this->itemActionParam == 2) && (this->unk_B28 != 0)) {
-            doAction = (this->unk_B28 == 2) ? 0x14 : 0xA;
-            doAction = (this->unk_B28 == 2) ? 0x14 : 0xA;
-        } else if (this->stateFlags3 & 0x2000) {
-            doAction = 0xD;
-        } else if ((this->doorType != 0) && (this->doorType != 4) && !(this->stateFlags1 & 0x800)) {
-            doAction = 4;
-        } else if (this->stateFlags3 & 0x200000) {
+            doActionA = DO_ACTION_NONE;
+        } else if (this->stateFlags1 & PLAYER_STATE1_100000) {
+            doActionA = DO_ACTION_RETURN;
+        } else if ((this->itemActionParam == PLAYER_AP_FISHING_POLE) && (this->unk_B28 != 0)) {
+            doActionA = (this->unk_B28 == 2) ? DO_ACTION_REEL : DO_ACTION_NONE;
+            doActionA = (this->unk_B28 == 2) ? DO_ACTION_REEL : DO_ACTION_NONE; // required to match, maybe FAKE?
+        } else if (this->stateFlags3 & PLAYER_STATE3_2000) {
+            doActionA = DO_ACTION_DOWN;
+        } else if ((this->doorType != PLAYER_DOORTYPE_0) && (this->doorType != PLAYER_DOORTYPE_STAIRCASE) &&
+                   !(this->stateFlags1 & PLAYER_STATE1_800)) {
+            doActionA = DO_ACTION_OPEN;
+        } else if (this->stateFlags3 & PLAYER_STATE3_200000) {
             static u8 D_8085D34C[] = {
-                0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22,
+                DO_ACTION_1, DO_ACTION_2, DO_ACTION_3, DO_ACTION_4, DO_ACTION_5, DO_ACTION_6, DO_ACTION_7, DO_ACTION_8,
             };
 
-            doAction = D_8085D34C[this->unk_B67];
-        } else if ((!(this->stateFlags1 & 0x800) || (sp34 == NULL)) && (sp30 != NULL) && (this->getItemId < 0)) {
-            doAction = 4;
-        } else if (!sp38 && (this->stateFlags2 & 1)) {
-            doAction = 0x11;
-        } else if ((this->stateFlags2 & 4) || (!(this->stateFlags1 & 0x800000) && (this->rideActor != NULL))) {
-            doAction = 0xB;
-        } else if ((this->stateFlags1 & 0x800000) &&
+            doActionA = D_8085D34C[this->unk_B67];
+        } else if ((!(this->stateFlags1 & PLAYER_STATE1_800) || (heldActor == NULL)) && (interactRangeActor != NULL) &&
+                   (this->getItemId < GI_NONE)) {
+            doActionA = DO_ACTION_OPEN;
+        } else if (!sp38 && (this->stateFlags2 & PLAYER_STATE2_1)) {
+            doActionA = DO_ACTION_GRAB;
+        } else if ((this->stateFlags2 & PLAYER_STATE2_4) ||
+                   (!(this->stateFlags1 & PLAYER_STATE1_800000) && (this->rideActor != NULL))) {
+            doActionA = DO_ACTION_CLIMB;
+        } else if ((this->stateFlags1 & PLAYER_STATE1_800000) &&
                    (!EN_HORSE_CHECK_4((EnHorse*)this->rideActor) && (func_808505D0 != this->actionFunc))) {
-            if ((this->stateFlags2 & 2) && (this->targetActor != NULL)) {
-                if ((this->targetActor->category == 4) || (this->targetActor->id == 0x19A)) {
-                    doAction = 0xF;
+            if ((this->stateFlags2 & PLAYER_STATE2_2) && (this->targetActor != NULL)) {
+                if ((this->targetActor->category == ACTORCAT_NPC) || (this->targetActor->id == ACTOR_DM_CHAR08)) {
+                    doActionA = DO_ACTION_SPEAK;
                 } else {
-                    doAction = 1;
+                    doActionA = DO_ACTION_CHECK;
                 }
-            } else if (!func_8082DA90(play) && !func_800B7128(this) && !(this->stateFlags1 & 0x100000)) {
-                doAction = 8;
+            } else if (!func_8082DA90(play) && !func_800B7128(this) && !(this->stateFlags1 & PLAYER_STATE1_100000)) {
+                doActionA = DO_ACTION_FASTER;
             } else {
-                doAction = 0xA;
+                doActionA = DO_ACTION_NONE;
             }
-        } else if ((this->stateFlags2 & 2) && (this->targetActor != NULL)) {
-            if ((this->targetActor->category == 4) || (this->targetActor->category == 5) ||
-                (this->targetActor->id == 0x19A)) {
-                doAction = 0xF;
+        } else if ((this->stateFlags2 & PLAYER_STATE2_2) && (this->targetActor != NULL)) {
+            if ((this->targetActor->category == ACTORCAT_NPC) || (this->targetActor->category == ACTORCAT_ENEMY) ||
+                (this->targetActor->id == ACTOR_DM_CHAR08)) {
+                doActionA = DO_ACTION_SPEAK;
             } else {
-                doAction = 1;
+                doActionA = DO_ACTION_CHECK;
             }
-        } else if ((this->stateFlags1 & 0x202000) ||
-                   ((this->stateFlags1 & 0x800000) && (this->stateFlags2 & 0x400000))) {
-            doAction = 0xD;
-        } else if ((this->stateFlags1 & 0x800) && (this->getItemId == 0) && (sp34 != NULL)) {
-            if ((this->actor.bgCheckFlags & 1) || (sp34->id == 0x11)) {
-                if (!func_8083D738(this, sp34)) {
-                    doAction = 0xC;
+        } else if ((this->stateFlags1 & (PLAYER_STATE1_2000 | PLAYER_STATE1_200000)) ||
+                   ((this->stateFlags1 & PLAYER_STATE1_800000) && (this->stateFlags2 & PLAYER_STATE2_400000))) {
+            doActionA = DO_ACTION_DOWN;
+        } else if ((this->stateFlags1 & PLAYER_STATE1_800) && (this->getItemId == GI_NONE) && (heldActor != NULL)) {
+            if ((this->actor.bgCheckFlags & 1) || (heldActor->id == ACTOR_EN_NIW)) {
+                if (!func_8083D738(this, heldActor)) {
+                    doActionA = DO_ACTION_DROP;
                 } else {
-                    doAction = 9;
+                    doActionA = DO_ACTION_THROW;
                 }
             } else {
-                doAction = 0xA;
+                doActionA = DO_ACTION_NONE;
             }
-        } else if (this->stateFlags2 & 0x10000) {
-            doAction = 0x11;
-        } else if (this->stateFlags2 & 0x800) {
-            static u8 D_8085D354[] = { 0x1B, 0x1C };
+        } else if (this->stateFlags2 & PLAYER_STATE2_10000) {
+            doActionA = DO_ACTION_GRAB;
+        } else if (this->stateFlags2 & PLAYER_STATE2_800) {
+            static u8 D_8085D354[] = { DO_ACTION_1, DO_ACTION_2 };
             s32 var_v0;
 
             var_v0 = ((120.0f - this->actor.depthInWater) / 40.0f);
             var_v0 = CLAMP(var_v0, 0, ARRAY_COUNT(D_8085D354) - 1);
-            doAction = D_8085D354[var_v0];
-        } else if (this->stateFlags3 & 0x100) {
-            doAction = 5;
-        } else if (this->stateFlags3 & 0x1000) {
-            doAction = 3;
-        } else if ((func_8082FBE8(this) == 0) && (this->stateFlags1 & 0x8000000) && (sp38 == 0)) {
-            doAction = 0x24;
-        } else if (((this->transformation != 3) &&
-                    (sp38 || ((this->stateFlags1 & 0x8000000) && !(this->actor.bgCheckFlags & 1)))) ||
-                   ((this->transformation == 3) && (this->actor.bgCheckFlags & 1) &&
+
+            doActionA = D_8085D354[var_v0];
+        } else if (this->stateFlags3 & PLAYER_STATE3_100) {
+            doActionA = DO_ACTION_JUMP;
+        } else if (this->stateFlags3 & PLAYER_STATE3_1000) {
+            doActionA = DO_ACTION_RETURN;
+        } else if (!func_8082FBE8(this) && (this->stateFlags1 & PLAYER_STATE1_8000000) && !sp38) {
+            doActionA = DO_ACTION_SURFACE;
+        } else if (((this->transformation != PLAYER_FORM_DEKU) &&
+                    (sp38 || ((this->stateFlags1 & PLAYER_STATE1_8000000) && !(this->actor.bgCheckFlags & 1)))) ||
+                   ((this->transformation == PLAYER_FORM_DEKU) && (this->actor.bgCheckFlags & 1) &&
                     func_800C9DDC(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId))) {
-            doAction = (this->transformation == 2)                                                  ? 0x25
-                       : ((this->stateFlags1 & 0x8000000) && (sp30 != NULL) && (sp30->id == 0x224)) ? 0x11
-                                                                                                    : 7;
+            doActionA = (this->transformation == PLAYER_FORM_ZORA) ? DO_ACTION_SWIM
+                        : ((this->stateFlags1 & PLAYER_STATE1_8000000) && (interactRangeActor != NULL) &&
+                           (interactRangeActor->id == ACTOR_EN_ZOG))
+                            ? DO_ACTION_GRAB
+                            : DO_ACTION_DIVE;
         } else {
             sp24 = func_8082FBE8(this);
-            if ((sp24 && (this->transformation != 3)) || !(this->stateFlags1 & 0x400000) ||
+            if ((sp24 && (this->transformation != PLAYER_FORM_DEKU)) || !(this->stateFlags1 & PLAYER_STATE1_400000) ||
                 !Player_IsGoronOrDeku(this)) {
-                if ((this->transformation != 1) && !(this->stateFlags1 & 0x4004) && (sp28 <= 0) &&
+                if ((this->transformation != PLAYER_FORM_GORON) &&
+                    !(this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_4000)) && (sp28 <= 0) &&
                     ((func_80123420(this)) ||
                      ((D_80862B08 != 7) &&
-                      ((func_80123434(this)) ||
-                       ((play->roomCtx.currRoom.unk3 != 2) && !(this->stateFlags1 & 0x400000) && (sp28 == 0)))))) {
-                    doAction = 0;
+                      ((func_80123434(this)) || ((play->roomCtx.currRoom.unk3 != 2) &&
+                                                 !(this->stateFlags1 & PLAYER_STATE1_400000) && (sp28 == 0)))))) {
+                    doActionA = DO_ACTION_ATTACK;
                 } else if ((play->roomCtx.currRoom.unk3 != 2) && sp24 && (sp28 > 0)) {
-                    doAction = 5;
-                } else if ((this->transformation == 3) && !(this->stateFlags1 & 0x8000000) &&
+                    doActionA = DO_ACTION_JUMP;
+                } else if ((this->transformation == PLAYER_FORM_DEKU) && !(this->stateFlags1 & PLAYER_STATE1_8000000) &&
                            (this->actor.bgCheckFlags & 1)) {
-                    doAction = 0;
-                } else if (((this->transformation == 4) || (this->transformation == 2)) &&
-                           ((this->itemActionParam >= 3) ||
-                            ((this->stateFlags2 & 0x100000) &&
+                    doActionA = DO_ACTION_ATTACK;
+                } else if (((this->transformation == PLAYER_FORM_HUMAN) ||
+                            (this->transformation == PLAYER_FORM_ZORA)) &&
+                           ((this->itemActionParam >= PLAYER_AP_SWORD_KOKIRI) ||
+                            ((this->stateFlags2 & PLAYER_STATE2_100000) &&
                              (play->actorCtx.targetContext.arrowPointedActor == NULL)))) {
-                    doAction = 0x13;
+                    doActionA = DO_ACTION_PUT_AWAY;
+
                     if (!play->msgCtx.currentTextId) {} //! FAKE
                 }
             }
         }
 
-        if (doAction != 0x13) {
-            this->unk_ACF = 0x14;
+        if (doActionA != DO_ACTION_PUT_AWAY) {
+            this->unk_ACF = 20;
         } else {
             if (this->unk_ACF != 0) {
-                doAction = 10;
+                doActionA = DO_ACTION_NONE;
                 this->unk_ACF--;
             }
         }
 
-        func_8011552C(play, doAction);
-        if (!Play_InCsMode(play) && (this->stateFlags2 & 0x200000) && !(this->stateFlags3 & 0x100)) {
+        func_8011552C(play, doActionA);
+
+        // Set Tatl state
+        if (!Play_InCsMode(play) && (this->stateFlags2 & PLAYER_STATE2_200000) &&
+            !(this->stateFlags3 & PLAYER_STATE3_100)) {
             if (this->unk_730 != NULL) {
                 func_80115764(play, 0x2B);
             } else {
@@ -11333,7 +11350,7 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         }
 
         if (!var_v1) {
-            func_808426F0(play, player);
+            Player_SetDoAction(play, player);
         }
 
         Player_UpdateCamAndSeqModes(play, player);

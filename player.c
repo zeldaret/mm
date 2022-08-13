@@ -10937,7 +10937,7 @@ void func_808425B4(Player* this) {
     this->unk_AA6 = 0;
 }
 
-void func_808426F0(PlayState* play, Player* this) {
+void Player_SetDoAction(PlayState* play, Player* this) {
     s32 sp3C;
     s32 sp38;
     Actor* sp34;
@@ -12176,7 +12176,7 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
             var_v1 = sp58;
         }
         if (var_v1 == 0) {
-            func_808426F0(play, player);
+            Player_SetDoAction(play, player);
         }
         Player_UpdateCamAndSeqModes(play, player);
         temp_v0_18 = player->skelAnime.moveFlags;
