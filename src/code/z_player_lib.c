@@ -3476,7 +3476,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
             }
             if ((player->unk_B2A != 0) || ((func_800B7118(player) == 0) && (sp224 != NULL))) {
                 if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->unk_B2A != 0) &&
-                    (player->exchangeItemId != EXCH_ITEM_NONE)) {
+                    (player->exchangeItemId != PLAYER_AP_NONE)) {
                     Math_Vec3f_Copy(&D_801F59E8, &player->leftHandWorld.pos);
                 } else {
                     D_801F59E8.x = (player->bodyPartsPos[0xF].x + player->leftHandWorld.pos.x) * 0.5f;

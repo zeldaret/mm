@@ -586,7 +586,7 @@ void func_80B41CBC(EnKgy* this, PlayState* play) {
         this->actionFunc = func_80B41E18;
         func_80B411DC(this, play, 4);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -595,7 +595,7 @@ void func_80B41D64(EnKgy* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actionFunc = func_80B41CBC;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     } else {
         Actor_PickUp(&this->actor, play, this->unk_2EA, 2000.0f, 1000.0f);
     }
@@ -744,7 +744,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                         case 0xC46:
                         case 0xC55:
                             Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
-                            player->exchangeItemId = EXCH_ITEM_NONE;
+                            player->exchangeItemId = PLAYER_AP_NONE;
                             this->unk_29C &= ~0x8;
                             play->msgCtx.msgLength = 0;
                             func_80B41368(this, play, 4);
@@ -759,7 +759,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                         case 0xC47:
                             func_80B40BC0(this, 1);
                             if (this->unk_29C & 8) {
-                                player->exchangeItemId = EXCH_ITEM_NONE;
+                                player->exchangeItemId = PLAYER_AP_NONE;
                                 this->unk_29C &= ~8;
                             }
                             func_80B40EBC(this, play, textId);
@@ -948,7 +948,7 @@ void func_80B4296C(EnKgy* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_NONE);
     }
 }
 

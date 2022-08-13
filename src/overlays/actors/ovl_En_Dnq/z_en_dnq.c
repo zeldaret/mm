@@ -456,7 +456,7 @@ void EnDnq_Update(Actor* thisx, PlayState* play) {
         this->unk_394 = this->picto.actor.xzDistToPlayer;
         func_80A52C6C(this, play);
         func_8013C964(&this->picto.actor, play, this->unk_390, fabsf(this->picto.actor.playerHeightRel) + 1.0f,
-                      EXCH_ITEM_NONE, this->unk_37C & 7);
+                      PLAYER_AP_NONE, this->unk_37C & 7);
         this->picto.actor.xzDistToPlayer = this->unk_394;
         Actor_SetFocus(&this->picto.actor, 46.0f);
         func_80A52604(this, play);

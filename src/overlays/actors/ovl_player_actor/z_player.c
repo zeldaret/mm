@@ -3948,7 +3948,7 @@ void func_80831990(PlayState* play, Player* this, ItemID item) {
             (actionParam == PLAYER_AP_OCARINA) ||
             ((actionParam > PLAYER_AP_BOTTLE) && actionParam < PLAYER_AP_MASK_TRUTH) ||
             ((actionParam == PLAYER_AP_PICTO_BOX) && (this->targetActor != NULL) &&
-             (this->exchangeItemId > EXCH_ITEM_NONE))) {
+             (this->exchangeItemId > PLAYER_AP_NONE))) {
             if (var_v1) {
                 s32 playerForm = (actionParam < PLAYER_AP_MASK_FIERCE_DEITY)
                                      ? PLAYER_FORM_HUMAN
@@ -6308,7 +6308,7 @@ void func_808379C0(PlayState* play, Player* this) {
 void func_80837B60(PlayState* play, Player* this) {
     func_8083172C(play, this, func_8084E980, 0);
 
-    this->exchangeItemId = EXCH_ITEM_NONE;
+    this->exchangeItemId = PLAYER_AP_NONE;
     this->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);
     if (this->actor.textId != 0) {
         Message_StartTextbox(play, this->actor.textId, this->targetActor);
@@ -6810,9 +6810,9 @@ s32 func_80838A90(Player* this, PlayState* play) {
                               (this->heldItemActionParam <= PLAYER_AP_BOTTLE_HYLIAN_LOACH)) ||
                              (this->heldItemActionParam > PLAYER_AP_BOTTLE_FAIRY) ||
                              ((this->targetActor != NULL) && (this->exchangeItemId > 0) &&
-                              (((this->exchangeItemId == EXCH_ITEM_2E) &&
+                              (((this->exchangeItemId == PLAYER_AP_MAGIC_BEANS) &&
                                 (this->heldItemActionParam == PLAYER_AP_MAGIC_BEANS)) ||
-                               ((this->exchangeItemId != EXCH_ITEM_2E) &&
+                               ((this->exchangeItemId != PLAYER_AP_MAGIC_BEANS) &&
                                 (Player_ActionToBottle(this, this->heldItemActionParam) > -1))))))) {
                     Actor* targetActor;
                     s32 heldItemTemp = this->heldItemActionParam;
@@ -6825,11 +6825,11 @@ s32 func_80838A90(Player* this, PlayState* play) {
                     this->unk_A86 = -1;
 
                     if ((targetActor != NULL) &&
-                        (((this->exchangeItemId == EXCH_ITEM_2E) &&
+                        (((this->exchangeItemId == PLAYER_AP_MAGIC_BEANS) &&
                           (this->heldItemActionParam == PLAYER_AP_MAGIC_BEANS)) ||
-                         ((this->exchangeItemId != EXCH_ITEM_2E) && (this->exchangeItemId > EXCH_ITEM_NONE)))) {
+                         ((this->exchangeItemId != PLAYER_AP_MAGIC_BEANS) && (this->exchangeItemId > PLAYER_AP_NONE)))) {
                         this->stateFlags1 |= (PLAYER_STATE1_20000000 | PLAYER_STATE1_40);
-                        if (this->exchangeItemId == EXCH_ITEM_2E) {
+                        if (this->exchangeItemId == PLAYER_AP_MAGIC_BEANS) {
                             Inventory_ChangeAmmo(ITEM_MAGIC_BEANS, -1);
                             func_80831760(play, this, func_8084B4A8, 0);
                             this->currentYaw = targetActor->yawTowardsPlayer + 0x8000;
@@ -16194,14 +16194,14 @@ void func_80852C04(Player* this, PlayState* play) {
                     this->stateFlags1 &= ~PLAYER_STATE1_20000000;
                     func_8085B28C(play, NULL, 0x5D);
                 } else {
-                    s32 var_a2 = ((this->targetActor != NULL) && (this->exchangeItemId < EXCH_ITEM_NONE)) ||
+                    s32 var_a2 = ((this->targetActor != NULL) && (this->exchangeItemId < PLAYER_AP_NONE)) ||
                                  (this->stateFlags3 & PLAYER_STATE3_20);
 
                     if (var_a2 || (gSaveContext.healthAccumulator == 0)) {
                         func_80838760(this);
                         if (var_a2) {
                             func_80848250(play, this);
-                            this->exchangeItemId = EXCH_ITEM_NONE;
+                            this->exchangeItemId = PLAYER_AP_NONE;
                             if (!func_80847994(play, this)) {
                                 func_8085B460(play, this->targetActor);
                             }
@@ -16435,7 +16435,7 @@ void func_808534C0(Player* this, PlayState* play) {
                 func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
 
                 targetActor = this->targetActor;
-                if ((targetActor != NULL) && (this->exchangeItemId < EXCH_ITEM_NONE)) {
+                if ((targetActor != NULL) && (this->exchangeItemId < PLAYER_AP_NONE)) {
                     func_8085B460(play, targetActor);
                 }
             }
@@ -16583,7 +16583,7 @@ void func_80853A5C(Player* this, PlayState* play) {
     func_8083249C(this);
 
     if (LinkAnimation_Update(play, &this->skelAnime)) {
-        if (this->exchangeItemId == EXCH_ITEM_NONE) {
+        if (this->exchangeItemId == PLAYER_AP_NONE) {
             Actor* targetActor = this->targetActor;
 
             func_80838760(this);
@@ -19750,7 +19750,7 @@ void func_8085B460(PlayState* play, Actor* actor) {
     }
 
     player->targetActor = actor;
-    player->exchangeItemId = EXCH_ITEM_NONE;
+    player->exchangeItemId = PLAYER_AP_NONE;
     player->unk_730 = actor;
 
     if (actor->textId == 0xFFFF) {

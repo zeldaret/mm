@@ -71,6 +71,7 @@ typedef enum PlayerMask {
 } PlayerMask;
 
 typedef enum PlayerActionParam {
+    /*   -1 */ PLAYER_AP_MINUS1 = -1,
     /* 0x00 */ PLAYER_AP_NONE,
     /* 0x01 */ PLAYER_AP_LAST_USED,
     /* 0x02 */ PLAYER_AP_FISHING_POLE,
