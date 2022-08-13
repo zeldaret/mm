@@ -7,17 +7,18 @@ struct EnTg;
 
 typedef void (*EnTgActionFunc)(struct EnTg*, PlayState*);
 
-typedef struct EnTgUnkStruct {
-    /* 0x00 */ u8 isSecondHeartSpawned; // whether or not the second heart in the animation is spawned
-    /* 0x01 */ u8 secondHeartTimer;     // set to 16 and counts down
+// EnTgHeartInfo
+typedef struct EnTgHeartInfo {
+    /* 0x00 */ u8 isSecondHeartSpawned; // Whether or not the second heart in the animation is spawned
+    /* 0x01 */ u8 secondHeartTimer;     // Set to 16 and counts down while isSecondHeartSpawned
     /* 0x02 */ char unk2[0x2];
-    /* 0x04 */ f32 scale;
+    /* 0x04 */ f32 scale; // Set to 0.01f and used in Matrix_Scale
     /* 0x08 */ char unk8[0xC];
-    /* 0x14 */ Vec3f secondHeartPos;
-    /* 0x20 */ Vec3f unusedZeroVec20; // set to zeroVec, never read
-    /* 0x2C */ Vec3f heartVelocity;   // set to {0, 1.5, 0}
-    /* 0x38 */ s16 unk38;             // only updated if isSecondHeartSpawned
-} EnTgUnkStruct;                      // size = 0x40
+    /* 0x14 */ Vec3f secondHeartPos;  // Position of the second heart
+    /* 0x20 */ Vec3f unusedZeroVec20; // Set to zeroVec, never read
+    /* 0x2C */ Vec3f heartVelocity;   // Set to {0, 1.5, 0}, updates the secondHeartPos y height every frame
+    /* 0x38 */ s16 angle;             // Only updated if isSecondHeartSpawned
+} EnTgHeartInfo;                      // size = 0x40
 
 typedef struct EnTg {
     /* 0x0000 */ Actor actor;
@@ -29,7 +30,7 @@ typedef struct EnTg {
     /* 0x026E */ Vec3s morphTable[21];
     /* 0x02EC */ s16 spawnHeartTimer;
     /* 0x02EE */ char unk2EE[0x2];
-    /* 0x02F0 */ EnTgUnkStruct enTgUnkStruct;
+    /* 0x02F0 */ EnTgHeartInfo enTgHeartInfo;
     /* 0x0330 */ char unk330[0x21C];
 } EnTg; // size = 0x548
 

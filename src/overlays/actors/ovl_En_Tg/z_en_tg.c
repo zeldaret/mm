@@ -18,9 +18,9 @@ void EnTg_Update(Actor* thisx, PlayState* play);
 void EnTg_Draw(Actor* thisx, PlayState* play);
 
 void func_8098FA70(EnTg* this, PlayState* play);
-void func_8098FEA8(PlayState* play, EnTgUnkStruct* enTgUnkStruct, s32 len);
-void func_8099000C(PlayState* play, EnTgUnkStruct* enTgUnkStruct, s32 len);
-void func_8098FD50(EnTg* this, EnTgUnkStruct* enTgUnkStruct, Vec3f* heartStartPos, s32 len);
+void func_8098FEA8(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len);
+void func_8099000C(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len);
+void func_8098FD50(EnTg* this, EnTgHeartInfo* enTgHeartInfo, Vec3f* heartStartPos, s32 len);
 
 const ActorInit En_Tg_InitVars = {
     ACTOR_EN_TG,
@@ -161,7 +161,7 @@ void func_8098FA70(EnTg* this, PlayState* play) {
         this->spawnHeartTimer = 12;
         heartStartPos = this->actor.world.pos; // -119.0, -8.0, -38.0
         heartStartPos.y += 62.0f;              // 54, the starting height for where the hearts spawn
-        func_8098FD50(this, &this->enTgUnkStruct, &heartStartPos, 10);
+        func_8098FD50(this, &this->enTgHeartInfo, &heartStartPos, 10);
     }
 }
 
@@ -171,7 +171,7 @@ void EnTg_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4U);
     func_8098F928(this, play);
-    func_8098FEA8(play, &this->enTgUnkStruct, 10);
+    func_8098FEA8(play, &this->enTgHeartInfo, 10);
     EnTg_UpdateCollider(this, play);
 }
 
@@ -200,7 +200,7 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
     GraphicsContext* gfxCtx;
 
     Matrix_Push();
-    func_8099000C(play, &this->enTgUnkStruct, 10);
+    func_8099000C(play, &this->enTgHeartInfo, 10);
     Matrix_Pop();
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -219,59 +219,60 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
 // TODO: called in action function
 // EnTg_SpawnHeart
 // func_8098FD50
-void func_8098FD50(EnTg* this, EnTgUnkStruct* enTgUnkStruct, Vec3f* heartStartPos, s32 len) {
+void func_8098FD50(EnTg* this, EnTgHeartInfo* enTgHeartInfo, Vec3f* heartStartPos, s32 len) {
     Vec3f heartVelocityVec = D_80990234; // { 0.0f, 1.5f, 0.0f };
     Vec3f zeroVec = D_80990240;          // { 0.0f, 0.0f, 0.0f };
     s32 i = 0;
 
-    while ((i < len) && enTgUnkStruct->isSecondHeartSpawned) {
+    while ((i < len) && enTgHeartInfo->isSecondHeartSpawned) {
         i++;
-        enTgUnkStruct++;
+        enTgHeartInfo++;
     }
 
     if (i < len) {
-        enTgUnkStruct->isSecondHeartSpawned = true;
-        enTgUnkStruct->secondHeartPos = *heartStartPos; // actor->world.pos + 62
-        enTgUnkStruct->heartVelocity = heartVelocityVec;
-        enTgUnkStruct->unusedZeroVec20 = zeroVec;
-        enTgUnkStruct->scale = 0.01f;
+        enTgHeartInfo->isSecondHeartSpawned = true;
+        enTgHeartInfo->secondHeartPos = *heartStartPos; // actor->world.pos + 62
+        enTgHeartInfo->heartVelocity = heartVelocityVec;
+        enTgHeartInfo->unusedZeroVec20 = zeroVec;
+        enTgHeartInfo->scale = 0.01f;
 
         // TODO: maybe affects the heart wiggly path? watch actor shape rot
-        enTgUnkStruct->secondHeartPos.x += 4.0f * Math_SinS(this->actor.shape.rot.y);
-        enTgUnkStruct->secondHeartPos.z += 4.0f * Math_CosS(this->actor.shape.rot.y);
-        enTgUnkStruct->secondHeartTimer = 16;
+        enTgHeartInfo->secondHeartPos.x += 4.0f * Math_SinS(this->actor.shape.rot.y);
+        enTgHeartInfo->secondHeartPos.z += 4.0f * Math_CosS(this->actor.shape.rot.y);
+        enTgHeartInfo->secondHeartTimer = 16;
     }
 }
 
 // Looks just like func_809647EC in z_en_fu.c
-// Called in Update... Updates heart positions?
-void func_8098FEA8(PlayState* play, EnTgUnkStruct* enTgUnkStruct, s32 len) {
+// Called in Update... Updates heart position?
+// The first heart spawned sets the path, the second heart spawned follows it
+void func_8098FEA8(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len) {
     Vec3f zeroVec = D_8099024C;
     s16 yaw = Camera_GetInputDirYaw(GET_ACTIVE_CAM(play));
     s32 i;
 
     // Every len frames, update heart position(s)?
-    for (i = 0; i < len; i++, enTgUnkStruct++) {
-        if (enTgUnkStruct->isSecondHeartSpawned == 1) {
-            if (DECR(enTgUnkStruct->secondHeartTimer) == 0) {
-                enTgUnkStruct->isSecondHeartSpawned = false;
+    for (i = 0; i < len; i++, enTgHeartInfo++) {
+        if (enTgHeartInfo->isSecondHeartSpawned == 1) {
+            if (DECR(enTgHeartInfo->secondHeartTimer) == 0) {
+                enTgHeartInfo->isSecondHeartSpawned = false;
             }
-            enTgUnkStruct->secondHeartPos.y += enTgUnkStruct->heartVelocity.y; // is always increased by 1.5f
-            enTgUnkStruct->secondHeartPos.x += 2.0f * Math_SinS(enTgUnkStruct->unk38);
-            enTgUnkStruct->secondHeartPos.z += 2.0f * Math_CosS(enTgUnkStruct->unk38);
+            enTgHeartInfo->secondHeartPos.y += enTgHeartInfo->heartVelocity.y; // is always increased by 1.5f
+            enTgHeartInfo->secondHeartPos.x += 2.0f * Math_SinS(enTgHeartInfo->angle);
+            enTgHeartInfo->secondHeartPos.z += 2.0f * Math_CosS(enTgHeartInfo->angle);
             Matrix_Push();
-            Matrix_Translate(enTgUnkStruct->secondHeartPos.x, enTgUnkStruct->secondHeartPos.y,
-                             enTgUnkStruct->secondHeartPos.z, MTXMODE_NEW);
+            Matrix_Translate(enTgHeartInfo->secondHeartPos.x, enTgHeartInfo->secondHeartPos.y,
+                             enTgHeartInfo->secondHeartPos.z, MTXMODE_NEW);
             Matrix_RotateYS(yaw, MTXMODE_APPLY);
-            Matrix_MultVec3f(&zeroVec, &enTgUnkStruct->secondHeartPos);
+            Matrix_MultVec3f(&zeroVec, &enTgHeartInfo->secondHeartPos);
             Matrix_Pop();
-            enTgUnkStruct->unk38 += 6000;
+            enTgHeartInfo->angle += 6000;
         }
     }
 }
 
 // Called in Draw... draws the heart(s)?
-void func_8099000C(PlayState* play, EnTgUnkStruct* enTgUnkStruct, s32 len) {
+void func_8099000C(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len) {
     s32 i;
     s32 flag = false;
 
@@ -280,16 +281,16 @@ void func_8099000C(PlayState* play, EnTgUnkStruct* enTgUnkStruct, s32 len) {
     POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
 
-    for (i = 0; i < len; i++, enTgUnkStruct++) {
-        if (enTgUnkStruct->isSecondHeartSpawned == 1) {
+    for (i = 0; i < len; i++, enTgHeartInfo++) {
+        if (enTgHeartInfo->isSecondHeartSpawned == 1) {
             if (!flag) {
                 gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0A0); // TODO: figure out what this thing is in Z64Uils
                 flag = true;
             }
-            Matrix_Translate(enTgUnkStruct->secondHeartPos.x, enTgUnkStruct->secondHeartPos.y,
-                             enTgUnkStruct->secondHeartPos.z, MTXMODE_NEW);
+            Matrix_Translate(enTgHeartInfo->secondHeartPos.x, enTgHeartInfo->secondHeartPos.y,
+                             enTgHeartInfo->secondHeartPos.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
-            Matrix_Scale(enTgUnkStruct->scale, enTgUnkStruct->scale, enTgUnkStruct->scale, MTXMODE_APPLY);
+            Matrix_Scale(enTgHeartInfo->scale, enTgHeartInfo->scale, enTgHeartInfo->scale, MTXMODE_APPLY);
 
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
