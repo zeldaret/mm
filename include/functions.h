@@ -1880,7 +1880,7 @@ s32 Inventory_ConsumeFairy(PlayState* play);
 void Inventory_UpdateItem(PlayState* play, s16 slot, s16 item);
 // void func_801153C8(void);
 // void func_80115428(void);
-void func_8011552C(PlayState* play, s16 arg1);
+void func_8011552C(PlayState* play, u16 arg1);
 void func_801155B4(PlayState* play, s16 arg1);
 void func_80115764(PlayState* play, UNK_TYPE arg1);
 void func_80115844(PlayState* play, s16 param_2);
