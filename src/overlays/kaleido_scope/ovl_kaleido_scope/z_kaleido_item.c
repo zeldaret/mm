@@ -640,7 +640,6 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
 
 s16 sCButtonPosX[] = { 660, 900, 1140 };
 s16 sCButtonPosY[] = { 1100, 920, 1100 };
-#ifdef NON_MATCHING
 void KaleidoScope_UpdateItemEquip(PlayState* play) {
     static s16 D_8082B494 = 0;
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -732,11 +731,11 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
 
             if (pauseCtx->equipTargetCBtn == 0) {
                 if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN)) {
-                    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) != ITEM_NONE) {
+                    if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) & 0xFF) != ITEM_NONE) {
                         if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8) &&
-                            ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) == ITEM_BOW) ||
-                             ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) >= ITEM_BOW_ARROW_FIRE) &&
-                              (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) <= ITEM_BOW_ARROW_LIGHT)))) {
+                            (((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) & 0xFF) == ITEM_BOW) ||
+                             (((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) & 0xFF) >= ITEM_BOW_ARROW_FIRE) &&
+                              ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) & 0xFF) <= ITEM_BOW_ARROW_LIGHT)))) {
                             pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
                             pauseCtx->equipTargetSlot = SLOT_BOW;
                         } else {
@@ -749,11 +748,11 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
                         C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN) = SLOT_NONE;
                     }
                 } else if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_RIGHT)) {
-                    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) != ITEM_NONE) {
+                    if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) & 0xFF) != ITEM_NONE) {
                         if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8) &&
-                            ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) == ITEM_BOW) ||
-                             ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) >= ITEM_BOW_ARROW_FIRE) &&
-                              (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) <= ITEM_BOW_ARROW_LIGHT)))) {
+                            (((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) & 0xFF) == ITEM_BOW) ||
+                             (((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) & 0xFF) >= ITEM_BOW_ARROW_FIRE) &&
+                              ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) & 0xFF) <= ITEM_BOW_ARROW_LIGHT)))) {
                             pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
                             pauseCtx->equipTargetSlot = SLOT_BOW;
                         } else {
@@ -793,11 +792,11 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_C_LEFT);
             } else if (pauseCtx->equipTargetCBtn == 1) {
                 if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT)) {
-                    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) != ITEM_NONE) {
+                    if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) & 0xFF) != ITEM_NONE) {
                         if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8) &&
-                            ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) == ITEM_BOW) ||
-                             ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) >= ITEM_BOW_ARROW_FIRE) &&
-                              (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) <= ITEM_BOW_ARROW_LIGHT)))) {
+                            (((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) & 0xFF) == ITEM_BOW) ||
+                             (((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) & 0xFF) >= ITEM_BOW_ARROW_FIRE) &&
+                              ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) & 0xFF) <= ITEM_BOW_ARROW_LIGHT)))) {
                             pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
                             pauseCtx->equipTargetSlot = SLOT_BOW;
                         } else {
@@ -810,11 +809,11 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
                         C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT) = SLOT_NONE;
                     }
                 } else if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_RIGHT)) {
-                    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) != ITEM_NONE) {
+                    if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) & 0xFF) != ITEM_NONE) {
                         if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8) &&
-                            ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) == ITEM_BOW) ||
-                             ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) >= ITEM_BOW_ARROW_FIRE) &&
-                              (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) <= ITEM_BOW_ARROW_LIGHT)))) {
+                            (((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) & 0xFF) == ITEM_BOW) ||
+                             (((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) & 0xFF) >= ITEM_BOW_ARROW_FIRE) &&
+                              ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) & 0xFF) <= ITEM_BOW_ARROW_LIGHT)))) {
                             pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
                             pauseCtx->equipTargetSlot = SLOT_BOW;
                         } else {
@@ -851,11 +850,11 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_C_DOWN);
             } else {
                 if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT)) {
-                    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) != ITEM_NONE) {
+                    if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) & 0xFF) != ITEM_NONE) {
                         if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8) &&
-                            ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) == ITEM_BOW) ||
-                             ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) >= ITEM_BOW_ARROW_FIRE) &&
-                              (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) <= ITEM_BOW_ARROW_LIGHT)))) {
+                            (((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) & 0xFF) == ITEM_BOW) ||
+                             (((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) & 0xFF) >= ITEM_BOW_ARROW_FIRE) &&
+                              ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) & 0xFF) <= ITEM_BOW_ARROW_LIGHT)))) {
                             pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
                             pauseCtx->equipTargetSlot = SLOT_BOW;
                         } else {
@@ -868,11 +867,11 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
                         C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT) = SLOT_NONE;
                     }
                 } else if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN)) {
-                    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) != ITEM_NONE) {
+                    if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) & 0xFF) != ITEM_NONE) {
                         if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8) &&
-                            ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) == ITEM_BOW) ||
-                             ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) >= ITEM_BOW_ARROW_FIRE) &&
-                              (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) <= ITEM_BOW_ARROW_LIGHT)))) {
+                            (((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) & 0xFF) == ITEM_BOW) ||
+                             (((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) & 0xFF) >= ITEM_BOW_ARROW_FIRE) &&
+                              ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) & 0xFF) <= ITEM_BOW_ARROW_LIGHT)))) {
                             pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
                             pauseCtx->equipTargetSlot = SLOT_BOW;
                         } else {
@@ -920,7 +919,3 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
         }
     }
 }
-#else
-s16 D_8082B494 = 0;
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_UpdateItemEquip.s")
-#endif
