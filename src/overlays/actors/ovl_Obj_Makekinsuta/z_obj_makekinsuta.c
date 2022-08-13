@@ -130,7 +130,7 @@ void func_8099FD7C(Actor* thisx, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(thisx->cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(thisx->cutscene, thisx);
         if (thisx->cutscene >= 0) {
-            func_800B7298(play, thisx, 4);
+            func_800B7298(play, thisx, PLAYER_CSMODE_4);
         }
         func_8099FB64(thisx, play);
         thisx->update = Actor_Noop;

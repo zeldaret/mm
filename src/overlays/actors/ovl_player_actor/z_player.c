@@ -3359,7 +3359,7 @@ void func_808304BC(Player* this, PlayState* play) {
     if ((this->actor.id == ACTOR_PLAYER) && !(this->stateFlags3 & PLAYER_STATE3_40000000)) {
         if ((this->itemActionParam == this->heldItemActionParam) || (this->stateFlags1 & PLAYER_STATE1_400000)) {
             if ((gSaveContext.save.playerData.health != 0) && (play->csCtx.state == CS_STATE_0)) {
-                if ((this->csMode == 0) && (play->unk_1887C == 0) && (play->activeCamId == 0)) {
+                if ((this->csMode == PLAYER_CSMODE_0) && (play->unk_1887C == 0) && (play->activeCamId == 0)) {
                     if (!func_8082DA90(play) && (gSaveContext.unk_3DD0[4] != 5)) {
                         func_8082FE0C(this, play);
                     }
@@ -4258,7 +4258,7 @@ void func_80832888(Player* this, PlayState* play) {
         this->stateFlags1 &= ~PLAYER_STATE1_40000000;
     }
 
-    if ((play->csCtx.state != CS_STATE_0) || (this->csMode != 0) ||
+    if ((play->csCtx.state != CS_STATE_0) || (this->csMode != PLAYER_CSMODE_0) ||
         (this->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) || (this->stateFlags3 & PLAYER_STATE3_80)) {
         this->unk_738 = 0;
     } else if ((temp_v0 != 0) || (this->stateFlags2 & PLAYER_STATE2_2000) || (this->unk_A78 != NULL)) {
@@ -5162,7 +5162,7 @@ s32 func_80834600(Player* this, PlayState* play) {
                     return 0;
                 }
 
-                if ((this->unk_D6B != 0) || (this->invincibilityTimer > 0) || (this->stateFlags1 & 0x4000000) || (this->csMode != 0) || (this->meleeWeaponQuads[0].base.atFlags & 2) || (this->meleeWeaponQuads[1].base.atFlags & 2) || (this->cylinder.base.atFlags & 2) || (this->shieldCylinder.base.atFlags & 2)) {
+                if ((this->unk_D6B != 0) || (this->invincibilityTimer > 0) || (this->stateFlags1 & 0x4000000) || (this->csMode != PLAYER_CSMODE_0) || (this->meleeWeaponQuads[0].base.atFlags & 2) || (this->meleeWeaponQuads[1].base.atFlags & 2) || (this->cylinder.base.atFlags & 2) || (this->shieldCylinder.base.atFlags & 2)) {
                     return 0;
                 }
 
@@ -5459,7 +5459,7 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
     s32 sp30;
 
     if ((this == GET_PLAYER(play)) && !(this->stateFlags1 & PLAYER_STATE1_80) && !func_8082DA90(play) &&
-        (this->csMode == 0) && !(this->stateFlags1 & PLAYER_STATE1_1)) {
+        (this->csMode == PLAYER_CSMODE_0) && !(this->stateFlags1 & PLAYER_STATE1_1)) {
         var_a3 = 0;
         if (((poly != NULL) && (var_a3 = SurfaceType_GetSceneExitIndex(&play->colCtx, poly, bgId), (var_a3 != 0)) &&
              (((play->sceneNum != SCENE_GORONRACE) && (play->sceneNum != SCENE_DEKU_KING)) || ((s32)var_a3 < 3)) &&
@@ -6030,7 +6030,7 @@ struct_8085D13C D_8085D13C[] = {
 s32 func_80836F10(PlayState* play, Player* this) {
     s32 var_s0;
 
-    if ((D_80862B08 == 6) || (D_80862B08 == 9) || (this->csMode != 0)) {
+    if ((D_80862B08 == 6) || (D_80862B08 == 9) || (this->csMode != PLAYER_CSMODE_0)) {
         var_s0 = 0;
     } else {
         var_s0 = this->fallDistance;
@@ -8378,7 +8378,7 @@ s32 func_8083D23C(Player* this, PlayState* play) {
                 return false;
             }
 
-            if (this->csMode == 0) {
+            if (this->csMode == PLAYER_CSMODE_0) {
                 if (!(this->stateFlags1 & 0x800)) {
                     if (this->getItemId != 0) {
                         if (~(D_80862B44->press.button | 0xFFFF7FFF) == 0) {
@@ -10012,7 +10012,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
             effect->color = D_8085D33C;
         }
 
-        if ((this->csMode == 9) || (this->csMode == 0x5D)) {
+        if ((this->csMode == PLAYER_CSMODE_9) || (this->csMode == PLAYER_CSMODE_93)) {
             Player_SetAction(play, this, func_8085B08C, 0);
             this->stateFlags1 |= PLAYER_STATE1_20000000;
         } else {
@@ -10050,7 +10050,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
 
     if (this->actor.shape.rot.x != 0) {
         this->actor.shape.rot.x = 0;
-        this->csMode = 0x44;
+        this->csMode = PLAYER_CSMODE_68;
         Player_SetAction(play, this, func_8085B08C, 0);
         this->stateFlags1 |= PLAYER_STATE1_20000000;
         return;
@@ -10699,7 +10699,7 @@ void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
         seqMode = SEQ_MODE_DEFAULT;
         if (this->stateFlags1 & PLAYER_STATE1_100000) {
             seqMode = SEQ_MODE_STILL;
-        } else if (this->csMode != 0) {
+        } else if (this->csMode != PLAYER_CSMODE_0) {
             Camera_ChangeMode(Play_GetCamera(play, CAM_ID_MAIN), CAM_MODE_NORMAL);
         } else {
             camera = (this->actor.id == ACTOR_PLAYER) ? Play_GetCamera(play, CAM_ID_MAIN)
@@ -10876,12 +10876,99 @@ void func_808446F4(PlayState* play, Player* this) {
     }
 }
 
-s8 D_8085D384[0x5C] = {
-    0,    2,    2,    4,    3,    0x38, 8,    0,    0,    0x87, 0x15, 0x3D, 0x3E, 0x3C, 0x3F,  0x40, 0x41, 0x42, 0x46,
-    0x13, 0x47, 0x48, 0x43, 0x49, 0x4A, 0x4B, 0x44, 0x45, 0x4C, 0x74, 0,    0x28, 0,    -0x34, 0x2A, 0x2B, 0x39, 0x51,
-    0x29, 0x35, 0x36, 0x2C, 0x37, 0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0x4D, 0x4E, 0x4F,  0x50, 0x51, 0x52, 0x53,
-    0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5E, 0x5F, 0x64, 0x65, 0x62, 0x63,  0x66, 0x67, 0x68, 0x70,
-    0x71, 0x75, 0x68, 0x68, 0x69, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x76, 0x77, 0x78, 0x72, 0x6F,  0x7A,
+s8 D_8085D384[92] = {
+    /*  0 */ PLAYER_CSMODE_0,
+    /*  1 */ PLAYER_CSMODE_2,
+    /*  2 */ PLAYER_CSMODE_2,
+    /*  3 */ PLAYER_CSMODE_4,
+    /*  4 */ PLAYER_CSMODE_3,
+    /*  5 */ PLAYER_CSMODE_56,
+    /*  6 */ PLAYER_CSMODE_8,
+    /*  7 */ PLAYER_CSMODE_0,
+    /*  8 */ PLAYER_CSMODE_0,
+    /*  9 */ PLAYER_CSMODE_135,
+    /* 10 */ PLAYER_CSMODE_21,
+    /* 11 */ PLAYER_CSMODE_61,
+    /* 12 */ PLAYER_CSMODE_62,
+    /* 13 */ PLAYER_CSMODE_60,
+    /* 14 */ PLAYER_CSMODE_63,
+    /* 15 */ PLAYER_CSMODE_64,
+    /* 16 */ PLAYER_CSMODE_65,
+    /* 17 */ PLAYER_CSMODE_66,
+    /* 18 */ PLAYER_CSMODE_70,
+    /* 19 */ PLAYER_CSMODE_19,
+    /* 20 */ PLAYER_CSMODE_71,
+    /* 21 */ PLAYER_CSMODE_72,
+    /* 22 */ PLAYER_CSMODE_67,
+    /* 23 */ PLAYER_CSMODE_73,
+    /* 24 */ PLAYER_CSMODE_74,
+    /* 25 */ PLAYER_CSMODE_75,
+    /* 26 */ PLAYER_CSMODE_68,
+    /* 27 */ PLAYER_CSMODE_69,
+    /* 28 */ PLAYER_CSMODE_76,
+    /* 29 */ PLAYER_CSMODE_116,
+    /* 30 */ PLAYER_CSMODE_0,
+    /* 31 */ PLAYER_CSMODE_40,
+    /* 32 */ PLAYER_CSMODE_0,
+    /* 33 */ -PLAYER_CSMODE_52, // the only negative one
+    /* 34 */ PLAYER_CSMODE_42,
+    /* 35 */ PLAYER_CSMODE_43,
+    /* 36 */ PLAYER_CSMODE_57,
+    /* 37 */ PLAYER_CSMODE_81,
+    /* 38 */ PLAYER_CSMODE_41,
+    /* 39 */ PLAYER_CSMODE_53,
+    /* 40 */ PLAYER_CSMODE_54,
+    /* 41 */ PLAYER_CSMODE_44,
+    /* 42 */ PLAYER_CSMODE_55,
+    /* 43 */ PLAYER_CSMODE_45,
+    /* 44 */ PLAYER_CSMODE_46,
+    /* 45 */ PLAYER_CSMODE_47,
+    /* 46 */ PLAYER_CSMODE_48,
+    /* 47 */ PLAYER_CSMODE_49,
+    /* 48 */ PLAYER_CSMODE_50,
+    /* 49 */ PLAYER_CSMODE_51,
+    /* 50 */ PLAYER_CSMODE_77,
+    /* 51 */ PLAYER_CSMODE_78,
+    /* 52 */ PLAYER_CSMODE_79,
+    /* 53 */ PLAYER_CSMODE_80,
+    /* 54 */ PLAYER_CSMODE_81,
+    /* 55 */ PLAYER_CSMODE_82,
+    /* 56 */ PLAYER_CSMODE_83,
+    /* 57 */ PLAYER_CSMODE_84,
+    /* 58 */ PLAYER_CSMODE_85,
+    /* 59 */ PLAYER_CSMODE_86,
+    /* 60 */ PLAYER_CSMODE_87,
+    /* 61 */ PLAYER_CSMODE_88,
+    /* 62 */ PLAYER_CSMODE_89,
+    /* 63 */ PLAYER_CSMODE_90,
+    /* 64 */ PLAYER_CSMODE_91,
+    /* 65 */ PLAYER_CSMODE_92,
+    /* 66 */ PLAYER_CSMODE_94,
+    /* 67 */ PLAYER_CSMODE_95,
+    /* 68 */ PLAYER_CSMODE_100,
+    /* 69 */ PLAYER_CSMODE_101,
+    /* 70 */ PLAYER_CSMODE_98,
+    /* 71 */ PLAYER_CSMODE_99,
+    /* 72 */ PLAYER_CSMODE_102,
+    /* 73 */ PLAYER_CSMODE_103,
+    /* 74 */ PLAYER_CSMODE_104,
+    /* 75 */ PLAYER_CSMODE_112,
+    /* 76 */ PLAYER_CSMODE_113,
+    /* 77 */ PLAYER_CSMODE_117,
+    /* 78 */ PLAYER_CSMODE_104,
+    /* 79 */ PLAYER_CSMODE_104,
+    /* 80 */ PLAYER_CSMODE_105,
+    /* 81 */ PLAYER_CSMODE_106,
+    /* 82 */ PLAYER_CSMODE_107,
+    /* 83 */ PLAYER_CSMODE_108,
+    /* 84 */ PLAYER_CSMODE_109,
+    /* 85 */ PLAYER_CSMODE_110,
+    /* 86 */ PLAYER_CSMODE_118,
+    /* 87 */ PLAYER_CSMODE_119,
+    /* 88 */ PLAYER_CSMODE_120,
+    /* 89 */ PLAYER_CSMODE_114,
+    /* 90 */ PLAYER_CSMODE_111,
+    /* 91 */ PLAYER_CSMODE_122,
 };
 
 f32 D_8085D3E0[PLAYER_FORM_MAX] = {
@@ -11250,30 +11337,30 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         }
 
         if (play->csCtx.state != CS_STATE_0) {
-            if ((player->csMode != 5) && !(player->stateFlags1 & PLAYER_STATE1_800000)) {
+            if ((player->csMode != PLAYER_CSMODE_5) && !(player->stateFlags1 & PLAYER_STATE1_800000)) {
                 if (!(player->stateFlags2 & PLAYER_STATE2_80) && (player->actor.id == ACTOR_PLAYER)) {
                     if ((play->csCtx.playerAction != NULL) && (D_8085D384[play->csCtx.playerAction->action] != 0)) {
-                        func_800B7298(play, NULL, 5);
+                        func_800B7298(play, NULL, PLAYER_CSMODE_5);
                         func_8082DABC(player);
-                        // Can't be player->csMode == 0
+                        // Can't be player->csMode == PLAYER_CSMODE_0
                     } else if ((!player->csMode) &&
                                !(player->stateFlags2 & (PLAYER_STATE2_400 | PLAYER_STATE2_8000000)) &&
                                (play->csCtx.state != CS_STATE_3)) {
-                        func_800B7298(play, NULL, 0x14);
+                        func_800B7298(play, NULL, PLAYER_CSMODE_20);
                         func_8082DABC(player);
                     }
                 }
             }
         }
 
-        // Can't be != 0
+        // Can't be != PLAYER_CSMODE_0
         if (player->csMode) {
-            if ((player->csMode != 6) ||
+            if ((player->csMode != PLAYER_CSMODE_6) ||
                 !(player->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 |
                                          PLAYER_STATE1_200000 | PLAYER_STATE1_4000000))) {
                 if (func_8085B08C != player->actionFunc) {
                     player->unk_AA5 = 4;
-                    if (player->csMode == 5) {
+                    if (player->csMode == PLAYER_CSMODE_5) {
                         func_808387A0(play, player);
                         func_8082DAD4(player);
                     }
@@ -11282,7 +11369,7 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
                 func_8085AACC(play, player, 0);
             }
         } else {
-            player->prevCsMode = 0;
+            player->prevCsMode = PLAYER_CSMODE_0;
         }
 
         func_8083BF54(play, player);
@@ -11424,7 +11511,7 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
                 !(player->stateFlags3 & PLAYER_STATE3_10000000)) {
                 if ((func_808561B0 != player->actionFunc) && (func_80853D68 != player->actionFunc) &&
                     (player->actor.draw != NULL)) {
-                    if ((player->actor.id != 0) && (player->csMode == 0x6E)) {
+                    if ((player->actor.id != 0) && (player->csMode == PLAYER_CSMODE_110)) {
                         player->cylinder.dim.radius = 8;
                     }
                     CollisionCheck_SetOC(play, &play->colChkCtx, &player->cylinder.base);
@@ -11512,7 +11599,7 @@ void Player_Update(Actor* thisx, PlayState* play) {
 
     if ((play->actorCtx.unk268 != 0) && (this == GET_PLAYER(play))) {
         input = play->actorCtx.unk_26C;
-    } else if ((this->csMode == 5) || (this->stateFlags1 & 0x20000020) || (this != GET_PLAYER(play)) ||
+    } else if ((this->csMode == PLAYER_CSMODE_5) || (this->stateFlags1 & 0x20000020) || (this != GET_PLAYER(play)) ||
                func_8082DA90(play) || (gSaveContext.save.playerData.health == 0)) {
         bzero(&input, sizeof(Input));
         this->fallStartHeight = this->actor.world.pos.y;
@@ -11782,7 +11869,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
                                   NULL, NULL, NULL);
         } else {
             OverrideLimbDrawFlex sp84 = func_80125D4C;
-            s32 lod = ((this->csMode != 0) || (this->actor.projectedPos.z < 320.0f)) ? 0 : 1;
+            s32 lod = ((this->csMode != PLAYER_CSMODE_0) || (this->actor.projectedPos.z < 320.0f)) ? 0 : 1;
             Vec3f sp74;
 
             //! FAKE
@@ -12000,7 +12087,7 @@ s32 func_80847880(PlayState* play, Player* this) {
         if (play->sceneNum == SCENE_20SICHITAI) {
             Player_SetAction(play, this, func_80854430, 0);
             play->unk_1887C = 0;
-            this->csMode = 0;
+            this->csMode = PLAYER_CSMODE_0;
             return true;
         }
 
@@ -12010,7 +12097,7 @@ s32 func_80847880(PlayState* play, Player* this) {
             func_80831990(play, this, ITEM_BOW);
         }
         Player_AnimationPlayOnce(play, this, func_8082ED20(this));
-        this->csMode = 0;
+        this->csMode = PLAYER_CSMODE_0;
         this->stateFlags1 |= PLAYER_STATE1_100000;
         func_8082DABC(this);
         func_80836D8C(this);
@@ -14582,7 +14669,8 @@ void func_8084E724(Player* this, PlayState* play) {
 
     if (((temp_v1 == 2) && (!(play->actorCtx.unk5 & 4))) ||
         ((temp_v1 != 2) &&
-         (((((((((this->csMode != 0) || (new_var == 0)) || (((s32)temp_v1) >= 5)) || (func_8082FB68(this) != 0)) ||
+         (((((((((this->csMode != PLAYER_CSMODE_0) || (new_var == 0)) || (((s32)temp_v1) >= 5)) ||
+               (func_8082FB68(this) != 0)) ||
               (this->unk_730 != NULL)) ||
              (func_8083868C(play, this) == 0)) ||
             ((this->unk_AA5 == 3) &&
@@ -15213,7 +15301,7 @@ void func_8084FE7C(Player* this, PlayState* play) {
         AnimationContext_SetCopyAll(play, this->skelAnime.limbCount, this->skelAnime.morphTable,
                                     this->skelAnime.jointTable);
 
-        if ((play->csCtx.state != CS_STATE_0) || (this->csMode != 0)) {
+        if ((play->csCtx.state != CS_STATE_0) || (this->csMode != PLAYER_CSMODE_0)) {
             this->unk_AA5 = 0;
             this->unk_AE7 = 0;
         } else if ((this->unk_AE8 < 2) || (this->unk_AE8 >= 4)) {
@@ -15278,7 +15366,7 @@ void func_8084FE7C(Player* this, PlayState* play) {
             } else {
                 func_8084FD7C(play, this, &rideActor->actor);
             }
-        } else if ((this->csMode != 0) ||
+        } else if ((this->csMode != PLAYER_CSMODE_0) ||
                    (!func_8082DAFC(play) && ((rideActor->actor.speedXZ != 0.0f) || !func_808391D8(this, play)) &&
                     !func_80847BF0(this, play) && !func_80838A90(this, play))) {
             if (this->unk_730 != NULL) {
@@ -15305,8 +15393,8 @@ void func_8084FE7C(Player* this, PlayState* play) {
         }
     }
 
-    if (this->csMode == 6) {
-        this->csMode = 0;
+    if (this->csMode == PLAYER_CSMODE_6) {
+        this->csMode = PLAYER_CSMODE_0;
     }
 }
 
@@ -15761,10 +15849,11 @@ void func_80851BD4(Player* this, PlayState* play) {
 
 s32 func_80851C40(PlayState* play, Player* this) {
     return ((play->sceneNum == SCENE_MILK_BAR) && Audio_IsSequencePlaying(NA_BGM_BALLAD_OF_THE_WIND_FISH)) ||
-           (((play->sceneNum != SCENE_MILK_BAR) && (this->csMode == 0x44)) ||
+           (((play->sceneNum != SCENE_MILK_BAR) && (this->csMode == PLAYER_CSMODE_68)) ||
             ((play->msgCtx.msgMode == 0x12) || (play->msgCtx.msgMode == 0x13) || (play->msgCtx.msgMode == 0x14) ||
              ((play->msgCtx.ocarinaMode != 1) &&
-              ((this->csMode == 5) || (play->msgCtx.ocarinaMode == 3) || play->msgCtx.ocarinaAction == 0x32))));
+              ((this->csMode == PLAYER_CSMODE_5) || (play->msgCtx.ocarinaMode == 3) ||
+               play->msgCtx.ocarinaAction == 0x32))));
 }
 
 // Deku playing the pipes? The loops both overwrite unk_AF0[0].y,z and unk_AF0[1].x,y,z
@@ -15979,7 +16068,7 @@ void func_8085269C(Player* this, PlayState* play) {
                                         0, play->msgCtx.ocarinaMode);
                     if (actor != NULL) {
                         this->stateFlags1 &= ~PLAYER_STATE1_20000000;
-                        this->csMode = 0;
+                        this->csMode = PLAYER_CSMODE_0;
                         func_8085B28C(play, NULL, 0x13);
                         this->stateFlags1 |= PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000;
                     } else {
@@ -18600,8 +18689,8 @@ void func_808595B8(PlayState* play, Player* this, UNK_TYPE arg2) {
         return;
     }
 
-    if ((this->csMode == 0x14) && (play->csCtx.state == CS_STATE_0)) {
-        func_800B7298(play, NULL, 6);
+    if ((this->csMode == PLAYER_CSMODE_20) && (play->csCtx.state == CS_STATE_0)) {
+        func_800B7298(play, NULL, PLAYER_CSMODE_6);
     } else if (this->stateFlags1 & PLAYER_STATE1_8000000) {
         func_80859300(play, this, 0);
         this->actor.velocity.y = 0.0f;
@@ -18685,7 +18774,7 @@ void func_80859890(PlayState* play, Player* this, UNK_TYPE arg2) {
         func_808411D4(play, this, &sp24, 0xA);
         this->unk_AE8++;
         if (this->unk_AE8 >= 0x15) {
-            this->csMode = 0xA;
+            this->csMode = PLAYER_CSMODE_10;
         }
     }
 }
@@ -18792,290 +18881,290 @@ void func_80859D44(PlayState* play, Player* this, UNK_TYPE arg2) {
     LinkAnimation_Update(play, &this->skelAnime);
 }
 
-struct_8085DA94 D_8085DA94[140] = {
-    /*   0 */ { 0, { NULL } },
-    /*   1 */ { -1, { func_808594D0 } },
-    /*   2 */ { 0, { NULL } },
-    /*   3 */ { 0, { NULL } },
-    /*   4 */ { 3, { &gameplay_keep_Linkanim_00D568 } },
-    /*   5 */ { 0, { NULL } },
-    /*   6 */ { 0, { NULL } },
-    /*   7 */ { -1, { func_808594D0 } },
-    /*   8 */ { 2, { &gameplay_keep_Linkanim_00D5A0 } },
-    /*   9 */ { -1, { func_8085978C } },
-    /*  10 */ { 3, { &gameplay_keep_Linkanim_00D680 } },
-    /*  11 */ { 5, { &gameplay_keep_Linkanim_00D1C0 } },
-    /*  12 */ { 7, { &gameplay_keep_Linkanim_00D1C8 } },
-    /*  13 */ { 2, { &gameplay_keep_Linkanim_00D560 } },
-    /*  14 */ { 0, { NULL } },
-    /*  15 */ { 3, { &gameplay_keep_Linkanim_00D5D0 } },
-    /*  16 */ { -1, { func_80859B54 } },
-    /*  17 */ { 2, { &gameplay_keep_Linkanim_00DDA8 } },
-    /*  18 */ { 16, { &gameplay_keep_Linkanim_00DCB0 } },
-    /*  19 */ { -1, { func_80859CA0 } },
-    /*  20 */ { -1, { func_808594D0 } },
-    /*  21 */ { 3, { &gameplay_keep_Linkanim_00D190 } },
-    /*  22 */ { 6, { &gameplay_keep_Linkanim_00E168 } },
-    /*  23 */ { 3, { &gameplay_keep_Linkanim_00D640 } },
-    /*  24 */ { 3, { &gameplay_keep_Linkanim_00DF38 } },
-    /*  25 */ { -1, { func_80859CFC } },
-    /*  26 */ { -1, { func_8085A66C } },
-    /*  27 */ { 3, { &gameplay_keep_Linkanim_00D688 } },
-    /*  28 */ { 3, { &gameplay_keep_Linkanim_00D610 } },
-    /*  29 */ { 3, { &gameplay_keep_Linkanim_00D620 } },
-    /*  30 */ { 3, { &gameplay_keep_Linkanim_00D628 } },
-    /*  31 */ { 6, { &gameplay_keep_Linkanim_00D310 } },
-    /*  32 */ { -1, { func_80859FCC } },
-    /*  33 */ { 3, { &gameplay_keep_Linkanim_00D2D0 } },
-    /*  34 */ { 4, { &gameplay_keep_Linkanim_00D2C8 } },
-    /*  35 */ { 3, { &gameplay_keep_Linkanim_00D2B8 } },
-    /*  36 */ { -1, { func_8085A120 } },
-    /*  37 */ { -1, { func_8085A19C } },
-    /*  38 */ { 6, { &gameplay_keep_Linkanim_00D278 } },
-    /*  39 */ { 6, { &gameplay_keep_Linkanim_00D288 } },
-    /*  40 */ { 5, { &gameplay_keep_Linkanim_00E428 } },
-    /*  41 */ { 5, { &gameplay_keep_Linkanim_00D060 } },
-    /*  42 */ { 5, { &gameplay_keep_Linkanim_00E148 } },
-    /*  43 */ { 5, { &gameplay_keep_Linkanim_00E150 } },
-    /*  44 */ { 7, { &gameplay_keep_Linkanim_00D068 } },
-    /*  45 */ { 5, { &gameplay_keep_Linkanim_00E420 } },
-    /*  46 */ { 5, { &gameplay_keep_Linkanim_00E430 } },
-    /*  47 */ { 5, { &gameplay_keep_Linkanim_00E440 } },
-    /*  48 */ { 3, { &gameplay_keep_Linkanim_00CF68 } },
-    /*  49 */ { 5, { &gameplay_keep_Linkanim_00D2F0 } },
-    /*  50 */ { 5, { &gameplay_keep_Linkanim_00E468 } },
-    /*  51 */ { 5, { &gameplay_keep_Linkanim_00E460 } },
-    /*  52 */ { 5, { &gameplay_keep_Linkanim_00E140 } },
-    /*  53 */ { 5, { &gameplay_keep_Linkanim_00E118 } },
-    /*  54 */ { 4, { &gameplay_keep_Linkanim_00E120 } },
-    /*  55 */ { 5, { &gameplay_keep_Linkanim_00E110 } },
-    /*  56 */ { 14, { &gameplay_keep_Linkanim_00E140 } },
-    /*  57 */ { 5, { &gameplay_keep_Linkanim_00D0E0 } },
-    /*  58 */ { -1, { func_8085978C } },
-    /*  59 */ { 5, { &gameplay_keep_Linkanim_00D0A0 } },
-    /*  60 */ { 2, { &gameplay_keep_Linkanim_00D080 } },
-    /*  61 */ { 7, { &gameplay_keep_Linkanim_00D0B8 } },
-    /*  62 */ { 5, { &gameplay_keep_Linkanim_00D0C0 } },
-    /*  63 */ { 3, { &gameplay_keep_Linkanim_00CF60 } },
-    /*  64 */ { 3, { &gameplay_keep_Linkanim_00CF48 } },
-    /*  65 */ { 3, { &gameplay_keep_Linkanim_00CF58 } },
-    /*  66 */ { 3, { &gameplay_keep_Linkanim_00CF40 } },
-    /*  67 */ { -1, { func_8085968C } },
-    /*  68 */ { -1, { func_8085A24C } },
-    /*  69 */ { -1, { func_8085A330 } },
-    /*  70 */ { 7, { &gameplay_keep_Linkanim_00D0D8 } },
-    /*  71 */ { 5, { &gameplay_keep_Linkanim_00D090 } },
-    /*  72 */ { 5, { &gameplay_keep_Linkanim_00D088 } },
-    /*  73 */ { 3, { &gameplay_keep_Linkanim_00CF88 } },
-    /*  74 */ { 3, { &gameplay_keep_Linkanim_00CF90 } },
-    /*  75 */ { 3, { &gameplay_keep_Linkanim_00CF78 } },
-    /*  76 */ { 3, { &gameplay_keep_Linkanim_00CF80 } },
-    /*  77 */ { 7, { &gameplay_keep_Linkanim_00D308 } },
-    /*  78 */ { 5, { &gameplay_keep_Linkanim_00D300 } },
-    /*  79 */ { 3, { &gameplay_keep_Linkanim_00D018 } },
-    /*  80 */ { 4, { &gameplay_keep_Linkanim_00D028 } },
-    /*  81 */ { 3, { &gameplay_keep_Linkanim_00CFE0 } },
-    /*  82 */ { 4, { &gameplay_keep_Linkanim_00D058 } },
-    /*  83 */ { 3, { &gameplay_keep_Linkanim_00D030 } },
-    /*  84 */ { 5, { &gameplay_keep_Linkanim_00CFB0 } },
-    /*  85 */ { 3, { &gameplay_keep_Linkanim_00CFC8 } },
-    /*  86 */ { 4, { &gameplay_keep_Linkanim_00D040 } },
-    /*  87 */ { 5, { &gameplay_keep_Linkanim_00D1D0 } },
-    /*  88 */ { 3, { &gameplay_keep_Linkanim_00CFD8 } },
-    /*  89 */ { 4, { &gameplay_keep_Linkanim_00CFC0 } },
-    /*  90 */ { 4, { &gameplay_keep_Linkanim_00CFB8 } },
-    /*  91 */ { 4, { &gameplay_keep_Linkanim_00D050 } },
-    /*  92 */ { 4, { &gameplay_keep_Linkanim_00D048 } },
-    /*  93 */ { -1, { func_8085A8C4 } },
-    /*  94 */ { 3, { &gameplay_keep_Linkanim_00D000 } },
-    /*  95 */ { 3, { &gameplay_keep_Linkanim_00D010 } },
-    /*  96 */ { 9, { &gameplay_keep_Linkanim_00DAD0 } },
-    /*  97 */ { -1, { func_8085A530 } },
-    /*  98 */ { 15, { &gameplay_keep_Linkanim_00D0A8 } },
-    /*  99 */ { 7, { &gameplay_keep_Linkanim_00D098 } },
-    /* 100 */ { 3, { &gameplay_keep_Linkanim_00CFA0 } },
-    /* 101 */ { 3, { &gameplay_keep_Linkanim_00CFF0 } },
-    /* 102 */ { -1, { func_8085A768 } },
-    /* 103 */ { -1, { func_8085AA60 } },
-    /* 104 */ { 5, { &gameplay_keep_Linkanim_00D070 } },
-    /* 105 */ { 5, { &gameplay_keep_Linkanim_00D358 } },
-    /* 106 */ { 5, { &gameplay_keep_Linkanim_00D330 } },
-    /* 107 */ { 5, { &gameplay_keep_Linkanim_00D340 } },
-    /* 108 */ { 5, { &gameplay_keep_Linkanim_00D350 } },
-    /* 109 */ { 5, { &gameplay_keep_Linkanim_00D328 } },
-    /* 110 */ { 7, { &gameplay_keep_Linkanim_00D368 } },
-    /* 111 */ { 3, { &gameplay_keep_Linkanim_00D9F8 } },
-    /* 112 */ { 5, { &gameplay_keep_Linkanim_00D108 } },
-    /* 113 */ { 5, { &gameplay_keep_Linkanim_00D118 } },
-    /* 114 */ { 4, { &gameplay_keep_Linkanim_00CF98 } },
-    /* 115 */ { 2, { &gameplay_keep_Linkanim_00D5B8 } },
-    /* 116 */ { 7, { &gameplay_keep_Linkanim_00E010 } },
-    /* 117 */ { 5, { &gameplay_keep_Linkanim_00D0F8 } },
-    /* 118 */ { 7, { &gameplay_keep_Linkanim_00D2D8 } },
-    /* 119 */ { 7, { &gameplay_keep_Linkanim_00D2E0 } },
-    /* 120 */ { 7, { &gameplay_keep_Linkanim_00D2E8 } },
-    /* 121 */ { -1, { func_80859990 } },
-    /* 122 */ { 0, { NULL } },
-    /* 123 */ { -1, { func_80859A10 } },
-    /* 124 */ { 7, { &gameplay_keep_Linkanim_00D158 } },
-    /* 125 */ { 5, { &gameplay_keep_Linkanim_00D160 } },
-    /* 126 */ { 5, { &gameplay_keep_Linkanim_00D168 } },
-    /* 127 */ { 3, { &gameplay_keep_Linkanim_00D5C0 } },
-    /* 128 */ { 4, { &gameplay_keep_Linkanim_00D668 } },
-    /* 129 */ { 3, { &gameplay_keep_Linkanim_00E470 } },
-    /* 130 */ { 3, { &gameplay_keep_Linkanim_00E478 } },
-    /* 131 */ { 3, { &gameplay_keep_Linkanim_00E4C0 } },
-    /* 132 */ { 3, { &gameplay_keep_Linkanim_00E480 } },
-    /* 133 */ { 3, { &gameplay_keep_Linkanim_00E490 } },
-    /* 134 */ { 3, { &gameplay_keep_Linkanim_00E488 } },
-    /* 135 */ { 3, { &gameplay_keep_Linkanim_00E498 } },
-    /* 136 */ { 3, { &gameplay_keep_Linkanim_00E4B0 } },
-    /* 137 */ { 3, { &gameplay_keep_Linkanim_00D660 } },
-    /* 138 */ { 3, { &gameplay_keep_Linkanim_00DA00 } },
-    /* 139 */ { 3, { &gameplay_keep_Linkanim_00DA08 } },
+struct_8085DA94 D_8085DA94[PLAYER_CSMODE_MAX] = {
+    /* PLAYER_CSMODE_0   */ { 0, { NULL } },
+    /* PLAYER_CSMODE_1   */ { -1, { func_808594D0 } },
+    /* PLAYER_CSMODE_2   */ { 0, { NULL } },
+    /* PLAYER_CSMODE_3   */ { 0, { NULL } },
+    /* PLAYER_CSMODE_4   */ { 3, { &gameplay_keep_Linkanim_00D568 } },
+    /* PLAYER_CSMODE_5   */ { 0, { NULL } },
+    /* PLAYER_CSMODE_6   */ { 0, { NULL } },
+    /* PLAYER_CSMODE_7   */ { -1, { func_808594D0 } },
+    /* PLAYER_CSMODE_8   */ { 2, { &gameplay_keep_Linkanim_00D5A0 } },
+    /* PLAYER_CSMODE_9   */ { -1, { func_8085978C } },
+    /* PLAYER_CSMODE_10  */ { 3, { &gameplay_keep_Linkanim_00D680 } },
+    /* PLAYER_CSMODE_11  */ { 5, { &gameplay_keep_Linkanim_00D1C0 } },
+    /* PLAYER_CSMODE_12  */ { 7, { &gameplay_keep_Linkanim_00D1C8 } },
+    /* PLAYER_CSMODE_13  */ { 2, { &gameplay_keep_Linkanim_00D560 } },
+    /* PLAYER_CSMODE_14  */ { 0, { NULL } },
+    /* PLAYER_CSMODE_15  */ { 3, { &gameplay_keep_Linkanim_00D5D0 } },
+    /* PLAYER_CSMODE_16  */ { -1, { func_80859B54 } },
+    /* PLAYER_CSMODE_17  */ { 2, { &gameplay_keep_Linkanim_00DDA8 } },
+    /* PLAYER_CSMODE_18  */ { 16, { &gameplay_keep_Linkanim_00DCB0 } },
+    /* PLAYER_CSMODE_19  */ { -1, { func_80859CA0 } },
+    /* PLAYER_CSMODE_20  */ { -1, { func_808594D0 } },
+    /* PLAYER_CSMODE_21  */ { 3, { &gameplay_keep_Linkanim_00D190 } },
+    /* PLAYER_CSMODE_22  */ { 6, { &gameplay_keep_Linkanim_00E168 } },
+    /* PLAYER_CSMODE_23  */ { 3, { &gameplay_keep_Linkanim_00D640 } },
+    /* PLAYER_CSMODE_24  */ { 3, { &gameplay_keep_Linkanim_00DF38 } },
+    /* PLAYER_CSMODE_25  */ { -1, { func_80859CFC } },
+    /* PLAYER_CSMODE_26  */ { -1, { func_8085A66C } },
+    /* PLAYER_CSMODE_27  */ { 3, { &gameplay_keep_Linkanim_00D688 } },
+    /* PLAYER_CSMODE_28  */ { 3, { &gameplay_keep_Linkanim_00D610 } },
+    /* PLAYER_CSMODE_29  */ { 3, { &gameplay_keep_Linkanim_00D620 } },
+    /* PLAYER_CSMODE_30  */ { 3, { &gameplay_keep_Linkanim_00D628 } },
+    /* PLAYER_CSMODE_31  */ { 6, { &gameplay_keep_Linkanim_00D310 } },
+    /* PLAYER_CSMODE_32  */ { -1, { func_80859FCC } },
+    /* PLAYER_CSMODE_33  */ { 3, { &gameplay_keep_Linkanim_00D2D0 } },
+    /* PLAYER_CSMODE_34  */ { 4, { &gameplay_keep_Linkanim_00D2C8 } },
+    /* PLAYER_CSMODE_35  */ { 3, { &gameplay_keep_Linkanim_00D2B8 } },
+    /* PLAYER_CSMODE_36  */ { -1, { func_8085A120 } },
+    /* PLAYER_CSMODE_37  */ { -1, { func_8085A19C } },
+    /* PLAYER_CSMODE_38  */ { 6, { &gameplay_keep_Linkanim_00D278 } },
+    /* PLAYER_CSMODE_39  */ { 6, { &gameplay_keep_Linkanim_00D288 } },
+    /* PLAYER_CSMODE_40  */ { 5, { &gameplay_keep_Linkanim_00E428 } },
+    /* PLAYER_CSMODE_41  */ { 5, { &gameplay_keep_Linkanim_00D060 } },
+    /* PLAYER_CSMODE_42  */ { 5, { &gameplay_keep_Linkanim_00E148 } },
+    /* PLAYER_CSMODE_43  */ { 5, { &gameplay_keep_Linkanim_00E150 } },
+    /* PLAYER_CSMODE_44  */ { 7, { &gameplay_keep_Linkanim_00D068 } },
+    /* PLAYER_CSMODE_45  */ { 5, { &gameplay_keep_Linkanim_00E420 } },
+    /* PLAYER_CSMODE_46  */ { 5, { &gameplay_keep_Linkanim_00E430 } },
+    /* PLAYER_CSMODE_47  */ { 5, { &gameplay_keep_Linkanim_00E440 } },
+    /* PLAYER_CSMODE_48  */ { 3, { &gameplay_keep_Linkanim_00CF68 } },
+    /* PLAYER_CSMODE_49  */ { 5, { &gameplay_keep_Linkanim_00D2F0 } },
+    /* PLAYER_CSMODE_50  */ { 5, { &gameplay_keep_Linkanim_00E468 } },
+    /* PLAYER_CSMODE_51  */ { 5, { &gameplay_keep_Linkanim_00E460 } },
+    /* PLAYER_CSMODE_52  */ { 5, { &gameplay_keep_Linkanim_00E140 } },
+    /* PLAYER_CSMODE_53  */ { 5, { &gameplay_keep_Linkanim_00E118 } },
+    /* PLAYER_CSMODE_54  */ { 4, { &gameplay_keep_Linkanim_00E120 } },
+    /* PLAYER_CSMODE_55  */ { 5, { &gameplay_keep_Linkanim_00E110 } },
+    /* PLAYER_CSMODE_56  */ { 14, { &gameplay_keep_Linkanim_00E140 } },
+    /* PLAYER_CSMODE_57  */ { 5, { &gameplay_keep_Linkanim_00D0E0 } },
+    /* PLAYER_CSMODE_58  */ { -1, { func_8085978C } },
+    /* PLAYER_CSMODE_59  */ { 5, { &gameplay_keep_Linkanim_00D0A0 } },
+    /* PLAYER_CSMODE_60  */ { 2, { &gameplay_keep_Linkanim_00D080 } },
+    /* PLAYER_CSMODE_61  */ { 7, { &gameplay_keep_Linkanim_00D0B8 } },
+    /* PLAYER_CSMODE_62  */ { 5, { &gameplay_keep_Linkanim_00D0C0 } },
+    /* PLAYER_CSMODE_63  */ { 3, { &gameplay_keep_Linkanim_00CF60 } },
+    /* PLAYER_CSMODE_64  */ { 3, { &gameplay_keep_Linkanim_00CF48 } },
+    /* PLAYER_CSMODE_65  */ { 3, { &gameplay_keep_Linkanim_00CF58 } },
+    /* PLAYER_CSMODE_66  */ { 3, { &gameplay_keep_Linkanim_00CF40 } },
+    /* PLAYER_CSMODE_67  */ { -1, { func_8085968C } },
+    /* PLAYER_CSMODE_68  */ { -1, { func_8085A24C } },
+    /* PLAYER_CSMODE_69  */ { -1, { func_8085A330 } },
+    /* PLAYER_CSMODE_70  */ { 7, { &gameplay_keep_Linkanim_00D0D8 } },
+    /* PLAYER_CSMODE_71  */ { 5, { &gameplay_keep_Linkanim_00D090 } },
+    /* PLAYER_CSMODE_72  */ { 5, { &gameplay_keep_Linkanim_00D088 } },
+    /* PLAYER_CSMODE_73  */ { 3, { &gameplay_keep_Linkanim_00CF88 } },
+    /* PLAYER_CSMODE_74  */ { 3, { &gameplay_keep_Linkanim_00CF90 } },
+    /* PLAYER_CSMODE_75  */ { 3, { &gameplay_keep_Linkanim_00CF78 } },
+    /* PLAYER_CSMODE_76  */ { 3, { &gameplay_keep_Linkanim_00CF80 } },
+    /* PLAYER_CSMODE_77  */ { 7, { &gameplay_keep_Linkanim_00D308 } },
+    /* PLAYER_CSMODE_78  */ { 5, { &gameplay_keep_Linkanim_00D300 } },
+    /* PLAYER_CSMODE_79  */ { 3, { &gameplay_keep_Linkanim_00D018 } },
+    /* PLAYER_CSMODE_80  */ { 4, { &gameplay_keep_Linkanim_00D028 } },
+    /* PLAYER_CSMODE_81  */ { 3, { &gameplay_keep_Linkanim_00CFE0 } },
+    /* PLAYER_CSMODE_82  */ { 4, { &gameplay_keep_Linkanim_00D058 } },
+    /* PLAYER_CSMODE_83  */ { 3, { &gameplay_keep_Linkanim_00D030 } },
+    /* PLAYER_CSMODE_84  */ { 5, { &gameplay_keep_Linkanim_00CFB0 } },
+    /* PLAYER_CSMODE_85  */ { 3, { &gameplay_keep_Linkanim_00CFC8 } },
+    /* PLAYER_CSMODE_86  */ { 4, { &gameplay_keep_Linkanim_00D040 } },
+    /* PLAYER_CSMODE_87  */ { 5, { &gameplay_keep_Linkanim_00D1D0 } },
+    /* PLAYER_CSMODE_88  */ { 3, { &gameplay_keep_Linkanim_00CFD8 } },
+    /* PLAYER_CSMODE_89  */ { 4, { &gameplay_keep_Linkanim_00CFC0 } },
+    /* PLAYER_CSMODE_90  */ { 4, { &gameplay_keep_Linkanim_00CFB8 } },
+    /* PLAYER_CSMODE_91  */ { 4, { &gameplay_keep_Linkanim_00D050 } },
+    /* PLAYER_CSMODE_92  */ { 4, { &gameplay_keep_Linkanim_00D048 } },
+    /* PLAYER_CSMODE_93  */ { -1, { func_8085A8C4 } },
+    /* PLAYER_CSMODE_94  */ { 3, { &gameplay_keep_Linkanim_00D000 } },
+    /* PLAYER_CSMODE_95  */ { 3, { &gameplay_keep_Linkanim_00D010 } },
+    /* PLAYER_CSMODE_96  */ { 9, { &gameplay_keep_Linkanim_00DAD0 } },
+    /* PLAYER_CSMODE_97  */ { -1, { func_8085A530 } },
+    /* PLAYER_CSMODE_98  */ { 15, { &gameplay_keep_Linkanim_00D0A8 } },
+    /* PLAYER_CSMODE_99  */ { 7, { &gameplay_keep_Linkanim_00D098 } },
+    /* PLAYER_CSMODE_100 */ { 3, { &gameplay_keep_Linkanim_00CFA0 } },
+    /* PLAYER_CSMODE_101 */ { 3, { &gameplay_keep_Linkanim_00CFF0 } },
+    /* PLAYER_CSMODE_102 */ { -1, { func_8085A768 } },
+    /* PLAYER_CSMODE_103 */ { -1, { func_8085AA60 } },
+    /* PLAYER_CSMODE_104 */ { 5, { &gameplay_keep_Linkanim_00D070 } },
+    /* PLAYER_CSMODE_105 */ { 5, { &gameplay_keep_Linkanim_00D358 } },
+    /* PLAYER_CSMODE_106 */ { 5, { &gameplay_keep_Linkanim_00D330 } },
+    /* PLAYER_CSMODE_107 */ { 5, { &gameplay_keep_Linkanim_00D340 } },
+    /* PLAYER_CSMODE_108 */ { 5, { &gameplay_keep_Linkanim_00D350 } },
+    /* PLAYER_CSMODE_109 */ { 5, { &gameplay_keep_Linkanim_00D328 } },
+    /* PLAYER_CSMODE_110 */ { 7, { &gameplay_keep_Linkanim_00D368 } },
+    /* PLAYER_CSMODE_111 */ { 3, { &gameplay_keep_Linkanim_00D9F8 } },
+    /* PLAYER_CSMODE_112 */ { 5, { &gameplay_keep_Linkanim_00D108 } },
+    /* PLAYER_CSMODE_113 */ { 5, { &gameplay_keep_Linkanim_00D118 } },
+    /* PLAYER_CSMODE_114 */ { 4, { &gameplay_keep_Linkanim_00CF98 } },
+    /* PLAYER_CSMODE_115 */ { 2, { &gameplay_keep_Linkanim_00D5B8 } },
+    /* PLAYER_CSMODE_116 */ { 7, { &gameplay_keep_Linkanim_00E010 } },
+    /* PLAYER_CSMODE_117 */ { 5, { &gameplay_keep_Linkanim_00D0F8 } },
+    /* PLAYER_CSMODE_118 */ { 7, { &gameplay_keep_Linkanim_00D2D8 } },
+    /* PLAYER_CSMODE_119 */ { 7, { &gameplay_keep_Linkanim_00D2E0 } },
+    /* PLAYER_CSMODE_120 */ { 7, { &gameplay_keep_Linkanim_00D2E8 } },
+    /* PLAYER_CSMODE_121 */ { -1, { func_80859990 } },
+    /* PLAYER_CSMODE_122 */ { 0, { NULL } },
+    /* PLAYER_CSMODE_123 */ { -1, { func_80859A10 } },
+    /* PLAYER_CSMODE_124 */ { 7, { &gameplay_keep_Linkanim_00D158 } },
+    /* PLAYER_CSMODE_125 */ { 5, { &gameplay_keep_Linkanim_00D160 } },
+    /* PLAYER_CSMODE_126 */ { 5, { &gameplay_keep_Linkanim_00D168 } },
+    /* PLAYER_CSMODE_127 */ { 3, { &gameplay_keep_Linkanim_00D5C0 } },
+    /* PLAYER_CSMODE_128 */ { 4, { &gameplay_keep_Linkanim_00D668 } },
+    /* PLAYER_CSMODE_129 */ { 3, { &gameplay_keep_Linkanim_00E470 } },
+    /* PLAYER_CSMODE_130 */ { 3, { &gameplay_keep_Linkanim_00E478 } },
+    /* PLAYER_CSMODE_131 */ { 3, { &gameplay_keep_Linkanim_00E4C0 } },
+    /* PLAYER_CSMODE_132 */ { 3, { &gameplay_keep_Linkanim_00E480 } },
+    /* PLAYER_CSMODE_133 */ { 3, { &gameplay_keep_Linkanim_00E490 } },
+    /* PLAYER_CSMODE_134 */ { 3, { &gameplay_keep_Linkanim_00E488 } },
+    /* PLAYER_CSMODE_135 */ { 3, { &gameplay_keep_Linkanim_00E498 } },
+    /* PLAYER_CSMODE_136 */ { 3, { &gameplay_keep_Linkanim_00E4B0 } },
+    /* PLAYER_CSMODE_137 */ { 3, { &gameplay_keep_Linkanim_00D660 } },
+    /* PLAYER_CSMODE_138 */ { 3, { &gameplay_keep_Linkanim_00DA00 } },
+    /* PLAYER_CSMODE_139 */ { 3, { &gameplay_keep_Linkanim_00DA08 } },
 };
 
-struct_8085DA94 D_8085DEF4[140] = {
-    /*   0 */ { 0, { NULL } },
-    /*   1 */ { -1, { func_80859414 } },
-    /*   2 */ { -1, { func_80859AD0 } },
-    /*   3 */ { -1, { func_80859B28 } },
-    /*   4 */ { 11, { NULL } },
-    /*   5 */ { -1, { func_8085ADA0 } },
-    /*   6 */ { -1, { func_8085AACC } },
-    /*   7 */ { -1, { func_808595B8 } },
-    /*   8 */ { 18, { D_8085DA70 } },
-    /*   9 */ { -1, { func_80859890 } },
-    /*  10 */ { -1, { func_80859C60 } },
-    /*  11 */ { 18, { D_8085D9E0 } },
-    /*  12 */ { 11, { NULL } },
-    /*  13 */ { 11, { NULL } },
-    /*  14 */ { 0, { NULL } },
-    /*  15 */ { 11, { NULL } },
-    /*  16 */ { 17, { &gameplay_keep_Linkanim_00DDB8 } },
-    /*  17 */ { 11, { NULL } },
-    /*  18 */ { 11, { NULL } },
-    /*  19 */ { -1, { func_8085A710 } },
-    /*  20 */ { -1, { func_808595B8 } },
-    /*  21 */ { 12, { &gameplay_keep_Linkanim_00D198 } },
-    /*  22 */ { -1, { func_80859D70 } },
-    /*  23 */ { 12, { &gameplay_keep_Linkanim_00D648 } },
-    /*  24 */ { 11, { NULL } },
-    /*  25 */ { 11, { NULL } },
-    /*  26 */ { -1, { func_8085A6C0 } },
-    /*  27 */ { 12, { &gameplay_keep_Linkanim_00D690 } },
-    /*  28 */ { 12, { &gameplay_keep_Linkanim_00D618 } },
-    /*  29 */ { 12, { &gameplay_keep_Linkanim_00D630 } },
-    /*  30 */ { 12, { &gameplay_keep_Linkanim_00D298 } },
-    /*  31 */ { 12, { &gameplay_keep_Linkanim_00D318 } },
-    /*  32 */ { -1, { func_80859FF4 } },
-    /*  33 */ { -1, { func_8085A04C } },
-    /*  34 */ { 11, { NULL } },
-    /*  35 */ { 12, { &gameplay_keep_Linkanim_00D2C0 } },
-    /*  36 */ { -1, { func_8085A144 } },
-    /*  37 */ { -1, { func_8085A1D4 } },
-    /*  38 */ { 12, { &gameplay_keep_Linkanim_00D280 } },
-    /*  39 */ { 12, { &gameplay_keep_Linkanim_00D290 } },
-    /*  40 */ { 18, { D_8085D9F0 } },
-    /*  41 */ { 11, { NULL } },
-    /*  42 */ { 18, { D_8085DA00 } },
-    /*  43 */ { 13, { &gameplay_keep_Linkanim_00E158 } },
-    /*  44 */ { -1, { func_8085A364 } },
-    /*  45 */ { 18, { D_8085DA2C } },
-    /*  46 */ { 12, { &gameplay_keep_Linkanim_00E438 } },
-    /*  47 */ { 12, { &gameplay_keep_Linkanim_00E448 } },
-    /*  48 */ { 12, { &gameplay_keep_Linkanim_00CF70 } },
-    /*  49 */ { 12, { &gameplay_keep_Linkanim_00D2F8 } },
-    /*  50 */ { 18, { D_8085DA50 } },
-    /*  51 */ { 11, { NULL } },
-    /*  52 */ { 18, { D_8085D9FC } },
-    /*  53 */ { 12, { &gameplay_keep_Linkanim_00E120 } },
-    /*  54 */ { -1, { func_8085A364 } },
-    /*  55 */ { 18, { D_8085DA1C } },
-    /*  56 */ { 11, { NULL } },
-    /*  57 */ { 18, { D_8085DA0C } },
-    /*  58 */ { -1, { func_808599DC } },
-    /*  59 */ { 11, { NULL } },
-    /*  60 */ { 18, { D_8085DA28 } },
-    /*  61 */ { -1, { func_8085A364 } },
-    /*  62 */ { 11, { NULL } },
-    /*  63 */ { 11, { NULL } },
-    /*  64 */ { 12, { &gameplay_keep_Linkanim_00CF50 } },
-    /*  65 */ { -1, { func_8085A40C } },
-    /*  66 */ { 11, { NULL } },
-    /*  67 */ { -1, { func_80859708 } },
-    /*  68 */ { -1, { func_8085A2AC } },
-    /*  69 */ { 11, { NULL } },
-    /*  70 */ { 11, { NULL } },
-    /*  71 */ { -1, { func_8085A40C } },
-    /*  72 */ { 11, { NULL } },
-    /*  73 */ { 11, { NULL } },
-    /*  74 */ { 11, { NULL } },
-    /*  75 */ { 11, { NULL } },
-    /*  76 */ { 11, { NULL } },
-    /*  77 */ { 11, { NULL } },
-    /*  78 */ { 18, { D_8085DA78 } },
-    /*  79 */ { 12, { &gameplay_keep_Linkanim_00D020 } },
-    /*  80 */ { -1, { func_8085A364 } },
-    /*  81 */ { 12, { &gameplay_keep_Linkanim_00CFE8 } },
-    /*  82 */ { 11, { NULL } },
-    /*  83 */ { 12, { &gameplay_keep_Linkanim_00D038 } },
-    /*  84 */ { 18, { D_8085DA80 } },
-    /*  85 */ { 12, { &gameplay_keep_Linkanim_00CFD0 } },
-    /*  86 */ { 11, { NULL } },
-    /*  87 */ { 11, { NULL } },
-    /*  88 */ { 11, { NULL } },
-    /*  89 */ { 11, { NULL } },
-    /*  90 */ { 11, { NULL } },
-    /*  91 */ { 11, { NULL } },
-    /*  92 */ { 11, { NULL } },
-    /*  93 */ { -1, { func_8085A940 } },
-    /*  94 */ { 12, { &gameplay_keep_Linkanim_00D008 } },
-    /*  95 */ { 11, { NULL } },
-    /*  96 */ { -1, { func_8085A4A4 } },
-    /*  97 */ { -1, { func_8085A5DC } },
-    /*  98 */ { -1, { func_8085AA84 } },
-    /*  99 */ { 11, { NULL } },
-    /* 100 */ { 12, { &gameplay_keep_Linkanim_00CFA8 } },
-    /* 101 */ { 12, { &gameplay_keep_Linkanim_00CFF8 } },
-    /* 102 */ { -1, { func_8085A7C0 } },
-    /* 103 */ { 11, { NULL } },
-    /* 104 */ { 13, { &gameplay_keep_Linkanim_00D078 } },
-    /* 105 */ { 13, { &gameplay_keep_Linkanim_00D360 } },
-    /* 106 */ { 13, { &gameplay_keep_Linkanim_00D338 } },
-    /* 107 */ { 13, { &gameplay_keep_Linkanim_00D348 } },
-    /* 108 */ { 11, { NULL } },
-    /* 109 */ { 11, { NULL } },
-    /* 110 */ { 11, { NULL } },
-    /* 111 */ { 12, { &gameplay_keep_Linkanim_00D9F0 } },
-    /* 112 */ { 13, { &gameplay_keep_Linkanim_00D110 } },
-    /* 113 */ { 13, { &gameplay_keep_Linkanim_00D120 } },
-    /* 114 */ { 11, { NULL } },
-    /* 115 */ { -1, { func_8085AA10 } },
-    /* 116 */ { 11, { NULL } },
-    /* 117 */ { -1, { func_8085A364 } },
-    /* 118 */ { 11, { NULL } },
-    /* 119 */ { 11, { NULL } },
-    /* 120 */ { 11, { NULL } },
-    /* 121 */ { -1, { func_808599DC } },
-    /* 122 */ { -1, { func_80859AF8 } },
-    /* 123 */ { -1, { func_80859A44 } },
-    /* 124 */ { 11, { NULL } },
-    /* 125 */ { 11, { NULL } },
-    /* 126 */ { 11, { NULL } },
-    /* 127 */ { 12, { &gameplay_keep_Linkanim_00D5C8 } },
-    /* 128 */ { 11, { NULL } },
-    /* 129 */ { 12, { &gameplay_keep_Linkanim_00E4A8 } },
-    /* 130 */ { 11, { NULL } },
-    /* 131 */ { 11, { NULL } },
-    /* 132 */ { 11, { NULL } },
-    /* 133 */ { 11, { NULL } },
-    /* 134 */ { -1, { func_80859D44 } },
-    /* 135 */ { 11, { NULL } },
-    /* 136 */ { 12, { &gameplay_keep_Linkanim_00E4A0 } },
-    /* 137 */ { -1, { func_80859EBC } },
-    /* 138 */ { -1, { func_80859F4C } },
-    /* 139 */ { -1, { func_80859F4C } },
+struct_8085DA94 D_8085DEF4[PLAYER_CSMODE_MAX] = {
+    /* PLAYER_CSMODE_0   */ { 0, { NULL } },
+    /* PLAYER_CSMODE_1   */ { -1, { func_80859414 } },
+    /* PLAYER_CSMODE_2   */ { -1, { func_80859AD0 } },
+    /* PLAYER_CSMODE_3   */ { -1, { func_80859B28 } },
+    /* PLAYER_CSMODE_4   */ { 11, { NULL } },
+    /* PLAYER_CSMODE_5   */ { -1, { func_8085ADA0 } },
+    /* PLAYER_CSMODE_6   */ { -1, { func_8085AACC } },
+    /* PLAYER_CSMODE_7   */ { -1, { func_808595B8 } },
+    /* PLAYER_CSMODE_8   */ { 18, { D_8085DA70 } },
+    /* PLAYER_CSMODE_9   */ { -1, { func_80859890 } },
+    /* PLAYER_CSMODE_10  */ { -1, { func_80859C60 } },
+    /* PLAYER_CSMODE_11  */ { 18, { D_8085D9E0 } },
+    /* PLAYER_CSMODE_12  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_13  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_14  */ { 0, { NULL } },
+    /* PLAYER_CSMODE_15  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_16  */ { 17, { &gameplay_keep_Linkanim_00DDB8 } },
+    /* PLAYER_CSMODE_17  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_18  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_19  */ { -1, { func_8085A710 } },
+    /* PLAYER_CSMODE_20  */ { -1, { func_808595B8 } },
+    /* PLAYER_CSMODE_21  */ { 12, { &gameplay_keep_Linkanim_00D198 } },
+    /* PLAYER_CSMODE_22  */ { -1, { func_80859D70 } },
+    /* PLAYER_CSMODE_23  */ { 12, { &gameplay_keep_Linkanim_00D648 } },
+    /* PLAYER_CSMODE_24  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_25  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_26  */ { -1, { func_8085A6C0 } },
+    /* PLAYER_CSMODE_27  */ { 12, { &gameplay_keep_Linkanim_00D690 } },
+    /* PLAYER_CSMODE_28  */ { 12, { &gameplay_keep_Linkanim_00D618 } },
+    /* PLAYER_CSMODE_29  */ { 12, { &gameplay_keep_Linkanim_00D630 } },
+    /* PLAYER_CSMODE_30  */ { 12, { &gameplay_keep_Linkanim_00D298 } },
+    /* PLAYER_CSMODE_31  */ { 12, { &gameplay_keep_Linkanim_00D318 } },
+    /* PLAYER_CSMODE_32  */ { -1, { func_80859FF4 } },
+    /* PLAYER_CSMODE_33  */ { -1, { func_8085A04C } },
+    /* PLAYER_CSMODE_34  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_35  */ { 12, { &gameplay_keep_Linkanim_00D2C0 } },
+    /* PLAYER_CSMODE_36  */ { -1, { func_8085A144 } },
+    /* PLAYER_CSMODE_37  */ { -1, { func_8085A1D4 } },
+    /* PLAYER_CSMODE_38  */ { 12, { &gameplay_keep_Linkanim_00D280 } },
+    /* PLAYER_CSMODE_39  */ { 12, { &gameplay_keep_Linkanim_00D290 } },
+    /* PLAYER_CSMODE_40  */ { 18, { D_8085D9F0 } },
+    /* PLAYER_CSMODE_41  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_42  */ { 18, { D_8085DA00 } },
+    /* PLAYER_CSMODE_43  */ { 13, { &gameplay_keep_Linkanim_00E158 } },
+    /* PLAYER_CSMODE_44  */ { -1, { func_8085A364 } },
+    /* PLAYER_CSMODE_45  */ { 18, { D_8085DA2C } },
+    /* PLAYER_CSMODE_46  */ { 12, { &gameplay_keep_Linkanim_00E438 } },
+    /* PLAYER_CSMODE_47  */ { 12, { &gameplay_keep_Linkanim_00E448 } },
+    /* PLAYER_CSMODE_48  */ { 12, { &gameplay_keep_Linkanim_00CF70 } },
+    /* PLAYER_CSMODE_49  */ { 12, { &gameplay_keep_Linkanim_00D2F8 } },
+    /* PLAYER_CSMODE_50  */ { 18, { D_8085DA50 } },
+    /* PLAYER_CSMODE_51  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_52  */ { 18, { D_8085D9FC } },
+    /* PLAYER_CSMODE_53  */ { 12, { &gameplay_keep_Linkanim_00E120 } },
+    /* PLAYER_CSMODE_54  */ { -1, { func_8085A364 } },
+    /* PLAYER_CSMODE_55  */ { 18, { D_8085DA1C } },
+    /* PLAYER_CSMODE_56  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_57  */ { 18, { D_8085DA0C } },
+    /* PLAYER_CSMODE_58  */ { -1, { func_808599DC } },
+    /* PLAYER_CSMODE_59  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_60  */ { 18, { D_8085DA28 } },
+    /* PLAYER_CSMODE_61  */ { -1, { func_8085A364 } },
+    /* PLAYER_CSMODE_62  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_63  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_64  */ { 12, { &gameplay_keep_Linkanim_00CF50 } },
+    /* PLAYER_CSMODE_65  */ { -1, { func_8085A40C } },
+    /* PLAYER_CSMODE_66  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_67  */ { -1, { func_80859708 } },
+    /* PLAYER_CSMODE_68  */ { -1, { func_8085A2AC } },
+    /* PLAYER_CSMODE_69  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_70  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_71  */ { -1, { func_8085A40C } },
+    /* PLAYER_CSMODE_72  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_73  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_74  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_75  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_76  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_77  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_78  */ { 18, { D_8085DA78 } },
+    /* PLAYER_CSMODE_79  */ { 12, { &gameplay_keep_Linkanim_00D020 } },
+    /* PLAYER_CSMODE_80  */ { -1, { func_8085A364 } },
+    /* PLAYER_CSMODE_81  */ { 12, { &gameplay_keep_Linkanim_00CFE8 } },
+    /* PLAYER_CSMODE_82  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_83  */ { 12, { &gameplay_keep_Linkanim_00D038 } },
+    /* PLAYER_CSMODE_84  */ { 18, { D_8085DA80 } },
+    /* PLAYER_CSMODE_85  */ { 12, { &gameplay_keep_Linkanim_00CFD0 } },
+    /* PLAYER_CSMODE_86  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_87  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_88  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_89  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_90  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_91  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_92  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_93  */ { -1, { func_8085A940 } },
+    /* PLAYER_CSMODE_94  */ { 12, { &gameplay_keep_Linkanim_00D008 } },
+    /* PLAYER_CSMODE_95  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_96  */ { -1, { func_8085A4A4 } },
+    /* PLAYER_CSMODE_97  */ { -1, { func_8085A5DC } },
+    /* PLAYER_CSMODE_98  */ { -1, { func_8085AA84 } },
+    /* PLAYER_CSMODE_99  */ { 11, { NULL } },
+    /* PLAYER_CSMODE_100 */ { 12, { &gameplay_keep_Linkanim_00CFA8 } },
+    /* PLAYER_CSMODE_101 */ { 12, { &gameplay_keep_Linkanim_00CFF8 } },
+    /* PLAYER_CSMODE_102 */ { -1, { func_8085A7C0 } },
+    /* PLAYER_CSMODE_103 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_104 */ { 13, { &gameplay_keep_Linkanim_00D078 } },
+    /* PLAYER_CSMODE_105 */ { 13, { &gameplay_keep_Linkanim_00D360 } },
+    /* PLAYER_CSMODE_106 */ { 13, { &gameplay_keep_Linkanim_00D338 } },
+    /* PLAYER_CSMODE_107 */ { 13, { &gameplay_keep_Linkanim_00D348 } },
+    /* PLAYER_CSMODE_108 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_109 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_110 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_111 */ { 12, { &gameplay_keep_Linkanim_00D9F0 } },
+    /* PLAYER_CSMODE_112 */ { 13, { &gameplay_keep_Linkanim_00D110 } },
+    /* PLAYER_CSMODE_113 */ { 13, { &gameplay_keep_Linkanim_00D120 } },
+    /* PLAYER_CSMODE_114 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_115 */ { -1, { func_8085AA10 } },
+    /* PLAYER_CSMODE_116 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_117 */ { -1, { func_8085A364 } },
+    /* PLAYER_CSMODE_118 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_119 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_120 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_121 */ { -1, { func_808599DC } },
+    /* PLAYER_CSMODE_122 */ { -1, { func_80859AF8 } },
+    /* PLAYER_CSMODE_123 */ { -1, { func_80859A44 } },
+    /* PLAYER_CSMODE_124 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_125 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_126 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_127 */ { 12, { &gameplay_keep_Linkanim_00D5C8 } },
+    /* PLAYER_CSMODE_128 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_129 */ { 12, { &gameplay_keep_Linkanim_00E4A8 } },
+    /* PLAYER_CSMODE_130 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_131 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_132 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_133 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_134 */ { -1, { func_80859D44 } },
+    /* PLAYER_CSMODE_135 */ { 11, { NULL } },
+    /* PLAYER_CSMODE_136 */ { 12, { &gameplay_keep_Linkanim_00E4A0 } },
+    /* PLAYER_CSMODE_137 */ { -1, { func_80859EBC } },
+    /* PLAYER_CSMODE_138 */ { -1, { func_80859F4C } },
+    /* PLAYER_CSMODE_139 */ { -1, { func_80859F4C } },
 };
 
 LinkAnimationHeader* D_8085E354[PLAYER_FORM_MAX] = {
@@ -19381,7 +19470,7 @@ void func_8085AACC(PlayState* play, Player* this, UNK_TYPE arg2) {
         }
     }
 
-    this->csMode = 0;
+    this->csMode = PLAYER_CSMODE_0;
     this->unk_AA5 = 0;
 }
 
@@ -19420,13 +19509,14 @@ void func_8085AC9C(PlayState* play, Player* this, CsCmdActorAction* actorAction,
     }
 
     if ((D_80862B6C & 4) && !(this->skelAnime.moveFlags & 4)) {
-        this->skelAnime.morphTable->y /= this->ageProperties->unk_08;
+        this->skelAnime.morphTable[0].y /= this->ageProperties->unk_08;
         D_80862B6C = 0;
     }
 }
 
-void func_8085AD5C(PlayState* play, Player* this, s32 arg2) {
-    if ((arg2 != 1) && (arg2 != 7) && (arg2 != 0x14) && (arg2 != 6)) {
+void func_8085AD5C(PlayState* play, Player* this, s32 csMode) {
+    if ((csMode != PLAYER_CSMODE_1) && (csMode != PLAYER_CSMODE_7) && (csMode != PLAYER_CSMODE_20) &&
+        (csMode != PLAYER_CSMODE_6)) {
         func_8082DCA0(play, this);
     }
 }
@@ -19448,14 +19538,14 @@ void func_8085ADA0(PlayState* play, Player* this, UNK_TYPE arg2) {
             this->unk_AA5 = 5;
 
             if (func_80838A90(this, play)) {
-                this->csMode = 0;
+                this->csMode = PLAYER_CSMODE_0;
             }
             return;
         } else {
             var_a0 = true;
             if (D_8085D384[this->unk_396] != 0x10) {
-                this->csMode = 6;
-                func_800B7298(play, NULL, 6);
+                this->csMode = PLAYER_CSMODE_6;
+                func_800B7298(play, NULL, PLAYER_CSMODE_6);
                 this->unk_396 = 0;
                 func_8082DABC(this);
                 return;
@@ -19471,28 +19561,28 @@ void func_8085ADA0(PlayState* play, Player* this, UNK_TYPE arg2) {
     var_v1 = this->unk_396;
     if (!var_a0) {
         if (var_v1 != actorAction->action) {
-            s32 index = D_8085D384[actorAction->action];
+            s32 csMode = D_8085D384[actorAction->action];
 
-            if ((index >= 0) && (D_801F4DE0 == 0)) {
-                if ((index == 2) || (index == 3)) {
+            if ((csMode >= PLAYER_CSMODE_0) && (D_801F4DE0 == 0)) {
+                if ((csMode == PLAYER_CSMODE_2) || (csMode == PLAYER_CSMODE_3)) {
                     func_8085ABA8(this, actorAction);
                 } else {
                     func_8085AB58(this, actorAction);
                 }
             }
 
-            if (index == 0x6C) {
+            if (csMode == PLAYER_CSMODE_108) {
                 this->stateFlags3 |= PLAYER_STATE3_20000000;
-            } else if (index == 0x6E) {
+            } else if (csMode == PLAYER_CSMODE_110) {
                 this->stateFlags3 &= ~PLAYER_STATE3_20000000;
             }
 
             D_80862B6C = this->skelAnime.moveFlags;
             func_8082E794(this);
 
-            func_8085AD5C(play, this, ABS_ALT(index));
+            func_8085AD5C(play, this, ABS_ALT(csMode));
 
-            func_8085AC9C(play, this, actorAction, &D_8085DA94[ABS_ALT(index)]);
+            func_8085AC9C(play, this, actorAction, &D_8085DA94[ABS_ALT(csMode)]);
             this->unk_AE8 = 0;
             this->unk_AE7 = 0;
 
@@ -19622,7 +19712,7 @@ void func_8085B460(PlayState* play, Actor* actor) {
     player->unk_730 = actor;
 
     if (actor->textId == 0xFFFF) {
-        func_800B7298(play, actor, 1);
+        func_800B7298(play, actor, PLAYER_CSMODE_1);
         actor->flags |= ACTOR_FLAG_100;
         func_8082DE14(play, player);
     } else {

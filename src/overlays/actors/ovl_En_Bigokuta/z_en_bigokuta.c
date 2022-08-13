@@ -378,7 +378,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, PlayState* play) {
         ActorCutscene_Start(this->cutscene, &this->picto.actor);
 
         if (!(gSaveContext.eventInf[4] & 2) && !(gSaveContext.eventInf[3] & 0x20)) {
-            func_800B724C(play, &this->picto.actor, 7);
+            func_800B724C(play, &this->picto.actor, PLAYER_CSMODE_7);
         } else {
             player = GET_PLAYER(play);
             player->stateFlags1 |= PLAYER_STATE1_20;
@@ -454,7 +454,7 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play) {
                 Actor_MarkForDeath(&this->picto.actor);
 
                 if (!(gSaveContext.eventInf[4] & 2) && !(gSaveContext.eventInf[3] & 0x20)) {
-                    func_800B724C(play, &this->picto.actor, 6);
+                    func_800B724C(play, &this->picto.actor, PLAYER_CSMODE_6);
                 } else {
                     Player* player = GET_PLAYER(play);
 

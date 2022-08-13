@@ -457,7 +457,7 @@ s32 func_808A1478(DoorShutter* this, PlayState* play, f32 arg2) {
         }
 
         if ((this->unk_160 != -1) && (ActorCutscene_GetCurrentIndex() == this->unk_160)) {
-            func_800B724C(play, &this->door.dyna.actor, 1);
+            func_800B724C(play, &this->door.dyna.actor, PLAYER_CSMODE_1);
         }
     }
 
@@ -575,7 +575,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
         if (ActorCutscene_GetCurrentIndex() == 0x7D) {
             func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));
             player->unk_A86 = -1;
-            func_800B7298(play, NULL, 0x73);
+            func_800B7298(play, NULL, PLAYER_CSMODE_115);
         }
     }
 }
@@ -626,8 +626,8 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
 
 void func_808A1C50(DoorShutter* this, PlayState* play) {
     if (this->unk_167++ > 30) {
-        if (GET_PLAYER(play)->csMode == 0x73) {
-            func_800B7298(play, NULL, 6);
+        if (GET_PLAYER(play)->csMode == PLAYER_CSMODE_115) {
+            func_800B7298(play, NULL, PLAYER_CSMODE_6);
         }
         DoorShutter_SetupDoor(this, play);
     }
