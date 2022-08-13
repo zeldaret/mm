@@ -2210,7 +2210,7 @@ void AnimatedMat_DrawAlpha(PlayState* play, AnimatedMaterial* matAnim, f32 alpha
 void AnimatedMat_DrawAlphaOpa(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio);
 void AnimatedMat_DrawAlphaXlu(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio);
 void AnimatedMat_DrawStep(PlayState* play, AnimatedMaterial* matAnim, u32 step);
-void AnimatedMat_DrawStepOpa(PlayState* play, AnimatedMaterial* textures, u32 step);
+void AnimatedMat_DrawStepOpa(PlayState* play, AnimatedMaterial* matAnim, u32 step);
 void AnimatedMat_DrawStepXlu(PlayState* play, AnimatedMaterial* matAnim, u32 step);
 void AnimatedMat_DrawAlphaStep(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step);
 void AnimatedMat_DrawAlphaStepOpa(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step);
