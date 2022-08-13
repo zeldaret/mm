@@ -66,7 +66,7 @@ static u8 sEnvColors[] = {
 };
 
 void OceffWipe5_Draw(Actor* thisx, PlayState* play) {
-    OceffWipe5* this = (OceffWipe5*)thisx;
+    OceffWipe5* this = THIS;
     f32 z;
     s32 pad;
     s32 i;
@@ -97,7 +97,7 @@ void OceffWipe5_Draw(Actor* thisx, PlayState* play) {
     } else {
         alpha = 255;
     }
-    for (i = 1; i < ARRAY_COUNT(gOceff5Vtx); i = i + 2) {
+    for (i = 1; i < ARRAY_COUNT(gOceff5Vtx); i += 2) {
         gOceff5Vtx[i].v.cn[3] = alpha;
     }
 
