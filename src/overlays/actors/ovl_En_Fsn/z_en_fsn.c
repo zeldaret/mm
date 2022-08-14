@@ -212,7 +212,7 @@ void EnFsn_HandleSetupResumeInteraction(EnFsn* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play) &&
         this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
         Actor_ProcessTalkRequest(&this->actor, &play->state);
-        func_800B85E0(&this->actor, play, 400.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
         if (ENFSN_IS_SHOP(&this->actor)) {
             this->actor.textId = 0;
         }
@@ -839,7 +839,7 @@ void EnFsn_StartBuying(EnFsn* this, PlayState* play) {
                 this->actionFunc = EnFsn_DeterminePrice;
                 break;
             case 0x29CF:
-                player->exchangeItemId = EXCH_ITEM_NONE;
+                player->exchangeItemId = PLAYER_AP_NONE;
                 this->actionFunc = EnFsn_SetupDeterminePrice;
                 break;
         }
@@ -986,7 +986,7 @@ void EnFsn_MakeOffer(EnFsn* this, PlayState* play) {
                 break;
             case 1:
                 func_8019F230();
-                player->exchangeItemId = EXCH_ITEM_NONE;
+                player->exchangeItemId = PLAYER_AP_NONE;
                 this->actionFunc = EnFsn_SetupDeterminePrice;
                 break;
         }
@@ -1042,7 +1042,7 @@ void EnFsn_ResumeInteraction(EnFsn* this, PlayState* play) {
             this->actionFunc = EnFsn_ConverseBackroom;
         }
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
     }
 }
 

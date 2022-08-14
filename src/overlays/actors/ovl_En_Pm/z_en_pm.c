@@ -1380,7 +1380,7 @@ s32 func_80AF94AC(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         if (scheduleOutput->result == 24) {
             Flags_UnsetSwitch(play, 0);
             Flags_UnsetSwitch(play, 1);
-            this->unk_394 = EXCH_ITEM_NONE;
+            this->unk_394 = PLAYER_AP_NONE;
             this->unk_368 = 60.0f;
             func_80AF7E98(this, 9);
         }
@@ -1568,7 +1568,7 @@ s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     this->actor.flags |= ACTOR_FLAG_1;
     this->actor.targetMode = 0;
-    this->unk_394 = EXCH_ITEM_NONE;
+    this->unk_394 = PLAYER_AP_NONE;
     this->unk_356 = 0;
     this->unk_368 = 40.0f;
 

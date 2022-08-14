@@ -1128,7 +1128,7 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
     if (gSaveContext.save.weekEventReg[16] & 0x10) {
         func_80A86924(this, 5);
     } else {
-        this->unk_388 = EXCH_ITEM_NONE;
+        this->unk_388 = PLAYER_AP_NONE;
     }
 
     this->actionFunc = func_80A87FD0;
@@ -1154,7 +1154,7 @@ void EnTru_Update(Actor* thisx, PlayState* play) {
     func_80A86DB8(this);
 
     radius = this->collider.dim.worldSphere.radius + 30;
-    this->unk_388 = !(this->unk_34E & 0x80) ? EXCH_ITEM_NONE : EXCH_ITEM_NONE;
+    this->unk_388 = !(this->unk_34E & 0x80) ? PLAYER_AP_NONE : PLAYER_AP_NONE;
 
     func_8013C964(&this->actor, play, radius, 20.0f, this->unk_388, this->unk_34E & 7);
     func_80A8697C(this, play);
