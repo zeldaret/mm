@@ -12776,14 +12776,14 @@ s32 func_8084933C(Player* this, PlayState* play) {
             (this->targetedActor != NULL) ? this->actor.shape.rot.y + 0x36B0 : yRotUntargeted, 0, ZORA_BOOMERANG_LEFT);
 
         if (this->boomerangActor != NULL) {
-            EnBoom* leftBoomearng = (EnBoom*)this->boomerangActor;
+            EnBoom* leftBoomerang = (EnBoom*)this->boomerangActor;
             EnBoom* rightBoomerang;
 
-            leftBoomearng->moveTo = this->targetedActor;
-            if (leftBoomearng->moveTo != NULL) {
-                leftBoomearng->unk_1CF = 0x10;
+            leftBoomerang->moveTo = this->targetedActor;
+            if (leftBoomerang->moveTo != NULL) {
+                leftBoomerang->unk_1CF = 0x10;
             }
-            leftBoomearng->unk_1CC = leftBoomearng->unk_1CF + 0x24;
+            leftBoomerang->unk_1CC = leftBoomerang->unk_1CF + 0x24;
 
             func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_R_HAND], this->actor.shape.rot.y, 0.0f, &pos);
 
@@ -12800,8 +12800,8 @@ s32 func_8084933C(Player* this, PlayState* play) {
                 }
 
                 rightBoomerang->unk_1CC = rightBoomerang->unk_1CF + 0x24;
-                leftBoomearng->actor.child = &rightBoomerang->actor;
-                rightBoomerang->actor.parent = &leftBoomearng->actor;
+                leftBoomerang->actor.child = &rightBoomerang->actor;
+                rightBoomerang->actor.parent = &leftBoomerang->actor;
             }
 
             this->stateFlags1 |= PLAYER_STATE1_2000000;
