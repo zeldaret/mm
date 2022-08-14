@@ -300,18 +300,18 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                 if (!SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
                     play_sound(NA_SE_SY_FSEL_DECIDE_L);
                     this->configMode = 34;
-                    this->unk_24510 = 99;
+                    this->kbdButton = 99;
                     this->unk_24512 = 0;
                     if (gSaveContext.options.language != 0) {
                         this->unk_24512 = 2;
                     }
-                    this->unk_24518 = 0;
-                    this->unk_2451A = 0;
+                    this->kbdX = 0;
+                    this->kbdY = 0;
                     this->unk_24516 = 0;
                     this->unk_24514 = 0;
                     this->unk_2451C = 0;
-                    this->unk_24506 = 120;
-                    this->unk_244E4 = 0;
+                    this->nameEntryBoxPosX = 120;
+                    this->nameEntryBoxAlpha = 0;
                     Lib_MemCpy(&this->unk_24414[this->buttonIndex], &sEmptyName, 8);
                 } else {
                     play_sound(NA_SE_SY_FSEL_DECIDE_L);
@@ -324,18 +324,18 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
             } else if (!FILE_CHOOSE_SLOT_OCCUPIED(this, this->buttonIndex)) {
                 play_sound(NA_SE_SY_FSEL_DECIDE_L);
                 this->configMode = 34;
-                this->unk_24510 = 99;
+                this->kbdButton = 99;
                 this->unk_24512 = 0;
                 if (gSaveContext.options.language != 0) {
                     this->unk_24512 = 2;
                 }
-                this->unk_24518 = 0;
-                this->unk_2451A = 0;
+                this->kbdX = 0;
+                this->kbdY = 0;
                 this->unk_24516 = 0;
                 this->unk_24514 = 0;
                 this->unk_2451C = 0;
-                this->unk_24506 = 120;
-                this->unk_244E4 = 0;
+                this->nameEntryBoxPosX = 120;
+                this->nameEntryBoxAlpha = 0;
                 Lib_MemCpy(&this->unk_24414[this->buttonIndex], &sEmptyName, 8);
             } else {
                 play_sound(NA_SE_SY_FSEL_DECIDE_L);
@@ -356,12 +356,12 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                 this->nextTitleLabel = 6;
             } else {
                 this->configMode = 39;
-                this->unk_24510 = 0;
-                this->unk_24518 = 0;
-                this->unk_2451A = 0;
+                this->kbdButton = 0;
+                this->kbdX = 0;
+                this->kbdY = 0;
                 this->unk_24514 = 0;
                 this->unk_2451C = 0;
-                this->unk_24506 = 120;
+                this->nameEntryBoxPosX = 120;
             }
             this->actionTimer = 4;
         } else {
@@ -527,10 +527,10 @@ void func_808074B4(GameState* thisx);
 void func_808077AC(GameState* thisx);
 
 // Copy/erase?
-void func_80809DF0(GameState* thisx);
+void FileSelect_StartNameEntry(GameState* thisx);
 void func_80809EA0(GameState* thisx);
 void func_8080A3CC(GameState* thisx);
-void func_8080A418(GameState* thisx);
+void FileSelect_StartOptions(GameState* thisx);
 void func_8080A4A0(GameState* thisx);
 void func_8080A6BC(GameState* thisx);
 
@@ -570,12 +570,12 @@ void (*gConfigModeUpdateFuncs[])(GameState*) = {
     func_808077AC,
     func_8080D164,
     FileSelect_RotateToNameEntry,
-    func_80809DF0,
+    FileSelect_StartNameEntry,
     func_80809EA0,
     func_8080A3CC,
     FileSelect_RotateToMain,
     FileSelect_RotateToOptions,
-    func_8080A418,
+    FileSelect_StartOptions,
     func_8080A4A0,
     func_8080A6BC,
     FileSelect_RotateToMain,
@@ -2537,10 +2537,10 @@ void FileSelect_InitContext(GameState* thisx) {
 
     this->stickYDir = this->inputTimerY = 0;
 
-    this->unk_24518 = this->unk_2451A = this->unk_24516 = 0;
+    this->kbdX = this->kbdY = this->unk_24516 = 0;
 
     // this->kbdButton = FS_KBD_BTN_NONE;
-    this->unk_24510 = 99;
+    this->kbdButton = 99;
 
     // windowColor
     this->unk_244B0[0] = 100;
@@ -2553,8 +2553,8 @@ void FileSelect_InitContext(GameState* thisx) {
                 this->connectorAlpha[0] = this->connectorAlpha[1] = this->connectorAlpha[2] = this->fileInfoAlpha[0] =
                     this->fileInfoAlpha[1] = this->fileInfoAlpha[2] = this->actionButtonAlpha[0] =
                         this->actionButtonAlpha[1] = this->actionButtonAlpha[2] = this->actionButtonAlpha[3] =
-                            this->optionButtonAlpha = this->unk_244E4 = this->controlsAlpha = this->emptyFileTextAlpha =
-                                0;
+                            this->optionButtonAlpha = this->nameEntryBoxAlpha = this->controlsAlpha =
+                                this->emptyFileTextAlpha = 0;
 
     this->windowPosX = 6;
     this->actionTimer = 4;

@@ -76,7 +76,7 @@ typedef struct FileSelectState {
     /* 0x244DA */ s16  actionButtonAlpha[2];
     /* 0x244DA */ s16  confirmButtonAlpha[2];
     /* 0x244E2 */ s16  optionButtonAlpha;
-    /* 0x244E4 */ s16  unk_244E4;
+    /* 0x244E4 */ s16  nameEntryBoxAlpha;
     /* 0x244E6 */ s16  controlsAlpha;
     /* 0x244E8 */ s16  emptyFileTextAlpha;
     /* 0x244EA */ s16  highlightColor[4]; // last elt may be separate
@@ -89,16 +89,16 @@ typedef struct FileSelectState {
     /* 0x24500 */ s16  stickYDir;
     /* 0x24502 */ s16  stickRelX;
     /* 0x24504 */ s16  stickRelY;
-    /* 0x24506 */ s16  unk_24506;
+    /* 0x24506 */ s16  nameEntryBoxPosX;
     /* 0x24508 */ s16  windowPosX;
     /* 0x2450A */ s16  screenFillAlpha;
     /* 0x2450C */ f32  windowRot;
-    /* 0x24510 */ s16  unk_24510;
+    /* 0x24510 */ s16  kbdButton;
     /* 0x24512 */ s16  unk_24512;
     /* 0x24514 */ s16  unk_24514;
     /* 0x24516 */ s16  unk_24516;
-    /* 0x24518 */ s16  unk_24518;
-    /* 0x2451A */ s16  unk_2451A;
+    /* 0x24518 */ s16  kbdX;
+    /* 0x2451A */ s16  kbdY;
     /* 0x2451C */ s16  unk_2451C;
     /* 0x2451E */ s16  unk_2451E[5];
     /* 0x24528 */ s16  highlightTimer;

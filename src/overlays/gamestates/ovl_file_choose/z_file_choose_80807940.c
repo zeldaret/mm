@@ -101,18 +101,56 @@ s32 D_8081426C[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_DrawNameEntry.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80809DF0.s")
+void FileSelect_StartNameEntry(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+
+    this->nameEntryBoxAlpha += 25;
+
+    if (this->nameEntryBoxAlpha >= 255) {
+        this->nameEntryBoxAlpha = 255;
+    }
+
+    this->nameEntryBoxPosX -= 30;
+
+    if (this->nameEntryBoxPosX <= 0) {
+        this->nameEntryBoxPosX = 0;
+        this->nameEntryBoxAlpha = 255;
+        this->kbdX = 0;
+        this->kbdY = 0;
+        this->kbdButton = 99;
+        this->configMode = 36;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80809EA0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080A3CC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080A418.s")
+void FileSelect_StartOptions(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+
+    this->nameEntryBoxAlpha += 25;
+
+    if (this->nameEntryBoxAlpha >= 255) {
+        this->nameEntryBoxAlpha = 255;
+    }
+
+    this->nameEntryBoxPosX -= 30;
+
+    if (this->nameEntryBoxPosX <= 0) {
+        this->nameEntryBoxPosX = 0;
+        this->nameEntryBoxAlpha = 255;
+        this->configMode = 41;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080A4A0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080A6BC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080A708.s")
+void FileSelect_DrawOptionsImpl(GameState* thisx);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_DrawOptionsImpl.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_DrawOptions.s")
+void FileSelect_DrawOptions(GameState* thisx) {
+    FileSelect_DrawOptionsImpl(thisx);
+}
