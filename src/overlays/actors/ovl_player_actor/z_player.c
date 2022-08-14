@@ -8875,7 +8875,7 @@ void func_8083E8E0(Player* this, f32 arg1, s16 arg2) {
 
 void func_8083E958(PlayState* play, Player* this) {
     LinkAnimation_BlendToJoint(play, &this->skelAnime, func_8082EF54(this), this->unk_B38, func_8082EF9C(this),
-                               this->unk_B38, this->unk_B40, (void*)this->blendTableBuffer);
+                               this->unk_B38, this->unk_B40, this->blendTableBuffer);
 }
 
 s32 func_8083E9C4(f32 arg0, f32 arg1, f32 arg2, f32 arg3) {
@@ -9071,7 +9071,7 @@ void func_8083F27C(PlayState* play, Player* this) {
 
     temp_fv0 = this->unk_B38 * (16.0f / 29.0f);
     LinkAnimation_BlendToJoint(play, &this->skelAnime, sp34, temp_fv0, sp38, temp_fv0, this->unk_B40,
-                               (void*)this->blendTableBuffer);
+                               this->blendTableBuffer);
 }
 
 void func_8083F358(Player* this, s32 arg1, PlayState* play) {
@@ -9117,10 +9117,10 @@ void func_8083F358(Player* this, s32 arg1, PlayState* play) {
 
     if (arg1 == 0) {
         LinkAnimation_BlendToJoint(play, &this->skelAnime, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_1, this->modelAnimType),
-                                   this->unk_B38, var_v0, this->unk_B38, var_fv1, (void*)this->blendTableBuffer);
+                                   this->unk_B38, var_v0, this->unk_B38, var_fv1, this->blendTableBuffer);
     } else {
         LinkAnimation_BlendToMorph(play, &this->skelAnime, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_1, this->modelAnimType),
-                                   this->unk_B38, var_v0, this->unk_B38, var_fv1, (void*)this->blendTableBuffer);
+                                   this->unk_B38, var_v0, this->unk_B38, var_fv1, this->blendTableBuffer);
     }
 }
 
@@ -9858,11 +9858,11 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
         ((gSaveContext.respawnFlag != 2) || (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams != 0xCFF))) {
         func_808309CC(play, this);
         SkelAnime_InitLink(play, &this->skelAnime, skelHeader, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_0, this->modelAnimType),
-                           1 | 8, (void*)this->jointTableBuffer, (void*)this->morphTableBuffer, PLAYER_LIMB_MAX);
+                           1 | 8, this->jointTableBuffer, this->morphTableBuffer, PLAYER_LIMB_MAX);
         this->skelAnime.baseTransl = D_8085D2C4;
 
-        SkelAnime_InitLink(play, &this->unk_284, skelHeader, func_8082ED20(this), 1 | 8, (void*)this->unk_929,
-                           (void*)this->unk_9C8, PLAYER_LIMB_MAX);
+        SkelAnime_InitLink(play, &this->unk_284, skelHeader, func_8082ED20(this), 1 | 8, this->unk_929,
+                           this->unk_9C8, PLAYER_LIMB_MAX);
         this->unk_284.baseTransl = D_8085D2C4;
 
         if (this->transformation == PLAYER_FORM_GORON) {
@@ -14143,7 +14143,7 @@ void func_8084CE84(Player* this, PlayState* play) {
 
     LinkAnimation_BlendToJoint(play, &this->skelAnime, D_8085CF60[Player_IsHoldingTwoHandedWeapon(this)], 0.0f,
                                D_8085CF70[Player_IsHoldingTwoHandedWeapon(this)], this->unk_B38 * 0.7241379f, var_fa0,
-                               (void*)this->blendTableBuffer);
+                               this->blendTableBuffer);
     if (!func_8083FE38(this, play) && !func_80840CD4(this, play)) {
         func_80840F34(this);
         func_80832F78(this, &sp54, &sp52, 0.0f, play);
@@ -14204,7 +14204,7 @@ void func_8084D18C(Player* this, PlayState* play) {
 
     LinkAnimation_BlendToJoint(play, &this->skelAnime, D_8085CF60[Player_IsHoldingTwoHandedWeapon(this)], 0.0f,
                                D_8085CF78[Player_IsHoldingTwoHandedWeapon(this)], this->unk_B38 * 0.7241379f, var_fa0,
-                               (void*)this->blendTableBuffer);
+                               this->blendTableBuffer);
     if (!func_8083FE38(this, play) && !func_80840CD4(this, play)) {
         func_80840F34(this);
         func_80832F78(this, &sp54, &sp52, 0.0f, play);
