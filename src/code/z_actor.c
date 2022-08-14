@@ -519,7 +519,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
 
             Target_SetPos(targetCtx, targetCtx->unk4C, projectedPos.x, projectedPos.y, projectedPos.z);
 
-            if ((!(player->stateFlags1 & PLAYER_STATE1_40)) || (actor != player->unk_730)) {
+            if ((!(player->stateFlags1 & PLAYER_STATE1_40)) || (actor != player->targetedActor)) {
                 OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 0x39);
 
                 for (spB0 = 0, spAC = targetCtx->unk4C; spB0 < spB8; spB0++, spAC = (spAC + 1) % 3) {
@@ -588,7 +588,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
     Vec3f projectedPos;
     f32 invW;
 
-    if ((player->unk_730 != 0) && (player->unk_AE3[player->unk_ADE] == 2)) {
+    if ((player->targetedActor != NULL) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->unk_94 = NULL;
     } else {
         func_800BB8EC(gameState, &play->actorCtx, &sp68, &D_801ED920, player);
@@ -1786,7 +1786,7 @@ f32 func_800B82EC(Actor* actor, Player* player, s16 angle) {
     s16 temp_v0 = BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), angle);
     s16 yaw = ABS_ALT(temp_v0);
 
-    if (player->unk_730 != NULL) {
+    if (player->targetedActor != NULL) {
         if ((yaw > 0x4000) || ((actor->flags & ACTOR_FLAG_8000000))) {
             return FLT_MAX;
         }
@@ -1824,7 +1824,7 @@ s32 func_800B83F8(Actor* actor, Player* player, s32 flag) {
         s16 phi_v1 = ABS_ALT(yaw);
         f32 dist;
 
-        if ((player->unk_730 == NULL) && (phi_v1 >= 0x2AAB)) {
+        if ((player->targetedActor == NULL) && (phi_v1 >= 0x2AAB)) {
             dist = FLT_MAX;
         } else {
             dist = actor->xyzDistToPlayerSq;
@@ -1904,7 +1904,7 @@ s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2) {
 
     if ((player->actor.flags & ACTOR_FLAG_100) && (targetActor != NULL)) {
         player->talkActor = actor2;
-        player->unk_730 = actor2;
+        player->targetedActor = actor2;
         return true;
     }
 
@@ -2371,13 +2371,13 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
                 actor->flags &= ~ACTOR_FLAG_1000000;
 
                 if ((DECR(actor->freezeTimer) == 0) && (actor->flags & params->unk_18)) {
-                    if (actor == params->player->unk_730) {
+                    if (actor == params->player->targetedActor) {
                         actor->isTargeted = true;
                     } else {
                         actor->isTargeted = false;
                     }
 
-                    if ((actor->targetPriority != 0) && (params->player->unk_730 == 0)) {
+                    if ((actor->targetPriority != 0) && (params->player->targetedActor == NULL)) {
                         actor->targetPriority = 0;
                     }
 
@@ -2502,7 +2502,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         }
     }
 
-    actor = player->unk_730;
+    actor = player->targetedActor;
     if ((actor != NULL) && (actor->update == NULL)) {
         actor = NULL;
         func_80123DA4(player);
@@ -3354,7 +3354,7 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
     Actor* newHead;
     ActorOverlay* overlayEntry = actor->overlayEntry;
 
-    if ((player != NULL) && (actor == player->unk_730)) {
+    if ((player != NULL) && (actor == player->targetedActor)) {
         func_80123DA4(player);
         Camera_ChangeMode(Play_GetCamera(play, Play_GetActiveCamId(play)), CAM_MODE_NORMAL);
     }
@@ -3397,7 +3397,7 @@ s32 func_800BB59C(PlayState* play, Actor* actor) {
 void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player, s32 actorCategory) {
     PlayState* play = (PlayState*)gameState;
     f32 temp_f0_2;
-    Actor* sp8C;
+    Actor* targetedActor;
     Actor* actor;
     s32 phi_s2;
     CollisionPoly* sp80;
@@ -3406,7 +3406,7 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
     s32 phi_s2_2;
 
     actor = actorCtx->actorLists[actorCategory].first;
-    sp8C = player->unk_730;
+    targetedActor = player->targetedActor;
     while (actor != NULL) {
         if ((actor->update != NULL) && ((Player*)actor != player)) {
             if (actor->flags & (ACTOR_FLAG_40000000 | ACTOR_FLAG_1)) {
@@ -3417,7 +3417,7 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
                     }
                 }
 
-                if ((actor != sp8C) || (actor->flags & ACTOR_FLAG_80000)) {
+                if ((actor != targetedActor) || (actor->flags & ACTOR_FLAG_80000)) {
                     temp_f0_2 = func_800B82EC(actor, player, D_801ED8DC);
                     phi_s2_2 = (actor->flags & 1) != 0;
                     if (phi_s2_2) {
