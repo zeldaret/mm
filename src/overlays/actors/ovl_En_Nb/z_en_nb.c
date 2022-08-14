@@ -22,8 +22,8 @@ void func_80BC0EAC(EnNb* this, PlayState* play);
 void func_80BC08E0(EnNb* this, PlayState* play);
 void func_80BC0978(EnNb* this, PlayState* play);
 
-s32 func_80BC00AC(EnNb* this, PlayState* play);
-s32 func_80BC01DC(EnNb* this, PlayState* play);
+s32 func_80BC00AC(Actor* thisx, PlayState* play);
+s32 func_80BC01DC(Actor* thisx, PlayState* play);
 
 typedef enum EnNbScheduleResult {
     /* 0 */ EN_NB_SCH_NONE,
@@ -233,22 +233,22 @@ s16 func_80BC0050(EnNb* this, s32 arg1) {
     return cutscene;
 }
 
-s32 func_80BC00AC(EnNb* this, PlayState* play) {
-    s32 pad;
-    s16 sp2A = func_80BC0050(this, 0);
-    s32 phi_v1 = 0;
+s32 func_80BC00AC(Actor* thisx, PlayState* play) {
+    EnNb* this = THIS;
+    s16 cutscene = func_80BC0050(this, 0);
+    s32 ret = 0;
 
     switch (this->unk_288) {
         case 0:
-            if (func_80BBFFD4(this, sp2A)) {
+            if (func_80BBFFD4(this, cutscene)) {
                 case 2:
                 case 4:
                 case 6:
                 case 8:
-                    Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)),
+                    Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(cutscene)),
                                           &this->actor);
                     this->unk_288++;
-                    phi_v1 = 1;
+                    ret = 1;
             }
             break;
 
@@ -257,25 +257,26 @@ s32 func_80BC00AC(EnNb* this, PlayState* play) {
         case 5:
         case 7:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)),
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(cutscene)),
                                       this->actor.child);
             }
             this->unk_288++;
-            phi_v1 = 1;
+            ret = 1;
             break;
 
         case 9:
-            ActorCutscene_Stop(sp2A);
+            ActorCutscene_Stop(cutscene);
             this->unk_288++;
-            phi_v1 = 1;
+            ret = 1;
             break;
     }
 
-    return phi_v1;
+    return ret;
 }
 
-s32 func_80BC01DC(EnNb* this, PlayState* play) {
-    s32 pad[2];
+s32 func_80BC01DC(Actor* thisx, PlayState* play) {
+    EnNb* this = THIS;
+    s32 pad[1];
     s32 sp2C = 0;
 
     switch (this->unk_288) {
@@ -412,9 +413,9 @@ void func_80BC06C4(EnNb* this) {
 
     Math_Vec3f_Copy(&sp40, &this->unk_1E8->world.pos);
     Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
-    Math_ApproachS(&this->unk_27E, Math_Vec3f_Yaw(&sp34, &sp40) - this->actor.shape.rot.y, 4, 0x2AA8);
+    Math_ApproachS(&this->headRotY, Math_Vec3f_Yaw(&sp34, &sp40) - this->actor.shape.rot.y, 4, 0x2AA8);
 
-    this->unk_27E = CLAMP(this->unk_27E, -0x1FFE, 0x1FFE);
+    this->headRotY = CLAMP(this->headRotY, -0x1FFE, 0x1FFE);
 
     Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
 
@@ -426,9 +427,9 @@ void func_80BC06C4(EnNb* this) {
         Math_Vec3f_Copy(&sp40, &this->unk_1E8->focus.pos);
     }
 
-    Math_ApproachS(&this->headRot, Math_Vec3f_Pitch(&sp34, &sp40), 4, 0x2AA8);
+    Math_ApproachS(&this->headRotZ, Math_Vec3f_Pitch(&sp34, &sp40), 4, 0x2AA8);
 
-    this->headRot = CLAMP(this->headRot, -0x1554, 0x1554);
+    this->headRotZ = CLAMP(this->headRotZ, -0x1554, 0x1554);
 }
 
 void func_80BC0800(EnNb* this) {
@@ -445,8 +446,8 @@ void func_80BC0800(EnNb* this) {
 
     if (this->stateFlags & EN_NB_FLAG_100) {
         this->stateFlags &= ~EN_NB_FLAG_100;
-        this->headRot = 0;
-        this->unk_27E = 0;
+        this->headRotZ = 0;
+        this->headRotY = 0;
         this->unk_282 = 20;
     } else if (DECR(this->unk_282) == 0) {
         this->stateFlags |= EN_NB_FLAG_400;
@@ -733,14 +734,14 @@ void EnNb_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     }
 
     if (limbIndex == NB_LIMB_HEAD) {
-        SubS_UpdateLimb(this->headRot + 0x4000, this->unk_27E + this->actor.shape.rot.y + 0x4000, &this->unk_1F0,
-                      &this->unk_1FC, stepRot, overrideRot);
+        SubS_UpdateLimb(this->headRotZ + 0x4000, this->headRotY + this->actor.shape.rot.y + 0x4000, &this->headComputedPos,
+                      &this->headComputedRot, stepRot, overrideRot);
         Matrix_Pop();
-        Matrix_Translate(this->unk_1F0.x, this->unk_1F0.y, this->unk_1F0.z, MTXMODE_NEW);
+        Matrix_Translate(this->headComputedPos.x, this->headComputedPos.y, this->headComputedPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateYS(this->unk_1FC.y, MTXMODE_APPLY);
-        Matrix_RotateXS(this->unk_1FC.x, MTXMODE_APPLY);
-        Matrix_RotateZS(this->unk_1FC.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->headComputedRot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headComputedRot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->headComputedRot.z, MTXMODE_APPLY);
         Matrix_Push();
     }
 }
