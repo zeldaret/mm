@@ -42,7 +42,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_eventmgr/func_800F2178.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_eventmgr/ActorCutscene_GetCurrentCamera.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eventmgr/ActorCutscene_GetCurrentSubCamId.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_eventmgr/func_800F21CC.s")
 

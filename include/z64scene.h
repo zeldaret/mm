@@ -9,211 +9,210 @@
 #define SPAWN_ROT_FLAGS(rotation, flags) (((rotation) << 7) | (flags))
 
 typedef struct {
-    /* 0x00 */ uintptr_t vromStart;
-    /* 0x04 */ uintptr_t vromEnd;
+    /* 0x0 */ uintptr_t vromStart;
+    /* 0x4 */ uintptr_t vromEnd;
 } RomFile; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ u32 data2;
-} SCmdBase;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ u32 data2;
+} SCmdBase; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdSpawnList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdSpawnList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  num;
-    /* 0x04 */ void* segment;
-} SCmdActorList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  num;
+    /* 0x4 */ void* segment;
+} SCmdActorList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdCsCameraList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdCsCameraList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdColHeader;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdColHeader; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  num;
-    /* 0x04 */ void* segment;
-} SCmdRoomList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  num;
+    /* 0x4 */ void* segment;
+} SCmdRoomList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x02 */ UNK_TYPE1 pad2[2];
-    /* 0x04 */ s8  west;
-    /* 0x05 */ s8  vertical;
-    /* 0x06 */ s8  south;
-    /* 0x07 */ u8  clothIntensity;
-} SCmdWindSettings;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x2 */ UNK_TYPE1 pad2[2];
+    /* 0x4 */ s8  west;
+    /* 0x5 */ s8  vertical;
+    /* 0x6 */ s8  south;
+    /* 0x7 */ u8  clothIntensity;
+} SCmdWindSettings; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdEntranceList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdEntranceList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  cUpElfMsgNum;
-    /* 0x04 */ u32 subKeepIndex;
-} SCmdSpecialFiles;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  cUpElfMsgNum;
+    /* 0x4 */ u32 subKeepIndex;
+} SCmdSpecialFiles; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  gpFlag1;
-    /* 0x04 */ u32 gpFlag2;
-} SCmdRoomBehavior;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  gpFlag1;
+    /* 0x4 */ u32 gpFlag2;
+} SCmdRoomBehavior; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdMesh;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdMesh; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  num;
-    /* 0x04 */ void* segment;
-} SCmdObjectList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  num;
+    /* 0x4 */ void* segment;
+} SCmdObjectList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  num;
-    /* 0x04 */ void* segment;
-} SCmdLightList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  num;
+    /* 0x4 */ void* segment;
+} SCmdLightList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdPathList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdPathList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  num;
-    /* 0x04 */ void* segment;
-} SCmdTransiActorList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  num;
+    /* 0x4 */ void* segment;
+} SCmdTransiActorList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  num;
-    /* 0x04 */ void* segment;
-} SCmdLightSettingList;
-// Cloudmodding has this as Environment Settings
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  num;
+    /* 0x4 */ void* segment;
+} SCmdLightSettingList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x02 */ UNK_TYPE1 pad2[2];
-    /* 0x04 */ u8  hour;
-    /* 0x05 */ u8  min;
-    /* 0x06 */ u8  unk6;
-} SCmdTimeSettings;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x2 */ UNK_TYPE1 pad2[2];
+    /* 0x4 */ u8  hour;
+    /* 0x5 */ u8  min;
+    /* 0x6 */ u8  unk6;
+} SCmdTimeSettings; // size = 0x7
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x02 */ UNK_TYPE1 pad2[2];
-    /* 0x04 */ u8  skyboxId;
-    /* 0x05 */ u8  unk5;
-    /* 0x06 */ u8  unk6;
-} SCmdSkyboxSettings;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x2 */ UNK_TYPE1 pad2[2];
+    /* 0x4 */ u8  skyboxId;
+    /* 0x5 */ u8  unk5;
+    /* 0x6 */ u8  unk6;
+} SCmdSkyboxSettings; // size = 0x7
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x02 */ UNK_TYPE1 pad2[2];
-    /* 0x04 */ u8  unk4;
-    /* 0x05 */ u8  unk5;
-} SCmdSkyboxDisables;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x2 */ UNK_TYPE1 pad2[2];
+    /* 0x4 */ u8  unk4;
+    /* 0x5 */ u8  unk5;
+} SCmdSkyboxDisables; // size = 0x6
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdExitList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdExitList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ u32 data2;
-} SCmdEndMarker;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ u32 data2;
+} SCmdEndMarker; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  bgmId;
-    /* 0x02 */ UNK_TYPE1 pad2[4];
-    /* 0x06 */ u8  nighttimeSFX;
-    /* 0x07 */ u8  musicSeq;
-} SCmdSoundSettings;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  bgmId;
+    /* 0x2 */ UNK_TYPE1 pad2[4];
+    /* 0x6 */ u8  nighttimeSFX;
+    /* 0x7 */ u8  musicSeq;
+} SCmdSoundSettings; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x02 */ UNK_TYPE1 pad2[5];
-    /* 0x07 */ u8  echo;
-} SCmdEchoSettings;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x2 */ UNK_TYPE1 pad2[5];
+    /* 0x7 */ u8  echo;
+} SCmdEchoSettings; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdCutsceneData;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdCutsceneData; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  cameraMovement;
-    /* 0x04 */ u32 area;
-} SCmdMiscSettings;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  cameraMovement;
+    /* 0x4 */ u32 area;
+} SCmdMiscSettings; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdAltHeaders;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdAltHeaders; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ u32 data2;
-} SCmdWorldMapVisited;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ u32 data2;
+} SCmdWorldMapVisited; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdTextureAnimations;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdTextureAnimations; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  num;
-    /* 0x04 */ void* segment;
-} SCmdCutsceneActorList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  num;
+    /* 0x4 */ void* segment;
+} SCmdCutsceneActorList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdMinimapSettings;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdMinimapSettings; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  num;
-    /* 0x04 */ void* segment;
-} SCmdMinimapChests;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  num;
+    /* 0x4 */ void* segment;
+} SCmdMinimapChests; // size = 0x8
 
 typedef struct {
     /* 0x0 */ Gfx* opaqueDl;
@@ -292,17 +291,17 @@ typedef struct {
     struct {
         s8 room;    // Room to switch to
         s8 bgCamDataId; // How the camera reacts during the transition. -2 for spiral staircase. -1 for generic door. 0+ will index scene CamData
-    } /* 0x00 */ sides[2]; // 0 = front, 1 = back
-    /* 0x04 */ s16   id;
-    /* 0x06 */ Vec3s pos;
-    /* 0x0C */ s16   rotY;
-    /* 0x0E */ u16   params;
+    } /* 0x0 */ sides[2]; // 0 = front, 1 = back
+    /* 0x4 */ s16   id;
+    /* 0x6 */ Vec3s pos;
+    /* 0xC */ s16   rotY;
+    /* 0xE */ u16   params;
 } TransitionActorEntry; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u8 numTransitionActors;
-    /* 0x04 */ TransitionActorEntry* transitionActorList;
-} DoorContext;
+    /* 0x0 */ u8 numTransitionActors;
+    /* 0x4 */ TransitionActorEntry* transitionActorList;
+} DoorContext; // size = 0x8
 
 typedef struct {
     /* 0x0 */ s16 id;
@@ -343,7 +342,7 @@ typedef struct {
     /* 0xA */ u8 unk_A;
     /* 0xB */ u8 drawConfig;
     /* 0xC */ u8 unk_C;
-} SceneTableEntry; // size = 0x10;
+} SceneTableEntry; // size = 0x10
 
 typedef struct {
     /* 0x0 */ u8 r;
@@ -392,116 +391,118 @@ typedef struct {
 } ObjectContext; // size = 0x958
 
 typedef struct {
-    u8 headerType;
-} MeshHeaderBase;
+    /* 0x0 */ u8 headerType;
+} MeshHeaderBase; // size = 0x1
 
 typedef struct {
-    MeshHeaderBase base;
-
-    u8 numEntries;
-    u32 dListStart;
-    u32 dListEnd;
-} MeshHeader0;
-
-typedef struct {
-    u32 opaqueDList;
-    u32 translucentDList;
-} MeshEntry0;
+    /* 0x0 */ MeshHeaderBase base;
+    /* 0x1 */ u8 numEntries;
+    /* 0x4 */ u32 dListStart;
+    /* 0x8 */ u32 dListEnd;
+} MeshHeader0; // size = 0xC
 
 typedef struct {
-    MeshHeaderBase base;
-    u8 format;
-    u32 entryRecord;
-} MeshHeader1Base;
+    /* 0x0 */ u32 opaqueDList;
+    /* 0x4 */ u32 translucentDList;
+} MeshEntry0; // size = 0x8
 
 typedef struct {
-    MeshHeader1Base base;
-    u32 imagePtr; // 0x08
-    u32 unknown; // 0x0C
-    u32 unknown2; // 0x10
-    u16 bgWidth; // 0x14
-    u16 bgHeight; // 0x16
-    u8 imageFormat; // 0x18
-    u8 imageSize; // 0x19
-    u16 imagePal; // 0x1A
-    u16 imageFlip; // 0x1C
-} MeshHeader1Single;
+    /* 0x0 */ MeshHeaderBase base;
+    /* 0x1 */ u8 format;
+    /* 0x4 */ u32 entryRecord;
+} MeshHeader1Base; // size = 0x8
 
 typedef struct {
-    MeshHeader1Base base;
-    u8 bgCnt;
-    u32 bgRecordPtr;
-} MeshHeader1Multi;
+    /* 0x00 */ MeshHeader1Base base;
+    /* 0x08 */ u32 imagePtr;
+    /* 0x0C */ u32 unknown;
+    /* 0x10 */ u32 unknown2;
+    /* 0x14 */ u16 bgWidth;
+    /* 0x16 */ u16 bgHeight;
+    /* 0x18 */ u8 imageFormat;
+    /* 0x19 */ u8 imageSize;
+    /* 0x1A */ u16 imagePal;
+    /* 0x1C */ u16 imageFlip;
+} MeshHeader1Single; // size = 0x20
 
 typedef struct {
-    u16 unknown; // 0x00
-    s8 bgID; // 0x02
-    u32 imagePtr; // 0x04
-    u32 unknown2; // 0x08
-    u32 unknown3; // 0x0C
-    u16 bgWidth; // 0x10
-    u16 bgHeight; // 0x12
-    u8 imageFmt; // 0x14
-    u8 imageSize; // 0x15
-    u16 imagePal; // 0x16
-    u16 imageFlip; // 0x18
-} BackgroundRecord;
+    /* 0x0 */ MeshHeader1Base base;
+    /* 0x8 */ u8 bgCnt;
+    /* 0xC */ u32 bgRecordPtr;
+} MeshHeader1Multi; // size = 0x10
 
 typedef struct {
-    s16 playerXMax, playerZMax;
-    s16 playerXMin, playerZMin;
-    u32 opaqueDList;
-    u32 translucentDList;
-} MeshEntry2;
+    /* 0x00 */ u16 unknown;
+    /* 0x02 */ s8 bgID;
+    /* 0x04 */ u32 imagePtr;
+    /* 0x08 */ u32 unknown2;
+    /* 0x0C */ u32 unknown3;
+    /* 0x10 */ u16 bgWidth;
+    /* 0x12 */ u16 bgHeight;
+    /* 0x14 */ u8 imageFmt;
+    /* 0x15 */ u8 imageSize;
+    /* 0x16 */ u16 imagePal;
+    /* 0x18 */ u16 imageFlip;
+} BackgroundRecord; // size = 0x1C
 
 typedef struct {
-    MeshHeaderBase base;
-    u8 numEntries;
-    u32 dListStart;
-    u32 dListEnd;
-} MeshHeader2;
+    /* 0x0 */ s16 playerXMax; 
+    /* 0x2 */ s16 playerZMax;
+    /* 0x4 */ s16 playerXMin; 
+    /* 0x6 */ s16 playerZMin;
+    /* 0x8 */ u32 opaqueDList;
+    /* 0xC */ u32 translucentDList;
+} MeshEntry2; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u8 count; // number of points in the path
-    /* 0x01 */ u8 unk1;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ Vec3s* points; // Segment Address to the array of points
+    /* 0x0 */ MeshHeaderBase base;
+    /* 0x1 */ u8 numEntries;
+    /* 0x4 */ u32 dListStart;
+    /* 0x8 */ u32 dListEnd;
+} MeshHeader2; // size = 0xC 
+
+typedef struct {
+    /* 0x0 */ u8 count; // number of points in the path
+    /* 0x1 */ u8 unk1;
+    /* 0x2 */ s16 unk2;
+    /* 0x4 */ Vec3s* points; // Segment Address to the array of points
 } Path; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE2 unk0;
-    /* 0x02 */ UNK_TYPE2 unk2;
-    /* 0x04 */ UNK_TYPE2 unk4;
-    /* 0x06 */ UNK_TYPE2 unk6;
-    /* 0x08 */ UNK_TYPE2 unk8;
+    /* 0x0 */ UNK_TYPE2 unk0;
+    /* 0x2 */ UNK_TYPE2 unk2;
+    /* 0x4 */ UNK_TYPE2 unk4;
+    /* 0x6 */ UNK_TYPE2 unk6;
+    /* 0x8 */ UNK_TYPE2 unk8;
 } MinimapEntry; // size = 0xA
 
 typedef struct {
-    /* 0x00 */ MinimapEntry* entry;
-    /* 0x04 */ UNK_TYPE unk4;
+    /* 0x0 */ MinimapEntry* entry;
+    /* 0x4 */ UNK_TYPE unk4;
 } MinimapList; // size  = 0x8
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE2 unk0;
-    /* 0x02 */ UNK_TYPE2 unk2;
-    /* 0x04 */ UNK_TYPE2 unk4;
-    /* 0x06 */ UNK_TYPE2 unk6;
-    /* 0x08 */ UNK_TYPE2 unk8;
+    /* 0x0 */ UNK_TYPE2 unk0;
+    /* 0x2 */ UNK_TYPE2 unk2;
+    /* 0x4 */ UNK_TYPE2 unk4;
+    /* 0x6 */ UNK_TYPE2 unk6;
+    /* 0x8 */ UNK_TYPE2 unk8;
 } MinimapChest; // size = 0xA
 
+// TODO: consider merging with bgCamInfo?
 typedef struct {
-    /* 0x0 */ s16 setting;
-    /* 0x2 */ s16 numData;
-    /* 0x4 */ Vec3s* data;
-} CsCamData; // size = 0x8
+    /* 0x0 */ s16 setting; // camera setting described by CameraSettingType enum
+    /* 0x2 */ s16 count;
+    /* 0x4 */ Vec3s* actorCsCamFuncData; // s16 data grouped in threes
+} ActorCsCamInfo; // size = 0x8
 
-typedef CsCamData CsCameraEntry; // TODO: Remove once ZAPD updates its structs
+typedef ActorCsCamInfo CsCameraEntry; // TODO: Remove once ZAPD updates its structs
 
 typedef union {
     /* Command: N/A  */ SCmdBase              base;
     /* Command: 0x00 */ SCmdSpawnList         spawnList;
     /* Command: 0x01 */ SCmdActorList         actorList;
-    /* Command: 0x02 */ SCmdCsCameraList      csCameraList;
+    /* Command: 0x02 */ SCmdCsCameraList      actorCsCamList;
     /* Command: 0x03 */ SCmdColHeader         colHeader;
     /* Command: 0x04 */ SCmdRoomList          roomList;
     /* Command: 0x05 */ SCmdWindSettings      windSettings;

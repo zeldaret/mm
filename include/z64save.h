@@ -49,16 +49,17 @@ typedef struct Inventory {
     /* 0x48 */ u32 upgrades;                            // "non_equip_register" some bits are wallet upgrades
     /* 0x4C */ u32 questItems;                          // "collect_register"
     /* 0x50 */ u8 dungeonItems[10];                     // "key_compass_map"
-    /* 0x5A */ s8 dungeonKeys[10];                      // "key_register"
+    /* 0x5A */ s8 dungeonKeys[9];                       // "key_register"
+    /* 0x63 */ s8 defenseHearts;
     /* 0x64 */ s8 strayFairies[10];                     // "orange_fairy"
     /* 0x6E */ char dekuPlaygroundPlayerName[3][8];     // "degnuts_memory_name" Stores playerName (8 char) over (3 days) when getting a new high score
 } Inventory; // size = 0x88
 
 typedef struct HorseData {
-    /* 0x00 */ s16 scene;                               // "spot_no"
-    /* 0x02 */ Vec3s pos;                               // "horse_x", "horse_y" and "horse_z"
-    /* 0x08 */ s16 yaw;                                 // "horse_a"
-} HorseData; // size = 0x0A
+    /* 0x0 */ s16 scene;                               // "spot_no"
+    /* 0x2 */ Vec3s pos;                               // "horse_x", "horse_y" and "horse_z"
+    /* 0x8 */ s16 yaw;                                 // "horse_a"
+} HorseData; // size = 0xA
 
 typedef struct RespawnData {
     /* 0x00 */ Vec3f pos;
@@ -91,32 +92,32 @@ typedef struct CycleSceneFlags {
 } CycleSceneFlags; // size = 0x14
 
 typedef struct SaveOptions {
-    /* 0x00 */ u16 optionId;                            // "option_id"
-    /* 0x02 */ u8 language;                             // "j_n"
-    /* 0x03 */ s8 audioSetting;                         // "s_sound"
-    /* 0x04 */ u8 languageSetting;                      // "language"
-    /* 0x05 */ u8 zTargetSetting;                       // "z_attention", 0: Switch; 1: Hold
-} SaveOptions; // size = 0x06
+    /* 0x0 */ u16 optionId;                            // "option_id"
+    /* 0x2 */ u8 language;                             // "j_n"
+    /* 0x3 */ s8 audioSetting;                         // "s_sound"
+    /* 0x4 */ u8 languageSetting;                      // "language"
+    /* 0x5 */ u8 zTargetSetting;                       // "z_attention", 0: Switch; 1: Hold
+} SaveOptions; // size = 0x6
 
 typedef struct SavePlayerData {
-    /* 0x0000 */ char newf[6];                          // "newf"               Will always be "ZELDA3 for a valid save
-    /* 0x0006 */ u16 deaths;                            // "savect"
-    /* 0x0008 */ char playerName[8];                    // "player_name"
-    /* 0x0010 */ s16 healthCapacity;                    // "max_life"
-    /* 0x0012 */ s16 health;                            // "now_life"
-    /* 0x0014 */ s8 magicLevel;                         // "magic_max"
-    /* 0x0015 */ s8 magic;                              // "magic_now"
-    /* 0x0016 */ s16 rupees;                            // "lupy_count"
-    /* 0x0018 */ u16 swordHealth;                       // "long_sword_hp"
-    /* 0x001A */ u16 tatlTimer;                         // "navi_timer"
-    /* 0x001C */ u8 magicAcquired;                      // "magic_mode"
-    /* 0x001D */ u8 doubleMagic;                        // "magic_ability"
-    /* 0x001E */ u8 doubleDefense;                      // "life_ability"
-    /* 0x001F */ u8 unk_1F;                             // "ocarina_round"
-    /* 0x0020 */ u8 unk_20;                             // "first_memory"
-    /* 0x0022 */ u16 owlActivationFlags;                // "memory_warp_point"
-    /* 0x0024 */ u8 unk_24;                             // "last_warp_pt"
-    /* 0x0026 */ s16 savedSceneNum;                     // "scene_data_ID"
+    /* 0x00 */ char newf[6];                          // "newf"               Will always be "ZELDA3 for a valid save
+    /* 0x06 */ u16 deaths;                            // "savect"
+    /* 0x08 */ char playerName[8];                    // "player_name"
+    /* 0x10 */ s16 healthCapacity;                    // "max_life"
+    /* 0x12 */ s16 health;                            // "now_life"
+    /* 0x14 */ s8 magicLevel;                         // "magic_max"
+    /* 0x15 */ s8 magic;                              // "magic_now"
+    /* 0x16 */ s16 rupees;                            // "lupy_count"
+    /* 0x18 */ u16 swordHealth;                       // "long_sword_hp"
+    /* 0x1A */ u16 tatlTimer;                         // "navi_timer"
+    /* 0x1C */ u8 magicAcquired;                      // "magic_mode"
+    /* 0x1D */ u8 doubleMagic;                        // "magic_ability"
+    /* 0x1E */ u8 doubleDefense;                      // "life_ability"
+    /* 0x1F */ u8 unk_1F;                             // "ocarina_round"
+    /* 0x20 */ u8 unk_20;                             // "first_memory"
+    /* 0x22 */ u16 owlActivationFlags;                // "memory_warp_point"
+    /* 0x24 */ u8 unk_24;                             // "last_warp_pt"
+    /* 0x26 */ s16 savedSceneNum;                     // "scene_data_ID"
 } SavePlayerData; // size = 0x28
 
 typedef struct Save {
@@ -142,8 +143,8 @@ typedef struct Save {
     /* 0x00F8 */ PermanentSceneFlags permanentSceneFlags[120];
     /* 0x0E18 */ u8 unk_E18[0x54];
     /* 0x0E6C */ u32 dekuPlaygroundHighScores[3];
-    /* 0x0E78 */ u32 pictoFlags0;
-    /* 0x0E7C */ u32 pictoFlags1;
+    /* 0x0E78 */ u32 pictoFlags0;                       // Flags set by `PictoActor`s if pictograph is valid
+    /* 0x0E7C */ u32 pictoFlags1;                       // Flags set by Snap_ValidatePictograph() to record errors; volatile since that function is run many times in succession
     /* 0x0E80 */ u32 unk_E80;
     /* 0x0E84 */ u32 unk_E84;
     /* 0x0E88 */ u32 unk_E88[7];                        // Invadepoh flags
@@ -160,13 +161,13 @@ typedef struct Save {
     /* 0x0EE8 */ u32 unk_EE8;
     /* 0x0EEC */ u32 horseBackBalloonHighScore;
     /* 0x0EF0 */ u32 lotteryCodeGuess;                  // Lottery code chosen by player (only uses lower three hex digits)
-    /* 0x0EF4 */ u32 unk_EF4;                           // Shooting Gallery Man Flags
+    /* 0x0EF4 */ u32 shootingGalleryHighScores;         // High scores for both shooting galleries. Town uses lower 16 bits, Swamp uses higher 16 bits.
     /* 0x0EF8 */ u8 weekEventReg[100];                  // "week_event_reg"
     /* 0x0F5C */ u32 mapsVisited;                       // "area_arrival"
     /* 0x0F60 */ u32 mapsVisible;                       // "cloud_clear"
     /* 0x0F64 */ u8 unk_F64;                            // "oca_rec_flag"                   has scarecrows song
     /* 0x0F65 */ u8 unk_F65;                            // "oca_rec_flag8"                  scarecrows song set?
-    /* 0x0F66 */ u8 scarecrowsSong[128];
+    /* 0x0F66 */ u8 scarecrowSpawnSong[128];
     /* 0x0FE6 */ s8 bombersCaughtNum;                   // "aikotoba_index"
     /* 0x0FE7 */ s8 bombersCaughtOrder[5];              // "aikotoba_table"
     /* 0x0FEC */ s8 lotteryCodes[3][3];                 // "numbers_table", Preset lottery codes
@@ -240,16 +241,16 @@ typedef struct SaveContext {
     /* 0x3F3F */ u8 unk_3F3F;                           // "flash_flag"
     /* 0x3F40 */ SaveOptions options;
     /* 0x3F46 */ u16 unk_3F46;                          // "NottoriBgm"
-    /* 0x3F48 */ u8 unk_3F48;                           // "fade_go"
+    /* 0x3F48 */ u8 cutsceneTransitionControl;          // "fade_go"
     /* 0x3F4A */ u16 nextCutsceneIndex;                 // "next_daytime"
     /* 0x3F4C */ u8 cutsceneTrigger;                    // "doukidemo"
     /* 0x3F4D */ u8 unk_3F4D;                           // "Kenjya_no"
     /* 0x3F4E */ u16 nextDayTime;                       // "next_zelda_time"
-    /* 0x3F50 */ u8 fadeDuration;                       // "fade_speed"
-    /* 0x3F51 */ u8 fadeSpeed;                          // "wipe_speed"           transition related
-    /* 0x3F52 */ u16 environmentTime;                   // "kankyo_time"
+    /* 0x3F50 */ u8 transFadeDuration;                  // "fade_speed"
+    /* 0x3F51 */ u8 transWipeSpeed;                     // "wipe_speed"           transition related
+    /* 0x3F52 */ u16 skyboxTime;                        // "kankyo_time"
     /* 0x3F54 */ u8 dogIsLost;                          // "dog_event_flag"
-    /* 0x3F55 */ u8 nextTransition;                     // "next_wipe"
+    /* 0x3F55 */ u8 nextTransitionType;                 // "next_wipe"
     /* 0x3F56 */ s16 worldMapArea;                      // "area_type"
     /* 0x3F58 */ s16 sunsSongState;                     // "sunmoon_flag"
     /* 0x3F5A */ s16 healthAccumulator;                 // "life_mode"
@@ -272,6 +273,85 @@ typedef enum SunsSongState {
     /* 2 */ SUNSSONG_SPEED_TIME, // suns was played where time passes, speed up the advancement of time
     /* 3 */ SUNSSONG_SPECIAL // time does not advance, but signals the song was played. used for freezing redeads
 } SunsSongState;
+
+// linkAge still exists in MM, but is always set to 0 (always adult)
+// There are remnants of these macros from OOT, but they are essentially useless
+#define LINK_IS_CHILD (gSaveContext.save.linkAge == 1)
+#define LINK_IS_ADULT (gSaveContext.save.linkAge == 0)
+
+#define CURRENT_DAY (((void)0, gSaveContext.save.day) % 5)
+
+#define SLOT(item) gItemSlots[item]
+#define AMMO(item) gSaveContext.save.inventory.ammo[SLOT(item)]
+#define INV_CONTENT(item) gSaveContext.save.inventory.items[SLOT(item)]
+#define GET_INV_CONTENT(item) ((void)0, gSaveContext.save.inventory.items)[SLOT(item)]
+
+#define CUR_FORM ((gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) ? 0 : gSaveContext.save.playerForm)
+
+#define GET_SAVE_EQUIPS_EQUIPMENT ((void)0, gSaveContext.save.equips.equipment)
+#define GET_SAVE_INVENTORY_UPGRADES ((void)0, gSaveContext.save.inventory.upgrades)
+#define GET_SAVE_INVENTORY_QUEST_ITEMS ((void)0, gSaveContext.save.inventory.questItems)
+
+#define GET_CUR_EQUIP_VALUE(equip) ((GET_SAVE_EQUIPS_EQUIPMENT & gEquipMasks[equip]) >> gEquipShifts[equip])
+
+#define CUR_UPG_VALUE(upg) ((gSaveContext.save.inventory.upgrades & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
+#define GET_CUR_UPG_VALUE(upg) ((GET_SAVE_INVENTORY_UPGRADES & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
+
+#define SET_EQUIP_VALUE(equip, value) (gSaveContext.save.equips.equipment = ((GET_SAVE_EQUIPS_EQUIPMENT & gEquipNegMasks[equip]) | (u16)((u16)(value) << gEquipShifts[equip])))
+
+#define BUTTON_ITEM_EQUIP(form, button) (gSaveContext.save.equips.buttonItems[form][button])
+#define CUR_FORM_EQUIP(button) BUTTON_ITEM_EQUIP(CUR_FORM, button)
+
+#define C_SLOT_EQUIP(form, button) (gSaveContext.save.equips.cButtonSlots[form][button])
+#define CHECK_QUEST_ITEM(item) (GET_SAVE_INVENTORY_QUEST_ITEMS & gBitFlags[item])
+#define SET_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS | gBitFlags[item]))
+#define REMOVE_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS & (-1 - gBitFlags[item])))
+
+#define GET_QUEST_HEART_PIECE_COUNT ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) >> QUEST_HEART_PIECE_COUNT)
+#define EQ_MAX_QUEST_HEART_PIECE_COUNT ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) == (4 << QUEST_HEART_PIECE_COUNT))
+#define LEQ_MAX_QUEST_HEART_PIECE_COUNT ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) <= (4 << QUEST_HEART_PIECE_COUNT))
+#define INCREMENT_QUEST_HEART_PIECE_COUNT (gSaveContext.save.inventory.questItems += (1 << QUEST_HEART_PIECE_COUNT))
+#define DECREMENT_QUEST_HEART_PIECE_COUNT (gSaveContext.save.inventory.questItems -= (1 << QUEST_HEART_PIECE_COUNT))
+#define RESET_HEART_PIECE_COUNT (gSaveContext.save.inventory.questItems ^= (4 << QUEST_HEART_PIECE_COUNT))
+
+#define CHECK_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.inventory.dungeonItems[(void)0, dungeonIndex] & gBitFlags[item])
+#define SET_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.inventory.dungeonItems[(void)0, dungeonIndex] |= (u8)gBitFlags[item])
+#define DUNGEON_KEY_COUNT(dungeonIndex) (gSaveContext.save.inventory.dungeonKeys[(void)0, dungeonIndex])
+
+#define GET_CUR_FORM_BTN_ITEM(btn) ((u8)((btn) == EQUIP_SLOT_B ? BUTTON_ITEM_EQUIP(CUR_FORM, btn) : BUTTON_ITEM_EQUIP(0, btn)))
+#define GET_CUR_FORM_BTN_SLOT(btn) ((u8)((btn) == EQUIP_SLOT_B ? C_SLOT_EQUIP(CUR_FORM, btn) : C_SLOT_EQUIP(0, btn)))
+
+
+#define SET_CUR_FORM_BTN_ITEM(btn, item)             \
+    if ((btn) == EQUIP_SLOT_B) {                     \
+        BUTTON_ITEM_EQUIP(CUR_FORM, (btn)) = (item); \
+    } else {                                         \
+        BUTTON_ITEM_EQUIP(0, (btn)) = (item);        \
+    }                                                \
+    (void)0
+
+#define SET_CUR_FORM_BTN_SLOT(btn, item)        \
+    if ((btn) == EQUIP_SLOT_B) {                \
+        C_SLOT_EQUIP(CUR_FORM, (btn)) = (item); \
+    } else {                                    \
+        C_SLOT_EQUIP(0, (btn)) = (item);        \
+    }                                           \
+    (void)0
+
+#define STOLEN_ITEM_NONE (0)
+
+#define STOLEN_ITEM_1 ((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18)
+#define STOLEN_ITEM_2 ((gSaveContext.save.stolenItems & 0x00FF0000) >> 0x10)
+
+#define SET_STOLEN_ITEM_1(itemId) \
+    (gSaveContext.save.stolenItems = (gSaveContext.save.stolenItems & ~0xFF000000) | ((itemId & 0xFF) << 0x18))
+#define SET_STOLEN_ITEM_2(itemId) \
+    (gSaveContext.save.stolenItems = (gSaveContext.save.stolenItems & ~0x00FF0000) | ((itemId & 0xFF) << 0x10))
+
+#define GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() ((s32)(gSaveContext.save.shootingGalleryHighScores & 0xFFFF))
+#define GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() ((s32)((gSaveContext.save.shootingGalleryHighScores & 0xFFFF0000) >> 0x10))
+#define SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(score) (gSaveContext.save.shootingGalleryHighScores = (gSaveContext.save.shootingGalleryHighScores & 0xFFFF0000) | ((u16)(score)))
+#define SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(score) (gSaveContext.save.shootingGalleryHighScores = ((gSaveContext.save.shootingGalleryHighScores) & 0xFFFF) | ((u16)(score) << 0x10))
 
 typedef enum {
     /* 0 */ DUNGEON_INDEX_WOODFALL_TEMPLE,
@@ -307,7 +387,7 @@ void func_80147150(SramContext* sramCtx);
 void func_80147198(SramContext* sramCtx);
 
 extern s32 D_801C6798[];
-extern u8 D_801C67B0[24];
+extern u8 gAmmoItems[];
 extern s32 D_801C67C8[];
 extern s32 D_801C67E8[];
 extern s32 D_801C67F0[];

@@ -243,7 +243,7 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
     if (this->grottoExitDelay++ == 10) {
         play->nextEntranceIndex = play->setupExitList[GET_WARPTAG_EXIT_INDEX(&this->dyna.actor)];
         Scene_SetExitFade(play);
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
         func_8019F128(NA_SE_OC_SECRET_HOLE_OUT);
         func_801A4058(5);
         if (1) {}

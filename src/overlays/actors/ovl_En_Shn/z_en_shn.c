@@ -6,6 +6,7 @@
  */
 
 #include "z_en_shn.h"
+#include "z64snap.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -15,9 +16,8 @@ void EnShn_Init(Actor* thisx, PlayState* play);
 void EnShn_Destroy(Actor* thisx, PlayState* play);
 void EnShn_Update(Actor* thisx, PlayState* play);
 void EnShn_Draw(Actor* thisx, PlayState* play);
-void func_80AE69E8(EnShn* this, PlayState* play);
+
 void func_80AE6A64(EnShn* this, PlayState* play);
-s32 func_80AE6704(EnShn* this, PlayState* play);
 
 // Could be something related to text/dialogue?
 static UNK_TYPE D_80AE6F00[] = {
@@ -63,21 +63,18 @@ const ActorInit En_Shn_InitVars = {
     (ActorFunc)EnShn_Draw,
 };
 
-static AnimationInfoS sAnimations[] = {
-    { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, 0 },
-    { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, -4 },
-    { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, 0 },
-    { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, -4 },
-};
-
-static s32 D_80AE7258[] = { 0, 2, 3, 8, 10, 1 };
-
 void func_80AE6130(EnShn* this) {
     this->skelAnime.playSpeed = this->playSpeed;
     SkelAnime_Update(&this->skelAnime);
 }
 
 s32 func_80AE615C(EnShn* this, s32 arg1) {
+    static AnimationInfoS sAnimations[] = {
+        { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, 0 },
+        { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, -4 },
+        { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, 0 },
+        { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, -4 },
+    };
     s32 phi_v0 = 0;
     s32 phi_v1 = 0;
 
@@ -104,7 +101,7 @@ s32 EnShn_IsFacingPlayer(EnShn* this) {
     }
     if (phi_v1 == 0) {
         this->unk_2EC ^= 1;
-        this->unk_2C8 = Rand_S16Offset(0x1E, 0x1E);
+        this->unk_2C8 = Rand_S16Offset(30, 30);
     }
     if (this->unk_2EC != 0) {
         range = 120.0f;
@@ -177,17 +174,16 @@ void func_80AE63A8(EnShn* this, PlayState* play) {
 
 void func_80AE6488(EnShn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 tempMsgState;
+    s32 talkState = Message_GetState(&play->msgCtx);
     f32 phi_f0_2;
     f32 phi_f0;
 
-    tempMsgState = Message_GetState(&play->msgCtx);
     this->unk_2D4 += (this->unk_2D0 != 0.0f) ? 40.0f : -40.0f;
     this->unk_2D4 = CLAMP(this->unk_2D4, 0.0f, 80.0f);
     Matrix_Translate(this->unk_2D4, 0.0f, 0.0f, MTXMODE_APPLY);
     if ((&this->actor == player->targetActor) &&
-        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId >= 0x201)) && (tempMsgState == 3) &&
-        (this->msgState == 3)) {
+        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId >= 0x201)) && (talkState == TEXT_STATE_3) &&
+        (this->prevTalkState == TEXT_STATE_3)) {
         if (play->state.frames % 2 == 0) {
             if (this->unk_2D0 != 0.0f) {
                 this->unk_2D0 = 0.0f;
@@ -198,7 +194,7 @@ void func_80AE6488(EnShn* this, PlayState* play) {
     } else {
         this->unk_2D0 = 0.0f;
     }
-    this->msgState = tempMsgState;
+    this->prevTalkState = talkState;
 }
 
 s32 func_80AE65F4(EnShn* this, PlayState* play) {
@@ -229,7 +225,11 @@ s32 func_80AE65F4(EnShn* this, PlayState* play) {
     return false;
 }
 
-s32 func_80AE6704(EnShn* thisx, PlayState* play) {
+s32 func_80AE6704(Actor* thisx, PlayState* play) {
+    static s32 sPictographFlags[] = {
+        PICTOGRAPH_0,      PICTOGRAPH_MONKEY,    PICTOGRAPH_BIG_OCTO,
+        PICTOGRAPH_TINGLE, PICTOGRAPH_DEKU_KING, PICTOGRAPH_IN_SWAMP,
+    };
     EnShn* this = THIS;
     s32 ret = 0;
 
@@ -242,12 +242,13 @@ s32 func_80AE6704(EnShn* thisx, PlayState* play) {
                 this->unk_2C6++;
             }
             break;
+
         case 1:
         case 2:
         case 3:
         case 4:
         case 5:
-            if (func_8013A4C4(D_80AE7258[this->unk_2C6])) {
+            if (Snap_CheckFlag(sPictographFlags[this->unk_2C6])) {
                 this->unk_2C6 = 6;
                 ret = 1;
                 REMOVE_QUEST_ITEM(QUEST_PICTOGRAPH);
@@ -255,14 +256,15 @@ s32 func_80AE6704(EnShn* thisx, PlayState* play) {
                 this->unk_2C6++;
             }
             break;
+
         case 6:
             gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
             func_800B7298(play, &this->actor, 7);
             play->nextEntranceIndex = 0x8460;
             gSaveContext.nextCutsceneIndex = 0;
-            play->sceneLoadFlag = 0x14;
-            play->unk_1887F = 3;
-            gSaveContext.nextTransition = 7;
+            play->transitionTrigger = TRANS_TRIGGER_START;
+            play->transitionType = TRANS_TYPE_03;
+            gSaveContext.nextTransitionType = TRANS_TYPE_07;
             this->unk_2C6++;
             break;
     }
@@ -286,12 +288,12 @@ UNK_TYPE* func_80AE6880(EnShn* this, PlayState* play) {
 
 s32 func_80AE68F0(EnShn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 ret = 0;
+    s32 ret = false;
 
     if (this->unk_1D8 & 7) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->unk_1D8 &= ~0x180;
-            if (player->exchangeItemId == EXCH_ITEM_13) {
+            if (player->exchangeItemId == EXCH_ITEM_PICTO_BOX) {
                 this->unk_1D8 |= 0x80;
                 this->unk_2E4 = player->exchangeItemId;
             } else if (player->exchangeItemId != EXCH_ITEM_NONE) {
@@ -305,7 +307,7 @@ s32 func_80AE68F0(EnShn* this, PlayState* play) {
                 this->unk_1D8 |= 8;
             }
             this->actionFunc = func_80AE6A64;
-            ret = 1;
+            ret = true;
         }
     }
     return ret;

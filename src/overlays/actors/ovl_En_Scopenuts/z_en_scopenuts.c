@@ -190,11 +190,11 @@ s16 func_80BCAF0C(EnScopenuts* this) {
 }
 
 void func_80BCAFA8(EnScopenuts* this, PlayState* play) {
-    Vec3f sp1C;
+    Vec3f screenPos;
 
-    func_80169474(play, &this->actor.world.pos, &sp1C);
-    if ((sp1C.x >= 130.0f) && (sp1C.x < 190.0f) && (sp1C.y >= 90.0f)) {
-        if (sp1C.y < 150.0f) {
+    Play_GetScreenPos(play, &this->actor.world.pos, &screenPos);
+    if ((screenPos.x >= 130.0f) && (screenPos.x < (SCREEN_WIDTH - 130.0f)) && (screenPos.y >= 90.0f)) {
+        if (screenPos.y < (SCREEN_HEIGHT - 90.0f)) {
             this->actor.draw = EnScopenuts_Draw;
             this->unk_348 = 10;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 10);
@@ -312,14 +312,14 @@ void func_80BCB52C(EnScopenuts* this, PlayState* play) {
 }
 
 void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (temp_v0 == 5) {
+    if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_328 & 1) {
                 this->unk_328 &= ~1;
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->actor.flags &= ~ACTOR_FLAG_1;
                 this->unk_328 &= ~4;
                 this->unk_348 = 8;
@@ -330,7 +330,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                 Message_StartTextbox(play, this->unk_33C, &this->actor);
             }
         }
-    } else if (temp_v0 == 4) {
+    } else if (talkState == TEXT_STATE_CHOICE) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -342,7 +342,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                     } else {
                         func_8019F208();
                         play->msgCtx.msgMode = 0x43;
-                        play->msgCtx.unk12023 = 4;
+                        play->msgCtx.stateTimer = 4;
                         Rupees_ChangeBy(-this->unk_358);
                         this->actionFunc = func_80BCB90C;
                     }
@@ -359,7 +359,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                     break;
             }
         }
-    } else if (temp_v0 == 6) {
+    } else if (talkState == TEXT_STATE_DONE) {
         func_800B85E0(&this->actor, play, 400.0f, -1);
         this->actionFunc = func_80BCB980;
     }

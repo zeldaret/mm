@@ -535,7 +535,8 @@ s32 func_80A1222C(EnGo* this, PlayState* play) {
     s32 ret = false;
 
     if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
-         (play->msgCtx.unk1202E == 1) && (this->unk_3EC == 0) && (this->actor.xzDistToPlayer < 400.0f)) ||
+         (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->unk_3EC == 0) &&
+         (this->actor.xzDistToPlayer < 400.0f)) ||
         (!(gSaveContext.save.weekEventReg[22] & 4) && (play->sceneNum == SCENE_16GORON_HOUSE) &&
          (gSaveContext.sceneSetupIndex == 0) && (this->unk_3EC == 0) && (play->csCtx.currentCsIndex == 1))) {
         ret = true;
@@ -1081,7 +1082,7 @@ void func_80A137C0(EnGo* this, PlayState* play, f32 arg2, f32 arg3) {
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, frames1, 0x20, 0x10, 1, 0, frames2, 0x40, 0x20));
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, (u8)arg3);
-        gSPDisplayList(POLY_XLU_DISP++, &gameplay_keep_DL_050D10);
+        gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment3DL);
 
         CLOSE_DISPS(play->state.gfxCtx);
 

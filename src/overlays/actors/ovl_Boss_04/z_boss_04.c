@@ -259,19 +259,19 @@ void func_809EC568(Boss04* this, PlayState* play) {
                     this->unk_708 = 10;
                     this->unk_704 = 0;
                     Cutscene_Start(play, &play->csCtx);
-                    this->unk_70A = Play_CreateSubCamera(play);
-                    Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-                    Play_CameraChangeStatus(play, this->unk_70A, CAM_STATUS_ACTIVE);
+                    this->subCamId = Play_CreateSubCamera(play);
+                    Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                    Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
                     func_800B7298(play, &this->actor, 7);
                     player->actor.world.pos.x = this->unk_6E8;
                     player->actor.world.pos.z = this->unk_6F0 + 410.0f;
                     player->actor.shape.rot.y = 0x7FFF;
                     player->actor.world.rot.y = player->actor.shape.rot.y;
-                    Math_Vec3f_Copy(&this->unk_70C, &player->actor.world.pos);
-                    this->unk_70C.y += 100.0f;
-                    Math_Vec3f_Copy(&this->unk_718, &this->actor.world.pos);
+                    Math_Vec3f_Copy(&this->subCamEye, &player->actor.world.pos);
+                    this->subCamEye.y += 100.0f;
+                    Math_Vec3f_Copy(&this->subCamAt, &this->actor.world.pos);
                     func_8016566C(150);
-                    this->unk_744 = 60.0f;
+                    this->subCamFov = 60.0f;
 
                     boss = play->actorCtx.actorLists[ACTORCAT_BOSS].first;
                     while (boss != NULL) {
@@ -293,7 +293,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
             }
             this->unk_2D0 = 10000.0f;
             this->unk_2C8 = 300;
-            Math_ApproachF(&this->unk_744, 20.0f, 0.3f, 11.0f);
+            Math_ApproachF(&this->subCamFov, 20.0f, 0.3f, 11.0f);
             if (this->unk_704 == 40) {
                 this->unk_708 = 11;
                 this->unk_704 = 0;
@@ -319,9 +319,9 @@ void func_809EC568(Boss04* this, PlayState* play) {
 
         case 12:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_ATTACK - SFX_FLAG);
-            Math_ApproachF(&this->unk_718.x, this->actor.world.pos.x, 0.5f, 1000.0f);
-            Math_ApproachF(&this->unk_718.y, this->actor.world.pos.y, 0.5f, 1000.0f);
-            Math_ApproachF(&this->unk_718.z, this->actor.world.pos.z, 0.5f, 1000.0f);
+            Math_ApproachF(&this->subCamAt.x, this->actor.world.pos.x, 0.5f, 1000.0f);
+            Math_ApproachF(&this->subCamAt.y, this->actor.world.pos.y, 0.5f, 1000.0f);
+            Math_ApproachF(&this->subCamAt.z, this->actor.world.pos.z, 0.5f, 1000.0f);
             if (this->actor.bgCheckFlags & 2) {
                 play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
                 this->unk_6F4 = 15;
@@ -331,22 +331,22 @@ void func_809EC568(Boss04* this, PlayState* play) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
                             this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SPLASH);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
-                this->unk_748 = 20;
+                this->subCamAtOscillator = 20;
             }
             break;
 
         case 1:
             player->actor.shape.rot.y = 0x7FFF;
             player->actor.world.rot.y = player->actor.shape.rot.y;
-            Matrix_MultVecZ(-100.0f, &this->unk_70C);
+            Matrix_MultVecZ(-100.0f, &this->subCamEye);
 
-            this->unk_70C.x += player->actor.world.pos.x;
-            this->unk_70C.y = Player_GetHeight(player) + player->actor.world.pos.y + 36.0f;
-            this->unk_70C.z += player->actor.world.pos.z;
+            this->subCamEye.x += player->actor.world.pos.x;
+            this->subCamEye.y = Player_GetHeight(player) + player->actor.world.pos.y + 36.0f;
+            this->subCamEye.z += player->actor.world.pos.z;
 
-            this->unk_718.x = player->actor.world.pos.x;
-            this->unk_718.y = (Player_GetHeight(player) + player->actor.world.pos.y) - 4.0f;
-            this->unk_718.z = player->actor.world.pos.z;
+            this->subCamAt.x = player->actor.world.pos.x;
+            this->subCamAt.y = (Player_GetHeight(player) + player->actor.world.pos.y) - 4.0f;
+            this->subCamAt.z = player->actor.world.pos.z;
 
             if (this->unk_704 >= 35) {
                 this->unk_704 = 0;
@@ -357,13 +357,13 @@ void func_809EC568(Boss04* this, PlayState* play) {
 
         case 2:
         case 3:
-            Matrix_MultVecZ(500.0f, &this->unk_70C);
-            this->unk_70C.x += this->actor.world.pos.x;
-            this->unk_70C.y += this->actor.world.pos.y - 50.0f;
-            this->unk_70C.z += this->actor.world.pos.z;
-            this->unk_718.x = this->actor.world.pos.x;
-            this->unk_718.z = this->actor.world.pos.z;
-            this->unk_718.y = (this->actor.world.pos.y - 70.0f) + this->unk_728;
+            Matrix_MultVecZ(500.0f, &this->subCamEye);
+            this->subCamEye.x += this->actor.world.pos.x;
+            this->subCamEye.y += this->actor.world.pos.y - 50.0f;
+            this->subCamEye.z += this->actor.world.pos.z;
+            this->subCamAt.x = this->actor.world.pos.x;
+            this->subCamAt.z = this->actor.world.pos.z;
+            this->subCamAt.y = (this->actor.world.pos.y - 70.0f) + this->unk_728;
             Math_ApproachZeroF(&this->unk_728, 0.05f, this->unk_73C);
             Math_ApproachF(&this->unk_73C, 3.0f, 1.0f, 0.05f);
             if (this->unk_704 == 20) {
@@ -379,15 +379,15 @@ void func_809EC568(Boss04* this, PlayState* play) {
             }
 
             if (this->unk_704 > 140) {
-                Camera* sp5C = Play_GetCamera(play, CAM_ID_MAIN);
+                Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
                 this->unk_708 = 0;
                 func_809ECD00(this, play);
-                sp5C->eye = this->unk_70C;
-                sp5C->eyeNext = this->unk_70C;
-                sp5C->at = this->unk_718;
-                func_80169AFC(play, this->unk_70A, 0);
-                this->unk_70A = 0;
+                mainCam->eye = this->subCamEye;
+                mainCam->eyeNext = this->subCamEye;
+                mainCam->at = this->subCamAt;
+                func_80169AFC(play, this->subCamId, 0);
+                this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_End(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 6);
                 func_80165690();
@@ -396,18 +396,18 @@ void func_809EC568(Boss04* this, PlayState* play) {
             break;
     }
 
-    if (this->unk_70A != 0) {
-        Vec3f sp50;
+    if (this->subCamId != SUB_CAM_ID_DONE) {
+        Vec3f subCamAt;
 
         ShrinkWindow_SetLetterboxTarget(27);
-        if (this->unk_748 != 0) {
-            this->unk_748--;
+        if (this->subCamAtOscillator != 0) {
+            this->subCamAtOscillator--;
         }
-        Math_Vec3f_Copy(&sp50, &this->unk_718);
-        sp50.y += Math_SinS(this->unk_748 * 0x4000) * this->unk_748 * 1.5f;
-        Play_CameraSetAtEye(play, this->unk_70A, &sp50, &this->unk_70C);
-        Play_CameraSetFov(play, this->unk_70A, this->unk_744);
-        Math_ApproachF(&this->unk_744, 60.0f, 0.1f, 1.0f);
+        Math_Vec3f_Copy(&subCamAt, &this->subCamAt);
+        subCamAt.y += Math_SinS(this->subCamAtOscillator * 0x4000) * this->subCamAtOscillator * 1.5f;
+        Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &this->subCamEye);
+        Play_SetCameraFov(play, this->subCamId, this->subCamFov);
+        Math_ApproachF(&this->subCamFov, 60.0f, 0.1f, 1.0f);
     }
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     x = player->actor.world.pos.x - this->actor.world.pos.x;

@@ -612,7 +612,7 @@ void func_80B943EC(EnZog* this, PlayState* play) {
 }
 
 void func_80B94470(EnZog* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x103C)) {
             func_801477B4(play);
             this->actionFunc = func_80B9451C;
@@ -629,7 +629,8 @@ void func_80B9451C(EnZog* this, PlayState* play) {
         this->unk_300 = 2;
         this->actionFunc = func_80B94470;
     } else if ((play->msgCtx.ocarinaMode == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
-        if ((play->msgCtx.unk1202E == 7) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
+            (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
             func_80B93BA8(this, 2);
             this->actionFunc = func_80B943C0;
             this->actor.shape.shadowDraw = NULL;
@@ -663,12 +664,12 @@ void func_80B946B4(EnZog* this, PlayState* play) {
 
 void func_80B946FC(EnZog* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        play->msgCtx.unk11F10 = 0;
+                        play->msgCtx.msgLength = 0;
                         this->actionFunc = func_80B946B4;
                         func_80B93BA8(this, 1);
                         break;
@@ -681,7 +682,7 @@ void func_80B946FC(EnZog* this, PlayState* play) {
             }
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1008:
@@ -717,7 +718,8 @@ void func_80B948A8(EnZog* this, PlayState* play) {
         this->unk_300 = 2;
         this->actionFunc = func_80B946FC;
     } else if ((play->msgCtx.ocarinaMode == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
-        if ((play->msgCtx.unk1202E == 7) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
+            (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
             func_80B93BA8(this, 2);
             this->actionFunc = func_80B943C0;
             this->actor.shape.shadowDraw = NULL;
@@ -827,7 +829,7 @@ void func_80B94D0C(EnZog* this, PlayState* play) {
         this->unk_31E = 0;
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->unk_320 = 5;
         switch (play->msgCtx.currentTextId) {
             case 0x1004:

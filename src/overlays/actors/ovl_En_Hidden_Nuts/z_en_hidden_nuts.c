@@ -182,7 +182,7 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
     }
 
     if (!(this->actor.xzDistToPlayer > 120.0f)) {
-        if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.unk1202E == 0)) {
+        if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_SONATA)) {
             play->msgCtx.ocarinaMode = 4;
             func_80BDB788(this);
         } else if (func_801A5100() == 2) {
@@ -223,7 +223,7 @@ void func_80BDB59C(EnHiddenNuts* this, PlayState* play) {
         this->unk_218 = 30;
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         func_80BDB268(this);
     }
