@@ -9,6 +9,16 @@ struct EnNb;
 typedef void (*EnNbActionFunc)(struct EnNb*, PlayState*);
 typedef s32 (*EnNbActionFunc2)(struct EnNb*, PlayState*);
 
+typedef enum EnNbAnimation {
+    /* -1 */ EN_NB_ANIM_INVALID = -1,
+    /*  0 */ EN_NB_ANIM_0,
+    /*  1 */ EN_NB_ANIM_1,
+    /*  2 */ EN_NB_ANIM_2,
+    /*  3 */ EN_NB_ANIM_3,
+    /*  4 */ EN_NB_ANIM_4,
+    /*  5 */ EN_NB_ANIM_5,
+} EnNbAnimation;
+
 typedef struct EnNb {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -24,9 +34,8 @@ typedef struct EnNb {
     /* 0x1FC */ Vec3s unk_1FC;
     /* 0x202 */ Vec3s jointTable[OBJECT_NB_LIMB_MAX];
     /* 0x232 */ Vec3s morphTable[OBJECT_NB_LIMB_MAX];
-    /* 0x262 */ u16 unk_262; // bitpack
+    /* 0x262 */ u16 stateFlags;
     /* 0x264 */ u16 textId;
-    /* 0x266 */ char unk_266[0x02];
     /* 0x268 */ f32 animPlaySpeed;
     /* 0x26C */ f32 unk_26C; // Related to unk_270
     /* 0x270 */ f32 unk_270; // headDisplacement? controls how much the upper part of the head moves when she talks
@@ -39,13 +48,23 @@ typedef struct EnNb {
     /* 0x284 */ s16 unk_284; // storyState?
     /* 0x286 */ s16 unk_286; // another timer?
     /* 0x288 */ s16 unk_288;
-    /* 0x28A */ char unk_28A[0x02];
     /* 0x28C */ EnNbActionFunc2 unk_28C;
-    /* 0x290 */ s32 animIndex;
+    /* 0x290 */ EnNbAnimation animIndex;
     /* 0x294 */ char unk_294[0x4];
     /* 0x294 */ TextState prevTalkState;
 } EnNb; // size = 0x29C
 
-extern const ActorInit En_Nb_InitVars;
+#define EN_NB_FLAG_NONE (0)
+#define EN_NB_FLAG_1    (1 << 0)
+#define EN_NB_FLAG_2    (1 << 1)
+#define EN_NB_FLAG_4    (1 << 2)
+#define EN_NB_FLAG_8    (1 << 3)
+#define EN_NB_FLAG_10   (1 << 4)
+#define EN_NB_FLAG_20   (1 << 5)
+#define EN_NB_FLAG_40   (1 << 6)
+#define EN_NB_FLAG_80   (1 << 7)
+#define EN_NB_FLAG_100  (1 << 8)
+#define EN_NB_FLAG_200  (1 << 9)
+#define EN_NB_FLAG_400  (1 << 10)
 
 #endif // Z_EN_NB_H

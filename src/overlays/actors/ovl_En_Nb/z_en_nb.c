@@ -123,16 +123,6 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-typedef enum EnNbAnimation {
-    /* -1 */ EN_NB_ANIM_INVALID = -1,
-    /*  0 */ EN_NB_ANIM_0,
-    /*  1 */ EN_NB_ANIM_1,
-    /*  2 */ EN_NB_ANIM_2,
-    /*  3 */ EN_NB_ANIM_3,
-    /*  4 */ EN_NB_ANIM_4,
-    /*  5 */ EN_NB_ANIM_5,
-} EnNbAnimation;
-
 static AnimationInfoS sAnimationInfo[] = {
     { &object_nb_Anim_000990, 1.0f, 0, -1, 0, 0 },   // EN_NB_ANIM_0
     { &object_nb_Anim_000990, 1.0f, 0, -1, 0, -4 }, // EN_NB_ANIM_1
@@ -373,22 +363,22 @@ UNK_PTR func_80BC045C(EnNb* this, PlayState* play) {
 }
 
 s32 func_80BC04FC(EnNb* this, PlayState* play) {
-    s32 phi_v1 = 0;
+    s32 ret = false;
 
-    if (this->unk_262 & 7) {
+    if (this->stateFlags & (EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4)) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            this->unk_262 |= 0x20;
-            SubS_UpdateFlags(&this->unk_262, 0, 7);
+            this->stateFlags |= EN_NB_FLAG_20;
+            SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_NONE, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
             this->unk_288 = 0;
             this->unk_28C = NULL;
             this->actor.child = this->unk_1E8;
             this->unk_1E0 = func_80BC045C(this, play);
-            this->unk_262 |= 0x20;
+            this->stateFlags |= EN_NB_FLAG_20;
             this->actionFunc = func_80BC0EAC;
-            phi_v1 = 1;
+            ret = true;
         }
     }
-    return phi_v1;
+    return ret;
 }
 
 void func_80BC05A8(EnNb* this, PlayState* play) {
@@ -442,24 +432,24 @@ void func_80BC06C4(EnNb* this) {
 }
 
 void func_80BC0800(EnNb* this) {
-    if (this->unk_262 & 0x20) {
+    if (this->stateFlags & EN_NB_FLAG_20) {
         if ((this->unk_1E8 != NULL) && (this->unk_1E8->update != NULL)) {
             if (DECR(this->unk_282) == 0) {
                 func_80BC06C4(this);
-                this->unk_262 &= ~0x400;
-                this->unk_262 |= 0x100;
+                this->stateFlags &= ~EN_NB_FLAG_400;
+                this->stateFlags |= EN_NB_FLAG_100;
                 return;
             }
         }
     }
 
-    if (this->unk_262 & 0x100) {
-        this->unk_262 &= ~0x100;
+    if (this->stateFlags & EN_NB_FLAG_100) {
+        this->stateFlags &= ~EN_NB_FLAG_100;
         this->headRot = 0;
         this->unk_27E = 0;
         this->unk_282 = 20;
     } else if (DECR(this->unk_282) == 0) {
-        this->unk_262 |= 0x400;
+        this->stateFlags |= EN_NB_FLAG_400;
     }
 }
 
@@ -467,11 +457,11 @@ void func_80BC0800(EnNb* this) {
 void func_80BC08E0(EnNb* this, PlayState* play) {
     if (this->unk_284 == 0) {
         EnNb_ChangeAnim(this, EN_NB_ANIM_2);
-        this->unk_262 |= 0x400;
+        this->stateFlags |= EN_NB_FLAG_400;
         this->unk_284++;
     } else if ((this->unk_284 == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         EnNb_ChangeAnim(this, EN_NB_ANIM_1);
-        this->unk_262 &= 0xFBFF;
+        this->stateFlags &= ~EN_NB_FLAG_400;
         this->unk_284++;
     }
 }
@@ -479,13 +469,13 @@ void func_80BC08E0(EnNb* this, PlayState* play) {
 void func_80BC0978(EnNb* this, PlayState* play) {
     if (this->unk_284 == 0) {
         EnNb_ChangeAnim(this, EN_NB_ANIM_5);
-        this->unk_262 &= ~0x20;
-        this->unk_262 |= 0x400;
-        this->unk_284 += 1;
+        this->stateFlags &= ~EN_NB_FLAG_20;
+        this->stateFlags |= EN_NB_FLAG_400;
+        this->unk_284++;
     } else if ((this->unk_284 == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         EnNb_ChangeAnim(this, EN_NB_ANIM_3);
-        this->unk_262 &= ~0x400;
-        this->unk_284 += 1;
+        this->stateFlags &= ~EN_NB_FLAG_400;
+        this->unk_284++;
     }
 }
 
@@ -493,13 +483,13 @@ s32 func_80BC0A18(EnNb* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 currentTextId = play->msgCtx.currentTextId;
 
-    if (player->stateFlags1 & 0x40) {
-        this->unk_262 |= 0x80;
+    if (player->stateFlags1 & PLAYER_STATE1_40) {
+        this->stateFlags |= EN_NB_FLAG_80;
 
         if (this->textId != currentTextId) {
             switch (currentTextId) {
                 case 0x28CF:
-                    this->unk_262 |= 0x20;
+                    this->stateFlags |= EN_NB_FLAG_20;
                     EnNb_ChangeAnim(this, EN_NB_ANIM_3);
                     break;
 
@@ -530,10 +520,10 @@ s32 func_80BC0A18(EnNb* this, PlayState* play) {
         }
 
         this->textId = currentTextId;
-    } else if (this->unk_262 & 0x80) {
+    } else if (this->stateFlags & EN_NB_FLAG_80) {
         this->unk_18C = NULL;
         this->textId = 0;
-        this->unk_262 &= ~0x80;
+        this->stateFlags &= ~EN_NB_FLAG_80;
         EnNb_ChangeAnim(this, EN_NB_ANIM_1);
     }
 
@@ -548,8 +538,8 @@ s32 func_80BC0B98(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 success = false;
 
     if (EnNb_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AN) != NULL) {
-        SubS_UpdateFlags(&this->unk_262, 3, 7);
-        this->unk_262 |= 0x20;
+        SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_1 | EN_NB_FLAG_2, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
+        this->stateFlags |= EN_NB_FLAG_20;
         EnNb_ChangeAnim(this, EN_NB_ANIM_0);
         success = true;
     }
@@ -559,9 +549,9 @@ s32 func_80BC0B98(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
 s32 func_80BC0C0C(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     if (!(gSaveContext.eventInf[4] & 8)) {
-        SubS_UpdateFlags(&this->unk_262, 3, 7);
+        SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_1 | EN_NB_FLAG_2, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
     } else {
-        SubS_UpdateFlags(&this->unk_262, 4, 7);
+        SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_4, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
     }
     EnNb_ChangeAnim(this, EN_NB_ANIM_0);
 
@@ -573,7 +563,7 @@ s32 EnNb_ProcessScheduleOutput(EnNb* this, PlayState* play, ScheduleOutput* sche
 
     this->actor.flags |= ACTOR_FLAG_1;
     this->actor.targetMode = 0;
-    this->unk_262 = 0;
+    this->stateFlags = EN_NB_FLAG_NONE;
     this->unk_274 = 40.0f;
 
     switch (scheduleOutput->result) {
@@ -617,7 +607,7 @@ void EnNb_FollowSchedule(EnNb* this, PlayState* play) {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_1;
     } else if ((!Schedule_RunScript(play, sScheduleScript, &scheduleResult)) ||
-               ((this->schResultValue != scheduleResult.result) && !EnNb_ProcessScheduleOutput(this, play, &scheduleResult.result))) {
+               ((this->schResultValue != scheduleResult.result) && !EnNb_ProcessScheduleOutput(this, play, &scheduleResult))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_1;
         scheduleResult.result = EN_NB_SCH_NONE;
@@ -638,13 +628,13 @@ void func_80BC0EAC(EnNb* this, PlayState* play) {
             gSaveContext.eventInf[4] &= (u8)~8;
         }
 
-        SubS_UpdateFlags(&this->unk_262, 3, 7);
+        SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_1 | EN_NB_FLAG_2, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
         if (this->schResultValue != EN_NB_SCH_2) {
-            this->unk_262 &= ~0x20;
+            this->stateFlags &= ~EN_NB_FLAG_20;
         }
 
         this->actor.child = NULL;
-        this->unk_262 |= 0x400;
+        this->stateFlags |= EN_NB_FLAG_400;
         this->unk_282 = 20;
         this->unk_1E4 = 0;
         this->actionFunc = EnNb_FollowSchedule;
@@ -664,10 +654,10 @@ void EnNb_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
-    this->unk_262 = 0;
+    this->stateFlags = EN_NB_FLAG_NONE;
 
     if (gSaveContext.eventInf[4] & 8) {
-        SubS_UpdateFlags(&this->unk_262, 4, 1 | 2 | 4);
+        SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_4, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
     } else {
         gSaveContext.eventInf[4] &= (u8)~4;
         gSaveContext.eventInf[4] &= (u8)~8;
@@ -695,7 +685,7 @@ void EnNb_Update(Actor* thisx, PlayState* play) {
         func_80BBFE60(this);
         func_80BC0800(this);
         if (Actor_IsFacingPlayer(&this->actor, 0x38E0)) {
-            func_8013C964(&this->actor, play, this->unk_274, 30.0f, 0, this->unk_262 & 7);
+            func_8013C964(&this->actor, play, this->unk_274, 30.0f, ITEM_OCARINA, this->stateFlags & (EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4));
         }
         func_80BBFF24(this, play);
     }
@@ -713,13 +703,13 @@ s32 EnNb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
 void EnNb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnNb* this = THIS;
-    Vec3f sp18;
+    Vec3f focusTarget;
 
     if ((ActorCutscene_GetCurrentIndex() == -1) && (limbIndex == OBJECT_NB_LIMB_05)) {
-        Matrix_MultVec3f(&gZeroVec3f, &sp18);
-        Math_ApproachF(&thisx->focus.pos.x, sp18.x, 0.6f, 10000.0f);
-        Math_ApproachF(&thisx->focus.pos.y, sp18.y, 0.6f, 10000.0f);
-        Math_ApproachF(&thisx->focus.pos.z, sp18.z, 0.6f, 10000.0f);
+        Matrix_MultVec3f(&gZeroVec3f, &focusTarget);
+        Math_ApproachF(&thisx->focus.pos.x, focusTarget.x, 0.6f, 10000.0f);
+        Math_ApproachF(&thisx->focus.pos.y, focusTarget.y, 0.6f, 10000.0f);
+        Math_ApproachF(&thisx->focus.pos.z, focusTarget.z, 0.6f, 10000.0f);
         Math_Vec3s_Copy(&thisx->focus.rot, &thisx->world.rot);
     }
 }
@@ -729,9 +719,9 @@ void EnNb_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     s32 stepRot;
     s32 overrideRot;
 
-    if (!(this->unk_262 & 0x400)) {
+    if (!(this->stateFlags & EN_NB_FLAG_400)) {
         overrideRot = false;
-        if (this->unk_262 & 0x100) {
+        if (this->stateFlags & EN_NB_FLAG_100) {
             overrideRot = true;
             stepRot = true;
         } else {
