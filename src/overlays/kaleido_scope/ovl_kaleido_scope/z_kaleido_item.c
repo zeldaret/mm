@@ -274,6 +274,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
     gDPPipeSync(POLY_OPA_DISP++);
 
     // Draw the item icons
+    // Loop over slots (i) and vtx offset (j)
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     for (j = 0, i = 0; i < 24; i++, j += 4) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
@@ -322,6 +323,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
             func_8012C628(play->state.gfxCtx);
             gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
+            // Loop over slots (i) and ammoIndex (j)
             for (j = 0, i = 0; i < 24; i++) {
                 if (gAmmoItems[i] != ITEM_NONE) {
                     if (((void)0, gSaveContext.save.inventory.items[i]) != ITEM_NONE) {
