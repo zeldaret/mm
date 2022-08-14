@@ -8116,41 +8116,32 @@ void func_8083C85C(Player* this) {
     this->unk_AA6 |= 0x48;
 }
 
-#ifdef NON_EQUIVALENT
-// may be equivalent
 void func_8083C8E8(Player* this, PlayState* play) {
     if ((func_800B7128(this) == 0) && (func_8082EF20(this) == 0) &&
         ((this->linearVelocity > 5.0f) || (D_80862B3C != 0.0f))) {
-        s16 var_a3; // sp24
-        s16 var_a1;
-        s16 var_a1_2;
-        float new_var;
+        s16 temp1;
+        s16 temp2;
 
-        new_var = this->linearVelocity * 200.0f;
-        var_a3 = BINANG_SUB(this->currentYaw, this->actor.shape.rot.y) * this->linearVelocity * 0.1f;
+        temp1 = this->linearVelocity * 200.0f;
+        temp2 = BINANG_SUB(this->currentYaw, this->actor.shape.rot.y) * this->linearVelocity * 0.1f;
 
-        var_a1_2 = CLAMP((s16)new_var, -0xFA0, 0xFA0);
-        var_a1 = var_a1_2;
+        temp1 = CLAMP(temp1, -0xFA0, 0xFA0);
 
-        var_a1_2 = var_a1 + (s32)(D_80862B3C * -500.0f);
+        temp1 += (s16)(s32)(D_80862B3C * -500.0f);
 
-        var_a1_2 = CLAMP(var_a1_2, -0x2EE0, 0x2EE0);
+        temp1 = CLAMP(temp1, -0x2EE0, 0x2EE0);
 
-        var_a3 = CLAMP(-var_a3, -0xFA0, 0xFA0);
+        temp2 = CLAMP(-temp2, -0xFA0, 0xFA0);
 
-        Math_ScaledStepToS(&this->unk_AB2.x, var_a1_2, 0x384);
-        this->unk_AAC.x = (-(f32)this->unk_AB2.x * 0.5f);
-        Math_ScaledStepToS(&this->unk_AAC.z, var_a3, 0x12C);
-        Math_ScaledStepToS(&this->unk_AB2.z, var_a3, 0xC8);
+        Math_ScaledStepToS(&this->unk_AB2.x, temp1, 0x384);
+        this->unk_AAC.x = -(f32)this->unk_AB2.x * 0.5f;
+        Math_ScaledStepToS(&this->unk_AAC.z, temp2, 0x12C);
+        Math_ScaledStepToS(&this->unk_AB2.z, temp2, 0xC8);
         this->unk_AA6 |= 0x168;
     } else {
         func_8083C6E8(this, play);
     }
 }
-#else
-void func_8083C8E8(Player* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083C8E8.s")
-#endif
 
 void func_8083CB04(Player* this, f32 arg1, s16 arg2, f32 arg3, f32 arg4, s16 arg5) {
     Math_AsymStepToF(&this->linearVelocity, arg1, arg3, arg4);
