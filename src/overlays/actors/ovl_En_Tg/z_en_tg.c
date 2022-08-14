@@ -17,10 +17,10 @@ void EnTg_Destroy(Actor* thisx, PlayState* play);
 void EnTg_Update(Actor* thisx, PlayState* play);
 void EnTg_Draw(Actor* thisx, PlayState* play);
 
-void func_8098FA70(EnTg* this, PlayState* play);
-void func_8098FEA8(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len);
-void func_8099000C(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len);
-void func_8098FD50(EnTg* this, EnTgHeartInfo* enTgHeartInfo, Vec3f* heartStartPos, s32 len);
+void EnTg_Idle(EnTg* this, PlayState* play);
+void EnTg_UpdateHeartPath(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len);
+void EnTg_DrawHeart(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len);
+void EnTg_SpawnFirstHeart(EnTg* this, EnTgHeartInfo* enTgHeartInfo, Vec3f* heartStartPos, s32 len);
 
 const ActorInit En_Tg_InitVars = {
     ACTOR_EN_TG,
@@ -123,9 +123,8 @@ void EnTg_UpdateCollider(EnTg* this, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-// EnTg_UpdateSkelAnime
-// func_8098F928
-void func_8098F928(EnTg* this, PlayState* play) {
+// EnTg_UpdateSkelAnime - func_8098F928
+void EnTg_UpdateSkelAnime(EnTg* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
 
@@ -139,7 +138,7 @@ void EnTg_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
-    this->actionFunc = func_8098FA70;
+    this->actionFunc = EnTg_Idle;
     this->actor.gravity = -4.0f;
 }
 
@@ -149,9 +148,8 @@ void EnTg_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-// EnTg_Idle?
-// func_8098FA70
-void func_8098FA70(EnTg* this, PlayState* play) {
+// EnTg_Idle - func_8098FA70
+void EnTg_Idle(EnTg* this, PlayState* play) {
     Vec3f heartStartPos;
 
     // TODO: this is what causes the actor to spin
@@ -163,7 +161,7 @@ void func_8098FA70(EnTg* this, PlayState* play) {
         this->spawnHeartTimer = 12;
         heartStartPos = this->actor.world.pos;
         heartStartPos.y += 62.0f;
-        func_8098FD50(this, &this->enTgHeartInfo, &heartStartPos, 10);
+        EnTg_SpawnFirstHeart(this, &this->enTgHeartInfo, &heartStartPos, 10);
     }
 }
 
@@ -172,21 +170,19 @@ void EnTg_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4U);
-    func_8098F928(this, play);
-    func_8098FEA8(play, &this->enTgHeartInfo, 10);
+    EnTg_UpdateSkelAnime(this, play);
+    EnTg_UpdateHeartPath(play, &this->enTgHeartInfo, 10);
     EnTg_UpdateCollider(this, play);
 }
 
-// EnTg_OverrideLimbDraw
-// func_8098FBB4
-s32 func_8098FBB4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+// EnTg_OverrideLimbDraw - func_8098FBB4
+s32 EnTg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTg* this = THIS;
     return 0;
 }
 
-// EnTg_PostLimbDraw
-// func_8098FBD0
-void func_8098FBD0(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+// EnTg_PostLimbDraw - func_8098FBD0
+void EnTg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnTg* this = THIS;
 
     Vec3f zeroVec = D_80990228; // { 0.0f, 0.0f, 0.0f };
@@ -202,7 +198,7 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
     GraphicsContext* gfxCtx;
 
     Matrix_Push();
-    func_8099000C(play, &this->enTgHeartInfo, 10);
+    EnTg_DrawHeart(play, &this->enTgHeartInfo, 10);
     Matrix_Pop();
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -213,26 +209,22 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(play->state.gfxCtx, 0xFF, 0xFF, 0xFF, 0));
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32)this->skelAnime.dListCount,
-                          func_8098FBB4, func_8098FBD0, &this->actor);
+                          EnTg_OverrideLimbDraw, EnTg_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-// EnTg_SpawnHeart
-// func_8098FD50
+// EnTg_SpawnFirstHeart - func_8098FD50
 /**
  * This function is always called with the same heartStartPos and len = 10.
+ * Sets all the flags and a path for when the first heart (of two) is spawned.
  */
-void func_8098FD50(EnTg* this, EnTgHeartInfo* enTgHeartInfo, Vec3f* heartStartPos, s32 len) {
+void EnTg_SpawnFirstHeart(EnTg* this, EnTgHeartInfo* enTgHeartInfo, Vec3f* heartStartPos, s32 len) {
     Vec3f heartVelocityVec = D_80990234; // { 0.0f, 1.5f, 0.0f };
     Vec3f zeroVec = D_80990240;          // { 0.0f, 0.0f, 0.0f };
     s32 i = 0;
 
-    // TODO: this loop and if is confusing
-    while ((i < len) && enTgHeartInfo->isFirstHeartSpawned) {
-        i++;
-        enTgHeartInfo++;
-    }
+    for (i = 0; i < len && enTgHeartInfo->isFirstHeartSpawned; i++, enTgHeartInfo++) {}
 
     if (i < len) {
         enTgHeartInfo->isFirstHeartSpawned = true;
@@ -252,7 +244,7 @@ void func_8098FD50(EnTg* this, EnTgHeartInfo* enTgHeartInfo, Vec3f* heartStartPo
  * The heart path is curvy as it floats up because of the use of Math_SinS and Math_CosS.
  * The first heart spawned sets the path, the second heart spawned follows it.
  */
-void func_8098FEA8(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len) {
+void EnTg_UpdateHeartPath(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len) {
     Vec3f zeroVec = D_8099024C;
     s16 yaw = Camera_GetInputDirYaw(GET_ACTIVE_CAM(play));
     s32 i;
@@ -278,8 +270,8 @@ void func_8098FEA8(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len) {
     }
 }
 
-// Called in Draw... draws the heart(s)?
-void func_8099000C(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len) {
+// EnTg_DrawHeart - func_8099000C
+void EnTg_DrawHeart(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len) {
     s32 i;
     s32 flag = false;
 
