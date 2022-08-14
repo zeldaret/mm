@@ -22,7 +22,7 @@ s16 sEquipMagicArrowSlotHoldTimer = 0;
 // Number of frames to move icon from slot to target position when equipping.
 s16 sEquipAnimTimer = 10;
 
-u8 gPlayerFormSlotRestrictions[5][24] = {
+u8 gPlayerFormSlotRestrictions[PLAYER_FORM_MAX][24] = {
     // Fierce Deity
     {
         false, // SLOT_OCARINA
@@ -189,7 +189,7 @@ void KaleidoScope_DrawAmmoCount(PauseContext* pauseCtx, GraphicsContext* gfxCtx,
     OPEN_DISPS(gfxCtx);
 
     if (item == ITEM_PICTO_BOX) {
-        if (!(((void)0, gSaveContext.save.inventory.questItems) & (gBitFlags[QUEST_PICTOGRAPH]))) {
+        if (!CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
             ammo = 0;
         } else {
             ammo = 1;
