@@ -8321,16 +8321,22 @@ s32 func_8083CF68(PlayState* play, Player* this) {
     return false;
 }
 
-void func_8083D168(PlayState* play, Player* this, GetItemEntry* arg2) {
-    s32 temp_v1 = arg2->unk_1 & 0x1F;
+void func_8083D168(PlayState* play, Player* this, GetItemEntry* giEntry) {
+    Item00Type droppedItem = giEntry->unk_1 & 0x1F;
 
-    if ((arg2->unk_1 & 0x80) ||
-        ((Item_DropCollectible(play, &this->actor.world.pos, temp_v1 | 0x8000), (temp_v1 != 4)) && (temp_v1 != 8) &&
-         (temp_v1 != 9) && (temp_v1 != 0xA) && (temp_v1 != 0) && (temp_v1 != 1) && (temp_v1 != 2) &&
-         (temp_v1 != 0x14) && (temp_v1 != 0x13))) {
-        Item_Give(play, arg2->itemId);
-        play_sound((this->getItemId < 0) ? NA_SE_SY_GET_BOXITEM : NA_SE_SY_GET_ITEM);
+    if (!(giEntry->unk_1 & 0x80)) {
+        Item_DropCollectible(play, &this->actor.world.pos, droppedItem | 0x8000);
+
+        if ((droppedItem == ITEM00_BOMBS_A) || (droppedItem == ITEM00_ARROWS_30) || (droppedItem == ITEM00_ARROWS_40) ||
+            (droppedItem == ITEM00_ARROWS_50) || (droppedItem == ITEM00_RUPEE_GREEN) ||
+            (droppedItem == ITEM00_RUPEE_BLUE) || (droppedItem == ITEM00_RUPEE_RED) ||
+            (droppedItem == ITEM00_RUPEE_PURPLE) || (droppedItem == ITEM00_RUPEE_HUGE)) {
+            return;
+        }
     }
+
+    Item_Give(play, giEntry->itemId);
+    play_sound((this->getItemId < 0) ? NA_SE_SY_GET_BOXITEM : NA_SE_SY_GET_ITEM);
 }
 
 s32 func_8083D23C(Player* this, PlayState* play) {
