@@ -149,7 +149,7 @@ s32 EnBubble_Explosion(EnBubble* this, PlayState* play) {
 }
 
 s32 func_8089F8BC(EnBubble* this) {
-    if (DECR(this->explosionCountdown)) {
+    if (DECR(this->explosionCountdown) != 0) {
         return -1;
     } else {
         return func_8089F5D0(this);
