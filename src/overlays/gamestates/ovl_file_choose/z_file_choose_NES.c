@@ -26,29 +26,117 @@ extern void* D_010310F0[];
 // there are uses of D_0E000000.fillRect (appearing as D_0E0002E0) in this file
 extern GfxMasterList D_0E000000;
 
-extern s16 fileChooseSkyboxRotation;
+s16 D_80814280[] = {
+    0x0002, 0x0003, 0x0002, 0x0002, 0x0002, 0x0002, 0x0002, 0x0002, 0x0002, 0x0002, 0x0001, 0x0002, 0x0000, 0x0001,
+    0x0001, 0x0002, 0x0001, 0x0001, 0x0004, 0x0002, 0x0002, 0x0002, 0x0001, 0x0001, 0x0000, 0x0002, 0x0000, 0x0001,
+    0x0001, 0x0001, 0x0001, 0x0001, 0x0000, 0x0001, 0x0001, 0x0001, 0x0002, 0x0002, 0x0002, 0x0002, 0x0002, 0x0003,
+    0x0002, 0x0002, 0x0004, 0x0003, 0x0002, 0x0004, 0x0001, 0x0002, 0x0002, 0x0001, 0x0001, 0x0002, 0x0002, 0x0003,
+    0x0002, 0x0002, 0x0000, 0x0002, 0x0002, 0x0002, 0x0000, 0x0003, 0x0001, 0x0000,
+};
+
+s32 D_80814304[] = {
+    0x00010002, 0x00000001, 0x00010002, 0x00010001, 0x00040002, 0x00020002, 0x00010001, 0x00000002,
+    0x00000001, 0x00010001, 0x00010001, 0x00000001, 0x00010001, 0x00020002, 0x00020002, 0x00020003,
+    0x00020002, 0x00040003, 0x00020004, 0x00010002, 0x00020001, 0x00010002, 0x00020003, 0x00020002,
+    0x00000002, 0x00020002, 0x00030002, 0x00020002, 0x00020002, 0x00020002, 0x00020002, 0x00010003,
+};
+
+s32 D_80814384[] = {
+    0x00000001, 0x00000001, 0x00010001, 0x00010001, 0x00020001, 0x00010001, 0x00010001, 0x00000001,
+    0x00000001, 0x00010001, 0x00010001, 0x00000001, 0x00010001, 0x00010001, 0x00010001, 0x00010001,
+    0x00010001, 0x00020001, 0x00010002, 0x00010001, 0x00010001, 0x00010001, 0x00010001, 0x00010001,
+    0x00000001, 0x00010001, 0x00010001, 0x00010001, 0x00010001, 0x00010001, 0x00010001, 0x00010001,
+};
+
+s32 D_80814404[] = {
+    0xFFA2FFA0,
+    0xFFD00000,
+    0x00200040,
+};
+
+s32 D_80814410[] = {
+    0x0038002C,
+    0x002C001C,
+    0x001C002C,
+};
+
+s32 D_8081441C[] = { 0x0048FFD0, 0xFFD0FFD0, 0xFFD0FFD0 };
+
+s32 D_80814428[] = { 0x01021D30, 0x010217B0 };
+
+s32 D_80814430[] = {
+    0x001C002C,
+};
+
+s32 D_80814434[] = {
+    0xFFE2FFF0, 0xFFFA0004, 0x000E0018, 0x0022002C, 0x0036FFF0, 0xFFF00000,
+};
+
+s32 D_8081444C[] = {
+    0x00480045, 0x00450045, 0x00450045, 0x00450045, 0x00450045, 0x00450000,
+};
+
+s32 D_80814464[] = {
+    0x01007180, 0x00800010, 0x01008600, 0x00400010, 0x01008D00,
+    0x00400010, 0x01009700, 0x00600010, 0x01009D00, 0x00300011,
+};
+
+s32 D_8081448C[] = {
+    0x01008A00, 0x00300010, 0x01008300, 0x00300010, 0x01008000, 0x00300010,
+    0x01007D00, 0x00300010, 0x01009100, 0x00300010, 0x01009400, 0x00300010,
+};
+
+s16 D_808144BC = 0xFF;
+s16 D_808144C0 = 0xFF;
+s16 D_808144C4 = 0xFF;
+s16 D_808144C8 = 0;
+s16 D_808144CC = 0;
+s16 D_808144D0 = 0;
+s16 D_808144D4 = 1;
+s16 D_808144D8 = 20;
+s16 D_808144DC[] = { 0xFF, 0xFF, 0xFF, 0, 0xFF, 0xFF };
+
+s32 D_808144E8[] = {
+    0x00000000, 0x00000000, 0x00960096, 0x00000000, 0x00000000,
+    0x00000000, 0x00000064, 0x41000000, 0x42C80000, 0x00000000,
+};
+
+// sScreenFillSetupDL
+Gfx D_80814510[] = {
+    0xE7000000, 0x00000000, 0xD9C0F9FA, 0x00000000, 0xEF802C30,
+    0x00504340, 0xFCFFFFFF, 0xFFFDF6FB, 0xDF000000, 0x00000000,
+};
+
+// sFileInfoBoxPartWidths
+s16 D_80814538[] = {
+    0x0024, 0x0024, 0x0024, 0x0024, 0x0018, 0x001C, 0x001C, 0x0000,
+};
+
+// sWindowContentColors
+s16 D_80814548[] = { 100, 150, 255, 0 };
+
+s16 fileChooseSkyboxRotation = 0;
+
+s16 D_80814554[] = { 1, 0, 0, 0 };
 
 extern u32 D_801C6798[];
 
 #define gSramSlotOffsets D_801C6798
-#define GET_NEWF(sramCtx, slotNum, index) (sramCtx->readBuff[gSramSlotOffsets[slotNum] + offsetof(SaveContext, save.playerData.newf[index])])
-#define SLOT_OCCUPIED(sramCtx, slotNum) \
-    ((GET_NEWF(sramCtx, slotNum, 0) == 'Z') || \
-     (GET_NEWF(sramCtx, slotNum, 1) == 'E') || \
-     (GET_NEWF(sramCtx, slotNum, 2) == 'L') || \
-     (GET_NEWF(sramCtx, slotNum, 3) == 'D') || \
-     (GET_NEWF(sramCtx, slotNum, 4) == 'A') || \
-     (GET_NEWF(sramCtx, slotNum, 5) == '3'))
+#define GET_NEWF(sramCtx, slotNum, index) \
+    (sramCtx->readBuff[gSramSlotOffsets[slotNum] + offsetof(SaveContext, save.playerData.newf[index])])
+#define SLOT_OCCUPIED(sramCtx, slotNum)                                                  \
+    ((GET_NEWF(sramCtx, slotNum, 0) == 'Z') || (GET_NEWF(sramCtx, slotNum, 1) == 'E') || \
+     (GET_NEWF(sramCtx, slotNum, 2) == 'L') || (GET_NEWF(sramCtx, slotNum, 3) == 'D') || \
+     (GET_NEWF(sramCtx, slotNum, 4) == 'A') || (GET_NEWF(sramCtx, slotNum, 5) == '3'))
 
 #define GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, index) (fileChooseCtx->newf[slotNum][index])
-#define FILE_CHOOSE_SLOT_OCCUPIED(fileChooseCtx, slotNum) \
+#define FILE_CHOOSE_SLOT_OCCUPIED(fileChooseCtx, slotNum)        \
     ((GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 0) == 'Z') && \
      (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 1) == 'E') && \
      (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 2) == 'L') && \
      (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 3) == 'D') && \
      (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 4) == 'A') && \
      (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 5) == '3'))
-
 
 void func_8080BC20(FileChooseContext* this) {
     this->unk_24486++;
@@ -97,7 +185,7 @@ void func_8080BC58(GameState* thisx) {
 }
 
 void func_8080BDAC(GameState* thisx) {
-    FileChooseContext *this = (FileChooseContext*)thisx;
+    FileChooseContext* this = (FileChooseContext*)thisx;
 
     func_8012C628(this->state.gfxCtx);
     FileChoose_nop8080BC4C(this);
@@ -112,13 +200,9 @@ void FileChoose_RenderView(FileChooseContext* this, f32 eyeX, f32 eyeY, f32 eyeZ
     eye.y = eyeY;
     eye.z = eyeZ;
 
-    lookAt.x = 
-    lookAt.y = 
-    lookAt.z = 
-    0.0f;
+    lookAt.x = lookAt.y = lookAt.z = 0.0f;
 
-    up.x = 
-    up.z = 0.0f;
+    up.x = up.z = 0.0f;
     up.y = 1.0f;
 
     View_SetViewOrientation(&this->view, &eye, &lookAt, &up);
@@ -147,30 +231,23 @@ void func_8080C040(FileChooseContext* this) {
         this->unk_244BC[i] = this->unk_244BA;
         if (gSaveContext.unk_3F3F == 0) {
             if (SLOT_OCCUPIED(sramCtx, i)) {
-                this->unk_244C2[i] = 
-                this->unk_244C8[i] = 
-                this->unk_244BA;
+                this->unk_244C2[i] = this->unk_244C8[i] = this->unk_244BA;
                 this->unk_244CE[i] += 20;
                 if (this->unk_244CE[i] >= 255) {
                     this->unk_244CE[i] = 255;
                 }
             }
         } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
-                this->unk_244C2[i] = 
-                this->unk_244C8[i] = 
-                this->unk_244BA;
-                this->unk_244CE[i] += 20;
+            this->unk_244C2[i] = this->unk_244C8[i] = this->unk_244BA;
+            this->unk_244CE[i] += 20;
 
-                if (this->unk_244CE[i] >= 255) {
-                    this->unk_244CE[i] = 255;
-                }
+            if (this->unk_244CE[i] >= 255) {
+                this->unk_244CE[i] = 255;
             }
+        }
     }
 
-    this->unk_244DA[0] =
-    this->unk_244DA[1] =
-    this->unk_244E2 =
-    this->unk_244BA;
+    this->unk_244DA[0] = this->unk_244DA[1] = this->unk_244E2 = this->unk_244BA;
 }
 
 // FileChoose_SplitNumber // SplitDigits? ExtractDigits?
@@ -178,11 +255,11 @@ void func_8080C228(u16 value, u16* hundreds, u16* tens, u16* ones) {
     *hundreds = 0;
     *tens = 0;
     *ones = value;
-    
+
     do {
         if ((*ones - 100) < 0) {
             break;
-        }  
+        }
         (*hundreds)++;
         *ones -= 100;
     } while (true);
@@ -199,7 +276,7 @@ void func_8080C228(u16 value, u16* hundreds, u16* tens, u16* ones) {
 // Start of Config Mode Update Functions
 
 void func_8080C29C(GameState* thisx) {
-    FileChooseContext *this = (FileChooseContext*)thisx;
+    FileChooseContext* this = (FileChooseContext*)thisx;
 
     func_8080C040(this);
     this->unk_2450A -= 40;
@@ -212,7 +289,7 @@ void func_8080C29C(GameState* thisx) {
 }
 
 void func_8080C324(GameState* thisx) {
-    FileChooseContext *this = (FileChooseContext*)thisx;
+    FileChooseContext* this = (FileChooseContext*)thisx;
 
     this->unk_244E6 += 20;
     func_8080C040(this);
@@ -229,12 +306,11 @@ void func_8080C324(GameState* thisx) {
 // (GameState* thisx) {
 //     FileChooseContext *this = (FileChooseContext*)thisx;
 
-extern u8 D_8081455C[];
-// u8 D_8081455C[] = { 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E };
+u8 D_8081455C[] = { 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E };
 
 // FileChoose_UpdateMainMenu
 void func_8080C3A8(GameState* thisx) {
-    FileChooseContext *this = (FileChooseContext*)thisx;
+    FileChooseContext* this = (FileChooseContext*)thisx;
     SramContext* sramCtx = &this->sramCtx;
     Input* input = &this->state.input[0];
 
@@ -350,11 +426,13 @@ void func_8080C3A8(GameState* thisx) {
                     this->unk_244A8 = -1;
                 }
             } else {
-                if (!FILE_CHOOSE_SLOT_OCCUPIED(this, 0) && !FILE_CHOOSE_SLOT_OCCUPIED(this, 1) && !FILE_CHOOSE_SLOT_OCCUPIED(this, 2)) {
+                if (!FILE_CHOOSE_SLOT_OCCUPIED(this, 0) && !FILE_CHOOSE_SLOT_OCCUPIED(this, 1) &&
+                    !FILE_CHOOSE_SLOT_OCCUPIED(this, 2)) {
                     this->unk_244AA = this->unk_24480;
                     this->unk_244A8 = 0;
                     this->unk_244E8 = 255;
-                } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, 0) && FILE_CHOOSE_SLOT_OCCUPIED(this, 1) && FILE_CHOOSE_SLOT_OCCUPIED(this, 2)) {
+                } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, 0) && FILE_CHOOSE_SLOT_OCCUPIED(this, 1) &&
+                           FILE_CHOOSE_SLOT_OCCUPIED(this, 2)) {
                     this->unk_244AA = this->unk_24480;
                     this->unk_244A8 = 2;
                     this->unk_244E8 = 255;
@@ -372,10 +450,11 @@ void func_8080C3A8(GameState* thisx) {
                     this->unk_244A8 = -1;
                 }
             } else {
-                if (!FILE_CHOOSE_SLOT_OCCUPIED(this, 0) && !FILE_CHOOSE_SLOT_OCCUPIED(this, 1) && !FILE_CHOOSE_SLOT_OCCUPIED(this, 2)) {
-                this->unk_244AA = this->unk_24480;
-                this->unk_244A8 = 1;
-                this->unk_244E8 = 255;
+                if (!FILE_CHOOSE_SLOT_OCCUPIED(this, 0) && !FILE_CHOOSE_SLOT_OCCUPIED(this, 1) &&
+                    !FILE_CHOOSE_SLOT_OCCUPIED(this, 2)) {
+                    this->unk_244AA = this->unk_24480;
+                    this->unk_244A8 = 1;
+                    this->unk_244E8 = 255;
                 } else {
                     this->unk_244A8 = -1;
                 }
@@ -386,26 +465,22 @@ void func_8080C3A8(GameState* thisx) {
     }
 }
 
-
 void func_8080D164(GameState* thisx) {
 }
 
-void func_8080D170(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D170.s")
-// Requires in-function static data to match
-// void func_8080D170(GameState *thisx) {
-//     static s16 D_80814564 = 0;
-//     FileChooseContext *this = (FileChooseContext*)thisx;
+void func_8080D170(GameState* thisx) {
+    static s16 D_80814564 = 0;
+    FileChooseContext* this = (FileChooseContext*)thisx;
 
-//     D_80814564 += 2;
-//     if (D_80814564 == 0xFE) {
-//         this->unk_24486 = this->unk_2448A;
-//         D_80814564 = 0;
-//     }
-// }
+    D_80814564 += 2;
+    if (D_80814564 == 0xFE) {
+        this->unk_24486 = this->unk_2448A;
+        D_80814564 = 0;
+    }
+}
 
-void func_8080D1BC(GameState *thisx) {
-    FileChooseContext *this = (FileChooseContext*)thisx;
+void func_8080D1BC(GameState* thisx) {
+    FileChooseContext* this = (FileChooseContext*)thisx;
 
     this->unk_2450C += 50.0f;
     if (this->unk_2450C >= 314.0f) {
@@ -415,7 +490,7 @@ void func_8080D1BC(GameState *thisx) {
 }
 
 void func_8080D220(GameState* thisx) {
-    FileChooseContext *this = (FileChooseContext*)thisx;
+    FileChooseContext* this = (FileChooseContext*)thisx;
 
     this->unk_2450C += 50.0f;
     if (this->unk_2450C >= 314.0f) {
@@ -425,7 +500,7 @@ void func_8080D220(GameState* thisx) {
 }
 
 void func_8080D284(GameState* thisx) {
-    FileChooseContext *this = (FileChooseContext*)thisx;
+    FileChooseContext* this = (FileChooseContext*)thisx;
 
     this->unk_2450C += 50.0f;
     if (this->unk_2450C >= 628.0f) {
@@ -435,27 +510,6 @@ void func_8080D284(GameState* thisx) {
 }
 
 // End of Config Mode Update Functions
-
-extern s16 D_8081461C[];
-// s16 D_8081461C[] = { 70, 200 };
-
-void func_8080D2EC(FileChooseContext *this) {
-    s32 step = ABS_ALT(this->unk_244EA[3] - D_8081461C[this->unk_244F2]) / this->unk_24528;
-
-    if (this->unk_244EA[3] >= D_8081461C[this->unk_244F2]) {
-        this->unk_244EA[3] -= step;
-    } else {
-        this->unk_244EA[3] += step;
-    }
-
-    this->unk_24528--;
-
-    if (this->unk_24528 == 0) {
-        this->unk_244EA[3] = D_8081461C[this->unk_244F2];
-        this->unk_24528 = 0x14;
-        this->unk_244F2 ^= 1;
-    }
-}
 
 // Nameset
 void func_80804010(GameState* thisx);
@@ -498,54 +552,34 @@ void func_8080A4A0(GameState* thisx);
 void func_8080A6BC(GameState* thisx);
 
 // gConfigModeUpdateFuncs
-extern void (*D_80814568[])(GameState*);
-// void (*D_80814568)(GameState*)[] = {
-//     func_8080C29C,
-//     func_8080C324,
-//     func_8080C3A8,
-//     func_80804010,
-//     func_808041A0,
-//     func_80804654,
-//     func_808047D8,
-//     func_8080489C,
-//     func_80804DAC,
-//     func_80804E74,
-//     func_80804F98,
-//     func_8080525C,
-//     func_808052B0,
-//     func_808054A4,
-//     func_808055D0,
-//     func_808058A4,
-//     func_80805918,
-//     func_80805A58,
-//     func_80805B30,
-//     func_80805C1C,
-//     func_80806014,
-//     func_80806148,
-//     func_80806310,
-//     func_808067E0,
-//     func_80806BC8,
-//     func_80806CA0,
-//     func_80806E84,
-//     func_80806F30,
-//     func_808071E4,
-//     func_80807390,
-//     func_8080742C,
-//     func_808074B4,
-//     func_808077AC,
-//     func_8080D164,
-//     func_8080D1BC,
-//     func_80809DF0,
-//     func_80809EA0,
-//     func_8080A3CC,
-//     func_8080D284,
-//     func_8080D220,
-//     func_8080A418,
-//     func_8080A4A0,
-//     func_8080A6BC,
-//     func_8080D284,
-//     func_8080D170,
-// };
+void (*D_80814568[])(GameState*) = {
+    func_8080C29C, func_8080C324, func_8080C3A8, func_80804010, func_808041A0, func_80804654, func_808047D8,
+    func_8080489C, func_80804DAC, func_80804E74, func_80804F98, func_8080525C, func_808052B0, func_808054A4,
+    func_808055D0, func_808058A4, func_80805918, func_80805A58, func_80805B30, func_80805C1C, func_80806014,
+    func_80806148, func_80806310, func_808067E0, func_80806BC8, func_80806CA0, func_80806E84, func_80806F30,
+    func_808071E4, func_80807390, func_8080742C, func_808074B4, func_808077AC, func_8080D164, func_8080D1BC,
+    func_80809DF0, func_80809EA0, func_8080A3CC, func_8080D284, func_8080D220, func_8080A418, func_8080A4A0,
+    func_8080A6BC, func_8080D284, func_8080D170,
+};
+
+s16 D_8081461C[] = { 70, 200 };
+void func_8080D2EC(FileChooseContext* this) {
+    s32 step = ABS_ALT(this->unk_244EA[3] - D_8081461C[this->unk_244F2]) / this->unk_24528;
+
+    if (this->unk_244EA[3] >= D_8081461C[this->unk_244F2]) {
+        this->unk_244EA[3] -= step;
+    } else {
+        this->unk_244EA[3] += step;
+    }
+
+    this->unk_24528--;
+
+    if (this->unk_24528 == 0) {
+        this->unk_244EA[3] = D_8081461C[this->unk_244F2];
+        this->unk_24528 = 0x14;
+        this->unk_244F2 ^= 1;
+    }
+}
 
 // FileChoose_ConfigModeUpdate
 void func_8080D3D0(GameState* thisx) {
@@ -598,28 +632,25 @@ void func_8080D40C(GameState* thisx) {
             this->unk_A4[x].v.cn[0] = this->unk_A4[x + 2].v.cn[0] = this->unk_A4[x].v.cn[1] =
                 this->unk_A4[x + 2].v.cn[1] = this->unk_A4[x].v.cn[2] = this->unk_A4[x + 2].v.cn[2] =
                     this->unk_A4[x + 1].v.cn[0] = this->unk_A4[x + 3].v.cn[0] = this->unk_A4[x + 1].v.cn[1] =
-                        this->unk_A4[x + 3].v.cn[1] = this->unk_A4[x + 1].v.cn[2] =
-                            this->unk_A4[x + 3].v.cn[2] = this->unk_A4[x].v.cn[3] =
-                                this->unk_A4[x + 2].v.cn[3] = this->unk_A4[x + 1].v.cn[3] =
-                                    this->unk_A4[x + 3].v.cn[3] = 255;
+                        this->unk_A4[x + 3].v.cn[1] = this->unk_A4[x + 1].v.cn[2] = this->unk_A4[x + 3].v.cn[2] =
+                            this->unk_A4[x].v.cn[3] = this->unk_A4[x + 2].v.cn[3] = this->unk_A4[x + 1].v.cn[3] =
+                                this->unk_A4[x + 3].v.cn[3] = 255;
         }
     }
 }
 
+s16 D_80814620[] = { 0x0008, 0x0008, 0x0008, 0x0000 };
+s16 D_80814628[] = { 0xC, 0xC, 0xC, 0 };
+s16 D_80814630[] = { 0xC, 0xC, 0xC, 0 };
+s16 D_80814638[] = {
+    0x58, 0x68, 0x78, 0x3AC, 0x3B0, 0x3B4,
+};
+s16 D_80814644[] = { 0x58, 0x68, 0x78, 0x3B0 };
+s16 D_8081464C[] = { 0x3AC, 0x3B0 };
+s16 D_80814650[] = { 0x3AC, 0x3B0 };
 // void func_8080D6D4(FileChooseContext* this);
 void func_8080D6D4(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D6D4.s")
-extern s16 D_80814280[];
-extern s16 D_80814538[]; // sFileInfoBoxPartWidths
-extern s16 D_80814554[];
-extern s16 D_80814620[];
-extern s16 D_80814628[];
-extern s16 D_80814630[];
-extern s16 D_80814638[];
-extern s16 D_80814644[];
-extern s16 D_8081464C[];
-extern s16 D_80814650[];
-
 // void func_8080D6D4(FileChooseContext *this) {
 //     s16 spAC;
 //     u16 spA8;
@@ -926,8 +957,6 @@ extern s16 D_80814650[];
 
 //     this->unk_243E4 = GRAPH_ALLOC(this->state.gfxCtx, 0x3C0 * sizeof(Vtx));
 
-
-
 //     for (phi_t1 = 0; phi_t1 < 0x3C0; phi_t1 += 4) {
 //         this->unk_243E4[phi_t1].v.ob[0] = this->unk_243E4[phi_t1 + 2].v.ob[0] = 0x12C;
 //         this->unk_243E4[phi_t1 + 1].v.ob[0] = this->unk_243E4[phi_t1 + 3].v.ob[0] =
@@ -1022,14 +1051,11 @@ extern s16 D_80814650[];
 //     //     phi_t1 = temp_t1;
 //     // } while (temp_t1 < 0x3C0);
 
-
-
 //     this->unk_243E4[0].v.ob[0] = this->unk_243E4[2].v.ob[0] = this->unk_24508;
 //     this->unk_243E4[1].v.ob[0] = this->unk_243E4[3].v.ob[0] = this->unk_243E4[0].v.ob[0] + 0x80;
 //     this->unk_243E4[0].v.ob[1] = this->unk_243E4[1].v.ob[1] = 0x48;
 //     this->unk_243E4[2].v.ob[1] = this->unk_243E4[3].v.ob[1] = this->unk_243E4[0].v.ob[1] - 0x10;
 //     this->unk_243E4[1].v.tc[0] = this->unk_243E4[3].v.tc[0] = 0x1000;
-
 
 // //     temp_v1_6 = this->unk_24508;
 // //     this->unk_243E4->unk20 = temp_v1_6;
@@ -1048,7 +1074,6 @@ extern s16 D_80814650[];
 // //     this->unk_243E4->unk38 = 0x1000;
 // //     temp_a1_7 = this->unk_243E4;
 // //     temp_a1_7->unk18 = (s16) temp_a1_7->unk38;
-
 
 //     for (phi_a3 = 0, phi_s3 = 4; phi_a3 < 3; phi_a3++) {
 //         phi_s1 = this->unk_24508 - 6;
@@ -1070,7 +1095,6 @@ extern s16 D_80814650[];
 //             phi_s1 += D_80814538[phi_s4];
 //         }
 //     }
-
 
 // //     phi_a3 = 0;
 // //     phi_a3_2 = 0;
@@ -1121,8 +1145,6 @@ extern s16 D_80814650[];
 // //         phi_a3 = temp_a3;
 // //     } while ((s32) temp_a3 < 3);
 
-
-    
 //     temp_s1 = this->unk_24508 - 6;
 // //     temp_a1_9 = temp_s1 + 0x40;
 // //     temp_a2 = temp_s1 + 0x34;
@@ -1206,9 +1228,6 @@ extern s16 D_80814650[];
 // //         phi_s3_11 = temp_s3_2;
 // //     } while ((s32) temp_s4_2 < 3);
 
-
-
-
 // //     sp9C = 0x2C;
 
 // //     do {
@@ -1223,7 +1242,8 @@ extern s16 D_80814650[];
 // //             phi_s1_2 = this->unk_24508 - 6;
 // //             if ((temp_v0_2 == 0x10) && (phi_s6 = this + (phi_s4_3 * 2) + 0x20000, (phi_s4_3 == this->fileNum))) {
 // //                 sp98 = this->unk_24492[phi_s4_3] + 0x2C;
-// //             } else if (((temp_v0_2 == 0x11) || (temp_v0_2 == 0x12)) && (phi_s6 = this + (phi_s4_3 * 2) + 0x20000, (phi_s4_3 == this->fileNum))) {
+// //             } else if (((temp_v0_2 == 0x11) || (temp_v0_2 == 0x12)) && (phi_s6 = this + (phi_s4_3 * 2) + 0x20000,
+// (phi_s4_3 == this->fileNum))) {
 // //                 sp98 = this->unk_2449A[phi_s4_3] + sp9C;
 // //             } else {
 // //                 sp98 = this->unk_24492[phi_s4_3] + sp9C + this->unk_2449A[phi_s4_3];
@@ -1498,7 +1518,8 @@ extern s16 D_80814650[];
 // //             if ((temp_v0_3 == 0x10) && (phi_s4_3 == this->fileNum)) {
 // //                 phi_t0_3 = phi_s6->unk4492 + 0x2C;
 // //             } else {
-// //                 if (((temp_v0_3 == 0x11) || (temp_v0_3 == 0x12)) && (phi_t9 = sp9C, (phi_s4_3 == this->fileNum))) {
+// //                 if (((temp_v0_3 == 0x11) || (temp_v0_3 == 0x12)) && (phi_t9 = sp9C, (phi_s4_3 == this->fileNum)))
+// {
 // //                     phi_t6 = phi_s6->unk449A;
 // //                 } else {
 // //                     phi_t6 = phi_s6->unk4492 + sp9C;
@@ -1614,13 +1635,8 @@ extern s16 D_80814650[];
 // //         phi_s3_11 = phi_s3_12;
 // //     } while ((s32) temp_s4_3 < 3);
 
-
-
-
 // //     temp_s1_5 = this->unk_24508 - 6;
 // //     phi_a1 = -0xC;
-
-
 
 // //     do {
 // //         this->unk_243E4[phi_s3_10].unk20 = temp_s1_5;
@@ -1646,8 +1662,6 @@ extern s16 D_80814650[];
 // //         phi_a1 += -0x10;
 // //     } while ((s32) temp_s4_4 < 2);
 
-
-
 // //     this->unk_243E4[temp_s3_13].unk20 = temp_s1_5;
 // //     temp_s3_14 = (temp_s3_13 + 4) & 0xFFFF;
 // //     this->unk_243E4[temp_s3_13].v.ob[0] = temp_s1_5;
@@ -1666,8 +1680,6 @@ extern s16 D_80814650[];
 // //     temp_a0_78 = &this->unk_243E4[temp_s3_13];
 // //     temp_a0_78->unk18 = (s16) temp_a0_78->unk38;
 // //     temp_a1_19 = this->unk_24484;
-
-
 
 // //     if (((temp_a1_19 == 1) && ((s32) this->unk_24486 >= 2)) || ((temp_a1_19 == 2) && (this->unk_2448C == 3))) {
 // //         if (temp_a1_19 == 1) {
@@ -1724,52 +1736,47 @@ extern s16 D_80814650[];
 // //     temp_a0_85->unk58 = (s16) temp_a0_85->unk78;
 // }
 
-
-void func_8080F25C(GameState*, s16);          /* extern */
+s16 D_80814654[] = { 0x0088, 0x0194, 0x02A0, 0 };
+s32 D_8081465C[] = { 0x0102BCB0, 0x0102CCB0, 0x0102DCB0, 0x0102ECB0 };
+s32 D_8081466C[] = { 0x01030130, 0x01030130, 0x01030370, 0x010305B0 };
+s32 D_8081467C[] = { 0x01030AF0, 0x01030C70, 0x01030DF0, 0x01030F70 };
+s32 D_8081468C[] = {
+    0x02000000, 0x02000100, 0x02000200, 0x02000300, 0x02000400,
+    0x02000500, 0x02000600, 0x02000700, 0x02000800, 0x02000900,
+};
+s32 D_808146B4[] = { 0x00010101, 0x01010202, 0x02020203, 0x03030303 };
+s32 D_808146C4[] = {
+    0x00C800FF, 0x006400AA, 0x00AA00FF, 0x00FF0069, 0x00690000,
+};
+s32 D_808146D8[] = {
+    0x00000050, 0x0000000A, 0x000A0050, 0x0028000A, 0x00000000,
+};
+s32 D_808146EC[] = { 0x00FF0046, 0x003200C8, 0x00000000 };
+s32 D_808146F8[] = { 0x00320028, 0x003C00FF, 0x00FF00FF };
+void func_8080F25C(GameState*, s16);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080F25C.s")
 
-
-void func_808108DC(GameState* thisx);
-// void func_808108DC(FileChooseContext* this);
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_808108DC.s")
 extern void* D_010220B0[]; // gFileSelNameBoxTex
 extern void* D_010277B0[]; // gOptionsButtonTex // Array on PAL
 extern void* D_0102A030[]; // gFileSelDISKButtonTex in OoT
 extern void* D_0102AAB0[]; // gFileSelBigButtonHighlightTex
-extern s16 D_80814548[]; // sWindowContentColors
-extern void* D_80814704[]; // sFileInfoBoxTextures
-extern void* D_80814720[]; // sTitleLabels
-extern void* D_80814744[]; // sWarningLabels
-extern void* D_80814758[]; // sFileButtonTextures
-extern void* D_80814764[]; // sActionButtonTextures
 
+void* D_80814704[] = { 0x01022E30, 0x01023DF0, 0x01024DB0, 0x01025D70, 0x01026D30, 0x010287B0, 0x010293F0 };
 
+void* D_80814720[] = { 0x01004980, 0x01005180, 0x01002980, 0x01003180, 0x01003980,
+                       0x01004180, 0x01005980, 0x01006180, 0x01006980 };
 
-// void* D_80814704[] = {
-//     0x01022E30, 0x01023DF0, 0x01024DB0, 0x01025D70, 0x01026D30, 0x010287B0, 0x010293F0
-// };
+void* D_80814744[] = { 0x01000000, 0x01000800, 0x01001000, 0x01001800, 0x01002000 };
 
-// void* D_80814720[] = {
-//     0x01004980, 0x01005180, 0x01002980, 0x01003180, 0x01003980, 0x01004180, 0x01005980, 0x01006180, 0x01006980
-// };
+void* D_80814758[] = { 0x0101EFB0, 0x0101F7B0, 0x0101FFB0 };
 
-// void* D_80814744[] = {
-//     0x01000000, 0x01000800, 0x01001000, 0x01001800, 0x01002000
-// };
-
-// void* D_80814758[] = {
-//     0x0101EFB0, 0x0101F7B0, 0x0101FFB0
-// };
-
-// void* D_80814764[] = {
-//     0x0101E7B0, 0x01020FB0, 0x010207B0, 0x01027FB0
-// };
+void* D_80814764[] = { 0x0101E7B0, 0x01020FB0, 0x010207B0, 0x01027FB0 };
 extern int ENVIRONMENT;
 extern int PRIMITIVE;
 extern int TEXEL0;
-
+// void func_808108DC(FileChooseContext* this);
 void func_808108DC(GameState* thisx) {
-    FileChooseContext *this = (FileChooseContext*)thisx;
+    FileChooseContext* this = (FileChooseContext*)thisx;
     s16 phi_s0;
     s16 phi_s6;
     s16 phi_t2;
@@ -1781,18 +1788,23 @@ void func_808108DC(GameState* thisx) {
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+    gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
+                      ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->unk_244B6[0]);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
     gSPVertex(POLY_OPA_DISP++, &this->unk_243E4[0], 4, 0);
-    gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814720[this->unk_244AC], G_IM_FMT_IA, G_IM_SIZ_8b, 128, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814720[this->unk_244AC], G_IM_FMT_IA, G_IM_SIZ_8b, 128, 16, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
     gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
 
     gDPPipeSync(POLY_OPA_DISP++);
 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->unk_244B6[1]);
-    gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814720[this->unk_244AE], G_IM_FMT_IA, G_IM_SIZ_8b, 128, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814720[this->unk_244AE], G_IM_FMT_IA, G_IM_SIZ_8b, 128, 16, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
     gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
 
     phi_s6 = 4;
@@ -1802,16 +1814,18 @@ void func_808108DC(GameState* thisx) {
     for (phi_s0 = 0; phi_s0 < 3; phi_s0++, phi_s6 += 28) {
         if (phi_s0 < 2) {
             gDPPipeSync(POLY_OPA_DISP++);
-            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244D4[phi_s0]);
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
+                            this->unk_244D4[phi_s0]);
             gSPVertex(POLY_OPA_DISP++, &this->unk_243E4[phi_s6], 28, 0);
 
             for (phi_t3 = 0, phi_t2 = 0; phi_t2 < 7; phi_t2++, phi_t3 += 4) {
                 if ((phi_t2 < 5) || ((this->unk_2446A[phi_s0] != 0) && (phi_t2 >= 5))) {
-                    gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814704[phi_t2], G_IM_FMT_IA, G_IM_SIZ_16b, D_80814538[phi_t2], 56, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                    gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814704[phi_t2], G_IM_FMT_IA, G_IM_SIZ_16b,
+                                        D_80814538[phi_t2], 56, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
+                                        G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
                     gSP1Quadrangle(POLY_OPA_DISP++, phi_t3, phi_t3 + 2, phi_t3 + 3, phi_t3 + 1, 0);
                 }
             }
-
         }
     }
 
@@ -1821,21 +1835,33 @@ void func_808108DC(GameState* thisx) {
         if (phi_t2 < 2) {
             gSPVertex(POLY_OPA_DISP++, &this->unk_243E4[phi_s6], 16, 0);
 
-            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_80814548[0], D_80814548[1], D_80814548[2], this->unk_244BC[phi_t2]);
-            gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814758[phi_t2], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_80814548[0], D_80814548[1], D_80814548[2],
+                            this->unk_244BC[phi_t2]);
+            gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814758[phi_t2], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
             gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
 
-            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_80814548[0], D_80814548[1], D_80814548[2], this->unk_244C2[phi_t2]);
-            gDPLoadTextureBlock(POLY_OPA_DISP++, D_010220B0, G_IM_FMT_IA, G_IM_SIZ_16b, 108, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_80814548[0], D_80814548[1], D_80814548[2],
+                            this->unk_244C2[phi_t2]);
+            gDPLoadTextureBlock(POLY_OPA_DISP++, D_010220B0, G_IM_FMT_IA, G_IM_SIZ_16b, 108, 16, 0,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
             gSP1Quadrangle(POLY_OPA_DISP++, 4, 6, 7, 5, 0);
 
-            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_80814548[0], D_80814548[1], D_80814548[2], this->unk_244CE[phi_t2]);
-            gDPLoadTextureBlock(POLY_OPA_DISP++, D_01002800, G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_80814548[0], D_80814548[1], D_80814548[2],
+                            this->unk_244CE[phi_t2]);
+            gDPLoadTextureBlock(POLY_OPA_DISP++, D_01002800, G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
             gSP1Quadrangle(POLY_OPA_DISP++, 8, 10, 11, 9, 0);
 
             if (this->unk_2446A[phi_t2] != 0) {
-                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_80814548[0], D_80814548[1], D_80814548[2], this->unk_244C2[phi_t2]);
-                gDPLoadTextureBlock(POLY_OPA_DISP++, D_0102A030, G_IM_FMT_IA, G_IM_SIZ_16b, 52, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_80814548[0], D_80814548[1], D_80814548[2],
+                                this->unk_244C2[phi_t2]);
+                gDPLoadTextureBlock(POLY_OPA_DISP++, D_0102A030, G_IM_FMT_IA, G_IM_SIZ_16b, 52, 16, 0,
+                                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                    G_TX_NOLOD, G_TX_NOLOD);
                 gSP1Quadrangle(POLY_OPA_DISP++, 12, 14, 15, 13, 0);
             }
         }
@@ -1846,14 +1872,18 @@ void func_808108DC(GameState* thisx) {
     }
 
     gDPPipeSync(POLY_OPA_DISP++);
-    gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+    gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
+                      ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
     gSPVertex(POLY_OPA_DISP++, &this->unk_243E4[0x3AC], 20, 0);
 
     for (phi_t3 = 0, phi_t2 = 0; phi_t2 < 2; phi_t2++, phi_t3 += 4) {
         gDPPipeSync(POLY_OPA_DISP++);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244DA[phi_t2]);
-        gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814764[phi_t2], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
+                        this->unk_244DA[phi_t2]);
+        gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814764[phi_t2], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
         gSP1Quadrangle(POLY_OPA_DISP++, phi_t3, phi_t3 + 2, phi_t3 + 3, phi_t3 + 1, 0);
     }
 
@@ -1861,34 +1891,45 @@ void func_808108DC(GameState* thisx) {
 
     for (phi_t3 = 0, phi_t2 = 0; phi_t2 < 2; phi_t2++, phi_t3 += 4) {
         phi_s6 = this->unk_244F6[phi_t2];
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244DE[phi_t2]);
-        gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814764[phi_s6], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
+                        this->unk_244DE[phi_t2]);
+        gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814764[phi_s6], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
         gSP1Quadrangle(POLY_OPA_DISP++, phi_t3, phi_t3 + 2, phi_t3 + 3, phi_t3 + 1, 0);
     }
-
 
     gDPPipeSync(POLY_OPA_DISP++);
 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244E2);
-    gDPLoadTextureBlock(POLY_OPA_DISP++, D_010277B0, G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, D_010277B0, G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     gSP1Quadrangle(POLY_OPA_DISP++, 8, 10, 11, 9, 0);
 
-    if (((this->unk_24484 == 1) && ((this->unk_24486 == 2) || (this->unk_24486 == 4) || (this->unk_24486 == 7) || (this->unk_24486 == 12) || (this->unk_24486 == 22) || (this->unk_24486 == 25))) || ((this->unk_24484 == 2) && (this->unk_2448C == 3))) {
+    if (((this->unk_24484 == 1) && ((this->unk_24486 == 2) || (this->unk_24486 == 4) || (this->unk_24486 == 7) ||
+                                    (this->unk_24486 == 12) || (this->unk_24486 == 22) || (this->unk_24486 == 25))) ||
+        ((this->unk_24484 == 2) && (this->unk_2448C == 3))) {
         gDPPipeSync(POLY_OPA_DISP++);
 
-        gDPSetCombineLERP(POLY_OPA_DISP++, 1, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, 1, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244EA[0], this->unk_244EA[1], this->unk_244EA[2], this->unk_244EA[3]);
-        gDPLoadTextureBlock(POLY_OPA_DISP++, D_0102AAB0, G_IM_FMT_I, G_IM_SIZ_8b, 72, 24, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPSetCombineLERP(POLY_OPA_DISP++, 1, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, 1, 0, PRIMITIVE, 0, TEXEL0, 0,
+                          PRIMITIVE, 0);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244EA[0], this->unk_244EA[1], this->unk_244EA[2],
+                        this->unk_244EA[3]);
+        gDPLoadTextureBlock(POLY_OPA_DISP++, D_0102AAB0, G_IM_FMT_I, G_IM_SIZ_8b, 72, 24, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         gSP1Quadrangle(POLY_OPA_DISP++, 12, 14, 15, 13, 0);
     }
 
     if (this->unk_244A8 > -1) {
         gDPPipeSync(POLY_OPA_DISP++);
 
-        gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+        gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                          PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->unk_244E8);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
-        gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814744[this->unk_244A8], G_IM_FMT_IA, G_IM_SIZ_8b, 128, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814744[this->unk_244A8], G_IM_FMT_IA, G_IM_SIZ_8b, 128, 16, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
         gSP1Quadrangle(POLY_OPA_DISP++, 16, 18, 19, 17, 0);
     }
 
@@ -1904,7 +1945,7 @@ void func_8080BBFC(GameState*);
 
 // FileChoose_ConfigModeDraw
 void func_80811CB8(GameState* thisx) {
-    FileChooseContext *this = (FileChooseContext*)thisx;
+    FileChooseContext* this = (FileChooseContext*)thisx;
 
     OPEN_DISPS(this->state.gfxCtx);
 
@@ -1921,7 +1962,8 @@ void func_80811CB8(GameState* thisx) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244BA);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
+                        this->unk_244BA);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
         Matrix_Translate(0.0f, 0.0f, -93.6f, MTXMODE_NEW);
@@ -1952,7 +1994,8 @@ void func_80811CB8(GameState* thisx) {
     if ((this->unk_24486 >= 34) && (this->unk_24486 <= 38)) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244BA);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
+                        this->unk_244BA);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
         Matrix_Translate(0.0f, 0.0f, -93.6f, MTXMODE_NEW);
@@ -1980,7 +2023,8 @@ void func_80811CB8(GameState* thisx) {
     if ((this->unk_24486 >= 39) && (this->unk_24486 <= 43)) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244BA);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
+                        this->unk_244BA);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
         Matrix_Translate(0.0f, 0.0f, -93.6f, MTXMODE_NEW);
@@ -1988,7 +2032,7 @@ void func_80811CB8(GameState* thisx) {
         Matrix_RotateXFApply((this->unk_2450C - 314.0f) / 100.0f);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        
+
         gSPVertex(POLY_OPA_DISP++, &this->unk_A4[0], 32, 0);
         gSPDisplayList(POLY_OPA_DISP++, D_010311F0);
 
@@ -2003,16 +2047,16 @@ void func_80811CB8(GameState* thisx) {
         // FileChoose_DrawOptions
         func_8080BBFC(&this->state);
     }
-    
+
     gDPPipeSync(POLY_OPA_DISP++);
-    
+
     FileChoose_RenderView(this, 0.0f, 0.0f, 64.0f);
-    
+
     CLOSE_DISPS(this->state.gfxCtx);
 }
 
 // FileChoose_FadeMainToSelect
-void func_80812460(GameState *thisx) {
+void func_80812460(GameState* thisx) {
     FileChooseContext* this = (FileChooseContext*)thisx;
     SramContext* sramCtx = &this->sramCtx;
     s16 i;
@@ -2020,23 +2064,16 @@ void func_80812460(GameState *thisx) {
     for (i = 0; i < 3; i++) {
         if (i != this->unk_24480) {
             this->unk_244BC[i] -= 50;
-            this->unk_244DA[0] = 
-            this->unk_244DA[1] = 
-            this->unk_244E2 = 
-            this->unk_244BC[i];
+            this->unk_244DA[0] = this->unk_244DA[1] = this->unk_244E2 = this->unk_244BC[i];
 
             if (gSaveContext.unk_3F3F == 0) {
                 if (SLOT_OCCUPIED(sramCtx, i)) {
-                    this->unk_244C8[i] =
-                    this->unk_244C2[i] = 
-                    this->unk_244BC[i];
+                    this->unk_244C8[i] = this->unk_244C2[i] = this->unk_244BC[i];
                     this->unk_244CE[i] -= 63;
                 }
             } else {
                 if (FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
-                    this->unk_244C8[i] = 
-                    this->unk_244C2[i] = 
-                    this->unk_244BC[i];
+                    this->unk_244C8[i] = this->unk_244C2[i] = this->unk_244BC[i];
                     this->unk_244CE[i] -= 63;
                 }
             }
@@ -2054,12 +2091,10 @@ void func_80812460(GameState *thisx) {
     }
 }
 
-
-extern s16 D_80814774[];
-// s16 D_80814774[] = { 0, 16, 32 };
+s16 D_80814774[] = { 0, 16, 32 };
 
 // FileChoose_MoveSelectedFileToTop
-void func_80812668(GameState *thisx) {
+void func_80812668(GameState* thisx) {
     FileChooseContext* this = (FileChooseContext*)thisx;
     s32 yStep;
 
@@ -2068,15 +2103,14 @@ void func_80812668(GameState *thisx) {
     this->unk_24498--;
 
     if ((this->unk_24498 == 0) || (this->unk_2449A[this->unk_24480] == D_80814774[this->unk_24480])) {
-        this->unk_2449A[3] =
-        this->unk_2449A[4] = -24;
+        this->unk_2449A[3] = this->unk_2449A[4] = -24;
         this->unk_24498 = 4;
         this->unk_2448C++;
     }
 }
 
 // FileChoose_FadeInFileInfo
-void func_80812760(GameState *thisx) {
+void func_80812760(GameState* thisx) {
     FileChooseContext* this = (FileChooseContext*)thisx;
 
     this->unk_244D4[this->unk_24480] += 50;
@@ -2093,13 +2127,11 @@ void func_80812760(GameState *thisx) {
         this->unk_2448C++;
     }
 
-    this->unk_244DE[0] =
-    this->unk_244DE[1] =
-    this->unk_244D4[this->unk_24480];
+    this->unk_244DE[0] = this->unk_244DE[1] = this->unk_244D4[this->unk_24480];
 }
 
 // FileChoose_ConfirmFile
-void func_80812840(GameState *thisx) {
+void func_80812840(GameState* thisx) {
     FileChooseContext* this = (FileChooseContext*)thisx;
     Input* input = &this->state.input[0];
 
@@ -2113,7 +2145,7 @@ void func_80812840(GameState *thisx) {
             play_sound(NA_SE_SY_FSEL_CLOSE);
             this->unk_2448C++;
         }
-    } else if CHECK_BTN_ALL(input->press.button, BTN_B) {
+    } else if CHECK_BTN_ALL (input->press.button, BTN_B) {
         play_sound(NA_SE_SY_FSEL_CLOSE);
         this->unk_2448C++;
     } else if (ABS_ALT(this->unk_24504) >= 30) {
@@ -2123,7 +2155,7 @@ void func_80812840(GameState *thisx) {
 }
 
 // FileChoose_FadeOutFileInfo
-void func_80812980(GameState *thisx) {
+void func_80812980(GameState* thisx) {
     FileChooseContext* this = (FileChooseContext*)thisx;
 
     this->unk_244D4[this->unk_24480] -= 200 / 4;
@@ -2138,9 +2170,7 @@ void func_80812980(GameState *thisx) {
         this->unk_24498 = 4;
         this->unk_2448C++;
     }
-    this->unk_244DA[2] =
-    this->unk_244DA[3] = 
-    this->unk_244D4[this->unk_24480];
+    this->unk_244DA[2] = this->unk_244DA[3] = this->unk_244D4[this->unk_24480];
 }
 
 // FileChoose_MoveSelectedFileToSlot
@@ -2152,7 +2182,7 @@ void func_80812A6C(GameState* thisx) {
 
     yStep = ABS_ALT(this->unk_2449A[this->unk_24480]) / this->unk_24498;
     this->unk_2449A[this->unk_24480] -= yStep;
-    
+
     if (this->unk_2449A[this->unk_24480] <= 0) {
         this->unk_2449A[this->unk_24480] = 0;
     }
@@ -2160,28 +2190,21 @@ void func_80812A6C(GameState* thisx) {
     for (i = 0; i < 3; i++) {
         if (i != this->unk_24480) {
             this->unk_244BC[i] += 200 / 4;
-            
+
             if (this->unk_244BC[i] >= 200) {
                 this->unk_244BC[i] = 200;
             }
 
-            this->unk_244DA[0] = 
-            this->unk_244DA[1] = 
-            this->unk_244E2 = 
-            this->unk_244BC[i];
+            this->unk_244DA[0] = this->unk_244DA[1] = this->unk_244E2 = this->unk_244BC[i];
 
             if (gSaveContext.unk_3F3F == 0) {
                 if (SLOT_OCCUPIED(sramCtx, i)) {
-                    this->unk_244C2[i] = 
-                    this->unk_244C8[i] =
-                    this->unk_244BC[i];
+                    this->unk_244C2[i] = this->unk_244C8[i] = this->unk_244BC[i];
                     this->unk_244CE[i] += 255 / 4;
                 }
             } else {
                 if (FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
-                    this->unk_244C2[i] = 
-                    this->unk_244C8[i] =
-                    this->unk_244BC[i];
+                    this->unk_244C2[i] = this->unk_244C8[i] = this->unk_244BC[i];
                     this->unk_244CE[i] += 255 / 4;
                 }
             }
@@ -2205,7 +2228,7 @@ void func_80812A6C(GameState* thisx) {
 }
 
 // FileChoose_FadeOut
-void func_80812D44(GameState *thisx) {
+void func_80812D44(GameState* thisx) {
     FileChooseContext* this = (FileChooseContext*)thisx;
 
     this->unk_2450A += 40;
@@ -2218,7 +2241,7 @@ void func_80812D44(GameState *thisx) {
 void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx);
 
 // FileChoose_LoadGame
-void func_80812D94(GameState *thisx) {
+void func_80812D94(GameState* thisx) {
     FileChooseContext* this = (FileChooseContext*)thisx;
     u16 phi_v0;
 
@@ -2226,7 +2249,7 @@ void func_80812D94(GameState *thisx) {
     Sram_OpenSave(this, &this->sramCtx);
 
     gSaveContext.gameMode = 0;
-    
+
     STOP_GAMESTATE(&this->state);
     SET_NEXT_GAMESTATE_TEST(&this->state, Play_Init, PlayState);
 
@@ -2267,17 +2290,10 @@ void func_80812D94(GameState *thisx) {
 }
 
 // gSelectModeUpdateFuncs
-extern void (*D_8081477C[])(GameState*);
-// void (*D_8081477C[])(GameState*) = {
-//     func_80812460,
-//     func_80812668,
-//     func_80812760,
-//     func_80812840,
-//     func_80812980,
-//     func_80812A6C,
-//     func_80812D44,
-//     func_80812D94,
-// };
+void (*D_8081477C[])(GameState*) = {
+    func_80812460, func_80812668, func_80812760, func_80812840,
+    func_80812980, func_80812A6C, func_80812D44, func_80812D94,
+};
 
 // SelectModeUpdate
 void func_80812E94(GameState* thisx) {
@@ -2289,7 +2305,7 @@ void func_80812E94(GameState* thisx) {
 
 // SelectModeDraw
 void func_80812ED0(GameState* thisx) {
-    FileChooseContext *this = (FileChooseContext*)thisx;
+    FileChooseContext* this = (FileChooseContext*)thisx;
 
     OPEN_DISPS(this->state.gfxCtx);
 
@@ -2338,7 +2354,7 @@ void FileChoose_UpdateAndDrawSkybox(FileChooseContext* this) {
 
     eyeX = 1000.0f * Math_CosS(fileChooseSkyboxRotation) - 1000.0f * Math_SinS(fileChooseSkyboxRotation);
     eyeY = -700.0f;
-    eyeZ =  1000.0f * Math_SinS(fileChooseSkyboxRotation) + 1000.0f * Math_CosS(fileChooseSkyboxRotation);
+    eyeZ = 1000.0f * Math_SinS(fileChooseSkyboxRotation) + 1000.0f * Math_CosS(fileChooseSkyboxRotation);
 
     FileChoose_RenderView(this, eyeX, eyeY, eyeZ);
     SkyboxDraw_Draw(&this->skyboxCtx, this->state.gfxCtx, 1, this->envCtx.unk_13, eyeX, -700.0f, eyeZ);
@@ -2350,30 +2366,22 @@ void FileChoose_UpdateAndDrawSkybox(FileChooseContext* this) {
     CLOSE_DISPS(gfxCtx);
 }
 
-// sScreenFillSetupDL
-extern Gfx D_80814510[];
-
 // State update/draws
-extern void (*D_8081479C[])(GameState*);
-// void (*D_8081479C[])(GameState*) = {
-//     func_8080BDAC,
-//     func_80811CB8,
-//     func_80812ED0,
-// };
-extern void (*D_808147A8[])(GameState*);
-// void (*D_808147A8[])(GameState*) = {
-//     func_8080BC58,
-//     func_8080D3D0,
-//     func_80812E94,
-// };
+void (*D_8081479C[])(GameState*) = {
+    func_8080BDAC,
+    func_80811CB8,
+    func_80812ED0,
+};
+void (*D_808147A8[])(GameState*) = {
+    func_8080BC58,
+    func_8080D3D0,
+    func_80812E94,
+};
 
-extern void* D_808147B4[];
 // Please wait, Decide/Cancel, Decide/Save
-// void* D_808147B4[] = { 0x0100B2B0, 0x0100A030, 0x0100A930 };
-extern s16 D_808147C0[];
-// s16 D_808147C0[] = { 144, 144, 152 };
-extern s16 D_808147C8[];
-// s16 D_808147C8[] = { 90, 90, 86 };
+void* D_808147B4[] = { 0x0100B2B0, 0x0100A030, 0x0100A930 };
+s16 D_808147C0[] = { 144, 144, 152 };
+s16 D_808147C8[] = { 90, 90, 86 };
 
 void FileChoose_Main(GameState* thisx) {
     FileChooseContext* this = (FileChooseContext*)thisx;
@@ -2465,8 +2473,8 @@ void FileChoose_Main(GameState* thisx) {
 
     func_8012C628(this->state.gfxCtx);
 
-    gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
-                          PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+    gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
+                      ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 100, 255, 255, this->unk_244E6);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
@@ -2478,10 +2486,13 @@ void FileChoose_Main(GameState* thisx) {
         texIndex = 1;
     }
 
-    gDPLoadTextureBlock(POLY_OPA_DISP++, D_808147B4[texIndex], G_IM_FMT_IA, G_IM_SIZ_8b, D_808147C0[texIndex], 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, D_808147B4[texIndex], G_IM_FMT_IA, G_IM_SIZ_8b, D_808147C0[texIndex], 16, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
+                        G_TX_NOLOD);
 
-    gSPTextureRectangle(POLY_OPA_DISP++, D_808147C8[texIndex] << 2, 204 << 2, (D_808147C8[texIndex] + D_808147C0[texIndex]) << 2, 
-                        (204 + 16) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(POLY_OPA_DISP++, D_808147C8[texIndex] << 2, 204 << 2,
+                        (D_808147C8[texIndex] + D_808147C0[texIndex]) << 2, (204 + 16) << 2, G_TX_RENDERTILE, 0, 0,
+                        1 << 10, 1 << 10);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gSPDisplayList(POLY_OPA_DISP++, D_80814510);
@@ -2502,11 +2513,7 @@ void func_80813908(GameState* thisx) {
     // this->menuMode = FS_MENU_MODE_INIT;
     this->unk_24484 = 0;
 
-    this->unk_24480 = 
-    this->unk_2448C = 
-    this->unk_2448E = 
-    this->fileNum = 
-    this->unk_24482 = 0;
+    this->unk_24480 = this->unk_2448C = this->unk_2448E = this->fileNum = this->unk_24482 = 0;
 
     this->unk_244F6[0] = 2;
     this->unk_244F6[1] = 3;
@@ -2523,15 +2530,11 @@ void func_80813908(GameState* thisx) {
     this->unk_24486 = 0;
     this->unk_2450C = 0.0f;
 
-    this->unk_244FE = 
-    this->unk_244FA = 0;
+    this->unk_244FE = this->unk_244FA = 0;
 
-    this->unk_24500 = 
-    this->unk_244FC = 0;
+    this->unk_24500 = this->unk_244FC = 0;
 
-    this->unk_24518 = 
-    this->unk_2451A = 
-    this->unk_24516 = 0;
+    this->unk_24518 = this->unk_2451A = this->unk_24516 = 0;
 
     // this->kbdButton = FS_KBD_BTN_NONE;
     this->unk_24510 = 99;
@@ -2541,47 +2544,19 @@ void func_80813908(GameState* thisx) {
     this->unk_244B0[1] = 150;
     this->unk_244B0[2] = 255;
 
-    this->unk_244BA    = 
-    this->unk_244B6[0] = 
-    this->unk_244B6[1] = 
-    this->unk_244BC[0] = 
-    this->unk_244BC[1] = 
-    this->unk_244BC[2] = 
-    this->unk_244C2[0] = 
-    this->unk_244C2[1] = 
-    this->unk_244C2[2] = 
-    this->unk_244C8[0] = 
-    this->unk_244C8[1] = 
-    this->unk_244C8[2] = 
-    this->unk_244CE[0] = 
-    this->unk_244CE[1] = 
-    this->unk_244CE[2] = 
-    this->unk_244D4[0] = 
-    this->unk_244D4[1] = 
-    this->unk_244D4[2] = 
-    this->unk_244DA[0] = 
-    this->unk_244DA[1] = 
-    this->unk_244DA[2] = 
-    this->unk_244DA[3] = 
-    this->unk_244E2    = 
-    this->unk_244E4    = 
-    this->unk_244E6    = 
-    this->unk_244E8 = 0;
+    this->unk_244BA = this->unk_244B6[0] = this->unk_244B6[1] = this->unk_244BC[0] = this->unk_244BC[1] =
+        this->unk_244BC[2] = this->unk_244C2[0] = this->unk_244C2[1] = this->unk_244C2[2] = this->unk_244C8[0] =
+            this->unk_244C8[1] = this->unk_244C8[2] = this->unk_244CE[0] = this->unk_244CE[1] = this->unk_244CE[2] =
+                this->unk_244D4[0] = this->unk_244D4[1] = this->unk_244D4[2] = this->unk_244DA[0] = this->unk_244DA[1] =
+                    this->unk_244DA[2] = this->unk_244DA[3] = this->unk_244E2 = this->unk_244E4 = this->unk_244E6 =
+                        this->unk_244E8 = 0;
 
     this->unk_24508 = 6;
     this->unk_24498 = 4;
     this->unk_244A8 = -1;
 
-    this->unk_244AA    =
-    this->unk_2449A[0] =
-    this->unk_2449A[1] =
-    this->unk_2449A[2] =
-    this->unk_2449A[3] =
-    this->unk_2449A[4] =
-    this->unk_2449A[5] =
-    this->unk_24492[0] =
-    this->unk_24492[1] =
-    this->unk_24492[2] = 0;
+    this->unk_244AA = this->unk_2449A[0] = this->unk_2449A[1] = this->unk_2449A[2] = this->unk_2449A[3] =
+        this->unk_2449A[4] = this->unk_2449A[5] = this->unk_24492[0] = this->unk_24492[1] = this->unk_24492[2] = 0;
 
     this->unk_2451E[0] = 0;
     this->unk_2451E[1] = 3;
