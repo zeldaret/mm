@@ -73,7 +73,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -151,7 +151,7 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
         path = &play->setupPathList[path->unk1];
     }
 
-    for (i = 0; i < EN_SYATEKI_WF_GET_PARAM_FF00(&this->actor); i++) {
+    for (i = 0; i < EN_SYATEKI_WF_GET_NUMBER(&this->actor); i++) {
         path = &play->setupPathList[path->unk1];
     }
 
@@ -224,7 +224,7 @@ void func_80A201CC(EnSyatekiWf* this) {
     this->actor.draw = NULL;
     this->unk_2A4 = 1;
     this->unk_298 = 0;
-    syatekiMan->unk_276 &= ~(1 << EN_SYATEKI_WF_GET_PARAM_FF00(&this->actor));
+    syatekiMan->wolfosFlags &= ~(1 << EN_SYATEKI_WF_GET_NUMBER(&this->actor));
     this->actionFunc = func_80A20284;
 }
 
@@ -233,10 +233,10 @@ void func_80A20284(EnSyatekiWf* this, PlayState* play) {
 
     if (this->actor.parent != NULL) {
         syatekiMan = (EnSyatekiMan*)this->actor.parent;
-        if ((syatekiMan->unk_26A == 1) && (this->unk_298 == 1)) {
+        if ((syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) && (this->unk_298 == 1)) {
             func_80A200E0(this);
             func_80A2030C(this);
-        } else if (syatekiMan->unk_276 & (1 << EN_SYATEKI_WF_GET_PARAM_FF00(&this->actor))) {
+        } else if (syatekiMan->wolfosFlags & (1 << EN_SYATEKI_WF_GET_NUMBER(&this->actor))) {
             this->unk_298 = 1;
         }
     }
@@ -270,7 +270,7 @@ void func_80A203DC(EnSyatekiWf* this, PlayState* play) {
     s16 temp_v0;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if (syatekiMan->unk_26A != 1) {
+    if (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING) {
         func_80A201CC(this);
     }
 
@@ -375,7 +375,7 @@ void func_80A20858(EnSyatekiWf* this, PlayState* play) {
     EffectSsExtra_Spawn(play, &this->actor.world.pos, &D_80A20EDC, &D_80A20EE8, 5, 2);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_DEAD);
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
-    syatekiMan->unk_280 += 100;
+    syatekiMan->score += 100;
     this->actionFunc = func_80A208F8;
 }
 

@@ -229,12 +229,12 @@ s32 EnMttag_UpdateCheckpoints(EnMttag* this, PlayState* play) {
 
 /**
  * Exits the race and returns the player back to "normal" gameplay.
- * Whether the player won or lost the race is determined by arg1 and nextTransition.
+ * Whether the player won or lost the race is determined by transitionType and nextTransitionType.
  */
-s32 EnMttag_ExitRace(PlayState* play, s32 arg1, s32 nextTransition) {
+s32 EnMttag_ExitRace(PlayState* play, s32 transitionType, s32 nextTransitionType) {
     CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
     play->nextEntranceIndex = 0xD020;
-    if ((gSaveContext.save.weekEventReg[33] & 0x80)) {
+    if (gSaveContext.save.weekEventReg[33] & 0x80) {
         // Spring
         gSaveContext.nextCutsceneIndex = 0xFFF0;
     } else {
@@ -242,9 +242,9 @@ s32 EnMttag_ExitRace(PlayState* play, s32 arg1, s32 nextTransition) {
         gSaveContext.nextCutsceneIndex = 0;
     }
 
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = arg1;
-    gSaveContext.nextTransition = nextTransition;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = transitionType;
+    gSaveContext.nextTransitionType = nextTransitionType;
     func_801477B4(play);
     return 1;
 }
@@ -398,10 +398,10 @@ void EnMttag_RaceFinish(EnMttag* this, PlayState* play) {
     if (DECR(this->timer) == 0) {
         if ((gSaveContext.eventInf[1] & 2)) {
             // Player won
-            EnMttag_ExitRace(play, 3, 3);
+            EnMttag_ExitRace(play, TRANS_TYPE_03, TRANS_TYPE_03);
         } else {
             // A non-player Goron won
-            EnMttag_ExitRace(play, 2, 2);
+            EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
         }
 
         Actor_MarkForDeath(&this->actor);
@@ -416,7 +416,7 @@ void EnMttag_RaceFinish(EnMttag* this, PlayState* play) {
 void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((talkState == 5 && Message_ShouldAdvance(play)) || talkState == 2)) {
+    if (((talkState == TEXT_STATE_5 && Message_ShouldAdvance(play)) || talkState == TEXT_STATE_CLOSING)) {
         if (this->shouldRestartRace) {
             play->nextEntranceIndex = 0xD010;
 
@@ -428,9 +428,9 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
                 gSaveContext.nextCutsceneIndex = 0;
             }
 
-            play->sceneLoadFlag = 0x14;
-            play->unk_1887F = 2;
-            gSaveContext.nextTransition = 2;
+            play->transitionTrigger = TRANS_TRIGGER_START;
+            play->transitionType = TRANS_TYPE_02;
+            gSaveContext.nextTransitionType = TRANS_TYPE_02;
             func_801477B4(play);
             func_800B7298(play, &this->actor, 7);
             Parameter_AddMagic(play,
@@ -442,7 +442,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
             gSaveContext.eventInf[1] &= (u8)~8;
             gSaveContext.eventInf[2] = ((gSaveContext.eventInf[2] & 0xF) + 1) | (gSaveContext.eventInf[2] & 0xF0);
         } else {
-            EnMttag_ExitRace(play, 2, 2);
+            EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
         }
         Actor_MarkForDeath(&this->actor);
     }
@@ -453,12 +453,12 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
  * responded to the Goron Elder's son's question.
  */
 void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 4) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex != 0) {
             // Exit the race
             func_8019F230();
             gSaveContext.unk_3DD0[4] = 0;
-            EnMttag_ExitRace(play, 2, 2);
+            EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
             gSaveContext.eventInf[1] &= (u8)~8;
             gSaveContext.eventInf[1] |= 4;
             Actor_MarkForDeath(&this->actor);

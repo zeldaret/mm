@@ -363,10 +363,10 @@ void AnimatedMat_DrawColorNonLinearInterp(PlayState* play, s32 segment, void* pa
  */
 void AnimatedMat_DrawTexCycle(PlayState* play, s32 segment, void* params) {
     AnimatedMatTexCycleParams* texAnimParams = params;
-    void** texList = Lib_SegmentedToVirtual(texAnimParams->textureList);
+    TexturePtr* texList = Lib_SegmentedToVirtual(texAnimParams->textureList);
     u8* texId = Lib_SegmentedToVirtual(texAnimParams->textureIndexList);
     s32 curFrame = sMatAnimStep % texAnimParams->keyFrameLength;
-    void* tex = Lib_SegmentedToVirtual(texList[texId[curFrame]]);
+    TexturePtr tex = Lib_SegmentedToVirtual(texList[texId[curFrame]]);
 
     OPEN_DISPS(play->state.gfxCtx);
 

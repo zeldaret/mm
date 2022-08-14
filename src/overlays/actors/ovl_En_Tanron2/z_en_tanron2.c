@@ -594,7 +594,7 @@ void EnTanron2_Draw(Actor* thisx, PlayState* play2) {
 
     func_8012C2DC(play->state.gfxCtx);
 
-    gSPDisplayList(POLY_XLU_DISP++, object_boss04_DL_003450);
+    gSPDisplayList(POLY_XLU_DISP++, gWartBubbleMaterialDL);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 150);
 
     tanron2 = play->actorCtx.actorLists[ACTORCAT_BOSS].first;
@@ -633,14 +633,14 @@ void EnTanron2_Draw(Actor* thisx, PlayState* play2) {
             Matrix_RotateZS(-D_80BB8458[i]->unk_14A, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, object_boss04_DL_0034C8);
+            gSPDisplayList(POLY_XLU_DISP++, gWartBubbleModelDL);
         }
     }
 
     func_8012C448(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 150);
-    gSPDisplayList(POLY_XLU_DISP++, object_boss04_DL_004510);
+    gSPDisplayList(POLY_XLU_DISP++, gWartShadowMaterialDL);
 
     tanron2 = play->actorCtx.actorLists[ACTORCAT_BOSS].first;
     while (tanron2 != NULL) {
@@ -649,7 +649,7 @@ void EnTanron2_Draw(Actor* thisx, PlayState* play2) {
             Matrix_Scale(0.6f, 0.0f, 0.6f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, object_boss04_DL_004550);
+            gSPDisplayList(POLY_XLU_DISP++, gWartShadowModelDL);
         }
         tanron2 = tanron2->next;
     }
@@ -670,7 +670,7 @@ void EnTanron2_Draw(Actor* thisx, PlayState* play2) {
             Matrix_Scale(D_80BB8454, 0.0f, D_80BB8454, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0377B0);
+            gSPDisplayList(POLY_XLU_DISP++, gEffWaterRippleDL);
         }
         tanron2 = tanron2->next;
     }

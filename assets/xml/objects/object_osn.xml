@@ -112,6 +112,6 @@
         <Limb Name="object_osn_Standardlimb_02029C" Type="Standard" EnumName="OBJECT_OSN_LIMB_12" Offset="0x2029C" />
         <Skeleton Name="object_osn_Skel_0202F0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_OSN_LIMB_NONE" LimbMax="OBJECT_OSN_LIMB_MAX" EnumName="object_osn_Limbs" Offset="0x202F0" />
         <Animation Name="object_osn_Anim_020530" Offset="0x20530" />
-        <!-- <Blob Name="object_osn_Blob_020540" Size="0x20" Offset="0x20540" /> -->
+        <Skeleton Name="gDekuMaskSkel" Type="Flex" LimbType="Standard" Offset="0x20550" />
     </File>
 </Root>
