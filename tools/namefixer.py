@@ -731,6 +731,8 @@ wordReplace = {
     "EXCH_ITEM_DEED_MOUNTAIN": "PLAYER_AP_DEED_MOUNTAIN",
     "EXCH_ITEM_DEED_OCEAN": "PLAYER_AP_DEED_OCEAN",
     "EXCH_ITEM_LETTER_MAMA": "PLAYER_AP_LETTER_MAMA",
+    "ITEM_FISHING_POLE": "ITEM_FISHING_ROD",
+    "PLAYER_AP_FISHING_POLE": "PLAYER_AP_FISHING_ROD",
 
     # Example of custom behaviour:
     # "PLAYER": ("GET_PLAYER(play)", {"ignore": (-1, '"PLAYER"')}), # ignore "PLAYER" in sSoundBankNames
