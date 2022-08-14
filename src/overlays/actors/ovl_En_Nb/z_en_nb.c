@@ -228,12 +228,12 @@ s32 func_80BC00AC(EnNb* this, PlayState* play) {
     s32 phi_v1 = 0;
 
     switch (this->unk_288) {
-        case 0x0:
-            if (func_80BBFFD4(this, sp2A) != 0) {
-                case 0x2:
-                case 0x4:
-                case 0x6:
-                case 0x8:
+        case 0:
+            if (func_80BBFFD4(this, sp2A)) {
+                case 2:
+                case 4:
+                case 6:
+                case 8:
                     Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)),
                                           &this->actor);
                     this->unk_288++;
@@ -241,10 +241,10 @@ s32 func_80BC00AC(EnNb* this, PlayState* play) {
             }
             break;
 
-        case 0x1:
-        case 0x3:
-        case 0x5:
-        case 0x7:
+        case 1:
+        case 3:
+        case 5:
+        case 7:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
                 Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)),
                                       this->actor.child);
@@ -253,7 +253,7 @@ s32 func_80BC00AC(EnNb* this, PlayState* play) {
             phi_v1 = 1;
             break;
 
-        case 0x9:
+        case 9:
             ActorCutscene_Stop(sp2A);
             this->unk_288++;
             phi_v1 = 1;
@@ -268,7 +268,7 @@ s32 func_80BC01DC(EnNb* this, PlayState* play) {
     s32 sp2C = 0;
 
     switch (this->unk_288) {
-        case 0x0:
+        case 0:
             if (Player_GetMask(play) == PLAYER_MASK_ALL_NIGHT) {
                 this->unk_288 = 1;
             } else {
@@ -276,13 +276,13 @@ s32 func_80BC01DC(EnNb* this, PlayState* play) {
             }
             break;
 
-        case 0x1:
+        case 1:
             func_8016A268(&play->state, 1, 0, 0, 0, 0);
             this->unk_286 = 40;
             this->unk_288 = (u16)(this->unk_288 + 1);
             break;
 
-        case 0x2:
+        case 2:
             MREG(68) = (s16)(s32)(255.0f - (((f32)ABS_ALT(20 - this->unk_286) / 20.0f) * 255.0f));
 
             if (this->unk_286 == 20) {
@@ -300,18 +300,18 @@ s32 func_80BC01DC(EnNb* this, PlayState* play) {
             }
             break;
 
-        case 0x3:
+        case 3:
             play->interfaceCtx.unk_31A = 4;
             this->unk_288++;
             sp2C = 1;
             break;
 
-        case 0x4:
+        case 4:
             play->interfaceCtx.unk_31A = 5;
             this->unk_288++;
             /* fallthrough */
 
-        case 0x5:
+        case 5:
             if (!(gSaveContext.eventInf[4] & 4)) {
                 gSaveContext.save.time = CLOCK_TIME(8, 0);
                 Sram_IncrementDay();
@@ -372,11 +372,11 @@ s32 func_80BC04FC(EnNb* this, PlayState* play) {
 
 void func_80BC05A8(EnNb* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 talkState = Message_GetState(&play->msgCtx);
-    u16 temp_a0 = play->msgCtx.currentTextId;
+    TextState talkState = Message_GetState(&play->msgCtx);
+    u16 textId = play->msgCtx.currentTextId;
 
-    if ((&this->actor == player->targetActor) && ((temp_a0 < 0xFF) || (temp_a0 > 0x200)) && (talkState == 3) &&
-        (this->lastTalkState == 3)) {
+    if ((&this->actor == player->targetActor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
+        (this->prevTalkState == TEXT_STATE_3)) {
         if ((play->state.frames % 3) == 0) {
             if (this->unk_26C == 120.0f) {
                 this->unk_26C = 0.0f;
@@ -390,7 +390,7 @@ void func_80BC05A8(EnNb* this, PlayState* play) {
 
     Math_SmoothStepToF(&this->unk_270, this->unk_26C, 0.8f, 40.0f, 10.0f);
     Matrix_Translate(this->unk_270, 0.0f, 0.0f, 1);
-    this->lastTalkState = talkState;
+    this->prevTalkState = talkState;
 }
 
 void func_80BC06C4(EnNb* this) {
@@ -524,16 +524,16 @@ s32 func_80BC0A18(EnNb* this, PlayState* play) {
 }
 
 s32 func_80BC0B98(EnNb* this, PlayState* play, UNK_TYPE arg2) {
-    s32 sp24 = 0;
+    s32 ret = false;
 
     if (func_80BBFDB0(this, play, ACTORCAT_NPC, ACTOR_EN_AN) != NULL) {
         SubS_UpdateFlags(&this->unk_262, 3, 7);
         this->unk_262 |= 0x20;
         EnNb_ChangeAnim(this, 0);
-        sp24 = 1;
+        ret = true;
     }
 
-    return sp24;
+    return ret;
 }
 
 s32 func_80BC0C0C(EnNb* this, PlayState* play, UNK_TYPE arg2) {
@@ -548,7 +548,7 @@ s32 func_80BC0C0C(EnNb* this, PlayState* play, UNK_TYPE arg2) {
 }
 
 s32 func_80BC0C80(EnNb* this, PlayState* play, u8* arg2) {
-    s32 phi_v0;
+    s32 ret;
 
     this->actor.flags |= ACTOR_FLAG_1;
     this->actor.targetMode = 0;
@@ -557,20 +557,20 @@ s32 func_80BC0C80(EnNb* this, PlayState* play, u8* arg2) {
 
     switch (*arg2) {
         default:
-            phi_v0 = 0;
+            ret = 0;
             break;
 
-        case 0x1:
-        case 0x3:
-        case 0x4:
-            phi_v0 = func_80BC0C0C(this, play, arg2);
+        case 1:
+        case 3:
+        case 4:
+            ret = func_80BC0C0C(this, play, arg2);
             break;
 
-        case 0x2:
-            phi_v0 = func_80BC0B98(this, play, arg2);
+        case 2:
+            ret = func_80BC0B98(this, play, arg2);
             break;
     }
-    return phi_v0;
+    return ret;
 }
 
 s32 func_80BC0D08(EnNb* this, PlayState* play) {
@@ -722,11 +722,11 @@ void EnNb_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
         SubS_UpdateLimb(this->headRot + 0x4000, this->unk_27E + this->actor.shape.rot.y + 0x4000, &this->unk_1F0,
                       &this->unk_1FC, phi_v0, phi_v1);
         Matrix_Pop();
-        Matrix_Translate(this->unk_1F0.x, this->unk_1F0.y, this->unk_1F0.z, 0);
-        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
-        Matrix_RotateYS(this->unk_1FC.y, 1);
-        Matrix_RotateXS(this->unk_1FC.x, 1);
-        Matrix_RotateZS(this->unk_1FC.z, 1);
+        Matrix_Translate(this->unk_1F0.x, this->unk_1F0.y, this->unk_1F0.z, MTXMODE_NEW);
+        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_1FC.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_1FC.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_1FC.z, MTXMODE_APPLY);
         Matrix_Push();
     }
 }

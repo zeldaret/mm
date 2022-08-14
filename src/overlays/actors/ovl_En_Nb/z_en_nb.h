@@ -44,7 +44,7 @@ typedef struct EnNb {
     /* 0x28C */ EnNbActionFunc2 unk_28C;
     /* 0x290 */ s32 unk_290; // animIndex?
     /* 0x294 */ char unk_294[0x4];
-    /* 0x294 */ s32 lastTalkState;
+    /* 0x294 */ TextState prevTalkState;
 } EnNb; // size = 0x29C
 
 extern const ActorInit En_Nb_InitVars;
