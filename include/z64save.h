@@ -386,7 +386,7 @@ void func_80147138(SramContext* sramCtx, s32 curPage, s32 numPages);
 void func_80147150(SramContext* sramCtx);
 void func_80147198(SramContext* sramCtx);
 
-extern u32 D_801C6798[];
+extern u32 gSramSlotOffsets[];
 extern u8 gAmmoItems[];
 extern s32 D_801C67C8[];
 extern s32 D_801C67E8[];

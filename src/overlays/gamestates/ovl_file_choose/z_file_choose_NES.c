@@ -9,7 +9,7 @@
 #include "z64rumble.h"
 #include "z64save.h"
 
-void func_801A3238(u8 playerIdx, u16 seqId, u8 fadeTimer, s8 arg3, s8 arg4); /* extern */
+void func_801A3238(u8 playerIdx, u16 seqId, u8 fadeTimer, s8 arg3, s8 arg4);
 void func_801A4058(u16);
 void func_801457CC(FileChooseContext* fileChooseCtx, SramContext* sramCtx);
 
@@ -27,53 +27,42 @@ extern void* D_010310F0[];
 extern GfxMasterList D_0E000000;
 
 s16 D_80814280[] = {
-    0x0002, 0x0003, 0x0002, 0x0002, 0x0002, 0x0002, 0x0002, 0x0002, 0x0002, 0x0002, 0x0001, 0x0002, 0x0000, 0x0001,
-    0x0001, 0x0002, 0x0001, 0x0001, 0x0004, 0x0002, 0x0002, 0x0002, 0x0001, 0x0001, 0x0000, 0x0002, 0x0000, 0x0001,
-    0x0001, 0x0001, 0x0001, 0x0001, 0x0000, 0x0001, 0x0001, 0x0001, 0x0002, 0x0002, 0x0002, 0x0002, 0x0002, 0x0003,
-    0x0002, 0x0002, 0x0004, 0x0003, 0x0002, 0x0004, 0x0001, 0x0002, 0x0002, 0x0001, 0x0001, 0x0002, 0x0002, 0x0003,
-    0x0002, 0x0002, 0x0000, 0x0002, 0x0002, 0x0002, 0x0000, 0x0003, 0x0001, 0x0000,
+    2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 1, 1, 2, 1, 1, 4, 2, 2, 2, 1, 1, 0, 2, 0, 1, 1, 1, 1, 1, 0,
+    1, 1, 1, 2, 2, 2, 2, 2, 3, 2, 2, 4, 3, 2, 4, 1, 2, 2, 1, 1, 2, 2, 3, 2, 2, 0, 2, 2, 2, 0, 3, 1, 0,
 };
 
-s32 D_80814304[] = {
-    0x00010002, 0x00000001, 0x00010002, 0x00010001, 0x00040002, 0x00020002, 0x00010001, 0x00000002,
-    0x00000001, 0x00010001, 0x00010001, 0x00000001, 0x00010001, 0x00020002, 0x00020002, 0x00020003,
-    0x00020002, 0x00040003, 0x00020004, 0x00010002, 0x00020001, 0x00010002, 0x00020003, 0x00020002,
-    0x00000002, 0x00020002, 0x00030002, 0x00020002, 0x00020002, 0x00020002, 0x00020002, 0x00010003,
+s16 D_80814304[] = {
+    1, 2, 0, 1, 1, 2, 1, 1, 4, 2, 2, 2, 1, 1, 0, 2, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 2, 2, 2, 2, 2, 3,
+    2, 2, 4, 3, 2, 4, 1, 2, 2, 1, 1, 2, 2, 3, 2, 2, 0, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 3,
 };
 
-s32 D_80814384[] = {
-    0x00000001, 0x00000001, 0x00010001, 0x00010001, 0x00020001, 0x00010001, 0x00010001, 0x00000001,
-    0x00000001, 0x00010001, 0x00010001, 0x00000001, 0x00010001, 0x00010001, 0x00010001, 0x00010001,
-    0x00010001, 0x00020001, 0x00010002, 0x00010001, 0x00010001, 0x00010001, 0x00010001, 0x00010001,
-    0x00000001, 0x00010001, 0x00010001, 0x00010001, 0x00010001, 0x00010001, 0x00010001, 0x00010001,
+s16 D_80814384[] = {
+    0, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 };
 
-s32 D_80814404[] = {
-    0xFFA2FFA0,
-    0xFFD00000,
-    0x00200040,
+s16 D_80814404[] = {
+    -94, -96, -48, 0, 32, 64,
 };
 
-s32 D_80814410[] = {
-    0x0038002C,
-    0x002C001C,
-    0x001C002C,
+s16 D_80814410[] = {
+    56, 44, 44, 28, 28, 44,
 };
 
-s32 D_8081441C[] = { 0x0048FFD0, 0xFFD0FFD0, 0xFFD0FFD0 };
-
-s32 D_80814428[] = { 0x01021D30, 0x010217B0 };
-
-s32 D_80814430[] = {
-    0x001C002C,
+s16 D_8081441C[] = {
+    72, -48, -48, -48, -48, -48,
 };
 
-s32 D_80814434[] = {
-    0xFFE2FFF0, 0xFFFA0004, 0x000E0018, 0x0022002C, 0x0036FFF0, 0xFFF00000,
+s16 D_80814428[] = { 0x0102, 0x1D30, 0x0102, 0x17B0 };
+
+s16 D_80814430[] = { 28, 44 };
+
+s16 D_80814434[] = {
+    -30, -16, -6, 4, 14, 24, 34, 44, 54, -16, -16, 0,
 };
 
-s32 D_8081444C[] = {
-    0x00480045, 0x00450045, 0x00450045, 0x00450045, 0x00450045, 0x00450000,
+s16 D_8081444C[] = {
+    72, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 0,
 };
 
 s32 D_80814464[] = {
@@ -101,27 +90,27 @@ s32 D_808144E8[] = {
     0x00000000, 0x00000064, 0x41000000, 0x42C80000, 0x00000000,
 };
 
-// sScreenFillSetupDL
-Gfx D_80814510[] = {
-    0xE7000000, 0x00000000, 0xD9C0F9FA, 0x00000000, 0xEF802C30,
-    0x00504340, 0xFCFFFFFF, 0xFFFDF6FB, 0xDF000000, 0x00000000,
+Gfx sScreenFillSetupDL[] = {
+    gsDPPipeSync(),
+    gsSPClearGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN |
+                          G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH),
+    gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_1PRIMITIVE,
+                     G_AC_NONE | G_ZS_PIXEL | G_RM_CLD_SURF | G_RM_CLD_SURF2),
+    gsDPSetCombineMode(G_CC_PRIMITIVE, G_CC_PRIMITIVE),
+    gsSPEndDisplayList(),
 };
 
-// sFileInfoBoxPartWidths
-s16 D_80814538[] = {
-    0x0024, 0x0024, 0x0024, 0x0024, 0x0018, 0x001C, 0x001C, 0x0000,
+s16 sFileInfoBoxPartWidths[] = {
+    36, 36, 36, 36, 24, 28, 28, 0,
 };
 
-// sWindowContentColors
-s16 D_80814548[] = { 100, 150, 255, 0 };
+s16 sWindowContentColors[] = { 100, 150, 255 };
 
 s16 fileChooseSkyboxRotation = 0;
 
 s16 D_80814554[] = { 1, 0, 0, 0 };
 
-extern u32 D_801C6798[];
-
-#define gSramSlotOffsets D_801C6798
 #define GET_NEWF(sramCtx, slotNum, index) \
     (sramCtx->readBuff[gSramSlotOffsets[slotNum] + offsetof(SaveContext, save.playerData.newf[index])])
 #define SLOT_OCCUPIED(sramCtx, slotNum)                                                  \
@@ -639,15 +628,15 @@ void func_8080D40C(GameState* thisx) {
     }
 }
 
-s16 D_80814620[] = { 0x0008, 0x0008, 0x0008, 0x0000 };
-s16 D_80814628[] = { 0xC, 0xC, 0xC, 0 };
-s16 D_80814630[] = { 0xC, 0xC, 0xC, 0 };
+s16 D_80814620[] = { 8, 8, 8, 0 };
+s16 D_80814628[] = { 12, 12, 12, 0 };
+s16 D_80814630[] = { 12, 12, 12, 0 };
 s16 D_80814638[] = {
-    0x58, 0x68, 0x78, 0x3AC, 0x3B0, 0x3B4,
+    88, 104, 120, 940, 944, 948,
 };
-s16 D_80814644[] = { 0x58, 0x68, 0x78, 0x3B0 };
-s16 D_8081464C[] = { 0x3AC, 0x3B0 };
-s16 D_80814650[] = { 0x3AC, 0x3B0 };
+s16 D_80814644[] = { 88, 104, 120, 944 };
+s16 D_8081464C[] = { 940, 944 };
+s16 D_80814650[] = { 940, 944 };
 // void func_8080D6D4(FileChooseContext* this);
 void func_8080D6D4(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D6D4.s")
@@ -1081,7 +1070,7 @@ void func_8080D6D4(GameState* thisx);
 //         for (phi_s4 = 0; phi_s4 < 7; phi_s4++, phi_s3 += 4) {
 //             this->unk_243E4[phi_s3].v.ob[0] = this->unk_243E4[phi_s3 + 2].v.ob[0] = phi_s1;
 //             this->unk_243E4[phi_s3 + 1].v.ob[0] = this->unk_243E4[phi_s3 + 3].v.ob[0] =
-//                 this->unk_243E4[phi_s3].v.ob[0] + D_80814538[phi_s4];
+//                 this->unk_243E4[phi_s3].v.ob[0] + sFileInfoBoxPartWidths[phi_s4];
 
 //             this->unk_243E4[phi_s3].v.ob[1] = this->unk_243E4[phi_s3 + 1].v.ob[1] =
 //                 this->unk_24492[phi_a3] + 0x2C;
@@ -1090,9 +1079,9 @@ void func_8080D6D4(GameState* thisx);
 //                 this->unk_243E4[phi_s3].v.ob[1] - 0x38;
 
 //             this->unk_243E4[phi_s3 + 1].v.tc[0] = this->unk_243E4[phi_s3 + 3].v.tc[0] =
-//                 D_80814538[phi_s4] << 5;
+//                 sFileInfoBoxPartWidths[phi_s4] << 5;
 //             this->unk_243E4[phi_s3 + 2].v.tc[1] = this->unk_243E4[phi_s3 + 3].v.tc[1] = 0x700;
-//             phi_s1 += D_80814538[phi_s4];
+//             phi_s1 += sFileInfoBoxPartWidths[phi_s4];
 //         }
 //     }
 
@@ -1112,7 +1101,7 @@ void func_8080D6D4(GameState* thisx);
 // //         phi_s4_4 = 0;
 // // loop_4:
 // //         this->unk_243E4[phi_s3].unk20 = phi_s1;
-// //         temp_a1_8 = &D_80814538 + (phi_s4 * 2);
+// //         temp_a1_8 = &sFileInfoBoxPartWidths + (phi_s4 * 2);
 // //         this->unk_243E4[phi_s3].v.ob[0] = phi_s1;
 // //         temp_s4 = phi_s4 + 1;
 // //         temp_a0_10 = &this->unk_243E4[phi_s3];
@@ -1821,8 +1810,8 @@ void func_808108DC(GameState* thisx) {
             for (phi_t3 = 0, phi_t2 = 0; phi_t2 < 7; phi_t2++, phi_t3 += 4) {
                 if ((phi_t2 < 5) || ((this->unk_2446A[phi_s0] != 0) && (phi_t2 >= 5))) {
                     gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814704[phi_t2], G_IM_FMT_IA, G_IM_SIZ_16b,
-                                        D_80814538[phi_t2], 56, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
-                                        G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                                        sFileInfoBoxPartWidths[phi_t2], 56, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
                     gSP1Quadrangle(POLY_OPA_DISP++, phi_t3, phi_t3 + 2, phi_t3 + 3, phi_t3 + 1, 0);
                 }
             }
@@ -1835,30 +1824,30 @@ void func_808108DC(GameState* thisx) {
         if (phi_t2 < 2) {
             gSPVertex(POLY_OPA_DISP++, &this->unk_243E4[phi_s6], 16, 0);
 
-            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_80814548[0], D_80814548[1], D_80814548[2],
-                            this->unk_244BC[phi_t2]);
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sWindowContentColors[0], sWindowContentColors[1],
+                            sWindowContentColors[2], this->unk_244BC[phi_t2]);
             gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814758[phi_t2], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
             gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
 
-            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_80814548[0], D_80814548[1], D_80814548[2],
-                            this->unk_244C2[phi_t2]);
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sWindowContentColors[0], sWindowContentColors[1],
+                            sWindowContentColors[2], this->unk_244C2[phi_t2]);
             gDPLoadTextureBlock(POLY_OPA_DISP++, D_010220B0, G_IM_FMT_IA, G_IM_SIZ_16b, 108, 16, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
             gSP1Quadrangle(POLY_OPA_DISP++, 4, 6, 7, 5, 0);
 
-            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_80814548[0], D_80814548[1], D_80814548[2],
-                            this->unk_244CE[phi_t2]);
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sWindowContentColors[0], sWindowContentColors[1],
+                            sWindowContentColors[2], this->unk_244CE[phi_t2]);
             gDPLoadTextureBlock(POLY_OPA_DISP++, D_01002800, G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
             gSP1Quadrangle(POLY_OPA_DISP++, 8, 10, 11, 9, 0);
 
             if (this->unk_2446A[phi_t2] != 0) {
-                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_80814548[0], D_80814548[1], D_80814548[2],
-                                this->unk_244C2[phi_t2]);
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sWindowContentColors[0], sWindowContentColors[1],
+                                sWindowContentColors[2], this->unk_244C2[phi_t2]);
                 gDPLoadTextureBlock(POLY_OPA_DISP++, D_0102A030, G_IM_FMT_IA, G_IM_SIZ_16b, 52, 16, 0,
                                     G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                     G_TX_NOLOD, G_TX_NOLOD);
@@ -2495,7 +2484,7 @@ void FileChoose_Main(GameState* thisx) {
                         1 << 10, 1 << 10);
 
     gDPPipeSync(POLY_OPA_DISP++);
-    gSPDisplayList(POLY_OPA_DISP++, D_80814510);
+    gSPDisplayList(POLY_OPA_DISP++, sScreenFillSetupDL);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, this->unk_2450A);
     gSPDisplayList(POLY_OPA_DISP++, D_0E000000.fillRect);
 

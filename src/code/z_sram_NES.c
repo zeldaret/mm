@@ -144,7 +144,7 @@ u16 D_801C66D0[ARRAY_COUNT(gSaveContext.save.weekEventReg)] = {
 };
 
 // used in other files
-u32 D_801C6798[] = {
+u32 gSramSlotOffsets[] = {
     0x00000020, 0x00001470, 0x000028C0, 0x00003D10, 0x00005160, 0x000065B0,
 };
 
