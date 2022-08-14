@@ -234,7 +234,7 @@ s32 func_80BC00AC(EnNb* this, PlayState* play) {
                 case 0x4:
                 case 0x6:
                 case 0x8:
-                    Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)),
+                    Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)),
                                           &this->actor);
                     this->unk_288++;
                     phi_v1 = 1;
@@ -246,7 +246,7 @@ s32 func_80BC00AC(EnNb* this, PlayState* play) {
         case 0x5:
         case 0x7:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)),
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)),
                                       this->actor.child);
             }
             this->unk_288++;
@@ -322,9 +322,9 @@ s32 func_80BC01DC(EnNb* this, PlayState* play) {
             this->unk_288++;
             play->nextEntranceIndex = 0xBC20;
             gSaveContext.nextCutsceneIndex = 0;
-            play->sceneLoadFlag = 0x14;
-            play->unk_1887F = 2;
-            gSaveContext.nextTransition = 6;
+            play->transitionTrigger = TRANS_TRIGGER_START;
+            play->transitionType = TRANS_TYPE_02;
+            gSaveContext.nextTransitionType = TRANS_TYPE_06;
             gSaveContext.eventInf[4] |= 8;
             break;
     }
@@ -585,7 +585,7 @@ void func_80BC0D1C(EnNb* this, PlayState* play) {
 }
 
 void EnNb_Wait(EnNb* this, PlayState* play) {
-    ScheduleResult scheduleResult;
+    ScheduleOutput scheduleResult;
 
     this->unk_280 = REG(15) + ((void)0, gSaveContext.save.daySpeed);
 
@@ -612,8 +612,8 @@ void EnNb_Wait(EnNb* this, PlayState* play) {
 void func_80BC0EAC(EnNb* this, PlayState* play) {
     if (func_8010BF58(&this->actor, play, this->unk_1E0, this->unk_28C, &this->unk_1E4) != 0) {
         if (gSaveContext.eventInf[4] & 8) {
-            gSaveContext.eventInf[4] &= (u8)~0x04;
-            gSaveContext.eventInf[4] &= (u8)~0x08;
+            gSaveContext.eventInf[4] &= (u8)~4;
+            gSaveContext.eventInf[4] &= (u8)~8;
         }
         SubS_UpdateFlags(&this->unk_262, 3, 7);
         if (this->unk_1DC != 2) {
@@ -645,8 +645,8 @@ void EnNb_Init(Actor* thisx, PlayState* play) {
     if (gSaveContext.eventInf[4] & 8) {
         SubS_UpdateFlags(&this->unk_262, 4, 1 | 2 | 4);
     } else {
-        gSaveContext.eventInf[4] &= (u8)~0x04;
-        gSaveContext.eventInf[4] &= (u8)~0x08;
+        gSaveContext.eventInf[4] &= (u8)~4;
+        gSaveContext.eventInf[4] &= (u8)~8;
     }
 
     this->actionFunc = EnNb_Wait;
