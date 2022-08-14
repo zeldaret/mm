@@ -13354,8 +13354,6 @@ void func_8084AB4C(Player* this, PlayState* play) {
     this->currentYaw = this->actor.shape.rot.y;
 }
 
-#ifdef NON_EQUIVALENT
-// not sure about equivalency
 void func_8084AC84(Player* this, PlayState* play) {
     this->stateFlags2 |= PLAYER_STATE2_20;
 
@@ -13364,31 +13362,25 @@ void func_8084AC84(Player* this, PlayState* play) {
     } else {
         this->skelAnime.animation = &gameplay_keep_Linkanim_00D220;
     }
-
     LinkAnimation_Update(play, &this->skelAnime);
 
-    if (func_80847880(play, this)) {
-        return;
-    }
-
-    if (func_80833058(play, this, D_8085D01C, 1) && (func_8084AC84 != this->actionFunc)) {
-        return;
-    }
-
-    if (!CHECK_BTN_ALL(D_80862B44->cur.button, BTN_B)) {
-        func_80839E74(this, play);
-    } else {
+    if (!func_80847880(play, this) &&
+        (!func_80833058(play, this, D_8085D01C, 1) || (func_8084AC84 == this->actionFunc))) {
         f32 sp3C;
         f32 temp_fv0;
         f32 temp_fv1;
         s16 sp32;
         s16 sp30;
-        s32 temp;
-        f32 temp2;
+
+        if (!CHECK_BTN_ALL(D_80862B44->cur.button, BTN_B)) {
+            func_80839E74(this, play);
+            return;
+        }
 
         this->linearVelocity = this->unk_B48;
         func_80832F78(this, &sp3C, &sp32, 0.018f, play);
         sp30 = sp32;
+
         if (!func_8083A4A4(this, &sp3C, &sp32, REG(43) / 100.0f)) {
             func_8083CB04(this, sp3C, sp32, REG(19) / 100.0f, 1.5f, 0x3E8);
             func_8083C8E8(this, play);
@@ -13397,18 +13389,16 @@ void func_8084AC84(Player* this, PlayState* play) {
                 this->actor.shape.rot.y = this->currentYaw;
             }
         }
-        temp_fv0 = this->skelAnime.curFrame + 5.0f;
 
-        temp_fv1 = this->skelAnime.animLength * 0.5f;
         this->unk_B48 = this->linearVelocity;
-        temp = temp_fv0 / temp_fv1;
-        temp2 = 1000.0f;
-        this->linearVelocity *= Math_CosS(temp2 * (temp_fv0 - (temp_fv1 * temp))) * 0.4f;
+        temp_fv0 = this->skelAnime.curFrame + 5.0f;
+        temp_fv1 = this->skelAnime.animLength / 2.0f;
+
+        // effectively an fmodf
+        temp_fv0 -= temp_fv1 * (s32)(temp_fv0 / temp_fv1);
+        this->linearVelocity *= Math_CosS(temp_fv0 * 1000.0f) * 0.4f;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084AC84.s")
-#endif
 
 void func_8084AEEC(Player* this, PlayState* play) {
     this->stateFlags2 |= PLAYER_STATE2_20;
