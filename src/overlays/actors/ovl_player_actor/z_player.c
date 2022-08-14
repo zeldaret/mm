@@ -13005,8 +13005,6 @@ void func_80849A9C(Player* this, PlayState* play) {
     }
 }
 
-extern s8 D_8085CFEC[];
-
 void func_80849DD0(Player* this, PlayState* play) {
     f32 sp3C;
     s16 sp3A;
@@ -13115,8 +13113,6 @@ void func_80849FE0(Player* this, PlayState* play) {
     }
 }
 
-extern s8 D_8085CFF8[];
-
 void func_8084A26C(Player* this, PlayState* play) {
     f32 var_fv0;
     s16 temp_v0_3;
@@ -13199,8 +13195,6 @@ void func_8084A26C(Player* this, PlayState* play) {
     }
 }
 
-extern s8 D_8085D004[];
-
 void func_8084A5C0(Player* this, PlayState* play) {
     f32 sp34;
     s16 sp32;
@@ -13276,8 +13270,6 @@ void func_8084A884(Player* this, PlayState* play) {
     }
 }
 
-extern s8 D_8085D00C[];
-
 void func_8084A8E8(Player* this, PlayState* play) {
     f32 sp3C;
     s16 sp3A;
@@ -13334,8 +13326,6 @@ void func_8084A8E8(Player* this, PlayState* play) {
         }
     }
 }
-
-extern s8 D_8085D018[];
 
 void func_8084AB4C(Player* this, PlayState* play) {
     f32 sp34;
@@ -13423,8 +13413,6 @@ void func_8084AC84(Player* this, PlayState* play) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084AC84.s")
 #endif
 
-extern s8 D_8085D01C[];
-
 void func_8084AEEC(Player* this, PlayState* play) {
     this->stateFlags2 |= PLAYER_STATE2_20;
     LinkAnimation_Update(play, &this->skelAnime);
@@ -13437,8 +13425,6 @@ void func_8084AEEC(Player* this, PlayState* play) {
         }
     }
 }
-
-extern s8 D_8085D028[];
 
 void func_8084AF9C(Player* this, PlayState* play) {
     f32 sp2C; // player speed?
@@ -13468,8 +13454,6 @@ void func_8084AF9C(Player* this, PlayState* play) {
         }
     }
 }
-
-extern s8 D_8085D034[];
 
 void func_8084B0EC(Player* this, PlayState* play) {
     f32 sp2C;
@@ -13526,8 +13510,6 @@ void func_8084B288(Player* this, PlayState* play) {
         }
     }
 }
-
-extern s8 D_8085D044[];
 
 void func_8084B3B8(Player* this, PlayState* play) {
     s32 sp34 = LinkAnimation_Update(play, &this->skelAnime);
