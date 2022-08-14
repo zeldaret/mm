@@ -66,7 +66,7 @@ f32 Camera_QuadraticAttenuation(f32 xRange, f32 x) {
 
 /*
  * Performs linear interpoloation between `cur` and `target`.  If `cur` is within
- * `minDiff` units, The result is rounded up to `target`
+ * `minDiff` units, the result is rounded up to `target`
  */
 f32 Camera_LerpCeilF(f32 target, f32 cur, f32 stepScale, f32 minDiff) {
     f32 diff = target - cur;
@@ -77,7 +77,7 @@ f32 Camera_LerpCeilF(f32 target, f32 cur, f32 stepScale, f32 minDiff) {
 
 /*
  * Performs linear interpoloation between `cur` and `target`.  If `cur` is within
- * `minDiff` units, The result is rounded up to `target`
+ * `minDiff` units, the result is rounded up to `target`
  */
 s16 Camera_LerpCeilS(s16 target, s16 cur, f32 stepScale, s16 minDiff) {
     s16 diff = target - cur;
@@ -88,7 +88,7 @@ s16 Camera_LerpCeilS(s16 target, s16 cur, f32 stepScale, s16 minDiff) {
 
 /*
  * Performs linear interpoloation between `cur` and `target`.  If `cur` is within
- * `minDiff` units, The result is rounded down to `cur`
+ * `minDiff` units, the result is rounded down to `cur`
  */
 s16 Camera_LerpFloorS(s16 target, s16 cur, f32 stepScale, s16 minDiff) {
     s16 diff = target - cur;
@@ -99,7 +99,7 @@ s16 Camera_LerpFloorS(s16 target, s16 cur, f32 stepScale, s16 minDiff) {
 
 /*
  * Performs linear interpoloation between `cur` and `target`.  If `cur` is within
- * `minDiff` units, The result is rounded up to `target`
+ * `minDiff` units, the result is rounded up to `target`. Output is written to `cur`
  */
 void Camera_LerpCeilVec3f(Vec3f* target, Vec3f* cur, f32 xzStepScale, f32 yStepScale, f32 minDiff) {
     cur->x = Camera_LerpCeilF(target->x, cur->x, xzStepScale, minDiff);
@@ -159,7 +159,7 @@ s16 Camera_AngleDiffAndScale(s16 angle1, s16 angle2, f32 scale) {
 }
 
 /**
- * Calculates the current offset between the camera's at-coordinates and the centered actors coordinates
+ * Calculates the current offset between the camera's at-coordinates and the centered actor's coordinates
  */
 void Camera_UpdateAtActorOffset(Camera* camera, Vec3f* actorOffset) {
     camera->atActorOffset.x = camera->at.x - actorOffset->x;
@@ -370,7 +370,7 @@ s32 func_800CBAAC(Camera* camera) {
     }
 }
 
-s32 func_800CBAD4(Vec3f* dst, Camera* camera) {
+s32 Camera_GetFocalActorPos(Vec3f* dst, Camera* camera) {
     PosRot focalPosRot;
     Actor* focalActor = camera->focalActor;
 

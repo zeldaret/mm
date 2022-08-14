@@ -1140,7 +1140,7 @@
     0x800CBA34:("Camera_IsChargingSwordOrDekuFlowerDive",),
     0x800CBA7C:("func_800CBA7C",),
     0x800CBAAC:("func_800CBAAC",),
-    0x800CBAD4:("func_800CBAD4",),
+    0x800CBAD4:("Camera_GetFocalActorPos",),
     0x800CBB58:("Camera_IsUnderwaterAsZora",),
     0x800CBB88:("func_800CBB88",),
     0x800CBC00:("Camera_IsUsingZoraFins",),
