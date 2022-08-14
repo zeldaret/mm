@@ -945,8 +945,8 @@ typedef struct Player {
     /* 0xA84 */ s16 tatlTextId;
     /* 0xA86 */ s8 unk_A86;
     /* 0xA87 */ s8 exchangeItemId;
-    /* 0xA88 */ Actor* targetActor; // TODO: rename to talkActor or similar
-    /* 0xA8C */ f32 targetActorDistance;
+    /* 0xA88 */ Actor* talkActor;
+    /* 0xA8C */ f32 talkActorDistance;
     /* 0xA90 */ Actor* unk_A90;
     /* 0xA94 */ f32 unk_A94;
     /* 0xA98 */ Actor* unk_A98;

@@ -3947,7 +3947,7 @@ void func_80831990(PlayState* play, Player* this, ItemID item) {
         if (var_v1 || (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_100) && (actionParam != PLAYER_AP_NONE)) ||
             (actionParam == PLAYER_AP_OCARINA) ||
             ((actionParam > PLAYER_AP_BOTTLE) && actionParam < PLAYER_AP_MASK_TRUTH) ||
-            ((actionParam == PLAYER_AP_PICTO_BOX) && (this->targetActor != NULL) &&
+            ((actionParam == PLAYER_AP_PICTO_BOX) && (this->talkActor != NULL) &&
              (this->exchangeItemId > PLAYER_AP_NONE))) {
             if (var_v1) {
                 s32 playerForm = (actionParam < PLAYER_AP_MASK_FIERCE_DEITY)
@@ -6248,7 +6248,7 @@ s32 func_8083784C(Player* this) {
             ((this->ageProperties->unk_2C - this->actor.depthInWater) < D_80862B18)) {
             if ((this->unk_B67 != 0) && (gSaveContext.save.playerData.health != 0) &&
                 !(this->stateFlags1 & PLAYER_STATE1_4000000)) {
-                if (((this->targetActor == NULL) || !(this->targetActor->flags & ACTOR_FLAG_10000))) {
+                if (((this->talkActor == NULL) || !(this->talkActor->flags & ACTOR_FLAG_10000))) {
                     return true;
                 }
             }
@@ -6311,9 +6311,9 @@ void func_80837B60(PlayState* play, Player* this) {
     this->exchangeItemId = PLAYER_AP_NONE;
     this->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);
     if (this->actor.textId != 0) {
-        Message_StartTextbox(play, this->actor.textId, this->targetActor);
+        Message_StartTextbox(play, this->actor.textId, this->talkActor);
     }
-    this->unk_730 = this->targetActor;
+    this->unk_730 = this->talkActor;
 }
 
 void func_80837BD0(PlayState* play, Player* this) {
@@ -6809,7 +6809,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                              ((this->heldItemActionParam >= PLAYER_AP_BOTTLE_ZORA_EGG) &&
                               (this->heldItemActionParam <= PLAYER_AP_BOTTLE_HYLIAN_LOACH)) ||
                              (this->heldItemActionParam > PLAYER_AP_BOTTLE_FAIRY) ||
-                             ((this->targetActor != NULL) && (this->exchangeItemId > 0) &&
+                             ((this->talkActor != NULL) && (this->exchangeItemId > 0) &&
                               (((this->exchangeItemId == PLAYER_AP_MAGIC_BEANS) &&
                                 (this->heldItemActionParam == PLAYER_AP_MAGIC_BEANS)) ||
                                ((this->exchangeItemId != PLAYER_AP_MAGIC_BEANS) &&
@@ -6820,7 +6820,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                     func_80838760(this);
                     this->heldItemActionParam = PLAYER_AP_NONE;
                     func_80831760(play, this, func_80853A5C, 0);
-                    targetActor = this->targetActor;
+                    targetActor = this->talkActor;
                     this->heldItemActionParam = heldItemTemp;
                     this->unk_A86 = -1;
 
@@ -6843,13 +6843,13 @@ s32 func_80838A90(Player* this, PlayState* play) {
                             this->stateFlags1 |= PLAYER_STATE1_20000000;
                             this->unk_AE8 = 80;
                             this->unk_AE7 = -1;
-                            this->unk_730 = this->targetActor;
+                            this->unk_730 = this->talkActor;
                         } else {
                             this->unk_A86 = 0x7C;
                         }
                         targetActor->flags |= ACTOR_FLAG_100;
                         this->actor.textId = 0;
-                        this->unk_730 = this->targetActor;
+                        this->unk_730 = this->talkActor;
                     } else {
                         this->stateFlags1 |= (PLAYER_STATE1_20000000 | PLAYER_STATE1_10000000 | PLAYER_STATE1_40);
                         this->unk_A86 = play->playerActorCsIds[3];
@@ -6940,7 +6940,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
 
 s32 func_808391D8(Player* this, PlayState* play) {
     if (gSaveContext.save.playerData.health != 0) {
-        Actor* sp2C = this->targetActor;
+        Actor* sp2C = this->talkActor;
         Actor* var_a3 = this->unk_730;
         Actor* var_a1 = NULL;
         s32 var_t1 = false;
@@ -6999,7 +6999,7 @@ s32 func_808391D8(Player* this, PlayState* play) {
                             }
 
                             sp2C = var_a1;
-                            this->targetActor = NULL;
+                            this->talkActor = NULL;
 
                             if (var_t1 || !var_t2) {
                                 var_a1->textId = ABS_ALT(this->tatlTextId);
@@ -10292,8 +10292,8 @@ void Player_SetDoAction(PlayState* play, Player* this) {
             doActionA = DO_ACTION_CLIMB;
         } else if ((this->stateFlags1 & PLAYER_STATE1_800000) &&
                    (!EN_HORSE_CHECK_4((EnHorse*)this->rideActor) && (func_808505D0 != this->actionFunc))) {
-            if ((this->stateFlags2 & PLAYER_STATE2_2) && (this->targetActor != NULL)) {
-                if ((this->targetActor->category == ACTORCAT_NPC) || (this->targetActor->id == ACTOR_DM_CHAR08)) {
+            if ((this->stateFlags2 & PLAYER_STATE2_2) && (this->talkActor != NULL)) {
+                if ((this->talkActor->category == ACTORCAT_NPC) || (this->talkActor->id == ACTOR_DM_CHAR08)) {
                     doActionA = DO_ACTION_SPEAK;
                 } else {
                     doActionA = DO_ACTION_CHECK;
@@ -10303,9 +10303,9 @@ void Player_SetDoAction(PlayState* play, Player* this) {
             } else {
                 doActionA = DO_ACTION_NONE;
             }
-        } else if ((this->stateFlags2 & PLAYER_STATE2_2) && (this->targetActor != NULL)) {
-            if ((this->targetActor->category == ACTORCAT_NPC) || (this->targetActor->category == ACTORCAT_ENEMY) ||
-                (this->targetActor->id == ACTOR_DM_CHAR08)) {
+        } else if ((this->stateFlags2 & PLAYER_STATE2_2) && (this->talkActor != NULL)) {
+            if ((this->talkActor->category == ACTORCAT_NPC) || (this->talkActor->category == ACTORCAT_ENEMY) ||
+                (this->talkActor->id == ACTOR_DM_CHAR08)) {
                 doActionA = DO_ACTION_SPEAK;
             } else {
                 doActionA = DO_ACTION_CHECK;
@@ -11375,7 +11375,7 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         Lights_PointSetPosition(&player->lightInfo, player->actor.world.pos.x, player->actor.world.pos.y + 40.0f,
                                 player->actor.world.pos.z);
 
-        if (((player->unk_730 == NULL) || (player->unk_730 == player->targetActor) ||
+        if (((player->unk_730 == NULL) || (player->unk_730 == player->talkActor) ||
              (player->unk_730->hintId == 0xFF)) &&
             (player->tatlTextId == 0)) {
             player->stateFlags2 &= ~(PLAYER_STATE2_2 | PLAYER_STATE2_200000);
@@ -11412,11 +11412,11 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
 
         func_80832578(player, play);
         if (player->actor.flags & ACTOR_FLAG_100) {
-            player->targetActorDistance = 0.0f;
+            player->talkActorDistance = 0.0f;
         } else {
-            player->targetActor = NULL;
+            player->talkActor = NULL;
             player->exchangeItemId = 0;
-            player->targetActorDistance = FLT_MAX;
+            player->talkActorDistance = FLT_MAX;
         }
         if (!(player->actor.flags & ACTOR_FLAG_20000000) && (player->unk_AA5 != 5)) {
             player->unk_A90 = NULL;
@@ -14701,7 +14701,7 @@ void func_8084E980(Player* this, PlayState* play) {
     func_8083216C(this, play);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         this->actor.flags &= ~ACTOR_FLAG_100;
-        if (!CHECK_FLAG_ALL(this->targetActor->flags, ACTOR_FLAG_1 | ACTOR_FLAG_4)) {
+        if (!CHECK_FLAG_ALL(this->talkActor->flags, ACTOR_FLAG_1 | ACTOR_FLAG_4)) {
             this->stateFlags2 &= ~PLAYER_STATE2_2000;
         }
 
@@ -14713,7 +14713,7 @@ void func_8084E980(Player* this, PlayState* play) {
             func_80837BD0(play, this);
             this->unk_AE8 = sp44;
         } else if (!func_80847994(play, this) && !func_80847880(play, this) && !func_808387A0(play, this) &&
-                   ((this->targetActor != this->interactRangeActor) || !func_8083D23C(this, play))) {
+                   ((this->talkActor != this->interactRangeActor) || !func_8083D23C(this, play))) {
             if (func_801242B4(this)) {
                 func_808353DC(play, this);
             } else {
@@ -14736,7 +14736,7 @@ void func_8084E980(Player* this, PlayState* play) {
     } else if (!func_80123420(this) && LinkAnimation_Update(play, &this->skelAnime)) {
         if (this->skelAnime.moveFlags != 0) {
             func_8082E794(this);
-            if ((this->targetActor->category == ACTORCAT_NPC) && (this->itemActionParam != PLAYER_AP_FISHING_POLE)) {
+            if ((this->talkActor->category == ACTORCAT_NPC) && (this->itemActionParam != PLAYER_AP_FISHING_POLE)) {
                 func_8082DB90(play, this, &gameplay_keep_Linkanim_00DEA0);
             } else {
                 Player_AnimationPlayLoop(play, this, func_8082ED20(this));
@@ -16071,12 +16071,12 @@ void func_8085269C(Player* this, PlayState* play) {
             ActorCutscene_Stop(play->playerActorCsIds[0]);
             this->actor.flags &= ~ACTOR_FLAG_20000000;
 
-            if ((this->targetActor != NULL) && (this->targetActor == this->unk_A90) && (this->unk_A94 >= 0.0f)) {
-                func_8085B460(play, this->targetActor);
+            if ((this->talkActor != NULL) && (this->talkActor == this->unk_A90) && (this->unk_A94 >= 0.0f)) {
+                func_8085B460(play, this->talkActor);
             } else if (this->tatlTextId < 0) {
-                this->targetActor = this->tatlActor;
+                this->talkActor = this->tatlActor;
                 this->tatlActor->textId = -this->tatlTextId;
-                func_8085B460(play, this->targetActor);
+                func_8085B460(play, this->talkActor);
             } else if (!func_80838A90(this, play)) {
                 func_80836A5C(this, play);
                 Player_AnimationPlayOnceReverse(play, this, D_8085D17C[this->transformation]);
@@ -16194,7 +16194,7 @@ void func_80852C04(Player* this, PlayState* play) {
                     this->stateFlags1 &= ~PLAYER_STATE1_20000000;
                     func_8085B28C(play, NULL, 0x5D);
                 } else {
-                    s32 var_a2 = ((this->targetActor != NULL) && (this->exchangeItemId < PLAYER_AP_NONE)) ||
+                    s32 var_a2 = ((this->talkActor != NULL) && (this->exchangeItemId < PLAYER_AP_NONE)) ||
                                  (this->stateFlags3 & PLAYER_STATE3_20);
 
                     if (var_a2 || (gSaveContext.healthAccumulator == 0)) {
@@ -16203,7 +16203,7 @@ void func_80852C04(Player* this, PlayState* play) {
                             func_80848250(play, this);
                             this->exchangeItemId = PLAYER_AP_NONE;
                             if (!func_80847994(play, this)) {
-                                func_8085B460(play, this->targetActor);
+                                func_8085B460(play, this->talkActor);
                             }
                         } else {
                             func_80848294(play, this);
@@ -16434,7 +16434,7 @@ void func_808534C0(Player* this, PlayState* play) {
                 func_80838760(this);
                 func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
 
-                targetActor = this->targetActor;
+                targetActor = this->talkActor;
                 if ((targetActor != NULL) && (this->exchangeItemId < PLAYER_AP_NONE)) {
                     func_8085B460(play, targetActor);
                 }
@@ -16584,7 +16584,7 @@ void func_80853A5C(Player* this, PlayState* play) {
 
     if (LinkAnimation_Update(play, &this->skelAnime)) {
         if (this->exchangeItemId == PLAYER_AP_NONE) {
-            Actor* targetActor = this->targetActor;
+            Actor* targetActor = this->talkActor;
 
             func_80838760(this);
             this->unk_B2A = 0;
@@ -19744,12 +19744,12 @@ void func_8085B460(PlayState* play, Actor* actor) {
     Player* player = GET_PLAYER(play);
 
     func_808323C0(player, 0x7C);
-    if ((player->targetActor != NULL) || (actor == player->tatlActor) ||
+    if ((player->talkActor != NULL) || (actor == player->tatlActor) ||
         CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_1 | ACTOR_FLAG_40000)) {
         actor->flags |= ACTOR_FLAG_100;
     }
 
-    player->targetActor = actor;
+    player->talkActor = actor;
     player->exchangeItemId = PLAYER_AP_NONE;
     player->unk_730 = actor;
 
@@ -19802,7 +19802,7 @@ void func_8085B460(PlayState* play, Actor* actor) {
         player->stateFlags1 |= PLAYER_STATE1_40 | PLAYER_STATE1_20000000;
     }
 
-    if ((player->tatlActor == player->targetActor) && ((player->targetActor->textId & 0xFF00) != 0x200)) {
+    if ((player->tatlActor == player->talkActor) && ((player->talkActor->textId & 0xFF00) != 0x200)) {
         player->tatlActor->flags |= ACTOR_FLAG_100;
     }
 }

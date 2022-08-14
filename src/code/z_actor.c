@@ -1856,13 +1856,13 @@ s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, Player
 
     if ((player->actor.flags & ACTOR_FLAG_100) || ((exchangeItemId > PLAYER_AP_NONE) && Player_InCsMode(play)) ||
         (!actor->isTargeted &&
-         ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || ((actor->xzDistToPlayer > player->targetActorDistance)) ||
+         ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || ((actor->xzDistToPlayer > player->talkActorDistance)) ||
           (xzRange < actor->xzDistToPlayer)))) {
         return false;
     }
 
-    player->targetActor = actor;
-    player->targetActorDistance = actor->xzDistToPlayer;
+    player->talkActor = actor;
+    player->talkActorDistance = actor->xzDistToPlayer;
     player->exchangeItemId = exchangeItemId;
 
     ActorCutscene_SetIntentToPlay(0x7C);
@@ -1900,10 +1900,10 @@ s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2) {
     Actor* targetActor;
     Player* player = GET_PLAYER(play);
 
-    targetActor = player->targetActor;
+    targetActor = player->talkActor;
 
     if ((player->actor.flags & ACTOR_FLAG_100) && (targetActor != NULL)) {
-        player->targetActor = actor2;
+        player->talkActor = actor2;
         player->unk_730 = actor2;
         return true;
     }
@@ -2005,7 +2005,7 @@ s32 Actor_PickUp(Actor* actor, PlayState* play, GetItemID getItemId, f32 xzRange
         if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->playerHeightRel) <= fabsf(yRange))) {
             if ((getItemId == GI_MASK_CIRCUS_LEADER || getItemId == GI_PENDANT_OF_MEMORIES ||
                  getItemId == GI_DEED_LAND ||
-                 ((player->heldActor != NULL || actor == player->targetActor) &&
+                 ((player->heldActor != NULL || actor == player->talkActor) &&
                   (getItemId > GI_NONE && getItemId < GI_MAX))) ||
                 !(player->stateFlags1 & (PLAYER_STATE1_800 | PLAYER_STATE1_20000000))) {
                 s16 yawDiff = actor->yawTowardsPlayer - player->actor.shape.rot.y;
@@ -2464,7 +2464,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     }
 
     if ((player->stateFlags1 & PLAYER_STATE1_40) && ((player->actor.textId & 0xFF00) != 0x1900)) {
-        params.unk10 = player->targetActor;
+        params.unk10 = player->talkActor;
     } else {
         params.unk10 = NULL;
     }

@@ -968,8 +968,8 @@ void func_8088E850(EnElf* this, PlayState* play) {
 
             default:
                 arrowPointedActor = play->actorCtx.targetContext.arrowPointedActor;
-                if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->targetActor != NULL)) {
-                    Math_Vec3f_Copy(&nextPos, &player->targetActor->focus.pos);
+                if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->talkActor != NULL)) {
+                    Math_Vec3f_Copy(&nextPos, &player->talkActor->focus.pos);
                 } else {
                     Math_Vec3f_Copy(&nextPos, &play->actorCtx.targetContext.unk0);
                 }

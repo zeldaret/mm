@@ -683,6 +683,8 @@ wordReplace = {
     "player->swordInfo": "player->meleeWeaponInfo",
     "player->unk_B68": "player->fallStartHeight",
     "player->unk_B6A": "player->fallDistance",
+    # "player->targetActor": "player->talkActor",
+    # "player->targetActorDistance": "player->talkActorDistance",
 
     "csCtx.npcActions": "csCtx.actorActions",
     "csCtx->npcActions": "csCtx->actorActions",
