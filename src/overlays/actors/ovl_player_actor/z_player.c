@@ -2080,7 +2080,7 @@ s32 func_8082ECCC(Player* this) {
 #define CHEST_ANIM_SHORT 0
 #define CHEST_ANIM_LONG 1
 
-GetItemEntry sGetItemTable[0xB9] = {
+GetItemEntry sGetItemTable[GI_MAX - 1] = {
     /* 0x01 */ GET_ITEM(ITEM_RUPEE_GREEN, OBJECT_GI_RUPY, GID_RUPEE_GREEN, 0xC4, 0x0, CHEST_ANIM_SHORT),
     /* 0x02 */ GET_ITEM(ITEM_RUPEE_BLUE, OBJECT_GI_RUPY, GID_RUPEE_BLUE, 0x2, 0x1, CHEST_ANIM_SHORT),
     /* 0x03 */ GET_ITEM(ITEM_RUPEE_10, OBJECT_GI_RUPY, GID_RUPEE_RED, 0x3, 0x2, CHEST_ANIM_SHORT),
@@ -8339,57 +8339,72 @@ void func_8083D168(PlayState* play, Player* this, GetItemEntry* arg2) {
 
 s32 func_8083D23C(Player* this, PlayState* play) {
     if (gSaveContext.save.playerData.health != 0) {
-        Actor* sp2C;
+        Actor* interactRangeActor = this->interactRangeActor;
 
-        sp2C = this->interactRangeActor;
-        if (sp2C != NULL) {
-            if (this->getItemId > 0) {
-                if (this->getItemId < 0xBA) {
-                    GetItemEntry* var_v1;
+        if (interactRangeActor != NULL) {
+            if (this->getItemId > GI_NONE) {
+                if (this->getItemId < GI_MAX) {
+                    GetItemEntry* giEntry = &sGetItemTable[this->getItemId - 1];
 
-                    var_v1 = &sGetItemTable[this->getItemId-1];
-                    sp2C->parent = &this->actor;
-                    if ((Item_CheckObtainability(var_v1->itemId) == 0xFF) || ((s16)var_v1->objectId == 0xB0)) {
+                    interactRangeActor->parent = &this->actor;
+                    if ((Item_CheckObtainability(giEntry->itemId) == ITEM_NONE) ||
+                        ((s16)giEntry->objectId == OBJECT_GI_BOMB_2)) {
                         func_8082DCA0(play, this);
-                        func_80838830(this, var_v1->objectId);
-                        if (!(this->stateFlags2 & 0x400) || (this->currentBoots == 5)) {
+                        func_80838830(this, giEntry->objectId);
+
+                        if (!(this->stateFlags2 & PLAYER_STATE2_400) ||
+                            (this->currentBoots == PLAYER_BOOTS_ZORA_UNDERWATER)) {
                             func_80838760(this);
-                            func_808324EC(play, this, func_80837C78, (s32) play->playerActorCsIds[1]);
-                            func_8082DB90(play, this, (this->transformation == 3) ? &gameplay_keep_Linkanim_00E2C0 : &gameplay_keep_Linkanim_00D5B0);
+                            func_808324EC(play, this, func_80837C78, play->playerActorCsIds[1]);
+                            func_8082DB90(play, this,
+                                          (this->transformation == PLAYER_FORM_DEKU) ? &gameplay_keep_Linkanim_00E2C0
+                                                                                     : &gameplay_keep_Linkanim_00D5B0);
                         }
-                        this->stateFlags1 |= 0x20000C00;
+
+                        this->stateFlags1 |= (PLAYER_STATE1_400 | PLAYER_STATE1_800 | PLAYER_STATE1_20000000);
                         func_8082DAD4(this);
-                        return 1;
+
+                        return true;
                     }
-                    func_8083D168(play, this, var_v1);
-                    this->getItemId = 0;
+
+                    func_8083D168(play, this, giEntry);
+                    this->getItemId = GI_NONE;
                 }
             } else if (this->csMode == PLAYER_CSMODE_0) {
-                if (!(this->stateFlags1 & 0x800)) {
-                    if (this->getItemId != 0) {
-                        if (~(D_80862B44->press.button | 0xFFFF7FFF) == 0) {
-                            GetItemEntry* var_v1;
-                            EnBox* chest = (EnBox*)sp2C;
+                if (!(this->stateFlags1 & PLAYER_STATE1_800)) {
+                    if (this->getItemId != GI_NONE) {
+                        if (CHECK_BTN_ALL(D_80862B44->press.button, BTN_A)) {
+                            GetItemEntry* giEntry = &sGetItemTable[-this->getItemId - 1];
+                            EnBox* chest = (EnBox*)interactRangeActor;
 
-                            var_v1 = &sGetItemTable[-this->getItemId-1];
-                            if ((var_v1->itemId != 0xFF) && (((Item_CheckObtainability(var_v1->itemId) == 0xFF) && (var_v1->unk_1 & 0x40)) || (((Item_CheckObtainability(var_v1->itemId) != 0xFF)) && (var_v1->unk_1 & 0x20)))) {
-
-                                this->getItemId = (var_v1->itemId == 0x44) ? -0xA : -2;
-                                var_v1 = &sGetItemTable[-this->getItemId-1];
+                            if ((giEntry->itemId != ITEM_NONE) &&
+                                (((Item_CheckObtainability(giEntry->itemId) == ITEM_NONE) && (giEntry->unk_1 & 0x40)) ||
+                                 (((Item_CheckObtainability(giEntry->itemId) != ITEM_NONE)) &&
+                                  (giEntry->unk_1 & 0x20)))) {
+                                this->getItemId =
+                                    (giEntry->itemId == ITEM_MASK_CAPTAIN) ? -GI_RECOVERY_HEART : -GI_RUPEE_BLUE;
+                                giEntry = &sGetItemTable[-this->getItemId - 1];
                             }
 
                             func_80832558(play, this, func_80837C78);
-                            this->stateFlags1 |= 0x20000C00;
-                            func_80838830(this, var_v1->objectId);
-                            this->actor.world.pos.x = sp2C->world.pos.x - (Math_SinS(sp2C->shape.rot.y) * this->ageProperties->unk_9C);
-                            this->actor.world.pos.z = sp2C->world.pos.z - (Math_CosS(sp2C->shape.rot.y) * this->ageProperties->unk_9C);
-                            this->actor.world.pos.y = sp2C->world.pos.y;
-                            this->currentYaw =this->actor.shape.rot.y = sp2C->shape.rot.y;
+                            this->stateFlags1 |= (PLAYER_STATE1_400 | PLAYER_STATE1_800 | PLAYER_STATE1_20000000);
+                            func_80838830(this, giEntry->objectId);
+
+                            this->actor.world.pos.x =
+                                interactRangeActor->world.pos.x -
+                                (Math_SinS(interactRangeActor->shape.rot.y) * this->ageProperties->unk_9C);
+                            this->actor.world.pos.z =
+                                interactRangeActor->world.pos.z -
+                                (Math_CosS(interactRangeActor->shape.rot.y) * this->ageProperties->unk_9C);
+                            this->actor.world.pos.y = interactRangeActor->world.pos.y;
+                            this->currentYaw = this->actor.shape.rot.y = interactRangeActor->shape.rot.y;
+
                             func_8082DAD4(this);
-                            if ((var_v1->itemId != 0xFF) && (var_v1->unk_2 >= 0) && (Item_CheckObtainability(var_v1->itemId) == 0xFF)) {
+                            if ((giEntry->itemId != ITEM_NONE) && (giEntry->unk_2 >= 0) &&
+                                (Item_CheckObtainability(giEntry->itemId) == ITEM_NONE)) {
                                 this->unk_A86 = chest->cutsceneIdxB;
                                 func_8082DB90(play, this, this->ageProperties->unk_A0);
-                                func_8082E920(play, this, 0x9F);
+                                func_8082E920(play, this, 1 | 2 | 4 | 8 | 0x10 | 0x80);
                                 this->actor.bgCheckFlags &= ~0x20;
                                 chest->unk_1EC = 1;
                             } else {
@@ -8397,22 +8412,27 @@ s32 func_8083D23C(Player* this, PlayState* play) {
                                 chest->unk_1EC = -1;
                             }
 
-                            return 1;
+                            return true;
                         }
-                    } else if (!(this->stateFlags1 & 0x8000000) && (this->transformation != 3)) {
+                    } else if (!(this->stateFlags1 & PLAYER_STATE1_8000000) &&
+                               (this->transformation != PLAYER_FORM_DEKU)) {
                         if ((this->heldActor == NULL) || Player_IsHoldingHookshot(this)) {
-                            EnBom* bomb = (EnBom*)sp2C;
+                            EnBom* bomb = (EnBom*)interactRangeActor;
 
-                            if (((this->transformation != 1) && (((bomb->actor.id == 9) && (bomb->isPowderKeg != 0)) || ((sp2C->id == 0xB0) && (sp2C->params & 1)) || (sp2C->id == 0xB9)))) {
-                                return 0;
+                            if (((this->transformation != PLAYER_FORM_GORON) &&
+                                 (((bomb->actor.id == ACTOR_EN_BOM) && bomb->isPowderKeg) ||
+                                  ((interactRangeActor->id == ACTOR_EN_ISHI) && (interactRangeActor->params & 1)) ||
+                                  (interactRangeActor->id == ACTOR_EN_MM)))) {
+                                return false;
                             }
 
-                            this->stateFlags2 |= 0x10000;
-                            if (~(D_80862B44->press.button | 0xFFFF7FFF) == 0) {
+                            this->stateFlags2 |= PLAYER_STATE2_10000;
+                            if (CHECK_BTN_ALL(D_80862B44->press.button, BTN_A)) {
                                 func_80832558(play, this, func_808379C0);
                                 func_8082DAD4(this);
-                                this->stateFlags1 |= 0x800;
-                                return 1;
+                                this->stateFlags1 |= PLAYER_STATE1_800;
+
+                                return true;
                             }
                         }
                     }
@@ -8421,7 +8441,7 @@ s32 func_8083D23C(Player* this, PlayState* play) {
         }
     }
 
-    return 0;
+    return false;
 }
 
 void func_8083D6DC(Player* this, PlayState* play) {
