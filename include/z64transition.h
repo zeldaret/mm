@@ -24,7 +24,7 @@ typedef struct {
 extern const TransitionInit TransitionFade_InitVars;
 
 typedef struct {
-    /* 0x000 */ Color_RGBA8_u32 color;
+    /* 0x00 */ Color_RGBA8_u32 color;
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 stepValue;
     /* 0x0C */ f32 unk_0C;

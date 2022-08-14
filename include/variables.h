@@ -2730,7 +2730,7 @@ extern f32 D_801DE860;
 extern f32 D_801DE864;
 extern f32 D_801DE868;
 extern f32 D_801DE884;
-extern TexturePtr D_801DE890[];
+extern TexturePtr gCircleTex[];
 extern f32 D_801DF090;
 extern f32 D_801DF094;
 extern f32 D_801DF0A0;
