@@ -912,7 +912,7 @@ void func_80144A94(SramContext* sramCtx) {
 
 u16 D_801C6A58[] = { 0x68B0, 0x6A60, 0xB230, 0x9A80, 0xD890, 0x3E40, 0x8640, 0x84A0, 0x2040, 0xAA30 };
 
-void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
+void Sram_OpenSave(FileSelectState* fileChooseCtx, SramContext* sramCtx) {
     s32 i;
     s32 pad;
     s32 phi_t1;
@@ -1071,8 +1071,8 @@ void func_80145698(SramContext* sramCtx) {
 
 // Verifies save and use backup if corrupted?
 #ifdef NON_EQUIVALENT
-void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
-    FileChooseContext* fileChooseCtx = fileChooseCtx2;
+void func_801457CC(FileSelectState* fileChooseCtx2, SramContext* sramCtx) {
+    FileSelectState* fileChooseCtx = fileChooseCtx2;
     u16 sp7A;
     // u16 sp78;
     u16 sp76;
@@ -1334,8 +1334,8 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_801457CC.s")
 #endif
 
-void func_80146580(FileChooseContext* fileChooseCtx2, SramContext* sramCtx, s32 fileNum) {
-    FileChooseContext* fileChooseCtx = fileChooseCtx2;
+void func_80146580(FileSelectState* fileChooseCtx2, SramContext* sramCtx, s32 fileNum) {
+    FileSelectState* fileChooseCtx = fileChooseCtx2;
     s32 pad;
 
     if (gSaveContext.unk_3F3F) {
@@ -1353,8 +1353,8 @@ void func_80146580(FileChooseContext* fileChooseCtx2, SramContext* sramCtx, s32 
 
 #ifdef NON_MATCHING
 // v0/v1
-void func_80146628(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
-    FileChooseContext* fileChooseCtx = fileChooseCtx2;
+void func_80146628(FileSelectState* fileChooseCtx2, SramContext* sramCtx) {
+    FileSelectState* fileChooseCtx = fileChooseCtx2;
     u16 i;
     s16 maskCount;
 
@@ -1440,21 +1440,21 @@ void func_80146628(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146628.s")
 #endif
 
-void Sram_InitSave(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
+void Sram_InitSave(FileSelectState* fileChooseCtx2, SramContext* sramCtx) {
     s32 phi_v0;
     u16 i;
-    FileChooseContext* fileChooseCtx = fileChooseCtx2;
+    FileSelectState* fileChooseCtx = fileChooseCtx2;
     s16 maskCount;
 
     if (gSaveContext.unk_3F3F) {
         Sram_InitNewSave();
-        if (fileChooseCtx->unk_24480 == 0) {
+        if (fileChooseCtx->buttonIndex == 0) {
             gSaveContext.save.cutscene = 0xFFF0;
         }
 
         for (phi_v0 = 0; phi_v0 < ARRAY_COUNT(gSaveContext.save.playerData.playerName); phi_v0++) {
             gSaveContext.save.playerData.playerName[phi_v0] =
-                fileChooseCtx->unk_24414[fileChooseCtx->unk_24480][phi_v0];
+                fileChooseCtx->unk_24414[fileChooseCtx->buttonIndex][phi_v0];
         }
 
         gSaveContext.save.playerData.newf[0] = 'Z';
@@ -1470,24 +1470,24 @@ void Sram_InitSave(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
         Lib_MemCpy(&sramCtx->saveBuf[0x2000], &gSaveContext.save, sizeof(Save));
 
         for (i = 0; i < ARRAY_COUNT(gSaveContext.save.playerData.newf); i++) {
-            fileChooseCtx->newf[fileChooseCtx->unk_24480][i] = gSaveContext.save.playerData.newf[i];
+            fileChooseCtx->newf[fileChooseCtx->buttonIndex][i] = gSaveContext.save.playerData.newf[i];
         }
 
-        fileChooseCtx->unk_2440C[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.deaths;
+        fileChooseCtx->unk_2440C[fileChooseCtx->buttonIndex] = gSaveContext.save.playerData.deaths;
 
         for (i = 0; i < ARRAY_COUNT(gSaveContext.save.playerData.playerName); i++) {
-            fileChooseCtx->unk_24414[fileChooseCtx->unk_24480][i] = gSaveContext.save.playerData.playerName[i];
+            fileChooseCtx->unk_24414[fileChooseCtx->buttonIndex][i] = gSaveContext.save.playerData.playerName[i];
         }
 
-        fileChooseCtx->healthCapacity[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.healthCapacity;
-        fileChooseCtx->health[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.health;
-        fileChooseCtx->unk_24454[fileChooseCtx->unk_24480] = gSaveContext.save.inventory.defenseHearts;
-        fileChooseCtx->unk_24444[fileChooseCtx->unk_24480] = gSaveContext.save.inventory.questItems;
-        fileChooseCtx->unk_24458[fileChooseCtx->unk_24480] = gSaveContext.save.time;
-        fileChooseCtx->unk_24460[fileChooseCtx->unk_24480] = gSaveContext.save.day;
-        fileChooseCtx->unk_24468[fileChooseCtx->unk_24480] = gSaveContext.save.isOwlSave;
-        fileChooseCtx->rupees[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.rupees;
-        fileChooseCtx->unk_24474[fileChooseCtx->unk_24480] = CUR_UPG_VALUE(UPG_WALLET);
+        fileChooseCtx->healthCapacity[fileChooseCtx->buttonIndex] = gSaveContext.save.playerData.healthCapacity;
+        fileChooseCtx->health[fileChooseCtx->buttonIndex] = gSaveContext.save.playerData.health;
+        fileChooseCtx->unk_24454[fileChooseCtx->buttonIndex] = gSaveContext.save.inventory.defenseHearts;
+        fileChooseCtx->unk_24444[fileChooseCtx->buttonIndex] = gSaveContext.save.inventory.questItems;
+        fileChooseCtx->unk_24458[fileChooseCtx->buttonIndex] = gSaveContext.save.time;
+        fileChooseCtx->unk_24460[fileChooseCtx->buttonIndex] = gSaveContext.save.day;
+        fileChooseCtx->unk_24468[fileChooseCtx->buttonIndex] = gSaveContext.save.isOwlSave;
+        fileChooseCtx->rupees[fileChooseCtx->buttonIndex] = gSaveContext.save.playerData.rupees;
+        fileChooseCtx->unk_24474[fileChooseCtx->buttonIndex] = CUR_UPG_VALUE(UPG_WALLET);
 
         for (i = 0, maskCount = 0; i < 24; i++) {
             if (gSaveContext.save.inventory.items[i + 24] != ITEM_NONE) {
@@ -1495,8 +1495,8 @@ void Sram_InitSave(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
             }
         }
 
-        fileChooseCtx->maskCount[fileChooseCtx->unk_24480] = maskCount;
-        fileChooseCtx->heartPieceCount[fileChooseCtx->unk_24480] =
+        fileChooseCtx->maskCount[fileChooseCtx->buttonIndex] = maskCount;
+        fileChooseCtx->heartPieceCount[fileChooseCtx->buttonIndex] =
             (gSaveContext.save.inventory.questItems & 0xF0000000) >> 0x1C;
     }
 

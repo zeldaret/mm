@@ -99,7 +99,7 @@ s32 D_8081426C[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80808D30.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80808F1C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_DrawNameEntry.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80809DF0.s")
 
@@ -115,4 +115,4 @@ s32 D_8081426C[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080A708.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080BBFC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_DrawOptions.s")

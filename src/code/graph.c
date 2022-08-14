@@ -80,7 +80,7 @@ GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
     if (gameStateInit == (GameStateFunc)Opening_Init) {
         return &gGameStateOverlayTable[4];
     }
-    if (gameStateInit == (GameStateFunc)FileChoose_Init) {
+    if (gameStateInit == (GameStateFunc)FileSelect_Init) {
         return &gGameStateOverlayTable[5];
     }
     if (gameStateInit == (GameStateFunc)Daytelop_Init) {

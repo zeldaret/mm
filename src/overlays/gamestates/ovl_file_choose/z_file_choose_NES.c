@@ -11,7 +11,7 @@
 
 void func_801A3238(u8 playerIdx, u16 seqId, u8 fadeTimer, s8 arg3, s8 arg4);
 void func_801A4058(u16);
-void func_801457CC(FileChooseContext* fileChooseCtx, SramContext* sramCtx);
+void func_801457CC(FileSelectState* fileChooseCtx, SramContext* sramCtx);
 
 extern Gfx D_010311F0[];
 extern Gfx D_01031408[];
@@ -127,60 +127,60 @@ s16 D_80814554[] = { 1, 0, 0, 0 };
      (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 4) == 'A') && \
      (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 5) == '3'))
 
-void func_8080BC20(FileChooseContext* this) {
-    this->unk_24486++;
+void func_8080BC20(FileSelectState* this) {
+    this->configMode++;
 }
 
 void FileChoose_nop8080bc44(void) {
 }
 
-void FileChoose_nop8080BC4C(FileChooseContext* this) {
+void FileChoose_nop8080BC4C(FileSelectState* this) {
 }
 
 void func_8080BC58(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+    FileSelectState* this = (FileSelectState*)thisx;
 
-    if (this->unk_24486 == 0) {
+    if (this->configMode == 0) {
         if (gSaveContext.options.optionId != 0xA51D) { // Magic number?
-            this->unk_24486++;
+            this->configMode++;
         } else {
             // TODO: defines for these
-            this->unk_24484 = 1;
-            this->unk_24486 = 0;
-            this->unk_244AC = 0;
-            this->unk_244AE = 1;
+            this->menuMode = 1;
+            this->configMode = 0;
+            this->titleLabel = 0;
+            this->nextTitleLabel = 1;
         }
     }
-    if (this->unk_24486 == 1) {
-        this->unk_2450A -= 40;
-        if (this->unk_2450A <= 0) {
-            this->unk_2450A = 0;
-            this->unk_24486++;
+    if (this->configMode == 1) {
+        this->screenFillAlpha -= 40;
+        if (this->screenFillAlpha <= 0) {
+            this->screenFillAlpha = 0;
+            this->configMode++;
         }
     } else {
-        if (this->unk_24486 == 2) {
+        if (this->configMode == 2) {
             func_8080BC20(this);
             return;
         }
-        this->unk_2450A += 40;
-        if (this->unk_2450A >= 255) {
-            this->unk_2450A = 255;
-            this->unk_24484 = 1;
-            this->unk_24486 = 0;
-            this->unk_244AC = 0;
-            this->unk_244AE = 1;
+        this->screenFillAlpha += 40;
+        if (this->screenFillAlpha >= 255) {
+            this->screenFillAlpha = 255;
+            this->menuMode = 1;
+            this->configMode = 0;
+            this->titleLabel = 0;
+            this->nextTitleLabel = 1;
         }
     }
 }
 
 void func_8080BDAC(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+    FileSelectState* this = (FileSelectState*)thisx;
 
     func_8012C628(this->state.gfxCtx);
     FileChoose_nop8080BC4C(this);
 }
 
-void FileChoose_RenderView(FileChooseContext* this, f32 eyeX, f32 eyeY, f32 eyeZ) {
+void FileSelect_RenderView(FileSelectState* this, f32 eyeX, f32 eyeY, f32 eyeZ) {
     Vec3f eye;
     Vec3f lookAt;
     Vec3f up;
@@ -198,8 +198,7 @@ void FileChoose_RenderView(FileChooseContext* this, f32 eyeX, f32 eyeY, f32 eyeZ
     View_RenderView(&this->view, 0x7F);
 }
 
-// FileChoose_QuadTextureIA8
-Gfx* func_8080BE60(Gfx* gfx, void* texture, s16 width, s16 height, s16 point) {
+Gfx* FileSelect_QuadTextureIA8(Gfx* gfx, void* texture, s16 width, s16 height, s16 point) {
     gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, width, height, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
@@ -208,39 +207,38 @@ Gfx* func_8080BE60(Gfx* gfx, void* texture, s16 width, s16 height, s16 point) {
     return gfx;
 }
 
-// FileChoose_FadeInMenuElements
-void func_8080C040(FileChooseContext* this) {
+void FileSelect_FadeInMenuElements(FileSelectState* this) {
     SramContext* sramCtx = &this->sramCtx;
     s16 i;
 
-    this->unk_244B6[0] += 20;
-    this->unk_244BA += 0x10;
+    this->titleAlpha[0] += 20;
+    this->windowAlpha += 16;
 
     for (i = 0; i < 3; i++) {
-        this->unk_244BC[i] = this->unk_244BA;
+        this->fileButtonAlpha[i] = this->windowAlpha;
         if (gSaveContext.unk_3F3F == 0) {
             if (SLOT_OCCUPIED(sramCtx, i)) {
-                this->unk_244C2[i] = this->unk_244C8[i] = this->unk_244BA;
-                this->unk_244CE[i] += 20;
-                if (this->unk_244CE[i] >= 255) {
-                    this->unk_244CE[i] = 255;
+                this->nameBoxAlpha[i] = this->nameAlpha[i] = this->windowAlpha;
+                this->connectorAlpha[i] += 20;
+                if (this->connectorAlpha[i] >= 255) {
+                    this->connectorAlpha[i] = 255;
                 }
             }
         } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
-            this->unk_244C2[i] = this->unk_244C8[i] = this->unk_244BA;
-            this->unk_244CE[i] += 20;
+            this->nameBoxAlpha[i] = this->nameAlpha[i] = this->windowAlpha;
+            this->connectorAlpha[i] += 20;
 
-            if (this->unk_244CE[i] >= 255) {
-                this->unk_244CE[i] = 255;
+            if (this->connectorAlpha[i] >= 255) {
+                this->connectorAlpha[i] = 255;
             }
         }
     }
 
-    this->unk_244DA[0] = this->unk_244DA[1] = this->unk_244E2 = this->unk_244BA;
+    this->actionButtonAlpha[0] = this->actionButtonAlpha[1] = this->optionButtonAlpha = this->windowAlpha;
 }
 
-// FileChoose_SplitNumber // SplitDigits? ExtractDigits?
-void func_8080C228(u16 value, u16* hundreds, u16* tens, u16* ones) {
+// SplitDigits? ExtractDigits?
+void FileSelect_SplitNumber(u16 value, u16* hundreds, u16* tens, u16* ones) {
     *hundreds = 0;
     *tens = 0;
     *ones = value;
@@ -264,51 +262,47 @@ void func_8080C228(u16 value, u16* hundreds, u16* tens, u16* ones) {
 
 // Start of Config Mode Update Functions
 
-void func_8080C29C(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_StartFadeIn(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
 
-    func_8080C040(this);
-    this->unk_2450A -= 40;
-    this->unk_24508 -= 20;
-    if (this->unk_24508 <= -94) {
-        this->unk_24508 = -94;
-        this->unk_24486 = 1;
-        this->unk_2450A = 0;
+    FileSelect_FadeInMenuElements(this);
+    this->screenFillAlpha -= 40;
+    this->windowPosX -= 20;
+
+    if (this->windowPosX <= -94) {
+        this->windowPosX = -94;
+        this->configMode = 1;
+        this->screenFillAlpha = 0;
     }
 }
 
-void func_8080C324(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_FinishFadeIn(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
 
-    this->unk_244E6 += 20;
-    func_8080C040(this);
+    this->controlsAlpha += 20;
+    FileSelect_FadeInMenuElements(this);
 
-    if (this->unk_244B6[0] >= 255) {
-        this->unk_244B6[0] = 255;
-        this->unk_244E6 = 255;
-        this->unk_244BA = 200;
-        this->unk_24486 = 2;
+    if (this->titleAlpha[0] >= 255) {
+        this->titleAlpha[0] = 255;
+        this->controlsAlpha = 255;
+        this->windowAlpha = 200;
+        this->configMode = 2;
     }
 }
 
-// (FileChooseContext* this);
-// (GameState* thisx) {
-//     FileChooseContext *this = (FileChooseContext*)thisx;
+u8 sEmptyName[] = { 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E };
 
-u8 D_8081455C[] = { 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E };
-
-// FileChoose_UpdateMainMenu
-void func_8080C3A8(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_UpdateMainMenu(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
     SramContext* sramCtx = &this->sramCtx;
     Input* input = &this->state.input[0];
 
     if (CHECK_BTN_ALL(input->press.button, BTN_START) || CHECK_BTN_ALL(input->press.button, BTN_A)) {
-        if (this->unk_24480 < 3) {
+        if (this->buttonIndex < 3) {
             if (gSaveContext.unk_3F3F == 0) {
-                if (!SLOT_OCCUPIED(sramCtx, this->unk_24480)) {
+                if (!SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
                     play_sound(NA_SE_SY_FSEL_DECIDE_L);
-                    this->unk_24486 = 34;
+                    this->configMode = 34;
                     this->unk_24510 = 99;
                     this->unk_24512 = 0;
                     if (gSaveContext.options.language != 0) {
@@ -321,18 +315,18 @@ void func_8080C3A8(GameState* thisx) {
                     this->unk_2451C = 0;
                     this->unk_24506 = 120;
                     this->unk_244E4 = 0;
-                    Lib_MemCpy(&this->unk_24414[this->unk_24480], &D_8081455C, 8);
+                    Lib_MemCpy(&this->unk_24414[this->buttonIndex], &sEmptyName, 8);
                 } else {
                     play_sound(NA_SE_SY_FSEL_DECIDE_L);
-                    this->unk_24498 = 4;
-                    this->unk_2448C = 0;
-                    this->unk_2448E = this->unk_24480;
-                    this->unk_24484 = 2;
-                    this->unk_244AE = 1;
+                    this->actionTimer = 4;
+                    this->selectMode = 0;
+                    this->unk_2448E = this->buttonIndex;
+                    this->menuMode = 2;
+                    this->nextTitleLabel = 1;
                 }
-            } else if (!FILE_CHOOSE_SLOT_OCCUPIED(this, this->unk_24480)) {
+            } else if (!FILE_CHOOSE_SLOT_OCCUPIED(this, this->buttonIndex)) {
                 play_sound(NA_SE_SY_FSEL_DECIDE_L);
-                this->unk_24486 = 34;
+                this->configMode = 34;
                 this->unk_24510 = 99;
                 this->unk_24512 = 0;
                 if (gSaveContext.options.language != 0) {
@@ -345,26 +339,26 @@ void func_8080C3A8(GameState* thisx) {
                 this->unk_2451C = 0;
                 this->unk_24506 = 120;
                 this->unk_244E4 = 0;
-                Lib_MemCpy(&this->unk_24414[this->unk_24480], &D_8081455C, 8);
+                Lib_MemCpy(&this->unk_24414[this->buttonIndex], &sEmptyName, 8);
             } else {
                 play_sound(NA_SE_SY_FSEL_DECIDE_L);
-                this->unk_24498 = 4;
-                this->unk_2448C = 0;
-                this->unk_2448E = this->unk_24480;
-                this->unk_24484 = 2;
-                this->unk_244AE = 1;
+                this->actionTimer = 4;
+                this->selectMode = 0;
+                this->unk_2448E = this->buttonIndex;
+                this->menuMode = 2;
+                this->nextTitleLabel = 1;
             }
-        } else if (this->unk_244A8 == -1) {
+        } else if (this->warningLabel == -1) {
             play_sound(NA_SE_SY_FSEL_DECIDE_L);
-            this->unk_24488 = this->unk_24486;
-            if (this->unk_24480 == 3) {
-                this->unk_24486 = 3;
-                this->unk_244AE = 2;
-            } else if (this->unk_24480 == 4) {
-                this->unk_24486 = 21;
-                this->unk_244AE = 6;
+            this->unk_24488 = this->configMode;
+            if (this->buttonIndex == 3) {
+                this->configMode = 3;
+                this->nextTitleLabel = 2;
+            } else if (this->buttonIndex == 4) {
+                this->configMode = 21;
+                this->nextTitleLabel = 6;
             } else {
-                this->unk_24486 = 39;
+                this->configMode = 39;
                 this->unk_24510 = 0;
                 this->unk_24518 = 0;
                 this->unk_2451A = 0;
@@ -372,7 +366,7 @@ void func_8080C3A8(GameState* thisx) {
                 this->unk_2451C = 0;
                 this->unk_24506 = 120;
             }
-            this->unk_24498 = 4;
+            this->actionTimer = 4;
         } else {
             play_sound(NA_SE_SY_FSEL_ERROR);
         }
@@ -381,75 +375,75 @@ void func_8080C3A8(GameState* thisx) {
         STOP_GAMESTATE(&this->state);
         SET_NEXT_GAMESTATE_TEST(&this->state, Opening_Init, OpeningContext);
     } else {
-        if (ABS_ALT(this->unk_24504) > 30) {
+        if (ABS_ALT(this->stickRelY) > 30) {
             play_sound(NA_SE_SY_FSEL_CURSOR);
-            if (this->unk_24504 > 30) {
-                this->unk_24480--;
-                if (this->unk_24480 == 2) {
-                    this->unk_24480 = 1;
+            if (this->stickRelY > 30) {
+                this->buttonIndex--;
+                if (this->buttonIndex == 2) {
+                    this->buttonIndex = 1;
                 }
-                if (this->unk_24480 < 0) {
-                    this->unk_24480 = 5;
+                if (this->buttonIndex < 0) {
+                    this->buttonIndex = 5;
                 }
             } else {
-                this->unk_24480++;
-                if (this->unk_24480 == 2) {
-                    this->unk_24480 = 3;
+                this->buttonIndex++;
+                if (this->buttonIndex == 2) {
+                    this->buttonIndex = 3;
                 }
-                if (this->unk_24480 >= 6) {
-                    this->unk_24480 = 0;
+                if (this->buttonIndex >= 6) {
+                    this->buttonIndex = 0;
                 }
             }
         }
-        if (this->unk_24480 == 3) {
+        if (this->buttonIndex == 3) {
             if (gSaveContext.unk_3F3F == 0) {
                 if (!SLOT_OCCUPIED(sramCtx, 0) && !SLOT_OCCUPIED(sramCtx, 1) && !SLOT_OCCUPIED(sramCtx, 2)) {
-                    this->unk_244AA = this->unk_24480;
-                    this->unk_244A8 = 0;
-                    this->unk_244E8 = 255;
+                    this->warningButtonIndex = this->buttonIndex;
+                    this->warningLabel = 0;
+                    this->emptyFileTextAlpha = 255;
                 } else if (SLOT_OCCUPIED(sramCtx, 0) && SLOT_OCCUPIED(sramCtx, 1) && SLOT_OCCUPIED(sramCtx, 2)) {
-                    this->unk_244AA = this->unk_24480;
-                    this->unk_244A8 = 2;
-                    this->unk_244E8 = 255;
+                    this->warningButtonIndex = this->buttonIndex;
+                    this->warningLabel = 2;
+                    this->emptyFileTextAlpha = 255;
                 } else {
-                    this->unk_244A8 = -1;
+                    this->warningLabel = -1;
                 }
             } else {
                 if (!FILE_CHOOSE_SLOT_OCCUPIED(this, 0) && !FILE_CHOOSE_SLOT_OCCUPIED(this, 1) &&
                     !FILE_CHOOSE_SLOT_OCCUPIED(this, 2)) {
-                    this->unk_244AA = this->unk_24480;
-                    this->unk_244A8 = 0;
-                    this->unk_244E8 = 255;
+                    this->warningButtonIndex = this->buttonIndex;
+                    this->warningLabel = 0;
+                    this->emptyFileTextAlpha = 255;
                 } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, 0) && FILE_CHOOSE_SLOT_OCCUPIED(this, 1) &&
                            FILE_CHOOSE_SLOT_OCCUPIED(this, 2)) {
-                    this->unk_244AA = this->unk_24480;
-                    this->unk_244A8 = 2;
-                    this->unk_244E8 = 255;
+                    this->warningButtonIndex = this->buttonIndex;
+                    this->warningLabel = 2;
+                    this->emptyFileTextAlpha = 255;
                 } else {
-                    this->unk_244A8 = -1;
+                    this->warningLabel = -1;
                 }
             }
-        } else if (this->unk_24480 == 4) {
+        } else if (this->buttonIndex == 4) {
             if (gSaveContext.unk_3F3F == 0) {
                 if (!SLOT_OCCUPIED(sramCtx, 0) && !SLOT_OCCUPIED(sramCtx, 1) && !SLOT_OCCUPIED(sramCtx, 2)) {
-                    this->unk_244AA = this->unk_24480;
-                    this->unk_244A8 = 1;
-                    this->unk_244E8 = 255;
+                    this->warningButtonIndex = this->buttonIndex;
+                    this->warningLabel = 1;
+                    this->emptyFileTextAlpha = 255;
                 } else {
-                    this->unk_244A8 = -1;
+                    this->warningLabel = -1;
                 }
             } else {
                 if (!FILE_CHOOSE_SLOT_OCCUPIED(this, 0) && !FILE_CHOOSE_SLOT_OCCUPIED(this, 1) &&
                     !FILE_CHOOSE_SLOT_OCCUPIED(this, 2)) {
-                    this->unk_244AA = this->unk_24480;
-                    this->unk_244A8 = 1;
-                    this->unk_244E8 = 255;
+                    this->warningButtonIndex = this->buttonIndex;
+                    this->warningLabel = 1;
+                    this->emptyFileTextAlpha = 255;
                 } else {
-                    this->unk_244A8 = -1;
+                    this->warningLabel = -1;
                 }
             }
         } else {
-            this->unk_244A8 = -1;
+            this->warningLabel = -1;
         }
     }
 }
@@ -459,42 +453,45 @@ void func_8080D164(GameState* thisx) {
 
 void func_8080D170(GameState* thisx) {
     static s16 D_80814564 = 0;
-    FileChooseContext* this = (FileChooseContext*)thisx;
+    FileSelectState* this = (FileSelectState*)thisx;
 
     D_80814564 += 2;
     if (D_80814564 == 0xFE) {
-        this->unk_24486 = this->unk_2448A;
+        this->configMode = this->nextConfigMode;
         D_80814564 = 0;
     }
 }
 
-void func_8080D1BC(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_RotateToNameEntry(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
 
-    this->unk_2450C += 50.0f;
-    if (this->unk_2450C >= 314.0f) {
-        this->unk_2450C = 314.0f;
-        this->unk_24486 = 35;
+    this->windowRot += 50.0f;
+
+    if (this->windowRot >= 314.0f) {
+        this->windowRot = 314.0f;
+        this->configMode = 35;
     }
 }
 
-void func_8080D220(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_RotateToOptions(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
 
-    this->unk_2450C += 50.0f;
-    if (this->unk_2450C >= 314.0f) {
-        this->unk_2450C = 314.0f;
-        this->unk_24486 = 40;
+    this->windowRot += 50.0f;
+
+    if (this->windowRot >= 314.0f) {
+        this->windowRot = 314.0f;
+        this->configMode = 40;
     }
 }
 
-void func_8080D284(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_RotateToMain(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
 
-    this->unk_2450C += 50.0f;
-    if (this->unk_2450C >= 628.0f) {
-        this->unk_2450C = 0.0f;
-        this->unk_24486 = 2;
+    this->windowRot += 50.0f;
+
+    if (this->windowRot >= 628.0f) {
+        this->windowRot = 0.0f;
+        this->configMode = 2;
     }
 }
 
@@ -540,46 +537,84 @@ void func_8080A418(GameState* thisx);
 void func_8080A4A0(GameState* thisx);
 void func_8080A6BC(GameState* thisx);
 
-// gConfigModeUpdateFuncs
-void (*D_80814568[])(GameState*) = {
-    func_8080C29C, func_8080C324, func_8080C3A8, func_80804010, func_808041A0, func_80804654, func_808047D8,
-    func_8080489C, func_80804DAC, func_80804E74, func_80804F98, func_8080525C, func_808052B0, func_808054A4,
-    func_808055D0, func_808058A4, func_80805918, func_80805A58, func_80805B30, func_80805C1C, func_80806014,
-    func_80806148, func_80806310, func_808067E0, func_80806BC8, func_80806CA0, func_80806E84, func_80806F30,
-    func_808071E4, func_80807390, func_8080742C, func_808074B4, func_808077AC, func_8080D164, func_8080D1BC,
-    func_80809DF0, func_80809EA0, func_8080A3CC, func_8080D284, func_8080D220, func_8080A418, func_8080A4A0,
-    func_8080A6BC, func_8080D284, func_8080D170,
+void (*gConfigModeUpdateFuncs[])(GameState*) = {
+    FileSelect_StartFadeIn,
+    FileSelect_FinishFadeIn,
+    FileSelect_UpdateMainMenu,
+    func_80804010,
+    func_808041A0,
+    func_80804654,
+    func_808047D8,
+    func_8080489C,
+    func_80804DAC,
+    func_80804E74,
+    func_80804F98,
+    func_8080525C,
+    func_808052B0,
+    func_808054A4,
+    func_808055D0,
+    func_808058A4,
+    func_80805918,
+    func_80805A58,
+    func_80805B30,
+    func_80805C1C,
+    func_80806014,
+    func_80806148,
+    func_80806310,
+    func_808067E0,
+    func_80806BC8,
+    func_80806CA0,
+    func_80806E84,
+    func_80806F30,
+    func_808071E4,
+    func_80807390,
+    func_8080742C,
+    func_808074B4,
+    func_808077AC,
+    func_8080D164,
+    FileSelect_RotateToNameEntry,
+    func_80809DF0,
+    func_80809EA0,
+    func_8080A3CC,
+    FileSelect_RotateToMain,
+    FileSelect_RotateToOptions,
+    func_8080A418,
+    func_8080A4A0,
+    func_8080A6BC,
+    FileSelect_RotateToMain,
+    func_8080D170,
 };
 
-s16 D_8081461C[] = { 70, 200 };
-void func_8080D2EC(FileChooseContext* this) {
-    s32 step = ABS_ALT(this->unk_244EA[3] - D_8081461C[this->unk_244F2]) / this->unk_24528;
+s16 sCursorAlphaTargets[] = { 70, 200 };
+/**
+ * Updates the alpha of the cursor to make it pulsate.
+ */
+void FileSelect_PulsateCursor(FileSelectState* this) {
+    s32 step = ABS_ALT(this->highlightColor[3] - sCursorAlphaTargets[this->highlightPulseDir]) / this->highlightTimer;
 
-    if (this->unk_244EA[3] >= D_8081461C[this->unk_244F2]) {
-        this->unk_244EA[3] -= step;
+    if (this->highlightColor[3] >= sCursorAlphaTargets[this->highlightPulseDir]) {
+        this->highlightColor[3] -= step;
     } else {
-        this->unk_244EA[3] += step;
+        this->highlightColor[3] += step;
     }
 
-    this->unk_24528--;
+    this->highlightTimer--;
 
-    if (this->unk_24528 == 0) {
-        this->unk_244EA[3] = D_8081461C[this->unk_244F2];
-        this->unk_24528 = 0x14;
-        this->unk_244F2 ^= 1;
+    if (this->highlightTimer == 0) {
+        this->highlightColor[3] = sCursorAlphaTargets[this->highlightPulseDir];
+        this->highlightTimer = 20;
+        this->highlightPulseDir ^= 1;
     }
 }
 
-// FileChoose_ConfigModeUpdate
-void func_8080D3D0(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_ConfigModeUpdate(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
 
-    D_80814568[this->unk_24486](&this->state);
+    gConfigModeUpdateFuncs[this->configMode](&this->state);
 }
 
-// FileChoose_SetWindowVtx
-void func_8080D40C(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_SetWindowVtx(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
     s16 i;
     s16 j;
     s16 x;
@@ -587,43 +622,42 @@ void func_8080D40C(GameState* thisx) {
     s32 tmp2;
     s32 tmp3;
 
-    // windowVtx
-    this->unk_A4 = GRAPH_ALLOC(this->state.gfxCtx, sizeof(Vtx) * 80);
-    // windowPos
-    tmp = this->unk_24508 - 90;
+    this->windowVtx = GRAPH_ALLOC(this->state.gfxCtx, sizeof(Vtx) * 80);
+    tmp = this->windowPosX - 90;
 
     for (x = 0, i = 0; i < 4; i++) {
         tmp += 0x40;
         tmp2 = (i == 3) ? 0x30 : 0x40;
 
         for (j = 0, tmp3 = 0x50; j < 5; j++, x += 4, tmp3 -= 0x20) {
-            this->unk_A4[x].v.ob[0] = this->unk_A4[x + 2].v.ob[0] = tmp;
+            this->windowVtx[x].v.ob[0] = this->windowVtx[x + 2].v.ob[0] = tmp;
 
-            this->unk_A4[x + 1].v.ob[0] = this->unk_A4[x + 3].v.ob[0] = tmp2 + tmp;
+            this->windowVtx[x + 1].v.ob[0] = this->windowVtx[x + 3].v.ob[0] = tmp2 + tmp;
 
-            this->unk_A4[x].v.ob[1] = this->unk_A4[x + 1].v.ob[1] = tmp3;
+            this->windowVtx[x].v.ob[1] = this->windowVtx[x + 1].v.ob[1] = tmp3;
 
-            this->unk_A4[x + 2].v.ob[1] = this->unk_A4[x + 3].v.ob[1] = tmp3 - 0x20;
+            this->windowVtx[x + 2].v.ob[1] = this->windowVtx[x + 3].v.ob[1] = tmp3 - 0x20;
 
-            this->unk_A4[x].v.ob[2] = this->unk_A4[x + 1].v.ob[2] = this->unk_A4[x + 2].v.ob[2] =
-                this->unk_A4[x + 3].v.ob[2] = 0;
+            this->windowVtx[x].v.ob[2] = this->windowVtx[x + 1].v.ob[2] = this->windowVtx[x + 2].v.ob[2] =
+                this->windowVtx[x + 3].v.ob[2] = 0;
 
-            this->unk_A4[x].v.flag = this->unk_A4[x + 1].v.flag = this->unk_A4[x + 2].v.flag =
-                this->unk_A4[x + 3].v.flag = 0;
+            this->windowVtx[x].v.flag = this->windowVtx[x + 1].v.flag = this->windowVtx[x + 2].v.flag =
+                this->windowVtx[x + 3].v.flag = 0;
 
-            this->unk_A4[x].v.tc[0] = this->unk_A4[x].v.tc[1] = this->unk_A4[x + 1].v.tc[1] =
-                this->unk_A4[x + 2].v.tc[0] = 0;
+            this->windowVtx[x].v.tc[0] = this->windowVtx[x].v.tc[1] = this->windowVtx[x + 1].v.tc[1] =
+                this->windowVtx[x + 2].v.tc[0] = 0;
 
-            this->unk_A4[x + 1].v.tc[0] = this->unk_A4[x + 3].v.tc[0] = tmp2 * 0x20;
+            this->windowVtx[x + 1].v.tc[0] = this->windowVtx[x + 3].v.tc[0] = tmp2 * 0x20;
 
-            this->unk_A4[x + 2].v.tc[1] = this->unk_A4[x + 3].v.tc[1] = 0x400;
+            this->windowVtx[x + 2].v.tc[1] = this->windowVtx[x + 3].v.tc[1] = 0x400;
 
-            this->unk_A4[x].v.cn[0] = this->unk_A4[x + 2].v.cn[0] = this->unk_A4[x].v.cn[1] =
-                this->unk_A4[x + 2].v.cn[1] = this->unk_A4[x].v.cn[2] = this->unk_A4[x + 2].v.cn[2] =
-                    this->unk_A4[x + 1].v.cn[0] = this->unk_A4[x + 3].v.cn[0] = this->unk_A4[x + 1].v.cn[1] =
-                        this->unk_A4[x + 3].v.cn[1] = this->unk_A4[x + 1].v.cn[2] = this->unk_A4[x + 3].v.cn[2] =
-                            this->unk_A4[x].v.cn[3] = this->unk_A4[x + 2].v.cn[3] = this->unk_A4[x + 1].v.cn[3] =
-                                this->unk_A4[x + 3].v.cn[3] = 255;
+            this->windowVtx[x].v.cn[0] = this->windowVtx[x + 2].v.cn[0] = this->windowVtx[x].v.cn[1] =
+                this->windowVtx[x + 2].v.cn[1] = this->windowVtx[x].v.cn[2] = this->windowVtx[x + 2].v.cn[2] =
+                    this->windowVtx[x + 1].v.cn[0] = this->windowVtx[x + 3].v.cn[0] = this->windowVtx[x + 1].v.cn[1] =
+                        this->windowVtx[x + 3].v.cn[1] = this->windowVtx[x + 1].v.cn[2] =
+                            this->windowVtx[x + 3].v.cn[2] = this->windowVtx[x].v.cn[3] =
+                                this->windowVtx[x + 2].v.cn[3] = this->windowVtx[x + 1].v.cn[3] =
+                                    this->windowVtx[x + 3].v.cn[3] = 255;
         }
     }
 }
@@ -637,10 +671,10 @@ s16 D_80814638[] = {
 s16 D_80814644[] = { 88, 104, 120, 944 };
 s16 D_8081464C[] = { 940, 944 };
 s16 D_80814650[] = { 940, 944 };
-// void func_8080D6D4(FileChooseContext* this);
-void func_8080D6D4(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D6D4.s")
-// void func_8080D6D4(FileChooseContext *this) {
+// void FileSelect_SetWindowContentVtx(FileSelectState* this);
+void FileSelect_SetWindowContentVtx(GameState* thisx);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_SetWindowContentVtx.s")
+// void FileSelect_SetWindowContentVtx(FileSelectState *this) {
 //     s16 spAC;
 //     u16 spA8;
 //     u16 spA6;
@@ -908,7 +942,7 @@ void func_8080D6D4(GameState* thisx);
 //     s16 phi_a3_2;
 //     s32 phi_s1_2;
 //     s32 phi_s3_3;
-//     u16 *phi_t2;
+//     u16 *i;
 //     s32 phi_s1_3;
 //     s32 phi_s3_4;
 //     s16 phi_a3_3;
@@ -942,145 +976,145 @@ void func_8080D6D4(GameState* thisx);
 //     // temp_v1 = this->state.gfxCtx;
 //     // temp_v0 = temp_v1->polyOpa.d - 0x3C00;
 //     // temp_v1->polyOpa.d = temp_v0;
-//     // this->unk_243E4 = (Vtx *) temp_v0;
+//     // this->windowContentVtx = (Vtx *) temp_v0;
 
-//     this->unk_243E4 = GRAPH_ALLOC(this->state.gfxCtx, 0x3C0 * sizeof(Vtx));
+//     this->windowContentVtx = GRAPH_ALLOC(this->state.gfxCtx, 0x3C0 * sizeof(Vtx));
 
 //     for (phi_t1 = 0; phi_t1 < 0x3C0; phi_t1 += 4) {
-//         this->unk_243E4[phi_t1].v.ob[0] = this->unk_243E4[phi_t1 + 2].v.ob[0] = 0x12C;
-//         this->unk_243E4[phi_t1 + 1].v.ob[0] = this->unk_243E4[phi_t1 + 3].v.ob[0] =
-//             this->unk_243E4[phi_t1].v.ob[0] + 0x10;
+//         this->windowContentVtx[phi_t1].v.ob[0] = this->windowContentVtx[phi_t1 + 2].v.ob[0] = 0x12C;
+//         this->windowContentVtx[phi_t1 + 1].v.ob[0] = this->windowContentVtx[phi_t1 + 3].v.ob[0] =
+//             this->windowContentVtx[phi_t1].v.ob[0] + 0x10;
 
-//         this->unk_243E4[phi_t1].v.ob[1] = this->unk_243E4[phi_t1 + 1].v.ob[1] = 0;
-//         this->unk_243E4[phi_t1 + 2].v.ob[1] = this->unk_243E4[phi_t1 + 3].v.ob[1] =
-//             this->unk_243E4[phi_t1].v.ob[1] - 0x10;
+//         this->windowContentVtx[phi_t1].v.ob[1] = this->windowContentVtx[phi_t1 + 1].v.ob[1] = 0;
+//         this->windowContentVtx[phi_t1 + 2].v.ob[1] = this->windowContentVtx[phi_t1 + 3].v.ob[1] =
+//             this->windowContentVtx[phi_t1].v.ob[1] - 0x10;
 
-//         this->unk_243E4[phi_t1].v.ob[2] = this->unk_243E4[phi_t1 + 1].v.ob[2] =
-//             this->unk_243E4[phi_t1 + 2].v.ob[2] = this->unk_243E4[phi_t1 + 3].v.ob[2] = 0;
+//         this->windowContentVtx[phi_t1].v.ob[2] = this->windowContentVtx[phi_t1 + 1].v.ob[2] =
+//             this->windowContentVtx[phi_t1 + 2].v.ob[2] = this->windowContentVtx[phi_t1 + 3].v.ob[2] = 0;
 
-//         this->unk_243E4[phi_t1].v.flag = this->unk_243E4[phi_t1 + 1].v.flag =
-//             this->unk_243E4[phi_t1 + 2].v.flag = this->unk_243E4[phi_t1 + 3].v.flag = 0;
+//         this->windowContentVtx[phi_t1].v.flag = this->windowContentVtx[phi_t1 + 1].v.flag =
+//             this->windowContentVtx[phi_t1 + 2].v.flag = this->windowContentVtx[phi_t1 + 3].v.flag = 0;
 
-//         this->unk_243E4[phi_t1].v.tc[0] = this->unk_243E4[phi_t1].v.tc[1] =
-//             this->unk_243E4[phi_t1 + 1].v.tc[1] = this->unk_243E4[phi_t1 + 2].v.tc[0] = 0;
+//         this->windowContentVtx[phi_t1].v.tc[0] = this->windowContentVtx[phi_t1].v.tc[1] =
+//             this->windowContentVtx[phi_t1 + 1].v.tc[1] = this->windowContentVtx[phi_t1 + 2].v.tc[0] = 0;
 
-//         this->unk_243E4[phi_t1 + 1].v.tc[0] = this->unk_243E4[phi_t1 + 2].v.tc[1] =
-//             this->unk_243E4[phi_t1 + 3].v.tc[0] = this->unk_243E4[phi_t1 + 3].v.tc[1] = 0x200;
+//         this->windowContentVtx[phi_t1 + 1].v.tc[0] = this->windowContentVtx[phi_t1 + 2].v.tc[1] =
+//             this->windowContentVtx[phi_t1 + 3].v.tc[0] = this->windowContentVtx[phi_t1 + 3].v.tc[1] = 0x200;
 
-//         this->unk_243E4[phi_t1].v.cn[0] = this->unk_243E4[phi_t1 + 1].v.cn[0] =
-//             this->unk_243E4[phi_t1 + 2].v.cn[0] = this->unk_243E4[phi_t1 + 3].v.cn[0] =
-//                 this->unk_243E4[phi_t1].v.cn[1] = this->unk_243E4[phi_t1 + 1].v.cn[1] =
-//                     this->unk_243E4[phi_t1 + 2].v.cn[1] = this->unk_243E4[phi_t1 + 3].v.cn[1] =
-//                         this->unk_243E4[phi_t1].v.cn[2] = this->unk_243E4[phi_t1 + 1].v.cn[2] =
-//                             this->unk_243E4[phi_t1 + 2].v.cn[2] = this->unk_243E4[phi_t1 + 3].v.cn[2] =
-//                                 this->unk_243E4[phi_t1].v.cn[3] = this->unk_243E4[phi_t1 + 1].v.cn[3] =
-//                                     this->unk_243E4[phi_t1 + 2].v.cn[3] =
-//                                         this->unk_243E4[phi_t1 + 3].v.cn[3] = 0xFF;
+//         this->windowContentVtx[phi_t1].v.cn[0] = this->windowContentVtx[phi_t1 + 1].v.cn[0] =
+//             this->windowContentVtx[phi_t1 + 2].v.cn[0] = this->windowContentVtx[phi_t1 + 3].v.cn[0] =
+//                 this->windowContentVtx[phi_t1].v.cn[1] = this->windowContentVtx[phi_t1 + 1].v.cn[1] =
+//                     this->windowContentVtx[phi_t1 + 2].v.cn[1] = this->windowContentVtx[phi_t1 + 3].v.cn[1] =
+//                         this->windowContentVtx[phi_t1].v.cn[2] = this->windowContentVtx[phi_t1 + 1].v.cn[2] =
+//                             this->windowContentVtx[phi_t1 + 2].v.cn[2] = this->windowContentVtx[phi_t1 + 3].v.cn[2] =
+//                                 this->windowContentVtx[phi_t1].v.cn[3] = this->windowContentVtx[phi_t1 + 1].v.cn[3] =
+//                                     this->windowContentVtx[phi_t1 + 2].v.cn[3] =
+//                                         this->windowContentVtx[phi_t1 + 3].v.cn[3] = 0xFF;
 //     }
 
 //     // phi_t1 = 0;
 //     // do {
-//     //     this->unk_243E4[phi_t1].unk20 = 0x12C;
+//     //     this->windowContentVtx[phi_t1].unk20 = 0x12C;
 //     //     temp_t1 = (phi_t1 + 4) & 0xFFFF;
-//     //     temp_a0 = &this->unk_243E4[phi_t1];
+//     //     temp_a0 = &this->windowContentVtx[phi_t1];
 //     //     temp_a0->v.ob[0] = temp_a0->unk20;
-//     //     temp_a0_2 = &this->unk_243E4[phi_t1];
+//     //     temp_a0_2 = &this->windowContentVtx[phi_t1];
 //     //     temp_v1_2 = temp_a0_2->v.ob[0] + 0x10;
 //     //     temp_a0_2->unk30 = temp_v1_2;
-//     //     this->unk_243E4[phi_t1].unk10 = temp_v1_2;
-//     //     this->unk_243E4[phi_t1].unk12 = 0;
-//     //     temp_a0_3 = &this->unk_243E4[phi_t1];
+//     //     this->windowContentVtx[phi_t1].unk10 = temp_v1_2;
+//     //     this->windowContentVtx[phi_t1].unk12 = 0;
+//     //     temp_a0_3 = &this->windowContentVtx[phi_t1];
 //     //     temp_a0_3->v.ob[1] = temp_a0_3->unk12;
-//     //     temp_a0_4 = &this->unk_243E4[phi_t1];
+//     //     temp_a0_4 = &this->windowContentVtx[phi_t1];
 //     //     temp_v1_3 = temp_a0_4->v.ob[1] - 0x10;
 //     //     temp_a0_4->unk32 = temp_v1_3;
-//     //     this->unk_243E4[phi_t1].unk22 = temp_v1_3;
-//     //     this->unk_243E4[phi_t1].unk34 = 0;
-//     //     temp_a0_5 = &this->unk_243E4[phi_t1];
+//     //     this->windowContentVtx[phi_t1].unk22 = temp_v1_3;
+//     //     this->windowContentVtx[phi_t1].unk34 = 0;
+//     //     temp_a0_5 = &this->windowContentVtx[phi_t1];
 //     //     temp_a1 = temp_a0_5->unk34;
 //     //     temp_a0_5->unk24 = temp_a1;
-//     //     this->unk_243E4[phi_t1].unk14 = temp_a1;
-//     //     this->unk_243E4[phi_t1].v.ob[2] = temp_a1;
-//     //     this->unk_243E4[phi_t1].unk36 = 0;
-//     //     temp_a0_6 = &this->unk_243E4[phi_t1];
+//     //     this->windowContentVtx[phi_t1].unk14 = temp_a1;
+//     //     this->windowContentVtx[phi_t1].v.ob[2] = temp_a1;
+//     //     this->windowContentVtx[phi_t1].unk36 = 0;
+//     //     temp_a0_6 = &this->windowContentVtx[phi_t1];
 //     //     temp_a1_2 = temp_a0_6->unk36;
 //     //     temp_a0_6->unk26 = temp_a1_2;
-//     //     this->unk_243E4[phi_t1].unk16 = temp_a1_2;
-//     //     this->unk_243E4[phi_t1].v.flag = temp_a1_2;
-//     //     this->unk_243E4[phi_t1].unk28 = 0;
-//     //     temp_a0_7 = &this->unk_243E4[phi_t1];
+//     //     this->windowContentVtx[phi_t1].unk16 = temp_a1_2;
+//     //     this->windowContentVtx[phi_t1].v.flag = temp_a1_2;
+//     //     this->windowContentVtx[phi_t1].unk28 = 0;
+//     //     temp_a0_7 = &this->windowContentVtx[phi_t1];
 //     //     temp_v1_4 = temp_a0_7->unk28;
 //     //     temp_a0_7->unk1A = temp_v1_4;
-//     //     this->unk_243E4[phi_t1].v.tc[1] = temp_v1_4;
-//     //     this->unk_243E4[phi_t1].v.tc[0] = temp_v1_4;
-//     //     this->unk_243E4[phi_t1].unk3A = 0x200;
-//     //     temp_a0_8 = &this->unk_243E4[phi_t1];
+//     //     this->windowContentVtx[phi_t1].v.tc[1] = temp_v1_4;
+//     //     this->windowContentVtx[phi_t1].v.tc[0] = temp_v1_4;
+//     //     this->windowContentVtx[phi_t1].unk3A = 0x200;
+//     //     temp_a0_8 = &this->windowContentVtx[phi_t1];
 //     //     temp_a1_3 = temp_a0_8->unk3A;
 //     //     temp_a0_8->unk38 = temp_a1_3;
-//     //     this->unk_243E4[phi_t1].unk2A = temp_a1_3;
-//     //     this->unk_243E4[phi_t1].unk18 = temp_a1_3;
-//     //     this->unk_243E4[phi_t1].unk3F = 0xFF;
-//     //     temp_a0_9 = &this->unk_243E4[phi_t1];
+//     //     this->windowContentVtx[phi_t1].unk2A = temp_a1_3;
+//     //     this->windowContentVtx[phi_t1].unk18 = temp_a1_3;
+//     //     this->windowContentVtx[phi_t1].unk3F = 0xFF;
+//     //     temp_a0_9 = &this->windowContentVtx[phi_t1];
 //     //     temp_v1_5 = temp_a0_9->unk3F;
 //     //     temp_a0_9->unk2F = temp_v1_5;
-//     //     this->unk_243E4[phi_t1].unk1F = temp_v1_5;
-//     //     this->unk_243E4[phi_t1].v.cn[3] = temp_v1_5;
-//     //     this->unk_243E4[phi_t1].unk3E = temp_v1_5;
-//     //     this->unk_243E4[phi_t1].unk2E = temp_v1_5;
-//     //     this->unk_243E4[phi_t1].unk1E = temp_v1_5;
-//     //     this->unk_243E4[phi_t1].v.cn[2] = temp_v1_5;
-//     //     this->unk_243E4[phi_t1].unk3D = temp_v1_5;
-//     //     this->unk_243E4[phi_t1].unk2D = temp_v1_5;
-//     //     this->unk_243E4[phi_t1].unk1D = temp_v1_5;
-//     //     this->unk_243E4[phi_t1].v.cn[1] = temp_v1_5;
-//     //     this->unk_243E4[phi_t1].unk3C = temp_v1_5;
-//     //     this->unk_243E4[phi_t1].unk2C = temp_v1_5;
-//     //     this->unk_243E4[phi_t1].unk1C = temp_v1_5;
-//     //     this->unk_243E4[phi_t1].v.cn[0] = temp_v1_5;
+//     //     this->windowContentVtx[phi_t1].unk1F = temp_v1_5;
+//     //     this->windowContentVtx[phi_t1].v.cn[3] = temp_v1_5;
+//     //     this->windowContentVtx[phi_t1].unk3E = temp_v1_5;
+//     //     this->windowContentVtx[phi_t1].unk2E = temp_v1_5;
+//     //     this->windowContentVtx[phi_t1].unk1E = temp_v1_5;
+//     //     this->windowContentVtx[phi_t1].v.cn[2] = temp_v1_5;
+//     //     this->windowContentVtx[phi_t1].unk3D = temp_v1_5;
+//     //     this->windowContentVtx[phi_t1].unk2D = temp_v1_5;
+//     //     this->windowContentVtx[phi_t1].unk1D = temp_v1_5;
+//     //     this->windowContentVtx[phi_t1].v.cn[1] = temp_v1_5;
+//     //     this->windowContentVtx[phi_t1].unk3C = temp_v1_5;
+//     //     this->windowContentVtx[phi_t1].unk2C = temp_v1_5;
+//     //     this->windowContentVtx[phi_t1].unk1C = temp_v1_5;
+//     //     this->windowContentVtx[phi_t1].v.cn[0] = temp_v1_5;
 //     //     phi_t1 = temp_t1;
 //     // } while (temp_t1 < 0x3C0);
 
-//     this->unk_243E4[0].v.ob[0] = this->unk_243E4[2].v.ob[0] = this->unk_24508;
-//     this->unk_243E4[1].v.ob[0] = this->unk_243E4[3].v.ob[0] = this->unk_243E4[0].v.ob[0] + 0x80;
-//     this->unk_243E4[0].v.ob[1] = this->unk_243E4[1].v.ob[1] = 0x48;
-//     this->unk_243E4[2].v.ob[1] = this->unk_243E4[3].v.ob[1] = this->unk_243E4[0].v.ob[1] - 0x10;
-//     this->unk_243E4[1].v.tc[0] = this->unk_243E4[3].v.tc[0] = 0x1000;
+//     this->windowContentVtx[0].v.ob[0] = this->windowContentVtx[2].v.ob[0] = this->windowPosX;
+//     this->windowContentVtx[1].v.ob[0] = this->windowContentVtx[3].v.ob[0] = this->windowContentVtx[0].v.ob[0] + 0x80;
+//     this->windowContentVtx[0].v.ob[1] = this->windowContentVtx[1].v.ob[1] = 0x48;
+//     this->windowContentVtx[2].v.ob[1] = this->windowContentVtx[3].v.ob[1] = this->windowContentVtx[0].v.ob[1] - 0x10;
+//     this->windowContentVtx[1].v.tc[0] = this->windowContentVtx[3].v.tc[0] = 0x1000;
 
-// //     temp_v1_6 = this->unk_24508;
-// //     this->unk_243E4->unk20 = temp_v1_6;
-// //     this->unk_243E4->v.ob[0] = temp_v1_6;
-// //     temp_a1_4 = this->unk_243E4;
+// //     temp_v1_6 = this->windowPosX;
+// //     this->windowContentVtx->unk20 = temp_v1_6;
+// //     this->windowContentVtx->v.ob[0] = temp_v1_6;
+// //     temp_a1_4 = this->windowContentVtx;
 // //     temp_v1_7 = temp_a1_4->v.ob[0] + 0x80;
 // //     temp_a1_4->unk30 = temp_v1_7;
-// //     this->unk_243E4->unk10 = temp_v1_7;
-// //     this->unk_243E4->unk12 = 0x48;
-// //     temp_a1_5 = this->unk_243E4;
+// //     this->windowContentVtx->unk10 = temp_v1_7;
+// //     this->windowContentVtx->unk12 = 0x48;
+// //     temp_a1_5 = this->windowContentVtx;
 // //     temp_a1_5->v.ob[1] = temp_a1_5->unk12;
-// //     temp_a1_6 = this->unk_243E4;
+// //     temp_a1_6 = this->windowContentVtx;
 // //     temp_v1_8 = temp_a1_6->v.ob[1] - 0x10;
 // //     temp_a1_6->unk32 = temp_v1_8;
-// //     this->unk_243E4->unk22 = temp_v1_8;
-// //     this->unk_243E4->unk38 = 0x1000;
-// //     temp_a1_7 = this->unk_243E4;
+// //     this->windowContentVtx->unk22 = temp_v1_8;
+// //     this->windowContentVtx->unk38 = 0x1000;
+// //     temp_a1_7 = this->windowContentVtx;
 // //     temp_a1_7->unk18 = (s16) temp_a1_7->unk38;
 
 //     for (phi_a3 = 0, phi_s3 = 4; phi_a3 < 3; phi_a3++) {
-//         phi_s1 = this->unk_24508 - 6;
+//         phi_s1 = this->windowPosX - 6;
 
 //         for (phi_s4 = 0; phi_s4 < 7; phi_s4++, phi_s3 += 4) {
-//             this->unk_243E4[phi_s3].v.ob[0] = this->unk_243E4[phi_s3 + 2].v.ob[0] = phi_s1;
-//             this->unk_243E4[phi_s3 + 1].v.ob[0] = this->unk_243E4[phi_s3 + 3].v.ob[0] =
-//                 this->unk_243E4[phi_s3].v.ob[0] + sFileInfoBoxPartWidths[phi_s4];
+//             this->windowContentVtx[phi_s3].v.ob[0] = this->windowContentVtx[phi_s3 + 2].v.ob[0] = phi_s1;
+//             this->windowContentVtx[phi_s3 + 1].v.ob[0] = this->windowContentVtx[phi_s3 + 3].v.ob[0] =
+//                 this->windowContentVtx[phi_s3].v.ob[0] + sFileInfoBoxPartWidths[phi_s4];
 
-//             this->unk_243E4[phi_s3].v.ob[1] = this->unk_243E4[phi_s3 + 1].v.ob[1] =
+//             this->windowContentVtx[phi_s3].v.ob[1] = this->windowContentVtx[phi_s3 + 1].v.ob[1] =
 //                 this->unk_24492[phi_a3] + 0x2C;
 
-//             this->unk_243E4[phi_s3 + 2].v.ob[1] = this->unk_243E4[phi_s3 + 3].v.ob[1] =
-//                 this->unk_243E4[phi_s3].v.ob[1] - 0x38;
+//             this->windowContentVtx[phi_s3 + 2].v.ob[1] = this->windowContentVtx[phi_s3 + 3].v.ob[1] =
+//                 this->windowContentVtx[phi_s3].v.ob[1] - 0x38;
 
-//             this->unk_243E4[phi_s3 + 1].v.tc[0] = this->unk_243E4[phi_s3 + 3].v.tc[0] =
+//             this->windowContentVtx[phi_s3 + 1].v.tc[0] = this->windowContentVtx[phi_s3 + 3].v.tc[0] =
 //                 sFileInfoBoxPartWidths[phi_s4] << 5;
-//             this->unk_243E4[phi_s3 + 2].v.tc[1] = this->unk_243E4[phi_s3 + 3].v.tc[1] = 0x700;
+//             this->windowContentVtx[phi_s3 + 2].v.tc[1] = this->windowContentVtx[phi_s3 + 3].v.tc[1] = 0x700;
 //             phi_s1 += sFileInfoBoxPartWidths[phi_s4];
 //         }
 //     }
@@ -1094,33 +1128,33 @@ void func_8080D6D4(GameState* thisx);
 // //     phi_a3_8 = 0;
 // //     phi_s3 = 4;
 // //     do {
-// //         phi_s1 = this->unk_24508 - 6;
+// //         phi_s1 = this->windowPosX - 6;
 // //         phi_s4 = 0;
 // //         phi_s4_2 = 0;
 // //         phi_s4_3 = 0;
 // //         phi_s4_4 = 0;
 // // loop_4:
-// //         this->unk_243E4[phi_s3].unk20 = phi_s1;
+// //         this->windowContentVtx[phi_s3].unk20 = phi_s1;
 // //         temp_a1_8 = &sFileInfoBoxPartWidths + (phi_s4 * 2);
-// //         this->unk_243E4[phi_s3].v.ob[0] = phi_s1;
+// //         this->windowContentVtx[phi_s3].v.ob[0] = phi_s1;
 // //         temp_s4 = phi_s4 + 1;
-// //         temp_a0_10 = &this->unk_243E4[phi_s3];
+// //         temp_a0_10 = &this->windowContentVtx[phi_s3];
 // //         temp_v1_9 = *temp_a1_8 + temp_a0_10->v.ob[0];
 // //         temp_a0_10->unk30 = temp_v1_9;
 // //         temp_s3 = (phi_s3 + 4) & 0xFFFF;
-// //         this->unk_243E4[phi_s3].unk10 = temp_v1_9;
+// //         this->windowContentVtx[phi_s3].unk10 = temp_v1_9;
 // //         temp_v1_10 = this->unk_24492[phi_a3] + 0x2C;
-// //         this->unk_243E4[phi_s3].unk12 = temp_v1_10;
-// //         this->unk_243E4[phi_s3].v.ob[1] = temp_v1_10;
-// //         temp_a0_11 = &this->unk_243E4[phi_s3];
+// //         this->windowContentVtx[phi_s3].unk12 = temp_v1_10;
+// //         this->windowContentVtx[phi_s3].v.ob[1] = temp_v1_10;
+// //         temp_a0_11 = &this->windowContentVtx[phi_s3];
 // //         temp_v1_11 = temp_a0_11->v.ob[1] - 0x38;
 // //         temp_a0_11->unk32 = temp_v1_11;
-// //         this->unk_243E4[phi_s3].unk22 = temp_v1_11;
+// //         this->windowContentVtx[phi_s3].unk22 = temp_v1_11;
 // //         temp_v1_12 = *temp_a1_8 << 5;
-// //         this->unk_243E4[phi_s3].unk38 = temp_v1_12;
-// //         this->unk_243E4[phi_s3].unk18 = temp_v1_12;
-// //         this->unk_243E4[phi_s3].unk3A = 0x700;
-// //         temp_a0_12 = &this->unk_243E4[phi_s3];
+// //         this->windowContentVtx[phi_s3].unk38 = temp_v1_12;
+// //         this->windowContentVtx[phi_s3].unk18 = temp_v1_12;
+// //         this->windowContentVtx[phi_s3].unk3A = 0x700;
+// //         temp_a0_12 = &this->windowContentVtx[phi_s3];
 // //         temp_a0_12->unk2A = (s16) temp_a0_12->unk3A;
 // //         phi_s1 += *temp_a1_8;
 // //         phi_s3 = temp_s3;
@@ -1134,7 +1168,7 @@ void func_8080D6D4(GameState* thisx);
 // //         phi_a3 = temp_a3;
 // //     } while ((s32) temp_a3 < 3);
 
-//     temp_s1 = this->unk_24508 - 6;
+//     temp_s1 = this->windowPosX - 6;
 // //     temp_a1_9 = temp_s1 + 0x40;
 // //     temp_a2 = temp_s1 + 0x34;
 // //     temp_a3_2 = temp_s1 + 0xA9;
@@ -1145,71 +1179,71 @@ void func_8080D6D4(GameState* thisx);
 //     }
 
 // //     do {
-// //         this->unk_243E4[phi_s3_2].unk20 = temp_s1;
+// //         this->windowContentVtx[phi_s3_2].unk20 = temp_s1;
 // //         temp_s3_2 = (phi_s3_2 + 0x10) & 0xFFFF;
-// //         this->unk_243E4[phi_s3_2].v.ob[0] = temp_s1;
-// //         temp_a0_13 = &this->unk_243E4[phi_s3_2];
+// //         this->windowContentVtx[phi_s3_2].v.ob[0] = temp_s1;
+// //         temp_a0_13 = &this->windowContentVtx[phi_s3_2];
 // //         temp_s4_2 = phi_s4_2 + 1;
 // //         temp_v1_13 = temp_a0_13->v.ob[0] + 0x40;
 // //         temp_a0_13->unk30 = temp_v1_13;
-// //         this->unk_243E4[phi_s3_2].unk10 = temp_v1_13;
-// //         temp_v1_14 = this->unk_2449A[phi_s4_2] + phi_t0;
-// //         this->unk_243E4[phi_s3_2].unk12 = temp_v1_14;
-// //         this->unk_243E4[phi_s3_2].v.ob[1] = temp_v1_14;
-// //         temp_a0_14 = &this->unk_243E4[phi_s3_2];
+// //         this->windowContentVtx[phi_s3_2].unk10 = temp_v1_13;
+// //         temp_v1_14 = this->buttonYOffsets[phi_s4_2] + phi_t0;
+// //         this->windowContentVtx[phi_s3_2].unk12 = temp_v1_14;
+// //         this->windowContentVtx[phi_s3_2].v.ob[1] = temp_v1_14;
+// //         temp_a0_14 = &this->windowContentVtx[phi_s3_2];
 // //         temp_v1_15 = temp_a0_14->v.ob[1] - 0x10;
 // //         temp_a0_14->unk32 = temp_v1_15;
-// //         this->unk_243E4[phi_s3_2].unk22 = temp_v1_15;
-// //         this->unk_243E4[phi_s3_2].unk38 = 0x800;
-// //         temp_a0_15 = &this->unk_243E4[phi_s3_2];
+// //         this->windowContentVtx[phi_s3_2].unk22 = temp_v1_15;
+// //         this->windowContentVtx[phi_s3_2].unk38 = 0x800;
+// //         temp_a0_15 = &this->windowContentVtx[phi_s3_2];
 // //         temp_a0_15->unk18 = (s16) temp_a0_15->unk38;
-// //         this->unk_243E4[phi_s3_2].unk60 = temp_a1_9;
-// //         this->unk_243E4[phi_s3_2].unk40 = temp_a1_9;
-// //         temp_a0_16 = &this->unk_243E4[phi_s3_2];
+// //         this->windowContentVtx[phi_s3_2].unk60 = temp_a1_9;
+// //         this->windowContentVtx[phi_s3_2].unk40 = temp_a1_9;
+// //         temp_a0_16 = &this->windowContentVtx[phi_s3_2];
 // //         temp_v1_16 = temp_a0_16->unk40 + 0x6C;
 // //         temp_a0_16->unk70 = temp_v1_16;
-// //         this->unk_243E4[phi_s3_2].unk50 = temp_v1_16;
-// //         temp_v1_17 = this->unk_2449A[phi_s4_2] + phi_t0;
-// //         this->unk_243E4[phi_s3_2].unk52 = temp_v1_17;
-// //         this->unk_243E4[phi_s3_2].unk42 = temp_v1_17;
-// //         temp_a0_17 = &this->unk_243E4[phi_s3_2];
+// //         this->windowContentVtx[phi_s3_2].unk50 = temp_v1_16;
+// //         temp_v1_17 = this->buttonYOffsets[phi_s4_2] + phi_t0;
+// //         this->windowContentVtx[phi_s3_2].unk52 = temp_v1_17;
+// //         this->windowContentVtx[phi_s3_2].unk42 = temp_v1_17;
+// //         temp_a0_17 = &this->windowContentVtx[phi_s3_2];
 // //         temp_v1_18 = temp_a0_17->unk42 - 0x10;
 // //         temp_a0_17->unk72 = temp_v1_18;
-// //         this->unk_243E4[phi_s3_2].unk62 = temp_v1_18;
-// //         this->unk_243E4[phi_s3_2].unk78 = 0xD80;
-// //         temp_a0_18 = &this->unk_243E4[phi_s3_2];
+// //         this->windowContentVtx[phi_s3_2].unk62 = temp_v1_18;
+// //         this->windowContentVtx[phi_s3_2].unk78 = 0xD80;
+// //         temp_a0_18 = &this->windowContentVtx[phi_s3_2];
 // //         temp_a0_18->unk58 = (s16) temp_a0_18->unk78;
-// //         this->unk_243E4[phi_s3_2].unkA0 = temp_a2;
-// //         this->unk_243E4[phi_s3_2].unk80 = temp_a2;
-// //         temp_a0_19 = &this->unk_243E4[phi_s3_2];
+// //         this->windowContentVtx[phi_s3_2].unkA0 = temp_a2;
+// //         this->windowContentVtx[phi_s3_2].unk80 = temp_a2;
+// //         temp_a0_19 = &this->windowContentVtx[phi_s3_2];
 // //         temp_v1_19 = temp_a0_19->unk80 + 0x18;
 // //         temp_a0_19->unkB0 = temp_v1_19;
-// //         this->unk_243E4[phi_s3_2].unk90 = temp_v1_19;
-// //         temp_v1_20 = this->unk_2449A[phi_s4_2] + phi_t0;
-// //         this->unk_243E4[phi_s3_2].unk92 = temp_v1_20;
-// //         this->unk_243E4[phi_s3_2].unk82 = temp_v1_20;
-// //         temp_a0_20 = &this->unk_243E4[phi_s3_2];
+// //         this->windowContentVtx[phi_s3_2].unk90 = temp_v1_19;
+// //         temp_v1_20 = this->buttonYOffsets[phi_s4_2] + phi_t0;
+// //         this->windowContentVtx[phi_s3_2].unk92 = temp_v1_20;
+// //         this->windowContentVtx[phi_s3_2].unk82 = temp_v1_20;
+// //         temp_a0_20 = &this->windowContentVtx[phi_s3_2];
 // //         temp_v1_21 = temp_a0_20->unk82 - 0x10;
 // //         temp_a0_20->unkB2 = temp_v1_21;
-// //         this->unk_243E4[phi_s3_2].unkA2 = temp_v1_21;
-// //         this->unk_243E4[phi_s3_2].unkB8 = 0x300;
-// //         temp_a0_21 = &this->unk_243E4[phi_s3_2];
+// //         this->windowContentVtx[phi_s3_2].unkA2 = temp_v1_21;
+// //         this->windowContentVtx[phi_s3_2].unkB8 = 0x300;
+// //         temp_a0_21 = &this->windowContentVtx[phi_s3_2];
 // //         temp_a0_21->unk98 = (s16) temp_a0_21->unkB8;
-// //         this->unk_243E4[phi_s3_2].unkE0 = temp_a3_2;
-// //         this->unk_243E4[phi_s3_2].unkC0 = temp_a3_2;
-// //         temp_a0_22 = &this->unk_243E4[phi_s3_2];
+// //         this->windowContentVtx[phi_s3_2].unkE0 = temp_a3_2;
+// //         this->windowContentVtx[phi_s3_2].unkC0 = temp_a3_2;
+// //         temp_a0_22 = &this->windowContentVtx[phi_s3_2];
 // //         temp_v1_22 = temp_a0_22->unkC0 + 0x34;
 // //         temp_a0_22->unkF0 = temp_v1_22;
-// //         this->unk_243E4[phi_s3_2].unkD0 = temp_v1_22;
-// //         temp_v1_23 = this->unk_2449A[phi_s4_2] + phi_t0;
-// //         this->unk_243E4[phi_s3_2].unkD2 = temp_v1_23;
-// //         this->unk_243E4[phi_s3_2].unkC2 = temp_v1_23;
-// //         temp_a0_23 = &this->unk_243E4[phi_s3_2];
+// //         this->windowContentVtx[phi_s3_2].unkD0 = temp_v1_22;
+// //         temp_v1_23 = this->buttonYOffsets[phi_s4_2] + phi_t0;
+// //         this->windowContentVtx[phi_s3_2].unkD2 = temp_v1_23;
+// //         this->windowContentVtx[phi_s3_2].unkC2 = temp_v1_23;
+// //         temp_a0_23 = &this->windowContentVtx[phi_s3_2];
 // //         temp_v1_24 = temp_a0_23->unkC2 - 0x10;
 // //         temp_a0_23->unkF2 = temp_v1_24;
-// //         this->unk_243E4[phi_s3_2].unkE2 = temp_v1_24;
-// //         this->unk_243E4[phi_s3_2].unkF8 = 0x680;
-// //         temp_a0_24 = &this->unk_243E4[phi_s3_2];
+// //         this->windowContentVtx[phi_s3_2].unkE2 = temp_v1_24;
+// //         this->windowContentVtx[phi_s3_2].unkF8 = 0x680;
+// //         temp_a0_24 = &this->windowContentVtx[phi_s3_2];
 // //         temp_a0_24->unkD8 = (s16) temp_a0_24->unkF8;
 // //         phi_s3_2 = temp_s3_2;
 // //         phi_s4_2 = temp_s4_2;
@@ -1227,15 +1261,15 @@ void func_8080D6D4(GameState* thisx);
 // //             if ((this + phi_s4_3)->unk2446A != 0) {
 // //                 spAC = phi_s4_3 + 2;
 // //             }
-// //             temp_v0_2 = this->unk_24486;
-// //             phi_s1_2 = this->unk_24508 - 6;
+// //             temp_v0_2 = this->configMode;
+// //             phi_s1_2 = this->windowPosX - 6;
 // //             if ((temp_v0_2 == 0x10) && (phi_s6 = this + (phi_s4_3 * 2) + 0x20000, (phi_s4_3 == this->fileNum))) {
 // //                 sp98 = this->unk_24492[phi_s4_3] + 0x2C;
 // //             } else if (((temp_v0_2 == 0x11) || (temp_v0_2 == 0x12)) && (phi_s6 = this + (phi_s4_3 * 2) + 0x20000,
 // (phi_s4_3 == this->fileNum))) {
-// //                 sp98 = this->unk_2449A[phi_s4_3] + sp9C;
+// //                 sp98 = this->buttonYOffsets[phi_s4_3] + sp9C;
 // //             } else {
-// //                 sp98 = this->unk_24492[phi_s4_3] + sp9C + this->unk_2449A[phi_s4_3];
+// //                 sp98 = this->unk_24492[phi_s4_3] + sp9C + this->buttonYOffsets[phi_s4_3];
 // //                 phi_s6 = this + (phi_s4_3 * 2) + 0x20000;
 // //             }
 // //             temp_t2 = sp98 - 2;
@@ -1244,84 +1278,84 @@ void func_8080D6D4(GameState* thisx);
 // //                 temp_a1_10 = &D_80814280 + ((this + (phi_s4_3 * 8) + phi_a3_2)->unk24414 * 2);
 // //                 temp_a3_3 = phi_a3_2 + 1;
 // //                 temp_v1_25 = *temp_a1_10 + phi_s1_2 + 0x4E;
-// //                 this->unk_243E4[phi_s3_3].unk20 = temp_v1_25;
-// //                 this->unk_243E4[phi_s3_3].v.ob[0] = temp_v1_25;
-// //                 temp_a0_25 = &this->unk_243E4[phi_s3_3];
+// //                 this->windowContentVtx[phi_s3_3].unk20 = temp_v1_25;
+// //                 this->windowContentVtx[phi_s3_3].v.ob[0] = temp_v1_25;
+// //                 temp_a0_25 = &this->windowContentVtx[phi_s3_3];
 // //                 temp_s3_3 = (phi_s3_3 + 4) & 0xFFFF;
 // //                 temp_v1_26 = temp_a0_25->v.ob[0] + 0xB;
 // //                 temp_a0_25->unk30 = temp_v1_26;
-// //                 this->unk_243E4[phi_s3_3].unk10 = temp_v1_26;
-// //                 this->unk_243E4[phi_s3_3].unk12 = temp_t2;
-// //                 this->unk_243E4[phi_s3_3].v.ob[1] = temp_t2;
-// //                 temp_a0_26 = &this->unk_243E4[phi_s3_3];
+// //                 this->windowContentVtx[phi_s3_3].unk10 = temp_v1_26;
+// //                 this->windowContentVtx[phi_s3_3].unk12 = temp_t2;
+// //                 this->windowContentVtx[phi_s3_3].v.ob[1] = temp_t2;
+// //                 temp_a0_26 = &this->windowContentVtx[phi_s3_3];
 // //                 temp_v1_27 = temp_a0_26->v.ob[1] - 0xC;
 // //                 temp_a0_26->unk32 = temp_v1_27;
-// //                 this->unk_243E4[phi_s3_3].unk22 = temp_v1_27;
+// //                 this->windowContentVtx[phi_s3_3].unk22 = temp_v1_27;
 // //                 temp_v1_28 = *temp_a1_10 + phi_s1_2 + 0x4F;
-// //                 this->unk_243E4[phi_s3_3].unk220 = temp_v1_28;
-// //                 this->unk_243E4[phi_s3_3].unk200 = temp_v1_28;
-// //                 temp_a0_27 = &this->unk_243E4[phi_s3_3];
+// //                 this->windowContentVtx[phi_s3_3].unk220 = temp_v1_28;
+// //                 this->windowContentVtx[phi_s3_3].unk200 = temp_v1_28;
+// //                 temp_a0_27 = &this->windowContentVtx[phi_s3_3];
 // //                 temp_v1_29 = temp_a0_27->unk200 + 0xB;
 // //                 temp_a0_27->unk230 = temp_v1_29;
-// //                 this->unk_243E4[phi_s3_3].unk210 = temp_v1_29;
-// //                 this->unk_243E4[phi_s3_3].unk212 = temp_a2_2;
-// //                 this->unk_243E4[phi_s3_3].unk202 = temp_a2_2;
-// //                 temp_a0_28 = &this->unk_243E4[phi_s3_3];
+// //                 this->windowContentVtx[phi_s3_3].unk210 = temp_v1_29;
+// //                 this->windowContentVtx[phi_s3_3].unk212 = temp_a2_2;
+// //                 this->windowContentVtx[phi_s3_3].unk202 = temp_a2_2;
+// //                 temp_a0_28 = &this->windowContentVtx[phi_s3_3];
 // //                 temp_v1_30 = temp_a0_28->unk202 - 0xC;
 // //                 temp_a0_28->unk232 = temp_v1_30;
-// //                 this->unk_243E4[phi_s3_3].unk222 = temp_v1_30;
+// //                 this->windowContentVtx[phi_s3_3].unk222 = temp_v1_30;
 // //                 phi_a3_2 = temp_a3_3;
 // //                 phi_s1_2 += 0xA;
 // //                 phi_s3_3 = temp_s3_3;
 // //             } while ((s32) temp_a3_3 < 8);
-// //             temp_s1_2 = this->unk_24508 + 0xE;
-// //             func_8080C228((u16) this->rupees[spAC], &spA4, &spA6, &spA8);
+// //             temp_s1_2 = this->windowPosX + 0xE;
+// //             FileSelect_SplitNumber((u16) this->rupees[spAC], &spA4, &spA6, &spA8);
 // //             temp_t3 = sp98 - 0x18;
 // //             temp_t4 = temp_t3 - 1;
 // //             sp50 = this + spAC + 0x20000;
-// //             phi_t2 = &(&spA4)[*(&D_80814554 + (this->unk_24474[spAC] * 2))];
+// //             i = &(&spA4)[*(&D_80814554 + (this->unk_24474[spAC] * 2))];
 // //             phi_s1_3 = temp_s1_2;
 // //             phi_s3_4 = (temp_s3_3 + 0x20) & 0xFFFF;
 // //             do {
 // //                 temp_a1_11 = phi_a3_3 * 2;
 // //                 temp_t0 = &D_80814628 + temp_a1_11;
-// //                 temp_v1_31 = *(&D_80814280 + (*phi_t2 * 2)) + phi_s1_3;
-// //                 this->unk_243E4[phi_s3_4].unk20 = temp_v1_31;
+// //                 temp_v1_31 = *(&D_80814280 + (*i * 2)) + phi_s1_3;
+// //                 this->windowContentVtx[phi_s3_4].unk20 = temp_v1_31;
 // //                 temp_a2_3 = &D_80814630 + temp_a1_11;
 // //                 temp_a3_4 = phi_a3_3 + 1;
-// //                 this->unk_243E4[phi_s3_4].v.ob[0] = temp_v1_31;
-// //                 temp_a0_29 = &this->unk_243E4[phi_s3_4];
+// //                 this->windowContentVtx[phi_s3_4].v.ob[0] = temp_v1_31;
+// //                 temp_a0_29 = &this->windowContentVtx[phi_s3_4];
 // //                 temp_v1_32 = *temp_t0 + temp_a0_29->v.ob[0];
 // //                 temp_a0_29->unk30 = temp_v1_32;
 // //                 temp_s3_4 = (phi_s3_4 + 4) & 0xFFFF;
-// //                 this->unk_243E4[phi_s3_4].unk10 = temp_v1_32;
-// //                 this->unk_243E4[phi_s3_4].unk12 = temp_t3;
-// //                 this->unk_243E4[phi_s3_4].v.ob[1] = temp_t3;
-// //                 temp_a0_30 = &this->unk_243E4[phi_s3_4];
+// //                 this->windowContentVtx[phi_s3_4].unk10 = temp_v1_32;
+// //                 this->windowContentVtx[phi_s3_4].unk12 = temp_t3;
+// //                 this->windowContentVtx[phi_s3_4].v.ob[1] = temp_t3;
+// //                 temp_a0_30 = &this->windowContentVtx[phi_s3_4];
 // //                 temp_v1_33 = temp_a0_30->v.ob[1] - *temp_a2_3;
 // //                 temp_a0_30->unk32 = temp_v1_33;
-// //                 this->unk_243E4[phi_s3_4].unk22 = temp_v1_33;
-// //                 temp_a0_31 = &this->unk_243E4[phi_s3_4];
+// //                 this->windowContentVtx[phi_s3_4].unk22 = temp_v1_33;
+// //                 temp_a0_31 = &this->windowContentVtx[phi_s3_4];
 // //                 temp_v1_34 = temp_a0_31->v.ob[0] + 1;
 // //                 temp_a0_31->unkE0 = temp_v1_34;
-// //                 this->unk_243E4[phi_s3_4].unkC0 = temp_v1_34;
-// //                 temp_a0_32 = &this->unk_243E4[phi_s3_4];
+// //                 this->windowContentVtx[phi_s3_4].unkC0 = temp_v1_34;
+// //                 temp_a0_32 = &this->windowContentVtx[phi_s3_4];
 // //                 temp_v1_35 = *temp_t0 + temp_a0_32->unkC0;
 // //                 temp_a0_32->unkF0 = temp_v1_35;
-// //                 this->unk_243E4[phi_s3_4].unkD0 = temp_v1_35;
-// //                 this->unk_243E4[phi_s3_4].unkD2 = temp_t4;
-// //                 this->unk_243E4[phi_s3_4].unkC2 = temp_t4;
-// //                 temp_a0_33 = &this->unk_243E4[phi_s3_4];
+// //                 this->windowContentVtx[phi_s3_4].unkD0 = temp_v1_35;
+// //                 this->windowContentVtx[phi_s3_4].unkD2 = temp_t4;
+// //                 this->windowContentVtx[phi_s3_4].unkC2 = temp_t4;
+// //                 temp_a0_33 = &this->windowContentVtx[phi_s3_4];
 // //                 temp_v1_36 = temp_a0_33->unkC2 - *temp_a2_3;
 // //                 temp_a0_33->unkF2 = temp_v1_36;
-// //                 this->unk_243E4[phi_s3_4].unkE2 = temp_v1_36;
-// //                 phi_t2 += 2;
+// //                 this->windowContentVtx[phi_s3_4].unkE2 = temp_v1_36;
+// //                 i += 2;
 // //                 phi_s1_3 += *(&D_80814620 + temp_a1_11);
 // //                 phi_s3_4 = temp_s3_4;
 // //                 phi_a3_3 = temp_a3_4;
 // //             } while ((s32) temp_a3_4 < 3);
-// //             temp_s1_3 = this->unk_24508 + 0x2A;
-// //             func_8080C228((u16) this->unk_24478[spAC], &spA4, &spA6, &spA8);
+// //             temp_s1_3 = this->windowPosX + 0x2A;
+// //             FileSelect_SplitNumber((u16) this->unk_24478[spAC], &spA4, &spA6, &spA8);
 // //             temp_t2_2 = sp98 - 0x2A;
 // //             temp_t3_2 = temp_t2_2 - 1;
 // //             phi_a3_4 = 1;
@@ -1332,60 +1366,60 @@ void func_8080D6D4(GameState* thisx);
 // //                 temp_t0_2 = &D_80814628 + temp_a1_12;
 // //                 temp_a2_4 = &D_80814630 + temp_a1_12;
 // //                 temp_v1_37 = *(&D_80814280 + ((sp + temp_a1_12)->unkA4 * 2)) + phi_s1_4;
-// //                 this->unk_243E4[phi_s3_5].unk20 = temp_v1_37;
+// //                 this->windowContentVtx[phi_s3_5].unk20 = temp_v1_37;
 // //                 temp_a3_5 = phi_a3_4 + 1;
-// //                 this->unk_243E4[phi_s3_5].v.ob[0] = temp_v1_37;
-// //                 temp_a0_34 = &this->unk_243E4[phi_s3_5];
+// //                 this->windowContentVtx[phi_s3_5].v.ob[0] = temp_v1_37;
+// //                 temp_a0_34 = &this->windowContentVtx[phi_s3_5];
 // //                 temp_v1_38 = *temp_t0_2 + temp_a0_34->v.ob[0];
 // //                 temp_a0_34->unk30 = temp_v1_38;
 // //                 temp_s3_5 = (phi_s3_5 + 4) & 0xFFFF;
-// //                 this->unk_243E4[phi_s3_5].unk10 = temp_v1_38;
-// //                 this->unk_243E4[phi_s3_5].unk12 = temp_t2_2;
-// //                 this->unk_243E4[phi_s3_5].v.ob[1] = temp_t2_2;
-// //                 temp_a0_35 = &this->unk_243E4[phi_s3_5];
+// //                 this->windowContentVtx[phi_s3_5].unk10 = temp_v1_38;
+// //                 this->windowContentVtx[phi_s3_5].unk12 = temp_t2_2;
+// //                 this->windowContentVtx[phi_s3_5].v.ob[1] = temp_t2_2;
+// //                 temp_a0_35 = &this->windowContentVtx[phi_s3_5];
 // //                 temp_v1_39 = temp_a0_35->v.ob[1] - *temp_a2_4;
 // //                 temp_a0_35->unk32 = temp_v1_39;
-// //                 this->unk_243E4[phi_s3_5].unk22 = temp_v1_39;
-// //                 temp_a0_36 = &this->unk_243E4[phi_s3_5];
+// //                 this->windowContentVtx[phi_s3_5].unk22 = temp_v1_39;
+// //                 temp_a0_36 = &this->windowContentVtx[phi_s3_5];
 // //                 temp_v1_40 = temp_a0_36->v.ob[0] + 1;
 // //                 temp_a0_36->unkA0 = temp_v1_40;
-// //                 this->unk_243E4[phi_s3_5].unk80 = temp_v1_40;
-// //                 temp_a0_37 = &this->unk_243E4[phi_s3_5];
+// //                 this->windowContentVtx[phi_s3_5].unk80 = temp_v1_40;
+// //                 temp_a0_37 = &this->windowContentVtx[phi_s3_5];
 // //                 temp_v1_41 = *temp_t0_2 + temp_a0_37->unk80;
 // //                 temp_a0_37->unkB0 = temp_v1_41;
-// //                 this->unk_243E4[phi_s3_5].unk90 = temp_v1_41;
-// //                 this->unk_243E4[phi_s3_5].unk92 = temp_t3_2;
-// //                 this->unk_243E4[phi_s3_5].unk82 = temp_t3_2;
-// //                 temp_a0_38 = &this->unk_243E4[phi_s3_5];
+// //                 this->windowContentVtx[phi_s3_5].unk90 = temp_v1_41;
+// //                 this->windowContentVtx[phi_s3_5].unk92 = temp_t3_2;
+// //                 this->windowContentVtx[phi_s3_5].unk82 = temp_t3_2;
+// //                 temp_a0_38 = &this->windowContentVtx[phi_s3_5];
 // //                 temp_v1_42 = temp_a0_38->unk82 - *temp_a2_4;
 // //                 temp_a0_38->unkB2 = temp_v1_42;
-// //                 this->unk_243E4[phi_s3_5].unkA2 = temp_v1_42;
+// //                 this->windowContentVtx[phi_s3_5].unkA2 = temp_v1_42;
 // //                 phi_a3_4 = temp_a3_5;
 // //                 phi_s1_4 += *(&D_80814620 + temp_a1_12);
 // //                 phi_s3_5 = temp_s3_5;
 // //             } while ((s32) temp_a3_5 < 3);
-// //             phi_s1_5 = this->unk_24508 + 0x3F;
+// //             phi_s1_5 = this->windowPosX + 0x3F;
 // //             phi_s3_6 = (temp_s3_5 + 8) & 0xFFFF;
 // //             phi_t0_2 = sp98 - 0x10;
 // //             do {
-// //                 this->unk_243E4[phi_s3_6].unk20 = phi_s1_5;
-// //                 this->unk_243E4[phi_s3_6].v.ob[0] = phi_s1_5;
+// //                 this->windowContentVtx[phi_s3_6].unk20 = phi_s1_5;
+// //                 this->windowContentVtx[phi_s3_6].v.ob[0] = phi_s1_5;
 // //                 temp_s3_6 = (phi_s3_6 + 4) & 0xFFFF;
-// //                 temp_a0_39 = &this->unk_243E4[phi_s3_6];
+// //                 temp_a0_39 = &this->windowContentVtx[phi_s3_6];
 // //                 temp_v1_43 = temp_a0_39->v.ob[0] + 0xA;
 // //                 temp_a0_39->unk30 = temp_v1_43;
-// //                 this->unk_243E4[phi_s3_6].unk10 = temp_v1_43;
-// //                 this->unk_243E4[phi_s3_6].unk12 = phi_t0_2;
-// //                 this->unk_243E4[phi_s3_6].v.ob[1] = phi_t0_2;
-// //                 temp_a0_40 = &this->unk_243E4[phi_s3_6];
+// //                 this->windowContentVtx[phi_s3_6].unk10 = temp_v1_43;
+// //                 this->windowContentVtx[phi_s3_6].unk12 = phi_t0_2;
+// //                 this->windowContentVtx[phi_s3_6].v.ob[1] = phi_t0_2;
+// //                 temp_a0_40 = &this->windowContentVtx[phi_s3_6];
 // //                 temp_v1_44 = temp_a0_40->v.ob[1] - 0xA;
 // //                 temp_a0_40->unk32 = temp_v1_44;
-// //                 this->unk_243E4[phi_s3_6].unk22 = temp_v1_44;
+// //                 this->windowContentVtx[phi_s3_6].unk22 = temp_v1_44;
 // //                 phi_s3_6 = temp_s3_6;
 // //                 phi_s3_7 = temp_s3_6;
 // //                 phi_s1_8 = phi_s1_5;
 // //                 if (phi_a3_5 == 9) {
-// //                     phi_s1_8 = this->unk_24508 + 0x36;
+// //                     phi_s1_8 = this->windowPosX + 0x36;
 // //                     phi_t0_2 += -8;
 // //                 }
 // //                 temp_a3_6 = phi_a3_5 + 1;
@@ -1393,117 +1427,117 @@ void func_8080D6D4(GameState* thisx);
 // //                 phi_a3_5 = temp_a3_6;
 // //             } while ((s32) temp_a3_6 < 0x14);
 // //             temp_a2_5 = sp98 - 0x20;
-// //             phi_s1_6 = this->unk_24508 + 0x40;
+// //             phi_s1_6 = this->windowPosX + 0x40;
 // //             do {
 // //                 temp_a3_7 = phi_a3_6 + 1;
-// //                 this->unk_243E4[phi_s3_7].unk20 = phi_s1_6;
-// //                 this->unk_243E4[phi_s3_7].v.ob[0] = phi_s1_6;
-// //                 temp_a0_41 = &this->unk_243E4[phi_s3_7];
+// //                 this->windowContentVtx[phi_s3_7].unk20 = phi_s1_6;
+// //                 this->windowContentVtx[phi_s3_7].v.ob[0] = phi_s1_6;
+// //                 temp_a0_41 = &this->windowContentVtx[phi_s3_7];
 // //                 temp_s3_7 = (phi_s3_7 + 4) & 0xFFFF;
 // //                 temp_v1_45 = temp_a0_41->v.ob[0] + 0x14;
 // //                 temp_a0_41->unk30 = temp_v1_45;
-// //                 this->unk_243E4[phi_s3_7].unk10 = temp_v1_45;
-// //                 this->unk_243E4[phi_s3_7].unk12 = temp_a2_5;
-// //                 this->unk_243E4[phi_s3_7].v.ob[1] = temp_a2_5;
-// //                 temp_a0_42 = &this->unk_243E4[phi_s3_7];
+// //                 this->windowContentVtx[phi_s3_7].unk10 = temp_v1_45;
+// //                 this->windowContentVtx[phi_s3_7].unk12 = temp_a2_5;
+// //                 this->windowContentVtx[phi_s3_7].v.ob[1] = temp_a2_5;
+// //                 temp_a0_42 = &this->windowContentVtx[phi_s3_7];
 // //                 temp_v1_46 = temp_a0_42->v.ob[1] - 0x14;
 // //                 temp_a0_42->unk32 = temp_v1_46;
-// //                 this->unk_243E4[phi_s3_7].unk22 = temp_v1_46;
-// //                 this->unk_243E4[phi_s3_7].unk3A = 0x400;
-// //                 temp_a0_43 = &this->unk_243E4[phi_s3_7];
+// //                 this->windowContentVtx[phi_s3_7].unk22 = temp_v1_46;
+// //                 this->windowContentVtx[phi_s3_7].unk3A = 0x400;
+// //                 temp_a0_43 = &this->windowContentVtx[phi_s3_7];
 // //                 temp_a1_13 = temp_a0_43->unk3A;
 // //                 temp_a0_43->unk38 = temp_a1_13;
-// //                 this->unk_243E4[phi_s3_7].unk2A = temp_a1_13;
-// //                 this->unk_243E4[phi_s3_7].unk18 = temp_a1_13;
+// //                 this->windowContentVtx[phi_s3_7].unk2A = temp_a1_13;
+// //                 this->windowContentVtx[phi_s3_7].unk18 = temp_a1_13;
 // //                 phi_s1_6 += 0x18;
 // //                 phi_s3_7 = temp_s3_7;
 // //                 phi_a3_6 = temp_a3_7;
 // //             } while ((s32) temp_a3_7 < 4);
-// //             temp_v1_47 = this->unk_24508 - 1;
-// //             this->unk_243E4[temp_s3_7].unk20 = temp_v1_47;
-// //             this->unk_243E4[temp_s3_7].v.ob[0] = temp_v1_47;
+// //             temp_v1_47 = this->windowPosX - 1;
+// //             this->windowContentVtx[temp_s3_7].unk20 = temp_v1_47;
+// //             this->windowContentVtx[temp_s3_7].v.ob[0] = temp_v1_47;
 // //             temp_s3_8 = (temp_s3_7 + 4) & 0xFFFF;
-// //             temp_a0_44 = &this->unk_243E4[temp_s3_7];
+// //             temp_a0_44 = &this->windowContentVtx[temp_s3_7];
 // //             temp_v1_48 = temp_a0_44->v.ob[0] + 0x10;
 // //             temp_a0_44->unk30 = temp_v1_48;
-// //             this->unk_243E4[temp_s3_7].unk10 = temp_v1_48;
+// //             this->windowContentVtx[temp_s3_7].unk10 = temp_v1_48;
 // //             temp_a1_14 = sp98 - 0x15;
-// //             this->unk_243E4[temp_s3_7].unk12 = temp_a1_14;
-// //             this->unk_243E4[temp_s3_7].v.ob[1] = temp_a1_14;
-// //             temp_a0_45 = &this->unk_243E4[temp_s3_7];
+// //             this->windowContentVtx[temp_s3_7].unk12 = temp_a1_14;
+// //             this->windowContentVtx[temp_s3_7].v.ob[1] = temp_a1_14;
+// //             temp_a0_45 = &this->windowContentVtx[temp_s3_7];
 // //             temp_v1_49 = temp_a0_45->v.ob[1] - 0x10;
 // //             temp_a0_45->unk32 = temp_v1_49;
-// //             this->unk_243E4[temp_s3_7].unk22 = temp_v1_49;
-// //             this->unk_243E4[temp_s3_7].unk38 = 0x200;
-// //             temp_a0_46 = &this->unk_243E4[temp_s3_7];
+// //             this->windowContentVtx[temp_s3_7].unk22 = temp_v1_49;
+// //             this->windowContentVtx[temp_s3_7].unk38 = 0x200;
+// //             temp_a0_46 = &this->windowContentVtx[temp_s3_7];
 // //             temp_a0_46->unk18 = (s16) temp_a0_46->unk38;
-// //             this->unk_243E4[temp_s3_7].unk3A = 0x200;
-// //             temp_a0_47 = &this->unk_243E4[temp_s3_7];
+// //             this->windowContentVtx[temp_s3_7].unk3A = 0x200;
+// //             temp_a0_47 = &this->windowContentVtx[temp_s3_7];
 // //             temp_a0_47->unk2A = (s16) temp_a0_47->unk3A;
 // //             temp_s3_9 = (temp_s3_8 + 4) & 0xFFFF;
-// //             temp_v1_50 = this->unk_24508 + 0x27;
-// //             this->unk_243E4[temp_s3_8].unk20 = temp_v1_50;
-// //             this->unk_243E4[temp_s3_8].v.ob[0] = temp_v1_50;
-// //             temp_a0_48 = &this->unk_243E4[temp_s3_8];
+// //             temp_v1_50 = this->windowPosX + 0x27;
+// //             this->windowContentVtx[temp_s3_8].unk20 = temp_v1_50;
+// //             this->windowContentVtx[temp_s3_8].v.ob[0] = temp_v1_50;
+// //             temp_a0_48 = &this->windowContentVtx[temp_s3_8];
 // //             temp_v1_51 = temp_a0_48->v.ob[0] + 0x18;
 // //             temp_a0_48->unk30 = temp_v1_51;
-// //             this->unk_243E4[temp_s3_8].unk10 = temp_v1_51;
-// //             this->unk_243E4[temp_s3_8].unk12 = temp_a1_14;
-// //             this->unk_243E4[temp_s3_8].v.ob[1] = temp_a1_14;
-// //             temp_a0_49 = &this->unk_243E4[temp_s3_8];
+// //             this->windowContentVtx[temp_s3_8].unk10 = temp_v1_51;
+// //             this->windowContentVtx[temp_s3_8].unk12 = temp_a1_14;
+// //             this->windowContentVtx[temp_s3_8].v.ob[1] = temp_a1_14;
+// //             temp_a0_49 = &this->windowContentVtx[temp_s3_8];
 // //             temp_v1_52 = temp_a0_49->v.ob[1] - 0x10;
 // //             temp_a0_49->unk32 = temp_v1_52;
-// //             this->unk_243E4[temp_s3_8].unk22 = temp_v1_52;
-// //             this->unk_243E4[temp_s3_8].unk38 = 0x300;
-// //             temp_a0_50 = &this->unk_243E4[temp_s3_8];
+// //             this->windowContentVtx[temp_s3_8].unk22 = temp_v1_52;
+// //             this->windowContentVtx[temp_s3_8].unk38 = 0x300;
+// //             temp_a0_50 = &this->windowContentVtx[temp_s3_8];
 // //             temp_a0_50->unk18 = (s16) temp_a0_50->unk38;
-// //             this->unk_243E4[temp_s3_8].unk3A = 0x200;
-// //             temp_a0_51 = &this->unk_243E4[temp_s3_8];
+// //             this->windowContentVtx[temp_s3_8].unk3A = 0x200;
+// //             temp_a0_51 = &this->windowContentVtx[temp_s3_8];
 // //             temp_a0_51->unk2A = (s16) temp_a0_51->unk3A;
 // //             temp_s3_10 = (temp_s3_9 + 8) & 0xFFFF;
-// //             temp_v1_53 = this->unk_24508 - 0xA;
-// //             this->unk_243E4[temp_s3_9].unk20 = temp_v1_53;
-// //             this->unk_243E4[temp_s3_9].v.ob[0] = temp_v1_53;
-// //             temp_a0_52 = &this->unk_243E4[temp_s3_9];
+// //             temp_v1_53 = this->windowPosX - 0xA;
+// //             this->windowContentVtx[temp_s3_9].unk20 = temp_v1_53;
+// //             this->windowContentVtx[temp_s3_9].v.ob[0] = temp_v1_53;
+// //             temp_a0_52 = &this->windowContentVtx[temp_s3_9];
 // //             temp_v1_54 = temp_a0_52->v.ob[0] + 0x40;
 // //             temp_a0_52->unk30 = temp_v1_54;
-// //             this->unk_243E4[temp_s3_9].unk10 = temp_v1_54;
+// //             this->windowContentVtx[temp_s3_9].unk10 = temp_v1_54;
 // //             temp_a2_6 = sp98 - 0x27;
-// //             this->unk_243E4[temp_s3_9].unk12 = temp_a2_6;
+// //             this->windowContentVtx[temp_s3_9].unk12 = temp_a2_6;
 // //             temp_a1_15 = temp_a2_6 - 1;
-// //             this->unk_243E4[temp_s3_9].v.ob[1] = temp_a2_6;
-// //             temp_a0_53 = &this->unk_243E4[temp_s3_9];
+// //             this->windowContentVtx[temp_s3_9].v.ob[1] = temp_a2_6;
+// //             temp_a0_53 = &this->windowContentVtx[temp_s3_9];
 // //             temp_v1_55 = temp_a0_53->v.ob[1] - 0x10;
 // //             temp_a0_53->unk32 = temp_v1_55;
-// //             this->unk_243E4[temp_s3_9].unk22 = temp_v1_55;
-// //             this->unk_243E4[temp_s3_9].unk38 = 0x800;
-// //             temp_a0_54 = &this->unk_243E4[temp_s3_9];
+// //             this->windowContentVtx[temp_s3_9].unk22 = temp_v1_55;
+// //             this->windowContentVtx[temp_s3_9].unk38 = 0x800;
+// //             temp_a0_54 = &this->windowContentVtx[temp_s3_9];
 // //             temp_a0_54->unk18 = (s16) temp_a0_54->unk38;
-// //             this->unk_243E4[temp_s3_9].unk3A = 0x200;
-// //             temp_a0_55 = &this->unk_243E4[temp_s3_9];
+// //             this->windowContentVtx[temp_s3_9].unk3A = 0x200;
+// //             temp_a0_55 = &this->windowContentVtx[temp_s3_9];
 // //             temp_a0_55->unk2A = (s16) temp_a0_55->unk3A;
-// //             temp_a0_56 = &this->unk_243E4[temp_s3_9];
+// //             temp_a0_56 = &this->windowContentVtx[temp_s3_9];
 // //             temp_v1_56 = temp_a0_56->v.ob[0] + 1;
 // //             temp_a0_56->unk60 = temp_v1_56;
-// //             this->unk_243E4[temp_s3_9].unk40 = temp_v1_56;
-// //             temp_a0_57 = &this->unk_243E4[temp_s3_9];
+// //             this->windowContentVtx[temp_s3_9].unk40 = temp_v1_56;
+// //             temp_a0_57 = &this->windowContentVtx[temp_s3_9];
 // //             temp_v1_57 = temp_a0_57->unk40 + 0x40;
 // //             temp_a0_57->unk70 = temp_v1_57;
-// //             this->unk_243E4[temp_s3_9].unk50 = temp_v1_57;
-// //             this->unk_243E4[temp_s3_9].unk52 = temp_a1_15;
-// //             this->unk_243E4[temp_s3_9].unk42 = temp_a1_15;
-// //             temp_a0_58 = &this->unk_243E4[temp_s3_9];
+// //             this->windowContentVtx[temp_s3_9].unk50 = temp_v1_57;
+// //             this->windowContentVtx[temp_s3_9].unk52 = temp_a1_15;
+// //             this->windowContentVtx[temp_s3_9].unk42 = temp_a1_15;
+// //             temp_a0_58 = &this->windowContentVtx[temp_s3_9];
 // //             temp_v1_58 = temp_a0_58->unk42 - 0x10;
 // //             temp_a0_58->unk72 = temp_v1_58;
-// //             this->unk_243E4[temp_s3_9].unk62 = temp_v1_58;
-// //             this->unk_243E4[temp_s3_9].unk78 = 0x800;
-// //             temp_a0_59 = &this->unk_243E4[temp_s3_9];
+// //             this->windowContentVtx[temp_s3_9].unk62 = temp_v1_58;
+// //             this->windowContentVtx[temp_s3_9].unk78 = 0x800;
+// //             temp_a0_59 = &this->windowContentVtx[temp_s3_9];
 // //             temp_a0_59->unk58 = (s16) temp_a0_59->unk78;
-// //             this->unk_243E4[temp_s3_9].unk7A = 0x200;
-// //             temp_a0_60 = &this->unk_243E4[temp_s3_9];
+// //             this->windowContentVtx[temp_s3_9].unk7A = 0x200;
+// //             temp_a0_60 = &this->windowContentVtx[temp_s3_9];
 // //             temp_a0_60->unk6A = (s16) temp_a0_60->unk7A;
-// //             temp_v0_3 = this->unk_24486;
-// //             temp_s1_4 = this->unk_24508 + 0xA3;
+// //             temp_v0_3 = this->configMode;
+// //             temp_s1_4 = this->windowPosX + 0xA3;
 // //             if ((temp_v0_3 == 0x10) && (phi_s4_3 == this->fileNum)) {
 // //                 phi_t0_3 = phi_s6->unk4492 + 0x2C;
 // //             } else {
@@ -1517,49 +1551,49 @@ void func_8080D6D4(GameState* thisx);
 // //                 phi_t0_3 = phi_t6 + phi_t9;
 // //             }
 // //             temp_a1_16 = temp_s1_4 + 0xE;
-// //             this->unk_243E4[temp_s3_10].unk20 = temp_a1_16;
+// //             this->windowContentVtx[temp_s3_10].unk20 = temp_a1_16;
 // //             temp_a2_7 = phi_t0_3 - 2;
 // //             temp_t3_3 = phi_t0_3 - 0x2B;
-// //             this->unk_243E4[temp_s3_10].v.ob[0] = temp_a1_16;
-// //             temp_a0_61 = &this->unk_243E4[temp_s3_10];
+// //             this->windowContentVtx[temp_s3_10].v.ob[0] = temp_a1_16;
+// //             temp_a0_61 = &this->windowContentVtx[temp_s3_10];
 // //             temp_v1_59 = temp_a0_61->v.ob[0] + 0x18;
 // //             temp_a0_61->unk30 = temp_v1_59;
-// //             this->unk_243E4[temp_s3_10].unk10 = temp_v1_59;
-// //             this->unk_243E4[temp_s3_10].unk12 = temp_a2_7;
-// //             this->unk_243E4[temp_s3_10].v.ob[1] = temp_a2_7;
-// //             temp_a0_62 = &this->unk_243E4[temp_s3_10];
+// //             this->windowContentVtx[temp_s3_10].unk10 = temp_v1_59;
+// //             this->windowContentVtx[temp_s3_10].unk12 = temp_a2_7;
+// //             this->windowContentVtx[temp_s3_10].v.ob[1] = temp_a2_7;
+// //             temp_a0_62 = &this->windowContentVtx[temp_s3_10];
 // //             temp_v1_60 = temp_a0_62->v.ob[1] - 0xC;
 // //             temp_a0_62->unk32 = temp_v1_60;
-// //             this->unk_243E4[temp_s3_10].unk22 = temp_v1_60;
-// //             this->unk_243E4[temp_s3_10].unk38 = 0x300;
-// //             temp_a0_63 = &this->unk_243E4[temp_s3_10];
+// //             this->windowContentVtx[temp_s3_10].unk22 = temp_v1_60;
+// //             this->windowContentVtx[temp_s3_10].unk38 = 0x300;
+// //             temp_a0_63 = &this->windowContentVtx[temp_s3_10];
 // //             temp_a0_63->unk18 = (s16) temp_a0_63->unk38;
-// //             this->unk_243E4[temp_s3_10].unk3A = 0x180;
-// //             temp_a0_64 = &this->unk_243E4[temp_s3_10];
+// //             this->windowContentVtx[temp_s3_10].unk3A = 0x180;
+// //             temp_a0_64 = &this->windowContentVtx[temp_s3_10];
 // //             temp_a0_64->unk2A = (s16) temp_a0_64->unk3A;
 // //             phi_s3_8 = (temp_s3_10 + 4) & 0xFFFF;
 // //             do {
 // //                 temp_a1_17 = temp_s1_4 + phi_a3_7 + 2;
-// //                 this->unk_243E4[phi_s3_8].unk20 = temp_a1_17;
+// //                 this->windowContentVtx[phi_s3_8].unk20 = temp_a1_17;
 // //                 temp_a2_8 = (phi_t0_3 - phi_a3_7) - 0x12;
-// //                 this->unk_243E4[phi_s3_8].v.ob[0] = temp_a1_17;
+// //                 this->windowContentVtx[phi_s3_8].v.ob[0] = temp_a1_17;
 // //                 temp_a3_8 = phi_a3_7 + 1;
-// //                 temp_a0_65 = &this->unk_243E4[phi_s3_8];
+// //                 temp_a0_65 = &this->windowContentVtx[phi_s3_8];
 // //                 temp_v1_61 = temp_a0_65->v.ob[0] + 0x30;
 // //                 temp_a0_65->unk30 = temp_v1_61;
 // //                 temp_s3_11 = (phi_s3_8 + 4) & 0xFFFF;
-// //                 this->unk_243E4[phi_s3_8].unk10 = temp_v1_61;
-// //                 this->unk_243E4[phi_s3_8].unk12 = temp_a2_8;
-// //                 this->unk_243E4[phi_s3_8].v.ob[1] = temp_a2_8;
-// //                 temp_a0_66 = &this->unk_243E4[phi_s3_8];
+// //                 this->windowContentVtx[phi_s3_8].unk10 = temp_v1_61;
+// //                 this->windowContentVtx[phi_s3_8].unk12 = temp_a2_8;
+// //                 this->windowContentVtx[phi_s3_8].v.ob[1] = temp_a2_8;
+// //                 temp_a0_66 = &this->windowContentVtx[phi_s3_8];
 // //                 temp_v1_62 = temp_a0_66->v.ob[1] - 0x18;
 // //                 temp_a0_66->unk32 = temp_v1_62;
-// //                 this->unk_243E4[phi_s3_8].unk22 = temp_v1_62;
-// //                 this->unk_243E4[phi_s3_8].unk38 = 0x600;
-// //                 temp_a0_67 = &this->unk_243E4[phi_s3_8];
+// //                 this->windowContentVtx[phi_s3_8].unk22 = temp_v1_62;
+// //                 this->windowContentVtx[phi_s3_8].unk38 = 0x600;
+// //                 temp_a0_67 = &this->windowContentVtx[phi_s3_8];
 // //                 temp_a0_67->unk18 = (s16) temp_a0_67->unk38;
-// //                 this->unk_243E4[phi_s3_8].unk3A = 0x300;
-// //                 temp_a0_68 = &this->unk_243E4[phi_s3_8];
+// //                 this->windowContentVtx[phi_s3_8].unk3A = 0x300;
+// //                 temp_a0_68 = &this->windowContentVtx[phi_s3_8];
 // //                 temp_a0_68->unk2A = (s16) temp_a0_68->unk3A;
 // //                 phi_a3_7 = temp_a3_8;
 // //                 phi_s3_8 = temp_s3_11;
@@ -1569,52 +1603,52 @@ void func_8080D6D4(GameState* thisx);
 // //             phi_s1_7 = temp_s1_4 + 6;
 // //             do {
 // //                 temp_a1_18 = phi_s1_7 + 1;
-// //                 this->unk_243E4[phi_s3_9].unk20 = phi_s1_7;
+// //                 this->windowContentVtx[phi_s3_9].unk20 = phi_s1_7;
 // //                 temp_a3_9 = phi_a3_8 + 1;
-// //                 this->unk_243E4[phi_s3_9].v.ob[0] = phi_s1_7;
-// //                 temp_a0_69 = &this->unk_243E4[phi_s3_9];
+// //                 this->windowContentVtx[phi_s3_9].v.ob[0] = phi_s1_7;
+// //                 temp_a0_69 = &this->windowContentVtx[phi_s3_9];
 // //                 temp_s3_12 = (phi_s3_9 + 4) & 0xFFFF;
 // //                 temp_v1_63 = temp_a0_69->v.ob[0] + 0xC;
 // //                 temp_a0_69->unk30 = temp_v1_63;
-// //                 this->unk_243E4[phi_s3_9].unk10 = temp_v1_63;
-// //                 this->unk_243E4[phi_s3_9].unk12 = temp_a2_9;
-// //                 this->unk_243E4[phi_s3_9].v.ob[1] = temp_a2_9;
-// //                 temp_a0_70 = &this->unk_243E4[phi_s3_9];
+// //                 this->windowContentVtx[phi_s3_9].unk10 = temp_v1_63;
+// //                 this->windowContentVtx[phi_s3_9].unk12 = temp_a2_9;
+// //                 this->windowContentVtx[phi_s3_9].v.ob[1] = temp_a2_9;
+// //                 temp_a0_70 = &this->windowContentVtx[phi_s3_9];
 // //                 temp_v1_64 = temp_a0_70->v.ob[1] - 0xC;
 // //                 temp_a0_70->unk32 = temp_v1_64;
-// //                 this->unk_243E4[phi_s3_9].unk22 = temp_v1_64;
-// //                 this->unk_243E4[phi_s3_9].unk160 = temp_a1_18;
-// //                 this->unk_243E4[phi_s3_9].unk140 = temp_a1_18;
-// //                 temp_a0_71 = &this->unk_243E4[phi_s3_9];
+// //                 this->windowContentVtx[phi_s3_9].unk22 = temp_v1_64;
+// //                 this->windowContentVtx[phi_s3_9].unk160 = temp_a1_18;
+// //                 this->windowContentVtx[phi_s3_9].unk140 = temp_a1_18;
+// //                 temp_a0_71 = &this->windowContentVtx[phi_s3_9];
 // //                 temp_v1_65 = temp_a0_71->unk140 + 0xC;
 // //                 temp_a0_71->unk170 = temp_v1_65;
-// //                 this->unk_243E4[phi_s3_9].unk150 = temp_v1_65;
-// //                 this->unk_243E4[phi_s3_9].unk152 = temp_t3_3;
-// //                 this->unk_243E4[phi_s3_9].unk142 = temp_t3_3;
-// //                 temp_a0_72 = &this->unk_243E4[phi_s3_9];
+// //                 this->windowContentVtx[phi_s3_9].unk150 = temp_v1_65;
+// //                 this->windowContentVtx[phi_s3_9].unk152 = temp_t3_3;
+// //                 this->windowContentVtx[phi_s3_9].unk142 = temp_t3_3;
+// //                 temp_a0_72 = &this->windowContentVtx[phi_s3_9];
 // //                 temp_v1_66 = temp_a0_72->unk142 - 0xC;
 // //                 temp_a0_72->unk172 = temp_v1_66;
-// //                 this->unk_243E4[phi_s3_9].unk162 = temp_v1_66;
+// //                 this->windowContentVtx[phi_s3_9].unk162 = temp_v1_66;
 // //                 phi_s1_7 += 8;
 // //                 phi_s3_9 = temp_s3_12;
 // //                 phi_a3_8 = temp_a3_9;
 // //             } while ((s32) temp_a3_9 < 5);
-// //             temp_v0_4 = &this->unk_243E4[temp_s3_11];
+// //             temp_v0_4 = &this->windowContentVtx[temp_s3_11];
 // //             temp_v1_67 = temp_v0_4->unk80 + 3;
 // //             temp_v0_4->unkA0 = temp_v1_67;
-// //             this->unk_243E4[temp_s3_11].unk80 = temp_v1_67;
-// //             temp_v0_5 = &this->unk_243E4[temp_s3_11];
+// //             this->windowContentVtx[temp_s3_11].unk80 = temp_v1_67;
+// //             temp_v0_5 = &this->windowContentVtx[temp_s3_11];
 // //             temp_v1_68 = temp_v0_5->unk80 + 0xC;
 // //             temp_v0_5->unkB0 = temp_v1_68;
-// //             this->unk_243E4[temp_s3_11].unk90 = temp_v1_68;
-// //             temp_v0_6 = &this->unk_243E4[temp_s3_11];
+// //             this->windowContentVtx[temp_s3_11].unk90 = temp_v1_68;
+// //             temp_v0_6 = &this->windowContentVtx[temp_s3_11];
 // //             temp_v1_69 = temp_v0_6->unk80 + 1;
 // //             temp_v0_6->unk1E0 = temp_v1_69;
-// //             this->unk_243E4[temp_s3_11].unk1C0 = temp_v1_69;
-// //             temp_v0_7 = &this->unk_243E4[temp_s3_11];
+// //             this->windowContentVtx[temp_s3_11].unk1C0 = temp_v1_69;
+// //             temp_v0_7 = &this->windowContentVtx[temp_s3_11];
 // //             temp_v1_70 = temp_v0_7->unk1C0 + 0xC;
 // //             temp_v0_7->unk1F0 = temp_v1_70;
-// //             this->unk_243E4[temp_s3_11].unk1D0 = temp_v1_70;
+// //             this->windowContentVtx[temp_s3_11].unk1D0 = temp_v1_70;
 // //             phi_s3_12 = (temp_s3_12 + 0x14) & 0xFFFF;
 // //         }
 // //         temp_s4_3 = phi_s4_3 + 1;
@@ -1624,104 +1658,104 @@ void func_8080D6D4(GameState* thisx);
 // //         phi_s3_11 = phi_s3_12;
 // //     } while ((s32) temp_s4_3 < 3);
 
-// //     temp_s1_5 = this->unk_24508 - 6;
+// //     temp_s1_5 = this->windowPosX - 6;
 // //     phi_a1 = -0xC;
 
 // //     do {
-// //         this->unk_243E4[phi_s3_10].unk20 = temp_s1_5;
+// //         this->windowContentVtx[phi_s3_10].unk20 = temp_s1_5;
 // //         temp_s3_13 = (phi_s3_10 + 4) & 0xFFFF;
-// //         this->unk_243E4[phi_s3_10].v.ob[0] = temp_s1_5;
+// //         this->windowContentVtx[phi_s3_10].v.ob[0] = temp_s1_5;
 // //         temp_s4_4 = phi_s4_4 + 1;
-// //         temp_a0_73 = &this->unk_243E4[phi_s3_10];
+// //         temp_a0_73 = &this->windowContentVtx[phi_s3_10];
 // //         temp_v1_71 = temp_a0_73->v.ob[0] + 0x40;
 // //         temp_a0_73->unk30 = temp_v1_71;
-// //         this->unk_243E4[phi_s3_10].unk10 = temp_v1_71;
+// //         this->windowContentVtx[phi_s3_10].unk10 = temp_v1_71;
 // //         temp_v1_72 = (this + (phi_s4_4 * 2))->unk244A0 + phi_a1;
-// //         this->unk_243E4[phi_s3_10].unk12 = temp_v1_72;
-// //         this->unk_243E4[phi_s3_10].v.ob[1] = temp_v1_72;
-// //         temp_a0_74 = &this->unk_243E4[phi_s3_10];
+// //         this->windowContentVtx[phi_s3_10].unk12 = temp_v1_72;
+// //         this->windowContentVtx[phi_s3_10].v.ob[1] = temp_v1_72;
+// //         temp_a0_74 = &this->windowContentVtx[phi_s3_10];
 // //         temp_v1_73 = temp_a0_74->v.ob[1] - 0x10;
 // //         temp_a0_74->unk32 = temp_v1_73;
-// //         this->unk_243E4[phi_s3_10].unk22 = temp_v1_73;
-// //         this->unk_243E4[phi_s3_10].unk38 = 0x800;
-// //         temp_a0_75 = &this->unk_243E4[phi_s3_10];
+// //         this->windowContentVtx[phi_s3_10].unk22 = temp_v1_73;
+// //         this->windowContentVtx[phi_s3_10].unk38 = 0x800;
+// //         temp_a0_75 = &this->windowContentVtx[phi_s3_10];
 // //         temp_a0_75->unk18 = (s16) temp_a0_75->unk38;
 // //         phi_s3_10 = temp_s3_13;
 // //         phi_s4_4 = temp_s4_4;
 // //         phi_a1 += -0x10;
 // //     } while ((s32) temp_s4_4 < 2);
 
-// //     this->unk_243E4[temp_s3_13].unk20 = temp_s1_5;
+// //     this->windowContentVtx[temp_s3_13].unk20 = temp_s1_5;
 // //     temp_s3_14 = (temp_s3_13 + 4) & 0xFFFF;
-// //     this->unk_243E4[temp_s3_13].v.ob[0] = temp_s1_5;
-// //     temp_a0_76 = &this->unk_243E4[temp_s3_13];
+// //     this->windowContentVtx[temp_s3_13].v.ob[0] = temp_s1_5;
+// //     temp_a0_76 = &this->windowContentVtx[temp_s3_13];
 // //     temp_v1_74 = temp_a0_76->v.ob[0] + 0x40;
 // //     temp_a0_76->unk30 = temp_v1_74;
-// //     this->unk_243E4[temp_s3_13].unk10 = temp_v1_74;
-// //     temp_v1_75 = this->unk_2449A[5] - 0x34;
-// //     this->unk_243E4[temp_s3_13].unk12 = temp_v1_75;
-// //     this->unk_243E4[temp_s3_13].v.ob[1] = temp_v1_75;
-// //     temp_a0_77 = &this->unk_243E4[temp_s3_13];
+// //     this->windowContentVtx[temp_s3_13].unk10 = temp_v1_74;
+// //     temp_v1_75 = this->buttonYOffsets[5] - 0x34;
+// //     this->windowContentVtx[temp_s3_13].unk12 = temp_v1_75;
+// //     this->windowContentVtx[temp_s3_13].v.ob[1] = temp_v1_75;
+// //     temp_a0_77 = &this->windowContentVtx[temp_s3_13];
 // //     temp_v1_76 = temp_a0_77->v.ob[1] - 0x10;
 // //     temp_a0_77->unk32 = temp_v1_76;
-// //     this->unk_243E4[temp_s3_13].unk22 = temp_v1_76;
-// //     this->unk_243E4[temp_s3_13].unk38 = 0x800;
-// //     temp_a0_78 = &this->unk_243E4[temp_s3_13];
+// //     this->windowContentVtx[temp_s3_13].unk22 = temp_v1_76;
+// //     this->windowContentVtx[temp_s3_13].unk38 = 0x800;
+// //     temp_a0_78 = &this->windowContentVtx[temp_s3_13];
 // //     temp_a0_78->unk18 = (s16) temp_a0_78->unk38;
-// //     temp_a1_19 = this->unk_24484;
+// //     temp_a1_19 = this->menuMode;
 
-// //     if (((temp_a1_19 == 1) && ((s32) this->unk_24486 >= 2)) || ((temp_a1_19 == 2) && (this->unk_2448C == 3))) {
+// //     if (((temp_a1_19 == 1) && ((s32) this->configMode >= 2)) || ((temp_a1_19 == 2) && (this->selectMode == 3))) {
 // //         if (temp_a1_19 == 1) {
-// //             temp_v0_8 = this->unk_24486;
+// //             temp_v0_8 = this->configMode;
 // //             if ((temp_v0_8 == 4) || (temp_v0_8 == 7) || (temp_v0_8 == 0x16)) {
-// //                 phi_s4_5 = *(&D_80814644 + (this->unk_24480 * 2));
+// //                 phi_s4_5 = *(&D_80814644 + (this->buttonIndex * 2));
 // //             } else if ((temp_v0_8 == 0x19) || (temp_v0_8 == 0xC)) {
-// //                 phi_s4_5 = *(&D_8081464C + (this->unk_24480 * 2));
+// //                 phi_s4_5 = *(&D_8081464C + (this->buttonIndex * 2));
 // //             } else {
-// //                 phi_s4_5 = *(&D_80814638 + (this->unk_24480 * 2));
+// //                 phi_s4_5 = *(&D_80814638 + (this->buttonIndex * 2));
 // //             }
 // //         } else {
-// //             phi_s4_5 = *(&D_80814650 + (this->unk_24482 * 2));
+// //             phi_s4_5 = *(&D_80814650 + (this->confirmButtonIndex * 2));
 // //         }
-// //         temp_v1_77 = this->unk_24508 - 0xA;
-// //         this->unk_243E4[temp_s3_14].unk20 = temp_v1_77;
-// //         this->unk_243E4[temp_s3_14].v.ob[0] = temp_v1_77;
-// //         temp_a0_79 = &this->unk_243E4[temp_s3_14];
+// //         temp_v1_77 = this->windowPosX - 0xA;
+// //         this->windowContentVtx[temp_s3_14].unk20 = temp_v1_77;
+// //         this->windowContentVtx[temp_s3_14].v.ob[0] = temp_v1_77;
+// //         temp_a0_79 = &this->windowContentVtx[temp_s3_14];
 // //         temp_v1_78 = temp_a0_79->v.ob[0] + 0x48;
 // //         temp_a0_79->unk30 = temp_v1_78;
-// //         this->unk_243E4[temp_s3_14].unk10 = temp_v1_78;
-// //         temp_a1_20 = this->unk_243E4;
+// //         this->windowContentVtx[temp_s3_14].unk10 = temp_v1_78;
+// //         temp_a1_20 = this->windowContentVtx;
 // //         temp_v1_79 = temp_a1_20[phi_s4_5].v.ob[1] + 4;
 // //         temp_a1_20[temp_s3_14].unk12 = temp_v1_79;
-// //         this->unk_243E4[temp_s3_14].v.ob[1] = temp_v1_79;
-// //         temp_a0_80 = &this->unk_243E4[temp_s3_14];
+// //         this->windowContentVtx[temp_s3_14].v.ob[1] = temp_v1_79;
+// //         temp_a0_80 = &this->windowContentVtx[temp_s3_14];
 // //         temp_v1_80 = temp_a0_80->v.ob[1] - 0x18;
 // //         temp_a0_80->unk32 = temp_v1_80;
-// //         this->unk_243E4[temp_s3_14].unk22 = temp_v1_80;
-// //         this->unk_243E4[temp_s3_14].unk38 = 0x900;
-// //         temp_a0_81 = &this->unk_243E4[temp_s3_14];
+// //         this->windowContentVtx[temp_s3_14].unk22 = temp_v1_80;
+// //         this->windowContentVtx[temp_s3_14].unk38 = 0x900;
+// //         temp_a0_81 = &this->windowContentVtx[temp_s3_14];
 // //         temp_a0_81->unk18 = (s16) temp_a0_81->unk38;
-// //         this->unk_243E4[temp_s3_14].unk3A = 0x300;
-// //         temp_a0_82 = &this->unk_243E4[temp_s3_14];
+// //         this->windowContentVtx[temp_s3_14].unk3A = 0x300;
+// //         temp_a0_82 = &this->windowContentVtx[temp_s3_14];
 // //         temp_a0_82->unk2A = (s16) temp_a0_82->unk3A;
 // //     }
-// //     temp_v1_81 = this->unk_24508 + 0x3A;
-// //     this->unk_243E4[temp_s3_14].unk60 = temp_v1_81;
-// //     this->unk_243E4[temp_s3_14].unk40 = temp_v1_81;
-// //     temp_a0_83 = &this->unk_243E4[temp_s3_14];
+// //     temp_v1_81 = this->windowPosX + 0x3A;
+// //     this->windowContentVtx[temp_s3_14].unk60 = temp_v1_81;
+// //     this->windowContentVtx[temp_s3_14].unk40 = temp_v1_81;
+// //     temp_a0_83 = &this->windowContentVtx[temp_s3_14];
 // //     temp_v1_82 = temp_a0_83->unk40 + 0x80;
 // //     temp_a0_83->unk70 = temp_v1_82;
-// //     this->unk_243E4[temp_s3_14].unk50 = temp_v1_82;
-// //     temp_a1_21 = this->unk_243E4;
-// //     temp_v1_83 = temp_a1_21[*(&D_80814638 + (this->unk_244AA * 2))].v.ob[1];
+// //     this->windowContentVtx[temp_s3_14].unk50 = temp_v1_82;
+// //     temp_a1_21 = this->windowContentVtx;
+// //     temp_v1_83 = temp_a1_21[*(&D_80814638 + (this->warningButtonIndex * 2))].v.ob[1];
 // //     temp_a1_21[temp_s3_14].unk52 = temp_v1_83;
-// //     this->unk_243E4[temp_s3_14].unk42 = temp_v1_83;
-// //     temp_a0_84 = &this->unk_243E4[temp_s3_14];
+// //     this->windowContentVtx[temp_s3_14].unk42 = temp_v1_83;
+// //     temp_a0_84 = &this->windowContentVtx[temp_s3_14];
 // //     temp_v1_84 = temp_a0_84->unk42 - 0x10;
 // //     temp_a0_84->unk72 = temp_v1_84;
-// //     this->unk_243E4[temp_s3_14].unk62 = temp_v1_84;
-// //     this->unk_243E4[temp_s3_14].unk78 = 0x1000;
-// //     temp_a0_85 = &this->unk_243E4[temp_s3_14];
+// //     this->windowContentVtx[temp_s3_14].unk62 = temp_v1_84;
+// //     this->windowContentVtx[temp_s3_14].unk78 = 0x1000;
+// //     temp_a0_85 = &this->windowContentVtx[temp_s3_14];
 // //     temp_a0_85->unk58 = (s16) temp_a0_85->unk78;
 // }
 
@@ -1742,77 +1776,78 @@ s32 D_808146D8[] = {
 };
 s32 D_808146EC[] = { 0x00FF0046, 0x003200C8, 0x00000000 };
 s32 D_808146F8[] = { 0x00320028, 0x003C00FF, 0x00FF00FF };
-void func_8080F25C(GameState*, s16);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080F25C.s")
+void FileSelect_DrawFileInfo(GameState*, s16);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_DrawFileInfo.s")
 
 extern void* D_010220B0[]; // gFileSelNameBoxTex
 extern void* D_010277B0[]; // gOptionsButtonTex // Array on PAL
 extern void* D_0102A030[]; // gFileSelDISKButtonTex in OoT
 extern void* D_0102AAB0[]; // gFileSelBigButtonHighlightTex
 
-void* D_80814704[] = { 0x01022E30, 0x01023DF0, 0x01024DB0, 0x01025D70, 0x01026D30, 0x010287B0, 0x010293F0 };
+void* sFileInfoBoxTextures[] = { 0x01022E30, 0x01023DF0, 0x01024DB0, 0x01025D70, 0x01026D30, 0x010287B0, 0x010293F0 };
 
 void* D_80814720[] = { 0x01004980, 0x01005180, 0x01002980, 0x01003180, 0x01003980,
                        0x01004180, 0x01005980, 0x01006180, 0x01006980 };
 
 void* D_80814744[] = { 0x01000000, 0x01000800, 0x01001000, 0x01001800, 0x01002000 };
 
-void* D_80814758[] = { 0x0101EFB0, 0x0101F7B0, 0x0101FFB0 };
+void* sFileButtonTextures[] = { 0x0101EFB0, 0x0101F7B0, 0x0101FFB0 };
 
 void* D_80814764[] = { 0x0101E7B0, 0x01020FB0, 0x010207B0, 0x01027FB0 };
 extern int ENVIRONMENT;
 extern int PRIMITIVE;
 extern int TEXEL0;
-// void func_808108DC(FileChooseContext* this);
-void func_808108DC(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
-    s16 phi_s0;
-    s16 phi_s6;
-    s16 phi_t2;
-    s16 phi_t3;
+void FileSelect_DrawWindowContents(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    s16 fileIndex;
+    s16 temp;
+    s16 i;
+    s16 quadVtxIndex;
 
     if (1) {}
 
     OPEN_DISPS(this->state.gfxCtx);
 
+    // draw title label
     gDPPipeSync(POLY_OPA_DISP++);
-
     gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                       ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->unk_244B6[0]);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[0]);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
-    gSPVertex(POLY_OPA_DISP++, &this->unk_243E4[0], 4, 0);
-    gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814720[this->unk_244AC], G_IM_FMT_IA, G_IM_SIZ_8b, 128, 16, 0,
+    gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[0], 4, 0);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814720[this->titleLabel], G_IM_FMT_IA, G_IM_SIZ_8b, 128, 16, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
     gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
 
+    // draw next title label
     gDPPipeSync(POLY_OPA_DISP++);
-
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->unk_244B6[1]);
-    gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814720[this->unk_244AE], G_IM_FMT_IA, G_IM_SIZ_8b, 128, 16, 0,
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[1]);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814720[this->nextTitleLabel], G_IM_FMT_IA, G_IM_SIZ_8b, 128, 16, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
     gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
 
-    phi_s6 = 4;
+    temp = 4;
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    for (phi_s0 = 0; phi_s0 < 3; phi_s0++, phi_s6 += 28) {
-        if (phi_s0 < 2) {
+    // draw file info box (large box when a file is selected)
+    for (fileIndex = 0; fileIndex < 3; fileIndex++, temp += 28) {
+        if (fileIndex < 2) {
             gDPPipeSync(POLY_OPA_DISP++);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
-                            this->unk_244D4[phi_s0]);
-            gSPVertex(POLY_OPA_DISP++, &this->unk_243E4[phi_s6], 28, 0);
+                            this->fileInfoAlpha[fileIndex]);
+            gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[temp], 28, 0);
 
-            for (phi_t3 = 0, phi_t2 = 0; phi_t2 < 7; phi_t2++, phi_t3 += 4) {
-                if ((phi_t2 < 5) || ((this->unk_2446A[phi_s0] != 0) && (phi_t2 >= 5))) {
-                    gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814704[phi_t2], G_IM_FMT_IA, G_IM_SIZ_16b,
-                                        sFileInfoBoxPartWidths[phi_t2], 56, 0, G_TX_NOMIRROR | G_TX_WRAP,
+            for (quadVtxIndex = 0, i = 0; i < 7; i++, quadVtxIndex += 4) {
+                if ((i < 5) || ((this->unk_2446A[fileIndex] != 0) && (i >= 5))) {
+                    gDPLoadTextureBlock(POLY_OPA_DISP++, sFileInfoBoxTextures[i], G_IM_FMT_IA, G_IM_SIZ_16b,
+                                        sFileInfoBoxPartWidths[i], 56, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-                    gSP1Quadrangle(POLY_OPA_DISP++, phi_t3, phi_t3 + 2, phi_t3 + 3, phi_t3 + 1, 0);
+                    gSP1Quadrangle(POLY_OPA_DISP++, quadVtxIndex, quadVtxIndex + 2, quadVtxIndex + 3, quadVtxIndex + 1,
+                                   0);
                 }
             }
         }
@@ -1820,34 +1855,36 @@ void func_808108DC(GameState* thisx) {
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    for (phi_t2 = 0; phi_t2 < 3; phi_t2++, phi_s6 += 16) {
-        if (phi_t2 < 2) {
-            gSPVertex(POLY_OPA_DISP++, &this->unk_243E4[phi_s6], 16, 0);
+    for (i = 0; i < 3; i++, temp += 16) {
+        if (i < 2) {
+            // draw file button
+            gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[temp], 16, 0);
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sWindowContentColors[0], sWindowContentColors[1],
-                            sWindowContentColors[2], this->unk_244BC[phi_t2]);
-            gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814758[phi_t2], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0,
+                            sWindowContentColors[2], this->fileButtonAlpha[i]);
+            gDPLoadTextureBlock(POLY_OPA_DISP++, sFileButtonTextures[i], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
             gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
 
+            // draw file name box
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sWindowContentColors[0], sWindowContentColors[1],
-                            sWindowContentColors[2], this->unk_244C2[phi_t2]);
+                            sWindowContentColors[2], this->nameBoxAlpha[i]);
             gDPLoadTextureBlock(POLY_OPA_DISP++, D_010220B0, G_IM_FMT_IA, G_IM_SIZ_16b, 108, 16, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
             gSP1Quadrangle(POLY_OPA_DISP++, 4, 6, 7, 5, 0);
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sWindowContentColors[0], sWindowContentColors[1],
-                            sWindowContentColors[2], this->unk_244CE[phi_t2]);
+                            sWindowContentColors[2], this->connectorAlpha[i]);
             gDPLoadTextureBlock(POLY_OPA_DISP++, D_01002800, G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
             gSP1Quadrangle(POLY_OPA_DISP++, 8, 10, 11, 9, 0);
 
-            if (this->unk_2446A[phi_t2] != 0) {
+            if (this->unk_2446A[i] != 0) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sWindowContentColors[0], sWindowContentColors[1],
-                                sWindowContentColors[2], this->unk_244C2[phi_t2]);
+                                sWindowContentColors[2], this->nameBoxAlpha[i]);
                 gDPLoadTextureBlock(POLY_OPA_DISP++, D_0102A030, G_IM_FMT_IA, G_IM_SIZ_16b, 52, 16, 0,
                                     G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                     G_TX_NOLOD, G_TX_NOLOD);
@@ -1856,67 +1893,73 @@ void func_808108DC(GameState* thisx) {
         }
     }
 
-    for (phi_s0 = 0; phi_s0 < 2; phi_s0++) {
-        func_8080F25C(&this->state, phi_s0); // DrawFileInfo(this, fileIndex)
+    // draw file info
+    for (fileIndex = 0; fileIndex < 2; fileIndex++) {
+        FileSelect_DrawFileInfo(&this->state, fileIndex);
     }
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                       ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
-    gSPVertex(POLY_OPA_DISP++, &this->unk_243E4[0x3AC], 20, 0);
+    gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[0x3AC], 20, 0);
 
-    for (phi_t3 = 0, phi_t2 = 0; phi_t2 < 2; phi_t2++, phi_t3 += 4) {
+    // draw primary action buttons (copy/erase)
+    for (quadVtxIndex = 0, i = 0; i < 2; i++, quadVtxIndex += 4) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
-                        this->unk_244DA[phi_t2]);
-        gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814764[phi_t2], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0,
+                        this->actionButtonAlpha[i]);
+        gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814764[i], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                             G_TX_NOLOD);
-        gSP1Quadrangle(POLY_OPA_DISP++, phi_t3, phi_t3 + 2, phi_t3 + 3, phi_t3 + 1, 0);
+        gSP1Quadrangle(POLY_OPA_DISP++, quadVtxIndex, quadVtxIndex + 2, quadVtxIndex + 3, quadVtxIndex + 1, 0);
     }
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    for (phi_t3 = 0, phi_t2 = 0; phi_t2 < 2; phi_t2++, phi_t3 += 4) {
-        phi_s6 = this->unk_244F6[phi_t2];
+    // draw confirm buttons (yes/quit)
+    for (quadVtxIndex = 0, i = 0; i < 2; i++, quadVtxIndex += 4) {
+        temp = this->confirmButtonTexIndices[i];
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
-                        this->unk_244DE[phi_t2]);
-        gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814764[phi_s6], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0,
+                        this->confirmButtonAlpha[i]);
+        gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814764[temp], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                             G_TX_NOLOD);
-        gSP1Quadrangle(POLY_OPA_DISP++, phi_t3, phi_t3 + 2, phi_t3 + 3, phi_t3 + 1, 0);
+        gSP1Quadrangle(POLY_OPA_DISP++, quadVtxIndex, quadVtxIndex + 2, quadVtxIndex + 3, quadVtxIndex + 1, 0);
     }
 
+    // draw options button
     gDPPipeSync(POLY_OPA_DISP++);
-
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244E2);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
+                    this->optionButtonAlpha);
     gDPLoadTextureBlock(POLY_OPA_DISP++, D_010277B0, G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     gSP1Quadrangle(POLY_OPA_DISP++, 8, 10, 11, 9, 0);
 
-    if (((this->unk_24484 == 1) && ((this->unk_24486 == 2) || (this->unk_24486 == 4) || (this->unk_24486 == 7) ||
-                                    (this->unk_24486 == 12) || (this->unk_24486 == 22) || (this->unk_24486 == 25))) ||
-        ((this->unk_24484 == 2) && (this->unk_2448C == 3))) {
+    // draw highlight over currently selected button
+    if (((this->menuMode == 1) && ((this->configMode == 2) || (this->configMode == 4) || (this->configMode == 7) ||
+                                   (this->configMode == 12) || (this->configMode == 22) || (this->configMode == 25))) ||
+        ((this->menuMode == 2) && (this->selectMode == 3))) {
         gDPPipeSync(POLY_OPA_DISP++);
 
         gDPSetCombineLERP(POLY_OPA_DISP++, 1, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, 1, 0, PRIMITIVE, 0, TEXEL0, 0,
                           PRIMITIVE, 0);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244EA[0], this->unk_244EA[1], this->unk_244EA[2],
-                        this->unk_244EA[3]);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->highlightColor[0], this->highlightColor[1],
+                        this->highlightColor[2], this->highlightColor[3]);
         gDPLoadTextureBlock(POLY_OPA_DISP++, D_0102AAB0, G_IM_FMT_I, G_IM_SIZ_8b, 72, 24, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         gSP1Quadrangle(POLY_OPA_DISP++, 12, 14, 15, 13, 0);
     }
 
-    if (this->unk_244A8 > -1) {
+    // draw warning labels
+    if (this->warningLabel > -1) {
         gDPPipeSync(POLY_OPA_DISP++);
 
         gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
                           PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->unk_244E8);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->emptyFileTextAlpha);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
-        gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814744[this->unk_244A8], G_IM_FMT_IA, G_IM_SIZ_8b, 128, 16, 0,
+        gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814744[this->warningLabel], G_IM_FMT_IA, G_IM_SIZ_8b, 128, 16, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                             G_TX_NOLOD);
         gSP1Quadrangle(POLY_OPA_DISP++, 16, 18, 19, 17, 0);
@@ -1929,312 +1972,299 @@ void func_808108DC(GameState* thisx) {
     CLOSE_DISPS(this->state.gfxCtx);
 }
 
-void func_80808F1C(GameState*);
-void func_8080BBFC(GameState*);
+void FileSelect_DrawNameEntry(GameState*);
+void FileSelect_DrawOptions(GameState*);
 
-// FileChoose_ConfigModeDraw
-void func_80811CB8(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_ConfigModeDraw(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
 
     OPEN_DISPS(this->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
 
     func_8012C8AC(this->state.gfxCtx);
-    FileChoose_RenderView(this, 0.0f, 0.0f, 64.0f);
-    // FileChoose_SetWindowVtx
-    func_8080D40C(&this->state);
-    // FileChoose_SetWindowContentVtx
-    func_8080D6D4(&this->state);
+    FileSelect_RenderView(this, 0.0f, 0.0f, 64.0f);
+    FileSelect_SetWindowVtx(&this->state);
+    FileSelect_SetWindowContentVtx(&this->state);
 
-    if ((this->unk_24486 != 36) && (this->unk_24486 != 35)) {
+    if ((this->configMode != 36) && (this->configMode != 35)) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
-                        this->unk_244BA);
+                        this->windowAlpha);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
         Matrix_Translate(0.0f, 0.0f, -93.6f, MTXMODE_NEW);
         Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
 
-        if (this->unk_2450C) {
-            Matrix_RotateXFApply(this->unk_2450C / 100.0f);
+        if (this->windowRot != 0) {
+            Matrix_RotateXFApply(this->windowRot / 100.0f);
         }
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[0], 32, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowVtx[0], 32, 0);
         gSPDisplayList(POLY_OPA_DISP++, D_010311F0);
 
-        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[32], 32, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowVtx[32], 32, 0);
         gSPDisplayList(POLY_OPA_DISP++, D_01031408);
 
-        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[64], 16, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowVtx[64], 16, 0);
         gSPDisplayList(POLY_OPA_DISP++, D_01031618);
 
         gDPPipeSync(POLY_OPA_DISP++);
 
-        // FileChoose_DrawWindowContents
-        func_808108DC(&this->state);
+        FileSelect_DrawWindowContents(&this->state);
     }
 
     // draw name entry menu
-    if ((this->unk_24486 >= 34) && (this->unk_24486 <= 38)) {
+    if ((this->configMode >= 34) && (this->configMode <= 38)) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
-                        this->unk_244BA);
+                        this->windowAlpha);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
         Matrix_Translate(0.0f, 0.0f, -93.6f, MTXMODE_NEW);
         Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
-        Matrix_RotateXFApply((this->unk_2450C - 314.0f) / 100.0f);
+        Matrix_RotateXFApply((this->windowRot - 314.0f) / 100.0f);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[0], 32, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowVtx[0], 32, 0);
         gSPDisplayList(POLY_OPA_DISP++, D_010311F0);
 
-        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[32], 32, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowVtx[32], 32, 0);
         gSPDisplayList(POLY_OPA_DISP++, D_01031408);
 
-        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[64], 16, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowVtx[64], 16, 0);
         gSPDisplayList(POLY_OPA_DISP++, D_01031618);
 
         gDPPipeSync(POLY_OPA_DISP++);
 
-        // FileChoose_DrawNameEntry
-        func_80808F1C(&this->state);
+        FileSelect_DrawNameEntry(&this->state);
     }
 
     // draw options menu
-    if ((this->unk_24486 >= 39) && (this->unk_24486 <= 43)) {
+    if ((this->configMode >= 39) && (this->configMode <= 43)) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
-                        this->unk_244BA);
+                        this->windowAlpha);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
         Matrix_Translate(0.0f, 0.0f, -93.6f, MTXMODE_NEW);
         Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
-        Matrix_RotateXFApply((this->unk_2450C - 314.0f) / 100.0f);
+        Matrix_RotateXFApply((this->windowRot - 314.0f) / 100.0f);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[0], 32, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowVtx[0], 32, 0);
         gSPDisplayList(POLY_OPA_DISP++, D_010311F0);
 
-        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[32], 32, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowVtx[32], 32, 0);
         gSPDisplayList(POLY_OPA_DISP++, D_01031408);
 
-        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[64], 16, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowVtx[64], 16, 0);
         gSPDisplayList(POLY_OPA_DISP++, D_01031618);
 
         gDPPipeSync(POLY_OPA_DISP++);
 
-        // FileChoose_DrawOptions
-        func_8080BBFC(&this->state);
+        FileSelect_DrawOptions(&this->state);
     }
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    FileChoose_RenderView(this, 0.0f, 0.0f, 64.0f);
+    FileSelect_RenderView(this, 0.0f, 0.0f, 64.0f);
 
     CLOSE_DISPS(this->state.gfxCtx);
 }
 
-// FileChoose_FadeMainToSelect
-void func_80812460(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_FadeMainToSelect(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
     SramContext* sramCtx = &this->sramCtx;
     s16 i;
 
     for (i = 0; i < 3; i++) {
-        if (i != this->unk_24480) {
-            this->unk_244BC[i] -= 50;
-            this->unk_244DA[0] = this->unk_244DA[1] = this->unk_244E2 = this->unk_244BC[i];
+        if (i != this->buttonIndex) {
+            this->fileButtonAlpha[i] -= 50;
+            this->actionButtonAlpha[0] = this->actionButtonAlpha[1] = this->optionButtonAlpha =
+                this->fileButtonAlpha[i];
 
             if (gSaveContext.unk_3F3F == 0) {
                 if (SLOT_OCCUPIED(sramCtx, i)) {
-                    this->unk_244C8[i] = this->unk_244C2[i] = this->unk_244BC[i];
-                    this->unk_244CE[i] -= 63;
+                    this->nameAlpha[i] = this->nameBoxAlpha[i] = this->fileButtonAlpha[i];
+                    this->connectorAlpha[i] -= 63;
                 }
             } else {
                 if (FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
-                    this->unk_244C8[i] = this->unk_244C2[i] = this->unk_244BC[i];
-                    this->unk_244CE[i] -= 63;
+                    this->nameAlpha[i] = this->nameBoxAlpha[i] = this->fileButtonAlpha[i];
+                    this->connectorAlpha[i] -= 63;
                 }
             }
         }
     }
 
-    this->unk_244B6[0] += -63;
-    this->unk_244B6[1] += 63;
-    this->unk_24498--;
+    this->titleAlpha[0] -= 63;
+    this->titleAlpha[1] += 63;
+    this->actionTimer--;
 
-    if (this->unk_24498 == 0) {
-        this->unk_24498 = 4;
-        this->unk_2448C++;
-        this->unk_24482 = 0;
+    if (this->actionTimer == 0) {
+        this->actionTimer = 4;
+        this->selectMode++;
+        this->confirmButtonIndex = 0;
     }
 }
 
-s16 D_80814774[] = { 0, 16, 32 };
+// amount to move by to reach the top of the screen
+s16 sFileYOffsets[] = { 0, 16, 32 };
 
-// FileChoose_MoveSelectedFileToTop
-void func_80812668(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_MoveSelectedFileToTop(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
     s32 yStep;
 
-    yStep = ABS_ALT(this->unk_2449A[this->unk_24480] - D_80814774[this->unk_24480]) / this->unk_24498;
-    this->unk_2449A[this->unk_24480] += yStep;
-    this->unk_24498--;
+    yStep = ABS_ALT(this->buttonYOffsets[this->buttonIndex] - sFileYOffsets[this->buttonIndex]) / this->actionTimer;
+    this->buttonYOffsets[this->buttonIndex] += yStep;
+    this->actionTimer--;
 
-    if ((this->unk_24498 == 0) || (this->unk_2449A[this->unk_24480] == D_80814774[this->unk_24480])) {
-        this->unk_2449A[3] = this->unk_2449A[4] = -24;
-        this->unk_24498 = 4;
-        this->unk_2448C++;
+    if ((this->actionTimer == 0) || (this->buttonYOffsets[this->buttonIndex] == sFileYOffsets[this->buttonIndex])) {
+        this->buttonYOffsets[3] = this->buttonYOffsets[4] = -24;
+        this->actionTimer = 4;
+        this->selectMode++;
     }
 }
 
-// FileChoose_FadeInFileInfo
-void func_80812760(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_FadeInFileInfo(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
 
-    this->unk_244D4[this->unk_24480] += 50;
-    this->unk_244C2[this->unk_24480] -= 100;
+    this->fileInfoAlpha[this->buttonIndex] += 50;
+    this->nameBoxAlpha[this->buttonIndex] -= 100;
 
-    if (this->unk_244C2[this->unk_24480] <= 0) {
-        this->unk_244C2[this->unk_24480] = 0;
+    if (this->nameBoxAlpha[this->buttonIndex] <= 0) {
+        this->nameBoxAlpha[this->buttonIndex] = 0;
     }
-    this->unk_24498--;
+    this->actionTimer--;
 
-    if (this->unk_24498 == 0) {
-        this->unk_244D4[this->unk_24480] = 200;
-        this->unk_24498 = 4;
-        this->unk_2448C++;
+    if (this->actionTimer == 0) {
+        this->fileInfoAlpha[this->buttonIndex] = 200;
+        this->actionTimer = 4;
+        this->selectMode++;
     }
 
-    this->unk_244DE[0] = this->unk_244DE[1] = this->unk_244D4[this->unk_24480];
+    this->confirmButtonAlpha[0] = this->confirmButtonAlpha[1] = this->fileInfoAlpha[this->buttonIndex];
 }
 
-// FileChoose_ConfirmFile
-void func_80812840(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_ConfirmFile(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
     Input* input = &this->state.input[0];
 
     if (CHECK_BTN_ALL(input->press.button, BTN_START) || (CHECK_BTN_ALL(input->press.button, BTN_A))) {
-        if (this->unk_24482 == 0) {
+        if (this->confirmButtonIndex == 0) {
             Rumble_Request(300.0f, 180, 20, 100);
             play_sound(NA_SE_SY_FSEL_DECIDE_L);
-            this->unk_2448C = 6;
+            this->selectMode = 6;
             func_801A4058(0xF);
         } else {
             play_sound(NA_SE_SY_FSEL_CLOSE);
-            this->unk_2448C++;
+            this->selectMode++;
         }
     } else if CHECK_BTN_ALL (input->press.button, BTN_B) {
         play_sound(NA_SE_SY_FSEL_CLOSE);
-        this->unk_2448C++;
-    } else if (ABS_ALT(this->unk_24504) >= 30) {
+        this->selectMode++;
+    } else if (ABS_ALT(this->stickRelY) >= 30) {
         play_sound(NA_SE_SY_FSEL_CURSOR);
-        this->unk_24482 ^= 1;
+        this->confirmButtonIndex ^= 1;
     }
 }
 
-// FileChoose_FadeOutFileInfo
-void func_80812980(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_FadeOutFileInfo(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
 
-    this->unk_244D4[this->unk_24480] -= 200 / 4;
-    this->unk_244C2[this->unk_24480] += 200 / 4;
-    this->unk_24498--;
+    this->fileInfoAlpha[this->buttonIndex] -= 200 / 4;
+    this->nameBoxAlpha[this->buttonIndex] += 200 / 4;
+    this->actionTimer--;
 
-    if (this->unk_24498 == 0) {
-        this->unk_2449A[3] = this->unk_2449A[4] = 0;
-        this->unk_244C2[this->unk_24480] = 200;
-        this->unk_244D4[this->unk_24480] = 0;
-        this->unk_244AE = 0;
-        this->unk_24498 = 4;
-        this->unk_2448C++;
+    if (this->actionTimer == 0) {
+        this->buttonYOffsets[3] = this->buttonYOffsets[4] = 0;
+        this->nameBoxAlpha[this->buttonIndex] = 200;
+        this->fileInfoAlpha[this->buttonIndex] = 0;
+        this->nextTitleLabel = 0;
+        this->actionTimer = 4;
+        this->selectMode++;
     }
-    this->unk_244DA[2] = this->unk_244DA[3] = this->unk_244D4[this->unk_24480];
+    this->confirmButtonAlpha[0] = this->confirmButtonAlpha[1] = this->fileInfoAlpha[this->buttonIndex];
 }
 
-// FileChoose_MoveSelectedFileToSlot
-void func_80812A6C(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_MoveSelectedFileToSlot(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
     SramContext* sramCtx = &this->sramCtx;
     s32 yStep;
     s16 i;
 
-    yStep = ABS_ALT(this->unk_2449A[this->unk_24480]) / this->unk_24498;
-    this->unk_2449A[this->unk_24480] -= yStep;
+    yStep = ABS_ALT(this->buttonYOffsets[this->buttonIndex]) / this->actionTimer;
+    this->buttonYOffsets[this->buttonIndex] -= yStep;
 
-    if (this->unk_2449A[this->unk_24480] <= 0) {
-        this->unk_2449A[this->unk_24480] = 0;
+    if (this->buttonYOffsets[this->buttonIndex] <= 0) {
+        this->buttonYOffsets[this->buttonIndex] = 0;
     }
 
     for (i = 0; i < 3; i++) {
-        if (i != this->unk_24480) {
-            this->unk_244BC[i] += 200 / 4;
+        if (i != this->buttonIndex) {
+            this->fileButtonAlpha[i] += 200 / 4;
 
-            if (this->unk_244BC[i] >= 200) {
-                this->unk_244BC[i] = 200;
+            if (this->fileButtonAlpha[i] >= 200) {
+                this->fileButtonAlpha[i] = 200;
             }
 
-            this->unk_244DA[0] = this->unk_244DA[1] = this->unk_244E2 = this->unk_244BC[i];
+            this->actionButtonAlpha[0] = this->actionButtonAlpha[1] = this->optionButtonAlpha =
+                this->fileButtonAlpha[i];
 
             if (gSaveContext.unk_3F3F == 0) {
                 if (SLOT_OCCUPIED(sramCtx, i)) {
-                    this->unk_244C2[i] = this->unk_244C8[i] = this->unk_244BC[i];
-                    this->unk_244CE[i] += 255 / 4;
+                    this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i];
+                    this->connectorAlpha[i] += 255 / 4;
                 }
             } else {
                 if (FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
-                    this->unk_244C2[i] = this->unk_244C8[i] = this->unk_244BC[i];
-                    this->unk_244CE[i] += 255 / 4;
+                    this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i];
+                    this->connectorAlpha[i] += 255 / 4;
                 }
             }
         }
     }
 
-    this->unk_244B6[0] -= 255 / 4;
-    this->unk_244B6[1] += 255 / 4;
-    this->unk_24498--;
+    this->titleAlpha[0] -= 255 / 4;
+    this->titleAlpha[1] += 255 / 4;
+    this->actionTimer--;
 
-    if (this->unk_24498 == 0) {
-        this->unk_244B6[0] = 255;
-        this->unk_244B6[1] = 0;
-        this->unk_244AC = this->unk_244AE;
-        this->unk_24498 = 4;
-        this->unk_24484 = 1;
-        this->unk_24486 = 2;
-        this->unk_2448A = 2;
-        this->unk_2448C = 0;
+    if (this->actionTimer == 0) {
+        this->titleAlpha[0] = 255;
+        this->titleAlpha[1] = 0;
+        this->titleLabel = this->nextTitleLabel;
+        this->actionTimer = 4;
+        this->menuMode = 1;
+        this->configMode = 2;
+        this->nextConfigMode = 2;
+        this->selectMode = 0;
     }
 }
 
-// FileChoose_FadeOut
-void func_80812D44(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_FadeOut(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
 
-    this->unk_2450A += 40;
-    if (this->unk_2450A >= 0xFF) {
-        this->unk_2450A = 0xFF;
-        this->unk_2448C++;
+    this->screenFillAlpha += 40;
+    if (this->screenFillAlpha >= 255) {
+        this->screenFillAlpha = 255;
+        this->selectMode++;
     }
 }
 
-void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx);
-
-// FileChoose_LoadGame
-void func_80812D94(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_LoadGame(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
     u16 phi_v0;
 
-    gSaveContext.fileNum = this->unk_24480;
+    gSaveContext.fileNum = this->buttonIndex;
     Sram_OpenSave(this, &this->sramCtx);
 
     gSaveContext.gameMode = 0;
@@ -2278,59 +2308,56 @@ void func_80812D94(GameState* thisx) {
     gSaveContext.save.playerData.tatlTimer = 0;
 }
 
-// gSelectModeUpdateFuncs
-void (*D_8081477C[])(GameState*) = {
-    func_80812460, func_80812668, func_80812760, func_80812840,
-    func_80812980, func_80812A6C, func_80812D44, func_80812D94,
+void (*gSelectModeUpdateFuncs[])(GameState*) = {
+    FileSelect_FadeMainToSelect, FileSelect_MoveSelectedFileToTop,  FileSelect_FadeInFileInfo, FileSelect_ConfirmFile,
+    FileSelect_FadeOutFileInfo,  FileSelect_MoveSelectedFileToSlot, FileSelect_FadeOut,        FileSelect_LoadGame,
 };
 
-// SelectModeUpdate
-void func_80812E94(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_SelectModeUpdate(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
 
-    // selectMode
-    D_8081477C[this->unk_2448C](&this->state);
+    gSelectModeUpdateFuncs[this->selectMode](&this->state);
 }
 
-// SelectModeDraw
-void func_80812ED0(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_SelectModeDraw(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
 
     OPEN_DISPS(this->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
 
     func_8012C8AC(this->state.gfxCtx);
-    FileChoose_RenderView(this, 0.0f, 0.0f, 64.0f);
-    func_8080D40C(&this->state);
-    func_8080D6D4(&this->state);
+    FileSelect_RenderView(this, 0.0f, 0.0f, 64.0f);
+    FileSelect_SetWindowVtx(&this->state);
+    FileSelect_SetWindowContentVtx(&this->state);
 
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244BA);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
+                    this->windowAlpha);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
     Matrix_Translate(0.0f, 0.0f, -93.6f, MTXMODE_NEW);
     Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
-    Matrix_RotateXFApply(this->unk_2450C / 100.0f);
+    Matrix_RotateXFApply(this->windowRot / 100.0f);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPVertex(POLY_OPA_DISP++, &this->unk_A4[0], 32, 0);
+    gSPVertex(POLY_OPA_DISP++, &this->windowVtx[0], 32, 0);
     gSPDisplayList(POLY_OPA_DISP++, D_010311F0);
 
-    gSPVertex(POLY_OPA_DISP++, &this->unk_A4[32], 32, 0);
+    gSPVertex(POLY_OPA_DISP++, &this->windowVtx[32], 32, 0);
     gSPDisplayList(POLY_OPA_DISP++, D_01031408);
 
-    gSPVertex(POLY_OPA_DISP++, &this->unk_A4[64], 16, 0);
+    gSPVertex(POLY_OPA_DISP++, &this->windowVtx[64], 16, 0);
     gSPDisplayList(POLY_OPA_DISP++, D_01031618);
 
-    func_808108DC(&this->state);
+    FileSelect_DrawWindowContents(&this->state);
     gDPPipeSync(POLY_OPA_DISP++);
-    FileChoose_RenderView(this, 0.0f, 0.0f, 64.0f);
+    FileSelect_RenderView(this, 0.0f, 0.0f, 64.0f);
 
     CLOSE_DISPS(this->state.gfxCtx);
 }
 
-void FileChoose_UpdateAndDrawSkybox(FileChooseContext* this) {
+void FileSelect_UpdateAndDrawSkybox(FileSelectState* this) {
     GraphicsContext* gfxCtx; // TODO: check if this temp is needed, or if it recasts thisx instead
     f32 eyeX;
     f32 eyeY;
@@ -2345,7 +2372,7 @@ void FileChoose_UpdateAndDrawSkybox(FileChooseContext* this) {
     eyeY = -700.0f;
     eyeZ = 1000.0f * Math_SinS(fileChooseSkyboxRotation) + 1000.0f * Math_CosS(fileChooseSkyboxRotation);
 
-    FileChoose_RenderView(this, eyeX, eyeY, eyeZ);
+    FileSelect_RenderView(this, eyeX, eyeY, eyeZ);
     SkyboxDraw_Draw(&this->skyboxCtx, this->state.gfxCtx, 1, this->envCtx.unk_13, eyeX, -700.0f, eyeZ);
 
     gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_NONE);
@@ -2355,16 +2382,15 @@ void FileChoose_UpdateAndDrawSkybox(FileChooseContext* this) {
     CLOSE_DISPS(gfxCtx);
 }
 
-// State update/draws
-void (*D_8081479C[])(GameState*) = {
+void (*gFileSelectDrawFuncs[])(GameState*) = {
     func_8080BDAC,
-    func_80811CB8,
-    func_80812ED0,
+    FileSelect_ConfigModeDraw,
+    FileSelect_SelectModeDraw,
 };
-void (*D_808147A8[])(GameState*) = {
+void (*gFileSelectUpdateFuncs[])(GameState*) = {
     func_8080BC58,
-    func_8080D3D0,
-    func_80812E94,
+    FileSelect_ConfigModeUpdate,
+    FileSelect_SelectModeUpdate,
 };
 
 // Please wait, Decide/Cancel, Decide/Save
@@ -2372,8 +2398,8 @@ void* D_808147B4[] = { 0x0100B2B0, 0x0100A030, 0x0100A930 };
 s16 D_808147C0[] = { 144, 144, 152 };
 s16 D_808147C8[] = { 90, 90, 86 };
 
-void FileChoose_Main(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_Main(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
     Input* input = &this->state.input[0];
     s32 texIndex;
     s32 pad;
@@ -2386,90 +2412,82 @@ void FileChoose_Main(GameState* thisx) {
     gSPSegment(POLY_OPA_DISP++, 0x02, this->parameterSegment);
     gSPSegment(POLY_OPA_DISP++, 0x06, this->titleSegment);
 
-    // stickRelX
-    this->unk_24502 = input->rel.stick_x;
-    // stickRelY
-    this->unk_24504 = input->rel.stick_y;
+    this->stickRelX = input->rel.stick_x;
+    this->stickRelY = input->rel.stick_y;
 
-    if (this->unk_24502 < -30) {
-        // stickXDir
-        if (this->unk_244FE == -1) {
-            // inputTimerX
-            this->unk_244FA--;
-            if (this->unk_244FA < 0) {
-                this->unk_244FA = 2;
+    if (this->stickRelX < -30) {
+        if (this->stickXDir == -1) {
+            this->inputTimerX--;
+            if (this->inputTimerX < 0) {
+                this->inputTimerX = 2;
             } else {
-                this->unk_24502 = 0;
+                this->stickRelX = 0;
             }
         } else {
-            this->unk_244FA = 10;
-            this->unk_244FE = -1;
+            this->inputTimerX = 10;
+            this->stickXDir = -1;
         }
-    } else if (this->unk_24502 > 30) {
-        if (this->unk_244FE == 1) {
-            this->unk_244FA--;
-            if (this->unk_244FA < 0) {
-                this->unk_244FA = 2;
+    } else if (this->stickRelX > 30) {
+        if (this->stickXDir == 1) {
+            this->inputTimerX--;
+            if (this->inputTimerX < 0) {
+                this->inputTimerX = 2;
             } else {
-                this->unk_24502 = 0;
+                this->stickRelX = 0;
             }
         } else {
-            this->unk_244FA = 10;
-            this->unk_244FE = 1;
+            this->inputTimerX = 10;
+            this->stickXDir = 1;
         }
     } else {
-        this->unk_244FE = 0;
+        this->stickXDir = 0;
     }
 
-    if (this->unk_24504 < -30) {
-        // stickYDir
-        if (this->unk_24500 == -1) {
-            // inputTimerY
-            this->unk_244FC--;
-            if (this->unk_244FC < 0) {
-                this->unk_244FC = 2;
+    if (this->stickRelY < -30) {
+        if (this->stickYDir == -1) {
+            this->inputTimerY--;
+            if (this->inputTimerY < 0) {
+                this->inputTimerY = 2;
             } else {
-                this->unk_24504 = 0;
+                this->stickRelY = 0;
             }
         } else {
-            this->unk_244FC = 10;
-            this->unk_24500 = -1;
+            this->inputTimerY = 10;
+            this->stickYDir = -1;
         }
-    } else if (this->unk_24504 > 30) {
-        if (this->unk_24500 == 1) {
-            this->unk_244FC--;
-            if (this->unk_244FC < 0) {
-                this->unk_244FC = 2;
+    } else if (this->stickRelY > 30) {
+        if (this->stickYDir == 1) {
+            this->inputTimerY--;
+            if (this->inputTimerY < 0) {
+                this->inputTimerY = 2;
             } else {
-                this->unk_24504 = 0;
+                this->stickRelY = 0;
             }
         } else {
-            this->unk_244FC = 10;
-            this->unk_24500 = 1;
+            this->inputTimerY = 10;
+            this->stickYDir = 1;
         }
     } else {
-        this->unk_24500 = 0;
+        this->stickYDir = 0;
     }
 
-    // emptyFileTextAlpha ?
-    this->unk_244E8 = 0;
+    this->emptyFileTextAlpha = 0;
 
-    func_8080D2EC(this);
-    // menuMode
-    D_808147A8[this->unk_24484](&this->state);
-    FileChoose_UpdateAndDrawSkybox(this);
-    D_8081479C[this->unk_24484](&this->state);
+    FileSelect_PulsateCursor(this);
+    gFileSelectUpdateFuncs[this->menuMode](&this->state);
+    FileSelect_UpdateAndDrawSkybox(this);
+    gFileSelectDrawFuncs[this->menuMode](&this->state);
 
     func_8012C628(this->state.gfxCtx);
 
     gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                       ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 100, 255, 255, this->unk_244E6);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 100, 255, 255, this->controlsAlpha);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
     if (this->sramCtx.status > 0) {
         texIndex = 0;
-    } else if ((this->unk_24486 > 38) && (this->unk_24486 < 44)) {
+    } else if ((this->configMode > 38) && (this->configMode < 44)) {
         texIndex = 2;
     } else {
         texIndex = 1;
@@ -2485,43 +2503,42 @@ void FileChoose_Main(GameState* thisx) {
 
     gDPPipeSync(POLY_OPA_DISP++);
     gSPDisplayList(POLY_OPA_DISP++, sScreenFillSetupDL);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, this->unk_2450A);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, this->screenFillAlpha);
     gSPDisplayList(POLY_OPA_DISP++, D_0E000000.fillRect);
 
     CLOSE_DISPS(this->state.gfxCtx);
 }
 
-// FileChoose_InitContext
-void func_80813908(GameState* thisx) {
-    FileChooseContext* this = (FileChooseContext*)thisx;
+void FileSelect_InitContext(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
     EnvironmentContext* envCtx = &this->envCtx;
 
     Sram_Alloc(&this->state, &this->sramCtx);
     func_801457CC(&this->state, &this->sramCtx);
 
     // this->menuMode = FS_MENU_MODE_INIT;
-    this->unk_24484 = 0;
+    this->menuMode = 0;
 
-    this->unk_24480 = this->unk_2448C = this->unk_2448E = this->fileNum = this->unk_24482 = 0;
+    this->buttonIndex = this->selectMode = this->unk_2448E = this->fileNum = this->confirmButtonIndex = 0;
 
-    this->unk_244F6[0] = 2;
-    this->unk_244F6[1] = 3;
-    this->unk_244AC = 0;
-    this->unk_244AE = 1;
+    this->confirmButtonTexIndices[0] = 2;
+    this->confirmButtonTexIndices[1] = 3;
+    this->titleLabel = 0;
+    this->nextTitleLabel = 1;
 
-    this->unk_2450A = 255;
-    this->unk_244F2 = 1;
+    this->screenFillAlpha = 255;
+    this->highlightPulseDir = 1;
     this->unk_244F4 = 0xC;
-    this->unk_244EA[0] = 155;
-    this->unk_244EA[1] = 255;
-    this->unk_244EA[2] = 255;
-    this->unk_244EA[3] = 70;
-    this->unk_24486 = 0;
-    this->unk_2450C = 0.0f;
+    this->highlightColor[0] = 155;
+    this->highlightColor[1] = 255;
+    this->highlightColor[2] = 255;
+    this->highlightColor[3] = 70;
+    this->configMode = 0;
+    this->windowRot = 0.0f;
 
-    this->unk_244FE = this->unk_244FA = 0;
+    this->stickXDir = this->inputTimerX = 0;
 
-    this->unk_24500 = this->unk_244FC = 0;
+    this->stickYDir = this->inputTimerY = 0;
 
     this->unk_24518 = this->unk_2451A = this->unk_24516 = 0;
 
@@ -2533,26 +2550,29 @@ void func_80813908(GameState* thisx) {
     this->unk_244B0[1] = 150;
     this->unk_244B0[2] = 255;
 
-    this->unk_244BA = this->unk_244B6[0] = this->unk_244B6[1] = this->unk_244BC[0] = this->unk_244BC[1] =
-        this->unk_244BC[2] = this->unk_244C2[0] = this->unk_244C2[1] = this->unk_244C2[2] = this->unk_244C8[0] =
-            this->unk_244C8[1] = this->unk_244C8[2] = this->unk_244CE[0] = this->unk_244CE[1] = this->unk_244CE[2] =
-                this->unk_244D4[0] = this->unk_244D4[1] = this->unk_244D4[2] = this->unk_244DA[0] = this->unk_244DA[1] =
-                    this->unk_244DA[2] = this->unk_244DA[3] = this->unk_244E2 = this->unk_244E4 = this->unk_244E6 =
-                        this->unk_244E8 = 0;
+    this->windowAlpha = this->titleAlpha[0] = this->titleAlpha[1] = this->fileButtonAlpha[0] =
+        this->fileButtonAlpha[1] = this->fileButtonAlpha[2] = this->nameBoxAlpha[0] = this->nameBoxAlpha[1] =
+            this->nameBoxAlpha[2] = this->nameAlpha[0] = this->nameAlpha[1] = this->nameAlpha[2] =
+                this->connectorAlpha[0] = this->connectorAlpha[1] = this->connectorAlpha[2] = this->fileInfoAlpha[0] =
+                    this->fileInfoAlpha[1] = this->fileInfoAlpha[2] = this->actionButtonAlpha[0] =
+                        this->actionButtonAlpha[1] = this->actionButtonAlpha[2] = this->actionButtonAlpha[3] =
+                            this->optionButtonAlpha = this->unk_244E4 = this->controlsAlpha = this->emptyFileTextAlpha =
+                                0;
 
-    this->unk_24508 = 6;
-    this->unk_24498 = 4;
-    this->unk_244A8 = -1;
+    this->windowPosX = 6;
+    this->actionTimer = 4;
+    this->warningLabel = -1;
 
-    this->unk_244AA = this->unk_2449A[0] = this->unk_2449A[1] = this->unk_2449A[2] = this->unk_2449A[3] =
-        this->unk_2449A[4] = this->unk_2449A[5] = this->unk_24492[0] = this->unk_24492[1] = this->unk_24492[2] = 0;
+    this->warningButtonIndex = this->buttonYOffsets[0] = this->buttonYOffsets[1] = this->buttonYOffsets[2] =
+        this->buttonYOffsets[3] = this->buttonYOffsets[4] = this->buttonYOffsets[5] = this->unk_24492[0] =
+            this->unk_24492[1] = this->unk_24492[2] = 0;
 
     this->unk_2451E[0] = 0;
     this->unk_2451E[1] = 3;
     this->unk_2451E[2] = 6;
     this->unk_2451E[3] = 8;
     this->unk_2451E[4] = 10;
-    this->unk_24528 = 20;
+    this->highlightTimer = 20;
 
     ShrinkWindow_SetLetterboxTarget(0);
     gSaveContext.skyboxTime = 0;
@@ -2590,18 +2610,18 @@ void FileChoose_Destroy(GameState* this) {
     ShrinkWindow_Destroy();
 }
 
-void FileChoose_Init(GameState* thisx) {
+void FileSelect_Init(GameState* thisx) {
     s32 pad;
-    FileChooseContext* this = (FileChooseContext*)thisx;
+    FileSelectState* this = (FileSelectState*)thisx;
     size_t size;
 
     Game_SetFramerateDivisor(&this->state, 1);
     Matrix_Init(&this->state);
     ShrinkWindow_Init();
     View_Init(&this->view, this->state.gfxCtx);
-    this->state.main = FileChoose_Main;
+    this->state.main = FileSelect_Main;
     this->state.destroy = FileChoose_Destroy;
-    func_80813908(&this->state);
+    FileSelect_InitContext(&this->state);
     Font_LoadOrderedFont(&this->font);
 
     size = SEGMENT_ROM_SIZE(title_static);
