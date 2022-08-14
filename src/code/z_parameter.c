@@ -1189,8 +1189,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
     switch (type) {
         case MAGIC_CONSUME_NOW:
         case MAGIC_CONSUME_NOW_ALT:
-            // Drank magic immediately
-            // Ex. Deku Bubble
+            // Drain magic immediately e.g. Deku Bubble
             if ((gSaveContext.magicState == MAGIC_STATE_IDLE) ||
                 (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS)) {
                 if (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS) {
@@ -1245,8 +1244,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
 
         case MAGIC_CONSUME_WAIT_PREVIEW:
             // Sets consume target but waits to consume.
-            // Preview consumption with a yellow bar
-            // Ex. Spin Attack
+            // Preview consumption with a yellow bar. e.g. Spin Attack
             if ((gSaveContext.magicState == MAGIC_STATE_IDLE) ||
                 (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS)) {
                 if (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS) {
@@ -1261,7 +1259,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
             }
 
         case MAGIC_CONSUME_GORON_ZORA:
-            // Zora Shock, Goron Spike Roll
+            // Goron spiked rolling or Zora electric barrier
             if (gSaveContext.save.playerData.magic != 0) {
                 interfaceCtx->magicConsumptionTimer = 10;
                 gSaveContext.magicState = MAGIC_STATE_CONSUME_GORON_ZORA_SETUP;
@@ -1271,7 +1269,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
             }
 
         case MAGIC_CONSUME_GIANTS_MASK:
-            // Wearing Giants Mask
+            // Wearing Giant's Mask
             if (gSaveContext.magicState == MAGIC_STATE_IDLE) {
                 if (gSaveContext.save.playerData.magic != 0) {
                     interfaceCtx->magicConsumptionTimer = R_MAGIC_CONSUME_TIMER_GIANTS_MASK;
@@ -1458,7 +1456,7 @@ void Magic_Update(PlayState* play) {
             break;
 
         case MAGIC_STATE_CONSUME_LENS:
-            // Slowly consume magic while lens is on
+            // Slowly consume magic while Lens of Truth is active
             if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
                 (msgCtx->msgMode == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
                 (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
@@ -1470,7 +1468,7 @@ void Magic_Update(PlayState* play) {
                      (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) != ITEM_LENS) &&
                      (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) != ITEM_LENS)) ||
                     !play->actorCtx.lensActive) {
-                    // Force lens off and set magic state to idle
+                    // Deactivate Lens of Truth and set magic state to idle
                     play->actorCtx.lensActive = false;
                     play_sound(NA_SE_SY_GLASSMODE_OFF);
                     gSaveContext.magicState = MAGIC_STATE_IDLE;

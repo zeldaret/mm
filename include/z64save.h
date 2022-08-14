@@ -32,22 +32,22 @@ typedef enum {
     /* 4  */ MAGIC_STATE_METER_FLASH_2, // Flashes border and draws yellow magic to preview target consumption
     /* 5  */ MAGIC_STATE_RESET, // Reset colors and return to idle
     /* 6  */ MAGIC_STATE_METER_FLASH_3, // Flashes border with no additional behaviour
-    /* 7  */ MAGIC_STATE_CONSUME_LENS, // Magic slowly consumed by lens
+    /* 7  */ MAGIC_STATE_CONSUME_LENS, // Magic slowly consumed by Lens of Truth
     /* 8  */ MAGIC_STATE_STEP_CAPACITY, // Step `magicCapacity` to full capacity
     /* 9  */ MAGIC_STATE_FILL, // Add magic until magicFillTarget is reached
     /* 10 */ MAGIC_STATE_CONSUME_GORON_ZORA_SETUP,
-    /* 11 */ MAGIC_STATE_CONSUME_GORON_ZORA, // Magic slowly consumed by goron spikes or zora shocks
-    /* 12 */ MAGIC_STATE_CONSUME_GIANTS_MASK // Magic slowly consumed by giants mask
+    /* 11 */ MAGIC_STATE_CONSUME_GORON_ZORA, // Magic slowly consumed by Goron spiked rolling or Zora electric barrier.
+    /* 12 */ MAGIC_STATE_CONSUME_GIANTS_MASK // Magic slowly consumed by Giant's Mask
 } MagicState;
 
 typedef enum {
-    /* 0 */ MAGIC_CONSUME_NOW, // Consume Magic immediately without preview
+    /* 0 */ MAGIC_CONSUME_NOW, // Consume magic immediately without preview
     /* 1 */ MAGIC_CONSUME_WAIT_NO_PREVIEW, // Sets consume target but waits to consume. No yellow magic preview to target consumption. Unused
     /* 2 */ MAGIC_CONSUME_NOW_ALT, // Identical behaviour to MAGIC_CONSUME_NOW. Unused
-    /* 3 */ MAGIC_CONSUME_LENS, // Lens consumption
-    /* 4 */ MAGIC_CONSUME_WAIT_PREVIEW, // Sets consume target but waits to consume. Draws yellow magic to target consumption
-    /* 5 */ MAGIC_CONSUME_GORON_ZORA, // Zora shock and Goron Spike Roll slow consumption
-    /* 6 */ MAGIC_CONSUME_GIANTS_MASK, // Giants Mask Slow consumption
+    /* 3 */ MAGIC_CONSUME_LENS, // Lens of Truth consumption
+    /* 4 */ MAGIC_CONSUME_WAIT_PREVIEW, // Sets consume target but waits to consume. Show magic to be consumed in yellow.
+    /* 5 */ MAGIC_CONSUME_GORON_ZORA, // Goron spiked rolling or Zora electric barrier slow consumption
+    /* 6 */ MAGIC_CONSUME_GIANTS_MASK, // Giant's Mask slow consumption
     /* 7 */ MAGIC_CONSUME_DEITY_BEAM // Fierce Deity Beam consumption, consumed magic now and not via request
 } MagicChangeType;
 
@@ -258,7 +258,7 @@ typedef struct SaveContext {
     /* 0x3F26 */ u16 unk_3F26;                          // "last_time_type"
     /* 0x3F28 */ s16 magicState; // determines magic meter behavior on each frame "magic_flag"
     /* 0x3F2A */ s16 isMagicRequested; // a request to add magic has been given "recovery_magic_flag"
-    /* 0x3F2C */ s16 magicFlag; // Set to 0 in func_80812D94, otherwise unused "keep_magic_flag"
+    /* 0x3F2C */ s16 magicFlag; // Set to 0 in func_80812D94(), otherwise unused "keep_magic_flag"
     /* 0x3F2E */ s16 magicCapacity; // maximum magic available "magic_now_max"
     /* 0x3F30 */ s16 magicFillTarget; // target used to fill magic "magic_now_now"
     /* 0x3F32 */ s16 magicToConsume; // accumulated magic that is requested to be consumed "magic_used"
