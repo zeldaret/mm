@@ -1,17 +1,28 @@
 /*
  * File: z_kaleido_item.c
  * Overlay: ovl_kaleido_scope
- * Description:
+ * Description: Pause Menu - Item Page
  */
 
 #include "z_kaleido_scope.h"
 #include "interface/parameter_static/parameter_static.h"
 
-s16 sEquipState = 0;
-s16 sEquipAnimTimer = 0;
-s16 sEquipMoveTimer = 10;
+typedef enum {
+    /* 0 */ EQUIP_STATE_MAGIC_ARROW_GROW_ORB,
+    /* 1 */ EQUIP_STATE_MAGIC_ARROW_MOVE_TO_BOW_SLOT,
+    /* 2 */ EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT,
+    /* 3 */ EQUIP_STATE_MOVE_TO_C_BTN
+} EquipState;
 
-u8 gSlotTransformReqs[5][24] = {
+s16 sEquipState = EQUIP_STATE_MAGIC_ARROW_GROW_ORB;
+
+// Timer to hold magic arrow icon over magic arrow slot before moving when equipping.
+s16 sEquipMagicArrowSlotHoldTimer = 0;
+
+// Number of frames to move icon from slot to target position when equipping.
+s16 sEquipAnimTimer = 10;
+
+u8 gPlayerFormSlotRestrictions[5][24] = {
     // Fierce Deity
     {
         false, // SLOT_OCARINA
@@ -149,19 +160,30 @@ u8 gSlotTransformReqs[5][24] = {
     },
 };
 
-s16 D_8082B444[] = {
-    0x005F, 0x003E, 0x005F, 0x0080, 0x00A1, 0x00C2, 0x003E, 0x005F,
+s16 sAmmoRectLeft[] = {
+    95,  // SLOT_BOW
+    62,  // SLOT_BOMB
+    95,  // SLOT_BOMBCHU
+    128, // SLOT_STICK
+    161, // SLOT_NUT
+    194, // SLOT_MAGIC_BEANS
+    62,  // SLOT_POWDER_KEG
+    95,  // SLOT_PICTO_BOX
 };
 
-s16 D_8082B454[] = {
-    0x0055, 0x0075, 0x0075, 0x0075, 0x0075, 0x0075, 0x0096, 0x0096,
+s16 sAmmoRectHeight[] = {
+    85,  // SLOT_BOW
+    117, // SLOT_BOMB
+    117, // SLOT_BOMBCHU
+    117, // SLOT_STICK
+    117, // SLOT_NUT
+    117, // SLOT_MAGIC_BEANS
+    150, // SLOT_POWDER_KEG
+    150, // SLOT_PICTO_BOX
 };
 
-Gfx* func_8010CD98(Gfx* displayListHead, void* texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
-                   s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy);
-
-void KaleidoScope_DrawAmmoCount(PauseContext* pauseCtx, GraphicsContext* gfxCtx, s16 item, u16 arg3) {
-    s16 i;
+void KaleidoScope_DrawAmmoCount(PauseContext* pauseCtx, GraphicsContext* gfxCtx, s16 item, u16 ammoIndex) {
+    s16 ammoUpperDigit;
     s16 ammo;
 
     OPEN_DISPS(gfxCtx);
@@ -178,11 +200,14 @@ void KaleidoScope_DrawAmmoCount(PauseContext* pauseCtx, GraphicsContext* gfxCtx,
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    if (!gSlotTransformReqs[((void)0, gSaveContext.save.playerForm)][SLOT(item)]) {
+    if (!gPlayerFormSlotRestrictions[((void)0, gSaveContext.save.playerForm)][SLOT(item)]) {
+        // Ammo item is restricted
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 100, 100, 100, pauseCtx->alpha);
     } else {
+        // Default ammo
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
         if (ammo == 0) {
+            // Out of ammo
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 130, 130, 130, pauseCtx->alpha);
         } else if (((item == ITEM_BOMB) && (AMMO(item) == CUR_CAPACITY(UPG_BOMB_BAG))) ||
                    ((item == ITEM_BOW) && (AMMO(item) == CUR_CAPACITY(UPG_QUIVER))) ||
@@ -191,22 +216,27 @@ void KaleidoScope_DrawAmmoCount(PauseContext* pauseCtx, GraphicsContext* gfxCtx,
                    ((item == ITEM_BOMBCHU) && (AMMO(item) == CUR_CAPACITY(UPG_BOMB_BAG))) ||
                    ((item == ITEM_POWDER_KEG) && (ammo == 1)) || ((item == ITEM_PICTO_BOX) && (ammo == 1)) ||
                    ((item == ITEM_MAGIC_BEANS) && (ammo == 20))) {
+            // Ammo at capacity
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 120, 255, 0, pauseCtx->alpha);
         }
     }
 
-    for (i = 0; ammo >= 10; i++) {
+    // Separate ammo into upper and lower digits
+    for (ammoUpperDigit = 0; ammo >= 10; ammoUpperDigit++) {
         ammo -= 10;
     }
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    if (i != 0) {
-        POLY_OPA_DISP = func_8010CD98(POLY_OPA_DISP, ((u8*)gAmmoDigit0Tex + (8 * 8 * i)), 8, 8, D_8082B444[arg3],
-                                      D_8082B454[arg3], 8, 8, 1 << 10, 1 << 10);
+    // Draw upper digit
+    if (ammoUpperDigit != 0) {
+        POLY_OPA_DISP = func_8010CD98(POLY_OPA_DISP, ((u8*)gAmmoDigit0Tex + (8 * 8 * ammoUpperDigit)), 8, 8,
+                                      sAmmoRectLeft[ammoIndex], sAmmoRectHeight[ammoIndex], 8, 8, 1 << 10, 1 << 10);
     }
-    POLY_OPA_DISP = func_8010CD98(POLY_OPA_DISP, ((u8*)gAmmoDigit0Tex + (8 * 8 * ammo)), 8, 8, D_8082B444[arg3] + 6,
-                                  D_8082B454[arg3], 8, 8, 1 << 10, 1 << 10);
+
+    // Draw lower digit
+    POLY_OPA_DISP = func_8010CD98(POLY_OPA_DISP, ((u8*)gAmmoDigit0Tex + (8 * 8 * ammo)), 8, 8,
+                                  sAmmoRectLeft[ammoIndex] + 6, sAmmoRectHeight[ammoIndex], 8, 8, 1 << 10, 1 << 10);
 
     CLOSE_DISPS(gfxCtx);
 }
@@ -216,11 +246,10 @@ void KaleidoScope_SetCursorVtx(PauseContext* pauseCtx, u16 index, Vtx* vtx) {
     pauseCtx->cursorVtx[0].v.ob[1] = vtx[index].v.ob[1];
 }
 
-// Part of KaleidoScope_DrawItemSelect
 s16 sMagicArrowEffectsR[] = { 255, 100, 255 };
 s16 sMagicArrowEffectsG[] = { 0, 100, 255 };
 s16 sMagicArrowEffectsB[] = { 0, 255, 100 };
-void func_8081B6EC(PlayState* play) {
+void KaleidoScope_DrawItemSelect(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     u16 i;
     u16 j;
@@ -229,10 +258,10 @@ void func_8081B6EC(PlayState* play) {
 
     func_8012C8AC(play->state.gfxCtx);
 
+    // Draw a white box around the items that are equipped on the C buttons
+    // Loop over c-buttons (i) and vtx offset (j)
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
-
     for (i = 0, j = 24 * 4; i < 3; i++, j += 4) {
         if (GET_CUR_FORM_BTN_ITEM(i + 1) != ITEM_NONE) {
             if (GET_CUR_FORM_BTN_SLOT(i + 1) < 24) {
@@ -243,16 +272,17 @@ void func_8081B6EC(PlayState* play) {
     }
 
     gDPPipeSync(POLY_OPA_DISP++);
-    gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
+    // Draw the item icons
+    gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     for (j = 0, i = 0; i < 24; i++, j += 4) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
         if (((void)0, gSaveContext.save.inventory.items[i]) != ITEM_NONE) {
             if ((pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_ITEM) && (pauseCtx->cursorSpecialPos == 0) &&
-                gSlotTransformReqs[(void)0, gSaveContext.save.playerForm][i]) {
-                if ((sEquipState == 2) && (i == 3)) {
-
+                gPlayerFormSlotRestrictions[(void)0, gSaveContext.save.playerForm][i]) {
+                if ((sEquipState == EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT) && (i == SLOT_ARROW_ICE)) {
+                    // Suppose to be `SLOT_BOW`, unchanged from OoT, instead increase size of ice arrow icon
                     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sMagicArrowEffectsR[pauseCtx->equipTargetItem - 0xB5],
                                     sMagicArrowEffectsG[pauseCtx->equipTargetItem - 0xB5],
                                     sMagicArrowEffectsB[pauseCtx->equipTargetItem - 0xB5], pauseCtx->alpha);
@@ -260,21 +290,22 @@ void func_8081B6EC(PlayState* play) {
                     pauseCtx->itemVtx[j + 0].v.ob[0] = pauseCtx->itemVtx[j + 2].v.ob[0] =
                         pauseCtx->itemVtx[j + 0].v.ob[0] - 2;
                     pauseCtx->itemVtx[j + 1].v.ob[0] = pauseCtx->itemVtx[j + 3].v.ob[0] =
-                        pauseCtx->itemVtx[j + 0].v.ob[0] + 0x20;
+                        pauseCtx->itemVtx[j + 0].v.ob[0] + 32;
                     pauseCtx->itemVtx[j + 0].v.ob[1] = pauseCtx->itemVtx[j + 1].v.ob[1] =
                         pauseCtx->itemVtx[j + 0].v.ob[1] + 2;
                     pauseCtx->itemVtx[j + 2].v.ob[1] = pauseCtx->itemVtx[j + 3].v.ob[1] =
-                        pauseCtx->itemVtx[j + 0].v.ob[1] - 0x20;
+                        pauseCtx->itemVtx[j + 0].v.ob[1] - 32;
 
-                } else if (i == pauseCtx->cursorSlot[0]) {
+                } else if (i == pauseCtx->cursorSlot[PAUSE_ITEM]) {
+                    // Increase the size of the selected item
                     pauseCtx->itemVtx[j + 0].v.ob[0] = pauseCtx->itemVtx[j + 2].v.ob[0] =
                         pauseCtx->itemVtx[j + 0].v.ob[0] - 2;
                     pauseCtx->itemVtx[j + 1].v.ob[0] = pauseCtx->itemVtx[j + 3].v.ob[0] =
-                        pauseCtx->itemVtx[j + 0].v.ob[0] + 0x20;
+                        pauseCtx->itemVtx[j + 0].v.ob[0] + 32;
                     pauseCtx->itemVtx[j + 0].v.ob[1] = pauseCtx->itemVtx[j + 1].v.ob[1] =
                         pauseCtx->itemVtx[j + 0].v.ob[1] + 2;
                     pauseCtx->itemVtx[j + 2].v.ob[1] = pauseCtx->itemVtx[j + 3].v.ob[1] =
-                        pauseCtx->itemVtx[j + 0].v.ob[1] - 0x20;
+                        pauseCtx->itemVtx[j + 0].v.ob[1] - 32;
                 }
             }
 
@@ -284,7 +315,8 @@ void func_8081B6EC(PlayState* play) {
         }
     }
 
-    if (pauseCtx->pageIndex == 0) {
+    // Draw the ammo digits
+    if (pauseCtx->pageIndex == PAUSE_ITEM) {
         if ((pauseCtx->state == 6) && ((pauseCtx->unk_200 == 0) || (pauseCtx->unk_200 == 3)) &&
             (pauseCtx->state != 7) && ((pauseCtx->state < 8) || (pauseCtx->state >= 0x13))) {
             func_8012C628(play->state.gfxCtx);
@@ -306,17 +338,17 @@ void func_8081B6EC(PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-u8 D_8082B47C[] = {
+u8 sPlayerFormItems[] = {
     ITEM_MASK_FIERCE_DEITY, ITEM_MASK_GORON, ITEM_MASK_ZORA, ITEM_MASK_DEKU, ITEM_NONE,
 };
-void KaleidoScope_DrawItemSelect(PlayState* play) {
-    s32 pad;
+void KaleidoScope_UpdateItemCursor(PlayState* play) {
+    s32 pad1;
     PauseContext* pauseCtx = &play->pauseCtx;
     MessageContext* msgCtx = &play->msgCtx;
     u16 vtxIndex;
     u16 cursorItem;
     u16 cursorSlot;
-    u8 index;
+    u8 magicArrowIndex;
     s16 cursorPoint;
     s16 cursorX;
     s16 cursorY;
@@ -327,13 +359,16 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
     pauseCtx->cursorColorSet = 0;
     pauseCtx->nameColorSet = 0;
 
-    if ((pauseCtx->state == 6) && (pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == 0) && (pauseCtx->unk_2B9 == 0)) {
+    if ((pauseCtx->state == 6) && (pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_ITEM) &&
+        !pauseCtx->itemDescriptionOn) {
         moveCursorResult = 0;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_ITEM];
 
         cursorItem = pauseCtx->cursorItem[PAUSE_ITEM];
 
+        // Move cursor left/right
         if (pauseCtx->cursorSpecialPos == 0) {
+            // cursor is currently on a slot
             pauseCtx->cursorColorSet = 2;
 
             if (ABS_ALT(pauseCtx->stickRelX) > 30) {
@@ -341,14 +376,15 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
                 cursorX = pauseCtx->cursorX[PAUSE_ITEM];
                 cursorY = pauseCtx->cursorY[PAUSE_ITEM];
 
+                // Search for slot to move to
                 while (moveCursorResult == 0) {
                     if (pauseCtx->stickRelX < -30) {
+                        // move cursor left
                         pauseCtx->unk_298 = 4.0f;
                         if (pauseCtx->cursorX[PAUSE_ITEM] != 0) {
                             pauseCtx->cursorX[PAUSE_ITEM]--;
                             pauseCtx->cursorPoint[PAUSE_ITEM]--;
                             moveCursorResult = 1;
-
                         } else {
                             pauseCtx->cursorX[PAUSE_ITEM] = cursorX;
                             pauseCtx->cursorY[PAUSE_ITEM]++;
@@ -374,8 +410,9 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
                             }
                         }
                     } else if (pauseCtx->stickRelX > 30) {
+                        // move cursor right
                         pauseCtx->unk_298 = 4.0f;
-                        if (pauseCtx->cursorX[PAUSE_ITEM] < 5) {
+                        if (pauseCtx->cursorX[PAUSE_ITEM] <= 4) {
                             pauseCtx->cursorX[PAUSE_ITEM]++;
                             pauseCtx->cursorPoint[PAUSE_ITEM]++;
                             moveCursorResult = 1;
@@ -415,9 +452,11 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
                 func_80821A04(play);
                 cursorY = 0;
                 cursorX = 0;
-                cursorPoint = 0;
+                cursorPoint = 0; // top row, left column (SLOT_OCARINA)
 
+                // Search for slot to move to
                 while (true) {
+                    // Check if current cursor has an item in its slot
                     if (gSaveContext.save.inventory.items[cursorPoint] != ITEM_NONE) {
                         pauseCtx->cursorPoint[PAUSE_ITEM] = cursorPoint;
                         pauseCtx->cursorX[PAUSE_ITEM] = cursorX;
@@ -426,12 +465,14 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
                         break;
                     }
 
+                    // move 1 row down and retry
                     cursorY++;
                     cursorPoint += 6;
                     if (cursorY < 4) {
                         continue;
                     }
 
+                    // move 1 column right and retry
                     cursorY = 0;
                     cursorPoint = cursorX + 1;
                     cursorX = cursorPoint;
@@ -439,44 +480,53 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
                         continue;
                     }
 
+                    // No item available
                     KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_RIGHT);
                     break;
                 }
             }
-        } else if (pauseCtx->stickRelX < -30) {
-            func_80821A04(play);
-            cursorX = 5;
-            cursorPoint = 5;
-            cursorY = 0;
+        } else { // PAUSE_CURSOR_PAGE_RIGHT
+            if (pauseCtx->stickRelX < -30) {
+                func_80821A04(play);
+                cursorX = 5;
+                cursorPoint = 5; // top row, right columne (SLOT_TRADE_DEED)
+                cursorY = 0;
 
-            while (true) {
-                if (gSaveContext.save.inventory.items[cursorPoint] != ITEM_NONE) {
-                    pauseCtx->cursorPoint[PAUSE_ITEM] = cursorPoint;
-                    pauseCtx->cursorX[PAUSE_ITEM] = cursorX;
-                    pauseCtx->cursorY[PAUSE_ITEM] = cursorY;
-                    moveCursorResult = 1;
+                // Search for slot to move to
+                while (true) {
+                    // Check if current cursor has an item in its slot
+                    if (gSaveContext.save.inventory.items[cursorPoint] != ITEM_NONE) {
+                        pauseCtx->cursorPoint[PAUSE_ITEM] = cursorPoint;
+                        pauseCtx->cursorX[PAUSE_ITEM] = cursorX;
+                        pauseCtx->cursorY[PAUSE_ITEM] = cursorY;
+                        moveCursorResult = 1;
+                        break;
+                    }
+
+                    // move 1 row down and retry
+                    cursorY++;
+                    cursorPoint += 6;
+                    if (cursorY < 4) {
+                        continue;
+                    }
+
+                    // move 1 column left and retry
+                    cursorY = 0;
+                    cursorPoint = cursorX - 1;
+                    cursorX = cursorPoint;
+                    if (cursorX >= 0) {
+                        continue;
+                    }
+
+                    // No item available
+                    KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
                     break;
                 }
-
-                cursorY++;
-                cursorPoint += 6;
-                if (cursorY < 4) {
-                    continue;
-                }
-
-                cursorY = 0;
-                cursorPoint = cursorX - 1;
-                cursorX = cursorPoint;
-                if (cursorX >= 0) {
-                    continue;
-                }
-
-                KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
-                break;
             }
         }
 
         if (pauseCtx->cursorSpecialPos == 0) {
+            // move cursor up/down
             if (ABS_ALT(pauseCtx->stickRelY) > 30) {
                 moveCursorResult = 0;
 
@@ -485,6 +535,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
 
                 while (moveCursorResult == 0) {
                     if (pauseCtx->stickRelY > 30) {
+                        // move cursor up
                         moveCursorResult = 2;
                         if (pauseCtx->cursorY[PAUSE_ITEM] != 0) {
                             pauseCtx->cursorY[PAUSE_ITEM]--;
@@ -496,6 +547,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
                             pauseCtx->cursorPoint[PAUSE_ITEM] = cursorPoint;
                         }
                     } else if (pauseCtx->stickRelY < -30) {
+                        // move cursor down
                         moveCursorResult = 2;
                         if (pauseCtx->cursorY[PAUSE_ITEM] < 3) {
                             pauseCtx->cursorY[PAUSE_ITEM]++;
@@ -538,55 +590,61 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
 
             pauseCtx->cursorItem[PAUSE_ITEM] = cursorItem;
             pauseCtx->cursorSlot[PAUSE_ITEM] = cursorSlot;
-
             if (cursorItem != PAUSE_ITEM_NONE) {
-                if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->unk_2B9 == 0) &&
+                // Equip item to the C buttons
+                if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && !pauseCtx->itemDescriptionOn &&
                     (pauseCtx->state == 6) && (pauseCtx->unk_200 == 0) &&
                     CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button, BTN_CLEFT | BTN_CDOWN | BTN_CRIGHT)) {
-                    if (gSaveContext.save.playerForm != 4) {
+
+                    // Ensure that a transformation mask can not be unequipped while being used
+                    if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
                         if (1) {}
                         if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CLEFT)) {
-                            if (D_8082B47C[((void)0, gSaveContext.save.playerForm)] ==
+                            if (sPlayerFormItems[((void)0, gSaveContext.save.playerForm)] ==
                                 BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)) {
                                 play_sound(NA_SE_SY_ERROR);
                                 return;
                             }
                         } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CDOWN)) {
-                            if (D_8082B47C[((void)0, gSaveContext.save.playerForm)] ==
+                            if (sPlayerFormItems[((void)0, gSaveContext.save.playerForm)] ==
                                 BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)) {
                                 play_sound(NA_SE_SY_ERROR);
                                 return;
                             }
-                        } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CRIGHT) &&
-                                   (D_8082B47C[((void)0, gSaveContext.save.playerForm)] ==
-                                    BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT))) {
-                            play_sound(NA_SE_SY_ERROR);
-                            return;
+                        } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CRIGHT)) {
+                            if (sPlayerFormItems[((void)0, gSaveContext.save.playerForm)] ==
+                                BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)) {
+                                play_sound(NA_SE_SY_ERROR);
+                                return;
+                            }
                         }
                     }
 
+                    // Ensure that a non-transformation mask can not be unequipped while being used
                     if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CLEFT)) {
                         if ((Player_GetCurMaskItemId(play) != ITEM_NONE) &&
                             (Player_GetCurMaskItemId(play) == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT))) {
                             play_sound(NA_SE_SY_ERROR);
                             return;
                         }
-                        pauseCtx->equipTargetCBtn = 0;
+                        pauseCtx->equipTargetCBtn = PAUSE_EQUIP_C_LEFT;
                     } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CDOWN)) {
                         if ((Player_GetCurMaskItemId(play) != ITEM_NONE) &&
                             (Player_GetCurMaskItemId(play) == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN))) {
                             play_sound(NA_SE_SY_ERROR);
                             return;
                         }
-                        pauseCtx->equipTargetCBtn = 1;
+                        pauseCtx->equipTargetCBtn = PAUSE_EQUIP_C_DOWN;
                     } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CRIGHT)) {
                         if ((Player_GetCurMaskItemId(play) != ITEM_NONE) &&
                             (Player_GetCurMaskItemId(play) == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT))) {
                             play_sound(NA_SE_SY_ERROR);
                             return;
                         }
-                        pauseCtx->equipTargetCBtn = 2;
+                        pauseCtx->equipTargetCBtn = PAUSE_EQUIP_C_RIGHT;
                     }
+
+                    // Equip item to the C buttons
                     pauseCtx->equipTargetItem = cursorItem;
                     pauseCtx->equipTargetSlot = cursorSlot;
                     pauseCtx->unk_200 = 3;
@@ -594,31 +652,32 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
                     pauseCtx->equipAnimX = pauseCtx->itemVtx[vtxIndex].v.ob[0] * 10;
                     pauseCtx->equipAnimY = pauseCtx->itemVtx[vtxIndex].v.ob[1] * 10;
                     pauseCtx->equipAnimAlpha = 255;
-                    sEquipAnimTimer = 0;
-                    sEquipState = 3;
-                    sEquipMoveTimer = 10;
+                    sEquipMagicArrowSlotHoldTimer = 0;
+                    sEquipState = EQUIP_STATE_MOVE_TO_C_BTN;
+                    sEquipAnimTimer = 10;
 
                     if ((pauseCtx->equipTargetItem == ITEM_ARROW_FIRE) ||
                         (pauseCtx->equipTargetItem == ITEM_ARROW_ICE) ||
                         (pauseCtx->equipTargetItem == ITEM_ARROW_LIGHT)) {
-                        index = 0;
+                        magicArrowIndex = 0;
                         if (pauseCtx->equipTargetItem == ITEM_ARROW_ICE) {
-                            index = 1;
+                            magicArrowIndex = 1;
                         }
                         if (pauseCtx->equipTargetItem == ITEM_ARROW_LIGHT) {
-                            index = 2;
+                            magicArrowIndex = 2;
                         }
-                        play_sound(NA_SE_SY_SET_FIRE_ARROW + index);
-                        pauseCtx->equipTargetItem = 0xB5 + index;
-                        pauseCtx->equipAnimAlpha = sEquipState = 0;
-                        sEquipMoveTimer = 6;
+                        play_sound(NA_SE_SY_SET_FIRE_ARROW + magicArrowIndex);
+                        pauseCtx->equipTargetItem = 0xB5 + magicArrowIndex;
+                        pauseCtx->equipAnimAlpha = sEquipState = 0; // EQUIP_STATE_MAGIC_ARROW_GROW_ORB
+                        sEquipAnimTimer = 6;
                     } else {
                         play_sound(NA_SE_SY_DECIDE);
                     }
                 } else if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->state == 6) &&
                            (pauseCtx->unk_200 == 0) && CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) &&
                            (msgCtx->msgLength == 0)) {
-                    pauseCtx->unk_2B9 = 1;
+                    // Give description on item through a message box
+                    pauseCtx->itemDescriptionOn = true;
                     if (pauseCtx->cursorY[PAUSE_ITEM] < 2) {
                         func_801514B0(play, 0x1700 + pauseCtx->cursorItem[PAUSE_ITEM], 3);
                     } else {
@@ -633,7 +692,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_ITEM]) {
             play_sound(NA_SE_SY_CURSOR);
         }
-    } else if ((pauseCtx->unk_200 == 3) && (pauseCtx->pageIndex == 0)) {
+    } else if ((pauseCtx->unk_200 == 3) && (pauseCtx->pageIndex == PAUSE_ITEM)) {
         pauseCtx->cursorColorSet = 2;
     }
 }
@@ -641,44 +700,46 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
 s16 sCButtonPosX[] = { 660, 900, 1140 };
 s16 sCButtonPosY[] = { 1100, 920, 1100 };
 void KaleidoScope_UpdateItemEquip(PlayState* play) {
-    static s16 D_8082B494 = 0;
+    static s16 sEquipMagicArrowBowSlotHoldTimer = 0;
     PauseContext* pauseCtx = &play->pauseCtx;
     Vtx* bowItemVtx;
     u16 offsetX;
     u16 offsetY;
 
-    if (sEquipState == 0) {
+    // Grow glowing orb when equipping magic arrows
+    if (sEquipState == EQUIP_STATE_MAGIC_ARROW_GROW_ORB) {
         pauseCtx->equipAnimAlpha += 14;
         if (pauseCtx->equipAnimAlpha > 255) {
             pauseCtx->equipAnimAlpha = 254;
             sEquipState++;
         }
-        sEquipAnimTimer = 5;
+        // Hover over magic arrow slot when the next state is reached
+        sEquipMagicArrowSlotHoldTimer = 5;
         return;
     }
 
-    if (sEquipState == 2) {
-        D_8082B494--;
+    if (sEquipState == EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT) {
+        sEquipMagicArrowBowSlotHoldTimer--;
 
-        if (D_8082B494 == 0) {
+        if (sEquipMagicArrowBowSlotHoldTimer == 0) {
             pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
             pauseCtx->equipTargetSlot = SLOT_BOW;
-            sEquipMoveTimer = 6;
-            pauseCtx->unk_2BA = 320;
-            pauseCtx->unk_2BC = 40;
+            sEquipAnimTimer = 6;
+            pauseCtx->equipAnimScale = 320;
+            pauseCtx->equipAnimShrinkRate = 40;
             sEquipState++;
             play_sound(NA_SE_SY_SYNTH_MAGIC_ARROW);
         }
         return;
     }
 
-    if (sEquipState == 1) {
+    if (sEquipState == EQUIP_STATE_MAGIC_ARROW_MOVE_TO_BOW_SLOT) {
         bowItemVtx = &pauseCtx->itemVtx[4];
-        offsetX = ABS_ALT(pauseCtx->equipAnimX - bowItemVtx->v.ob[0] * 10) / sEquipMoveTimer;
-        offsetY = ABS_ALT(pauseCtx->equipAnimY - bowItemVtx->v.ob[1] * 10) / sEquipMoveTimer;
+        offsetX = ABS_ALT(pauseCtx->equipAnimX - bowItemVtx->v.ob[0] * 10) / sEquipAnimTimer;
+        offsetY = ABS_ALT(pauseCtx->equipAnimY - bowItemVtx->v.ob[1] * 10) / sEquipAnimTimer;
     } else {
-        offsetX = ABS_ALT(pauseCtx->equipAnimX - sCButtonPosX[pauseCtx->equipTargetCBtn]) / sEquipMoveTimer;
-        offsetY = ABS_ALT(pauseCtx->equipAnimY - sCButtonPosY[pauseCtx->equipTargetCBtn]) / sEquipMoveTimer;
+        offsetX = ABS_ALT(pauseCtx->equipAnimX - sCButtonPosX[pauseCtx->equipTargetCBtn]) / sEquipAnimTimer;
+        offsetY = ABS_ALT(pauseCtx->equipAnimY - sCButtonPosY[pauseCtx->equipTargetCBtn]) / sEquipAnimTimer;
     }
 
     if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipAnimAlpha < 254)) {
@@ -686,15 +747,17 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
         if (pauseCtx->equipAnimAlpha > 255) {
             pauseCtx->equipAnimAlpha = 254;
         }
-        sEquipAnimTimer = 5;
+        sEquipMagicArrowSlotHoldTimer = 5;
         return;
     }
 
-    if (sEquipAnimTimer == 0) {
-        pauseCtx->unk_2BA -= pauseCtx->unk_2BC / sEquipMoveTimer;
-        pauseCtx->unk_2BC -= pauseCtx->unk_2BC / sEquipMoveTimer;
+    if (sEquipMagicArrowSlotHoldTimer == 0) {
+        pauseCtx->equipAnimScale -= pauseCtx->equipAnimShrinkRate / sEquipAnimTimer;
+        pauseCtx->equipAnimShrinkRate -= pauseCtx->equipAnimShrinkRate / sEquipAnimTimer;
 
-        if (sEquipState == 1) {
+        // Update coordinates of item icon while being equipped
+        if (sEquipState == EQUIP_STATE_MAGIC_ARROW_MOVE_TO_BOW_SLOT) {
+            // target is the bow slot
             if (pauseCtx->equipAnimX >= (pauseCtx->itemVtx[4].v.ob[0] * 10)) {
                 pauseCtx->equipAnimX -= offsetX;
             } else {
@@ -707,6 +770,7 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
                 pauseCtx->equipAnimY += offsetY;
             }
         } else {
+            // target is the c button
             if (pauseCtx->equipAnimX >= sCButtonPosX[pauseCtx->equipTargetCBtn]) {
                 pauseCtx->equipAnimX -= offsetX;
             } else {
@@ -720,16 +784,17 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
             }
         }
 
-        sEquipMoveTimer--;
-
-        if (sEquipMoveTimer == 0) {
-            if (sEquipState == 1) {
+        sEquipAnimTimer--;
+        if (sEquipAnimTimer == 0) {
+            if (sEquipState == EQUIP_STATE_MAGIC_ARROW_MOVE_TO_BOW_SLOT) {
                 sEquipState++;
-                D_8082B494 = 4;
+                sEquipMagicArrowBowSlotHoldTimer = 4;
                 return;
             }
 
-            if (pauseCtx->equipTargetCBtn == 0) {
+            // Equip item onto c buttons
+            if (pauseCtx->equipTargetCBtn == PAUSE_EQUIP_C_LEFT) {
+                // Swap if item is already equipped on CDown or CRight.
                 if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN)) {
                     if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) & 0xFF) != ITEM_NONE) {
                         if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8) &&
@@ -766,6 +831,7 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
                     }
                 }
 
+                // Special case for magic arrows
                 if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8)) {
                     if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) == ITEM_BOW) ||
                         ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) >= ITEM_BOW_ARROW_FIRE) &&
@@ -787,10 +853,12 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
                     }
                 }
 
+                // Equip item on CLeft
                 BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) = pauseCtx->equipTargetItem;
                 C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT) = pauseCtx->equipTargetSlot;
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_C_LEFT);
-            } else if (pauseCtx->equipTargetCBtn == 1) {
+            } else if (pauseCtx->equipTargetCBtn == PAUSE_EQUIP_C_DOWN) {
+                // Swap if item is already equipped on CLeft or CRight.
                 if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT)) {
                     if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) & 0xFF) != ITEM_NONE) {
                         if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8) &&
@@ -827,6 +895,7 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
                     }
                 }
 
+                // Special case for magic arrows
                 if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8)) {
                     if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) == ITEM_BOW) ||
                         ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) >= ITEM_BOW_ARROW_FIRE) &&
@@ -845,10 +914,13 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
                         Interface_LoadItemIcon(play, EQUIP_SLOT_C_RIGHT);
                     }
                 }
+
+                // Equip item on CDown
                 BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = pauseCtx->equipTargetItem;
                 C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN) = pauseCtx->equipTargetSlot;
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_C_DOWN);
-            } else {
+            } else { // (pauseCtx->equipTargetCBtn == PAUSE_EQUIP_C_RIGHT)
+                // Swap if item is already equipped on CLeft or CDown.
                 if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT)) {
                     if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) & 0xFF) != ITEM_NONE) {
                         if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8) &&
@@ -885,6 +957,7 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
                     }
                 }
 
+                // Special case for magic arrows
                 if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipTargetItem < 0xB8)) {
                     if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) == ITEM_BOW) ||
                         ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) >= ITEM_BOW_ARROW_FIRE) &&
@@ -903,18 +976,22 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
                         Interface_LoadItemIcon(play, EQUIP_SLOT_C_DOWN);
                     }
                 }
+
+                // Equip item on CRight
                 BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) = pauseCtx->equipTargetItem;
                 C_SLOT_EQUIP(0, EQUIP_SLOT_C_RIGHT) = pauseCtx->equipTargetSlot;
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_C_RIGHT);
             }
+
+            // Reset params
             pauseCtx->unk_200 = 0;
-            sEquipMoveTimer = 10;
-            pauseCtx->unk_2BA = 320;
-            pauseCtx->unk_2BC = 40;
+            sEquipAnimTimer = 10;
+            pauseCtx->equipAnimScale = 320;
+            pauseCtx->equipAnimShrinkRate = 40;
         }
     } else {
-        sEquipAnimTimer--;
-        if (sEquipAnimTimer == 0) {
+        sEquipMagicArrowSlotHoldTimer--;
+        if (sEquipMagicArrowSlotHoldTimer == 0) {
             pauseCtx->equipAnimAlpha = 255;
         }
     }

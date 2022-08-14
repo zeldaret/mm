@@ -355,7 +355,7 @@ void KaleidoScope_HandlePageToggles(PlayState* play, Input* input) {
 
     if (1) {}
 
-    if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->unk_2B9 == 0)) {
+    if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && !pauseCtx->itemDescriptionOn) {
         if (CHECK_BTN_ALL(input->cur.button, BTN_DRIGHT) || CHECK_BTN_ALL(input->press.button, BTN_R)) {
             if (interfaceCtx->unk_212 == 6) {
                 func_8011552C(play, 0x15);
@@ -430,7 +430,6 @@ Gfx* KaleidoScope_DrawPageSections(Gfx* gfx, Vtx* vertices, void** textures) {
 
 void func_801091F0(PlayState*);
 void func_808160A0(PlayState*);
-void func_8081B6EC(PlayState*);
 void func_8081D6DC(PlayState*);
 void KaleidoScope_DrawWorldMap(PlayState*);
 void func_8081FF80(PlayState*);
@@ -522,7 +521,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->itemPageVtx, &D_8082B73C[0]);
 
-            func_8081B6EC(play);
+            KaleidoScope_DrawItemSelect(play);
         }
 
         if ((pauseCtx->pageIndex != PAUSE_MAP) && (pauseCtx->pageIndex != PAUSE_MASK)) {
@@ -615,7 +614,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
                     POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->itemPageVtx, &D_8082B73C[0]);
 
-                    func_8081B6EC(play);
+                    KaleidoScope_DrawItemSelect(play);
                 }
                 break;
 

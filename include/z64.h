@@ -475,9 +475,9 @@ typedef struct {
     /* 0x2B6 */ u8 unk_2B6;
     /* 0x2B7 */ u8 unk_2B7;
     /* 0x2B8 */ u8 unk_2B8;
-    /* 0x2B9 */ u8 unk_2B9;
-    /* 0x2BA */ s16 unk_2BA;
-    /* 0x2BC */ s16 unk_2BC;
+    /* 0x2B9 */ u8 itemDescriptionOn; // helpful description of item given through a message box
+    /* 0x2BA */ s16 equipAnimScale; // scale of item icon while moving being equipped to c-button
+    /* 0x2BC */ s16 equipAnimShrinkRate; // rate the scale is shrinking for the item icon while moving being equipped to c-button
     /* 0x2BE */ s16 unk_2BE[5];
     /* 0x2C8 */ u16 unk_2C8;
     /* 0x2CA */ s16 unk_2CA;

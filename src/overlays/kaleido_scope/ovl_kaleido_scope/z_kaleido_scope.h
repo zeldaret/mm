@@ -17,6 +17,12 @@ typedef enum {
 } PauseMenuPage;
 
 typedef enum {
+    /* 0 */ PAUSE_EQUIP_C_LEFT,
+    /* 1 */ PAUSE_EQUIP_C_DOWN,
+    /* 2 */ PAUSE_EQUIP_C_RIGHT
+} PauseEquipCButton;
+
+typedef enum {
   /* 0 */ DEBUG_EDITOR_NONE,
   /* 1 */ DEBUG_EDITOR_INVENTORY_INIT,
   /* 2 */ DEBUG_EDITOR_INVENTORY,
@@ -32,7 +38,9 @@ void func_80821A04(PlayState* play);
 void func_8081FB1C(PlayState* play);
 
 // Item
+void KaleidoScope_SetCursorVtx(PauseContext* pauseCtx, u16 index, Vtx* vtx);
 void KaleidoScope_DrawItemSelect(PlayState* play);
+void KaleidoScope_UpdateItemCursor(PlayState* play);
 void KaleidoScope_UpdateItemEquip(PlayState* play);
 
 // Debug
