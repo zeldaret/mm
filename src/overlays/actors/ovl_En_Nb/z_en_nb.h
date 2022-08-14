@@ -13,10 +13,10 @@ typedef enum EnNbAnimation {
     /* -1 */ EN_NB_ANIM_INVALID = -1,
     /*  0 */ EN_NB_ANIM_0,
     /*  1 */ EN_NB_ANIM_1,
-    /*  2 */ EN_NB_ANIM_2,
-    /*  3 */ EN_NB_ANIM_3,
-    /*  4 */ EN_NB_ANIM_4,
-    /*  5 */ EN_NB_ANIM_5,
+    /*  2 */ EN_NB_ANIM_TALK_ONCE,
+    /*  3 */ EN_NB_ANIM_TALK_LOOP,
+    /*  4 */ EN_NB_ANIM_ANGRY,
+    /*  5 */ EN_NB_ANIM_RELIEVED,
 } EnNbAnimation;
 
 typedef struct EnNb {
@@ -32,8 +32,8 @@ typedef struct EnNb {
     /* 0x1EC */ char unk_1EC[0x04];
     /* 0x1F0 */ Vec3f unk_1F0;
     /* 0x1FC */ Vec3s unk_1FC;
-    /* 0x202 */ Vec3s jointTable[OBJECT_NB_LIMB_MAX];
-    /* 0x232 */ Vec3s morphTable[OBJECT_NB_LIMB_MAX];
+    /* 0x202 */ Vec3s jointTable[NB_LIMB_MAX];
+    /* 0x232 */ Vec3s morphTable[NB_LIMB_MAX];
     /* 0x262 */ u16 stateFlags;
     /* 0x264 */ u16 textId;
     /* 0x268 */ f32 animPlaySpeed;
