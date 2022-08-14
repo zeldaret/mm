@@ -3319,17 +3319,11 @@ void func_808302CC(Player* this, PlayState* play) {
         var_v1 = (actionParam == PLAYER_AP_NONE) ? -0xD : 0xD;
     }
 
-    if (var_v1 < 0) {
-        this->unk_14E = -var_v1;
-    } else {
-        this->unk_14E = var_v1;
-    }
-
+    this->unk_14E = ABS_ALT(var_v1);
     anim = D_8085CC88[this->unk_14E].anim;
     if ((anim == &gameplay_keep_Linkanim_00DC50) && (this->currentShield == PLAYER_SHIELD_NONE)) {
         anim = &gameplay_keep_Linkanim_00DC60;
     }
-
     endFrame = Animation_GetLastFrame(anim);
     if (var_v1 >= 0) {
         frameSpeed = 1.2f;
