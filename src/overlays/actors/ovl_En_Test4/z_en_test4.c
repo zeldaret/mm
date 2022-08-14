@@ -445,7 +445,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     u32 entranceIndex = gSaveContext.save.entranceIndex;
 
                     if ((play->actorCtx.unk5 & 2)) {
-                        playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_C);
+                        playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_TELESCOPE);
                     } else {
                         playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B);
                     }

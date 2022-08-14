@@ -229,22 +229,23 @@ s32 func_8084933C(Player* this, PlayState* play);
 s32 func_80849570(Player* this, PlayState* play);
 s32 func_80849620(Player* this, PlayState* play);
 
-void func_808412A0(PlayState* play, Player* this);
-void func_80841408(PlayState* play, Player* this);
-void func_808412BC(PlayState* play, Player* this);
-void func_808414E0(PlayState* play, Player* this);
-void func_80841528(PlayState* play, Player* this);
-void func_808415E4(PlayState* play, Player* this);
-void func_80841624(PlayState* play, Player* this);
-void func_808415A0(PlayState* play, Player* this);
+/* Init Mode functions */
+void Player_InitMode_0(PlayState* play, Player* this);
+void Player_InitMode_1(PlayState* play, Player* this);
+void Player_InitMode_2(PlayState* play, Player* this);
+void Player_InitMode_3(PlayState* play, Player* this);
+void Player_InitMode_4(PlayState* play, Player* this);
+void Player_InitMode_5(PlayState* play, Player* this);
+void Player_InitMode_6(PlayState* play, Player* this);
+void Player_InitMode_7(PlayState* play, Player* this);
 void func_80841744(PlayState* play, Player* this);
 void func_80841744(PlayState* play, Player* this);
 void func_8083ADF0(PlayState* play, Player* this);
-void func_8083AD8C(PlayState* play, Player* this);
-void func_8083AD04(PlayState* play, Player* this);
-void func_8083ADB8(PlayState* play, Player* this);
+void Player_InitMode_B(PlayState* play, Player* this);
+void Player_InitMode_Telescope(PlayState* play, Player* this);
+void Player_InitMode_D(PlayState* play, Player* this);
 void func_8083ADF0(PlayState* play, Player* this);
-void func_8083AE38(PlayState* play, Player* this);
+void Player_InitMode_F(PlayState* play, Player* this);
 
 void func_80859F4C(PlayState* play, Player* this, UNK_TYPE arg2);
 void func_80859FCC(PlayState* play, Player* this, UNK_TYPE arg2);
@@ -7556,7 +7557,7 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
 }
 
 // Set up using a telescope
-void func_8083AD04(PlayState* play, Player* this) {
+void Player_InitMode_Telescope(PlayState* play, Player* this) {
     this->actor.update = func_8083A98C;
     this->actor.draw = NULL;
     if (play->sceneNum == SCENE_00KEIKOKU) {
@@ -7575,16 +7576,17 @@ void func_8083AD04(PlayState* play, Player* this) {
     play->actorCtx.unk5 |= 2;
 }
 
-void func_8083AD8C(PlayState* play, Player* this) {
+void Player_InitMode_B(PlayState* play, Player* this) {
     func_8085B384(this, play);
 }
 
-void func_8083ADB8(PlayState* play, Player* this) {
+void Player_InitMode_D(PlayState* play, Player* this) {
     if (func_8083A878(play, this, 180.0f)) {
         this->unk_AE8 = -20;
     }
 }
 
+// InitModes 0xA and 0xE
 void func_8083ADF0(PlayState* play, Player* this) {
     this->linearVelocity = 2.0f;
     gSaveContext.entranceSpeed = 2.0f;
@@ -7594,7 +7596,7 @@ void func_8083ADF0(PlayState* play, Player* this) {
     }
 }
 
-void func_8083AE38(PlayState* play, Player* this) {
+void Player_InitMode_F(PlayState* play, Player* this) {
     if (gSaveContext.entranceSpeed < 0.1f) {
         gSaveContext.entranceSpeed = 0.1f;
     }
@@ -9730,12 +9732,12 @@ s32 func_808411D4(PlayState* play, Player* this, f32* arg2, s32 arg3) {
     return sp2C;
 }
 
-void func_808412A0(PlayState* play, Player* this) {
+void Player_InitMode_0(PlayState* play, Player* this) {
     this->actor.update = func_801229EC;
     this->actor.draw = NULL;
 }
 
-void func_808412BC(PlayState* play, Player* this) {
+void Player_InitMode_2(PlayState* play, Player* this) {
     Player_SetAction(play, this, func_80854118, 0);
     this->stateFlags1 |= PLAYER_STATE1_20000000;
     LinkAnimation_Change(play, &this->skelAnime, &gameplay_keep_Linkanim_00DF78, 2.0f / 3.0f, 0.0f, 24.0f,
@@ -9770,7 +9772,7 @@ void func_80841358(PlayState* play, Player* this, s32 arg2) {
 
 Vec3f D_8085D2B4 = { -1.0f, 69.0f, 20.0f };
 
-void func_80841408(PlayState* play, Player* this) {
+void Player_InitMode_1(PlayState* play, Player* this) {
     Player_SetAction(play, this, func_80852FD4, 0);
     this->stateFlags1 |= PLAYER_STATE1_20000000;
     Math_Vec3f_Copy(&this->actor.world.pos, &D_8085D2B4);
@@ -9784,31 +9786,31 @@ void func_80841408(PlayState* play, Player* this) {
     this->unk_AE8 = 20;
 }
 
-void func_808414E0(PlayState* play, Player* this) {
+void Player_InitMode_3(PlayState* play, Player* this) {
     Player_SetAction(play, this, func_8085437C, 0);
     func_8082E920(play, this, (1 | 2 | 8 | 0x10 | 0x80));
 }
 
 void func_80834DB8(Player* this, LinkAnimationHeader* anim, f32 arg2, PlayState* play);
 
-void func_80841528(PlayState* play, Player* this) {
+void Player_InitMode_4(PlayState* play, Player* this) {
     func_80834DB8(this, &gameplay_keep_Linkanim_00DCD8, 12.0f, play);
     Player_SetAction(play, this, func_8085439C, 0);
     this->stateFlags1 |= PLAYER_STATE1_20000000;
     this->fallStartHeight = this->actor.world.pos.y;
 }
 
-void func_808415A0(PlayState* play, Player* this) {
+void Player_InitMode_7(PlayState* play, Player* this) {
     func_80833B18(play, this, 1, 2.0f, 2.0f, this->actor.shape.rot.y + 0x8000, 0);
 }
 
-void func_808415E4(PlayState* play, Player* this) {
+void Player_InitMode_5(PlayState* play, Player* this) {
     Player_SetAction(play, this, func_808540A0, 0);
     this->actor.draw = NULL;
     this->stateFlags1 |= PLAYER_STATE1_20000000;
 }
 
-void func_80841624(PlayState* play, Player* this) {
+void Player_InitMode_6(PlayState* play, Player* this) {
     if (gSaveContext.save.isOwlSave) {
         Player_SetAction(play, this, func_808496AC, 0);
         func_8082E514(play, this, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_43, this->modelAnimType));
@@ -9825,6 +9827,7 @@ void func_80841624(PlayState* play, Player* this) {
     }
 }
 
+// InitModes 0x8 and 0x9
 void func_80841744(PlayState* play, Player* this) {
     Player_SetAction(play, this, func_80855C28, 0);
     if (PLAYER_GET_INITMODE(&this->actor) == PLAYER_INITMODE_8) {
@@ -9850,9 +9853,9 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->currentYaw = this->actor.world.rot.y;
 
-    if ((PLAYER_GET_INITMODE(&this->actor) != PLAYER_INITMODE_C) &&
+    if ((PLAYER_GET_INITMODE(&this->actor) != PLAYER_INITMODE_TELESCOPE) &&
         ((gSaveContext.respawnFlag != 2) ||
-         (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams != PLAYER_PARAMS(0xFF, PLAYER_INITMODE_C)))) {
+         (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams != PLAYER_PARAMS(0xFF, PLAYER_INITMODE_TELESCOPE)))) {
         func_808309CC(play, this);
         SkelAnime_InitLink(play, &this->skelAnime, skelHeader, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_0, this->modelAnimType),
                            1 | 8, this->jointTableBuffer, this->morphTableBuffer, PLAYER_LIMB_MAX);
@@ -9887,25 +9890,28 @@ void func_80841A50(PlayState* play, Player* this) {
     }
 }
 
+typedef void (*PlayerInitModeFunc)(PlayState*, Player*);
+
 // Initialisation functions for various gameplay modes depending on spawn params. There may be at most 0x10 due to it
 // using a single nybble.
-void (*D_8085D2CC[0x10])(PlayState*, Player*) = {
-    /* 0x0 */ func_808412A0,
-    /* 0x1 */ func_80841408,
-    /* 0x2 */ func_808412BC,
-    /* 0x3 */ func_808414E0,
-    /* 0x4 */ func_80841528,
-    /* 0x5 */ func_808415E4,
-    /* 0x6 */ func_80841624,
-    /* 0x7 */ func_808415A0,
+// sInitModeFuncs
+PlayerInitModeFunc D_8085D2CC[0x10] = {
+    /* 0x0 */ Player_InitMode_0,
+    /* 0x1 */ Player_InitMode_1,
+    /* 0x2 */ Player_InitMode_2,
+    /* 0x3 */ Player_InitMode_3,
+    /* 0x4 */ Player_InitMode_4,
+    /* 0x5 */ Player_InitMode_5,
+    /* 0x6 */ Player_InitMode_6,
+    /* 0x7 */ Player_InitMode_7,
     /* 0x8 */ func_80841744,
     /* 0x9 */ func_80841744,
     /* 0xA */ func_8083ADF0,
-    /* 0xB */ func_8083AD8C,
-    /* 0xC */ func_8083AD04, // Telescope
-    /* 0xD */ func_8083ADB8,
+    /* 0xB */ Player_InitMode_B,
+    /* 0xC */ Player_InitMode_Telescope, // Telescope
+    /* 0xD */ Player_InitMode_D,
     /* 0xE */ func_8083ADF0,
-    /* 0xF */ func_8083AE38,
+    /* 0xF */ Player_InitMode_F,
 };
 
 // sBlureInit
@@ -9917,7 +9923,9 @@ EffectBlureInit2 D_8085D30C = {
 // sTireMarkInit ?
 EffectTireMarkInit D_8085D330 = { 0, 63, { 0, 0, 15, 100 } };
 
+// sTireMarkGoronColor ?
 Color_RGBA8 D_8085D338 = { 0, 0, 15, 100 };
+// sTireMarkOtherColor ?
 Color_RGBA8 D_8085D33C = { 0, 0, 0, 150 };
 Vec3f D_8085D340 = { 0.0f, 50.0f, 0.0f };
 
@@ -10016,16 +10024,16 @@ void Player_Init(Actor* thisx, PlayState* play) {
     Player_InitCommon(this, play, gPlayerSkeletons[this->transformation]);
 
     if (this->actor.shape.rot.z != 0) {
-        EffectTireMark* effect;
+        EffectTireMark* tireMark;
 
         this->actor.shape.rot.z = 0;
         func_8082F938(play, this, 0, 4);
 
-        effect = Effect_GetByIndex(this->meleeWeaponEffectIndex[2]);
+        tireMark = Effect_GetByIndex(this->meleeWeaponEffectIndex[2]);
         if (this->transformation == PLAYER_FORM_GORON) {
-            effect->color = D_8085D338;
+            tireMark->color = D_8085D338;
         } else {
-            effect->color = D_8085D33C;
+            tireMark->color = D_8085D33C;
         }
 
         if ((this->csMode == PLAYER_CSMODE_9) || (this->csMode == PLAYER_CSMODE_93)) {

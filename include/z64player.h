@@ -837,7 +837,7 @@ typedef enum {
     /* 0x9 */ PLAYER_INITMODE_9,
     /* 0xA */ PLAYER_INITMODE_A,
     /* 0xB */ PLAYER_INITMODE_B,
-    /* 0xC */ PLAYER_INITMODE_C,
+    /* 0xC */ PLAYER_INITMODE_TELESCOPE,
     /* 0xD */ PLAYER_INITMODE_D,
     /* 0xE */ PLAYER_INITMODE_E,
     /* 0xF */ PLAYER_INITMODE_F

@@ -1735,22 +1735,22 @@ u8 D_8085D2B0[4] = { 0x4E, 0x4D, 0, 0 };
 Vec3f D_8085D2B4 = { -1.0f, 69.0f, 20.0f };
 Vec3s D_8085D2C4 = { -0x39, 0xD31, 0 };
 void (*D_8085D2CC[0x10])(PlayState*, Player*) = {
-    func_808412A0,
-    func_80841408,
-    func_808412BC,
-    func_808414E0,
-    func_80841528,
-    func_808415E4,
-    func_80841624,
-    func_808415A0,
+    Player_InitMode_0,
+    Player_InitMode_1,
+    Player_InitMode_2,
+    Player_InitMode_3,
+    Player_InitMode_4,
+    Player_InitMode_5,
+    Player_InitMode_6,
+    Player_InitMode_7,
     func_80841744,
     func_80841744,
     func_8083ADF0,
-    func_8083AD8C,
-    func_8083AD04,
-    func_8083ADB8,
+    Player_InitMode_B,
+    Player_InitMode_Telescope,
+    Player_InitMode_D,
     func_8083ADF0,
-    func_8083AE38,
+    Player_InitMode_F,
 };
 EffectBlureInit2 D_8085D30C = {
     0,
@@ -8020,7 +8020,7 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
     }
 }
 
-void func_8083AD04(PlayState* play, Player* this) {
+void Player_InitMode_Telescope(PlayState* play, Player* this) {
     s16 temp_v0;
 
     this->actor.update = func_8083A98C;
@@ -8042,11 +8042,11 @@ void func_8083AD04(PlayState* play, Player* this) {
     play->actorCtx.unk5 |= 2;
 }
 
-void func_8083AD8C(PlayState* play, Player* this) {
+void Player_InitMode_B(PlayState* play, Player* this) {
     func_8085B384(this, play);
 }
 
-void func_8083ADB8(PlayState* play, Player* this) {
+void Player_InitMode_D(PlayState* play, Player* this) {
     if (func_8083A878(play, this, 180.0f) != 0) {
         this->unk_AE8 = -0x14;
     }
@@ -8060,7 +8060,7 @@ void func_8083ADF0(PlayState* play, Player* this) {
     }
 }
 
-void func_8083AE38(PlayState* play, Player* this) {
+void Player_InitMode_F(PlayState* play, Player* this) {
     if (gSaveContext.entranceSpeed < 0.1f) {
         gSaveContext.entranceSpeed = 0.1f;
     }
@@ -10544,12 +10544,12 @@ s32 func_808411D4(PlayState* play, Player* this, f32* arg2, s32 arg3) {
     return sp2C;
 }
 
-void func_808412A0(PlayState* play, Player* this) {
+void Player_InitMode_0(PlayState* play, Player* this) {
     this->actor.update = func_801229EC;
     this->actor.draw = NULL;
 }
 
-void func_808412BC(PlayState* play, Player* this) {
+void Player_InitMode_2(PlayState* play, Player* this) {
     Player_SetAction(play, this, func_80854118, 0);
     this->stateFlags1 |= 0x20000000;
     LinkAnimation_Change(play, &this->skelAnime, &D_0400DF78, 0.6666667f, 0.0f, 24.0f, (u8) 2, 0.0f);
@@ -10575,7 +10575,7 @@ void func_80841358(PlayState* play, Player* this, s32 arg2) {
     }
 }
 
-void func_80841408(PlayState* play, Player* this) {
+void Player_InitMode_1(PlayState* play, Player* this) {
     Player_SetAction(play, this, func_80852FD4, 0);
     this->stateFlags1 |= 0x20000000;
     Math_Vec3f_Copy(&this->actor.world.pos, &D_8085D2B4);
@@ -10589,29 +10589,29 @@ void func_80841408(PlayState* play, Player* this) {
     this->unk_AE8 = 0x14;
 }
 
-void func_808414E0(PlayState* play, Player* this) {
+void Player_InitMode_3(PlayState* play, Player* this) {
     Player_SetAction(play, this, func_8085437C, 0);
     func_8082E920(play, this, 0x9B);
 }
 
-void func_80841528(PlayState* play, Player* this) {
+void Player_InitMode_4(PlayState* play, Player* this) {
     func_80834DB8(this, &D_0400DCD8, 12.0f, play);
     Player_SetAction(play, this, func_8085439C, 0);
     this->stateFlags1 |= 0x20000000;
     this->fallStartHeight = (s16) (s32) this->actor.world.pos.y;
 }
 
-void func_808415A0(PlayState* play, Player* this) {
+void Player_InitMode_7(PlayState* play, Player* this) {
     func_80833B18(play, this, 1, 2.0f, 2.0f, (s16) (this->actor.shape.rot.y + 0x8000), 0);
 }
 
-void func_808415E4(PlayState* play, Player* this) {
+void Player_InitMode_5(PlayState* play, Player* this) {
     Player_SetAction(play, this, func_808540A0, 0);
     this->actor.draw = NULL;
     this->stateFlags1 |= 0x20000000;
 }
 
-void func_80841624(PlayState* play, Player* this) {
+void Player_InitMode_6(PlayState* play, Player* this) {
     if (gSaveContext.save.isOwlSave != 0) {
         Player_SetAction(play, this, func_808496AC, 0);
         func_8082E514(play, this, (*(D_8085BE84 + 0x408))[this->modelAnimType]);
