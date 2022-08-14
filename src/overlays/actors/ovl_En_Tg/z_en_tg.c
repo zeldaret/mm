@@ -54,10 +54,8 @@ static ColliderCylinderInit sCylinderInit = {
     { 18, 64, 0, { 0, 0, 0 } },
 };
 
-// sColChkInfoInit
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-// static DamageTable sDamageTable = {
 static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(0, 0x0),
@@ -94,12 +92,15 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS sAnimations = { &object_mu_Anim_0053E0, 1.0f, 0, -1, 0, 0 };
-static Vec3f D_80990228 = { 0.0f, 0.0f, 0.0f }; // TODO: rename sZeroVec0?
+static Vec3f D_80990228 = { 0.0f, 0.0f, 0.0f }; // TODO: should these be moved or renamed?
 static Vec3f D_80990234 = { 0.0f, 1.5f, 0.0f };
-static Vec3f D_80990240 = { 0.0f, 0.0f, 0.0f }; // TODO: rename sZeroVec1?
-static Vec3f D_8099024C = { 0.0f, 0.0f, 0.0f }; // TODO: rename sZeroVec2?
+static Vec3f D_80990240 = { 0.0f, 0.0f, 0.0f };
+static Vec3f D_8099024C = { 0.0f, 0.0f, 0.0f };
 
 // EnTg_ChangeAnimation - func_8098F800
+/**
+ * This function is always called with unusedExtraOffset = 0.
+ */
 void EnTg_ChangeAnimation(SkelAnime* skelAnime, AnimationInfoS* animation, s16 unusedExtraOffset) {
     f32 endFrame;
 
@@ -123,8 +124,7 @@ void EnTg_UpdateCollider(EnTg* this, PlayState* play) {
 }
 
 // Called in Update
-// Maybe UpdateSkelAnime? or is some kind of animation playing?
-// also could be Idle?
+// Maybe EnTg_UpdateSkelAnime? or is some kind of animation playing?
 void func_8098F928(EnTg* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
@@ -153,8 +153,8 @@ void EnTg_Destroy(Actor* thisx, PlayState* play) {
 void func_8098FA70(EnTg* this, PlayState* play) {
     Vec3f heartStartPos;
 
-    this->actor.shape.rot.y += sREG(0) + 0x258; // -256
-    this->actor.world.rot = this->actor.shape.rot;
+    this->actor.shape.rot.y += sREG(0) + 0x258;    // Stays constant at -256
+    this->actor.world.rot = this->actor.shape.rot; // TODO: see if constant?
 
     // A new heart is spawned every 12 frames
     if (DECR(this->spawnHeartTimer) == 0) {
@@ -219,11 +219,15 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
 // TODO: called in action function
 // EnTg_SpawnHeart
 // func_8098FD50
+/**
+ * This function is always called with the same heartStartPos, and len = 10.
+ */
 void func_8098FD50(EnTg* this, EnTgHeartInfo* enTgHeartInfo, Vec3f* heartStartPos, s32 len) {
     Vec3f heartVelocityVec = D_80990234; // { 0.0f, 1.5f, 0.0f };
     Vec3f zeroVec = D_80990240;          // { 0.0f, 0.0f, 0.0f };
     s32 i = 0;
 
+    // TODO: this loop and if is confusing
     while ((i < len) && enTgHeartInfo->isFirstHeartSpawned) {
         i++;
         enTgHeartInfo++;
@@ -231,41 +235,44 @@ void func_8098FD50(EnTg* this, EnTgHeartInfo* enTgHeartInfo, Vec3f* heartStartPo
 
     if (i < len) {
         enTgHeartInfo->isFirstHeartSpawned = true;
-        enTgHeartInfo->firstHeartPos = *heartStartPos; // actor->world.pos + 62
+        enTgHeartInfo->firstHeartPos = *heartStartPos;
         enTgHeartInfo->velocity = heartVelocityVec;
         enTgHeartInfo->unusedZeroVec20 = zeroVec;
         enTgHeartInfo->scale = 0.01f;
-
-        // TODO: maybe affects the heart wiggly path? watch actor shape rot
         enTgHeartInfo->firstHeartPos.x += 4.0f * Math_SinS(this->actor.shape.rot.y);
         enTgHeartInfo->firstHeartPos.z += 4.0f * Math_CosS(this->actor.shape.rot.y);
         enTgHeartInfo->firstHeartTimer = 16;
     }
 }
 
-// Looks just like func_809647EC in z_en_fu.c
-// Called in Update... Updates heart position?
-// The first heart spawned sets the path, the second heart spawned follows it
+// EnTg_UpdateHeartPath - func_8098FEA8
+/**
+ * This function is always called with the same len = 10.
+ * The heart path is curvy as it floats up because of the use of Math_SinS and Math_CosS.
+ * The first heart spawned sets the path, the second heart spawned follows it.
+ * Looks just like func_809647EC in z_en_fu.c
+ */
 void func_8098FEA8(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len) {
     Vec3f zeroVec = D_8099024C;
     s16 yaw = Camera_GetInputDirYaw(GET_ACTIVE_CAM(play));
     s32 i;
 
-    // Every len frames, update heart position(s)?
     for (i = 0; i < len; i++, enTgHeartInfo++) {
         if (enTgHeartInfo->isFirstHeartSpawned == 1) {
             if (DECR(enTgHeartInfo->firstHeartTimer) == 0) {
                 enTgHeartInfo->isFirstHeartSpawned = false;
             }
-            enTgHeartInfo->firstHeartPos.y += enTgHeartInfo->velocity.y; // is always increased by 1.5f
+            enTgHeartInfo->firstHeartPos.y += enTgHeartInfo->velocity.y; // always increased by 1.5f
             enTgHeartInfo->firstHeartPos.x += 2.0f * Math_SinS(enTgHeartInfo->angle);
             enTgHeartInfo->firstHeartPos.z += 2.0f * Math_CosS(enTgHeartInfo->angle);
+
             Matrix_Push();
             Matrix_Translate(enTgHeartInfo->firstHeartPos.x, enTgHeartInfo->firstHeartPos.y,
                              enTgHeartInfo->firstHeartPos.z, MTXMODE_NEW);
             Matrix_RotateYS(yaw, MTXMODE_APPLY);
             Matrix_MultVec3f(&zeroVec, &enTgHeartInfo->firstHeartPos);
             Matrix_Pop();
+
             enTgHeartInfo->angle += 0x1770;
         }
     }
