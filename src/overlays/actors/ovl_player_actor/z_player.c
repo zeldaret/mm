@@ -9861,8 +9861,8 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
                            1 | 8, this->jointTableBuffer, this->morphTableBuffer, PLAYER_LIMB_MAX);
         this->skelAnime.baseTransl = D_8085D2C4;
 
-        SkelAnime_InitLink(play, &this->unk_284, skelHeader, func_8082ED20(this), 1 | 8, this->unk_929,
-                           this->unk_9C8, PLAYER_LIMB_MAX);
+        SkelAnime_InitLink(play, &this->unk_284, skelHeader, func_8082ED20(this), 1 | 8, this->unk_929, this->unk_9C8,
+                           PLAYER_LIMB_MAX);
         this->unk_284.baseTransl = D_8085D2C4;
 
         if (this->transformation == PLAYER_FORM_GORON) {
