@@ -12764,54 +12764,60 @@ s32 func_8084933C(Player* this, PlayState* play) {
         func_8082F43C(play, this, func_80849570);
         this->unk_ACC = 0;
     } else if (LinkAnimation_OnFrame(&this->unk_284, 6.0f)) {
-        Vec3f sp54;
-        s16 temp;
+        Vec3f pos;
+        s16 yRotUntargeted;
 
-        func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_L_HAND], this->actor.shape.rot.y, 0.0f, &sp54);
-        sp54.y = this->actor.world.pos.y + 50.0f;
+        func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_L_HAND], this->actor.shape.rot.y, 0.0f, &pos);
+        pos.y = this->actor.world.pos.y + 50.0f;
 
-        temp = this->actor.shape.rot.y - 0x190;
-        this->boomerangActor = (EnBoom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, sp54.x, sp54.y, sp54.z,
-                                         this->actor.focus.rot.x, (this->targetedActor != NULL) ? this->actor.shape.rot.y + 0x36B0 : temp, 0, ZORA_BOOMERANG_LEFT);
+        yRotUntargeted = this->actor.shape.rot.y - 0x190;
+        this->boomerangActor = Actor_Spawn(
+            &play->actorCtx, play, ACTOR_EN_BOOM, pos.x, pos.y, pos.z, this->actor.focus.rot.x,
+            (this->targetedActor != NULL) ? this->actor.shape.rot.y + 0x36B0 : yRotUntargeted, 0, ZORA_BOOMERANG_LEFT);
 
         if (this->boomerangActor != NULL) {
-            EnBoom* temp_v0_2 = this->boomerangActor;
-            EnBoom* temp_v0_4;
+            EnBoom* leftBoomearng = (EnBoom*)this->boomerangActor;
+            EnBoom* rightBoomerang;
 
-            temp_v0_2->moveTo = this->targetedActor;
-            if (temp_v0_2->moveTo != NULL) {
-                temp_v0_2->unk_1CF = 0x10;
+            leftBoomearng->moveTo = this->targetedActor;
+            if (leftBoomearng->moveTo != NULL) {
+                leftBoomearng->unk_1CF = 0x10;
             }
-            temp_v0_2->unk_1CC = temp_v0_2->unk_1CF + 0x24;
+            leftBoomearng->unk_1CC = leftBoomearng->unk_1CF + 0x24;
 
-            func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_R_HAND], this->actor.shape.rot.y, 0.0f, &sp54);
+            func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_R_HAND], this->actor.shape.rot.y, 0.0f, &pos);
 
-            temp = (this->actor.shape.rot.y + 0x190);
-            temp_v0_4 = (EnBoom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, sp54.x, sp54.y, sp54.z,
-                                             this->actor.focus.rot.x,  (this->targetedActor != NULL) ? this->actor.shape.rot.y - 0x36B0 : temp, 0, ZORA_BOOMERANG_RIGHT);
+            yRotUntargeted = (this->actor.shape.rot.y + 0x190);
+            rightBoomerang =
+                (EnBoom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, pos.x, pos.y, pos.z, this->actor.focus.rot.x,
+                                     (this->targetedActor != NULL) ? this->actor.shape.rot.y - 0x36B0 : yRotUntargeted,
+                                     0, ZORA_BOOMERANG_RIGHT);
 
-            if (temp_v0_4 != NULL) {
-                temp_v0_4->moveTo = this->targetedActor;
-                if (temp_v0_4->moveTo != NULL) {
-                    temp_v0_4->unk_1CF = 0x10;
+            if (rightBoomerang != NULL) {
+                rightBoomerang->moveTo = this->targetedActor;
+                if (rightBoomerang->moveTo != NULL) {
+                    rightBoomerang->unk_1CF = 0x10;
                 }
-                temp_v0_4->unk_1CC = temp_v0_4->unk_1CF + 0x24;
-                temp_v0_2->actor.child = &temp_v0_4->actor;
-                temp_v0_4->actor.parent = &temp_v0_2->actor;
+
+                rightBoomerang->unk_1CC = rightBoomerang->unk_1CF + 0x24;
+                leftBoomearng->actor.child = &rightBoomerang->actor;
+                rightBoomerang->actor.parent = &leftBoomearng->actor;
             }
-            this->stateFlags1 |= 0x02000000;
-            this->stateFlags3 &= 0xFF7FFFFF;
+
+            this->stateFlags1 |= PLAYER_STATE1_2000000;
+            this->stateFlags3 &= ~PLAYER_STATE1_800000;
             if (!func_80123420(this)) {
                 func_8083133C(this);
             }
 
             this->unk_D57 = 20;
 
-            func_800B8E58(this, 0x1805);
-            func_8082DF8C(this, 0x6800);
+            func_800B8E58(this, NA_SE_IT_BOOMERANG_THROW);
+            func_8082DF8C(this, NA_SE_VO_LI_SWORD_N);
         }
     }
-    return 1;
+
+    return true;
 }
 
 s32 func_80849570(Player* this, PlayState* play) {
