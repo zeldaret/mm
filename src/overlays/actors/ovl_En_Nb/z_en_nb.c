@@ -36,30 +36,30 @@ typedef enum EnNbScheduleResult {
 static u8 sScheduleScript[] = {
     /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x21 - 0x04),
     /* 0x04 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x12 - 0x08),
-    /* 0x08 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S( 6,  0, 18,  0, 0x0F - 0x0E),
+    /* 0x08 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(6, 0, 18, 0, 0x0F - 0x0E),
     /* 0x0E */ SCHEDULE_CMD_RET_NONE(),
     /* 0x0F */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_3),
     /* 0x12 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_OMOYA, 0x20 - 0x16),
-    /* 0x16 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18,  0,  6,  0, 0x1D - 0x1C),
+    /* 0x16 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x1D - 0x1C),
     /* 0x1C */ SCHEDULE_CMD_RET_NONE(),
     /* 0x1D */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_4),
     /* 0x20 */ SCHEDULE_CMD_RET_NONE(),
     /* 0x21 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x72 - 0x25),
     /* 0x25 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(1, 0x47 - 0x29),
-    /* 0x29 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S( 8,  0, 12,  0, 0x44 - 0x2F),
-    /* 0x2F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12,  0, 12, 15, 0x41 - 0x35),
-    /* 0x35 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 15, 18,  0, 0x3E - 0x3B),
+    /* 0x29 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(8, 0, 12, 0, 0x44 - 0x2F),
+    /* 0x2F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 0, 12, 15, 0x41 - 0x35),
+    /* 0x35 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 15, 18, 0, 0x3E - 0x3B),
     /* 0x3B */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_3),
     /* 0x3E */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
     /* 0x41 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_2),
     /* 0x44 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
     /* 0x47 */ SCHEDULE_CMD_CHECK_FLAG_S(0x32, 0x20, 0x57 - 0x4B),
-    /* 0x4B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S( 8,  0, 18,  0, 0x54 - 0x51),
+    /* 0x4B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(8, 0, 18, 0, 0x54 - 0x51),
     /* 0x51 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_3),
     /* 0x54 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
-    /* 0x57 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S( 8,  0, 12,  0, 0x70 - 0x5D),
-    /* 0x5D */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12,  0, 12, 15, 0x6E - 0x63),
-    /* 0x63 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 15, 18,  0, 0x6C - 0x69),
+    /* 0x57 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(8, 0, 12, 0, 0x70 - 0x5D),
+    /* 0x5D */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 0, 12, 15, 0x6E - 0x63),
+    /* 0x63 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 15, 18, 0, 0x6C - 0x69),
     /* 0x69 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_3),
     /* 0x6C */ SCHEDULE_CMD_RET_VAL_S(EN_NB_SCH_1),
     /* 0x6E */ SCHEDULE_CMD_RET_VAL_S(EN_NB_SCH_2),
@@ -124,11 +124,11 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static AnimationInfoS sAnimationInfo[] = {
-    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // EN_NB_ANIM_0
-    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // EN_NB_ANIM_1
-    { &gNbTalkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },   // EN_NB_ANIM_TALK_ONCE
-    { &gNbTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // EN_NB_ANIM_TALK_LOOP
-    { &gNbAngryAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },  // EN_NB_ANIM_ANGRY
+    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // EN_NB_ANIM_0
+    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },     // EN_NB_ANIM_1
+    { &gNbTalkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // EN_NB_ANIM_TALK_ONCE
+    { &gNbTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },     // EN_NB_ANIM_TALK_LOOP
+    { &gNbAngryAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // EN_NB_ANIM_ANGRY
     { &gNbRelievedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // EN_NB_ANIM_RELIEVED
 };
 
@@ -590,7 +590,8 @@ s32 func_80BC0D08(EnNb* this, PlayState* play) {
 }
 
 void EnNb_HandleSchedule(EnNb* this, PlayState* play) {
-    if ((this->schResultValue == EN_NB_SCH_1) || (this->schResultValue == EN_NB_SCH_2) || (this->schResultValue == EN_NB_SCH_3) || (this->schResultValue == EN_NB_SCH_4)) {
+    if ((this->schResultValue == EN_NB_SCH_1) || (this->schResultValue == EN_NB_SCH_2) ||
+        (this->schResultValue == EN_NB_SCH_3) || (this->schResultValue == EN_NB_SCH_4)) {
         func_80BC0D08(this, play);
     }
 
@@ -608,7 +609,8 @@ void EnNb_FollowSchedule(EnNb* this, PlayState* play) {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_1;
     } else if ((!Schedule_RunScript(play, sScheduleScript, &scheduleResult)) ||
-               ((this->schResultValue != scheduleResult.result) && !EnNb_ProcessScheduleOutput(this, play, &scheduleResult))) {
+               ((this->schResultValue != scheduleResult.result) &&
+                !EnNb_ProcessScheduleOutput(this, play, &scheduleResult))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_1;
         scheduleResult.result = EN_NB_SCH_NONE;
@@ -646,8 +648,7 @@ void EnNb_Init(Actor* thisx, PlayState* play) {
     EnNb* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gNbSkel, NULL, this->jointTable, this->morphTable,
-                       NB_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gNbSkel, NULL, this->jointTable, this->morphTable, NB_LIMB_MAX);
 
     this->animIndex = EN_NB_ANIM_INVALID;
     EnNb_ChangeAnim(this, EN_NB_ANIM_0);
@@ -686,7 +687,8 @@ void EnNb_Update(Actor* thisx, PlayState* play) {
         func_80BBFE60(this);
         func_80BC0800(this);
         if (Actor_IsFacingPlayer(&this->actor, 0x38E0)) {
-            func_8013C964(&this->actor, play, this->unk_274, 30.0f, ITEM_OCARINA, this->stateFlags & (EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4));
+            func_8013C964(&this->actor, play, this->unk_274, 30.0f, ITEM_OCARINA,
+                          this->stateFlags & (EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4));
         }
         func_80BBFF24(this, play);
     }
@@ -734,8 +736,8 @@ void EnNb_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     }
 
     if (limbIndex == NB_LIMB_HEAD) {
-        SubS_UpdateLimb(this->headRotZ + 0x4000, this->headRotY + this->actor.shape.rot.y + 0x4000, &this->headComputedPos,
-                      &this->headComputedRot, stepRot, overrideRot);
+        SubS_UpdateLimb(this->headRotZ + 0x4000, this->headRotY + this->actor.shape.rot.y + 0x4000,
+                        &this->headComputedPos, &this->headComputedRot, stepRot, overrideRot);
         Matrix_Pop();
         Matrix_Translate(this->headComputedPos.x, this->headComputedPos.y, this->headComputedPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
