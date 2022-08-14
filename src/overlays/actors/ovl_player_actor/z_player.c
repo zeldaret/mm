@@ -12759,31 +12759,26 @@ s32 func_808492C4(Player* this, PlayState* play) {
     return true;
 }
 
-#ifdef NON_MATCHING
 s32 func_8084933C(Player* this, PlayState* play) {
-
     if (LinkAnimation_Update(play, &this->unk_284)) {
         func_8082F43C(play, this, func_80849570);
         this->unk_ACC = 0;
     } else if (LinkAnimation_OnFrame(&this->unk_284, 6.0f)) {
         Vec3f sp54;
-        EnBoom* temp_v0_4;
-        EnBoom* temp_v0_2;
-        s32 var_t0;
         s16 temp;
 
         func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_L_HAND], this->actor.shape.rot.y, 0.0f, &sp54);
         sp54.y = this->actor.world.pos.y + 50.0f;
 
         temp = this->actor.shape.rot.y - 0x190;
-        var_t0 = (this->targetedActor != NULL) ? this->actor.shape.rot.y + 0x36B0 : temp;
-        temp_v0_2 = (EnBoom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, sp54.x, sp54.y, sp54.z,
-                                         this->actor.focus.rot.x, var_t0, 0, ZORA_BOOMERANG_LEFT);
-        this->boomerangActor = &temp_v0_2->actor;
+        this->boomerangActor = (EnBoom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, sp54.x, sp54.y, sp54.z,
+                                         this->actor.focus.rot.x, (this->targetedActor != NULL) ? this->actor.shape.rot.y + 0x36B0 : temp, 0, ZORA_BOOMERANG_LEFT);
 
-        if (temp_v0_2 != NULL) {
+        if (this->boomerangActor != NULL) {
+            EnBoom* temp_v0_2 = this->boomerangActor;
+            EnBoom* temp_v0_4;
+
             temp_v0_2->moveTo = this->targetedActor;
-            // Reordering here
             if (temp_v0_2->moveTo != NULL) {
                 temp_v0_2->unk_1CF = 0x10;
             }
@@ -12792,9 +12787,8 @@ s32 func_8084933C(Player* this, PlayState* play) {
             func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_R_HAND], this->actor.shape.rot.y, 0.0f, &sp54);
 
             temp = (this->actor.shape.rot.y + 0x190);
-            var_t0 = (this->targetedActor != NULL) ? this->actor.shape.rot.y - 0x36B0 : temp;
             temp_v0_4 = (EnBoom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, sp54.x, sp54.y, sp54.z,
-                                             this->actor.focus.rot.x, var_t0, 0, ZORA_BOOMERANG_RIGHT);
+                                             this->actor.focus.rot.x,  (this->targetedActor != NULL) ? this->actor.shape.rot.y - 0x36B0 : temp, 0, ZORA_BOOMERANG_RIGHT);
 
             if (temp_v0_4 != NULL) {
                 temp_v0_4->moveTo = this->targetedActor;
@@ -12819,9 +12813,6 @@ s32 func_8084933C(Player* this, PlayState* play) {
     }
     return 1;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084933C.s")
-#endif
 
 s32 func_80849570(Player* this, PlayState* play) {
     if (func_80830B88(play, this)) {
