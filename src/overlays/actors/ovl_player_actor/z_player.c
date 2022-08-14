@@ -6140,62 +6140,68 @@ void func_80837134(PlayState* play, Player* this) {
 void func_808373A4(PlayState* play, Player* this) {
     func_8082E438(play, this, &gameplay_keep_Linkanim_00E270);
     this->unk_B10[0] = 20000.0f;
-    this->unk_B10[1] = 196608.0f;
+    this->unk_B10[1] = 0x30000;
     func_800B8E58(this, NA_SE_PL_DEKUNUTS_ATTACK);
 }
 
-#if 0
+// related to Deku hopping
 s32 func_808373F8(PlayState* play, Player* this, u16 sfxId) {
-    s32 pad[3];
-    s32 var_v1; // sp28
-    LinkAnimationHeader* var_a2;
-    f32 var_fv1;
-    s16 var_v0 = this->currentYaw - this->actor.shape.rot.y;
+    LinkAnimationHeader* anim;
+    f32 speed;
+    s16 yawDiff = this->currentYaw - this->actor.shape.rot.y;
 
     if ((IREG(66) / 100.0f) < this->linearVelocity) {
-        var_fv1 = IREG(67) / 100.0f;
+        speed = IREG(67) / 100.0f;
     } else {
-        var_fv1 = (IREG(68) / 100.0f) +  ((IREG(69) * this->linearVelocity) / 1000.0f);
-        if (this->transformation == PLAYER_FORM_DEKU) {
-             if (this->linearVelocity) {}
-            var_fv1 = CLAMP_MIN(var_fv1, 8.0f);
-        } else {
-            var_fv1 = CLAMP_MIN(var_fv1, 5.0f);
+        speed = (IREG(68) / 100.0f + (IREG(69) * this->linearVelocity) / 1000.0f);
+
+        if ((this->transformation == PLAYER_FORM_DEKU) && (speed < 8.0f)) {
+            speed = 8.0f;
+        } else if (speed < 5.0f) {
+            speed = 5.0f;
         }
     }
 
-    if ((ABS_ALT(var_v0) >= 0x1000) || (this->linearVelocity <= 4.0f)) {
-        var_a2 = &gameplay_keep_Linkanim_00DCD8;
+    if ((ABS_ALT(yawDiff) >= 0x1000) || (this->linearVelocity <= 4.0f)) {
+        anim = &gameplay_keep_Linkanim_00DCD8;
     } else {
-        if ((this->transformation != PLAYER_FORM_DEKU) && ((D_80862B1C == 1) || (D_80862B1C == 2))) {
-            var_v1 = (D_80862B1C == 1) ? 4 : 5;
+        s32 var_v1;
 
-            func_80834D50(play, this, D_8085C2A4[var_v1].unk_0, var_fv1, (var_v1 == 4) ? 0x6800 : sfxId);
+        if ((this->transformation != PLAYER_FORM_DEKU) && (((D_80862B1C == 1)) || (D_80862B1C == 2))) {
+            if (D_80862B1C == 1) {
+                var_v1 = 4;
+            } else {
+                var_v1 = 5;
+            }
+
+            func_80834D50(play, this, D_8085C2A4[var_v1].unk_0, speed, ((var_v1 == 4) ? NA_SE_VO_LI_SWORD_N : sfxId));
             this->unk_AE8 = -1;
-            this->stateFlags2 |= 0x80000;
+            this->stateFlags2 |= PLAYER_STATE2_80000;
             this->unk_AE7 = var_v1;
             return 1;
         }
-        var_a2 = &gameplay_keep_Linkanim_00DE48;
+        anim = &gameplay_keep_Linkanim_00DE48;
     }
 
+    // Deku hopping
     if (this->transformation == PLAYER_FORM_DEKU) {
-        var_fv1 *= 0.3f + ((5 - this->unk_B67) * 0.18f);
-        var_fv1 = CLAMP_MIN(var_fv1, 4.0f);
+        speed *= 0.3f + ((5 - this->unk_B67) * 0.18f);
+        if (speed < 4.0f) {
+            speed = 4.0f;
+        }
 
         if ((this->actor.depthInWater > 0.0f) && (this->unk_B67 != 0)) {
             this->actor.world.pos.y += this->actor.depthInWater;
-            func_80834D50(play, this, var_a2, var_fv1, 0);
+            func_80834D50(play, this, anim, speed, 0);
             this->unk_AE8 = 1;
-            this->stateFlags3 |= 0x200000;
-            func_800B8E58(this, (0x9B5 - this->unk_B67));
+            this->stateFlags3 |= PLAYER_STATE3_200000;
+            func_800B8E58(this, (NA_SE_PL_DEKUNUTS_JUMP5 + 1 - this->unk_B67));
             func_8082DF8C(this, sfxId);
             this->unk_B67--;
             if (this->unk_B67 == 0) {
-                this->stateFlags2 |= 0x80000;
+                this->stateFlags2 |= PLAYER_STATE2_80000;
                 func_808373A4(play, this);
             }
-
             return 1;
         }
 
@@ -6204,14 +6210,11 @@ s32 func_808373F8(PlayState* play, Player* this, u16 sfxId) {
         }
     }
 
-    func_80834D50(play, this, var_a2, var_fv1, sfxId);
+    func_80834D50(play, this, anim, speed, sfxId);
     this->unk_AE8 = 1;
+
     return 1;
 }
-#else
-s32 func_808373F8(PlayState* play, Player* this, u16 sfxId);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808373F8.s")
-#endif
 
 s32 func_80837730(PlayState* play, Player* this, f32 arg2, s32 arg3) {
     f32 sp3C = fabsf(arg2);
@@ -6332,7 +6335,7 @@ void func_80837C78(PlayState* play, Player* this) {
     this->stateFlags1 |= (PLAYER_STATE1_400 | PLAYER_STATE1_20000000);
 
     if (this->getItemId == GI_HEART_CONTAINER) {
-        this->unk_AE8 = 0x14;
+        this->unk_AE8 = 20;
     } else if (this->getItemId >= GI_NONE) {
         this->unk_AE8 = 1;
     } else {

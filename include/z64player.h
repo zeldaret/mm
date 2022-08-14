@@ -798,7 +798,7 @@ typedef enum PlayerCsMode {
 #define PLAYER_STATE3_80000      (1 << 19)
 // 
 #define PLAYER_STATE3_100000     (1 << 20)
-// 
+// Deku hopping?
 #define PLAYER_STATE3_200000     (1 << 21)
 // 
 #define PLAYER_STATE3_400000     (1 << 22)
@@ -1012,7 +1012,7 @@ typedef struct Player {
     /* 0xB64 */ u8 unk_B64;
     /* 0xB65 */ u8 shockTimer;
     /* 0xB66 */ u8 unk_B66;
-    /* 0xB67 */ u8 unk_B67; // deku hop timer?
+    /* 0xB67 */ u8 unk_B67; // deku remaining hops counter
     /* 0xB68 */ s16 fallStartHeight; // last truncated Y position before falling
     /* 0xB6A */ s16 fallDistance; // truncated Y distance the player has fallen so far (positive is down)
     /* 0xB6C */ s16 unk_B6C;
