@@ -123,8 +123,8 @@ void EnTg_UpdateCollider(EnTg* this, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-// Called in Update
-// Maybe EnTg_UpdateSkelAnime? or is some kind of animation playing?
+// EnTg_UpdateSkelAnime
+// func_8098F928
 void func_8098F928(EnTg* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
@@ -149,18 +149,20 @@ void EnTg_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-// TODO: Maybe EnTg_IdleSpin ?
+// EnTg_Idle?
+// func_8098FA70
 void func_8098FA70(EnTg* this, PlayState* play) {
     Vec3f heartStartPos;
 
-    this->actor.shape.rot.y += sREG(0) + 0x258;    // Stays constant at -256
+    // TODO: this is what causes the actor to spin
+    this->actor.shape.rot.y += sREG(0) + 0x258;    // Somehow stays constant at -256
     this->actor.world.rot = this->actor.shape.rot; // TODO: see if constant?
 
     // A new heart is spawned every 12 frames
     if (DECR(this->spawnHeartTimer) == 0) {
         this->spawnHeartTimer = 12;
-        heartStartPos = this->actor.world.pos; // -119.0, -8.0, -38.0
-        heartStartPos.y += 62.0f;              // 54, the starting height for where the hearts spawn
+        heartStartPos = this->actor.world.pos;
+        heartStartPos.y += 62.0f;
         func_8098FD50(this, &this->enTgHeartInfo, &heartStartPos, 10);
     }
 }
@@ -216,11 +218,10 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-// TODO: called in action function
 // EnTg_SpawnHeart
 // func_8098FD50
 /**
- * This function is always called with the same heartStartPos, and len = 10.
+ * This function is always called with the same heartStartPos and len = 10.
  */
 void func_8098FD50(EnTg* this, EnTgHeartInfo* enTgHeartInfo, Vec3f* heartStartPos, s32 len) {
     Vec3f heartVelocityVec = D_80990234; // { 0.0f, 1.5f, 0.0f };
@@ -250,7 +251,6 @@ void func_8098FD50(EnTg* this, EnTgHeartInfo* enTgHeartInfo, Vec3f* heartStartPo
  * This function is always called with the same len = 10.
  * The heart path is curvy as it floats up because of the use of Math_SinS and Math_CosS.
  * The first heart spawned sets the path, the second heart spawned follows it.
- * Looks just like func_809647EC in z_en_fu.c
  */
 void func_8098FEA8(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len) {
     Vec3f zeroVec = D_8099024C;
