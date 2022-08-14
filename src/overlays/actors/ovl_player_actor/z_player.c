@@ -2488,15 +2488,15 @@ struct_8082F02C_arg1 D_8085C98C = {
     { 0, 0, 0 }, { 0xFF, 0xFF, 0x9B }, { 0x14, 0x14, 0x32 }, 0x3AC, 0x1388,
 };
 
-#ifdef NON_MATCHING
-// stack
 void func_8082F1AC(PlayState* play, Player* this) {
+    s32 sp4C = this->unk_B62;
     f32 temp;
+    s16 sp46;
+    s16 sp44;
+    f32 sp40;
+    f32 sp3C;
     s32 var_v0;
-    s32 sp4C;
-    s32 pad;
 
-    sp4C = this->unk_B62;
     if ((gSaveContext.save.playerData.magic != 0) && (this->stateFlags1 & PLAYER_STATE1_10)) {
         if (gSaveContext.unk_3F28 == 0) {
             // Magic_Consume
@@ -2516,12 +2516,8 @@ void func_8082F1AC(PlayState* play, Player* this) {
     }
 
     if ((this->unk_B62 != 0) || (sp4C != 0)) {
-        s16 sp46;
-        s16 sp44;
-        f32 sp40;
-        f32 sp3C;
-        f32 new_var;
         f32 sp34;
+        f32 new_var;
 
         sp46 = play->gameplayFrames * 7000;
         sp44 = play->gameplayFrames * 14000;
@@ -2539,10 +2535,6 @@ void func_8082F1AC(PlayState* play, Player* this) {
         func_800B648C(play, 1, 2, 100.0f, &this->actor.world.pos);
     }
 }
-#else
-void func_8082F1AC(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F1AC.s")
-#endif
 
 void func_8082F43C(PlayState* play, Player* this, PlayerFuncAC4 arg2) {
     this->unk_AC4 = arg2;
