@@ -7460,22 +7460,19 @@ s32 func_8083A878(PlayState* play, Player* this, f32 arg2) {
     return true;
 }
 
-#ifdef NON_MATCHING
-// regalloc
+/**
+ * Update for using telescopes. SCENE_AYASHIISHOP acts quite differently: it has a different camera mode and cannot use
+ * zooming.
+ *
+ * - Stick inputs move the view; shape.rot.y is used as a base position which cannot be looked too far away from. (This
+ * is not necessarily the same as the original angle of the spawn.)
+ * - A can be used to zoom (except in SCENE_AYASHIISHOP)
+ * - B exits, using the RESPAWN_MODE_DOWN entrance
+ */
 void func_8083A98C(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Player* this = THIS;
-    s32 camMode; // sp1C;
-    f32 temp_fa0;
-    f32 temp_fv1;
-    s16 temp_a1;
-    s16 temp_t1;
-    s16 temp_v0_2;
-    s16 temp_v0_3;
-    s16 temp_v1_2;
-    s16 temp_v1_4;
-    s32 var_v0_5;
-    s16 var_v1;
+    s32 camMode;
 
     if (play->csCtx.state != CS_STATE_0) {
         return;
@@ -7484,62 +7481,68 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
     if (DECR(this->unk_AE8) != 0) {
         camMode = (play->sceneNum != SCENE_AYASHIISHOP) ? CAM_MODE_FIRSTPERSON : CAM_MODE_DEKUHIDE;
 
+        // Show controls overlay. SCENE_AYASHIISHOP does not have Zoom, so has a different one.
         if (this->unk_AE8 == 1) {
             Message_StartTextbox(play, (play->sceneNum == SCENE_AYASHIISHOP) ? 0x2A00 : 0x5E6, NULL);
         }
     } else {
         D_80862B44 = play->state.input;
         if (play->view.fovy >= 25.0f) {
-            s32 temp;
+            s16 prevFocusX = thisx->focus.rot.x;
+            s16 prevFocusY = thisx->focus.rot.y;
+            s16 inputY;
+            s16 inputX;
+            s16 newYaw; // from base position shape.rot.y
 
-            temp_v1_2 = thisx->focus.rot.x;
-            temp_t1 = thisx->focus.rot.y;
-
-            temp_v0_2 = play->state.input[0].rel.stick_y * 4;
-
-            thisx->focus.rot.x += CLAMP(temp_v0_2, -0x12C, 0x12C);
-
+            // Pitch:
+            inputY = D_80862B44->rel.stick_y * 4;
+            // Add input, clamped to prevent turning too fast
+            thisx->focus.rot.x += CLAMP(inputY, -0x12C, 0x12C);
+            // Prevent looking too far up or down
             thisx->focus.rot.x = CLAMP(thisx->focus.rot.x, -0x2EE0, 0x2EE0);
 
-            temp_a1 = thisx->shape.rot.y;
+            // Yaw: shape.rot.y is used as a fixed starting position
+            inputX = D_80862B44->rel.stick_x * -4;
+            // Start from current position: no input -> no change
+            newYaw = thisx->focus.rot.y - thisx->shape.rot.y;
+            // Add input, clamped to prevent turning too fast
+            newYaw += CLAMP(inputX, -0x12C, 0x12C);
+            // Prevent looking too far left or right of base position
+            newYaw = CLAMP(newYaw, -0x3E80, 0x3E80);
+            thisx->focus.rot.y = thisx->shape.rot.y + newYaw;
 
-            temp_v0_3 = D_80862B44->rel.stick_x * -4;
-            temp = (s16)(thisx->focus.rot.y - temp_a1);
-            var_v0_5 = CLAMP(temp_v0_3, -0x12C, 0x12C);
-
-            temp_v1_4 = temp + var_v0_5;
-            var_v1 = CLAMP(temp_v1_4, -0x3E80, 0x3E80);
-            thisx->focus.rot.y = temp_a1 + var_v1;
             if (play->sceneNum == SCENE_00KEIKOKU) {
-                temp_fv1 = (s16)(thisx->focus.rot.x - temp_v1_2);
-                temp_fa0 = (s16)(thisx->focus.rot.y - temp_t1);
+                f32 focusDeltaX = (s16)(thisx->focus.rot.x - prevFocusX);
+                f32 focusDeltaY = (s16)(thisx->focus.rot.y - prevFocusY);
+
                 func_8019FAD8(&gSfxDefaultPos, NA_SE_PL_TELESCOPE_MOVEMENT - SFX_FLAG,
-                              sqrtf(SQ(temp_fv1) + SQ(temp_fa0)) / 300.0f);
+                              sqrtf(SQ(focusDeltaX) + SQ(focusDeltaY)) / 300.0f);
             }
         }
 
         if (play->sceneNum == SCENE_AYASHIISHOP) {
             camMode = CAM_MODE_DEKUHIDE;
-        } else if (CHECK_BTN_ALL(D_80862B44->cur.button, BTN_A)) {
+        } else if (CHECK_BTN_ALL(D_80862B44->cur.button, BTN_A)) { // Zoom
             camMode = CAM_MODE_TARGET;
         } else {
             camMode = CAM_MODE_NORMAL;
         }
 
+        // Exit
         if (CHECK_BTN_ALL(D_80862B44->press.button, BTN_B)) {
             func_801477B4(play);
 
             if (play->sceneNum == SCENE_00KEIKOKU) {
                 gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = 0x4C20;
             } else {
-                u16 var_v0_7;
+                u16 entrance;
 
                 if (play->sceneNum == SCENE_AYASHIISHOP) {
-                    var_v0_7 = 0xE30;
+                    entrance = 0xE30;
                 } else {
-                    var_v0_7 = 0x4080;
+                    entrance = 0x4080;
                 }
-                gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = var_v0_7;
+                gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = entrance;
             }
 
             func_80169EFC(&play->state);
@@ -7548,14 +7551,11 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
         }
     }
 
-    Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), 0x3E);
+    Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), CAM_SET_TELESCOPE);
     Camera_ChangeMode(Play_GetCamera(play, CAM_ID_MAIN), camMode);
 }
-#else
-void func_8083A98C(Actor* thisx, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083A98C.s")
-#endif
 
+// Set up using a telescope
 void func_8083AD04(PlayState* play, Player* this) {
     this->actor.update = func_8083A98C;
     this->actor.draw = NULL;
