@@ -977,7 +977,8 @@ void func_80A92950(EnTest6* this, PlayState* play) {
 
             case 9:
                 Play_SetRespawnData(&play->state, 1, ((void)0, gSaveContext.save.entranceIndex & 0xFFFF),
-                                    player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
+                                    player->unk_3CE, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0,
+                                    player->unk_3CC);
                 this->unk_276 = 99;
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 play->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_RETURN].entranceIndex;
@@ -1058,7 +1059,8 @@ void func_80A92950(EnTest6* this, PlayState* play) {
             case 9:
                 if (gSaveContext.save.time > CLOCK_TIME(12, 0)) {
                     Play_SetRespawnData(&play->state, 1, ((void)0, gSaveContext.save.entranceIndex & 0xFFFF),
-                                        player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
+                                        player->unk_3CE, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0,
+                                        player->unk_3CC);
                     this->unk_276 = 99;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     play->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_RETURN].entranceIndex;

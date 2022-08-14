@@ -4,6 +4,7 @@
  * Description: Three-Day Timer
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_test4.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
@@ -399,7 +400,8 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                 } else {
                     gSaveContext.screenScale = 0.0f;
                     Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateIndexFromSpawn(0),
-                                        player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
+                                        player->unk_3CE, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0,
+                                        player->unk_3CC);
                     func_80169EFC(&play->state);
                     if (player->stateFlags1 & PLAYER_STATE1_800000) {
                         EnHorse* rideActor = (EnHorse*)player->rideActor;
@@ -443,9 +445,9 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     u32 entranceIndex = gSaveContext.save.entranceIndex;
 
                     if ((play->actorCtx.unk5 & 2)) {
-                        playerParams = 0xCFF;
+                        playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_C);
                     } else {
-                        playerParams = 0xBFF;
+                        playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B);
                     }
                     Play_SetRespawnData(&play->state, RESPAWN_MODE_RETURN, entranceIndex, player->unk_3CE, playerParams,
                                         &player->unk_3C0, player->unk_3CC);

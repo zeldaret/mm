@@ -9827,7 +9827,7 @@ void func_80841624(PlayState* play, Player* this) {
 
 void func_80841744(PlayState* play, Player* this) {
     Player_SetAction(play, this, func_80855C28, 0);
-    if (((s32)(this->actor.params & 0xF00) >> 8) == 8) {
+    if (PLAYER_GET_INITMODE(&this->actor) == PLAYER_INITMODE_8) {
         Player_AnimationPlayOnceReverse(play, this, D_8085D17C[this->transformation]);
         this->heldItemActionParam = PLAYER_AP_OCARINA;
         Player_SetModels(this, Player_ActionToModelGroup(this, this->heldItemActionParam));
@@ -9850,8 +9850,9 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->currentYaw = this->actor.world.rot.y;
 
-    if ((((this->actor.params & 0xF00) >> 8) != 0xC) &&
-        ((gSaveContext.respawnFlag != 2) || (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams != 0xCFF))) {
+    if ((PLAYER_GET_INITMODE(&this->actor) != PLAYER_INITMODE_C) &&
+        ((gSaveContext.respawnFlag != 2) ||
+         (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams != PLAYER_PARAMS(0xFF, PLAYER_INITMODE_C)))) {
         func_808309CC(play, this);
         SkelAnime_InitLink(play, &this->skelAnime, skelHeader, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_0, this->modelAnimType),
                            1 | 8, this->jointTableBuffer, this->morphTableBuffer, PLAYER_LIMB_MAX);
@@ -9886,10 +9887,25 @@ void func_80841A50(PlayState* play, Player* this) {
     }
 }
 
+// Initialisation functions for various gameplay modes depending on spawn params. There may be at most 0x10 due to it
+// using a single nybble.
 void (*D_8085D2CC[0x10])(PlayState*, Player*) = {
-    func_808412A0, func_80841408, func_808412BC, func_808414E0, func_80841528, func_808415E4,
-    func_80841624, func_808415A0, func_80841744, func_80841744, func_8083ADF0, func_8083AD8C,
-    func_8083AD04, func_8083ADB8, func_8083ADF0, func_8083AE38,
+    /* 0x0 */ func_808412A0,
+    /* 0x1 */ func_80841408,
+    /* 0x2 */ func_808412BC,
+    /* 0x3 */ func_808414E0,
+    /* 0x4 */ func_80841528,
+    /* 0x5 */ func_808415E4,
+    /* 0x6 */ func_80841624,
+    /* 0x7 */ func_808415A0,
+    /* 0x8 */ func_80841744,
+    /* 0x9 */ func_80841744,
+    /* 0xA */ func_8083ADF0,
+    /* 0xB */ func_8083AD8C,
+    /* 0xC */ func_8083AD04, // Telescope
+    /* 0xD */ func_8083ADB8,
+    /* 0xE */ func_8083ADF0,
+    /* 0xF */ func_8083AE38,
 };
 
 // sBlureInit
@@ -9911,7 +9927,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     s8 objBankIndex;
     s32 respawnFlag;
     s32 var_a1;
-    s32 var_v0_3;
+    s32 initMode;
 
     play->playerInit = Player_InitCommon;
     play->playerUpdate = Player_UpdateCommon;
@@ -10108,7 +10124,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
 
     var_a1 = ((respawnFlag == 4) || (gSaveContext.respawnFlag == -4)) ? 1 : 0;
     if (func_801226E0(play, var_a1) == 0) {
-        gSaveContext.respawn[RESPAWN_MODE_DOWN].playerParams = (thisx->params & 0xFF) | 0xD00;
+        gSaveContext.respawn[RESPAWN_MODE_DOWN].playerParams = PLAYER_PARAMS(thisx->params, PLAYER_INITMODE_D);
     }
 
     gSaveContext.respawn[RESPAWN_MODE_DOWN].data = 1;
@@ -10116,14 +10132,16 @@ void Player_Init(Actor* thisx, PlayState* play) {
         gSaveContext.respawn[RESPAWN_MODE_TOP] = gSaveContext.respawn[RESPAWN_MODE_DOWN];
     }
     gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams =
-        (gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams & 0xFF) | 0xD00;
+        PLAYER_PARAMS(gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams, PLAYER_INITMODE_D);
 
-    var_v0_3 = (this->actor.params & 0xF00) >> 8;
-    if (((var_v0_3 == 5) || (var_v0_3 == 6)) && (gSaveContext.save.cutscene >= 0xFFF0)) {
-        var_v0_3 = 0xD;
+    initMode = PLAYER_GET_INITMODE(&this->actor);
+    if (((initMode == PLAYER_INITMODE_5) || (initMode == PLAYER_INITMODE_6)) &&
+        (gSaveContext.save.cutscene >= 0xFFF0)) {
+        initMode = PLAYER_INITMODE_D;
     }
 
-    D_8085D2CC[var_v0_3](play, this);
+    D_8085D2CC[initMode](play, this);
+
     if ((this->actor.draw != NULL) && gSaveContext.save.hasTatl &&
         ((gSaveContext.gameMode == 0) || (gSaveContext.gameMode == 3)) && (play->sceneNum != SCENE_SPOT00)) {
         this->tatlActor = Player_SpawnFairy(play, this, &this->actor.world.pos, &D_8085D340, 0);
@@ -12453,7 +12471,7 @@ void func_80848640(PlayState* play, Player* this) {
 
     if (torch2 != NULL) {
         play->actorCtx.unk_254[this->transformation] = (Actor*)torch2;
-        Play_SetupRespawnPoint(&play->state, this->transformation + 3, 0xBFF);
+        Play_SetupRespawnPoint(&play->state, this->transformation + 3, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B));
     }
 
     effChange = Actor_Spawn(&play->actorCtx, play, ACTOR_EFF_CHANGE, this->actor.world.pos.x, this->actor.world.pos.y,
@@ -14523,7 +14541,7 @@ void func_8084E034(Player* this, PlayState* play) {
                 }
 
                 func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
-                Play_SetupRespawnPoint(&play->state, 0, 0xBFF);
+                Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_DOWN, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B));
             }
         }
     } else if (!(this->stateFlags1 & PLAYER_STATE1_20000000) && LinkAnimation_OnFrame(&this->skelAnime, 15.0f)) {
@@ -17397,7 +17415,7 @@ void func_80855C28(Player* this, PlayState* play) {
             if (BINANG_SUB(this->actor.shape.rot.y, this->actor.world.rot.y) >= 0) {
                 this->actor.shape.rot.y = this->actor.world.rot.y;
                 func_80838760(this);
-                if (((s32)(this->actor.params & 0xF00) >> 8) == 8) {
+                if (PLAYER_GET_INITMODE(&this->actor) == PLAYER_INITMODE_8) {
                     sp34 = D_8085D17C[this->transformation];
                     func_80836A5C(this, play);
                     LinkAnimation_Change(play, &this->skelAnime, sp34, -2.0f / 3.0f, Animation_GetLastFrame(sp34), 0.0f,

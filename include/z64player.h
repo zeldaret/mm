@@ -822,6 +822,29 @@ typedef enum PlayerCsMode {
 #define PLAYER_STATE3_80000000   (1 << 31)
 
 
+#define PLAYER_GET_INITMODE(thisx) (((thisx)->params & 0xF00) >> 8)
+
+typedef enum {
+    /* 0x0 */ PLAYER_INITMODE_0,
+    /* 0x1 */ PLAYER_INITMODE_1,
+    /* 0x2 */ PLAYER_INITMODE_2,
+    /* 0x3 */ PLAYER_INITMODE_3,
+    /* 0x4 */ PLAYER_INITMODE_4,
+    /* 0x5 */ PLAYER_INITMODE_5,
+    /* 0x6 */ PLAYER_INITMODE_6,
+    /* 0x7 */ PLAYER_INITMODE_7,
+    /* 0x8 */ PLAYER_INITMODE_8,
+    /* 0x9 */ PLAYER_INITMODE_9,
+    /* 0xA */ PLAYER_INITMODE_A,
+    /* 0xB */ PLAYER_INITMODE_B,
+    /* 0xC */ PLAYER_INITMODE_C,
+    /* 0xD */ PLAYER_INITMODE_D,
+    /* 0xE */ PLAYER_INITMODE_E,
+    /* 0xF */ PLAYER_INITMODE_F
+} PlayerInitMode;
+
+#define PLAYER_PARAMS(startBgCamId, initMode) ((startBgCamId & 0xFF) | ((initMode & 0xF) << 8))
+
 typedef void (*PlayerActionFunc)(struct Player* this, struct PlayState* play);
 typedef s32 (*PlayerFuncAC4)(struct Player* this, struct PlayState* play);
 typedef void (*PlayerFuncD58)(struct PlayState* play, struct Player* this);

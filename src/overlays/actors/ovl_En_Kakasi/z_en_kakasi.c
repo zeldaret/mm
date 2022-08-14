@@ -930,7 +930,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                 player = GET_PLAYER(play);
 
                 Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateIndexFromSpawn(0), player->unk_3CE,
-                                    0xBFF, &player->unk_3C0, player->unk_3CC);
+                                    PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
                 func_80169EFC(&play->state);
 
                 if (0) {}
