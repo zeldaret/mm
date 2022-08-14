@@ -1,8 +1,9 @@
 #ifndef Z64PLAYER_H
 #define Z64PLAYER_H
 
-#include "z64actor.h"
 #include "os.h"
+#include "z64actor.h"
+#include "alignment.h"
 
 struct Player;
 
@@ -410,6 +411,8 @@ typedef struct PlayerAnimationFrame {
     /* 0x000 */ Vec3s frameTable[PLAYER_LIMB_MAX];
     /* 0x108 */ s16 faceInfo;
 } PlayerAnimationFrame; // size = 0x10A
+
+#define PLAYER_LIMB_BUF_SIZE (ALIGN16(sizeof(PlayerAnimationFrame)) + 0xF)
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -929,12 +932,11 @@ typedef struct Player {
     /* 0x738 */ s32 unk_738;
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];
     /* 0x748 */ PlayerActionFunc actionFunc;
-    /* 0x74C */ u8 unk_74C[0x9F];
-    /* 0x7EB */ u8 unk_7EB[0x9F];
-    /* 0x88A */ UNK_TYPE1 unk_88A[0x9F];
-    /* 0x929 */ u8 unk_929[0x9F];
-    /* 0x9C8 */ u8 unk_9C8[0x9F];
-    /* 0xA67 */ UNK_TYPE1 unk_A67[0x1];
+    /* 0x74C */ u8 jointTableBuffer[PLAYER_LIMB_BUF_SIZE];
+    /* 0x7EB */ u8 morphTableBuffer[PLAYER_LIMB_BUF_SIZE];
+    /* 0x88A */ u8 blendTableBuffer[PLAYER_LIMB_BUF_SIZE];
+    /* 0x929 */ u8 unk_929[PLAYER_LIMB_BUF_SIZE];
+    /* 0x9C8 */ u8 unk_9C8[PLAYER_LIMB_BUF_SIZE];
     /* 0xA68 */ PlayerAgeProperties* ageProperties; // repurposed as "transformation properties"?
     /* 0xA6C */ u32 stateFlags1;
     /* 0xA70 */ u32 stateFlags2;

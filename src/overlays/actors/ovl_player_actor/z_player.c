@@ -4474,8 +4474,8 @@ s32 func_80833058(PlayState* play, Player* this, s8* arg2, s32 arg3) {
                 if (D_8085D054[var_v0](this, play) != 0) {
                     return true;
                 }
-                var_v0 = arg2[1];
-                arg2 += 1;
+                arg2++;
+                var_v0 = *arg2;
             }
 
             if (D_8085D054[-var_v0](this, play) != 0) {
@@ -8875,7 +8875,7 @@ void func_8083E8E0(Player* this, f32 arg1, s16 arg2) {
 
 void func_8083E958(PlayState* play, Player* this) {
     LinkAnimation_BlendToJoint(play, &this->skelAnime, func_8082EF54(this), this->unk_B38, func_8082EF9C(this),
-                               this->unk_B38, this->unk_B40, (void*)this->unk_88A);
+                               this->unk_B38, this->unk_B40, (void*)this->blendTableBuffer);
 }
 
 s32 func_8083E9C4(f32 arg0, f32 arg1, f32 arg2, f32 arg3) {
@@ -9071,7 +9071,7 @@ void func_8083F27C(PlayState* play, Player* this) {
 
     temp_fv0 = this->unk_B38 * (16.0f / 29.0f);
     LinkAnimation_BlendToJoint(play, &this->skelAnime, sp34, temp_fv0, sp38, temp_fv0, this->unk_B40,
-                               (void*)this->unk_88A);
+                               (void*)this->blendTableBuffer);
 }
 
 void func_8083F358(Player* this, s32 arg1, PlayState* play) {
@@ -9117,10 +9117,10 @@ void func_8083F358(Player* this, s32 arg1, PlayState* play) {
 
     if (arg1 == 0) {
         LinkAnimation_BlendToJoint(play, &this->skelAnime, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_1, this->modelAnimType),
-                                   this->unk_B38, var_v0, this->unk_B38, var_fv1, (Vec3s*)this->unk_88A);
+                                   this->unk_B38, var_v0, this->unk_B38, var_fv1, (void*)this->blendTableBuffer);
     } else {
         LinkAnimation_BlendToMorph(play, &this->skelAnime, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_1, this->modelAnimType),
-                                   this->unk_B38, var_v0, this->unk_B38, var_fv1, (Vec3s*)this->unk_88A);
+                                   this->unk_B38, var_v0, this->unk_B38, var_fv1, (void*)this->blendTableBuffer);
     }
 }
 
@@ -9858,10 +9858,10 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
         ((gSaveContext.respawnFlag != 2) || (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams != 0xCFF))) {
         func_808309CC(play, this);
         SkelAnime_InitLink(play, &this->skelAnime, skelHeader, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_0, this->modelAnimType),
-                           9, (void*)this->unk_74C, (void*)this->unk_7EB, PLAYER_LIMB_MAX);
+                           1 | 8, (void*)this->jointTableBuffer, (void*)this->morphTableBuffer, PLAYER_LIMB_MAX);
         this->skelAnime.baseTransl = D_8085D2C4;
 
-        SkelAnime_InitLink(play, &this->unk_284, skelHeader, func_8082ED20(this), 9, (void*)this->unk_929,
+        SkelAnime_InitLink(play, &this->unk_284, skelHeader, func_8082ED20(this), 1 | 8, (void*)this->unk_929,
                            (void*)this->unk_9C8, PLAYER_LIMB_MAX);
         this->unk_284.baseTransl = D_8085D2C4;
 
@@ -14143,7 +14143,7 @@ void func_8084CE84(Player* this, PlayState* play) {
 
     LinkAnimation_BlendToJoint(play, &this->skelAnime, D_8085CF60[Player_IsHoldingTwoHandedWeapon(this)], 0.0f,
                                D_8085CF70[Player_IsHoldingTwoHandedWeapon(this)], this->unk_B38 * 0.7241379f, var_fa0,
-                               (void*)this->unk_88A);
+                               (void*)this->blendTableBuffer);
     if (!func_8083FE38(this, play) && !func_80840CD4(this, play)) {
         func_80840F34(this);
         func_80832F78(this, &sp54, &sp52, 0.0f, play);
@@ -14204,7 +14204,7 @@ void func_8084D18C(Player* this, PlayState* play) {
 
     LinkAnimation_BlendToJoint(play, &this->skelAnime, D_8085CF60[Player_IsHoldingTwoHandedWeapon(this)], 0.0f,
                                D_8085CF78[Player_IsHoldingTwoHandedWeapon(this)], this->unk_B38 * 0.7241379f, var_fa0,
-                               (void*)this->unk_88A);
+                               (void*)this->blendTableBuffer);
     if (!func_8083FE38(this, play) && !func_80840CD4(this, play)) {
         func_80840F34(this);
         func_80832F78(this, &sp54, &sp52, 0.0f, play);
@@ -15933,7 +15933,7 @@ void func_80851F18(PlayState* play, Player* this) {
     if (this->unk_B86[1] >= 0) {
         temp = D_8085D714 + this->unk_B86[1];
         temp_v0 = &this->unk_B10[this->unk_B86[1]];
-        sp2C = ((s32)this->unk_88A + 0xF) & ~0xF;
+        sp2C = ALIGN16((uintptr_t)this->blendTableBuffer);
         AnimationContext_SetLoadFrame(play, temp->unk_4, *temp_v0, ((void)0, this->skelAnime.limbCount), sp2C);
         AnimationContext_SetCopyTrue(play, this->skelAnime.limbCount, this->skelAnime.jointTable, sp2C, D_8085BA20);
     }
