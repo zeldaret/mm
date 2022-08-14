@@ -12771,15 +12771,15 @@ s32 func_8084933C(Player* this, PlayState* play) {
         this->unk_ACC = 0;
     } else if (LinkAnimation_OnFrame(&this->unk_284, 6.0f)) {
         Vec3f pos;
-        s16 yRotUntargeted;
+        s16 untargetedRotY;
 
         func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_L_HAND], this->actor.shape.rot.y, 0.0f, &pos);
         pos.y = this->actor.world.pos.y + 50.0f;
 
-        yRotUntargeted = this->actor.shape.rot.y - 0x190;
+        untargetedRotY = this->actor.shape.rot.y - 0x190;
         this->boomerangActor = Actor_Spawn(
             &play->actorCtx, play, ACTOR_EN_BOOM, pos.x, pos.y, pos.z, this->actor.focus.rot.x,
-            (this->targetedActor != NULL) ? this->actor.shape.rot.y + 0x36B0 : yRotUntargeted, 0, ZORA_BOOMERANG_LEFT);
+            (this->targetedActor != NULL) ? this->actor.shape.rot.y + 0x36B0 : untargetedRotY, 0, ZORA_BOOMERANG_LEFT);
 
         if (this->boomerangActor != NULL) {
             EnBoom* leftBoomerang = (EnBoom*)this->boomerangActor;
@@ -12793,10 +12793,10 @@ s32 func_8084933C(Player* this, PlayState* play) {
 
             func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_R_HAND], this->actor.shape.rot.y, 0.0f, &pos);
 
-            yRotUntargeted = (this->actor.shape.rot.y + 0x190);
+            untargetedRotY = (this->actor.shape.rot.y + 0x190);
             rightBoomerang =
                 (EnBoom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, pos.x, pos.y, pos.z, this->actor.focus.rot.x,
-                                     (this->targetedActor != NULL) ? this->actor.shape.rot.y - 0x36B0 : yRotUntargeted,
+                                     (this->targetedActor != NULL) ? this->actor.shape.rot.y - 0x36B0 : untargetedRotY,
                                      0, ZORA_BOOMERANG_RIGHT);
 
             if (rightBoomerang != NULL) {
