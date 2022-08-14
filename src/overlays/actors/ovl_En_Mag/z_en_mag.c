@@ -388,7 +388,7 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                                     D_801BB12C = 0;
                                 }
                                 play_sound(NA_SE_SY_PIECE_OF_HEART);
-                                gSaveContext.gameMode = 2; // Go to FileChoose
+                                gSaveContext.gameMode = 2; // Go to FileSelect
                                 play->transitionTrigger = TRANS_TRIGGER_START;
                                 play->transitionType = TRANS_TYPE_02;
                                 play->nextEntranceIndex = 0x1C00;

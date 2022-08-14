@@ -11,7 +11,7 @@
 
 void func_801A3238(u8 playerIdx, u16 seqId, u8 fadeTimer, s8 arg3, s8 arg4);
 void func_801A4058(u16);
-void func_801457CC(FileSelectState* fileChooseCtx, SramContext* sramCtx);
+void func_801457CC(FileSelectState* fileSelect, SramContext* sramCtx);
 
 extern Gfx D_010311F0[];
 extern Gfx D_01031408[];
@@ -107,7 +107,7 @@ s16 sFileInfoBoxPartWidths[] = {
 
 s16 sWindowContentColors[] = { 100, 150, 255 };
 
-s16 fileChooseSkyboxRotation = 0;
+s16 sFileSelectSkyboxRotation = 0;
 
 s16 D_80814554[] = { 1, 0, 0, 0 };
 
@@ -118,23 +118,20 @@ s16 D_80814554[] = { 1, 0, 0, 0 };
      (GET_NEWF(sramCtx, slotNum, 2) == 'L') || (GET_NEWF(sramCtx, slotNum, 3) == 'D') || \
      (GET_NEWF(sramCtx, slotNum, 4) == 'A') || (GET_NEWF(sramCtx, slotNum, 5) == '3'))
 
-#define GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, index) (fileChooseCtx->newf[slotNum][index])
-#define FILE_CHOOSE_SLOT_OCCUPIED(fileChooseCtx, slotNum)        \
-    ((GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 0) == 'Z') && \
-     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 1) == 'E') && \
-     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 2) == 'L') && \
-     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 3) == 'D') && \
-     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 4) == 'A') && \
-     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 5) == '3'))
+#define GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, index) (fileSelect->newf[slotNum][index])
+#define FILE_CHOOSE_SLOT_OCCUPIED(fileSelect, slotNum)                                                                 \
+    ((GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 0) == 'Z') && (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 1) == 'E') && \
+     (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 2) == 'L') && (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 3) == 'D') && \
+     (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 4) == 'A') && (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 5) == '3'))
 
 void func_8080BC20(FileSelectState* this) {
     this->configMode++;
 }
 
-void FileChoose_nop8080bc44(void) {
+void FileSelect_nop8080bc44(void) {
 }
 
-void FileChoose_nop8080BC4C(FileSelectState* this) {
+void FileSelect_nop8080BC4C(FileSelectState* this) {
 }
 
 void func_8080BC58(GameState* thisx) {
@@ -177,7 +174,7 @@ void func_8080BDAC(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
 
     func_8012C628(this->state.gfxCtx);
-    FileChoose_nop8080BC4C(this);
+    FileSelect_nop8080BC4C(this);
 }
 
 void FileSelect_RenderView(FileSelectState* this, f32 eyeX, f32 eyeY, f32 eyeZ) {
@@ -2368,16 +2365,16 @@ void FileSelect_UpdateAndDrawSkybox(FileSelectState* this) {
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    eyeX = 1000.0f * Math_CosS(fileChooseSkyboxRotation) - 1000.0f * Math_SinS(fileChooseSkyboxRotation);
+    eyeX = 1000.0f * Math_CosS(sFileSelectSkyboxRotation) - 1000.0f * Math_SinS(sFileSelectSkyboxRotation);
     eyeY = -700.0f;
-    eyeZ = 1000.0f * Math_SinS(fileChooseSkyboxRotation) + 1000.0f * Math_CosS(fileChooseSkyboxRotation);
+    eyeZ = 1000.0f * Math_SinS(sFileSelectSkyboxRotation) + 1000.0f * Math_CosS(sFileSelectSkyboxRotation);
 
     FileSelect_RenderView(this, eyeX, eyeY, eyeZ);
     SkyboxDraw_Draw(&this->skyboxCtx, this->state.gfxCtx, 1, this->envCtx.unk_13, eyeX, -700.0f, eyeZ);
 
     gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_NONE);
 
-    fileChooseSkyboxRotation += -0xA;
+    sFileSelectSkyboxRotation += -0xA;
 
     CLOSE_DISPS(gfxCtx);
 }
@@ -2606,7 +2603,7 @@ void FileSelect_InitContext(GameState* thisx) {
     gSaveContext.buttonStatus[4] = 0;
 }
 
-void FileChoose_Destroy(GameState* this) {
+void FileSelect_Destroy(GameState* this) {
     ShrinkWindow_Destroy();
 }
 
@@ -2620,7 +2617,7 @@ void FileSelect_Init(GameState* thisx) {
     ShrinkWindow_Init();
     View_Init(&this->view, this->state.gfxCtx);
     this->state.main = FileSelect_Main;
-    this->state.destroy = FileChoose_Destroy;
+    this->state.destroy = FileSelect_Destroy;
     FileSelect_InitContext(&this->state);
     Font_LoadOrderedFont(&this->font);
 

@@ -4,7 +4,7 @@
 #include "global.h"
 
 void FileSelect_Init(GameState* thisx);
-void FileChoose_Destroy(GameState* thisx);
+void FileSelect_Destroy(GameState* thisx);
 
 typedef struct FileSelectState {
     /* 0x00000 */ GameState state;
