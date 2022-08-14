@@ -63,7 +63,6 @@ typedef struct LightNode {
     /* 0x8 */ struct LightNode* next;
 } LightNode; // size = 0xC
 
-// TODO move LightsBuffer to .c file once .bss has been split
 #define LIGHTS_BUFFER_SIZE 32
 
 typedef struct LightsBuffer {
@@ -83,12 +82,12 @@ typedef struct LightContext {
 } LightContext; // size = 0x10
 
 typedef enum LightType {
-    /* 0x00 */ LIGHT_POINT_NOGLOW,
-    /* 0x01 */ LIGHT_DIRECTIONAL,
-    /* 0x02 */ LIGHT_POINT_GLOW
+    /* 0 */ LIGHT_POINT_NOGLOW,
+    /* 1 */ LIGHT_DIRECTIONAL,
+    /* 2 */ LIGHT_POINT_GLOW
 } LightType;
 
 typedef void (*LightsBindFunc)(Lights* lights, LightParams* params, Vec3f* vec);
-typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, struct GlobalContext* globalCtx);
+typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, struct PlayState* play);
 
 #endif

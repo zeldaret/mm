@@ -6,9 +6,12 @@
 
 #include "z_file_choose.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
+#include "z64rumble.h"
+#include "z64save.h"
 
 void func_801A3238(u8 playerIdx, u16 seqId, u8 fadeTimer, s8 arg3, s8 arg4); /* extern */
 void func_801A4058(u16);
+void func_801457CC(FileChooseContext* fileChooseCtx, SramContext* sramCtx);
 
 extern Gfx D_010311F0[];
 extern Gfx D_01031408[];
@@ -28,7 +31,7 @@ extern s16 fileChooseSkyboxRotation;
 extern u32 D_801C6798[];
 
 #define gSramSlotOffsets D_801C6798
-#define GET_NEWF(sramCtx, slotNum, index) (sramCtx->readBuff[gSramSlotOffsets[slotNum] + offsetof(SaveContext, newf[index])])
+#define GET_NEWF(sramCtx, slotNum, index) (sramCtx->readBuff[gSramSlotOffsets[slotNum] + offsetof(SaveContext, save.playerData.newf[index])])
 #define SLOT_OCCUPIED(sramCtx, slotNum) \
     ((GET_NEWF(sramCtx, slotNum, 0) == 'Z') || \
      (GET_NEWF(sramCtx, slotNum, 1) == 'E') || \
@@ -61,7 +64,7 @@ void func_8080BC58(GameState* thisx) {
     FileChooseContext* this = (FileChooseContext*)thisx;
 
     if (this->unk_24486 == 0) {
-        if (gSaveContext.option_id != 0xA51D) { // Magic number?
+        if (gSaveContext.options.optionId != 0xA51D) { // Magic number?
             this->unk_24486++;
         } else {
             // TODO: defines for these
@@ -243,7 +246,7 @@ void func_8080C3A8(GameState* thisx) {
                     this->unk_24486 = 34;
                     this->unk_24510 = 99;
                     this->unk_24512 = 0;
-                    if (gSaveContext.language != 0) {
+                    if (gSaveContext.options.language != 0) {
                         this->unk_24512 = 2;
                     }
                     this->unk_24518 = 0;
@@ -267,7 +270,7 @@ void func_8080C3A8(GameState* thisx) {
                 this->unk_24486 = 34;
                 this->unk_24510 = 99;
                 this->unk_24512 = 0;
-                if (gSaveContext.language != 0) {
+                if (gSaveContext.options.language != 0) {
                     this->unk_24512 = 2;
                 }
                 this->unk_24518 = 0;
@@ -1218,9 +1221,9 @@ extern s16 D_80814650[];
 // //             }
 // //             temp_v0_2 = this->unk_24486;
 // //             phi_s1_2 = this->unk_24508 - 6;
-// //             if ((temp_v0_2 == 0x10) && (phi_s6 = this + (phi_s4_3 * 2) + 0x20000, (phi_s4_3 == this->unk_244A6))) {
+// //             if ((temp_v0_2 == 0x10) && (phi_s6 = this + (phi_s4_3 * 2) + 0x20000, (phi_s4_3 == this->fileNum))) {
 // //                 sp98 = this->unk_24492[phi_s4_3] + 0x2C;
-// //             } else if (((temp_v0_2 == 0x11) || (temp_v0_2 == 0x12)) && (phi_s6 = this + (phi_s4_3 * 2) + 0x20000, (phi_s4_3 == this->unk_244A6))) {
+// //             } else if (((temp_v0_2 == 0x11) || (temp_v0_2 == 0x12)) && (phi_s6 = this + (phi_s4_3 * 2) + 0x20000, (phi_s4_3 == this->fileNum))) {
 // //                 sp98 = this->unk_2449A[phi_s4_3] + sp9C;
 // //             } else {
 // //                 sp98 = this->unk_24492[phi_s4_3] + sp9C + this->unk_2449A[phi_s4_3];
@@ -1492,10 +1495,10 @@ extern s16 D_80814650[];
 // //             temp_a0_60->unk6A = (s16) temp_a0_60->unk7A;
 // //             temp_v0_3 = this->unk_24486;
 // //             temp_s1_4 = this->unk_24508 + 0xA3;
-// //             if ((temp_v0_3 == 0x10) && (phi_s4_3 == this->unk_244A6)) {
+// //             if ((temp_v0_3 == 0x10) && (phi_s4_3 == this->fileNum)) {
 // //                 phi_t0_3 = phi_s6->unk4492 + 0x2C;
 // //             } else {
-// //                 if (((temp_v0_3 == 0x11) || (temp_v0_3 == 0x12)) && (phi_t9 = sp9C, (phi_s4_3 == this->unk_244A6))) {
+// //                 if (((temp_v0_3 == 0x11) || (temp_v0_3 == 0x12)) && (phi_t9 = sp9C, (phi_s4_3 == this->fileNum))) {
 // //                     phi_t6 = phi_s6->unk449A;
 // //                 } else {
 // //                     phi_t6 = phi_s6->unk4492 + sp9C;
@@ -1921,11 +1924,11 @@ void func_80811CB8(GameState* thisx) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244BA);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
-        Matrix_InsertTranslation(0.0f, 0.0f, -93.6f, MTXMODE_NEW);
+        Matrix_Translate(0.0f, 0.0f, -93.6f, MTXMODE_NEW);
         Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
 
         if (this->unk_2450C) {
-            Matrix_RotateStateAroundXAxis(this->unk_2450C / 100.0f);
+            Matrix_RotateXFApply(this->unk_2450C / 100.0f);
         }
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1952,9 +1955,9 @@ void func_80811CB8(GameState* thisx) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244BA);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
-        Matrix_InsertTranslation(0.0f, 0.0f, -93.6f, MTXMODE_NEW);
+        Matrix_Translate(0.0f, 0.0f, -93.6f, MTXMODE_NEW);
         Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
-        Matrix_RotateStateAroundXAxis((this->unk_2450C - 314.0f) / 100.0f);
+        Matrix_RotateXFApply((this->unk_2450C - 314.0f) / 100.0f);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -1980,9 +1983,9 @@ void func_80811CB8(GameState* thisx) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244BA);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
-        Matrix_InsertTranslation(0.0f, 0.0f, -93.6f, MTXMODE_NEW);
+        Matrix_Translate(0.0f, 0.0f, -93.6f, MTXMODE_NEW);
         Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
-        Matrix_RotateStateAroundXAxis((this->unk_2450C - 314.0f) / 100.0f);
+        Matrix_RotateXFApply((this->unk_2450C - 314.0f) / 100.0f);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         
@@ -2102,7 +2105,7 @@ void func_80812840(GameState *thisx) {
 
     if (CHECK_BTN_ALL(input->press.button, BTN_START) || (CHECK_BTN_ALL(input->press.button, BTN_A))) {
         if (this->unk_24482 == 0) {
-            func_8013ECE0(300.0f, 180, 20, 100);
+            Rumble_Request(300.0f, 180, 20, 100);
             play_sound(NA_SE_SY_FSEL_DECIDE_L);
             this->unk_2448C = 6;
             func_801A4058(0xF);
@@ -2212,7 +2215,7 @@ void func_80812D44(GameState *thisx) {
     }
 }
 
-void func_80144E78(FileChooseContext* fileChooseCtx, SramContext* sramCtx);
+void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx);
 
 // FileChoose_LoadGame
 void func_80812D94(GameState *thisx) {
@@ -2220,12 +2223,12 @@ void func_80812D94(GameState *thisx) {
     u16 phi_v0;
 
     gSaveContext.fileNum = this->unk_24480;
-    func_80144E78(this, &this->sramCtx);
+    Sram_OpenSave(this, &this->sramCtx);
 
     gSaveContext.gameMode = 0;
     
     STOP_GAMESTATE(&this->state);
-    SET_NEXT_GAMESTATE_TEST(&this->state, Play_Init, GlobalContext);
+    SET_NEXT_GAMESTATE_TEST(&this->state, Play_Init, PlayState);
 
     gSaveContext.respawnFlag = 0;
     gSaveContext.respawn[0].entranceIndex = 0xFFFF;
@@ -2245,8 +2248,8 @@ void func_80812D94(GameState *thisx) {
     gSaveContext.healthAccumulator = 0;
     gSaveContext.unk_3F2C = 0;
     gSaveContext.unk_3F46 = 0;
-    gSaveContext.environmentTime = 0;
-    gSaveContext.nextTransition = 0xFF;
+    gSaveContext.skyboxTime = 0;
+    gSaveContext.nextTransitionType = TRANS_NEXT_TYPE_DEFAULT;
     gSaveContext.cutsceneTrigger = 0;
     gSaveContext.unk_3F4D = 0;
     gSaveContext.nextDayTime = 0xFFFF;
@@ -2260,7 +2263,7 @@ void func_80812D94(GameState *thisx) {
     gSaveContext.unk_3F20 = 0;
     gSaveContext.unk_3F22 = 0;
     gSaveContext.unk_3F24 = 0;
-    gSaveContext.tatlTimer = 0;
+    gSaveContext.save.playerData.tatlTimer = 0;
 }
 
 // gSelectModeUpdateFuncs
@@ -2301,9 +2304,9 @@ void func_80812ED0(GameState* thisx) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244BA);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
-    Matrix_InsertTranslation(0.0f, 0.0f, -93.6f, 0);
-    Matrix_Scale(0.78f, 0.78f, 0.78f, 1);
-    Matrix_RotateStateAroundXAxis(this->unk_2450C / 100.0f);
+    Matrix_Translate(0.0f, 0.0f, -93.6f, MTXMODE_NEW);
+    Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
+    Matrix_RotateXFApply(this->unk_2450C / 100.0f);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gSPVertex(POLY_OPA_DISP++, &this->unk_A4[0], 32, 0);
@@ -2502,7 +2505,7 @@ void func_80813908(GameState* thisx) {
     this->unk_24480 = 
     this->unk_2448C = 
     this->unk_2448E = 
-    this->unk_244A6 = 
+    this->fileNum = 
     this->unk_24482 = 0;
 
     this->unk_244F6[0] = 2;
@@ -2588,8 +2591,8 @@ void func_80813908(GameState* thisx) {
     this->unk_24528 = 20;
 
     ShrinkWindow_SetLetterboxTarget(0);
-    gSaveContext.environmentTime = 0;
-    gSaveContext.time = 0;
+    gSaveContext.skyboxTime = 0;
+    gSaveContext.save.time = 0;
 
     // Skybox_Init
     func_801434E4(&this->state, &this->skyboxCtx, 1);
@@ -2629,7 +2632,7 @@ void FileChoose_Init(GameState* thisx) {
     size_t size;
 
     Game_SetFramerateDivisor(&this->state, 1);
-    Matrix_StateAlloc(&this->state);
+    Matrix_Init(&this->state);
     ShrinkWindow_Init();
     View_Init(&this->view, this->state.gfxCtx);
     this->state.main = FileChoose_Main;
@@ -2645,9 +2648,9 @@ void FileChoose_Init(GameState* thisx) {
     this->parameterSegment = THA_AllocEndAlign16(&this->state.heap, size);
     DmaMgr_SendRequest0(this->parameterSegment, SEGMENT_ROM_START(parameter_static), size);
 
-    size = objectFileTable[OBJECT_MAG].vromEnd - objectFileTable[OBJECT_MAG].vromStart;
+    size = gObjectTable[OBJECT_MAG].vromEnd - gObjectTable[OBJECT_MAG].vromStart;
     this->titleSegment = THA_AllocEndAlign16(&this->state.heap, size);
-    DmaMgr_SendRequest0(this->titleSegment, objectFileTable[OBJECT_MAG].vromStart, size);
+    DmaMgr_SendRequest0(this->titleSegment, gObjectTable[OBJECT_MAG].vromStart, size);
 
     audio_setBGM(0xA);
     func_801A3238(SEQ_PLAYER_BGM_MAIN, NA_BGM_FILE_SELECT, 0, 7, 1);

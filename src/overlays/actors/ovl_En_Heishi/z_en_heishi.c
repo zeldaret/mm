@@ -5,21 +5,20 @@
  */
 
 #include "z_en_heishi.h"
-#include "objects/object_sdn/object_sdn.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnHeishi*)thisx)
 
-void EnHeishi_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnHeishi_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnHeishi_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnHeishi_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnHeishi_Init(Actor* thisx, PlayState* play);
+void EnHeishi_Destroy(Actor* thisx, PlayState* play);
+void EnHeishi_Update(Actor* thisx, PlayState* play);
+void EnHeishi_Draw(Actor* thisx, PlayState* play);
 
 void EnHeishi_ChangeAnimation(EnHeishi* this, s32 animIndex);
 void EnHeishi_SetHeadRotation(EnHeishi* this);
 void EnHeishi_SetupIdle(EnHeishi* this);
-void EnHeishi_Idle(EnHeishi* this, GlobalContext* globalCtx);
+void EnHeishi_Idle(EnHeishi* this, PlayState* play);
 
 typedef enum {
     /* 0 */ HEISHI_ANIMATION_STAND_HAND_ON_HIP,
@@ -61,41 +60,43 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
-void EnHeishi_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnHeishi_Init(Actor* thisx, PlayState* play) {
     EnHeishi* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSoldierSkeleton, &gSoldierWave, this->jointTable,
-                       this->morphTable, HEISHI_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierWave, this->jointTable, this->morphTable,
+                       SOLDIER_LIMB_MAX);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->paramsCopy = this->actor.params;
     this->yawTowardsPlayer = this->actor.world.rot.y;
 
     if (this->paramsCopy == 0) {
         this->shouldSetHeadRotation = 1;
-        if (!(gSaveContext.weekEventReg[63] & 0x80) && !((gSaveContext.day == 3) && gSaveContext.isNight)) {
+        if (!(gSaveContext.save.weekEventReg[63] & 0x80) &&
+            !((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
     } else {
         this->colliderCylinder.dim.radius = 30;
         this->colliderCylinder.dim.height = 60;
         this->colliderCylinder.dim.yShift = 0;
-        if ((gSaveContext.weekEventReg[63] & 0x80) || ((gSaveContext.day == 3) && gSaveContext.isNight)) {
+        if ((gSaveContext.save.weekEventReg[63] & 0x80) ||
+            ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
     }
 
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);
     this->actor.flags |= ACTOR_FLAG_8000000;
     EnHeishi_SetupIdle(this);
 }
 
-void EnHeishi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnHeishi_Destroy(Actor* thisx, PlayState* play) {
     EnHeishi* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->colliderCylinder);
+    Collider_DestroyCylinder(play, &this->colliderCylinder);
 }
 
 void EnHeishi_ChangeAnimation(EnHeishi* this, s32 animIndex) {
@@ -137,10 +138,10 @@ void EnHeishi_SetupIdle(EnHeishi* this) {
     this->actionFunc = EnHeishi_Idle;
 }
 
-void EnHeishi_Idle(EnHeishi* this, GlobalContext* globalCtx) {
+void EnHeishi_Idle(EnHeishi* this, PlayState* play) {
 }
 
-void EnHeishi_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnHeishi_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnHeishi* this = THIS;
 
@@ -150,12 +151,12 @@ void EnHeishi_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if ((this->paramsCopy != 0) && (gSaveContext.day == 3) && gSaveContext.isNight) {
+    if ((this->paramsCopy != 0) && (gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
         Actor_MarkForDeath(&this->actor);
     } else {
-        this->actionFunc(this, globalCtx);
+        this->actionFunc(this, play);
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 29);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 29);
         Actor_SetScale(&this->actor, 0.01f);
         if (this->shouldSetHeadRotation) {
             EnHeishi_SetHeadRotation(this);
@@ -165,15 +166,14 @@ void EnHeishi_Update(Actor* thisx, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 3000, 0);
         Math_SmoothStepToS(&this->headRotY, this->headRotYTarget, 1, 1000, 0);
         Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderCylinder.base);
     }
 }
 
-s32 EnHeishi_OverrideLimbDraw(GlobalContext* globalctx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                              Actor* thisx) {
+s32 EnHeishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnHeishi* this = THIS;
 
-    if (limbIndex == HEISHI_LIMB_HEAD) {
+    if (limbIndex == SOLDIER_LIMB_HEAD) {
         rot->x += this->headRotX;
         rot->y += this->headRotY;
         rot->z += this->headRotZ;
@@ -182,10 +182,10 @@ s32 EnHeishi_OverrideLimbDraw(GlobalContext* globalctx, s32 limbIndex, Gfx** dLi
     return false;
 }
 
-void EnHeishi_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnHeishi_Draw(Actor* thisx, PlayState* play) {
     EnHeishi* this = THIS;
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    func_8012C28C(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnHeishi_OverrideLimbDraw, NULL, &this->actor);
 }

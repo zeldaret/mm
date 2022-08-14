@@ -8,10 +8,10 @@
 
 #define PARAMS ((EffectSsBomb2InitParams*)initParamsx)
 
-s32 EffectSsBomb2_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsBomb2_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void func_80978138(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void func_80978304(GlobalContext* globalCtx, u32 index, EffectSs* this);
+s32 EffectSsBomb2_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsBomb2_Update(PlayState* play, u32 index, EffectSs* this);
+void func_80978138(PlayState* play, u32 index, EffectSs* this);
+void func_80978304(PlayState* play, u32 index, EffectSs* this);
 
 #if 0
 const EffectSsInit Effect_Ss_Bomb2_InitVars = {

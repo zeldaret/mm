@@ -10,22 +10,22 @@
 
 #define THIS ((EnOkuta*)thisx)
 
-void EnOkuta_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnOkuta_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnOkuta_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnOkuta_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnOkuta_Init(Actor* thisx, PlayState* play);
+void EnOkuta_Destroy(Actor* thisx, PlayState* play);
+void EnOkuta_Update(Actor* thisx, PlayState* play);
+void EnOkuta_Draw(Actor* thisx, PlayState* play);
 
-void func_8086E52C(EnOkuta* this, GlobalContext* globalCtx);
-void func_8086E658(EnOkuta* this, GlobalContext* globalCtx);
-void func_8086E7E8(EnOkuta* this, GlobalContext* globalCtx);
-void func_8086E948(EnOkuta* this, GlobalContext* globalCtx);
-void func_8086EC00(EnOkuta* this, GlobalContext* globalCtx);
-void func_8086EF14(EnOkuta* this, GlobalContext* globalCtx);
-void func_8086EFE8(EnOkuta* this, GlobalContext* globalCtx);
-void func_8086F434(EnOkuta* this, GlobalContext* globalCtx);
-void func_8086F4B0(EnOkuta* this, GlobalContext* globalCtx);
-void func_8086F57C(EnOkuta* this, GlobalContext* globalCtx);
-void func_8086F694(EnOkuta* this, GlobalContext* globalCtx);
+void func_8086E52C(EnOkuta* this, PlayState* play);
+void func_8086E658(EnOkuta* this, PlayState* play);
+void func_8086E7E8(EnOkuta* this, PlayState* play);
+void func_8086E948(EnOkuta* this, PlayState* play);
+void func_8086EC00(EnOkuta* this, PlayState* play);
+void func_8086EF14(EnOkuta* this, PlayState* play);
+void func_8086EFE8(EnOkuta* this, PlayState* play);
+void func_8086F434(EnOkuta* this, PlayState* play);
+void func_8086F4B0(EnOkuta* this, PlayState* play);
+void func_8086F57C(EnOkuta* this, PlayState* play);
+void func_8086F694(EnOkuta* this, PlayState* play);
 
 #if 0
 const ActorInit En_Okuta_InitVars = {

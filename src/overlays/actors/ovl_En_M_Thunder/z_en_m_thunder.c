@@ -5,15 +5,16 @@
  */
 
 #include "z_en_m_thunder.h"
+#include "z64rumble.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnMThunder*)thisx)
 
-void EnMThunder_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnMThunder_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnMThunder_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnMThunder_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnMThunder_Init(Actor* thisx, PlayState* play);
+void EnMThunder_Destroy(Actor* thisx, PlayState* play);
+void EnMThunder_Update(Actor* thisx, PlayState* play);
+void EnMThunder_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_M_Thunder_InitVars = {

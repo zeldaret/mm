@@ -13,7 +13,7 @@ GfxMasterList* gGfxMasterDL;
 CfbInfo sGraphCfbInfos[3];
 OSTime sGraphTaskStartTime;
 
-void* Graph_FaultClient(void) {
+void Graph_FaultClient(void) {
     FaultDrawer_DrawText(30, 100, "ShowFrameBuffer PAGE 0/1");
     osViSwapBuffer(SysCfb_GetFbPtr(0));
     osViSetMode(D_801FBB88);
@@ -68,7 +68,7 @@ GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
     if (gameStateInit == (GameStateFunc)TitleSetup_Init) {
         return &gGameStateOverlayTable[0];
     }
-    if (gameStateInit == (GameStateFunc)Select_Init) {
+    if (gameStateInit == (GameStateFunc)MapSelect_Init) {
         return &gGameStateOverlayTable[1];
     }
     if (gameStateInit == (GameStateFunc)Title_Init) {
