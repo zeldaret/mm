@@ -82,8 +82,8 @@ void OceffWipe7_Draw(Actor* thisx, PlayState* play) {
         alpha = 255;
     }
 
-    for (i = 1; i < ARRAY_COUNT(gOceff7Vtx); i += 2) {
-        gOceff7Vtx[i].v.cn[3] = alpha;
+    for (i = 1; i < ARRAY_COUNT(sSongofHealingEffectFrustrumVtx); i += 2) {
+        sSongofHealingEffectFrustrumVtx[i].v.cn[3] = alpha;
     }
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -96,8 +96,8 @@ void OceffWipe7_Draw(Actor* thisx, PlayState* play) {
     Matrix_RotateXS(0x708, MTXMODE_APPLY);
     Matrix_Translate(0.0f, 0.0f, -z, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    AnimatedMat_Draw(play, ovl_Oceff_Wipe7_Matanimheader_000B38);
-    gSPDisplayList(POLY_XLU_DISP++, gOceff7DL);
+    AnimatedMat_Draw(play, sSongofHealingEffectTexAnim);
+    gSPDisplayList(POLY_XLU_DISP++, sSongOfHealingEffectFrustumDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
