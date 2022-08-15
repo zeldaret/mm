@@ -544,21 +544,10 @@ typedef struct {
     /* 0xC */ s16 unk_C;
 } struct_8082F02C_arg1; // size = 0xE
 
-#if 0
-// OoT:
-typedef struct GetItemEntry {
-    /* 0x00 */ u8 itemId;
-    /* 0x01 */ u8 field; // various bit-packed data
-    /* 0x02 */ s8 gi;    // defines the draw id and chest opening animation
-    /* 0x03 */ u8 textId;
-    /* 0x04 */ u16 objectId;
-} GetItemEntry; // size = 0x06
-#endif
-
 typedef struct GetItemEntry {
     /* 0x0 */ u8 itemId;
-    /* 0x1 */ u8 field;
-    /* 0x2 */ s8 unk_2;
+    /* 0x1 */ u8 field; // various bit-packed data
+    /* 0x2 */ s8 gid;   // defines the draw id and chest opening animation
     /* 0x3 */ u8 textId;
     /* 0x4 */ u16 objectId;
 } GetItemEntry; // size = 0x6
@@ -2527,10 +2516,11 @@ GetItemEntry sGetItemTable[GI_MAX - 1] = {
              CHEST_ANIM_LONG),
 };
 
+// Player_UpdateCurrentGetItemDrawId?
 void func_8082ECE0(Player* this) {
     GetItemEntry* giEntry = &sGetItemTable[this->getItemId - 1];
 
-    this->unk_B2A = ABS_ALT(giEntry->unk_2);
+    this->getItemDrawId = ABS_ALT(giEntry->gid);
 }
 
 LinkAnimationHeader* func_8082ED20(Player* this) {
@@ -8621,7 +8611,7 @@ s32 func_8083D23C(Player* this, PlayState* play) {
                             this->currentYaw = this->actor.shape.rot.y = interactRangeActor->shape.rot.y;
 
                             func_8082DAD4(this);
-                            if ((giEntry->itemId != ITEM_NONE) && (giEntry->unk_2 >= 0) &&
+                            if ((giEntry->itemId != ITEM_NONE) && (giEntry->gid >= 0) &&
                                 (Item_CheckObtainability(giEntry->itemId) == ITEM_NONE)) {
                                 this->unk_A86 = chest->cutsceneIdxB;
                                 func_8082DB90(play, this, this->ageProperties->unk_A0);
@@ -12178,7 +12168,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
             gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment3DL);
         }
 
-        if (this->unk_B2A > 0) {
+        if (this->getItemDrawId > 0) {
             Player_DrawGetItem(play, this);
         }
 
@@ -12569,7 +12559,7 @@ void func_808481CC(PlayState* play, Player* this, f32 arg2) {
 }
 
 void func_80848250(PlayState* play, Player* this) {
-    this->unk_B2A = 0;
+    this->getItemDrawId = 0;
     this->stateFlags1 &= ~(PLAYER_STATE1_400 | PLAYER_STATE1_800);
     this->getItemId = GI_NONE;
     func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
@@ -16386,8 +16376,8 @@ void func_80852C04(Player* this, PlayState* play) {
             if (func_808482E0(play, this) && (this->unk_AE8 == 1)) {
                 Player_SetModels(this, Player_ActionToModelGroup(this, this->heldItemActionParam));
 
-                if ((this->unk_B2A == 0x5D) || (this->unk_B2A == 0x64) || (this->unk_B2A == 0x65) ||
-                    (this->unk_B2A == 0x66)) {
+                if ((this->getItemDrawId == GID_POWDER_KEG) || (this->getItemDrawId == GID_REMAINS_GYORG) || (this->getItemDrawId == GID_REMAINS_TWINMOLD) ||
+                    (this->getItemDrawId == GID_SWORD_RAZOR)) {
                     func_80838760(this);
                     func_80848250(play, this);
                     this->stateFlags1 &= ~PLAYER_STATE1_20000000;
@@ -16786,7 +16776,7 @@ void func_80853A5C(Player* this, PlayState* play) {
             Actor* targetActor = this->talkActor;
 
             func_80838760(this);
-            this->unk_B2A = 0;
+            this->getItemDrawId = GID_BOTTLE;
 
             if ((targetActor->textId != 0) && (targetActor->textId != 0xFFFF)) {
                 this->actor.flags |= ACTOR_FLAG_100;
@@ -16796,7 +16786,7 @@ void func_80853A5C(Player* this, PlayState* play) {
             GetItemEntry* giEntry = &sGetItemTable[D_8085D1A4[this->exchangeItemId] - 1];
 
             if (Player_ActionToBottle(this, this->heldItemActionParam) < 0) {
-                this->unk_B2A = ABS_ALT(giEntry->unk_2);
+                this->getItemDrawId = ABS_ALT(giEntry->gid);
             }
 
             if (this->unk_AE8 == 0) {
@@ -16807,7 +16797,7 @@ void func_80853A5C(Player* this, PlayState* play) {
                 this->unk_AE8 = 1;
             } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
                 func_80838760(this);
-                this->unk_B2A = 0;
+                this->getItemDrawId = GID_BOTTLE;
                 this->actor.flags &= ~ACTOR_FLAG_100;
                 func_80839E74(this, play);
                 this->unk_B5E = 0xA;
@@ -18963,7 +18953,7 @@ void func_8085968C(PlayState* play, Player* this, UNK_TYPE arg2) {
 void func_80859708(PlayState* play, Player* this, UNK_TYPE arg2) {
     LinkAnimation_Update(play, &this->skelAnime);
     if ((this->actor.id == ACTOR_EN_TEST3) && Animation_OnFrame(&this->skelAnime, 20.0f)) {
-        this->unk_B2A = 0x3A;
+        this->getItemDrawId = GID_MASK_BLAST;
         func_80151BB4(play, 0x1B);
         func_801A3098(0x37);
     }
@@ -19637,10 +19627,10 @@ void func_8085A7C0(PlayState* play, Player* this, UNK_TYPE arg2) {
         if (this->unk_AE8 == 0) {
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) ||
                 (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE)) {
-                this->unk_B2A = 0;
+                this->getItemDrawId = GID_BOTTLE;
                 this->unk_AE8 = -1;
             } else {
-                this->unk_B2A = 0x6F;
+                this->getItemDrawId = GID_MUSHROOM;
             }
         } else if (this->unk_AE8 < 0) {
             if (Actor_HasParent(&this->actor, play)) {
@@ -20060,7 +20050,7 @@ PlayerActionParam func_8085B854(PlayState* play, Player* player, ItemID itemId) 
     player->heldItemActionParam = actionParam;
     Player_AnimationPlayOnce(play, player, &gameplay_keep_Linkanim_00DCA8);
     player->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);
-    player->unk_B2A = 0;
+    player->getItemDrawId = GID_BOTTLE;
     player->exchangeItemId = actionParam;
 
     return actionParam;

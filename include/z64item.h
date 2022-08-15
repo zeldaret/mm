@@ -444,7 +444,7 @@ typedef enum GetItemID {
     /* 0xBA */ GI_MAX
 } GetItemID;
 
-typedef enum {
+typedef enum GetItemDrawID {
     /* 0x00 */ GID_BOTTLE,
     /* 0x01 */ GID_KEY_SMALL,
     /* 0x02 */ GID_MASK_KAMARO,
