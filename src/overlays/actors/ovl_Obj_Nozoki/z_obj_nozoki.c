@@ -441,7 +441,7 @@ void func_80BA3344(ObjNozoki* this, PlayState* play) {
             ObjNozoki_SetupAction(this, func_80BA3230);
         }
     } else if ((this->dyna.actor.textId == 0) || Actor_TextboxIsClosing(&this->dyna.actor, play)) {
-        play->nextEntranceIndex = 0xE20;
+        play->nextEntrance = ENTRANCE(CURIOSITY_SHOP, 2);
         play->transitionTrigger = TRANS_TRIGGER_START;
     }
 }

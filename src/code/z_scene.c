@@ -454,7 +454,7 @@ void Scene_HeaderCmdAltHeaderList(PlayState* play, SceneCmd* cmd) {
     SceneCmd** altHeaderList;
     SceneCmd* altHeader;
 
-    if (gSaveContext.sceneSetupIndex) {
+    if (gSaveContext.sceneSetupIndex != 0) {
         altHeaderList = Lib_SegmentedToVirtual(cmd->altHeaders.segment);
         altHeader = altHeaderList[gSaveContext.sceneSetupIndex - 1];
 
@@ -527,7 +527,7 @@ void Scene_HeaderCmdAnimatedMaterials(PlayState* play, SceneCmd* cmd) {
  * Sets the exit fade from the next entrance index.
  */
 void Scene_SetExitFade(PlayState* play) {
-    play->transitionType = Entrance_GetTransitionFlags(play->nextEntranceIndex) & 0x7F;
+    play->transitionType = Entrance_GetTransitionFlags(play->nextEntrance) & 0x7F;
 }
 
 /**
@@ -587,15 +587,15 @@ s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header) {
 }
 
 /**
- * Creates an entrance index from the scene index, spawn index, and scene setup.
+ * Creates an entrance from the scene, spawn, and lyaer.
  */
-u16 Entrance_CreateIndex(s32 sceneIndex, s32 spawnIndex, s32 sceneSetup) {
-    return (((sceneIndex << 9) | (spawnIndex << 4)) | sceneSetup) & 0xFFFF;
+u16 Entrance_Create(s32 scene, s32 spawn, s32 layer) {
+    return (scene << 9) | (spawn << 4) | layer;
 }
 
 /**
- * Creates an entrance index from the current entrance index with the given spawn index.
+ * Creates an layer 0 entranace from the current entrance and the given spawn.
  */
-u16 Entrance_CreateIndexFromSpawn(s32 spawnIndex) {
-    return Entrance_CreateIndex(gSaveContext.save.entranceIndex >> 9, spawnIndex, 0);
+u16 Entrance_CreateFromSpawn(s32 spawn) {
+    return Entrance_Create(gSaveContext.save.entrance >> 9, spawn, 0);
 }

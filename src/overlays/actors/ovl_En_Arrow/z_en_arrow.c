@@ -315,9 +315,6 @@ void func_8088AA98(EnArrow* this, PlayState* play) {
     }
 }
 
-#ifdef NON_MATCHING
-// Stack. Scoped variable required to fix code gen at the bottom, likely sp60/54 there,
-// but sp50 must be declared below those so maybe not?
 void func_8088ACE0(EnArrow* this, PlayState* play) {
     CollisionPoly* spAC;
     s32 spA8;
@@ -329,8 +326,6 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
     f32 sp78;
     f32 sp74;
     f32 temp_f12_2;
-    Vec3f sp60;
-    Vec3f sp54;
     s32 sp50;
 
     if ((DECR(this->unk_260) == 0) ||
@@ -470,9 +465,8 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             Actor_MoveWithGravity(&this->actor);
         }
 
-        this->unk_262 = BgCheck_ProjectileLineTest(&play->colCtx, &this->actor.prevPos, &this->actor.world.pos, &sp9C,
-                                                   &this->actor.wallPoly, true, true, true, true, &spA8);
-        if (this->unk_262 != 0) {
+        if ((this->unk_262 = BgCheck_ProjectileLineTest(&play->colCtx, &this->actor.prevPos, &this->actor.world.pos,
+                                                        &sp9C, &this->actor.wallPoly, true, true, true, true, &spA8))) {
             func_800B90AC(play, &this->actor, this->actor.wallPoly, spA8, &sp9C);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp9C);
             this->actor.wallBgId = spA8;
@@ -485,7 +479,8 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
 
     if (this->unk_264 != NULL) {
         if (this->unk_264->update != NULL) {
-            s32 pad;
+            Vec3f sp60;
+            Vec3f sp54;
 
             Math_Vec3f_Sum(&this->unk_228, &this->unk_268, &sp60);
             Math_Vec3f_Sum(&this->actor.world.pos, &this->unk_268, &sp54);
@@ -511,9 +506,6 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Arrow/func_8088ACE0.s")
-#endif
 
 void func_8088B630(EnArrow* this, PlayState* play) {
     SkelAnime_Update(&this->arrow.skelAnime);
