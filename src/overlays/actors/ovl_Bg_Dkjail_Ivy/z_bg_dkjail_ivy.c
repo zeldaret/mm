@@ -17,11 +17,11 @@ void BgDkjailIvy_Destroy(Actor* thisx, PlayState* play);
 void BgDkjailIvy_Update(Actor* thisx, PlayState* play);
 void BgDkjailIvy_Draw(Actor* thisx, PlayState* play);
 
-void func_80ADE6AC(BgDkjailIvy* this);
+void BgDkjailIvy_SetupSetCollision(BgDkjailIvy* this);
 void BgDkjailIvy_SetCollision(BgDkjailIvy* this, PlayState* play);
-void func_80ADE734(BgDkjailIvy* this);
-void BgDkjailIvy_SetupCutscene(BgDkjailIvy* this, PlayState* play);
-void func_80ADE7E0(BgDkjailIvy* this);
+void BgDkjailIvy_SetupCutscene(BgDkjailIvy* this);
+void BgDkjailIvy_BeginCutscene(BgDkjailIvy* this, PlayState* play);
+void BgDkjailIvy_SetupFadeOut(BgDkjailIvy* this);
 void BgDkjailIvy_FadeOut(BgDkjailIvy* this, PlayState* play);
 
 const ActorInit Bg_Dkjail_Ivy_InitVars = {
@@ -129,7 +129,7 @@ void BgDkjailIvy_Init(Actor* thisx, PlayState* play) {
         Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
         Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
         this->alpha = 255;
-        func_80ADE6AC(this);
+        BgDkjailIvy_SetupSetCollision(this);
     }
 }
 
@@ -140,7 +140,7 @@ void BgDkjailIvy_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80ADE6AC(BgDkjailIvy* this) {
+void BgDkjailIvy_SetupSetCollision(BgDkjailIvy* this) {
     this->actionFunc = BgDkjailIvy_SetCollision;
 }
 
@@ -149,17 +149,17 @@ void BgDkjailIvy_SetCollision(BgDkjailIvy* this, PlayState* play) {
         this->collider.base.acFlags &= ~AC_HIT;
         this->dyna.actor.flags |= ACTOR_FLAG_10;
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
-        func_80ADE734(this);
+        BgDkjailIvy_SetupCutscene(this);
     } else {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
-void func_80ADE734(BgDkjailIvy* this) {
-    this->actionFunc = BgDkjailIvy_SetupCutscene;
+void BgDkjailIvy_SetupCutscene(BgDkjailIvy* this) {
+    this->actionFunc = BgDkjailIvy_BeginCutscene;
 }
 
-void BgDkjailIvy_SetupCutscene(BgDkjailIvy* this, PlayState* play) {
+void BgDkjailIvy_BeginCutscene(BgDkjailIvy* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         this->fadeOutTimer = 50;
@@ -167,13 +167,13 @@ void BgDkjailIvy_SetupCutscene(BgDkjailIvy* this, PlayState* play) {
         Flags_SetSwitch(play, BG_DKJAIL_GET_SWITCH(&this->dyna.actor));
         BgDkjailIvy_IvyCutEffects(this, play);
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_GRASS_WALL_BROKEN);
-        func_80ADE7E0(this);
+        BgDkjailIvy_SetupFadeOut(this);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
 }
 
-void func_80ADE7E0(BgDkjailIvy* this) {
+void BgDkjailIvy_SetupFadeOut(BgDkjailIvy* this) {
     this->actionFunc = BgDkjailIvy_FadeOut;
 }
 
