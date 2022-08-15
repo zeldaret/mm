@@ -296,8 +296,8 @@ void func_809CD634(EnBji01* this, PlayState* play) {
     AudioSfx_MuteBanks((1 << BANK_PLAYER) | (1 << BANK_ITEM) | (1 << BANK_ENV) | (1 << BANK_ENEMY) |
                        (1 << BANK_OCARINA) | (1 << BANK_VOICE));
     Audio_QueueSeqCmd(0xE0000101);
-    play->nextEntranceIndex = 0x54A0; /* Termina Field from telescope */
-    gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = play->nextEntranceIndex;
+    play->nextEntrance = ENTRANCE(TERMINA_FIELD, 10); /* Telescope entrance */
+    gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = play->nextEntrance;
     func_80169EFC(&play->state); /* Load new entrance? */
     gSaveContext.respawnFlag = -2;
     this->actionFunc = EnBji01_DoNothing;
@@ -343,13 +343,13 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
     SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     this->moonsTear = (ObjMoonStone*)SubS_FindActor(play, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
 
-    switch (gSaveContext.save.entranceIndex) {
-        case 0x4C00: /* Observatory from ECT */
-        case 0x4C10: /* Observatory from Termina Field door */
+    switch (gSaveContext.save.entrance) {
+        case ENTRANCE(ASTRAL_OBSERVATORY, 0): /* ECT entrance*/
+        case ENTRANCE(ASTRAL_OBSERVATORY, 1): /* TF door entrance */
             this->actor.params = SHIKASHI_TYPE_DEFAULT;
             func_809CCE98(this, play);
             break;
-        case 0x4C20: /* Observatory from Termina Field telescope */
+        case ENTRANCE(ASTRAL_OBSERVATORY, 2): /* Telescope entrance */
             this->actor.flags |= ACTOR_FLAG_10000;
             AudioSfx_MuteBanks(0);
             Audio_QueueSeqCmd(0xE0000100);

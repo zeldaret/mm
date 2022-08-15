@@ -300,7 +300,7 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
 }
 
 void EnBaba_TriggerTransition(PlayState* play, u16 nextEntrance) {
-    play->nextEntranceIndex = nextEntrance;
+    play->nextEntrance = nextEntrance;
     play->transitionType = TRANS_TYPE_64;
     gSaveContext.nextTransitionType = TRANS_TYPE_64;
     play->transitionTrigger = TRANS_TRIGGER_START;
@@ -510,7 +510,8 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
         this->actionFunc = EnBaba_Idle;
     } else if (play->sceneNum == SCENE_BACKTOWN) {
         if ((BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_FOLLOW_SCHEDULE) &&
-            (gSaveContext.save.entranceIndex != 0xD670) && (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != 0x3F)) {
+            (gSaveContext.save.entrance != ENTRANCE(NORTH_CLOCK_TOWN, 7)) &&
+            (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != 0x3F)) {
             if ((gSaveContext.save.weekEventReg[58] & 0x40) ||
                 (gSaveContext.save.time >= CLOCK_TIME(0, 20) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
                 Actor_MarkForDeath(&this->actor);
@@ -522,7 +523,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
             this->actionFunc = EnBaba_FollowSchedule;
         } else if ((BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_IDLE) &&
-                   (gSaveContext.save.entranceIndex == 0xD670)) {
+                   (gSaveContext.save.entrance == ENTRANCE(NORTH_CLOCK_TOWN, 7))) {
             if (gSaveContext.save.weekEventReg[81] & 2) {
                 Actor_MarkForDeath(&this->actor);
                 return;
@@ -603,12 +604,12 @@ void EnBaba_Talk(EnBaba* this, PlayState* play) {
                     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                         if (play->msgCtx.unk120B1 == 0) {
                             gSaveContext.save.weekEventReg[81] |= 2;
-                            EnBaba_TriggerTransition(play, 0xD670);
+                            EnBaba_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
                             return;
                         }
                     } else {
                         gSaveContext.save.weekEventReg[81] |= 2;
-                        EnBaba_TriggerTransition(play, 0xD670);
+                        EnBaba_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
                     }
                 } else {
                     this->textId = 0;
@@ -626,7 +627,7 @@ void EnBaba_Talk(EnBaba* this, PlayState* play) {
     } else if (talkState == TEXT_STATE_DONE) {
         if (Message_ShouldAdvance(play) && (play->msgCtx.unk120B1 == 0)) {
             gSaveContext.save.weekEventReg[81] |= 2;
-            EnBaba_TriggerTransition(play, 0xD670);
+            EnBaba_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
         }
     }
 }
@@ -699,7 +700,7 @@ void EnBaba_KnockedOver(EnBaba* this, PlayState* play) {
     } else {
         if ((gSaveContext.save.weekEventReg[79] & 0x40) && (DECR(this->sakonDeadTimer) == 0)) {
             Audio_QueueSeqCmd(0x101400FF);
-            EnBaba_TriggerTransition(play, 0xD670);
+            EnBaba_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
         } else {
             Actor_MoveWithGravity(&this->actor);
         }

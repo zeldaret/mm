@@ -1970,8 +1970,8 @@ asm/non_matchings/code/z_scene/Scene_HeaderCmdSetAreaVisitedFlag.s,Scene_HeaderC
 asm/non_matchings/code/z_scene/Scene_HeaderCmdAnimatedMaterials.s,Scene_HeaderCmdAnimatedMaterials,0x80130674,0xC
 asm/non_matchings/code/z_scene/Scene_SetExitFade.s,Scene_SetExitFade,0x801306A4,0x11
 asm/non_matchings/code/z_scene/Scene_ProcessHeader.s,Scene_ProcessHeader,0x801306E8,0x20
-asm/non_matchings/code/z_scene/Entrance_CreateIndex.s,Entrance_CreateIndex,0x80130768,0x7
-asm/non_matchings/code/z_scene/Entrance_CreateIndexFromSpawn.s,Entrance_CreateIndexFromSpawn,0x80130784,0xF
+asm/non_matchings/code/z_scene/Entrance_Create.s,Entrance_Create,0x80130768,0x7
+asm/non_matchings/code/z_scene/Entrance_CreateFromSpawn.s,Entrance_CreateFromSpawn,0x80130784,0xF
 asm/non_matchings/code/z_scene_proc/Scene_ExecuteDrawConfig.s,Scene_ExecuteDrawConfig,0x801307C0,0xD
 asm/non_matchings/code/z_scene_proc/Scene_DrawConfigDefault.s,Scene_DrawConfigDefault,0x801307F4,0x10
 asm/non_matchings/code/z_scene_proc/AnimatedMat_TexScroll.s,AnimatedMat_TexScroll,0x80130834,0x1B

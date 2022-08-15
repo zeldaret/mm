@@ -416,7 +416,7 @@ void func_809C1C9C(EnAob01* this, PlayState* play) {
         gSaveContext.save.weekEventReg[63] &= (u8)~2;
         this->unk_2D2 |= 0x20;
         func_800FD750(0x40);
-        play->nextEntranceIndex = 0x7C10;
+        play->nextEntrance = ENTRANCE(DOGGY_RACETRACK, 1);
         play->transitionType = TRANS_TYPE_64;
         gSaveContext.nextTransitionType = TRANS_TYPE_64;
         gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & (u8)~7) | 2;
@@ -672,7 +672,7 @@ void func_809C2788(EnAob01* this, PlayState* play) {
     this->unk_2D2 |= 0x20;
     if (func_809C25E4(this, play)) {
         if (func_801A8A50(0) != 0x41) {
-            play->nextEntranceIndex = 0x7C10;
+            play->nextEntrance = ENTRANCE(DOGGY_RACETRACK, 1);
             gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & (u8)~7) | 3;
             play->transitionType = TRANS_TYPE_64;
             gSaveContext.nextTransitionType = TRANS_TYPE_03;

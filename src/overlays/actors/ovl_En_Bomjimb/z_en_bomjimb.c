@@ -790,12 +790,12 @@ void func_80C02BCC(EnBomjimb* this, PlayState* play) {
 
 void func_80C02CA4(EnBomjimb* this, PlayState* play) {
     if (BREG(13) == 0) {
-        play->nextEntranceIndex = play->setupExitList[this->unk_2B2];
+        play->nextEntrance = play->setupExitList[this->unk_2B2];
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
     } else {
-        play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(5);
+        play->nextEntrance = Entrance_CreateFromSpawn(5);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;

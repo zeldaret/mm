@@ -166,7 +166,7 @@ typedef union CutsceneData {
 
 typedef struct {
     /* 0x0 */ CutsceneData* segmentedData;
-    /* 0x4 */ s16 nextEntranceIndex;
+    /* 0x4 */ s16 nextEntrance;
     /* 0x6 */ u8 unk6;
     /* 0x7 */ u8 unk7; // a weekEventReg bitpack?
 } CutsceneEntry; // size = 0x8

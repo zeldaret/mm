@@ -94,7 +94,7 @@ void EnBombers2_Init(Actor* thisx, PlayState* play) {
                        this->jointTable, OBJECT_CS_LIMB_MAX);
     this->actor.targetMode = 6;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    if ((gSaveContext.save.weekEventReg[73] & 0x80) || (gSaveContext.save.entranceIndex == 0xD220)) {
+    if ((gSaveContext.save.weekEventReg[73] & 0x80) || (gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2))) {
         this->actor.world.pos.x += Math_SinS(this->actor.home.rot.y + 0xC100) * 50.0f;
         cos = Math_CosS(this->actor.home.rot.y + 0xC100) * 50.0f;
         this->unk_2AC = 1;

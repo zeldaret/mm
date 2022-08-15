@@ -607,6 +607,9 @@ wordReplace = {
 
     "ActorCutscene_GetCurrentCamera": "ActorCutscene_GetCurrentSubCamId",
 
+    "Entrance_CreateIndex": "Entrance_Create",
+    "Entrance_CreateIndexFromSpawn": "Entrance_CreateFromSpawn",
+
     # Structs
     "ActorAnimationEntry": "AnimationInfo",
     "ActorAnimationEntryS": "AnimationInfoS",
@@ -651,7 +654,7 @@ wordReplace = {
     "gSaveContext.playerName": "gSaveContext.save.playerData.playerName",
     "gSaveContext.inventory": "gSaveContext.save.inventory",
     "gSaveContext.equippedMask": "gSaveContext.save.equippedMask",
-    "gSaveContext.entranceIndex": "gSaveContext.save.entranceIndex",
+    "gSaveContext.entranceIndex": "gSaveContext.save.entrance",
     "gSaveContext.time": "gSaveContext.save.time",
     "gSaveContext.unk_14": "gSaveContext.save.daySpeed",
     "gSaveContext.unk_FE6": "gSaveContext.save.bombersCaughtNum",
@@ -668,6 +671,7 @@ wordReplace = {
     "gSaveContext.unk_1016": "gSaveContext.jinxTimer",
     "gSaveContext.unk_3F58": "gSaveContext.sunsSongState",
     "gSaveContext.unk_48C8": "gSaveContext.dungeonIndex",
+    "gSaveContext.save.entranceIndex": "gSaveContext.save.entrance",
 
     "player->unk_A87": "player->exchangeItemId",
     "player->leftHandActor": "player->heldActor",
@@ -700,6 +704,7 @@ wordReplace = {
     "play->msgCtx.unk12023": "play->msgCtx.stateTimer",
     "play->msgCtx.unk1202A": "play->msgCtx.ocarinaMode",
     "play->msgCtx.unk1202C": "play->msgCtx.ocarinaAction",
+    "play->nextEntranceIndex": "play->nextEntrance",
 
     "play->sceneLoadFlag": "play->transitionTrigger",
     "play->unk_18B4A": "play->transitionMode",

@@ -94,7 +94,7 @@ void EnJgameTsn_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.velocity.y = 0.0f;
 
-    if (gSaveContext.save.entranceIndex == 0x68D0) {
+    if (gSaveContext.save.entrance == ENTRANCE(GREAT_BAY_COAST, 13)) {
         this->actor.flags |= ACTOR_FLAG_10000;
     }
 
@@ -367,7 +367,7 @@ void func_80C144E4(EnJgameTsn* this) {
 }
 
 void func_80C144F8(EnJgameTsn* this, PlayState* play) {
-    play->nextEntranceIndex = 0x68D0;
+    play->nextEntrance = ENTRANCE(GREAT_BAY_COAST, 13);
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_80;
     gSaveContext.nextTransitionType = TRANS_TYPE_03;

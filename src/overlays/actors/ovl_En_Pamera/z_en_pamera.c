@@ -155,12 +155,14 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
         func_80BD8658(this);
         if (1) {}
         if (!(gSaveContext.save.weekEventReg[14] & 4) || (gSaveContext.save.weekEventReg[52] & 0x20) ||
-            (gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.entranceIndex == 0x2090)) {
+            (gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.entrance == ENTRANCE(IKANA_CANYON, 9))) {
             Actor_MarkForDeath(&this->actor);
         }
         if (gSaveContext.save.weekEventReg[61] & 4) {
-            if (!(gSaveContext.save.weekEventReg[59] & 1) || (gSaveContext.save.entranceIndex != 0x2020)) {
-                if ((gSaveContext.save.entranceIndex != 0x2020) && (gSaveContext.save.weekEventReg[59] & 1)) {
+            if (!(gSaveContext.save.weekEventReg[59] & 1) ||
+                (gSaveContext.save.entrance != ENTRANCE(IKANA_CANYON, 2))) {
+                if ((gSaveContext.save.entrance != ENTRANCE(IKANA_CANYON, 2)) &&
+                    (gSaveContext.save.weekEventReg[59] & 1)) {
                     gSaveContext.save.weekEventReg[59] &= (u8)~1;
                 }
                 func_80BD8700(this);
@@ -684,7 +686,7 @@ void func_80BD9B4C(EnPamera* this, PlayState* play) {
 }
 
 void func_80BD9C70(EnPamera* this, PlayState* play) {
-    play->nextEntranceIndex = 0x2020;
+    play->nextEntrance = ENTRANCE(IKANA_CANYON, 2);
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_70;
     gSaveContext.nextTransitionType = TRANS_TYPE_02;

@@ -775,7 +775,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
     }
 
     if (((play->sceneNum == SCENE_KOEPONARACE) && (GET_RACE_FLAGS == 1)) ||
-        ((gSaveContext.save.entranceIndex == 0x6400) && Cutscene_GetSceneSetupIndex(play))) {
+        ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && Cutscene_GetSceneSetupIndex(play))) {
         this->stateFlags |= ENHORSE_FLAG_25;
     }
 
@@ -1551,7 +1551,7 @@ void EnHorse_Stopping(EnHorse* this, PlayState* play) {
     if ((this->stateFlags & ENHORSE_STOPPING_NEIGH_SOUND) && (this->skin.skelAnime.curFrame > 29.0f)) {
         this->actor.speedXZ = 0.0f;
         if ((Rand_ZeroOne() > 0.5f) &&
-            ((gSaveContext.save.entranceIndex != 0x6400) || !Cutscene_GetSceneSetupIndex(play))) {
+            ((gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 0)) || !Cutscene_GetSceneSetupIndex(play))) {
             if (this->stateFlags & ENHORSE_DRAW) {
                 if (this->type == HORSE_TYPE_2) {
                     Audio_PlaySfxAtPos(&this->unk_218, NA_SE_EV_KID_HORSE_NEIGH);

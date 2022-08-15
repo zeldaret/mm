@@ -214,10 +214,10 @@ void EnMa4_Init(Actor* thisx, PlayState* play) {
     } else {
         EnMa4_InitPath(this, play);
 
-        if (gSaveContext.save.entranceIndex == 0x6410) {
+        if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 1)) {
             EnMa4_ChangeAnim(this, 0);
             this->state = MA4_STATE_AFTERHORSEBACKGAME;
-        } else if (gSaveContext.save.entranceIndex == 0x64A0) {
+        } else if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 10)) {
             EnMa4_ChangeAnim(this, 0);
             this->state = MA4_STATE_AFTERDESCRIBETHEMCS;
         } else {
@@ -662,7 +662,7 @@ void EnMa4_SetupBeginHorsebackGame(EnMa4* this) {
 }
 
 void EnMa4_BeginHorsebackGame(EnMa4* this, PlayState* play) {
-    play->nextEntranceIndex = 0x6400;
+    play->nextEntrance = ENTRANCE(ROMANI_RANCH, 0);
     gSaveContext.nextCutsceneIndex = 0xFFF0;
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_80;
@@ -753,7 +753,7 @@ void EnMa4_HorsebackGameEnd(EnMa4* this, PlayState* play) {
         }
     } else if (sFrameCounter == 50) {
         play->actorCtx.unk268 = 0;
-        play->nextEntranceIndex = 0x6410;
+        play->nextEntrance = ENTRANCE(ROMANI_RANCH, 1);
         gSaveContext.nextCutsceneIndex = 0;
         sFrameCounter = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -859,7 +859,7 @@ void EnMa4_SetupBeginDescribeThemCs(EnMa4* this) {
 }
 
 void EnMa4_BeginDescribeThemCs(EnMa4* this, PlayState* play) {
-    play->nextEntranceIndex = 0x6400;
+    play->nextEntrance = ENTRANCE(ROMANI_RANCH, 0);
     gSaveContext.nextCutsceneIndex = 0xFFF5;
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_64;

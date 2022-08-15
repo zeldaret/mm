@@ -833,7 +833,7 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
                 player = GET_PLAYER(play);
                 func_8019F208();
                 gSaveContext.save.weekEventReg[31] |= 0x80;
-                play->nextEntranceIndex = 0x64B0;
+                play->nextEntrance = ENTRANCE(ROMANI_RANCH, 11);
                 if (player->stateFlags1 & PLAYER_STATE1_800000) {
                     D_801BDAA0 = 1;
                 }
@@ -1140,7 +1140,7 @@ void ObjUm_RanchWaitPathFinished(ObjUm* this, PlayState* play) {
         case OBJUM_PATH_STATE_FINISH:
             if (gSaveContext.save.weekEventReg[31] & 0x80) {
                 ActorCutscene_Stop(this->dyna.actor.cutscene);
-                play->nextEntranceIndex = 0x3E50;
+                play->nextEntrance = ENTRANCE(MILK_ROAD, 5);
                 play->transitionType = TRANS_TYPE_64;
                 gSaveContext.nextTransitionType = TRANS_TYPE_03;
                 play->transitionTrigger = TRANS_TRIGGER_START;
@@ -1243,7 +1243,7 @@ void func_80B7A2AC(ObjUm* this, PlayState* play) {
     switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
-            play->nextEntranceIndex = 0xCE40;
+            play->nextEntrance = ENTRANCE(GORMAN_TRACK, 4);
             play->transitionType = TRANS_TYPE_64;
             gSaveContext.nextTransitionType = TRANS_TYPE_03;
             play->transitionTrigger = TRANS_TRIGGER_START;
@@ -1301,14 +1301,14 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
 
             if (!(gSaveContext.save.weekEventReg[52] & 1) && !(gSaveContext.save.weekEventReg[52] & 2)) {
                 if (!this->areAllPotsBroken) {
-                    play->nextEntranceIndex = 0x3E60;
+                    play->nextEntrance = ENTRANCE(MILK_ROAD, 6);
                     play->transitionType = TRANS_TYPE_64;
                     gSaveContext.nextTransitionType = TRANS_TYPE_03;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     gSaveContext.save.weekEventReg[52] |= 1;
                     gSaveContext.save.weekEventReg[52] &= (u8)~2;
                 } else {
-                    play->nextEntranceIndex = 0x6480;
+                    play->nextEntrance = ENTRANCE(ROMANI_RANCH, 8);
                     play->transitionType = TRANS_TYPE_64;
                     gSaveContext.nextTransitionType = TRANS_TYPE_03;
                     play->transitionTrigger = TRANS_TRIGGER_START;
@@ -1550,7 +1550,7 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
         Audio_SetCutsceneFlag(false);
         gSaveContext.save.weekEventReg[59] |= 2;
         gSaveContext.nextCutsceneIndex = 0xFFF3;
-        play->nextEntranceIndex = 0x5400;
+        play->nextEntrance = ENTRANCE(TERMINA_FIELD, 0);
         play->transitionType = TRANS_TYPE_64;
         gSaveContext.nextTransitionType = TRANS_TYPE_03;
         play->transitionTrigger = TRANS_TRIGGER_START;

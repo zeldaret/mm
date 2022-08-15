@@ -645,7 +645,7 @@ void func_80B51760(EnGk* this, PlayState* play) {
                 this->unk_1E4 |= 2;
             }
         } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) &&
-                   (gSaveContext.save.entranceIndex != 0xD010)) {
+                   (gSaveContext.save.entrance != 0xD010)) {
             func_800B863C(&this->actor, play);
         }
 
@@ -720,7 +720,7 @@ void func_80B51B40(EnGk* this, PlayState* play) {
                 }
 
                 if (this->unk_31C == 0xE8F) {
-                    play->nextEntranceIndex = 0xD010;
+                    play->nextEntrance = ENTRANCE(GORON_RACETRACK, 1);
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     play->transitionType = TRANS_TYPE_03;
                     gSaveContext.nextTransitionType = TRANS_TYPE_03;
@@ -1029,9 +1029,9 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
             }
         } else if (play->sceneNum == SCENE_GORONRACE) {
             if (gSaveContext.save.weekEventReg[33] & 0x80) {
-                if (gSaveContext.save.entranceIndex == 0xD010) {
+                if (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1)) {
                     this->actionFunc = func_80B51760;
-                } else if (gSaveContext.save.entranceIndex == 0xD020) {
+                } else if (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 2)) {
                     this->actionFunc = func_80B52340;
                 } else {
                     this->actionFunc = func_80B51760;

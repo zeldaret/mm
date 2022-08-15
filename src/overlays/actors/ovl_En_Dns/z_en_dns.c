@@ -439,7 +439,7 @@ void func_8092D330(EnDns* this, PlayState* play) {
     }
     if ((this->unk_2C6 & 0x100) && (DECR(this->unk_2D0) == 0)) {
         this->unk_2C6 &= ~0x100;
-        play->nextEntranceIndex = 0x5010;
+        play->nextEntrance = ENTRANCE(DEKU_PALACE, 1);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_03;

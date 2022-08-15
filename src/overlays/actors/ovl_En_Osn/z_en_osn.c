@@ -789,17 +789,19 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
     this->unk_1FA = 255;
     switch (ENOSN_GET_3(&this->actor)) {
         case 0:
-            if (((gSaveContext.save.entranceIndex == 0xC020) || (gSaveContext.save.entranceIndex == 0xC030)) ||
-                (gSaveContext.save.entranceIndex == 0xC060)) {
+            if (((gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 2)) ||
+                 (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 3))) ||
+                (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 6))) {
                 this->unk_1EA |= 1;
             }
             this->unk_1F0 = 1;
             if (play->sceneNum == SCENE_INSIDETOWER) {
-                if ((gSaveContext.save.entranceIndex == 0xC020) || (gSaveContext.save.entranceIndex == 0xC060)) {
+                if ((gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 2)) ||
+                    (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 6))) {
                     this->actionFunc = func_80AD16A8;
                     return;
                 }
-                if (gSaveContext.save.entranceIndex == 0xC030) {
+                if (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 3)) {
                     func_80AD1398(this);
                     this->actionFunc = func_80AD1634;
                     return;

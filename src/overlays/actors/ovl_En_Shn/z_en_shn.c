@@ -260,7 +260,7 @@ s32 func_80AE6704(Actor* thisx, PlayState* play) {
         case 6:
             gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
             func_800B7298(play, &this->actor, 7);
-            play->nextEntranceIndex = 0x8460;
+            play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_POISONED, 6);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;
             play->transitionType = TRANS_TYPE_03;
@@ -360,7 +360,7 @@ void EnShn_Init(Actor* thisx, PlayState* play) {
     this->unk_2E0 = 0;
     this->unk_2D8 = 0;
     this->unk_1D8 = 0;
-    if (gSaveContext.save.entranceIndex != 0xA820) {
+    if (gSaveContext.save.entrance != ENTRANCE(TOURIST_INFORMATION, 2)) {
         SubS_UpdateFlags(&this->unk_1D8, 3, 7);
         this->unk_2BE = 0;
     } else {
