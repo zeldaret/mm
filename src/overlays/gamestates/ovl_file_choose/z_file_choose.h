@@ -57,7 +57,7 @@ typedef struct FileSelectState {
     /* 0x2448C */ s16  selectMode;
     /* 0x2448E */ s16  unk_2448E;
     /* 0x24490 */ s16  unk_24490;
-    /* 0x24492 */ s16  unk_24492[3];
+    /* 0x24492 */ s16  fileNamesY[3];
     /* 0x24498 */ s16  actionTimer;
     /* 0x2449A */ s16  buttonYOffsets[6];
     /* 0x244A6 */ s16  fileNum;
@@ -65,7 +65,7 @@ typedef struct FileSelectState {
     /* 0x244AA */ s16  warningButtonIndex;
     /* 0x244AC */ s16  titleLabel;
     /* 0x244AE */ s16  nextTitleLabel;
-    /* 0x244B0 */ s16  unk_244B0[3];
+    /* 0x244B0 */ s16  windowColor[3];
     /* 0x244B6 */ s16  titleAlpha[2];
     /* 0x244BA */ s16  windowAlpha;
     /* 0x244BC */ s16  fileButtonAlpha[3];

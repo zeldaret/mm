@@ -668,1093 +668,519 @@ s16 D_80814638[] = {
 s16 D_80814644[] = { 88, 104, 120, 944 };
 s16 D_8081464C[] = { 940, 944 };
 s16 D_80814650[] = { 940, 944 };
-// void FileSelect_SetWindowContentVtx(FileSelectState* this);
+#ifdef NON_EQUIVALENT
+void FileSelect_SetWindowContentVtx(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    u16 i;       // u16
+    s16 j;       // s16
+    u16 spA4[3]; // u16
+    s32 sp9C;    // s32
+    s32 sp98;    // s32
+    s32 var_s1;
+    s16 var_a3; // s16
+    s32 temp_t5;
+
+    this->windowContentVtx = GRAPH_ALLOC(this->state.gfxCtx, 0x3C00);
+
+    for (i = 0; i < 0x3C0; i += 4) {
+        this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = 0x12C;
+
+        this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
+            this->windowContentVtx[i + 0].v.ob[0] + 0x10;
+
+        this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = 0;
+
+        this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
+            this->windowContentVtx[i + 0].v.ob[1] - 0x10;
+
+        this->windowContentVtx[i + 0].v.ob[2] = this->windowContentVtx[i + 1].v.ob[2] =
+            this->windowContentVtx[i + 2].v.ob[2] = this->windowContentVtx[i + 3].v.ob[2] = 0;
+
+        this->windowContentVtx[i + 0].v.flag = this->windowContentVtx[i + 1].v.flag =
+            this->windowContentVtx[i + 2].v.flag = this->windowContentVtx[i + 3].v.flag = 0;
+
+        this->windowContentVtx[i + 0].v.tc[0] = this->windowContentVtx[i + 0].v.tc[1] =
+            this->windowContentVtx[i + 1].v.tc[1] = this->windowContentVtx[i + 2].v.tc[0] = 0;
+
+        this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 2].v.tc[1] =
+            this->windowContentVtx[i + 3].v.tc[0] = this->windowContentVtx[i + 3].v.tc[1] = 0x200;
+
+        this->windowContentVtx[i + 0].v.cn[0] = this->windowContentVtx[i + 1].v.cn[0] =
+            this->windowContentVtx[i + 2].v.cn[0] = this->windowContentVtx[i + 3].v.cn[0] =
+                this->windowContentVtx[i + 0].v.cn[1] = this->windowContentVtx[i + 1].v.cn[1] =
+                    this->windowContentVtx[i + 2].v.cn[1] = this->windowContentVtx[i + 3].v.cn[1] =
+                        this->windowContentVtx[i + 0].v.cn[2] = this->windowContentVtx[i + 1].v.cn[2] =
+                            this->windowContentVtx[i + 2].v.cn[2] = this->windowContentVtx[i + 3].v.cn[2] =
+                                this->windowContentVtx[i + 0].v.cn[3] = this->windowContentVtx[i + 1].v.cn[3] =
+                                    this->windowContentVtx[i + 2].v.cn[3] = this->windowContentVtx[i + 3].v.cn[3] =
+                                        0xFF;
+    }
+
+    this->windowContentVtx[0].v.ob[0] = this->windowContentVtx[2].v.ob[0] = this->windowPosX;
+    this->windowContentVtx[1].v.ob[0] = this->windowContentVtx[3].v.ob[0] = this->windowContentVtx[0].v.ob[0] + 0x80;
+    this->windowContentVtx[0].v.ob[1] = this->windowContentVtx[1].v.ob[1] = 0x48;
+    this->windowContentVtx[2].v.ob[1] = this->windowContentVtx[3].v.ob[1] = this->windowContentVtx[0].v.ob[1] - 0x10;
+    this->windowContentVtx[1].v.tc[0] = this->windowContentVtx[3].v.tc[0] = 0x1000;
+
+    for (i = 4, var_a3 = 0; var_a3 < 3; var_a3++) {
+        var_s1 = this->windowPosX - 6;
+
+        for (j = 0; j < 7; j++, i += 4) {
+            this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1;
+
+            this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
+                this->windowContentVtx[i + 0].v.ob[0] + sFileInfoBoxPartWidths[j];
+
+            this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] =
+                this->fileNamesY[var_a3] + 0x2C;
+
+            this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
+                this->windowContentVtx[i + 0].v.ob[1] - 0x38;
+
+            this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = sFileInfoBoxPartWidths[j]
+                                                                                            << 5;
+
+            this->windowContentVtx[i + 2].v.tc[1] = this->windowContentVtx[i + 3].v.tc[1] = 0x700;
+
+            var_s1 += sFileInfoBoxPartWidths[j];
+        }
+    }
+
+    var_s1 = this->windowPosX - 6;
+    sp9C = 0x2C;
+
+    for (j = 0; j < 3; j++, i += 16, sp9C -= 0x10) {
+        this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1;
+
+        this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
+            this->windowContentVtx[i + 0].v.ob[0] + 0x40;
+
+        this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = this->buttonYOffsets[j] + sp9C;
+
+        this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
+            this->windowContentVtx[i + 0].v.ob[1] - 0x10;
+
+        this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x800;
+
+        this->windowContentVtx[i + 4].v.ob[0] = this->windowContentVtx[i + 6].v.ob[0] = var_s1 + 0x40;
+
+        this->windowContentVtx[i + 5].v.ob[0] = this->windowContentVtx[i + 7].v.ob[0] =
+            this->windowContentVtx[i + 4].v.ob[0] + 0x6C;
+
+        this->windowContentVtx[i + 4].v.ob[1] = this->windowContentVtx[i + 5].v.ob[1] = this->buttonYOffsets[j] + sp9C;
+
+        this->windowContentVtx[i + 6].v.ob[1] = this->windowContentVtx[i + 7].v.ob[1] =
+            this->windowContentVtx[i + 4].v.ob[1] - 0x10;
+
+        this->windowContentVtx[i + 5].v.tc[0] = this->windowContentVtx[i + 7].v.tc[0] = 0xD80;
+
+        this->windowContentVtx[i + 8].v.ob[0] = this->windowContentVtx[i + 10].v.ob[0] = var_s1 + 0x34;
+
+        this->windowContentVtx[i + 9].v.ob[0] = this->windowContentVtx[i + 11].v.ob[0] =
+            this->windowContentVtx[i + 8].v.ob[0] + 0x18;
+
+        this->windowContentVtx[i + 8].v.ob[1] = this->windowContentVtx[i + 9].v.ob[1] = this->buttonYOffsets[j] + sp9C;
+
+        this->windowContentVtx[i + 10].v.ob[1] = this->windowContentVtx[i + 11].v.ob[1] =
+            this->windowContentVtx[i + 8].v.ob[1] - 0x10;
+
+        this->windowContentVtx[i + 9].v.tc[0] = this->windowContentVtx[i + 11].v.tc[0] = 0x300;
+
+        this->windowContentVtx[i + 12].v.ob[0] = this->windowContentVtx[i + 14].v.ob[0] = var_s1 + 0xA9;
+
+        this->windowContentVtx[i + 13].v.ob[0] = this->windowContentVtx[i + 15].v.ob[0] =
+            this->windowContentVtx[i + 12].v.ob[0] + 0x34;
+
+        this->windowContentVtx[i + 12].v.ob[1] = this->windowContentVtx[i + 13].v.ob[1] =
+            this->buttonYOffsets[j] + sp9C;
+
+        this->windowContentVtx[i + 14].v.ob[1] = this->windowContentVtx[i + 15].v.ob[1] =
+            this->windowContentVtx[i + 12].v.ob[1] - 0x10;
+
+        this->windowContentVtx[i + 13].v.tc[0] = this->windowContentVtx[i + 15].v.tc[0] = 0x680;
+    }
+
+    sp9C = 0x2C;
+
+    for (j = 0; j < 3; j++, sp9C -= 16) {
+        if (gSaveContext.unk_3F3F != 0) {
+            if (this->unk_2446A[j] != 0) {
+                j += 2;
+            }
+
+            var_s1 = this->windowPosX - 6;
+
+            if ((this->configMode == 0x10) && (j == this->fileNum)) {
+                sp98 = this->fileNamesY[j] + 0x2C;
+            } else if (((this->configMode == 0x11) || (this->configMode == 0x12)) && (j == this->fileNum)) {
+                sp98 = this->buttonYOffsets[j] + sp9C;
+            } else {
+                sp98 = sp9C + this->buttonYOffsets[j] + this->fileNamesY[j];
+            }
+
+            sp98 -= 2;
+
+            for (var_a3 = 0; var_a3 < 8; var_a3++, i += 4, var_s1 += 0xA) {
+
+                this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] =
+                    D_80814280[this->unk_24414[j][var_a3]] + var_s1 + 0x4E;
+
+                this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
+                    this->windowContentVtx[i + 0].v.ob[0] + 0xB;
+
+                this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98;
+
+                this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
+                    this->windowContentVtx[i + 0].v.ob[1] - 0xC;
+
+                this->windowContentVtx[i + 32].v.ob[0] = this->windowContentVtx[i + 34].v.ob[0] =
+                    D_80814280[this->unk_24414[j][var_a3]] + var_s1 + 0x4F;
+
+                this->windowContentVtx[i + 33].v.ob[0] = this->windowContentVtx[i + 35].v.ob[0] =
+                    this->windowContentVtx[i + 32].v.ob[0] + 0xB;
+
+                this->windowContentVtx[i + 32].v.ob[1] = this->windowContentVtx[i + 33].v.ob[1] = sp98 - 1;
+
+                this->windowContentVtx[i + 34].v.ob[1] = this->windowContentVtx[i + 35].v.ob[1] =
+                    this->windowContentVtx[i + 32].v.ob[1] - 0xC;
+            }
+
+            var_s1 = this->windowPosX + 14;
+            i += 32;
+            FileSelect_SplitNumber(this->rupees[j], &spA4[0], &spA4[1], &spA4[2]);
+
+            sp98 -= 0x18;
+            for (var_a3 = 0; var_a3 < 3; var_a3++, i += 4) {
+
+                this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] =
+                    D_80814280[spA4[D_80814554[this->unk_24474[j]] + i]] + var_s1;
+
+                this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
+                    D_80814628[var_a3] + this->windowContentVtx[i + 0].v.ob[0];
+
+                this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98;
+
+                this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
+                    this->windowContentVtx[i + 0].v.ob[1] - D_80814630[var_a3];
+
+                this->windowContentVtx[i + 12].v.ob[0] = this->windowContentVtx[i + 14].v.ob[0] =
+                    this->windowContentVtx[i + 0].v.ob[0] + 1;
+
+                this->windowContentVtx[i + 13].v.ob[0] = this->windowContentVtx[i + 15].v.ob[0] =
+                    D_80814628[var_a3] + this->windowContentVtx[i + 12].v.ob[0];
+
+                this->windowContentVtx[i + 12].v.ob[1] = this->windowContentVtx[i + 13].v.ob[1] = sp98 - 1;
+
+                this->windowContentVtx[i + 14].v.ob[1] = this->windowContentVtx[i + 15].v.ob[1] =
+                    this->windowContentVtx[i + 12].v.ob[1] - D_80814630[var_a3];
+
+                var_s1 += D_80814620[var_a3];
+            }
+
+            i += 12;
+            var_s1 = this->windowPosX + 42;
+
+            FileSelect_SplitNumber(this->maskCount[j], &spA4[0], &spA4[1], &spA4[2]);
+
+            sp98 -= 0x2A;
+
+            for (var_a3 = 1; var_a3 < 3; var_a3++, i += 4) {
+
+                this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] =
+                    D_80814280[spA4[var_a3]] + var_s1;
+
+                this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
+                    D_80814628[var_a3] + this->windowContentVtx[i + 0].v.ob[0];
+
+                this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98;
+
+                this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
+                    this->windowContentVtx[i + 0].v.ob[1] - D_80814630[var_a3];
+
+                this->windowContentVtx[i + 8].v.ob[0] = this->windowContentVtx[i + 10].v.ob[0] =
+                    this->windowContentVtx[i + 0].v.ob[0] + 1;
+
+                this->windowContentVtx[i + 9].v.ob[0] = this->windowContentVtx[i + 11].v.ob[0] =
+                    D_80814628[var_a3] + this->windowContentVtx[i + 8].v.ob[0];
+
+                this->windowContentVtx[i + 8].v.ob[1] = this->windowContentVtx[i + 9].v.ob[1] = sp98 - 1;
+
+                this->windowContentVtx[i + 10].v.ob[1] = this->windowContentVtx[i + 11].v.ob[1] =
+                    this->windowContentVtx[i + 8].v.ob[1] - D_80814630[var_a3];
+
+                var_s1 += D_80814620[var_a3];
+            }
+
+            var_s1 = this->windowPosX + 0x3F;
+            i += 8;
+
+            var_a3 = 0;
+            sp98 -= 0x10;
+            for (; var_a3 < 20; var_a3++, i += 4, var_s1 += 9) {
+
+                this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1;
+
+                this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
+                    this->windowContentVtx[i + 0].v.ob[0] + 0xA;
+
+                this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98;
+
+                this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
+                    this->windowContentVtx[i + 0].v.ob[1] - 0xA;
+
+                if (var_a3 == 9) {
+                    var_s1 = this->windowPosX + 54;
+                    sp98 -= 8;
+                }
+            }
+
+            var_s1 = this->windowPosX + 64;
+            var_a3 = 0;
+            sp98 -= 0x20;
+
+            for (; var_a3 < 4; var_a3++, i += 4, var_s1 += 0x18) {
+
+                this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1;
+
+                this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
+                    this->windowContentVtx[i + 0].v.ob[0] + 0x14;
+
+                this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98;
+
+                this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
+                    this->windowContentVtx[i + 0].v.ob[1] - 0x14;
+
+                this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 2].v.tc[1] =
+                    this->windowContentVtx[i + 3].v.tc[0] = this->windowContentVtx[i + 3].v.tc[1] = 0x400;
+            }
+
+            // sp98 -= 0x15;
+
+            this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = this->windowPosX - 1;
+
+            this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
+                this->windowContentVtx[i + 0].v.ob[0] + 0x10;
+
+            this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98 - 0x15;
+
+            this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
+                this->windowContentVtx[i + 0].v.ob[1] - 0x10;
+
+            this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x200;
+            this->windowContentVtx[i + 2].v.tc[1] = this->windowContentVtx[i + 3].v.tc[1] = 0x200;
+
+            i += 4;
+
+            this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = this->windowPosX + 0x27;
+
+            this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
+                this->windowContentVtx[i + 0].v.ob[0] + 0x18;
+
+            this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98 - 0x15;
+
+            this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
+                this->windowContentVtx[i + 0].v.ob[1] - 0x10;
+
+            this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x300;
+            this->windowContentVtx[i + 2].v.tc[1] = this->windowContentVtx[i + 3].v.tc[1] = 0x200;
+
+            i += 4;
+
+            // sp98 -= 0x27;
+
+            this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = this->windowPosX - 10;
+
+            this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
+                this->windowContentVtx[i + 0].v.ob[0] + 0x40;
+
+            this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98 - 0x27;
+
+            this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
+                this->windowContentVtx[i + 0].v.ob[1] - 0x10;
+
+            this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x800;
+            this->windowContentVtx[i + 2].v.tc[1] = this->windowContentVtx[i + 3].v.tc[1] = 0x200;
+
+            this->windowContentVtx[i + 4].v.ob[0] = this->windowContentVtx[i + 6].v.ob[0] =
+                this->windowContentVtx[i + 0].v.ob[0] + 1;
+
+            this->windowContentVtx[i + 5].v.ob[0] = this->windowContentVtx[i + 7].v.ob[0] =
+                this->windowContentVtx[i + 4].v.ob[0] + 0x40;
+
+            this->windowContentVtx[i + 4].v.ob[1] = this->windowContentVtx[i + 5].v.ob[1] = sp98 - 0x28;
+
+            this->windowContentVtx[i + 6].v.ob[1] = this->windowContentVtx[i + 7].v.ob[1] =
+                this->windowContentVtx[i + 4].v.ob[1] - 0x10;
+
+            this->windowContentVtx[i + 5].v.tc[0] = this->windowContentVtx[i + 7].v.tc[0] = 0x800;
+
+            this->windowContentVtx[i + 6].v.tc[1] = this->windowContentVtx[i + 7].v.tc[1] = 0x200;
+
+            i += 8;
+
+            var_s1 = this->windowPosX + 0xA3;
+
+            if ((this->configMode == 0x10) && (j == this->fileNum)) {
+                sp98 = this->fileNamesY[j] + 0x2C;
+            } else if (((this->configMode == 0x11) || (this->configMode == 0x12)) && (j == this->fileNum)) {
+                sp98 = this->buttonYOffsets[j] + sp9C;
+            } else {
+                sp98 = sp9C + this->buttonYOffsets[j] + this->fileNamesY[j];
+            }
+
+            this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1 + 0xE;
+
+            this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
+                this->windowContentVtx[i + 0].v.ob[0] + 0x18;
+
+            this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98 - 2;
+
+            this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
+                this->windowContentVtx[i + 0].v.ob[1] - 0xC;
+
+            this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x300;
+            this->windowContentVtx[i + 2].v.tc[1] = this->windowContentVtx[i + 3].v.tc[1] = 0x180;
+
+            i += 4;
+
+            for (var_a3 = 0; var_a3 < 2; var_a3++, i += 4) {
+
+                this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1 + var_a3 + 2;
+
+                this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
+                    this->windowContentVtx[i + 0].v.ob[0] + 0x30;
+
+                this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = (sp98 - var_a3) - 0x12;
+
+                this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
+                    this->windowContentVtx[i + 0].v.ob[1] - 0x18;
+
+                this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x600;
+
+                this->windowContentVtx[i + 2].v.tc[1] = this->windowContentVtx[i + 3].v.tc[1] = 0x300;
+            }
+
+            var_s1 += 6;
+            temp_t5 = i;
+
+            for (var_a3 = 0; var_a3 < 5; var_a3++, i += 4, var_s1 += 8) {
+
+                this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1;
+
+                this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
+                    this->windowContentVtx[i + 0].v.ob[0] + 0xC;
+
+                this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98 - 0x2A;
+
+                this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
+                    this->windowContentVtx[i + 0].v.ob[1] - 0xC;
+
+                this->windowContentVtx[i + 0x14].v.ob[0] = this->windowContentVtx[i + 0x16].v.ob[0] = var_s1 + 1;
+
+                this->windowContentVtx[i + 0x15].v.ob[0] = this->windowContentVtx[i + 0x17].v.ob[0] =
+                    this->windowContentVtx[i + 0x14].v.ob[0] + 0xC;
+
+                this->windowContentVtx[i + 0x14].v.ob[1] = this->windowContentVtx[i + 0x15].v.ob[1] = sp98 - 0x2B;
+
+                this->windowContentVtx[i + 0x16].v.ob[1] = this->windowContentVtx[i + 0x17].v.ob[1] =
+                    this->windowContentVtx[i + 0x14].v.ob[1] - 0xC;
+            }
+
+            i += 20;
+
+            this->windowContentVtx[temp_t5 + 8].v.ob[0] = this->windowContentVtx[temp_t5 + 10].v.ob[0] =
+                this->windowContentVtx[temp_t5 + 8].v.ob[0] + 3;
+
+            this->windowContentVtx[temp_t5 + 9].v.ob[0] = this->windowContentVtx[temp_t5 + 11].v.ob[0] =
+                this->windowContentVtx[temp_t5 + 8].v.ob[0] + 0xC;
+
+            this->windowContentVtx[temp_t5 + 0x1C].v.ob[0] = this->windowContentVtx[temp_t5 + 0x1E].v.ob[0] =
+                this->windowContentVtx[temp_t5 + 8].v.ob[0] + 1;
+
+            this->windowContentVtx[temp_t5 + 0x1D].v.ob[0] = this->windowContentVtx[temp_t5 + 0x1F].v.ob[0] =
+                this->windowContentVtx[temp_t5 + 0x1C].v.ob[0] + 0xC;
+        }
+    }
+
+    var_s1 = this->windowPosX - 6;
+    sp9C = -0xC;
+
+    for (j = 0; j < 2; j++, i += 4, sp9C -= 0x10) {
+
+        this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1;
+
+        this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
+            this->windowContentVtx[i + 0].v.ob[0] + 0x40;
+
+        this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] =
+            this->buttonYOffsets[j + 3] + sp9C;
+
+        this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
+            this->windowContentVtx[i + 0].v.ob[1] - 0x10;
+
+        this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x800;
+    }
+
+    this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1;
+
+    this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
+        this->windowContentVtx[i + 0].v.ob[0] + 0x40;
+
+    this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = this->buttonYOffsets[5] - 0x34;
+
+    this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
+        this->windowContentVtx[i + 0].v.ob[1] - 0x10;
+
+    this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x800;
+
+    i += 4;
+
+    if (((this->menuMode == 1) && (this->configMode >= 2)) || ((this->menuMode == 2) && (this->selectMode == 3))) {
+        if (this->menuMode == 1) {
+            if ((this->configMode == 4) || (this->configMode == 7) || (this->configMode == 0x16)) {
+                j = D_80814644[this->buttonIndex];
+            } else if ((this->configMode == 0x19) || (this->configMode == 0xC)) {
+                j = D_8081464C[this->buttonIndex];
+            } else {
+                j = D_80814638[this->buttonIndex];
+            }
+        } else {
+            j = D_80814650[this->confirmButtonIndex];
+        }
+
+        this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = this->windowPosX - 0xA;
+
+        this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
+            this->windowContentVtx[i + 0].v.ob[0] + 0x48;
+
+        this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] =
+            this->windowContentVtx[j].v.ob[1] + 4;
+
+        this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
+            this->windowContentVtx[i + 0].v.ob[1] - 0x18;
+
+        this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x900;
+
+        this->windowContentVtx[i + 2].v.tc[1] = this->windowContentVtx[i + 3].v.tc[1] = 0x300;
+    }
+
+    this->windowContentVtx[i + 4].v.ob[0] = this->windowContentVtx[i + 6].v.ob[0] = this->windowPosX + 0x3A;
+
+    this->windowContentVtx[i + 5].v.ob[0] = this->windowContentVtx[i + 7].v.ob[0] =
+        this->windowContentVtx[i + 4].v.ob[0] + 0x80;
+
+    this->windowContentVtx[i + 4].v.ob[1] = this->windowContentVtx[i + 5].v.ob[1] =
+        this->windowContentVtx[D_80814638[this->warningButtonIndex]].v.ob[1];
+
+    this->windowContentVtx[i + 6].v.ob[1] = this->windowContentVtx[i + 7].v.ob[1] =
+        this->windowContentVtx[i + 4].v.ob[1] - 0x10;
+
+    this->windowContentVtx[i + 5].v.tc[0] = this->windowContentVtx[i + 7].v.tc[0] = 0x1000;
+}
+#else
 void FileSelect_SetWindowContentVtx(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_SetWindowContentVtx.s")
-// void FileSelect_SetWindowContentVtx(FileSelectState *this) {
-//     s16 spAC;
-//     u16 spA8;
-//     u16 spA6;
-//     u16 spA4;
-//     s32 sp9C;
-//     s32 sp98;
-//     void *sp50;
-//     Gfx *temp_v0;
-//     GraphicsContext *temp_v1;
-//     Vtx *temp_a0;
-//     Vtx *temp_a0_10;
-//     Vtx *temp_a0_11;
-//     Vtx *temp_a0_12;
-//     Vtx *temp_a0_13;
-//     Vtx *temp_a0_14;
-//     Vtx *temp_a0_15;
-//     Vtx *temp_a0_16;
-//     Vtx *temp_a0_17;
-//     Vtx *temp_a0_18;
-//     Vtx *temp_a0_19;
-//     Vtx *temp_a0_20;
-//     Vtx *temp_a0_21;
-//     Vtx *temp_a0_22;
-//     Vtx *temp_a0_23;
-//     Vtx *temp_a0_24;
-//     Vtx *temp_a0_25;
-//     Vtx *temp_a0_26;
-//     Vtx *temp_a0_27;
-//     Vtx *temp_a0_28;
-//     Vtx *temp_a0_29;
-//     Vtx *temp_a0_2;
-//     Vtx *temp_a0_30;
-//     Vtx *temp_a0_31;
-//     Vtx *temp_a0_32;
-//     Vtx *temp_a0_33;
-//     Vtx *temp_a0_34;
-//     Vtx *temp_a0_35;
-//     Vtx *temp_a0_36;
-//     Vtx *temp_a0_37;
-//     Vtx *temp_a0_38;
-//     Vtx *temp_a0_39;
-//     Vtx *temp_a0_3;
-//     Vtx *temp_a0_40;
-//     Vtx *temp_a0_41;
-//     Vtx *temp_a0_42;
-//     Vtx *temp_a0_43;
-//     Vtx *temp_a0_44;
-//     Vtx *temp_a0_45;
-//     Vtx *temp_a0_46;
-//     Vtx *temp_a0_47;
-//     Vtx *temp_a0_48;
-//     Vtx *temp_a0_49;
-//     Vtx *temp_a0_4;
-//     Vtx *temp_a0_50;
-//     Vtx *temp_a0_51;
-//     Vtx *temp_a0_52;
-//     Vtx *temp_a0_53;
-//     Vtx *temp_a0_54;
-//     Vtx *temp_a0_55;
-//     Vtx *temp_a0_56;
-//     Vtx *temp_a0_57;
-//     Vtx *temp_a0_58;
-//     Vtx *temp_a0_59;
-//     Vtx *temp_a0_5;
-//     Vtx *temp_a0_60;
-//     Vtx *temp_a0_61;
-//     Vtx *temp_a0_62;
-//     Vtx *temp_a0_63;
-//     Vtx *temp_a0_64;
-//     Vtx *temp_a0_65;
-//     Vtx *temp_a0_66;
-//     Vtx *temp_a0_67;
-//     Vtx *temp_a0_68;
-//     Vtx *temp_a0_69;
-//     Vtx *temp_a0_6;
-//     Vtx *temp_a0_70;
-//     Vtx *temp_a0_71;
-//     Vtx *temp_a0_72;
-//     Vtx *temp_a0_73;
-//     Vtx *temp_a0_74;
-//     Vtx *temp_a0_75;
-//     Vtx *temp_a0_76;
-//     Vtx *temp_a0_77;
-//     Vtx *temp_a0_78;
-//     Vtx *temp_a0_79;
-//     Vtx *temp_a0_7;
-//     Vtx *temp_a0_80;
-//     Vtx *temp_a0_81;
-//     Vtx *temp_a0_82;
-//     Vtx *temp_a0_83;
-//     Vtx *temp_a0_84;
-//     Vtx *temp_a0_85;
-//     Vtx *temp_a0_8;
-//     Vtx *temp_a0_9;
-//     Vtx *temp_a1_20;
-//     Vtx *temp_a1_21;
-//     Vtx *temp_a1_4;
-//     Vtx *temp_a1_5;
-//     Vtx *temp_a1_6;
-//     Vtx *temp_a1_7;
-//     Vtx *temp_v0_4;
-//     Vtx *temp_v0_5;
-//     Vtx *temp_v0_6;
-//     Vtx *temp_v0_7;
-//     s16 *temp_a1_10;
-//     s16 *temp_a1_8;
-//     s16 *temp_a2_3;
-//     s16 *temp_a2_4;
-//     s16 *temp_t0;
-//     s16 *temp_t0_2;
-//     s16 temp_a1;
-//     s16 temp_a1_13;
-//     s16 temp_a1_14;
-//     s16 temp_a1_15;
-//     s16 temp_a1_16;
-//     s16 temp_a1_17;
-//     s16 temp_a1_18;
-//     s16 temp_a1_19;
-//     s16 temp_a1_3;
-//     s16 temp_a1_9;
-//     s16 temp_a2;
-//     s16 temp_a2_2;
-//     s16 temp_a2_5;
-//     s16 temp_a2_6;
-//     s16 temp_a2_7;
-//     s16 temp_a2_8;
-//     s16 temp_a2_9;
-//     s16 temp_a3;
-//     s16 temp_a3_2;
-//     s16 temp_a3_3;
-//     s16 temp_a3_4;
-//     s16 temp_a3_5;
-//     s16 temp_a3_6;
-//     s16 temp_a3_7;
-//     s16 temp_a3_8;
-//     s16 temp_a3_9;
-//     s16 temp_s1;
-//     s16 temp_s1_5;
-//     s16 temp_s4;
-//     s16 temp_s4_2;
-//     s16 temp_s4_3;
-//     s16 temp_s4_4;
-//     s16 temp_t2;
-//     s16 temp_t2_2;
-//     s16 temp_t3;
-//     s16 temp_t3_2;
-//     s16 temp_t3_3;
-//     s16 temp_t4;
-//     s16 temp_v0_2;
-//     s16 temp_v0_3;
-//     s16 temp_v0_8;
-//     s16 temp_v1_10;
-//     s16 temp_v1_11;
-//     s16 temp_v1_12;
-//     s16 temp_v1_13;
-//     s16 temp_v1_14;
-//     s16 temp_v1_15;
-//     s16 temp_v1_16;
-//     s16 temp_v1_17;
-//     s16 temp_v1_18;
-//     s16 temp_v1_19;
-//     s16 temp_v1_20;
-//     s16 temp_v1_21;
-//     s16 temp_v1_22;
-//     s16 temp_v1_23;
-//     s16 temp_v1_24;
-//     s16 temp_v1_25;
-//     s16 temp_v1_26;
-//     s16 temp_v1_27;
-//     s16 temp_v1_28;
-//     s16 temp_v1_29;
-//     s16 temp_v1_2;
-//     s16 temp_v1_30;
-//     s16 temp_v1_31;
-//     s16 temp_v1_32;
-//     s16 temp_v1_33;
-//     s16 temp_v1_34;
-//     s16 temp_v1_35;
-//     s16 temp_v1_36;
-//     s16 temp_v1_37;
-//     s16 temp_v1_38;
-//     s16 temp_v1_39;
-//     s16 temp_v1_3;
-//     s16 temp_v1_40;
-//     s16 temp_v1_41;
-//     s16 temp_v1_42;
-//     s16 temp_v1_43;
-//     s16 temp_v1_44;
-//     s16 temp_v1_45;
-//     s16 temp_v1_46;
-//     s16 temp_v1_47;
-//     s16 temp_v1_48;
-//     s16 temp_v1_49;
-//     s16 temp_v1_4;
-//     s16 temp_v1_50;
-//     s16 temp_v1_51;
-//     s16 temp_v1_52;
-//     s16 temp_v1_53;
-//     s16 temp_v1_54;
-//     s16 temp_v1_55;
-//     s16 temp_v1_56;
-//     s16 temp_v1_57;
-//     s16 temp_v1_58;
-//     s16 temp_v1_59;
-//     s16 temp_v1_60;
-//     s16 temp_v1_61;
-//     s16 temp_v1_62;
-//     s16 temp_v1_63;
-//     s16 temp_v1_64;
-//     s16 temp_v1_65;
-//     s16 temp_v1_66;
-//     s16 temp_v1_67;
-//     s16 temp_v1_68;
-//     s16 temp_v1_69;
-//     s16 temp_v1_6;
-//     s16 temp_v1_70;
-//     s16 temp_v1_71;
-//     s16 temp_v1_72;
-//     s16 temp_v1_73;
-//     s16 temp_v1_74;
-//     s16 temp_v1_75;
-//     s16 temp_v1_76;
-//     s16 temp_v1_77;
-//     s16 temp_v1_78;
-//     s16 temp_v1_79;
-//     s16 temp_v1_7;
-//     s16 temp_v1_80;
-//     s16 temp_v1_81;
-//     s16 temp_v1_82;
-//     s16 temp_v1_83;
-//     s16 temp_v1_84;
-//     s16 temp_v1_8;
-//     s16 temp_v1_9;
-//     s32 temp_a1_11;
-//     s32 temp_a1_12;
-//     s32 temp_s1_2;
-//     s32 temp_s1_3;
-//     s32 temp_s1_4;
-//     s32 temp_s3;
-//     s32 temp_s3_10;
-//     s32 temp_s3_11;
-//     s32 temp_s3_12;
-//     s32 temp_s3_13;
-//     s32 temp_s3_14;
-//     s32 temp_s3_2;
-//     s32 temp_s3_3;
-//     s32 temp_s3_4;
-//     s32 temp_s3_5;
-//     s32 temp_s3_6;
-//     s32 temp_s3_7;
-//     s32 temp_s3_8;
-//     s32 temp_s3_9;
-//     s32 temp_t1;
-//     u16 temp_a1_2;
-//     u8 temp_v1_5;
-//     s32 phi_t1;
-//     s16 phi_s1;
-//     s32 phi_s3;
-//     s16 phi_s4;
-//     s16 phi_a3;
-//     s32 phi_s3_2;
-//     s16 phi_s4_2;
-//     s32 phi_t0;
-//     s16 phi_s4_3;
-//     s16 phi_a3_2;
-//     s32 phi_s1_2;
-//     s32 phi_s3_3;
-//     u16 *i;
-//     s32 phi_s1_3;
-//     s32 phi_s3_4;
-//     s16 phi_a3_3;
-//     s16 phi_a3_4;
-//     s32 phi_s1_4;
-//     s32 phi_s3_5;
-//     s16 phi_s1_5;
-//     s32 phi_s3_6;
-//     s16 phi_t0_2;
-//     s16 phi_a3_5;
-//     s16 phi_s1_6;
-//     s32 phi_s3_7;
-//     s16 phi_a3_6;
-//     s32 phi_t0_3;
-//     s16 phi_a3_7;
-//     s32 phi_s3_8;
-//     s16 phi_s1_7;
-//     s32 phi_s3_9;
-//     s16 phi_a3_8;
-//     s32 phi_s3_10;
-//     s16 phi_s4_4;
-//     s32 phi_a1;
-//     s16 phi_s4_5;
-//     s32 phi_s3_11;
-//     s16 phi_s1_8;
-//     void *phi_s6;
-//     s16 phi_t6;
-//     s32 phi_t9;
-//     s32 phi_s3_12;
-
-//     // temp_v1 = this->state.gfxCtx;
-//     // temp_v0 = temp_v1->polyOpa.d - 0x3C00;
-//     // temp_v1->polyOpa.d = temp_v0;
-//     // this->windowContentVtx = (Vtx *) temp_v0;
-
-//     this->windowContentVtx = GRAPH_ALLOC(this->state.gfxCtx, 0x3C0 * sizeof(Vtx));
-
-//     for (phi_t1 = 0; phi_t1 < 0x3C0; phi_t1 += 4) {
-//         this->windowContentVtx[phi_t1].v.ob[0] = this->windowContentVtx[phi_t1 + 2].v.ob[0] = 0x12C;
-//         this->windowContentVtx[phi_t1 + 1].v.ob[0] = this->windowContentVtx[phi_t1 + 3].v.ob[0] =
-//             this->windowContentVtx[phi_t1].v.ob[0] + 0x10;
-
-//         this->windowContentVtx[phi_t1].v.ob[1] = this->windowContentVtx[phi_t1 + 1].v.ob[1] = 0;
-//         this->windowContentVtx[phi_t1 + 2].v.ob[1] = this->windowContentVtx[phi_t1 + 3].v.ob[1] =
-//             this->windowContentVtx[phi_t1].v.ob[1] - 0x10;
-
-//         this->windowContentVtx[phi_t1].v.ob[2] = this->windowContentVtx[phi_t1 + 1].v.ob[2] =
-//             this->windowContentVtx[phi_t1 + 2].v.ob[2] = this->windowContentVtx[phi_t1 + 3].v.ob[2] = 0;
-
-//         this->windowContentVtx[phi_t1].v.flag = this->windowContentVtx[phi_t1 + 1].v.flag =
-//             this->windowContentVtx[phi_t1 + 2].v.flag = this->windowContentVtx[phi_t1 + 3].v.flag = 0;
-
-//         this->windowContentVtx[phi_t1].v.tc[0] = this->windowContentVtx[phi_t1].v.tc[1] =
-//             this->windowContentVtx[phi_t1 + 1].v.tc[1] = this->windowContentVtx[phi_t1 + 2].v.tc[0] = 0;
-
-//         this->windowContentVtx[phi_t1 + 1].v.tc[0] = this->windowContentVtx[phi_t1 + 2].v.tc[1] =
-//             this->windowContentVtx[phi_t1 + 3].v.tc[0] = this->windowContentVtx[phi_t1 + 3].v.tc[1] = 0x200;
-
-//         this->windowContentVtx[phi_t1].v.cn[0] = this->windowContentVtx[phi_t1 + 1].v.cn[0] =
-//             this->windowContentVtx[phi_t1 + 2].v.cn[0] = this->windowContentVtx[phi_t1 + 3].v.cn[0] =
-//                 this->windowContentVtx[phi_t1].v.cn[1] = this->windowContentVtx[phi_t1 + 1].v.cn[1] =
-//                     this->windowContentVtx[phi_t1 + 2].v.cn[1] = this->windowContentVtx[phi_t1 + 3].v.cn[1] =
-//                         this->windowContentVtx[phi_t1].v.cn[2] = this->windowContentVtx[phi_t1 + 1].v.cn[2] =
-//                             this->windowContentVtx[phi_t1 + 2].v.cn[2] = this->windowContentVtx[phi_t1 + 3].v.cn[2] =
-//                                 this->windowContentVtx[phi_t1].v.cn[3] = this->windowContentVtx[phi_t1 + 1].v.cn[3] =
-//                                     this->windowContentVtx[phi_t1 + 2].v.cn[3] =
-//                                         this->windowContentVtx[phi_t1 + 3].v.cn[3] = 0xFF;
-//     }
-
-//     // phi_t1 = 0;
-//     // do {
-//     //     this->windowContentVtx[phi_t1].unk20 = 0x12C;
-//     //     temp_t1 = (phi_t1 + 4) & 0xFFFF;
-//     //     temp_a0 = &this->windowContentVtx[phi_t1];
-//     //     temp_a0->v.ob[0] = temp_a0->unk20;
-//     //     temp_a0_2 = &this->windowContentVtx[phi_t1];
-//     //     temp_v1_2 = temp_a0_2->v.ob[0] + 0x10;
-//     //     temp_a0_2->unk30 = temp_v1_2;
-//     //     this->windowContentVtx[phi_t1].unk10 = temp_v1_2;
-//     //     this->windowContentVtx[phi_t1].unk12 = 0;
-//     //     temp_a0_3 = &this->windowContentVtx[phi_t1];
-//     //     temp_a0_3->v.ob[1] = temp_a0_3->unk12;
-//     //     temp_a0_4 = &this->windowContentVtx[phi_t1];
-//     //     temp_v1_3 = temp_a0_4->v.ob[1] - 0x10;
-//     //     temp_a0_4->unk32 = temp_v1_3;
-//     //     this->windowContentVtx[phi_t1].unk22 = temp_v1_3;
-//     //     this->windowContentVtx[phi_t1].unk34 = 0;
-//     //     temp_a0_5 = &this->windowContentVtx[phi_t1];
-//     //     temp_a1 = temp_a0_5->unk34;
-//     //     temp_a0_5->unk24 = temp_a1;
-//     //     this->windowContentVtx[phi_t1].unk14 = temp_a1;
-//     //     this->windowContentVtx[phi_t1].v.ob[2] = temp_a1;
-//     //     this->windowContentVtx[phi_t1].unk36 = 0;
-//     //     temp_a0_6 = &this->windowContentVtx[phi_t1];
-//     //     temp_a1_2 = temp_a0_6->unk36;
-//     //     temp_a0_6->unk26 = temp_a1_2;
-//     //     this->windowContentVtx[phi_t1].unk16 = temp_a1_2;
-//     //     this->windowContentVtx[phi_t1].v.flag = temp_a1_2;
-//     //     this->windowContentVtx[phi_t1].unk28 = 0;
-//     //     temp_a0_7 = &this->windowContentVtx[phi_t1];
-//     //     temp_v1_4 = temp_a0_7->unk28;
-//     //     temp_a0_7->unk1A = temp_v1_4;
-//     //     this->windowContentVtx[phi_t1].v.tc[1] = temp_v1_4;
-//     //     this->windowContentVtx[phi_t1].v.tc[0] = temp_v1_4;
-//     //     this->windowContentVtx[phi_t1].unk3A = 0x200;
-//     //     temp_a0_8 = &this->windowContentVtx[phi_t1];
-//     //     temp_a1_3 = temp_a0_8->unk3A;
-//     //     temp_a0_8->unk38 = temp_a1_3;
-//     //     this->windowContentVtx[phi_t1].unk2A = temp_a1_3;
-//     //     this->windowContentVtx[phi_t1].unk18 = temp_a1_3;
-//     //     this->windowContentVtx[phi_t1].unk3F = 0xFF;
-//     //     temp_a0_9 = &this->windowContentVtx[phi_t1];
-//     //     temp_v1_5 = temp_a0_9->unk3F;
-//     //     temp_a0_9->unk2F = temp_v1_5;
-//     //     this->windowContentVtx[phi_t1].unk1F = temp_v1_5;
-//     //     this->windowContentVtx[phi_t1].v.cn[3] = temp_v1_5;
-//     //     this->windowContentVtx[phi_t1].unk3E = temp_v1_5;
-//     //     this->windowContentVtx[phi_t1].unk2E = temp_v1_5;
-//     //     this->windowContentVtx[phi_t1].unk1E = temp_v1_5;
-//     //     this->windowContentVtx[phi_t1].v.cn[2] = temp_v1_5;
-//     //     this->windowContentVtx[phi_t1].unk3D = temp_v1_5;
-//     //     this->windowContentVtx[phi_t1].unk2D = temp_v1_5;
-//     //     this->windowContentVtx[phi_t1].unk1D = temp_v1_5;
-//     //     this->windowContentVtx[phi_t1].v.cn[1] = temp_v1_5;
-//     //     this->windowContentVtx[phi_t1].unk3C = temp_v1_5;
-//     //     this->windowContentVtx[phi_t1].unk2C = temp_v1_5;
-//     //     this->windowContentVtx[phi_t1].unk1C = temp_v1_5;
-//     //     this->windowContentVtx[phi_t1].v.cn[0] = temp_v1_5;
-//     //     phi_t1 = temp_t1;
-//     // } while (temp_t1 < 0x3C0);
-
-//     this->windowContentVtx[0].v.ob[0] = this->windowContentVtx[2].v.ob[0] = this->windowPosX;
-//     this->windowContentVtx[1].v.ob[0] = this->windowContentVtx[3].v.ob[0] = this->windowContentVtx[0].v.ob[0] + 0x80;
-//     this->windowContentVtx[0].v.ob[1] = this->windowContentVtx[1].v.ob[1] = 0x48;
-//     this->windowContentVtx[2].v.ob[1] = this->windowContentVtx[3].v.ob[1] = this->windowContentVtx[0].v.ob[1] - 0x10;
-//     this->windowContentVtx[1].v.tc[0] = this->windowContentVtx[3].v.tc[0] = 0x1000;
-
-// //     temp_v1_6 = this->windowPosX;
-// //     this->windowContentVtx->unk20 = temp_v1_6;
-// //     this->windowContentVtx->v.ob[0] = temp_v1_6;
-// //     temp_a1_4 = this->windowContentVtx;
-// //     temp_v1_7 = temp_a1_4->v.ob[0] + 0x80;
-// //     temp_a1_4->unk30 = temp_v1_7;
-// //     this->windowContentVtx->unk10 = temp_v1_7;
-// //     this->windowContentVtx->unk12 = 0x48;
-// //     temp_a1_5 = this->windowContentVtx;
-// //     temp_a1_5->v.ob[1] = temp_a1_5->unk12;
-// //     temp_a1_6 = this->windowContentVtx;
-// //     temp_v1_8 = temp_a1_6->v.ob[1] - 0x10;
-// //     temp_a1_6->unk32 = temp_v1_8;
-// //     this->windowContentVtx->unk22 = temp_v1_8;
-// //     this->windowContentVtx->unk38 = 0x1000;
-// //     temp_a1_7 = this->windowContentVtx;
-// //     temp_a1_7->unk18 = (s16) temp_a1_7->unk38;
-
-//     for (phi_a3 = 0, phi_s3 = 4; phi_a3 < 3; phi_a3++) {
-//         phi_s1 = this->windowPosX - 6;
-
-//         for (phi_s4 = 0; phi_s4 < 7; phi_s4++, phi_s3 += 4) {
-//             this->windowContentVtx[phi_s3].v.ob[0] = this->windowContentVtx[phi_s3 + 2].v.ob[0] = phi_s1;
-//             this->windowContentVtx[phi_s3 + 1].v.ob[0] = this->windowContentVtx[phi_s3 + 3].v.ob[0] =
-//                 this->windowContentVtx[phi_s3].v.ob[0] + sFileInfoBoxPartWidths[phi_s4];
-
-//             this->windowContentVtx[phi_s3].v.ob[1] = this->windowContentVtx[phi_s3 + 1].v.ob[1] =
-//                 this->unk_24492[phi_a3] + 0x2C;
-
-//             this->windowContentVtx[phi_s3 + 2].v.ob[1] = this->windowContentVtx[phi_s3 + 3].v.ob[1] =
-//                 this->windowContentVtx[phi_s3].v.ob[1] - 0x38;
-
-//             this->windowContentVtx[phi_s3 + 1].v.tc[0] = this->windowContentVtx[phi_s3 + 3].v.tc[0] =
-//                 sFileInfoBoxPartWidths[phi_s4] << 5;
-//             this->windowContentVtx[phi_s3 + 2].v.tc[1] = this->windowContentVtx[phi_s3 + 3].v.tc[1] = 0x700;
-//             phi_s1 += sFileInfoBoxPartWidths[phi_s4];
-//         }
-//     }
-
-// //     phi_a3 = 0;
-// //     phi_a3_2 = 0;
-// //     phi_a3_3 = 0;
-// //     phi_a3_5 = 0;
-// //     phi_a3_6 = 0;
-// //     phi_a3_7 = 0;
-// //     phi_a3_8 = 0;
-// //     phi_s3 = 4;
-// //     do {
-// //         phi_s1 = this->windowPosX - 6;
-// //         phi_s4 = 0;
-// //         phi_s4_2 = 0;
-// //         phi_s4_3 = 0;
-// //         phi_s4_4 = 0;
-// // loop_4:
-// //         this->windowContentVtx[phi_s3].unk20 = phi_s1;
-// //         temp_a1_8 = &sFileInfoBoxPartWidths + (phi_s4 * 2);
-// //         this->windowContentVtx[phi_s3].v.ob[0] = phi_s1;
-// //         temp_s4 = phi_s4 + 1;
-// //         temp_a0_10 = &this->windowContentVtx[phi_s3];
-// //         temp_v1_9 = *temp_a1_8 + temp_a0_10->v.ob[0];
-// //         temp_a0_10->unk30 = temp_v1_9;
-// //         temp_s3 = (phi_s3 + 4) & 0xFFFF;
-// //         this->windowContentVtx[phi_s3].unk10 = temp_v1_9;
-// //         temp_v1_10 = this->unk_24492[phi_a3] + 0x2C;
-// //         this->windowContentVtx[phi_s3].unk12 = temp_v1_10;
-// //         this->windowContentVtx[phi_s3].v.ob[1] = temp_v1_10;
-// //         temp_a0_11 = &this->windowContentVtx[phi_s3];
-// //         temp_v1_11 = temp_a0_11->v.ob[1] - 0x38;
-// //         temp_a0_11->unk32 = temp_v1_11;
-// //         this->windowContentVtx[phi_s3].unk22 = temp_v1_11;
-// //         temp_v1_12 = *temp_a1_8 << 5;
-// //         this->windowContentVtx[phi_s3].unk38 = temp_v1_12;
-// //         this->windowContentVtx[phi_s3].unk18 = temp_v1_12;
-// //         this->windowContentVtx[phi_s3].unk3A = 0x700;
-// //         temp_a0_12 = &this->windowContentVtx[phi_s3];
-// //         temp_a0_12->unk2A = (s16) temp_a0_12->unk3A;
-// //         phi_s1 += *temp_a1_8;
-// //         phi_s3 = temp_s3;
-// //         phi_s4 = temp_s4;
-// //         phi_s3_2 = temp_s3;
-// //         phi_s3 = temp_s3;
-// //         if ((s32) temp_s4 < 7) {
-// //             goto loop_4;
-// //         }
-// //         temp_a3 = phi_a3 + 1;
-// //         phi_a3 = temp_a3;
-// //     } while ((s32) temp_a3 < 3);
-
-//     temp_s1 = this->windowPosX - 6;
-// //     temp_a1_9 = temp_s1 + 0x40;
-// //     temp_a2 = temp_s1 + 0x34;
-// //     temp_a3_2 = temp_s1 + 0xA9;
-//     phi_t0 = 0x2C;
-
-//     for (phi_s4_2 = 0; phi_s4_2 < 3; phi_s4_2++, phi_t0 -= 0x20) {
-
-//     }
-
-// //     do {
-// //         this->windowContentVtx[phi_s3_2].unk20 = temp_s1;
-// //         temp_s3_2 = (phi_s3_2 + 0x10) & 0xFFFF;
-// //         this->windowContentVtx[phi_s3_2].v.ob[0] = temp_s1;
-// //         temp_a0_13 = &this->windowContentVtx[phi_s3_2];
-// //         temp_s4_2 = phi_s4_2 + 1;
-// //         temp_v1_13 = temp_a0_13->v.ob[0] + 0x40;
-// //         temp_a0_13->unk30 = temp_v1_13;
-// //         this->windowContentVtx[phi_s3_2].unk10 = temp_v1_13;
-// //         temp_v1_14 = this->buttonYOffsets[phi_s4_2] + phi_t0;
-// //         this->windowContentVtx[phi_s3_2].unk12 = temp_v1_14;
-// //         this->windowContentVtx[phi_s3_2].v.ob[1] = temp_v1_14;
-// //         temp_a0_14 = &this->windowContentVtx[phi_s3_2];
-// //         temp_v1_15 = temp_a0_14->v.ob[1] - 0x10;
-// //         temp_a0_14->unk32 = temp_v1_15;
-// //         this->windowContentVtx[phi_s3_2].unk22 = temp_v1_15;
-// //         this->windowContentVtx[phi_s3_2].unk38 = 0x800;
-// //         temp_a0_15 = &this->windowContentVtx[phi_s3_2];
-// //         temp_a0_15->unk18 = (s16) temp_a0_15->unk38;
-// //         this->windowContentVtx[phi_s3_2].unk60 = temp_a1_9;
-// //         this->windowContentVtx[phi_s3_2].unk40 = temp_a1_9;
-// //         temp_a0_16 = &this->windowContentVtx[phi_s3_2];
-// //         temp_v1_16 = temp_a0_16->unk40 + 0x6C;
-// //         temp_a0_16->unk70 = temp_v1_16;
-// //         this->windowContentVtx[phi_s3_2].unk50 = temp_v1_16;
-// //         temp_v1_17 = this->buttonYOffsets[phi_s4_2] + phi_t0;
-// //         this->windowContentVtx[phi_s3_2].unk52 = temp_v1_17;
-// //         this->windowContentVtx[phi_s3_2].unk42 = temp_v1_17;
-// //         temp_a0_17 = &this->windowContentVtx[phi_s3_2];
-// //         temp_v1_18 = temp_a0_17->unk42 - 0x10;
-// //         temp_a0_17->unk72 = temp_v1_18;
-// //         this->windowContentVtx[phi_s3_2].unk62 = temp_v1_18;
-// //         this->windowContentVtx[phi_s3_2].unk78 = 0xD80;
-// //         temp_a0_18 = &this->windowContentVtx[phi_s3_2];
-// //         temp_a0_18->unk58 = (s16) temp_a0_18->unk78;
-// //         this->windowContentVtx[phi_s3_2].unkA0 = temp_a2;
-// //         this->windowContentVtx[phi_s3_2].unk80 = temp_a2;
-// //         temp_a0_19 = &this->windowContentVtx[phi_s3_2];
-// //         temp_v1_19 = temp_a0_19->unk80 + 0x18;
-// //         temp_a0_19->unkB0 = temp_v1_19;
-// //         this->windowContentVtx[phi_s3_2].unk90 = temp_v1_19;
-// //         temp_v1_20 = this->buttonYOffsets[phi_s4_2] + phi_t0;
-// //         this->windowContentVtx[phi_s3_2].unk92 = temp_v1_20;
-// //         this->windowContentVtx[phi_s3_2].unk82 = temp_v1_20;
-// //         temp_a0_20 = &this->windowContentVtx[phi_s3_2];
-// //         temp_v1_21 = temp_a0_20->unk82 - 0x10;
-// //         temp_a0_20->unkB2 = temp_v1_21;
-// //         this->windowContentVtx[phi_s3_2].unkA2 = temp_v1_21;
-// //         this->windowContentVtx[phi_s3_2].unkB8 = 0x300;
-// //         temp_a0_21 = &this->windowContentVtx[phi_s3_2];
-// //         temp_a0_21->unk98 = (s16) temp_a0_21->unkB8;
-// //         this->windowContentVtx[phi_s3_2].unkE0 = temp_a3_2;
-// //         this->windowContentVtx[phi_s3_2].unkC0 = temp_a3_2;
-// //         temp_a0_22 = &this->windowContentVtx[phi_s3_2];
-// //         temp_v1_22 = temp_a0_22->unkC0 + 0x34;
-// //         temp_a0_22->unkF0 = temp_v1_22;
-// //         this->windowContentVtx[phi_s3_2].unkD0 = temp_v1_22;
-// //         temp_v1_23 = this->buttonYOffsets[phi_s4_2] + phi_t0;
-// //         this->windowContentVtx[phi_s3_2].unkD2 = temp_v1_23;
-// //         this->windowContentVtx[phi_s3_2].unkC2 = temp_v1_23;
-// //         temp_a0_23 = &this->windowContentVtx[phi_s3_2];
-// //         temp_v1_24 = temp_a0_23->unkC2 - 0x10;
-// //         temp_a0_23->unkF2 = temp_v1_24;
-// //         this->windowContentVtx[phi_s3_2].unkE2 = temp_v1_24;
-// //         this->windowContentVtx[phi_s3_2].unkF8 = 0x680;
-// //         temp_a0_24 = &this->windowContentVtx[phi_s3_2];
-// //         temp_a0_24->unkD8 = (s16) temp_a0_24->unkF8;
-// //         phi_s3_2 = temp_s3_2;
-// //         phi_s4_2 = temp_s4_2;
-// //         phi_t0 += -0x10;
-// //         phi_s3_11 = temp_s3_2;
-// //     } while ((s32) temp_s4_2 < 3);
-
-// //     sp9C = 0x2C;
-
-// //     do {
-// //         phi_s3_3 = phi_s3_11;
-// //         phi_s3_12 = phi_s3_11;
-// //         if (gSaveContext.unk_3F3F != 0) {
-// //             spAC = phi_s4_3;
-// //             if ((this + phi_s4_3)->unk2446A != 0) {
-// //                 spAC = phi_s4_3 + 2;
-// //             }
-// //             temp_v0_2 = this->configMode;
-// //             phi_s1_2 = this->windowPosX - 6;
-// //             if ((temp_v0_2 == 0x10) && (phi_s6 = this + (phi_s4_3 * 2) + 0x20000, (phi_s4_3 == this->fileNum))) {
-// //                 sp98 = this->unk_24492[phi_s4_3] + 0x2C;
-// //             } else if (((temp_v0_2 == 0x11) || (temp_v0_2 == 0x12)) && (phi_s6 = this + (phi_s4_3 * 2) + 0x20000,
-// (phi_s4_3 == this->fileNum))) {
-// //                 sp98 = this->buttonYOffsets[phi_s4_3] + sp9C;
-// //             } else {
-// //                 sp98 = this->unk_24492[phi_s4_3] + sp9C + this->buttonYOffsets[phi_s4_3];
-// //                 phi_s6 = this + (phi_s4_3 * 2) + 0x20000;
-// //             }
-// //             temp_t2 = sp98 - 2;
-// //             temp_a2_2 = temp_t2 - 1;
-// //             do {
-// //                 temp_a1_10 = &D_80814280 + ((this + (phi_s4_3 * 8) + phi_a3_2)->unk24414 * 2);
-// //                 temp_a3_3 = phi_a3_2 + 1;
-// //                 temp_v1_25 = *temp_a1_10 + phi_s1_2 + 0x4E;
-// //                 this->windowContentVtx[phi_s3_3].unk20 = temp_v1_25;
-// //                 this->windowContentVtx[phi_s3_3].v.ob[0] = temp_v1_25;
-// //                 temp_a0_25 = &this->windowContentVtx[phi_s3_3];
-// //                 temp_s3_3 = (phi_s3_3 + 4) & 0xFFFF;
-// //                 temp_v1_26 = temp_a0_25->v.ob[0] + 0xB;
-// //                 temp_a0_25->unk30 = temp_v1_26;
-// //                 this->windowContentVtx[phi_s3_3].unk10 = temp_v1_26;
-// //                 this->windowContentVtx[phi_s3_3].unk12 = temp_t2;
-// //                 this->windowContentVtx[phi_s3_3].v.ob[1] = temp_t2;
-// //                 temp_a0_26 = &this->windowContentVtx[phi_s3_3];
-// //                 temp_v1_27 = temp_a0_26->v.ob[1] - 0xC;
-// //                 temp_a0_26->unk32 = temp_v1_27;
-// //                 this->windowContentVtx[phi_s3_3].unk22 = temp_v1_27;
-// //                 temp_v1_28 = *temp_a1_10 + phi_s1_2 + 0x4F;
-// //                 this->windowContentVtx[phi_s3_3].unk220 = temp_v1_28;
-// //                 this->windowContentVtx[phi_s3_3].unk200 = temp_v1_28;
-// //                 temp_a0_27 = &this->windowContentVtx[phi_s3_3];
-// //                 temp_v1_29 = temp_a0_27->unk200 + 0xB;
-// //                 temp_a0_27->unk230 = temp_v1_29;
-// //                 this->windowContentVtx[phi_s3_3].unk210 = temp_v1_29;
-// //                 this->windowContentVtx[phi_s3_3].unk212 = temp_a2_2;
-// //                 this->windowContentVtx[phi_s3_3].unk202 = temp_a2_2;
-// //                 temp_a0_28 = &this->windowContentVtx[phi_s3_3];
-// //                 temp_v1_30 = temp_a0_28->unk202 - 0xC;
-// //                 temp_a0_28->unk232 = temp_v1_30;
-// //                 this->windowContentVtx[phi_s3_3].unk222 = temp_v1_30;
-// //                 phi_a3_2 = temp_a3_3;
-// //                 phi_s1_2 += 0xA;
-// //                 phi_s3_3 = temp_s3_3;
-// //             } while ((s32) temp_a3_3 < 8);
-// //             temp_s1_2 = this->windowPosX + 0xE;
-// //             FileSelect_SplitNumber((u16) this->rupees[spAC], &spA4, &spA6, &spA8);
-// //             temp_t3 = sp98 - 0x18;
-// //             temp_t4 = temp_t3 - 1;
-// //             sp50 = this + spAC + 0x20000;
-// //             i = &(&spA4)[*(&D_80814554 + (this->unk_24474[spAC] * 2))];
-// //             phi_s1_3 = temp_s1_2;
-// //             phi_s3_4 = (temp_s3_3 + 0x20) & 0xFFFF;
-// //             do {
-// //                 temp_a1_11 = phi_a3_3 * 2;
-// //                 temp_t0 = &D_80814628 + temp_a1_11;
-// //                 temp_v1_31 = *(&D_80814280 + (*i * 2)) + phi_s1_3;
-// //                 this->windowContentVtx[phi_s3_4].unk20 = temp_v1_31;
-// //                 temp_a2_3 = &D_80814630 + temp_a1_11;
-// //                 temp_a3_4 = phi_a3_3 + 1;
-// //                 this->windowContentVtx[phi_s3_4].v.ob[0] = temp_v1_31;
-// //                 temp_a0_29 = &this->windowContentVtx[phi_s3_4];
-// //                 temp_v1_32 = *temp_t0 + temp_a0_29->v.ob[0];
-// //                 temp_a0_29->unk30 = temp_v1_32;
-// //                 temp_s3_4 = (phi_s3_4 + 4) & 0xFFFF;
-// //                 this->windowContentVtx[phi_s3_4].unk10 = temp_v1_32;
-// //                 this->windowContentVtx[phi_s3_4].unk12 = temp_t3;
-// //                 this->windowContentVtx[phi_s3_4].v.ob[1] = temp_t3;
-// //                 temp_a0_30 = &this->windowContentVtx[phi_s3_4];
-// //                 temp_v1_33 = temp_a0_30->v.ob[1] - *temp_a2_3;
-// //                 temp_a0_30->unk32 = temp_v1_33;
-// //                 this->windowContentVtx[phi_s3_4].unk22 = temp_v1_33;
-// //                 temp_a0_31 = &this->windowContentVtx[phi_s3_4];
-// //                 temp_v1_34 = temp_a0_31->v.ob[0] + 1;
-// //                 temp_a0_31->unkE0 = temp_v1_34;
-// //                 this->windowContentVtx[phi_s3_4].unkC0 = temp_v1_34;
-// //                 temp_a0_32 = &this->windowContentVtx[phi_s3_4];
-// //                 temp_v1_35 = *temp_t0 + temp_a0_32->unkC0;
-// //                 temp_a0_32->unkF0 = temp_v1_35;
-// //                 this->windowContentVtx[phi_s3_4].unkD0 = temp_v1_35;
-// //                 this->windowContentVtx[phi_s3_4].unkD2 = temp_t4;
-// //                 this->windowContentVtx[phi_s3_4].unkC2 = temp_t4;
-// //                 temp_a0_33 = &this->windowContentVtx[phi_s3_4];
-// //                 temp_v1_36 = temp_a0_33->unkC2 - *temp_a2_3;
-// //                 temp_a0_33->unkF2 = temp_v1_36;
-// //                 this->windowContentVtx[phi_s3_4].unkE2 = temp_v1_36;
-// //                 i += 2;
-// //                 phi_s1_3 += *(&D_80814620 + temp_a1_11);
-// //                 phi_s3_4 = temp_s3_4;
-// //                 phi_a3_3 = temp_a3_4;
-// //             } while ((s32) temp_a3_4 < 3);
-// //             temp_s1_3 = this->windowPosX + 0x2A;
-// //             FileSelect_SplitNumber((u16) this->unk_24478[spAC], &spA4, &spA6, &spA8);
-// //             temp_t2_2 = sp98 - 0x2A;
-// //             temp_t3_2 = temp_t2_2 - 1;
-// //             phi_a3_4 = 1;
-// //             phi_s1_4 = temp_s1_3;
-// //             phi_s3_5 = (temp_s3_4 + 0xC) & 0xFFFF;
-// //             do {
-// //                 temp_a1_12 = phi_a3_4 * 2;
-// //                 temp_t0_2 = &D_80814628 + temp_a1_12;
-// //                 temp_a2_4 = &D_80814630 + temp_a1_12;
-// //                 temp_v1_37 = *(&D_80814280 + ((sp + temp_a1_12)->unkA4 * 2)) + phi_s1_4;
-// //                 this->windowContentVtx[phi_s3_5].unk20 = temp_v1_37;
-// //                 temp_a3_5 = phi_a3_4 + 1;
-// //                 this->windowContentVtx[phi_s3_5].v.ob[0] = temp_v1_37;
-// //                 temp_a0_34 = &this->windowContentVtx[phi_s3_5];
-// //                 temp_v1_38 = *temp_t0_2 + temp_a0_34->v.ob[0];
-// //                 temp_a0_34->unk30 = temp_v1_38;
-// //                 temp_s3_5 = (phi_s3_5 + 4) & 0xFFFF;
-// //                 this->windowContentVtx[phi_s3_5].unk10 = temp_v1_38;
-// //                 this->windowContentVtx[phi_s3_5].unk12 = temp_t2_2;
-// //                 this->windowContentVtx[phi_s3_5].v.ob[1] = temp_t2_2;
-// //                 temp_a0_35 = &this->windowContentVtx[phi_s3_5];
-// //                 temp_v1_39 = temp_a0_35->v.ob[1] - *temp_a2_4;
-// //                 temp_a0_35->unk32 = temp_v1_39;
-// //                 this->windowContentVtx[phi_s3_5].unk22 = temp_v1_39;
-// //                 temp_a0_36 = &this->windowContentVtx[phi_s3_5];
-// //                 temp_v1_40 = temp_a0_36->v.ob[0] + 1;
-// //                 temp_a0_36->unkA0 = temp_v1_40;
-// //                 this->windowContentVtx[phi_s3_5].unk80 = temp_v1_40;
-// //                 temp_a0_37 = &this->windowContentVtx[phi_s3_5];
-// //                 temp_v1_41 = *temp_t0_2 + temp_a0_37->unk80;
-// //                 temp_a0_37->unkB0 = temp_v1_41;
-// //                 this->windowContentVtx[phi_s3_5].unk90 = temp_v1_41;
-// //                 this->windowContentVtx[phi_s3_5].unk92 = temp_t3_2;
-// //                 this->windowContentVtx[phi_s3_5].unk82 = temp_t3_2;
-// //                 temp_a0_38 = &this->windowContentVtx[phi_s3_5];
-// //                 temp_v1_42 = temp_a0_38->unk82 - *temp_a2_4;
-// //                 temp_a0_38->unkB2 = temp_v1_42;
-// //                 this->windowContentVtx[phi_s3_5].unkA2 = temp_v1_42;
-// //                 phi_a3_4 = temp_a3_5;
-// //                 phi_s1_4 += *(&D_80814620 + temp_a1_12);
-// //                 phi_s3_5 = temp_s3_5;
-// //             } while ((s32) temp_a3_5 < 3);
-// //             phi_s1_5 = this->windowPosX + 0x3F;
-// //             phi_s3_6 = (temp_s3_5 + 8) & 0xFFFF;
-// //             phi_t0_2 = sp98 - 0x10;
-// //             do {
-// //                 this->windowContentVtx[phi_s3_6].unk20 = phi_s1_5;
-// //                 this->windowContentVtx[phi_s3_6].v.ob[0] = phi_s1_5;
-// //                 temp_s3_6 = (phi_s3_6 + 4) & 0xFFFF;
-// //                 temp_a0_39 = &this->windowContentVtx[phi_s3_6];
-// //                 temp_v1_43 = temp_a0_39->v.ob[0] + 0xA;
-// //                 temp_a0_39->unk30 = temp_v1_43;
-// //                 this->windowContentVtx[phi_s3_6].unk10 = temp_v1_43;
-// //                 this->windowContentVtx[phi_s3_6].unk12 = phi_t0_2;
-// //                 this->windowContentVtx[phi_s3_6].v.ob[1] = phi_t0_2;
-// //                 temp_a0_40 = &this->windowContentVtx[phi_s3_6];
-// //                 temp_v1_44 = temp_a0_40->v.ob[1] - 0xA;
-// //                 temp_a0_40->unk32 = temp_v1_44;
-// //                 this->windowContentVtx[phi_s3_6].unk22 = temp_v1_44;
-// //                 phi_s3_6 = temp_s3_6;
-// //                 phi_s3_7 = temp_s3_6;
-// //                 phi_s1_8 = phi_s1_5;
-// //                 if (phi_a3_5 == 9) {
-// //                     phi_s1_8 = this->windowPosX + 0x36;
-// //                     phi_t0_2 += -8;
-// //                 }
-// //                 temp_a3_6 = phi_a3_5 + 1;
-// //                 phi_s1_5 = phi_s1_8 + 9;
-// //                 phi_a3_5 = temp_a3_6;
-// //             } while ((s32) temp_a3_6 < 0x14);
-// //             temp_a2_5 = sp98 - 0x20;
-// //             phi_s1_6 = this->windowPosX + 0x40;
-// //             do {
-// //                 temp_a3_7 = phi_a3_6 + 1;
-// //                 this->windowContentVtx[phi_s3_7].unk20 = phi_s1_6;
-// //                 this->windowContentVtx[phi_s3_7].v.ob[0] = phi_s1_6;
-// //                 temp_a0_41 = &this->windowContentVtx[phi_s3_7];
-// //                 temp_s3_7 = (phi_s3_7 + 4) & 0xFFFF;
-// //                 temp_v1_45 = temp_a0_41->v.ob[0] + 0x14;
-// //                 temp_a0_41->unk30 = temp_v1_45;
-// //                 this->windowContentVtx[phi_s3_7].unk10 = temp_v1_45;
-// //                 this->windowContentVtx[phi_s3_7].unk12 = temp_a2_5;
-// //                 this->windowContentVtx[phi_s3_7].v.ob[1] = temp_a2_5;
-// //                 temp_a0_42 = &this->windowContentVtx[phi_s3_7];
-// //                 temp_v1_46 = temp_a0_42->v.ob[1] - 0x14;
-// //                 temp_a0_42->unk32 = temp_v1_46;
-// //                 this->windowContentVtx[phi_s3_7].unk22 = temp_v1_46;
-// //                 this->windowContentVtx[phi_s3_7].unk3A = 0x400;
-// //                 temp_a0_43 = &this->windowContentVtx[phi_s3_7];
-// //                 temp_a1_13 = temp_a0_43->unk3A;
-// //                 temp_a0_43->unk38 = temp_a1_13;
-// //                 this->windowContentVtx[phi_s3_7].unk2A = temp_a1_13;
-// //                 this->windowContentVtx[phi_s3_7].unk18 = temp_a1_13;
-// //                 phi_s1_6 += 0x18;
-// //                 phi_s3_7 = temp_s3_7;
-// //                 phi_a3_6 = temp_a3_7;
-// //             } while ((s32) temp_a3_7 < 4);
-// //             temp_v1_47 = this->windowPosX - 1;
-// //             this->windowContentVtx[temp_s3_7].unk20 = temp_v1_47;
-// //             this->windowContentVtx[temp_s3_7].v.ob[0] = temp_v1_47;
-// //             temp_s3_8 = (temp_s3_7 + 4) & 0xFFFF;
-// //             temp_a0_44 = &this->windowContentVtx[temp_s3_7];
-// //             temp_v1_48 = temp_a0_44->v.ob[0] + 0x10;
-// //             temp_a0_44->unk30 = temp_v1_48;
-// //             this->windowContentVtx[temp_s3_7].unk10 = temp_v1_48;
-// //             temp_a1_14 = sp98 - 0x15;
-// //             this->windowContentVtx[temp_s3_7].unk12 = temp_a1_14;
-// //             this->windowContentVtx[temp_s3_7].v.ob[1] = temp_a1_14;
-// //             temp_a0_45 = &this->windowContentVtx[temp_s3_7];
-// //             temp_v1_49 = temp_a0_45->v.ob[1] - 0x10;
-// //             temp_a0_45->unk32 = temp_v1_49;
-// //             this->windowContentVtx[temp_s3_7].unk22 = temp_v1_49;
-// //             this->windowContentVtx[temp_s3_7].unk38 = 0x200;
-// //             temp_a0_46 = &this->windowContentVtx[temp_s3_7];
-// //             temp_a0_46->unk18 = (s16) temp_a0_46->unk38;
-// //             this->windowContentVtx[temp_s3_7].unk3A = 0x200;
-// //             temp_a0_47 = &this->windowContentVtx[temp_s3_7];
-// //             temp_a0_47->unk2A = (s16) temp_a0_47->unk3A;
-// //             temp_s3_9 = (temp_s3_8 + 4) & 0xFFFF;
-// //             temp_v1_50 = this->windowPosX + 0x27;
-// //             this->windowContentVtx[temp_s3_8].unk20 = temp_v1_50;
-// //             this->windowContentVtx[temp_s3_8].v.ob[0] = temp_v1_50;
-// //             temp_a0_48 = &this->windowContentVtx[temp_s3_8];
-// //             temp_v1_51 = temp_a0_48->v.ob[0] + 0x18;
-// //             temp_a0_48->unk30 = temp_v1_51;
-// //             this->windowContentVtx[temp_s3_8].unk10 = temp_v1_51;
-// //             this->windowContentVtx[temp_s3_8].unk12 = temp_a1_14;
-// //             this->windowContentVtx[temp_s3_8].v.ob[1] = temp_a1_14;
-// //             temp_a0_49 = &this->windowContentVtx[temp_s3_8];
-// //             temp_v1_52 = temp_a0_49->v.ob[1] - 0x10;
-// //             temp_a0_49->unk32 = temp_v1_52;
-// //             this->windowContentVtx[temp_s3_8].unk22 = temp_v1_52;
-// //             this->windowContentVtx[temp_s3_8].unk38 = 0x300;
-// //             temp_a0_50 = &this->windowContentVtx[temp_s3_8];
-// //             temp_a0_50->unk18 = (s16) temp_a0_50->unk38;
-// //             this->windowContentVtx[temp_s3_8].unk3A = 0x200;
-// //             temp_a0_51 = &this->windowContentVtx[temp_s3_8];
-// //             temp_a0_51->unk2A = (s16) temp_a0_51->unk3A;
-// //             temp_s3_10 = (temp_s3_9 + 8) & 0xFFFF;
-// //             temp_v1_53 = this->windowPosX - 0xA;
-// //             this->windowContentVtx[temp_s3_9].unk20 = temp_v1_53;
-// //             this->windowContentVtx[temp_s3_9].v.ob[0] = temp_v1_53;
-// //             temp_a0_52 = &this->windowContentVtx[temp_s3_9];
-// //             temp_v1_54 = temp_a0_52->v.ob[0] + 0x40;
-// //             temp_a0_52->unk30 = temp_v1_54;
-// //             this->windowContentVtx[temp_s3_9].unk10 = temp_v1_54;
-// //             temp_a2_6 = sp98 - 0x27;
-// //             this->windowContentVtx[temp_s3_9].unk12 = temp_a2_6;
-// //             temp_a1_15 = temp_a2_6 - 1;
-// //             this->windowContentVtx[temp_s3_9].v.ob[1] = temp_a2_6;
-// //             temp_a0_53 = &this->windowContentVtx[temp_s3_9];
-// //             temp_v1_55 = temp_a0_53->v.ob[1] - 0x10;
-// //             temp_a0_53->unk32 = temp_v1_55;
-// //             this->windowContentVtx[temp_s3_9].unk22 = temp_v1_55;
-// //             this->windowContentVtx[temp_s3_9].unk38 = 0x800;
-// //             temp_a0_54 = &this->windowContentVtx[temp_s3_9];
-// //             temp_a0_54->unk18 = (s16) temp_a0_54->unk38;
-// //             this->windowContentVtx[temp_s3_9].unk3A = 0x200;
-// //             temp_a0_55 = &this->windowContentVtx[temp_s3_9];
-// //             temp_a0_55->unk2A = (s16) temp_a0_55->unk3A;
-// //             temp_a0_56 = &this->windowContentVtx[temp_s3_9];
-// //             temp_v1_56 = temp_a0_56->v.ob[0] + 1;
-// //             temp_a0_56->unk60 = temp_v1_56;
-// //             this->windowContentVtx[temp_s3_9].unk40 = temp_v1_56;
-// //             temp_a0_57 = &this->windowContentVtx[temp_s3_9];
-// //             temp_v1_57 = temp_a0_57->unk40 + 0x40;
-// //             temp_a0_57->unk70 = temp_v1_57;
-// //             this->windowContentVtx[temp_s3_9].unk50 = temp_v1_57;
-// //             this->windowContentVtx[temp_s3_9].unk52 = temp_a1_15;
-// //             this->windowContentVtx[temp_s3_9].unk42 = temp_a1_15;
-// //             temp_a0_58 = &this->windowContentVtx[temp_s3_9];
-// //             temp_v1_58 = temp_a0_58->unk42 - 0x10;
-// //             temp_a0_58->unk72 = temp_v1_58;
-// //             this->windowContentVtx[temp_s3_9].unk62 = temp_v1_58;
-// //             this->windowContentVtx[temp_s3_9].unk78 = 0x800;
-// //             temp_a0_59 = &this->windowContentVtx[temp_s3_9];
-// //             temp_a0_59->unk58 = (s16) temp_a0_59->unk78;
-// //             this->windowContentVtx[temp_s3_9].unk7A = 0x200;
-// //             temp_a0_60 = &this->windowContentVtx[temp_s3_9];
-// //             temp_a0_60->unk6A = (s16) temp_a0_60->unk7A;
-// //             temp_v0_3 = this->configMode;
-// //             temp_s1_4 = this->windowPosX + 0xA3;
-// //             if ((temp_v0_3 == 0x10) && (phi_s4_3 == this->fileNum)) {
-// //                 phi_t0_3 = phi_s6->unk4492 + 0x2C;
-// //             } else {
-// //                 if (((temp_v0_3 == 0x11) || (temp_v0_3 == 0x12)) && (phi_t9 = sp9C, (phi_s4_3 == this->fileNum)))
-// {
-// //                     phi_t6 = phi_s6->unk449A;
-// //                 } else {
-// //                     phi_t6 = phi_s6->unk4492 + sp9C;
-// //                     phi_t9 = (s32) phi_s6->unk449A;
-// //                 }
-// //                 phi_t0_3 = phi_t6 + phi_t9;
-// //             }
-// //             temp_a1_16 = temp_s1_4 + 0xE;
-// //             this->windowContentVtx[temp_s3_10].unk20 = temp_a1_16;
-// //             temp_a2_7 = phi_t0_3 - 2;
-// //             temp_t3_3 = phi_t0_3 - 0x2B;
-// //             this->windowContentVtx[temp_s3_10].v.ob[0] = temp_a1_16;
-// //             temp_a0_61 = &this->windowContentVtx[temp_s3_10];
-// //             temp_v1_59 = temp_a0_61->v.ob[0] + 0x18;
-// //             temp_a0_61->unk30 = temp_v1_59;
-// //             this->windowContentVtx[temp_s3_10].unk10 = temp_v1_59;
-// //             this->windowContentVtx[temp_s3_10].unk12 = temp_a2_7;
-// //             this->windowContentVtx[temp_s3_10].v.ob[1] = temp_a2_7;
-// //             temp_a0_62 = &this->windowContentVtx[temp_s3_10];
-// //             temp_v1_60 = temp_a0_62->v.ob[1] - 0xC;
-// //             temp_a0_62->unk32 = temp_v1_60;
-// //             this->windowContentVtx[temp_s3_10].unk22 = temp_v1_60;
-// //             this->windowContentVtx[temp_s3_10].unk38 = 0x300;
-// //             temp_a0_63 = &this->windowContentVtx[temp_s3_10];
-// //             temp_a0_63->unk18 = (s16) temp_a0_63->unk38;
-// //             this->windowContentVtx[temp_s3_10].unk3A = 0x180;
-// //             temp_a0_64 = &this->windowContentVtx[temp_s3_10];
-// //             temp_a0_64->unk2A = (s16) temp_a0_64->unk3A;
-// //             phi_s3_8 = (temp_s3_10 + 4) & 0xFFFF;
-// //             do {
-// //                 temp_a1_17 = temp_s1_4 + phi_a3_7 + 2;
-// //                 this->windowContentVtx[phi_s3_8].unk20 = temp_a1_17;
-// //                 temp_a2_8 = (phi_t0_3 - phi_a3_7) - 0x12;
-// //                 this->windowContentVtx[phi_s3_8].v.ob[0] = temp_a1_17;
-// //                 temp_a3_8 = phi_a3_7 + 1;
-// //                 temp_a0_65 = &this->windowContentVtx[phi_s3_8];
-// //                 temp_v1_61 = temp_a0_65->v.ob[0] + 0x30;
-// //                 temp_a0_65->unk30 = temp_v1_61;
-// //                 temp_s3_11 = (phi_s3_8 + 4) & 0xFFFF;
-// //                 this->windowContentVtx[phi_s3_8].unk10 = temp_v1_61;
-// //                 this->windowContentVtx[phi_s3_8].unk12 = temp_a2_8;
-// //                 this->windowContentVtx[phi_s3_8].v.ob[1] = temp_a2_8;
-// //                 temp_a0_66 = &this->windowContentVtx[phi_s3_8];
-// //                 temp_v1_62 = temp_a0_66->v.ob[1] - 0x18;
-// //                 temp_a0_66->unk32 = temp_v1_62;
-// //                 this->windowContentVtx[phi_s3_8].unk22 = temp_v1_62;
-// //                 this->windowContentVtx[phi_s3_8].unk38 = 0x600;
-// //                 temp_a0_67 = &this->windowContentVtx[phi_s3_8];
-// //                 temp_a0_67->unk18 = (s16) temp_a0_67->unk38;
-// //                 this->windowContentVtx[phi_s3_8].unk3A = 0x300;
-// //                 temp_a0_68 = &this->windowContentVtx[phi_s3_8];
-// //                 temp_a0_68->unk2A = (s16) temp_a0_68->unk3A;
-// //                 phi_a3_7 = temp_a3_8;
-// //                 phi_s3_8 = temp_s3_11;
-// //                 phi_s3_9 = temp_s3_11;
-// //             } while ((s32) temp_a3_8 < 2);
-// //             temp_a2_9 = phi_t0_3 - 0x2A;
-// //             phi_s1_7 = temp_s1_4 + 6;
-// //             do {
-// //                 temp_a1_18 = phi_s1_7 + 1;
-// //                 this->windowContentVtx[phi_s3_9].unk20 = phi_s1_7;
-// //                 temp_a3_9 = phi_a3_8 + 1;
-// //                 this->windowContentVtx[phi_s3_9].v.ob[0] = phi_s1_7;
-// //                 temp_a0_69 = &this->windowContentVtx[phi_s3_9];
-// //                 temp_s3_12 = (phi_s3_9 + 4) & 0xFFFF;
-// //                 temp_v1_63 = temp_a0_69->v.ob[0] + 0xC;
-// //                 temp_a0_69->unk30 = temp_v1_63;
-// //                 this->windowContentVtx[phi_s3_9].unk10 = temp_v1_63;
-// //                 this->windowContentVtx[phi_s3_9].unk12 = temp_a2_9;
-// //                 this->windowContentVtx[phi_s3_9].v.ob[1] = temp_a2_9;
-// //                 temp_a0_70 = &this->windowContentVtx[phi_s3_9];
-// //                 temp_v1_64 = temp_a0_70->v.ob[1] - 0xC;
-// //                 temp_a0_70->unk32 = temp_v1_64;
-// //                 this->windowContentVtx[phi_s3_9].unk22 = temp_v1_64;
-// //                 this->windowContentVtx[phi_s3_9].unk160 = temp_a1_18;
-// //                 this->windowContentVtx[phi_s3_9].unk140 = temp_a1_18;
-// //                 temp_a0_71 = &this->windowContentVtx[phi_s3_9];
-// //                 temp_v1_65 = temp_a0_71->unk140 + 0xC;
-// //                 temp_a0_71->unk170 = temp_v1_65;
-// //                 this->windowContentVtx[phi_s3_9].unk150 = temp_v1_65;
-// //                 this->windowContentVtx[phi_s3_9].unk152 = temp_t3_3;
-// //                 this->windowContentVtx[phi_s3_9].unk142 = temp_t3_3;
-// //                 temp_a0_72 = &this->windowContentVtx[phi_s3_9];
-// //                 temp_v1_66 = temp_a0_72->unk142 - 0xC;
-// //                 temp_a0_72->unk172 = temp_v1_66;
-// //                 this->windowContentVtx[phi_s3_9].unk162 = temp_v1_66;
-// //                 phi_s1_7 += 8;
-// //                 phi_s3_9 = temp_s3_12;
-// //                 phi_a3_8 = temp_a3_9;
-// //             } while ((s32) temp_a3_9 < 5);
-// //             temp_v0_4 = &this->windowContentVtx[temp_s3_11];
-// //             temp_v1_67 = temp_v0_4->unk80 + 3;
-// //             temp_v0_4->unkA0 = temp_v1_67;
-// //             this->windowContentVtx[temp_s3_11].unk80 = temp_v1_67;
-// //             temp_v0_5 = &this->windowContentVtx[temp_s3_11];
-// //             temp_v1_68 = temp_v0_5->unk80 + 0xC;
-// //             temp_v0_5->unkB0 = temp_v1_68;
-// //             this->windowContentVtx[temp_s3_11].unk90 = temp_v1_68;
-// //             temp_v0_6 = &this->windowContentVtx[temp_s3_11];
-// //             temp_v1_69 = temp_v0_6->unk80 + 1;
-// //             temp_v0_6->unk1E0 = temp_v1_69;
-// //             this->windowContentVtx[temp_s3_11].unk1C0 = temp_v1_69;
-// //             temp_v0_7 = &this->windowContentVtx[temp_s3_11];
-// //             temp_v1_70 = temp_v0_7->unk1C0 + 0xC;
-// //             temp_v0_7->unk1F0 = temp_v1_70;
-// //             this->windowContentVtx[temp_s3_11].unk1D0 = temp_v1_70;
-// //             phi_s3_12 = (temp_s3_12 + 0x14) & 0xFFFF;
-// //         }
-// //         temp_s4_3 = phi_s4_3 + 1;
-// //         sp9C += -0x10;
-// //         phi_s4_3 = temp_s4_3;
-// //         phi_s3_10 = phi_s3_12;
-// //         phi_s3_11 = phi_s3_12;
-// //     } while ((s32) temp_s4_3 < 3);
-
-// //     temp_s1_5 = this->windowPosX - 6;
-// //     phi_a1 = -0xC;
-
-// //     do {
-// //         this->windowContentVtx[phi_s3_10].unk20 = temp_s1_5;
-// //         temp_s3_13 = (phi_s3_10 + 4) & 0xFFFF;
-// //         this->windowContentVtx[phi_s3_10].v.ob[0] = temp_s1_5;
-// //         temp_s4_4 = phi_s4_4 + 1;
-// //         temp_a0_73 = &this->windowContentVtx[phi_s3_10];
-// //         temp_v1_71 = temp_a0_73->v.ob[0] + 0x40;
-// //         temp_a0_73->unk30 = temp_v1_71;
-// //         this->windowContentVtx[phi_s3_10].unk10 = temp_v1_71;
-// //         temp_v1_72 = (this + (phi_s4_4 * 2))->unk244A0 + phi_a1;
-// //         this->windowContentVtx[phi_s3_10].unk12 = temp_v1_72;
-// //         this->windowContentVtx[phi_s3_10].v.ob[1] = temp_v1_72;
-// //         temp_a0_74 = &this->windowContentVtx[phi_s3_10];
-// //         temp_v1_73 = temp_a0_74->v.ob[1] - 0x10;
-// //         temp_a0_74->unk32 = temp_v1_73;
-// //         this->windowContentVtx[phi_s3_10].unk22 = temp_v1_73;
-// //         this->windowContentVtx[phi_s3_10].unk38 = 0x800;
-// //         temp_a0_75 = &this->windowContentVtx[phi_s3_10];
-// //         temp_a0_75->unk18 = (s16) temp_a0_75->unk38;
-// //         phi_s3_10 = temp_s3_13;
-// //         phi_s4_4 = temp_s4_4;
-// //         phi_a1 += -0x10;
-// //     } while ((s32) temp_s4_4 < 2);
-
-// //     this->windowContentVtx[temp_s3_13].unk20 = temp_s1_5;
-// //     temp_s3_14 = (temp_s3_13 + 4) & 0xFFFF;
-// //     this->windowContentVtx[temp_s3_13].v.ob[0] = temp_s1_5;
-// //     temp_a0_76 = &this->windowContentVtx[temp_s3_13];
-// //     temp_v1_74 = temp_a0_76->v.ob[0] + 0x40;
-// //     temp_a0_76->unk30 = temp_v1_74;
-// //     this->windowContentVtx[temp_s3_13].unk10 = temp_v1_74;
-// //     temp_v1_75 = this->buttonYOffsets[5] - 0x34;
-// //     this->windowContentVtx[temp_s3_13].unk12 = temp_v1_75;
-// //     this->windowContentVtx[temp_s3_13].v.ob[1] = temp_v1_75;
-// //     temp_a0_77 = &this->windowContentVtx[temp_s3_13];
-// //     temp_v1_76 = temp_a0_77->v.ob[1] - 0x10;
-// //     temp_a0_77->unk32 = temp_v1_76;
-// //     this->windowContentVtx[temp_s3_13].unk22 = temp_v1_76;
-// //     this->windowContentVtx[temp_s3_13].unk38 = 0x800;
-// //     temp_a0_78 = &this->windowContentVtx[temp_s3_13];
-// //     temp_a0_78->unk18 = (s16) temp_a0_78->unk38;
-// //     temp_a1_19 = this->menuMode;
-
-// //     if (((temp_a1_19 == 1) && ((s32) this->configMode >= 2)) || ((temp_a1_19 == 2) && (this->selectMode == 3))) {
-// //         if (temp_a1_19 == 1) {
-// //             temp_v0_8 = this->configMode;
-// //             if ((temp_v0_8 == 4) || (temp_v0_8 == 7) || (temp_v0_8 == 0x16)) {
-// //                 phi_s4_5 = *(&D_80814644 + (this->buttonIndex * 2));
-// //             } else if ((temp_v0_8 == 0x19) || (temp_v0_8 == 0xC)) {
-// //                 phi_s4_5 = *(&D_8081464C + (this->buttonIndex * 2));
-// //             } else {
-// //                 phi_s4_5 = *(&D_80814638 + (this->buttonIndex * 2));
-// //             }
-// //         } else {
-// //             phi_s4_5 = *(&D_80814650 + (this->confirmButtonIndex * 2));
-// //         }
-// //         temp_v1_77 = this->windowPosX - 0xA;
-// //         this->windowContentVtx[temp_s3_14].unk20 = temp_v1_77;
-// //         this->windowContentVtx[temp_s3_14].v.ob[0] = temp_v1_77;
-// //         temp_a0_79 = &this->windowContentVtx[temp_s3_14];
-// //         temp_v1_78 = temp_a0_79->v.ob[0] + 0x48;
-// //         temp_a0_79->unk30 = temp_v1_78;
-// //         this->windowContentVtx[temp_s3_14].unk10 = temp_v1_78;
-// //         temp_a1_20 = this->windowContentVtx;
-// //         temp_v1_79 = temp_a1_20[phi_s4_5].v.ob[1] + 4;
-// //         temp_a1_20[temp_s3_14].unk12 = temp_v1_79;
-// //         this->windowContentVtx[temp_s3_14].v.ob[1] = temp_v1_79;
-// //         temp_a0_80 = &this->windowContentVtx[temp_s3_14];
-// //         temp_v1_80 = temp_a0_80->v.ob[1] - 0x18;
-// //         temp_a0_80->unk32 = temp_v1_80;
-// //         this->windowContentVtx[temp_s3_14].unk22 = temp_v1_80;
-// //         this->windowContentVtx[temp_s3_14].unk38 = 0x900;
-// //         temp_a0_81 = &this->windowContentVtx[temp_s3_14];
-// //         temp_a0_81->unk18 = (s16) temp_a0_81->unk38;
-// //         this->windowContentVtx[temp_s3_14].unk3A = 0x300;
-// //         temp_a0_82 = &this->windowContentVtx[temp_s3_14];
-// //         temp_a0_82->unk2A = (s16) temp_a0_82->unk3A;
-// //     }
-// //     temp_v1_81 = this->windowPosX + 0x3A;
-// //     this->windowContentVtx[temp_s3_14].unk60 = temp_v1_81;
-// //     this->windowContentVtx[temp_s3_14].unk40 = temp_v1_81;
-// //     temp_a0_83 = &this->windowContentVtx[temp_s3_14];
-// //     temp_v1_82 = temp_a0_83->unk40 + 0x80;
-// //     temp_a0_83->unk70 = temp_v1_82;
-// //     this->windowContentVtx[temp_s3_14].unk50 = temp_v1_82;
-// //     temp_a1_21 = this->windowContentVtx;
-// //     temp_v1_83 = temp_a1_21[*(&D_80814638 + (this->warningButtonIndex * 2))].v.ob[1];
-// //     temp_a1_21[temp_s3_14].unk52 = temp_v1_83;
-// //     this->windowContentVtx[temp_s3_14].unk42 = temp_v1_83;
-// //     temp_a0_84 = &this->windowContentVtx[temp_s3_14];
-// //     temp_v1_84 = temp_a0_84->unk42 - 0x10;
-// //     temp_a0_84->unk72 = temp_v1_84;
-// //     this->windowContentVtx[temp_s3_14].unk62 = temp_v1_84;
-// //     this->windowContentVtx[temp_s3_14].unk78 = 0x1000;
-// //     temp_a0_85 = &this->windowContentVtx[temp_s3_14];
-// //     temp_a0_85->unk58 = (s16) temp_a0_85->unk78;
-// }
+#endif
 
 s16 D_80814654[] = { 0x0088, 0x0194, 0x02A0, 0 };
 s32 D_8081465C[] = { 0x0102BCB0, 0x0102CCB0, 0x0102DCB0, 0x0102ECB0 };
@@ -1834,7 +1260,7 @@ void FileSelect_DrawWindowContents(GameState* thisx) {
     for (fileIndex = 0; fileIndex < 3; fileIndex++, temp += 28) {
         if (fileIndex < 2) {
             gDPPipeSync(POLY_OPA_DISP++);
-            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->windowColor[0], this->windowColor[1], this->windowColor[2],
                             this->fileInfoAlpha[fileIndex]);
             gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[temp], 28, 0);
 
@@ -1904,7 +1330,7 @@ void FileSelect_DrawWindowContents(GameState* thisx) {
     // draw primary action buttons (copy/erase)
     for (quadVtxIndex = 0, i = 0; i < 2; i++, quadVtxIndex += 4) {
         gDPPipeSync(POLY_OPA_DISP++);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->windowColor[0], this->windowColor[1], this->windowColor[2],
                         this->actionButtonAlpha[i]);
         gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814764[i], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -1917,7 +1343,7 @@ void FileSelect_DrawWindowContents(GameState* thisx) {
     // draw confirm buttons (yes/quit)
     for (quadVtxIndex = 0, i = 0; i < 2; i++, quadVtxIndex += 4) {
         temp = this->confirmButtonTexIndices[i];
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->windowColor[0], this->windowColor[1], this->windowColor[2],
                         this->confirmButtonAlpha[i]);
         gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814764[temp], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -1927,7 +1353,7 @@ void FileSelect_DrawWindowContents(GameState* thisx) {
 
     // draw options button
     gDPPipeSync(POLY_OPA_DISP++);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->windowColor[0], this->windowColor[1], this->windowColor[2],
                     this->optionButtonAlpha);
     gDPLoadTextureBlock(POLY_OPA_DISP++, D_010277B0, G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -1988,7 +1414,7 @@ void FileSelect_ConfigModeDraw(GameState* thisx) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->windowColor[0], this->windowColor[1], this->windowColor[2],
                         this->windowAlpha);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
@@ -2019,7 +1445,7 @@ void FileSelect_ConfigModeDraw(GameState* thisx) {
     if ((this->configMode >= 34) && (this->configMode <= 38)) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->windowColor[0], this->windowColor[1], this->windowColor[2],
                         this->windowAlpha);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
@@ -2047,7 +1473,7 @@ void FileSelect_ConfigModeDraw(GameState* thisx) {
     if ((this->configMode >= 39) && (this->configMode <= 43)) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->windowColor[0], this->windowColor[1], this->windowColor[2],
                         this->windowAlpha);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
@@ -2329,7 +1755,7 @@ void FileSelect_SelectModeDraw(GameState* thisx) {
     FileSelect_SetWindowContentVtx(&this->state);
 
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2],
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->windowColor[0], this->windowColor[1], this->windowColor[2],
                     this->windowAlpha);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
@@ -2534,7 +1960,6 @@ void FileSelect_InitContext(GameState* thisx) {
     this->windowRot = 0.0f;
 
     this->stickXDir = this->inputTimerX = 0;
-
     this->stickYDir = this->inputTimerY = 0;
 
     this->kbdX = this->kbdY = this->unk_24516 = 0;
@@ -2542,10 +1967,9 @@ void FileSelect_InitContext(GameState* thisx) {
     // this->kbdButton = FS_KBD_BTN_NONE;
     this->kbdButton = 99;
 
-    // windowColor
-    this->unk_244B0[0] = 100;
-    this->unk_244B0[1] = 150;
-    this->unk_244B0[2] = 255;
+    this->windowColor[0] = 100;
+    this->windowColor[1] = 150;
+    this->windowColor[2] = 255;
 
     this->windowAlpha = this->titleAlpha[0] = this->titleAlpha[1] = this->fileButtonAlpha[0] =
         this->fileButtonAlpha[1] = this->fileButtonAlpha[2] = this->nameBoxAlpha[0] = this->nameBoxAlpha[1] =
@@ -2561,8 +1985,8 @@ void FileSelect_InitContext(GameState* thisx) {
     this->warningLabel = -1;
 
     this->warningButtonIndex = this->buttonYOffsets[0] = this->buttonYOffsets[1] = this->buttonYOffsets[2] =
-        this->buttonYOffsets[3] = this->buttonYOffsets[4] = this->buttonYOffsets[5] = this->unk_24492[0] =
-            this->unk_24492[1] = this->unk_24492[2] = 0;
+        this->buttonYOffsets[3] = this->buttonYOffsets[4] = this->buttonYOffsets[5] = this->fileNamesY[0] =
+            this->fileNamesY[1] = this->fileNamesY[2] = 0;
 
     this->unk_2451E[0] = 0;
     this->unk_2451E[1] = 3;
@@ -2572,12 +1996,13 @@ void FileSelect_InitContext(GameState* thisx) {
     this->highlightTimer = 20;
 
     ShrinkWindow_SetLetterboxTarget(0);
+
     gSaveContext.skyboxTime = 0;
     gSaveContext.save.time = 0;
 
     // Skybox_Init
     func_801434E4(&this->state, &this->skyboxCtx, 1);
-    R_ENV_TIME_INCREMENT = 10;
+    R_TIME_SPEED = 10;
 
     // TODO: copy some variable names from OoT
     envCtx->unk_19 = 0;
