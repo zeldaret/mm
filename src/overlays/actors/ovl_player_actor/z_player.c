@@ -18071,6 +18071,7 @@ void func_80856918(Player* this, PlayState* play) {
     func_808378FC(play, this);
 }
 
+// Deku spinning related
 void func_808573A4(Player* this, PlayState* play) {
     this->stateFlags2 |= PLAYER_STATE2_20 | PLAYER_STATE2_40;
 
