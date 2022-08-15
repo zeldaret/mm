@@ -70,7 +70,7 @@ void OceffWipe3_Draw(Actor* thisx, PlayState* play) {
 
     Camera_GetQuakeOffset(&quakeOffset, GET_ACTIVE_CAM(play));
 
-    vtxPtr = sOceffWipe3FrustumVtx;
+    vtxPtr = sSariaSongFrustumVtx;
 
     if (this->counter < 32) {
         z = Math_SinS(this->counter << 9) * 1220.0f;
@@ -100,10 +100,10 @@ void OceffWipe3_Draw(Actor* thisx, PlayState* play) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 170, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, 100, 200, 0, 128);
-    gSPDisplayList(POLY_XLU_DISP++, &sOceffWipe3FrustrumMaterialDL);
-    gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, 0, scroll * 12, scroll * (-12), 64, 64, 1,
-                                                     scroll * 8, scroll * (-8), 64, 64));
-    gSPDisplayList(POLY_XLU_DISP++, &sOceffWipe3FrustumModelDL);
+    gSPDisplayList(POLY_XLU_DISP++, &sSariaSongFrustrumMaterialDL);
+    gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, 0, scroll * 12, scroll * -12, 64, 64, 1,
+                                                     scroll * 8, scroll * -8, 64, 64));
+    gSPDisplayList(POLY_XLU_DISP++, &sSariaSongFrustumModelDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
