@@ -359,17 +359,18 @@ void func_80966FEC(EnWeatherTag* this, PlayState* play) {
 
 // type 4_2 pirates fortres only?
 void func_80967060(EnWeatherTag* this, PlayState* play) {
-    Vec3f vec1;
-    Vec3f vec2;
+    Vec3f worldPos;
+    Vec3f screenPos;
 
-    vec1.x = 1055.0f;
-    vec1.y = -145.0f;
-    vec1.z = 181.0f;
+    worldPos.x = 1055.0f;
+    worldPos.y = -145.0f;
+    worldPos.z = 181.0f;
 
-    func_80169474(play, &vec1, &vec2);
+    Play_GetScreenPos(play, &worldPos, &screenPos);
 
     if (play->view.fovy < 25.0f) {
-        if ((vec2.x >= 70.0f) && (vec2.x < 250.0f) && (vec2.y >= 30.0f) && (vec2.y < 210.0f)) {
+        if ((screenPos.x >= 70.0f) && (screenPos.x < (SCREEN_WIDTH - 70.0f)) && (screenPos.y >= 30.0f) &&
+            (screenPos.y < (SCREEN_HEIGHT - 30.0f))) {
             EnWeatherTag_SetupAction(this, func_80967148);
         }
     }

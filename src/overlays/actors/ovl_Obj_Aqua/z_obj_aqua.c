@@ -288,8 +288,10 @@ void ObjAqua_Draw(Actor* thisx, PlayState* play) {
         Matrix_RotateZS(rotation * -1, MTXMODE_APPLY);
         Matrix_Scale(10.0f / 13.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     }
+
     Matrix_RotateYS(yaw, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

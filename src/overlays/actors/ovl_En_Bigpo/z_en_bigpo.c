@@ -278,7 +278,7 @@ void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, PlayState* play) {
             subCam->eye.x -= 1.5f * Math_SinS(this->actor.yawTowardsPlayer);
             subCam->eye.z -= 1.5f * Math_CosS(this->actor.yawTowardsPlayer);
         }
-        Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &subCam->eye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &subCam->eye);
     }
 }
 
@@ -338,7 +338,7 @@ void EnBigpo_SpawnCutsceneStage1(EnBigpo* this, PlayState* play) {
         subCamEye.x = ((this->actor.world.pos.x - this->fires[0].pos.x) * 1.8f) + this->actor.world.pos.x;
         subCamEye.y = this->actor.world.pos.y + 150.0f;
         subCamEye.z = ((this->actor.world.pos.z - this->fires[0].pos.z) * 1.8f) + this->actor.world.pos.z;
-        Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
     }
     this->actionFunc = EnBigpo_SpawnCutsceneStage2;
 }
@@ -460,7 +460,7 @@ void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, PlayState* play) {
     this->idleTimer--;
     if (this->idleTimer == 0) {
         subCam = Play_GetCamera(play, this->subCamId);
-        Play_CameraSetAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
+        Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
         if (this->actor.params == ENBIGPO_SUMMONED) {
             dampe = SubS_FindActor(play, NULL, ACTORCAT_NPC, ACTOR_EN_TK);
@@ -957,7 +957,7 @@ void EnBigpo_SetupFlameCirclePositions(EnBigpo* this, PlayState* play) {
         subCamEye.x = (Math_SinS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.x;
         subCamEye.y = this->actor.world.pos.y + 150.0f;
         subCamEye.z = (Math_CosS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.z;
-        Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
     }
 
     this->actionFunc = EnBigpo_DoNothing;
@@ -1444,7 +1444,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play) {
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        gSPDisplayList(POLY_XLU_DISP++, &gGameplayKeepDrawFlameDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -1471,7 +1471,7 @@ void EnBigpo_RevealedFire(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(POLY_XLU_DISP++, &gGameplayKeepDrawFlameDL);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -214,11 +214,12 @@ f32 func_80BCD4D0(Path* path, s32 count, Vec3f* arg2, Vec3s* arg3) {
 }
 
 void func_80BCD590(EnScopecrow* this, PlayState* play) {
-    Vec3f sp1C;
+    Vec3f screenPos;
 
-    func_80169474(play, &this->actor.world.pos, &sp1C);
+    Play_GetScreenPos(play, &this->actor.world.pos, &screenPos);
 
-    if ((sp1C.x >= 130.0f) && (sp1C.x < 190.0f) && (sp1C.y >= 90.0f) && (sp1C.y < 150.0f)) {
+    if ((screenPos.x >= 130.0f) && (screenPos.x < (SCREEN_WIDTH - 130.0f)) && (screenPos.y >= 90.0f) &&
+        (screenPos.y < (SCREEN_HEIGHT - 90.0f))) {
         this->actor.draw = EnScopecrow_Draw;
         this->actionFunc = func_80BCD640;
     }
