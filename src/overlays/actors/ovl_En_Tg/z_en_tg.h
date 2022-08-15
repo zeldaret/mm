@@ -2,6 +2,7 @@
 #define Z_EN_TG_H
 
 #include "global.h"
+#include "objects/object_mu/object_mu.h"
 
 struct EnTg;
 
@@ -25,8 +26,8 @@ typedef struct EnTg {
     /* 0x0148 */ SkelAnime skelAnime;
     /* 0x018C */ ColliderCylinder collider;
     /* 0x01D8 */ char unk1D8[0x18];
-    /* 0x01F0 */ Vec3s jointTable[21];
-    /* 0x026E */ Vec3s morphTable[21];
+    /* 0x01F0 */ Vec3s jointTable[HONEY_AND_DARLING_LIMB_MAX];
+    /* 0x026E */ Vec3s morphTable[HONEY_AND_DARLING_LIMB_MAX];
     /* 0x02EC */ s16 spawnHeartTimer; // Countdown timer for a new heart spawning above the actor
     /* 0x02EE */ char unk2EE[0x2];
     /* 0x02F0 */ EnTgHeartInfo enTgHeartInfo;

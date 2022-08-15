@@ -194,7 +194,7 @@ void EnFu_Init(Actor* thisx, PlayState* play) {
 
     if (fuKaiten != NULL) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_mu_Skel_00B2B0, &object_mu_Anim_001F74, this->jointTable,
+        SkelAnime_InitFlex(play, &this->skelAnime, &gHoneyAndDarlingSkel, &object_mu_Anim_001F74, this->jointTable,
                            this->morphTable, 21);
         Collider_InitCylinder(play, &this->collider);
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);

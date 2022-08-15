@@ -132,7 +132,7 @@ void EnTg_Init(Actor* thisx, PlayState* play) {
     EnTg* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_mu_Skel_00B2B0, NULL, this->jointTable, this->morphTable, 21);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gHoneyAndDarlingSkel, NULL, this->jointTable, this->morphTable, 21);
     EnTg_ChangeAnimation(&this->skelAnime, &sAnimations, 0);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -187,7 +187,7 @@ void EnTg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     Vec3f zeroVec = D_80990228; // { 0.0f, 0.0f, 0.0f };
 
-    if (limbIndex == 9) {
+    if (limbIndex == HONEY_AND_DARLING_LIMB_MAN_HEAD) {
         Matrix_MultVec3f(&zeroVec, &this->actor.focus.pos);
     }
 }
