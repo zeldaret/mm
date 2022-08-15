@@ -42,9 +42,9 @@ typedef struct FileSelectState {
     /* 0x2446A */ u8 unk_2446A[2];
     /* 0x2446C */ s16 rupees[2];
     /* 0x24470 */ s16 unk_24470[2];
-    /* 0x24474 */ s8 unk_24474[2];
+    /* 0x24474 */ u8 unk_24474[2];
     /* 0x24476 */ s8 unk_24476[2];
-    /* 0x24478 */ s8 maskCount[2];
+    /* 0x24478 */ u8 maskCount[2];
     /* 0x2447A */ s8 unk_2447A[2];
     /* 0x2447C */ s8 heartPieceCount[2];
     /* 0x2447E */ s8 unk_2447E[2];
