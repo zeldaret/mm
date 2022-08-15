@@ -22,7 +22,7 @@ typedef struct EnBji01 {
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ Vec3s jointTable[SHIKASHI_LIMB_MAX]; 
     /* 0x238 */ Vec3s morphTable[SHIKASHI_LIMB_MAX];
-    /* 0x298 */ s32 animationIndex;
+    /* 0x298 */ s32 animIndex;
     /* 0x29C */ s16 eyeTexIndex;
     /* 0x29E */ s16 blinkSeqIndex;
     /* 0x2A0 */ s16 blinkTimer;

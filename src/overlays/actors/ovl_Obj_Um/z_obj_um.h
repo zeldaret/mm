@@ -11,14 +11,14 @@ typedef void (*ObjUmActionFunc)(struct ObjUm*, PlayState*);
 
 #define MILK_POTS_COUNT 3
 
-typedef enum ObjUmAnimimations {
+typedef enum ObjUmAnimation {
     /* -1 */ OBJ_UM_ANIM_MINUS_1 = -1,
     /*  0 */ OBJ_UM_ANIM_TROT,
     /*  1 */ OBJ_UM_ANIM_GALLOP,
     /*  2 */ OBJ_UM_ANIM_IDLE,
     /*  3 */ OBJ_UM_ANIM_3, // NULL pointer
     /*  4 */ OBJ_UM_ANIM_LOOK_BACK
-} ObjUmAnimimations;
+} ObjUmAnimation;
 
 typedef struct ObjUm {
     /* 0x000 */ DynaPolyActor dyna;
@@ -40,7 +40,7 @@ typedef struct ObjUm {
     /* 0x2F4 */ s32 flags;
     /* 0x2BC */ Vec3s unk_2F8;
     /* 0x2FE */ Vec3s unk_2FE;
-    /* 0x304 */ ObjUmAnimimations currentAnimIndex;
+    /* 0x304 */ ObjUmAnimation animIndex;
     /* 0x308 */ Vec3f unk_308;
     /* 0x314 */ s32 potsLife[MILK_POTS_COUNT];
     /* 0x320 */ s32 wasPotHit[MILK_POTS_COUNT]; // resets to false in the same frame

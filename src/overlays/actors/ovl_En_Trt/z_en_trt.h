@@ -41,7 +41,7 @@ typedef struct EnTrt {
     /* 0x3F0 */ Color_RGBAu32 cursorColor;
     /* 0x400 */ u8 drawCursor;
     /* 0x402 */ s16 timer;
-    /* 0x404 */ s16 animationIndex;
+    /* 0x404 */ s16 animIndex;
     /* 0x406 */ u16 textId;
     /* 0x408 */ u16 prevTextId;
     /* 0x40A */ u16 talkOptionTextId;

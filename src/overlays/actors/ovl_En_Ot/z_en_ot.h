@@ -35,7 +35,7 @@ typedef struct EnOt {
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ Vec3s jointTable[19];
     /* 0x24A */ Vec3s morphTable[19];
-    /* 0x2BC */ s32 animIdx;
+    /* 0x2BC */ s32 animIndex;
     /* 0x2C0 */ ActorPathing actorPath;
     /* 0x32C */ u16 unk_32C;
     /* 0x330 */ Vec3f unk_330;

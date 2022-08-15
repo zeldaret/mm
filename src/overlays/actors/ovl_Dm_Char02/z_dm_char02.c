@@ -32,32 +32,32 @@ const ActorInit Dm_Char02_InitVars = {
 };
 
 typedef enum {
-    /* 0 */ DMCHAR02_ANIMATION_HIT_GROUND,
-    /* 1 */ DMCHAR02_ANIMATION_TURN_AROUND,
-    /* 2 */ DMCHAR02_ANIMATION_JUGGLE,
-    /* 3 */ DMCHAR02_ANIMATION_FALL,
-} DmChar02AnimationIndex;
+    /* 0 */ DMCHAR02_ANIM_HIT_GROUND,
+    /* 1 */ DMCHAR02_ANIM_TURN_AROUND,
+    /* 2 */ DMCHAR02_ANIM_JUGGLE,
+    /* 3 */ DMCHAR02_ANIM_FALL,
+} DmChar02Animation;
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &gClockTowerOcarinaOfTimeHitGroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &gClockTowerOcarinaOfTimeTurnAroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &gClockTowerOcarinaOfTimeJuggleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gClockTowerOcarinaOfTimeFallAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
 };
 
-void DmChar02_ChangeAnimation(SkelAnime* skelAnime, AnimationInfo* animation, u16 index) {
+void DmChar02_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
     f32 frameCount;
 
-    animation += index;
+    animationInfo += animIndex;
 
-    if (animation->frameCount < 0.0f) {
-        frameCount = Animation_GetLastFrame(animation->animation);
+    if (animationInfo->frameCount < 0.0f) {
+        frameCount = Animation_GetLastFrame(animationInfo->animation);
     } else {
-        frameCount = animation->frameCount;
+        frameCount = animationInfo->frameCount;
     }
 
-    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, frameCount,
-                     animation->mode, animation->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
+                     frameCount, animationInfo->mode, animationInfo->morphFrames);
 }
 
 void DmChar02_PlaySfxForDroppingOcarinaCutscene(DmChar02* this, PlayState* play) {
@@ -84,11 +84,11 @@ void DmChar02_Init(Actor* thisx, PlayState* play) {
     DmChar02* this = THIS;
 
     if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
-        this->animIndex = DMCHAR02_ANIMATION_HIT_GROUND;
+        this->animIndex = DMCHAR02_ANIM_HIT_GROUND;
         this->actor.targetArrowOffset = 3000.0f;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gClockTowerOcarinaOfTimeSkel, NULL, NULL, NULL, 0);
-        DmChar02_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+        DmChar02_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
         Actor_SetScale(&this->actor, 0.01f);
         this->actionFunc = DmChar02_PerformCutsceneActions;
     } else {
@@ -108,25 +108,25 @@ void DmChar02_PerformCutsceneActions(DmChar02* this, PlayState* play) {
         if (play->csCtx.frames == play->csCtx.actorActions[actionIndex]->startFrame) {
             switch (play->csCtx.actorActions[actionIndex]->action) {
                 default:
-                    this->animIndex = DMCHAR02_ANIMATION_HIT_GROUND;
+                    this->animIndex = DMCHAR02_ANIM_HIT_GROUND;
                     shouldChangeAnimation = false;
                     break;
 
                 case 1:
-                    this->animIndex = DMCHAR02_ANIMATION_HIT_GROUND;
+                    this->animIndex = DMCHAR02_ANIM_HIT_GROUND;
                     break;
 
                 case 2:
-                    this->animIndex = DMCHAR02_ANIMATION_TURN_AROUND;
+                    this->animIndex = DMCHAR02_ANIM_TURN_AROUND;
                     break;
 
                 case 4:
-                    this->animIndex = DMCHAR02_ANIMATION_FALL;
+                    this->animIndex = DMCHAR02_ANIM_FALL;
                     break;
             }
 
             if (shouldChangeAnimation) {
-                DmChar02_ChangeAnimation(&this->skelAnime, &sAnimations[this->animIndex], 0);
+                DmChar02_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
             }
         }
 
@@ -134,9 +134,9 @@ void DmChar02_PerformCutsceneActions(DmChar02* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        if (this->animIndex == DMCHAR02_ANIMATION_TURN_AROUND) {
+        if (this->animIndex == DMCHAR02_ANIM_TURN_AROUND) {
             this->animIndex++;
-            DmChar02_ChangeAnimation(&this->skelAnime, &sAnimations[this->animIndex], 0);
+            DmChar02_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
         }
     }
 }
