@@ -16428,7 +16428,7 @@
     0x80BFC8AC:("func_80BFC8AC",),
     0x80BFC8F8:("func_80BFC8F8",),
     0x80BFC9E4:("EnRz_Update",),
-    0x80BFCAD0:("func_80BFCAD0",),
+    0x80BFCAD0:("EnRz_PostLimbDraw",),
     0x80BFCB3C:("EnRz_Draw",),
     0x80BFCFA0:("func_80BFCFA0",),
     0x80BFCFB8:("func_80BFCFB8",),

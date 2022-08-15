@@ -24,7 +24,7 @@ void func_80BFC058(EnRz* this, PlayState* play);
 void func_80BFC078(EnRz* this, PlayState* play);
 void func_80BFC3F8(EnRz* this, PlayState* play);
 void func_80BFC674(EnRz* this, PlayState* play);
-s32 func_80BFC7E0(EnRz* this, PlayState* play);
+void func_80BFC7E0(EnRz* this, PlayState* play);
 void func_80BFC8F8(EnRz* this, PlayState* play);
 
 const ActorInit En_Rz_InitVars = {
@@ -568,7 +568,7 @@ void func_80BFC728(EnRz* this, PlayState* play) {
     }
 }
 
-s32 func_80BFC7E0(EnRz* this, PlayState* play) {
+void func_80BFC7E0(EnRz* this, PlayState* play) {
     s32 new_var;
 
     EnRz_UpdateAnimation(this, play);
@@ -652,7 +652,7 @@ void EnRz_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-void func_80BFCAD0(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnRz_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnRz* this = THIS;
 
     if (limbIndex == OBJECT_RZ_LIMB_0B) {
@@ -685,7 +685,7 @@ void EnRz_Draw(Actor* thisx, PlayState* play) {
     }
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
-                          func_80BFCAD0, &this->actor);
+                          EnRz_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
