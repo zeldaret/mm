@@ -445,6 +445,7 @@ typedef struct struct_8085DA94 {
         void* ptr; // Do not use, required in the absence of designated initialisors
         LinkAnimationHeader* anim;
         PlayerCueInterpretor func;
+        AnimSfxEntry* entry;
     };
 } struct_8085DA94; // size = 0x8
 
@@ -461,26 +462,20 @@ typedef struct struct_8085D910 {
 } struct_8085D910; // size = 0x4
 
 typedef struct struct_8085D848_unk_00 {
-    /* 0x00 */ s16 unk_00; /* inferred */
-    /* 0x02 */ u8 unk_02;  /* inferred */
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 unk_07;
+    /* 0x00 */ s16 fogNear;
+    /* 0x02 */ u8 fogColor[3];
+    /* 0x05 */ u8 ambientColor[3];
 } struct_8085D848_unk_00; // size = 0x08
 
 typedef struct struct_8085D848_unk_18 {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ u8 unk_0C;
-    /* 0x0D */ u8 unk_0D;
-    /* 0x0E */ u8 unk_0E;
-    /* 0x10 */ s16 unk_10;
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ u8 color[3];
+    /* 0x10 */ s16 radius;
 } struct_8085D848_unk_18; // size = 0x14
 
 typedef struct struct_8085D848 {
     /* 0x00 */ struct_8085D848_unk_00 unk_00[3];
-    /* 0x18 */ struct_8085D848_unk_18 unk_18[3];
+    /* 0x18 */ struct_8085D848_unk_18 light[3];
 } struct_8085D848; // size = 0x54
 
 typedef struct struct_8085D80C {
@@ -692,14 +687,12 @@ void func_8082DC64(PlayState* play, Player* this) {
 void func_8082DCA0(PlayState* play, Player* this) {
     Actor* heldActor = this->heldActor;
 
-    if (heldActor != NULL) {
-        if (!Player_IsHoldingHookshot(this)) {
-            this->actor.child = NULL;
-            this->heldActor = NULL;
-            this->interactRangeActor = NULL;
-            heldActor->parent = NULL;
-            this->stateFlags1 &= ~PLAYER_STATE1_800;
-        }
+    if ((heldActor != NULL) && !Player_IsHoldingHookshot(this)) {
+        this->actor.child = NULL;
+        this->heldActor = NULL;
+        this->interactRangeActor = NULL;
+        heldActor->parent = NULL;
+        this->stateFlags1 &= ~PLAYER_STATE1_800;
     }
 
     if (Player_GetExplosiveHeld(this) >= 0) {
@@ -739,8 +732,9 @@ s32 func_8082DE14(PlayState* play, Player* this) {
     if (this->itemActionParam > PLAYER_AP_LAST_USED) {
         func_80831990(play, this, ITEM_NONE);
         return true;
+    } else {
+        return false;
     }
-    return false;
 }
 
 void func_8082DE50(PlayState* play, Player* this) {
@@ -1928,8 +1922,9 @@ s32 func_8082E67C(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     if (LinkAnimation_Update(play, &this->skelAnime)) {
         Player_AnimationPlayLoop(play, this, anim);
         return true;
+    } else {
+        return false;
     }
-    return false;
 }
 
 void func_8082E6D0(Player* this) {
@@ -1949,17 +1944,17 @@ void func_8082E784(Player* this) {
 }
 
 void func_8082E794(Player* this) {
-    if (this->skelAnime.moveFlags != 0) {
+    if (this->skelAnime.moveFlags) {
         func_8082DC28(this);
-        this->skelAnime.jointTable->x = this->skelAnime.baseTransl.x;
-        this->skelAnime.jointTable->z = this->skelAnime.baseTransl.z;
+        this->skelAnime.jointTable[0].x = this->skelAnime.baseTransl.x;
+        this->skelAnime.jointTable[0].z = this->skelAnime.baseTransl.z;
 
         if (this->skelAnime.moveFlags & 8) {
             if (this->skelAnime.moveFlags & 2) {
-                this->skelAnime.jointTable->y = this->skelAnime.prevTransl.y;
+                this->skelAnime.jointTable[0].y = this->skelAnime.prevTransl.y;
             }
         } else {
-            this->skelAnime.jointTable->y = this->skelAnime.baseTransl.y;
+            this->skelAnime.jointTable[0].y = this->skelAnime.baseTransl.y;
         }
         func_8082E6D0(this);
         this->skelAnime.moveFlags = 0;
@@ -15823,7 +15818,6 @@ void func_80850D68(Player* this, PlayState* play) {
             func_800B8F98(&this->actor, NA_SE_PL_ZORA_SWIM_LV - SFX_FLAG);
         }
 
-
         // Y
         sp3E = D_80862B44->rel.stick_y * 0xC8;
         if (this->unk_B8C != 0) {
@@ -17192,6 +17186,12 @@ void func_80854C70(Player* this, PlayState* play) {
     }
 }
 
+// Array colour interpolation
+// arg0 is the interpolation parameter
+// arg1,5,9 are out colours
+// arg2,6,0xA are first values
+// arg3,7,0xB are second values
+// arg4,8,0xC are subtracted after interpolation
 void func_80854CD0(f32 arg0, s16* arg1, u8* arg2, u8* arg3, u8* arg4, s16* arg5, u8* arg6, u8* arg7, u8* arg8,
                    s16* arg9, u8* argA, u8* argB, u8* argC) {
     s32 i;
@@ -17216,109 +17216,114 @@ void func_80854CD0(f32 arg0, s16* arg1, u8* arg2, u8* arg3, u8* arg4, s16* arg5,
     }
 }
 
+// Black, probably in-function static
 u8 D_8085D844[] = { 0, 0, 0 };
 
-#ifdef NON_MATCHING
+// arg1 is the colour interpolation parameter
 void func_80854EFC(PlayState* play, f32 arg1, struct_8085D848_unk_00* arg2) {
     struct_8085D848_unk_00 sp70;
     struct_8085D848_unk_00* var_t0;
     struct_8085D848_unk_00* var_v1;
     u8* var_t3;
     u8* var_t4;
-    s32 pad[5];
+    u8* new_var;
+    s32 pad[4];
 
-    sp70.unk_00 = play->envCtx.unk_C4.fogNear;
-    sp70.unk_02 = play->envCtx.unk_C4.fogColor[0];
-    sp70.unk_03 = play->envCtx.unk_C4.fogColor[1];
-    sp70.unk_04 = play->envCtx.unk_C4.fogColor[2];
-    sp70.unk_05 = play->envCtx.unk_C4.ambientColor[0];
-    sp70.unk_06 = play->envCtx.unk_C4.ambientColor[1];
-    sp70.unk_07 = play->envCtx.unk_C4.ambientColor[2];
+    new_var = play->envCtx.unk_C4.diffuseColor1;
+    sp70.fogNear = play->envCtx.unk_C4.fogNear;
+    sp70.fogColor[0] = play->envCtx.unk_C4.fogColor[0];
+    sp70.fogColor[1] = play->envCtx.unk_C4.fogColor[1];
+    sp70.fogColor[2] = play->envCtx.unk_C4.fogColor[2];
+    sp70.ambientColor[0] = play->envCtx.unk_C4.ambientColor[0];
+    sp70.ambientColor[1] = play->envCtx.unk_C4.ambientColor[1];
+    sp70.ambientColor[2] = play->envCtx.unk_C4.ambientColor[2];
 
     if (arg1 <= 1.0f) {
-        var_t4 = play->envCtx.unk_C4.diffuseColor1;
-        var_v1 = arg2;
+        arg1 -= 0.0f;
+
+        var_v1 = &arg2[0];
         var_t0 = &sp70;
         var_t3 = D_8085D844;
+        var_t4 = new_var;
     } else if (arg1 <= 2.0f) {
         arg1 -= 1.0f;
         var_v1 = &arg2[1];
-        var_t0 = arg2;
-        var_t4 = D_8085D844;
+        var_t0 = &arg2[0];
         var_t3 = D_8085D844;
+        var_t4 = D_8085D844;
+
     } else if (arg1 <= 3.0f) {
         arg1 -= 2.0f;
         var_v1 = &arg2[2];
         var_t0 = &arg2[1];
-        var_t4 = D_8085D844;
         var_t3 = D_8085D844;
+        var_t4 = D_8085D844;
+
     } else {
         arg1 -= 3.0f;
         var_v1 = &sp70;
         var_t0 = &arg2[2];
+        var_t3 = new_var;
         var_t4 = D_8085D844;
-        var_t3 = play->envCtx.unk_C4.diffuseColor1;
     }
 
     play->envCtx.lightSettings.fogNear =
-        play->envCtx.unk_C4.fogNear + (-(((s32)((var_v1->unk_00 - var_t0->unk_00) * arg1)) + var_t0->unk_00));
+        ((s16)((var_v1->fogNear - var_t0->fogNear) * arg1) + var_t0->fogNear) - play->envCtx.unk_C4.fogNear;
 
-    func_80854CD0(arg1, play->envCtx.lightSettings.fogColor, &var_v1->unk_02, &var_t0->unk_02,
-                  play->envCtx.unk_C4.fogColor, play->envCtx.lightSettings.ambientColor, &var_v1->unk_05,
-                  &var_t0->unk_05, play->envCtx.unk_C4.ambientColor, play->envCtx.lightSettings.diffuseColor1, var_t3,
-                  var_t4, play->envCtx.unk_C4.diffuseColor1);
+    func_80854CD0(arg1, play->envCtx.lightSettings.fogColor, var_v1->fogColor, var_t0->fogColor,
+                  play->envCtx.unk_C4.fogColor, play->envCtx.lightSettings.ambientColor, var_v1->ambientColor,
+                  var_t0->ambientColor, play->envCtx.unk_C4.ambientColor, play->envCtx.lightSettings.diffuseColor1,
+                  var_t3, var_t4, new_var);
 }
-#else
-void func_80854EFC(PlayState* play, f32 arg1, struct_8085D848_unk_00 arg2[]);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80854EFC.s")
-#endif
 
 struct_8085D848 D_8085D848[] = {
     {
         {
-            { 0x28A, 0, 0, 0, 0xA, 0, 0x1E },
-            { 0x12C, 0xC8, 0xC8, 0xFF, 0, 0, 0 },
-            { 0x258, 0, 0, 0, 0, 0, 0xC8 },
+            { 650, { 0, 0, 0 }, { 10, 0, 30 } },
+            { 300, { 200, 200, 255 }, { 0, 0, 0 } },
+            { 600, { 0, 0, 0 }, { 0, 0, 200 } },
         },
         {
-            { { -40.0f, 20.0f, -10.0f }, 0x78, 0xC8, 0xFF, 0x3E8 },
-            { { 0.0f, -10.0f, 0.0f }, 0xFF, 0xFF, 0xFF, 0x1388 },
-            { { -10.0f, 4.0f, 3.0f }, 0xC8, 0xC8, 0xFF, 0x1388 },
+            { { -40.0f, 20.0f, -10.0f }, { 120, 200, 255 }, 1000 },
+            { { 0.0f, -10.0f, 0.0f },    { 255, 255, 255 }, 5000 },
+            { { -10.0f, 4.0f, 3.0f },    { 200, 200, 255 }, 5000 },
         },
     },
     {
         {
-            { 0x28A, 0, 0, 0, 0xA, 0, 0x1E },
-            { 0x12C, 0xC8, 0xC8, 0xFF, 0, 0, 0 },
-            { 0x258, 0, 0, 0, 0, 0, 0xC8 },
+            { 650, { 0, 0, 0 }, { 10, 0, 30 } },
+            { 300, { 200, 200, 255 }, { 0, 0, 0 } },
+            { 600, { 0, 0, 0 }, { 0, 0, 200 } },
         },
         {
-            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, 0x64 },
-            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, 0x64 },
-            { { 0.0f, 0.0f, 5.0f }, 0x9B, 0xFF, 0xFF, 0x64 },
+            { { 0.0f, 0.0f, 5.0f }, { 155, 255, 255 }, 100 },
+            { { 0.0f, 0.0f, 5.0f }, { 155, 255, 255 }, 100 },
+            { { 0.0f, 0.0f, 5.0f }, { 155, 255, 255 }, 100 },
         },
     },
 };
 
+// arg2 is the colour interpolation parameter
+// arg3 both selects the light to use and scales the radius
+// arg4 selects the env fog/colour info
 void func_808550D0(PlayState* play, Player* this, f32 arg2, f32 arg3, s32 arg4) {
     struct_8085D848* temp_a2 = &D_8085D848[arg4];
-    struct_8085D848_unk_18* var_s0;
-    Vec3f sp3C;
+    struct_8085D848_unk_18* lightInit = temp_a2->light;
+    Vec3f pos;
 
-    var_s0 = temp_a2->unk_18;
     func_80854EFC(play, arg2, temp_a2->unk_00);
 
     if (arg3 > 2.0f) {
         arg3 -= 2.0f;
-        var_s0 += 2;
+        lightInit += 2;
     } else if (arg3 > 1.0f) {
         arg3 -= 1.0f;
-        var_s0 += 1;
+        lightInit += 1;
     }
 
-    func_80835BC8(this, &this->actor.world.pos, &var_s0->unk_00, &sp3C);
-    Lights_PointNoGlowSetInfo(&this->lightInfo, sp3C.x, sp3C.y, sp3C.z, var_s0->unk_0C, var_s0->unk_0D, var_s0->unk_0E,
-                              var_s0->unk_10 * arg3);
+    func_80835BC8(this, &this->actor.world.pos, &lightInit->pos, &pos);
+    Lights_PointNoGlowSetInfo(&this->lightInfo, pos.x, pos.y, pos.z, lightInit->color[0], lightInit->color[1], lightInit->color[2],
+                              lightInit->radius * arg3);
 }
 
 AnimSfxEntry D_8085D8F0[] = {
@@ -17338,17 +17343,17 @@ void func_80855218(PlayState* play, Player* this, UNK_PTR arg2) {
         func_8082DB60(play, this, &gameplay_keep_Linkanim_00D0D0);
     } else if ((this->skelAnime.animation == &gameplay_keep_Linkanim_00D0C8) ||
                (this->skelAnime.animation == &gameplay_keep_Linkanim_00D0D0)) {
-        if (this->unk_AE7 >= 0x3A) {
-            Math_StepToS(&this->unk_AE8, 0xFF, 0x32);
+        if (this->unk_AE7 >= 58) {
+            Math_StepToS(&this->unk_AE8, 255, 50);
         }
 
-        if (this->unk_AE7 >= 0x40) {
+        if (this->unk_AE7 >= 64) {
             Math_StepToF(&this->unk_B10[2], 0.0f, 0.015f);
         } else if (this->unk_AE7 >= 0xE) {
             Math_StepToF(&this->unk_B10[2], 0.3f, 0.3f);
         }
 
-        if (this->unk_AE7 >= 0x42) {
+        if (this->unk_AE7 > 65) {
             Math_StepToF(&this->unk_B10[3], 0.0f, 0.02f);
         } else if (this->unk_AE7 >= 0x10) {
             Math_StepToF(&this->unk_B10[3], -0.1f, 0.1f);
@@ -17358,13 +17363,13 @@ void func_80855218(PlayState* play, Player* this, UNK_PTR arg2) {
             Player_PlayAnimSfx(this, D_8085D8F0);
         }
     } else {
-        if (this->unk_AE7 >= 0x14) {
-            Math_StepToS(&this->unk_AE8, 0xFF, 0x14);
+        if (this->unk_AE7 >= 20) {
+            Math_StepToS(&this->unk_AE8, 255, 20);
         }
 
         if (MREG(64) == 0) {
             Player_PlayAnimSfx(this, D_8085D904);
-            if (this->unk_AE7 == 0xF) {
+            if (this->unk_AE7 == 15) {
                 func_800B8E58(this, NA_SE_PL_FACE_CHANGE);
             }
         }
@@ -17511,7 +17516,7 @@ void func_80855818(Player* this, PlayState* play) {
         s16 angle;
 
         func_800FF3A0(&dist, &angle, play->state.input);
-        if (LinkAnimation_Update(play, &this->skelAnime) || ((this->unk_AE7 >= 0xB) && (dist != 0.0f))) {
+        if (LinkAnimation_Update(play, &this->skelAnime) || ((this->unk_AE7 > 10) && (dist != 0.0f))) {
             if (MREG(64) == 0) {
                 this->stateFlags1 &= ~PLAYER_STATE1_2;
                 this->prevMask = this->currentMask;
@@ -17530,12 +17535,12 @@ void func_80855818(Player* this, PlayState* play) {
 }
 
 void func_80855A7C(Player* this, PlayState* play) {
-    if (this->unk_AE8++ >= 0x5B) {
+    if (this->unk_AE8++ > 90) {
         play->msgCtx.ocarinaMode = 4;
         func_8085B384(this, play);
         return;
     }
-    if (this->unk_AE8 == 0xA) {
+    if (this->unk_AE8 == 10) {
         func_80848640(play, this);
     }
 }
