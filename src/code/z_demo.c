@@ -488,6 +488,7 @@ void func_800EADB0(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     }
 }
 #else
+void func_800EADB0(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EADB0.s")
 #endif
 
@@ -1111,8 +1112,6 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
     }
 }
 
-#ifdef NON_MATCHING
-// Some stack issues, and a few instructions in the "wrong" places
 /**
  * Loops over the cutscene data itself (`cutscenePtr`), applying the effects of each command instantaneously (for most
  * commands).
@@ -1141,14 +1140,13 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
  */
 void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutscenePtr) {
     s32 i;
-    s16 phi_s0;
-    s32 totalEntries;
     s32 j;
-    u32 cmdType; // sp5C
     s32 pad;
-    s32 cmdEntries;       // sp58
-    s32 cutsceneEndFrame; // sp50
-    s16 phi_s0_23;
+    s32 totalEntries;
+    u32 cmdType;
+    s32 cmdEntries;
+    s32 pad2;
+    s32 cutsceneEndFrame;
     CsCmdBase* cmd;
 
     // Read the command list count and the ending frame for this cutscene
@@ -1177,14 +1175,14 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
         // Check special cases of command types. This are generic ActorActions
         // Ranges: [0x64, 0x96), 0xC9, [0x1C2, 0x258)
         if (((cmdType >= 100) && (cmdType < 150)) || (cmdType == 201) || ((cmdType >= 450) && (cmdType < 600))) {
-            for (phi_s0 = 0; phi_s0 < ARRAY_COUNT(D_801F4DC8); phi_s0++) {
-                if ((u16)cmdType == D_801F4DC8[phi_s0]) {
-                    func_800ECD7C(csCtx, &cutscenePtr, phi_s0);
+            for (j = 0; j < ARRAY_COUNT(D_801F4DC8); j = (s16)(j + 1)) {
+                if (D_801F4DC8[j] == (u16)cmdType) {
+                    func_800ECD7C(csCtx, &cutscenePtr, j);
                     cmdType = -2;
                     break;
-                } else if (D_801F4DC8[phi_s0] == 0) {
-                    D_801F4DC8[phi_s0] = cmdType;
-                    func_800ECD7C(csCtx, &cutscenePtr, phi_s0);
+                } else if (D_801F4DC8[j] == 0) {
+                    D_801F4DC8[j] = cmdType;
+                    func_800ECD7C(csCtx, &cutscenePtr, j);
                     cmdType = -2;
                     break;
                 }
@@ -1314,15 +1312,15 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     cmd = (CsCmdBase*)cutscenePtr;
-                    if ((csCtx->frames >= cmd->startFrame) && (csCtx->frames < cmd->endFrame)) {
-                        csCtx->playerAction = (CsCmdActorAction*)cutscenePtr;
+                    if ((cmd->startFrame <= csCtx->frames) && (csCtx->frames < cmd->endFrame)) {
+                        csCtx->playerAction = (CsCmdActorAction*)cmd;
                     }
                     cutscenePtr += sizeof(CsCmdActorAction);
                 }
                 break;
 
             case CS_CMD_CAMERA:
-                cutscenePtr = &cutscenePtr[Cutscene_Command_Camera(play, cutscenePtr)];
+                cutscenePtr += Cutscene_Command_Camera(play, cutscenePtr);
                 break;
 
             case CS_CMD_TERMINATOR:
@@ -1349,7 +1347,7 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 for (j = 0; j < cmdEntries; j++) {
                     cmd = (CsCmdBase*)cutscenePtr;
                     if (cmd->base != 0xFFFF) {
-                        Cutscene_Command_Textbox(play, csCtx, (CsCmdTextbox*)cutscenePtr);
+                        Cutscene_Command_Textbox(play, csCtx, (CsCmdTextbox*)cmd);
                     }
                     cutscenePtr += sizeof(CsCmdTextbox);
                 }
@@ -1395,10 +1393,6 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
         }
     }
 }
-#else
-void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutscenePtr);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_ProcessCommands.s")
-#endif
 
 /* End of command handling section */
 
