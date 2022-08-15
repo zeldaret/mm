@@ -4039,7 +4039,7 @@ void AudioSfx_LowerSfxSettingsReverb(Vec3f* pos, s8 isReverbLowered) {
 
 void func_8019F780(Vec3f* arg0, u16 sfxId, f32 arg2) {
     func_8019F5AC(arg2);
-    Audio_PlaySfxGeneral(sfxId, arg0, 4, &sSfxSyncedFreq, &sSfxSyncedVolume, &gSfxDefaultReverb);
+    AudioSfx_PlaySfx(sfxId, arg0, 4, &sSfxSyncedFreq, &sSfxSyncedVolume, &gSfxDefaultReverb);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019F7D8.s")

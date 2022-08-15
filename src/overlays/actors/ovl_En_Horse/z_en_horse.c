@@ -108,18 +108,6 @@ typedef struct {
     RaceWaypoint* waypoints;
 } RaceInfo;
 
-typedef enum {
-    /* 0 */ ENHORSE_ANIM_IDLE,
-    /* 1 */ ENHORSE_ANIM_WHINNY,
-    /* 2 */ ENHORSE_ANIM_STOPPING,
-    /* 3 */ ENHORSE_ANIM_REARING,
-    /* 4 */ ENHORSE_ANIM_WALK,
-    /* 5 */ ENHORSE_ANIM_TROT,
-    /* 6 */ ENHORSE_ANIM_GALLOP,
-    /* 7 */ ENHORSE_ANIM_LOW_JUMP,
-    /* 8 */ ENHORSE_ANIM_HIGH_JUMP
-} EnHorseAnimation;
-
 static AnimationHeader* sEponaAnimations[] = {
     &object_horse_link_child_Anim_006D44, &object_horse_link_child_Anim_007468, &object_horse_link_child_Anim_005F64,
     &object_horse_link_child_Anim_004DE8, &object_horse_link_child_Anim_007D50, &object_horse_link_child_Anim_0043AC,

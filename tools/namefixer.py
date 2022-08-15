@@ -149,6 +149,7 @@ wordReplace = {
     "func_801A5BD0": "AudioSfx_MuteBanks",
     "func_801A72CC": "AudioSfx_StopByPos",
     "Audio_StopSfxByPos": "AudioSfx_StopByPos",
+    "Audio_StopSfxById": "AudioSfx_StopById",
     "func_801A7328": "AudioSfx_StopByPosAndId",
     "func_801A75E8": "AudioSfx_StopById",
     "SkelAnime_LodDrawLimb": "SkelAnime_DrawLimbLod",

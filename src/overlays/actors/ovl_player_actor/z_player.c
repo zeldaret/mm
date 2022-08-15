@@ -1796,7 +1796,7 @@ void func_8082E00C(Player* this) {
     u16* sfxIdPtr = D_8085C3EC;
 
     for (i = 0; i < ARRAY_COUNT(D_8085C3EC); i++) {
-        Audio_StopSfxById(*sfxIdPtr + this->ageProperties->unk_92);
+        AudioSfx_StopById((u16)(*sfxIdPtr + this->ageProperties->unk_92));
         sfxIdPtr++;
     }
 }
@@ -2911,8 +2911,8 @@ PlayerActionParam Player_ItemToActionParam(Player* this, ItemID item) {
         return PLAYER_AP_NONE;
     } else if (item == ITEM_FC) {
         return PLAYER_AP_LAST_USED;
-    } else if (item == ITEM_FISHING_POLE) {
-        return PLAYER_AP_FISHING_POLE;
+    } else if (item == ITEM_FISHING_ROD) {
+        return PLAYER_AP_FISHING_ROD;
     } else if ((item == ITEM_SWORD_KOKIRI) && (this->transformation == PLAYER_FORM_ZORA)) {
         return PLAYER_AP_ZORA_FINS;
     } else {
@@ -2942,7 +2942,7 @@ void func_8082F5C0(PlayState* play, Player* this) {
 PlayerFuncAC4 D_8085C9F0[PLAYER_AP_MAX] = {
     func_80848780, // PLAYER_AP_NONE
     func_80848780, // PLAYER_AP_LAST_USED
-    func_80848780, // PLAYER_AP_FISHING_POLE
+    func_80848780, // PLAYER_AP_FISHING_ROD
     func_808487B8, // PLAYER_AP_SWORD_KOKIRI
     func_808487B8, // PLAYER_AP_SWORD_RAZOR
     func_808487B8, // PLAYER_AP_SWORD_GILDED
@@ -3028,7 +3028,7 @@ PlayerFuncAC4 D_8085C9F0[PLAYER_AP_MAX] = {
 void (*D_8085CB3C[PLAYER_AP_MAX])(PlayState*, Player*) = {
     func_8082F594, // PLAYER_AP_NONE
     func_8082F594, // PLAYER_AP_LAST_USED
-    func_8082F594, // PLAYER_AP_FISHING_POLE
+    func_8082F594, // PLAYER_AP_FISHING_ROD
     func_8082F594, // PLAYER_AP_SWORD_KOKIRI
     func_8082F594, // PLAYER_AP_SWORD_RAZOR
     func_8082F594, // PLAYER_AP_SWORD_GILDED
@@ -3502,9 +3502,9 @@ void func_8082FE0C(Player* this, PlayState* play) {
         }
     }
 
-    if (((this->actor.id == ACTOR_PLAYER) && (this->heldItemActionParam >= PLAYER_AP_FISHING_POLE)) &&
+    if (((this->actor.id == ACTOR_PLAYER) && (this->heldItemActionParam >= PLAYER_AP_FISHING_ROD)) &&
         !(((func_80124148(this) == 0) || (gSaveContext.jinxTimer == 0)) &&
-          (func_8082FC78(this, (IREG(1) != 0) ? ITEM_FISHING_POLE : Inventory_GetBtnBItem(play)) ||
+          (func_8082FC78(this, (IREG(1) != 0) ? ITEM_FISHING_ROD : Inventory_GetBtnBItem(play)) ||
            func_8082FC78(this, C_BTN_ITEM(EQUIP_SLOT_C_LEFT)) || func_8082FC78(this, C_BTN_ITEM(EQUIP_SLOT_C_DOWN)) ||
            func_8082FC78(this, C_BTN_ITEM(EQUIP_SLOT_C_RIGHT))))) {
         func_80831990(play, this, ITEM_NONE);
@@ -4536,7 +4536,7 @@ void func_80832888(Player* this, PlayState* play) {
     if (temp_v0_3 || (this->unk_738 != 0) || (this->stateFlags1 & (PLAYER_STATE1_1000 | PLAYER_STATE1_2000000))) {
         if (!temp_v0_3) {
             if (!(this->stateFlags1 & PLAYER_STATE1_2000000) &&
-                ((this->itemActionParam != PLAYER_AP_FISHING_POLE) || (this->unk_B28 == 0)) &&
+                ((this->itemActionParam != PLAYER_AP_FISHING_ROD) || (this->unk_B28 == 0)) &&
                 CHECK_BTN_ALL(D_80862B44->press.button, BTN_Z)) {
                 var_v1_2 = (this == GET_PLAYER(play)) ? play->actorCtx.targetContext.arrowPointedActor
                                                       : &GET_PLAYER(play)->actor;
@@ -5641,21 +5641,21 @@ u8 sReturnEntranceGroupIndices[] = {
 
 // subfunction of OoT's func_80839034
 void func_808354A4(PlayState* play, s32 arg1, s32 arg2) {
-    play->nextEntranceIndex = play->setupExitList[arg1];
+    play->nextEntrance = play->setupExitList[arg1];
 
-    if (play->nextEntranceIndex == 0xFFFF) {
+    if (play->nextEntrance == 0xFFFF) {
         gSaveContext.respawnFlag = 4;
-        play->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_UNK_3].entranceIndex;
+        play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_UNK_3].entrance;
         play->transitionType = TRANS_TYPE_03;
         gSaveContext.nextTransitionType = TRANS_TYPE_03;
-    } else if (play->nextEntranceIndex >= 0xFE00) {
-        play->nextEntranceIndex =
-            sReturnEntranceGroupData[sReturnEntranceGroupIndices[play->nextEntranceIndex - 0xFE00] + play->curSpawn];
+    } else if (play->nextEntrance >= 0xFE00) {
+        play->nextEntrance =
+            sReturnEntranceGroupData[sReturnEntranceGroupIndices[play->nextEntrance - 0xFE00] + play->curSpawn];
 
         Scene_SetExitFade(play);
     } else {
         if (arg2) {
-            gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = play->nextEntranceIndex;
+            gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = play->nextEntrance;
             func_80169EFC(&play->state);
             gSaveContext.respawnFlag = -2;
         }
@@ -6899,7 +6899,7 @@ LinkAnimationHeader* D_8085D190[PLAYER_FORM_MAX] = {
 u8 D_8085D1A4[PLAYER_AP_MAX] = {
     GI_NONE,                // PLAYER_AP_NONE
     GI_NONE,                // PLAYER_AP_LAST_USED
-    GI_NONE,                // PLAYER_AP_FISHING_POLE
+    GI_NONE,                // PLAYER_AP_FISHING_ROD
     GI_SWORD_KOKIRI,        // PLAYER_AP_SWORD_KOKIRI
     GI_SWORD_RAZOR,         // PLAYER_AP_SWORD_RAZOR
     GI_SWORD_GILDED,        // PLAYER_AP_SWORD_GILDED
@@ -7764,7 +7764,7 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
             func_801477B4(play);
 
             if (play->sceneNum == SCENE_00KEIKOKU) {
-                gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = 0x4C20;
+                gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = 0x4C20;
             } else {
                 u16 entrance;
 
@@ -7773,7 +7773,7 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
                 } else {
                     entrance = 0x4080;
                 }
-                gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = entrance;
+                gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = entrance;
             }
 
             func_80169EFC(&play->state);
@@ -8112,9 +8112,9 @@ void func_8083BB4C(PlayState* play, Player* this) {
                 } else {
                     if ((play->sceneNum == SCENE_20SICHITAI) && (this->unk_3CF == 0)) {
                         if (gSaveContext.eventInf[5] & 1) {
-                            play->nextEntranceIndex = 0xA820;
+                            play->nextEntrance = 0xA820;
                         } else {
-                            play->nextEntranceIndex = 0xA810;
+                            play->nextEntrance = 0xA810;
                         }
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_04;
@@ -10522,7 +10522,7 @@ void Player_SetDoAction(PlayState* play, Player* this) {
             doActionA = DO_ACTION_NONE;
         } else if (this->stateFlags1 & PLAYER_STATE1_100000) {
             doActionA = DO_ACTION_RETURN;
-        } else if ((this->itemActionParam == PLAYER_AP_FISHING_POLE) && (this->unk_B28 != 0)) {
+        } else if ((this->itemActionParam == PLAYER_AP_FISHING_ROD) && (this->unk_B28 != 0)) {
             doActionA = (this->unk_B28 == 2) ? DO_ACTION_REEL : DO_ACTION_NONE;
             doActionA = (this->unk_B28 == 2) ? DO_ACTION_REEL : DO_ACTION_NONE; // required to match, maybe FAKE?
         } else if (this->stateFlags3 & PLAYER_STATE3_2000) {
@@ -11439,7 +11439,7 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
 
     if ((player->itemActionParam == PLAYER_AP_STICK) && (player->unk_B28 != 0)) {
         func_808442D8(play, player);
-    } else if (player->itemActionParam == PLAYER_AP_FISHING_POLE) {
+    } else if (player->itemActionParam == PLAYER_AP_FISHING_ROD) {
         if (player->unk_B28 < 0) {
             player->unk_B28++;
         }
@@ -12634,7 +12634,7 @@ s32 func_808482E0(PlayState* play, Player* this) {
     } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         if (this->getItemId == GI_OCARINA) {
             // zelda teaching song of time cs?
-            play->nextEntranceIndex = 0x1C00;
+            play->nextEntrance = 0x1C00;
             gSaveContext.nextCutsceneIndex = 0xFFF2;
             play->transitionTrigger = TRANS_TRIGGER_START;
             play->transitionType = TRANS_TYPE_03;
@@ -14947,7 +14947,7 @@ void func_8084E980(Player* this, PlayState* play) {
     } else if (!func_80123420(this) && LinkAnimation_Update(play, &this->skelAnime)) {
         if (this->skelAnime.moveFlags != 0) {
             func_8082E794(this);
-            if ((this->talkActor->category == ACTORCAT_NPC) && (this->itemActionParam != PLAYER_AP_FISHING_POLE)) {
+            if ((this->talkActor->category == ACTORCAT_NPC) && (this->itemActionParam != PLAYER_AP_FISHING_ROD)) {
                 func_8082DB90(play, this, &gameplay_keep_Linkanim_00DEA0);
             } else {
                 Player_AnimationPlayLoop(play, this, func_8082ED20(this));
@@ -15463,15 +15463,15 @@ void func_8084FE7C(Player* this, PlayState* play) {
 
         this->skelAnime.prevTransl = D_8085D6E0;
 
-        if ((this->unk_AE8 < 0) || ((rideActor->animationIdx != (this->unk_AE8 & 0xFFFF)) &&
-                                    ((rideActor->animationIdx >= ENHORSE_ANIM_STOPPING) || (this->unk_AE8 >= 2)))) {
-            s32 animationIdx = rideActor->animationIdx;
+        if ((this->unk_AE8 < 0) || ((rideActor->animIndex != (this->unk_AE8 & 0xFFFF)) &&
+                                    ((rideActor->animIndex >= ENHORSE_ANIM_STOPPING) || (this->unk_AE8 >= 2)))) {
+            s32 animationIdx = rideActor->animIndex;
 
             if (animationIdx < ENHORSE_ANIM_STOPPING) {
                 f32 temp_fv0 = Rand_ZeroOne();
                 s32 index = 0;
 
-                animationIdx = ENHORSE_ANIM_WHINNEY;
+                animationIdx = ENHORSE_ANIM_WHINNY;
                 if (temp_fv0 < 0.1f) {
                     index = 2;
                 } else if (temp_fv0 < 0.2f) {
@@ -16300,9 +16300,9 @@ void func_8085269C(Player* this, PlayState* play) {
                 if (play->msgCtx.ocarinaMode == 0x16) {
                     if (!func_8082DA90(play)) {
                         if (gSaveContext.save.playerData.deaths == 1) {
-                            play->nextEntranceIndex = 0x1C10;
+                            play->nextEntrance = 0x1C10;
                         } else {
-                            play->nextEntranceIndex = 0x1C00;
+                            play->nextEntrance = 0x1C00;
                         }
 
                         gSaveContext.nextCutsceneIndex = 0xFFF7;
@@ -17465,10 +17465,10 @@ block_17:
                 }
 
                 if (this->transformation == 4) {
-                    Audio_StopSfxById(0x9AAU);
-                    Audio_StopSfxById(0x1858U);
+                    AudioSfx_StopById(0x9AAU);
+                    AudioSfx_StopById(0x1858U);
                 } else {
-                    Audio_StopSfxById(0x9A4U);
+                    AudioSfx_StopById(0x9A4U);
                 }
             }
             func_800B8E58(this, 0x484FU);
@@ -19878,7 +19878,7 @@ s32 Player_StartFishing(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     func_8082DE50(play, player);
-    func_80831990(play, player, ITEM_FISHING_POLE);
+    func_80831990(play, player, ITEM_FISHING_ROD);
     return 1;
 }
 
@@ -19993,7 +19993,7 @@ void func_8085B460(PlayState* play, Actor* actor) {
             if (func_801242B4(player)) {
                 func_80832558(play, player, func_80837B60);
                 func_8082E634(play, player, &gameplay_keep_Linkanim_00E000);
-            } else if ((actor->category != ACTORCAT_NPC) || (player->itemActionParam == PLAYER_AP_FISHING_POLE)) {
+            } else if ((actor->category != ACTORCAT_NPC) || (player->itemActionParam == PLAYER_AP_FISHING_ROD)) {
                 func_80837B60(play, player);
 
                 if (!func_80123420(player)) {
