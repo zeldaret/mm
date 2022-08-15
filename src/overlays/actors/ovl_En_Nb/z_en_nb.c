@@ -276,7 +276,7 @@ s32 func_80BC00AC(Actor* thisx, PlayState* play) {
 
 s32 func_80BC01DC(Actor* thisx, PlayState* play) {
     EnNb* this = THIS;
-    s32 pad[1];
+    s32 pad;
     s32 sp2C = 0;
 
     switch (this->unk_288) {
@@ -332,7 +332,7 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
             }
 
             this->unk_288++;
-            play->nextEntranceIndex = 0xBC20;
+            play->nextEntrance = ENTRANCE(STOCK_POT_INN, 2);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;
             play->transitionType = TRANS_TYPE_02;
