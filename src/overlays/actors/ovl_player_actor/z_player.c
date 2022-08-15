@@ -4706,7 +4706,7 @@ s32 (*D_8085D054[])(Player*, PlayState*) = {
 
 s32 func_80833058(PlayState* play, Player* this, s8* arg2, s32 arg3) {
     if (!(this->stateFlags1 & (PLAYER_STATE1_1 | PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) && !func_8082DA90(play)) {
-        if (arg3 != 0) {
+        if (arg3) {
             D_80862B04 = func_8083216C(this, play);
             if (func_80852B28 == this->actionFunc) {
                 return true;
@@ -15752,22 +15752,21 @@ void func_80850D20(PlayState* play, Player* this) {
     func_8083F8A8(play, this, 12.0f, -1, 1.0f, 160, 20, true);
 }
 
-#ifdef NON_MATCHING
 void func_80850D68(Player* this, PlayState* play) {
     f32 sp44;
-    s16 temp_a1_2; // sp42
+    s16 sp42;
     s16 sp40;
-    s16 var_a1;
-    s16 temp_v0_2; // sp3C
-    s16 var_t1;    // sp3A
-    s16 temp_v1_3;
+    s16 sp3E;
+    s16 sp3C;
+    s16 sp3A;
+    // s16 temp_v1_3;
 
     this->stateFlags2 |= PLAYER_STATE2_20;
 
     func_808475B4(this);
     func_8082F164(this, BTN_R);
 
-    if (func_80833058(play, this, D_8085D048, 0)) {
+    if (func_80833058(play, this, D_8085D048, false)) {
         return;
     }
 
@@ -15801,7 +15800,7 @@ void func_80850D68(Player* this, PlayState* play) {
             if (this->skelAnime.curFrame >= 13.0f) {
                 sp44 = 12.0f;
 
-                if (LinkAnimation_OnFrame(&this->skelAnime, 13.0f) != 0) {
+                if (LinkAnimation_OnFrame(&this->skelAnime, 13.0f)) {
                     this->unk_B48 = 16.0f;
                 }
                 this->stateFlags3 |= PLAYER_STATE3_8000;
@@ -15825,33 +15824,38 @@ void func_80850D68(Player* this, PlayState* play) {
             func_800B8F98(&this->actor, NA_SE_PL_ZORA_SWIM_LV - SFX_FLAG);
         }
 
-        var_a1 = D_80862B44->rel.stick_y * 0xC8;
+
+        // Y
+        sp3E = D_80862B44->rel.stick_y * 0xC8;
         if (this->unk_B8C != 0) {
             this->unk_B8C--;
-            temp_v1_3 = this->unk_B6C - 0xFA0;
-            if (temp_v1_3 < var_a1) {
-                var_a1 = temp_v1_3;
-            }
+            sp3E = CLAMP_MAX(sp3E, (s16)(this->unk_B6C - 0xFA0));
+            // temp_v1_3 = this->unk_B6C - 0xFA0;
+            // if (temp_v1_3 < sp3E) {
+            //     sp3E = temp_v1_3;
+            // }
         }
 
-        if ((this->unk_AAA >= -0x1555) && (this->actor.depthInWater < (this->ageProperties->unk_24 + 10.0f)) &&
-            (var_a1 < 0x7D0)) {
-            var_a1 = 0x7D0;
+        if ((this->unk_AAA >= -0x1555) && (this->actor.depthInWater < (this->ageProperties->unk_24 + 10.0f))) {
+            // if (sp3E < 0x7D0) {
+            //     sp3E = 0x7D0;
+            // }
+            sp3E = CLAMP_MIN(sp3E, 0x7D0);
         }
+        Math_SmoothStepToS(&this->unk_AAA, sp3E, 4, 0xFA0, 0x190);
 
-        Math_SmoothStepToS(&this->unk_AAA, var_a1, 4, 0xFA0, 0x190);
-        temp_a1_2 = D_80862B44->rel.stick_x * 0x64;
-        if ((Math_ScaledStepToS(&this->unk_B8A, temp_a1_2, 0x384) != 0) && (temp_a1_2 == 0)) {
+        // X
+        sp42 = D_80862B44->rel.stick_x * 0x64;
+        if (Math_ScaledStepToS(&this->unk_B8A, sp42, 0x384) && (sp42 == 0)) {
             Math_SmoothStepToS(&this->unk_B86[1], 0, 4, 0x5DC, 0x64);
             Math_SmoothStepToS(&this->unk_B8E, this->unk_B86[1], IREG(44) + 1, IREG(45), IREG(46));
         } else {
-            temp_v0_2 = this->unk_B86[1];
-            var_t1 = (this->unk_B8A < 0) ? -0x3A98 : 0x3A98;
+            sp3C = this->unk_B86[1];
+            sp3A = (this->unk_B8A < 0) ? -0x3A98 : 0x3A98;
             this->unk_B86[1] += this->unk_B8A;
             Math_SmoothStepToS(&this->unk_B8E, this->unk_B86[1], IREG(47) + 1, IREG(48), IREG(49));
 
-            if ((ABS_ALT(this->unk_B8A) > 0xFA0) &&
-                ((((temp_v0_2 + this->unk_B8A) - var_t1) * (temp_v0_2 - var_t1)) <= 0)) {
+            if ((ABS_ALT(this->unk_B8A) > 0xFA0) && ((((sp3C + this->unk_B8A) - sp3A) * (sp3C - sp3A)) <= 0)) {
                 func_800B8E58(this, NA_SE_PL_ZORA_SWIM_ROLL);
             }
         }
@@ -15871,12 +15875,12 @@ void func_80850D68(Player* this, PlayState* play) {
     }
 
     if ((this->unk_B8C < 8) && (this->actor.bgCheckFlags & 1)) {
-        DynaPolyActor* temp_v0_3;
+        DynaPolyActor* dynaActor;
 
-        if ((this->actor.floorBgId == 0x32) ||
-            ((temp_v0_3 = DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId)) == NULL) ||
-            (temp_v0_3->actor.id != ACTOR_EN_TWIG)) {
-            this->unk_AAA += (-this->unk_B6C - this->unk_AAA) * 2;
+        if ((this->actor.floorBgId == BGCHECK_SCENE) ||
+            ((dynaActor = DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId)) == NULL) ||
+            (dynaActor->actor.id != ACTOR_EN_TWIG)) {
+            this->unk_AAA += (s16)((-this->unk_B6C - this->unk_AAA) * 2);
             this->unk_B8C = 0xF;
         }
 
@@ -15887,9 +15891,6 @@ void func_80850D68(Player* this, PlayState* play) {
     func_80850BF8(this, sp44);
     func_80850BA8(this);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80850D68.s")
-#endif
 
 void func_808513EC(Player* this, PlayState* play) {
     f32 sp34;
