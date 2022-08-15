@@ -163,10 +163,10 @@ void OceffSpot_Draw(Actor* thisx, PlayState* play) {
     func_8012C2DC(play->state.gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, &sOceffSpotCylinderMaterialDL);
+    gSPDisplayList(POLY_XLU_DISP++, &sSunSongEffectCylinderMaterialDL);
     gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, 0, scroll * 2, scroll * -2, 0x20, 0x20, 1, 0,
                                                      scroll * -8, 0x20, 0x20));
-    gSPDisplayList(POLY_XLU_DISP++, &sOceffSpotCylinderModelDL);
+    gSPDisplayList(POLY_XLU_DISP++, &sSunSongEffectCylinderModelDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

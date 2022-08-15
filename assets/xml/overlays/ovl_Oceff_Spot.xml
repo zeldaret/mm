@@ -1,10 +1,7 @@
 <Root>
     <File Name="ovl_Oceff_Spot" BaseAddress="0x80972680" RangeStart="0x720" RangeEnd="0xDF8">
         <Texture Name="sSunSongEffectTex" OutName="sun_song_effect" Format="i8" Width="32" Height="32" Offset="0x720"/>
-        <Array Name="sOceffSpotCylinderVtx" Count="27" Offset="0xB20">
-            <Vtx/>
-        </Array>
-        <DList Name="sOceffSpotCylinderMaterialDL" Offset="0xCD0"/>
-        <DList Name="sOceffSpotCylinderModelDL" Offset="0xD68"/>
+        <DList Name="sSunSongEffectCylinderMaterialDL" Offset="0xCD0"/>
+        <DList Name="sSunSongEffectCylinderModelDL" Offset="0xD68"/>
     </File>
 </Root>
