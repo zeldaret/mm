@@ -64,15 +64,15 @@ static Gfx* D_8096ABCC[] = {
     gMoonChildGyorgsMaskDL,  gMoonChildTwinmoldsMaskDL,
 };
 
-static f32 D_8096ABE0[] = { 1.0f, 0.5f, 0.5f, 0.48f, 0.45f };
+f32 D_8096ABE0[] = { 1.0f, 0.5f, 0.5f, 0.48f, 0.45f };
 
-static f32 D_8096ABF4[] = { 60.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+f32 D_8096ABF4[] = { 60.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 
-static f32 D_8096AC08[] = { -450.0f, 1400.0f, 1470.0f, 1670.0f, 1470.0f };
+f32 D_8096AC08[] = { -450.0f, 1400.0f, 1470.0f, 1670.0f, 1470.0f };
 
-static f32 D_8096AC1C[] = { 0.0f, 700.0f, 900.0f, 900.0f, 900.0f };
+f32 D_8096AC1C[] = { 0.0f, 700.0f, 900.0f, 900.0f, 900.0f };
 
-static Vec3f D_8096AC30 = { 500.0f, -500.0f, 0.0f };
+Vec3f D_8096AC30 = { 500.0f, -500.0f, 0.0f };
 
 void EnJs_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -116,9 +116,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
             if (gSaveContext.save.weekEventReg[84] & 0x20) {
                 Inventory_DeleteItem(ITEM_MASK_FIERCE_DEITY, SLOT(ITEM_MASK_FIERCE_DEITY));
                 gSaveContext.save.weekEventReg[84] &= (u8)~0x20;
-                break;
             }
-        default:
             break;
         case 1:
         case 2:
@@ -130,7 +128,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
             func_80968A5C(this);
             if (func_809692A8(ENJS_GET_TYPE(&this->actor) + 4)) {
                 Actor_MarkForDeath(&this->actor);
-                break;
+                return;
             }
             break;
         case 5:
@@ -139,6 +137,8 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
         case 8:
             this->maskType = ENJS_GET_TYPE(&this->actor) - 4;
             this->actionFunc = func_8096A104;
+            break;
+        default:
             break;
     }
 }
@@ -153,7 +153,7 @@ void EnJs_Destroy(Actor* thisx, PlayState* play) {
     switch (paramsF) {
         case 0:
             func_80165690();
-            return;
+            break;
         case 5:
         case 6:
         case 7:
@@ -161,8 +161,9 @@ void EnJs_Destroy(Actor* thisx, PlayState* play) {
             if (!func_809692A8(paramsF)) {
                 func_80969400(ENJS_GET_TYPE(&this->actor));
             }
+            break;
         default:
-            return;
+            break;
     }
 }
 
@@ -187,12 +188,12 @@ void func_80968B18(EnJs* this) {
 
 s32 func_80968B8C(EnJs* this, PlayState* play) {
     Path* path;
-    f32 f0;
-    f32 f2;
+    f32 temp_f0;
+    f32 temp_f2;
     s32 pathIndex = ENJS_GET_PATH_INDEX(&this->actor);
     s32 i;
     f32 sp18 = 0.0f;
-    Vec3s* phi_a0;
+    Vec3s* points;
 
     pathIndex = ENJS_GET_PATH_INDEX(&this->actor);
     if (pathIndex != 0x3F) {
@@ -200,17 +201,17 @@ s32 func_80968B8C(EnJs* this, PlayState* play) {
         if (this->path != NULL) {
             path = this->path;
 
-            phi_a0 = Lib_SegmentedToVirtual(path->points);
+            points = Lib_SegmentedToVirtual(path->points);
 
-            for (i = 0; i < path->count; i++, phi_a0++) {
-                f0 = phi_a0->x - this->actor.world.pos.x;
-                f2 = phi_a0->z - this->actor.world.pos.z;
-                f0 = SQ(f0) + SQ(f2);
+            for (i = 0; i < path->count; i++, points++) {
+                temp_f0 = points->x - this->actor.world.pos.x;
+                temp_f2 = points->z - this->actor.world.pos.z;
+                temp_f0 = SQ(temp_f0) + SQ(temp_f2);
                 if (i == 0) {
-                    sp18 = f0;
+                    sp18 = temp_f0;
                     this->unk_2B0 = 0;
-                } else if (f0 < sp18) {
-                    sp18 = f0;
+                } else if (temp_f0 < sp18) {
+                    sp18 = temp_f0;
                     this->unk_2B0 = i;
                 }
             }
@@ -225,7 +226,7 @@ s32 func_80968B8C(EnJs* this, PlayState* play) {
         this->unk_2B0 = 0;
     }
 
-    return 0;
+    return false;
 }
 
 s32 func_80968CB8(EnJs* this) {
@@ -247,7 +248,7 @@ s32 func_80968CB8(EnJs* this) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 0x7D0, 0xC8);
 
-    if ((SQ(temp_fa0) + SQ(temp_fa1)) < 100.0f) {
+    if ((SQ(temp_fa0) + SQ(temp_fa1)) < SQ(10.0f)) {
         this->unk_2B0++;
         if (this->unk_2B0 >= path->count) {
             this->unk_2B0 = 0;
@@ -373,34 +374,34 @@ s32 EnJs_GetRemainingMasks(void) {
     return count;
 }
 
-void EnJs_TakeMask(s32 item, s32 childType) {
+void EnJs_TakeMask(s32 actionParams, s32 childType) {
     u8* maskMaskBit = gSaveContext.maskMaskBit;
-    s32 a = 0;
+    s32 temp = 0;
 
     if ((childType >= 0) && (childType < 9)) {
-        item -= PLAYER_AP_MASK_TRUTH;
+        actionParams -= PLAYER_AP_MASK_TRUTH;
         childType *= 3;
-        if (item < 8) {
-            maskMaskBit[childType] |= 1 << item;
-            maskMaskBit[a] |= 1 << item;
+        if (actionParams < 8) {
+            maskMaskBit[childType] |= 1 << actionParams;
+            maskMaskBit[temp] |= 1 << actionParams;
             return;
         }
 
-        item -= 8;
+        actionParams -= 8;
         childType++;
-        a++;
-        if (item < 8) {
-            maskMaskBit[childType] |= 1 << item;
-            maskMaskBit[a] |= 1 << item;
+        temp++;
+        if (actionParams < 8) {
+            maskMaskBit[childType] |= 1 << actionParams;
+            maskMaskBit[temp] |= 1 << actionParams;
             return;
         }
 
-        item -= 8;
+        actionParams -= 8;
         childType++;
-        a++;
-        if (item < 6) {
-            maskMaskBit[childType] |= 1 << item;
-            maskMaskBit[a] |= 1 << item;
+        temp++;
+        if (actionParams < 6) {
+            maskMaskBit[childType] |= 1 << actionParams;
+            maskMaskBit[temp] |= 1 << actionParams;
         }
     }
 }
@@ -503,7 +504,7 @@ s32 func_809695FC(EnJs* this, PlayState* play) {
     if (ENJS_GET_EXIT_INDEX(&this->actor) == 0x3F) {
         return false;
     }
-    play->transitionTrigger = 0x14;
+    play->transitionTrigger = TRANS_TRIGGER_START;
     play->nextEntranceIndex = play->setupExitList[ENJS_GET_EXIT_INDEX(&this->actor)];
     this->actionFunc = func_8096971C;
     play->msgCtx.msgLength = 0;
@@ -530,34 +531,34 @@ void func_8096971C(EnJs* this, PlayState* play) {
 }
 
 void func_80969748(EnJs* this, PlayState* play) {
-    s32 item;
+    s32 itemActionParam;
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (Message_GetState(&play->msgCtx) == 0x10) {
-        item = func_80123810(play);
-        if (item != 0) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
+        itemActionParam = func_80123810(play);
+        if (itemActionParam != 0) {
             this->actionFunc = func_80969898;
         }
-        if (item > 0) {
+        if (itemActionParam > 0) {
             func_801477B4(play);
-            if ((item >= PLAYER_AP_MASK_TRUTH) && (item <= PLAYER_AP_MASK_GIANT)) {
-                EnJs_TakeMask(item, ENJS_GET_TYPE(&this->actor));
-                Inventory_UnequipItem(item - 4);
+            if ((itemActionParam >= PLAYER_AP_MASK_TRUTH) && (itemActionParam <= PLAYER_AP_MASK_GIANT)) {
+                EnJs_TakeMask(itemActionParam, ENJS_GET_TYPE(&this->actor));
+                Inventory_UnequipItem(itemActionParam - 4);
                 if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
                     player->actor.textId = 0x2212;
                 } else {
                     player->actor.textId = 0x2213;
                 }
-            } else if ((item >= PLAYER_AP_MASK_FIERCE_DEITY) && (item <= PLAYER_AP_MASK_DEKU)) {
+            } else if ((itemActionParam >= PLAYER_AP_MASK_FIERCE_DEITY) && (itemActionParam <= PLAYER_AP_MASK_DEKU)) {
                 player->actor.textId = 0x2211;
             } else {
                 player->actor.textId = 0x2210;
             }
         }
-        if (item < 0) {
+        if (itemActionParam < 0) {
             func_80151938(play, 0x2216);
         }
     }
@@ -676,34 +677,34 @@ void func_80969B5C(EnJs* this, PlayState* play) {
 }
 
 void func_80969C54(EnJs* this, PlayState* play) {
-    s32 item;
+    s32 itemActionParam;
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        item = func_80123810(play);
-        if (item != 0) {
+        itemActionParam = func_80123810(play);
+        if (itemActionParam != 0) {
             this->actionFunc = func_80969DA4;
         }
-        if (item > 0) {
+        if (itemActionParam > 0) {
             func_801477B4(play);
-            if ((item >= PLAYER_AP_MASK_TRUTH) && (item <= PLAYER_AP_MASK_GIANT)) {
-                EnJs_TakeMask(item, ENJS_GET_TYPE(&this->actor));
-                Inventory_UnequipItem(item - 4);
+            if ((itemActionParam >= PLAYER_AP_MASK_TRUTH) && (itemActionParam <= PLAYER_AP_MASK_GIANT)) {
+                EnJs_TakeMask(itemActionParam, ENJS_GET_TYPE(&this->actor));
+                Inventory_UnequipItem(itemActionParam - 4);
                 if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
                     player->actor.textId = 0x2221;
                 } else {
                     player->actor.textId = 0x2222;
                 }
-            } else if ((item >= PLAYER_AP_MASK_FIERCE_DEITY) && (item <= PLAYER_AP_MASK_DEKU)) {
+            } else if ((itemActionParam >= PLAYER_AP_MASK_FIERCE_DEITY) && (itemActionParam <= PLAYER_AP_MASK_DEKU)) {
                 player->actor.textId = 0x2220;
             } else {
                 player->actor.textId = 0x221D;
             }
         }
-        if (item < 0) {
+        if (itemActionParam < 0) {
             func_80151938(play, 0x221E);
         }
     }
@@ -1045,8 +1046,9 @@ void func_8096A9F4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
                              MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, D_8096ABCC[this->maskType]);
+
+            CLOSE_DISPS(play->state.gfxCtx);
         }
-        CLOSE_DISPS(play->state.gfxCtx);
     }
 }
 
