@@ -834,10 +834,12 @@
         <Limb Name="gameplay_keep_Lodlimb_014540" Type="LOD" Offset="0x14540" />
         <Skeleton Name="gameplay_keep_Skel_014560" Type="Normal" LimbType="Standard" Offset="0x14560" />
         <Texture Name="gameplay_keep_Tex_014570" OutName="tex_014570" Format="rgba32" Width="16" Height="32" Offset="0x14570" />
-        <Texture Name="gameplay_keep_Tex_014D70" OutName="tex_014D70" Format="ia8" Width="64" Height="64" Offset="0x14D70" />
-        <DList Name="gameplay_keep_DL_015DB0" Offset="0x15DB0" />
-        <Texture Name="gameplay_keep_Tex_015E40" OutName="tex_015E40" Format="rgba16" Width="8" Height="8" Offset="0x15E40" />
-        <DList Name="gameplay_keep_DL_015FA0" Offset="0x15FA0" />
+
+        <!-- Bomb -->
+        <Texture Name="gBombBodyTex" OutName="bomb_body" Format="ia8" Width="64" Height="64" Offset="0x14D70" />
+        <DList Name="gBombBodyDL" Offset="0x15DB0" />
+        <Texture Name="gBombCapTex" OutName="bomb_cap" Format="rgba16" Width="8" Height="8" Offset="0x15E40" />
+        <DList Name="gBombCapDL" Offset="0x15FA0" />
 
         <!-- Bombchu -->
         <Texture Name="gBombchuBodyTex" OutName="bombchu_body" Format="rgba16" Width="8" Height="8" Offset="0x16060" />

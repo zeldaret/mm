@@ -148,7 +148,7 @@ s32 func_809CB4A0(EnCne01* this, PlayState* play) {
 }
 
 void EnCne01_FinishInit(EnHy* this, PlayState* play) {
-    if (EnHy_Init(this, play, &gCneSkel, ENHY_ANIMATION_OS_ANIME_11)) {
+    if (EnHy_Init(this, play, &gCneSkel, ENHY_ANIM_OS_ANIME_11)) {
         this->actor.flags |= ACTOR_FLAG_1;
         this->actor.draw = EnCne01_Draw;
         this->waitingOnInit = false;

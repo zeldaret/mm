@@ -88,9 +88,9 @@ typedef enum {
     /*  3 */ TOILET_HAND_ANIM_THUMBS_UP,      // Right
     /*  4 */ TOILET_HAND_ANIM_OPEN_HAND,
     /*  5 */ TOILET_HAND_ANIM_FIST // i.e. holding the reward
-} ToiletHandAnimations;
+} ToiletHandAnimation;
 
-static AnimationInfoS sAnimationInfos[] = {
+static AnimationInfoS sAnimationInfo[] = {
     /* 0 */ { &gToiletHandWaitingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     /* 1 */ { &gToiletHandWaitingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     /* 2 */ { &gToiletHandWaggingFingerAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
@@ -104,22 +104,21 @@ void EnBjt_UpdateSkelAnime(EnBjt* this) {
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 EnBjt_ChangeAnimation(EnBjt* this, s32 animIndex) {
+s32 EnBjt_ChangeAnim(EnBjt* this, s32 animIndex) {
     s32 changeAnim = false;
     s32 changed = false;
 
     if ((animIndex == TOILET_HAND_ANIM_WAITING) || (animIndex == TOILET_HAND_ANIM_WAITING_MORPH)) {
-        if (!((this->curAnimIndex == TOILET_HAND_ANIM_WAITING) ||
-              (this->curAnimIndex == TOILET_HAND_ANIM_WAITING_MORPH))) {
+        if (!((this->animIndex == TOILET_HAND_ANIM_WAITING) || (this->animIndex == TOILET_HAND_ANIM_WAITING_MORPH))) {
             changeAnim = true;
         }
-    } else if (this->curAnimIndex != animIndex) {
+    } else if (this->animIndex != animIndex) {
         changeAnim = true;
     }
 
     if (changeAnim) {
-        this->curAnimIndex = animIndex;
-        changed = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfos, animIndex);
+        this->animIndex = animIndex;
+        changed = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->animPlaySpeed = this->skelAnime.playSpeed;
     }
 
@@ -254,7 +253,7 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
                     if ((itemAP == PLAYER_AP_DEED_LAND) || (itemAP == PLAYER_AP_LETTER_TO_KAFEI) ||
                         (itemAP == PLAYER_AP_DEED_SWAMP) || (itemAP == PLAYER_AP_DEED_MOUNTAIN) ||
                         (itemAP == PLAYER_AP_DEED_OCEAN) || (itemAP == PLAYER_AP_LETTER_MAMA)) {
-                        EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_WAITING_MORPH);
+                        EnBjt_ChangeAnim(this, TOILET_HAND_ANIM_WAITING_MORPH);
                         this->playedSfx = false;
                         this->behaviour++;
                         scriptBranch = 1; // Right item
@@ -288,7 +287,7 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
 
         case TOILET_HAND_BEHAVIOUR_USE_ITEM:
             if (DECR(this->timer) == 0) {
-                EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_FIST); // change while not visible
+                EnBjt_ChangeAnim(this, TOILET_HAND_ANIM_FIST); // change while not visible
                 this->playedSfx = false;
                 this->behaviour++;
             } else if (this->timer == 10) {
@@ -304,7 +303,7 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
             break;
 
         case TOILET_HAND_BEHAVIOUR_REWARD_GIVEN:
-            EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_OPEN_HAND);
+            EnBjt_ChangeAnim(this, TOILET_HAND_ANIM_OPEN_HAND);
             this->behaviour++;
             scriptBranch = 1; // Right item
             break;
@@ -339,11 +338,11 @@ s32 EnBjt_ChooseAnimation(EnBjt* this, PlayState* play) {
         if (this->textId != curTextId) {
             switch (curTextId) {
                 case 0x2949: // Wrong item
-                    EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_WAGGING_FINGER);
+                    EnBjt_ChangeAnim(this, TOILET_HAND_ANIM_WAGGING_FINGER);
                     break;
 
                 case 0x294A: // Right item
-                    EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_THUMBS_UP);
+                    EnBjt_ChangeAnim(this, TOILET_HAND_ANIM_THUMBS_UP);
                     break;
 
                 default:
@@ -353,7 +352,7 @@ s32 EnBjt_ChooseAnimation(EnBjt* this, PlayState* play) {
         this->textId = curTextId;
     } else if (this->stateFlags & TOILET_HAND_STATE_TEXTBOX) {
         this->stateFlags &= ~TOILET_HAND_STATE_TEXTBOX;
-        EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_WAITING);
+        EnBjt_ChangeAnim(this, TOILET_HAND_ANIM_WAITING);
     }
     return 0;
 }
@@ -422,8 +421,8 @@ void EnBjt_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gToiletHandSkel, NULL, this->jointTable, this->morphTable,
                        TOILET_HAND_LIMB_MAX);
 
-    this->curAnimIndex = TOILET_HAND_ANIM_NONE;
-    EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_WAITING);
+    this->animIndex = TOILET_HAND_ANIM_NONE;
+    EnBjt_ChangeAnim(this, TOILET_HAND_ANIM_WAITING);
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
