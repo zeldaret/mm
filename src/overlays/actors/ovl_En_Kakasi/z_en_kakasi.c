@@ -122,15 +122,15 @@ typedef enum {
     /* 0x6 */ ENKAKASI_ANIM_WAVE,               // "wave" short sideways shake, stops early, partial? unused?
     /* 0x7 */ ENKAKASI_ANIM_SLOWROLL,           // partial bounch, ends looking left, OFFER anim takes over
     /* 0x8 */ ENKAKASI_ANIM_IDLE,               // slow stretching wiggle, ends in regular position
-} EnKakasi_Animations;
+} EnKakasiAnimation;
 
-static AnimationHeader* kakasiAnimations[] = {
+static AnimationHeader* sAnimations[] = {
     &object_ka_Anim_007444, &object_ka_Anim_00686C, &object_ka_Anim_0081A4,
     &object_ka_Anim_007B90, &object_ka_Anim_0071EC, &object_ka_Anim_007444,
     &object_ka_Anim_00686C, &object_ka_Anim_0081A4, &object_ka_Anim_000214,
 };
 
-static u8 sAnimModes[] = {
+static u8 sAnimationModes[] = {
     ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
     ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE,
 };
@@ -195,12 +195,12 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
     }
 }
 
-void EnKakasi_SetAnimation(EnKakasi* this, s32 index) {
-    this->animIndex = index;
-    this->animeFrameCount = Animation_GetLastFrame(&kakasiAnimations[this->animIndex]->common);
+void EnKakasi_ChangeAnim(EnKakasi* this, s32 animIndex) {
+    this->animIndex = animIndex;
+    this->animeFrameCount = Animation_GetLastFrame(&sAnimations[this->animIndex]->common);
     // 1: regular playback speed, 0: starting frame
-    Animation_Change(&this->skelanime, kakasiAnimations[this->animIndex], 1.0f, 0.0f, this->animeFrameCount,
-                     sAnimModes[this->animIndex], -4.0f);
+    Animation_Change(&this->skelanime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animeFrameCount,
+                     sAnimationModes[this->animIndex], -4.0f);
 }
 
 s32 EnKakasi_ValidatePictograph(PlayState* play, Actor* thisx) {
@@ -280,7 +280,7 @@ void func_8096FBB8(EnKakasi* this, PlayState* play) {
         this->unk190++;
     }
     if (this->unk190 != 0 && this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
-        EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
+        EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
     }
     if (this->unk190 > 8) {
         this->unk190 = 8;
@@ -292,7 +292,7 @@ void func_8096FBB8(EnKakasi* this, PlayState* play) {
 }
 
 void EnKakasi_InitTimeSkipDialogue(EnKakasi* this) {
-    EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SLOWROLL);
+    EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SLOWROLL);
     this->actionFunc = EnKakasi_TimeSkipDialogue;
 }
 
@@ -351,21 +351,21 @@ void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
         if (this->picto.actor.projectedPos.z > -20.0f && x > 0 && x < SCREEN_WIDTH && y > 0 && y < SCREEN_HEIGHT &&
             this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
             // faster shaking
-            EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
+            EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
             this->skelanime.playSpeed = 2.0f;
         }
     } else if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
         if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
-            EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
+            EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
             this->skelanime.playSpeed = 2.0f;
         }
     } else if (saveContextDay == 3 && gSaveContext.save.isNight) {
         this->skelanime.playSpeed = 1.0f;
         if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
-            EnKakasi_SetAnimation(this, 1);
+            EnKakasi_ChangeAnim(this, 1);
         }
     } else if (this->animIndex != ENKAKASI_ANIM_IDLE) {
-        EnKakasi_SetAnimation(this, ENKAKASI_ANIM_IDLE);
+        EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_IDLE);
     }
     if (this->picto.actor.xzDistToPlayer < 120.0f) {
         func_800B8614(&this->picto.actor, play, 100.0f);
@@ -376,12 +376,12 @@ void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
 void EnKakasi_SetupDialogue(EnKakasi* this) {
     // bug? starts one animation then changes it a few lines down?
     if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
-        EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
+        EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
     }
 
     this->talkState = TEXT_STATE_5;
     this->unkState196 = 1;
-    EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
+    EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
     this->actionFunc = EnKakasi_RegularDialogue;
 }
 
@@ -394,7 +394,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
     if (this->picto.actor.textId != 0x1644 && this->animeFrameCount <= currentAnimeFrame &&
         this->animIndex == ENKAKASI_ANIM_SLOWROLL) {
 
-        EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
+        EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
         this->unkCounter1A4 = 0;
     }
 
@@ -403,7 +403,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
         if (this->animeFrameCount <= currentAnimeFrame && this->animIndex != ENKAKASI_ANIM_SPIN_REACH_OFFER) {
             if (++this->unkCounter1A4 >= 2) {
                 this->unkCounter1A4 = 0;
-                EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
+                EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
             }
         }
     }
@@ -426,7 +426,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
                 u32 saveContextDay2 = gSaveContext.save.day;
 
                 if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
-                    EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
+                    EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
                 }
 
                 if (saveContextDay2 == 3 && gSaveContext.save.isNight) {
@@ -465,13 +465,13 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
             } else if (this->picto.actor.textId == 0x1645 || this->picto.actor.textId == 0x164E) {
                 this->picto.actor.textId = 0x1650; // "Shall we dance?  No Yes"
                 if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
-                    EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
+                    EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
                 }
                 this->talkState = TEXT_STATE_CHOICE;
 
             } else if (this->picto.actor.textId == 0x1644) {
                 if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
-                    EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
+                    EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
                 }
                 if (gSaveContext.save.isNight) {
                     this->picto.actor.textId = 0x164E;
@@ -481,12 +481,12 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
 
             } else if (this->picto.actor.textId == 0x164F) {
                 if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
-                    EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
+                    EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
                 }
                 this->picto.actor.textId = 0x165A;
             } else if (this->picto.actor.textId == 0x1651) {
                 if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
-                    EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
+                    EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
                 }
                 this->picto.actor.textId = 0x1654;
             } else if (this->picto.actor.textId == 0x1654) {
@@ -522,7 +522,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
                 } else {
                     this->picto.actor.textId = 0x1652;
                 }
-                EnKakasi_SetAnimation(this, ENKAKASI_ANIM_HOPPING_REGULAR);
+                EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_HOPPING_REGULAR);
             } else {
                 func_8019F230();
                 if (this->picto.actor.textId == 0x1656) { // would you like to learn a song? yes/no
@@ -534,7 +534,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
                 }
                 this->unkCounter1A4 = 0;
                 if (this->animIndex != ENKAKASI_ANIM_ARMS_CROSSED_ROCKING) {
-                    EnKakasi_SetAnimation(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
+                    EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
                 }
             }
         }
@@ -548,7 +548,7 @@ void EnKakasi_SetupSongTeach(EnKakasi* this, PlayState* play) {
     this->subCamId = SUB_CAM_ID_DONE;
     this->subCamFov = 0.0f;
     this->subCamFovNext = 60.0f;
-    EnKakasi_SetAnimation(this, ENKAKASI_ANIM_TWIRL);
+    EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_TWIRL);
     this->unkState196 = 2;
     this->actionFunc = EnKakasi_OcarinaRemark;
 }
@@ -627,13 +627,13 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
             this->picto.actor.textId = 0x1647;
             this->unkState1A8 = 2;
             this->talkState = TEXT_STATE_5;
-            EnKakasi_SetAnimation(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
+            EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
             this->actionFunc = EnKakasi_RegularDialogue;
 
         } else if (play->msgCtx.ocarinaMode == 3) { // song success
             this->postTeachTimer = 30;
             this->skelanime.playSpeed = 2.0f;
-            EnKakasi_SetAnimation(this, ENKAKASI_ANIM_HOPPING_REGULAR);
+            EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_HOPPING_REGULAR);
             this->actionFunc = EnKakasi_PostSongLearnTwirl;
         }
     }
@@ -643,7 +643,7 @@ void EnKakasi_PostSongLearnTwirl(EnKakasi* this, PlayState* play) {
     f32 animeFrame = this->skelanime.curFrame;
 
     if (this->postTeachTimer == 0 && this->animIndex != ENKAKASI_ANIM_TWIRL) {
-        EnKakasi_SetAnimation(this, ENKAKASI_ANIM_TWIRL);
+        EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_TWIRL);
         this->skelanime.playSpeed = 2.0f;
     }
     if (this->postTeachTimer == 0 && this->animIndex == ENKAKASI_ANIM_TWIRL && this->animeFrameCount <= animeFrame) {
@@ -656,7 +656,7 @@ void EnKakasi_SetupPostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     play->msgCtx.ocarinaMode = 4;
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
-    EnKakasi_SetAnimation(this, ENKAKASI_ANIM_HOPPING_REGULAR);
+    EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_HOPPING_REGULAR);
     this->subCamId = SUB_CAM_ID_DONE;
     this->talkState = TEXT_STATE_5;
     this->unkState1A8 = 1;
@@ -686,7 +686,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
         this->animeFrameCount <= tempAnimFrame) {
         this->unkCounter1A4++;
         if (this->unkCounter1A4 >= 2) {
-            EnKakasi_SetAnimation(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
+            EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
         }
     }
 
@@ -694,7 +694,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
         this->animeFrameCount <= tempAnimFrame) {
         this->unkCounter1A4++;
         if (this->unkCounter1A4 >= 2) {
-            EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
+            EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
         }
     }
 
@@ -747,7 +747,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
                 func_800B7298(play, &this->picto.actor, 7);
                 this->picto.actor.textId = 0x1649;
                 if (this->animIndex != ENKAKASI_ANIM_ARMS_CROSSED_ROCKING) {
-                    EnKakasi_SetAnimation(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
+                    EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
                 }
 
             } else if (this->picto.actor.textId == 0x1649) {
@@ -759,7 +759,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
 
             } else if (this->picto.actor.textId == 0x164B) {
                 this->picto.actor.textId = 0x164C;
-                EnKakasi_SetAnimation(this, ENKAKASI_ANIM_TWIRL);
+                EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_TWIRL);
 
             } else {
                 if (this->picto.actor.textId == 0x164C || this->picto.actor.textId == 0x1661) {
@@ -771,10 +771,10 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
         } else {
             this->talkState = TEXT_STATE_5;
             if (play->msgCtx.choiceIndex == 1) {
-                func_8019F208(); // play 0x4808 sfx (decide) and calls Audio_StopSfxById
+                func_8019F208(); // play 0x4808 sfx (decide) and calls AudioSfx_StopById
                 this->picto.actor.textId = 0x164A;
             } else {
-                func_8019F230(); // play 0x480A sfx (cancel) and calls Audio_StopSfxById
+                func_8019F230(); // play 0x480A sfx (cancel) and calls AudioSfx_StopById
                 this->picto.actor.textId = 0x1661;
             }
         }
@@ -811,7 +811,7 @@ void EnKakasi_SetupDanceNightAway(EnKakasi* this) {
     this->unkCounter1A4 = 0;
     this->subCamFov = 0.0f;
     this->subCamFovNext = 60.0f;
-    EnKakasi_SetAnimation(this, ENKAKASI_ANIM_TWIRL);
+    EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_TWIRL);
     Math_Vec3f_Copy(&this->unk22C, &this->picto.actor.home.pos);
     func_8016566C(0xB4);
     this->actionFunc = EnKakasi_DancingNightAway;
@@ -859,7 +859,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
             if (this->unk204 == 0 && this->animeFrameCount <= currentFrame) {
                 this->unk204 = 0x14;
                 this->unk190++;
-                EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
+                EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
             }
             return;
         case 2:
@@ -929,7 +929,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
             if (this->unk204 == 0) {
                 player = GET_PLAYER(play);
 
-                Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateIndexFromSpawn(0), player->unk_3CE,
+                Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
                                     0xBFF, &player->unk_3C0, player->unk_3CC);
                 func_80169EFC(&play->state);
 
@@ -954,7 +954,7 @@ void EnKakasi_DoNothing(EnKakasi* this, PlayState* play) {
 
 void EnKakasi_SetupDigAway(EnKakasi* this) {
     if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
-        EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
+        EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
     }
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
@@ -1065,7 +1065,7 @@ void EnKakasi_RisingOutOfGround(EnKakasi* this, PlayState* play) {
     this->picto.actor.shape.rot.y += 0x3000;
 
     if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
-        EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
+        EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
     }
     if (this->picto.actor.shape.yOffset < -10.0f) {
         if ((play->gameplayFrames % 8) == 0) {

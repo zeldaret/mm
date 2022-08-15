@@ -68,7 +68,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static Cylinder16 D_80A2CADC[] = { { 24, 40, 0, { 0, 0, 0 } } };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &gDekuScrubUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
     { &gDekuScrubBurrowAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
     { &gDekuScrubIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
@@ -231,7 +231,7 @@ void func_80A2C168(EnSyatekiDekunuts* this, PlayState* play) {
 
 void func_80A2C1AC(EnSyatekiDekunuts* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actionFunc = func_80A2C208;
@@ -250,7 +250,7 @@ void func_80A2C208(EnSyatekiDekunuts* this, PlayState* play) {
 }
 
 void func_80A2C27C(EnSyatekiDekunuts* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
     if (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) != 1) {
         this->actionFunc = func_80A2C2E0;
     } else {
@@ -281,7 +281,7 @@ void func_80A2C33C(EnSyatekiDekunuts* this, PlayState* play) {
 }
 
 void func_80A2C3AC(EnSyatekiDekunuts* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
     this->actionFunc = func_80A2C3F0;
 }
 
@@ -330,7 +330,7 @@ void func_80A2C4D0(EnSyatekiDekunuts* this, PlayState* play) {
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     this->unk_1E2 = 0;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
     this->unk_1D8 = 160;
     this->actionFunc = func_80A2C5DC;
 }
@@ -342,7 +342,7 @@ void func_80A2C5DC(EnSyatekiDekunuts* this, PlayState* play) {
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (this->unk_1D8 == 160) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DEAD);
             this->unk_1D8--;
         } else if (this->unk_1D8 < 160) {
