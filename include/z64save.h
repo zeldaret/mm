@@ -65,7 +65,7 @@ typedef struct RespawnData {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ s16 yaw;
     /* 0x0E */ s16 playerParams;
-    /* 0x10 */ u16 entranceIndex;
+    /* 0x10 */ u16 entrance;
     /* 0x12 */ u8 roomIndex;
     /* 0x13 */ s8 data;
     /* 0x14 */ u32 tempSwitchFlags;
@@ -121,7 +121,7 @@ typedef struct SavePlayerData {
 } SavePlayerData; // size = 0x28
 
 typedef struct Save {
-    /* 0x0000 */ u32 entranceIndex;                     // "scene_no"
+    /* 0x0000 */ u32 entrance;                          // "scene_no"
     /* 0x0004 */ u8 equippedMask;                       // "player_mask"
     /* 0x0005 */ u8 isFirstCycle;                       // "opening_flag"
     /* 0x0006 */ u8 unk_06;

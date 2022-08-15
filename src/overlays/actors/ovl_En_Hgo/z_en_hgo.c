@@ -39,7 +39,7 @@ const ActorInit En_Hgo_InitVars = {
     (ActorFunc)EnHgo_Draw,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &object_harfgibud_Anim_00B644, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &object_harfgibud_Anim_013684, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &object_harfgibud_Anim_0152EC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
@@ -127,7 +127,7 @@ void func_80BD0434(EnHgo* this, PlayState* play) {
 }
 
 void func_80BD049C(EnHgo* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80BD04E0;
 }
 
@@ -258,28 +258,28 @@ s32 func_80BD0898(EnHgo* this, PlayState* play) {
             switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     this->unk_218 = 0;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
                     break;
                 case 2:
                     this->actor.draw = EnHgo_Draw;
                     this->unk_218 = 1;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                     break;
                 case 3:
                     this->unk_218 = 2;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
                     break;
                 case 4:
                     this->unk_218 = 3;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                     break;
                 case 5:
                     this->unk_218 = 4;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
                     break;
                 case 6:
                     this->unk_218 = 5;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
                     break;
             }
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -295,11 +295,11 @@ s32 func_80BD0898(EnHgo* this, PlayState* play) {
                     break;
                 case 2:
                     this->unk_218 = 3;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                     break;
                 case 5:
                     this->unk_218 = 6;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
             }
         }
 

@@ -216,7 +216,7 @@ void EnHs_DoNothing(EnHs* this, PlayState* play) {
 
 void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, PlayState* play) {
     if (DECR(this->stateTimer) == 0) {
-        play->nextEntranceIndex = play->setupExitList[HS_GET_EXIT_INDEX(&this->actor)];
+        play->nextEntrance = play->setupExitList[HS_GET_EXIT_INDEX(&this->actor)];
         play->transitionTrigger = TRANS_TRIGGER_START;
         SET_WEEKEVENTREG(WEEKEVENTREG_25_08);
         this->actionFunc = EnHs_DoNothing;

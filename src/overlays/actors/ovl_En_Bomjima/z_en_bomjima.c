@@ -757,7 +757,7 @@ void func_80BFFBC4(EnBomjima* this, PlayState* play) {
     if (D_80C009F0 >= 104) {
         D_80C009F0 = 0;
         func_801477B4(play);
-        play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(6);
+        play->nextEntrance = Entrance_CreateFromSpawn(6);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;

@@ -87,7 +87,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static AnimationInfoS D_80B7755C[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_tru_Anim_00F9A0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_tru_Anim_00F9A0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_tru_Anim_0108AC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
@@ -115,19 +115,19 @@ s32 func_80B76030(SkelAnime* skelAnime, s16 arg1) {
     s16 startFrame;
     s32 ret = false;
 
-    if ((arg1 >= 0) && (arg1 < ARRAY_COUNT(D_80B7755C))) {
-        endFrame = D_80B7755C[arg1].frameCount;
+    if ((arg1 >= 0) && (arg1 < ARRAY_COUNT(sAnimationInfo))) {
+        endFrame = sAnimationInfo[arg1].frameCount;
         if (endFrame < 0) {
-            endFrame = Animation_GetLastFrame(D_80B7755C[arg1].animation);
+            endFrame = Animation_GetLastFrame(sAnimationInfo[arg1].animation);
         }
 
-        startFrame = D_80B7755C[arg1].startFrame;
+        startFrame = sAnimationInfo[arg1].startFrame;
         if (startFrame < 0) {
-            startFrame = Animation_GetLastFrame(D_80B7755C[arg1].animation);
+            startFrame = Animation_GetLastFrame(sAnimationInfo[arg1].animation);
         }
 
-        Animation_Change(skelAnime, D_80B7755C[arg1].animation, D_80B7755C[arg1].playSpeed, startFrame, endFrame,
-                         D_80B7755C[arg1].mode, D_80B7755C[arg1].morphFrames);
+        Animation_Change(skelAnime, sAnimationInfo[arg1].animation, sAnimationInfo[arg1].playSpeed, startFrame,
+                         endFrame, sAnimationInfo[arg1].mode, sAnimationInfo[arg1].morphFrames);
         ret = true;
     }
     return ret;
@@ -373,7 +373,7 @@ void func_80B76A64(EnTruMt* this, PlayState* play) {
 void func_80B76BB8(EnTruMt* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
-            play->nextEntranceIndex = 0xA810;
+            play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 1);
             play->transitionType = TRANS_TYPE_03;
             gSaveContext.nextTransitionType = TRANS_TYPE_03;
             play->transitionTrigger = TRANS_TRIGGER_START;

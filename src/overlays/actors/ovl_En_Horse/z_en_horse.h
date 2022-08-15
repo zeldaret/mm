@@ -53,7 +53,7 @@ typedef enum {
     /* 3  */ ENHORSE_ACT_FOLLOW_PLAYER,
     /* 4  */ ENHORSE_ACT_INGO_RACE,
     /* 5  */ ENHORSE_ACT_MOUNTED_IDLE,
-    /* 6  */ ENHORSE_ACT_MOUNTED_IDLE_WHINNEYING,
+    /* 6  */ ENHORSE_ACT_MOUNTED_IDLE_WHINNYING,
     /* 7  */ ENHORSE_ACT_MOUNTED_TURN,
     /* 8  */ ENHORSE_ACT_MOUNTED_WALK,
     /* 9  */ ENHORSE_ACT_MOUNTED_TROT,
@@ -83,18 +83,6 @@ typedef enum {
     /* 4 */ PLAYER_DIR_SIDE_R,
     /* 5 */ PLAYER_DIR_SIDE_L
 } EnHorsePlayerDir;
-
-typedef enum {
-    /* 0 */ ENHORSE_ANIM_IDLE,
-    /* 1 */ ENHORSE_ANIM_WHINNEY,
-    /* 2 */ ENHORSE_ANIM_STOPPING,
-    /* 3 */ ENHORSE_ANIM_REARING,
-    /* 4 */ ENHORSE_ANIM_WALK,
-    /* 5 */ ENHORSE_ANIM_TROT,
-    /* 6 */ ENHORSE_ANIM_GALLOP,
-    /* 7 */ ENHORSE_ANIM_LOW_JUMP,
-    /* 8 */ ENHORSE_ANIM_HIGH_JUMP
-} EnHorseAnimationIndex;
 
 typedef enum {
     /* 0 */ HORSE_TYPE_EPONA,
@@ -157,7 +145,7 @@ typedef struct EnHorse {
     /* 0x200 */ s32 curRaceWaypoint;
     /* 0x204 */ s32 boostSpeed;
     /* 0x208 */ s32 playerControlled;
-    /* 0x20C */ s32 animationIdx;
+    /* 0x20C */ s32 animIndex;
     /* 0x210 */ f32 curFrame;
     /* 0x214 */ s32 soundTimer;
     /* 0x218 */ Vec3f unk_218;

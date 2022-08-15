@@ -254,62 +254,39 @@ void func_8014CCB4(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) 
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D304.s")
 
-#ifdef NON_EQUIVALENT
-extern u16* D_801D0188;
-extern s16* D_801D0250;
+extern u16 D_801D0188[][9];
+extern s16 D_801D0250[];
 
 void func_8014D62C(PlayState* play, s32* arg1, f32* arg2, s16* arg3) {
-    f32 sp3C;
-    s16 temp_s0;
-    s16 temp_s1;
-    s16 temp_s1_2;
+    MessageContext* msgCtx = &play->msgCtx;
+    PauseContext* pauseCtx = &play->pauseCtx;
     s16 temp_s6;
-    s32 temp_s2;
-    s32 temp_s2_2;
-    u16* temp_v0;
+    s16 temp_s1 = *arg3;
+    s32 temp_s2 = *arg1;
+    f32 sp3C = *arg2;
     s16 phi_v0;
     s16 phi_s0;
-    s16 phi_s1;
-    s32 phi_s2;
-    s16 phi_s1_2;
-    s32 phi_s2_2;
 
-    temp_s1 = *arg3;
-    temp_s2 = *arg1;
-    sp3C = *arg2;
     if ((func_8010A0A4(play) != 0) || (play->sceneNum == 0x4F)) {
         phi_v0 = 0xA;
     } else {
-        phi_v0 = play->pauseCtx.unk_238[PAUSE_WORLD_MAP];
+        phi_v0 = pauseCtx->unk_238[PAUSE_WORLD_MAP];
     }
-    temp_s6 = *(&D_801D0250 + (phi_v0 * 2));
-    phi_s0 = 0;
-    phi_s1_2 = temp_s1;
-    phi_s2_2 = temp_s2;
-    if ((s32)temp_s6 > 0) {
-        phi_s1 = temp_s1;
-        phi_s2 = temp_s2;
-        do {
-            temp_v0 = (phi_v0 * 0x12) + &D_801D0188 + (phi_s0 * 2);
-            (play + 0x4908 + (phi_s1 * 2))->decodedBuffer = (u16)*temp_v0;
-            Font_LoadChar(play, *temp_v0, phi_s2);
-            temp_s0 = phi_s0 + 1;
-            temp_s1_2 = phi_s1 + 1;
-            temp_s2_2 = phi_s2 + 0x80;
-            phi_s0 = temp_s0;
-            phi_s1 = temp_s1_2;
-            phi_s2 = temp_s2_2;
-            phi_s1_2 = temp_s1_2;
-            phi_s2_2 = temp_s2_2;
-        } while ((s32)temp_s0 < (s32)temp_s6);
+
+    temp_s6 = D_801D0250[phi_v0];
+
+    for (phi_s0 = 0; phi_s0 < temp_s6; phi_s0++, temp_s1++, temp_s2 += 0x80) {
+        msgCtx->decodedBuffer.wchar[temp_s1] = D_801D0188[phi_v0][phi_s0];
+        Font_LoadChar(play, D_801D0188[phi_v0][phi_s0], temp_s2);
     }
-    *arg3 = phi_s1_2 - 1;
-    *arg1 = phi_s2_2;
-    *arg2 = sp3C + ((f32)(temp_s6 - 1) * (16.0f * play->msgCtx.unk12098));
+
+    temp_s1--;
+    sp3C += (temp_s6 - 1) * (16.0f * msgCtx->unk12098);
+
+    *arg3 = temp_s1;
+    *arg1 = temp_s2;
+    *arg2 = sp3C;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D62C.s")
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D7B4.s")
 
