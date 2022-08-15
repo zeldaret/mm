@@ -64,7 +64,7 @@ typedef struct EnFsn {
     /* 0x444 */ u8 arrowAnimState;
     /* 0x445 */ u8 stickAnimState;
     /* 0x448 */ f32 shopItemSelectedTween;
-    /* 0x44C */ s16 animationIndex;
+    /* 0x44C */ s16 animIndex;
     /* 0x44E */ u16 flags;
 } EnFsn; // size = 0x450
 

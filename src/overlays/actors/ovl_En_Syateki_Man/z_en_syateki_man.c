@@ -72,12 +72,12 @@ const ActorInit En_Syateki_Man_InitVars = {
 };
 
 typedef enum {
-    /* 0 */ EN_SYATEKI_MAN_ANIMATION_HANDS_ON_TABLE,
-    /* 1 */ EN_SYATEKI_MAN_ANIMATION_SWAMP_HEAD_SCRATCH_LOOP,
-    /* 2 */ EN_SYATEKI_MAN_ANIMATION_SWAMP_HEAD_SCRATCH_END,
-} EnSyatekiManAnimationIndex;
+    /* 0 */ EN_SYATEKI_MAN_ANIM_HANDS_ON_TABLE,
+    /* 1 */ EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_LOOP,
+    /* 2 */ EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_END,
+} EnSyatekiManAnimation;
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &gBurlyGuyHandsOnTableAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
     { &gSwampShootingGalleryManHeadScratchLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
     { &gSwampShootingGalleryManHeadScratchEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
@@ -260,7 +260,7 @@ void EnSyatekiMan_Swamp_Idle(EnSyatekiMan* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         u16 faceReactionTextId;
 
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_SYATEKI_MAN_ANIMATION_SWAMP_HEAD_SCRATCH_END);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_END);
         faceReactionTextId = Text_GetFaceReaction(play, 0x31);
         if (faceReactionTextId != 0) {
             Message_StartTextbox(play, faceReactionTextId, &this->actor);
@@ -479,7 +479,7 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
 
     if (this->skelAnime.animation == &gSwampShootingGalleryManHeadScratchEndAnim) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_SYATEKI_MAN_ANIMATION_HANDS_ON_TABLE);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_MAN_ANIM_HANDS_ON_TABLE);
         }
     }
 }
@@ -899,7 +899,7 @@ void EnSyatekiMan_Swamp_GiveReward(EnSyatekiMan* this, PlayState* play) {
         this->shootingGameState = SG_GAME_STATE_NONE;
         this->actionFunc = EnSyatekiMan_Swamp_Talk;
     } else {
-        func_800B85E0(&this->actor, play, 500.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 500.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -963,7 +963,7 @@ void EnSyatekiMan_Town_GiveReward(EnSyatekiMan* this, PlayState* play) {
         this->shootingGameState = SG_GAME_STATE_NONE;
         this->actionFunc = EnSyatekiMan_Town_Talk;
     } else {
-        func_800B85E0(&this->actor, play, 500.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 500.0f, PLAYER_AP_MINUS1);
     }
 }
 

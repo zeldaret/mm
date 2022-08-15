@@ -144,7 +144,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
     Player* player;
     s32 playerSpawnIndex;
     s32 new15E;
-    s32 entranceIndex;
+    s32 entrance;
     u32 playerSpawnIndexPerForm[PLAYER_FORM_MAX];
     u8 playerForm;
     s16 playerParams;
@@ -192,7 +192,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
                     playerForm = player->transformation;
                 }
 
-                entranceIndex = gSaveContext.save.entranceIndex;
+                entrance = gSaveContext.save.entrance;
 
                 playerSpawnIndex = playerSpawnIndexPerForm[playerForm];
                 playerActorEntry = &play->linkActorEntry[playerSpawnIndex];
@@ -209,7 +209,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
                 // why are we getting player home rotation from the room data? doesnt player have home.rot.y?
                 // especially because we are converting from deg to binang, but isnt home.rot.y already in binang??
                 Play_SetRespawnData(
-                    &play->state, 0, entranceIndex, // parameter 3 is called "sceneSetup"
+                    &play->state, 0, entrance, // parameter 3 is called "sceneSetup"
                     play->setupEntranceList[playerSpawnIndex].room, playerParams, &newRespawnPos,
                     ((((playerActorEntry->rot.y >> 7) & 0x1FF) / 180.0f) * 32768.0f)); // DEG_TO_BINANG ?
 
@@ -241,7 +241,7 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
     }
 
     if (this->grottoExitDelay++ == 10) {
-        play->nextEntranceIndex = play->setupExitList[GET_WARPTAG_EXIT_INDEX(&this->dyna.actor)];
+        play->nextEntrance = play->setupExitList[GET_WARPTAG_EXIT_INDEX(&this->dyna.actor)];
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
         func_8019F128(NA_SE_OC_SECRET_HOLE_OUT);
