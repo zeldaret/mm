@@ -631,8 +631,6 @@ beginseg
     pad_text
     include "build/src/code/audio/audio_sfx_params.o"
     include "build/src/code/audio/code_801A5BD0.o"
-    include "build/data/code/code_801A5BD0.data.o"
-    include "build/data/code/code_801A5BD0.bss.o"
     include "build/src/code/audio/code_801A7B10.o"
     include "build/data/code/code_801A7B10.data.o"
     include "build/data/code/code_801A7B10.bss.o"
@@ -1943,8 +1941,7 @@ beginseg
     name "ovl_Effect_Ss_Dead_Dd"
     compress
     include "build/src/overlays/effects/ovl_Effect_Ss_Dead_Dd/z_eff_ss_dead_dd.o"
-    include "build/data/ovl_Effect_Ss_Dead_Dd/ovl_Effect_Ss_Dead_Dd.data.o"
-    include "build/data/ovl_Effect_Ss_Dead_Dd/ovl_Effect_Ss_Dead_Dd.reloc.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Dead_Dd/ovl_Effect_Ss_Dead_Dd_reloc.o"
 endseg
 
 beginseg
@@ -2864,8 +2861,7 @@ beginseg
     name "ovl_En_Rat"
     compress
     include "build/src/overlays/actors/ovl_En_Rat/z_en_rat.o"
-    include "build/data/ovl_En_Rat/ovl_En_Rat.data.o"
-    include "build/data/ovl_En_Rat/ovl_En_Rat.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Rat/ovl_En_Rat_reloc.o"
 endseg
 
 beginseg
@@ -3158,8 +3154,7 @@ beginseg
     name "ovl_Dm_Char09"
     compress
     include "build/src/overlays/actors/ovl_Dm_Char09/z_dm_char09.o"
-    include "build/data/ovl_Dm_Char09/ovl_Dm_Char09.data.o"
-    include "build/data/ovl_Dm_Char09/ovl_Dm_Char09.reloc.o"
+    include "build/src/overlays/actors/ovl_Dm_Char09/ovl_Dm_Char09_reloc.o"
 endseg
 
 beginseg
@@ -4363,8 +4358,7 @@ beginseg
     name "ovl_En_S_Goro"
     compress
     include "build/src/overlays/actors/ovl_En_S_Goro/z_en_s_goro.o"
-    include "build/data/ovl_En_S_Goro/ovl_En_S_Goro.data.o"
-    include "build/data/ovl_En_S_Goro/ovl_En_S_Goro.reloc.o"
+    include "build/src/overlays/actors/ovl_En_S_Goro/ovl_En_S_Goro_reloc.o"
 endseg
 
 beginseg
@@ -4453,9 +4447,7 @@ beginseg
     name "ovl_Oceff_Wipe7"
     compress
     include "build/src/overlays/actors/ovl_Oceff_Wipe7/z_oceff_wipe7.o"
-    include "build/data/ovl_Oceff_Wipe7/ovl_Oceff_Wipe7.data.o"
-    include "build/data/ovl_Oceff_Wipe7/ovl_Oceff_Wipe7.bss.o"
-    include "build/data/ovl_Oceff_Wipe7/ovl_Oceff_Wipe7.reloc.o"
+    include "build/src/overlays/actors/ovl_Oceff_Wipe7/ovl_Oceff_Wipe7_reloc.o"
 endseg
 
 beginseg

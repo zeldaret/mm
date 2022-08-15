@@ -134,7 +134,7 @@ static DamageTable sDamageTable2 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, 0 },
     { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, -4 },
     { &object_st_Anim_0055A8, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 },
@@ -678,7 +678,7 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
             Enemy_StartFinishingBlow(play, &this->actor);
             this->actor.flags &= ~ACTOR_FLAG_1;
             if (!ENSW_GET_3(&this->actor)) {
-                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 3);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 3);
             }
 
             switch (this->actor.colChkInfo.damageEffect) {
@@ -1158,7 +1158,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
     if (!func_808D9968(this, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         SkelAnime_Init(play, &this->skelAnime, &object_st_Skel_005298, NULL, this->jointTable, this->morphTable, 30);
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 0);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
         this->skelAnime.playSpeed = 4.0f;
 
         Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
