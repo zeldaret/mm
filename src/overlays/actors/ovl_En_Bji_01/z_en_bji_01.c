@@ -62,7 +62,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 /* Animations struct */
-static AnimationSpeedInfo D_809CDC7C[] = {
+static AnimationSpeedInfo sAnimationInfo[] = {
     { &object_bji_Anim_000FDC, 1.0f, ANIMMODE_LOOP, 0.0f },  /* Looking through telescope */
     { &object_bji_Anim_005B58, 1.0f, ANIMMODE_LOOP, 10.0f }, /* Breathing? Unused? */
     { &object_bji_Anim_000AB0, 1.0f, ANIMMODE_LOOP, 0.0f },  /* Talking */
@@ -82,7 +82,7 @@ void func_809CCDE0(EnBji01* this, PlayState* play) {
 }
 
 void func_809CCE98(EnBji01* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 0, &this->animationIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 0, &this->animIndex);
     this->actor.textId = 0;
     this->actionFunc = func_809CCEE8;
 }
@@ -191,7 +191,7 @@ void func_809CD028(EnBji01* this, PlayState* play) {
             }
             break;
     }
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 2, &this->animIndex);
     this->actionFunc = EnBji01_DialogueHandler;
 }
 
@@ -237,7 +237,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 switch (play->msgCtx.currentTextId) {
                     case 0x5DE:
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 3, &this->animationIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 3, &this->animIndex);
                         func_80151938(play, 0x5DF);
                         break;
                     case 0x5E4:
@@ -287,8 +287,8 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
             func_809CCE98(this, play);
             break;
     }
-    if ((this->animationIndex == 3) && (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
-        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
+    if ((this->animIndex == 3) && (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 2, &this->animIndex);
     }
 }
 
@@ -307,7 +307,7 @@ void EnBji01_DoNothing(EnBji01* this, PlayState* play) {
 }
 
 void func_809CD6C0(EnBji01* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 2, &this->animIndex);
     this->actionFunc = func_809CD70C;
 }
 
@@ -337,7 +337,7 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 0;
     this->actor.child = NULL;
-    this->animationIndex = -1;
+    this->animIndex = -1;
 
     Actor_SetScale(&this->actor, 0.01f);
     SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));

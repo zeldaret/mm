@@ -64,7 +64,7 @@ static AnimationHeader* sAnimations[] = {
     &object_cs_Anim_0060E8, &object_cs_Anim_005DC4, &object_cs_Anim_0026B0,
 };
 
-static u8 sAnimModes[] = {
+static u8 sAnimationModes[] = {
     ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE,
     ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
 };
@@ -120,7 +120,7 @@ void EnBombers2_ChangeAnim(EnBombers2* this, s32 animIndex, f32 playSpeed) {
     lastFrame = Animation_GetLastFrame(sAnimations[this->animIndex]);
     this->lastAnimFrame = lastFrame;
     Animation_Change(&this->skelAnime, sAnimations[this->animIndex], playSpeed, 0.0f, lastFrame,
-                     sAnimModes[this->animIndex], -10.0f);
+                     sAnimationModes[this->animIndex], -10.0f);
 }
 
 void func_80C04B40(EnBombers2* this) {

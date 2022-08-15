@@ -25,7 +25,7 @@ void EnHorse_StartMountedIdleResetAnim(EnHorse* this);
 void EnHorse_StartMountedIdle(EnHorse* this);
 void EnHorse_MountedIdle(EnHorse* this, PlayState* play);
 void EnHorse_MountedIdleAnim(EnHorse* this);
-void EnHorse_MountedIdleWhinney(EnHorse* this);
+void EnHorse_MountedIdleWhinny(EnHorse* this);
 void EnHorse_StartTurning(EnHorse* this);
 void EnHorse_StartWalkingFromIdle(EnHorse* this);
 void EnHorse_StartWalkingInterruptable(EnHorse* this);
@@ -108,20 +108,32 @@ typedef struct {
     RaceWaypoint* waypoints;
 } RaceInfo;
 
-static AnimationHeader* sEponaAnimHeaders[] = {
+typedef enum {
+    /* 0 */ ENHORSE_ANIM_IDLE,
+    /* 1 */ ENHORSE_ANIM_WHINNY,
+    /* 2 */ ENHORSE_ANIM_STOPPING,
+    /* 3 */ ENHORSE_ANIM_REARING,
+    /* 4 */ ENHORSE_ANIM_WALK,
+    /* 5 */ ENHORSE_ANIM_TROT,
+    /* 6 */ ENHORSE_ANIM_GALLOP,
+    /* 7 */ ENHORSE_ANIM_LOW_JUMP,
+    /* 8 */ ENHORSE_ANIM_HIGH_JUMP
+} EnHorseAnimation;
+
+static AnimationHeader* sEponaAnimations[] = {
     &object_horse_link_child_Anim_006D44, &object_horse_link_child_Anim_007468, &object_horse_link_child_Anim_005F64,
     &object_horse_link_child_Anim_004DE8, &object_horse_link_child_Anim_007D50, &object_horse_link_child_Anim_0043AC,
     &object_horse_link_child_Anim_002F98, &object_horse_link_child_Anim_0035B0, &object_horse_link_child_Anim_003D38,
 };
 
-static AnimationHeader* sHniAnimHeaders[] = {
+static AnimationHeader* sHniAnimations[] = {
     &object_ha_Anim_00C850, &object_ha_Anim_00CE70, &object_ha_Anim_00B9C8,
     &object_ha_Anim_00B00C, &object_ha_Anim_00D648, &object_ha_Anim_00A650,
     &object_ha_Anim_009208, &object_ha_Anim_009858, &object_ha_Anim_00A05C,
 };
 
 static AnimationHeader** sAnimationHeaders[] = {
-    NULL, NULL, sEponaAnimHeaders, sHniAnimHeaders, sHniAnimHeaders,
+    NULL, NULL, sEponaAnimations, sHniAnimations, sHniAnimations,
 };
 
 static f32 sPlaybackSpeeds[] = {
@@ -228,11 +240,15 @@ static u8 sResetNoInput[] = {
     true,  true,  true,  false, false, false, false, false, false, false, false, false,
 };
 
-static s32 sIdleAnimIds[] = {
-    1, 3, 0, 3, 1, 0,
+static s32 sIdleAnimIndices[] = {
+    ENHORSE_ANIM_WHINNY,  ENHORSE_ANIM_REARING, ENHORSE_ANIM_IDLE,
+    ENHORSE_ANIM_REARING, ENHORSE_ANIM_WHINNY,  ENHORSE_ANIM_IDLE,
 };
 
-static s16 sIngoAnimations[] = { 7, 6, 2, 2, 1, 1, 0, 0, 0, 0 };
+static s16 sIngoAnimIndices[] = {
+    ENIN_ANIM_7, ENIN_ANIM_6, ENIN_ANIM_2, ENIN_ANIM_2, ENIN_ANIM_1,
+    ENIN_ANIM_1, ENIN_ANIM_0, ENIN_ANIM_0, ENIN_ANIM_0, ENIN_ANIM_0,
+};
 
 static EnHorseCsFunc sCutsceneInitFuncs[] = {
     NULL,
@@ -549,7 +565,7 @@ s32 func_8087C38C(PlayState* play, EnHorse* this, Vec3f* arg2) {
 }
 
 void EnHorse_IdleAnimSounds(EnHorse* this, PlayState* play) {
-    if ((this->animationIdx == ENHORSE_ANIM_IDLE) &&
+    if ((this->animIndex == ENHORSE_ANIM_IDLE) &&
         (((this->curFrame > 35.0f) && (this->type == HORSE_TYPE_EPONA)) ||
          ((this->curFrame > 28.0f) && (this->type == HORSE_TYPE_HNI)) ||
          ((this->curFrame > 25.0f) && (this->type == HORSE_TYPE_2))) &&
@@ -560,7 +576,7 @@ void EnHorse_IdleAnimSounds(EnHorse* this, PlayState* play) {
         } else {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_SANDDUST);
         }
-    } else if ((this->animationIdx == 3) && (this->curFrame > 25.0f) && !(this->stateFlags & ENHORSE_LAND2_SOUND)) {
+    } else if ((this->animIndex == 3) && (this->curFrame > 25.0f) && !(this->stateFlags & ENHORSE_LAND2_SOUND)) {
         this->stateFlags |= ENHORSE_LAND2_SOUND;
         if (this->type == HORSE_TYPE_2) {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_LAND2);
@@ -716,7 +732,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
             thisx->objBankIndex = Object_Spawn(&play->objectCtx, OBJECT_HORSE_LINK_CHILD);
             Actor_SetObjectDependency(play, &this->actor);
             Skin_Init(&play->state, &this->skin, sSkeletonHeaders[this->type], sAnimationHeaders[this->type][0]);
-            Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx]);
+            Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex]);
             this->unk_1EC |= 0x200;
         } else {
             thisx->update = func_8087D540;
@@ -823,7 +839,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         Skin_Init(&play->state, &this->skin, sSkeletonHeaders[this->type], sAnimationHeaders[this->type][0]);
     }
 
-    this->animationIdx = 0;
+    this->animIndex = 0;
     this->numBoosts = 6;
     this->boostRegenTime = 0;
     this->postDrawFunc = NULL;
@@ -926,7 +942,7 @@ void func_8087D540(Actor* thisx, PlayState* play) {
         } else {
             Skin_Init(&play->state, &this->skin, sSkeletonHeaders[this->type], sAnimationHeaders[this->type][0]);
         }
-        Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx]);
+        Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex]);
     }
 }
 
@@ -966,7 +982,7 @@ void EnHorse_Freeze(EnHorse* this, PlayState* play) {
         this->colliderCylinder1.base.ocFlags1 &= ~OC1_ON;
         this->colliderCylinder2.base.ocFlags1 &= ~OC1_ON;
         this->colliderJntSph.base.ocFlags1 &= ~OC1_ON;
-        this->animationIdx = ENHORSE_ANIM_IDLE;
+        this->animIndex = ENHORSE_ANIM_IDLE;
     }
 }
 
@@ -1100,7 +1116,7 @@ void EnHorse_StartMountedIdle(EnHorse* this) {
     f32 curFrame;
 
     this->action = ENHORSE_ACT_MOUNTED_TURN;
-    this->animationIdx = ENHORSE_ANIM_IDLE;
+    this->animIndex = ENHORSE_ANIM_IDLE;
 
     if (((this->curFrame > 35.0f) && (this->type == HORSE_TYPE_EPONA)) ||
         ((this->curFrame > 28.0f) && (this->type == HORSE_TYPE_HNI))) {
@@ -1114,8 +1130,8 @@ void EnHorse_StartMountedIdle(EnHorse* this) {
         }
     }
     curFrame = this->skin.skelAnime.curFrame;
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, curFrame,
-                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, -3.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, curFrame,
+                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
 }
 
 void EnHorse_MountedIdle(EnHorse* this, PlayState* play) {
@@ -1145,16 +1161,16 @@ void EnHorse_MountedIdle(EnHorse* this, PlayState* play) {
 
 void EnHorse_MountedIdleAnim(EnHorse* this) {
     this->skin.skelAnime.curFrame = 0.0f;
-    EnHorse_MountedIdleWhinney(this);
+    EnHorse_MountedIdleWhinny(this);
 }
 
-void EnHorse_MountedIdleWhinney(EnHorse* this) {
+void EnHorse_MountedIdleWhinny(EnHorse* this) {
     f32 curFrame;
 
     this->action = ENHORSE_ACT_MOUNTED_WALK;
-    this->animationIdx = ENHORSE_ANIM_WHINNEY;
+    this->animIndex = ENHORSE_ANIM_WHINNY;
     curFrame = this->skin.skelAnime.curFrame;
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, curFrame,
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, curFrame,
                      Animation_GetLastFrame(sAnimationHeaders[this->type][1]), ANIMMODE_ONCE, -3.0f);
     if (this->stateFlags & ENHORSE_DRAW) {
         if (this->type == HORSE_TYPE_2) {
@@ -1165,7 +1181,7 @@ void EnHorse_MountedIdleWhinney(EnHorse* this) {
     }
 }
 
-void EnHorse_MountedIdleWhinneying(EnHorse* this, PlayState* play) {
+void EnHorse_MountedIdleWhinnying(EnHorse* this, PlayState* play) {
     f32 stickMag;
     s16 stickAngle = 0;
 
@@ -1193,8 +1209,8 @@ void EnHorse_MountedIdleWhinneying(EnHorse* this, PlayState* play) {
 void EnHorse_StartTurning(EnHorse* this) {
     this->action = ENHORSE_ACT_MOUNTED_TROT;
     this->soundTimer = 0;
-    this->animationIdx = ENHORSE_ANIM_WALK;
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
+    this->animIndex = ENHORSE_ANIM_WALK;
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
                      Animation_GetLastFrame(sAnimationHeaders[this->type][4]), ANIMMODE_ONCE, -3.0f);
 }
 
@@ -1256,18 +1272,18 @@ void EnHorse_StartWalkingInterruptable(EnHorse* this) {
 void EnHorse_StartWalking(EnHorse* this) {
     this->action = ENHORSE_ACT_MOUNTED_GALLOP;
     this->soundTimer = 0;
-    this->animationIdx = ENHORSE_ANIM_WALK;
+    this->animIndex = ENHORSE_ANIM_WALK;
     this->waitTimer = 0;
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
                      Animation_GetLastFrame(sAnimationHeaders[this->type][4]), ANIMMODE_ONCE, -3.0f);
 }
 
 void EnHorse_MountedWalkingReset(EnHorse* this) {
     this->action = ENHORSE_ACT_MOUNTED_GALLOP;
     this->soundTimer = 0;
-    this->animationIdx = ENHORSE_ANIM_WALK;
+    this->animIndex = ENHORSE_ANIM_WALK;
     this->waitTimer = 0;
-    Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx]);
+    Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex]);
 }
 
 void EnHorse_MountedWalk(EnHorse* this, PlayState* play) {
@@ -1327,15 +1343,15 @@ void EnHorse_MountedWalk(EnHorse* this, PlayState* play) {
 
 void EnHorse_StartTrotting(EnHorse* this) {
     this->action = ENHORSE_ACT_MOUNTED_REARING;
-    this->animationIdx = ENHORSE_ANIM_TROT;
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, -3.0f);
+    this->animIndex = ENHORSE_ANIM_TROT;
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
 }
 
 void EnHorse_MountedTrotReset(EnHorse* this) {
     this->action = ENHORSE_ACT_MOUNTED_REARING;
-    this->animationIdx = ENHORSE_ANIM_TROT;
-    Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx]);
+    this->animIndex = ENHORSE_ANIM_TROT;
+    Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex]);
 }
 
 void EnHorse_MountedTrot(EnHorse* this, PlayState* play) {
@@ -1371,19 +1387,19 @@ void EnHorse_StartGallopingInterruptable(EnHorse* this) {
 
 void EnHorse_StartGalloping(EnHorse* this) {
     this->action = ENHORSE_ACT_STOPPING;
-    this->animationIdx = ENHORSE_ANIM_GALLOP;
+    this->animIndex = ENHORSE_ANIM_GALLOP;
     this->unk_230 = 0;
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, -3.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
 }
 
 void EnHorse_MountedGallopReset(EnHorse* this) {
     this->noInputTimer = 0;
     this->noInputTimerMax = 0;
     this->action = ENHORSE_ACT_STOPPING;
-    this->animationIdx = ENHORSE_ANIM_GALLOP;
+    this->animIndex = ENHORSE_ANIM_GALLOP;
     this->unk_230 = 0;
-    Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx]);
+    Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex]);
 }
 
 void EnHorse_JumpLanding(EnHorse* this, PlayState* play) {
@@ -1391,8 +1407,8 @@ void EnHorse_JumpLanding(EnHorse* this, PlayState* play) {
     f32 y;
 
     this->action = ENHORSE_ACT_STOPPING;
-    this->animationIdx = ENHORSE_ANIM_GALLOP;
-    Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx]);
+    this->animIndex = ENHORSE_ANIM_GALLOP;
+    Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex]);
     jointTable = this->skin.skelAnime.jointTable;
     y = jointTable->y;
     this->riderPos.y += y * 0.01f * this->unk_528 * 0.01f;
@@ -1437,9 +1453,9 @@ void EnHorse_MountedGallop(EnHorse* this, PlayState* play) {
 
 void EnHorse_StartRearing(EnHorse* this) {
     this->action = ENHORSE_ACT_REVERSE;
-    this->animationIdx = ENHORSE_ANIM_REARING;
+    this->animIndex = ENHORSE_ANIM_REARING;
 
-    if (sAnimationHeaders[this->type][this->animationIdx] == NULL) {
+    if (sAnimationHeaders[this->type][this->animIndex] == NULL) {
         if (Rand_ZeroOne() > 0.5f) {
             if (this->stateFlags & ENHORSE_DRAW) {
                 if (this->type == HORSE_TYPE_2) {
@@ -1464,8 +1480,8 @@ void EnHorse_StartRearing(EnHorse* this) {
     }
 
     Rumble_Request(0.0f, 180, 20, 100);
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, -3.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
 }
 
 void EnHorse_MountedRearing(EnHorse* this, PlayState* play) {
@@ -1512,8 +1528,8 @@ void EnHorse_MountedRearing(EnHorse* this, PlayState* play) {
 
 void EnHorse_StartBraking(EnHorse* this, PlayState* play) {
     this->action = ENHORSE_ACT_LOW_JUMP;
-    this->animationIdx = ENHORSE_ANIM_STOPPING;
-    if (sAnimationHeaders[this->type][this->animationIdx] == NULL) {
+    this->animIndex = ENHORSE_ANIM_STOPPING;
+    if (sAnimationHeaders[this->type][this->animIndex] == NULL) {
         if (Rand_ZeroOne() > 0.5f) {
             if (this->stateFlags & ENHORSE_DRAW) {
                 if (this->type == HORSE_TYPE_2) {
@@ -1534,8 +1550,8 @@ void EnHorse_StartBraking(EnHorse* this, PlayState* play) {
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_HORSE_SLIP);
     }
 
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.5f, 0.0f,
-                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, -3.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.5f, 0.0f,
+                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
     this->stateFlags |= ENHORSE_STOPPING_NEIGH_SOUND;
     this->stateFlags &= ~ENHORSE_BOOST;
 }
@@ -1592,10 +1608,10 @@ void EnHorse_StartReversingInterruptable(EnHorse* this) {
 
 void EnHorse_StartReversing(EnHorse* this) {
     this->action = ENHORSE_ACT_HIGH_JUMP;
-    this->animationIdx = ENHORSE_ANIM_WALK;
+    this->animIndex = ENHORSE_ANIM_WALK;
     this->soundTimer = 0;
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_LOOP, -3.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_LOOP, -3.0f);
 }
 
 void EnHorse_Reverse(EnHorse* this, PlayState* play) {
@@ -1673,10 +1689,10 @@ void EnHorse_StartLowJump(EnHorse* this, PlayState* play) {
     f32 y;
 
     this->action = ENHORSE_ACT_BRIDGE_JUMP;
-    this->animationIdx = ENHORSE_ANIM_LOW_JUMP;
+    this->animIndex = ENHORSE_ANIM_LOW_JUMP;
     curFrame = this->skin.skelAnime.curFrame;
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.5f, curFrame,
-                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, -3.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.5f, curFrame,
+                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
     this->postDrawFunc = NULL;
     this->jumpStartY = this->actor.world.pos.y;
     this->actor.gravity = 0.0f;
@@ -1769,10 +1785,10 @@ void EnHorse_StartHighJump(EnHorse* this, PlayState* play) {
     f32 y;
 
     this->action = ENHORSE_ACT_CS_UPDATE;
-    this->animationIdx = ENHORSE_ANIM_HIGH_JUMP;
+    this->animIndex = ENHORSE_ANIM_HIGH_JUMP;
     curFrame = this->skin.skelAnime.curFrame;
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.5f, curFrame,
-                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, -3.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.5f, curFrame,
+                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
 
     this->postDrawFunc = NULL;
     this->jumpStartY = this->actor.world.pos.y;
@@ -1861,7 +1877,7 @@ void EnHorse_InitInactive(EnHorse* this) {
     this->colliderCylinder2.base.ocFlags1 &= ~OC1_ON;
     this->colliderJntSph.base.ocFlags1 &= ~OC1_ON;
     this->action = ENHORSE_ACT_INACTIVE;
-    this->animationIdx = ENHORSE_ANIM_WALK;
+    this->animIndex = ENHORSE_ANIM_WALK;
     this->stateFlags |= ENHORSE_INACTIVE;
     this->followTimer = 0;
 }
@@ -1891,7 +1907,7 @@ void EnHorse_PlayIdleAnimation(EnHorse* this, s32 anim, f32 morphFrames, f32 sta
     this->action = ENHORSE_ACT_IDLE;
     this->actor.speedXZ = 0.0f;
 
-    if ((anim != ENHORSE_ANIM_IDLE) && (anim != ENHORSE_ANIM_WHINNEY) && (anim != ENHORSE_ANIM_REARING)) {
+    if ((anim != ENHORSE_ANIM_IDLE) && (anim != ENHORSE_ANIM_WHINNY) && (anim != ENHORSE_ANIM_REARING)) {
         anim = ENHORSE_ANIM_IDLE;
     }
 
@@ -1899,12 +1915,12 @@ void EnHorse_PlayIdleAnimation(EnHorse* this, s32 anim, f32 morphFrames, f32 sta
         anim = ENHORSE_ANIM_IDLE;
     }
 
-    if (anim != this->animationIdx) {
-        this->animationIdx = anim;
+    if (anim != this->animIndex) {
+        this->animIndex = anim;
         if (anim == ENHORSE_ANIM_IDLE) {
             this->stateFlags &= ~ENHORSE_SANDDUST_SOUND;
         } else {
-            if (this->animationIdx == ENHORSE_ANIM_WHINNEY) {
+            if (this->animIndex == ENHORSE_ANIM_WHINNY) {
                 if (this->stateFlags & ENHORSE_DRAW) {
                     if (this->type == HORSE_TYPE_2) {
                         Audio_PlaySfxAtPos(&this->unk_218, NA_SE_EV_KID_HORSE_GROAN);
@@ -1912,7 +1928,7 @@ void EnHorse_PlayIdleAnimation(EnHorse* this, s32 anim, f32 morphFrames, f32 sta
                         Audio_PlaySfxAtPos(&this->unk_218, NA_SE_EV_HORSE_GROAN);
                     }
                 }
-            } else if (this->animationIdx == ENHORSE_ANIM_REARING) {
+            } else if (this->animIndex == ENHORSE_ANIM_REARING) {
                 if (this->stateFlags & ENHORSE_DRAW) {
                     if (this->type == HORSE_TYPE_2) {
                         Audio_PlaySfxAtPos(&this->unk_218, NA_SE_EV_KID_HORSE_NEIGH);
@@ -1923,8 +1939,8 @@ void EnHorse_PlayIdleAnimation(EnHorse* this, s32 anim, f32 morphFrames, f32 sta
                 this->stateFlags &= ~ENHORSE_LAND2_SOUND;
             }
         }
-        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, startFrames,
-                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
+        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, startFrames,
+                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE,
                          morphFrames);
     }
 }
@@ -1934,8 +1950,8 @@ void EnHorse_ChangeIdleAnimation(EnHorse* this, s32 anim, f32 morphFrames) {
 }
 
 void EnHorse_ResetIdleAnimation(EnHorse* this) {
-    this->animationIdx = ENHORSE_ANIM_WALK;
-    EnHorse_PlayIdleAnimation(this, this->animationIdx, 0.0f, 0.0f);
+    this->animIndex = ENHORSE_ANIM_WALK;
+    EnHorse_PlayIdleAnimation(this, this->animIndex, 0.0f, 0.0f);
 }
 
 void EnHorse_StartIdleRidable(EnHorse* this) {
@@ -1971,17 +1987,18 @@ void EnHorse_Idle(EnHorse* this, PlayState* play) {
     }
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
-        s32 idleAnimIdx = 0;
+        s32 idleAnimIndex = 0;
 
-        if (this->animationIdx != 0) {
-            if (this->animationIdx == 1) {
-                idleAnimIdx = 1;
-            } else if (this->animationIdx == 3) {
-                idleAnimIdx = 2;
+        if (this->animIndex != ENHORSE_ANIM_IDLE) {
+            if (this->animIndex == ENHORSE_ANIM_WHINNY) {
+                idleAnimIndex = 1;
+            } else if (this->animIndex == ENHORSE_ANIM_REARING) {
+                idleAnimIndex = 2;
             }
         }
         // Play one of the two other idle animations
-        EnHorse_PlayIdleAnimation(this, sIdleAnimIds[((Rand_ZeroOne() > 0.5f) ? 0 : 1) + idleAnimIdx * 2], 0.0f, 0.0f);
+        EnHorse_PlayIdleAnimation(this, sIdleAnimIndices[((Rand_ZeroOne() > 0.5f) ? 0 : 1) + idleAnimIndex * 2], 0.0f,
+                                  0.0f);
     }
 }
 
@@ -1993,15 +2010,14 @@ void EnHorse_StartMovingAnimation(EnHorse* this, s32 anim, f32 morphFrames, f32 
         anim = ENHORSE_ANIM_WALK;
     }
 
-    if (anim != this->animationIdx) {
-        this->animationIdx = anim;
-        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, startFrames,
-                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
+    if (anim != this->animIndex) {
+        this->animIndex = anim;
+        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, startFrames,
+                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE,
                          morphFrames);
     } else {
-        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, startFrames,
-                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
-                         0.0f);
+        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, startFrames,
+                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, 0.0f);
     }
 }
 
@@ -2015,13 +2031,13 @@ void EnHorse_SetFollowAnimation(EnHorse* this, PlayState* play) {
         anim = ENHORSE_ANIM_TROT;
     }
 
-    if (this->animationIdx == ENHORSE_ANIM_GALLOP) {
+    if (this->animIndex == ENHORSE_ANIM_GALLOP) {
         if (distToPlayer > 400.0f) {
             anim = ENHORSE_ANIM_GALLOP;
         } else {
             anim = ENHORSE_ANIM_TROT;
         }
-    } else if (this->animationIdx == ENHORSE_ANIM_TROT) {
+    } else if (this->animIndex == ENHORSE_ANIM_TROT) {
         if (distToPlayer > 400.0f) {
             anim = ENHORSE_ANIM_GALLOP;
         } else if (distToPlayer < 300.0f) {
@@ -2029,7 +2045,7 @@ void EnHorse_SetFollowAnimation(EnHorse* this, PlayState* play) {
         } else {
             anim = ENHORSE_ANIM_TROT;
         }
-    } else if (this->animationIdx == ENHORSE_ANIM_WALK) {
+    } else if (this->animIndex == ENHORSE_ANIM_WALK) {
         if (distToPlayer > 300.0f) {
             anim = ENHORSE_ANIM_TROT;
         } else {
@@ -2050,7 +2066,7 @@ void EnHorse_FollowPlayer(EnHorse* this, PlayState* play) {
         !(this->stateFlags & ENHORSE_TURNING_TO_PLAYER)) {
         f32 angleDiff;
 
-        this->animationIdx = ENHORSE_ANIM_REARING;
+        this->animIndex = ENHORSE_ANIM_REARING;
         this->stateFlags |= ENHORSE_TURNING_TO_PLAYER;
         this->angleToPlayer = Actor_YawBetweenActors(&this->actor, &GET_PLAYER(play)->actor);
 
@@ -2062,9 +2078,9 @@ void EnHorse_FollowPlayer(EnHorse* this, PlayState* play) {
         }
 
         this->followPlayerTurnSpeed =
-            angleDiff / Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]);
+            angleDiff / Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]);
 
-        Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx]);
+        Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex]);
         this->skin.skelAnime.playSpeed = 1.0f;
         this->stateFlags &= ~ENHORSE_LAND2_SOUND;
     } else if (this->stateFlags & ENHORSE_TURNING_TO_PLAYER) {
@@ -2082,14 +2098,14 @@ void EnHorse_FollowPlayer(EnHorse* this, PlayState* play) {
         EnHorse_RotateToPlayer(this, play);
     }
 
-    if (this->animationIdx == ENHORSE_ANIM_GALLOP) {
+    if (this->animIndex == ENHORSE_ANIM_GALLOP) {
         this->actor.speedXZ = 8.0f;
         this->skin.skelAnime.playSpeed = this->actor.speedXZ * 0.3f;
     } else {
-        if (this->animationIdx == ENHORSE_ANIM_TROT) {
+        if (this->animIndex == ENHORSE_ANIM_TROT) {
             this->actor.speedXZ = 6.0f;
             this->skin.skelAnime.playSpeed = this->actor.speedXZ * 0.375f;
-        } else if (this->animationIdx == ENHORSE_ANIM_WALK) {
+        } else if (this->animIndex == ENHORSE_ANIM_WALK) {
             this->actor.speedXZ = 3.0f;
             EnHorse_PlayWalkingSound(this);
             this->skin.skelAnime.playSpeed = this->actor.speedXZ * 0.75f;
@@ -2114,9 +2130,9 @@ void EnHorse_FollowPlayer(EnHorse* this, PlayState* play) {
     }
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
-        if (this->animationIdx == ENHORSE_ANIM_GALLOP) {
+        if (this->animIndex == ENHORSE_ANIM_GALLOP) {
             func_8087C1C0(this);
-        } else if (this->animationIdx == ENHORSE_ANIM_TROT) {
+        } else if (this->animIndex == ENHORSE_ANIM_TROT) {
             func_8087C178(this);
         }
 
@@ -2140,13 +2156,13 @@ void EnHorse_InitIngoHorse(EnHorse* this) {
     }
 }
 
-void EnHorse_SetIngoAnimation(s32 anim, f32 curFrame, s32 arg2, s16* animIdxOut) {
-    *animIdxOut = sIngoAnimations[anim];
-    if (arg2 == 1) {
-        if (anim == 5) {
-            *animIdxOut = 4;
-        } else if (anim == 6) {
-            *animIdxOut = 3;
+void EnHorse_SetIngoAnimation(s32 animIndex, f32 curFrame, s32 arg2, s16* animIndexOut) {
+    *animIndexOut = sIngoAnimIndices[animIndex];
+    if (arg2 == ENIN_ANIM_1) {
+        if (animIndex == ENHORSE_ANIM_TROT) {
+            *animIndexOut = ENIN_ANIM_4;
+        } else if (animIndex == ENHORSE_ANIM_GALLOP) {
+            *animIndexOut = ENIN_ANIM_3;
         }
     }
 }
@@ -2159,37 +2175,37 @@ void EnHorse_UpdateIngoHorseAnim(EnHorse* this) {
     this->stateFlags &= ~ENHORSE_SANDDUST_SOUND;
 
     if (this->actor.speedXZ == 0.0f) {
-        if (this->animationIdx != ENHORSE_ANIM_IDLE) {
+        if (this->animIndex != ENHORSE_ANIM_IDLE) {
             animChanged = true;
         }
-        this->animationIdx = ENHORSE_ANIM_IDLE;
+        this->animIndex = ENHORSE_ANIM_IDLE;
     } else if (this->actor.speedXZ <= 3.0f) {
-        if (this->animationIdx != ENHORSE_ANIM_WALK) {
+        if (this->animIndex != ENHORSE_ANIM_WALK) {
             animChanged = true;
         }
-        this->animationIdx = ENHORSE_ANIM_WALK;
+        this->animIndex = ENHORSE_ANIM_WALK;
     } else if (this->actor.speedXZ <= 6.0f) {
-        if (this->animationIdx != ENHORSE_ANIM_TROT) {
+        if (this->animIndex != ENHORSE_ANIM_TROT) {
             animChanged = true;
         }
-        this->animationIdx = ENHORSE_ANIM_TROT;
+        this->animIndex = ENHORSE_ANIM_TROT;
     } else {
-        if (this->animationIdx != ENHORSE_ANIM_GALLOP) {
+        if (this->animIndex != ENHORSE_ANIM_GALLOP) {
             animChanged = true;
         }
-        this->animationIdx = ENHORSE_ANIM_GALLOP;
+        this->animIndex = ENHORSE_ANIM_GALLOP;
     }
 
-    if (this->animationIdx == ENHORSE_ANIM_WALK) {
+    if (this->animIndex == ENHORSE_ANIM_WALK) {
         animSpeed = this->actor.speedXZ * 0.5f;
-    } else if (this->animationIdx == ENHORSE_ANIM_TROT) {
+    } else if (this->animIndex == ENHORSE_ANIM_TROT) {
         animSpeed = this->actor.speedXZ * 0.25f;
         if (this->type == HORSE_TYPE_2) {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_RUN);
         } else {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_HORSE_RUN);
         }
-    } else if (this->animationIdx == ENHORSE_ANIM_GALLOP) {
+    } else if (this->animIndex == ENHORSE_ANIM_GALLOP) {
         animSpeed = this->actor.speedXZ * 0.2f;
         if (this->type == HORSE_TYPE_2) {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_RUN);
@@ -2201,40 +2217,38 @@ void EnHorse_UpdateIngoHorseAnim(EnHorse* this) {
     }
 
     if (animChanged == true) {
-        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx],
-                         sPlaybackSpeeds[this->animationIdx] * animSpeed * 1.5f, 0.0f,
-                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
-                         -3.0f);
+        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex],
+                         sPlaybackSpeeds[this->animIndex] * animSpeed * 1.5f, 0.0f,
+                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
     } else {
-        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx],
-                         sPlaybackSpeeds[this->animationIdx] * animSpeed * 1.5f, 0.0f,
-                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
-                         0.0f);
+        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex],
+                         sPlaybackSpeeds[this->animIndex] * animSpeed * 1.5f, 0.0f,
+                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, 0.0f);
     }
 }
 
 void EnHorse_UpdateIngoRace(EnHorse* this, PlayState* play) {
     f32 playSpeed;
 
-    if ((this->animationIdx == ENHORSE_ANIM_IDLE) || (this->animationIdx == ENHORSE_ANIM_WHINNEY)) {
+    if ((this->animIndex == ENHORSE_ANIM_IDLE) || (this->animIndex == ENHORSE_ANIM_WHINNY)) {
         EnHorse_IdleAnimSounds(this, play);
-    } else if (this->animationIdx == ENHORSE_ANIM_WALK) {
+    } else if (this->animIndex == ENHORSE_ANIM_WALK) {
         EnHorse_PlayWalkingSound(this);
     }
 
     if (!this->inRace) {
         this->actor.speedXZ = 0.0f;
         this->rider->actor.speedXZ = 0.0f;
-        if (this->animationIdx != ENHORSE_ANIM_IDLE) {
+        if (this->animIndex != ENHORSE_ANIM_IDLE) {
             EnHorse_UpdateIngoHorseAnim(this);
         }
     }
 
-    if (this->animationIdx == ENHORSE_ANIM_WALK) {
+    if (this->animIndex == ENHORSE_ANIM_WALK) {
         playSpeed = this->actor.speedXZ * 0.5f;
-    } else if (this->animationIdx == 5) {
+    } else if (this->animIndex == ENHORSE_ANIM_TROT) {
         playSpeed = this->actor.speedXZ * 0.25f;
-    } else if (this->animationIdx == 6) {
+    } else if (this->animIndex == ENHORSE_ANIM_GALLOP) {
         playSpeed = this->actor.speedXZ * 0.2f;
     } else {
         playSpeed = 1.0f;
@@ -2242,7 +2256,7 @@ void EnHorse_UpdateIngoRace(EnHorse* this, PlayState* play) {
     this->skin.skelAnime.playSpeed = playSpeed;
 
     if (SkelAnime_Update(&this->skin.skelAnime) ||
-        ((this->animationIdx == ENHORSE_ANIM_IDLE) && (this->actor.speedXZ != 0.0f))) {
+        ((this->animIndex == ENHORSE_ANIM_IDLE) && (this->actor.speedXZ != 0.0f))) {
         EnHorse_UpdateIngoHorseAnim(this);
     }
 }
@@ -2255,11 +2269,11 @@ void func_8088126C(EnHorse* this, PlayState* play) {
 void func_80881290(EnHorse* this, PlayState* play) {
     f32 curFrame;
 
-    this->action = ENHORSE_ACT_MOUNTED_IDLE_WHINNEYING;
-    this->animationIdx = ENHORSE_ANIM_HIGH_JUMP;
+    this->action = ENHORSE_ACT_MOUNTED_IDLE_WHINNYING;
+    this->animIndex = ENHORSE_ANIM_HIGH_JUMP;
     curFrame = this->skin.skelAnime.curFrame;
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.5f, curFrame,
-                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, -3.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.5f, curFrame,
+                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
     this->postDrawFunc = NULL;
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
@@ -2324,8 +2338,8 @@ void func_8088159C(EnHorse* this, PlayState* play) {
     f32 y;
 
     this->action = ENHORSE_ACT_MOUNTED_IDLE;
-    this->animationIdx = ENHORSE_ANIM_GALLOP;
-    Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx]);
+    this->animIndex = ENHORSE_ANIM_GALLOP;
+    Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex]);
     jointTable = this->skin.skelAnime.jointTable;
     y = jointTable->y;
     this->riderPos.y += y * 0.01f * this->unk_528 * 0.01f;
@@ -2351,37 +2365,37 @@ void func_8088168C(EnHorse* this) {
     this->stateFlags &= ~ENHORSE_SANDDUST_SOUND;
 
     if (this->actor.speedXZ == 0.0f) {
-        if (this->animationIdx != ENHORSE_ANIM_IDLE) {
+        if (this->animIndex != ENHORSE_ANIM_IDLE) {
             animChanged = true;
         }
-        this->animationIdx = ENHORSE_ANIM_IDLE;
+        this->animIndex = ENHORSE_ANIM_IDLE;
     } else if (this->actor.speedXZ <= 3.0f) {
-        if (this->animationIdx != ENHORSE_ANIM_WALK) {
+        if (this->animIndex != ENHORSE_ANIM_WALK) {
             animChanged = true;
         }
-        this->animationIdx = ENHORSE_ANIM_WALK;
+        this->animIndex = ENHORSE_ANIM_WALK;
     } else if (this->actor.speedXZ <= 6.0f) {
-        if (this->animationIdx != ENHORSE_ANIM_TROT) {
+        if (this->animIndex != ENHORSE_ANIM_TROT) {
             animChanged = true;
         }
-        this->animationIdx = ENHORSE_ANIM_TROT;
+        this->animIndex = ENHORSE_ANIM_TROT;
     } else {
-        if (this->animationIdx != ENHORSE_ANIM_GALLOP) {
+        if (this->animIndex != ENHORSE_ANIM_GALLOP) {
             animChanged = true;
         }
-        this->animationIdx = ENHORSE_ANIM_GALLOP;
+        this->animIndex = ENHORSE_ANIM_GALLOP;
     }
 
-    if (this->animationIdx == ENHORSE_ANIM_WALK) {
+    if (this->animIndex == ENHORSE_ANIM_WALK) {
         animSpeed = this->actor.speedXZ * 0.5f;
-    } else if (this->animationIdx == ENHORSE_ANIM_TROT) {
+    } else if (this->animIndex == ENHORSE_ANIM_TROT) {
         animSpeed = this->actor.speedXZ * 0.25f;
         if (this->type == HORSE_TYPE_2) {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_RUN);
         } else {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_HORSE_RUN);
         }
-    } else if (this->animationIdx == ENHORSE_ANIM_GALLOP) {
+    } else if (this->animIndex == ENHORSE_ANIM_GALLOP) {
         animSpeed = this->actor.speedXZ * 0.2f;
         if (this->type == HORSE_TYPE_2) {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_RUN);
@@ -2392,19 +2406,17 @@ void func_8088168C(EnHorse* this) {
         animSpeed = 1.0f;
     }
 
-    finalAnimSpeed = sPlaybackSpeeds[this->animationIdx] * animSpeed * 1.5f;
+    finalAnimSpeed = sPlaybackSpeeds[this->animIndex] * animSpeed * 1.5f;
     if (finalAnimSpeed < 1.0f) {
         finalAnimSpeed = 1.0f;
     }
 
     if (animChanged == true) {
-        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], finalAnimSpeed, 0.0f,
-                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
-                         -3.0f);
+        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], finalAnimSpeed, 0.0f,
+                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
     } else {
-        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], finalAnimSpeed, 0.0f,
-                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
-                         0.0f);
+        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], finalAnimSpeed, 0.0f,
+                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, 0.0f);
     }
 }
 
@@ -2412,16 +2424,16 @@ void func_808819D8(EnHorse* this, PlayState* play) {
     Path* path;
     f32 animSpeed;
 
-    if ((this->animationIdx == ENHORSE_ANIM_IDLE) || (this->animationIdx == ENHORSE_ANIM_WHINNEY)) {
+    if ((this->animIndex == ENHORSE_ANIM_IDLE) || (this->animIndex == ENHORSE_ANIM_WHINNY)) {
         EnHorse_IdleAnimSounds(this, play);
-    } else if (this->animationIdx == ENHORSE_ANIM_WALK) {
+    } else if (this->animIndex == ENHORSE_ANIM_WALK) {
         EnHorse_PlayWalkingSound(this);
     }
 
     if (!this->inRace) {
         this->actor.speedXZ = 0.0f;
         this->rider->actor.speedXZ = 0.0f;
-        if (this->animationIdx != ENHORSE_ANIM_IDLE) {
+        if (this->animIndex != ENHORSE_ANIM_IDLE) {
             EnHorse_UpdateIngoHorseAnim(this);
         }
     }
@@ -2436,16 +2448,16 @@ void func_808819D8(EnHorse* this, PlayState* play) {
 
     if (!this->inRace) {
         this->actor.speedXZ = 0.0f;
-        if (this->animationIdx != ENHORSE_ANIM_IDLE) {
+        if (this->animIndex != ENHORSE_ANIM_IDLE) {
             func_8088168C(this);
         }
     }
 
-    if (this->animationIdx == ENHORSE_ANIM_WALK) {
+    if (this->animIndex == ENHORSE_ANIM_WALK) {
         animSpeed = this->actor.speedXZ * 0.5f;
-    } else if (this->animationIdx == ENHORSE_ANIM_TROT) {
+    } else if (this->animIndex == ENHORSE_ANIM_TROT) {
         animSpeed = this->actor.speedXZ * 0.25f;
-    } else if (this->animationIdx == ENHORSE_ANIM_GALLOP) {
+    } else if (this->animIndex == ENHORSE_ANIM_GALLOP) {
         animSpeed = this->actor.speedXZ * 0.2f;
     } else {
         animSpeed = 1.0f;
@@ -2453,22 +2465,22 @@ void func_808819D8(EnHorse* this, PlayState* play) {
     this->skin.skelAnime.playSpeed = animSpeed;
 
     if (SkelAnime_Update(&this->skin.skelAnime) ||
-        ((this->animationIdx == ENHORSE_ANIM_IDLE) && (this->actor.speedXZ != 0.0f))) {
+        ((this->animIndex == ENHORSE_ANIM_IDLE) && (this->actor.speedXZ != 0.0f))) {
         func_8088168C(this);
     }
 
     if (GET_RACE_FLAGS == 3) {
         this->rider->unk488 = 7;
     } else {
-        EnHorse_SetIngoAnimation(this->animationIdx, this->skin.skelAnime.curFrame, this->unk_394 & 1,
+        EnHorse_SetIngoAnimation(this->animIndex, this->skin.skelAnime.curFrame, this->unk_394 & 1,
                                  &this->rider->unk488);
     }
 }
 
 void EnHorse_CsMoveInit(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
-    this->animationIdx = ENHORSE_ANIM_GALLOP;
+    this->animIndex = ENHORSE_ANIM_GALLOP;
     this->cutsceneAction = 1;
-    Animation_PlayOnceSetSpeed(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx],
+    Animation_PlayOnceSetSpeed(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex],
                                this->actor.speedXZ * 0.2f * 1.5f);
 }
 
@@ -2492,7 +2504,7 @@ void EnHorse_CsMoveToPoint(EnHorse* this, PlayState* play, CsCmdActorAction* act
     if (SkelAnime_Update(&this->skin.skelAnime)) {
         func_8087C1C0(this);
         Rumble_Request(0.0f, 120, 8, 255);
-        Animation_PlayOnceSetSpeed(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx],
+        Animation_PlayOnceSetSpeed(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex],
                                    this->actor.speedXZ * 0.3f);
     }
 }
@@ -2507,10 +2519,10 @@ void EnHorse_CsPlayHighJumpAnim(EnHorse* this, PlayState* play) {
     f32 y;
     Vec3s* jointTable;
 
-    this->animationIdx = ENHORSE_ANIM_HIGH_JUMP;
+    this->animIndex = ENHORSE_ANIM_HIGH_JUMP;
     curFrame = this->skin.skelAnime.curFrame;
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.5f, curFrame,
-                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, -3.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.5f, curFrame,
+                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
     this->postDrawFunc = NULL;
     this->jumpStartY = this->actor.world.pos.y;
     this->actor.gravity = 0.0f;
@@ -2582,8 +2594,8 @@ void EnHorse_CsJump(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
         this->actor.velocity.y = 0.0f;
         this->actor.world.pos.y = this->actor.floorHeight;
         func_800B1598(play, 25.0f, &this->actor.world.pos);
-        this->animationIdx = ENHORSE_ANIM_GALLOP;
-        Animation_PlayOnceSetSpeed(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx],
+        this->animIndex = ENHORSE_ANIM_GALLOP;
+        Animation_PlayOnceSetSpeed(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex],
                                    sPlaybackSpeeds[6]);
 
         jointTable = this->skin.skelAnime.jointTable;
@@ -2595,7 +2607,7 @@ void EnHorse_CsJump(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
 }
 
 void EnHorse_CsRearingInit(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
-    this->animationIdx = ENHORSE_ANIM_REARING;
+    this->animIndex = ENHORSE_ANIM_REARING;
     this->cutsceneAction = 3;
     this->cutsceneFlags &= ~4;
     this->stateFlags &= ~ENHORSE_LAND2_SOUND;
@@ -2606,8 +2618,8 @@ void EnHorse_CsRearingInit(EnHorse* this, PlayState* play, CsCmdActorAction* act
             Audio_PlaySfxAtPos(&this->unk_218, NA_SE_EV_HORSE_NEIGH);
         }
     }
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, -3.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
 }
 
 void EnHorse_CsRearing(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
@@ -2624,15 +2636,15 @@ void EnHorse_CsRearing(EnHorse* this, PlayState* play, CsCmdActorAction* action)
     }
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
-        this->animationIdx = ENHORSE_ANIM_IDLE;
+        this->animIndex = ENHORSE_ANIM_IDLE;
         if (!(this->cutsceneFlags & 4)) {
             this->cutsceneFlags |= 4;
-            Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                             Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
+            Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                             Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE,
                              -3.0f);
         } else {
-            Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                             Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_LOOP,
+            Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                             Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_LOOP,
                              0.0f);
         }
     }
@@ -2647,9 +2659,9 @@ void EnHorse_WarpMoveInit(EnHorse* this, PlayState* play, CsCmdActorAction* acti
     this->actor.world.rot.y = action->urot.y;
     this->actor.shape.rot = this->actor.world.rot;
 
-    this->animationIdx = ENHORSE_ANIM_GALLOP;
+    this->animIndex = ENHORSE_ANIM_GALLOP;
     this->cutsceneAction = 4;
-    Animation_PlayOnceSetSpeed(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx],
+    Animation_PlayOnceSetSpeed(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex],
                                this->actor.speedXZ * 0.3f);
 }
 
@@ -2673,7 +2685,7 @@ void EnHorse_CsWarpMoveToPoint(EnHorse* this, PlayState* play, CsCmdActorAction*
     if (SkelAnime_Update(&this->skin.skelAnime)) {
         func_8087C1C0(this);
         Rumble_Request(0.0f, 120, 8, 255);
-        Animation_PlayOnceSetSpeed(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx],
+        Animation_PlayOnceSetSpeed(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex],
                                    this->actor.speedXZ * 0.3f);
     }
 }
@@ -2687,7 +2699,7 @@ void EnHorse_CsWarpRearingInit(EnHorse* this, PlayState* play, CsCmdActorAction*
     this->actor.world.rot.y = action->urot.y;
     this->actor.shape.rot = this->actor.world.rot;
 
-    this->animationIdx = ENHORSE_ANIM_REARING;
+    this->animIndex = ENHORSE_ANIM_REARING;
     this->cutsceneAction = 5;
     this->cutsceneFlags &= ~4;
     this->stateFlags &= ~ENHORSE_LAND2_SOUND;
@@ -2699,8 +2711,8 @@ void EnHorse_CsWarpRearingInit(EnHorse* this, PlayState* play, CsCmdActorAction*
             Audio_PlaySfxAtPos(&this->unk_218, NA_SE_EV_HORSE_NEIGH);
         }
     }
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, -3.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
 }
 
 void EnHorse_CsWarpRearing(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
@@ -2717,15 +2729,15 @@ void EnHorse_CsWarpRearing(EnHorse* this, PlayState* play, CsCmdActorAction* act
     }
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
-        this->animationIdx = ENHORSE_ANIM_IDLE;
+        this->animIndex = ENHORSE_ANIM_IDLE;
         if (!(this->cutsceneFlags & 4)) {
             this->cutsceneFlags |= 4;
-            Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                             Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
+            Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                             Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE,
                              -3.0f);
         } else {
-            Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                             Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_LOOP,
+            Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                             Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_LOOP,
                              0.0f);
         }
     }
@@ -2840,30 +2852,30 @@ void EnHorse_UpdateHbaAnim(EnHorse* this) {
 
     this->action = ENHORSE_ACT_FLEE_PLAYER;
     if (this->actor.speedXZ == 0.0f) {
-        if (this->animationIdx != ENHORSE_ANIM_IDLE) {
+        if (this->animIndex != ENHORSE_ANIM_IDLE) {
             animChanged = true;
         }
-        this->animationIdx = ENHORSE_ANIM_IDLE;
+        this->animIndex = ENHORSE_ANIM_IDLE;
     } else if (this->actor.speedXZ <= 3.0f) {
-        if (this->animationIdx != ENHORSE_ANIM_WALK) {
+        if (this->animIndex != ENHORSE_ANIM_WALK) {
             animChanged = true;
         }
-        this->animationIdx = ENHORSE_ANIM_WALK;
+        this->animIndex = ENHORSE_ANIM_WALK;
     } else if (this->actor.speedXZ <= 6.0f) {
-        if (this->animationIdx != ENHORSE_ANIM_TROT) {
+        if (this->animIndex != ENHORSE_ANIM_TROT) {
             animChanged = true;
         }
-        this->animationIdx = ENHORSE_ANIM_TROT;
+        this->animIndex = ENHORSE_ANIM_TROT;
     } else {
-        if (this->animationIdx != ENHORSE_ANIM_GALLOP) {
+        if (this->animIndex != ENHORSE_ANIM_GALLOP) {
             animChanged = true;
         }
-        this->animationIdx = ENHORSE_ANIM_GALLOP;
+        this->animIndex = ENHORSE_ANIM_GALLOP;
     }
 
-    if (this->animationIdx == ENHORSE_ANIM_WALK) {
+    if (this->animIndex == ENHORSE_ANIM_WALK) {
         animSpeed = this->actor.speedXZ * 0.5f;
-    } else if (this->animationIdx == ENHORSE_ANIM_TROT) {
+    } else if (this->animIndex == ENHORSE_ANIM_TROT) {
         animSpeed = this->actor.speedXZ * 0.25f;
         if (this->type == HORSE_TYPE_2) {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_RUN);
@@ -2871,7 +2883,7 @@ void EnHorse_UpdateHbaAnim(EnHorse* this) {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_HORSE_RUN);
         }
         Rumble_Request(0.0f, 60, 8, 255);
-    } else if (this->animationIdx == ENHORSE_ANIM_GALLOP) {
+    } else if (this->animIndex == ENHORSE_ANIM_GALLOP) {
         animSpeed = this->actor.speedXZ * 0.2f;
         if (this->type == HORSE_TYPE_2) {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_RUN);
@@ -2884,15 +2896,13 @@ void EnHorse_UpdateHbaAnim(EnHorse* this) {
     }
 
     if (animChanged == true) {
-        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx],
-                         sPlaybackSpeeds[this->animationIdx] * animSpeed * 1.5f, 0.0f,
-                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
-                         -3.0f);
+        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex],
+                         sPlaybackSpeeds[this->animIndex] * animSpeed * 1.5f, 0.0f,
+                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
     } else {
-        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx],
-                         sPlaybackSpeeds[this->animationIdx] * animSpeed * 1.5f, 0.0f,
-                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
-                         0.0f);
+        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex],
+                         sPlaybackSpeeds[this->animIndex] * animSpeed * 1.5f, 0.0f,
+                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, 0.0f);
     }
 }
 
@@ -2900,7 +2910,7 @@ void EnHorse_UpdateHorsebackArchery(EnHorse* this, PlayState* play) {
     f32 playSpeed;
     s32 sp28;
 
-    if (this->animationIdx == ENHORSE_ANIM_WALK) {
+    if (this->animIndex == ENHORSE_ANIM_WALK) {
         EnHorse_PlayWalkingSound(this);
     }
 
@@ -2926,16 +2936,16 @@ void EnHorse_UpdateHorsebackArchery(EnHorse* this, PlayState* play) {
 
     if (this->hbaStarted == 0) {
         this->actor.speedXZ = 0.0f;
-        if (this->animationIdx != ENHORSE_ANIM_IDLE) {
+        if (this->animIndex != ENHORSE_ANIM_IDLE) {
             EnHorse_UpdateHbaAnim(this);
         }
     }
 
-    if (this->animationIdx == ENHORSE_ANIM_WALK) {
+    if (this->animIndex == ENHORSE_ANIM_WALK) {
         playSpeed = this->actor.speedXZ * 0.5f;
-    } else if (this->animationIdx == ENHORSE_ANIM_TROT) {
+    } else if (this->animIndex == ENHORSE_ANIM_TROT) {
         playSpeed = this->actor.speedXZ * 0.25f;
-    } else if (this->animationIdx == ENHORSE_ANIM_GALLOP) {
+    } else if (this->animIndex == ENHORSE_ANIM_GALLOP) {
         playSpeed = this->actor.speedXZ * 0.2f;
     } else {
         playSpeed = 1.0f;
@@ -2943,7 +2953,7 @@ void EnHorse_UpdateHorsebackArchery(EnHorse* this, PlayState* play) {
     this->skin.skelAnime.playSpeed = playSpeed;
 
     if (SkelAnime_Update(&this->skin.skelAnime) ||
-        ((this->animationIdx == ENHORSE_ANIM_IDLE) && (this->actor.speedXZ != 0.0f))) {
+        ((this->animIndex == ENHORSE_ANIM_IDLE) && (this->actor.speedXZ != 0.0f))) {
         EnHorse_UpdateHbaAnim(this);
     }
 }
@@ -2953,7 +2963,7 @@ void EnHorse_FleePlayer(EnHorse* this, PlayState* play) {
     f32 distToHome;
     f32 playerDistToHome;
     f32 distToPlayer;
-    s32 nextAnim = this->animationIdx;
+    s32 nextAnimIndex = this->animIndex;
     s32 animFinished;
     s16 yaw;
 
@@ -2996,25 +3006,26 @@ void EnHorse_FleePlayer(EnHorse* this, PlayState* play) {
 
     if (this->actor.speedXZ >= 6.0f) {
         this->skin.skelAnime.playSpeed = this->actor.speedXZ * 0.3f;
-        nextAnim = ENHORSE_ANIM_GALLOP;
+        nextAnimIndex = ENHORSE_ANIM_GALLOP;
     } else if (this->actor.speedXZ >= 3.0f) {
         this->skin.skelAnime.playSpeed = this->actor.speedXZ * 0.375f;
-        nextAnim = ENHORSE_ANIM_TROT;
+        nextAnimIndex = ENHORSE_ANIM_TROT;
     } else if (this->actor.speedXZ > 0.1f) {
         this->skin.skelAnime.playSpeed = this->actor.speedXZ * 0.75f;
-        nextAnim = ENHORSE_ANIM_WALK;
+        nextAnimIndex = ENHORSE_ANIM_WALK;
         EnHorse_PlayWalkingSound(this);
     } else {
         if (Rand_ZeroOne() > 0.5f) {
-            nextAnim = ENHORSE_ANIM_WHINNEY;
+            nextAnimIndex = ENHORSE_ANIM_WHINNY;
         } else {
-            nextAnim = ENHORSE_ANIM_IDLE;
+            nextAnimIndex = ENHORSE_ANIM_IDLE;
         }
         EnHorse_IdleAnimSounds(this, play);
         this->skin.skelAnime.playSpeed = 1.0f;
     }
 
-    if ((nextAnim == ENHORSE_ANIM_GALLOP) || (nextAnim == ENHORSE_ANIM_TROT) || (nextAnim == ENHORSE_ANIM_WALK)) {
+    if ((nextAnimIndex == ENHORSE_ANIM_GALLOP) || (nextAnimIndex == ENHORSE_ANIM_TROT) ||
+        (nextAnimIndex == ENHORSE_ANIM_WALK)) {
         if (playerDistToHome < 300.0f) {
             yaw = player->actor.shape.rot.y;
             yaw += ((Actor_YawBetweenActors(&this->actor, &player->actor) > 0) ? 1 : -1) * 0x3FFF;
@@ -3034,35 +3045,36 @@ void EnHorse_FleePlayer(EnHorse* this, PlayState* play) {
 
     animFinished = SkelAnime_Update(&this->skin.skelAnime);
 
-    if (((this->animationIdx == ENHORSE_ANIM_IDLE) || (this->animationIdx == ENHORSE_ANIM_WHINNEY)) &&
-        ((nextAnim == ENHORSE_ANIM_GALLOP) || (nextAnim == ENHORSE_ANIM_TROT) || (nextAnim == ENHORSE_ANIM_WALK))) {
-        this->animationIdx = nextAnim;
-        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimationHeaders[this->type][nextAnim]), ANIMMODE_ONCE, -3.0f);
-        if (this->animationIdx == ENHORSE_ANIM_GALLOP) {
+    if (((this->animIndex == ENHORSE_ANIM_IDLE) || (this->animIndex == ENHORSE_ANIM_WHINNY)) &&
+        ((nextAnimIndex == ENHORSE_ANIM_GALLOP) || (nextAnimIndex == ENHORSE_ANIM_TROT) ||
+         (nextAnimIndex == ENHORSE_ANIM_WALK))) {
+        this->animIndex = nextAnimIndex;
+        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                         Animation_GetLastFrame(sAnimationHeaders[this->type][nextAnimIndex]), ANIMMODE_ONCE, -3.0f);
+        if (this->animIndex == ENHORSE_ANIM_GALLOP) {
             func_8087C1C0(this);
-        } else if (this->animationIdx == ENHORSE_ANIM_TROT) {
+        } else if (this->animIndex == ENHORSE_ANIM_TROT) {
             func_8087C178(this);
         }
     } else if (animFinished) {
-        if (nextAnim == ENHORSE_ANIM_GALLOP) {
+        if (nextAnimIndex == ENHORSE_ANIM_GALLOP) {
             func_8087C1C0(this);
-        } else if (nextAnim == ENHORSE_ANIM_TROT) {
+        } else if (nextAnimIndex == ENHORSE_ANIM_TROT) {
             func_8087C178(this);
         }
 
-        if ((this->animationIdx == ENHORSE_ANIM_IDLE) || (this->animationIdx == ENHORSE_ANIM_WHINNEY)) {
-            if (nextAnim != this->animationIdx) {
-                this->animationIdx = nextAnim;
-                Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                                 Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]),
-                                 ANIMMODE_ONCE, -3.0f);
+        if ((this->animIndex == ENHORSE_ANIM_IDLE) || (this->animIndex == ENHORSE_ANIM_WHINNY)) {
+            if (nextAnimIndex != this->animIndex) {
+                this->animIndex = nextAnimIndex;
+                Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                                 Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE,
+                                 -3.0f);
             } else {
                 if (Rand_ZeroOne() > 0.5f) {
-                    this->animationIdx = ENHORSE_ANIM_IDLE;
+                    this->animIndex = ENHORSE_ANIM_IDLE;
                     this->stateFlags &= ~ENHORSE_SANDDUST_SOUND;
                 } else {
-                    this->animationIdx = ENHORSE_ANIM_WHINNEY;
+                    this->animIndex = ENHORSE_ANIM_WHINNY;
                     if (this->stateFlags & ENHORSE_DRAW) {
                         if (this->type == HORSE_TYPE_2) {
                             Audio_PlaySfxAtPos(&this->unk_218, NA_SE_EV_KID_HORSE_GROAN);
@@ -3071,26 +3083,25 @@ void EnHorse_FleePlayer(EnHorse* this, PlayState* play) {
                         }
                     }
                 }
-                Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                                 Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]),
-                                 ANIMMODE_ONCE, -3.0f);
+                Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                                 Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE,
+                                 -3.0f);
             }
-        } else if (nextAnim != this->animationIdx) {
-            this->animationIdx = nextAnim;
-            Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                             Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
+        } else if (nextAnimIndex != this->animIndex) {
+            this->animIndex = nextAnimIndex;
+            Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                             Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE,
                              -3.0f);
         } else {
-            Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                             Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
+            Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                             Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE,
                              0.0f);
         }
-    } else if ((this->animationIdx == ENHORSE_ANIM_WALK) &&
-               ((nextAnim == ENHORSE_ANIM_IDLE) || (nextAnim == ENHORSE_ANIM_WHINNEY))) {
-        this->animationIdx = nextAnim;
-        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
-                         -3.0f);
+    } else if ((this->animIndex == ENHORSE_ANIM_WALK) &&
+               ((nextAnimIndex == ENHORSE_ANIM_IDLE) || (nextAnimIndex == ENHORSE_ANIM_WHINNY))) {
+        this->animIndex = nextAnimIndex;
+        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
     }
 }
 
@@ -3107,21 +3118,20 @@ void func_80883B70(EnHorse* this, CsCmdActorAction* action) {
 
 void func_80883BEC(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
     func_80883B70(this, action);
-    this->animationIdx = ENHORSE_ANIM_IDLE;
+    this->animIndex = ENHORSE_ANIM_IDLE;
     this->unk_3E0 = 1;
     this->stateFlags &= ~ENHORSE_SANDDUST_SOUND;
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, 0.0f);
     this->stateFlags |= ENHORSE_SANDDUST_SOUND;
 }
 
 void func_80883CB0(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
     EnHorse_IdleAnimSounds(this, play);
     if (SkelAnime_Update(&this->skin.skelAnime)) {
-        this->animationIdx = ENHORSE_ANIM_IDLE;
-        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
-                         0.0f);
+        this->animIndex = ENHORSE_ANIM_IDLE;
+        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, 0.0f);
     }
 }
 
@@ -3168,36 +3178,34 @@ void func_80883F98(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
 void func_80884010(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
     func_80883B70(this, action);
     this->unk_3E0 = 5;
-    this->animationIdx = ENHORSE_ANIM_WALK;
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, -3.0f);
+    this->animIndex = ENHORSE_ANIM_WALK;
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
 }
 
 void func_808840C4(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
     EnHorse_PlayWalkingSound(this);
     Cutscene_ActorTranslateAndYaw(&this->actor, play, this->unk_530);
     if (SkelAnime_Update(&this->skin.skelAnime)) {
-        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
-                         0.0f);
+        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, 0.0f);
     }
 }
 
 void func_80884194(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
     func_80883B70(this, action);
     this->unk_3E0 = 6;
-    this->animationIdx = ENHORSE_ANIM_GALLOP;
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, -3.0f);
+    this->animIndex = ENHORSE_ANIM_GALLOP;
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
     func_8087C1C0(this);
 }
 
 void func_8088424C(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
     Cutscene_ActorTranslateAndYaw(&this->actor, play, this->unk_530);
     if (SkelAnime_Update(&this->skin.skelAnime)) {
-        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
-                         0.0f);
+        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, 0.0f,
+                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, 0.0f);
         func_8087C1C0(this);
     }
 }
@@ -3308,8 +3316,8 @@ void func_80884718(EnHorse* this, PlayState* play) {
 
 void func_80884868(EnHorse* this) {
     this->action = ENHORSE_ACT_23;
-    this->animationIdx = ENHORSE_ANIM_WALK;
-    Animation_PlayLoop(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx]);
+    this->animIndex = ENHORSE_ANIM_WALK;
+    Animation_PlayLoop(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex]);
     this->stateFlags |= ENHORSE_UNRIDEABLE;
 }
 
@@ -3329,10 +3337,10 @@ void func_808848C8(EnHorse* this, PlayState* play) {
 
 void func_80884994(EnHorse* this) {
     this->unk_534 = -1;
-    this->animationIdx = ENHORSE_ANIM_TROT;
+    this->animIndex = ENHORSE_ANIM_TROT;
     this->action = ENHORSE_ACT_24;
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 2.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, -3.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 2.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
 }
 
 void func_80884A40(EnHorse* this, PlayState* play) {
@@ -3340,43 +3348,42 @@ void func_80884A40(EnHorse* this, PlayState* play) {
     s32 sp40;
     s32 temp_v0;
 
-    if (this->animationIdx == ENHORSE_ANIM_WHINNEY) {
+    if (this->animIndex == ENHORSE_ANIM_WHINNY) {
         temp_v0 = ENHORSE_ANIM_IDLE;
     } else {
-        temp_v0 = this->animationIdx;
+        temp_v0 = this->animIndex;
     }
 
     sp40 = sp44[this->unk_538] != temp_v0;
 
     if (SkelAnime_Update(&this->skin.skelAnime) || sp40) {
-        this->animationIdx = sp44[this->unk_538];
-        if ((this->animationIdx == ENHORSE_ANIM_IDLE) && (Rand_ZeroOne() < 0.5f)) {
-            this->animationIdx = ENHORSE_ANIM_WHINNEY;
+        this->animIndex = sp44[this->unk_538];
+        if ((this->animIndex == ENHORSE_ANIM_IDLE) && (Rand_ZeroOne() < 0.5f)) {
+            this->animIndex = ENHORSE_ANIM_WHINNY;
         }
 
         if (sp40) {
-            if (this->animationIdx == ENHORSE_ANIM_IDLE) {
-                Animation_MorphToPlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx],
-                                          -3.0f);
+            if (this->animIndex == ENHORSE_ANIM_IDLE) {
+                Animation_MorphToPlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], -3.0f);
             } else {
-                Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 2.0f, 0.0f,
-                                 Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]),
-                                 ANIMMODE_ONCE, -3.0f);
+                Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 2.0f, 0.0f,
+                                 Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE,
+                                 -3.0f);
             }
-        } else if (this->animationIdx == ENHORSE_ANIM_IDLE) {
-            Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx]);
+        } else if (this->animIndex == ENHORSE_ANIM_IDLE) {
+            Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex]);
         } else {
-            Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 2.0f, 0.0f,
-                             Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
+            Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 2.0f, 0.0f,
+                             Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE,
                              0.0f);
         }
 
         if ((this->unk_538 == OBJ_UM_ANIM_TROT) || (this->unk_538 == OBJ_UM_ANIM_GALLOP)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HORSE_RUN);
         } else if (this->unk_538 == OBJ_UM_ANIM_IDLE) {
-            if (this->animationIdx == ENHORSE_ANIM_IDLE) {
+            if (this->animIndex == ENHORSE_ANIM_IDLE) {
                 EnHorse_IdleAnimSounds(this, play);
-            } else if (this->animationIdx == ENHORSE_ANIM_WHINNEY) {
+            } else if (this->animIndex == ENHORSE_ANIM_WHINNY) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HORSE_GROAN);
             }
         }
@@ -3390,11 +3397,11 @@ void func_80884D04(EnHorse* this, PlayState* play) {
     this->action = ENHORSE_ACT_25;
     this->unk_540 = this->actor.world.pos;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_INGO_HORSE_NEIGH);
-    this->animationIdx = ENHORSE_ANIM_GALLOP;
+    this->animIndex = ENHORSE_ANIM_GALLOP;
     playSpeed = this->actor.speedXZ * 0.2f;
-    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx],
-                     sPlaybackSpeeds[this->animationIdx] * playSpeed * 2.5f, 0.0f,
-                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex],
+                     sPlaybackSpeeds[this->animIndex] * playSpeed * 2.5f, 0.0f,
+                     Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, 0.0f);
 }
 
 // Action func: EnHorse_UpdateBandit?
@@ -3406,10 +3413,9 @@ void func_80884E0C(EnHorse* this, PlayState* play) {
     this->skin.skelAnime.playSpeed = playSpeed;
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
-        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx],
-                         sPlaybackSpeeds[this->animationIdx] * playSpeed * 2.5f, 0.0f,
-                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE,
-                         0.0f);
+        Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex],
+                         sPlaybackSpeeds[this->animIndex] * playSpeed * 2.5f, 0.0f,
+                         Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, 0.0f);
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_HORSE_RUN);
     }
 
@@ -3421,7 +3427,7 @@ void func_80884E0C(EnHorse* this, PlayState* play) {
     if (((this->unk_550 == 5) || (this->unk_550 == 7)) && (Player_GetMask(play) != PLAYER_MASK_CIRCUS_LEADER)) {
         this->rider->unk488 = 7;
     } else {
-        EnHorse_SetIngoAnimation(this->animationIdx, this->skin.skelAnime.curFrame, this->unk_394 & 1,
+        EnHorse_SetIngoAnimation(this->animIndex, this->skin.skelAnime.curFrame, this->unk_394 & 1,
                                  &this->rider->unk488);
     }
 
@@ -3480,7 +3486,7 @@ s32 EnHorse_CalcFloorHeight(EnHorse* this, PlayState* play, Vec3f* pos, Collisio
  */
 void EnHorse_ObstructMovement(EnHorse* this, PlayState* play, s32 obstacleType, s32 galloping) {
     if (this->action != ENHORSE_ACT_HBA) {
-        if ((this->action == ENHORSE_ACT_MOUNTED_IDLE) || (this->action == ENHORSE_ACT_MOUNTED_IDLE_WHINNEYING)) {
+        if ((this->action == ENHORSE_ACT_MOUNTED_IDLE) || (this->action == ENHORSE_ACT_MOUNTED_IDLE_WHINNYING)) {
             this->actor.world.pos = this->actor.prevPos;
             this->actor.world.rot.y -= 0x640;
             this->actor.speedXZ = 0.0f;
@@ -3495,7 +3501,7 @@ void EnHorse_ObstructMovement(EnHorse* this, PlayState* play, s32 obstacleType, 
             this->actor.world.pos = this->lastPos;
             this->stateFlags |= ENHORSE_OBSTACLE;
             if (this->playerControlled == 0) {
-                if (this->animationIdx != 3) {}
+                if (this->animIndex != 3) {}
             } else if (this->action != ENHORSE_ACT_REVERSE) {
                 if (this->stateFlags & ENHORSE_JUMPING) {
                     this->stateFlags &= ~ENHORSE_JUMPING;
@@ -4155,7 +4161,7 @@ static EnHorseActionFunc sActionFuncs[] = {
     func_808819D8,
     func_80881398,
     EnHorse_MountedIdle,
-    EnHorse_MountedIdleWhinneying,
+    EnHorse_MountedIdleWhinnying,
     EnHorse_MountedTurn,
     EnHorse_MountedWalk,
     EnHorse_MountedTrot,
@@ -4212,7 +4218,7 @@ void EnHorse_Update(Actor* thisx, PlayState* play2) {
 
     this->stateFlags &= ~ENHORSE_OBSTACLE;
     this->unk_3EC = thisx->world.rot.y;
-    if ((this->animationIdx == ENHORSE_ANIM_STOPPING) || (this->animationIdx == ENHORSE_ANIM_REARING)) {
+    if ((this->animIndex == ENHORSE_ANIM_STOPPING) || (this->animIndex == ENHORSE_ANIM_REARING)) {
         this->skin.skelAnime.jointTable[0].y += 0x154;
     }
 
@@ -4245,7 +4251,7 @@ void EnHorse_Update(Actor* thisx, PlayState* play2) {
                 this->rider->actor.world.pos.z = thisx->world.pos.z;
                 this->rider->actor.shape.rot.x = thisx->shape.rot.x;
                 this->rider->actor.shape.rot.y = thisx->shape.rot.y;
-            } else if (this->action == ENHORSE_ACT_MOUNTED_IDLE_WHINNEYING) {
+            } else if (this->action == ENHORSE_ACT_MOUNTED_IDLE_WHINNYING) {
                 EnIn* in = this->rider;
                 s16 jnt = in->jointTable[0].y;
 
@@ -4272,7 +4278,7 @@ void EnHorse_Update(Actor* thisx, PlayState* play2) {
         }
 
         if ((this->action != ENHORSE_ACT_INGO_RACE) && (this->action != ENHORSE_ACT_MOUNTED_IDLE) &&
-            (this->action != ENHORSE_ACT_MOUNTED_IDLE_WHINNEYING)) {
+            (this->action != ENHORSE_ACT_MOUNTED_IDLE_WHINNYING)) {
             EnHorse_TiltBody(this, play);
         }
 
@@ -4435,7 +4441,7 @@ s32 EnHorse_GetMountSide(EnHorse* this, PlayState* play) {
         return 0;
     }
 
-    if ((this->animationIdx != ENHORSE_ANIM_IDLE) && (this->animationIdx != ENHORSE_ANIM_WHINNEY)) {
+    if ((this->animIndex != ENHORSE_ANIM_IDLE) && (this->animIndex != ENHORSE_ANIM_WHINNY)) {
         return 0;
     }
 
@@ -4485,7 +4491,7 @@ void EnHorse_PostDraw(Actor* thisx, PlayState* play, Skin* skin) {
 
     SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &sp38, &this->unk_218, &sp34);
 
-    if ((this->animationIdx == ENHORSE_ANIM_IDLE) && (this->action != ENHORSE_ACT_FROZEN) &&
+    if ((this->animIndex == ENHORSE_ANIM_IDLE) && (this->action != ENHORSE_ACT_FROZEN) &&
         (((curFrame > 40.0f) && (curFrame < 45.0f) && (this->type == 0)) ||
          ((curFrame > 28.0f) && (curFrame < 33.0f) && (this->type == 1)))) {
         if (Rand_ZeroOne() < 0.02f) {
@@ -4539,7 +4545,7 @@ void EnHorse_PostDraw(Actor* thisx, PlayState* play, Skin* skin) {
                 }
                 EnHorse_RandomOffset(&sp64, 10.0f, &this->backRightHoof);
             }
-        } else if (this->animationIdx == ENHORSE_ANIM_GALLOP) {
+        } else if (this->animIndex == ENHORSE_ANIM_GALLOP) {
             if ((curFrame > 14.0f) && (curFrame < 16.0f) && (Rand_ZeroOne() < 0.02f)) {
                 this->dustFlags |= 1;
                 if (this->type == HORSE_TYPE_2) {

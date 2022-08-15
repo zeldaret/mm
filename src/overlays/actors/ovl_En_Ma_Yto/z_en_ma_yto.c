@@ -59,7 +59,7 @@ void EnMaYto_PostMilkRunEnd(EnMaYto* this, PlayState* play);
 void EnMaYto_DefaultStartDialogue(EnMaYto* this, PlayState* play);
 void EnMaYto_DinnerStartDialogue(EnMaYto* this, PlayState* play);
 void EnMaYto_BarnStartDialogue(EnMaYto* this, PlayState* play);
-void EnMaYto_ChangeAnim(EnMaYto* this, s32 index);
+void EnMaYto_ChangeAnim(EnMaYto* this, s32 animIndex);
 void EnMaYto_UpdateEyes(EnMaYto* this);
 void func_80B90E50(EnMaYto* this, s16);
 void EnMaYto_SetRomaniFaceExpression(EnMaYto* this, s16 overrideEyeTexIndex, s16 mouthTexIndex);
@@ -380,10 +380,10 @@ void EnMaYto_KeepLookingForRomani(EnMaYto* this, PlayState* play) {
 
 void EnMaYto_SetupDefaultWait(EnMaYto* this) {
     if (this->actor.shape.rot.y == this->actor.home.rot.y) {
-        this->currentAnim = 11;
+        this->animIndex = 11;
         EnMaYto_ChangeAnim(this, 11);
     } else {
-        this->currentAnim = 1;
+        this->animIndex = 1;
         EnMaYto_ChangeAnim(this, 1);
     }
 
@@ -398,8 +398,8 @@ void EnMaYto_DefaultWait(EnMaYto* this, PlayState* play) {
 
     direction = rotY - this->actor.yawTowardsPlayer;
     if (Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x3000, 0x100) == 0 &&
-        this->currentAnim == 1) {
-        this->currentAnim = 11;
+        this->animIndex == 1) {
+        this->animIndex = 11;
         EnMaYto_ChangeAnim(this, 11);
     }
 
@@ -1268,10 +1268,10 @@ void EnMaYto_BarnStartDialogue(EnMaYto* this, PlayState* play) {
     }
 }
 
-void EnMaYto_ChangeAnim(EnMaYto* this, s32 index) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[index].animation, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[index].animation), sAnimationInfo[index].mode,
-                     sAnimationInfo[index].morphFrames);
+void EnMaYto_ChangeAnim(EnMaYto* this, s32 animIndex) {
+    Animation_Change(&this->skelAnime, sAnimationInfo[animIndex].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationInfo[animIndex].animation), sAnimationInfo[animIndex].mode,
+                     sAnimationInfo[animIndex].morphFrames);
 }
 
 void func_80B90C78(EnMaYto* this, PlayState* play) {

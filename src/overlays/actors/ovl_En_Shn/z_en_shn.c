@@ -68,8 +68,8 @@ void func_80AE6130(EnShn* this) {
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 func_80AE615C(EnShn* this, s32 arg1) {
-    static AnimationInfoS sAnimations[] = {
+s32 func_80AE615C(EnShn* this, s32 animIndex) {
+    static AnimationInfoS sAnimationInfo[] = {
         { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, 0 },
         { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, -4 },
         { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, 0 },
@@ -78,12 +78,12 @@ s32 func_80AE615C(EnShn* this, s32 arg1) {
     s32 phi_v0 = 0;
     s32 phi_v1 = 0;
 
-    if (arg1 != this->unk_2E8) {
+    if (animIndex != this->unk_2E8) {
         phi_v0 = 1;
     }
     if (phi_v0 != 0) {
-        this->unk_2E8 = arg1;
-        phi_v1 = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
+        this->unk_2E8 = animIndex;
+        phi_v1 = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->playSpeed = this->skelAnime.playSpeed;
     }
     return phi_v1;

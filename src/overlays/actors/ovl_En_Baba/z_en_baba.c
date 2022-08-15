@@ -62,7 +62,7 @@ const ActorInit En_Baba_InitVars = {
     (ActorFunc)EnBaba_Draw,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &gBbaIdleHoldingBagAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &gBbaIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &gBbaWalkingHoldingBagAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
@@ -488,7 +488,7 @@ void EnBaba_HandleSchedule(EnBaba* this, PlayState* play) {
             this->actor.speedXZ = 0.0f;
             Enemy_StartFinishingBlow(play, &this->actor);
             this->stateFlags |= BOMB_SHOP_LADY_STATE_KNOCKED_OVER;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnBaba_KnockedOver;
             break;
     }
@@ -506,7 +506,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
     if (play->sceneNum == SCENE_BOMYA) {
         this->stateFlags |= BOMB_SHOP_LADY_STATE_VISIBLE;
         this->animIndex = BOMB_SHOP_LADY_ANIM_IDLE;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnBaba_Idle;
     } else if (play->sceneNum == SCENE_BACKTOWN) {
         if ((BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_FOLLOW_SCHEDULE) &&
@@ -520,7 +520,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
 
             this->sakonDeadTimer = 50;
             this->animIndex = BOMB_SHOP_LADY_ANIM_WALKING_HOLDING_BAG;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnBaba_FollowSchedule;
         } else if ((BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_IDLE) &&
                    (gSaveContext.save.entrance == ENTRANCE(NORTH_CLOCK_TOWN, 7))) {
@@ -536,7 +536,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
                 this->animIndex = BOMB_SHOP_LADY_ANIM_IDLE;
             }
 
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->stateFlags |= BOMB_SHOP_LADY_STATE_AUTOTALK;
             this->actionFunc = EnBaba_Idle;
         } else {
@@ -548,15 +548,15 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
         if (BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_SWAY) {
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->animIndex = BOMB_SHOP_LADY_ANIM_SWAY;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnBaba_DoNothing;
         } else if (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != 0x3F) {
             this->animIndex = BOMB_SHOP_LADY_ANIM_WALKING_HOLDING_BAG;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnBaba_Walk;
         } else {
             this->animIndex = BOMB_SHOP_LADY_ANIM_IDLE_HOLDING_BAG;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnBaba_FaceForward;
         }
     }
@@ -683,7 +683,7 @@ void EnBaba_FollowSchedule(EnBaba* this, PlayState* play) {
 
 void EnBaba_KnockedOver(EnBaba* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 endFrame = Animation_GetLastFrame(sAnimations[this->animIndex].animation);
+    s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     this->collider.dim.height = 37;
     this->collider.dim.radius = 23;
@@ -695,7 +695,7 @@ void EnBaba_KnockedOver(EnBaba* this, PlayState* play) {
 
         if (curFrame == endFrame) {
             this->animIndex = BOMB_SHOP_LADY_ANIM_LYING_DOWN;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
     } else {
         if ((gSaveContext.save.weekEventReg[79] & 0x40) && (DECR(this->sakonDeadTimer) == 0)) {
