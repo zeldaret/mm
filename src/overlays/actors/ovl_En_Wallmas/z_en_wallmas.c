@@ -248,7 +248,7 @@ void EnWallmas_WaitToDrop(EnWallmas* this, PlayState* play) {
         !(player->actor.bgCheckFlags & 1) ||
         ((WALLMASTER_GET_TYPE(&this->actor) == WALLMASTER_TYPE_PROXIMITY) &&
          (Math_Vec3f_DistXZ(&this->actor.home.pos, playerPos) > (120.f + this->detectionRadius)))) {
-        Audio_StopSfxById(NA_SE_EN_FALL_AIM);
+        AudioSfx_StopById(NA_SE_EN_FALL_AIM);
         this->timer = 130;
     }
 

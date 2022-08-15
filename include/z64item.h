@@ -210,7 +210,7 @@ typedef enum {
     /* 0x59 */ ITEM_WALLET_DEFAULT,
     /* 0x5A */ ITEM_WALLET_ADULT,
     /* 0x5B */ ITEM_WALLET_GIANT,
-    /* 0x5C */ ITEM_FISHING_POLE,
+    /* 0x5C */ ITEM_FISHING_ROD,
     /* 0x5D */ ITEM_REMAINS_ODOLWA,
     /* 0x5E */ ITEM_REMAINS_GOHT,
     /* 0x5F */ ITEM_REMAINS_GYORG,

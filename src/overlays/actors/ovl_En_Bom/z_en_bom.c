@@ -610,7 +610,7 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
             Matrix_MultVec3f(&D_80872EE0, &this->actor.home.pos);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_015FA0);
+            gSPDisplayList(POLY_OPA_DISP++, gBombCapDL);
 
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_RotateXS(0x4000, MTXMODE_APPLY);
@@ -619,7 +619,7 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
             gDPPipeSync(POLY_OPA_DISP++);
             gDPSetEnvColor(POLY_OPA_DISP++, (s8)this->unk_1F4, 0, 40, 255);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, (s8)this->unk_1F4, 0, 40, 255);
-            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_015DB0);
+            gSPDisplayList(POLY_OPA_DISP++, gBombBodyDL);
         } else {
             Vec3f sp58;
             Vec3f sp4C;

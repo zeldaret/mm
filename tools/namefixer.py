@@ -146,7 +146,11 @@ wordReplace = {
     "ShrinkWindow_Fini": "ShrinkWindow_Destroy",
     "func_801A89A8": "Audio_QueueSeqCmd",
     "func_8019F1C0": "Audio_PlaySfxAtPos",
-    "func_801A72CC": "Audio_StopSfxByPos",
+    "func_801A5BD0": "AudioSfx_MuteBanks",
+    "func_801A72CC": "AudioSfx_StopByPos",
+    "Audio_StopSfxByPos": "AudioSfx_StopByPos",
+    "func_801A7328": "AudioSfx_StopByPosAndId",
+    "func_801A75E8": "AudioSfx_StopById",
     "SkelAnime_LodDrawLimb": "SkelAnime_DrawLimbLod",
     "SkelAnime_LodDraw": "SkelAnime_DrawLod",
     "SkelAnime_LodDrawLimbSV": "SkelAnime_DrawFlexLimbLod",
@@ -257,7 +261,8 @@ wordReplace = {
     "func_800B8B84": "Actor_PickUpNearby",
     "func_800B8BB0": "Actor_LiftActor",
     "func_800B8BD0": "Actor_PickUpFar",
-    "func_801A5CFC": "Audio_PlaySfxGeneral",
+    "func_801A5CFC": "AudioSfx_PlaySfx",
+    "Audio_PlaySfxGeneral": "AudioSfx_PlaySfx",
     "func_800BBDAC": "Actor_SpawnFloorDustRing",
     "func_800B8708": "Player_GetExchangeItemId",
     "func_801233E4": "Player_InCsMode",
@@ -606,6 +611,9 @@ wordReplace = {
 
     "ActorCutscene_GetCurrentCamera": "ActorCutscene_GetCurrentSubCamId",
 
+    "Entrance_CreateIndex": "Entrance_Create",
+    "Entrance_CreateIndexFromSpawn": "Entrance_CreateFromSpawn",
+
     # Structs
     "ActorAnimationEntry": "AnimationInfo",
     "ActorAnimationEntryS": "AnimationInfoS",
@@ -650,7 +658,7 @@ wordReplace = {
     "gSaveContext.playerName": "gSaveContext.save.playerData.playerName",
     "gSaveContext.inventory": "gSaveContext.save.inventory",
     "gSaveContext.equippedMask": "gSaveContext.save.equippedMask",
-    "gSaveContext.entranceIndex": "gSaveContext.save.entranceIndex",
+    "gSaveContext.entranceIndex": "gSaveContext.save.entrance",
     "gSaveContext.time": "gSaveContext.save.time",
     "gSaveContext.unk_14": "gSaveContext.save.daySpeed",
     "gSaveContext.unk_FE6": "gSaveContext.save.bombersCaughtNum",
@@ -668,6 +676,7 @@ wordReplace = {
     "gSaveContext.unk_3F58": "gSaveContext.sunsSongState",
     "gSaveContext.equips.buttonItems": "gSaveContext.save.equips.buttonItems",
     "gSaveContext.unk_48C8": "gSaveContext.dungeonIndex",
+    "gSaveContext.save.entranceIndex": "gSaveContext.save.entrance",
 
     "player->unk_A87": "player->exchangeItemId",
     "player->leftHandActor": "player->heldActor",
@@ -706,6 +715,7 @@ wordReplace = {
     "play->msgCtx.unk12023": "play->msgCtx.stateTimer",
     "play->msgCtx.unk1202A": "play->msgCtx.ocarinaMode",
     "play->msgCtx.unk1202C": "play->msgCtx.ocarinaAction",
+    "play->nextEntranceIndex": "play->nextEntrance",
 
     "play->sceneLoadFlag": "play->transitionTrigger",
     "play->unk_18B4A": "play->transitionMode",
@@ -725,6 +735,22 @@ wordReplace = {
     "CUR_UPG_VALUE_VOID": "GET_CUR_UPG_VALUE",
     "ICHAIN_F32_DIV1000(minVelocityY,": "ICHAIN_F32_DIV1000(terminalVelocity,",
     "ICHAIN_F32(minVelocityY,": "ICHAIN_F32(terminalVelocity,",
+
+    "EXCH_ITEM_MINUS1": "PLAYER_AP_MINUS1",
+    "EXCH_ITEM_NONE": "PLAYER_AP_NONE",
+    "EXCH_ITEM_PICTO_BOX": "PLAYER_AP_PICTO_BOX",
+    "EXCH_ITEM_1E": "PLAYER_AP_BOTTLE_MUSHROOM",
+    "EXCH_ITEM_MOON_TEAR": "PLAYER_AP_MOON_TEAR",
+    "EXCH_ITEM_DEED_LAND": "PLAYER_AP_DEED_LAND",
+    "EXCH_ITEM_ROOM_KEY": "PLAYER_AP_ROOM_KEY",
+    "EXCH_ITEM_LETTER_TO_KAFEI": "PLAYER_AP_LETTER_TO_KAFEI",
+    "EXCH_ITEM_2E": "PLAYER_AP_MAGIC_BEANS",
+    "EXCH_ITEM_DEED_SWAMP": "PLAYER_AP_DEED_SWAMP",
+    "EXCH_ITEM_DEED_MOUNTAIN": "PLAYER_AP_DEED_MOUNTAIN",
+    "EXCH_ITEM_DEED_OCEAN": "PLAYER_AP_DEED_OCEAN",
+    "EXCH_ITEM_LETTER_MAMA": "PLAYER_AP_LETTER_MAMA",
+    "ITEM_FISHING_POLE": "ITEM_FISHING_ROD",
+    "PLAYER_AP_FISHING_POLE": "PLAYER_AP_FISHING_ROD",
 
     # Example of custom behaviour:
     # "PLAYER": ("GET_PLAYER(play)", {"ignore": (-1, '"PLAYER"')}), # ignore "PLAYER" in sSoundBankNames

@@ -1657,10 +1657,10 @@ void func_80B4627C(EnInvadepoh* this, PlayState* play) {
             func_80B46F88(this);
         }
     } else if (D_80B4E940 == 3) {
-        if (gSaveContext.save.entranceIndex == 0x6460) {
+        if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 6)) {
             func_80B471C0(this);
 
-        } else if (gSaveContext.save.entranceIndex == 0x6470) {
+        } else if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 7)) {
             func_80B47248(this);
         } else {
             func_80B47248(this);
@@ -1757,7 +1757,7 @@ void EnInvadepoh_InitRomani(EnInvadepoh* this, PlayState* play) {
         }
     } else if (temp != 8) {
         if (temp == 9) {
-            if (gSaveContext.save.entranceIndex != 0x6460) {
+            if (gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 6)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -1993,7 +1993,7 @@ void func_80B47108(EnInvadepoh* this, PlayState* play) {
     }
     this->actionTimer--;
     if (this->actionTimer <= 0) {
-        play->nextEntranceIndex = 0x6460;
+        play->nextEntrance = ENTRANCE(ROMANI_RANCH, 6);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_73;
@@ -2011,7 +2011,7 @@ void func_80B471C0(EnInvadepoh* this) {
 
 void func_80B471E0(EnInvadepoh* this, PlayState* play) {
     if (D_80B4E998) {
-        play->nextEntranceIndex = 0x6470;
+        play->nextEntrance = ENTRANCE(ROMANI_RANCH, 7);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_72;
@@ -2034,7 +2034,7 @@ void func_80B47278(EnInvadepoh* this) {
 }
 
 void func_80B47298(EnInvadepoh* this, PlayState* play) {
-    play->nextEntranceIndex = 0x6400;
+    play->nextEntrance = ENTRANCE(ROMANI_RANCH, 0);
     gSaveContext.nextCutsceneIndex = 0xFFF3;
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_72;

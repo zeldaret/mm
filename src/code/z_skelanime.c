@@ -924,30 +924,30 @@ s16 Animation_GetLastFrame2(LegacyAnimationHeader* animation) {
 }
 
 /**
- * Linearly interpolates the start and tactoret frame tables with the given weight, putting the result in dst
+ * Linearly interpolates the start and target frame tables with the given weight, putting the result in dst
  */
-void SkelAnime_InterpFrameTable(s32 limbCount, Vec3s* dst, Vec3s* start, Vec3s* tactoret, f32 weight) {
+void SkelAnime_InterpFrameTable(s32 limbCount, Vec3s* dst, Vec3s* start, Vec3s* target, f32 weight) {
     s32 i;
     s16 diff;
     s16 base;
 
     if (weight < 1.0f) {
-        for (i = 0; i < limbCount; i++, dst++, start++, tactoret++) {
+        for (i = 0; i < limbCount; i++, dst++, start++, target++) {
             base = start->x;
-            diff = tactoret->x - base;
+            diff = target->x - base;
             dst->x = (s16)(diff * weight) + base;
             base = start->y;
-            diff = tactoret->y - base;
+            diff = target->y - base;
             dst->y = (s16)(diff * weight) + base;
             base = start->z;
-            diff = tactoret->z - base;
+            diff = target->z - base;
             dst->z = (s16)(diff * weight) + base;
         }
     } else {
-        for (i = 0; i < limbCount; i++, dst++, tactoret++) {
-            dst->x = tactoret->x;
-            dst->y = tactoret->y;
-            dst->z = tactoret->z;
+        for (i = 0; i < limbCount; i++, dst++, target++) {
+            dst->x = target->x;
+            dst->y = target->y;
+            dst->z = target->z;
         }
     }
 }

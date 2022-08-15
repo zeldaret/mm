@@ -68,8 +68,8 @@ void func_80AE6130(EnShn* this) {
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 func_80AE615C(EnShn* this, s32 arg1) {
-    static AnimationInfoS sAnimations[] = {
+s32 func_80AE615C(EnShn* this, s32 animIndex) {
+    static AnimationInfoS sAnimationInfo[] = {
         { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, 0 },
         { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, -4 },
         { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, 0 },
@@ -78,12 +78,12 @@ s32 func_80AE615C(EnShn* this, s32 arg1) {
     s32 phi_v0 = 0;
     s32 phi_v1 = 0;
 
-    if (arg1 != this->unk_2E8) {
+    if (animIndex != this->unk_2E8) {
         phi_v0 = 1;
     }
     if (phi_v0 != 0) {
-        this->unk_2E8 = arg1;
-        phi_v1 = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
+        this->unk_2E8 = animIndex;
+        phi_v1 = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->playSpeed = this->skelAnime.playSpeed;
     }
     return phi_v1;
@@ -260,7 +260,7 @@ s32 func_80AE6704(Actor* thisx, PlayState* play) {
         case 6:
             gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
             func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
-            play->nextEntranceIndex = 0x8460;
+            play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_POISONED, 6);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;
             play->transitionType = TRANS_TYPE_03;
@@ -360,7 +360,7 @@ void EnShn_Init(Actor* thisx, PlayState* play) {
     this->unk_2E0 = 0;
     this->unk_2D8 = 0;
     this->unk_1D8 = 0;
-    if (gSaveContext.save.entranceIndex != 0xA820) {
+    if (gSaveContext.save.entrance != ENTRANCE(TOURIST_INFORMATION, 2)) {
         SubS_UpdateFlags(&this->unk_1D8, 3, 7);
         this->unk_2BE = 0;
     } else {

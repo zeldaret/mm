@@ -28,14 +28,14 @@ const ActorInit Dm_Nb_InitVars = {
     (ActorFunc)DmNb_Draw,
 };
 
-static AnimationInfoS D_80C1E200[] = { { &object_nb_Anim_000990, 1.0f, 0, -1, ANIMMODE_LOOP, 0 } };
+static AnimationInfoS sAnimationInfo[] = { { &object_nb_Anim_000990, 1.0f, 0, -1, ANIMMODE_LOOP, 0 } };
 
 s32 func_80C1DED0(DmNb* this, s32 arg1) {
     s32 ret = false;
 
     if (arg1 != this->unk1F0) {
         this->unk1F0 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80C1E200, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
     }
     return ret;
 }

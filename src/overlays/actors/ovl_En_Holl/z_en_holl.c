@@ -188,7 +188,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
                     func_8012EBF8(play, &play->roomCtx);
                 }
             } else if (this->type == EN_HOLL_TYPE_SCENE_CHANGER) {
-                play->nextEntranceIndex = play->setupExitList[EN_HOLL_GET_EXIT_LIST_INDEX(&this->actor)];
+                play->nextEntrance = play->setupExitList[EN_HOLL_GET_EXIT_LIST_INDEX(&this->actor)];
                 gSaveContext.unk_3DBB = 1;
                 Scene_SetExitFade(play);
                 play->transitionTrigger = TRANS_TRIGGER_START;

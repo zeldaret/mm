@@ -163,7 +163,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.gravity = 0.0f;
     SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
     this->skelAnime.curFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
     this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     this->unk_744.r = 255;
@@ -300,7 +300,7 @@ void func_80B5BB38(Color_RGB8* arg0, Color_RGB8* arg1, f32 arg2) {
 }
 
 void func_80B5BDA8(EnOt* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIndex);
     SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     this->actionFunc = func_80B5BE04;
 }
@@ -322,7 +322,7 @@ void func_80B5BE04(EnOt* this, PlayState* play) {
 }
 
 void func_80B5BE88(EnOt* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIndex);
     this->actionFunc = func_80B5BED4;
 }
 
@@ -337,7 +337,7 @@ void func_80B5BED4(EnOt* this, PlayState* play) {
 
 void func_80B5BF60(EnOt* this, PlayState* play) {
     this->unk_32C |= 0x40;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
     this->actionFunc = func_80B5BFB8;
 }
 
@@ -410,8 +410,8 @@ void func_80B5C25C(EnOt* this, PlayState* play) {
     if ((this->unk_33C == 2) && (this->unk_32C & 0x80) && (this->unk_360->unk_32C & 0x80)) {
         this->unk_32C |= 0x100;
         this->unk_360->unk_32C |= 0x100;
-        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 2, &this->animIdx);
-        SubS_ChangeAnimationBySpeedInfo(&this->unk_360->skelAnime, sAnimations, 2, &this->unk_360->animIdx);
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 2, &this->animIndex);
+        SubS_ChangeAnimationBySpeedInfo(&this->unk_360->skelAnime, sAnimations, 2, &this->unk_360->animIndex);
         this->actor.flags |= ACTOR_FLAG_8000000;
         this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
         this->unk_360->actor.flags |= ACTOR_FLAG_8000000;
@@ -489,7 +489,7 @@ void func_80B5C64C(EnOt* this, PlayState* play) {
 
 void func_80B5C684(EnOt* this, PlayState* play) {
     this->actor.speedXZ = 0.0f;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
     this->actionFunc = func_80B5C6DC;
 }
 
@@ -635,7 +635,7 @@ void func_80B5CCA0(EnOt* this, PlayState* play) {
 }
 
 void func_80B5CCF4(EnOt* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
     this->actionFunc = func_80B5CD40;
 }
 
@@ -676,7 +676,7 @@ void func_80B5CD40(EnOt* this, PlayState* play) {
 void func_80B5CE6C(EnOt* this, PlayState* play) {
     this->unk_384 = 0;
     this->unk_32C |= 0x20;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
     this->actionFunc = func_80B5CEC8;
 }
 
@@ -731,7 +731,7 @@ void func_80B5CEC8(EnOt* this, PlayState* play) {
 }
 
 void func_80B5D114(EnOt* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
     this->actionFunc = func_80B5D160;
 }
 
@@ -886,7 +886,7 @@ void func_80B5D648(EnOt* this, PlayState* play) {
     this->actorPath.pointOffset.z = 0.0f;
     this->actor.gravity = 0.0f;
     this->actor.speedXZ = 0.0f;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIndex);
     this->actor.flags |= ACTOR_FLAG_8000000;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
     Flags_SetSwitch(play, ENOT_GET_3F80(&this->actor));
@@ -929,7 +929,7 @@ void EnOt_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnOt* this = THIS;
 
-    if ((this->animIdx == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+    if ((this->animIndex == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SEAHORSE_SWIM);
     }
 

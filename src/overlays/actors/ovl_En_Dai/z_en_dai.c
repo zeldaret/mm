@@ -128,7 +128,7 @@ s32 func_80B3E5B4(EnDai* this, PlayState* play) {
 }
 
 s32 func_80B3E5DC(EnDai* this, s32 arg1) {
-    static AnimationInfoS D_80B3FBFC[] = {
+    static AnimationInfoS sAnimationInfo[] = {
         { &object_dai_Anim_0079E4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
         { &object_dai_Anim_0079E4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
         { &object_dai_Anim_007354, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
@@ -167,7 +167,7 @@ s32 func_80B3E5DC(EnDai* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_A70 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80B3FBFC, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
     }
 
     return ret;

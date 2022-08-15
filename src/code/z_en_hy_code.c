@@ -11,7 +11,7 @@
 #include "objects/object_boj/object_boj.h"
 #include "objects/object_os_anime/object_os_anime.h"
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gMamamuYanUnusedIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
@@ -45,15 +45,15 @@ s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
     s32 isChanged = false;
 
-    if (animIndex >= ENHY_ANIMATION_AOB_0 && animIndex < ENHY_ANIMATION_MAX) {
+    if (animIndex >= ENHY_ANIM_AOB_0 && animIndex < ENHY_ANIM_MAX) {
         isChanged = true;
-        frameCount = sAnimations[animIndex].frameCount;
+        frameCount = sAnimationInfo[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(&sAnimations[animIndex].animation->common);
+            frameCount = Animation_GetLastFrame(&sAnimationInfo[animIndex].animation->common);
         }
-        Animation_Change(skelAnime, sAnimations[animIndex].animation, sAnimations[animIndex].playSpeed,
-                         sAnimations[animIndex].startFrame, frameCount, sAnimations[animIndex].mode,
-                         sAnimations[animIndex].morphFrames);
+        Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed,
+                         sAnimationInfo[animIndex].startFrame, frameCount, sAnimationInfo[animIndex].mode,
+                         sAnimationInfo[animIndex].morphFrames);
     }
     return isChanged;
 }

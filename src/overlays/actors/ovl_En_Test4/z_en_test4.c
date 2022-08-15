@@ -399,7 +399,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     func_80A41FA4(this, play);
                 } else {
                     gSaveContext.screenScale = 0.0f;
-                    Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateIndexFromSpawn(0),
+                    Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0),
                                         player->unk_3CE, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0,
                                         player->unk_3CC);
                     func_80169EFC(&play->state);
@@ -442,20 +442,20 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
                      (play->sceneNum == SCENE_CLOCKTOWER))) {
                     s32 playerParams;
-                    u32 entranceIndex = gSaveContext.save.entranceIndex;
+                    u32 entrance = gSaveContext.save.entrance;
 
                     if ((play->actorCtx.unk5 & 2)) {
                         playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_TELESCOPE);
                     } else {
                         playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B);
                     }
-                    Play_SetRespawnData(&play->state, RESPAWN_MODE_RETURN, entranceIndex, player->unk_3CE, playerParams,
+                    Play_SetRespawnData(&play->state, RESPAWN_MODE_RETURN, entrance, player->unk_3CE, playerParams,
                                         &player->unk_3C0, player->unk_3CC);
 
                     if ((play->sceneNum == SCENE_TENMON_DAI) || (play->sceneNum == SCENE_00KEIKOKU)) {
-                        play->nextEntranceIndex = 0x5400;
+                        play->nextEntrance = ENTRANCE(TERMINA_FIELD, 0);
                     } else {
-                        play->nextEntranceIndex = 0xD800;
+                        play->nextEntrance = ENTRANCE(SOUTH_CLOCK_TOWN, 0);
                     }
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
                     play->transitionTrigger = TRANS_TRIGGER_START;
