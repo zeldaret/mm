@@ -68,13 +68,14 @@ void OceffWipe4_Draw(Actor* thisx, PlayState* play) {
     Vec3f quakeOffset;
 
     Camera_GetQuakeOffset(&quakeOffset, GET_ACTIVE_CAM(play));
+
     if (this->counter < 16) {
         z = Math_SinS(this->counter * 1024) * 1220.0f;
     } else {
         z = 1220.0f;
     }
 
-    vtxPtr = sOceffWipe4FrustumVtx;
+    vtxPtr = sScarecrowSongFrustumVtx;
     if (this->counter >= 30) {
         alpha = 12 * (50 - this->counter);
     } else {
@@ -98,15 +99,15 @@ void OceffWipe4_Draw(Actor* thisx, PlayState* play) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     if (this->actor.params == OCEFF_WIPE4_UNUSED) {
-        gSPDisplayList(POLY_XLU_DISP++, sOceffWipe4UnusedMaterialDL);
+        gSPDisplayList(POLY_XLU_DISP++, sScarecrowSongUnusedMaterialDL);
     } else {
-        gSPDisplayList(POLY_XLU_DISP++, sOceffWipe4MaterialDL);
+        gSPDisplayList(POLY_XLU_DISP++, sScarecrowSongMaterialDL);
     }
 
-    gSPDisplayList(POLY_XLU_DISP++, sOceffWipe4Material2DL);
+    gSPDisplayList(POLY_XLU_DISP++, sScarecrowSongMaterial2DL);
     gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, scroll * 2, scroll * -2, 32,
                                                      64, 1, scroll * -1, scroll, 32, 32));
-    gSPDisplayList(POLY_XLU_DISP++, &sOceffWipe4Material2DL[11]);
+    gSPDisplayList(POLY_XLU_DISP++, &sScarecrowSongMaterial2DL[11]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
