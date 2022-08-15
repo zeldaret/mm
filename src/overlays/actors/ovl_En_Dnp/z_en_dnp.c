@@ -304,7 +304,7 @@ void func_80B3D338(EnDnp* this, PlayState* play) {
         } else {
             this->actor.textId = 0x971;
             player->actor.textId = this->actor.textId;
-            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, EXCH_ITEM_MINUS1);
+            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, PLAYER_AP_MINUS1);
         }
     }
 }
@@ -409,7 +409,7 @@ void EnDnp_Update(Actor* thisx, PlayState* play) {
         if ((this->unk_322 & 0x400) && !(gSaveContext.save.weekEventReg[23] & 0x20)) {
             Actor_PickUp(&this->actor, play, GI_MAX, sp2C, sp28);
         }
-        func_8013C964(&this->actor, play, sp2C, sp28, EXCH_ITEM_NONE, this->unk_322 & 7);
+        func_8013C964(&this->actor, play, sp2C, sp28, PLAYER_AP_NONE, this->unk_322 & 7);
         Actor_SetFocus(&this->actor, 30.0f);
         func_80B3CC80(this, play);
     }
