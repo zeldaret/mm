@@ -3622,7 +3622,6 @@ void func_808304BC(Player* this, PlayState* play) {
     }
 }
 
-
 // EN_ARROW ammo related?
 s32 func_808305BC(PlayState* play, Player* this, ItemID* item, s32* typeParam) {
     if (this->itemActionParam == PLAYER_AP_NUT) {
@@ -16397,8 +16396,8 @@ void func_80852C04(Player* this, PlayState* play) {
             if (func_808482E0(play, this) && (this->unk_AE8 == 1)) {
                 Player_SetModels(this, Player_ActionToModelGroup(this, this->heldItemActionParam));
 
-                if ((this->getItemDrawId == GID_POWDER_KEG) || (this->getItemDrawId == GID_REMAINS_GYORG) || (this->getItemDrawId == GID_REMAINS_TWINMOLD) ||
-                    (this->getItemDrawId == GID_SWORD_RAZOR)) {
+                if ((this->getItemDrawId == GID_POWDER_KEG) || (this->getItemDrawId == GID_REMAINS_GYORG) ||
+                    (this->getItemDrawId == GID_REMAINS_TWINMOLD) || (this->getItemDrawId == GID_SWORD_RAZOR)) {
                     func_80838760(this);
                     func_80848250(play, this);
                     this->stateFlags1 &= ~PLAYER_STATE1_20000000;
