@@ -14,7 +14,7 @@ void ObjSwprize_Init(Actor* thisx, PlayState* play);
 void ObjSwprize_Destroy(Actor* thisx, PlayState* play);
 void ObjSwprize_Update(Actor* thisx, PlayState* play);
 
-void ObjSwprize_DoNothing(ObjSwprize* this, PlayState* play);
+void ObjSwprize_SetupDoNothing(ObjSwprize* this, PlayState* play);
 void func_80C25654(ObjSwprize* this, PlayState* play);
 void func_80C25640(ObjSwprize* this);
 void func_80C25698(ObjSwprize* this);
@@ -53,10 +53,11 @@ void func_80C253D0(ObjSwprize* this, PlayState* play) {
     s32 i;
     Actor* collectible;
     Vec3f sp78;
-    s32 type = (thisx->params >> 8) & 3;
+    s32 type = OBJ_SWPRIZE_GET_TYPE(thisx);
     s32 temp_s0 = D_80C257F0[type];
 
     func_80C25360(this, &sp78);
+
     if (type == 2) {
         for (i = 0; i < 3; i++) {
             collectible = Item_DropCollectible(play, &thisx->world.pos, temp_s0);
@@ -133,10 +134,10 @@ void func_80C2572C(ObjSwprize* this, PlayState* play) {
 }
 
 void func_80C25780(ObjSwprize* this) {
-    this->actionFunc = ObjSwprize_DoNothing;
+    this->actionFunc = ObjSwprize_SetupDoNothing;
 }
 
-void ObjSwprize_DoNothing(ObjSwprize* this, PlayState* play) {
+void ObjSwprize_SetupDoNothing(ObjSwprize* this, PlayState* play) {
 }
 
 void ObjSwprize_Update(Actor* thisx, PlayState* play) {
