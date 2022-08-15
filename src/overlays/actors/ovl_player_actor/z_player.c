@@ -4452,24 +4452,23 @@ void func_80832578(Player* this, PlayState* play) {
 }
 
 s16 func_80832660(s16* pValue, s16 target, s16 step, s16 arg3, s16 arg4, s16 arg5) {
-    s16 temp_v1;
-    s16 var_v0;
-    s32 temp;
+    s16 temp1;
+    s16 temp2;
+    s16 temp3;
 
-    temp_v1 = var_v0 = arg4 - (*pValue);
-    var_v0 = CLAMP(var_v0, -arg5, arg5);
-    *pValue += (s16)(temp_v1 - var_v0);
+    temp1 = temp2 = arg4 - *pValue;
+    temp2 = CLAMP(temp2, -arg5, arg5);
+    *pValue += BINANG_SUB(temp1, temp2);
 
     Math_ScaledStepToS(pValue, target, step);
 
-    //! FAKE: redundant cast (?)
-    temp = (s16)(s32)*pValue;
+    temp3 = *pValue;
     if (*pValue < -arg3) {
         *pValue = -arg3;
     } else if (arg3 < *pValue) {
         *pValue = arg3;
     }
-    return (temp - *pValue);
+    return temp3 - *pValue;
 }
 
 s16 func_80832754(Player* this, s32 arg1) {
