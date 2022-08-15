@@ -14379,19 +14379,13 @@ void func_8084CE84(Player* this, PlayState* play) {
     }
 }
 
-#ifdef NON_MATCHING
-// stack
 void func_8084D18C(Player* this, PlayState* play) {
     f32 sp5C;
-    s16 temp_v0_2;
-    f32 sp54;
-    s16 sp52;
     f32 var_fa0;
-    s32 temp_v0;
-    s32 var_v1; // sp44
 
     sp5C = fabsf(this->linearVelocity);
     this->stateFlags1 |= PLAYER_STATE1_1000;
+
     if (sp5C == 0.0f) {
         sp5C = ABS_ALT(this->unk_B4C) * 0.0015f;
         if (sp5C < 400.0f) {
@@ -14411,6 +14405,12 @@ void func_8084D18C(Player* this, PlayState* play) {
                                D_8085CF78[Player_IsHoldingTwoHandedWeapon(this)], this->unk_B38 * 0.7241379f, var_fa0,
                                this->blendTableBuffer);
     if (!func_8083FE38(this, play) && !func_80840CD4(this, play)) {
+        f32 sp54;
+        s16 sp52;
+        s32 temp_v0;
+        s16 temp_v0_2;
+        s32 var_v1;
+
         func_80840F34(this);
         func_80832F78(this, &sp54, &sp52, 0.0f, play);
         temp_v0 = func_8083E7F8(this, &sp54, &sp52, play);
@@ -14424,10 +14424,9 @@ void func_8084D18C(Player* this, PlayState* play) {
             sp52 = this->currentYaw;
         }
 
-        temp_v0_2 = sp52 - this->currentYaw;
-        var_v1 = ABS_ALT(temp_v0_2);
+        var_v1 = ABS_ALT(BINANG_SUB(sp52, this->currentYaw));
         if (var_v1 > 0x4000) {
-            if (Math_StepToF(&this->linearVelocity, 0.0f, 1.0f) != 0) {
+            if (Math_StepToF(&this->linearVelocity, 0.0f, 1.0f)) {
                 this->currentYaw = sp52;
             }
         } else {
@@ -14439,9 +14438,6 @@ void func_8084D18C(Player* this, PlayState* play) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084D18C.s")
-#endif
 
 void func_8084D4EC(Player* this, PlayState* play) {
     s32 animFinished;
@@ -18015,9 +18011,8 @@ void func_80856918(Player* this, PlayState* play) {
             if (AMMO(ITEM_NUT) == 0) {
                 play_sound(NA_SE_SY_ERROR);
             } else {
-                this->boomerangActor =
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ARROW, this->bodyPartsPos[0].x, this->bodyPartsPos[0].y,
-                                this->bodyPartsPos[0].z, (s16)-1, (s16)0, (s16)0, 8);
+                this->boomerangActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ARROW, this->bodyPartsPos[0].x,
+                                                   this->bodyPartsPos[0].y, this->bodyPartsPos[0].z, -1, 0, 0, 8);
                 if (this->boomerangActor != NULL) {
                     this->boomerangActor->velocity.x = this->actor.velocity.x * 1.5f;
                     this->boomerangActor->velocity.z = this->actor.velocity.z * 1.5f;
@@ -18090,7 +18085,7 @@ void func_808573A4(Player* this, PlayState* play) {
         }
 
         this->unk_B10[0] += -800.0f;
-        this->actor.shape.rot.y += (s16)((s16)this->unk_B10[0] + (s16)(this->currentYaw - prevYaw));
+        this->actor.shape.rot.y += BINANG_ADD((s16)this->unk_B10[0], BINANG_SUB(this->currentYaw, prevYaw));
 
         if (Math_StepToF(&this->unk_B10[1], 0.0f, this->unk_B10[0])) {
             this->actor.shape.rot.y = this->currentYaw;
