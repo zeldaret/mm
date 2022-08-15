@@ -934,7 +934,7 @@ void EnHorse_Destroy(Actor* thisx, PlayState* play) {
     EnHorse* this = THIS;
 
     if (this->stateFlags & ENHORSE_DRAW) {
-        Audio_StopSfxByPos(&this->unk_218);
+        AudioSfx_StopByPos(&this->unk_218);
     }
     Skin_Free(&play->state, &this->skin);
     Collider_DestroyCylinder(play, &this->colliderCylinder1);

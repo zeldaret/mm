@@ -699,7 +699,7 @@ void func_80BB2B1C(EnGeg* this, PlayState* play) {
         }
         this->unk_4E0--;
     }
-    func_8019F570(&this->actor.projectedPos, 1);
+    AudioSfx_LowerSfxSettingsReverb(&this->actor.projectedPos, true);
     func_8019F4AC(&this->actor.projectedPos, NA_SE_EN_GOLON_SIRLOIN_EAT - SFX_FLAG);
 }
 

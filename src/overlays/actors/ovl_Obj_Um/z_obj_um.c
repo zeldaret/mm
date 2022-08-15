@@ -795,7 +795,7 @@ void ObjUm_Destroy(Actor* thisx, PlayState* play) {
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 
     for (i = 0; i < ARRAY_COUNT(this->potPos); i++) {
-        Audio_StopSfxByPos(&this->potPos[i]);
+        AudioSfx_StopByPos(&this->potPos[i]);
     }
 
     Collider_DestroyCylinder(play, &this->banditsCollisions[0]);

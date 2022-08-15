@@ -530,7 +530,7 @@ void DmStk_PlaySfxForCurseCutsceneSecondPart(DmStk* this, PlayState* play) {
             break;
 
         case 365:
-            func_801A0654(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 0);
+            AudioSfx_SetChannelIO(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 0);
             break;
 
         case 650:
@@ -730,7 +730,8 @@ void DmStk_PlaySfxForEndingCutsceneSecondPart(DmStk* this, PlayState* play) {
             break;
 
         case 2000:
-            Audio_SetSfxBanksMute(0x7F);
+            AudioSfx_MuteBanks((1 << BANK_PLAYER) | (1 << BANK_ITEM) | (1 << BANK_ENV) | (1 << BANK_ENEMY) |
+                               (1 << BANK_SYSTEM) | (1 << BANK_OCARINA) | (1 << BANK_VOICE));
             break;
     }
 

@@ -16,13 +16,13 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/func_80193858.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/func_8019387C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/AudioThread_QueueCmdS32.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/Audio_QueueCmdS8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/AudioThread_QueueCmdS8.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/func_801938D0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/func_80193900.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/AudioThread_ScheduleProcessCmds.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/func_80193990.s")
 
@@ -76,6 +76,6 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/func_80194568.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/Audio_NextRandom.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/AudioThread_NextRandom.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/Audio_InitMesgQueues.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/AudioThread_InitMesgQueues.s")
