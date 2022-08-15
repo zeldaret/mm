@@ -5327,167 +5327,134 @@ void func_808345C8(void) {
     }
 }
 
-u8 D_8085D0F4[] = {
-    0,
-    2,
-    1,
-    1,
-};
-
-#if 0
 s32 func_80834600(Player* this, PlayState* play) {
-    s32 sp70;
-    //s32 sp6C;
-    s32 sp64;
-    Actor* sp60;
-    s32 sp5C;
-    s32 sp58;
-    u32 sp54;
-    LinkAnimationHeader* var_a2;
-    s32 var_a1;
-    s32 var_a2_3;
+    s32 pad74;
     s32 var_v0;
-    u8 var_v1_2;
 
     if (this->unk_D6A != 0) {
         if (!Player_InBlockingCsMode(play, this)) {
             Player_InflictDamage(play, -0x10);
             this->unk_D6A = 0;
         }
-    } else {
-        var_v0 = 0;
-        if ((Player_GetHeight(this) - 8.0f) < (this->unk_AB8 * this->actor.scale.y)) {
-            var_v0 = 1;
-        }
-
-        if ((var_v0 != 0) || (this->actor.bgCheckFlags & 0x100) || ((D_80862B08 == 9)) || (this->stateFlags2 & 0x80000000)) {
-            sp70 = var_v0;
-            func_8082DF8C(this, NA_SE_VO_LI_DAMAGE_S);
-            if (var_v0 != 0) {
-                func_80169FDC(&play->state);
-                func_808345C8();
-                Scene_SetExitFade(play);
-            } else {
-                func_80169EFC(&play->state);
-                func_808345C8();
-            }
-            func_8082DF8C(this, 0x680CU);
-            play->unk_18845 = 1;
-            play_sound(0x5801U);
+    } else if ((var_v0 = ((Player_GetHeight(this) - 8.0f) < (this->unk_AB8 * this->actor.scale.y))) ||
+               (this->actor.bgCheckFlags & 0x100) || (D_80862B08 == 9) || (this->stateFlags2 & 0x80000000)) {
+        func_8082DF8C(this, 0x6805U);
+        if (var_v0 != 0) {
+            func_80169FDC(&play->state);
+            func_808345C8();
+            Scene_SetExitFade(play);
         } else {
-            if ((this->unk_B75 != 0) && (((s32) this->unk_B75 >= 3) || (this->invincibilityTimer == 0))) {
-                //sp6C = D_8085D0F4;
-                u8 sp6C[] = {2, 1, 1};
-                if (func_8083456C(play, this) == 0) {
-                    if (this->unk_B75 == 4) {
-                        this->shockTimer = 0x28;
-                    }
-                    this->actor.colChkInfo.damage += this->unk_B74;
-                    func_80833B18(play, this, sp6C[this->unk_B75-1], this->unk_B78, this->unk_B7C, this->unk_B76, 0x14);
-                }
-            } else {
-                if ((this->shieldQuad.base.acFlags & 0x80) || (this->shieldCylinder.base.acFlags & 0x80) || (((this->invincibilityTimer < 0)) && (this->cylinder.base.acFlags & 2) && ((this->cylinder.info.acHitInfo != NULL)) && (this->cylinder.info.acHitInfo->toucher.dmgFlags != 0x20000000))) {
-                    Player_RequestRumble(play, this, 0xB4U, 0x14U, (u8) 0x64, 0);
-                    if ((this->invincibilityTimer >= 0) && (Player_IsGoronOrDeku(this) == 0)) {
-                        sp64 = func_8084B5C0 == this->actionFunc;
-                        if (func_801242B4(this) == 0) {
-                            Player_SetAction(play, this, func_8084BAA4, 0);
-                        }
-                        this->unk_AE7 = (s8) sp64;
-                        if (!sp64) {
-                            func_8082F43C(play, this, func_80848A0C);
-                            if (this->unk_B40 < 0.5f) {
-                                var_a2 = D_8085CFD4[Player_IsHoldingTwoHandedWeapon(this)];
-                            } else {
-                                var_a2 = D_8085CFCC[Player_IsHoldingTwoHandedWeapon(this)];
-                            }
-                            LinkAnimation_PlayOnce(play, &this->unk_284, var_a2);
-                        } else {
-                            Player_AnimationPlayOnce(play, this, D_8085CFDC[Player_IsHoldingTwoHandedWeapon(this)]);
-                        }
-                    }
-                    if (!(this->stateFlags1 & 0x206004)) {
-                        this->linearVelocity = -18.0f;
-                        this->currentYaw = this->actor.shape.rot.y;
-                    }
-                    return 0;
-                }
+            func_80169EFC(&play->state);
+            func_808345C8();
+        }
+        func_8082DF8C(this, 0x680CU);
+        play->unk_18845 = 1;
+        play_sound(0x5801U);
+    } else if ((this->unk_B75 != 0) && ((this->unk_B75 >= 3) || (this->invincibilityTimer == 0))) {
+        u8 sp6C[] = { 0, 2, 1, 1 };
+        if (func_8083456C(play, this) == 0) {
 
-                if ((this->unk_D6B != 0) || (this->invincibilityTimer > 0) || (this->stateFlags1 & 0x4000000) || (this->csMode != PLAYER_CSMODE_0) || (this->meleeWeaponQuads[0].base.atFlags & 2) || (this->meleeWeaponQuads[1].base.atFlags & 2) || (this->cylinder.base.atFlags & 2) || (this->shieldCylinder.base.atFlags & 2)) {
-                    return 0;
-                }
-
-                if (this->cylinder.base.acFlags & 2) {
-                    sp60 = this->cylinder.base.ac;
-                    if (sp60->flags & 0x01000000) {
-                        func_800B8E58(this, 0x83EU);
-                    }
-
-                    if (this->actor.colChkInfo.acHitEffect == 2) {
-                        sp5C = 3;
-                        goto block_66;
-                    }
-                    if (this->actor.colChkInfo.acHitEffect == 3) {
-                        sp5C = 4;
-                        goto block_66;
-                    }
-                    sp5C = 1;
-                    if (this->actor.colChkInfo.acHitEffect == 7) {
-                        this->shockTimer = 0x28;
-                        goto block_66;
-                    }
-                    if (this->actor.colChkInfo.acHitEffect == 9) {
-                        if (func_80834534(play, this) == 0) {
-                            goto block_66;
-                        }
-                    } else {
-                        if (((this->actor.colChkInfo.acHitEffect == 4) && (this->currentMask != 0x14)) || (this->stateFlags3 & 0x1000)) {
-                            goto block_66;
-                        }
-                        sp5C = 0;
-                        if (func_8083456C(play, this) == 0) {
-            block_66:
-                            func_80833B18(play, this, sp5C, 4.0f, 5.0f, (s16) Actor_YawBetweenActors(sp60, &this->actor), 20);
-                        }
-                    }
-                } else {
-                    if (this->invincibilityTimer != 0) {
-                        return 0;
-                    }
-
-                    sp58 = func_808340AC(D_80862B08);
-                    sp54 = SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-                    var_a1 = 0;
-                    if ((sp58 < 0) || ((sp54 == 0) && (this->transformation == 1) && !(this->actor.depthInWater > 0.0f))) {
-                        var_a1 = (this->actor.wallPoly != NULL) && SurfaceType_IsWallDamage(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId);
-                        if (var_a1 == 0) {
-                            return 0;
-                        }
-                    }
-
-                    if (var_a1 != 0) {
-                        var_v1_2 = this->actor.wallBgId;
-                    } else {
-                        var_v1_2 = this->actor.floorBgId;
-                    }
-
-                    if (((this->transformation == 3) || (this->transformation == 2)) && (sp58 >= 0) && (sp54 == 0) && !(this->stateFlags1 & 0x8000000) && (this->actor.bgCheckFlags & 1) && (this->actor.depthInWater < -30.0f)) {
-                        func_80834534(play, this);
-                    } else {
-                        this->actor.colChkInfo.damage = 4;
-                        func_80833B18(play, this, (var_v1_2 == 0x32) ? 0 : 1, 4.0f, 5.0f, (var_a1 != 0) ? this->actor.wallYaw : this->actor.shape.rot.y, 0x14);
-                    }
-                }
+            if (this->unk_B75 == 4) {
+                this->shockTimer = 40;
             }
+
+            this->actor.colChkInfo.damage += this->unk_B74;
+            func_80833B18(play, this, sp6C[this->unk_B75 - 1], this->unk_B78, this->unk_B7C, this->unk_B76, 0x14);
+        }
+    } else if ((this->shieldQuad.base.acFlags & 0x80) || (this->shieldCylinder.base.acFlags & 0x80) ||
+               ((this->invincibilityTimer < 0) && (this->cylinder.base.acFlags & 2) &&
+                (this->cylinder.info.acHitInfo != NULL) &&
+                (this->cylinder.info.acHitInfo->toucher.dmgFlags != 0x20000000))) {
+        LinkAnimationHeader* var_a2;
+        s32 sp64;
+
+        Player_RequestRumble(play, this, 0xB4, 0x14, 0x64, 0);
+        if ((this->invincibilityTimer >= 0) && !Player_IsGoronOrDeku(this)) {
+            sp64 = (func_8084B5C0 == this->actionFunc);
+            if (func_801242B4(this) == 0) {
+                Player_SetAction(play, this, func_8084BAA4, 0);
+            }
+            this->unk_AE7 = sp64;
+            if ((s8)sp64 == 0) {
+                func_8082F43C(play, this, func_80848A0C);
+                var_a2 = (this->unk_B40 < 0.5f) ? D_8085CFD4[Player_IsHoldingTwoHandedWeapon(this)]
+                                                : D_8085CFCC[Player_IsHoldingTwoHandedWeapon(this)];
+                LinkAnimation_PlayOnce(play, &this->unk_284, var_a2);
+            } else {
+                Player_AnimationPlayOnce(play, this, D_8085CFDC[Player_IsHoldingTwoHandedWeapon(this)]);
+            }
+        }
+        if (!(this->stateFlags1 & 0x206004)) {
+            this->linearVelocity = -18.0f;
+            this->currentYaw = this->actor.shape.rot.y;
+        }
+        return 0;
+    } else if ((this->unk_D6B != 0) || (this->invincibilityTimer > 0) || (this->stateFlags1 & 0x04000000) ||
+               (this->csMode != 0) || (this->meleeWeaponQuads[0].base.atFlags & 2) ||
+               (this->meleeWeaponQuads[1].base.atFlags & 2) || (this->cylinder.base.atFlags & 2) ||
+               (this->shieldCylinder.base.atFlags & 2)) {
+        return 0;
+    } else if (this->cylinder.base.acFlags & 2) {
+        Actor* sp60 = this->cylinder.base.ac;
+        s32 var_a2_2;
+
+        if (sp60->flags & 0x01000000) {
+            func_800B8E58(this, 0x83EU);
+        }
+        if (this->actor.colChkInfo.acHitEffect == 2) {
+            var_a2_2 = 3;
+        } else if (this->actor.colChkInfo.acHitEffect == 3) {
+            var_a2_2 = 4;
+        } else if (this->actor.colChkInfo.acHitEffect == 7) {
+            var_a2_2 = 1;
+            this->shockTimer = 40;
+        } else if (this->actor.colChkInfo.acHitEffect == 9) {
+            var_a2_2 = 1;
+            if (func_80834534(play, this) != 0) {
+                return 1;
+            }
+        } else if (((this->actor.colChkInfo.acHitEffect == 4) && (this->currentMask != 0x14)) ||
+                   (this->stateFlags3 & 0x1000)) {
+            var_a2_2 = 1;
+        } else {
+            var_a2_2 = 0;
+            if (func_8083456C(play, this) != 0) {
+                return 1;
+            }
+        }
+        func_80833B18(play, this, var_a2_2, 4.0f, 5.0f, (s16)Actor_YawBetweenActors(sp60, &this->actor), 0x14);
+    } else if (this->invincibilityTimer != 0) {
+        return 0;
+    } else {
+        s32 sp58 = func_808340AC(D_80862B08);
+        u32 sp54 = SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        s32 var_a1 = 0;
+        s32 var_v1_2;
+        s32 pad48;
+
+        if ((sp58 < 0) || ((sp54 == 0) && (this->transformation == 1) && !(this->actor.depthInWater > 0.0f))) {
+            var_a1 = (this->actor.wallPoly != NULL) &&
+                     (SurfaceType_IsWallDamage(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId) != 0);
+            if (var_a1 == 0) {
+                goto label;
+            }
+        }
+        var_v1_2 = (var_a1 != 0) ? this->actor.wallBgId : this->actor.floorBgId;
+        if (((this->transformation == 3) || (this->transformation == 2)) &&
+            ((sp58 >= 0) && (sp54 == 0) && !(this->stateFlags1 & 0x08000000) && (this->actor.bgCheckFlags & 1) &&
+             (this->actor.depthInWater < -30.0f))) {
+            func_80834534(play, this);
+        } else {
+            this->actor.colChkInfo.damage = 4;
+            func_80833B18(play, this, (var_v1_2 == 0x32) ? 0 : 1, 4.0f, 5.0f,
+                          (var_a1 != 0) ? this->actor.wallYaw : this->actor.shape.rot.y, 0x14);
+            return 1;
+        label:
+            return 0;
         }
     }
-
     return 1;
 }
-#else
-s32 func_80834600(Player* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80834600.s")
-#endif
 
 void func_80834CD0(Player* this, f32 arg1, u16 sfxId) {
     this->actor.velocity.y = arg1 * D_8085C3E4;
