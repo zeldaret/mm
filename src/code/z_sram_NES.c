@@ -1072,9 +1072,11 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
         }
     } else {
         gSaveContext.save.entrance = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
-        if ((gSaveContext.save.entrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+        if ((gSaveContext.save.entrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) &&
+            CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
             gSaveContext.save.entrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10);
-        } else if ((gSaveContext.save.entrance == ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+        } else if ((gSaveContext.save.entrance == ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8)) &&
+                   CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
             gSaveContext.save.entrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 8);
         }
 

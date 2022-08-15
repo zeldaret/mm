@@ -161,7 +161,8 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
 
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_61_04)) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_01) || (gSaveContext.save.entrance != ENTRANCE(IKANA_CANYON, 2))) {
-                if ((gSaveContext.save.entrance != ENTRANCE(IKANA_CANYON, 2)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_59_01)) {
+                if ((gSaveContext.save.entrance != ENTRANCE(IKANA_CANYON, 2)) &&
+                    CHECK_WEEKEVENTREG(WEEKEVENTREG_59_01)) {
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_59_01);
                 }
                 func_80BD8700(this);
