@@ -14041,12 +14041,10 @@ s32 func_8084C124(PlayState* play, Player* this) {
     return false;
 }
 
-#ifdef NON_EQUIVALENT
-// regalloc, maybe equivalent
 void func_8084C16C(Player* this, PlayState* play) {
     f32 sp44;
     s16 sp42;
-    Actor* temp_a2;
+    Actor* heldActor;
 
     if (func_80123420(this) != 0) {
         this->actor.gravity = -1.2f;
@@ -14055,8 +14053,8 @@ void func_8084C16C(Player* this, PlayState* play) {
     if (!(this->actor.bgCheckFlags & 1)) {
         func_80832F78(this, &sp44, &sp42, 0.0f, play);
         if (this->stateFlags1 & 0x800) {
-            temp_a2 = this->heldActor;
-            if (!func_808313A8(play, this, temp_a2) && (temp_a2->id == ACTOR_EN_NIW) &&
+            heldActor = this->heldActor;
+            if (!func_808313A8(play, this, heldActor) && (heldActor->id == ACTOR_EN_NIW) &&
                 CHECK_BTN_ANY(D_80862B44->press.button, BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_B | BTN_A)) {
                 func_808409A8(play, this, this->linearVelocity + 2.0f, this->actor.velocity.y + 2.0f);
             }
@@ -14069,19 +14067,16 @@ void func_8084C16C(Player* this, PlayState* play) {
         }
 
         if (this->transformation == PLAYER_FORM_DEKU) {
-            s16 sp3A = this->currentYaw;
+            s16 prevYaw = this->currentYaw;
 
             func_808378FC(play, this);
             func_8083CBC4(this, sp44 * 0.5f, sp42, 2.0f, 0.2f, 0.1f, 0x190);
+
             if (this->skelAnime.animation == &gameplay_keep_Linkanim_00E270) {
-                u16 yawDiff;
-
                 this->stateFlags2 |= (PLAYER_STATE2_20 | PLAYER_STATE2_40);
+
                 this->unk_B10[0] += -800.0f;
-
-                yawDiff = (this->currentYaw - sp3A);
-                this->actor.shape.rot.y += (s32)this->unk_B10[0] + yawDiff;
-
+                this->actor.shape.rot.y += BINANG_ADD((s16)this->unk_B10[0], BINANG_SUB(this->currentYaw, prevYaw));
                 Math_StepToF(&this->unk_B10[1], 0.0f, this->unk_B10[0]);
             }
         } else {
@@ -14117,25 +14112,25 @@ void func_8084C16C(Player* this, PlayState* play) {
                             if (func_8083D860(this, play)) {
                                 func_8084C124(play, this);
                             }
-                        } else if (this->unk_B5C >= 2) {
-                            if ((this->wallHeight < (150.0f * this->ageProperties->unk_08)) &&
-                                ((70.0f * this->ageProperties->unk_08) <
-                                 ((this->actor.world.pos.y - this->actor.floorHeight) + this->wallHeight))) {
-                                AnimationContext_DisableQueue(play);
-                                if (this->stateFlags3 & PLAYER_STATE3_10000) {
-                                    func_8082DF8C(this, NA_SE_VO_LI_HOOKSHOT_HANG);
-                                } else {
-                                    func_8082DF8C(this, NA_SE_VO_LI_HANG);
-                                }
-
-                                this->actor.world.pos.y += this->wallHeight;
-                                func_80837CEC(play, this, this->actor.wallPoly, this->wallDistance,
-                                              D_8085BE84[PLAYER_ANIMGROUP_38][this->modelAnimType]);
-                                this->currentYaw += 0x8000;
-                                this->stateFlags1 |= PLAYER_STATE1_2000;
-                                this->actor.shape.rot.y = this->currentYaw;
-                                func_8084C124(play, this);
+                        } else if ((this->unk_B5C >= 2) &&
+                                   ((this->wallHeight < (150.0f * this->ageProperties->unk_08)) &&
+                                    (((this->actor.world.pos.y - this->actor.floorHeight) + this->wallHeight)) >
+                                        (70.0f * this->ageProperties->unk_08))) {
+                            AnimationContext_DisableQueue(play);
+                            if (this->stateFlags3 & PLAYER_STATE3_10000) {
+                                func_8082DF8C(this, NA_SE_VO_LI_HOOKSHOT_HANG);
+                            } else {
+                                func_8082DF8C(this, NA_SE_VO_LI_HANG);
                             }
+
+                            this->actor.world.pos.y += this->wallHeight;
+                            func_80837CEC(play, this, this->actor.wallPoly, this->wallDistance,
+                                          GET_PLAYER_ANIM(PLAYER_ANIMGROUP_38, this->modelAnimType));
+                            this->currentYaw += 0x8000;
+                            this->actor.shape.rot.y = this->currentYaw;
+                            this->stateFlags1 |= PLAYER_STATE1_2000;
+
+                            func_8084C124(play, this);
                         }
                     }
                 }
@@ -14148,9 +14143,6 @@ void func_8084C16C(Player* this, PlayState* play) {
 
     func_80838A90(this, play);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084C16C.s")
-#endif
 
 AnimSfxEntry D_8085D61C[] = {
     ANIMSFX(ANIMSFX_TYPE_VOICE, 1, NA_SE_VO_LI_SWORD_N, CONTINUE),
