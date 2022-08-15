@@ -385,7 +385,9 @@ void func_80BFC058(EnRz* this, PlayState* play) {
 void func_80BFC078(EnRz* this, PlayState* play) {
     s32 pad;
     Vec3f sp28;
+
     func_80BFBD54(this, play);
+
     if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x2927:
@@ -406,6 +408,7 @@ void func_80BFC078(EnRz* this, PlayState* play) {
                 break;
         }
     }
+
     if (!EN_RZ_GET_PARAM_8000(&this->actor)) {
         sp28.x = this->actor.projectedPos.x;
         sp28.y = this->actor.projectedPos.y;
@@ -477,6 +480,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
     if (!func_80BFBE70(this, play)) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->actionFunc = func_80BFC078;
+
             if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) {
                 this->actionFunc = func_80BFC36C;
                 this->actor.cutscene = this->cutscenes[0];
@@ -493,6 +497,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
                 Message_StartTextbox(play, 0x2926, &this->actor);
                 func_80BFBDFC(play);
             }
+
         } else if (EnRz_CanTalk(this, play)) {
             if (func_80BFBCEC(this, play) && !(gSaveContext.save.weekEventReg[77] & 4) && this->unk_40C != NULL) {
                 this->actor.flags |= ACTOR_FLAG_10000;
@@ -502,6 +507,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
                 func_800B8614(&this->actor, play, 120.0f);
             }
         }
+
         if (!EN_RZ_GET_PARAM_8000(&this->actor)) {
             sp30.x = this->actor.projectedPos.x;
             sp30.y = this->actor.projectedPos.y;
@@ -521,6 +527,7 @@ void func_80BFC608(EnRz* this, PlayState* play) {
 
 void func_80BFC674(EnRz* this, PlayState* play) {
     func_80BFBD54(this, play);
+
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC608;
         if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
@@ -530,6 +537,7 @@ void func_80BFC674(EnRz* this, PlayState* play) {
         Message_StartTextbox(play, 0x2924, &this->actor);
         return;
     }
+
     if (EnRz_CanTalk(this, play)) {
         func_800B8614(&this->actor, play, 120.0f);
     }
@@ -537,6 +545,7 @@ void func_80BFC674(EnRz* this, PlayState* play) {
 
 void func_80BFC728(EnRz* this, PlayState* play) {
     func_80BFBD54(this, play);
+
     if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         this->actionFunc = func_80BFC7E0;
@@ -562,14 +571,13 @@ void func_80BFC7E0(EnRz* this, PlayState* play) {
         this->actionFunc = func_80BFC8F8;
         func_80BFB9E4(play, this, 2);
     }
+
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC728;
         func_80BFB9E4(play, this, 0);
         this->actor.speedXZ = 0.0f;
         func_80BFBDFC(play);
-        return;
-    }
-    if (EnRz_CanTalk(this, play)) {
+    } else if (EnRz_CanTalk(this, play)) {
         func_800B8614(&this->actor, play, 120.0f);
     }
 }
@@ -595,6 +603,7 @@ void func_80BFC8F8(EnRz* this, PlayState* play) {
     } else {
         func_80BFC8AC(this, play);
     }
+
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC728;
         func_80BFB9E4(play, this, 0);
@@ -616,15 +625,17 @@ void EnRz_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, 5);
 
     this->actionFunc(this, play);
-    if (this->unk_412 == 0) {
+    if (!this->unk_412) {
         phi_v0 = false;
     } else {
         this->unk_412--;
         phi_v0 = this->unk_412;
     }
+
     if (!phi_v0) {
         this->unk_412 = Rand_S16Offset(60, 60);
     }
+
     this->unk_410 = this->unk_412;
     if (this->unk_410 >= 3) {
         this->unk_410 = 0;
