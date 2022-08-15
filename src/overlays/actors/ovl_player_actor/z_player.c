@@ -17676,7 +17676,7 @@ s32 func_80856000(PlayState* play, Player* this) {
 }
 
 void func_80856074(PlayState* play, Player* this) {
-    if (func_8083F8A8(play, this, 12.0f, 4, 0.0f, 10, 50, 1)) {
+    if (func_8083F8A8(play, this, 12.0f, 4, 0.0f, 10, 50, true)) {
         EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 3.0f, 0, 4, 8, 2, -1, 10, NULL);
     }
 }
@@ -18071,43 +18071,41 @@ void func_80856918(Player* this, PlayState* play) {
     func_808378FC(play, this);
 }
 
-#ifdef NON_EQUIVALENT
-// mostly regalloc, dunno about equivalency
 void func_808573A4(Player* this, PlayState* play) {
-    this->stateFlags2 |= 0x60;
+    this->stateFlags2 |= PLAYER_STATE2_20 | PLAYER_STATE2_40;
 
     LinkAnimation_Update(play, &this->skelAnime);
-    func_8082F0E4(this, 0x8000U, 1, 0x1E);
+    func_8082F0E4(this, 0x8000, 1, 30);
+
     if (!func_80838A90(this, play)) {
-        s16 sp46;
+        s16 prevYaw = this->currentYaw;
         f32 sp40;
         s16 sp3E;
-        s32 temp;
 
-        sp46 = this->currentYaw;
         func_80832F78(this, &sp40, &sp3E, 0.018f, play);
         sp40 *= 1.0f - (0.9f * ((11100.0f - this->unk_B10[0]) / 11100.0f));
-        if (func_8083A4A4(this, &sp40, &sp3E, (f32)REG(43) / 100.0f) == 0) {
+        if (!func_8083A4A4(this, &sp40, &sp3E, REG(43) / 100.0f)) {
             func_8083CB58(this, sp40, sp3E);
         }
 
         this->unk_B10[0] += -800.0f;
-        temp = (this->currentYaw - sp46);
-        this->actor.shape.rot.y += (s32)this->unk_B10[0] + temp;
+        this->actor.shape.rot.y += (s16)((s16)this->unk_B10[0] + (s16)(this->currentYaw - prevYaw));
 
-        if (Math_StepToF(&this->unk_B10[1], 0.0f, this->unk_B10[0]) != 0) {
+        if (Math_StepToF(&this->unk_B10[1], 0.0f, this->unk_B10[0])) {
             this->actor.shape.rot.y = this->currentYaw;
             func_8083B2E4(this, play);
-        } else if (&gameplay_keep_Linkanim_00E270 == this->skelAnime.animation) {
+        } else if (this->skelAnime.animation == &gameplay_keep_Linkanim_00E270) {
             this->stateFlags3 |= PLAYER_STATE3_100000;
+
             if (this->unk_B10[1] < 0.0f) {
                 func_8082E438(play, this, func_8082ED20(this));
             }
         }
 
-        func_808566C0(play, this, 0, 1.0f, 0.5f, 0.0f, 0x20);
+        func_808566C0(play, this, 0, 1.0f, 0.5f, 0.0f, 32);
+
         if (this->unk_B10[0] > 9500.0f) {
-            func_8083F8A8(&play->state, &this->actor, 2.0f, 1, 2.5f, 0xA, 0x12, 1);
+            func_8083F8A8(play, this, 2.0f, 1, 2.5f, 10, 18, true);
         }
 
         func_800AE930(&play->colCtx, Effect_GetByIndex(this->meleeWeaponEffectIndex[2]), &this->actor.world.pos, 2.0f,
@@ -18115,9 +18113,6 @@ void func_808573A4(Player* this, PlayState* play) {
         func_800B8F98(&this->actor, func_8082E078(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG));
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808573A4.s")
-#endif
 
 void func_80857640(Player* this, f32 arg1, s32 arg2) {
     func_80834CD0(this, arg1, NA_SE_VO_LI_SWORD_N);
@@ -18146,7 +18141,7 @@ void func_808576BC(PlayState* play, Player* this) {
         func_800B8F98(&this->actor, NA_SE_PL_GORON_SLIP - SFX_FLAG);
     }
 
-    if (func_8083F8A8(play, this, 12.0f, -1 - (var_v0 >> 0xC), (var_v0 >> 0xA) + 1.0f, (var_v0 >> 7) + 0xA0, 0x14, 1)) {
+    if (func_8083F8A8(play, this, 12.0f, -1 - (var_v0 >> 0xC), (var_v0 >> 0xA) + 1.0f, (var_v0 >> 7) + 160, 20, true)) {
         func_800B8E58(this, (this->unk_B72 == NA_SE_PL_WALK_SNOW - SFX_FLAG) ? NA_SE_PL_ROLL_SNOW_DUST - SFX_FLAG
                                                                              : NA_SE_PL_ROLL_DUST - SFX_FLAG);
     }
