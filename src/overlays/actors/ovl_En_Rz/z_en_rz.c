@@ -16,7 +16,7 @@ void EnRz_Destroy(Actor* thisx, PlayState* play);
 void EnRz_Update(Actor* thisx, PlayState* play);
 void EnRz_Draw(Actor* thisx, PlayState* play);
 
-void func_80BFB780(Actor* thisx, Lights* mapper, PlayState* play);
+void EnRz_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play);
 void EnRz_SetAnimation(PlayState*, EnRz*, s16 animIndex, u8 animMode, f32 transitionRate);
 s32 func_80BFBA50(EnRz* this, PlayState* play);
 Actor* func_80BFBDA0(EnRz* this, PlayState*);
@@ -24,7 +24,7 @@ void func_80BFC058(EnRz* this, PlayState* play);
 void func_80BFC078(EnRz* this, PlayState* play);
 void func_80BFC3F8(EnRz* this, PlayState* play);
 void func_80BFC674(EnRz* this, PlayState* play);
-void func_80BFC7E0(EnRz* this, PlayState* play);
+s32 func_80BFC7E0(EnRz* this, PlayState* play);
 void func_80BFC8F8(EnRz* this, PlayState* play);
 
 const ActorInit En_Rz_InitVars = {
@@ -93,7 +93,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
     }
 
     Actor_SetScale(&this->actor, 0.01f);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_80BFB780, 20.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, EnRz_ActorShadowFunc, 20.0f);
 
     SkelAnime_InitFlex(play, &this->skelAnime, &object_rz_Skel_00D8D8, &object_rz_Anim_003A20,
                        (intptr_t)this->jointTable & ~0xF, (intptr_t)this->morphTable & ~0xF, OBJECT_RZ_LIMB_MAX);
@@ -156,7 +156,10 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
     this->unk_428 = 0;
 }
 
-void func_80BFB780(Actor* thisx, Lights* mapper, PlayState* play) {
+/**
+ * Custom shadow draw function of type ActorShadowFunc.
+ */
+void EnRz_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
     Vec3f oldPos;
     EnRz* this = THIS;
 
@@ -188,6 +191,7 @@ void EnRz_SetAnimation(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, 
     } else {
         animationPtr = D_80BFCD3C;
     }
+
     if ((animIndex >= 0) && (animIndex < 9) && ((animIndex != this->currentAnimIndex) || (animMode != 0))) {
         if (animIndex >= 7) {
             endFrame = Animation_GetLastFrame(gLinkAnimations[animIndex - 7]);
@@ -293,7 +297,7 @@ s32 func_80BFBCEC(EnRz* this, PlayState* play) {
     return false;
 }
 
-void func_80BFBD54(EnRz* this, PlayState* play) {
+void EnRz_UpdateAnimation(EnRz* this, PlayState* play) {
     if (this->currentAnimIndex < 7) {
         SkelAnime_Update(&this->skelAnime);
     } else {
@@ -330,6 +334,7 @@ void EnRz_Destroy(Actor* thisx, PlayState* play) {
 
 s32 func_80BFBE70(EnRz* this, PlayState* play) {
     u16 action;
+
     if (!EN_RZ_GET_PARAM_8000(&this->actor) && this->currentAnimIndex == 4) {
         func_800B9010(&this->actor, NA_SE_EV_CLAPPING_2P - SFX_FLAG);
     }
@@ -379,14 +384,14 @@ s32 func_80BFBFAC(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC058(EnRz* this, PlayState* play) {
-    func_80BFBD54(this, play);
+    EnRz_UpdateAnimation(this, play);
 }
 
 void func_80BFC078(EnRz* this, PlayState* play) {
     s32 pad;
     Vec3f sp28;
 
-    func_80BFBD54(this, play);
+    EnRz_UpdateAnimation(this, play);
 
     if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
@@ -418,7 +423,7 @@ void func_80BFC078(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC19C(EnRz* this, PlayState* play) {
-    func_80BFBD54(this, play);
+    EnRz_UpdateAnimation(this, play);
     if (!func_80BFBE70(this, play)) {
         this->actionFunc = func_80BFC3F8;
         func_80BFBA1C(play, this, 8);
@@ -429,14 +434,14 @@ void func_80BFC19C(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC214(EnRz* this, PlayState* play) {
-    func_80BFBD54(this, play);
+    EnRz_UpdateAnimation(this, play);
     if (!func_80BFBE70(this, play) && func_80BFBFAC(this, play)) {
         this->actionFunc = func_80BFC19C;
     }
 }
 
 void func_80BFC270(EnRz* this, PlayState* play) {
-    func_80BFBD54(this, play);
+    EnRz_UpdateAnimation(this, play);
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = func_80BFC214;
@@ -447,7 +452,7 @@ void func_80BFC270(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC2F4(EnRz* this, PlayState* play) {
-    func_80BFBD54(this, play);
+    EnRz_UpdateAnimation(this, play);
     if (!func_80BFBE70(this, play)) {
         func_801477B4(play);
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 2000.0f, 1000.0f);
@@ -456,7 +461,7 @@ void func_80BFC2F4(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC36C(EnRz* this, PlayState* play) {
-    func_80BFBD54(this, play);
+    EnRz_UpdateAnimation(this, play);
     if (func_80BFBFAC(this, play)) {
         gSaveContext.save.weekEventReg[77] |= 4;
         if ((gSaveContext.save.weekEventReg[75] & 0x80)) {
@@ -473,10 +478,12 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
     s32 pad;
     Vec3f sp30;
 
-    func_80BFBD54(this, play);
+    EnRz_UpdateAnimation(this, play);
+
     if (this->unk_40C == NULL) {
         this->unk_40C = func_80BFBDA0(this, play);
     }
+
     if (!func_80BFBE70(this, play)) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->actionFunc = func_80BFC078;
@@ -518,7 +525,8 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC608(EnRz* this, PlayState* play) {
-    func_80BFBD54(this, play);
+    EnRz_UpdateAnimation(this, play);
+
     if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         this->actionFunc = func_80BFC674;
@@ -526,7 +534,7 @@ void func_80BFC608(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC674(EnRz* this, PlayState* play) {
-    func_80BFBD54(this, play);
+    EnRz_UpdateAnimation(this, play);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC608;
@@ -544,7 +552,7 @@ void func_80BFC674(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC728(EnRz* this, PlayState* play) {
-    func_80BFBD54(this, play);
+    EnRz_UpdateAnimation(this, play);
 
     if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
@@ -560,10 +568,11 @@ void func_80BFC728(EnRz* this, PlayState* play) {
     }
 }
 
-void func_80BFC7E0(EnRz* this, PlayState* play) {
+s32 func_80BFC7E0(EnRz* this, PlayState* play) {
     s32 new_var;
 
-    func_80BFBD54(this, play);
+    EnRz_UpdateAnimation(this, play);
+
     new_var = this->timer;
     if (new_var > 0) {
         this->timer--;
@@ -592,7 +601,8 @@ void func_80BFC8AC(EnRz* this, PlayState* play) {
 void func_80BFC8F8(EnRz* this, PlayState* play) {
     s32 temp_v0;
 
-    func_80BFBD54(this, play);
+    EnRz_UpdateAnimation(this, play);
+
     this->actor.speedXZ = 1.5f;
     temp_v0 = func_80BFBB44(this);
     if (temp_v0 != 1) {
