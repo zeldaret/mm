@@ -716,7 +716,7 @@ wordReplace = {
     "gSaveContext.unk_3DE0": "gSaveContext.timerCurTime",
     "gSaveContext.unk_3E18": "gSaveContext.timerTimeLimit",
     "gSaveContext.unk_3E50": "gSaveContext.timerStartOsTime",
-    "gSaveContext.unk_3E88": "gSaveContext.timerEndOsTime",
+    "gSaveContext.unk_3E88": "gSaveContext.timerStopTime",
     "gSaveContext.unk_3EC0": "gSaveContext.timerPausedOsTime",
 
     "play->sceneLoadFlag": "play->transitionTrigger",

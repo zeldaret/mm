@@ -395,7 +395,7 @@ void func_80A6FBFC(EnMm3* this, PlayState* play) {
         }
     } else if (gSaveContext.timerCurTime[TIMER_ID_POSTMAN] > SECONDS_TO_TIMER(15)) {
         gSaveContext.timerState[TIMER_ID_POSTMAN] = TIMER_STATE_POSTMAN_STOP;
-        gSaveContext.timerOsTime = osGetTime();
+        gSaveContext.postmanTimerOsTime = osGetTime();
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {

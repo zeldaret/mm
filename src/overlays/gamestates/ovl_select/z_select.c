@@ -519,7 +519,7 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
                 gSaveContext.timerCurTime[i] = SECONDS_TO_TIMER(0);
                 gSaveContext.timerTimeLimit[i] = SECONDS_TO_TIMER(0);
                 gSaveContext.timerStartOsTime[i] = 0;
-                gSaveContext.timerEndOsTime[i] = 0;
+                gSaveContext.timerStopTime[i] = 0;
                 gSaveContext.timerPausedOsTime[i] = 0;
             }
             gSaveContext.minigameState = 0;

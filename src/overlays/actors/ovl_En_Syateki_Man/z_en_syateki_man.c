@@ -1156,7 +1156,7 @@ void EnSyatekiMan_Swamp_AddBonusPoints(EnSyatekiMan* this, PlayState* play) {
             this->actionFunc = EnSyatekiMan_Swamp_EndGame;
             sBonusTimer = 0;
         } else if (sBonusTimer > 10) {
-            gSaveContext.timerEndOsTime[TIMER_ID_MINIGAME_1] += 100;
+            gSaveContext.timerStopTime[TIMER_ID_MINIGAME_1] += SECONDS_TO_TIMER(1);
             play->interfaceCtx.unk_25C += 10;
             this->score += 10;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
