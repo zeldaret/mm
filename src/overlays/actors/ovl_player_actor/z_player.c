@@ -4404,7 +4404,7 @@ s32 func_808324EC(PlayState* play, Player* this, void (*arg2)(PlayState*, Player
 
 s32 func_80832444(Player* this) {
     if (this->unk_A86 >= 0) {
-        if (ActorCutscene_GetCanPlayNext(this->unk_A86) == 0) {
+        if (!ActorCutscene_GetCanPlayNext(this->unk_A86)) {
             ActorCutscene_SetIntentToPlay(this->unk_A86);
             return false;
         }
@@ -5356,8 +5356,8 @@ s32 func_80834600(Player* this, PlayState* play) {
         play_sound(0x5801U);
     } else if ((this->unk_B75 != 0) && ((this->unk_B75 >= 3) || (this->invincibilityTimer == 0))) {
         u8 sp6C[] = { 0, 2, 1, 1 };
-        if (func_8083456C(play, this) == 0) {
 
+        if (func_8083456C(play, this) == 0) {
             if (this->unk_B75 == 4) {
                 this->shockTimer = 40;
             }
@@ -17389,15 +17389,9 @@ void func_80855218(PlayState* play, Player* this, UNK_PTR arg2) {
 u16 D_8085D908[] = { 0x1E80, 0x1E20, 0x1E40, 0x1E10 };
 struct_8085D910 D_8085D910[] = { { 0x10, 0xA, 0x3B, 0x3F }, { 9, 0x32, 0xA, 0xD } };
 
-#ifdef NON_EQUIVALENT
 void func_808553F4(Player* this, PlayState* play) {
     struct_8085D910* sp4C;
     s32 sp48;
-    s32 temp_t7;
-    s32 var_v0_2;
-    s32 var_v0_3;
-    s8 temp_a0;
-    u16 temp_t8;
 
     sp4C = D_8085D910;
     sp48 = 0;
@@ -17408,6 +17402,7 @@ void func_808553F4(Player* this, PlayState* play) {
                       (this->transformation == PLAYER_FORM_HUMAN) ? CAM_MODE_NORMAL : CAM_MODE_JUMP);
     this->stateFlags2 |= 0x40;
     this->actor.shape.rot.y = Camera_GetCamDirYaw(play->cameraPtrs[play->activeCamId]) + 0x8000;
+
     func_80855218(play, this, &sp4C);
 
     if (this->unk_AE7 == 0x14) {
@@ -17422,62 +17417,38 @@ void func_808553F4(Player* this, PlayState* play) {
             this->actor.draw = NULL;
             this->unk_AE7 = 0;
             func_80165DF0();
-            temp_t8 = D_8085D908[gSaveContext.save.playerForm];
-            temp_t7 = (s32)temp_t8 >> 8;
-            gSaveContext.save.weekEventReg[temp_t7] |= temp_t8;
+            SET_WEEKEVENTREG(D_8085D908[gSaveContext.save.playerForm]);
         }
-    } else {
-        temp_a0 = this->unk_AE7;
-
-        var_v0_2 = (this->transformation == 4) ? 0x53 : 0x37;
-        this->unk_AE7 = temp_a0 + 1;
-#if 0
-        if (var_v0_2 >= temp_a0) {
-            if (this->unk_AE7 >= 5) {
-                if ((this->transformation != 4) || ( var_v0_3 = (D_8085D908[gSaveContext.save.playerForm] & 0xFF & gSaveContext.save.weekEventReg[(s32) D_8085D908[gSaveContext.save.playerForm] >> 8]) != 0, (var_v0_3 != 0))) {
-                    var_v0_3 = (D_80862B44->press.button & 0xC00F) != 0;
-                }
-                sp48 = var_v0_3;
-                if (var_v0_3 != 0) {
-                    goto block_17;
-                }
-            }
-        } else {
-block_17:
-#endif
-        if ((var_v0_2 < temp_a0) ||
-            ((this->unk_AE7 >= 5) &&
-             (((this->transformation != 4) ||
-               (var_v0_3 = (D_8085D908[gSaveContext.save.playerForm] & 0xFF &
-                            gSaveContext.save.weekEventReg[(s32)D_8085D908[gSaveContext.save.playerForm] >> 8]) != 0,
-                (var_v0_3 != 0))) &&
-              (sp48 = var_v0_3 = (D_80862B44->press.button & 0xC00F) != 0)))) {
+    } else if ((this->unk_AE7++ > ((this->transformation == 4) ? 0x53 : 0x37)) || ((this->unk_AE7 >= 5) && (sp48 = ((this->transformation != 4) ||
+                CHECK_WEEKEVENTREG(D_8085D908[gSaveContext.save.playerForm])
+                       ) && 
+                (D_80862B44->press.button & 0xC00F)))) {
             MREG(64) = 0x2D;
             MREG(65) = 0xDC;
             MREG(66) = 0xDC;
             MREG(67) = 0xDC;
             MREG(68) = 0;
 
-            if (sp48 != 0) {
-                if (ActorCutscene_GetCurrentIndex() == this->unk_A86) {
-                    func_800E0348(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->unk_A86)));
-                }
-
-                if (this->transformation == 4) {
-                    AudioSfx_StopById(0x9AAU);
-                    AudioSfx_StopById(0x1858U);
-                } else {
-                    AudioSfx_StopById(0x9A4U);
-                }
+        if (sp48) {
+            if (ActorCutscene_GetCurrentIndex() == this->unk_A86) {
+                func_800E0348(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->unk_A86)));
             }
-            func_800B8E58(this, 0x484FU);
+
+            if (this->transformation == 4) {
+                AudioSfx_StopById(0x9AA);
+                AudioSfx_StopById(0x1858);
+            } else {
+                AudioSfx_StopById(0x9A4);
+            }
         }
+
+        func_800B8E58(this, 0x484F);
     }
 
     if (this->unk_AE7 >= sp4C->unk_0) {
         if (this->unk_AE7 < sp4C->unk_2) {
             Math_StepToF(&this->unk_B10[4], 1.0f, sp4C->unk_1 / 100.0f);
-        } else if (this->unk_AE7 < (s32)sp4C->unk_3) {
+        } else if (this->unk_AE7 < sp4C->unk_3) {
             if (this->unk_AE7 == sp4C->unk_2) {
                 func_801000CC(NA_SE_EV_LIGHTNING_HARD);
             }
@@ -17500,9 +17471,6 @@ block_17:
 
     func_808550D0(play, this, this->unk_B10[4], this->unk_B10[5], (this->transformation == 4) ? 0 : 1);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808553F4.s")
-#endif
 
 void func_80855818(Player* this, PlayState* play) {
     Camera_ChangeMode(play->cameraPtrs[play->activeCamId],
@@ -17606,8 +17574,8 @@ void func_80855C28(Player* this, PlayState* play) {
     }
 
     this->actor.shape.rot.y += this->unk_AE8;
-    this->skelAnime.jointTable->x = 0;
-    this->skelAnime.jointTable->z = 0;
+    this->skelAnime.jointTable[0].x = 0;
+    this->skelAnime.jointTable[0].z = 0;
     this->unk_ABC += this->unk_B10[5];
 
     if (this->unk_ABC >= 0.0f) {
