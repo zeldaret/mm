@@ -55,7 +55,7 @@
         <Limb Name="object_fb_Standardlimb_006110" Type="Standard" EnumName="OBJECT_FB_LIMB_15" Offset="0x6110" />
         <Limb Name="object_fb_Standardlimb_00611C" Type="Standard" EnumName="OBJECT_FB_LIMB_16" Offset="0x611C" />
         <Limb Name="object_fb_Standardlimb_006128" Type="Standard" EnumName="OBJECT_FB_LIMB_17" Offset="0x6128" />
-        <Skeleton Name="object_fb_Skel_006190" Type="Flex" LimbType="Standard" LimbNone="OBJECT_FB_LIMB_NONE" LimbMax="OBJECT_FB_LIMB_MAX" EnumName="object_fb_Limbs" Offset="0x6190" />
+        <Skeleton Name="object_fb_Skel_006190" Type="Flex" LimbType="Standard" LimbNone="OBJECT_FB_LIMB_NONE" LimbMax="OBJECT_FB_LIMB_MAX" EnumName="ObjectFbLimb" Offset="0x6190" />
         <DList Name="object_fb_DL_0061E0" Offset="0x61E0" />
         <Texture Name="object_fb_Tex_0062A8" OutName="tex_0062A8" Format="i4" Width="32" Height="64" Offset="0x62A8" />
         <Texture Name="object_fb_Tex_0066A8" OutName="tex_0066A8" Format="i4" Width="64" Height="64" Offset="0x66A8" />

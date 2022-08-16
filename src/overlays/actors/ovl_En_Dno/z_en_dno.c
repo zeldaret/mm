@@ -517,7 +517,7 @@ void func_80A724B8(EnDno* this, PlayState* play) {
 }
 
 void func_80A7256C(EnDno* this, PlayState* play) {
-    func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, EXCH_ITEM_MINUS1);
+    func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_AP_MINUS1);
 }
 
 void func_80A72598(EnDno* this, PlayState* play) {
@@ -1000,7 +1000,7 @@ void EnDno_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, -frames * 20, 0x20, 0x80));
         gDPSetPrimColor(&gfxXlu[2], 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(&gfxXlu[3], 255, 0, 0, 0);
-        gSPDisplayList(&gfxXlu[4], gGameplayKeepDrawFlameDL);
+        gSPDisplayList(&gfxXlu[4], gEffFire1DL);
 
         POLY_XLU_DISP = gfxXlu + 5;
 

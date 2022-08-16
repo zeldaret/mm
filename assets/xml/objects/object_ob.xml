@@ -1,7 +1,7 @@
 ﻿<Root>
     <!-- Object for MoonChild and his four Masks -->
     <File Name="object_ob" Segment="6">
-
+    
         <!-- Moonchild Mask DisplayLists -->
         <DList Name="gMoonChildOdalwasMaskDL" Offset="0x690" />
         <DList Name="gMoonChildGyorgsMaskDL" Offset="0x1D80" />

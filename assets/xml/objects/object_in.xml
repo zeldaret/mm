@@ -112,7 +112,7 @@
         <Limb Name="object_in_Standardlimb_014E38" Type="Standard" EnumName="OBJECT_IN_LIMB_11" Offset="0x14E38" />
         <Limb Name="object_in_Standardlimb_014E44" Type="Standard" EnumName="OBJECT_IN_LIMB_12" Offset="0x14E44" />
         <Limb Name="object_in_Standardlimb_014E50" Type="Standard" EnumName="OBJECT_IN_LIMB_13" Offset="0x14E50" />
-        <Skeleton Name="object_in_Skel_014EA8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_IN_LIMB_NONE" LimbMax="OBJECT_IN_LIMB_MAX" EnumName="object_in_Limbs" Offset="0x14EA8" />
+        <Skeleton Name="object_in_Skel_014EA8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_IN_LIMB_NONE" LimbMax="OBJECT_IN_LIMB_MAX" EnumName="ObjectInLimb" Offset="0x14EA8" />
         <Animation Name="object_in_Anim_014F8C" Offset="0x14F8C" />
         <Animation Name="object_in_Anim_015918" Offset="0x15918" />
         <Animation Name="object_in_Anim_015E38" Offset="0x15E38" />

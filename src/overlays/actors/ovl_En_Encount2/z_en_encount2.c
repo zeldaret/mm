@@ -114,7 +114,7 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.targetMode = 6;
     this->dyna.actor.colChkInfo.health = 1;
     this->scale = 0.1;
-    this->switchFlag = GET_ENCOUNT2_SWITCH_FLAG(this);
+    this->switchFlag = ENCOUNT2_GET_SWITCH_FLAG(&this->dyna.actor);
 
     if (this->switchFlag == 0x7F) {
         this->switchFlag = -1;
@@ -137,6 +137,7 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
 
 void EnEncount2_Destroy(Actor* thisx, PlayState* play) {
     EnEncount2* this = THIS;
+
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyJntSph(play, &this->collider);
 }

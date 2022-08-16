@@ -227,7 +227,7 @@ void func_80BBB2C4(EnZos* this, PlayState* play) {
         this->actionFunc = func_80BBB8AC;
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -239,7 +239,7 @@ void func_80BBB354(EnZos* this, PlayState* play) {
         this->actionFunc = func_80BBB2C4;
         gSaveContext.save.weekEventReg[39] |= 0x20;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     } else {
         if (gSaveContext.save.weekEventReg[39] & 0x20) {
             getItemId = GI_RUPEE_PURPLE;
@@ -498,7 +498,7 @@ void func_80BBBCBC(EnZos* this, PlayState* play) {
         Message_StartTextbox(play, 0x124D, &this->actor);
         this->actionFunc = func_80BBB574;
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -507,7 +507,7 @@ void func_80BBBD5C(EnZos* this, PlayState* play) {
     if (!Cutscene_CheckActorAction(play, 0x1F5)) {
         this->actionFunc = func_80BBBCBC;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     }
 }
 

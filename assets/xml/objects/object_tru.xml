@@ -102,7 +102,7 @@
         <Limb Name="object_tru_Standardlimb_01A9D4" Type="Standard" EnumName="OBJECT_TRU_LIMB_18" Offset="0x1A9D4" />
         <Limb Name="object_tru_Standardlimb_01A9E0" Type="Standard" EnumName="OBJECT_TRU_LIMB_19" Offset="0x1A9E0" />
         <Limb Name="object_tru_Standardlimb_01A9EC" Type="Standard" EnumName="OBJECT_TRU_LIMB_1A" Offset="0x1A9EC" />
-        <Skeleton Name="object_tru_Skel_01AA60" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TRU_LIMB_NONE" LimbMax="OBJECT_TRU_LIMB_MAX" EnumName="object_tru_Limbs" Offset="0x1AA60" />
+        <Skeleton Name="object_tru_Skel_01AA60" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TRU_LIMB_NONE" LimbMax="OBJECT_TRU_LIMB_MAX" EnumName="ObjectTruLimb" Offset="0x1AA60" />
         <Animation Name="object_tru_Anim_01B5C4" Offset="0x1B5C4" />
     </File>
 </Root>
