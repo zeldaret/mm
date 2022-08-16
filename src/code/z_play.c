@@ -848,8 +848,6 @@ void func_8016A268(GameState* thisx, s16 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg
     MREG(68) = arg5;
 }
 
-// #ifdef NON_MATCHING
-// a1/a2 reg swap around Entrance_GetSpawnNum
 void Play_Init(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
     GraphicsContext* gfxCtx = this->state.gfxCtx;
@@ -884,7 +882,7 @@ void Play_Init(GameState* thisx) {
         gSaveContext.unk_3CA7 = 0;
     }
 
-    if ((s32)gSaveContext.save.entrance == -1) {
+    if (gSaveContext.save.entrance == -1) {
         gSaveContext.save.entrance = 0;
         this->state.running = false;
         {
@@ -1124,9 +1122,6 @@ void Play_Init(GameState* thisx) {
     D_801F6DFC = 0;
     func_8016FC78(&D_801F6D50);
 }
-// #else
-// #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Init.s")
-// #endif
 
 // play_hireso need to confirm still
 u16 D_801D0D78[] = { 0, 0, 0, 0 };
