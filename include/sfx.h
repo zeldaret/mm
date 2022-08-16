@@ -1,6 +1,19 @@
 #ifndef SFX_H
 #define SFX_H
 
+/**
+ * With `SFX_FLAG` on, play the entire sfx audio clip.
+ * Requesting the sfx while playing will restart the sfx from the beginning.
+ * i.e. sfx only needs to be requested once.
+ * 
+ * With `SFX_FLAG` off, play the sfx for only one frame.
+ * Requesting the sfx while playing will allow the sfx to continue to the next frame.
+ * i.e. sfx needs to be requested every frame.
+ * 
+ * By default, `SFX_FLAG` is on.
+ * Use `- SFX_FLAG` to turn `SFX_FLAG` off.
+ */
+#define SFX_FLAG_MASK 0xC00
 #define SFX_FLAG 0x800
 
 // ------------ PLAYER ------------

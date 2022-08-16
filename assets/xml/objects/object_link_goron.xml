@@ -80,7 +80,7 @@
         <Limb Name="object_link_goron_Standardlimb_017784" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_02" Offset="0x17784" />
         <Limb Name="object_link_goron_Standardlimb_017790" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_03" Offset="0x17790" />
         <Limb Name="object_link_goron_Standardlimb_01779C" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_04" Offset="0x1779C" />
-        <Skeleton Name="object_link_goron_Skel_0177B8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_GORON_1_LIMB_NONE" LimbMax="OBJECT_LINK_GORON_1_LIMB_MAX" EnumName="object_link_goron_1_Limbs" Offset="0x177B8" />
+        <Skeleton Name="object_link_goron_Skel_0177B8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_GORON_1_LIMB_NONE" LimbMax="OBJECT_LINK_GORON_1_LIMB_MAX" EnumName="ObjectLinkGoron1Limb" Offset="0x177B8" />
         <!-- <Blob Name="object_link_goron_Blob_0178D0" Size="0x10" Offset="0x178D0" /> -->
         <Limb Name="object_link_goron_Lodlimb_0178E0" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_01" Offset="0x178E0" />
         <Limb Name="object_link_goron_Lodlimb_0178F0" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_02" Offset="0x178F0" />
@@ -103,6 +103,6 @@
         <Limb Name="object_link_goron_Lodlimb_017A00" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_13" Offset="0x17A00" />
         <Limb Name="object_link_goron_Lodlimb_017A10" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_14" Offset="0x17A10" />
         <Limb Name="object_link_goron_Lodlimb_017A20" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_15" Offset="0x17A20" />
-        <Skeleton Name="object_link_goron_Skel_017A84" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_GORON_2_LIMB_NONE" LimbMax="OBJECT_LINK_GORON_2_LIMB_MAX" EnumName="object_link_goron_2_Limbs" Offset="0x17A84" />
+        <Skeleton Name="object_link_goron_Skel_017A84" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_GORON_2_LIMB_NONE" LimbMax="OBJECT_LINK_GORON_2_LIMB_MAX" EnumName="ObjectLinkGoron2Limb" Offset="0x17A84" />
     </File>
 </Root>

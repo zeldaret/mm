@@ -134,10 +134,10 @@ static AnimationSpeedInfo sAnimationInfo[] = {
     { &gRomaniSittingLookDownAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
 };
 
-void EnMa4_ChangeAnim(EnMa4* this, s32 index) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[index].animation, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[index].animation), sAnimationInfo[index].mode,
-                     sAnimationInfo[index].morphFrames);
+void EnMa4_ChangeAnim(EnMa4* this, s32 animIndex) {
+    Animation_Change(&this->skelAnime, sAnimationInfo[animIndex].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationInfo[animIndex].animation), sAnimationInfo[animIndex].mode,
+                     sAnimationInfo[animIndex].morphFrames);
 }
 
 void func_80ABDD9C(EnMa4* this, PlayState* play) {
@@ -214,10 +214,10 @@ void EnMa4_Init(Actor* thisx, PlayState* play) {
     } else {
         EnMa4_InitPath(this, play);
 
-        if (gSaveContext.save.entranceIndex == 0x6410) {
+        if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 1)) {
             EnMa4_ChangeAnim(this, 0);
             this->state = MA4_STATE_AFTERHORSEBACKGAME;
-        } else if (gSaveContext.save.entranceIndex == 0x64A0) {
+        } else if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 10)) {
             EnMa4_ChangeAnim(this, 0);
             this->state = MA4_STATE_AFTERDESCRIBETHEMCS;
         } else {
@@ -243,30 +243,30 @@ void EnMa4_Destroy(Actor* thisx, PlayState* play) {
 
 // Running in circles in the ranch
 void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
-    static s32 sCurrentAnim = 9;
+    static s32 sAnimIndex = 9;
     static s32 D_80AC0250 = 0;
     static s16 D_80AC0254 = 10;
     Vec3f sp34;
     s32 pad;
     s16 sp2E;
 
-    if (sCurrentAnim != 9 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        if (sCurrentAnim == 3) {
+    if (sAnimIndex != 9 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        if (sAnimIndex == 3) {
             if (D_80AC0250 < 3) {
                 D_80AC0250++;
             } else {
                 D_80AC0250 = 0;
                 EnMa4_ChangeAnim(this, 13);
-                sCurrentAnim = 13;
+                sAnimIndex = 13;
             }
         } else {
             this->actor.speedXZ = 2.7f;
             EnMa4_ChangeAnim(this, 9);
-            sCurrentAnim = 9;
+            sAnimIndex = 9;
         }
     }
 
-    if (sCurrentAnim == 13 && Animation_OnFrame(&this->skelAnime, 37.0f)) {
+    if (sAnimIndex == 13 && Animation_OnFrame(&this->skelAnime, 37.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROMANI_BOW_FLICK);
     }
 
@@ -282,7 +282,7 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
             this->actor.speedXZ = 0.0f;
             D_80AC0254 = 2;
             EnMa4_ChangeAnim(this, 3);
-            sCurrentAnim = 3;
+            sAnimIndex = 3;
         } else {
             if (D_80AC0254 > 0) {
                 D_80AC0254--;
@@ -662,7 +662,7 @@ void EnMa4_SetupBeginHorsebackGame(EnMa4* this) {
 }
 
 void EnMa4_BeginHorsebackGame(EnMa4* this, PlayState* play) {
-    play->nextEntranceIndex = 0x6400;
+    play->nextEntrance = ENTRANCE(ROMANI_RANCH, 0);
     gSaveContext.nextCutsceneIndex = 0xFFF0;
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_80;
@@ -753,7 +753,7 @@ void EnMa4_HorsebackGameEnd(EnMa4* this, PlayState* play) {
         }
     } else if (sFrameCounter == 50) {
         play->actorCtx.unk268 = 0;
-        play->nextEntranceIndex = 0x6410;
+        play->nextEntrance = ENTRANCE(ROMANI_RANCH, 1);
         gSaveContext.nextCutsceneIndex = 0;
         sFrameCounter = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -828,7 +828,7 @@ void EnMa4_EponasSongCs(EnMa4* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
 
         player->stateFlags1 |= 0x20;
-        func_800B85E0(&this->actor, play, 200.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_AP_MINUS1);
         D_80AC0260 = 99;
         this->hasBow = true;
         EnMa4_SetupEndEponasSongCs(this);
@@ -850,7 +850,7 @@ void EnMa4_EndEponasSongCs(EnMa4* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         EnMa4_SetupDialogueHandler(this);
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -859,7 +859,7 @@ void EnMa4_SetupBeginDescribeThemCs(EnMa4* this) {
 }
 
 void EnMa4_BeginDescribeThemCs(EnMa4* this, PlayState* play) {
-    play->nextEntranceIndex = 0x6400;
+    play->nextEntrance = ENTRANCE(ROMANI_RANCH, 0);
     gSaveContext.nextCutsceneIndex = 0xFFF5;
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_64;
