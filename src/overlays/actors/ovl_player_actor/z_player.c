@@ -8707,86 +8707,75 @@ s32 func_8083D78C(Player* this, PlayState* play) {
     return false;
 }
 
-#ifdef NON_MATCHING
 s32 func_8083D860(Player* this, PlayState* play) {
     if ((this->wallHeight >= 79.0f) && (!(this->stateFlags1 & 0x8000000) || (this->currentBoots == 5) ||
                                         (this->actor.depthInWater < this->ageProperties->unk_2C))) {
-        s32 var_t0 = (D_80862B0C & 8) ? 2 : 0;
+        s32 var_t0 = (D_80862B0C & 8) ? 2 : 0; // sp8C
         s32 temp_t2 = D_80862B0C & 2; // sp80
-        CollisionPoly* sp7C;
 
         if ((var_t0 != 0) || temp_t2 || func_800C9AE4(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId)) {
-            // f32 var_fv1;
-            // f32 var_fa1; // sp78
-            // f32 var_ft4; // sp74
-            // f32 var_fv1 = 0.0f;
-            f32 xMin; // var_fa1_2; // sp78
-            f32 zMin; // var_ft4_2 // sp74
-            f32 zMax; // var_fa0;
-            f32 yMin; // var_ft5_2 // sp6C
+            CollisionPoly* sp7C;
+            f32 sp78; // var_fa1_2; // sp78
+            f32 sp74; // var_ft4_2 // sp74
+            f32 zOut; // var_fa0;
+            f32 yOut; // var_ft5_2 // sp6C
             Vec3f sp48[3];
-            s32 var_v1;
+            s32 i;
             f32 sp40;
             Vec3f* sp3C;
-            f32 xMax; // var_fv1_2
+            f32 xOut;
 
             sp7C = this->actor.wallPoly;
-            yMin = xMax = 0.0f;
+            yOut = xOut = 0.0f;
             if (var_t0 != 0) {
-                xMin = this->actor.world.pos.x;
-                zMin = this->actor.world.pos.z;
+                sp78 = this->actor.world.pos.x;
+                sp74 = this->actor.world.pos.z;
             } else {
                 // s32 pad;
 
                 sp3C = sp48;
                 CollisionPoly_GetVerticesByBgId(sp7C, this->actor.wallBgId, &play->colCtx, sp48);
-                xMin = xMax = sp48[0].x;
-                zMin = zMax = sp48[0].z;
-                yMin = sp48[0].y;
+                sp78 = xOut = sp48[0].x;
+                sp74 = zOut = sp48[0].z;
+                yOut = sp48[0].y;
 
-                for (var_v1 = 1; var_v1 < ARRAY_COUNT(sp48); var_v1++) {
+                for (i = 1; i < ARRAY_COUNT(sp48); i++) {
                     sp3C++;
 
-                    if (xMin > sp3C->x) {
-                        xMin = sp3C->x;
-                    } else if (xMax < sp3C->x) {
-                        xMax = sp3C->x;
+                    if (sp78 > sp3C->x) {
+                        sp78 = sp3C->x;
+                    } else if (xOut < sp3C->x) {
+                        xOut = sp3C->x;
                     }
 
-                    if (zMin > sp3C->z) {
-                        zMin = sp3C->z;
-                    } else if (zMax < sp3C->z) {
-                        zMax = sp3C->z;
+                    if (sp74 > sp3C->z) {
+                        sp74 = sp3C->z;
+                    } else if (zOut < sp3C->z) {
+                        zOut = sp3C->z;
                     }
 
-                    if (yMin > sp3C->y) {
-                        yMin = sp3C->y;
+                    if (yOut > sp3C->y) {
+                        yOut = sp3C->y;
                     }
                 }
 
-                xMin = (xMin + xMax) * 0.5f;
-                zMin = (zMin + zMax) * 0.5f;
+                sp78 = (sp78 + xOut) * 0.5f;
+                sp74 = (sp74 + zOut) * 0.5f;
 
-                // if (1) { }
+                xOut = ((this->actor.world.pos.x - sp78) * COLPOLY_GET_NORMAL(sp7C->normal.z)) -
+                       ((this->actor.world.pos.z - sp74) * COLPOLY_GET_NORMAL(sp7C->normal.x));
 
-                xMax = ((this->actor.world.pos.x - xMin) * COLPOLY_GET_NORMAL(sp7C->normal.z)) -
-                       ((this->actor.world.pos.z - zMin) * COLPOLY_GET_NORMAL(sp7C->normal.x));
-
-                sp40 = this->actor.world.pos.y - yMin;
-                yMin = ((s32)((sp40 / 15.0f) + 0.5f) * 15.0f) - sp40;
-                xMax = fabsf(xMax);
+                sp40 = this->actor.world.pos.y - yOut;
+                yOut = ((s32)((sp40 / 15.0f) + 0.5f) * 15.0f) - sp40;
+                xOut = fabsf(xOut);
             }
 
-            if (xMax < 8.0f) {
-                f32 sp34;
-                f32 sp30;
-                f32 var_fv0;
-                // f32 temp_fv0_4;              // sp2C
+            if (xOut < 8.0f) {
+                f32 sp34 = COLPOLY_GET_NORMAL(sp7C->normal.x);
+                f32 sp30 = COLPOLY_GET_NORMAL(sp7C->normal.z);
+                f32 var_fv0 = this->wallDistance; // sp2C
                 LinkAnimationHeader* var_a2; // sp28
 
-                sp34 = COLPOLY_GET_NORMAL(sp7C->normal.x);
-                sp30 = COLPOLY_GET_NORMAL(sp7C->normal.z);
-                var_fv0 = this->wallDistance;
                 func_80832558(play, this, func_80837C20);
 
                 this->stateFlags1 |= 0x200000;
@@ -8807,35 +8796,30 @@ s32 func_8083D860(Player* this, PlayState* play) {
                     }
 
                     this->unk_AE8 = -2;
-                    this->actor.world.pos.y += yMin;
+                    this->actor.world.pos.y += yOut;
 
-                    // regalloc here
                     this->actor.shape.rot.y = this->currentYaw = this->actor.wallYaw + 0x8000;
                 } else {
                     var_a2 = this->ageProperties->unk_B0;
                     var_fv0 = (this->ageProperties->unk_38 - this->ageProperties->unk_3C) + 17.0f;
                     this->unk_AE8 = -4;
 
-                    this->actor.shape.rot.y = this->currentYaw = this->actor.wallYaw;
+                    this->actor.shape.rot.y = this->currentYaw = i = this->actor.wallYaw; //! FAKE
                 }
 
-                this->actor.world.pos.x = (var_fv0 * sp34) + xMin;
-                this->actor.world.pos.z = (var_fv0 * sp30) + zMin;
+                this->actor.world.pos.x = (var_fv0 * sp34) + sp78;
+                this->actor.world.pos.z = (var_fv0 * sp30) + sp74;
                 func_8082DAD4(this);
                 Math_Vec3f_Copy(&this->actor.prevPos, &this->actor.world.pos);
                 Player_AnimationPlayOnce(play, this, var_a2);
                 func_8082E920(play, this, 0x9F);
-                return 1;
+                return true;
             }
         }
     }
 
-    return 0;
+    return false;
 }
-#else
-s32 func_8083D860(Player* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083D860.s")
-#endif
 
 void func_8083DCC4(Player* this, LinkAnimationHeader* anim, PlayState* play) {
     func_8083172C(play, this, func_8084FC0C, 0);
@@ -16137,7 +16121,7 @@ void func_80851F18(PlayState* play, Player* this) {
     if (this->unk_B86[1] >= 0) {
         temp = &D_8085D714[this->unk_B86[1]];
         temp_v0 = &this->unk_B10[this->unk_B86[1]];
-        AnimationContext_SetLoadFrame(play, temp->unk_4, *temp_v0, (0, this->skelAnime.limbCount), sp2C);
+        AnimationContext_SetLoadFrame(play, temp->unk_4, *temp_v0, this->skelAnime.limbCount, sp2C);
         AnimationContext_SetCopyTrue(play, this->skelAnime.limbCount, this->skelAnime.jointTable, sp2C, D_8085BA20);
     }
 
