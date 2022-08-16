@@ -58,6 +58,6 @@
         <Limb Name="gBombShopkeeperRightForearmLimb" Type="Standard" EnumName="BOMB_SHOPKEEPER_LIMB_RIGHT_FOREARM" Offset="0x91C0" />
         <Limb Name="gBombShopkeeperRightHandLimb" Type="Standard" EnumName="BOMB_SHOPKEEPER_LIMB_RIGHT_HAND" Offset="0x91CC" />
         <Limb Name="gBombShopkeeperHeadLimb" Type="Standard" EnumName="BOMB_SHOPKEEPER_LIMB_HEAD" Offset="0x91D8" />
-        <Skeleton Name="gBombShopkeeperSkel" Type="Flex" LimbType="Standard" LimbNone="BOMB_SHOPKEEPER_LIMB_NONE" LimbMax="BOMB_SHOPKEEPER_LIMB_MAX" EnumName="BombShopkeeperLimbs" Offset="0x9220" />
+        <Skeleton Name="gBombShopkeeperSkel" Type="Flex" LimbType="Standard" LimbNone="BOMB_SHOPKEEPER_LIMB_NONE" LimbMax="BOMB_SHOPKEEPER_LIMB_MAX" EnumName="BombShopkeeperLimb" Offset="0x9220" />
     </File>
 </Root>

@@ -32,6 +32,6 @@ typedef struct EnKusa {
 #define KUSA_GET_PARAMS_3F(thisx) (((thisx)->params >> 0x2) & 0x3F)
 
 
-#define GET_KUSA_TYPE(thisx)((thisx)->params & 0x3)
+#define KUSA_GET_TYPE(thisx)((thisx)->params & 0x3)
 
 #endif // Z_EN_KUSA_H

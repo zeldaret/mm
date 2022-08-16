@@ -56,7 +56,7 @@
         <Limb Name="object_mu_Standardlimb_00B23C" Type="Standard" EnumName="OBJECT_MU_LIMB_12" Offset="0xB23C" />
         <Limb Name="object_mu_Standardlimb_00B248" Type="Standard" EnumName="OBJECT_MU_LIMB_13" Offset="0xB248" />
         <Limb Name="object_mu_Standardlimb_00B254" Type="Standard" EnumName="OBJECT_MU_LIMB_14" Offset="0xB254" />
-        <Skeleton Name="object_mu_Skel_00B2B0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MU_LIMB_NONE" LimbMax="OBJECT_MU_LIMB_MAX" EnumName="object_mu_Limbs" Offset="0xB2B0" />
+        <Skeleton Name="object_mu_Skel_00B2B0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MU_LIMB_NONE" LimbMax="OBJECT_MU_LIMB_MAX" EnumName="ObjectMuLimb" Offset="0xB2B0" />
         <Animation Name="object_mu_Anim_00BAC4" Offset="0xBAC4" />
     </File>
 </Root>

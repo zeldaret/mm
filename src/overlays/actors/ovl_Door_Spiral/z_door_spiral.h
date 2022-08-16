@@ -5,6 +5,10 @@
 
 struct DoorSpiral;
 
+#define DOORSPIRAL_GET_ORIENTATION(thisx) (((thisx)->params >> 7) & 0x1)
+#define DOORSPIRAL_GET_UNK145(thisx) (((thisx)->params >> 8) & 0x3)
+#define DOORSPIRAL_GET_TRANSITION_ID(thisx) ((u16)(thisx)->params >> 10)
+
 typedef void (*DoorSpiralActionFunc)(struct DoorSpiral*, PlayState*);
 
 typedef struct DoorSpiral {

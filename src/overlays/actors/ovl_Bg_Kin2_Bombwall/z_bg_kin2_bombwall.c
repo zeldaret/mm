@@ -145,7 +145,7 @@ void BgKin2Bombwall_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
     bombwallCollider = &this->collider;
     Collider_InitCylinder(play, bombwallCollider);
-    if (Flags_GetSwitch(play, BG_KIN2_BOMBWALL_SWITCH_FLAG(this))) {
+    if (Flags_GetSwitch(play, BG_KIN2_BOMBWALL_SWITCH_FLAG(&this->dyna.actor))) {
         Actor_MarkForDeath(&this->dyna.actor);
     } else {
         DynaPolyActor_LoadMesh(play, &this->dyna, &gOceanSpiderHouseBombableWallCol);
@@ -184,7 +184,7 @@ void BgKin2Bombwall_SetupPlayCutscene(BgKin2Bombwall* this) {
 void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        Flags_SetSwitch(play, BG_KIN2_BOMBWALL_SWITCH_FLAG(this));
+        Flags_SetSwitch(play, BG_KIN2_BOMBWALL_SWITCH_FLAG(&this->dyna.actor));
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 60, NA_SE_EV_WALL_BROKEN);
         func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = NULL;

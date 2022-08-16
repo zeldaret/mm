@@ -8,8 +8,8 @@ struct ObjIceblock;
 typedef void (*ObjIceblockActionFunc)(struct ObjIceblock*, PlayState*);
 typedef void (*ObjIceblockExtendedDrawFunc)(struct ObjIceblock*, PlayState*);
 
-#define GET_ICEBLOCK_SNAP_ROT(thisx) (((thisx)->params >> 1) & 1)
-#define GET_ICEBLOCK_ICEBERG(thisx) ((thisx)->params & 1)
+#define ICEBLOCK_GET_SNAP_ROT(thisx) (((thisx)->params >> 1) & 1)
+#define ICEBLOCK_GET_ICEBERG(thisx) ((thisx)->params & 1)
 
 typedef struct {
     /* 0x00 */ s16 unk_00;
