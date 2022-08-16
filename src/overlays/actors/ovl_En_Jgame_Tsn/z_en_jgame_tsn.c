@@ -284,7 +284,7 @@ void func_80C1410C(EnJgameTsn* this, PlayState* play) {
 
     player->stateFlags1 |= 0x20;
     func_801A2BB8(0x25);
-    play->interfaceCtx.minigameState = 1;
+    play->interfaceCtx.unk_280 = 1;
     func_80112AFC(play);
     gSaveContext.save.weekEventReg[90] |= 0x20;
     Interface_StartTimer(TIMER_ID_MINIGAME_2, 120);
@@ -294,7 +294,7 @@ void func_80C1410C(EnJgameTsn* this, PlayState* play) {
 void func_80C1418C(EnJgameTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (play->interfaceCtx.minigameState == 8) {
+    if (play->interfaceCtx.unk_280 == 8) {
         func_80C141DC(this);
         player->stateFlags1 &= ~0x20;
     }

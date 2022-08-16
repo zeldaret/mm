@@ -688,7 +688,7 @@ void EnMa4_HorsebackGameTalking(EnMa4* this, PlayState* play) {
 void EnMa4_InitHorsebackGame(EnMa4* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    play->interfaceCtx.minigameState = 1;
+    play->interfaceCtx.unk_280 = 1;
     Interface_StartTimer(TIMER_ID_MINIGAME_2, 0);
     gSaveContext.save.weekEventReg[8] |= 1;
     func_80112AFC(play);
@@ -699,7 +699,7 @@ void EnMa4_InitHorsebackGame(EnMa4* this, PlayState* play) {
 void EnMa4_SetupHorsebackGameWait(EnMa4* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (play->interfaceCtx.minigameState == 8) {
+    if (play->interfaceCtx.unk_280 == 8) {
         this->actionFunc = EnMa4_HorsebackGameWait;
         player->stateFlags1 &= ~0x20;
     }

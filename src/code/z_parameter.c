@@ -1523,7 +1523,7 @@ void Interface_DrawTimers(PlayState* play) {
                 case TIMER_STATE_START:
                 case TIMER_STATE_ALT_START:
                     sTimerStateTimer = 20;
-                    if (interfaceCtx->minigameState != MINIGAME_STATE_NONE) {
+                    if (interfaceCtx->unk_280 != 0) {
                         gSaveContext.timerX[sTimerId] = 26;
 
                         if (interfaceCtx->magicAlpha != 255) {
@@ -1534,8 +1534,7 @@ void Interface_DrawTimers(PlayState* play) {
                             gSaveContext.timerY[sTimerId] = 46;
                         }
 
-                        if ((interfaceCtx->minigameState == MINIGAME_STATE_COUNTDOWN_GO) ||
-                            (interfaceCtx->minigameState == MINIGAME_STATE_30)) {
+                        if ((interfaceCtx->unk_280 == 8) || (interfaceCtx->unk_280 == 30)) {
                             if (gSaveContext.timerState[sTimerId] == TIMER_STATE_START) {
                                 gSaveContext.timerState[sTimerId] = TIMER_STATE_COUNTING;
                             } else {
