@@ -47,7 +47,7 @@
         <Limb Name="object_bai_Standardlimb_007898" Type="Standard" EnumName="OBJECT_BAI_LIMB_11" Offset="0x7898" />
         <Limb Name="object_bai_Standardlimb_0078A4" Type="Standard" EnumName="OBJECT_BAI_LIMB_12" Offset="0x78A4" />
         <Limb Name="object_bai_Standardlimb_0078B0" Type="Standard" EnumName="OBJECT_BAI_LIMB_13" Offset="0x78B0" />
-        <Skeleton Name="object_bai_Skel_007908" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BAI_LIMB_NONE" LimbMax="OBJECT_BAI_LIMB_MAX" EnumName="object_bai_Limbs" Offset="0x7908" />
+        <Skeleton Name="object_bai_Skel_007908" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BAI_LIMB_NONE" LimbMax="OBJECT_BAI_LIMB_MAX" EnumName="ObjectBaiLimb" Offset="0x7908" />
         <Animation Name="object_bai_Anim_008198" Offset="0x8198" />
     </File>
 </Root>

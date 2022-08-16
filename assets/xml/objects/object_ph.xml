@@ -39,6 +39,6 @@
         <Limb Name="object_ph_Standardlimb_001C00" Type="Standard" EnumName="OBJECT_PH_LIMB_15" Offset="0x1C00" />
         <Limb Name="object_ph_Standardlimb_001C0C" Type="Standard" EnumName="OBJECT_PH_LIMB_16" Offset="0x1C0C" />
         <Limb Name="object_ph_Standardlimb_001C18" Type="Standard" EnumName="OBJECT_PH_LIMB_17" Offset="0x1C18" />
-        <Skeleton Name="object_ph_Skel_001C80" Type="Normal" LimbType="Standard" LimbNone="OBJECT_PH_LIMB_NONE" LimbMax="OBJECT_PH_LIMB_MAX" EnumName="object_ph_Limbs" Offset="0x1C80" />
+        <Skeleton Name="object_ph_Skel_001C80" Type="Normal" LimbType="Standard" LimbNone="OBJECT_PH_LIMB_NONE" LimbMax="OBJECT_PH_LIMB_MAX" EnumName="ObjectPhLimb" Offset="0x1C80" />
     </File>
 </Root>

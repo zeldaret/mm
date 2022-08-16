@@ -461,7 +461,7 @@ s32 func_800CBAAC(Camera* camera) {
     }
 }
 
-s32 func_800CBAD4(Vec3f* dst, Camera* camera) {
+s32 Camera_GetFocalActorPos(Vec3f* dst, Camera* camera) {
     PosRot focalPosRot;
     Actor* focalActor = camera->focalActor;
 
@@ -2745,7 +2745,7 @@ s32 Camera_Parallel1(Camera* camera) {
 
     OLib_Vec3fDiffToVecSphGeo(&sp80, at, eye);
     OLib_Vec3fDiffToVecSphGeo(&sp78, at, eyeNext);
-    func_800CBAD4(&spA4, camera);
+    Camera_GetFocalActorPos(&spA4, camera);
 
     switch (camera->animState) {
         case 20:

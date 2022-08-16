@@ -88,7 +88,7 @@
         <Limb Name="object_dnq_Standardlimb_00EAA4" Type="Standard" EnumName="OBJECT_DNQ_LIMB_1E" Offset="0xEAA4" />
         <Limb Name="object_dnq_Standardlimb_00EAB0" Type="Standard" EnumName="OBJECT_DNQ_LIMB_1F" Offset="0xEAB0" />
         <Limb Name="object_dnq_Standardlimb_00EABC" Type="Standard" EnumName="OBJECT_DNQ_LIMB_20" Offset="0xEABC" />
-        <Skeleton Name="object_dnq_Skel_00EB48" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DNQ_LIMB_NONE" LimbMax="OBJECT_DNQ_LIMB_MAX" EnumName="object_dnq_Limbs" Offset="0xEB48" />
+        <Skeleton Name="object_dnq_Skel_00EB48" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DNQ_LIMB_NONE" LimbMax="OBJECT_DNQ_LIMB_MAX" EnumName="ObjectDnqLimb" Offset="0xEB48" />
         <Animation Name="object_dnq_Anim_00F504" Offset="0xF504" />
     </File>
 </Root>

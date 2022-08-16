@@ -64,7 +64,7 @@
         <Limb Name="object_st_Standardlimb_005200" Type="Standard" EnumName="OBJECT_ST_LIMB_1B" Offset="0x5200" />
         <Limb Name="object_st_Standardlimb_00520C" Type="Standard" EnumName="OBJECT_ST_LIMB_1C" Offset="0x520C" />
         <Limb Name="object_st_Standardlimb_005218" Type="Standard" EnumName="OBJECT_ST_LIMB_1D" Offset="0x5218" />
-        <Skeleton Name="object_st_Skel_005298" Type="Normal" LimbType="Standard" LimbNone="OBJECT_ST_LIMB_NONE" LimbMax="OBJECT_ST_LIMB_MAX" EnumName="object_st_Limbs" Offset="0x5298" />
+        <Skeleton Name="object_st_Skel_005298" Type="Normal" LimbType="Standard" LimbNone="OBJECT_ST_LIMB_NONE" LimbMax="OBJECT_ST_LIMB_MAX" EnumName="ObjectStLimb" Offset="0x5298" />
         <Animation Name="object_st_Anim_0055A8" Offset="0x55A8" />
         <Animation Name="object_st_Anim_005B98" Offset="0x5B98" />
     </File>
