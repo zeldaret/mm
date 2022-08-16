@@ -4602,7 +4602,7 @@ void func_80832888(Player* this, PlayState* play) {
     }
 }
 
-s32 func_80832CAC(PlayState* play, Player* this, f32* arg2, s16* arg3, f32 arg4) {
+s32 func_80832CAC(PlayState* play, Player* this, f32* arg2, s16* outYaw, f32 arg4) {
     f32 new_var;
     f32 temp_fv0;
     f32 temp_fv1_2;
@@ -4610,12 +4610,12 @@ s32 func_80832CAC(PlayState* play, Player* this, f32* arg2, s16* arg3, f32 arg4)
     f32 var_fa1;
     f32 var_fa1_2;
 
-    if ((this->unk_AA5 != 0) || (func_8082DA90(play) != 0) || (this->stateFlags1 & 1)) {
+    if ((this->unk_AA5 != 0) || func_8082DA90(play) || (this->stateFlags1 & 1)) {
         *arg2 = 0.0f;
-        *arg3 = this->actor.shape.rot.y;
+        *outYaw = this->actor.shape.rot.y;
     } else {
         *arg2 = D_80862AFC;
-        *arg3 = D_80862B00;
+        *outYaw = D_80862B00;
         if (arg4 != 0.0f) {
             *arg2 -= 20.0f;
             if (*arg2 < 0.0f) {
@@ -4665,48 +4665,53 @@ s32 func_80832CAC(PlayState* play, Player* this, f32* arg2, s16* arg3, f32 arg4)
             }
 
             *arg2 = var_fa1_2;
-            return 1;
+            return true;
         }
     }
 
-    return 0;
+    return false;
 }
 
 s32 func_80832F24(Player* this) {
     return Math_StepToF(&this->linearVelocity, 0.0f, REG(43) / 100.0f);
 }
 
-s32 func_80832F78(Player* this, f32* arg1, s16* arg2, f32 arg3, PlayState* play) {
-    if (func_80832CAC(play, this, arg1, arg2, arg3) == 0) {
-        *arg2 = this->actor.shape.rot.y;
+s32 func_80832F78(Player* this, f32* arg1, s16* outYaw, f32 arg3, PlayState* play) {
+    if (!func_80832CAC(play, this, arg1, outYaw, arg3)) {
+        *outYaw = this->actor.shape.rot.y;
 
         if (this->targetedActor != NULL) {
             if ((play->actorCtx.targetContext.unk4B != 0) && !(this->stateFlags2 & PLAYER_STATE2_40)) {
-                *arg2 = Math_Vec3f_Yaw(&this->actor.world.pos, &this->targetedActor->focus.pos);
+                *outYaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->targetedActor->focus.pos);
             }
         } else if (func_80123434(this)) {
-            *arg2 = this->targetYaw;
+            *outYaw = this->targetYaw;
         }
 
         return false;
     }
 
-    *arg2 += Camera_GetInputDirYaw(play->cameraPtrs[play->activeCamId]);
+    *outYaw += Camera_GetInputDirYaw(play->cameraPtrs[play->activeCamId]);
     return true;
 }
 
-s8 D_8085CFE4[8] = { 0xD, 2, 4, 9, 0xA, 0xB, 8, -7 };
-s8 D_8085CFEC[0xC] = { 0xD, 1, 2, 5, 3, 4, 9, 0xA, 0xB, 7, 8, -6 };
-s8 D_8085CFF8[0xC] = { 0xD, 1, 2, 3, 4, 9, 0xA, 0xB, 8, 7, -6, 0 };
-s8 D_8085D004[8] = { 0xD, 2, 4, 9, 0xA, 0xB, 8, -7 };
-s8 D_8085D00C[0xC] = { 0xD, 2, 4, 9, 0xA, 0xB, 0xC, 8, -7, 0, 0, 0 };
-s8 D_8085D018[4] = { -7, 0, 0, 0 };
-s8 D_8085D01C[0xC] = { 0, 0xB, 1, 2, 3, 5, 4, 9, 8, 7, -6, 0 };
-s8 D_8085D028[0xC] = { 0, 0xB, 1, 2, 3, 0xC, 5, 4, 9, 8, 7, -6 };
-s8 D_8085D034[0x10] = { 0xD, 1, 2, 3, 0xC, 5, 4, 9, 0xA, 0xB, 8, 7, -6, 0, 0, 0 };
-s8 D_8085D044[4] = { 0xA, 8, -7, 0 };
-s8 D_8085D048[8] = { 0, 0xC, 5, 4, -0xE, 0, 0, 0 };
-s8 D_8085D050[4] = { 0xD, 2, -4, 0 };
+/**
+ * The values of following arrays are used as indices for the `D_8085D054` array.
+ * Each index correspond to a function which will be called on sequence until any of them return `true`.
+ * Negative marks the end of the array.
+ */
+s8 D_8085CFE4[] = { 13, 2, 4, 9, 10, 11, 8, -7 };
+s8 D_8085CFEC[] = { 13, 1, 2, 5, 3, 4, 9, 10, 11, 7, 8, -6 };
+s8 D_8085CFF8[] = { 13, 1, 2, 3, 4, 9, 10, 11, 8, 7, -6 };
+s8 D_8085D004[] = { 13, 2, 4, 9, 10, 11, 8, -7 };
+s8 D_8085D00C[] = { 13, 2, 4, 9, 10, 11, 12, 8, -7 };
+s8 D_8085D018[] = { -7 };
+s8 D_8085D01C[] = { 0, 11, 1, 2, 3, 5, 4, 9, 8, 7, -6 };
+s8 D_8085D028[] = { 0, 11, 1, 2, 3, 12, 5, 4, 9, 8, 7, -6 };
+s8 D_8085D034[] = { 13, 1, 2, 3, 12, 5, 4, 9, 10, 11, 8, 7, -6 };
+s8 D_8085D044[] = { 10, 8, -7 };
+s8 D_8085D048[] = { 0, 12, 5, 4, -14 };
+s8 D_8085D050[] = { 13, 2, -4 };
 
 s32 (*D_8085D054[])(Player*, PlayState*) = {
     func_80839518, func_808365DC, func_8083D23C, func_8083CCB4, func_808391D8,
@@ -4732,14 +4737,14 @@ s32 func_80833058(PlayState* play, Player* this, s8* arg2, s32 arg3) {
             s8 var_v0 = *arg2;
 
             while (var_v0 >= 0) {
-                if (D_8085D054[var_v0](this, play) != 0) {
+                if (D_8085D054[var_v0](this, play)) {
                     return true;
                 }
                 arg2++;
                 var_v0 = *arg2;
             }
 
-            if (D_8085D054[-var_v0](this, play) != 0) {
+            if (D_8085D054[-var_v0](this, play)) {
                 return true;
             }
         }
@@ -8687,6 +8692,7 @@ s32 func_8083D23C(Player* this, PlayState* play) {
     return false;
 }
 
+// Player_SetAction_Throwing
 void func_8083D6DC(Player* this, PlayState* play) {
     Player_SetAction(play, this, func_8084E65C, 1);
     Player_AnimationPlayOnce(play, this, D_8085BE84[PLAYER_ANIMGROUP_28][this->modelAnimType]);
@@ -13775,6 +13781,7 @@ void func_8084B4A8(Player* this, PlayState* play) {
     }
 }
 
+// Player_Action_Shielding
 void func_8084B5C0(Player* this, PlayState* play) {
     func_80832F24(this);
 
@@ -14150,6 +14157,7 @@ void func_8084C16C(Player* this, PlayState* play) {
     func_80838A90(this, play);
 }
 
+// sPlayerRollingAnimSfx
 AnimSfxEntry D_8085D61C[] = {
     ANIMSFX(ANIMSFX_TYPE_VOICE, 1, NA_SE_VO_LI_SWORD_N, CONTINUE),
     ANIMSFX(ANIMSFX_TYPE_3, 6, NA_SE_PL_WALK_GROUND, CONTINUE),
@@ -14157,6 +14165,7 @@ AnimSfxEntry D_8085D61C[] = {
     ANIMSFX(ANIMSFX_TYPE_5, 18, 0, STOP),
 };
 
+// Player_Action_Rolling // Handles bonking too?
 void func_8084C6EC(Player* this, PlayState* play) {
     s32 animFinished;
 
@@ -14212,6 +14221,7 @@ void func_8084C6EC(Player* this, PlayState* play) {
                                                 ? NA_SE_PL_ROLL_SNOW_DUST - SFX_FLAG
                                                 : NA_SE_PL_ROLL_DUST - SFX_FLAG);
             }
+
             Player_PlayAnimSfx(this, D_8085D61C);
         }
     }
@@ -14667,7 +14677,7 @@ void func_8084D820(Player* this, PlayState* play) {
 
             temp_v0_8 = func_808411D4(play, this, &sp5C, sp58);
             if ((this->unk_AE8 == 0) || ((temp_v0_8 == 0) && (this->linearVelocity == 0.0f) &&
-                                         (Play_GetCamera(play, 0)->stateFlags & PLAYER_STATE1_10))) {
+                                         (Play_GetCamera(play, 0)->stateFlags & 0x10))) {
                 if (this->unk_397 == 4) {
                     Map_InitRoomData(play, (s16)play->roomCtx.currRoom.num);
                     Minimap_SavePlayerRoomInitInfo(play);
@@ -14772,7 +14782,7 @@ void func_8084E25C(Player* this, PlayState* play) {
     }
 }
 
-// grab/hold an actor (?) What's the difference with func_8084E25C ?
+// grab/hold an actor (?)
 void func_8084E334(Player* this, PlayState* play) {
     func_80832F24(this);
 
@@ -14825,6 +14835,7 @@ void func_8084E4E4(Player* this, PlayState* play) {
     }
 }
 
+// Player_Action_PutDownObject?
 void func_8084E58C(Player* this, PlayState* play) {
     func_80832F24(this);
 
@@ -14844,14 +14855,15 @@ void func_8084E58C(Player* this, PlayState* play) {
     }
 }
 
+// Player_Action_Throwing
 void func_8084E65C(Player* this, PlayState* play) {
     f32 sp34;
-    s16 sp32;
+    s16 yaw;
 
     func_80832F24(this);
 
     if (LinkAnimation_Update(play, &this->skelAnime) ||
-        ((this->skelAnime.curFrame >= 8.0f) && func_80832F78(this, &sp34, &sp32, 0.018f, play))) {
+        ((this->skelAnime.curFrame >= 8.0f) && func_80832F78(this, &sp34, &yaw, 0.018f, play))) {
         func_80836988(this, play);
     } else if (LinkAnimation_OnFrame(&this->skelAnime, 3.0f)) {
         func_808409A8(play, this, this->linearVelocity + 8.0f, 12.0f);
