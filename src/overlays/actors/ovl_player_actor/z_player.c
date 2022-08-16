@@ -19058,9 +19058,9 @@ void func_80859BA8(PlayState* play, Player* this, void* arg) {
     progress = (((f32)(play->csCtx.frames - playerAction->startFrame)) /
                           ((f32)(playerAction->endFrame - playerAction->startFrame)));
 
-    this->actor.world.pos.x = ((diffX) * progress) + startX;
-    this->actor.world.pos.y = ((diffY) * progress) + startY;
-    this->actor.world.pos.z = ((diffZ) * progress) + startZ;
+    this->actor.world.pos.x = (diffX * progress) + startX;
+    this->actor.world.pos.y = (diffY * progress) + startY;
+    this->actor.world.pos.z = (diffZ * progress) + startZ;
 }
 
 void func_80859C60(PlayState* play, Player* this, UNK_PTR arg2) {
