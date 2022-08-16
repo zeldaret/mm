@@ -8343,7 +8343,7 @@ void func_8083BB4C(PlayState* play, Player* this) {
 
     temp_fv0 = this->actor.depthInWater - this->ageProperties->unk_2C;
     if (temp_fv0 < 0.0f) {
-        this->unk_AD8 = 0;
+        this->underwaterTimer = 0;
         if ((this->transformation == 2) && (this->actor.bgCheckFlags & 1)) {
             this->currentBoots = 4;
         }
@@ -8352,11 +8352,11 @@ void func_8083BB4C(PlayState* play, Player* this) {
         sp1C = temp_fv0;
         func_801A3E38(0x20U);
         if ((this->transformation == 2) || (temp_fv0 < 10.0f)) {
-            this->unk_AD8 = 0;
+            this->underwaterTimer = 0;
         } else {
-            temp_v0 = this->unk_AD8;
+            temp_v0 = this->underwaterTimer;
             if ((s32) temp_v0 < 0x12C) {
-                this->unk_AD8 = temp_v0 + 1;
+                this->underwaterTimer = temp_v0 + 1;
             }
         }
     }

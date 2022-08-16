@@ -1458,7 +1458,7 @@ s32 func_801242DC(PlayState* play) {
 
     if (play->roomCtx.currRoom.unk2 == 3) { // Room is hot
         envIndex = 0;
-    } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->unk_AD8 > 80)) {
+    } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->underwaterTimer > 80)) {
         envIndex = 3;
     } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
         if ((player->transformation == PLAYER_FORM_ZORA) && (player->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&

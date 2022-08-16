@@ -995,7 +995,7 @@ typedef struct Player {
     /* 0xAD0 */ f32 linearVelocity;
     /* 0xAD4 */ s16 currentYaw;
     /* 0xAD6 */ s16 targetYaw;
-    /* 0xAD8 */ u16 unk_AD8;
+    /* 0xAD8 */ u16 underwaterTimer;
     /* 0xADA */ s8 meleeWeaponAnimation;
     /* 0xADB */ s8 meleeWeaponState;
     /* 0xADC */ s8 unk_ADC;

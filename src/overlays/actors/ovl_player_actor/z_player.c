@@ -8085,7 +8085,7 @@ void func_8083BB4C(PlayState* play, Player* this) {
     f32 sp1C = this->actor.depthInWater - this->ageProperties->unk_2C;
 
     if (sp1C < 0.0f) {
-        this->unk_AD8 = 0;
+        this->underwaterTimer = 0;
         if ((this->transformation == PLAYER_FORM_ZORA) && (this->actor.bgCheckFlags & 1)) {
             this->currentBoots = 4;
         }
@@ -8093,9 +8093,9 @@ void func_8083BB4C(PlayState* play, Player* this) {
     } else {
         func_801A3E38(0x20);
         if ((this->transformation == PLAYER_FORM_ZORA) || (sp1C < 10.0f)) {
-            this->unk_AD8 = 0;
-        } else if (this->unk_AD8 < 300) {
-            this->unk_AD8++;
+            this->underwaterTimer = 0;
+        } else if (this->underwaterTimer < 300) {
+            this->underwaterTimer++;
         }
     }
 
