@@ -8707,48 +8707,36 @@ s32 func_8083D78C(Player* this, PlayState* play) {
     return false;
 }
 
-#ifdef NON_EQUIVALENT
+#ifdef NON_MATCHING
 s32 func_8083D860(Player* this, PlayState* play) {
-    s32 var_t0;  // sp84
-    s32 temp_t2; // sp80
-    CollisionPoly* sp7C;
-    f32 var_fa1; // sp78
-    f32 var_ft4; // sp74
-
-    f32 var_ft5; // sp6C
-    Vec3f sp48[3];
-
-    f32 sp40;
-    Vec3f* sp3C;
-
-    f32 sp34;
-    f32 sp30;
-    f32 temp_fv0_4;              // sp2C
-    LinkAnimationHeader* var_a2; // sp28
-
-    if ((this->wallHeight >= 79.0f) && ((!(this->stateFlags1 & 0x8000000)) || (this->currentBoots == 5) ||
+    if ((this->wallHeight >= 79.0f) && (!(this->stateFlags1 & 0x8000000) || (this->currentBoots == 5) ||
                                         (this->actor.depthInWater < this->ageProperties->unk_2C))) {
-        var_t0 = (D_80862B0C & 8) ? 2 : 0;
+        s32 var_t0 = (D_80862B0C & 8) ? 2 : 0;
+        s32 temp_t2 = D_80862B0C & 2; // sp80
+        CollisionPoly* sp7C;
 
-        temp_t2 = D_80862B0C & 2;
-        if ((var_t0 != 0) || (temp_t2 != 0) ||
-            (func_800C9AE4(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId) != 0)) {
-            f32 var_fv0;
-            f32 var_fv1;
+        if ((var_t0 != 0) || temp_t2 || func_800C9AE4(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId)) {
+            // f32 var_fv1;
+            // f32 var_fa1; // sp78
+            // f32 var_ft4; // sp74
+            // f32 var_fv1 = 0.0f;
+            f32 xMin; // var_fa1_2; // sp78
+            f32 zMin; // var_ft4_2 // sp74
+            f32 zMax; // var_fa0;
+            f32 yMin; // var_ft5_2 // sp6C
+            Vec3f sp48[3];
+            s32 var_v1;
+            f32 sp40;
+            Vec3f* sp3C;
+            f32 xMax; // var_fv1_2
 
-            var_fv1 = 0.0f;
-            var_ft5 = 0.0f;
             sp7C = this->actor.wallPoly;
+            yMin = xMax = 0.0f;
             if (var_t0 != 0) {
-                var_fa1 = this->actor.world.pos.x;
-                var_ft4 = this->actor.world.pos.z;
+                xMin = this->actor.world.pos.x;
+                zMin = this->actor.world.pos.z;
             } else {
-                s32 var_v1;
-                f32 zMax; // var_fa0;
-                f32 xMin; // var_fa1_2;
-                f32 zMin; // var_ft4_2
-                f32 yMin; // var_ft5_2
-                f32 xMax; // var_fv1_2
+                // s32 pad;
 
                 sp3C = sp48;
                 CollisionPoly_GetVerticesByBgId(sp7C, this->actor.wallBgId, &play->colCtx, sp48);
@@ -8757,71 +8745,82 @@ s32 func_8083D860(Player* this, PlayState* play) {
                 yMin = sp48[0].y;
 
                 for (var_v1 = 1; var_v1 < ARRAY_COUNT(sp48); var_v1++) {
-                    sp3C += 1;
+                    sp3C++;
 
-                    if (sp3C->x < xMin) {
+                    if (xMin > sp3C->x) {
                         xMin = sp3C->x;
                     } else if (xMax < sp3C->x) {
                         xMax = sp3C->x;
                     }
 
-                    if (sp3C->z < zMin) {
+                    if (zMin > sp3C->z) {
                         zMin = sp3C->z;
                     } else if (zMax < sp3C->z) {
                         zMax = sp3C->z;
                     }
 
-                    if (sp3C->y < yMin) {
+                    if (yMin > sp3C->y) {
                         yMin = sp3C->y;
                     }
                 }
 
-                var_fa1 = (xMin + xMax) * 0.5f;
-                var_ft4 = (zMin + zMax) * 0.5f;
-                sp40 = this->actor.world.pos.y - yMin;
+                xMin = (xMin + xMax) * 0.5f;
+                zMin = (zMin + zMax) * 0.5f;
 
                 // if (1) { }
 
-                var_fv1 = fabsf(((this->actor.world.pos.x - var_fa1) * COLPOLY_GET_NORMAL(sp7C->normal.z)) -
-                                ((this->actor.world.pos.z - var_ft4) * COLPOLY_GET_NORMAL(sp7C->normal.x)));
-                var_ft5 = ((s32)((sp40 / 15.0f) + 0.5f) * 15.0f) - sp40;
+                xMax = ((this->actor.world.pos.x - xMin) * COLPOLY_GET_NORMAL(sp7C->normal.z)) -
+                       ((this->actor.world.pos.z - zMin) * COLPOLY_GET_NORMAL(sp7C->normal.x));
+
+                sp40 = this->actor.world.pos.y - yMin;
+                yMin = ((s32)((sp40 / 15.0f) + 0.5f) * 15.0f) - sp40;
+                xMax = fabsf(xMax);
             }
 
-            if (var_fv1 < 8.0f) {
+            if (xMax < 8.0f) {
+                f32 sp34;
+                f32 sp30;
+                f32 var_fv0;
+                // f32 temp_fv0_4;              // sp2C
+                LinkAnimationHeader* var_a2; // sp28
+
                 sp34 = COLPOLY_GET_NORMAL(sp7C->normal.x);
                 sp30 = COLPOLY_GET_NORMAL(sp7C->normal.z);
-                temp_fv0_4 = this->wallDistance;
+                var_fv0 = this->wallDistance;
                 func_80832558(play, this, func_80837C20);
 
-                this->stateFlags1 |= PLAYER_STATE1_200000;
-                this->stateFlags1 &= ~PLAYER_STATE1_8000000;
+                this->stateFlags1 |= 0x200000;
+                this->stateFlags1 &= ~0x8000000;
 
-                if ((var_t0 != 0) || (temp_t2 != 0)) {
-                    this->unk_AE7 = var_t0;
+                if ((var_t0 != 0) || temp_t2) {
+                    if ((this->unk_AE7 = var_t0) != 0) {
+                        if (this->actor.bgCheckFlags & 1) {
+                            var_a2 = &gameplay_keep_Linkanim_00DAA0;
 
-                    if (var_t0 != 0) {
-                        var_a2 = (this->actor.bgCheckFlags & 1) ? &gameplay_keep_Linkanim_00DAA0
-                                                                : &gameplay_keep_Linkanim_00DA88;
-                        var_fv0 = (this->ageProperties->unk_3C + 4.0f) - temp_fv0_4;
+                        } else {
+                            var_a2 = &gameplay_keep_Linkanim_00DA88;
+                        }
+                        var_fv0 = (this->ageProperties->unk_3C + 4.0f) - var_fv0;
                     } else {
                         var_a2 = this->ageProperties->unk_AC;
                         var_fv0 = 20.5f;
                     }
 
                     this->unk_AE8 = -2;
-                    this->actor.world.pos.y += var_ft5;
+                    this->actor.world.pos.y += yMin;
 
+                    // regalloc here
                     this->actor.shape.rot.y = this->currentYaw = this->actor.wallYaw + 0x8000;
                 } else {
                     var_a2 = this->ageProperties->unk_B0;
                     var_fv0 = (this->ageProperties->unk_38 - this->ageProperties->unk_3C) + 17.0f;
-
                     this->unk_AE8 = -4;
-                    this->currentYaw = this->actor.shape.rot.y = this->actor.wallYaw;
+
+                    this->actor.shape.rot.y = this->currentYaw = this->actor.wallYaw;
                 }
 
-                this->actor.world.pos.x = (var_fv0 * sp34) + var_fa1;
-                this->actor.world.pos.z = (var_fv0 * sp30) + var_ft4;
+                this->actor.world.pos.x = (var_fv0 * sp34) + xMin;
+                this->actor.world.pos.z = (var_fv0 * sp30) + zMin;
                 func_8082DAD4(this);
                 Math_Vec3f_Copy(&this->actor.prevPos, &this->actor.world.pos);
                 Player_AnimationPlayOnce(play, this, var_a2);
@@ -16123,10 +16122,11 @@ void func_80851F18(PlayState* play, Player* this) {
     f32* temp_v0;
     s32 i;
     // s32 temp_t1;
+    sp2C = ((s32)this->blendTableBuffer + 0xF) & ~0xF;
 
     // temp_t1 = this->unk_B86[0];
     if (this->unk_B86[0] >= 0) {
-        temp = D_8085D714 + this->unk_B86[0];
+        temp = &D_8085D714[this->unk_B86[0]];
         temp_v0 = &this->unk_B10[this->unk_B86[0]];
         AnimationContext_SetLoadFrame(play, temp->unk_4, *temp_v0, this->skelAnime.limbCount,
                                       this->skelAnime.morphTable);
@@ -16135,10 +16135,9 @@ void func_80851F18(PlayState* play, Player* this) {
     }
     // temp_t1 = this->unk_B86[1];
     if (this->unk_B86[1] >= 0) {
-        temp = D_8085D714 + this->unk_B86[1];
+        temp = &D_8085D714[this->unk_B86[1]];
         temp_v0 = &this->unk_B10[this->unk_B86[1]];
-        sp2C = ALIGN16((uintptr_t)this->blendTableBuffer);
-        AnimationContext_SetLoadFrame(play, temp->unk_4, *temp_v0, ((void)0, this->skelAnime.limbCount), sp2C);
+        AnimationContext_SetLoadFrame(play, temp->unk_4, *temp_v0, (0, this->skelAnime.limbCount), sp2C);
         AnimationContext_SetCopyTrue(play, this->skelAnime.limbCount, this->skelAnime.jointTable, sp2C, D_8085BA20);
     }
 
