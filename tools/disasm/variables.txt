@@ -2128,7 +2128,7 @@
     0x801D0D50:("gDbgCamEnabled","UNK_TYPE4","",0x4),
     0x801D0D54:("D_801D0D54","UNK_TYPE1","",0x1),
     0x801D0D58:("D_801D0D58","UNK_TYPE2","",0x2),
-    0x801D0D5C:("D_801D0D5C","UNK_TYPE2","",0x2),
+    0x801D0D5C:("sIsCameraUnderwater","UNK_TYPE2","",0x2),
     0x801D0D60:("D_801D0D60","Input*","",0x4),
     0x801D0D64:("D_801D0D64","s16","[10]",0x14),
     0x801D0D78:("D_801D0D78","u16","[4]",0x4),

@@ -597,5 +597,5 @@ u16 Entrance_Create(s32 scene, s32 spawn, s32 layer) {
  * Creates an layer 0 entranace from the current entrance and the given spawn.
  */
 u16 Entrance_CreateFromSpawn(s32 spawn) {
-    return Entrance_Create(gSaveContext.save.entrance >> 9, spawn, 0);
+    return Entrance_Create((u32)gSaveContext.save.entrance >> 9, spawn, 0);
 }

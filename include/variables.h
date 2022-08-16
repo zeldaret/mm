@@ -1479,7 +1479,7 @@ extern const TransitionInit TransitionCircle_InitVars;
 extern s32 gDbgCamEnabled;
 // extern UNK_TYPE1 D_801D0D54;
 // extern UNK_TYPE2 D_801D0D58;
-// extern UNK_TYPE2 D_801D0D5C;
+// extern UNK_TYPE2 sIsCameraUnderwater;
 extern Input* D_801D0D60;
 // extern UNK_TYPE2 D_801D0D64;
 // extern UNK_TYPE1 D_801D0D7A;

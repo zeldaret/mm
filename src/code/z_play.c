@@ -63,7 +63,7 @@ void func_80165E1C(PreRender* prerender) {
 s32 func_80165E7C(PlayState* this, s32 arg1) {
     s32 phi_v1 = arg1;
 
-    if (arg1 == 0x14) {
+    if (arg1 == TRANS_TYPE_20) {
         if (!gSaveContext.save.isNight) {
             phi_v1 = TRANS_TYPE_03;
         } else {
@@ -159,10 +159,10 @@ void func_80166060(PlayState* this) {
 }
 
 Gfx* func_801660B8(PlayState* this, Gfx* gfx) {
-    s32 phi_v1 = this->lightCtx.unkC * 0.078125f;
+    s32 phi_v1 = this->lightCtx.unkC * (5.0f / 64.0f);
 
     return Gfx_SetFogWithSync(gfx, this->lightCtx.unk7, this->lightCtx.unk8, this->lightCtx.unk9, 0,
-                              this->lightCtx.unkA, phi_v1 <= 1000 ? 1000 : phi_v1);
+                              this->lightCtx.unkA, (phi_v1 <= 1000) ? 1000 : phi_v1);
 }
 
 void Play_Destroy(GameState* thisx) {
@@ -181,14 +181,17 @@ void Play_Destroy(GameState* thisx) {
         gfxCtx->updateViMode = 1;
         D_801F6DFC = 0;
     }
+
     func_8016FC98(&D_801F6D50);
     this->state.gfxCtx->callback = NULL;
     this->state.gfxCtx->callbackParam = 0;
     func_80165630();
+
     if (SREG(94) != 0) {
         PreRender_ApplyFiltersSlowlyDestroy(&this->pauseBgPreRender);
         SREG(94) = 0;
     }
+
     SREG(89) = 0;
     PreRender_Destroy(&this->pauseBgPreRender);
     this->unk_18E58 = NULL;
@@ -199,24 +202,29 @@ void Play_Destroy(GameState* thisx) {
     Effect_DestroyAll(this);
     EffectSS_Clear(this);
     CollisionCheck_DestroyContext(this, &this->colChkCtx);
+
     if (D_801F6D10 == 3) {
         func_8016424C(&D_801F6C30);
         D_801F6D10 = 0;
     }
+
     if ((this->transitionMode == TRANS_MODE_03) || (D_801D0D54 != 0)) {
         this->unk_18BF0.unk_234(&this->unk_18BF0.unk_08);
         func_80166060(this);
         this->transitionMode = TRANS_MODE_OFF;
     }
+
     ShrinkWindow_Destroy();
     TransitionFade_Destroy(&this->unk_18E48);
     VisMono_Destroy(&D_801F6D18);
     func_80140EA0(D_801F6D4C);
     D_801F6D4C = NULL;
+
     if (gSaveContext.save.weekEventReg[0x5C] & 0x80) {
         Actor_CleanupContext(&this->actorCtx, this);
     }
     gSaveContext.save.weekEventReg[0x5C] &= (u8)~0x80;
+
     func_80121F94(this);
     KaleidoScopeCall_Destroy(this);
     KaleidoManager_Destroy();
@@ -247,23 +255,23 @@ f32 func_801668B4(PlayState* this, Vec3f* arg1, s32* arg2) {
 
 void func_80166968(PlayState* this, Camera* camera) {
     static s16 D_801D0D58 = -1;
-    static s16 D_801D0D5C = 0;
+    static s16 sIsCameraUnderwater = false;
     s32 pad;
     s32 sp28;
     Player* player = GET_PLAYER(this);
 
-    D_801D0D5C = camera->stateFlags & CAM_STATE_UNDERWATER;
+    sIsCameraUnderwater = camera->stateFlags & CAM_STATE_UNDERWATER;
     if (func_801668B4(this, &camera->eye, &sp28) != BGCHECK_Y_MIN) {
-        s16 temp;
-
-        if (D_801D0D5C == 0) {
+        if (!sIsCameraUnderwater) {
             Camera_SetFlags(camera, CAM_STATE_UNDERWATER);
             D_801D0D58 = -1;
             Distortion_SetType(0x10);
             Distortion_SetCountdown(0x50);
         }
+
         func_801A3EC0(0x20);
         func_800F6834(this, sp28);
+
         if ((D_801D0D58 == -1) || (Quake_GetCountdown(D_801D0D58) == 0xA)) {
             s16 quake = Quake_Add(camera, 5);
 
@@ -282,8 +290,8 @@ void func_80166968(PlayState* this, Camera* camera) {
             Distortion_ClearType(8);
         }
     } else {
-        if (D_801D0D5C != 0) {
-            Camera_ClearFlags(camera, 0x100);
+        if (sIsCameraUnderwater) {
+            Camera_ClearFlags(camera, CAM_STATE_UNDERWATER);
         }
         Distortion_ClearType(4);
         Distortion_ClearType(0x10);
@@ -840,13 +848,13 @@ void func_8016A268(GameState* thisx, s16 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg
     MREG(68) = arg5;
 }
 
-#ifdef NON_MATCHING
+// #ifdef NON_MATCHING
 // a1/a2 reg swap around Entrance_GetSpawnNum
 void Play_Init(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
     GraphicsContext* gfxCtx = this->state.gfxCtx;
     s32 pad;
-    s32 pad2;
+    s32 temp;
     s32 sp94;
     Player* player;
     s32 spawn;
@@ -876,7 +884,7 @@ void Play_Init(GameState* thisx) {
         gSaveContext.unk_3CA7 = 0;
     }
 
-    if (gSaveContext.save.entrance == -1) {
+    if ((s32)gSaveContext.save.entrance == -1) {
         gSaveContext.save.entrance = 0;
         this->state.running = false;
         {
@@ -944,11 +952,11 @@ void Play_Init(GameState* thisx) {
     }
 
     Camera_Init(&this->mainCamera, &this->view, &this->colCtx, this);
-    Camera_ChangeStatus(&this->mainCamera, 7);
+    Camera_ChangeStatus(&this->mainCamera, CAM_STATUS_ACTIVE);
 
     for (i = 0; i < ARRAY_COUNT(this->subCameras); i++) {
         Camera_Init(&this->subCameras[i], &this->view, &this->colCtx, this);
-        Camera_ChangeStatus(&this->subCameras[i], 0x100);
+        Camera_ChangeStatus(&this->subCameras[i], CAM_STATUS_INACTIVE);
     }
 
     this->cameraPtrs[CAM_ID_MAIN] = &this->mainCamera;
@@ -1001,10 +1009,12 @@ void Play_Init(GameState* thisx) {
 
     sp87 = gSaveContext.sceneSetupIndex;
 
+    //! FAKE: temp. Also introduces a warning.
     Play_SceneInit(
         this,
-        Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneSetupIndex)),
-        Entrance_GetSpawnNum(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneSetupIndex)));
+        Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.save.entrance) +
+                                     ((void)0, (temp = gSaveContext.sceneSetupIndex))),
+        Entrance_GetSpawnNum(((void)0, gSaveContext.save.entrance) + ((void)0, (temp = gSaveContext.sceneSetupIndex))));
     KaleidoScopeCall_Init(this);
     func_80121FC4(this);
 
@@ -1056,7 +1066,7 @@ void Play_Init(GameState* thisx) {
                 (Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entrance) + sp87) >> 7) & 0x7F;
         } else {
             this->transitionType = gSaveContext.nextTransitionType;
-            gSaveContext.nextTransitionType = 0xFF;
+            gSaveContext.nextTransitionType = TRANS_NEXT_TYPE_DEFAULT;
         }
     } else {
         this->transitionType = TRANS_TYPE_02;
@@ -1064,7 +1074,7 @@ void Play_Init(GameState* thisx) {
 
     TransitionFade_Init(&this->unk_18E48);
     TransitionFade_SetType(&this->unk_18E48, 3);
-    TransitionFade_SetColor(&this->unk_18E48, 0xA0A0A0FF);
+    TransitionFade_SetColor(&this->unk_18E48, RGBA8(160, 160, 160, 255));
     TransitionFade_Start(&this->unk_18E48);
     VisMono_Init(&D_801F6D18);
 
@@ -1114,9 +1124,9 @@ void Play_Init(GameState* thisx) {
     D_801F6DFC = 0;
     func_8016FC78(&D_801F6D50);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Init.s")
-#endif
+// #else
+// #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Init.s")
+// #endif
 
 // play_hireso need to confirm still
 u16 D_801D0D78[] = { 0, 0, 0, 0 };
