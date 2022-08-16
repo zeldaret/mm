@@ -170,9 +170,9 @@ s16 sExtraItemBases[] = {
     ITEM_NUT,     // ITEM_NUT_UPGRADE_30
 };
 
-s16 sEnvTimerType = 0;
-s16 sEnvTimerActive = 0;
-s16 sPostmanBunnyHoodState = 0;
+s16 sEnvTimerType = PLAYER_ENV_TIMER_NONE;
+s16 sEnvTimerActive = false;
+s16 sPostmanBunnyHoodState = POSTMAN_MINIGAME_BUNNY_HOOD_OFF;
 OSTime sTimerPausedOsTime = 0;
 OSTime sBottleTimerPausedOsTime = 0;
 OSTime D_801BF8F8[] = {
