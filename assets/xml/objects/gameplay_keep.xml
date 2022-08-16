@@ -796,7 +796,7 @@
         <Limb Name="gPinkDekuFlowerFrontLeftPetalLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_FRONT_LEFT_PETAL" Offset="0x114CC" />
         <Limb Name="gPinkDekuFlowerLeftLeafLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_LEFT_LEAF" Offset="0x114D8" />
         <Limb Name="gPinkDekuFlowerBackLeftPetalLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_BACK_LEFT_PETAL" Offset="0x114E4" />
-        <Skeleton Name="gPinkDekuFlowerSkel" Type="Normal" LimbType="Standard" LimbNone="PINK_DEKU_FLOWER_LIMB_NONE" LimbMax="PINK_DEKU_FLOWER_LIMB_MAX" EnumName="PinkDekuFlowerLimbs" Offset="0x11518" />
+        <Skeleton Name="gPinkDekuFlowerSkel" Type="Normal" LimbType="Standard" LimbNone="PINK_DEKU_FLOWER_LIMB_NONE" LimbMax="PINK_DEKU_FLOWER_LIMB_MAX" EnumName="PinkDekuFlowerLimb" Offset="0x11518" />
         <Animation Name="gDekuFlowerRustleAnim" Offset="0x117A8" /> <!-- Original name is "dnp_zawa" ("rustling") -->
         <Collision Name="gGoldDekuFlowerCol" Offset="0x118D8" />
         <DList Name="gGoldDekuFlowerIdleDL" Offset="0x11BD0" />
@@ -820,7 +820,7 @@
         <Limb Name="gGoldDekuFlowerFrontLeftPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_FRONT_LEFT_PETAL" Offset="0x1279C" />
         <Limb Name="gGoldDekuFlowerLeftPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_LEFT_PETAL" Offset="0x127A8" />
         <Limb Name="gGoldDekuFlowerBackLeftPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_BACK_LEFT_PETAL" Offset="0x127B4" />
-        <Skeleton Name="gGoldDekuFlowerSkel" Type="Flex" LimbType="Standard" LimbNone="GOLD_DEKU_FLOWER_LIMB_NONE" LimbMax="GOLD_DEKU_FLOWER_LIMB_MAX" EnumName="GoldDekuFlowerLimbs" Offset="0x127E8" />
+        <Skeleton Name="gGoldDekuFlowerSkel" Type="Flex" LimbType="Standard" LimbNone="GOLD_DEKU_FLOWER_LIMB_NONE" LimbMax="GOLD_DEKU_FLOWER_LIMB_MAX" EnumName="GoldDekuFlowerLimb" Offset="0x127E8" />
 
         <Animation Name="gameplay_keep_Anim_012860" Offset="0x12860" />
         <Animation Name="gameplay_keep_Anim_0128BC" Offset="0x128BC" />
@@ -828,11 +828,11 @@
         <Texture Name="gameplay_keep_Tex_0138D0" OutName="tex_0138D0" Format="rgba16" Width="32" Height="16" Offset="0x138D0" />
         <DList Name="gameplay_keep_DL_013FF0" Offset="0x13FF0" />
         <DList Name="gameplay_keep_DL_014370" Offset="0x14370" />
-        <Limb Name="gameplay_keep_Lodlimb_014510" Type="LOD" Offset="0x14510" />
-        <Limb Name="gameplay_keep_Lodlimb_014520" Type="LOD" Offset="0x14520" />
-        <Limb Name="gameplay_keep_Lodlimb_014530" Type="LOD" Offset="0x14530" />
-        <Limb Name="gameplay_keep_Lodlimb_014540" Type="LOD" Offset="0x14540" />
-        <Skeleton Name="gameplay_keep_Skel_014560" Type="Normal" LimbType="Standard" Offset="0x14560" />
+        <Limb Name="gameplay_keep_Lodlimb_014510" Type="LOD" EnumName="ARROW_LIMB_1" Offset="0x14510" />
+        <Limb Name="gameplay_keep_Lodlimb_014520" Type="LOD" EnumName="ARROW_LIMB_2" Offset="0x14520" />
+        <Limb Name="gameplay_keep_Lodlimb_014530" Type="LOD" EnumName="ARROW_LIMB_3" Offset="0x14530" />
+        <Limb Name="gameplay_keep_Lodlimb_014540" Type="LOD" EnumName="ARROW_LIMB_4" Offset="0x14540" />
+        <Skeleton Name="gameplay_keep_Skel_014560" Type="Normal" LimbType="Standard" LimbNone="ARROW_LIMB_NONE" LimbMax="ARROW_LIMB_MAX" EnumName="ArrowLimb" Offset="0x14560" />
         <Texture Name="gameplay_keep_Tex_014570" OutName="tex_014570" Format="rgba32" Width="16" Height="32" Offset="0x14570" />
 
         <!-- Bomb -->
@@ -893,11 +893,11 @@
         <DList Name="gameplay_keep_DL_0221B8" Offset="0x221B8" />
         <Texture Name="gameplay_keep_Tex_0222E8" OutName="tex_0222E8" Format="i4" Width="32" Height="64" Offset="0x222E8" />
         <Texture Name="gameplay_keep_Tex_0226E8" OutName="tex_0226E8" Format="i8" Width="8" Height="128" Offset="0x226E8" />
-        <Limb Name="gameplay_keep_Standardlimb_022AE8" Type="Standard" Offset="0x22AE8" />
-        <Limb Name="gameplay_keep_Standardlimb_022AF4" Type="Standard" Offset="0x22AF4" />
-        <Limb Name="gameplay_keep_Standardlimb_022B00" Type="Standard" Offset="0x22B00" />
-        <Limb Name="gameplay_keep_Standardlimb_022B0C" Type="Standard" Offset="0x22B0C" />
-        <Skeleton Name="gDoorSkel" Type="Normal" LimbType="Standard" Offset="0x22B28" />
+        <Limb Name="gameplay_keep_Standardlimb_022AE8" Type="Standard" EnumName="DOOR_LIMB_1" Offset="0x22AE8" />
+        <Limb Name="gameplay_keep_Standardlimb_022AF4" Type="Standard" EnumName="DOOR_LIMB_2" Offset="0x22AF4" />
+        <Limb Name="gameplay_keep_Standardlimb_022B00" Type="Standard" EnumName="DOOR_LIMB_3" Offset="0x22B00" />
+        <Limb Name="gameplay_keep_Standardlimb_022B0C" Type="Standard" EnumName="DOOR_LIMB_4" Offset="0x22B0C" />
+        <Skeleton Name="gDoorSkel" Type="Normal" LimbType="Standard" LimbNone="DOOR_LIMB_NONE" LimbMax="DOOR_LIMB_MAX" EnumName="DoorLimb" Offset="0x22B28" />
         <Animation Name="gameplay_keep_Anim_022BE8" Offset="0x22BE8" />
         <Animation Name="gameplay_keep_Anim_022CA8" Offset="0x22CA8" />
         <Animation Name="gameplay_keep_Anim_022D90" Offset="0x22D90" />
@@ -944,13 +944,13 @@
         <DList Name="gameplay_keep_DL_029CF0" Offset="0x29CF0" />
         <DList Name="gameplay_keep_DL_029D10" Offset="0x29D10" /> <!-- Used in ObJ_Kinoko to radiate a purple glow -->
         <Texture Name="gameplay_keep_Tex_029EF8" OutName="tex_029EF8" Format="rgba16" Width="32" Height="64" Offset="0x29EF8" />
-        <Limb Name="gameplay_keep_Standardlimb_02AEF8" Type="Standard" Offset="0x2AEF8" />
-        <Limb Name="gameplay_keep_Standardlimb_02AF04" Type="Standard" Offset="0x2AF04" />
-        <Limb Name="gameplay_keep_Standardlimb_02AF10" Type="Standard" Offset="0x2AF10" />
-        <Limb Name="gameplay_keep_Standardlimb_02AF1C" Type="Standard" Offset="0x2AF1C" />
-        <Limb Name="gameplay_keep_Standardlimb_02AF28" Type="Standard" Offset="0x2AF28" />
-        <Limb Name="gameplay_keep_Standardlimb_02AF34" Type="Standard" Offset="0x2AF34" />
-        <Skeleton Name="gameplay_keep_Skel_02AF58" Type="Flex" LimbType="Standard" Offset="0x2AF58" />
+        <Limb Name="gameplay_keep_Standardlimb_02AEF8" Type="Standard" EnumName="FAIRY_LIMB_1" Offset="0x2AEF8" />
+        <Limb Name="gameplay_keep_Standardlimb_02AF04" Type="Standard" EnumName="FAIRY_LIMB_2" Offset="0x2AF04" />
+        <Limb Name="gameplay_keep_Standardlimb_02AF10" Type="Standard" EnumName="FAIRY_LIMB_3" Offset="0x2AF10" />
+        <Limb Name="gameplay_keep_Standardlimb_02AF1C" Type="Standard" EnumName="FAIRY_LIMB_4" Offset="0x2AF1C" />
+        <Limb Name="gameplay_keep_Standardlimb_02AF28" Type="Standard" EnumName="FAIRY_LIMB_5" Offset="0x2AF28" />
+        <Limb Name="gameplay_keep_Standardlimb_02AF34" Type="Standard" EnumName="FAIRY_LIMB_6" Offset="0x2AF34" />
+        <Skeleton Name="gameplay_keep_Skel_02AF58" Type="Flex" LimbType="Standard" LimbNone="FAIRY_LIMB_NONE" LimbMax="FAIRY_LIMB_MAX" EnumName="FairyLimb" Offset="0x2AF58" />
         <Animation Name="gameplay_keep_Anim_02B2E8" Offset="0x2B2E8" />
 
         <!-- Stray Fairy -->
@@ -983,7 +983,7 @@
         <Limb Name="gStrayFairyPelvisAndLegsLimb" Type="Standard" EnumName="STRAY_FAIRY_LIMB_PELVIS_AND_LEGS" Offset="0x2CA50" />
         <Limb Name="gStrayFairyLeftArmLimb" Type="Standard" EnumName="STRAY_FAIRY_LIMB_LEFT_ARM" Offset="0x2CA5C" />
         <Limb Name="gStrayFairyLeftFacingHeadLimb" Type="Standard" EnumName="STRAY_FAIRY_LIMB_LEFT_FACING_HEAD" Offset="0x2CA68" />
-        <Skeleton Name="gStrayFairySkel" Type="Flex" LimbType="Standard" LimbNone="STRAY_FAIRY_LIMB_NONE" LimbMax="STRAY_FAIRY_LIMB_MAX" EnumName="StrayFairyLimbs" Offset="0x2CA98" />
+        <Skeleton Name="gStrayFairySkel" Type="Flex" LimbType="Standard" LimbNone="STRAY_FAIRY_LIMB_NONE" LimbMax="STRAY_FAIRY_LIMB_MAX" EnumName="StrayFairyLimb" Offset="0x2CA98" />
 
         <Texture Name="gameplay_keep_Tex_02CAA8" OutName="tex_02CAA8" Format="i4" Width="16" Height="16" Offset="0x2CAA8" />
         <Texture Name="gameplay_keep_Tex_02CB30" OutName="tex_02CB30" Format="i8" Width="16" Height="16" Offset="0x2CB30" />
@@ -997,13 +997,13 @@
         <DList Name="gameplay_keep_DL_02EAB8" Offset="0x2EAB8" />
         <Texture Name="gameplay_keep_Tex_02EBC8" OutName="tex_02EBC8" Format="rgba16" Width="16" Height="16" Offset="0x2EBC8" />
         <Texture Name="gameplay_keep_Tex_02EDC8" OutName="tex_02EDC8" Format="rgba16" Width="32" Height="8" Offset="0x2EDC8" />
-        <Limb Name="gameplay_keep_Standardlimb_02EFC8" Type="Standard" Offset="0x2EFC8" />
-        <Limb Name="gameplay_keep_Standardlimb_02EFD4" Type="Standard" Offset="0x2EFD4" />
-        <Limb Name="gameplay_keep_Standardlimb_02EFE0" Type="Standard" Offset="0x2EFE0" />
-        <Limb Name="gameplay_keep_Standardlimb_02EFEC" Type="Standard" Offset="0x2EFEC" />
-        <Limb Name="gameplay_keep_Standardlimb_02EFF8" Type="Standard" Offset="0x2EFF8" />
-        <Limb Name="gameplay_keep_Standardlimb_02F004" Type="Standard" Offset="0x2F004" />
-        <Skeleton Name="gameplay_keep_Skel_02F028" Type="Flex" LimbType="Standard" Offset="0x2F028" />
+        <Limb Name="gameplay_keep_Standardlimb_02EFC8" Type="Standard" EnumName="FISH_LIMB_1" Offset="0x2EFC8" />
+        <Limb Name="gameplay_keep_Standardlimb_02EFD4" Type="Standard" EnumName="FISH_LIMB_2" Offset="0x2EFD4" />
+        <Limb Name="gameplay_keep_Standardlimb_02EFE0" Type="Standard" EnumName="FISH_LIMB_3" Offset="0x2EFE0" />
+        <Limb Name="gameplay_keep_Standardlimb_02EFEC" Type="Standard" EnumName="FISH_LIMB_4" Offset="0x2EFEC" />
+        <Limb Name="gameplay_keep_Standardlimb_02EFF8" Type="Standard" EnumName="FISH_LIMB_5" Offset="0x2EFF8" />
+        <Limb Name="gameplay_keep_Standardlimb_02F004" Type="Standard" EnumName="FISH_LIMB_6" Offset="0x2F004" />
+        <Skeleton Name="gameplay_keep_Skel_02F028" Type="Flex" LimbType="Standard" LimbNone="FISH_LIMB_NONE" LimbMax="FISH_LIMB_MAX" EnumName="FishLimb" Offset="0x2F028" />
         <Animation Name="gameplay_keep_Anim_02F0EC" Offset="0x2F0EC" />
         <Texture Name="gEffShockwaveTex" OutName="eff_shockwave" Format="i8" Width="64" Height="64" Offset="0x2F100" />
         <DList Name="gEffShockwaveDL" Offset="0x30100" />
@@ -1152,30 +1152,30 @@
         <DList Name="gameplay_keep_DL_051C60" Offset="0x51C60" />
         <Texture Name="gameplay_keep_Tex_051D30" OutName="tex_051D30" Format="rgba16" Width="16" Height="64" Offset="0x51D30" />
         <Texture Name="gameplay_keep_Tex_052530" OutName="tex_052530" Format="rgba16" Width="8" Height="16" Offset="0x52530" />
-        <Limb Name="gameplay_keep_Standardlimb_052630" Type="Standard" Offset="0x52630" />
-        <Limb Name="gameplay_keep_Standardlimb_05263C" Type="Standard" Offset="0x5263C" />
-        <Limb Name="gameplay_keep_Standardlimb_052648" Type="Standard" Offset="0x52648" />
-        <Limb Name="gameplay_keep_Standardlimb_052654" Type="Standard" Offset="0x52654" />
-        <Limb Name="gameplay_keep_Standardlimb_052660" Type="Standard" Offset="0x52660" />
-        <Limb Name="gameplay_keep_Standardlimb_05266C" Type="Standard" Offset="0x5266C" />
-        <Limb Name="gameplay_keep_Standardlimb_052678" Type="Standard" Offset="0x52678" />
-        <Limb Name="gameplay_keep_Standardlimb_052684" Type="Standard" Offset="0x52684" />
-        <Limb Name="gameplay_keep_Standardlimb_052690" Type="Standard" Offset="0x52690" />
-        <Limb Name="gameplay_keep_Standardlimb_05269C" Type="Standard" Offset="0x5269C" />
-        <Limb Name="gameplay_keep_Standardlimb_0526A8" Type="Standard" Offset="0x526A8" />
-        <Limb Name="gameplay_keep_Standardlimb_0526B4" Type="Standard" Offset="0x526B4" />
-        <Limb Name="gameplay_keep_Standardlimb_0526C0" Type="Standard" Offset="0x526C0" />
-        <Limb Name="gameplay_keep_Standardlimb_0526CC" Type="Standard" Offset="0x526CC" />
-        <Limb Name="gameplay_keep_Standardlimb_0526D8" Type="Standard" Offset="0x526D8" />
-        <Limb Name="gameplay_keep_Standardlimb_0526E4" Type="Standard" Offset="0x526E4" />
-        <Limb Name="gameplay_keep_Standardlimb_0526F0" Type="Standard" Offset="0x526F0" />
-        <Limb Name="gameplay_keep_Standardlimb_0526FC" Type="Standard" Offset="0x526FC" />
-        <Limb Name="gameplay_keep_Standardlimb_052708" Type="Standard" Offset="0x52708" />
-        <Limb Name="gameplay_keep_Standardlimb_052714" Type="Standard" Offset="0x52714" />
-        <Limb Name="gameplay_keep_Standardlimb_052720" Type="Standard" Offset="0x52720" />
-        <Limb Name="gameplay_keep_Standardlimb_05272C" Type="Standard" Offset="0x5272C" />
-        <Limb Name="gameplay_keep_Standardlimb_052738" Type="Standard" Offset="0x52738" />
-        <Skeleton Name="gameplay_keep_Skel_0527A0" Type="Normal" LimbType="Standard" Offset="0x527A0" />
+        <Limb Name="gameplay_keep_Standardlimb_052630" Type="Standard" EnumName="BUG_LIMB_01" Offset="0x52630" />
+        <Limb Name="gameplay_keep_Standardlimb_05263C" Type="Standard" EnumName="BUG_LIMB_02" Offset="0x5263C" />
+        <Limb Name="gameplay_keep_Standardlimb_052648" Type="Standard" EnumName="BUG_LIMB_03" Offset="0x52648" />
+        <Limb Name="gameplay_keep_Standardlimb_052654" Type="Standard" EnumName="BUG_LIMB_04" Offset="0x52654" />
+        <Limb Name="gameplay_keep_Standardlimb_052660" Type="Standard" EnumName="BUG_LIMB_05" Offset="0x52660" />
+        <Limb Name="gameplay_keep_Standardlimb_05266C" Type="Standard" EnumName="BUG_LIMB_06" Offset="0x5266C" />
+        <Limb Name="gameplay_keep_Standardlimb_052678" Type="Standard" EnumName="BUG_LIMB_07" Offset="0x52678" />
+        <Limb Name="gameplay_keep_Standardlimb_052684" Type="Standard" EnumName="BUG_LIMB_08" Offset="0x52684" />
+        <Limb Name="gameplay_keep_Standardlimb_052690" Type="Standard" EnumName="BUG_LIMB_09" Offset="0x52690" />
+        <Limb Name="gameplay_keep_Standardlimb_05269C" Type="Standard" EnumName="BUG_LIMB_0A" Offset="0x5269C" />
+        <Limb Name="gameplay_keep_Standardlimb_0526A8" Type="Standard" EnumName="BUG_LIMB_0B" Offset="0x526A8" />
+        <Limb Name="gameplay_keep_Standardlimb_0526B4" Type="Standard" EnumName="BUG_LIMB_0C" Offset="0x526B4" />
+        <Limb Name="gameplay_keep_Standardlimb_0526C0" Type="Standard" EnumName="BUG_LIMB_0D" Offset="0x526C0" />
+        <Limb Name="gameplay_keep_Standardlimb_0526CC" Type="Standard" EnumName="BUG_LIMB_0E" Offset="0x526CC" />
+        <Limb Name="gameplay_keep_Standardlimb_0526D8" Type="Standard" EnumName="BUG_LIMB_0F" Offset="0x526D8" />
+        <Limb Name="gameplay_keep_Standardlimb_0526E4" Type="Standard" EnumName="BUG_LIMB_10" Offset="0x526E4" />
+        <Limb Name="gameplay_keep_Standardlimb_0526F0" Type="Standard" EnumName="BUG_LIMB_11" Offset="0x526F0" />
+        <Limb Name="gameplay_keep_Standardlimb_0526FC" Type="Standard" EnumName="BUG_LIMB_12" Offset="0x526FC" />
+        <Limb Name="gameplay_keep_Standardlimb_052708" Type="Standard" EnumName="BUG_LIMB_13" Offset="0x52708" />
+        <Limb Name="gameplay_keep_Standardlimb_052714" Type="Standard" EnumName="BUG_LIMB_14" Offset="0x52714" />
+        <Limb Name="gameplay_keep_Standardlimb_052720" Type="Standard" EnumName="BUG_LIMB_15" Offset="0x52720" />
+        <Limb Name="gameplay_keep_Standardlimb_05272C" Type="Standard" EnumName="BUG_LIMB_16" Offset="0x5272C" />
+        <Limb Name="gameplay_keep_Standardlimb_052738" Type="Standard" EnumName="BUG_LIMB_17" Offset="0x52738" />
+        <Skeleton Name="gameplay_keep_Skel_0527A0" Type="Normal" LimbType="Standard" LimbNone="BUG_LIMB_NONE" LimbMax="BUG_LIMB_MAX" EnumName="BugLimb" Offset="0x527A0" />
         <DList Name="gKakeraLeafMiddle" Offset="0x527F0" />
         <DList Name="gKakeraLeafTip" Offset="0x528B0" />
         <Texture Name="gameplay_keep_Tex_052940" OutName="tex_052940" Format="rgba16" Width="32" Height="32" Offset="0x52940" />
