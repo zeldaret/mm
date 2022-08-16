@@ -867,7 +867,7 @@ s32 Player_GetEnvTimerType(PlayState* play) {
 
     if (play->roomCtx.currRoom.unk2 == 3) { // Room is hot
         envTimerType = PLAYER_ENV_TIMER_HOTROOM - 1;
-    } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->underwaterCounter > 80)) {
+    } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->underwaterTimer > 80)) {
         envTimerType = PLAYER_ENV_TIMER_UNDERWATER_FREE - 1;
     } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
         if ((player->transformation == PLAYER_FORM_ZORA) && (player->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&

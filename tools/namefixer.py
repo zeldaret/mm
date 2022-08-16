@@ -685,7 +685,7 @@ wordReplace = {
     "player->unk_394": "player->csMode",
     "player->swordQuads": "player->meleeWeaponQuads",
     "player->blureEffectIndex": "player->meleeWeaponEffectIndex",
-    "player->unk_AD8": "player->underwaterCounter",
+    "player->unk_AD8": "player->underwaterTimer",
     "player->swordAnimation": "player->meleeWeaponAnimation",
     "player->swordState": "player->meleeWeaponState",
     "player->swordInfo": "player->meleeWeaponInfo",

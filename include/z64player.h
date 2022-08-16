@@ -76,7 +76,7 @@ typedef enum {
     /* 2 */ PLAYER_ENV_TIMER_UNDERWATER_FLOOR,
     /* 3 */ PLAYER_ENV_TIMER_SWIMMING,
     /* 4 */ PLAYER_ENV_TIMER_UNDERWATER_FREE
-} PlayerEnvTimer;
+} PlayerEnvTimerType;
 
 typedef enum PlayerActionParam {
     /*   -1 */ PLAYER_AP_MINUS1 = -1,
@@ -602,7 +602,7 @@ typedef struct Player {
     /* 0xAD0 */ f32 linearVelocity;
     /* 0xAD4 */ s16 currentYaw;
     /* 0xAD6 */ s16 targetYaw;
-    /* 0xAD8 */ u16 underwaterCounter;
+    /* 0xAD8 */ u16 underwaterTimer;
     /* 0xADA */ s8 meleeWeaponAnimation;
     /* 0xADB */ s8 meleeWeaponState;
     /* 0xADC */ s8 unk_ADC;
