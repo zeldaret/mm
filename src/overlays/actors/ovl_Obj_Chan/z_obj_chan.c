@@ -429,7 +429,7 @@ void ObjChan_DrawFire(ObjChan* this, PlayState* play) {
     gSPSegment(&dl[1], 0x08, Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, -sp4C * 20, 32, 128));
     gDPSetPrimColor(&dl[2], 128, 128, 255, 255, 0, 255);
     gDPSetEnvColor(&dl[3], 255, 0, 0, 0);
-    gSPDisplayList(&dl[4], &gGameplayKeepDrawFlameDL);
+    gSPDisplayList(&dl[4], gEffFire1DL);
     POLY_XLU_DISP = &dl[5];
 
     CLOSE_DISPS(play->state.gfxCtx);

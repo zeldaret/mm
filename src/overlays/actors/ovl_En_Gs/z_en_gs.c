@@ -184,7 +184,7 @@ void func_80997D38(EnGs* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (this->actor.xzDistToPlayer <= D_8099A408[this->actor.params]) {
             func_8013E8F8(&this->actor, play, D_8099A408[this->actor.params], D_8099A408[this->actor.params],
-                          EXCH_ITEM_NONE, 0x2000, 0x2000);
+                          PLAYER_AP_NONE, 0x2000, 0x2000);
         }
     }
 
@@ -1099,7 +1099,7 @@ void EnGs_Draw(Actor* thisx, PlayState* play) {
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, -frames * 20, 0x20, 0x80));
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
-        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

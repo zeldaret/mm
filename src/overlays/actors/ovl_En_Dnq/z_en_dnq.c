@@ -57,7 +57,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS D_80A5349C[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_dnq_Anim_008328, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_dnq_Anim_008328, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_dnq_Anim_007528, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
@@ -105,7 +105,7 @@ s32 func_80A5257C(EnDnq* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_398 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80A5349C, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
     }
 
     return ret;
@@ -456,7 +456,7 @@ void EnDnq_Update(Actor* thisx, PlayState* play) {
         this->unk_394 = this->picto.actor.xzDistToPlayer;
         func_80A52C6C(this, play);
         func_8013C964(&this->picto.actor, play, this->unk_390, fabsf(this->picto.actor.playerHeightRel) + 1.0f,
-                      EXCH_ITEM_NONE, this->unk_37C & 7);
+                      PLAYER_AP_NONE, this->unk_37C & 7);
         this->picto.actor.xzDistToPlayer = this->unk_394;
         Actor_SetFocus(&this->picto.actor, 46.0f);
         func_80A52604(this, play);
