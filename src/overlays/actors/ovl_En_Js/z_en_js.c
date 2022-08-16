@@ -505,7 +505,7 @@ s32 func_809695FC(EnJs* this, PlayState* play) {
         return false;
     }
     play->transitionTrigger = TRANS_TRIGGER_START;
-    play->nextEntranceIndex = play->setupExitList[ENJS_GET_EXIT_INDEX(&this->actor)];
+    play->nextEntrance = play->setupExitList[ENJS_GET_EXIT_INDEX(&this->actor)];
     this->actionFunc = func_8096971C;
     play->msgCtx.msgLength = 0;
     gSaveContext.respawnFlag = -2;
