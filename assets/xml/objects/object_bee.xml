@@ -23,6 +23,6 @@
         <Limb Name="object_bee_Standardlimb_001350" Type="Standard" EnumName="OBJECT_BEE_LIMB_07" Offset="0x1350" />
         <Limb Name="object_bee_Standardlimb_00135C" Type="Standard" EnumName="OBJECT_BEE_LIMB_08" Offset="0x135C" />
         <Limb Name="object_bee_Standardlimb_001368" Type="Standard" EnumName="OBJECT_BEE_LIMB_09" Offset="0x1368" />
-        <Skeleton Name="object_bee_Skel_001398" Type="Normal" LimbType="Standard" LimbNone="OBJECT_BEE_LIMB_NONE" LimbMax="OBJECT_BEE_LIMB_MAX" EnumName="object_bee_Limbs" Offset="0x1398" />
+        <Skeleton Name="object_bee_Skel_001398" Type="Normal" LimbType="Standard" LimbNone="OBJECT_BEE_LIMB_NONE" LimbMax="OBJECT_BEE_LIMB_MAX" EnumName="ObjectBeeLimb" Offset="0x1398" />
     </File>
 </Root>

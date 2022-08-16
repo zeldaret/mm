@@ -15,18 +15,18 @@ void EnHeishi_Destroy(Actor* thisx, PlayState* play);
 void EnHeishi_Update(Actor* thisx, PlayState* play);
 void EnHeishi_Draw(Actor* thisx, PlayState* play);
 
-void EnHeishi_ChangeAnimation(EnHeishi* this, s32 animIndex);
+void EnHeishi_ChangeAnim(EnHeishi* this, s32 animIndex);
 void EnHeishi_SetHeadRotation(EnHeishi* this);
 void EnHeishi_SetupIdle(EnHeishi* this);
 void EnHeishi_Idle(EnHeishi* this, PlayState* play);
 
 typedef enum {
-    /* 0 */ HEISHI_ANIMATION_STAND_HAND_ON_HIP,
-    /* 1 */ HEISHI_ANIMATION_CHEER_WITH_SPEAR,
-    /* 2 */ HEISHI_ANIMATION_WAVE,
-    /* 3 */ HEISHI_ANIMATION_SIT_AND_REACH,
-    /* 4 */ HEISHI_ANIMATION_STAND_UP
-} EnHeishiAnimationIndex;
+    /* 0 */ HEISHI_ANIM_STAND_HAND_ON_HIP,
+    /* 1 */ HEISHI_ANIM_CHEER_WITH_SPEAR,
+    /* 2 */ HEISHI_ANIM_WAVE,
+    /* 3 */ HEISHI_ANIM_SIT_AND_REACH,
+    /* 4 */ HEISHI_ANIM_STAND_UP
+} EnHeishiAnimation;
 
 const ActorInit En_Heishi_InitVars = {
     ACTOR_EN_HEISHI,
@@ -99,11 +99,11 @@ void EnHeishi_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->colliderCylinder);
 }
 
-void EnHeishi_ChangeAnimation(EnHeishi* this, s32 animIndex) {
+void EnHeishi_ChangeAnim(EnHeishi* this, s32 animIndex) {
     static AnimationHeader* sAnimations[] = {
         &gSoldierStandHandOnHip, &gSoldierCheerWithSpear, &gSoldierWave, &gSoldierSitAndReach, &gSoldierStandUp,
     };
-    static u8 sAnimModes[] = {
+    static u8 sAnimationModes[] = {
         ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
         ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
         ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
@@ -112,7 +112,7 @@ void EnHeishi_ChangeAnimation(EnHeishi* this, s32 animIndex) {
     this->animIndex = animIndex;
     this->frameCount = Animation_GetLastFrame(sAnimations[this->animIndex]);
     Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->frameCount,
-                     sAnimModes[this->animIndex], -10.0f);
+                     sAnimationModes[this->animIndex], -10.0f);
 }
 
 void EnHeishi_SetHeadRotation(EnHeishi* this) {
@@ -131,9 +131,9 @@ void EnHeishi_SetHeadRotation(EnHeishi* this) {
 }
 
 void EnHeishi_SetupIdle(EnHeishi* this) {
-    s8 animIndex = HEISHI_ANIMATION_STAND_HAND_ON_HIP;
+    s8 animIndex = HEISHI_ANIM_STAND_HAND_ON_HIP;
 
-    EnHeishi_ChangeAnimation(this, animIndex);
+    EnHeishi_ChangeAnim(this, animIndex);
     this->unk278 = animIndex;
     this->actionFunc = EnHeishi_Idle;
 }

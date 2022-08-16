@@ -145,13 +145,12 @@ typedef enum {
     /* 0x108 */ CS_CMD_UNK_108 = 0x108,
     /* 0x109 */ CS_CMD_UNK_109,
     /* 0x12C */ CS_CMD_PLAYSEQ = 0x12C,
-    /* 0x12D */ CS_CMD_UNK_12D,
-    /* 0x130 */ CS_CMD_130 = 0x130,
+    /* 0x12D */ CS_CMD_STOPSEQ,
+    /* 0x12E */ CS_CMD_PLAYAMBIENCE,
+    /* 0x12F */ CS_CMD_FADEAMBIENCE,
+    /* 0x130 */ CS_CMD_130,
     /* 0x131 */ CS_CMD_131,
     /* 0x132 */ CS_CMD_132,
-    /* 0x133 */ CS_CMD_STOPSEQ,
-    /* 0x134 */ CS_CMD_PLAYAMBIENCE,
-    /* 0x135 */ CS_CMD_FADEAMBIENCE,
     /* 0x15E */ CS_CMD_TERMINATOR = 0x15E,
     /* 0x15F */ CS_CMD_CHOOSE_CREDITS_SCENES,
     /* 0x190 */ CS_CMD_RUMBLE = 0x190
@@ -166,7 +165,7 @@ typedef union CutsceneData {
 
 typedef struct {
     /* 0x0 */ CutsceneData* segmentedData;
-    /* 0x4 */ s16 nextEntranceIndex;
+    /* 0x4 */ s16 nextEntrance;
     /* 0x6 */ u8 unk6;
     /* 0x7 */ u8 unk7; // a weekEventReg bitpack?
 } CutsceneEntry; // size = 0x8

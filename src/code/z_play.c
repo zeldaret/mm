@@ -357,11 +357,11 @@ void Play_SaveCycleSceneFlags(GameState* thisx) {
     cycleSceneFlags->clearedRoom = this->actorCtx.flags.clearedRoom;
 }
 
-void Play_SetRespawnData(GameState* thisx, s32 respawnMode, u16 entranceIndex, s32 roomIndex, s32 playerParams,
-                         Vec3f* pos, s16 yaw) {
+void Play_SetRespawnData(GameState* thisx, s32 respawnMode, u16 entrance, s32 roomIndex, s32 playerParams, Vec3f* pos,
+                         s16 yaw) {
     PlayState* this = (PlayState*)thisx;
 
-    gSaveContext.respawn[respawnMode].entranceIndex = Entrance_CreateIndex(entranceIndex >> 9, 0, entranceIndex & 0xF);
+    gSaveContext.respawn[respawnMode].entrance = Entrance_Create(entrance >> 9, 0, entrance & 0xF);
     gSaveContext.respawn[respawnMode].roomIndex = roomIndex;
     gSaveContext.respawn[respawnMode].pos = *pos;
     gSaveContext.respawn[respawnMode].yaw = yaw;
@@ -376,7 +376,7 @@ void Play_SetupRespawnPoint(GameState* thisx, s32 respawnMode, s32 playerParams)
     Player* player = GET_PLAYER(this);
 
     if (this->sceneNum != SCENE_KAKUSIANA) { // Grottos
-        Play_SetRespawnData(&this->state, respawnMode, (u16)((void)0, gSaveContext.save.entranceIndex),
+        Play_SetRespawnData(&this->state, respawnMode, (u16)((void)0, gSaveContext.save.entrance),
                             this->roomCtx.currRoom.num, playerParams, &player->actor.world.pos,
                             player->actor.shape.rot.y);
     }
@@ -385,7 +385,7 @@ void Play_SetupRespawnPoint(GameState* thisx, s32 respawnMode, s32 playerParams)
 // Override respawn data in Sakon's Hideout
 void func_80169ECC(PlayState* this) {
     if (this->sceneNum == SCENE_SECOM) {
-        this->nextEntranceIndex = 0x2060;
+        this->nextEntrance = ENTRANCE(IKANA_CANYON, 6);
         gSaveContext.respawnFlag = -7;
     }
 }
@@ -398,7 +398,7 @@ void func_80169EFC(GameState* thisx) {
     gSaveContext.respawn[RESPAWN_MODE_DOWN].tempSwitchFlags = this->actorCtx.flags.switches[2];
     gSaveContext.respawn[RESPAWN_MODE_DOWN].unk_18 = this->actorCtx.flags.collectible[1];
     gSaveContext.respawn[RESPAWN_MODE_DOWN].tempCollectFlags = this->actorCtx.flags.collectible[2];
-    this->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex;
+    this->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance;
     gSaveContext.respawnFlag = 1;
     func_80169ECC(this);
     this->transitionTrigger = TRANS_TRIGGER_START;
@@ -410,7 +410,7 @@ void func_80169EFC(GameState* thisx) {
 void func_80169F78(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
 
-    this->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_TOP].entranceIndex;
+    this->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_TOP].entrance;
     gSaveContext.respawnFlag = -1;
     func_80169ECC(this);
     this->transitionTrigger = TRANS_TRIGGER_START;
