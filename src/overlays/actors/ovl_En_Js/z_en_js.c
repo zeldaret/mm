@@ -855,7 +855,7 @@ void func_8096A1E8(EnJs* this, PlayState* play) {
         gSaveContext.save.weekEventReg[84] |= 0x20;
         func_809696EC(this, 0);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     }
 }
 
