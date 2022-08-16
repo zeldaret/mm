@@ -1378,7 +1378,8 @@ LinkAnimationHeader* D_8085BE84[PLAYER_ANIMGROUP_MAX][PLAYER_ANIMTYPE_MAX] = {
     // PLAYER_ANIMGROUP_12
     {
         &gameplay_keep_Linkanim_00DB28, // Grabbing something from the floor
-        &gameplay_keep_Linkanim_00DB20, &gameplay_keep_Linkanim_00DB20,
+        &gameplay_keep_Linkanim_00DB20, // 
+        &gameplay_keep_Linkanim_00DB20, // 
         &gameplay_keep_Linkanim_00DB28, // Grabbing something from the floor
         &gameplay_keep_Linkanim_00DB28, // Grabbing something from the floor
         &gameplay_keep_Linkanim_00DB28, // Grabbing something from the floor
@@ -2615,7 +2616,7 @@ AnimSfxEntry* D_8085C93C[] = {
 
 // Used to index into D_8085C93C
 u8 D_8085C96C[] = {
-    0, 0, 1, 1, 2, 2, 2, 2, 0xA, 0xA, 0xA, 0xA, 0xA, 0xA, 3, 3, 4, 4, 8, 8, 5, 5, 6, 6, 7, 7, 9, 9, 0xB, 0xB,
+    0, 0, 1, 1, 2, 2, 2, 2, 10, 10, 10, 10, 10, 10, 3, 3, 4, 4, 8, 8, 5, 5, 6, 6, 7, 7, 9, 9, 11, 11,
 };
 
 s32 func_8082ED94(Player* this) {
