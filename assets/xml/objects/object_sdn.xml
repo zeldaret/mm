@@ -60,7 +60,7 @@
         <Limb Name="gSoldierRightForearmLimb" Type="Standard" EnumName="SOLDIER_LIMB_RIGHT_FOREARM" Offset="0xD5DC" />
         <Limb Name="gSoldierRightHandWithSpearLimb" Type="Standard" EnumName="SOLDIER_LIMB_RIGHT_HAND_WITH_SPEAR" Offset="0xD5E8" />
         <Limb Name="gSoldierHeadLimb" Type="Standard" EnumName="SOLDIER_LIMB_HEAD" Offset="0xD5F4" />
-        <Skeleton Name="gSoldierSkel" Type="Flex" LimbType="Standard" LimbNone="SOLDIER_LIMB_NONE" LimbMax="SOLDIER_LIMB_MAX" EnumName="SoldierLimbs" Offset="0xD640" />
+        <Skeleton Name="gSoldierSkel" Type="Flex" LimbType="Standard" LimbNone="SOLDIER_LIMB_NONE" LimbMax="SOLDIER_LIMB_MAX" EnumName="SoldierLimb" Offset="0xD640" />
         <Animation Name="gSoldierStandAndLookDown" Offset="0xDC7C" />
     </File>
 </Root>
