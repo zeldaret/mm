@@ -1269,12 +1269,12 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
 LinkAnimationHeader* D_8085BE84[PLAYER_ANIMGROUP_MAX][PLAYER_ANIMTYPE_MAX] = {
     // PLAYER_ANIMGROUP_0
     {
-        &gameplay_keep_Linkanim_00DF28, // Default idle, looking forward
-        &gameplay_keep_Linkanim_00DF20, // Default idle, looking forward, sword and shield
-        &gameplay_keep_Linkanim_00DF20, // Default idle, looking forward, sword and shield
-        &gameplay_keep_Linkanim_00D988, // Default idle, looking forward, two hand weapon
-        &gameplay_keep_Linkanim_00DF28, // Default idle, looking forward
-        &gameplay_keep_Linkanim_00DF28, // Default idle, looking forward
+        &gameplay_keep_Linkanim_00DF28, // Default idle standing, looking forward
+        &gameplay_keep_Linkanim_00DF20, // Default idle standing, looking forward, sword and shield
+        &gameplay_keep_Linkanim_00DF20, // Default idle standing, looking forward, sword and shield
+        &gameplay_keep_Linkanim_00D988, // Default idle standing, looking forward, two hand weapon
+        &gameplay_keep_Linkanim_00DF28, // Default idle standing, looking forward
+        &gameplay_keep_Linkanim_00DF28, // Default idle standing, looking forward
     },
     // PLAYER_ANIMGROUP_1
     {
@@ -1287,12 +1287,12 @@ LinkAnimationHeader* D_8085BE84[PLAYER_ANIMGROUP_MAX][PLAYER_ANIMTYPE_MAX] = {
     },
     // PLAYER_ANIMGROUP_2
     {
-        &gameplay_keep_Linkanim_00DE40, // Walking with empty hands
-        &gameplay_keep_Linkanim_00D918, // Walking with Sword and Shield in hands
+        &gameplay_keep_Linkanim_00DE40, // Running with empty hands
+        &gameplay_keep_Linkanim_00D918, // Running with Sword and Shield in hands
         &gameplay_keep_Linkanim_00DE38,
-        &gameplay_keep_Linkanim_00D920, // Walking with Two handed weapon
-        &gameplay_keep_Linkanim_00DE40, // Walking with empty hands
-        &gameplay_keep_Linkanim_00DE40, // Walking with empty hands
+        &gameplay_keep_Linkanim_00D920, // Running with Two handed weapon
+        &gameplay_keep_Linkanim_00DE40, // Running with empty hands
+        &gameplay_keep_Linkanim_00DE40, // Running with empty hands
     },
     // PLAYER_ANIMGROUP_3
     {

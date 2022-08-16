@@ -218,9 +218,9 @@ typedef enum PlayerAnimType {
 } PlayerAnimType;
 
 typedef enum {
-    /*  0 */ PLAYER_ANIMGROUP_0,
-    /*  1 */ PLAYER_ANIMGROUP_1,
-    /*  2 */ PLAYER_ANIMGROUP_2,
+    /*  0 */ PLAYER_ANIMGROUP_0, // STANDING_IDLE
+    /*  1 */ PLAYER_ANIMGROUP_1, // WALKING
+    /*  2 */ PLAYER_ANIMGROUP_2, // RUNNING
     /*  3 */ PLAYER_ANIMGROUP_3,
     /*  4 */ PLAYER_ANIMGROUP_4,
     /*  5 */ PLAYER_ANIMGROUP_5,
