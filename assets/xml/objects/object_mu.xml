@@ -1,11 +1,11 @@
 ﻿<Root>
     <!-- Assets for Honey & Darling -->
     <File Name="object_mu" Segment="6">
-        <Animation Name="object_mu_Anim_001F74" Offset="0x1F74" />
-        <Animation Name="object_mu_Anim_002F64" Offset="0x2F64" />
-        <Animation Name="object_mu_Anim_004904" Offset="0x4904" />
-        <Animation Name="object_mu_Anim_005304" Offset="0x5304" />
-        <Animation Name="object_mu_Anim_0053E0" Offset="0x53E0" />
+        <Animation Name="gHoneyAndDarlingCupCheeksLoopAnim" Offset="0x1F74" />
+        <Animation Name="gHoneyAndDarlingHugLoopAnim" Offset="0x2F64" />
+        <Animation Name="gHoneyAndDarlingGameDanceLoopAnim" Offset="0x4904" />
+        <Animation Name="gHoneyAndDarlingHoldHandsLoopAnim" Offset="0x5304" />
+        <Animation Name="gHoneyAndDarlingIdleAnim" Offset="0x53E0" />
         <Texture Name="object_mu_TLUT_0053F0" OutName="tlut_0053F0" Format="rgba16" Width="16" Height="16" Offset="0x53F0" />
         <Texture Name="object_mu_Tex_0055F0" OutName="tex_0055F0" Format="i8" Width="16" Height="16" Offset="0x55F0" />
         <Texture Name="object_mu_Tex_0056F0" OutName="tex_0056F0" Format="ci8" Width="16" Height="16" Offset="0x56F0" />
@@ -58,6 +58,6 @@
         <Limb Name="gHoneyAndDarlingWomanRightHandLimb" Type="Standard" EnumName="HONEY_AND_DARLING_LIMB_WOMAN_RIGHT_HAND" Offset="0xB248" />
         <Limb Name="gHoneyAndDarlingWomanHeadLimb" Type="Standard" EnumName="HONEY_AND_DARLING_LIMB_WOMAN_HEAD" Offset="0xB254" />
         <Skeleton Name="gHoneyAndDarlingSkel" Type="Flex" LimbType="Standard" LimbNone="HONEY_AND_DARLING_LIMB_NONE" LimbMax="HONEY_AND_DARLING_LIMB_MAX" EnumName="HoneyAndDarlingLimbs" Offset="0xB2B0" />
-        <Animation Name="object_mu_Anim_00BAC4" Offset="0xBAC4" />
+        <Animation Name="gHoneyAndDarlingSurpiseAnim" Offset="0xBAC4" />
     </File>
 </Root>

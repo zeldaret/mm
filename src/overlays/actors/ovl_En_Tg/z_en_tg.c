@@ -91,7 +91,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfoS sAnimations = { &object_mu_Anim_0053E0, 1.0f, 0, -1, 0, 0 };
+static AnimationInfoS sAnimations = { &gHoneyAndDarlingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 };
 static Vec3f D_80990228 = { 0.0f, 0.0f, 0.0f }; // TODO: should these be moved or renamed?
 static Vec3f D_80990234 = { 0.0f, 1.5f, 0.0f };
 static Vec3f D_80990240 = { 0.0f, 0.0f, 0.0f };
