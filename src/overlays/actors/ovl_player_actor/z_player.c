@@ -17386,21 +17386,27 @@ void func_80855218(PlayState* play, Player* this, UNK_PTR arg2) {
     }
 }
 
-u16 D_8085D908[] = { 0x1E80, 0x1E20, 0x1E40, 0x1E10 };
-struct_8085D910 D_8085D910[] = { { 0x10, 0xA, 0x3B, 0x3F }, { 9, 0x32, 0xA, 0xD } };
+u16 D_8085D908[] = {
+    WEEKEVENTREG_30_80, // PLAYER_FORM_FIERCE_DEITY
+    WEEKEVENTREG_30_20, // PLAYER_FORM_GORON
+    WEEKEVENTREG_30_40, // PLAYER_FORM_ZORA
+    WEEKEVENTREG_30_10, // PLAYER_FORM_DEKU
+};
+struct_8085D910 D_8085D910[] = {
+    { 0x10, 0xA, 0x3B, 0x3F },
+    { 9, 0x32, 0xA, 0xD },
+};
 
 void func_808553F4(Player* this, PlayState* play) {
-    struct_8085D910* sp4C;
-    s32 sp48;
+    struct_8085D910* sp4C = D_8085D910;
+    s32 sp48 = false;
 
-    sp4C = D_8085D910;
-    sp48 = 0;
     func_808323C0(this, play->playerActorCsIds[5]);
     D_80862B44 = play->state.input;
 
     Camera_ChangeMode(play->cameraPtrs[play->activeCamId],
                       (this->transformation == PLAYER_FORM_HUMAN) ? CAM_MODE_NORMAL : CAM_MODE_JUMP);
-    this->stateFlags2 |= 0x40;
+    this->stateFlags2 |= PLAYER_STATE2_40;
     this->actor.shape.rot.y = Camera_GetCamDirYaw(play->cameraPtrs[play->activeCamId]) + 0x8000;
 
     func_80855218(play, this, &sp4C);
@@ -17419,30 +17425,32 @@ void func_808553F4(Player* this, PlayState* play) {
             func_80165DF0();
             SET_WEEKEVENTREG(D_8085D908[gSaveContext.save.playerForm]);
         }
-    } else if ((this->unk_AE7++ > ((this->transformation == 4) ? 0x53 : 0x37)) || ((this->unk_AE7 >= 5) && (sp48 = ((this->transformation != 4) ||
-                CHECK_WEEKEVENTREG(D_8085D908[gSaveContext.save.playerForm])
-                       ) && 
-                (D_80862B44->press.button & 0xC00F)))) {
-            MREG(64) = 0x2D;
-            MREG(65) = 0xDC;
-            MREG(66) = 0xDC;
-            MREG(67) = 0xDC;
-            MREG(68) = 0;
+    } else if ((this->unk_AE7++ > ((this->transformation == PLAYER_FORM_HUMAN) ? 0x53 : 0x37)) ||
+               ((this->unk_AE7 >= 5) &&
+                (sp48 = ((this->transformation != PLAYER_FORM_HUMAN) ||
+                         CHECK_WEEKEVENTREG(D_8085D908[gSaveContext.save.playerForm])) &&
+                        CHECK_BTN_ANY(D_80862B44->press.button,
+                                      BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP | BTN_B | BTN_A)))) {
+        MREG(64) = 0x2D;
+        MREG(65) = 0xDC;
+        MREG(66) = 0xDC;
+        MREG(67) = 0xDC;
+        MREG(68) = 0;
 
         if (sp48) {
             if (ActorCutscene_GetCurrentIndex() == this->unk_A86) {
                 func_800E0348(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->unk_A86)));
             }
 
-            if (this->transformation == 4) {
-                AudioSfx_StopById(0x9AA);
-                AudioSfx_StopById(0x1858);
+            if (this->transformation == PLAYER_FORM_HUMAN) {
+                AudioSfx_StopById(NA_SE_PL_TRANSFORM_VOICE);
+                AudioSfx_StopById(NA_SE_IT_TRANSFORM_MASK_BROKEN);
             } else {
-                AudioSfx_StopById(0x9A4);
+                AudioSfx_StopById(NA_SE_PL_FACE_CHANGE);
             }
         }
 
-        func_800B8E58(this, 0x484F);
+        func_800B8E58(this, NA_SE_SY_TRANSFORM_MASK_FLASH);
     }
 
     if (this->unk_AE7 >= sp4C->unk_0) {
@@ -17469,7 +17477,7 @@ void func_808553F4(Player* this, PlayState* play) {
         }
     }
 
-    func_808550D0(play, this, this->unk_B10[4], this->unk_B10[5], (this->transformation == 4) ? 0 : 1);
+    func_808550D0(play, this, this->unk_B10[4], this->unk_B10[5], (this->transformation == PLAYER_FORM_HUMAN) ? 0 : 1);
 }
 
 void func_80855818(Player* this, PlayState* play) {
