@@ -484,6 +484,21 @@ typedef struct {
     /* 0x2CA */ s16 unk_2CA;
 } PauseContext; // size = 0x2D0
 
+typedef enum {
+    /*  0 */ MINIGAME_STATE_NONE,
+    /*  1 */ MINIGAME_STATE_COUNTDOWN_START_3,
+    /*  2 */ MINIGAME_STATE_COUNTDOWN_3,
+    /*  3 */ MINIGAME_STATE_COUNTDOWN_START_2,
+    /*  4 */ MINIGAME_STATE_COUNTDOWN_2,
+    /*  5 */ MINIGAME_STATE_COUNTDOWN_START_1,
+    /*  6 */ MINIGAME_STATE_COUNTDOWN_1,
+    /*  7 */ MINIGAME_STATE_COUNTDOWN_START_GO,
+    /*  8 */ MINIGAME_STATE_COUNTDOWN_GO,
+    /* 20 */ MINIGAME_STATE_20 = 20,
+    /* 21 */ MINIGAME_STATE_21,
+    /* 30 */ MINIGAME_STATE_30 = 30
+} MinigameState;
+
 typedef struct {
     /* 0x000 */ View view;
     /* 0x168 */ Vtx* actionVtx;
@@ -544,7 +559,7 @@ typedef struct {
     /* 0x27C */ s16 mapRoomNum;
     /* 0x27E */ u8 unk_27E;
     /* 0x27F */ u8 unk_27F;
-    /* 0x280 */ u8 unk_280;
+    /* 0x280 */ u8 minigameState;
     /* 0x282 */ s16 unk_282;
     /* 0x284 */ s16 unk_284;
     /* 0x286 */ s16 unk_286;

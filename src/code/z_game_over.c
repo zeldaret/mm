@@ -18,14 +18,14 @@ static s16 sGameOverTimer = 0;
 
 void GameOver_Update(PlayState* play) {
     GameOverContext* gameOverCtx = &play->gameOverCtx;
-    s16 i;
+    s16 timerId;
 
     switch (gameOverCtx->state) {
         case GAMEOVER_DEATH_START:
             func_801477B4(play);
 
-            for (i = 0; i < ARRAY_COUNT(gSaveContext.unk_3DD0); i++) {
-                gSaveContext.unk_3DD0[i] = 0;
+            for (timerId = 0; timerId < TIMER_ID_MAX; timerId++) {
+                gSaveContext.timerState[timerId] = TIMER_STATE_OFF;
             }
 
             gSaveContext.eventInf[1] &= ~1;

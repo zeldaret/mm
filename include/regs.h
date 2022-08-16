@@ -74,6 +74,8 @@
 #define R_MAGIC_BAR_X               XREG(49)
 #define R_MAGIC_BAR_LARGE_Y         XREG(50)
 #define R_MAGIC_FILL_X              XREG(51)
+#define R_FINAL_HOURS_TIMER_Y       XREG(80)
+#define R_FINAL_HOURS_TIMER_X       XREG(81)
 #define R_MINIMAP_DISABLED          XREG(95)
 #define R_B_LABEL_DD                WREG(0)
 #define R_OW_MINIMAP_X              WREG(29)
