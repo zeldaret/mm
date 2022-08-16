@@ -9920,7 +9920,7 @@
     0x809C9464:("sSwampTargetActorLists","UNK_PTR","",0x4),
     0x809C946C:("sSwampTargetActorListLengths","UNK_TYPE1","",0x1),
     0x809C9474:("sSwampPlayerPos","UNK_TYPE4","",0x4),
-    0x809C9480:("sTownFierceDietyPlayerPos","UNK_TYPE4","",0x4),
+    0x809C9480:("sTownFierceDeityPlayerPos","UNK_TYPE4","",0x4),
     0x809C948C:("sTownPlayerPos","UNK_TYPE4","",0x4),
     0x809C9498:("sGameStartTimer","s16","",0x2),
     0x809C949C:("sHasSpawnedGuaysForThisWave","UNK_TYPE2","",0x2),

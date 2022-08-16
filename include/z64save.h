@@ -264,7 +264,7 @@ typedef struct SaveContext {
     /* 0x3DE0 */ u64 timerCurTime[TIMER_ID_MAX];        // "event_ostime"
     /* 0x3E18 */ u64 timerTimeLimit[TIMER_ID_MAX];      // "event_sub"
     /* 0x3E50 */ OSTime timerStartOsTime[TIMER_ID_MAX]; // "func_time"
-    /* 0x3E88 */ OSTime timerStopTime[TIMER_ID_MAX];    // "func_end_time"
+    /* 0x3E88 */ u64 timerStopTime[TIMER_ID_MAX];       // "func_end_time"
     /* 0x3EC0 */ OSTime timerPausedOsTime[TIMER_ID_MAX]; // "func_stop_time"
     /* 0x3EF8 */ s16 timerX[TIMER_ID_MAX];              // "event_xp"
     /* 0x3F06 */ s16 timerY[TIMER_ID_MAX];              // "event_yp"

@@ -173,7 +173,6 @@ s16 sExtraItemBases[] = {
 s16 sEnvTimerType = 0;
 s16 sEnvTimerActive = 0;
 s16 sPostmanBunnyHoodState = 0;
-
 OSTime sTimerPausedOsTime = 0;
 OSTime sBottleTimerPausedOsTime = 0;
 OSTime D_801BF8F8[] = {
@@ -182,11 +181,10 @@ OSTime D_801BF8F8[] = {
 OSTime D_801BF930[] = {
     0, 0, 0, 0, 0, 0, 0,
 };
-
 u8 sIsTimerPaused = false;
 u8 sIsBottleTimerPaused = false;
-
 s16 sTimerId = 99;
+
 s16 D_801BF974 = 0;
 s16 D_801BF978 = 10;
 s16 D_801BF97C = 255;
@@ -309,9 +307,9 @@ void Interface_StartPostmanTimer(s16 seconds, s16 bunnyHoodState) {
     } else {
         gSaveContext.timerDirection[TIMER_ID_POSTMAN] = TIMER_COUNT_UP;
     }
-    gSaveContext.timerState[TIMER_ID_POSTMAN] = TIMER_STATE_POSTMAN_START;
 
-    gSaveContext.timerStopTime[TIMER_ID_POSTMAN] = 0;
+    gSaveContext.timerState[TIMER_ID_POSTMAN] = TIMER_STATE_POSTMAN_START;
+    gSaveContext.timerStopTime[TIMER_ID_POSTMAN] = SECONDS_TO_TIMER(0);
     gSaveContext.timerPausedOsTime[TIMER_ID_POSTMAN] = 0;
 }
 
@@ -1544,7 +1542,7 @@ void Interface_DrawTimers(PlayState* play) {
                             }
 
                             gSaveContext.timerStartOsTime[sTimerId] = osGetTime();
-                            gSaveContext.timerStopTime[sTimerId] = 0;
+                            gSaveContext.timerStopTime[sTimerId] = SECONDS_TO_TIMER(0);
                             gSaveContext.timerPausedOsTime[sTimerId] = 0;
                         }
                     } else {
@@ -1593,7 +1591,7 @@ void Interface_DrawTimers(PlayState* play) {
 
                         gSaveContext.timerState[sTimerId] = TIMER_STATE_COUNTING;
                         gSaveContext.timerStartOsTime[sTimerId] = osGetTime();
-                        gSaveContext.timerStopTime[sTimerId] = 0;
+                        gSaveContext.timerStopTime[sTimerId] = SECONDS_TO_TIMER(0);
                         gSaveContext.timerPausedOsTime[sTimerId] = 0;
                     }
                     // fallthrough
