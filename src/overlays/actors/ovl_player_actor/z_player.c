@@ -19046,31 +19046,21 @@ void func_80859B54(PlayState* play, Player* this, UNK_TYPE arg2) {
 }
 
 void func_80859BA8(PlayState* play, Player* this, void* arg) {
-    f32 temp_ft1;
     CsCmdActorAction* playerAction = arg;
-    f32 temp_fv0;
-    f32 temp_fv1;
-    f32 temp_fa0;
-    f32 xDiff;
-    f32 new_var;
-    f32 yDiff;
-    f32 zDiff;
+    f32 startX = playerAction->startPos.x;
+    f32 startY = playerAction->startPos.y;
+    f32 startZ = playerAction->startPos.z;
+    f32 diffX = playerAction->endPos.x - startX;
+    f32 diffY = playerAction->endPos.y - startY;
+    f32 progress;
+    f32 diffZ = playerAction->endPos.z - startZ;
 
-    temp_fv0 = playerAction->startPos.x;
-    temp_fv1 = playerAction->startPos.y;
-    temp_fa0 = playerAction->startPos.z;
-
-    xDiff = playerAction->endPos.x - temp_fv0;
-    yDiff = playerAction->endPos.y - temp_fv1;
-    zDiff = playerAction->endPos.z - temp_fa0;
-
-    //! FAKE
-    temp_ft1 = (new_var = ((f32)(play->csCtx.frames - playerAction->startFrame)) /
+    progress = (((f32)(play->csCtx.frames - playerAction->startFrame)) /
                           ((f32)(playerAction->endFrame - playerAction->startFrame)));
 
-    this->actor.world.pos.x = ((xDiff)*temp_ft1) + temp_fv0;
-    this->actor.world.pos.y = ((yDiff)*temp_ft1) + temp_fv1;
-    this->actor.world.pos.z = ((zDiff)*temp_ft1) + temp_fa0;
+    this->actor.world.pos.x = ((diffX) * progress) + startX;
+    this->actor.world.pos.y = ((diffY) * progress) + startY;
+    this->actor.world.pos.z = ((diffZ) * progress) + startZ;
 }
 
 void func_80859C60(PlayState* play, Player* this, UNK_PTR arg2) {
