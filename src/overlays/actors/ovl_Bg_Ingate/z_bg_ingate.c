@@ -245,10 +245,10 @@ void func_809541B8(BgIngate* this, PlayState* play) {
 
 void func_809542A0(BgIngate* this, PlayState* play) {
     if (gSaveContext.eventInf[5] & 1) {
-        play->nextEntranceIndex = 0xA820;
+        play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 2);
         gSaveContext.eventInf[5] &= (u8)~1;
     } else {
-        play->nextEntranceIndex = 0xA810;
+        play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 1);
     }
     gSaveContext.nextCutsceneIndex = 0;
     play->transitionTrigger = TRANS_TRIGGER_START;
