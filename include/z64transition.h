@@ -16,7 +16,12 @@ typedef struct {
 } TransitionInit; // size = 0x24
 
 typedef struct {
-    /* 0x0 */ char unk_0[0xC];
+    /* 0x00 */ s8 unk_00;
+    /* 0x01 */ s8 unk_01;
+    /* 0x02 */ s8 unk_02;
+    /* 0x04 */ Color_RGBA8_u32 unk_04;
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ char unk_0A[0x2];
 } TransitionFade; // size = 0xC
 
 extern const TransitionInit TransitionFade_InitVars;

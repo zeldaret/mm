@@ -1,17 +1,50 @@
 #include "global.h"
+#include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
+#include "overlays/gamestates/ovl_opening/z_opening.h"
+
+s32 gDbgCamEnabled = false;
+u8 D_801D0D54 = 0;
+
+// bss
+extern s16 D_801F6C10;
+extern Input D_801F6C18;
+extern FbDemoStruct D_801F6C30;
+extern u16* D_801F6D0C;
+extern s32 D_801F6D10;
+extern VisMono D_801F6D18;
+extern Color_RGBA8 D_801F6D30;
+extern Struct_80140E80 D_801F6D38;
+extern Struct_80140E80* D_801F6D4C;
+extern HiresoStruct D_801F6D50;
+extern u8 D_801F6DFC;
+extern s8 D_801F6DFD;
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165460.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165608.s")
+void func_80165608(void) {
+    SREG(91) = 0;
+    SREG(93) = 0;
+    D_801F6DFD = 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165630.s")
+void func_80165630(void) {
+    SREG(91) = 0;
+    SREG(93) = 0;
+    D_801F6DFD = 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165658.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_8016566C.s")
+void func_8016566C(u32 arg0) {
+    SREG(90) = arg0;
+    SREG(91) = 1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165690.s")
+void func_80165690(void) {
+    SREG(91) = 0;
+}
 
+void func_801656A4(u8* arg0, u16* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801656A4.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165DB8.s")
@@ -22,27 +55,248 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165E04.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165E1C.s")
+void func_80165E1C(PreRender* prerender) {
+    PreRender_ApplyFilters(prerender);
+    func_801656A4(D_80780000, prerender->fbufSave, 0x140, 0x50, 0x40, 0xEF, 0xAF, 8);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165E7C.s")
+s32 func_80165E7C(PlayState* this, s32 arg1) {
+    s32 phi_v1 = arg1;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165EC0.s")
+    if (arg1 == 0x14) {
+        if (!gSaveContext.save.isNight) {
+            phi_v1 = TRANS_TYPE_03;
+        } else {
+            phi_v1 = TRANS_TYPE_02;
+        }
+    }
+    if (phi_v1 != arg1) {
+        this->transitionType = phi_v1;
+    }
+    return phi_v1;
+}
+
+void func_80165EC0(PlayState* this, s32 arg1) {
+    PlayStruct_18BF0* ptr = &this->unk_18BF0;
+    s32 sp20;
+
+    bzero(ptr, sizeof(this->unk_18BF0));
+
+    sp20 = -1;
+    if (arg1 & 0x40) {
+        sp20 = 3;
+    } else if ((arg1 & 0x78) == 0x20) {
+        sp20 = 4;
+    } else if (!(arg1 & 0x60)) {
+        switch (arg1) {
+            case 1:
+                sp20 = 1;
+                break;
+            case 0:
+            case 8:
+                sp20 = 2;
+                break;
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 13:
+            case 17:
+            case 18:
+            case 19:
+                sp20 = 0;
+                break;
+            case 9:
+            case 10:
+                this->transitionMode = TRANS_MODE_04;
+                break;
+            case 11:
+                this->transitionMode = TRANS_MODE_10;
+                break;
+            case 12:
+                this->transitionMode = TRANS_MODE_07;
+                break;
+            case 14:
+                this->transitionMode = TRANS_MODE_12;
+                break;
+            case 15:
+                this->transitionMode = TRANS_MODE_14;
+                break;
+            case 16:
+                this->transitionMode = TRANS_MODE_16;
+                break;
+            case 21:
+                sp20 = 5;
+                break;
+            case 22:
+                sp20 = 6;
+                break;
+            default:
+                sp20 = -1;
+                __assert("../z_play.c", 1420);
+        }
+    } else {
+        sp20 = -1;
+        __assert("../z_play.c", 1423);
+    }
+
+    ptr->unk_00 = arg1;
+    ptr->unk_02 = sp20;
+    if (sp20 != -1) {
+        func_80163C90(ptr);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/D_801DFA18.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80166060.s")
+void func_80166060(PlayState* this) {
+    if (this->unk_18BF0.unk_02 != -1) {
+        func_80163D80(&this->unk_18BF0, this);
+    }
+    this->unk_18BF0.unk_00 = -1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801660B8.s")
+Gfx* func_801660B8(PlayState* this, Gfx* gfx) {
+    s32 phi_v1 = this->lightCtx.unkC * 0.078125f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Destroy.s")
+    return Gfx_SetFogWithSync(gfx, this->lightCtx.unk7, this->lightCtx.unk8, this->lightCtx.unk9, 0,
+                              this->lightCtx.unkA, phi_v1 <= 1000 ? 1000 : phi_v1);
+}
+
+void Play_Destroy(GameState* thisx) {
+    PlayState* this = (PlayState*)thisx;
+    GraphicsContext* gfxCtx = this->state.gfxCtx;
+
+    if (D_801F6DFC != 0) {
+        MsgEvent_SendNullTask();
+        func_80178750();
+        gfxCtx->curFrameBuffer = (u16*)SysCfb_GetFbPtr(gfxCtx->framebufferIdx % 2);
+        gfxCtx->zbuffer = SysCfb_GetZBuffer();
+        gfxCtx->viMode = D_801FBB88;
+        gfxCtx->viConfigFeatures = gViConfigFeatures;
+        gfxCtx->xScale = gViConfigXScale;
+        gfxCtx->yScale = gViConfigYScale;
+        gfxCtx->updateViMode = 1;
+        D_801F6DFC = 0;
+    }
+    func_8016FC98(&D_801F6D50);
+    this->state.gfxCtx->callback = NULL;
+    this->state.gfxCtx->callbackParam = 0;
+    func_80165630();
+    if (SREG(94) != 0) {
+        PreRender_ApplyFiltersSlowlyDestroy(&this->pauseBgPreRender);
+        SREG(94) = 0;
+    }
+    SREG(89) = 0;
+    PreRender_Destroy(&this->pauseBgPreRender);
+    this->unk_18E58 = NULL;
+    this->unk_18E5C = NULL;
+    this->unk_18E60 = NULL;
+    this->unk_18E64 = NULL;
+    this->unk_18E68 = NULL;
+    Effect_DestroyAll(this);
+    EffectSS_Clear(this);
+    CollisionCheck_DestroyContext(this, &this->colChkCtx);
+    if (D_801F6D10 == 3) {
+        func_8016424C(&D_801F6C30);
+        D_801F6D10 = 0;
+    }
+    if ((this->transitionMode == TRANS_MODE_03) || (D_801D0D54 != 0)) {
+        this->unk_18BF0.unk_234(&this->unk_18BF0.unk_08);
+        func_80166060(this);
+        this->transitionMode = TRANS_MODE_OFF;
+    }
+    ShrinkWindow_Destroy();
+    TransitionFade_Destroy(&this->unk_18E48);
+    VisMono_Destroy(&D_801F6D18);
+    func_80140EA0(D_801F6D4C);
+    D_801F6D4C = NULL;
+    if (gSaveContext.save.weekEventReg[0x5C] & 0x80) {
+        Actor_CleanupContext(&this->actorCtx, this);
+    }
+    gSaveContext.save.weekEventReg[0x5C] &= (u8)~0x80;
+    func_80121F94(this);
+    KaleidoScopeCall_Destroy(this);
+    KaleidoManager_Destroy();
+    ZeldaArena_Cleanup();
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801663C4.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80166644.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801668B4.s")
+f32 func_801668B4(PlayState* this, Vec3f* arg1, s32* arg2) {
+    Player* player = GET_PLAYER(this);
+    f32 sp38 = player->actor.world.pos.y;
+    WaterBox* sp34;
+    s32 sp30;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80166968.s")
+    if (!WaterBox_GetSurfaceImpl(this, &this->colCtx, arg1->x, arg1->z, &sp38, &sp34, &sp30)) {
+        return BGCHECK_Y_MIN;
+    }
+
+    if (sp38 < arg1->y) {
+        return BGCHECK_Y_MIN;
+    }
+
+    *arg2 = WaterBox_GetLightSettingIndex(&this->colCtx, sp34);
+    return sp38;
+}
+
+void func_80166968(PlayState* this, Camera* camera) {
+    static s16 D_801D0D58 = -1;
+    static s16 D_801D0D5C = 0;
+    s32 pad;
+    s32 sp28;
+    Player* player = GET_PLAYER(this);
+
+    D_801D0D5C = camera->stateFlags & CAM_STATE_UNDERWATER;
+    if (func_801668B4(this, &camera->eye, &sp28) != BGCHECK_Y_MIN) {
+        s16 temp;
+
+        if (D_801D0D5C == 0) {
+            Camera_SetFlags(camera, CAM_STATE_UNDERWATER);
+            D_801D0D58 = -1;
+            Distortion_SetType(0x10);
+            Distortion_SetCountdown(0x50);
+        }
+        func_801A3EC0(0x20);
+        func_800F6834(this, sp28);
+        if ((D_801D0D58 == -1) || (Quake_GetCountdown(D_801D0D58) == 0xA)) {
+            s16 quake = Quake_Add(camera, 5);
+
+            D_801D0D58 = quake;
+            if (quake != 0) {
+                Quake_SetSpeed(D_801D0D58, 0x226);
+                Quake_SetQuakeValues(D_801D0D58, 1, 1, 0xB4, 0);
+                Quake_SetCountdown(D_801D0D58, 1000);
+            }
+        }
+        if (player->stateFlags3 & PLAYER_STATE3_8000) {
+            Distortion_SetType(8);
+            Distortion_ClearType(4);
+        } else {
+            Distortion_SetType(4);
+            Distortion_ClearType(8);
+        }
+    } else {
+        if (D_801D0D5C != 0) {
+            Camera_ClearFlags(camera, 0x100);
+        }
+        Distortion_ClearType(4);
+        Distortion_ClearType(0x10);
+        Distortion_ClearType(8);
+        if (D_801D0D58 != 0) {
+            Quake_RemoveFromIdx(D_801D0D58);
+        }
+        func_800F694C(this);
+        func_801A3EC0(0);
+    }
+}
+
+Input* D_801D0D60 = NULL;
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80166B30.s")
 
@@ -56,6 +310,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80168DAC.s")
 
+void Play_Main(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Main.s")
 
 s32 Play_InCsMode(PlayState* this) {
@@ -66,13 +321,53 @@ s32 Play_InCsMode(PlayState* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801691F0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_LoadScene.s")
+void* Play_LoadScene(PlayState* this, RomFile* entry) {
+    size_t size = entry->vromEnd - entry->vromStart;
+    void* sp18 = THA_AllocEndAlign16(&this->state.heap, size);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_8016927C.s")
+    DmaMgr_SendRequest0(sp18, entry->vromStart, size);
+    return sp18;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801692C4.s")
+void func_8016927C(PlayState* this, s16 skyboxId) {
+    func_801434E4(&this->state, &this->skyboxCtx, skyboxId);
+    Kankyo_Init(this, &this->envCtx, 0);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_SceneInit.s")
+void func_801692C4(PlayState* this, s32 spawn) {
+    this->curSpawn = spawn;
+    this->linkActorEntry = NULL;
+    this->actorCsCamList = NULL;
+    this->setupEntranceList = NULL;
+    this->setupExitList = NULL;
+    this->unk_18868 = NULL;
+    this->setupPathList = NULL;
+    this->sceneMaterialAnims = NULL;
+    this->roomCtx.unk74 = NULL;
+    this->numSetupActors = 0;
+    Object_InitBank(&this->state, &this->objectCtx);
+    LightContext_Init(this, &this->lightCtx);
+    Door_InitContext(&this->state, &this->doorCtx);
+    Room_Init(this, &this->roomCtx);
+    gSaveContext.worldMapArea = 0;
+    Scene_ProcessHeader(this, this->sceneSegment);
+    func_8016927C(this, this->skyboxId);
+}
+
+void Play_SceneInit(PlayState* this, s32 scene, s32 spawn) {
+    s32 pad;
+    SceneTableEntry* sp1C = &gSceneTable[scene];
+
+    sp1C->unk_D = 0;
+    this->loadedScene = sp1C;
+    this->sceneNum = scene;
+    this->sceneConfig = sp1C->drawConfig;
+    this->sceneSegment = Play_LoadScene(this, &sp1C->segment);
+    sp1C->unk_D = 0;
+    gSegments[0x02] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
+    func_801692C4(this, spawn);
+    Room_AllocateAndLoad(this, &this->roomCtx);
+}
 
 void Play_GetScreenPos(PlayState* this, Vec3f* worldPos, Vec3f* screenPos) {
     f32 invW;
@@ -500,8 +795,7 @@ s32 Play_IsDebugCamEnabled(void) {
 }
 
 // A mapping from playerActorCsIds to sGlobalCamDataSettings indices.
-extern s16 D_801D0D64[];
-// s16 D_801D0D64[] = { -3, -2, -4, -5, -7, -11, -8, -9, -6, -16 };
+s16 D_801D0D64[] = { -3, -2, -4, -5, -7, -11, -8, -9, -6, -16 };
 
 // Used by Player
 /**
@@ -546,4 +840,283 @@ void func_8016A268(GameState* thisx, s16 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg
     MREG(68) = arg5;
 }
 
+#ifdef NON_MATCHING
+// a1/a2 reg swap around Entrance_GetSpawnNum
+void Play_Init(GameState* thisx) {
+    PlayState* this = (PlayState*)thisx;
+    GraphicsContext* gfxCtx = this->state.gfxCtx;
+    s32 pad;
+    s32 pad2;
+    s32 sp94;
+    Player* player;
+    s32 spawn;
+    s32 i;
+    u8 sp87;
+    u32 temp_v0_12;
+    s32 scene;
+    s16 params;
+
+    if ((gSaveContext.respawnFlag == -4) || (gSaveContext.respawnFlag == -0x63)) {
+        if (gSaveContext.eventInf[2] & 0x80) {
+            gSaveContext.eventInf[2] &= (u8)~0x80;
+            this->state.running = false;
+            {
+                GameState* state = &this->state;
+
+                SET_NEXT_GAMESTATE(state, Daytelop_Init, DaytelopContext);
+            }
+            return;
+        }
+
+        gSaveContext.unk_3CA7 = 1;
+        if (gSaveContext.respawnFlag == ~0x62) {
+            gSaveContext.respawnFlag = 2;
+        }
+    } else {
+        gSaveContext.unk_3CA7 = 0;
+    }
+
+    if (gSaveContext.save.entrance == -1) {
+        gSaveContext.save.entrance = 0;
+        this->state.running = false;
+        {
+            GameState* state = &this->state;
+
+            SET_NEXT_GAMESTATE(state, Opening_Init, OpeningContext);
+        }
+        return;
+    }
+
+    if ((gSaveContext.nextCutsceneIndex == 0xFFEF) || (gSaveContext.nextCutsceneIndex == 0xFFF0)) {
+        scene = gSaveContext.save.entrance >> 9;
+        spawn = (gSaveContext.save.entrance >> 4) & 0x1F;
+
+        if (gSaveContext.save.weekEventReg[33] & 0x80) {
+            if (scene == ENTR_SCENE_MOUNTAIN_VILLAGE_WINTER) {
+                scene = ENTR_SCENE_MOUNTAIN_VILLAGE_SPRING;
+            } else if (scene == ENTR_SCENE_GORON_VILLAGE_WINTER) {
+                scene = ENTR_SCENE_GORON_VILLAGE_SPRING;
+            } else if (scene == ENTR_SCENE_PATH_TO_GORON_VILLAGE_WINTER) {
+                scene = ENTR_SCENE_PATH_TO_GORON_VILLAGE_SPRING;
+            } else if ((scene == ENTR_SCENE_SNOWHEAD) || (scene == ENTR_SCENE_PATH_TO_SNOWHEAD) ||
+                       (scene == ENTR_SCENE_PATH_TO_MOUNTAIN_VILLAGE) || (scene == ENTR_SCENE_GORON_SHRINE) ||
+                       (scene == ENTR_SCENE_GORON_RACETRACK)) {
+                gSaveContext.nextCutsceneIndex = 0xFFF0;
+            }
+        }
+
+        if (gSaveContext.save.weekEventReg[20] & 2) {
+            if (scene == ENTR_SCENE_SOUTHERN_SWAMP_POISONED) {
+                scene = ENTR_SCENE_SOUTHERN_SWAMP_CLEARED;
+            } else if (scene == ENTR_SCENE_WOODFALL) {
+                gSaveContext.nextCutsceneIndex = 0xFFF1;
+            }
+        }
+
+        if ((gSaveContext.save.weekEventReg[52] & 0x20) && (scene == ENTR_SCENE_IKANA_CANYON)) {
+            gSaveContext.nextCutsceneIndex = 0xFFF2;
+        }
+
+        if ((gSaveContext.save.weekEventReg[55] & 0x80) &&
+            ((scene == ENTR_SCENE_GREAT_BAY_COAST) || (scene == ENTR_SCENE_ZORA_CAPE))) {
+            gSaveContext.nextCutsceneIndex = 0xFFF0;
+        }
+
+        if (INV_CONTENT(ITEM_OCARINA) != ITEM_OCARINA) {
+            if ((scene == ENTR_SCENE_TERMINA_FIELD) &&
+                (((void)0, gSaveContext.save.entrance) != ENTRANCE(TERMINA_FIELD, 10))) {
+                gSaveContext.nextCutsceneIndex = 0xFFF4;
+            }
+        }
+        gSaveContext.save.entrance = Entrance_Create(scene, spawn, ((void)0, gSaveContext.save.entrance) & 0xF);
+    }
+
+    GameState_Realloc(&this->state, 0);
+    KaleidoManager_Init(this);
+    ShrinkWindow_Init();
+    View_Init(&this->view, gfxCtx);
+    func_801A3EC0(0);
+    Quake_Init();
+    Distortion_Init(this);
+
+    for (i = 0; i < ARRAY_COUNT(this->cameraPtrs); i++) {
+        this->cameraPtrs[i] = NULL;
+    }
+
+    Camera_Init(&this->mainCamera, &this->view, &this->colCtx, this);
+    Camera_ChangeStatus(&this->mainCamera, 7);
+
+    for (i = 0; i < ARRAY_COUNT(this->subCameras); i++) {
+        Camera_Init(&this->subCameras[i], &this->view, &this->colCtx, this);
+        Camera_ChangeStatus(&this->subCameras[i], 0x100);
+    }
+
+    this->cameraPtrs[CAM_ID_MAIN] = &this->mainCamera;
+    this->cameraPtrs[CAM_ID_MAIN]->uid = CAM_ID_MAIN;
+    this->activeCamId = CAM_ID_MAIN;
+
+    func_800DFF18(&this->mainCamera, 0x7F);
+    Sram_Alloc(&this->state, &this->sramCtx);
+    func_801AAAA0(this);
+    Message_Init(this);
+    GameOver_Init(this);
+    SoundSource_InitAll(this);
+    EffFootmark_Init(this);
+    Effect_Init(this);
+    EffectSS_Init(this, 100);
+    CollisionCheck_InitContext(this, &this->colChkCtx);
+    AnimationContext_Reset(&this->animationCtx);
+    Cutscene_Init(this, &this->csCtx);
+
+    if (gSaveContext.nextCutsceneIndex != 0xFFEF) {
+        gSaveContext.save.cutscene = gSaveContext.nextCutsceneIndex;
+        gSaveContext.nextCutsceneIndex = 0xFFEF;
+    }
+
+    if (gSaveContext.save.cutscene == 0xFFFD) {
+        gSaveContext.save.cutscene = 0;
+    }
+
+    if (gSaveContext.nextDayTime != 0xFFFF) {
+        gSaveContext.save.time = gSaveContext.nextDayTime;
+        gSaveContext.skyboxTime = gSaveContext.nextDayTime;
+    }
+
+    if ((gSaveContext.save.time >= CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 30))) {
+        gSaveContext.save.isNight = true;
+    } else {
+        gSaveContext.save.isNight = false;
+    }
+
+    func_800EDDB0(this);
+
+    if (((gSaveContext.gameMode != 0) && (gSaveContext.gameMode != 1)) || (gSaveContext.save.cutscene >= 0xFFF0)) {
+        gSaveContext.unk_3DC0 = 0;
+        func_80115D5C(&this->state);
+        gSaveContext.sceneSetupIndex = (gSaveContext.save.cutscene & 0xF) + 1;
+        gSaveContext.save.cutscene = 0;
+    } else {
+        gSaveContext.sceneSetupIndex = 0;
+    }
+
+    sp87 = gSaveContext.sceneSetupIndex;
+
+    Play_SceneInit(
+        this,
+        Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneSetupIndex)),
+        Entrance_GetSpawnNum(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneSetupIndex)));
+    KaleidoScopeCall_Init(this);
+    func_80121FC4(this);
+
+    if (gSaveContext.nextDayTime != 0xFFFF) {
+        if (gSaveContext.nextDayTime == 0x8000) {
+            gSaveContext.save.day++;
+            gSaveContext.save.daysElapsed++;
+            gSaveContext.dogIsLost = true;
+            gSaveContext.nextDayTime = -2;
+        } else {
+            gSaveContext.nextDayTime = -3;
+        }
+    }
+
+    func_80165608();
+
+    SREG(94) = 0;
+    SREG(89) = 0;
+
+    PreRender_Init(&this->pauseBgPreRender);
+    PreRender_SetValuesSave(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, NULL, NULL, NULL);
+    PreRender_SetValues(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, NULL, NULL);
+
+    this->unk_18E64 = D_801FBB90;
+    this->unk_18E5C = D_80780000;
+    this->unk_18E68 = D_80784600;
+    this->unk_18E58 = D_80784600;
+    this->unk_18E60 = D_80784600;
+    D_801F6D10 = 0;
+    this->transitionMode = TRANS_MODE_OFF;
+    D_801D0D54 = 0;
+
+    FrameAdvance_Init(&this->frameAdvCtx);
+    Rand_Seed(osGetTime());
+    Matrix_Init(&this->state);
+
+    this->state.main = Play_Main;
+    this->state.destroy = Play_Destroy;
+
+    this->transitionTrigger = TRANS_TRIGGER_END;
+    this->unk_18876 = 0;
+    this->bgCoverAlpha = 0;
+    this->unk_18845 = 0;
+    this->unk_18844 = 0;
+
+    if (gSaveContext.gameMode != 1) {
+        if (gSaveContext.nextTransitionType == TRANS_NEXT_TYPE_DEFAULT) {
+            this->transitionType =
+                (Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entrance) + sp87) >> 7) & 0x7F;
+        } else {
+            this->transitionType = gSaveContext.nextTransitionType;
+            gSaveContext.nextTransitionType = 0xFF;
+        }
+    } else {
+        this->transitionType = TRANS_TYPE_02;
+    }
+
+    TransitionFade_Init(&this->unk_18E48);
+    TransitionFade_SetType(&this->unk_18E48, 3);
+    TransitionFade_SetColor(&this->unk_18E48, 0xA0A0A0FF);
+    TransitionFade_Start(&this->unk_18E48);
+    VisMono_Init(&D_801F6D18);
+
+    D_801F6D30.a = 0;
+    D_801F6D4C = &D_801F6D38;
+    func_80140E80(D_801F6D4C);
+    D_801F6D4C->lodProportion = 0.0f;
+    D_801F6D4C->mode = 1;
+    D_801F6D4C->primColor.r = 0;
+    D_801F6D4C->primColor.g = 0;
+    D_801F6D4C->primColor.b = 0;
+    D_801F6D4C->primColor.a = 0;
+    D_801F6D4C->envColor.r = 0;
+    D_801F6D4C->envColor.g = 0;
+    D_801F6D4C->envColor.b = 0;
+    D_801F6D4C->envColor.a = 0;
+    EnvFlags_UnsetAll(this);
+    THA_GetSize(&this->state.heap);
+    sp94 = THA_GetSize(&this->state.heap);
+    temp_v0_12 = (u32)THA_AllocEndAlign16(&this->state.heap, sp94);
+    ZeldaArena_Init(((temp_v0_12 + 8) & ~0xF), (sp94 - ((temp_v0_12 + 8) & ~0xF)) + temp_v0_12);
+    Actor_InitContext(this, &this->actorCtx, this->linkActorEntry);
+
+    while (Room_HandleLoadCallbacks(this, &this->roomCtx) == 0) {}
+
+    if ((CURRENT_DAY != 0) && ((this->roomCtx.currRoom.unk3 == 1) || (this->roomCtx.currRoom.unk3 == 5))) {
+        Actor_Spawn(&this->actorCtx, this, 0x15A, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0);
+    }
+
+    player = GET_PLAYER(this);
+
+    Camera_InitPlayerSettings(&this->mainCamera, player);
+    gDbgCamEnabled = false;
+
+    if ((player->actor.params & 0xFF) != 0xFF) {
+        Camera_ChangeDataIdx(&this->mainCamera, player->actor.params & 0xFF);
+    }
+
+    func_800F15D8(&this->mainCamera);
+    func_801129E4(this);
+    func_800FB758(this);
+    gSaveContext.seqIndex = this->soundCtx.seqIndex;
+    gSaveContext.nightSeqIndex = this->soundCtx.nightSeqIndex;
+    AnimationContext_Update(this, &this->animationCtx);
+    func_800EDBE0(this);
+    gSaveContext.respawnFlag = 0;
+    D_801F6DFC = 0;
+    func_8016FC78(&D_801F6D50);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Init.s")
+#endif
+
+// play_hireso need to confirm still
+u16 D_801D0D78[] = { 0, 0, 0, 0 };

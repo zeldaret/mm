@@ -1088,6 +1088,24 @@ typedef struct {
     /* 0x0 */ u16 state;
 } GameOverContext; // size = 0x2
 
+typedef struct {
+    /* 0x000 */ s16 unk_00;
+    /* 0x002 */ s8 unk_02;
+    /* 0x003 */ char unk03[0x5];
+    /* 0x008 */ s32 unk_08;
+    /* 0x00C */ char unk0C[0x224];
+    /* 0x230 */ void (*unk_230)(s32*);
+    /* 0x234 */ void (*unk_234)(s32*);
+    /* 0x238 */ void (*unk_238)(s32*, u8);
+    /* 0x23C */ char unk23C[0x4];
+    /* 0x240 */ void (*unk_240)(s32*);
+    /* 0x244 */ void (*unk_244)(s32*, s32);
+    /* 0x248 */ void (*unk_248)(s32*, u32); // RGBA8 colour?
+    /* 0x24C */ void (*unk_24C)(s32*, u32); // RGBA8 colour?
+    /* 0x250 */ s32 (*unk_250)(s32*);
+    /* 0x254 */ char unk254[0x4];
+} PlayStruct_18BF0; // size = 0x258 TransitionContext?
+
 struct PlayState {
     /* 0x00000 */ GameState state;
     /* 0x000A4 */ s16 sceneNum;
@@ -1169,12 +1187,49 @@ struct PlayState {
     /* 0x18B49 */ u8 unk_18B49;
     /* 0x18B4A */ u8 transitionMode;
     /* 0x18B4C */ PreRender pauseBgPreRender;
-    /* 0x18B9C */ char unk_18B9C[0x2B8];
+    /* 0x18B9C */ char unk_18B9C[0x54];
+    /* 0x18BF0 */ PlayStruct_18BF0 unk_18BF0;
+    /* 0x18E48 */ TransitionFade unk_18E48;
     /* 0x18E54 */ SceneTableEntry* loadedScene;
-    /* 0x18E58 */ char unk_18E58[0x10];
-    /* 0x18E68 */ s32 unk_18E68;
+    /* 0x18E58 */ UNK_PTR unk_18E58;
+    /* 0x18E5C */ UNK_PTR unk_18E5C;
+    /* 0x18E60 */ UNK_PTR unk_18E60;
+    /* 0x18E64 */ void* unk_18E64;
+    /* 0x18E68 */ void* unk_18E68;
     /* 0x18E6C */ char unk_18E6C[0x3EC];
 }; // size = 0x19258
+
+typedef struct {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ char unk_01[0x3F];
+    /* 0x40 */ void* unk_40;
+    /* 0x44 */ u32 unk_44;
+    /* 0x48 */ u32 unk_48;
+    /* 0x4C */ DmaRequest unk_4C;
+    /* 0x6C */ OSMesgQueue unk_6C;
+    /* 0x84 */ OSMesg unk_84[1];
+    /* 0x88 */ void* unk_88;
+    /* 0x8C */ uintptr_t unk_8C;
+    /* 0x90 */ size_t unk_90;
+    /* 0x94 */ s32 unk_94;
+    /* 0x98 */ s32 unk_98;
+    /* 0x9C */ s32 unk_9C;
+    /* 0xA0 */ char unk_A0[0x4];
+    /* 0xA4 */ s32 unk_A4;
+    /* 0xA8 */ s32 unk_A8;
+} HiresoStruct; // size = 0xAC
+
+typedef struct {
+    /* 0x00 */ char unk_00[0xDC];
+} FbDemoStruct; // size = 0xDC
+
+typedef struct {
+    /* 0x00 */ u8 mode;
+    /* 0x04 */ f32 scale;
+    /* 0x08 */ f32 lodProportion; // expected to be between 0.0f and 1.0f
+    /* 0x0C */ Color_RGBA8_u32 primColor;
+    /* 0x10 */ Color_RGBA8_u32 envColor;
+} Struct_80140E80; // size = 0x14
 
 typedef struct {
     /* 0x00 */ s32 unk0;

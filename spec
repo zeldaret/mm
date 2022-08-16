@@ -556,7 +556,6 @@ beginseg
     include "build/data/code/z_fbdemo_circle.data.o"
     include "build/src/code/z_overlay.o"
     include "build/src/code/z_play.o"
-    include "build/data/code/z_play.data.o"
     include "build/data/code/z_play.bss.o"
     include "build/src/code/z_play_hireso.o"
     include "build/data/code/z_play_hireso.data.o"
