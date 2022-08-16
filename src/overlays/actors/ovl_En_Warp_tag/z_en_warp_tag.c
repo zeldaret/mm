@@ -51,10 +51,10 @@ void EnWarptag_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     Actor_SetFocus(&this->dyna.actor, 0.0f);
 
-    if (GET_WARPTAG_3C0_MAX(thisx) == WARPTAG_3C0_MAX) {
+    if (WARPTAG_GET_3C0_MAX(thisx) == WARPTAG_3C0_MAX) {
         this->dyna.actor.flags &= ~ACTOR_FLAG_1;
 
-        if (GET_WARPTAG_INVISIBLE(&this->dyna.actor)) {
+        if (WARPTAG_GET_INVISIBLE(&this->dyna.actor)) {
             this->actionFunc = EnWarpTag_WaitForPlayer;
 
         } else {
@@ -93,7 +93,7 @@ void EnWarpTag_CheckDungeonKeepObject(EnWarptag* this, PlayState* play) {
 void EnWarpTag_WaitForPlayer(EnWarptag* this, PlayState* play) {
     if (!Player_InCsMode(play) && (this->dyna.actor.xzDistToPlayer <= 30.0f) &&
         (this->dyna.actor.playerHeightRel <= 10.0f)) {
-        if (GET_WARPTAG_INVISIBLE(&this->dyna.actor)) {
+        if (WARPTAG_GET_INVISIBLE(&this->dyna.actor)) {
             func_800B7298(play, NULL, 0x51);
             this->actionFunc = EnWarpTag_GrottoReturn;
         } else {
@@ -112,8 +112,8 @@ void EnWarpTag_Unused809C09A0(EnWarptag* this, PlayState* play) {
         //   this actor doesnt have that flag set default, or in init, and this is called shortly after init
         //   and I doubt its set externally by another actor, so I believe this is unused
         // might be a bug, they might have meant to set actor flag (0x2000 0000) up above but mistyped (0x200 0000)
-        // also GET_WARPTAG_3C0 should always return 2C0 -> 0xF for all known in-game uses, which is OOB
-        func_80152434(play, D_809C1000[GET_WARPTAG_3C0(&this->dyna.actor)]); // unk message function
+        // also WARPTAG_GET_3C0 should always return 2C0 -> 0xF for all known in-game uses, which is OOB
+        func_80152434(play, D_809C1000[WARPTAG_GET_3C0(&this->dyna.actor)]); // unk message function
         this->actionFunc = EnWarpTag_Unused809C0A20;
 
     } else {
@@ -180,7 +180,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
             player->actor.gravity = -0.5f;
 
             if (this->dyna.actor.playerHeightRel < -80.0f) {
-                playerSpawnIndexPerForm[PLAYER_FORM_FIERCE_DEITY] = GET_WARPTAG_EXIT_INDEX(&this->dyna.actor);
+                playerSpawnIndexPerForm[PLAYER_FORM_FIERCE_DEITY] = WARPTAG_GET_EXIT_INDEX(&this->dyna.actor);
                 playerSpawnIndexPerForm[PLAYER_FORM_HUMAN] = playerSpawnIndexPerForm[PLAYER_FORM_FIERCE_DEITY];
                 playerSpawnIndexPerForm[PLAYER_FORM_GORON] = this->dyna.actor.world.rot.x;
                 playerSpawnIndexPerForm[PLAYER_FORM_ZORA] = this->dyna.actor.world.rot.y;
@@ -200,7 +200,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
                 newRespawnPos.y = playerActorEntry->pos.y;
                 newRespawnPos.z = playerActorEntry->pos.z;
 
-                if (GET_WARPTAG_3C0_MAX(&this->dyna.actor) == WARPTAG_3C0_MAX) {
+                if (WARPTAG_GET_3C0_MAX(&this->dyna.actor) == WARPTAG_3C0_MAX) {
                     playerParams = 0x9FF;
                 } else { // not used by any known variant
                     playerParams = 0x8FF;
@@ -241,7 +241,7 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
     }
 
     if (this->grottoExitDelay++ == 10) {
-        play->nextEntrance = play->setupExitList[GET_WARPTAG_EXIT_INDEX(&this->dyna.actor)];
+        play->nextEntrance = play->setupExitList[WARPTAG_GET_EXIT_INDEX(&this->dyna.actor)];
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
         func_8019F128(NA_SE_OC_SECRET_HOLE_OUT);

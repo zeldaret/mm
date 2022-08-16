@@ -49,8 +49,8 @@ void BgLadder_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
-    this->switchFlag = GET_BGLADDER_SWITCHFLAG(thisx);
-    thisx->params = GET_BGLADDER_SIZE(thisx);
+    this->switchFlag = BGLADDER_GET_SWITCHFLAG(thisx);
+    thisx->params = BGLADDER_GET_SIZE(thisx);
     DynaPolyActor_Init(&this->dyna, 0);
     size = thisx->params;
 
