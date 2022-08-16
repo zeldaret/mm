@@ -39,11 +39,11 @@ const ActorInit En_Rz_InitVars = {
     (ActorFunc)EnRz_Draw,
 };
 
-static u64* D_80BFCCE0[] = { object_rz_Tex_00BC50, object_rz_Tex_00C190, object_rz_Tex_00C590 };
+TexturePtr D_80BFCCE0[] = { object_rz_Tex_00BC50, object_rz_Tex_00C190, object_rz_Tex_00C590 };
 
-static u64* D_80BFCCEC = object_rz_Tex_00C990;
+TexturePtr D_80BFCCEC = object_rz_Tex_00C990;
 
-static u64* D_80BFCCF0 = object_rz_Tex_00CD90;
+TexturePtr D_80BFCCF0 = object_rz_Tex_00CD90;
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -96,7 +96,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, EnRz_ActorShadowFunc, 20.0f);
 
     SkelAnime_InitFlex(play, &this->skelAnime, &object_rz_Skel_00D8D8, &object_rz_Anim_003A20,
-                       (intptr_t)this->jointTable & ~0xF, (intptr_t)this->morphTable & ~0xF, OBJECT_RZ_LIMB_MAX);
+                       (uintptr_t)this->jointTable & ~0xF, (uintptr_t)this->morphTable & ~0xF, OBJECT_RZ_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &object_rz_Anim_003A20);
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -192,30 +192,32 @@ void EnRz_SetAnimation(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, 
         animationPtr = D_80BFCD3C;
     }
 
-    if ((animIndex >= 0) && (animIndex < 9) && ((animIndex != this->currentAnimIndex) || (animMode != 0))) {
-        if (animIndex >= 7) {
-            endFrame = Animation_GetLastFrame(gLinkAnimations[animIndex - 7]);
-            if (animMode == 0) {
-                LinkAnimation_Change(play, &this->skelAnime, gLinkAnimations[animIndex - 7], 2.0f / 3.0f, 0.0f,
-                                     endFrame, 0, transitionRate);
+    if ((animIndex >= ANIMMODE_LOOP) && (animIndex < 9) &&
+        ((animIndex != this->currentAnimIndex) || (animMode != ANIMMODE_LOOP))) {
+        if (animIndex >= ARRAY_COUNT(D_80BFCD20)) {
+            endFrame = Animation_GetLastFrame(gLinkAnimations[animIndex - ARRAY_COUNT(D_80BFCD20)]);
+            if (animMode == ANIMMODE_LOOP) {
+                LinkAnimation_Change(play, &this->skelAnime, gLinkAnimations[animIndex - ARRAY_COUNT(D_80BFCD20)],
+                                     2.0f / 3.0f, 0.0f, endFrame, ANIMMODE_LOOP, transitionRate);
             } else {
-                LinkAnimation_Change(play, &this->skelAnime, gLinkAnimations[animIndex - 7], 2.0f / 3.0f, 0.0f,
-                                     endFrame, 0, transitionRate);
+                LinkAnimation_Change(play, &this->skelAnime, gLinkAnimations[animIndex - ARRAY_COUNT(D_80BFCD20)],
+                                     2.0f / 3.0f, 0.0f, endFrame, ANIMMODE_LOOP, transitionRate);
             }
         } else {
             Animation_Change(&this->skelAnime, animationPtr[animIndex], 1.0f, 0.0f,
                              Animation_GetLastFrame(animationPtr[animIndex]), animMode, transitionRate);
         }
+
         this->currentAnimIndex = animIndex;
     }
 }
 
 void func_80BFB9E4(PlayState* play, EnRz* this, s16 animIndex) {
-    EnRz_SetAnimation(play, this, animIndex, 0, -5.0f);
+    EnRz_SetAnimation(play, this, animIndex, ANIMMODE_LOOP, -5.0f);
 }
 
 void func_80BFBA1C(PlayState* play, EnRz* this, s16 animIndex) {
-    EnRz_SetAnimation(play, this, animIndex, 0, 0.0f);
+    EnRz_SetAnimation(play, this, animIndex, ANIMMODE_LOOP, 0.0f);
 }
 
 s32 func_80BFBA50(EnRz* this, PlayState* play) {
@@ -290,7 +292,7 @@ s32 func_80BFBCEC(EnRz* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->actor.xzDistToPlayer < 100.0f && Actor_IsFacingPlayer(&this->actor, 0x3000) &&
-        player->stateFlags2 & 0x2000000) {
+        player->stateFlags2 & PLAYER_STATE2_2000000) {
         return true;
     }
 
@@ -393,7 +395,7 @@ void func_80BFC078(EnRz* this, PlayState* play) {
 
     EnRz_UpdateAnimation(this, play);
 
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x2927:
             case 0x2928:
@@ -527,7 +529,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
 void func_80BFC608(EnRz* this, PlayState* play) {
     EnRz_UpdateAnimation(this, play);
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         this->actionFunc = func_80BFC674;
     }
@@ -554,7 +556,7 @@ void func_80BFC674(EnRz* this, PlayState* play) {
 void func_80BFC728(EnRz* this, PlayState* play) {
     EnRz_UpdateAnimation(this, play);
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         this->actionFunc = func_80BFC7E0;
         this->actor.textId++;
