@@ -1561,10 +1561,10 @@ void Interface_DrawTimers(PlayState* play) {
                     break;
 
                 case TIMER_STATE_MOVING_TIMER:
-                    if (sTimerId == TIMER_ID_FINAL_HOURS) {
-                        j = ((((void)0, gSaveContext.timerX[sTimerId]) - R_FINAL_HOURS_TIMER_X) / sTimerStateTimer);
+                    if (sTimerId == TIMER_ID_MOON_CRASH) {
+                        j = ((((void)0, gSaveContext.timerX[sTimerId]) - R_MOON_CRASH_TIMER_X) / sTimerStateTimer);
                         gSaveContext.timerX[sTimerId] = ((void)0, gSaveContext.timerX[sTimerId]) - j;
-                        j = ((((void)0, gSaveContext.timerY[sTimerId]) - R_FINAL_HOURS_TIMER_Y) / sTimerStateTimer);
+                        j = ((((void)0, gSaveContext.timerY[sTimerId]) - R_MOON_CRASH_TIMER_Y) / sTimerStateTimer);
                         gSaveContext.timerY[sTimerId] = ((void)0, gSaveContext.timerY[sTimerId]) - j;
                     } else {
                         j = ((((void)0, gSaveContext.timerX[sTimerId]) - 26) / sTimerStateTimer);
@@ -1580,8 +1580,8 @@ void Interface_DrawTimers(PlayState* play) {
                     if (sTimerStateTimer == 0) {
                         sTimerStateTimer = 20;
 
-                        if (sTimerId == TIMER_ID_FINAL_HOURS) {
-                            gSaveContext.timerY[sTimerId] = R_FINAL_HOURS_TIMER_Y;
+                        if (sTimerId == TIMER_ID_MOON_CRASH) {
+                            gSaveContext.timerY[sTimerId] = R_MOON_CRASH_TIMER_Y;
                         } else {
                             gSaveContext.timerX[sTimerId] = 26;
                             if (gSaveContext.save.playerData.healthCapacity > 0xA0) {
@@ -1599,9 +1599,9 @@ void Interface_DrawTimers(PlayState* play) {
                     // fallthrough
                 case TIMER_STATE_COUNTING:
                     if ((gSaveContext.timerState[sTimerId] == TIMER_STATE_COUNTING) &&
-                        (sTimerId == TIMER_ID_FINAL_HOURS)) {
-                        gSaveContext.timerX[TIMER_ID_FINAL_HOURS] = R_FINAL_HOURS_TIMER_X;
-                        gSaveContext.timerY[TIMER_ID_FINAL_HOURS] = R_FINAL_HOURS_TIMER_Y;
+                        (sTimerId == TIMER_ID_MOON_CRASH)) {
+                        gSaveContext.timerX[TIMER_ID_MOON_CRASH] = R_MOON_CRASH_TIMER_X;
+                        gSaveContext.timerY[TIMER_ID_MOON_CRASH] = R_MOON_CRASH_TIMER_Y;
                     }
                     break;
 
@@ -1640,7 +1640,7 @@ void Interface_DrawTimers(PlayState* play) {
 
                     gSaveContext.timerState[sTimerId] = TIMER_STATE_OFF;
 
-                    if (sTimerId == TIMER_ID_FINAL_HOURS) {
+                    if (sTimerId == TIMER_ID_MOON_CRASH) {
                         gSaveContext.save.day = 4;
                         if ((play->sceneNum == SCENE_OKUJOU) && (gSaveContext.sceneSetupIndex == 3)) {
                             play->nextEntrance = ENTRANCE(TERMINA_FIELD, 1);

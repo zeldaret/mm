@@ -37,7 +37,7 @@ typedef enum {
     /*  0 */ TIMER_ID_POSTMAN, // postman's counting minigame
     /*  1 */ TIMER_ID_MINIGAME_1, // minigame timer
     /*  2 */ TIMER_ID_2,
-    /*  3 */ TIMER_ID_FINAL_HOURS, // countdown until mooncrash
+    /*  3 */ TIMER_ID_MOON_CRASH, // timer used for mooncrash on the clocktower roof
     /*  4 */ TIMER_ID_MINIGAME_2, // minigame timer
     /*  5 */ TIMER_ID_ENV, // environmental timer (underwater or hot room)
     /*  6 */ TIMER_ID_GORON_RACE_UNUSED,
@@ -262,7 +262,7 @@ typedef struct SaveContext {
     /* 0x3DD0 */ u8 timerState[TIMER_ID_MAX];           // "event_fg"
     /* 0x3DD7 */ u8 timerDirection[TIMER_ID_MAX];       // "calc_flag"
     /* 0x3DE0 */ u64 timerCurTime[TIMER_ID_MAX];        // "event_ostime"
-    /* 0x3E18 */ u64 timerTimeLimit[TIMER_ID_MAX];     // "event_sub"
+    /* 0x3E18 */ u64 timerTimeLimit[TIMER_ID_MAX];      // "event_sub"
     /* 0x3E50 */ OSTime timerStartOsTime[TIMER_ID_MAX]; // "func_time"
     /* 0x3E88 */ OSTime timerEndOsTime[TIMER_ID_MAX];   // "func_end_time"
     /* 0x3EC0 */ OSTime timerPausedOsTime[TIMER_ID_MAX]; // "func_stop_time"
