@@ -6,18 +6,18 @@
         <Animation Name="gHoneyAndDarlingGameDanceLoopAnim" Offset="0x4904" />
         <Animation Name="gHoneyAndDarlingHoldHandsLoopAnim" Offset="0x5304" />
         <Animation Name="gHoneyAndDarlingIdleAnim" Offset="0x53E0" />
-        <Texture Name="object_mu_TLUT_0053F0" OutName="tlut_0053F0" Format="rgba16" Width="16" Height="16" Offset="0x53F0" />
-        <Texture Name="object_mu_Tex_0055F0" OutName="tex_0055F0" Format="i8" Width="16" Height="16" Offset="0x55F0" />
-        <Texture Name="object_mu_Tex_0056F0" OutName="tex_0056F0" Format="ci8" Width="16" Height="16" Offset="0x56F0" />
-        <Texture Name="object_mu_Tex_0057F0" OutName="tex_0057F0" Format="i8" Width="8" Height="8" Offset="0x57F0" />
-        <Texture Name="object_mu_Tex_005830" OutName="tex_005830" Format="ci8" Width="8" Height="8" Offset="0x5830" />
-        <Texture Name="object_mu_Tex_005870" OutName="tex_005870" Format="ci8" Width="16" Height="16" Offset="0x5870" />
-        <Texture Name="object_mu_Tex_005970" OutName="tex_005970" Format="ci8" Width="8" Height="8" Offset="0x5970" />
-        <Texture Name="object_mu_Tex_0059B0" OutName="tex_0059B0" Format="ci8" Width="32" Height="16" Offset="0x59B0" />
-        <Texture Name="object_mu_Tex_005BB0" OutName="tex_005BB0" Format="ci8" Width="32" Height="32" Offset="0x5BB0" />
-        <Texture Name="object_mu_Tex_005FB0" OutName="tex_005FB0" Format="ci8" Width="8" Height="8" Offset="0x5FB0" />
-        <Texture Name="object_mu_Tex_005FF0" OutName="tex_005FF0" Format="ci8" Width="8" Height="16" Offset="0x5FF0" />
-        <Texture Name="object_mu_Tex_006070" OutName="tex_006070" Format="ci8" Width="32" Height="32" Offset="0x6070" />
+        <Texture Name="gHoneyAndDarlingTLUT" OutName="tlut_0053F0" Format="rgba16" Width="16" Height="16" Offset="0x53F0" />
+        <Texture Name="object_mu_Tex_0055F0" OutName="tex_0055F0" Format="i8" Width="16" Height="16" Offset="0x55F0" /> <!-- TODO: mans' torso top? maybe legs, too -->
+        <Texture Name="gHoneyAndDarlingWomanDressTex" OutName="tex_0056F0" Format="ci8" Width="16" Height="16" Offset="0x56F0" />
+        <Texture Name="object_mu_Tex_0057F0" OutName="tex_0057F0" Format="i8" Width="8" Height="8" Offset="0x57F0" /> <!-- TODO: woman's top? it's drawn as lines? -->
+        <Texture Name="object_mu_Tex_005830" OutName="tex_005830" Format="ci8" Width="8" Height="8" Offset="0x5830" /> <!-- TODO: their skin? -->
+        <Texture Name="gHoneyAndDarlingManHairTex" OutName="tex_005870" Format="ci8" Width="16" Height="16" Offset="0x5870" /> 
+        <Texture Name="object_mu_Tex_005970" OutName="tex_005970" Format="ci8" Width="8" Height="8" Offset="0x5970" /> <!-- TODO: their ears? -->
+        <Texture Name="gHoneyAndDarlingMouthTex" OutName="tex_0059B0" Format="ci8" Width="32" Height="16" Offset="0x59B0" />
+        <Texture Name="gHoneyAndDarlingManEyeTex" OutName="tex_005BB0" Format="ci8" Width="32" Height="32" Offset="0x5BB0" />
+        <Texture Name="gHoneyAndDarlingHandTex" OutName="tex_005FB0" Format="ci8" Width="8" Height="8" Offset="0x5FB0" />
+        <Texture Name="gHoneyAndDarlingWomanHairTex" OutName="tex_005FF0" Format="ci8" Width="8" Height="16" Offset="0x5FF0" />
+        <Texture Name="gHoneyAndDarlingWomanEyeTex" OutName="tex_006070" Format="ci8" Width="32" Height="32" Offset="0x6070" />
         <DList Name="gHoneyAndDarlingLegsDL" Offset="0x9370" />
         <DList Name="gHoneyAndDarlingWomanHeadDL" Offset="0x96C8" />
         <DList Name="gHoneyAndDarlingWomanRightHandDL" Offset="0x9BC8" />
