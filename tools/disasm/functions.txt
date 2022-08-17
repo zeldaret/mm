@@ -4265,7 +4265,7 @@
     0x8082DF48:("Player_RequestRumble",),
     0x8082DF8C:("func_8082DF8C",),
     0x8082E00C:("func_8082E00C",),
-    0x8082E078:("func_8082E078",),
+    0x8082E078:("Player_GetFloorSfx",),
     0x8082E094:("func_8082E094",),
     0x8082E0CC:("func_8082E0CC",),
     0x8082E0F4:("func_8082E0F4",),

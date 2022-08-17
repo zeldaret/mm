@@ -2565,12 +2565,12 @@ void func_8082E00C(Player* this) {
     } while (var_s1 != 4);
 }
 
-u16 func_8082E078(Player* this, u16 sfxId) {
+u16 Player_GetFloorSfx(Player* this, u16 sfxId) {
     return ((sfxId & 0xFFFF) + this->unk_B72) & 0xFFFF;
 }
 
 void func_8082E094(Player* this, u16 sfxId) {
-    func_800B8E58(this, func_8082E078(this, sfxId & 0xFFFF) & 0xFFFF);
+    func_800B8E58(this, Player_GetFloorSfx(this, sfxId & 0xFFFF) & 0xFFFF);
 }
 
 u16 func_8082E0CC(Player* this, u16 sfxId) {
@@ -11792,7 +11792,7 @@ void func_80844784(PlayState* play, Player* this) {
             Math_ScaledStepToS(&this->actor.world.rot.y, var_a3, (s16) var_v0);
         }
         if ((this->linearVelocity == 0.0f) && (this->actor.speedXZ != 0.0f)) {
-            func_8019F780(&this->actor.projectedPos, func_8082E078(this, 0xD0U) & 0xFFFF, this->actor.speedXZ);
+            func_8019F780(&this->actor.projectedPos, Player_GetFloorSfx(this, 0xD0U) & 0xFFFF, this->actor.speedXZ);
         }
     } else {
         this->actor.speedXZ = this->linearVelocity;
@@ -11851,7 +11851,7 @@ void func_80844784(PlayState* play, Player* this) {
                 if (fabsf(temp_ft2_2) > 4.0f) {
                     func_8083FBC4(play, this);
                 }
-                func_8019F780(sp24, func_8082E078(this, 0xD0U) & 0xFFFF, fabsf(D_80862B3C));
+                func_8019F780(sp24, Player_GetFloorSfx(this, 0xD0U) & 0xFFFF, fabsf(D_80862B3C));
             }
             this->actor.velocity.x += sp48;
             this->actor.velocity.z += sp44;
@@ -18240,7 +18240,7 @@ void func_80853D68(Player* this, PlayState* play) {
     this->stateFlags2 |= 0x60;
     LinkAnimation_Update(play, &this->skelAnime);
     func_8083FBC4(play, this);
-    func_8019F780(&this->actor.projectedPos, func_8082E078(this, 0xD0U) & 0xFFFF, this->actor.speedXZ);
+    func_8019F780(&this->actor.projectedPos, Player_GetFloorSfx(this, 0xD0U) & 0xFFFF, this->actor.speedXZ);
     if ((func_80838A90(this, play) == 0) && ((this->transformation != 1) || (func_8083A114(this, play) == 0))) {
         temp_a3 = this->actor.floorPoly;
         if (temp_a3 == NULL) {
@@ -19671,7 +19671,7 @@ void func_808573A4(Player* this, PlayState* play) {
             func_8083F8A8(play, this, 2.0f, 1, 2.5f, 0xA, 0x12, 1);
         }
         func_800AE930(&play->colCtx, Effect_GetByIndex(this->meleeWeaponEffectIndex[2]), &this->actor.world.pos, 2.0f, (s16) (s32) this->currentYaw, this->actor.floorPoly, (s32) this->actor.floorBgId);
-        func_800B8F98(&this->actor, func_8082E078(this, 0xD0U) & 0xFFFF);
+        func_800B8F98(&this->actor, Player_GetFloorSfx(this, 0xD0U) & 0xFFFF);
     }
 }
 
@@ -20202,7 +20202,7 @@ block_62:
                             this->unk_B86[0] = temp_v0_10 + temp_ft3_2;
                             if ((this->actor.bgCheckFlags & 1) && (temp_ft3_2 != 0) && (((temp_v0_10 + temp_ft3_2) * temp_v0_10) <= 0)) {
                                 sp54 = var_fv0;
-                                func_8019F780(&this->actor.projectedPos, func_8082E078(this, 0x990U) & 0xFFFF, var_fv0);
+                                func_8019F780(&this->actor.projectedPos, Player_GetFloorSfx(this, 0x990U) & 0xFFFF, var_fv0);
                             }
                         }
                     }
@@ -20308,7 +20308,7 @@ block_155:
                         var_v1_9 = 0x980;
                     }
                     sp38 = &this->actor.projectedPos;
-                    func_8019F780(sp38, func_8082E078(this, var_v1_9 & 0xFFFF) & 0xFFFF, this->unk_B08[0]);
+                    func_8019F780(sp38, Player_GetFloorSfx(this, var_v1_9 & 0xFFFF) & 0xFFFF, this->unk_B08[0]);
                 }
             }
             if (this->unk_AE7 == 2) {
