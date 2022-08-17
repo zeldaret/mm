@@ -441,13 +441,14 @@ typedef struct struct_8085CD30 {
     /* 0x0D */ u8 unk_D;
 } struct_8085CD30; // size = 0x10
 
-typedef struct struct_8085D09C {
+typedef struct MeleeWeaponDamageInfo {
     /* 0x0 */ s32 dmgFlags;
-    /* 0x4 */ u8 unk_4;
-    /* 0x5 */ u8 unk_5;
-    /* 0x6 */ u8 unk_6;
-    /* 0x7 */ u8 unk_7;
-} struct_8085D09C; // size = 0x8
+    // Presumably these two fields are intended for Fierce Deity, but will also work for Deku if it can equip a sword
+    /* 0x4 */ u8 dmgTransformedNormal;
+    /* 0x5 */ u8 dmgTransformedStrong;
+    /* 0x6 */ u8 dmgHumanNormal;
+    /* 0x7 */ u8 dmgHumanStrong;
+} MeleeWeaponDamageInfo; // size = 0x8
 
 typedef struct struct_8085CC88 {
     /* 0x0 */ LinkAnimationHeader* anim;
@@ -4645,17 +4646,14 @@ s32 func_80833058(PlayState* play, Player* this, s8* arg2, s32 arg3) {
         }
 
         if (!(this->stateFlags3 & PLAYER_STATE3_40000000) && (func_80848808 != this->unk_AC4)) {
-            s8 var_v0 = *arg2;
-
-            while (var_v0 >= 0) {
-                if (D_8085D054[var_v0](this, play)) {
+            while (*arg2 >= 0) {
+                if (D_8085D054[*arg2](this, play)) {
                     return true;
                 }
                 arg2++;
-                var_v0 = *arg2;
             }
 
-            if (D_8085D054[-var_v0](this, play)) {
+            if (D_8085D054[-*arg2](this, play)) {
                 return true;
             }
         }
@@ -4854,36 +4852,49 @@ PlayerMeleeWeaponAnimation func_808335F4(Player* this) {
 void func_80833728(Player* this, s32 index, u32 dmgFlags, s32 damage) {
     this->meleeWeaponQuads[index].info.toucher.dmgFlags = dmgFlags;
     this->meleeWeaponQuads[index].info.toucher.damage = damage;
-    if (dmgFlags == 2) {
+
+    if (dmgFlags == DMG_DEKU_STICK) {
         this->meleeWeaponQuads[index].info.toucherFlags = (TOUCH_ON | TOUCH_NEAREST | TOUCH_SFX_WOOD);
     } else {
         this->meleeWeaponQuads[index].info.toucherFlags = (TOUCH_ON | TOUCH_NEAREST);
     }
 }
 
-struct_8085D09C D_8085D09C[] = {
-    { 0x100, 2, 2, 0, 0 }, { 0x200, 4, 8, 1, 2 }, { 0x200, 4, 8, 2, 4 },    { 0x200, 4, 8, 3, 6 },
-    { 0x200, 4, 8, 4, 8 }, { 2, 0, 0, 2, 4 },     { 0x800000, 1, 2, 0, 0 },
+MeleeWeaponDamageInfo D_8085D09C[] = {
+    /* Goron, non-sword AP         */ { DMG_GORON_PUNCH, 2, 2, 0, 0 },
+    /* PLAYER_AP_SWORD_KOKIRI      */ { DMG_SWORD, 4, 8, 1, 2 },
+    /* PLAYER_AP_SWORD_RAZOR       */ { DMG_SWORD, 4, 8, 2, 4 },
+    /* PLAYER_AP_SWORD_GILDED      */ { DMG_SWORD, 4, 8, 3, 6 },
+    /* PLAYER_AP_SWORD_GREAT_FAIRY */ { DMG_SWORD, 4, 8, 4, 8 },
+    /* PLAYER_AP_STICK             */ { DMG_DEKU_STICK, 0, 0, 2, 4 },
+    /* PLAYER_AP_ZORA_FINS         */ { DMG_ZORA_PUNCH, 1, 2, 0, 0 },
 };
 
 void func_8083375C(Player* this, PlayerMeleeWeaponAnimation meleeWeaponAnimation) {
-    struct_8085D09C* var_v0 = &D_8085D09C[0];
+    MeleeWeaponDamageInfo* dmgInfo = &D_8085D09C[0];
     s32 damage;
 
     if (this->actor.id == ACTOR_EN_TEST3) {
+        // Was Kafei originally intended to be able to punch?
         meleeWeaponAnimation = PLAYER_MWA_GORON_PUNCH_LEFT;
         this->meleeWeaponAnimation = -1;
     } else {
-        var_v0 = &D_8085D09C[(this->transformation == PLAYER_FORM_GORON) ? 0 : Player_GetMeleeWeaponHeld(this)];
+        //! @bug Quick Put Away Damage: Since 0 is also the "no weapon" value, producing a weapon quad without a weapon
+        //! in hand, such as during Quick Put Away, produced a quad with the Goron punch properties, which does 0 damage
+        //! as human.
+        dmgInfo = &D_8085D09C[(this->transformation == PLAYER_FORM_GORON) ? 0 : Player_GetMeleeWeaponHeld(this)];
     }
 
-    damage = ((meleeWeaponAnimation >= PLAYER_MWA_FLIPSLASH_START) &&
-              (meleeWeaponAnimation <= PLAYER_MWA_ZORA_JUMPKICK_FINISH))
-                 ? ((this->transformation == PLAYER_FORM_HUMAN) ? var_v0->unk_7 : var_v0->unk_5)
-                 : ((this->transformation == PLAYER_FORM_HUMAN) ? var_v0->unk_6 : var_v0->unk_4);
+    //! @bug Great Deku Sword: Presumably the dmgTransformed fields are intended for Fierce Deity, but also work for
+    //! Deku if it is able to equip a sword (such as with the "0th day" glitch), giving Great Fairy's Sword damage.
+    damage =
+        ((meleeWeaponAnimation >= PLAYER_MWA_FLIPSLASH_START) &&
+         (meleeWeaponAnimation <= PLAYER_MWA_ZORA_JUMPKICK_FINISH))
+            ? ((this->transformation == PLAYER_FORM_HUMAN) ? dmgInfo->dmgHumanStrong : dmgInfo->dmgTransformedStrong)
+            : ((this->transformation == PLAYER_FORM_HUMAN) ? dmgInfo->dmgHumanNormal : dmgInfo->dmgTransformedNormal);
 
-    func_80833728(this, 0, var_v0->dmgFlags, damage);
-    func_80833728(this, 1, var_v0->dmgFlags, damage);
+    func_80833728(this, 0, dmgInfo->dmgFlags, damage);
+    func_80833728(this, 1, dmgInfo->dmgFlags, damage);
 }
 
 void func_80833864(PlayState* play, Player* this, PlayerMeleeWeaponAnimation meleeWeaponAnimation) {
@@ -4896,6 +4907,7 @@ void func_80833864(PlayState* play, Player* this, PlayerMeleeWeaponAnimation mel
         func_8082DC38(this);
     }
 
+    // Accumulate consecutive slashes to do the "third slash" types
     if ((meleeWeaponAnimation != this->meleeWeaponAnimation) || (this->unk_ADD >= 3)) {
         this->unk_ADD = 0;
     }
@@ -17452,7 +17464,6 @@ void func_80855A7C(Player* this, PlayState* play) {
     if (this->unk_AE8++ > 90) {
         play->msgCtx.ocarinaMode = 4;
         func_8085B384(this, play);
-        return;
     } else if (this->unk_AE8 == 10) {
         func_80848640(play, this);
     }

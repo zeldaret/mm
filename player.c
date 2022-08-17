@@ -1561,7 +1561,7 @@ s32 (*D_8085D054[0xF])(Player*, PlayState*) = {
 };
 s8 D_8085D090[4] = { 0xC, 4, 4, 8 };
 s8 D_8085D094[2][3] = { { 0x1B, 0x1C, 0x1D }, { 0x18, 0x19, 0x1A } };
-struct_8085D09C D_8085D09C[7] = {
+MeleeWeaponDamageInfo D_8085D09C[7] = {
     { 0x100, 2, 2, 0, 0 },
     { 0x200, 4, 8, 1, 2 },
     { 0x200, 4, 8, 2, 4 },
@@ -4902,11 +4902,11 @@ void func_80833728(Player* this, s32 index, u32 dmgFlags, s32 damage) {
 }
 
 void func_8083375C(Player* this, enum PlayerMeleeWeaponAnimation meleeWeaponAnimation) {
-    struct_8085D09C* sp24;
+    MeleeWeaponDamageInfo* sp24;
     s32 sp20;
     enum PlayerMeleeWeaponAnimation var_a1;
     s32 var_a0;
-    struct_8085D09C* var_v0;
+    MeleeWeaponDamageInfo* var_v0;
     u8 var_a3;
     u8 var_v1;
 
