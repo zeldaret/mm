@@ -8624,6 +8624,7 @@ void func_8083D6DC(Player* this, PlayState* play) {
     Player_AnimationPlayOnce(play, this, D_8085BE84[PLAYER_ANIMGROUP_28][this->modelAnimType]);
 }
 
+// Determines whether a held actor should be dropped or thrown: false implies droppable.
 s32 func_8083D738(Player* this, Actor* heldActor) {
     if ((heldActor != NULL) && !(heldActor->flags & ACTOR_FLAG_800000) &&
         ((this->linearVelocity < 1.1f) || (heldActor->id == ACTOR_EN_BOM_CHU))) {
@@ -17072,6 +17073,9 @@ void func_808548B8(Player* this, PlayState* play) {
         this->unk_3D0.unk_00 = 3;
     }
 
+    //! @bug Lunge Storage: If this block is prevented from running at the end of an animation that produces a lunge,
+    //! the prepared lunge will be retained until next time execution passes through here, which usually means the next
+    //! sword slash.
     if ((this->stateFlags2 & PLAYER_STATE2_40000000) && LinkAnimation_OnFrame(&this->skelAnime, 0.0f)) {
         this->linearVelocity = 15.0f;
         this->stateFlags2 &= ~PLAYER_STATE2_40000000;
