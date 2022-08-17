@@ -3388,8 +3388,9 @@ u16 D_8085CFA8[] = {
     BTN_CRIGHT,
 };
 
-s32 func_8082FDC4(void) {
-    s32 i;
+// Return currently-pressed button, in order of priority B, CLEFT, CDOWN, CRIGHT.
+EquipSlot func_8082FDC4(void) {
+    EquipSlot i;
 
     for (i = 0; i < ARRAY_COUNT(D_8085CFA8); i++) {
         if (CHECK_BTN_ALL(D_80862B44->press.button, D_8085CFA8[i])) {
@@ -3964,6 +3965,7 @@ void func_808313F0(Player* this, PlayState* play) {
     }
 }
 
+// Stops the current fanfare if a stateflag is set; these two are Kamaro Dancing and Bremen Marching.
 void func_80831454(Player* this) {
     if ((this->stateFlags3 & PLAYER_STATE3_20000000) || (this->stateFlags2 & PLAYER_STATE2_2000000)) {
         Audio_QueueSeqCmd(0x110000FF);
@@ -4097,6 +4099,7 @@ s32 func_80831814(Player* this, PlayState* play, s32 arg2) {
     return false;
 }
 
+// Toggle Lens
 void func_808318C0(PlayState* play) {
     if (func_80115DB4(play, 0, 3) != 0) {
         if (play->actorCtx.unk3 != 0) {
@@ -4111,6 +4114,7 @@ void func_808318C0(PlayState* play) {
     }
 }
 
+// Toggle Lens from a button press
 void func_80831944(PlayState* play, Player* this) {
     if (func_8012364C(play, this, func_8082FDC4()) == ITEM_LENS) {
         func_808318C0(play);
@@ -4237,8 +4241,10 @@ void func_80831F34(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     }
 
     this->stateFlags1 |= PLAYER_STATE1_80;
+
     func_8082DAD4(this);
     func_8082DF8C(this, NA_SE_VO_LI_DOWN);
+
     if (this == GET_PLAYER(play)) {
         this->unk_A86 = play->playerActorCsIds[6];
         func_801A0184();
@@ -4246,29 +4252,30 @@ void func_80831F34(PlayState* play, Player* this, LinkAnimationHeader* anim) {
         gSaveContext.unk_1014 = 0;
         gSaveContext.jinxTimer = 0;
 
-        if (Inventory_ConsumeFairy(play) != 0) {
-            play->gameOverCtx.state = 0x14;
+        if (Inventory_ConsumeFairy(play)) {
+            play->gameOverCtx.state = GAMEOVER_REVIVE_START;
             this->unk_AE7 = 1;
         } else {
-            play->gameOverCtx.state = 1;
+            play->gameOverCtx.state = GAMEOVER_DEATH_START;
             func_801A41F8(0);
-            func_801A3098(0x20);
-            gSaveContext.seqIndex = 0xFF;
+            func_801A3098(NA_BGM_GAME_OVER);
+            gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
             gSaveContext.nightSeqIndex = 0xFF;
         }
 
-        ShrinkWindow_SetLetterboxTarget(0x20);
+        ShrinkWindow_SetLetterboxTarget(32);
     }
 }
 
 s32 func_80832090(Player* this) {
-    return (((func_8084D770 == this->actionFunc) == 0) ||
+    return (!(func_8084D770 == this->actionFunc) ||
             (((this->stateFlags3 & PLAYER_STATE3_40000000)) &&
              ((this->heldItemId == ITEM_FC) || (this->heldItemId == ITEM_NONE)))) &&
-           (((func_80848808 == this->unk_AC4) == 0) ||
+           (!(func_80848808 == this->unk_AC4) ||
             Player_ItemToActionParam(this, this->heldItemId) == this->itemActionParam);
 }
 
+// Whether action is Bremen marching or Kamaro dancing
 s32 func_8083213C(Player* this) {
     return func_8084AC84 == this->actionFunc || func_8084AEEC == this->actionFunc;
 }
@@ -4528,14 +4535,9 @@ void func_80832888(Player* this, PlayState* play) {
 }
 
 s32 func_80832CAC(PlayState* play, Player* this, f32* arg2, s16* outYaw, f32 arg4) {
-    f32 new_var;
-    f32 temp_fv0;
     f32 temp_fv1_2;
-    f32 var_fa0;
-    f32 var_fa1;
-    f32 var_fa1_2;
 
-    if ((this->unk_AA5 != 0) || func_8082DA90(play) || (this->stateFlags1 & 1)) {
+    if ((this->unk_AA5 != 0) || func_8082DA90(play) || (this->stateFlags1 & PLAYER_STATE1_1)) {
         *arg2 = 0.0f;
         *outYaw = this->actor.shape.rot.y;
     } else {
@@ -4558,38 +4560,22 @@ s32 func_80832CAC(PlayState* play, Player* this, f32* arg2, s16* outYaw, f32 arg
         }
 
         if (D_80862AFC != 0.0f) {
-            temp_fv0 = Math_SinS(this->unk_B6C);
+            f32 temp_fv0 = Math_SinS(this->unk_B6C);
+            f32 var_fa0 = this->unk_B50;
+            f32 var_fa1;
 
-            var_fa0 = this->unk_B50;
             if (this->unk_AB8 != 0.0f) {
-                if (this->targetedActor != NULL) {
-                    var_fa1 = 0.002f;
-                } else {
-                    var_fa1 = 0.008f;
-                }
+                var_fa1 = (this->targetedActor != NULL) ? 0.002f : 0.008f;
+
                 var_fa0 -= this->unk_AB8 * var_fa1;
-                if (var_fa0 < 2.0f) {
-                    var_fa0 = 2.0f;
-                }
+                var_fa0 = CLAMP_MIN(var_fa0, 2.0f);
+                // if (var_fa0 < 2.0f) {
+                //     var_fa0 = 2.0f;
+                // }
             }
             *arg2 = (*arg2 * 0.14f) - (8.0f * temp_fv0 * temp_fv0);
-
-            if (*arg2 < 0.0f) {
-                *arg2 = 0.0f;
-                return 1;
-            }
-
-            //! FAKE
-            if (var_fa0 < *arg2) {
-                goto dummy_label_131731;
-            dummy_label_131731:;
-                var_fa1_2 = var_fa0;
-            } else {
-                new_var = *arg2;
-                var_fa1_2 = new_var;
-            }
-
-            *arg2 = var_fa1_2;
+            *arg2 = CLAMP(*arg2, 0.0f, var_fa0);
+            if (temp_fv0) {} //! FAKE
             return true;
         }
     }
@@ -7529,7 +7515,7 @@ s32 func_8083A4A4(Player* this, f32* arg1, s16* arg2, f32 arg3) {
     s16 yaw = this->currentYaw - *arg2;
 
     if (ABS_ALT(yaw) > 0x6000) {
-        if (Math_StepToF(&this->linearVelocity, 0.0f, arg3) != 0) {
+        if (Math_StepToF(&this->linearVelocity, 0.0f, arg3)) {
             *arg1 = 0.0f;
             *arg2 = this->currentYaw;
         } else {
