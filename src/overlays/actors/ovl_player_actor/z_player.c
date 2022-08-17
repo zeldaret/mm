@@ -1752,7 +1752,7 @@ void func_8082E0F4(Player* this, u16 sfxId) {
 }
 
 // ANIMSFX_TYPE_6 and ANIMSFX_TYPE_8
-void func_8082E12C(Player* this, f32 arg1) {
+void Player_AnimSfx_PlayFloorWalk(Player* this, f32 freqVolumeLerp) {
     s32 sfxId;
 
     if (this->currentMask == PLAYER_MASK_GIANT) {
@@ -1760,16 +1760,18 @@ void func_8082E12C(Player* this, f32 arg1) {
     } else {
         sfxId = Player_GetFloorSfxByAge(this, NA_SE_PL_WALK_GROUND);
     }
-    func_8019F638(&this->actor.projectedPos, sfxId, arg1);
+
+    // Audio_PlaySfx_AtPosForMetalEffectsWithSyncedFreqAndVolume
+    func_8019F638(&this->actor.projectedPos, sfxId, freqVolumeLerp);
 }
 
 // ANIMSFX_TYPE_7
-void func_8082E188(Player* this) {
+void Player_AnimSfx_PlayFloorJump(Player* this) {
     func_800B8E58(this, Player_GetFloorSfxByAge(this, NA_SE_PL_JUMP_GROUND));
 }
 
 // ANIMSFX_TYPE_5
-void func_8082E1BC(Player* this) {
+void Player_AnimSfx_PlayFloorLand(Player* this) {
     func_800B8E58(this, Player_GetFloorSfxByAge(this, NA_SE_PL_LAND_GROUND));
 }
 
@@ -1795,14 +1797,15 @@ void Player_PlayAnimSfx(Player* this, AnimSfxEntry* entry) {
             } else if (type == ANIMSFX_SHIFT_TYPE(ANIMSFX_TYPE_VOICE)) {
                 func_8082DF8C(this, entry->sfxId);
             } else if (type == ANIMSFX_SHIFT_TYPE(ANIMSFX_TYPE_5)) {
-                func_8082E1BC(this);
+                Player_AnimSfx_PlayFloorLand(this);
             } else if (type == ANIMSFX_SHIFT_TYPE(ANIMSFX_TYPE_6)) {
-                func_8082E12C(this, 6.0f);
+                Player_AnimSfx_PlayFloorWalk(this, 6.0f);
             } else if (type == ANIMSFX_SHIFT_TYPE(ANIMSFX_TYPE_7)) {
-                func_8082E188(this);
+                Player_AnimSfx_PlayFloorJump(this);
             } else if (type == ANIMSFX_SHIFT_TYPE(ANIMSFX_TYPE_8)) {
-                func_8082E12C(this, 0.0f);
+                Player_AnimSfx_PlayFloorWalk(this, 0.0f);
             } else if (type == ANIMSFX_SHIFT_TYPE(ANIMSFX_TYPE_9)) {
+                // Audio_PlaySfx_AtPosForMetalEffectsWithSyncedFreqAndVolume
                 func_8019F638(&this->actor.projectedPos, this->ageProperties->unk_94 + NA_SE_PL_WALK_LADDER, 0.0f);
             } else if (type == ANIMSFX_SHIFT_TYPE(ANIMSFX_TYPE_10)) {
                 func_800B8E58(this, entry->sfxId + this->ageProperties->unk_94);
@@ -5412,7 +5415,7 @@ void func_80834CD0(Player* this, f32 arg1, u16 sfxId) {
     this->actor.bgCheckFlags &= ~1;
 
     if (sfxId != 0) {
-        func_8082E188(this);
+        Player_AnimSfx_PlayFloorJump(this);
         func_8082DF8C(this, sfxId);
     }
 
@@ -6247,7 +6250,7 @@ s32 func_80836F10(PlayState* play, Player* this) {
         }
     }
 
-    func_8082E1BC(this);
+    Player_AnimSfx_PlayFloorLand(this);
     return 0;
 }
 
@@ -6282,7 +6285,7 @@ void func_80837134(PlayState* play, Player* this) {
 
         if (var_v1) {
             func_80836A98(this, anim, play);
-            func_8082E1BC(this);
+            Player_AnimSfx_PlayFloorLand(this);
             return;
         }
     } else if (this->stateFlags2 & PLAYER_STATE2_80000) {
@@ -7231,7 +7234,7 @@ void func_808395F0(PlayState* play, Player* this, PlayerMeleeWeaponAnimation mel
     this->currentYaw = this->actor.shape.rot.y;
     this->actor.velocity.y = yVelocity;
     this->actor.bgCheckFlags &= ~1;
-    func_8082E188(this);
+    Player_AnimSfx_PlayFloorJump(this);
     func_8082DF8C(this, NA_SE_VO_LI_SWORD_L);
 }
 
@@ -9064,7 +9067,7 @@ void func_8083EA44(Player* this, f32 arg1) {
     sp24 = func_8083E9C4(this->unk_B38, arg1, 29.0f, 10.0f);
 
     if (sp24 || func_8083E9C4(this->unk_B38, arg1, 29.0f, 24.0f)) {
-        func_8082E12C(this, this->linearVelocity);
+        Player_AnimSfx_PlayFloorWalk(this, this->linearVelocity);
         if (this->linearVelocity > 4.0f) {
             this->stateFlags2 |= PLAYER_STATE2_8;
         }
@@ -13330,7 +13333,7 @@ void func_8084A26C(Player* this, PlayState* play) {
 
     LinkAnimation_Update(play, &this->skelAnime);
     if (LinkAnimation_OnFrame(&this->skelAnime, 0.0f) || LinkAnimation_OnFrame(&this->skelAnime, var_fv0 / 2.0f)) {
-        func_8082E12C(this, this->linearVelocity);
+        Player_AnimSfx_PlayFloorWalk(this, this->linearVelocity);
     }
 
     if (func_80833058(play, this, D_8085CFF8, 1)) {
@@ -14237,7 +14240,7 @@ void func_8084CB58(Player* this, PlayState* play) {
             func_80833864(play, this, this->meleeWeaponAnimation);
             this->unk_ADD = 3;
             this->meleeWeaponState = 0;
-            func_8082E1BC(this);
+            Player_AnimSfx_PlayFloorLand(this);
         }
     }
 }
@@ -14449,13 +14452,13 @@ void func_8084D4EC(Player* this, PlayState* play) {
         }
 
         if (LinkAnimation_OnFrame(&this->skelAnime, frame)) {
-            func_8082E1BC(this);
+            Player_AnimSfx_PlayFloorLand(this);
             func_8082DF8C(this, NA_SE_VO_LI_CLIMB_END);
         }
 
         if ((this->skelAnime.animation == &gameplay_keep_Linkanim_00DA60) || (this->skelAnime.curFrame > 5.0f)) {
             if (this->unk_AE8 == 0) {
-                func_8082E188(this);
+                Player_AnimSfx_PlayFloorJump(this);
                 this->unk_AE8 = 1;
             }
             Math_SmoothStepToF(&this->unk_ABC, 0.0f, 0.1f, 400.0f, 150.0f);
@@ -15128,7 +15131,7 @@ void func_8084F3DC(Player* this, PlayState* play) {
         func_80839E74(this, play);
         this->stateFlags1 &= ~(PLAYER_STATE1_4 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000);
     } else if (LinkAnimation_OnFrame(&this->skelAnime, this->skelAnime.endFrame - 6.0f)) {
-        func_8082E1BC(this);
+        Player_AnimSfx_PlayFloorLand(this);
     } else if (LinkAnimation_OnFrame(&this->skelAnime, this->skelAnime.endFrame - 34.0f)) {
         func_800B8E58(this, NA_SE_PL_CLIMB_CLIFF);
         func_8082DF8C(this, NA_SE_VO_LI_CLIMB_END);
@@ -15315,7 +15318,7 @@ void func_8084FC0C(Player* this, PlayState* play) {
             pos.z = this->actor.world.pos.z;
             if (BgCheck_EntityRaycastFloor5(&play->colCtx, &poly, &bgId, &this->actor, &pos) != 0.0f) {
                 this->floorSfxOffset = SurfaceType_GetSfx(&play->colCtx, poly, bgId);
-                func_8082E1BC(this);
+                Player_AnimSfx_PlayFloorLand(this);
             }
         }
     }
@@ -15658,7 +15661,7 @@ void func_808508C8(Player* this, PlayState* play) {
         if (this->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) {
             if (this->actor.bgCheckFlags & 1) {
                 func_80836A98(this, D_8085BE84[PLAYER_ANIMGROUP_14][this->modelAnimType], play);
-                func_8082E1BC(this);
+                Player_AnimSfx_PlayFloorLand(this);
             }
         } else if ((func_80850854(play, this) == 0) &&
                    (func_80832F78(this, &sp34, &sp32, 0.0f, play), (sp34 != 0.0f))) {
@@ -16420,7 +16423,7 @@ void func_80852C04(Player* this, PlayState* play) {
                                BINANG_ADD(Camera_GetCamDirYaw(play->cameraPtrs[play->activeCamId]), 0x8000), 0xFA0);
         } else if ((this->skelAnime.animation == &gameplay_keep_Linkanim_00E2B8) &&
                    LinkAnimation_OnFrame(&this->skelAnime, 10.0f)) {
-            func_8082E1BC(this);
+            Player_AnimSfx_PlayFloorLand(this);
         }
 
         if (LinkAnimation_OnFrame(&this->skelAnime, 21.0f)) {
@@ -16899,7 +16902,7 @@ void func_80854118(Player* this, PlayState* play) {
             if (this->unk_AE8 == 0) {
                 if (this->actor.bgCheckFlags & 1) {
                     this->skelAnime.endFrame = this->skelAnime.animLength - 1.0f;
-                    func_8082E1BC(this);
+                    Player_AnimSfx_PlayFloorLand(this);
                     this->unk_AE8 = 1;
                 }
             } else {
@@ -18167,7 +18170,7 @@ void func_80857AEC(PlayState* play, Player* this) {
             }
         }
 
-        func_8082E1BC(this);
+        Player_AnimSfx_PlayFloorLand(this);
     }
 }
 
@@ -18695,6 +18698,8 @@ AnimSfxEntry D_8085DA38[] = {
     ANIMSFX(ANIMSFX_TYPE_3, 39, NA_SE_PL_LAND_GROUND, CONTINUE),
     ANIMSFX(ANIMSFX_TYPE_5, 49, 0, STOP),
 };
+
+// gameplay_keep_Linkanim_00D0B8
 AnimSfxEntry D_8085DA48[] = {
     ANIMSFX(ANIMSFX_TYPE_6, 1, 0, CONTINUE),
     ANIMSFX(ANIMSFX_TYPE_6, 5, 0, STOP),
