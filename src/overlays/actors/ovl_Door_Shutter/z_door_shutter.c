@@ -139,7 +139,7 @@ void DoorShutter_SetupAction(DoorShutter* this, DoorShutterActionFunc actionFunc
 }
 
 s32 func_808A0900(DoorShutter* this, PlayState* play) {
-    TransitionActorEntry* transitionEntry = &play->doorCtx.transitionActorList[DOORSHUTTER_GET_FC00(&this->actor)];
+    TransitionActorEntry* transitionEntry = &play->transitionActors.list[DOORSHUTTER_GET_FC00(&this->actor)];
     s8 frontRoom = transitionEntry->sides[0].room;
 
     if (frontRoom == transitionEntry->sides[1].room) {
@@ -255,8 +255,8 @@ void DoorShutter_Destroy(Actor* thisx, PlayState* play) {
     if (this->actor.room >= 0) {
         s32 transitionActorId = DOORSHUTTER_GET_FC00(&this->actor);
 
-        play->doorCtx.transitionActorList[transitionActorId].id =
-            -play->doorCtx.transitionActorList[transitionActorId].id;
+        play->transitionActors.list[transitionActorId].id =
+            -play->transitionActors.list[transitionActorId].id;
     }
 }
 
@@ -551,7 +551,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
         Actor_OffsetOfPointInActorCoords(&this->actor, &sp44, &player->actor.world.pos);
 
         this->actor.room =
-            play->doorCtx.transitionActorList[DOORSHUTTER_GET_FC00(&this->actor)].sides[(sp44.z < 0.0f) ? 0 : 1].room;
+            play->transitionActors.list[DOORSHUTTER_GET_FC00(&this->actor)].sides[(sp44.z < 0.0f) ? 0 : 1].room;
 
         if (room != this->actor.room) {
             Room temp = play->roomCtx.currRoom;
@@ -679,7 +679,7 @@ void DoorShutter_Draw(Actor* thisx, PlayState* play) {
 
         if (sp44->unk_04 != 0) {
             TransitionActorEntry* transitionEntry =
-                &play->doorCtx.transitionActorList[DOORSHUTTER_GET_FC00(&this->actor)];
+                &play->transitionActors.list[DOORSHUTTER_GET_FC00(&this->actor)];
 
             if ((play->roomCtx.prevRoom.num >= 0) ||
                 (transitionEntry->sides[0].room == transitionEntry->sides[1].room)) {

@@ -182,7 +182,7 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play) {
     s32 transition = GET_TRANSITION_ID_PARAM(thisx);
     s8 objBankId;
 
-    if (this->actor.room != play->doorCtx.transitionActorList[transition].sides[0].room) {
+    if (this->actor.room != play->transitionActors.list[transition].sides[0].room) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -206,7 +206,7 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play) {
 void DoorSpiral_Destroy(Actor* thisx, PlayState* play) {
     s32 transition = GET_TRANSITION_ID_PARAM(thisx);
 
-    play->doorCtx.transitionActorList[transition].id *= -1;
+    play->transitionActors.list[transition].id *= -1;
 }
 
 /**
@@ -282,7 +282,7 @@ void DoorSpiral_Wait(DoorSpiral* this, PlayState* play) {
         player->doorDirection = this->orientation;
         player->doorActor = &this->actor;
         transition = GET_TRANSITION_ID_PARAM(this);
-        player->doorNext = ((u16)play->doorCtx.transitionActorList[transition].params) >> 10;
+        player->doorNext = ((u16)play->transitionActors.list[transition].params) >> 10;
 
         func_80122F28(player);
     }

@@ -1,19 +1,17 @@
 #include "global.h"
 #include "z64map.h"
 
-extern T_801BED4C D_801BED4C[];
-extern T_801BED88 D_801BED88[];
-extern s32 D_801BF15C[5];
-
-extern T_801BF170 D_801BF170[];
-
-extern Color_RGBA8 D_801BED40[];
-
-extern s32 D_801BF3B4[];
-extern s32 D_801BEFC8[];
+extern Color_RGBA8  D_801BED40[];
+extern T_801BED4C   D_801BED4C[];
+extern T_801BF170   D_801BED88[];
+extern s32          D_801BEFC8[];
+extern s32          D_801BF15C[5];
+extern T_801BF170   D_801BF170[];
+extern s32          D_801BF3B4[];
 
 s32 func_80109A98(s32);
 
+// Get ? Color
 void func_801094A0(s32 arg0, Color_RGBA8* color) {
     *color = D_801BED40[arg0];
 }
@@ -149,6 +147,7 @@ void func_801098A0(s32 arg0, s32* arg1) {
     }
 }
 
+//return some color index?
 u8 func_80109908(s32 arg0) {
     switch (func_80109714(arg0)) {
     case 0:
@@ -270,7 +269,7 @@ s32 func_80109C38(s32 arg0) {
     }
 }
 
-s32 func_80109CBC(s32 arg0) {
+s32 MapData_GetIMapSize(s32 arg0) {
     if (arg0 == -1) {
         return 0;
     }
@@ -299,8 +298,8 @@ void func_80109D40(s32 arg0, s32* arg1, s32* arg2) {
     case 1:
         func_8010997C(arg0, arg1, arg2);
         return;
-    default:
     case 2:
+    default:
         *arg2 = 0;
         *arg1 = 0;
         return;
@@ -322,8 +321,8 @@ void func_80109DD8(s32 arg0, s32* arg1, s32* arg2) {
     case 1:
         func_801099AC(arg0, arg1, arg2);
         return;
-    default:
     case 2:
+    default:
         *arg2 = 0;
         *arg1 = 0;
         return;

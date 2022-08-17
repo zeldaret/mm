@@ -1,7 +1,7 @@
 #include "global.h"
 
-void func_801068D8(PlayState* play);
-void func_801068B4(PlayState* play);
+void MapDisp_DestroyIMap(PlayState* play);
+void MapDisp_InitIMap(PlayState* play);
 void func_80103090(MinimapEntry*, s32*, s32*);
 void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot);
 void func_80106644(PlayState* play, s32 x, s32 z, s32 rot);
@@ -19,7 +19,7 @@ s16 func_80109F78(s32);
 void func_80109D40(s32, s32*, s32*, void*);
 void func_80109DD8(s32, s32*, s32*);
 
-extern s32          D_801BEAD0[4]; //G_IM_SIZ
+extern s32          D_801BEAD0[4]; // G_IM_SIZ
 extern s32          D_801BEAE0[4]; // siz_LOAD_BLOCK
 extern u32          D_801BEAF0[4]; // siz_INCR
 extern s32          D_801BEB00[4]; // siz_SHIFT
@@ -28,15 +28,13 @@ extern u32          D_801BEB20[4]; // siz_LINE_BYTES
 
 extern TexturePtr   D_801BEB38;
 extern T_801BEBB8   D_801BEBB8;
-extern s16          D_801BEBF8; // D_801BEBB8.unk40
 extern s16          D_801BEBFA; // D_801BEBB8.unk42
-extern s16          D_801BEBFC; // D_801BEBB8.unk44
-extern s16          D_801BEC10;
+
 extern MinimapList  D_801BEC14; //D_801F5130
 extern s32          D_801BEC1C; //current scene's no. of rooms
 extern s32          D_801BEC20; //MinimapChest count
-extern DoorContext  D_801BEC24;
-extern Color_RGBA8  D_801BEC2C[]; // cat colors
+extern TransitionActorList  D_801BEC24;
+extern Color_RGBA8  D_801BEC2C[12]; // cat colors
 extern T_801BEC5C   D_801BEC5C[5];
 extern T_801BEC70   D_801BEC70;
 extern u16          D_801BEC84[0x10]; //palette 0
@@ -50,8 +48,6 @@ extern MinimapEntry D_801F5130[0x50];
 extern MinimapChest D_801F5270[32];
 extern TransitionActorEntry D_801F53B0[48];
 extern T_801F56B0   D_801F56B0;
-extern TexturePtr   D_801F57B4[32]; //unconfirmed length
-extern s32          D_801F5834;
 
 extern TexturePtr   D_02002460;
 extern TexturePtr   D_02003F20;
@@ -82,23 +78,23 @@ void func_80102ED0(u32 param_1) {
 
 s32 func_80102EF0(PlayState* play) {
     MinimapEntry* entry;
-    s8 temp_v1;
+    s8 curRoom;
 
-    if (Map_IsInBossArea(play) == 1) {
-        return 1;
+    if (Map_IsInBossArea(play) == true) {
+        return true;
     }
-    temp_v1 = play->roomCtx.currRoom.num;
-    if (temp_v1 == -1) {
-        return 0;
+    curRoom = play->roomCtx.currRoom.num;
+    if (curRoom == -1) {
+        return false;
     }
-    entry = &D_801BEBB8.unk0->entry[temp_v1];
+    entry = &D_801BEBB8.unk0->entry[curRoom];
     if (entry->unk0 == 0xFFFF) {
-        return 0;
+        return false;
     }
     if (func_80109AD8(entry->unk0) == 0x3A) {
-        return 0;
+        return false;
     }
-    return 1;
+    return true;
 }
 
 f32 func_80102F9C(f32 arg0) {
@@ -269,7 +265,7 @@ void func_80103A58(PlayState *play, Actor *actor) {
     s32 spAC;
     //GraphicsContext *spA8;
     
-    spDC = &D_801BEBB8.unk0->entry[D_801BEBB8.unk4];
+    spDC = &D_801BEBB8.unk0->entry[D_801BEBB8.curRoom];
     spB4 = GET_PLAYER(play);
     if (spDC->unk0 != 0xFFFF) {
         func_801030F4(spDC, &spD0, &spCC);
@@ -392,7 +388,7 @@ void func_8010439C(PlayState *play) {
                         && (actor->init == NULL) 
                         && (Object_IsLoaded(&play->objectCtx, actor->objBankIndex))
                         && ((actor->id == ACTOR_EN_BOX) || (i == ACTORCAT_PLAYER) || (actor->flags & ACTOR_FLAG_80000000))
-                        && ((D_801BEBB8.unk4 == actor->room) || (actor->room == -1))) {
+                        && ((D_801BEBB8.curRoom == actor->room) || (actor->room == -1))) {
                         func_80103A58(play, actor);
                     }
                     actor = actor->next;
@@ -423,7 +419,7 @@ void func_801045AC(PlayState* play, Actor* actor) {
     if (sp50 < 0) {
         sp50 = 0.0f;
     }
-    sp7C = &D_801BEBB8.unk0->entry[D_801BEBB8.unk4];
+    sp7C = &D_801BEBB8.unk0->entry[D_801BEBB8.curRoom];
     if (sp7C->unk0 != 0xFFFF) {
         func_801030F4(sp7C, &sp70, &sp6C);
         func_80103090(sp7C, &sp68, &sp64);
@@ -487,7 +483,7 @@ void func_80104AE8(PlayState *play) {
                     (actor->update != NULL) 
                     && (actor->init == NULL) 
                     && Object_IsLoaded(&play->objectCtx, actor->objBankIndex)
-                    && ((D_801BEBB8.unk4 == actor->room) || (actor->room == -1))) {
+                    && ((D_801BEBB8.curRoom == actor->room) || (actor->room == -1))) {
                     func_801045AC(play, actor);
                 }
                 actor = actor->next;
@@ -513,34 +509,35 @@ void func_80104C80(PlayState* play) {
     if (&play->objectCtx) {}
 }
 
-void func_80104CF4(PlayState* play) {
+//init
+void MapDisp_Init(PlayState* play) {
     s32 i;
 
     D_801BEBB8.unk0 = NULL;
-    D_801BEBB8.unk4 = -1;
+    D_801BEBB8.curRoom = -1;
     D_801BEBB8.unk8 = 0xD2;
     D_801BEBB8.unkA = 0x8C;
     D_801BEBB8.unkC = 0xD2;
     D_801BEBB8.unkE = 0x8C;
     D_801BEBB8.unk10 = NULL;
-    D_801BEBB8.unk14 = -1;
+    D_801BEBB8.prevRoom = -1;
     D_801BEBB8.unk18 = NULL;
     D_801BEBB8.unk1C = 0;
     D_801BEBB8.unk1E = 0;
     D_801BEBB8.unk20 = 0;
     D_801BEBB8.unk24 = 0;
     
-    if (Map_IsInBossArea(play) == 0) {
+    if (!Map_IsInBossArea(play)) {
         D_801BEC1C = play->numRooms;
     }
     D_801BEBB8.unk28 = THA_AllocEndAlign16(&play->state.heap, 0x4000);
     D_801BEBB8.unk2C = THA_AllocEndAlign16(&play->state.heap, 0x4000);
     func_80104C80(play);
-    if (Map_IsInBossArea(play) == 0) {
-        D_801BEBB8.unk34 = 0x64;
+    if (!Map_IsInBossArea(play)) {
         D_801BEBB8.unk30 = 0;
-        D_801BEBB8.unk36 = 0x64;
         D_801BEBB8.unk32 = 0;
+        D_801BEBB8.unk34 = 0x64;
+        D_801BEBB8.unk36 = 0x64;
         D_801BEBB8.unk38 = (s16) (s32) ((f32) D_801BEBB8.unk30 + ((f32) D_801BEBB8.unk34 * 0.5f));
         D_801BEBB8.unk3A = (s16) (s32) ((f32) D_801BEBB8.unk32 + ((f32) D_801BEBB8.unk36 * 0.5f));
     }
@@ -555,7 +552,7 @@ void func_80104CF4(PlayState* play) {
     {
         D_801BEBB8.unk48[i] = -0x7FFF;
     }
-    func_801068B4(play);
+    MapDisp_InitIMap(play);
     D_801BEBB8.unk58 = 0;
     D_801BEBB8.unk5A = 0;
     if (Map_IsInBossArea(play) != 0) {
@@ -642,7 +639,7 @@ s32 func_80105294(void) {
 }
 
 s16 func_80105318(void) {
-    return D_801BEC10;
+    return D_801BEBB8.unk58;
 }
 
 // TransitionActor params test
@@ -654,14 +651,14 @@ s32 func_80105328(s32 params) {
 }
 
 void func_8010534C(PlayState* play) {
-    DoorContext* doorCtx; 
+    TransitionActorList* transitionActors; 
     TransitionActorEntry* var_s0;
     s32 var_v0;
     s32 var_s2;
 
-    doorCtx = &D_801BEC24;
+    transitionActors = &D_801BEC24;
 
-    for (var_s2 = 0; var_s2 < doorCtx->numTransitionActors; var_s2++) {
+    for (var_s2 = 0; var_s2 < transitionActors->count; var_s2++) {
         if (func_80105328(D_801F53B0[var_s2].params) != 0) {
             if (ABS_ALT(D_801F53B0[var_s2].id) != 0x18) {
                 for (var_v0 = 0; var_v0 < D_801BEBB8.unk40; var_v0++) {
@@ -737,24 +734,24 @@ void func_80105818(PlayState* play, s32 num, TransitionActorEntry* transitionAct
     s32 i;
 
     if (Map_IsInBossArea(play) == 0) {
-        D_801BEC24.numTransitionActors = num;
+        D_801BEC24.count = num;
         for (i = 0; i < num; i++)
         {
             D_801F53B0[i] = transitionActorList[i];
         }
-        D_801BEC24.transitionActorList = D_801F53B0;
+        D_801BEC24.list = D_801F53B0;
     }
 }
 
-void func_80105A40(PlayState* play) {
+void MapDisp_Destroy(PlayState* play) {
     s32 i;
 
     D_801BEBB8.unk0 = NULL;
-    D_801BEBB8.unk4 = -1;
+    D_801BEBB8.curRoom = -1;
     D_801BEBB8.unkC = 0xD2;
     D_801BEBB8.unkE = 0x8C;
     D_801BEBB8.unk10 = NULL;
-    D_801BEBB8.unk14 = -1;
+    D_801BEBB8.prevRoom = -1;
     D_801BEBB8.unk18 = NULL;
     D_801BEBB8.unk1C = 0;
     D_801BEBB8.unk1E = 0;
@@ -775,7 +772,7 @@ void func_80105A40(PlayState* play) {
     D_801BEBB8.unk48 = NULL;
     D_801BEBB8.unk50 = 0;
     D_801BEBB8.unk54 = NULL;
-    func_801068D8(play);
+    MapDisp_DestroyIMap(play);
     D_801BEBB8.unk5A = 0;
 }
 
@@ -789,7 +786,7 @@ void func_80105B34(PlayState* play) {
 
     if ((D_801BEBB8.unk0 != NULL) && (D_801BEC1C != 0)) {
         D_801BEBFA = 8 - play->pauseCtx.unk_256;
-        if (D_801BEBB8.unk14 != -1) {
+        if (D_801BEBB8.prevRoom != -1) {
             temp_v0 = D_801BEBB8.unk24;
             if (temp_v0 > 0) {
                 temp_v1 = D_801BEBB8.unk8;
@@ -805,7 +802,7 @@ void func_80105B34(PlayState* play) {
                 D_801BEBB8.unk24 = temp_v0 - 1;
                 return;
             }
-            D_801BEBB8.unk14 = -1;
+            D_801BEBB8.prevRoom = -1;
             D_801BEBB8.unk24 = 0;
             D_801BEBB8.unkC = D_801BEBB8.unk8;
             D_801BEBB8.unkE = D_801BEBB8.unkA;
@@ -814,7 +811,6 @@ void func_80105B34(PlayState* play) {
         D_801BEBB8.unk24 = 0;
     }
 }
-
 
 #ifdef NON_MATCHING
 //https://decomp.me/scratch/oK0wd
@@ -837,15 +833,15 @@ void func_80105C40(s16 arg0) {
         temp_s0 = &D_801BEBB8.unk0->entry[arg0];
      if ( ( temp_s0->unk0 < 5) || (( temp_s0->unk0 >= 0x100) && ( temp_s0->unk0 < 0x162)) ||  temp_s0->unk0 == 0xFFFF) {
         
-        D_801BEBB8.unk14 = D_801BEBB8.unk4;
-        D_801BEBB8.unk4 = arg0;
+        D_801BEBB8.prevRoom = D_801BEBB8.curRoom;
+        D_801BEBB8.curRoom = arg0;
         D_801BEBB8.unk24 = 0x14;
 
         D_801BEBB8.unk18 = D_801BEBB8.unk10;
         sp54 = D_801BEBB8.unk8;
         sp50 = D_801BEBB8.unkA;
 
-        temp_s0 = &D_801BEBB8.unk0->entry[D_801BEBB8.unk4];
+        temp_s0 = &D_801BEBB8.unk0->entry[D_801BEBB8.curRoom];
 
         if (temp_s0->unk0 == 0xFFFF) {
             D_801BEBB8.unk1E = 0;
@@ -861,8 +857,8 @@ void func_80105C40(s16 arg0) {
         func_80103090(temp_s0, &sp4C, &sp48);
         D_801BEBB8.unk8 = 0x127 - sp4C;
         D_801BEBB8.unkA = 0xDC - sp48;
-        if (D_801BEBB8.unk14 != -1) {
-            sp58 = &D_801BEBB8.unk0->entry[D_801BEBB8.unk14];
+        if (D_801BEBB8.prevRoom != -1) {
+            sp58 = &D_801BEBB8.unk0->entry[D_801BEBB8.prevRoom];
             if (sp58->unk0 == 0xFFFF) {
                 D_801BEBB8.unk1E = 0;
                 D_801BEBB8.unk10 = NULL;
@@ -932,7 +928,7 @@ void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot) {
     f32 sp4C;
     s32 sp48;
 
-    sp6C = &D_801BEBB8.unk0->entry[D_801BEBB8.unk4];
+    sp6C = &D_801BEBB8.unk0->entry[D_801BEBB8.curRoom];
     if (sp6C->unk0 != 0xFFFF) {
         func_801030F4(sp6C, &sp60, &sp5C);
         func_80103090(sp6C, &sp58, &sp54);
@@ -1033,9 +1029,9 @@ void func_80106644(PlayState *play, s32 x, s32 z, s32 rot) {
         //sp2C = ;// + 0x10000;
         if ((func_801064CC(play) == 0) && (D_801BEC1C != 0)) {
             if (func_80106450(play) != 0) {
-                func_801031D0(play, D_801BEBB8.unk10, D_801BEBB8.unkC, D_801BEBB8.unkE, D_801BEBB8.unk4, 1.0f - ((f32) D_801BEBB8.unk24 * 0.05f));
-                if ((D_801BEBB8.unk4 != D_801BEBB8.unk14) && (func_8010657C(D_801BEBB8.unk4, D_801BEBB8.unk14) != 0)) {
-                    func_801031D0(play, D_801BEBB8.unk18, D_801BEBB8.unkC + D_801BEBB8.unk1C, D_801BEBB8.unkE + D_801BEBB8.unk1E, D_801BEBB8.unk14, (f32) D_801BEBB8.unk24 * 0.05f);
+                func_801031D0(play, D_801BEBB8.unk10, D_801BEBB8.unkC, D_801BEBB8.unkE, D_801BEBB8.curRoom, 1.0f - ((f32) D_801BEBB8.unk24 * 0.05f));
+                if ((D_801BEBB8.curRoom != D_801BEBB8.prevRoom) && (func_8010657C(D_801BEBB8.curRoom, D_801BEBB8.prevRoom) != 0)) {
+                    func_801031D0(play, D_801BEBB8.unk18, D_801BEBB8.unkC + D_801BEBB8.unk1C, D_801BEBB8.unkE + D_801BEBB8.unk1E, D_801BEBB8.prevRoom, (f32) D_801BEBB8.unk24 * 0.05f);
                 }
                 func_80104AE8(play);
             }
@@ -1053,103 +1049,99 @@ void func_80106644(PlayState *play, s32 x, s32 z, s32 rot) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80106644.s")
 #endif
 
-void func_8010683C(void) {
+void MapDisp_ResetIMap(void) {
     s32 i;
 
-    D_801F56B0.unk0 = 0;
+    D_801F56B0.rooms = 0;
     for (i = 0; i < 32; i++)
     {
         D_801F56B0.unk4[i] = 0;
-        D_801F56B0.unk84[i] = 0;
-        D_801F56B0.unk104[i] = 0;
+        D_801F56B0.unk84[i] = NULL;
+        D_801F56B0.unk104[i] = NULL;
     }
 
     D_801F56B0.unk184 = 0;
     D_801BEBB8.unk20 &= ~1;
 }
 
-void func_801068B4(PlayState* play) {
-    func_8010683C();
+void MapDisp_InitIMap(PlayState* play) {
+    MapDisp_ResetIMap();
 }
 
-void func_801068D8(PlayState* play) {
-    func_8010683C();
+void MapDisp_DestroyIMap(PlayState* play) {
+    MapDisp_ResetIMap();
 }
 
 #ifdef NON_MATCHING
-s32 func_801068FC(s32 arg0, s32 arg1) {
-    s32 sp3C;
+//alloc pause screen dungeon map
+void* func_801068FC(PlayState* play, void* heap) {
+    void* heapNext; //sp3C
     s32 temp_s2;
     s32 temp_v0;
-    s32 temp_v0_2;
     s32 var_s1;
-    s32 var_s1_2;
-    s32 var_s1_3;
     s32 var_s2;
-    s32 var_s3;
     s32 var_s4;
-    u16 temp_a0;
-    u16 temp_a0_2;
+    MinimapEntry* entry;
+    s32 var_s3;
 
-    sp3C = arg1;
+    heapNext = heap;
     if ((D_801BEBB8.unk0 == NULL) || (D_801BEC1C == 0)) {
-        return sp3C;
+        return heapNext;
     }
-    D_801F56B0.unk0 = 0;
+    D_801F56B0.rooms = 0;
 
+    //loop for number of rooms
     for (var_s4 = 0; var_s4 < D_801BEC1C; var_s4++) {
         var_s2 = 0;
-        temp_a0 = D_801BEBB8.unk0->entry[var_s4].unk0;
-        if (temp_a0 == 0xFFFF) {
+        entry = &D_801BEBB8.unk0->entry[var_s4];
+        if (entry->unk0 == 0xFFFF) {
             continue;
         } else {
-            temp_v0 = func_80109BA0((s32) temp_a0);
+            temp_v0 = func_80109BA0(entry->unk0);
             if (temp_v0 == -1) {
                 continue;
             } else {
-                for (var_s1 = 0; var_s1 < D_801F56B0.unk0; var_s1++) {
+                for (var_s1 = 0; var_s1 < D_801F56B0.rooms; var_s1++) {
                     if (temp_v0 == D_801F56B0.unk4[var_s1]) {
                         var_s2 = 1;
                         break;
                     }
                 }
                 if (var_s2 == 0) {
-                    D_801F56B0.unk4[D_801F56B0.unk0] = temp_v0;
-                    D_801F56B0.unk0 += 1;
+                    D_801F56B0.unk4[D_801F56B0.rooms] = temp_v0;
+                    D_801F56B0.rooms += 1;
                 }
             }
         }
     }
-    for (var_s1_2 = 0; var_s1_2 < D_801F56B0.unk0; var_s1_2++) {
-        temp_s2 = D_801F56B0.unk4[var_s1_2];
-        func_80102E40(D_801F56B0.unk84[var_s1_2], temp_s2);
-        if (var_s1_2 + 1 < D_801F56B0.unk0) {
-            D_801F56B0.unk84[var_s1_2 + 1] = (func_80109CBC(temp_s2) + D_801F56B0.unk84[var_s1_2] + 0xF) & ~0xF;
+
+    D_801F56B0.unk84[0] = heap;
+    for (var_s1 = 0; var_s1 < D_801F56B0.rooms; var_s1++) {
+        temp_s2 = D_801F56B0.unk4[var_s1];
+        func_80102E40(D_801F56B0.unk84[var_s1], temp_s2);
+        if (var_s1 + 1 < D_801F56B0.rooms) {
+            D_801F56B0.unk84[var_s1 + 1] = ALIGN16((intptr_t)D_801F56B0.unk84[var_s1] + MapData_GetIMapSize(temp_s2));
         } else {
-            sp3C = func_80109CBC(temp_s2) + D_801F56B0.unk84[var_s1_2];
+            heapNext = (intptr_t)D_801F56B0.unk84[var_s1] + MapData_GetIMapSize(temp_s2); 
         }
     }
     for (var_s4 = 0; var_s4 < D_801BEC1C; var_s4++) {
-        var_s3 = 0;
-        temp_a0_2 = D_801BEBB8.unk0->entry[var_s4].unk0;
-        if (temp_a0_2 == 0xFFFF) {
-            D_801F56B0.unk104[var_s4] = 0;
+        entry = &D_801BEBB8.unk0->entry[var_s4];
+        if (entry->unk0 == 0xFFFF) {
+            D_801F56B0.unk104[var_s4] = NULL;
         } else {
-            temp_v0_2 = func_80109BA0((s32) temp_a0_2);
-            for (var_s1_3 = 0; var_s1_3 < D_801F56B0.unk0; var_s1_3++) {
-                if (temp_v0_2 == D_801F56B0.unk4[var_s1_3]) {
-                    var_s3 = 1;
+            var_s3 = false;
+            temp_v0 = func_80109BA0(entry->unk0);
+            for (var_s1 = 0; var_s1 < D_801F56B0.rooms; var_s1++) {
+                if (temp_v0 == D_801F56B0.unk4[var_s1]) {
+                    var_s3 = true;
                     break;
                 }
             }
-            if (var_s3 == 0) {
-                D_801F56B0.unk104[var_s4] = 0;
-            } else {
-                D_801F56B0.unk104[var_s4] = D_801F56B0.unk84[var_s1_3];
-            }
+            D_801F56B0.unk104[var_s4] = (!var_s3) ? NULL : D_801F56B0.unk84[var_s1];
         }
     }
-    return sp3C;
+    return heapNext;
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_801068FC.s")
@@ -1206,8 +1198,8 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     s32 temp1;
     s32 temp2;
 
-    temp1 = ((D_801F5834 * -120.0f / 40.0f) + 200.0f) * 31.0f / 255.0f;
-    temp2 = ((D_801F5834 * 115.0f / 40.0f) + 140.0f) * 31.0f / 255.0f;
+    temp1 = ((D_801F56B0.unk184 * -120.0f / 40.0f) + 200.0f) * 31.0f / 255.0f;
+    temp2 = ((D_801F56B0.unk184 * 115.0f / 40.0f) + 140.0f) * 31.0f / 255.0f;
 
     D_801BECC4[1] = (temp1 << 6) | (temp2 << 1) | 1; //COLOR16(0, ((D_801F5834 * -120.0f) / 40.0f) + 200.0f, ((D_801F5834 * 115.0f) / 40.0f) + 140.0f, 1);
     //  (
@@ -1257,7 +1249,7 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
         if ((sp108->unk0 != 0xFFFF) && (sp108->unk0 < 0x162)) {
             if ((D_801BEBB8.unk42 >= D_801BEBB8.unk3C[var_s2]) 
             && ((D_801BEBB8.unk3C[var_s2] + ((sp108->unk8 >> 2) & 7)) >= D_801BEBB8.unk42)) {
-                temp_s1 = D_801F57B4[var_s2];
+                temp_s1 = D_801F56B0.unk104[var_s2];
                 if (temp_s1 != NULL) {
                     spE8 = func_80109BA0(sp108->unk0);
                     if (spE8 == -1) {
@@ -1483,7 +1475,7 @@ void func_80107B78(PlayState* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
 
 void func_80108124(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5, s32 arg6) {
     PauseContext* pauseCtx = &play->pauseCtx;
-    DoorContext* sp48 = &D_801BEC24;
+    TransitionActorList* transitionActors = &D_801BEC24;
     TransitionActorEntry* var_s1;
     s32 tempX;
     s32 tempY;
@@ -1491,11 +1483,11 @@ void func_80108124(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     s8 roomA;
     s8 roomB;
 
-    if (sp48->numTransitionActors != 0) {
+    if (transitionActors->count != 0) {
         OPEN_DISPS(play->state.gfxCtx);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPLoadTextureBlock_4b(POLY_OPA_DISP++, &D_801BEB38, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-        for (i = 0; i < sp48->numTransitionActors; i++) {
+        for (i = 0; i < transitionActors->count; i++) {
             if (func_80106BEC(D_801BEBB8.unk42, D_801F53B0[i].pos.y)) {
                 if ((ABS_ALT(D_801F53B0[i].id) != ACTOR_EN_HOLL) 
                 && (func_80105328(D_801F53B0[i].params) == 0)){ 
@@ -1522,7 +1514,7 @@ void func_80108124(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
 #ifdef NON_MATCHING
 // https://decomp.me/scratch/nHYgx
 void func_80108558(PlayState* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5, s32 arg6) {
-    DoorContext* sp30;
+    TransitionActorList* sp30;
     //TransitionActorEntry* var_s0;
     s32 temp_ft0;
     s32 temp_ft0_2;
@@ -1540,7 +1532,7 @@ void func_80108558(PlayState* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
         gDPLoadTextureBlock_TEST(POLY_OPA_DISP++, &D_02002460, G_IM_FMT_IA,
          D_801BEAE0[1], D_801BEAF0[1], D_801BEB00[1], D_801BEB10[1],D_801BEB20[1], D_801BEAD0[1], 8, 8, 0,
         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,G_TX_NOMASK,G_TX_NOLOD, G_TX_NOLOD);
-        for (var_s2 = 0; var_s2 < sp30->numTransitionActors; var_s2++) {
+        for (var_s2 = 0; var_s2 < sp30->count; var_s2++) {
                 if ((func_80105328((s32) D_801F53B0[var_s2].params) != 0) && (func_80106BEC((s32) D_801BEBB8.unk42, (f32) D_801F53B0[var_s2].pos.y) != 0)) {
                     if (ABS_ALT(D_801F53B0[var_s2].id) != ACTOR_EN_HOLL) {
                         temp_ft0 = ((((f32) D_801F53B0[var_s2].pos.x -  D_801BEBB8.unk38) * arg5) - 4) + ((arg3 / 2) + arg1);
@@ -1743,11 +1735,11 @@ void func_801091F0(PlayState* play) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_801091F0.s")
 #endif
 
-void func_80109428(s32 arg0) {
+void func_80109428(PlayState* play) {
     D_801BEBB8.unk4C++;
     if (!(D_801BEBB8.unk20 & 1)) {
         D_801F56B0.unk184++;
-        if (D_801F56B0.unk184 >= 0x29) {
+        if (D_801F56B0.unk184 > 40) {
             D_801BEBB8.unk20 |= 1;
         }
     } else {

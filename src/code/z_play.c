@@ -276,7 +276,7 @@ s32 func_8016A02C(GameState* thisx, Actor* actor, s16* yaw) {
         return false;
     }
 
-    transitionActor = &this->doorCtx.transitionActorList[(u16)actor->params >> 10];
+    transitionActor = &this->transitionActors.list[(u16)actor->params >> 10];
     frontRoom = transitionActor->sides[0].room;
     if (frontRoom == transitionActor->sides[1].room) {
         return false;

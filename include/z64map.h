@@ -4,7 +4,6 @@
 #include "z64scene.h"
 #define FLOOR_INDEX_MAX 4
 
-/* z_scene */
 /* z_map_data */
 
 typedef struct {
@@ -17,16 +16,6 @@ typedef struct {
     /* 0x09 */ u8 unk9;
     /* 0x0A */ s16 unkA;
 } T_801BED4C; // size 0x0C?
-
-typedef struct {
-    /* 0x00 */ u8 unk0;
-    /* 0x01 */ u8 unk1;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ s16 unk4;
-    /* 0x06 */ u8 unk6;
-    /* 0x07 */ u8 unk7;
-    /* 0x08 */ s16 unk8;
-} T_801BED88; // size 0x0A
 
 typedef struct {
     u8 unk0;
@@ -42,13 +31,13 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ MinimapList2* unk0; //unk0 -> sub1 -> s16[5]
-    /* 0x04 */ s32 unk4;
+    /* 0x04 */ s32 curRoom;
     /* 0x08 */ s16 unk8;
     /* 0x0A */ s16 unkA;
     /* 0x0C */ s16 unkC;
     /* 0x0E */ s16 unkE;
     /* 0x10 */ TexturePtr unk10; // gameplay cur minimap room
-    /* 0x14 */ s32 unk14; //unk4 same type as unk14
+    /* 0x14 */ s32 prevRoom;
     /* 0x18 */ TexturePtr unk18;
     /* 0x1C */ s16 unk1C; //same as 0C
     /* 0x1E */ s16 unk1E; //same as 0E
@@ -68,7 +57,6 @@ typedef struct {
     /* 0x44 */ s16 unk44;
     /* 0x48 */ s16* unk48;
     /* 0x4C */ s16 unk4C;
-    /* 0x4E */ char unk4E[0x02];
     /* 0x50 */ s32 unk50; //num chests
     /* 0x54 */ MinimapChest* unk54;
     /* 0x58 */ s16 unk58;
@@ -91,10 +79,10 @@ typedef struct {
 } T_801BED24; // size 0x0C
 
 typedef struct {
-    /* 0x000 */ s32 unk0;
+    /* 0x000 */ s32 rooms;
     /* 0x004 */ s32 unk4[32];
-    /* 0x084 */ s32 unk84[32];
-    /* 0x104 */ s32 unk104[32];
+    /* 0x084 */ void* unk84[32];
+    /* 0x104 */ void* unk104[32];
     /* 0x184 */ s32 unk184;
 } T_801F56B0;
 
@@ -102,7 +90,7 @@ typedef struct {
 TexturePtr func_8010958C(s32);
 
 s32 func_80109714(s32);
-s32 func_80109CBC(s32);
+s32 MapData_GetIMapSize(s32);
 s32 func_80109A98(s32);
 s32 func_80109AD8(s32);
 s32 func_801096D4(s32 arg0);

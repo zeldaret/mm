@@ -3260,9 +3260,9 @@ Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, PlayState* play
 }
 
 void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx) {
-    TransitionActorEntry* transitionActorList = play->doorCtx.transitionActorList;
+    TransitionActorEntry* transitionActorList = play->transitionActors.list;
     s32 i;
-    s16 numTransitionActors = play->doorCtx.numTransitionActors;
+    s16 numTransitionActors = play->transitionActors.count;
 
     for (i = 0; i < numTransitionActors; transitionActorList++, i++) {
         if (transitionActorList->id >= 0) {
@@ -3281,7 +3281,7 @@ void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx) {
                                                   transitionActorList->rotY & 0x7F, 0x3FF, 0) != NULL) {
                     transitionActorList->id = -transitionActorList->id;
                 }
-                numTransitionActors = play->doorCtx.numTransitionActors;
+                numTransitionActors = play->transitionActors.count;
             }
         }
     }

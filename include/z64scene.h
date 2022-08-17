@@ -300,14 +300,14 @@ typedef struct {
 } TransitionActorEntry; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u8 numTransitionActors;
-    /* 0x04 */ TransitionActorEntry* transitionActorList;
-} DoorContext;
+    /* 0x00 */ u8 count;
+    /* 0x04 */ TransitionActorEntry* list;
+} TransitionActorList;
 
 typedef struct {
     /* 0x00 */ u16 unk0;
     /* 0x02 */ s16 unk2;
-    /* 0x04 */ UNK_TYPE2 unk4;
+    /* 0x04 */ s16 unk4;
     /* 0x06 */ s16 unk6;
     /* 0x08 */ u16 unk8;
 } MinimapEntry; // size = 0xA
