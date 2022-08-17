@@ -4870,6 +4870,7 @@ MeleeWeaponDamageInfo D_8085D09C[] = {
     /* PLAYER_AP_ZORA_FINS         */ { DMG_ZORA_PUNCH, 1, 2, 0, 0 },
 };
 
+// New function in NE0: split out of func_80833864 to be able to call it to patch Power Crouch Stab.
 void func_8083375C(Player* this, PlayerMeleeWeaponAnimation meleeWeaponAnimation) {
     MeleeWeaponDamageInfo* dmgInfo = &D_8085D09C[0];
     s32 damage;
@@ -9417,9 +9418,11 @@ s32 func_8083FCF0(PlayState* play, Player* this, f32 arg2, f32 arg3, f32 arg4) {
     return false;
 }
 
+// Crouch-stabbing
 s32 func_8083FD80(Player* this, PlayState* play) {
     if (!Player_IsGoronOrDeku(this) && (Player_GetMeleeWeaponHeld(this) != 0) &&
         (this->transformation != PLAYER_FORM_ZORA) && (D_80862B48 != 0)) {
+        //! Calling this function sets the meleeWeaponQuads' damage properties correctly, patching "Power Crouch Stab".
         func_8083375C(this, PLAYER_MWA_STAB_1H);
         Player_AnimationPlayOnce(play, this, &gameplay_keep_Linkanim_00DBE8);
         this->unk_AE7 = 1;
