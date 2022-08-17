@@ -67,7 +67,7 @@ void func_80839A10(PlayState* play, Player* this);
 typedef enum AnimSfxType {
     /*  1 */ ANIMSFX_TYPE_1 = 1, // GENERAL?
     /*  2 */ ANIMSFX_TYPE_2,     // FLOOR
-    /*  3 */ ANIMSFX_TYPE_3,
+    /*  3 */ ANIMSFX_TYPE_3,     // FLOOR_BY_AGE
     /*  4 */ ANIMSFX_TYPE_VOICE,
     /*  5 */ ANIMSFX_TYPE_5, // does not use sfxId
     /*  6 */ ANIMSFX_TYPE_6, // does not use sfxId
@@ -755,6 +755,7 @@ void Player_RequestRumble(PlayState* play, Player* this, s32 sourceIntensity, s3
 // TODO: less dumb name
 #define SFX_VOICE_BANK_SIZE 0x20
 
+// ANIMSFX_TYPE_VOICE
 void func_8082DF8C(Player* this, u16 sfxId) {
     u16 sfxOffset;
 
@@ -1736,6 +1737,7 @@ u16 Player_GetFloorSfx(Player* this, u16 sfxId) {
     return sfxId + this->floorSfxOffset;
 }
 
+// ANIMSFX_TYPE_2
 void func_8082E094(Player* this, u16 sfxId) {
     func_800B8E58(this, Player_GetFloorSfx(this, sfxId));
 }
@@ -1744,10 +1746,12 @@ u16 Player_GetFloorSfxByAge(Player* this, u16 sfxId) {
     return sfxId + this->floorSfxOffset + this->ageProperties->unk_94;
 }
 
+// ANIMSFX_TYPE_3
 void func_8082E0F4(Player* this, u16 sfxId) {
     func_800B8E58(this, Player_GetFloorSfxByAge(this, sfxId));
 }
 
+// ANIMSFX_TYPE_6 and ANIMSFX_TYPE_8
 void func_8082E12C(Player* this, f32 arg1) {
     s32 sfxId;
 
@@ -1759,10 +1763,12 @@ void func_8082E12C(Player* this, f32 arg1) {
     func_8019F638(&this->actor.projectedPos, sfxId, arg1);
 }
 
+// ANIMSFX_TYPE_7
 void func_8082E188(Player* this) {
     func_800B8E58(this, Player_GetFloorSfxByAge(this, NA_SE_PL_JUMP_GROUND));
 }
 
+// ANIMSFX_TYPE_5
 void func_8082E1BC(Player* this) {
     func_800B8E58(this, Player_GetFloorSfxByAge(this, NA_SE_PL_LAND_GROUND));
 }
@@ -14507,7 +14513,7 @@ void func_8084D820(Player* this, PlayState* play) {
                     CollisionPoly* sp64;
                     s32 sp60;
 
-                    if (func_80835DF8(play, this, &sp64, &sp60) != 0) {
+                    if (func_80835DF8(play, this, &sp64, &sp60)) {
                         this->actor.floorPoly = sp64;
                         this->actor.floorBgId = sp60;
                     }
