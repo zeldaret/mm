@@ -1043,7 +1043,7 @@ typedef struct Player {
     /* 0xB6C */ s16 unk_B6C;
     /* 0xB6E */ s16 unk_B6E;
     /* 0xB70 */ s16 unk_B70;
-    /* 0xB72 */ u16 unk_B72; // floor sfx
+    /* 0xB72 */ u16 floorSfxOffset;
     /* 0xB74 */ u8 unk_B74;
     /* 0xB75 */ u8 unk_B75;
     /* 0xB76 */ s16 unk_B76;

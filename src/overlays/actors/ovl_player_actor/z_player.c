@@ -65,8 +65,8 @@ void func_80839978(PlayState* play, Player* this);
 void func_80839A10(PlayState* play, Player* this);
 
 typedef enum AnimSfxType {
-    /*  1 */ ANIMSFX_TYPE_1 = 1,
-    /*  2 */ ANIMSFX_TYPE_2,
+    /*  1 */ ANIMSFX_TYPE_1 = 1, // GENERAL?
+    /*  2 */ ANIMSFX_TYPE_2,     // GROUND?
     /*  3 */ ANIMSFX_TYPE_3,
     /*  4 */ ANIMSFX_TYPE_VOICE,
     /*  5 */ ANIMSFX_TYPE_5, // does not use sfxId
@@ -1733,7 +1733,7 @@ void func_8082E00C(Player* this) {
 }
 
 u16 func_8082E078(Player* this, u16 sfxId) {
-    return sfxId + this->unk_B72;
+    return sfxId + this->floorSfxOffset;
 }
 
 void func_8082E094(Player* this, u16 sfxId) {
@@ -1741,7 +1741,7 @@ void func_8082E094(Player* this, u16 sfxId) {
 }
 
 u16 func_8082E0CC(Player* this, u16 sfxId) {
-    return sfxId + this->unk_B72 + this->ageProperties->unk_94;
+    return sfxId + this->floorSfxOffset + this->ageProperties->unk_94;
 }
 
 void func_8082E0F4(Player* this, u16 sfxId) {
@@ -5833,7 +5833,7 @@ void func_80835EAC(PlayState* play, Player* this, Actor* door) {
     this->unk_3BA =
         play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorStaircase->actor)].sides[0].bgCamDataId;
     Actor_DisableLens(play);
-    this->unk_B72 = NA_SE_PL_WALK_CONCRETE - SFX_FLAG;
+    this->floorSfxOffset = NA_SE_PL_WALK_CONCRETE - SFX_FLAG;
 }
 
 /**
@@ -6689,7 +6689,7 @@ void func_8083827C(Player* this, PlayState* play) {
         Player_SetAction(play, this, func_8084C16C, 1);
         func_8082DD2C(play, this);
 
-        this->unk_B72 = this->unk_D66;
+        this->floorSfxOffset = this->unk_D66;
         if ((this->transformation != PLAYER_FORM_GORON) &&
             ((this->transformation != PLAYER_FORM_DEKU) || (this->unk_B67 != 0)) && (this->actor.bgCheckFlags & 4)) {
             if (!(this->stateFlags1 & PLAYER_STATE1_8000000)) {
@@ -9333,7 +9333,7 @@ s32 func_8083F8A8(PlayState* play, Player* this, f32 radius, s32 countMax, f32 r
     static Vec3f D_8085D27C = { 0.0f, 0.0f, 0.0f };
     static Vec3f D_8085D288 = { 0.0f, 0.0f, 0.0f };
 
-    if ((countMax < 0) || (this->unk_B72 == NA_SE_PL_WALK_SNOW - SFX_FLAG)) {
+    if ((countMax < 0) || (this->floorSfxOffset == NA_SE_PL_WALK_SNOW - SFX_FLAG)) {
         s32 count = func_80173B48(&play->state) / 20000000;
         Vec3f pos;
         s32 i;
@@ -9348,7 +9348,8 @@ s32 func_8083F8A8(PlayState* play, Player* this, f32 radius, s32 countMax, f32 r
         }
 
         return true;
-    } else if ((this->unk_B72 == NA_SE_PL_WALK_GROUND - SFX_FLAG) || (this->unk_B72 == NA_SE_PL_WALK_SAND - SFX_FLAG)) {
+    } else if ((this->floorSfxOffset == NA_SE_PL_WALK_GROUND - SFX_FLAG) ||
+               (this->floorSfxOffset == NA_SE_PL_WALK_SAND - SFX_FLAG)) {
         s32 count = func_80173B48(&play->state) / 12000000;
 
         if (count > 0) {
@@ -9358,7 +9359,7 @@ s32 func_8083F8A8(PlayState* play, Player* this, f32 radius, s32 countMax, f32 r
 
             return true;
         }
-    } else if (this->unk_B72 == NA_SE_PL_WALK_GRASS - SFX_FLAG) {
+    } else if (this->floorSfxOffset == NA_SE_PL_WALK_GRASS - SFX_FLAG) {
         s32 count = func_80173B48(&play->state) / 12000000;
         Vec3f velocity;
         Vec3f pos;
@@ -9379,7 +9380,8 @@ s32 func_8083F8A8(PlayState* play, Player* this, f32 radius, s32 countMax, f32 r
 }
 
 s32 func_8083FBC4(PlayState* play, Player* this) {
-    if ((this->unk_B72 == NA_SE_PL_WALK_GROUND - SFX_FLAG) || (this->unk_B72 == NA_SE_PL_WALK_SAND - SFX_FLAG)) {
+    if ((this->floorSfxOffset == NA_SE_PL_WALK_GROUND - SFX_FLAG) ||
+        (this->floorSfxOffset == NA_SE_PL_WALK_SAND - SFX_FLAG)) {
         Vec3f* feetPos = this->actor.shape.feetPos;
         s32 i;
 
@@ -9391,7 +9393,7 @@ s32 func_8083FBC4(PlayState* play, Player* this) {
         return true;
     }
 
-    if (this->unk_B72 == NA_SE_PL_WALK_SNOW - SFX_FLAG) {
+    if (this->floorSfxOffset == NA_SE_PL_WALK_SNOW - SFX_FLAG) {
         Vec3f* feetPos = this->actor.shape.feetPos;
         s32 i;
 
@@ -10850,18 +10852,20 @@ void func_80843178(PlayState* play, Player* this) {
     }
 
     if (floorPoly != NULL) {
-        this->unk_D66 = this->unk_B72;
+        this->unk_D66 = this->floorSfxOffset;
         if (spAC != 0) {
-            this->unk_B72 = 2;
+            this->floorSfxOffset = NA_SE_PL_WALK_CONCRETE - SFX_FLAG;
             return;
         }
 
         if (this->actor.bgCheckFlags & 0x20) {
             if (this->actor.depthInWater < 50.0f) {
                 if (this->actor.depthInWater < 20.0f) {
-                    this->unk_B72 = (D_80862B08 == 0xD) ? 3 : 4;
+                    this->floorSfxOffset =
+                        (D_80862B08 == 0xD) ? NA_SE_PL_WALK_DIRT - SFX_FLAG : NA_SE_PL_WALK_WATER0 - SFX_FLAG;
                 } else {
-                    this->unk_B72 = (D_80862B08 == 0xD) ? 13 : 5;
+                    this->floorSfxOffset =
+                        (D_80862B08 == 0xD) ? NA_CODE_DIRT_DEEP - SFX_FLAG : NA_SE_PL_WALK_WATER1 - SFX_FLAG;
                 }
 
                 return;
@@ -10869,9 +10873,9 @@ void func_80843178(PlayState* play, Player* this) {
         }
 
         if (this->stateFlags2 & PLAYER_STATE2_200) {
-            this->unk_B72 = 1;
+            this->floorSfxOffset = NA_SE_PL_WALK_SAND - SFX_FLAG;
         } else if (COLPOLY_GET_NORMAL(floorPoly->normal.y) > 0.5f) {
-            this->unk_B72 = SurfaceType_GetSfx(&play->colCtx, floorPoly, this->actor.floorBgId);
+            this->floorSfxOffset = SurfaceType_GetSfx(&play->colCtx, floorPoly, this->actor.floorBgId);
         }
     }
 }
@@ -12361,7 +12365,7 @@ s32 func_80847A94(PlayState* play, Player* this, s32 arg2, f32* arg3) {
             if (!func_80835D58(play, this, &D_8085D5B8[arg2], &sp40, &sp38, &sp44)) {
                 this->actor.floorPoly = sp3C;
                 this->actor.floorBgId = sp38;
-                this->unk_B72 = SurfaceType_GetSfx(&play->colCtx, sp3C, sp34);
+                this->floorSfxOffset = SurfaceType_GetSfx(&play->colCtx, sp3C, sp34);
                 return true;
             }
         }
@@ -14150,7 +14154,7 @@ void func_8084C6EC(Player* this, PlayState* play) {
             func_8083CB58(this, sp3C, this->actor.shape.rot.y);
 
             if (func_8083FBC4(play, this)) {
-                func_800B8F98(&this->actor, (this->unk_B72 == NA_SE_PL_WALK_SNOW - SFX_FLAG)
+                func_800B8F98(&this->actor, (this->floorSfxOffset == NA_SE_PL_WALK_SNOW - SFX_FLAG)
                                                 ? NA_SE_PL_ROLL_SNOW_DUST - SFX_FLAG
                                                 : NA_SE_PL_ROLL_DUST - SFX_FLAG);
             }
@@ -15304,7 +15308,7 @@ void func_8084FC0C(Player* this, PlayState* play) {
             pos.y = this->actor.world.pos.y + 20.0f;
             pos.z = this->actor.world.pos.z;
             if (BgCheck_EntityRaycastFloor5(&play->colCtx, &poly, &bgId, &this->actor, &pos) != 0.0f) {
-                this->unk_B72 = SurfaceType_GetSfx(&play->colCtx, poly, bgId);
+                this->floorSfxOffset = SurfaceType_GetSfx(&play->colCtx, poly, bgId);
                 func_8082E1BC(this);
             }
         }
@@ -18079,8 +18083,8 @@ void func_808576BC(PlayState* play, Player* this) {
     }
 
     if (func_8083F8A8(play, this, 12.0f, -1 - (var_v0 >> 0xC), (var_v0 >> 0xA) + 1.0f, (var_v0 >> 7) + 160, 20, true)) {
-        func_800B8E58(this, (this->unk_B72 == NA_SE_PL_WALK_SNOW - SFX_FLAG) ? NA_SE_PL_ROLL_SNOW_DUST - SFX_FLAG
-                                                                             : NA_SE_PL_ROLL_DUST - SFX_FLAG);
+        func_800B8E58(this, (this->floorSfxOffset == NA_SE_PL_WALK_SNOW - SFX_FLAG) ? NA_SE_PL_ROLL_SNOW_DUST - SFX_FLAG
+                                                                                    : NA_SE_PL_ROLL_DUST - SFX_FLAG);
     }
 }
 
@@ -18326,8 +18330,9 @@ void func_80857BE8(Player* this, PlayState* play) {
                 } else {
                     static Vec3f D_8085D978 = { -30.0f, 60.0f, 0.0f };
                     static Vec3f D_8085D984 = { 30.0f, 60.0f, 0.0f };
-                    f32 sp84 = (((this->unk_B72 == 0xE) || (this->unk_B72 == 0xF) || (this->unk_B72 == 1) ||
-                                 (D_80862B08 == 5)) &&
+                    f32 sp84 = (((this->floorSfxOffset == NA_SE_PL_WALK_SNOW - SFX_FLAG) ||
+                                 (this->floorSfxOffset == NA_SE_PL_WALK_ICE - SFX_FLAG) ||
+                                 (this->floorSfxOffset == NA_SE_PL_WALK_SAND - SFX_FLAG) || (D_80862B08 == 5)) &&
                                 (spC0 >= 0x7D0))
                                    ? 0.08f
                                    : this->unk_AE8 * 0.0003f;
