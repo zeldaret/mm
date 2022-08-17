@@ -438,8 +438,8 @@ typedef struct {
     /* 0x4A */ Vec3s unk_4A[4];
     /* 0x62 */ Vec3s unk_62[4];
     /* 0x7A */ Vec3s unk_7A[4];
-    /* 0x92 */ u16 unk_92; // voice sfx offset
-    /* 0x94 */ u16 unk_94; // (?) sfx offset
+    /* 0x92 */ u16 voiceSfxOffset; // voice sfx offset
+    /* 0x94 */ u16 surfaceSfxOffset;
     /* 0x98 */ f32 unk_98;
     /* 0x9C */ f32 unk_9C;
     /* 0xA0 */ LinkAnimationHeader* unk_A0;

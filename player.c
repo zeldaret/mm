@@ -2531,7 +2531,7 @@ void Player_RequestRumble(PlayState* play, Player* this, s32 sourceIntensity, s3
     }
 }
 
-void func_8082DF8C(Player* this, u16 sfxId) {
+void Player_AnimSfx_PlayVoice(Player* this, u16 sfxId) {
     s32 temp_a3;
     u16 var_v0;
     u8 temp_v0;
@@ -2569,7 +2569,7 @@ u16 Player_GetFloorSfx(Player* this, u16 sfxId) {
     return ((sfxId & 0xFFFF) + this->unk_B72) & 0xFFFF;
 }
 
-void func_8082E094(Player* this, u16 sfxId) {
+void Player_AnimSfx_PlayFloor(Player* this, u16 sfxId) {
     func_800B8E58(this, Player_GetFloorSfx(this, sfxId & 0xFFFF) & 0xFFFF);
 }
 
@@ -2577,7 +2577,7 @@ u16 Player_GetFloorSfxByAge(Player* this, u16 sfxId) {
     return ((sfxId & 0xFFFF) + this->unk_B72 + this->ageProperties->unk_94) & 0xFFFF;
 }
 
-void func_8082E0F4(Player* this, u16 sfxId) {
+void Player_AnimSfx_PlayFloorByAge(Player* this, u16 sfxId) {
     func_800B8E58(this, Player_GetFloorSfxByAge(this, sfxId & 0xFFFF) & 0xFFFF);
 }
 
@@ -2624,11 +2624,11 @@ void Player_PlayAnimSfx(Player* this, AnimSfxEntry* entry) {
             if (temp_v0_3 == 0x800) {
                 func_800B8E58(this, var_s2->sfxId);
             } else if (temp_v0_3 == 0x1000) {
-                func_8082E094(this, var_s2->sfxId);
+                Player_AnimSfx_PlayFloor(this, var_s2->sfxId);
             } else if (temp_v0_3 == 0x1800) {
-                func_8082E0F4(this, var_s2->sfxId);
+                Player_AnimSfx_PlayFloorByAge(this, var_s2->sfxId);
             } else if (temp_v0_3 == 0x2000) {
-                func_8082DF8C(this, var_s2->sfxId);
+                Player_AnimSfx_PlayVoice(this, var_s2->sfxId);
             } else if (temp_v0_3 == 0x2800) {
                 Player_AnimSfx_PlayFloorLand(this);
             } else if (temp_v0_3 == 0x3000) {
@@ -3284,7 +3284,7 @@ void func_8082FA5C(PlayState* play, Player* this, s32 meleeWeaponState) {
         }
         temp_v0_2 = this->meleeWeaponAnimation;
         if ((temp_v0_2 < 0x10) || (temp_v0_2 >= 0x16)) {
-            func_8082DF8C(this, var_a2 & 0xFFFF);
+            Player_AnimSfx_PlayVoice(this, var_a2 & 0xFFFF);
         }
         func_8082F938(play, this, 0, 4);
     }
@@ -4219,7 +4219,7 @@ void func_80831F34(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     }
     this->stateFlags1 |= 0x80;
     func_8082DAD4(this);
-    func_8082DF8C(this, 0x680BU);
+    Player_AnimSfx_PlayVoice(this, 0x680BU);
     if (this == play->actorCtx.player) {
         this->unk_A86 = (s8) play->playerActorCsIds[6];
         func_801A0184();
@@ -4275,7 +4275,7 @@ s32 func_8083216C(Player* this, PlayState* play) {
         this->actor.bgCheckFlags &= 0xFFFE;
         this->unk_AA6 |= 0x43;
         this->currentYaw = this->actor.shape.rot.y;
-        func_8082DF8C(this, 0x6802U);
+        Player_AnimSfx_PlayVoice(this, 0x6802U);
         goto block_21;
     }
     if (func_80832090(this) != 0) {
@@ -5053,7 +5053,7 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 velocity, f32 yV
                 this->actor.velocity.y = 0.0f;
                 Player_RequestRumble(play, this, 0xFF, 0xA, 0x28, 0);
                 func_800B8E58(this, 0x874U);
-                func_8082DF8C(this, 0x6806U);
+                Player_AnimSfx_PlayVoice(this, 0x6806U);
                 goto block_47;
             }
             if (arg2 == 4) {
@@ -5077,7 +5077,7 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 velocity, f32 yV
                     this->linearVelocity = 4.0f;
                     this->actor.velocity.y = 0.0f;
                 }
-                func_8082DF8C(this, 0x6805U);
+                Player_AnimSfx_PlayVoice(this, 0x6805U);
                 sp2C = &D_0400DFF8;
                 goto block_43;
             }
@@ -5092,7 +5092,7 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 velocity, f32 yV
                     this->linearVelocity = 3.0f;
                     this->actor.velocity.y = 6.0f;
                     func_8082E5A8(play, this, (*(D_8085BE84 + 0x48))[this->modelAnimType]);
-                    func_8082DF8C(this, 0x6805U);
+                    Player_AnimSfx_PlayVoice(this, 0x6805U);
                 } else {
                     this->actor.speedXZ = velocity;
                     this->linearVelocity = velocity;
@@ -5106,7 +5106,7 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 velocity, f32 yV
                     } else {
                         sp2C = &D_0400DAD0;
                     }
-                    func_8082DF8C(this, 0x6808U);
+                    Player_AnimSfx_PlayVoice(this, 0x6808U);
                 }
                 this->actor.bgCheckFlags &= 0xFFFE;
                 goto block_43;
@@ -5114,7 +5114,7 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 velocity, f32 yV
             if ((this->linearVelocity > 4.0f) && (func_80123420(this) == 0)) {
                 this->unk_B64 = 0x14;
                 Player_RequestRumble(play, this, 0x78, 0x14, 0xA, 0);
-                func_8082DF8C(this, 0x6805U);
+                Player_AnimSfx_PlayVoice(this, 0x6805U);
                 return;
             }
             sp28 = D_8085D0D4;
@@ -5142,7 +5142,7 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 velocity, f32 yV
                 var_v1_2 += 4;
             }
             sp2C = *var_v1_2;
-            func_8082DF8C(this, 0x6805U);
+            Player_AnimSfx_PlayVoice(this, 0x6805U);
 block_43:
             var_v0_3 = arg5;
             this->actor.shape.rot.y += arg5;
@@ -5312,7 +5312,7 @@ s32 func_808344C0(PlayState* play, Player* this) {
 }
 
 s32 func_80834534(PlayState* play, Player* this) {
-    func_8082DF8C(this, 0x6808U);
+    Player_AnimSfx_PlayVoice(this, 0x6808U);
     return func_808344C0(play, this);
 }
 
@@ -5384,7 +5384,7 @@ s32 func_80834600(Player* this, PlayState* play) {
     }
     if ((var_v0 != 0) || (this->actor.bgCheckFlags & 0x100) || (temp_a0 = D_80862B08, (temp_a0 == 9)) || (this->stateFlags2 & 0x80000000)) {
         sp70 = var_v0;
-        func_8082DF8C(this, 0x6805U);
+        Player_AnimSfx_PlayVoice(this, 0x6805U);
         if (var_v0 != 0) {
             func_80169FDC(&play->state);
             func_808345C8();
@@ -5393,7 +5393,7 @@ s32 func_80834600(Player* this, PlayState* play) {
             func_80169EFC(&play->state);
             func_808345C8();
         }
-        func_8082DF8C(this, 0x680CU);
+        Player_AnimSfx_PlayVoice(this, 0x680CU);
         play->unk_18845 = 1;
         play_sound(0x5801U);
         goto block_95;
@@ -5542,7 +5542,7 @@ void func_80834CD0(Player* this, f32 arg1, u16 sfxId) {
     if (temp_a1 != 0) {
         sfxId = temp_a1;
         Player_AnimSfx_PlayFloorJump(this);
-        func_8082DF8C(this, sfxId);
+        Player_AnimSfx_PlayVoice(this, sfxId);
     }
     this->stateFlags1 |= 0x40000;
     this->fallStartHeight = (s16) (s32) this->actor.world.pos.y;
@@ -5705,7 +5705,7 @@ s32 func_80835428(PlayState* play, Player* this) {
     if ((func_8082DA90(play) == 0) && (this->stateFlags1 & 0x80000000)) {
         func_80834104(play, this);
         Player_AnimationPlayLoop(play, this, &D_0400DD30);
-        func_8082DF8C(this, 0x6807U);
+        Player_AnimSfx_PlayVoice(this, 0x6807U);
         func_8019F128(0x5803U);
         return 1;
     }
@@ -6340,7 +6340,7 @@ s32 func_80836F10(PlayState* play, Player* this) {
         }
         func_800B8E58(this, 0x83EU);
         temp_s0 = &D_8085D13C[sp28];
-        func_8082DF8C(this, temp_s0->sfxId);
+        Player_AnimSfx_PlayVoice(this, temp_s0->sfxId);
         if (Player_InflictDamage(play, (s32) temp_s0->damage) != 0) {
             return -1;
         }
@@ -6356,7 +6356,7 @@ s32 func_80836F10(PlayState* play, Player* this) {
         }
         Player_RequestRumble(play, this, var_s0_2, (s32) ((f32) var_s0_2 * 0.1f), var_s0_2, 0);
         if (D_80862B08 == 6) {
-            func_8082DF8C(this, 0x6804U);
+            Player_AnimSfx_PlayVoice(this, 0x6804U);
         }
     }
     Player_AnimSfx_PlayFloorLand(this);
@@ -6526,7 +6526,7 @@ block_23:
             this->unk_AE8 = 1;
             this->stateFlags3 |= 0x200000;
             func_800B8E58(this, (0x9B5 - this->unk_B67) & 0xFFFF);
-            func_8082DF8C(this, sfxId);
+            Player_AnimSfx_PlayVoice(this, sfxId);
             temp_t4 = this->unk_B67 - 1;
             this->unk_B67 = temp_t4;
             if (!(temp_t4 & 0xFF)) {
@@ -6827,7 +6827,7 @@ s32 func_80837DEC(Player* this, PlayState* play) {
                                 this->stateFlags1 = temp_t4 & 0xFFFDFFFF;
                             }
                             func_800B8E58(this, 0x830U);
-                            func_8082DF8C(this, 0x6803U);
+                            Player_AnimSfx_PlayVoice(this, 0x6803U);
                             return 1;
                         }
                     }
@@ -7420,7 +7420,7 @@ void func_808395F0(PlayState* play, Player* this, enum PlayerMeleeWeaponAnimatio
     this->actor.bgCheckFlags &= 0xFFFE;
     this->actor.velocity.y = yVelocity;
     Player_AnimSfx_PlayFloorJump(this);
-    func_8082DF8C(this, 0x6801U);
+    Player_AnimSfx_PlayVoice(this, 0x6801U);
 }
 
 s32 func_808396B8(PlayState* play, Player* this) {
@@ -7827,7 +7827,7 @@ s32 func_8083A6C0(PlayState* play, Player* this) {
             }
             func_8082DB90(play, this, D_8085D200[this->unk_AE8].unk_0);
             func_800B8E58(this, 0x1801U);
-            func_8082DF8C(this, 0x6814U);
+            Player_AnimSfx_PlayVoice(this, 0x6814U);
             return 1;
         }
         /* Duplicate return node #6. Try simplifying control flow for better match */
@@ -8283,7 +8283,7 @@ void func_8083B8D0(PlayState* play, Player* this) {
     if (func_80837730(play, this, this->actor.velocity.y, 0x1F4) != 0) {
         func_800B8E58(this, 0x2889U);
         if (this->fallDistance >= 0x321) {
-            func_8082DF8C(this, 0x6804U);
+            Player_AnimSfx_PlayVoice(this, 0x6804U);
         }
     }
 }
@@ -8917,7 +8917,7 @@ s32 func_8083CF68(PlayState* play, Player* this) {
             this->currentYaw = sp46;
             if (D_80862B28 >= 0) {
                 this->unk_AE7 = 1;
-                func_8082DF8C(this, 0x6803U);
+                Player_AnimSfx_PlayVoice(this, 0x6803U);
             }
             return 1;
         }
@@ -9401,7 +9401,7 @@ s32 func_8083E354(Player* this, PlayState* play) {
         return 0;
     }
     func_8083E2F4(this, play);
-    func_8082DF8C(this, 0x6814U);
+    Player_AnimSfx_PlayVoice(this, 0x6814U);
     return 1;
 }
 
@@ -10311,7 +10311,7 @@ void func_80840770(PlayState* play, Player* this) {
 }
 
 void func_80840980(Player* this, u16 sfxId) {
-    func_8082DF8C(this, sfxId & 0xFFFF);
+    Player_AnimSfx_PlayVoice(this, sfxId & 0xFFFF);
 }
 
 void func_808409A8(PlayState* play, Player* this, f32 speedXZ, f32 yVelocity) {
@@ -10326,7 +10326,7 @@ void func_808409A8(PlayState* play, Player* this, f32 speedXZ, f32 yVelocity) {
         temp_a2->velocity.y = yVelocity;
         func_808309CC(play, this);
         func_800B8E58(this, 0x83AU);
-        func_8082DF8C(this, 0x6800U);
+        Player_AnimSfx_PlayVoice(this, 0x6800U);
     }
 }
 
@@ -10403,7 +10403,7 @@ block_12:
             Player_RequestRumble(play, this, 0xFF, 0x14, 0x96, 0);
             func_800B648C(play, 2, 2, 100.0f, &this->actor.world.pos);
             func_800B8E58(this, 0x83EU);
-            func_8082DF8C(this, 0x6804U);
+            Player_AnimSfx_PlayVoice(this, 0x6804U);
             return 1;
         }
         goto block_29;
@@ -13863,7 +13863,7 @@ s32 func_8084933C(Player* this, PlayState* play) {
             }
             this->unk_D57 = 0x14;
             func_800B8E58(this, 0x1805U);
-            func_8082DF8C(this, 0x6800U);
+            Player_AnimSfx_PlayVoice(this, 0x6800U);
         }
     }
     return 1;
@@ -13881,7 +13881,7 @@ s32 func_80849570(Player* this, PlayState* play) {
         LinkAnimation_PlayOnce(play, &this->unk_284, &D_0400E3A0);
         this->stateFlags3 &= 0xFF7FFFFF;
         func_800B8E58(this, 0x836U);
-        func_8082DF8C(this, 0x6800U);
+        Player_AnimSfx_PlayVoice(this, 0x6800U);
         var_v0 = 1;
     }
     return var_v0;
@@ -14857,12 +14857,12 @@ void func_8084BC64(Player* this, PlayState* play) {
                     var_a2_2 = &D_0400DC80;
                 }
                 Player_AnimationPlayOnce(play, this, var_a2_2);
-                func_8082DF8C(this, 0x6806U);
+                Player_AnimSfx_PlayVoice(this, 0x6806U);
             }
         }
     }
     if (this->actor.bgCheckFlags & 2) {
-        func_8082E094(this, 0x850U);
+        Player_AnimSfx_PlayFloor(this, 0x850U);
     }
 }
 
@@ -14932,7 +14932,7 @@ void func_8084BFDC(Player* this, PlayState* play) {
             return;
         }
         if ((&D_0400DC28 == temp_v0) && (LinkAnimation_OnFrame(temp_a2, 88.0f) != 0)) {
-            func_8082E094(this, 0x850U);
+            Player_AnimSfx_PlayFloor(this, 0x850U);
         }
     }
 }
@@ -15022,9 +15022,9 @@ void func_8084C16C(Player* this, PlayState* play) {
                             if ((temp_fv0_2 < (150.0f * temp_fv1)) && ((70.0f * temp_fv1) < ((this->actor.world.pos.y - this->actor.floorHeight) + temp_fv0_2))) {
                                 AnimationContext_DisableQueue(play);
                                 if (this->stateFlags3 & 0x10000) {
-                                    func_8082DF8C(this, 0x6819U);
+                                    Player_AnimSfx_PlayVoice(this, 0x6819U);
                                 } else {
-                                    func_8082DF8C(this, 0x6803U);
+                                    Player_AnimSfx_PlayVoice(this, 0x6803U);
                                 }
                                 this->actor.world.pos.y += this->wallHeight;
                                 func_80837CEC(play, this, this->actor.wallPoly, this->wallDistance, (*(D_8085BE84 + 0x390))[this->modelAnimType]);
@@ -15462,7 +15462,7 @@ void func_8084D4EC(Player* this, PlayState* play) {
         }
         if (LinkAnimation_OnFrame(sp2C, var_fv0_3) != 0) {
             Player_AnimSfx_PlayFloorLand(this);
-            func_8082DF8C(this, 0x6804U);
+            Player_AnimSfx_PlayVoice(this, 0x6804U);
         }
         if ((&D_0400DA60 == this->skelAnime.animation) || (this->skelAnime.curFrame > 5.0f)) {
             if (this->unk_AE8 == 0) {
@@ -15851,7 +15851,7 @@ void func_8084E334(Player* this, PlayState* play) {
             return;
         }
         if (LinkAnimation_OnFrame(sp20, 25.0f) != 0) {
-            func_8082DF8C(this, 0x6801U);
+            Player_AnimSfx_PlayVoice(this, 0x6801U);
         }
     } else if (D_80862B44->press.button & 0xC007) {
         Player_SetAction(play, this, func_8084E434, 1);
@@ -15877,7 +15877,7 @@ void func_8084E434(Player* this, PlayState* play) {
         temp_v0->velocity.y = 20.0f;
         func_808309CC(play, this);
         func_800B8E58(this, 0x83AU);
-        func_8082DF8C(this, 0x6800U);
+        Player_AnimSfx_PlayVoice(this, 0x6800U);
     }
 }
 
@@ -15895,7 +15895,7 @@ void func_8084E4E4(Player* this, PlayState* play) {
         if (this->unk_AE8 == 0) {
             func_80836A98(this, &D_0400DD78, play);
             this->stateFlags1 &= ~0x800;
-            func_8082DF8C(this, 0x6805U);
+            Player_AnimSfx_PlayVoice(this, 0x6805U);
         }
     }
 }
@@ -16094,7 +16094,7 @@ void func_8084EE50(Player* this, PlayState* play) {
     if (func_8082E67C(play, this, &D_0400DE10) != 0) {
         this->unk_AE8 = 1;
     } else if ((this->unk_AE8 == 0) && (LinkAnimation_OnFrame(&this->skelAnime, 11.0f) != 0)) {
-        func_8082DF8C(this, 0x6818U);
+        Player_AnimSfx_PlayVoice(this, 0x6818U);
     }
     Player_PlayAnimSfx(this, D_8085D650);
     func_8083DEE4(play, this);
@@ -16133,7 +16133,7 @@ void func_8084EF9C(Player* this, PlayState* play) {
         this->unk_AE8 = 1;
     } else if (this->unk_AE8 == 0) {
         if (LinkAnimation_OnFrame(&this->skelAnime, 11.0f) != 0) {
-            func_8082DF8C(this, 0x6818U);
+            Player_AnimSfx_PlayVoice(this, 0x6818U);
         }
     } else {
         Player_PlayAnimSfx(this, D_8085D658);
@@ -16192,7 +16192,7 @@ void func_8084F1B8(Player* this, PlayState* play) {
             var_fv0 = 1.0f;
         }
         if (LinkAnimation_OnFrame(temp_a2, var_fv0) != 0) {
-            func_8082E094(this, 0x800U);
+            Player_AnimSfx_PlayFloor(this, 0x800U);
             if (&D_0400DC30 == this->skelAnime.animation) {
                 this->unk_AE7 = 1;
             } else {
@@ -16247,7 +16247,7 @@ void func_8084F3DC(Player* this, PlayState* play) {
     }
     if (LinkAnimation_OnFrame(sp24, this->skelAnime.endFrame - 34.0f) != 0) {
         func_800B8E58(this, 0x831U);
-        func_8082DF8C(this, 0x6804U);
+        Player_AnimSfx_PlayVoice(this, 0x6804U);
         func_8084C124(play, this);
     }
 }
@@ -16713,13 +16713,13 @@ block_45:
                 if (&D_0400E080 == this->unk_284.animation) {
                     if (LinkAnimation_OnFrame(temp_a2, 23.0f) != 0) {
                         func_800B8E58(this, 0x181EU);
-                        func_8082DF8C(this, 0x6802U);
+                        Player_AnimSfx_PlayVoice(this, 0x6802U);
                     }
                     AnimationContext_SetCopyAll(play, (s32) this->skelAnime.limbCount, this->skelAnime.jointTable, this->unk_284.jointTable);
                 } else {
                     if (LinkAnimation_OnFrame(temp_a2, 10.0f) != 0) {
                         func_800B8E58(this, 0x181EU);
-                        func_8082DF8C(this, 0x6802U);
+                        Player_AnimSfx_PlayVoice(this, 0x6802U);
                     }
                     AnimationContext_SetCopyTrue(play, (s32) this->skelAnime.limbCount, this->skelAnime.jointTable, this->unk_284.jointTable, D_8085B9F0);
                 }
@@ -17259,7 +17259,7 @@ void func_808519FC(Player* this, PlayState* play) {
             func_8082ECE0(this);
             func_8082DC64(play, this);
         } else if (LinkAnimation_OnFrame(temp_a0, 5.0f) != 0) {
-            func_8082DF8C(this, 0x680AU);
+            Player_AnimSfx_PlayVoice(this, 0x680AU);
         }
     }
     func_808475B4(this);
@@ -17726,7 +17726,7 @@ void func_80852B28(Player* this, PlayState* play) {
             Inventory_ChangeAmmo(9, -1);
             this->unk_D57 = 4;
         }
-        func_8082DF8C(this, 0x6800U);
+        Player_AnimSfx_PlayVoice(this, 0x6800U);
     }
 }
 
@@ -17860,7 +17860,7 @@ void func_80852FD4(Player* this, PlayState* play) {
         }
     } else {
         if ((this->transformation == 0) && (LinkAnimation_OnFrame(temp_a3, 158.0f) != 0)) {
-            func_8082DF8C(this, 0x6800U);
+            Player_AnimSfx_PlayVoice(this, 0x6800U);
             return;
         }
         if (this->transformation != 0) {
@@ -17976,11 +17976,11 @@ void func_80853194(Player* this, PlayState* play) {
                 }
                 Player_UpdateBottleHeld(play, this, var_a2_2, PLAYER_AP_BOTTLE);
             }
-            func_8082DF8C(this, 0x6010U);
+            Player_AnimSfx_PlayVoice(this, 0x6010U);
             return;
         }
         if ((temp_v0_5 == 2) && (LinkAnimation_OnFrame(sp34, 29.0f) != 0)) {
-            func_8082DF8C(this, 0x680AU);
+            Player_AnimSfx_PlayVoice(this, 0x680AU);
         }
     }
 }
@@ -18078,7 +18078,7 @@ void func_80853754(Player* this, PlayState* play) {
     if (LinkAnimation_OnFrame(temp_a2, 37.0f) != 0) {
         sp2C = 8;
         func_800B8E58(this, 0x286CU);
-        func_8082DF8C(this, 0x6814U);
+        Player_AnimSfx_PlayVoice(this, 0x6814U);
         if (this->heldItemActionParam == 0x29) {
             Player_UpdateBottleHeld(play, this, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
             func_800B8E58(this, 0x20A8U);
@@ -18362,8 +18362,8 @@ void func_8085421C(Player* this, PlayState* play) {
         sp20 = temp_a2;
         LinkAnimation_Update(play, temp_a2);
         if ((&D_0400D698 == this->skelAnime.animation) && (LinkAnimation_OnFrame(temp_a2, 60.0f) != 0)) {
-            func_8082E094(this, 0x850U);
-            func_8082DF8C(this, 0x6805U);
+            Player_AnimSfx_PlayFloor(this, 0x850U);
+            Player_AnimSfx_PlayVoice(this, 0x6805U);
         }
     }
     temp_v0 = this->unk_AE8;
@@ -20409,7 +20409,7 @@ void func_80858FBC(PlayState* play, Player* this, void* anim) {
 
 void func_80858FE8(Player* this) {
     if (&D_0400E120 == this->skelAnime.animation) {
-        func_8082E094(this, 0xD0U);
+        Player_AnimSfx_PlayFloor(this, 0xD0U);
         func_800B8E58(this, 0x6042U);
     }
 }
@@ -21290,7 +21290,7 @@ void func_8085B170(PlayState* play, Player* this) {
     Player_AnimationPlayOnce(play, this, &D_0400DE28);
     this->stateFlags2 |= 0x80;
     func_8082DAD4(this);
-    func_8082DF8C(this, 0x680DU);
+    Player_AnimSfx_PlayVoice(this, 0x680DU);
 }
 
 s32 Player_GrabPlayer(PlayState* play, Player* player) {
