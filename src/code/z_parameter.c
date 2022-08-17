@@ -1998,8 +1998,8 @@ s16 D_801BFD9C = 0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_801210E0.s")
 
-void Interface_Destroy(void) {
-    Map_Destroy();
+void Interface_Destroy(PlayState* play) {
+    Map_Destroy(play);
     func_80174F9C(Interface_PostmanTimerCallback, NULL);
 }
 
