@@ -321,88 +321,11 @@ void func_80859A10(PlayState* play, Player* this, UNK_TYPE arg2);
 
 // ActionParams
 void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
 void func_8082F5A4(PlayState* play, Player* this);
 void func_8082F8A0(PlayState* play, Player* this);
 void func_8082F5C0(PlayState* play, Player* this);
-void func_8082F5C0(PlayState* play, Player* this);
-void func_8082F5C0(PlayState* play, Player* this);
-void func_8082F5C0(PlayState* play, Player* this);
 void func_8082F7F4(PlayState* play, Player* this);
 void func_8082F62C(PlayState* play, Player* this);
-void func_8082F62C(PlayState* play, Player* this);
-void func_8082F62C(PlayState* play, Player* this);
-void func_8082F8A0(PlayState* play, Player* this);
-void func_8082F5C0(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
-void func_8082F594(PlayState* play, Player* this);
 
 void func_80858DB4(PlayState* play, Player* this, void* anim);
 void func_80858DDC(PlayState* play, Player* this, void* anim);
@@ -1666,31 +1589,37 @@ LinkAnimationHeader* D_8085BE84[PLAYER_ANIMGROUP_MAX][PLAYER_ANIMTYPE_MAX] = {
 };
 
 struct_8085C2A4 D_8085C2A4[] = {
+    /* 0 / Forward */
     {
         &gameplay_keep_Linkanim_00D828,
         &gameplay_keep_Linkanim_00D838,
         &gameplay_keep_Linkanim_00D830,
     },
+    /* 1 / Left */
     {
         &gameplay_keep_Linkanim_00D770,
         &gameplay_keep_Linkanim_00D780,
         &gameplay_keep_Linkanim_00D778,
     },
+    /* 2 / Back */
     {
         &gameplay_keep_Linkanim_00D7F0,
         &gameplay_keep_Linkanim_00D800,
         &gameplay_keep_Linkanim_00D7F8,
     },
+    /* 3 / Right */
     {
         &gameplay_keep_Linkanim_00D7A8,
         &gameplay_keep_Linkanim_00D7B8,
         &gameplay_keep_Linkanim_00D7B0,
     },
+    /* 4 /  */
     {
         &gameplay_keep_Linkanim_00DD50,
         &gameplay_keep_Linkanim_00DD58,
         &gameplay_keep_Linkanim_00DD58,
     },
+    /* 5 /  */
     {
         &gameplay_keep_Linkanim_00DD60,
         &gameplay_keep_Linkanim_00DD68,
@@ -2043,7 +1972,7 @@ void func_8082EB38(PlayState* play, Player* this) {
         var_v1 = -1;
     } else {
         var_v1 = ((u16)(D_80862B00 + 0x2000)) >> 9;
-        var_v0 = ((u16)(BINANG_SUB(D_80862B02, this->actor.shape.rot.y) + 0x2000)) >> 0xE;
+        var_v0 = ((u16)(BINANG_SUB(D_80862B02, this->actor.shape.rot.y) + 0x2000)) >> 14;
     }
     this->unk_ADF[this->unk_ADE] = var_v1;
     this->unk_AE3[this->unk_ADE] = var_v0;
@@ -2801,7 +2730,7 @@ void func_8082F43C(PlayState* play, Player* this, PlayerFuncAC4 arg2) {
 
 #define GET_PLAYER_ANIM(group, type) ((LinkAnimationHeader**)D_8085BE84)[group * PLAYER_ANIMTYPE_MAX + type]
 
-void func_8082F470(PlayState* play, Player* this, s32 arg2) {
+void func_8082F470(PlayState* play, Player* this, PlayerActionParam actionParam) {
     LinkAnimationHeader* current = this->skelAnime.animation;
     LinkAnimationHeader*(*iter)[PLAYER_ANIMTYPE_MAX] = (void*)&D_8085BE84[0][this->modelAnimType];
     s32 i;
@@ -2815,7 +2744,7 @@ void func_8082F470(PlayState* play, Player* this, s32 arg2) {
         iter++;
     }
 
-    func_8082F8BC(play, this, arg2);
+    func_8082F8BC(play, this, actionParam);
 
     if (i < PLAYER_ANIMGROUP_MAX) {
         this->skelAnime.animation = GET_PLAYER_ANIM(i, this->modelAnimType);
@@ -3026,6 +2955,7 @@ PlayerFuncAC4 D_8085C9F0[PLAYER_AP_MAX] = {
     func_80848780, // PLAYER_AP_LENS
 };
 
+// sPlayerActionParamInits?
 void (*D_8085CB3C[PLAYER_AP_MAX])(PlayState*, Player*) = {
     func_8082F594, // PLAYER_AP_NONE
     func_8082F594, // PLAYER_AP_LAST_USED
@@ -4296,9 +4226,8 @@ void func_80831990(PlayState* play, Player* this, ItemID item) {
 }
 
 void func_80831F34(PlayState* play, Player* this, LinkAnimationHeader* anim) {
-    s32 sp24;
+    s32 sp24 = func_801242B4(this);
 
-    sp24 = func_801242B4(this);
     func_8082DE50(play, this);
     Player_SetAction(play, this, sp24 ? func_80851BD4 : func_8084BFDC, 0);
     Player_AnimationPlayOnce(play, this, anim);
@@ -4404,10 +4333,6 @@ s32 func_808323C0(Player* this, s16 csIndex) {
     return true;
 }
 
-s32 func_80832444(Player* this);
-s32 func_8083249C(Player* this);
-s32 func_808324EC(PlayState* play, Player* this, void (*arg2)(PlayState*, Player*), s32 arg3);
-
 s32 func_80832444(Player* this) {
     if (this->unk_A86 >= 0) {
         if (!ActorCutscene_GetCanPlayNext(this->unk_A86)) {
@@ -4436,7 +4361,7 @@ s32 func_808324EC(PlayState* play, Player* this, PlayerFuncD58 arg2, s32 arg3) {
     return func_8082DE14(play, this);
 }
 
-s32 func_80832558(PlayState* play, Player* this, void (*arg2)(PlayState*, Player*)) {
+s32 func_80832558(PlayState* play, Player* this, PlayerFuncD58 arg2) {
     return func_808324EC(play, this, arg2, -1);
 }
 
@@ -5960,15 +5885,17 @@ void func_8083604C(PlayState* play, Player* this, Actor* door) {
     }
 }
 
+// sPlayerOpenDoorLeftAnimPerForm
 LinkAnimationHeader* D_8085D118[] = {
-    &gameplay_keep_Linkanim_00E1B8,
-    &gameplay_keep_Linkanim_00E3C8,
-    &gameplay_keep_Linkanim_00E280,
+    &gameplay_keep_Linkanim_00E1B8, // PLAYER_FORM_GORON
+    &gameplay_keep_Linkanim_00E3C8, // PLAYER_FORM_ZORA
+    &gameplay_keep_Linkanim_00E280, // PLAYER_FORM_DEKU
 };
+// sPlayerOpenDoorRightAnimPerForm
 LinkAnimationHeader* D_8085D124[] = {
-    &gameplay_keep_Linkanim_00E1C0,
-    &gameplay_keep_Linkanim_00E3D0,
-    &gameplay_keep_Linkanim_00E288,
+    &gameplay_keep_Linkanim_00E1C0, // PLAYER_FORM_GORON
+    &gameplay_keep_Linkanim_00E3D0, // PLAYER_FORM_ZORA
+    &gameplay_keep_Linkanim_00E288, // PLAYER_FORM_DEKU
 };
 
 /**
@@ -5980,34 +5907,29 @@ LinkAnimationHeader* D_8085D124[] = {
  */
 void func_80836258(PlayState* play, Player* this, Actor* door) {
     s32 temp = this->transformation - 1;
-    LinkAnimationHeader* sp60;
+    LinkAnimationHeader* anim;
     f32 temp_fv0; // sp5C
     DoorBaseActor* doorNormal = (DoorBaseActor*)door;
-    CollisionPoly* sp54;
-    s32 sp50;
-    Vec3f sp44;
-    s32 sp40;
-    Camera* temp_a0_2;
 
     doorNormal->animIndex = this->transformation;
 
     if (this->doorDirection < 0) {
         if (this->transformation == PLAYER_FORM_FIERCE_DEITY) {
-            sp60 = D_8085BE84[PLAYER_ANIMGROUP_8][this->modelAnimType];
+            anim = D_8085BE84[PLAYER_ANIMGROUP_8][this->modelAnimType];
         } else if (this->transformation == PLAYER_FORM_HUMAN) {
-            sp60 = D_8085BE84[PLAYER_ANIMGROUP_9][this->modelAnimType];
+            anim = D_8085BE84[PLAYER_ANIMGROUP_9][this->modelAnimType];
         } else {
-            sp60 = D_8085D118[temp];
+            anim = D_8085D118[temp];
         }
     } else {
         doorNormal->animIndex += 5;
 
         if (this->transformation == PLAYER_FORM_FIERCE_DEITY) {
-            sp60 = D_8085BE84[PLAYER_ANIMGROUP_10][this->modelAnimType];
+            anim = D_8085BE84[PLAYER_ANIMGROUP_10][this->modelAnimType];
         } else if (this->transformation == PLAYER_FORM_HUMAN) {
-            sp60 = D_8085BE84[PLAYER_ANIMGROUP_11][this->modelAnimType];
+            anim = D_8085BE84[PLAYER_ANIMGROUP_11][this->modelAnimType];
         } else {
-            sp60 = D_8085D124[temp];
+            anim = D_8085D124[temp];
         }
     }
 
@@ -6024,7 +5946,7 @@ void func_80836258(PlayState* play, Player* this, Actor* door) {
     temp_fv0 = this->doorDirection * 22.0f;
     func_80835BF8(&doorNormal->dyna.actor.world.pos, doorNormal->dyna.actor.shape.rot.y, temp_fv0,
                   &this->actor.world.pos);
-    func_8082EC9C(play, this, sp60);
+    func_8082EC9C(play, this, anim);
 
     if (this->doorTimer != 0) {
         this->skelAnime.endFrame = 0.0f;
@@ -6034,22 +5956,28 @@ void func_80836258(PlayState* play, Player* this, Actor* door) {
     func_8082E920(play, this, 0x28F);
     doorNormal->unk_1A1 = 1;
     if (this->doorType != PLAYER_DOORTYPE_3) {
-        sp40 = ENDOOR_GET_PARAMS_7(&doorNormal->dyna.actor);
+        CollisionPoly* poly;
+        s32 bgId;
+        Vec3f pos;
+        s32 sp40 = ENDOOR_GET_PARAMS_7(&doorNormal->dyna.actor);
+
         this->stateFlags1 |= PLAYER_STATE1_20000000;
 
         if (this->actor.category == ACTORCAT_PLAYER) {
             Actor_DisableLens(play);
-            func_80835BF8(&doorNormal->dyna.actor.world.pos, doorNormal->dyna.actor.shape.rot.y, -temp_fv0, &sp44);
-            sp44.y = doorNormal->dyna.actor.world.pos.y + 10.0f;
-            BgCheck_EntityRaycastFloor5(&play->colCtx, &sp54, &sp50, &this->actor, &sp44);
+            func_80835BF8(&doorNormal->dyna.actor.world.pos, doorNormal->dyna.actor.shape.rot.y, -temp_fv0, &pos);
+            pos.y = doorNormal->dyna.actor.world.pos.y + 10.0f;
+            BgCheck_EntityRaycastFloor5(&play->colCtx, &poly, &bgId, &this->actor, &pos);
 
-            if (func_8083562C(play, this, sp54, 0x32)) {
+            if (func_8083562C(play, this, poly, BGCHECK_SCENE)) {
                 gSaveContext.entranceSpeed = 2.0f;
             } else if (sp40 != 7) {
-                this->unk_AE7 = 38.0f * D_8085C3E8;
-                temp_a0_2 = Play_GetCamera(play, 0);
+                Camera* cam;
 
-                Camera_ChangeDoorCam(temp_a0_2, &doorNormal->dyna.actor,
+                this->unk_AE7 = 38.0f * D_8085C3E8;
+                cam = Play_GetCamera(play, CAM_ID_MAIN);
+
+                Camera_ChangeDoorCam(cam, &doorNormal->dyna.actor,
                                      play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorNormal->dyna.actor)]
                                          .sides[(this->doorDirection > 0) ? 0 : 1]
                                          .bgCamDataId,
@@ -6153,16 +6081,16 @@ void func_80836988(Player* this, PlayState* play) {
 }
 
 void func_808369F4(Player* this, PlayState* play) {
-    void (*var_a2)(Player*, PlayState*);
+    PlayerActionFunc actionFunc;
 
     if (func_80123420(this)) {
-        var_a2 = func_80849A9C;
+        actionFunc = func_80849A9C;
     } else if (func_80123434(this)) {
-        var_a2 = func_80849DD0;
+        actionFunc = func_80849DD0;
     } else {
-        var_a2 = func_80849FE0;
+        actionFunc = func_80849FE0;
     }
-    Player_SetAction(play, this, var_a2, 1);
+    Player_SetAction(play, this, actionFunc, 1);
 }
 
 void func_80836A5C(Player* this, PlayState* play) {
@@ -7780,14 +7708,14 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
             func_801477B4(play);
 
             if (play->sceneNum == SCENE_00KEIKOKU) {
-                gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = 0x4C20;
+                gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = ENTRANCE(ASTRAL_OBSERVATORY, 2);
             } else {
                 u16 entrance;
 
                 if (play->sceneNum == SCENE_AYASHIISHOP) {
-                    entrance = 0xE30;
+                    entrance = ENTRANCE(CURIOSITY_SHOP, 3);
                 } else {
-                    entrance = 0x4080;
+                    entrance = ENTRANCE(PIRATES_FORTRESS_INTERIOR, 8);
                 }
                 gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = entrance;
             }
@@ -8128,9 +8056,9 @@ void func_8083BB4C(PlayState* play, Player* this) {
                 } else {
                     if ((play->sceneNum == SCENE_20SICHITAI) && (this->unk_3CF == 0)) {
                         if (gSaveContext.eventInf[5] & 1) {
-                            play->nextEntrance = 0xA820;
+                            play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 2);
                         } else {
-                            play->nextEntrance = 0xA810;
+                            play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 1);
                         }
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_04;
@@ -11294,7 +11222,7 @@ void func_80844784(PlayState* play, Player* this) {
             sp48 = Math_SinS(this->windAngleY) * sp4C;
             sp44 = Math_CosS(this->windAngleY) * sp4C;
 
-            if ((sp50 > 0.0f) && (this->transformation == 3) && !(this->actor.bgCheckFlags & 1)) {
+            if ((sp50 > 0.0f) && (this->transformation == PLAYER_FORM_DEKU) && !(this->actor.bgCheckFlags & 1)) {
                 if (Player_SetAction(play, this, func_80856918, 1)) {
                     this->stateFlags3 |= PLAYER_STATE3_2000 | PLAYER_STATE3_1000000;
                     func_8082E1F0(this, NA_SE_IT_DEKUNUTS_FLOWER_OPEN);
@@ -12641,7 +12569,7 @@ s32 func_808482E0(PlayState* play, Player* this) {
     } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         if (this->getItemId == GI_OCARINA) {
             // zelda teaching song of time cs?
-            play->nextEntrance = 0x1C00;
+            play->nextEntrance = ENTRANCE(CUTSCENE, 0);
             gSaveContext.nextCutsceneIndex = 0xFFF2;
             play->transitionTrigger = TRANS_TRIGGER_START;
             play->transitionType = TRANS_TYPE_03;
@@ -14202,14 +14130,14 @@ void func_8084C6EC(Player* this, PlayState* play) {
     } else if (!func_80840A30(play, this, &this->linearVelocity, 6.0f)) {
         if ((this->skelAnime.curFrame < 15.0f) || !func_80848570(this, play)) {
             f32 sp3C;
-            s16 sp3A;
+            s16 yaw;
 
             if (this->skelAnime.curFrame >= 20.0f) {
                 func_80836A5C(this, play);
                 return;
             }
 
-            func_80832F78(this, &sp3C, &sp3A, 0.018f, play);
+            func_80832F78(this, &sp3C, &yaw, 0.018f, play);
             sp3C *= 1.5f;
             if ((sp3C < 3.0f) || (this->unk_AE3[this->unk_ADE] != 0)) {
                 sp3C = 3.0f;
@@ -14676,8 +14604,8 @@ void func_8084D820(Player* this, PlayState* play) {
             }
 
             temp_v0_8 = func_808411D4(play, this, &sp5C, sp58);
-            if ((this->unk_AE8 == 0) || ((temp_v0_8 == 0) && (this->linearVelocity == 0.0f) &&
-                                         (Play_GetCamera(play, 0)->stateFlags & 0x10))) {
+            if ((this->unk_AE8 == 0) ||
+                ((temp_v0_8 == 0) && (this->linearVelocity == 0.0f) && (Play_GetCamera(play, 0)->stateFlags & 0x10))) {
                 if (this->unk_397 == 4) {
                     Map_InitRoomData(play, (s16)play->roomCtx.currRoom.num);
                     Minimap_SavePlayerRoomInitInfo(play);
@@ -16313,9 +16241,9 @@ void func_8085269C(Player* this, PlayState* play) {
                 if (play->msgCtx.ocarinaMode == 0x16) {
                     if (!func_8082DA90(play)) {
                         if (gSaveContext.save.playerData.deaths == 1) {
-                            play->nextEntrance = 0x1C10;
+                            play->nextEntrance = ENTRANCE(CUTSCENE, 1);
                         } else {
-                            play->nextEntrance = 0x1C00;
+                            play->nextEntrance = ENTRANCE(CUTSCENE, 0);
                         }
 
                         gSaveContext.nextCutsceneIndex = 0xFFF7;
@@ -17539,8 +17467,7 @@ void func_80855A7C(Player* this, PlayState* play) {
         play->msgCtx.ocarinaMode = 4;
         func_8085B384(this, play);
         return;
-    }
-    if (this->unk_AE8 == 10) {
+    } else if (this->unk_AE8 == 10) {
         func_80848640(play, this);
     }
 }

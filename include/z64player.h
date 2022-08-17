@@ -968,7 +968,7 @@ typedef struct Player {
     /* 0xA7C */ Actor* boomerangActor;
     /* 0xA80 */ Actor* tatlActor;
     /* 0xA84 */ s16 tatlTextId;
-    /* 0xA86 */ s8 unk_A86;
+    /* 0xA86 */ s8 unk_A86; // actorCutsceneIndex?
     /* 0xA87 */ s8 exchangeItemId;
     /* 0xA88 */ Actor* talkActor;
     /* 0xA8C */ f32 talkActorDistance;
@@ -979,7 +979,7 @@ typedef struct Player {
     /* 0xAA0 */ f32 unk_AA0;
     /* 0xAA4 */ s8 unk_AA4;
     /* 0xAA5 */ u8 unk_AA5;
-    /* 0xAA6 */ u16 unk_AA6;
+    /* 0xAA6 */ u16 unk_AA6; // flags of some kind
     /* 0xAA8 */ s16 unk_AA8;
     /* 0xAAA */ s16 unk_AAA;
     /* 0xAAC */ Vec3s unk_AAC;
