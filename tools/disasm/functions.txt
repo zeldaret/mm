@@ -4267,7 +4267,7 @@
     0x8082E00C:("func_8082E00C",),
     0x8082E078:("Player_GetFloorSfx",),
     0x8082E094:("func_8082E094",),
-    0x8082E0CC:("func_8082E0CC",),
+    0x8082E0CC:("Player_GetFloorSfxByAge",),
     0x8082E0F4:("func_8082E0F4",),
     0x8082E12C:("func_8082E12C",),
     0x8082E188:("func_8082E188",),

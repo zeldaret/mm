@@ -2573,12 +2573,12 @@ void func_8082E094(Player* this, u16 sfxId) {
     func_800B8E58(this, Player_GetFloorSfx(this, sfxId & 0xFFFF) & 0xFFFF);
 }
 
-u16 func_8082E0CC(Player* this, u16 sfxId) {
+u16 Player_GetFloorSfxByAge(Player* this, u16 sfxId) {
     return ((sfxId & 0xFFFF) + this->unk_B72 + this->ageProperties->unk_94) & 0xFFFF;
 }
 
 void func_8082E0F4(Player* this, u16 sfxId) {
-    func_800B8E58(this, func_8082E0CC(this, sfxId & 0xFFFF) & 0xFFFF);
+    func_800B8E58(this, Player_GetFloorSfxByAge(this, sfxId & 0xFFFF) & 0xFFFF);
 }
 
 void func_8082E12C(Player* this, f32 arg1) {
@@ -2587,17 +2587,17 @@ void func_8082E12C(Player* this, f32 arg1) {
     if (this->currentMask == 0x14) {
         var_v1 = 0x8CE;
     } else {
-        var_v1 = func_8082E0CC(this, 0x800U);
+        var_v1 = Player_GetFloorSfxByAge(this, 0x800U);
     }
     func_8019F638(&this->actor.projectedPos, var_v1 & 0xFFFF, arg1);
 }
 
 void func_8082E188(Player* this) {
-    func_800B8E58(this, func_8082E0CC(this, 0x810U) & 0xFFFF);
+    func_800B8E58(this, Player_GetFloorSfxByAge(this, 0x810U) & 0xFFFF);
 }
 
 void func_8082E1BC(Player* this) {
-    func_800B8E58(this, func_8082E0CC(this, 0x820U) & 0xFFFF);
+    func_800B8E58(this, Player_GetFloorSfxByAge(this, 0x820U) & 0xFFFF);
 }
 
 void func_8082E1F0(Player* this, u16 sfxId) {

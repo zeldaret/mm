@@ -66,7 +66,7 @@ void func_80839A10(PlayState* play, Player* this);
 
 typedef enum AnimSfxType {
     /*  1 */ ANIMSFX_TYPE_1 = 1, // GENERAL?
-    /*  2 */ ANIMSFX_TYPE_2,     // GROUND?
+    /*  2 */ ANIMSFX_TYPE_2,     // FLOOR
     /*  3 */ ANIMSFX_TYPE_3,
     /*  4 */ ANIMSFX_TYPE_VOICE,
     /*  5 */ ANIMSFX_TYPE_5, // does not use sfxId
@@ -1740,12 +1740,12 @@ void func_8082E094(Player* this, u16 sfxId) {
     func_800B8E58(this, Player_GetFloorSfx(this, sfxId));
 }
 
-u16 func_8082E0CC(Player* this, u16 sfxId) {
+u16 Player_GetFloorSfxByAge(Player* this, u16 sfxId) {
     return sfxId + this->floorSfxOffset + this->ageProperties->unk_94;
 }
 
 void func_8082E0F4(Player* this, u16 sfxId) {
-    func_800B8E58(this, func_8082E0CC(this, sfxId));
+    func_800B8E58(this, Player_GetFloorSfxByAge(this, sfxId));
 }
 
 void func_8082E12C(Player* this, f32 arg1) {
@@ -1754,17 +1754,17 @@ void func_8082E12C(Player* this, f32 arg1) {
     if (this->currentMask == PLAYER_MASK_GIANT) {
         sfxId = NA_SE_PL_GIANT_WALK;
     } else {
-        sfxId = func_8082E0CC(this, NA_SE_PL_WALK_GROUND);
+        sfxId = Player_GetFloorSfxByAge(this, NA_SE_PL_WALK_GROUND);
     }
     func_8019F638(&this->actor.projectedPos, sfxId, arg1);
 }
 
 void func_8082E188(Player* this) {
-    func_800B8E58(this, func_8082E0CC(this, NA_SE_PL_JUMP_GROUND));
+    func_800B8E58(this, Player_GetFloorSfxByAge(this, NA_SE_PL_JUMP_GROUND));
 }
 
 void func_8082E1BC(Player* this) {
-    func_800B8E58(this, func_8082E0CC(this, NA_SE_PL_LAND_GROUND));
+    func_800B8E58(this, Player_GetFloorSfxByAge(this, NA_SE_PL_LAND_GROUND));
 }
 
 void func_8082E1F0(Player* this, u16 sfxId) {
