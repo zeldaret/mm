@@ -417,28 +417,28 @@ typedef struct PlayerAnimationFrame {
 #define PLAYER_LIMB_BUF_SIZE (ALIGN16(sizeof(PlayerAnimationFrame)) + 0xF)
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
+    /* 0x00 */ f32 unk_00; // ceilingCheckHeight
+    /* 0x04 */ f32 shadowScale;
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ f32 unk_20;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ f32 unk_28;
-    /* 0x2C */ f32 unk_2C;
-    /* 0x30 */ f32 unk_30;
-    /* 0x34 */ f32 unk_34; // height?
-    /* 0x38 */ f32 unk_38;
+    /* 0x14 */ f32 unk_14; // compared to wallHeight
+    /* 0x18 */ f32 unk_18; // compared to wallHeight
+    /* 0x1C */ f32 unk_1C; // compared to wallHeight
+    /* 0x20 */ f32 unk_20; // unused?
+    /* 0x24 */ f32 unk_24; // water stuff // depthInWater
+    /* 0x28 */ f32 unk_28; // water stuff // depthInWater
+    /* 0x2C */ f32 unk_2C; // water stuff // depthInWater
+    /* 0x30 */ f32 unk_30; // water stuff // depthInWater
+    /* 0x34 */ f32 unk_34;
+    /* 0x38 */ f32 unk_38; // wallCheckHeight
     /* 0x3C */ f32 unk_3C;
     /* 0x40 */ f32 unk_40;
     /* 0x44 */ Vec3s unk_44;
     /* 0x4A */ Vec3s unk_4A[4];
     /* 0x62 */ Vec3s unk_62[4];
     /* 0x7A */ Vec3s unk_7A[4];
-    /* 0x92 */ u16 voiceSfxOffset; // voice sfx offset
+    /* 0x92 */ u16 voiceSfxOffset;
     /* 0x94 */ u16 surfaceSfxOffset;
     /* 0x98 */ f32 unk_98;
     /* 0x9C */ f32 unk_9C;

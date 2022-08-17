@@ -760,7 +760,7 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
     {
         // unk_00;
         84.0f,
-        // unk_04;
+        // shadowScale;
         90.0f,
         // unk_08;
         1.5f,
@@ -843,7 +843,7 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
     {
         // unk_00;
         70.0f,
-        // unk_04;
+        // shadowScale;
         90.0f,
         // unk_08;
         0.74f,
@@ -926,7 +926,7 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
     {
         // unk_00;
         56.0f,
-        // unk_04;
+        // shadowScale;
         90.0f,
         // unk_08;
         1.0f,
@@ -1009,7 +1009,7 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
     {
         // unk_00;
         35.0f,
-        // unk_04;
+        // shadowScale;
         50.0f,
         // unk_08;
         0.3f,
@@ -1092,7 +1092,7 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
     {
         // unk_00;
         40.0f,
-        // unk_04;
+        // shadowScale;
         60.0f,
         // unk_08;
         11.0f / 17.0f,
@@ -4000,7 +4000,7 @@ s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc,
         this->actor.flags &= ~ACTOR_FLAG_20000000;
     } else if ((func_80857BE8 == this->actionFunc) || (func_808561B0 == this->actionFunc)) {
         this->actor.shape.shadowDraw = ActorShadow_DrawFeet;
-        this->actor.shape.shadowScale = this->ageProperties->unk_04;
+        this->actor.shape.shadowScale = this->ageProperties->shadowScale;
         this->unk_ABC = 0.0f;
         if (func_80857BE8 == this->actionFunc) {
             if (this->stateFlags3 & PLAYER_STATE3_80000) {
@@ -5426,16 +5426,16 @@ void func_80834CD0(Player* this, f32 arg1, u16 sfxId) {
     this->fallStartHeight = this->actor.world.pos.y;
 }
 
-void func_80834D50(PlayState* play, Player* this, LinkAnimationHeader* anim, f32 arg3, u16 sfxId) {
+void func_80834D50(PlayState* play, Player* this, LinkAnimationHeader* anim, f32 speed, u16 sfxId) {
     Player_SetAction(play, this, func_8084C16C, 1);
     if (anim != NULL) {
         func_8082DB90(play, this, anim);
     }
-    func_80834CD0(this, arg3, sfxId);
+    func_80834CD0(this, speed, sfxId);
 }
 
-void func_80834DB8(Player* this, LinkAnimationHeader* anim, f32 arg2, PlayState* play) {
-    func_80834D50(play, this, anim, arg2, NA_SE_VO_LI_SWORD_N);
+void func_80834DB8(Player* this, LinkAnimationHeader* anim, f32 speed, PlayState* play) {
+    func_80834D50(play, this, anim, speed, NA_SE_VO_LI_SWORD_N);
 }
 
 s32 func_80834DFC(Player* this, PlayState* play) {
@@ -7276,18 +7276,16 @@ s32 func_80839800(Player* this, PlayState* play) {
 
 void func_80839860(Player* this, PlayState* play, s32 arg2) {
     s32 pad;
-    f32 var_fv0;
-
-    var_fv0 = (!(arg2 & 1) ? 5.8f : 3.5f);
+    f32 speed = (!(arg2 & 1) ? 5.8f : 3.5f);
 
     if (this->currentBoots == PLAYER_BOOTS_GIANT) {
-        var_fv0 *= 0.5f;
+        speed *= 0.5f;
     }
 
     //! FAKE
     if (arg2 == 2) {}
 
-    func_80834D50(play, this, D_8085C2A4[arg2].unk_0, var_fv0, NA_SE_VO_LI_SWORD_N);
+    func_80834D50(play, this, D_8085C2A4[arg2].unk_0, speed, NA_SE_VO_LI_SWORD_N);
 
     this->unk_AE8 = 1;
     this->unk_AE7 = arg2;
@@ -9962,8 +9960,6 @@ void Player_InitMode_3(PlayState* play, Player* this) {
     func_8082E920(play, this, (1 | 2 | 8 | 0x10 | 0x80));
 }
 
-void func_80834DB8(Player* this, LinkAnimationHeader* anim, f32 arg2, PlayState* play);
-
 void Player_InitMode_4(PlayState* play, Player* this) {
     func_80834DB8(this, &gameplay_keep_Linkanim_00DCD8, 12.0f, play);
     Player_SetAction(play, this, func_8085439C, 0);
@@ -10041,7 +10037,7 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
                                this->jointTable, this->morphTable, OBJECT_LINK_GORON_1_LIMB_MAX);
         }
 
-        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawFeet, this->ageProperties->unk_04);
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawFeet, this->ageProperties->shadowScale);
     }
 
     this->subCamId = CAM_ID_NONE;
@@ -14416,18 +14412,20 @@ void func_8084D4EC(Player* this, PlayState* play) {
     if (this->skelAnime.animation == &gameplay_keep_Linkanim_00DA70) {
         this->linearVelocity = 1.0f;
         if (LinkAnimation_OnFrame(&this->skelAnime, 8.0f)) {
-            f32 var_fv0 = this->wallHeight;
+            f32 speed = this->wallHeight;
 
-            var_fv0 = CLAMP_MAX(var_fv0, this->ageProperties->unk_0C);
+            speed = CLAMP_MAX(speed, this->ageProperties->unk_0C);
             if (this->stateFlags1 & PLAYER_STATE1_8000000) {
-                var_fv0 *= 0.085f;
+                speed *= 0.085f;
             } else {
-                var_fv0 *= 0.072f;
+                speed *= 0.072f;
             }
+
             if (this->transformation == PLAYER_FORM_HUMAN) {
-                var_fv0 += 1.0f;
+                speed += 1.0f;
             }
-            func_80834D50(play, this, NULL, var_fv0, NA_SE_VO_LI_AUTO_JUMP);
+
+            func_80834D50(play, this, NULL, speed, NA_SE_VO_LI_AUTO_JUMP);
             this->unk_AE8 = -1;
         }
     } else {
@@ -17726,24 +17724,24 @@ void func_808561B0(Player* this, PlayState* play) {
 
         temp_fv0_2 = this->unk_ABC;
         if (temp_fv0_2 >= 0.0f) {
-            f32 var_fv0; // sp30
+            f32 speed; // sp30
 
             sp38 = (this->unk_AE8 >= 10);
             var_v1 = -1;
-            var_fv0 = this->unk_B48 * this->actor.scale.y;
+            speed = this->unk_B48 * this->actor.scale.y;
             if (this->actor.floorBgId != BGCHECK_SCENE) {
                 dyna = DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId);
                 var_v1 = 0;
                 if ((dyna != NULL) && (dyna->actor.id == ACTOR_OBJ_ETCETERA) && (dyna->actor.params & 0x100)) {
                     var_v1 = 1;
-                    var_fv0 *= (f32)aux / 100.0f;
+                    speed *= (f32)aux / 100.0f;
                 }
             }
 
             Math_Vec3f_Copy(this->unk_AF0, &this->actor.world.pos);
             this->unk_ABC = 0.0f;
             this->actor.world.pos.y += temp_fv0_2 * this->actor.scale.y;
-            func_80834DB8(this, &gameplay_keep_Linkanim_00E2D0, var_fv0, play);
+            func_80834DB8(this, &gameplay_keep_Linkanim_00E2D0, speed, play);
             Player_SetAction(play, this, func_80856918, 1);
             this->boomerangActor = NULL;
 
