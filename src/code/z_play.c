@@ -83,7 +83,9 @@ void func_80165630(void) {
     D_801F6DFD = 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165658.s")
+void func_80165658(u32 arg0) {
+    SREG(90) = arg0;
+}
 
 void func_8016566C(u32 arg0) {
     SREG(90) = arg0;
