@@ -17,9 +17,59 @@ extern Struct_80140E80 D_801F6D38;
 extern Struct_80140E80* D_801F6D4C;
 extern HiresoStruct D_801F6D50;
 extern u8 D_801F6DFC;
-extern s8 D_801F6DFD;
+extern u8 D_801F6DFD;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165460.s")
+void func_80165460(PlayState* this) {
+    GraphicsContext* gfxCtx = this->state.gfxCtx;
+    s32 alpha;
+    Gfx* gfx;
+    Gfx* dlistHead;
+
+    if (SREG(93) != 0) {
+        alpha = SREG(92);
+
+        if (D_801F6DFD == 0) {
+            D_801F6DFD = 1;
+        }
+    } else if (SREG(91) != 0) {
+        alpha = SREG(90);
+
+        if (D_801F6DFD == 0) {
+            D_801F6DFD = 1;
+        }
+    } else {
+        alpha = 0;
+        D_801F6DFD = 0;
+    }
+
+    if (D_801F6DFD != 0) {
+        OPEN_DISPS(gfxCtx);
+
+        dlistHead = POLY_OPA_DISP;
+        gfx = Graph_GfxPlusOne(dlistHead);
+
+        gSPDisplayList(OVERLAY_DISP++, gfx);
+
+        this->pauseBgPreRender.fbuf = gfxCtx->curFrameBuffer;
+        this->pauseBgPreRender.fbufSave = this->unk_18E64;
+
+        if (D_801F6DFD == 2) {
+            func_80170AE0(&this->pauseBgPreRender, &gfx, alpha);
+        } else {
+            D_801F6DFD = 2;
+        }
+
+        func_801705B4(&this->pauseBgPreRender, &gfx);
+
+        gSPEndDisplayList(gfx++);
+
+        Graph_BranchDlist(dlistHead, gfx);
+
+        POLY_OPA_DISP = gfx;
+
+        CLOSE_DISPS(gfxCtx);
+    }
+}
 
 void func_80165608(void) {
     SREG(91) = 0;
