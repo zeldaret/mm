@@ -15595,7 +15595,7 @@
     0x80BC7BBC:("OceffWipe5_Draw",),
     0x80BC9270:("EnStoneheishi_Init",),
     0x80BC9330:("EnStoneheishi_Destroy",),
-    0x80BC935C:("func_80BC935C",),
+    0x80BC935C:("EnStoneheishi_SetAnimation",),
     0x80BC941C:("func_80BC941C",),
     0x80BC94B0:("func_80BC94B0",),
     0x80BC9560:("func_80BC9560",),

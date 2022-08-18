@@ -24,12 +24,19 @@ typedef struct EnStoneheishi {
     /* 0x26A */ s16 unk26A;
     /* 0x26C */ f32 endFrame;
     /* 0x270 */ s16 unk270;
-    /* 0x272 */ s16 unk272;
+    /* 0x272 */ s16 textIndex;
     /* 0x274 */ s16 unk274;
-    /* 0x276 */ u8 unk276;
-    /* 0x277 */ u8 unk277;
+    /* 0x276 */ u8 bottleStatus;
+    /* 0x277 */ u8 playerGivesBluePotion;
     /* 0x278 */ ColliderCylinder collider;
 } EnStoneheishi; // size = 0x2C4
+
+typedef enum EN_STONE_HEISHI_BOTTLE {
+    /* 0 */ BOTTLE_NONE,
+    /* 1 */ BOTTLE_EMPTY,
+    /* 2 */ BOTTLE_RED_POTION,
+    /* 3 */ BOTTLE_BLUE_POTION,
+} EN_STONE_HEISHI_BOTTLE;
 
 extern const ActorInit En_Stone_heishi_InitVars;
 
