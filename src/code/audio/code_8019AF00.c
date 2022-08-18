@@ -400,7 +400,7 @@ u8 sSeqFlags[] = {
     0,                                    // NA_BGM_END_CREDITS_2
 };
 
-s8 sSpecReverbs[20] = {
+s8 sSpecReverbs[] = {
     0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
@@ -4537,7 +4537,7 @@ void Audio_SplitBgmChannels(s8 volumeSplit) {
 
     if ((Audio_GetActiveSequence(SEQ_PLAYER_FANFARE) == NA_BGM_DISABLED) &&
         (Audio_GetActiveSequence(SEQ_PLAYER_BGM_SUB) != NA_BGM_ROMANI_RANCH)) {
-        for (i = 0; i < 2; i++) {
+        for (i = 0; i < ARRAY_COUNT(sBgmPlayers); i++) {
             if (i == 0) {
                 // Main Bgm SeqPlayer
                 volume = volumeSplit;
@@ -4691,7 +4691,7 @@ void Audio_StartSceneSequence(u16 seqId) {
     if ((sSeqFlags[sPrevSceneSeqId] & SEQ_FLAG_STORE_PREV_SPOT) &&
         (sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_STORE_SPOT)) {
         // Start the sequence from the spot where it last left off last time it was played in the scene
-        if ((sSeqSpot % 64) != 0) {
+        if ((sSeqSpot & 0x3F) != 0) {
             fadeInDuration = 30;
         }
 

@@ -134,11 +134,11 @@
 #define NA_BGM_DISABLED 0xFFFF
 
 typedef enum {
-    /* 0 */ SEQ_PLAYER_BGM_MAIN,
-    /* 1 */ SEQ_PLAYER_FANFARE,
-    /* 2 */ SEQ_PLAYER_SFX,
-    /* 3 */ SEQ_PLAYER_BGM_SUB,
-    /* 4 */ SEQ_PLAYER_AMBIENCE,
+    /*    0 */ SEQ_PLAYER_BGM_MAIN,
+    /*    1 */ SEQ_PLAYER_FANFARE,
+    /*    2 */ SEQ_PLAYER_SFX,
+    /*    3 */ SEQ_PLAYER_BGM_SUB,
+    /*    4 */ SEQ_PLAYER_AMBIENCE,
     /* 0xFF */ SEQ_PLAYER_INVALID = 0xFF
 } SequencePlayerId;
 
