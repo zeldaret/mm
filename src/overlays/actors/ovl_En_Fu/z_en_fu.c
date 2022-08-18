@@ -537,7 +537,7 @@ void func_80962660(EnFu* this, PlayState* play) {
                 player->stateFlags1 |= 0x20;
                 this->unk_53C = 0;
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
-                func_801A2BB8(NA_BGM_MINI_GAME_2);
+                func_801A2BB8(NA_BGM_TIMED_MINI_GAME);
                 if (this->unk_542 == 0) {
                     if (this->unk_546 == 1) {
                         func_80961EC8(play);
@@ -799,7 +799,7 @@ void func_80962F4C(EnFu* this, PlayState* play) {
             func_801A2C20();
             gSaveContext.unk_3DE0[4] = 0;
             gSaveContext.unk_3DD0[4] = 5;
-            func_801A3098(NA_BGM_GET_ITEM | 0x900);
+            Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
             func_8011B4E0(play, 1);
             this->unk_54A = 3;
             func_809632D0(this);

@@ -30,9 +30,9 @@
 typedef enum {
     /* 0 */ SOUNDMODE_STEREO,
     /* 1 */ SOUNDMODE_HEADSET,
-    /* 2 */ SOUNDMODE_SURROUND,
+    /* 2 */ SOUNDMODE_SURROUND_EXTERNAL,
     /* 3 */ SOUNDMODE_MONO,
-    /* 4 */ SOUNDMODE_SURROUND_EXTERNAL,
+    /* 4 */ SOUNDMODE_SURROUND,
 } SoundMode;
 
 typedef enum {
@@ -1039,7 +1039,7 @@ typedef struct {
     /* 0x204 */ u16 unk_28;
     /* 0x206 */ u16 unk_250;
     /* 0x208 */ u16 unk_252;
-    /* 0x20A */ u16 unk_254;
+    /* 0x20A */ u16 seqId;
     /* 0x20C */ u16 unk_256;
     /* 0x20E */ u16 unk_258;
     /* 0x210 */ u8 unk_260;
@@ -1051,7 +1051,7 @@ typedef struct {
     /* 0x219 */ u8 unk_4D;
     /* 0x21A */ u8 unk_4E;
     /* 0x21B */ u8 unk_21B;
-} unk_D_8016E750; // size = 0x21C
+} ActiveSequence; // size = 0x21C
 
 typedef struct {
     /* 0x0 */ u8 unk_0;
@@ -1066,7 +1066,7 @@ typedef enum {
     /* 4 */ BANK_SYSTEM,
     /* 5 */ BANK_OCARINA,
     /* 6 */ BANK_VOICE
-} SoundBankTypes;
+} SfxBankType;
 
 typedef enum {
     /* 0 */ SFX_STATE_EMPTY,
