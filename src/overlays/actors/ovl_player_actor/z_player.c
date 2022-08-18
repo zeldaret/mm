@@ -583,7 +583,7 @@ void func_8082DC28(Player* this) {
 
 void func_8082DC38(Player* this) {
     this->stateFlags2 &= ~PLAYER_STATE2_20000;
-    this->meleeWeaponState = PLAYER_MWA_FORWARD_SLASH_1H;
+    this->meleeWeaponState = 0;
     this->meleeWeaponInfo[2].active = false;
     this->meleeWeaponInfo[1].active = false;
     this->meleeWeaponInfo[0].active = false;
@@ -4620,7 +4620,7 @@ s32 func_80832F78(Player* this, f32* arg1, s16* outYaw, f32 arg3, PlayState* pla
 
 /**
  * The values of following arrays are used as indices for the `D_8085D054` array.
- * Each index correspond to a function which will be called on sequence until any of them return `true`.
+ * Each index correspond to a function which will be called sequentially until any of them return `true`.
  * Negative marks the end of the array.
  */
 s8 D_8085CFE4[] = { 13, 2, 4, 9, 10, 11, 8, -7 };
@@ -4987,20 +4987,21 @@ void func_80833AA0(Player* this, PlayState* play) {
     }
 }
 
+// TODO: this can be one array, but should it be?
 LinkAnimationHeader* D_8085D0D4[] = {
     &gameplay_keep_Linkanim_00DCA0,
     &gameplay_keep_Linkanim_00DC98,
     &gameplay_keep_Linkanim_00DB00,
     &gameplay_keep_Linkanim_00DAF8,
-};
-LinkAnimationHeader* D_8085D0E4[] = {
+    // };
+    // LinkAnimationHeader* D_8085D0E4[] = {
     &gameplay_keep_Linkanim_00DC90,
     &gameplay_keep_Linkanim_00D418,
     &gameplay_keep_Linkanim_00DAE8,
     &gameplay_keep_Linkanim_00D3F0,
 };
 
-void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 velocity, f32 yVelocity, s16 arg5,
+void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 speedXZ, f32 velocityY, s16 arg5,
                    s32 invincibilityTimer) {
     LinkAnimationHeader* anim = NULL;
 
@@ -5009,6 +5010,7 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 velocity, f32 yV
     }
 
     this->unk_B64 = 0;
+
     func_800B8E58(this, NA_SE_PL_DAMAGE);
 
     if (func_808339D4(play, this, -this->actor.colChkInfo.damage) == 0) {
@@ -5040,7 +5042,8 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 velocity, f32 yV
         Player_SetAction(play, this, func_80854800, 0);
         func_8082DB60(play, this, &gameplay_keep_Linkanim_00DC20);
         func_8082DAD4(this);
-        this->unk_AE8 = 0x14;
+
+        this->unk_AE8 = 20;
         this->actor.velocity.y = 0.0f;
 
         Player_RequestRumble(play, this, 255, 80, 150, SQ(0));
@@ -5052,8 +5055,8 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 velocity, f32 yV
             Player_RequestRumble(play, this, 180, 20, 50, SQ(0));
 
             if (arg2 == 1) {
-                this->linearVelocity = velocity * 1.5f;
-                this->actor.velocity.y = yVelocity * 0.7f;
+                this->linearVelocity = speedXZ * 1.5f;
+                this->actor.velocity.y = velocityY * 0.7f;
             } else {
                 this->linearVelocity = 4.0f;
                 this->actor.velocity.y = 0.0f;
@@ -5067,20 +5070,23 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 velocity, f32 yV
             Player_SetAction(play, this, func_8084BC64, 0);
 
             this->stateFlags3 |= PLAYER_STATE3_2;
+
             Player_RequestRumble(play, this, 255, 20, 150, SQ(0));
             func_8082DAD4(this);
 
             if (arg2 == 2) {
                 this->unk_AE8 = 4;
+
                 this->actor.speedXZ = 3.0f;
                 this->linearVelocity = 3.0f;
                 this->actor.velocity.y = 6.0f;
+
                 func_8082E5A8(play, this, D_8085BE84[PLAYER_ANIMGROUP_3][this->modelAnimType]);
                 Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_DAMAGE_S);
             } else {
-                this->actor.speedXZ = velocity;
-                this->linearVelocity = velocity;
-                this->actor.velocity.y = yVelocity;
+                this->actor.speedXZ = speedXZ;
+                this->linearVelocity = speedXZ;
+                this->actor.velocity.y = velocityY;
 
                 if (ABS_ALT(arg5) > 0x4000) {
                     anim = &gameplay_keep_Linkanim_00DC78;
@@ -5091,13 +5097,14 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 velocity, f32 yV
             }
             this->actor.bgCheckFlags &= ~1;
         } else if ((this->linearVelocity > 4.0f) && !func_80123420(this)) {
-            this->unk_B64 = 0x14;
+            this->unk_B64 = 20;
+
             Player_RequestRumble(play, this, 120, 20, 10, SQ(0));
             Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_DAMAGE_S);
 
             return;
         } else {
-            LinkAnimationHeader** var_v1 = D_8085D0D4;
+            LinkAnimationHeader** animPtr = D_8085D0D4;
 
             Player_SetAction(play, this, func_8084BBF0, 0);
             func_8082FC60(this);
@@ -5108,18 +5115,19 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 velocity, f32 yV
                 Player_RequestRumble(play, this, 180, 20, 100, SQ(0));
                 this->linearVelocity = 23.0f;
 
-                var_v1 = D_8085D0E4;
+                // animPtr = D_8085D0E4;
+                animPtr += 4;
             }
 
             if (ABS_ALT(arg5) <= 0x4000) {
-                var_v1 += 2;
+                animPtr += 2;
             }
 
             if (func_80123420(this)) {
-                var_v1++;
+                animPtr += 1;
             }
 
-            anim = *var_v1;
+            anim = *animPtr;
             Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_DAMAGE_S);
         }
 
@@ -5135,6 +5143,7 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 velocity, f32 yV
     func_8082DE50(play, this);
 
     this->stateFlags1 |= PLAYER_STATE1_4000000;
+
     if (anim != NULL) {
         func_8082DB90(play, this, anim);
     }
@@ -5247,6 +5256,14 @@ s32 func_808344C0(PlayState* play, Player* this) {
         this->flameTimers[i] = Rand_S16Offset(0, 200);
         i++;
     }
+    // for (i = 0; i < ARRAY_COUNT(this->flameTimers); i++) { this->flameTimers[i] = Rand_S16Offset(0, 200); }
+    // for (i = 0; i < ARRAY_COUNT(this->flameTimers);) {
+    //     this->flameTimers[i++] = Rand_S16Offset(0, 200);
+    // }
+    // for (i = 0; i < ARRAY_COUNT(this->flameTimers);) {
+    //     this->flameTimers[i] = Rand_S16Offset(0, 200);
+    //     i++;
+    // }
 
     this->isBurning = true;
     return func_808341F4(play, this);
@@ -5541,11 +5558,14 @@ s32 func_80834DFC(Player* this, PlayState* play) {
 void func_80835324(PlayState* play, Player* this, f32 arg2, s16 arg3) {
     Player_SetAction(play, this, func_8084D820, 0);
     func_8082DD2C(play, this);
+
     this->unk_A86 = -1;
     this->unk_AE7 = 1;
     this->unk_AE8 = 1;
+
     this->unk_3A0.x = Math_SinS(arg3) * arg2 + this->actor.world.pos.x;
     this->unk_3A0.z = Math_CosS(arg3) * arg2 + this->actor.world.pos.z;
+
     Player_AnimationPlayOnce(play, this, func_8082ED20(this));
 }
 
@@ -5576,7 +5596,7 @@ s32 func_80835428(PlayState* play, Player* this) {
  * The spawn value (`PlayState.curSpawn`) is set to a different value depending on the entrance used to enter the
  * scene, which allows these dynamic "return entrances" to link back to the previous scene.
  *
- * Seems unused on MM
+ * Seems unused in MM
  */
 u16 sReturnEntranceGroupData[] = {
     // 0xFE00
@@ -5643,7 +5663,7 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
             (func_808340D4(D_80862B08) && (this->unk_D5E == 0xC))) {
             sp34 = this->unk_D68 - (s32)this->actor.world.pos.y;
             if (!(this->stateFlags1 & (PLAYER_STATE1_800000 | PLAYER_STATE1_8000000 | PLAYER_STATE1_20000000)) &&
-                !(this->actor.bgCheckFlags & 1) && (sp34 < 0x190) && (D_80862B18 > 100.0f)) {
+                !(this->actor.bgCheckFlags & 1) && (sp34 < 400) && (D_80862B18 > 100.0f)) {
                 if ((this->unk_D5E != 5) && (this->unk_D5E != 0xC)) {
                     this->linearVelocity = 0.0f;
                 }
@@ -5662,7 +5682,7 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
                     if ((this->stateFlags1 & PLAYER_STATE1_8000000) && (this->unk_D5E == 5)) {
                         func_8019F128(NA_SE_OC_TUNAMI);
                         func_801A4058(5);
-                        gSaveContext.seqIndex = 0xFF;
+                        gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
                         gSaveContext.nightSeqIndex = 0xFF;
                     } else if (!(this->actor.bgCheckFlags & 1) && (this->unk_D5E == 0xC)) {
                         func_8019F128(NA_SE_OC_SECRET_WARP_IN);
@@ -5679,11 +5699,11 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
 
                 if (!(this->stateFlags1 & (PLAYER_STATE1_800000 | PLAYER_STATE1_8000000 | PLAYER_STATE1_20000000)) &&
                     (temp_v0_3 = func_800C99D4(&play->colCtx, poly, bgId), (temp_v0_3 != 0xA)) &&
-                    ((sp34 < 0x64) || (this->actor.bgCheckFlags & 1))) {
+                    ((sp34 < 100) || (this->actor.bgCheckFlags & 1))) {
                     if (temp_v0_3 == 0xB) {
                         func_8019F128(NA_SE_OC_SECRET_HOLE_OUT);
                         func_801A4058(5);
-                        gSaveContext.seqIndex = 0xFF;
+                        gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
                         gSaveContext.nightSeqIndex = 0xFF;
                     } else {
                         func_8085B74C(play);
@@ -5735,7 +5755,7 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
                             this->stateFlags1 |= PLAYER_STATE1_20000000;
                         } else {
                             func_80834104(play, this);
-                            this->unk_AE8 = 0x270F;
+                            this->unk_AE8 = 9999;
                             if (this->unk_D5E == 5) {
                                 this->unk_AE7 = -1;
                             } else {
@@ -5766,6 +5786,7 @@ Actor* Player_SpawnFairy(PlayState* play, Player* this, Vec3f* translation, Vec3
     Vec3f pos;
 
     func_80835BC8(this, translation, arg3, &pos);
+
     return Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, pos.x, pos.y, pos.z, 0, 0, 0, elfParams);
 }
 
@@ -6511,6 +6532,7 @@ void func_80837C20(PlayState* play, Player* this) {
 
     func_8083172C(play, this, func_8084F4E8, 0);
     this->actor.velocity.y = 0.0f;
+
     this->unk_AE8 = sp1C;
     this->unk_AE7 = sp18;
 }
@@ -6529,18 +6551,18 @@ void func_80837C78(PlayState* play, Player* this) {
 }
 
 void func_80837CEC(PlayState* play, Player* this, CollisionPoly* arg2, f32 arg3, LinkAnimationHeader* anim) {
-    f32 sp24 = arg2->normal.x * SHT_MINV;
-    f32 sp20 = arg2->normal.z * SHT_MINV;
+    f32 nx = COLPOLY_GET_NORMAL(arg2->normal.x);
+    f32 nz = COLPOLY_GET_NORMAL(arg2->normal.z);
 
     Player_SetAction(play, this, func_8084F1B8, 0);
     func_8082DE50(play, this);
     Player_AnimationPlayOnce(play, this, anim);
 
-    this->actor.world.pos.x -= (arg3 + 1.0f) * sp24;
-    this->actor.world.pos.z -= (arg3 + 1.0f) * sp20;
-    this->actor.shape.rot.y = Math_FAtan2F(sp20, sp24);
-
+    this->actor.world.pos.x -= (arg3 + 1.0f) * nx;
+    this->actor.world.pos.z -= (arg3 + 1.0f) * nz;
+    this->actor.shape.rot.y = Math_FAtan2F(nz, nx);
     this->currentYaw = this->actor.shape.rot.y;
+
     func_8082DAD4(this);
     this->actor.velocity.y = 0.0f;
     func_8082E6D0(this);
@@ -6686,7 +6708,7 @@ void func_8083827C(Player* this, PlayState* play) {
             return;
         }
 
-        if ((D_80862B1C == 7) || (this->meleeWeaponState != PLAYER_MWA_FORWARD_SLASH_1H) ||
+        if ((D_80862B1C == 7) || (this->meleeWeaponState != 0) ||
             ((this->skelAnime.moveFlags & 8) && func_808381F8(play, this))) {
             Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
             if (this->linearVelocity > 0.0f) {
@@ -6705,15 +6727,17 @@ void func_8083827C(Player* this, PlayState* play) {
             ((this->transformation != PLAYER_FORM_DEKU) || (this->unk_B67 != 0)) && (this->actor.bgCheckFlags & 4)) {
             if (!(this->stateFlags1 & PLAYER_STATE1_8000000)) {
                 if ((D_80862B1C != 6) && (D_80862B1C != 9) && (D_80862B18 > 20.0f) &&
-                    (this->meleeWeaponState == PLAYER_MWA_FORWARD_SLASH_1H)) {
+                    (this->meleeWeaponState == 0)) {
                     if ((ABS_ALT(temp_t0) < 0x2000) && (this->linearVelocity > 3.0f)) {
                         if (!(this->stateFlags1 & PLAYER_STATE1_800)) {
                             if (((this->transformation == PLAYER_FORM_ZORA) &&
                                  CHECK_BTN_ALL(D_80862B44->cur.button, BTN_A)) ||
                                 ((D_80862B1C == 0xB) && (this->transformation != PLAYER_FORM_GORON) &&
                                  (this->transformation != PLAYER_FORM_DEKU))) {
+
                                 sp48 = func_80835CD8(play, this, &D_8085D154, &sp4C, &sp60, &sp5C);
                                 sp44 = this->actor.world.pos.y;
+
                                 if (WaterBox_GetSurface1(play, &play->colCtx, sp4C.x, sp4C.z, &sp44, &sp58) &&
                                     ((sp44 - sp48) > 50.0f)) {
                                     func_80834DB8(this, &gameplay_keep_Linkanim_00DE58, 6.0f, play);
