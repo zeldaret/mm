@@ -4135,6 +4135,7 @@ void func_80831944(PlayState* play, Player* this) {
     }
 }
 
+// Proposed name: Player_UseItem
 void func_80831990(PlayState* play, Player* this, ItemID item) {
     PlayerActionParam actionParam = Player_ItemToActionParam(this, item);
 
@@ -4146,7 +4147,6 @@ void func_80831990(PlayState* play, Player* this, ItemID item) {
         ((actionParam == PLAYER_AP_NONE) || !(this->stateFlags1 & PLAYER_STATE1_8000000) ||
          (actionParam == PLAYER_AP_MASK_ZORA) ||
          ((this->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) && (this->actor.bgCheckFlags & 1)))) {
-
         s32 var_v1 = ((actionParam >= PLAYER_AP_MASK_TRUTH) && (actionParam <= PLAYER_AP_MASK_DEKU) &&
                       ((this->transformation != PLAYER_FORM_HUMAN) || (actionParam >= PLAYER_AP_MASK_GIANT)));
         CollisionPoly* sp5C;
@@ -4160,9 +4160,9 @@ void func_80831990(PlayState* play, Player* this, ItemID item) {
             ((actionParam == PLAYER_AP_PICTO_BOX) && (this->talkActor != NULL) &&
              (this->exchangeItemId > PLAYER_AP_NONE))) {
             if (var_v1) {
-                s32 playerForm = (actionParam < PLAYER_AP_MASK_FIERCE_DEITY)
-                                     ? PLAYER_FORM_HUMAN
-                                     : actionParam - PLAYER_AP_MASK_FIERCE_DEITY;
+                PlayerTransformation playerForm = (actionParam < PLAYER_AP_MASK_FIERCE_DEITY)
+                                                      ? PLAYER_FORM_HUMAN
+                                                      : actionParam - PLAYER_AP_MASK_FIERCE_DEITY;
 
                 if (((this->currentMask != PLAYER_MASK_GIANT) && (actionParam == PLAYER_AP_MASK_GIANT) &&
                      ((gSaveContext.unk_3F28 != 0) || (gSaveContext.save.playerData.magic == 0))) ||
@@ -4173,20 +4173,18 @@ void func_80831990(PlayState* play, Player* this, ItemID item) {
                     return;
                 }
             }
-            if ((actionParam == PLAYER_AP_MAGIC_BEANS) &&
-                (gSaveContext.save.inventory.ammo[gItemSlots[ITEM_MAGIC_BEANS]] == 0)) {
+            if ((actionParam == PLAYER_AP_MAGIC_BEANS) && (AMMO(ITEM_MAGIC_BEANS) == 0)) {
                 play_sound(NA_SE_SY_ERROR);
             } else {
                 this->heldItemActionParam = actionParam;
                 this->unk_AA5 = 5;
             }
-        } else if (((actionParam == PLAYER_AP_STICK) &&
-                    (gSaveContext.save.inventory.ammo[gItemSlots[ITEM_STICK]] == 0)) ||
+        } else if (((actionParam == PLAYER_AP_STICK) && (AMMO(ITEM_STICK) == 0)) ||
                    (((play->unk_1887D != 0) || (play->unk_1887E != 0)) &&
                     (play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].length >= 5)) ||
                    ((play->unk_1887D == 0) && (play->unk_1887E == 0) &&
                     ((explAction = Player_ActionToExplosive(this, actionParam)) >= 0) &&
-                    ((gSaveContext.save.inventory.ammo[gItemSlots[sPlayerExplosiveInfo[explAction].itemId]] == 0) ||
+                    ((AMMO(sPlayerExplosiveInfo[explAction].itemId) == 0) ||
                      (play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].length >= 3)))) {
             play_sound(NA_SE_SY_ERROR);
         } else if (actionParam == PLAYER_AP_LENS) {
@@ -4197,7 +4195,7 @@ void func_80831990(PlayState* play, Player* this, ItemID item) {
             }
         } else if ((actionParam == PLAYER_AP_NUT) &&
                    ((this->transformation != PLAYER_FORM_DEKU) || (this->heldItemButton != 0))) {
-            if (gSaveContext.save.inventory.ammo[gItemSlots[ITEM_NUT]] != 0) {
+            if (AMMO(ITEM_NUT) != 0) {
                 func_8083A658(play, this);
             } else {
                 play_sound(NA_SE_SY_ERROR);
@@ -18930,7 +18928,7 @@ void func_80859890(PlayState* play, Player* this, UNK_TYPE arg2) {
         if (MREG(68) >= 0x100) {
             MREG(64) = -0x40;
             MREG(68) = 0xFF;
-            gSaveContext.save.playerForm = 4;
+            gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
             this->actor.update = func_8012301C;
             this->actor.draw = NULL;
             this->unk_AE7 = 0;
