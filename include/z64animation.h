@@ -12,7 +12,7 @@ struct SkelAnime;
 struct PlayerAnimationFrame;
 
 #define LINK_ANIMETION_OFFSET(addr, offset) \
-    (SEGMENT_ROM_START(link_animetion) + ((u32)addr & 0xFFFFFF) + ((u32)offset))
+    (SEGMENT_ROM_START(link_animetion) + ((uintptr_t)addr & 0xFFFFFF) + ((uintptr_t)offset))
 #define LIMB_DONE 0xFF
 #define ANIMATION_ENTRY_MAX 50
 

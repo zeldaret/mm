@@ -416,7 +416,7 @@ typedef struct PlayerAnimationFrame {
 
 #define PLAYER_LIMB_BUF_SIZE (ALIGN16(sizeof(PlayerAnimationFrame)) + 0xF)
 
-typedef struct {
+typedef struct PlayerAgeProperties {
     /* 0x00 */ f32 unk_00; // ceilingCheckHeight
     /* 0x04 */ f32 shadowScale;
     /* 0x08 */ f32 unk_08;
