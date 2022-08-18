@@ -411,7 +411,7 @@ typedef struct {
 } AmbienceDataIO; // size = 0x68
 
 AmbienceDataIO sAmbienceData[20] = {
-    // AMBIENCE_CHANNEL_STREAM_0
+    // AMBIENCE_ID_00
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
@@ -468,7 +468,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_1
+    // AMBIENCE_ID_01
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
@@ -525,7 +525,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_2
+    // AMBIENCE_ID_02
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
@@ -582,7 +582,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_3
+    // AMBIENCE_ID_03
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
@@ -639,7 +639,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_4
+    // AMBIENCE_ID_04
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
@@ -700,7 +700,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_5
+    // AMBIENCE_ID_05
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
@@ -757,7 +757,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_6
+    // AMBIENCE_ID_06
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
@@ -814,7 +814,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_7
+    // AMBIENCE_ID_07
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
@@ -830,7 +830,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_8
+    // AMBIENCE_ID_08
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_RAIN) |
@@ -853,7 +853,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_9
+    // AMBIENCE_ID_09
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
@@ -888,7 +888,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_A
+    // AMBIENCE_ID_0A
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_6) | (1 << AMBIENCE_CHANNEL_RAIN) |
@@ -911,7 +911,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_B
+    // AMBIENCE_ID_0B
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
@@ -946,7 +946,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_C
+    // AMBIENCE_ID_0C
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
@@ -974,7 +974,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_D
+    // AMBIENCE_ID_0D
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_RAIN) |
@@ -997,7 +997,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_E
+    // AMBIENCE_ID_0E
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_RAIN) |
@@ -1020,7 +1020,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_F
+    // AMBIENCE_ID_0F
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_RAIN) |
@@ -1043,7 +1043,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_10
+    // AMBIENCE_ID_10
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_RAIN) |
@@ -1066,7 +1066,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_11
+    // AMBIENCE_ID_11
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_RAIN) |
@@ -1089,7 +1089,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_12
+    // AMBIENCE_ID_12
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
@@ -1104,7 +1104,7 @@ AmbienceDataIO sAmbienceData[20] = {
         },
     },
 
-    // AMBIENCE_13
+    // AMBIENCE_ID_13
     {
         // Init channel mask
         ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_RAIN) |
@@ -4941,7 +4941,6 @@ void Audio_SetSequenceMode(u8 seqMode) {
 
             if ((seqMode == SEQ_MODE_STILL) && (sNumFramesStill < 30) && (sNumFramesMoving > 20)) {
                 seqMode = SEQ_MODE_DEFAULT;
-                if (!seqMode && !seqMode) {}
             }
 
             sPrevSeqMode = seqMode;
@@ -4967,6 +4966,7 @@ void Audio_UpdateEnemyBgmVolume(f32 dist) {
 
             sBgmEnemyVolume = ((350.0f - adjDist) * 127.0f) / 350.0f;
             Audio_SetVolumeScale(SEQ_PLAYER_BGM_SUB, 3, sBgmEnemyVolume, 10);
+
             if ((seqId >= NA_BGM_TERMINA_FIELD) && !(sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_FANFARE_KAMARO)) {
                 Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 3, (0x7F - sBgmEnemyVolume), 10);
             }
@@ -5060,10 +5060,9 @@ void Audio_SetAmbienceChannelIO(u8 channelIndexRange, u8 ioPort, u8 ioData) {
     }
 
     // channelIndexRange = 01 on ioPort 1
-    if (((channelIndexRange << 8) + (u32)ioPort) == ((1 << 8) | (u32)1)) {
-        if (Audio_GetActiveSequence(SEQ_PLAYER_BGM_SUB) != NA_BGM_ROMANI_RANCH) {
-            D_801FD3A8 = 0;
-        }
+    if ((((channelIndexRange << 8) + (u32)ioPort) == ((1 << 8) | (u32)1)) &&
+        (Audio_GetActiveSequence(SEQ_PLAYER_BGM_SUB) != NA_BGM_ROMANI_RANCH)) {
+        D_801FD3A8 = 0;
     }
 
     firstChannelIndex = channelIndexRange >> 4;
