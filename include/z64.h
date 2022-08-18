@@ -1193,7 +1193,7 @@ struct PlayState {
     /* 0x18E54 */ SceneTableEntry* loadedScene;
     /* 0x18E58 */ UNK_PTR unk_18E58;
     /* 0x18E5C */ UNK_PTR unk_18E5C;
-    /* 0x18E60 */ UNK_PTR unk_18E60;
+    /* 0x18E60 */ void* unk_18E60;
     /* 0x18E64 */ void* unk_18E64;
     /* 0x18E68 */ void* unk_18E68;
     /* 0x18E6C */ char unk_18E6C[0x3EC];

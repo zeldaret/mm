@@ -116,7 +116,6 @@ void func_80165E04(void) {
     SREG(89) = 1;
 }
 
-
 void func_80165E1C(PreRender* prerender) {
     PreRender_ApplyFilters(prerender);
     func_801656A4(D_80780000, prerender->fbufSave, 0x140, 0x50, 0x40, 0xEF, 0xAF, 8);
@@ -379,10 +378,9 @@ void func_80167DE4(PlayState* play) {
             D_801F6D50.unk_00 = 0;
         }
     } else {
-        if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_L) || 
-        CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B) ||
-        CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_START) || 
-        (gIrqMgrResetStatus != 0)) {
+        if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_L) ||
+            CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B) ||
+            CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_START) || (gIrqMgrResetStatus != 0)) {
             D_801F6DFC = 0;
             play->pauseCtx.unk_1F0 = 0;
             D_801F6D50.unk_00 = 0;
@@ -401,7 +399,46 @@ void func_80167DE4(PlayState* play) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80167F0C.s")
+void func_80167F0C(PlayState* this) {
+    Gfx* sp34;
+    Gfx* sp30;
+    GraphicsContext* gfxCtx;
+
+    if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != 0)) {
+        KaleidoScopeCall_Draw(this);
+    }
+
+    if (gSaveContext.gameMode == 0) {
+        func_8011F0E0(this);
+    }
+
+    if (((this->pauseCtx.state == 0) && (this->pauseCtx.debugEditor == 0)) || (this->msgCtx.currentTextId != 0xFF)) {
+        func_80156758(this);
+    }
+
+    if (this->gameOverCtx.state != 0) {
+        GameOver_FadeLights(this);
+    }
+
+    if (gSaveContext.screenScaleFlag != 0) {
+        gfxCtx = this->state.gfxCtx;
+        D_801F6D4C->scale = gSaveContext.screenScale / 1000.0f;
+
+        OPEN_DISPS(gfxCtx);
+
+        sp30 = POLY_OPA_DISP;
+        sp34 = Graph_GfxPlusOne(sp30);
+        gSPDisplayList(OVERLAY_DISP++, sp34);
+
+        func_80141778(D_801F6D4C, &sp34, this->unk_18E60, gfxCtx);
+
+        gSPEndDisplayList(sp34++);
+        Graph_BranchDlist(sp30, sp34);
+        POLY_OPA_DISP = sp34;
+
+        CLOSE_DISPS(gfxCtx);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Draw.s")
 
