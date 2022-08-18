@@ -2603,7 +2603,7 @@ void Play_Init(GameState* gameState);
 // void func_8016EA90(void);
 // void func_8016F1A8(void);
 // void func_8016F4EC(void);
-void func_8016F5A8(PlayState* play, s8* pcParm2, Input* iParm3);
+void func_8016F5A8(PlayState* play, HiresoStruct* arg1, Input* input);
 void func_8016FC78(HiresoStruct* this);
 void func_8016FC98(HiresoStruct* this);
 void PreRender_SetValuesSave(PreRender* this, u32 width, u32 height, void* fbuf, void* zbuf, void* cvg);

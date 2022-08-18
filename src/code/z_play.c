@@ -372,7 +372,34 @@ Input* D_801D0D60 = NULL;
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80167DE4.s")
+void func_80167DE4(PlayState* play) {
+    if (D_801F6DFC == 0) {
+        if (play->pauseCtx.unk_1F0 != 0) {
+            D_801F6DFC = 1;
+            D_801F6D50.unk_00 = 0;
+        }
+    } else {
+        if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_L) || 
+        CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B) ||
+        CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_START) || 
+        (gIrqMgrResetStatus != 0)) {
+            D_801F6DFC = 0;
+            play->pauseCtx.unk_1F0 = 0;
+            D_801F6D50.unk_00 = 0;
+            play->msgCtx.msgLength = 0;
+            play->msgCtx.msgMode = 0;
+            play->msgCtx.currentTextId = 0;
+            play->msgCtx.stateTimer = 0;
+            play_sound(NA_SE_SY_CANCEL);
+        }
+    }
+    if (D_801F6DFC != 0) {
+        func_8016F5A8(play, &D_801F6D50, play->state.input);
+        func_8015680C(play);
+    } else {
+        Play_Update(play);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80167F0C.s")
 
