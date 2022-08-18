@@ -4320,7 +4320,7 @@
     0x8082F5A4:("func_8082F5A4",),
     0x8082F5C0:("func_8082F5C0",),
     0x8082F5FC:("func_8082F5FC",),
-    0x8082F62C:("func_8082F62C",),
+    0x8082F62C:("Player_SpawnExplosive",),
     0x8082F7F4:("func_8082F7F4",),
     0x8082F8A0:("func_8082F8A0",),
     0x8082F8BC:("func_8082F8BC",),

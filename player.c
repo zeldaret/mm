@@ -1165,9 +1165,9 @@ void (*D_8085CB3C[0x53])(PlayState*, Player*) = {
     func_8082F5C0,
     func_8082F5C0,
     func_8082F7F4,
-    func_8082F62C,
-    func_8082F62C,
-    func_8082F62C,
+    Player_SpawnExplosive,
+    Player_SpawnExplosive,
+    Player_SpawnExplosive,
     func_8082F8A0,
     func_8082F5C0,
     func_8082F594,
@@ -1260,7 +1260,7 @@ s8 D_8085CD00[6][6] = {
     { 8, -5, -3, -6, 8, 0xB },
     { 8, -5, -3, -6, 8, 0xB },
 };
-struct_8085CD24 D_8085CD24[3] = { { 6, 9 }, { 0xC, 9 }, { 7, 0x6A } };
+struct_8085CD24 sPlayerExplosiveInfo[3] = { { 6, 9 }, { 0xC, 9 }, { 7, 0x6A } };
 struct_8085CD30 D_8085CD30[0x22] = {
     {
         (LinkAnimationHeader* )0x0400D868,
@@ -3118,7 +3118,7 @@ void func_8082F5FC(Player* this, Actor* actor) {
     this->stateFlags1 |= 0x800;
 }
 
-void func_8082F62C(PlayState* play, Player* this) {
+void Player_SpawnExplosive(PlayState* play, Player* this) {
     s32 sp4C;
     struct_8085CD24* sp48;
     Actor* sp44;
@@ -3134,7 +3134,7 @@ void func_8082F62C(PlayState* play, Player* this) {
         return;
     }
     temp_v0 = Player_GetExplosiveHeld(this);
-    temp_t1 = &D_8085CD24[temp_v0];
+    temp_t1 = &sPlayerExplosiveInfo[temp_v0];
     if ((temp_v0 == 1) && (gSaveContext.powderKegTimer == 0)) {
         gSaveContext.powderKegTimer = 0xC8;
     }
