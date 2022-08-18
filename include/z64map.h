@@ -6,6 +6,8 @@
 
 /* z_map_data */
 
+#define MAPDATA_SOURCE_MAP_I_STATIC 1
+
 typedef struct {
     /* 0x00 */ TexturePtr lmapTex; //minimap texture
     /* 0x04 */ u8 unk4;
@@ -89,6 +91,8 @@ typedef struct {
 /* z_map_data */
 TexturePtr func_8010958C(s32);
 
+s16 func_80109F78(s32);
+s32 func_80109BA0(s32);
 s32 func_80109714(s32);
 s32 MapData_GetIMapSize(s32);
 s32 func_80109A98(s32);
@@ -97,6 +101,6 @@ s32 func_801096D4(s32 arg0);
 void func_8010983C(s32 arg0, s32 *arg1);
 void func_801097C8(s32 arg0, s32* arg1, s32* arg2);
 void func_80109754(s32 arg0, s32 *arg1, s32 *arg2);
-
-void func_80178E3C(u8*, s32, s32, s32);
+void func_80109D40(s32, s32*, s32*);
+void func_80109DD8(s32, s32*, s32*);
 #endif

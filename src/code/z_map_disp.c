@@ -2,22 +2,6 @@
 
 void MapDisp_DestroyIMap(PlayState* play);
 void MapDisp_InitIMap(PlayState* play);
-void func_80103090(MinimapEntry*, s32*, s32*);
-void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot);
-void func_80106644(PlayState* play, s32 x, s32 z, s32 rot);
-s32 func_801039EC(PlayState* play);
-void func_80103A58(PlayState* play, Actor* actor);
-
-void func_80106D5C(PlayState*, s32, s32, s32, s32, f32, s32);
-void func_80107B78(PlayState*, s32, s32, s32, s32, f32);
-void func_80108124(PlayState*, s32, s32, s32, s32, f32, s32);
-void func_80108558(PlayState*, s32, s32, s32, s32, f32, s32);
-s32 func_80108A64(PlayState*);
-s32 func_80109BA0(s32);
-s16 func_80109F78(s32);
-
-void func_80109D40(s32, s32*, s32*, void*);
-void func_80109DD8(s32, s32*, s32*);
 
 extern s32          D_801BEAD0[4]; // G_IM_SIZ
 extern s32          D_801BEAE0[4]; // siz_LOAD_BLOCK
@@ -54,9 +38,9 @@ extern TexturePtr   D_02003F20;
 extern Gfx          D_0401ED00[];
 extern TexturePtr   D_0C000000;
 
-void func_80102E40(s32 arg0, s32 arg1) {
-    if (func_80109A98(arg1) != 0) {
-        func_80178E3C(SEGMENT_ROM_START(map_i_static), arg1, arg0, func_80109A98(arg1));
+void MapDisp_GetIMapTexture(void* dst, s32 iMapId) {
+    if (func_80109A98(iMapId) != 0) {
+        func_80178E3C(SEGMENT_ROM_START(map_i_static), iMapId, dst, func_80109A98(iMapId));
     }
 }
 
@@ -210,10 +194,13 @@ void func_801031D0(PlayState* play, TexturePtr arg1, s32 arg2, s32 arg3, s32 arg
     }
 }
 #else
+void func_801031D0(PlayState* play, TexturePtr arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_801031D0.s")
 #endif
 
-s32 func_801039EC(PlayState *play) {
+// Tests if the map data should be rotated 180 degrees
+// SCENE_35TAKI is the only scene with data flipped in this manner.
+s32 MapDisp_IsDataRotated(PlayState *play) {
     if (play->sceneNum == SCENE_35TAKI) {
         return true;
     }
@@ -278,7 +265,7 @@ void func_80103A58(PlayState *play, Actor *actor) {
             var_v0 = spAC;
         }
         spC0 = 1.0f / (f32) var_v0;
-        if (func_801039EC(play) == 0) {
+        if (!MapDisp_IsDataRotated(play)) {
             spD8 = (s32) ((actor->world.pos.x - (f32) spDC->unk2) * spC0) + D_801BEBB8.unk8 + D_801BEBB8.unkC - D_801BEBB8.unk8 + spD0;
             spD4 = (s32) ((actor->world.pos.z - (f32) spDC->unk6) * spC0) + D_801BEBB8.unkA + D_801BEBB8.unkE - D_801BEBB8.unkA + spCC;
         } else {
@@ -299,7 +286,7 @@ void func_80103A58(PlayState *play, Actor *actor) {
                 Matrix_Translate((f32) spD8 - 160.0f, 120.0f - (f32) spD4, 0.0f, MTXMODE_NEW);
                 Matrix_RotateXFApply(-1.6f);
                 spA2 = (s32) (0x7FFF - actor->focus.rot.y) / 1024;
-                if (func_801039EC(play) != 0) {
+                if (MapDisp_IsDataRotated(play)) {
                     spA2 += 0x7FFF;
                 }
                 Matrix_RotateYF((f32) spA2 / 10.0f, MTXMODE_APPLY);
@@ -367,6 +354,7 @@ void func_80103A58(PlayState *play, Actor *actor) {
     }
 }
 #else
+void func_80103A58(PlayState* play, Actor* actor);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80103A58.s")
 #endif
 
@@ -433,7 +421,7 @@ void func_801045AC(PlayState* play, Actor* actor) {
             var_v1 = sp4C;
         }
         sp5C = 1.0f / var_v1;
-        if (func_801039EC(play) == 0) {
+        if (!MapDisp_IsDataRotated(play)) {
             sp78 = (((s32) ((actor->world.pos.x - sp7C->unk2) * sp5C) + D_801BEBB8.unk8 + D_801BEBB8.unkC) - D_801BEBB8.unk8) + sp70;
             sp74 = (((s32) ((actor->world.pos.z - sp7C->unk6) * sp5C) + D_801BEBB8.unkA + D_801BEBB8.unkE) - D_801BEBB8.unkA) + sp6C;
         } else {
@@ -509,7 +497,6 @@ void func_80104C80(PlayState* play) {
     if (&play->objectCtx) {}
 }
 
-//init
 void MapDisp_Init(PlayState* play) {
     s32 i;
 
@@ -680,7 +667,6 @@ void func_8010534C(PlayState* play) {
     D_801BEBB8.unk58 = 0;
 }
 
-#ifdef NON_MATCHING
 void func_8010549C(PlayState* globalCtx, void* segmentAddress) {
     MinimapEntry* var_v1;
     MinimapList* temp_v0;
@@ -694,7 +680,7 @@ void func_8010549C(PlayState* globalCtx, void* segmentAddress) {
 
         for (i = 0; i < D_801BEC1C; i++)
         {
-            D_801F5130[i] = var_v1[i];
+            D_801F5130[i] = *var_v1++;
         }
         
         D_801BEC14.entry = D_801F5130;
@@ -703,17 +689,14 @@ void func_8010549C(PlayState* globalCtx, void* segmentAddress) {
             D_801BEBB8.unk32 = globalCtx->colCtx.colHeader->minBounds.z;
             D_801BEBB8.unk34 = globalCtx->colCtx.colHeader->maxBounds.x - globalCtx->colCtx.colHeader->minBounds.x;
             D_801BEBB8.unk36 = globalCtx->colCtx.colHeader->maxBounds.z - globalCtx->colCtx.colHeader->minBounds.z;
-            D_801BEBB8.unk38 = (s16) (D_801BEBB8.unk30 + (D_801BEBB8.unk34 * 0.5f));
-            D_801BEBB8.unk3A = (s16) (D_801BEBB8.unk32 + (D_801BEBB8.unk36 * 0.5f));
+            D_801BEBB8.unk38 = D_801BEBB8.unk30 + (D_801BEBB8.unk34 * 0.5f);
+            D_801BEBB8.unk3A = D_801BEBB8.unk32 + (D_801BEBB8.unk36 * 0.5f);
         }
     }
     D_801BEBB8.unk0 = &D_801BEC14;
     func_80104F34(globalCtx);
     func_8010534C(globalCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_8010549C.s")
-#endif
 
 void func_8010565C(PlayState* play, s32 num, void* segmentAddress) {
     MinimapChest* var_v1;
@@ -812,8 +795,6 @@ void func_80105B34(PlayState* play) {
     }
 }
 
-#ifdef NON_MATCHING
-//https://decomp.me/scratch/oK0wd
 void func_80105C40(s16 arg0) {
     MinimapEntry* temp_s0;
     MinimapEntry* sp58;
@@ -823,11 +804,6 @@ void func_80105C40(s16 arg0) {
     s32 sp48;
     s32 sp44;
     s32 sp40;
-    s32 sp3C;
-    s32 sp38;
-    s32 var_v0;
-    s32 pad;
-    s32 sp2C;
 
     if ((D_801BEBB8.unk0 != NULL) && (D_801BEC1C != 0) && (arg0 != -1)) {
         temp_s0 = &D_801BEBB8.unk0->entry[arg0];
@@ -867,20 +843,27 @@ void func_80105C40(s16 arg0) {
                 D_801BEBB8.unkE = D_801BEBB8.unkA;
                 return;
             }
-            func_801030F4(sp58, &sp3C, &sp38);
-            //temp_a0 = ;
-            var_v0 = D_801BEBB8.unk0->unk4;
-            if (D_801BEBB8.unk0->unk4 == 0) {
-                var_v0 = 0x14;
-            } else if (D_801BEBB8.unk0->unk4 == -1) {
-                func_801030B4(temp_s0, &sp2C);
-                var_v0 = sp2C;
+            else {
+                s32 sp3C;
+                s32 sp38;
+                s32 var_v0;
+                s32 pad;
+                func_801030F4(sp58, &sp3C, &sp38);
+                //temp_a0 = ;
+                var_v0 = D_801BEBB8.unk0->unk4;
+                if (D_801BEBB8.unk0->unk4 == 0) {
+                    var_v0 = 0x14;
+                } else if (D_801BEBB8.unk0->unk4 == -1) {
+                    s32 sp2C;
+                    func_801030B4(temp_s0, &sp2C);
+                    var_v0 = sp2C;
+                }
+                //temp_fv0 = ;
+                D_801BEBB8.unk1C = (s16) (s32) (((f32) sp44 + (((f32) sp58->unk2 - (f32) temp_s0->unk2) * (1.0f / var_v0))) - (f32) sp3C);
+                D_801BEBB8.unk1E = (s16) (s32) (((f32) sp40 + (((f32) sp58->unk6 - (f32) temp_s0->unk6) * (1.0f / var_v0))) - (f32) sp38);
+                D_801BEBB8.unkC = sp54 - D_801BEBB8.unk1C;
+                D_801BEBB8.unkE = sp50 - D_801BEBB8.unk1E;
             }
-            //temp_fv0 = ;
-            D_801BEBB8.unk1C = (s16) (s32) (((f32) sp44 + (((f32) sp58->unk2 - (f32) temp_s0->unk2) * (1.0f / var_v0))) - (f32) sp3C);
-            D_801BEBB8.unk1E = (s16) (s32) (((f32) sp40 + (((f32) sp58->unk6 - (f32) temp_s0->unk6) * (1.0f / var_v0))) - (f32) sp38);
-            D_801BEBB8.unkC = sp54 - D_801BEBB8.unk1C;
-            D_801BEBB8.unkE = sp50 - D_801BEBB8.unk1E;
         }
         else {
             D_801BEBB8.unk1C = D_801BEBB8.unk1E = 0;
@@ -910,9 +893,6 @@ void func_80105C40(s16 arg0) {
     }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80105C40.s")
-#endif
 
 #ifdef NON_MATCHING
 //https://decomp.me/scratch/WiRnZ
@@ -925,22 +905,22 @@ void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot) {
     s32 sp58;
     s32 sp54;
     s32 var_v0;
-    f32 sp4C;
-    s32 sp48;
 
     sp6C = &D_801BEBB8.unk0->entry[D_801BEBB8.curRoom];
     if (sp6C->unk0 != 0xFFFF) {
+    f32 sp4C;
         func_801030F4(sp6C, &sp60, &sp5C);
         func_80103090(sp6C, &sp58, &sp54);
         var_v0 = D_801BEBB8.unk0->unk4;
         if (D_801BEBB8.unk0->unk4 == 0) {
-            var_v0 = 0x14;
+            var_v0 = 20;
         } else if (D_801BEBB8.unk0->unk4 == -1) {
+            s32 sp48;
             func_801030B4(sp6C, &sp48);
             var_v0 = sp48;
         }
         sp4C = (1.0f / var_v0);
-        if (func_801039EC(play) == 0) {
+        if (!MapDisp_IsDataRotated(play)) {
             sp68 = (s32) ((x - (f32)sp6C->unk2) * sp4C) + D_801BEBB8.unk8 + (D_801BEBB8.unkC - D_801BEBB8.unk8) + sp60;
             sp64 = (s32) ((z - (f32)sp6C->unk6) * sp4C) + D_801BEBB8.unkA + (D_801BEBB8.unkE - D_801BEBB8.unkA) + sp5C;
         } else {
@@ -957,7 +937,7 @@ void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot) {
             gDPSetRenderMode(OVERLAY_DISP++, G_RM_AA_DEC_LINE, G_RM_NOOP2);
             Matrix_Translate((f32) sp68 - 160.0f, 120.0f - (f32) sp64, 0.0f, MTXMODE_NEW);
             Matrix_RotateXFApply(-1.6f);
-            if (func_801039EC(play) != 0) {
+            if (MapDisp_IsDataRotated(play)) {
                 rot += 0x7FFF;
             }
             Matrix_RotateYF(rot / 10.0f, MTXMODE_APPLY);
@@ -970,6 +950,7 @@ void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot) {
     }
 }
 #else
+void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80105FE0.s")
 #endif
 
@@ -1021,12 +1002,10 @@ s32 func_8010657C(s32 arg0, s32 arg1) {
     return 0;
 }
 
-#ifdef NON_MATCHING
 void func_80106644(PlayState *play, s32 x, s32 z, s32 rot) {
-    s32 pad[2];
+    PauseContext* pauseCtx = &play->pauseCtx;
     
-    if ((D_801BEBB8.unk0 != 0) && ((s32) play->pauseCtx.state < 4) && (XREG(95) == 0) && (play->interfaceCtx.minimapAlpha != 0)) {
-        //sp2C = ;// + 0x10000;
+    if ((D_801BEBB8.unk0 != 0) && ((s32) pauseCtx->state < 4) && (XREG(95) == 0) && (play->interfaceCtx.minimapAlpha != 0)) {
         if ((func_801064CC(play) == 0) && (D_801BEC1C != 0)) {
             if (func_80106450(play) != 0) {
                 func_801031D0(play, D_801BEBB8.unk10, D_801BEBB8.unkC, D_801BEBB8.unkE, D_801BEBB8.curRoom, 1.0f - ((f32) D_801BEBB8.unk24 * 0.05f));
@@ -1035,7 +1014,7 @@ void func_80106644(PlayState *play, s32 x, s32 z, s32 rot) {
                 }
                 func_80104AE8(play);
             }
-            if (((func_8010A0A4(play) == 0) || (gSaveContext.save.inventory.dungeonItems[gSaveContext.mapIndex] & gBitFlags[1]) )
+            if (((func_8010A0A4(play) == 0) || CHECK_DUNGEON_ITEM(1,gSaveContext.mapIndex ) )
                  && ((func_8010A0A4(play) != 0) || Inventory_IsMapVisible(play->sceneNum))) {
                 if (play->interfaceCtx.unk_280 == 0) {
                     func_80105FE0(play, x, z, rot);
@@ -1045,9 +1024,6 @@ void func_80106644(PlayState *play, s32 x, s32 z, s32 rot) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80106644.s")
-#endif
 
 void MapDisp_ResetIMap(void) {
     s32 i;
@@ -1118,7 +1094,7 @@ void* func_801068FC(PlayState* play, void* heap) {
     D_801F56B0.unk84[0] = heap;
     for (var_s1 = 0; var_s1 < D_801F56B0.rooms; var_s1++) {
         temp_s2 = D_801F56B0.unk4[var_s1];
-        func_80102E40(D_801F56B0.unk84[var_s1], temp_s2);
+        MapDisp_GetIMapTexture(D_801F56B0.unk84[var_s1], temp_s2);
         if (var_s1 + 1 < D_801F56B0.rooms) {
             D_801F56B0.unk84[var_s1 + 1] = ALIGN16((intptr_t)D_801F56B0.unk84[var_s1] + MapData_GetIMapSize(temp_s2));
         } else {
@@ -1188,7 +1164,8 @@ s32 func_80106D08(s32 sceneNum) {
 #ifdef NON_MATCHING
 // https://decomp.me/scratch/3cGkW
 void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5, s32 arg6) {
-    s32 var_a0;
+    PauseContext* pauseCtx = &play->pauseCtx;
+    //s32 var_a0;
     s32 var_a1_2;
     s32 var_a1_4;
     s32 var_a1_5;
@@ -1209,9 +1186,9 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     //     | 1);
     if (CHECK_DUNGEON_ITEM(2, arg6)) {//*(gBitFlags + 8) & gSaveContext.save.inventory.dungeonItems[arg6]) {
         //15, 15, F (172, 172, 123)
-        D_801BEC84[0xF] = COLOR16(176, 176, 128, 1); //0xAD5F;
-        D_801BECA4[0xF] = COLOR16(176, 176, 128, 1);
-        D_801BECC4[0xF] = COLOR16(176, 176, 128, 1);
+        D_801BEC84[0xF] = 0xAD5F;
+        D_801BECA4[0xF] = 0xAD5F;
+        D_801BECC4[0xF] = 0xAD5F;
     } else {
         D_801BEC84[0xF] = 0;
         D_801BECA4[0xF] = 0;
@@ -1222,7 +1199,7 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     //temp_a0 = play->state.gfxCtx;
     //sp48 = arg6 + &gSaveContext;
     func_8012C628(play->state.gfxCtx);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, play->pauseCtx.alpha);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
     gDPLoadTLUT_pal16(POLY_OPA_DISP++, 0, D_801BEC84);
     gDPLoadTLUT_pal16(POLY_OPA_DISP++, 1, D_801BECA4);
     gDPLoadTLUT_pal16(POLY_OPA_DISP++, 2, D_801BECC4);
@@ -1256,7 +1233,7 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
                         continue;
                     } else {
                         //sp3C = play + 0x18000;
-                        func_80109D40(spE8, &sp118, &sp114, sp108);
+                        func_80109D40(spE8, &sp118, &sp114);
                         func_80109DD8(spE8, &sp110, &sp10C);
                         if (sp108->unk8 & 1) {
                             sp110 = (sp118 / 2 - sp110) + sp118 / 2;
@@ -1302,6 +1279,7 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 #else
+void func_80106D5C(PlayState*, s32, s32, s32, s32, f32, s32);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80106D5C.s")
 #endif
 
@@ -1470,6 +1448,7 @@ void func_80107B78(PlayState* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     }
 }
 #else
+void func_80107B78(PlayState*, s32, s32, s32, s32, f32);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80107B78.s")
 #endif
 
@@ -1545,6 +1524,7 @@ void func_80108558(PlayState* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     CLOSE_DISPS(arg0->state.gfxCtx);
 }
 #else
+void func_80108558(PlayState*, s32, s32, s32, s32, f32, s32);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80108558.s")
 #endif
 

@@ -2,7 +2,7 @@
 #include "z64map.h"
 
 extern Color_RGBA8  D_801BED40[];
-extern T_801BED4C   D_801BED4C[];
+extern T_801BED4C   D_801BED4C[5];
 extern T_801BF170   D_801BED88[];
 extern s32          D_801BEFC8[];
 extern s32          D_801BF15C[5];
@@ -245,7 +245,7 @@ s32 func_80109BF4(s32 arg0) {
         return 2;
     }
     if (arg0 < 0x3A) {
-        return 1;
+        return MAPDATA_SOURCE_MAP_I_STATIC;
     }
     if (arg0 >= 0x3A) {
         return 0;
@@ -260,7 +260,7 @@ s32 func_80109C38(s32 arg0) {
     switch (func_80109BF4(arg0)) {
     case 0:
         return func_80109670(arg0 + 0xC6);
-    case 1:
+    case MAPDATA_SOURCE_MAP_I_STATIC:
         return func_80109A40(arg0);
     case 2:
         return 0;
@@ -276,7 +276,7 @@ s32 MapData_GetIMapSize(s32 arg0) {
     switch (func_80109BF4(arg0)) {
     case 0:
         return func_801096D4(arg0 + 0xC6);
-    case 1:
+    case MAPDATA_SOURCE_MAP_I_STATIC:
         return func_80109A98(arg0);
     case 2:
         return 0;
@@ -295,7 +295,7 @@ void func_80109D40(s32 arg0, s32* arg1, s32* arg2) {
     case 0:
         func_801095AC(arg0 + 0xC6, arg1, arg2);
         return;
-    case 1:
+    case MAPDATA_SOURCE_MAP_I_STATIC:
         func_8010997C(arg0, arg1, arg2);
         return;
     case 2:
@@ -318,7 +318,7 @@ void func_80109DD8(s32 arg0, s32* arg1, s32* arg2) {
     case 0:
         func_801095DC(arg0 + 0xC6, arg1, arg2);
         return;
-    case 1:
+    case MAPDATA_SOURCE_MAP_I_STATIC:
         func_801099AC(arg0, arg1, arg2);
         return;
     case 2:
@@ -338,7 +338,7 @@ void func_80109E70(s32 arg0, s32* arg1) {
     case 0:
         func_8010960C(arg0 + 0xC6, arg1);
         return;
-    case 1:
+    case MAPDATA_SOURCE_MAP_I_STATIC:
         func_801099DC(arg0, arg1);
         return;
     case 2:
@@ -355,7 +355,7 @@ u8 func_80109EF8(s32 arg0) {
     switch (func_80109BF4(arg0)) {
     case 0:
         return func_80109630(arg0 + 0xC6);
-    case 1:
+    case MAPDATA_SOURCE_MAP_I_STATIC:
         return func_80109A00(arg0);
     case 2:
     default:
@@ -370,7 +370,7 @@ s16 func_80109F78(s32 arg0) {
     switch (func_80109BF4(arg0)) {
     case 0:
         return func_80109650(arg0 + 0xC6);
-    case 1:
+    case MAPDATA_SOURCE_MAP_I_STATIC:
         return func_80109A20(arg0);
     case 2:
     default:

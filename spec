@@ -491,6 +491,7 @@ beginseg
     include "build/data/code/z_map_disp.data.o"
     include "build/data/code/z_map_disp.bss.o"
     include "build/src/code/z_map_data.o"
+    include "build/data/code/z_map_data.data.o"
     include "build/src/code/z_map_exp.o"
     include "build/src/code/z_msgevent.o"
     include "build/data/code/z_msgevent.data.o"
