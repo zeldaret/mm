@@ -39,6 +39,16 @@ typedef enum {
 #define AUDIO_RELOCATED_ADDRESS_START K0BASE
 
 typedef enum {
+    /*  0x1 */ AUDIO_ERROR_NO_INST = 1,
+    /*  0x3 */ AUDIO_ERROR_INVALID_INST_ID = 3,
+    /*  0x4 */ AUDIO_ERROR_INVALID_DRUM_SFX_ID,
+    /*  0x5 */ AUDIO_ERROR_NO_DRUM_SFX,
+    /* 0x10 */ AUDIO_ERROR_FONT_NOT_LOADED = 0x10
+} AudioError;
+
+#define AUDIO_ERROR(fontId, id, err) (((fontId << 8) + id) + (err << 24))
+
+typedef enum {
     /* 0 */ SOUNDMODE_STEREO,
     /* 1 */ SOUNDMODE_HEADSET,
     /* 2 */ SOUNDMODE_SURROUND,
