@@ -253,9 +253,7 @@ u8 sObjSoundMainBgmSeqId = NA_BGM_GENERAL_SFX;
  * `SEQ_FLAG_STORE_PREV_SPOT`, the spot from the previous scene sequence will be stored. Then, when returning to the
  * scene with the sequence `SEQ_FLAG_STORE_SPOT`, then the sequence will continue playing from where it left off.
  *
- * There are only 5 sequences with `SEQ_FLAG_STORE_SPOT`, and all 5 of those sequences have special sequence
- * instructions in their .seq files to read io port 7 and branch to different starting points along the sequence
- * i.e. this system will only work for: kokiri forest, kakariko child, kakariko adult, zoras domain, gerudo valley
+ * TODO: Confirm which sequences properly implement this system after sequence extraction
  */
 #define SEQ_FLAG_STORE_SPOT (1 << 4)
 #define SEQ_FLAG_STORE_PREV_SPOT (1 << 5)
