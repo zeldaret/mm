@@ -262,9 +262,7 @@ u8 sObjSoundMainBgmSeqId = NA_BGM_GENERAL_SFX;
 
 /**
  * Will write a value of 1 to ioPort 7 when called through the scene. How it's used depends on the sequence:
- * NA_BGM_CHAMBER_OF_SAGES - ioPort 7 is never read from
  * NA_BGM_FILE_SELECT - ioPort 7 skips the harp intro when a value of 1 is written to it.
- * Note: NA_BGM_FILE_SELECT is not called through the scene. So this flag serves no purpose
  */
 #define SEQ_FLAG_SKIP_HARP_INTRO (1 << 6)
 
