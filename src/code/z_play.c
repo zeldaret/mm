@@ -99,13 +99,23 @@ void func_80165690(void) {
 void func_801656A4(u8* arg0, u16* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801656A4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165DB8.s")
+void func_80165DB8(s32 arg0) {
+    SREG(92) = arg0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165DCC.s")
+void func_80165DCC(s32 arg0) {
+    SREG(92) = arg0;
+    SREG(93) = 1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165DF0.s")
+void func_80165DF0(void) {
+    SREG(93) = 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165E04.s")
+void func_80165E04(void) {
+    SREG(89) = 1;
+}
+
 
 void func_80165E1C(PreRender* prerender) {
     PreRender_ApplyFilters(prerender);
