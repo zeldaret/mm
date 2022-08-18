@@ -4727,59 +4727,42 @@ void func_808332A0(PlayState* play, Player* this, s32 arg2, s32 arg3) {
     }
 }
 
+// Check for inputs for quickspin
 s32 func_808333CC(Player* this) {
-    s8 sp24[4];
+    s8 sp3C[4];
+    s8* iter;
+    s8* iter2;
+    s8 temp1;
+    s8 temp2;
     s32 i;
-    s32 j;
-    s8 temp_a0;
-    s8 temp_v1;
-    s8* var_v0 = this->unk_ADF;
-    s8* var_v1 = sp24;
 
     if (this->itemActionParam == PLAYER_AP_STICK) {
-        return false;
+        return 0;
     }
 
-    i = 0;
-
-    if (!this) {}
-
-    while (true) {
-        temp_a0 = *var_v0;
-        i++;
-        var_v0++;
-        *var_v1 = temp_a0;
-        if (temp_a0 < 0) {
-            return false;
+    iter = &this->unk_ADF[0];
+    iter2 = &sp3C[0];
+    for (i = 0; i < 4; i++, iter++, iter2++) {
+        if ((*iter2 = *iter) < 0) {
+            return 0;
         }
+        *iter2 *= 2;
+    }
 
-        *var_v1 *= 2;
-        var_v1++;
+    temp1 = sp3C[0] - sp3C[1];
+    if (ABS_ALT(temp1) < 10) {
+        return 0;
+    }
 
-        if (i >= ARRAY_COUNT(this->unk_ADF)) {
-            temp_v1 = sp24[0] - sp24[1];
-            if (ABS_ALT(temp_v1) < 0xA) {
-                return 0;
-            }
-
-            var_v1 = &sp24[1];
-            j = 1;
-
-            while (true) {
-                j++;
-                temp_a0 = var_v1[0] - var_v1[1];
-
-                if ((ABS_ALT(temp_a0) < 0xA) || ((temp_a0 * temp_v1) < 0)) {
-                    return false;
-                }
-
-                var_v1++;
-                if (j == ARRAY_COUNT(sp24) - 1) {
-                    return true;
-                }
-            }
+    iter2 = &sp3C[1];
+    for (i = 1; i < 3; i++, iter2++) {
+        temp2 = *iter2 - *(iter2 + 1);
+        if ((ABS_ALT(temp2) < 10) || (temp2 * temp1 < 0)) {
+            return 0;
         }
     }
+
+    return 1;
 }
 
 void func_808334D4(PlayState* play, Player* this) {
@@ -6726,8 +6709,7 @@ void func_8083827C(Player* this, PlayState* play) {
         if ((this->transformation != PLAYER_FORM_GORON) &&
             ((this->transformation != PLAYER_FORM_DEKU) || (this->unk_B67 != 0)) && (this->actor.bgCheckFlags & 4)) {
             if (!(this->stateFlags1 & PLAYER_STATE1_8000000)) {
-                if ((D_80862B1C != 6) && (D_80862B1C != 9) && (D_80862B18 > 20.0f) &&
-                    (this->meleeWeaponState == 0)) {
+                if ((D_80862B1C != 6) && (D_80862B1C != 9) && (D_80862B18 > 20.0f) && (this->meleeWeaponState == 0)) {
                     if ((ABS_ALT(temp_t0) < 0x2000) && (this->linearVelocity > 3.0f)) {
                         if (!(this->stateFlags1 & PLAYER_STATE1_800)) {
                             if (((this->transformation == PLAYER_FORM_ZORA) &&
