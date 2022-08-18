@@ -1,10 +1,10 @@
 #include "global.h"
 
 #define SCENE_ENTRY(name, textId, config) \
-    { { SEGMENT_ROM_START(name), SEGMENT_ROM_END(name) }, textId, 0, config, 0 }
+    { { SEGMENT_ROM_START(name), SEGMENT_ROM_END(name) }, textId, 0, config, 0, 0 }
 
 #define SCENE_ENTRY_NONE() \
-    { { 0, 0 }, 0, 0, 0, 0 }
+    { { 0, 0 }, 0, 0, 0, 0, 0 }
 
 SceneTableEntry gSceneTable[] = {
     /* 0x00 */ SCENE_ENTRY(Z2_20SICHITAI2, 0x0116, SCENE_DRAW_CFG_MAT_ANIM),
