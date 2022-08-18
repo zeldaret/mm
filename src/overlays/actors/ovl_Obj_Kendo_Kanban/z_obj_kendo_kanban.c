@@ -9,6 +9,16 @@
 
 #define FLAGS 0x00000000
 
+#define PART_FULL 0
+#define PART_TOP_RIGHT (1 << 0)
+#define PART_TOP_LEFT (1 << 1)
+#define PART_BOTTOM_RIGHT (1 << 2)
+#define PART_BOTTOM_LEFT (1 << 3)
+#define RIGHT_HALF (PART_TOP_RIGHT | PART_BOTTOM_RIGHT)
+#define LEFT_HALF (PART_TOP_LEFT | PART_BOTTOM_LEFT)
+#define TOP_HALF (PART_TOP_RIGHT | PART_TOP_LEFT)
+#define BOTTOM_HALF (PART_BOTTOM_RIGHT | PART_BOTTOM_LEFT)
+
 #define THIS ((ObjKendoKanban*)thisx)
 
 void ObjKendoKanban_Init(Actor* thisx, PlayState* play);
@@ -16,12 +26,12 @@ void ObjKendoKanban_Destroy(Actor* thisx, PlayState* play);
 void ObjKendoKanban_Update(Actor* thisx, PlayState* play);
 void ObjKendoKanban_Draw(Actor* thisx, PlayState* play);
 
-void func_80B65880(ObjKendoKanban* this);
-void func_80B65894(ObjKendoKanban* this, PlayState* play);
-void func_80B658A4(ObjKendoKanban* this, PlayState* play);
-void func_80B65CE0(ObjKendoKanban* this, PlayState* play);
-void func_80B65D68(ObjKendoKanban* this, PlayState* play);
-void func_80B65DA8(ObjKendoKanban* this, PlayState* play);
+void ObjKendoKanban_SetNullAction(ObjKendoKanban* this);
+void ObjKendoKanban_NullAction(ObjKendoKanban* this, PlayState* play);
+void ObjKendoKanban_BreakAndSetBrokenActionFunc(ObjKendoKanban* this, PlayState* play);
+void ObjKendoKanban_BrokenAction(ObjKendoKanban* this, PlayState* play);
+void ObjKendoKanban_SettledAction(ObjKendoKanban* this, PlayState* play);
+void func_80B65DA8_BounceHandler(ObjKendoKanban* this, PlayState* play);
 s32 func_80B6618C(ObjKendoKanban* this, PlayState* play);
 
 const ActorInit Obj_Kendo_Kanban_InitVars = {
@@ -36,29 +46,50 @@ const ActorInit Obj_Kendo_Kanban_InitVars = {
     (ActorFunc)ObjKendoKanban_Draw,
 };
 
-Vec3f D_80B66660 = { -1.5f, 10.0f, 0.5f };
-Vec3f D_80B6666C = { 1.5f, 10.0f, 0.5f };
-Vec3f D_80B66678 = { 0.0f, 4.0f, -1.0f };
-Vec3f D_80B66684 = { 1.0f, 7.0f, 4.0f };
-Vec3f D_80B66690 = { -150.0f, 425.0f, 40.0f };
-Vec3f D_80B6669C = { 150.0f, 425.0f, 40.0f };
-Vec3f D_80B666A8 = { 0.0f, 140.0f, 40.0f };
-Vec3f D_80B666B4 = { 0.0f, 565.0f, 40.0f };
+// Directly applied to the velocity of the actor upon object creation.
+const Vec3f OBJKENDOKANBAN_LBREAK_VEL = { -1.5f, 10.0f, 0.5f }; // Surge Left/Up/Back  (Left side Breakaway)
+const Vec3f OBJKENDOKANBAN_RBREAK_VEL = { 1.5f, 10.0f, 0.5f };  // Surge Right/Up/Back (Right side Breakaway)
+const Vec3f OBJKENDOKANBAN_BBREAK_VEL = { 0.0f, 4.0f, -1.0f };  // Surge Up/Forward?  (Bottom Breakaway)
+const Vec3f OBJKENDOKANBAN_TBREAK_VEL = { 1.0f, 7.0f, 4.0f };   // Surge Right Up Back (Top Breakaway)
 
+const Vec3f D_80B66690 = { -150.0f, 425.0f,
+                           40.0f }; // Left    // Large Surge Left/Up/Back (Left side secondary breakway?)
+const Vec3f D_80B6669C = { 150.0f, 425.0f,
+                           40.0f }; // Right   // Large Surge Right/Up/Back (Right side Secondary breakaway)
+const Vec3f D_80B666A8 = { 0.0f, 140.0f, 40.0f }; // Bottom  // Medium Surge Up/Back (Bottom Secondary Breakaway)
+const Vec3f D_80B666B4 = { 0.0f, 565.0f, 40.0f }; // Top     // Large Surge Up/Back (Top Secondary Breakaway)
+
+#if 1
+static Gfx* sDisplayLists[] = { gKendoKanbanTopRightDL, gKendoKanbanTopLeftDL, gKendoKanbanBottomRightDL,
+                                gKendoKanbanBottomLeftDL };
+#else
 Gfx* D_80B666C0 = gKendoKanbanTopRightDL;
 Gfx* D_80B666C4 = gKendoKanbanTopLeftDL;
 Gfx* D_80B666C8 = gKendoKanbanBottomRightDL;
 Gfx* D_80B666CC = gKendoKanbanBottomLeftDL;
-
-Vec3f D_80B666D0 = { -300.0f, 850.0f, 40.0f };
-Vec3f D_80B666DC = { 10.0f, 850.0f, 40.0f };
-Vec3f D_80B666E8 = { 300.0f, 850.0f, 40.0f };
-Vec3f D_80B666F4 = { -300.0f, 310.0f, 40.0f };
-Vec3f D_80B66700 = { 0.0f, 280.0f, 40.0f };
-Vec3f D_80B6670C = { 300.0f, 250.0f, 40.0f };
-Vec3f D_80B66718 = { -300.0f, 10.0f, 40.0f };
-Vec3f D_80B66724 = { 0.0f, 10.0f, 40.0f };
-Vec3f D_80B66730 = { 300.0f, 10.0f, 40.0f };
+#endif
+// Still not quite known to me what these points represent. They appear as as the 4 pieces of the board with a slight
+// skew in the middle row of points (L->R T->B slashing motion? does the board actually split that way?) Most confusing
+// to me is that 4 points does not a 3d-shape make, so I may be misinterpreting their use. They appear to make up a
+//
+//    X        X        X
+//
+//
+//    X
+//             X
+//                      X
+//
+//    X        X        X
+//
+const Vec3f pointTL = { -300.0f, 850.0f, 40.0f }; // Left and Top
+const Vec3f pointTC = { 10.0f, 850.0f, 40.0f };   // Right and Left
+const Vec3f pointTR = { 300.0f, 850.0f, 40.0f };  // Right and Top
+const Vec3f pointCL = { -300.0f, 310.0f, 40.0f }; // Bottom and Top
+const Vec3f pointCC = { 0.0f, 280.0f, 40.0f };
+const Vec3f pointCR = { 300.0f, 250.0f, 40.0f }; // Bottom and Top
+const Vec3f pointBL = { -300.0f, 10.0f, 40.0f }; // Left and Bottom
+const Vec3f pointBC = { 0.0f, 10.0f, 40.0f };    // Left and Right
+const Vec3f pointBR = { 300.0f, 10.0f, 40.0f };  // Right and Bottom
 
 static ColliderTrisElementInit sTrisElementsInit[] = {
     {
@@ -155,8 +186,8 @@ static DamageTable sDamageTable = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 
-Vec3f D_80B6681C = { 0.0f, 0.0f, 0.0f };
-Vec3f D_80B66828 = { 1.0f, 0.0f, 0.0f };
+Vec3f OBJKENDOKANBAN_NULL_VECTOR = { 0.0f, 0.0f, 0.0f };
+Vec3f OBJKENDOKANBAN_UNITX_VECTOR = { 1.0f, 0.0f, 0.0f }; // Unit Vector X
 
 void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
     s32 pad[2];
@@ -186,27 +217,27 @@ void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
 
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
-    this->unk_30C = OBJKENDOKANBAN_GET_F(&this->actor);
+    this->boardFragments = OBJKENDOKANBAN_GET_F(&this->actor);
     this->actor.gravity = -2.0f;
-    this->unk_2CC = D_80B6681C;
-    this->unk_2D8 = D_80B6681C;
-    this->unk_2E4 = D_80B6681C;
-    this->unk_2F0 = D_80B66828;
-    this->unk_302 = 0;
+    this->unk_2CC_DrawMultSrc = OBJKENDOKANBAN_NULL_VECTOR;
+    this->deltaActorPosition = OBJKENDOKANBAN_NULL_VECTOR;
+    this->vectLowestPoint = OBJKENDOKANBAN_NULL_VECTOR;
+    this->rotationalAxis = OBJKENDOKANBAN_UNITX_VECTOR;
+    this->rotationalVelocity = 0;
     this->unk_304 = 0;
-    this->unk_2FC = -1;
-    this->unk_300 = 0;
-    this->unk_308 = 0;
+    this->idxLastLowestPoint = -1;
+    this->bHasNewLowestPoint = 0;
+    this->framesSinceGrounded = 0;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_26C); i++) {
-        this->unk_26C[i] = this->unk_29C[i] = D_80B6681C;
+    for (i = 0; i < ARRAY_COUNT(this->unk_26C_4ElemDrawMultDest); i++) {
+        this->unk_26C_4ElemDrawMultDest[i] = this->fourPoints[i] = OBJKENDOKANBAN_NULL_VECTOR;
     }
 
     this->unk_30A = 0;
-    if (this->unk_30C == OBJKENDOKANBAN_F_0) {
-        func_80B65880(this);
+    if (this->boardFragments == PART_FULL) {
+        ObjKendoKanban_SetNullAction(this);
     } else {
-        func_80B658A4(this, play);
+        ObjKendoKanban_BreakAndSetBrokenActionFunc(this, play);
     }
 }
 
@@ -217,86 +248,91 @@ void ObjKendoKanban_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyTris(play, &this->colliderTris);
 }
 
-void func_80B65880(ObjKendoKanban* this) {
-    this->actionFunc = func_80B65894;
+void ObjKendoKanban_SetNullAction(ObjKendoKanban* this) {
+    this->actionFunc = ObjKendoKanban_NullAction;
 }
 
-void func_80B65894(ObjKendoKanban* this, PlayState* play) {
+void ObjKendoKanban_NullAction(ObjKendoKanban* this, PlayState* play) {
 }
 
-void func_80B658A4(ObjKendoKanban* this, PlayState* play) {
+void ObjKendoKanban_BreakAndSetBrokenActionFunc(ObjKendoKanban* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (this->unk_30C == OBJKENDOKANBAN_F_0) {
+    if (this->boardFragments == PART_FULL) {
         if ((player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_1H) ||
             (player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_2H) ||
             (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_FINISH)) {
-            this->unk_30C = (OBJKENDOKANBAN_F_4 | OBJKENDOKANBAN_F_1);
-            this->unk_304 = 0x71C;
-            this->actor.velocity = D_80B6666C;
-            this->unk_2CC = D_80B6669C;
 
+            // Retain the right side.
+            this->boardFragments = RIGHT_HALF;
+            this->unk_304 = 10 * 2 ^ 16 / 360;
+            this->actor.velocity = OBJKENDOKANBAN_RBREAK_VEL;
+            this->unk_2CC_DrawMultSrc = D_80B6669C;
+
+            // Spawn the left side.
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_KENDO_KANBAN,
                                this->actor.home.pos.x - 5.0f, this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0,
-                               0xA);
+                               LEFT_HALF);
 
-            this->unk_29C[0] = D_80B666DC;
-            this->unk_29C[1] = D_80B666E8;
-            this->unk_29C[2] = D_80B66730;
-            this->unk_29C[3] = D_80B66724;
+            this->fourPoints[0] = pointTC; // also Left Only
+            this->fourPoints[1] = pointTR; // also Top only
+            this->fourPoints[2] = pointBR; // also Bottom only
+            this->fourPoints[3] = pointBC; // also Left Only
         } else {
-            this->unk_30C = (OBJKENDOKANBAN_F_8 | OBJKENDOKANBAN_F_4);
+
+            // A Full board hit with any other slash cuts
+            this->boardFragments = BOTTOM_HALF;
             this->unk_304 = -0x71C;
-            this->actor.velocity = D_80B66678;
-            this->unk_2CC = D_80B666A8;
+            this->actor.velocity = OBJKENDOKANBAN_BBREAK_VEL;
+            this->unk_2CC_DrawMultSrc = D_80B666A8;
 
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_KENDO_KANBAN, this->actor.home.pos.x,
                                this->actor.home.pos.y + 5.0f, this->actor.home.pos.z, 0, 0, 0, 3);
 
-            this->unk_29C[0] = D_80B666F4;
-            this->unk_29C[1] = D_80B6670C;
-            this->unk_29C[2] = D_80B66730;
-            this->unk_29C[3] = D_80B66718;
+            this->fourPoints[0] = pointCL;
+            this->fourPoints[1] = pointCR;
+            this->fourPoints[2] = pointBR;
+            this->fourPoints[3] = pointBL;
         }
-    } else if (this->unk_30C == (OBJKENDOKANBAN_F_8 | OBJKENDOKANBAN_F_2)) {
+    } else if (this->boardFragments == LEFT_HALF) {
         this->unk_304 = 0x71C;
-        this->actor.velocity = D_80B66660;
-        this->unk_2CC = D_80B66690;
+        this->actor.velocity = OBJKENDOKANBAN_LBREAK_VEL;
+        this->unk_2CC_DrawMultSrc = D_80B66690;
 
-        this->unk_29C[0] = D_80B666D0;
-        this->unk_29C[1] = D_80B666DC;
-        this->unk_29C[2] = D_80B66724;
-        this->unk_29C[3] = D_80B66718;
-    } else if (this->unk_30C == (OBJKENDOKANBAN_F_2 | OBJKENDOKANBAN_F_1)) {
+        this->fourPoints[0] = pointTL;
+        this->fourPoints[1] = pointTC;
+        this->fourPoints[2] = pointBC;
+        this->fourPoints[3] = pointBL;
+    } else if (this->boardFragments == TOP_HALF) {
         this->unk_304 = 0x71C;
-        this->actor.velocity = D_80B66684;
-        this->unk_2CC = D_80B666B4;
+        this->actor.velocity = OBJKENDOKANBAN_TBREAK_VEL;
+        this->unk_2CC_DrawMultSrc = D_80B666B4;
 
-        this->unk_29C[0] = D_80B666D0;
-        this->unk_29C[1] = D_80B666E8;
-        this->unk_29C[2] = D_80B6670C;
-        this->unk_29C[3] = D_80B666F4;
+        this->fourPoints[0] = pointTL;
+        this->fourPoints[1] = pointTR;
+        this->fourPoints[2] = pointCR;
+        this->fourPoints[3] = pointCL;
     }
 
     this->unk_30A = 0;
-    this->actionFunc = func_80B65CE0;
+    this->actionFunc = ObjKendoKanban_BrokenAction;
 }
 
-void func_80B65CE0(ObjKendoKanban* this, PlayState* play) {
+void ObjKendoKanban_BrokenAction(ObjKendoKanban* this, PlayState* play) {
     this->actor.velocity.y += this->actor.gravity;
     Actor_UpdatePos(&this->actor);
-    this->unk_302 += this->unk_304;
-    func_80B65DA8(this, play);
+    this->rotationalVelocity += this->unk_304;
+    func_80B65DA8_BounceHandler(this, play);
     if (this->actor.world.pos.y < -200.0f) {
         this->actor.world.pos.y = -200.0f;
     }
 }
 
-void func_80B65D54(ObjKendoKanban* this) {
-    this->actionFunc = func_80B65D68;
+void ObjKendoKanban_SetSettledAction(ObjKendoKanban* this) {
+    this->actionFunc = ObjKendoKanban_SettledAction;
 }
 
-void func_80B65D68(ObjKendoKanban* this, PlayState* play) {
+void ObjKendoKanban_SettledAction(ObjKendoKanban* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (func_80B6618C(this, play) == 1) {
@@ -304,23 +340,23 @@ void func_80B65D68(ObjKendoKanban* this, PlayState* play) {
     }
 }
 
-void func_80B65DA8(ObjKendoKanban* this, PlayState* play) {
-    Vec3f sp5C;
+void func_80B65DA8_BounceHandler(ObjKendoKanban* this, PlayState* play) {
+    Vec3f vectLowestPosition;
     s32 pad[2];
-    Vec3f sp48;
+    Vec3f vectActorsWorldPosition;
     s32 pad2;
-    s32 index = 0;
+    s32 idxLowestPoint = 0;
     s32 i;
     f32 sp38;
 
-    sp5C = this->unk_26C[0];
-    sp48 = this->actor.world.pos;
+    vectLowestPosition = this->unk_26C_4ElemDrawMultDest[0];
+    vectActorsWorldPosition = this->actor.world.pos;
 
-    sp48.x -= this->unk_2D8.x;
-    sp48.y -= this->unk_2D8.y;
-    sp48.z -= this->unk_2D8.z;
+    vectActorsWorldPosition.x -= this->deltaActorPosition.x;
+    vectActorsWorldPosition.y -= this->deltaActorPosition.y;
+    vectActorsWorldPosition.z -= this->deltaActorPosition.z;
 
-    sp38 = (this->unk_2F0.x * sp48.z) + (this->unk_2F0.z * -sp48.x);
+    sp38 = (this->rotationalAxis.x * vectActorsWorldPosition.z) + (this->rotationalAxis.z * -vectActorsWorldPosition.x);
 
     if (sp38 < 0.0f) {
         this->unk_304 += 0x64;
@@ -328,55 +364,61 @@ void func_80B65DA8(ObjKendoKanban* this, PlayState* play) {
         this->unk_304 -= 0x64;
     }
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_26C); i++) {
-        if (this->unk_26C[i].y < sp5C.y) {
-            sp5C = this->unk_26C[i];
-            index = i;
+    // Find the lowest point?
+    for (i = 0; i < ARRAY_COUNT(this->unk_26C_4ElemDrawMultDest); i++) {
+        if (this->unk_26C_4ElemDrawMultDest[i].y < vectLowestPosition.y) {
+            vectLowestPosition = this->unk_26C_4ElemDrawMultDest[i];
+            idxLowestPoint = i;
         }
     }
 
-    if (index != this->unk_2FC) {
-        this->unk_300 = 1;
-        this->unk_2FC = index;
-        this->unk_2E4 = this->unk_29C[index];
+    // When the lowest point changes due to rotation, re-initialize the actor position to that point?
+    if (idxLowestPoint != this->idxLastLowestPoint) {
+        this->bHasNewLowestPoint = 1;
+        this->idxLastLowestPoint = idxLowestPoint;
+        this->vectLowestPoint = this->fourPoints[idxLowestPoint];
 
         Matrix_Push();
         Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                      &this->actor.shape.rot);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_MultVec3f(&this->unk_2E4, &this->actor.world.pos);
-        this->actor.world.pos = sp5C;
+        Matrix_MultVec3f(&this->vectLowestPoint, &this->actor.world.pos);
+        this->actor.world.pos = vectLowestPosition;
         this->actor.prevPos = this->actor.world.pos;
         Matrix_Pop();
     }
 
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & 1) { // Stationary Grounded
+        // When the board is on the ground, Apply some drag to slow it to a stop?
         this->actor.velocity.x *= 0.8f;
         this->actor.velocity.z *= 0.8f;
     }
 
-    if (this->unk_300 == 1) {
-        if (this->unk_308 >= 7) {
-            s16 temp_v0_3 = this->unk_302 & 0x3FFF;
+    if (this->bHasNewLowestPoint == 1) {
+        if (this->framesSinceGrounded >= 7) {
 
-            if (temp_v0_3 >= 0x2000) {
-                temp_v0_3 -= 0x4000;
+            // Suppress all rotational velocity?
+            s16 deltaRotationalVelocity = this->rotationalVelocity & 0x3FFF; // Limit to 90 degrees
+            if (deltaRotationalVelocity >= 0x2000) {                         // If Greater than 45
+                deltaRotationalVelocity -= 0x4000;                           // Go 90 degrees opposite
             }
-            this->unk_302 -= temp_v0_3;
+            this->rotationalVelocity -= deltaRotationalVelocity;
             this->unk_304 = 0;
-            func_80B65D54(this);
+            ObjKendoKanban_SetSettledAction(this);
             return;
         }
 
         if (this->actor.bgCheckFlags & 2) {
+            // When the board Touches the ground,...
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
-            this->unk_300 = 0;
+            this->bHasNewLowestPoint = 0;
             this->actor.velocity.y *= 0.5f;
         } else if (this->actor.bgCheckFlags & 1) {
-            this->unk_308++;
-            this->unk_300 = 0;
+            // When the board on the ground, ...
+            this->framesSinceGrounded++;
+            this->bHasNewLowestPoint = 0;
             this->actor.velocity.x *= 0.3f;
             this->actor.velocity.z *= 0.3f;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
@@ -398,7 +440,7 @@ void func_80B65DA8(ObjKendoKanban* this, PlayState* play) {
 
 s32 func_80B6618C(ObjKendoKanban* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 phi_v0;
+    s32 nextIdx;
     s32 phi_v1 = 0;
     s32 i;
     f32 x;
@@ -406,18 +448,14 @@ s32 func_80B6618C(ObjKendoKanban* this, PlayState* play) {
     f32 x2;
     f32 z2;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_26C); i++) {
-        if (i != 3) {
-            phi_v0 = i + 1;
-        } else {
-            phi_v0 = 0;
-        }
+    for (i = 0; i < ARRAY_COUNT(this->unk_26C_4ElemDrawMultDest); i++) {
+        nextIdx = i != 3 ? i + 1 : 0;
 
-        z = this->unk_26C[i].z - player->actor.world.pos.z;
-        x = this->unk_26C[i].x - player->actor.world.pos.x;
+        z = this->unk_26C_4ElemDrawMultDest[i].z - player->actor.world.pos.z;
+        x = this->unk_26C_4ElemDrawMultDest[i].x - player->actor.world.pos.x;
 
-        z2 = (this->unk_26C[phi_v0].z - player->actor.world.pos.z);
-        x2 = (this->unk_26C[phi_v0].x - player->actor.world.pos.x);
+        z2 = (this->unk_26C_4ElemDrawMultDest[nextIdx].z - player->actor.world.pos.z);
+        x2 = (this->unk_26C_4ElemDrawMultDest[nextIdx].x - player->actor.world.pos.x);
 
         if ((x * z2) < (z * x2)) {
             if (phi_v1 == 0) {
@@ -435,17 +473,17 @@ s32 func_80B6618C(ObjKendoKanban* this, PlayState* play) {
 }
 
 void func_80B66304(ObjKendoKanban* this, PlayState* play) {
-    if ((this->actionFunc != func_80B65CE0) && (this->actionFunc != func_80B65D68)) {
+    if ((this->actionFunc != ObjKendoKanban_BrokenAction) && (this->actionFunc != ObjKendoKanban_SettledAction)) {
         if (this->colliderTris.base.acFlags & AC_HIT) {
             this->colliderTris.base.acFlags &= ~AC_HIT;
-            func_80B658A4(this, play);
+            ObjKendoKanban_BreakAndSetBrokenActionFunc(this, play);
         }
 
         Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
         this->colliderCylinder.dim.pos.z -= (s16)(20.0f * Math_CosS(this->actor.shape.rot.y));
         this->colliderCylinder.dim.pos.x -= (s16)(20.0f * Math_SinS(this->actor.shape.rot.y));
 
-        if (this->actionFunc == func_80B65894) {
+        if (this->actionFunc == ObjKendoKanban_NullAction) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderTris.base);
         }
 
@@ -461,7 +499,6 @@ void ObjKendoKanban_Update(Actor* thisx, PlayState* play) {
     func_80B66304(this, play);
 }
 
-#ifdef NON_MATCHING
 void ObjKendoKanban_Draw(Actor* thisx, PlayState* play) {
     ObjKendoKanban* this = THIS;
     s32 i;
@@ -471,40 +508,27 @@ void ObjKendoKanban_Draw(Actor* thisx, PlayState* play) {
 
     func_8012C28C(play->state.gfxCtx);
 
-    if (this->unk_30C == OBJKENDOKANBAN_F_0) {
+    if (this->boardFragments == PART_FULL) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gKendoKanbanDL);
     } else {
-        Matrix_RotateAxisS(this->unk_302, &this->unk_2F0, MTXMODE_APPLY);
-        Matrix_Translate(-this->unk_2E4.x, -this->unk_2E4.y, -this->unk_2E4.z, MTXMODE_APPLY);
-
+        Matrix_RotateAxisS(this->rotationalVelocity, &this->rotationalAxis, MTXMODE_APPLY);
+        Matrix_Translate(-this->vectLowestPoint.x, -this->vectLowestPoint.y, -this->vectLowestPoint.z, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        if (this->unk_30C & OBJKENDOKANBAN_F_1) {
-            gSPDisplayList(POLY_OPA_DISP++, D_80B666C0);
-        }
-
-        if (this->unk_30C & OBJKENDOKANBAN_F_2) {
-            gSPDisplayList(POLY_OPA_DISP++, D_80B666C4);
-        }
-
-        if (this->unk_30C & OBJKENDOKANBAN_F_4) {
-            gSPDisplayList(POLY_OPA_DISP++, D_80B666C8);
-        }
-
-        if (this->unk_30C & OBJKENDOKANBAN_F_8) {
-            gSPDisplayList(POLY_OPA_DISP++, D_80B666CC);
+        // Display only the fragments of the board which are present
+        for (i = 0; i < ARRAY_COUNT(sDisplayLists); i++) {
+            if ((1 << i) & this->boardFragments) {
+                gSPDisplayList(POLY_OPA_DISP++, sDisplayLists[i]);
+            }
         }
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_26C); i++) {
-        Matrix_MultVec3f(&this->unk_29C[i], &this->unk_26C[i]);
+    for (i = 0; i < ARRAY_COUNT(this->unk_26C_4ElemDrawMultDest); i++) {
+        Matrix_MultVec3f(&this->fourPoints[i], &this->unk_26C_4ElemDrawMultDest[i]);
     }
 
-    Matrix_MultVec3f(&this->unk_2CC, &this->unk_2D8);
+    Matrix_MultVec3f(&this->unk_2CC_DrawMultSrc, &this->deltaActorPosition);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/ObjKendoKanban_Draw.s")
-#endif
