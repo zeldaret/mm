@@ -3060,12 +3060,7 @@ s32 Camera_Jump1(Camera* camera) {
 
 /**
  * Camera for climbing structures
- *
- * This function is matching but rodata was improperly split between Camera_Jump2 and Camera_Jump3
- * This will successfully match when Camera_Jump3 is matching
- * (has been verified by manually moving rodata asm after extraction)
  */
-#ifdef NON_MATCHING
 s32 Camera_Jump2(Camera* camera) {
     Vec3f* eye = &camera->eye;
     Vec3f* at = &camera->at;
@@ -3236,21 +3231,17 @@ s32 Camera_Jump2(Camera* camera) {
     camera->roll = Camera_LerpCeilS(0, camera->roll, 0.5f, 5);
     return true;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Jump2.s")
-#endif
 
 /**
  * Used for water-based camera settings
  * e.g. Gyorg, Pinnacle Rock, whirlpool, water
  */
-#ifdef NON_EQUIVALENT
 s32 Camera_Jump3(Camera* camera) {
     Vec3f* sp48 = &camera->eye;
     Vec3f* sp44 = &camera->at;
     Vec3f* sp40 = &camera->eyeNext;
-    f32 spD0;
-    f32 spCC;
+    f32 spD0; // f2
+    f32 spCC; // f16
     PosRot* sp3C = &camera->focalActorPosRot;
     f32 phi_f0;
     f32 spC0;
@@ -3262,14 +3253,12 @@ s32 Camera_Jump3(Camera* camera) {
     VecSph sp94;
     f32 phi_f2_2;
     f32 temp_f0;
-    f32 pad1; // Fake Temp
-    f32 pad2; // UNUSED - Available for temp
-    f32 pad3; // UNUSED - Available for temp
-    f32 pad4; // UNUSED - Available for temp
-    f32 sp78;
+    f32 temp1;
+    f32 pad;
     Jump3ReadOnlyData* roData = &camera->paramData.jump3.roData;
     Jump3ReadWriteData* rwData = &camera->paramData.jump3.rwData;
-    Vec3f sp64;
+    f32 sp78;
+    PosRot sp64;
     f32 sp60;
     f32 sp5C;
     s32 sp58;
@@ -3315,19 +3304,15 @@ s32 Camera_Jump3(Camera* camera) {
     OLib_Vec3fDiffToVecSphGeo(&sp9C, sp44, sp48);
     OLib_Vec3fDiffToVecSphGeo(&sp94, sp44, sp40);
 
-    // Everything above is down to SP and floats
-
     if (!RELOAD_PARAMS(camera) && !sp58) {
     } else {
         values = sCameraSettings[camera->setting].cameraModes[rwData->unk_0A].values;
 
         sp5C = 0.8f - -0.2f * (68.0f / sp78);
         spD0 = sp78 * 0.01f * sp5C;
-        // if (phi_f2) {}
 
         roData->unk_00 = GET_NEXT_RO_DATA(values) * spD0;
         roData->unk_04 = GET_NEXT_RO_DATA(values) * spD0;
-        if (1) {}
         roData->unk_08 = GET_NEXT_RO_DATA(values) * spD0;
         roData->unk_20 = CAM_DEG_TO_BINANG(GET_NEXT_RO_DATA(values));
         roData->unk_0C = GET_NEXT_RO_DATA(values);
@@ -3361,25 +3346,15 @@ s32 Camera_Jump3(Camera* camera) {
             break;
     }
 
-    spC0 = sp64.y - sp3C->pos.y;
+    spC0 = sp64.pos.y - sp3C->pos.y;
     spB4 = *sp48;
 
-    // crazy things going on with temp_f0_2
-    // temp_f0_2 = camera->speedRatio; // Removing this temp fixes large chuncks of code and destorys other chuncks of
-    // code
-
-    // PERM_RANDOMIZE(
-
-    spD0 = camera->speedRatio;
-    spD0 *= 0.5f;
+    spD0 = camera->speedRatio * 0.5f;
     spCC = camera->speedRatio * 0.2f;
-    // spCC = phi_f2;
 
     temp_f0 = (D_801EDC30[camera->camId].unk_64 == 1) ? 0.5f : spD0;
 
     if (D_801EDC30[camera->camId].unk_66 != 0) {
-        // spD0 = temp_f2;
-        // spCC = camera->speedRatio * 0.2f;
         camera->yawUpdateRateInv =
             Camera_LerpCeilF((D_801EDC30[camera->camId].swingUpdateRate + D_801EDC30[camera->camId].unk_66 * 2),
                              camera->yawUpdateRateInv, spD0, 0.1f);
@@ -3387,49 +3362,29 @@ s32 Camera_Jump3(Camera* camera) {
             Camera_LerpCeilF((40.0f + D_801EDC30[camera->camId].unk_66 * 2), camera->pitchUpdateRateInv, spCC, 0.1f);
         D_801EDC30[camera->camId].unk_66--;
     } else {
-        // spCC = camera->speedRatio * 0.2f;
-        // phi_f14 = camera->yawUpdateRateInv;
         camera->yawUpdateRateInv =
             Camera_LerpCeilF(D_801EDC30[camera->camId].swingUpdateRate, camera->yawUpdateRateInv, temp_f0, 0.1f);
         camera->pitchUpdateRateInv = Camera_LerpCeilF(40.0f, camera->pitchUpdateRateInv, spCC, 0.1f);
     }
 
-    // NOT ELSE
-
     if (roData->interfaceFlags & JUMP3_FLAG_7) {
         camera->yOffsetUpdateRate = Camera_LerpCeilF(0.01f, camera->yOffsetUpdateRate, spD0, 0.0001f);
-        // sp4C = sqrtf(SQXZ(camera->focalActorOffset));
-        // if (1) {} // TODO: is needed? (helps a lot)
-        // temp_f0 = sqrtf((camera->focalActorOffset.x * camera->focalActorOffset.x) + (camera->focalActorOffset.z *
-        // camera->focalActorOffset.z)); if (1) {}
         sp5C = sqrtf((camera->focalActorOffset.x * camera->focalActorOffset.x) +
                      (camera->focalActorOffset.z * camera->focalActorOffset.z)) /
                Camera_GetRunSpeedLimit(camera);
         camera->speedRatio = OLib_ClampMaxDist(sp5C / Camera_GetRunSpeedLimit(camera), 1.8f);
         spCC = camera->speedRatio * 0.2f;
     } else {
-        camera->yOffsetUpdateRate = Camera_LerpCeilF(0.05f, phi_f14 = camera->yOffsetUpdateRate, spD0, 0.0001f);
-        // spCC = phi_f2; // Currently not needed
-        // spCC = camera->speedRatio * 0.2f;
+        camera->yOffsetUpdateRate = Camera_LerpCeilF(0.05f, camera->yOffsetUpdateRate, spD0, 0.0001f);
     }
 
-    // if (1) {} // TODO is needed?
-    // dummy:; // TODO is needed?
-
     camera->xzOffsetUpdateRate = Camera_LerpCeilF(0.05f, camera->xzOffsetUpdateRate, spCC, 0.0001f);
-    camera->fovUpdateRate = Camera_LerpCeilF(0.050f, (0, camera->fovUpdateRate), camera->speedRatio * 0.05f,
-                                             0.0001f); // TODO: IS extra 0 needed?
-
-    // Everything below is down to SP and floats
+    camera->fovUpdateRate = Camera_LerpCeilF(0.050f, camera->fovUpdateRate, camera->speedRatio * 0.05f, 0.0001f);
 
     if (sp60 < 50.0f) {
         sp5C = camera->waterYPos - spC0;
-        if (sp60 < 0.0f) {
-            phi_f14 = 1.0f;
-        } else {
-            phi_f14 = 1.0f - (sp60 / 50.0f);
-        }
-        func_800CD834(camera, &sp94, roData->unk_00, &sp5C, phi_f14 * 50.0f);
+
+        func_800CD834(camera, &sp94, roData->unk_00, &sp5C, ((sp60 < 0.0f) ? 1.0f : 1.0f - (sp60 / 50.0f)) * 50.0f);
     } else {
         Camera_CalcAtDefault(camera, &sp94, roData->unk_00, roData->interfaceFlags);
     }
@@ -3439,37 +3394,31 @@ s32 Camera_Jump3(Camera* camera) {
     camera->dist = spAC.r;
 
     if (!(Camera_fabsf(sp3C->pos.y - camera->playerFloorHeight) < 10.0f) &&
-        !(Camera_fabsf(sp64.y - camera->waterYPos) < 50.f)) { // No 0?
+        !(Camera_fabsf(sp64.pos.y - camera->waterYPos) < 50.f)) {
         camera->pitchUpdateRateInv = 100.0f;
     }
 
+    // Float regalloc starts here
+
     if (roData->interfaceFlags & JUMP3_FLAG_5) {
-        if (camera->speedRatio * 1.3f > 0.6f) {
-            spD0 = 0.6f;
-        } else {
-            spD0 = (camera->speedRatio * 1.3f);
-        }
-        // spD0 = pad1;
-        spAC.pitch =
-            Camera_LerpCeilS((spAC.pitch * spD0) + (roData->unk_20 * (1.0f - spD0)), sp94.pitch,
-                             1.0f / ((camera->pitchUpdateRateInv + 1.0f) - (camera->pitchUpdateRateInv * spD0)), 5);
+        spD0 = CLAMP_MAX(camera->speedRatio * 1.3f, 0.6f);
+
+        spAC.pitch = Camera_LerpCeilS(
+            (spAC.pitch * spD0) + (roData->unk_20 * (1.0f - spD0)), sp94.pitch,
+            1.0f / (spCC = ((camera->pitchUpdateRateInv + 1.0f) - (camera->pitchUpdateRateInv * spD0))), 5);
     } else if (D_801EDC30[camera->camId].unk_64 == 1) {
-        pad1 = 1.0f / camera->yawUpdateRateInv;
-        spAC.yaw = Camera_LerpCeilS(D_801EDC30[camera->camId].yaw, sp94.yaw, pad1, 5);
-        // temp_f0 = 1.0f / camera->yawUpdateRateInv;
+        spAC.yaw = Camera_LerpCeilS(D_801EDC30[camera->camId].yaw, sp94.yaw, 1.0f / camera->yawUpdateRateInv, 5);
+
         // Bug? Should be pitchUpdateRateInv
         spAC.pitch = Camera_LerpCeilS(D_801EDC30[camera->camId].pitch, sp94.pitch, 1.0f / camera->yawUpdateRateInv, 5);
     } else if (roData->interfaceFlags & (JUMP3_FLAG_7 | JUMP3_FLAG_3)) {
         spAC.yaw = Camera_CalcDefaultYaw(camera, sp94.yaw, sp3C->rot.y, roData->unk_14, 0.0f);
 
-        if (camera->speedRatio * 1.3f > 1.0f) {
-            spCC = pad2 = 1.0f;
-        } else {
-            spCC = pad2 = camera->speedRatio * 1.3f;
-        }
-        spAC.pitch =
-            Camera_LerpCeilS((spAC.pitch * spCC) + (roData->unk_20 * (1.0f - spCC)), sp94.pitch,
-                             1.0f / ((camera->pitchUpdateRateInv + 1.0f) - (camera->pitchUpdateRateInv * spCC)), 5);
+        spD0 = CLAMP_MAX(camera->speedRatio * 1.3f, 1.0f);
+
+        spAC.pitch = Camera_LerpCeilS(
+            (spAC.pitch * spD0) + (roData->unk_20 * (1.0f - spD0)), sp94.pitch,
+            1.0f / (spCC = (camera->pitchUpdateRateInv + 1.0f) - (camera->pitchUpdateRateInv * spD0)), 5);
     } else {
         spAC.yaw = Camera_CalcDefaultYaw(camera, sp94.yaw, sp3C->rot.y, roData->unk_14, 0.0f);
         spAC.pitch = Camera_CalcDefaultPitch(camera, sp94.pitch, roData->unk_20, 0);
@@ -3486,11 +3435,13 @@ s32 Camera_Jump3(Camera* camera) {
     }
 
     OLib_VecSphAddToVec3f(sp40, sp44, &spAC);
+
     if ((camera->status == CAM_STATUS_ACTIVE) && !(roData->interfaceFlags & JUMP3_FLAG_6)) {
         if (func_800CBA7C(camera) == 0) {
             func_800CED90(camera, &spAC, &sp9C, roData->unk_04, roData->unk_0C, &D_801EDC30[camera->camId],
                           &rwData->unk_10);
         }
+
         if (roData->interfaceFlags & JUMP3_FLAG_2) {
             camera->inputDir.x = -sp9C.pitch;
             camera->inputDir.y = sp9C.yaw + 0x8000;
@@ -3509,13 +3460,11 @@ s32 Camera_Jump3(Camera* camera) {
     }
 
     camera->fov = Camera_LerpCeilF(roData->unk_18, camera->fov, camera->fovUpdateRate, 0.1f);
-    camera->roll = Camera_LerpCeilS(0, camera->roll, .5f, 5); // TODO is extra 0 in 0.50f needed? (try without f)
+    camera->roll = Camera_LerpCeilS(0, camera->roll, .5f, 5);
     camera->atLerpStepScale = Camera_ClampLerpScale(camera, roData->unk_1C);
+
     return true;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Jump3.s")
-#endif
 
 s32 Camera_Jump4(Camera* camera) {
     return Camera_Noop(camera);
