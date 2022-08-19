@@ -56,7 +56,7 @@ typedef struct Inventory {
 } Inventory; // size = 0x88
 
 typedef struct HorseData {
-    /* 0x0 */ s16 scene;                               // "spot_no"
+    /* 0x0 */ s16 sceneId;                             // "spot_no"
     /* 0x2 */ Vec3s pos;                               // "horse_x", "horse_y" and "horse_z"
     /* 0x8 */ s16 yaw;                                 // "horse_a"
 } HorseData; // size = 0xA

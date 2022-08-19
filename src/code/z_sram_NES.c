@@ -679,7 +679,7 @@ void Sram_InitNewSave(void) {
     Lib_MemCpy(&gSaveContext.save.inventory, &sSaveDefaultInventory, sizeof(Inventory));
     Lib_MemCpy(&gSaveContext.save.checksum, &sSaveDefaultChecksum, sizeof(gSaveContext.save.checksum));
 
-    gSaveContext.save.horseData.scene = SCENE_F01;
+    gSaveContext.save.horseData.sceneId = SCENE_F01;
     gSaveContext.save.horseData.pos.x = -1420;
     gSaveContext.save.horseData.pos.y = 257;
     gSaveContext.save.horseData.pos.z = -1285;
@@ -839,7 +839,7 @@ void Sram_InitDebugSave(void) {
 
     gSaveContext.save.hasTatl = true;
 
-    gSaveContext.save.horseData.scene = SCENE_F01;
+    gSaveContext.save.horseData.sceneId = SCENE_F01;
     gSaveContext.save.horseData.pos.x = -1420;
     gSaveContext.save.horseData.pos.y = 257;
     gSaveContext.save.horseData.pos.z = -1285;
