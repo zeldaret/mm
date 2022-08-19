@@ -3,14 +3,18 @@
 
 #include "global.h"
 
+#define OBJHSBLOCK_GET_SWITCH(thisx) (((thisx)->params >> 8) & 0x7F)
+#define OBJHSBLOCK_GET_3(thisx) ((thisx)->params & 3)
+#define OBJHSBLOCK_GET_5(thisx) (((thisx)->params >> 5) & 1)
+#define OBJHSBLOCK_GET_6(thisx) (((thisx)->params >> 6) & 3)
+
 struct ObjHsblock;
 
 typedef void (*ObjHsblockActionFunc)(struct ObjHsblock*, PlayState*);
 
 typedef struct ObjHsblock {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x18];
-    /* 0x015C */ ObjHsblockActionFunc actionFunc;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ ObjHsblockActionFunc actionFunc;
 } ObjHsblock; // size = 0x160
 
 extern const ActorInit Obj_Hsblock_InitVars;

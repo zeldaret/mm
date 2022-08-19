@@ -107,7 +107,7 @@ void func_80C072D0(BgIkninside* this, PlayState* play) {
         if ((this->collider.info.acHitInfo != NULL) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000)) {
             for (i = 0; i < 20; i++) {
                 altitude = Rand_S16Offset(0x1800, 0x2800);
-                azimuth = (u32)Rand_Next() >> 0x10;
+                azimuth = Rand_Next() >> 0x10;
                 speed = Rand_ZeroFloat(3.0f) + 8.0f;
                 velocity.x = speed * Math_CosS(altitude) * Math_SinS(azimuth);
                 velocity.y = speed * Math_SinS(altitude) + Rand_ZeroFloat(5.0f);

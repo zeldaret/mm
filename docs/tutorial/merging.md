@@ -3,7 +3,6 @@
 - Up: [Contents](contents.md)
 - Previous: [Documenting](documenting.md)
 
-
 ## Preparing to PR
 
 ### Change the `spec`
@@ -73,7 +72,6 @@ Run the formatting script `format.sh`, to format the C files in the standard way
 
 To make sure the PR builds correctly with the current master, you need to merge `upstream/master` before you make the PR. This tends to break things, that you have to fix to get it to compile correctly again.
 
-
 ## Pull Requests
 
 Push commits to your fork of the repository on GitHub, and then open a pull request. Name the PR something sensible, like
@@ -86,7 +84,6 @@ Push commits to your fork of the repository on GitHub, and then open a pull requ
 and so on, although these four tend to cover most cases. Feel free to add a comment describing anything interesting you had to do or issues in non-matchings.
 
 Please also update the status of the file on Trello/the spreadsheet.
-
 
 ### Reviews
 

@@ -10,8 +10,8 @@ typedef void (*EnGakufuActionFunc)(struct EnGakufu*, PlayState*);
 #define GAKUFU_GET_TYPE(thisx) ((thisx)->params & 0xF)
 
 typedef enum {
-    /* 0x00 */ GAKUFU_TERMINA_FIELD,   
-    /* 0x01 */ GAKUFU_MILK_BAR
+    /* 0x0 */ GAKUFU_TERMINA_FIELD,   
+    /* 0x1 */ GAKUFU_MILK_BAR
 } GakufuType;
 
 typedef struct EnGakufu {

@@ -23,6 +23,7 @@
  */
 
 #include "z_en_rd.h"
+#include "z64rumble.h"
 #include "objects/object_rd/object_rd.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
@@ -439,7 +440,7 @@ void EnRd_SquattingDance(EnRd* this, PlayState* play) {
         } else {
             this->actor.hintId = 0x2A;
         }
-        Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 19.0f, 2, -10.0f);
+        Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 19.0f, ANIMMODE_ONCE, -10.0f);
         this->actionFunc = EnRd_EndClappingOrSquattingDanceWhenPlayerIsClose;
     }
 
@@ -483,7 +484,7 @@ void EnRd_ClappingDance(EnRd* this, PlayState* play) {
         } else {
             this->actor.hintId = 0x2A;
         }
-        Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 19.0f, 2, -10.0f);
+        Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 19.0f, ANIMMODE_ONCE, -10.0f);
         this->actionFunc = EnRd_EndClappingOrSquattingDanceWhenPlayerIsClose;
     }
 
@@ -581,7 +582,7 @@ void EnRd_EndPirouetteWhenPlayerIsClose(EnRd* this, PlayState* play) {
 
     this->pirouetteRotationalVelocity -= 0x64;
     if ((this->pirouetteRotationalVelocity < 0x834) && (this->pirouetteRotationalVelocity >= 0x7D0)) {
-        Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 19.0f, 2, -10.0f);
+        Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 19.0f, ANIMMODE_ONCE, -10.0f);
     } else if (this->pirouetteRotationalVelocity < 0x3E8) {
         if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (!this->isMourning)) {
             EnRd_SetupAttemptPlayerFreeze(this);
@@ -593,7 +594,7 @@ void EnRd_EndPirouetteWhenPlayerIsClose(EnRd* this, PlayState* play) {
 
 void EnRd_SetupRiseFromCoffin(EnRd* this) {
     Animation_Change(&this->skelAnime, &gGibdoRedeadIdleAnim, 0.0f, 0.0f, Animation_GetLastFrame(&gGibdoRedeadIdleAnim),
-                     0, -6.0f);
+                     ANIMMODE_LOOP, -6.0f);
     this->action = EN_RD_ACTION_RISING_FROM_COFFIN;
     this->coffinRiseForwardAccelTimer = 6;
     this->actor.shape.rot.x = -0x4000;
@@ -629,7 +630,7 @@ void EnRd_RiseFromCoffin(EnRd* this, PlayState* play) {
 void EnRd_SetupWalkToPlayer(EnRd* this, PlayState* play) {
     f32 frameCount = Animation_GetLastFrame(&gGibdoRedeadWalkAnim);
 
-    Animation_Change(&this->skelAnime, &gGibdoRedeadWalkAnim, 1.0f, 4.0f, frameCount, 1, -4.0f);
+    Animation_Change(&this->skelAnime, &gGibdoRedeadWalkAnim, 1.0f, 4.0f, frameCount, ANIMMODE_LOOP_INTERP, -4.0f);
     this->actor.speedXZ = 0.4f;
     this->action = EN_RD_ACTION_WALKING_TO_PLAYER_OR_RELEASING_GRAB;
     this->actionFunc = EnRd_WalkToPlayer;
@@ -660,7 +661,7 @@ void EnRd_WalkToPlayer(EnRd* this, PlayState* play) {
                     player->actor.freezeTimer = 40;
                     func_80123E90(play, &this->actor);
                     GET_PLAYER(play)->unk_A78 = &this->actor;
-                    func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
+                    Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
                 }
                 this->playerStunWaitTimer = 60;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
@@ -706,7 +707,7 @@ void EnRd_WalkToPlayer(EnRd* this, PlayState* play) {
 
 void EnRd_SetupWalkToHome(EnRd* this, PlayState* play) {
     Animation_Change(&this->skelAnime, &gGibdoRedeadWalkAnim, 0.5f, 0.0f, Animation_GetLastFrame(&gGibdoRedeadWalkAnim),
-                     1, -4.0f);
+                     ANIMMODE_LOOP_INTERP, -4.0f);
     this->action = EN_RD_ACTION_WALKING_TO_HOME;
     this->actionFunc = EnRd_WalkToHome;
 }
@@ -758,7 +759,7 @@ void EnRd_WalkToHome(EnRd* this, PlayState* play) {
 void EnRd_SetupWalkToParent(EnRd* this) {
     f32 frameCount = Animation_GetLastFrame(&gGibdoRedeadWalkAnim);
 
-    Animation_Change(&this->skelAnime, &gGibdoRedeadWalkAnim, 0.5f, 0.0f, frameCount, 1, -4.0f);
+    Animation_Change(&this->skelAnime, &gGibdoRedeadWalkAnim, 0.5f, 0.0f, frameCount, ANIMMODE_LOOP_INTERP, -4.0f);
     this->action = EN_RD_ACTION_WALKING_TO_PARENT;
     this->isMourning = true;
     this->actionFunc = EnRd_WalkToParent;
@@ -829,7 +830,7 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
             Animation_PlayLoop(&this->skelAnime, &gGibdoRedeadGrabAttackAnim);
             this->grabState++;
             play->damagePlayer(play, -8);
-            func_8013ECE0(this->actor.xzDistToPlayer, 255, 1, 12);
+            Rumble_Request(this->actor.xzDistToPlayer, 255, 1, 12);
             this->grabDamageTimer = 20;
 
         case EN_RD_GRAB_START:
@@ -843,7 +844,7 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
                     player->unk_AE8 = 100;
                 }
                 Animation_Change(&this->skelAnime, &gGibdoRedeadGrabEndAnim, 0.5f, 0.0f,
-                                 Animation_GetLastFrame(&gGibdoRedeadGrabEndAnim), 3, 0.0f);
+                                 Animation_GetLastFrame(&gGibdoRedeadGrabEndAnim), ANIMMODE_ONCE_INTERP, 0.0f);
                 this->grabState++;
                 this->action = EN_RD_ACTION_WALKING_TO_PLAYER_OR_RELEASING_GRAB;
                 break;
@@ -877,7 +878,7 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
             this->grabDamageTimer--;
             if (this->grabDamageTimer == 0) {
                 play->damagePlayer(play, -8);
-                func_8013ECE0(this->actor.xzDistToPlayer, 240, 1, 12);
+                Rumble_Request(this->actor.xzDistToPlayer, 240, 1, 12);
                 this->grabDamageTimer = 20;
                 func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
             }
@@ -904,7 +905,7 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
 
 void EnRd_SetupAttemptPlayerFreeze(EnRd* this) {
     Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f,
-                     Animation_GetLastFrame(&gGibdoRedeadLookBackAnim), 2, 0.0f);
+                     Animation_GetLastFrame(&gGibdoRedeadLookBackAnim), ANIMMODE_ONCE, 0.0f);
     this->action = EN_RD_ACTION_ATTEMPTING_PLAYER_STUN;
     this->actionFunc = EnRd_AttemptPlayerFreeze;
 }
@@ -917,7 +918,7 @@ void EnRd_AttemptPlayerFreeze(EnRd* this, PlayState* play) {
     if (ABS_ALT(yaw) < 0x2008) {
         if (!(this->flags & EN_RD_FLAG_CANNOT_FREEZE_PLAYER)) {
             player->actor.freezeTimer = 60;
-            func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
+            Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
             func_80123E90(play, &this->actor);
         }
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
@@ -951,7 +952,7 @@ void EnRd_GrabFail(EnRd* this, PlayState* play) {
 void EnRd_SetupTurnAwayAndShakeHead(EnRd* this) {
     f32 frameCount = Animation_GetLastFrame(&gGibdoRedeadWalkAnim);
 
-    Animation_Change(&this->skelAnime, &gGibdoRedeadWalkAnim, 0.5f, 0.0f, frameCount, 1, -4.0f);
+    Animation_Change(&this->skelAnime, &gGibdoRedeadWalkAnim, 0.5f, 0.0f, frameCount, ANIMMODE_LOOP_INTERP, -4.0f);
     this->action = EN_RD_ACTION_TURNING_AWAY_AND_SHAKING_HEAD;
     this->headShakeTimer = 0;
     this->actionFunc = EnRd_TurnAwayAndShakeHead;
@@ -988,7 +989,7 @@ void EnRd_StandUp(EnRd* this, PlayState* play) {
 
 void EnRd_SetupCrouch(EnRd* this) {
     Animation_Change(&this->skelAnime, &gGibdoRedeadStandUpAnim, -1.0f,
-                     Animation_GetLastFrame(&gGibdoRedeadStandUpAnim), 0.0f, 2, -4.0f);
+                     Animation_GetLastFrame(&gGibdoRedeadStandUpAnim), 0.0f, ANIMMODE_ONCE, -4.0f);
     this->action = EN_RD_ACTION_CROUCHING;
     this->actionFunc = EnRd_Crouch;
 }

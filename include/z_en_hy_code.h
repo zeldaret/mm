@@ -10,28 +10,28 @@ struct EnHy;
 
 //! TODO: Better animaion enum names when animations are documented
 typedef enum {
-    /*  0 */ ENHY_ANIMATION_AOB_0,
-    /*  1 */ ENHY_ANIMATION_BOJ_1,
-    /*  2 */ ENHY_ANIMATION_BOJ_2,
-    /*  3 */ ENHY_ANIMATION_BOJ_3,
-    /*  4 */ ENHY_ANIMATION_BOJ_4,
-    /*  5 */ ENHY_ANIMATION_BOJ_5,
-    /*  6 */ ENHY_ANIMATION_BBA_6,
-    /*  7 */ ENHY_ANIMATION_BJI_7,
-    /*  8 */ ENHY_ANIMATION_BJI_8,
-    /*  9 */ ENHY_ANIMATION_BJI_9,
-    /* 10 */ ENHY_ANIMATION_BOJ_10,
-    /* 11 */ ENHY_ANIMATION_OS_ANIME_11,
-    /* 12 */ ENHY_ANIMATION_BOJ_12,
-    /* 13 */ ENHY_ANIMATION_BOJ_13,
-    /* 14 */ ENHY_ANIMATION_BOJ_14,
-    /* 15 */ ENHY_ANIMATION_BOJ_15,
-    /* 16 */ ENHY_ANIMATION_BOJ_16,
-    /* 17 */ ENHY_ANIMATION_BOJ_17,
-    /* 18 */ ENHY_ANIMATION_BOJ_18,
-    /* 19 */ ENHY_ANIMATION_BOJ_19,
-    /* 20 */ ENHY_ANIMATION_BOJ_20,
-    /* 21 */ ENHY_ANIMATION_MAX
+    /*  0 */ ENHY_ANIM_AOB_0,
+    /*  1 */ ENHY_ANIM_BOJ_1,
+    /*  2 */ ENHY_ANIM_BOJ_2,
+    /*  3 */ ENHY_ANIM_BOJ_3,
+    /*  4 */ ENHY_ANIM_BOJ_4,
+    /*  5 */ ENHY_ANIM_BOJ_5,
+    /*  6 */ ENHY_ANIM_BBA_6,
+    /*  7 */ ENHY_ANIM_BJI_7,
+    /*  8 */ ENHY_ANIM_BJI_8,
+    /*  9 */ ENHY_ANIM_BJI_9,
+    /* 10 */ ENHY_ANIM_BOJ_10,
+    /* 11 */ ENHY_ANIM_OS_ANIME_11,
+    /* 12 */ ENHY_ANIM_BOJ_12,
+    /* 13 */ ENHY_ANIM_BOJ_13,
+    /* 14 */ ENHY_ANIM_BOJ_14,
+    /* 15 */ ENHY_ANIM_BOJ_15,
+    /* 16 */ ENHY_ANIM_BOJ_16,
+    /* 17 */ ENHY_ANIM_BOJ_17,
+    /* 18 */ ENHY_ANIM_BOJ_18,
+    /* 19 */ ENHY_ANIM_BOJ_19,
+    /* 20 */ ENHY_ANIM_BOJ_20,
+    /* 21 */ ENHY_ANIM_MAX
 } EnHyAnimation;
 
 typedef void (*EnHyActionFunc)(struct EnHy*, PlayState*);
@@ -39,7 +39,7 @@ typedef void (*EnHyActionFunc)(struct EnHy*, PlayState*);
 typedef struct EnHy {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnHyActionFunc actionFunc;
-    /* 0x148 */ EnHyActionFunc tmpActionFunc;
+    /* 0x148 */ EnHyActionFunc prevActionFunc;
     /* 0x14C */ SkelAnime skelAnime;
     /* 0x190 */ s8 headObjIndex; // Limb 15
     /* 0x191 */ s8 skelUpperObjIndex; // Limbs 8-14
@@ -60,9 +60,9 @@ typedef struct EnHy {
     /* 0x2C6 */ Vec3s trackTarget;
     /* 0x2CC */ Vec3s headRot;
     /* 0x2D2 */ Vec3s torsoRot;
-    /* 0x2D8 */ Vec3s tmptrackTarget;
-    /* 0x2DE */ Vec3s tmpHeadRot;
-    /* 0x2E4 */ Vec3s tmpTorsoRot;
+    /* 0x2D8 */ Vec3s prevTrackTarget;
+    /* 0x2DE */ Vec3s prevHeadRot;
+    /* 0x2E4 */ Vec3s prevTorsoRot;
     /* 0x2EA */ s16 limbRotTableY[16];
     /* 0x30A */ s16 limbRotTableZ[16];
     /* 0x32C */ Vec3f bodyPartsPos[15];

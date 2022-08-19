@@ -96,7 +96,7 @@ const ActorInit En_Prz_InitVars = {
 
 AnimationHeader* D_80A77240[] = { &object_pr_Anim_004340, &object_pr_Anim_004274 };
 
-u8 D_80A77248[] = { 0, 0 };
+u8 D_80A77248[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
 
 Vec3f D_80A7724C = { 0.0f, 0.0f, 0.0f };
 

@@ -33,6 +33,7 @@
         <DList Name="object_iknv_obj_DL_0115E0" Offset="0x115E0" />
         <DList Name="object_iknv_obj_DL_011788" Offset="0x11788" />
         <TextureAnimation Name="object_iknv_obj_Matanimheader_0117A0" Offset="0x117A0" />
+        <Collision Name="object_iknv_obj_Colheader_0117C8" Offset="0x117C8" />
         <DList Name="object_iknv_obj_DL_011880" Offset="0x11880" />
         <DList Name="object_iknv_obj_DL_011950" Offset="0x11950" />
         <Collision Name="object_iknv_obj_Colheader_0119D4" Offset="0x119D4" />
@@ -58,7 +59,7 @@
         <DList Name="object_iknv_obj_DL_0126D0" Offset="0x126D0" />
         <DList Name="object_iknv_obj_DL_012700" Offset="0x12700" />
         <TextureAnimation Name="object_iknv_obj_Matanimheader_012728" Offset="0x12728" />
-        <!-- <Blob Name="object_iknv_obj_Blob_012740" Size="0x80" Offset="0x12740" /> -->
+        <Collision Name="object_iknv_obj_Colheader_012788" Offset="0x12788" />
         <DList Name="object_iknv_obj_DL_012880" Offset="0x12880" />
         <DList Name="object_iknv_obj_DL_0129C0" Offset="0x129C0" />
         <DList Name="object_iknv_obj_DL_0129C8" Offset="0x129C8" />

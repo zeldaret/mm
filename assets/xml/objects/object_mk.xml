@@ -40,6 +40,6 @@
         <Limb Name="object_mk_Standardlimb_006C4C" Type="Standard" EnumName="OBJECT_MK_LIMB_0A" Offset="0x6C4C" />
         <Limb Name="object_mk_Standardlimb_006C58" Type="Standard" EnumName="OBJECT_MK_LIMB_0B" Offset="0x6C58" />
         <Limb Name="object_mk_Standardlimb_006C64" Type="Standard" EnumName="OBJECT_MK_LIMB_0C" Offset="0x6C64" />
-        <Skeleton Name="object_mk_Skel_006CA0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MK_LIMB_NONE" LimbMax="OBJECT_MK_LIMB_MAX" EnumName="object_mk_Limbs" Offset="0x6CA0" />
+        <Skeleton Name="object_mk_Skel_006CA0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MK_LIMB_NONE" LimbMax="OBJECT_MK_LIMB_MAX" EnumName="ObjectMkLimb" Offset="0x6CA0" />
     </File>
 </Root>

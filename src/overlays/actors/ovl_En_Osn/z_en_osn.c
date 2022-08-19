@@ -28,20 +28,32 @@ const ActorInit En_Osn_InitVars = {
     (ActorFunc)EnOsn_Draw,
 };
 
-static AnimationInfo sAnimations[] = {
-    { &object_osn_Anim_0201BC, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_002F74, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_0037C4, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_004320, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_004C8C, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_0094E4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_009BB8, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_00AC60, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_001614, 1.0f, 1.0f, 39.0f, 0, 0.0f }, { &object_osn_Anim_001034, 1.0f, 1.0f, 70.0f, 0, 0.0f },
-    { &object_osn_Anim_00AE9C, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_003A1C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_0055F8, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_007220, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_00A444, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_0000C4, 0.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &object_osn_Anim_0000C4, 0.0f, 1.0f, 1.0f, 2, 0.0f },  { &object_osn_Anim_006D48, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_001D6C, 1.0f, 0.0f, 0.0f, 2, 0.0f },  { &object_osn_Anim_002634, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_008D80, 1.0f, 0.0f, 0.0f, 2, 0.0f },  { &object_osn_Anim_005D78, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &object_osn_Anim_006564, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_00A444, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_008D80, 0.0f, 77.0f, 0.0f, 2, 0.0f },
+static AnimationInfo sAnimationInfo[] = {
+    { &object_osn_Anim_0201BC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_002F74, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_0037C4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_004320, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_004C8C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_0094E4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_009BB8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_00AC60, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_001614, 1.0f, 1.0f, 39.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_001034, 1.0f, 1.0f, 70.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_00AE9C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_003A1C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_0055F8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_007220, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_00A444, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_0000C4, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_osn_Anim_0000C4, 0.0f, 1.0f, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_osn_Anim_006D48, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_001D6C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_osn_Anim_002634, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_008D80, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_osn_Anim_005D78, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_osn_Anim_006564, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_00A444, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_osn_Anim_008D80, 0.0f, 77.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -167,27 +179,27 @@ s32 func_80AD08B0(PlayState* play) {
 
 void func_80AD0998(EnOsn* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_1EC].animation);
 
     if (this->unk_1EC == 0x12 && curFrame == lastFrame) {
         this->unk_1EC = 0x13;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0x13);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0x13);
     }
 }
 
 void func_80AD0A24(EnOsn* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_1EC].animation);
 
     if (this->unk_1EC == 0x15 && curFrame == lastFrame) {
         this->unk_1EC = 0x16;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0x16);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0x16);
     }
 }
 
 void func_80AD0AB0(EnOsn* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_1EC].animation);
 
     if (curFrame == lastFrame) {
         this->unk_1FA -= 8;
@@ -596,7 +608,7 @@ void func_80AD144C(EnOsn* this, PlayState* play) {
     u32 sp1C = Flags_GetSwitch(play, 0);
     this->cutscene = this->actor.cutscene;
 
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     if (sp1C == 0) {
         this->actionFunc = func_80AD16A8;
     } else {
@@ -716,7 +728,7 @@ void func_80AD16A8(EnOsn* this, PlayState* play) {
                     this->unk_1EC = 0;
                     break;
             }
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->unk_1EC);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->unk_1EC);
         }
 
         if ((this->unk_1EC == 5) && (play->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 0xB) &&
@@ -747,13 +759,13 @@ void func_80AD16A8(EnOsn* this, PlayState* play) {
 }
 
 void func_80AD19A0(EnOsn* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if ((temp_v0 == 6 || temp_v0 == 5) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_DONE) || (talkState == TEXT_STATE_5)) && Message_ShouldAdvance(play)) {
         if (this->unk_1EA & 0x20) {
             this->unk_1EA &= ~0x20;
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->actionFunc = func_80AD14C8;
         } else {
             func_80AD10FC(this, play);
@@ -770,24 +782,26 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_osn_Skel_0202F0, &object_osn_Anim_0201BC, 0, 0, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_osn_Skel_0202F0, &object_osn_Anim_0201BC, NULL, NULL, 0);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->unk_1FA = 255;
     switch (ENOSN_GET_3(&this->actor)) {
         case 0:
-            if (((gSaveContext.save.entranceIndex == 0xC020) || (gSaveContext.save.entranceIndex == 0xC030)) ||
-                (gSaveContext.save.entranceIndex == 0xC060)) {
+            if (((gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 2)) ||
+                 (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 3))) ||
+                (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 6))) {
                 this->unk_1EA |= 1;
             }
             this->unk_1F0 = 1;
             if (play->sceneNum == SCENE_INSIDETOWER) {
-                if ((gSaveContext.save.entranceIndex == 0xC020) || (gSaveContext.save.entranceIndex == 0xC060)) {
+                if ((gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 2)) ||
+                    (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 6))) {
                     this->actionFunc = func_80AD16A8;
                     return;
                 }
-                if (gSaveContext.save.entranceIndex == 0xC030) {
+                if (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 3)) {
                     func_80AD1398(this);
                     this->actionFunc = func_80AD1634;
                     return;
@@ -800,13 +814,13 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
 
         case 1:
             this->unk_1EC = 0xF;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->unk_1EC);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->unk_1EC);
             this->actionFunc = EnOsn_Idle;
             break;
 
         case 2:
             this->unk_1EC = 0x10;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->unk_1EC);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->unk_1EC);
             this->actionFunc = EnOsn_Idle;
             break;
 
@@ -836,7 +850,7 @@ void EnOsn_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
-    if (!(ENOSN_GET_3(&this->actor))) {
+    if (!ENOSN_GET_3(&this->actor)) {
         if (sp34 != 0) {
             this->actor.flags |= ACTOR_FLAG_1;
             func_80AD0830(this, play);

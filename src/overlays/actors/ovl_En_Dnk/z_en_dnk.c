@@ -93,7 +93,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
     { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &gDekuPalaceGuardWaitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
@@ -138,18 +138,18 @@ s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
     s32 sp30 = false;
 
     if (animIndex >= 0) {
-        if (animIndex < ARRAY_COUNT(sAnimations)) {
+        if (animIndex < ARRAY_COUNT(sAnimationInfo)) {
             sp30 = true;
-            frameCount = sAnimations[animIndex].frameCount;
+            frameCount = sAnimationInfo[animIndex].frameCount;
             if (frameCount < 0) {
-                frameCount = Animation_GetLastFrame(sAnimations[animIndex].animation);
+                frameCount = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
             }
-            frame = sAnimations[animIndex].startFrame;
+            frame = sAnimationInfo[animIndex].startFrame;
             if (frame < 0) {
                 frame = frameCount;
             }
-            Animation_Change(skelAnime, sAnimations[animIndex].animation, sAnimations[animIndex].playSpeed, frame,
-                             frameCount, sAnimations[animIndex].mode, sAnimations[animIndex].morphFrames);
+            Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed, frame,
+                             frameCount, sAnimationInfo[animIndex].mode, sAnimationInfo[animIndex].morphFrames);
         }
     }
     return sp30;

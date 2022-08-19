@@ -158,7 +158,6 @@ void EffectSsBomb2_DrawLayered(PlayState* play, u32 index, EffectSs* this) {
         }
     }
 
-
     CLOSE_DISPS(gfxCtx);
 }
 

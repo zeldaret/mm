@@ -5,7 +5,6 @@
  */
 
 #include "z_en_ma4.h"
-#include "objects/object_ma1/object_ma1.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
@@ -90,14 +89,14 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 D_80AC00DC = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static TexturePtr sEyeTextures[] = {
-    object_ma1_Tex_00FFC8, object_ma1_Tex_0107C8, object_ma1_Tex_010FC8, object_ma1_Tex_0117C8, object_ma1_Tex_011FC8,
+    gRomaniEyeOpenTex, gRomaniEyeHalfTex, gRomaniEyeClosedTex, gRomaniEyeHappyTex, gRomaniEyeSadTex,
 };
 
 static TexturePtr sMouthTextures[] = {
-    object_ma1_Tex_0127C8,
-    object_ma1_Tex_012BC8,
-    object_ma1_Tex_012FC8,
-    object_ma1_Tex_0133C8,
+    gRomaniMouthHappyTex,
+    gRomaniMouthFrownTex,
+    gRomaniMouthHangingOpenTex,
+    gRomaniMouthSmileTex,
 };
 
 void EnMa4_UpdateEyes(EnMa4* this) {
@@ -113,41 +112,41 @@ void EnMa4_UpdateEyes(EnMa4* this) {
 }
 
 static AnimationSpeedInfo sAnimationInfo[] = {
-    { &object_ma1_Anim_009E58, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_ma1_Anim_009E58, 1.0f, ANIMMODE_LOOP, -6.0f }, // Idle anim
-    { &object_ma1_Anim_002A8C, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_ma1_Anim_002A8C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Looking around anim
-    { &object_ma1_Anim_018948, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_ma1_Anim_018948, 1.0f, ANIMMODE_ONCE, -6.0f }, // Starts holding hands anim
-    { &object_ma1_Anim_01B76C, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_ma1_Anim_01B76C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Holnding hands anim
-    { &object_ma1_Anim_007328, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_ma1_Anim_007328, 1.0f, ANIMMODE_LOOP, -6.0f }, // Walking anim
-    { &object_ma1_Anim_014088, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_ma1_Anim_014088, 1.0f, ANIMMODE_LOOP, -6.0f }, //
-    { &object_ma1_Anim_015B7C, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_ma1_Anim_015B7C, 1.0f, ANIMMODE_ONCE, -6.0f }, // Shoot arrow anim
-    { &object_ma1_Anim_007D98, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_ma1_Anim_007D98, 1.0f, ANIMMODE_LOOP, -6.0f }, // Sitting anim
-    { &object_ma1_Anim_00852C, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_ma1_Anim_00852C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Sitting traumatized anim
-    { &object_ma1_Anim_008F6C, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_ma1_Anim_008F6C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Sitting sad anim
+    { &gRomaniIdleAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gRomaniIdleAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gRomaniLookAroundAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gRomaniLookAroundAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gRomaniSingStartAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gRomaniSingStartAnim, 1.0f, ANIMMODE_ONCE, -6.0f },
+    { &gRomaniSingLoopAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gRomaniSingLoopAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gRomaniRunAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gRomaniRunAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gRomaniWalkAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gRomaniWalkAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gRomaniShootBowAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gRomaniShootBowAnim, 1.0f, ANIMMODE_ONCE, -6.0f },
+    { &gRomaniSittingAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gRomaniSittingAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gRomaniSittingHeadShakeAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gRomaniSittingHeadShakeAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gRomaniSittingLookDownAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gRomaniSittingLookDownAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
 };
 
-void EnMa4_ChangeAnim(EnMa4* this, s32 index) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[index].animation, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[index].animation), sAnimationInfo[index].mode,
-                     sAnimationInfo[index].morphFrames);
+void EnMa4_ChangeAnim(EnMa4* this, s32 animIndex) {
+    Animation_Change(&this->skelAnime, sAnimationInfo[animIndex].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationInfo[animIndex].animation), sAnimationInfo[animIndex].mode,
+                     sAnimationInfo[animIndex].morphFrames);
 }
 
 void func_80ABDD9C(EnMa4* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 flag;
 
-    if (this->unk_1D8.unk_00 == 0 && ((this->skelAnime.animation == &object_ma1_Anim_007328) ||
-                                      (this->skelAnime.animation == &object_ma1_Anim_002A8C) ||
-                                      (this->skelAnime.animation == &object_ma1_Anim_015B7C))) {
+    if (this->unk_1D8.unk_00 == 0 &&
+        ((this->skelAnime.animation == &gRomaniRunAnim) || (this->skelAnime.animation == &gRomaniLookAroundAnim) ||
+         (this->skelAnime.animation == &gRomaniShootBowAnim))) {
         flag = 1;
     } else {
         flag = (this->type == MA4_TYPE_ALIENS_WON && this->actionFunc != EnMa4_DialogueHandler) ? 1 : 0;
@@ -183,8 +182,7 @@ void EnMa4_Init(Actor* thisx, PlayState* play) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, NULL, this->jointTable, this->morphTable,
-                       MA1_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, NULL, this->jointTable, this->morphTable, ROMANI_LIMB_MAX);
 
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -216,10 +214,10 @@ void EnMa4_Init(Actor* thisx, PlayState* play) {
     } else {
         EnMa4_InitPath(this, play);
 
-        if (gSaveContext.save.entranceIndex == 0x6410) {
+        if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 1)) {
             EnMa4_ChangeAnim(this, 0);
             this->state = MA4_STATE_AFTERHORSEBACKGAME;
-        } else if (gSaveContext.save.entranceIndex == 0x64A0) {
+        } else if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 10)) {
             EnMa4_ChangeAnim(this, 0);
             this->state = MA4_STATE_AFTERDESCRIBETHEMCS;
         } else {
@@ -245,30 +243,30 @@ void EnMa4_Destroy(Actor* thisx, PlayState* play) {
 
 // Running in circles in the ranch
 void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
-    static s32 sCurrentAnim = 9;
+    static s32 sAnimIndex = 9;
     static s32 D_80AC0250 = 0;
     static s16 D_80AC0254 = 10;
     Vec3f sp34;
     s32 pad;
     s16 sp2E;
 
-    if (sCurrentAnim != 9 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        if (sCurrentAnim == 3) {
+    if (sAnimIndex != 9 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        if (sAnimIndex == 3) {
             if (D_80AC0250 < 3) {
                 D_80AC0250++;
             } else {
                 D_80AC0250 = 0;
                 EnMa4_ChangeAnim(this, 13);
-                sCurrentAnim = 13;
+                sAnimIndex = 13;
             }
         } else {
             this->actor.speedXZ = 2.7f;
             EnMa4_ChangeAnim(this, 9);
-            sCurrentAnim = 9;
+            sAnimIndex = 9;
         }
     }
 
-    if (sCurrentAnim == 13 && Animation_OnFrame(&this->skelAnime, 37.0f)) {
+    if (sAnimIndex == 13 && Animation_OnFrame(&this->skelAnime, 37.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROMANI_BOW_FLICK);
     }
 
@@ -284,7 +282,7 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
             this->actor.speedXZ = 0.0f;
             D_80AC0254 = 2;
             EnMa4_ChangeAnim(this, 3);
-            sCurrentAnim = 3;
+            sAnimIndex = 3;
         } else {
             if (D_80AC0254 > 0) {
                 D_80AC0254--;
@@ -300,7 +298,7 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
 
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     Actor_MoveWithGravity(&this->actor);
-    if (this->skelAnime.animation == &object_ma1_Anim_007328) { // Walking animation
+    if (this->skelAnime.animation == &gRomaniRunAnim) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 4.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
         }
@@ -628,31 +626,29 @@ void EnMa4_SetupDialogueHandler(EnMa4* this) {
 }
 
 void EnMa4_DialogueHandler(EnMa4* this, PlayState* play) {
-    s32 temp_v0;
-
     switch (Message_GetState(&play->msgCtx)) {
         default:
             break;
 
-        case 4: // Player answered a question
+        case TEXT_STATE_CHOICE: // Player answered a question
             EnMa4_HandlePlayerChoice(this, play);
             break;
 
-        case 5: // End message block
+        case TEXT_STATE_5: // End message block
             EnMa4_ChooseNextDialogue(this, play);
             break;
 
-        case 6: // End conversation
+        case TEXT_STATE_DONE: // End conversation
             if (Message_ShouldAdvance(play)) {
                 if ((play->msgCtx.unk120B1 == 0) || !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                     EnMa4_SetupWait(this);
                 }
             }
 
-        case 0:
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
     }
 
@@ -666,11 +662,11 @@ void EnMa4_SetupBeginHorsebackGame(EnMa4* this) {
 }
 
 void EnMa4_BeginHorsebackGame(EnMa4* this, PlayState* play) {
-    play->nextEntranceIndex = 0x6400;
+    play->nextEntrance = ENTRANCE(ROMANI_RANCH, 0);
     gSaveContext.nextCutsceneIndex = 0xFFF0;
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = 0x50;
-    gSaveContext.nextTransition = 3;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_80;
+    gSaveContext.nextTransitionType = TRANS_TYPE_03;
 }
 
 void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4* this, PlayState* play) {
@@ -757,17 +753,17 @@ void EnMa4_HorsebackGameEnd(EnMa4* this, PlayState* play) {
         }
     } else if (sFrameCounter == 50) {
         play->actorCtx.unk268 = 0;
-        play->nextEntranceIndex = 0x6410;
+        play->nextEntrance = ENTRANCE(ROMANI_RANCH, 1);
         gSaveContext.nextCutsceneIndex = 0;
         sFrameCounter = 0;
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
 
         if (this->poppedBalloonCounter == 10) {
-            play->unk_1887F = 0x50;
-            gSaveContext.nextTransition = 3;
+            play->transitionType = TRANS_TYPE_80;
+            gSaveContext.nextTransitionType = TRANS_TYPE_03;
         } else {
-            play->unk_1887F = 0x40;
-            gSaveContext.nextTransition = 2;
+            play->transitionType = TRANS_TYPE_64;
+            gSaveContext.nextTransitionType = TRANS_TYPE_02;
         }
 
         this->poppedBalloonCounter = 0;
@@ -832,7 +828,7 @@ void EnMa4_EponasSongCs(EnMa4* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
 
         player->stateFlags1 |= 0x20;
-        func_800B85E0(&this->actor, play, 200.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_AP_MINUS1);
         D_80AC0260 = 99;
         this->hasBow = true;
         EnMa4_SetupEndEponasSongCs(this);
@@ -854,7 +850,7 @@ void EnMa4_EndEponasSongCs(EnMa4* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         EnMa4_SetupDialogueHandler(this);
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -863,11 +859,11 @@ void EnMa4_SetupBeginDescribeThemCs(EnMa4* this) {
 }
 
 void EnMa4_BeginDescribeThemCs(EnMa4* this, PlayState* play) {
-    play->nextEntranceIndex = 0x6400;
+    play->nextEntrance = ENTRANCE(ROMANI_RANCH, 0);
     gSaveContext.nextCutsceneIndex = 0xFFF5;
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = 0x40;
-    gSaveContext.nextTransition = 2;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_64;
+    gSaveContext.nextTransitionType = TRANS_TYPE_02;
 }
 
 void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
@@ -1033,12 +1029,12 @@ s32 EnMa4_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     EnMa4* this = THIS;
     Vec3s sp4;
 
-    if (limbIndex == MA1_LIMB_HEAD) {
+    if (limbIndex == ROMANI_LIMB_HEAD) {
         sp4 = this->unk_1D8.unk_08;
         rot->x = rot->x + sp4.y;
         rot->z = rot->z + sp4.x;
     }
-    if (limbIndex == MA1_LIMB_TORSO) {
+    if (limbIndex == ROMANI_LIMB_TORSO) {
         sp4 = this->unk_1D8.unk_0E;
         rot->x = rot->x - sp4.y;
         rot->z = rot->z - sp4.x;
@@ -1051,12 +1047,12 @@ void EnMa4_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     EnMa4* this = THIS;
     Vec3f sp28 = { 800.0f, 0.0f, 0.0f };
 
-    if (limbIndex == MA1_LIMB_HEAD) {
+    if (limbIndex == ROMANI_LIMB_HEAD) {
         Matrix_MultVec3f(&sp28, &this->actor.focus.pos);
-    } else if (limbIndex == MA1_LIMB_HAND_LEFT) {
+    } else if (limbIndex == ROMANI_LIMB_LEFT_HAND) {
         if (this->hasBow == true) {
             OPEN_DISPS(play->state.gfxCtx);
-            gSPDisplayList(POLY_OPA_DISP++, object_ma1_DL_0003B0);
+            gSPDisplayList(POLY_OPA_DISP++, gRomaniBowDL);
             CLOSE_DISPS(play->state.gfxCtx);
         }
     }
@@ -1068,7 +1064,7 @@ void EnMa4_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     if (this->type == MA4_TYPE_ALIENS_WON) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, object_ma1_DL_000A20);
+        gSPDisplayList(POLY_OPA_DISP++, gRomaniWoodenBoxDL);
     }
 
     func_8012C28C(play->state.gfxCtx);
