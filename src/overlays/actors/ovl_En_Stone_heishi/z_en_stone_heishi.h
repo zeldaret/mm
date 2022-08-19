@@ -19,24 +19,34 @@ typedef struct EnStoneheishi {
     /* 0x25C */ s16 headRotZ;
     /* 0x25E */ s16 targetHeadPosY;
     /* 0x260 */ s16 targetHeadPosX;
-    /* 0x264 */ s32 animMode;
+    /* 0x264 */ s32 animIndex;
     /* 0x268 */ s16 timer;
-    /* 0x26A */ s16 unk26A;
+    /* 0x26A */ s16 DrinkBottleState;
     /* 0x26C */ f32 endFrame;
     /* 0x270 */ s16 unk270;
     /* 0x272 */ s16 textIndex;
-    /* 0x274 */ s16 unk274;
-    /* 0x276 */ u8 bottleStatus;
+    /* 0x274 */ s16 unk274; // Message related
+    /* 0x276 */ u8 bottleDisplay;
     /* 0x277 */ u8 playerGivesBluePotion;
     /* 0x278 */ ColliderCylinder collider;
 } EnStoneheishi; // size = 0x2C4
 
 typedef enum EN_STONE_HEISHI_BOTTLE {
     /* 0 */ BOTTLE_NONE,
-    /* 1 */ BOTTLE_EMPTY,
-    /* 2 */ BOTTLE_RED_POTION,
+    /* 1 */ BOTTLE_RED_POTION,
+    /* 2 */ BOTTLE_EMPTY,
     /* 3 */ BOTTLE_BLUE_POTION,
 } EN_STONE_HEISHI_BOTTLE;
+
+typedef enum EN_STONE_HEISHI_ANIMATIONS {
+    /* 0 */ SOLDIER_STAND_HAND_ON_HIP,
+    /* 1 */ SOLDIER_DRINK_1,
+    /* 2 */ SOLDIER_CHEER_WITH_SPEAR,
+    /* 3 */ SOLDIER_WAVE,
+    /* 4 */ SOLDIER_SIT_AND_REACH,
+    /* 5 */ SOLDIER_DRINK_2,
+    /* 6 */ SOLDIER_STAND_UP,
+} EN_STONE_HEISHI_ANIMATIONS;
 
 extern const ActorInit En_Stone_heishi_InitVars;
 
