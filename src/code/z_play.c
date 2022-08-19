@@ -389,7 +389,7 @@ void func_80166968(PlayState* this, Camera* camera) {
             Camera_SetFlags(camera, CAM_STATE_UNDERWATER);
             D_801D0D58 = -1;
             Distortion_SetType(0x10);
-            Distortion_SetCountdown(0x50);
+            Distortion_SetCountdown(80);
         }
 
         func_801A3EC0(0x20);
@@ -548,8 +548,7 @@ void func_80168DAC(PlayState* this) {
 void Play_Main(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
 
-    D_801D0D60 = &this->state.input[0];
-
+    D_801D0D60 = CONTROLLER1(&this->state);
     DebugDisplay_Init();
 
     {
@@ -563,13 +562,13 @@ void Play_Main(GameState* thisx) {
     }
 
     {
-        Input sp28 = this->state.input[0];
+        Input sp28 = *CONTROLLER1(&this->state);
 
         if (1) {
-            this->state.input[0] = D_801F6C18;
+            *CONTROLLER1(&this->state) = D_801F6C18;
         }
         func_80168DAC(this);
-        this->state.input[0] = sp28;
+        *CONTROLLER1(&this->state) = sp28;
     }
 
     ActorCutscene_Update();
