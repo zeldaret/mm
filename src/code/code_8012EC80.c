@@ -688,7 +688,7 @@ void Inventory_SetMapVisibility(s16 tingleIndex) {
 void Inventory_SaveDekuPlaygroundHighScore(s16 timerId) {
     s16 i;
 
-    gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1] = gSaveContext.timerCurTime[timerId];
+    gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1] = gSaveContext.timerCurTimes[timerId];
 
     for (i = 0; i < 8; i++) {
         gSaveContext.save.inventory.dekuPlaygroundPlayerName[CURRENT_DAY - 1][i] =

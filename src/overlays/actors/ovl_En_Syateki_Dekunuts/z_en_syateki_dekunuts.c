@@ -271,7 +271,7 @@ void func_80A2C2E0(EnSyatekiDekunuts* this, PlayState* play) {
 void func_80A2C33C(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if ((gSaveContext.timerCurTime[TIMER_ID_MINIGAME_1] <= SECONDS_TO_TIMER(0)) ||
+    if ((gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] <= SECONDS_TO_TIMER(0)) ||
         (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING)) {
         func_80A2C3AC(this);
     }

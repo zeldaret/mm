@@ -487,7 +487,7 @@ void func_80B10344(EnGb2* this, PlayState* play) {
     if (this->unk_26C & 0x200) {
         if (this->unk_280 == 3) {
             this->unk_26C &= ~0x200;
-            gSaveContext.timerState[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
+            gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
             func_800FE498();
             gSaveContext.eventInf[4] |= 0x40;
             func_80B0FE7C(play);
@@ -506,7 +506,7 @@ void func_80B10344(EnGb2* this, PlayState* play) {
     }
 
     if (gSaveContext.save.playerData.health < 49) {
-        gSaveContext.timerState[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
         gSaveContext.eventInf[4] |= 0x40;
         gSaveContext.eventInf[4] |= 0x20;
 
@@ -519,8 +519,8 @@ void func_80B10344(EnGb2* this, PlayState* play) {
         }
 
         func_80B0FE7C(play);
-    } else if (gSaveContext.timerCurTime[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
-        gSaveContext.timerState[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
+    } else if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
         gSaveContext.eventInf[4] |= 0x40;
         gSaveContext.eventInf[4] |= 0x10;
 

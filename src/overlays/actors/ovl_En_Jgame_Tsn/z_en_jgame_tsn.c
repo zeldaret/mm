@@ -155,7 +155,7 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (this->actor.flags & ACTOR_FLAG_10000) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
-            if (gSaveContext.timerCurTime[TIMER_ID_MINIGAME_2] > SECONDS_TO_TIMER(0)) {
+            if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] > SECONDS_TO_TIMER(0)) {
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                 Message_StartTextbox(play, 0x10A2, &this->actor);
                 this->unk_300 = 0x10A2;
@@ -352,7 +352,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
         func_80C14030(this);
     }
 
-    if (gSaveContext.timerCurTime[TIMER_ID_MINIGAME_2] == SECONDS_TO_TIMER(0)) {
+    if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] == SECONDS_TO_TIMER(0)) {
         Message_StartTextbox(play, 0x10A1, &this->actor);
         this->unk_300 = 0x10A1;
         player->stateFlags1 |= 0x20;
@@ -479,7 +479,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
             case 0x10A1:
                 func_801477B4(play);
                 gSaveContext.minigameState = 3;
-                gSaveContext.timerState[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
+                gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
                 gSaveContext.save.weekEventReg[90] &= (u8)~0x20;
                 func_80C144E4(this);
                 break;

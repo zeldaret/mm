@@ -25,7 +25,7 @@ void GameOver_Update(PlayState* play) {
             func_801477B4(play);
 
             for (timerId = 0; timerId < TIMER_ID_MAX; timerId++) {
-                gSaveContext.timerState[timerId] = TIMER_STATE_OFF;
+                gSaveContext.timerStates[timerId] = TIMER_STATE_OFF;
             }
 
             gSaveContext.eventInf[1] &= ~1;

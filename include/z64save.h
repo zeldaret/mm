@@ -58,7 +58,7 @@ typedef enum {
     /*  4 */ TIMER_STATE_COUNTING,
     /*  5 */ TIMER_STATE_STOP,
     /*  6 */ TIMER_STATE_6, // like `TIMER_STATE_STOP` but with extra minigame checks
-    /*  7 */ TIMER_STATE_7, // stopped but still update `timerCurTime`
+    /*  7 */ TIMER_STATE_7, // stopped but still update `timerCurTimes`
     /*  8 */ TIMER_STATE_ENV_START,
     /*  9 */ TIMER_STATE_ALT_START,
     /* 10 */ TIMER_STATE_10, // precursor to `TIMER_STATE_ALT_COUNTING`
@@ -235,11 +235,11 @@ typedef struct SaveContext {
     /* 0x1015 */ u8 unk_1015;
     /* 0x1016 */ u16 jinxTimer;
     /* 0x1018 */ s16 rupeeAccumulator;                  // "lupy_udct"
-    /* 0x101A */ u8 bottleTimerState[BOTTLE_MAX];            // "bottle_status", one entry for each bottle
-    /* 0x1020 */ OSTime bottleTimerStartOsTime[BOTTLE_MAX];  // "bottle_ostime", one entry for each bottle
-    /* 0x1050 */ u64 bottleTimerCurTimeLimit[BOTTLE_MAX];    // "bottle_sub", one entry for each bottle
-    /* 0x1080 */ u64 bottleTimerCurTime[BOTTLE_MAX];         // "bottle_time", one entry for each bottle
-    /* 0x10B0 */ OSTime bottleTimerPausedOsTime[BOTTLE_MAX]; // "bottle_stop_time", one entry for each bottle
+    /* 0x101A */ u8 bottleTimerStates[BOTTLE_MAX];            // "bottle_status", one entry for each bottle
+    /* 0x1020 */ OSTime bottleTimerStartOsTimes[BOTTLE_MAX];  // "bottle_ostime", one entry for each bottle
+    /* 0x1050 */ u64 bottleTimerCurTimeLimits[BOTTLE_MAX];    // "bottle_sub", one entry for each bottle
+    /* 0x1080 */ u64 bottleTimerCurTimes[BOTTLE_MAX];         // "bottle_time", one entry for each bottle
+    /* 0x10B0 */ OSTime bottleTimerPausedOsTimes[BOTTLE_MAX]; // "bottle_stop_time", one entry for each bottle
     /* 0x10E0 */ u64 pictoPhoto[1400];                  // buffer containing the pictograph photo
     /* 0x3CA0 */ s32 fileNum;                           // "file_no"
     /* 0x3CA4 */ s16 powderKegTimer;                    // "big_bom_timer"
@@ -259,13 +259,13 @@ typedef struct SaveContext {
     /* 0x3DC0 */ s16 unk_3DC0;                          // "shield_magic_timer"
     /* 0x3DC2 */ u8 unk_3DC2;                           // "pad1"
     /* 0x3DC8 */ OSTime postmanTimerOsTime;             // "get_time"
-    /* 0x3DD0 */ u8 timerState[TIMER_ID_MAX];           // "event_fg"
-    /* 0x3DD7 */ u8 timerDirection[TIMER_ID_MAX];       // "calc_flag"
-    /* 0x3DE0 */ u64 timerCurTime[TIMER_ID_MAX];        // "event_ostime"
-    /* 0x3E18 */ u64 timerTimeLimit[TIMER_ID_MAX];      // "event_sub"
-    /* 0x3E50 */ OSTime timerStartOsTime[TIMER_ID_MAX]; // "func_time"
-    /* 0x3E88 */ u64 timerStopTime[TIMER_ID_MAX];       // "func_end_time"
-    /* 0x3EC0 */ OSTime timerPausedOsTime[TIMER_ID_MAX]; // "func_stop_time"
+    /* 0x3DD0 */ u8 timerStates[TIMER_ID_MAX];          // "event_fg"
+    /* 0x3DD7 */ u8 timerDirections[TIMER_ID_MAX];      // "calc_flag"
+    /* 0x3DE0 */ u64 timerCurTimes[TIMER_ID_MAX];       // "event_ostime"
+    /* 0x3E18 */ u64 timerTimeLimits[TIMER_ID_MAX];     // "event_sub"
+    /* 0x3E50 */ OSTime timerStartOsTimes[TIMER_ID_MAX]; // "func_time"
+    /* 0x3E88 */ u64 timerStopTimes[TIMER_ID_MAX];      // "func_end_time"
+    /* 0x3EC0 */ OSTime timerPausedOsTimes[TIMER_ID_MAX]; // "func_stop_time"
     /* 0x3EF8 */ s16 timerX[TIMER_ID_MAX];              // "event_xp"
     /* 0x3F06 */ s16 timerY[TIMER_ID_MAX];              // "event_yp"
     /* 0x3F14 */ s16 unk_3F14;                          // "character_change"

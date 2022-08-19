@@ -895,12 +895,12 @@ void func_80144A94(SramContext* sramCtx) {
     }
 
     for (i = 0; i < TIMER_ID_MAX; i++) {
-        gSaveContext.timerState[i] = TIMER_STATE_OFF;
-        gSaveContext.timerCurTime[i] = SECONDS_TO_TIMER(0);
-        gSaveContext.timerTimeLimit[i] = SECONDS_TO_TIMER(0);
-        gSaveContext.timerStartOsTime[i] = 0;
-        gSaveContext.timerStopTime[i] = SECONDS_TO_TIMER(0);
-        gSaveContext.timerPausedOsTime[i] = 0;
+        gSaveContext.timerStates[i] = TIMER_STATE_OFF;
+        gSaveContext.timerCurTimes[i] = SECONDS_TO_TIMER(0);
+        gSaveContext.timerTimeLimits[i] = SECONDS_TO_TIMER(0);
+        gSaveContext.timerStartOsTimes[i] = 0;
+        gSaveContext.timerStopTimes[i] = SECONDS_TO_TIMER(0);
+        gSaveContext.timerPausedOsTimes[i] = 0;
     }
 
     D_801BDAA0 = 1;
@@ -970,12 +970,12 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
         }
 
         for (i = 0; i < TIMER_ID_MAX; i++) {
-            gSaveContext.timerState[i] = TIMER_STATE_OFF;
-            gSaveContext.timerCurTime[i] = SECONDS_TO_TIMER(0);
-            gSaveContext.timerTimeLimit[i] = SECONDS_TO_TIMER(0);
-            gSaveContext.timerStartOsTime[i] = 0;
-            gSaveContext.timerStopTime[i] = SECONDS_TO_TIMER(0);
-            gSaveContext.timerPausedOsTime[i] = 0;
+            gSaveContext.timerStates[i] = TIMER_STATE_OFF;
+            gSaveContext.timerCurTimes[i] = SECONDS_TO_TIMER(0);
+            gSaveContext.timerTimeLimits[i] = SECONDS_TO_TIMER(0);
+            gSaveContext.timerStartOsTimes[i] = 0;
+            gSaveContext.timerStopTimes[i] = SECONDS_TO_TIMER(0);
+            gSaveContext.timerPausedOsTimes[i] = 0;
         }
 
         if (gSaveContext.save.isFirstCycle) {

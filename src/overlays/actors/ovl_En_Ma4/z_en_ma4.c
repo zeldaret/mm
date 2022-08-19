@@ -674,7 +674,7 @@ void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4* this, PlayState* play) {
         // "You're feeling confident"
         Message_StartTextbox(play, 0x336E, &this->actor);
         this->actionFunc = EnMa4_HorsebackGameTalking;
-    } else if (gSaveContext.timerCurTime[TIMER_ID_MINIGAME_2] < SECONDS_TO_TIMER(115)) {
+    } else if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] < SECONDS_TO_TIMER(115)) {
         func_800B8614(&this->actor, play, 100.0f);
     }
 }
@@ -717,9 +717,9 @@ void EnMa4_HorsebackGameWait(EnMa4* this, PlayState* play) {
         play->interfaceCtx.unk_25C = 1;
     }
 
-    if ((gSaveContext.timerCurTime[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(120)) ||
+    if ((gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(120)) ||
         (this->poppedBalloonCounter == 10)) {
-        gSaveContext.timerState[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
         EnMa4_SetupHorsebackGameEnd(this, play);
         D_80AC0258 = 0;
     }
@@ -898,13 +898,13 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     gSaveContext.save.weekEventReg[21] |= 0x40;
                 }
             } else if (this->state == MA4_STATE_AFTERHORSEBACKGAME) {
-                if (gSaveContext.timerCurTime[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(120)) {
+                if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(120)) {
                     // "Too bad Grasshopper"
                     EnMa4_SetFaceExpression(this, 0, 0);
                     Message_StartTextbox(play, 0x336D, &this->actor);
                     this->textId = 0x336D;
                 } else {
-                    time = gSaveContext.timerCurTime[TIMER_ID_MINIGAME_2];
+                    time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
                     if ((s32)time < (s32)gSaveContext.save.horseBackBalloonHighScore) {
                         // [Score] New record!
                         gSaveContext.save.horseBackBalloonHighScore = time;
@@ -943,12 +943,12 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                 Message_StartTextbox(play, 0x3354, &this->actor);
                 this->textId = 0x3354;
             } else if (this->state == MA4_STATE_AFTERHORSEBACKGAME) {
-                if (gSaveContext.timerCurTime[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(120)) {
+                if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(120)) {
                     // "Try again?"
                     Message_StartTextbox(play, 0x3356, &this->actor);
                     this->textId = 0x3356;
                 } else {
-                    time = gSaveContext.timerCurTime[TIMER_ID_MINIGAME_2];
+                    time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
                     if ((s32)time < (s32)gSaveContext.save.horseBackBalloonHighScore) {
                         gSaveContext.save.horseBackBalloonHighScore = time;
                         EnMa4_SetFaceExpression(this, 0, 3);
@@ -970,12 +970,12 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                 Message_StartTextbox(play, 0x3358, &this->actor);
                 this->textId = 0x3358;
             } else if (this->state == MA4_STATE_AFTERHORSEBACKGAME) {
-                if (gSaveContext.timerCurTime[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(120)) {
+                if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(120)) {
                     // "Try again?"
                     Message_StartTextbox(play, 0x3356, &this->actor);
                     this->textId = 0x3356;
                 } else {
-                    time = gSaveContext.timerCurTime[TIMER_ID_MINIGAME_2];
+                    time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
                     if ((s32)time < (s32)gSaveContext.save.horseBackBalloonHighScore) {
                         // New record
                         gSaveContext.save.horseBackBalloonHighScore = time;
