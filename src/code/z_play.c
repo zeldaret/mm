@@ -545,8 +545,36 @@ void func_80168DAC(PlayState* this) {
     }
 }
 
-void Play_Main(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Main.s")
+void Play_Main(GameState* thisx) {
+    PlayState* this = (PlayState*)thisx;
+
+    D_801D0D60 = &this->state.input[0];
+
+    DebugDisplay_Init();
+
+    {
+        GraphicsContext* gfxCtx = this->state.gfxCtx;
+
+        if (1) {
+            this->state.gfxCtx = NULL;
+        }
+        func_80167DE4(this);
+        this->state.gfxCtx = gfxCtx;
+    }
+
+    {
+        Input sp28 = this->state.input[0];
+
+        if (1) {
+            this->state.input[0] = D_801F6C18;
+        }
+        func_80168DAC(this);
+        this->state.input[0] = sp28;
+    }
+
+    ActorCutscene_Update();
+    ActorCutscene_ClearWaiting();
+}
 
 s32 Play_InCsMode(PlayState* this) {
     return (this->csCtx.state != 0) || Player_InCsMode(this);
