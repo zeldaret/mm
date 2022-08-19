@@ -18,7 +18,7 @@
         <Limb Name="gCneRightHandLimb" LimbType="Standard" EnumName="CNE_LIMB_RIGHT_HAND" Offset="0x9C"/>
         <Limb Name="gCneHeadLimb" LimbType="Standard" EnumName="CNE_LIMB_HEAD" Offset="0xA8"/>
 
-        <Skeleton Name="gCneSkel" Type="Flex" LimbType="Standard" LimbNone="CNE_LIMB_NONE" LimbMax="CNE_LIMB_MAX" EnumName="CneLimbs" Offset="0xF0"/>
+        <Skeleton Name="gCneSkel" Type="Flex" LimbType="Standard" LimbNone="CNE_LIMB_NONE" LimbMax="CNE_LIMB_MAX" EnumName="CneLimb" Offset="0xF0"/>
 
         <!-- 32-bit aligned textures. -->
         <Texture Name="gCneTLUT" OutName="cne_tlut" Format="rgba16" Width="16" Height="16" Offset="0xFC"/>

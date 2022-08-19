@@ -295,7 +295,7 @@ void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
-        play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(this->spawnIndex);
+        play->nextEntrance = Entrance_CreateFromSpawn(this->spawnIndex);
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;

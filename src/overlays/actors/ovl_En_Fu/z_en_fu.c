@@ -73,7 +73,7 @@ static Vec3f D_80964B0C = { 0.0f, 60.0f, -8.0f };
 static Vec3f D_80964B18 = { 0.0f, 55.0f, 12.0f };
 static Vec3f D_80964B24 = { 0.0f, 60.0f, 0.0f };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &object_mu_Anim_0053E0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &object_mu_Anim_001F74, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &object_mu_Anim_002F64, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
@@ -371,7 +371,7 @@ void func_8096209C(EnFu* this, PlayState* play) {
 }
 
 void func_809622FC(EnFu* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
     this->actionFunc = func_80962340;
 }
 
@@ -536,7 +536,7 @@ void func_80962660(EnFu* this, PlayState* play) {
                 func_801477B4(play);
                 player->stateFlags1 |= 0x20;
                 this->unk_53C = 0;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                 func_801A2BB8(NA_BGM_MINI_GAME_2);
                 if (this->unk_542 == 0) {
                     if (this->unk_546 == 1) {
@@ -935,7 +935,7 @@ void func_80963630(EnFu* this, PlayState* play) {
         player->stateFlags1 &= ~0x20;
     } else {
         this->actor.child->freezeTimer = 10;
-        func_800B85E0(&this->actor, play, 500.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 500.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -1214,7 +1214,7 @@ void func_80964190(EnFu* this, PlayState* play) {
             case 0x2842:
             case 0x2844:
             case 0x2848:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                 break;
 
             case 0x2840:
@@ -1240,21 +1240,21 @@ void func_80964190(EnFu* this, PlayState* play) {
             case 0x286B:
             case 0x286D:
             case 0x2871:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
                 break;
 
             case 0x2860:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
                 break;
 
             case 0x285F:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
                 break;
 
             case 0x287E:
             case 0x2880:
             case 0x2883:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
                 break;
         }
     }
