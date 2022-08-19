@@ -490,11 +490,11 @@ s32 Play_InCsMode(PlayState* this) {
     return (this->csCtx.state != 0) || Player_InCsMode(this);
 }
 
-f32 func_80169100(PlayState* play, MtxF* mtx, CollisionPoly** poly, s32* bgId, Vec3f* feetPosPtr) {
-    f32 floorHeight = BgCheck_EntityRaycastFloor3(&play->colCtx, poly, bgId, feetPosPtr);
+f32 func_80169100(PlayState* play, MtxF* mtx, CollisionPoly** poly, s32* bgId, Vec3f* feetPos) {
+    f32 floorHeight = BgCheck_EntityRaycastFloor3(&play->colCtx, poly, bgId, feetPos);
 
     if (floorHeight > BGCHECK_Y_MIN) {
-        func_800C0094(*poly, feetPosPtr->x, floorHeight, feetPosPtr->z, mtx);
+        func_800C0094(*poly, feetPos->x, floorHeight, feetPos->z, mtx);
     } else {
         mtx->xy = 0.0f;
         mtx->zx = 0.0f;
@@ -508,15 +508,20 @@ f32 func_80169100(PlayState* play, MtxF* mtx, CollisionPoly** poly, s32* bgId, V
         mtx->yz = 0.0f;
         mtx->zy = 0.0f;
         mtx->yy = 1.0f;
-        mtx->xw = feetPosPtr->x;
-        mtx->yw = feetPosPtr->y;
-        mtx->zw = feetPosPtr->z;
+        mtx->xw = feetPos->x;
+        mtx->yw = feetPos->y;
+        mtx->zw = feetPos->z;
         mtx->ww = 1.0f;
     }
     return floorHeight;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801691F0.s")
+void func_801691F0(PlayState* this, MtxF* mtx, Vec3f* feetPos) {
+    CollisionPoly* poly;
+    s32 bgId;
+
+    func_80169100(this, mtx, &poly, &bgId, feetPos);
+}
 
 void* Play_LoadScene(PlayState* this, RomFile* entry) {
     size_t size = entry->vromEnd - entry->vromStart;
