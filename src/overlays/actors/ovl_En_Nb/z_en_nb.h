@@ -50,7 +50,7 @@ typedef struct EnNb {
     /* 0x288 */ s16 unk_288;
     /* 0x28C */ EnNbUnkFunc unk_28C;
     /* 0x290 */ EnNbAnimation animIndex;
-    /* 0x294 */ char unk_294[0x4];
+    /* 0x294 */ UNK_TYPE1 unk_294[0x4];
     /* 0x294 */ TextState prevTalkState;
 } EnNb; // size = 0x29C
 
