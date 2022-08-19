@@ -2983,7 +2983,7 @@
     0x80165E04:("func_80165E04",),
     0x80165E1C:("func_80165E1C",),
     0x80165E7C:("func_80165E7C",),
-    0x80165EC0:("func_80165EC0",),
+    0x80165EC0:("Play_SetupTransition",),
     0x80166060:("func_80166060",),
     0x801660B8:("func_801660B8",),
     0x8016613C:("Play_Destroy",),

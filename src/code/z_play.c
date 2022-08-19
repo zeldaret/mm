@@ -17,8 +17,9 @@ extern Struct_80140E80 D_801F6D38;
 extern Struct_80140E80* D_801F6D4C;
 extern HiresoStruct D_801F6D50;
 extern u8 D_801F6DFC;
-extern u8 D_801F6DFD;
+extern u8 D_801F6DFD; // motion blur "status"?
 
+// Draw Motion Blur
 void func_80165460(PlayState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
     s32 alpha;
@@ -71,29 +72,34 @@ void func_80165460(PlayState* this) {
     }
 }
 
+// Motion Blur Init?
 void func_80165608(void) {
     SREG(91) = 0;
     SREG(93) = 0;
     D_801F6DFD = 0;
 }
 
+// Motion Blur Destroy?
 void func_80165630(void) {
     SREG(91) = 0;
     SREG(93) = 0;
     D_801F6DFD = 0;
 }
 
-void func_80165658(u32 arg0) {
-    SREG(90) = arg0;
+// Sets Motion Blur Alpha
+void func_80165658(u32 motionBlurAlpha) {
+    SREG(90) = motionBlurAlpha;
 }
 
-void func_8016566C(u32 arg0) {
-    SREG(90) = arg0;
-    SREG(91) = 1;
+// Sets Motion Blur Alpha and Enables
+void func_8016566C(u32 motionBlurAlpha) {
+    SREG(90) = motionBlurAlpha;
+    SREG(91) = true;
 }
 
+// Disables Motion Blur
 void func_80165690(void) {
-    SREG(91) = 0;
+    SREG(91) = false;
 }
 
 void func_801656A4(void* arg0, u16* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
@@ -197,92 +203,103 @@ void func_80165E1C(PreRender* prerender) {
     func_801656A4(D_80780000, prerender->fbufSave, 320, 80, 64, 240 - 1, 176 - 1, 8);
 }
 
-s32 func_80165E7C(PlayState* this, s32 arg1) {
-    s32 phi_v1 = arg1;
+s32 func_80165E7C(PlayState* this, s32 transitionType) {
+    s32 nextTransitionType = transitionType;
 
-    if (arg1 == TRANS_TYPE_20) {
+    if (transitionType == TRANS_TYPE_20) {
         if (!gSaveContext.save.isNight) {
-            phi_v1 = TRANS_TYPE_03;
+            nextTransitionType = TRANS_TYPE_03;
         } else {
-            phi_v1 = TRANS_TYPE_02;
+            nextTransitionType = TRANS_TYPE_02;
         }
     }
-    if (phi_v1 != arg1) {
-        this->transitionType = phi_v1;
+    if (nextTransitionType != transitionType) {
+        this->transitionType = nextTransitionType;
     }
-    return phi_v1;
+    return nextTransitionType;
 }
 
-void func_80165EC0(PlayState* this, s32 arg1) {
-    PlayStruct_18BF0* ptr = &this->unk_18BF0;
-    s32 sp20;
+void Play_SetupTransition(PlayState* this, s32 transitionType) {
+    TransitionContext* transitionCtx = &this->transitionCtx;
+    s32 fbdemoType;
 
-    bzero(ptr, sizeof(this->unk_18BF0));
+    bzero(transitionCtx, sizeof(TransitionContext));
 
-    sp20 = -1;
-    if (arg1 & 0x40) {
-        sp20 = 3;
-    } else if ((arg1 & 0x78) == 0x20) {
-        sp20 = 4;
-    } else if (!(arg1 & 0x60)) {
-        switch (arg1) {
-            case 1:
-                sp20 = 1;
+    fbdemoType = -1;
+    if (transitionType & 0x40) {
+        fbdemoType = FBDEMO_WIPE3;
+    } else if ((transitionType & 0x78) == 0x20) {
+        fbdemoType = FBDEMO_WIPE4;
+    } else if (!(transitionType & 0x60)) {
+        switch (transitionType) {
+            case TRANS_TYPE_01:
+                fbdemoType = FBDEMO_TRIFORCE;
                 break;
-            case 0:
-            case 8:
-                sp20 = 2;
+
+            case TRANS_TYPE_00:
+            case TRANS_TYPE_08:
+                fbdemoType = FBDEMO_WIPE1;
                 break;
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 13:
-            case 17:
-            case 18:
-            case 19:
-                sp20 = 0;
+
+            case TRANS_TYPE_02:
+            case TRANS_TYPE_03:
+            case TRANS_TYPE_04:
+            case TRANS_TYPE_05:
+            case TRANS_TYPE_06:
+            case TRANS_TYPE_07:
+            case TRANS_TYPE_13:
+            case TRANS_TYPE_17:
+            case TRANS_TYPE_18:
+            case TRANS_TYPE_19:
+                fbdemoType = FBDEMO_FADE;
                 break;
-            case 9:
-            case 10:
+
+            case TRANS_TYPE_09:
+            case TRANS_TYPE_10:
                 this->transitionMode = TRANS_MODE_04;
                 break;
-            case 11:
+
+            case TRANS_TYPE_11:
                 this->transitionMode = TRANS_MODE_10;
                 break;
-            case 12:
+
+            case TRANS_TYPE_12:
                 this->transitionMode = TRANS_MODE_07;
                 break;
-            case 14:
+
+            case TRANS_TYPE_14:
                 this->transitionMode = TRANS_MODE_12;
                 break;
-            case 15:
+
+            case TRANS_TYPE_15:
                 this->transitionMode = TRANS_MODE_14;
                 break;
-            case 16:
+
+            case TRANS_TYPE_16:
                 this->transitionMode = TRANS_MODE_16;
                 break;
-            case 21:
-                sp20 = 5;
+
+            case TRANS_TYPE_21:
+                fbdemoType = 5;
                 break;
-            case 22:
-                sp20 = 6;
+
+            case TRANS_TYPE_22:
+                fbdemoType = 6;
                 break;
+
             default:
-                sp20 = -1;
+                fbdemoType = -1;
                 __assert("../z_play.c", 1420);
         }
     } else {
-        sp20 = -1;
+        fbdemoType = -1;
         __assert("../z_play.c", 1423);
     }
 
-    ptr->unk_00 = arg1;
-    ptr->unk_02 = sp20;
-    if (sp20 != -1) {
-        func_80163C90(ptr);
+    transitionCtx->transitionType = transitionType;
+    transitionCtx->fbdemoType = fbdemoType;
+    if (fbdemoType != -1) {
+        func_80163C90(transitionCtx);
     }
 }
 
@@ -351,10 +368,10 @@ const char D_801DFB24[] = "fj";
 const char D_801DFB28[] = "fk";
 
 void func_80166060(PlayState* this) {
-    if (this->unk_18BF0.unk_02 != -1) {
-        func_80163D80(&this->unk_18BF0, this);
+    if (this->transitionCtx.fbdemoType != -1) {
+        func_80163D80(&this->transitionCtx, this);
     }
-    this->unk_18BF0.unk_00 = -1;
+    this->transitionCtx.transitionType = -1;
 }
 
 Gfx* func_801660B8(PlayState* this, Gfx* gfx) {
@@ -408,7 +425,7 @@ void Play_Destroy(GameState* thisx) {
     }
 
     if ((this->transitionMode == TRANS_MODE_03) || (D_801D0D54 != 0)) {
-        this->unk_18BF0.unk_234(&this->unk_18BF0.unk_08);
+        this->transitionCtx.unk_234(&this->transitionCtx.unk_08);
         func_80166060(this);
         this->transitionMode = TRANS_MODE_OFF;
     }
@@ -437,10 +454,10 @@ void Play_Destroy(GameState* thisx) {
 f32 func_801668B4(PlayState* this, Vec3f* arg1, s32* arg2) {
     Player* player = GET_PLAYER(this);
     f32 sp38 = player->actor.world.pos.y;
-    WaterBox* sp34;
-    s32 sp30;
+    WaterBox* waterBox;
+    s32 bgId;
 
-    if (!WaterBox_GetSurfaceImpl(this, &this->colCtx, arg1->x, arg1->z, &sp38, &sp34, &sp30)) {
+    if (!WaterBox_GetSurfaceImpl(this, &this->colCtx, arg1->x, arg1->z, &sp38, &waterBox, &bgId)) {
         return BGCHECK_Y_MIN;
     }
 
@@ -448,7 +465,7 @@ f32 func_801668B4(PlayState* this, Vec3f* arg1, s32* arg2) {
         return BGCHECK_Y_MIN;
     }
 
-    *arg2 = WaterBox_GetLightSettingIndex(&this->colCtx, sp34);
+    *arg2 = WaterBox_GetLightSettingIndex(&this->colCtx, waterBox);
     return sp38;
 }
 

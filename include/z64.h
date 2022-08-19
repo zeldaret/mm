@@ -787,6 +787,7 @@ typedef enum {
     /* 19 */ TRANS_TYPE_19,
     /* 20 */ TRANS_TYPE_20,
     /* 21 */ TRANS_TYPE_21,
+    /* 22 */ TRANS_TYPE_22,
     /* 64 */ TRANS_TYPE_64 = 64,
     /* 70 */ TRANS_TYPE_70 = 70,
     /* 72 */ TRANS_TYPE_72 = 72,
@@ -794,6 +795,16 @@ typedef enum {
     /* 80 */ TRANS_TYPE_80 = 80,
     /* 86 */ TRANS_TYPE_86 = 86
 } TransitionType;
+
+typedef enum {
+    /* 0 */ FBDEMO_FADE,
+    /* 1 */ FBDEMO_TRIFORCE,
+    /* 2 */ FBDEMO_WIPE1,
+    /* 3 */ FBDEMO_WIPE3,
+    /* 4 */ FBDEMO_WIPE4,
+    /* 5 */ FBDEMO_CIRCLE,
+    /* 6 */ FBDEMO_WIPE5
+} FbDemoType;
 
 #define TRANS_NEXT_TYPE_DEFAULT 0xFF
 
@@ -1089,8 +1100,8 @@ typedef struct {
 } GameOverContext; // size = 0x2
 
 typedef struct {
-    /* 0x000 */ s16 unk_00;
-    /* 0x002 */ s8 unk_02;
+    /* 0x000 */ s16 transitionType;
+    /* 0x002 */ s8 fbdemoType;
     /* 0x003 */ char unk03[0x5];
     /* 0x008 */ s32 unk_08;
     /* 0x00C */ char unk0C[0x224];
@@ -1104,7 +1115,7 @@ typedef struct {
     /* 0x24C */ void (*unk_24C)(s32*, u32); // RGBA8 colour?
     /* 0x250 */ s32 (*unk_250)(s32*);
     /* 0x254 */ char unk254[0x4];
-} PlayStruct_18BF0; // size = 0x258 TransitionContext?
+} TransitionContext; // size = 0x258
 
 struct PlayState {
     /* 0x00000 */ GameState state;
@@ -1188,7 +1199,7 @@ struct PlayState {
     /* 0x18B4A */ u8 transitionMode;
     /* 0x18B4C */ PreRender pauseBgPreRender;
     /* 0x18B9C */ char unk_18B9C[0x54];
-    /* 0x18BF0 */ PlayStruct_18BF0 unk_18BF0;
+    /* 0x18BF0 */ TransitionContext transitionCtx;
     /* 0x18E48 */ TransitionFade unk_18E48;
     /* 0x18E54 */ SceneTableEntry* loadedScene;
     /* 0x18E58 */ UNK_PTR unk_18E58;
