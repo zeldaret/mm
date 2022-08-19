@@ -58,7 +58,7 @@
         <Limb Name="object_dodongo_Standardlimb_00827C" Type="Standard" EnumName="OBJECT_DODONGO_LIMB_1C" Offset="0x827C" />
         <Limb Name="object_dodongo_Standardlimb_008288" Type="Standard" EnumName="OBJECT_DODONGO_LIMB_1D" Offset="0x8288" />
         <Limb Name="object_dodongo_Standardlimb_008294" Type="Standard" EnumName="OBJECT_DODONGO_LIMB_1E" Offset="0x8294" />
-        <Skeleton Name="object_dodongo_Skel_008318" Type="Normal" LimbType="Standard" LimbNone="OBJECT_DODONGO_LIMB_NONE" LimbMax="OBJECT_DODONGO_LIMB_MAX" EnumName="object_dodongo_Limbs" Offset="0x8318" />
+        <Skeleton Name="object_dodongo_Skel_008318" Type="Normal" LimbType="Standard" LimbNone="OBJECT_DODONGO_LIMB_NONE" LimbMax="OBJECT_DODONGO_LIMB_MAX" EnumName="ObjectDodongoLimb" Offset="0x8318" />
         <Animation Name="object_dodongo_Anim_008B1C" Offset="0x8B1C" />
         <Animation Name="object_dodongo_Anim_008DE0" Offset="0x8DE0" />
         <Animation Name="object_dodongo_Anim_009088" Offset="0x9088" />

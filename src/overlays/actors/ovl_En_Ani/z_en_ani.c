@@ -128,7 +128,7 @@ void EnAni_Init(Actor* thisx, PlayState* play) {
     this->treeReachTimer = 0;
     this->blinkFunc = EnAni_DefaultBlink;
 
-    if (GET_ANI_TYPE(thisx) == ANI_TYPE_TREE_HANGING) {
+    if (ANI_GET_TYPE(thisx) == ANI_TYPE_TREE_HANGING) {
         Animation_Change(&this->skelAnime, &gAniTreeHangingAnim, 1.0f, 0.0f,
                          Animation_GetLastFrame(&gAniTreeHangingAnim), ANIMMODE_ONCE, 0.0f);
         this->actionFunc = EnAni_HangInTree;
@@ -175,7 +175,7 @@ void EnAni_IdleStanding(EnAni* this, PlayState* play) {
 
 void EnAni_Talk(EnAni* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (Message_GetState(&play->msgCtx) == 2 && play->msgCtx.currentTextId == 0x6DE) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) && play->msgCtx.currentTextId == 0x6DE) {
         this->actionFunc = EnAni_IdleInPain;
     }
 }
@@ -219,7 +219,7 @@ void EnAni_FallToGround(EnAni* this, PlayState* play) {
         // the animation gets cut short, (first 16 frames only) only the landing part is seen
         Animation_Change(&this->skelAnime, &gAniLandingThenStandingUpAnim, 1.0f, 0.0f, 16.0f, ANIMMODE_ONCE, 0.0f);
         this->stateFlags |= ANI_STATE_WRITHING;
-        quakeValue = Quake_Add(play->cameraPtrs[0], 3);
+        quakeValue = Quake_Add(play->cameraPtrs[CAM_ID_MAIN], 3);
         Quake_SetSpeed(quakeValue, 0x6978);
         Quake_SetQuakeValues(quakeValue, 7, 0, 0, 0);
         Quake_SetCountdown(quakeValue, 0x14);
@@ -308,7 +308,7 @@ void EnAni_Update(Actor* thisx, PlayState* play) {
         } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
             this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(this->actor.cutscene)),
+            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->actor.cutscene)),
                                    &this->actor);
         } else {
             ActorCutscene_SetIntentToPlay(this->actor.cutscene);

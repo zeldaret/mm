@@ -4,6 +4,7 @@
  * Description: Great Bay Temple - See-Saw
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_bg_dblue_balance.h"
 #include "objects/object_dblue_object/object_dblue_object.h"
 
@@ -466,7 +467,7 @@ void func_80B82DE0(BgDblueBalance* this, PlayState* play) {
     phi_f2 = this->unk_178;
     temp2 = this->unk_17A;
     if ((phi_f2 * temp2) <= 0.0f) {
-        func_801A7328(&this->dyna.actor.projectedPos, NA_SE_EV_SEESAW_INCLINE - SFX_FLAG);
+        AudioSfx_StopByPosAndId(&this->dyna.actor.projectedPos, NA_SE_EV_SEESAW_INCLINE - SFX_FLAG);
     }
 
     phi_f2 *= 0.0022222223f;

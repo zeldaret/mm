@@ -1,7 +1,7 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 #include "interface/parameter_static/parameter_static.h"
-#include "prevent_bss_reordering.h"
 
 s16 sHeartsPrimColors[3][3] = { { 255, 70, 50 }, { 255, 190, 0 }, { 100, 100, 255 } };
 s16 sHeartsEnvColors[3][3] = { { 50, 40, 60 }, { 255, 0, 0 }, { 0, 0, 255 } };
@@ -223,7 +223,7 @@ void LifeMeter_Draw(PlayState* play) {
     f32 lifesize = interfaceCtx->lifeSizeChange * 0.1f;
     u32 curCombineModeSet = 0;
     TexturePtr temp = NULL;
-    s32 ddCount = gSaveContext.save.inventory.dungeonKeys[9] - 1;
+    s32 ddCount = gSaveContext.save.inventory.defenseHearts - 1;
 
     OPEN_DISPS(gfxCtx);
 
@@ -399,8 +399,8 @@ void LifeMeter_UpdateSizeAndBeep(PlayState* play) {
         if (interfaceCtx->lifeSizeChange <= 0) {
             interfaceCtx->lifeSizeChange = 0;
             interfaceCtx->lifeSizeChangeDirection = 0;
-            if (!Player_InCsMode(&play->state) && (play->pauseCtx.state == 0) && (play->pauseCtx.debugState == 0) &&
-                LifeMeter_IsCritical() && !Play_InCsMode(play)) {
+            if (!Player_InCsMode(play) && (play->pauseCtx.state == 0) &&
+                (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) && LifeMeter_IsCritical() && !Play_InCsMode(play)) {
                 play_sound(NA_SE_SY_HITPOINT_ALARM);
             }
         }
@@ -416,16 +416,16 @@ void LifeMeter_UpdateSizeAndBeep(PlayState* play) {
 u32 LifeMeter_IsCritical(void) {
     s16 criticalThreshold;
 
-    if (gSaveContext.save.playerData.healthCapacity <= 80) { // healthCapacity <= 5 hearts?
-        criticalThreshold = 16;
+    if (gSaveContext.save.playerData.healthCapacity <= 0x50) {
+        criticalThreshold = 0x10;
 
-    } else if (gSaveContext.save.playerData.healthCapacity <= 160) { // healthCapacity <= 10 hearts?
-        criticalThreshold = 24;
+    } else if (gSaveContext.save.playerData.healthCapacity <= 0xA0) {
+        criticalThreshold = 0x18;
 
-    } else if (gSaveContext.save.playerData.healthCapacity <= 240) { // healthCapacity <= 15 hearts?
-        criticalThreshold = 32;
+    } else if (gSaveContext.save.playerData.healthCapacity <= 0xF0) {
+        criticalThreshold = 0x20;
     } else {
-        criticalThreshold = 44;
+        criticalThreshold = 0x2C;
     }
 
     if ((criticalThreshold >= gSaveContext.save.playerData.health) && (gSaveContext.save.playerData.health > 0)) {

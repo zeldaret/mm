@@ -3,15 +3,25 @@
 
 #include "global.h"
 
+#define OBJLIFT_GET_1(thisx) ((thisx)->params & 1)
+#define OBJLIFT_GET_7(thisx) (((thisx)->params >> 8) & 7)
+#define OBJLIFT_GET_7F(thisx) (((thisx)->params >> 1) & 0x7F)
+
 struct ObjLift;
 
 typedef void (*ObjLiftActionFunc)(struct ObjLift*, PlayState*);
 
 typedef struct ObjLift {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x18];
-    /* 0x015C */ ObjLiftActionFunc actionFunc;
-    /* 0x0160 */ char unk_160[0x1C];
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ ObjLiftActionFunc actionFunc;
+    /* 0x160 */ s16 unk_160;
+    /* 0x162 */ s16 unk_162;
+    /* 0x164 */ s16 unk_164;
+    /* 0x166 */ s16 timer;
+    /* 0x168 */ Vec3f unk_168;
+    /* 0x174 */ s16 unk_174;
+    /* 0x176 */ s16 unk_176;
+    /* 0x178 */ s16 unk_178;
 } ObjLift; // size = 0x17C
 
 extern const ActorInit Obj_Lift_InitVars;

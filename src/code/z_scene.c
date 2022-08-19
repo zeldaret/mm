@@ -4,12 +4,12 @@ s32 Object_Spawn(ObjectContext* objectCtx, s16 id) {
     size_t size;
 
     objectCtx->status[objectCtx->num].id = id;
-    size = objectFileTable[id].vromEnd - objectFileTable[id].vromStart;
+    size = gObjectTable[id].vromEnd - gObjectTable[id].vromStart;
 
     if (1) {}
 
     if (size != 0) {
-        DmaMgr_SendRequest0(objectCtx->status[objectCtx->num].segment, objectFileTable[id].vromStart, size);
+        DmaMgr_SendRequest0(objectCtx->status[objectCtx->num].segment, gObjectTable[id].vromStart, size);
     }
 
     if (objectCtx->num < OBJECT_EXCHANGE_BANK_MAX - 1) {
@@ -66,7 +66,7 @@ void Object_UpdateBank(ObjectContext* objectCtx) {
             s32 id = -status->id;
 
             if (status->dmaReq.vromAddr == 0) {
-                objectFile = &objectFileTable[id];
+                objectFile = &gObjectTable[id];
                 size = objectFile->vromEnd - objectFile->vromStart;
 
                 if (size == 0) {
@@ -112,13 +112,13 @@ void Object_LoadAll(ObjectContext* objectCtx) {
 
     for (i = 0; i < objectCtx->num; i++) {
         id = objectCtx->status[i].id;
-        vromSize = objectFileTable[id].vromEnd - objectFileTable[id].vromStart;
+        vromSize = gObjectTable[id].vromEnd - gObjectTable[id].vromStart;
 
         if (vromSize == 0) {
             continue;
         }
 
-        DmaMgr_SendRequest0(objectCtx->status[i].segment, objectFileTable[id].vromStart, vromSize);
+        DmaMgr_SendRequest0(objectCtx->status[i].segment, gObjectTable[id].vromStart, vromSize);
     }
 }
 
@@ -130,7 +130,7 @@ void* func_8012F73C(ObjectContext* objectCtx, s32 iParm2, s16 id) {
     objectCtx->status[iParm2].id = -id;
     objectCtx->status[iParm2].dmaReq.vromAddr = 0;
 
-    fileTableEntry = &objectFileTable[id];
+    fileTableEntry = &gObjectTable[id];
     vromSize = fileTableEntry->vromEnd - fileTableEntry->vromStart;
 
     // TODO: UB to cast void to u32
@@ -149,7 +149,7 @@ void Scene_HeaderCmdSpawnList(PlayState* play, SceneCmd* cmd) {
     play->linkActorEntry =
         (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) + play->setupEntranceList[play->curSpawn].spawn;
     if ((play->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
-        (gSaveContext.respawnFlag == 0x02 && gSaveContext.respawn[RESTART_MODE_RETURN].playerParams == 0x0CFF)) {
+        (gSaveContext.respawnFlag == 0x02 && gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams == 0x0CFF)) {
         // Skull Kid Object
         Object_Spawn(&play->objectCtx, OBJECT_STK);
         return;
@@ -159,7 +159,7 @@ void Scene_HeaderCmdSpawnList(PlayState* play, SceneCmd* cmd) {
     nextObject = play->objectCtx.status[play->objectCtx.num].segment;
     play->objectCtx.num = loadedCount;
     play->objectCtx.spawnedObjectCount = loadedCount;
-    playerObjectId = gLinkFormObjectIndexes[(void)0, gSaveContext.save.playerForm];
+    playerObjectId = gPlayerFormObjectIndices[(void)0, gSaveContext.save.playerForm];
     gActorOverlayTable[0].initInfo->objectId = playerObjectId;
     Object_Spawn(&play->objectCtx, playerObjectId);
 
@@ -173,9 +173,9 @@ void Scene_HeaderCmdActorList(PlayState* play, SceneCmd* cmd) {
     play->actorCtx.unkC = 0;
 }
 
-// SceneTableEntry Header Command 0x02: List of cameras for actor cutscenes
+// SceneTableEntry Header Command 0x02: List of camera data for actor cutscenes
 void Scene_HeaderCmdActorCutsceneCamList(PlayState* play, SceneCmd* cmd) {
-    play->csCamData = Lib_SegmentedToVirtual(cmd->csCameraList.segment);
+    play->actorCsCamList = Lib_SegmentedToVirtual(cmd->actorCsCamList.segment);
 }
 
 // SceneTableEntry Header Command 0x03: Collision Header
@@ -192,8 +192,8 @@ void Scene_HeaderCmdColHeader(PlayState* play, SceneCmd* cmd) {
         colHeader->surfaceTypeList = Lib_SegmentedToVirtual(colHeader->surfaceTypeList);
     }
 
-    if (colHeader->cameraDataList != NULL) {
-        colHeader->cameraDataList = Lib_SegmentedToVirtual(colHeader->cameraDataList);
+    if (colHeader->bgCamList != NULL) {
+        colHeader->bgCamList = Lib_SegmentedToVirtual(colHeader->bgCamList);
     }
 
     if (colHeader->waterBoxes != NULL) {
@@ -237,9 +237,9 @@ void Scene_HeaderCmdRoomBehavior(PlayState* play, SceneCmd* cmd) {
     play->roomCtx.currRoom.unk3 = cmd->roomBehavior.gpFlag1;
     play->roomCtx.currRoom.unk2 = cmd->roomBehavior.gpFlag2 & 0xFF;
     play->roomCtx.currRoom.unk5 = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
-    play->msgCtx.unk12044 = (cmd->roomBehavior.gpFlag2 >> 0xa) & 1;
-    play->roomCtx.currRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xb) & 1;
-    play->envCtx.unk_E2 = (cmd->roomBehavior.gpFlag2 >> 0xc) & 1;
+    play->msgCtx.unk12044 = (cmd->roomBehavior.gpFlag2 >> 0xA) & 1;
+    play->roomCtx.currRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xB) & 1;
+    play->envCtx.unk_E2 = (cmd->roomBehavior.gpFlag2 >> 0xC) & 1;
 }
 
 // SceneTableEntry Header Command 0x0A: Mesh Header
@@ -376,7 +376,7 @@ void Scene_HeaderCmdSkyboxDisables(PlayState* play, SceneCmd* cmd) {
 // SceneTableEntry Header Command 0x10: Time Settings
 void Scene_HeaderCmdTimeSettings(PlayState* play, SceneCmd* cmd) {
     if (cmd->timeSettings.hour != 0xFF && cmd->timeSettings.min != 0xFF) {
-        gSaveContext.environmentTime = gSaveContext.save.time =
+        gSaveContext.skyboxTime = gSaveContext.save.time =
             (u16)(((cmd->timeSettings.hour + (cmd->timeSettings.min / 60.0f)) * 60.0f) / 0.021972656f);
     }
 
@@ -398,20 +398,17 @@ void Scene_HeaderCmdTimeSettings(PlayState* play, SceneCmd* cmd) {
     play->envCtx.unk_8 = (Math_CosS(((void)0, gSaveContext.save.time) - 0x8000) * 120.0f) * 25.0f;
     play->envCtx.unk_C = (Math_CosS(((void)0, gSaveContext.save.time) - 0x8000) * 20.0f) * 25.0f;
 
-    if (play->envCtx.timeIncrement == 0 && gSaveContext.save.cutscene < 0xFFF0) {
-        gSaveContext.environmentTime = gSaveContext.save.time;
+    if ((play->envCtx.timeIncrement == 0) && (gSaveContext.save.cutscene < 0xFFF0)) {
+        gSaveContext.skyboxTime = gSaveContext.save.time;
 
-        if (gSaveContext.environmentTime >= CLOCK_TIME(4, 0) && gSaveContext.environmentTime < CLOCK_TIME(6, 30)) {
-            gSaveContext.environmentTime = CLOCK_TIME(5, 0);
-        } else if (gSaveContext.environmentTime >= CLOCK_TIME(6, 30) &&
-                   gSaveContext.environmentTime < CLOCK_TIME(8, 0)) {
-            gSaveContext.environmentTime = CLOCK_TIME(8, 0);
-        } else if (gSaveContext.environmentTime >= CLOCK_TIME(16, 0) &&
-                   gSaveContext.environmentTime < CLOCK_TIME(17, 0)) {
-            gSaveContext.environmentTime = CLOCK_TIME(17, 0);
-        } else if (gSaveContext.environmentTime >= CLOCK_TIME(18, 0) &&
-                   gSaveContext.environmentTime < CLOCK_TIME(19, 0)) {
-            gSaveContext.environmentTime = CLOCK_TIME(19, 0);
+        if ((gSaveContext.skyboxTime >= CLOCK_TIME(4, 0)) && (gSaveContext.skyboxTime < CLOCK_TIME(6, 30))) {
+            gSaveContext.skyboxTime = CLOCK_TIME(5, 0);
+        } else if ((gSaveContext.skyboxTime >= CLOCK_TIME(6, 30)) && (gSaveContext.skyboxTime < CLOCK_TIME(8, 0))) {
+            gSaveContext.skyboxTime = CLOCK_TIME(8, 0);
+        } else if ((gSaveContext.skyboxTime >= CLOCK_TIME(16, 0)) && (gSaveContext.skyboxTime < CLOCK_TIME(17, 0))) {
+            gSaveContext.skyboxTime = CLOCK_TIME(17, 0);
+        } else if ((gSaveContext.skyboxTime >= CLOCK_TIME(18, 0)) && (gSaveContext.skyboxTime < CLOCK_TIME(19, 0))) {
+            gSaveContext.skyboxTime = CLOCK_TIME(19, 0);
         }
     }
 }
@@ -457,7 +454,7 @@ void Scene_HeaderCmdAltHeaderList(PlayState* play, SceneCmd* cmd) {
     SceneCmd** altHeaderList;
     SceneCmd* altHeader;
 
-    if (gSaveContext.sceneSetupIndex) {
+    if (gSaveContext.sceneSetupIndex != 0) {
         altHeaderList = Lib_SegmentedToVirtual(cmd->altHeaders.segment);
         altHeader = altHeaderList[gSaveContext.sceneSetupIndex - 1];
 
@@ -530,7 +527,7 @@ void Scene_HeaderCmdAnimatedMaterials(PlayState* play, SceneCmd* cmd) {
  * Sets the exit fade from the next entrance index.
  */
 void Scene_SetExitFade(PlayState* play) {
-    play->unk_1887F = Entrance_GetTransitionFlags(play->nextEntranceIndex) & 0x7F;
+    play->transitionType = Entrance_GetTransitionFlags(play->nextEntrance) & 0x7F;
 }
 
 /**
@@ -590,15 +587,15 @@ s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header) {
 }
 
 /**
- * Creates an entrance index from the scene index, spawn index, and scene setup.
+ * Creates an entrance from the scene, spawn, and lyaer.
  */
-u16 Entrance_CreateIndex(s32 sceneIndex, s32 spawnIndex, s32 sceneSetup) {
-    return (((sceneIndex << 9) | (spawnIndex << 4)) | sceneSetup) & 0xFFFF;
+u16 Entrance_Create(s32 scene, s32 spawn, s32 layer) {
+    return (scene << 9) | (spawn << 4) | layer;
 }
 
 /**
- * Creates an entrance index from the current entrance index with the given spawn index.
+ * Creates an layer 0 entranace from the current entrance and the given spawn.
  */
-u16 Entrance_CreateIndexFromSpawn(s32 spawnIndex) {
-    return Entrance_CreateIndex(gSaveContext.save.entranceIndex >> 9, spawnIndex, 0);
+u16 Entrance_CreateFromSpawn(s32 spawn) {
+    return Entrance_Create(gSaveContext.save.entrance >> 9, spawn, 0);
 }

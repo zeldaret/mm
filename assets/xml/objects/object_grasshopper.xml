@@ -58,7 +58,7 @@
         <Limb Name="object_grasshopper_Standardlimb_003E80" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_15" Offset="0x3E80" />
         <Limb Name="object_grasshopper_Standardlimb_003E8C" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_16" Offset="0x3E8C" />
         <Limb Name="object_grasshopper_Standardlimb_003E98" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_17" Offset="0x3E98" />
-        <Skeleton Name="object_grasshopper_Skel_003F00" Type="Normal" LimbType="Standard" LimbNone="OBJECT_GRASSHOPPER_LIMB_NONE" LimbMax="OBJECT_GRASSHOPPER_LIMB_MAX" EnumName="object_grasshopper_Limbs" Offset="0x3F00" />
+        <Skeleton Name="object_grasshopper_Skel_003F00" Type="Normal" LimbType="Standard" LimbNone="OBJECT_GRASSHOPPER_LIMB_NONE" LimbMax="OBJECT_GRASSHOPPER_LIMB_MAX" EnumName="ObjectGrasshopperLimb" Offset="0x3F00" />
         <Animation Name="object_grasshopper_Anim_0042F0" Offset="0x42F0" />
         <Animation Name="object_grasshopper_Anim_0047AC" Offset="0x47AC" />
         <Animation Name="object_grasshopper_Anim_004BC8" Offset="0x4BC8" />
