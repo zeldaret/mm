@@ -233,13 +233,13 @@ void Play_Destroy(GameState* thisx) {
     if (D_801F6DFC != 0) {
         MsgEvent_SendNullTask();
         func_80178750();
-        gfxCtx->curFrameBuffer = (u16*)SysCfb_GetFbPtr(gfxCtx->framebufferIdx % 2);
+        gfxCtx->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx->framebufferIdx % 2);
         gfxCtx->zbuffer = SysCfb_GetZBuffer();
         gfxCtx->viMode = D_801FBB88;
         gfxCtx->viConfigFeatures = gViConfigFeatures;
         gfxCtx->xScale = gViConfigXScale;
         gfxCtx->yScale = gViConfigYScale;
-        gfxCtx->updateViMode = 1;
+        gfxCtx->updateViMode = true;
         D_801F6DFC = 0;
     }
 
@@ -442,7 +442,46 @@ void func_80167F0C(PlayState* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Draw.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80168DAC.s")
+void func_80168DAC(PlayState* this) {
+    GraphicsContext* gfxCtx = this->state.gfxCtx;
+
+    {
+        GraphicsContext* gfxCtx2 = this->state.gfxCtx;
+
+        if (D_801F6DFC != 0) {
+            if (D_801FBBD4 != 1) {
+                MsgEvent_SendNullTask();
+                func_80178818();
+                gfxCtx2->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx2->framebufferIdx % 2);
+                gfxCtx2->zbuffer = SysCfb_GetZBuffer();
+                gfxCtx2->viMode = D_801FBB88;
+                gfxCtx2->viConfigFeatures = gViConfigFeatures;
+                gfxCtx2->xScale = gViConfigXScale;
+                gfxCtx2->yScale = gViConfigYScale;
+                gfxCtx2->updateViMode = true;
+            }
+        } else {
+            if (D_801FBBD4 != 0) {
+                MsgEvent_SendNullTask();
+                func_80178750();
+                gfxCtx2->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx2->framebufferIdx % 2);
+                gfxCtx2->zbuffer = SysCfb_GetZBuffer();
+                gfxCtx2->viMode = D_801FBB88;
+                gfxCtx2->viConfigFeatures = gViConfigFeatures;
+                gfxCtx2->xScale = gViConfigXScale;
+                gfxCtx2->yScale = gViConfigYScale;
+                gfxCtx2->updateViMode = true;
+            }
+        }
+    }
+
+    if ((D_801F6DFC != 0) && ((SREG(2) != 2) || (gZBufferPtr == NULL))) {
+        func_8016F1A8(&D_801F6D50, gfxCtx);
+        func_80156758(this);
+    } else {
+        Play_Draw(this);
+    }
+}
 
 void Play_Main(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Main.s")
