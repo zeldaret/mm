@@ -1,7 +1,7 @@
 /*
  * File: z_eff_ss_dead_db.c
  * Overlay: ovl_Effect_Ss_Dead_Db
- * Description: Enemy Death Flames 
+ * Description: Enemy Death Flames
  */
 
 #include "z_eff_ss_dead_db.h"
