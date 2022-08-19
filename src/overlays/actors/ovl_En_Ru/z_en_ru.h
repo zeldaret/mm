@@ -18,10 +18,10 @@ typedef struct EnRu {
     /* 0x1D8 */ UNK_TYPE1 pad1D8[0x4];
     /* 0x1DC */ Path* path;
     /* 0x1E0 */ UNK_TYPE1 pad1E0[0x4];
-    /* 0x1E4 */ Vec3f vec1E4LeftFoot;
-    /* 0x1F0 */ Vec3f vec1F0RightFoot;
-    /* 0x1FC */ u8 isFloorAbove1;
-    /* 0x1FD */ u8 isFloorAbove2;
+    /* 0x1E4 */ Vec3f leftFootPos;
+    /* 0x1F0 */ Vec3f rightFootPos;
+    /* 0x1FC */ u8 isLeftFootGrounded;
+    /* 0x1FD */ u8 isRightFootGrounded;
     /* 0x1FE */ Vec3s jointTable[RU2_LIMB_MAX];
     /* 0x288 */ Vec3s morphTable[RU2_LIMB_MAX];
     /* 0x312 */ Vec3s trackTarget;

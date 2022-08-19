@@ -165,46 +165,39 @@ s32 EnRu_ChangeAnimation(SkelAnime* skelAnime, s16 animIndex) {
     return ret;
 }
 
-// horribly ugly fake match, what it's doing with the pointer check first is just weird, permuter to the rescue
-// https://decomp.me/scratch/UqUYg
-s32 EnRu_UpdateWaterSfx(EnRu* this, PlayState* play) {
-    u8 isFloorAbove1Old;
-    u8 isFloorAbove2Old;
-    EnRu* this2;
-    s16 surfaceSfx;
-    u8* isFloorAbove2Ptr;
-    u8* isFloorAbove1Ptr;
+// En_Zo has a copy of this function
+s32 EnRu_PlayWalkingSound(EnRu* this, PlayState* play) {
+    u8 leftWasGrounded;
+    u8 rightWasGrounded;
     s32 waterSfxId;
+    s16 sfxId;
+    u8 isFootGrounded;
 
-    isFloorAbove1Old = this->isFloorAbove1;
-    isFloorAbove2Old = this->isFloorAbove2;
-    if ((this->actor.bgCheckFlags & 0x20) != 0) {
+    leftWasGrounded = this->isLeftFootGrounded;
+    rightWasGrounded = this->isRightFootGrounded;
+
+    if (this->actor.bgCheckFlags & 0x20) {
         if (this->actor.depthInWater < 20.0f) {
             waterSfxId = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
         } else {
             waterSfxId = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
         }
 
-        surfaceSfx = waterSfxId + SFX_FLAG;
+        sfxId = waterSfxId + SFX_FLAG;
 
     } else {
-        //! FAKE:
-        this2 = this;
-        surfaceSfx = SurfaceType_GetSfx(&play->colCtx, this2->actor.floorPoly, this2->actor.floorBgId) + SFX_FLAG;
+        sfxId = SurfaceType_GetSfx(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) + SFX_FLAG;
     }
 
-    this->isFloorAbove1 = SubS_IsFloorAbove(play, &this->vec1E4LeftFoot, -6.0f);
+    this->isLeftFootGrounded = isFootGrounded = SubS_IsFloorAbove(play, &this->leftFootPos, -6.0f);
 
-    //! FAKE: stupid pointer use, almost like it thinks its volitile
-    isFloorAbove2Ptr = &this->isFloorAbove2;
-    isFloorAbove1Ptr = &this->isFloorAbove1;
-    if ((*(isFloorAbove1Ptr) != false) && (isFloorAbove1Old == false) && (*(isFloorAbove1Ptr) != false)) {
-        Actor_PlaySfxAtPos(&this->actor, surfaceSfx);
+    if ((this->isLeftFootGrounded) && (!leftWasGrounded) && (isFootGrounded)) {
+        Actor_PlaySfxAtPos(&this->actor, sfxId);
     }
 
-    this->isFloorAbove2 = SubS_IsFloorAbove(play, &this->vec1F0RightFoot, -6.0f);
-    if ((((*isFloorAbove2Ptr) != false) && (isFloorAbove2Old == false)) && (this->isFloorAbove2 != false)) {
-        Actor_PlaySfxAtPos(&this->actor, surfaceSfx);
+    this->isRightFootGrounded = isFootGrounded = SubS_IsFloorAbove(play, &this->rightFootPos, -6.0f);
+    if ((this->isRightFootGrounded) && (!rightWasGrounded) && (isFootGrounded)){ 
+        Actor_PlaySfxAtPos(&this->actor, sfxId);
     }
 
     return false;
@@ -255,7 +248,7 @@ void EnRu_UpdateModel(EnRu* this, PlayState* play) {
     }
 
     EnRu_UpdateEyes(this, 3);
-    EnRu_UpdateWaterSfx(this, play);
+    EnRu_PlayWalkingSound(this, play);
     SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, RU2_LIMB_MAX);
 }
 
@@ -334,10 +327,10 @@ void EnRu_PostLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     // pos not rot for some reason? not sure what this is doing
     if (limbIndex == RU2_LIMB_LEFT_FOOT) {
-        Matrix_MultVec3f(&bodyPartPos, &this->vec1E4LeftFoot);
+        Matrix_MultVec3f(&bodyPartPos, &this->leftFootPos);
     }
     if (limbIndex == RU2_LIMB_RIGHT_FOOT) {
-        Matrix_MultVec3f(&bodyPartPos, &this->vec1F0RightFoot);
+        Matrix_MultVec3f(&bodyPartPos, &this->rightFootPos);
     }
 }
 
