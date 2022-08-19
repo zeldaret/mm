@@ -322,7 +322,6 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
             play->interfaceCtx.unk_31A = 5;
             this->unk_288++;
             /* fallthrough */
-
         case 5:
             if (!(gSaveContext.eventInf[4] & 4)) {
                 gSaveContext.save.time = CLOCK_TIME(8, 0);
