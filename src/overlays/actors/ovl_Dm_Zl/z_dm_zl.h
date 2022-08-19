@@ -15,7 +15,7 @@ typedef struct DmZl {
     /* 0x1F4 */ Vec3s morphTable[ZL4_LIMB_MAX];
     /* 0x260 */ DmZlActionFunc actionFunc;
     /* 0x264 */ ColliderCylinder collider; // unused, assumed to be here based on OoT documentation
-    /* 0x2B0 */ s16 animationIndex;
+    /* 0x2B0 */ s16 animIndex;
     /* 0x2B2 */ u8 eyeTextureIndexLeft;
     /* 0x2B3 */ u8 eyeTextureIndexRight;
     /* 0x2B4 */ u8 mouthTextureIndex;

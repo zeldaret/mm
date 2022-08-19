@@ -1,5 +1,6 @@
 #include "global.h"
 #include "system_malloc.h"
+#include "z64rumble.h"
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;
@@ -191,7 +192,7 @@ void GameState_Realloc(GameState* gameState, size_t size) {
 
 void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* gfxCtx) {
     gameState->gfxCtx = gfxCtx;
-    gameState->frames = 0U;
+    gameState->frames = 0;
     gameState->main = NULL;
     gameState->destroy = NULL;
     gameState->running = 1;
@@ -200,7 +201,7 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
     gfxCtx->xScale = gViConfigXScale;
     gfxCtx->yScale = gViConfigYScale;
     gameState->nextGameStateInit = NULL;
-    gameState->nextGameStateSize = 0U;
+    gameState->nextGameStateSize = 0;
 
     {
         s32 requiredScopeTemp;
@@ -216,14 +217,14 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
         VisMono_Init(&sMonoColors);
         func_80140898(&D_801F8048);
         func_801773A0(&D_801F7FF0);
-        func_8013ED9C();
+        Rumble_Init();
 
         osSendMesg(&gameState->gfxCtx->queue, NULL, OS_MESG_BLOCK);
     }
 }
 
 void GameState_Destroy(GameState* gameState) {
-    func_80172BC0();
+    AudioMgr_StopAllSfxExceptSystem();
     func_8019E014();
     osRecvMesg(&gameState->gfxCtx->queue, NULL, OS_MESG_BLOCK);
 
@@ -231,7 +232,7 @@ void GameState_Destroy(GameState* gameState) {
         gameState->destroy(gameState);
     }
 
-    func_8013EDD0();
+    Rumble_Destroy();
     func_801773C4(&D_801F7FF0);
     func_80140D04(&D_801F8010);
     func_801420F4(&D_801F8020);

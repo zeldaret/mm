@@ -106,12 +106,12 @@ void EnGakufu_ProcessNotes(EnGakufu* this) {
     s32 songIndex;
 
     AudioOcarina_TerminaWallGenerateNotes();
-    AudioOcarina_SetInstrumentId(OCARINA_INSTRUMENT_DEFAULT);
+    AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_DEFAULT);
     AudioOcarina_StartDefault((1 << this->songIndex) | 0x80000000);
     playbackStaff = AudioOcarina_GetPlaybackStaff();
     playbackStaff->pos = 0;
     playbackStaff->state = 0xFF;
-    AudioOcarina_SetInstrumentId(OCARINA_INSTRUMENT_OFF);
+    AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
 
     songIndex = this->songIndex;
     ocarinaSongButtons = &gOcarinaSongButtons[songIndex];
@@ -207,7 +207,7 @@ void EnGakufu_GiveReward(EnGakufu* this, PlayState* play) {
 
     play_sound(NA_SE_SY_CORRECT_CHIME);
 
-    hour = gSaveContext.save.time * (24.0f / 0x10000);
+    hour = gSaveContext.save.time * (24.0f / 0x10000); // TIME_TO_HOURS_F
     for (i = 0; i < 3; i++) {
         Item_DropCollectible(play, &sRewardDropsSpawnTerminaFieldPos, sRewardDrops[i + sRewardDropsIndex[hour]]);
     }

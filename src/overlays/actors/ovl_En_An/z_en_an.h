@@ -8,10 +8,10 @@ struct EnAn;
 typedef void (*EnAnActionFunc)(struct EnAn*, PlayState*);
 
 typedef struct EnAn {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x44];
-    /* 0x0188 */ EnAnActionFunc actionFunc;
-    /* 0x018C */ char unk_18C[0x23C];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ char unk_144[0x44];
+    /* 0x188 */ EnAnActionFunc actionFunc;
+    /* 0x18C */ char unk_18C[0x23C];
 } EnAn; // size = 0x3C8
 
 extern const ActorInit En_An_InitVars;

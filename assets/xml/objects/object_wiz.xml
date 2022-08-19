@@ -97,6 +97,6 @@
         <Limb Name="object_wiz_Standardlimb_00B2B0" Type="Standard" EnumName="OBJECT_WIZ_LIMB_11" Offset="0xB2B0" />
         <Limb Name="object_wiz_Standardlimb_00B2BC" Type="Standard" EnumName="OBJECT_WIZ_LIMB_12" Offset="0xB2BC" />
         <Limb Name="object_wiz_Standardlimb_00B2C8" Type="Standard" EnumName="OBJECT_WIZ_LIMB_13" Offset="0xB2C8" />
-        <Skeleton Name="object_wiz_Skel_00B320" Type="Flex" LimbType="Standard" LimbNone="OBJECT_WIZ_LIMB_NONE" LimbMax="OBJECT_WIZ_LIMB_MAX" EnumName="object_wiz_Limbs" Offset="0xB320" />
+        <Skeleton Name="object_wiz_Skel_00B320" Type="Flex" LimbType="Standard" LimbNone="OBJECT_WIZ_LIMB_NONE" LimbMax="OBJECT_WIZ_LIMB_MAX" EnumName="ObjectWizLimb" Offset="0xB320" />
     </File>
 </Root>

@@ -17,24 +17,24 @@
 #  define F3DEX_GBI
 # endif
 #define	G_NOOP			0x00
-#define	G_RDPHALF_2		0xf1
-#define	G_SETOTHERMODE_H	0xe3
-#define	G_SETOTHERMODE_L	0xe2
-#define	G_RDPHALF_1		0xe1
-#define	G_SPNOOP		0xe0
-#define	G_ENDDL			0xdf
-#define	G_DL			0xde
-#define	G_LOAD_UCODE		0xdd
-#define	G_MOVEMEM		0xdc
-#define	G_MOVEWORD		0xdb
-#define	G_MTX			0xda
-#define G_GEOMETRYMODE		0xd9
-#define	G_POPMTX		0xd8
-#define	G_TEXTURE		0xd7
-#define	G_DMA_IO		0xd6
-#define	G_SPECIAL_1		0xd5
-#define	G_SPECIAL_2		0xd4
-#define	G_SPECIAL_3		0xd3
+#define	G_RDPHALF_2		0xF1
+#define	G_SETOTHERMODE_H	0xE3
+#define	G_SETOTHERMODE_L	0xE2
+#define	G_RDPHALF_1		0xE1
+#define	G_SPNOOP		0xE0
+#define	G_ENDDL			0xDF
+#define	G_DL			0xDE
+#define	G_LOAD_UCODE		0xDD
+#define	G_MOVEMEM		0xDC
+#define	G_MOVEWORD		0xDB
+#define	G_MTX			0xDA
+#define G_GEOMETRYMODE		0xD9
+#define	G_POPMTX		0xD8
+#define	G_TEXTURE		0xD7
+#define	G_DMA_IO		0xD6
+#define	G_SPECIAL_1		0xD5
+#define	G_SPECIAL_2		0xD4
+#define	G_SPECIAL_3		0xD3
 
 #define	G_VTX			0x01
 #define	G_MODIFYVTX		0x02
@@ -89,38 +89,38 @@
 #define G_SPRITE2D_DRAW         (G_IMMFIRST-2)
 
 /* RDP commands: */
-#define	G_NOOP			0xc0	/*   0 */
+#define	G_NOOP			0xC0	/*   0 */
 
 #endif	/* F3DEX_GBI_2 */
 
 /* RDP commands: */
-#define	G_SETCIMG		0xff	/*  -1 */
-#define	G_SETZIMG		0xfe	/*  -2 */
-#define	G_SETTIMG		0xfd	/*  -3 */
-#define	G_SETCOMBINE		0xfc	/*  -4 */
-#define	G_SETENVCOLOR		0xfb	/*  -5 */
-#define	G_SETPRIMCOLOR		0xfa	/*  -6 */
-#define	G_SETBLENDCOLOR		0xf9	/*  -7 */
-#define	G_SETFOGCOLOR		0xf8	/*  -8 */
-#define	G_SETFILLCOLOR		0xf7	/*  -9 */
-#define	G_FILLRECT		0xf6	/* -10 */
-#define	G_SETTILE		0xf5	/* -11 */
-#define	G_LOADTILE		0xf4	/* -12 */
-#define	G_LOADBLOCK		0xf3	/* -13 */
-#define	G_SETTILESIZE		0xf2	/* -14 */
-#define	G_LOADTLUT		0xf0	/* -16 */
-#define	G_RDPSETOTHERMODE	0xef	/* -17 */
-#define	G_SETPRIMDEPTH		0xee	/* -18 */
-#define	G_SETSCISSOR		0xed	/* -19 */
-#define	G_SETCONVERT		0xec	/* -20 */
-#define	G_SETKEYR		0xeb	/* -21 */
-#define	G_SETKEYGB		0xea	/* -22 */
-#define	G_RDPFULLSYNC		0xe9	/* -23 */
-#define	G_RDPTILESYNC		0xe8	/* -24 */
-#define	G_RDPPIPESYNC		0xe7	/* -25 */
-#define	G_RDPLOADSYNC		0xe6	/* -26 */
-#define G_TEXRECTFLIP		0xe5	/* -27 */
-#define G_TEXRECT		0xe4	/* -28 */
+#define	G_SETCIMG		0xFF	/*  -1 */
+#define	G_SETZIMG		0xFE	/*  -2 */
+#define	G_SETTIMG		0xFD	/*  -3 */
+#define	G_SETCOMBINE		0xFC	/*  -4 */
+#define	G_SETENVCOLOR		0xFB	/*  -5 */
+#define	G_SETPRIMCOLOR		0xFA	/*  -6 */
+#define	G_SETBLENDCOLOR		0xF9	/*  -7 */
+#define	G_SETFOGCOLOR		0xF8	/*  -8 */
+#define	G_SETFILLCOLOR		0xF7	/*  -9 */
+#define	G_FILLRECT		0xF6	/* -10 */
+#define	G_SETTILE		0xF5	/* -11 */
+#define	G_LOADTILE		0xF4	/* -12 */
+#define	G_LOADBLOCK		0xF3	/* -13 */
+#define	G_SETTILESIZE		0xF2	/* -14 */
+#define	G_LOADTLUT		0xF0	/* -16 */
+#define	G_RDPSETOTHERMODE	0xEF	/* -17 */
+#define	G_SETPRIMDEPTH		0xEE	/* -18 */
+#define	G_SETSCISSOR		0xED	/* -19 */
+#define	G_SETCONVERT		0xEC	/* -20 */
+#define	G_SETKEYR		0xEB	/* -21 */
+#define	G_SETKEYGB		0xEA	/* -22 */
+#define	G_RDPFULLSYNC		0xE9	/* -23 */
+#define	G_RDPTILESYNC		0xE8	/* -24 */
+#define	G_RDPPIPESYNC		0xE7	/* -25 */
+#define	G_RDPLOADSYNC		0xE6	/* -26 */
+#define G_TEXRECTFLIP		0xE5	/* -27 */
+#define G_TEXRECT		0xE4	/* -28 */
 
 
 /*
@@ -131,14 +131,14 @@
  * These id's are -56, -52, -54, -50, -55, -51, -53, -49, ...
  *                                 edge, shade, texture, zbuff bits:  estz
  */
-#define G_TRI_FILL		0xc8 /* fill triangle:            11001000 */
-#define G_TRI_SHADE		0xcc /* shade triangle:           11001100 */
-#define G_TRI_TXTR		0xca /* texture triangle:         11001010 */
-#define G_TRI_SHADE_TXTR	0xce /* shade, texture triangle:  11001110 */
-#define G_TRI_FILL_ZBUFF	0xc9 /* fill, zbuff triangle:     11001001 */
-#define G_TRI_SHADE_ZBUFF	0xcd /* shade, zbuff triangle:    11001101 */
-#define G_TRI_TXTR_ZBUFF	0xcb /* texture, zbuff triangle:  11001011 */
-#define G_TRI_SHADE_TXTR_ZBUFF	0xcf /* shade, txtr, zbuff trngl: 11001111 */
+#define G_TRI_FILL		0xC8 /* fill triangle:            11001000 */
+#define G_TRI_SHADE		0xCC /* shade triangle:           11001100 */
+#define G_TRI_TXTR		0xCA /* texture triangle:         11001010 */
+#define G_TRI_SHADE_TXTR	0xCE /* shade, texture triangle:  11001110 */
+#define G_TRI_FILL_ZBUFF	0xC9 /* fill, zbuff triangle:     11001001 */
+#define G_TRI_SHADE_ZBUFF	0xCD /* shade, zbuff triangle:    11001101 */
+#define G_TRI_TXTR_ZBUFF	0xCB /* texture, zbuff triangle:  11001011 */
+#define G_TRI_SHADE_TXTR_ZBUFF	0xCF /* shade, txtr, zbuff trngl: 11001111 */
 
 /*
  * A TRI_FILL triangle is just the edges. You need to set the DP
@@ -178,13 +178,13 @@
 /* gets added to RDP command, in order to test for addres fixup: */
 #define G_RDP_ADDR_FIXUP	3	/* |RDP cmds| <= this, do addr fixup */
 #ifdef _LANGUAGE_ASSEMBLY
-#define G_RDP_TEXRECT_CHECK	((-1*G_TEXRECTFLIP)& 0xff)
+#define G_RDP_TEXRECT_CHECK	((-1*G_TEXRECTFLIP)& 0xFF)
 #endif
 
 /* macros for command parsing: */
 #define	GDMACMD(x)		(x)
 #define	GIMMCMD(x)		(G_IMMFIRST-(x))
-#define	GRDPCMD(x)		(0xff-(x))
+#define	GRDPCMD(x)		(0xFF-(x))
 
 #define	G_DMACMDSIZ		128
 #define	G_IMMCMDSIZ		64
@@ -211,11 +211,11 @@
  * Note : this number is NOT the viewport z-scale constant.
  * See the comment next to G_MAXZ for more info.
  */
-#define	G_MAXFBZ		0x3fff	/* 3b exp, 11b mantissa */
+#define	G_MAXFBZ		0x3FFF	/* 3b exp, 11b mantissa */
 
-#define	GPACK_RGBA5551(r, g, b, a)	((((r)<<8) & 0xf800) | 		\
-					 (((g)<<3) & 0x7c0) |		\
-					 (((b)>>2) & 0x3e) | ((a) & 0x1))
+#define	GPACK_RGBA5551(r, g, b, a)	((((r)<<8) & 0xF800) | 		\
+					 (((g)<<3) & 0x7C0) |		\
+					 (((b)>>2) & 0x3E) | ((a) & 0x1))
 #define GPACK_IA16(i, a) (((i) << 8) | (a))
 #define	GPACK_ZDZ(z, dz)		((z) << 2 | (dz))
 
@@ -590,7 +590,7 @@
 #define	ZMODE_OPA	0
 #define	ZMODE_INTER	0x400
 #define	ZMODE_XLU	0x800
-#define	ZMODE_DEC	0xc00
+#define	ZMODE_DEC	0xC00
 #define	CVG_X_ALPHA	0x1000
 #define	ALPHA_CVG_SEL	0x2000
 #define	FORCE_BL	0x4000
@@ -1075,7 +1075,7 @@ typedef struct {
  * but we don't have the ucode to do that...
  *
  */
-#define G_MAXZ		0x03ff	/* 10 bits of integer screen-Z precision */
+#define G_MAXZ		0x03FF	/* 10 bits of integer screen-Z precision */
 
 /*
  * The viewport structure elements have 2 bits of fraction, necessary
@@ -1131,17 +1131,17 @@ typedef union {
 # define G_MV_LOOKATX	0x84
 # define G_MV_L0	0x86
 # define G_MV_L1	0x88
-# define G_MV_L2	0x8a
-# define G_MV_L3	0x8c
-# define G_MV_L4	0x8e
+# define G_MV_L2	0x8A
+# define G_MV_L3	0x8C
+# define G_MV_L4	0x8E
 # define G_MV_L5	0x90
 # define G_MV_L6	0x92
 # define G_MV_L7	0x94
 # define G_MV_TXTATT	0x96
-# define G_MV_MATRIX_1	0x9e	/* NOTE: this is in moveword table */
+# define G_MV_MATRIX_1	0x9E	/* NOTE: this is in moveword table */
 # define G_MV_MATRIX_2	0x98
-# define G_MV_MATRIX_3	0x9a
-# define G_MV_MATRIX_4	0x9c
+# define G_MV_MATRIX_3	0x9A
+# define G_MV_MATRIX_4	0x9C
 #endif	/* F3DEX_GBI_2 */
 
 /*
@@ -1157,22 +1157,22 @@ typedef union {
 #define G_MW_CLIP		0x04
 #define G_MW_SEGMENT		0x06
 #define G_MW_FOG		0x08
-#define G_MW_LIGHTCOL		0x0a
+#define G_MW_LIGHTCOL		0x0A
 #ifdef	F3DEX_GBI_2
-# define G_MW_FORCEMTX		0x0c
+# define G_MW_FORCEMTX		0x0C
 #else	/* F3DEX_GBI_2 */
-# define G_MW_POINTS		0x0c
+# define G_MW_POINTS		0x0C
 #endif	/* F3DEX_GBI_2 */
-#define	G_MW_PERSPNORM		0x0e
+#define	G_MW_PERSPNORM		0x0E
 
 /*
  * These are offsets from the address in the dmem table
  */
 #define G_MWO_NUMLIGHT		0x00
 #define G_MWO_CLIP_RNX		0x04
-#define G_MWO_CLIP_RNY		0x0c
+#define G_MWO_CLIP_RNY		0x0C
 #define G_MWO_CLIP_RPX		0x14
-#define G_MWO_CLIP_RPY		0x1c
+#define G_MWO_CLIP_RPY		0x1C
 #define G_MWO_SEGMENT_0		0x00
 #define G_MWO_SEGMENT_1		0x01
 #define G_MWO_SEGMENT_2		0x02
@@ -1183,30 +1183,30 @@ typedef union {
 #define G_MWO_SEGMENT_7		0x07
 #define G_MWO_SEGMENT_8		0x08
 #define G_MWO_SEGMENT_9		0x09
-#define G_MWO_SEGMENT_A		0x0a
-#define G_MWO_SEGMENT_B		0x0b
-#define G_MWO_SEGMENT_C		0x0c
-#define G_MWO_SEGMENT_D		0x0d
-#define G_MWO_SEGMENT_E		0x0e
-#define G_MWO_SEGMENT_F		0x0f
+#define G_MWO_SEGMENT_A		0x0A
+#define G_MWO_SEGMENT_B		0x0B
+#define G_MWO_SEGMENT_C		0x0C
+#define G_MWO_SEGMENT_D		0x0D
+#define G_MWO_SEGMENT_E		0x0E
+#define G_MWO_SEGMENT_F		0x0F
 #define G_MWO_FOG		0x00
 #define G_MWO_aLIGHT_1		0x00
 #define G_MWO_bLIGHT_1		0x04
 #ifdef	F3DEX_GBI_2
 #define G_MWO_aLIGHT_2		0x18
-#define G_MWO_bLIGHT_2		0x1c
+#define G_MWO_bLIGHT_2		0x1C
 #define G_MWO_aLIGHT_3		0x30
 #define G_MWO_bLIGHT_3		0x34
 #define G_MWO_aLIGHT_4		0x48
-#define G_MWO_bLIGHT_4		0x4c
+#define G_MWO_bLIGHT_4		0x4C
 #define G_MWO_aLIGHT_5		0x60
 #define G_MWO_bLIGHT_5		0x64
 #define G_MWO_aLIGHT_6		0x78
-#define G_MWO_bLIGHT_6		0x7c
+#define G_MWO_bLIGHT_6		0x7C
 #define G_MWO_aLIGHT_7		0x90
 #define G_MWO_bLIGHT_7		0x94
-#define G_MWO_aLIGHT_8		0xa8
-#define G_MWO_bLIGHT_8		0xac
+#define G_MWO_aLIGHT_8		0xA8
+#define G_MWO_bLIGHT_8		0xAC
 #else
 #define G_MWO_aLIGHT_2		0x20
 #define G_MWO_bLIGHT_2		0x24
@@ -1216,33 +1216,33 @@ typedef union {
 #define G_MWO_bLIGHT_4		0x64
 #define G_MWO_aLIGHT_5		0x80
 #define G_MWO_bLIGHT_5		0x84
-#define G_MWO_aLIGHT_6		0xa0
-#define G_MWO_bLIGHT_6		0xa4
-#define G_MWO_aLIGHT_7		0xc0
-#define G_MWO_bLIGHT_7		0xc4
-#define G_MWO_aLIGHT_8		0xe0
-#define G_MWO_bLIGHT_8		0xe4
+#define G_MWO_aLIGHT_6		0xA0
+#define G_MWO_bLIGHT_6		0xA4
+#define G_MWO_aLIGHT_7		0xC0
+#define G_MWO_bLIGHT_7		0xC4
+#define G_MWO_aLIGHT_8		0xE0
+#define G_MWO_bLIGHT_8		0xE4
 #endif
 #define G_MWO_MATRIX_XX_XY_I	0x00
 #define G_MWO_MATRIX_XZ_XW_I	0x04
 #define G_MWO_MATRIX_YX_YY_I	0x08
-#define G_MWO_MATRIX_YZ_YW_I	0x0c
+#define G_MWO_MATRIX_YZ_YW_I	0x0C
 #define G_MWO_MATRIX_ZX_ZY_I	0x10
 #define G_MWO_MATRIX_ZZ_ZW_I	0x14
 #define G_MWO_MATRIX_WX_WY_I	0x18
-#define G_MWO_MATRIX_WZ_WW_I	0x1c
+#define G_MWO_MATRIX_WZ_WW_I	0x1C
 #define G_MWO_MATRIX_XX_XY_F	0x20
 #define G_MWO_MATRIX_XZ_XW_F	0x24
 #define G_MWO_MATRIX_YX_YY_F	0x28
-#define G_MWO_MATRIX_YZ_YW_F	0x2c
+#define G_MWO_MATRIX_YZ_YW_F	0x2C
 #define G_MWO_MATRIX_ZX_ZY_F	0x30
 #define G_MWO_MATRIX_ZZ_ZW_F	0x34
 #define G_MWO_MATRIX_WX_WY_F	0x38
-#define G_MWO_MATRIX_WZ_WW_F	0x3c
+#define G_MWO_MATRIX_WZ_WW_F	0x3C
 #define G_MWO_POINT_RGBA	0x10
 #define G_MWO_POINT_ST		0x14
 #define G_MWO_POINT_XYSCREEN	0x18
-#define G_MWO_POINT_ZSCREEN	0x1c
+#define G_MWO_POINT_ZSCREEN	0x1C
 
 /*
  * Light structure.
@@ -2373,14 +2373,14 @@ _DW({									\
 	Gfx *_g = (Gfx *)(pkt);						\
 									\
 	_g->words.w0 = _SHIFTL(G_CULLDL, 24, 8) |			\
-                       ((0x0f & (vstart))*40);				\
-	_g->words.w1 = (unsigned int)((0x0f & ((vend)+1))*40);		\
+                       ((0x0FF& (vstart))*40);				\
+	_g->words.w1 = (unsigned int)((0x0F & ((vend)+1))*40);		\
 }
 
 #define gsSPCullDisplayList(vstart,vend)				\
 {									\
-	_SHIFTL(G_CULLDL, 24, 8) | ((0x0f & (vstart))*40), 		\
-	((0x0f & ((vend)+1))*40)					\
+	_SHIFTL(G_CULLDL, 24, 8) | ((0x0F & (vstart))*40), 		\
+	((0x0F & ((vend)+1))*40)					\
 }
 #endif
 
@@ -2393,17 +2393,17 @@ _DW({									\
  * Clipping Macros
  */
 #define FR_NEG_FRUSTRATIO_1	0x00000001
-#define FR_POS_FRUSTRATIO_1	0x0000ffff
+#define FR_POS_FRUSTRATIO_1	0x0000FFFF
 #define FR_NEG_FRUSTRATIO_2	0x00000002
-#define FR_POS_FRUSTRATIO_2	0x0000fffe
+#define FR_POS_FRUSTRATIO_2	0x0000FFFE
 #define FR_NEG_FRUSTRATIO_3	0x00000003
-#define FR_POS_FRUSTRATIO_3	0x0000fffd
+#define FR_POS_FRUSTRATIO_3	0x0000FFFD
 #define FR_NEG_FRUSTRATIO_4	0x00000004
-#define FR_POS_FRUSTRATIO_4	0x0000fffc
+#define FR_POS_FRUSTRATIO_4	0x0000FFFC
 #define FR_NEG_FRUSTRATIO_5	0x00000005
-#define FR_POS_FRUSTRATIO_5	0x0000fffb
+#define FR_POS_FRUSTRATIO_5	0x0000FFFB
 #define FR_NEG_FRUSTRATIO_6	0x00000006
-#define FR_POS_FRUSTRATIO_6	0x0000fffa
+#define FR_POS_FRUSTRATIO_6	0x0000FFFA
 /*
  * r should be one of: FRUSTRATIO_1, FRUSTRATIO_2, FRUSTRATIO_3, ... FRUSTRATIO_6
  */
@@ -2867,18 +2867,18 @@ _DW({									\
 	gsSPLookAtY((char *)(la)+16)
 
 #define gDPSetHilite1Tile(pkt, tile, hilite, width, height)		\
-	gDPSetTileSize(pkt, tile, (hilite)->h.x1 & 0xfff, (hilite)->h.y1 & 0xfff, 	\
-		((((width)-1)*4)+(hilite)->h.x1) & 0xfff, ((((height)-1)*4)+(hilite)->h.y1) & 0xfff)
+	gDPSetTileSize(pkt, tile, (hilite)->h.x1 & 0xFFF, (hilite)->h.y1 & 0xFFF, 	\
+		((((width)-1)*4)+(hilite)->h.x1) & 0xFFF, ((((height)-1)*4)+(hilite)->h.y1) & 0xFFF)
 #define gsDPSetHilite1Tile(tile, hilite, width, height)			\
-	gsDPSetTileSize(tile, (hilite)->h.x1 & 0xfff, (hilite)->h.y1 & 0xfff, 		\
-		((((width)-1)*4)+(hilite)->h.x1) & 0xfff, ((((height)-1)*4)+(hilite)->h.y1) & 0xfff)
+	gsDPSetTileSize(tile, (hilite)->h.x1 & 0xFFF, (hilite)->h.y1 & 0xFFF, 		\
+		((((width)-1)*4)+(hilite)->h.x1) & 0xFFF, ((((height)-1)*4)+(hilite)->h.y1) & 0xFFF)
 
 #define gDPSetHilite2Tile(pkt, tile, hilite, width, height)		\
-	gDPSetTileSize(pkt, tile, (hilite)->h.x2 & 0xfff, (hilite)->h.y2 & 0xfff, 	\
-		((((width)-1)*4)+(hilite)->h.x2) & 0xfff, ((((height)-1)*4)+(hilite)->h.y2) & 0xfff)
+	gDPSetTileSize(pkt, tile, (hilite)->h.x2 & 0xFFF, (hilite)->h.y2 & 0xFFF, 	\
+		((((width)-1)*4)+(hilite)->h.x2) & 0xFFF, ((((height)-1)*4)+(hilite)->h.y2) & 0xFFF)
 #define gsDPSetHilite2Tile(tile, hilite, width, height)			\
-	gsDPSetTileSize(tile, (hilite)->h.x2 & 0xfff, (hilite)->h.y2 & 0xfff, 		\
-		((((width)-1)*4)+(hilite)->h.x2) & 0xfff, ((((height)-1)*4)+(hilite)->h.y2) & 0xfff)
+	gsDPSetTileSize(tile, (hilite)->h.x2 & 0xFFF, (hilite)->h.y2 & 0xFFF, 		\
+		((((width)-1)*4)+(hilite)->h.x2) & 0xFFF, ((((height)-1)*4)+(hilite)->h.y2) & 0xFFF)
 
 /*
  * FOG macros
@@ -4333,7 +4333,7 @@ _DW({									\
 {									\
 	gDPSetTextureImage(pkt, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, dram);	\
 	gDPTileSync(pkt);						\
-	gDPSetTile(pkt, 0, 0, 0, (256+(((pal)&0xf)*16)),		\
+	gDPSetTile(pkt, 0, 0, 0, (256+(((pal)&0xF)*16)),		\
 		G_TX_LOADTILE, 0 , 0, 0, 0, 0, 0, 0);			\
 	gDPLoadSync(pkt);						\
 	gDPLoadTLUTCmd(pkt, G_TX_LOADTILE, 15);				\
@@ -4344,7 +4344,7 @@ _DW({									\
 
 #define gDPLoadTLUT_pal16(pkt, pal, dram)				\
 									\
-        _gDPLoadTextureBlock(pkt, dram, (256+(((pal)&0xf)*16)),		\
+        _gDPLoadTextureBlock(pkt, dram, (256+(((pal)&0xF)*16)),		\
 		G_IM_FMT_RGBA, G_IM_SIZ_16b, 4*16, 1,			\
 		pal, 0, 0, 0, 0, 0, 0)
 
@@ -4361,7 +4361,7 @@ _DW({									\
  									\
 	gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, dram),	\
 	gsDPTileSync(),							\
-	gsDPSetTile(0, 0, 0, (256+(((pal)&0xf)*16)),			\
+	gsDPSetTile(0, 0, 0, (256+(((pal)&0xF)*16)),			\
 		G_TX_LOADTILE, 0 , 0, 0, 0, 0, 0, 0),			\
 	gsDPLoadSync(),							\
 	gsDPLoadTLUTCmd(G_TX_LOADTILE, 15),				\
@@ -4371,7 +4371,7 @@ _DW({									\
 
 #define gsDPLoadTLUT_pal16(pal, dram)                                   \
 									\
-	_gsDPLoadTextureBlock(dram, (256+(((pal)&0xf)*16)),           	\
+	_gsDPLoadTextureBlock(dram, (256+(((pal)&0xF)*16)),           	\
                 G_IM_FMT_RGBA, G_IM_SIZ_16b, 4*16, 1,                   \
                 pal, 0, 0, 0, 0, 0, 0)
 

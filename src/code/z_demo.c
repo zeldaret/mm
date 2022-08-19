@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64rumble.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 
 void Cutscene_DoNothing(PlayState* play, CutsceneContext* csCtx);
@@ -81,7 +82,7 @@ CutsceneStateHandler sCsStateHandlers2[] = {
 };
 
 void Cutscene_Update2(PlayState* play, CutsceneContext* csCtx) {
-    if ((gSaveContext.cutsceneTrigger != 0) && (play->sceneLoadFlag == 0x14)) {
+    if ((gSaveContext.cutsceneTrigger != 0) && (play->transitionTrigger == TRANS_TRIGGER_START)) {
         gSaveContext.cutsceneTrigger = 0;
     }
 
@@ -255,8 +256,7 @@ void Cutscene_Command_Misc(PlayState* play2, CutsceneContext* csCtx, CsCmdBase* 
             }
             break;
         case 0x13:
-            // AudioOcarina_PlayLongScarecrowAfterCredits
-            func_8019D758();
+            AudioOcarina_PlayLongScarecrowAfterCredits();
             csCtx->frames = cmd->startFrame - 1;
             break;
         case 0x14:
@@ -290,10 +290,10 @@ void Cutscene_Command_Misc(PlayState* play2, CutsceneContext* csCtx, CsCmdBase* 
             break;
         case 0x1B:
             if (isStartFrame) {
-                play->nextEntranceIndex = 0x1C00;
+                play->nextEntrance = ENTRANCE(CUTSCENE, 0);
                 gSaveContext.nextCutsceneIndex = 0xFFF8;
-                play->sceneLoadFlag = 0x14;
-                play->unk_1887F = 3;
+                play->transitionTrigger = TRANS_TRIGGER_START;
+                play->transitionType = TRANS_TYPE_03;
             }
             break;
         case 0x1C:
@@ -488,6 +488,7 @@ void func_800EADB0(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     }
 }
 #else
+void func_800EADB0(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EADB0.s")
 #endif
 
@@ -505,14 +506,14 @@ void Cutscene_Command_Rumble(PlayState* play, CutsceneContext* csCtx, CsCmdRumbl
     switch (cmd->type) {
         case 1:
             if (csCtx->frames == cmd->startFrame) {
-                func_8013ECE0(0.0f, cmd->unk6, cmd->unk7, cmd->unk8);
+                Rumble_Request(0.0f, cmd->intensity, cmd->decayTimer, cmd->decayStep);
             }
             break;
 
         case 2:
             if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
                 if ((csCtx->frames == cmd->startFrame) || (play->state.frames % 64 == 0)) {
-                    func_8013ECE0(0.0f, cmd->unk6, cmd->unk7, cmd->unk8);
+                    Rumble_Request(0.0f, cmd->intensity, cmd->decayTimer, cmd->decayStep);
                 }
             }
             break;
@@ -553,7 +554,7 @@ void Cutscene_Command_SetTime(PlayState* play, CutsceneContext* csCtx, CsCmdDayT
 
         nextTime = hourAsMinutes + minutes;
         gSaveContext.save.time = nextTime;
-        gSaveContext.environmentTime = nextTime;
+        gSaveContext.skyboxTime = nextTime;
     }
 }
 
@@ -561,7 +562,7 @@ void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase*
     csCtx->state = CS_STATE_4;
     func_80165690();
     Audio_SetCutsceneFlag(false);
-    gSaveContext.unk_3F48 = 1;
+    gSaveContext.cutsceneTransitionControl = 1;
 
     if ((gSaveContext.gameMode != 0) && (csCtx->frames != cmd->startFrame)) {
         gSaveContext.unk_3F1E = 1;
@@ -569,9 +570,9 @@ void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase*
 
     gSaveContext.save.cutscene = 0;
     if (cmd->base == 1) {
-        play->nextEntranceIndex = play->csCtx.sceneCsList[play->csCtx.currentCsIndex].nextEntranceIndex;
+        play->nextEntrance = play->csCtx.sceneCsList[play->csCtx.currentCsIndex].nextEntrance;
         gSaveContext.nextCutsceneIndex = 0;
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
         if (gSaveContext.gameMode != 1) {
             Scene_SetExitFade(play);
         } else {
@@ -579,14 +580,14 @@ void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase*
             if (D_801BB12C >= 2) {
                 D_801BB12C = 0;
             }
-            play->unk_1887F = 4;
+            play->transitionType = TRANS_TYPE_04;
         }
 
-        if ((play->nextEntranceIndex & 0xF) > 0) {
-            gSaveContext.nextCutsceneIndex = (play->nextEntranceIndex & 0xF) + 0xFFEF;
+        if ((play->nextEntrance & 0xF) > 0) {
+            gSaveContext.nextCutsceneIndex = (play->nextEntrance & 0xF) + 0xFFEF;
         }
 
-        play->nextEntranceIndex &= ~0xF;
+        play->nextEntrance &= ~0xF;
     }
 }
 
@@ -603,44 +604,44 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
             switch (D_801F4DE2) {
                 case 0x1F:
                     if (gSaveContext.save.weekEventReg[20] & 2) {
-                        play->nextEntranceIndex = 0x3010;
-                        play->sceneLoadFlag = 0x14;
-                        play->unk_1887F = 3;
+                        play->nextEntrance = ENTRANCE(WOODFALL_TEMPLE, 1);
+                        play->transitionTrigger = TRANS_TRIGGER_START;
+                        play->transitionType = TRANS_TYPE_03;
                     } else {
-                        play->nextEntranceIndex = 0x8600;
+                        play->nextEntrance = ENTRANCE(WOODFALL, 0);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
-                        play->sceneLoadFlag = 0x14;
-                        play->unk_1887F = 3;
+                        play->transitionTrigger = TRANS_TRIGGER_START;
+                        play->transitionType = TRANS_TYPE_03;
                     }
                     break;
 
                 case 0x44:
                     if (gSaveContext.save.weekEventReg[33] & 0x80) {
-                        play->nextEntranceIndex = 0xAE70;
-                        play->sceneLoadFlag = 0x14;
-                        play->unk_1887F = 3;
+                        play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 7);
+                        play->transitionTrigger = TRANS_TRIGGER_START;
+                        play->transitionType = TRANS_TYPE_03;
                     } else {
-                        play->nextEntranceIndex = 0xAE00;
+                        play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 0);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
-                        play->sceneLoadFlag = 0x14;
-                        play->unk_1887F = 3;
+                        play->transitionTrigger = TRANS_TRIGGER_START;
+                        play->transitionType = TRANS_TYPE_03;
                     }
                     break;
 
                 case 0x5F:
                     gSaveContext.save.weekEventReg[55] |= 0x80;
-                    play->nextEntranceIndex = 0x6A80;
+                    play->nextEntrance = ENTRANCE(ZORA_CAPE, 8);
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
-                    play->sceneLoadFlag = 0x14;
-                    play->unk_1887F = 3;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
+                    play->transitionType = TRANS_TYPE_03;
                     break;
 
                 case 0x36:
                     gSaveContext.save.weekEventReg[52] |= 0x20;
-                    play->nextEntranceIndex = 0x2000;
+                    play->nextEntrance = ENTRANCE(IKANA_CANYON, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
-                    play->sceneLoadFlag = 0x14;
-                    play->unk_1887F = 3;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
+                    play->transitionType = TRANS_TYPE_03;
                     break;
             }
         }
@@ -658,126 +659,107 @@ void Cutscene_Command_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCt
 
             case 2:
                 if (INV_CONTENT(ITEM_MASK_KAMARO) == ITEM_MASK_KAMARO) {
-                    // Milk bar
-                    play->nextEntranceIndex = 0x2400;
+                    play->nextEntrance = ENTRANCE(MILK_BAR, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
                 } else {
-                    // SPOT00
-                    play->nextEntranceIndex = 0x1C00;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 3:
                 if (INV_CONTENT(ITEM_MASK_GREAT_FAIRY) == ITEM_MASK_GREAT_FAIRY) {
-                    // Fairy's fountain
-                    play->nextEntranceIndex = 0x4600;
+                    play->nextEntrance = ENTRANCE(FAIRY_FOUNTAIN, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
                 } else {
-                    // SPOT00
-                    play->nextEntranceIndex = 0x1C10;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 1);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 4:
                 if (INV_CONTENT(ITEM_MASK_ROMANI) == ITEM_MASK_ROMANI) {
-                    // Romani ranch
-                    play->nextEntranceIndex = 0x6400;
+                    play->nextEntrance = ENTRANCE(ROMANI_RANCH, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
                 } else {
-                    // SPOT00
-                    play->nextEntranceIndex = 0x1C20;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 2);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 5:
                 if (INV_CONTENT(ITEM_MASK_BLAST) == ITEM_MASK_BLAST) {
-                    // West clock town
-                    play->nextEntranceIndex = 0xD400;
+                    play->nextEntrance = ENTRANCE(WEST_CLOCK_TOWN, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
                 } else {
-                    // SPOT00
-                    play->nextEntranceIndex = 0x1C30;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 3);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 6:
                 if (INV_CONTENT(ITEM_MASK_CIRCUS_LEADER) == ITEM_MASK_CIRCUS_LEADER) {
-                    // Milk bar
-                    play->nextEntranceIndex = 0x2400;
+                    play->nextEntrance = ENTRANCE(MILK_BAR, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
                 } else {
-                    // SPOT00
-                    play->nextEntranceIndex = 0x1C50;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 5);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 7:
                 if (INV_CONTENT(ITEM_MASK_BREMEN) == ITEM_MASK_BREMEN) {
-                    // Milk bar
-                    play->nextEntranceIndex = 0x2400;
+                    play->nextEntrance = ENTRANCE(MILK_BAR, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF3;
                 } else {
-                    // SPOT00
-                    play->nextEntranceIndex = 0x1C60;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 6);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 8:
-                // Ikana canyon
-                play->nextEntranceIndex = 0x2000;
+                play->nextEntrance = ENTRANCE(IKANA_CANYON, 0);
                 gSaveContext.nextCutsceneIndex = 0xFFF3;
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 9:
                 if (INV_CONTENT(ITEM_MASK_COUPLE) == ITEM_MASK_COUPLE) {
-                    // Termina field
-                    play->nextEntranceIndex = 0x5400;
+                    play->nextEntrance = ENTRANCE(TERMINA_FIELD, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF8;
                 } else {
-                    // SPOT00
-                    play->nextEntranceIndex = 0x1C70;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 7);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 10:
                 if (INV_CONTENT(ITEM_MASK_BUNNY) == ITEM_MASK_BUNNY) {
-                    // Cucco shack
-                    play->nextEntranceIndex = 0x7E00;
+                    play->nextEntrance = ENTRANCE(CUCCO_SHACK, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
                 } else {
-                    // SPOT00
-                    play->nextEntranceIndex = 0x1C40;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 4);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 11:
                 if (INV_CONTENT(ITEM_MASK_POSTMAN) == ITEM_MASK_POSTMAN) {
-                    // Termina field
-                    play->nextEntranceIndex = 0x5410;
+                    play->nextEntrance = ENTRANCE(TERMINA_FIELD, 1);
                     gSaveContext.nextCutsceneIndex = 0xFFF8;
                 } else {
-                    // SPOT00
-                    play->nextEntranceIndex = 0x1C80;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 8);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
         }
     }
@@ -879,7 +861,7 @@ void Cutscene_Command_TransitionFX(PlayState* play, CutsceneContext* csCtx, CsCm
                 break;
 
             case 9:
-                gSaveContext.unk_3F48 = 1;
+                gSaveContext.cutsceneTransitionControl = 1;
                 break;
 
             case 10:
@@ -997,7 +979,7 @@ s32 Cutscene_CountNormalMasks(void) {
 // Command 0xA: Textbox
 void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdTextbox* cmd) {
     static s32 D_801BB160 = CS_TEXTBOX_TYPE_DEFAULT;
-    u8 dialogState;
+    u8 talkState;
     s32 pad;
     u16 originalCsFrames;
     s32 pad2;
@@ -1047,10 +1029,11 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
             // a textbox that is expected to be closed by the user is still open.
 
             originalCsFrames = csCtx->frames;
-            dialogState = Message_GetState(&play->msgCtx);
-            if ((dialogState != 2) && (dialogState != 0) && (dialogState != 7) && (dialogState != 8)) {
+            talkState = Message_GetState(&play->msgCtx);
+            if ((talkState != TEXT_STATE_CLOSING) && (talkState != TEXT_STATE_NONE) && (talkState != TEXT_STATE_7) &&
+                (talkState != TEXT_STATE_8)) {
                 csCtx->frames--;
-                if ((dialogState == 4) && Message_ShouldAdvance(play)) {
+                if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
                     if (play->msgCtx.choiceIndex == 0) {
                         if (cmd->base == 0x33BD) {
                             func_8019F230();
@@ -1088,12 +1071,12 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
                     }
                 }
 
-                if (dialogState == 5 && Message_ShouldAdvance(play)) {
+                if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
                     func_80152434(play, cmd->base);
                 }
             }
 
-            if ((dialogState == 2) && (D_801BB160 == CS_TEXTBOX_TYPE_3)) {
+            if ((talkState == TEXT_STATE_CLOSING) && (D_801BB160 == CS_TEXTBOX_TYPE_3)) {
                 csCtx->frames--;
                 D_801BB124++;
             }
@@ -1129,8 +1112,6 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
     }
 }
 
-#ifdef NON_MATCHING
-// Some stack issues, and a few instructions in the "wrong" places
 /**
  * Loops over the cutscene data itself (`cutscenePtr`), applying the effects of each command instantaneously (for most
  * commands).
@@ -1159,14 +1140,13 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
  */
 void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutscenePtr) {
     s32 i;
-    s16 phi_s0;
-    s32 totalEntries;
     s32 j;
-    u32 cmdType; // sp5C
     s32 pad;
-    s32 cmdEntries;       // sp58
-    s32 cutsceneEndFrame; // sp50
-    s16 phi_s0_23;
+    s32 totalEntries;
+    u32 cmdType;
+    s32 cmdEntries;
+    s32 pad2;
+    s32 cutsceneEndFrame;
     CsCmdBase* cmd;
 
     // Read the command list count and the ending frame for this cutscene
@@ -1175,7 +1155,8 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
     bcopy(cutscenePtr, &cutsceneEndFrame, sizeof(s32));
     cutscenePtr += sizeof(s32);
 
-    if (((u16)cutsceneEndFrame < csCtx->frames) && (play->sceneLoadFlag != 0x14) && (csCtx->state != CS_STATE_4)) {
+    if (((u16)cutsceneEndFrame < csCtx->frames) && (play->transitionTrigger != TRANS_TRIGGER_START) &&
+        (csCtx->state != CS_STATE_4)) {
         csCtx->state = CS_STATE_3;
         return;
     }
@@ -1194,14 +1175,14 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
         // Check special cases of command types. This are generic ActorActions
         // Ranges: [0x64, 0x96), 0xC9, [0x1C2, 0x258)
         if (((cmdType >= 100) && (cmdType < 150)) || (cmdType == 201) || ((cmdType >= 450) && (cmdType < 600))) {
-            for (phi_s0 = 0; phi_s0 < ARRAY_COUNT(D_801F4DC8); phi_s0++) {
-                if ((u16)cmdType == D_801F4DC8[phi_s0]) {
-                    func_800ECD7C(csCtx, &cutscenePtr, phi_s0);
+            for (j = 0; j < ARRAY_COUNT(D_801F4DC8); j = (s16)(j + 1)) {
+                if (D_801F4DC8[j] == (u16)cmdType) {
+                    func_800ECD7C(csCtx, &cutscenePtr, j);
                     cmdType = -2;
                     break;
-                } else if (D_801F4DC8[phi_s0] == 0) {
-                    D_801F4DC8[phi_s0] = cmdType;
-                    func_800ECD7C(csCtx, &cutscenePtr, phi_s0);
+                } else if (D_801F4DC8[j] == 0) {
+                    D_801F4DC8[j] = cmdType;
+                    func_800ECD7C(csCtx, &cutscenePtr, j);
                     cmdType = -2;
                     break;
                 }
@@ -1331,15 +1312,15 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     cmd = (CsCmdBase*)cutscenePtr;
-                    if ((csCtx->frames >= cmd->startFrame) && (csCtx->frames < cmd->endFrame)) {
-                        csCtx->playerAction = (CsCmdActorAction*)cutscenePtr;
+                    if ((cmd->startFrame <= csCtx->frames) && (csCtx->frames < cmd->endFrame)) {
+                        csCtx->playerAction = (CsCmdActorAction*)cmd;
                     }
                     cutscenePtr += sizeof(CsCmdActorAction);
                 }
                 break;
 
             case CS_CMD_CAMERA:
-                cutscenePtr = &cutscenePtr[Cutscene_Command_Camera(play, cutscenePtr)];
+                cutscenePtr += Cutscene_Command_Camera(play, cutscenePtr);
                 break;
 
             case CS_CMD_TERMINATOR:
@@ -1366,7 +1347,7 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 for (j = 0; j < cmdEntries; j++) {
                     cmd = (CsCmdBase*)cutscenePtr;
                     if (cmd->base != 0xFFFF) {
-                        Cutscene_Command_Textbox(play, csCtx, (CsCmdTextbox*)cutscenePtr);
+                        Cutscene_Command_Textbox(play, csCtx, (CsCmdTextbox*)cmd);
                     }
                     cutscenePtr += sizeof(CsCmdTextbox);
                 }
@@ -1412,10 +1393,6 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
         }
     }
 }
-#else
-void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutscenePtr);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_ProcessCommands.s")
-#endif
 
 /* End of command handling section */
 
@@ -1453,7 +1430,7 @@ void func_800EDA04(PlayState* play, CutsceneContext* csCtx) {
 }
 
 void func_800EDA84(PlayState* play, CutsceneContext* csCtx) {
-    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_0) && !Player_InCsMode(&play->state)) {
+    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_0) && !Player_InCsMode(play)) {
         gSaveContext.save.cutscene = 0xFFFD;
     }
 
@@ -1473,8 +1450,8 @@ void func_800EDA84(PlayState* play, CutsceneContext* csCtx) {
             Audio_SetCutsceneFlag(true);
 
             csCtx->frames = 0xFFFF;
-            csCtx->csCamId = ActorCutscene_GetCurrentCamera(0x7F);
-            func_8016119C(Play_GetCamera(play, csCtx->csCamId), &sCutsceneCameraInfo);
+            csCtx->subCamId = ActorCutscene_GetCurrentSubCamId(0x7F);
+            func_8016119C(Play_GetCamera(play, csCtx->subCamId), &sCutsceneCameraInfo);
             csCtx->unk_18 = 0xFFFF;
 
             if (gSaveContext.cutsceneTrigger == 0) {
@@ -1491,11 +1468,9 @@ void func_800EDA84(PlayState* play, CutsceneContext* csCtx) {
     }
 }
 
-#ifdef NON_MATCHING
 // HandleFlags?
-// regalloc
 void func_800EDBE0(PlayState* play) {
-    CutsceneEntry* temp_a3;
+    s32 pad;
     s16 sp2A;
     SceneTableEntry* sp24;
     s32 temp_v0_3;
@@ -1505,15 +1480,16 @@ void func_800EDBE0(PlayState* play) {
         if (sp2A != -1) {
             temp_v0_3 = func_800F2138(sp2A);
             if (temp_v0_3 != -1) {
-                temp_a3 = ((void)0, play->csCtx.sceneCsList);
-                if ((temp_a3[temp_v0_3].unk7 != 0xFF) && (gSaveContext.respawnFlag == 0)) {
-                    if (temp_a3[temp_v0_3].unk7 == 0xFE) {
+                if ((play->csCtx.sceneCsList[temp_v0_3].unk7 != 0xFF) && (gSaveContext.respawnFlag == 0)) {
+                    if (play->csCtx.sceneCsList[temp_v0_3].unk7 == 0xFE) {
                         ActorCutscene_Start(sp2A, NULL);
                         gSaveContext.showTitleCard = false;
-                    } else if (!((1 << (temp_a3[temp_v0_3].unk7 % 8)) &
-                                 gSaveContext.save.weekEventReg[temp_a3[temp_v0_3].unk7 / 8])) {
-                        gSaveContext.save.weekEventReg[(temp_a3[temp_v0_3].unk7 / 8)] |=
-                            1 << (temp_a3[temp_v0_3].unk7 % 8);
+                    } else if (!(((void)0,
+                                  gSaveContext.save.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)]) &
+                                 (1 << (play->csCtx.sceneCsList[temp_v0_3].unk7 % 8)))) {
+                        gSaveContext.save.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)] =
+                            ((void)0, gSaveContext.save.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)]) |
+                            (1 << (play->csCtx.sceneCsList[temp_v0_3].unk7 % 8));
                         ActorCutscene_Start(sp2A, NULL);
                         gSaveContext.showTitleCard = false;
                     }
@@ -1527,7 +1503,8 @@ void func_800EDBE0(PlayState* play) {
     if ((gSaveContext.respawnFlag == 0) || (gSaveContext.respawnFlag == -2)) {
         sp24 = play->loadedScene;
         if ((sp24->titleTextId != 0) && gSaveContext.showTitleCard) {
-            if ((Entrance_GetTransitionFlags(gSaveContext.sceneSetupIndex + gSaveContext.save.entranceIndex) &
+            if ((Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entrance) +
+                                             ((void)0, gSaveContext.sceneSetupIndex)) &
                  0x4000) != 0) {
                 func_80151A68(play, sp24->titleTextId);
             }
@@ -1536,9 +1513,6 @@ void func_800EDBE0(PlayState* play) {
         gSaveContext.showTitleCard = true;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EDBE0.s")
-#endif
 
 void func_800EDDB0(PlayState* play) {
 }

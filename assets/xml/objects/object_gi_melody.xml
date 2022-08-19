@@ -1,11 +1,14 @@
 ﻿<Root>
+    <!-- Get Item Draw: OoT Songs -->
     <File Name="object_gi_melody" Segment="6">
-        <DList Name="object_gi_melody_DL_000A80" Offset="0xA80" />
-        <DList Name="object_gi_melody_DL_000A90" Offset="0xA90" />
-        <DList Name="object_gi_melody_DL_000AA0" Offset="0xAA0" />
-        <DList Name="object_gi_melody_DL_000AB0" Offset="0xAB0" />
-        <DList Name="object_gi_melody_DL_000AC0" Offset="0xAC0" />
-        <DList Name="object_gi_melody_DL_000AD0" Offset="0xAD0" />
-        <DList Name="object_gi_melody_DL_000AE0" Offset="0xAE0" />
+
+        <!-- OoT Songs Display Lists -->
+        <DList Name="gGiMinuetColorDL" Offset="0xA80" />
+        <DList Name="gGiBoleroColorDL" Offset="0xA90" />
+        <DList Name="gGiSerenadeColorDL" Offset="0xAA0" />
+        <DList Name="gGiRequiemColorDL" Offset="0xAB0" />
+        <DList Name="gGiNocturneColorDL" Offset="0xAC0" />
+        <DList Name="gGiPreludeColorDL" Offset="0xAD0" />
+        <DList Name="gGiSongNoteDL" Offset="0xAE0" />
     </File>
 </Root>
