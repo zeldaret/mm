@@ -96,8 +96,84 @@ void func_80165690(void) {
     SREG(91) = 0;
 }
 
-void func_801656A4(u8* arg0, u16* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801656A4.s")
+void func_801656A4(void* arg0, u16* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
+    s32 i;
+    s32 j;
+    u32 t2;
+    u32 temp1;
+    u32 temp2;
+    u32 tempr;
+    u32 tempg;
+    u32 tempb;
+
+    switch (arg7) {
+        case 4: {
+            u8* arg01 = (u8*)arg0;
+
+            for (i = arg4; i <= arg6; i++) {
+                for (j = arg3; j <= arg5; j += 2) {
+                    t2 = arg1[i * arg2 + j];
+                    tempr = (t2 >> 11) & 0x1f;
+                    tempg = (t2 >> 6) & 0x1f;
+                    tempb = (t2 >> 1) & 0x1f;
+                    temp1 = ((tempr * 2 + tempg * 4 + tempb) * 0xF) / 217;
+
+                    t2 = arg1[i * arg2 + j + 1];
+                    tempr = (t2 >> 11) & 0x1f;
+                    tempg = (t2 >> 6) & 0x1f;
+                    tempb = (t2 >> 1) & 0x1f;
+                    temp2 = ((tempr * 2 + tempg * 4 + tempb) * 0xF) / 217;
+
+                    *(arg01++) = (temp1 << 4) | temp2;
+                }
+            }
+        } break;
+
+        case 5: {
+            u8* arg02 = (u8*)arg0;
+
+            for (i = arg4; i <= arg6; i++) {
+                for (j = arg3; j <= arg5; j++) {
+                    t2 = arg1[i * arg2 + j];
+                    tempr = (t2 >> 11) & 0x1f;
+                    tempg = (t2 >> 6) & 0x1f;
+                    tempb = (t2 >> 1) & 0x1f;
+
+                    //! What
+                    t2 = 0;
+
+                    *(arg02++) = (((tempr * 2 + tempg * 4 + tempb) * 0xFF) / 217) & 0xF8;
+                }
+            }
+        } break;
+
+        case 8: {
+            u8* arg03 = (u8*)arg0;
+
+            for (i = arg4; i <= arg6; i++) {
+                for (j = arg3; j <= arg5; j++) {
+                    t2 = arg1[i * arg2 + j];
+
+                    tempr = (t2 >> 11) & 0x1f;
+                    tempg = (t2 >> 6) & 0x1f;
+                    tempb = (t2 >> 1) & 0x1f;
+
+                    *(arg03++) = ((tempr * 2 + tempg * 4 + tempb) * 0xFF) / 217;
+                }
+            }
+        } break;
+
+        case 16: {
+            u16* arg0u = (u16*)arg0;
+
+            for (i = arg4; i <= arg6; i++) {
+                for (j = arg3; j <= arg5; j++) {
+                    *(arg0u++) = arg1[i * arg2 + j];
+                }
+            }
+        } break;
+    }
+}
 
 void func_80165DB8(s32 arg0) {
     SREG(92) = arg0;
@@ -118,7 +194,7 @@ void func_80165E04(void) {
 
 void func_80165E1C(PreRender* prerender) {
     PreRender_ApplyFilters(prerender);
-    func_801656A4(D_80780000, prerender->fbufSave, 0x140, 0x50, 0x40, 0xEF, 0xAF, 8);
+    func_801656A4(D_80780000, prerender->fbufSave, 320, 80, 64, 240 - 1, 176 - 1, 8);
 }
 
 s32 func_80165E7C(PlayState* this, s32 arg1) {
