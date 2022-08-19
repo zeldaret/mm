@@ -21,10 +21,10 @@ typedef struct EnWeatherTag {
 
 extern const ActorInit En_Weather_Tag_InitVars;
 
-#define WEATHER_TAG_TYPE(x) (x->actor.params & 0xF)
-#define WEATHER_TAG_PATHID(x) (x->actor.params >> 4 & 0xF)
-#define WEATHER_TAG_RANGE100(x) ((u8)(((x->actor.params >> 8) & 0xFF)) * 100.0f)
-#define WEATHER_TAG_RANGE100INT(x) ((u8)(((x->actor.params >> 8))) * 100)
+#define WEATHER_TAG_TYPE(thisx) ((thisx)->params & 0xF)
+#define WEATHER_TAG_PATHID(thisx) (((thisx)->params >> 4) & 0xF)
+#define WEATHER_TAG_RANGE100(thisx) ((u8)(((thisx)->params >> 8) & 0xFF) * 100.0f)
+#define WEATHER_TAG_RANGE100INT(thisx) ((u8)(((thisx)->params >> 8) & 0xFF) * 100)
 
 typedef enum {
     /* 0 */ WEATHERTAG_TYPE_UNK0,

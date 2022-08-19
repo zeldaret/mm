@@ -209,7 +209,7 @@ static ColliderSphereInit sSphereInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS D_80951CC0[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_in2_Anim_009CDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_in2_Anim_009CDC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_in2_Anim_00A5E0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -317,7 +317,7 @@ s32 func_8094E054(EnGm* this, PlayState* play, s32 arg2) {
     if (phi_v1) {
         if (tmp >= 0) {
             this->unk_3E8 = arg2;
-            ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80951CC0, arg2);
+            ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg2);
             this->unk_3A8 = this->skelAnime.playSpeed;
         }
     }
@@ -1710,7 +1710,7 @@ void EnGm_Update(Actor* thisx, PlayState* play) {
             func_8094DFF8(this, play);
             func_8094E2D0(this);
             func_8094F2E8(this);
-            func_8013C964(&this->actor, play, this->unk_3B4, 30.0f, EXCH_ITEM_NONE, this->unk_3A4 & 7);
+            func_8013C964(&this->actor, play, this->unk_3B4, 30.0f, PLAYER_AP_NONE, this->unk_3A4 & 7);
             if ((this->unk_258 != 3) && (this->unk_258 != 5) && (this->unk_258 != 8)) {
                 Actor_MoveWithGravity(&this->actor);
                 Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);

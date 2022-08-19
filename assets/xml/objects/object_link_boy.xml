@@ -76,6 +76,6 @@
         <Limb Name="object_link_boy_Lodlimb_00D7F4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_13" Offset="0xD7F4" />
         <Limb Name="object_link_boy_Lodlimb_00D804" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_14" Offset="0xD804" />
         <Limb Name="object_link_boy_Lodlimb_00D814" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_15" Offset="0xD814" />
-        <Skeleton Name="object_link_boy_Skel_00D878" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_BOY_LIMB_NONE" LimbMax="OBJECT_LINK_BOY_LIMB_MAX" EnumName="object_link_boy_Limbs" Offset="0xD878" />
+        <Skeleton Name="object_link_boy_Skel_00D878" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_BOY_LIMB_NONE" LimbMax="OBJECT_LINK_BOY_LIMB_MAX" EnumName="ObjectLinkBoyLimb" Offset="0xD878" />
     </File>
 </Root>

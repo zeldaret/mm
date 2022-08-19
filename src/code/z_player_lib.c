@@ -777,11 +777,11 @@ s32 func_801240DC(Player* player) {
 }
 
 s32 func_80124110(Player* player, s32 actionParam) {
-    s32 temp_v0 = actionParam - PLAYER_AP_FISHING_POLE;
+    s32 temp_v0 = actionParam - PLAYER_AP_FISHING_ROD;
 
     if (player->transformation != PLAYER_FORM_GORON) {
-        if (((actionParam - PLAYER_AP_FISHING_POLE) > (PLAYER_AP_FISHING_POLE - PLAYER_AP_FISHING_POLE)) &&
-            ((actionParam - PLAYER_AP_FISHING_POLE) < (PLAYER_AP_SWORD_GREAT_FAIRY - PLAYER_AP_FISHING_POLE))) {
+        if (((actionParam - PLAYER_AP_FISHING_ROD) > (PLAYER_AP_FISHING_ROD - PLAYER_AP_FISHING_ROD)) &&
+            ((actionParam - PLAYER_AP_FISHING_ROD) < (PLAYER_AP_SWORD_GREAT_FAIRY - PLAYER_AP_FISHING_ROD))) {
             return temp_v0;
         }
     }

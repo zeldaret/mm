@@ -389,7 +389,7 @@ void EnBigslime_Destroy(Actor* thisx, PlayState* play) {
     }
 
     Collider_DestroyCylinder(play, &this->gekkoCollider);
-    Audio_StopSfxByPos(&this->gekkoProjectedPos);
+    AudioSfx_StopByPos(&this->gekkoProjectedPos);
 }
 
 void EnBigslime_DynamicVtxCopyState(EnBigslime* this) {
