@@ -133,7 +133,8 @@ void func_801656A4(void* arg0, u16* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5
                     *(arg01++) = (temp1 << 4) | temp2;
                 }
             }
-        } break;
+            break;
+        }
 
         case 5: {
             u8* arg02 = (u8*)arg0;
@@ -151,7 +152,8 @@ void func_801656A4(void* arg0, u16* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5
                     *(arg02++) = (((tempr * 2 + tempg * 4 + tempb) * 0xFF) / 217) & 0xF8;
                 }
             }
-        } break;
+            break;
+        }
 
         case 8: {
             u8* arg03 = (u8*)arg0;
@@ -167,7 +169,8 @@ void func_801656A4(void* arg0, u16* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5
                     *(arg03++) = ((tempr * 2 + tempg * 4 + tempb) * 0xFF) / 217;
                 }
             }
-        } break;
+            break;
+        }
 
         case 16: {
             u16* arg0u = (u16*)arg0;
@@ -177,7 +180,8 @@ void func_801656A4(void* arg0, u16* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5
                     *(arg0u++) = arg1[i * arg2 + j];
                 }
             }
-        } break;
+            break;
+        }
     }
 }
 
