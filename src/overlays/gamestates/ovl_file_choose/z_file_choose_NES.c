@@ -5,6 +5,7 @@
  */
 
 #include "z_file_choose.h"
+#include "z64rumble.h"
 
 extern UNK_TYPE D_01002800;
 extern UNK_TYPE D_01007980;

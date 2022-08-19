@@ -247,7 +247,7 @@ void EnWallmas_WaitToDrop(EnWallmas* this, PlayState* play) {
         (player->actor.freezeTimer > 0) || !(player->actor.bgCheckFlags & 1) ||
         ((WALLMASTER_GET_TYPE(&this->actor) == WALLMASTER_TYPE_PROXIMITY) &&
          (Math_Vec3f_DistXZ(&this->actor.home.pos, playerPos) > (120.f + this->detectionRadius)))) {
-        func_801A75E8(NA_SE_EN_FALL_AIM);
+        AudioSfx_StopById(NA_SE_EN_FALL_AIM);
         this->timer = 130;
     }
 
@@ -629,7 +629,7 @@ void EnWallmas_Update(Actor* thisx, PlayState* play) {
         }
 
         if (this->actionFunc != EnWallmas_Drop) {
-            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 0.0f, 0x1DU);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 0.0f, 0x1D);
         }
 
         if ((this->actionFunc != EnWallmas_Die) && (this->actionFunc != EnWallmas_Drop)) {

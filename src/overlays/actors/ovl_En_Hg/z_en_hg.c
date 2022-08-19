@@ -1,11 +1,10 @@
 /*
  * File: z_en_hg.c
  * Overlay: ovl_En_Hg
- * Description: Pamela's Father (Human)
+ * Description: Pamela's Father (Gibdo)
  */
 
 #include "z_en_hg.h"
-#include "objects/object_harfgibud/object_harfgibud.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
@@ -102,7 +101,7 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, 0x80,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &object_harfgibud_Anim_00260C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &object_harfgibud_Anim_009D44, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &object_harfgibud_Anim_00A164, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
@@ -121,8 +120,8 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_harfgibud_Skel_008580, &object_harfgibud_Anim_00260C,
-                       this->jointTable, this->morphTable, HG_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gHarfgibudGibdoSkel, &object_harfgibud_Anim_00260C, this->jointTable,
+                       this->morphTable, HARFGIBUD_GIBDO_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
@@ -149,7 +148,7 @@ void EnHg_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80BCF354(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80BCF398;
 }
 
@@ -167,7 +166,7 @@ void func_80BCF398(EnHg* this, PlayState* play) {
 }
 
 void func_80BCF468(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
     this->actionFunc = func_80BCF4AC;
 }
 
@@ -176,7 +175,7 @@ void func_80BCF4AC(EnHg* this, PlayState* play) {
     s32 pad;
 
     this->actor.speedXZ = 1.6f;
-    if (!(player->stateFlags2 & 0x08000000) && Message_GetState(&play->msgCtx) == 0) {
+    if (!(player->stateFlags2 & 0x08000000) && Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (((this->skelAnime.curFrame > 9.0f) && (this->skelAnime.curFrame < 16.0f)) ||
             ((this->skelAnime.curFrame > 44.0f) && (this->skelAnime.curFrame < 51.0f))) {
             Actor_MoveWithGravity(&this->actor);
@@ -191,7 +190,7 @@ void func_80BCF4AC(EnHg* this, PlayState* play) {
 }
 
 void func_80BCF5F0(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80BCF634;
 }
 
@@ -204,7 +203,7 @@ void func_80BCF634(EnHg* this, PlayState* play) {
 }
 
 void func_80BCF68C(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
     this->actionFunc = func_80BCF6D0;
 }
 
@@ -215,7 +214,7 @@ void func_80BCF6D0(EnHg* this, PlayState* play) {
 }
 
 void func_80BCF710(EnHg* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 0) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             Message_StartTextbox(play, 0x24F, &this->actor);
         } else {
@@ -278,30 +277,30 @@ void func_80BCF95C(EnHg* this, PlayState* play) {
             this->cutscenes[3] = play->csCtx.actorActions[actionIndex]->action;
             switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 1:
-                    this->currentAnimation = 0;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+                    this->animIndex = 0;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
                     break;
                 case 2:
                     this->cutscenes[2] = 0;
-                    this->currentAnimation = 3;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+                    this->animIndex = 3;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                     break;
                 case 3:
                     this->cutscenes[2] = 0;
-                    this->currentAnimation = 5;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
+                    this->animIndex = 5;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
                     break;
                 case 4:
                     this->cutscenes[2] = 0;
-                    this->currentAnimation = 7;
+                    this->animIndex = 7;
                     if ((this->unk218 == 1) || (this->unk218 == 3)) {
                         func_8019F128(NA_SE_EN_HALF_REDEAD_TRANS);
                     }
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 7);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 7);
                     break;
                 case 5:
-                    this->currentAnimation = 1;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+                    this->animIndex = 1;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                     break;
                 case 6:
                     gSaveContext.save.weekEventReg[75] |= 0x20;
@@ -310,19 +309,19 @@ void func_80BCF95C(EnHg* this, PlayState* play) {
             }
         } else {
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                switch (this->currentAnimation) {
+                switch (this->animIndex) {
                     case 3:
-                        this->currentAnimation = 4;
-                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
+                        this->animIndex = 4;
+                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
                         break;
                     case 5:
-                        this->currentAnimation = 6;
-                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
+                        this->animIndex = 6;
+                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
                         break;
                 }
             }
         }
-        switch (this->currentAnimation) {
+        switch (this->animIndex) {
             case 3:
             case 4:
                 func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);
@@ -358,7 +357,8 @@ void func_80BCFC0C(EnHg* this, PlayState* play) {
             D_80BD00C8 = false;
         }
         if (play->msgCtx.ocarinaMode == 3) {
-            if (play->msgCtx.unk1202E == 7 && gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+            if (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING &&
+                gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
                 if (INV_CONTENT(ITEM_MASK_GIBDO) == ITEM_MASK_GIBDO) {
                     this->unk218 = 3;
                 } else {
@@ -401,9 +401,9 @@ s32 EnHg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
 void EnHg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnHg* this = THIS;
-    if (limbIndex == HG_LIMB_HEAD) {
+    if (limbIndex == HARFGIBUD_GIBDO_LIMB_EYEBROWS) {
         Matrix_Get(&this->unk1D8);
-    } else if (limbIndex == HG_LIMB_PELVIS) {
+    } else if (limbIndex == HARFGIBUD_GIBDO_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
     }
 }
@@ -417,6 +417,6 @@ void EnHg_Draw(Actor* thisx, PlayState* play) {
                           EnHg_OverrideLimbDraw, EnHg_PostLimbDraw, &this->actor);
     Matrix_Put(&this->unk1D8);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_harfgibud_DL_005E28);
+    gSPDisplayList(POLY_OPA_DISP++, gHarfgibudGibdoEyebrowsDL);
     CLOSE_DISPS(play->state.gfxCtx);
 }

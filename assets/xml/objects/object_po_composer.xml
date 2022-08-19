@@ -53,6 +53,6 @@
         <Limb Name="object_po_composer_Standardlimb_0098E0" Type="Standard" EnumName="OBJECT_PO_COMPOSER_LIMB_09" Offset="0x98E0" />
         <Limb Name="object_po_composer_Standardlimb_0098EC" Type="Standard" EnumName="OBJECT_PO_COMPOSER_LIMB_0A" Offset="0x98EC" />
         <Limb Name="object_po_composer_Standardlimb_0098F8" Type="Standard" EnumName="OBJECT_PO_COMPOSER_LIMB_0B" Offset="0x98F8" />
-        <Skeleton Name="object_po_composer_Skel_009930" Type="Flex" LimbType="Standard" LimbNone="OBJECT_PO_COMPOSER_LIMB_NONE" LimbMax="OBJECT_PO_COMPOSER_LIMB_MAX" EnumName="object_po_composer_Limbs" Offset="0x9930" />
+        <Skeleton Name="object_po_composer_Skel_009930" Type="Flex" LimbType="Standard" LimbNone="OBJECT_PO_COMPOSER_LIMB_NONE" LimbMax="OBJECT_PO_COMPOSER_LIMB_MAX" EnumName="ObjectPoComposerLimb" Offset="0x9930" />
     </File>
 </Root>

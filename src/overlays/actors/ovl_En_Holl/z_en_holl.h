@@ -60,11 +60,10 @@ typedef struct EnHoll {
 #define EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL 50.0f
 
 
-#define EN_HOLL_GET_ID_AND(this) ((this->actor.params & 0xFFFF) >> 10)
-#define EN_HOLL_GET_ID_CAST(this) ((u16) this->actor.params >> 10)
-#define EN_HOLL_GET_TYPE(this) ((this->actor.params >> 7) & 0x7)
-#define EN_HOLL_GET_EXIT_LIST_INDEX(this) (this->actor.params & 0x7F)
-#define EN_HOLL_GET_Z_ACTOR_BITMASK_INDEX(this) (this->actor.params & 0x7)
+#define EN_HOLL_GET_ID(thisx) ((u16)(thisx)->params >> 10)
+#define EN_HOLL_GET_TYPE(thisx) (((thisx)->params >> 7) & 0x7)
+#define EN_HOLL_GET_EXIT_LIST_INDEX(thisx) ((thisx)->params & 0x7F)
+#define EN_HOLL_GET_Z_ACTOR_BITMASK_INDEX(thisx) ((thisx)->params & 0x7)
 
 #define EN_HOLL_IS_VISIBLE(this) ((this->type == EN_HOLL_TYPE_DEFAULT) || (this->type == EN_HOLL_TYPE_SCENE_CHANGER))
 #define EN_HOLL_IS_SCENE_CHANGER(this) (this->type == EN_HOLL_TYPE_SCENE_CHANGER)

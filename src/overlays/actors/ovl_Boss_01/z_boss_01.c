@@ -5,6 +5,7 @@
  */
 
 #include "z_boss_01.h"
+#include "z64rumble.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -129,7 +130,7 @@ static ColliderJntSphElementInit D_809D79D0[3] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809D7A3C = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    3, D_809D79D0, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809D79D0, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -143,7 +144,7 @@ static ColliderJntSphElementInit D_809D7A4C[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809D7A70 = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_809D7A4C, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809D7A4C, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[11] = {
@@ -197,7 +198,7 @@ static ColliderJntSphElementInit D_809D7A80[11] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809D7C0C = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    11, D_809D7A80, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809D7A80, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
@@ -215,7 +216,7 @@ static ColliderJntSphElementInit D_809D7C1C[2] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809D7C64 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    2, D_809D7C1C, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809D7C1C, // sJntSphElementsInit,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

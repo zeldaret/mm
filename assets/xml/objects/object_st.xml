@@ -33,8 +33,8 @@
         <DList Name="object_st_DL_0048B8" Offset="0x48B8" />
         <DList Name="object_st_DL_004950" Offset="0x4950" />
         <DList Name="object_st_DL_0049E8" Offset="0x49E8" />
-        <DList Name="object_st_DL_004DB0" Offset="0x4DB0" />
-        <DList Name="object_st_DL_004EB8" Offset="0x4EB8" />
+        <DList Name="gSkulltulaTokenDL" Offset="0x4DB0" />
+        <DList Name="gSkulltulaTokenFlameDL" Offset="0x4EB8" />
         <Limb Name="object_st_Standardlimb_0050C8" Type="Standard" EnumName="OBJECT_ST_LIMB_01" Offset="0x50C8" />
         <Limb Name="object_st_Standardlimb_0050D4" Type="Standard" EnumName="OBJECT_ST_LIMB_02" Offset="0x50D4" />
         <Limb Name="object_st_Standardlimb_0050E0" Type="Standard" EnumName="OBJECT_ST_LIMB_03" Offset="0x50E0" />
@@ -64,7 +64,7 @@
         <Limb Name="object_st_Standardlimb_005200" Type="Standard" EnumName="OBJECT_ST_LIMB_1B" Offset="0x5200" />
         <Limb Name="object_st_Standardlimb_00520C" Type="Standard" EnumName="OBJECT_ST_LIMB_1C" Offset="0x520C" />
         <Limb Name="object_st_Standardlimb_005218" Type="Standard" EnumName="OBJECT_ST_LIMB_1D" Offset="0x5218" />
-        <Skeleton Name="object_st_Skel_005298" Type="Normal" LimbType="Standard" LimbNone="OBJECT_ST_LIMB_NONE" LimbMax="OBJECT_ST_LIMB_MAX" EnumName="object_st_Limbs" Offset="0x5298" />
+        <Skeleton Name="object_st_Skel_005298" Type="Normal" LimbType="Standard" LimbNone="OBJECT_ST_LIMB_NONE" LimbMax="OBJECT_ST_LIMB_MAX" EnumName="ObjectStLimb" Offset="0x5298" />
         <Animation Name="object_st_Anim_0055A8" Offset="0x55A8" />
         <Animation Name="object_st_Anim_005B98" Offset="0x5B98" />
     </File>

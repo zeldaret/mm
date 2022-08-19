@@ -4,6 +4,7 @@
  * Description: Great Bay Temple - Waterwheels and push switches
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_bg_dblue_movebg.h"
 #include "objects/object_dblue_object/object_dblue_object.h"
 #include "overlays/actors/ovl_Obj_Hunsui/z_obj_hunsui.h"
@@ -288,7 +289,7 @@ void BgDblueMovebg_Destroy(Actor* thisx, PlayState* play) {
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     if ((this->unk_160 == 9) || (this->unk_160 == 8)) {
-        Audio_StopSfxByPos(&this->unk_1A8);
+        AudioSfx_StopByPos(&this->unk_1A8);
     }
 }
 

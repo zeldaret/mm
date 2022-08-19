@@ -68,7 +68,7 @@
         <Limb Name="object_bal_Standardlimb_00A62C" Type="Standard" EnumName="OBJECT_BAL_LIMB_1E" Offset="0xA62C" />
         <Limb Name="object_bal_Standardlimb_00A638" Type="Standard" EnumName="OBJECT_BAL_LIMB_1F" Offset="0xA638" />
         <Limb Name="object_bal_Standardlimb_00A644" Type="Standard" EnumName="OBJECT_BAL_LIMB_20" Offset="0xA644" />
-        <Skeleton Name="object_bal_Skel_00A6D0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BAL_LIMB_NONE" LimbMax="OBJECT_BAL_LIMB_MAX" EnumName="object_bal_Limbs" Offset="0xA6D0" />
+        <Skeleton Name="object_bal_Skel_00A6D0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BAL_LIMB_NONE" LimbMax="OBJECT_BAL_LIMB_MAX" EnumName="ObjectBalLimb" Offset="0xA6D0" />
         <Animation Name="object_bal_Anim_00A7DC" Offset="0xA7DC" />
         <Animation Name="object_bal_Anim_00B1E8" Offset="0xB1E8" />
         <Animation Name="object_bal_Anim_00B604" Offset="0xB604" />

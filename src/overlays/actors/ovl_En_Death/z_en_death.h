@@ -8,10 +8,10 @@ struct EnDeath;
 typedef void (*EnDeathActionFunc)(struct EnDeath*, PlayState*);
 
 typedef struct EnDeath {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x44];
-    /* 0x0188 */ EnDeathActionFunc actionFunc;
-    /* 0x018C */ char unk_18C[0x7AC];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ char unk_144[0x44];
+    /* 0x188 */ EnDeathActionFunc actionFunc;
+    /* 0x18C */ char unk_18C[0x7AC];
 } EnDeath; // size = 0x938
 
 extern const ActorInit En_Death_InitVars;

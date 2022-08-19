@@ -236,7 +236,7 @@ void EnNwc_CheckFound(EnNwc* this, PlayState* play) {
         }
 
         EnNwc_ChangeState(this, NWC_STATE_FOLLOWING);
-        func_801A0868(&D_801DB4A4, NA_SE_SY_CHICK_JOIN_CHIME, currentChickCount);
+        func_801A0868(&gSfxDefaultPos, NA_SE_SY_CHICK_JOIN_CHIME, currentChickCount);
     }
 }
 
@@ -246,7 +246,8 @@ void EnNwc_LoadNiwSkeleton(EnNwc* this, PlayState* play) {
 
         SkelAnime_InitFlex(play, &this->niwSkeleton, &gNiwSkeleton, &gNiwIdleAnim, this->jointTable, this->morphTable,
                            NIW_LIMB_MAX);
-        Animation_Change(&this->niwSkeleton, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim), 0, 0.0f);
+        Animation_Change(&this->niwSkeleton, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim),
+                         ANIMMODE_LOOP, 0.0f);
 
         gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[this->nwcObjectIndex].segment);
         this->state = NWC_STATE_NIW_LOADED;

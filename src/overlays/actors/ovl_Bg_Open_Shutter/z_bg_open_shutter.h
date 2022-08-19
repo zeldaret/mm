@@ -3,15 +3,17 @@
 
 #include "global.h"
 
+#define BGOPENSHUTTER_GET_A(thisx) ((u16)((thisx)->params) >> 0xA)
+
 struct BgOpenShutter;
 
 typedef void (*BgOpenShutterActionFunc)(struct BgOpenShutter*, PlayState*);
 
 typedef struct BgOpenShutter {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x1C];
-    /* 0x0160 */ BgOpenShutterActionFunc actionFunc;
-    /* 0x0164 */ char unk_164[0x4];
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ s16 unk_15C;
+    /* 0x160 */ BgOpenShutterActionFunc actionFunc;
+    /* 0x164 */ s32 unk_164;
 } BgOpenShutter; // size = 0x168
 
 extern const ActorInit Bg_Open_Shutter_InitVars;

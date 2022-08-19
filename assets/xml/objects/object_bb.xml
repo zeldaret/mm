@@ -42,6 +42,6 @@
         <Limb Name="gBubbleCraniumLimb" Type="Standard" EnumName="BUBBLE_LIMB_CRANIUM" Offset="0x19E8" />
 
         <!-- Bubble Skeleton -->
-        <Skeleton Name="gBubbleSkel" Type="Normal" LimbType="Standard" LimbNone="BUBBLE_LIMB_NONE" LimbMax="BUBBLE_LIMB_MAX" EnumName="BubbleLimbs" Offset="0x1A30" />
+        <Skeleton Name="gBubbleSkel" Type="Normal" LimbType="Standard" LimbNone="BUBBLE_LIMB_NONE" LimbMax="BUBBLE_LIMB_MAX" EnumName="BubbleLimb" Offset="0x1A30" />
     </File>
 </Root>
