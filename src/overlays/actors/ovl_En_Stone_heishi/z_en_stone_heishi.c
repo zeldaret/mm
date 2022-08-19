@@ -17,15 +17,15 @@ void EnStoneheishi_Draw(Actor* thisx, PlayState* play);
 
 void func_80BC9560(EnStoneheishi* this, PlayState* play);
 void func_80BC9680(EnStoneheishi* this, PlayState* play);
-void func_80BC9908(EnStoneheishi* this, PlayState* play);
-void func_80BC9A2C(EnStoneheishi* this, PlayState* play);
+void EnStoneheishi_CheckGivenItem(EnStoneheishi* this, PlayState* play);
+void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play);
 void func_80BC9D28(EnStoneheishi* this, PlayState* play);
 void func_80BC9E50(EnStoneheishi* this, PlayState* play);
 void func_80BC94B0(EnStoneheishi* this);
 void func_80BC9660(EnStoneheishi* this);
 void func_80BC98EC(EnStoneheishi*);
-void func_80BC9C88(EnStoneheishi* this, PlayState* play);
-void func_80BC9A10(EnStoneheishi* this);
+void EnStoneheishi_GiveItemPrize(EnStoneheishi* this, PlayState* play);
+void EnStoneheishi_SetupDrinkBottleProcess(EnStoneheishi* this);
 
 const ActorInit En_Stone_heishi_InitVars = {
     ACTOR_EN_STONE_HEISHI,
@@ -61,12 +61,12 @@ static ColliderCylinderInit sCylinderInit = {
 
 static u16 sEnStoneHeishiTextIds[] = { 0x1473, 0x1474, 0x1475, 0x1476, 0x1477, 0x1478, 0x1479, 0x147A, 0x1472 };
 
-static AnimationHeader* D_80BCA3E0[] = {
+static AnimationHeader* sEnStoneHeishiAnimationInfoS[] = {
     &gSoldierStandHandOnHip, &gSoldierDrink, &gSoldierCheerWithSpear, &gSoldierWave,
     &gSoldierSitAndReach,    &gSoldierDrink, &gSoldierStandUp,
 };
 
-static u8 sEnStoneHeishiAnimModes[] = { 0, 2, 0, 0, 0, 0, 2 };
+static u8 sEnStoneHeishiAnimations[] = { 0, 2, 0, 0, 0, 0, 2 };
 
 void EnStoneheishi_Init(Actor* thisx, PlayState* play) {
     EnStoneheishi* this = THIS;
@@ -95,30 +95,30 @@ void EnStoneheishi_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnStoneheishi_SetAnimation(EnStoneheishi* this, s32 animIndex) {
-    f32 phi_fv0 = 0.0f;
+    f32 startFrame = 0.0f;
 
-    this->animMode = animIndex;
-    this->endFrame = Animation_GetLastFrame(D_80BCA3E0[animIndex]);
+    this->animIndex = animIndex;
+    this->endFrame = Animation_GetLastFrame(sEnStoneHeishiAnimationInfoS[animIndex]);
 
-    if (animIndex == 5) {
-        phi_fv0 = 55.0f;
+    if (animIndex == SOLDIER_DRINK_2) {
+        startFrame = 55.0f;
     }
 
-    Animation_Change(&this->skelAnime, D_80BCA3E0[this->animMode], 1.0f, phi_fv0, this->endFrame,
-                     sEnStoneHeishiAnimModes[this->animMode], -10.0f);
+    Animation_Change(&this->skelAnime, sEnStoneHeishiAnimationInfoS[this->animIndex], 1.0f, startFrame, this->endFrame,
+                     sEnStoneHeishiAnimations[this->animIndex], -10.0f);
 }
 
 void func_80BC941C(EnStoneheishi* this) {
-    s16 temp_v0;
-    s32 phi_v1;
+    s16 yawDiff;
+    s32 absYawDiff;
 
-    temp_v0 = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
+    yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
 
-    phi_v1 = ABS_ALT(temp_v0);
+    absYawDiff = ABS_ALT(yawDiff);
 
     this->targetHeadPosX = 0;
 
-    if ((this->actor.xzDistToPlayer < 200.0f) && (phi_v1 < 0x4E20)) {
+    if ((this->actor.xzDistToPlayer < 200.0f) && (absYawDiff < 0x4E20)) {
         this->targetHeadPosX = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
         if (this->targetHeadPosX >= 0x2711) {
             this->targetHeadPosX = 0x2710;
@@ -130,14 +130,14 @@ void func_80BC941C(EnStoneheishi* this) {
     }
 }
 
-void func_80BC94B0(EnStoneheishi* this) {
+void func_80BC94B0(EnStoneheishi* this) { // After drinking bottle
     this->textIndex = 0;
     if (gSaveContext.save.weekEventReg[0x29] & 0x40) {
-        EnStoneheishi_SetAnimation(this, 2);
+        EnStoneheishi_SetAnimation(this, SOLDIER_CHEER_WITH_SPEAR);
         this->textIndex = 8;
         this->actor.flags &= -0x81;
     } else {
-        EnStoneheishi_SetAnimation(this, 3);
+        EnStoneheishi_SetAnimation(this, SOLDIER_WAVE);
         if (gSaveContext.save.weekEventReg[0x29] & 0x80) {
             this->textIndex = 2;
         }
@@ -149,8 +149,8 @@ void func_80BC94B0(EnStoneheishi* this) {
 
 void func_80BC9560(EnStoneheishi* this, PlayState* play) {
     Player* sp1C = GET_PLAYER(play);
-    s16 temp_v1;
-    s32 phi_v0;
+    s16 yawDiff;
+    s32 absYawDiff;
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80BC9660(this);
@@ -165,11 +165,11 @@ void func_80BC9560(EnStoneheishi* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     this->actor.flags &= 0xF7FFFFFF;
-    temp_v1 = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
+    yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
 
-    phi_v0 = ABS_ALT(temp_v1);
+    absYawDiff = ABS_ALT(yawDiff);
 
-    if ((phi_v0 < 0x18F1) && ((s32)(sp1C->stateFlags1 << 8) >= 0)) {
+    if ((absYawDiff < 0x18F1) && ((s32)(sp1C->stateFlags1 << 8) >= 0)) {
         func_800B8614(&this->actor, play, 70.0f);
     }
 }
@@ -184,16 +184,16 @@ void func_80BC9680(EnStoneheishi* this, PlayState* play) {
     f32 currentFrame = this->skelAnime.curFrame;
 
     if (this->textIndex == 0 || this->textIndex == 2) {
-        if (this->animMode != 4) {
+        if (this->animIndex != SOLDIER_SIT_AND_REACH) {
             if (fabsf(this->headRotY - this->targetHeadPosY) < 50.0f) {
-                EnStoneheishi_SetAnimation(this, 4);
+                EnStoneheishi_SetAnimation(this, SOLDIER_SIT_AND_REACH);
             }
             return;
         }
     } else if (this->textIndex == 3) {
-        if (this->animMode != 3) {
+        if (this->animIndex != SOLDIER_WAVE) {
             if ((this->timer == 0) && (fabsf((f32)(this->headRotY - this->targetHeadPosY)) < 50.0f)) {
-                EnStoneheishi_SetAnimation(this, 3);
+                EnStoneheishi_SetAnimation(this, SOLDIER_WAVE);
             }
             return;
         } else if (!this->unk274 && (this->endFrame <= currentFrame)) {
@@ -222,7 +222,7 @@ void func_80BC9680(EnStoneheishi* this, PlayState* play) {
             return;
         }
         if (this->textIndex == 6) {
-            func_80BC9C88(this, play);
+            EnStoneheishi_GiveItemPrize(this, play);
             return;
         }
         if (this->textIndex < 7) {
@@ -239,10 +239,15 @@ void func_80BC9680(EnStoneheishi* this, PlayState* play) {
 
 void func_80BC98EC(EnStoneheishi* this) {
     this->unk270 = 2;
-    this->actionFunc = func_80BC9908;
+    this->actionFunc = EnStoneheishi_CheckGivenItem;
 }
+/* handles:
+*BluePotionToggle
+*item given by the player
 
-void func_80BC9908(EnStoneheishi* this, PlayState* play) {
+
+*/
+void EnStoneheishi_CheckGivenItem(EnStoneheishi* this, PlayState* play) {
     s32 item;
 
     SkelAnime_Update(&this->skelAnime);
@@ -258,7 +263,7 @@ void func_80BC9908(EnStoneheishi* this, PlayState* play) {
                 if (item == PLAYER_AP_BOTTLE_POTION_BLUE) {
                     this->playerGivesBluePotion = true;
                 }
-                func_80BC9A10(this);
+                EnStoneheishi_SetupDrinkBottleProcess(this);
             } else {
                 Player* player = GET_PLAYER(play);
 
@@ -276,76 +281,76 @@ void func_80BC9908(EnStoneheishi* this, PlayState* play) {
     }
 }
 
-void func_80BC9A10(EnStoneheishi* this) {
+void EnStoneheishi_SetupDrinkBottleProcess(EnStoneheishi* this) {
     this->unk270 = 3;
-    this->actionFunc = func_80BC9A2C;
+    this->actionFunc = EnStoneheishi_DrinkBottleProcess;
 }
 
-void func_80BC9A2C(EnStoneheishi* this, PlayState* play) {
+void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
     f32 currentFrame = this->skelAnime.curFrame;
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
 
-    switch (this->unk26A) {
-        case 0:
+    switch (this->DrinkBottleState) {
+        case 0: // Initial conversation
             if (this->timer == 0) {
                 this->textIndex = 4;
                 func_80151938(play, sEnStoneHeishiTextIds[this->textIndex]);
                 player->actor.textId = sEnStoneHeishiTextIds[this->textIndex];
-                this->unk26A++;
+                this->DrinkBottleState++;
             }
 
         default:
             return;
 
-        case 1:
+        case 1: // Shiro starts drinking bottle
             if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
                 Player* player = GET_PLAYER(play);
 
                 play->msgCtx.msgLength = 0;
                 player->actor.textId = 0;
                 player->exchangeItemId = 0;
-                this->bottleStatus = BOTTLE_EMPTY;
+                this->bottleDisplay = BOTTLE_RED_POTION;
 
                 if (this->playerGivesBluePotion) {
-                    this->bottleStatus = BOTTLE_BLUE_POTION;
+                    this->bottleDisplay = BOTTLE_BLUE_POTION;
                 }
 
                 Player_SetModels(player, 3);
-                EnStoneheishi_SetAnimation(this, 1);
+                EnStoneheishi_SetAnimation(this, SOLDIER_DRINK_1); // Shiro drinking bottle animation
                 this->timer = 30;
-                this->unk26A++;
+                this->DrinkBottleState++;
             }
             break;
 
         case 2:
             if (this->timer != 0) {
-                if ((this->timer < 10) && (this->bottleStatus != 2)) {
-                    this->bottleStatus = BOTTLE_RED_POTION;
+                if ((this->timer < 10) && (this->bottleDisplay != BOTTLE_EMPTY)) {
+                    this->bottleDisplay = BOTTLE_EMPTY;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_NP_DRINK);
                     func_80123D50(play, GET_PLAYER(play), 0x12, 0x15);
                 }
             } else {
-                this->unk26A++;
+                this->DrinkBottleState++;
             }
             break;
 
-        case 3:
+        case 3: // Bottle becomes empty, Shiro quits drinking
             if (this->endFrame <= currentFrame) {
                 func_801A3098(0x922);
-                this->bottleStatus = BOTTLE_NONE;
-                EnStoneheishi_SetAnimation(this, 6);
-                this->unk26A++;
+                this->bottleDisplay = BOTTLE_NONE;
+                EnStoneheishi_SetAnimation(this, SOLDIER_STAND_UP);
+                this->DrinkBottleState++;
             }
             break;
 
-        case 4:
+        case 4: // Shiro stands up
             if (this->endFrame <= currentFrame) {
                 this->textIndex = 5;
                 func_80151938(play, sEnStoneHeishiTextIds[this->textIndex]);
                 player->actor.textId = sEnStoneHeishiTextIds[this->textIndex];
-                EnStoneheishi_SetAnimation(this, 0);
+                EnStoneheishi_SetAnimation(this, SOLDIER_STAND_HAND_ON_HIP);
                 this->unk270 = 1;
                 this->actionFunc = func_80BC9680;
             }
@@ -353,13 +358,13 @@ void func_80BC9A2C(EnStoneheishi* this, PlayState* play) {
     }
 }
 
-void func_80BC9C88(EnStoneheishi* this, PlayState* play) {
+void EnStoneheishi_GiveItemPrize(EnStoneheishi* this, PlayState* play) {
     func_801477B4(play);
 
     if (gSaveContext.save.inventory.items[gItemSlots[0x45]] == 0x45) {
-        Actor_PickUp(&this->actor, play, 2, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 300.0f, 300.0f);
     } else {
-        Actor_PickUp(&this->actor, play, 0x8B, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, play, GI_MASK_STONE, 300.0f, 300.0f);
     }
 
     this->unk270 = 4;
@@ -378,9 +383,9 @@ void func_80BC9D28(EnStoneheishi* this, PlayState* play) {
         func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_AP_MINUS1);
         this->actionFunc = func_80BC9E50;
     } else if (gSaveContext.save.inventory.items[gItemSlots[0x45]] == 0x45) {
-        Actor_PickUp(&this->actor, play, 2, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 300.0f, 300.0f);
     } else {
-        Actor_PickUp(&this->actor, play, 0x8B, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, play, GI_MASK_STONE, 300.0f, 300.0f);
     }
 }
 
@@ -409,13 +414,14 @@ void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 29);
     Actor_SetScale(&this->actor, 0.01f);
 
     if (((gSaveContext.save.weekEventReg[0x29] & 0x40) || play->actorCtx.unk4 == 0x64) &&
         (((s32)player->stateFlags1 << 8) >= 0)) {
-        if ((this->animMode != 3) && ((((this->unk270 == 0) || (this->unk270 == 1)) || (this->unk270 == 2)) ||
-                                      ((this->unk270 == 3) && (this->unk26A < 2)))) {
+        if ((this->animIndex != SOLDIER_WAVE) &&
+            ((((this->unk270 == 0) || (this->unk270 == 1)) || (this->unk270 == 2)) ||
+             ((this->unk270 == 3) && (this->DrinkBottleState < 2)))) {
             func_80BC941C(this);
         } else {
             this->targetHeadPosX = 0;
@@ -434,7 +440,66 @@ void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 func_80BCA0AC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+/*
+void Debug_PrintToScreen(Actor* thisx, PlayState* play) {
+    //ObjBean* this = THIS;
+    EnStoneheishi* this = THIS;
+    // with explanation comments
+    GfxPrint printer;
+    Gfx* gfx;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    // the dlist will be written in the opa buffer because that buffer is larger,
+    // but executed from the overlay buffer (overlay draws last, for example the hud is drawn to overlay)
+    gfx = POLY_OPA_DISP + 1;
+    gSPDisplayList(OVERLAY_DISP++, gfx);
+
+    // initialize GfxPrint struct
+    GfxPrint_Init(&printer);
+    GfxPrint_Open(&printer, gfx);
+
+    GfxPrint_SetColor(&printer, 255, 255, 255, 255);
+    GfxPrint_SetPos(&printer, 1, 7);
+    GfxPrint_Printf(&printer, "unk270: %X", this->unk270);
+    GfxPrint_SetPos(&printer, 1, 8);
+    GfxPrint_Printf(&printer, "unk274: %X", this->unk274);
+    GfxPrint_SetPos(&printer, 1, 9);
+    GfxPrint_Printf(&printer, "animIndex: %X", this->animIndex);
+
+    GfxPrint_SetPos(&printer, 1, 10);
+    GfxPrint_Printf(&printer, "bottleDisplay: %X", this->bottleDisplay);
+
+    { // address locations
+        u32 convertedAddr = (u32)Fault_ConvertAddress((void*)this->actionFunc);
+        GfxPrint_SetPos(&printer, 1, 11);
+        //GfxPrint_Printf(&printer, "func %X", &EnPoSisters_CheckCollision);
+        GfxPrint_Printf(&printer, "Case: %X", (u32)this->DrinkBottleState);
+        GfxPrint_SetPos(&printer, 1, 12);
+        GfxPrint_Printf(&printer, "playerGivesBluePotion  %X", this->playerGivesBluePotion);
+    }
+
+    GfxPrint_SetPos(&printer, 1, 13);
+
+    //GfxPrint_Printf(&printer, "drawflags %X", this->drawFlags);
+    //GfxPrint_Printf(&printer, "BREG86 %X", BREG(86));
+    GfxPrint_Printf(&printer, "mesgState %X", Message_GetState(&play->msgCtx));
+
+    // end of text printing
+    gfx = GfxPrint_Close(&printer);
+    GfxPrint_Destroy(&printer);
+
+    gSPEndDisplayList(gfx++);
+    // make the opa dlist jump over the part that will be executed as part of overlay
+    gSPBranchList(POLY_OPA_DISP, gfx);
+    POLY_OPA_DISP = gfx;
+
+    CLOSE_DISPS(play->state.gfxCtx);
+    //Debug_PrintToScreen(thisx, play);
+} //
+
+*/
+s32 EnStoneheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnStoneheishi* this = THIS;
 
     if (limbIndex == SOLDIER_LIMB_HEAD) {
@@ -442,15 +507,16 @@ s32 func_80BCA0AC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
         rot->y += this->headRotY;
         rot->z += this->headRotZ;
     }
+
     return false;
 }
 
-void func_80BCA104(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnStoneheishi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     static Vec3f D_80BCA404 = { 0.0f, 0.0f, 0.0f };
     EnStoneheishi* this = THIS;
     Gfx* gfx2;
 
-    if ((limbIndex == SOLDIER_LIMB_LEFT_HAND) && ((this->bottleStatus) != BOTTLE_NONE)) {
+    if (limbIndex == SOLDIER_LIMB_LEFT_HAND && this->bottleDisplay != BOTTLE_NONE) {
         gfx2 = func_8012C2B4(*gfx);
 
         D_80BCA404.x = 320.0f;
@@ -465,8 +531,8 @@ void func_80BCA104(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
         Matrix_RotateXS(0x7D0, MTXMODE_APPLY);
         Matrix_RotateZS(-0x7530, MTXMODE_APPLY);
 
-        if (this->bottleStatus != BOTTLE_RED_POTION) {
-            if (this->bottleStatus == BOTTLE_BLUE_POTION) {
+        if (this->bottleDisplay != BOTTLE_EMPTY) {
+            if (this->bottleDisplay == BOTTLE_BLUE_POTION) {
                 gDPSetEnvColor(gfx2++, 0, 0, 200, 0); // Blue Potion
             } else {
                 gDPSetEnvColor(gfx2++, 200, 0, 0, 0); // Red Potion
@@ -492,14 +558,15 @@ void EnStoneheishi_Draw(Actor* thisx, PlayState* play) {
 
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                               func_80BCA0AC, func_80BCA104, &this->actor, POLY_XLU_DISP);
+                               EnStoneheishi_OverrideLimbDraw, EnStoneheishi_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     } else {
         func_8012C28C(play->state.gfxCtx);
 
         POLY_OPA_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                               func_80BCA0AC, func_80BCA104, &this->actor, POLY_OPA_DISP);
+                               EnStoneheishi_OverrideLimbDraw, EnStoneheishi_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
+    // Debug_PrintToScreen(thisx, play);
 }
