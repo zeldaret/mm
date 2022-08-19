@@ -149,7 +149,69 @@ void func_80165EC0(PlayState* this, s32 arg1) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/D_801DFA18.s")
+const char D_801DFA18[] = "来た!!!!!!!!!!!!!!!!!!!!!";
+const char D_801DFA34[] = "all";
+const char D_801DFA38[] = "a";
+const char D_801DFA3C[] = "a";
+const char D_801DFA40[] = "b";
+const char D_801DFA44[] = "b";
+const char D_801DFA48[] = "c";
+const char D_801DFA4C[] = "c";
+const char D_801DFA50[] = "d";
+const char D_801DFA54[] = "d";
+const char D_801DFA58[] = "e";
+const char D_801DFA5C[] = "e";
+const char D_801DFA60[] = "f";
+const char D_801DFA64[] = "fa";
+const char D_801DFA68[] = "fa";
+const char D_801DFA6C[] = "fb";
+const char D_801DFA70[] = "fb";
+const char D_801DFA74[] = "fc";
+const char D_801DFA78[] = "fc";
+const char D_801DFA7C[] = "fd";
+const char D_801DFA80[] = "fd";
+const char D_801DFA84[] = "fe";
+const char D_801DFA88[] = "fe";
+const char D_801DFA8C[] = "fg";
+const char D_801DFA90[] = "fg";
+const char D_801DFA94[] = "fh";
+const char D_801DFA98[] = "fh";
+const char D_801DFA9C[] = "fi";
+const char D_801DFAA0[] = "fi";
+const char D_801DFAA4[] = "fj";
+const char D_801DFAA8[] = "fj";
+const char D_801DFAAC[] = "fk";
+const char D_801DFAB0[] = "fk";
+const char D_801DFAB4[] = "f";
+const char D_801DFAB8[] = "g";
+const char D_801DFABC[] = "g";
+const char D_801DFAC0[] = "h";
+const char D_801DFAC4[] = "h";
+const char D_801DFAC8[] = "i";
+const char D_801DFACC[] = "i";
+const char D_801DFAD0[] = "all";
+const char D_801DFAD4[] = "all";
+const char D_801DFAD8[] = "a";
+const char D_801DFADC[] = "b";
+const char D_801DFAE0[] = "c";
+const char D_801DFAE4[] = "d";
+const char D_801DFAE8[] = "e";
+const char D_801DFAEC[] = "f";
+const char D_801DFAF0[] = "g";
+const char D_801DFAF4[] = "h";
+const char D_801DFAF8[] = "i";
+const char D_801DFAFC[] = "f";
+const char D_801DFB00[] = "fa";
+const char D_801DFB04[] = "fb";
+const char D_801DFB08[] = "fc";
+const char D_801DFB0C[] = "fd";
+const char D_801DFB10[] = "fe";
+const char D_801DFB14[] = "ff";
+const char D_801DFB18[] = "fg";
+const char D_801DFB1C[] = "fh";
+const char D_801DFB20[] = "fi";
+const char D_801DFB24[] = "fj";
+const char D_801DFB28[] = "fk";
 
 void func_80166060(PlayState* this) {
     if (this->unk_18BF0.unk_02 != -1) {
