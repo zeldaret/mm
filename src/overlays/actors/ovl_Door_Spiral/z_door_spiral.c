@@ -54,7 +54,7 @@ typedef struct {
 
 // Maps scenes to SpiralObjectType
 typedef struct {
-    /* 0x00 */ s16 sceneNum;
+    /* 0x00 */ s16 sceneId;
     /* 0x02 */ u8 objectType;
 } SpiralSceneInfo;
 
@@ -147,7 +147,7 @@ s32 DoorSpiral_GetObjectType(PlayState* play) {
     s32 type;
 
     for (i = 0; i < ARRAY_COUNT(spiralSceneInfo); sceneInfo++, i++) {
-        if (play->sceneNum == sceneInfo->sceneNum) {
+        if (play->sceneId == sceneInfo->sceneId) {
             break;
         }
     }

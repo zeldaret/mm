@@ -352,7 +352,7 @@ void func_80966FEC(EnWeatherTag* this, PlayState* play) {
     }
 
     // unique pirates fortress behavior?
-    if ((play->sceneNum == SCENE_KAIZOKU) && (play->actorCtx.unk5 & 2)) {
+    if ((play->sceneId == SCENE_KAIZOKU) && (play->actorCtx.unk5 & 2)) {
         EnWeatherTag_SetupAction(this, func_80967060);
     }
 }

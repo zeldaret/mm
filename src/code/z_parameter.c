@@ -319,7 +319,7 @@ u8 Item_Give(PlayState* play, u8 item) {
 
     if (item == ITEM_SKULL_TOKEN) {
         SET_QUEST_ITEM(item - ITEM_SKULL_TOKEN + QUEST_SKULL_TOKEN);
-        Inventory_IncrementSkullTokenCount(play->sceneNum);
+        Inventory_IncrementSkullTokenCount(play->sceneId);
         return ITEM_NONE;
 
     } else if (item == ITEM_TINGLE_MAP) {

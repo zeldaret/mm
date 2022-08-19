@@ -117,7 +117,7 @@ typedef struct SavePlayerData {
     /* 0x20 */ u8 unk_20;                             // "first_memory"
     /* 0x22 */ u16 owlActivationFlags;                // "memory_warp_point"
     /* 0x24 */ u8 unk_24;                             // "last_warp_pt"
-    /* 0x26 */ s16 savedSceneNum;                     // "scene_data_ID"
+    /* 0x26 */ s16 savedSceneId;                     // "scene_data_ID"
 } SavePlayerData; // size = 0x28
 
 typedef struct Save {

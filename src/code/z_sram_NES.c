@@ -248,7 +248,7 @@ void Sram_ClearFlagsAtDawnOfTheFirstDay(void) {
  * Used by Song of Time (when clicking "Yes") and (indirectly) by the "Dawn of the New Day" cutscene
  */
 void Sram_SaveEndOfCycle(PlayState* play) {
-    s16 sceneNum;
+    s16 sceneId;
     s32 j;
     s32 i;
     u8 slot;
@@ -264,13 +264,13 @@ void Sram_SaveEndOfCycle(PlayState* play) {
         gSaveContext.save.playerData.deaths = 999;
     }
 
-    sceneNum = Play_GetOriginalSceneNumber(play->sceneNum);
+    sceneId = Play_GetOriginalSceneId(play->sceneId);
     Play_SaveCycleSceneFlags(&play->state);
 
-    play->actorCtx.flags.chest &= D_801C5FC0[sceneNum][2];
-    play->actorCtx.flags.switches[0] &= D_801C5FC0[sceneNum][0];
-    play->actorCtx.flags.switches[1] &= D_801C5FC0[sceneNum][1];
-    play->actorCtx.flags.collectible[0] &= D_801C5FC0[sceneNum][3];
+    play->actorCtx.flags.chest &= D_801C5FC0[sceneId][2];
+    play->actorCtx.flags.switches[0] &= D_801C5FC0[sceneId][0];
+    play->actorCtx.flags.switches[1] &= D_801C5FC0[sceneId][1];
+    play->actorCtx.flags.collectible[0] &= D_801C5FC0[sceneId][3];
     play->actorCtx.flags.clearedRoom = 0;
 
     for (i = 0; i < SCENE_MAX; i++) {
@@ -608,7 +608,7 @@ SavePlayerData sSaveDefaultPlayerData = {
     0xFF,                                               // unk_20
     0x0000,                                             // owlActivationFlags
     0xFF,                                               // unk_24
-    SCENE_SPOT00,                                       // savedSceneNum
+    SCENE_SPOT00,                                       // savedSceneId
 };
 
 ItemEquips sSaveDefaultItemEquips = {
@@ -708,7 +708,7 @@ SavePlayerData sSaveDebugPlayerData = {
     0xFF,                                               // unk_20
     0,                                                  // owlActivationFlags
     0xFF,                                               // unk_24
-    SCENE_SPOT00,                                       // savedSceneNum
+    SCENE_SPOT00,                                       // savedSceneId
 };
 
 ItemEquips sSaveDebugItemEquips = {

@@ -522,7 +522,7 @@ void Inventory_ChangeUpgrade(s16 upgrade, u32 value) {
     gSaveContext.save.inventory.upgrades = upgrades;
 }
 
-s32 Inventory_IsMapVisible(s16 sceneNum) {
+s32 Inventory_IsMapVisible(s16 sceneId) {
     s16 index = 0;
 
     /**
@@ -530,23 +530,23 @@ s32 Inventory_IsMapVisible(s16 sceneNum) {
      * increment to the next index of scenesVisible so that every scene gets a unique flag in scenesVisible,
      * 224 bits were allocated to this although there are only 112 scenes
      */
-    if (sceneNum >= 0x20) {
-        if (sceneNum < 0x40) {
+    if (sceneId >= 0x20) {
+        if (sceneId < 0x40) {
             index = 1;
-        } else if (sceneNum < 0x60) {
+        } else if (sceneId < 0x60) {
             index = 2;
-        } else if (sceneNum < 0x80) {
+        } else if (sceneId < 0x80) {
             index = 3;
-        } else if (sceneNum < 0xA0) {
+        } else if (sceneId < 0xA0) {
             index = 4;
-        } else if (sceneNum < 0xC0) {
+        } else if (sceneId < 0xC0) {
             index = 5;
-        } else if (sceneNum < 0xE0) {
+        } else if (sceneId < 0xE0) {
             index = 6;
         }
     }
 
-    if (gSaveContext.save.scenesVisible[index] & gBitFlags[sceneNum - (index << 5)]) {
+    if (gSaveContext.save.scenesVisible[index] & gBitFlags[sceneId - (index << 5)]) {
         return true;
     }
 

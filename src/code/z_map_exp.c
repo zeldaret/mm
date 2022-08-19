@@ -18,7 +18,7 @@ s32 Map_GetDungeonOrBossAreaIndex(PlayState* play) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(sDungeonAndBossScenes); i++) {
-        if (Play_GetOriginalSceneNumber(play->sceneNum) == sDungeonAndBossScenes[i]) {
+        if (Play_GetOriginalSceneId(play->sceneId) == sDungeonAndBossScenes[i]) {
             return i;
         }
     }
@@ -57,7 +57,7 @@ s32 Map_GetDungeonAreaIndex(PlayState* play) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(sDungeonScenes); i++) {
-        if (Play_GetOriginalSceneNumber(play->sceneNum) == sDungeonScenes[i]) {
+        if (Play_GetOriginalSceneId(play->sceneId) == sDungeonScenes[i]) {
             return i;
         }
     }
@@ -91,7 +91,7 @@ s32 Map_GetBossAreaIndex(PlayState* play) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(sBossScenes); i++) {
-        if (Play_GetOriginalSceneNumber(play->sceneNum) == sBossScenes[i]) {
+        if (Play_GetOriginalSceneId(play->sceneId) == sBossScenes[i]) {
             return i;
         }
     }
@@ -120,7 +120,7 @@ s32 func_8010A238(PlayState* play) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(D_801BF5A4); i++) {
-        if (Play_GetOriginalSceneNumber(play->sceneNum) == D_801BF5A4[i]) {
+        if (Play_GetOriginalSceneId(play->sceneId) == D_801BF5A4[i]) {
             return i;
         }
     }
@@ -156,7 +156,7 @@ void Map_InitRoomData(PlayState* play, s16 room) {
 
     if (room >= 0) {
         if (Map_IsInDungeonOrBossArea(play)) {
-            gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneNumber(play->sceneNum)].rooms |= gBitFlags[room];
+            gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneId(play->sceneId)].rooms |= gBitFlags[room];
             interfaceCtx->mapRoomNum = room;
             interfaceCtx->dungeonOrBossAreaMapIndex = mapIndex;
         }
@@ -189,7 +189,7 @@ void Map_Init(PlayState* play) {
     if (Map_IsInDungeonOrBossArea(play)) {
         dungeonIndex = Map_GetDungeonOrBossAreaIndex(play);
         gSaveContext.mapIndex = dungeonIndex;
-        switch (play->sceneNum) {
+        switch (play->sceneId) {
             case SCENE_MITURIN_BS:
                 dungeonIndex = DUNGEON_INDEX_WOODFALL_TEMPLE;
                 break;
@@ -243,7 +243,7 @@ void Map_Update(PlayState* play) {
         if (Map_IsInDungeonArea(play)) {
             floor = func_80109124(player->actor.world.pos.y);
             if (floor != -1) {
-                gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneNumber(play->sceneNum)].unk_14 |=
+                gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneId(play->sceneId)].unk_14 |=
                     gBitFlags[FLOOR_INDEX_MAX - floor];
                 XREG(94) = FLOOR_INDEX_MAX - floor;
                 if (interfaceCtx->mapRoomNum != sLastRoomNum) {

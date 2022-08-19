@@ -2009,8 +2009,8 @@ asm/non_matchings/code/z_scene_proc/Scene_DrawConfig5.s,Scene_DrawConfig5,0x8013
 asm/non_matchings/code/z_scene_proc/Scene_DrawConfigMatAnimManualStep.s,Scene_DrawConfigMatAnimManualStep,0x80131F90,0xC
 asm/non_matchings/code/z_scene_proc/Scene_DrawConfigGreatBayTemple.s,Scene_DrawConfigGreatBayTemple,0x80131FC0,0xC0
 asm/non_matchings/code/z_scene_table/Entrance_GetTableEntry.s,Entrance_GetTableEntry,0x801322C0,0x13
-asm/non_matchings/code/z_scene_table/Entrance_GetSceneNum.s,Entrance_GetSceneNum,0x8013230C,0xB
-asm/non_matchings/code/z_scene_table/Entrance_GetSceneNumAbsolute.s,Entrance_GetSceneNumAbsolute,0x80132338,0xF
+asm/non_matchings/code/z_scene_table/Entrance_GetSceneId.s,Entrance_GetSceneId,0x8013230C,0xB
+asm/non_matchings/code/z_scene_table/Entrance_GetSceneIdAbsolute.s,Entrance_GetSceneIdAbsolute,0x80132338,0xF
 asm/non_matchings/code/z_scene_table/Entrance_GetSpawnNum.s,Entrance_GetSpawnNum,0x80132374,0xB
 asm/non_matchings/code/z_scene_table/Entrance_GetTransitionFlags.s,Entrance_GetTransitionFlags,0x801323A0,0xC
 asm/non_matchings/code/code_801323D0/func_801323D0.s,func_801323D0,0x801323D0,0x16
@@ -2538,7 +2538,7 @@ asm/non_matchings/code/z_play/Play_GetCameraUID.s,Play_GetCameraUID,0x80169BC4,0
 asm/non_matchings/code/z_play/func_80169BF8.s,func_80169BF8,0x80169BF8,0x1B
 asm/non_matchings/code/z_play/Play_GetActorCsCamSetting.s,Play_GetActorCsCamSetting,0x80169C64,0x8
 asm/non_matchings/code/z_play/Play_GetActorCsCamFuncData.s,Play_GetActorCsCamFuncData,0x80169C84,0xE
-asm/non_matchings/code/z_play/Play_GetOriginalSceneNumber.s,Play_GetOriginalSceneNumber,0x80169CBC,0x21
+asm/non_matchings/code/z_play/Play_GetOriginalSceneId.s,Play_GetOriginalSceneId,0x80169CBC,0x21
 asm/non_matchings/code/z_play/Play_SaveCycleSceneFlags.s,Play_SaveCycleSceneFlags,0x80169D40,0x23
 asm/non_matchings/code/z_play/Play_SetRespawnData.s,Play_SetRespawnData,0x80169DCC,0x28
 asm/non_matchings/code/z_play/Play_SetupRespawnPoint.s,Play_SetupRespawnPoint,0x80169E6C,0x18

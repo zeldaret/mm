@@ -178,7 +178,7 @@ void EnBat_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 EnBat_IsGraveyardOnSecondDay(PlayState* play) {
-    if ((CURRENT_DAY == 2) && (play->sceneNum == SCENE_BOTI)) {
+    if ((CURRENT_DAY == 2) && (play->sceneId == SCENE_BOTI)) {
         return true;
     } else {
         return false;

@@ -162,7 +162,7 @@ void func_80927818(ObjTsubo* this, PlayState* play, s32 arg2) {
 }
 
 s32 ObjTsubo_IsSceneNotGohtOrTwinmold(ObjTsubo* this, PlayState* play) {
-    return (play->sceneNum != SCENE_HAKUGIN_BS) && (play->sceneNum != SCENE_INISIE_BS);
+    return (play->sceneId != SCENE_HAKUGIN_BS) && (play->sceneId != SCENE_INISIE_BS);
 }
 
 void func_8092788C(ObjTsubo* this, PlayState* play) {

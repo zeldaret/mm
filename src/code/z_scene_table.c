@@ -2783,19 +2783,19 @@ EntranceTableEntry* Entrance_GetTableEntry(u16 entrance) {
 /**
  * Returns the scene index from a given entrance index.
  */
-s32 Entrance_GetSceneNum(u16 entrance) {
+s32 Entrance_GetSceneId(u16 entrance) {
     EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entrance);
 
-    return tableEntry->sceneNum;
+    return tableEntry->sceneId;
 }
 
 /**
  * Returns the absolute value scene index (since for some reason some of them are negative) from a given entrance index.
  */
-s32 Entrance_GetSceneNumAbsolute(u16 entrance) {
+s32 Entrance_GetSceneIdAbsolute(u16 entrance) {
     EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entrance);
 
-    return ABS_ALT(tableEntry->sceneNum);
+    return ABS_ALT(tableEntry->sceneId);
 }
 
 /**
