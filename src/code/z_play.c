@@ -17,9 +17,59 @@ extern Struct_80140E80 D_801F6D38;
 extern Struct_80140E80* D_801F6D4C;
 extern HiresoStruct D_801F6D50;
 extern u8 D_801F6DFC;
-extern s8 D_801F6DFD;
+extern u8 D_801F6DFD;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165460.s")
+void func_80165460(PlayState* this) {
+    GraphicsContext* gfxCtx = this->state.gfxCtx;
+    s32 alpha;
+    Gfx* gfx;
+    Gfx* dlistHead;
+
+    if (SREG(93) != 0) {
+        alpha = SREG(92);
+
+        if (D_801F6DFD == 0) {
+            D_801F6DFD = 1;
+        }
+    } else if (SREG(91) != 0) {
+        alpha = SREG(90);
+
+        if (D_801F6DFD == 0) {
+            D_801F6DFD = 1;
+        }
+    } else {
+        alpha = 0;
+        D_801F6DFD = 0;
+    }
+
+    if (D_801F6DFD != 0) {
+        OPEN_DISPS(gfxCtx);
+
+        dlistHead = POLY_OPA_DISP;
+        gfx = Graph_GfxPlusOne(dlistHead);
+
+        gSPDisplayList(OVERLAY_DISP++, gfx);
+
+        this->pauseBgPreRender.fbuf = gfxCtx->curFrameBuffer;
+        this->pauseBgPreRender.fbufSave = this->unk_18E64;
+
+        if (D_801F6DFD == 2) {
+            func_80170AE0(&this->pauseBgPreRender, &gfx, alpha);
+        } else {
+            D_801F6DFD = 2;
+        }
+
+        func_801705B4(&this->pauseBgPreRender, &gfx);
+
+        gSPEndDisplayList(gfx++);
+
+        Graph_BranchDlist(dlistHead, gfx);
+
+        POLY_OPA_DISP = gfx;
+
+        CLOSE_DISPS(gfxCtx);
+    }
+}
 
 void func_80165608(void) {
     SREG(91) = 0;
@@ -33,7 +83,9 @@ void func_80165630(void) {
     D_801F6DFD = 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165658.s")
+void func_80165658(u32 arg0) {
+    SREG(90) = arg0;
+}
 
 void func_8016566C(u32 arg0) {
     SREG(90) = arg0;
@@ -47,13 +99,22 @@ void func_80165690(void) {
 void func_801656A4(u8* arg0, u16* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801656A4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165DB8.s")
+void func_80165DB8(s32 arg0) {
+    SREG(92) = arg0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165DCC.s")
+void func_80165DCC(s32 arg0) {
+    SREG(92) = arg0;
+    SREG(93) = 1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165DF0.s")
+void func_80165DF0(void) {
+    SREG(93) = 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165E04.s")
+void func_80165E04(void) {
+    SREG(89) = 1;
+}
 
 void func_80165E1C(PreRender* prerender) {
     PreRender_ApplyFilters(prerender);
@@ -234,13 +295,13 @@ void Play_Destroy(GameState* thisx) {
     if (D_801F6DFC != 0) {
         MsgEvent_SendNullTask();
         func_80178750();
-        gfxCtx->curFrameBuffer = (u16*)SysCfb_GetFbPtr(gfxCtx->framebufferIdx % 2);
+        gfxCtx->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx->framebufferIdx % 2);
         gfxCtx->zbuffer = SysCfb_GetZBuffer();
         gfxCtx->viMode = D_801FBB88;
         gfxCtx->viConfigFeatures = gViConfigFeatures;
         gfxCtx->xScale = gViConfigXScale;
         gfxCtx->yScale = gViConfigYScale;
-        gfxCtx->updateViMode = 1;
+        gfxCtx->updateViMode = true;
         D_801F6DFC = 0;
     }
 
@@ -372,13 +433,117 @@ Input* D_801D0D60 = NULL;
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80167DE4.s")
+void func_80167DE4(PlayState* play) {
+    if (D_801F6DFC == 0) {
+        if (play->pauseCtx.unk_1F0 != 0) {
+            D_801F6DFC = 1;
+            D_801F6D50.unk_00 = 0;
+        }
+    } else {
+        if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_L) ||
+            CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B) ||
+            CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_START) || (gIrqMgrResetStatus != 0)) {
+            D_801F6DFC = 0;
+            play->pauseCtx.unk_1F0 = 0;
+            D_801F6D50.unk_00 = 0;
+            play->msgCtx.msgLength = 0;
+            play->msgCtx.msgMode = 0;
+            play->msgCtx.currentTextId = 0;
+            play->msgCtx.stateTimer = 0;
+            play_sound(NA_SE_SY_CANCEL);
+        }
+    }
+    if (D_801F6DFC != 0) {
+        func_8016F5A8(play, &D_801F6D50, play->state.input);
+        func_8015680C(play);
+    } else {
+        Play_Update(play);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80167F0C.s")
+void func_80167F0C(PlayState* this) {
+    Gfx* sp34;
+    Gfx* sp30;
+    GraphicsContext* gfxCtx;
+
+    if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != 0)) {
+        KaleidoScopeCall_Draw(this);
+    }
+
+    if (gSaveContext.gameMode == 0) {
+        func_8011F0E0(this);
+    }
+
+    if (((this->pauseCtx.state == 0) && (this->pauseCtx.debugEditor == 0)) || (this->msgCtx.currentTextId != 0xFF)) {
+        func_80156758(this);
+    }
+
+    if (this->gameOverCtx.state != 0) {
+        GameOver_FadeLights(this);
+    }
+
+    if (gSaveContext.screenScaleFlag != 0) {
+        gfxCtx = this->state.gfxCtx;
+        D_801F6D4C->scale = gSaveContext.screenScale / 1000.0f;
+
+        OPEN_DISPS(gfxCtx);
+
+        sp30 = POLY_OPA_DISP;
+        sp34 = Graph_GfxPlusOne(sp30);
+        gSPDisplayList(OVERLAY_DISP++, sp34);
+
+        func_80141778(D_801F6D4C, &sp34, this->unk_18E60, gfxCtx);
+
+        gSPEndDisplayList(sp34++);
+        Graph_BranchDlist(sp30, sp34);
+        POLY_OPA_DISP = sp34;
+
+        CLOSE_DISPS(gfxCtx);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Draw.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80168DAC.s")
+void func_80168DAC(PlayState* this) {
+    GraphicsContext* gfxCtx = this->state.gfxCtx;
+
+    {
+        GraphicsContext* gfxCtx2 = this->state.gfxCtx;
+
+        if (D_801F6DFC != 0) {
+            if (D_801FBBD4 != 1) {
+                MsgEvent_SendNullTask();
+                func_80178818();
+                gfxCtx2->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx2->framebufferIdx % 2);
+                gfxCtx2->zbuffer = SysCfb_GetZBuffer();
+                gfxCtx2->viMode = D_801FBB88;
+                gfxCtx2->viConfigFeatures = gViConfigFeatures;
+                gfxCtx2->xScale = gViConfigXScale;
+                gfxCtx2->yScale = gViConfigYScale;
+                gfxCtx2->updateViMode = true;
+            }
+        } else {
+            if (D_801FBBD4 != 0) {
+                MsgEvent_SendNullTask();
+                func_80178750();
+                gfxCtx2->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx2->framebufferIdx % 2);
+                gfxCtx2->zbuffer = SysCfb_GetZBuffer();
+                gfxCtx2->viMode = D_801FBB88;
+                gfxCtx2->viConfigFeatures = gViConfigFeatures;
+                gfxCtx2->xScale = gViConfigXScale;
+                gfxCtx2->yScale = gViConfigYScale;
+                gfxCtx2->updateViMode = true;
+            }
+        }
+    }
+
+    if ((D_801F6DFC != 0) && ((SREG(2) != 2) || (gZBufferPtr == NULL))) {
+        func_8016F1A8(&D_801F6D50, gfxCtx);
+        func_80156758(this);
+    } else {
+        Play_Draw(this);
+    }
+}
 
 void Play_Main(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Main.s")
@@ -387,9 +552,38 @@ s32 Play_InCsMode(PlayState* this) {
     return (this->csCtx.state != 0) || Player_InCsMode(this);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169100.s")
+f32 func_80169100(PlayState* play, MtxF* mtx, CollisionPoly** poly, s32* bgId, Vec3f* feetPos) {
+    f32 floorHeight = BgCheck_EntityRaycastFloor3(&play->colCtx, poly, bgId, feetPos);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801691F0.s")
+    if (floorHeight > BGCHECK_Y_MIN) {
+        func_800C0094(*poly, feetPos->x, floorHeight, feetPos->z, mtx);
+    } else {
+        mtx->xy = 0.0f;
+        mtx->zx = 0.0f;
+        mtx->yx = 0.0f;
+        mtx->xx = 0.0f;
+        mtx->wz = 0.0f;
+        mtx->xz = 0.0f;
+        mtx->wy = 0.0f;
+        mtx->wx = 0.0f;
+        mtx->zz = 0.0f;
+        mtx->yz = 0.0f;
+        mtx->zy = 0.0f;
+        mtx->yy = 1.0f;
+        mtx->xw = feetPos->x;
+        mtx->yw = feetPos->y;
+        mtx->zw = feetPos->z;
+        mtx->ww = 1.0f;
+    }
+    return floorHeight;
+}
+
+void func_801691F0(PlayState* this, MtxF* mtx, Vec3f* feetPos) {
+    CollisionPoly* poly;
+    s32 bgId;
+
+    func_80169100(this, mtx, &poly, &bgId, feetPos);
+}
 
 void* Play_LoadScene(PlayState* this, RomFile* entry) {
     size_t size = entry->vromEnd - entry->vromStart;

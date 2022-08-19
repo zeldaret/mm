@@ -49,7 +49,7 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
     gfxCtx->workBuffer = pool->workBuffer;
     gfxCtx->debugBuffer = pool->debugBuffer;
 
-    gfxCtx->curFrameBuffer = (u16*)SysCfb_GetFbPtr(gfxCtx->framebufferIdx % 2);
+    gfxCtx->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx->framebufferIdx % 2);
     gSegments[0x0F] = gfxCtx->curFrameBuffer;
 
     gfxCtx->zbuffer = SysCfb_GetZBuffer();
