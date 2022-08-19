@@ -987,7 +987,7 @@ void Boss07_Wrath_Death(Boss07* this, PlayState* play) {
                         func_8019FE74(&gSfxVolume, 0.0f, 90);
                     }
                     if (this->unk_ABC8 == (KREG(94) + 440)) {
-                        play->nextEntranceIndex = 0x5400;
+                        play->nextEntrance = 0x5400;
                         gSaveContext.nextCutsceneIndex = 0xFFF7;
                         play->transitionTrigger = TRANS_TRIGGER_START;
                     }
@@ -1771,8 +1771,8 @@ void Boss07_Wrath_WhipCollisionCheck(Vec3f* arg0, f32 arg1, Boss07* this, PlaySt
                         f32 dxz1;
 
                         player->actor.parent = &this->actor;
-                        Audio_PlaySfxGeneral(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4, &D_801DB4B0,
-                                             &D_801DB4B0, &gSfxDefaultReverb);
+                        AudioSfx_PlaySfx(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+                                             &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
                         this->unk_F7C = 0;
                         this->unk_F7E = ((this->actor.xzDistToPlayer - 300.0f) / 22.0f) + 10.0f;
                         dx1 = player->actor.world.pos.x - this->rightWhip.basePos.x;
@@ -3744,7 +3744,7 @@ void Boss07_Mask_Damaged(Boss07* this, PlayState* play) {
         if ((s8)this->actor.colChkInfo.health <= 0) {
             this->unk_148 = true;
             Enemy_StartFinishingBlow(play, &this->actor);
-            Audio_StopSfxByPos(&this->actor.projectedPos);
+            AudioSfx_StopByPos(&this->actor.projectedPos);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_DEAD_OLD);
         } else {
             this->moveTarget.x = this->actor.world.pos.x;
@@ -3926,7 +3926,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                             } else {
                                 this->unk_15C = 50;
                                 this->unk_15E = 15;
-                                Audio_StopSfxByPos(&this->actor.projectedPos);
+                                AudioSfx_StopByPos(&this->actor.projectedPos);
                                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_DAMAGE2_OLD);
                                 Boss07_Mask_SetupDamaged(this, play, 2, NULL);
                                 Boss07_Mask_ClearBeam(this);
@@ -4429,12 +4429,12 @@ void Boss07_Mask_CollisionCheck(Boss07* this, PlayState* play) {
                 damage = (hitbox->toucher.dmgFlags & 0xF7CFFFFF) ? this->actor.colChkInfo.damage : 0;
                 this->unk_15C = 50;
                 this->unk_15E = 15;
-                Audio_StopSfxByPos(&this->actor.projectedPos);
+                AudioSfx_StopByPos(&this->actor.projectedPos);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_DAMAGE2_OLD);
                 Boss07_Mask_SetupDamaged(this, play, damage, hitActor);
             } else {
                 this->unk_15C = 15;
-                Audio_StopSfxByPos(&this->actor.projectedPos);
+                AudioSfx_StopByPos(&this->actor.projectedPos);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_DAMAGE1_OLD);
                 Boss07_Mask_SetupStunned(this, play);
             }
