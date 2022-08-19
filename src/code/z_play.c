@@ -1,6 +1,7 @@
 #include "global.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 s32 gDbgCamEnabled = false;
 u8 D_801D0D54 = 0;
@@ -119,15 +120,15 @@ void func_801656A4(void* arg0, u16* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5
             for (i = arg4; i <= arg6; i++) {
                 for (j = arg3; j <= arg5; j += 2) {
                     t2 = arg1[i * arg2 + j];
-                    tempr = (t2 >> 11) & 0x1f;
-                    tempg = (t2 >> 6) & 0x1f;
-                    tempb = (t2 >> 1) & 0x1f;
+                    tempr = (t2 >> 11) & 0x1F;
+                    tempg = (t2 >> 6) & 0x1F;
+                    tempb = (t2 >> 1) & 0x1F;
                     temp1 = ((tempr * 2 + tempg * 4 + tempb) * 0xF) / 217;
 
                     t2 = arg1[i * arg2 + j + 1];
-                    tempr = (t2 >> 11) & 0x1f;
-                    tempg = (t2 >> 6) & 0x1f;
-                    tempb = (t2 >> 1) & 0x1f;
+                    tempr = (t2 >> 11) & 0x1F;
+                    tempg = (t2 >> 6) & 0x1F;
+                    tempb = (t2 >> 1) & 0x1F;
                     temp2 = ((tempr * 2 + tempg * 4 + tempb) * 0xF) / 217;
 
                     *(arg01++) = (temp1 << 4) | temp2;
@@ -142,9 +143,9 @@ void func_801656A4(void* arg0, u16* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5
             for (i = arg4; i <= arg6; i++) {
                 for (j = arg3; j <= arg5; j++) {
                     t2 = arg1[i * arg2 + j];
-                    tempr = (t2 >> 11) & 0x1f;
-                    tempg = (t2 >> 6) & 0x1f;
-                    tempb = (t2 >> 1) & 0x1f;
+                    tempr = (t2 >> 11) & 0x1F;
+                    tempg = (t2 >> 6) & 0x1F;
+                    tempb = (t2 >> 1) & 0x1F;
 
                     //! What
                     t2 = 0;
@@ -162,9 +163,9 @@ void func_801656A4(void* arg0, u16* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5
                 for (j = arg3; j <= arg5; j++) {
                     t2 = arg1[i * arg2 + j];
 
-                    tempr = (t2 >> 11) & 0x1f;
-                    tempg = (t2 >> 6) & 0x1f;
-                    tempb = (t2 >> 1) & 0x1f;
+                    tempr = (t2 >> 11) & 0x1F;
+                    tempg = (t2 >> 6) & 0x1F;
+                    tempb = (t2 >> 1) & 0x1F;
 
                     *(arg03++) = ((tempr * 2 + tempg * 4 + tempb) * 0xFF) / 217;
                 }
@@ -497,8 +498,8 @@ void func_80166968(PlayState* this, Camera* camera) {
 
             D_801D0D58 = quake;
             if (quake != 0) {
-                Quake_SetSpeed(D_801D0D58, 0x226);
-                Quake_SetQuakeValues(D_801D0D58, 1, 1, 0xB4, 0);
+                Quake_SetSpeed(D_801D0D58, 550);
+                Quake_SetQuakeValues(D_801D0D58, 1, 1, 180, 0);
                 Quake_SetCountdown(D_801D0D58, 1000);
             }
         }
@@ -558,21 +559,22 @@ void func_80167DE4(PlayState* play) {
     }
 }
 
-void func_80167F0C(PlayState* this) {
+void Play_DrawOverlayElements(PlayState* this) {
     Gfx* sp34;
     Gfx* sp30;
     GraphicsContext* gfxCtx;
 
-    if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != 0)) {
+    if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
         KaleidoScopeCall_Draw(this);
     }
 
     if (gSaveContext.gameMode == 0) {
-        func_8011F0E0(this);
+        Interface_Draw(this);
     }
 
-    if (((this->pauseCtx.state == 0) && (this->pauseCtx.debugEditor == 0)) || (this->msgCtx.currentTextId != 0xFF)) {
-        func_80156758(this);
+    if (((this->pauseCtx.state == 0) && (this->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) ||
+        (this->msgCtx.currentTextId != 0xFF)) {
+        Message_Draw(this);
     }
 
     if (this->gameOverCtx.state != 0) {
@@ -636,7 +638,7 @@ void func_80168DAC(PlayState* this) {
 
     if ((D_801F6DFC != 0) && ((SREG(2) != 2) || (gZBufferPtr == NULL))) {
         func_8016F1A8(&D_801F6D50, gfxCtx);
-        func_80156758(this);
+        Message_Draw(this);
     } else {
         Play_Draw(this);
     }

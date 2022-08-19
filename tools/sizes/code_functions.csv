@@ -1675,7 +1675,7 @@ asm/non_matchings/code/z_parameter/func_8011C898.s,func_8011C898,0x8011C898,0x73
 asm/non_matchings/code/z_parameter/func_8011CA64.s,func_8011CA64,0x8011CA64,0x654
 asm/non_matchings/code/z_parameter/func_8011E3B4.s,func_8011E3B4,0x8011E3B4,0xDF
 asm/non_matchings/code/z_parameter/func_8011E730.s,func_8011E730,0x8011E730,0x26C
-asm/non_matchings/code/z_parameter/func_8011F0E0.s,func_8011F0E0,0x8011F0E0,0x7AC
+asm/non_matchings/code/z_parameter/Interface_Draw.s,Interface_Draw,0x8011F0E0,0x7AC
 asm/non_matchings/code/z_parameter/func_80120F90.s,func_80120F90,0x80120F90,0x35
 asm/non_matchings/code/z_parameter/func_80121064.s,func_80121064,0x80121064,0x1F
 asm/non_matchings/code/z_parameter/func_801210E0.s,func_801210E0,0x801210E0,0x3AD
@@ -2384,7 +2384,7 @@ asm/non_matchings/code/z_message/func_80153750.s,func_80153750,0x80153750,0x1CB
 asm/non_matchings/code/z_message/func_80153E7C.s,func_80153E7C,0x80153E7C,0x1D
 asm/non_matchings/code/z_message/func_80153EF0.s,func_80153EF0,0x80153EF0,0xB9
 asm/non_matchings/code/z_message/func_801541D4.s,func_801541D4,0x801541D4,0x961
-asm/non_matchings/code/z_message/func_80156758.s,func_80156758,0x80156758,0x2D
+asm/non_matchings/code/z_message/Message_Draw.s,Message_Draw,0x80156758,0x2D
 asm/non_matchings/code/z_message/func_8015680C.s,func_8015680C,0x8015680C,0x7A6
 asm/non_matchings/code/z_message/func_801586A4.s,func_801586A4,0x801586A4,0xC
 asm/non_matchings/code/z_message/Message_Init.s,Message_Init,0x801586D4,0x7F
@@ -2508,7 +2508,7 @@ asm/non_matchings/code/z_play/func_80166968.s,func_80166968,0x80166968,0x72
 asm/non_matchings/code/z_play/func_80166B30.s,func_80166B30,0x80166B30,0x339
 asm/non_matchings/code/z_play/Play_Update.s,Play_Update,0x80167814,0x174
 asm/non_matchings/code/z_play/func_80167DE4.s,func_80167DE4,0x80167DE4,0x4A
-asm/non_matchings/code/z_play/func_80167F0C.s,func_80167F0C,0x80167F0C,0x61
+asm/non_matchings/code/z_play/Play_DrawOverlayElements.s,Play_DrawOverlayElements,0x80167F0C,0x61
 asm/non_matchings/code/z_play/Play_Draw.s,Play_Draw,0x80168090,0x347
 asm/non_matchings/code/z_play/func_80168DAC.s,func_80168DAC,0x80168DAC,0x6E
 asm/non_matchings/code/z_play/Play_Main.s,Play_Main,0x80168F64,0x5A

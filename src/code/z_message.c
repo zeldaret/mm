@@ -533,7 +533,7 @@ void func_80153E7C(PlayState* play, void* arg1) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801541D4.s")
 
-void func_80156758(PlayState* play) {
+void Message_Draw(PlayState* play) {
     Gfx* nextDisplayList;
     Gfx* polyOpa;
     GraphicsContext* gfxCtx = play->state.gfxCtx;

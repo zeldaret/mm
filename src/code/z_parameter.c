@@ -1360,7 +1360,7 @@ TexturePtr D_801BFD8C[] = {
     gStoryGiantsLeavingTLUT,
 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8011F0E0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Interface_Draw.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80120F90.s")
 
