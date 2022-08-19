@@ -53,7 +53,7 @@ typedef struct Boss07 {
     /* 0x015E */ s16 unk_15E;
     /* 0x0160 */ s16 unk_160;
     /* 0x0162 */ s16 unk_162;
-    /* 0x0164 */ Vec3f unk_164;
+    /* 0x0164 */ Vec3f moveTarget;
     /* 0x0170 */ f32 unk_170;
     /* 0x0174 */ u8 unk_174;
     /* 0x0178 */ f32 unk_178;
@@ -151,16 +151,17 @@ typedef struct Boss07 {
     /* 0xABC8 */ u32 unk_ABC8;
     /* 0xABCC */ s32 unk_ABCC;
     /* 0xABD0 */ s16 csState;
-    /* 0xABD2 */ s16 csCamIndex;
-    /* 0xABD4 */ Vec3f csCamEye;
-    /* 0xABE0 */ Vec3f csCamAt;
-    /* 0xABEC */ Vec3f csCamNextEye;
-    /* 0xABF8 */ Vec3f csCamNextAt;
-    /* 0xAC04 */ f32 csCamRotY;
-    /* 0xAC08 */ f32 csCamRotVel;
-    /* 0xAC0C */ f32 csCamSpeedMod;
-    /* 0xAC10 */ Vec3f csCamEyeMod;
-    /* 0xAC1C */ UNK_TYPE1 unkAC1C[4];
+    /* 0xABD2 */ s16 subCamIndex;
+    /* 0xABD4 */ Vec3f subCamEye;
+    /* 0xABE0 */ Vec3f subCamAt;
+    /* 0xABEC */ Vec3f subCamNextEye;
+    /* 0xABF8 */ Vec3f subCamNextAt;
+    /* 0xAC04 */ f32 subCamRotY;
+    /* 0xAC08 */ f32 subCamRotVel;
+    /* 0xAC0C */ f32 subCamSpeedMod;
+    /* 0xAC10 */ UNK_TYPE1 unkAC10;
+    /* 0xAC14 */ f32 subCamEyeModY;
+    /* 0xAC18 */ UNK_TYPE1 unkAC18[8];
 } Boss07; // size = 0xAC20
 
 extern const ActorInit Boss_07_InitVars;

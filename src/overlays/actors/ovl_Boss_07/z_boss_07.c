@@ -42,13 +42,70 @@ typedef struct {
 
 typedef enum {
     /* 0 */ MAJORA_EFFECT_NONE,
-    /* 1 */ MAJORA_EFFECT_1
+    /* 1 */ MAJORA_EFFECT_FLAME
 } Boss07EffectType;
 
+typedef enum {
+   MAJORAS_WRATH_ATTACK_0,
+   MAJORAS_WRATH_ATTACK_1,
+   MAJORAS_WRATH_ATTACK_2,
+   MAJORAS_WRATH_ATTACK_3,
+   MAJORAS_WRATH_ATTACK_4,
+   MAJORAS_WRATH_ATTACK_5,
+   MAJORAS_WRATH_ATTACK_6,
+   MAJORAS_WRATH_ATTACK_7,
+   MAJORAS_WRATH_ATTACK_MAX,
+} Boss07WrathActionStates;
+
+typedef enum {
+    MAJORAS_INCARNATION_STATE_0,
+    MAJORAS_INCARNATION_STATE_1,
+    MAJORAS_INCARNATION_STATE_2,
+    MAJORAS_INCARNATION_STATE_MAX,
+} Boss07IncarnationActionStates;
+
+typedef enum {
+    MAJORAS_MASK_SPIN_STATE_0,
+    MAJORAS_MASK_SPIN_STATE_1,
+    MAJORAS_MASK_SPIN_STATE_2,
+    MAJORAS_MASK_SPIN_STATE_MAX,
+} Boss07MaskSpinStates;
+
+typedef enum {
+    MAJORAS_MASK_BEAM_STATE_0,
+    MAJORAS_MASK_BEAM_STATE_1,
+    MAJORAS_MASK_BEAM_STATE_2,
+    MAJORAS_MASK_BEAM_STATE_3,
+    MAJORAS_MASK_BEAM_STATE_4,
+    MAJORAS_MASK_BEAM_STATE_5,
+    MAJORAS_MASK_BEAM_STATE_MAX,
+} Boss07MaskBeamStates;
+
+typedef enum {
+    MAJORAS_PROJECTILE_STATE_0,
+    MAJORAS_PROJECTILE_STATE_1,
+    MAJORAS_PROJECTILE_STATE_MAX,
+} Boss07ProjectileStates;
+
+typedef enum {
+    MAJORAS_REMAINS_STATE_0,
+    MAJORAS_REMAINS_STATE_1,
+    MAJORAS_REMAINS_STATE_2,
+    MAJORAS_REMAINS_STATE_3,
+    MAJORAS_REMAINS_STATE_10=10,
+    MAJORAS_REMAINS_STATE_20=20,
+} Boss07RemainsStates;
+
+typedef enum {
+    MAJORAS_TOP_STATE_0,
+    MAJORAS_TOP_STATE_1,
+    MAJORAS_TOP_STATE_MAX,
+} Boss07TopState;
+
 #if 1 // function prototypes
-void func_809F4D10(Vec3f* arg0, f32 arg1);
-void func_809FCBC8(Boss07* this);
-void func_80A006D0(Boss07* this);
+void Boss07_RandVec3fXZ(Vec3f* arg0, f32 arg1);
+void Boss07_Incarnation_AvoidPlayer(Boss07* this);
+void Boss07_Mask_ClearBeam(Boss07* this);
 
 void Boss07_Init(Actor* thisx, PlayState* play);
 void Boss07_Destroy(Actor* thisx, PlayState* play);
@@ -233,7 +290,7 @@ void Boss07_SpawnEffect(PlayState* play, Vec3f* pos, Vec3f* vel, Vec3f* accel, f
 
     for (i = 0; i < ARRAY_COUNT(sEffects); i++, effect++) {
         if (effect->type == MAJORA_EFFECT_NONE) {
-            effect->type = MAJORA_EFFECT_1;
+            effect->type = MAJORA_EFFECT_FLAME;
             effect->pos = *pos;
             effect->vel = *vel;
             effect->accel = *accel;
@@ -271,9 +328,9 @@ void Boss07_SmoothStop(Boss07* this, f32 maxStep) {
     }
 }
 
-void func_809F4D10(Vec3f* dst, f32 scale) {
+void Boss07_RandVec3fXZ(Vec3f* dst, f32 length) {
     Matrix_RotateYF(Rand_ZeroFloat(2 * M_PI), MTXMODE_NEW);
-    Matrix_MultVecZ(scale, dst);
+    Matrix_MultVecZ(length, dst);
 }
 
 void Boss07_SpawnDust(Boss07* this, PlayState* play, u8 spawnInterval, u8 mode) {
@@ -529,9 +586,9 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
                 this->actor.world.pos.y = sREG(17) + 277.0f;
                 this->actor.world.pos.z = -922.5f;
                 Boss07_Mask_SetupIdle(this, play);
-                this->unk_164.x = 0.0f;
-                this->unk_164.y = 200.0f;
-                this->unk_164.z = 0.0f;
+                this->moveTarget.x = 0.0f;
+                this->moveTarget.y = 200.0f;
+                this->moveTarget.z = 0.0f;
                 this->unk_170 = 0.0f;
                 this->timers[0] = 50;
                 this->timers[2] = 200;
@@ -571,8 +628,8 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
             Collider_InitAndSetJntSph(play, &this->sph1, &this->actor, &sIncarnationJntSphInit1,
                                         this->sphElems1);
             ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 80.0f);
-            this->csCamIndex = this->actor.shape.rot.z;
-            if (this->csCamIndex != 0) {
+            this->subCamIndex = this->actor.shape.rot.z;
+            if (this->subCamIndex != 0) {
                 Boss07_Incarnation_SetupIntro(this, play);
             } else {
                 Boss07_Incarnation_SetupTaunt(this, play);
@@ -594,8 +651,8 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
     this->actor.colChkInfo.health = 40;
     this->actor.colChkInfo.damageTable = &sWrathDmgTable;
     Actor_SetScale(&this->actor, 0.01f);
-    this->csCamIndex = this->actor.shape.rot.z;
-    if (this->csCamIndex != 0) {
+    this->subCamIndex = this->actor.shape.rot.z;
+    if (this->subCamIndex != 0) {
         Boss07_Wrath_SetupIntro(this, play);
     } else {
         Boss07_Wrath_SetupIdle(this, play, 50);
@@ -654,12 +711,12 @@ void Boss07_Wrath_Intro(Boss07* this, PlayState* play) {
         case 0:
             this->unk_ABC8 = 0;
             this->csState = 1;
-            this->csCamNextAt.z = 0.f;
-            this->csCamNextEye.x = 0.0;
-            this->csCamNextEye.y = KREG(17) + 100.0f - 30.0f + 80.0f;
-            this->csCamNextEye.z = KREG(18) + 270.0f - 150.0f + 30.0f - 50.0f;
-            this->csCamNextAt.x = 0.0f;
-            this->csCamNextAt.y = 180.0f;
+            this->subCamNextAt.z = 0.f;
+            this->subCamNextEye.x = 0.0;
+            this->subCamNextEye.y = KREG(17) + 100.0f - 30.0f + 80.0f;
+            this->subCamNextEye.z = KREG(18) + 270.0f - 150.0f + 30.0f - 50.0f;
+            this->subCamNextAt.x = 0.0f;
+            this->subCamNextAt.y = 180.0f;
         case 1:
             if (this->unk_ABC8 < 40) {
                 sHeartbeatTimer = 3;
@@ -690,10 +747,10 @@ void Boss07_Wrath_Intro(Boss07* this, PlayState* play) {
                     dataIndex = 4;
                 }
 
-                Math_ApproachF(&this->csCamNextEye.y, sCamPoints[dataIndex][0], 0.075f, this->csCamSpeedMod * 7.0f);
-                Math_ApproachF(&this->csCamNextEye.z, sCamPoints[dataIndex][1], 0.075f, this->csCamSpeedMod * 17.0f);
-                Math_ApproachF(&this->csCamNextAt.y, sCamPoints[dataIndex][2], 0.075f, this->csCamSpeedMod * 7.0f);
-                Math_ApproachF(&this->csCamSpeedMod, 1.0f, 1.0f, 0.01f);
+                Math_ApproachF(&this->subCamNextEye.y, sCamPoints[dataIndex][0], 0.075f, this->subCamSpeedMod * 7.0f);
+                Math_ApproachF(&this->subCamNextEye.z, sCamPoints[dataIndex][1], 0.075f, this->subCamSpeedMod * 17.0f);
+                Math_ApproachF(&this->subCamNextAt.y, sCamPoints[dataIndex][2], 0.075f, this->subCamSpeedMod * 7.0f);
+                Math_ApproachF(&this->subCamSpeedMod, 1.0f, 1.0f, 0.01f);
                 if (this->unk_ABC8 == 70) {
                     Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathIntroAnim, -15.0f);
                     this->unk_1D4 = Animation_GetLastFrame(&gMajorasWrathIntroAnim);
@@ -726,11 +783,11 @@ void Boss07_Wrath_Intro(Boss07* this, PlayState* play) {
 
                     this->csState = 0;
                     Boss07_Wrath_SetupIdle(this, play, 50);
-                    sp48->eye = this->csCamEye;
-                    sp48->eyeNext = this->csCamEye;
-                    sp48->at = this->csCamAt;
-                    func_80169AFC(play, this->csCamIndex, 0);
-                    this->csCamIndex = 0;
+                    sp48->eye = this->subCamEye;
+                    sp48->eyeNext = this->subCamEye;
+                    sp48->at = this->subCamAt;
+                    func_80169AFC(play, this->subCamIndex, 0);
+                    this->subCamIndex = 0;
                     Cutscene_End(play, &play->csCtx);
                     func_800B7298(play, &this->actor, 6);
                     this->actor.flags |= 1;
@@ -744,11 +801,11 @@ void Boss07_Wrath_Intro(Boss07* this, PlayState* play) {
             }
             break;
     }
-    Matrix_MultVec3f(&this->csCamNextEye, &this->csCamEye);
-    Matrix_MultVec3f(&this->csCamNextAt, &this->csCamAt);
-    if (this->csCamIndex != 0) {
+    Matrix_MultVec3f(&this->subCamNextEye, &this->subCamEye);
+    Matrix_MultVec3f(&this->subCamNextAt, &this->subCamAt);
+    if (this->subCamIndex != 0) {
         ShrinkWindow_SetLetterboxTarget(0x1B);
-        Play_SetCameraAtEye(play, this->csCamIndex, &this->csCamAt, &this->csCamEye);
+        Play_SetCameraAtEye(play, this->subCamIndex, &this->subCamAt, &this->subCamEye);
     }
 }
 
@@ -768,7 +825,7 @@ void Boss07_Wrath_SetupDeath(Boss07* this, PlayState* play) {
     this->unk_ABC8 = 0;
     if (sBossRemains[REMAINS_ODOLWA] != NULL) {
         for (i = 0; i < 4; i++) {
-            sBossRemains[i]->actionState = 2;
+            sBossRemains[i]->actionState = MAJORAS_REMAINS_STATE_2;
         }
     }
     this->unk_15C = 1000;
@@ -791,21 +848,21 @@ void Boss07_Wrath_Death(Boss07* this, PlayState* play) {
             }
             Cutscene_Start(play, &play->csCtx);
             func_800B7298(play, &this->actor, 1);
-            this->csCamIndex = Play_CreateSubCamera(play);
+            this->subCamIndex = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, 0, 1);
-            Play_ChangeCameraStatus(play, this->csCamIndex, 7);
+            Play_ChangeCameraStatus(play, this->subCamIndex, 7);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST3_DEAD_ROD);
         case 1:
             this->unk_ABC8 = 0;
             this->csState = 2;
-            this->csCamEye.x = camera->eye.x;
-            this->csCamEye.y = camera->eye.y;
-            this->csCamEye.z = camera->eye.z;
-            this->csCamAt.x = camera->at.x;
-            this->csCamAt.y = camera->at.y;
-            this->csCamAt.z = camera->at.z;
-            this->csCamRotY = this->actor.shape.rot.y * M_PI / 0x8000;
-            this->csCamRotVel = this->csCamSpeedMod = sMajoraStatic->unk_180C = 0.0f;
+            this->subCamEye.x = camera->eye.x;
+            this->subCamEye.y = camera->eye.y;
+            this->subCamEye.z = camera->eye.z;
+            this->subCamAt.x = camera->at.x;
+            this->subCamAt.y = camera->at.y;
+            this->subCamAt.z = camera->at.z;
+            this->subCamRotY = this->actor.shape.rot.y * M_PI / 0x8000;
+            this->subCamRotVel = this->subCamSpeedMod = sMajoraStatic->unk_180C = 0.0f;
             Boss07_InitRand(1, 0x71AC, 0x263A);
             for (i = 0; i < ARRAY_COUNT(this->deathLightScale); i++) {
                 this->deathLightScale[i] = Boss07_RandZeroOne() - 1.0f;
@@ -827,9 +884,9 @@ void Boss07_Wrath_Death(Boss07* this, PlayState* play) {
             spB4.x = 0.0f;
             spB4.y = -90.0f;
             spB4.z = 350.0f;
-            this->csCamNextAt.x = this->actor.focus.pos.x;
-            this->csCamNextAt.y = this->actor.focus.pos.y - 40.0f;
-            this->csCamNextAt.z = this->actor.focus.pos.z;
+            this->subCamNextAt.x = this->actor.focus.pos.x;
+            this->subCamNextAt.y = this->actor.focus.pos.y - 40.0f;
+            this->subCamNextAt.z = this->actor.focus.pos.z;
 
             if ((this->unk_ABC8 >= 50) && (this->unk_ABC8 < 80)) {
                 if (this->unk_ABC8 == 50) {
@@ -837,7 +894,7 @@ void Boss07_Wrath_Death(Boss07* this, PlayState* play) {
                 }
                 spB4.x = 30.0f;
                 spB4.z = 120.0f;
-                this->csCamNextAt.y = this->actor.focus.pos.y - 40.0f + 30.0f;
+                this->subCamNextAt.y = this->actor.focus.pos.y - 40.0f + 30.0f;
                 spA4 = 200.0f;
                 spA0 = 1.0f;
             } else if ((this->unk_ABC8 >= 80) && (this->unk_ABC8 < 110)) {
@@ -847,7 +904,7 @@ void Boss07_Wrath_Death(Boss07* this, PlayState* play) {
                 }
                 spB4.x = -10.0f;
                 spB4.z = 150.0f;
-                this->csCamNextAt.y = this->actor.focus.pos.y - 40.0f - 60.0f;
+                this->subCamNextAt.y = this->actor.focus.pos.y - 40.0f - 60.0f;
                 spA4 = 200.0f;
                 spA0 = 1.0f;
             } else if ((this->unk_ABC8 >= 110) && (this->unk_ABC8 < 140)) {
@@ -856,13 +913,13 @@ void Boss07_Wrath_Death(Boss07* this, PlayState* play) {
                 }
                 spB4.x = -70.0f;
                 spB4.z = 110.0f;
-                this->csCamNextAt.y = this->actor.focus.pos.y - 40.0f + 30.0f;
+                this->subCamNextAt.y = this->actor.focus.pos.y - 40.0f + 30.0f;
                 spA4 = 200.0f;
                 spA0 = 1.0f;
             }
             if (this->unk_ABC8 >= (sREG(15) + 140)) {
                 this->csState = 4;
-                this->csCamEyeMod.y = sREG(16) + 270.0f + 50.0f;
+                this->subCamEyeModY = sREG(16) + 270.0f + 50.0f;
                 Audio_PlaySfxAtPos(&sSfxPoint, NA_SE_EN_LAST3_DEAD_FLOAT);
             } else {
                 break;
@@ -870,16 +927,16 @@ void Boss07_Wrath_Death(Boss07* this, PlayState* play) {
         case 4:
             if ((this->unk_ABC8 >= (sREG(90) + 260)) && (this->unk_ABC8 < (sREG(91) + 370))) {
                 spC0 = KREG(14) + 1;
-                this->csCamRotY = this->actor.shape.rot.y * M_PI / 0x8000;
+                this->subCamRotY = this->actor.shape.rot.y * M_PI / 0x8000;
                 spB4.x = 0.0f;
-                spB4.y = this->csCamEyeMod.y + -190.0f;
+                spB4.y = this->subCamEyeModY + -190.0f;
                 spB4.z = sREG(17) + 390.0f - 380.0f;
 
-                this->csCamNextAt.x = this->actor.focus.pos.x;
-                this->csCamNextAt.y = this->actor.focus.pos.y - 40.0f - 60.0f + sREG(18) + 130.0f;
-                this->csCamNextAt.z = this->actor.focus.pos.z;
+                this->subCamNextAt.x = this->actor.focus.pos.x;
+                this->subCamNextAt.y = this->actor.focus.pos.y - 40.0f - 60.0f + sREG(18) + 130.0f;
+                this->subCamNextAt.z = this->actor.focus.pos.z;
 
-                Math_ApproachF(&this->csCamEyeMod.y, sREG(19) + 240.0f, 0.05f, 1.0f + (sREG(20) * 0.1f));
+                Math_ApproachF(&this->subCamEyeModY, sREG(19) + 240.0f, 0.05f, 1.0f + (sREG(20) * 0.1f));
                 spA4 = 2000.0f;
                 spA0 = 1.0f;
 
@@ -890,17 +947,17 @@ void Boss07_Wrath_Death(Boss07* this, PlayState* play) {
                 spB4.x = 0.0f;
                 spB4.y = -190.0f;
                 spB4.z = 390.0f;
-                this->csCamNextAt.x = this->actor.focus.pos.x;
-                this->csCamNextAt.y = this->actor.focus.pos.y - 40.0f - 60.0f;
-                this->csCamNextAt.z = this->actor.focus.pos.z;
+                this->subCamNextAt.x = this->actor.focus.pos.x;
+                this->subCamNextAt.y = this->actor.focus.pos.y - 40.0f - 60.0f;
+                this->subCamNextAt.z = this->actor.focus.pos.z;
                 this->unk_1D8 = 0;
                 if (this->unk_ABC8 > 330) {
                     spA4 = 2000.0f;
                     spA0 = 1.0f;
                 }
-                Math_ApproachZeroF(&this->actor.world.pos.x, 0.1f, this->csCamSpeedMod);
-                Math_ApproachZeroF(&this->actor.world.pos.z, 0.1f, this->csCamSpeedMod);
-                Math_ApproachF(&this->csCamSpeedMod, 5.0f, 1.0f, 0.1f);
+                Math_ApproachZeroF(&this->actor.world.pos.x, 0.1f, this->subCamSpeedMod);
+                Math_ApproachZeroF(&this->actor.world.pos.z, 0.1f, this->subCamSpeedMod);
+                Math_ApproachF(&this->subCamSpeedMod, 5.0f, 1.0f, 0.1f);
             }
             if (this->unk_ABC8 >= 260) {
                 f32 sp98;
@@ -946,10 +1003,10 @@ void Boss07_Wrath_Death(Boss07* this, PlayState* play) {
                     Math_ApproachF(&play->envCtx.lightBlend, 1.0f, 1.0f, 0.1f);
                 }
             }
-            this->csCamRotY += this->csCamRotVel;
-            this->csCamRotVel += 0.0004f;
-            if (this->csCamRotVel > 0.02f) {
-                this->csCamRotVel = 0.02f;
+            this->subCamRotY += this->subCamRotVel;
+            this->subCamRotVel += 0.0004f;
+            if (this->subCamRotVel > 0.02f) {
+                this->subCamRotVel = 0.02f;
             }
             if (this->unk_ABC8 >= (sREG(93) + 180)) {
                 Vec3f sp84 = { 0.0f, 10.0f, 0.0f };
@@ -979,26 +1036,26 @@ void Boss07_Wrath_Death(Boss07* this, PlayState* play) {
             }
             break;
     }
-    Matrix_RotateYF(this->csCamRotY, MTXMODE_NEW);
-    Matrix_MultVec3f(&spB4, &this->csCamNextEye);
-    this->csCamNextEye.x += this->actor.focus.pos.x;
-    this->csCamNextEye.y += this->actor.focus.pos.y;
-    this->csCamNextEye.z += this->actor.focus.pos.z;
+    Matrix_RotateYF(this->subCamRotY, MTXMODE_NEW);
+    Matrix_MultVec3f(&spB4, &this->subCamNextEye);
+    this->subCamNextEye.x += this->actor.focus.pos.x;
+    this->subCamNextEye.y += this->actor.focus.pos.y;
+    this->subCamNextEye.z += this->actor.focus.pos.z;
 
-    Math_ApproachF(&this->csCamEye.x, this->csCamNextEye.x, spA0, 40.0f + spA4);
-    Math_ApproachF(&this->csCamEye.y, this->csCamNextEye.y, spA0, 40.0f + spA4);
-    Math_ApproachF(&this->csCamEye.z, this->csCamNextEye.z, spA0, 40.0f + spA4);
+    Math_ApproachF(&this->subCamEye.x, this->subCamNextEye.x, spA0, 40.0f + spA4);
+    Math_ApproachF(&this->subCamEye.y, this->subCamNextEye.y, spA0, 40.0f + spA4);
+    Math_ApproachF(&this->subCamEye.z, this->subCamNextEye.z, spA0, 40.0f + spA4);
 
-    Math_ApproachF(&this->csCamAt.x, this->csCamNextAt.x, spA0, 70.0f + spA4);
-    Math_ApproachF(&this->csCamAt.y, this->csCamNextAt.y, spA0, 70.0f + spA4);
-    Math_ApproachF(&this->csCamAt.z, this->csCamNextAt.z, spA0, 70.0f + spA4);
-    if (this->csCamIndex != 0) {
+    Math_ApproachF(&this->subCamAt.x, this->subCamNextAt.x, spA0, 70.0f + spA4);
+    Math_ApproachF(&this->subCamAt.y, this->subCamNextAt.y, spA0, 70.0f + spA4);
+    Math_ApproachF(&this->subCamAt.z, this->subCamNextAt.z, spA0, 70.0f + spA4);
+    if (this->subCamIndex != 0) {
         Vec3f sp5C;
 
-        sp5C.x = this->csCamAt.x + spA8.x;
-        sp5C.y = this->csCamAt.y + spA8.y;
-        sp5C.z = this->csCamAt.z + spA8.z;
-        Play_SetCameraAtEye(play, this->csCamIndex, &sp5C, &this->csCamEye);
+        sp5C.x = this->subCamAt.x + spA8.x;
+        sp5C.y = this->subCamAt.y + spA8.y;
+        sp5C.z = this->subCamAt.z + spA8.z;
+        Play_SetCameraAtEye(play, this->subCamIndex, &sp5C, &this->subCamEye);
     }
     SkelAnime_Update(&this->skelAnime);
     this->unk_ABC8++;
@@ -1149,9 +1206,9 @@ void Boss07_Wrath_SetupSidestep(Boss07* this, PlayState* play) {
         this->skelAnime.playSpeed = -1.0f;
         phi_f14 = -300.0f;
     }
-    Matrix_MultVecX(phi_f14, &this->unk_164);
-    this->unk_164.x += this->actor.world.pos.x;
-    this->unk_164.z += this->actor.world.pos.z;
+    Matrix_MultVecX(phi_f14, &this->moveTarget);
+    this->moveTarget.x += this->actor.world.pos.x;
+    this->moveTarget.z += this->actor.world.pos.z;
     this->timers[1] = 21;
     this->unk_158 = 10;
     this->unk_170 = 0.0f;
@@ -1172,8 +1229,8 @@ void Boss07_Wrath_Sidestep(Boss07* this, PlayState* play) {
     this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
-    Math_ApproachF(&this->actor.world.pos.x, this->unk_164.x, 0.8f, this->unk_170);
-    Math_ApproachF(&this->actor.world.pos.z, this->unk_164.z, 0.8f, this->unk_170);
+    Math_ApproachF(&this->actor.world.pos.x, this->moveTarget.x, 0.8f, this->unk_170);
+    Math_ApproachF(&this->actor.world.pos.z, this->moveTarget.z, 0.8f, this->unk_170);
     Math_ApproachF(&this->unk_170, 20.0f, 1.0f, 10.0f);
     if (this->timers[1] == 0) {
         if (Rand_ZeroOne() < 0.3f) {
@@ -1190,51 +1247,51 @@ void Boss07_Wrath_SetupAttack(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Wrath_Attack;
     this->timers[1] = 0;
     if (player->stateFlags3 & 0x100) {
-        this->actionState = 4;
+        this->actionState = MAJORAS_WRATH_ATTACK_4;
     } else if (this->actor.xzDistToPlayer <= 300.0f) {
         if (this->actor.xzDistToPlayer <= 200.0f) {
-            this->actionState = 7;
+            this->actionState = MAJORAS_WRATH_ATTACK_7;
         } else {
-            this->actionState = 4;
+            this->actionState = MAJORAS_WRATH_ATTACK_4;
         }
     } else {
         this->actionState = Rand_ZeroFloat(6.99f);
-        if (((s8)this->actor.colChkInfo.health >= 28) && ((this->actionState == 1) || (this->actionState == 2))) {
-            this->actionState = 0;
+        if (((s8)this->actor.colChkInfo.health >= 28) && ((this->actionState == MAJORAS_WRATH_ATTACK_1) || (this->actionState == MAJORAS_WRATH_ATTACK_2))) {
+            this->actionState = MAJORAS_WRATH_ATTACK_0;
         }
     }
     switch (this->actionState) {
-        case 0:
+        case MAJORAS_WRATH_ATTACK_0:
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathShortSingleWhipAttackAnim, -5.0f);
             this->unk_1D4 = Animation_GetLastFrame(&gMajorasWrathShortSingleWhipAttackAnim);
             break;
-        case 1:
+        case MAJORAS_WRATH_ATTACK_1:
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathWhipFlurryAttackAnim, -5.0f);
             this->unk_1D4 = Animation_GetLastFrame(&gMajorasWrathWhipFlurryAttackAnim);
             break;
-        case 2:
+        case MAJORAS_WRATH_ATTACK_2:
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathDoubleWhipAttackAnim, -5.0f);
             this->unk_1D4 = Animation_GetLastFrame(&gMajorasWrathDoubleWhipAttackAnim);
             break;
-        case 3:
+        case MAJORAS_WRATH_ATTACK_3:
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathLongSingleWhipAttackAnim, -5.0f);
             this->unk_1D4 = Animation_GetLastFrame(&gMajorasWrathLongSingleWhipAttackAnim);
             break;
-        case 4:
+        case MAJORAS_WRATH_ATTACK_4:
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathSpinAttackAnim, -5.0f);
             this->unk_1D4 = Animation_GetLastFrame(&gMajorasWrathSpinAttackAnim);
-            func_809F4D10(&this->unk_164, 650.0f);
+            Boss07_RandVec3fXZ(&this->moveTarget, 650.0f);
             this->unk_170 = 0.0f;
             break;
-        case 5:
+        case MAJORAS_WRATH_ATTACK_5:
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathTauntAnim, -5.0f);
             this->unk_1D4 = Animation_GetLastFrame(&gMajorasWrathTauntAnim);
             break;
-        case 6:
+        case MAJORAS_WRATH_ATTACK_6:
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathThreeAttackComboAnim, -5.0f);
             this->unk_1D4 = Animation_GetLastFrame(&gMajorasWrathThreeAttackComboAnim);
             break;
-        case 7:
+        case MAJORAS_WRATH_ATTACK_7:
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathKickAnim, -5.0f);
             this->unk_1D4 = Animation_GetLastFrame(&gMajorasWrathKickAnim);
             break;
@@ -1253,7 +1310,7 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
         this->unk_174 = true;
     }
     switch (this->actionState) {
-        case 0:
+        case MAJORAS_WRATH_ATTACK_0:
             if (this->actionTimer == (s16)(KREG(92) + 1)) {
                 Audio_PlaySfxAtPos(&sSfxPoint, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
@@ -1270,7 +1327,7 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST3_ROD_WIND_OLD);
             }
             break;
-        case 1:
+        case MAJORAS_WRATH_ATTACK_1:
             if (this->actionTimer == (s16)(KREG(91) + 3)) {
                 Audio_PlaySfxAtPos(&sSfxPoint, NA_SE_EN_LAST3_VOICE_THROW_OLD);
             }
@@ -1285,7 +1342,7 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
                 Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
             }
             break;
-        case 2:
+        case MAJORAS_WRATH_ATTACK_2:
             if (this->actionTimer == (s16)(KREG(84) + 5)) {
                 Audio_PlaySfxAtPos(&sSfxPoint, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
@@ -1303,7 +1360,7 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST3_ROD_WIND_OLD);
             }
             break;
-        case 3:
+        case MAJORAS_WRATH_ATTACK_3:
             if (this->actionTimer == (s16)(KREG(84) + 5)) {
                 Audio_PlaySfxAtPos(&sSfxPoint, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
@@ -1322,33 +1379,33 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST3_ROD_WIND_OLD);
             }
             break;
-        case 4:
+        case MAJORAS_WRATH_ATTACK_4:
             if ((this->actionTimer > 16) && (this->actionTimer <= 40)) {
                 this->leftWhip.tension = this->rightWhip.tension = 200.0f;
                 if ((this->actionTimer % 8) == 0) {
                     Audio_PlaySfxAtPos(&sSfxPoint, NA_SE_EN_LAST3_VOICE_KOMA_OLD);
                 }
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST3_ROD_DANCE_OLD - SFX_FLAG);
-                Math_ApproachF(&this->actor.world.pos.x, this->unk_164.x, 0.1f, this->unk_170);
-                Math_ApproachF(&this->actor.world.pos.z, this->unk_164.z, 0.1f, this->unk_170);
+                Math_ApproachF(&this->actor.world.pos.x, this->moveTarget.x, 0.1f, this->unk_170);
+                Math_ApproachF(&this->actor.world.pos.z, this->moveTarget.z, 0.1f, this->unk_170);
                 Math_ApproachF(&this->unk_170, 20.0f, 1.0f, 4.0f);
                 Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x2000);
                 this->unk_174 = false;
             }
             break;
-        case 7:
+        case MAJORAS_WRATH_ATTACK_7:
             this->unk_174 = false;
             if (this->actionTimer == 3) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST3_VOICE_KICK_OLD);
             }
             break;
-        case 5:
+        case MAJORAS_WRATH_ATTACK_5:
             this->rightWhip.stiffness = this->leftWhip.stiffness = 0.7f;
             this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
             Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
             this->unk_174 = true;
             break;
-        case 6:
+        case MAJORAS_WRATH_ATTACK_6:
             if (this->actionTimer == (s16)(KREG(85) + 5)) {
                 Audio_PlaySfxAtPos(&sSfxPoint, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
@@ -1693,7 +1750,7 @@ void Boss07_Wrath_WhipCollisionCheck(Vec3f* arg0, f32 arg1, Boss07* this, PlaySt
             prop = prop->next;
         }
     }
-    if ((arg1 >= 50.0f) && (this->unk_15A == 0) && (!(player->stateFlags3 & 0x100) || (this->actionState == 4))) {
+    if ((arg1 >= 50.0f) && (this->unk_15A == 0) && (!(player->stateFlags3 & 0x100) || (this->actionState == MAJORAS_WRATH_ATTACK_4))) {
         if ((func_800B64FC(play, 1000.0f, &this->actor.world.pos, &sp98) >= 0.0f) && (sp98 != 1)) {
             sp98 = -1;
         }
@@ -1986,7 +2043,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
     }
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->sph1.base);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->sph1.base);
-    if ((this->actionFunc == Boss07_Wrath_Attack) && (this->actionState == 7) && (this->actionTimer >= 6)) {
+    if ((this->actionFunc == Boss07_Wrath_Attack) && (this->actionState == MAJORAS_WRATH_ATTACK_7) && (this->actionTimer >= 6)) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->sph2.base);
     } else {
         if (this->unk_174 && Boss07_IsFacingPlayer(this, play)) {
@@ -2596,14 +2653,14 @@ void Boss07_Wrath_DrawShadowTex(u8* shadowTex, Boss07* this, PlayState* play) {
     CLOSE_DISPS(pad3);
 }
 
-void func_809FCBC8(Boss07* this) {
+void Boss07_Incarnation_AvoidPlayer(Boss07* this) {
     s32 phi_v0 = (Rand_ZeroOne() < 0.5f) ? 0x4000 : -0x4000;
 
     Matrix_RotateYS(this->actor.yawTowardsPlayer + phi_v0, MTXMODE_NEW);
-    Matrix_MultVecZ(200.0f, &this->unk_164);
+    Matrix_MultVecZ(200.0f, &this->moveTarget);
     this->timers[1] = 30;
-    this->unk_164.x += this->actor.world.pos.x;
-    this->unk_164.z += this->actor.world.pos.z;
+    this->moveTarget.x += this->actor.world.pos.x;
+    this->moveTarget.z += this->actor.world.pos.z;
     this->unk_170 = 20000.0f;
 }
 
@@ -2627,15 +2684,15 @@ void Boss07_Incarnation_Intro(Boss07* this, PlayState* play) {
         case 0:
             this->unk_ABC8 = 0;
             this->csState = 1;
-            this->csCamNextAt.z = 0.0f;
+            this->subCamNextAt.z = 0.0f;
         case 1:
             this->csState = 2;
             this->unk_ABC8 = 0;
-            this->csCamNextEye.x = 70.0f;
-            this->csCamNextEye.y = 70.0f;
-            this->csCamNextEye.z = 150.0f;
-            this->csCamNextAt.x = 20.0f;
-            this->csCamNextAt.y = 80.0f;
+            this->subCamNextEye.x = 70.0f;
+            this->subCamNextEye.y = 70.0f;
+            this->subCamNextEye.z = 150.0f;
+            this->subCamNextAt.x = 20.0f;
+            this->subCamNextAt.y = 80.0f;
             break;
         case 2:
             if (this->unk_ABC8 >= 20) {
@@ -2651,12 +2708,12 @@ void Boss07_Incarnation_Intro(Boss07* this, PlayState* play) {
             }
             break;
         case 3:
-            Math_ApproachF(&this->csCamNextEye.x, 0.0f, 0.05f, this->csCamSpeedMod * 40.0f);
-            Math_ApproachF(&this->csCamNextEye.y, 100.0f, 0.05f, this->csCamSpeedMod * 30.0f);
-            Math_ApproachF(&this->csCamNextEye.z, 270.0f, 0.05f, this->csCamSpeedMod * 150.0f);
-            Math_ApproachF(&this->csCamNextAt.x, 0.0f, 0.05f, this->csCamSpeedMod * 20.0f);
-            Math_ApproachF(&this->csCamNextAt.y, 100.0f, 0.05f, this->csCamSpeedMod * 20.0f);
-            Math_ApproachF(&this->csCamSpeedMod, 0.05f, 1.0f, 0.002f);
+            Math_ApproachF(&this->subCamNextEye.x, 0.0f, 0.05f, this->subCamSpeedMod * 40.0f);
+            Math_ApproachF(&this->subCamNextEye.y, 100.0f, 0.05f, this->subCamSpeedMod * 30.0f);
+            Math_ApproachF(&this->subCamNextEye.z, 270.0f, 0.05f, this->subCamSpeedMod * 150.0f);
+            Math_ApproachF(&this->subCamNextAt.x, 0.0f, 0.05f, this->subCamSpeedMod * 20.0f);
+            Math_ApproachF(&this->subCamNextAt.y, 100.0f, 0.05f, this->subCamSpeedMod * 20.0f);
+            Math_ApproachF(&this->subCamSpeedMod, 0.05f, 1.0f, 0.002f);
             if (this->unk_ABC8 >= 20) {
                 if (this->unk_ABC8 == 20) {
                     this->unk_17C8[2] = 1.0f;
@@ -2687,10 +2744,10 @@ void Boss07_Incarnation_Intro(Boss07* this, PlayState* play) {
             }
             break;
         case 4:
-            this->csCamNextEye.x = 0.0f;
-            this->csCamNextEye.y = 120.0f;
-            this->csCamNextEye.z = 140.0f;
-            this->csCamNextAt.y = 170.0f;
+            this->subCamNextEye.x = 0.0f;
+            this->subCamNextEye.y = 120.0f;
+            this->subCamNextEye.z = 140.0f;
+            this->subCamNextAt.y = 170.0f;
             if (this->unk_ABC8 >= 10) {
                 if (this->unk_ABC8 == 10) {
                     this->unk_17C8[3] = 1.0f;
@@ -2701,7 +2758,7 @@ void Boss07_Incarnation_Intro(Boss07* this, PlayState* play) {
             if (this->unk_ABC8 == 30) {
                 this->csState = 5;
                 this->unk_ABC8 = 0;
-                this->csCamSpeedMod = 0.0f;
+                this->subCamSpeedMod = 0.0f;
                 this->unk_1D4 = 1000.0f;
                 func_80165690();
             }
@@ -2734,21 +2791,21 @@ void Boss07_Incarnation_Intro(Boss07* this, PlayState* play) {
                 this->unk_14A = 1;
                 play->envCtx.lightBlend = 0.0f;
             }
-            Math_ApproachF(&this->csCamNextEye.x, -80.0f, 0.05f, this->csCamSpeedMod * 80.0f);
-            Math_ApproachF(&this->csCamNextEye.y, 20.0f, 0.05f, this->csCamSpeedMod * 60.0f);
-            Math_ApproachF(&this->csCamNextEye.z, 220.0f, 0.05f, this->csCamSpeedMod * 180.0f);
-            Math_ApproachF(&this->csCamNextAt.y, 110.0f, 0.05f, this->csCamSpeedMod * 80.0f);
-            Math_ApproachF(&this->csCamSpeedMod, 0.1f, 1.0f, 0.005f);
+            Math_ApproachF(&this->subCamNextEye.x, -80.0f, 0.05f, this->subCamSpeedMod * 80.0f);
+            Math_ApproachF(&this->subCamNextEye.y, 20.0f, 0.05f, this->subCamSpeedMod * 60.0f);
+            Math_ApproachF(&this->subCamNextEye.z, 220.0f, 0.05f, this->subCamSpeedMod * 180.0f);
+            Math_ApproachF(&this->subCamNextAt.y, 110.0f, 0.05f, this->subCamSpeedMod * 80.0f);
+            Math_ApproachF(&this->subCamSpeedMod, 0.1f, 1.0f, 0.005f);
             if (Animation_OnFrame(&this->skelAnime, this->unk_1D4)) {
                 Camera* sp54 = Play_GetCamera(play, 0);
 
                 this->csState = 0;
                 Boss07_Incarnation_SetupTaunt(this, play);
-                sp54->eye = this->csCamEye;
-                sp54->eyeNext = this->csCamEye;
-                sp54->at = this->csCamAt;
-                func_80169AFC(play, this->csCamIndex, 0);
-                this->csCamIndex = 0;
+                sp54->eye = this->subCamEye;
+                sp54->eyeNext = this->subCamEye;
+                sp54->at = this->subCamAt;
+                func_80169AFC(play, this->subCamIndex, 0);
+                this->subCamIndex = 0;
                 Cutscene_End(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 6);
                 this->actor.flags |= 1;
@@ -2758,11 +2815,11 @@ void Boss07_Incarnation_Intro(Boss07* this, PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(this->unk_17C8); i++) {
         Math_ApproachZeroF(&this->unk_17C8[i], 0.5f, 0.1f);
     }
-    Matrix_MultVec3f(&this->csCamNextEye, &this->csCamEye);
-    Matrix_MultVec3f(&this->csCamNextAt, &this->csCamAt);
-    if (this->csCamIndex != 0) {
+    Matrix_MultVec3f(&this->subCamNextEye, &this->subCamEye);
+    Matrix_MultVec3f(&this->subCamNextAt, &this->subCamAt);
+    if (this->subCamIndex != 0) {
         ShrinkWindow_SetLetterboxTarget(0x1B);
-        Play_SetCameraAtEye(play, this->csCamIndex, &this->csCamAt, &this->csCamEye);
+        Play_SetCameraAtEye(play, this->subCamIndex, &this->subCamAt, &this->subCamEye);
     }
 }
 
@@ -2774,7 +2831,7 @@ void Boss07_Incarnation_SetupTaunt(Boss07* this, PlayState* play) {
     };
 
     this->actionFunc = Boss07_Incarnation_Taunt;
-    this->actionState = Rand_ZeroFloat(2.999f);
+    this->actionState = Rand_ZeroFloat(MAJORAS_INCARNATION_STATE_MAX - 0.001f);
     Animation_MorphToLoop(&this->skelAnime, sTauntAnims[this->actionState], -10.0f);
     this->actor.flags |= 1;
     this->timers[0] = Rand_ZeroFloat(50.0f) + 50.0f;
@@ -2783,9 +2840,9 @@ void Boss07_Incarnation_SetupTaunt(Boss07* this, PlayState* play) {
 void Boss07_Incarnation_Taunt(Boss07* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (this->actionState < 2) {
+    if (this->actionState < MAJORAS_INCARNATION_STATE_2) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST2_WAIT_OLD - SFX_FLAG);
-    } else if ((this->actionState == 2) && Animation_OnFrame(&this->skelAnime, 5.0f)) {
+    } else if ((this->actionState == MAJORAS_INCARNATION_STATE_2) && Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST2_JUMP_OLD);
     }
     SkelAnime_Update(&this->skelAnime);
@@ -2871,7 +2928,7 @@ void Boss07_Incarnation_SetupRun(Boss07* this, PlayState* play) {
     Animation_MorphToLoop(&this->skelAnime, &gMajorasIncarnationRunAnim, -2.0f);
     this->actionFunc = Boss07_Incarnation_Run;
     this->timers[0] = Rand_ZeroFloat(100.0f) + 150.0f;
-    func_809FCBC8(this);
+    Boss07_Incarnation_AvoidPlayer(this);
 }
 
 void Boss07_Incarnation_Run(Boss07* this, PlayState* play) {
@@ -2890,8 +2947,8 @@ void Boss07_Incarnation_Run(Boss07* this, PlayState* play) {
         Boss07_Incarnation_SetupStunned(this, play, 50);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST2_DAMAGE_OLD);
     } else {
-        sp34 = this->unk_164.x - this->actor.world.pos.x;
-        sp30 = this->unk_164.z - this->actor.world.pos.z;
+        sp34 = this->moveTarget.x - this->actor.world.pos.x;
+        sp30 = this->moveTarget.z - this->actor.world.pos.z;
         if ((this->timers[1] == 0) || (SQ(sp34) + SQ(sp30) < SQ(173.20508f))) { // 100 * sqrt(3)
             if (Rand_ZeroOne() < 0.3f) {
                 f32 temp_f0 = Rand_ZeroOne();
@@ -2908,7 +2965,7 @@ void Boss07_Incarnation_Run(Boss07* this, PlayState* play) {
             } else if (Rand_ZeroOne() < 0.01f) {
                 Boss07_Incarnation_SetupStunned(this, play, 50);
             } else {
-                func_809F4D10(&this->unk_164, 500.0f);
+                Boss07_RandVec3fXZ(&this->moveTarget, 500.0f);
                 this->timers[1] = Rand_ZeroFloat(50.0f) + 20.0f;
                 this->unk_170 = 0.0f;
             }
@@ -2920,7 +2977,7 @@ void Boss07_Incarnation_Run(Boss07* this, PlayState* play) {
             Boss07_Incarnation_SetupTaunt(this, play);
         }
         if ((this->actor.xzDistToPlayer < 200.0f) && (this->timers[2] == 0)) {
-            func_809FCBC8(this);
+            Boss07_Incarnation_AvoidPlayer(this);
             this->timers[0] = 50;
             this->timers[2] = 50;
         }
@@ -3088,20 +3145,20 @@ void Boss07_Incarnation_Death(Boss07* this, PlayState* play) {
             }
             Cutscene_Start(play, &play->csCtx);
             func_800B7298(play, &this->actor, 7);
-            this->csCamIndex = Play_CreateSubCamera(play);
+            this->subCamIndex = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, 0, 1);
-            Play_ChangeCameraStatus(play, this->csCamIndex, 7);
+            Play_ChangeCameraStatus(play, this->subCamIndex, 7);
             this->unk_ABC8 = 0;
             this->csState = 10;
             func_8016566C(150);
         case 10:
             sHeartbeatTimer = 5;
-            this->csCamNextEye.x = 0.0f;
-            this->csCamNextEye.y = 30.0f;
-            this->csCamNextEye.z = 210.0f;
-            this->csCamNextAt.x = 0.0f;
-            this->csCamNextAt.y = 150.0f;
-            this->csCamNextAt.z = 0.0f;
+            this->subCamNextEye.x = 0.0f;
+            this->subCamNextEye.y = 30.0f;
+            this->subCamNextEye.z = 210.0f;
+            this->subCamNextAt.x = 0.0f;
+            this->subCamNextAt.y = 150.0f;
+            this->subCamNextAt.z = 0.0f;
             Math_ApproachF(&this->actor.world.pos.x, 0.0f, 0.1f, 5.0f);
             Math_ApproachF(&this->actor.world.pos.z, 0.0f, 0.1f, 5.0f);
             if (Animation_OnFrame(&this->skelAnime, this->unk_1D4)) {
@@ -3112,16 +3169,16 @@ void Boss07_Incarnation_Death(Boss07* this, PlayState* play) {
             break;
         case 1:
             sHeartbeatTimer = 5;
-            this->csCamNextAt.y = (Math_SinS(this->unk_ABC8 * 0x700) * 15.0f) + 150.0f;
+            this->subCamNextAt.y = (Math_SinS(this->unk_ABC8 * 0x700) * 15.0f) + 150.0f;
             if (this->unk_ABC8 == 40) {
                 this->unk_ABC8 = 0;
                 this->csState = 2;
-                this->csCamNextEye.x = -30.0f;
-                this->csCamNextEye.y = 120.0f;
-                this->csCamNextEye.z = 110.0f;
-                this->csCamNextAt.x = -70.0f;
-                this->csCamNextAt.y = 150.0f;
-                this->csCamNextAt.z = -20.0f;
+                this->subCamNextEye.x = -30.0f;
+                this->subCamNextEye.y = 120.0f;
+                this->subCamNextEye.z = 110.0f;
+                this->subCamNextAt.x = -70.0f;
+                this->subCamNextAt.y = 150.0f;
+                this->subCamNextAt.z = -20.0f;
                 this->unk_17E8 = 1.0f;
                 this->unk_17EC = 0.4f;
                 Animation_MorphToLoop(&this->skelAnime, &gMajorasIncarnationPumpingUpAnim, -5.0f);
@@ -3141,12 +3198,12 @@ void Boss07_Incarnation_Death(Boss07* this, PlayState* play) {
             if (this->unk_ABC8 == 40) {
                 this->unk_ABC8 = 0;
                 this->csState = 3;
-                this->csCamNextEye.x = 30.0f;
-                this->csCamNextEye.y = 120.0f;
-                this->csCamNextEye.z = 110.0f;
-                this->csCamNextAt.x = 50.0f;
-                this->csCamNextAt.y = 150.0f;
-                this->csCamNextAt.z = -20.0f;
+                this->subCamNextEye.x = 30.0f;
+                this->subCamNextEye.y = 120.0f;
+                this->subCamNextEye.z = 110.0f;
+                this->subCamNextAt.x = 50.0f;
+                this->subCamNextAt.y = 150.0f;
+                this->subCamNextAt.z = -20.0f;
                 this->unk_17E8 = 1.0f;
                 this->unk_17EC = 0.4f;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST2_PUMP_UP_OLD);
@@ -3158,12 +3215,12 @@ void Boss07_Incarnation_Death(Boss07* this, PlayState* play) {
             if (this->unk_ABC8 == 40) {
                 this->unk_ABC8 = 0;
                 this->csState = 4;
-                this->csCamNextEye.x = 0.0f;
-                this->csCamNextEye.y = 90.0f;
-                this->csCamNextEye.z = 110.0f;
-                this->csCamNextAt.x = 0.0f;
-                this->csCamNextAt.y = 90.0f;
-                this->csCamNextAt.z = 0.0f;
+                this->subCamNextEye.x = 0.0f;
+                this->subCamNextEye.y = 90.0f;
+                this->subCamNextEye.z = 110.0f;
+                this->subCamNextAt.x = 0.0f;
+                this->subCamNextAt.y = 90.0f;
+                this->subCamNextAt.z = 0.0f;
                 this->unk_17E8 = 1.0f;
                 this->unk_17EC = 0.4f;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST2_PUMP_UP_OLD);
@@ -3177,15 +3234,15 @@ void Boss07_Incarnation_Death(Boss07* this, PlayState* play) {
             }
             if (this->unk_ABC8 == 40) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x,
-                            this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, this->csCamIndex, MAJORA_WRATH);
+                            this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, this->subCamIndex, MAJORA_WRATH);
                 Actor_MarkForDeath(&this->actor);
             }
             break;
     }
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_MultVec3f(&this->csCamNextEye, &this->csCamEye);
-    Matrix_MultVec3f(&this->csCamNextAt, &this->csCamAt);
+    Matrix_MultVec3f(&this->subCamNextEye, &this->subCamEye);
+    Matrix_MultVec3f(&this->subCamNextAt, &this->subCamAt);
     if (sp4B == 1) {
         this->unk_17E0 = (Math_SinS(this->unk_ABC8 * 0x3000) * this->unk_17EC) + this->unk_17E8;
         Math_ApproachF(&this->unk_17E8, 2.0f, 1.0f, 0.05f);
@@ -3197,9 +3254,9 @@ void Boss07_Incarnation_Death(Boss07* this, PlayState* play) {
     }
     this->unk_17F0 = (Math_SinS(this->unk_ABC8 * 0x2000) * 0.1f) + 1.0f;
     this->unk_17F4 = (Math_CosS(this->unk_ABC8 * 0x2000) * 0.1f) + 1.0f;
-    if (this->csCamIndex != 0) {
+    if (this->subCamIndex != 0) {
         ShrinkWindow_SetLetterboxTarget(0x1B);
-        Play_SetCameraAtEye(play, this->csCamIndex, &this->csCamAt, &this->csCamEye);
+        Play_SetCameraAtEye(play, this->subCamIndex, &this->subCamAt, &this->subCamEye);
     }
 }
 
@@ -3478,7 +3535,7 @@ void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_FLOAT_OLD - SFX_FLAG);
     if (this->timers[0] == 0) {
         if (this->timers[2] == 0) {
-            if (((s8)this->actor.colChkInfo.health <= 8) && (player->transformation != 0) && (Rand_ZeroOne() < 0.75f)) {
+            if (((s8)this->actor.colChkInfo.health <= 8) && (player->transformation != PLAYER_FORM_FIERCE_DEITY) && (Rand_ZeroOne() < 0.75f)) {
                 Boss07_Mask_SetupBeam(this, play);
             } else {
                 Boss07_Mask_SetupSpin(this, play);
@@ -3487,16 +3544,16 @@ void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
             this->unk_18C = 2.0f;
             this->timers[0] = Rand_ZeroFloat(50.0f) + 30.0f;
         } else {
-            func_809F4D10(&this->unk_164, 500.0f);
-            this->unk_164.y = Rand_ZeroFloat(350.0f) + 100.0f;
+            Boss07_RandVec3fXZ(&this->moveTarget, 500.0f);
+            this->moveTarget.y = Rand_ZeroFloat(350.0f) + 100.0f;
             this->timers[0] = Rand_ZeroFloat(50.0f) + 20.0f;
             this->unk_170 = 0.0f;
             this->unk_18C = Rand_ZeroFloat(12.0f) + 3.0f;
         }
     }
-    sp30 = this->unk_164.x - this->actor.world.pos.x;
-    sp2C = this->unk_164.y - this->actor.world.pos.y;
-    sp28 = this->unk_164.z - this->actor.world.pos.z;
+    sp30 = this->moveTarget.x - this->actor.world.pos.x;
+    sp2C = this->moveTarget.y - this->actor.world.pos.y;
+    sp28 = this->moveTarget.z - this->actor.world.pos.z;
     sp34 = Math_Atan2S(sp30, sp28);
     sp36 = Math_Atan2S(sp2C, sqrtf(SQ(sp30) + SQ(sp28)));
     sp36 += (s16)(Math_SinS(this->actionTimer * 0x1388) * 4000.0f);
@@ -3526,7 +3583,7 @@ void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
 
 void Boss07_Mask_SetupSpin(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Mask_Spin;
-    this->actionState = 0;
+    this->actionState = MAJORAS_MASK_SPIN_STATE_0;
     this->csState = 0;
     this->timers[0] = 30;
     this->unk_18D4 = 0;
@@ -3544,13 +3601,13 @@ void Boss07_Mask_Spin(Boss07* this, PlayState* play) {
 
     this->actor.shape.rot.z -= this->unk_18D4;
     switch (this->actionState) {
-        case 0:
+        case MAJORAS_MASK_SPIN_STATE_0:
             Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
             Boss07_SmoothStop(this, 1.0f);
             Math_ApproachS(&this->actor.shape.rot.x, -0x4000, 0xA, 0x100);
             Math_ApproachS(&this->unk_18D4, 0x2000, 1, 0x100);
             if (this->timers[0] == 0) {
-                this->actionState = 1;
+                this->actionState = MAJORAS_MASK_SPIN_STATE_1;
                 this->actor.world.rot.x = 0;
                 this->actor.world.rot.y = this->actor.yawTowardsPlayer;
                 this->timers[0] = 100;
@@ -3558,19 +3615,19 @@ void Boss07_Mask_Spin(Boss07* this, PlayState* play) {
                 this->unk_170 = 0.0f;
             }
             break;
-        case 1:
+        case MAJORAS_MASK_SPIN_STATE_1:
             Math_ApproachS(&this->actor.shape.rot.x, -0x4000, 0xA, 0x400);
             Math_ApproachS(&this->unk_18D4, 0x2000, 1, 0x200);
             if (this->timers[1] != 0) {
-                this->unk_164.x = player->actor.world.pos.x;
-                this->unk_164.y = player->actor.world.pos.y + 10.0f;
-                this->unk_164.z = player->actor.world.pos.z;
+                this->moveTarget.x = player->actor.world.pos.x;
+                this->moveTarget.y = player->actor.world.pos.y + 10.0f;
+                this->moveTarget.z = player->actor.world.pos.z;
             } else {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_ROLLING_OLD - SFX_FLAG);
             }
-            sp30 = this->unk_164.x - this->actor.world.pos.x;
-            sp2C = this->unk_164.y - this->actor.world.pos.y;
-            sp28 = this->unk_164.z - this->actor.world.pos.z;
+            sp30 = this->moveTarget.x - this->actor.world.pos.x;
+            sp2C = this->moveTarget.y - this->actor.world.pos.y;
+            sp28 = this->moveTarget.z - this->actor.world.pos.z;
             sp34 = Math_Atan2S(sp30, sp28);
             sp24 = sqrtf(SQ(sp30) + SQ(sp28));
             sp36 = Math_Atan2S(sp2C, sp24);
@@ -3580,11 +3637,11 @@ void Boss07_Mask_Spin(Boss07* this, PlayState* play) {
             Math_ApproachF(&this->actor.speedXZ, 20.0f, 1.0f, 2.0f);
             if (((this->csState == 0) && (sp24 < 100.0f)) || (this->timers[0] == 0)) {
                 if (Rand_ZeroOne() < 0.25f) {
-                    this->actionState = 2;
+                    this->actionState = MAJORAS_MASK_SPIN_STATE_2;
                     this->timers[0] = 30;
                 } else {
-                    func_809F4D10(&this->unk_164, 500.0f);
-                    this->unk_164.y = Rand_ZeroFloat(100.0f) + 100.0f;
+                    Boss07_RandVec3fXZ(&this->moveTarget, 500.0f);
+                    this->moveTarget.y = Rand_ZeroFloat(100.0f) + 100.0f;
                     if (Rand_ZeroOne() < 0.3f) {
                         this->timers[1] = 20;
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_ATTACK_2ND_OLD);
@@ -3598,7 +3655,7 @@ void Boss07_Mask_Spin(Boss07* this, PlayState* play) {
                 }
             }
             break;
-        case 2:
+        case MAJORAS_MASK_SPIN_STATE_2:
             Math_ApproachS(&this->unk_18D4, 0, 1, 0x100);
             Math_ApproachS(&this->actor.world.rot.x, 0x2000, 0xA, 0x7D0);
             Boss07_SmoothStop(this, 0.5f);
@@ -3690,9 +3747,9 @@ void Boss07_Mask_Damaged(Boss07* this, PlayState* play) {
             Audio_StopSfxByPos(&this->actor.projectedPos);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_DEAD_OLD);
         } else {
-            this->unk_164.x = this->actor.world.pos.x;
-            this->unk_164.y = 200.0f;
-            this->unk_164.z = this->actor.world.pos.z;
+            this->moveTarget.x = this->actor.world.pos.x;
+            this->moveTarget.y = 200.0f;
+            this->moveTarget.z = this->actor.world.pos.z;
             this->actor.world.rot.x = 0x3000;
             this->timers[0] = 50;
             this->timers[2] = 100;
@@ -3702,7 +3759,7 @@ void Boss07_Mask_Damaged(Boss07* this, PlayState* play) {
     }
 }
 
-void func_80A006D0(Boss07* this) {
+void Boss07_Mask_ClearBeam(Boss07* this) {
     this->unk_188C = 0.0f;
     this->unk_1890 = 0.0f;
     this->unk_1894 = 0.0f;
@@ -3712,7 +3769,7 @@ void func_80A006D0(Boss07* this) {
 
 void Boss07_Mask_SetupBeam(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Mask_Beam;
-    this->actionState = 0;
+    this->actionState = MAJORAS_MASK_BEAM_STATE_0;
     this->timers[0] = 30;
     this->unk_170 = 0.0f;
 }
@@ -3752,35 +3809,35 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
     Math_ApproachF(&this->unk_170, 4000.0f, 1.0f, 200.0f);
     this->unk_1874 = 1;
     switch (this->actionState) {
-        case 0:
+        case MAJORAS_MASK_BEAM_STATE_0:
             if (this->timers[0] == 25) {
                 Audio_PlaySfxAtPos(&sSfxPoint, NA_SE_EN_LAST1_BLOW_OLD);
             }
             if (this->timers[0] == 0) {
-                this->actionState = 1;
+                this->actionState = MAJORAS_MASK_BEAM_STATE_1;
                 this->timers[0] = 6;
                 this->unk_1898 = 1.0f;
             }
             break;
-        case 1:
+        case MAJORAS_MASK_BEAM_STATE_1:
             Math_ApproachF(&this->unk_188C, 1.0f, 1.0f, 0.2f);
             if (this->timers[0] == 0) {
-                this->actionState = 2;
+                this->actionState = MAJORAS_MASK_BEAM_STATE_2;
                 this->timers[0] = 8;
             }
             break;
-        case 2:
+        case MAJORAS_MASK_BEAM_STATE_2:
             play_sound(NA_SE_EN_LAST1_BEAM_OLD - SFX_FLAG);
             Math_ApproachF(&this->unk_1890, 1.0f, 0.2f, 0.2f);
             if (this->timers[0] == 0) {
-                this->actionState = 3;
+                this->actionState = MAJORAS_MASK_BEAM_STATE_3;
                 this->timers[0] = 100;
             }
             break;
-        case 3:
-        case 4:
+        case MAJORAS_MASK_BEAM_STATE_3:
+        case MAJORAS_MASK_BEAM_STATE_4:
             play_sound(NA_SE_EN_LAST1_BEAM_OLD - SFX_FLAG);
-        case 5:
+        case MAJORAS_MASK_BEAM_STATE_5:
             Math_ApproachF(&this->unk_1890, 1.0f, 0.2f, 0.2f);
             temp_f20 = player->actor.world.pos.x - this->unk_189C.x;
             temp_f12 = player->actor.world.pos.y - this->unk_189C.y + 20.0f;
@@ -3790,7 +3847,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
 
             if (BgCheck_EntityLineTest1(&play->colCtx, &this->unk_189C, &this->unk_18A8, &sp14C, &sp158, 1, 1, 1,
                                         1, &sp144) &&
-                (this->actionState != 5)) {
+                (this->actionState != MAJORAS_MASK_BEAM_STATE_5)) {
                 Vec3f sp138;
                 Vec3f sp12C;
                 Vec3f sp120;
@@ -3825,8 +3882,8 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                     Matrix_MtxFToYXZRot(&player->shieldMf, &sp118, 0);
                     sp118.y += 0x8000;
                     sp118.x = -sp118.x;
-                    if (this->actionState == 3) {
-                        this->actionState = 4;
+                    if (this->actionState == MAJORAS_MASK_BEAM_STATE_3) {
+                        this->actionState = MAJORAS_MASK_BEAM_STATE_4;
                         this->unk_18C4 = sp118.x;
                         this->unk_18C6 = sp118.y;
                     } else {
@@ -3846,7 +3903,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                         Matrix_Push();
                         Matrix_MultVec3f(&sp16C, &sp160);
                         if ((fabsf(sp160.x) < 60.0f) && (fabsf(sp160.y) < 60.0f) && (sp160.z > 40.0f) &&
-                            (sp160.z <= (this->unk_18C0 * 16.666668f)) && (this->actionState != 5)) {
+                            (sp160.z <= (this->unk_18C0 * 16.666668f)) && (this->actionState != MAJORAS_MASK_BEAM_STATE_5)) {
                             s32 phi_s0_2;
                             Vec3f sp108;
                             Vec3f spFC;
@@ -3872,7 +3929,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                                 Audio_StopSfxByPos(&this->actor.projectedPos);
                                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_DAMAGE2_OLD);
                                 Boss07_Mask_SetupDamaged(this, play, 2, NULL);
-                                func_80A006D0(this);
+                                Boss07_Mask_ClearBeam(this);
                                 for (phi_s0_2 = 0; phi_s0_2 < 20; phi_s0_2++) {
                                     sp108.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(50.0f);
                                     sp108.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(50.0f);
@@ -3894,7 +3951,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                         }
                         Matrix_Pop();
                         for (sp178 = 0; sp178 < ARRAY_COUNT(sBossRemains); sp178++) {
-                            if (sBossRemains[sp178]->actionState >= 2) {
+                            if (sBossRemains[sp178]->actionState >= MAJORAS_REMAINS_STATE_2) {
                                 continue;
                             }
                             sp16C.x = sBossRemains[sp178]->actor.world.pos.x - this->unk_18A8.x;
@@ -3903,7 +3960,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                             sp180 = sqrtf(SQXYZ(sp16C));
                             Matrix_MultVec3f(&sp16C, &sp160);
                             if ((fabsf(sp160.x) < 60.0f) && (fabsf(sp160.y) < 60.0f) && (sp160.z > 40.0f) &&
-                                (sp160.z <= (this->unk_18C0 * 16.666668f)) && (this->actionState != 5)) {
+                                (sp160.z <= (this->unk_18C0 * 16.666668f)) && (this->actionState != MAJORAS_MASK_BEAM_STATE_5)) {
                                 s32 pad;
                                 Vec3f spE0;
                                 Vec3f spD4;
@@ -3925,7 +3982,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                                     Boss07_SpawnEffect(play, &spE0, &spD4, &spC8, Rand_ZeroFloat(10.0f) + 25.0f);
                                     sBossRemains[sp178]->unk_15E |= 0xA;
                                 } else {
-                                    sBossRemains[sp178]->actionState = 2;
+                                    sBossRemains[sp178]->actionState = MAJORAS_REMAINS_STATE_2;
                                     sBossRemains[sp178]->unk_18D6 = 60;
                                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FOLLOWERS_DEAD);
                                     for (pad = 0; pad < 20; pad++) {
@@ -3949,7 +4006,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                         }
                         if (BgCheck_EntityLineTest1(&play->colCtx, &this->unk_18A8, &this->unk_18B4, &sp14C,
                                                     &sp158, 1, 1, 1, 1, &sp144) &&
-                            (this->actionState != 5)) {
+                            (this->actionState != MAJORAS_MASK_BEAM_STATE_5)) {
                             Vec3f spBC;
                             Vec3f spB0;
                             Vec3f spA4;
@@ -3968,7 +4025,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                             Boss07_SpawnEffect(play, &spBC, &spB0, &spA4, Rand_ZeroFloat(10.0f) + 25.0f);
                         }
                     }
-                } else if (!player->isBurning && (this->actionState != 5)) {
+                } else if (!player->isBurning && (this->actionState != MAJORAS_MASK_BEAM_STATE_5)) {
                     s32 pad2;
 
                     func_800B8D50(play, &this->actor, 5.0f, this->actor.shape.rot.y, 0.0f, 0x10);
@@ -3989,9 +4046,9 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                 }
                 this->unk_18E0 = sp14C;
             }
-            if (this->actionState != 5) {
+            if (this->actionState != MAJORAS_MASK_BEAM_STATE_5) {
                 if (this->timers[0] == 0) {
-                    this->actionState = 5;
+                    this->actionState = MAJORAS_MASK_BEAM_STATE_5;
                     this->timers[0] = 20;
                 }
             } else {
@@ -3999,7 +4056,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                 if (this->timers[0] == 0) {
                     Boss07_Mask_SetupIdle(this, play);
                     this->timers[2] = 100;
-                    func_80A006D0(this);
+                    Boss07_Mask_ClearBeam(this);
                 }
             }
             break;
@@ -4040,47 +4097,49 @@ void Boss07_Mask_Intro(Boss07* this, PlayState* play) {
             this->actor.world.pos.x = 0.0f;
             this->actor.world.pos.y = 277.0f;
             this->actor.world.pos.z = -922.5f;
-            if ((player->actor.world.pos.z < 700.0f) && (ActorCutscene_GetCurrentIndex() == -1)) {
-                Cutscene_Start(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 7);
-                this->csCamIndex = Play_CreateSubCamera(play);
-                Play_ChangeCameraStatus(play, 0, 1);
-                Play_ChangeCameraStatus(play, this->csCamIndex, 7);
-                this->unk_ABC8 = 0;
-                this->csState = 1;
-                this->unk_160 = KREG(76) + 150;
-                case 1:
-                    if (this->unk_ABC8 >= 20) {
-                        func_8019F128(NA_SE_EV_LIGHT_GATHER - SFX_FLAG);
-                        Math_ApproachF(&sMajoraStatic->unk_AB44, sREG(50) + 1.0f, 0.05f, sREG(51) + 0.05f);
-                    }
-                    if (this->unk_ABC8 == 35) {
-                        func_800B7298(play, &this->actor, 0xF);
-                    }
-                    player->actor.world.pos.x = 0.0f;
-                    player->actor.world.pos.z = 700.0f;
-                    player->actor.shape.rot.y = -0x8000;
-                    player->actor.world.rot.y = player->actor.shape.rot.y;
-                    this->csCamEye.x = 0.0f;
-                    this->csCamEye.y = Player_GetHeight(player) + player->actor.world.pos.y - 24.0f;
-                    this->csCamEye.z = player->actor.world.pos.z - 60.0f;
-                    this->csCamAt.x = player->actor.world.pos.x;
-                    this->csCamAt.y = Player_GetHeight(player) + player->actor.world.pos.y - 20.0f;
-                    this->csCamAt.z = player->actor.world.pos.z;
-                    if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
-                        this->csCamAt.y -= 30.0f;
-                    }
-                    if (this->unk_ABC8 == 75) {
-                        this->unk_ABC8 = 0;
-                        this->csState = 2;
-                        this->csCamEye.x = player->actor.world.pos.x;
-                        this->csCamEye.y = player->actor.world.pos.y + 20.0f;
-                        this->csCamEye.z = player->actor.world.pos.z - 60.0f + 120.0f;
-                        this->csCamAt.x = player->actor.world.pos.x;
-                        this->csCamAt.y = player->actor.world.pos.y + 24.0f + 5.0f;
-                        this->csCamAt.z = player->actor.world.pos.z;
-                    }
+            if (!((player->actor.world.pos.z < 700.0f) && (ActorCutscene_GetCurrentIndex() == -1))) {
+                break;
             }
+            Cutscene_Start(play, &play->csCtx);
+            func_800B7298(play, &this->actor, 7);
+            this->subCamIndex = Play_CreateSubCamera(play);
+            Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_ChangeCameraStatus(play, this->subCamIndex, CAM_STATUS_ACTIVE);
+            this->unk_ABC8 = 0;
+            this->csState = 1;
+            this->unk_160 = KREG(76) + 150;
+        case 1:
+            if (this->unk_ABC8 >= 20) {
+                func_8019F128(NA_SE_EV_LIGHT_GATHER - SFX_FLAG);
+                Math_ApproachF(&sMajoraStatic->unk_AB44, sREG(50) + 1.0f, 0.05f, sREG(51) + 0.05f);
+            }
+            if (this->unk_ABC8 == 35) {
+                func_800B7298(play, &this->actor, 0xF);
+            }
+            player->actor.world.pos.x = 0.0f;
+            player->actor.world.pos.z = 700.0f;
+            player->actor.shape.rot.y = -0x8000;
+            player->actor.world.rot.y = player->actor.shape.rot.y;
+            this->subCamEye.x = 0.0f;
+            this->subCamEye.y = Player_GetHeight(player) + player->actor.world.pos.y - 24.0f;
+            this->subCamEye.z = player->actor.world.pos.z - 60.0f;
+            this->subCamAt.x = player->actor.world.pos.x;
+            this->subCamAt.y = Player_GetHeight(player) + player->actor.world.pos.y - 20.0f;
+            this->subCamAt.z = player->actor.world.pos.z;
+            if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
+                this->subCamAt.y -= 30.0f;
+            }
+            if (this->unk_ABC8 == 75) {
+                this->unk_ABC8 = 0;
+                this->csState = 2;
+                this->subCamEye.x = player->actor.world.pos.x;
+                this->subCamEye.y = player->actor.world.pos.y + 20.0f;
+                this->subCamEye.z = player->actor.world.pos.z - 60.0f + 120.0f;
+                this->subCamAt.x = player->actor.world.pos.x;
+                this->subCamAt.y = player->actor.world.pos.y + 24.0f + 5.0f;
+                this->subCamAt.z = player->actor.world.pos.z;
+            }
+        
             break;
         case 2:
             this->unk_160 = KREG(77) + 150;
@@ -4088,10 +4147,10 @@ void Boss07_Mask_Intro(Boss07* this, PlayState* play) {
                 Math_ApproachZeroF(&sMajoraStatic->unk_AB44, 1.0f, 0.05f);
             }
             if (this->unk_ABC8 == 20) {
-                sBossRemains[REMAINS_ODOLWA]->actionState = 1;
-                sBossRemains[REMAINS_GYORG]->actionState = 1;
-                sBossRemains[REMAINS_GOHT]->actionState = 1;
-                sBossRemains[REMAINS_TWINMOLD]->actionState = 1;
+                sBossRemains[REMAINS_ODOLWA]->actionState = MAJORAS_REMAINS_STATE_1;
+                sBossRemains[REMAINS_GYORG]->actionState = MAJORAS_REMAINS_STATE_1;
+                sBossRemains[REMAINS_GOHT]->actionState = MAJORAS_REMAINS_STATE_1;
+                sBossRemains[REMAINS_TWINMOLD]->actionState = MAJORAS_REMAINS_STATE_1;
             }
             if (this->unk_ABC8 == 0) {
                 func_800B7298(play, &this->actor, 7);
@@ -4100,43 +4159,43 @@ void Boss07_Mask_Intro(Boss07* this, PlayState* play) {
                 func_800B7298(play, &this->actor, 0x15);
             }
             if (this->unk_ABC8 >= 0x1FU) {
-                Math_ApproachF(&this->csCamAt.y, player->actor.world.pos.y + 24.0f + 20.0f, 0.05f, this->csCamSpeedMod);
-                Math_ApproachF(&this->csCamSpeedMod, 1.0f, 1.0f, 0.01f);
+                Math_ApproachF(&this->subCamAt.y, player->actor.world.pos.y + 24.0f + 20.0f, 0.05f, this->subCamSpeedMod);
+                Math_ApproachF(&this->subCamSpeedMod, 1.0f, 1.0f, 0.01f);
             }
             if (this->unk_ABC8 >= 160) {
                 if (this->unk_ABC8 == 160) {
-                    sBossRemains[REMAINS_ODOLWA]->actionState = 2;
-                    sBossRemains[REMAINS_GYORG]->actionState = 2;
-                    sBossRemains[REMAINS_GOHT]->actionState = 2;
-                    sBossRemains[REMAINS_TWINMOLD]->actionState = 2;
+                    sBossRemains[REMAINS_ODOLWA]->actionState = MAJORAS_REMAINS_STATE_2;
+                    sBossRemains[REMAINS_GYORG]->actionState = MAJORAS_REMAINS_STATE_2;
+                    sBossRemains[REMAINS_GOHT]->actionState = MAJORAS_REMAINS_STATE_2;
+                    sBossRemains[REMAINS_TWINMOLD]->actionState = MAJORAS_REMAINS_STATE_2;
                 }
                 if (this->unk_ABC8 == 161) {
-                    sBossRemains[REMAINS_ODOLWA]->actionState = 3;
+                    sBossRemains[REMAINS_ODOLWA]->actionState = MAJORAS_REMAINS_STATE_3;
                 }
                 if ((this->unk_ABC8 == 180) || (this->unk_ABC8 == 200) || (this->unk_ABC8 == 220)) {
                     this->unk_ABCC++;
-                    sBossRemains[this->unk_ABCC]->actionState = 3;
+                    sBossRemains[this->unk_ABCC]->actionState = MAJORAS_REMAINS_STATE_3;
                 }
-                this->csCamEye.x = sIntroCamEyes[this->unk_ABCC].x;
-                this->csCamEye.y = sIntroCamEyes[this->unk_ABCC].y;
-                this->csCamEye.z = sIntroCamEyes[this->unk_ABCC].z;
-                this->csCamAt.x = sIntroCamAts[this->unk_ABCC].x;
-                this->csCamAt.y = sIntroCamAts[this->unk_ABCC].y;
-                this->csCamAt.z = sIntroCamAts[this->unk_ABCC].z;
+                this->subCamEye.x = sIntroCamEyes[this->unk_ABCC].x;
+                this->subCamEye.y = sIntroCamEyes[this->unk_ABCC].y;
+                this->subCamEye.z = sIntroCamEyes[this->unk_ABCC].z;
+                this->subCamAt.x = sIntroCamAts[this->unk_ABCC].x;
+                this->subCamAt.y = sIntroCamAts[this->unk_ABCC].y;
+                this->subCamAt.z = sIntroCamAts[this->unk_ABCC].z;
                 if (this->unk_ABC8 == 250) {
                     this->csState = 3;
                     this->unk_ABC8 = 0;
-                    this->csCamEye.x = this->actor.world.pos.x;
-                    this->csCamEye.y = this->actor.world.pos.y;
-                    this->csCamEye.z = 300.0f;
-                    this->csCamAt.x = this->actor.world.pos.x;
-                    this->csCamAt.y = this->actor.world.pos.y;
-                    this->csCamAt.z = this->actor.world.pos.z;
+                    this->subCamEye.x = this->actor.world.pos.x;
+                    this->subCamEye.y = this->actor.world.pos.y;
+                    this->subCamEye.z = 300.0f;
+                    this->subCamAt.x = this->actor.world.pos.x;
+                    this->subCamAt.y = this->actor.world.pos.y;
+                    this->subCamAt.z = this->actor.world.pos.z;
                     Boss07_Remains_SetupFly(sBossRemains[REMAINS_ODOLWA], play);
                     Boss07_Remains_SetupFly(sBossRemains[REMAINS_GYORG], play);
                     Boss07_Remains_SetupFly(sBossRemains[REMAINS_GOHT], play);
                     Boss07_Remains_SetupFly(sBossRemains[REMAINS_TWINMOLD], play);
-                    this->csCamSpeedMod = 0.0f;
+                    this->subCamSpeedMod = 0.0f;
                     sMajoraStatic->unk_AB44 = 0.0f;
                     Audio_QueueSeqCmd(NA_BGM_STOP | 0xA0000);
                 }
@@ -4145,7 +4204,7 @@ void Boss07_Mask_Intro(Boss07* this, PlayState* play) {
         case 3:
             this->unk_160 = KREG(78) + 150;
             if (this->unk_ABC8 >= 15) {
-                Math_ApproachF(&this->csCamEye.z, -700.0f, 0.4f, 100.0f);
+                Math_ApproachF(&this->subCamEye.z, -700.0f, 0.4f, 100.0f);
             }
             if (this->unk_ABC8 >= 55) {
                 if (this->unk_ABC8 == 55) {
@@ -4179,9 +4238,9 @@ void Boss07_Mask_Intro(Boss07* this, PlayState* play) {
             if (this->unk_ABC8 == 110) {
                 this->csState = 4;
                 this->unk_ABC8 = 0;
-                this->csCamEye.x = this->actor.world.pos.x + 200.0f;
-                this->csCamEye.y = this->actor.world.pos.y;
-                this->csCamEye.z = this->actor.world.pos.z + 400.0f;
+                this->subCamEye.x = this->actor.world.pos.x + 200.0f;
+                this->subCamEye.y = this->actor.world.pos.y;
+                this->subCamEye.z = this->actor.world.pos.z + 400.0f;
                 player->actor.world.pos.z = 0.0f;
                 func_800B7298(play, &this->actor, 1);
                 this->unk_160 = KREG(74) + 200;
@@ -4207,13 +4266,13 @@ void Boss07_Mask_Intro(Boss07* this, PlayState* play) {
                     Audio_QueueSeqCmd(NA_BGM_MAJORAS_MASK | 0x8000);
                 }
                 if (this->unk_ABC8 > 100) {
-                    Math_ApproachF(&this->csCamEye.x, player->actor.world.pos.x + 40.0f, 0.1f,
-                                   this->csCamSpeedMod * 20.0f);
-                    Math_ApproachF(&this->csCamEye.y, player->actor.world.pos.y + 10.0f, 0.1f,
-                                   this->csCamSpeedMod * 20.0f);
-                    Math_ApproachF(&this->csCamEye.z, player->actor.world.pos.z + 90.0f, 0.1f,
-                                   this->csCamSpeedMod * 60.0f);
-                    Math_ApproachF(&this->csCamSpeedMod, 1.0f, 1.0f, 0.03f);
+                    Math_ApproachF(&this->subCamEye.x, player->actor.world.pos.x + 40.0f, 0.1f,
+                                   this->subCamSpeedMod * 20.0f);
+                    Math_ApproachF(&this->subCamEye.y, player->actor.world.pos.y + 10.0f, 0.1f,
+                                   this->subCamSpeedMod * 20.0f);
+                    Math_ApproachF(&this->subCamEye.z, player->actor.world.pos.z + 90.0f, 0.1f,
+                                   this->subCamSpeedMod * 60.0f);
+                    Math_ApproachF(&this->subCamSpeedMod, 1.0f, 1.0f, 0.03f);
                 }
                 if (this->unk_ABC8 == 175) {
                     Camera* sp5C = Play_GetCamera(play, 0);
@@ -4223,15 +4282,15 @@ void Boss07_Mask_Intro(Boss07* this, PlayState* play) {
                     this->timers[0] = 50;
                     this->timers[2] = 200;
                     this->unk_1888 = 50;
-                    this->unk_164.x = 0.0f;
-                    this->unk_164.y = 200.0f;
-                    this->unk_164.z = 0.0f;
+                    this->moveTarget.x = 0.0f;
+                    this->moveTarget.y = 200.0f;
+                    this->moveTarget.z = 0.0f;
                     this->unk_170 = 0.0f;
-                    sp5C->eye = this->csCamEye;
-                    sp5C->eyeNext = this->csCamEye;
-                    sp5C->at = this->csCamAt;
-                    func_80169AFC(play, this->csCamIndex, 0);
-                    this->csCamIndex = 0;
+                    sp5C->eye = this->subCamEye;
+                    sp5C->eyeNext = this->subCamEye;
+                    sp5C->at = this->subCamAt;
+                    func_80169AFC(play, this->subCamIndex, 0);
+                    this->subCamIndex = 0;
                     Cutscene_End(play, &play->csCtx);
                     func_800B7298(play, &this->actor, 6);
                     this->actor.flags |= 1;
@@ -4243,19 +4302,19 @@ void Boss07_Mask_Intro(Boss07* this, PlayState* play) {
             } else {
                 this->actor.world.pos.x -= 2.0f;
             }
-            Math_ApproachF(&this->csCamAt.x, this->actor.world.pos.x, 0.05f, 10.0f);
-            Math_ApproachF(&this->csCamAt.y, this->actor.world.pos.y, 0.05f, 10.0f);
-            Math_ApproachF(&this->csCamAt.z, this->actor.world.pos.z, 0.05f, 10.0f);
+            Math_ApproachF(&this->subCamAt.x, this->actor.world.pos.x, 0.05f, 10.0f);
+            Math_ApproachF(&this->subCamAt.y, this->actor.world.pos.y, 0.05f, 10.0f);
+            Math_ApproachF(&this->subCamAt.z, this->actor.world.pos.z, 0.05f, 10.0f);
             break;
     }
-    if (this->csCamIndex != 0) {
+    if (this->subCamIndex != 0) {
         Vec3f sp50;
 
         ShrinkWindow_SetLetterboxTarget(0x1B);
-        sp50.x = this->csCamAt.x;
-        sp50.y = this->csCamAt.y + sp8C;
-        sp50.z = this->csCamAt.z;
-        Play_SetCameraAtEye(play, this->csCamIndex, &sp50, &this->csCamEye);
+        sp50.x = this->subCamAt.x;
+        sp50.y = this->subCamAt.y + sp8C;
+        sp50.z = this->subCamAt.z;
+        Play_SetCameraAtEye(play, this->subCamIndex, &sp50, &this->subCamEye);
     }
 }
 
@@ -4290,21 +4349,21 @@ void Boss07_Mask_Death(Boss07* this, PlayState* play) {
             if (ActorCutscene_GetCurrentIndex() == -1) {
                 Cutscene_Start(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 1U);
-                this->csCamIndex = Play_CreateSubCamera(play);
+                this->subCamIndex = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, 0, 1);
-                Play_ChangeCameraStatus(play, this->csCamIndex, 7);
+                Play_ChangeCameraStatus(play, this->subCamIndex, 7);
                 this->unk_ABC8 = 0;
                 this->csState = 1;
-                this->csCamNextAt.z = 0.0f;
+                this->subCamNextAt.z = 0.0f;
                 this->unk_18D6 = 120;
                 func_8016566C(150);
-                this->csCamNextEye.x = 0.0f;
-                this->csCamNextEye.y = -30.0f;
-                this->csCamNextEye.z = 270.0f;
-                this->csCamNextAt.x = 0.0f;
-                this->csCamNextAt.y = -30.0f;
-                Matrix_MultVec3f(&this->csCamNextEye, &this->csCamEye);
-                Matrix_MultVec3f(&this->csCamNextAt, &this->csCamAt);
+                this->subCamNextEye.x = 0.0f;
+                this->subCamNextEye.y = -30.0f;
+                this->subCamNextEye.z = 270.0f;
+                this->subCamNextAt.x = 0.0f;
+                this->subCamNextAt.y = -30.0f;
+                Matrix_MultVec3f(&this->subCamNextEye, &this->subCamEye);
+                Matrix_MultVec3f(&this->subCamNextAt, &this->subCamAt);
             } else {
                 break;
             }
@@ -4330,23 +4389,23 @@ void Boss07_Mask_Death(Boss07* this, PlayState* play) {
             }
         case 2:
             Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, 0.0f, 0.0f, 0.0f, 0, this->actor.shape.rot.y,
-                        this->csCamIndex, MAJORA_INCARNATION);
+                        this->subCamIndex, MAJORA_INCARNATION);
             Actor_MarkForDeath(&this->actor);
             break;
     }
 
-    Matrix_MultVec3f(&this->csCamNextEye, &this->csCamEye);
-    Matrix_MultVec3f(&this->csCamNextAt, &sp60);
-    Math_ApproachF(&this->csCamAt.x, sp60.x, 0.1f, 10.0f);
-    Math_ApproachF(&this->csCamAt.y, sp60.y, 0.1f, 10.0f);
-    Math_ApproachF(&this->csCamAt.z, sp60.z, 0.1f, 10.0f);
-    if (this->csCamIndex != 0) {
+    Matrix_MultVec3f(&this->subCamNextEye, &this->subCamEye);
+    Matrix_MultVec3f(&this->subCamNextAt, &sp60);
+    Math_ApproachF(&this->subCamAt.x, sp60.x, 0.1f, 10.0f);
+    Math_ApproachF(&this->subCamAt.y, sp60.y, 0.1f, 10.0f);
+    Math_ApproachF(&this->subCamAt.z, sp60.z, 0.1f, 10.0f);
+    if (this->subCamIndex != 0) {
         ShrinkWindow_SetLetterboxTarget(0x1B);
-        sp54 = this->csCamEye;
+        sp54 = this->subCamEye;
         if (sp54.y < 30.0f) {
             sp54.y = 30.0f;
         }
-        Play_SetCameraAtEye(play, this->csCamIndex, &this->csCamAt, &sp54);
+        Play_SetCameraAtEye(play, this->subCamIndex, &this->subCamAt, &sp54);
     }
 }
 
@@ -4403,7 +4462,7 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
         }
     }
     Math_Vec3f_Copy(&sSfxPoint, &this->actor.projectedPos);
-    if ((sMajoraStatic == NULL) || (sMajoraStatic->csCamIndex == 0)) {
+    if ((sMajoraStatic == NULL) || (sMajoraStatic->subCamIndex == 0)) {
         this->unk_149 = true;
         play->envCtx.unk_C1 = 2;
         play->envCtx.unk_C2 = 0;
@@ -4803,7 +4862,7 @@ void Boss07_Projectile_Update(Actor* thisx, PlayState* play2) {
     }
     if (KREG(63) == 0) {
         Actor_SetScale(&this->actor, 3.5f);
-        if (this->actionState == 0) {
+        if (this->actionState == MAJORAS_PROJECTILE_STATE_0) {
             sp58 = player->actor.world.pos.x - this->actor.world.pos.x;
             sp54 = player->actor.world.pos.y - this->actor.world.pos.y + 20.0f;
             sp50 = player->actor.world.pos.z - this->actor.world.pos.z;
@@ -4811,7 +4870,7 @@ void Boss07_Projectile_Update(Actor* thisx, PlayState* play2) {
             this->actor.world.rot.y = Math_Atan2S(sp58, sp50);
             pad = sqrtf(SQ(sp58) + SQ(sp50));
             this->actor.world.rot.x = Math_Atan2S(sp54, pad);
-            this->actionState = 1;
+            this->actionState = MAJORAS_PROJECTILE_STATE_1;
             this->actor.speedXZ = 30.0f;
             func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
             if (this->actor.params == MAJORA_INCARNATION_SHOT) {
@@ -4876,12 +4935,12 @@ void Boss07_Remains_CollisionCheck(Boss07* this, PlayState* play) {
             this->unk_15E = 15;
             this->actionFunc = Boss07_Remains_Fly;
             if ((s8)this->actor.colChkInfo.health <= 0) {
-                this->actionState = 2;
+                this->actionState = MAJORAS_REMAINS_STATE_2;
                 this->unk_18DA = 1;
                 Enemy_StartFinishingBlow(play, &this->actor);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FOLLOWERS_DEAD);
             } else {
-                this->actionState = 0xA;
+                this->actionState = MAJORAS_REMAINS_STATE_10;
                 this->timers[0] = 0xF;
                 Boss07_Remains_DamageSfx(this);
             }
@@ -4920,12 +4979,12 @@ void Boss07_Remains_Intro(Boss07* this, PlayState* play) {
             if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
                 this->actor.world.pos.y += 30.0f + KREG(48);
             }
-            this->unk_164.x = sRemainsStart[this->actor.params - MAJORA_REMAINS].x + player->actor.world.pos.x;
-            this->unk_164.y = sRemainsStart[this->actor.params - MAJORA_REMAINS].y + player->actor.world.pos.y;
-            this->unk_164.z = sRemainsStart[this->actor.params - MAJORA_REMAINS].z + player->actor.world.pos.z;
-            sp54 = this->unk_164.x - this->actor.world.pos.x;
-            sp50 = this->unk_164.y - this->actor.world.pos.y;
-            sp4C = this->unk_164.z - this->actor.world.pos.z;
+            this->moveTarget.x = sRemainsStart[this->actor.params - MAJORA_REMAINS].x + player->actor.world.pos.x;
+            this->moveTarget.y = sRemainsStart[this->actor.params - MAJORA_REMAINS].y + player->actor.world.pos.y;
+            this->moveTarget.z = sRemainsStart[this->actor.params - MAJORA_REMAINS].z + player->actor.world.pos.z;
+            sp54 = this->moveTarget.x - this->actor.world.pos.x;
+            sp50 = this->moveTarget.y - this->actor.world.pos.y;
+            sp4C = this->moveTarget.z - this->actor.world.pos.z;
             this->actor.world.rot.y = Math_Atan2S(sp54, sp4C);
             this->actor.world.rot.x = Math_Atan2S(sp50, sqrtf(SQ(sp54) + SQ(sp4C)));
             this->unk_AB40 = Rand_ZeroFloat(100.0f);
@@ -4938,9 +4997,9 @@ void Boss07_Remains_Intro(Boss07* this, PlayState* play) {
             Math_ApproachF(&this->actor.scale.x, 0.004f, 0.5f, 0.0002f);
             this->actor.scale.y = this->actor.scale.z = this->actor.scale.x;
             if (this->unk_ABC8 > 90) {
-                this->unk_164.x = sRemainsEnd[this->actor.params - MAJORA_REMAINS].x;
-                this->unk_164.y = 370.0f;
-                this->unk_164.z = sRemainsEnd[this->actor.params - MAJORA_REMAINS].z;
+                this->moveTarget.x = sRemainsEnd[this->actor.params - MAJORA_REMAINS].x;
+                this->moveTarget.y = 370.0f;
+                this->moveTarget.z = sRemainsEnd[this->actor.params - MAJORA_REMAINS].z;
                 sp38 = 20.0f;
                 sp34 = 0.5f;
                 sp40 = 4096.0f;
@@ -4953,9 +5012,9 @@ void Boss07_Remains_Intro(Boss07* this, PlayState* play) {
                 sp40 = 1500.0f;
                 sp3C = 100.0f;
             }
-            sp54 = this->unk_164.x - this->actor.world.pos.x;
-            sp50 = this->unk_164.y - this->actor.world.pos.y + phi_f2;
-            sp4C = this->unk_164.z - this->actor.world.pos.z;
+            sp54 = this->moveTarget.x - this->actor.world.pos.x;
+            sp50 = this->moveTarget.y - this->actor.world.pos.y + phi_f2;
+            sp4C = this->moveTarget.z - this->actor.world.pos.z;
             sp30 = Math_Atan2S(sp54, sp4C);
             sp32 = Math_Atan2S(sp50, sqrtf(SQ(sp54) + SQ(sp4C)));
             Math_ApproachS(&this->actor.world.rot.y, sp30, 5, this->unk_170);
@@ -4994,7 +5053,7 @@ void Boss07_Remains_SetupFly(Boss07* this, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
     Collider_InitAndSetCylinder(play, &this->cyl2, &this->actor, &sRemainsCylInit);
     this->actor.colChkInfo.health = 5;
-    this->actionState = 0;
+    this->actionState = MAJORAS_REMAINS_STATE_0;
 }
 
 void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
@@ -5009,13 +5068,13 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
     Vec3f sp48;
 
     switch (this->actionState) {
-        case 20:
+        case MAJORAS_REMAINS_STATE_20:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MUJURA_FOLLOWERS_FLY - SFX_FLAG);
             this->timers[0] = 80;
             this->timers[2] = 100.0f + Rand_ZeroFloat(100.0f);
             this->unk_18C = 5.0f;
             this->actor.speedXZ = 5.0f;
-            this->unk_164 = gZeroVec3f;
+            this->moveTarget = gZeroVec3f;
             this->actor.world.rot.y = Math_Atan2S(-this->actor.world.pos.x, -this->actor.world.pos.z);
             this->actionState = 1;
             this->unk_1888 = 100;
@@ -5023,7 +5082,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
             this->actor.flags |= 0x201;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_DEMO_BREAK);
             break;
-        case 1:
+        case MAJORAS_REMAINS_STATE_1:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MUJURA_FOLLOWERS_FLY - SFX_FLAG);
             if (this->timers[2] == 0) {
                 this->unk_18DB = 1;
@@ -5034,16 +5093,16 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
                     this->unk_18C = 1.0f;
                     this->timers[0] = Rand_ZeroFloat(50.0f) + 30.0f;
                 } else {
-                    func_809F4D10(&this->unk_164, 500.0f);
-                    this->unk_164.y = Rand_ZeroFloat(350.0f) + 100.0f;
+                    Boss07_RandVec3fXZ(&this->moveTarget, 500.0f);
+                    this->moveTarget.y = Rand_ZeroFloat(350.0f) + 100.0f;
                     this->timers[0] = Rand_ZeroFloat(50.0f) + 20.0f;
                     this->unk_170 = 0.0f;
                     this->unk_18C = Rand_ZeroFloat(5.0f) + 5.0f;
                 }
             }
-            sp78 = this->unk_164.x - this->actor.world.pos.x;
-            sp74 = this->unk_164.y - this->actor.world.pos.y;
-            sp70 = this->unk_164.z - this->actor.world.pos.z;
+            sp78 = this->moveTarget.x - this->actor.world.pos.x;
+            sp74 = this->moveTarget.y - this->actor.world.pos.y;
+            sp70 = this->moveTarget.z - this->actor.world.pos.z;
             sp7C = Math_Atan2S(sp78, sp70);
             sp7E = Math_Atan2S(sp74, sqrtf(SQ(sp78) + SQ(sp70)));
             sp7E += (s16)(Math_SinS(this->actionTimer * 0x1388) * 4000.0f);
@@ -5065,7 +5124,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
             }
             Boss07_Remains_CollisionCheck(this, play);
             break;
-        case 2:
+        case MAJORAS_REMAINS_STATE_2:
             Math_ApproachS(&this->actor.shape.rot.x, -0x4000, 1, 0x500);
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 100.0f, 100.0f, 5);
@@ -5084,7 +5143,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
                 this->actor.shape.rot.z += 0x200;
             }
             break;
-        case 10:
+        case MAJORAS_REMAINS_STATE_10:
             Actor_MoveWithGravity(&this->actor);
             this->actor.world.pos.y -= 50.0f;
             this->actor.prevPos.y -= 50.0f;
@@ -5095,10 +5154,10 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
                 this->actionState = 1;
             }
             break;
-        case 0:
+        case MAJORAS_REMAINS_STATE_0:
             break;
     }
-    if (this->actionState < 2) {
+    if (this->actionState < MAJORAS_REMAINS_STATE_2) {
         Collider_UpdateCylinder(&this->actor, &this->cyl2);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->cyl2.base);
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->cyl2.base);
@@ -5146,7 +5205,7 @@ void Boss07_Remains_Stunned(Boss07* this, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->cyl2.base);
     if (this->timers[0] == 0) {
         this->actionFunc = Boss07_Remains_Fly;
-        this->actionState = 1;
+        this->actionState = MAJORAS_REMAINS_STATE_1;
     }
 }
 
@@ -5316,9 +5375,9 @@ void Boss07_Top_Ground(Boss07* this, PlayState* play) {
         sp48 = this->actor.prevPos.z - this->actor.world.pos.z;
         func_800AE930(&play->colCtx, Effect_GetByIndex(this->effectIndex), &this->actor.world.pos, 3.0f,
                       Math_Atan2S(sp4C, sp48), this->actor.floorPoly, this->actor.floorBgId);
-        this->actionState = 1;
-    } else if (this->actionState != 0) {
-        this->actionState = 0;
+        this->actionState = MAJORAS_TOP_STATE_1;
+    } else if (this->actionState != MAJORAS_TOP_STATE_0) {
+        this->actionState = MAJORAS_TOP_STATE_0;
         func_800AEF44(Effect_GetByIndex(this->effectIndex));
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -5534,84 +5593,84 @@ void Boss07_Static_Update(Actor* thisx, PlayState* play2) {
             if (ActorCutscene_GetCurrentIndex() == -1) {
                 Cutscene_Start(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 7);
-                this->csCamIndex = Play_CreateSubCamera(play);
+                this->subCamIndex = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, 0, 1);
-                Play_ChangeCameraStatus(play, this->csCamIndex, 7);
+                Play_ChangeCameraStatus(play, this->subCamIndex, 7);
                 this->unk_ABC8 = 0;
                 this->csState = 2;
                 func_8016566C(150);
-                this->csCamEye.x = sBossRemains[REMAINS_ODOLWA]->actor.world.pos.x * 0.7f;
-                this->csCamEye.y = sBossRemains[REMAINS_ODOLWA]->actor.world.pos.y * 0.7f;
-                this->csCamEye.z = sBossRemains[REMAINS_ODOLWA]->actor.world.pos.z * 0.7f;
+                this->subCamEye.x = sBossRemains[REMAINS_ODOLWA]->actor.world.pos.x * 0.7f;
+                this->subCamEye.y = sBossRemains[REMAINS_ODOLWA]->actor.world.pos.y * 0.7f;
+                this->subCamEye.z = sBossRemains[REMAINS_ODOLWA]->actor.world.pos.z * 0.7f;
             } else {
                 break;
             }
         case 2:
             if (this->unk_ABC8 == 20) {
-                sBossRemains[REMAINS_ODOLWA]->actionState = 20;
+                sBossRemains[REMAINS_ODOLWA]->actionState = MAJORAS_REMAINS_STATE_20;
             }
-            this->csCamAt.x = sBossRemains[REMAINS_ODOLWA]->actor.world.pos.x;
-            this->csCamAt.y = sBossRemains[REMAINS_ODOLWA]->actor.world.pos.y;
-            this->csCamAt.z = sBossRemains[REMAINS_ODOLWA]->actor.world.pos.z;
+            this->subCamAt.x = sBossRemains[REMAINS_ODOLWA]->actor.world.pos.x;
+            this->subCamAt.y = sBossRemains[REMAINS_ODOLWA]->actor.world.pos.y;
+            this->subCamAt.z = sBossRemains[REMAINS_ODOLWA]->actor.world.pos.z;
             if (this->unk_ABC8 == 40) {
                 this->csState = 3;
                 this->unk_ABC8 = 0;
-                this->csCamEye.x = sBossRemains[REMAINS_GYORG]->actor.world.pos.x * 0.7f;
-                this->csCamEye.y = sBossRemains[REMAINS_GYORG]->actor.world.pos.y * 0.7f;
-                this->csCamEye.z = sBossRemains[REMAINS_GYORG]->actor.world.pos.z * 0.7f;
+                this->subCamEye.x = sBossRemains[REMAINS_GYORG]->actor.world.pos.x * 0.7f;
+                this->subCamEye.y = sBossRemains[REMAINS_GYORG]->actor.world.pos.y * 0.7f;
+                this->subCamEye.z = sBossRemains[REMAINS_GYORG]->actor.world.pos.z * 0.7f;
             } else {
                 break;
             }
         case 3:
             if (this->unk_ABC8 == 20) {
-                sBossRemains[REMAINS_GYORG]->actionState = 20;
+                sBossRemains[REMAINS_GYORG]->actionState = MAJORAS_REMAINS_STATE_20;
             }
-            this->csCamAt.x = sBossRemains[REMAINS_GYORG]->actor.world.pos.x;
-            this->csCamAt.y = sBossRemains[REMAINS_GYORG]->actor.world.pos.y;
-            this->csCamAt.z = sBossRemains[REMAINS_GYORG]->actor.world.pos.z;
+            this->subCamAt.x = sBossRemains[REMAINS_GYORG]->actor.world.pos.x;
+            this->subCamAt.y = sBossRemains[REMAINS_GYORG]->actor.world.pos.y;
+            this->subCamAt.z = sBossRemains[REMAINS_GYORG]->actor.world.pos.z;
             if (this->unk_ABC8 == 40) {
                 this->csState = 4;
                 this->unk_ABC8 = 0;
-                this->csCamEye.x = sBossRemains[REMAINS_GOHT]->actor.world.pos.x * 0.7f;
-                this->csCamEye.y = sBossRemains[REMAINS_GOHT]->actor.world.pos.y * 0.7f;
-                this->csCamEye.z = sBossRemains[REMAINS_GOHT]->actor.world.pos.z * 0.7f;
+                this->subCamEye.x = sBossRemains[REMAINS_GOHT]->actor.world.pos.x * 0.7f;
+                this->subCamEye.y = sBossRemains[REMAINS_GOHT]->actor.world.pos.y * 0.7f;
+                this->subCamEye.z = sBossRemains[REMAINS_GOHT]->actor.world.pos.z * 0.7f;
             } else {
                 break;
             }
         case 4:
             if (this->unk_ABC8 == 20) {
-                sBossRemains[REMAINS_GOHT]->actionState = 20;
+                sBossRemains[REMAINS_GOHT]->actionState = MAJORAS_REMAINS_STATE_20;
             }
-            this->csCamAt.x = sBossRemains[REMAINS_GOHT]->actor.world.pos.x;
-            this->csCamAt.y = sBossRemains[REMAINS_GOHT]->actor.world.pos.y;
-            this->csCamAt.z = sBossRemains[REMAINS_GOHT]->actor.world.pos.z;
+            this->subCamAt.x = sBossRemains[REMAINS_GOHT]->actor.world.pos.x;
+            this->subCamAt.y = sBossRemains[REMAINS_GOHT]->actor.world.pos.y;
+            this->subCamAt.z = sBossRemains[REMAINS_GOHT]->actor.world.pos.z;
             if (this->unk_ABC8 == 40) {
                 this->csState = 5;
                 this->unk_ABC8 = 0;
-                this->csCamEye.x = sBossRemains[REMAINS_TWINMOLD]->actor.world.pos.x * 0.7f;
-                this->csCamEye.y = sBossRemains[REMAINS_TWINMOLD]->actor.world.pos.y * 0.7f;
-                this->csCamEye.z = sBossRemains[REMAINS_TWINMOLD]->actor.world.pos.z * 0.7f;
+                this->subCamEye.x = sBossRemains[REMAINS_TWINMOLD]->actor.world.pos.x * 0.7f;
+                this->subCamEye.y = sBossRemains[REMAINS_TWINMOLD]->actor.world.pos.y * 0.7f;
+                this->subCamEye.z = sBossRemains[REMAINS_TWINMOLD]->actor.world.pos.z * 0.7f;
             } else {
                 break;
             }
         case 5:
             if (this->unk_ABC8 == 20) {
-                sBossRemains[REMAINS_TWINMOLD]->actionState = 20;
+                sBossRemains[REMAINS_TWINMOLD]->actionState = MAJORAS_REMAINS_STATE_20;
             }
-            this->csCamAt.x = sBossRemains[REMAINS_TWINMOLD]->actor.world.pos.x;
-            this->csCamAt.y = sBossRemains[REMAINS_TWINMOLD]->actor.world.pos.y;
-            this->csCamAt.z = sBossRemains[REMAINS_TWINMOLD]->actor.world.pos.z;
+            this->subCamAt.x = sBossRemains[REMAINS_TWINMOLD]->actor.world.pos.x;
+            this->subCamAt.y = sBossRemains[REMAINS_TWINMOLD]->actor.world.pos.y;
+            this->subCamAt.z = sBossRemains[REMAINS_TWINMOLD]->actor.world.pos.z;
             if (this->unk_ABC8 == 40) {
                 Camera* camera = Play_GetCamera(play, CAM_ID_MAIN);
                 s32 i;
 
                 this->csState = 6;
                 this->unk_ABC8 = 0;
-                camera->eye = this->csCamEye;
-                camera->eyeNext = this->csCamEye;
-                camera->at = this->csCamAt;
-                func_80169AFC(play, this->csCamIndex, 0);
-                this->csCamIndex = 0;
+                camera->eye = this->subCamEye;
+                camera->eyeNext = this->subCamEye;
+                camera->at = this->subCamAt;
+                func_80169AFC(play, this->subCamIndex, 0);
+                this->subCamIndex = SUB_CAM_ID_DONE;
                 Cutscene_End(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 6);
                 func_80165690();
@@ -5623,7 +5682,7 @@ void Boss07_Static_Update(Actor* thisx, PlayState* play2) {
         case 6:
             break;
     }
-    if (this->csCamIndex != 0) {
+    if (this->subCamIndex != 0) {
         if (this->unk_ABC8 < 20) {
             s32 j;
 
@@ -5638,7 +5697,7 @@ void Boss07_Static_Update(Actor* thisx, PlayState* play2) {
             }
         }
         ShrinkWindow_SetLetterboxTarget(27);
-        Play_SetCameraAtEye(play, this->csCamIndex, &this->csCamAt, &this->csCamEye);
+        Play_SetCameraAtEye(play, this->subCamIndex, &this->subCamAt, &this->subCamEye);
     }
 }
 
@@ -5665,7 +5724,7 @@ void Boss07_Static_UpdateEffects(PlayState* play) {
             effect->vel.x += effect->accel.x;
             effect->vel.y += effect->accel.y;
             effect->vel.z += effect->accel.z;
-            if (effect->type == MAJORA_EFFECT_1) {
+            if (effect->type == MAJORA_EFFECT_FLAME) {
                 if (effect->isFading) {
                     effect->alpha -= (i % 8U) + 13;
                     if (effect->alpha <= 0) {
