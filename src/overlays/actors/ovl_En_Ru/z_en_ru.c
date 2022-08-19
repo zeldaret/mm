@@ -196,7 +196,7 @@ s32 EnRu_PlayWalkingSound(EnRu* this, PlayState* play) {
     }
 
     this->isRightFootGrounded = isFootGrounded = SubS_IsFloorAbove(play, &this->rightFootPos, -6.0f);
-    if ((this->isRightFootGrounded) && (!rightWasGrounded) && (isFootGrounded)){ 
+    if ((this->isRightFootGrounded) && (!rightWasGrounded) && (isFootGrounded)) {
         Actor_PlaySfxAtPos(&this->actor, sfxId);
     }
 
