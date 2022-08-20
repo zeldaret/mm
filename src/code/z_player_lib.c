@@ -1581,6 +1581,8 @@ PlayerFaceIndices sPlayerFaces[] = {
     { PLAYER_EYES_OPEN, PLAYER_MOUTH_HAPPY },        // PLAYER_FACE_15
 };
 
+// Note the correct pointer to pass as the jointTable is the jointTable pointer from the SkelAnime struct, not the
+// buffer from the Player struct itself since that one may be misalligned.
 void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod,
                      PlayerTransformation playerForm, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw,
                      PostLimbDrawFlex postLimbDraw, Actor* actor) {
@@ -1647,31 +1649,31 @@ void func_80124CC4(PlayState* play, Player* player, f32 arg2) {
     s32 bgId;
     Vec3f sp7C;
     Vec3f sp70;
-    Vec3f sp64;
+    Vec3f pos;
     Vec3f sp58;
     f32 sp54;
-    f32 sp50;
+    f32 scale;
 
     D_801C094C.z = 0.0f;
     Matrix_MultVec3f(&D_801C094C, &sp7C);
     D_801C094C.z = arg2;
     Matrix_MultVec3f(&D_801C094C, &sp70);
 
-    if (BgCheck_AnyLineTest3(&play->colCtx, &sp7C, &sp70, &sp64, &poly, 1, 1, 1, 1, &bgId)) {
-        if (!func_800B90AC(play, &player->actor, poly, bgId, &sp64) ||
-            BgCheck_ProjectileLineTest(&play->colCtx, &sp7C, &sp70, &sp64, &poly, 1, 1, 1, 1, &bgId)) {
+    if (BgCheck_AnyLineTest3(&play->colCtx, &sp7C, &sp70, &pos, &poly, true, true, true, true, &bgId)) {
+        if (!func_800B90AC(play, &player->actor, poly, bgId, &pos) ||
+            BgCheck_ProjectileLineTest(&play->colCtx, &sp7C, &sp70, &pos, &poly, true, true, true, true, &bgId)) {
             OPEN_DISPS(play->state.gfxCtx);
 
             OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 7);
 
-            SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &sp64, &sp58, &sp54);
+            SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &pos, &sp58, &sp54);
             if (sp54 < 200.0f) {
-                sp50 = 0.08f;
+                scale = 0.08f;
             } else {
-                sp50 = (sp54 / 200.0f) * 0.08f;
+                scale = (sp54 / 200.0f) * 0.08f;
             }
-            Matrix_Translate(sp64.x, sp64.y, sp64.z, MTXMODE_NEW);
-            Matrix_Scale(sp50, sp50, sp50, MTXMODE_APPLY);
+            Matrix_Translate(pos.x, pos.y, pos.z, MTXMODE_NEW);
+            Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -2088,8 +2090,8 @@ void Player_DrawCouplesMask(PlayState* play, Player* player) {
 }
 
 void Player_DrawCircusLeadersMask(PlayState* play, Actor* actor) {
-    static Vec3f D_801C0BA8 = { 0.0f, 0.0f, 0.0f };
-    static Vec3f D_801C0BB4 = { 0.0f, 0.0f, 0.0f };
+    static Vec3f bubbleVelocity = { 0.0f, 0.0f, 0.0f };
+    static Vec3f bubbleAccel = { 0.0f, 0.0f, 0.0f };
     Gfx* gfx;
     s32 i;
 
@@ -2098,26 +2100,21 @@ void Player_DrawCircusLeadersMask(PlayState* play, Actor* actor) {
     gfx = POLY_XLU_DISP;
 
     for (i = 0; i < ARRAY_COUNT(D_801C0B90); i++) {
-        f32 temp_f22 = (D_801F59C8[i] / 400.0f) * 0.1f;
+        f32 scaleY = (D_801F59C8[i] / 400.0f) * 0.1f;
 
         Matrix_MultVec3f(&D_801C0B90[i], &D_801F59B0[i]);
 
+        //! FAKE
         if (1) {}
 
-        D_801F59B0[i].y += -10.0f * temp_f22;
+        D_801F59B0[i].y += -10.0f * scaleY;
 
         if (D_801F59C8[i] < 0x190) {
-            f32 phi_f20;
-
-            if (temp_f22 > 0.05f) {
-                phi_f20 = 0.05f;
-            } else {
-                phi_f20 = temp_f22;
-            }
+            f32 scaleXZ = CLAMP_MAX(scaleY, 0.05f);
 
             Matrix_Push();
             Matrix_Translate(D_801F59B0[i].x, D_801F59B0[i].y, D_801F59B0[i].z, MTXMODE_NEW);
-            Matrix_Scale(phi_f20, temp_f22, phi_f20, MTXMODE_APPLY);
+            Matrix_Scale(scaleXZ, scaleY, scaleXZ, MTXMODE_APPLY);
 
             gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPSegment(&gfx[1], 0x08, VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(gEffBubble1Tex)));
@@ -2135,8 +2132,8 @@ void Player_DrawCircusLeadersMask(PlayState* play, Actor* actor) {
             s16 phi_s0 = temp_f0 * 2000.0f;
             f32 temp_f20;
 
-            D_801C0BA8.y = temp_f0 * 0.4f;
-            D_801C0BB4.y = -0.3f;
+            bubbleVelocity.y = temp_f0 * 0.4f;
+            bubbleAccel.y = -0.3f;
 
             if (phi_s0 > 0x3E80) {
                 phi_s0 = 0x3E80;
@@ -2149,10 +2146,10 @@ void Player_DrawCircusLeadersMask(PlayState* play, Actor* actor) {
                 temp_f20 = 4.0f;
             }
 
-            D_801C0BA8.x = -Math_SinS(phi_s0) * temp_f20;
-            D_801C0BA8.z = -Math_CosS(phi_s0) * temp_f20;
+            bubbleVelocity.x = -Math_SinS(phi_s0) * temp_f20;
+            bubbleVelocity.z = -Math_CosS(phi_s0) * temp_f20;
 
-            EffectSsDtBubble_SpawnColorProfile(play, &D_801F59B0[i], &D_801C0BA8, &D_801C0BB4, 20, 20, 3, 0);
+            EffectSsDtBubble_SpawnColorProfile(play, &D_801F59B0[i], &bubbleVelocity, &bubbleAccel, 20, 20, 3, 0);
             D_801F59C8[i] -= 0x190;
         }
     }

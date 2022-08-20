@@ -196,7 +196,6 @@ typedef enum {
     /* 34 */ PLAYER_MWA_MAX
 } PlayerMeleeWeaponAnimation;
 
-// TODO: figure out MAX
 typedef enum PlayerAnimType {
     /* 0 */ PLAYER_ANIMTYPE_0,
     /* 1 */ PLAYER_ANIMTYPE_1,
@@ -204,7 +203,7 @@ typedef enum PlayerAnimType {
     /* 3 */ PLAYER_ANIMTYPE_3,
     /* 4 */ PLAYER_ANIMTYPE_4,
     /* 5 */ PLAYER_ANIMTYPE_5,
-    // /* 6 */ PLAYER_ANIMTYPE_MAX
+    /* 6 */ PLAYER_ANIMTYPE_MAX
 } PlayerAnimType;
 
 typedef enum PlayerModelType {

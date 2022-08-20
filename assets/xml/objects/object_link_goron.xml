@@ -84,9 +84,9 @@
         <DList Name="object_link_goron_DL_017180" Offset="0x17180" />
         <DList Name="object_link_goron_DL_017620" Offset="0x17620" />
 
-        <Limb Name="object_link_goron_Standardlimb_017778" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_01" Offset="0x17778" />
-        <Limb Name="object_link_goron_Standardlimb_017784" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_02" Offset="0x17784" />
-        <Limb Name="object_link_goron_Standardlimb_017790" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_03" Offset="0x17790" />
+        <Limb Name="gLinkGoronShieldingRootLimb" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_01" Offset="0x17778" />
+        <Limb Name="gLinkGoronShieldingBodyLimb" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_02" Offset="0x17784" />
+        <Limb Name="gLinkGoronShieldingHeadLimb" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_03" Offset="0x17790" />
         <Limb Name="object_link_goron_Standardlimb_01779C" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_04" Offset="0x1779C" />
         <Skeleton Name="gLinkGoronShieldingSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_GORON_1_LIMB_NONE" LimbMax="OBJECT_LINK_GORON_1_LIMB_MAX" EnumName="LinkGoronShieldingLimb" Offset="0x177B8" />
 

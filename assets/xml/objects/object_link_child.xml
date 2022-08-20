@@ -45,7 +45,7 @@
         <DList Name="gLinkHumanHeadDL" Offset="0xC3E8" />
         <DList Name="gLinkHumanHatDL" Offset="0xCAA8" />
         <!-- Unused sword in scabbard -->
-        <DList Name="object_link_child_DL_00CBC8" Offset="0xCBC8" />
+        <DList Name="gLinkHumanSwordScabbardDL" Offset="0xCBC8" />
         <DList Name="gLinkHumanRightShoulderDL" Offset="0xCCE0" />
         <DList Name="gLinkHumanRightForearmDL" Offset="0xCF08" />
         <DList Name="gLinkHumanRightHandOpenDL" Offset="0xD058" />
