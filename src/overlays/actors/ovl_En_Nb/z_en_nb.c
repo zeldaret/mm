@@ -158,7 +158,7 @@ Actor* EnNb_FindActor(EnNb* this, PlayState* play, u8 actorCategory, s16 actorId
     return actor;
 }
 
-void func_80BBFE60(EnNb* this) {
+void EnNb_UpdateSkelAnime(EnNb* this) {
     this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
@@ -683,7 +683,7 @@ void EnNb_Update(Actor* thisx, PlayState* play) {
     func_80BC0A18(this, play);
 
     if (this->schResultValue != EN_NB_SCH_NONE) {
-        func_80BBFE60(this);
+        EnNb_UpdateSkelAnime(this);
         func_80BC0800(this);
         if (Actor_IsFacingPlayer(&this->actor, 0x38E0)) {
             func_8013C964(&this->actor, play, this->unk_274, 30.0f, ITEM_OCARINA,

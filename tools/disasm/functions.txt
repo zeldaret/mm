@@ -15452,7 +15452,7 @@
     0x80BBF6BC:("EnSGoro_DrawRolledUp",),
     0x80BBF7BC:("EnSGoro_Draw",),
     0x80BBFDB0:("EnNb_FindActor",),
-    0x80BBFE60:("func_80BBFE60",),
+    0x80BBFE60:("EnNb_UpdateSkelAnime",),
     0x80BBFE8C:("EnNb_ChangeAnim",),
     0x80BBFF24:("func_80BBFF24",),
     0x80BBFF90:("func_80BBFF90",),
