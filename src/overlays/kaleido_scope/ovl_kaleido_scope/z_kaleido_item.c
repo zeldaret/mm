@@ -699,8 +699,8 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
     }
 }
 
-s16 sCButtonPosX[] = { 660, 900, 1140 };
-s16 sCButtonPosY[] = { 1100, 920, 1100 };
+s16 sCButtonItemPosX[] = { 660, 900, 1140 };
+s16 sCButtonItemPosY[] = { 1100, 920, 1100 };
 void KaleidoScope_UpdateItemEquip(PlayState* play) {
     static s16 sEquipMagicArrowBowSlotHoldTimer = 0;
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -740,8 +740,8 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
         offsetX = ABS_ALT(pauseCtx->equipAnimX - bowItemVtx->v.ob[0] * 10) / sEquipAnimTimer;
         offsetY = ABS_ALT(pauseCtx->equipAnimY - bowItemVtx->v.ob[1] * 10) / sEquipAnimTimer;
     } else {
-        offsetX = ABS_ALT(pauseCtx->equipAnimX - sCButtonPosX[pauseCtx->equipTargetCBtn]) / sEquipAnimTimer;
-        offsetY = ABS_ALT(pauseCtx->equipAnimY - sCButtonPosY[pauseCtx->equipTargetCBtn]) / sEquipAnimTimer;
+        offsetX = ABS_ALT(pauseCtx->equipAnimX - sCButtonItemPosX[pauseCtx->equipTargetCBtn]) / sEquipAnimTimer;
+        offsetY = ABS_ALT(pauseCtx->equipAnimY - sCButtonItemPosY[pauseCtx->equipTargetCBtn]) / sEquipAnimTimer;
     }
 
     if ((pauseCtx->equipTargetItem >= 0xB5) && (pauseCtx->equipAnimAlpha < 254)) {
@@ -773,13 +773,13 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
             }
         } else {
             // target is the c button
-            if (pauseCtx->equipAnimX >= sCButtonPosX[pauseCtx->equipTargetCBtn]) {
+            if (pauseCtx->equipAnimX >= sCButtonItemPosX[pauseCtx->equipTargetCBtn]) {
                 pauseCtx->equipAnimX -= offsetX;
             } else {
                 pauseCtx->equipAnimX += offsetX;
             }
 
-            if (pauseCtx->equipAnimY >= sCButtonPosY[pauseCtx->equipTargetCBtn]) {
+            if (pauseCtx->equipAnimY >= sCButtonItemPosY[pauseCtx->equipTargetCBtn]) {
                 pauseCtx->equipAnimY -= offsetY;
             } else {
                 pauseCtx->equipAnimY += offsetY;

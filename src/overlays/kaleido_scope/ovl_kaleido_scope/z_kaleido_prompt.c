@@ -1,7 +1,7 @@
 /*
- * File: z_kaleido_mask.c
+ * File: z_kaleido_prompt.c
  * Overlay: ovl_kaleido_scope
- * Description:
+ * Description: Pause Menu - Prompt
  */
 
 #include "z_kaleido_scope.h"
