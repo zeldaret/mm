@@ -1,7 +1,7 @@
 /*
  * File: z_en_tg.c
  * Overlay: ovl_En_Tg
- * Description: Target Game (Honey & Darling) - End Credits
+ * Description: Target Game (Honey & Darling) - End Credits Scene
  */
 
 #include "z_en_tg.h"
@@ -93,9 +93,9 @@ static DamageTable sDamageTable = {
 
 static AnimationInfoS sAnimations = { &gHoneyAndDarlingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 };
 
-// EnTg_ChangeAnimation - func_8098F800
 /**
  * This function is always called with unusedExtraOffset = 0.
+ * The only animation used is the Idle (stationary) animation.
  */
 void EnTg_ChangeAnimation(SkelAnime* skelAnime, AnimationInfoS* animation, s16 unusedExtraOffset) {
     f32 endFrame;
@@ -119,7 +119,6 @@ void EnTg_UpdateCollider(EnTg* this, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-// EnTg_UpdateSkelAnime - func_8098F928
 void EnTg_UpdateSkelAnime(EnTg* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
@@ -144,14 +143,15 @@ void EnTg_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-// EnTg_Idle - func_8098FA70
+/**
+ * The actor spins, and a heart is spawned above the actor every 12 frames.
+ */
 void EnTg_Idle(EnTg* this, PlayState* play) {
     Vec3f heartStartPos;
 
     this->actor.shape.rot.y += sREG(0) + 0x258;
     this->actor.world.rot = this->actor.shape.rot;
 
-    // A new heart is spawned every 12 frames
     if (DECR(this->spawnHeartTimer) == 0) {
         this->spawnHeartTimer = 12;
         heartStartPos = this->actor.world.pos;
@@ -170,14 +170,12 @@ void EnTg_Update(Actor* thisx, PlayState* play) {
     EnTg_UpdateCollider(this, play);
 }
 
-// EnTg_OverrideLimbDraw - func_8098FBB4
 s32 EnTg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTg* this = THIS;
 
     return 0;
 }
 
-// EnTg_PostLimbDraw - func_8098FBD0
 void EnTg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnTg* this = THIS;
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
@@ -208,7 +206,6 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-// EnTg_SpawnFirstHeart - func_8098FD50
 /**
  * This function is always called with the same heartStartPos and len = 10.
  * Sets all the flags and a path for when the first heart (of two) is spawned.
@@ -232,7 +229,6 @@ void EnTg_SpawnFirstHeart(EnTg* this, EnTgHeartInfo* enTgHeartInfo, Vec3f* heart
     }
 }
 
-// EnTg_UpdateHeartPath - func_8098FEA8
 /**
  * This function is always called with the same len = 10.
  * The heart path is curvy as it floats up because of the use of Math_SinS and Math_CosS.
@@ -264,7 +260,6 @@ void EnTg_UpdateHeartPath(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len
     }
 }
 
-// EnTg_DrawHeart - func_8099000C
 void EnTg_DrawHeart(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len) {
     s32 i;
     s32 flag = false;
