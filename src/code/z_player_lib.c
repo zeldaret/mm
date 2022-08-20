@@ -34,6 +34,8 @@
 #include "objects/object_mask_zora/object_mask_zora.h"
 #include "objects/object_mask_nuts/object_mask_nuts.h"
 
+#include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
+
 void PlayerCall_Init(Actor* thisx, PlayState* play);
 void PlayerCall_Destroy(Actor* thisx, PlayState* play);
 void PlayerCall_Update(Actor* thisx, PlayState* play);
@@ -62,7 +64,7 @@ typedef struct {
 
 struct_801F59D0 D_801F59D0;
 
-Vec3f* D_801F59DC;
+Vec3f* sPlayerCurBodyPartPos;
 
 s32 D_801F59E0;
 
@@ -70,8 +72,8 @@ s32 D_801F59E4;
 
 Vec3f D_801F59E8;
 
-s32 D_801F59F4;
-s32 D_801F59F8;
+PlayerModelType sPlayerLeftHandType;
+PlayerModelType sPlayerRightHandType;
 
 void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2);
 
@@ -1957,28 +1959,22 @@ void func_80125500(PlayState* play, Player* player, s32 limbIndex, Vec3f* pos, V
     }
 }
 
-// Probably EnArrow, waiting for it to be decomped
-typedef struct {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ f32 unk_144;
-} ActorUnknown; // size >= 0x144
-
-// Player_OverrideLimbDrawGameplayCommon
-s32 func_80125580(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                          Actor* thisx) {
     s32 pad;
     Player* player = (Player*)thisx;
-    Vec3f sp54;
-    Actor* sp50;
-    f32 temp_f6;
-    Actor* phi_v0;
-    struct_80124618* phi_a0;
-    struct_80124618* phi_v0_2;
-    struct_80124618* phi_v1_2;
 
     if (limbIndex == PLAYER_LIMB_ROOT) {
-        D_801F59F4 = (s32)player->leftHandType;
-        D_801F59F8 = (s32)player->rightHandType;
-        D_801F59DC = &player->meleeWeaponInfo[2].base;
+        sPlayerLeftHandType = player->leftHandType;
+        sPlayerRightHandType = player->rightHandType;
+
+        // `sPlayerCurBodyPartPos` is incremented before each usage, so it starts at index -1.
+        // What determines if a limb corresponds to a body part is whether or not it has a non-NULL `dList`.
+        // Note: The increment would not be done for the root limb, even if it had a non-NULL `dList`.
+        //       So if the root limb had a non-NULL `dList` (which is not the case in vanilla),
+        //       an out-of-bounds write to `bodyPartsPos` would occur.
+        sPlayerCurBodyPartPos = &player->bodyPartsPos[-1];
+
         if (player->transformation != PLAYER_FORM_FIERCE_DEITY) {
             if (!(player->skelAnime.moveFlags & 4) || (player->skelAnime.moveFlags & 1)) {
                 pos->x *= player->ageProperties->unk_08;
@@ -1991,68 +1987,75 @@ s32 func_80125580(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 
         pos->y -= player->unk_AB8;
         if ((player->transformation == PLAYER_FORM_ZORA) && (player->stateFlags3 & PLAYER_STATE3_8000)) {
-            Matrix_Translate(pos->x, ((Math_CosS(player->unk_AAA) - 1.0f) * 200.0f) + pos->y, pos->z, 1);
-            Matrix_RotateXS(player->unk_AAA, 1);
+            Matrix_Translate(pos->x, ((Math_CosS(player->unk_AAA) - 1.0f) * 200.0f) + pos->y, pos->z, MTXMODE_APPLY);
+            Matrix_RotateXS(player->unk_AAA, MTXMODE_APPLY);
+
             if (player->unk_B62 != 0) {
                 Matrix_Push();
-                Matrix_RotateZS(player->unk_B8E, 1);
-                Matrix_RotateZYX(rot->x, rot->y, rot->z, 1);
-                Matrix_RotateXS(-0x8000, 1);
-                Matrix_Translate(0.0f, 0.0f, -4000.0f, 1);
+                Matrix_RotateZS(player->unk_B8E, MTXMODE_APPLY);
+                Matrix_RotateZYX(rot->x, rot->y, rot->z, MTXMODE_APPLY);
+                Matrix_RotateXS(-0x8000, MTXMODE_APPLY);
+                Matrix_Translate(0.0f, 0.0f, -4000.0f, MTXMODE_APPLY);
                 Player_DrawZoraShield(play, player);
                 Matrix_Pop();
             }
-            Matrix_RotateZS(player->unk_B88, 1);
-            Matrix_RotateZYX(rot->x, rot->y, rot->z, 1);
+
+            Matrix_RotateZS(player->unk_B88, MTXMODE_APPLY);
+            Matrix_RotateZYX(rot->x, rot->y, rot->z, MTXMODE_APPLY);
             func_80125318(pos, rot);
         } else if (player->stateFlags3 & PLAYER_STATE3_2000) {
+            Vec3f sp54;
+
             func_801251C4(player, &sp54);
             sp54.x -= player->actor.world.pos.x;
             sp54.y -= player->actor.world.pos.y;
             sp54.z -= player->actor.world.pos.z;
-            Matrix_Translate(pos->x + sp54.x, pos->y + sp54.y, pos->z + sp54.z, 1);
-            Matrix_RotateXS(player->unk_B94, 1);
-            Matrix_RotateZS(player->unk_B8E, 1);
+            Matrix_Translate(pos->x + sp54.x, pos->y + sp54.y, pos->z + sp54.z, MTXMODE_APPLY);
+            Matrix_RotateXS(player->unk_B94, MTXMODE_APPLY);
+            Matrix_RotateZS(player->unk_B8E, MTXMODE_APPLY);
             player->unk_AB2.x = player->unk_B90 - player->unk_B94;
-            Matrix_RotateZYX(rot->x, rot->y, rot->z, 1);
+            Matrix_RotateZYX(rot->x, rot->y, rot->z, MTXMODE_APPLY);
             func_80125318(pos, rot);
         } else if (player->unk_AAA != 0) {
-            Matrix_Translate(pos->x, ((Math_CosS(player->unk_AAA) - 1.0f) * 200.0f) + pos->y, pos->z, 1);
-            Matrix_RotateXS(player->unk_AAA, 1);
-            Matrix_RotateZYX(rot->x, rot->y, rot->z, 1);
+            Matrix_Translate(pos->x, ((Math_CosS(player->unk_AAA) - 1.0f) * 200.0f) + pos->y, pos->z, MTXMODE_APPLY);
+            Matrix_RotateXS(player->unk_AAA, MTXMODE_APPLY);
+            Matrix_RotateZYX(rot->x, rot->y, rot->z, MTXMODE_APPLY);
             func_80125318(pos, rot);
         }
     } else {
         if (*dList != NULL) {
-            D_801F59DC++;
+            sPlayerCurBodyPartPos++;
         }
 
         if (limbIndex == PLAYER_LIMB_HEAD) {
             rot->x += player->unk_AAC.z;
             rot->y -= player->unk_AAC.y;
             rot->z += player->unk_AAC.x;
+
             if (player->transformation == PLAYER_FORM_DEKU) {
-                sp50 = NULL;
+                EnArrow* bubble = NULL;
 
                 if (((player->skelAnime.animation == &gameplay_keep_Linkanim_00E298)) ||
                     (player->unk_284.animation == &gameplay_keep_Linkanim_00E2F0) ||
-                    ((player->stateFlags3 & PLAYER_STATE3_40) && (sp50 = player->heldActor, (sp50 != NULL)))) {
+                    ((player->stateFlags3 & PLAYER_STATE3_40) && ((bubble = (EnArrow*)player->heldActor) != NULL))) {
                     Matrix_TranslateRotateZYX(pos, rot);
                     func_80125340();
                     func_80125318(pos, rot);
-                    if (sp50 != NULL) {
-                        f32 temp;
 
-                        player->unk_AF0[0].x = 1.0f - (((ActorUnknown*)sp50)->unk_144 * 0.03f);
-                        player->unk_AF0[0].y = 1.0f - (((ActorUnknown*)sp50)->unk_144 * 0.01f);
-                        player->unk_AF0[0].z = 1.0f - (((ActorUnknown*)sp50)->unk_144 * 0.04f);
-                        rot->z = (((ActorUnknown*)sp50)->unk_144 * 320.0f);
+                    if (bubble != NULL) {
+                        s32 requiredScopeTemp[2];
+
+                        player->unk_AF0[0].x = 1.0f - (bubble->bubble.unk_144 * 0.03f);
+                        player->unk_AF0[0].y = 1.0f - (bubble->bubble.unk_144 * 0.01f);
+                        player->unk_AF0[0].z = 1.0f - (bubble->bubble.unk_144 * 0.04f);
+                        rot->z = bubble->bubble.unk_144 * 320.0f;
                     } else if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E298) {
                         func_80124618(D_801C03E0, player->skelAnime.curFrame, player->unk_AF0);
                     } else {
                         func_80124618(D_801C03C0, player->unk_284.curFrame, player->unk_AF0);
                     }
-                    Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, 1);
+
+                    Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, MTXMODE_APPLY);
                 }
             }
         } else if (limbIndex == PLAYER_LIMB_TORSO) {
@@ -2064,65 +2067,60 @@ s32 func_80125580(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                 if (player->transformation == PLAYER_FORM_GORON) {
                     func_80125340();
                 }
+
                 func_80125318(pos, rot);
                 if ((player->transformation != PLAYER_FORM_ZORA) ||
                     (player->skelAnime.animation == &gameplay_keep_Linkanim_00E410)) {
-                    if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E410) {
-                        phi_a0 = D_801C0608;
-                    } else {
-                        if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E260) {
-                            phi_v0_2 = D_801C0628;
-                        } else {
-                            if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E248) {
-                                phi_v1_2 = D_801C07C0;
-                            } else {
-                                phi_v1_2 = D_801C0460;
-                            }
-                            phi_v0_2 = phi_v1_2;
-                        }
-                        phi_a0 = phi_v0_2;
-                    }
+                    struct_80124618* phi_a0 =
+                        (player->skelAnime.animation == &gameplay_keep_Linkanim_00E410)
+                            ? D_801C0608
+                            : ((player->skelAnime.animation == &gameplay_keep_Linkanim_00E260)
+                                   ? D_801C0628
+                                   : ((player->skelAnime.animation == &gameplay_keep_Linkanim_00E248) ? D_801C07C0
+                                                                                                      : D_801C0460));
+
                     func_80124618(phi_a0, player->skelAnime.curFrame, player->unk_AF0);
                 } else {
                     player->unk_AF0[0].y = 1.0f;
                 }
+
                 if (player->transformation == PLAYER_FORM_ZORA) {
                     player->unk_AF0[0].y *= 1.0f + (0.29999995f * player->unk_B08[2]);
                     player->unk_AF0[0].x = 1.0f;
                     player->unk_AF0[0].z = 1.0f;
                 }
-                Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, 1);
+                Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, MTXMODE_APPLY);
             }
         } else if (limbIndex == PLAYER_LIMB_UPPER_ROOT) {
-            s16 phi_a0_2;
-            s16 rot_temp = 0x44C;
+            s16 xRot;
+            s16 zRot = 0x44C;
 
             if (player->unk_AA8 != 0) {
-                Matrix_RotateZS(rot_temp, 1);
-                Matrix_RotateYS(player->unk_AA8, 1);
+                Matrix_RotateZS(zRot, MTXMODE_APPLY);
+                Matrix_RotateYS(player->unk_AA8, MTXMODE_APPLY);
             }
 
             if (player->unk_AB2.y != 0) {
-                Matrix_RotateYS(player->unk_AB2.y, 1);
+                Matrix_RotateYS(player->unk_AB2.y, MTXMODE_APPLY);
             }
 
-            phi_a0_2 = player->unk_AB2.x;
+            xRot = player->unk_AB2.x;
             if ((player->transformation == PLAYER_FORM_DEKU) && (player->stateFlags3 & PLAYER_STATE3_40)) {
                 if (player->heldActor != NULL) {
-                    phi_a0_2 += (s16)(((ActorUnknown*)player->heldActor)->unk_144 * -470.0f);
+                    xRot += (s16)(((EnArrow*)(player->heldActor))->bubble.unk_144 * -470.0f);
                 }
             }
 
-            Matrix_RotateXS(phi_a0_2, 1);
+            Matrix_RotateXS(xRot, MTXMODE_APPLY);
             if (player->unk_AB2.z != 0) {
-                Matrix_RotateZS(player->unk_AB2.z, 1);
+                Matrix_RotateZS(player->unk_AB2.z, MTXMODE_APPLY);
             }
         } else {
             func_80125500(play, player, limbIndex, pos, rot);
         }
     }
 
-    return 0;
+    return false;
 }
 
 void func_80125CE0(Player* player, struct_80124618* arg1, Vec3f* pos, Vec3s* rot) {
@@ -2145,18 +2143,18 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     Gfx** phi_v1_2;
     s32 phi_v0;
 
-    if (!func_80125580(play, limbIndex, dList, pos, rot, player)) {
+    if (!Player_OverrideLimbDrawGameplayCommon(play, limbIndex, dList, pos, rot, player)) {
         if (limbIndex == PLAYER_LIMB_L_HAND) {
             phi_a0 = player->leftHandDLists;
             if (player->stateFlags3 & PLAYER_STATE3_2000) {
                 rot->z -= player->unk_B8C;
-            } else if ((D_801F59F4 == 4) && (player->stateFlags1 & PLAYER_STATE1_2000000)) {
+            } else if ((sPlayerLeftHandType == 4) && (player->stateFlags1 & PLAYER_STATE1_2000000)) {
                 phi_a0 = &gPlayerLeftHandOpenDLs[D_801F59E0];
-                D_801F59F4 = 0;
+                sPlayerLeftHandType = 0;
             } else if ((player->leftHandType == 0) && (player->actor.speedXZ > 2.0f) &&
                        !(player->stateFlags1 & PLAYER_STATE1_8000000)) {
                 phi_a0 = &gPlayerLeftHandClosedDLs[D_801F59E0];
-                D_801F59F4 = 1;
+                sPlayerLeftHandType = 1;
             } else {
                 if ((player->leftHandType == 2) && (player->transformation == PLAYER_FORM_HUMAN) &&
                     ((phi_v0 = CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD), phi_v0 != 0))) {
@@ -2205,7 +2203,7 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                 if (player->stateFlags3 & PLAYER_STATE3_2000) {
                     rot->z -= player->unk_B8C;
                 }
-                if (D_801F59F8 == 8) {
+                if (sPlayerRightHandType == 8) {
                     if (player->transformation == PLAYER_FORM_HUMAN) {
                         if (player->currentShield != 0) {
                             phi_v1 = &gPlayerHandHoldingShields[player->currentShield - 1];
@@ -2214,7 +2212,7 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                 } else if ((player->rightHandType == 6) && (player->actor.speedXZ > 2.0f) &&
                            (!(player->stateFlags1 & PLAYER_STATE1_8000000))) {
                     phi_v1 = &gPlayerRightHandClosedDLs[D_801F59E0];
-                    D_801F59F8 = 7;
+                    sPlayerRightHandType = 7;
                 } else {
                     // temp_v0_9 = player->skelAnime.jointTable->unk_84 & 0xF00;
                     temp_v0_9 = player->skelAnime.jointTable[0x16].x & 0xF00;
@@ -2266,7 +2264,7 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 s32 func_801262C8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
     Player* player = (Player*)actor;
 
-    if (func_80125580(play, limbIndex, dList, pos, rot, actor) == 0) {
+    if (!Player_OverrideLimbDrawGameplayCommon(play, limbIndex, dList, pos, rot, actor)) {
         if (player->unk_AA5 != 3) {
             *dList = NULL;
         } else if (limbIndex == PLAYER_LIMB_L_FOREARM) {
@@ -2293,7 +2291,7 @@ s32 func_801262C8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 s32 func_801263FC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     Player* player = (Player*)thisx;
 
-    if (!func_80125580(play, limbIndex, dList, pos, rot, thisx)) {
+    if (!Player_OverrideLimbDrawGameplayCommon(play, limbIndex, dList, pos, rot, thisx)) {
         *dList = NULL;
     }
 
@@ -2327,7 +2325,7 @@ s32 func_80126440(PlayState* play, ColliderQuad* collider, WeaponInfo* weaponInf
     }
     Math_Vec3f_Copy(&weaponInfo->base, arg4);
     Math_Vec3f_Copy(&weaponInfo->tip, arg3);
-    weaponInfo->active = 1;
+    weaponInfo->active = true;
 
     return true;
 }
@@ -3369,11 +3367,11 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
     Vec2f* temp_s0_6;
 
     if (*dList2 != NULL) {
-        Matrix_MultZero(D_801F59DC);
+        Matrix_MultZero(sPlayerCurBodyPartPos);
     }
 
     if (limbIndex == PLAYER_LIMB_L_HAND) {
-        Math_Vec3f_Copy(&player->leftHandWorld.pos, D_801F59DC);
+        Math_Vec3f_Copy(&player->leftHandWorld.pos, sPlayerCurBodyPartPos);
         if ((*dList1 != 0) && !func_801271B0(play, player, 0) && !func_80128640(play, player, *dList1) &&
             (&gameplay_keep_Linkanim_00E218 == player->skelAnime.animation)) {
             func_80127488(play, player, D_801C0778[(s32)player->skelAnime.curFrame]);
@@ -3428,7 +3426,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
                 Matrix_Translate(D_801C0D9C, D_801C0D9C, D_801C0DA0, MTXMODE_APPLY);
                 if ((player->stateFlags3 & PLAYER_STATE3_40) && (player->unk_B28 >= 0) && (player->unk_ACC < 0xB)) {
                     Matrix_MultZero(&sp20C);
-                    temp_f0 = Math_Vec3f_DistXYZ(D_801F59DC, &sp20C);
+                    temp_f0 = Math_Vec3f_DistXYZ(sPlayerCurBodyPartPos, &sp20C);
                     player->unk_B08[0] = temp_f0 - 3.0f;
                     if (temp_f0 < 3.0f) {
                         player->unk_B08[0] = 0.0f;
@@ -3695,7 +3693,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
                 Matrix_MultVec3f(&D_801C0E7C, &player->actor.focus.pos);
             } else {
                 Matrix_MultVec3f(&D_801C0E7C, &player->actor.focus.pos);
-                Matrix_MultVec3f(&D_801C0E94, D_801F59DC);
+                Matrix_MultVec3f(&D_801C0E94, sPlayerCurBodyPartPos);
                 if (((&gameplay_keep_Linkanim_00E298 == player->skelAnime.animation) ||
                      (&gameplay_keep_Linkanim_00E2F0 == player->unk_284.animation) ||
                      (((player->stateFlags3 & PLAYER_STATE3_40) != 0) && ((player->heldActor != 0)))) &&
