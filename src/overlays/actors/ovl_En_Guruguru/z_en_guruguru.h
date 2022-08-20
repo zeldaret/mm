@@ -15,10 +15,10 @@ typedef struct EnGuruguru {
     /* 0x248 */ EnGuruguruActionFunc actionFunc;
     /* 0x24C */ s16 headZRot;
     /* 0x24E */ s16 headXRot;
-    /* 0x250 */ char unk250[0x2];
+    /* 0x250 */ UNK_TYPE1 unk250[0x2];
     /* 0x252 */ s16 headZRotTarget;
     /* 0x254 */ s16 headXRotTarget;
-    /* 0x256 */ char unk256[0xE];
+    /* 0x256 */ UNK_TYPE1 unk256[0xE];
     /* 0x264 */ s16 unusedTimer; // set to 6 and decremented, but never has any effect
     /* 0x266 */ s16 unk266;
     /* 0x268 */ s16 unk268;

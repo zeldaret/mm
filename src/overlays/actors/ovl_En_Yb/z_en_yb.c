@@ -29,7 +29,7 @@ void EnYb_TeachingDance(EnYb* this, PlayState* play);
 void EnYb_WaitForMidnight(EnYb* this, PlayState* play);
 
 void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play);
-void EnYb_SetAnimation(PlayState*, EnYb*, s16, u8, f32);
+void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 morphFrames);
 s32 EnYb_CanTalk(EnYb* this, PlayState* play);
 
 const ActorInit En_Yb_InitVars = {
@@ -93,11 +93,11 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actionFunc = EnYb_Idle;
-    this->currentAnimIndex = 3; // gets overwritten to 2 in EnYb_SetAnimation later
+    this->animIndex = 3; // gets overwritten to 2 in EnYb_ChangeAnim later
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
-    EnYb_SetAnimation(play, this, 2, ANIMMODE_LOOP, 0.0f);
+    EnYb_ChangeAnim(play, this, 2, ANIMMODE_LOOP, 0.0f);
 
     tempCutscene = this->actor.cutscene;
     for (i = 0; i < ARRAY_COUNT(this->cutscenes); i++) {
@@ -147,7 +147,7 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
     EnYb* this = THIS;
 
     if (this->alpha > 0) {
-        if (this->currentAnimIndex == 2) {
+        if (this->animIndex == 2) {
             f32 tempScale = (((27.0f - this->shadowPos.y) + this->actor.world.pos.y) * ((1 / 2.25f) * 0.001f)) + 0.01f;
             this->actor.scale.x = tempScale;
         }
@@ -167,19 +167,19 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
     }
 }
 
-void EnYb_SetAnimation(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 transitionRate) {
+void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 morphFrames) {
     if (animIndex >= 0 && animIndex < 3) {
-        if (animIndex != this->currentAnimIndex || animMode != ANIMMODE_LOOP) {
+        if (animIndex != this->animIndex || animMode != ANIMMODE_LOOP) {
             if (animIndex > 0) {
                 if (animMode == ANIMMODE_LOOP) {
                     LinkAnimation_Change(play, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
                                          Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), ANIMMODE_LOOP,
-                                         transitionRate);
+                                         morphFrames);
                 } else {
                     // unused case, (only called once with animMode = ANIMMODE_LOOP)
                     LinkAnimation_Change(play, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
                                          Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), ANIMMODE_LOOP,
-                                         transitionRate);
+                                         morphFrames);
                 }
             } else {
                 // unused case, (only called once with animIndex = 2)
@@ -188,9 +188,9 @@ void EnYb_SetAnimation(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, 
                 if (1) {}
 
                 Animation_Change(&this->skelAnime, gYbUnusedAnimations[animIndex], 1.0f, 0.0f,
-                                 Animation_GetLastFrame(animationPtr), animMode, transitionRate);
+                                 Animation_GetLastFrame(animationPtr), animMode, morphFrames);
             }
-            this->currentAnimIndex = animIndex;
+            this->animIndex = animIndex;
         }
     }
 }
@@ -205,7 +205,7 @@ s32 EnYb_CanTalk(EnYb* this, PlayState* play) {
 }
 
 void EnYb_UpdateAnimation(EnYb* this, PlayState* play) {
-    if (this->currentAnimIndex <= 0) {
+    if (this->animIndex <= 0) {
         SkelAnime_Update(&this->skelAnime);
     } else {
         LinkAnimation_Update(play, &this->skelAnime);
@@ -263,7 +263,7 @@ void EnYb_SetupLeaving(EnYb* this, PlayState* play) {
         Message_StartTextbox(play, 0x147D, &this->actor);
         func_80BFA2FC(play);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     }
     EnYb_EnableProximityMusic(this);
 }
@@ -275,7 +275,7 @@ void EnYb_ReceiveMask(EnYb* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = EnYb_SetupLeaving;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     } else {
         Actor_PickUp(&this->actor, play, GI_MASK_KAMARO, 10000.0f, 100.0f);
     }
@@ -326,7 +326,7 @@ void EnYb_TeachingDanceFinish(EnYb* this, PlayState* play) {
         Message_StartTextbox(play, 0x147C, &this->actor);
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     }
     EnYb_EnableProximityMusic(this);
 }
@@ -341,7 +341,7 @@ void EnYb_TeachingDance(EnYb* this, PlayState* play) {
         EnYb_FinishTeachingCutscene(this);
         this->actionFunc = EnYb_TeachingDanceFinish;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     }
     EnYb_EnableProximityMusic(this);
 }

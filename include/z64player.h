@@ -70,10 +70,11 @@ typedef enum {
     /* 0x19 */ PLAYER_MASK_MAX
 } PlayerMask;
 
-typedef enum {
+typedef enum PlayerActionParam {
+    /*   -1 */ PLAYER_AP_MINUS1 = -1,
     /* 0x00 */ PLAYER_AP_NONE,
     /* 0x01 */ PLAYER_AP_LAST_USED,
-    /* 0x02 */ PLAYER_AP_FISHING_POLE,
+    /* 0x02 */ PLAYER_AP_FISHING_ROD,
     /* 0x03 */ PLAYER_AP_SWORD_KOKIRI,
     /* 0x04 */ PLAYER_AP_SWORD_RAZOR,
     /* 0x05 */ PLAYER_AP_SWORD_GILDED,

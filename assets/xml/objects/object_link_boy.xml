@@ -81,6 +81,6 @@
         <Limb Name="gLinkFierceDeityRightHandLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_R_HAND" Offset="0xD7F4" />
         <Limb Name="gLinkFierceDeitySheathLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_SHEATH" Offset="0xD804" />
         <Limb Name="gLinkFierceDeityTorsoLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_TORSO" Offset="0xD814" />
-        <Skeleton Name="gLinkFierceDeitySkel" Type="Flex" LimbType="LOD" LimbNone="LINK_FIERCE_DEITY_LIMB_NONE" LimbMax="LINK_FIERCE_DEITY_LIMB_MAX" EnumName="LinkFierceDeityLimbs" Offset="0xD878" />
+        <Skeleton Name="gLinkFierceDeitySkel" Type="Flex" LimbType="LOD" LimbNone="LINK_FIERCE_DEITY_LIMB_NONE" LimbMax="LINK_FIERCE_DEITY_LIMB_MAX" EnumName="LinkFierceDeityLimb" Offset="0xD878" />
     </File>
 </Root>

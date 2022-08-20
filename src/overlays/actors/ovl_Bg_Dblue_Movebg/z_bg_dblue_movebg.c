@@ -289,7 +289,7 @@ void BgDblueMovebg_Destroy(Actor* thisx, PlayState* play) {
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     if ((this->unk_160 == 9) || (this->unk_160 == 8)) {
-        Audio_StopSfxByPos(&this->unk_1A8);
+        AudioSfx_StopByPos(&this->unk_1A8);
     }
 }
 

@@ -113,6 +113,6 @@
         <Limb Name="gLinkGoronRightHandLimb" Type="LOD" EnumName="LINK_GORON_LIMB_R_HAND" Offset="0x17A00" />
         <Limb Name="gLinkGoronSheathLimb" Type="LOD" EnumName="LINK_GORON_LIMB_SHEATH" Offset="0x17A10" />
         <Limb Name="gLinkGoronTorsoLimb" Type="LOD" EnumName="LINK_GORON_LIMB_TORSO" Offset="0x17A20" />
-        <Skeleton Name="gLinkGoronSkel" Type="Flex" LimbType="Standard" LimbNone="LINK_GORON_LIMB_NONE" LimbMax="LINK_GORON_LIMB_MAX" EnumName="LinkGoronLimbs" Offset="0x17A84" />
+        <Skeleton Name="gLinkGoronSkel" Type="Flex" LimbType="Standard" LimbNone="LINK_GORON_LIMB_NONE" LimbMax="LINK_GORON_LIMB_MAX" EnumName="LinkGoronLimb" Offset="0x17A84" />
     </File>
 </Root>

@@ -89,6 +89,6 @@
         <Limb Name="object_trt_Standardlimb_00FE64" Type="Standard" EnumName="OBJECT_TRT_LIMB_18" Offset="0xFE64" />
         <Limb Name="object_trt_Standardlimb_00FE70" Type="Standard" EnumName="OBJECT_TRT_LIMB_19" Offset="0xFE70" />
         <Limb Name="object_trt_Standardlimb_00FE7C" Type="Standard" EnumName="OBJECT_TRT_LIMB_1A" Offset="0xFE7C" />
-        <Skeleton Name="object_trt_Skel_00FEF0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TRT_LIMB_NONE" LimbMax="OBJECT_TRT_LIMB_MAX" EnumName="object_trt_Limbs" Offset="0xFEF0" />
+        <Skeleton Name="object_trt_Skel_00FEF0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TRT_LIMB_NONE" LimbMax="OBJECT_TRT_LIMB_MAX" EnumName="ObjectTrtLimb" Offset="0xFEF0" />
     </File>
 </Root>

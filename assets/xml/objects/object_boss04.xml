@@ -41,6 +41,6 @@
         <Limb Name="gWartBottomEyelidLimb" Type="Standard" EnumName="WART_LIMB_BOTTOM_EYELID" Offset="0x45BC" />
 
         <!-- Wart Skeleton -->
-        <Skeleton Name="gWartSkel" Type="Flex" LimbType="Standard" LimbNone="WART_LIMB_NONE" LimbMax="WART_LIMB_MAX" EnumName="WartLimbs" Offset="0x45E8" />
+        <Skeleton Name="gWartSkel" Type="Flex" LimbType="Standard" LimbNone="WART_LIMB_NONE" LimbMax="WART_LIMB_MAX" EnumName="WartLimb" Offset="0x45E8" />
     </File>
 </Root>

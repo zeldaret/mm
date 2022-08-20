@@ -526,7 +526,7 @@ static ColliderSphereInit sSphereInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_mm_Anim_002238, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_mm_Anim_002238, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_mm_Anim_00A4E0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -718,7 +718,7 @@ s32 func_80AF7E98(EnPm* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_384 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
         this->unk_35C = this->skelAnime.playSpeed;
     }
 
@@ -1380,7 +1380,7 @@ s32 func_80AF94AC(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         if (scheduleOutput->result == 24) {
             Flags_UnsetSwitch(play, 0);
             Flags_UnsetSwitch(play, 1);
-            this->unk_394 = EXCH_ITEM_NONE;
+            this->unk_394 = PLAYER_AP_NONE;
             this->unk_368 = 60.0f;
             func_80AF7E98(this, 9);
         }
@@ -1568,7 +1568,7 @@ s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     this->actor.flags |= ACTOR_FLAG_1;
     this->actor.targetMode = 0;
-    this->unk_394 = EXCH_ITEM_NONE;
+    this->unk_394 = PLAYER_AP_NONE;
     this->unk_356 = 0;
     this->unk_368 = 40.0f;
 

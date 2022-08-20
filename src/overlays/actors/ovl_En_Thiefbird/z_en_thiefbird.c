@@ -5,7 +5,6 @@
  */
 
 #include "z_en_thiefbird.h"
-#include "objects/object_thiefbird/object_thiefbird.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200 | ACTOR_FLAG_1000 | ACTOR_FLAG_80000000)
 
@@ -150,8 +149,8 @@ void EnThiefbird_Init(Actor* thisx, PlayState* play) {
     ColliderJntSphElementDim* dim;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_thiefbird_Skel_0061A0, &object_thiefbird_Anim_000604,
-                       this->jointTable, this->morphTable, 17);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gTakkuriSkel, &gTakkuriFlyAnim, this->jointTable, this->morphTable,
+                       TAKKURI_LIMB_MAX);
     Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
 
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
@@ -206,7 +205,7 @@ void func_80C10984(EnThiefbird* this, s32 arg1) {
 }
 
 s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
-    static Gfx* D_80C13680[] = { object_thiefbird_DL_004348, object_thiefbird_DL_004B88, object_thiefbird_DL_0055E0 };
+    static Gfx* D_80C13680[] = { gTakkuriStolenKokiriSwordDL, gTakkuriStolenRazorSwordDL, gTakkuriStolenGildedSwordDL };
     s32 isItemFound = false;
     s32 phi_a3 = 0;
     s32 slotId = SLOT_BOTTLE_1;
@@ -239,7 +238,7 @@ s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
 
     if (isItemFound) {
         Inventory_DeleteItem(itemId2, slotId);
-        this->unk_3E8 = object_thiefbird_DL_0033B0;
+        this->unk_3E8 = gTakkuriStolenBottleDL;
         if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
             Message_StartTextbox(play, 0xF4, NULL);
         }
@@ -256,7 +255,7 @@ s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
         itemId1 = phi_a3 + (ITEM_SWORD_KOKIRI - 1);
         if (phi_a3 == 4) {
             Inventory_DeleteItem(ITEM_SWORD_GREAT_FAIRY, SLOT_SWORD_GREAT_FAIRY);
-            this->unk_3E8 = object_thiefbird_DL_003D58;
+            this->unk_3E8 = gTakkuriStolenGreatFairySwordDL;
             itemId1 = ITEM_SWORD_GREAT_FAIRY;
         } else {
             CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
@@ -461,7 +460,7 @@ void func_80C114C0(EnThiefbird* this, PlayState* play) {
 }
 
 void func_80C11538(EnThiefbird* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_thiefbird_Anim_000604, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gTakkuriFlyAnim, -4.0f);
     this->unk_18E = 60;
     this->collider.base.acFlags |= AC_ON;
     this->actionFunc = func_80C11590;
@@ -526,7 +525,7 @@ void func_80C11590(EnThiefbird* this, PlayState* play) {
 }
 
 void func_80C118E4(EnThiefbird* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_thiefbird_Anim_0063C4, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gTakkuriAttackAnim, -10.0f);
     this->unk_18E = 300;
     this->actionFunc = func_80C1193C;
     this->actor.speedXZ = 5.0f;
@@ -592,7 +591,7 @@ void func_80C1193C(EnThiefbird* this, PlayState* play) {
 void func_80C11C60(EnThiefbird* this) {
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
-    Animation_PlayOnce(&this->skelAnime, &object_thiefbird_Anim_000088);
+    Animation_PlayOnce(&this->skelAnime, &gTakkuriDeathAnim);
     this->actor.bgCheckFlags &= ~1;
     this->actor.shape.rot.x = 0;
     this->unk_18E = 40;
@@ -664,7 +663,7 @@ void func_80C11DF0(EnThiefbird* this, PlayState* play) {
 }
 
 void func_80C11F6C(EnThiefbird* this, PlayState* play) {
-    Animation_MorphToLoop(&this->skelAnime, &object_thiefbird_Anim_000278, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gTakkuriFlyWithItemAnim, -4.0f);
     func_80C10984(this, 15);
     if (this->actor.colChkInfo.damageEffect != 3) {
         this->actor.speedXZ = 4.0f;
@@ -748,7 +747,7 @@ void func_80C1215C(EnThiefbird* this, PlayState* play) {
 }
 
 void func_80C12308(EnThiefbird* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_thiefbird_Anim_000278, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gTakkuriFlyWithItemAnim, -4.0f);
     func_80C10984(this, 15);
     this->unk_190 = -0x1000;
     this->unk_192 = BINANG_ROT180(this->actor.yawTowardsPlayer);
@@ -777,7 +776,7 @@ void func_80C12378(EnThiefbird* this, PlayState* play) {
 }
 
 void func_80C1242C(EnThiefbird* this) {
-    Animation_Change(&this->skelAnime, &object_thiefbird_Anim_000278, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f);
+    Animation_Change(&this->skelAnime, &gTakkuriFlyWithItemAnim, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f);
     this->actor.flags |= ACTOR_FLAG_10;
     this->collider.base.acFlags |= AC_ON;
     this->actionFunc = func_80C124B0;
@@ -837,8 +836,8 @@ void func_80C126D8(EnThiefbird* this, PlayState* play) {
 }
 
 void func_80C12744(EnThiefbird* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_thiefbird_Anim_000604, -4.0f);
-    Animation_Change(&this->skelAnime, &object_thiefbird_Anim_000604, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gTakkuriFlyAnim, -4.0f);
+    Animation_Change(&this->skelAnime, &gTakkuriFlyAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -4.0f);
     this->unk_190 = 0;
     this->collider.base.acFlags |= AC_ON;
     this->actor.flags |= ACTOR_FLAG_10;
@@ -1031,8 +1030,8 @@ void EnThiefbird_Update(Actor* thisx, PlayState* play2) {
     }
 
     func_80C12D00(this);
-    if (((this->skelAnime.animation == &object_thiefbird_Anim_000604) && Animation_OnFrame(&this->skelAnime, 13.0f)) ||
-        ((this->skelAnime.animation == &object_thiefbird_Anim_000278) && Animation_OnFrame(&this->skelAnime, 1.0f))) {
+    if (((this->skelAnime.animation == &gTakkuriFlyAnim) && Animation_OnFrame(&this->skelAnime, 13.0f)) ||
+        ((this->skelAnime.animation == &gTakkuriFlyWithItemAnim) && Animation_OnFrame(&this->skelAnime, 1.0f))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
     }
 }
@@ -1040,12 +1039,12 @@ void EnThiefbird_Update(Actor* thisx, PlayState* play2) {
 s32 EnThiefbird_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnThiefbird* this = THIS;
 
-    if ((limbIndex == 10) || (limbIndex == 11)) {
+    if ((limbIndex == TAKKURI_LIMB_RIGHT_EAR) || (limbIndex == TAKKURI_LIMB_LEFT_EAR)) {
         this->unk_3E4 = *dList;
         *dList = NULL;
-    } else if (limbIndex == 16) {
+    } else if (limbIndex == TAKKURI_LIMB_STOLEN_ITEM) {
         *dList = NULL;
-    } else if (limbIndex == 8) {
+    } else if (limbIndex == TAKKURI_LIMB_NECK) {
         rot->z += this->unk_194;
     }
 
@@ -1062,7 +1061,7 @@ void EnThiefbird_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
     s8 idx;
 
     Collider_UpdateSpheres(limbIndex, &this->collider);
-    if ((limbIndex == 10) || (limbIndex == 11)) {
+    if ((limbIndex == TAKKURI_LIMB_RIGHT_EAR) || (limbIndex == TAKKURI_LIMB_LEFT_EAR)) {
         OPEN_DISPS(play->state.gfxCtx);
 
         gfx = POLY_OPA_DISP;
@@ -1072,11 +1071,11 @@ void EnThiefbird_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
         POLY_OPA_DISP = &gfx[2];
 
         CLOSE_DISPS(play->state.gfxCtx);
-    } else if (limbIndex == 16) {
+    } else if (limbIndex == TAKKURI_LIMB_STOLEN_ITEM) {
         if (this->unk_3E8 != NULL) {
             OPEN_DISPS(play->state.gfxCtx);
 
-            if (this->unk_3E8 == object_thiefbird_DL_0033B0) {
+            if (this->unk_3E8 == gTakkuriStolenBottleDL) {
                 gfx = POLY_XLU_DISP;
             } else {
                 gfx = POLY_OPA_DISP;
@@ -1085,7 +1084,7 @@ void EnThiefbird_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
             gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(&gfx[1], this->unk_3E8);
 
-            if (this->unk_3E8 == object_thiefbird_DL_0033B0) {
+            if (this->unk_3E8 == gTakkuriStolenBottleDL) {
                 POLY_XLU_DISP = &gfx[2];
             } else {
                 POLY_OPA_DISP = &gfx[2];
@@ -1118,7 +1117,7 @@ void func_80C13354(EnThiefbird* this, PlayState* play2) {
 
     gfx = POLY_OPA_DISP;
     gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
-    gSPDisplayList(&gfx[1], object_thiefbird_DL_003060);
+    gSPDisplayList(&gfx[1], gTakkuriFeatherMaterialDL);
     gfx = &gfx[2];
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3F0); i++, ptr++) {
@@ -1131,7 +1130,7 @@ void func_80C13354(EnThiefbird* this, PlayState* play2) {
             Matrix_Scale(ptr->unk_18, ptr->unk_18, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(&gfx[1], object_thiefbird_DL_0030D8);
+            gSPDisplayList(&gfx[1], gTakkuriFeatherModelDL);
             gfx = &gfx[2];
         }
     }
