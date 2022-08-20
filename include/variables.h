@@ -3196,7 +3196,7 @@ extern Input D_801F6C18;
 // extern UNK_TYPE1 D_801F6D0C;
 extern UNK_TYPE4 gTrnsnUnkState;
 // extern UNK_TYPE1 D_801F6D18;
-extern Color_RGBA8 D_801F6D30;
+extern Color_RGBA8 gVisMonoColor;
 // extern UNK_TYPE1 D_801F6D38;
 // extern UNK_TYPE4 D_801F6D4C;
 // extern UNK_TYPE1 D_801F6D50;

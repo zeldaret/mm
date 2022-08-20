@@ -15,7 +15,7 @@ extern FbDemoStruct sTrnsnUnk;
 extern u16* D_801F6D0C;
 extern s32 gTrnsnUnkState;
 extern VisMono D_801F6D18;
-extern Color_RGBA8 D_801F6D30;
+extern Color_RGBA8 gVisMonoColor;
 extern Struct_80140E80 D_801F6D38;
 extern Struct_80140E80* D_801F6D4C;
 extern HiresoStruct D_801F6D50;
@@ -993,7 +993,7 @@ void Play_Update(PlayState* this) {
                     CollisionCheck_OC(this, &this->colChkCtx);
                     CollisionCheck_Damage(this, &this->colChkCtx);
                     CollisionCheck_ClearContext(this, &this->colChkCtx);
-                    if (this->unk_18845 == 0) {
+                    if (!this->haltAllActors) {
                         Actor_UpdateAll(this, &this->actorCtx);
                     }
                     Cutscene_Update1(this, &this->csCtx);
@@ -1008,7 +1008,7 @@ void Play_Update(PlayState* this) {
 
             Room_nop8012D510(this, &this->roomCtx.currRoom, &pad58[1], 0);
             Room_nop8012D510(this, &this->roomCtx.prevRoom, &pad58[1], 1);
-            SkyboxDraw_Noop(&this->skyboxCtx);
+            SkyboxDraw_Update(&this->skyboxCtx);
 
             if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
                 KaleidoScopeCall_Update(this);
@@ -1972,7 +1972,7 @@ void Play_Init(GameState* thisx) {
     this->transitionTrigger = TRANS_TRIGGER_END;
     this->unk_18876 = 0;
     this->bgCoverAlpha = 0;
-    this->unk_18845 = 0;
+    this->haltAllActors = false;
     this->unk_18844 = 0;
 
     if (gSaveContext.gameMode != 1) {
@@ -1993,7 +1993,7 @@ void Play_Init(GameState* thisx) {
     TransitionFade_Start(&this->unk_18E48);
     VisMono_Init(&D_801F6D18);
 
-    D_801F6D30.a = 0;
+    gVisMonoColor.a = 0;
     D_801F6D4C = &D_801F6D38;
     func_80140E80(D_801F6D4C);
     D_801F6D4C->lodProportion = 0.0f;

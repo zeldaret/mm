@@ -273,7 +273,7 @@ void func_80A70F2C(BgCraceMovebg* this, PlayState* play) {
     func_80A70C04(this, play);
     if (Math_StepToF(&this->unk160, 0.0f, 1.0f)) {
         if (!(this->unk170 & 2) && !Flags_GetSwitch(play, BGCRACEMOVEBG_GET_7F0(&this->dyna.actor) + 1)) {
-            play->unk_18845 = 1;
+            play->haltAllActors = true;
             func_80169FDC(&play->state);
             play_sound(NA_SE_OC_ABYSS);
         }
