@@ -916,7 +916,135 @@ void Play_UpdateTransition(PlayState* this) {
     }
 }
 
+#ifdef NON_MATCHING
+void TransitionFade_Update(TransitionFade*, s32);
+void Rumble_SetUpdateEnabled(s32);
+void func_800F8CD4(PlayState *, EnvironmentContext *, LightContext *, PauseContext *, MessageContext *, GameOverContext *, GraphicsContext *);
+void func_801210E0(PlayState *);
+s32 func_801642D8(FbDemoStruct *, s32, s32);
+void func_801647AC(FbDemoStruct *);
+
+void Play_Update(PlayState *play2) {
+    PlayState* play = play2;
+    u8 pad60;
+    s32 sp5C = 0;
+    Input* pad58 = play->state.input;
+
+    gSegments[4] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[play->objectCtx.mainKeepIndex].segment);
+    gSegments[5] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
+    gSegments[2] = VIRTUAL_TO_PHYSICAL(play->sceneSegment);
+
+    if (gGameInfo->data[0xB9] == 2) {
+        gGameInfo->data[0xB9] = 3;
+        MsgEvent_SendNullTask();
+        func_80165E1C(&play->pauseBgPreRender);
+        gGameInfo->data[0xB9] = 0;
+    }
+    Actor_SetMovementScale(play->state.framerateDivisor);
+
+    if (FrameAdvance_Update(&play->frameAdvCtx, &pad58[1]) != 0) {
+        if ((play->transitionMode == 0) && (play->transitionTrigger != 0)) {
+            play->transitionMode = 1;
+        }
+        switch (D_801F6D10) { 
+            case 0:
+                break;
+            case 2:
+                if (func_801642D8(&D_801F6C30, 0xA, 7) == 0) {
+                    D_801F6D10 = 0;
+                } else {
+                    D_801F6D0C = gZBufferPtr;
+                    D_801F6D10 = 3;
+                    Game_SetFramerateDivisor(&play->state, 1);
+                }
+                break;
+            case 3:
+                func_801647AC(&D_801F6C30);
+                break;
+        }
+        func_80166B30(play);
+        if (D_801F6D10 != 3) {
+            if ((gSaveContext.gameMode == 0) && (((play->msgCtx.msgMode == 0)) || ((play->msgCtx.currentTextId == 0xFF) && (play->msgCtx.msgMode == 0x42) && (play->msgCtx.unk12020 == 0x41)) || ((play->msgCtx.currentTextId >= 0x100) && ( play->msgCtx.currentTextId < 0x201))) && (play->gameOverCtx.state == 0)) {
+                KaleidoSetup_Update(play);
+            }
+            sp5C = (play->pauseCtx.state != 0) || (play->pauseCtx.debugEditor != 0);
+
+            AnimationContext_Reset(&play->animationCtx);
+            Object_UpdateBank(&play->objectCtx);
+            if ((sp5C == 0) && (gGameInfo->data[0x3A8] == 0)) {
+                play->gameplayFrames++;
+                Rumble_SetUpdateEnabled(1);
+                if((play->actorCtx.freezeFlashTimer != 0) && (play->actorCtx.freezeFlashTimer-- < 5)) {
+                    if ((play->actorCtx.freezeFlashTimer > 0) && (( play->actorCtx.freezeFlashTimer % 2) != 0)) {
+                        play->envCtx.fillScreen = 1;
+                        play->envCtx.screenFillColor[0] = play->envCtx.screenFillColor[1] = play->envCtx.screenFillColor[2] = 150;
+                        play->envCtx.screenFillColor[3] = 80;
+                    } else {
+                        play->envCtx.fillScreen = 0;
+                    }
+                } else {
+                    Room_HandleLoadCallbacks(play, &play->roomCtx);
+                    CollisionCheck_AT(play, &play->colChkCtx);
+                    CollisionCheck_OC(play, &play->colChkCtx);
+                    CollisionCheck_Damage(play, &play->colChkCtx);
+                    CollisionCheck_ClearContext(play, &play->colChkCtx);
+                    if (play->unk_18845 == 0) {
+                        Actor_UpdateAll(play, &play->actorCtx);
+                    }
+                    Cutscene_Update1(play, &play->csCtx);
+                    Cutscene_Update2(play, &play->csCtx);
+                    Effect_UpdateAll(play);
+                    EffectSS_UpdateAllParticles(play);
+                    EffFootmark_Update(play);
+                }
+            } else {
+                Rumble_SetUpdateEnabled(0);
+            }
+            Room_nop8012D510(play, &play->roomCtx.currRoom, &pad58[1], 0);
+            Room_nop8012D510(play, &play->roomCtx.prevRoom, &pad58[1], 1);
+            SkyboxDraw_Noop(&play->skyboxCtx);
+            if ((play->pauseCtx.state != 0) || (play->pauseCtx.debugEditor != 0)) {
+                KaleidoScopeCall_Update(play);
+            } else if (play->gameOverCtx.state != 0) {
+                GameOver_Update(play);
+            }
+            func_8015680C(play);
+            func_801210E0(play);
+            AnimationContext_Update(play, &play->animationCtx);
+            SoundSource_UpdateAll(play);
+            ShrinkWindow_Update(play->state.framerateDivisor);
+            TransitionFade_Update(&play->unk_18E48, play->state.framerateDivisor);
+        }
+    }
+    if ((sp5C == 0) || (gDbgCamEnabled != 0)) {
+        s32 sp54;
+        s32 sp50;
+        Vec3s sp48;
+
+        play->nextCamera = play->activeCamId;
+        for(sp54 = 0; sp54 < 4; sp54++) {
+            if ((sp54 != play->nextCamera) && (play->cameraPtrs[sp54] != NULL)) {
+                Camera_Update(&sp48, play->cameraPtrs[sp54]);
+            }
+        }
+        Camera_Update(&sp48, play->cameraPtrs[play->nextCamera]);
+    }
+    if (sp5C == 0) {
+        func_80166968(play, play->cameraPtrs[play->nextCamera]);
+        Distortion_Update();
+    }
+    func_800F8CD4(play, &play->envCtx, &play->lightCtx, &play->pauseCtx, &play->msgCtx, &play->gameOverCtx, play->state.gfxCtx);
+    if (play->sramCtx.status != 0) {
+        if (gSaveContext.save.isOwlSave != 0) {
+            func_80147198(&play->sramCtx);
+        } else {
+            func_80147068(&play->sramCtx);
+        }
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
+#endif
 
 void func_80167DE4(PlayState* play) {
     if (!D_801F6DFC) {
