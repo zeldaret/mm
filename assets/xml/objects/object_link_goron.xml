@@ -84,11 +84,11 @@
         <DList Name="object_link_goron_DL_017180" Offset="0x17180" />
         <DList Name="object_link_goron_DL_017620" Offset="0x17620" />
 
-        <Limb Name="gLinkGoronShieldingRootLimb" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_01" Offset="0x17778" />
-        <Limb Name="gLinkGoronShieldingBodyLimb" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_02" Offset="0x17784" />
-        <Limb Name="gLinkGoronShieldingHeadLimb" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_03" Offset="0x17790" />
-        <Limb Name="object_link_goron_Standardlimb_01779C" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_04" Offset="0x1779C" />
-        <Skeleton Name="gLinkGoronShieldingSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_GORON_1_LIMB_NONE" LimbMax="OBJECT_LINK_GORON_1_LIMB_MAX" EnumName="LinkGoronShieldingLimb" Offset="0x177B8" />
+        <Limb Name="gLinkGoronShieldingRootLimb" Type="Standard" EnumName="LINK_GORON_SHIELDING_LIMB_ROOT" Offset="0x17778" />
+        <Limb Name="gLinkGoronShieldingBodyLimb" Type="Standard" EnumName="LINK_GORON_SHIELDING_LIMB_BODY" Offset="0x17784" />
+        <Limb Name="gLinkGoronShieldingHeadLimb" Type="Standard" EnumName="LINK_GORON_SHIELDING_LIMB_HEAD" Offset="0x17790" />
+        <Limb Name="object_link_goron_Standardlimb_01779C" Type="Standard" EnumName="LINK_GORON_SHIELDING_LIMB_04" Offset="0x1779C" />
+        <Skeleton Name="gLinkGoronShieldingSkel" Type="Flex" LimbType="Standard" LimbNone="LINK_GORON_SHIELDING_LIMB_NONE" LimbMax="LINK_GORON_SHIELDING_LIMB_MAX" EnumName="LinkGoronShieldingLimb" Offset="0x177B8" />
 
         <!-- <Blob Name="object_link_goron_Blob_0178D0" Size="0x10" Offset="0x178D0" /> -->
 
