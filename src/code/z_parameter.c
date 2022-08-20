@@ -1370,7 +1370,7 @@ u8 D_801BFD94 = 0;
 s16 D_801BFD98 = 0;
 s16 D_801BFD9C = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_801210E0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Interface_Update.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80121F94.s")
 

@@ -752,8 +752,8 @@ typedef enum {
     /*  5 */ TRANS_MODE_FILL_IN,
     /*  6 */ TRANS_MODE_FILL_OUT,
     /*  7 */ TRANS_MODE_FILL_BROWN_INIT,
-    /*  8 */ TRANS_MODE_08,
-    /*  9 */ TRANS_MODE_09,
+    /*  8 */ TRANS_MODE_08, // unused
+    /*  9 */ TRANS_MODE_09, // unused
     /* 10 */ TRANS_MODE_INSTANT,
     /* 11 */ TRANS_MODE_INSTANCE_WAIT,
     /* 12 */ TRANS_MODE_SANDSTORM_INIT,
@@ -814,6 +814,14 @@ typedef struct {
     /* 0x003 */ char unk03[0x5];
     /* 0x008 */ s32 instanceData;
     /* 0x00C */ char unk0C[0x224];
+    /*
+    union {
+       TransitionFade fade;
+       TransitionCircle circle;
+       TransitionTriforce triforce;
+       TransitionWipe wipe;
+    } instanceData;
+    */
     /* 0x230 */ void* (*init)(void* transition);
     /* 0x234 */ void  (*destroy)(void* transition);
     /* 0x238 */ void  (*update)(void* transition, s32 updateRate);

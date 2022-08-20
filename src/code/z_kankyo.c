@@ -42,7 +42,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F8A9C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F8CD4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_Update.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F8D84.s")
 
