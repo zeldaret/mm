@@ -399,6 +399,7 @@ typedef struct {
 } SoundSource; // size = 0x1C
 
 typedef void(*fault_update_input_func)(Input* input);
+
 typedef struct {
     /* 0x000 */ View view;
     /* 0x168 */ u8* iconItemSegment;

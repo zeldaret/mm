@@ -7,18 +7,12 @@
 #include "z_kaleido_scope.h"
 #include "interface/parameter_static/parameter_static.h"
 
-extern UNK_TYPE D_02001360;
-extern UNK_TYPE D_020044A0;
-extern UNK_TYPE D_02004AA0;
-extern UNK_TYPE D_0200B998;
-extern UNK_TYPE D_08062000;
-extern UNK_TYPE D_08064340;
-extern UNK_TYPE D_0B000000;
-extern UNK_TYPE D_0C000000;
-extern UNK_TYPE D_0C006C00;
+s16 sMaskEquipState = EQUIP_STATE_MAGIC_ARROW_GROW_ORB;
 
-s16 sMaskEquipState = 0;
+// Timer to hold magic arrow icon over magic arrow slot before moving when equipping.
 s16 sMaskEquipMagicArrowSlotHoldTimer = 0;
+
+// Number of frames to move icon from slot to target position when equipping.
 s16 sMaskEquipAnimTimer = 10;
 
 u8 gMaskPlayerFormSlotRestrictions[PLAYER_FORM_MAX][24] = {
@@ -177,9 +171,10 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
 
     func_8012C8AC(play->state.gfxCtx);
 
+    // Draw a white box around the items that are equipped on the C buttons
+    // Loop over c-buttons (i) and vtx offset (j)
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
-
     for (i = 0, j = 24 * 4; i < 3; i++, j += 4) {
         if (GET_CUR_FORM_BTN_ITEM(i + 1) != ITEM_NONE) {
             if (GET_CUR_FORM_BTN_SLOT(i + 1) >= 24) {
@@ -190,17 +185,19 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
     }
 
     gDPPipeSync(POLY_OPA_DISP++);
-    gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
+    // Draw the item icons
+    // Loop over slots (i) and vtx offset (j)
+    gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     for (j = 0, i = 0; i < 24; i++, j += 4) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
-        if (((void)0, gSaveContext.save.inventory.items[i + 24]) != ITEM_NONE) {
+        if (((void)0, gSaveContext.save.inventory.items[i + SLOT_MASK_FIRST]) != ITEM_NONE) {
             if (!(gSaveContext.maskMaskBit[D_8082B684[i] >> 8] & (u8)D_8082B684[i])) {
                 if ((pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_MASK) &&
                     (pauseCtx->cursorSpecialPos == 0) &&
                     gMaskPlayerFormSlotRestrictions[(void)0, gSaveContext.save.playerForm][i]) {
-                    if ((sMaskEquipState == 2) && (i == SLOT_ARROW_ICE)) {
+                    if ((sMaskEquipState == EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT) && (i == SLOT_ARROW_ICE)) {
                         // Suppose to be `SLOT_BOW`, unchanged from OoT, instead increase size of ice arrow icon
                         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0,
                                         sMaskMagicArrowEffectsR[pauseCtx->equipTargetItem - 0xB5],
@@ -231,7 +228,8 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
 
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->maskVtx[j + 0], 4, 0);
                 KaleidoScope_DrawQuadTextureRGBA32(
-                    play->state.gfxCtx, gItemIcons[((void)0, gSaveContext.save.inventory.items[i + 24])], 32, 32, 0);
+                    play->state.gfxCtx, gItemIcons[((void)0, gSaveContext.save.inventory.items[i + SLOT_MASK_FIRST])],
+                    32, 32, 0);
             }
         }
     }
@@ -359,7 +357,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                 // Search for slot to move to
                 while (true) {
                     // Check if current cursor has an item in its slot
-                    if ((gSaveContext.save.inventory.items[cursorPoint + 24] != ITEM_NONE) &&
+                    if ((gSaveContext.save.inventory.items[cursorPoint + SLOT_MASK_FIRST] != ITEM_NONE) &&
                         !(gSaveContext.maskMaskBit[D_8082B684[cursorPoint] >> 8] & (u8)D_8082B684[cursorPoint])) {
                         pauseCtx->cursorPoint[PAUSE_MASK] = cursorPoint;
                         pauseCtx->cursorX[PAUSE_MASK] = cursorX;
@@ -399,7 +397,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                 // Search for slot to move to
                 while (true) {
                     // Check if current cursor has an item in its slot
-                    if ((gSaveContext.save.inventory.items[cursorPoint + 24] != ITEM_NONE) &&
+                    if ((gSaveContext.save.inventory.items[cursorPoint + SLOT_MASK_FIRST] != ITEM_NONE) &&
                         !(gSaveContext.maskMaskBit[D_8082B684[cursorPoint] >> 8] & (u8)D_8082B684[cursorPoint])) {
                         pauseCtx->cursorPoint[PAUSE_MASK] = cursorPoint;
                         pauseCtx->cursorX[PAUSE_MASK] = cursorX;
@@ -471,13 +469,13 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
             pauseCtx->cursorColorSet = 2;
 
             if (moveCursorResult == 1) {
-                cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + 24];
+                cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + SLOT_MASK_FIRST];
                 if (gSaveContext.maskMaskBit[D_8082B684[pauseCtx->cursorPoint[PAUSE_MASK]] >> 8] &
                     (u8)D_8082B684[pauseCtx->cursorPoint[PAUSE_MASK]]) {
                     cursorItem = ITEM_NONE;
                 }
             } else if (moveCursorResult != 2) {
-                cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + 24];
+                cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + SLOT_MASK_FIRST];
                 if (gSaveContext.maskMaskBit[D_8082B684[pauseCtx->cursorPoint[PAUSE_MASK]] >> 8] &
                     (u8)D_8082B684[pauseCtx->cursorPoint[PAUSE_MASK]]) {
                     cursorItem = ITEM_NONE;
@@ -511,7 +509,6 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
 
                     // Ensure that a non-transformation mask can not be unequipped while being used
                     if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-
                         if (((Player_GetCurMaskItemId(play) != ITEM_NONE) &&
                              (Player_GetCurMaskItemId(play) == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT))) ||
                             ((sMaskPlayerFormItems[((void)0, gSaveContext.save.playerForm)] != ITEM_NONE) &&
@@ -540,8 +537,9 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                         }
                     }
 
-                    if ((func_801242DC(play) >= 2) && (func_801242DC(play) < 5) &&
-                        ((cursorSlot == 5) || (cursorSlot == 0xB))) {
+                    if ((func_801242DC(play) >= 2) && (func_801242DC(play) <= 4) &&
+                        ((cursorSlot == (SLOT_MASK_DEKU - SLOT_MASK_FIRST)) ||
+                         (cursorSlot == (SLOT_MASK_GORON - SLOT_MASK_FIRST)))) {
                         play_sound(NA_SE_SY_ERROR);
                         return;
                     }
@@ -557,14 +555,14 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
 
                     // Equip item to the C buttons
                     pauseCtx->equipTargetItem = cursorItem;
-                    pauseCtx->equipTargetSlot = cursorSlot + 24;
+                    pauseCtx->equipTargetSlot = cursorSlot + SLOT_MASK_FIRST;
                     pauseCtx->unk_200 = 0xF;
                     vtxIndex = cursorSlot * 4;
                     pauseCtx->equipAnimX = pauseCtx->maskVtx[vtxIndex].v.ob[0] * 10;
                     pauseCtx->equipAnimY = pauseCtx->maskVtx[vtxIndex].v.ob[1] * 10;
                     pauseCtx->equipAnimAlpha = 255;
                     sMaskEquipMagicArrowSlotHoldTimer = 0;
-                    sMaskEquipState = 3;
+                    sMaskEquipState = EQUIP_STATE_MOVE_TO_C_BTN;
                     sMaskEquipAnimTimer = 10;
                     play_sound(NA_SE_SY_DECIDE);
                 } else if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->state == 6) &&
@@ -593,7 +591,6 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
 
 s16 sMaskCButtonPosX[] = { 660, 900, 1140 };
 s16 sMaskCButtonPosY[] = { 1100, 920, 1100 };
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_UpdateMaskEquip.s")
 void KaleidoScope_UpdateMaskEquip(PlayState* play) {
     static s16 sMaskEquipMagicArrowBowSlotHoldTimer = 0;
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -602,7 +599,7 @@ void KaleidoScope_UpdateMaskEquip(PlayState* play) {
     u16 offsetY;
 
     // Grow glowing orb when equipping magic arrows
-    if (sMaskEquipState == 0) {
+    if (sMaskEquipState == EQUIP_STATE_MAGIC_ARROW_GROW_ORB) {
         pauseCtx->equipAnimAlpha += 14;
         if (pauseCtx->equipAnimAlpha > 255) {
             pauseCtx->equipAnimAlpha = 254;
@@ -613,7 +610,7 @@ void KaleidoScope_UpdateMaskEquip(PlayState* play) {
         return;
     }
 
-    if (sMaskEquipState == 2) {
+    if (sMaskEquipState == EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT) {
         sMaskEquipMagicArrowBowSlotHoldTimer--;
 
         if (sMaskEquipMagicArrowBowSlotHoldTimer == 0) {
@@ -628,7 +625,7 @@ void KaleidoScope_UpdateMaskEquip(PlayState* play) {
         return;
     }
 
-    if (sMaskEquipState == 1) {
+    if (sMaskEquipState == EQUIP_STATE_MAGIC_ARROW_MOVE_TO_BOW_SLOT) {
         bowItemVtx = &pauseCtx->itemVtx[12];
         offsetX = ABS_ALT(pauseCtx->equipAnimX - bowItemVtx->v.ob[0] * 10) / sMaskEquipAnimTimer;
         offsetY = ABS_ALT(pauseCtx->equipAnimY - bowItemVtx->v.ob[1] * 10) / sMaskEquipAnimTimer;
@@ -651,7 +648,7 @@ void KaleidoScope_UpdateMaskEquip(PlayState* play) {
         pauseCtx->equipAnimShrinkRate -= pauseCtx->equipAnimShrinkRate / sMaskEquipAnimTimer;
 
         // Update coordinates of item icon while being equipped
-        if (sMaskEquipState == 1) {
+        if (sMaskEquipState == EQUIP_STATE_MAGIC_ARROW_MOVE_TO_BOW_SLOT) {
             // target is the bow slot
             if (pauseCtx->equipAnimX >= (pauseCtx->itemVtx[12].v.ob[0] * 10)) {
                 pauseCtx->equipAnimX -= offsetX;
@@ -681,15 +678,15 @@ void KaleidoScope_UpdateMaskEquip(PlayState* play) {
 
         sMaskEquipAnimTimer--;
         if (sMaskEquipAnimTimer == 0) {
-            if (sMaskEquipState == 1) {
+            if (sMaskEquipState == EQUIP_STATE_MAGIC_ARROW_MOVE_TO_BOW_SLOT) {
                 sMaskEquipState++;
                 sMaskEquipMagicArrowBowSlotHoldTimer = 4;
                 return;
             }
 
-            // Equip item onto c buttons
+            // Equip mask onto c buttons
             if (pauseCtx->equipTargetCBtn == PAUSE_EQUIP_C_LEFT) {
-                // Swap if item is already equipped on CDown or CRight.
+                // Swap if mask is already equipped on CDown or CRight.
                 if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN)) {
                     if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) & 0xFF) != ITEM_NONE) {
                         BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT);
@@ -710,12 +707,12 @@ void KaleidoScope_UpdateMaskEquip(PlayState* play) {
                     }
                 }
 
-                // Equip item on CLeft
+                // Equip mask on CLeft
                 BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) = pauseCtx->equipTargetItem;
                 C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT) = pauseCtx->equipTargetSlot;
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_C_LEFT);
             } else if (pauseCtx->equipTargetCBtn == PAUSE_EQUIP_C_DOWN) {
-                // Swap if item is already equipped on CLeft or CRight.
+                // Swap if mask is already equipped on CLeft or CRight.
                 if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT)) {
                     if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) & 0xFF) != ITEM_NONE) {
                         BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) = BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN);
@@ -736,12 +733,12 @@ void KaleidoScope_UpdateMaskEquip(PlayState* play) {
                     }
                 }
 
-                // Equip item on CDown
+                // Equip mask on CDown
                 BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = pauseCtx->equipTargetItem;
                 C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN) = pauseCtx->equipTargetSlot;
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_C_DOWN);
             } else { // (pauseCtx->equipTargetCBtn == PAUSE_EQUIP_C_RIGHT)
-                // Swap if item is already equipped on CLeft or CDown.
+                // Swap if mask is already equipped on CLeft or CDown.
                 if (pauseCtx->equipTargetSlot == C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT)) {
                     if ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) & 0xFF) != ITEM_NONE) {
                         BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) = BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT);
@@ -762,7 +759,7 @@ void KaleidoScope_UpdateMaskEquip(PlayState* play) {
                     }
                 }
 
-                // Equip item on CRight
+                // Equip mask on CRight
                 BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) = pauseCtx->equipTargetItem;
                 C_SLOT_EQUIP(0, EQUIP_SLOT_C_RIGHT) = pauseCtx->equipTargetSlot;
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_C_RIGHT);

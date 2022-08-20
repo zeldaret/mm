@@ -7,13 +7,6 @@
 #include "z_kaleido_scope.h"
 #include "interface/parameter_static/parameter_static.h"
 
-typedef enum {
-    /* 0 */ EQUIP_STATE_MAGIC_ARROW_GROW_ORB,
-    /* 1 */ EQUIP_STATE_MAGIC_ARROW_MOVE_TO_BOW_SLOT,
-    /* 2 */ EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT,
-    /* 3 */ EQUIP_STATE_MOVE_TO_C_BTN
-} EquipState;
-
 s16 sEquipState = EQUIP_STATE_MAGIC_ARROW_GROW_ORB;
 
 // Timer to hold magic arrow icon over magic arrow slot before moving when equipping.

@@ -29,6 +29,15 @@ typedef enum {
   /* 3 */ DEBUG_EDITOR_EVENTS
 } DebugEditor;
 
+typedef enum {
+    /* 0 */ EQUIP_STATE_MAGIC_ARROW_GROW_ORB,
+    /* 1 */ EQUIP_STATE_MAGIC_ARROW_MOVE_TO_BOW_SLOT,
+    /* 2 */ EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT,
+    /* 3 */ EQUIP_STATE_MOVE_TO_C_BTN
+} EquipState;
+
+#define SLOT_MASK_FIRST 24
+
 // NES
 void KaleidoScope_MoveCursorToSpecialPos(PlayState* play, s16 cursorSpecialPos);
 void KaleidoScope_DrawQuadTextureRGBA32(GraphicsContext* gfxCtx, void* texture, u16 width, u16 height, u16 point);
