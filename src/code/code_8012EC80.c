@@ -365,7 +365,7 @@ s16 gItemPrices[] = {
 };
 
 // Used to map scene indexes to their region in Termina
-u16 gScenesPerRegion[11][27] = {
+u16 gSceneIdsPerRegion[11][27] = {
     // Great Bay
     {
         SCENE_30GYOSON,
@@ -553,7 +553,7 @@ s32 Inventory_IsMapVisible(s16 sceneId) {
     return false;
 }
 
-static u16 sScenesPerTingleMap[6][12] = {
+static u16 sSceneIdsPerTingleMap[6][12] = {
     {
         // Clock Town Tingle Map
         SCENE_00KEIKOKU,
@@ -630,7 +630,7 @@ static u16 sScenesPerTingleMap[6][12] = {
 void Inventory_SetMapVisibility(s16 tingleIndex) {
     s16 i = 0;
     s16 index = 0;
-    u16(*tingleMapSceneIndices)[] = &sScenesPerTingleMap[tingleIndex];
+    u16(*tingleMapSceneIndices)[] = &sSceneIdsPerTingleMap[tingleIndex];
 
     if ((tingleIndex >= 0) && (tingleIndex < 6)) {
         while (true) {
@@ -664,17 +664,17 @@ void Inventory_SetMapVisibility(s16 tingleIndex) {
             i++;
         }
 
-        if ((*tingleMapSceneIndices) == sScenesPerTingleMap[0]) {
+        if ((*tingleMapSceneIndices) == sSceneIdsPerTingleMap[0]) {
             gSaveContext.save.mapsVisible |= 3;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[1]) {
+        } else if ((*tingleMapSceneIndices) == sSceneIdsPerTingleMap[1]) {
             gSaveContext.save.mapsVisible |= 0x1C;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[2]) {
+        } else if ((*tingleMapSceneIndices) == sSceneIdsPerTingleMap[2]) {
             gSaveContext.save.mapsVisible |= 0xE0;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[3]) {
+        } else if ((*tingleMapSceneIndices) == sSceneIdsPerTingleMap[3]) {
             gSaveContext.save.mapsVisible |= 0x100;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[4]) {
+        } else if ((*tingleMapSceneIndices) == sSceneIdsPerTingleMap[4]) {
             gSaveContext.save.mapsVisible |= 0x1E00;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[5]) {
+        } else if ((*tingleMapSceneIndices) == sSceneIdsPerTingleMap[5]) {
             gSaveContext.save.mapsVisible |= 0x6000;
         }
     }

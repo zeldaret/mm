@@ -584,7 +584,7 @@ void ObjSwitch_FloorSwitchDown(ObjSwitch* this, PlayState* play) {
         case OBJSWITCH_SUBTYPE_ONCE:
         case OBJSWITCH_SUBTYPE_SYNC:
             if (!Flags_GetSwitch(play, OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor))) {
-                if (play->sceneId == SCENE_SECOM && DynaPolyActor_IsInSwitchPressedState(&this->dyna)) {
+                if ((play->sceneId == SCENE_SECOM) && DynaPolyActor_IsInSwitchPressedState(&this->dyna)) {
                     ObjSwitch_SetSwitchFlagState(this, play, true);
                 } else {
                     ObjSwitch_FloorSwitchRiseUpInit(this);
@@ -595,7 +595,7 @@ void ObjSwitch_FloorSwitchDown(ObjSwitch* this, PlayState* play) {
         case OBJSWITCH_SUBTYPE_RESET:
         case OBJSWITCH_SUBTYPE_RESET_INVERTED:
             if (!DynaPolyActor_IsInSwitchPressedState(&this->dyna) &&
-                (!Player_InCsMode(play) || play->sceneId == SCENE_SECOM)) {
+                (!Player_InCsMode(play) || (play->sceneId == SCENE_SECOM))) {
                 if (this->floorSwitchReleaseTimer <= 0) {
                     if (subType == OBJSWITCH_SUBTYPE_RESET) {
                         ObjSwitch_SetSwitchFlagState(this, play, false);

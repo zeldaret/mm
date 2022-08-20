@@ -46,7 +46,7 @@ u8 D_801B46C0[] = {
     /* 0x0E */ 1
 };
 
-s16 sSmallMemScenes[] = {
+s16 sSmallMemSceneIds[] = {
     SCENE_F01,
 };
 
@@ -1462,10 +1462,10 @@ u32 BgCheck_InitStaticLookup(CollisionContext* colCtx, PlayState* play, StaticLo
  * Returns whether the current scene should reserve less memory for it's collision lookup
  */
 s32 BgCheck_IsSmallMemScene(PlayState* play) {
-    s16* i;
+    s16* sceneId;
 
-    for (i = sSmallMemScenes; i < sSmallMemScenes + ARRAY_COUNT(sSmallMemScenes); i++) {
-        if (play->sceneId == *i) {
+    for (sceneId = sSmallMemSceneIds; sceneId < sSmallMemSceneIds + ARRAY_COUNT(sSmallMemSceneIds); sceneId++) {
+        if (play->sceneId == *sceneId) {
             return true;
         }
     }
