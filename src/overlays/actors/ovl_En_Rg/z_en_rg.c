@@ -724,7 +724,7 @@ void func_80BF4FC4(EnRg* this, PlayState* play) {
 void EnRg_Init(Actor* thisx, PlayState* play) {
     EnRg* this = THIS;
 
-    if (gSaveContext.save.entranceIndex == 0xD010) {
+    if (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
                            GORON_LIMB_MAX);

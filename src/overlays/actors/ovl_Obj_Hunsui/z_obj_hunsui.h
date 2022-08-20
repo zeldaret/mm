@@ -31,7 +31,7 @@ typedef struct ObjHunsui {
     /* 0x16C */ s8 unk_16C;
     /* 0x16D */ s8 unk_16D;
     /* 0x16E */ s8 unk_16E;
-    /* 0x170 */ s16 unk_170;
+    /* 0x170 */ s16 unk_170[1];
     /* 0x172 */ u16 unk_172;
     /* 0x174 */ f32 unk_174;
     /* 0x178 */ f32 unk_178;

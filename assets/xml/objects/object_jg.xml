@@ -108,11 +108,11 @@
         <Limb Name="gGoronElderRightFootLimb" Type="Standard" EnumName="GORON_ELDER_LIMB_RIGHT_FOOT" Offset="0x1AF5C" />
 
         <!-- Goron Elder Skeleton -->
-        <Skeleton Name="gGoronElderSkel" Type="Flex" LimbType="Standard" LimbNone="GORON_ELDER_LIMB_NONE" LimbMax="GORON_ELDER_LIMB_MAX" EnumName="GoronElderLimbs" Offset="0x1AFF0" />
+        <Skeleton Name="gGoronElderSkel" Type="Flex" LimbType="Standard" LimbNone="GORON_ELDER_LIMB_NONE" LimbMax="GORON_ELDER_LIMB_MAX" EnumName="GoronElderLimb" Offset="0x1AFF0" />
 
         <!-- Drum Animation, Limb, and Skeleton -->
         <Animation Name="gGoronElderDrumTakeOutAnim" Offset="0x1B1E8" /> <!-- Original name is "jggakki_dasu" ("get out") -->
         <Limb Name="gGoronElderDrumLimb" Type="Standard" EnumName="GORON_ELDER_DRUM_LIMB_ROOT" Offset="0x1B200" />
-        <Skeleton Name="gGoronElderDrumSkel" Type="Normal" LimbType="Standard" LimbNone="GORON_ELDER_DRUM_LIMB_NONE" LimbMax="GORON_ELDER_DRUM_LIMB_MAX" EnumName="GoronElderDrumLimbs"Offset="0x1B210" />
+        <Skeleton Name="gGoronElderDrumSkel" Type="Normal" LimbType="Standard" LimbNone="GORON_ELDER_DRUM_LIMB_NONE" LimbMax="GORON_ELDER_DRUM_LIMB_MAX" EnumName="GoronElderDrumLimb" Offset="0x1B210" />
     </File>
 </Root>

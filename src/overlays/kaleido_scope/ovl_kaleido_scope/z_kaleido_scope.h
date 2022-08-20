@@ -48,6 +48,9 @@ void KaleidoScope_DrawMaskSelect(PlayState* play);
 void KaleidoScope_UpdateMaskCursor(PlayState* play);
 void KaleidoScope_UpdateMaskEquip(PlayState* play);
 
+// Prompt
+void KaleidoScope_UpdatePrompt(PlayState* play);
+
 // Debug
 void KaleidoScope_DrawInventoryEditor(PlayState* play);
 void KaleidoScope_UpdateInventoryEditor(PlayState* play);

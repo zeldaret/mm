@@ -393,11 +393,7 @@ void func_800B4B50(Actor* actor, Lights* mapper, PlayState* play) {
 
 void Actor_GetProjectedPos(PlayState* play, Vec3f* worldPos, Vec3f* projectedPos, f32* invW) {
     SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, worldPos, projectedPos, invW);
-    if (*invW < 1.0f) {
-        *invW = 1.0f;
-    } else {
-        *invW = 1.0f / *invW;
-    }
+    *invW = (*invW < 1.0f) ? 1.0f : (1.0f / *invW);
 }
 
 void Target_SetPos(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 z) {
@@ -507,11 +503,11 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
 
             Actor_GetProjectedPos(play, &targetCtx->targetCenterPos, &projectedPos, &invW);
 
-            projectedPos.x = (160 * (projectedPos.x * invW)) * var1;
-            projectedPos.x = CLAMP(projectedPos.x, -320.0f, 320.0f);
+            projectedPos.x = ((SCREEN_WIDTH / 2) * (projectedPos.x * invW)) * var1;
+            projectedPos.x = CLAMP(projectedPos.x, -SCREEN_WIDTH, SCREEN_WIDTH);
 
-            projectedPos.y = (120 * (projectedPos.y * invW)) * var1;
-            projectedPos.y = CLAMP(projectedPos.y, -240.0f, 240.0f);
+            projectedPos.y = ((SCREEN_HEIGHT / 2) * (projectedPos.y * invW)) * var1;
+            projectedPos.y = CLAMP(projectedPos.y, -SCREEN_HEIGHT, SCREEN_HEIGHT);
 
             projectedPos.z = projectedPos.z * var1;
 
@@ -588,8 +584,8 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
     PlayState* play = (PlayState*)gameState;
     Actor* sp68 = NULL;
     s32 category;
-    Vec3f sp58;
-    f32 sp54;
+    Vec3f projectedPos;
+    f32 invW;
 
     if ((player->unk_730 != 0) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->unk_94 = NULL;
@@ -641,8 +637,9 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
     }
 
     if (actor != NULL && targetCtx->unk4B == 0) {
-        Actor_GetProjectedPos(play, &actor->focus.pos, &sp58, &sp54);
-        if ((sp58.z <= 0.0f) || (fabsf(sp58.x * sp54) >= 1.0f) || (fabsf(sp58.y * sp54) >= 1.0f)) {
+        Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &invW);
+        if ((projectedPos.z <= 0.0f) || (fabsf(projectedPos.x * invW) >= 1.0f) ||
+            (fabsf(projectedPos.y * invW) >= 1.0f)) {
             actor = NULL;
         }
     }
@@ -1857,10 +1854,10 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
 
 // Actor_PickUpExchange? Seems to be called with exchangeItemId -1 if the same actor used Actor_PickUp
 // This function is also used to toggle the "Speak" action on the A button
-s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId) {
+s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerActionParam exchangeItemId) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->actor.flags & ACTOR_FLAG_100) || ((exchangeItemId > EXCH_ITEM_NONE) && Player_InCsMode(play)) ||
+    if ((player->actor.flags & ACTOR_FLAG_100) || ((exchangeItemId > PLAYER_AP_NONE) && Player_InCsMode(play)) ||
         (!actor->isTargeted &&
          ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || ((actor->xzDistToPlayer > player->targetActorDistance)) ||
           (xzRange < actor->xzDistToPlayer)))) {
@@ -1875,12 +1872,12 @@ s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 ex
     return true;
 }
 
-s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, s32 exchangeItemId) {
+s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, PlayerActionParam exchangeItemId) {
     return func_800B8500(actor, play, radius, radius, exchangeItemId);
 }
 
 s32 func_800B8614(Actor* actor, PlayState* play, f32 radius) {
-    return func_800B85E0(actor, play, radius, EXCH_ITEM_NONE);
+    return func_800B85E0(actor, play, radius, PLAYER_AP_NONE);
 }
 
 s32 func_800B863C(Actor* actor, PlayState* play) {
@@ -1967,14 +1964,15 @@ s32 func_800B886C(Actor* actor, PlayState* play) {
 
 void Actor_GetScreenPos(PlayState* play, Actor* actor, s16* x, s16* y) {
     Vec3f projectedPos;
-    f32 w;
+    f32 invW;
 
-    Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &w);
-    *x = PROJECTED_TO_SCREEN_X(projectedPos, w);
-    *y = PROJECTED_TO_SCREEN_Y(projectedPos, w);
+    Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &invW);
+
+    *x = PROJECTED_TO_SCREEN_X(projectedPos, invW);
+    *y = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
 }
 
-s32 func_800B8934(PlayState* play, Actor* actor) {
+s32 Actor_OnScreen(PlayState* play, Actor* actor) {
     Vec3f projectedPos;
     f32 invW;
     s32 pad[2];
@@ -2133,7 +2131,8 @@ void func_800B8E58(Player* player, u16 sfxId) {
     if (player->currentMask == PLAYER_MASK_GIANT) {
         func_8019F170(&player->actor.projectedPos, sfxId);
     } else {
-        Audio_PlaySfxGeneral(sfxId, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &gSfxDefaultReverb);
+        AudioSfx_PlaySfx(sfxId, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+                         &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
     }
 }
 
@@ -2573,7 +2572,8 @@ void func_800B9D1C(Actor* actor) {
 
     if (sfxId != 0) {
         if (actor->audioFlags & 2) {
-            Audio_PlaySfxGeneral(sfxId, &actor->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &gSfxDefaultReverb);
+            AudioSfx_PlaySfx(sfxId, &actor->projectedPos, 4, &gSfxDefaultFreqAndVolScale, &gSfxDefaultFreqAndVolScale,
+                             &gSfxDefaultReverb);
         } else if (actor->audioFlags & 4) {
             play_sound(sfxId);
         } else if (actor->audioFlags & 8) {
@@ -3344,7 +3344,7 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
         actorCtx->targetContext.bgmEnemy = NULL;
     }
 
-    Audio_StopSfxByPos(&actor->projectedPos);
+    AudioSfx_StopByPos(&actor->projectedPos);
     Actor_Destroy(actor, play);
 
     newHead = Actor_RemoveFromCategory(play, actorCtx, actor);
@@ -4062,7 +4062,7 @@ s32 func_800BD2B4(PlayState* play, Actor* actor, s16* arg2, f32 arg3, u16 (*text
     } else if (*arg2) {
         *arg2 = arg5(play, actor);
         return false;
-    } else if (!func_800B8934(play, actor)) {
+    } else if (!Actor_OnScreen(play, actor)) {
         return false;
     } else if (!func_800B8614(actor, play, arg3)) {
         return false;
@@ -4297,18 +4297,18 @@ s16 func_800BDB6C(Actor* actor, PlayState* play, s16 arg2, f32 arg3) {
     return arg2;
 }
 
-void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animation, s32 index) {
+void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animationInfo, s32 animIndex) {
     f32 frameCount;
 
-    animation += index;
-    if (animation->frameCount > 0.0f) {
-        frameCount = animation->frameCount;
+    animationInfo += animIndex;
+    if (animationInfo->frameCount > 0.0f) {
+        frameCount = animationInfo->frameCount;
     } else {
-        frameCount = Animation_GetLastFrame(&animation->animation->common);
+        frameCount = Animation_GetLastFrame(&animationInfo->animation->common);
     }
 
-    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, frameCount,
-                     animation->mode, animation->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
+                     frameCount, animationInfo->mode, animationInfo->morphFrames);
 }
 
 // Unused
