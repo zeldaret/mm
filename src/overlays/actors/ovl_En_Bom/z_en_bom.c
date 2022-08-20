@@ -541,7 +541,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 Camera_AddQuake(&play->mainCamera, 2, 11, 8);
                 thisx->params = ENBOM_1;
                 this->timer = 10;
-                thisx->flags |= (0x100000 | 0x20);
+                thisx->flags |= (ACTOR_FLAG_20 | ACTOR_FLAG_100000);
                 this->actionFunc = func_808715B8;
                 if (this->isPowderKeg) {
                     gSaveContext.powderKegTimer = 0;
