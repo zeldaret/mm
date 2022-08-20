@@ -123,7 +123,7 @@ AnimationInfoS D_80BF5914[] = {
     { &gGoronUnrollAnim, -2.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
-TexturePtr sDustTextures[] = {
+static TexturePtr sDustTextures[] = {
     gEffDust8Tex, gEffDust7Tex, gEffDust6Tex, gEffDust5Tex, gEffDust4Tex, gEffDust3Tex, gEffDust2Tex, gEffDust1Tex,
 };
 

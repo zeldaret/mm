@@ -444,7 +444,7 @@ void EnFg_UpdateDust(EnFgEffectDust* dustEffect) {
     }
 }
 
-TexturePtr sDustTextures[] = {
+static TexturePtr sDustTextures[] = {
     gEffDust8Tex, gEffDust7Tex, gEffDust6Tex, gEffDust5Tex, gEffDust4Tex, gEffDust3Tex, gEffDust2Tex, gEffDust1Tex,
 };
 
