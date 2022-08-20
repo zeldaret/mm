@@ -4,6 +4,8 @@
 #include "global.h"
 #include "objects/object_grasshopper/object_grasshopper.h"
 
+#define EN_GRASSHOPPER_GET_TYPE(thisx) ((thisx)->params)
+
 struct EnGrasshopper;
 
 typedef void (*EnGrasshopperActionFunc)(struct EnGrasshopper*, PlayState*);

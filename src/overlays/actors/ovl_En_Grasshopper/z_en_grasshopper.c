@@ -238,7 +238,7 @@ void EnGrasshopper_Init(Actor* thisx, PlayState* play) {
 
     SkelAnime_Init(play, &this->skelAnime, &gDragonflySkel, &gDragonflyFlyAnim, this->jointTable, this->morphTable,
                    DRAGONFLY_LIMB_MAX);
-    this->type = this->actor.params;
+    this->type = EN_GRASSHOPPER_GET_TYPE(&this->actor);
     if (this->type < EN_GRASSHOPPER_TYPE_UNUSED_NORMAL) {
         this->type = EN_GRASSHOPPER_TYPE_NORMAL;
     }
