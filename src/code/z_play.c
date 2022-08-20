@@ -917,28 +917,29 @@ void Play_UpdateTransition(PlayState* this) {
     }
 }
 
+// Stack issues
 #ifdef NON_MATCHING
-void Play_Update(PlayState* play) {
-    PlayState* play2 = play;
+void Play_Update(PlayState* this) {
+    PlayState* this2 = this;
     u8 pad60;
     s32 sp5C = 0;
-    Input* pad58 = play->state.input;
+    Input* pad58 = this->state.input;
 
-    gSegments[4] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[play->objectCtx.mainKeepIndex].segment);
-    gSegments[5] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
-    gSegments[2] = VIRTUAL_TO_PHYSICAL(play->sceneSegment);
+    gSegments[4] = VIRTUAL_TO_PHYSICAL(this->objectCtx.status[this->objectCtx.mainKeepIndex].segment);
+    gSegments[5] = VIRTUAL_TO_PHYSICAL(this->objectCtx.status[this->objectCtx.subKeepIndex].segment);
+    gSegments[2] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
 
     if (SREG(89) == 2) {
         SREG(89) = 3;
         MsgEvent_SendNullTask();
-        func_80165E1C(&play->pauseBgPreRender);
+        func_80165E1C(&this->pauseBgPreRender);
         SREG(89) = 0;
     }
-    Actor_SetMovementScale(play->state.framerateDivisor);
+    Actor_SetMovementScale(this->state.framerateDivisor);
 
-    if (FrameAdvance_Update(&play->frameAdvCtx, &pad58[1])) {
-        if ((play->transitionMode == TRANS_MODE_OFF) && (play->transitionTrigger != TRANS_TRIGGER_OFF)) {
-            play->transitionMode = TRANS_MODE_SETUP;
+    if (FrameAdvance_Update(&this->frameAdvCtx, &pad58[1])) {
+        if ((this->transitionMode == TRANS_MODE_OFF) && (this->transitionTrigger != TRANS_TRIGGER_OFF)) {
+            this->transitionMode = TRANS_MODE_SETUP;
         }
 
         if (gTrnsnUnkState != 0) {
@@ -949,7 +950,7 @@ void Play_Update(PlayState* play) {
                     } else {
                         D_801F6D0C = gZBufferPtr;
                         gTrnsnUnkState = 3;
-                        Game_SetFramerateDivisor(&play->state, 1);
+                        Game_SetFramerateDivisor(&this->state, 1);
                     }
                     break;
                 case 3:
@@ -957,70 +958,70 @@ void Play_Update(PlayState* play) {
                     break;
             }
         }
-        Play_UpdateTransition(play);
+        Play_UpdateTransition(this);
         if (gTrnsnUnkState != 3) {
             if ((gSaveContext.gameMode == 0) &&
-                (((play->msgCtx.msgMode == 0)) ||
-                 ((play->msgCtx.currentTextId == 0xFF) && (play->msgCtx.msgMode == 0x42) &&
-                  (play->msgCtx.unk12020 == 0x41)) ||
-                 ((play->msgCtx.currentTextId >= 0x100) && (play->msgCtx.currentTextId < 0x201))) &&
-                (play->gameOverCtx.state == 0)) {
-                KaleidoSetup_Update(play);
+                (((this->msgCtx.msgMode == 0)) ||
+                 ((this->msgCtx.currentTextId == 0xFF) && (this->msgCtx.msgMode == 0x42) &&
+                  (this->msgCtx.unk12020 == 0x41)) ||
+                 ((this->msgCtx.currentTextId >= 0x100) && (this->msgCtx.currentTextId <= 0x200))) &&
+                (this->gameOverCtx.state == 0)) {
+                KaleidoSetup_Update(this);
             }
 
-            sp5C = (play->pauseCtx.state != 0) || (play->pauseCtx.debugEditor != 0);
+            sp5C = (this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE);
 
-            AnimationContext_Reset(&play->animationCtx);
-            Object_UpdateBank(&play->objectCtx);
+            AnimationContext_Reset(&this->animationCtx);
+            Object_UpdateBank(&this->objectCtx);
 
             if ((sp5C == 0) && (IREG(72) == 0)) {
-                play->gameplayFrames++;
+                this->gameplayFrames++;
                 Rumble_SetUpdateEnabled(true);
-                if ((play->actorCtx.freezeFlashTimer != 0) && (play->actorCtx.freezeFlashTimer-- < 5)) {
-                    pad60 = play->actorCtx.freezeFlashTimer;
+                if ((this->actorCtx.freezeFlashTimer != 0) && (this->actorCtx.freezeFlashTimer-- < 5)) {
+                    pad60 = this->actorCtx.freezeFlashTimer;
                     if ((pad60 > 0) && ((pad60 % 2) != 0)) {
-                        play->envCtx.fillScreen = true;
-                        play->envCtx.screenFillColor[0] = play->envCtx.screenFillColor[1] =
-                            play->envCtx.screenFillColor[2] = 150;
-                        play->envCtx.screenFillColor[3] = 80;
+                        this->envCtx.fillScreen = true;
+                        this->envCtx.screenFillColor[0] = this->envCtx.screenFillColor[1] =
+                            this->envCtx.screenFillColor[2] = 150;
+                        this->envCtx.screenFillColor[3] = 80;
                     } else {
-                        play->envCtx.fillScreen = false;
+                        this->envCtx.fillScreen = false;
                     }
                 } else {
-                    Room_HandleLoadCallbacks(play, &play->roomCtx);
-                    CollisionCheck_AT(play, &play->colChkCtx);
-                    CollisionCheck_OC(play, &play->colChkCtx);
-                    CollisionCheck_Damage(play, &play->colChkCtx);
-                    CollisionCheck_ClearContext(play, &play->colChkCtx);
-                    if (play->unk_18845 == 0) {
-                        Actor_UpdateAll(play, &play->actorCtx);
+                    Room_HandleLoadCallbacks(this, &this->roomCtx);
+                    CollisionCheck_AT(this, &this->colChkCtx);
+                    CollisionCheck_OC(this, &this->colChkCtx);
+                    CollisionCheck_Damage(this, &this->colChkCtx);
+                    CollisionCheck_ClearContext(this, &this->colChkCtx);
+                    if (this->unk_18845 == 0) {
+                        Actor_UpdateAll(this, &this->actorCtx);
                     }
-                    Cutscene_Update1(play, &play->csCtx);
-                    Cutscene_Update2(play, &play->csCtx);
-                    Effect_UpdateAll(play);
-                    EffectSS_UpdateAllParticles(play);
-                    EffFootmark_Update(play);
+                    Cutscene_Update1(this, &this->csCtx);
+                    Cutscene_Update2(this, &this->csCtx);
+                    Effect_UpdateAll(this);
+                    EffectSS_UpdateAllParticles(this);
+                    EffFootmark_Update(this);
                 }
             } else {
                 Rumble_SetUpdateEnabled(false);
             }
 
-            Room_nop8012D510(play, &play->roomCtx.currRoom, &pad58[1], 0);
-            Room_nop8012D510(play, &play->roomCtx.prevRoom, &pad58[1], 1);
-            SkyboxDraw_Noop(&play->skyboxCtx);
+            Room_nop8012D510(this, &this->roomCtx.currRoom, &pad58[1], 0);
+            Room_nop8012D510(this, &this->roomCtx.prevRoom, &pad58[1], 1);
+            SkyboxDraw_Noop(&this->skyboxCtx);
 
-            if ((play->pauseCtx.state != 0) || (play->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
-                KaleidoScopeCall_Update(play);
-            } else if (play->gameOverCtx.state != 0) {
-                GameOver_Update(play);
+            if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
+                KaleidoScopeCall_Update(this);
+            } else if (this->gameOverCtx.state != 0) {
+                GameOver_Update(this);
             }
 
-            func_8015680C(play);
-            Interface_Update(play);
-            AnimationContext_Update(play, &play->animationCtx);
-            SoundSource_UpdateAll(play);
-            ShrinkWindow_Update(play->state.framerateDivisor);
-            TransitionFade_Update(&play->unk_18E48, play->state.framerateDivisor);
+            func_8015680C(this);
+            Interface_Update(this);
+            AnimationContext_Update(this, &this->animationCtx);
+            SoundSource_UpdateAll(this);
+            ShrinkWindow_Update(this->state.framerateDivisor);
+            TransitionFade_Update(&this->unk_18E48, this->state.framerateDivisor);
         }
     }
 
@@ -1029,28 +1030,28 @@ void Play_Update(PlayState* play) {
         s32 sp50;
         Vec3s sp48; // InputDir
 
-        play->nextCamera = play->activeCamId;
+        this->nextCamera = this->activeCamId;
         for (sp54 = 0; sp54 < 4; sp54++) {
-            if ((sp54 != play->nextCamera) && (play->cameraPtrs[sp54] != NULL)) {
-                Camera_Update(&sp48, play->cameraPtrs[sp54]);
+            if ((sp54 != this->nextCamera) && (this->cameraPtrs[sp54] != NULL)) {
+                Camera_Update(&sp48, this->cameraPtrs[sp54]);
             }
         }
-        Camera_Update(&sp48, play->cameraPtrs[play->nextCamera]);
+        Camera_Update(&sp48, this->cameraPtrs[this->nextCamera]);
     }
 
     if (!sp5C) {
-        func_80166968(play, play->cameraPtrs[play->nextCamera]);
+        func_80166968(this, this->cameraPtrs[this->nextCamera]);
         Distortion_Update();
     }
 
-    Environment_Update(play, &play->envCtx, &play->lightCtx, &play->pauseCtx, &play->msgCtx, &play->gameOverCtx,
-                       play->state.gfxCtx);
+    Environment_Update(this, &this->envCtx, &this->lightCtx, &this->pauseCtx, &this->msgCtx, &this->gameOverCtx,
+                       this->state.gfxCtx);
 
-    if (play->sramCtx.status != 0) {
+    if (this->sramCtx.status != 0) {
         if (gSaveContext.save.isOwlSave) {
-            func_80147198(&play->sramCtx);
+            func_80147198(&this->sramCtx);
         } else {
-            func_80147068(&play->sramCtx);
+            func_80147068(&this->sramCtx);
         }
     }
 }
@@ -1058,31 +1059,31 @@ void Play_Update(PlayState* play) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
 #endif
 
-void func_80167DE4(PlayState* play) {
+void func_80167DE4(PlayState* this) {
     if (!D_801F6DFC) {
-        if (play->pauseCtx.unk_1F0 != 0) {
+        if (this->pauseCtx.unk_1F0 != 0) {
             D_801F6DFC = true;
             D_801F6D50.unk_00 = 0;
         }
     } else {
-        if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_L) ||
-            CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B) ||
-            CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_START) || (gIrqMgrResetStatus != 0)) {
+        if (CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_L) ||
+            CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_B) ||
+            CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_START) || (gIrqMgrResetStatus != 0)) {
             D_801F6DFC = false;
-            play->pauseCtx.unk_1F0 = 0;
+            this->pauseCtx.unk_1F0 = 0;
             D_801F6D50.unk_00 = 0;
-            play->msgCtx.msgLength = 0;
-            play->msgCtx.msgMode = 0;
-            play->msgCtx.currentTextId = 0;
-            play->msgCtx.stateTimer = 0;
+            this->msgCtx.msgLength = 0;
+            this->msgCtx.msgMode = 0;
+            this->msgCtx.currentTextId = 0;
+            this->msgCtx.stateTimer = 0;
             play_sound(NA_SE_SY_CANCEL);
         }
     }
     if (D_801F6DFC) {
-        func_8016F5A8(play, &D_801F6D50, play->state.input);
-        func_8015680C(play);
+        func_8016F5A8(this, &D_801F6D50, this->state.input);
+        func_8015680C(this);
     } else {
-        Play_Update(play);
+        Play_Update(this);
     }
 }
 
@@ -1206,8 +1207,8 @@ s32 Play_InCsMode(PlayState* this) {
     return (this->csCtx.state != 0) || Player_InCsMode(this);
 }
 
-f32 func_80169100(PlayState* play, MtxF* mtx, CollisionPoly** poly, s32* bgId, Vec3f* feetPos) {
-    f32 floorHeight = BgCheck_EntityRaycastFloor3(&play->colCtx, poly, bgId, feetPos);
+f32 func_80169100(PlayState* this, MtxF* mtx, CollisionPoly** poly, s32* bgId, Vec3f* feetPos) {
+    f32 floorHeight = BgCheck_EntityRaycastFloor3(&this->colCtx, poly, bgId, feetPos);
 
     if (floorHeight > BGCHECK_Y_MIN) {
         func_800C0094(*poly, feetPos->x, floorHeight, feetPos->z, mtx);
@@ -1686,7 +1687,7 @@ s32 func_8016A02C(GameState* thisx, Actor* actor, s16* yaw) {
 /**
  * @brief Tests if \p pos is underwater.
  *
- * @param[in] play PlayState
+ * @param[in] this PlayState
  * @param[in] pos position to test
  * @return true if inside a waterbox and not above a void.
  */
