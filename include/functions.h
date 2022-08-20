@@ -2434,7 +2434,7 @@ u8 Message_GetState(MessageContext* msgCtx);
 // void func_80153EF0(void);
 void func_801541D4(PlayState* play, Gfx** gfxp);
 void Message_Draw(PlayState* play);
-void func_8015680C(PlayState* play);
+void Message_Update(PlayState* play);
 void func_801586A4(PlayState* play);
 void Message_Init(PlayState* play);
 void Message_FindMessageNES(PlayState* play, u16 textId);

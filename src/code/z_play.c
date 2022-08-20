@@ -965,7 +965,7 @@ void Play_Update(PlayState* this) {
                  ((this->msgCtx.currentTextId == 0xFF) && (this->msgCtx.msgMode == 0x42) &&
                   (this->msgCtx.unk12020 == 0x41)) ||
                  ((this->msgCtx.currentTextId >= 0x100) && (this->msgCtx.currentTextId <= 0x200))) &&
-                (this->gameOverCtx.state == 0)) {
+                (this->gameOverCtx.state == GAMEOVER_INACTIVE)) {
                 KaleidoSetup_Update(this);
             }
 
@@ -1012,11 +1012,11 @@ void Play_Update(PlayState* this) {
 
             if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
                 KaleidoScopeCall_Update(this);
-            } else if (this->gameOverCtx.state != 0) {
+            } else if (this->gameOverCtx.state != GAMEOVER_INACTIVE) {
                 GameOver_Update(this);
             }
 
-            func_8015680C(this);
+            Message_Update(this);
             Interface_Update(this);
             AnimationContext_Update(this, &this->animationCtx);
             SoundSource_UpdateAll(this);
@@ -1081,17 +1081,13 @@ void func_80167DE4(PlayState* this) {
     }
     if (D_801F6DFC) {
         func_8016F5A8(this, &D_801F6D50, this->state.input);
-        func_8015680C(this);
+        Message_Update(this);
     } else {
         Play_Update(this);
     }
 }
 
 void Play_DrawOverlayElements(PlayState* this) {
-    Gfx* sp34;
-    Gfx* sp30;
-    GraphicsContext* gfxCtx;
-
     if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
         KaleidoScopeCall_Draw(this);
     }
@@ -1105,25 +1101,29 @@ void Play_DrawOverlayElements(PlayState* this) {
         Message_Draw(this);
     }
 
-    if (this->gameOverCtx.state != 0) {
+    if (this->gameOverCtx.state != GAMEOVER_INACTIVE) {
         GameOver_FadeLights(this);
     }
 
-    if (gSaveContext.screenScaleFlag != 0) {
-        gfxCtx = this->state.gfxCtx;
+    // Shrink the whole screen display (at the end of First and Second Day by default)
+    if (gSaveContext.screenScaleFlag) {
+        Gfx* nextOpa;
+        Gfx* opa;
+        GraphicsContext* gfxCtx = this->state.gfxCtx;
+
         D_801F6D4C->scale = gSaveContext.screenScale / 1000.0f;
 
         OPEN_DISPS(gfxCtx);
 
-        sp30 = POLY_OPA_DISP;
-        sp34 = Graph_GfxPlusOne(sp30);
-        gSPDisplayList(OVERLAY_DISP++, sp34);
+        opa = POLY_OPA_DISP;
+        nextOpa = Graph_GfxPlusOne(opa);
+        gSPDisplayList(OVERLAY_DISP++, nextOpa);
 
-        func_80141778(D_801F6D4C, &sp34, this->unk_18E60, gfxCtx);
+        func_80141778(D_801F6D4C, &nextOpa, this->unk_18E60, gfxCtx);
 
-        gSPEndDisplayList(sp34++);
-        Graph_BranchDlist(sp30, sp34);
-        POLY_OPA_DISP = sp34;
+        gSPEndDisplayList(nextOpa++);
+        Graph_BranchDlist(opa, nextOpa);
+        POLY_OPA_DISP = nextOpa;
 
         CLOSE_DISPS(gfxCtx);
     }

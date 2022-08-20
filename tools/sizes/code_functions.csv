@@ -2385,7 +2385,7 @@ asm/non_matchings/code/z_message/func_80153E7C.s,func_80153E7C,0x80153E7C,0x1D
 asm/non_matchings/code/z_message/func_80153EF0.s,func_80153EF0,0x80153EF0,0xB9
 asm/non_matchings/code/z_message/func_801541D4.s,func_801541D4,0x801541D4,0x961
 asm/non_matchings/code/z_message/Message_Draw.s,Message_Draw,0x80156758,0x2D
-asm/non_matchings/code/z_message/func_8015680C.s,func_8015680C,0x8015680C,0x7A6
+asm/non_matchings/code/z_message/Message_Update.s,Message_Update,0x8015680C,0x7A6
 asm/non_matchings/code/z_message/func_801586A4.s,func_801586A4,0x801586A4,0xC
 asm/non_matchings/code/z_message/Message_Init.s,Message_Init,0x801586D4,0x7F
 asm/non_matchings/code/z_message_nes/Message_FindMessageNES.s,Message_FindMessageNES,0x801588D0,0x2E

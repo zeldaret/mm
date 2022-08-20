@@ -2871,7 +2871,7 @@
     0x80153EF0:("func_80153EF0",),
     0x801541D4:("func_801541D4",),
     0x80156758:("Message_Draw",),
-    0x8015680C:("func_8015680C",),
+    0x8015680C:("Message_Update",),
     0x801586A4:("func_801586A4",),
     0x801586D4:("Message_Init",),
     0x801588D0:("Message_FindMessageNES",),
