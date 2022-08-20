@@ -352,7 +352,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                 func_80821A04(play);
                 cursorY = 0;
                 cursorX = 0;
-                cursorPoint = 0; // top row, left column (SLOT_OCARINA)
+                cursorPoint = 0; // top row, left column (SLOT_MASK_POSTMAN)
 
                 // Search for slot to move to
                 while (true) {
@@ -391,7 +391,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
             if (pauseCtx->stickRelX < -30) {
                 func_80821A04(play);
                 cursorX = 5;
-                cursorPoint = 5; // top row, right columne (SLOT_TRADE_DEED)
+                cursorPoint = 5; // top row, right column (SLOT_MASK_DEKU)
                 cursorY = 0;
 
                 // Search for slot to move to

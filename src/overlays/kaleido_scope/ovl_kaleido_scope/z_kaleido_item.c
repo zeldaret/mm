@@ -484,7 +484,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
             if (pauseCtx->stickRelX < -30) {
                 func_80821A04(play);
                 cursorX = 5;
-                cursorPoint = 5; // top row, right columne (SLOT_TRADE_DEED)
+                cursorPoint = 5; // top row, right column (SLOT_TRADE_DEED)
                 cursorY = 0;
 
                 // Search for slot to move to
