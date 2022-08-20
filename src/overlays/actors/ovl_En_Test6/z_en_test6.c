@@ -398,7 +398,7 @@ void func_80A916F0(EnTest6* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->actor.freezeTimer = 0;
-    play->unk_18844 = 0;
+    play->unk_18844 = false;
     ActorCutscene_Stop(play->playerActorCsIds[8]);
     func_800B7298(play, NULL, 6);
     func_80A90C34();
@@ -470,7 +470,7 @@ void func_80A91760(EnTest6* this, PlayState* play) {
                 func_80A90C08(0x78);
                 Distortion_SetType(0x20);
                 Distortion_SetCountdown(80);
-                play->unk_18844 = 1;
+                play->unk_18844 = true;
                 this->unk_274 = 95;
             }
             break;
@@ -524,7 +524,7 @@ void func_80A91760(EnTest6* this, PlayState* play) {
                 this->unk_14C = 0.1f;
                 func_80A90C34();
                 Distortion_ClearType(0x20);
-                play->unk_18844 = 0;
+                play->unk_18844 = false;
                 if (this->unk_254 != NULL) {
                     ZeldaArena_Free(this->unk_254);
                 }
@@ -619,7 +619,7 @@ void func_80A92118(EnTest6* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->actor.freezeTimer = 0;
-    play->unk_18844 = 0;
+    play->unk_18844 = false;
     ActorCutscene_Stop(play->playerActorCsIds[8]);
     func_800B7298(play, NULL, 6);
     func_80A90C34();
@@ -662,7 +662,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
         func_800FD5E0(play, &D_80A94070, 1.0f);
         func_800FD654(play, &D_80A94068, 1.0f);
         func_800FD698(play, D_80A94074, D_80A94078, 1.0f);
-        play->unk_18844 = 1;
+        play->unk_18844 = true;
     }
 
     if (this->unk_27A == 15) {
@@ -670,7 +670,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
         func_800FD5E0(play, &D_80A94070, 0.0f);
         func_800FD654(play, &D_80A94068, 0.0f);
         func_800FD698(play, D_80A94074, D_80A94078, 0.0f);
-        play->unk_18844 = 0;
+        play->unk_18844 = false;
     }
 
     if (this->unk_286 >= 20) {
@@ -678,7 +678,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
         func_800FD5E0(play, &D_80A94070, this->unk_160);
         func_800FD654(play, &D_80A94068, this->unk_160);
         func_800FD698(play, D_80A94074, D_80A94078, this->unk_160);
-        play->unk_18844 = 0;
+        play->unk_18844 = false;
     }
 
     func_800B8F98(&player->actor, NA_SE_PL_FLYING_AIR - SFX_FLAG);

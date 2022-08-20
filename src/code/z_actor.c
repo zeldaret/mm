@@ -2411,7 +2411,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     params.player = player;
     params.play = play;
 
-    if (play->unk_18844 != 0) {
+    if (play->unk_18844) {
         params.unk_18 = ACTOR_FLAG_200000;
     } else {
         params.unk_18 = ACTOR_FLAG_200000 | ACTOR_FLAG_40 | ACTOR_FLAG_10;
@@ -2850,7 +2850,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     s32 actorFlags;
     s32 i;
 
-    if (play->unk_18844 != 0) {
+    if (play->unk_18844) {
         actorFlags = ACTOR_FLAG_200000;
     } else {
         actorFlags = ACTOR_FLAG_200000 | ACTOR_FLAG_40 | ACTOR_FLAG_20;
@@ -2921,7 +2921,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     gSPBranchList(ref2, &tmp2[1]);
     POLY_XLU_DISP = &tmp2[1];
 
-    if (play->unk_18844 == 0) {
+    if (!play->unk_18844) {
         Lights_DrawGlow(play);
     }
 

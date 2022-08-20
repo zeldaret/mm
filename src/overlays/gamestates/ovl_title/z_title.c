@@ -109,7 +109,7 @@ void Title_Draw(GameState* thisx) {
                             1 << 10, 1 << 10);
     }
 
-    func_800FC444(this->gameState.gfxCtx, 0, 0, 0, this->coverAlpha, 2);
+    Environment_FillScreen(this->gameState.gfxCtx, 0, 0, 0, this->coverAlpha, 2);
 
     titleRotation += 300;
 

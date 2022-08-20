@@ -438,7 +438,7 @@ void func_80AF19A8(EnTest7* this, PlayState* play) {
     } else {
         ActorCutscene_Start(play->playerActorCsIds[8], NULL);
         func_80AF082C(this, func_80AF1A2C);
-        play->unk_18844 = 1;
+        play->unk_18844 = true;
     }
 }
 
@@ -599,7 +599,7 @@ void func_80AF2030(EnTest7* this, PlayState* play) {
         MREG(66) = 255;
         MREG(67) = 255;
         MREG(68) = 255;
-        play->unk_18844 = 0;
+        play->unk_18844 = false;
         this->unk_144 &= ~4;
         func_80AF082C(this, func_80AF21E8);
         func_80165690();

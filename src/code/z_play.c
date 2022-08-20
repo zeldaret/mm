@@ -5,6 +5,8 @@
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
+extern Gfx D_0E000140[];
+
 s32 gDbgCamEnabled = false;
 u8 D_801D0D54 = false;
 
@@ -15,7 +17,7 @@ extern FbDemoStruct sTrnsnUnk;
 extern u16* D_801F6D0C;
 extern s32 gTrnsnUnkState;
 extern VisMono D_801F6D18;
-extern Color_RGBA8 gVisMonoColor;
+extern Color_RGBA8_u32 gVisMonoColor;
 extern Struct_80140E80 D_801F6D38;
 extern Struct_80140E80* D_801F6D4C;
 extern HiresoStruct D_801F6D50;
@@ -1129,7 +1131,303 @@ void Play_DrawOverlayElements(PlayState* this) {
     }
 }
 
+#ifdef NON_MATCHING
+void Play_Draw(PlayState* this) {
+    GraphicsContext* gfxCtx = this->state.gfxCtx;
+    Lights* sp268;
+    Vec3f sp25C;
+    u8 sp25B = false;
+    f32 var_fv0; // fogFar
+
+    if (SREG(94) >= 4) {
+        PreRender_ApplyFiltersSlowlyDestroy(&this->pauseBgPreRender);
+        SREG(94) = 0;
+    }
+
+    if ((SREG(94) < 2) && (gTrnsnUnkState < 2)) {
+        if (this->skyboxCtx.skyboxShouldDraw || (this->roomCtx.currRoom.mesh->type0.type == 1)) {
+            func_8012CF0C(gfxCtx, 0, 1, 0, 0, 0);
+        } else {
+            func_8012CF0C(gfxCtx, 1, 1, this->lightCtx.unk7, this->lightCtx.unk8, this->lightCtx.unk9);
+        }
+    } else {
+        func_8012CF0C(gfxCtx, 0, 0, 0, 0, 0);
+    }
+
+    OPEN_DISPS(gfxCtx);
+
+    gSegments[4] = VIRTUAL_TO_PHYSICAL(this->objectCtx.status[this->objectCtx.mainKeepIndex].segment);
+    gSegments[5] = VIRTUAL_TO_PHYSICAL(this->objectCtx.status[this->objectCtx.subKeepIndex].segment);
+    gSegments[2] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
+
+    gSPSegment(POLY_OPA_DISP++, 0x04, this->objectCtx.status[this->objectCtx.mainKeepIndex].segment);
+    gSPSegment(POLY_XLU_DISP++, 0x04, this->objectCtx.status[this->objectCtx.mainKeepIndex].segment);
+    gSPSegment(OVERLAY_DISP++, 0x04, this->objectCtx.status[this->objectCtx.mainKeepIndex].segment);
+
+    gSPSegment(POLY_OPA_DISP++, 0x05, this->objectCtx.status[this->objectCtx.subKeepIndex].segment);
+    gSPSegment(POLY_XLU_DISP++, 0x05, this->objectCtx.status[this->objectCtx.subKeepIndex].segment);
+    gSPSegment(OVERLAY_DISP++, 0x05, this->objectCtx.status[this->objectCtx.subKeepIndex].segment);
+
+    gSPSegment(POLY_OPA_DISP++, 0x02, this->sceneSegment);
+    gSPSegment(POLY_XLU_DISP++, 0x02, this->sceneSegment);
+    gSPSegment(OVERLAY_DISP++, 0x02, this->sceneSegment);
+
+    ShrinkWindow_Draw(gfxCtx);
+
+    POLY_OPA_DISP = func_801660B8(this, POLY_OPA_DISP);
+    POLY_XLU_DISP = func_801660B8(this, POLY_XLU_DISP);
+
+    // fogFar
+    var_fv0 = this->lightCtx.unkC;
+    if (var_fv0 > 12800.0f) {
+        var_fv0 = 12800.0f;
+    }
+
+    func_8013F0D0(&this->view, this->view.fovy, this->view.zNear, var_fv0);
+
+    View_RenderView(&this->view, 0xF);
+
+    Matrix_MtxToMtxF(&this->view.viewing, &this->billboardMtxF);
+    Matrix_MtxToMtxF(&this->view.projection, &this->viewProjectionMtxF);
+
+    this->unk_187F0.x = this->viewProjectionMtxF.xx;
+    this->unk_187F0.y = this->viewProjectionMtxF.yy;
+    this->unk_187F0.z = -this->viewProjectionMtxF.zz;
+
+    SkinMatrix_MtxFMtxFMult(&this->viewProjectionMtxF, &this->billboardMtxF, &this->viewProjectionMtxF);
+
+    this->billboardMtxF.mf[3][2] =
+        (this->billboardMtxF.mf[3][1] =
+             (this->billboardMtxF.mf[3][0] =
+                  (this->billboardMtxF.mf[2][3] =
+                       (this->billboardMtxF.mf[1][3] = (this->billboardMtxF.mf[0][3] = 0.0f)))));
+
+    Matrix_Transpose(&this->billboardMtxF);
+
+    this->billboardMtx = GRAPH_ALLOC(this->state.gfxCtx, 0x80);
+
+    Matrix_MtxFToMtx(&this->billboardMtxF, this->billboardMtx);
+    Matrix_RotateYF(((s16)(Camera_GetCamDirYaw(GET_ACTIVE_CAM(this)) + 0x8000)) * 0.0000958738f, MTXMODE_NEW);
+    Matrix_ToMtx(this->billboardMtx + 1);
+
+    gSPSegment(POLY_OPA_DISP++, 0x01, this->billboardMtx);
+    gSPSegment(POLY_XLU_DISP++, 0x01, this->billboardMtx);
+    gSPSegment(OVERLAY_DISP++, 0x01, this->billboardMtx);
+
+    if (1) {
+        Gfx* sp218;
+        Gfx* sp214 = POLY_OPA_DISP;
+
+        sp218 = Graph_GfxPlusOne(sp214);
+        gSPDisplayList(OVERLAY_DISP++, sp218);
+
+        if (((this->transitionMode == TRANS_MODE_INSTANCE_RUNNING) || (this->transitionMode == TRANS_TYPE_INSTANT)) ||
+            D_801D0D54) {
+            View spA8;
+
+            View_Init(&spA8, gfxCtx);
+            spA8.flags = 0xA;
+
+            SET_FULLSCREEN_VIEWPORT(&spA8);
+
+            func_801400CC(&spA8, &sp218);
+            this->transitionCtx.draw(&this->transitionCtx.instanceData, &sp218);
+        }
+
+        TransitionFade_Draw(&this->unk_18E48, &sp218);
+
+        if (gVisMonoColor.a != 0) {
+            D_801F6D18.primColor.rgba = gVisMonoColor.rgba;
+            VisMono_Draw(&D_801F6D18, &sp218);
+        }
+
+        gSPEndDisplayList(sp218++);
+        Graph_BranchDlist(sp214, sp218);
+        POLY_OPA_DISP = sp218;
+    }
+
+    if (gTrnsnUnkState == 3) {
+        Gfx* sp90 = POLY_OPA_DISP;
+
+        TransitionUnk_Draw(&sTrnsnUnk, &sp90);
+        POLY_OPA_DISP = sp90;
+        sp25B = true;
+        goto Play_Draw_DrawOverlayElements;
+    }
+
+    PreRender_SetValues(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, gfxCtx->curFrameBuffer, gfxCtx->zbuffer);
+
+    if (SREG(94) == 2) {
+        MsgEvent_SendNullTask();
+        if (!gSaveContext.screenScaleFlag) {
+            PreRender_ApplyFiltersSlowlyInit(&this->pauseBgPreRender);
+        }
+        SREG(94) = 3;
+        SREG(33) |= 1;
+    } else {
+        if (SREG(94) == 3) {
+            Gfx* sp8C = POLY_OPA_DISP;
+
+            if (this->pauseBgPreRender.unk_4D == 2) {
+                func_80170B28(&this->pauseBgPreRender, &sp8C);
+            } else {
+                func_80170798(&this->pauseBgPreRender, &sp8C);
+            }
+
+            gSPDisplayList(sp8C++, D_0E000140);
+            POLY_OPA_DISP = sp8C;
+            sp25B = true;
+            goto Play_Draw_DrawOverlayElements;
+        }
+
+        if (!this->unk_18844) {
+            if (this->skyboxId && !this->envCtx.skyboxDisabled) {
+                if ((this->skyboxId == 1) || (this->skyboxId == 3)) {
+                    Environment_UpdateSkybox(this->skyboxId, &this->envCtx, &this->skyboxCtx);
+                    SkyboxDraw_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.unk_13, this->view.eye.x,
+                                    this->view.eye.y, this->view.eye.z);
+                } else if (!this->skyboxCtx.skyboxShouldDraw) {
+                    SkyboxDraw_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x, this->view.eye.y,
+                                    this->view.eye.z);
+                }
+            }
+
+            func_800FE390(this);
+            sp268 = LightContext_NewLights(&this->lightCtx, gfxCtx);
+
+            if (this->roomCtx.currRoom.enablePosLights || (MREG(93) != 0)) {
+                sp268->enablePosLights = true;
+            }
+
+            Lights_BindAll(sp268, this->lightCtx.listHead, NULL, this);
+            Lights_Draw(sp268, gfxCtx);
+
+            Scene_Draw(this);
+
+            if (this->roomCtx.unk78) {
+                //! FAKE: Regalloc around here. s64 solves the regalloc,
+                //        but much too large on the stack. Need:
+                //        `if (stuff that evaluates to 0 but not trivially)`
+                s64 roomDrawFlags = 3;
+
+                Room_Draw(this, &this->roomCtx.currRoom, roomDrawFlags);
+                Room_Draw(this, &this->roomCtx.prevRoom, roomDrawFlags);
+            }
+
+            if (this->skyboxCtx.skyboxShouldDraw) {
+                Vec3f sp78;
+
+                if (1) {}
+                Camera_GetQuakeOffset(&sp78, GET_ACTIVE_CAM(this));
+                SkyboxDraw_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x + sp78.x,
+                                this->view.eye.y + sp78.y, this->view.eye.z + sp78.z);
+            }
+
+            // envCtx.precipitation[PRECIP_RAIN_CUR]
+            if (this->envCtx.unk_F2[1] != 0) {
+                Environment_DrawRain(this, &this->view, gfxCtx);
+            }
+        }
+
+        Environment_FillScreen(gfxCtx, 0, 0, 0, this->bgCoverAlpha, 1);
+
+        Actor_DrawAll(this, &this->actorCtx);
+
+        if (!this->envCtx.sunMoonDisabled) {
+            sp25C.x = this->view.eye.x + this->envCtx.unk_4;
+            sp25C.y = this->view.eye.y + this->envCtx.unk_8;
+            sp25C.z = this->view.eye.z + this->envCtx.unk_C;
+            Environment_DrawSunLensFlare(this, &this->envCtx, &this->view, gfxCtx, sp25C);
+        }
+
+        Environment_DrawCustomLensFlare(this);
+
+        if (MREG(64) != 0) {
+            Environment_FillScreen(gfxCtx, MREG(65), MREG(66), MREG(67), MREG(68), 3);
+        }
+
+        switch (this->envCtx.fillScreen) {
+            case 1:
+                Environment_FillScreen(gfxCtx, this->envCtx.screenFillColor[0], this->envCtx.screenFillColor[1],
+                                       this->envCtx.screenFillColor[2], this->envCtx.screenFillColor[3], 3);
+                break;
+            default:
+                break;
+        }
+
+        if (this->envCtx.sandstormState != 0) {
+            Environment_DrawSandstorm(this, this->envCtx.sandstormState);
+        }
+
+        if (this->unk_18876 != 0) {
+            Environment_FillScreen(gfxCtx, 0, 0, 0, this->unk_18876, 3);
+        }
+
+        DebugDisplay_DrawObjects(this);
+        func_80165460(this);
+
+        if (((SREG(94) == 1) || (gTrnsnUnkState == 1)) || (SREG(89) == 1)) {
+            Gfx* sp74;
+            Gfx* sp70 = POLY_OPA_DISP;
+
+            sp74 = Graph_GfxPlusOne(sp70);
+            gSPDisplayList(OVERLAY_DISP++, sp74);
+            this->pauseBgPreRender.fbuf = gfxCtx->curFrameBuffer;
+
+            if (SREG(94) == 1) {
+                SREG(94) = 2;
+                this->pauseBgPreRender.fbufSave = (u16*)gfxCtx->zbuffer;
+                this->pauseBgPreRender.cvgSave = this->unk_18E58;
+            } else if (SREG(89) == 1) {
+                SREG(89) = 2;
+                this->pauseBgPreRender.fbufSave = (u16*)gfxCtx->zbuffer;
+                this->pauseBgPreRender.cvgSave = this->unk_18E58;
+            } else {
+                gTrnsnUnkState = 2;
+                this->pauseBgPreRender.fbufSave = (u16*)gfxCtx->zbuffer;
+                this->pauseBgPreRender.cvgSave = NULL;
+            }
+
+            func_801705B4(&this->pauseBgPreRender, &sp74);
+
+            if (this->pauseBgPreRender.cvgSave != NULL) {
+                func_80170730(&this->pauseBgPreRender, &sp74);
+            }
+
+            gSPEndDisplayList(sp74++);
+            Graph_BranchDlist(sp70, sp74);
+            POLY_OPA_DISP = sp74;
+            this->unk_18B49 = 2;
+            SREG(33) |= 1;
+        } else {
+        Play_Draw_DrawOverlayElements:
+            Play_DrawOverlayElements(this);
+        }
+    }
+
+    //! Fake: regalloc around here
+    if (this && this && this) {}
+
+    if ((this->view.unk164 != 0) && !gDbgCamEnabled) {
+        Vec3s sp4C;
+
+        Camera_Update(&sp4C, GET_ACTIVE_CAM(this));
+        func_80140024(&this->view);
+        this->view.unk164 = 0;
+        if ((this->skyboxId != 0) && !this->envCtx.skyboxDisabled) {
+            SkyboxDraw_UpdateMatrix(&this->skyboxCtx, this->view.eye.x, this->view.eye.y, this->view.eye.z);
+        }
+    }
+
+    if (!sp25B) {
+        func_800FE3E0(this);
+    }
+
+    CLOSE_DISPS(this->state.gfxCtx);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Draw.s")
+#endif
 
 void func_80168DAC(PlayState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
@@ -1973,7 +2271,7 @@ void Play_Init(GameState* thisx) {
     this->unk_18876 = 0;
     this->bgCoverAlpha = 0;
     this->haltAllActors = false;
-    this->unk_18844 = 0;
+    this->unk_18844 = false;
 
     if (gSaveContext.gameMode != 1) {
         if (gSaveContext.nextTransitionType == TRANS_NEXT_TYPE_DEFAULT) {
