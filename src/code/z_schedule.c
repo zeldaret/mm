@@ -130,7 +130,7 @@ s32 Schedule_ReturnValueS(PlayState* play, u8** script, ScheduleOutput* output) 
 
 s32 Schedule_CheckNotInSceneS(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckNotInSceneS* cmd = (ScheduleCmdCheckNotInSceneS*)*script;
-    s16 sceneId = (cmd->sceneH << 8) | cmd->sceneL;
+    s16 sceneId = (cmd->sceneIdH << 8) | cmd->sceneIdL;
 
     if (sceneId != play->sceneId) {
         *script += cmd->offset;
@@ -141,7 +141,7 @@ s32 Schedule_CheckNotInSceneS(PlayState* play, u8** script, ScheduleOutput* outp
 
 s32 Schedule_CheckNotInSceneL(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckNotInSceneL* cmd = (ScheduleCmdCheckNotInSceneL*)*script;
-    s16 sceneId = (cmd->sceneH << 8) | cmd->sceneL;
+    s16 sceneId = (cmd->sceneIdH << 8) | cmd->sceneIdL;
 
     if (sceneId != play->sceneId) {
         *script = *script + (s16)((cmd->offsetH << 8) | cmd->offsetL);

@@ -130,15 +130,15 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ ScheduleCmdBase base;
-    /* 0x1 */ u8 sceneH;
-    /* 0x2 */ u8 sceneL;
+    /* 0x1 */ u8 sceneIdH;
+    /* 0x2 */ u8 sceneIdL;
     /* 0x3 */ s8 offset;
 } ScheduleCmdCheckNotInSceneS; // size = 0x4
 
 typedef struct {
     /* 0x0 */ ScheduleCmdBase base;
-    /* 0x1 */ u8 sceneH;
-    /* 0x2 */ u8 sceneL;
+    /* 0x1 */ u8 sceneIdH;
+    /* 0x2 */ u8 sceneIdL;
     /* 0x3 */ u8 offsetH;
     /* 0x4 */ u8 offsetL;
 } ScheduleCmdCheckNotInSceneL; // size = 0x5

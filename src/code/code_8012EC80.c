@@ -630,11 +630,11 @@ static u16 sSceneIdsPerTingleMap[6][12] = {
 void Inventory_SetMapVisibility(s16 tingleIndex) {
     s16 i = 0;
     s16 index = 0;
-    u16(*tingleMapSceneIndices)[] = &sSceneIdsPerTingleMap[tingleIndex];
+    u16(*tingleMapSceneIds)[] = &sSceneIdsPerTingleMap[tingleIndex];
 
     if ((tingleIndex >= 0) && (tingleIndex < 6)) {
         while (true) {
-            if ((*tingleMapSceneIndices)[i] == 0xFFFF) {
+            if ((*tingleMapSceneIds)[i] == 0xFFFF) {
                 break;
             }
 
@@ -643,38 +643,38 @@ void Inventory_SetMapVisibility(s16 tingleIndex) {
              * increment to the next index of scenesVisible so that every scene gets a unique flag in scenesVisible,
              * 224 bits were allocated to this although there are only 112 scenes
              */
-            if (((s16)(*tingleMapSceneIndices)[i]) < 0x20) {
+            if (((s16)(*tingleMapSceneIds)[i]) < 0x20) {
                 index = 0;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x40) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0x40) {
                 index = 1;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x60) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0x60) {
                 index = 2;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x80) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0x80) {
                 index = 3;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xA0) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0xA0) {
                 index = 4;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xC0) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0xC0) {
                 index = 5;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xE0) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0xE0) {
                 index = 6;
             }
 
             gSaveContext.save.scenesVisible[index] =
-                gSaveContext.save.scenesVisible[index] | gBitFlags[(s16)(*tingleMapSceneIndices)[i] - (index << 5)];
+                gSaveContext.save.scenesVisible[index] | gBitFlags[(s16)(*tingleMapSceneIds)[i] - (index << 5)];
             i++;
         }
 
-        if ((*tingleMapSceneIndices) == sSceneIdsPerTingleMap[0]) {
+        if ((*tingleMapSceneIds) == sSceneIdsPerTingleMap[0]) {
             gSaveContext.save.mapsVisible |= 3;
-        } else if ((*tingleMapSceneIndices) == sSceneIdsPerTingleMap[1]) {
+        } else if ((*tingleMapSceneIds) == sSceneIdsPerTingleMap[1]) {
             gSaveContext.save.mapsVisible |= 0x1C;
-        } else if ((*tingleMapSceneIndices) == sSceneIdsPerTingleMap[2]) {
+        } else if ((*tingleMapSceneIds) == sSceneIdsPerTingleMap[2]) {
             gSaveContext.save.mapsVisible |= 0xE0;
-        } else if ((*tingleMapSceneIndices) == sSceneIdsPerTingleMap[3]) {
+        } else if ((*tingleMapSceneIds) == sSceneIdsPerTingleMap[3]) {
             gSaveContext.save.mapsVisible |= 0x100;
-        } else if ((*tingleMapSceneIndices) == sSceneIdsPerTingleMap[4]) {
+        } else if ((*tingleMapSceneIds) == sSceneIdsPerTingleMap[4]) {
             gSaveContext.save.mapsVisible |= 0x1E00;
-        } else if ((*tingleMapSceneIndices) == sSceneIdsPerTingleMap[5]) {
+        } else if ((*tingleMapSceneIds) == sSceneIdsPerTingleMap[5]) {
             gSaveContext.save.mapsVisible |= 0x6000;
         }
     }
