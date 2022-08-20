@@ -92,10 +92,6 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS sAnimations = { &gHoneyAndDarlingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 };
-static Vec3f D_80990228 = { 0.0f, 0.0f, 0.0f }; // TODO: should these be moved or renamed?
-static Vec3f D_80990234 = { 0.0f, 1.5f, 0.0f };
-static Vec3f D_80990240 = { 0.0f, 0.0f, 0.0f };
-static Vec3f D_8099024C = { 0.0f, 0.0f, 0.0f };
 
 // EnTg_ChangeAnimation - func_8098F800
 /**
@@ -152,9 +148,8 @@ void EnTg_Destroy(Actor* thisx, PlayState* play) {
 void EnTg_Idle(EnTg* this, PlayState* play) {
     Vec3f heartStartPos;
 
-    // TODO: this is what causes the actor to spin
-    this->actor.shape.rot.y += sREG(0) + 0x258;    // Somehow stays constant at -256
-    this->actor.world.rot = this->actor.shape.rot; // TODO: see if constant?
+    this->actor.shape.rot.y += sREG(0) + 0x258;
+    this->actor.world.rot = this->actor.shape.rot;
 
     // A new heart is spawned every 12 frames
     if (DECR(this->spawnHeartTimer) == 0) {
@@ -178,14 +173,14 @@ void EnTg_Update(Actor* thisx, PlayState* play) {
 // EnTg_OverrideLimbDraw - func_8098FBB4
 s32 EnTg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTg* this = THIS;
+
     return 0;
 }
 
 // EnTg_PostLimbDraw - func_8098FBD0
 void EnTg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnTg* this = THIS;
-
-    Vec3f zeroVec = D_80990228; // { 0.0f, 0.0f, 0.0f };
+    Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
     if (limbIndex == HONEY_AND_DARLING_LIMB_MAN_HEAD) {
         Matrix_MultVec3f(&zeroVec, &this->actor.focus.pos);
@@ -194,7 +189,6 @@ void EnTg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
 void EnTg_Draw(Actor* thisx, PlayState* play) {
     EnTg* this = THIS;
-
     GraphicsContext* gfxCtx;
 
     Matrix_Push();
@@ -220,9 +214,9 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
  * Sets all the flags and a path for when the first heart (of two) is spawned.
  */
 void EnTg_SpawnFirstHeart(EnTg* this, EnTgHeartInfo* enTgHeartInfo, Vec3f* heartStartPos, s32 len) {
-    Vec3f heartVelocityVec = D_80990234; // { 0.0f, 1.5f, 0.0f };
-    Vec3f zeroVec = D_80990240;          // { 0.0f, 0.0f, 0.0f };
-    s32 i = 0;
+    Vec3f heartVelocityVec = { 0.0f, 1.5f, 0.0f };
+    Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
+    s32 i;
 
     for (i = 0; i < len && enTgHeartInfo->isFirstHeartSpawned; i++, enTgHeartInfo++) {}
 
@@ -245,7 +239,7 @@ void EnTg_SpawnFirstHeart(EnTg* this, EnTgHeartInfo* enTgHeartInfo, Vec3f* heart
  * The first heart spawned sets the path, the second heart spawned follows it.
  */
 void EnTg_UpdateHeartPath(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len) {
-    Vec3f zeroVec = D_8099024C;
+    Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
     s16 yaw = Camera_GetInputDirYaw(GET_ACTIVE_CAM(play));
     s32 i;
 
