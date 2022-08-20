@@ -1,6 +1,7 @@
 #include "global.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
+#include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 s32 gDbgCamEnabled = false;
@@ -525,9 +526,372 @@ void func_80166968(PlayState* this, Camera* camera) {
     }
 }
 
-Input* D_801D0D60 = NULL;
+void func_80166B30(PlayState* this) {
+    s32 pad;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80166B30.s")
+    if (this->transitionMode == TRANS_MODE_OFF) {
+        return;
+    }
+
+    switch (this->transitionMode) {
+        case TRANS_MODE_01:
+            if (this->transitionTrigger != TRANS_TRIGGER_END) {
+                s16 sceneLayer = 0;
+
+                Interface_ChangeAlpha(1);
+                if (gSaveContext.nextCutsceneIndex >= 0xFFF0) {
+                    sceneLayer = (gSaveContext.nextCutsceneIndex & 0xF) + 1;
+                }
+
+                if ((!(Entrance_GetTransitionFlags(this->nextEntrance + sceneLayer) & 0x8000) ||
+                     ((this->nextEntrance == ENTRANCE(PATH_TO_MOUNTAIN_VILLAGE, 1)) &&
+                      !(gSaveContext.save.weekEventReg[0x21] & 0x80)) ||
+                     ((this->nextEntrance == ENTRANCE(ROAD_TO_SOUTHERN_SWAMP, 1)) &&
+                      !(gSaveContext.save.weekEventReg[0x14] & 2)) ||
+                     ((this->nextEntrance == ENTRANCE(TERMINA_FIELD, 2)) &&
+                      !(gSaveContext.save.weekEventReg[0x37] & 0x80)) ||
+                     ((this->nextEntrance == ENTRANCE(ROAD_TO_IKANA, 1)) &&
+                      !(gSaveContext.save.weekEventReg[0x34] & 0x20))) &&
+                    (!func_800FE590(this) || (Entrance_GetSceneNum(this->nextEntrance + sceneLayer) < 0) ||
+                     (func_801A8A50(0) != NA_BGM_FINAL_HOURS))) {
+                    func_801A4058(20);
+                    gSaveContext.seqIndex = 0xFF;
+                    gSaveContext.nightSeqIndex = 0xFF;
+                }
+
+                if (func_800FD768()) {
+                    func_801A4058(20);
+                    gSaveContext.seqIndex = 0xFF;
+                    gSaveContext.nightSeqIndex = 0xFF;
+                }
+
+                if (func_800FE590(this) && (Entrance_GetSceneNum(this->nextEntrance + sceneLayer) >= 0) &&
+                    (func_801A8A50(0) == NA_BGM_FINAL_HOURS)) {
+                    func_801A41C8(0x14);
+                }
+            }
+
+            if (D_801D0D54 == 0) {
+                Play_SetupTransition(this, func_80165E7C(this, this->transitionType));
+            }
+
+            if (this->transitionMode >= TRANS_MODE_04) {
+                break;
+            }
+
+        case TRANS_MODE_02: {
+            s32 transWipeSpeed;
+            s32 transFadeDuration;
+            u32 color;
+
+            this->transitionCtx.unk_230(&this->transitionCtx.unk_08);
+            if (this->transitionCtx.transitionType & 0x60) {
+                this->transitionCtx.unk_244(&this->transitionCtx.unk_08, this->transitionCtx.transitionType | 0x80);
+            }
+
+            if ((this->transitionCtx.transitionType == TRANS_TYPE_08) ||
+                (this->transitionCtx.transitionType == TRANS_TYPE_09)) {
+                transWipeSpeed = 28;
+            } else {
+                transWipeSpeed = 14;
+            }
+            gSaveContext.transWipeSpeed = transWipeSpeed;
+
+            switch (this->transitionCtx.transitionType) {
+                case TRANS_TYPE_04:
+                case TRANS_TYPE_05:
+                    transFadeDuration = 20;
+                    break;
+                case TRANS_TYPE_06:
+                case TRANS_TYPE_07:
+                    transFadeDuration = 150;
+                    break;
+                case TRANS_TYPE_17:
+                    transFadeDuration = 2;
+                    break;
+                default:
+                    transFadeDuration = 60;
+                    break;
+            }
+            gSaveContext.transFadeDuration = transFadeDuration;
+
+            switch (this->transitionCtx.transitionType) {
+                case TRANS_TYPE_03:
+                case TRANS_TYPE_05:
+                case TRANS_TYPE_07:
+                case TRANS_TYPE_13:
+                case TRANS_TYPE_17:
+                    color = RGBA8(160, 160, 160, 255);
+                    break;
+                case TRANS_TYPE_18:
+                    color = RGBA8(140, 140, 100, 255);
+                    break;
+                case TRANS_TYPE_19:
+                    color = RGBA8(70, 100, 110, 255);
+                    break;
+                default:
+                    color = RGBA8(0, 0, 0, 255);
+                    break;
+            }
+            this->transitionCtx.unk_248(&this->transitionCtx.unk_08, color);
+            if (this->transitionCtx.unk_24C != NULL) {
+                this->transitionCtx.unk_24C(&this->transitionCtx.unk_08, color);
+            }
+            this->transitionCtx.unk_244(&this->transitionCtx.unk_08,
+                                        (this->transitionTrigger == TRANS_TRIGGER_END) ? 1 : 2);
+            this->transitionCtx.unk_240(&this->transitionCtx.unk_08);
+            if (this->transitionCtx.transitionType == TRANS_TYPE_13) {
+                this->transitionMode = TRANS_MODE_11;
+            } else {
+                this->transitionMode = TRANS_MODE_03;
+            }
+            break;
+        }
+
+        case TRANS_MODE_03:
+            if (this->transitionCtx.unk_250(&this->transitionCtx.unk_08)) {
+                if (this->transitionTrigger != TRANS_TRIGGER_END) {
+                    if (this->transitionCtx.transitionType == TRANS_TYPE_21) {
+                        D_801D0D54 = 0;
+                    }
+
+                    if (gSaveContext.gameMode == 4) {
+                        do {
+                            GameState* state = &this->state;
+
+                            state->running = false;
+                        } while (0);
+                        do {
+                            GameState* state = &this->state;
+
+                            SET_NEXT_GAMESTATE(state, Opening_Init, OpeningContext);
+                        } while (0);
+                    } else if (gSaveContext.gameMode != 2) {
+                        do {
+                            GameState* state = &this->state;
+
+                            state->running = false;
+                        } while (0);
+                        do {
+                            GameState* state = &this->state;
+
+                            SET_NEXT_GAMESTATE(state, Play_Init, PlayState);
+                        } while (0);
+                        gSaveContext.save.entrance = this->nextEntrance;
+                        if (gSaveContext.minigameState == 1) {
+                            gSaveContext.minigameState = 3;
+                        }
+                    } else {
+                        do {
+                            GameState* state = &this->state;
+
+                            state->running = false;
+                        } while (0);
+                        do {
+                            GameState* state = &this->state;
+
+                            SET_NEXT_GAMESTATE(state, FileChoose_Init, FileChooseContext);
+                        } while (0);
+                    }
+                } else {
+                    if (this->transitionCtx.transitionType == TRANS_TYPE_21) {
+                        D_801D0D54 = 1;
+                    } else {
+                        this->transitionCtx.unk_234(&this->transitionCtx.unk_08);
+                        func_80166060(this);
+                    }
+                    this->transitionMode = TRANS_MODE_OFF;
+                    if (D_801F6D10 == 3) {
+                        func_8016424C(&D_801F6C30);
+                        D_801F6D10 = 0;
+                        Game_SetFramerateDivisor(&this->state, 3);
+                    }
+                }
+                this->transitionTrigger = TRANS_TRIGGER_OFF;
+            } else {
+                this->transitionCtx.unk_238(&this->transitionCtx.unk_08, this->state.framerateDivisor);
+            }
+            break;
+    }
+
+    switch (this->transitionMode) {
+        case TRANS_MODE_04:
+            D_801F6C10 = 0;
+            this->envCtx.fillScreen = 1;
+            this->envCtx.screenFillColor[0] = 160;
+            this->envCtx.screenFillColor[1] = 160;
+            this->envCtx.screenFillColor[2] = 160;
+            if (this->transitionTrigger != TRANS_TRIGGER_END) {
+                this->envCtx.screenFillColor[3] = 0;
+                this->transitionMode = TRANS_MODE_05;
+            } else {
+                this->envCtx.screenFillColor[3] = 255;
+                this->transitionMode = TRANS_MODE_06;
+            }
+            break;
+
+        case TRANS_MODE_05:
+            this->envCtx.screenFillColor[3] = (D_801F6C10 / 20.0f) * 255.0f;
+            if (D_801F6C10 >= 20) {
+                do {
+                    GameState* state = &this->state;
+
+                    state->running = false;
+                } while (0);
+                do {
+                    GameState* state = &this->state;
+
+                    SET_NEXT_GAMESTATE(state, Play_Init, PlayState);
+                } while (0);
+                gSaveContext.save.entrance = this->nextEntrance;
+                this->transitionTrigger = TRANS_TRIGGER_OFF;
+                this->transitionMode = TRANS_MODE_OFF;
+            } else {
+                D_801F6C10++;
+            }
+            break;
+
+        case TRANS_MODE_06:
+            this->envCtx.screenFillColor[3] = (1.0f - (D_801F6C10 / 20.0f)) * 255.0f;
+            if (D_801F6C10 >= 20) {
+                D_801F6D10 = 0;
+                Game_SetFramerateDivisor(&this->state, 3);
+                this->transitionTrigger = TRANS_TRIGGER_OFF;
+                this->transitionMode = TRANS_MODE_OFF;
+                this->envCtx.fillScreen = 0;
+            } else {
+                D_801F6C10++;
+            }
+            break;
+
+        case TRANS_MODE_07:
+            D_801F6C10 = 0;
+            this->envCtx.fillScreen = 1;
+            this->envCtx.screenFillColor[0] = 170;
+            this->envCtx.screenFillColor[1] = 160;
+            this->envCtx.screenFillColor[2] = 150;
+            if (this->transitionTrigger != TRANS_TRIGGER_END) {
+                this->envCtx.screenFillColor[3] = 0;
+                this->transitionMode = TRANS_MODE_05;
+            } else {
+                this->envCtx.screenFillColor[3] = 255;
+                this->transitionMode = TRANS_MODE_06;
+            }
+            break;
+
+        case TRANS_MODE_10:
+            if (this->transitionTrigger != TRANS_TRIGGER_END) {
+                do {
+                    GameState* state = &this->state;
+
+                    state->running = false;
+                } while (0);
+                do {
+                    GameState* state = &this->state;
+
+                    SET_NEXT_GAMESTATE(state, Play_Init, PlayState);
+                } while (0);
+                gSaveContext.save.entrance = this->nextEntrance;
+                this->transitionTrigger = TRANS_TRIGGER_OFF;
+                this->transitionMode = TRANS_MODE_OFF;
+            } else {
+                D_801F6D10 = 0;
+                Game_SetFramerateDivisor(&this->state, 3);
+                this->transitionTrigger = TRANS_TRIGGER_OFF;
+                this->transitionMode = TRANS_MODE_OFF;
+            }
+            break;
+
+        case TRANS_MODE_11:
+            if (gSaveContext.cutsceneTransitionControl != 0) {
+                this->transitionMode = TRANS_MODE_03;
+            }
+            break;
+
+        case TRANS_MODE_12:
+            if (this->transitionTrigger != TRANS_TRIGGER_END) {
+                this->envCtx.sandstormState = 1;
+                this->transitionMode = TRANS_MODE_13;
+            } else {
+                this->envCtx.sandstormState = 2;
+                this->envCtx.unk_EB = 0xFF;
+                this->envCtx.unk_EC = 0xFF;
+                this->transitionMode = TRANS_MODE_13;
+            }
+            break;
+
+        case TRANS_MODE_13:
+            func_8019F128(NA_SE_EV_SAND_STORM - SFX_FLAG);
+            if (this->transitionTrigger == TRANS_TRIGGER_END) {
+                if (this->envCtx.unk_EB < 0x6E) {
+                    D_801F6D10 = 0;
+                    Game_SetFramerateDivisor(&this->state, 3);
+                    this->transitionTrigger = TRANS_TRIGGER_OFF;
+                    this->transitionMode = TRANS_MODE_OFF;
+                }
+            } else if (this->envCtx.unk_EC == 0xFF) {
+                do {
+                    GameState* state = &this->state;
+
+                    state->running = false;
+                } while (0);
+                do {
+                    GameState* state = &this->state;
+
+                    SET_NEXT_GAMESTATE(state, Play_Init, PlayState);
+                } while (0);
+                gSaveContext.save.entrance = this->nextEntrance;
+                this->transitionTrigger = TRANS_TRIGGER_OFF;
+                this->transitionMode = TRANS_MODE_OFF;
+            }
+            break;
+
+        case TRANS_MODE_14:
+            if (this->transitionTrigger == TRANS_TRIGGER_END) {
+                this->envCtx.sandstormState = 4;
+                this->envCtx.unk_EB = 0xFF;
+                this->envCtx.unk_EC = 0xFF;
+                this->transitionMode = TRANS_MODE_15;
+            } else {
+                this->transitionMode = TRANS_MODE_12;
+            }
+            break;
+
+        case TRANS_MODE_15:
+            func_8019F128(NA_SE_EV_SAND_STORM - SFX_FLAG);
+            if (this->transitionTrigger == TRANS_TRIGGER_END) {
+                if (this->envCtx.unk_EB <= 0) {
+                    D_801F6D10 = 0;
+                    Game_SetFramerateDivisor(&this->state, 3);
+                    this->transitionTrigger = TRANS_TRIGGER_OFF;
+                    this->transitionMode = TRANS_MODE_OFF;
+                }
+            }
+            break;
+
+        case TRANS_MODE_16:
+            D_801F6C10 = 0;
+            this->envCtx.fillScreen = 1;
+            this->envCtx.screenFillColor[0] = 0;
+            this->envCtx.screenFillColor[1] = 0;
+            this->envCtx.screenFillColor[2] = 0;
+            this->envCtx.screenFillColor[3] = 255;
+            this->transitionMode = TRANS_MODE_17;
+            break;
+
+        case TRANS_MODE_17:
+            if (gSaveContext.cutsceneTransitionControl != 0) {
+                this->envCtx.screenFillColor[3] = gSaveContext.cutsceneTransitionControl;
+                if (gSaveContext.cutsceneTransitionControl < 0x65) {
+                    D_801F6D10 = 0;
+                    Game_SetFramerateDivisor(&this->state, 3);
+                    this->transitionTrigger = TRANS_TRIGGER_OFF;
+                    this->transitionMode = TRANS_MODE_OFF;
+                }
+            }
+            break;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
 
@@ -645,6 +1009,7 @@ void func_80168DAC(PlayState* this) {
 }
 
 void Play_Main(GameState* thisx) {
+    static Input* D_801D0D60 = NULL;
     PlayState* this = (PlayState*)thisx;
 
     D_801D0D60 = CONTROLLER1(&this->state);
@@ -1234,25 +1599,27 @@ void Play_Init(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
     GraphicsContext* gfxCtx = this->state.gfxCtx;
     s32 pad;
-    s32 temp;
+    u32 temp_v0_12;
     s32 sp94;
     Player* player;
-    s32 spawn;
     s32 i;
+    s32 spawn;
     u8 sp87;
-    u32 temp_v0_12;
     s32 scene;
-    s16 params;
 
     if ((gSaveContext.respawnFlag == -4) || (gSaveContext.respawnFlag == -0x63)) {
         if (gSaveContext.eventInf[2] & 0x80) {
             gSaveContext.eventInf[2] &= (u8)~0x80;
-            this->state.running = false;
-            {
+            do {
+                GameState* state = &this->state;
+
+                state->running = false;
+            } while (0);
+            do {
                 GameState* state = &this->state;
 
                 SET_NEXT_GAMESTATE(state, Daytelop_Init, DaytelopContext);
-            }
+            } while (0);
             return;
         }
 
@@ -1266,18 +1633,22 @@ void Play_Init(GameState* thisx) {
 
     if (gSaveContext.save.entrance == -1) {
         gSaveContext.save.entrance = 0;
-        this->state.running = false;
-        {
+        do {
+            GameState* state = &this->state;
+
+            state->running = false;
+        } while (0);
+        do {
             GameState* state = &this->state;
 
             SET_NEXT_GAMESTATE(state, Opening_Init, OpeningContext);
-        }
+        } while (0);
         return;
     }
 
     if ((gSaveContext.nextCutsceneIndex == 0xFFEF) || (gSaveContext.nextCutsceneIndex == 0xFFF0)) {
-        scene = gSaveContext.save.entrance >> 9;
-        spawn = (gSaveContext.save.entrance >> 4) & 0x1F;
+        scene = ((void)0, gSaveContext.save.entrance) >> 9;
+        spawn = (((void)0, gSaveContext.save.entrance) >> 4) & 0x1F;
 
         if (gSaveContext.save.weekEventReg[33] & 0x80) {
             if (scene == ENTR_SCENE_MOUNTAIN_VILLAGE_WINTER) {
@@ -1316,7 +1687,9 @@ void Play_Init(GameState* thisx) {
                 gSaveContext.nextCutsceneIndex = 0xFFF4;
             }
         }
-        gSaveContext.save.entrance = Entrance_Create(scene, spawn, ((void)0, gSaveContext.save.entrance) & 0xF);
+        //! FAKE:
+        gSaveContext.save.entrance =
+            Entrance_Create(((void)0, scene), spawn, ((void)0, gSaveContext.save.entrance) & 0xF);
     }
 
     GameState_Realloc(&this->state, 0);
@@ -1389,12 +1762,10 @@ void Play_Init(GameState* thisx) {
 
     sp87 = gSaveContext.sceneSetupIndex;
 
-    //! FAKE: temp. Also introduces a warning.
     Play_SceneInit(
         this,
-        Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.save.entrance) +
-                                     ((void)0, (temp = gSaveContext.sceneSetupIndex))),
-        Entrance_GetSpawnNum(((void)0, gSaveContext.save.entrance) + ((void)0, (temp = gSaveContext.sceneSetupIndex))));
+        Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneSetupIndex)),
+        Entrance_GetSpawnNum(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneSetupIndex)));
     KaleidoScopeCall_Init(this);
     func_80121FC4(this);
 

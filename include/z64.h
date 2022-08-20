@@ -1105,15 +1105,15 @@ typedef struct {
     /* 0x003 */ char unk03[0x5];
     /* 0x008 */ s32 unk_08;
     /* 0x00C */ char unk0C[0x224];
-    /* 0x230 */ void (*unk_230)(s32*);
-    /* 0x234 */ void (*unk_234)(s32*);
-    /* 0x238 */ void (*unk_238)(s32*, u8);
+    /* 0x230 */ void* (*unk_230)(void*);
+    /* 0x234 */ void (*unk_234)(void*);
+    /* 0x238 */ void (*unk_238)(void*, u8);
     /* 0x23C */ char unk23C[0x4];
-    /* 0x240 */ void (*unk_240)(s32*);
-    /* 0x244 */ void (*unk_244)(s32*, s32);
-    /* 0x248 */ void (*unk_248)(s32*, u32); // RGBA8 colour?
-    /* 0x24C */ void (*unk_24C)(s32*, u32); // RGBA8 colour?
-    /* 0x250 */ s32 (*unk_250)(s32*);
+    /* 0x240 */ void (*unk_240)(void*);
+    /* 0x244 */ void (*unk_244)(void*, s32);
+    /* 0x248 */ void (*unk_248)(void*, u32); // RGBA8 colour?
+    /* 0x24C */ void (*unk_24C)(void*, u32); // RGBA8 colour?
+    /* 0x250 */ s32 (*unk_250)(void*);
     /* 0x254 */ char unk254[0x4];
 } TransitionContext; // size = 0x258
 
