@@ -73,7 +73,7 @@ static Vec3f D_80964B0C = { 0.0f, 60.0f, -8.0f };
 static Vec3f D_80964B18 = { 0.0f, 55.0f, 12.0f };
 static Vec3f D_80964B24 = { 0.0f, 60.0f, 0.0f };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &gHoneyAndDarlingIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &gHoneyAndDarlingCupCheeksLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &gHoneyAndDarlingHugLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
