@@ -6,7 +6,14 @@
 
 /* z_map_data */
 
-#define MAPDATA_SOURCE_MAP_I_STATIC 1
+#define MAPDATA_MID_GAMEPLAY_DANGEON_KEEP 0
+#define MAPDATA_MID_GRAND_MAP_STATIC 1
+#define MAPDATA_MID_MAP_I_STATIC 2
+
+
+#define MAPDATA_CPID_GRAND_MAP_STATIC 0
+#define MAPDATA_CPID_MAP_I_STATIC 1
+#define MAPDATA_CPID_2 2
 
 typedef struct {
     /* 0x00 */ TexturePtr lmapTex; //minimap texture
@@ -17,7 +24,7 @@ typedef struct {
     /* 0x08 */ u8 unk8;
     /* 0x09 */ u8 unk9;
     /* 0x0A */ s16 unkA;
-} T_801BED4C; // size 0x0C?
+} T_801BED4C; // size 0x0C
 
 typedef struct {
     u8 unk0;
@@ -94,13 +101,13 @@ TexturePtr func_8010958C(s32);
 s16 func_80109F78(s32);
 s32 func_80109BA0(s32);
 s32 func_80109714(s32);
-s32 MapData_GetIMapSize(s32);
+s32 MapData_GetMapSize(s32);
 s32 func_80109A98(s32);
 s32 func_80109AD8(s32);
 s32 func_801096D4(s32 arg0);
-void func_8010983C(s32 arg0, s32 *arg1);
-void func_801097C8(s32 arg0, s32* arg1, s32* arg2);
 void func_80109754(s32 arg0, s32 *arg1, s32 *arg2);
+void func_801097C8(s32 arg0, s32* arg1, s32* arg2);
+void MapData_GetMapScale(s32 mapId, s32 *scale);
 void func_80109D40(s32, s32*, s32*);
 void func_80109DD8(s32, s32*, s32*);
 #endif

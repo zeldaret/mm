@@ -305,7 +305,7 @@ typedef struct {
 } TransitionActorList;
 
 typedef struct {
-    /* 0x00 */ u16 unk0;
+    /* 0x00 */ u16 mapId;
     /* 0x02 */ s16 unk2;
     /* 0x04 */ s16 unk4;
     /* 0x06 */ s16 unk6;
@@ -319,7 +319,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ MinimapEntry* entry;
-    /* 0x04 */ s16 unk4;
+    /* 0x04 */ s16 scale;
 } MinimapList2; // size  = 0x8
 
 typedef struct {

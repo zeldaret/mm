@@ -255,8 +255,7 @@ void DoorShutter_Destroy(Actor* thisx, PlayState* play) {
     if (this->actor.room >= 0) {
         s32 transitionActorId = DOORSHUTTER_GET_FC00(&this->actor);
 
-        play->transitionActors.list[transitionActorId].id =
-            -play->transitionActors.list[transitionActorId].id;
+        play->transitionActors.list[transitionActorId].id = -play->transitionActors.list[transitionActorId].id;
     }
 }
 
@@ -678,8 +677,7 @@ void DoorShutter_Draw(Actor* thisx, PlayState* play) {
         }
 
         if (sp44->unk_04 != 0) {
-            TransitionActorEntry* transitionEntry =
-                &play->transitionActors.list[DOORSHUTTER_GET_FC00(&this->actor)];
+            TransitionActorEntry* transitionEntry = &play->transitionActors.list[DOORSHUTTER_GET_FC00(&this->actor)];
 
             if ((play->roomCtx.prevRoom.num >= 0) ||
                 (transitionEntry->sides[0].room == transitionEntry->sides[1].room)) {
