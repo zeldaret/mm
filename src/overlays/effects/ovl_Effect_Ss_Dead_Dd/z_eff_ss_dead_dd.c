@@ -123,7 +123,6 @@ void EffectSsDeadDd_Draw(PlayState* play, u32 index, EffectSs* this) {
 }
 
 void EffectSsDeadDd_Update(PlayState* play, u32 index, EffectSs* this) {
-
     this->rScale += this->rScaleStep;
 
     if (this->rScale < 0) {
