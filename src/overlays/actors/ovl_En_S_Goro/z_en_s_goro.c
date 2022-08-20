@@ -235,9 +235,9 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
 
     switch (EN_S_GORO_GET_MAIN_TYPE(&this->actor)) {
         case EN_S_GORO_TYPE_SHRINE_WINTER_A:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {
                 if (player->transformation == PLAYER_FORM_GORON) {
-                    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_36_02))) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_02)) {
                         switch (this->textId) {
                             case 0xCFB:
                                 return 0xCFC;
@@ -255,7 +255,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                         return 0xCFE;
                     }
                 } else {
-                    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_36_01))) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_01)) {
                         SET_WEEKEVENTREG(WEEKEVENTREG_36_01);
                         return 0xCF9;
                     }
@@ -266,7 +266,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                 // Scene flag - Checks whether the chandelier has been lit
                 if (!Flags_GetSwitch(play, EN_S_GORO_SCENEFLAG_INDEX(&this->actor))) {
                     if (player->transformation == PLAYER_FORM_GORON) {
-                        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_36_08))) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_08)) {
                             if (this->textId == 0xD02) {
                                 SET_WEEKEVENTREG(WEEKEVENTREG_36_08);
                                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
@@ -277,7 +277,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                         return 0xD04;
                     }
-                    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_36_04))) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_04)) {
                         if (this->textId == 0xCFF) {
                             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                             SET_WEEKEVENTREG(WEEKEVENTREG_36_04);
@@ -288,7 +288,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                     return 0xD01;
                 }
-                if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_36_10))) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_10)) {
                     if (this->textId == 0xD05) {
                         SET_WEEKEVENTREG(WEEKEVENTREG_36_10);
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
@@ -302,9 +302,9 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
             break;
 
         case EN_S_GORO_TYPE_SHRINE_WINTER_B:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {
                 if (player->transformation == PLAYER_FORM_GORON) {
-                    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_36_40))) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_40)) {
                         switch (this->textId) {
                             case 0xD15:
                                 return 0xD16;
@@ -320,7 +320,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                         return 0xD17;
                     }
                 } else {
-                    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_36_20))) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_20)) {
                         SET_WEEKEVENTREG(WEEKEVENTREG_36_20);
                         return 0xD13;
                     }
@@ -328,7 +328,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                     return 0xD14;
                 }
             } else if (player->transformation == PLAYER_FORM_GORON) {
-                if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_37_01))) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_01)) {
                     switch (this->textId) {
                         case 0xD1E:
                             return 0xD1F;
@@ -344,7 +344,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                     return 0xD21;
                 }
             } else {
-                if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_36_80))) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_80)) {
                     switch (this->textId) {
                         case 0xD18:
                             return 0xD19;
@@ -367,9 +367,9 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
             break;
 
         case EN_S_GORO_TYPE_SHRINE_WINTER_C:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {
                 if (player->transformation == PLAYER_FORM_GORON) {
-                    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_37_02))) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_02)) {
                         switch (this->textId) {
                             case 0xD09:
                                 return 0xD0A;
@@ -391,7 +391,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                     return 0xD08;
                 }
             } else if (player->transformation == PLAYER_FORM_GORON) {
-                if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_37_04))) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_04)) {
                     switch (this->textId) {
                         case 0xD0E:
                             return 0xD0F;
@@ -842,7 +842,7 @@ s32 EnSGoro_CheckGKBehavior(EnSGoro* this, PlayState* play) {
         return false;
     }
     if ((!(this->actionFlags & EN_S_GORO_ACTIONFLAG_GKQUIET_ACKNOWLEDGED)) &&
-        ((((EnGk*)this->otherGoron)->unk_1E4 & 0x80) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)))) {
+        ((((EnGk*)this->otherGoron)->unk_1E4 & 0x80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04))) {
 
         this->actionFlags |= EN_S_GORO_ACTIONFLAG_GKQUIET_ACKNOWLEDGED;
         this->animInfoIndex = EN_S_GORO_ANIM_ROLLUP;
