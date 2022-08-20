@@ -654,8 +654,8 @@ typedef struct {
     /* 0xE5 */ u8 fillScreen;
     /* 0xE6 */ u8 screenFillColor[4];
     /* 0xEA */ u8 sandstormState;
-    /* 0xEB */ u8 unk_EB;
-    /* 0xEC */ u8 unk_EC;
+    /* 0xEB */ u8 sandstormPrimA;
+    /* 0xEC */ u8 sandstormEnvA;
     /* 0xED */ u8 unk_ED;
     /* 0xEE */ u8 unk_EE[4];
     /* 0xF2 */ u8 unk_F2[8]; // [3] is used by both DemoKankyo and ObjectKankyo effect count
@@ -745,46 +745,46 @@ typedef struct {
 
 typedef enum {
     /*  0 */ TRANS_MODE_OFF,
-    /*  1 */ TRANS_MODE_01,
-    /*  2 */ TRANS_MODE_02,
-    /*  3 */ TRANS_MODE_03,
-    /*  4 */ TRANS_MODE_04,
-    /*  5 */ TRANS_MODE_05,
-    /*  6 */ TRANS_MODE_06,
-    /*  7 */ TRANS_MODE_07,
+    /*  1 */ TRANS_MODE_SETUP,
+    /*  2 */ TRANS_MODE_INSTANCE_INIT,
+    /*  3 */ TRANS_MODE_INSTANCE_RUNNING,
+    /*  4 */ TRANS_MODE_FILL_WHITE_INIT,
+    /*  5 */ TRANS_MODE_FILL_IN,
+    /*  6 */ TRANS_MODE_FILL_OUT,
+    /*  7 */ TRANS_MODE_FILL_BROWN_INIT,
     /*  8 */ TRANS_MODE_08,
     /*  9 */ TRANS_MODE_09,
-    /* 10 */ TRANS_MODE_10,
-    /* 11 */ TRANS_MODE_11,
-    /* 12 */ TRANS_MODE_12,
-    /* 13 */ TRANS_MODE_13,
-    /* 14 */ TRANS_MODE_14,
-    /* 15 */ TRANS_MODE_15,
-    /* 16 */ TRANS_MODE_16,
-    /* 17 */ TRANS_MODE_17
+    /* 10 */ TRANS_MODE_INSTANT,
+    /* 11 */ TRANS_MODE_INSTANCE_WAIT,
+    /* 12 */ TRANS_MODE_SANDSTORM_INIT,
+    /* 13 */ TRANS_MODE_SANDSTORM,
+    /* 14 */ TRANS_MODE_SANDSTORM_END_INIT,
+    /* 15 */ TRANS_MODE_SANDSTORM_END,
+    /* 16 */ TRANS_MODE_CS_BLACK_FILL_INIT,
+    /* 17 */ TRANS_MODE_CS_BLACK_FILL
 } TransitionMode;
 
 typedef enum {
-    /*  0 */ TRANS_TYPE_00,
-    /*  1 */ TRANS_TYPE_01,
-    /*  2 */ TRANS_TYPE_02,
-    /*  3 */ TRANS_TYPE_03,
-    /*  4 */ TRANS_TYPE_04,
-    /*  5 */ TRANS_TYPE_05,
-    /*  6 */ TRANS_TYPE_06,
-    /*  7 */ TRANS_TYPE_07,
-    /*  8 */ TRANS_TYPE_08,
-    /*  9 */ TRANS_TYPE_09, 
-    /* 10 */ TRANS_TYPE_10,
-    /* 11 */ TRANS_TYPE_11,
-    /* 12 */ TRANS_TYPE_12,
-    /* 13 */ TRANS_TYPE_13,
-    /* 14 */ TRANS_TYPE_14,
-    /* 15 */ TRANS_TYPE_15,
-    /* 16 */ TRANS_TYPE_16,
-    /* 17 */ TRANS_TYPE_17,
-    /* 18 */ TRANS_TYPE_18,
-    /* 19 */ TRANS_TYPE_19,
+    /*  0 */ TRANS_TYPE_WIPE,
+    /*  1 */ TRANS_TYPE_TRIFORCE,
+    /*  2 */ TRANS_TYPE_FADE_BLACK,
+    /*  3 */ TRANS_TYPE_FADE_WHITE,
+    /*  4 */ TRANS_TYPE_FADE_BLACK_FAST,
+    /*  5 */ TRANS_TYPE_FADE_WHITE_FAST,
+    /*  6 */ TRANS_TYPE_FADE_BLACK_SLOW,
+    /*  7 */ TRANS_TYPE_FADE_WHITE_SLOW,
+    /*  8 */ TRANS_TYPE_WIPE_FAST,
+    /*  9 */ TRANS_TYPE_FILL_WHITE2, 
+    /* 10 */ TRANS_TYPE_FILL_WHITE,
+    /* 11 */ TRANS_TYPE_INSTANT,
+    /* 12 */ TRANS_TYPE_FILL_BROWN,
+    /* 13 */ TRANS_TYPE_FADE_WHITE_CS_DELAYED,
+    /* 14 */ TRANS_TYPE_SANDSTORM_PERSIST,
+    /* 15 */ TRANS_TYPE_SANDSTORM_END,
+    /* 16 */ TRANS_TYPE_CS_BLACK_FILL,
+    /* 17 */ TRANS_TYPE_FADE_WHITE_INSTANT,
+    /* 18 */ TRANS_TYPE_FADE_GREEN,
+    /* 19 */ TRANS_TYPE_FADE_BLUE,
     /* 20 */ TRANS_TYPE_20,
     /* 21 */ TRANS_TYPE_21,
     /* 22 */ TRANS_TYPE_22,
@@ -807,6 +807,24 @@ typedef enum {
 } FbDemoType;
 
 #define TRANS_NEXT_TYPE_DEFAULT 0xFF
+
+typedef struct {
+    /* 0x000 */ s16 transitionType;
+    /* 0x002 */ s8 fbdemoType;
+    /* 0x003 */ char unk03[0x5];
+    /* 0x008 */ s32 instanceData;
+    /* 0x00C */ char unk0C[0x224];
+    /* 0x230 */ void* (*init)(void* transition);
+    /* 0x234 */ void  (*destroy)(void* transition);
+    /* 0x238 */ void  (*update)(void* transition, s32 updateRate);
+    /* 0x23C */ void  (*draw)(void* transition, Gfx** gfxP);
+    /* 0x240 */ void  (*start)(void* transition);
+    /* 0x244 */ void  (*setType)(void* transition, s32 type);
+    /* 0x248 */ void  (*setColor)(void* transition, u32 color);
+    /* 0x24C */ void  (*setUnkColor)(void* transition, u32 color);
+    /* 0x250 */ s32   (*isDone)(void* transition);
+    /* 0x254 */ char unk254[0x4];
+} TransitionContext; // size = 0x258
 
 typedef struct FaultAddrConvClient {
     /* 0x0 */ struct FaultAddrConvClient* next;
@@ -1099,24 +1117,6 @@ typedef struct {
     /* 0x0 */ u16 state;
 } GameOverContext; // size = 0x2
 
-typedef struct {
-    /* 0x000 */ s16 transitionType;
-    /* 0x002 */ s8 fbdemoType;
-    /* 0x003 */ char unk03[0x5];
-    /* 0x008 */ s32 unk_08;
-    /* 0x00C */ char unk0C[0x224];
-    /* 0x230 */ void* (*unk_230)(void*);
-    /* 0x234 */ void (*unk_234)(void*);
-    /* 0x238 */ void (*unk_238)(void*, u8);
-    /* 0x23C */ char unk23C[0x4];
-    /* 0x240 */ void (*unk_240)(void*);
-    /* 0x244 */ void (*unk_244)(void*, s32);
-    /* 0x248 */ void (*unk_248)(void*, u32); // RGBA8 colour?
-    /* 0x24C */ void (*unk_24C)(void*, u32); // RGBA8 colour?
-    /* 0x250 */ s32 (*unk_250)(void*);
-    /* 0x254 */ char unk254[0x4];
-} TransitionContext; // size = 0x258
-
 struct PlayState {
     /* 0x00000 */ GameState state;
     /* 0x000A4 */ s16 sceneNum;
@@ -1230,6 +1230,7 @@ typedef struct {
     /* 0xA8 */ s32 unk_A8;
 } HiresoStruct; // size = 0xAC
 
+// OoT's TransitionUnk
 typedef struct {
     /* 0x00 */ char unk_00[0xDC];
 } FbDemoStruct; // size = 0xDC

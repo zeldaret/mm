@@ -398,10 +398,10 @@ void EnMttag_RaceFinish(EnMttag* this, PlayState* play) {
     if (DECR(this->timer) == 0) {
         if ((gSaveContext.eventInf[1] & 2)) {
             // Player won
-            EnMttag_ExitRace(play, TRANS_TYPE_03, TRANS_TYPE_03);
+            EnMttag_ExitRace(play, TRANS_TYPE_FADE_WHITE, TRANS_TYPE_FADE_WHITE);
         } else {
             // A non-player Goron won
-            EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
+            EnMttag_ExitRace(play, TRANS_TYPE_FADE_BLACK, TRANS_TYPE_FADE_BLACK);
         }
 
         Actor_MarkForDeath(&this->actor);
@@ -429,8 +429,8 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
             }
 
             play->transitionTrigger = TRANS_TRIGGER_START;
-            play->transitionType = TRANS_TYPE_02;
-            gSaveContext.nextTransitionType = TRANS_TYPE_02;
+            play->transitionType = TRANS_TYPE_FADE_BLACK;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
             func_801477B4(play);
             func_800B7298(play, &this->actor, 7);
             Parameter_AddMagic(play,
@@ -442,7 +442,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
             gSaveContext.eventInf[1] &= (u8)~8;
             gSaveContext.eventInf[2] = ((gSaveContext.eventInf[2] & 0xF) + 1) | (gSaveContext.eventInf[2] & 0xF0);
         } else {
-            EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
+            EnMttag_ExitRace(play, TRANS_TYPE_FADE_BLACK, TRANS_TYPE_FADE_BLACK);
         }
         Actor_MarkForDeath(&this->actor);
     }
@@ -458,7 +458,7 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play) {
             // Exit the race
             func_8019F230();
             gSaveContext.unk_3DD0[4] = 0;
-            EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
+            EnMttag_ExitRace(play, TRANS_TYPE_FADE_BLACK, TRANS_TYPE_FADE_BLACK);
             gSaveContext.eventInf[1] &= (u8)~8;
             gSaveContext.eventInf[1] |= 4;
             Actor_MarkForDeath(&this->actor);

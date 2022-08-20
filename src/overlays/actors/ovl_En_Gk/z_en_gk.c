@@ -722,8 +722,8 @@ void func_80B51B40(EnGk* this, PlayState* play) {
                 if (this->unk_31C == 0xE8F) {
                     play->nextEntrance = ENTRANCE(GORON_RACETRACK, 1);
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    play->transitionType = TRANS_TYPE_03;
-                    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                    play->transitionType = TRANS_TYPE_FADE_WHITE;
+                    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                     Parameter_AddMagic(play, ((void)0, gSaveContext.unk_3F30) +
                                                  (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
                 } else {

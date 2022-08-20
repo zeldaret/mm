@@ -761,7 +761,7 @@ void func_80BFFBC4(EnBomjima* this, PlayState* play) {
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         ActorCutscene_Stop(this->unk_2D4[1]);
     }
 }

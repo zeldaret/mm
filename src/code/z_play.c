@@ -5,14 +5,14 @@
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 s32 gDbgCamEnabled = false;
-u8 D_801D0D54 = 0;
+u8 D_801D0D54 = false;
 
 // bss
-extern s16 D_801F6C10;
+extern s16 sTransitionFillTimer;
 extern Input D_801F6C18;
-extern FbDemoStruct D_801F6C30;
+extern FbDemoStruct sTrnsnUnk;
 extern u16* D_801F6D0C;
-extern s32 D_801F6D10;
+extern s32 gTrnsnUnkState;
 extern VisMono D_801F6D18;
 extern Color_RGBA8 D_801F6D30;
 extern Struct_80140E80 D_801F6D38;
@@ -214,9 +214,9 @@ s32 func_80165E7C(PlayState* this, s32 transitionType) {
 
     if (transitionType == TRANS_TYPE_20) {
         if (!gSaveContext.save.isNight) {
-            nextTransitionType = TRANS_TYPE_03;
+            nextTransitionType = TRANS_TYPE_FADE_WHITE;
         } else {
-            nextTransitionType = TRANS_TYPE_02;
+            nextTransitionType = TRANS_TYPE_FADE_BLACK;
         }
     }
     if (nextTransitionType != transitionType) {
@@ -238,59 +238,59 @@ void Play_SetupTransition(PlayState* this, s32 transitionType) {
         fbdemoType = FBDEMO_WIPE4;
     } else if (!(transitionType & 0x60)) {
         switch (transitionType) {
-            case TRANS_TYPE_01:
+            case TRANS_TYPE_TRIFORCE:
                 fbdemoType = FBDEMO_TRIFORCE;
                 break;
 
-            case TRANS_TYPE_00:
-            case TRANS_TYPE_08:
+            case TRANS_TYPE_WIPE:
+            case TRANS_TYPE_WIPE_FAST:
                 fbdemoType = FBDEMO_WIPE1;
                 break;
 
-            case TRANS_TYPE_02:
-            case TRANS_TYPE_03:
-            case TRANS_TYPE_04:
-            case TRANS_TYPE_05:
-            case TRANS_TYPE_06:
-            case TRANS_TYPE_07:
-            case TRANS_TYPE_13:
-            case TRANS_TYPE_17:
-            case TRANS_TYPE_18:
-            case TRANS_TYPE_19:
+            case TRANS_TYPE_FADE_BLACK:
+            case TRANS_TYPE_FADE_WHITE:
+            case TRANS_TYPE_FADE_BLACK_FAST:
+            case TRANS_TYPE_FADE_WHITE_FAST:
+            case TRANS_TYPE_FADE_BLACK_SLOW:
+            case TRANS_TYPE_FADE_WHITE_SLOW:
+            case TRANS_TYPE_FADE_WHITE_CS_DELAYED:
+            case TRANS_TYPE_FADE_WHITE_INSTANT:
+            case TRANS_TYPE_FADE_GREEN:
+            case TRANS_TYPE_FADE_BLUE:
                 fbdemoType = FBDEMO_FADE;
                 break;
 
-            case TRANS_TYPE_09:
-            case TRANS_TYPE_10:
-                this->transitionMode = TRANS_MODE_04;
+            case TRANS_TYPE_FILL_WHITE2:
+            case TRANS_TYPE_FILL_WHITE:
+                this->transitionMode = TRANS_MODE_FILL_WHITE_INIT;
                 break;
 
-            case TRANS_TYPE_11:
-                this->transitionMode = TRANS_MODE_10;
+            case TRANS_TYPE_INSTANT:
+                this->transitionMode = TRANS_MODE_INSTANT;
                 break;
 
-            case TRANS_TYPE_12:
-                this->transitionMode = TRANS_MODE_07;
+            case TRANS_TYPE_FILL_BROWN:
+                this->transitionMode = TRANS_MODE_FILL_BROWN_INIT;
                 break;
 
-            case TRANS_TYPE_14:
-                this->transitionMode = TRANS_MODE_12;
+            case TRANS_TYPE_SANDSTORM_PERSIST:
+                this->transitionMode = TRANS_MODE_SANDSTORM_INIT;
                 break;
 
-            case TRANS_TYPE_15:
-                this->transitionMode = TRANS_MODE_14;
+            case TRANS_TYPE_SANDSTORM_END:
+                this->transitionMode = TRANS_MODE_SANDSTORM_END_INIT;
                 break;
 
-            case TRANS_TYPE_16:
-                this->transitionMode = TRANS_MODE_16;
+            case TRANS_TYPE_CS_BLACK_FILL:
+                this->transitionMode = TRANS_MODE_CS_BLACK_FILL_INIT;
                 break;
 
             case TRANS_TYPE_21:
-                fbdemoType = 5;
+                fbdemoType = FBDEMO_CIRCLE;
                 break;
 
             case TRANS_TYPE_22:
-                fbdemoType = 6;
+                fbdemoType = FBDEMO_WIPE5;
                 break;
 
             default:
@@ -391,7 +391,7 @@ void Play_Destroy(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
     GraphicsContext* gfxCtx = this->state.gfxCtx;
 
-    if (D_801F6DFC != 0) {
+    if (D_801F6DFC) {
         MsgEvent_SendNullTask();
         func_80178750();
         gfxCtx->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx->framebufferIdx % 2);
@@ -401,7 +401,7 @@ void Play_Destroy(GameState* thisx) {
         gfxCtx->xScale = gViConfigXScale;
         gfxCtx->yScale = gViConfigYScale;
         gfxCtx->updateViMode = true;
-        D_801F6DFC = 0;
+        D_801F6DFC = false;
     }
 
     func_8016FC98(&D_801F6D50);
@@ -425,13 +425,13 @@ void Play_Destroy(GameState* thisx) {
     EffectSS_Clear(this);
     CollisionCheck_DestroyContext(this, &this->colChkCtx);
 
-    if (D_801F6D10 == 3) {
-        func_8016424C(&D_801F6C30);
-        D_801F6D10 = 0;
+    if (gTrnsnUnkState == 3) {
+        TransitionUnk_Destroy(&sTrnsnUnk);
+        gTrnsnUnkState = 0;
     }
 
-    if ((this->transitionMode == TRANS_MODE_03) || (D_801D0D54 != 0)) {
-        this->transitionCtx.unk_234(&this->transitionCtx.unk_08);
+    if ((this->transitionMode == TRANS_MODE_INSTANCE_RUNNING) || D_801D0D54) {
+        this->transitionCtx.destroy(&this->transitionCtx.instanceData);
         func_80166060(this);
         this->transitionMode = TRANS_MODE_OFF;
     }
@@ -526,7 +526,7 @@ void func_80166968(PlayState* this, Camera* camera) {
     }
 }
 
-void func_80166B30(PlayState* this) {
+void Play_UpdateTransition(PlayState* this) {
     s32 pad;
 
     if (this->transitionMode == TRANS_MODE_OFF) {
@@ -534,11 +534,12 @@ void func_80166B30(PlayState* this) {
     }
 
     switch (this->transitionMode) {
-        case TRANS_MODE_01:
+        case TRANS_MODE_SETUP:
             if (this->transitionTrigger != TRANS_TRIGGER_END) {
                 s16 sceneLayer = 0;
 
                 Interface_ChangeAlpha(1);
+
                 if (gSaveContext.nextCutsceneIndex >= 0xFFF0) {
                     sceneLayer = (gSaveContext.nextCutsceneIndex & 0xF) + 1;
                 }
@@ -567,30 +568,33 @@ void func_80166B30(PlayState* this) {
 
                 if (func_800FE590(this) && (Entrance_GetSceneNum(this->nextEntrance + sceneLayer) >= 0) &&
                     (func_801A8A50(0) == NA_BGM_FINAL_HOURS)) {
-                    func_801A41C8(0x14);
+                    func_801A41C8(20);
                 }
             }
 
-            if (D_801D0D54 == 0) {
+            if (!D_801D0D54) {
                 Play_SetupTransition(this, func_80165E7C(this, this->transitionType));
             }
 
-            if (this->transitionMode >= TRANS_MODE_04) {
+            if (this->transitionMode >= TRANS_MODE_FILL_WHITE_INIT) {
+                // non-instance modes break out of this switch
                 break;
             }
-
-        case TRANS_MODE_02: {
+            // fallthrough
+        case TRANS_MODE_INSTANCE_INIT: {
             s32 transWipeSpeed;
             s32 transFadeDuration;
             u32 color;
 
-            this->transitionCtx.unk_230(&this->transitionCtx.unk_08);
+            this->transitionCtx.init(&this->transitionCtx.instanceData);
+
             if (this->transitionCtx.transitionType & 0x60) {
-                this->transitionCtx.unk_244(&this->transitionCtx.unk_08, this->transitionCtx.transitionType | 0x80);
+                this->transitionCtx.setType(&this->transitionCtx.instanceData,
+                                            this->transitionCtx.transitionType | 0x80);
             }
 
-            if ((this->transitionCtx.transitionType == TRANS_TYPE_08) ||
-                (this->transitionCtx.transitionType == TRANS_TYPE_09)) {
+            if ((this->transitionCtx.transitionType == TRANS_TYPE_WIPE_FAST) ||
+                (this->transitionCtx.transitionType == TRANS_TYPE_FILL_WHITE2)) {
                 transWipeSpeed = 28;
             } else {
                 transWipeSpeed = 14;
@@ -598,17 +602,20 @@ void func_80166B30(PlayState* this) {
             gSaveContext.transWipeSpeed = transWipeSpeed;
 
             switch (this->transitionCtx.transitionType) {
-                case TRANS_TYPE_04:
-                case TRANS_TYPE_05:
+                case TRANS_TYPE_FADE_BLACK_FAST:
+                case TRANS_TYPE_FADE_WHITE_FAST:
                     transFadeDuration = 20;
                     break;
-                case TRANS_TYPE_06:
-                case TRANS_TYPE_07:
+
+                case TRANS_TYPE_FADE_BLACK_SLOW:
+                case TRANS_TYPE_FADE_WHITE_SLOW:
                     transFadeDuration = 150;
                     break;
-                case TRANS_TYPE_17:
+
+                case TRANS_TYPE_FADE_WHITE_INSTANT:
                     transFadeDuration = 2;
                     break;
+
                 default:
                     transFadeDuration = 60;
                     break;
@@ -616,43 +623,49 @@ void func_80166B30(PlayState* this) {
             gSaveContext.transFadeDuration = transFadeDuration;
 
             switch (this->transitionCtx.transitionType) {
-                case TRANS_TYPE_03:
-                case TRANS_TYPE_05:
-                case TRANS_TYPE_07:
-                case TRANS_TYPE_13:
-                case TRANS_TYPE_17:
+                case TRANS_TYPE_FADE_WHITE:
+                case TRANS_TYPE_FADE_WHITE_FAST:
+                case TRANS_TYPE_FADE_WHITE_SLOW:
+                case TRANS_TYPE_FADE_WHITE_CS_DELAYED:
+                case TRANS_TYPE_FADE_WHITE_INSTANT:
                     color = RGBA8(160, 160, 160, 255);
                     break;
-                case TRANS_TYPE_18:
+
+                case TRANS_TYPE_FADE_GREEN:
                     color = RGBA8(140, 140, 100, 255);
                     break;
-                case TRANS_TYPE_19:
+
+                case TRANS_TYPE_FADE_BLUE:
                     color = RGBA8(70, 100, 110, 255);
                     break;
+
                 default:
                     color = RGBA8(0, 0, 0, 255);
                     break;
             }
-            this->transitionCtx.unk_248(&this->transitionCtx.unk_08, color);
-            if (this->transitionCtx.unk_24C != NULL) {
-                this->transitionCtx.unk_24C(&this->transitionCtx.unk_08, color);
+
+            this->transitionCtx.setColor(&this->transitionCtx.instanceData, color);
+            if (this->transitionCtx.setUnkColor != NULL) {
+                this->transitionCtx.setUnkColor(&this->transitionCtx.instanceData, color);
             }
-            this->transitionCtx.unk_244(&this->transitionCtx.unk_08,
+
+            this->transitionCtx.setType(&this->transitionCtx.instanceData,
                                         (this->transitionTrigger == TRANS_TRIGGER_END) ? 1 : 2);
-            this->transitionCtx.unk_240(&this->transitionCtx.unk_08);
-            if (this->transitionCtx.transitionType == TRANS_TYPE_13) {
-                this->transitionMode = TRANS_MODE_11;
+            this->transitionCtx.start(&this->transitionCtx.instanceData);
+
+            if (this->transitionCtx.transitionType == TRANS_TYPE_FADE_WHITE_CS_DELAYED) {
+                this->transitionMode = TRANS_MODE_INSTANCE_WAIT;
             } else {
-                this->transitionMode = TRANS_MODE_03;
+                this->transitionMode = TRANS_MODE_INSTANCE_RUNNING;
             }
             break;
         }
 
-        case TRANS_MODE_03:
-            if (this->transitionCtx.unk_250(&this->transitionCtx.unk_08)) {
+        case TRANS_MODE_INSTANCE_RUNNING:
+            if (this->transitionCtx.isDone(&this->transitionCtx.instanceData)) {
                 if (this->transitionTrigger != TRANS_TRIGGER_END) {
                     if (this->transitionCtx.transitionType == TRANS_TYPE_21) {
-                        D_801D0D54 = 0;
+                        D_801D0D54 = false;
                     }
 
                     if (gSaveContext.gameMode == 4) {
@@ -678,6 +691,7 @@ void func_80166B30(PlayState* this) {
                             SET_NEXT_GAMESTATE(state, Play_Init, PlayState);
                         } while (0);
                         gSaveContext.save.entrance = this->nextEntrance;
+
                         if (gSaveContext.minigameState == 1) {
                             gSaveContext.minigameState = 3;
                         }
@@ -695,44 +709,47 @@ void func_80166B30(PlayState* this) {
                     }
                 } else {
                     if (this->transitionCtx.transitionType == TRANS_TYPE_21) {
-                        D_801D0D54 = 1;
+                        D_801D0D54 = true;
                     } else {
-                        this->transitionCtx.unk_234(&this->transitionCtx.unk_08);
+                        this->transitionCtx.destroy(&this->transitionCtx.instanceData);
                         func_80166060(this);
                     }
                     this->transitionMode = TRANS_MODE_OFF;
-                    if (D_801F6D10 == 3) {
-                        func_8016424C(&D_801F6C30);
-                        D_801F6D10 = 0;
+                    if (gTrnsnUnkState == 3) {
+                        TransitionUnk_Destroy(&sTrnsnUnk);
+                        gTrnsnUnkState = 0;
                         Game_SetFramerateDivisor(&this->state, 3);
                     }
                 }
                 this->transitionTrigger = TRANS_TRIGGER_OFF;
             } else {
-                this->transitionCtx.unk_238(&this->transitionCtx.unk_08, this->state.framerateDivisor);
+                this->transitionCtx.update(&this->transitionCtx.instanceData, this->state.framerateDivisor);
             }
             break;
     }
 
+    // update non-instance transitions
     switch (this->transitionMode) {
-        case TRANS_MODE_04:
-            D_801F6C10 = 0;
-            this->envCtx.fillScreen = 1;
+        case TRANS_MODE_FILL_WHITE_INIT:
+            sTransitionFillTimer = 0;
+            this->envCtx.fillScreen = true;
             this->envCtx.screenFillColor[0] = 160;
             this->envCtx.screenFillColor[1] = 160;
             this->envCtx.screenFillColor[2] = 160;
+
             if (this->transitionTrigger != TRANS_TRIGGER_END) {
                 this->envCtx.screenFillColor[3] = 0;
-                this->transitionMode = TRANS_MODE_05;
+                this->transitionMode = TRANS_MODE_FILL_IN;
             } else {
                 this->envCtx.screenFillColor[3] = 255;
-                this->transitionMode = TRANS_MODE_06;
+                this->transitionMode = TRANS_MODE_FILL_OUT;
             }
             break;
 
-        case TRANS_MODE_05:
-            this->envCtx.screenFillColor[3] = (D_801F6C10 / 20.0f) * 255.0f;
-            if (D_801F6C10 >= 20) {
+        case TRANS_MODE_FILL_IN:
+            this->envCtx.screenFillColor[3] = (sTransitionFillTimer / 20.0f) * 255.0f;
+
+            if (sTransitionFillTimer >= 20) {
                 do {
                     GameState* state = &this->state;
 
@@ -747,39 +764,41 @@ void func_80166B30(PlayState* this) {
                 this->transitionTrigger = TRANS_TRIGGER_OFF;
                 this->transitionMode = TRANS_MODE_OFF;
             } else {
-                D_801F6C10++;
+                sTransitionFillTimer++;
             }
             break;
 
-        case TRANS_MODE_06:
-            this->envCtx.screenFillColor[3] = (1.0f - (D_801F6C10 / 20.0f)) * 255.0f;
-            if (D_801F6C10 >= 20) {
-                D_801F6D10 = 0;
+        case TRANS_MODE_FILL_OUT:
+            this->envCtx.screenFillColor[3] = (1.0f - (sTransitionFillTimer / 20.0f)) * 255.0f;
+
+            if (sTransitionFillTimer >= 20) {
+                gTrnsnUnkState = 0;
                 Game_SetFramerateDivisor(&this->state, 3);
                 this->transitionTrigger = TRANS_TRIGGER_OFF;
                 this->transitionMode = TRANS_MODE_OFF;
-                this->envCtx.fillScreen = 0;
+                this->envCtx.fillScreen = false;
             } else {
-                D_801F6C10++;
+                sTransitionFillTimer++;
             }
             break;
 
-        case TRANS_MODE_07:
-            D_801F6C10 = 0;
-            this->envCtx.fillScreen = 1;
+        case TRANS_MODE_FILL_BROWN_INIT:
+            sTransitionFillTimer = 0;
+            this->envCtx.fillScreen = true;
             this->envCtx.screenFillColor[0] = 170;
             this->envCtx.screenFillColor[1] = 160;
             this->envCtx.screenFillColor[2] = 150;
+
             if (this->transitionTrigger != TRANS_TRIGGER_END) {
                 this->envCtx.screenFillColor[3] = 0;
-                this->transitionMode = TRANS_MODE_05;
+                this->transitionMode = TRANS_MODE_FILL_IN;
             } else {
                 this->envCtx.screenFillColor[3] = 255;
-                this->transitionMode = TRANS_MODE_06;
+                this->transitionMode = TRANS_MODE_FILL_OUT;
             }
             break;
 
-        case TRANS_MODE_10:
+        case TRANS_MODE_INSTANT:
             if (this->transitionTrigger != TRANS_TRIGGER_END) {
                 do {
                     GameState* state = &this->state;
@@ -795,73 +814,76 @@ void func_80166B30(PlayState* this) {
                 this->transitionTrigger = TRANS_TRIGGER_OFF;
                 this->transitionMode = TRANS_MODE_OFF;
             } else {
-                D_801F6D10 = 0;
+                gTrnsnUnkState = 0;
                 Game_SetFramerateDivisor(&this->state, 3);
                 this->transitionTrigger = TRANS_TRIGGER_OFF;
                 this->transitionMode = TRANS_MODE_OFF;
             }
             break;
 
-        case TRANS_MODE_11:
+        case TRANS_MODE_INSTANCE_WAIT:
             if (gSaveContext.cutsceneTransitionControl != 0) {
-                this->transitionMode = TRANS_MODE_03;
+                this->transitionMode = TRANS_MODE_INSTANCE_RUNNING;
             }
             break;
 
-        case TRANS_MODE_12:
+        case TRANS_MODE_SANDSTORM_INIT:
             if (this->transitionTrigger != TRANS_TRIGGER_END) {
                 this->envCtx.sandstormState = 1;
-                this->transitionMode = TRANS_MODE_13;
+                this->transitionMode = TRANS_MODE_SANDSTORM;
             } else {
                 this->envCtx.sandstormState = 2;
-                this->envCtx.unk_EB = 0xFF;
-                this->envCtx.unk_EC = 0xFF;
-                this->transitionMode = TRANS_MODE_13;
+                this->envCtx.sandstormPrimA = 255;
+                this->envCtx.sandstormEnvA = 255;
+                this->transitionMode = TRANS_MODE_SANDSTORM;
             }
             break;
 
-        case TRANS_MODE_13:
+        case TRANS_MODE_SANDSTORM:
             func_8019F128(NA_SE_EV_SAND_STORM - SFX_FLAG);
             if (this->transitionTrigger == TRANS_TRIGGER_END) {
-                if (this->envCtx.unk_EB < 0x6E) {
-                    D_801F6D10 = 0;
+                if (this->envCtx.sandstormPrimA < 110) {
+                    gTrnsnUnkState = 0;
                     Game_SetFramerateDivisor(&this->state, 3);
                     this->transitionTrigger = TRANS_TRIGGER_OFF;
                     this->transitionMode = TRANS_MODE_OFF;
                 }
-            } else if (this->envCtx.unk_EC == 0xFF) {
-                do {
-                    GameState* state = &this->state;
+            } else {
+                if (this->envCtx.sandstormEnvA == 255) {
+                    do {
+                        GameState* state = &this->state;
 
-                    state->running = false;
-                } while (0);
-                do {
-                    GameState* state = &this->state;
+                        state->running = false;
+                    } while (0);
+                    do {
+                        GameState* state = &this->state;
 
-                    SET_NEXT_GAMESTATE(state, Play_Init, PlayState);
-                } while (0);
-                gSaveContext.save.entrance = this->nextEntrance;
-                this->transitionTrigger = TRANS_TRIGGER_OFF;
-                this->transitionMode = TRANS_MODE_OFF;
+                        SET_NEXT_GAMESTATE(state, Play_Init, PlayState);
+                    } while (0);
+                    gSaveContext.save.entrance = this->nextEntrance;
+                    this->transitionTrigger = TRANS_TRIGGER_OFF;
+                    this->transitionMode = TRANS_MODE_OFF;
+                }
             }
             break;
 
-        case TRANS_MODE_14:
+        case TRANS_MODE_SANDSTORM_END_INIT:
             if (this->transitionTrigger == TRANS_TRIGGER_END) {
                 this->envCtx.sandstormState = 4;
-                this->envCtx.unk_EB = 0xFF;
-                this->envCtx.unk_EC = 0xFF;
-                this->transitionMode = TRANS_MODE_15;
+                this->envCtx.sandstormPrimA = 255;
+                this->envCtx.sandstormEnvA = 255;
+                this->transitionMode = TRANS_MODE_SANDSTORM_END;
             } else {
-                this->transitionMode = TRANS_MODE_12;
+                this->transitionMode = TRANS_MODE_SANDSTORM_INIT;
             }
             break;
 
-        case TRANS_MODE_15:
+        case TRANS_MODE_SANDSTORM_END:
             func_8019F128(NA_SE_EV_SAND_STORM - SFX_FLAG);
+
             if (this->transitionTrigger == TRANS_TRIGGER_END) {
-                if (this->envCtx.unk_EB <= 0) {
-                    D_801F6D10 = 0;
+                if (this->envCtx.sandstormPrimA <= 0) {
+                    gTrnsnUnkState = 0;
                     Game_SetFramerateDivisor(&this->state, 3);
                     this->transitionTrigger = TRANS_TRIGGER_OFF;
                     this->transitionMode = TRANS_MODE_OFF;
@@ -869,21 +891,22 @@ void func_80166B30(PlayState* this) {
             }
             break;
 
-        case TRANS_MODE_16:
-            D_801F6C10 = 0;
-            this->envCtx.fillScreen = 1;
+        case TRANS_MODE_CS_BLACK_FILL_INIT:
+            sTransitionFillTimer = 0;
+            this->envCtx.fillScreen = true;
             this->envCtx.screenFillColor[0] = 0;
             this->envCtx.screenFillColor[1] = 0;
             this->envCtx.screenFillColor[2] = 0;
             this->envCtx.screenFillColor[3] = 255;
-            this->transitionMode = TRANS_MODE_17;
+            this->transitionMode = TRANS_MODE_CS_BLACK_FILL;
             break;
 
-        case TRANS_MODE_17:
+        case TRANS_MODE_CS_BLACK_FILL:
             if (gSaveContext.cutsceneTransitionControl != 0) {
                 this->envCtx.screenFillColor[3] = gSaveContext.cutsceneTransitionControl;
-                if (gSaveContext.cutsceneTransitionControl < 0x65) {
-                    D_801F6D10 = 0;
+
+                if (gSaveContext.cutsceneTransitionControl <= 100) {
+                    gTrnsnUnkState = 0;
                     Game_SetFramerateDivisor(&this->state, 3);
                     this->transitionTrigger = TRANS_TRIGGER_OFF;
                     this->transitionMode = TRANS_MODE_OFF;
@@ -896,16 +919,16 @@ void func_80166B30(PlayState* this) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
 
 void func_80167DE4(PlayState* play) {
-    if (D_801F6DFC == 0) {
+    if (!D_801F6DFC) {
         if (play->pauseCtx.unk_1F0 != 0) {
-            D_801F6DFC = 1;
+            D_801F6DFC = true;
             D_801F6D50.unk_00 = 0;
         }
     } else {
         if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_L) ||
             CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B) ||
             CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_START) || (gIrqMgrResetStatus != 0)) {
-            D_801F6DFC = 0;
+            D_801F6DFC = false;
             play->pauseCtx.unk_1F0 = 0;
             D_801F6D50.unk_00 = 0;
             play->msgCtx.msgLength = 0;
@@ -915,7 +938,7 @@ void func_80167DE4(PlayState* play) {
             play_sound(NA_SE_SY_CANCEL);
         }
     }
-    if (D_801F6DFC != 0) {
+    if (D_801F6DFC) {
         func_8016F5A8(play, &D_801F6D50, play->state.input);
         func_8015680C(play);
     } else {
@@ -973,7 +996,7 @@ void func_80168DAC(PlayState* this) {
     {
         GraphicsContext* gfxCtx2 = this->state.gfxCtx;
 
-        if (D_801F6DFC != 0) {
+        if (D_801F6DFC) {
             if (D_801FBBD4 != 1) {
                 MsgEvent_SendNullTask();
                 func_80178818();
@@ -1000,7 +1023,7 @@ void func_80168DAC(PlayState* this) {
         }
     }
 
-    if ((D_801F6DFC != 0) && ((SREG(2) != 2) || (gZBufferPtr == NULL))) {
+    if (D_801F6DFC && ((SREG(2) != 2) || (gZBufferPtr == NULL))) {
         func_8016F1A8(&D_801F6D50, gfxCtx);
         Message_Draw(this);
     } else {
@@ -1452,7 +1475,7 @@ void func_80169EFC(GameState* thisx) {
     gSaveContext.respawnFlag = 1;
     func_80169ECC(this);
     this->transitionTrigger = TRANS_TRIGGER_START;
-    this->transitionType = TRANS_TYPE_02;
+    this->transitionType = TRANS_TYPE_FADE_BLACK;
 }
 
 // Gameplay_LoadToLastEntrance ?
@@ -1464,7 +1487,7 @@ void func_80169F78(GameState* thisx) {
     gSaveContext.respawnFlag = -1;
     func_80169ECC(this);
     this->transitionTrigger = TRANS_TRIGGER_START;
-    this->transitionType = TRANS_TYPE_02;
+    this->transitionType = TRANS_TYPE_FADE_BLACK;
 }
 
 // Gameplay_TriggerRespawn ?
@@ -1794,9 +1817,9 @@ void Play_Init(GameState* thisx) {
     this->unk_18E68 = D_80784600;
     this->unk_18E58 = D_80784600;
     this->unk_18E60 = D_80784600;
-    D_801F6D10 = 0;
+    gTrnsnUnkState = 0;
     this->transitionMode = TRANS_MODE_OFF;
-    D_801D0D54 = 0;
+    D_801D0D54 = false;
 
     FrameAdvance_Init(&this->frameAdvCtx);
     Rand_Seed(osGetTime());
@@ -1820,7 +1843,7 @@ void Play_Init(GameState* thisx) {
             gSaveContext.nextTransitionType = TRANS_NEXT_TYPE_DEFAULT;
         }
     } else {
-        this->transitionType = TRANS_TYPE_02;
+        this->transitionType = TRANS_TYPE_FADE_BLACK;
     }
 
     TransitionFade_Init(&this->unk_18E48);
@@ -1872,7 +1895,7 @@ void Play_Init(GameState* thisx) {
     AnimationContext_Update(this, &this->animationCtx);
     func_800EDBE0(this);
     gSaveContext.respawnFlag = 0;
-    D_801F6DFC = 0;
+    D_801F6DFC = false;
     func_8016FC78(&D_801F6D50);
 }
 

@@ -344,8 +344,8 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
                     play->nextEntrance = ENTRANCE(CLOCK_TOWER_ROOFTOP, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF2;
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    play->transitionType = TRANS_TYPE_02;
-                    gSaveContext.nextTransitionType = TRANS_TYPE_02;
+                    play->transitionType = TRANS_TYPE_FADE_BLACK;
+                    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
                     sGiantsCutsceneState = 9;
                 }
                 break;

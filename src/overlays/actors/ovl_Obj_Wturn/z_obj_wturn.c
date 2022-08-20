@@ -110,7 +110,7 @@ void func_808A7C78(ObjWturn* this, PlayState* play) {
     Play_SetCameraAtEyeUp(play, this->subCamId, &player->actor.focus.pos, &subCam->eye, &sSubCamUp);
     if (this->unk_14A == 1) {
         play->transitionType = TRANS_TYPE_64;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         gSaveContext.nextCutsceneIndex = 0;
         if (play->sceneNum == SCENE_F40) {
             play->nextEntrance = ENTRANCE(STONE_TOWER_INVERTED, 0);

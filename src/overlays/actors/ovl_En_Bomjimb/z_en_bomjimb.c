@@ -799,7 +799,7 @@ void func_80C02CA4(EnBomjimb* this, PlayState* play) {
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
     }
     gSaveContext.save.weekEventReg[75] |= 0x40;
     gSaveContext.save.weekEventReg[83] |= 4;

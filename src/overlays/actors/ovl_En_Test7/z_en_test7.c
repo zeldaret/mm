@@ -676,7 +676,7 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
     }
 
     play->transitionTrigger = TRANS_TRIGGER_START;
-    play->transitionType = TRANS_TYPE_02;
+    play->transitionType = TRANS_TYPE_FADE_BLACK;
     gSaveContext.seqIndex = 0xFF;
     gSaveContext.nightSeqIndex = 0xFF;
 }

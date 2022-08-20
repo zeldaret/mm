@@ -197,7 +197,7 @@ void func_80A90C34(void) {
 }
 
 void func_80A90C54(PlayState* play, f32 arg1) {
-    play->envCtx.fillScreen = 1;
+    play->envCtx.fillScreen = true;
     play->envCtx.screenFillColor[0] = 250;
     play->envCtx.screenFillColor[1] = 250;
     play->envCtx.screenFillColor[2] = 250;
@@ -205,7 +205,7 @@ void func_80A90C54(PlayState* play, f32 arg1) {
 }
 
 void func_80A90D20(PlayState* play) {
-    play->envCtx.fillScreen = 0;
+    play->envCtx.fillScreen = false;
 }
 
 void func_80A90D34(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
@@ -344,7 +344,7 @@ void EnTest6_Destroy(Actor* thisx, PlayState* play2) {
     play->envCtx.lightSettings.fogColor[2] = 0;
     play->envCtx.lightSettings.fogNear = 0;
     play->envCtx.lightSettings.fogFar = 0;
-    play->envCtx.fillScreen = 0;
+    play->envCtx.fillScreen = false;
 
     for (i = 0; i < ARRAY_COUNT(this->lights); i++) {
         LightContext_RemoveLight(play, &play->lightCtx, this->lights[i].node);
@@ -981,7 +981,7 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                 this->unk_276 = 99;
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
-                play->transitionType = TRANS_TYPE_02;
+                play->transitionType = TRANS_TYPE_FADE_BLACK;
                 if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     gSaveContext.respawnFlag = -0x63;
                     gSaveContext.eventInf[2] |= 0x80;
@@ -1062,7 +1062,7 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                     this->unk_276 = 99;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
-                    play->transitionType = TRANS_TYPE_02;
+                    play->transitionType = TRANS_TYPE_FADE_BLACK;
                     gSaveContext.respawnFlag = 2;
                     play->msgCtx.ocarinaMode = 4;
                 }
