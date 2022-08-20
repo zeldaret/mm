@@ -97,17 +97,16 @@ static AnimationInfoS sAnimations[] = {
     { &gAdultRutoSwimmingUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
-// in PostLimbdraw, conversts limbIndex to bodyPartsPos index
-s8 sBodyPartPosIndexs[] = { -1, -1, 0x0C, 0x0D, 0x0E, -1, 0x09, 0x0A, 0x0B, -1,  0x00, 0x06,
-                            -1, -1, 0x07, 0x08, 0x02, -1, -1,   0x03, 0x4,  0x2, 0x1,  0 };
+// in PostLimbdraw, converts limbIndex to bodyPartsPos index
+static s8 sBodyPartPosIndices[] = { -1, -1, 0x0C, 0x0D, 0x0E, -1, 0x09, 0x0A, 0x0B, -1,  0x00, 0x06,
+                                    -1, -1, 0x07, 0x08, 0x02, -1, -1,   0x03, 0x4,  0x2, 0x1,  0 };
 
-s8 sRuBodyParts[] = {
+static s8 sRuBodyParts[] = {
     0x00, 0x00, 0x00, 0x00, 0x03, 0x04, 0x00, 0x06, 0x07, 0x00, 0x09, 0x0A, 0x00, 0x0C, 0x0D, 0x00,
 };
 
-u8 sRuShadowSizes[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-};
+static u8 sRuShadowSizes[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 static TrackOptionsSet sTrackOptions = {
     { 0xFA0, 4, 1, 3 },
@@ -116,40 +115,33 @@ static TrackOptionsSet sTrackOptions = {
     { 0x1770, 4, 1, 6 },
 };
 
-Vec3f sHeadFocusPos = {
+static Vec3f sHeadFocusPos = {
     800.0f,
     0,
     0,
 };
 
-Vec3f sBodyFocusPos = {
+static Vec3f sBodyFocusPos = {
     0,
     0,
     0,
 };
 
-// unused, display lists? (not in oot ru2 either)
-// if they were display lists they would be
-//  gDPSetRenderMode(POLY_OPA_DISP++, AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-//  G_RM_FOG_SHADE_A, AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-//  GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA));
-// gDPSetAlphaCompare(POLY_OPA_DISP++, G_AC_THRESHOLD);
-Gfx D_80A39598[] = {
-    0xE200001C,
-    0xC81049F8,
-    0xE2001E01,
-    0x00000001,
-};
-
-Gfx sRutoEmptyDisplayList[] = {
-    0xDF000000, 0x00000000 // gSPEndDisplayList();
+// copy of displaylist found in En_Zo
+static Gfx sTransparencyDlist[] = {
+    gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                          G_RM_FOG_SHADE_A,
+                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                          GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
+    gsDPSetAlphaCompare(G_AC_THRESHOLD),
+    gsSPEndDisplayList(),
 };
 
 s32 EnRu_ChangeAnimation(SkelAnime* skelAnime, s16 animIndex) {
     s16 lastFrame;
     s32 ret = false;
 
-    if ((animIndex >= 0) && (animIndex < 8)) { // cannot be sizeof() because slti vs sltiu
+    if ((animIndex >= 0) && (animIndex < ARRAY_COUNT(sAnimations))) {
         lastFrame = sAnimations[animIndex].frameCount;
 
         ret = true;
@@ -318,8 +310,8 @@ void EnRu_PostLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     Vec3f headFocus = sHeadFocusPos;
     Vec3f bodyPartPos = sBodyFocusPos;
 
-    if (sBodyPartPosIndexs[limbIndex] >= 0) {
-        Matrix_MultVec3f(&bodyPartPos, &this->bodyPartsPos[sBodyPartPosIndexs[limbIndex]]);
+    if (sBodyPartPosIndices[limbIndex] >= 0) {
+        Matrix_MultVec3f(&bodyPartPos, &this->bodyPartsPos[sBodyPartPosIndices[limbIndex]]);
     }
     if (limbIndex == RU2_LIMB_HEAD) {
         Matrix_MultVec3f(&headFocus, &thisx->focus.pos);
@@ -353,7 +345,8 @@ void EnRu_Draw(Actor* thisx, PlayState* play) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(eyeTextures[this->eyeState]));
 
-    gSPSegment(POLY_OPA_DISP++, 0x0C, &sRutoEmptyDisplayList);
+    // only runs the last command of the display list, which is gsSPEndDisplayList
+    gSPSegment(POLY_OPA_DISP++, 0x0C, &sTransparencyDlist[2]);
 
     POLY_OPA_DISP =
         SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
