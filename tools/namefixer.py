@@ -705,6 +705,7 @@ wordReplace = {
     "play->msgCtx.unk1202A": "play->msgCtx.ocarinaMode",
     "play->msgCtx.unk1202C": "play->msgCtx.ocarinaAction",
     "play->nextEntranceIndex": "play->nextEntrance",
+    "play->sceneNum": "play->sceneId",
 
     "play->sceneLoadFlag": "play->transitionTrigger",
     "play->unk_18B4A": "play->transitionMode",
