@@ -22,7 +22,7 @@ s16 sEquipMagicArrowSlotHoldTimer = 0;
 // Number of frames to move icon from slot to target position when equipping.
 s16 sEquipAnimTimer = 10;
 
-u8 gPlayerFormSlotRestrictions[5][24] = {
+u8 gPlayerFormSlotRestrictions[PLAYER_FORM_MAX][24] = {
     // Fierce Deity
     {
         false, // SLOT_OCARINA
@@ -189,7 +189,7 @@ void KaleidoScope_DrawAmmoCount(PauseContext* pauseCtx, GraphicsContext* gfxCtx,
     OPEN_DISPS(gfxCtx);
 
     if (item == ITEM_PICTO_BOX) {
-        if (!(((void)0, gSaveContext.save.inventory.questItems) & (gBitFlags[QUEST_PICTOGRAPH]))) {
+        if (!CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
             ammo = 0;
         } else {
             ammo = 1;
@@ -274,6 +274,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
     gDPPipeSync(POLY_OPA_DISP++);
 
     // Draw the item icons
+    // Loop over slots (i) and vtx offset (j)
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     for (j = 0, i = 0; i < 24; i++, j += 4) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
@@ -322,6 +323,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
             func_8012C628(play->state.gfxCtx);
             gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
+            // Loop over slots (i) and ammoIndex (j)
             for (j = 0, i = 0; i < 24; i++) {
                 if (gAmmoItems[i] != ITEM_NONE) {
                     if (((void)0, gSaveContext.save.inventory.items[i]) != ITEM_NONE) {

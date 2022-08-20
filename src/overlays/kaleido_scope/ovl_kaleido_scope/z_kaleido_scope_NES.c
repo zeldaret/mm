@@ -432,7 +432,7 @@ void func_801091F0(PlayState*);
 void func_808160A0(PlayState*);
 void func_8081D6DC(PlayState*);
 void KaleidoScope_DrawWorldMap(PlayState*);
-void func_8081FF80(PlayState*);
+void KaleidoScope_DrawMaskSelect(PlayState*);
 
 #ifdef NON_EQUIVALENT
 void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
@@ -592,7 +592,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->maskPageVtx, &D_8082B700[0]);
 
-            func_8081FF80(play);
+            KaleidoScope_DrawMaskSelect(play);
         }
 
         switch (pauseCtx->pageIndex) {
@@ -702,7 +702,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
                 POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->maskPageVtx, &D_8082B700[0]);
 
-                func_8081FF80(play);
+                KaleidoScope_DrawMaskSelect(play);
                 break;
         }
     }

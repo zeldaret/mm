@@ -52,16 +52,11 @@ s16 D_8082B6DC[] = {
 
 s32 D_8082B6E4[] = { 0, 0, 0 };
 
-s16 D_8082B6F0[] = { 100, 255 };
+void KaleidoScope_DrawMaskSelect(PlayState* play);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawMaskSelect.s")
 
-s32 D_8082B6F4 = 0;
+void KaleidoScope_UpdateMaskCursor(PlayState* play);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_UpdateMaskCursor.s")
 
-s16 D_8082B6F8[] = { 10, 0, 0, 0 };
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081FF80.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808204AC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80820FA4.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80821730.s")
+void KaleidoScope_UpdateMaskEquip(PlayState* play);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_UpdateMaskEquip.s")
