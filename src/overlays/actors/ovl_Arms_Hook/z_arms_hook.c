@@ -164,7 +164,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
 
         grabbed = this->grabbed;
         if (grabbed != NULL) {
-            if ((grabbed->update == NULL) || (grabbed->flags & ACTOR_FLAG_2000) != ACTOR_FLAG_2000) {
+            if ((grabbed->update == NULL) || !CHECK_FLAG_ALL(grabbed->flags, ACTOR_FLAG_2000)) {
                 grabbed = NULL;
                 this->grabbed = NULL;
             } else {
