@@ -456,9 +456,61 @@ void Play_Destroy(GameState* thisx) {
     ZeldaArena_Cleanup();
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801663C4.s")
+void func_801663C4(u8 *arg0, s8 *arg1, u32 arg2) {
+    u32 i;
+    u8* var_v0 = arg0;
+    s8* var_v1 = arg1;
+    s32 var_a3 = 8;
+    u32 var_t0 = 0;
+    s32 var_a1;
+    u32 temp_lo_2;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80166644.s")
+    for(i = 0; i < arg2; i++) {
+        temp_lo_2 = *var_v0++;
+        temp_lo_2 = (temp_lo_2 * 0x1F + 0x80) / 255;
+        var_a1 = var_a3 - 5;
+        if(var_a1 > 0) {
+            var_t0 |= temp_lo_2 << (var_a1);
+            
+        } else {
+            var_t0 |= temp_lo_2 >> -(var_a1);
+            *var_v1++ = var_t0;
+            var_a1 += 8;
+            var_t0 = temp_lo_2 << (var_a1);        
+        }
+        var_a3 = var_a1;
+    }
+    if(var_a3 < 8) {
+        *var_v1 = var_t0;
+    }
+}
+
+void func_80166644(u8 *arg0, s8 *arg1, u32 arg2) {
+    u32 i;
+    u8* var_v0 = arg0;
+    s8* var_v1 = arg1;
+    s32 var_a3 = 8;
+    u32 var_t0;
+    s32 var_a1;
+    u32 temp_lo_2 = *var_v0++;
+
+    for(i = 0; i < arg2; i++) {
+        var_a1 = var_a3 - 5;
+        if(var_a1 > 0) {
+            var_t0 = 0;
+            var_t0 |= temp_lo_2 >> (var_a1);
+        } else {
+            var_t0 = 0;
+            var_t0 |= temp_lo_2 << -(var_a1);
+            temp_lo_2 = *var_v0++;
+            var_a1 += 8;
+            var_t0 |= temp_lo_2 >> var_a1;       
+        }
+        var_t0 = (var_t0 & 0x1F) * 0xFF / 0x1F;
+        *var_v1++ = var_t0;
+        var_a3 = var_a1;
+    }
+}
 
 f32 func_801668B4(PlayState* this, Vec3f* arg1, s32* arg2) {
     Player* player = GET_PLAYER(this);
