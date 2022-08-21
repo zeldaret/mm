@@ -629,12 +629,13 @@ void func_80A47298(EnWiz* this, PlayState* play) {
     this->unk_3D4 = 0.015f;
     this->unk_740 = 0;
     this->unk_3C6 = 0;
-    if ((this->drawDmgEffTimer != 0) && ((this->drawDmgEffType == 0) || (this->drawDmgEffType == 0x14))) {
+    if ((this->drawDmgEffTimer != 0) &&
+        ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) || (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_LIGHT_ORBS))) {
         this->unk_3B2 = 0;
     }
 
     this->unk_3C0 = 0x4E20;
-    if ((this->drawDmgEffTimer != 0) && (this->drawDmgEffType == 0xB)) {
+    if ((this->drawDmgEffTimer != 0) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX)) {
         this->unk_3C0 = 0;
         this->unk_3B2 = 0;
     }
@@ -646,21 +647,21 @@ void func_80A47298(EnWiz* this, PlayState* play) {
 void func_80A473B8(EnWiz* this, PlayState* play) {
     s32 i;
 
-    if ((this->drawDmgEffTimer < 50) && (this->drawDmgEffType == 0xB)) {
+    if ((this->drawDmgEffTimer < 50) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX)) {
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 1.0f, 0.7f);
         this->drawDmgEffTimer = 0;
-        this->drawDmgEffType = 0;
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->unk_3C0 = 0x4E20;
         this->actor.velocity.y = 30.0f;
         this->actor.gravity = -3.0f;
     }
 
-    if ((this->drawDmgEffTimer != 0) && (this->drawDmgEffTimer < 0x1E) &&
-        ((this->drawDmgEffType == 0) || (this->drawDmgEffType == 0x14))) {
+    if ((this->drawDmgEffTimer != 0) && (this->drawDmgEffTimer < 30) &&
+        ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) || (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_LIGHT_ORBS))) {
         this->actor.velocity.y = 30.0f;
         this->actor.gravity = -3.0f;
         this->drawDmgEffTimer = 0;
-        this->drawDmgEffType = 0;
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     } else if ((this->unk_750 == 0) && (this->unk_3B6 != 0) && (this->actor.colChkInfo.health <= 0)) {
         this->actor.velocity.y = 30.0f;
         this->actor.gravity = -3.0f;
@@ -737,13 +738,12 @@ void func_80A476C8(EnWiz* this, PlayState* play) {
     }
 }
 
-#ifdef NON_MATCHING
 void func_80A477E8(EnWiz* this, PlayState* play) {
     s32 i;
     s32 attackDealsDamage = false;
 
-    if (this->unk_6F4.base.acFlags & 2) {
-        this->unk_454.base.acFlags &= ~2;
+    if (this->unk_6F4.base.acFlags & AC_HIT) {
+        this->unk_454.base.acFlags &= ~AC_HIT;
         if (this->unk_3B0 < 7) {
             return;
         }
@@ -752,29 +752,36 @@ void func_80A477E8(EnWiz* this, PlayState* play) {
             case 0xF:
                 attackDealsDamage = true;
                 break;
+
             case 2:
                 if (this->unk_74A == 1) {
-                    this->drawDmgEffTimer = 0x28;
-                    this->drawDmgEffType = 0;
+                    this->drawDmgEffTimer = 40;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                 }
+
                 attackDealsDamage = true;
                 break;
+
             case 3:
                 if ((this->unk_74A == 0) || (this->unk_74A == 2)) {
-                    this->drawDmgEffTimer = 0x50;
-                    this->drawDmgEffType = 0xB;
+                    this->drawDmgEffTimer = 80;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
                     this->drawDmgEffScale = 0.0f;
                     this->drawDmgEffFrozenSteamScale = 1.5f;
                 }
+
                 Actor_ApplyDamage(&this->actor);
                 func_80A47298(this, play);
                 break;
+
             case 4:
-                if (((this->drawDmgEffType != 0xB) && (this->drawDmgEffType != 0xA)) || (this->drawDmgEffTimer == 0)) {
-                    Actor_Spawn(&play->actorCtx, play, 0xA2, this->actor.focus.pos.x, this->actor.focus.pos.y,
-                                this->actor.focus.pos.z, 0, 0, 0, 4);
-                    this->drawDmgEffTimer = 0x28;
-                    this->drawDmgEffType = 0x14;
+                if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_SFX) &&
+                     (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
+                    (this->drawDmgEffTimer == 0)) {
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x,
+                                this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                    this->drawDmgEffTimer = 40;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     attackDealsDamage = true;
                 }
                 break;
@@ -790,15 +797,15 @@ void func_80A477E8(EnWiz* this, PlayState* play) {
 
     if ((this->unk_740 != 0) && (this->unk_3B6 != 1)) {
         for (i = 0; i < this->unk_740; i++) {
-            if ((gGameInfo->data[0x692] != 0) || (this->unk_454.elements[i + 1].info.bumperFlags & 2)) {
-                Vec3f accel;
-                Vec3f velocity;
-                Vec3f pos;
-                f32 temp_fs0;
-                s32 j;
+            Vec3f accel;
+            Vec3f velocity;
+            Vec3f pos;
+            f32 temp_fs0;
+            s32 j;
 
+            if ((iREG(50) != 0) || (this->unk_454.elements[i + 1].info.bumperFlags & BUMP_HIT)) {
                 this->unk_3B6 = 2;
-                this->unk_454.base.acFlags &= ~2;
+                this->unk_454.base.acFlags &= ~BUMP_HIT;
                 if (this->unk_81C[i].x != .0f || this->unk_81C[i].z != .0f) {
                     for (j = 0; j < 9; j++) {
                         accel.x = 0.0f;
@@ -823,9 +830,6 @@ void func_80A477E8(EnWiz* this, PlayState* play) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A477E8.s")
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/EnWiz_Update.s")
 
