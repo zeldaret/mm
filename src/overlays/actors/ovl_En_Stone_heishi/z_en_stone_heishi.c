@@ -148,7 +148,7 @@ void func_80BC94B0(EnStoneheishi* this) {
 }
 
 void func_80BC9560(EnStoneheishi* this, PlayState* play) {
-    Player* sp1C = GET_PLAYER(play);
+    Player* player = GET_PLAYER(play);
     s16 yawDiff;
     s32 absYawDiff;
 
@@ -169,7 +169,7 @@ void func_80BC9560(EnStoneheishi* this, PlayState* play) {
 
     absYawDiff = ABS_ALT(yawDiff);
 
-    if (absYawDiff < 0x18F1 && ((s32)(sp1C->stateFlags1 << 8) >= 0)) {
+    if (absYawDiff < 0x18F1 && ((s32)(player->stateFlags1 << 8) >= 0)) {
         func_800B8614(&this->actor, play, 70.0f);
     }
 }
