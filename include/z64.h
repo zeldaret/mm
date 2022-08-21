@@ -404,10 +404,10 @@ typedef struct {
     /* 0x000 */ View view;
     /* 0x168 */ u8* iconItemSegment;
     /* 0x16C */ u8* iconItem24Segment;
-    /* 0x170 */ u8* unk_170;
-    /* 0x174 */ u8* unk_174;
+    /* 0x170 */ u8* iconItemAltSegment;
+    /* 0x174 */ u8* iconItemLangSegment;
     /* 0x178 */ u8* nameSegment;
-    /* 0x17C */ u8* unk_17C;
+    /* 0x17C */ u8* iconItemVtxSegment;
     /* 0x180 */ Vtx* itemPageVtx;
     /* 0x184 */ Vtx* mapPageVtx;
     /* 0x188 */ Vtx* questPageVtx;

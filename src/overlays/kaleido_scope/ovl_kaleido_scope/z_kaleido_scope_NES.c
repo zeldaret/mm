@@ -74,7 +74,7 @@ f32 D_8082B8D8[] = {
     -4.0f, -4.0f, -4.0f, 4.0f, 4.0f, 4.0f, 4.0f, -4.0f,
 };
 
-s16 D_8082B8F8[] = {
+u16 D_8082B8F8[] = {
     PAUSE_MAP, PAUSE_MASK, PAUSE_QUEST, PAUSE_ITEM, PAUSE_MASK, PAUSE_MAP, PAUSE_ITEM, PAUSE_QUEST,
 };
 
@@ -616,8 +616,32 @@ void func_80824B90(PlayState* play);
 void func_808256E4(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808256E4.s")
 
-void func_8082585C(PlayState* play, Input* input);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8082585C.s")
+void func_8082585C(PlayState* play, Input* input) {
+    PauseContext* pauseCtx = &play->pauseCtx;
+
+    if (1) {
+        pauseCtx->eye.x += D_8082B8B8[pauseCtx->mode] * 2.0f;
+        pauseCtx->eye.z += D_8082B8D8[pauseCtx->mode] * 2.0f;
+
+        if (pauseCtx->unk_206 < 32) {
+            D_8082B918 -= (s16)(D_8082B910 / 4);
+            D_8082B91C -= (s16)(D_8082B914 / 4);
+        } else {
+            D_8082B918 += (s16)(D_8082B910 / 4);
+            D_8082B91C += (s16)(D_8082B914 / 4);
+        }
+
+        pauseCtx->unk_206 += 8;
+
+        if (pauseCtx->unk_206 == 64) {
+            pauseCtx->unk_206 = 0;
+            pauseCtx->pageIndex = D_8082B8F8[pauseCtx->mode];
+            pauseCtx->unk_200 = 0;
+
+            KaleidoScope_HandlePageToggles(play, input);
+        }
+    }
+}
 
 void KaleidoScope_SetView(PauseContext* pauseCtx, f32 x, f32 y, f32 z) {
     Vec3f eye;
@@ -1380,9 +1404,9 @@ void KaleidoScope_Draw(PlayState* play) {
     gSPSegment(POLY_OPA_DISP++, 0x08, pauseCtx->iconItemSegment);
     gSPSegment(POLY_OPA_DISP++, 0x09, pauseCtx->iconItem24Segment);
     gSPSegment(POLY_OPA_DISP++, 0x0A, pauseCtx->nameSegment);
-    gSPSegment(POLY_OPA_DISP++, 0x0C, pauseCtx->unk_170);
-    gSPSegment(POLY_OPA_DISP++, 0x0D, pauseCtx->unk_174);
-    gSPSegment(POLY_OPA_DISP++, 0x0B, pauseCtx->unk_17C);
+    gSPSegment(POLY_OPA_DISP++, 0x0C, pauseCtx->iconItemAltSegment);
+    gSPSegment(POLY_OPA_DISP++, 0x0D, pauseCtx->iconItemLangSegment);
+    gSPSegment(POLY_OPA_DISP++, 0x0B, pauseCtx->iconItemVtxSegment);
 
     if (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) {
         KaleidoScope_SetView(pauseCtx, pauseCtx->eye.x, pauseCtx->eye.y, pauseCtx->eye.z);
@@ -1465,8 +1489,40 @@ void KaleidoScope_GrayOutTextureRGBA32(u32* texture, u16 pixelCount) {
     }
 }
 
-void func_80828788(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80828788.s")
+void func_80828788(PlayState* play) {
+    PauseContext* pauseCtx = &play->pauseCtx;
+
+    pauseCtx->eye.x += D_8082B8B8[pauseCtx->mode] * 2.0f;
+    pauseCtx->eye.z += D_8082B8D8[pauseCtx->mode] * 2.0f;
+    pauseCtx->unk_206 += 8;
+
+    if (pauseCtx->unk_206 == 64) {
+        func_80112C0C(play, 1);
+
+        if (pauseCtx->cursorSpecialPos == 0) {
+            gSaveContext.buttonStatus[EQUIP_SLOT_B] = D_801C6A98[pauseCtx->pageIndex][0];
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = D_801C6A98[pauseCtx->pageIndex][1];
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = D_801C6A98[pauseCtx->pageIndex][1];
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = D_801C6A98[pauseCtx->pageIndex][1];
+            gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
+        } else {
+            gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_DISABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_DISABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_DISABLED;
+        }
+
+        pauseCtx->pageIndex = D_8082B8F8[pauseCtx->mode];
+        pauseCtx->unk_200 = 0;
+        pauseCtx->state++;
+        pauseCtx->alpha = 255;
+        func_80115844(play, 3);
+    } else if (pauseCtx->unk_206 == 64) {
+        pauseCtx->pageIndex = D_8082B8F8[pauseCtx->mode];
+        pauseCtx->mode = (pauseCtx->pageIndex * 2) + 1;
+    }
+}
 
 void KaleidoScope_Update(PlayState* play) {
     static u16 D_8082BE88[] = {
@@ -1491,7 +1547,7 @@ void KaleidoScope_Update(PlayState* play) {
     size_t size2;
     u16 i;
     u16 worldMapCursorPoint;
-    void* var_a0_2;
+    void* iconItemLangSegment;
     s16 stepR;
     s16 stepG;
     s16 stepB;
@@ -1537,37 +1593,35 @@ void KaleidoScope_Update(PlayState* play) {
             size1 = SEGMENT_ROM_SIZE(icon_item_24_static_old);
             func_80178E7C((uintptr_t)SEGMENT_ROM_START(icon_item_24_static_test), pauseCtx->iconItem24Segment, size1);
 
-            pauseCtx->unk_170 = (void*)ALIGN16((uintptr_t)pauseCtx->iconItem24Segment + size1);
-
-            if (func_8010A0A4(play) != 0) {
+            pauseCtx->iconItemAltSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItem24Segment + size1);
+            if (func_8010A0A4(play)) {
                 size_t size = SEGMENT_ROM_SIZE(icon_item_dungeon_static);
 
-                DmaMgr_SendRequest0(pauseCtx->unk_170, SEGMENT_ROM_START(icon_item_dungeon_static), size);
-                var_a0_2 = func_801068FC(play, (void*)ALIGN16((uintptr_t)pauseCtx->unk_170 + size), size);
+                DmaMgr_SendRequest0(pauseCtx->iconItemAltSegment, SEGMENT_ROM_START(icon_item_dungeon_static), size);
+                iconItemLangSegment =
+                    func_801068FC(play, (void*)ALIGN16((uintptr_t)pauseCtx->iconItemAltSegment + size), size);
                 sInDungeonScene = true;
             } else {
                 size_t size;
 
                 sInDungeonScene = false;
                 size = SEGMENT_ROM_SIZE(icon_item_field_static);
-                DmaMgr_SendRequest0(pauseCtx->unk_170, _icon_item_field_staticSegmentRomStart, size);
-                var_a0_2 = (void*)ALIGN16((uintptr_t)pauseCtx->unk_170 + size);
+                DmaMgr_SendRequest0(pauseCtx->iconItemAltSegment, _icon_item_field_staticSegmentRomStart, size);
+                iconItemLangSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemAltSegment + size);
             }
 
-            pauseCtx->unk_174 = var_a0_2;
-
+            pauseCtx->iconItemLangSegment = iconItemLangSegment;
             size2 = SEGMENT_ROM_SIZE(icon_item_jpn_static);
-            DmaMgr_SendRequest0(pauseCtx->unk_174, SEGMENT_ROM_START(icon_item_jpn_static), size2);
-            pauseCtx->nameSegment = (void*)ALIGN16((uintptr_t)pauseCtx->unk_174 + size2);
+            DmaMgr_SendRequest0(pauseCtx->iconItemLangSegment, SEGMENT_ROM_START(icon_item_jpn_static), size2);
 
+            pauseCtx->nameSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemLangSegment + size2);
             func_8011552C(play, 0x15);
-
             if (((void)0, gSaveContext.worldMapArea) < 0x16) {
                 func_8082192C(pauseCtx->nameSegment + 0x400, ((void)0, gSaveContext.worldMapArea));
             }
 
-            pauseCtx->unk_17C = (void*)ALIGN16((uintptr_t)pauseCtx->nameSegment + 0xA00);
-            DmaMgr_SendRequest0(pauseCtx->unk_17C, SEGMENT_ROM_START(icon_item_vtx_static),
+            pauseCtx->iconItemVtxSegment = (void*)ALIGN16((uintptr_t)pauseCtx->nameSegment + 0xA00);
+            DmaMgr_SendRequest0(pauseCtx->iconItemVtxSegment, SEGMENT_ROM_START(icon_item_vtx_static),
                                 SEGMENT_ROM_SIZE(icon_item_vtx_static));
 
             pauseCtx->unk_2B6 = 0xFF;
@@ -1853,12 +1907,12 @@ void KaleidoScope_Update(PlayState* play) {
             size1 = SEGMENT_ROM_SIZE(icon_item_24_static_old);
             func_80178E7C(SEGMENT_ROM_START(icon_item_24_static_test), pauseCtx->iconItem24Segment, size1);
 
-            pauseCtx->unk_170 = (void*)ALIGN16((uintptr_t)pauseCtx->iconItem24Segment + size1);
+            pauseCtx->iconItemAltSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItem24Segment + size1);
             size2 = SEGMENT_ROM_SIZE(icon_item_gameover_static);
-            DmaMgr_SendRequest0(pauseCtx->unk_170, SEGMENT_ROM_START(icon_item_gameover_static), size2);
+            DmaMgr_SendRequest0(pauseCtx->iconItemAltSegment, SEGMENT_ROM_START(icon_item_gameover_static), size2);
 
-            pauseCtx->unk_174 = (void*)ALIGN16((uintptr_t)pauseCtx->unk_170 + size2);
-            DmaMgr_SendRequest0(pauseCtx->unk_174, SEGMENT_ROM_START(icon_item_jpn_static),
+            pauseCtx->iconItemLangSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemAltSegment + size2);
+            DmaMgr_SendRequest0(pauseCtx->iconItemLangSegment, SEGMENT_ROM_START(icon_item_jpn_static),
                                 SEGMENT_ROM_SIZE(icon_item_jpn_static));
 
             gSaveContext.unk_3DD0[3] = 0;
@@ -2099,22 +2153,22 @@ void KaleidoScope_Update(PlayState* play) {
             size0 = SEGMENT_ROM_SIZE(icon_item_static_old);
             func_80178E7C(SEGMENT_ROM_START(icon_item_static_test), pauseCtx->iconItemSegment, size0);
 
-            pauseCtx->unk_170 = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemSegment + size0);
+            pauseCtx->iconItemAltSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemSegment + size0);
             sInDungeonScene = false;
             size1 = SEGMENT_ROM_SIZE(icon_item_field_static);
-            DmaMgr_SendRequest0(pauseCtx->unk_170, SEGMENT_ROM_START(icon_item_field_static), size1);
+            DmaMgr_SendRequest0(pauseCtx->iconItemAltSegment, SEGMENT_ROM_START(icon_item_field_static), size1);
 
-            pauseCtx->unk_174 = (void*)ALIGN16((uintptr_t)pauseCtx->unk_170 + size1);
+            pauseCtx->iconItemLangSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemAltSegment + size1);
             size2 = SEGMENT_ROM_SIZE(icon_item_jpn_static);
-            DmaMgr_SendRequest0(pauseCtx->unk_174, SEGMENT_ROM_START(icon_item_jpn_static), size2);
+            DmaMgr_SendRequest0(pauseCtx->iconItemLangSegment, SEGMENT_ROM_START(icon_item_jpn_static), size2);
 
-            pauseCtx->nameSegment = (void*)ALIGN16((uintptr_t)pauseCtx->unk_174 + size2);
+            pauseCtx->nameSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemLangSegment + size2);
             func_8011552C(play, 0x16);
             worldMapCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
             func_80821900(pauseCtx->nameSegment, worldMapCursorPoint);
 
-            pauseCtx->unk_17C = (void*)ALIGN16((uintptr_t)pauseCtx->nameSegment + 0xA00);
-            DmaMgr_SendRequest0(pauseCtx->unk_17C, SEGMENT_ROM_START(icon_item_vtx_static),
+            pauseCtx->iconItemVtxSegment = (void*)ALIGN16((uintptr_t)pauseCtx->nameSegment + 0xA00);
+            DmaMgr_SendRequest0(pauseCtx->iconItemVtxSegment, SEGMENT_ROM_START(icon_item_vtx_static),
                                 SEGMENT_ROM_SIZE(icon_item_vtx_static));
 
             pauseCtx->state = PAUSE_STATE_16;
