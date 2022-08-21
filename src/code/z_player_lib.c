@@ -1389,16 +1389,16 @@ s32 func_80124148(Player* player) {
     return func_80124110(player, player->itemActionParam);
 }
 
-s32 Player_ActionToMeleeWeapon(PlayerActionParam actionParam) {
-    s32 weapon = actionParam - (PLAYER_AP_SWORD_KOKIRI - 1);
+PlayerMeleeWeapon Player_ActionToMeleeWeapon(PlayerActionParam actionParam) {
+    PlayerMeleeWeapon weapon = actionParam - (PLAYER_AP_SWORD_KOKIRI - 1);
 
-    if ((weapon > 0) && (weapon <= (PLAYER_AP_ZORA_FINS - (PLAYER_AP_SWORD_KOKIRI - 1)))) {
+    if ((weapon > PLAYER_MELEEWEAPON_NONE) && (weapon < PLAYER_MELEEWEAPON_MAX)) {
         return weapon;
     }
-    return 0;
+    return PLAYER_MELEEWEAPON_NONE;
 }
 
-s32 Player_GetMeleeWeaponHeld(Player* player) {
+PlayerMeleeWeapon Player_GetMeleeWeaponHeld(Player* player) {
     return Player_ActionToMeleeWeapon(player->itemActionParam);
 }
 
@@ -2948,14 +2948,14 @@ Vec3f D_801C0D24[PLAYER_FORM_MAX] = {
 Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
 Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
 
-f32 D_801C0D78[] = {
-    0.0f,    // Player is not holding a melee weapon
-    3000.0f, // PLAYER_AP_SWORD_KOKIRI
-    3000.0f, // PLAYER_AP_SWORD_RAZOR
-    4000.0f, // PLAYER_AP_SWORD_GILDED
-    5500.0f, // PLAYER_AP_SWORD_GREAT_FAIRY
-    -1.0f,   // PLAYER_AP_STICK
-    2500.0f, // PLAYER_AP_ZORA_FINS
+f32 D_801C0D78[PLAYER_MELEEWEAPON_MAX] = {
+    0.0f,    // PLAYER_MELEEWEAPON_NONE              // Player is not holding a melee weapon
+    3000.0f, // PLAYER_MELEEWEAPON_SWORD_KOKIRI      // PLAYER_AP_SWORD_KOKIRI
+    3000.0f, // PLAYER_MELEEWEAPON_SWORD_RAZOR       // PLAYER_AP_SWORD_RAZOR
+    4000.0f, // PLAYER_MELEEWEAPON_SWORD_GILDED      // PLAYER_AP_SWORD_GILDED
+    5500.0f, // PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY // PLAYER_AP_SWORD_GREAT_FAIRY
+    -1.0f,   // PLAYER_MELEEWEAPON_STICK             // PLAYER_AP_STICK
+    2500.0f, // PLAYER_MELEEWEAPON_ZORA_FINS         // PLAYER_AP_ZORA_FINS
 };
 
 Gfx* D_801C0D94 = object_link_child_DL_017818;
