@@ -4245,7 +4245,7 @@
     0x80828788:("func_80828788",),
     0x8082895C:("KaleidoScope_Update",),
     0x8082DA90:("func_8082DA90",),
-    0x8082DABC:("func_8082DABC",),
+    0x8082DABC:("Player_StopHorizontalMovement",),
     0x8082DAD4:("func_8082DAD4",),
     0x8082DAFC:("func_8082DAFC",),
     0x8082DB18:("Player_AnimationPlayOnce",),
