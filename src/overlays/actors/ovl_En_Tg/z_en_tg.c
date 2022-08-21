@@ -161,14 +161,14 @@ void EnTg_Update(Actor* thisx, PlayState* play) {
     EnTg* this = THIS;
 
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4U);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     EnTg_UpdateSkelAnime(this, play);
     EnTg_UpdateHearts(play, this->enTgHeartEffect, ARRAY_COUNT(this->enTgHeartEffect));
     EnTg_UpdateCollider(this, play);
 }
 
 s32 EnTg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    return 0;
+    return false;
 }
 
 void EnTg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -233,7 +233,7 @@ void EnTg_UpdateHearts(PlayState* play, EnTgHeartEffect* enTgHeartEffect, s32 le
     s32 i;
 
     for (i = 0; i < len; i++, enTgHeartEffect++) {
-        if (enTgHeartEffect->isEnabled == 1) {
+        if (enTgHeartEffect->isEnabled == true) {
             if (DECR(enTgHeartEffect->timer) == 0) {
                 enTgHeartEffect->isEnabled = false;
             }
@@ -262,7 +262,7 @@ void EnTg_DrawHeart(PlayState* play, EnTgHeartEffect* enTgHeartEffect, s32 len) 
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
 
     for (i = 0; i < len; i++, enTgHeartEffect++) {
-        if (enTgHeartEffect->isEnabled == 1) {
+        if (enTgHeartEffect->isEnabled == true) {
             if (!flag) {
                 gSPDisplayList(POLY_OPA_DISP++, gHoneyAndDarlingHeartMaterialDL);
                 flag = true;
