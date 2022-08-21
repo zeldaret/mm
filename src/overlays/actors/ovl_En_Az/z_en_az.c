@@ -183,27 +183,32 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
     this->actor.targetMode = 1;
     switch (BEAVER_GET_PARAM_F00(thisx)) {
         case 0:
-            phi_v1 = (gSaveContext.save.entrance == 0x8E00) && (gSaveContext.save.weekEventReg[93] & 1);
+            phi_v1 = (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 0)) &&
+                     (gSaveContext.save.weekEventReg[93] & 1);
             phi_v1 = !phi_v1;
             break;
         case 2:
-            phi_v1 = (gSaveContext.save.entrance != 0x8E10) || !(gSaveContext.save.weekEventReg[24] & 4);
+            phi_v1 = (gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 1)) ||
+                     !(gSaveContext.save.weekEventReg[24] & 4);
             break;
         case 4:
-            phi_v1 = gSaveContext.save.entrance != 0x8E20;
+            phi_v1 = gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 2);
             break;
         case 1:
-            phi_v1 = (gSaveContext.save.entrance == 0x8E00) && (gSaveContext.save.weekEventReg[93] & 1);
+            phi_v1 = (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 0)) &&
+                     (gSaveContext.save.weekEventReg[93] & 1);
             phi_v1 = !phi_v1;
             break;
         case 3:
-            phi_v1 = (gSaveContext.save.entrance != 0x8E10) || (gSaveContext.save.weekEventReg[24] & 4);
+            phi_v1 = (gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 1)) ||
+                     (gSaveContext.save.weekEventReg[24] & 4);
             break;
         case 5:
-            phi_v1 = gSaveContext.save.entrance != 0x8E20;
+            phi_v1 = gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 2);
             break;
         case 6:
-            phi_v1 = (gSaveContext.save.entrance == 0x8E00) && !(gSaveContext.save.weekEventReg[93] & 1);
+            phi_v1 = (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 0)) &&
+                     !(gSaveContext.save.weekEventReg[93] & 1);
             phi_v1 = !phi_v1;
             break;
         default:
@@ -262,7 +267,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
     this->skelAnime.curFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
 
     switch (gSaveContext.save.entrance) {
-        case 0x8E00:
+        case ENTRANCE(WATERFALL_RAPIDS, 0):
             if (gSaveContext.save.weekEventReg[93] & 1) {
                 this->unk_2FA = 5;
                 if (this->unk_374 & 2) {
@@ -281,17 +286,17 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
                 func_80A95DA0(this, play);
             }
             break;
-        case 0x8E30:
+        case ENTRANCE(WATERFALL_RAPIDS, 3):
             this->unk_2FA = 0;
             if (!(this->unk_374 & 2)) {
                 this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10000);
             }
-            if (gSaveContext.save.entrance == 0x8E30) {
+            if (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 3)) {
                 this->unk_2FA = 0xA;
             }
             func_80A97C0C(this, play);
             break;
-        case 0x8E10:
+        case ENTRANCE(WATERFALL_RAPIDS, 1):
             if (gSaveContext.save.weekEventReg[93] & 1) {
                 if (gSaveContext.save.weekEventReg[24] & 4) {
                     this->unk_2FA = 8;
@@ -321,7 +326,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
                 func_80A97D5C(this, play);
             }
             break;
-        case 0x8E20:
+        case ENTRANCE(WATERFALL_RAPIDS, 2):
             if (gSaveContext.save.weekEventReg[93] & 1) {
                 if (gSaveContext.save.weekEventReg[24] & 4) {
                     this->unk_2FA = 9;
@@ -372,7 +377,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
 void EnAz_Destroy(Actor* thisx, PlayState* play2) {
     EnAz* this = THIS;
 
-    if (gSaveContext.save.entrance != 0x8E10) {
+    if (gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 1)) {
         gSaveContext.unk_3DD0[4] = 5;
     }
     Collider_DestroyCylinder(play2, &this->collider);
