@@ -1,9 +1,9 @@
 #ifndef Z64PLAYER_H
 #define Z64PLAYER_H
 
+#include "alignment.h"
 #include "os.h"
 #include "z64actor.h"
-#include "alignment.h"
 
 struct Player;
 

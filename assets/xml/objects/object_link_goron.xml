@@ -90,7 +90,6 @@
         <Limb Name="object_link_goron_Standardlimb_01779C" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_04" Offset="0x1779C" />
         <Skeleton Name="object_link_goron_Skel_0177B8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_GORON_1_LIMB_NONE" LimbMax="OBJECT_LINK_GORON_1_LIMB_MAX" EnumName="object_link_goron_1_Limb" Offset="0x177B8" />
 
-        <!-- <Blob Name="object_link_goron_Blob_0178D0" Size="0x10" Offset="0x178D0" /> -->
         <Animation Name="object_link_goron_Anim_0178D0" Offset="0x178D0" />
 
         <Limb Name="gLinkGoronRootLimb" Type="LOD" EnumName="LINK_GORON_LIMB_ROOT" Offset="0x178E0" />
