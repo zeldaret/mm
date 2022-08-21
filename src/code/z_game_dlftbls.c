@@ -4,6 +4,7 @@
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "overlays/gamestates/ovl_select/z_select.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
+#include "z_title_setup.h"
 
 #define GAMESTATE_OVERLAY(name, init, destroy, size)                                                 \
     {                                                                                                \

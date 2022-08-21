@@ -2667,10 +2667,6 @@ void AudioMgr_ThreadEntry(void* arg);
 void AudioMgr_Unlock(AudioMgr* audioMgr);
 void AudioMgr_Init(AudioMgr* audioMgr, void* stack, OSPri pri, OSId id, SchedContext* sched, IrqMgr* irqMgr);
 
-void Setup_Destroy(GameState* thisx);
-void Setup_Init(GameState* thisx);
-
-
 void Game_UpdateFramerateVariables(s32 divisor);
 void Game_SetFramerateDivisor(GameState* gameState, s32 divisor);
 void GameState_SetFBFilter(Gfx** gfx, u32 arg1);

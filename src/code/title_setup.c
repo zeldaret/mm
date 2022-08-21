@@ -1,4 +1,4 @@
-#include "global.h"
+#include "z_title_setup.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
 void Setup_SetRegs(void) {
