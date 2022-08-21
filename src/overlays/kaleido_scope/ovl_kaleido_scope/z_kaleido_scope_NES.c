@@ -1387,7 +1387,6 @@ void KaleidoScope_GrayOutTextureRGBA32(u32* texture, u16 pixelCount) {
 void func_80828788(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80828788.s")
 
-#ifdef NON_MATCHING
 void KaleidoScope_Update(PlayState* play) {
     static u16 D_8082BE88[] = {
         28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
@@ -1699,7 +1698,7 @@ void KaleidoScope_Update(PlayState* play) {
                         pauseCtx->state = PAUSE_STATE_1B;
                         pauseCtx->unk_210 = pauseCtx->unk_214 = pauseCtx->unk_218 = pauseCtx->unk_21C = 160.0f;
                         pauseCtx->unk_220 = -434.0f;
-                        pauseCtx->unk_25C = 0x3E7;
+                        pauseCtx->unk_25C = 999;
                         pauseCtx->unk_200 = 0;
                     }
                     break;
@@ -2030,7 +2029,7 @@ void KaleidoScope_Update(PlayState* play) {
 
             pauseCtx->unk_178 = (void*)ALIGN16((uintptr_t)pauseCtx->unk_174 + size2);
             func_8011552C(play, 0x16);
-            func_80821900(pauseCtx->unk_178, (u16)pauseCtx->cursorPoint[PAUSE_WORLD_MAP]);
+            func_80821900(pauseCtx->unk_178, (s32)((void)0, (u16)pauseCtx->cursorPoint[PAUSE_WORLD_MAP]));
 
             pauseCtx->unk_17C = (void*)ALIGN16((uintptr_t)pauseCtx->unk_178 + 0xA00);
             DmaMgr_SendRequest0(pauseCtx->unk_17C, SEGMENT_ROM_START(icon_item_vtx_static),
@@ -2057,7 +2056,7 @@ void KaleidoScope_Update(PlayState* play) {
                 pauseCtx->unk_200 = 0;
                 pauseCtx->cursorSpecialPos = 0;
                 pauseCtx->state = PAUSE_STATE_17;
-                XREG(87) = 0x78;
+                XREG(87) = 120;
             }
             break;
 
@@ -2113,7 +2112,7 @@ void KaleidoScope_Update(PlayState* play) {
 
         case PAUSE_STATE_19:
             if (pauseCtx->unk_214 != 160.0f) {
-                XREG(87) -= 0x3C;
+                XREG(87) -= 60;
                 if (XREG(87) <= 0) {
                     XREG(87) = 0;
                 }
@@ -2155,7 +2154,7 @@ void KaleidoScope_Update(PlayState* play) {
                 pauseCtx->unk_218 = 160.0f;
                 pauseCtx->unk_214 = 160.0f;
                 pauseCtx->unk_210 = 160.0f;
-                pauseCtx->unk_25C = 0x3E7;
+                pauseCtx->unk_25C = 999;
                 interfaceCtx->startAlpha = 0;
             }
             break;
@@ -2290,17 +2289,3 @@ void KaleidoScope_Update(PlayState* play) {
         KaleidoScope_UpdateInventoryEditor(play);
     }
 }
-#else
-u16 D_8082BE88[] = {
-        28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
-    };
-s16 D_8082BE9C = 0;
-s16 D_8082BEA0 = 0;
-s16 D_8082BEA4 = 10;
-s16 D_8082BEA8 = 0;
-s16 D_8082BEAC = 0;
-s16 D_8082BEB0 = 0;
-s16 D_8082BEB4 = 0;
-s16 D_8082BEB8 = 0;
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_Update.s")
-#endif
