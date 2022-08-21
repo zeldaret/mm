@@ -17,6 +17,33 @@ typedef enum {
 } PauseMenuPage;
 
 typedef enum {
+    /* 0x00 */ PAUSE_STATE_0,
+    /* 0x01 */ PAUSE_STATE_1,
+    /* 0x02 */ PAUSE_STATE_2,
+    /* 0x03 */ PAUSE_STATE_3,
+    /* 0x04 */ PAUSE_STATE_4,
+    /* 0x05 */ PAUSE_STATE_5,
+    /* 0x06 */ PAUSE_STATE_6,
+    /* 0x07 */ PAUSE_STATE_7,
+    /* 0x0A */ PAUSE_STATE_A = 0xA,
+    /* 0x0B */ PAUSE_STATE_B,
+    /* 0x0C */ PAUSE_STATE_C,
+    /* 0x0D */ PAUSE_STATE_D,
+    /* 0x0E */ PAUSE_STATE_E,
+    /* 0x0F */ PAUSE_STATE_F,
+    /* 0x10 */ PAUSE_STATE_10,
+    /* 0x11 */ PAUSE_STATE_11,
+    /* 0x12 */ PAUSE_STATE_12,
+    /* 0x15 */ PAUSE_STATE_15 = 0x15,
+    /* 0x16 */ PAUSE_STATE_16,
+    /* 0x17 */ PAUSE_STATE_17,
+    /* 0x18 */ PAUSE_STATE_18,
+    /* 0x19 */ PAUSE_STATE_19,
+    /* 0x1A */ PAUSE_STATE_1A,
+    /* 0x1B */ PAUSE_STATE_1B
+} PauseState;
+
+typedef enum {
     /* 0 */ PAUSE_EQUIP_C_LEFT,
     /* 1 */ PAUSE_EQUIP_C_DOWN,
     /* 2 */ PAUSE_EQUIP_C_RIGHT
@@ -71,12 +98,5 @@ void KaleidoScope_UpdatePrompt(PlayState* play);
 // Debug
 void KaleidoScope_DrawInventoryEditor(PlayState* play);
 void KaleidoScope_UpdateInventoryEditor(PlayState* play);
-
-// Collect
-void func_80817B5C(PlayState* play);
-
-// Mask
-void KaleidoScope_UpdateMaskEquip(PlayState* play);
-void KaleidoScope_UpdateMaskCursor(PlayState* play);
 
 #endif
