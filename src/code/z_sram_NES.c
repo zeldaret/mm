@@ -1342,8 +1342,8 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_801457CC.s")
 #endif
 
-void func_80146580(FileSelectState* fileChooseCtx2, SramContext* sramCtx, s32 fileNum) {
-    FileSelectState* fileSelect = fileChooseCtx2;
+void func_80146580(FileSelectState* fileSelect2, SramContext* sramCtx, s32 fileNum) {
+    FileSelectState* fileSelect = fileSelect2;
     s32 pad;
 
     if (gSaveContext.unk_3F3F) {
@@ -1361,8 +1361,8 @@ void func_80146580(FileSelectState* fileChooseCtx2, SramContext* sramCtx, s32 fi
 
 #ifdef NON_MATCHING
 // v0/v1
-void func_80146628(FileSelectState* fileChooseCtx2, SramContext* sramCtx) {
-    FileSelectState* fileSelect = fileChooseCtx2;
+void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
+    FileSelectState* fileSelect = fileSelect2;
     u16 i;
     s16 maskCount;
 
@@ -1448,10 +1448,10 @@ void func_80146628(FileSelectState* fileChooseCtx2, SramContext* sramCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146628.s")
 #endif
 
-void Sram_InitSave(FileSelectState* fileChooseCtx2, SramContext* sramCtx) {
+void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
     s32 phi_v0;
     u16 i;
-    FileSelectState* fileSelect = fileChooseCtx2;
+    FileSelectState* fileSelect = fileSelect2;
     s16 maskCount;
 
     if (gSaveContext.unk_3F3F) {
