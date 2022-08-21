@@ -104,10 +104,10 @@ void OceffWipe4_Draw(Actor* thisx, PlayState* play) {
         gSPDisplayList(POLY_XLU_DISP++, sScarecrowSongMaterialDL);
     }
 
-    gSPDisplayList(POLY_XLU_DISP++, sScarecrowSongMaterial2DL);
+    gSPDisplayList(POLY_XLU_DISP++, sScarecrowSongModelDL);
     gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, scroll * 2, scroll * -2, 32,
                                                      64, 1, scroll * -1, scroll, 32, 32));
-    gSPDisplayList(POLY_XLU_DISP++, &sScarecrowSongMaterial2DL[11]);
+    gSPDisplayList(POLY_XLU_DISP++, &sScarecrowSongModelDL[11]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
