@@ -123,7 +123,8 @@ void EnTg_Init(Actor* thisx, PlayState* play) {
     EnTg* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gHoneyAndDarlingSkel, NULL, this->jointTable, this->morphTable, HONEY_AND_DARLING_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gHoneyAndDarlingSkel, NULL, this->jointTable, this->morphTable,
+                       HONEY_AND_DARLING_LIMB_MAX);
     EnTg_ChangeAnim(&this->skelAnime, &sAnimationInfo, 0);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
