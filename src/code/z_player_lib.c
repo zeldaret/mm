@@ -1504,21 +1504,20 @@ s32 func_801242DC(PlayState* play) {
     return envIndex + 1;
 }
 
-#ifdef NON_MATCHING
-void func_80124420(Player* player) {
-    f32 pad;
+void Player_UpdateBunnyEarsKinematics(Player* player) {
+    s32 pad;
     s16 sp2C;
     s16 sp28;
     s16 sp26;
 
     D_801F59D0.unk_6 -= D_801F59D0.unk_6 >> 3;
     D_801F59D0.unk_8 -= D_801F59D0.unk_8 >> 3;
-    D_801F59D0.unk_6 += (-D_801F59D0.unk_0) >> 2;
-    D_801F59D0.unk_8 += (-D_801F59D0.unk_2) >> 2;
+    D_801F59D0.unk_6 += -D_801F59D0.unk_0 >> 2;
+    D_801F59D0.unk_8 += -D_801F59D0.unk_2 >> 2;
 
-    sp26 = BINANG_SUB(player->actor.world.rot.y, player->actor.shape.rot.y);
-    sp28 = (player->actor.speedXZ * -200.0f * Math_CosS(sp26)) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f);
-    sp2C = (player->actor.speedXZ * 100.0f * Math_SinS(sp26)) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f);
+    sp26 = player->actor.world.rot.y - player->actor.shape.rot.y;
+    sp28 = (s32)(player->actor.speedXZ * -200.0f * Math_CosS(sp26) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
+    sp2C = (s32)(player->actor.speedXZ * 100.0f * Math_SinS(sp26) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
 
     D_801F59D0.unk_6 += sp28 >> 2;
     D_801F59D0.unk_8 += sp2C >> 2;
@@ -1544,10 +1543,6 @@ void func_80124420(Player* player) {
         D_801F59D0.unk_4 = 0;
     }
 }
-#else
-void func_80124420(Player* player);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124420.s")
-#endif
 
 void func_80124618(struct_80124618 arg0[], f32 curFrame, Vec3f* arg2) {
     s32 currentFrame = curFrame;
