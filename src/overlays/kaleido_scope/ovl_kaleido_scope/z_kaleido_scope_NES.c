@@ -483,7 +483,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
                         (pauseCtx->state >= PAUSE_STATE_19) ||
                         ((pauseCtx->state == PAUSE_STATE_7) &&
                          ((pauseCtx->unk_208 == 3) || (pauseCtx->unk_208 == 7)))) {
-                        Matrix_Translate(0.0f, (YREG(25) - 0x1F40) / 100.0f, YREG(26) / 100.0f, MTXMODE_APPLY);
+                        Matrix_Translate(0.0f, (YREG(25) - 8000) / 100.0f, YREG(26) / 100.0f, MTXMODE_APPLY);
                     } else {
                         Matrix_Translate(0.0f, YREG(25) / 100.0f, YREG(26) / 100.0f, MTXMODE_APPLY);
                     }
@@ -561,6 +561,7 @@ s16 D_8082B9B8[] = {
 };
 s16 D_8082B9C8 = 20;
 s16 D_8082B9CC = 0;
+// KaleidoScope_DrawInfoPanel1?
 void func_80823350(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80823350.s")
 
@@ -602,14 +603,53 @@ void KaleidoScope_UpdateNamePanel1(PlayState* play) {
     }
 }
 
-void func_808248D0(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808248D0.s")
+void func_808248D0(PlayState* play) {
+    PauseContext* pauseCtx = &play->pauseCtx;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, SHADE, 0, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0,
+                      SHADE, 0);
+
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 180, 180, 120, 255);
+
+    Matrix_RotateYF(-1.57f, MTXMODE_NEW);
+    Matrix_Translate(0.0f, D_8082B908 / 100.0f, -93.0f, MTXMODE_APPLY);
+    Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
+    Matrix_RotateXFApply(-pauseCtx->unk_214 / 100.0f);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, D_8082B778);
+
+    Matrix_RotateYF(YREG(24) / 1000.0f, MTXMODE_NEW);
+
+    if ((pauseCtx->state == PAUSE_STATE_4) || (pauseCtx->state == PAUSE_STATE_16) ||
+        (pauseCtx->state >= PAUSE_STATE_19) ||
+        ((pauseCtx->state == PAUSE_STATE_7) && ((pauseCtx->unk_208 == 3) || (pauseCtx->unk_208 == 7)))) {
+        Matrix_Translate(0.0f, (YREG(25) - 8000) / 100.0f, YREG(26) / 100.0f, MTXMODE_APPLY);
+    } else {
+        Matrix_Translate(0.0f, YREG(25) / 100.0f, YREG(26) / 100.0f, MTXMODE_APPLY);
+    }
+
+    Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+    Matrix_RotateXFApply(-pauseCtx->unk_214 / 100.0f);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    KaleidoScope_DrawWorldMap(play);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
 
 s16 D_8082B9D0[] = {
     180, 210, 255, 220, 100, 100, 150, 220,
 };
 s16 D_8082B9E0 = 20;
 s16 D_8082B9E4 = 0;
+// KaleidoScope_DrawInfoPanel2?
 void func_80824B90(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80824B90.s")
 
@@ -1473,7 +1513,6 @@ void KaleidoScope_Draw(PlayState* play) {
         } else {
             KaleidoScope_InitVertices(play, play->state.gfxCtx);
             KaleidoScope_DrawPages(play, play->state.gfxCtx);
-
             func_808248D0(play);
 
             func_8012C8AC(play->state.gfxCtx);
