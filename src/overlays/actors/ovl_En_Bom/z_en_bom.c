@@ -253,7 +253,7 @@ void func_80871058(EnBom* this, PlayState* play) {
 
         sp40 = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
         sp3C = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
-        func_800B75A0(this->actor.floorPoly, &sp48, &sp46);
+        Actor_GetSlopeDirection(this->actor.floorPoly, &sp48, &sp46);
 
         sp40 += 3.0f * sp48.x;
         sp3C += 3.0f * sp48.z;

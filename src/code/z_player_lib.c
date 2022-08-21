@@ -150,7 +150,8 @@ void func_801229A0(PlayState* play, Player* player) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
+// Update function
+void func_801229EC(Actor* thisx, PlayState* play) {
 }
 
 s16 sMaskObjectIds[PLAYER_MASK_MAX - 1] = {
@@ -375,9 +376,10 @@ void func_8012300C(PlayState* play, s32 arg1) {
     player->unk_B2B = arg1;
 }
 
-void func_8012301C(Player* player, PlayState* play2) {
+// Update function
+void func_8012301C(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    s32 pad;
+    Player* player = (Player*)thisx;
 
     player->unk_AE7++;
 
@@ -597,9 +599,9 @@ ItemID func_8012364C(PlayState* play, Player* player, s32 arg2) {
 
 u16 sCItemButtons[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
 
-s32 func_80123810(PlayState* play) {
+PlayerActionParam func_80123810(PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 temp_v0;
+    PlayerActionParam actionParam;
     ItemID itemId;
     s32 i;
 
@@ -623,19 +625,19 @@ s32 func_80123810(PlayState* play) {
             play->interfaceCtx.unk_224 = 0;
             Interface_ChangeAlpha(play->msgCtx.unk_120BC);
 
-            if ((itemId >= ITEM_FD) || (temp_v0 = play->unk_18794(play, player, itemId, i), (temp_v0 < 0))) {
+            if ((itemId >= ITEM_FD) || ((actionParam = play->unk_18794(play, player, itemId)) < PLAYER_AP_NONE)) {
                 play_sound(NA_SE_SY_ERROR);
-                return -1;
+                return PLAYER_AP_MINUS1;
             } else {
                 s32 pad;
 
                 player->heldItemButton = i;
-                return temp_v0;
+                return actionParam;
             }
         }
     }
 
-    return 0;
+    return PLAYER_AP_NONE;
 }
 
 // Used to map action params to model groups
@@ -1284,7 +1286,7 @@ void Player_SetEquipmentData(PlayState* play, Player* player) {
     }
 }
 
-void func_80123D50(PlayState* play, Player* player, ItemID itemId, PlayerActionParam actionParam) {
+void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemID itemId, PlayerActionParam actionParam) {
     Inventory_UpdateBottleItem(play, itemId, player->heldItemButton);
 
     if (itemId != ITEM_BOTTLE) {
@@ -1649,7 +1651,7 @@ PlayerFaceIndices sPlayerFaces[] = {
     { PLAYER_EYES_OPEN, PLAYER_MOUTH_HAPPY },        // PLAYER_FACE_15
 };
 
-void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic, s32 boots,
+void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, PlayerTransformation playerForm, s32 boots,
                      s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor) {
     s32 eyeIndex = (jointTable[22].x & 0xF) - 1;
     s32 mouthIndex = ((jointTable[22].x >> 4) & 0xF) - 1;
@@ -1663,7 +1665,7 @@ void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dL
         eyeIndex = sPlayerFaces[face].eyeIndex;
     }
 
-    if (tunic == 1) {
+    if (playerForm == PLAYER_FORM_GORON) {
         if ((eyeIndex >= PLAYER_EYES_ROLL_RIGHT) && (eyeIndex <= PLAYER_EYES_ROLL_DOWN)) {
             eyeIndex = PLAYER_EYES_OPEN;
         } else if (eyeIndex == PLAYER_EYES_7) {
@@ -1681,7 +1683,7 @@ void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dL
 
     POLY_OPA_DISP = &gfx[2];
 
-    D_801F59E0 = tunic * 2;
+    D_801F59E0 = playerForm * 2;
     D_801F59E4 = lod;
     SkelAnime_DrawFlexLod(play, skeleton, jointTable, dListCount, overrideLimbDraw, postLimbDraw, actor, lod);
 

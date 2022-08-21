@@ -1372,7 +1372,7 @@ s32 func_800B724C(PlayState* play, Actor* actor, u8 csMode) {
     return true;
 }
 
-u32 func_800B7298(PlayState* play, Actor* actor, u8 csMode) {
+s32 func_800B7298(PlayState* play, Actor* actor, u8 csMode) {
     Player* player = GET_PLAYER(play);
 
     if (func_800B724C(play, actor, csMode)) {
@@ -1487,11 +1487,12 @@ s32 Actor_ActorAIsFacingAndNearActorB(Actor* actorA, Actor* actorB, f32 range, s
 
 /* Start of BgCheck related section */
 
-void func_800B75A0(CollisionPoly* poly, Vec3f* normal, s16* azimuth) {
-    normal->x = COLPOLY_GET_NORMAL(poly->normal.x);
-    normal->y = COLPOLY_GET_NORMAL(poly->normal.y);
-    normal->z = COLPOLY_GET_NORMAL(poly->normal.z);
-    *azimuth = Math_FAtan2F(normal->z, normal->x);
+void Actor_GetSlopeDirection(CollisionPoly* floorPoly, Vec3f* slopeNormal, s16* downwardSlopeYaw) {
+    slopeNormal->x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
+    slopeNormal->y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
+    slopeNormal->z = COLPOLY_GET_NORMAL(floorPoly->normal.z);
+
+    *downwardSlopeYaw = Math_FAtan2F(slopeNormal->z, slopeNormal->x);
 }
 
 s32 func_800B761C(Actor* actor, f32 arg1, s32 arg2) {
@@ -1994,7 +1995,7 @@ s32 Actor_HasParent(Actor* actor, PlayState* play) {
  * GI_NONE is usually used as a special case to lift an actor
  * GI_MAX is usually used to catch an actor in a bottle
  */
-s32 Actor_PickUp(Actor* actor, PlayState* play, s32 getItemId, f32 xzRange, f32 yRange) {
+s32 Actor_PickUp(Actor* actor, PlayState* play, GetItemID getItemId, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(play);
 
     if (!(player->stateFlags1 &
@@ -2028,7 +2029,7 @@ s32 Actor_PickUp(Actor* actor, PlayState* play, s32 getItemId, f32 xzRange, f32 
     return false;
 }
 
-s32 Actor_PickUpNearby(Actor* actor, PlayState* play, s32 getItemId) {
+s32 Actor_PickUpNearby(Actor* actor, PlayState* play, GetItemID getItemId) {
     return Actor_PickUp(actor, play, getItemId, 50.0f, 10.0f);
 }
 
@@ -2036,7 +2037,7 @@ s32 Actor_LiftActor(Actor* actor, PlayState* play) {
     return Actor_PickUpNearby(actor, play, GI_NONE);
 }
 
-s32 Actor_PickUpFar(Actor* actor, PlayState* play, s32 getItemId) {
+s32 Actor_PickUpFar(Actor* actor, PlayState* play, GetItemID getItemId) {
     return Actor_PickUp(actor, play, getItemId, 9999.9f, 9999.9f);
 }
 
@@ -2209,7 +2210,7 @@ void func_800B9098(Actor* actor) {
     actor->audioFlags |= 0x40;
 }
 
-s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgId, s32 arg4) {
+s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgId, Vec3f* arg4) {
     if (func_800C99D4(&play->colCtx, polygon, bgId) == 8) {
         return true;
     }
@@ -2217,7 +2218,7 @@ s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgI
     return false;
 }
 
-void func_800B90F4(PlayState* play) {
+void Actor_DeactivateLens(PlayState* play) {
     if (play->actorCtx.unk3 != 0) {
         play->actorCtx.unk3 = 0;
         func_80115D5C(&play->state);
@@ -2937,7 +2938,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     if (play->actorCtx.unk3 != 0) {
         Math_StepToC(&play->actorCtx.unk4, 100, 20);
         if (GET_PLAYER(play)->stateFlags2 & PLAYER_STATE2_8000000) {
-            func_800B90F4(play);
+            Actor_DeactivateLens(play);
         }
     } else {
         Math_StepToC(&play->actorCtx.unk4, 0, 10);

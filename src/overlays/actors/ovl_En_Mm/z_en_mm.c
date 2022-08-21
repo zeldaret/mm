@@ -143,7 +143,7 @@ void func_80965DB4(EnMm* this, PlayState* play) {
         } else {
             temp_f14 = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
             temp_f12 = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
-            func_800B75A0(this->actor.floorPoly, &sp50, &unused);
+            Actor_GetSlopeDirection(this->actor.floorPoly, &sp50, &unused);
             temp_f14 += 3.0f * sp50.x;
             temp_f12 += 3.0f * sp50.z;
             temp_f2 = sqrtf(SQ(temp_f14) + SQ(temp_f12));

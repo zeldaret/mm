@@ -822,7 +822,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
                     if (!requestedItem->isBottledItem) {
                         Inventory_ChangeAmmo(requestedItem->item, -requestedItem->amount);
                     } else {
-                        func_80123D50(play, player, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+                        Player_UpdateBottleHeld(play, player, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
                     }
                     player->stateFlags1 |= PLAYER_STATE1_20;
                     player->stateFlags1 |= PLAYER_STATE1_20000000;

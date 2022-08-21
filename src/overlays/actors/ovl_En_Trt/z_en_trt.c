@@ -336,7 +336,7 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
                 this->textId = 0x884;
                 Message_StartTextbox(play, this->textId, &this->actor);
                 gSaveContext.save.weekEventReg[53] |= 8;
-                func_80123D50(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+                Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
                 break;
             case 0x888:
                 this->textId = 0x889;
@@ -362,7 +362,7 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
 void EnTrt_PayForMushroom(EnTrt* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        func_80123D50(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+        Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
         this->actionFunc = EnTrt_SetupItemGiven;
     } else {
         Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 300.0f, 300.0f);
