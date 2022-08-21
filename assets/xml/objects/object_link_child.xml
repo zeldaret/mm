@@ -105,7 +105,7 @@
         <DList Name="gLinkHumanKokiriSwordSheathDL" Offset="0x17700" />
         <DList Name="object_link_child_DL_017818" Offset="0x17818" />
         <DList Name="gLinkHumanHookshotDL" Offset="0x17858" />
-        <DList Name="object_link_child_DL_017B40" Offset="0x17B40" />https://github.com/Decompollaborate/mm/compare/z_player_lib__2..z_player_lib
+        <DList Name="object_link_child_DL_017B40" Offset="0x17B40" />
         <DList Name="gLinkHumanBowDL" Offset="0x181C8" />
         <DList Name="object_link_child_DL_018490" Offset="0x18490" />
 
