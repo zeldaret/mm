@@ -10441,7 +10441,7 @@
     0x80A45164:("EnSekihi_Draw",),
     0x80A45360:("EnWiz_Init",),
     0x80A45568:("EnWiz_Destroy",),
-    0x80A455C4:("func_80A455C4",),
+    0x80A455C4:("EnWiz_ChangeAnim",),
     0x80A456A0:("func_80A456A0",),
     0x80A45CD8:("func_80A45CD8",),
     0x80A460A4:("func_80A460A4",),
