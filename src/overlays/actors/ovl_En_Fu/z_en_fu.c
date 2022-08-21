@@ -1454,7 +1454,7 @@ void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len) {
     for (i = 0; i < len; i++, ptr++) {
         if (ptr->unk_36 == 1) {
             if (!flag) {
-                gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0A0);
+                gSPDisplayList(POLY_OPA_DISP++, gHoneyAndDarlingHeartMaterialDL);
                 flag = true;
             }
             Matrix_Translate(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
@@ -1463,7 +1463,7 @@ void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len) {
 
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0E0);
+            gSPDisplayList(POLY_OPA_DISP++, gHoneyAndDarlingHeartModelDL);
         }
     }
 

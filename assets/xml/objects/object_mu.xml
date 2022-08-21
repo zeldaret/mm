@@ -35,8 +35,8 @@
         <DList Name="gHoneyAndDarlingManLeftUpperArmDL" Offset="0xAD58" />
         <DList Name="gHoneyAndDarlingManLeftLowerArmDL" Offset="0xAE58" />
         <DList Name="gHoneyAndDarlingManLeftHandDL" Offset="0xAF58" />
-        <DList Name="object_mu_DL_00B0A0" Offset="0xB0A0" /> <!-- TODO: haven't been able to render these -->
-        <DList Name="object_mu_DL_00B0E0" Offset="0xB0E0" />
+        <DList Name="gHoneyAndDarlingHeartMaterialDL" Offset="0xB0A0" />
+        <DList Name="gHoneyAndDarlingHeartModelDL" Offset="0xB0E0" />
         <Limb Name="gHoneyAndDarlingLegsLimb" Type="Standard" EnumName="HONEY_AND_DARLING_LIMB_LEGS" Offset="0xB170" />
         <Limb Name="gHoneyAndDarlingManTorsoLimb" Type="Standard" EnumName="HONEY_AND_DARLING_LIMB_MAN_TORSO" Offset="0xB17C" />
         <Limb Name="gHoneyAndDarlingManLeftUpperArmLimb" Type="Standard" EnumName="HONEY_AND_DARLING_LIMB_MAN_LEFT_UPPER_ARM" Offset="0xB188" />

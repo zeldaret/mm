@@ -272,7 +272,7 @@ void EnTg_DrawHeart(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len) {
     for (i = 0; i < len; i++, enTgHeartInfo++) {
         if (enTgHeartInfo->isFirstHeartSpawned == 1) {
             if (!flag) {
-                gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0A0); // TODO: haven't been able to name this
+                gSPDisplayList(POLY_OPA_DISP++, gHoneyAndDarlingHeartMaterialDL);
                 flag = true;
             }
             Matrix_Translate(enTgHeartInfo->firstHeartPos.x, enTgHeartInfo->firstHeartPos.y,
@@ -280,9 +280,9 @@ void EnTg_DrawHeart(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len) {
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(enTgHeartInfo->scale, enTgHeartInfo->scale, enTgHeartInfo->scale, MTXMODE_APPLY);
 
-            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0)); // Heart texture
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0E0);
+            gSPDisplayList(POLY_OPA_DISP++, gHoneyAndDarlingHeartModelDL);
         }
     }
 
