@@ -718,10 +718,10 @@ wordReplace = {
     "gSaveContext.fadeDuration": "gSaveContext.transFadeDuration",
     "gSaveContext.fadeSpeed": "gSaveContext.transWipeSpeed",
 
-    "D_801D15B0" : "gZeroVec3f",
-    "D_801D15BC" : "gZeroVec3s",
-    "D_801D1DE0" : "gIdentityMtx",
-    "D_801D1E20" : "gIdentityMtxF",
+    "D_801D15B0": "gZeroVec3f",
+    "D_801D15BC": "gZeroVec3s",
+    "D_801D1DE0": "gIdentityMtx",
+    "D_801D1E20": "gIdentityMtxF",
 
     # Macros
     "CUR_EQUIP_VALUE_VOID": "GET_CUR_EQUIP_VALUE",

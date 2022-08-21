@@ -154,11 +154,30 @@ void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
 }
 
 s16 sMaskObjectIds[PLAYER_MASK_MAX - 1] = {
-    OBJECT_MASK_TRUTH,  OBJECT_MASK_KERFAY,  OBJECT_MASK_YOFUKASI, OBJECT_MASK_RABIT,   OBJECT_MASK_KI_TAN,
-    OBJECT_MASK_JSON,   OBJECT_MASK_ROMERNY, OBJECT_MASK_ZACHO,    OBJECT_MASK_POSTHAT, OBJECT_MASK_MEOTO,
-    OBJECT_MASK_BIGELF, OBJECT_MASK_GIBUDO,  OBJECT_MASK_GERO,     OBJECT_MASK_DANCER,  OBJECT_MASK_SKJ,
-    OBJECT_MASK_STONE,  OBJECT_MASK_BREE,    OBJECT_MASK_BAKURETU, OBJECT_MASK_BU_SAN,  OBJECT_MASK_KYOJIN,
-    OBJECT_MASK_BOY,    OBJECT_MASK_GORON,   OBJECT_MASK_ZORA,     OBJECT_MASK_NUTS,
+    OBJECT_MASK_TRUTH,    // PLAYER_MASK_TRUTH
+    OBJECT_MASK_KERFAY,   // PLAYER_MASK_KAFEIS_MASK
+    OBJECT_MASK_YOFUKASI, // PLAYER_MASK_ALL_NIGHT
+    OBJECT_MASK_RABIT,    // PLAYER_MASK_BUNNY
+    OBJECT_MASK_KI_TAN,   // PLAYER_MASK_KEATON
+    OBJECT_MASK_JSON,     // PLAYER_MASK_GARO
+    OBJECT_MASK_ROMERNY,  // PLAYER_MASK_ROMANI
+    OBJECT_MASK_ZACHO,    // PLAYER_MASK_CIRCUS_LEADER
+    OBJECT_MASK_POSTHAT,  // PLAYER_MASK_POSTMAN
+    OBJECT_MASK_MEOTO,    // PLAYER_MASK_COUPLE
+    OBJECT_MASK_BIGELF,   // PLAYER_MASK_GREAT_FAIRY
+    OBJECT_MASK_GIBUDO,   // PLAYER_MASK_GIBDO
+    OBJECT_MASK_GERO,     // PLAYER_MASK_DON_GERO
+    OBJECT_MASK_DANCER,   // PLAYER_MASK_KAMARO
+    OBJECT_MASK_SKJ,      // PLAYER_MASK_CAPTAIN
+    OBJECT_MASK_STONE,    // PLAYER_MASK_STONE
+    OBJECT_MASK_BREE,     // PLAYER_MASK_BREMEN
+    OBJECT_MASK_BAKURETU, // PLAYER_MASK_BLAST
+    OBJECT_MASK_BU_SAN,   // PLAYER_MASK_SCENTS
+    OBJECT_MASK_KYOJIN,   // PLAYER_MASK_GIANT
+    OBJECT_MASK_BOY,      // PLAYER_MASK_FIERCE_DEITY
+    OBJECT_MASK_GORON,    // PLAYER_MASK_GORON
+    OBJECT_MASK_ZORA,     // PLAYER_MASK_ZORA
+    OBJECT_MASK_NUTS,     // PLAYER_MASK_DEKU
 };
 
 // Load mask object?
@@ -1588,16 +1607,22 @@ Gfx gCullFrontDList[] = {
     gsSPEndDisplayList(),
 };
 
-TexturePtr sPlayerEyesTextures[] = {
-    gLinkHumanEyesOpenTex,     gLinkHumanEyesHalfTex,   gLinkHumanEyesClosedTex,   gLinkHumanEyesRollRightTex,
-    gLinkHumanEyesRollLeftTex, gLinkHumanEyesRollUpTex, gLinkHumanEyesRollDownTex, object_link_child_Tex_003800,
+TexturePtr sPlayerEyesTextures[PLAYER_EYES_MAX] = {
+    gLinkHumanEyesOpenTex,        // PLAYER_EYES_OPEN
+    gLinkHumanEyesHalfTex,        // PLAYER_EYES_HALF
+    gLinkHumanEyesClosedTex,      // PLAYER_EYES_CLOSED
+    gLinkHumanEyesRollRightTex,   // PLAYER_EYES_ROLL_RIGHT
+    gLinkHumanEyesRollLeftTex,    // PLAYER_EYES_ROLL_LEFT
+    gLinkHumanEyesRollUpTex,      // PLAYER_EYES_ROLL_UP
+    gLinkHumanEyesRollDownTex,    // PLAYER_EYES_ROLL_DOWN
+    object_link_child_Tex_003800, // PLAYER_EYES_7
 };
 
-TexturePtr sPlayerMouthTextures[] = {
-    gLinkHumanMouthClosedTex,
-    gLinkHumanMouthTeethTex,
-    gLinkHumanMouthAngryTex,
-    gLinkHumanMouthHappyTex,
+TexturePtr sPlayerMouthTextures[PLAYER_MOUTH_MAX] = {
+    gLinkHumanMouthClosedTex, // PLAYER_MOUTH_CLOSED
+    gLinkHumanMouthTeethTex,  // PLAYER_MOUTH_TEETH
+    gLinkHumanMouthAngryTex,  // PLAYER_MOUTH_ANGRY
+    gLinkHumanMouthHappyTex,  // PLAYER_MOUTH_HAPPY
 };
 
 typedef struct PlayerFaceIndices {
