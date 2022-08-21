@@ -1409,13 +1409,13 @@ void KaleidoScope_Update(PlayState* play) {
     size_t size1;
     size_t size2;
     u16 i;
-    s16 stepA;
+    u16 worldMapCursorPoint;
     void* var_a0_2;
-    s32 pad;
     s16 stepR;
     s16 stepG;
-    s16 stickRelX = input->rel.stick_x;
     s16 stepB;
+    s16 stepA;
+    s16 stickRelX = input->rel.stick_x;
 
     func_80109428(play);
 
@@ -2029,7 +2029,8 @@ void KaleidoScope_Update(PlayState* play) {
 
             pauseCtx->unk_178 = (void*)ALIGN16((uintptr_t)pauseCtx->unk_174 + size2);
             func_8011552C(play, 0x16);
-            func_80821900(pauseCtx->unk_178, (s32)((void)0, (u16)pauseCtx->cursorPoint[PAUSE_WORLD_MAP]));
+            worldMapCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
+            func_80821900(pauseCtx->unk_178, worldMapCursorPoint);
 
             pauseCtx->unk_17C = (void*)ALIGN16((uintptr_t)pauseCtx->unk_178 + 0xA00);
             DmaMgr_SendRequest0(pauseCtx->unk_17C, SEGMENT_ROM_START(icon_item_vtx_static),
