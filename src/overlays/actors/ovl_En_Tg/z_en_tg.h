@@ -28,7 +28,7 @@ typedef struct EnTg {
     /* 0x01D8 */ char unk1D8[0x18];
     /* 0x01F0 */ Vec3s jointTable[HONEY_AND_DARLING_LIMB_MAX];
     /* 0x026E */ Vec3s morphTable[HONEY_AND_DARLING_LIMB_MAX];
-    /* 0x02EC */ s16 spawnHeartTimer; // Countdown timer for a new heart spawning above the actor
+    /* 0x02EC */ s16 spawnHeartTimer;
     /* 0x02EE */ char unk2EE[0x2];
     /* 0x02F0 */ EnTgHeartEffect enTgHeartEffect[10];
 } EnTg; // size = 0x548

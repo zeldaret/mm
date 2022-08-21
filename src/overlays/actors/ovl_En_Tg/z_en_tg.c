@@ -20,7 +20,7 @@ void EnTg_Draw(Actor* thisx, PlayState* play);
 void EnTg_Idle(EnTg* this, PlayState* play);
 void EnTg_UpdateHearts(PlayState* play, EnTgHeartEffect* enTgHeartEffect, s32 len);
 void EnTg_DrawHeart(PlayState* play, EnTgHeartEffect* enTgHeartEffect, s32 len);
-void EnTg_SpawnFirstHeart(EnTg* this, EnTgHeartEffect* enTgHeartEffect, Vec3f* heartStartPos, s32 len);
+void EnTg_SpawnHeart(EnTg* this, EnTgHeartEffect* enTgHeartEffect, Vec3f* heartStartPos, s32 len);
 
 const ActorInit En_Tg_InitVars = {
     ACTOR_EN_TG,
@@ -153,7 +153,7 @@ void EnTg_Idle(EnTg* this, PlayState* play) {
         this->spawnHeartTimer = 12;
         heartStartPos = this->actor.world.pos;
         heartStartPos.y += 62.0f;
-        EnTg_SpawnFirstHeart(this, this->enTgHeartEffect, &heartStartPos, 10);
+        EnTg_SpawnHeart(this, this->enTgHeartEffect, &heartStartPos, ARRAY_COUNT(this->enTgHeartEffect));
     }
 }
 
@@ -163,7 +163,7 @@ void EnTg_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4U);
     EnTg_UpdateSkelAnime(this, play);
-    EnTg_UpdateHearts(play, this->enTgHeartEffect, 10);
+    EnTg_UpdateHearts(play, this->enTgHeartEffect, ARRAY_COUNT(this->enTgHeartEffect));
     EnTg_UpdateCollider(this, play);
 }
 
@@ -185,7 +185,7 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
     GraphicsContext* gfxCtx;
 
     Matrix_Push();
-    EnTg_DrawHeart(play, this->enTgHeartEffect, 10);
+    EnTg_DrawHeart(play, this->enTgHeartEffect, ARRAY_COUNT(this->enTgHeartEffect));
     Matrix_Pop();
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -202,10 +202,10 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
 }
 
 /**
- * This function is always called with the same heartStartPos and len = 10.
- * Sets all the flags and a path for when the first heart (of two) is spawned.
+ * Spawns a heart at the first enTgHeartEffect array index that's not enabled.
+ * Because of the frame counts, only two hearts are ever spawned at a time.
  */
-void EnTg_SpawnFirstHeart(EnTg* this, EnTgHeartEffect* enTgHeartEffect, Vec3f* heartStartPos, s32 len) {
+void EnTg_SpawnHeart(EnTg* this, EnTgHeartEffect* enTgHeartEffect, Vec3f* heartStartPos, s32 len) {
     Vec3f heartVelocityVec = { 0.0f, 1.5f, 0.0f };
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
     s32 i;
@@ -225,9 +225,7 @@ void EnTg_SpawnFirstHeart(EnTg* this, EnTgHeartEffect* enTgHeartEffect, Vec3f* h
 }
 
 /**
- * This function is always called with the same len = 10.
  * The heart path is curvy as it floats up because of the use of Math_SinS and Math_CosS.
- * The first heart spawned sets the path, the second heart spawned follows it.
  */
 void EnTg_UpdateHearts(PlayState* play, EnTgHeartEffect* enTgHeartEffect, s32 len) {
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
@@ -239,7 +237,7 @@ void EnTg_UpdateHearts(PlayState* play, EnTgHeartEffect* enTgHeartEffect, s32 le
             if (DECR(enTgHeartEffect->timer) == 0) {
                 enTgHeartEffect->isEnabled = false;
             }
-            enTgHeartEffect->pos.y += enTgHeartEffect->velocity.y; // always increased by 1.5f
+            enTgHeartEffect->pos.y += enTgHeartEffect->velocity.y;
             enTgHeartEffect->pos.x += 2.0f * Math_SinS(enTgHeartEffect->angle);
             enTgHeartEffect->pos.z += 2.0f * Math_CosS(enTgHeartEffect->angle);
 

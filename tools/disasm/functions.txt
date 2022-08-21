@@ -8422,7 +8422,7 @@
     0x8098FBB4:("EnTg_OverrideLimbDraw",),
     0x8098FBD0:("EnTg_PostLimbDraw",),
     0x8098FC2C:("EnTg_Draw",),
-    0x8098FD50:("EnTg_SpawnFirstHeart",),
+    0x8098FD50:("EnTg_SpawnHeart",),
     0x8098FEA8:("EnTg_UpdateHearts",),
     0x8099000C:("EnTg_DrawHeart",),
     0x80990310:("EnWf_Init",),
