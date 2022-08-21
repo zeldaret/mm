@@ -412,11 +412,11 @@ void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 29);
     Actor_SetScale(&this->actor, 0.01f);
 
-    if (((gSaveContext.save.weekEventReg[0x29] & 0x40) || play->actorCtx.unk4 == 0x64) &&
+    if (((gSaveContext.save.weekEventReg[0x29] & 0x40) || play->actorCtx.unk4 == 100) &&
         (((s32)player->stateFlags1 << 8) >= 0)) {
         if ((this->animIndex != EN_STONE_HEISHI_WAVE) &&
             ((((this->action == 0) || (this->action == 1)) || (this->action == 2)) ||
-             ((this->action == 3) && (this->DrinkBottleState < 2)))) {
+             ((this->action == 3) && (this->DrinkBottleState <= EN_STONE_DRINK_BOTTLE_DRINKING)))) {
             EnStoneheishi_HeadTowardsLink(this);
         } else {
             this->targetHeadPosX = 0;
