@@ -867,8 +867,8 @@ typedef struct GameState {
     /* 0x00 */ GraphicsContext* gfxCtx;
     /* 0x04 */ GameStateFunc main;
     /* 0x08 */ GameStateFunc destroy;
-    /* 0x0C */ GameStateFunc nextGameStateInit;
-    /* 0x10 */ size_t nextGameStateSize;
+    /* 0x0C */ GameStateFunc init;
+    /* 0x10 */ size_t size;
     /* 0x14 */ Input input[4];
     /* 0x74 */ TwoHeadArena heap;
     /* 0x84 */ GameAlloc alloc;

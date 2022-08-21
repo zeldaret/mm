@@ -64,7 +64,7 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
 }
 
 GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
-    GameStateFunc gameStateInit = GameState_GetNextStateInit(gameState);
+    GameStateFunc gameStateInit = GameState_GetInit(gameState);
 
     if (gameStateInit == Setup_Init) {
         return &gGameStateOverlayTable[0];

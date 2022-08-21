@@ -2648,8 +2648,8 @@ asm/non_matchings/code/game/Game_InitHeap.s,Game_InitHeap,0x80173810,0x1C
 asm/non_matchings/code/game/Game_ResizeHeap.s,Game_ResizeHeap,0x80173880,0x34
 asm/non_matchings/code/game/GameState_Init.s,GameState_Init,0x80173950,0x40
 asm/non_matchings/code/game/GameState_Destroy.s,GameState_Destroy,0x80173A50,0x2C
-asm/non_matchings/code/game/GameState_GetNextStateInit.s,GameState_GetNextStateInit,0x80173B00,0x3
-asm/non_matchings/code/game/GameState_GetNextStateSize.s,GameState_GetNextStateSize,0x80173B0C,0x3
+asm/non_matchings/code/game/GameState_GetInit.s,GameState_GetInit,0x80173B00,0x3
+asm/non_matchings/code/game/GameState_GetSize.s,GameState_GetSize,0x80173B0C,0x3
 asm/non_matchings/code/game/GameState_IsRunning.s,GameState_IsRunning,0x80173B18,0x3
 asm/non_matchings/code/game/Game_GetHeapFreeSize.s,Game_GetHeapFreeSize,0x80173B24,0x9
 asm/non_matchings/code/game/func_80173B48.s,func_80173B48,0x80173B48,0x2A
