@@ -24,6 +24,21 @@
 
 #define GET_ACTIVE_CAM(play) ((play)->cameraPtrs[(play)->activeCamId])
 
+#define STOP_GAMESTATE(curState)     \
+    do {                             \
+        GameState* state = curState; \
+                                     \
+        state->running = false;      \
+    } while(0)
+
+#define NEXT_GAMESTATE(curState, newInit, newStructSize) \
+    do {                                                     \
+        GameState* state = curState;                         \
+                                                             \
+        (state)->nextGameStateInit = newInit;                \
+        (state)->nextGameStateSize = newStructSize;          \
+    } while (0)
+
 #define SET_NEXT_GAMESTATE(curState, newInit, newStruct)    \
     (curState)->nextGameStateInit = (GameStateFunc)newInit; \
     (curState)->nextGameStateSize = sizeof(newStruct)

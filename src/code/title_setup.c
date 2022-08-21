@@ -1,7 +1,7 @@
 #include "global.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
-void TitleSetup_GameStateResetContext(void) {
+void Setup_SetRegs(void) {
     XREG(2) = 0;
     XREG(10) = 0x1A;
     XREG(11) = 0x14;
@@ -45,23 +45,22 @@ void TitleSetup_GameStateResetContext(void) {
     YREG(43) = 0xB1;
 }
 
-void TitleSetup_InitImpl(GameState* gameState) {
+void Setup_InitImpl(SetupState* this) {
     func_80185908();
     SaveContext_Init();
-    TitleSetup_GameStateResetContext();
+    Setup_SetRegs();
 
-    gameState->running = 0;
+    STOP_GAMESTATE(&this->state);
+    NEXT_GAMESTATE(&this->state, Title_Init, sizeof(TitleContext));
 
-setNextGamestate
-    :; // This label is probably a leftover of a debug ifdef, it's essential to not have gameState->running reordered!
-    SET_NEXT_GAMESTATE(gameState, Title_Init, TitleContext);
 }
 
-void TitleSetup_Destroy(GameState* gameState) {
-    ;
+void Setup_Destroy(GameState* thisx) {
 }
 
-void TitleSetup_Init(GameState* gameState) {
-    gameState->destroy = TitleSetup_Destroy;
-    TitleSetup_InitImpl(gameState);
+void Setup_Init(GameState* thisx) {
+    SetupState* this = (SetupState*)thisx;
+
+    this->state.destroy = Setup_Destroy;
+    Setup_InitImpl(this);
 }
