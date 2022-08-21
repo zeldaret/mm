@@ -77,7 +77,7 @@ GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
     if (gameStateInit == (GameStateFunc)Play_Init) {
         return &gGameStateOverlayTable[3];
     }
-    if (gameStateInit == (GameStateFunc)Opening_Init) {
+    if (gameStateInit == (GameStateFunc)TitleSetup_Init) {
         return &gGameStateOverlayTable[4];
     }
     if (gameStateInit == (GameStateFunc)FileChoose_Init) {

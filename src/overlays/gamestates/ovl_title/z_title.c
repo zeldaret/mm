@@ -133,7 +133,7 @@ void ConsoleLogo_Main(GameState* thisx) {
         gSaveContext.gameMode = 1;
 
         STOP_GAMESTATE(&this->state);
-        NEXT_GAMESTATE(&this->state, Opening_Init, sizeof(OpeningContext));
+        NEXT_GAMESTATE(&this->state, TitleSetup_Init, sizeof(TitleSetupState));
     }
 
     CLOSE_DISPS(this->state.gfxCtx);

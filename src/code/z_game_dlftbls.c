@@ -18,7 +18,7 @@ GameStateOverlay gGameStateOverlayTable[] = {
     GAMESTATE_OVERLAY(select, MapSelect_Init, MapSelect_Destroy, sizeof(MapSelectState)),
     GAMESTATE_OVERLAY(title, ConsoleLogo_Init, ConsoleLogo_Destroy, sizeof(ConsoleLogoState)),
     GAMESTATE_OVERLAY_INTERNAL(Play_Init, Play_Destroy, sizeof(PlayState)),
-    GAMESTATE_OVERLAY(opening, Opening_Init, Opening_Destroy, sizeof(OpeningContext)),
+    GAMESTATE_OVERLAY(opening, TitleSetup_Init, TitleSetup_Destroy, sizeof(TitleSetupState)),
     GAMESTATE_OVERLAY(file_choose, FileChoose_Init, FileChoose_Destroy, sizeof(FileChooseContext)),
     GAMESTATE_OVERLAY(daytelop, Daytelop_Init, Daytelop_Destroy, sizeof(DaytelopContext)),
 };
