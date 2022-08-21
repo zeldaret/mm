@@ -47,6 +47,7 @@ void KaleidoScope_DrawQuadTextureRGBA32(GraphicsContext* gfxCtx, void* texture, 
 void func_80821A04(PlayState* play);
 
 // Map
+void func_8081E118(PlayState* play);
 void func_8081FB1C(PlayState* play);
 
 // Collect
@@ -70,5 +71,12 @@ void KaleidoScope_UpdatePrompt(PlayState* play);
 // Debug
 void KaleidoScope_DrawInventoryEditor(PlayState* play);
 void KaleidoScope_UpdateInventoryEditor(PlayState* play);
+
+// Collect
+void func_80817B5C(PlayState* play);
+
+// Mask
+void KaleidoScope_UpdateMaskEquip(PlayState* play);
+void KaleidoScope_UpdateMaskCursor(PlayState* play);
 
 #endif

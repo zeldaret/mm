@@ -5,6 +5,7 @@
  */
 
 #include "z_kaleido_scope.h"
+#include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
 
 extern UNK_TYPE D_02001360;
@@ -51,6 +52,7 @@ s16 D_8082B880 = 0;
 s16 D_8082B884 = 0;
 s16 D_8082B888 = 0;
 s16 D_8082B88C = 255;
+
 s16 D_8082B890 = 0;
 s16 D_8082B894 = 0;
 s16 D_8082B898 = 0;
@@ -246,7 +248,7 @@ f32 D_8082BE28[] = {
 };
 
 s16 D_8082BE84 = 0;
-s16 D_8082BE88[] = {
+u16 D_8082BE88[] = {
     28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
 };
 s16 D_8082BE9C = 0;
@@ -257,6 +259,9 @@ s16 D_8082BEAC = 0;
 s16 D_8082BEB0 = 0;
 s16 D_8082BEB4 = 0;
 s16 D_8082BEB8 = 0;
+
+// bss
+extern u8 D_8082DA58[5];
 
 void func_80821900(s32 arg0, s32 arg1) {
     func_80178E3C(SEGMENT_ROM_START(map_name_static), arg1, arg0, 0x400);
@@ -716,14 +721,17 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80823350.s")
 
+void func_80824738(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80824738.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808248D0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80824B90.s")
 
+void func_808256E4(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808256E4.s")
 
+void func_8082585C(PlayState* play, Input* input);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8082585C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808259D4.s")
@@ -1387,6 +1395,874 @@ void KaleidoScope_GrayOutTextureRGBA32(u32* texture, u16 pixelCount) {
     }
 }
 
+void func_80828788(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80828788.s")
 
+#ifdef NON_EQUIVALNET
+void KaleidoScope_Update(PlayState* play) {
+    PauseContext* pauseCtx = &play->pauseCtx;
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+    MessageContext* msgCtx = &play->msgCtx;
+    GameOverContext* gameOverCtx = &play->gameOverCtx;
+    SramContext* sramCtx = &play->sramCtx;
+    s16 stepR;
+    s16 stepG;
+    s16 stepB;
+    s16 stepA;
+
+    size_t sp2C;
+    size_t sp24;
+    void* var_a0_2;
+    s16 var_v0_2;
+    u16 i;
+    Input* input = CONTROLLER1(&play->state);
+
+    func_80109428(play);
+    pauseCtx->stickRelX = input->rel.stick_x;
+    pauseCtx->stickRelY = input->rel.stick_y;
+
+    switch (pauseCtx->state) {
+        case 0x3:
+            D_8082BE9C = gSaveContext.unk_3F22;
+            D_8082B908 = -6240.0f;
+            D_8082DA58[0] = gSaveContext.buttonStatus[0];
+            D_8082DA58[1] = gSaveContext.buttonStatus[1];
+            D_8082DA58[2] = gSaveContext.buttonStatus[2];
+            D_8082DA58[3] = gSaveContext.buttonStatus[3];
+            D_8082DA58[4] = gSaveContext.buttonStatus[4];
+
+            pauseCtx->cursorX[PAUSE_MAP] = 0;
+            pauseCtx->cursorSlot[PAUSE_MAP] = XREG(94) + 4;
+            pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256 = XREG(94) + 4;
+
+            D_8082B918 = -175;
+            D_8082B91C = 155;
+            pauseCtx->unk_220 = -314.0f;
+
+            pauseCtx->iconItemSegment = (void*)ALIGN16((uintptr_t)play->objectCtx.spaceStart);
+            sp2C = SEGMENT_ROM_SIZE(icon_item_static_old);
+            func_80178E7C((uintptr_t)SEGMENT_ROM_START(icon_item_static_test), pauseCtx->iconItemSegment, sp2C);
+
+            gSegments[0x08] = VIRTUAL_TO_PHYSICAL(pauseCtx->iconItemSegment);
+
+            for (i = 0; i < 75; i++) {
+                if (!D_801C2410[(void)0, gSaveContext.save.playerForm][i]) {
+                    KaleidoScope_GrayOutTextureRGBA32(Lib_SegmentedToVirtual(gItemIcons[i]), 0x400);
+                }
+            }
+
+            pauseCtx->iconItem24Segment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemSegment + sp2C);
+            sp24 = SEGMENT_ROM_SIZE(icon_item_24_static_old);
+            func_80178E7C((uintptr_t)SEGMENT_ROM_START(icon_item_24_static_test), pauseCtx->iconItem24Segment, sp24);
+
+            pauseCtx->unk_170 = (void*)ALIGN16((uintptr_t)pauseCtx->iconItem24Segment + sp24);
+
+            if (func_8010A0A4(play) != 0) {
+                size_t size = SEGMENT_ROM_SIZE(icon_item_dungeon_static);
+
+                DmaMgr_SendRequest0(pauseCtx->unk_170, SEGMENT_ROM_START(icon_item_dungeon_static), size);
+                var_a0_2 = func_801068FC(play, (void*)ALIGN16((uintptr_t)pauseCtx->unk_170 + size), size);
+                sInDungeonScene = true;
+            } else {
+                size_t size;
+
+                sInDungeonScene = false;
+                size = SEGMENT_ROM_SIZE(icon_item_field_static);
+                DmaMgr_SendRequest0(pauseCtx->unk_170, _icon_item_field_staticSegmentRomStart, size);
+                var_a0_2 = (void*)ALIGN16((uintptr_t)pauseCtx->unk_170 + size);
+            }
+            pauseCtx->unk_174 = var_a0_2;
+
+            sp2C = SEGMENT_ROM_SIZE(icon_item_jpn_static);
+            DmaMgr_SendRequest0(pauseCtx->unk_174, SEGMENT_ROM_START(icon_item_jpn_static), sp2C);
+            pauseCtx->unk_178 = (void*)ALIGN16((uintptr_t)pauseCtx->unk_174 + sp2C);
+
+            func_8011552C(play, 0x15);
+
+            if (((void)0, gSaveContext.worldMapArea) < 0x16) {
+                func_8082192C(pauseCtx->unk_178 + 0x400, ((void)0, gSaveContext.worldMapArea));
+            }
+
+            pauseCtx->unk_17C = (void*)ALIGN16((uintptr_t)pauseCtx->unk_178 + 0xA00);
+            DmaMgr_SendRequest0(pauseCtx->unk_17C, SEGMENT_ROM_START(icon_item_vtx_static),
+                                SEGMENT_ROM_SIZE(icon_item_vtx_static));
+
+            pauseCtx->unk_2B6 = 0xFF;
+            pauseCtx->unk_2B7 = 0xFF;
+            pauseCtx->unk_2B8 = 0xFF;
+            pauseCtx->state = 4;
+            break;
+
+        case 0x4: /* switch 1 */
+            pauseCtx->unk_27E += 10;
+            pauseCtx->unk_210 = pauseCtx->unk_214 = pauseCtx->unk_218 = pauseCtx->unk_21C -= 40.0f;
+
+            interfaceCtx->startAlpha += 63;
+            D_8082B918 += (s16)(D_8082B910 / 4);
+            D_8082B91C += (s16)(D_8082B914 / 4);
+            pauseCtx->alpha += 31;
+            if (pauseCtx->unk_210 == 0) {
+                interfaceCtx->startAlpha = 255;
+                D_8082B908 = 0.0f;
+                pauseCtx->state = 5;
+            }
+            func_80828788(play);
+            break;
+
+        case 0x5: /* switch 1 */
+            pauseCtx->alpha += 31;
+            func_80828788(play);
+
+            if (pauseCtx->state == 6) {
+                func_80824738(play);
+            }
+            break;
+        case 0x6:                        /* switch 1 */
+            switch (pauseCtx->unk_200) { /* switch 2 */
+                case 0x0:                /* switch 2 */
+                    if (!pauseCtx->itemDescriptionOn &&
+                        (CHECK_BTN_ALL(input->press.button, BTN_START) || CHECK_BTN_ALL(input->press.button, BTN_B))) {
+                        func_8011552C(play, 0xA);
+                        pauseCtx->state = 26;
+                        D_8082B908 = -6240.0f;
+                        func_801A3AEC(0);
+                    }
+                    break;
+
+                case 0x1: /* switch 2 */
+                    func_8082585C(play, input);
+                    break;
+
+                case 0x2: /* switch 2 */
+                    pauseCtx->ocarinaStaff = AudioOcarina_GetPlaybackStaff();
+                    if (pauseCtx->ocarinaStaff->state == 0) {
+                        pauseCtx->unk_200 = 4;
+                        AudioOcarina_SetInstrument(0);
+                    }
+                    break;
+
+                case 0x3: /* switch 2 */
+                    KaleidoScope_UpdateItemEquip(play);
+                    break;
+
+                case 0x5: /* switch 2 */
+                    pauseCtx->ocarinaStaff = AudioOcarina_GetPlayingStaff();
+                    if (CHECK_BTN_ALL(input->press.button, BTN_START) || CHECK_BTN_ALL(input->press.button, BTN_B)) {
+                        AudioOcarina_SetInstrument(0);
+                        func_8011552C(play, 0xA);
+                        pauseCtx->state = 0x1A;
+                        D_8082B908 = -6240.0f;
+                        func_801A3AEC(0);
+                        pauseCtx->unk_200 = 0;
+                    } else {
+                        if (pauseCtx->ocarinaStaff->state == pauseCtx->unk_2A0) {
+                            play_sound(0x4807);
+                            D_8082BEA0 = 0;
+                            D_8082BEA4 = 30;
+                            pauseCtx->unk_200 = 6;
+                        } else if (pauseCtx->ocarinaStaff->state == 0xFF) {
+                            play_sound(0x4827);
+                            D_8082BEA0 = 4;
+                            D_8082BEA4 = 20;
+                            pauseCtx->unk_200 = 6;
+                        }
+                    }
+                    break;
+
+                case 0x6: /* switch 2 */
+                    D_8082BEA4--;
+                    if (D_8082BEA4 == 0) {
+                        pauseCtx->unk_200 = D_8082BEA0;
+                        if (pauseCtx->unk_200 == 0) {
+                            AudioOcarina_SetInstrument(0);
+                        }
+                    }
+                    break;
+
+                case 0x8: /* switch 2 */
+                    if (CHECK_BTN_ALL(input->press.button, BTN_START) || CHECK_BTN_ALL(input->press.button, BTN_B)) {
+                        AudioOcarina_SetInstrument(0);
+                        func_8011552C(play, 0xA);
+                        pauseCtx->state = 0x1A;
+                        D_8082B908 = -6240.0f;
+                        func_801A3AEC(0);
+                        pauseCtx->unk_200 = 0;
+                    }
+                    break;
+
+                case 0xF: /* switch 2 */
+                    KaleidoScope_UpdateMaskEquip(play);
+                    break;
+
+                case 0x10: /* switch 2 */
+                    if (play->pauseCtx.unk_1F0 == 0) {
+                        pauseCtx->unk_200 = 0;
+                    }
+                    break;
+
+                case 0xA: /* switch 2 */
+                case 0xB:
+                case 0xC:
+                case 0xD:
+                case 0xE:
+                    pauseCtx->unk_200 = 0;
+                    break;
+            }
+            break;
+        case 0x7:                        /* switch 1 */
+            switch (pauseCtx->unk_208) { /* switch 3 */
+                case 0x0:                /* switch 3 */
+                    pauseCtx->unk_220 -= 78.5f;
+                    D_8082B918 -= (s16)(D_8082B910 / 4);
+                    D_8082B91C -= (s16)(D_8082B914 / 4);
+                    if (pauseCtx->unk_220 <= -628.0f) {
+                        pauseCtx->unk_220 = -628.0f;
+                        pauseCtx->unk_208 = 1;
+                    }
+                    break;
+                case 0x1: /* switch 3 */
+                    if (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
+                        if (pauseCtx->promptChoice != 0) {
+                            func_8011552C(play, 0xA);
+                            pauseCtx->unk_208 = 2;
+                        } else {
+                            play_sound(0x4823);
+                            Play_SaveCycleSceneFlags(&play->state);
+                            gSaveContext.save.playerData.savedSceneNum = play->sceneNum;
+                            func_8014546C(sramCtx);
+                            if (gSaveContext.unk_3F3F == 0) {
+                                pauseCtx->unk_208 = 5;
+                            } else {
+                                func_80147008(sramCtx, D_801C67C8[(void)0, gSaveContext.fileNum],
+                                              D_801C67F0[(void)0, gSaveContext.fileNum]);
+                                func_80147020(sramCtx);
+                                pauseCtx->unk_208 = 4;
+                            }
+                            D_8082BEA4 = 0x5A;
+                        }
+                    } else if (CHECK_BTN_ALL(input->press.button, BTN_START)) {
+                        func_8011552C(play, 0xA);
+                        pauseCtx->unk_208 = 3;
+                        D_8082B908 = -6240.0f;
+                        D_8082B90C = pauseCtx->unk_220;
+                        func_801A3AEC(0);
+                    } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+                        func_8011552C(play, 0xA);
+                        pauseCtx->unk_208 = 2;
+                        D_8082B90C = pauseCtx->unk_220;
+                    }
+                    break;
+                case 0x4: /* switch 3 */
+                    if (sramCtx->status == 0) {
+                        pauseCtx->unk_208 = 5;
+                    }
+                    break;
+                case 0x5: /* switch 3 */
+                    if (CHECK_BTN_ALL(input->press.button, BTN_B) || CHECK_BTN_ALL(input->press.button, BTN_A) ||
+                        CHECK_BTN_ALL(input->press.button, BTN_START) || (--D_8082BEA4 == 0)) {
+                        func_8011552C(play, 0xA);
+                        pauseCtx->unk_208 = 3;
+                        D_8082B908 = -6240.0f;
+                        D_8082B90C = pauseCtx->unk_220;
+                        func_801A3AEC(0);
+                    }
+                    break;
+                case 0x3: /* switch 3 */
+                case 0x7: /* switch 3 */
+                    if (pauseCtx->unk_220 != (D_8082B90C + 160.0f)) {
+                        pauseCtx->unk_210 = pauseCtx->unk_214 = pauseCtx->unk_218 = pauseCtx->unk_21C += 40.0f;
+                        pauseCtx->unk_220 += 40.0f;
+                        pauseCtx->unk_27E -= 10;
+                        D_8082B918 -= (s16)(D_8082B910 / 4);
+                        D_8082B91C -= (s16)(D_8082B914 / 4);
+                        pauseCtx->alpha -= 63;
+                        if (pauseCtx->unk_220 == (D_8082B90C + 160.0f)) {
+                            pauseCtx->alpha = 0;
+                        }
+                    } else {
+                        pauseCtx->debugEditor = 0;
+                        pauseCtx->state = 0x1B;
+                        pauseCtx->unk_210 = pauseCtx->unk_214 = pauseCtx->unk_218 = pauseCtx->unk_21C = 160.0f;
+                        pauseCtx->unk_25C = 0x3E7;
+                        pauseCtx->unk_200 = 0;
+                        pauseCtx->unk_220 = -434.0f;
+                    }
+                    break;
+                case 0x2: /* switch 3 */
+                    pauseCtx->unk_220 += 78.5f;
+                    D_8082B918 += (s16)(D_8082B910 / 4);
+                    D_8082B91C += (s16)(D_8082B914 / 4);
+                    if (pauseCtx->unk_220 >= -314.0f) {
+                        pauseCtx->state = 6;
+                        pauseCtx->unk_208 = 0;
+                        pauseCtx->unk_220 = -314.0f;
+                        pauseCtx->unk_210 = pauseCtx->unk_214 = pauseCtx->unk_218 = pauseCtx->unk_21C = 0.0f;
+                        func_8011552C(play, 0x15);
+                        gSaveContext.buttonStatus[0] = D_801C6A98[pauseCtx->pageIndex + 1][0];
+                        gSaveContext.buttonStatus[1] = D_801C6A98[pauseCtx->pageIndex + 1][1];
+                        gSaveContext.buttonStatus[2] = D_801C6A98[pauseCtx->pageIndex + 1][1];
+                        gSaveContext.buttonStatus[3] = D_801C6A98[pauseCtx->pageIndex + 1][1];
+                        if ((pauseCtx->cursorSpecialPos == 0xA) || (pauseCtx->cursorSpecialPos == 0xB)) {
+                            KaleidoScope_MoveCursorToSpecialPos(play, pauseCtx->cursorSpecialPos);
+                        } else {
+                            func_80821A04(play);
+                        }
+                    }
+                    break;
+                case 0x6: /* switch 3 */
+                    if (interfaceCtx->unk_264 != 255) {
+                        interfaceCtx->unk_264 += 10;
+                        if (interfaceCtx->unk_264 >= 255) {
+                            interfaceCtx->unk_264 = 255;
+                            pauseCtx->state = 0;
+                            Game_SetFramerateDivisor(&play->state, 3);
+                            gGameInfo->data[0xBE] = 4;
+                            Object_LoadAll(&play->objectCtx);
+                            BgCheck_InitCollisionHeaders(&play->colCtx, play);
+                            do {
+                                GameState* state = &play->state;
+
+                                state->running = false;
+                            } while (0);
+                            do {
+                                GameState* state = &play->state;
+
+                                SET_NEXT_GAMESTATE(state, Opening_Init, OpeningContext);
+                            } while (0);
+                            func_801A4058(0x14);
+                            gSaveContext.seqIndex = 0xFF;
+                            gSaveContext.nightSeqIndex = 0xFF;
+                        }
+                    }
+                    break;
+            }
+            break;
+
+        case 0xA: /* switch 1 */
+            pauseCtx->cursorSlot[1] = XREG(94) + 4;
+            pauseCtx->cursorPoint[1] = XREG(94) + 4;
+            D_8082B918 = -175;
+            D_8082B91C = 155;
+            pauseCtx->unk_220 = -434.0f;
+            Interface_ChangeAlpha(1);
+
+            pauseCtx->iconItemSegment =
+                (void*)(((uintptr_t)play->objectCtx.spaceStart + 0x30) & ~0x3F); // Messed up ALIGN64
+            sp2C = SEGMENT_ROM_SIZE(icon_item_static_old);
+            func_80178E7C(SEGMENT_ROM_START(icon_item_static_test), pauseCtx->iconItemSegment, sp2C);
+
+            pauseCtx->iconItem24Segment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemSegment + sp2C);
+            sp24 = SEGMENT_ROM_SIZE(icon_item_24_static_old);
+            func_80178E7C(SEGMENT_ROM_START(icon_item_24_static_test), pauseCtx->iconItem24Segment, sp24);
+
+            pauseCtx->unk_170 = (void*)ALIGN16((uintptr_t)pauseCtx->iconItem24Segment + sp24);
+            sp2C = SEGMENT_ROM_SIZE(icon_item_gameover_static);
+            DmaMgr_SendRequest0(pauseCtx->unk_170, SEGMENT_ROM_START(icon_item_gameover_static), sp2C);
+
+            pauseCtx->unk_174 = (void*)ALIGN16((uintptr_t)pauseCtx->unk_170 + sp2C);
+            DmaMgr_SendRequest0(pauseCtx->unk_174, SEGMENT_ROM_START(icon_item_jpn_static),
+                                SEGMENT_ROM_SIZE(icon_item_jpn_static));
+
+            gSaveContext.unk_3DD0[3] = 0;
+            D_8082B880 = 255;
+            D_8082B884 = 130;
+            D_8082B888 = 0;
+            D_8082B88C = 0;
+            D_8082B8A8 = 30;
+            D_8082B8AC = 0;
+            D_8082B8B0 = 0;
+            D_8082B944 = 98;
+            pauseCtx->promptChoice = 0;
+            pauseCtx->state++;
+            D_8082BEA8 = 30;
+            if (play->gameOverCtx.state == 0) {
+                pauseCtx->state++;
+            }
+            break;
+
+        case 0xB: /* switch 1 */
+            stepR = ABS_ALT(D_8082B880 - 30) / D_8082BEA8;
+            stepG = ABS_ALT(D_8082B884) / D_8082BEA8;
+            stepB = ABS_ALT(D_8082B888) / D_8082BEA8;
+            stepA = ABS_ALT(D_8082B88C - 255) / D_8082BEA8;
+            if (D_8082B880 >= 30) {
+                D_8082B880 -= stepR;
+            } else {
+                D_8082B880 += stepR;
+            }
+            if (D_8082B884 >= 0) {
+                D_8082B884 -= stepG;
+            } else {
+                D_8082B884 += stepG;
+            }
+            if (D_8082B888 >= 0) {
+                D_8082B888 -= stepB;
+            } else {
+                D_8082B888 += stepB;
+            }
+            if (D_8082B88C >= 255) {
+                D_8082B88C -= stepA;
+            } else {
+                D_8082B88C += stepA;
+            }
+
+            stepR = ABS_ALT(D_8082B8A8 - 255) / D_8082BEA8;
+            stepG = ABS_ALT(D_8082B8AC - 130) / D_8082BEA8;
+            stepB = ABS_ALT(D_8082B8B0) / D_8082BEA8;
+            if (D_8082B8A8 >= 255) {
+                D_8082B8A8 -= stepR;
+            } else {
+                D_8082B8A8 += stepR;
+            }
+            if (D_8082B8AC >= 130) {
+                D_8082B8AC -= stepG;
+            } else {
+                D_8082B8AC += stepG;
+            }
+            if (D_8082B8B0 >= 0) {
+                D_8082B8B0 -= stepB;
+            } else {
+                D_8082B8B0 += stepB;
+            }
+
+            D_8082BEA8--;
+            if (D_8082BEA8 == 0) {
+                D_8082B880 = 30;
+                D_8082B884 = 0;
+                D_8082B888 = 0;
+                D_8082B88C = 255;
+
+                D_8082B8A8 = 255;
+                D_8082B8AC = 130;
+                D_8082B8B0 = 0;
+
+                pauseCtx->state++;
+                D_8082BEA8 = 40;
+            }
+            break;
+
+        case 0xC: /* switch 1 */
+            D_8082BEA8--;
+            if (D_8082BEA8 == 0) {
+                pauseCtx->state = 0xD;
+            }
+            break;
+
+        case 0xD: /* switch 1 */
+            pauseCtx->unk_27E += 0xA;
+            pauseCtx->unk_220 -= 40.0f;
+            pauseCtx->unk_210 = pauseCtx->unk_214 = pauseCtx->unk_218 = pauseCtx->unk_21C = pauseCtx->unk_220;
+            interfaceCtx->startAlpha += 63;
+            D_8082B944 -= 3;
+            D_8082B918 += (s16)(D_8082B910 / 4);
+            D_8082B91C += (s16)(D_8082B914 / 4);
+            pauseCtx->alpha += 31;
+            if (pauseCtx->unk_220 < -628.0f) {
+                pauseCtx->unk_220 = -628.0f;
+                interfaceCtx->startAlpha = 255;
+                D_8082B944 = 0x42;
+                D_8082B908 = 0.0f;
+                pauseCtx->alpha = 255;
+                if (play->gameOverCtx.state == 0) {
+                    pauseCtx->state = 0xE;
+                } else {
+                    pauseCtx->state = 0x11;
+                }
+            }
+            break;
+
+        case 0xE: /* switch 1 */
+            if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
+                if (pauseCtx->promptChoice != 0) {
+                    pauseCtx->promptChoice = 0;
+                    play_sound(0x4808);
+                    pauseCtx->state = 0;
+                    Game_SetFramerateDivisor(&play->state, 3);
+                    SREG(94) = 4;
+                    Object_LoadAll(&play->objectCtx);
+                    BgCheck_InitCollisionHeaders(&play->colCtx, play);
+                } else {
+                    play_sound(0x4823);
+                    pauseCtx->promptChoice = 0;
+                    Play_SaveCycleSceneFlags(&play->state);
+                    gSaveContext.save.playerData.savedSceneNum = play->sceneNum;
+                    gSaveContext.save.playerData.health = 0x30;
+                    func_8014546C(sramCtx);
+                    if (gSaveContext.unk_3F3F == 0) {
+                        pauseCtx->state = 0x10;
+                    } else {
+                        func_80147008(sramCtx, D_801C67C8[(void)0, gSaveContext.fileNum],
+                                      D_801C67F0[(void)0, gSaveContext.fileNum]);
+                        func_80147020(sramCtx);
+                        pauseCtx->state = 0xF;
+                    }
+                    D_8082BEA4 = 0x5A;
+                }
+            } else if ((pauseCtx->promptChoice == 0) && (pauseCtx->promptChoice >= 0x1E)) {
+                play_sound(0x4809);
+                pauseCtx->promptChoice = 4;
+            } else if ((pauseCtx->promptChoice != 0) && (pauseCtx->promptChoice < -0x1D)) {
+                play_sound(0x4809);
+                pauseCtx->promptChoice = 0;
+            }
+            break;
+
+        case 0xF: /* switch 1 */
+            if (sramCtx->status == 0) {
+                pauseCtx->state = 0;
+                Game_SetFramerateDivisor(&play->state, 3);
+                SREG(94) = 4;
+                Object_LoadAll(&play->objectCtx);
+                BgCheck_InitCollisionHeaders(&play->colCtx, play);
+            }
+            break;
+
+        case 0x10: /* switch 1 */
+            D_8082BEA4--;
+            if (D_8082BEA4 == 0) {
+                pauseCtx->state = 0x11;
+                gameOverCtx->state++;
+            } else if ((D_8082BEA4 < 81) &&
+                       (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_START))) {
+                pauseCtx->state = 0x11;
+                gameOverCtx->state++;
+                func_801A3AEC(0);
+            }
+            break;
+
+        case 0x11: /* switch 1 */
+            if (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_START)) {
+                if (pauseCtx->promptChoice == 0) {
+                    play_sound(0x4823);
+                    Play_SaveCycleSceneFlags(&play->state);
+                    if (gSaveContext.save.entrance == ENTRANCE(UNSET_0D, 0)) {}
+                } else {
+                    play_sound(0x4808);
+                }
+                pauseCtx->state = 0x12;
+            }
+            break;
+
+        case 0x12: /* switch 1 */
+            if (interfaceCtx->unk_264 != 0xFF) {
+                interfaceCtx->unk_264 += 0xA;
+                if (interfaceCtx->unk_264 >= 0xFF) {
+                    interfaceCtx->unk_264 = 0xFF;
+                    pauseCtx->state = 0;
+                    Game_SetFramerateDivisor(&play->state, 3);
+                    SREG(94) = 4;
+                    Object_LoadAll(&play->objectCtx);
+                    BgCheck_InitCollisionHeaders(&play->colCtx, play);
+                    if (pauseCtx->promptChoice == 0) {
+                        func_80169FDC(&play->state);
+                        gSaveContext.respawnFlag = -2;
+                        gSaveContext.nextTransitionType = 2;
+                        gSaveContext.save.playerData.health = 0x30;
+                        audio_setBGM(0xA);
+                        gSaveContext.healthAccumulator = 0;
+                        gSaveContext.unk_3F28 = 0;
+                        gSaveContext.unk_3F2C = 0;
+                        gSaveContext.unk_3F2E = 0;
+                        gSaveContext.unk_3F30 = gSaveContext.save.playerData.magic;
+                        gSaveContext.save.playerData.magicLevel = 0;
+                        gSaveContext.save.playerData.magic = 0;
+                    } else {
+                        do {
+                            GameState* state = &play->state;
+
+                            state->running = false;
+                        } while (0);
+                        do {
+                            GameState* state = &play->state;
+
+                            SET_NEXT_GAMESTATE(state, Opening_Init, OpeningContext);
+                        } while (0);
+                    }
+                }
+            }
+            break;
+
+        case 0x15: /* switch 1 */
+            D_8082B908 = -6240.0f;
+            D_8082DA58[0] = gSaveContext.buttonStatus[0];
+            D_8082DA58[1] = gSaveContext.buttonStatus[1];
+            D_8082DA58[2] = gSaveContext.buttonStatus[2];
+            D_8082DA58[3] = gSaveContext.buttonStatus[3];
+            D_8082DA58[4] = gSaveContext.buttonStatus[4];
+            pauseCtx->cursorX[1] = 0;
+            pauseCtx->cursorSlot[1] = XREG(94) + 4;
+            pauseCtx->cursorPoint[1] = pauseCtx->unk_256 = XREG(94) + 4;
+            D_8082B918 = -175;
+            D_8082B91C = 155;
+
+            pauseCtx->iconItemSegment = (void*)ALIGN16((uintptr_t)play->objectCtx.spaceStart);
+            sp2C = SEGMENT_ROM_SIZE(icon_item_static_old);
+            func_80178E7C(SEGMENT_ROM_START(icon_item_static_test), pauseCtx->iconItemSegment, sp2C);
+
+            pauseCtx->unk_170 = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemSegment + sp2C);
+            sInDungeonScene = false;
+            sp24 = SEGMENT_ROM_SIZE(icon_item_field_static);
+            DmaMgr_SendRequest0(pauseCtx->unk_170, SEGMENT_ROM_START(icon_item_field_static), sp24);
+
+            pauseCtx->unk_174 = (void*)ALIGN16((uintptr_t)pauseCtx->unk_170 + sp24);
+            sp2C = SEGMENT_ROM_SIZE(icon_item_jpn_static);
+            DmaMgr_SendRequest0(pauseCtx->unk_174, SEGMENT_ROM_START(icon_item_jpn_static), sp2C);
+
+            pauseCtx->unk_178 = (void*)ALIGN16((uintptr_t)pauseCtx->unk_174 + sp2C);
+            func_8011552C(play, 0x16);
+            func_80821900(pauseCtx->unk_178, (u16)pauseCtx->cursorPoint[4]);
+
+            pauseCtx->unk_17C = (void*)ALIGN16((uintptr_t)pauseCtx->unk_178 + 0xA00);
+            DmaMgr_SendRequest0(pauseCtx->unk_17C, SEGMENT_ROM_START(icon_item_vtx_static),
+                                SEGMENT_ROM_SIZE(icon_item_vtx_static));
+
+            pauseCtx->state = 0x16;
+            D_8082B944 = 98;
+            pauseCtx->promptChoice = 0;
+            break;
+
+        case 0x16: /* switch 1 */
+            XREG(87) += 0x14;
+            pauseCtx->unk_27E += 10;
+            pauseCtx->unk_214 -= 40.0f;
+            interfaceCtx->startAlpha += 63;
+            D_8082B944 -= 3;
+            D_8082B918 += (s16)(D_8082B910 / 4);
+            D_8082B91C += (s16)(D_8082B914 / 4);
+            pauseCtx->alpha += 31;
+            if (pauseCtx->unk_214 == 0) {
+                interfaceCtx->startAlpha = 255;
+                D_8082B908 = 0.0f;
+                pauseCtx->alpha = 255;
+                pauseCtx->unk_200 = 0;
+                pauseCtx->cursorSpecialPos = 0;
+                pauseCtx->state = 0x17;
+                XREG(87) = 0x78;
+            }
+            break;
+
+        case 0x17: /* switch 1 */
+            if (CHECK_BTN_ALL(input->press.button, BTN_START) || CHECK_BTN_ALL(input->press.button, BTN_B)) {
+                func_8011552C(play, 0xA);
+                pauseCtx->state = 0x19;
+                D_8082B908 = -6240.0f;
+                func_801A3AEC(0);
+                play->msgCtx.ocarinaMode = 4;
+                gSaveContext.unk_3F26 = 50;
+            } else if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
+                play_sound(0x4808);
+                Message_StartTextbox(play, 0x1B93, NULL);
+                pauseCtx->state = 0x18;
+            } else {
+                func_808256E4(play);
+            }
+            break;
+
+        case 0x18: /* switch 1 */
+            if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
+                msgCtx->msgLength = 0;
+                msgCtx->msgMode = 0;
+                if (msgCtx->choiceIndex == 0) {
+                    func_8011552C(play, 0xA);
+                    pauseCtx->state = 0x19;
+                    D_8082B908 = -6240.0f;
+                    func_801A3AEC(0);
+                    play->msgCtx.ocarinaMode = D_8082BE88[pauseCtx->cursorPoint[4]];
+                    play_sound(0x4808);
+                } else {
+                    pauseCtx->state = 0x17;
+                    func_8011552C(play, 0x16);
+                    play_sound(0x4818);
+                };
+            } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+                msgCtx->msgLength = 0;
+                msgCtx->msgMode = 0;
+                pauseCtx->state = 0x17;
+                play_sound(0x4818);
+            } else if (CHECK_BTN_ALL(input->press.button, BTN_START)) {
+                msgCtx->msgLength = 0;
+                msgCtx->msgMode = 0;
+                func_8011552C(play, 0xA);
+                pauseCtx->state = 0x19;
+                D_8082B908 = -6240.0f;
+                func_801A3AEC(0);
+                play->msgCtx.ocarinaMode = 4;
+                gSaveContext.unk_3F26 = 50;
+            }
+            break;
+
+        case 0x19: /* switch 1 */
+            if (pauseCtx->unk_214 != 160.0f) {
+                XREG(87) -= 0x3C;
+                if (XREG(87) <= 0) {
+                    XREG(87) = 0;
+                }
+                pauseCtx->unk_27E -= 10;
+                pauseCtx->unk_214 += 40.0f;
+                interfaceCtx->startAlpha -= 0x3F;
+                D_8082B918 -= (s16)(D_8082B910 / 4);
+                D_8082B91C -= (s16)(D_8082B914 / 4);
+                pauseCtx->alpha -= 63;
+                if (pauseCtx->unk_214 == 160.0f) {
+                    pauseCtx->alpha = 0;
+                }
+            } else {
+                pauseCtx->debugEditor = 0;
+                pauseCtx->state = 0x1B;
+                pauseCtx->unk_210 = pauseCtx->unk_214 = pauseCtx->unk_218 = pauseCtx->unk_21C = 160.0f;
+                pauseCtx->unk_25C = 0x3E7;
+                play->interfaceCtx.startAlpha = 0;
+                pauseCtx->pageIndex = pauseCtx->unk_2C8;
+                pauseCtx->cursorPoint[4] = pauseCtx->unk_2CA;
+            }
+            break;
+
+        case 0x1A: /* switch 1 */
+            if (pauseCtx->unk_210 != 160.0f) {
+                pauseCtx->unk_27E -= 10;
+                pauseCtx->unk_210 = pauseCtx->unk_214 = pauseCtx->unk_218 = pauseCtx->unk_21C += 40.0f;
+                interfaceCtx->startAlpha -= 63;
+                D_8082B918 -= (s16)(D_8082B910 / 4);
+                D_8082B91C -= (s16)(D_8082B914 / 4);
+                pauseCtx->alpha -= 63;
+                if (pauseCtx->unk_210 == 160.0f) {
+                    pauseCtx->alpha = 0;
+                }
+            } else {
+                pauseCtx->debugEditor = 0;
+                pauseCtx->state = 0x1B;
+                pauseCtx->unk_21C = 160.0f;
+                pauseCtx->unk_218 = 160.0f;
+                pauseCtx->unk_214 = 160.0f;
+                pauseCtx->unk_210 = 160.0f;
+                pauseCtx->unk_25C = 0x3E7;
+                play->interfaceCtx.startAlpha = 0;
+            }
+            break;
+
+        case 0x1B: /* switch 1 */
+            pauseCtx->state = 0;
+            Game_SetFramerateDivisor(&play->state, 3);
+            SREG(94) = 4;
+            Object_LoadAll(&play->objectCtx);
+            BgCheck_InitCollisionHeaders(&play->colCtx, play);
+            gSaveContext.buttonStatus[0] = D_8082DA58[0];
+            gSaveContext.buttonStatus[1] = D_8082DA58[1];
+            gSaveContext.buttonStatus[2] = D_8082DA58[2];
+            gSaveContext.buttonStatus[3] = D_8082DA58[3];
+            gSaveContext.buttonStatus[4] = D_8082DA58[4];
+            func_80110038(play);
+            gSaveContext.unk_3F22 = 0;
+            Interface_ChangeAlpha(0x32);
+            MsgEvent_SendNullTask();
+            func_80143324(play, &play->skyboxCtx, play->skyboxId);
+            if (((u8)msgCtx->unk11FF2 != 0) && (msgCtx->currentTextId == 0xFF)) {
+                func_80115844(play, 0x12);
+                func_8011552C(play, 0x12);
+                Interface_ChangeAlpha(0x10);
+            } else {
+                interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
+            }
+            gSaveContext.unk_3F22 = 0;
+            Interface_ChangeAlpha(D_8082BE9C);
+            func_801A3A7C(0);
+            break;
+    }
+
+    if (((pauseCtx->state < 8) || (pauseCtx->state >= 0x13)) && (pauseCtx->state != 7)) {
+        if (pauseCtx->stickRelX < -30) {
+            if (D_8082BEB4 == -1) {
+                D_8082BEAC--;
+                if (D_8082BEAC < 0) {
+                    D_8082BEAC = 2;
+                } else {
+                    pauseCtx->stickRelX = 0;
+                }
+            } else {
+                D_8082BEB4 = -1;
+                D_8082BEAC = 10;
+            }
+        } else if (pauseCtx->stickRelX > 30) {
+            if (D_8082BEB4 == 1) {
+                D_8082BEAC--;
+                if (D_8082BEAC < 0) {
+                    D_8082BEAC = 2;
+                } else {
+                    pauseCtx->stickRelX = 0;
+                }
+            } else {
+                D_8082BEB4 = 1;
+                D_8082BEAC = 10;
+            }
+        } else {
+            D_8082BEB4 = 0;
+        }
+
+        if (pauseCtx->stickRelY < -30) {
+            if (D_8082BEB8 == -1) {
+                D_8082BEB0--;
+                if (D_8082BEB0 < 0) {
+                    D_8082BEB0 = 2;
+                } else {
+                    pauseCtx->stickRelY = 0;
+                }
+            } else {
+                D_8082BEB8 = -1;
+                D_8082BEB0 = 10;
+            }
+        } else if (pauseCtx->stickRelY > 30) {
+            if (D_8082BEB8 == 1) {
+                D_8082BEB0--;
+                if (D_8082BEB0 < 0) {
+                    D_8082BEB0 = 2;
+                } else {
+                    pauseCtx->stickRelY = 0;
+                }
+            } else {
+                D_8082BEB8 = 1;
+                D_8082BEB0 = 10;
+            }
+        } else {
+            D_8082BEB8 = 0;
+        }
+    }
+    if ((SREG(94) == 3) && (pauseCtx->debugEditor == 0) && ((pauseCtx->state < 0x15) || (pauseCtx->state >= 0x1A)) &&
+        (((pauseCtx->state >= 4) && (pauseCtx->state < 8)) || ((pauseCtx->state >= 0xA) && (pauseCtx->state < 0x1B)))) {
+        if ((pauseCtx->state < 8) || (pauseCtx->state >= 0x13)) {
+            switch (pauseCtx->pageIndex) { /* switch 4; irregular */
+                case 0x0:                  /* switch 4 */
+                    KaleidoScope_UpdateItemCursor(play);
+                    break;
+                case 0x1: /* switch 4 */
+                    if (sInDungeonScene) {
+                        func_8081E118(play);
+                    } else {
+                        func_8081FB1C(play);
+                    }
+                    break;
+                case 0x2: /* switch 4 */
+                    func_80817B5C(play);
+                    break;
+                case 0x3: /* switch 4 */
+                    KaleidoScope_UpdateMaskCursor(play);
+                    break;
+            }
+            if ((pauseCtx->state == 6) && ((pauseCtx->unk_200 == 0) || (pauseCtx->unk_200 == 8))) {
+                KaleidoScope_HandlePageToggles(play, input);
+            }
+        }
+        if (pauseCtx->state == 6) {
+            func_80824738(play);
+        }
+    } else if (pauseCtx->state == 0x17) {
+        func_8081FB1C(play);
+        func_80824738(play);
+    }
+
+    if ((pauseCtx->debugEditor == 1) || (pauseCtx->debugEditor == 2)) {
+        KaleidoScope_UpdateInventoryEditor(play);
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_Update.s")
+#endif
