@@ -23,12 +23,13 @@ typedef struct EnWiz {
     /* 0x3B8 */ s16 unk_388;
     /* 0x3BA */ s16 unk_3BA;
     /* 0x3BC */ s16 unk_3BC;
-    /* 0x3B4 */ char unk_3BE[4];
+    /* 0x3B4 */ char unk_3BE[2];
+    /* 0x3C0 */ s16 unk_3C0;
     /* 0x3C2 */ s16 unk_3C2;
     /* 0x3C4 */ s16 unk_3C4;
     /* 0x3C6 */ s16 unk_3C6;
     /* 0x3C8 */ char unk_3C8[2];
-    /* 0x3CA */ s8 unk_3CA;
+    /* 0x3CA */ u8 unk_3CA;
     /* 0x3CB */ u8 unk_3CB;
     /* 0x3CC */ char unk_3CC[4];
     /* 0x3D0 */ f32 endFrame;
@@ -42,7 +43,8 @@ typedef struct EnWiz {
     /* 0x414 */ Vec3f unk_414;
     /* 0x420 */ Actor* unk_420[10];
     /* 0x448 */ s32 unk_448;
-    /* 0x44C */ char unk_44C[4];
+    /* 0x44C */ s16 unk_44C;
+    /* 0x44E */ char unk_44E[2];
     /* 0x450 */ f32 unk_450;
     /* 0x454 */ ColliderJntSph unk_454;
     /* 0x474 */ ColliderJntSphElement unk_474[10];
@@ -53,7 +55,7 @@ typedef struct EnWiz {
     /* 0x74A */ s16 unk_74A;
     /* 0x74C */ s16 switchFlag;
     /* 0x74E */ s16 unk_74E;
-    /* 0x750 */ char unk_750[2];
+    /* 0x750 */ s16 unk_750;
     /* 0x752 */ s16 drawDmgEffTimer;
     /* 0x754 */ s16 drawDmgEffType;
     /* 0x756 */ char unk_756[2];
