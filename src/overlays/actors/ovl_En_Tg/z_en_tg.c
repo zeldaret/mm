@@ -216,7 +216,7 @@ void EnTg_SpawnHeart(EnTg* this, EnTgHeartEffect* effects, Vec3f* heartStartPos,
         effects->isEnabled = true;
         effects->pos = *heartStartPos;
         effects->velocity = heartVelocityVec;
-        effects->unusedZeroVec20 = zeroVec;
+        effects->unusedZeroVec = zeroVec;
         effects->scale = 0.01f;
         effects->pos.x += 4.0f * Math_SinS(this->actor.shape.rot.y);
         effects->pos.z += 4.0f * Math_CosS(this->actor.shape.rot.y);

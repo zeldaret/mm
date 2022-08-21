@@ -11,11 +11,10 @@ typedef void (*EnTgActionFunc)(struct EnTg*, PlayState*);
 typedef struct EnTgHeartEffect {
     /* 0x00 */ u8 isEnabled;
     /* 0x01 */ u8 timer;
-    /* 0x02 */ char unk2[0x2];
     /* 0x04 */ f32 scale;
     /* 0x08 */ char unk8[0xC];
     /* 0x14 */ Vec3f pos;
-    /* 0x20 */ Vec3f unusedZeroVec20;
+    /* 0x20 */ Vec3f unusedZeroVec;
     /* 0x2C */ Vec3f velocity;
     /* 0x38 */ s16 angle;
 } EnTgHeartEffect; // size = 0x3C
@@ -29,7 +28,6 @@ typedef struct EnTg {
     /* 0x01F0 */ Vec3s jointTable[HONEY_AND_DARLING_LIMB_MAX];
     /* 0x026E */ Vec3s morphTable[HONEY_AND_DARLING_LIMB_MAX];
     /* 0x02EC */ s16 spawnHeartTimer;
-    /* 0x02EE */ char unk2EE[0x2];
     /* 0x02F0 */ EnTgHeartEffect effects[10];
 } EnTg; // size = 0x548
 
