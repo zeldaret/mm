@@ -1003,8 +1003,8 @@ typedef struct Player {
     /* 0xADC */ s8 unk_ADC;
     /* 0xADD */ s8 unk_ADD;
     /* 0xADE */ u8 unk_ADE;
-    /* 0xADF */ s8 unk_ADF[4];
-    /* 0xAE3 */ s8 unk_AE3[4];
+    /* 0xADF */ s8 unk_ADF[4]; // Circular buffer used for testing for triggering a quickspin
+    /* 0xAE3 */ s8 unk_AE3[4]; // Circular buffer used for ?
     /* 0xAE7 */ s8 unk_AE7; // a timer
     /* 0xAE8 */ s16 unk_AE8; // multipurpose timer
     /* 0xAEC */ f32 unk_AEC;
