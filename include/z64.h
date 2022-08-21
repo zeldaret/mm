@@ -867,7 +867,7 @@ typedef struct GameState {
     /* 0x00 */ GraphicsContext* gfxCtx;
     /* 0x04 */ GameStateFunc main;
     /* 0x08 */ GameStateFunc destroy;
-    /* 0x0C */ GameStateFunc init; // Current init, though after stopping, the graph thread will look here to determine the next gamestate to load
+    /* 0x0C */ GameStateFunc init; // Usually the current state's init, though after stopping, the graph thread will look here to determine the next gamestate to load.
     /* 0x10 */ size_t size;
     /* 0x14 */ Input input[4];
     /* 0x74 */ TwoHeadArena heap;
