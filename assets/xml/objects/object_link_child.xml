@@ -105,7 +105,7 @@
         <DList Name="gLinkHumanKokiriSwordSheathDL" Offset="0x17700" />
         <DList Name="object_link_child_DL_017818" Offset="0x17818" />
         <DList Name="gLinkHumanHookshotDL" Offset="0x17858" />
-        <DList Name="object_link_child_DL_017B40" Offset="0x17B40" />
+        <DList Name="object_link_child_DL_017B40" Offset="0x17B40" />https://github.com/Decompollaborate/mm/compare/z_player_lib__2..z_player_lib
         <DList Name="gLinkHumanBowDL" Offset="0x181C8" />
         <DList Name="object_link_child_DL_018490" Offset="0x18490" />
 
@@ -188,6 +188,6 @@
         <Limb Name="gLinkHumanRightHandLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_R_HAND" Offset="0x1E1C0" />
         <Limb Name="gLinkHumanSheathLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_SHEATH" Offset="0x1E1D0" />
         <Limb Name="gLinkHumanTorsoLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_TORSO" Offset="0x1E1E0" />
-        <Skeleton Name="gLinkHumanSkel" Type="Flex" LimbType="LOD" LimbNone="LINK_HUMAN_LIMB_NONE" LimbMax="LINK_HUMAN_LIMB_MAX" EnumName="LinkHumanLimbs" Offset="0x1E244" />
+        <Skeleton Name="gLinkHumanSkel" Type="Flex" LimbType="LOD" LimbNone="LINK_HUMAN_LIMB_NONE" LimbMax="LINK_HUMAN_LIMB_MAX" EnumName="LinkHumanLimb" Offset="0x1E244" />
     </File>
 </Root>

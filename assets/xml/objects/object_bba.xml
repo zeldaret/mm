@@ -41,7 +41,7 @@
         <Limb Name="gBbaRightLowerArmRootLimb" Type="Standard" EnumName="BBA_LIMB_RIGHT_LOWER_ARM_ROOT" Offset="0x5E88" />
         <Limb Name="gBbaRightForearmLimb" Type="Standard" EnumName="BBA_LIMB_RIGHT_FOREARM" Offset="0x5E94" />
         <Limb Name="gBbaRightHandLimb" Type="Standard" EnumName="BBA_LIMB_RIGHT_HAND" Offset="0x5EA0" />
-        <Skeleton Name="gBbaSkel" Type="Flex" LimbType="Standard" LimbNone="BBA_LIMB_NONE" LimbMax="BBA_LIMB_MAX" EnumName="BbaLimbs" Offset="0x5EF0" />
+        <Skeleton Name="gBbaSkel" Type="Flex" LimbType="Standard" LimbNone="BBA_LIMB_NONE" LimbMax="BBA_LIMB_MAX" EnumName="BbaLimb" Offset="0x5EF0" />
 
          <!-- Animations -->
         <Animation Name="gBbaIdleAnim" Offset="0x6550" />

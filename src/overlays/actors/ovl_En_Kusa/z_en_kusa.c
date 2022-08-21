@@ -243,12 +243,12 @@ void EnKusa_DropCollectible(EnKusa* this, PlayState* play) {
     s32 collectible;
     s32 collectableParams;
 
-    if ((GET_KUSA_TYPE(&this->actor) == ENKUSA_TYPE_GRASS) || (GET_KUSA_TYPE(&this->actor) == ENKUSA_TYPE_BUSH)) {
+    if ((KUSA_GET_TYPE(&this->actor) == ENKUSA_TYPE_GRASS) || (KUSA_GET_TYPE(&this->actor) == ENKUSA_TYPE_BUSH)) {
         if (!KUSA_GET_PARAMS_0C(&this->actor)) {
             Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos,
                                        KUSA_GET_RAND_COLLECTIBLE_ID(&this->actor) * 0x10);
         }
-    } else if (GET_KUSA_TYPE(&this->actor) == ENKUSA_TYPE_REGROWING_GRASS) {
+    } else if (KUSA_GET_TYPE(&this->actor) == ENKUSA_TYPE_REGROWING_GRASS) {
         Item_DropCollectible(play, &this->actor.world.pos, 3);
     } else {
         collectible = func_800A8150(KUSA_GET_PARAMS_3F(&this->actor));
@@ -361,7 +361,7 @@ void EnKusa_InitCollider(Actor* thisx, PlayState* play) {
 void EnKusa_Init(Actor* thisx, PlayState* play) {
     EnKusa* this = THIS;
     s32 pad;
-    s32 kusaType = GET_KUSA_TYPE(&this->actor);
+    s32 kusaType = KUSA_GET_TYPE(&this->actor);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
@@ -392,7 +392,7 @@ void EnKusa_Init(Actor* thisx, PlayState* play) {
         this->isInWater |= 1;
     }
 
-    this->objIndex = Object_GetIndex(&play->objectCtx, objectIds[(GET_KUSA_TYPE(&this->actor))]);
+    this->objIndex = Object_GetIndex(&play->objectCtx, objectIds[(KUSA_GET_TYPE(&this->actor))]);
     if (this->objIndex < 0) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -428,7 +428,7 @@ void EnKusa_WaitObject(EnKusa* this, PlayState* play) {
     s32 pad;
 
     if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
-        s32 kusaType = GET_KUSA_TYPE(&this->actor);
+        s32 kusaType = KUSA_GET_TYPE(&this->actor);
 
         if (this->isCut) {
             EnKusa_SetupCut(this);
@@ -465,11 +465,11 @@ void EnKusa_WaitForInteract(EnKusa* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
 
         if (KUSA_SHOULD_SPAWN_BUGS(&this->actor)) {
-            if (GET_KUSA_TYPE(&this->actor) != ENKUSA_TYPE_GRASS_2) {
+            if (KUSA_GET_TYPE(&this->actor) != ENKUSA_TYPE_GRASS_2) {
                 EnKusa_SpawnBugs(this, play);
             }
         }
-        if (GET_KUSA_TYPE(&this->actor) == ENKUSA_TYPE_BUSH) {
+        if (KUSA_GET_TYPE(&this->actor) == ENKUSA_TYPE_BUSH) {
             Actor_MarkForDeath(&this->actor);
         } else {
             EnKusa_SetupCut(this);
@@ -488,7 +488,7 @@ void EnKusa_WaitForInteract(EnKusa* this, PlayState* play) {
             if (this->actor.xzDistToPlayer < 400.0f) {
                 CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
                 if (this->actor.xzDistToPlayer < 100.0f) {
-                    if (GET_KUSA_TYPE(&this->actor) != ENKUSA_TYPE_GRASS_2) {
+                    if (KUSA_GET_TYPE(&this->actor) != ENKUSA_TYPE_GRASS_2) {
                         Actor_LiftActor(&this->actor, play);
                     }
                 }
@@ -557,7 +557,7 @@ void EnKusa_Fall(EnKusa* this, PlayState* play) {
         }
         EnKusa_SpawnFragments(this, play);
         EnKusa_DropCollectible(this, play);
-        switch (GET_KUSA_TYPE(&this->actor)) {
+        switch (KUSA_GET_TYPE(&this->actor)) {
             case ENKUSA_TYPE_BUSH:
             case ENKUSA_TYPE_GRASS:
                 Actor_MarkForDeath(&this->actor);
@@ -610,7 +610,7 @@ void EnKusa_Fall(EnKusa* this, PlayState* play) {
 }
 
 void EnKusa_SetupCut(EnKusa* this) {
-    switch (GET_KUSA_TYPE(&this->actor)) {
+    switch (KUSA_GET_TYPE(&this->actor)) {
         case ENKUSA_TYPE_GRASS:
         case ENKUSA_TYPE_GRASS_2:
             this->actionFunc = EnKusa_DoNothing;

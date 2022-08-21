@@ -40,7 +40,7 @@ typedef enum {
     /* 4 */ MA_YTO_TYPE_4  // HugCutscene? Doesn't seem to work properly in-game
 } EnMaYtoType;
 
-#define EN_MA_YTO_PARSE_TYPE(params) (((params)&0xF000) >> 12)
+#define EN_MA_YTO_GET_TYPE(thisx) (((thisx)->params & 0xF000) >> 12)
 #define EN_MA_YTO_PARAM(enMaYtsType, arg1) (((enMaYtsType) << 12) | ((arg1) << 8))
 
 #endif // Z_EN_MA_YTO_H

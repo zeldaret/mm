@@ -109,6 +109,6 @@
         <Limb Name="gLinkZoraRightHandLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_R_HAND" Offset="0x12BB0" />
         <Limb Name="gLinkZoraSheathLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_SHEATH" Offset="0x12BC0" />
         <Limb Name="gLinkZoraTorsoLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_TORSO" Offset="0x12BD0" />
-        <Skeleton Name="gLinkZoraSkel" Type="Flex" LimbType="LOD" LimbNone="LINK_ZORA_LIMB_NONE" LimbMax="LINK_ZORA_LIMB_MAX" EnumName="LinkZoraLimbs" Offset="0x12C34" />
+        <Skeleton Name="gLinkZoraSkel" Type="Flex" LimbType="LOD" LimbNone="LINK_ZORA_LIMB_NONE" LimbMax="LINK_ZORA_LIMB_MAX" EnumName="LinkZoraLimb" Offset="0x12C34" />
     </File>
 </Root>

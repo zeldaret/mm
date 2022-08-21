@@ -76,6 +76,6 @@
         <Limb Name="gLinkDekuRightHandLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_R_HAND" Offset="0xB9A0" />
         <Limb Name="gLinkDekuSheathLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_SHEATH" Offset="0xB9B0" />
         <Limb Name="gLinkDekuTorsoLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_TORSO" Offset="0xB9C0" />
-        <Skeleton Name="gLinkDekuSkel" Type="Flex" LimbType="LOD" LimbNone="LINK_DEKU_LIMB_NONE" LimbMax="LINK_DEKU_LIMB_MAX" EnumName="LinkDekuLimbs" Offset="0xBA24" />
+        <Skeleton Name="gLinkDekuSkel" Type="Flex" LimbType="LOD" LimbNone="LINK_DEKU_LIMB_NONE" LimbMax="LINK_DEKU_LIMB_MAX" EnumName="LinkDekuLimb" Offset="0xBA24" />
     </File>
 </Root>

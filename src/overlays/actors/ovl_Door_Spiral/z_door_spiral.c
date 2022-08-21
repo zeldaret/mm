@@ -184,8 +184,8 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play) {
     }
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->unk145 = DOORSPIRAL_GET_UNK145_PARAM(thisx); // set but never used
-    this->orientation = DOORSPIRAL_GET_ORIENTATION_PARAM(thisx);
+    this->unk145 = DOORSPIRAL_GET_UNK145(thisx); // set but never used
+    this->orientation = DOORSPIRAL_GET_ORIENTATION(thisx);
     this->objectType = DoorSpiral_GetObjectType(play);
     objBankId = Object_GetIndex(&play->objectCtx, sSpiralObjectInfo[this->objectType].objectBankId);
     this->bankIndex = objBankId;
