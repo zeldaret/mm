@@ -1787,7 +1787,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
             player->actor.world.pos.x *= 10.0f;
             player->actor.world.pos.y -= 3150.0f;
             player->actor.world.pos.y *= 10.0f;
-            player->unk_B68 = player->actor.world.pos.y;
+            player->fallStartHeight = player->actor.world.pos.y;
             player->actor.world.pos.z *= 10.0f;
 
             if ((sBlueWarp != NULL) && ((SQ(player->actor.world.pos.z) + SQ(player->actor.world.pos.x)) < SQ(60.0f))) {
@@ -1859,7 +1859,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
             player->actor.world.pos.x *= 0.1f;
             player->actor.world.pos.y *= 0.1f;
             player->actor.world.pos.y += 3150.0f;
-            player->unk_B68 = player->actor.world.pos.y;
+            player->fallStartHeight = player->actor.world.pos.y;
             player->actor.world.pos.z *= 0.1f;
 
             sRedTwinmold->actor.world.pos.x *= 0.1f;

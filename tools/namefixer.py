@@ -691,6 +691,15 @@ wordReplace = {
     "player->swordAnimation": "player->meleeWeaponAnimation",
     "player->swordState": "player->meleeWeaponState",
     "player->swordInfo": "player->meleeWeaponInfo",
+    "player->unk_AD8": "player->underwaterTimer",
+    "player->unk_B2A": "player->getItemDrawId",
+    "player->unk_B68": "player->fallStartHeight",
+    "player->unk_B6A": "player->fallDistance",
+
+    "ageProperties->unk_04": "ageProperties->shadowScale",
+    "ageProperties->unk_92": "ageProperties->voiceSfxOffset",
+    "ageProperties->unk_94": "ageProperties->surfaceSfxOffset",
+    
 
     "csCtx.npcActions": "csCtx.actorActions",
     "csCtx->npcActions": "csCtx->actorActions",

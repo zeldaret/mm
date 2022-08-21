@@ -644,7 +644,7 @@ PlayerActionParam func_80123810(PlayState* play) {
 u8 sActionModelGroups[PLAYER_AP_MAX] = {
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_NONE
     PLAYER_MODELGROUP_13,             // PLAYER_AP_LAST_USED
-    PLAYER_MODELGROUP_STICK,          // PLAYER_AP_FISHING_POLE
+    PLAYER_MODELGROUP_STICK,          // PLAYER_AP_FISHING_ROD
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_AP_SWORD_KOKIRI
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_AP_SWORD_RAZOR
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_AP_SWORD_GILDED
@@ -1485,7 +1485,7 @@ s32 func_801242DC(PlayState* play) {
 
     if (play->roomCtx.currRoom.unk2 == 3) { // Room is hot
         envIndex = 0;
-    } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->unk_AD8 > 80)) {
+    } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->underwaterTimer > 80)) {
         envIndex = 3;
     } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
         if ((player->transformation == PLAYER_FORM_ZORA) && (player->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&
@@ -2026,7 +2026,7 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
                 Matrix_Pop();
             }
 
-            Matrix_RotateZS(player->unk_B88, MTXMODE_APPLY);
+            Matrix_RotateZS(player->unk_B86[1], MTXMODE_APPLY);
             Matrix_RotateZYX(rot->x, rot->y, rot->z, MTXMODE_APPLY);
             func_80125318(pos, rot);
         } else if (player->stateFlags3 & PLAYER_STATE3_2000) {
@@ -2589,7 +2589,7 @@ void Player_DrawGetItem(PlayState* play, Player* player) {
             Math_Vec3f_Copy(&refPos, &D_801F59E8);
         }
 
-        drawIdPlusOne = ABS_ALT(player->unk_B2A);
+        drawIdPlusOne = ABS_ALT(player->getItemDrawId);
         Player_DrawGetItemImpl(play, player, &refPos, drawIdPlusOne);
     }
 }
@@ -3355,8 +3355,8 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else if (dlist == object_link_zora_DL_00E2A0) { // zora guitar
-        s16 sp26 = Math_SinS(player->unk_B86) * (ABS_ALT(player->unk_AB2.x) * ((f32)(IREG(52) + 20)) / 100.0f);
-        s16 sp24 = Math_SinS(player->unk_B88) * (ABS_ALT(player->unk_AB2.y) * ((f32)(IREG(53) + 15)) / 100.0f);
+        s16 sp26 = Math_SinS(player->unk_B86[0]) * (ABS_ALT(player->unk_AB2.x) * ((f32)(IREG(52) + 20)) / 100.0f);
+        s16 sp24 = Math_SinS(player->unk_B86[1]) * (ABS_ALT(player->unk_AB2.y) * ((f32)(IREG(53) + 15)) / 100.0f);
 
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -3516,8 +3516,8 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
             } else if ((player->meleeWeaponState != 0) && (player->meleeWeaponAnimation == 0x19)) {
                 func_80126B8C(play, player);
             }
-            if ((player->unk_B2A != 0) || ((func_800B7118(player) == 0) && (sp224 != NULL))) {
-                if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->unk_B2A != 0) &&
+            if ((player->getItemDrawId != 0) || ((func_800B7118(player) == 0) && (sp224 != NULL))) {
+                if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->getItemDrawId != 0) &&
                     (player->exchangeItemId != PLAYER_AP_NONE)) {
                     Math_Vec3f_Copy(&D_801F59E8, &player->leftHandWorld.pos);
                 } else {
@@ -3526,7 +3526,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
                     D_801F59E8.z = (player->bodyPartsPos[0xF].z + player->leftHandWorld.pos.z) * 0.5f;
                 }
 
-                if (player->unk_B2A == 0) {
+                if (player->getItemDrawId == 0) {
                     Math_Vec3f_Copy(&sp224->world.pos, &D_801F59E8);
                 }
             }
