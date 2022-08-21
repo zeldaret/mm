@@ -564,7 +564,7 @@ s16 D_8082B9CC = 0;
 void func_80823350(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80823350.s")
 
-void KaleidoScope_UpdateNamePanel2(PlayState* play) {
+void KaleidoScope_UpdateNamePanel1(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     u16 namedItem;
 
@@ -613,7 +613,7 @@ s16 D_8082B9E4 = 0;
 void func_80824B90(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80824B90.s")
 
-void KaleidoScope_UpdateNamePanel1(PlayState* play) {
+void KaleidoScope_UpdateNamePanel2(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     u16 namedItem;
 
@@ -1685,7 +1685,7 @@ void KaleidoScope_Update(PlayState* play) {
             func_80828788(play);
 
             if (pauseCtx->state == PAUSE_STATE_6) {
-                KaleidoScope_UpdateNamePanel2(play);
+                KaleidoScope_UpdateNamePanel1(play);
             }
             break;
 
@@ -2243,7 +2243,7 @@ void KaleidoScope_Update(PlayState* play) {
                 Message_StartTextbox(play, 0x1B93, NULL);
                 pauseCtx->state = PAUSE_STATE_18;
             } else {
-                KaleidoScope_UpdateNamePanel1(play);
+                KaleidoScope_UpdateNamePanel2(play);
             }
             break;
 
@@ -2448,11 +2448,11 @@ void KaleidoScope_Update(PlayState* play) {
             }
         }
         if (pauseCtx->state == PAUSE_STATE_6) {
-            KaleidoScope_UpdateNamePanel2(play);
+            KaleidoScope_UpdateNamePanel1(play);
         }
     } else if (pauseCtx->state == PAUSE_STATE_17) {
         KaleidoScope_UpdateWorldMapCursor(play);
-        KaleidoScope_UpdateNamePanel2(play);
+        KaleidoScope_UpdateNamePanel1(play);
     }
 
     if ((pauseCtx->debugEditor == DEBUG_EDITOR_INVENTORY_INIT) || (pauseCtx->debugEditor == DEBUG_EDITOR_INVENTORY)) {
