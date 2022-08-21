@@ -38,6 +38,9 @@ typedef enum {
 
 #define SLOT_MASK_FIRST 24
 
+#define PAUSE_SAVE_PROMPT_YES 0
+#define PAUSE_SAVE_PROMPT_NO 4
+
 // NES
 void KaleidoScope_MoveCursorToSpecialPos(PlayState* play, s16 cursorSpecialPos);
 void KaleidoScope_DrawQuadTextureRGBA32(GraphicsContext* gfxCtx, void* texture, u16 width, u16 height, u16 point);
@@ -62,7 +65,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play);
 void KaleidoScope_UpdateMaskEquip(PlayState* play);
 
 // Prompt
-void KaleidoScope_UpdatePrompt(PlayState* play);
+void KaleidoScope_UpdateSavePrompt(PlayState* play);
 
 // Debug
 void KaleidoScope_DrawInventoryEditor(PlayState* play);
