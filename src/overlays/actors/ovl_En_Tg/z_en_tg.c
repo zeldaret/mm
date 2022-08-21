@@ -91,19 +91,19 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfoS sAnimations = { &gHoneyAndDarlingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 };
+static AnimationInfoS sAnimationInfo = { &gHoneyAndDarlingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 };
 
 /**
  * This function is always called with unusedExtraOffset = 0.
  * The only animation used is the Idle (stationary) animation.
  */
-void EnTg_ChangeAnimation(SkelAnime* skelAnime, AnimationInfoS* animation, s16 unusedExtraOffset) {
+void EnTg_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s16 animIndex) {
     f32 endFrame;
 
     animation += unusedExtraOffset;
 
     if (animation->frameCount < 0) {
-        endFrame = (f32)Animation_GetLastFrame(animation->animation);
+        endFrame = (Animation_GetLastFrame(animation->animation);
     } else {
         endFrame = animation->frameCount;
     }
@@ -127,7 +127,7 @@ void EnTg_Init(Actor* thisx, PlayState* play) {
     EnTg* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gHoneyAndDarlingSkel, NULL, this->jointTable, this->morphTable, 21);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gHoneyAndDarlingSkel, NULL, this->jointTable, this->morphTable, HONEY_AND_DARLING_LIMB_MAX);
     EnTg_ChangeAnimation(&this->skelAnime, &sAnimations, 0);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -171,7 +171,6 @@ void EnTg_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnTg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnTg* this = THIS;
 
     return 0;
 }
@@ -197,10 +196,10 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(play->state.gfxCtx, 0, 0x32, 0xA0, 0));
-    gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(play->state.gfxCtx, 0xFF, 0xFF, 0xFF, 0));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(play->state.gfxCtx, 0, 50, 160, 0));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(play->state.gfxCtx, 255, 255, 255, 0));
 
-    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32)this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnTg_OverrideLimbDraw, EnTg_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -234,7 +233,7 @@ void EnTg_SpawnFirstHeart(EnTg* this, EnTgHeartInfo* enTgHeartInfo, Vec3f* heart
  * The heart path is curvy as it floats up because of the use of Math_SinS and Math_CosS.
  * The first heart spawned sets the path, the second heart spawned follows it.
  */
-void EnTg_UpdateHeartPath(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len) {
+void EnTg_UpdateHearts(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len) {
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
     s16 yaw = Camera_GetInputDirYaw(GET_ACTIVE_CAM(play));
     s32 i;

@@ -30,8 +30,8 @@ typedef struct EnTg {
     /* 0x026E */ Vec3s morphTable[HONEY_AND_DARLING_LIMB_MAX];
     /* 0x02EC */ s16 spawnHeartTimer; // Countdown timer for a new heart spawning above the actor
     /* 0x02EE */ char unk2EE[0x2];
-    /* 0x02F0 */ EnTgHeartInfo enTgHeartInfo;
-    /* 0x0330 */ char unk330[0x21C];
+    /* 0x02F0 */ EnTgHeartInfo enTgHeartInfo[10];
+    /* 0x0520 */ char unk330[0x28];
 } EnTg; // size = 0x548
 
 extern const ActorInit En_Tg_InitVars;
