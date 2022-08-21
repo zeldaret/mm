@@ -242,8 +242,7 @@ void EnTg_UpdateHearts(PlayState* play, EnTgHeartEffect* enTgHeartEffect, s32 le
             enTgHeartEffect->pos.z += 2.0f * Math_CosS(enTgHeartEffect->angle);
 
             Matrix_Push();
-            Matrix_Translate(enTgHeartEffect->pos.x, enTgHeartEffect->pos.y,
-                             enTgHeartEffect->pos.z, MTXMODE_NEW);
+            Matrix_Translate(enTgHeartEffect->pos.x, enTgHeartEffect->pos.y, enTgHeartEffect->pos.z, MTXMODE_NEW);
             Matrix_RotateYS(yaw, MTXMODE_APPLY);
             Matrix_MultVec3f(&zeroVec, &enTgHeartEffect->pos);
             Matrix_Pop();
@@ -268,8 +267,7 @@ void EnTg_DrawHeart(PlayState* play, EnTgHeartEffect* enTgHeartEffect, s32 len) 
                 gSPDisplayList(POLY_OPA_DISP++, gHoneyAndDarlingHeartMaterialDL);
                 flag = true;
             }
-            Matrix_Translate(enTgHeartEffect->pos.x, enTgHeartEffect->pos.y,
-                             enTgHeartEffect->pos.z, MTXMODE_NEW);
+            Matrix_Translate(enTgHeartEffect->pos.x, enTgHeartEffect->pos.y, enTgHeartEffect->pos.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(enTgHeartEffect->scale, enTgHeartEffect->scale, enTgHeartEffect->scale, MTXMODE_APPLY);
 
