@@ -4229,7 +4229,7 @@
     0x80821F30:("KaleidoScope_DrawPageSections",),
     0x808221DC:("KaleidoScope_DrawPages",),
     0x80823350:("func_80823350",),
-    0x80824738:("func_80824738",),
+    0x80824738:("KaleidoScope_UpdateNamePanel",),
     0x808248D0:("func_808248D0",),
     0x80824B90:("func_80824B90",),
     0x808256E4:("func_808256E4",),

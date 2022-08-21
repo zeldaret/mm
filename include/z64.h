@@ -406,7 +406,7 @@ typedef struct {
     /* 0x16C */ u8* iconItem24Segment;
     /* 0x170 */ u8* unk_170;
     /* 0x174 */ u8* unk_174;
-    /* 0x178 */ u8* unk_178;
+    /* 0x178 */ u8* nameSegment;
     /* 0x17C */ u8* unk_17C;
     /* 0x180 */ Vtx* itemPageVtx;
     /* 0x184 */ Vtx* mapPageVtx;
@@ -450,7 +450,7 @@ typedef struct {
     /* 0x256 */ s16 unk_256;
     /* 0x258 */ s16 cursorSpecialPos;
     /* 0x25A */ s16 pageSwitchTimer;
-    /* 0x25C */ u16 unk_25C;
+    /* 0x25C */ u16 namedItem;
     /* 0x25E */ u16 cursorItem[5];
     /* 0x268 */ u16 cursorSlot[5];
     /* 0x272 */ u16 equipTargetItem;
@@ -460,7 +460,7 @@ typedef struct {
     /* 0x27A */ s16 equipAnimY;
     /* 0x27C */ s16 equipAnimAlpha;
     /* 0x27E */ s16 unk_27E;
-    /* 0x280 */ u16 unk_280;
+    /* 0x280 */ u16 nameDisplayTimer;
     /* 0x282 */ u16 nameColorSet;
     /* 0x284 */ s16 cursorColorSet;
     /* 0x286 */ s16 unk_286;

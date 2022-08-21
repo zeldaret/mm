@@ -128,7 +128,7 @@ void KaleidoScope_MoveCursorToSpecialPos(PlayState* play, s16 cursorSpecialPos) 
 void func_80821A04(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
 
-    pauseCtx->unk_280 = 0;
+    pauseCtx->nameDisplayTimer = 0;
     pauseCtx->cursorSpecialPos = 0;
 
     play_sound(NA_SE_SY_CURSOR);
@@ -564,8 +564,43 @@ s16 D_8082B9CC = 0;
 void func_80823350(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80823350.s")
 
-void func_80824738(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80824738.s")
+void KaleidoScope_UpdateNamePanel(PlayState* play) {
+    PauseContext* pauseCtx = &play->pauseCtx;
+    u16 namedItem;
+
+    if ((pauseCtx->namedItem != pauseCtx->cursorItem[pauseCtx->pageIndex]) ||
+        ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->cursorSpecialPos != 0))) {
+
+        pauseCtx->namedItem = pauseCtx->cursorItem[pauseCtx->pageIndex];
+        namedItem = pauseCtx->namedItem;
+
+        osCreateMesgQueue(&pauseCtx->loadQueue, &pauseCtx->loadMsg, 1);
+
+        if (pauseCtx->namedItem != PAUSE_ITEM_NONE) {
+            if ((pauseCtx->pageIndex == PAUSE_MAP) && !sInDungeonScene) {
+                func_80821900(pauseCtx->nameSegment, namedItem);
+            } else {
+                func_80821958(pauseCtx->nameSegment, namedItem);
+            }
+            pauseCtx->nameDisplayTimer = 0;
+        }
+    } else if (pauseCtx->nameColorSet == 0) {
+        if (((pauseCtx->pageIndex == PAUSE_QUEST) && (pauseCtx->cursorSlot[PAUSE_QUEST] >= 6) &&
+             (pauseCtx->cursorSlot[PAUSE_QUEST] < 0x12) && (pauseCtx->unk_200 == 8)) ||
+            ((pauseCtx->pageIndex == PAUSE_QUEST) && (pauseCtx->cursorSlot[PAUSE_QUEST] == 0x12)) ||
+            (pauseCtx->pageIndex == PAUSE_ITEM) || (pauseCtx->pageIndex == PAUSE_MASK)) {
+
+            pauseCtx->nameDisplayTimer++;
+            if (pauseCtx->nameDisplayTimer > 70) {
+                pauseCtx->nameDisplayTimer = 0;
+            }
+        } else {
+            pauseCtx->nameDisplayTimer = 0;
+        }
+    } else {
+        pauseCtx->nameDisplayTimer = 0;
+    }
+}
 
 void func_808248D0(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808248D0.s")
@@ -1344,7 +1379,7 @@ void KaleidoScope_Draw(PlayState* play) {
     gSPSegment(POLY_OPA_DISP++, 0x02, interfaceCtx->parameterSegment);
     gSPSegment(POLY_OPA_DISP++, 0x08, pauseCtx->iconItemSegment);
     gSPSegment(POLY_OPA_DISP++, 0x09, pauseCtx->iconItem24Segment);
-    gSPSegment(POLY_OPA_DISP++, 0x0A, pauseCtx->unk_178);
+    gSPSegment(POLY_OPA_DISP++, 0x0A, pauseCtx->nameSegment);
     gSPSegment(POLY_OPA_DISP++, 0x0C, pauseCtx->unk_170);
     gSPSegment(POLY_OPA_DISP++, 0x0D, pauseCtx->unk_174);
     gSPSegment(POLY_OPA_DISP++, 0x0B, pauseCtx->unk_17C);
@@ -1523,15 +1558,15 @@ void KaleidoScope_Update(PlayState* play) {
 
             size2 = SEGMENT_ROM_SIZE(icon_item_jpn_static);
             DmaMgr_SendRequest0(pauseCtx->unk_174, SEGMENT_ROM_START(icon_item_jpn_static), size2);
-            pauseCtx->unk_178 = (void*)ALIGN16((uintptr_t)pauseCtx->unk_174 + size2);
+            pauseCtx->nameSegment = (void*)ALIGN16((uintptr_t)pauseCtx->unk_174 + size2);
 
             func_8011552C(play, 0x15);
 
             if (((void)0, gSaveContext.worldMapArea) < 0x16) {
-                func_8082192C(pauseCtx->unk_178 + 0x400, ((void)0, gSaveContext.worldMapArea));
+                func_8082192C(pauseCtx->nameSegment + 0x400, ((void)0, gSaveContext.worldMapArea));
             }
 
-            pauseCtx->unk_17C = (void*)ALIGN16((uintptr_t)pauseCtx->unk_178 + 0xA00);
+            pauseCtx->unk_17C = (void*)ALIGN16((uintptr_t)pauseCtx->nameSegment + 0xA00);
             DmaMgr_SendRequest0(pauseCtx->unk_17C, SEGMENT_ROM_START(icon_item_vtx_static),
                                 SEGMENT_ROM_SIZE(icon_item_vtx_static));
 
@@ -1562,7 +1597,7 @@ void KaleidoScope_Update(PlayState* play) {
             func_80828788(play);
 
             if (pauseCtx->state == PAUSE_STATE_6) {
-                func_80824738(play);
+                KaleidoScope_UpdateNamePanel(play);
             }
             break;
 
@@ -1744,7 +1779,7 @@ void KaleidoScope_Update(PlayState* play) {
                         pauseCtx->state = PAUSE_STATE_1B;
                         pauseCtx->unk_210 = pauseCtx->unk_214 = pauseCtx->unk_218 = pauseCtx->unk_21C = 160.0f;
                         pauseCtx->unk_220 = -434.0f;
-                        pauseCtx->unk_25C = 999;
+                        pauseCtx->namedItem = PAUSE_ITEM_NONE;
                         pauseCtx->unk_200 = 0;
                     }
                     break;
@@ -2073,12 +2108,12 @@ void KaleidoScope_Update(PlayState* play) {
             size2 = SEGMENT_ROM_SIZE(icon_item_jpn_static);
             DmaMgr_SendRequest0(pauseCtx->unk_174, SEGMENT_ROM_START(icon_item_jpn_static), size2);
 
-            pauseCtx->unk_178 = (void*)ALIGN16((uintptr_t)pauseCtx->unk_174 + size2);
+            pauseCtx->nameSegment = (void*)ALIGN16((uintptr_t)pauseCtx->unk_174 + size2);
             func_8011552C(play, 0x16);
             worldMapCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
-            func_80821900(pauseCtx->unk_178, worldMapCursorPoint);
+            func_80821900(pauseCtx->nameSegment, worldMapCursorPoint);
 
-            pauseCtx->unk_17C = (void*)ALIGN16((uintptr_t)pauseCtx->unk_178 + 0xA00);
+            pauseCtx->unk_17C = (void*)ALIGN16((uintptr_t)pauseCtx->nameSegment + 0xA00);
             DmaMgr_SendRequest0(pauseCtx->unk_17C, SEGMENT_ROM_START(icon_item_vtx_static),
                                 SEGMENT_ROM_SIZE(icon_item_vtx_static));
 
@@ -2176,7 +2211,7 @@ void KaleidoScope_Update(PlayState* play) {
                 pauseCtx->debugEditor = DEBUG_EDITOR_NONE;
                 pauseCtx->state = PAUSE_STATE_1B;
                 pauseCtx->unk_210 = pauseCtx->unk_214 = pauseCtx->unk_218 = pauseCtx->unk_21C = 160.0f;
-                pauseCtx->unk_25C = 999;
+                pauseCtx->namedItem = PAUSE_ITEM_NONE;
                 interfaceCtx->startAlpha = 0;
                 pauseCtx->pageIndex = pauseCtx->unk_2C8;
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = pauseCtx->unk_2CA;
@@ -2201,7 +2236,7 @@ void KaleidoScope_Update(PlayState* play) {
                 pauseCtx->unk_218 = 160.0f;
                 pauseCtx->unk_214 = 160.0f;
                 pauseCtx->unk_210 = 160.0f;
-                pauseCtx->unk_25C = 999;
+                pauseCtx->namedItem = PAUSE_ITEM_NONE;
                 interfaceCtx->startAlpha = 0;
             }
             break;
@@ -2325,11 +2360,11 @@ void KaleidoScope_Update(PlayState* play) {
             }
         }
         if (pauseCtx->state == PAUSE_STATE_6) {
-            func_80824738(play);
+            KaleidoScope_UpdateNamePanel(play);
         }
     } else if (pauseCtx->state == PAUSE_STATE_17) {
         KaleidoScope_UpdateWorldMapCursor(play);
-        func_80824738(play);
+        KaleidoScope_UpdateNamePanel(play);
     }
 
     if ((pauseCtx->debugEditor == DEBUG_EDITOR_INVENTORY_INIT) || (pauseCtx->debugEditor == DEBUG_EDITOR_INVENTORY)) {
