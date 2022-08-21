@@ -206,7 +206,7 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
  * Because of the frame counts, only two hearts are ever spawned at a time.
  */
 void EnTg_SpawnHeart(EnTg* this, EnTgHeartEffect* effect, Vec3f* heartStartPos, s32 numEffects) {
-    Vec3f heartVelocityVec = { 0.0f, 1.5f, 0.0f };
+    Vec3f heartVelocity = { 0.0f, 1.5f, 0.0f };
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
     s32 i;
 
@@ -215,7 +215,7 @@ void EnTg_SpawnHeart(EnTg* this, EnTgHeartEffect* effect, Vec3f* heartStartPos, 
     if (i < numEffects) {
         effect->isEnabled = true;
         effect->pos = *heartStartPos;
-        effect->velocity = heartVelocityVec;
+        effect->velocity = heartVelocity;
         effect->unusedZeroVec = zeroVec;
         effect->scale = 0.01f;
         effect->pos.x += 4.0f * Math_SinS(this->actor.shape.rot.y);
@@ -254,7 +254,7 @@ void EnTg_UpdateHearts(PlayState* play, EnTgHeartEffect* effect, s32 numEffects)
 
 void EnTg_DrawHeart(PlayState* play, EnTgHeartEffect* effect, s32 numEffects) {
     s32 i;
-    s32 flag = false;
+    s32 isMaterialApplied = false;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -263,9 +263,9 @@ void EnTg_DrawHeart(PlayState* play, EnTgHeartEffect* effect, s32 numEffects) {
 
     for (i = 0; i < numEffects; i++, effect++) {
         if (effect->isEnabled == true) {
-            if (!flag) {
+            if (!isMaterialApplied) {
                 gSPDisplayList(POLY_OPA_DISP++, gHoneyAndDarlingHeartMaterialDL);
-                flag = true;
+                isMaterialApplied = true;
             }
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
