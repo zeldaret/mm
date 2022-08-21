@@ -4059,7 +4059,7 @@
     0x801F6D0C:("D_801F6D0C","UNK_TYPE1","",0x1),
     0x801F6D10:("gTrnsnUnkState","UNK_TYPE4","",0x4),
     0x801F6D18:("D_801F6D18","UNK_TYPE1","",0x1),
-    0x801F6D30:("D_801F6D30","Color_RGBA8","",0x4),
+    0x801F6D30:("gVisMonoColor","Color_RGBA8","",0x4),
     0x801F6D38:("D_801F6D38","UNK_TYPE1","",0x1),
     0x801F6D4C:("D_801F6D4C","UNK_TYPE4","",0x4),
     0x801F6D50:("D_801F6D50","UNK_TYPE1","",0x1),

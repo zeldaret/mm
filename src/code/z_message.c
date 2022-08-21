@@ -553,7 +553,7 @@ void Message_Draw(PlayState* play) {
     CLOSE_DISPS(gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8015680C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_Update.s")
 
 void func_801586A4(PlayState* play) {
     play->msgCtx.messageEntryTableNes = D_801C6B98;

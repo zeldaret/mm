@@ -204,16 +204,16 @@ void Cutscene_Command_Misc(PlayState* play2, CutsceneContext* csCtx, CsCmdBase* 
             }
             break;
         case 0xA:
-            D_801F6D30.r = 255;
-            D_801F6D30.g = 255;
-            D_801F6D30.b = 255;
-            D_801F6D30.a = 255 * progress;
+            gVisMonoColor.r = 255;
+            gVisMonoColor.g = 255;
+            gVisMonoColor.b = 255;
+            gVisMonoColor.a = 255 * progress;
             break;
         case 0xB:
-            D_801F6D30.r = 255;
-            D_801F6D30.g = 180;
-            D_801F6D30.b = 100;
-            D_801F6D30.a = 255 * progress;
+            gVisMonoColor.r = 255;
+            gVisMonoColor.g = 180;
+            gVisMonoColor.b = 100;
+            gVisMonoColor.a = 255 * progress;
             break;
         case 0xC:
             play->roomCtx.currRoom.segment = NULL;
@@ -234,10 +234,10 @@ void Cutscene_Command_Misc(PlayState* play2, CutsceneContext* csCtx, CsCmdBase* 
             }
             break;
         case 0xE:
-            play->unk_18845 = 1;
+            play->haltAllActors = true;
             break;
         case 0xF:
-            play->unk_18845 = 0;
+            play->haltAllActors = false;
             break;
         case 0x10:
             if (isStartFrame) {

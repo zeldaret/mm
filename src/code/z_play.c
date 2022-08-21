@@ -1,8 +1,11 @@
 #include "global.h"
+#include "z64rumble.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
+
+extern Gfx D_0E000140[];
 
 s32 gDbgCamEnabled = false;
 u8 D_801D0D54 = false;
@@ -14,7 +17,7 @@ extern FbDemoStruct sTrnsnUnk;
 extern u16* D_801F6D0C;
 extern s32 gTrnsnUnkState;
 extern VisMono D_801F6D18;
-extern Color_RGBA8_u32 D_801F6D30;
+extern Color_RGBA8_u32 gVisMonoColor;
 extern Struct_80140E80 D_801F6D38;
 extern Struct_80140E80* D_801F6D4C;
 extern HiresoStruct D_801F6D50;
@@ -916,129 +919,141 @@ void Play_UpdateTransition(PlayState* this) {
     }
 }
 
+// Stack issues
 #ifdef NON_MATCHING
-void TransitionFade_Update(TransitionFade*, s32);
-void Rumble_SetUpdateEnabled(s32);
-void func_800F8CD4(PlayState *, EnvironmentContext *, LightContext *, PauseContext *, MessageContext *, GameOverContext *, GraphicsContext *);
-void func_801210E0(PlayState *);
-s32 func_801642D8(FbDemoStruct *, s32, s32);
-void func_801647AC(FbDemoStruct *);
-
-void Play_Update(PlayState *play2) {
-    PlayState* play = play2;
+void Play_Update(PlayState* this) {
+    PlayState* this2 = this;
     u8 pad60;
     s32 sp5C = 0;
-    Input* pad58 = play->state.input;
+    Input* pad58 = this->state.input;
 
-    gSegments[4] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[play->objectCtx.mainKeepIndex].segment);
-    gSegments[5] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
-    gSegments[2] = VIRTUAL_TO_PHYSICAL(play->sceneSegment);
+    gSegments[4] = VIRTUAL_TO_PHYSICAL(this->objectCtx.status[this->objectCtx.mainKeepIndex].segment);
+    gSegments[5] = VIRTUAL_TO_PHYSICAL(this->objectCtx.status[this->objectCtx.subKeepIndex].segment);
+    gSegments[2] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
 
-    if (gGameInfo->data[0xB9] == 2) {
-        gGameInfo->data[0xB9] = 3;
+    if (SREG(89) == 2) {
+        SREG(89) = 3;
         MsgEvent_SendNullTask();
-        func_80165E1C(&play->pauseBgPreRender);
-        gGameInfo->data[0xB9] = 0;
+        func_80165E1C(&this->pauseBgPreRender);
+        SREG(89) = 0;
     }
-    Actor_SetMovementScale(play->state.framerateDivisor);
+    Actor_SetMovementScale(this->state.framerateDivisor);
 
-    if (FrameAdvance_Update(&play->frameAdvCtx, &pad58[1]) != 0) {
-        if ((play->transitionMode == 0) && (play->transitionTrigger != 0)) {
-            play->transitionMode = 1;
+    if (FrameAdvance_Update(&this->frameAdvCtx, &pad58[1])) {
+        if ((this->transitionMode == TRANS_MODE_OFF) && (this->transitionTrigger != TRANS_TRIGGER_OFF)) {
+            this->transitionMode = TRANS_MODE_SETUP;
         }
-        switch (gTrnsnUnkState) { 
-            case 0:
-                break;
-            case 2:
-                if (func_801642D8(&sTrnsnUnk, 0xA, 7) == 0) {
-                    gTrnsnUnkState = 0;
-                } else {
-                    D_801F6D0C = gZBufferPtr;
-                    gTrnsnUnkState = 3;
-                    Game_SetFramerateDivisor(&play->state, 1);
-                }
-                break;
-            case 3:
-                func_801647AC(&sTrnsnUnk);
-                break;
-        }
-        Play_UpdateTransition(play);
-        if (gTrnsnUnkState != 3) {
-            if ((gSaveContext.gameMode == 0) && (((play->msgCtx.msgMode == 0)) || ((play->msgCtx.currentTextId == 0xFF) && (play->msgCtx.msgMode == 0x42) && (play->msgCtx.unk12020 == 0x41)) || ((play->msgCtx.currentTextId >= 0x100) && ( play->msgCtx.currentTextId < 0x201))) && (play->gameOverCtx.state == 0)) {
-                KaleidoSetup_Update(play);
-            }
-            sp5C = (play->pauseCtx.state != 0) || (play->pauseCtx.debugEditor != 0);
 
-            AnimationContext_Reset(&play->animationCtx);
-            Object_UpdateBank(&play->objectCtx);
-            if ((sp5C == 0) && (gGameInfo->data[0x3A8] == 0)) {
-                play->gameplayFrames++;
-                Rumble_SetUpdateEnabled(1);
-                if((play->actorCtx.freezeFlashTimer != 0) && (play->actorCtx.freezeFlashTimer-- < 5)) {
-                    if ((play->actorCtx.freezeFlashTimer > 0) && (( play->actorCtx.freezeFlashTimer % 2) != 0)) {
-                        play->envCtx.fillScreen = 1;
-                        play->envCtx.screenFillColor[0] = play->envCtx.screenFillColor[1] = play->envCtx.screenFillColor[2] = 150;
-                        play->envCtx.screenFillColor[3] = 80;
+        if (gTrnsnUnkState != 0) {
+            switch (gTrnsnUnkState) {
+                case 2:
+                    if (TransitionUnk_Init(&sTrnsnUnk, 10, 7) == NULL) {
+                        gTrnsnUnkState = 0;
                     } else {
-                        play->envCtx.fillScreen = 0;
+                        D_801F6D0C = gZBufferPtr;
+                        gTrnsnUnkState = 3;
+                        Game_SetFramerateDivisor(&this->state, 1);
+                    }
+                    break;
+                case 3:
+                    func_801647AC(&sTrnsnUnk);
+                    break;
+            }
+        }
+        Play_UpdateTransition(this);
+        if (gTrnsnUnkState != 3) {
+            if ((gSaveContext.gameMode == 0) &&
+                (((this->msgCtx.msgMode == 0)) ||
+                 ((this->msgCtx.currentTextId == 0xFF) && (this->msgCtx.msgMode == 0x42) &&
+                  (this->msgCtx.unk12020 == 0x41)) ||
+                 ((this->msgCtx.currentTextId >= 0x100) && (this->msgCtx.currentTextId <= 0x200))) &&
+                (this->gameOverCtx.state == GAMEOVER_INACTIVE)) {
+                KaleidoSetup_Update(this);
+            }
+
+            sp5C = (this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE);
+
+            AnimationContext_Reset(&this->animationCtx);
+            Object_UpdateBank(&this->objectCtx);
+
+            if ((sp5C == 0) && (IREG(72) == 0)) {
+                this->gameplayFrames++;
+                Rumble_SetUpdateEnabled(true);
+                if ((this->actorCtx.freezeFlashTimer != 0) && (this->actorCtx.freezeFlashTimer-- < 5)) {
+                    pad60 = this->actorCtx.freezeFlashTimer;
+                    if ((pad60 > 0) && ((pad60 % 2) != 0)) {
+                        this->envCtx.fillScreen = true;
+                        this->envCtx.screenFillColor[0] = this->envCtx.screenFillColor[1] =
+                            this->envCtx.screenFillColor[2] = 150;
+                        this->envCtx.screenFillColor[3] = 80;
+                    } else {
+                        this->envCtx.fillScreen = false;
                     }
                 } else {
-                    Room_HandleLoadCallbacks(play, &play->roomCtx);
-                    CollisionCheck_AT(play, &play->colChkCtx);
-                    CollisionCheck_OC(play, &play->colChkCtx);
-                    CollisionCheck_Damage(play, &play->colChkCtx);
-                    CollisionCheck_ClearContext(play, &play->colChkCtx);
-                    if (play->unk_18845 == 0) {
-                        Actor_UpdateAll(play, &play->actorCtx);
+                    Room_HandleLoadCallbacks(this, &this->roomCtx);
+                    CollisionCheck_AT(this, &this->colChkCtx);
+                    CollisionCheck_OC(this, &this->colChkCtx);
+                    CollisionCheck_Damage(this, &this->colChkCtx);
+                    CollisionCheck_ClearContext(this, &this->colChkCtx);
+                    if (!this->haltAllActors) {
+                        Actor_UpdateAll(this, &this->actorCtx);
                     }
-                    Cutscene_Update1(play, &play->csCtx);
-                    Cutscene_Update2(play, &play->csCtx);
-                    Effect_UpdateAll(play);
-                    EffectSS_UpdateAllParticles(play);
-                    EffFootmark_Update(play);
+                    Cutscene_Update1(this, &this->csCtx);
+                    Cutscene_Update2(this, &this->csCtx);
+                    Effect_UpdateAll(this);
+                    EffectSS_UpdateAllParticles(this);
+                    EffFootmark_Update(this);
                 }
             } else {
-                Rumble_SetUpdateEnabled(0);
+                Rumble_SetUpdateEnabled(false);
             }
-            Room_nop8012D510(play, &play->roomCtx.currRoom, &pad58[1], 0);
-            Room_nop8012D510(play, &play->roomCtx.prevRoom, &pad58[1], 1);
-            SkyboxDraw_Noop(&play->skyboxCtx);
-            if ((play->pauseCtx.state != 0) || (play->pauseCtx.debugEditor != 0)) {
-                KaleidoScopeCall_Update(play);
-            } else if (play->gameOverCtx.state != 0) {
-                GameOver_Update(play);
-            }
-            func_8015680C(play);
-            func_801210E0(play);
-            AnimationContext_Update(play, &play->animationCtx);
-            SoundSource_UpdateAll(play);
-            ShrinkWindow_Update(play->state.framerateDivisor);
-            TransitionFade_Update(&play->unk_18E48, play->state.framerateDivisor);
-        }
-    }
-    if ((sp5C == 0) || (gDbgCamEnabled != 0)) {
-        s32 sp54;
-        s32 sp50;
-        Vec3s sp48;
 
-        play->nextCamera = play->activeCamId;
-        for(sp54 = 0; sp54 < 4; sp54++) {
-            if ((sp54 != play->nextCamera) && (play->cameraPtrs[sp54] != NULL)) {
-                Camera_Update(&sp48, play->cameraPtrs[sp54]);
+            Room_nop8012D510(this, &this->roomCtx.currRoom, &pad58[1], 0);
+            Room_nop8012D510(this, &this->roomCtx.prevRoom, &pad58[1], 1);
+            SkyboxDraw_Update(&this->skyboxCtx);
+
+            if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
+                KaleidoScopeCall_Update(this);
+            } else if (this->gameOverCtx.state != GAMEOVER_INACTIVE) {
+                GameOver_Update(this);
+            }
+
+            Message_Update(this);
+            Interface_Update(this);
+            AnimationContext_Update(this, &this->animationCtx);
+            SoundSource_UpdateAll(this);
+            ShrinkWindow_Update(this->state.framerateDivisor);
+            TransitionFade_Update(&this->unk_18E48, this->state.framerateDivisor);
+        }
+    }
+
+    if (!sp5C || gDbgCamEnabled) {
+        s32 sp54; // camId
+        s32 sp50;
+        Vec3s sp48; // InputDir
+
+        this->nextCamera = this->activeCamId;
+        for (sp54 = 0; sp54 < 4; sp54++) {
+            if ((sp54 != this->nextCamera) && (this->cameraPtrs[sp54] != NULL)) {
+                Camera_Update(&sp48, this->cameraPtrs[sp54]);
             }
         }
-        Camera_Update(&sp48, play->cameraPtrs[play->nextCamera]);
+        Camera_Update(&sp48, this->cameraPtrs[this->nextCamera]);
     }
-    if (sp5C == 0) {
-        func_80166968(play, play->cameraPtrs[play->nextCamera]);
+
+    if (!sp5C) {
+        func_80166968(this, this->cameraPtrs[this->nextCamera]);
         Distortion_Update();
     }
-    func_800F8CD4(play, &play->envCtx, &play->lightCtx, &play->pauseCtx, &play->msgCtx, &play->gameOverCtx, play->state.gfxCtx);
-    if (play->sramCtx.status != 0) {
-        if (gSaveContext.save.isOwlSave != 0) {
-            func_80147198(&play->sramCtx);
+
+    Environment_Update(this, &this->envCtx, &this->lightCtx, &this->pauseCtx, &this->msgCtx, &this->gameOverCtx,
+                       this->state.gfxCtx);
+
+    if (this->sramCtx.status != 0) {
+        if (gSaveContext.save.isOwlSave) {
+            func_80147198(&this->sramCtx);
         } else {
-            func_80147068(&play->sramCtx);
+            func_80147068(&this->sramCtx);
         }
     }
 }
@@ -1046,39 +1061,35 @@ void Play_Update(PlayState *play2) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
 #endif
 
-void func_80167DE4(PlayState* play) {
+void func_80167DE4(PlayState* this) {
     if (!D_801F6DFC) {
-        if (play->pauseCtx.unk_1F0 != 0) {
+        if (this->pauseCtx.unk_1F0 != 0) {
             D_801F6DFC = true;
             D_801F6D50.unk_00 = 0;
         }
     } else {
-        if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_L) ||
-            CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B) ||
-            CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_START) || (gIrqMgrResetStatus != 0)) {
+        if (CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_L) ||
+            CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_B) ||
+            CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_START) || (gIrqMgrResetStatus != 0)) {
             D_801F6DFC = false;
-            play->pauseCtx.unk_1F0 = 0;
+            this->pauseCtx.unk_1F0 = 0;
             D_801F6D50.unk_00 = 0;
-            play->msgCtx.msgLength = 0;
-            play->msgCtx.msgMode = 0;
-            play->msgCtx.currentTextId = 0;
-            play->msgCtx.stateTimer = 0;
+            this->msgCtx.msgLength = 0;
+            this->msgCtx.msgMode = 0;
+            this->msgCtx.currentTextId = 0;
+            this->msgCtx.stateTimer = 0;
             play_sound(NA_SE_SY_CANCEL);
         }
     }
     if (D_801F6DFC) {
-        func_8016F5A8(play, &D_801F6D50, play->state.input);
-        func_8015680C(play);
+        func_8016F5A8(this, &D_801F6D50, this->state.input);
+        Message_Update(this);
     } else {
-        Play_Update(play);
+        Play_Update(this);
     }
 }
 
 void Play_DrawOverlayElements(PlayState* this) {
-    Gfx* sp34;
-    Gfx* sp30;
-    GraphicsContext* gfxCtx;
-
     if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
         KaleidoScopeCall_Draw(this);
     }
@@ -1092,277 +1103,327 @@ void Play_DrawOverlayElements(PlayState* this) {
         Message_Draw(this);
     }
 
-    if (this->gameOverCtx.state != 0) {
+    if (this->gameOverCtx.state != GAMEOVER_INACTIVE) {
         GameOver_FadeLights(this);
     }
 
-    if (gSaveContext.screenScaleFlag != 0) {
-        gfxCtx = this->state.gfxCtx;
+    // Shrink the whole screen display (at the end of First and Second Day by default)
+    if (gSaveContext.screenScaleFlag) {
+        Gfx* nextOpa;
+        Gfx* opa;
+        GraphicsContext* gfxCtx = this->state.gfxCtx;
+
         D_801F6D4C->scale = gSaveContext.screenScale / 1000.0f;
 
         OPEN_DISPS(gfxCtx);
 
-        sp30 = POLY_OPA_DISP;
-        sp34 = Graph_GfxPlusOne(sp30);
-        gSPDisplayList(OVERLAY_DISP++, sp34);
+        opa = POLY_OPA_DISP;
+        nextOpa = Graph_GfxPlusOne(opa);
+        gSPDisplayList(OVERLAY_DISP++, nextOpa);
 
-        func_80141778(D_801F6D4C, &sp34, this->unk_18E60, gfxCtx);
+        func_80141778(D_801F6D4C, &nextOpa, this->unk_18E60, gfxCtx);
 
-        gSPEndDisplayList(sp34++);
-        Graph_BranchDlist(sp30, sp34);
-        POLY_OPA_DISP = sp34;
+        gSPEndDisplayList(nextOpa++);
+        Graph_BranchDlist(opa, nextOpa);
+        POLY_OPA_DISP = nextOpa;
 
         CLOSE_DISPS(gfxCtx);
     }
 }
 
-#if 1
-void DebugDisplay_DrawObjects(PlayState *);            /* extern */
-void TransitionFade_Draw(TransitionFade *, Gfx **);    /* extern */
-void func_800F5CD0(u8, EnvironmentContext *, SkyboxContext *); /* extern */
-void func_800F9728(PlayState *, EnvironmentContext *, View *, GraphicsContext *, Vec3f); /* extern */
-void func_800FA9FC(PlayState *, View *, GraphicsContext *); /* extern */
-void func_800FBCBC(PlayState *);                       /* extern */
-void func_800FC64C(PlayState *, u8);                   /* extern */
-void func_800FE390(PlayState *);                       /* extern */
-void func_800FE3E0(PlayState *);                       /* extern */
-void func_8016454C(FbDemoStruct *, Gfx **);            /* extern */
-extern Gfx D_0E000140[];
-
-void Play_Draw(PlayState *play) {
-    GraphicsContext *temp_s1 = play->state.gfxCtx;
-    Lights *sp268;
+#ifdef NON_MATCHING
+void Play_Draw(PlayState* this) {
+    GraphicsContext* gfxCtx = this->state.gfxCtx;
+    Lights* sp268;
     Vec3f sp25C;
-    u8 sp25B = 0;
-    f32 var_fv0;
+    u8 sp25B = false;
+    f32 var_fv0; // fogFar
 
-    if (gGameInfo->data[0xBE] >= 4) {
-        PreRender_ApplyFiltersSlowlyDestroy(&play->pauseBgPreRender);
-        gGameInfo->data[0xBE] = 0;
+    if (SREG(94) >= 4) {
+        PreRender_ApplyFiltersSlowlyDestroy(&this->pauseBgPreRender);
+        SREG(94) = 0;
     }
-    if ((gGameInfo->data[0xBE] < 2) && (gTrnsnUnkState < 2)) {
-        if (play->skyboxCtx.skyboxShouldDraw || (play->roomCtx.currRoom.mesh->type0.type == 1)) {
-            func_8012CF0C(temp_s1, 0, 1, 0, 0, 0);
+
+    if ((SREG(94) < 2) && (gTrnsnUnkState < 2)) {
+        if (this->skyboxCtx.skyboxShouldDraw || (this->roomCtx.currRoom.mesh->type0.type == 1)) {
+            func_8012CF0C(gfxCtx, 0, 1, 0, 0, 0);
         } else {
-            func_8012CF0C(temp_s1, 1, 1, play->lightCtx.unk7, play->lightCtx.unk8, play->lightCtx.unk9);
+            func_8012CF0C(gfxCtx, 1, 1, this->lightCtx.unk7, this->lightCtx.unk8, this->lightCtx.unk9);
         }
     } else {
-        func_8012CF0C(temp_s1, 0, 0, 0, 0, 0);
+        func_8012CF0C(gfxCtx, 0, 0, 0, 0, 0);
     }
 
-    OPEN_DISPS(temp_s1);
+    OPEN_DISPS(gfxCtx);
 
-    gSegments[4] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[play->objectCtx.mainKeepIndex].segment);
-    gSegments[5] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
-    gSegments[2] = VIRTUAL_TO_PHYSICAL(play->sceneSegment);
+    gSegments[4] = VIRTUAL_TO_PHYSICAL(this->objectCtx.status[this->objectCtx.mainKeepIndex].segment);
+    gSegments[5] = VIRTUAL_TO_PHYSICAL(this->objectCtx.status[this->objectCtx.subKeepIndex].segment);
+    gSegments[2] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
 
-    gSPSegment(POLY_OPA_DISP++, 0x04, play->objectCtx.status[play->objectCtx.mainKeepIndex].segment);
-    gSPSegment(POLY_XLU_DISP++, 0x04, play->objectCtx.status[play->objectCtx.mainKeepIndex].segment);
-    gSPSegment(OVERLAY_DISP++, 0x04,  play->objectCtx.status[play->objectCtx.mainKeepIndex].segment);
+    gSPSegment(POLY_OPA_DISP++, 0x04, this->objectCtx.status[this->objectCtx.mainKeepIndex].segment);
+    gSPSegment(POLY_XLU_DISP++, 0x04, this->objectCtx.status[this->objectCtx.mainKeepIndex].segment);
+    gSPSegment(OVERLAY_DISP++, 0x04, this->objectCtx.status[this->objectCtx.mainKeepIndex].segment);
 
-    gSPSegment(POLY_OPA_DISP++, 0x05, play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
-    gSPSegment(POLY_XLU_DISP++, 0x05, play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
-    gSPSegment(OVERLAY_DISP++, 0x05,  play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
+    gSPSegment(POLY_OPA_DISP++, 0x05, this->objectCtx.status[this->objectCtx.subKeepIndex].segment);
+    gSPSegment(POLY_XLU_DISP++, 0x05, this->objectCtx.status[this->objectCtx.subKeepIndex].segment);
+    gSPSegment(OVERLAY_DISP++, 0x05, this->objectCtx.status[this->objectCtx.subKeepIndex].segment);
 
-    gSPSegment(POLY_OPA_DISP++, 0x02, play->sceneSegment);
-    gSPSegment(POLY_XLU_DISP++, 0x02, play->sceneSegment);
-    gSPSegment(OVERLAY_DISP++, 0x02,  play->sceneSegment);
+    gSPSegment(POLY_OPA_DISP++, 0x02, this->sceneSegment);
+    gSPSegment(POLY_XLU_DISP++, 0x02, this->sceneSegment);
+    gSPSegment(OVERLAY_DISP++, 0x02, this->sceneSegment);
 
-    ShrinkWindow_Draw(temp_s1);
+    ShrinkWindow_Draw(gfxCtx);
 
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
-    POLY_XLU_DISP = func_801660B8(play, POLY_XLU_DISP);
+    POLY_OPA_DISP = func_801660B8(this, POLY_OPA_DISP);
+    POLY_XLU_DISP = func_801660B8(this, POLY_XLU_DISP);
 
-    var_fv0 = play->lightCtx.unkC;
+    // fogFar
+    var_fv0 = this->lightCtx.unkC;
     if (var_fv0 > 12800.0f) {
         var_fv0 = 12800.0f;
     }
-    func_8013F0D0(&play->view, play->view.fovy, play->view.zNear, var_fv0);
-    View_RenderView(&play->view, 0xF);
-    Matrix_MtxToMtxF(&play->view.viewing, &play->billboardMtxF);
-    Matrix_MtxToMtxF(&play->view.projection, &play->viewProjectionMtxF);
-    play->unk_187F0.x = play->viewProjectionMtxF.xx;
-    play->unk_187F0.y = play->viewProjectionMtxF.yy;
-    play->unk_187F0.z = -play->viewProjectionMtxF.zz;
-    SkinMatrix_MtxFMtxFMult(&play->viewProjectionMtxF, &play->billboardMtxF, &play->viewProjectionMtxF);
-        play->billboardMtxF.mf[3][2] = play->billboardMtxF.mf[3][1] =  play->billboardMtxF.mf[3][0] = play->billboardMtxF.mf[2][3] = play->billboardMtxF.mf[1][3] = play->billboardMtxF.mf[0][3] = 0.0f;
-    Matrix_Transpose(&play->billboardMtxF);
 
-    play->billboardMtx = GRAPH_ALLOC(play->state.gfxCtx, 2*sizeof(Mtx));
+    func_8013F0D0(&this->view, this->view.fovy, this->view.zNear, var_fv0);
 
-    Matrix_MtxFToMtx(&play->billboardMtxF, &play->billboardMtx[0]);
-    Matrix_RotateYF((s16)(Camera_GetCamDirYaw(play->cameraPtrs[play->activeCamId]) + 0x8000) * 0.0000958738f, MTXMODE_NEW);
-    Matrix_ToMtx(&play->billboardMtx[1]);
-    gSPSegment(POLY_OPA_DISP++, 0x01, play->billboardMtx);
-    gSPSegment(POLY_XLU_DISP++, 0x01, play->billboardMtx);
-    gSPSegment(OVERLAY_DISP++, 0x01, play->billboardMtx);
-    if(1) {
+    View_RenderView(&this->view, 0xF);
+
+    Matrix_MtxToMtxF(&this->view.viewing, &this->billboardMtxF);
+    Matrix_MtxToMtxF(&this->view.projection, &this->viewProjectionMtxF);
+
+    this->unk_187F0.x = this->viewProjectionMtxF.xx;
+    this->unk_187F0.y = this->viewProjectionMtxF.yy;
+    this->unk_187F0.z = -this->viewProjectionMtxF.zz;
+
+    SkinMatrix_MtxFMtxFMult(&this->viewProjectionMtxF, &this->billboardMtxF, &this->viewProjectionMtxF);
+
+    this->billboardMtxF.mf[3][2] =
+        (this->billboardMtxF.mf[3][1] =
+             (this->billboardMtxF.mf[3][0] =
+                  (this->billboardMtxF.mf[2][3] =
+                       (this->billboardMtxF.mf[1][3] = (this->billboardMtxF.mf[0][3] = 0.0f)))));
+
+    Matrix_Transpose(&this->billboardMtxF);
+
+    this->billboardMtx = GRAPH_ALLOC(this->state.gfxCtx, 0x80);
+
+    Matrix_MtxFToMtx(&this->billboardMtxF, this->billboardMtx);
+    Matrix_RotateYF(((s16)(Camera_GetCamDirYaw(GET_ACTIVE_CAM(this)) + 0x8000)) * 0.0000958738f, MTXMODE_NEW);
+    Matrix_ToMtx(this->billboardMtx + 1);
+
+    gSPSegment(POLY_OPA_DISP++, 0x01, this->billboardMtx);
+    gSPSegment(POLY_XLU_DISP++, 0x01, this->billboardMtx);
+    gSPSegment(OVERLAY_DISP++, 0x01, this->billboardMtx);
+
+    if (1) {
         Gfx* sp218;
         Gfx* sp214 = POLY_OPA_DISP;
 
         sp218 = Graph_GfxPlusOne(sp214);
-
         gSPDisplayList(OVERLAY_DISP++, sp218);
 
-        if ((play->transitionMode == 3) || (play->transitionMode == 0xB) || D_801D0D54) {
+        if (((this->transitionMode == TRANS_MODE_INSTANCE_RUNNING) || (this->transitionMode == TRANS_TYPE_INSTANT)) ||
+            D_801D0D54) {
             View spA8;
 
-            View_Init(&spA8, temp_s1);
+            View_Init(&spA8, gfxCtx);
             spA8.flags = 0xA;
-            {Viewport sp98;sp98.bottomY = 0xF0;sp98.rightX = 0x140;sp98.topY = 0;sp98.leftX = 0;View_SetViewport(&spA8, &sp98);}(void) 0;
+
+            SET_FULLSCREEN_VIEWPORT(&spA8);
+
             func_801400CC(&spA8, &sp218);
-            play->transitionCtx.draw(&play->transitionCtx.instanceData, &sp218);
+            this->transitionCtx.draw(&this->transitionCtx.instanceData, &sp218);
         }
-        TransitionFade_Draw(&play->unk_18E48, &sp218);
-        if (D_801F6D30.a != 0) {
-            D_801F6D18.primColor.rgba = D_801F6D30.rgba;
+
+        TransitionFade_Draw(&this->unk_18E48, &sp218);
+
+        if (gVisMonoColor.a != 0) {
+            D_801F6D18.primColor.rgba = gVisMonoColor.rgba;
             VisMono_Draw(&D_801F6D18, &sp218);
         }
+
         gSPEndDisplayList(sp218++);
-
         Graph_BranchDlist(sp214, sp218);
-
         POLY_OPA_DISP = sp218;
     }
+
     if (gTrnsnUnkState == 3) {
         Gfx* sp90 = POLY_OPA_DISP;
 
-        func_8016454C(&sTrnsnUnk, &sp90);
+        TransitionUnk_Draw(&sTrnsnUnk, &sp90);
         POLY_OPA_DISP = sp90;
-        sp25B = 1;
-        goto block_66;
+        sp25B = true;
+        goto Play_Draw_DrawOverlayElements;
     }
-    PreRender_SetValues(&play->pauseBgPreRender, D_801FBBCC, D_801FBBCE, temp_s1->curFrameBuffer, temp_s1->zbuffer);
-    if (gGameInfo->data[0xBE] == 2) {
+
+    PreRender_SetValues(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, gfxCtx->curFrameBuffer, gfxCtx->zbuffer);
+
+    if (SREG(94) == 2) {
         MsgEvent_SendNullTask();
-        if (gSaveContext.screenScaleFlag == 0) {
-            PreRender_ApplyFiltersSlowlyInit(&play->pauseBgPreRender);
+        if (!gSaveContext.screenScaleFlag) {
+            PreRender_ApplyFiltersSlowlyInit(&this->pauseBgPreRender);
         }
-        gGameInfo->data[0xBE] = 3;
-        gGameInfo->data[0x81] |= 1;
+        SREG(94) = 3;
+        SREG(33) |= 1;
     } else {
-        if (gGameInfo->data[0xBE] == 3) {
+        if (SREG(94) == 3) {
             Gfx* sp8C = POLY_OPA_DISP;
 
-            if (play->pauseBgPreRender.unk_4D == 2) {
-                func_80170B28(&play->pauseBgPreRender, &sp8C);
+            if (this->pauseBgPreRender.unk_4D == 2) {
+                func_80170B28(&this->pauseBgPreRender, &sp8C);
             } else {
-                func_80170798(&play->pauseBgPreRender, &sp8C);
+                func_80170798(&this->pauseBgPreRender, &sp8C);
             }
+
             gSPDisplayList(sp8C++, D_0E000140);
             POLY_OPA_DISP = sp8C;
-            sp25B = 1;
-            goto block_66;
+            sp25B = true;
+            goto Play_Draw_DrawOverlayElements;
         }
-        if (play->unk_18844 == 0) {
-            s32 pad;
 
-            if ((play->skyboxId) && (!play->envCtx.skyboxDisabled)) {
-                if ((play->skyboxId == 1) || (play->skyboxId == 3)) {
-                    
-                    func_800F5CD0(play->skyboxId, &play->envCtx, &play->skyboxCtx);
-                    SkyboxDraw_Draw(&play->skyboxCtx, temp_s1, play->skyboxId, play->envCtx.unk_13, play->view.eye.x, play->view.eye.y, play->view.eye.z);
-                } else if (!play->skyboxCtx.skyboxShouldDraw) {
-                    SkyboxDraw_Draw(&play->skyboxCtx, temp_s1, play->skyboxId, 0, play->view.eye.x, play->view.eye.y, play->view.eye.z);
+        if (!this->unk_18844) {
+            if (this->skyboxId && !this->envCtx.skyboxDisabled) {
+                if ((this->skyboxId == 1) || (this->skyboxId == 3)) {
+                    Environment_UpdateSkybox(this->skyboxId, &this->envCtx, &this->skyboxCtx);
+                    SkyboxDraw_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.unk_13, this->view.eye.x,
+                                    this->view.eye.y, this->view.eye.z);
+                } else if (!this->skyboxCtx.skyboxShouldDraw) {
+                    SkyboxDraw_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x, this->view.eye.y,
+                                    this->view.eye.z);
                 }
             }
-            func_800FE390(play);
-            sp268 = LightContext_NewLights(&play->lightCtx, temp_s1);
-            if (play->roomCtx.currRoom.enablePosLights || (gGameInfo->data[0x23D])) {
-                sp268->enablePosLights = 1;
-            }
-            Lights_BindAll(sp268, play->lightCtx.listHead, NULL, play);
-            Lights_Draw(sp268, temp_s1);
-            Scene_ExecuteDrawConfig(play);
-            if (play->roomCtx.unk78) {
-                Room_Draw(play, &play->roomCtx.currRoom, 3);
-                Room_Draw(play, &play->roomCtx.prevRoom, 3);
-            }
-            if (play->skyboxCtx.skyboxShouldDraw) {
-                Vec3f sp78;
-                if(1) {}
-                Camera_GetQuakeOffset(&sp78, play->cameraPtrs[play->activeCamId]);
-                SkyboxDraw_Draw(&play->skyboxCtx, temp_s1, play->skyboxId, 0, play->view.eye.x + sp78.x, play->view.eye.y + sp78.y, play->view.eye.z + sp78.z);
-            }
-            if (play->envCtx.unk_F2[1]) {
-                func_800FA9FC(play, &play->view, temp_s1);
-            }
-        }
-        func_800FC444(temp_s1, 0, 0, 0, play->bgCoverAlpha, 1);
-        Actor_DrawAll(play, &play->actorCtx);
-        if (!play->envCtx.sunMoonDisabled) {
-            sp25C.x = play->view.eye.x + play->envCtx.unk_4;
-            sp25C.y = play->view.eye.y + play->envCtx.unk_8;
-            sp25C.z = play->view.eye.z + play->envCtx.unk_C;
-            func_800F9728(play, &play->envCtx, &play->view, temp_s1, sp25C);
-        }
-        func_800FBCBC(play);
-        if (gGameInfo->data[0x220]) {
-            func_800FC444(temp_s1, gGameInfo->data[0x221], gGameInfo->data[0x222], gGameInfo->data[0x223], gGameInfo->data[0x224], 3);
-        }
-        if (play->envCtx.fillScreen == 1) {
-            if(1) {}
-            func_800FC444(temp_s1, play->envCtx.screenFillColor[0], play->envCtx.screenFillColor[1], play->envCtx.screenFillColor[2], play->envCtx.screenFillColor[3], 3);
-        }
-        if (play->envCtx.sandstormState != 0) {
-            func_800FC64C(play, play->envCtx.sandstormState);
-        }
-        if (play->unk_18876 != 0) {
-            func_800FC444(temp_s1, 0, 0, 0, play->unk_18876, 3);
-        }
-        DebugDisplay_DrawObjects(play);
-        func_80165460(play);
 
-        if ((gGameInfo->data[0xBE] == 1) || (gTrnsnUnkState == 1) || (gGameInfo->data[0xB9] == 1)) {
+            func_800FE390(this);
+            sp268 = LightContext_NewLights(&this->lightCtx, gfxCtx);
+
+            if (this->roomCtx.currRoom.enablePosLights || (MREG(93) != 0)) {
+                sp268->enablePosLights = true;
+            }
+
+            Lights_BindAll(sp268, this->lightCtx.listHead, NULL, this);
+            Lights_Draw(sp268, gfxCtx);
+
+            Scene_Draw(this);
+
+            if (this->roomCtx.unk78) {
+                //! FAKE: Regalloc around here. s64 solves the regalloc,
+                //        but much too large on the stack. Need:
+                //        `if (stuff that evaluates to 0 but not trivially)`
+                s64 roomDrawFlags = 3;
+
+                Room_Draw(this, &this->roomCtx.currRoom, roomDrawFlags);
+                Room_Draw(this, &this->roomCtx.prevRoom, roomDrawFlags);
+            }
+
+            if (this->skyboxCtx.skyboxShouldDraw) {
+                Vec3f sp78;
+
+                if (1) {}
+                Camera_GetQuakeOffset(&sp78, GET_ACTIVE_CAM(this));
+                SkyboxDraw_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x + sp78.x,
+                                this->view.eye.y + sp78.y, this->view.eye.z + sp78.z);
+            }
+
+            // envCtx.precipitation[PRECIP_RAIN_CUR]
+            if (this->envCtx.unk_F2[1] != 0) {
+                Environment_DrawRain(this, &this->view, gfxCtx);
+            }
+        }
+
+        Environment_FillScreen(gfxCtx, 0, 0, 0, this->bgCoverAlpha, 1);
+
+        Actor_DrawAll(this, &this->actorCtx);
+
+        if (!this->envCtx.sunMoonDisabled) {
+            sp25C.x = this->view.eye.x + this->envCtx.unk_4;
+            sp25C.y = this->view.eye.y + this->envCtx.unk_8;
+            sp25C.z = this->view.eye.z + this->envCtx.unk_C;
+            Environment_DrawSunLensFlare(this, &this->envCtx, &this->view, gfxCtx, sp25C);
+        }
+
+        Environment_DrawCustomLensFlare(this);
+
+        if (MREG(64) != 0) {
+            Environment_FillScreen(gfxCtx, MREG(65), MREG(66), MREG(67), MREG(68), 3);
+        }
+
+        switch (this->envCtx.fillScreen) {
+            case 1:
+                Environment_FillScreen(gfxCtx, this->envCtx.screenFillColor[0], this->envCtx.screenFillColor[1],
+                                       this->envCtx.screenFillColor[2], this->envCtx.screenFillColor[3], 3);
+                break;
+            default:
+                break;
+        }
+
+        if (this->envCtx.sandstormState != 0) {
+            Environment_DrawSandstorm(this, this->envCtx.sandstormState);
+        }
+
+        if (this->unk_18876 != 0) {
+            Environment_FillScreen(gfxCtx, 0, 0, 0, this->unk_18876, 3);
+        }
+
+        DebugDisplay_DrawObjects(this);
+        func_80165460(this);
+
+        if (((SREG(94) == 1) || (gTrnsnUnkState == 1)) || (SREG(89) == 1)) {
             Gfx* sp74;
             Gfx* sp70 = POLY_OPA_DISP;
 
             sp74 = Graph_GfxPlusOne(sp70);
             gSPDisplayList(OVERLAY_DISP++, sp74);
+            this->pauseBgPreRender.fbuf = gfxCtx->curFrameBuffer;
 
-            play->pauseBgPreRender.fbuf = temp_s1->curFrameBuffer;
-
-            if (gGameInfo->data[0xBE] == 1) {
-                gGameInfo->data[0xBE] = 2;
-                play->pauseBgPreRender.fbufSave = (u16 *) temp_s1->zbuffer;
-                play->pauseBgPreRender.cvgSave = play->unk_18E58;
-            } else if (gGameInfo->data[0xB9] == 1) {
-                gGameInfo->data[0xB9] = 2;
-                play->pauseBgPreRender.fbufSave = (u16 *) temp_s1->zbuffer;
-                play->pauseBgPreRender.cvgSave = play->unk_18E58;
+            if (SREG(94) == 1) {
+                SREG(94) = 2;
+                this->pauseBgPreRender.fbufSave = (u16*)gfxCtx->zbuffer;
+                this->pauseBgPreRender.cvgSave = this->unk_18E58;
+            } else if (SREG(89) == 1) {
+                SREG(89) = 2;
+                this->pauseBgPreRender.fbufSave = (u16*)gfxCtx->zbuffer;
+                this->pauseBgPreRender.cvgSave = this->unk_18E58;
             } else {
                 gTrnsnUnkState = 2;
-                play->pauseBgPreRender.fbufSave = (u16 *) temp_s1->zbuffer;
-                play->pauseBgPreRender.cvgSave = NULL;
+                this->pauseBgPreRender.fbufSave = (u16*)gfxCtx->zbuffer;
+                this->pauseBgPreRender.cvgSave = NULL;
             }
-            func_801705B4(&play->pauseBgPreRender, &sp74);
-            if (play->pauseBgPreRender.cvgSave != NULL) {
-                func_80170730(&play->pauseBgPreRender, &sp74);
+
+            func_801705B4(&this->pauseBgPreRender, &sp74);
+
+            if (this->pauseBgPreRender.cvgSave != NULL) {
+                func_80170730(&this->pauseBgPreRender, &sp74);
             }
+
             gSPEndDisplayList(sp74++);
             Graph_BranchDlist(sp70, sp74);
             POLY_OPA_DISP = sp74;
-            play->unk_18B49 = 2;
-            gGameInfo->data[0x81] |= 1;
+            this->unk_18B49 = 2;
+            SREG(33) |= 1;
         } else {
-block_66:
-            Play_DrawOverlayElements(play);
+        Play_Draw_DrawOverlayElements:
+            Play_DrawOverlayElements(this);
         }
     }
-    if ((play->view.unk164 != 0) && !gDbgCamEnabled) {
+
+    //! Fake: regalloc around here
+    if (this && this && this) {}
+
+    if ((this->view.unk164 != 0) && !gDbgCamEnabled) {
         Vec3s sp4C;
 
-        Camera_Update(&sp4C, play->cameraPtrs[play->activeCamId]);
-        func_80140024(&play->view);
-        play->view.unk164 = 0;
-        if ((play->skyboxId) && !play->envCtx.skyboxDisabled) {
-            SkyboxDraw_UpdateMatrix(&play->skyboxCtx, play->view.eye.x, play->view.eye.y, play->view.eye.z);
+        Camera_Update(&sp4C, GET_ACTIVE_CAM(this));
+        func_80140024(&this->view);
+        this->view.unk164 = 0;
+        if ((this->skyboxId != 0) && !this->envCtx.skyboxDisabled) {
+            SkyboxDraw_UpdateMatrix(&this->skyboxCtx, this->view.eye.x, this->view.eye.y, this->view.eye.z);
         }
     }
+
     if (!sp25B) {
-        func_800FE3E0(play);
+        func_800FE3E0(this);
     }
-    CLOSE_DISPS(play->state.gfxCtx);
+
+    CLOSE_DISPS(this->state.gfxCtx);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Draw.s")
@@ -1444,8 +1505,8 @@ s32 Play_InCsMode(PlayState* this) {
     return (this->csCtx.state != 0) || Player_InCsMode(this);
 }
 
-f32 func_80169100(PlayState* play, MtxF* mtx, CollisionPoly** poly, s32* bgId, Vec3f* feetPos) {
-    f32 floorHeight = BgCheck_EntityRaycastFloor3(&play->colCtx, poly, bgId, feetPos);
+f32 func_80169100(PlayState* this, MtxF* mtx, CollisionPoly** poly, s32* bgId, Vec3f* feetPos) {
+    f32 floorHeight = BgCheck_EntityRaycastFloor3(&this->colCtx, poly, bgId, feetPos);
 
     if (floorHeight > BGCHECK_Y_MIN) {
         func_800C0094(*poly, feetPos->x, floorHeight, feetPos->z, mtx);
@@ -1924,7 +1985,7 @@ s32 func_8016A02C(GameState* thisx, Actor* actor, s16* yaw) {
 /**
  * @brief Tests if \p pos is underwater.
  *
- * @param[in] play PlayState
+ * @param[in] this PlayState
  * @param[in] pos position to test
  * @return true if inside a waterbox and not above a void.
  */
@@ -2209,8 +2270,8 @@ void Play_Init(GameState* thisx) {
     this->transitionTrigger = TRANS_TRIGGER_END;
     this->unk_18876 = 0;
     this->bgCoverAlpha = 0;
-    this->unk_18845 = 0;
-    this->unk_18844 = 0;
+    this->haltAllActors = false;
+    this->unk_18844 = false;
 
     if (gSaveContext.gameMode != 1) {
         if (gSaveContext.nextTransitionType == TRANS_NEXT_TYPE_DEFAULT) {
@@ -2230,7 +2291,7 @@ void Play_Init(GameState* thisx) {
     TransitionFade_Start(&this->unk_18E48);
     VisMono_Init(&D_801F6D18);
 
-    D_801F6D30.a = 0;
+    gVisMonoColor.a = 0;
     D_801F6D4C = &D_801F6D38;
     func_80140E80(D_801F6D4C);
     D_801F6D4C->lodProportion = 0.0f;
