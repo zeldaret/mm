@@ -1390,11 +1390,12 @@ PlayerBButtonSword Player_GetHeldBButtonSword(Player* player) {
 }
 
 PlayerMeleeWeapon Player_ActionToMeleeWeapon(PlayerActionParam actionParam) {
-    PlayerMeleeWeapon weapon = actionParam - (PLAYER_AP_SWORD_KOKIRI - 1);
+    PlayerMeleeWeapon weapon = GET_MELEE_WEAPON_FROM_AP(actionParam);
 
     if ((weapon > PLAYER_MELEEWEAPON_NONE) && (weapon < PLAYER_MELEEWEAPON_MAX)) {
         return weapon;
     }
+
     return PLAYER_MELEEWEAPON_NONE;
 }
 
