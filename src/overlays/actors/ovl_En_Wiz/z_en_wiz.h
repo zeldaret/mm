@@ -28,10 +28,10 @@ typedef struct EnWiz {
     /* 0x3C2 */ s16 unk_3C2;
     /* 0x3C4 */ s16 unk_3C4;
     /* 0x3C6 */ s16 unk_3C6;
-    /* 0x3C8 */ char unk_3C8[2];
+    /* 0x3C8 */ s16 unk_3C8;
     /* 0x3CA */ u8 unk_3CA;
     /* 0x3CB */ u8 unk_3CB;
-    /* 0x3CC */ char unk_3CC[4];
+    /* 0x3CC */ s32 unk_3CC;
     /* 0x3D0 */ f32 endFrame;
     /* 0x3D4 */ f32 unk_3D4;
     /* 0x3D8 */ Vec3f unk_3D8;

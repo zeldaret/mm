@@ -357,7 +357,131 @@ void EnWiz_ChangeAnim(EnWiz* this, s32 animIndex, s32 arg2) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A456A0.s")
+void func_80A456A0(EnWiz* this, PlayState* play) {
+    Camera* camera;
+    Vec3f sp58;
+    Vec3f sp4C;
+
+    if (this->unk_3CB < 6) {
+        camera = Play_GetCamera(play, this->unk_74E);
+        switch (this->unk_3CB) {
+            case 0:
+                this->unk_3B4 = 100;
+                this->unk_3C8 = this->actor.world.rot.y;
+                this->unk_3CB++;
+                break;
+
+            case 1:
+                Math_Vec3f_Copy(&sp58, &this->actor.world.pos);
+                Math_Vec3f_Copy(&sp4C, &this->actor.world.pos);
+                sp58.x += Math_SinS(this->unk_3C8) * 200.0f;
+                sp58.y += 100.0f;
+                sp58.z += Math_CosS(this->unk_3C8) * 200.0f;
+                sp4C.y += 80.0f;
+                Math_ApproachF(&camera->eye.x, sp58.x, 0.3f, 30.0f);
+                Math_ApproachF(&camera->eye.z, sp58.z, 0.3f, 30.0f);
+                Math_ApproachF(&camera->at.x, sp4C.x, 0.3f, 30.0f);
+                Math_ApproachF(&camera->at.z, sp4C.z, 0.3f, 30.0f);
+                camera->eye.y = sp58.y;
+                camera->at.y = sp4C.y;
+                if ((fabsf(camera->eye.x - sp58.x) < 2.0f) && (fabsf(camera->eye.y - sp58.y) < 2.0f) &&
+                    (fabsf(camera->eye.z - sp58.z) < 2.0f) && (fabsf(camera->at.x - sp4C.x) < 2.0f) &&
+                    (fabsf(camera->at.y - sp4C.y) < 2.0f) && (fabsf(camera->at.z - sp4C.z) < 2.0f)) {
+                    Player* player = GET_PLAYER(play);
+                    s32 i;
+
+                    this->actor.world.rot.y = this->actor.shape.rot.y =
+                        Math_Vec3f_Yaw(&this->actor.world.pos, &player->actor.world.pos);
+
+                    for (i = 0; i < this->unk_740; i++) {
+                        this->unk_894[i].y = Math_Vec3f_Yaw(&this->unk_81C[i], &player->actor.world.pos);
+                    }
+
+                    EnWiz_ChangeAnim(this, 0, true);
+                    this->unk_3CA = 0;
+                    this->unk_3C6 = 0xFF;
+                    Math_Vec3f_Copy(&this->unk_414, &this->actor.world.pos);
+                    if (this->unk_3B6 == 0) {
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_UNARI);
+                    } else {
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_VOICE - SFX_FLAG);
+                    }
+
+                    this->unk_3B4 = 40;
+                    this->unk_3CB++;
+                }
+                break;
+
+            case 2:
+                if (this->unk_3B4 == 0) {
+                    this->unk_3B4 = 20;
+                    this->unk_3CB++;
+                }
+                break;
+
+            case 3:
+                Math_Vec3f_Copy(&sp58, &this->actor.world.pos);
+                Math_Vec3f_Copy(&sp4C, &this->actor.world.pos);
+                sp58.x += Math_SinS(this->actor.world.rot.y) * 160.0f;
+                sp58.y += 70.0f;
+                sp58.z += Math_CosS(this->actor.world.rot.y) * 140.0f;
+                sp4C.x += -10.0f;
+                sp4C.y += 100.0f;
+                Math_ApproachF(&camera->eye.x, sp58.x, 0.3f, 30.0f);
+                Math_ApproachF(&camera->eye.z, sp58.z, 0.3f, 30.0f);
+                Math_ApproachF(&camera->at.x, sp4C.x, 0.3f, 30.0f);
+                Math_ApproachF(&camera->at.z, sp4C.z, 0.3f, 30.0f);
+                camera->eye.y = sp58.y;
+                camera->at.y = sp4C.y;
+                if (this->unk_3B4 == 0) {
+                    this->unk_3B4 = 10;
+                    this->unk_3CB++;
+                    this->unk_3C8 = this->actor.world.rot.y;
+                }
+                break;
+
+            case 4:
+                if (this->unk_3B4 == 0) {
+                    EnWiz_ChangeAnim(this, 1, false);
+                    this->unk_3C0 = 0;
+                    this->unk_3B4 = 34;
+                    this->unk_3CB++;
+                }
+                break;
+
+            case 5:
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_RUN - SFX_FLAG);
+                if (this->unk_3B4 == 0) {
+                    this->unk_44C = this->unk_3C8 = 0;
+                    this->unk_3CB = 6;
+                } else {
+                    Math_SmoothStepToS(&this->unk_3C0, 0x1388, 0x64, 0x3E8, 0x3E8);
+                    this->actor.world.rot.y += this->unk_3C0;
+                }
+
+                Math_Vec3f_Copy(&sp58, &this->actor.world.pos);
+                Math_Vec3f_Copy(&sp4C, &this->actor.world.pos);
+                sp58.x += Math_SinS(this->unk_3C8) * 200.0f;
+                sp58.y += 100.0f;
+                sp58.z += Math_CosS(this->unk_3C8) * 200.0f;
+                sp4C.y += 80.0f;
+                Math_ApproachF(&camera->eye.x, sp58.x, 0.3f, 30.0f);
+                Math_ApproachF(&camera->eye.z, sp58.z, 0.3f, 30.0f);
+                Math_ApproachF(&camera->at.x, sp4C.x, 0.3f, 30.0f);
+                Math_ApproachF(&camera->at.z, sp4C.z, 0.3f, 30.0f);
+                camera->eye.y = sp58.y;
+                camera->at.y = sp4C.y;
+                break;
+        }
+
+        if (this->unk_3CC < 0xB) {
+            this->unk_3CC++;
+            if ((this->unk_74A != 2) && (this->unk_3CC == 0xB)) {
+                func_801A2E54(0x38);
+            }
+        }
+    }
+}
 
 void func_80A45CD8(EnWiz* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A45CD8.s")
