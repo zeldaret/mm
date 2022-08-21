@@ -71,7 +71,7 @@ GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
     if (gameStateInit == (GameStateFunc)MapSelect_Init) {
         return &gGameStateOverlayTable[1];
     }
-    if (gameStateInit == (GameStateFunc)Title_Init) {
+    if (gameStateInit == (GameStateFunc)ConsoleLogo_Init) {
         return &gGameStateOverlayTable[2];
     }
     if (gameStateInit == (GameStateFunc)Play_Init) {

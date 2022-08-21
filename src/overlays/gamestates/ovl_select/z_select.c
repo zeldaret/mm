@@ -14,7 +14,7 @@ void MapSelect_LoadTitle(MapSelectState* this) {
         gameState->running = false;
     }
 
-    SET_NEXT_GAMESTATE(&this->state, Title_Init, TitleContext);
+    SET_NEXT_GAMESTATE(&this->state, ConsoleLogo_Init, ConsoleLogoState);
 }
 
 void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
