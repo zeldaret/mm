@@ -57,7 +57,7 @@
         <Limb Name="gHoneyAndDarlingWomanRightLowerArmLimb" Type="Standard" EnumName="HONEY_AND_DARLING_LIMB_WOMAN_RIGHT_LOWER_ARM" Offset="0xB23C" />
         <Limb Name="gHoneyAndDarlingWomanRightHandLimb" Type="Standard" EnumName="HONEY_AND_DARLING_LIMB_WOMAN_RIGHT_HAND" Offset="0xB248" />
         <Limb Name="gHoneyAndDarlingWomanHeadLimb" Type="Standard" EnumName="HONEY_AND_DARLING_LIMB_WOMAN_HEAD" Offset="0xB254" />
-        <Skeleton Name="gHoneyAndDarlingSkel" Type="Flex" LimbType="Standard" LimbNone="HONEY_AND_DARLING_LIMB_NONE" LimbMax="HONEY_AND_DARLING_LIMB_MAX" EnumName="HoneyAndDarlingLimbs" Offset="0xB2B0" />
+        <Skeleton Name="gHoneyAndDarlingSkel" Type="Flex" LimbType="Standard" LimbNone="HONEY_AND_DARLING_LIMB_NONE" LimbMax="HONEY_AND_DARLING_LIMB_MAX" EnumName="HoneyAndDarlingLimb" Offset="0xB2B0" />
         <Animation Name="gHoneyAndDarlingSurpiseAnim" Offset="0xBAC4" />
     </File>
 </Root>
