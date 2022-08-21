@@ -1735,8 +1735,8 @@ asm/non_matchings/code/z_player_lib/Player_HasMirrorShieldEquipped.s,Player_HasM
 asm/non_matchings/code/z_player_lib/Player_IsHoldingMirrorShield.s,Player_IsHoldingMirrorShield,0x80124088,0x10
 asm/non_matchings/code/z_player_lib/Player_IsHoldingHookshot.s,Player_IsHoldingHookshot,0x801240C8,0x5
 asm/non_matchings/code/z_player_lib/func_801240DC.s,func_801240DC,0x801240DC,0xD
-asm/non_matchings/code/z_player_lib/func_80124110.s,func_80124110,0x80124110,0xE
-asm/non_matchings/code/z_player_lib/func_80124148.s,func_80124148,0x80124148,0x8
+asm/non_matchings/code/z_player_lib/Player_BButtonSwordFromAP.s,Player_BButtonSwordFromAP,0x80124110,0xE
+asm/non_matchings/code/z_player_lib/Player_GetHeldBButtonSword.s,Player_GetHeldBButtonSword,0x80124148,0x8
 asm/non_matchings/code/z_player_lib/Player_ActionToMeleeWeapon.s,Player_ActionToMeleeWeapon,0x80124168,0xA
 asm/non_matchings/code/z_player_lib/Player_GetMeleeWeaponHeld.s,Player_GetMeleeWeaponHeld,0x80124190,0x9
 asm/non_matchings/code/z_player_lib/Player_IsHoldingTwoHandedWeapon.s,Player_IsHoldingTwoHandedWeapon,0x801241B4,0xB
