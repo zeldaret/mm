@@ -1412,18 +1412,17 @@ s32 Player_IsHoldingTwoHandedWeapon(Player* player) {
     return false;
 }
 
-s32 Player_ActionToBottle(Player* player, PlayerActionParam actionParam) {
-    s32 bottle = actionParam - PLAYER_AP_BOTTLE;
+PlayerBottle Player_ActionToBottle(Player* player, PlayerActionParam actionParam) {
+    PlayerBottle bottle = GET_BOTTLE_FROM_AP(actionParam);
 
-    // Relies on bottle-related action params to be contiguous
-    if ((bottle >= (PLAYER_AP_BOTTLE - PLAYER_AP_BOTTLE)) && (bottle <= (PLAYER_AP_BOTTLE_FAIRY - PLAYER_AP_BOTTLE))) {
+    if ((bottle > PLAYER_BOTTLE_NONE) && (bottle < PLAYER_BOTTLE_MAX)) {
         return bottle;
     }
 
-    return -1;
+    return PLAYER_BOTTLE_NONE;
 }
 
-s32 Player_GetBottleHeld(Player* Player) {
+PlayerBottle Player_GetBottleHeld(Player* Player) {
     return Player_ActionToBottle(Player, Player->itemActionParam);
 }
 
@@ -2931,11 +2930,28 @@ struct_80128388_arg1 D_801C0C54[] = {
     { 30.0f, 0x0000, 0x0000, { 0.0f, 0.0f, 0.0f }, 20.0f, 0x1F40, 0x2EE0 },
 };
 
-Color_RGB8 D_801C0CA8[] = {
-    { 255, 255, 255 }, { 80, 80, 255 },   { 136, 192, 255 }, { 136, 192, 255 }, { 184, 232, 232 }, { 248, 200, 0 },
-    { 255, 180, 0 },   { 0, 128, 0 },     { 252, 238, 0 },   { 131, 0, 174 },   { 64, 64, 32 },    { 0, 0, 255 },
-    { 255, 0, 255 },   { 255, 0, 255 },   { 255, 0, 0 },     { 0, 0, 255 },     { 0, 200, 0 },     { 255, 255, 255 },
-    { 255, 255, 255 }, { 255, 255, 255 }, { 80, 80, 255 },
+Color_RGB8 D_801C0CA8[PLAYER_BOTTLE_MAX] = {
+    { 255, 255, 255 }, // PLAYER_BOTTLE_EMPTY            // PLAYER_AP_BOTTLE
+    { 80, 80, 255 },   // PLAYER_BOTTLE_FISH             // PLAYER_AP_BOTTLE_FISH
+    { 136, 192, 255 }, // PLAYER_BOTTLE_SPRING_WATER     // PLAYER_AP_BOTTLE_SPRING_WATER
+    { 136, 192, 255 }, // PLAYER_BOTTLE_HOT_SPRING_WATER // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
+    { 184, 232, 232 }, // PLAYER_BOTTLE_ZORA_EGG         // PLAYER_AP_BOTTLE_ZORA_EGG
+    { 248, 200, 0 },   // PLAYER_BOTTLE_DEKU_PRINCESS    // PLAYER_AP_BOTTLE_DEKU_PRINCESS
+    { 255, 180, 0 },   // PLAYER_BOTTLE_GOLD_DUST        // PLAYER_AP_BOTTLE_GOLD_DUST
+    { 0, 128, 0 },     // PLAYER_BOTTLE_1C               // PLAYER_AP_BOTTLE_1C
+    { 252, 238, 0 },   // PLAYER_BOTTLE_SEAHORSE         // PLAYER_AP_BOTTLE_SEAHORSE
+    { 131, 0, 174 },   // PLAYER_BOTTLE_MUSHROOM         // PLAYER_AP_BOTTLE_MUSHROOM
+    { 64, 64, 32 },    // PLAYER_BOTTLE_HYLIAN_LOACH     // PLAYER_AP_BOTTLE_HYLIAN_LOACH
+    { 0, 0, 255 },     // PLAYER_BOTTLE_BUG              // PLAYER_AP_BOTTLE_BUG
+    { 255, 0, 255 },   // PLAYER_BOTTLE_POE              // PLAYER_AP_BOTTLE_POE
+    { 255, 0, 255 },   // PLAYER_BOTTLE_BIG_POE          // PLAYER_AP_BOTTLE_BIG_POE
+    { 255, 0, 0 },     // PLAYER_BOTTLE_POTION_RED       // PLAYER_AP_BOTTLE_POTION_RED
+    { 0, 0, 255 },     // PLAYER_BOTTLE_POTION_BLUE      // PLAYER_AP_BOTTLE_POTION_BLUE
+    { 0, 200, 0 },     // PLAYER_BOTTLE_POTION_GREEN     // PLAYER_AP_BOTTLE_POTION_GREEN
+    { 255, 255, 255 }, // PLAYER_BOTTLE_MILK             // PLAYER_AP_BOTTLE_MILK
+    { 255, 255, 255 }, // PLAYER_BOTTLE_MILK_HALF        // PLAYER_AP_BOTTLE_MILK_HALF
+    { 255, 255, 255 }, // PLAYER_BOTTLE_CHATEAU          // PLAYER_AP_BOTTLE_CHATEAU
+    { 80, 80, 255 },   // PLAYER_BOTTLE_FAIRY            // PLAYER_AP_BOTTLE_FAIRY
 };
 
 Vec3f D_801C0CE8[PLAYER_FORM_MAX] = {
@@ -3287,8 +3303,8 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
         Matrix_Pop();
 
         CLOSE_DISPS(play->state.gfxCtx);
-    } else if (player->leftHandType == 5) {
-        s32 sp48 = Player_ActionToBottle(player, player->heldItemActionParam);
+    } else if (player->leftHandType == PLAYER_MODELTYPE_LH_BOTTLE) {
+        PlayerBottle bottle = Player_ActionToBottle(player, player->heldItemActionParam);
         Vec3f* temp_v1_2 = &D_801C0CE8[player->transformation];
 
         OPEN_DISPS(play->state.gfxCtx);
@@ -3296,12 +3312,14 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
         Matrix_Push();
         Matrix_Translate(temp_v1_2->x, temp_v1_2->y, temp_v1_2->z, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        if (sp48 != 0) {
-            Color_RGB8* temp_v1_3 = &D_801C0CA8[sp48];
 
-            gDPSetEnvColor(POLY_XLU_DISP++, temp_v1_3->r, temp_v1_3->g, temp_v1_3->b, 0);
+        if (bottle != PLAYER_BOTTLE_EMPTY) {
+            Color_RGB8* bottleColor = &D_801C0CA8[bottle];
+
+            gDPSetEnvColor(POLY_XLU_DISP++, bottleColor->r, bottleColor->g, bottleColor->b, 0);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_000320);
         }
+
         gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0003E0);
 
         Matrix_Pop();
@@ -3333,7 +3351,7 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
 void func_80128B74(PlayState* play, Player* player, s32 limbIndex) {
     Vec3f* footPos = &D_801C0D24[player->transformation];
 
-    Actor_SetFeetPos(&player->actor, limbIndex, 9, footPos, 6, footPos);
+    Actor_SetFeetPos(&player->actor, limbIndex, PLAYER_LIMB_L_FOOT, footPos, PLAYER_LIMB_R_FOOT, footPos);
 }
 
 #ifdef NON_EQUIVALENT
@@ -3471,7 +3489,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
             }
             if ((player->unk_B2A != 0) || ((func_800B7118(player) == 0) && (sp224 != NULL))) {
                 if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->unk_B2A != 0) &&
-                    (player->exchangeItemId != EXCH_ITEM_NONE)) {
+                    (player->exchangeItemId != PLAYER_AP_NONE)) {
                     Math_Vec3f_Copy(&D_801F59E8, &player->leftHandWorld.pos);
                 } else {
                     D_801F59E8.x = (player->bodyPartsPos[0xF].x + player->leftHandWorld.pos.x) * 0.5f;
