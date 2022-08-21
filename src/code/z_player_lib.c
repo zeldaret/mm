@@ -1582,7 +1582,7 @@ PlayerFaceIndices sPlayerFaces[] = {
 };
 
 // Note the correct pointer to pass as the jointTable is the jointTable pointer from the SkelAnime struct, not the
-// buffer from the Player struct itself since that one may be misalligned.
+// buffer from the Player struct itself since that one may be misaligned.
 void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod,
                      PlayerTransformation playerForm, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw,
                      PostLimbDrawFlex postLimbDraw, Actor* actor) {
