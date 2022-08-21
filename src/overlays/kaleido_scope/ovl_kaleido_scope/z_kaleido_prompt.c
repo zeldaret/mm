@@ -1,46 +1,49 @@
 /*
  * File: z_kaleido_prompt.c
  * Overlay: ovl_kaleido_scope
- * Description: Pause Menu - Save Prompt
+ * Description: Pause Menu - Save and Continue Prompt
  */
 
 #include "z_kaleido_scope.h"
 
-s16 sSavePromptAlphaTargets[] = { 100, 255 };
+s16 sPromptAlphaTargets[] = { 100, 255 };
 
 // Unused remnant of OoT
-void KaleidoScope_UpdateSavePrompt(PlayState* play) {
-    static s16 sSavePromptAlphaTargetIndex = 0;
-    static s16 sSavePromptAlphaTimer = 10;
+void KaleidoScope_UpdatePrompt(PlayState* play) {
+    static s16 sPromptAlphaTargetIndex = 0;
+    static s16 sPromptAlphaTimer = 10;
     PauseContext* pauseCtx = &play->pauseCtx;
     Input* input = CONTROLLER1(&play->state);
     s8 relStickX = input->rel.stick_x;
     s16 alphaStep;
 
-    if (((play->pauseCtx.state == 7) && (pauseCtx->unk_208 == 1)) || (pauseCtx->state == 0xE) ||
-        (pauseCtx->state == 0x11)) {
-        if ((pauseCtx->savePromptChoice == PAUSE_SAVE_PROMPT_YES) && (relStickX >= 30)) {
+    if (((pauseCtx->state == 7) && (pauseCtx->unk_208 == 1)) || (pauseCtx->state == 0xE) || (pauseCtx->state == 0x11)) {
+
+        // Move the prompt
+        if ((pauseCtx->promptChoice == PAUSE_PROMPT_YES) && (relStickX >= 30)) {
+            // Move right to the no prompt
             play_sound(NA_SE_SY_CURSOR);
-            pauseCtx->savePromptChoice = PAUSE_SAVE_PROMPT_NO;
-        } else if ((pauseCtx->savePromptChoice != PAUSE_SAVE_PROMPT_YES) && (relStickX <= -30)) {
+            pauseCtx->promptChoice = PAUSE_PROMPT_NO;
+        } else if ((pauseCtx->promptChoice != PAUSE_PROMPT_YES) && (relStickX <= -30)) {
+            // Move left to the yes prompt
             play_sound(NA_SE_SY_CURSOR);
-            pauseCtx->savePromptChoice = PAUSE_SAVE_PROMPT_YES;
+            pauseCtx->promptChoice = PAUSE_PROMPT_YES;
         }
 
-        alphaStep = ABS_ALT(pauseCtx->savePromptAlpha - sSavePromptAlphaTargets[sSavePromptAlphaTargetIndex]) /
-                    sSavePromptAlphaTimer;
+        // Update the alpha for the green glowing orb above the prompt
+        alphaStep = ABS_ALT(pauseCtx->promptAlpha - sPromptAlphaTargets[sPromptAlphaTargetIndex]) / sPromptAlphaTimer;
 
-        if (pauseCtx->savePromptAlpha >= sSavePromptAlphaTargets[sSavePromptAlphaTargetIndex]) {
-            pauseCtx->savePromptAlpha -= alphaStep;
+        if (pauseCtx->promptAlpha >= sPromptAlphaTargets[sPromptAlphaTargetIndex]) {
+            pauseCtx->promptAlpha -= alphaStep;
         } else {
-            pauseCtx->savePromptAlpha += alphaStep;
+            pauseCtx->promptAlpha += alphaStep;
         }
 
-        sSavePromptAlphaTimer--;
-        if (sSavePromptAlphaTimer == 0) {
-            pauseCtx->savePromptAlpha = sSavePromptAlphaTargets[sSavePromptAlphaTargetIndex];
-            sSavePromptAlphaTimer = sSavePromptAlphaTargetIndex + 20;
-            sSavePromptAlphaTargetIndex ^= 1;
+        sPromptAlphaTimer--;
+        if (sPromptAlphaTimer == 0) {
+            pauseCtx->promptAlpha = sPromptAlphaTargets[sPromptAlphaTargetIndex];
+            sPromptAlphaTimer = sPromptAlphaTargetIndex + 20;
+            sPromptAlphaTargetIndex ^= 1;
         }
     }
 }
