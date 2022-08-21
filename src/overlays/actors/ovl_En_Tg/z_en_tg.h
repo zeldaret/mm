@@ -18,7 +18,7 @@ typedef struct EnTgHeartEffect {
     /* 0x20 */ Vec3f unusedZeroVec20;
     /* 0x2C */ Vec3f velocity;
     /* 0x38 */ s16 angle;
-} EnTgHeartEffect; // size = 0x40
+} EnTgHeartEffect; // size = 0x3C
 
 typedef struct EnTg {
     /* 0x0000 */ Actor actor;
@@ -30,7 +30,7 @@ typedef struct EnTg {
     /* 0x026E */ Vec3s morphTable[HONEY_AND_DARLING_LIMB_MAX];
     /* 0x02EC */ s16 spawnHeartTimer;
     /* 0x02EE */ char unk2EE[0x2];
-    /* 0x02F0 */ EnTgHeartEffect enTgHeartEffect[10];
+    /* 0x02F0 */ EnTgHeartEffect effects[10];
 } EnTg; // size = 0x548
 
 extern const ActorInit En_Tg_InitVars;
