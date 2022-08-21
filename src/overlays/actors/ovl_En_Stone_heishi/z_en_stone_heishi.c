@@ -23,7 +23,7 @@ void func_80BC9D28(EnStoneheishi* this, PlayState* play);
 void func_80BC9E50(EnStoneheishi* this, PlayState* play);
 void func_80BC94B0(EnStoneheishi* this);
 void func_80BC9660(EnStoneheishi* this);
-void func_80BC98EC(EnStoneheishi*);
+void EnStoneheishi_SetupCheckGivenItem(EnStoneheishi*);
 void EnStoneheishi_GiveItemPrize(EnStoneheishi* this, PlayState* play);
 void EnStoneheishi_SetupDrinkBottleProcess(EnStoneheishi* this);
 
@@ -143,7 +143,7 @@ void func_80BC94B0(EnStoneheishi* this) {
         }
     }
     this->actor.textId = sEnStoneHeishiTextIds[this->textIndex];
-    this->action = 0;
+    this->action = EN_STONE_ACTION_1;
     this->actionFunc = func_80BC9560;
 }
 
@@ -176,7 +176,7 @@ void func_80BC9560(EnStoneheishi* this, PlayState* play) {
 
 void func_80BC9660(EnStoneheishi* this) {
     this->textIdSet = false;
-    this->action = 1;
+    this->action = EN_STONE_ACTION_2;
     this->actionFunc = func_80BC9680;
 }
 
@@ -214,7 +214,7 @@ void func_80BC9680(EnStoneheishi* this, PlayState* play) {
 
         if (this->textIndex == 2) {
             func_80151938(play, 0xFF);
-            func_80BC98EC(this);
+            EnStoneheishi_SetupCheckGivenItem(this);
             return;
         }
         if (this->textIndex == 3) {
@@ -237,8 +237,8 @@ void func_80BC9680(EnStoneheishi* this, PlayState* play) {
     }
 }
 
-void func_80BC98EC(EnStoneheishi* this) {
-    this->action = 2;
+void EnStoneheishi_SetupCheckGivenItem(EnStoneheishi* this) {
+    this->action = EN_STONE_ACTION_CHECK_ITEM;
     this->actionFunc = EnStoneheishi_CheckGivenItem;
 }
 
@@ -265,7 +265,7 @@ void EnStoneheishi_CheckGivenItem(EnStoneheishi* this, PlayState* play) {
                 this->textIndex = 3;
                 player->actor.textId = 0;
                 gSaveContext.save.weekEventReg[0x29] |= 0x80;
-                this->action = 1;
+                this->action = EN_STONE_ACTION_2;
                 this->actionFunc = func_80BC9680;
             }
         } else if (item < PLAYER_AP_NONE) {
@@ -277,7 +277,7 @@ void EnStoneheishi_CheckGivenItem(EnStoneheishi* this, PlayState* play) {
 }
 
 void EnStoneheishi_SetupDrinkBottleProcess(EnStoneheishi* this) {
-    this->action = 3;
+    this->action = EN_STONE_ACTION_DRINK_BOTTLE;
     this->actionFunc = EnStoneheishi_DrinkBottleProcess;
 }
 
@@ -346,7 +346,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
                 func_80151938(play, sEnStoneHeishiTextIds[this->textIndex]);
                 player->actor.textId = sEnStoneHeishiTextIds[this->textIndex];
                 EnStoneheishi_SetAnimation(this, EN_STONE_HEISHI_STAND_HAND_ON_HIP);
-                this->action = 1;
+                this->action = EN_STONE_ACTION_2;
                 this->actionFunc = func_80BC9680;
             }
             break;
@@ -362,7 +362,7 @@ void EnStoneheishi_GiveItemPrize(EnStoneheishi* this, PlayState* play) {
         Actor_PickUp(&this->actor, play, GI_MASK_STONE, 300.0f, 300.0f);
     }
 
-    this->action = 4;
+    this->action = EN_STONE_ACTION_5;
     this->actionFunc = func_80BC9D28;
 }
 
@@ -390,7 +390,7 @@ void func_80BC9E50(EnStoneheishi* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80151BB4(play, 0x35);
         func_80151BB4(play, 0x12);
-        this->action = 1;
+        this->action = EN_STONE_ACTION_2;
         this->actionFunc = func_80BC9680;
     } else {
         func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_AP_MINUS1);
@@ -415,8 +415,10 @@ void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
     if (((gSaveContext.save.weekEventReg[0x29] & 0x40) || play->actorCtx.unk4 == 100) &&
         (((s32)player->stateFlags1 << 8) >= 0)) {
         if ((this->animIndex != EN_STONE_HEISHI_WAVE) &&
-            ((((this->action == 0) || (this->action == 1)) || (this->action == 2)) ||
-             ((this->action == 3) && (this->DrinkBottleState <= EN_STONE_DRINK_BOTTLE_DRINKING)))) {
+            ((((this->action == EN_STONE_ACTION_1) || (this->action == EN_STONE_ACTION_2)) ||
+              (this->action == EN_STONE_ACTION_CHECK_ITEM)) ||
+             ((this->action == EN_STONE_ACTION_DRINK_BOTTLE) &&
+              (this->DrinkBottleState <= EN_STONE_DRINK_BOTTLE_DRINKING)))) {
             EnStoneheishi_HeadTowardsLink(this);
         } else {
             this->targetHeadPosX = 0;

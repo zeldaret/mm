@@ -15601,7 +15601,7 @@
     0x80BC9560:("func_80BC9560",),
     0x80BC9660:("func_80BC9660",),
     0x80BC9680:("func_80BC9680",),
-    0x80BC98EC:("func_80BC98EC",),
+    0x80BC98EC:("EnStoneheishi_SetupCheckGivenItem",),
     0x80BC9908:("EnStoneheishi_CheckGivenItem",),
     0x80BC9A10:("EnStoneheishi_SetupDrinkBottleProcess",),
     0x80BC9A2C:("EnStoneheishi_DrinkBottleProcess",),
