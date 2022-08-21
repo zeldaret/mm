@@ -561,11 +561,13 @@ s16 D_8082B9B8[] = {
 };
 s16 D_8082B9C8 = 20;
 s16 D_8082B9CC = 0;
+void func_80823350(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80823350.s")
 
 void func_80824738(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80824738.s")
 
+void func_808248D0(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808248D0.s")
 
 s16 D_8082B9D0[] = {
@@ -573,6 +575,7 @@ s16 D_8082B9D0[] = {
 };
 s16 D_8082B9E0 = 20;
 s16 D_8082B9E4 = 0;
+void func_80824B90(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80824B90.s")
 
 void func_808256E4(PlayState* play);
@@ -581,7 +584,21 @@ void func_808256E4(PlayState* play);
 void func_8082585C(PlayState* play, Input* input);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8082585C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808259D4.s")
+void KaleidoScope_SetView(PauseContext* pauseCtx, f32 x, f32 y, f32 z) {
+    Vec3f eye;
+    Vec3f at;
+    Vec3f up;
+
+    eye.x = x;
+    eye.y = y;
+    eye.z = z;
+    at.x = at.y = at.z = 0.0f;
+    up.x = up.z = 0.0f;
+    up.y = 1.0f;
+
+    View_SetViewOrientation(&pauseCtx->view, &eye, &at, &up);
+    View_RenderView(&pauseCtx->view, 0x7F);
+}
 
 s16 D_8082B9E8[] = { 0, 0 };
 s16 D_8082B9EC[] = { 0, 0 };
@@ -1317,7 +1334,75 @@ void KaleidoScope_DrawGameOver(PlayState* play) {
     CLOSE_DISPS(gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_Draw.s")
+void KaleidoScope_Draw(PlayState* play) {
+    s32 pad;
+    PauseContext* pauseCtx = &play->pauseCtx;
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    gSPSegment(POLY_OPA_DISP++, 0x02, interfaceCtx->parameterSegment);
+    gSPSegment(POLY_OPA_DISP++, 0x08, pauseCtx->iconItemSegment);
+    gSPSegment(POLY_OPA_DISP++, 0x09, pauseCtx->iconItem24Segment);
+    gSPSegment(POLY_OPA_DISP++, 0x0A, pauseCtx->unk_178);
+    gSPSegment(POLY_OPA_DISP++, 0x0C, pauseCtx->unk_170);
+    gSPSegment(POLY_OPA_DISP++, 0x0D, pauseCtx->unk_174);
+    gSPSegment(POLY_OPA_DISP++, 0x0B, pauseCtx->unk_17C);
+
+    if (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) {
+        KaleidoScope_SetView(pauseCtx, pauseCtx->eye.x, pauseCtx->eye.y, pauseCtx->eye.z);
+        func_8012C8AC(play->state.gfxCtx);
+
+        if (!((pauseCtx->state >= PAUSE_STATE_15) && (pauseCtx->state <= PAUSE_STATE_19))) {
+            KaleidoScope_InitVertices(play, play->state.gfxCtx);
+            KaleidoScope_DrawPages(play, play->state.gfxCtx);
+
+            func_8012C8AC(play->state.gfxCtx);
+            gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                              PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+
+            KaleidoScope_SetView(pauseCtx, 0.0f, 0.0f, 64.0f);
+
+            if (!((pauseCtx->state >= PAUSE_STATE_8) && (pauseCtx->state <= PAUSE_STATE_12))) {
+                func_80823350(play);
+            }
+
+            KaleidoScope_UpdateCursorSize(play);
+
+            if (pauseCtx->state == PAUSE_STATE_6) {
+                KaleidoScope_DrawCursor(play);
+            }
+
+            if ((pauseCtx->state >= PAUSE_STATE_B) && (pauseCtx->state <= PAUSE_STATE_12) &&
+                (play->gameOverCtx.state != GAMEOVER_INACTIVE)) {
+                KaleidoScope_DrawGameOver(play);
+            }
+        } else {
+            KaleidoScope_InitVertices(play, play->state.gfxCtx);
+            KaleidoScope_DrawPages(play, play->state.gfxCtx);
+
+            func_808248D0(play);
+
+            func_8012C8AC(play->state.gfxCtx);
+            gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                              PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+
+            KaleidoScope_SetView(pauseCtx, 0.0f, 0.0f, 64.0f);
+            func_80824B90(play);
+            KaleidoScope_UpdateCursorSize(play);
+
+            if (pauseCtx->state == PAUSE_STATE_17) {
+                KaleidoScope_DrawCursor(play);
+            }
+        }
+    }
+
+    if ((pauseCtx->debugEditor == DEBUG_EDITOR_INVENTORY_INIT) || (pauseCtx->debugEditor == DEBUG_EDITOR_INVENTORY)) {
+        KaleidoScope_DrawInventoryEditor(play);
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
 
 void KaleidoScope_GrayOutTextureRGBA32(u32* texture, u16 pixelCount) {
     u32 rgb;
@@ -1753,7 +1838,7 @@ void KaleidoScope_Update(PlayState* play) {
             D_8082BEA8 = 30;
             pauseCtx->promptChoice = PAUSE_PROMPT_YES;
             pauseCtx->state++;
-            if (gameOverCtx->state == 0) {
+            if (gameOverCtx->state == GAMEOVER_INACTIVE) {
                 pauseCtx->state++;
             }
             break;
@@ -1841,7 +1926,7 @@ void KaleidoScope_Update(PlayState* play) {
                 D_8082B944 = 0x42;
                 D_8082B908 = 0.0f;
                 pauseCtx->alpha = 255;
-                if (gameOverCtx->state == 0) {
+                if (gameOverCtx->state == GAMEOVER_INACTIVE) {
                     pauseCtx->state = PAUSE_STATE_E;
                 } else {
                     pauseCtx->state = PAUSE_STATE_11;
