@@ -547,7 +547,7 @@ void func_80B41ACC(EnKgy* this, PlayState* play) {
                 player->actor.textId = 0xC47;
             }
             this->unk_29C |= 8;
-        } else if (itemActionParam < PLAYER_AP_NONE) {
+        } else if (itemActionParam <= PLAYER_AP_MINUS1) {
             if (this->unk_29C & 0x10) {
                 this->actor.textId = 0xC57;
             } else {

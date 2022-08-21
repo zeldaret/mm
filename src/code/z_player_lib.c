@@ -619,7 +619,7 @@ PlayerActionParam func_80123810(PlayState* play) {
             play->interfaceCtx.unk_224 = 0;
             Interface_ChangeAlpha(play->msgCtx.unk_120BC);
 
-            if ((itemId >= ITEM_FD) || ((actionParam = play->unk_18794(play, player, itemId)) < PLAYER_AP_NONE)) {
+            if ((itemId >= ITEM_FD) || ((actionParam = play->unk_18794(play, player, itemId)) <= PLAYER_AP_MINUS1)) {
                 play_sound(NA_SE_SY_ERROR);
                 return PLAYER_AP_MINUS1;
             } else {
@@ -1648,8 +1648,8 @@ PlayerFaceIndices sPlayerFaces[] = {
 void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod,
                      PlayerTransformation playerForm, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw,
                      PostLimbDrawFlex postLimbDraw, Actor* actor) {
-    s32 eyeIndex = (jointTable[22].x & 0xF) - 1;
-    s32 mouthIndex = ((jointTable[22].x >> 4) & 0xF) - 1;
+    s32 eyeIndex = (GET_FACE_FROM_JOINTTABLE(jointTable) & 0xF) - 1;
+    s32 mouthIndex = ((GET_FACE_FROM_JOINTTABLE(jointTable) >> 4) & 0xF) - 1;
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -2178,7 +2178,7 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                        ((temp_v1 = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD)) != 0)) {
                 var_a0 = *(D_801C018C + ((temp_v1 - 1) ^ 0));
             } else {
-                var_v0 = player->skelAnime.jointTable[0x16].x & 0xF000;
+                var_v0 = GET_FACE_FROM_JOINTTABLE(player->skelAnime.jointTable) & 0xF000;
                 if (var_v0 != 0) {
                     var_v0 = (var_v0 >> 0xC) - 1;
                     if (var_v0 >= 2) {
@@ -2229,7 +2229,7 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                     sPlayerRightHandType = PLAYER_MODELTYPE_RH_CLOSED;
                 } else {
                     // temp_v0_8 = player->skelAnime.jointTable->unk_84 & 0xF00;
-                    temp_v0_8 = player->skelAnime.jointTable[0x16].x & 0xF00;
+                    temp_v0_8 = GET_FACE_FROM_JOINTTABLE(player->skelAnime.jointTable) & 0xF00;
                     if (temp_v0_8 != 0) {
                         var_v1 = &D_801C0964[((temp_v0_8 >> 8) - 1) ^ 0][D_801F59E0];
                     }

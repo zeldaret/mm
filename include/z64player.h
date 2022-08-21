@@ -373,6 +373,8 @@ typedef enum {
     /* 15 */ PLAYER_FACE_15
 } PlayerFacialExpression;
 
+#define GET_FACE_FROM_JOINTTABLE(joinTable) (((PlayerAnimationFrame*)(jointTable))->faceInfo)
+
 typedef enum {
     /* 0x00 */ PLAYER_LIMB_NONE,
     /* 0x01 */ PLAYER_LIMB_ROOT,

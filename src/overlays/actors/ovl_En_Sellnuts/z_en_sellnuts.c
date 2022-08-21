@@ -433,7 +433,7 @@ void func_80ADB924(EnSellnuts* this, PlayState* play) {
                 this->actionFunc = func_80ADB0D8;
             }
             func_801477B4(play);
-        } else if (actionParam < PLAYER_AP_NONE) {
+        } else if (actionParam <= PLAYER_AP_MINUS1) {
             this->unk_340 = D_80ADD920[this->unk_33A];
             func_80151938(play, this->unk_340);
             this->actionFunc = func_80ADB0D8;

@@ -938,7 +938,7 @@ void EnFsn_DeterminePrice(EnFsn* this, PlayState* play) {
             }
             this->actor.textId = player->actor.textId;
             func_801477B4(play);
-        } else if (itemActionParam < PLAYER_AP_NONE) {
+        } else if (itemActionParam <= PLAYER_AP_MINUS1) {
             if (CURRENT_DAY == 3) {
                 this->actor.textId = 0x29DF;
             } else {

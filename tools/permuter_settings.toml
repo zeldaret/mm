@@ -1,3 +1,4 @@
+compiler_type = "ido"
 [preserve_macros]
 "g[DS]P.*" = "void"
 "gs[DS]P.*" = "void"
@@ -17,7 +18,10 @@ CLAMP = "int"
 CLOCK_TIME = "int"
 CURRENT_DAY = "int"
 CHECK_NEWF = "int"
+BINANG_SUB = "int"
+BINANG_ADD = "int"
 NULL = "int"
+GET_PLAYER = "int"
 
 [decompme.compilers]
 "tools/ido_recomp/linux/7.1/cc" = "ido7.1"
