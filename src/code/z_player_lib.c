@@ -384,7 +384,7 @@ void func_8012301C(Actor* thisx, PlayState* play2) {
     this->unk_AE7++;
 
     if (this->unk_AE7 == 2) {
-        s16 objectId = gPlayerFormObjectIndices[((void)0, gSaveContext.save.playerForm)];
+        s16 objectId = gPlayerFormObjectIndices[GET_PLAYER_FORM];
 
         gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = objectId;
         func_8012F73C(&play->objectCtx, this->actor.objBankIndex, objectId);
@@ -394,7 +394,7 @@ void func_8012301C(Actor* thisx, PlayState* play2) {
 
         if (Object_IsLoaded(&play->objectCtx, objBankIndex)) {
             this->actor.objBankIndex = objBankIndex;
-            this->actor.shape.rot.z = gSaveContext.save.playerForm + 1;
+            this->actor.shape.rot.z = GET_PLAYER_FORM + 1;
             this->actor.init = PlayerCall_Init;
             this->actor.update = PlayerCall_Update;
             this->actor.draw = PlayerCall_Draw;
@@ -581,20 +581,14 @@ ItemID func_8012364C(PlayState* play, Player* player, s32 arg2) {
     }
 
     if (arg2 == 1) {
-        return (gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)
-               : (gSaveContext.unk_3F22 == 0x10)                              ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)
-                                                                              : ITEM_NONE;
+        return C_BTN_ITEM(EQUIP_SLOT_C_LEFT);
     }
 
     if (arg2 == 2) {
-        return (gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)
-               : (gSaveContext.unk_3F22 == 0x10)                              ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)
-                                                                              : ITEM_NONE;
+        return C_BTN_ITEM(EQUIP_SLOT_C_DOWN);
     }
 
-    return (gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)
-           : (gSaveContext.unk_3F22 == 0x10)                               ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)
-                                                                           : ITEM_NONE;
+    return C_BTN_ITEM(EQUIP_SLOT_C_RIGHT);
 }
 
 u16 sCItemButtons[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
@@ -1356,7 +1350,7 @@ s32 Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 y
 }
 
 u8 Player_GetStrength(void) {
-    return sPlayerStrengths[(void)0, gSaveContext.save.playerForm];
+    return sPlayerStrengths[GET_PLAYER_FORM];
 }
 
 u8 Player_GetMask(PlayState* play) {
@@ -1651,8 +1645,9 @@ PlayerFaceIndices sPlayerFaces[] = {
     { PLAYER_EYES_OPEN, PLAYER_MOUTH_HAPPY },        // PLAYER_FACE_15
 };
 
-void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, PlayerTransformation playerForm, s32 boots,
-                     s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor) {
+void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod,
+                     PlayerTransformation playerForm, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw,
+                     PostLimbDrawFlex postLimbDraw, Actor* actor) {
     s32 eyeIndex = (jointTable[22].x & 0xF) - 1;
     s32 mouthIndex = ((jointTable[22].x >> 4) & 0xF) - 1;
     Gfx* gfx;

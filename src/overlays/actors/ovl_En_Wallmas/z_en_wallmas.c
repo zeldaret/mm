@@ -480,7 +480,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
             this->actor.world.pos.y += 10.0f;
         }
 
-        player->actor.world.pos.y = this->actor.world.pos.y - sYOffsetPerForm[((void)0, gSaveContext.save.playerForm)];
+        player->actor.world.pos.y = this->actor.world.pos.y - sYOffsetPerForm[GET_PLAYER_FORM];
         if (this->timer == -30) {
             func_800B8E58(player, player->ageProperties->voiceSfxOffset + NA_SE_VO_LI_TAKEN_AWAY);
         }
@@ -491,8 +491,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
 
         this->timer += 2;
     } else {
-        Math_StepToF(&this->actor.world.pos.y,
-                     sYOffsetPerForm[((void)0, gSaveContext.save.playerForm)] + player->actor.world.pos.y, 5.0f);
+        Math_StepToF(&this->actor.world.pos.y, sYOffsetPerForm[GET_PLAYER_FORM] + player->actor.world.pos.y, 5.0f);
     }
 
     Math_StepToF(&this->actor.world.pos.x, player->actor.world.pos.x, 3.0f);

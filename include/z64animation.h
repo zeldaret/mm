@@ -9,9 +9,10 @@
 struct PlayState;
 struct Actor;
 struct SkelAnime;
+struct PlayerAnimationFrame;
 
 #define LINK_ANIMETION_OFFSET(addr, offset) \
-    (SEGMENT_ROM_START(link_animetion) + ((u32)addr & 0xFFFFFF) + ((u32)offset))
+    (SEGMENT_ROM_START(link_animetion) + ((uintptr_t)addr & 0xFFFFFF) + ((uintptr_t)offset))
 #define LIMB_DONE 0xFF
 #define ANIMATION_ENTRY_MAX 50
 
@@ -168,7 +169,7 @@ typedef struct AnimationContext {
 
 typedef struct {
     /* 0x0 */ AnimationHeaderCommon common;
-    /* 0x4 */ u32 segment;
+    /* 0x4 */ struct PlayerAnimationFrame* segment;
 } LinkAnimationHeader; // size = 0x8
 
 typedef struct SkelAnime {

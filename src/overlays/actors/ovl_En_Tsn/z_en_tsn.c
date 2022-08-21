@@ -311,51 +311,40 @@ void func_80AE04C4(EnTsn* this, PlayState* play) {
 }
 
 void func_80AE04FC(EnTsn* this, PlayState* play) {
-    s32 sp24;
+    PlayerActionParam itemActionParam;
     Player* player = GET_PLAYER(play);
 
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        sp24 = func_80123810(play);
-        if (sp24 != 0) {
+        itemActionParam = func_80123810(play);
+
+        if (itemActionParam != PLAYER_AP_NONE) {
             gSaveContext.save.weekEventReg[26] |= 2;
         }
 
-        if (sp24 > 0) {
+        if (itemActionParam > PLAYER_AP_NONE) {
             func_801477B4(play);
             this->actionFunc = func_80AE0704;
-            if (sp24 == 19) {
+            if (itemActionParam == PLAYER_AP_PICTO_BOX) {
                 if (CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
                     if (Snap_CheckFlag(PICTOGRAPH_PIRATE_GOOD)) {
                         player->actor.textId = 0x107B;
-                        return;
-                    }
-
-                    if (Snap_CheckFlag(PICTOGRAPH_PIRATE_TOO_FAR)) {
+                    } else if (Snap_CheckFlag(PICTOGRAPH_PIRATE_TOO_FAR)) {
                         player->actor.textId = 0x10A9;
-                        return;
+                    } else {
+                        player->actor.textId = 0x1078;
+                        this->unk_220 |= 8;
                     }
-
+                } else {
                     player->actor.textId = 0x1078;
                     this->unk_220 |= 8;
-                    return;
                 }
-
+            } else if (itemActionParam == PLAYER_AP_HOOKSHOT) {
+                player->actor.textId = 0x1075;
+            } else {
                 player->actor.textId = 0x1078;
                 this->unk_220 |= 8;
-                return;
             }
-
-            if (sp24 == 13) {
-                player->actor.textId = 0x1075;
-                return;
-            }
-
-            player->actor.textId = 0x1078;
-            this->unk_220 |= 8;
-            return;
-        }
-
-        if (sp24 < 0) {
+        } else if (itemActionParam <= PLAYER_AP_MINUS1) {
             func_80151938(play, 0x1078);
             Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_001198, -10.0f);
             this->actionFunc = func_80AE0704;

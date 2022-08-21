@@ -334,17 +334,18 @@ void func_80BBB574(EnZos* this, PlayState* play) {
 }
 
 void func_80BBB718(EnZos* this, PlayState* play) {
-    s32 sp24;
+    PlayerActionParam itemActionParam;
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
 
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        sp24 = func_80123810(play);
-        if (sp24 > 0) {
+        itemActionParam = func_80123810(play);
+
+        if (itemActionParam > PLAYER_AP_NONE) {
             func_801477B4(play);
 
-            if (sp24 == 25) {
+            if (itemActionParam == PLAYER_AP_BOTTLE_ZORA_EGG) {
                 player->actor.textId = 0x1232;
                 func_80BBAE84(this, 5, ANIMMODE_LOOP);
                 this->unk_2B6 |= 8;
@@ -358,7 +359,7 @@ void func_80BBB718(EnZos* this, PlayState* play) {
                 this->unk_2B6 |= 4;
             }
             this->actionFunc = func_80BBB8AC;
-        } else if (sp24 < 0) {
+        } else if (itemActionParam <= PLAYER_AP_MINUS1) {
             if (gSaveContext.save.weekEventReg[39] & 8) {
                 func_80151938(play, 0x1241);
             } else {

@@ -194,7 +194,7 @@ s32 EnPst_HandleLetterDay2(EnPst* this) {
 }
 
 s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
-    s32 itemActionParam = 0;
+    PlayerActionParam itemActionParam = PLAYER_AP_NONE;
     s32 scriptBranch = 0;
     EnPst* this = THIS;
 

@@ -236,7 +236,7 @@ typedef enum {
 s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
     EnBjt* this = THIS;
-    s32 itemAP;
+    PlayerActionParam itemAP;
     s32 scriptBranch = 0;
 
     switch (this->behaviour) {

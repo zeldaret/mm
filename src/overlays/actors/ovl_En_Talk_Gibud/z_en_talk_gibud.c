@@ -723,7 +723,7 @@ s32 EnTalkGibud_PresentedItemMatchesRequest(EnTalkGibud* this, PlayState* play, 
 
 void EnTalkGibud_CheckPresentedItem(EnTalkGibud* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 itemActionParam;
+    PlayerActionParam itemActionParam;
 
     if (this->itemActionParam == PLAYER_AP_NONE) {
         itemActionParam = func_80123810(play);

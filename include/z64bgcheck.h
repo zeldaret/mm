@@ -221,14 +221,14 @@ typedef struct {
 } DynaCollisionContext; // size = 0x1418
 
 typedef struct {
-    /* 0x00 */ CollisionHeader* colHeader; // scene's static collision
-    /* 0x04 */ Vec3f minBounds;            // minimum coordinates of collision bounding box
-    /* 0x10 */ Vec3f maxBounds;            // maximum coordinates of collision bounding box
-    /* 0x1C */ Vec3i subdivAmount;         // x, y, z subdivisions of the scene's static collision
-    /* 0x28 */ Vec3f subdivLength;         // x, y, z subdivision worldspace lengths
-    /* 0x34 */ Vec3f subdivLengthInv;      // inverse of subdivision length
-    /* 0x40 */ StaticLookup* lookupTbl;    // 3d array of length subdivAmount
-    /* 0x44 */ SSNodeList polyNodes;
+    /* 0x0000 */ CollisionHeader* colHeader; // scene's static collision
+    /* 0x0004 */ Vec3f minBounds;            // minimum coordinates of collision bounding box
+    /* 0x0010 */ Vec3f maxBounds;            // maximum coordinates of collision bounding box
+    /* 0x001C */ Vec3i subdivAmount;         // x, y, z subdivisions of the scene's static collision
+    /* 0x0028 */ Vec3f subdivLength;         // x, y, z subdivision worldspace lengths
+    /* 0x0034 */ Vec3f subdivLengthInv;      // inverse of subdivision length
+    /* 0x0040 */ StaticLookup* lookupTbl;    // 3d array of length subdivAmount
+    /* 0x0044 */ SSNodeList polyNodes;
     /* 0x0050 */ DynaCollisionContext dyna;
     /* 0x1468 */ u32 memSize; // Size of all allocated memory plus CollisionContext
     /* 0x146C */ u32 flags;   // bit 0 reverses conveyor direction (i.e. water flow in Great Bay Temple)

@@ -202,7 +202,7 @@ typedef struct SaveContext {
     /* 0x3DB8 */ u16 entranceSound;                     // "player_wipe_door_SE"
     /* 0x3DBA */ u8 unk_3DBA;                           // "player_wipe_item"
     /* 0x3DBB */ u8 unk_3DBB;                           // "next_walk"
-    /* 0x3DBC */ u16 dogParams;                         // "dog_flag"
+    /* 0x3DBC */ s16 dogParams;                         // "dog_flag"
     /* 0x3DBE */ u8 textTriggerFlags;                   // "guide_status"
     /* 0x3DBF */ u8 showTitleCard;                      // "name_display"
     /* 0x3DC0 */ s16 unk_3DC0;                          // "shield_magic_timer"
@@ -226,7 +226,7 @@ typedef struct SaveContext {
     /* 0x3F22 */ u16 unk_3F22;                          // "prev_alpha_type"
     /* 0x3F24 */ u16 unk_3F24;                          // "alpha_count"
     /* 0x3F26 */ u16 unk_3F26;                          // "last_time_type"
-    /* 0x3F28 */ s16 unk_3F28;                          // "magic_flag"
+    /* 0x3F28 */ s16 unk_3F28;                          // "magic_flag" // magicState
     /* 0x3F2A */ s16 unk_3F2A;                          // "recovery_magic_flag"
     /* 0x3F2C */ s16 unk_3F2C;                          // "keep_magic_flag"
     /* 0x3F2E */ s16 unk_3F2E;                          // "magic_now_max"
@@ -281,6 +281,8 @@ typedef enum SunsSongState {
 
 #define CURRENT_DAY (((void)0, gSaveContext.save.day) % 5)
 
+#define GET_PLAYER_FORM ((void)0, gSaveContext.save.playerForm)
+
 #define SLOT(item) gItemSlots[item]
 #define AMMO(item) gSaveContext.save.inventory.ammo[SLOT(item)]
 #define INV_CONTENT(item) gSaveContext.save.inventory.items[SLOT(item)]
@@ -321,6 +323,10 @@ typedef enum SunsSongState {
 #define GET_CUR_FORM_BTN_ITEM(btn) ((u8)((btn) == EQUIP_SLOT_B ? BUTTON_ITEM_EQUIP(CUR_FORM, btn) : BUTTON_ITEM_EQUIP(0, btn)))
 #define GET_CUR_FORM_BTN_SLOT(btn) ((u8)((btn) == EQUIP_SLOT_B ? C_SLOT_EQUIP(CUR_FORM, btn) : C_SLOT_EQUIP(0, btn)))
 
+#define C_BTN_ITEM(btn)                                 \
+    ((gSaveContext.buttonStatus[(btn)] != BTN_DISABLED) \
+         ? BUTTON_ITEM_EQUIP(0, (btn))                  \
+         : ((gSaveContext.unk_3F22 == 0x10) ? BUTTON_ITEM_EQUIP(0, (btn)) : ITEM_NONE))
 
 #define SET_CUR_FORM_BTN_ITEM(btn, item)             \
     if ((btn) == EQUIP_SLOT_B) {                     \

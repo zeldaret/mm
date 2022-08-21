@@ -948,7 +948,7 @@ void func_80B9854C(EnZot* this, PlayState* play) {
 }
 
 void func_80B985EC(EnZot* this, PlayState* play) {
-    s32 itemActionParam;
+    PlayerActionParam itemActionParam;
     Player* player = GET_PLAYER(play);
 
     func_80B98348(this, play);

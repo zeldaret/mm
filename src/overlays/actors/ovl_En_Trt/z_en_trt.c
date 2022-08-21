@@ -1359,7 +1359,7 @@ void EnTrt_OpenEyesThenSetToBlink(EnTrt* this) {
 void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
     u8 talkState = talkState = Message_GetState(&play->msgCtx);
     Player* player = GET_PLAYER(play);
-    s32 itemGiven;
+    PlayerActionParam itemGiven;
 
     if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
