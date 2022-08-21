@@ -94,7 +94,7 @@ void EnStoneheishi_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnStoneheishi_SetAnimation(EnStoneheishi* this, s32 animIndex) {
+void EnStoneheishi_ChangeAnim(EnStoneheishi* this, s32 animIndex) {
     f32 startFrame = 0.0f;
 
     this->animIndex = animIndex;
@@ -133,11 +133,11 @@ void EnStoneheishi_HeadTowardsLink(EnStoneheishi* this) {
 void func_80BC94B0(EnStoneheishi* this) {
     this->textIndex = 0;
     if (gSaveContext.save.weekEventReg[0x29] & 0x40) { // After drinking bottle
-        EnStoneheishi_SetAnimation(this, EN_STONE_HEISHI_CHEER_WITH_SPEAR);
+        EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_CHEER_WITH_SPEAR);
         this->textIndex = 8;
         this->actor.flags &= ~ACTOR_FLAG_80;
     } else { // Initial configuration
-        EnStoneheishi_SetAnimation(this, EN_STONE_HEISHI_WAVE);
+        EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_WAVE);
         if (gSaveContext.save.weekEventReg[0x29] & 0x80) {
             this->textIndex = 2;
         }
@@ -186,14 +186,14 @@ void func_80BC9680(EnStoneheishi* this, PlayState* play) {
     if (this->textIndex == 0 || this->textIndex == 2) {
         if (this->animIndex != EN_STONE_HEISHI_SIT_AND_REACH) {
             if (fabsf(this->headRotY - this->targetHeadPosY) < 50.0f) {
-                EnStoneheishi_SetAnimation(this, EN_STONE_HEISHI_SIT_AND_REACH);
+                EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_SIT_AND_REACH);
             }
             return;
         }
     } else if (this->textIndex == 3) {
         if (this->animIndex != EN_STONE_HEISHI_WAVE) {
             if ((this->timer == 0) && (fabsf((f32)(this->headRotY - this->targetHeadPosY)) < 50.0f)) {
-                EnStoneheishi_SetAnimation(this, EN_STONE_HEISHI_WAVE);
+                EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_WAVE);
             }
             return;
         } else if (!this->textIdSet && (this->endFrame <= currentFrame)) {
@@ -313,7 +313,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
                 }
 
                 Player_SetModels(player, 3);
-                EnStoneheishi_SetAnimation(this, EN_STONE_HEISHI_DRINK_1);
+                EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_DRINK_1);
                 this->timer = 30;
                 this->DrinkBottleState++;
             }
@@ -335,7 +335,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
             if (this->endFrame <= currentFrame) {
                 func_801A3098(0x922);
                 this->bottleDisplay = EN_STONE_BOTTLE_NONE;
-                EnStoneheishi_SetAnimation(this, EN_STONE_HEISHI_STAND_UP);
+                EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_STAND_UP);
                 this->DrinkBottleState++;
             }
             break;
@@ -345,7 +345,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
                 this->textIndex = 5;
                 func_80151938(play, sEnStoneHeishiTextIds[this->textIndex]);
                 player->actor.textId = sEnStoneHeishiTextIds[this->textIndex];
-                EnStoneheishi_SetAnimation(this, EN_STONE_HEISHI_STAND_HAND_ON_HIP);
+                EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_STAND_HAND_ON_HIP);
                 this->action = EN_STONE_ACTION_2;
                 this->actionFunc = func_80BC9680;
             }
