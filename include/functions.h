@@ -1972,10 +1972,6 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist);
 void func_80128B74(PlayState* play, Player* player, s32 limbIndex);
 void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor);
 
-void PreNMI_Main(GameState* thisx);
-void PreNMI_Destroy(GameState* thisx);
-void PreNMI_Init(GameState* thisx);
-
 f32 Quake_Random(void);
 void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 verticalPertubation, f32 horizontalPertubation);
 s16 Quake_Callback1(QuakeRequest* req, ShakeInfo* shake);

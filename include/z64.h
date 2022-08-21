@@ -880,12 +880,6 @@ typedef struct GameState {
     /* 0xA3 */ u8 unk_A3;
 } GameState; // size = 0xA4
 
-typedef struct PreNMIState {
-    /* 0x00 */ GameState state;
-    /* 0xA4 */ u32 timer;
-    /* 0xA8 */ UNK_TYPE4 unkA8;
-} PreNMIState; // size = 0xAC
-
 typedef struct {
     /* 0x00 */ u32 resetting;
     /* 0x04 */ u32 resetCount;

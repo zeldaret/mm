@@ -1,4 +1,4 @@
-#include "global.h"
+#include "z_prenmi.h"
 
 void PreNMI_Stop(PreNMIState* this) {
     STOP_GAMESTATE(&this->state);
