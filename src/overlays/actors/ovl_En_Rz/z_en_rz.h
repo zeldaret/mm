@@ -27,11 +27,11 @@ typedef struct EnRz {
     /* 0x412 */ s16 unk_412;
     /* 0x414 */ Vec3f shadowPos;
     /* 0x420 */ u16 unk_420;
-    /* 0x422 */ s16 currentAnimIndex;
+    /* 0x422 */ s16 animIndex;
     /* 0x424 */ s16 timer;
     /* 0x426 */ u16 csAction;
     /* 0x428 */ u16 unk_428;
-    /* 0x42A */ s16 cutscenes[3];
+    /* 0x42A */ s16 cutscenes[2];
     /* 0x430 */ EnRzActionFunc actionFunc;
 } EnRz; // size = 0x434
 
