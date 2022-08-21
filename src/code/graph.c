@@ -65,27 +65,28 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
 GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
     GameStateFunc gameStateInit = GameState_GetNextStateInit(gameState);
 
-    if (gameStateInit == (GameStateFunc)Setup_Init) {
+    if (gameStateInit == Setup_Init) {
         return &gGameStateOverlayTable[0];
     }
-    if (gameStateInit == (GameStateFunc)MapSelect_Init) {
+    if (gameStateInit == MapSelect_Init) {
         return &gGameStateOverlayTable[1];
     }
-    if (gameStateInit == (GameStateFunc)ConsoleLogo_Init) {
+    if (gameStateInit == ConsoleLogo_Init) {
         return &gGameStateOverlayTable[2];
     }
-    if (gameStateInit == (GameStateFunc)Play_Init) {
+    if (gameStateInit == Play_Init) {
         return &gGameStateOverlayTable[3];
     }
-    if (gameStateInit == (GameStateFunc)TitleSetup_Init) {
+    if (gameStateInit == TitleSetup_Init) {
         return &gGameStateOverlayTable[4];
     }
-    if (gameStateInit == (GameStateFunc)FileSelect_Init) {
+    if (gameStateInit == FileSelect_Init) {
         return &gGameStateOverlayTable[5];
     }
-    if (gameStateInit == (GameStateFunc)Daytelop_Init) {
+    if (gameStateInit == Daytelop_Init) {
         return &gGameStateOverlayTable[6];
     }
+
     return NULL;
 }
 

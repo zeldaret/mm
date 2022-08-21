@@ -39,10 +39,6 @@
         (state)->nextGameStateSize = nextSize;       \
     } while (0)
 
-#define SET_NEXT_GAMESTATE(curState, newInit, newStruct)    \
-    (curState)->nextGameStateInit = (GameStateFunc)newInit; \
-    (curState)->nextGameStateSize = sizeof(newStruct)
-
 #define GET_PLAYER(play) ((Player*)(play)->actorCtx.actorLists[ACTORCAT_PLAYER].first)
 
 #define GET_FIRST_ENEMY(play) ((Actor*)(play)->actorCtx.actorLists[ACTORCAT_ENEMY].first)

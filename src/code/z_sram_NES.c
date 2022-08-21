@@ -1183,8 +1183,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
                         }
                     }
                     fileSelect->maskCount[sp76] = phi_a0;
-                    fileSelect->heartPieceCount[sp76] =
-                        ((gSaveContext.save.inventory.questItems & 0xF0000000) >> 0x1C);
+                    fileSelect->heartPieceCount[sp76] = ((gSaveContext.save.inventory.questItems & 0xF0000000) >> 0x1C);
                 }
 
                 if (sp6E == 1) {
@@ -1394,15 +1393,13 @@ void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
             }
 
             fileSelect->unk_2447A[fileSelect->fileNum] = maskCount;
-            fileSelect->unk_2447E[fileSelect->fileNum] =
-                (gSaveContext.save.inventory.questItems & 0xF0000000) >> 0x1C;
+            fileSelect->unk_2447E[fileSelect->fileNum] = (gSaveContext.save.inventory.questItems & 0xF0000000) >> 0x1C;
         }
 
         // clear buffer
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         // read to buffer
-        func_80185968(sramCtx->saveBuf, D_801C67C8[fileSelect->unk_2448E * 2],
-                      D_801C67F0[fileSelect->unk_2448E * 2]);
+        func_80185968(sramCtx->saveBuf, D_801C67C8[fileSelect->unk_2448E * 2], D_801C67F0[fileSelect->unk_2448E * 2]);
 
         if (1) {}
         func_80185968(&sramCtx->saveBuf[0x2000], D_801C67C8[fileSelect->unk_2448E * 2 + 1],
@@ -1461,8 +1458,7 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         }
 
         for (phi_v0 = 0; phi_v0 < ARRAY_COUNT(gSaveContext.save.playerData.playerName); phi_v0++) {
-            gSaveContext.save.playerData.playerName[phi_v0] =
-                fileSelect->unk_24414[fileSelect->unk_24480][phi_v0];
+            gSaveContext.save.playerData.playerName[phi_v0] = fileSelect->unk_24414[fileSelect->unk_24480][phi_v0];
         }
 
         gSaveContext.save.playerData.newf[0] = 'Z';

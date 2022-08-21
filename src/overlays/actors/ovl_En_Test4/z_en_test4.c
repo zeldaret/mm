@@ -315,12 +315,8 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
             if (gSaveContext.save.time < CLOCK_TIME(6, 1)) {
                 gSaveContext.save.time = CLOCK_TIME(6, 0);
                 gSaveContext.gameMode = 0;
-                {
-                    GameState* state = &play->state;
-                    state->running = false;
-                }
-                SET_NEXT_GAMESTATE(&play->state, Daytelop_Init, DaytelopState);
-                if (this && this && this) {}
+                STOP_GAMESTATE(&play->state);
+                NEXT_GAMESTATE(&play->state, Daytelop_Init, sizeof(DaytelopState));
                 this->unk_144 = 1;
                 gSaveContext.save.time = CLOCK_TIME(6, 0);
                 Actor_MarkForDeath(&this->actor);
