@@ -1227,7 +1227,7 @@
         <Texture Name="gameplay_keep_Tex_05CEF0" OutName="tex_05CEF0" Format="rgba16" Width="32" Height="32" Offset="0x5CEF0" />
         <Texture Name="gameplay_keep_Tex_05D6F0" OutName="tex_05D6F0" Format="rgba16" Width="32" Height="32" Offset="0x5D6F0" />
         <Texture Name="gameplay_keep_Tex_05DEF0" OutName="tex_05DEF0" Format="rgba16" Width="32" Height="32" Offset="0x5DEF0" />
-        <Texture Name="gEffHeartTex" OutName="eff_heart" Format="rgba16" Width="32" Height="32" Offset="0x5E6F0" />
+        <Texture Name="gDropRecoveryHeartTex" OutName="drop_recovery_heart" Format="rgba16" Width="32" Height="32" Offset="0x5E6F0" />
         <Texture Name="gameplay_keep_Tex_05EEF0" OutName="tex_05EEF0" Format="rgba16" Width="32" Height="32" Offset="0x5EEF0" />
         <DList Name="gameplay_keep_DL_05F6F0" Offset="0x5F6F0" />
         <Texture Name="gameplay_keep_Tex_05F7C0" OutName="tex_05F7C0" Format="rgba16" Width="32" Height="32" Offset="0x5F7C0" />
