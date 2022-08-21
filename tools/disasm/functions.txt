@@ -4194,7 +4194,7 @@
     0x80814FE8:("Daytelop_Draw",),
     0x808156B4:("Daytelop_Main",),
     0x8081574C:("Daytelop_Destroy",),
-    0x80815770:("Daytelop_nop80815770",),
+    0x80815770:("Daytelop_Noop",),
     0x8081577C:("Daytelop_LoadGraphics",),
     0x80815820:("Daytelop_Init",),
     0x808160A0:("func_808160A0",),

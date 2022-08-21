@@ -350,7 +350,7 @@ void Cutscene_Command_Misc(PlayState* play2, CutsceneContext* csCtx, CsCmdBase* 
                 GameState* gameState = &play->state;
                 gameState->running = false;
             }
-            SET_NEXT_GAMESTATE(&play->state, Daytelop_Init, DaytelopContext);
+            SET_NEXT_GAMESTATE(&play->state, Daytelop_Init, DaytelopState);
 
             Sram_SaveSpecialNewDay(play);
             break;
