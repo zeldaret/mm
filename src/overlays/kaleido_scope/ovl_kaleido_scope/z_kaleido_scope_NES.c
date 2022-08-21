@@ -429,7 +429,7 @@ Gfx* KaleidoScope_DrawPageSections(Gfx* gfx, Vtx* vertices, void** textures) {
 }
 
 void func_801091F0(PlayState*);
-void func_808160A0(PlayState*);
+void KaleidoScope_DrawQuestStatus(PlayState*);
 void func_8081D6DC(PlayState*);
 void KaleidoScope_DrawWorldMap(PlayState*);
 void KaleidoScope_DrawMaskSelect(PlayState*);
@@ -570,7 +570,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->questPageVtx, &D_8082B7B4[0]);
 
-            func_808160A0(play);
+            KaleidoScope_DrawQuestStatus(play);
         }
 
         if ((pauseCtx->pageIndex != PAUSE_MASK) && (pauseCtx->pageIndex != PAUSE_MAP)) {
@@ -682,7 +682,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
                 POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->questPageVtx, &D_8082B7B4[0]);
 
-                func_808160A0(play);
+                KaleidoScope_DrawQuestStatus(play);
                 break;
 
             case PAUSE_MASK:

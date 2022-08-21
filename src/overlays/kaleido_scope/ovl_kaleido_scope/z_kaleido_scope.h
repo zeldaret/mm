@@ -46,6 +46,10 @@ void func_80821A04(PlayState* play);
 // Map
 void func_8081FB1C(PlayState* play);
 
+// Collect
+void KaleidoScope_DrawQuestStatus(PlayState* play);
+void KaleidoScope_UpdateQuestStatus(PlayState* play);
+
 // Item
 void KaleidoScope_SetCursorVtx(PauseContext* pauseCtx, u16 index, Vtx* vtx);
 void KaleidoScope_DrawItemSelect(PlayState* play);
