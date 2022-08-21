@@ -20,7 +20,7 @@ GameStateOverlay gGameStateOverlayTable[] = {
     GAMESTATE_OVERLAY_INTERNAL(Play_Init, Play_Destroy, sizeof(PlayState)),
     GAMESTATE_OVERLAY(opening, TitleSetup_Init, TitleSetup_Destroy, sizeof(TitleSetupState)),
     GAMESTATE_OVERLAY(file_choose, FileSelect_Init, FileSelect_Destroy, sizeof(FileSelectState)),
-    GAMESTATE_OVERLAY(daytelop, Daytelop_Init, Daytelop_Destroy, sizeof(DaytelopState)),
+    GAMESTATE_OVERLAY(daytelop, DayTelop_Init, DayTelop_Destroy, sizeof(DayTelopState)),
 };
 
 s32 graphNumGameStates = ARRAY_COUNT(gGameStateOverlayTable);
