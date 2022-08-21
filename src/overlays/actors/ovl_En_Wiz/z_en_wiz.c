@@ -632,7 +632,63 @@ void func_80A468CC(EnWiz* this, PlayState* play) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A46990.s")
+void func_80A46990(EnWiz* this, PlayState* play) {
+    Camera* camera;
+    s32 i;
+
+    Math_SmoothStepToS(&this->unk_3C2, 0xFF, 1, 5, 0);
+    camera = Play_GetCamera(play, this->unk_74E);
+    Math_Vec3f_Copy(&camera->at, &this->actor.focus.pos);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_RUN - SFX_FLAG);
+    if (this->unk_420[this->unk_744] != NULL) {
+        f32 diffX = this->actor.world.pos.x - this->unk_420[this->unk_744]->world.pos.x;
+        f32 diffZ = this->actor.world.pos.z - this->unk_420[this->unk_744]->world.pos.z;
+        s32 pad;
+
+        if (sqrtf(SQ(diffX) + SQ(diffZ)) < 30.0f) {
+            if (this->unk_3BC == 0) {
+                this->unk_744++;
+                if (this->unk_744 >= this->unk_740) {
+                    this->unk_3BC = 1;
+                    this->unk_744 = 0;
+                }
+            } else {
+                f32 diffX = this->actor.world.pos.x - this->unk_81C[this->unk_740].x;
+                f32 diffZ = this->actor.world.pos.z - this->unk_81C[this->unk_740].z;
+                s32 pad;
+                s32 i;
+
+                this->actor.flags |= ACTOR_FLAG_8000000;
+                if (sqrtf(SQ(diffX) + SQ(diffZ)) < 20.0f) {
+                    for (i = 0; i < this->unk_740; i++) {
+                        Math_Vec3f_Copy(&this->unk_81C[i], &gZeroVec3f);
+                    }
+
+                    this->unk_744 = 0;
+                    this->unk_740 = 0;
+                    this->unk_3B6 = 2;
+                    this->unk_3B2 = 0;
+                    ActorCutscene_Stop(ActorCutscene_GetAdditionalCutscene(this->actor.cutscene));
+                    this->actor.flags &= ~ACTOR_FLAG_100000;
+                    func_80A47000(this);
+                    return;
+                }
+            }
+        }
+    }
+
+    Math_Vec3f_Copy(this->unk_81C, &this->actor.world.pos);
+    this->unk_894[0].y = this->actor.world.rot.y;
+    Math_ApproachF(&this->actor.world.pos.x, this->unk_420[this->unk_744]->world.pos.x, 0.3f, 30.0f);
+    Math_ApproachF(&this->actor.world.pos.y, this->unk_420[this->unk_744]->world.pos.y, 0.3f, 30.0f);
+    Math_ApproachF(&this->actor.world.pos.z, this->unk_420[this->unk_744]->world.pos.z, 0.3f, 30.0f);
+    for (i = this->unk_740; i > 0; i--) {
+        Math_Vec3f_Copy(&this->unk_81C[i], &this->unk_81C[i - 1]);
+        this->unk_894[i].y = this->unk_894[i - 1].y;
+    }
+
+    this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_420[this->unk_744]->world.pos);
+}
 
 void func_80A46C88(EnWiz* this) {
     EnWiz_ChangeAnim(this, 3, 0);
