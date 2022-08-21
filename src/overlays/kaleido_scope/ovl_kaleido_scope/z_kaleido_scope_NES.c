@@ -1,7 +1,7 @@
 /*
  * File: z_kaleido_scope_NES.c
  * Overlay: ovl_kaleido_scope
- * Description:
+ * Description: Pause Menu
  */
 
 #include "z_kaleido_scope.h"
@@ -19,6 +19,7 @@ extern UNK_TYPE D_0C000000;
 extern UNK_TYPE D_0C006C00;
 
 // bss
+extern u8 D_8082DA58[5];
 extern f32 D_8082DA60[4];
 extern f32 D_8082DA70[4];
 
@@ -93,9 +94,6 @@ u8 D_8082B924[] = {
 
 s16 D_8082B944 = 66;
 
-// bss
-extern u8 D_8082DA58[5];
-
 void func_80821900(s32 arg0, u32 arg1) {
     func_80178E3C(SEGMENT_ROM_START(map_name_static), arg1, arg0, 0x400);
 }
@@ -126,8 +124,6 @@ void KaleidoScope_MoveCursorToSpecialPos(PlayState* play, s16 cursorSpecialPos) 
     gSaveContext.unk_3F22 = 0;
     Interface_ChangeAlpha(50);
 }
-
-extern u8 D_801C6A98[5][5];
 
 void func_80821A04(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -269,7 +265,6 @@ Gfx* KaleidoScope_DrawPageSections(Gfx* gfx, Vtx* vertices, void** textures) {
 s16 D_8082B948[][3] = {
     { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 0 }, { 255, 255, 0 }, { 100, 150, 255 }, { 100, 255, 255 },
 };
-
 s16 D_8082B96C[][3] = {
     { 0, 0, 0 }, { 170, 170, 170 }, { 0, 0, 0 }, { 255, 160, 0 }, { 0, 0, 100 }, { 0, 150, 255 },
 };
@@ -283,8 +278,8 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
     OPEN_DISPS(gfxCtx);
 
-    if ((pauseCtx->state < 8) || (pauseCtx->state >= 0x13)) {
-        if (pauseCtx->state != 7) {
+    if (!((pauseCtx->state >= PAUSE_STATE_8) && (pauseCtx->state <= PAUSE_STATE_12))) {
+        if (pauseCtx->state != PAUSE_STATE_7) {
 
             stepR = ABS_ALT(D_8082B890 - D_8082B948[pauseCtx->cursorColorSet + D_8082B994][0]) / D_8082B990;
             stepG = ABS_ALT(D_8082B894 - D_8082B948[pauseCtx->cursorColorSet + D_8082B994][1]) / D_8082B990;
@@ -381,7 +376,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
             POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, &D_8082B778[0]);
 
             if (sInDungeonScene) {
-                func_8081D6DC(play);
+                KaleidoScope_DrawDungeonMap(play);
                 func_8012C8AC(gfxCtx);
                 gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
                 func_801091F0(play);
@@ -475,22 +470,22 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
                 POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, &D_8082B778[0]);
 
                 if (sInDungeonScene) {
-                    func_8081D6DC(play);
+                    KaleidoScope_DrawDungeonMap(play);
                     func_8012C8AC(gfxCtx);
 
                     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
                     func_801091F0(play);
                 } else {
-                    Matrix_RotateYF(gGameInfo->data[0x258] / 1000.0f, MTXMODE_NEW);
+                    Matrix_RotateYF(YREG(24) / 1000.0f, MTXMODE_NEW);
 
-                    if ((pauseCtx->state == 4) || (pauseCtx->state == 0x16) || (pauseCtx->state >= 0x19) ||
-                        ((pauseCtx->state == 7) && ((pauseCtx->unk_208 == 3) || (pauseCtx->unk_208 == 7)))) {
-                        Matrix_Translate(0.0f, (gGameInfo->data[0x259] - 0x1F40) / 100.0f,
-                                         gGameInfo->data[0x25A] / 100.0f, MTXMODE_APPLY);
+                    if ((pauseCtx->state == PAUSE_STATE_4) || (pauseCtx->state == PAUSE_STATE_16) ||
+                        (pauseCtx->state >= PAUSE_STATE_19) ||
+                        ((pauseCtx->state == PAUSE_STATE_7) &&
+                         ((pauseCtx->unk_208 == 3) || (pauseCtx->unk_208 == 7)))) {
+                        Matrix_Translate(0.0f, (YREG(25) - 0x1F40) / 100.0f, YREG(26) / 100.0f, MTXMODE_APPLY);
                     } else {
-                        Matrix_Translate(0.0f, gGameInfo->data[0x259] / 100.0f, gGameInfo->data[0x25A] / 100.0f,
-                                         MTXMODE_APPLY);
+                        Matrix_Translate(0.0f, YREG(25) / 100.0f, YREG(26) / 100.0f, MTXMODE_APPLY);
                     }
 
                     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
@@ -704,7 +699,7 @@ s16 func_80825A50(PlayState* play, Vtx* vtx, s16 arg2, s16 arg3) {
 
             vtx[k + 1].v.ob[0] = vtx[k + 3].v.ob[0] = vtx[k + 0].v.ob[0] + ptr2[i];
 
-            if ((pauseCtx->state < 8) || (pauseCtx->state >= 0x13)) {
+            if (!((pauseCtx->state >= PAUSE_STATE_8) && (pauseCtx->state <= PAUSE_STATE_12))) {
                 vtx[k + 0].v.ob[1] = vtx[k + 1].v.ob[1] = ptr3[i] + pauseCtx->offsetY;
             } else if (gameOverCtx->state == GAMEOVER_INACTIVE) {
                 vtx[k + 0].v.ob[1] = vtx[k + 1].v.ob[1] = ptr3[i] + pauseCtx->offsetY;
@@ -760,8 +755,9 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
 
     pauseCtx->offsetY = 0;
 
-    if ((pauseCtx->state == 4) || (pauseCtx->state == 0x16) || (pauseCtx->state >= 0x19) ||
-        ((pauseCtx->state == 7) && ((pauseCtx->unk_208 == 3) || (pauseCtx->unk_208 == 7)))) {
+    if ((pauseCtx->state == PAUSE_STATE_4) || (pauseCtx->state == PAUSE_STATE_16) ||
+        (pauseCtx->state >= PAUSE_STATE_19) ||
+        ((pauseCtx->state == PAUSE_STATE_7) && ((pauseCtx->unk_208 == 3) || (pauseCtx->unk_208 == 7)))) {
         pauseCtx->offsetY = 80;
     }
 
@@ -1074,7 +1070,8 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
 
     pauseCtx->unk_1A4 = GRAPH_ALLOC(gfxCtx, 0x1C0);
 
-    if ((pauseCtx->state == 7) || ((pauseCtx->state >= 8) && (pauseCtx->state < 0x13))) {
+    if ((pauseCtx->state == PAUSE_STATE_7) ||
+        ((pauseCtx->state >= PAUSE_STATE_8) && (pauseCtx->state <= PAUSE_STATE_12))) {
         pauseCtx->unk_1A0 = GRAPH_ALLOC(gfxCtx, 0x500);
         func_80825A50(play, pauseCtx->unk_1A0, 5, 5);
     }
@@ -1143,7 +1140,7 @@ void KaleidoScope_UpdateCursorSize(PlayState* play) {
                         pauseCtx->unk_288 = D_8082BCDC[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
                         pauseCtx->unk_28C = D_8082BD08[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
                     }
-                    if ((pauseCtx->state < PAUSE_STATE_15) || (pauseCtx->state >= PAUSE_STATE_1A)) {
+                    if (!((pauseCtx->state >= PAUSE_STATE_15) && (pauseCtx->state <= PAUSE_STATE_19))) {
                         pauseCtx->unk_294 = 10.0f;
                         pauseCtx->unk_290 = 10.0f;
                     } else {
@@ -2153,7 +2150,7 @@ void KaleidoScope_Update(PlayState* play) {
             break;
     }
 
-    if (((pauseCtx->state <= PAUSE_STATE_7) || (pauseCtx->state > PAUSE_STATE_12)) &&
+    if (!((pauseCtx->state >= PAUSE_STATE_8) && (pauseCtx->state <= PAUSE_STATE_12)) &&
         (pauseCtx->state != PAUSE_STATE_7)) {
         if (pauseCtx->stickRelX < -30) {
             if (D_8082BEB4 == -1) {
@@ -2212,10 +2209,10 @@ void KaleidoScope_Update(PlayState* play) {
         }
     }
     if ((SREG(94) == 3) && (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
-        ((pauseCtx->state < PAUSE_STATE_15) || (pauseCtx->state >= PAUSE_STATE_1A)) &&
+        !((pauseCtx->state >= PAUSE_STATE_15) && (pauseCtx->state <= PAUSE_STATE_19)) &&
         (((pauseCtx->state >= PAUSE_STATE_4) && (pauseCtx->state <= PAUSE_STATE_7)) ||
          ((pauseCtx->state >= PAUSE_STATE_A) && (pauseCtx->state <= PAUSE_STATE_1A)))) {
-        if ((pauseCtx->state <= PAUSE_STATE_7) || (pauseCtx->state > PAUSE_STATE_12)) {
+        if (!((pauseCtx->state >= PAUSE_STATE_8) && (pauseCtx->state <= PAUSE_STATE_12))) {
             switch (pauseCtx->pageIndex) {
                 case PAUSE_ITEM:
                     KaleidoScope_UpdateItemCursor(play);
@@ -2223,14 +2220,14 @@ void KaleidoScope_Update(PlayState* play) {
 
                 case PAUSE_MAP:
                     if (sInDungeonScene) {
-                        func_8081E118(play);
+                        KaleidoScope_UpdateDungeonCursor(play);
                     } else {
-                        func_8081FB1C(play);
+                        KaleidoScope_UpdateWorldMapCursor(play);
                     }
                     break;
 
                 case PAUSE_QUEST:
-                    KaleidoScope_UpdateQuestStatus(play);
+                    KaleidoScope_UpdateQuestCursor(play);
                     break;
 
                 case PAUSE_MASK:
@@ -2246,7 +2243,7 @@ void KaleidoScope_Update(PlayState* play) {
             func_80824738(play);
         }
     } else if (pauseCtx->state == PAUSE_STATE_17) {
-        func_8081FB1C(play);
+        KaleidoScope_UpdateWorldMapCursor(play);
         func_80824738(play);
     }
 

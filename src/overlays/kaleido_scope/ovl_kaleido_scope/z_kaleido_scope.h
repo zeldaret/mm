@@ -25,7 +25,9 @@ typedef enum {
     /* 0x05 */ PAUSE_STATE_5,
     /* 0x06 */ PAUSE_STATE_6,
     /* 0x07 */ PAUSE_STATE_7,
-    /* 0x0A */ PAUSE_STATE_A = 0xA,
+    /* 0x08 */ PAUSE_STATE_8,
+    /* 0x09 */ PAUSE_STATE_9,
+    /* 0x0A */ PAUSE_STATE_A,
     /* 0x0B */ PAUSE_STATE_B,
     /* 0x0C */ PAUSE_STATE_C,
     /* 0x0D */ PAUSE_STATE_D,
@@ -34,7 +36,9 @@ typedef enum {
     /* 0x10 */ PAUSE_STATE_10,
     /* 0x11 */ PAUSE_STATE_11,
     /* 0x12 */ PAUSE_STATE_12,
-    /* 0x15 */ PAUSE_STATE_15 = 0x15,
+    /* 0x13 */ PAUSE_STATE_13,
+    /* 0x14 */ PAUSE_STATE_14,
+    /* 0x15 */ PAUSE_STATE_15,
     /* 0x16 */ PAUSE_STATE_16,
     /* 0x17 */ PAUSE_STATE_17,
     /* 0x18 */ PAUSE_STATE_18,
@@ -74,14 +78,14 @@ void KaleidoScope_DrawQuadTextureRGBA32(GraphicsContext* gfxCtx, void* texture, 
 void func_80821A04(PlayState* play);
 
 // Map
-void func_8081D6DC(PlayState*);
-void func_8081E118(PlayState* play);
+void KaleidoScope_DrawDungeonMap(PlayState*);
+void KaleidoScope_UpdateDungeonCursor(PlayState* play);
 void KaleidoScope_DrawWorldMap(PlayState* play);
-void func_8081FB1C(PlayState* play);
+void KaleidoScope_UpdateWorldMapCursor(PlayState* play);
 
 // Collect
 void KaleidoScope_DrawQuestStatus(PlayState* play);
-void KaleidoScope_UpdateQuestStatus(PlayState* play);
+void KaleidoScope_UpdateQuestCursor(PlayState* play);
 
 // Item
 void KaleidoScope_SetCursorVtx(PauseContext* pauseCtx, u16 index, Vtx* vtx);

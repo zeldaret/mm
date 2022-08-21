@@ -17,7 +17,8 @@ void KaleidoScope_UpdatePrompt(PlayState* play) {
     s8 relStickX = input->rel.stick_x;
     s16 alphaStep;
 
-    if (((pauseCtx->state == 7) && (pauseCtx->unk_208 == 1)) || (pauseCtx->state == 0xE) || (pauseCtx->state == 0x11)) {
+    if (((pauseCtx->state == PAUSE_STATE_7) && (pauseCtx->unk_208 == 1)) || (pauseCtx->state == PAUSE_STATE_E) ||
+        (pauseCtx->state == PAUSE_STATE_11)) {
 
         // Move the prompt
         if ((pauseCtx->promptChoice == PAUSE_PROMPT_YES) && (relStickX >= 30)) {

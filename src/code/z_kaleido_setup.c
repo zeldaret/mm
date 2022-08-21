@@ -23,7 +23,7 @@ void func_800F4A10(PlayState* play) {
         pauseCtx->worldMapPoints[i] = 0;
     }
 
-    if (pauseCtx->state == 1) {
+    if (pauseCtx->state == PAUSE_STATE_1) {
         for (i = 0; i < 11; i++) {
             if ((gSaveContext.save.mapsVisited >> i) & 1) {
                 pauseCtx->worldMapPoints[i] = 1;
@@ -70,7 +70,7 @@ void KaleidoSetup_Update(PlayState* play) {
         if (msgCtx && msgCtx) {}
     }
 
-    if ((pauseCtx->state == 0) && (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
+    if ((pauseCtx->state == PAUSE_STATE_0) && (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
         (play->gameOverCtx.state == GAMEOVER_INACTIVE)) {
         if ((play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
             if ((gSaveContext.save.cutscene < 0xFFF0) && (gSaveContext.nextCutsceneIndex < 0xFFF0)) {
@@ -81,13 +81,13 @@ void KaleidoSetup_Update(PlayState* play) {
                                 if ((play->actorCtx.unk268 == 0) && CHECK_BTN_ALL(input->press.button, BTN_START)) {
                                     gSaveContext.unk_3F26 = gSaveContext.unk_3F22;
                                     pauseCtx->itemDescriptionOn = false;
-                                    pauseCtx->state = 1;
+                                    pauseCtx->state = PAUSE_STATE_1;
                                     func_800F4A10(play);
                                     pauseCtx->mode = pauseCtx->pageIndex * 2 + 1;
                                     func_801A3A7C(1);
                                 }
 
-                                if (pauseCtx->state == 1) {
+                                if (pauseCtx->state == PAUSE_STATE_1) {
                                     Game_SetFramerateDivisor(&play->state, 2);
                                     if (ShrinkWindow_GetLetterboxTarget() != 0) {
                                         ShrinkWindow_SetLetterboxTarget(0);
