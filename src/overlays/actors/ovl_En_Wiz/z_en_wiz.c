@@ -20,6 +20,7 @@ void EnWiz_Draw(Actor* thisx, PlayState* play);
 void func_80A46280(EnWiz* this, PlayState* play);
 void func_80A462F8(EnWiz* this, PlayState* play);
 void func_80A46414(EnWiz* this, PlayState* play);
+void func_80A4668C(EnWiz* this);
 void func_80A46764(EnWiz* this, PlayState* play);
 void func_80A468CC(EnWiz* this, PlayState* play);
 void func_80A46990(EnWiz* this, PlayState* play);
@@ -284,12 +285,6 @@ static AnimationHeader* D_80A48D34[] = {
 static u8 D_80A48D4C[] = {
     ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE,
 };
-
-static Vec3f D_80A48D54 = { 0.006f, 0.006f, 0.006f };
-
-static Color_RGBA8 D_80A48D60 = { 250, 250, 250, 255 };
-
-static Color_RGBA8 D_80A48D64 = { 180, 180, 180, 255 };
 
 void EnWiz_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -566,7 +561,60 @@ void func_80A462F8(EnWiz* this, PlayState* play) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A46414.s")
+void func_80A46414(EnWiz* this, PlayState* play) {
+    Vec3f sp3C = { 0.006f, 0.006f, 0.006f };
+    Player* player = GET_PLAYER(play);
+
+    func_80A456A0(this, play);
+    if (this->unk_3CB >= 2) {
+        SkelAnime_Update(&this->skelAnime);
+        if ((this->unk_3B6 == 0) && (this->unk_3CB >= 6) &&
+            ((this->actor.xzDistToPlayer < 200.0f) ||
+             ((player->unk_D57 != 0) &&
+              ((ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x7D0)) &&
+              (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, BINANG_ADD(player->actor.shape.rot.y, 0x8000))) <
+               0x7D0)))) {
+            func_80A47000(this);
+        } else {
+            Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0xA, 0xBB8, 0);
+
+            if (this->unk_3B6 == 0) {
+                Math_SmoothStepToS(&this->unk_3C4, this->unk_3C6, 0xA, 0xA, 0xA);
+                if (this->unk_3CA == 0) {
+                    this->unk_3B2 = 0x14;
+                    this->unk_3CA = 1;
+                }
+            } else {
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_VOICE - SFX_FLAG);
+            }
+
+            if (this->unk_3B2 == 0) {
+                Math_ApproachF(&this->unk_3D4, 0.015f, 0.05f, 0.01f);
+                Math_SmoothStepToS(&this->unk_3C2, 0xFF, 1, 5, 0);
+            }
+
+            if (this->unk_3D4 < 0.0138f) {
+            } else {
+                this->unk_3B0 = 7;
+                this->actor.flags &= ~ACTOR_FLAG_8000000;
+                this->unk_454.elements->info.bumper.dmgFlags = 0x01013A22;
+                Math_Vec3f_Copy(&this->unk_3F0, &sp3C);
+                this->unk_3C6 = 0;
+                if (this->unk_3CB == 6) {
+                    this->unk_3B2 = 0;
+                    this->unk_3B4 = 20;
+                    func_80A47000(this);
+                } else if (this->unk_3CB >= 7) {
+                    if (this->unk_3B6 == 1) {
+                        this->actionFunc = func_80A468CC;
+                    } else {
+                        func_80A4668C(this);
+                    }
+                }
+            }
+        }
+    }
+}
 
 void func_80A4668C(EnWiz* this) {
     EnWiz_ChangeAnim(this, 2, 0);
@@ -949,6 +997,10 @@ void func_80A476C8(EnWiz* this, PlayState* play) {
         }
     }
 }
+
+static Color_RGBA8 D_80A48D60 = { 250, 250, 250, 255 };
+
+static Color_RGBA8 D_80A48D64 = { 180, 180, 180, 255 };
 
 void func_80A477E8(EnWiz* this, PlayState* play) {
     s32 i;
