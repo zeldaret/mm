@@ -1220,8 +1220,8 @@ void SkelAnime_InitLink(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeade
         skelAnime->jointTable = ZeldaArena_Malloc(allocSize);
         skelAnime->morphTable = ZeldaArena_Malloc(allocSize);
     } else {
-        skelAnime->jointTable = (void*)ALIGN16((uintptr_t)jointTableBuffer);
-        skelAnime->morphTable = (void*)ALIGN16((uintptr_t)morphTableBuffer);
+        skelAnime->jointTable = (void*)ALIGN16(jointTableBuffer);
+        skelAnime->morphTable = (void*)ALIGN16(morphTableBuffer);
     }
 
     LinkAnimation_Change(play, skelAnime, animation, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f);
@@ -1448,7 +1448,7 @@ void LinkAnimation_BlendToJoint(PlayState* play, SkelAnime* skelAnime, LinkAnima
 
     AnimationContext_SetLoadFrame(play, animation1, (s32)frame1, skelAnime->limbCount, skelAnime->jointTable);
 
-    alignedBlendTable = (void*)ALIGN16((uintptr_t)blendTableBuffer);
+    alignedBlendTable = (void*)ALIGN16(blendTableBuffer);
 
     AnimationContext_SetLoadFrame(play, animation2, (s32)frame2, skelAnime->limbCount, alignedBlendTable);
     AnimationContext_SetInterp(play, skelAnime->limbCount, skelAnime->jointTable, alignedBlendTable, blendWeight);
@@ -1463,7 +1463,7 @@ void LinkAnimation_BlendToMorph(PlayState* play, SkelAnime* skelAnime, LinkAnima
 
     AnimationContext_SetLoadFrame(play, animation1, (s32)frame1, skelAnime->limbCount, skelAnime->morphTable);
 
-    alignedBlendTable = (void*)ALIGN16((uintptr_t)blendTableBuffer);
+    alignedBlendTable = (void*)ALIGN16(blendTableBuffer);
 
     AnimationContext_SetLoadFrame(play, animation2, (s32)frame2, skelAnime->limbCount, alignedBlendTable);
     AnimationContext_SetInterp(play, skelAnime->limbCount, skelAnime->morphTable, alignedBlendTable, blendWeight);

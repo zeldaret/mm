@@ -2238,7 +2238,7 @@ void AnimationContext_CopyTrue(PlayState* play, AnimationEntryData* data);
 void AnimationContext_CopyFalse(PlayState* play, AnimationEntryData* data);
 void AnimationContext_MoveActor(PlayState* play, AnimationEntryData* data);
 void AnimationContext_Update(PlayState* play, AnimationContext* animationCtx);
-void SkelAnime_InitLink(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, LinkAnimationHeader* animation, s32 flags, void* jointTableBufrer, void* morphTableBuffer, s32 limbBufCount);
+void SkelAnime_InitLink(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, LinkAnimationHeader* animation, s32 flags, void* jointTableBuffer, void* morphTableBuffer, s32 limbBufCount);
 void LinkAnimation_SetUpdateFunction(SkelAnime* skelAnime);
 s32 LinkAnimation_Update(PlayState* play, SkelAnime* skelAnime);
 s32 LinkAnimation_Morph(PlayState* play, SkelAnime* skelAnime);
