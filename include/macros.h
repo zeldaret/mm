@@ -31,12 +31,12 @@
         state->running = false;      \
     } while(0)
 
-#define NEXT_GAMESTATE(curState, newInit, newStructSize) \
-    do {                                                     \
-        GameState* state = curState;                         \
-                                                             \
-        (state)->nextGameStateInit = newInit;                \
-        (state)->nextGameStateSize = newStructSize;          \
+#define NEXT_GAMESTATE(curState, nextInit, nextSize) \
+    do {                                             \
+        GameState* state = curState;                 \
+                                                     \
+        (state)->nextGameStateInit = nextInit;       \
+        (state)->nextGameStateSize = nextSize;       \
     } while (0)
 
 #define SET_NEXT_GAMESTATE(curState, newInit, newStruct)    \
