@@ -23,7 +23,7 @@ void TitleSetup_SetupTitleScreen(TitleSetupState* this) {
     gSaveContext.save.day = 1;
 
     STOP_GAMESTATE(&this->state);
-    NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
+    SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
 
     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
 }

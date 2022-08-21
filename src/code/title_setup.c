@@ -51,7 +51,7 @@ void Setup_InitImpl(SetupState* this) {
     Setup_SetRegs();
 
     STOP_GAMESTATE(&this->state);
-    NEXT_GAMESTATE(&this->state, ConsoleLogo_Init, sizeof(ConsoleLogoState));
+    SET_NEXT_GAMESTATE(&this->state, ConsoleLogo_Init, sizeof(ConsoleLogoState));
 }
 
 void Setup_Destroy(GameState* thisx) {

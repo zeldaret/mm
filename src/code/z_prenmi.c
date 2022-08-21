@@ -2,7 +2,7 @@
 
 void PreNMI_Stop(PreNMIState* this) {
     STOP_GAMESTATE(&this->state);
-    NEXT_GAMESTATE(&this->state, NULL, 0);
+    SET_NEXT_GAMESTATE(&this->state, NULL, 0);
 }
 
 void PreNMI_Update(PreNMIState* this) {

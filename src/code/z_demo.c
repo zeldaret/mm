@@ -346,7 +346,7 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
             gSaveContext.save.day = 9;
 
             STOP_GAMESTATE(&play->state);
-            NEXT_GAMESTATE(&play->state, DayTelop_Init, sizeof(DayTelopState));
+            SET_NEXT_GAMESTATE(&play->state, DayTelop_Init, sizeof(DayTelopState));
 
             Sram_SaveSpecialNewDay(play);
             break;

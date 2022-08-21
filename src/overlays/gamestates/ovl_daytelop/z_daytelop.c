@@ -78,7 +78,7 @@ void DayTelop_Update(DayTelopState* this, GameState* thisx) {
         }
 
         STOP_GAMESTATE(&this->state);
-        NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
+        SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
 
         gSaveContext.save.time = CLOCK_TIME(6, 0);
         D_801BDBC8 = 0xFE;

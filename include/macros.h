@@ -31,7 +31,7 @@
         state->running = false;      \
     } while(0)
 
-#define NEXT_GAMESTATE(curState, nextInit, nextSize) \
+#define SET_NEXT_GAMESTATE(curState, nextInit, nextSize) \
     do {                                             \
         GameState* state = curState;                 \
                                                      \
