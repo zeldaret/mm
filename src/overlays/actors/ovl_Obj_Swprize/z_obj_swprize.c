@@ -14,14 +14,14 @@ void ObjSwprize_Init(Actor* thisx, PlayState* play);
 void ObjSwprize_Destroy(Actor* thisx, PlayState* play);
 void ObjSwprize_Update(Actor* thisx, PlayState* play);
 
-void ObjSwprize_SetupDoNothing(ObjSwprize* this, PlayState* play);
+void ObjSwprize_DoNothing(ObjSwprize* this, PlayState* play);
 void func_80C25654(ObjSwprize* this, PlayState* play);
 void func_80C25640(ObjSwprize* this);
 void func_80C25698(ObjSwprize* this);
 void func_80C256AC(ObjSwprize* this, PlayState* play);
 void func_80C25710(ObjSwprize* this);
 void func_80C2572C(ObjSwprize* this, PlayState* play);
-void func_80C25780(ObjSwprize* this);
+void ObjSwprize_SetupDoNothing(ObjSwprize* this);
 
 const ActorInit Obj_Swprize_InitVars = {
     ACTOR_OBJ_SWPRIZE,
@@ -35,9 +35,9 @@ const ActorInit Obj_Swprize_InitVars = {
     (ActorFunc)NULL,
 };
 
-static s16 D_80C257F0[] = { 2, 0x14, 1, 8 };
+s16 D_80C257F0[] = { 2, 0x14, 1, 8 };
 
-static s16 D_80C257F8[] = { -0x888, 0, 0x888 };
+s16 D_80C257F8[] = { -0x888, 0, 0x888 };
 
 void func_80C25360(ObjSwprize* this, Vec3f* vec) {
     Matrix_Push();
@@ -85,7 +85,7 @@ void ObjSwprize_Init(Actor* thisx, PlayState* play) {
     ObjSwprize* this = THIS;
 
     if (Flags_GetSwitch(play, OBJ_SWPRIZE_GET_SWITCH_FLAG(&this->actor))) {
-        func_80C25780(this);
+        ObjSwprize_SetupDoNothing(this);
     } else {
         func_80C25640(this);
     }
@@ -128,16 +128,16 @@ void func_80C2572C(ObjSwprize* this, PlayState* play) {
         this->timer--;
         if (this->timer == 0) {
             ActorCutscene_Stop(this->actor.cutscene);
-            func_80C25780(this);
+            ObjSwprize_SetupDoNothing(this);
         }
     }
 }
 
-void func_80C25780(ObjSwprize* this) {
-    this->actionFunc = ObjSwprize_SetupDoNothing;
+void ObjSwprize_SetupDoNothing(ObjSwprize* this) {
+    this->actionFunc = ObjSwprize_DoNothing;
 }
 
-void ObjSwprize_SetupDoNothing(ObjSwprize* this, PlayState* play) {
+void ObjSwprize_DoNothing(ObjSwprize* this, PlayState* play) {
 }
 
 void ObjSwprize_Update(Actor* thisx, PlayState* play) {
