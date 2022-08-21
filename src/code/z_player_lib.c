@@ -1373,18 +1373,17 @@ s32 func_801240DC(Player* player) {
 }
 
 PlayerBButtonSword Player_BButtonSwordFromAP(Player* player, PlayerActionParam actionParam) {
-    PlayerBButtonSword bButtonSword = GET_BBUTTONSWORD_FROM_AP(actionParam);
+    PlayerBButtonSword bButtonSword = GET_B_SWORD_FROM_AP(actionParam);
 
     if (player->transformation != PLAYER_FORM_GORON) {
-        if ((GET_BBUTTONSWORD_FROM_AP(actionParam) > PLAYER_BBUTTONSWORD_NONE) &&
-            (GET_BBUTTONSWORD_FROM_AP(actionParam) < PLAYER_BBUTTONSWORD_MAX)) {
+        if ((GET_B_SWORD_FROM_AP(actionParam) > PLAYER_BSWORD_NONE) &&
+            (GET_B_SWORD_FROM_AP(actionParam) < PLAYER_BSWORD_MAX)) {
             return bButtonSword;
         }
     }
 
-    return PLAYER_BBUTTONSWORD_NONE;
+    return PLAYER_BSWORD_NONE;
 }
-
 
 PlayerBButtonSword Player_GetHeldBButtonSword(Player* player) {
     return Player_BButtonSwordFromAP(player, player->itemActionParam);
