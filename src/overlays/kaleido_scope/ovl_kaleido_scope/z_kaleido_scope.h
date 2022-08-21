@@ -74,7 +74,9 @@ void KaleidoScope_DrawQuadTextureRGBA32(GraphicsContext* gfxCtx, void* texture, 
 void func_80821A04(PlayState* play);
 
 // Map
+void func_8081D6DC(PlayState*);
 void func_8081E118(PlayState* play);
+void KaleidoScope_DrawWorldMap(PlayState* play);
 void func_8081FB1C(PlayState* play);
 
 // Collect

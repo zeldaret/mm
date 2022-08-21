@@ -93,162 +93,6 @@ u8 D_8082B924[] = {
 
 s16 D_8082B944 = 66;
 
-s16 D_8082B948[][3] = {
-    { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 0 }, { 255, 255, 0 }, { 100, 150, 255 }, { 100, 255, 255 },
-};
-
-s16 D_8082B96C[][3] = {
-    { 0, 0, 0 }, { 170, 170, 170 }, { 0, 0, 0 }, { 255, 160, 0 }, { 0, 0, 100 }, { 0, 150, 255 },
-};
-
-s16 D_8082B990 = 10;
-s16 D_8082B994 = 0;
-
-s32 D_8082B998[] = {
-    0x0D003300,
-    0x0D002700,
-    0x0D002B00,
-    0x0D002F00,
-};
-
-s32 D_8082B9A8[] = {
-    0x0D002B00,
-    0x0D002F00,
-    0x0D003300,
-    0x0D002700,
-};
-
-s16 D_8082B9B8[] = {
-    180, 210, 255, 220, 100, 100, 150, 220,
-};
-
-s16 D_8082B9C8 = 20;
-s16 D_8082B9CC = 0;
-
-s16 D_8082B9D0[] = {
-    180, 210, 255, 220, 100, 100, 150, 220,
-};
-
-s16 D_8082B9E0 = 20;
-s16 D_8082B9E4 = 0;
-
-s16 D_8082B9E8[] = { 0, 0 };
-s16 D_8082B9EC[] = { 0, 0 };
-s16 D_8082B9F0[] = { -21, -104, -76, -48, -104, -40 };
-s16 D_8082B9FC[] = { 0, 0 };
-s16 D_8082BA00[] = {
-    -41, 9, 43, -21, -37, 43, -69, -69, -32, -109, -45, -109, -45, 59,  -5, -70, -52, -11,
-    -2,  8, 2,  1,   43,  52, 54,  62,  -80, -64,  -9,  -3,   -7,  -16, -1, 23,  44,  54,
-};
-s16 D_8082BA48[] = {
-    -76, -58, 10, -58, 10, 0,
-};
-s16 D_8082BA54[] = { 0, 0 };
-s16 D_8082BA58[] = { 0, 0 };
-s16 D_8082BA5C[] = {
-    128, 24, 24, 24, 32, 24,
-};
-s16 D_8082BA68[] = { 0, 0 };
-s16 D_8082BA6C[] = {
-    152, 48, 48, 48, 48, 0,
-};
-s16 D_8082BA78[] = { 0, 0 };
-s16 D_8082BA7C[] = { 0, 0 };
-
-s16 D_8082BA80[] = {
-    54, -42, -42, -42, -24, 50,
-};
-s16 D_8082BA8C[] = { 0, 0 };
-s16 D_8082BA90[] = {
-    11,  22,  -16, -16, -16, 59, 24, 59, -11, -5,  -5, 59, 59, 39, 31,  -10, -36, -19,
-    -53, -27, -2,  41,  11,  -3, 45, 18, -8,  -38, 39, 26, 1,  -7, -28, -27, -1,  24,
-};
-s16 D_8082BAD8[] = {
-    36, 10, 10, -6, -6, 0,
-};
-s16 D_8082BAE4[] = { 0, 0 };
-s16 D_8082BAE8[] = { 0, 0 };
-s16 D_8082BAEC[] = {
-    16, 24, 24, 24, 24, 24,
-};
-s16 D_8082BAF8[] = { 0, 0 };
-s16 D_8082BAFC[] = {
-    16, 48, 48, 16, 16, 0,
-};
-
-s16* D_8082BB08[] = {
-    D_8082B9E8, D_8082B9EC, D_8082B9F0, D_8082B9FC, D_8082BA00, D_8082BA48,
-};
-
-s16* D_8082BB20[] = {
-    D_8082BA54, D_8082BA58, D_8082BA5C, D_8082BA68, D_8082B7F0, D_8082BA6C,
-};
-
-s16* D_8082BB38[] = {
-    D_8082BA78, D_8082BA7C, D_8082BA80, D_8082BA8C, D_8082BA90, D_8082BAD8,
-};
-
-s16* D_8082BB50[] = {
-    D_8082BAE4, D_8082BAE8, D_8082BAEC, D_8082BAF8, D_8082B838, D_8082BAFC,
-};
-
-s16 D_8082BB68[] = {
-    14, -2, -2, -18, -18, 0,
-};
-
-s16 D_8082BB74[] = {
-    45, 78,   10,  45,  80,  11,  -109, -87, -65, -41, -19, -18, -109, -87, -65, -41, -19, -18, -103, 7,
-    82, -110, -54, -98, -86, -74, -62,  -50, -38, -26, -14, -98, -86,  -74, -62, -50, -38, -26, -14,  0,
-};
-
-s16 D_8082BBC4[] = {
-    62,  42, 42, 20,  -9,  -9,  -20, -20, -20, -20, -20, -20, 2,   2,   2,   2,   2,   2,   54,  -44,
-    -44, 34, 58, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, 0,
-};
-
-s16 D_8082BC14[] = {
-    32, 32, 32, 32, 32, 32, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 32, 32,
-    32, 24, 48, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 0,
-};
-
-s16 D_8082BC64[] = {
-    32, 32, 32, 32, 32, 32, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 32, 32,
-    32, 24, 48, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 0,
-};
-
-f32 D_8082BCB4[] = {
-    -62.0f, -36.0f, -10.0f, 16.0f, 42.0f, 68.0f,
-};
-f32 D_8082BCCC[] = { 31.0f, 5.0f, -21.0f, -47.0f };
-f32 D_8082BCDC[] = {
-    -49.0f, -35.0f, -3.0f, 4.0f, 12.0f, 8.0f, 7.0f, 40.0f, 47.0f, 49.0f, 55.0f,
-};
-f32 D_8082BD08[] = {
-    -15.0f, -36.0f, -23.0f, -49.0f, -29.0f, -8.0f, 25.0f, 2.0f, -9.0f, 28.0f, 7.0f,
-};
-f32 D_8082BD34[] = {
-    -50.0f, -38.0f, 6.0f, 11.0f, 8.0f, 0.0f, 12.0f, 31.0f, 48.0f, 56.0f,
-};
-f32 D_8082BD5C[] = {
-    -14.0f, -39.0f, 23.0f, 11.0f, -8.0f, -15.0f, -31.0f, -30.0f, -10.0f, 11.0f,
-};
-f32 D_8082BD84[] = {
-    -72.0f, -47.0f, -26.0f, -50.0f, -48.0f, -48.0f, -48.0f, -48.0f, -48.0f,
-};
-f32 D_8082BDA8[] = {
-    -47.0f, -47.0f, -47.0f, -30.0f, 33.0f, 22.0f, 11.0f, -2.0f, -13.0f,
-};
-f32 D_8082BDCC[] = {
-    52.0f,  80.0f,  24.0f,  52.0f,  81.0f, 24.0f, -78.0f, -61.0f, -44.0f, -24.0f, -6.0f,  -3.0f,
-    -78.0f, -61.0f, -44.0f, -24.0f, -6.0f, -3.0f, -68.0f, 22.0f,  83.0f,  -67.0f, -21.0f,
-};
-f32 D_8082BE28[] = {
-    33.0f,  18.0f,  18.0f,  0.0f,   -23.0f, -23.0f, -29.0f, -29.0f, -29.0f, -29.0f, -29.0f, -29.0f,
-    -11.0f, -11.0f, -11.0f, -11.0f, -11.0f, -11.0f, 27.0f,  -53.0f, -53.0f, 14.0f,  26.0f,
-};
-
-s16 D_8082BE84 = 0;
-
 // bss
 extern u8 D_8082DA58[5];
 
@@ -422,18 +266,20 @@ Gfx* KaleidoScope_DrawPageSections(Gfx* gfx, Vtx* vertices, void** textures) {
     return gfx;
 }
 
-void func_801091F0(PlayState*);
-void KaleidoScope_DrawQuestStatus(PlayState*);
-void func_8081D6DC(PlayState*);
-void KaleidoScope_DrawWorldMap(PlayState*);
-void KaleidoScope_DrawMaskSelect(PlayState*);
+s16 D_8082B948[][3] = {
+    { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 0 }, { 255, 255, 0 }, { 100, 150, 255 }, { 100, 255, 255 },
+};
 
-#ifdef NON_EQUIVALENT
+s16 D_8082B96C[][3] = {
+    { 0, 0, 0 }, { 170, 170, 170 }, { 0, 0, 0 }, { 255, 160, 0 }, { 0, 0, 100 }, { 0, 150, 255 },
+};
 void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
+    static s16 D_8082B990 = 10;
+    static s16 D_8082B994 = 0;
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 stepR;
     s16 stepG;
-    s32 stepB;
+    s16 stepB;
 
     OPEN_DISPS(gfxCtx);
 
@@ -442,7 +288,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             stepR = ABS_ALT(D_8082B890 - D_8082B948[pauseCtx->cursorColorSet + D_8082B994][0]) / D_8082B990;
             stepG = ABS_ALT(D_8082B894 - D_8082B948[pauseCtx->cursorColorSet + D_8082B994][1]) / D_8082B990;
-            stepB = ABS_ALT(D_8082B898 - D_8082B948[pauseCtx->cursorColorSet + D_8082B994][2]);
+            stepB = ABS_ALT(D_8082B898 - D_8082B948[pauseCtx->cursorColorSet + D_8082B994][2]) / D_8082B990;
 
             if (D_8082B890 >= D_8082B948[pauseCtx->cursorColorSet + D_8082B994][0]) {
                 D_8082B890 -= stepR;
@@ -457,14 +303,14 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
             }
 
             if (D_8082B898 >= D_8082B948[pauseCtx->cursorColorSet + D_8082B994][2]) {
-                D_8082B898 -= (s16)(stepB / D_8082B990);
+                D_8082B898 -= stepB;
             } else {
-                D_8082B898 += (s16)(stepB / D_8082B990);
+                D_8082B898 += stepB;
             }
 
             stepR = ABS_ALT(D_8082B89C - D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][0]) / D_8082B990;
             stepG = ABS_ALT(D_8082B8A0 - D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][1]) / D_8082B990;
-            stepB = ABS_ALT(D_8082B8A4 - D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][2]);
+            stepB = ABS_ALT(D_8082B8A4 - D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][2]) / D_8082B990;
 
             if (D_8082B89C >= D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][0]) {
                 D_8082B89C -= stepR;
@@ -479,13 +325,12 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
             }
 
             if (D_8082B8A4 >= D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][2]) {
-                D_8082B8A4 -= (s16)(stepB / D_8082B990);
+                D_8082B8A4 -= stepB;
             } else {
-                D_8082B8A4 += (s16)(stepB / D_8082B990);
+                D_8082B8A4 += stepB;
             }
 
             D_8082B990--;
-
             if (D_8082B990 == 0) {
                 D_8082B890 = D_8082B948[pauseCtx->cursorColorSet + D_8082B994][0];
                 D_8082B894 = D_8082B948[pauseCtx->cursorColorSet + D_8082B994][1];
@@ -703,11 +548,24 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
     CLOSE_DISPS(gfxCtx);
 }
-#else
-void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawPages.s")
-#endif
 
+s32 D_8082B998[] = {
+    0x0D003300,
+    0x0D002700,
+    0x0D002B00,
+    0x0D002F00,
+};
+s32 D_8082B9A8[] = {
+    0x0D002B00,
+    0x0D002F00,
+    0x0D003300,
+    0x0D002700,
+};
+s16 D_8082B9B8[] = {
+    180, 210, 255, 220, 100, 100, 150, 220,
+};
+s16 D_8082B9C8 = 20;
+s16 D_8082B9CC = 0;
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80823350.s")
 
 void func_80824738(PlayState* play);
@@ -715,6 +573,11 @@ void func_80824738(PlayState* play);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808248D0.s")
 
+s16 D_8082B9D0[] = {
+    180, 210, 255, 220, 100, 100, 150, 220,
+};
+s16 D_8082B9E0 = 20;
+s16 D_8082B9E4 = 0;
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80824B90.s")
 
 void func_808256E4(PlayState* play);
@@ -725,7 +588,67 @@ void func_8082585C(PlayState* play, Input* input);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808259D4.s")
 
-// OoT func_80823A0C
+s16 D_8082B9E8[] = { 0, 0 };
+s16 D_8082B9EC[] = { 0, 0 };
+s16 D_8082B9F0[] = { -21, -104, -76, -48, -104, -40 };
+s16 D_8082B9FC[] = { 0, 0 };
+s16 D_8082BA00[] = {
+    -41, 9, 43, -21, -37, 43, -69, -69, -32, -109, -45, -109, -45, 59,  -5, -70, -52, -11,
+    -2,  8, 2,  1,   43,  52, 54,  62,  -80, -64,  -9,  -3,   -7,  -16, -1, 23,  44,  54,
+};
+s16 D_8082BA48[] = {
+    -76, -58, 10, -58, 10, 0,
+};
+s16 D_8082BA54[] = { 0, 0 };
+s16 D_8082BA58[] = { 0, 0 };
+s16 D_8082BA5C[] = {
+    128, 24, 24, 24, 32, 24,
+};
+s16 D_8082BA68[] = { 0, 0 };
+s16 D_8082BA6C[] = {
+    152, 48, 48, 48, 48, 0,
+};
+s16 D_8082BA78[] = { 0, 0 };
+s16 D_8082BA7C[] = { 0, 0 };
+
+s16 D_8082BA80[] = {
+    54, -42, -42, -42, -24, 50,
+};
+s16 D_8082BA8C[] = { 0, 0 };
+s16 D_8082BA90[] = {
+    11,  22,  -16, -16, -16, 59, 24, 59, -11, -5,  -5, 59, 59, 39, 31,  -10, -36, -19,
+    -53, -27, -2,  41,  11,  -3, 45, 18, -8,  -38, 39, 26, 1,  -7, -28, -27, -1,  24,
+};
+s16 D_8082BAD8[] = {
+    36, 10, 10, -6, -6, 0,
+};
+s16 D_8082BAE4[] = { 0, 0 };
+s16 D_8082BAE8[] = { 0, 0 };
+s16 D_8082BAEC[] = {
+    16, 24, 24, 24, 24, 24,
+};
+s16 D_8082BAF8[] = { 0, 0 };
+s16 D_8082BAFC[] = {
+    16, 48, 48, 16, 16, 0,
+};
+s16* D_8082BB08[] = {
+    D_8082B9E8, D_8082B9EC, D_8082B9F0, D_8082B9FC, D_8082BA00, D_8082BA48,
+};
+
+s16* D_8082BB20[] = {
+    D_8082BA54, D_8082BA58, D_8082BA5C, D_8082BA68, D_8082B7F0, D_8082BA6C,
+};
+
+s16* D_8082BB38[] = {
+    D_8082BA78, D_8082BA7C, D_8082BA80, D_8082BA8C, D_8082BA90, D_8082BAD8,
+};
+
+s16* D_8082BB50[] = {
+    D_8082BAE4, D_8082BAE8, D_8082BAEC, D_8082BAF8, D_8082B838, D_8082BAFC,
+};
+s16 D_8082BB68[] = {
+    14, -2, -2, -18, -18, 0,
+};
 s16 func_80825A50(PlayState* play, Vtx* vtx, s16 arg2, s16 arg3) {
     PauseContext* pauseCtx = &play->pauseCtx;
     GameOverContext* gameOverCtx = &play->gameOverCtx;
@@ -811,6 +734,22 @@ s16 func_80825A50(PlayState* play, Vtx* vtx, s16 arg2, s16 arg3) {
     return k;
 }
 
+s16 D_8082BB74[] = {
+    45, 78,   10,  45,  80,  11,  -109, -87, -65, -41, -19, -18, -109, -87, -65, -41, -19, -18, -103, 7,
+    82, -110, -54, -98, -86, -74, -62,  -50, -38, -26, -14, -98, -86,  -74, -62, -50, -38, -26, -14,  0,
+};
+s16 D_8082BBC4[] = {
+    62,  42, 42, 20,  -9,  -9,  -20, -20, -20, -20, -20, -20, 2,   2,   2,   2,   2,   2,   54,  -44,
+    -44, 34, 58, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, 0,
+};
+s16 D_8082BC14[] = {
+    32, 32, 32, 32, 32, 32, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 32, 32,
+    32, 24, 48, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 0,
+};
+s16 D_8082BC64[] = {
+    32, 32, 32, 32, 32, 32, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 32, 32,
+    32, 24, 48, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 0,
+};
 void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 i;
@@ -1141,6 +1080,41 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
     }
 }
 
+f32 D_8082BCB4[] = {
+    -62.0f, -36.0f, -10.0f, 16.0f, 42.0f, 68.0f,
+};
+f32 D_8082BCCC[] = {
+    31.0f,
+    5.0f,
+    -21.0f,
+    -47.0f,
+};
+f32 D_8082BCDC[] = {
+    -49.0f, -35.0f, -3.0f, 4.0f, 12.0f, 8.0f, 7.0f, 40.0f, 47.0f, 49.0f, 55.0f,
+};
+f32 D_8082BD08[] = {
+    -15.0f, -36.0f, -23.0f, -49.0f, -29.0f, -8.0f, 25.0f, 2.0f, -9.0f, 28.0f, 7.0f,
+};
+f32 D_8082BD34[] = {
+    -50.0f, -38.0f, 6.0f, 11.0f, 8.0f, 0.0f, 12.0f, 31.0f, 48.0f, 56.0f,
+};
+f32 D_8082BD5C[] = {
+    -14.0f, -39.0f, 23.0f, 11.0f, -8.0f, -15.0f, -31.0f, -30.0f, -10.0f, 11.0f,
+};
+f32 D_8082BD84[] = {
+    -72.0f, -47.0f, -26.0f, -50.0f, -48.0f, -48.0f, -48.0f, -48.0f, -48.0f,
+};
+f32 D_8082BDA8[] = {
+    -47.0f, -47.0f, -47.0f, -30.0f, 33.0f, 22.0f, 11.0f, -2.0f, -13.0f,
+};
+f32 D_8082BDCC[] = {
+    52.0f,  80.0f,  24.0f,  52.0f,  81.0f, 24.0f, -78.0f, -61.0f, -44.0f, -24.0f, -6.0f,  -3.0f,
+    -78.0f, -61.0f, -44.0f, -24.0f, -6.0f, -3.0f, -68.0f, 22.0f,  83.0f,  -67.0f, -21.0f,
+};
+f32 D_8082BE28[] = {
+    33.0f,  18.0f,  18.0f,  0.0f,   -23.0f, -23.0f, -29.0f, -29.0f, -29.0f, -29.0f, -29.0f, -29.0f,
+    -11.0f, -11.0f, -11.0f, -11.0f, -11.0f, -11.0f, 27.0f,  -53.0f, -53.0f, 14.0f,  26.0f,
+};
 void KaleidoScope_UpdateCursorSize(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 index;
@@ -1300,10 +1274,9 @@ void KaleidoScope_DrawCursor(PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-#ifdef NON_MATCHING
 void KaleidoScope_DrawGameOver(PlayState* play) {
+    static s16 D_8082BE84 = 0;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
-    s16 temp;
 
     OPEN_DISPS(gfxCtx);
 
@@ -1317,7 +1290,7 @@ void KaleidoScope_DrawGameOver(PlayState* play) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 80, D_8082B880, D_8082B884, D_8082B888, D_8082B88C);
     gDPSetEnvColor(POLY_OPA_DISP++, D_8082B8A8, D_8082B8AC, D_8082B8B0, 255);
 
-    temp = D_8082BE84 - 2;
+    D_8082BE84 -= 2;
 
     gDPLoadTextureBlock(POLY_OPA_DISP++, gGameOverP1Tex, G_IM_FMT_IA, G_IM_SIZ_8b, 64, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -1325,9 +1298,7 @@ void KaleidoScope_DrawGameOver(PlayState* play) {
     gDPLoadMultiBlock(POLY_OPA_DISP++, gGameOverMaskTex, 256, 1, G_IM_FMT_IA, G_IM_SIZ_8b, 64, 32, 0,
                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    gDPSetTileSize(POLY_OPA_DISP++, 1, 0, temp & 0x7F, 252, (temp & 0x7F) + 0x7C);
-
-    D_8082BE84 = temp;
+    gDPSetTileSize(POLY_OPA_DISP++, 1, 0, D_8082BE84 & 0x7F, 252, (D_8082BE84 & 0x7F) + 0x7C);
 
     gSPTextureRectangle(POLY_OPA_DISP++, 0x0100, D_8082B944 << 2, 0x0200, (D_8082B944 + 32) << 2, G_TX_RENDERTILE, 0, 0,
                         1 << 10, 1 << 10);
@@ -1346,15 +1317,8 @@ void KaleidoScope_DrawGameOver(PlayState* play) {
     gSPTextureRectangle(POLY_OPA_DISP++, 0x0300, D_8082B944 << 2, 0x0400, (D_8082B944 + 32) << 2, G_TX_RENDERTILE, 0, 0,
                         1 << 10, 1 << 10);
 
-    //! FAKE
-    temp = D_8082BE84 - 2;
-    temp += 0;
-
     CLOSE_DISPS(gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawGameOver.s")
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_Draw.s")
 
