@@ -1095,7 +1095,58 @@ void func_80A477E8(EnWiz* this, PlayState* play) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/EnWiz_Update.s")
+void EnWiz_Update(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnWiz* this = THIS;
+    s32 i;
+    s32 j;
+
+    if (this->unk_3B0 != 1) {
+        SkelAnime_Update(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime2);
+    }
+
+    Actor_SetFocus(&this->actor, 60.0f);
+    Actor_SetScale(&this->actor, this->unk_3D4);
+    func_80A477E8(this, play);
+    this->actionFunc(this, play);
+
+    this->actor.shape.rot.y = this->actor.world.rot.y;
+
+    DECR(this->unk_3B2);
+    DECR(this->unk_3B4);
+    DECR(this->drawDmgEffTimer);
+
+    this->unk_6F4.dim.radius = 35;
+    this->unk_6F4.dim.height = 130;
+    this->unk_6F4.dim.yShift = 0;
+    if (this->unk_3B0 >= 7) {
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk_454.base);
+        Collider_UpdateCylinder(&this->actor, &this->unk_6F4);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk_6F4.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->unk_6F4.base);
+    }
+
+    Math_ApproachF(&this->unk_3E4, this->unk_3F0.x, 0.3f, 0.002f);
+    Math_ApproachF(&this->unk_3E8, this->unk_3F0.y, 0.3f, 0.002f);
+    Math_ApproachF(&this->unk_3EC, this->unk_3F0.z, 0.3f, 0.002f);
+
+    if (this->unk_3B6 == 0) {
+        this->unk_740 = 0;
+    } else if (this->unk_3B6 == 3) {
+        for (i = 0; i < this->unk_740; i++) {
+            for (j = 0; j < ARRAY_COUNT(this->jointTable2); j++) {
+                this->jointTable3[i][j] = this->jointTable2[j];
+            }
+        }
+    } else {
+        for (i = 0; i < this->unk_740; i++) {
+            for (j = 0; j < ARRAY_COUNT(this->jointTable); j++) {
+                this->jointTable3[i][j] = this->jointTable[j];
+            }
+        }
+    }
+}
 
 void func_80A47FCC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Vec3f sp24 = { 0.0f, 0.0f, 0.0f };
