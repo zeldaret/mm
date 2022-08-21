@@ -5,6 +5,7 @@
  */
 
 #include "z_kaleido_scope.h"
+#include "interface/parameter_static/parameter_static.h"
 
 extern UNK_TYPE D_02001360;
 extern UNK_TYPE D_020044A0;
@@ -16,10 +17,67 @@ extern UNK_TYPE D_0B000000;
 extern UNK_TYPE D_0C000000;
 extern UNK_TYPE D_0C006C00;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081D240.s")
+void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
+    s16 spC4[2];
+    s16 j;
+    s16 i;
 
-s32 D_8082B4A0[] = { 0x09003600, 0x09003F00, 0x09004800 };
-s32 D_8082B4AC[] = {
+    OPEN_DISPS(play->state.gfxCtx);
+
+    spC4[1] = 15;
+    spC4[0] = spC4[1] / 10;
+    spC4[1] -= (s16)(spC4[0] * 10);
+
+    for (j = 0x74, i = 0; i < 2; i++, j += 8) {
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 255);
+
+        POLY_OPA_DISP = func_8010D7D0(POLY_OPA_DISP, (u8*)gCounterDigit0Tex + (spC4[i] << 7), 8, 0x10, j + 1, 0x92, 8,
+                                      0x10, 0x400, 0x400);
+
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
+
+        gSPTextureRectangle(POLY_OPA_DISP++, j * 4, 0x0244, j * 4 + 0x20, 0x284, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
+    };
+
+    gDPPipeSync(POLY_OPA_DISP++);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 255);
+
+    POLY_OPA_DISP =
+        func_8010D7D0(POLY_OPA_DISP, gStrayFairyMapCounterSlashTex, 8, 0x10, 0x6B, 0x92, 8, 0x10, 0x400, 0x400);
+
+    gDPPipeSync(POLY_OPA_DISP++);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
+
+    gSPTextureRectangle(POLY_OPA_DISP++, 0x01A8, 0x0244, 0x01C8, 0x0284, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+
+    spC4[1] = gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex];
+    spC4[0] = spC4[1] / 10;
+    spC4[1] -= (s16)(spC4[0] * 10);
+
+    for (j = 0x58, i = 0; i < 2; i++, j += 8) {
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 255);
+
+        POLY_OPA_DISP = func_8010D7D0(POLY_OPA_DISP, (u8*)gCounterDigit0Tex + (spC4[i] << 7), 8, 0x10, j + 1, 0x92, 8,
+                                      0x10, 0x400, 0x400);
+
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
+
+        gSPTextureRectangle(POLY_OPA_DISP++, j * 4, 0x244, j * 4 + 0x20, 0x284, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+TexturePtr D_8082B4A0[] = {
+    0x09003600,
+    0x09003F00,
+    0x09004800,
+};
+TexturePtr D_8082B4AC[] = {
     0x0D000000,
     0x0D000800,
     0x0D001000,
@@ -38,7 +96,7 @@ s16 D_8082B4D0 = 0xF;
 s16 D_8082B4D4 = 0;
 s16 D_8082B4D8 = 0xFF;
 f32 D_8082B4DC = 100.0f;
-s32 D_8082B4E0[] = {
+TexturePtr D_8082B4E0[] = {
     0x02008998, 0x0C001B80, 0x02008998, 0x0C001B80, 0x02009598, 0x0C002780, 0x02009598, 0x0C002780,
     0x0200A198, 0x0C003380, 0x0200A198, 0x0C003380, 0x0200AD98, 0x0C003F80, 0x0200AD98, 0x0C003F80,
 };
@@ -62,10 +120,9 @@ s32 D_8082B538[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_UpdateDungeonCursor.s")
 
-s16 D_8082B548[] = {
-    0x0C00, 0x8418, 0x0C00, 0x9098, 0x0C01, 0x2898, 0x0C01, 0x35D8, 0x0C01, 0x4318,
-    0x0C00, 0xDE58, 0x0C00, 0xEB58, 0x0C00, 0xFAA8, 0x0C00, 0x9858, 0x0C00, 0x9E58,
-    0x0C00, 0xAE58, 0x0C00, 0xBE58, 0x0C00, 0xCE58, 0x0C01, 0x09F8, 0x0C01, 0x1958,
+TexturePtr D_8082B548[] = {
+    0x0C008418, 0x0C009098, 0x0C012898, 0x0C0135D8, 0x0C014318, 0x0C00DE58, 0x0C00EB58, 0x0C00FAA8,
+    0x0C009858, 0x0C009E58, 0x0C00AE58, 0x0C00BE58, 0x0C00CE58, 0x0C0109F8, 0x0C011958,
 };
 s16 D_8082B584[] = {
     0x0000, 0x0000, 0x00FF, 0x00FF, 0x00FF, 0x0000,
@@ -85,11 +142,11 @@ s16 D_8082B5CC[] = {
 };
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawWorldMap.s")
 
+u16 D_8082B5E0[] = {
+    0xAF, 0xB3, 0xAA, 0xB1, 0xA9, 0xB2, 0xA8, 0xB0, 0xAC, 0xAE,
+};
 #ifdef NON_EQUIVALENT
 void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
-    static u16 D_8082B5E0[] = {
-        0xAF, 0xB3, 0xAA, 0xB1, 0xA9, 0xB2, 0xA8, 0xB0, 0xAC, 0xAE,
-    };
     static u16 D_8082B5F4 = 0;
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 oldCursorPoint;
@@ -224,9 +281,6 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
     }
 }
 #else
-u16 D_8082B5E0[] = {
-    0xAF, 0xB3, 0xAA, 0xB1, 0xA9, 0xB2, 0xA8, 0xB0, 0xAC, 0xAE,
-};
 u16 D_8082B5F4 = 0;
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_UpdateWorldMapCursor.s")
 #endif
