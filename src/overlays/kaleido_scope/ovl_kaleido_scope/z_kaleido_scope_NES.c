@@ -23,19 +23,19 @@ extern u8 D_8082DA58[5];
 extern f32 D_8082DA60[4];
 extern f32 D_8082DA70[4];
 
-void* D_8082B700[] = {
+TexturePtr D_8082B700[] = {
     0x08064440, 0x0806E440, 0x08077A40, 0x08081040, 0x0808A640, 0x0D003A00, 0x0806EE40, 0x08078440,
     0x08081A40, 0x0808B040, 0x08065840, 0x0806F840, 0x08078E40, 0x08082440, 0x0808BA40,
 };
-void* D_8082B73C[] = {
+TexturePtr D_8082B73C[] = {
     0x0D004400, 0x08070240, 0x08079840, 0x08082E40, 0x0808C440, 0x0D004E00, 0x08070C40, 0x0807A240,
     0x08083840, 0x0808CE40, 0x0D005800, 0x08071640, 0x0807AC40, 0x08084240, 0x0808D840,
 };
-void* D_8082B778[] = {
+TexturePtr D_8082B778[] = {
     0x08068040, 0x08072040, 0x0807B640, 0x08084C40, 0x0808E240, 0x0D006200, 0x08072A40, 0x0807C040,
     0x08085640, 0x0808EC40, 0x08069440, 0x08073440, 0x0807CA40, 0x08086040, 0x0808F640,
 };
-void* D_8082B7B4[] = {
+TexturePtr D_8082B7B4[] = {
     0x0D006C00, 0x08073E40, 0x0807D440, 0x08086A40, 0x08090040, 0x0D007600, 0x08074840, 0x0807DE40,
     0x08087440, 0x08090A40, 0x0D008000, 0x08075240, 0x0807E840, 0x08087E40, 0x08091440,
 };
@@ -544,13 +544,13 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
     CLOSE_DISPS(gfxCtx);
 }
 
-s32 D_8082B998[] = {
+TexturePtr D_8082B998[] = {
     0x0D003300,
     0x0D002700,
     0x0D002B00,
     0x0D002F00,
 };
-s32 D_8082B9A8[] = {
+TexturePtr D_8082B9A8[] = {
     0x0D002B00,
     0x0D002F00,
     0x0D003300,
@@ -561,9 +561,8 @@ s16 D_8082B9B8[] = {
 };
 s16 D_8082B9C8 = 20;
 s16 D_8082B9CC = 0;
-// KaleidoScope_DrawInfoPanel1?
-void func_80823350(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80823350.s")
+void KaleidoScope_DrawInfoPanel1(PlayState* play);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawInfoPanel1.s")
 
 void KaleidoScope_UpdateNamePanel1(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -649,9 +648,8 @@ s16 D_8082B9D0[] = {
 };
 s16 D_8082B9E0 = 20;
 s16 D_8082B9E4 = 0;
-// KaleidoScope_DrawInfoPanel2?
-void func_80824B90(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80824B90.s")
+void KaleidoScope_DrawInfoPanel2(PlayState* play);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawInfoPanel2.s")
 
 void KaleidoScope_UpdateNamePanel2(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -1218,7 +1216,7 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
     pauseCtx->cursorVtx[17].v.tc[0] = pauseCtx->cursorVtx[18].v.tc[1] = pauseCtx->cursorVtx[19].v.tc[0] =
         pauseCtx->cursorVtx[19].v.tc[1] = 0x400;
 
-    pauseCtx->unk_1A4 = GRAPH_ALLOC(gfxCtx, 0x1C0);
+    pauseCtx->infoPanelVtx = GRAPH_ALLOC(gfxCtx, 0x1C0);
 
     if ((pauseCtx->state == PAUSE_STATE_7) ||
         ((pauseCtx->state >= PAUSE_STATE_8) && (pauseCtx->state <= PAUSE_STATE_12))) {
@@ -1497,7 +1495,7 @@ void KaleidoScope_Draw(PlayState* play) {
             KaleidoScope_SetView(pauseCtx, 0.0f, 0.0f, 64.0f);
 
             if (!((pauseCtx->state >= PAUSE_STATE_8) && (pauseCtx->state <= PAUSE_STATE_12))) {
-                func_80823350(play);
+                KaleidoScope_DrawInfoPanel1(play);
             }
 
             KaleidoScope_UpdateCursorSize(play);
@@ -1520,7 +1518,7 @@ void KaleidoScope_Draw(PlayState* play) {
                               PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
 
             KaleidoScope_SetView(pauseCtx, 0.0f, 0.0f, 64.0f);
-            func_80824B90(play);
+            KaleidoScope_DrawInfoPanel2(play);
             KaleidoScope_UpdateCursorSize(play);
 
             if (pauseCtx->state == PAUSE_STATE_17) {
@@ -1704,7 +1702,7 @@ void KaleidoScope_Update(PlayState* play) {
             break;
 
         case PAUSE_STATE_4:
-            pauseCtx->unk_27E += 10;
+            pauseCtx->infoPanelOffsetY += 10;
             pauseCtx->unk_210 = pauseCtx->unk_214 = pauseCtx->unk_218 = pauseCtx->unk_21C -= 40.0f;
 
             interfaceCtx->startAlpha += 63;
@@ -1894,7 +1892,7 @@ void KaleidoScope_Update(PlayState* play) {
                     if (pauseCtx->unk_220 != (D_8082B90C + 160.0f)) {
                         pauseCtx->unk_210 = pauseCtx->unk_214 = pauseCtx->unk_218 = pauseCtx->unk_21C += 40.0f;
                         pauseCtx->unk_220 += 40.0f;
-                        pauseCtx->unk_27E -= 10;
+                        pauseCtx->infoPanelOffsetY -= 10;
                         D_8082B918 -= (s16)(D_8082B910 / 4);
                         D_8082B91C -= (s16)(D_8082B914 / 4);
                         pauseCtx->alpha -= 63;
@@ -2074,7 +2072,7 @@ void KaleidoScope_Update(PlayState* play) {
             break;
 
         case PAUSE_STATE_D:
-            pauseCtx->unk_27E += 10;
+            pauseCtx->infoPanelOffsetY += 10;
             pauseCtx->unk_220 -= 40.0f;
             pauseCtx->unk_210 = pauseCtx->unk_214 = pauseCtx->unk_218 = pauseCtx->unk_21C = pauseCtx->unk_220;
             interfaceCtx->startAlpha += 63;
@@ -2251,7 +2249,7 @@ void KaleidoScope_Update(PlayState* play) {
 
         case PAUSE_STATE_16:
             XREG(87) += 20;
-            pauseCtx->unk_27E += 10;
+            pauseCtx->infoPanelOffsetY += 10;
             pauseCtx->unk_214 -= 40.0f;
             interfaceCtx->startAlpha += 63;
             D_8082B944 -= 3;
@@ -2325,7 +2323,7 @@ void KaleidoScope_Update(PlayState* play) {
                 if (XREG(87) <= 0) {
                     XREG(87) = 0;
                 }
-                pauseCtx->unk_27E -= 10;
+                pauseCtx->infoPanelOffsetY -= 10;
                 pauseCtx->unk_214 += 40.0f;
                 interfaceCtx->startAlpha -= 63;
                 D_8082B918 -= (s16)(D_8082B910 / 4);
@@ -2347,7 +2345,7 @@ void KaleidoScope_Update(PlayState* play) {
 
         case PAUSE_STATE_1A:
             if (pauseCtx->unk_210 != 160.0f) {
-                pauseCtx->unk_27E -= 10;
+                pauseCtx->infoPanelOffsetY -= 10;
                 pauseCtx->unk_210 = pauseCtx->unk_214 = pauseCtx->unk_218 = pauseCtx->unk_21C += 40.0f;
                 interfaceCtx->startAlpha -= 63;
                 D_8082B918 -= (s16)(D_8082B910 / 4);

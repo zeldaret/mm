@@ -17,7 +17,7 @@ void func_800F4A10(PlayState* play) {
     pauseCtx->eye.x = sKaleidoSetupEyeX[pauseCtx->pageIndex];
     pauseCtx->eye.z = sKaleidoSetupEyeZ[pauseCtx->pageIndex];
     pauseCtx->pageIndex = D_801BDB00[pauseCtx->pageIndex];
-    pauseCtx->unk_27E = -40;
+    pauseCtx->infoPanelOffsetY = -40;
 
     for (i = 0; i < ARRAY_COUNT(pauseCtx->worldMapPoints); i++) {
         pauseCtx->worldMapPoints[i] = 0;

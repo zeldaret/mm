@@ -417,7 +417,7 @@ typedef struct {
     /* 0x198 */ Vtx* questVtx;
     /* 0x19C */ Vtx* maskVtx;
     /* 0x1A0 */ Vtx* unk_1A0;
-    /* 0x1A4 */ Vtx* unk_1A4;
+    /* 0x1A4 */ Vtx* infoPanelVtx;
     /* 0x1A8 */ Vtx* cursorVtx;
     /* 0x1AC */ OcarinaStaff* ocarinaStaff;
     /* 0x1B0 */ DmaRequest unk_1B0;
@@ -459,7 +459,7 @@ typedef struct {
     /* 0x278 */ s16 equipAnimX;
     /* 0x27A */ s16 equipAnimY;
     /* 0x27C */ s16 equipAnimAlpha;
-    /* 0x27E */ s16 unk_27E;
+    /* 0x27E */ s16 infoPanelOffsetY;
     /* 0x280 */ u16 nameDisplayTimer;
     /* 0x282 */ u16 nameColorSet;
     /* 0x284 */ s16 cursorColorSet;
