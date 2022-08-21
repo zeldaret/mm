@@ -18,7 +18,7 @@ void EnTg_Update(Actor* thisx, PlayState* play);
 void EnTg_Draw(Actor* thisx, PlayState* play);
 
 void EnTg_Idle(EnTg* this, PlayState* play);
-void EnTg_UpdateHeartPath(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len);
+void EnTg_UpdateHearts(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len);
 void EnTg_DrawHeart(PlayState* play, EnTgHeartInfo* enTgHeartInfo, s32 len);
 void EnTg_SpawnFirstHeart(EnTg* this, EnTgHeartInfo* enTgHeartInfo, Vec3f* heartStartPos, s32 len);
 
@@ -93,22 +93,18 @@ static DamageTable sDamageTable = {
 
 static AnimationInfoS sAnimationInfo = { &gHoneyAndDarlingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 };
 
-/**
- * This function is always called with unusedExtraOffset = 0.
- * The only animation used is the Idle (stationary) animation.
- */
 void EnTg_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s16 animIndex) {
     f32 endFrame;
 
-    animation += unusedExtraOffset;
+    animationInfo += animIndex;
 
-    if (animation->frameCount < 0) {
-        endFrame = (Animation_GetLastFrame(animation->animation);
+    if (animationInfo->frameCount < 0) {
+        endFrame = Animation_GetLastFrame(animationInfo->animation);
     } else {
-        endFrame = animation->frameCount;
+        endFrame = animationInfo->frameCount;
     }
-    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, endFrame,
-                     animation->mode, animation->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame, endFrame,
+                     animationInfo->mode, animationInfo->morphFrames);
 }
 
 void EnTg_UpdateCollider(EnTg* this, PlayState* play) {
@@ -128,7 +124,7 @@ void EnTg_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gHoneyAndDarlingSkel, NULL, this->jointTable, this->morphTable, HONEY_AND_DARLING_LIMB_MAX);
-    EnTg_ChangeAnimation(&this->skelAnime, &sAnimations, 0);
+    EnTg_ChangeAnim(&this->skelAnime, &sAnimationInfo, 0);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -156,7 +152,7 @@ void EnTg_Idle(EnTg* this, PlayState* play) {
         this->spawnHeartTimer = 12;
         heartStartPos = this->actor.world.pos;
         heartStartPos.y += 62.0f;
-        EnTg_SpawnFirstHeart(this, &this->enTgHeartInfo, &heartStartPos, 10);
+        EnTg_SpawnFirstHeart(this, this->enTgHeartInfo, &heartStartPos, 10);
     }
 }
 
@@ -166,12 +162,11 @@ void EnTg_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4U);
     EnTg_UpdateSkelAnime(this, play);
-    EnTg_UpdateHeartPath(play, &this->enTgHeartInfo, 10);
+    EnTg_UpdateHearts(play, this->enTgHeartInfo, 10);
     EnTg_UpdateCollider(this, play);
 }
 
 s32 EnTg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-
     return 0;
 }
 
@@ -189,7 +184,7 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
     GraphicsContext* gfxCtx;
 
     Matrix_Push();
-    EnTg_DrawHeart(play, &this->enTgHeartInfo, 10);
+    EnTg_DrawHeart(play, this->enTgHeartInfo, 10);
     Matrix_Pop();
 
     OPEN_DISPS(play->state.gfxCtx);
