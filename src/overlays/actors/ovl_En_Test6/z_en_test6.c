@@ -593,9 +593,9 @@ void func_80A91760(EnTest6* this, PlayState* play) {
                (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_B))) {
         this->unk_286 = 1;
         if (ENTEST6_GET(&this->actor) == ENTEST6_25) {
-            Audio_StopSfxById(NA_SE_SY_TIME_CONTROL_SLOW);
+            AudioSfx_StopById(NA_SE_SY_TIME_CONTROL_SLOW);
         } else if (ENTEST6_GET(&this->actor) == ENTEST6_24) {
-            Audio_StopSfxById(NA_SE_SY_TIME_CONTROL_NORMAL);
+            AudioSfx_StopById(NA_SE_SY_TIME_CONTROL_NORMAL);
         }
     }
 
@@ -976,11 +976,11 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                 return;
 
             case 9:
-                Play_SetRespawnData(&play->state, 1, ((void)0, gSaveContext.save.entranceIndex & 0xFFFF),
-                                    player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
+                Play_SetRespawnData(&play->state, 1, ((void)0, gSaveContext.save.entrance & 0xFFFF), player->unk_3CE,
+                                    0xBFF, &player->unk_3C0, player->unk_3CC);
                 this->unk_276 = 99;
                 play->transitionTrigger = TRANS_TRIGGER_START;
-                play->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_RETURN].entranceIndex;
+                play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
                 play->transitionType = TRANS_TYPE_02;
                 if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     gSaveContext.respawnFlag = -0x63;
@@ -1057,11 +1057,11 @@ void func_80A92950(EnTest6* this, PlayState* play) {
 
             case 9:
                 if (gSaveContext.save.time > CLOCK_TIME(12, 0)) {
-                    Play_SetRespawnData(&play->state, 1, ((void)0, gSaveContext.save.entranceIndex & 0xFFFF),
+                    Play_SetRespawnData(&play->state, 1, ((void)0, gSaveContext.save.entrance & 0xFFFF),
                                         player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
                     this->unk_276 = 99;
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    play->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_RETURN].entranceIndex;
+                    play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
                     play->transitionType = TRANS_TYPE_02;
                     gSaveContext.respawnFlag = 2;
                     play->msgCtx.ocarinaMode = 4;
