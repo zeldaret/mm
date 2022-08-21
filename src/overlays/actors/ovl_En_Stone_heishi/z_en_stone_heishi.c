@@ -288,7 +288,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     switch (this->DrinkBottleState) {
-        case 0: // Initial conversation
+        case EN_STONE_DRINK_BOTTLE_INITIAL:
             if (this->timer == 0) {
                 this->textIndex = 4;
                 func_80151938(play, sEnStoneHeishiTextIds[this->textIndex]);
@@ -299,7 +299,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
         default:
             return;
 
-        case 1: // Shiro starts drinking bottle
+        case EN_STONE_DRINK_BOTTLE_DRINKING:
             if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
                 Player* player = GET_PLAYER(play);
 
@@ -319,7 +319,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
             }
             break;
 
-        case 2: // Bottle becomes empty, Shiro quits drinking
+        case EN_STONE_DRINK_BOTTLE_EMPTY:
             if (this->timer != 0) {
                 if (this->timer < 10 && (this->bottleDisplay != EN_STONE_BOTTLE_EMPTY)) {
                     this->bottleDisplay = EN_STONE_BOTTLE_EMPTY;
@@ -331,7 +331,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
             }
             break;
 
-        case 3: // Shiro stands up
+        case EN_STONE_DRINK_BOTTLE_STAND_UP:
             if (this->endFrame <= currentFrame) {
                 func_801A3098(0x922);
                 this->bottleDisplay = EN_STONE_BOTTLE_NONE;
@@ -340,7 +340,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
             }
             break;
 
-        case 4:
+        case EN_STONE_DRINK_BOTTLE_STANDING:
             if (this->endFrame <= currentFrame) {
                 this->textIndex = 5;
                 func_80151938(play, sEnStoneHeishiTextIds[this->textIndex]);

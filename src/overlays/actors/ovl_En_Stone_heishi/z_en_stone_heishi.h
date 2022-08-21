@@ -31,6 +31,14 @@ typedef struct EnStoneheishi {
     /* 0x278 */ ColliderCylinder collider;
 } EnStoneheishi; // size = 0x2C4
 
+typedef enum EN_STONE_DRINK_BOTTLE {
+    /* 0 */ EN_STONE_DRINK_BOTTLE_INITIAL,
+    /* 1 */ EN_STONE_DRINK_BOTTLE_DRINKING,
+    /* 2 */ EN_STONE_DRINK_BOTTLE_EMPTY,
+    /* 3 */ EN_STONE_DRINK_BOTTLE_STAND_UP,
+    /* 4 */ EN_STONE_DRINK_BOTTLE_STANDING
+} EN_STONE_DRINK_BOTTLE;
+
 typedef enum EN_STONE_HEISHI_BOTTLE {
     /* 0 */ EN_STONE_BOTTLE_NONE,
     /* 1 */ EN_STONE_BOTTLE_RED_POTION,
