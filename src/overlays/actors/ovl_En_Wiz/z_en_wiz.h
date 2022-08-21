@@ -33,11 +33,14 @@ typedef struct EnWiz {
     /* 0x3CC */ char unk_3CC[4];
     /* 0x3D0 */ f32 endFrame;
     /* 0x3D4 */ f32 unk_3D4;
-    /* 0x3D8 */ char unk_3D8[0x18];
+    /* 0x3D8 */ Vec3f unk_3D8;
+    /* 0x3E4 */ f32 unk_3E4;
+    /* 0x3E8 */ f32 unk_3E8;
+    /* 0x3EC */ f32 unk_3EC;
     /* 0x3F0 */ Vec3f unk_3F0;
     /* 0x3FC */ char unk_3FC[0x18];
     /* 0x414 */ Vec3f unk_414;
-    /* 0x420 */ char unk_420[0x28];
+    /* 0x420 */ Actor* unk_420[10];
     /* 0x448 */ s32 unk_448;
     /* 0x44C */ char unk_44C[4];
     /* 0x450 */ f32 unk_450;
@@ -50,10 +53,19 @@ typedef struct EnWiz {
     /* 0x74A */ s16 unk_74A;
     /* 0x74C */ s16 switchFlag;
     /* 0x74E */ s16 unk_74E;
-    /* 0x750 */ char unk_750[0xCC];
+    /* 0x750 */ char unk_750[2];
+    /* 0x752 */ s16 drawDmgEffTimer;
+    /* 0x754 */ s16 drawDmgEffType;
+    /* 0x756 */ char unk_756[2];
+    /* 0x758 */ f32 drawDmgEffScale;
+    /* 0x75C */ f32 drawDmgEffFrozenSteamScale;
+    /* 0x760 */ Vec3f bodyPartsPos[12];
+    /* 0x7F0 */ s16 bodyPartsPosIndex;
+    /* 0x7F2 */ s16 unk_7F2[10];
+    /* 0x806 */ char unk_806[0x16];
     /* 0x81C */ Vec3f unk_81C[10];
     /* 0x894 */ Vec3s unk_894[10];
-    /* 0x8D0 */ char unk_898[0x4B0];
+    /* 0x8D0 */ Vec3s jointTable3[10][20];
 } EnWiz; // size = 0xD80
 
 extern const ActorInit En_Wiz_InitVars;

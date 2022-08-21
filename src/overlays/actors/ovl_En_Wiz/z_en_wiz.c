@@ -31,6 +31,8 @@ extern AnimationHeader D_06002458;
 extern AnimationHeader D_060060E8;
 extern AnimationHeader D_060007B0;
 extern AnimationHeader D_06002218;
+extern Gfx D_0407D590[];
+extern Gfx D_06001860[];
 
 const ActorInit En_Wiz_InitVars = {
     ACTOR_EN_WIZ,
@@ -279,10 +281,6 @@ static Color_RGBA8 D_80A48D60 = { 250, 250, 250, 255 };
 
 static Color_RGBA8 D_80A48D64 = { 180, 180, 180, 255 };
 
-static Vec3f D_80A48D68 = { 0.0f, 0.0f, 0.0f };
-
-static Vec3f D_80A48D74 = { 0.0f, 0.0f, 0.0f };
-
 void EnWiz_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnWiz* this = THIS;
@@ -451,8 +449,79 @@ void func_80A468CC(EnWiz* this, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/EnWiz_Update.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A47FCC.s")
+void func_80A47FCC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    Vec3f sp24 = { 0.0f, 0.0f, 0.0f };
+    EnWiz* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A48138.s")
+    if (limbIndex == 9) {
+        sp24.x = 7300.0f;
+        sp24.y = -1500.0f;
+        if (this->unk_3B0 != 9) {
+            sp24.y = 0.0f;
+            sp24.x = 5300.0f;
+        }
+
+        Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_MultVec3f(&sp24, &this->unk_3D8);
+    }
+
+    Collider_UpdateSpheres(limbIndex, &this->unk_454);
+
+    if ((limbIndex == 1) || (limbIndex == 2) || (limbIndex == 3) || (limbIndex == 4) || (limbIndex == 6) ||
+        (limbIndex == 7) || (limbIndex == 0xA) || (limbIndex == 0xB) || (limbIndex == 0xC) || (limbIndex == 0xF) ||
+        (limbIndex == 0x12) || (limbIndex == 0xD)) {
+        Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosIndex]);
+        this->bodyPartsPosIndex++;
+        if (this->bodyPartsPosIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
+            this->bodyPartsPosIndex = 0;
+        }
+    }
+}
+
+void func_80A48138(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+    Vec3f sp4C = { 0.0f, 0.0f, 0.0f };
+    s32 pad;
+    EnWiz* this = THIS;
+
+    if (this->unk_3B0 != 6) {
+        if (limbIndex == 9) {
+            sp4C.x = 7300.0f;
+            sp4C.y = -1500.0f;
+            if (this->unk_3B0 != 9) {
+                sp4C.y = 0.0f;
+                sp4C.x = 5300.0f;
+            }
+
+            Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_MultVec3f(&sp4C, &this->unk_3D8);
+        }
+    } else {
+        if (this->unk_3B2 == 0) {
+            Vec3f sp38;
+
+            Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_MultVec3f(&sp4C, &sp38);
+            sp38.x += randPlusMinusPoint5Scaled(4.0f);
+            sp38.y += randPlusMinusPoint5Scaled(7.0f);
+            sp38.z += randPlusMinusPoint5Scaled(5.0f);
+            func_800B3030(play, &sp38, &gZeroVec3f, &gZeroVec3f, ((Rand_ZeroFloat(1.0f) * 50.0f) + 70.0f), 10, 1);
+            SoundSource_PlaySfxAtFixedWorldPos(play, &sp38, 10, NA_SE_EN_EXTINCT);
+        }
+
+        if ((limbIndex >= 0x13) && (this->unk_3B2 == 0)) {
+            this->unk_3B2 = 4;
+        }
+    }
+
+    if ((limbIndex == 1) || (limbIndex == 2) || (limbIndex == 3) || (limbIndex == 4) || (limbIndex == 6) ||
+        (limbIndex == 7) || (limbIndex == 0xA) || (limbIndex == 0xB) || (limbIndex == 0xC) || (limbIndex == 0xF) ||
+        (limbIndex == 0x12) || (limbIndex == 0xD)) {
+        Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosIndex]);
+        this->bodyPartsPosIndex++;
+        if (this->bodyPartsPosIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
+            this->bodyPartsPosIndex = 0;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/EnWiz_Draw.s")
