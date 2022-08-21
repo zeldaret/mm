@@ -124,7 +124,7 @@ s32 func_80A94A90(PlayState* play, ActorPathing* actorPathing) {
 }
 
 void func_80A94AB8(EnAz* this, PlayState* play, s32 spawnIndex) {
-    play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(spawnIndex);
+    play->nextEntrance = Entrance_CreateFromSpawn(spawnIndex);
     gSaveContext.nextCutsceneIndex = 0;
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_03;
@@ -183,27 +183,27 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
     this->actor.targetMode = 1;
     switch (BEAVER_GET_PARAM_F00(thisx)) {
         case 0:
-            phi_v1 = (gSaveContext.save.entranceIndex == 0x8E00) && (gSaveContext.save.weekEventReg[93] & 1);
+            phi_v1 = (gSaveContext.save.entrance == 0x8E00) && (gSaveContext.save.weekEventReg[93] & 1);
             phi_v1 = !phi_v1;
             break;
         case 2:
-            phi_v1 = (gSaveContext.save.entranceIndex != 0x8E10) || !(gSaveContext.save.weekEventReg[24] & 4);
+            phi_v1 = (gSaveContext.save.entrance != 0x8E10) || !(gSaveContext.save.weekEventReg[24] & 4);
             break;
         case 4:
-            phi_v1 = gSaveContext.save.entranceIndex != 0x8E20;
+            phi_v1 = gSaveContext.save.entrance != 0x8E20;
             break;
         case 1:
-            phi_v1 = (gSaveContext.save.entranceIndex == 0x8E00) && (gSaveContext.save.weekEventReg[93] & 1);
+            phi_v1 = (gSaveContext.save.entrance == 0x8E00) && (gSaveContext.save.weekEventReg[93] & 1);
             phi_v1 = !phi_v1;
             break;
         case 3:
-            phi_v1 = (gSaveContext.save.entranceIndex != 0x8E10) || (gSaveContext.save.weekEventReg[24] & 4);
+            phi_v1 = (gSaveContext.save.entrance != 0x8E10) || (gSaveContext.save.weekEventReg[24] & 4);
             break;
         case 5:
-            phi_v1 = gSaveContext.save.entranceIndex != 0x8E20;
+            phi_v1 = gSaveContext.save.entrance != 0x8E20;
             break;
         case 6:
-            phi_v1 = (gSaveContext.save.entranceIndex == 0x8E00) && !(gSaveContext.save.weekEventReg[93] & 1);
+            phi_v1 = (gSaveContext.save.entrance == 0x8E00) && !(gSaveContext.save.weekEventReg[93] & 1);
             phi_v1 = !phi_v1;
             break;
         default:
@@ -261,7 +261,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 0, &this->animIndex);
     this->skelAnime.curFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
 
-    switch (gSaveContext.save.entranceIndex) {
+    switch (gSaveContext.save.entrance) {
         case 0x8E00:
             if (gSaveContext.save.weekEventReg[93] & 1) {
                 this->unk_2FA = 5;
@@ -286,7 +286,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
             if (!(this->unk_374 & 2)) {
                 this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10000);
             }
-            if (gSaveContext.save.entranceIndex == 0x8E30) {
+            if (gSaveContext.save.entrance == 0x8E30) {
                 this->unk_2FA = 0xA;
             }
             func_80A97C0C(this, play);
@@ -372,7 +372,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
 void EnAz_Destroy(Actor* thisx, PlayState* play2) {
     EnAz* this = THIS;
 
-    if (gSaveContext.save.entranceIndex != 0x8E10) {
+    if (gSaveContext.save.entrance != 0x8E10) {
         gSaveContext.unk_3DD0[4] = 5;
     }
     Collider_DestroyCylinder(play2, &this->collider);
@@ -1258,7 +1258,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
                     func_80A97114(this, play);
                     this->unk_378 = 2;
                 } else if (func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
-                                         EXCH_ITEM_MINUS1)) {
+                                         PLAYER_AP_MINUS1)) {
                     this->actor.textId = func_80A973B4(this, play);
                 }
             } else {
@@ -1388,7 +1388,7 @@ void func_80A97C4C(EnAz* this, PlayState* play) {
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3) || (this->unk_2FA == 6) || (this->unk_2FA == 8)) {
         gSaveContext.save.weekEventReg[24] &= (u8)~1;
         func_800FD750(NA_BGM_MINI_GAME_2);
-        play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(1);
+        play->nextEntrance = Entrance_CreateFromSpawn(1);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_80;
@@ -1469,7 +1469,7 @@ void func_80A97F9C(EnAz* this, PlayState* play) {
         }
         gSaveContext.unk_3DD0[4] = 5;
         this->unk_374 &= ~0x10;
-        play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(2);
+        play->nextEntrance = Entrance_CreateFromSpawn(2);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_03;
