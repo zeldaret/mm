@@ -1,8 +1,9 @@
 ﻿<Root>
-    <!-- Adult Ruto from OoT (Unused) -->
+    <!-- Adult Ruto from OoT (Unused). -->
+    <!-- Object is Copy from OoT, including documentation. -->
     <File Name="object_ru2" Segment="6">
         <!-- Adult Ruto Animations -->
-        <!-- gAdultRutoCrossingArmsAnim: Used in OoT when the sages seal ganon in the Evil Realm -->
+        <!-- gAdultRutoCrossingArmsAnim: Used in OoT when the sages seal ganon in the Evil Realm. -->
         <Animation Name="gAdultRutoCrossingArmsAnim" Offset="0x04CC"/>
         <Animation Name="gAdultRutoIdleAnim" Offset="0xDE8"/>
 

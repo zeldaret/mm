@@ -16,7 +16,7 @@ typedef struct EnRu {
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ UNK_TYPE1 pad1D8[0x4];
-    /* 0x1DC */ Path* path;
+    /* 0x1DC */ Path* path; // path is preapred in EnRu_Init, but unused after
     /* 0x1E0 */ UNK_TYPE1 pad1E0[0x4];
     /* 0x1E4 */ Vec3f leftFootPos;
     /* 0x1F0 */ Vec3f rightFootPos;
@@ -30,8 +30,8 @@ typedef struct EnRu {
     /* 0x324 */ UNK_TYPE1 pad324[0x12];
     /* 0x336 */ s16 limbRotTableY[RU2_LIMB_MAX];
     /* 0x364 */ s16 limbRotTableZ[RU2_LIMB_MAX];
-    /* 0x364 */ UNK_TYPE1 pad392[0x2];
-    /* 0x394 */ Vec3f bodyPartsPos[0xF]; // why is this not RU2_LIMB_MAX? F is the size of the shadow tho...
+    /* 0x392 */ UNK_TYPE1 pad392[0x2];
+    /* 0x394 */ Vec3f bodyPartsPos[0xF]; // ARRAY_SIZE(sRuBodyParts)
     /* 0x348 */ UNK_TYPE1 padUNK[6];
     /* 0x44E */ s16 eyeState;
     /* 0x450 */ s16 blinkTimer;

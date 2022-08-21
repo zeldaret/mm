@@ -98,36 +98,26 @@ static AnimationInfoS sAnimations[] = {
 };
 
 // in PostLimbdraw, converts limbIndex to bodyPartsPos index
-static s8 sBodyPartPosIndices[] = { -1, -1, 0x0C, 0x0D, 0x0E, -1, 0x09, 0x0A, 0x0B, -1,  0x00, 0x06,
-                                    -1, -1, 0x07, 0x08, 0x02, -1, -1,   0x03, 0x4,  0x2, 0x1,  0 };
+static s8 sBodyPartPosIndices[] = { -1, -1, 12, 13, 14, -1, 9, 10, 11, -1,  0, 6,
+                                    -1, -1, 7, 8, 2, -1, -1, 3, 4,  2, 1,  0 };
 
 static s8 sRuBodyParts[] = {
-    0x00, 0x00, 0x00, 0x00, 0x03, 0x04, 0x00, 0x06, 0x07, 0x00, 0x09, 0x0A, 0x00, 0x0C, 0x0D, 0x00,
+    0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13, 0,
 };
 
-static u8 sRuShadowSizes[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static u8 sRuShadowSizes[] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+};
 
 static TrackOptionsSet sTrackOptions = {
-    { 0xFA0, 4, 1, 3 },
-    { 0x1770, 4, 1, 6 },
-    { 0xFA0, 4, 1, 3 },
-    { 0x1770, 4, 1, 6 },
+    { 0xFA0, 4, 1, 3 }, { 0x1770, 4, 1, 6 }, { 0xFA0, 4, 1, 3 }, { 0x1770, 4, 1, 6 }
 };
 
-static Vec3f sHeadFocusPos = {
-    800.0f,
-    0,
-    0,
-};
+static Vec3f sHeadFocusPos = { 800.0f, 0, 0 };
 
-static Vec3f sBodyFocusPos = {
-    0,
-    0,
-    0,
-};
+static Vec3f sBodyFocusPos = { 0, 0, 0 };
 
-// copy of displaylist found in En_Zo
+// This is a copy of displaylist found in En_Zo
 static Gfx sTransparencyDlist[] = {
     gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
                           G_RM_FOG_SHADE_A,
@@ -195,7 +185,7 @@ s32 EnRu_PlayWalkingSound(EnRu* this, PlayState* play) {
     return false;
 }
 
-// this func is only ever called with eyeStateMax == 3
+// This function is only ever called with eyeStateMax == 3
 void EnRu_UpdateEyes(EnRu* this, s32 eyeStateMax) {
     if (DECR(this->blinkTimer) == 0) {
         this->eyeState++;
@@ -206,8 +196,7 @@ void EnRu_UpdateEyes(EnRu* this, s32 eyeStateMax) {
     }
 }
 
-void EnRu_CollisionCheck(EnRu* this, PlayState* play) {
-    // why the manual collider pos update?
+void EnRu_UpdateCollider(EnRu* this, PlayState* play) {
     this->collider.dim.pos.x = (s16)(s32)this->actor.world.pos.x;
     this->collider.dim.pos.y = (s16)(s32)this->actor.world.pos.y;
     this->collider.dim.pos.z = (s16)(s32)this->actor.world.pos.z;
@@ -220,7 +209,7 @@ void EnRu_UpdateModel(EnRu* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    // head and torso tracking to link if in front of ruto
+    // Head and Torso tracking to Player if in front of Ru.
     if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x2710, this->actor.yawTowardsPlayer)) {
         Vec3f playerPos;
 
@@ -277,7 +266,7 @@ void EnRu_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     EnRu_UpdateModel(this, play);
-    EnRu_CollisionCheck(this, play);
+    EnRu_UpdateCollider(this, play);
 }
 
 s32 EnRu_OverrideLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
@@ -298,8 +287,8 @@ s32 EnRu_OverrideLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
     if ((limbIndex == RU2_LIMB_TORSO) || (limbIndex == RU2_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == RU2_LIMB_RIGHT_UPPER_ARM)) {
-        rot->y += (s32)(s16)(Math_SinS(this->limbRotTableY[limbIndex]) * 200.0f);
-        rot->z += (s32)(s16)(Math_CosS(this->limbRotTableZ[limbIndex]) * 200.0f);
+        rot->y += (s16)(Math_SinS(this->limbRotTableY[limbIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->limbRotTableZ[limbIndex]) * 200.0f);
     }
 
     return false;
@@ -317,7 +306,6 @@ void EnRu_PostLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
         Matrix_MultVec3f(&headFocus, &thisx->focus.pos);
     }
 
-    // pos not rot for some reason? not sure what this is doing
     if (limbIndex == RU2_LIMB_LEFT_FOOT) {
         Matrix_MultVec3f(&bodyPartPos, &this->leftFootPos);
     }
@@ -358,10 +346,9 @@ void EnRu_Draw(Actor* thisx, PlayState* play) {
         *shadowTexIter++ = 0;
     }
 
-    // really? they wanted to give her the weird shadow?
     for (i = 0; i < 5; i++) {
-        SubS_GenShadowTex(&this->bodyPartsPos[0], &this->actor.world.pos, shadowTex, (i / 5.0f), 0xF, sRuShadowSizes,
-                          sRuBodyParts);
+        SubS_GenShadowTex(&this->bodyPartsPos[0], &this->actor.world.pos, shadowTex, (i / 5.0f),
+                          (ARRAY_COUNT(sRuBodyParts) - 1), sRuShadowSizes, sRuBodyParts);
     }
 
     SubS_DrawShadowTex(&this->actor, &play->state, shadowTex);
