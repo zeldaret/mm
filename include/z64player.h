@@ -209,7 +209,28 @@ typedef enum PlayerBottle {
     /* 21 */ PLAYER_BOTTLE_MAX
 } PlayerBottle;
 
-typedef enum {
+#define GET_EXPLOSIVE_FROM_AP(actionParam) ((actionParam) - PLAYER_AP_BOMB)
+
+typedef enum PlayerExplosive {
+    /* -1 */ PLAYER_EXPLOSIVE_NONE = -1,
+    /*  0 */ PLAYER_EXPLOSIVE_BOMB = GET_EXPLOSIVE_FROM_AP(PLAYER_AP_BOMB),
+    /*  1 */ PLAYER_EXPLOSIVE_POWDER_KEG = GET_EXPLOSIVE_FROM_AP(PLAYER_AP_POWDER_KEG),
+    /*  2 */ PLAYER_EXPLOSIVE_BOMBCHU = GET_EXPLOSIVE_FROM_AP(PLAYER_AP_BOMBCHU),
+    /*  3 */ PLAYER_EXPLOSIVE_MAX
+} PlayerExplosive;
+
+#define GET_SWORD_FROM_AP(actionParam) ((actionParam) - PLAYER_AP_SWORD_KOKIRI)
+
+typedef enum PlayerSword {
+    /* -1 */ PLAYER_SWORD_NONE = -1,
+    /*  0 */ PLAYER_SWORD_KOKIRI = GET_SWORD_FROM_AP(PLAYER_AP_SWORD_KOKIRI),
+    /*  1 */ PLAYER_SWORD_RAZOR = GET_SWORD_FROM_AP(PLAYER_AP_SWORD_RAZOR),
+    /*  2 */ PLAYER_SWORD_GILDED = GET_SWORD_FROM_AP(PLAYER_AP_SWORD_GILDED),
+    /*  3 */ PLAYER_SWORD_GREAT_FAIRY = GET_SWORD_FROM_AP(PLAYER_AP_SWORD_GREAT_FAIRY),
+    /*  4 */ PLAYER_SWORD_MAX
+} PlayerSword;
+
+typedef enum PlayerMeleeWeaponAnimation {
     /*  0 */ PLAYER_MWA_FORWARD_SLASH_1H,      // Vertical one-handed slash
     /*  1 */ PLAYER_MWA_FORWARD_SLASH_2H,      // Vertical two-handed slash
     /*  2 */ PLAYER_MWA_FORWARD_COMBO_1H,      // Third vertical one-handed slash

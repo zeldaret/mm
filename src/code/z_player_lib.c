@@ -1426,32 +1426,31 @@ PlayerBottle Player_GetBottleHeld(Player* Player) {
     return Player_ActionToBottle(Player, Player->itemActionParam);
 }
 
-s32 Player_ActionToExplosive(Player* player, PlayerActionParam actionParam) {
-    s32 explosive = actionParam - PLAYER_AP_BOMB;
+PlayerExplosive Player_ActionToExplosive(Player* player, PlayerActionParam actionParam) {
+    PlayerExplosive explosive = GET_EXPLOSIVE_FROM_AP(actionParam);
 
-    // Relies on explosive-related action params to be contiguous
-    if ((explosive >= (PLAYER_AP_BOMB - PLAYER_AP_BOMB)) && (explosive <= (PLAYER_AP_BOMBCHU - PLAYER_AP_BOMB))) {
+    if ((explosive > PLAYER_EXPLOSIVE_NONE) && (explosive < PLAYER_EXPLOSIVE_MAX)) {
         return explosive;
     }
 
-    return -1;
+    return PLAYER_EXPLOSIVE_NONE;
 }
 
-s32 Player_GetExplosiveHeld(Player* player) {
+PlayerExplosive Player_GetExplosiveHeld(Player* player) {
     return Player_ActionToExplosive(player, player->itemActionParam);
 }
 
-s32 Player_ActionToSword(Actor* actor, PlayerActionParam actionParam) {
-    s32 sword = 0;
+// Note this function maps PLAYER_AP_LAST_USED to PLAYER_SWORD_KOKIRI
+PlayerSword Player_ActionToSword(Player* player, PlayerActionParam actionParam) {
+    PlayerSword sword = PLAYER_SWORD_KOKIRI;
 
     //! FAKE:
     if ((actionParam == PLAYER_AP_LAST_USED) ||
-        ((sword = actionParam - PLAYER_AP_SWORD_KOKIRI, (sword >= PLAYER_AP_SWORD_KOKIRI - PLAYER_AP_SWORD_KOKIRI)) &&
-         (sword <= PLAYER_AP_SWORD_GREAT_FAIRY - PLAYER_AP_SWORD_KOKIRI))) {
+        ((sword = GET_SWORD_FROM_AP(actionParam), (sword > PLAYER_SWORD_NONE)) && (sword < PLAYER_SWORD_MAX))) {
         return sword;
     }
 
-    return -1;
+    return PLAYER_SWORD_NONE;
 }
 
 s32 func_801242B4(Player* player) {
@@ -3313,6 +3312,9 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
         Matrix_Translate(temp_v1_2->x, temp_v1_2->y, temp_v1_2->z, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
+        // Note this does not check for PLAYER_BOTTLE_NONE, which would produce an OoB access on D_801C0CA8.
+        // On normal circunstances it should not be a problem because of the previous
+        // `player->leftHandType == PLAYER_MODELTYPE_LH_BOTTLE` check
         if (bottle != PLAYER_BOTTLE_EMPTY) {
             Color_RGB8* bottleColor = &D_801C0CA8[bottle];
 
