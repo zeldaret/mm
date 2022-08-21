@@ -884,11 +884,11 @@ typedef struct {
     /* 0x00 */ GameState state;
 } SetupState; // size = 0xA4
 
-typedef struct PreNMIContext {
+typedef struct PreNMIState {
     /* 0x00 */ GameState state;
     /* 0xA4 */ u32 timer;
     /* 0xA8 */ UNK_TYPE4 unkA8;
-} PreNMIContext; // size = 0xAC
+} PreNMIState; // size = 0xAC
 
 typedef struct {
     /* 0x00 */ u32 resetting;
