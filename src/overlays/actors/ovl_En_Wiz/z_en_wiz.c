@@ -486,8 +486,40 @@ void func_80A456A0(EnWiz* this, PlayState* play) {
 void func_80A45CD8(EnWiz* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A45CD8.s")
 
-void func_80A460A4(EnWiz* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A460A4.s")
+void func_80A460A4(EnWiz* this) {
+    s32 i;
+    s32 j;
+    s32 playSfx = false;
+
+    for (i = 0; i < this->unk_740; i++) {
+        if (this->unk_81C[i].x != 0.0f && this->unk_81C[i].z != 0.0f) {
+            f32 diffX;
+            f32 diffZ;
+
+            j = this->unk_806[i];
+            diffX = this->unk_420[j]->world.pos.x - this->unk_81C[i].x;
+            diffZ = this->unk_420[j]->world.pos.z - this->unk_81C[i].z;
+            playSfx++;
+
+            if (sqrtf(SQ(diffX) + SQ(diffZ)) < 30.0f) {
+                this->unk_806[i]--;
+                if (this->unk_806[i] < 0) {
+                    this->unk_806[i] = this->unk_740 - 1;
+                }
+            }
+
+            j = this->unk_806[i];
+            Math_ApproachF(&this->unk_81C[i].x, this->unk_420[j]->world.pos.x, 0.3f, 30.0f);
+            Math_ApproachF(&this->unk_81C[i].y, this->unk_420[j]->world.pos.y, 0.3f, 30.0f);
+            Math_ApproachF(&this->unk_81C[i].z, this->unk_420[j]->world.pos.z, 0.3f, 30.0f);
+            this->unk_894[i].y = Math_Vec3f_Yaw(&this->unk_81C[i], &this->unk_420[j]->world.pos);
+        }
+    }
+
+    if (playSfx) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_RUN - SFX_FLAG);
+    }
+}
 
 void func_80A46280(EnWiz* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {

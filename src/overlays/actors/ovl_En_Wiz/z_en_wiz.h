@@ -64,7 +64,8 @@ typedef struct EnWiz {
     /* 0x760 */ Vec3f bodyPartsPos[12];
     /* 0x7F0 */ s16 bodyPartsPosIndex;
     /* 0x7F2 */ s16 unk_7F2[10];
-    /* 0x806 */ char unk_806[0x16];
+    /* 0x806 */ s16 unk_806[10];
+    /* 0x81A */ char unk_81A[0x2];
     /* 0x81C */ Vec3f unk_81C[10];
     /* 0x894 */ Vec3s unk_894[10];
     /* 0x8D0 */ Vec3s jointTable3[10][20];
