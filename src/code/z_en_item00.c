@@ -739,7 +739,7 @@ void EnItem00_DrawRupee(EnItem00* this, PlayState* play) {
 }
 
 TexturePtr D_801ADF44[12] = {
-    gameplay_keep_Tex_05E6F0, // Heart (Not used)
+    gEffHeartTex, // Heart (Not used)
     gameplay_keep_Tex_05CEF0, // Bombs (A), Bombs (0)
     gameplay_keep_Tex_05BEF0, // Arrows (10)
     gameplay_keep_Tex_05B6F0, // Arrows (30)

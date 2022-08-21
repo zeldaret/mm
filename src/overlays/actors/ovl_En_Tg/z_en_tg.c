@@ -271,7 +271,7 @@ void EnTg_DrawHeart(PlayState* play, EnTgHeartEffect* enTgHeartEffect, s32 len) 
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(enTgHeartEffect->scale, enTgHeartEffect->scale, enTgHeartEffect->scale, MTXMODE_APPLY);
 
-            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gEffHeartTex));
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gHoneyAndDarlingHeartModelDL);
         }
