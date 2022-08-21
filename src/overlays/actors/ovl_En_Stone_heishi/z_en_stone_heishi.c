@@ -157,7 +157,7 @@ void func_80BC9560(EnStoneheishi* this, PlayState* play) {
         return;
     }
 
-    if ((!(gSaveContext.save.weekEventReg[0x29] & 0x40)) && (play->actorCtx.unk4 != 0x64)) {
+    if ((!(gSaveContext.save.weekEventReg[0x29] & 0x40)) && (play->actorCtx.unk4 != 100)) {
         this->actor.flags |= ACTOR_FLAG_8000000;
         return;
     }
@@ -169,7 +169,7 @@ void func_80BC9560(EnStoneheishi* this, PlayState* play) {
 
     absYawDiff = ABS_ALT(yawDiff);
 
-    if (absYawDiff < 0x18F1 && ((s32)(player->stateFlags1 << 8) >= 0)) {
+    if ((absYawDiff < 0x18F1) && ((s32)(player->stateFlags1 << 8) >= 0)) {
         func_800B8614(&this->actor, play, 70.0f);
     }
 }
@@ -183,7 +183,7 @@ void func_80BC9660(EnStoneheishi* this) {
 void func_80BC9680(EnStoneheishi* this, PlayState* play) {
     f32 currentFrame = this->skelAnime.curFrame;
 
-    if (this->textIndex == 0 || this->textIndex == 2) {
+    if ((this->textIndex == 0) || (this->textIndex == 2)) {
         if (this->animIndex != EN_STONE_HEISHI_SIT_AND_REACH) {
             if (fabsf(this->headRotY - this->targetHeadPosY) < 50.0f) {
                 EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_SIT_AND_REACH);
@@ -196,7 +196,7 @@ void func_80BC9680(EnStoneheishi* this, PlayState* play) {
                 EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_WAVE);
             }
             return;
-        } else if (!this->textIdSet && (this->endFrame <= currentFrame)) {
+        } else if (!(this->textIdSet) && (this->endFrame <= currentFrame)) {
             Player* player = GET_PLAYER(play);
 
             this->textIdSet = true;
@@ -321,7 +321,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
 
         case EN_STONE_DRINK_BOTTLE_EMPTY:
             if (this->timer != 0) {
-                if (this->timer < 10 && (this->bottleDisplay != EN_STONE_BOTTLE_EMPTY)) {
+                if ((this->timer < 10) && (this->bottleDisplay != EN_STONE_BOTTLE_EMPTY)) {
                     this->bottleDisplay = EN_STONE_BOTTLE_EMPTY;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_NP_DRINK);
                     func_80123D50(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
@@ -333,7 +333,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
 
         case EN_STONE_DRINK_BOTTLE_STAND_UP:
             if (this->endFrame <= currentFrame) {
-                func_801A3098(0x922);
+                func_801A3098(NA_SE_PL_DUMMY_290);
                 this->bottleDisplay = EN_STONE_BOTTLE_NONE;
                 EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_STAND_UP);
                 this->DrinkBottleState++;
@@ -412,7 +412,7 @@ void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 29);
     Actor_SetScale(&this->actor, 0.01f);
 
-    if (((gSaveContext.save.weekEventReg[0x29] & 0x40) || play->actorCtx.unk4 == 100) &&
+    if (((gSaveContext.save.weekEventReg[0x29] & 0x40) || (play->actorCtx.unk4 == 100)) &&
         (((s32)player->stateFlags1 << 8) >= 0)) {
         if ((this->animIndex != EN_STONE_HEISHI_WAVE) &&
             ((((this->action == EN_STONE_ACTION_1) || (this->action == EN_STONE_ACTION_2)) ||
@@ -456,7 +456,7 @@ void EnStoneheishi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     EnStoneheishi* this = THIS;
     Gfx* gfx2;
 
-    if (limbIndex == SOLDIER_LIMB_LEFT_HAND && this->bottleDisplay != EN_STONE_BOTTLE_NONE) {
+    if ((limbIndex == SOLDIER_LIMB_LEFT_HAND) && (this->bottleDisplay != EN_STONE_BOTTLE_NONE)) {
         gfx2 = func_8012C2B4(*gfx);
 
         D_80BCA404.x = 320.0f;
