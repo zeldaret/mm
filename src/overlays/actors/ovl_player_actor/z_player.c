@@ -4117,7 +4117,7 @@ s32 func_80831814(Player* this, PlayState* play, s32 arg2) {
 void func_808318C0(PlayState* play) {
     if (func_80115DB4(play, 0, 3) != 0) {
         if (play->actorCtx.unk3 != 0) {
-            Actor_DisableLens(play);
+            Actor_DeactivateLens(play);
         } else {
             play->actorCtx.unk3 = 1;
         }
@@ -5847,7 +5847,7 @@ void func_80835EAC(PlayState* play, Player* this, Actor* door) {
     Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), 0x50);
     this->unk_3BA =
         play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorStaircase->actor)].sides[0].bgCamDataId;
-    Actor_DisableLens(play);
+    Actor_DeactivateLens(play);
     this->floorSfxOffset = NA_SE_PL_WALK_CONCRETE - SFX_FLAG;
 }
 
@@ -5895,7 +5895,7 @@ void func_8083604C(PlayState* play, Player* this, Actor* door) {
         this->unk_3BA = (s16)play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorSliding->dyna.actor)]
                             .sides[this->doorDirection > 0 ? 0 : 1]
                             .bgCamDataId;
-        Actor_DisableLens(play);
+        Actor_DeactivateLens(play);
     }
 }
 
@@ -5978,7 +5978,7 @@ void func_80836258(PlayState* play, Player* this, Actor* door) {
         this->stateFlags1 |= PLAYER_STATE1_20000000;
 
         if (this->actor.category == ACTORCAT_PLAYER) {
-            Actor_DisableLens(play);
+            Actor_DeactivateLens(play);
             func_80835BF8(&doorNormal->dyna.actor.world.pos, doorNormal->dyna.actor.shape.rot.y, -temp_fv0, &pos);
             pos.y = doorNormal->dyna.actor.world.pos.y + 10.0f;
             BgCheck_EntityRaycastFloor5(&play->colCtx, &poly, &bgId, &this->actor, &pos);
@@ -6819,7 +6819,7 @@ void func_808388B8(PlayState* play, Player* this, PlayerTransformation playerFor
 
     D_80862B50 = play->envCtx.lightSettings;
     this->actor.velocity.y = 0.0f;
-    Actor_DisableLens(play);
+    Actor_DeactivateLens(play);
 }
 
 void func_808389BC(PlayState* play, Player* this) {
@@ -8451,7 +8451,7 @@ s32 func_8083CCB4(Player* this, PlayState* play) {
                 func_8082E920(play, this, 1 | ANIM_FLAG_UPDATEY | 8 | ANIM_FLAG_NOMOVE | 0x80);
                 this->actor.parent = this->rideActor;
                 func_8082DAD4(this);
-                Actor_DisableLens(play);
+                Actor_DeactivateLens(play);
 
                 return true;
             }
