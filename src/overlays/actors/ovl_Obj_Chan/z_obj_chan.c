@@ -231,7 +231,7 @@ void ObjChan_ChandelierAction(ObjChan* this2, PlayState* play) {
     }
     this->actor.shape.rot.z = (Math_SinS(this->unk1D4) * this->unk1D0);
     if ((this->stateFlags & OBJCHAN_STATE_START_CUTSCENE) &&
-        SubS_StartActorCutscene(&this->actor, this->cutscenes[0], -1, 0)) {
+        SubS_StartActorCutscene(&this->actor, this->cutscenes[0], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         this->stateFlags |= OBJCHAN_STATE_CUTSCENE;
         this->stateFlags &= ~OBJCHAN_STATE_START_CUTSCENE;
     }

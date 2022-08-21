@@ -32,7 +32,7 @@ const ActorInit Dm_Char00_InitVars = {
     (ActorFunc)DmChar00_Draw,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &gameplay_keep_Anim_02B2E8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &gameplay_keep_Anim_029140, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &object_delf_Anim_004FF4, 1.0f, 0.0f, -1.0f, 2, 0.0f },
@@ -542,7 +542,7 @@ void DmChar00_Init(Actor* thisx, PlayState* play) {
     SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_02AF58.sh, &gameplay_keep_Anim_029140, this->jointTable,
                    this->morphTable, 7);
     ActorShape_Init(&thisx->shape, 0.0f, NULL, 15.0f);
-    func_80AA5580(&this->skelAnime, sAnimations, 0);
+    func_80AA5580(&this->skelAnime, sAnimationInfo, 0);
     Actor_SetScale(thisx, 0.01f);
     this->actionFunc = func_80AA67F8;
 }
@@ -783,7 +783,7 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
                         this->unk_261 = 0;
                         break;
                 }
-                func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
+                func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
             }
         }
         Cutscene_ActorTranslateAndYaw(&this->actor, play, temp_v0);
@@ -796,7 +796,7 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
             case 0x4:
             case 0x5:
                 this->unk_261 += 4;
-                func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
+                func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
                 this->skelAnime.curFrame = 37.0f;
                 break;
 
@@ -805,7 +805,7 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
             case 0x14:
             case 0x15:
                 this->unk_261 += 2;
-                func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
+                func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
                 break;
 
             case 0xA:
@@ -833,18 +833,18 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
             case 0x50:
             case 0x53:
                 this->unk_261 += 1;
-                func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
+                func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
                 break;
 
             case 0x2D:
                 this->unk_261 = 19;
-                func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
+                func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
                 break;
 
             case 0x46:
             case 0x4D:
                 this->unk_261 = 0;
-                func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
+                func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
                 break;
         }
     }
@@ -856,7 +856,7 @@ void func_80AA67F8(DmChar00* this, PlayState* play) {
     if ((play->csCtx.state == 0) && (gSaveContext.sceneSetupIndex == 0) && (play->csCtx.currentCsIndex == 1)) {
         if (this->unk_261 != 42) {
             this->unk_261 = 42;
-            func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
+            func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
         }
 
         Math_SmoothStepToF(&this->actor.world.pos.x, 0.0f, 0.5f, 0.5f, 0.001f);
@@ -865,7 +865,7 @@ void func_80AA67F8(DmChar00* this, PlayState* play) {
 
         if (player->actor.world.pos.z < -625.0f) {
             this->unk_261 = 43;
-            func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
+            func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
             this->actionFunc = func_80AA695C;
             this->skelAnime.playSpeed = 1.5f;
         }

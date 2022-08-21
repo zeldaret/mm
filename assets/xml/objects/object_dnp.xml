@@ -81,7 +81,7 @@
         <Limb Name="object_dnp_Standardlimb_010CD8" Type="Standard" EnumName="OBJECT_DNP_LIMB_17" Offset="0x10CD8" />
         <Limb Name="object_dnp_Standardlimb_010CE4" Type="Standard" EnumName="OBJECT_DNP_LIMB_18" Offset="0x10CE4" />
         <Limb Name="object_dnp_Standardlimb_010CF0" Type="Standard" EnumName="OBJECT_DNP_LIMB_19" Offset="0x10CF0" />
-        <Skeleton Name="object_dnp_Skel_010D60" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DNP_LIMB_NONE" LimbMax="OBJECT_DNP_LIMB_MAX" EnumName="object_dnp_Limbs" Offset="0x10D60" />
+        <Skeleton Name="object_dnp_Skel_010D60" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DNP_LIMB_NONE" LimbMax="OBJECT_DNP_LIMB_MAX" EnumName="ObjectDnpLimb" Offset="0x10D60" />
         <Animation Name="object_dnp_Anim_0115B8" Offset="0x115B8" />
         <Animation Name="object_dnp_Anim_012428" Offset="0x12428" />
     </File>

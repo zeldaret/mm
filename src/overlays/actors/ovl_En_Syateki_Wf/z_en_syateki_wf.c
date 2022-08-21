@@ -113,7 +113,7 @@ const ActorInit En_Syateki_Wf_InitVars = {
     (ActorFunc)EnSyatekiWf_Draw,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &gWolfosWaitingAnim, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
     { &gWolfosRunningAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
     { &gWolfosRunningAnim, 1.0f, 0.0f, 4.0f, ANIMMODE_ONCE, 1.0f },
@@ -257,7 +257,7 @@ void func_80A20320(EnSyatekiWf* this, PlayState* play) {
 }
 
 void func_80A20378(EnSyatekiWf* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
     this->actor.speedXZ = 10.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.draw = EnSyatekiWf_Draw;
@@ -328,7 +328,7 @@ void func_80A20670(EnSyatekiWf* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP);
     this->actor.velocity.y = 20.0f;
     this->actor.speedXZ = 5.0f;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
     this->actionFunc = func_80A206DC;
 }
 
@@ -340,7 +340,7 @@ void func_80A206DC(EnSyatekiWf* this, PlayState* play) {
 
 void func_80A20710(EnSyatekiWf* this) {
     this->actor.speedXZ = 0.0f;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
     this->actionFunc = func_80A2075C;
 }
 
@@ -354,7 +354,7 @@ void func_80A2079C(EnSyatekiWf* this) {
     this->unk_29A = 40;
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
     this->actionFunc = func_80A20800;
 }
 
@@ -374,7 +374,7 @@ void func_80A20858(EnSyatekiWf* this, PlayState* play) {
     this->actor.speedXZ = 0.0f;
     EffectSsExtra_Spawn(play, &this->actor.world.pos, &D_80A20EDC, &D_80A20EE8, 5, 2);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_DEAD);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
     syatekiMan->score += 100;
     this->actionFunc = func_80A208F8;
 }

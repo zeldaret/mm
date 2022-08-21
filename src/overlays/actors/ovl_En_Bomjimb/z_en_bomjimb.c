@@ -81,7 +81,7 @@ static AnimationHeader* sAnimations[] = {
     &object_cs_Anim_0031C4, &object_cs_Anim_010B68,
 };
 
-static u8 sAnimModes[] = {
+static u8 sAnimationModes[] = {
     ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
     ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
     ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
@@ -177,8 +177,8 @@ void EnBomjimb_Destroy(Actor* thisx, PlayState* play) {
 void func_80C0113C(EnBomjimb* this, s32 arg1, f32 arg2) {
     this->unk_2DC = arg1;
     this->unk_2B8 = Animation_GetLastFrame(sAnimations[arg1]);
-    Animation_Change(&this->skelAnime, sAnimations[this->unk_2DC], arg2, 0.0f, this->unk_2B8, sAnimModes[this->unk_2DC],
-                     -4.0f);
+    Animation_Change(&this->skelAnime, sAnimations[this->unk_2DC], arg2, 0.0f, this->unk_2B8,
+                     sAnimationModes[this->unk_2DC], -4.0f);
 }
 
 void func_80C011CC(EnBomjimb* this) {
@@ -790,12 +790,12 @@ void func_80C02BCC(EnBomjimb* this, PlayState* play) {
 
 void func_80C02CA4(EnBomjimb* this, PlayState* play) {
     if (BREG(13) == 0) {
-        play->nextEntranceIndex = play->setupExitList[this->unk_2B2];
+        play->nextEntrance = play->setupExitList[this->unk_2B2];
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
     } else {
-        play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(5);
+        play->nextEntrance = Entrance_CreateFromSpawn(5);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;

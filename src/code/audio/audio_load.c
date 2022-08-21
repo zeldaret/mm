@@ -1208,7 +1208,7 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
             gAudioContext.refreshRate = 60;
     }
 
-    Audio_InitMesgQueues();
+    AudioThread_InitMesgQueues();
 
     for (i = 0; i < ARRAY_COUNT(gAudioContext.aiBufLengths); i++) {
         gAudioContext.aiBufLengths[i] = 0xA0;
@@ -1217,7 +1217,7 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
     gAudioContext.totalTaskCount = 0;
     gAudioContext.rspTaskIndex = 0;
     gAudioContext.curAiBuffferIndex = 0;
-    gAudioContext.soundMode = AUDIO_MODE_STEREO;
+    gAudioContext.soundMode = SOUNDMODE_STEREO;
     gAudioContext.curTask = NULL;
     gAudioContext.rspTask[0].task.t.dataSize = 0;
     gAudioContext.rspTask[1].task.t.dataSize = 0;
