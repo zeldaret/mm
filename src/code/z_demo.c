@@ -1457,7 +1457,7 @@ void func_800EDA84(PlayState* play, CutsceneContext* csCtx) {
             if (gSaveContext.cutsceneTrigger == 0) {
                 Interface_ChangeAlpha(1);
                 Letterbox_SetSizeTarget(32);
-                Letterbox_SetSize(0x20);
+                Letterbox_SetSize(32);
                 csCtx->state++;
             }
 

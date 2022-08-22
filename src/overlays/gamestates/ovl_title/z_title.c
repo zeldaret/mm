@@ -46,7 +46,7 @@ void Title_RenderView(TitleContext* this, f32 x, f32 y, f32 z) {
     up.y = 1.0f;
     View_SetPerspective(view, 30.0f, 10.0f, 12800.0f);
     View_LookAt(view, &eye, &at, &up);
-    View_Apply(view, 0xF);
+    View_Apply(view, VIEW_ALL);
 }
 
 void Title_Draw(GameState* thisx) {
