@@ -1303,4 +1303,130 @@ void func_80A48138(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/EnWiz_Draw.s")
+void EnWiz_Draw(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnWiz* this = THIS;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
+
+    if ((this->unk_3B0 == 6) || (this->unk_3C2 != 0xFF)) {
+        Scene_SetRenderModeXlu(play, 1, 2);
+        gDPPipeSync(POLY_XLU_DISP++);
+        gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk_3C2);
+        POLY_XLU_DISP =
+            SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                               NULL, func_80A48138, &this->actor, POLY_XLU_DISP);
+    } else {
+        Scene_SetRenderModeXlu(play, 0, 1);
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, this->unk_3C2);
+        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                              NULL, func_80A47FCC, &this->actor);
+    }
+
+    if (this->drawDmgEffTimer != 0) {
+        f32 drawDmgEffAlpha = this->drawDmgEffTimer * 0.05f;
+
+        if ((this->drawDmgEffType == 0xB) || (this->drawDmgEffType == 0xA)) {
+            this->drawDmgEffScale += 0.3f;
+            if (this->drawDmgEffScale > 0.5f) {
+                this->drawDmgEffScale = 0.5f;
+            }
+
+            Math_ApproachF(&this->drawDmgEffFrozenSteamScale, this->drawDmgEffScale, 0.1f, 0.04f);
+        } else {
+            this->drawDmgEffScale = 0.8f;
+            this->drawDmgEffFrozenSteamScale = 0.8f;
+        }
+
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+                                this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, drawDmgEffAlpha,
+                                this->drawDmgEffType);
+    }
+
+    if (this->unk_740 > 0) {
+        s32 i;
+        s16 var_v0;
+
+        Matrix_Push();
+
+        var_v0 = this->unk_740;
+        if (this->unk_3B6 == 1) {
+            var_v0 = 10;
+        }
+
+        for (i = 0; i < var_v0; i++) {
+            func_8012C28C(play->state.gfxCtx);
+            func_8012C2DC(play->state.gfxCtx);
+
+            if (this->unk_81C[i].x != 0.0f && this->unk_81C[i].z != 0.0f) {
+                Matrix_Translate(this->unk_81C[i].x, this->unk_81C[i].y + 10.0f, this->unk_81C[i].z, MTXMODE_NEW);
+                Matrix_Scale(this->unk_3D4, this->unk_3D4, this->unk_3D4, MTXMODE_APPLY);
+                Matrix_RotateYS(this->unk_894[i].y, MTXMODE_APPLY);
+                Matrix_RotateXS(this->unk_894[i].x, MTXMODE_APPLY);
+                Matrix_RotateZS(this->unk_894[i].z, MTXMODE_APPLY);
+                Scene_SetRenderModeXlu(play, 1, 2);
+                gDPPipeSync(POLY_XLU_DISP++);
+                gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk_7F2[i]);
+                POLY_XLU_DISP =
+                    SkelAnime_DrawFlex(play, this->skelAnime2.skeleton, this->jointTable3[i],
+                                       this->skelAnime2.dListCount, NULL, NULL, &this->actor, POLY_XLU_DISP);
+                this->unk_454.elements[i + 1].dim.worldSphere.center.x = this->unk_81C[i].x;
+                this->unk_454.elements[i + 1].dim.worldSphere.center.y = this->unk_81C[i].y + 50.0f;
+                this->unk_454.elements[i + 1].dim.worldSphere.center.z = this->unk_81C[i].z;
+                this->unk_454.elements[i + 1].dim.worldSphere.radius = this->unk_454.elements->dim.modelSphere.radius;
+                this->unk_454.elements[i + 1].dim.scale = this->unk_454.elements->dim.scale;
+            }
+        }
+
+        Matrix_Pop();
+    }
+
+    func_8012C2DC(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
+
+    if (this->unk_3B6 == 0) {
+        Matrix_Push();
+
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&D_0600211C));
+        Matrix_Translate(this->unk_414.x, this->unk_414.y, this->unk_414.z, MTXMODE_NEW);
+        Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
+        gDPPipeSync(POLY_XLU_DISP++);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->unk_3C4);
+
+        if ((this->unk_74A == 0) || (this->unk_74A == 2)) {
+            gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 100, 255);
+        } else {
+            gDPSetEnvColor(POLY_XLU_DISP++, 50, 0, 255, 255);
+        }
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, D_06001860);
+
+        Matrix_Pop();
+    }
+
+    Matrix_Translate(this->unk_3D8.x, this->unk_3D8.y, this->unk_3D8.z, MTXMODE_NEW);
+    Matrix_Scale(this->unk_3E4, this->unk_3E8, this->unk_3EC, MTXMODE_APPLY);
+    gSPSegment(POLY_XLU_DISP++, 0x08,
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0,
+                                ((this->unk_388 * 10) - (play->state.frames * 20)) % 512, 32, 128));
+    gDPPipeSync(POLY_XLU_DISP++);
+
+    if ((this->unk_74A == 0) || (this->unk_74A == 2)) {
+        gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 170, 255);
+        gDPSetEnvColor(POLY_XLU_DISP++, 0xFF, 50, 0, 255);
+    } else {
+        gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 170, 255, 255, 255);
+        gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 255, 255);
+    }
+
+    Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
