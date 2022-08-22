@@ -16,7 +16,7 @@ typedef struct EnRu {
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ UNK_TYPE1 pad1D8[0x4];
-    /* 0x1DC */ Path* path; // path is preapred in EnRu_Init, but unused after
+    /* 0x1DC */ Path* path; // path is prepared in EnRu_Init, but unused after
     /* 0x1E0 */ UNK_TYPE1 pad1E0[0x4];
     /* 0x1E4 */ Vec3f leftFootPos;
     /* 0x1F0 */ Vec3f rightFootPos;
@@ -35,7 +35,6 @@ typedef struct EnRu {
     /* 0x348 */ UNK_TYPE1 padUNK[6];
     /* 0x44E */ s16 eyeState;
     /* 0x450 */ s16 blinkTimer;
-
 } EnRu; // size = 0x454
 
 extern const ActorInit En_Ru_InitVars;
