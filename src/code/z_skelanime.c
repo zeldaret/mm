@@ -1213,7 +1213,7 @@ void SkelAnime_InitLink(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeade
     allocSize = sizeof(Vec3s) * limbCount;
 
     if (flags & 8) {
-        allocSize += 2;
+        allocSize += sizeof(u16);
     }
 
     if (jointTableBuffer == NULL) {
