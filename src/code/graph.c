@@ -93,16 +93,16 @@ GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
 
 void* Graph_FaultAddrConvFunc(void* address, void* param) {
     uintptr_t addr = address;
-    GameStateOverlay* gamestateOvl = &gGameStateOverlayTable[0];
+    GameStateOverlay* gameStateOvl = &gGameStateOverlayTable[0];
     uintptr_t ramConv;
     void* ramStart;
     uintptr_t diff;
     s32 i;
 
-    for (i = 0; i < graphNumGameStates; i++, gamestateOvl++) {
-        diff = VRAM_PTR_SIZE(gamestateOvl);
-        ramStart = gamestateOvl->loadedRamAddr;
-        ramConv = (uintptr_t)gamestateOvl->vramStart - (uintptr_t)ramStart;
+    for (i = 0; i < graphNumGameStates; i++, gameStateOvl++) {
+        diff = VRAM_PTR_SIZE(gameStateOvl);
+        ramStart = gameStateOvl->loadedRamAddr;
+        ramConv = (uintptr_t)gameStateOvl->vramStart - (uintptr_t)ramStart;
 
         if (ramStart != NULL) {
             if (addr >= (uintptr_t)ramStart && addr < (uintptr_t)ramStart + diff) {
@@ -237,7 +237,7 @@ void Graph_UpdateGame(GameState* gameState) {
 }
 
 /**
- *  Run the gamestate logic, then finalize the gfx buffer
+ *  Run the game state logic, then finalize the gfx buffer
  *  and run the graphics task for this frame.
  */
 void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState) {

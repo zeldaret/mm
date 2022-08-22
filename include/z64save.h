@@ -376,7 +376,7 @@ void func_80146628(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void Sram_InitSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void func_80146DF8(SramContext* sramCtx);
 void Sram_InitSram(struct GameState* gameState, SramContext* sramCtx);
-void Sram_Alloc(struct GameState* gamestate, SramContext* sramCtx);
+void Sram_Alloc(struct GameState* gameState, SramContext* sramCtx);
 void Sram_SaveSpecialEnterClockTown(struct PlayState* play);
 void Sram_SaveSpecialNewDay(struct PlayState* play);
 void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages);

@@ -8,7 +8,7 @@
 #include "libc/alloca.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
-void MapSelect_LoadTitle(MapSelectState* this) {
+void MapSelect_LoadConsoleLogo(MapSelectState* this) {
     STOP_GAMESTATE(&this->state);
     SET_NEXT_GAMESTATE(&this->state, ConsoleLogo_Init, sizeof(ConsoleLogoState));
 }
@@ -494,7 +494,7 @@ static SceneSelectEntry sScenes[] = {
     { "X 1:SPOT00", MapSelect_LoadGame, ENTRANCE(CUTSCENE, 0) },
 
     // "Title" (Title Screen)
-    { "title", (void*)MapSelect_LoadTitle, 0 },
+    { "title", (void*)MapSelect_LoadConsoleLogo, 0 },
 };
 
 void MapSelect_UpdateMenu(MapSelectState* this) {

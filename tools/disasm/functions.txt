@@ -4089,7 +4089,7 @@
     0x8080066C:("ConsoleLogo_Main",),
     0x8080071C:("ConsoleLogo_Destroy",),
     0x8080074C:("ConsoleLogo_Init",),
-    0x80800910:("MapSelect_LoadTitle",),
+    0x80800910:("MapSelect_LoadConsoleLogo",),
     0x80800930:("MapSelect_LoadGame",),
     0x80800A44:("MapSelect_UpdateMenu",),
     0x808013B8:("MapSelect_PrintMenu",),

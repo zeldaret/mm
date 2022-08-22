@@ -1522,9 +1522,9 @@ void Sram_InitSram(GameState* gameState, SramContext* sramCtx) {
     func_801A3D98(gSaveContext.options.audioSetting);
 }
 
-void Sram_Alloc(GameState* gamestate, SramContext* sramCtx) {
+void Sram_Alloc(GameState* gameState, SramContext* sramCtx) {
     if (gSaveContext.unk_3F3F) {
-        sramCtx->saveBuf = THA_AllocEndAlign16(&gamestate->heap, SAVE_BUFFER_SIZE);
+        sramCtx->saveBuf = THA_AllocEndAlign16(&gameState->heap, SAVE_BUFFER_SIZE);
         sramCtx->status = 0;
     }
 }
