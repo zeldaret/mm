@@ -674,7 +674,7 @@ asm/non_matchings/code/z_camera/Camera_GetBgCamIndex.s,Camera_GetBgCamIndex,0x80
 asm/non_matchings/code/z_camera/Camera_GetWaterBoxBgCamSetting.s,Camera_GetWaterBoxBgCamSetting,0x800CC874,0x31
 asm/non_matchings/code/z_camera/func_800CC938.s,func_800CC938,0x800CC938,0x8
 asm/non_matchings/code/z_camera/Camera_CalcXZAngle.s,Camera_CalcXZAngle,0x800CC958,0x1A
-asm/non_matchings/code/z_camera/func_800CC9C0.s,func_800CC9C0,0x800CC9C0,0xCB
+asm/non_matchings/code/z_camera/Camera_CalcPitchAdjFromFloorHeightDiffs.s,Camera_CalcPitchAdjFromFloorHeightDiffs,0x800CC9C0,0xCB
 asm/non_matchings/code/z_camera/func_800CCCEC.s,func_800CCCEC,0x800CCCEC,0xD8
 asm/non_matchings/code/z_camera/Camera_CalcUpFromPitchYawRoll.s,Camera_CalcUpFromPitchYawRoll,0x800CD04C,0x8F
 asm/non_matchings/code/z_camera/Camera_ClampLerpScale.s,Camera_ClampLerpScale,0x800CD288,0x16

@@ -381,12 +381,12 @@ typedef struct {
     /* 0x18 */ CollisionPoly* poly;
     /* 0x1C */ VecSph sphNorm;
     /* 0x24 */ s32 bgId;
-} CamColChk; // size = 0x28
+} CameraCollision; // size = 0x28
 
 typedef struct {
     /* 0x00 */ Vec3f collisionClosePoint;
-    /* 0x0C */ CamColChk atEyeColChk;
-    /* 0x34 */ CamColChk eyeAtColChk;
+    /* 0x0C */ CameraCollision atEyeColChk;
+    /* 0x34 */ CameraCollision eyeAtColChk;
     /* 0x5C */ f32 swingUpdateRate;
     /* 0x60 */ s16 pitch;
     /* 0x62 */ s16 yaw;
@@ -1574,7 +1574,7 @@ typedef struct Camera {
     /* 0x0F0 */ Vec3f focalActorOffset;
     /* 0x0FC */ f32 fov;
     /* 0x100 */ f32 atLerpStepScale;
-    /* 0x104 */ f32 playerFloorHeight;
+    /* 0x104 */ f32 focalActorFloorHeight;
     /* 0x108 */ Vec3f floorNorm;
     /* 0x114 */ f32 waterYPos;
     /* 0x118 */ s32 waterPrevBgCamDataId;
