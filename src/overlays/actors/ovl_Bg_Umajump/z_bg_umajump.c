@@ -15,13 +15,8 @@ void BgUmajump_Destroy(Actor* thisx, PlayState* play);
 void BgUmajump_Update(Actor* thisx, PlayState* play);
 
 void func_8091A5A0(BgUmajump* this, PlayState* play);
-void func_8091A0B8(BgUmajump* this, PlayState* play);
-void func_8091A044(BgUmajump* this, PlayState* play);
-void func_80919FC8(BgUmajump* this, PlayState* play);
-void func_80919F30(BgUmajump* this, PlayState* play); /* extern */
 void func_8091A7B0(Actor* thisx, PlayState* play);
 
-#if 1
 const ActorInit Bg_Umajump_InitVars = {
     ACTOR_BG_UMAJUMP,
     ACTORCAT_PROP,
@@ -34,20 +29,16 @@ const ActorInit Bg_Umajump_InitVars = {
     (ActorFunc)NULL,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_8091A810[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-#endif
-
-extern InitChainEntry D_8091A810[];
-extern CollisionHeader D_06001438;
 
 extern Gfx* D_06001220;
-extern UNK_TYPE D_06001558;
+extern CollisionHeader D_06001438;
+extern CollisionHeader D_06001558;
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Umajump/func_80919F30.s")
 
@@ -103,7 +94,7 @@ void func_8091A0B8(BgUmajump* this, PlayState* play) {
 void BgUmajump_Init(Actor* thisx, PlayState* play) {
     BgUmajump* this = THIS;
 
-    Actor_ProcessInitChain(&this->dyna.actor, D_8091A810);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
     this->actionFunc = NULL;
     this->horse = NULL;
