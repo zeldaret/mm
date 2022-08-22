@@ -5,6 +5,13 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
 
+typedef struct {
+    /* 0x0 */ s8 letterboxTarget;
+    /* 0x1 */ s8 letterboxSize;
+    /* 0x2 */ s8 pillarboxTarget;
+    /* 0x3 */ s8 pillarboxSize;
+} ShrinkWindowContext; // size = 0x4
+
 ShrinkWindowContext gShrinkWindowContext;
 ShrinkWindowContext* gShrinkWindowContextPtr;
 
