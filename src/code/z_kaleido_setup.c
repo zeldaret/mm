@@ -1,5 +1,6 @@
 #include "global.h"
 #include "z64rumble.h"
+#include "z64view.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 s16 D_801BDB00[] = { PAUSE_MAP, PAUSE_QUEST, PAUSE_MASK, PAUSE_ITEM };

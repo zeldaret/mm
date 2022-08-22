@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64view.h"
 
 QuakeRequest sQuakeRequest[4];
 DistortionContext sDistortionContext;

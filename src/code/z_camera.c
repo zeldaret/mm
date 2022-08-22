@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64view.h"
 
 /**
  * Returns the absolute value for floats

@@ -1,4 +1,8 @@
 #include "global.h"
+#include "z64view.h"
+
+s32 View_ApplyPerspective(View* view);
+s32 View_ApplyOrtho(View* view);
 
 void View_ViewportToVp(Vp* dest, Viewport* src) {
     s32 width = src->rightX - src->leftX;

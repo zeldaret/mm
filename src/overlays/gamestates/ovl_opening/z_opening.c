@@ -5,6 +5,7 @@
  */
 
 #include "z_opening.h"
+#include "z64view.h"
 
 void Opening_SetupForTitleCutscene(OpeningContext* this) {
     static s32 openingEntrances[] = { ENTRANCE(CUTSCENE, 0), ENTRANCE(CUTSCENE, 1) };
