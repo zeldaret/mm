@@ -1541,7 +1541,7 @@ void EnSuttari_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
                 } else {
                     func_8012C28C(play->state.gfxCtx);
                     OPEN_DISPS(play->state.gfxCtx);
-                    gSPDisplayList(POLY_OPA_DISP++, object_boj_DL_013380);
+                    gSPDisplayList(POLY_OPA_DISP++, gBojBombShopBagDL);
                     CLOSE_DISPS(play->state.gfxCtx);
                 }
             }
