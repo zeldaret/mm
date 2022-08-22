@@ -224,7 +224,7 @@ s16 sFinalHoursClockColorTargetIndex = 0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CB80.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Gfx_TextureIA8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CD98.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CFBC.s")
 
@@ -232,7 +232,7 @@ s16 sFinalHoursClockColorTargetIndex = 0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D480.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Gfx_TextureI8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D7D0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D9F4.s")
 
@@ -1801,8 +1801,8 @@ void Interface_DrawTimers(PlayState* play) {
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, 0);
             OVERLAY_DISP =
-                Gfx_TextureIA8(OVERLAY_DISP, gTimerClockIconTex, 0x10, 0x10, ((void)0, gSaveContext.timerX[sTimerId]),
-                               ((void)0, gSaveContext.timerY[sTimerId]) + 2, 0x10, 0x10, 1 << 10, 1 << 10);
+                func_8010CD98(OVERLAY_DISP, gTimerClockIconTex, 0x10, 0x10, ((void)0, gSaveContext.timerX[sTimerId]),
+                              ((void)0, gSaveContext.timerY[sTimerId]) + 2, 0x10, 0x10, 1 << 10, 1 << 10);
             gDPPipeSync(OVERLAY_DISP++);
             gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0,
                               0, PRIMITIVE, 0);
@@ -1849,7 +1849,7 @@ void Interface_DrawTimers(PlayState* play) {
                     if (sPostmanBunnyHoodState == POSTMAN_MINIGAME_BUNNY_HOOD_ON) {
                         // draw sTimerDigits[3] (10s of seconds) to sTimerDigits[6] (100s of milliseconds)
                         for (j = 0; j < 4; j++) {
-                            OVERLAY_DISP = Gfx_TextureI8(
+                            OVERLAY_DISP = func_8010D7D0(
                                 OVERLAY_DISP, ((u8*)gCounterDigit0Tex + (8 * 16 * sTimerDigits[j + 3])), 8, 0x10,
                                 ((void)0, gSaveContext.timerX[sTimerId]) + sTimerDigitsOffsetX[j],
                                 ((void)0, gSaveContext.timerY[sTimerId]), sTimerDigitsWidth[j], 0xFA, 0x370, 0x370);
@@ -1857,7 +1857,7 @@ void Interface_DrawTimers(PlayState* play) {
                     } else {
                         // draw sTimerDigits[3] (10s of seconds) to sTimerDigits[7] (10s of milliseconds)
                         for (j = 0; j < 5; j++) {
-                            OVERLAY_DISP = Gfx_TextureI8(
+                            OVERLAY_DISP = func_8010D7D0(
                                 OVERLAY_DISP, ((u8*)gCounterDigit0Tex + (8 * 16 * sTimerDigits[j + 3])), 8, 0x10,
                                 ((void)0, gSaveContext.timerX[sTimerId]) + sTimerDigitsOffsetX[j],
                                 ((void)0, gSaveContext.timerY[sTimerId]), sTimerDigitsWidth[j], 0xFA, 0x370, 0x370);
@@ -1866,7 +1866,7 @@ void Interface_DrawTimers(PlayState* play) {
                 } else {
                     // draw sTimerDigits[3] (6s of minutes) to sTimerDigits[7] (10s of milliseconds)
                     for (j = 0; j < 8; j++) {
-                        OVERLAY_DISP = Gfx_TextureI8(
+                        OVERLAY_DISP = func_8010D7D0(
                             OVERLAY_DISP, ((u8*)gCounterDigit0Tex + (8 * 16 * sTimerDigits[j])), 8, 0x10,
                             ((void)0, gSaveContext.timerX[sTimerId]) + sTimerDigitsOffsetX[j],
                             ((void)0, gSaveContext.timerY[sTimerId]), sTimerDigitsWidth[j], 0xFA, 0x370, 0x370);

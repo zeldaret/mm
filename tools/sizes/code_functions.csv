@@ -1598,11 +1598,11 @@ asm/non_matchings/code/z_olib/OLib_Vec3fDiffBinAng.s,OLib_Vec3fDiffBinAng,0x8010
 asm/non_matchings/code/z_olib/OLib_DbCameraVec3fDiff.s,OLib_DbCameraVec3fDiff,0x8010C9C8,0x36
 asm/non_matchings/code/z_olib/OLib_DbCameraVec3fSum.s,OLib_DbCameraVec3fSum,0x8010CAA0,0x34
 asm/non_matchings/code/z_parameter/func_8010CB80.s,func_8010CB80,0x8010CB80,0x86
-asm/non_matchings/code/z_parameter/Gfx_TextureIA8.s,Gfx_TextureIA8,0x8010CD98,0x89
+asm/non_matchings/code/z_parameter/func_8010CD98.s,func_8010CD98,0x8010CD98,0x89
 asm/non_matchings/code/z_parameter/func_8010CFBC.s,func_8010CFBC,0x8010CFBC,0xC6
 asm/non_matchings/code/z_parameter/func_8010D2D4.s,func_8010D2D4,0x8010D2D4,0x6B
 asm/non_matchings/code/z_parameter/func_8010D480.s,func_8010D480,0x8010D480,0xD4
-asm/non_matchings/code/z_parameter/Gfx_TextureI8.s,Gfx_TextureI8,0x8010D7D0,0x89
+asm/non_matchings/code/z_parameter/func_8010D7D0.s,func_8010D7D0,0x8010D7D0,0x89
 asm/non_matchings/code/z_parameter/func_8010D9F4.s,func_8010D9F4,0x8010D9F4,0x99
 asm/non_matchings/code/z_parameter/func_8010DC58.s,func_8010DC58,0x8010DC58,0x78
 asm/non_matchings/code/z_parameter/func_8010DE38.s,func_8010DE38,0x8010DE38,0x7C
