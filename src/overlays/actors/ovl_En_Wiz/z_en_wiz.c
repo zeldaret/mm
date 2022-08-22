@@ -25,15 +25,27 @@ void func_80A4668C(EnWiz* this);
 void func_80A46764(EnWiz* this, PlayState* play);
 void func_80A468CC(EnWiz* this, PlayState* play);
 void func_80A46990(EnWiz* this, PlayState* play);
-void func_80A46C88(EnWiz* this);
-void func_80A46CC4(EnWiz* this, PlayState* play);
-void func_80A46DDC(EnWiz* this);
-void func_80A46E24(EnWiz* this, PlayState* play);
+void EnWiz_SetupWindUp(EnWiz* this);
+void EnWiz_WindUp(EnWiz* this, PlayState* play);
+void EnWiz_SetupAttack(EnWiz* this);
+void EnWiz_Attack(EnWiz* this, PlayState* play);
 void func_80A47000(EnWiz* this);
 void func_80A470D8(EnWiz* this, PlayState* play);
-void func_80A473B8(EnWiz* this, PlayState* play);
-void func_80A4767C(EnWiz* this);
-void func_80A476C8(EnWiz* this, PlayState* play);
+void EnWiz_Damaged(EnWiz* this, PlayState* play);
+void EnWiz_SetupDead(EnWiz* this);
+void EnWiz_Dead(EnWiz* this, PlayState* play);
+
+typedef enum {
+    /* 1 */ EN_WIZ_ACTION_UNK1 = 1,
+    /* 2 */ EN_WIZ_ACTION_UNK2,
+    /* 3 */ EN_WIZ_ACTION_UNK3,
+    /* 4 */ EN_WIZ_ACTION_DAMAGED,
+    /* 5 */ EN_WIZ_ACTION_DEAD,
+    /* 6 */ EN_WIZ_ACTION_UNK6,
+    /* 7 */ EN_WIZ_ACTION_UNK7,
+    /* 8 */ EN_WIZ_ACTION_ATTACK,
+    /* 9 */ EN_WIZ_ACTION_UNK9,
+} EnWizAction;
 
 const ActorInit En_Wiz_InitVars = {
     ACTOR_EN_WIZ,
@@ -47,8 +59,7 @@ const ActorInit En_Wiz_InitVars = {
     (ActorFunc)EnWiz_Draw,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[10] = {
-static ColliderJntSphElementInit D_80A48B50[10] = {
+static ColliderJntSphElementInit sJntSphElementsInit[10] = {
     {
         {
             ELEMTYPE_UNK0,
@@ -161,8 +172,7 @@ static ColliderJntSphElementInit D_80A48B50[10] = {
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_80A48CB8 = {
+static ColliderJntSphInit sJntSphInit = {
     {
         COLTYPE_HIT2,
         AT_NONE,
@@ -171,12 +181,11 @@ static ColliderJntSphInit D_80A48CB8 = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    ARRAY_COUNT(D_80A48B50),
-    D_80A48B50, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit),
+    sJntSphElementsInit,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80A48CC8 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -296,13 +305,13 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
                        this->morphTable2, WIZZROBE_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.0f);
     this->unk_3C4 = 0;
-    this->unk_3C2 = 0xFF;
+    this->alpha = 255;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 3;
     this->unk_450 = 1.0f;
     this->actor.shape.yOffset = 700.0f;
-    Collider_InitAndSetJntSph(play, &this->unk_454, &this->actor, &D_80A48CB8, this->unk_474);
-    Collider_InitAndSetCylinder(play, &this->unk_6F4, &this->actor, &D_80A48CC8);
+    Collider_InitAndSetJntSph(play, &this->unk_454, &this->actor, &sJntSphInit, this->unk_474);
+    Collider_InitAndSetCylinder(play, &this->unk_6F4, &this->actor, &sCylinderInit);
     this->unk_388 = Rand_S16Offset(0, 7);
     this->switchFlag = this->actor.params & 0x7F;
     this->unk_74A = (this->actor.params >> 8) & 0xFF;
@@ -347,10 +356,11 @@ void EnWiz_Destroy(Actor* thisx, PlayState* play) {
 
 void EnWiz_ChangeAnim(EnWiz* this, s32 animIndex, s32 arg2) {
     this->endFrame = Animation_GetLastFrame(sAnimations[animIndex]);
-    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f, this->endFrame, sAnimationModes[animIndex], -2.0f);
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f, this->endFrame, sAnimationModes[animIndex],
+                     -2.0f);
     if (arg2 != 0) {
-        Animation_Change(&this->skelAnime2, sAnimations[animIndex], 1.0f, 0.0f, this->endFrame, sAnimationModes[animIndex],
-                         -2.0f);
+        Animation_Change(&this->skelAnime2, sAnimations[animIndex], 1.0f, 0.0f, this->endFrame,
+                         sAnimationModes[animIndex], -2.0f);
     }
 }
 
@@ -360,7 +370,7 @@ void func_80A456A0(EnWiz* this, PlayState* play) {
     Vec3f sp4C;
 
     if (this->unk_3CB < 6) {
-        camera = Play_GetCamera(play, this->unk_74E);
+        camera = Play_GetCamera(play, this->subCamId);
         switch (this->unk_3CB) {
             case 0:
                 this->unk_3B4 = 100;
@@ -440,7 +450,7 @@ void func_80A456A0(EnWiz* this, PlayState* play) {
             case 4:
                 if (this->unk_3B4 == 0) {
                     EnWiz_ChangeAnim(this, EN_WIZ_ANIM_RUN, false);
-                    this->unk_3C0 = 0;
+                    this->rotationalVelocity = 0;
                     this->unk_3B4 = 34;
                     this->unk_3CB++;
                 }
@@ -449,11 +459,11 @@ void func_80A456A0(EnWiz* this, PlayState* play) {
             case 5:
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_RUN - SFX_FLAG);
                 if (this->unk_3B4 == 0) {
-                    this->unk_44C = this->unk_3C8 = 0;
+                    this->animLoopCounter = this->unk_3C8 = 0;
                     this->unk_3CB = 6;
                 } else {
-                    Math_SmoothStepToS(&this->unk_3C0, 0x1388, 0x64, 0x3E8, 0x3E8);
-                    this->actor.world.rot.y += this->unk_3C0;
+                    Math_SmoothStepToS(&this->rotationalVelocity, 0x1388, 0x64, 0x3E8, 0x3E8);
+                    this->actor.world.rot.y += this->rotationalVelocity;
                 }
 
                 Math_Vec3f_Copy(&sp58, &this->actor.world.pos);
@@ -471,10 +481,10 @@ void func_80A456A0(EnWiz* this, PlayState* play) {
                 break;
         }
 
-        if (this->unk_3CC < 0xB) {
-            this->unk_3CC++;
-            if ((this->unk_74A != 2) && (this->unk_3CC == 0xB)) {
-                func_801A2E54(0x38);
+        if (this->musicStartTimer < 11) {
+            this->musicStartTimer++;
+            if ((this->unk_74A != 2) && (this->musicStartTimer == 11)) {
+                func_801A2E54(NA_BGM_MINI_BOSS);
             }
         }
     }
@@ -488,8 +498,8 @@ void func_80A45CD8(EnWiz* this, PlayState* play) {
     s16 var_v1;
     s16 var_fp;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_420); i++) {
-        this->unk_420[i] = NULL;
+    for (i = 0; i < ARRAY_COUNT(this->platforms); i++) {
+        this->platforms[i] = NULL;
     }
 
     prop = play->actorCtx.actorLists[ACTORCAT_PROP].first;
@@ -500,9 +510,9 @@ void func_80A45CD8(EnWiz* this, PlayState* play) {
             continue;
         }
 
-        this->unk_420[i] = prop;
+        this->platforms[i] = prop;
         i++;
-        if (this->unk_3B0 != 6) {
+        if (this->action != EN_WIZ_ACTION_UNK6) {
             var_v1 = this->unk_74A;
             if (var_v1 == 2) {
                 var_v1 = 0;
@@ -515,7 +525,7 @@ void func_80A45CD8(EnWiz* this, PlayState* play) {
         }
     }
 
-    if (this->unk_3B0 != 5) {
+    if (this->action != EN_WIZ_ACTION_DEAD) {
         this->unk_740 = i;
         if (i < 0) {
             i = 0;
@@ -532,11 +542,11 @@ void func_80A45CD8(EnWiz* this, PlayState* play) {
         this->unk_748 = var_fp;
         switch (this->unk_3B6) {
             case 0:
-                Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_420[var_fp]->world.pos);
+                Math_Vec3f_Copy(&this->actor.world.pos, &this->platforms[var_fp]->world.pos);
                 break;
 
             case 1:
-                Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_420[0]->world.pos);
+                Math_Vec3f_Copy(&this->actor.world.pos, &this->platforms[0]->world.pos);
                 for (i = 0, var_s0 = 128; i < this->unk_740; i++, var_s0 -= 10) {
                     Math_Vec3f_Copy(&this->unk_81C[i], &this->actor.world.pos);
                     this->unk_7F2[i] = var_s0;
@@ -544,10 +554,10 @@ void func_80A45CD8(EnWiz* this, PlayState* play) {
                 break;
 
             default:
-                Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_420[var_fp]->world.pos);
+                Math_Vec3f_Copy(&this->actor.world.pos, &this->platforms[var_fp]->world.pos);
                 for (i--; i >= 0; i--) {
                     if (var_fp != i) {
-                        Math_Vec3f_Copy(&this->unk_81C[i], &this->unk_420[i]->world.pos);
+                        Math_Vec3f_Copy(&this->unk_81C[i], &this->platforms[i]->world.pos);
                         this->unk_894[i] = this->actor.world.rot;
                         this->unk_7F2[i] = 0x64;
                         this->unk_806[i] = i;
@@ -574,8 +584,8 @@ void func_80A460A4(EnWiz* this) {
             f32 diffZ;
 
             j = this->unk_806[i];
-            diffX = this->unk_420[j]->world.pos.x - this->unk_81C[i].x;
-            diffZ = this->unk_420[j]->world.pos.z - this->unk_81C[i].z;
+            diffX = this->platforms[j]->world.pos.x - this->unk_81C[i].x;
+            diffZ = this->platforms[j]->world.pos.z - this->unk_81C[i].z;
             playSfx++;
 
             if (sqrtf(SQ(diffX) + SQ(diffZ)) < 30.0f) {
@@ -586,10 +596,10 @@ void func_80A460A4(EnWiz* this) {
             }
 
             j = this->unk_806[i];
-            Math_ApproachF(&this->unk_81C[i].x, this->unk_420[j]->world.pos.x, 0.3f, 30.0f);
-            Math_ApproachF(&this->unk_81C[i].y, this->unk_420[j]->world.pos.y, 0.3f, 30.0f);
-            Math_ApproachF(&this->unk_81C[i].z, this->unk_420[j]->world.pos.z, 0.3f, 30.0f);
-            this->unk_894[i].y = Math_Vec3f_Yaw(&this->unk_81C[i], &this->unk_420[j]->world.pos);
+            Math_ApproachF(&this->unk_81C[i].x, this->platforms[j]->world.pos.x, 0.3f, 30.0f);
+            Math_ApproachF(&this->unk_81C[i].y, this->platforms[j]->world.pos.y, 0.3f, 30.0f);
+            Math_ApproachF(&this->unk_81C[i].z, this->platforms[j]->world.pos.z, 0.3f, 30.0f);
+            this->unk_894[i].y = Math_Vec3f_Yaw(&this->unk_81C[i], &this->platforms[j]->world.pos);
         }
     }
 
@@ -601,7 +611,7 @@ void func_80A460A4(EnWiz* this) {
 void func_80A46280(EnWiz* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetFlag(this->actor.cutscene, &this->actor);
-        this->unk_74E = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
+        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
         this->actor.flags |= ACTOR_FLAG_100000;
         func_80A462F8(this, play);
     } else {
@@ -614,7 +624,7 @@ void func_80A462F8(EnWiz* this, PlayState* play) {
     s32 i;
     s16 angle;
 
-    this->unk_3B0 = 1;
+    this->action = EN_WIZ_ACTION_UNK1;
 
     if (this->unk_3B2 == 0) {
         func_80A45CD8(this, play);
@@ -672,12 +682,12 @@ void func_80A46414(EnWiz* this, PlayState* play) {
 
             if (this->unk_3B2 == 0) {
                 Math_ApproachF(&this->unk_3D4, 0.015f, 0.05f, 0.01f);
-                Math_SmoothStepToS(&this->unk_3C2, 0xFF, 1, 5, 0);
+                Math_SmoothStepToS(&this->alpha, 255, 1, 5, 0);
             }
 
             if (this->unk_3D4 < 0.0138f) {
             } else {
-                this->unk_3B0 = 7;
+                this->action = EN_WIZ_ACTION_UNK7;
                 this->actor.flags &= ~ACTOR_FLAG_8000000;
                 this->unk_454.elements->info.bumper.dmgFlags = 0x01013A22;
                 Math_Vec3f_Copy(&this->unk_3F0, &sp3C);
@@ -701,16 +711,16 @@ void func_80A46414(EnWiz* this, PlayState* play) {
 void func_80A4668C(EnWiz* this) {
     EnWiz_ChangeAnim(this, EN_WIZ_ANIM_DANCE, false);
     Math_ApproachF(&this->unk_3D4, 0.015f, 0.05f, 0.001f);
-    this->unk_3C0 = 0;
-    this->unk_44C = 0;
-    this->unk_3B0 = 9;
+    this->rotationalVelocity = 0;
+    this->animLoopCounter = 0;
+    this->action = EN_WIZ_ACTION_UNK9;
     if (this->unk_3B6 >= 2) {
         Animation_Change(&this->skelAnime2, &gWizzrobeRunAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gWizzrobeRunAnim),
                          ANIMMODE_LOOP, 0.0f);
         this->unk_3B6 = 3;
     }
 
-    Math_SmoothStepToS(&this->unk_3C2, 0xFF, 1, 5, 0);
+    Math_SmoothStepToS(&this->alpha, 255, 1, 5, 0);
     this->actionFunc = func_80A46764;
 }
 
@@ -718,29 +728,29 @@ void func_80A46764(EnWiz* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
     s32 i;
 
-    Math_SmoothStepToS(&this->unk_3C2, 0xFF, 1, 5, 0);
+    Math_SmoothStepToS(&this->alpha, 255, 1, 5, 0);
     Math_ApproachF(&this->unk_3D4, 0.015f, 0.05f, 0.001f);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_RUN - SFX_FLAG);
-    this->actor.world.rot.y += this->unk_3C0;
+    this->actor.world.rot.y += this->rotationalVelocity;
     if (this->unk_3B6 >= 3) {
         func_80A460A4(this);
     } else {
         for (i = 0; i < this->unk_740; i++) {
-            this->unk_894[i].y += this->unk_3C0;
+            this->unk_894[i].y += this->rotationalVelocity;
         }
     }
 
-    Math_SmoothStepToS(&this->unk_3C0, 0x1388, 0x64, 0x3E8, 0x3E8);
+    Math_SmoothStepToS(&this->rotationalVelocity, 0x1388, 0x64, 0x3E8, 0x3E8);
     Math_SmoothStepToS(&this->unk_3C4, this->unk_3C6, 0x14, 0x32, 0xA);
     if (this->endFrame <= curFrame) {
-        if (this->unk_44C < 10) {
-            this->unk_44C++;
+        if (this->animLoopCounter < 10) {
+            this->animLoopCounter++;
         }
     }
 
-    if ((this->unk_44C >= 3) && (this->unk_3BA == 0)) {
+    if ((this->animLoopCounter >= 3) && (this->unk_3BA == 0)) {
         this->unk_3C6 = 0;
-        func_80A46C88(this);
+        EnWiz_SetupWindUp(this);
     }
 }
 
@@ -751,13 +761,13 @@ void func_80A468CC(EnWiz* this, PlayState* play) {
         ActorCutscene_SetIntentToPlay(temp_v0);
     } else {
         ActorCutscene_StartAndSetFlag(temp_v0, &this->actor);
-        this->unk_74E = ActorCutscene_GetCurrentSubCamId(temp_v0);
+        this->subCamId = ActorCutscene_GetCurrentSubCamId(temp_v0);
         this->actor.flags |= ACTOR_FLAG_100000;
         EnWiz_ChangeAnim(this, EN_WIZ_ANIM_DANCE, false);
-        this->unk_3B0 = 2;
+        this->action = EN_WIZ_ACTION_UNK2;
         this->unk_744 = 1;
         this->unk_3BC = 0;
-        Math_SmoothStepToS(&this->unk_3C2, 0xFF, 1, 5, 0);
+        Math_SmoothStepToS(&this->alpha, 255, 1, 5, 0);
         this->actionFunc = func_80A46990;
     }
 }
@@ -766,13 +776,13 @@ void func_80A46990(EnWiz* this, PlayState* play) {
     Camera* camera;
     s32 i;
 
-    Math_SmoothStepToS(&this->unk_3C2, 0xFF, 1, 5, 0);
-    camera = Play_GetCamera(play, this->unk_74E);
+    Math_SmoothStepToS(&this->alpha, 255, 1, 5, 0);
+    camera = Play_GetCamera(play, this->subCamId);
     Math_Vec3f_Copy(&camera->at, &this->actor.focus.pos);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_RUN - SFX_FLAG);
-    if (this->unk_420[this->unk_744] != NULL) {
-        f32 diffX = this->actor.world.pos.x - this->unk_420[this->unk_744]->world.pos.x;
-        f32 diffZ = this->actor.world.pos.z - this->unk_420[this->unk_744]->world.pos.z;
+    if (this->platforms[this->unk_744] != NULL) {
+        f32 diffX = this->actor.world.pos.x - this->platforms[this->unk_744]->world.pos.x;
+        f32 diffZ = this->actor.world.pos.z - this->platforms[this->unk_744]->world.pos.z;
         s32 pad;
 
         if (sqrtf(SQ(diffX) + SQ(diffZ)) < 30.0f) {
@@ -809,24 +819,24 @@ void func_80A46990(EnWiz* this, PlayState* play) {
 
     Math_Vec3f_Copy(this->unk_81C, &this->actor.world.pos);
     this->unk_894[0].y = this->actor.world.rot.y;
-    Math_ApproachF(&this->actor.world.pos.x, this->unk_420[this->unk_744]->world.pos.x, 0.3f, 30.0f);
-    Math_ApproachF(&this->actor.world.pos.y, this->unk_420[this->unk_744]->world.pos.y, 0.3f, 30.0f);
-    Math_ApproachF(&this->actor.world.pos.z, this->unk_420[this->unk_744]->world.pos.z, 0.3f, 30.0f);
+    Math_ApproachF(&this->actor.world.pos.x, this->platforms[this->unk_744]->world.pos.x, 0.3f, 30.0f);
+    Math_ApproachF(&this->actor.world.pos.y, this->platforms[this->unk_744]->world.pos.y, 0.3f, 30.0f);
+    Math_ApproachF(&this->actor.world.pos.z, this->platforms[this->unk_744]->world.pos.z, 0.3f, 30.0f);
     for (i = this->unk_740; i > 0; i--) {
         Math_Vec3f_Copy(&this->unk_81C[i], &this->unk_81C[i - 1]);
         this->unk_894[i].y = this->unk_894[i - 1].y;
     }
 
-    this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_420[this->unk_744]->world.pos);
+    this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &this->platforms[this->unk_744]->world.pos);
 }
 
-void func_80A46C88(EnWiz* this) {
+void EnWiz_SetupWindUp(EnWiz* this) {
     EnWiz_ChangeAnim(this, EN_WIZ_ANIM_WIND_UP, false);
-    this->unk_44C = 0;
-    this->actionFunc = func_80A46CC4;
+    this->animLoopCounter = 0;
+    this->actionFunc = EnWiz_WindUp;
 }
 
-void func_80A46CC4(EnWiz* this, PlayState* play) {
+void EnWiz_WindUp(EnWiz* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
     s32 i;
 
@@ -840,24 +850,24 @@ void func_80A46CC4(EnWiz* this, PlayState* play) {
     }
 
     if (this->endFrame <= curFrame) {
-        this->unk_44C++;
-        if (this->unk_44C >= 2) {
-            func_80A46DDC(this);
+        this->animLoopCounter++;
+        if (this->animLoopCounter >= 2) {
+            EnWiz_SetupAttack(this);
         }
     }
 
     Math_SmoothStepToS(&this->unk_3C4, this->unk_3C6, 0xA, 0xA, 0xA);
 }
 
-void func_80A46DDC(EnWiz* this) {
+void EnWiz_SetupAttack(EnWiz* this) {
     EnWiz_ChangeAnim(this, EN_WIZ_ANIM_ATTACK, false);
     this->unk_3B2 = 0;
     this->unk_3CA = 0;
-    this->unk_3B0 = 8;
-    this->actionFunc = func_80A46E24;
+    this->action = EN_WIZ_ACTION_ATTACK;
+    this->actionFunc = EnWiz_Attack;
 }
 
-void func_80A46E24(EnWiz* this, PlayState* play) {
+void EnWiz_Attack(EnWiz* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     if (this->unk_3B6 >= 3) {
@@ -898,21 +908,21 @@ void func_80A46E24(EnWiz* this, PlayState* play) {
 }
 
 void func_80A47000(EnWiz* this) {
-    if (this->unk_3B0 != 4) {
-        this->unk_3C0 = 0x2710;
+    if (this->action != EN_WIZ_ACTION_DAMAGED) {
+        this->rotationalVelocity = 0x2710;
         this->unk_3B2 = 0;
         EnWiz_ChangeAnim(this, EN_WIZ_ANIM_IDLE, false);
-        this->unk_3B0 = 3;
+        this->action = EN_WIZ_ACTION_UNK3;
     } else {
-        this->unk_3C0 = 0x2710;
-        this->actor.world.rot.y += this->unk_3C0;
+        this->rotationalVelocity = 0x2710;
+        this->actor.world.rot.y += this->rotationalVelocity;
     }
 
     this->unk_3C6 = 0;
     this->actor.flags |= ACTOR_FLAG_8000000;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
-    Math_SmoothStepToS(&this->unk_3C0, 0x1388, 0x64, 0x3E8, 0x3E8);
-    this->actor.world.rot.y += this->unk_3C0;
+    Math_SmoothStepToS(&this->rotationalVelocity, 0x1388, 0x64, 0x3E8, 0x3E8);
+    this->actor.world.rot.y += this->rotationalVelocity;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actionFunc = func_80A470D8;
 }
@@ -920,16 +930,16 @@ void func_80A47000(EnWiz* this) {
 void func_80A470D8(EnWiz* this, PlayState* play) {
     s32 i;
 
-    Math_SmoothStepToS(&this->unk_3C0, 0, 0xA, 0xBB8, 0x14);
-    this->actor.world.rot.y += this->unk_3C0;
-    if ((this->unk_3B6 == 0) || (this->unk_3B0 == 4)) {
+    Math_SmoothStepToS(&this->rotationalVelocity, 0, 0xA, 0xBB8, 0x14);
+    this->actor.world.rot.y += this->rotationalVelocity;
+    if ((this->unk_3B6 == 0) || (this->action == EN_WIZ_ACTION_DAMAGED)) {
         Math_ApproachZeroF(&this->unk_3D4, 0.3f, 0.01f);
         Math_SmoothStepToS(&this->unk_3C4, this->unk_3C6, 5, 0x32, 0);
     } else {
         Math_ApproachZeroF(&this->unk_3D4, 0.3f, 0.001f);
         Math_SmoothStepToS(&this->unk_3C4, this->unk_3C6, 0xA, 0x32, 0);
         for (i = 0; i < this->unk_740; i++) {
-            this->unk_894[i].y += this->unk_3C0;
+            this->unk_894[i].y += this->rotationalVelocity;
         }
     }
 
@@ -943,7 +953,7 @@ void func_80A470D8(EnWiz* this, PlayState* play) {
         }
 
         if (this->unk_3CB != 6) {
-            this->unk_3C2 = 0;
+            this->alpha = 0;
             if (this->unk_3B6 == 0) {
                 this->unk_454.elements->info.bumper.dmgFlags = 0x01000202;
             }
@@ -954,7 +964,7 @@ void func_80A470D8(EnWiz* this, PlayState* play) {
     }
 }
 
-void func_80A47298(EnWiz* this, PlayState* play) {
+void EnWiz_SetupDamaged(EnWiz* this, PlayState* play) {
     EnWiz_ChangeAnim(this, EN_WIZ_ANIM_DAMAGE, false);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
     this->unk_3B2 = 0x14;
@@ -976,24 +986,24 @@ void func_80A47298(EnWiz* this, PlayState* play) {
         this->unk_3B2 = 0;
     }
 
-    this->unk_3C0 = 0x4E20;
+    this->rotationalVelocity = 0x4E20;
     if ((this->drawDmgEffTimer != 0) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX)) {
-        this->unk_3C0 = 0;
+        this->rotationalVelocity = 0;
         this->unk_3B2 = 0;
     }
 
-    this->unk_3B0 = 4;
-    this->actionFunc = func_80A473B8;
+    this->action = EN_WIZ_ACTION_DAMAGED;
+    this->actionFunc = EnWiz_Damaged;
 }
 
-void func_80A473B8(EnWiz* this, PlayState* play) {
+void EnWiz_Damaged(EnWiz* this, PlayState* play) {
     s32 i;
 
     if ((this->drawDmgEffTimer < 50) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX)) {
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 1.0f, 0.7f);
         this->drawDmgEffTimer = 0;
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->unk_3C0 = 0x4E20;
+        this->rotationalVelocity = 0x4E20;
         this->actor.velocity.y = 30.0f;
         this->actor.gravity = -3.0f;
     }
@@ -1010,14 +1020,14 @@ void func_80A473B8(EnWiz* this, PlayState* play) {
         this->unk_750 = 1;
     }
 
-    this->actor.world.rot.y += this->unk_3C0;
-    Math_SmoothStepToS(&this->unk_3C0, 0, 0xA, 0xBB8, 0x14);
+    this->actor.world.rot.y += this->rotationalVelocity;
+    Math_SmoothStepToS(&this->rotationalVelocity, 0, 0xA, 0xBB8, 0x14);
     for (i = 0; i < this->unk_740; i++) {
-        this->unk_894[i].y += this->unk_3C0;
+        this->unk_894[i].y += this->rotationalVelocity;
     }
 
     if ((this->unk_3B2 == 1) || ((this->actor.velocity.y < 0.0f) &&
-                                 (this->actor.world.pos.y < (this->unk_420[this->unk_748]->world.pos.y + 11.0f)))) {
+                                 (this->actor.world.pos.y < (this->platforms[this->unk_748]->world.pos.y + 11.0f)))) {
         this->unk_3B2 = 0;
         this->actor.velocity.y = 0.0f;
         this->actor.gravity = 0.0f;
@@ -1034,7 +1044,7 @@ void func_80A473B8(EnWiz* this, PlayState* play) {
 
                 func_80A47000(this);
             } else {
-                func_80A4767C(this);
+                EnWiz_SetupDead(this);
             }
         } else {
             func_80A47000(this);
@@ -1048,29 +1058,29 @@ void func_80A473B8(EnWiz* this, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 40.0f, 40.0f, 0x1F);
 }
 
-void func_80A4767C(EnWiz* this) {
+void EnWiz_SetupDead(EnWiz* this) {
     EnWiz_ChangeAnim(this, EN_WIZ_ANIM_DAMAGE, false);
-    this->unk_3C0 = 0x2710;
-    this->unk_3B0 = 5;
+    this->rotationalVelocity = 0x2710;
+    this->action = EN_WIZ_ACTION_DEAD;
     this->unk_3B2 = 0;
-    this->actionFunc = func_80A476C8;
+    this->actionFunc = EnWiz_Dead;
 }
 
-void func_80A476C8(EnWiz* this, PlayState* play) {
+void EnWiz_Dead(EnWiz* this, PlayState* play) {
     s32 i;
 
-    this->actor.world.rot.y += this->unk_3C0;
-    Math_SmoothStepToS(&this->unk_3C0, 0, 0xA, 0xBB8, 0x14);
-    if (this->unk_3C0 < 0x1E) {
-        Math_SmoothStepToS(&this->unk_3C2, 0, 0xA, 0x1E, 0x14);
+    this->actor.world.rot.y += this->rotationalVelocity;
+    Math_SmoothStepToS(&this->rotationalVelocity, 0, 0xA, 0xBB8, 0x14);
+    if (this->rotationalVelocity < 0x1E) {
+        Math_SmoothStepToS(&this->alpha, 0, 10, 30, 20);
         for (i = 0; i < this->unk_740; i++) {
             Math_SmoothStepToS(&this->unk_7F2[i], 0, 0xA, 0x1E, 0x14);
         }
 
-        this->unk_3B0 = 6;
+        this->action = EN_WIZ_ACTION_UNK6;
     }
 
-    if (this->unk_3C2 < 0x1E) {
+    if (this->alpha < 30) {
         func_80A45CD8(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EN_EXTINCT);
         Actor_MarkForDeath(&this->actor);
@@ -1084,13 +1094,13 @@ static Color_RGBA8 D_80A48D60 = { 250, 250, 250, 255 };
 
 static Color_RGBA8 D_80A48D64 = { 180, 180, 180, 255 };
 
-void func_80A477E8(EnWiz* this, PlayState* play) {
+void EnWiz_UpdateDamage(EnWiz* this, PlayState* play) {
     s32 i;
     s32 attackDealsDamage = false;
 
     if (this->unk_6F4.base.acFlags & AC_HIT) {
         this->unk_454.base.acFlags &= ~AC_HIT;
-        if (this->unk_3B0 < 7) {
+        if (this->action < EN_WIZ_ACTION_UNK7) {
             return;
         }
 
@@ -1117,7 +1127,7 @@ void func_80A477E8(EnWiz* this, PlayState* play) {
                 }
 
                 Actor_ApplyDamage(&this->actor);
-                func_80A47298(this, play);
+                EnWiz_SetupDamaged(this, play);
                 break;
 
             case 4:
@@ -1133,10 +1143,10 @@ void func_80A477E8(EnWiz* this, PlayState* play) {
                 break;
         }
 
-        this->unk_3C2 = 0xFF;
+        this->alpha = 255;
         if (attackDealsDamage) {
             Actor_ApplyDamage(&this->actor);
-            func_80A47298(this, play);
+            EnWiz_SetupDamaged(this, play);
             return;
         }
     }
@@ -1183,14 +1193,14 @@ void EnWiz_Update(Actor* thisx, PlayState* play) {
     s32 i;
     s32 j;
 
-    if (this->unk_3B0 != 1) {
+    if (this->action != EN_WIZ_ACTION_UNK1) {
         SkelAnime_Update(&this->skelAnime);
         SkelAnime_Update(&this->skelAnime2);
     }
 
     Actor_SetFocus(&this->actor, 60.0f);
     Actor_SetScale(&this->actor, this->unk_3D4);
-    func_80A477E8(this, play);
+    EnWiz_UpdateDamage(this, play);
     this->actionFunc(this, play);
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -1202,16 +1212,16 @@ void EnWiz_Update(Actor* thisx, PlayState* play) {
     this->unk_6F4.dim.radius = 35;
     this->unk_6F4.dim.height = 130;
     this->unk_6F4.dim.yShift = 0;
-    if (this->unk_3B0 >= 7) {
+    if (this->action >= EN_WIZ_ACTION_UNK7) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk_454.base);
         Collider_UpdateCylinder(&this->actor, &this->unk_6F4);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk_6F4.base);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->unk_6F4.base);
     }
 
-    Math_ApproachF(&this->unk_3E4, this->unk_3F0.x, 0.3f, 0.002f);
-    Math_ApproachF(&this->unk_3E8, this->unk_3F0.y, 0.3f, 0.002f);
-    Math_ApproachF(&this->unk_3EC, this->unk_3F0.z, 0.3f, 0.002f);
+    Math_ApproachF(&this->unk_3E4.x, this->unk_3F0.x, 0.3f, 0.002f);
+    Math_ApproachF(&this->unk_3E4.y, this->unk_3F0.y, 0.3f, 0.002f);
+    Math_ApproachF(&this->unk_3E4.z, this->unk_3F0.z, 0.3f, 0.002f);
 
     if (this->unk_3B6 == 0) {
         this->unk_740 = 0;
@@ -1237,7 +1247,7 @@ void func_80A47FCC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
     if (limbIndex == WIZZROBE_LIMB_STAFF) {
         sp24.x = 7300.0f;
         sp24.y = -1500.0f;
-        if (this->unk_3B0 != 9) {
+        if (this->action != EN_WIZ_ACTION_UNK9) {
             sp24.y = 0.0f;
             sp24.x = 5300.0f;
         }
@@ -1267,11 +1277,11 @@ void func_80A48138(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
     s32 pad;
     EnWiz* this = THIS;
 
-    if (this->unk_3B0 != 6) {
+    if (this->action != EN_WIZ_ACTION_UNK6) {
         if (limbIndex == WIZZROBE_LIMB_STAFF) {
             sp4C.x = 7300.0f;
             sp4C.y = -1500.0f;
-            if (this->unk_3B0 != 9) {
+            if (this->action != EN_WIZ_ACTION_UNK9) {
                 sp4C.y = 0.0f;
                 sp4C.x = 5300.0f;
             }
@@ -1320,17 +1330,17 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
     func_8012C2DC(play->state.gfxCtx);
 
-    if ((this->unk_3B0 == 6) || (this->unk_3C2 != 0xFF)) {
+    if ((this->action == EN_WIZ_ACTION_UNK6) || (this->alpha != 255)) {
         Scene_SetRenderModeXlu(play, 1, 2);
         gDPPipeSync(POLY_XLU_DISP++);
-        gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk_3C2);
+        gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                NULL, func_80A48138, &this->actor, POLY_XLU_DISP);
     } else {
         Scene_SetRenderModeXlu(play, 0, 1);
         gDPPipeSync(POLY_OPA_DISP++);
-        gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, this->unk_3C2);
+        gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, this->alpha);
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               NULL, func_80A47FCC, &this->actor);
     }
@@ -1418,7 +1428,7 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
     }
 
     Matrix_Translate(this->unk_3D8.x, this->unk_3D8.y, this->unk_3D8.z, MTXMODE_NEW);
-    Matrix_Scale(this->unk_3E4, this->unk_3E8, this->unk_3EC, MTXMODE_APPLY);
+    Matrix_Scale(this->unk_3E4.x, this->unk_3E4.y, this->unk_3E4.z, MTXMODE_APPLY);
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0,
                                 ((this->unk_388 * 10) - (play->state.frames * 20)) % 512, 32, 128));
