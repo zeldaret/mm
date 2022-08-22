@@ -155,14 +155,14 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ITEM00_MAGIC_LARGE:
-            Actor_SetScale(&this->actor, 0.044999998f);
-            this->unk154 = 0.044999998f;
+            Actor_SetScale(&this->actor, 4.5f * 0.01f);
+            this->unk154 = 4.5f * 0.01f;
             shadowOffset = 320.0f;
             break;
 
         case ITEM00_RUPEE_HUGE:
-            Actor_SetScale(&this->actor, 0.044999998f);
-            this->unk154 = 0.044999998f;
+            Actor_SetScale(&this->actor, 4.5f * 0.01f);
+            this->unk154 = 4.5f * 0.01f;
             shadowOffset = 750.0f;
             break;
 
@@ -471,7 +471,7 @@ void func_800A6A40(EnItem00* this, PlayState* play) {
     this->actor.world.pos = player->actor.world.pos;
 
     if (this->actor.params <= ITEM00_RUPEE_RED) {
-        this->actor.shape.rot.y += 960;
+        this->actor.shape.rot.y += 0x3C0;
     } else if (this->actor.params == ITEM00_RECOVERY_HEART) {
         this->actor.shape.rot.y = 0;
     }
@@ -771,11 +771,10 @@ void EnItem00_Draw(Actor* thisx, PlayState* play) {
     }
 }
 
-static TexturePtr sRupeeTextures[] = { gRupeeGreenTex, gRupeeBlueTex, gRupeeRedTex, gRupeeOrangeTex, gRupeePurpleTex };
+static TexturePtr sRupeeTextures[] = {
+    gRupeeGreenTex, gRupeeBlueTex, gRupeeRedTex, gRupeeOrangeTex, gRupeePurpleTex,
+};
 
-/**
- * Draw Function used for Rupee types of En_Item00.
- */
 void EnItem00_DrawRupee(EnItem00* this, PlayState* play) {
     s32 pad;
     s32 texIndex;
@@ -954,7 +953,7 @@ Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params) {
                 }
                 spawnedActor->speedXZ = 2.0f;
                 spawnedActor->gravity = -0.9f;
-                spawnedActor->world.rot.y = randPlusMinusPoint5Scaled(65536.0f);
+                spawnedActor->world.rot.y = randPlusMinusPoint5Scaled(0x10000);
                 Actor_SetScale(spawnedActor, 0.0f);
                 ((EnItem00*)spawnedActor)->actionFunc = func_800A6780;
                 ((EnItem00*)spawnedActor)->unk152 = 0xDC;
@@ -1009,7 +1008,7 @@ Actor* Item_DropCollectible2(PlayState* play, Vec3f* spawnPos, s32 params) {
                     } else {
                         spawnedActor->gravity = -0.9f;
                     }
-                    spawnedActor->world.rot.y = randPlusMinusPoint5Scaled(65536.0f);
+                    spawnedActor->world.rot.y = randPlusMinusPoint5Scaled(0x10000);
                     spawnedActor->flags |= 0x10;
                 }
             }
