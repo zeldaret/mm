@@ -478,8 +478,88 @@ void func_80A456A0(EnWiz* this, PlayState* play) {
     }
 }
 
-void func_80A45CD8(EnWiz* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A45CD8.s")
+void func_80A45CD8(EnWiz* this, PlayState* play) {
+    Actor* prop;
+    s32 i;
+    s32 j;
+    s16 var_s0;
+    s16 var_v1;
+    s16 var_fp;
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_420); i++) {
+        this->unk_420[i] = NULL;
+    }
+
+    prop = play->actorCtx.actorLists[ACTORCAT_PROP].first;
+    i = 0;
+    while (prop != NULL) {
+        if (prop->id != ACTOR_EN_WIZ_BROCK) {
+            prop = prop->next;
+            continue;
+        }
+
+        this->unk_420[i] = prop;
+        i++;
+        if (this->unk_3B0 != 6) {
+            var_v1 = this->unk_74A;
+            if (var_v1 == 2) {
+                var_v1 = 0;
+            }
+            prop->colChkInfo.health = var_v1 + 1;
+            prop = prop->next;
+        } else {
+            prop->colChkInfo.health = 0;
+            prop = prop->next;
+        }
+    }
+
+    if (this->unk_3B0 != 5) {
+        this->unk_740 = i;
+        if (i < 0) {
+            i = 0;
+        } else if (this->unk_740 > 10) {
+            this->unk_740 = 10;
+        }
+
+        var_fp = Rand_ZeroFloat(i);
+        while ((this->unk_748 == var_fp) || ((s16)i == var_fp)) {
+            var_fp = Rand_ZeroFloat(i);
+            if (1) {}
+        }
+
+        this->unk_748 = var_fp;
+        switch (this->unk_3B6) {
+            case 0:
+                Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_420[var_fp]->world.pos);
+                break;
+
+            case 1:
+                Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_420[0]->world.pos);
+                for (i = 0, var_s0 = 128; i < this->unk_740; i++, var_s0 -= 10) {
+                    Math_Vec3f_Copy(&this->unk_81C[i], &this->actor.world.pos);
+                    this->unk_7F2[i] = var_s0;
+                }
+                break;
+
+            default:
+                Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_420[var_fp]->world.pos);
+                for (i--; i >= 0; i--) {
+                    if (var_fp != i) {
+                        Math_Vec3f_Copy(&this->unk_81C[i], &this->unk_420[i]->world.pos);
+                        this->unk_894[i] = this->actor.world.rot;
+                        this->unk_7F2[i] = 0x64;
+                        this->unk_806[i] = i;
+                        for (j = 0; j < ARRAY_COUNT(this->jointTable); j++) {
+                            this->jointTable3[i][j] = this->jointTable[j];
+                        }
+                    } else {
+                        Math_Vec3f_Copy(&this->unk_81C[i], &gZeroVec3f);
+                    }
+                }
+                break;
+        }
+    }
+}
 
 void func_80A460A4(EnWiz* this) {
     s32 i;
