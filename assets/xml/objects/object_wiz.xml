@@ -1,6 +1,8 @@
 ﻿<Root>
     <File Name="object_wiz" Segment="6">
-        <Animation Name="object_wiz_Anim_0007B0" Offset="0x7B0" />
+        <!-- Wizzrobe Animation -->
+        <Animation Name="gWizzrobeAttackAnim" Offset="0x7B0" /> <!-- Original name is "wiz_atack" -->
+
         <Texture Name="object_wiz_Tex_0007C0" OutName="tex_0007C0" Format="i4" Width="32" Height="64" Offset="0x7C0" />
         <Texture Name="object_wiz_Tex_000BC0" OutName="tex_000BC0" Format="i4" Width="32" Height="32" Offset="0xBC0" />
         <Texture Name="object_wiz_Tex_000DC0" OutName="tex_000DC0" Format="i4" Width="16" Height="16" Offset="0xDC0" />
@@ -8,18 +10,21 @@
         <DList Name="object_wiz_DL_000F28" Offset="0xF28" />
         <DList Name="object_wiz_DL_000FD8" Offset="0xFD8" />
         <DList Name="object_wiz_DL_0010E0" Offset="0x10E0" />
-        <DList Name="gWizzrobePlatform" Offset="0x10E8" />
-        <Texture Name="object_wiz_Tex_001198" OutName="tex_001198" Format="rgba16" Width="16" Height="32" Offset="0x1198" />
-        <!-- <Blob Name="object_wiz_Blob_0015A0" Size="0x10" Offset="0x15A0" /> -->
-        <Collision Name="object_wiz_Colheader_001690" Offset="0x1690" />
-        <DList Name="object_wiz_DL_001860" Offset="0x1860" />
+        <DList Name="gWizzrobePlatformDL" Offset="0x10E8" /> <!-- Original name is "wiz_daiza_model" ("pedestal") -->
+        <Texture Name="gWizzrobePlatformTex" OutName="wizzrobe_platform" Format="rgba16" Width="16" Height="32" Offset="0x1198" />
+        <TextureAnimation Name="object_wiz_Matanimheader_0015A0" Offset="0x15A0" />
+        <Collision Name="gWizzrobePlatformCol" Offset="0x1690" />
+        <DList Name="object_wiz_DL_001860" Offset="0x1860" /> <!-- Original name is "wiz_daizalight_model" -->
         <Texture Name="object_wiz_Tex_0019F0" OutName="tex_0019F0" Format="i4" Width="32" Height="32" Offset="0x19F0" />
         <Texture Name="object_wiz_Tex_001BF0" OutName="tex_001BF0" Format="i4" Width="16" Height="32" Offset="0x1BF0" />
         <Texture Name="object_wiz_Tex_001CF0" OutName="tex_001CF0" Format="i8" Width="32" Height="32" Offset="0x1CF0" />
         <TextureAnimation Name="object_wiz_Matanimheader_00211C" Offset="0x211C" />
-        <Animation Name="object_wiz_Anim_002218" Offset="0x2218" />
-        <Animation Name="object_wiz_Anim_002458" Offset="0x2458" />
-        <Animation Name="object_wiz_Anim_0025F0" Offset="0x25F0" />
+
+        <!-- Wizzrobe Animations -->
+        <Animation Name="gWizzrobeDamageAnim" Offset="0x2218" /> <!-- Original name is "wiz_damage" -->
+        <Animation Name="gWizzrobeDanceAnim" Offset="0x2458" /> <!-- Original name is "wiz_dance" -->
+        <Animation Name="gWizzrobeRunAnim" Offset="0x25F0" /> <!-- Original name is "wiz_dash" -->
+
         <DList Name="object_wiz_DL_002630" Offset="0x2630" />
         <Texture Name="object_wiz_Tex_002700" OutName="tex_002700" Format="i4" Width="32" Height="32" Offset="0x2700" />
         <Texture Name="object_wiz_Tex_002900" OutName="tex_002900" Format="i4" Width="32" Height="32" Offset="0x2900" />
@@ -40,63 +45,73 @@
         <Texture Name="object_wiz_Tex_005230" OutName="tex_005230" Format="i4" Width="32" Height="64" Offset="0x5230" />
         <Texture Name="object_wiz_Tex_005630" OutName="tex_005630" Format="i4" Width="16" Height="16" Offset="0x5630" />
         <DList Name="object_wiz_DL_005750" Offset="0x5750" />
-        <DList Name="gWizzrobePlatformCenter" Offset="0x5870" />
+        <DList Name="gWizzrobePlatformCenterDL" Offset="0x5870" /> <!-- Original name is "wiz_lighthole_modelT" -->
         <DList Name="object_wiz_DL_005938" Offset="0x5938" />
         <Texture Name="object_wiz_Tex_005940" OutName="tex_005940" Format="i4" Width="32" Height="32" Offset="0x5940" />
         <Texture Name="object_wiz_Tex_005B40" OutName="tex_005B40" Format="i4" Width="16" Height="32" Offset="0x5B40" />
         <TextureAnimation Name="gWizzrobePlatformTexAnim" Offset="0x5C64" />
-        <Animation Name="object_wiz_Anim_0060E8" Offset="0x60E8" />
-        <Animation Name="object_wiz_Anim_0066C0" Offset="0x66C0" />
-        <DList Name="object_wiz_DL_008640" Offset="0x8640" />
-        <DList Name="object_wiz_DL_0086F0" Offset="0x86F0" />
-        <DList Name="object_wiz_DL_008790" Offset="0x8790" />
-        <DList Name="object_wiz_DL_008868" Offset="0x8868" />
-        <DList Name="object_wiz_DL_008938" Offset="0x8938" />
-        <DList Name="object_wiz_DL_0089D8" Offset="0x89D8" />
-        <DList Name="object_wiz_DL_008AB0" Offset="0x8AB0" />
-        <DList Name="object_wiz_DL_008B80" Offset="0x8B80" />
-        <DList Name="object_wiz_DL_008C10" Offset="0x8C10" />
-        <DList Name="object_wiz_DL_008CE8" Offset="0x8CE8" />
-        <DList Name="object_wiz_DL_008F18" Offset="0x8F18" />
-        <DList Name="object_wiz_DL_0091D8" Offset="0x91D8" />
-        <DList Name="object_wiz_DL_009560" Offset="0x9560" />
-        <DList Name="object_wiz_DL_009608" Offset="0x9608" />
-        <DList Name="object_wiz_DL_0096E0" Offset="0x96E0" />
-        <DList Name="object_wiz_DL_0097B8" Offset="0x97B8" />
-        <DList Name="object_wiz_DL_009918" Offset="0x9918" />
-        <DList Name="object_wiz_DL_0099C0" Offset="0x99C0" />
-        <DList Name="object_wiz_DL_009A98" Offset="0x9A98" />
-        <Texture Name="object_wiz_Tex_009B70" OutName="tex_009B70" Format="rgba16" Width="8" Height="8" Offset="0x9B70" />
-        <Texture Name="object_wiz_Tex_009BF0" OutName="tex_009BF0" Format="rgba16" Width="32" Height="32" Offset="0x9BF0" />
-        <Texture Name="object_wiz_Tex_00A3F0" OutName="tex_00A3F0" Format="rgba16" Width="8" Height="16" Offset="0xA3F0" />
-        <Texture Name="object_wiz_Tex_00A4F0" OutName="tex_00A4F0" Format="rgba16" Width="16" Height="16" Offset="0xA4F0" />
-        <Texture Name="object_wiz_Tex_00A6F0" OutName="tex_00A6F0" Format="rgba16" Width="16" Height="16" Offset="0xA6F0" />
-        <Texture Name="object_wiz_Tex_00A8F0" OutName="tex_00A8F0" Format="rgba16" Width="8" Height="8" Offset="0xA8F0" />
-        <Texture Name="object_wiz_Tex_00A970" OutName="tex_00A970" Format="rgba16" Width="8" Height="16" Offset="0xA970" />
-        <Texture Name="object_wiz_Tex_00AA70" OutName="tex_00AA70" Format="rgba16" Width="16" Height="4" Offset="0xAA70" />
-        <Texture Name="object_wiz_Tex_00AAF0" OutName="tex_00AAF0" Format="rgba16" Width="16" Height="16" Offset="0xAAF0" />
-        <Texture Name="object_wiz_Tex_00ACF0" OutName="tex_00ACF0" Format="rgba16" Width="16" Height="16" Offset="0xACF0" />
-        <Texture Name="object_wiz_Tex_00AEF0" OutName="tex_00AEF0" Format="rgba16" Width="16" Height="16" Offset="0xAEF0" />
-        <Texture Name="object_wiz_Tex_00B0F0" OutName="tex_00B0F0" Format="rgba16" Width="16" Height="8" Offset="0xB0F0" />
-        <Limb Name="object_wiz_Standardlimb_00B1F0" Type="Standard" EnumName="OBJECT_WIZ_LIMB_01" Offset="0xB1F0" />
-        <Limb Name="object_wiz_Standardlimb_00B1FC" Type="Standard" EnumName="OBJECT_WIZ_LIMB_02" Offset="0xB1FC" />
-        <Limb Name="object_wiz_Standardlimb_00B208" Type="Standard" EnumName="OBJECT_WIZ_LIMB_03" Offset="0xB208" />
-        <Limb Name="object_wiz_Standardlimb_00B214" Type="Standard" EnumName="OBJECT_WIZ_LIMB_04" Offset="0xB214" />
-        <Limb Name="object_wiz_Standardlimb_00B220" Type="Standard" EnumName="OBJECT_WIZ_LIMB_05" Offset="0xB220" />
-        <Limb Name="object_wiz_Standardlimb_00B22C" Type="Standard" EnumName="OBJECT_WIZ_LIMB_06" Offset="0xB22C" />
-        <Limb Name="object_wiz_Standardlimb_00B238" Type="Standard" EnumName="OBJECT_WIZ_LIMB_07" Offset="0xB238" />
-        <Limb Name="object_wiz_Standardlimb_00B244" Type="Standard" EnumName="OBJECT_WIZ_LIMB_08" Offset="0xB244" />
-        <Limb Name="object_wiz_Standardlimb_00B250" Type="Standard" EnumName="OBJECT_WIZ_LIMB_09" Offset="0xB250" />
-        <Limb Name="object_wiz_Standardlimb_00B25C" Type="Standard" EnumName="OBJECT_WIZ_LIMB_0A" Offset="0xB25C" />
-        <Limb Name="object_wiz_Standardlimb_00B268" Type="Standard" EnumName="OBJECT_WIZ_LIMB_0B" Offset="0xB268" />
-        <Limb Name="object_wiz_Standardlimb_00B274" Type="Standard" EnumName="OBJECT_WIZ_LIMB_0C" Offset="0xB274" />
-        <Limb Name="object_wiz_Standardlimb_00B280" Type="Standard" EnumName="OBJECT_WIZ_LIMB_0D" Offset="0xB280" />
-        <Limb Name="object_wiz_Standardlimb_00B28C" Type="Standard" EnumName="OBJECT_WIZ_LIMB_0E" Offset="0xB28C" />
-        <Limb Name="object_wiz_Standardlimb_00B298" Type="Standard" EnumName="OBJECT_WIZ_LIMB_0F" Offset="0xB298" />
-        <Limb Name="object_wiz_Standardlimb_00B2A4" Type="Standard" EnumName="OBJECT_WIZ_LIMB_10" Offset="0xB2A4" />
-        <Limb Name="object_wiz_Standardlimb_00B2B0" Type="Standard" EnumName="OBJECT_WIZ_LIMB_11" Offset="0xB2B0" />
-        <Limb Name="object_wiz_Standardlimb_00B2BC" Type="Standard" EnumName="OBJECT_WIZ_LIMB_12" Offset="0xB2BC" />
-        <Limb Name="object_wiz_Standardlimb_00B2C8" Type="Standard" EnumName="OBJECT_WIZ_LIMB_13" Offset="0xB2C8" />
-        <Skeleton Name="object_wiz_Skel_00B320" Type="Flex" LimbType="Standard" LimbNone="OBJECT_WIZ_LIMB_NONE" LimbMax="OBJECT_WIZ_LIMB_MAX" EnumName="ObjectWizLimb" Offset="0xB320" />
+
+        <!-- Wizzrobe Animations -->
+        <Animation Name="gWizzrobeWindUpAnim" Offset="0x60E8" /> <!-- Original name is "wiz_preatack" -->
+        <Animation Name="gWizzrobeIdleAnim" Offset="0x66C0" /> <!-- Original name is "wiz_wait" -->
+
+        <!-- Wizzrobe Limb DisplayLists -->
+        <DList Name="gWizzrobePelvisDL" Offset="0x8640" />
+        <DList Name="gWizzrobeRightThighDL" Offset="0x86F0" />
+        <DList Name="gWizzrobeRightShinDL" Offset="0x8790" />
+        <DList Name="gWizzrobeRightFootDL" Offset="0x8868" />
+        <DList Name="gWizzrobeLeftThighDL" Offset="0x8938" />
+        <DList Name="gWizzrobeLeftShinDL" Offset="0x89D8" />
+        <DList Name="gWizzrobeLeftFootDL" Offset="0x8AB0" />
+        <DList Name="gWizzrobeLoinclothDL" Offset="0x8B80" />
+        <DList Name="gWizzrobeTorsoDL" Offset="0x8C10" />
+        <DList Name="gWizzrobeNeckDL" Offset="0x8CE8" /> <!-- Also includes the nose and ears for some reason. -->
+        <DList Name="gWizzrobeJawDL" Offset="0x8F18" />
+        <DList Name="gWizzrobeHeadDL" Offset="0x91D8" />
+        <DList Name="gWizzrobeRightUpperArmDL" Offset="0x9560" />
+        <DList Name="gWizzrobeRightForearmDL" Offset="0x9608" />
+        <DList Name="gWizzrobeRightHandDL" Offset="0x96E0" />
+        <DList Name="gWizzrobeStaffDL" Offset="0x97B8" />
+        <DList Name="gWizzrobeLeftUpperArmDL" Offset="0x9918" />
+        <DList Name="gWizzrobeLeftForearmDL" Offset="0x99C0" />
+        <DList Name="gWizzrobeLeftHandDL" Offset="0x9A98" />
+
+        <!-- Wizzrobe Textures -->
+        <Texture Name="gWizzrobeFaceSkinTex" OutName="wizzrobe_face_skin" Format="rgba16" Width="8" Height="8" Offset="0x9B70" />
+        <Texture Name="gWizzrobeRobeTex" OutName="wizzrobe_robe" Format="rgba16" Width="32" Height="32" Offset="0x9BF0" />
+        <Texture Name="gWizzrobeHairTex" OutName="wizzrobe_hair" Format="rgba16" Width="8" Height="16" Offset="0xA3F0" />
+        <Texture Name="gWizzrobeEyeOrbitTex" OutName="wizzrobe_eye_orbit" Format="rgba16" Width="16" Height="16" Offset="0xA4F0" />
+        <Texture Name="gWizzrobeEyeTex" OutName="wizzrobe_eye" Format="rgba16" Width="16" Height="16" Offset="0xA6F0" />
+        <Texture Name="gWizzrobeLowerLipTex" OutName="wizzrobe_lower_lip" Format="rgba16" Width="8" Height="8" Offset="0xA8F0" />
+        <Texture Name="gWizzrobeNoseTex" OutName="wizzrobe_nose" Format="rgba16" Width="8" Height="16" Offset="0xA970" />
+        <Texture Name="gWizzrobeEarTex" OutName="wizzrobe_ear" Format="rgba16" Width="16" Height="4" Offset="0xAA70" />
+        <Texture Name="gWizzrobeStaffTipTex" OutName="wizzrobe_staff_tip" Format="rgba16" Width="16" Height="16" Offset="0xAAF0" />
+        <Texture Name="gWizzrobeStaffTex" OutName="wizzrobe_staff" Format="rgba16" Width="16" Height="16" Offset="0xACF0" />
+        <Texture Name="gWizzrobeBandTex" OutName="wizzrobe_band" Format="rgba16" Width="16" Height="16" Offset="0xAEF0" />
+        <Texture Name="gWizzrobeFootTex" OutName="wizzrobe_foot" Format="rgba16" Width="16" Height="8" Offset="0xB0F0" />
+
+        <!-- Wizzrobe Limbs -->
+        <Limb Name="gWizzrobePelvisLimb" Type="Standard" EnumName="WIZZROBE_LIMB_PELVIS" Offset="0xB1F0" />
+        <Limb Name="gWizzrobeTorsoLimb" Type="Standard" EnumName="WIZZROBE_LIMB_TORSO" Offset="0xB1FC" />
+        <Limb Name="gWizzrobeLeftUpperArmLimb" Type="Standard" EnumName="WIZZROBE_LIMB_LEFT_UPPER_ARM" Offset="0xB208" />
+        <Limb Name="gWizzrobeLeftForearmLimb" Type="Standard" EnumName="WIZZROBE_LIMB_LEFT_FOREARM" Offset="0xB214" />
+        <Limb Name="gWizzrobeLeftHandLimb" Type="Standard" EnumName="WIZZROBE_LIMB_LEFT_HAND" Offset="0xB220" />
+        <Limb Name="gWizzrobeRightUpperArmLimb" Type="Standard" EnumName="WIZZROBE_LIMB_RIGHT_UPPER_ARM" Offset="0xB22C" />
+        <Limb Name="gWizzrobeRightForearmLimb" Type="Standard" EnumName="WIZZROBE_LIMB_RIGHT_FOREARM" Offset="0xB238" />
+        <Limb Name="gWizzrobeRightHandLimb" Type="Standard" EnumName="WIZZROBE_LIMB_RIGHT_HAND" Offset="0xB244" />
+        <Limb Name="gWizzrobeStaffLimb" Type="Standard" EnumName="WIZZROBE_LIMB_STAFF" Offset="0xB250" />
+        <Limb Name="gWizzrobeNeckLimb" Type="Standard" EnumName="WIZZROBE_LIMB_NECK" Offset="0xB25C" />
+        <Limb Name="gWizzrobeHeadLimb" Type="Standard" EnumName="WIZZROBE_LIMB_HEAD" Offset="0xB268" />
+        <Limb Name="gWizzrobeJawLimb" Type="Standard" EnumName="WIZZROBE_LIMB_JAW" Offset="0xB274" />
+        <Limb Name="gWizzrobeLoinclothLimb" Type="Standard" EnumName="WIZZROBE_LIMB_LOINCLOTH" Offset="0xB280" />
+        <Limb Name="gWizzrobeLeftThighLimb" Type="Standard" EnumName="WIZZROBE_LIMB_LEFT_THIGH" Offset="0xB28C" />
+        <Limb Name="gWizzrobeLeftShinLimb" Type="Standard" EnumName="WIZZROBE_LIMB_LEFT_SHIN" Offset="0xB298" />
+        <Limb Name="gWizzrobeLeftFootLimb" Type="Standard" EnumName="WIZZROBE_LIMB_LEFT_FOOT" Offset="0xB2A4" />
+        <Limb Name="gWizzrobeRightThighLimb" Type="Standard" EnumName="WIZZROBE_LIMB_RIGHT_THIGH" Offset="0xB2B0" />
+        <Limb Name="gWizzrobeRightShinLimb" Type="Standard" EnumName="WIZZROBE_LIMB_RIGHT_SHIN" Offset="0xB2BC" />
+        <Limb Name="gWizzrobeRightFootLimb" Type="Standard" EnumName="WIZZROBE_LIMB_RIGHT_FOOT" Offset="0xB2C8" />
+
+        <!-- Wizzrobe Skeleton -->
+        <Skeleton Name="gWizzrobeSkel" Type="Flex" LimbType="Standard" LimbNone="WIZZROBE_LIMB_NONE" LimbMax="WIZZROBE_LIMB_MAX" EnumName="WizzrobeLimb" Offset="0xB320" />
     </File>
 </Root>

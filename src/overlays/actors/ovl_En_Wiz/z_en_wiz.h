@@ -11,11 +11,11 @@ typedef void (*EnWizActionFunc)(struct EnWiz*, PlayState*);
 typedef struct EnWiz {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[20];
-    /* 0x200 */ Vec3s morphTable[20];
+    /* 0x188 */ Vec3s jointTable[WIZZROBE_LIMB_MAX];
+    /* 0x200 */ Vec3s morphTable[WIZZROBE_LIMB_MAX];
     /* 0x278 */ SkelAnime skelAnime2;
-    /* 0x2BC */ Vec3s jointTable2[20];
-    /* 0x334 */ Vec3s morphTable2[20];
+    /* 0x2BC */ Vec3s jointTable2[WIZZROBE_LIMB_MAX];
+    /* 0x334 */ Vec3s morphTable2[WIZZROBE_LIMB_MAX];
     /* 0x3AC */ EnWizActionFunc actionFunc;
     /* 0x3B0 */ s16 unk_3B0;
     /* 0x3B2 */ s16 unk_3B2;
@@ -66,7 +66,7 @@ typedef struct EnWiz {
     /* 0x806 */ s16 unk_806[10];
     /* 0x81C */ Vec3f unk_81C[10];
     /* 0x894 */ Vec3s unk_894[10];
-    /* 0x8D0 */ Vec3s jointTable3[10][20];
+    /* 0x8D0 */ Vec3s jointTable3[10][WIZZROBE_LIMB_MAX];
 } EnWiz; // size = 0xD80
 
 extern const ActorInit En_Wiz_InitVars;

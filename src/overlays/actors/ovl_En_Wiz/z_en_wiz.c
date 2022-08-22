@@ -268,12 +268,21 @@ static DamageTable D_80A48D14 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-static AnimationHeader* D_80A48D34[] = {
-    &object_wiz_Anim_0066C0, &object_wiz_Anim_0025F0, &object_wiz_Anim_002458,
-    &object_wiz_Anim_0060E8, &object_wiz_Anim_0007B0, &object_wiz_Anim_002218,
+typedef enum {
+    /* 0 */ EN_WIZ_ANIM_IDLE,
+    /* 1 */ EN_WIZ_ANIM_RUN,
+    /* 2 */ EN_WIZ_ANIM_DANCE,
+    /* 3 */ EN_WIZ_ANIM_WIND_UP,
+    /* 4 */ EN_WIZ_ANIM_ATTACK,
+    /* 5 */ EN_WIZ_ANIM_DAMAGE,
+} EnWizAnimation;
+
+static AnimationHeader* sAnimations[] = {
+    &gWizzrobeIdleAnim,   &gWizzrobeRunAnim,    &gWizzrobeDanceAnim,
+    &gWizzrobeWindUpAnim, &gWizzrobeAttackAnim, &gWizzrobeDamageAnim,
 };
 
-static u8 D_80A48D4C[] = {
+static u8 sAnimationModes[] = {
     ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE,
 };
 
@@ -281,10 +290,10 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnWiz* this = THIS;
 
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_wiz_Skel_00B320, &object_wiz_Anim_0066C0, this->jointTable,
-                       this->morphTable, 20);
-    SkelAnime_InitFlex(play, &this->skelAnime2, &object_wiz_Skel_00B320, &object_wiz_Anim_0066C0, this->jointTable2,
-                       this->morphTable2, 20);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gWizzrobeSkel, &gWizzrobeIdleAnim, this->jointTable, this->morphTable,
+                       WIZZROBE_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime2, &gWizzrobeSkel, &gWizzrobeIdleAnim, this->jointTable2,
+                       this->morphTable2, WIZZROBE_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.0f);
     this->unk_3C4 = 0;
     this->unk_3C2 = 0xFF;
@@ -337,10 +346,10 @@ void EnWiz_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnWiz_ChangeAnim(EnWiz* this, s32 animIndex, s32 arg2) {
-    this->endFrame = Animation_GetLastFrame(D_80A48D34[animIndex]);
-    Animation_Change(&this->skelAnime, D_80A48D34[animIndex], 1.0f, 0.0f, this->endFrame, D_80A48D4C[animIndex], -2.0f);
+    this->endFrame = Animation_GetLastFrame(sAnimations[animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f, this->endFrame, sAnimationModes[animIndex], -2.0f);
     if (arg2 != 0) {
-        Animation_Change(&this->skelAnime2, D_80A48D34[animIndex], 1.0f, 0.0f, this->endFrame, D_80A48D4C[animIndex],
+        Animation_Change(&this->skelAnime2, sAnimations[animIndex], 1.0f, 0.0f, this->endFrame, sAnimationModes[animIndex],
                          -2.0f);
     }
 }
@@ -385,7 +394,7 @@ void func_80A456A0(EnWiz* this, PlayState* play) {
                         this->unk_894[i].y = Math_Vec3f_Yaw(&this->unk_81C[i], &player->actor.world.pos);
                     }
 
-                    EnWiz_ChangeAnim(this, 0, true);
+                    EnWiz_ChangeAnim(this, EN_WIZ_ANIM_IDLE, true);
                     this->unk_3CA = 0;
                     this->unk_3C6 = 0xFF;
                     Math_Vec3f_Copy(&this->unk_414, &this->actor.world.pos);
@@ -430,7 +439,7 @@ void func_80A456A0(EnWiz* this, PlayState* play) {
 
             case 4:
                 if (this->unk_3B4 == 0) {
-                    EnWiz_ChangeAnim(this, 1, false);
+                    EnWiz_ChangeAnim(this, EN_WIZ_ANIM_RUN, false);
                     this->unk_3C0 = 0;
                     this->unk_3B4 = 34;
                     this->unk_3CB++;
@@ -618,7 +627,7 @@ void func_80A462F8(EnWiz* this, PlayState* play) {
                 this->unk_894[i].y = Math_Vec3f_Yaw(&this->unk_81C[i], &player->actor.world.pos);
             }
 
-            EnWiz_ChangeAnim(this, 0, true);
+            EnWiz_ChangeAnim(this, EN_WIZ_ANIM_IDLE, true);
             this->unk_3CA = 0;
             this->unk_3C6 = 0xFF;
             Math_Vec3f_Copy(&this->unk_414, &this->actor.world.pos);
@@ -690,14 +699,14 @@ void func_80A46414(EnWiz* this, PlayState* play) {
 }
 
 void func_80A4668C(EnWiz* this) {
-    EnWiz_ChangeAnim(this, 2, 0);
+    EnWiz_ChangeAnim(this, EN_WIZ_ANIM_DANCE, false);
     Math_ApproachF(&this->unk_3D4, 0.015f, 0.05f, 0.001f);
     this->unk_3C0 = 0;
     this->unk_44C = 0;
     this->unk_3B0 = 9;
     if (this->unk_3B6 >= 2) {
-        Animation_Change(&this->skelAnime2, &object_wiz_Anim_0025F0, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&object_wiz_Anim_0025F0), ANIMMODE_LOOP, 0.0f);
+        Animation_Change(&this->skelAnime2, &gWizzrobeRunAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gWizzrobeRunAnim),
+                         ANIMMODE_LOOP, 0.0f);
         this->unk_3B6 = 3;
     }
 
@@ -744,7 +753,7 @@ void func_80A468CC(EnWiz* this, PlayState* play) {
         ActorCutscene_StartAndSetFlag(temp_v0, &this->actor);
         this->unk_74E = ActorCutscene_GetCurrentSubCamId(temp_v0);
         this->actor.flags |= ACTOR_FLAG_100000;
-        EnWiz_ChangeAnim(this, 2, false);
+        EnWiz_ChangeAnim(this, EN_WIZ_ANIM_DANCE, false);
         this->unk_3B0 = 2;
         this->unk_744 = 1;
         this->unk_3BC = 0;
@@ -812,7 +821,7 @@ void func_80A46990(EnWiz* this, PlayState* play) {
 }
 
 void func_80A46C88(EnWiz* this) {
-    EnWiz_ChangeAnim(this, 3, 0);
+    EnWiz_ChangeAnim(this, EN_WIZ_ANIM_WIND_UP, false);
     this->unk_44C = 0;
     this->actionFunc = func_80A46CC4;
 }
@@ -841,7 +850,7 @@ void func_80A46CC4(EnWiz* this, PlayState* play) {
 }
 
 void func_80A46DDC(EnWiz* this) {
-    EnWiz_ChangeAnim(this, 4, 0);
+    EnWiz_ChangeAnim(this, EN_WIZ_ANIM_ATTACK, false);
     this->unk_3B2 = 0;
     this->unk_3CA = 0;
     this->unk_3B0 = 8;
@@ -892,7 +901,7 @@ void func_80A47000(EnWiz* this) {
     if (this->unk_3B0 != 4) {
         this->unk_3C0 = 0x2710;
         this->unk_3B2 = 0;
-        EnWiz_ChangeAnim(this, 0, 0);
+        EnWiz_ChangeAnim(this, EN_WIZ_ANIM_IDLE, false);
         this->unk_3B0 = 3;
     } else {
         this->unk_3C0 = 0x2710;
@@ -946,7 +955,7 @@ void func_80A470D8(EnWiz* this, PlayState* play) {
 }
 
 void func_80A47298(EnWiz* this, PlayState* play) {
-    EnWiz_ChangeAnim(this, 5, 0);
+    EnWiz_ChangeAnim(this, EN_WIZ_ANIM_DAMAGE, false);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
     this->unk_3B2 = 0x14;
 
@@ -1040,7 +1049,7 @@ void func_80A473B8(EnWiz* this, PlayState* play) {
 }
 
 void func_80A4767C(EnWiz* this) {
-    EnWiz_ChangeAnim(this, 5, 0);
+    EnWiz_ChangeAnim(this, EN_WIZ_ANIM_DAMAGE, false);
     this->unk_3C0 = 0x2710;
     this->unk_3B0 = 5;
     this->unk_3B2 = 0;
@@ -1225,7 +1234,7 @@ void func_80A47FCC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
     Vec3f sp24 = { 0.0f, 0.0f, 0.0f };
     EnWiz* this = THIS;
 
-    if (limbIndex == 9) {
+    if (limbIndex == WIZZROBE_LIMB_STAFF) {
         sp24.x = 7300.0f;
         sp24.y = -1500.0f;
         if (this->unk_3B0 != 9) {
@@ -1239,9 +1248,12 @@ void func_80A47FCC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
 
     Collider_UpdateSpheres(limbIndex, &this->unk_454);
 
-    if ((limbIndex == 1) || (limbIndex == 2) || (limbIndex == 3) || (limbIndex == 4) || (limbIndex == 6) ||
-        (limbIndex == 7) || (limbIndex == 0xA) || (limbIndex == 0xB) || (limbIndex == 0xC) || (limbIndex == 0xF) ||
-        (limbIndex == 0x12) || (limbIndex == 0xD)) {
+    if ((limbIndex == WIZZROBE_LIMB_PELVIS) || (limbIndex == WIZZROBE_LIMB_TORSO) ||
+        (limbIndex == WIZZROBE_LIMB_LEFT_UPPER_ARM) || (limbIndex == WIZZROBE_LIMB_LEFT_FOREARM) ||
+        (limbIndex == WIZZROBE_LIMB_RIGHT_UPPER_ARM) || (limbIndex == WIZZROBE_LIMB_RIGHT_FOREARM) ||
+        (limbIndex == WIZZROBE_LIMB_NECK) || (limbIndex == WIZZROBE_LIMB_HEAD) || (limbIndex == WIZZROBE_LIMB_JAW) ||
+        (limbIndex == WIZZROBE_LIMB_LEFT_SHIN) || (limbIndex == WIZZROBE_LIMB_RIGHT_SHIN) ||
+        (limbIndex == WIZZROBE_LIMB_LOINCLOTH)) {
         Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosIndex]);
         this->bodyPartsPosIndex++;
         if (this->bodyPartsPosIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
@@ -1256,7 +1268,7 @@ void func_80A48138(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
     EnWiz* this = THIS;
 
     if (this->unk_3B0 != 6) {
-        if (limbIndex == 9) {
+        if (limbIndex == WIZZROBE_LIMB_STAFF) {
             sp4C.x = 7300.0f;
             sp4C.y = -1500.0f;
             if (this->unk_3B0 != 9) {
@@ -1280,14 +1292,17 @@ void func_80A48138(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
             SoundSource_PlaySfxAtFixedWorldPos(play, &sp38, 10, NA_SE_EN_EXTINCT);
         }
 
-        if ((limbIndex >= 0x13) && (this->unk_3B2 == 0)) {
+        if ((limbIndex >= WIZZROBE_LIMB_RIGHT_FOOT) && (this->unk_3B2 == 0)) {
             this->unk_3B2 = 4;
         }
     }
 
-    if ((limbIndex == 1) || (limbIndex == 2) || (limbIndex == 3) || (limbIndex == 4) || (limbIndex == 6) ||
-        (limbIndex == 7) || (limbIndex == 0xA) || (limbIndex == 0xB) || (limbIndex == 0xC) || (limbIndex == 0xF) ||
-        (limbIndex == 0x12) || (limbIndex == 0xD)) {
+    if ((limbIndex == WIZZROBE_LIMB_PELVIS) || (limbIndex == WIZZROBE_LIMB_TORSO) ||
+        (limbIndex == WIZZROBE_LIMB_LEFT_UPPER_ARM) || (limbIndex == WIZZROBE_LIMB_LEFT_FOREARM) ||
+        (limbIndex == WIZZROBE_LIMB_RIGHT_UPPER_ARM) || (limbIndex == WIZZROBE_LIMB_RIGHT_FOREARM) ||
+        (limbIndex == WIZZROBE_LIMB_NECK) || (limbIndex == WIZZROBE_LIMB_HEAD) || (limbIndex == WIZZROBE_LIMB_JAW) ||
+        (limbIndex == WIZZROBE_LIMB_LEFT_SHIN) || (limbIndex == WIZZROBE_LIMB_RIGHT_SHIN) ||
+        (limbIndex == WIZZROBE_LIMB_LOINCLOTH)) {
         Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosIndex]);
         this->bodyPartsPosIndex++;
         if (this->bodyPartsPosIndex >= ARRAY_COUNT(this->bodyPartsPos)) {

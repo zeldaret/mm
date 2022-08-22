@@ -45,7 +45,7 @@ void EnWizBrock_Init(Actor* thisx, PlayState* play) {
     CollisionHeader* colHeader = NULL;
 
     DynaPolyActor_Init(&this->dyna, 0);
-    CollisionHeader_GetVirtual(&object_wiz_Colheader_001690, &colHeader);
+    CollisionHeader_GetVirtual(&gWizzrobePlatformCol, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->dyna.actor.colChkInfo.health = 3;
@@ -115,13 +115,13 @@ void EnWizBrock_Draw(Actor* thisx, PlayState* play) {
         Scene_SetRenderModeXlu(play, 0, 1);
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
-        Gfx_DrawDListOpa(play, gWizzrobePlatform);
+        Gfx_DrawDListOpa(play, gWizzrobePlatformDL);
 
     } else {
         Scene_SetRenderModeXlu(play, 1, 2);
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, (s16)this->alpha);
-        Gfx_DrawDListXlu(play, gWizzrobePlatform);
+        Gfx_DrawDListXlu(play, gWizzrobePlatformDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -138,7 +138,7 @@ void EnWizBrock_Draw(Actor* thisx, PlayState* play) {
         }
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, &gWizzrobePlatformCenter);
+        gSPDisplayList(POLY_XLU_DISP++, &gWizzrobePlatformCenterDL);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
