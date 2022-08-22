@@ -24,7 +24,7 @@ typedef struct ObjKendoKanban {
     /* 0x2FC */ s32 idxLastLowestPoint;
     /* 0x300 */ s16 bHasNewLowestPoint;
     /* 0x302 */ s16 rotationalVelocity;
-    /* 0x304 */ s16 unk_304;
+    /* 0x304 */ s16 rotationalAcceleration;
     /* 0x306 */ UNK_TYPE1 pad306[2];
     /* 0x308 */ s16 framesSinceGrounded;
     /* 0x30A */ s16 unk_30A;
