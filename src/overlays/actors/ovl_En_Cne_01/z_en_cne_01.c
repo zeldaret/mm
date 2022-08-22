@@ -103,7 +103,7 @@ void EnCne01_UpdateModel(EnCne01* this, PlayState* play) {
     EnHy_UpdateSkelAnime(&this->enHy, play);
     if (SubS_AngleDiffLessEqual(this->enHy.actor.shape.rot.y, 0x36B0, this->enHy.actor.yawTowardsPlayer)) {
         point.x = player->actor.world.pos.x;
-        point.y = player->bodyPartsPos[7].y + 3.0f;
+        point.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
         point.z = player->actor.world.pos.z;
         SubS_TrackPoint(&point, &this->enHy.actor.focus.pos, &this->enHy.actor.shape.rot, &this->enHy.trackTarget,
                         &this->enHy.headRot, &this->enHy.torsoRot, &sTrackOptions);

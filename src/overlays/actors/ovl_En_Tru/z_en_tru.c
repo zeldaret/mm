@@ -446,7 +446,7 @@ s32 func_80A869DC(EnTru* this, PlayState* play) {
     Math_ApproachS(&this->unk_368, this->actor.yawTowardsPlayer - this->actor.shape.rot.y, 4, 0x2AA8);
     this->unk_368 = CLAMP(this->unk_368, -0x1FFE, 0x1FFE);
     Math_Vec3f_Copy(&sp38, &player->actor.world.pos);
-    sp38.y = player->bodyPartsPos[7].y + 3.0f;
+    sp38.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     Math_Vec3f_Copy(&sp2C, &this->actor.focus.pos);
     sp2C.y -= 30.0f;
     Math_ApproachS(&this->unk_366, Math_Vec3f_Pitch(&sp2C, &sp38), 4, 0x2AA8);

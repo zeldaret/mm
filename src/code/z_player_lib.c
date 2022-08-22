@@ -207,7 +207,8 @@ void func_801229FC(Player* player) {
                 s32 i;
 
                 for (i = 0; i < ARRAY_COUNT(D_801F58B0); i++) {
-                    func_80127B64(D_801F58B0[i], ARRAY_COUNT(D_801F58B0[i]), &player->bodyPartsPos[7]);
+                    func_80127B64(D_801F58B0[i], ARRAY_COUNT(D_801F58B0[i]),
+                                  &player->bodyPartsPos[PLAYER_BODYPART_HEAD]);
                 }
             }
         }
@@ -1909,12 +1910,13 @@ void func_801251C4(Player* player, Vec3f* arg1) {
     sp4C.x = player->actor.world.pos.x;
     sp4C.y = player->actor.world.pos.y + 60.0f;
     sp4C.z = player->actor.world.pos.z;
-    func_80124FF0(-20.0f, player->unk_B8C, &sp4C, player->actor.shape.rot.y, player->bodyPartsPos, arg1,
-                  &player->unk_B90, &player->unk_B10[0], 0.0f, 0x1F40, &player->unk_B92, &player->unk_B10[1], 0);
+    func_80124FF0(-20.0f, player->unk_B8C, &sp4C, player->actor.shape.rot.y,
+                  &player->bodyPartsPos[PLAYER_BODYPART_WAIST], arg1, &player->unk_B90, &player->unk_B10[0], 0.0f,
+                  0x1F40, &player->unk_B92, &player->unk_B10[1], 0);
 
-    sp40.x = (player->bodyPartsPos[6].x + player->bodyPartsPos[3].x) * 0.5f;
-    sp40.y = (player->bodyPartsPos[6].y + player->bodyPartsPos[3].y) * 0.5f;
-    sp40.z = (player->bodyPartsPos[6].z + player->bodyPartsPos[3].z) * 0.5f;
+    sp40.x = (player->bodyPartsPos[PLAYER_BODYPART_L_FOOT].x + player->bodyPartsPos[PLAYER_BODYPART_R_FOOT].x) / 2.0f;
+    sp40.y = (player->bodyPartsPos[PLAYER_BODYPART_L_FOOT].y + player->bodyPartsPos[PLAYER_BODYPART_R_FOOT].y) / 2.0f;
+    sp40.z = (player->bodyPartsPos[PLAYER_BODYPART_L_FOOT].z + player->bodyPartsPos[PLAYER_BODYPART_R_FOOT].z) / 2.0f;
     func_80124FF0(-20.0f, player->unk_B90, arg1, (player->actor.shape.rot.y + player->unk_B92), &sp40, arg1,
                   &player->unk_B94, &player->unk_B10[2], -1.9f, 0x1F40, &player->unk_B96, &player->unk_B10[3], 0);
 }
@@ -2352,9 +2354,9 @@ s32 func_80126440(PlayState* play, ColliderQuad* collider, WeaponInfo* weaponInf
 }
 
 u8 D_801C096C[PLAYER_SHIELD_MAX] = {
-    COLTYPE_METAL,
-    COLTYPE_METAL,
-    COLTYPE_METAL,
+    COLTYPE_METAL, // PLAYER_SHIELD_NONE
+    COLTYPE_METAL, // PLAYER_SHIELD_HEROS_SHIELD
+    COLTYPE_METAL, // PLAYER_SHIELD_MIRROR_SHIELD
 };
 
 void func_801265C8(PlayState* play, Player* player, ColliderQuad* collider, Vec3f arg3[4]) {
@@ -2472,35 +2474,35 @@ Gfx* D_801C0B14[] = {
 };
 
 u8 D_801C0B1C[] = {
-    0x0C,
-    0x0F,
+    PLAYER_BODYPART_L_HAND,
+    PLAYER_BODYPART_R_HAND,
 };
 
 Gfx* D_801C0B20[] = {
-    object_mask_truth_DL_0001A0, // PLAYER_MASK_TRUTH
-    object_mask_kerfay_DL_000D40, // PLAYER_MASK_KAFEIS_MASK
+    object_mask_truth_DL_0001A0,    // PLAYER_MASK_TRUTH
+    object_mask_kerfay_DL_000D40,   // PLAYER_MASK_KAFEIS_MASK
     object_mask_yofukasi_DL_000490, // PLAYER_MASK_ALL_NIGHT
-    object_mask_rabit_DL_000610, // PLAYER_MASK_BUNNY
-    object_mask_ki_tan_DL_0004A0, // PLAYER_MASK_KEATON
-    object_mask_json_DL_0004C0, // PLAYER_MASK_GARO
-    object_mask_romerny_DL_0007A0, // PLAYER_MASK_ROMANI
-    object_mask_zacho_DL_000700, // PLAYER_MASK_CIRCUS_LEADER
-    object_mask_posthat_DL_000290, // PLAYER_MASK_POSTMAN
-    object_mask_meoto_DL_0005A0, // PLAYER_MASK_COUPLE
-    object_mask_bigelf_DL_0016F0, // PLAYER_MASK_GREAT_FAIRY
-    object_mask_gibudo_DL_000250, // PLAYER_MASK_GIBDO
-    gDonGeroMaskDL, // PLAYER_MASK_DON_GERO
-    object_mask_dancer_DL_000EF0, // PLAYER_MASK_KAMARO
-    object_mask_skj_DL_0009F0, // PLAYER_MASK_CAPTAIN
-    object_mask_stone_DL_000820, // PLAYER_MASK_STONE
-    object_mask_bree_DL_0003C0, // PLAYER_MASK_BREMEN
+    object_mask_rabit_DL_000610,    // PLAYER_MASK_BUNNY
+    object_mask_ki_tan_DL_0004A0,   // PLAYER_MASK_KEATON
+    object_mask_json_DL_0004C0,     // PLAYER_MASK_GARO
+    object_mask_romerny_DL_0007A0,  // PLAYER_MASK_ROMANI
+    object_mask_zacho_DL_000700,    // PLAYER_MASK_CIRCUS_LEADER
+    object_mask_posthat_DL_000290,  // PLAYER_MASK_POSTMAN
+    object_mask_meoto_DL_0005A0,    // PLAYER_MASK_COUPLE
+    object_mask_bigelf_DL_0016F0,   // PLAYER_MASK_GREAT_FAIRY
+    object_mask_gibudo_DL_000250,   // PLAYER_MASK_GIBDO
+    gDonGeroMaskDL,                 // PLAYER_MASK_DON_GERO
+    object_mask_dancer_DL_000EF0,   // PLAYER_MASK_KAMARO
+    object_mask_skj_DL_0009F0,      // PLAYER_MASK_CAPTAIN
+    object_mask_stone_DL_000820,    // PLAYER_MASK_STONE
+    object_mask_bree_DL_0003C0,     // PLAYER_MASK_BREMEN
     object_mask_bakuretu_DL_0005C0, // PLAYER_MASK_BLAST
-    object_mask_bu_san_DL_000710, // PLAYER_MASK_SCENTS
-    object_mask_kyojin_DL_000380, // PLAYER_MASK_GIANT
-    gameplay_keep_DL_00B260, // PLAYER_MASK_FIERCE_DEITY
-    gameplay_keep_DL_005A10, // PLAYER_MASK_GORON
-    gameplay_keep_DL_005360, // PLAYER_MASK_ZORA
-    gameplay_keep_DL_0056C0, // PLAYER_MASK_DEKU
+    object_mask_bu_san_DL_000710,   // PLAYER_MASK_SCENTS
+    object_mask_kyojin_DL_000380,   // PLAYER_MASK_GIANT
+    gameplay_keep_DL_00B260,        // PLAYER_MASK_FIERCE_DEITY
+    gameplay_keep_DL_005A10,        // PLAYER_MASK_GORON
+    gameplay_keep_DL_005360,        // PLAYER_MASK_ZORA
+    gameplay_keep_DL_0056C0,        // PLAYER_MASK_DEKU
     object_mask_boy_DL_000900,
     object_mask_goron_DL_0014A0,
     object_mask_zora_DL_000DB0,
@@ -2579,9 +2581,9 @@ void Player_DrawGetItem(PlayState* play, Player* player) {
                 if (player->stateFlags1 & PLAYER_STATE1_400) {
                     refPos.y = player->actor.world.pos.y + 30.0f;
                 } else {
-                    refPos.x = player->bodyPartsPos[0xC].x;
-                    refPos.y = player->bodyPartsPos[0xC].y - 6.0f;
-                    refPos.z = player->bodyPartsPos[0xC].z;
+                    refPos.x = player->bodyPartsPos[PLAYER_BODYPART_L_HAND].x;
+                    refPos.y = player->bodyPartsPos[PLAYER_BODYPART_L_HAND].y - 6.0f;
+                    refPos.z = player->bodyPartsPos[PLAYER_BODYPART_L_HAND].z;
                 }
             } else {
                 refPos.y = player->actor.world.pos.y + 28.0f;
@@ -3265,7 +3267,8 @@ void Player_DrawGreatFairysMask(PlayState* play, Player* player) {
     gSPSegment(POLY_OPA_DISP++, 0x0B, sp90);
 
     Matrix_MultVec3f(&D_801C0C00, &D_801C0C54[1].unk_08);
-    Math_Vec3f_Lerp(&player->bodyPartsPos[7], &player->bodyPartsPos[0], 0.2f, &D_801C0C54[2].unk_08);
+    Math_Vec3f_Lerp(&player->bodyPartsPos[PLAYER_BODYPART_HEAD], &player->bodyPartsPos[PLAYER_BODYPART_WAIST], 0.2f,
+                    &D_801C0C54[2].unk_08);
 
     for (i = 0; i < ARRAY_COUNT(D_801C0C0C); i++) {
         Matrix_MultVec3f(iter, &sp84);
@@ -3523,9 +3526,12 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
                     (player->exchangeItemId != PLAYER_AP_NONE)) {
                     Math_Vec3f_Copy(&D_801F59E8, &player->leftHandWorld.pos);
                 } else {
-                    D_801F59E8.x = (player->bodyPartsPos[0xF].x + player->leftHandWorld.pos.x) * 0.5f;
-                    D_801F59E8.y = (player->bodyPartsPos[0xF].y + player->leftHandWorld.pos.y) * 0.5f;
-                    D_801F59E8.z = (player->bodyPartsPos[0xF].z + player->leftHandWorld.pos.z) * 0.5f;
+                    D_801F59E8.x =
+                        (player->bodyPartsPos[PLAYER_BODYPART_R_HAND].x + player->leftHandWorld.pos.x) * 0.5f;
+                    D_801F59E8.y =
+                        (player->bodyPartsPos[PLAYER_BODYPART_R_HAND].y + player->leftHandWorld.pos.y) * 0.5f;
+                    D_801F59E8.z =
+                        (player->bodyPartsPos[PLAYER_BODYPART_R_HAND].z + player->leftHandWorld.pos.z) * 0.5f;
                 }
 
                 if (player->getItemDrawId == 0) {

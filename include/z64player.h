@@ -401,8 +401,6 @@ typedef enum {
     /* 0x16 */ PLAYER_LIMB_MAX
 } PlayerLimb;
 
-// Taken from OoT
-// TODO: check if those values are the same.
 typedef enum PlayerBodyPart {
     /* 0x00 */ PLAYER_BODYPART_WAIST,      // PLAYER_LIMB_WAIST
     /* 0x01 */ PLAYER_BODYPART_R_THIGH,    // PLAYER_LIMB_R_THIGH

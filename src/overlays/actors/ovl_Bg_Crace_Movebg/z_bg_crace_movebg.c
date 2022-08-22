@@ -196,7 +196,7 @@ void BgCraceMovebg_Update(Actor* thisx, PlayState* play) {
             }
         default:
             this->actionFunc(this, play);
-            Math_Vec3f_Copy(&this->unk188, &player->bodyPartsPos[0]);
+            Math_Vec3f_Copy(&this->unk188, &player->bodyPartsPos[PLAYER_BODYPART_WAIST]);
     }
 }
 
@@ -208,9 +208,9 @@ void func_80A70C04(BgCraceMovebg* this, PlayState* play) {
 
     if ((BGCRACEMOVEBG_GET_F(&this->dyna.actor) != 2) &&
         SubS_LineSegVsPlane(&this->dyna.actor.home.pos, &this->dyna.actor.home.rot, D_80A710AC, &this->unk188,
-                            &player->bodyPartsPos[0], &intersect)) {
+                            &player->bodyPartsPos[PLAYER_BODYPART_WAIST], &intersect)) {
         Matrix_RotateYS(-this->dyna.actor.home.rot.y, MTXMODE_NEW);
-        Math_Vec3f_Diff(&player->bodyPartsPos[0], &this->dyna.actor.home.pos, &diff);
+        Math_Vec3f_Diff(&player->bodyPartsPos[PLAYER_BODYPART_WAIST], &this->dyna.actor.home.pos, &diff);
         Matrix_MultVec3f(&diff, &this->unk178);
         if (fabsf(this->unk178.x) < 100.0f && this->unk178.y >= -10.0f && this->unk178.y <= 180.0f) {
             if (this->unk178.z < 0.0f) {
