@@ -190,27 +190,27 @@ void func_80A8146C(ObjMine* this, s16* arg1, s16* arg2) {
     }
 }
 
+#define NON_MATCHING
 #ifdef NON_MATCHING
 // stack, 1 var needs to go without changing code gen
 void func_80A81544(ObjMine* this, Vec3f* arg1) {
-    ColliderJntSphElement* element = &this->collider.elements[0];
-    Vec3s* sphere = &element->dim.worldSphere.center;
-    Actor* temp_v1 = this->collider.base.ac;
+    Actor* ac = this->collider.base.ac;
+    Vec3f sp20;
 
-    if ((element->info.acHitInfo->toucher.dmgFlags & 0x13820)) {
+    if ((this->collider.elements[0].info.acHitInfo->toucher.dmgFlags & 0x13820)) {
         Matrix_Push();
-        Matrix_RotateYS(temp_v1->shape.rot.y, MTXMODE_NEW);
-        Matrix_RotateXS(temp_v1->shape.rot.x, MTXMODE_APPLY);
+        Matrix_RotateYS(ac->shape.rot.y, MTXMODE_NEW);
+        Matrix_RotateXS(ac->shape.rot.x, MTXMODE_APPLY);
         Matrix_MultVecZ(1.0f, arg1);
         Matrix_Pop();
     } else {
-        Vec3f sp20;
+        Sphere16* sphere = &this->collider.elements[0].dim.worldSphere;
 
-        sp20.x = sphere->x - temp_v1->world.pos.x;
-        sp20.y = sphere->y - temp_v1->world.pos.y;
-        sp20.z = sphere->z - temp_v1->world.pos.z;
+        sp20.x = sphere->center.x - ac->world.pos.x;
+        sp20.y = sphere->center.y - ac->world.pos.y;
+        sp20.z = sphere->center.z - ac->world.pos.z;
         if (!func_80A8120C(&sp20, arg1)) {
-            Math_Vec3f_Copy(arg1, D_80A845D0);
+            Math_Vec3f_Copy(arg1, &D_80A845D0[0]);
         }
     }
 }
@@ -218,6 +218,7 @@ void func_80A81544(ObjMine* this, Vec3f* arg1) {
 void func_80A81544(ObjMine* this, Vec3f* arg1);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mine/func_80A81544.s")
 #endif
+#undef NON_MATCHING
 
 void func_80A81640(ObjMine* this) {
 }
@@ -369,7 +370,7 @@ void func_80A81B7C(ObjMine* this, s32 arg1) {
     ptr->unk_00.x = 0.9f;
     ptr->unk_18.y = 0.003f;
 
-    *(s16*)((u8*)ptr + 0x20) = (u32)Rand_Next() >> 0x13;
+    *(s16*)((u8*)ptr + 0x20) = Rand_Next() >> 0x13;
     ptr->unk_24.x = -0.0002f;
     ptr->unk_30 = -0.0002f;
 
@@ -637,69 +638,58 @@ void func_80A82F98(ObjMine* this, PlayState* play) {
 }
 
 void func_80A82FA8(ObjMine* this) {
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->actionFunc = func_80A82FC8;
 }
 
-#ifdef NON_MATCHING
-// stack
 void func_80A82FC8(ObjMine* this, PlayState* play) {
-    f32 phi_f0;
+    Actor* thisx = &this->actor;
     Vec3f spA0;
-    f32 sp9C;
-    s32 pad;
-    f32 phi_f12;
+    f32 speed;
+    f32 step;
+    f32 target;
     s32 sp90;
     Vec3f sp84;
     Vec3f sp78;
     MtxF sp38;
 
     Math_Vec3s_ToVec3f(&spA0, &this->unk_1B4[this->unk_1B0 + 1]);
-    Math_Vec3f_Diff(&spA0, &this->actor.world.pos, &this->actor.velocity);
-
-    sp9C = Math3D_Vec3fMagnitude(&this->actor.velocity);
-    if ((sp9C < (this->unk_1A8 * 8.0f)) && (this->unk_1A8 > 2.0f)) {
-        phi_f0 = ((this->unk_1A8 - 2.0f) * 0.1f) + 2.0f;
-        phi_f12 = this->unk_1A8 * 0.03f;
+    Math_Vec3f_Diff(&spA0, &thisx->world.pos, &thisx->velocity);
+    speed = Math3D_Vec3fMagnitude(&thisx->velocity);
+    if ((speed < (this->unk_1A8 * 8.0f)) && (this->unk_1A8 > 2.0f)) {
+        target = ((this->unk_1A8 - 2.0f) * 0.1f) + 2.0f;
+        step = this->unk_1A8 * 0.03f;
     } else {
-        phi_f0 = this->unk_1A8;
-        phi_f12 = this->unk_1A8 * 0.16f;
+        target = this->unk_1A8;
+        step = this->unk_1A8 * 0.16f;
     }
-
-    Math_StepToF(&this->actor.speedXZ, phi_f0, phi_f12);
-
-    if ((this->actor.speedXZ + 0.05f) < sp9C) {
-        Math_Vec3f_Scale(&this->actor.velocity, this->actor.speedXZ / sp9C);
-        this->actor.world.pos.x += this->actor.velocity.x;
-        this->actor.world.pos.y += this->actor.velocity.y;
-        this->actor.world.pos.z += this->actor.velocity.z;
+    Math_StepToF(&thisx->speedXZ, target, step);
+    if ((thisx->speedXZ + 0.05f) < speed) {
+        Math_Vec3f_Scale(&thisx->velocity, thisx->speedXZ / speed);
+        thisx->world.pos.x += thisx->velocity.x;
+        thisx->world.pos.y += thisx->velocity.y;
+        thisx->world.pos.z += thisx->velocity.z;
     } else {
-        this->actor.speedXZ *= 0.4f;
+        thisx->speedXZ *= 0.4f;
         this->unk_1B0++;
         if (this->unk_1B0 >= this->unk_1AC) {
             this->unk_1B0 = 0;
         }
         func_80A811D0(this, this->unk_1B0);
     }
-
-    this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp90,
-                                                          &this->actor, &this->actor.world.pos);
-
-    if (this->actor.flags & 0x40) {
-        Math3D_CrossProduct(&D_80A845D0[0], &this->actor.velocity, &sp78);
+    thisx->floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &thisx->floorPoly, &sp90, thisx, &thisx->world.pos);
+    if (thisx->flags & 0x40) {
+        Math3D_CrossProduct(&D_80A845D0[0], &thisx->velocity, &sp78);
         if (func_80A8120C(&sp78, &sp84)) {
-            Matrix_RotateAxisF(this->actor.speedXZ * 0.03125f, &sp84, MTXMODE_NEW);
-            Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
-            Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
-            Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
+            Matrix_RotateAxisF(thisx->speedXZ * 0.03125f, &sp84, MTXMODE_NEW);
+            Matrix_RotateYS(thisx->shape.rot.y, MTXMODE_APPLY);
+            Matrix_RotateXS(thisx->shape.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(thisx->shape.rot.z, MTXMODE_APPLY);
             Matrix_Get(&sp38);
-            Matrix_MtxFToYXZRot(&sp38, &this->actor.shape.rot, 0);
+            Matrix_MtxFToYXZRot(&sp38, &thisx->shape.rot, false);
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mine/func_80A82FC8.s")
-#endif
 
 void func_80A83214(ObjMine* this) {
     this->actor.flags |= 0x10;
@@ -769,9 +759,9 @@ void func_80A832D0(ObjMine* this, PlayState* play) {
             Math_StepToF(&unkStruct->unk_48, 0.0f, 0.02f);
         }
 
-        if ((u32)Rand_Next() >> 0x1B == 0) {
+        if ((Rand_Next() >> 0x1B) == 0) {
             unkStruct->unk_50 = Rand_ZeroOne() * unkStruct->unk_58;
-            unkStruct->unk_54 = (u32)Rand_Next() >> 0x10;
+            unkStruct->unk_54 = Rand_Next() >> 0x10;
         }
 
         sp90 = Math_SinS(unkStruct->unk_54) * unkStruct->unk_50;
@@ -891,11 +881,11 @@ void func_80A83B28(ObjMine* this, PlayState* play) {
     ptr->unk_24.x = -0.0002f;
     ptr->unk_30 = -0.0002f;
     ptr->unk_18.y = 0.003f;
-    if (!((u32)Rand_Next() >> 0x1B)) {
-        rand = (u32)Rand_Next() >> 0x10;
+    if ((Rand_Next() >> 0x1B) == 0) {
+        rand = Rand_Next() >> 0x10;
         ptr->unk_0C.z = Math_SinS(rand) * 1.8f * ptr->unk_18.y;
         ptr->unk_18.x = Math_CosS(rand) * 0.2f * ptr->unk_18.y;
-        *(s16*)((u8*)ptr + 0x20) = (u32)Rand_Next() >> 0x13;
+        *(s16*)((u8*)ptr + 0x20) = Rand_Next() >> 0x13;
     }
 
     func_80A82C28(this, play);
