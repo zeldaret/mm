@@ -5,6 +5,7 @@
  */
 
 #include "z_en_wiz.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS                                                                                            \
     (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_1000 | ACTOR_FLAG_100000 | \
@@ -33,17 +34,6 @@ void func_80A470D8(EnWiz* this, PlayState* play);
 void func_80A473B8(EnWiz* this, PlayState* play);
 void func_80A4767C(EnWiz* this);
 void func_80A476C8(EnWiz* this, PlayState* play);
-
-extern FlexSkeletonHeader D_0600B320;
-extern UNK_TYPE D_0600211C;
-extern AnimationHeader D_060025F0;
-extern AnimationHeader D_060066C0;
-extern AnimationHeader D_06002458;
-extern AnimationHeader D_060060E8;
-extern AnimationHeader D_060007B0;
-extern AnimationHeader D_06002218;
-extern Gfx D_0407D590[];
-extern Gfx D_06001860[];
 
 const ActorInit En_Wiz_InitVars = {
     ACTOR_EN_WIZ,
@@ -279,7 +269,8 @@ static DamageTable D_80A48D14 = {
 };
 
 static AnimationHeader* D_80A48D34[] = {
-    &D_060066C0, &D_060025F0, &D_06002458, &D_060060E8, &D_060007B0, &D_06002218,
+    &object_wiz_Anim_0066C0, &object_wiz_Anim_0025F0, &object_wiz_Anim_002458,
+    &object_wiz_Anim_0060E8, &object_wiz_Anim_0007B0, &object_wiz_Anim_002218,
 };
 
 static u8 D_80A48D4C[] = {
@@ -290,8 +281,10 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnWiz* this = THIS;
 
-    SkelAnime_InitFlex(play, &this->skelAnime, &D_0600B320, &D_060066C0, this->jointTable, this->morphTable, 20);
-    SkelAnime_InitFlex(play, &this->skelAnime2, &D_0600B320, &D_060066C0, this->jointTable2, this->morphTable2, 20);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_wiz_Skel_00B320, &object_wiz_Anim_0066C0, this->jointTable,
+                       this->morphTable, 20);
+    SkelAnime_InitFlex(play, &this->skelAnime2, &object_wiz_Skel_00B320, &object_wiz_Anim_0066C0, this->jointTable2,
+                       this->morphTable2, 20);
     Actor_SetScale(&this->actor, 0.0f);
     this->unk_3C4 = 0;
     this->unk_3C2 = 0xFF;
@@ -703,8 +696,8 @@ void func_80A4668C(EnWiz* this) {
     this->unk_44C = 0;
     this->unk_3B0 = 9;
     if (this->unk_3B6 >= 2) {
-        Animation_Change(&this->skelAnime2, &D_060025F0, 1.0f, 0.0f, Animation_GetLastFrame(&D_060025F0), ANIMMODE_LOOP,
-                         0.0f);
+        Animation_Change(&this->skelAnime2, &object_wiz_Anim_0025F0, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&object_wiz_Anim_0025F0), ANIMMODE_LOOP, 0.0f);
         this->unk_3B6 = 3;
     }
 
@@ -1391,7 +1384,7 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
     if (this->unk_3B6 == 0) {
         Matrix_Push();
 
-        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&D_0600211C));
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&object_wiz_Matanimheader_00211C));
         Matrix_Translate(this->unk_414.x, this->unk_414.y, this->unk_414.z, MTXMODE_NEW);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
         gDPPipeSync(POLY_XLU_DISP++);
@@ -1404,7 +1397,7 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
         }
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_06001860);
+        gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_001860);
 
         Matrix_Pop();
     }
@@ -1426,7 +1419,7 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
 
     Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

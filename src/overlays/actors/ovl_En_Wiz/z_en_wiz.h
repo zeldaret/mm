@@ -2,6 +2,7 @@
 #define Z_EN_WIZ_H
 
 #include "global.h"
+#include "objects/object_wiz/object_wiz.h"
 
 struct EnWiz;
 
@@ -44,7 +45,6 @@ typedef struct EnWiz {
     /* 0x420 */ Actor* unk_420[10];
     /* 0x448 */ s32 unk_448;
     /* 0x44C */ s16 unk_44C;
-    /* 0x44E */ char unk_44E[2];
     /* 0x450 */ f32 unk_450;
     /* 0x454 */ ColliderJntSph unk_454;
     /* 0x474 */ ColliderJntSphElement unk_474[10];
@@ -58,14 +58,12 @@ typedef struct EnWiz {
     /* 0x750 */ s16 unk_750;
     /* 0x752 */ s16 drawDmgEffTimer;
     /* 0x754 */ s16 drawDmgEffType;
-    /* 0x756 */ char unk_756[2];
     /* 0x758 */ f32 drawDmgEffScale;
     /* 0x75C */ f32 drawDmgEffFrozenSteamScale;
     /* 0x760 */ Vec3f bodyPartsPos[12];
     /* 0x7F0 */ s16 bodyPartsPosIndex;
     /* 0x7F2 */ s16 unk_7F2[10];
     /* 0x806 */ s16 unk_806[10];
-    /* 0x81A */ char unk_81A[0x2];
     /* 0x81C */ Vec3f unk_81C[10];
     /* 0x894 */ Vec3s unk_894[10];
     /* 0x8D0 */ Vec3s jointTable3[10][20];
