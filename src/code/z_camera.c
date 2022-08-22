@@ -1113,9 +1113,9 @@ Vec3f* Camera_CalcUpFromPitchYawRoll(Vec3f* viewUp, s16 pitch, s16 yaw, s16 roll
     tempUp3.y = ((sinPitch * cosPitchCosYaw) * (1.0f - cosRoll)) - (cosPitchSinYaw * sinRoll);
     tempUp3.z = ((1.0f - SQ(cosPitchCosYaw)) * cosRoll) + SQ(cosPitchCosYaw);
 
-    up.x = ((temp1 * tempUp1.x) + (temp2 * tempUp2.x)) + (temp3 * tempUp3.x);
-    up.y = ((temp1 * tempUp1.y) + (temp2 * tempUp2.y)) + (temp3 * tempUp3.y);
-    up.z = ((temp1 * tempUp1.z) + (temp2 * tempUp2.z)) + (temp3 * tempUp3.z);
+    up.x = (temp1 * tempUp1.x) + (temp2 * tempUp2.x) + (temp3 * tempUp3.x);
+    up.y = (temp1 * tempUp1.y) + (temp2 * tempUp2.y) + (temp3 * tempUp3.y);
+    up.z = (temp1 * tempUp1.z) + (temp2 * tempUp2.z) + (temp3 * tempUp3.z);
 
     *viewUp = up;
 
