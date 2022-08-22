@@ -18,55 +18,62 @@ extern UNK_TYPE D_0C000000;
 extern UNK_TYPE D_0C006C00;
 
 void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
-    s16 spC4[2];
-    s16 j;
-    s16 i;
+    s16 counterDigits[2];
+    s16 rectLeft;
+    s16 digitIndex;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    spC4[1] = 15;
-    spC4[0] = spC4[1] / 10;
-    spC4[1] -= (s16)(spC4[0] * 10);
+    // Get digits for max number of stray faries
+    counterDigits[1] = 15;
+    counterDigits[0] = counterDigits[1] / 10;
+    counterDigits[1] -= (s16)(counterDigits[0] * 10);
 
-    for (j = 0x74, i = 0; i < 2; i++, j += 8) {
+    // Draw max number of stray faries
+    for (rectLeft = 116, digitIndex = 0; digitIndex < 2; digitIndex++, rectLeft += 8) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 255);
 
-        POLY_OPA_DISP = func_8010D7D0(POLY_OPA_DISP, (u8*)gCounterDigit0Tex + (spC4[i] << 7), 8, 0x10, j + 1, 0x92, 8,
-                                      0x10, 0x400, 0x400);
+        POLY_OPA_DISP = func_8010D7D0(POLY_OPA_DISP, (u8*)gCounterDigit0Tex + (8 * 16 * counterDigits[digitIndex]), 8,
+                                      16, rectLeft + 1, 146, 8, 16, 1 << 10, 1 << 10);
 
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
 
-        gSPTextureRectangle(POLY_OPA_DISP++, j * 4, 0x0244, j * 4 + 0x20, 0x284, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
-    };
+        gSPTextureRectangle(POLY_OPA_DISP++, rectLeft * 4, 580, (rectLeft * 4) + 32, 644, G_TX_RENDERTILE, 0, 0,
+                            1 << 10, 1 << 10);
+    }
 
+    // Draw Counter slash
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 255);
 
     POLY_OPA_DISP =
-        func_8010D7D0(POLY_OPA_DISP, gStrayFairyMapCounterSlashTex, 8, 0x10, 0x6B, 0x92, 8, 0x10, 0x400, 0x400);
+        func_8010D7D0(POLY_OPA_DISP, gStrayFairyMapCounterSlashTex, 8, 16, 107, 146, 8, 16, 1 << 10, 1 << 10);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
 
-    gSPTextureRectangle(POLY_OPA_DISP++, 0x01A8, 0x0244, 0x01C8, 0x0284, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+    gSPTextureRectangle(POLY_OPA_DISP++, 424, 580, 456, 644, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
-    spC4[1] = gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex];
-    spC4[0] = spC4[1] / 10;
-    spC4[1] -= (s16)(spC4[0] * 10);
+    // Get digits for current number of stray faries collected
+    counterDigits[1] = gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex];
+    counterDigits[0] = counterDigits[1] / 10;
+    counterDigits[1] -= (s16)(counterDigits[0] * 10);
 
-    for (j = 0x58, i = 0; i < 2; i++, j += 8) {
+    // Draw digits for current number of stray faries collected
+    for (rectLeft = 88, digitIndex = 0; digitIndex < 2; digitIndex++, rectLeft += 8) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 255);
 
-        POLY_OPA_DISP = func_8010D7D0(POLY_OPA_DISP, (u8*)gCounterDigit0Tex + (spC4[i] << 7), 8, 0x10, j + 1, 0x92, 8,
-                                      0x10, 0x400, 0x400);
+        POLY_OPA_DISP = func_8010D7D0(POLY_OPA_DISP, (u8*)gCounterDigit0Tex + (8 * 16 * counterDigits[digitIndex]), 8,
+                                      16, rectLeft + 1, 146, 8, 16, 1 << 10, 1 << 10);
 
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
 
-        gSPTextureRectangle(POLY_OPA_DISP++, j * 4, 0x244, j * 4 + 0x20, 0x284, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
+        gSPTextureRectangle(POLY_OPA_DISP++, rectLeft * 4, 580, (rectLeft * 4) + 32, 644, G_TX_RENDERTILE, 0, 0,
+                            1 << 10, 1 << 10);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
