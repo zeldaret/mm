@@ -624,7 +624,7 @@ void EnNb_FollowSchedule(EnNb* this, PlayState* play) {
 }
 
 void func_80BC0EAC(EnNb* this, PlayState* play) {
-    if (func_8010BF58(&this->actor, play, this->unk_1E0, this->unk_28C, &this->unk_1E4) != 0) {
+    if (func_8010BF58(&this->actor, play, this->unk_1E0, this->unk_28C, &this->unk_1E4)) {
         if (gSaveContext.eventInf[4] & 8) {
             gSaveContext.eventInf[4] &= (u8)~4;
             gSaveContext.eventInf[4] &= (u8)~8;
