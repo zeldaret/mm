@@ -280,7 +280,7 @@ void func_80A49A44(EnWizFire* this, PlayState* play) {
 
             if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_WIZ) &&
                 (this->actor.parent->update != NULL)) {
-                ((EnWiz*)this->actor.parent)->unk_3BA = 0;
+                ((EnWiz*)this->actor.parent)->hasActiveProjectile = false;
             }
         }
     }
@@ -402,7 +402,7 @@ void func_80A4A11C(EnWizFire* this, PlayState* play) {
 
                 this->collider.dim.yShift = -15;
                 this->unk_164 = 1;
-                wiz->unk_3BA = 0;
+                wiz->hasActiveProjectile = false;
             }
         }
 
@@ -427,7 +427,7 @@ void func_80A4A11C(EnWizFire* this, PlayState* play) {
                 (this->actor.parent->update != NULL)) {
                 EnWiz* wiz = (EnWiz*)this->actor.parent;
 
-                wiz->unk_3BA = 0;
+                wiz->hasActiveProjectile = false;
             }
             Actor_MarkForDeath(&this->actor);
         }
@@ -444,7 +444,7 @@ void func_80A4A608(EnWizFire* this, PlayState* play) {
 
                 D_80A4C1C0 = 0;
                 if (wiz->actor.update != NULL) {
-                    wiz->unk_3BA = 0;
+                    wiz->hasActiveProjectile = false;
                 }
             }
             Actor_MarkForDeath(&this->actor);

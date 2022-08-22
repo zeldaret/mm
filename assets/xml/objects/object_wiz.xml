@@ -14,7 +14,7 @@
         <Texture Name="gWizzrobePlatformTex" OutName="wizzrobe_platform" Format="rgba16" Width="16" Height="32" Offset="0x1198" />
         <TextureAnimation Name="object_wiz_Matanimheader_0015A0" Offset="0x15A0" />
         <Collision Name="gWizzrobePlatformCol" Offset="0x1690" />
-        <DList Name="object_wiz_DL_001860" Offset="0x1860" /> <!-- Original name is "wiz_daizalight_model" -->
+        <DList Name="gWizzrobePlatformLightDL" Offset="0x1860" /> <!-- Original name is "wiz_daizalight_model" -->
         <Texture Name="object_wiz_Tex_0019F0" OutName="tex_0019F0" Format="i4" Width="32" Height="32" Offset="0x19F0" />
         <Texture Name="object_wiz_Tex_001BF0" OutName="tex_001BF0" Format="i4" Width="16" Height="32" Offset="0x1BF0" />
         <Texture Name="object_wiz_Tex_001CF0" OutName="tex_001CF0" Format="i8" Width="32" Height="32" Offset="0x1CF0" />

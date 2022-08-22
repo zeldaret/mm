@@ -18,28 +18,28 @@ typedef struct EnWiz {
     /* 0x334 */ Vec3s morphTable2[WIZZROBE_LIMB_MAX];
     /* 0x3AC */ EnWizActionFunc actionFunc;
     /* 0x3B0 */ s16 action;
-    /* 0x3B2 */ s16 unk_3B2;
-    /* 0x3B4 */ s16 unk_3B4;
-    /* 0x3B6 */ s16 unk_3B6;
-    /* 0x3B8 */ s16 unk_388;
-    /* 0x3BA */ s16 unk_3BA;
-    /* 0x3BC */ s16 unk_3BC;
+    /* 0x3B2 */ s16 timer;
+    /* 0x3B4 */ s16 introCutsceneTimer;
+    /* 0x3B6 */ s16 unk_3B6; // fight state? 0 = first phase, 1 = second phase CS, 2 = beginning of second phase, 3 = first time in second phase where afterimages run
+    /* 0x3B8 */ s16 staffFlameScroll;
+    /* 0x3BA */ s16 hasActiveProjectile;
+    /* 0x3BC */ s16 unk_3BC; // has visited every platform during second phase CS
     /* 0x3B4 */ char unk_3BE[2];
     /* 0x3C0 */ s16 rotationalVelocity;
     /* 0x3C2 */ s16 alpha;
-    /* 0x3C4 */ s16 unk_3C4;
-    /* 0x3C6 */ s16 unk_3C6;
-    /* 0x3C8 */ s16 unk_3C8;
-    /* 0x3CA */ u8 unk_3CA;
-    /* 0x3CB */ u8 unk_3CB;
+    /* 0x3C4 */ s16 platformLightAlpha;
+    /* 0x3C6 */ s16 targetPlatformLightAlpha;
+    /* 0x3C8 */ s16 introCutsceneCameraAngle; // check the name on this one
+    /* 0x3CA */ u8 unk_3CA; // Always false for phase 2. Mostly true for phase 1 except for 1 frame during disappearance
+    /* 0x3CB */ u8 introCutsceneState;
     /* 0x3CC */ s32 musicStartTimer;
     /* 0x3D0 */ f32 endFrame;
-    /* 0x3D4 */ f32 unk_3D4;
-    /* 0x3D8 */ Vec3f unk_3D8;
-    /* 0x3E4 */ Vec3f unk_3E4;
-    /* 0x3F0 */ Vec3f unk_3F0;
+    /* 0x3D4 */ f32 scale;
+    /* 0x3D8 */ Vec3f staffFlamePos;
+    /* 0x3E4 */ Vec3f staffFlameScale;
+    /* 0x3F0 */ Vec3f staffTargetFlameScale;
     /* 0x3FC */ char unk_3FC[0x18];
-    /* 0x414 */ Vec3f unk_414;
+    /* 0x414 */ Vec3f platformLightPos;
     /* 0x420 */ Actor* platforms[10];
     /* 0x448 */ Actor* freezard;
     /* 0x44C */ s16 animLoopCounter;
@@ -47,13 +47,13 @@ typedef struct EnWiz {
     /* 0x454 */ ColliderJntSph unk_454;
     /* 0x474 */ ColliderJntSphElement unk_474[10];
     /* 0x6F4 */ ColliderCylinder unk_6F4;
-    /* 0x740 */ s32 unk_740;
-    /* 0x744 */ s32 unk_744;
-    /* 0x748 */ s16 unk_748;
-    /* 0x74A */ s16 unk_74A;
+    /* 0x740 */ s32 unk_740; // platform count? only seems to kick in for second phase
+    /* 0x744 */ s32 unk_744; // when running between platforms, it's the index of the "next" platform
+    /* 0x748 */ s16 unk_748; // current platform
+    /* 0x74A */ s16 unk_74A; // type?
     /* 0x74C */ s16 switchFlag;
     /* 0x74E */ s16 subCamId;
-    /* 0x750 */ s16 unk_750;
+    /* 0x750 */ s16 isDead;
     /* 0x752 */ s16 drawDmgEffTimer;
     /* 0x754 */ s16 drawDmgEffType;
     /* 0x758 */ f32 drawDmgEffScale;
