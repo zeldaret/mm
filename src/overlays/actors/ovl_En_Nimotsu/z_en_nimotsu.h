@@ -7,7 +7,7 @@ struct EnNimotsu;
 
 typedef struct EnNimotsu {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char pad144[0x48];
+    /* 0x144 */ char unk_144[0x48];
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ u16 dustDone;
     /* 0x1DA */ s16 dustTimer;
