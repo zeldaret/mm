@@ -400,7 +400,7 @@ void func_80BC05A8(EnNb* this, PlayState* play) {
     }
 
     Math_SmoothStepToF(&this->unk_270, this->unk_26C, 0.8f, 40.0f, 10.0f);
-    Matrix_Translate(this->unk_270, 0.0f, 0.0f, 1);
+    Matrix_Translate(this->unk_270, 0.0f, 0.0f, MTXMODE_APPLY);
     this->prevTalkState = talkState;
 }
 
