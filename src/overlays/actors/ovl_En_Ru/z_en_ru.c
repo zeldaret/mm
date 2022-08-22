@@ -198,9 +198,9 @@ void EnRu_UpdateEyes(EnRu* this, s32 eyeStateMax) {
 }
 
 void EnRu_UpdateCollider(EnRu* this, PlayState* play) {
-    this->collider.dim.pos.x = (s16)(s32)this->actor.world.pos.x;
-    this->collider.dim.pos.y = (s16)(s32)this->actor.world.pos.y;
-    this->collider.dim.pos.z = (s16)(s32)this->actor.world.pos.z;
+    this->collider.dim.pos.x = this->actor.world.pos.x;
+    this->collider.dim.pos.y = this->actor.world.pos.y;
+    this->collider.dim.pos.z = this->actor.world.pos.z;
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
