@@ -21,7 +21,7 @@ void func_80919FC8(BgUmajump* this, PlayState* play);
 void func_80919F30(BgUmajump* this, PlayState* play); /* extern */
 void func_8091A7B0(Actor* thisx, PlayState* play);
 
-#if 0
+#if 1
 const ActorInit Bg_Umajump_InitVars = {
     ACTOR_BG_UMAJUMP,
     ACTORCAT_PROP,
