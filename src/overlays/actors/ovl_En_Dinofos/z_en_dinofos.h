@@ -5,7 +5,7 @@
 
 struct EnDinofos;
 
-typedef void (*EnDinofosActionFunc)(struct EnDinofos*, GlobalContext*);
+typedef void (*EnDinofosActionFunc)(struct EnDinofos*, PlayState*);
 
 typedef struct EnDinofos {
     /* 0x000 */ Actor actor;

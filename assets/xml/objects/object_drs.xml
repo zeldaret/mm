@@ -16,6 +16,6 @@
         <Limb Name="gWeddingDressMannequinLimb" Type="Standard" EnumName="WEDDING_DRESS_MANNEQUIN_LIMB" Offset="0x5A48" />
         <Limb Name="gWeddingDressMannequinMaskLimb" Type="Standard" EnumName="WEDDING_DRESS_MANNEQUIN_LIMB_MASK" Offset="0x5A54" />
         <Limb Name="gWeddingDressMannequinPatternLimb" Type="Standard" EnumName="WEDDING_DRESS_MANNEQUIN_LIMB_PATTERN" Offset="0x5A60" />
-        <Skeleton Name="gWeddingDressMannequinSkel" Type="Flex" LimbType="Standard" LimbNone="WEDDING_DRESS_MANNEQUIN_LIMB_NONE" LimbMax="WEDDING_DRESS_MANNEQUIN_LIMB_MAX" EnumName="WeddingDressMannequinLimbs" Offset="0x5A78" />
+        <Skeleton Name="gWeddingDressMannequinSkel" Type="Flex" LimbType="Standard" LimbNone="WEDDING_DRESS_MANNEQUIN_LIMB_NONE" LimbMax="WEDDING_DRESS_MANNEQUIN_LIMB_MAX" EnumName="WeddingDressMannequinLimb" Offset="0x5A78" />
     </File>
 </Root>

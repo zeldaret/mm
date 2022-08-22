@@ -40,13 +40,13 @@ glabel func_809529AC
 and turn it into compilable C code:
 
 ```C
-void func_809529AC(EnMs *this, GlobalContext *globalCtx) {
-    if (Actor_HasParent(&this->actor, globalCtx)) {
+void func_809529AC(EnMs* this, PlayState* play) {
+    if (Actor_HasParent(&this->actor, play)) {
         this->actor.textId = 0;
-        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
         this->actionFunc = func_80952A1C;
     } else {
-        Actor_PickUp(&this->actor, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_PickUp(&this->actor, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 ```
@@ -73,12 +73,14 @@ A lot of work has already been done on the code to bring it into a format that i
 
 An *actor* is any thing in the game that moves or performs actions or interactions: Link is an actor, enemies are actors, NPCs are actors, props like grass are actors. The vast majority of actors are *overlays*, which means they are loaded only when the game needs them.
 
-In the code, each actor is associated to several files: there is 
+In the code, each actor is associated to several files: there is
+
 - the main .c file, e.g. `src/overlays/actors/ovl_En_Ms/z_en_ms.c`
 - the actor's Header file, e.g. `src/overlays/actors/ovl_En_Ms/z_en_ms.h`
-- various .o files that tell the `make` script how to incorporate it into building the ROM, 
+- various .o files that tell the `make` script how to incorporate it into building the ROM,
 
-and then for undecompiled actors, various assembly (.s) files, generally including: 
+and then for undecompiled actors, various assembly (.s) files, generally including:
+
 - one for the actor's *data* (this usually includes things like its collision information about how to draw it, and various other stuff that is used in it), e.g. `data/overlays/actors/ovl_En_Ms.data.s`
 - one for each function in the actor, e.g. `asm/non_matchings/overlays/actors/ovl_En_Ms/func_809529AC.s`
 

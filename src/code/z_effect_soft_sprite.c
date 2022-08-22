@@ -1,13 +1,14 @@
 #include "global.h"
+#include "z64load.h"
 
 EffectSsInfo sEffectSsInfo = { NULL, 0, 0 };
 
-void EffectSS_Init(GlobalContext* globalCtx, s32 numEntries) {
+void EffectSS_Init(PlayState* play, s32 numEntries) {
     u32 i;
     EffectSs* effectsSs;
     EffectSsOverlay* overlay;
 
-    sEffectSsInfo.data_table = (EffectSs*)THA_AllocEndAlign16(&globalCtx->state.heap, numEntries * sizeof(EffectSs));
+    sEffectSsInfo.data_table = (EffectSs*)THA_AllocEndAlign16(&play->state.heap, numEntries * sizeof(EffectSs));
     sEffectSsInfo.searchIndex = 0;
     sEffectSsInfo.size = numEntries;
 
@@ -23,7 +24,7 @@ void EffectSS_Init(GlobalContext* globalCtx, s32 numEntries) {
     }
 }
 
-void EffectSS_Clear(GlobalContext* globalCtx) {
+void EffectSS_Clear(PlayState* play) {
     u32 i;
     EffectSs* effectsSs;
     EffectSsOverlay* overlay;
@@ -58,11 +59,11 @@ EffectSs* EffectSS_GetTable() {
 
 void EffectSS_Delete(EffectSs* effectSs) {
     if (effectSs->flags & 2) {
-        Audio_StopSfxByPos(&effectSs->pos);
+        AudioSfx_StopByPos(&effectSs->pos);
     }
 
     if (effectSs->flags & 4) {
-        Audio_StopSfxByPos(&effectSs->vec);
+        AudioSfx_StopByPos(&effectSs->vec);
     }
 
     EffectSS_ResetEntry(effectSs);
@@ -149,10 +150,10 @@ s32 EffectSS_FindFreeSpace(s32 priority, s32* tableEntry) {
     return false;
 }
 
-void EffectSS_Copy(GlobalContext* globalCtx, EffectSs* effectsSs) {
+void EffectSS_Copy(PlayState* play, EffectSs* effectsSs) {
     s32 index;
 
-    if (FrameAdvance_IsEnabled(&globalCtx->state) != true) {
+    if (FrameAdvance_IsEnabled(&play->state) != true) {
         if (EffectSS_FindFreeSpace(effectsSs->priority, &index) == 0) {
             sEffectSsInfo.searchIndex = index + 1;
             sEffectSsInfo.data_table[index] = *effectsSs;
@@ -160,7 +161,7 @@ void EffectSS_Copy(GlobalContext* globalCtx, EffectSs* effectsSs) {
     }
 }
 
-void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* initData) {
+void EffectSs_Spawn(PlayState* play, s32 type, s32 priority, void* initData) {
     s32 index;
     u32 overlaySize;
     EffectSsOverlay* entry = &gParticleOverlayTable[type];
@@ -187,8 +188,9 @@ void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* init
             Load2_LoadOverlay(entry->vromStart, entry->vromEnd, entry->vramStart, entry->vramEnd, entry->loadedRamAddr);
         }
 
-        initInfo = (uintptr_t)(
-            (entry->initInfo != NULL) ? (void*)(-OVERLAY_RELOCATION_OFFSET(entry) + (uintptr_t)entry->initInfo) : NULL);
+        initInfo = (uintptr_t)((entry->initInfo != NULL)
+                                   ? (void*)((uintptr_t)entry->initInfo - (intptr_t)OVERLAY_RELOCATION_OFFSET(entry))
+                                   : NULL);
     }
 
     if (initInfo->init != NULL) {
@@ -198,13 +200,13 @@ void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* init
         sEffectSsInfo.data_table[index].type = type;
         sEffectSsInfo.data_table[index].priority = priority;
 
-        if (initInfo->init(globalCtx, index, &sEffectSsInfo.data_table[index], initData) == 0) {
+        if (initInfo->init(play, index, &sEffectSsInfo.data_table[index], initData) == 0) {
             EffectSS_ResetEntry(&sEffectSsInfo.data_table[index]);
         }
     }
 }
 
-void EffectSS_UpdateParticle(GlobalContext* globalCtx, s32 index) {
+void EffectSS_UpdateParticle(PlayState* play, s32 index) {
     EffectSs* particle = &sEffectSsInfo.data_table[index];
 
     if (particle->update != NULL) {
@@ -216,11 +218,11 @@ void EffectSS_UpdateParticle(GlobalContext* globalCtx, s32 index) {
         particle->pos.y += particle->velocity.y;
         particle->pos.z += particle->velocity.z;
 
-        particle->update(globalCtx, index, particle);
+        particle->update(play, index, particle);
     }
 }
 
-void EffectSS_UpdateAllParticles(GlobalContext* globalCtx) {
+void EffectSS_UpdateAllParticles(PlayState* play) {
     s32 i;
 
     for (i = 0; i < sEffectSsInfo.size; i++) {
@@ -233,25 +235,25 @@ void EffectSS_UpdateAllParticles(GlobalContext* globalCtx) {
         }
 
         if (sEffectSsInfo.data_table[i].life > -1) {
-            EffectSS_UpdateParticle(globalCtx, i);
+            EffectSS_UpdateParticle(play, i);
         }
     }
 }
 
-void EffectSS_DrawParticle(GlobalContext* globalCtx, s32 index) {
+void EffectSS_DrawParticle(PlayState* play, s32 index) {
     EffectSs* entry = &sEffectSsInfo.data_table[index];
 
     if (entry->draw != NULL) {
-        entry->draw(globalCtx, index, entry);
+        entry->draw(play, index, entry);
     }
 }
 
-void EffectSS_DrawAllParticles(GlobalContext* globalCtx) {
-    Lights* lights = LightContext_NewLights(&globalCtx->lightCtx, globalCtx->state.gfxCtx);
+void EffectSS_DrawAllParticles(PlayState* play) {
+    Lights* lights = LightContext_NewLights(&play->lightCtx, play->state.gfxCtx);
     s32 i;
 
-    Lights_BindAll(lights, globalCtx->lightCtx.listHead, NULL, globalCtx);
-    Lights_Draw(lights, globalCtx->state.gfxCtx);
+    Lights_BindAll(lights, play->lightCtx.listHead, NULL, play);
+    Lights_Draw(lights, play->state.gfxCtx);
 
     for (i = 0; i < sEffectSsInfo.size; i++) {
         if (sEffectSsInfo.data_table[i].life > -1) {
@@ -263,7 +265,7 @@ void EffectSS_DrawAllParticles(GlobalContext* globalCtx) {
                 (sEffectSsInfo.data_table[i].pos.z < BGCHECK_Y_MIN)) {
                 EffectSS_Delete(&sEffectSsInfo.data_table[i]);
             } else {
-                EffectSS_DrawParticle(globalCtx, i);
+                EffectSS_DrawParticle(play, i);
             }
         }
     }

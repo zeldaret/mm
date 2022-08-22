@@ -5,7 +5,7 @@
 
 struct EnGinkoMan;
 
- typedef void (*EnGinkoManActionFunc)(struct EnGinkoMan*, GlobalContext*);
+ typedef void (*EnGinkoManActionFunc)(struct EnGinkoMan*, PlayState*);
 
 typedef struct EnGinkoMan {
     /* 0x000 */ Actor actor;
@@ -33,13 +33,5 @@ extern const ActorInit En_Ginko_Man_InitVars;
 
 #define GINKOMAN_CHOICE_YES  0
 #define GINKOMAN_CHOICE_NO   1
-
-typedef enum {
-    /* 0 */ GINKO_FLOORSMACKING,
-    /* 1 */ GINKO_SITTING,
-    /* 2 */ GINKO_REACHING,
-    /* 3 */ GINKO_AMAZED,
-    /* 4 */ GINKO_ADVERTISING,
-} GinkoAnimationIndex;
 
 #endif // Z_EN_GINKO_MAN_H

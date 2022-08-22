@@ -11,28 +11,28 @@
 
 #define THIS ((ObjMine*)thisx)
 
-void ObjMine_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjMine_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjMine_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjMine_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjMine_Init(Actor* thisx, PlayState* play);
+void ObjMine_Destroy(Actor* thisx, PlayState* play);
+void ObjMine_Update(Actor* thisx, PlayState* play);
+void ObjMine_Draw(Actor* thisx, PlayState* play);
 
 void func_80A82F84(ObjMine* this);
-void func_80A82F98(ObjMine* this, GlobalContext* globalCtx);
+void func_80A82F98(ObjMine* this, PlayState* play);
 void func_80A82FA8(ObjMine* this);
-void func_80A82FC8(ObjMine* this, GlobalContext* globalCtx);
-void func_80A83258(ObjMine* this, GlobalContext* globalCtx);
+void func_80A82FC8(ObjMine* this, PlayState* play);
+void func_80A83258(ObjMine* this, PlayState* play);
 void func_80A832BC(ObjMine* this);
-void func_80A832D0(ObjMine* this, GlobalContext* globalCtx);
+void func_80A832D0(ObjMine* this, PlayState* play);
 void func_80A83A74(ObjMine* this);
-void func_80A83A88(ObjMine* this, GlobalContext* globalCtx);
+void func_80A83A88(ObjMine* this, PlayState* play);
 void func_80A83B14(ObjMine* this);
-void func_80A83B28(ObjMine* this, GlobalContext* globalCtx);
+void func_80A83B28(ObjMine* this, PlayState* play);
 void func_80A83CEC(ObjMine* this);
-void func_80A83D00(ObjMine* this, GlobalContext* globalCtx);
-void func_80A83E7C(Actor* thisx, GlobalContext* globalCtx);
-void func_80A83FBC(Actor* thisx, GlobalContext* globalCtx);
-void func_80A84088(Actor* thisx, GlobalContext* globalCtx);
-void func_80A84338(Actor* thisx, GlobalContext* globalCtx);
+void func_80A83D00(ObjMine* this, PlayState* play);
+void func_80A83E7C(Actor* thisx, PlayState* play);
+void func_80A83FBC(Actor* thisx, PlayState* play);
+void func_80A84088(Actor* thisx, PlayState* play);
+void func_80A84338(Actor* thisx, PlayState* play);
 
 extern Gfx D_06000030[];
 extern Gfx D_06002068[];
@@ -75,7 +75,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -130,8 +130,8 @@ s32 func_80A81288(Vec3f* arg0, Vec3f* arg1, f32* arg2, f32* arg3) {
     return true;
 }
 
-void func_80A8131C(ObjMine* this, GlobalContext* globalCtx) {
-    EnBom* bomb = (EnBom*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM, this->actor.world.pos.x,
+void func_80A8131C(ObjMine* this, PlayState* play) {
+    EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
                                       this->actor.world.pos.y - 15.0f, this->actor.world.pos.z, 0, 0, 0, 0);
 
     if (bomb != NULL) {
@@ -139,12 +139,12 @@ void func_80A8131C(ObjMine* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A81384(ObjMine* this, GlobalContext* globalCtx) {
+void func_80A81384(ObjMine* this, PlayState* play) {
     f32 x = this->collider.elements[0].dim.worldSphere.center.x;
     f32 y = this->collider.elements[0].dim.worldSphere.center.y - 15.0f;
     f32 z = this->collider.elements[0].dim.worldSphere.center.z;
 
-    EnBom* bom = (EnBom*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM, x, y, z, 0, 0, 0, 0);
+    EnBom* bom = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, x, y, z, 0, 0, 0, 0);
 
     if (bom != NULL) {
         bom->timer = 0;
@@ -198,11 +198,11 @@ void func_80A81544(ObjMine* this, Vec3f* arg1) {
     Actor* temp_v1 = this->collider.base.ac;
 
     if ((element->info.acHitInfo->toucher.dmgFlags & 0x13820)) {
-        Matrix_StatePush();
-        Matrix_RotateY(temp_v1->shape.rot.y, MTXMODE_NEW);
-        Matrix_InsertXRotation_s(temp_v1->shape.rot.x, MTXMODE_APPLY);
-        Matrix_GetStateTranslationAndScaledZ(1.0f, arg1);
-        Matrix_StatePop();
+        Matrix_Push();
+        Matrix_RotateYS(temp_v1->shape.rot.y, MTXMODE_NEW);
+        Matrix_RotateXS(temp_v1->shape.rot.x, MTXMODE_APPLY);
+        Matrix_MultVecZ(1.0f, arg1);
+        Matrix_Pop();
     } else {
         Vec3f sp20;
 
@@ -215,6 +215,7 @@ void func_80A81544(ObjMine* this, Vec3f* arg1) {
     }
 }
 #else
+void func_80A81544(ObjMine* this, Vec3f* arg1);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mine/func_80A81544.s")
 #endif
 
@@ -222,7 +223,7 @@ void func_80A81640(ObjMine* this) {
 }
 
 void func_80A8164C(Vec3f* arg0) {
-    MtxF* matrix = Matrix_GetCurrentState();
+    MtxF* matrix = Matrix_GetCurrent();
 
     matrix->mf[3][0] = arg0->x;
     matrix->mf[3][1] = arg0->y;
@@ -230,7 +231,7 @@ void func_80A8164C(Vec3f* arg0) {
 }
 
 void func_80A81684(ObjMineUnkStruct* arg0) {
-    MtxF* matrix = Matrix_GetCurrentState();
+    MtxF* matrix = Matrix_GetCurrent();
 
     matrix->mf[0][0] = arg0->unk_00.x;
     matrix->mf[0][1] = arg0->unk_00.y;
@@ -264,18 +265,18 @@ s32 func_80A81714(Vec3f* arg0, Vec3f* arg1, f32 arg2) {
         return true;
     }
 
-    Matrix_StatePush();
+    Matrix_Push();
     Math_Vec3f_Copy(&sp30, arg0);
     Math3D_CrossProduct(arg0, arg1, &sp3C);
     if (func_80A8120C(&sp3C, &sp24)) {
-        Matrix_InsertRotationAroundUnitVector_s(arg2 * 10430.378f, &sp24, MTXMODE_NEW);
-        Matrix_MultiplyVector3fByState(&sp30, arg0);
+        Matrix_RotateAxisS(arg2 * 10430.378f, &sp24, MTXMODE_NEW);
+        Matrix_MultVec3f(&sp30, arg0);
     } else {
-        Matrix_SetStateXRotation(arg2);
-        Matrix_MultiplyVector3fByState(&sp30, arg0);
+        Matrix_RotateXFNew(arg2);
+        Matrix_MultVec3f(&sp30, arg0);
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
     return false;
 }
 
@@ -318,7 +319,7 @@ void func_80A81868(ObjMine* this, s32 arg1) {
 }
 
 void func_80A819A4(ObjMine* this, s32 arg1) {
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     Collider_UpdateSpheres(0, &this->collider);
 }
@@ -407,7 +408,7 @@ void func_80A81B7C(ObjMine* this, s32 arg1) {
 }
 
 void func_80A81D70(ObjMine* this, s32 arg1) {
-    Matrix_InsertTranslation(this->actor.home.pos.x, this->actor.home.pos.y + (arg1 * 12.0f) + 10.0f,
+    Matrix_Translate(this->actor.home.pos.x, this->actor.home.pos.y + (arg1 * 12.0f) + 10.0f,
                              this->actor.home.pos.z, MTXMODE_NEW);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     Collider_UpdateSpheres(0, &this->collider);
@@ -428,7 +429,7 @@ void func_80A81DEC(ObjMine* this) {
     }
 }
 
-void func_80A81E7C(ObjMine* this, GlobalContext* globalCtx) {
+void func_80A81E7C(ObjMine* this, PlayState* play) {
     ObjMineUnkStruct* temp_v1 = &this->unk_1B8;
     s32 pad;
     Vec3f sp7C;
@@ -455,7 +456,7 @@ void func_80A81E7C(ObjMine* this, GlobalContext* globalCtx) {
                 sp7C.x = this->actor.home.pos.x;
                 sp7C.y = this->actor.world.pos.y;
                 sp7C.z = this->actor.home.pos.z;
-                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &sp7C, &sp70, &sp64, &sp48, 1, 0, 0, 1, &sp44)) {
+                if (BgCheck_EntityLineTest1(&play->colCtx, &sp7C, &sp70, &sp64, &sp48, 1, 0, 0, 1, &sp44)) {
                     *(s8*)(&temp_v1->unk_40) = 1;
                     temp_v1->unk_38 = sp4C.x * -0.2f;
                     temp_v1->unk_3C = sp4C.z * -0.2f;
@@ -548,13 +549,13 @@ void func_80A828A8(ObjMine* this) {
 
 void func_80A81FFC(ObjMine* this);
 
-void func_80A82C28(ObjMine* this, GlobalContext* globalCtx) {
-    func_80A81E7C(this, globalCtx);
+void func_80A82C28(ObjMine* this, PlayState* play) {
+    func_80A81E7C(this, play);
     func_80A81FFC(this);
     func_80A828A8(this);
 }
 
-void ObjMine_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjMine_Init(Actor* thisx, PlayState* play) {
     ObjMine* this = THIS;
     s32 pad;
     s32 sp44 = this->actor.params & 0xFF;
@@ -566,8 +567,8 @@ void ObjMine_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.shape.rot.z = 0;
     this->actor.world.rot.z = 0;
-    Collider_InitJntSph(globalCtx, &this->collider);
-    Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
+    Collider_InitJntSph(play, &this->collider);
+    Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
 
     if (sp38 == 0) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 45.0f);
@@ -576,18 +577,18 @@ void ObjMine_Init(Actor* thisx, GlobalContext* globalCtx) {
         if (sp44 == 0xFF) {
             func_80A82F84(this);
         } else {
-            path = &globalCtx->setupPathList[sp44];
+            path = &play->setupPathList[sp44];
             this->unk_1B0 = 0;
             this->unk_1AC = path->count - 1;
             this->unk_1B4 = (Vec3s*)Lib_SegmentedToVirtual(path->points);
             func_80A811D0(this, this->unk_1B0);
             func_80A82FA8(this);
         }
-        Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+        Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                               &this->actor.shape.rot);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Collider_UpdateSpheres(0, &this->collider);
-        this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &sp3C,
+        this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp3C,
                                                               &this->actor, &this->actor.world.pos);
     } else {
         sp34 = this->actor.params & 0x3F;
@@ -602,7 +603,7 @@ void ObjMine_Init(Actor* thisx, GlobalContext* globalCtx) {
             func_80A81868(this, sp34);
             this->actor.world.pos.y = (-10.0f - (sp34 * 12.0f)) + this->actor.home.pos.y;
             func_80A819A4(this, sp34);
-            func_800B4AEC(globalCtx, &this->actor, 0.0f);
+            func_800B4AEC(play, &this->actor, 0.0f);
             if (sp34 == 0) {
                 func_80A83A74(this);
             } else {
@@ -622,17 +623,17 @@ void ObjMine_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ObjMine_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjMine_Destroy(Actor* thisx, PlayState* play) {
     ObjMine* this = THIS;
 
-    Collider_DestroyJntSph(globalCtx, &this->collider);
+    Collider_DestroyJntSph(play, &this->collider);
 }
 
 void func_80A82F84(ObjMine* this) {
     this->actionFunc = func_80A82F98;
 }
 
-void func_80A82F98(ObjMine* this, GlobalContext* globalCtx) {
+void func_80A82F98(ObjMine* this, PlayState* play) {
 }
 
 void func_80A82FA8(ObjMine* this) {
@@ -642,7 +643,7 @@ void func_80A82FA8(ObjMine* this) {
 
 #ifdef NON_MATCHING
 // stack
-void func_80A82FC8(ObjMine* this, GlobalContext* globalCtx) {
+void func_80A82FC8(ObjMine* this, PlayState* play) {
     f32 phi_f0;
     Vec3f spA0;
     f32 sp9C;
@@ -681,18 +682,18 @@ void func_80A82FC8(ObjMine* this, GlobalContext* globalCtx) {
         func_80A811D0(this, this->unk_1B0);
     }
 
-    this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &sp90,
+    this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp90,
                                                           &this->actor, &this->actor.world.pos);
 
     if (this->actor.flags & 0x40) {
         Math3D_CrossProduct(&D_80A845D0[0], &this->actor.velocity, &sp78);
         if (func_80A8120C(&sp78, &sp84)) {
-            Matrix_InsertRotationAroundUnitVector_f(this->actor.speedXZ * 0.03125f, &sp84, MTXMODE_NEW);
-            Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
-            Matrix_CopyCurrentState(&sp38);
-            func_8018219C(&sp38, &this->actor.shape.rot, 0);
+            Matrix_RotateAxisF(this->actor.speedXZ * 0.03125f, &sp84, MTXMODE_NEW);
+            Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
+            Matrix_Get(&sp38);
+            Matrix_MtxFToYXZRot(&sp38, &this->actor.shape.rot, 0);
         }
     }
 }
@@ -710,7 +711,7 @@ void func_80A83214(ObjMine* this) {
     this->actionFunc = func_80A83258;
 }
 
-void func_80A83258(ObjMine* this, GlobalContext* globalCtx) {
+void func_80A83258(ObjMine* this, PlayState* play) {
     this->actor.scale.x *= 1.8f;
     if (this->actor.scale.x > 0.17495999f) {
         Actor_MarkForDeath(&this->actor);
@@ -724,14 +725,14 @@ void func_80A832BC(ObjMine* this) {
     this->actionFunc = func_80A832D0;
 }
 
-void func_80A832D0(ObjMine* this, GlobalContext* globalCtx) {
+void func_80A832D0(ObjMine* this, PlayState* play) {
     s32 pad;
     s32 spA0 = this->actor.params & 0x3F;
     ObjMineUnkStruct* unkStruct = &this->unk_1B8;
 
     Math_Vec3f_Copy(&unkStruct->unk_24, &unkStruct->unk_0C);
     if (func_80A8140C(this)) {
-        func_80A81384(this, globalCtx);
+        func_80A81384(this, play);
         func_80A81640(this);
         func_80A83214(this);
     } else {
@@ -796,7 +797,7 @@ void func_80A832D0(ObjMine* this, GlobalContext* globalCtx) {
         if ((unkStruct->unk_5C > -0.000001f) &&
             (unkStruct->unk_5C <= Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z,
                                                            this->actor.home.pos.x, this->actor.home.pos.z))) {
-            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 20.0f, 0.0f, 1);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 20.0f, 0.0f, 1);
 
             if (this->actor.bgCheckFlags & 8) {
                 if (this->actor.wallPoly != NULL) {
@@ -837,10 +838,10 @@ void func_80A832D0(ObjMine* this, GlobalContext* globalCtx) {
             temp->unk_00 += temp->unk_02;
         }
 
-        func_800B4AEC(globalCtx, &this->actor, 0.0f);
+        func_800B4AEC(play, &this->actor, 0.0f);
         func_80A81818(this);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
@@ -848,14 +849,14 @@ void func_80A83A74(ObjMine* this) {
     this->actionFunc = func_80A83A88;
 }
 
-void func_80A83A88(ObjMine* this, GlobalContext* globalCtx) {
+void func_80A83A88(ObjMine* this, PlayState* play) {
     if (func_80A8140C(this)) {
-        func_80A81384(this, globalCtx);
+        func_80A81384(this, play);
         func_80A81640(this);
         func_80A83214(this);
     } else {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
@@ -863,12 +864,12 @@ void func_80A83B14(ObjMine* this) {
     this->actionFunc = func_80A83B28;
 }
 
-void func_80A83B28(ObjMine* this, GlobalContext* globalCtx) {
+void func_80A83B28(ObjMine* this, PlayState* play) {
     ObjMineUnkStruct* ptr;
     s16 rand;
 
     if (func_80A8140C(this)) {
-        func_80A81384(this, globalCtx);
+        func_80A81384(this, play);
         func_80A81640(this);
         func_80A83214(this);
         return;
@@ -897,95 +898,95 @@ void func_80A83B28(ObjMine* this, GlobalContext* globalCtx) {
         *(s16*)((u8*)ptr + 0x20) = (u32)Rand_Next() >> 0x13;
     }
 
-    func_80A82C28(this, globalCtx);
+    func_80A82C28(this, play);
     func_80A81DEC(this);
     func_80A81818(this);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 }
 
 void func_80A83CEC(ObjMine* this) {
     this->actionFunc = func_80A83D00;
 }
 
-void func_80A83D00(ObjMine* this, GlobalContext* globalCtx) {
+void func_80A83D00(ObjMine* this, PlayState* play) {
     if (func_80A8140C(this)) {
-        func_80A81384(this, globalCtx);
+        func_80A81384(this, play);
         func_80A81640(this);
         func_80A83214(this);
     } else {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
-void ObjMine_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjMine_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjMine* this = THIS;
 
     if ((this->collider.base.ocFlags2 & OC2_HIT_PLAYER) || (this->collider.base.acFlags & AC_HIT)) {
-        func_80A8131C(this, globalCtx);
+        func_80A8131C(this, play);
         func_80A83214(this);
     }
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (this->actor.update != NULL) {
         this->collider.base.ocFlags1 &= ~OC1_HIT;
         this->collider.base.acFlags &= ~AC_HIT;
         this->collider.base.ocFlags2 &= ~OC2_HIT_PLAYER;
         if ((this->actor.flags & 0x40) && (this->actionFunc != func_80A83258)) {
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         }
     }
 }
 
-void func_80A83E7C(Actor* thisx, GlobalContext* globalCtx) {
+void func_80A83E7C(Actor* thisx, PlayState* play) {
     ObjMine* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void ObjMine_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjMine_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjMine* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     if (this->actionFunc == func_80A82FC8) {
         Collider_UpdateSpheres(0, &this->collider);
     }
 
-    func_800B8050(&this->actor, globalCtx, 1);
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_800B8050(&this->actor, play, 1);
+    func_8012C28C(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_PASS, G_RM_AA_ZB_OPA_SURF2);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gSPDisplayList(POLY_OPA_DISP++, D_06002068);
     gSPDisplayList(POLY_OPA_DISP++, D_06002188);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80A83FBC(Actor* thisx, GlobalContext* globalCtx) {
+void func_80A83FBC(Actor* thisx, PlayState* play) {
     ObjMine* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_800B8118(&this->actor, globalCtx, 1);
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_800B8118(&this->actor, play, 1);
+    func_8012C2DC(play->state.gfxCtx);
 
     gDPSetRenderMode(POLY_XLU_DISP++, G_RM_PASS, G_RM_AA_ZB_XLU_SURF2);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 75);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, D_06002068);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80A84088(Actor* thisx, GlobalContext* globalCtx) {
+void func_80A84088(Actor* thisx, PlayState* play) {
     ObjMine* this = THIS;
     s32 temp_s5 = this->actor.params & 0x3F;
     ObjMineUnkStruct3* temp;
@@ -996,13 +997,13 @@ void func_80A84088(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp88;
     Gfx* gfx;
 
-    func_800B8050(&this->actor, globalCtx, 1);
+    func_800B8050(&this->actor, play, 1);
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
     gfx = POLY_OPA_DISP;
 
     gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
-    gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(gfx++, D_06000030);
 
     func_80A81684(ptr);
@@ -1015,21 +1016,21 @@ void func_80A84088(Actor* thisx, GlobalContext* globalCtx) {
         Math_Vec3f_ScaleAndStore(&ptr->unk_0C, -12.0f, &sp88);
 
         for (i = 0, temp = &ptr->unk_60[0]; i < temp_s5; i++, temp++) {
-            Matrix_RotateY(temp->unk_00, MTXMODE_APPLY);
+            Matrix_RotateYS(temp->unk_00, MTXMODE_APPLY);
             sp94.x += sp88.x;
             sp94.y += sp88.y;
             sp94.z += sp88.z;
             func_80A8164C(&sp94);
 
-            gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(gfx++, D_06000030);
         }
     }
 
-    Matrix_InsertXRotation_s(0x2000, MTXMODE_APPLY);
+    Matrix_RotateXS(0x2000, MTXMODE_APPLY);
     func_80A8164C(&this->actor.world.pos);
 
-    gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPPipeSync(gfx++);
     gDPSetRenderMode(gfx++, G_RM_PASS, G_RM_AA_ZB_OPA_SURF2);
     gDPSetEnvColor(gfx++, 0, 0, 0, 255);
@@ -1038,10 +1039,10 @@ void func_80A84088(Actor* thisx, GlobalContext* globalCtx) {
 
     POLY_OPA_DISP = gfx;
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80A84338(Actor* thisx, GlobalContext* globalCtx) {
+void func_80A84338(Actor* thisx, PlayState* play) {
     ObjMine* this = THIS;
     s32 temp_s7 = this->actor.params & 0x3F;
     s32 i;
@@ -1049,31 +1050,31 @@ void func_80A84338(Actor* thisx, GlobalContext* globalCtx) {
     ObjMineUnkStruct2* temp;
     s32 pad[2];
 
-    func_800B8050(&this->actor, globalCtx, 1);
+    func_800B8050(&this->actor, play, 1);
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
     gfx = POLY_OPA_DISP;
 
     gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
-    gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(gfx++, D_06000030);
 
     for (i = 0, temp = (ObjMineUnkStruct2*)((u8*)this + 0x1FC); i < temp_s7; i++, temp++) {
         func_80A81684((ObjMineUnkStruct*)temp);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
         if ((i & 1) == 0) {
-            Matrix_RotateY(0x4000, 1);
+            Matrix_RotateYS(0x4000, MTXMODE_APPLY);
         }
         func_80A8164C(&temp->unk_24);
 
-        gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(gfx++, D_06000030);
     }
 
-    Matrix_InsertXRotation_s(0x2000, 1);
+    Matrix_RotateXS(0x2000, 1);
     func_80A8164C(&this->actor.world.pos);
 
-    gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPPipeSync(gfx++);
     gDPSetRenderMode(gfx++, G_RM_PASS, G_RM_AA_ZB_OPA_SURF2);
     gDPSetEnvColor(gfx++, 0, 0, 0, 255);
@@ -1082,5 +1083,5 @@ void func_80A84338(Actor* thisx, GlobalContext* globalCtx) {
 
     POLY_OPA_DISP = gfx;
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

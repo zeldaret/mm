@@ -6,7 +6,7 @@
 
 struct EnAni;
 
-typedef void (*EnAniActionFunc)(struct EnAni*, GlobalContext*);
+typedef void (*EnAniActionFunc)(struct EnAni*, PlayState*);
 typedef void (*EnAniBlinkFunc)(struct EnAni*);
 
 
@@ -33,6 +33,6 @@ enum EnAniType {
   /* 1    */ ANI_TYPE_TREE_HANGING = 1,
 };
 
-#define GET_ANI_TYPE(thisx) (thisx->params & 0xFF) 
+#define ANI_GET_TYPE(thisx) ((thisx)->params & 0xFF) 
 
 #endif // Z_EN_ANI_H

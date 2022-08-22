@@ -5,7 +5,7 @@
 
 struct EnEgol;
 
-typedef void (*EnEgolActionFunc)(struct EnEgol*, GlobalContext*);
+typedef void (*EnEgolActionFunc)(struct EnEgol*, PlayState*);
 
 typedef struct EnEgol {
     /* 0x0000 */ Actor actor;

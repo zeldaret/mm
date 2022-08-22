@@ -5,7 +5,7 @@
 
 struct ObjTree;
 
-typedef void (*ObjTreeActionFunc)(struct ObjTree*, GlobalContext*);
+typedef void (*ObjTreeActionFunc)(struct ObjTree*, PlayState*);
 
 #define OBJTREE_ISLARGE(thisx) ((thisx)->params & 0x8000)
 

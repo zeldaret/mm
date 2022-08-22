@@ -148,10 +148,31 @@ s32 D_801C6798[] = {
     0x00000020, 0x00001470, 0x000028C0, 0x00003D10, 0x00005160, 0x000065B0,
 };
 
-u8 D_801C67B0[24] = {
-    ITEM_NONE,  ITEM_BOW,  ITEM_NONE,        ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_BOMB, ITEM_BOMBCHU,
-    ITEM_STICK, ITEM_NUT,  ITEM_MAGIC_BEANS, ITEM_NONE, ITEM_POWDER_KEG, ITEM_PICTO_BOX, ITEM_NONE, ITEM_NONE,
-    ITEM_NONE,  ITEM_NONE, ITEM_NONE,        ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_NONE, ITEM_NONE,
+u8 gAmmoItems[] = {
+    ITEM_NONE,        // SLOT_OCARINA
+    ITEM_BOW,         // SLOT_BOW
+    ITEM_NONE,        // SLOT_ARROW_FIRE
+    ITEM_NONE,        // SLOT_ARROW_ICE
+    ITEM_NONE,        // SLOT_ARROW_LIGHT
+    ITEM_NONE,        // SLOT_TRADE_DEED
+    ITEM_BOMB,        // SLOT_BOMB
+    ITEM_BOMBCHU,     // SLOT_BOMBCHU
+    ITEM_STICK,       // SLOT_STICK
+    ITEM_NUT,         // SLOT_NUT
+    ITEM_MAGIC_BEANS, // SLOT_MAGIC_BEANS
+    ITEM_NONE,        // SLOT_TRADE_KEY_MAMA
+    ITEM_POWDER_KEG,  // SLOT_POWDER_KEG
+    ITEM_PICTO_BOX,   // SLOT_PICTO_BOX
+    ITEM_NONE,        // SLOT_LENS
+    ITEM_NONE,        // SLOT_HOOKSHOT
+    ITEM_NONE,        // SLOT_SWORD_GREAT_FAIRY
+    ITEM_NONE,        // SLOT_TRADE_COUPLE
+    ITEM_NONE,        // SLOT_BOTTLE_1
+    ITEM_NONE,        // SLOT_BOTTLE_2
+    ITEM_NONE,        // SLOT_BOTTLE_3
+    ITEM_NONE,        // SLOT_BOTTLE_4
+    ITEM_NONE,        // SLOT_BOTTLE_5
+    ITEM_NONE,        // SLOT_BOTTLE_6
 };
 
 s32 D_801C67C8[] = { 0, 0x40, 0x80, 0xC0, 0x100, 0x180, 0x200, 0x280 };
@@ -199,8 +220,8 @@ void Sram_ClearHighscores(void) {
     gSaveContext.save.unk_EE8 = (gSaveContext.save.unk_EE8 & 0xFFFF) | 0x130000;
     gSaveContext.save.unk_EE8 = (gSaveContext.save.unk_EE8 & 0xFFFF0000) | 0xA;
     gSaveContext.save.horseBackBalloonHighScore = 6000; // 60 seconds
-    gSaveContext.save.unk_EF4 = (gSaveContext.save.unk_EF4 & 0xFFFF0000) | 0x27;
-    gSaveContext.save.unk_EF4 = (gSaveContext.save.unk_EF4 & 0xFFFF) | 0xA0000;
+    SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(39);
+    SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(10);
 
     gSaveContext.save.dekuPlaygroundHighScores[0] = 7500; // 75 seconds
     gSaveContext.save.dekuPlaygroundHighScores[1] = 7500; // 75 seconds
@@ -226,12 +247,12 @@ void Sram_ClearFlagsAtDawnOfTheFirstDay(void) {
 /**
  * Used by Song of Time (when clicking "Yes") and (indirectly) by the "Dawn of the New Day" cutscene
  */
-void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
+void Sram_SaveEndOfCycle(PlayState* play) {
     s16 sceneNum;
     s32 j;
     s32 i;
-    u8 temp;
-    u8 temp2;
+    u8 slot;
+    u8 item;
 
     gSaveContext.save.daySpeed = 0;
     gSaveContext.save.daysElapsed = 0;
@@ -243,14 +264,14 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
         gSaveContext.save.playerData.deaths = 999;
     }
 
-    sceneNum = Play_GetOriginalSceneNumber(globalCtx->sceneNum);
-    Play_SaveCycleSceneFlags(&globalCtx->state);
+    sceneNum = Play_GetOriginalSceneNumber(play->sceneNum);
+    Play_SaveCycleSceneFlags(&play->state);
 
-    globalCtx->actorCtx.flags.chest &= D_801C5FC0[sceneNum][2];
-    globalCtx->actorCtx.flags.switches[0] &= D_801C5FC0[sceneNum][0];
-    globalCtx->actorCtx.flags.switches[1] &= D_801C5FC0[sceneNum][1];
-    globalCtx->actorCtx.flags.collectible[0] &= D_801C5FC0[sceneNum][3];
-    globalCtx->actorCtx.flags.clearedRoom = 0;
+    play->actorCtx.flags.chest &= D_801C5FC0[sceneNum][2];
+    play->actorCtx.flags.switches[0] &= D_801C5FC0[sceneNum][0];
+    play->actorCtx.flags.switches[1] &= D_801C5FC0[sceneNum][1];
+    play->actorCtx.flags.collectible[0] &= D_801C5FC0[sceneNum][3];
+    play->actorCtx.flags.clearedRoom = 0;
 
     for (i = 0; i < SCENE_MAX; i++) {
         gSaveContext.cycleSceneFlags[i].switch0 = ((void)0, gSaveContext.cycleSceneFlags[i].switch0) & D_801C5FC0[i][0];
@@ -260,7 +281,7 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
             ((void)0, gSaveContext.cycleSceneFlags[i].collectible) & D_801C5FC0[i][3];
         gSaveContext.cycleSceneFlags[i].clearedRoom = 0;
         gSaveContext.save.permanentSceneFlags[i].unk_14 = 0;
-        gSaveContext.save.permanentSceneFlags[i].unk_18 = 0;
+        gSaveContext.save.permanentSceneFlags[i].rooms = 0;
     }
 
     for (; i < ARRAY_COUNT(gSaveContext.cycleSceneFlags); i++) {
@@ -276,7 +297,7 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
     }
 
     if (gSaveContext.save.weekEventReg[84] & 0x20) {
-        func_801149A0(ITEM_MASK_FIERCE_DEITY, SLOT(ITEM_MASK_FIERCE_DEITY));
+        Inventory_DeleteItem(ITEM_MASK_FIERCE_DEITY, SLOT(ITEM_MASK_FIERCE_DEITY));
     }
 
     for (i = 0; i < ARRAY_COUNT(D_801C66D0); i++) {
@@ -306,35 +327,35 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
     }
 
     if (INV_CONTENT(ITEM_BOMB) == ITEM_BOMB) {
-        temp2 = INV_CONTENT(ITEM_BOMB);
-        if (AMMO(temp2) != 0) {
+        item = INV_CONTENT(ITEM_BOMB);
+        if (AMMO(item) != 0) {
             gSaveContext.eventInf[7] |= 2;
         }
     }
     if (INV_CONTENT(ITEM_NUT) == ITEM_NUT) {
-        temp2 = INV_CONTENT(ITEM_NUT);
-        if (AMMO(temp2) != 0) {
+        item = INV_CONTENT(ITEM_NUT);
+        if (AMMO(item) != 0) {
             gSaveContext.eventInf[7] |= 4;
         }
     }
     if (INV_CONTENT(ITEM_STICK) == ITEM_STICK) {
-        temp2 = INV_CONTENT(ITEM_STICK);
-        if (AMMO(temp2) != 0) {
+        item = INV_CONTENT(ITEM_STICK);
+        if (AMMO(item) != 0) {
             gSaveContext.eventInf[7] |= 8;
         }
     }
     if (INV_CONTENT(ITEM_BOW) == ITEM_BOW) {
-        temp2 = INV_CONTENT(ITEM_BOW);
-        if (AMMO(temp2) != 0) {
+        item = INV_CONTENT(ITEM_BOW);
+        if (AMMO(item) != 0) {
             gSaveContext.eventInf[7] |= 0x10;
         }
     }
 
-    for (i = 0; i < ARRAY_COUNT(D_801C67B0); i++) {
-        if (D_801C67B0[i] != ITEM_NONE) {
+    for (i = 0; i < ARRAY_COUNT(gAmmoItems); i++) {
+        if (gAmmoItems[i] != ITEM_NONE) {
             if ((gSaveContext.save.inventory.items[i] != ITEM_NONE) && (i != SLOT_PICTO_BOX)) {
-                temp2 = gSaveContext.save.inventory.items[i];
-                AMMO(temp2) = 0;
+                item = gSaveContext.save.inventory.items[i];
+                AMMO(item) = 0;
             }
         }
     }
@@ -343,10 +364,10 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
         // Check for all bottled items
         if (gSaveContext.save.inventory.items[i] >= ITEM_POTION_RED) {
             if (gSaveContext.save.inventory.items[i] <= ITEM_OBABA_DRINK) {
-                for (j = 1; j < 4; j++) {
+                for (j = EQUIP_SLOT_C_LEFT; j <= EQUIP_SLOT_C_RIGHT; j++) {
                     if (GET_CUR_FORM_BTN_ITEM(j) == gSaveContext.save.inventory.items[i]) {
                         SET_CUR_FORM_BTN_ITEM(j, ITEM_BOTTLE);
-                        func_80112B40(globalCtx, j);
+                        Interface_LoadItemIconImpl(play, j);
                     }
                 }
                 gSaveContext.save.inventory.items[i] = ITEM_BOTTLE;
@@ -354,26 +375,26 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
         }
     }
 
-    REMOVE_QUEST_ITEM(QUEST_UNK_19);
+    REMOVE_QUEST_ITEM(QUEST_PICTOGRAPH);
 
     if (gSaveContext.save.playerData.health < 0x30) {
         gSaveContext.save.playerData.health = 0x30;
     }
 
-    if (GET_CUR_EQUIP_VALUE(EQUIP_SWORD) < 3) {
-        SET_EQUIP_VALUE(EQUIP_SWORD, 1);
+    if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) <= EQUIP_VALUE_SWORD_RAZOR) {
+        SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, EQUIP_VALUE_SWORD_KOKIRI);
 
         if (CUR_FORM == 0) {
             if ((STOLEN_ITEM_1 >= ITEM_SWORD_GILDED) || (STOLEN_ITEM_2 >= ITEM_SWORD_GILDED)) {
                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_SWORD_GILDED;
-                SET_EQUIP_VALUE(EQUIP_SWORD, 3);
+                SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, EQUIP_VALUE_SWORD_GILDED);
             } else {
                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
             }
         } else {
             if ((STOLEN_ITEM_1 >= ITEM_SWORD_GILDED) || (STOLEN_ITEM_2 >= ITEM_SWORD_GILDED)) {
                 BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_B) = ITEM_SWORD_GILDED;
-                SET_EQUIP_VALUE(EQUIP_SWORD, 3);
+                SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, EQUIP_VALUE_SWORD_GILDED);
             } else {
                 BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
             }
@@ -385,20 +406,20 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
     }
 
     if (STOLEN_ITEM_1 == ITEM_BOTTLE) {
-        temp = SLOT(ITEM_BOTTLE);
-        for (i = 0; i < 6; i++) {
-            if (gSaveContext.save.inventory.items[temp + i] == ITEM_NONE) {
-                gSaveContext.save.inventory.items[temp + i] = ITEM_BOTTLE;
+        slot = SLOT(ITEM_BOTTLE);
+        for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
+            if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
+                gSaveContext.save.inventory.items[slot + i] = ITEM_BOTTLE;
                 break;
             }
         }
     }
 
     if (STOLEN_ITEM_2 == ITEM_BOTTLE) {
-        temp = SLOT(ITEM_BOTTLE);
-        for (i = 0; i < 6; i++) {
-            if (gSaveContext.save.inventory.items[temp + i] == ITEM_NONE) {
-                gSaveContext.save.inventory.items[temp + i] = ITEM_BOTTLE;
+        slot = SLOT(ITEM_BOTTLE);
+        for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
+            if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
+                gSaveContext.save.inventory.items[slot + i] = ITEM_BOTTLE;
                 break;
             }
         }
@@ -407,15 +428,14 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
     SET_STOLEN_ITEM_1(STOLEN_ITEM_NONE);
     SET_STOLEN_ITEM_2(STOLEN_ITEM_NONE);
 
-    // ??
-    func_801149A0(ITEM_OCARINA_FAIRY, SLOT_TRADE_DEED);
-    func_801149A0(ITEM_SLINGSHOT, SLOT_TRADE_KEY_MAMA);
-    func_801149A0(ITEM_LONGSHOT, SLOT_TRADE_COUPLE);
+    Inventory_DeleteItem(ITEM_OCARINA_FAIRY, SLOT_TRADE_DEED);
+    Inventory_DeleteItem(ITEM_SLINGSHOT, SLOT_TRADE_KEY_MAMA);
+    Inventory_DeleteItem(ITEM_LONGSHOT, SLOT_TRADE_COUPLE);
 
-    for (j = 1; j < 4; j++) {
-        if (GET_CUR_FORM_BTN_ITEM(j) >= ITEM_MOON_TEAR && GET_CUR_FORM_BTN_ITEM(j) <= ITEM_PENDANT_MEMORIES) {
+    for (j = EQUIP_SLOT_C_LEFT; j <= EQUIP_SLOT_C_RIGHT; j++) {
+        if (GET_CUR_FORM_BTN_ITEM(j) >= ITEM_MOON_TEAR && GET_CUR_FORM_BTN_ITEM(j) <= ITEM_PENDANT_OF_MEMORIES) {
             SET_CUR_FORM_BTN_ITEM(j, ITEM_NONE);
-            func_80112B40(globalCtx, j);
+            Interface_LoadItemIconImpl(play, j);
         }
     }
 
@@ -434,8 +454,8 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
     Sram_ClearHighscores();
 
     for (i = 0; i < 8; i++) {
-        gSaveContext.save.inventory.dungeonItems[i] &= (u8)~1;
-        gSaveContext.save.inventory.dungeonKeys[i] = 0;
+        gSaveContext.save.inventory.dungeonItems[i] &= (u8)~1; // remove boss key
+        DUNGEON_KEY_COUNT(i) = 0;
         gSaveContext.save.inventory.strayFairies[i] = 0;
     }
 
@@ -446,7 +466,7 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
     gSaveContext.jinxTimer = 0;
     gSaveContext.rupeeAccumulator = 0;
 
-    func_800F3B2C(globalCtx);
+    func_800F3B2C(play);
 }
 
 void Sram_IncrementDay(void) {
@@ -481,7 +501,7 @@ u16 Sram_CalcChecksum(void* data, size_t count) {
 
 // Resets `Save` substruct
 void Sram_ResetSave(void) {
-    gSaveContext.save.entranceIndex = 0x1C00;
+    gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0);
     gSaveContext.save.equippedMask = 0;
     gSaveContext.save.isFirstCycle = false;
     gSaveContext.save.unk_06 = 0;
@@ -596,7 +616,7 @@ ItemEquips sSaveDefaultItemEquips = {
         { ITEM_SWORD_KOKIRI, ITEM_NONE, ITEM_NONE, ITEM_NONE },
         { ITEM_SWORD_KOKIRI, ITEM_NONE, ITEM_NONE, ITEM_NONE },
         { ITEM_SWORD_KOKIRI, ITEM_NONE, ITEM_NONE, ITEM_NONE },
-        { ITEM_UNK_FD, ITEM_NONE, ITEM_NONE, ITEM_NONE },
+        { ITEM_FD, ITEM_NONE, ITEM_NONE, ITEM_NONE },
     },
     {
         { SLOT_OCARINA, SLOT_NONE, SLOT_NONE, SLOT_NONE },
@@ -625,7 +645,9 @@ Inventory sSaveDefaultInventory = {
     // dungeonItems
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     // dungeonKeys
-    { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0 },
+    { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
+    // defenceHearts
+    0,
     // strayFairies
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     // dekuPlaygroundPlayerName
@@ -769,7 +791,9 @@ Inventory sSaveDebugInventory = {
     // dungeonItems
     { 7, 7, 7, 7, 7, 7, 7, 7, 7, 7 },
     // dungeonKeys
-    { 8, 8, 8, 8, 8, 8, 8, 8, 8, 0 },
+    { 8, 8, 8, 8, 8, 8, 8, 8, 8 },
+    // defenceHearts
+    0,
     // strayFairies
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     // dekuPlaygroundPlayerName
@@ -809,8 +833,8 @@ void Sram_InitDebugSave(void) {
     Lib_MemCpy(&gSaveContext.save.checksum, &sSaveDebugChecksum, sizeof(gSaveContext.save.checksum));
 
     if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
-        BUTTON_ITEM_EQUIP(0, 2) = D_801C6A48[((void)0, gSaveContext.save.playerForm & 0xFF)];
-        C_SLOT_EQUIP(0, 2) = D_801C6A50[((void)0, gSaveContext.save.playerForm & 0xFF)];
+        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = D_801C6A48[((void)0, gSaveContext.save.playerForm)];
+        C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN) = D_801C6A50[((void)0, gSaveContext.save.playerForm)];
     }
 
     gSaveContext.save.hasTatl = true;
@@ -821,7 +845,7 @@ void Sram_InitDebugSave(void) {
     gSaveContext.save.horseData.pos.z = -1285;
     gSaveContext.save.horseData.yaw = -0x7554;
 
-    gSaveContext.save.entranceIndex = 0x1C00;
+    gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0);
     gSaveContext.save.isFirstCycle = true;
 
     //
@@ -886,15 +910,19 @@ void func_80144A94(SramContext* sramCtx) {
     gSaveContext.jinxTimer = 0;
 }
 
-u16 D_801C6A58[] = { 0x68B0, 0x6A60, 0xB230, 0x9A80, 0xD890, 0x3E40, 0x8640, 0x84A0, 0x2040, 0xAA30 };
+u16 D_801C6A58[] = {
+    ENTRANCE(GREAT_BAY_COAST, 11), ENTRANCE(ZORA_CAPE, 6),
+    ENTRANCE(SNOWHEAD, 3),         ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8),
+    ENTRANCE(SOUTH_CLOCK_TOWN, 9), ENTRANCE(MILK_ROAD, 4),
+    ENTRANCE(WOODFALL, 4),         ENTRANCE(SOUTHERN_SWAMP_POISONED, 10),
+    ENTRANCE(IKANA_CANYON, 4),     ENTRANCE(STONE_TOWER, 3),
+};
 
-#ifdef NON_MATCHING
-// Small regalloc between v0/t6/t7
 void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
     s32 i;
     s32 pad;
     s32 phi_t1;
-    s32 pad1[2];
+    s32 pad1;
     s32 fileNum;
 
     if (gSaveContext.unk_3F3F) {
@@ -951,23 +979,24 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
         }
 
         if (gSaveContext.save.isFirstCycle) {
-            gSaveContext.save.entranceIndex = 0xD800;
+            gSaveContext.save.entrance = ENTRANCE(SOUTH_CLOCK_TOWN, 0);
             gSaveContext.save.day = 0;
             gSaveContext.save.time = 0x3FFF;
         } else {
-            gSaveContext.save.entranceIndex = 0x1C00;
+            gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0);
             gSaveContext.nextCutsceneIndex = 0;
             gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
         }
     } else {
-        gSaveContext.save.entranceIndex = D_801C6A58[gSaveContext.save.owlSaveLocation];
-        if (D_801C6A58[gSaveContext.save.owlSaveLocation] == 0x84A0 && (gSaveContext.save.weekEventReg[20] & 2)) {
+        gSaveContext.save.entrance = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
+        if ((gSaveContext.save.entrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) &&
+            (gSaveContext.save.weekEventReg[20] & 2)) {
             // Unconfirmed weekEventReg: "Woodfall Temple Prison Entrance raised / Water cleansed"
-            gSaveContext.save.entranceIndex = 0xCA0;
-        } else if (D_801C6A58[gSaveContext.save.owlSaveLocation] == 0x9A80 &&
+            gSaveContext.save.entrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10);
+        } else if ((gSaveContext.save.entrance == ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8)) &&
                    (gSaveContext.save.weekEventReg[33] & 0x80)) {
             // Unconfirmed weekEventReg: "Mountain Village Unfrozen"
-            gSaveContext.save.entranceIndex = 0xAE80;
+            gSaveContext.save.entrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 8);
         }
 
         for (i = 0; i < ARRAY_COUNT(gSaveContext.cycleSceneFlags); i++) {
@@ -979,19 +1008,16 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
         }
 
         if (gSaveContext.save.unk_F65) {
-            Lib_MemCpy(gScarecrowSpawnSongPtr, gSaveContext.save.scarecrowsSong,
-                       sizeof(gSaveContext.save.scarecrowsSong));
+            Lib_MemCpy(gScarecrowSpawnSongPtr, gSaveContext.save.scarecrowSpawnSong,
+                       sizeof(gSaveContext.save.scarecrowSpawnSong));
 
-            for (i = 0; i != ARRAY_COUNT(gSaveContext.save.scarecrowsSong); i++) {}
+            for (i = 0; i != ARRAY_COUNT(gSaveContext.save.scarecrowSpawnSong); i++) {}
         }
 
         fileNum = gSaveContext.fileNum;
         func_80147314(sramCtx, fileNum);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_OpenSave.s")
-#endif
 
 // Similar to func_80145698, but accounts for owl saves?
 void func_8014546C(SramContext* sramCtx) {
@@ -1143,7 +1169,7 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 
                     fileChooseCtx->healthCapacity[sp76] = gSaveContext.save.playerData.healthCapacity;
                     fileChooseCtx->health[sp76] = gSaveContext.save.playerData.health;
-                    fileChooseCtx->unk_24454[sp76] = gSaveContext.save.inventory.dungeonKeys[9];
+                    fileChooseCtx->unk_24454[sp76] = gSaveContext.save.inventory.defenseHearts;
                     fileChooseCtx->unk_24444[sp76] = gSaveContext.save.inventory.questItems;
                     fileChooseCtx->unk_24458[sp76] = gSaveContext.save.time;
                     fileChooseCtx->unk_24460[sp76] = gSaveContext.save.day;
@@ -1238,7 +1264,7 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 
                         fileChooseCtx->healthCapacity[sp76] = gSaveContext.save.playerData.healthCapacity;
                         fileChooseCtx->health[sp76] = gSaveContext.save.playerData.health;
-                        fileChooseCtx->unk_24454[sp76] = gSaveContext.save.inventory.dungeonKeys[9];
+                        fileChooseCtx->unk_24454[sp76] = gSaveContext.save.inventory.defenseHearts;
                         fileChooseCtx->unk_24444[sp76] = gSaveContext.save.inventory.questItems;
                         fileChooseCtx->unk_24458[sp76] = gSaveContext.save.time;
                         fileChooseCtx->unk_24460[sp76] = gSaveContext.save.day;
@@ -1351,7 +1377,7 @@ void func_80146628(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 
             fileChooseCtx->unk_24438[fileChooseCtx->fileNum] = gSaveContext.save.playerData.healthCapacity;
             fileChooseCtx->unk_24440[fileChooseCtx->fileNum] = gSaveContext.save.playerData.health;
-            fileChooseCtx->unk_24456[fileChooseCtx->fileNum] = gSaveContext.save.inventory.dungeonKeys[9];
+            fileChooseCtx->unk_24456[fileChooseCtx->fileNum] = gSaveContext.save.inventory.defenseHearts;
             fileChooseCtx->unk_2444C[fileChooseCtx->fileNum] = gSaveContext.save.inventory.questItems;
             fileChooseCtx->unk_2445C[fileChooseCtx->fileNum] = gSaveContext.save.time;
             fileChooseCtx->unk_24464[fileChooseCtx->fileNum] = gSaveContext.save.day;
@@ -1394,7 +1420,7 @@ void func_80146628(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 
         fileChooseCtx->healthCapacity[fileChooseCtx->fileNum] = gSaveContext.save.playerData.healthCapacity;
         fileChooseCtx->health[fileChooseCtx->fileNum] = gSaveContext.save.playerData.health;
-        fileChooseCtx->unk_24454[fileChooseCtx->fileNum] = gSaveContext.save.inventory.dungeonKeys[9];
+        fileChooseCtx->unk_24454[fileChooseCtx->fileNum] = gSaveContext.save.inventory.defenseHearts;
         fileChooseCtx->unk_24444[fileChooseCtx->fileNum] = gSaveContext.save.inventory.questItems;
         fileChooseCtx->unk_24458[fileChooseCtx->fileNum] = gSaveContext.save.time;
         fileChooseCtx->unk_24460[fileChooseCtx->fileNum] = gSaveContext.save.day;
@@ -1463,7 +1489,7 @@ void Sram_InitSave(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 
         fileChooseCtx->healthCapacity[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.healthCapacity;
         fileChooseCtx->health[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.health;
-        fileChooseCtx->unk_24454[fileChooseCtx->unk_24480] = gSaveContext.save.inventory.dungeonKeys[9];
+        fileChooseCtx->unk_24454[fileChooseCtx->unk_24480] = gSaveContext.save.inventory.defenseHearts;
         fileChooseCtx->unk_24444[fileChooseCtx->unk_24480] = gSaveContext.save.inventory.questItems;
         fileChooseCtx->unk_24458[fileChooseCtx->unk_24480] = gSaveContext.save.time;
         fileChooseCtx->unk_24460[fileChooseCtx->unk_24480] = gSaveContext.save.day;
@@ -1495,7 +1521,7 @@ void func_80146DF8(SramContext* sramCtx) {
 }
 
 void Sram_InitSram(GameState* gameState, SramContext* sramCtx) {
-    if (&gSaveContext.save) {}
+    if (gSaveContext.save.entrance) {} // Required to match
 
     func_801A3D98(gSaveContext.options.audioSetting);
 }
@@ -1519,9 +1545,9 @@ void func_80146EBC(SramContext* sramCtx, s32 curPage, s32 numPages) {
 /**
  * Saves the game on the very first time Player enters South Clock Town from the Clock Tower
  */
-void Sram_SaveSpecialEnterClockTown(GlobalContext* globalCtx) {
+void Sram_SaveSpecialEnterClockTown(PlayState* play) {
     s32 pad[2];
-    SramContext* sramCtx = &globalCtx->sramCtx;
+    SramContext* sramCtx = &play->sramCtx;
 
     gSaveContext.save.isFirstCycle = true;
     gSaveContext.save.isOwlSave = false;
@@ -1532,7 +1558,7 @@ void Sram_SaveSpecialEnterClockTown(GlobalContext* globalCtx) {
 /**
  * Saves when beating the game, after showing the "Dawn of the New Day" message
  */
-void Sram_SaveSpecialNewDay(GlobalContext* globalCtx) {
+void Sram_SaveSpecialNewDay(PlayState* play) {
     s32 cutscene = gSaveContext.save.cutscene;
     s32 day;
     u16 time = gSaveContext.save.time;
@@ -1542,14 +1568,13 @@ void Sram_SaveSpecialNewDay(GlobalContext* globalCtx) {
     // Unconfirmed: "Obtained Fierce Deity Mask?"
     gSaveContext.save.weekEventReg[84] &= (u8)~0x20;
 
-    Sram_SaveEndOfCycle(globalCtx);
-    func_8014546C(&globalCtx->sramCtx);
+    Sram_SaveEndOfCycle(play);
+    func_8014546C(&play->sramCtx);
 
     gSaveContext.save.day = day;
     gSaveContext.save.time = time;
     gSaveContext.save.cutscene = cutscene;
-    func_80185F64(globalCtx->sramCtx.saveBuf, D_801C67C8[gSaveContext.fileNum * 2],
-                  D_801C67F0[gSaveContext.fileNum * 2]);
+    func_80185F64(play->sramCtx.saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]);
 }
 
 void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages) {

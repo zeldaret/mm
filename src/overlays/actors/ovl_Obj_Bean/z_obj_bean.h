@@ -5,7 +5,7 @@
 
 struct ObjBean;
 
-typedef void (*ObjBeanActionFunc)(struct ObjBean*, GlobalContext*);
+typedef void (*ObjBeanActionFunc)(struct ObjBean*, PlayState*);
 typedef void (*ObjBeanUnkFunc)(struct ObjBean*);
 
 #define OBJBEAN_GET_7F(thisx, x) (((thisx)->params + (x)) & 0x7F)
@@ -17,9 +17,9 @@ typedef void (*ObjBeanUnkFunc)(struct ObjBean*);
 #define OBJBEAN_GET_3(thisx) ((thisx)->home.rot.z & 3)
 
 enum {
-    /* 0x00 */ ENOBJBEAN_GET_C000_0,
-    /* 0x01 */ ENOBJBEAN_GET_C000_1,
-    /* 0x02 */ ENOBJBEAN_GET_C000_2,
+    /* 0x0 */ ENOBJBEAN_GET_C000_0,
+    /* 0x1 */ ENOBJBEAN_GET_C000_1,
+    /* 0x2 */ ENOBJBEAN_GET_C000_2,
 };
 
 typedef struct ObjBean {

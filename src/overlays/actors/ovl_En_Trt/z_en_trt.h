@@ -6,13 +6,13 @@
 
 struct EnTrt;
 
-typedef void (*EnTrtActionFunc)(struct EnTrt*, GlobalContext*);
+typedef void (*EnTrtActionFunc)(struct EnTrt*, PlayState*);
 typedef void (*EnTrtBlinkFunc)(struct EnTrt*);
 
 typedef struct EnTrt {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnTrtActionFunc actionFunc;
-    /* 0x148 */ EnTrtActionFunc tmpActionFunc;
+    /* 0x148 */ EnTrtActionFunc prevActionFunc;
     /* 0x14C */ SkelAnime skelAnime;
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ UNK_TYPE1 pad1DC[0x154];
@@ -41,9 +41,9 @@ typedef struct EnTrt {
     /* 0x3F0 */ Color_RGBAu32 cursorColor;
     /* 0x400 */ u8 drawCursor;
     /* 0x402 */ s16 timer;
-    /* 0x404 */ s16 animationIndex;
+    /* 0x404 */ s16 animIndex;
     /* 0x406 */ u16 textId;
-    /* 0x408 */ u16 tmpTextId;
+    /* 0x408 */ u16 prevTextId;
     /* 0x40A */ u16 talkOptionTextId;
     /* 0x40C */ s16 lookForwardCutscene;
     /* 0x40E */ s16 lookToShelfCutscene;

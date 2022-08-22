@@ -5,12 +5,12 @@
 
 struct EnRz;
 
-typedef void (*EnRzActionFunc)(struct EnRz*, GlobalContext*);
+typedef void (*EnRzActionFunc)(struct EnRz*, PlayState*);
 
 typedef struct EnRz {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x2EC];
-    /* 0x0430 */ EnRzActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ char unk_144[0x2EC];
+    /* 0x430 */ EnRzActionFunc actionFunc;
 } EnRz; // size = 0x434
 
 extern const ActorInit En_Rz_InitVars;

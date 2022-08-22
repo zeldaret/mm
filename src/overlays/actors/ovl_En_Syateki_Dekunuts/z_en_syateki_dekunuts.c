@@ -7,33 +7,32 @@
 #include "z_en_syateki_dekunuts.h"
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/object_dekunuts/object_dekunuts.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_8000000)
 
 #define THIS ((EnSyatekiDekunuts*)thisx)
 
-void EnSyatekiDekunuts_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnSyatekiDekunuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnSyatekiDekunuts_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnSyatekiDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play);
+void EnSyatekiDekunuts_Destroy(Actor* thisx, PlayState* play);
+void EnSyatekiDekunuts_Update(Actor* thisx, PlayState* play);
+void EnSyatekiDekunuts_Draw(Actor* thisx, PlayState* play);
 
 void func_80A2BE54(EnSyatekiDekunuts* this);
-void func_80A2BF18(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
+void func_80A2BF18(EnSyatekiDekunuts* this, PlayState* play);
 void func_80A2BFC4(EnSyatekiDekunuts* this);
-void func_80A2C0F8(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
+void func_80A2C0F8(EnSyatekiDekunuts* this, PlayState* play);
 void func_80A2C150(EnSyatekiDekunuts* this);
-void func_80A2C168(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
+void func_80A2C168(EnSyatekiDekunuts* this, PlayState* play);
 void func_80A2C1AC(EnSyatekiDekunuts* this);
-void func_80A2C208(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
+void func_80A2C208(EnSyatekiDekunuts* this, PlayState* play);
 void func_80A2C27C(EnSyatekiDekunuts* this);
-void func_80A2C2E0(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
-void func_80A2C33C(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
+void func_80A2C2E0(EnSyatekiDekunuts* this, PlayState* play);
+void func_80A2C33C(EnSyatekiDekunuts* this, PlayState* play);
 void func_80A2C3AC(EnSyatekiDekunuts* this);
-void func_80A2C3F0(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
+void func_80A2C3F0(EnSyatekiDekunuts* this, PlayState* play);
 void func_80A2C478(EnSyatekiDekunuts* this);
-void func_80A2C48C(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
-void func_80A2C5DC(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
+void func_80A2C48C(EnSyatekiDekunuts* this, PlayState* play);
+void func_80A2C5DC(EnSyatekiDekunuts* this, PlayState* play);
 
 const ActorInit En_Syateki_Dekunuts_InitVars = {
     ACTOR_EN_SYATEKI_DEKUNUTS,
@@ -69,14 +68,14 @@ static ColliderCylinderInit sCylinderInit = {
 
 static Cylinder16 D_80A2CADC[] = { { 24, 40, 0, { 0, 0, 0 } } };
 
-static AnimationInfo sAnimations[] = {
-    { &object_dekunuts_Anim_003180, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_dekunuts_Anim_002A5C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_dekunuts_Anim_00326C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
-    { &object_dekunuts_Anim_002FA4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
-    { &object_dekunuts_Anim_00259C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_dekunuts_Anim_002BD4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_dekunuts_Anim_002DD4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+static AnimationInfo sAnimationInfo[] = {
+    { &gDekuScrubUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gDekuScrubBurrowAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gDekuScrubIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
+    { &gDekuScrubLookAroundAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
+    { &gDekuScrubDamageAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gDekuScrubDieAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gDekuScrubUnburrowAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -85,18 +84,18 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 2600, ICHAIN_STOP),
 };
 
-void EnSyatekiDekunuts_Init(Actor* thisx, GlobalContext* globalCtx2) {
+void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
     static s32 D_80A2CB9C = 1;
     EnSyatekiDekunuts* this = THIS;
-    GlobalContext* globalCtx = globalCtx2;
+    PlayState* play = play2;
     s32 phi_v0;
     Path* path;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
     s32 i;
 
     path = syatekiMan->path;
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     if (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) == 1) {
         Actor_SetScale(&this->actor, 0.01f);
@@ -108,11 +107,11 @@ void EnSyatekiDekunuts_Init(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     while (path->unk2 != phi_v0) {
-        path = &globalCtx->setupPathList[path->unk1];
+        path = &play->setupPathList[path->unk1];
     }
 
     for (i = 0; i < EN_SYATEKI_DEKUNUTS_GET_PARAM_FF00(&this->actor); i++) {
-        path = &globalCtx->setupPathList[path->unk1];
+        path = &play->setupPathList[path->unk1];
     }
 
     if (D_80A2CB9C == 1) {
@@ -124,15 +123,15 @@ void EnSyatekiDekunuts_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dekunuts_Skel_002468, &object_dekunuts_Anim_002A5C,
-                   this->jointTable, this->morphTable, 10);
+    SkelAnime_Init(play, &this->skelAnime, &gDekuScrubSkel, &gDekuScrubBurrowAnim, this->jointTable, this->morphTable,
+                   DEKU_SCRUB_LIMB_MAX);
     if (path == NULL) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
     this->unk_1E4 = Lib_SegmentedToVirtual(path->points);
-    this->unk_1E8 = EN_SYATEKI_DEKUNUTS_GET_PARAM_F0(&this->actor);
+    this->unk_1E8 = EN_SYATEKI_DEKUNUTS_GET_NUMBER(&this->actor);
     this->unk_1EA = path->count;
     this->unk_1D8 = 0;
     this->unk_1DC = 0;
@@ -140,14 +139,14 @@ void EnSyatekiDekunuts_Init(Actor* thisx, GlobalContext* globalCtx2) {
     func_80A2BE54(this);
 }
 
-void EnSyatekiDekunuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnSyatekiDekunuts_Destroy(Actor* thisx, PlayState* play) {
     EnSyatekiDekunuts* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void func_80A2BE54(EnSyatekiDekunuts* this) {
-    Animation_PlayOnceSetSpeed(&this->skelAnime, &object_dekunuts_Anim_003180, 0.0f);
+    Animation_PlayOnceSetSpeed(&this->skelAnime, &gDekuScrubUpAnim, 0.0f);
 
     this->actor.speedXZ = 0.0f;
     this->actor.world = this->actor.home;
@@ -164,16 +163,17 @@ void func_80A2BE54(EnSyatekiDekunuts* this) {
     this->actionFunc = func_80A2BF18;
 }
 
-void func_80A2BF18(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+void func_80A2BF18(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if ((syatekiMan->unk_26A == 1) && (this->unk_1E2 == 1) && ((syatekiMan->unk_272 & (1 << this->unk_1E8)) != 0)) {
+    if ((syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) && (this->unk_1E2 == 1) &&
+        ((syatekiMan->dekuScrubFlags & (1 << this->unk_1E8)) != 0)) {
         func_80A2BFC4(this);
-    } else if (syatekiMan->unk_26A != 1) {
+    } else if (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING) {
         this->unk_1E2 = 1;
     }
 
-    if ((syatekiMan->unk_272 == 0) && (syatekiMan->unk_274 == 0) &&
+    if ((syatekiMan->dekuScrubFlags == 0) && (syatekiMan->guayFlags == 0) &&
         (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) != 1)) {
         this->unk_1E2 = 1;
     }
@@ -190,9 +190,9 @@ void func_80A2BFC4(EnSyatekiDekunuts* this) {
     this->actor.world.pos = this->actor.prevPos = sp14;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
-    this->unk_1EE = 140 - (syatekiMan->unk_27C * 20);
+    this->unk_1EE = 140 - (syatekiMan->currentWave * 20);
 
-    if ((syatekiMan->unk_27C & 1) != 0) {
+    if ((syatekiMan->currentWave & 1) != 0) {
         this->unk_1F0 = 1;
         this->unk_1F2 = 0;
     } else {
@@ -202,7 +202,7 @@ void func_80A2BFC4(EnSyatekiDekunuts* this) {
     this->actionFunc = func_80A2C0F8;
 }
 
-void func_80A2C0F8(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+void func_80A2C0F8(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan;
 
     if (this->unk_1DA > 20) {
@@ -220,7 +220,7 @@ void func_80A2C150(EnSyatekiDekunuts* this) {
     this->actionFunc = func_80A2C168;
 }
 
-void func_80A2C168(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+void func_80A2C168(EnSyatekiDekunuts* this, PlayState* play) {
     if (this->unk_1DA > 20) {
         func_80A2C1AC(this);
         this->unk_1DA = 0;
@@ -231,13 +231,13 @@ void func_80A2C168(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
 
 void func_80A2C1AC(EnSyatekiDekunuts* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actionFunc = func_80A2C208;
 }
 
-void func_80A2C208(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+void func_80A2C208(EnSyatekiDekunuts* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         func_80A2C27C(this);
     }
@@ -250,7 +250,7 @@ void func_80A2C208(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80A2C27C(EnSyatekiDekunuts* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
     if (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) != 1) {
         this->actionFunc = func_80A2C2E0;
     } else {
@@ -258,20 +258,20 @@ void func_80A2C27C(EnSyatekiDekunuts* this) {
     }
 }
 
-void func_80A2C2E0(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+void func_80A2C2E0(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if ((this->unk_1EE < this->unk_1D8) || (syatekiMan->unk_26A != 1)) {
+    if ((this->unk_1EE < this->unk_1D8) || (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING)) {
         func_80A2C3AC(this);
     }
 
     this->unk_1D8++;
 }
 
-void func_80A2C33C(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+void func_80A2C33C(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if ((gSaveContext.unk_3DE0[1] <= 0) || (syatekiMan->unk_26A != 1)) {
+    if ((gSaveContext.unk_3DE0[1] <= 0) || (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING)) {
         func_80A2C3AC(this);
     }
 
@@ -281,14 +281,14 @@ void func_80A2C33C(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80A2C3AC(EnSyatekiDekunuts* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
     this->actionFunc = func_80A2C3F0;
 }
 
-void func_80A2C3F0(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+void func_80A2C3F0(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if (syatekiMan->unk_26A == 1) {
+    if (syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) {
         if (this->unk_1D8 > 160 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_1D8 = 0;
             func_80A2C150(this);
@@ -304,7 +304,7 @@ void func_80A2C478(EnSyatekiDekunuts* this) {
     this->actionFunc = func_80A2C48C;
 }
 
-void func_80A2C48C(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+void func_80A2C48C(EnSyatekiDekunuts* this, PlayState* play) {
     if (this->unk_1DA > 20) {
         func_80A2BE54(this);
         this->unk_1DA = 0;
@@ -313,36 +313,36 @@ void func_80A2C48C(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A2C4D0(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+void func_80A2C4D0(EnSyatekiDekunuts* this, PlayState* play) {
     static Vec3f D_80A2CBA0 = { 0.0f, 20.0f, 0.0f };
     static Vec3f D_80A2CBAC = { 0.0f, 0.0f, 0.0f };
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
     if (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) == 1) {
-        EffectSsExtra_Spawn(globalCtx, &this->actor.world.pos, &D_80A2CBA0, &D_80A2CBAC, 5, 2);
-        syatekiMan->unk_280 += 100;
-        syatekiMan->unk_26E++;
+        EffectSsExtra_Spawn(play, &this->actor.world.pos, &D_80A2CBA0, &D_80A2CBAC, 5, 2);
+        syatekiMan->score += 100;
+        syatekiMan->perGameVar2.bonusDekuScrubHitCounter++;
     } else {
-        EffectSsExtra_Spawn(globalCtx, &this->actor.world.pos, &D_80A2CBA0, &D_80A2CBAC, 5, 0);
-        syatekiMan->unk_280 += 30;
-        syatekiMan->unk_278++;
+        EffectSsExtra_Spawn(play, &this->actor.world.pos, &D_80A2CBA0, &D_80A2CBAC, 5, 0);
+        syatekiMan->score += 30;
+        syatekiMan->dekuScrubHitCounter++;
     }
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     this->unk_1E2 = 0;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
     this->unk_1D8 = 160;
     this->actionFunc = func_80A2C5DC;
 }
 
-void func_80A2C5DC(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+void func_80A2C5DC(EnSyatekiDekunuts* this, PlayState* play) {
     static Color_RGBA8 D_80A2CBB8 = { 255, 255, 255, 255 };
     static Color_RGBA8 D_80A2CBBC = { 150, 150, 150, 0 };
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (this->unk_1D8 == 160) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DEAD);
             this->unk_1D8--;
         } else if (this->unk_1D8 < 160) {
@@ -351,13 +351,13 @@ void func_80A2C5DC(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
             sp40.x = this->actor.world.pos.x;
             sp40.y = this->actor.world.pos.y + 18.0f;
             sp40.z = this->actor.world.pos.z;
-            EffectSsDeadDb_Spawn(globalCtx, &sp40, &gZeroVec3f, &gZeroVec3f, &D_80A2CBB8, &D_80A2CBBC, 200, 0, 13);
-            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_EXTINCT);
+            EffectSsDeadDb_Spawn(play, &sp40, &gZeroVec3f, &gZeroVec3f, &D_80A2CBB8, &D_80A2CBBC, 200, 0, 13);
+            SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_EXTINCT);
             sp40.y = this->actor.world.pos.y + 10.0f;
-            EffectSsHahen_SpawnBurst(globalCtx, &sp40, 3.0f, 0, 12, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
+            EffectSsHahen_SpawnBurst(play, &sp40, 3.0f, 0, 12, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
             if (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) != 1) {
-                syatekiMan->unk_272 &= ~(1 << this->unk_1E8);
+                syatekiMan->dekuScrubFlags &= ~(1 << this->unk_1E8);
             }
 
             func_80A2BE54(this);
@@ -367,11 +367,11 @@ void func_80A2C5DC(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnSyatekiDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnSyatekiDekunuts_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnSyatekiDekunuts* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if ((this->actionFunc != func_80A2BF18) && (this->unk_1D8 < this->unk_1EE) && (this->unk_1D8 > 10)) {
         if ((this->collider.base.acFlags & AC_HIT) && (this->unk_1E2 == 1)) {
@@ -382,11 +382,11 @@ void EnSyatekiDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             this->collider.base.acFlags &= ~AC_HIT;
-            func_80A2C4D0(this, globalCtx);
+            func_80A2C4D0(this, play);
         }
 
         Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     } else {
         this->collider.base.acFlags &= ~AC_HIT;
     }
@@ -394,24 +394,24 @@ void EnSyatekiDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 EnSyatekiDekunuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+s32 EnSyatekiDekunuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                        Actor* thisx) {
     EnSyatekiDekunuts* this = THIS;
 
-    if ((limbIndex == OBJECT_DEKUNUTS_LIMB_03) && (this->unk_1F0 == 1)) {
+    if ((limbIndex == DEKU_SCRUB_LIMB_HEADDRESS) && (this->unk_1F0 == 1)) {
         rot->z += this->unk_1F2;
     }
 
     return false;
 }
 
-void EnSyatekiDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnSyatekiDekunuts_Draw(Actor* thisx, PlayState* play) {
     EnSyatekiDekunuts* this = THIS;
     Vec3f temp_f20;
     s32 i;
 
     if (this->actionFunc != func_80A2BF18) {
-        SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+        SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                           EnSyatekiDekunuts_OverrideLimbDraw, NULL, &this->actor);
     }
 
@@ -421,16 +421,15 @@ void EnSyatekiDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
             temp_f20.y = this->unk_1E4[i].y;
             temp_f20.z = this->unk_1E4[i].z;
 
-            OPEN_DISPS(globalCtx->state.gfxCtx);
+            OPEN_DISPS(play->state.gfxCtx);
 
-            func_8012C28C(globalCtx->state.gfxCtx);
-            Matrix_InsertTranslation(temp_f20.x, temp_f20.y, temp_f20.z, MTXMODE_NEW);
+            func_8012C28C(play->state.gfxCtx);
+            Matrix_Translate(temp_f20.x, temp_f20.y, temp_f20.z, MTXMODE_NEW);
             Matrix_Scale(0.02f, 0.02f, 0.02f, MTXMODE_APPLY);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, &object_dekunuts_DL_001E50);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_OPA_DISP++, gDekuScrubFlowerDL);
 
-            CLOSE_DISPS(globalCtx->state.gfxCtx);
+            CLOSE_DISPS(play->state.gfxCtx);
         }
     }
 }

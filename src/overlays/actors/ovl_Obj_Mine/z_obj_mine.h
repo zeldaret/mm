@@ -5,7 +5,7 @@
 
 struct ObjMine;
 
-typedef void (*ObjMineActionFunc)(struct ObjMine*, GlobalContext*);
+typedef void (*ObjMineActionFunc)(struct ObjMine*, PlayState*);
 
 // definitely fake
 typedef struct {
