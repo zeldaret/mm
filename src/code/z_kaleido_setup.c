@@ -89,8 +89,8 @@ void KaleidoSetup_Update(PlayState* play) {
 
                                 if (pauseCtx->state == 1) {
                                     Game_SetFramerateDivisor(&play->state, 2);
-                                    if (ShrinkWindow_GetLetterboxTarget() != 0) {
-                                        ShrinkWindow_SetLetterboxTarget(0);
+                                    if (Letterbox_GetSizeTarget() != 0) {
+                                        Letterbox_SetSizeTarget(0);
                                     }
                                     func_801A3AEC(1);
                                 }

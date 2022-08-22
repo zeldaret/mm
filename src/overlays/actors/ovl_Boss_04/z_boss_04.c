@@ -399,7 +399,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
     if (this->subCamId != SUB_CAM_ID_DONE) {
         Vec3f subCamAt;
 
-        ShrinkWindow_SetLetterboxTarget(27);
+        Letterbox_SetSizeTarget(27);
         if (this->subCamAtOscillator != 0) {
             this->subCamAtOscillator--;
         }

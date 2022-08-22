@@ -2033,7 +2033,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
         Matrix_RotateZF(this->unk_1D54, MTXMODE_APPLY);
         Matrix_MultVecY(1.0f, &this->subCamUp);
         Play_SetCameraAtEyeUp(play, this->subCamId, &this->subCamAt, &this->subCamEye, &this->subCamUp);
-        ShrinkWindow_SetLetterboxTarget(27);
+        Letterbox_SetSizeTarget(27);
     }
 }
 
@@ -2241,6 +2241,6 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
         Play_SetCameraAtEyeUp(play, this->subCamId, &this->subCamAt, &subCamEye, &this->subCamUp);
         this->subCamUp.z = this->subCamUp.x = 0.0f;
         this->subCamUp.y = 1.0f;
-        ShrinkWindow_SetLetterboxTarget(27);
+        Letterbox_SetSizeTarget(27);
     }
 }

@@ -1033,7 +1033,7 @@ void MapSelect_Draw(MapSelectState* this) {
     func_8012CF0C(gfxCtx, true, true, 0, 0, 0);
 
     SET_FULLSCREEN_VIEWPORT(&this->view);
-    View_RenderView(&this->view, 0xF);
+    View_Apply(&this->view, 0xF);
     if (!this->state.running) {
         MapSelect_DrawLoadingScreen(this);
     } else {

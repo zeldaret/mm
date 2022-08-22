@@ -106,7 +106,7 @@ s32 func_800EA220(PlayState* play, CutsceneContext* csCtx, f32 target) {
 
 void func_800EA258(PlayState* play, CutsceneContext* csCtx) {
     Interface_ChangeAlpha(1);
-    ShrinkWindow_SetLetterboxTarget(32);
+    Letterbox_SetSizeTarget(32);
     if (func_800EA220(play, csCtx, 1.0f)) {
         Audio_SetCutsceneFlag(true);
         csCtx->state++;
@@ -116,7 +116,7 @@ void func_800EA258(PlayState* play, CutsceneContext* csCtx) {
 void func_800EA2B8(PlayState* play, CutsceneContext* csCtx) {
     func_800ED980(play, csCtx);
     Interface_ChangeAlpha(1);
-    ShrinkWindow_SetLetterboxTarget(32);
+    Letterbox_SetSizeTarget(32);
     if (func_800EA220(play, csCtx, 1.0f)) {
         Audio_SetCutsceneFlag(true);
         csCtx->state++;
@@ -1456,8 +1456,8 @@ void func_800EDA84(PlayState* play, CutsceneContext* csCtx) {
 
             if (gSaveContext.cutsceneTrigger == 0) {
                 Interface_ChangeAlpha(1);
-                ShrinkWindow_SetLetterboxTarget(32);
-                ShrinkWindow_SetLetterboxMagnitude(0x20);
+                Letterbox_SetSizeTarget(32);
+                Letterbox_SetSize(0x20);
                 csCtx->state++;
             }
 

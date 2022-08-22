@@ -339,7 +339,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
     }
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
-        ShrinkWindow_SetLetterboxTarget(27);
+        Letterbox_SetSizeTarget(27);
         Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }

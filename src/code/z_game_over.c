@@ -86,7 +86,7 @@ void GameOver_Update(PlayState* play) {
             gameOverCtx->state++;
             sGameOverTimer = 0;
             Kankyo_InitGameOverLights(play);
-            ShrinkWindow_SetLetterboxTarget(32);
+            Letterbox_SetSizeTarget(32);
             break;
         case GAMEOVER_REVIVE_RUMBLE:
             sGameOverTimer = 50;

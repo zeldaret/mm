@@ -36,7 +36,7 @@ void KaleidoScopeCall_Update(PlayState* play) {
 
     if ((play->pauseCtx.state != 0) || (play->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
         if (pauseCtx->state == 1 || pauseCtx->state == 19) {
-            if (ShrinkWindow_GetLetterboxMagnitude() == 0) {
+            if (Letterbox_GetSize() == 0) {
                 R_PAUSE_MENU_MODE = 1;
                 pauseCtx->unk_200 = 0;
                 pauseCtx->unk_208 = 0;

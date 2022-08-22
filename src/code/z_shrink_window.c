@@ -8,36 +8,36 @@
 ShrinkWindowContext gShrinkWindowContext;
 ShrinkWindowContext* gShrinkWindowContextPtr;
 
-void ShrinkWindow_SetLetterboxTarget(s32 target) {
+void Letterbox_SetSizeTarget(s32 target) {
     gShrinkWindowContextPtr->letterboxTarget = target;
 }
 
-s32 ShrinkWindow_GetLetterboxTarget(void) {
+s32 Letterbox_GetSizeTarget(void) {
     return gShrinkWindowContextPtr->letterboxTarget;
 }
 
-void ShrinkWindow_SetLetterboxMagnitude(s32 magnitude) {
-    gShrinkWindowContextPtr->letterboxMagnitude = magnitude;
+void Letterbox_SetSize(s32 size) {
+    gShrinkWindowContextPtr->letterboxSize = size;
 }
 
-s32 ShrinkWindow_GetLetterboxMagnitude(void) {
-    return gShrinkWindowContextPtr->letterboxMagnitude;
+s32 Letterbox_GetSize(void) {
+    return gShrinkWindowContextPtr->letterboxSize;
 }
 
-void ShrinkWindow_SetPillarboxTarget(s32 target) {
+void Pillarbox_SetSizeTarget(s32 target) {
     gShrinkWindowContextPtr->pillarboxTarget = target;
 }
 
-s32 ShrinkWindow_GetPillarboxTarget(void) {
+s32 Pillarbox_GetSizeTarget(void) {
     return gShrinkWindowContextPtr->pillarboxTarget;
 }
 
-void ShrinkWindow_SetPillarboxMagnitude(s32 magnitude) {
-    gShrinkWindowContextPtr->pillarboxMagnitude = magnitude;
+void Pillarbox_SetSize(s32 size) {
+    gShrinkWindowContextPtr->pillarboxSize = size;
 }
 
-s32 ShrinkWindow_GetPillarboxMagnitude(void) {
-    return gShrinkWindowContextPtr->pillarboxMagnitude;
+s32 Pillarbox_GetSize(void) {
+    return gShrinkWindowContextPtr->pillarboxSize;
 }
 
 void ShrinkWindow_Init(void) {
@@ -50,24 +50,24 @@ void ShrinkWindow_Destroy(void) {
 }
 
 void ShrinkWindow_Update(s32 framerateDivisor) {
-    s32 step = ((framerateDivisor == 3) ? 10 : 30 / framerateDivisor);
-    s32 nextMagnitude;
+    s32 step = (framerateDivisor == 3) ? 10 : (30 / framerateDivisor);
+    s32 nextSize;
 
-    nextMagnitude = gShrinkWindowContextPtr->letterboxMagnitude;
-    Math_StepToIGet(&nextMagnitude, gShrinkWindowContextPtr->letterboxTarget, step);
-    gShrinkWindowContextPtr->letterboxMagnitude = nextMagnitude;
+    nextSize = gShrinkWindowContextPtr->letterboxSize;
+    Math_StepToIGet(&nextSize, gShrinkWindowContextPtr->letterboxTarget, step);
+    gShrinkWindowContextPtr->letterboxSize = nextSize;
 
-    nextMagnitude = gShrinkWindowContextPtr->pillarboxMagnitude;
-    Math_StepToIGet(&nextMagnitude, gShrinkWindowContextPtr->pillarboxTarget, step);
-    gShrinkWindowContextPtr->pillarboxMagnitude = nextMagnitude;
+    nextSize = gShrinkWindowContextPtr->pillarboxSize;
+    Math_StepToIGet(&nextSize, gShrinkWindowContextPtr->pillarboxTarget, step);
+    gShrinkWindowContextPtr->pillarboxSize = nextSize;
 }
 
 void ShrinkWindow_Draw(GraphicsContext* gfxCtx) {
     Gfx* gfx;
-    s8 letterboxMagnitude = gShrinkWindowContextPtr->letterboxMagnitude;
-    s8 pillarboxMagnitude = gShrinkWindowContextPtr->pillarboxMagnitude;
+    s8 letterboxSize = gShrinkWindowContextPtr->letterboxSize;
+    s8 pillarboxSize = gShrinkWindowContextPtr->pillarboxSize;
 
-    if (letterboxMagnitude > 0) {
+    if (letterboxSize > 0) {
         OPEN_DISPS(gfxCtx);
 
         gfx = OVERLAY_DISP;
@@ -76,23 +76,23 @@ void ShrinkWindow_Draw(GraphicsContext* gfxCtx) {
         gDPSetCycleType(gfx++, G_CYC_FILL);
         gDPSetRenderMode(gfx++, G_RM_NOOP, G_RM_NOOP2);
         gDPSetFillColor(gfx++, (GPACK_RGBA5551(0, 0, 0, 1) << 16) | GPACK_RGBA5551(0, 0, 0, 1));
-        gDPFillRectangle(gfx++, 0, 0, gScreenWidth - 1, letterboxMagnitude - 1);
-        gDPFillRectangle(gfx++, 0, gScreenHeight - letterboxMagnitude, gScreenWidth - 1, gScreenHeight - 1);
+        gDPFillRectangle(gfx++, 0, 0, gScreenWidth - 1, letterboxSize - 1);
+        gDPFillRectangle(gfx++, 0, gScreenHeight - letterboxSize, gScreenWidth - 1, gScreenHeight - 1);
 
         gDPPipeSync(gfx++);
         gDPSetCycleType(gfx++, G_CYC_1CYCLE);
         gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 0);
-        gDPFillRectangle(gfx++, 0, letterboxMagnitude, gScreenWidth, letterboxMagnitude + 1);
-        gDPFillRectangle(gfx++, 0, gScreenHeight - letterboxMagnitude - 1, gScreenWidth,
-                         gScreenHeight - letterboxMagnitude);
+        gDPFillRectangle(gfx++, 0, letterboxSize, gScreenWidth, letterboxSize + 1);
+        gDPFillRectangle(gfx++, 0, gScreenHeight - letterboxSize - 1, gScreenWidth, gScreenHeight - letterboxSize);
 
         gDPPipeSync(gfx++);
         OVERLAY_DISP = gfx++;
 
         CLOSE_DISPS(gfxCtx);
     }
-    if (pillarboxMagnitude > 0) {
+
+    if (pillarboxSize > 0) {
         OPEN_DISPS(gfxCtx);
 
         gfx = OVERLAY_DISP;
@@ -102,17 +102,16 @@ void ShrinkWindow_Draw(GraphicsContext* gfxCtx) {
         gDPSetRenderMode(gfx++, G_RM_NOOP, G_RM_NOOP2);
         gDPSetFillColor(gfx++, (GPACK_RGBA5551(0, 0, 0, 1) << 16) | GPACK_RGBA5551(0, 0, 0, 1));
 
-        gDPFillRectangle(gfx++, 0, 0, pillarboxMagnitude - 1, gScreenHeight - 1);
-        gDPFillRectangle(gfx++, gScreenWidth - pillarboxMagnitude, 0, gScreenWidth - 1, gScreenHeight - 1);
+        gDPFillRectangle(gfx++, 0, 0, pillarboxSize - 1, gScreenHeight - 1);
+        gDPFillRectangle(gfx++, gScreenWidth - pillarboxSize, 0, gScreenWidth - 1, gScreenHeight - 1);
 
         gDPPipeSync(gfx++);
         gDPSetCycleType(gfx++, G_CYC_1CYCLE);
         gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 0);
 
-        gDPFillRectangle(gfx++, pillarboxMagnitude, 0, pillarboxMagnitude + 2, gScreenHeight);
-        gDPFillRectangle(gfx++, gScreenWidth - pillarboxMagnitude - 2, 0, gScreenWidth - pillarboxMagnitude,
-                         gScreenHeight);
+        gDPFillRectangle(gfx++, pillarboxSize, 0, pillarboxSize + 2, gScreenHeight);
+        gDPFillRectangle(gfx++, gScreenWidth - pillarboxSize - 2, 0, gScreenWidth - pillarboxSize, gScreenHeight);
 
         gDPPipeSync(gfx++);
         OVERLAY_DISP = gfx++;

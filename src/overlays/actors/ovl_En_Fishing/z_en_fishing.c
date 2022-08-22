@@ -5170,7 +5170,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             sSubCamVelFactor = 0.0f;
             // fallthrough
         case 2:
-            ShrinkWindow_SetLetterboxTarget(27);
+            Letterbox_SetSizeTarget(27);
 
             spFC.x = sLurePos.x - player->actor.world.pos.x;
             spFC.z = sLurePos.z - player->actor.world.pos.z;
