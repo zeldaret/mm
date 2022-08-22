@@ -185,13 +185,13 @@ s32 EnNb_ChangeAnim(EnNb* this, EnNbAnimation animIndex) {
 }
 
 void func_80BBFF24(EnNb* this, PlayState* play) {
-    f32 diff;
+    f32 yDiff;
     s32 pad;
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
 
-    diff = this->actor.focus.pos.y - this->actor.world.pos.y;
-    this->collider.dim.height = diff;
+    yDiff = this->actor.focus.pos.y - this->actor.world.pos.y;
+    this->collider.dim.height = yDiff;
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
@@ -236,7 +236,7 @@ s16 func_80BC0050(EnNb* this, s32 arg1) {
 s32 func_80BC00AC(Actor* thisx, PlayState* play) {
     EnNb* this = THIS;
     s16 cutscene = func_80BC0050(this, 0);
-    s32 ret = 0;
+    s32 ret = false;
 
     switch (this->unk_288) {
         case 0:
@@ -248,7 +248,7 @@ s32 func_80BC00AC(Actor* thisx, PlayState* play) {
                     Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(cutscene)),
                                           &this->actor);
                     this->unk_288++;
-                    ret = 1;
+                    ret = true;
             }
             break;
 
@@ -261,13 +261,13 @@ s32 func_80BC00AC(Actor* thisx, PlayState* play) {
                                       this->actor.child);
             }
             this->unk_288++;
-            ret = 1;
+            ret = true;
             break;
 
         case 9:
             ActorCutscene_Stop(cutscene);
             this->unk_288++;
-            ret = 1;
+            ret = true;
             break;
     }
 
@@ -277,7 +277,7 @@ s32 func_80BC00AC(Actor* thisx, PlayState* play) {
 s32 func_80BC01DC(Actor* thisx, PlayState* play) {
     EnNb* this = THIS;
     s32 pad;
-    s32 sp2C = 0;
+    s32 ret = false;
 
     switch (this->unk_288) {
         case 0:
@@ -315,7 +315,7 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
         case 3:
             play->interfaceCtx.unk_31A = 4;
             this->unk_288++;
-            sp2C = 1;
+            ret = true;
             break;
 
         case 4:
@@ -340,7 +340,7 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
             break;
     }
 
-    return sp2C;
+    return ret;
 }
 
 UNK_PTR func_80BC045C(EnNb* this, PlayState* play) {

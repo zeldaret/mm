@@ -20,16 +20,16 @@
         <!-- Anju's Grandma TLUTs -->
         <Texture Name="object_nb_TLUT_006910" OutName="tlut_006910" Format="rgba16" Width="16" Height="16" Offset="0x6910" />
         <Texture Name="object_nb_TLUT_006B10" OutName="tlut_006B10" Format="rgba16" Width="16" Height="16" Offset="0x6B10" />
-        <Texture Name="gNbTigerTLUT" OutName="tiger_tlut" Format="rgba16" Width="16" Height="16" Offset="0x6D10" />
+        <Texture Name="gNbTigerTLUT" OutName="nb_tiger_tlut" Format="rgba16" Width="16" Height="16" Offset="0x6D10" />
 
         <!-- Anju's Grandma Textures -->
-        <Texture Name="gNbSkinTex" OutName="skin" Format="ci8" Width="8" Height="8" Offset="0x6F10" TlutOffset="0x6910" />
-        <Texture Name="gNbEarTex" OutName="ear" Format="ci8" Width="16" Height="16" Offset="0x6F50" TlutOffset="0x6910" />
+        <Texture Name="gNbSkinTex" OutName="nb_skin" Format="ci8" Width="8" Height="8" Offset="0x6F10" TlutOffset="0x6910" />
+        <Texture Name="gNbEarTex" OutName="nb_ear" Format="ci8" Width="16" Height="16" Offset="0x6F50" TlutOffset="0x6910" />
         <Texture Name="object_nb_Tex_007050" OutName="tex_007050" Format="ci8" Width="16" Height="16" Offset="0x7050" TlutOffset="0x6910" />
-        <Texture Name="gNbUpperEyelidTex" OutName="upper_eyelid" Format="ci8" Width="16" Height="8" Offset="0x7150" TlutOffset="0x6910" />
-        <Texture Name="gNbHairTex" OutName="hair" Format="ci8" Width="16" Height="32" Offset="0x71D0" TlutOffset="0x6B10" />
-        <Texture Name="gNbEyeTex" OutName="eye" Format="ci8" Width="16" Height="8" Offset="0x73D0" TlutOffset="0x6910" />
-        <Texture Name="gNbLowerEyelidTex" OutName="lower_eyelid" Format="ci8" Width="16" Height="8" Offset="0x7450" TlutOffset="0x6910" />
+        <Texture Name="gNbUpperEyelidTex" OutName="nb_upper_eyelid" Format="ci8" Width="16" Height="8" Offset="0x7150" TlutOffset="0x6910" />
+        <Texture Name="gNbHairTex" OutName="nb_hair" Format="ci8" Width="16" Height="32" Offset="0x71D0" TlutOffset="0x6B10" />
+        <Texture Name="gNbEyeTex" OutName="nb_eye" Format="ci8" Width="16" Height="8" Offset="0x73D0" TlutOffset="0x6910" />
+        <Texture Name="gNbLowerEyelidTex" OutName="nb_lower_eyelid" Format="ci8" Width="16" Height="8" Offset="0x7450" TlutOffset="0x6910" />
         <Texture Name="object_nb_Tex_0074D0" OutName="tex_0074D0" Format="ci8" Width="16" Height="8" Offset="0x74D0" TlutOffset="0x6D10" />
         <Texture Name="object_nb_Tex_007550" OutName="tex_007550" Format="ci8" Width="16" Height="16" Offset="0x7550" TlutOffset="0x6B10" />
         <Texture Name="object_nb_Tex_007650" OutName="tex_007650" Format="i8" Width="16" Height="16" Offset="0x7650" />
@@ -37,11 +37,11 @@
         <Texture Name="object_nb_Tex_0077D0" OutName="tex_0077D0" Format="ci8" Width="16" Height="16" Offset="0x77D0" TlutOffset="0x6B10" />
         <Texture Name="object_nb_Tex_0078D0" OutName="tex_0078D0" Format="ci8" Width="16" Height="16" Offset="0x78D0" TlutOffset="0x6B10" />
         <Texture Name="object_nb_Tex_0079D0" OutName="tex_0079D0" Format="ci8" Width="32" Height="16" Offset="0x79D0" TlutOffset="0x6B10" />
-        <Texture Name="gNbBookCoverTex" OutName="book_cover" Format="ci8" Width="16" Height="16" Offset="0x7BD0" TlutOffset="0x6B10" />
-        <Texture Name="gNbSkirtTex" OutName="skirt" Format="ci8" Width="16" Height="16" Offset="0x7CD0" TlutOffset="0x6910" />
-        <Texture Name="gNbBookPageTex" OutName="book_page" Format="ci8" Width="16" Height="16" Offset="0x7DD0" TlutOffset="0x6D10" />
-        <Texture Name="gNbFingersTex" OutName="fingers" Format="ci8" Width="16" Height="16" Offset="0x7ED0" TlutOffset="0x6910" />
-        <Texture Name="gNbTigerTex" OutName="tiger" Format="ci8" Width="32" Height="64" Offset="0x7FD0" TlutOffset="0x6D10" />
+        <Texture Name="gNbBookCoverTex" OutName="nb_book_cover" Format="ci8" Width="16" Height="16" Offset="0x7BD0" TlutOffset="0x6B10" />
+        <Texture Name="gNbSkirtTex" OutName="nb_skirt" Format="ci8" Width="16" Height="16" Offset="0x7CD0" TlutOffset="0x6910" />
+        <Texture Name="gNbBookPageTex" OutName="nb_book_page" Format="ci8" Width="16" Height="16" Offset="0x7DD0" TlutOffset="0x6D10" />
+        <Texture Name="gNbFingersTex" OutName="nb_fingers" Format="ci8" Width="16" Height="16" Offset="0x7ED0" TlutOffset="0x6910" />
+        <Texture Name="gNbTigerTex" OutName="nb_tiger" Format="ci8" Width="32" Height="64" Offset="0x7FD0" TlutOffset="0x6D10" />
         <Texture Name="object_nb_Tex_0087D0" OutName="tex_0087D0" Format="ci8" Width="32" Height="32" Offset="0x87D0" TlutOffset="0x6B10" />
 
         <!-- Anju's Grandma Limbs -->
