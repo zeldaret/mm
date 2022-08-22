@@ -11,13 +11,6 @@
 
 #define THIS ((EnWizBrock*)thisx)
 
-typedef enum {
-    PLATFORM_TYPE_INACTIVE,
-    PLATFORM_TYPE_FIRE,
-    PLATFORM_TYPE_ICE,
-    PLATFORM_TYPE_MAX,
-} PlatformType;
-
 void EnWizBrock_Init(Actor* thisx, PlayState* play);
 void EnWizBrock_Destroy(Actor* thisx, PlayState* play);
 void EnWizBrock_Update(Actor* thisx, PlayState* play);
@@ -26,7 +19,7 @@ void EnWizBrock_Draw(Actor* thisx, PlayState* play);
 void EnWizBrock_SetupUpdateStatus(EnWizBrock* this, PlayState* play);
 void EnWizBrock_UpdateStatus(EnWizBrock* this, PlayState* play);
 
-s16 platformCount = 0;
+s16 platformIndex = 0;
 
 const ActorInit En_Wiz_Brock_InitVars = {
     ACTOR_EN_WIZ_BROCK,
@@ -51,7 +44,7 @@ void EnWizBrock_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.colChkInfo.health = 3;
     this->unk_1A6 = 0;
     Actor_SetScale(&this->dyna.actor, 0.01f);
-    this->platformNum = platformCount++;
+    this->platformIndex = platformIndex++;
     this->actionFunc = EnWizBrock_SetupUpdateStatus;
     this->dyna.actor.scale.x = this->dyna.actor.scale.y = this->dyna.actor.scale.z = 0.01f;
     this->alpha = 255.0f;
@@ -72,8 +65,8 @@ void EnWizBrock_SetupUpdateStatus(EnWizBrock* this, PlayState* play) {
  *  count up to 30 at which point the platforms are despawned.
  */
 void EnWizBrock_UpdateStatus(EnWizBrock* this, PlayState* play) {
-    if (this->platformType == PLATFORM_TYPE_INACTIVE) {
-        if (this->dyna.actor.colChkInfo.health != PLATFORM_TYPE_MAX) {
+    if (this->platformType == EN_WIZ_BROCK_PLATFORM_TYPE_INACTIVE) {
+        if (this->dyna.actor.colChkInfo.health != EN_WIZ_BROCK_PLATFORM_TYPE_MAX) {
             this->platformType = this->dyna.actor.colChkInfo.health;
         }
     }
@@ -126,12 +119,12 @@ void EnWizBrock_Draw(Actor* thisx, PlayState* play) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    if (this->platformType != PLATFORM_TYPE_INACTIVE) {
+    if (this->platformType != EN_WIZ_BROCK_PLATFORM_TYPE_INACTIVE) {
         OPEN_DISPS(play->state.gfxCtx);
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWizzrobePlatformTexAnim));
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 255, 255);
-        if (this->platformType == PLATFORM_TYPE_FIRE) {
+        if (this->platformType == EN_WIZ_BROCK_PLATFORM_TYPE_FIRE) {
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 00, 100, (s16)this->alpha);
         } else {
             gDPSetEnvColor(POLY_XLU_DISP++, 50, 00, 255, (s16)this->alpha);
