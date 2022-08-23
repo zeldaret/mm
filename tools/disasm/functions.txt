@@ -6910,7 +6910,7 @@
     0x8091A2D8:("BgUmajump_Destroy",),
     0x8091A30C:("BgUmajump_Update",),
     0x8091A5A0:("func_8091A5A0",),
-    0x8091A7B0:("func_8091A7B0",),
+    0x8091A7B0:("BgUmajump_Draw",),
     0x8091A8A0:("func_8091A8A0",),
     0x8091A8C4:("EnInsect_XZDistanceSquared",),
     0x8091A8F4:("EnInsect_InBottleRange",),
