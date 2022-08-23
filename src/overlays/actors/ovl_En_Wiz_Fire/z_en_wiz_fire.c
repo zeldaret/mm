@@ -473,7 +473,7 @@ void EnWizFire_Update(Actor* thisx, PlayState* play2) {
     if (this->unk_162 == 0) {
         Actor* wiz = this->actor.parent;
 
-        if ((wiz != NULL) && (wiz->id == ACTOR_EN_WIZ) && (wiz->update != NULL) && (((EnWiz*)wiz)->unk_74A != 2)) {
+        if ((wiz != NULL) && (wiz->id == ACTOR_EN_WIZ) && (wiz->update != NULL) && (((EnWiz*)wiz)->type != 2)) {
             f32 phi_f0;
 
             idx = this->unk_166 * 4;
