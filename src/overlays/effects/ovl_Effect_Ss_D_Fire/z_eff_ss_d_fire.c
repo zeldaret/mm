@@ -89,6 +89,7 @@ void EffectSsDFire_Draw(PlayState* play, u32 index, EffectSs* this) {
 
         {
             TexturePtr* tex = sFireTextures[this->rTexIndex];
+            
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(tex));
         }
 
