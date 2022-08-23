@@ -161,11 +161,11 @@ s32 Play_SetCameraAtEye(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye) {
     camera->dist = Math3D_Distance(at, eye);
 
     if (camera->focalActor != NULL) {
-        camera->atActorOffset.x = at->x - camera->focalActor->world.pos.x;
-        camera->atActorOffset.y = at->y - camera->focalActor->world.pos.y;
-        camera->atActorOffset.z = at->z - camera->focalActor->world.pos.z;
+        camera->focalActorAtOffset.x = at->x - camera->focalActor->world.pos.x;
+        camera->focalActorAtOffset.y = at->y - camera->focalActor->world.pos.y;
+        camera->focalActorAtOffset.z = at->z - camera->focalActor->world.pos.z;
     } else {
-        camera->atActorOffset.x = camera->atActorOffset.y = camera->atActorOffset.z = 0.0f;
+        camera->focalActorAtOffset.x = camera->focalActorAtOffset.y = camera->focalActorAtOffset.z = 0.0f;
     }
 
     camera->atLerpStepScale = 0.01f;
@@ -190,11 +190,11 @@ s32 Play_SetCameraAtEyeUp(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye, Vec
     camera->dist = Math3D_Distance(at, eye);
 
     if (camera->focalActor != NULL) {
-        camera->atActorOffset.x = at->x - camera->focalActor->world.pos.x;
-        camera->atActorOffset.y = at->y - camera->focalActor->world.pos.y;
-        camera->atActorOffset.z = at->z - camera->focalActor->world.pos.z;
+        camera->focalActorAtOffset.x = at->x - camera->focalActor->world.pos.x;
+        camera->focalActorAtOffset.y = at->y - camera->focalActor->world.pos.y;
+        camera->focalActorAtOffset.z = at->z - camera->focalActor->world.pos.z;
     } else {
-        camera->atActorOffset.x = camera->atActorOffset.y = camera->atActorOffset.z = 0.0f;
+        camera->focalActorAtOffset.x = camera->focalActorAtOffset.y = camera->focalActorAtOffset.z = 0.0f;
     }
 
     camera->atLerpStepScale = 0.01f;
