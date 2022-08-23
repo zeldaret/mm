@@ -148,7 +148,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
-        { 7, { { 0, 0, 0 }, 0 }, 0 },
+        { DRAGONFLY_LIMB_THORAX, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
@@ -159,7 +159,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
             BUMP_ON,
             OCELEM_NONE,
         },
-        { 6, { { 0, 0, 0 }, 0 }, 0 },
+        { DRAGONFLY_LIMB_TAIL_TIP, { { 0, 0, 0 }, 0 }, 0 },
     },
 };
 
