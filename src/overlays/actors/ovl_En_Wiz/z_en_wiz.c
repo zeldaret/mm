@@ -719,7 +719,8 @@ void EnWiz_Appear(EnWiz* this, PlayState* play) {
             } else {
                 this->action = EN_WIZ_ACTION_RUN_IN_CIRCLES;
                 this->actor.flags &= ~ACTOR_FLAG_8000000;
-                this->ghostColliders.elements[0].info.bumper.dmgFlags = 0x01013A22;
+                this->ghostColliders.elements[0].info.bumper.dmgFlags =
+                    0x1000000 | 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x200 | 0x20 | 0x2;
                 Math_Vec3f_Copy(&this->staffTargetFlameScale, &sp3C);
                 this->targetPlatformLightAlpha = 0;
                 if (this->introCutsceneState == EN_WIZ_INTRO_CS_DISAPPEAR) {
@@ -986,7 +987,7 @@ void EnWiz_Disappear(EnWiz* this, PlayState* play) {
         if (this->introCutsceneState != EN_WIZ_INTRO_CS_DISAPPEAR) {
             this->alpha = 0;
             if (this->fightState == EN_WIZ_FIGHT_STATE_FIRST_PHASE) {
-                this->ghostColliders.elements[0].info.bumper.dmgFlags = 0x01000202;
+                this->ghostColliders.elements[0].info.bumper.dmgFlags = 0x1000000 | 0x200 | 0x2;
             }
 
             this->actor.flags |= ACTOR_FLAG_1;
