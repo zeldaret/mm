@@ -20,11 +20,11 @@ typedef void (*EnWizActionFunc)(struct EnWiz*, PlayState*);
 typedef struct EnWiz {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[WIZZROBE_LIMB_MAX];
-    /* 0x200 */ Vec3s morphTable[WIZZROBE_LIMB_MAX];
+    /* 0x188 */ Vec3s jointTable[WIZROBE_LIMB_MAX];
+    /* 0x200 */ Vec3s morphTable[WIZROBE_LIMB_MAX];
     /* 0x278 */ SkelAnime ghostSkelAnime;
-    /* 0x2BC */ Vec3s ghostBaseJointTable[WIZZROBE_LIMB_MAX];
-    /* 0x334 */ Vec3s ghostMorphTable[WIZZROBE_LIMB_MAX];
+    /* 0x2BC */ Vec3s ghostBaseJointTable[WIZROBE_LIMB_MAX];
+    /* 0x334 */ Vec3s ghostMorphTable[WIZROBE_LIMB_MAX];
     /* 0x3AC */ EnWizActionFunc actionFunc;
     /* 0x3B0 */ s16 action;
     /* 0x3B2 */ s16 timer;
@@ -32,7 +32,7 @@ typedef struct EnWiz {
     /* 0x3B6 */ s16 fightState;
     /* 0x3B8 */ s16 staffFlameScroll;
     /* 0x3BA */ s16 hasActiveProjectile;
-    /* 0x3BC */ s16 hasRunToEveryPlatform; // used for the second phase cutscene to make sure the Wizzrobe visits every platform
+    /* 0x3BC */ s16 hasRunToEveryPlatform; // used for the second phase cutscene to make sure the Wizrobe visits every platform
     /* 0x3B4 */ char unk_3BE[2];
     /* 0x3C0 */ s16 rotationalVelocity;
     /* 0x3C2 */ s16 alpha;
@@ -57,7 +57,7 @@ typedef struct EnWiz {
     /* 0x474 */ ColliderJntSphElement ghostColliderElements[10];
     /* 0x6F4 */ ColliderCylinder collider;
     /* 0x740 */ s32 platformCount;
-    /* 0x744 */ s32 nextPlatformIndex; // used for the second phase cutscene to dictate where the Wizzrobe should run to next
+    /* 0x744 */ s32 nextPlatformIndex; // used for the second phase cutscene to dictate where the Wizrobe should run to next
     /* 0x748 */ s16 currentPlatformIndex;
     /* 0x74A */ s16 type;
     /* 0x74C */ s16 switchFlag;
@@ -73,7 +73,7 @@ typedef struct EnWiz {
     /* 0x806 */ s16 ghostNextPlatformIndex[10];
     /* 0x81C */ Vec3f ghostPos[10];
     /* 0x894 */ Vec3s ghostRot[10];
-    /* 0x8D0 */ Vec3s ghostJointTables[10][WIZZROBE_LIMB_MAX];
+    /* 0x8D0 */ Vec3s ghostJointTables[10][WIZROBE_LIMB_MAX];
 } EnWiz; // size = 0xD80
 
 extern const ActorInit En_Wiz_InitVars;

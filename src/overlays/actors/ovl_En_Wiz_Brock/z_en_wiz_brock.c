@@ -1,7 +1,7 @@
 /*
  * File: z_en_wiz_brock.c
  * Overlay: ovl_En_Wiz_Brock
- * Description: Wizzrobe Warp Platform
+ * Description: Wizrobe Warp Platform
  */
 
 #include "z_en_wiz_brock.h"
@@ -38,7 +38,7 @@ void EnWizBrock_Init(Actor* thisx, PlayState* play) {
     CollisionHeader* colHeader = NULL;
 
     DynaPolyActor_Init(&this->dyna, 0);
-    CollisionHeader_GetVirtual(&gWizzrobePlatformCol, &colHeader);
+    CollisionHeader_GetVirtual(&gWizrobePlatformCol, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->dyna.actor.colChkInfo.health = 3;
@@ -61,7 +61,7 @@ void EnWizBrock_SetupUpdateStatus(EnWizBrock* this, PlayState* play) {
 }
 
 /**
- * @brief Checks the platform status, when the Wizzrobe is defeated, which triggers timer to
+ * @brief Checks the platform status, when the Wizrobe is defeated, which triggers timer to
  *  count up to 30 at which point the platforms are despawned.
  */
 void EnWizBrock_UpdateStatus(EnWizBrock* this, PlayState* play) {
@@ -108,20 +108,20 @@ void EnWizBrock_Draw(Actor* thisx, PlayState* play) {
         Scene_SetRenderModeXlu(play, 0, 1);
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
-        Gfx_DrawDListOpa(play, gWizzrobePlatformDL);
+        Gfx_DrawDListOpa(play, gWizrobePlatformDL);
 
     } else {
         Scene_SetRenderModeXlu(play, 1, 2);
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, (s16)this->alpha);
-        Gfx_DrawDListXlu(play, gWizzrobePlatformDL);
+        Gfx_DrawDListXlu(play, gWizrobePlatformDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
 
     if (this->platformType != EN_WIZ_BROCK_PLATFORM_TYPE_INACTIVE) {
         OPEN_DISPS(play->state.gfxCtx);
-        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWizzrobePlatformTexAnim));
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWizrobePlatformTexAnim));
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 255, 255);
         if (this->platformType == EN_WIZ_BROCK_PLATFORM_TYPE_FIRE) {
@@ -131,7 +131,7 @@ void EnWizBrock_Draw(Actor* thisx, PlayState* play) {
         }
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, &gWizzrobePlatformCenterDL);
+        gSPDisplayList(POLY_XLU_DISP++, &gWizrobePlatformCenterDL);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

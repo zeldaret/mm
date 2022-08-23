@@ -1,7 +1,7 @@
 /*
  * File: z_en_wiz.c
  * Overlay: ovl_En_Wiz
- * Description: Wizzrobe
+ * Description: Wizrobe
  */
 
 #include "z_en_wiz.h"
@@ -52,7 +52,7 @@ typedef enum {
     /* 0 */ EN_WIZ_INTRO_CS_NOT_STARTED,
     /* 1 */ EN_WIZ_INTRO_CS_CAMERA_MOVE_TO_PLATFORM,
     /* 2 */ EN_WIZ_INTRO_CS_APPEAR,
-    /* 3 */ EN_WIZ_INTRO_CS_CAMERA_SPIN_TO_FACE_WIZZROBE,
+    /* 3 */ EN_WIZ_INTRO_CS_CAMERA_SPIN_TO_FACE_WIZROBE,
     /* 4 */ EN_WIZ_INTRO_CS_WAIT_BEFORE_RUN,
     /* 5 */ EN_WIZ_INTRO_CS_RUN_IN_CIRCLES,
     /* 6 */ EN_WIZ_INTRO_CS_DISAPPEAR,
@@ -88,7 +88,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[10] = {
             BUMP_NONE,
             OCELEM_NONE,
         },
-        { 1, { { 0, 0, 0 }, 0 }, 1 },
+        { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 1 },
     },
     {
         {
@@ -99,7 +99,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[10] = {
             BUMP_ON,
             OCELEM_NONE,
         },
-        { 1, { { 0, 0, 0 }, 0 }, 0 },
+        { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
@@ -110,7 +110,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[10] = {
             BUMP_ON,
             OCELEM_NONE,
         },
-        { 1, { { 0, 0, 0 }, 0 }, 0 },
+        { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
@@ -121,7 +121,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[10] = {
             BUMP_ON,
             OCELEM_NONE,
         },
-        { 1, { { 0, 0, 0 }, 0 }, 0 },
+        { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
@@ -132,7 +132,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[10] = {
             BUMP_ON,
             OCELEM_NONE,
         },
-        { 1, { { 0, 0, 0 }, 0 }, 0 },
+        { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
@@ -143,7 +143,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[10] = {
             BUMP_ON,
             OCELEM_NONE,
         },
-        { 1, { { 0, 0, 0 }, 0 }, 0 },
+        { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
@@ -154,7 +154,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[10] = {
             BUMP_ON,
             OCELEM_NONE,
         },
-        { 1, { { 0, 0, 0 }, 0 }, 0 },
+        { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
@@ -165,7 +165,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[10] = {
             BUMP_ON,
             OCELEM_NONE,
         },
-        { 1, { { 0, 0, 0 }, 0 }, 0 },
+        { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
@@ -176,7 +176,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[10] = {
             BUMP_ON,
             OCELEM_NONE,
         },
-        { 1, { { 0, 0, 0 }, 0 }, 0 },
+        { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
@@ -187,7 +187,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[10] = {
             BUMP_ON,
             OCELEM_NONE,
         },
-        { 1, { { 0, 0, 0 }, 0 }, 0 },
+        { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
     },
 };
 
@@ -227,13 +227,13 @@ static ColliderCylinderInit sCylinderInit = {
 typedef enum {
     /* 0x0 */ EN_WIZ_DMGEFF_NO_DAMAGE,    // Deals no damage
     /* 0x1 */ EN_WIZ_DMGEFF_UNK1,         // Deals no damage. Was probably originally intended for stunning.
-    /* 0x2 */ EN_WIZ_DMGEFF_FIRE,         // Damages and sets Ice Wizzrobes on fire
-    /* 0x3 */ EN_WIZ_DMGEFF_FREEZE,       // Damages and surrounds Fire Wizzrobes with ice
-    /* 0x4 */ EN_WIZ_DMGEFF_LIGHT_ORB,    // Damages and surrounds the Wizzrobe with light orbs
+    /* 0x2 */ EN_WIZ_DMGEFF_FIRE,         // Damages and sets Ice Wizrobes on fire
+    /* 0x3 */ EN_WIZ_DMGEFF_FREEZE,       // Damages and surrounds Fire Wizrobes with ice
+    /* 0x4 */ EN_WIZ_DMGEFF_LIGHT_ORB,    // Damages and surrounds the Wizrobe with light orbs
     /* 0xF */ EN_WIZ_DMGEFF_DAMAGE = 0xF, // Deals regular damage
 } EnWizDamageEffect;
 
-static DamageTable sFireWizzrobeDamageTable = {
+static DamageTable sFireWizrobeDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, EN_WIZ_DMGEFF_UNK1),
     /* Deku Stick     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
     /* Horse trample  */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
@@ -268,7 +268,7 @@ static DamageTable sFireWizzrobeDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
 };
 
-static DamageTable sIceWizzrobeDamageTable = {
+static DamageTable sIceWizrobeDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, EN_WIZ_DMGEFF_UNK1),
     /* Deku Stick     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
     /* Horse trample  */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
@@ -313,8 +313,8 @@ typedef enum {
 } EnWizAnimation;
 
 static AnimationHeader* sAnimations[] = {
-    &gWizzrobeIdleAnim,   &gWizzrobeRunAnim,    &gWizzrobeDanceAnim,
-    &gWizzrobeWindUpAnim, &gWizzrobeAttackAnim, &gWizzrobeDamageAnim,
+    &gWizrobeIdleAnim,   &gWizrobeRunAnim,    &gWizrobeDanceAnim,
+    &gWizrobeWindUpAnim, &gWizrobeAttackAnim, &gWizrobeDamageAnim,
 };
 
 static u8 sAnimationModes[] = {
@@ -325,10 +325,10 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnWiz* this = THIS;
 
-    SkelAnime_InitFlex(play, &this->skelAnime, &gWizzrobeSkel, &gWizzrobeIdleAnim, this->jointTable, this->morphTable,
-                       WIZZROBE_LIMB_MAX);
-    SkelAnime_InitFlex(play, &this->ghostSkelAnime, &gWizzrobeSkel, &gWizzrobeIdleAnim, this->ghostBaseJointTable,
-                       this->ghostMorphTable, WIZZROBE_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gWizrobeSkel, &gWizrobeIdleAnim, this->jointTable, this->morphTable,
+                       WIZROBE_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->ghostSkelAnime, &gWizrobeSkel, &gWizrobeIdleAnim, this->ghostBaseJointTable,
+                       this->ghostMorphTable, WIZROBE_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.0f);
     this->platformLightAlpha = 0;
     this->alpha = 255;
@@ -347,11 +347,11 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((this->type == EN_WIZ_TYPE_FIRE) || (this->type == EN_WIZ_TYPE_FIRE_NO_MINI_BOSS_BGM)) {
-        this->actor.colChkInfo.damageTable = &sFireWizzrobeDamageTable;
+        this->actor.colChkInfo.damageTable = &sFireWizrobeDamageTable;
         this->actor.colChkInfo.health = 8;
         this->actor.flags &= ~ACTOR_FLAG_100000;
     } else {
-        this->actor.colChkInfo.damageTable = &sIceWizzrobeDamageTable;
+        this->actor.colChkInfo.damageTable = &sIceWizrobeDamageTable;
         this->actor.colChkInfo.health = 6;
     }
 
@@ -452,7 +452,7 @@ void EnWiz_HandleIntroCutscene(EnWiz* this, PlayState* play) {
                 }
                 break;
 
-            case EN_WIZ_INTRO_CS_CAMERA_SPIN_TO_FACE_WIZZROBE:
+            case EN_WIZ_INTRO_CS_CAMERA_SPIN_TO_FACE_WIZROBE:
                 Math_Vec3f_Copy(&targetEye, &this->actor.world.pos);
                 Math_Vec3f_Copy(&targetAt, &this->actor.world.pos);
                 targetEye.x += Math_SinS(this->actor.world.rot.y) * 160.0f;
@@ -746,8 +746,8 @@ void EnWiz_SetupDance(EnWiz* this) {
     this->animLoopCounter = 0;
     this->action = EN_WIZ_ACTION_DANCE;
     if (this->fightState >= EN_WIZ_FIGHT_STATE_SECOND_PHASE) {
-        Animation_Change(&this->ghostSkelAnime, &gWizzrobeRunAnim, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&gWizzrobeRunAnim), ANIMMODE_LOOP, 0.0f);
+        Animation_Change(&this->ghostSkelAnime, &gWizrobeRunAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gWizrobeRunAnim),
+                         ANIMMODE_LOOP, 0.0f);
         this->fightState = EN_WIZ_FIGHT_STATE_SECOND_PHASE_WITH_RUNNING_GHOSTS;
     }
 
@@ -1279,7 +1279,7 @@ void EnWiz_OpaPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
     Vec3f sp24 = { 0.0f, 0.0f, 0.0f };
     EnWiz* this = THIS;
 
-    if (limbIndex == WIZZROBE_LIMB_STAFF) {
+    if (limbIndex == WIZROBE_LIMB_STAFF) {
         sp24.x = 7300.0f;
         sp24.y = -1500.0f;
         if (this->action != EN_WIZ_ACTION_DANCE) {
@@ -1293,12 +1293,12 @@ void EnWiz_OpaPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 
     Collider_UpdateSpheres(limbIndex, &this->ghostColliders);
 
-    if ((limbIndex == WIZZROBE_LIMB_PELVIS) || (limbIndex == WIZZROBE_LIMB_TORSO) ||
-        (limbIndex == WIZZROBE_LIMB_LEFT_UPPER_ARM) || (limbIndex == WIZZROBE_LIMB_LEFT_FOREARM) ||
-        (limbIndex == WIZZROBE_LIMB_RIGHT_UPPER_ARM) || (limbIndex == WIZZROBE_LIMB_RIGHT_FOREARM) ||
-        (limbIndex == WIZZROBE_LIMB_NECK) || (limbIndex == WIZZROBE_LIMB_HEAD) || (limbIndex == WIZZROBE_LIMB_JAW) ||
-        (limbIndex == WIZZROBE_LIMB_LEFT_SHIN) || (limbIndex == WIZZROBE_LIMB_RIGHT_SHIN) ||
-        (limbIndex == WIZZROBE_LIMB_LOINCLOTH)) {
+    if ((limbIndex == WIZROBE_LIMB_PELVIS) || (limbIndex == WIZROBE_LIMB_TORSO) ||
+        (limbIndex == WIZROBE_LIMB_LEFT_UPPER_ARM) || (limbIndex == WIZROBE_LIMB_LEFT_FOREARM) ||
+        (limbIndex == WIZROBE_LIMB_RIGHT_UPPER_ARM) || (limbIndex == WIZROBE_LIMB_RIGHT_FOREARM) ||
+        (limbIndex == WIZROBE_LIMB_NECK) || (limbIndex == WIZROBE_LIMB_HEAD) || (limbIndex == WIZROBE_LIMB_JAW) ||
+        (limbIndex == WIZROBE_LIMB_LEFT_SHIN) || (limbIndex == WIZROBE_LIMB_RIGHT_SHIN) ||
+        (limbIndex == WIZROBE_LIMB_LOINCLOTH)) {
         Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosIndex]);
         this->bodyPartsPosIndex++;
         if (this->bodyPartsPosIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
@@ -1313,7 +1313,7 @@ void EnWiz_XluPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
     EnWiz* this = THIS;
 
     if (this->action != EN_WIZ_ACTION_BURST_INTO_FLAMES) {
-        if (limbIndex == WIZZROBE_LIMB_STAFF) {
+        if (limbIndex == WIZROBE_LIMB_STAFF) {
             sp4C.x = 7300.0f;
             sp4C.y = -1500.0f;
             if (this->action != EN_WIZ_ACTION_DANCE) {
@@ -1337,17 +1337,17 @@ void EnWiz_XluPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
             SoundSource_PlaySfxAtFixedWorldPos(play, &flamePos, 10, NA_SE_EN_EXTINCT);
         }
 
-        if ((limbIndex >= WIZZROBE_LIMB_RIGHT_FOOT) && (this->timer == 0)) {
+        if ((limbIndex >= WIZROBE_LIMB_RIGHT_FOOT) && (this->timer == 0)) {
             this->timer = 4;
         }
     }
 
-    if ((limbIndex == WIZZROBE_LIMB_PELVIS) || (limbIndex == WIZZROBE_LIMB_TORSO) ||
-        (limbIndex == WIZZROBE_LIMB_LEFT_UPPER_ARM) || (limbIndex == WIZZROBE_LIMB_LEFT_FOREARM) ||
-        (limbIndex == WIZZROBE_LIMB_RIGHT_UPPER_ARM) || (limbIndex == WIZZROBE_LIMB_RIGHT_FOREARM) ||
-        (limbIndex == WIZZROBE_LIMB_NECK) || (limbIndex == WIZZROBE_LIMB_HEAD) || (limbIndex == WIZZROBE_LIMB_JAW) ||
-        (limbIndex == WIZZROBE_LIMB_LEFT_SHIN) || (limbIndex == WIZZROBE_LIMB_RIGHT_SHIN) ||
-        (limbIndex == WIZZROBE_LIMB_LOINCLOTH)) {
+    if ((limbIndex == WIZROBE_LIMB_PELVIS) || (limbIndex == WIZROBE_LIMB_TORSO) ||
+        (limbIndex == WIZROBE_LIMB_LEFT_UPPER_ARM) || (limbIndex == WIZROBE_LIMB_LEFT_FOREARM) ||
+        (limbIndex == WIZROBE_LIMB_RIGHT_UPPER_ARM) || (limbIndex == WIZROBE_LIMB_RIGHT_FOREARM) ||
+        (limbIndex == WIZROBE_LIMB_NECK) || (limbIndex == WIZROBE_LIMB_HEAD) || (limbIndex == WIZROBE_LIMB_JAW) ||
+        (limbIndex == WIZROBE_LIMB_LEFT_SHIN) || (limbIndex == WIZROBE_LIMB_RIGHT_SHIN) ||
+        (limbIndex == WIZROBE_LIMB_LOINCLOTH)) {
         Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosIndex]);
         this->bodyPartsPosIndex++;
         if (this->bodyPartsPosIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
@@ -1458,12 +1458,12 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
         }
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gWizzrobePlatformLightDL);
+        gSPDisplayList(POLY_XLU_DISP++, gWizrobePlatformLightDL);
 
         Matrix_Pop();
     }
 
-    // Draw the flame at the tip of the Wizzrobe's staff
+    // Draw the flame at the tip of the Wizrobe's staff
     Matrix_Translate(this->staffFlamePos.x, this->staffFlamePos.y, this->staffFlamePos.z, MTXMODE_NEW);
     Matrix_Scale(this->staffFlameScale.x, this->staffFlameScale.y, this->staffFlameScale.z, MTXMODE_APPLY);
     gSPSegment(POLY_XLU_DISP++, 0x08,
