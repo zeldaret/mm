@@ -41,7 +41,7 @@ static TexturePtr sTextures[] = {
     gEffBombExplosion5Tex, gEffBombExplosion6Tex, gEffBombExplosion7Tex, gEffBombExplosion8Tex,
 };
 
-static TexturePtr sLayerdTextures[] = {
+static TexturePtr sLayeredTextures[] = {
     gEffBombExplosion1Tex, gEffBombExplosion2Tex, gEffBombExplosion3Tex, gEffBombExplosion4Tex,
     gEffBombExplosion5Tex, gEffBombExplosion6Tex, gEffBombExplosion7Tex, gEffBombExplosion8Tex,
 };
@@ -100,7 +100,7 @@ void EffectSsBomb2_DrawFade(PlayState* play, u32 index, EffectSs* this) {
         gSPDisplayList(POLY_XLU_DISP++, this->gfx);
     }
 
-    CLOSE_DISPS(gfxCt);
+    CLOSE_DISPS(gfxCtx);
 }
 
 void EffectSsBomb2_DrawLayered(PlayState* play, u32 index, EffectSs* this) {
@@ -139,7 +139,7 @@ void EffectSsBomb2_DrawLayered(PlayState* play, u32 index, EffectSs* this) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB,
                             this->rPrimColorA);
             gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, 0);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sLayerdTextures[this->rTexIndex]));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sLayeredTextures[this->rTexIndex]));
             gSPDisplayList(POLY_XLU_DISP++, gEffBombExplosion2DL);
             gSPDisplayList(POLY_XLU_DISP++, gEffBombExplosion3DL);
 
