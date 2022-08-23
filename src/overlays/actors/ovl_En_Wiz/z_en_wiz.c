@@ -1445,7 +1445,7 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
     if (this->fightState == EN_WIZ_FIGHT_STATE_FIRST_PHASE) {
         Matrix_Push();
 
-        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&object_wiz_Matanimheader_00211C));
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWizrobePlatformLightTexAnim));
         Matrix_Translate(this->platformLightPos.x, this->platformLightPos.y, this->platformLightPos.z, MTXMODE_NEW);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
         gDPPipeSync(POLY_XLU_DISP++);

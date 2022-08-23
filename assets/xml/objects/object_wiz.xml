@@ -9,16 +9,20 @@
         <DList Name="object_wiz_DL_000E70" Offset="0xE70" />
         <DList Name="object_wiz_DL_000F28" Offset="0xF28" />
         <DList Name="object_wiz_DL_000FD8" Offset="0xFD8" />
-        <DList Name="object_wiz_DL_0010E0" Offset="0x10E0" />
+
+        <!-- Assets for the Wizrobe platform -->
+        <DList Name="gWizrobePlatformEmptyDL" Offset="0x10E0" /> <!-- Empty, probably was the transparent version of the following DL -->
         <DList Name="gWizrobePlatformDL" Offset="0x10E8" /> <!-- Original name is "wiz_daiza_model" ("pedestal") -->
         <Texture Name="gWizrobePlatformTex" OutName="wizrobe_platform" Format="rgba16" Width="16" Height="32" Offset="0x1198" />
-        <TextureAnimation Name="object_wiz_Matanimheader_0015A0" Offset="0x15A0" />
+        <TextureAnimation Name="gWizrobePlatformEmptyTexAnim" Offset="0x15A0" />
         <Collision Name="gWizrobePlatformCol" Offset="0x1690" />
+
+        <!-- Assets for the light that appears from the platform when the Wizrobe appears -->
         <DList Name="gWizrobePlatformLightDL" Offset="0x1860" /> <!-- Original name is "wiz_daizalight_model" -->
-        <Texture Name="object_wiz_Tex_0019F0" OutName="tex_0019F0" Format="i4" Width="32" Height="32" Offset="0x19F0" />
-        <Texture Name="object_wiz_Tex_001BF0" OutName="tex_001BF0" Format="i4" Width="16" Height="32" Offset="0x1BF0" />
-        <Texture Name="object_wiz_Tex_001CF0" OutName="tex_001CF0" Format="i8" Width="32" Height="32" Offset="0x1CF0" />
-        <TextureAnimation Name="object_wiz_Matanimheader_00211C" Offset="0x211C" />
+        <Texture Name="gWizrobePlatformLightMaskTex" OutName="wizrobe_platform_light_mask" Format="i4" Width="32" Height="32" Offset="0x19F0" />
+        <Texture Name="gWizrobePlatformLightBaseTex" OutName="wizrobe_platform_light_base" Format="i4" Width="16" Height="32" Offset="0x1BF0" />
+        <Texture Name="gWizrobePlatformLightRaysTex" OutName="wizrobe_platform_light_rays" Format="i8" Width="32" Height="32" Offset="0x1CF0" />
+        <TextureAnimation Name="gWizrobePlatformLightTexAnim" Offset="0x211C" />
 
         <!-- Wizrobe Animations -->
         <Animation Name="gWizrobeDamageAnim" Offset="0x2218" /> <!-- Original name is "wiz_damage" -->
@@ -45,11 +49,13 @@
         <Texture Name="object_wiz_Tex_005230" OutName="tex_005230" Format="i4" Width="32" Height="64" Offset="0x5230" />
         <Texture Name="object_wiz_Tex_005630" OutName="tex_005630" Format="i4" Width="16" Height="16" Offset="0x5630" />
         <DList Name="object_wiz_DL_005750" Offset="0x5750" />
+
+        <!-- Assets for the glowing light in the center of the Wizrobe platform -->
         <DList Name="gWizrobePlatformCenterDL" Offset="0x5870" /> <!-- Original name is "wiz_lighthole_modelT" -->
-        <DList Name="object_wiz_DL_005938" Offset="0x5938" />
-        <Texture Name="object_wiz_Tex_005940" OutName="tex_005940" Format="i4" Width="32" Height="32" Offset="0x5940" />
-        <Texture Name="object_wiz_Tex_005B40" OutName="tex_005B40" Format="i4" Width="16" Height="32" Offset="0x5B40" />
-        <TextureAnimation Name="gWizrobePlatformTexAnim" Offset="0x5C64" />
+        <DList Name="gWizrobePlatformCenterEmptyDL" Offset="0x5938" /> <!-- Empty, was probably the opaque version of the previous DL -->
+        <Texture Name="gWizrobePlatformCenterMaskTex" OutName="wizrobe_platform_center_mask" Format="i4" Width="32" Height="32" Offset="0x5940" />
+        <Texture Name="gWizrobePlatformCenterTex" OutName="wizrobe_platform_center" Format="i4" Width="16" Height="32" Offset="0x5B40" />
+        <TextureAnimation Name="gWizrobePlatformCenterTexAnim" Offset="0x5C64" />
 
         <!-- Wizrobe Animations -->
         <Animation Name="gWizrobeWindUpAnim" Offset="0x60E8" /> <!-- Original name is "wiz_preatack" -->
