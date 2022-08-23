@@ -217,76 +217,83 @@ static ColliderCylinderInit sCylinderInit = {
     { 35, 130, 0, { 0, 0, 0 } },
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80A48CF4 = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x1),
-    /* Deku Stick     */ DMG_ENTRY(1, 0xF),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0xF),
-    /* Zora boomerang */ DMG_ENTRY(1, 0xF),
-    /* Normal arrow   */ DMG_ENTRY(1, 0xF),
-    /* UNK_DMG_D_06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(1, 0xF),
-    /* Goron punch    */ DMG_ENTRY(1, 0xF),
-    /* Sword          */ DMG_ENTRY(1, 0xF),
-    /* Goron pound    */ DMG_ENTRY(3, 0xF),
-    /* Fire arrow     */ DMG_ENTRY(1, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(2, 0x3),
-    /* Light arrow    */ DMG_ENTRY(2, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(0, 0x0),
-    /* Deku spin      */ DMG_ENTRY(1, 0xF),
-    /* Deku bubble    */ DMG_ENTRY(1, 0xF),
-    /* Deku launch    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x1),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0xF),
-    /* Zora punch     */ DMG_ENTRY(1, 0xF),
-    /* Spin attack    */ DMG_ENTRY(1, 0xF),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
+typedef enum {
+    /* 0x0 */ EN_WIZ_DMGEFF_NO_DAMAGE,    // Deals no damage
+    /* 0x1 */ EN_WIZ_DMGEFF_UNK1,         // Deals no damage. Was probably originally intended for stunning.
+    /* 0x2 */ EN_WIZ_DMGEFF_FIRE,         // Damages and sets Ice Wizzrobes on fire
+    /* 0x3 */ EN_WIZ_DMGEFF_FREEZE,       // Damages and surrounds Fire Wizzrobes with ice
+    /* 0x4 */ EN_WIZ_DMGEFF_LIGHT_ORB,    // Damages and surrounds the Wizzrobe with light orbs
+    /* 0xF */ EN_WIZ_DMGEFF_DAMAGE = 0xF, // Deals regular damage
+} EnWizDamageEffect;
+
+static DamageTable sFireWizzrobeDamageTable = {
+    /* Deku Nut       */ DMG_ENTRY(0, EN_WIZ_DMGEFF_UNK1),
+    /* Deku Stick     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Horse trample  */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Explosives     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Zora boomerang */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Normal arrow   */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* UNK_DMG_D_06   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Hookshot       */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Goron punch    */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Sword          */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Goron pound    */ DMG_ENTRY(3, EN_WIZ_DMGEFF_DAMAGE),
+    /* Fire arrow     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_FIRE),
+    /* Ice arrow      */ DMG_ENTRY(2, EN_WIZ_DMGEFF_FREEZE),
+    /* Light arrow    */ DMG_ENTRY(2, EN_WIZ_DMGEFF_LIGHT_ORB),
+    /* Goron spikes   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Deku spin      */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Deku bubble    */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Deku launch    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_UNK1),
+    /* Zora barrier   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Normal shield  */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Light ray      */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Thrown object  */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Zora punch     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Spin attack    */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Sword beam     */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Normal Roll    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Unblockable    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Powder Keg     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80A48D14 = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x1),
-    /* Deku Stick     */ DMG_ENTRY(1, 0xF),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0xF),
-    /* Zora boomerang */ DMG_ENTRY(1, 0xF),
-    /* Normal arrow   */ DMG_ENTRY(1, 0xF),
-    /* UNK_DMG_D_06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(1, 0xF),
-    /* Goron punch    */ DMG_ENTRY(2, 0xF),
-    /* Sword          */ DMG_ENTRY(1, 0xF),
-    /* Goron pound    */ DMG_ENTRY(3, 0xF),
-    /* Fire arrow     */ DMG_ENTRY(2, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(1, 0x3),
-    /* Light arrow    */ DMG_ENTRY(2, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(0, 0x0),
-    /* Deku spin      */ DMG_ENTRY(1, 0xF),
-    /* Deku bubble    */ DMG_ENTRY(1, 0xF),
-    /* Deku launch    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x1),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0xF),
-    /* Zora punch     */ DMG_ENTRY(1, 0xF),
-    /* Spin attack    */ DMG_ENTRY(1, 0xF),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
+static DamageTable sIceWizzrobeDamageTable = {
+    /* Deku Nut       */ DMG_ENTRY(0, EN_WIZ_DMGEFF_UNK1),
+    /* Deku Stick     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Horse trample  */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Explosives     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Zora boomerang */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Normal arrow   */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* UNK_DMG_D_06   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Hookshot       */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Goron punch    */ DMG_ENTRY(2, EN_WIZ_DMGEFF_DAMAGE),
+    /* Sword          */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Goron pound    */ DMG_ENTRY(3, EN_WIZ_DMGEFF_DAMAGE),
+    /* Fire arrow     */ DMG_ENTRY(2, EN_WIZ_DMGEFF_FIRE),
+    /* Ice arrow      */ DMG_ENTRY(1, EN_WIZ_DMGEFF_FREEZE),
+    /* Light arrow    */ DMG_ENTRY(2, EN_WIZ_DMGEFF_LIGHT_ORB),
+    /* Goron spikes   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Deku spin      */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Deku bubble    */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Deku launch    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_UNK1),
+    /* Zora barrier   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Normal shield  */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Light ray      */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Thrown object  */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Zora punch     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Spin attack    */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Sword beam     */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Normal Roll    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Unblockable    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Powder Keg     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
 };
 
 typedef enum {
@@ -333,11 +340,11 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((this->type == EN_WIZ_TYPE_FIRE) || (this->type == EN_WIZ_TYPE_FIRE_NO_MINI_BOSS_BGM)) {
-        this->actor.colChkInfo.damageTable = &D_80A48CF4;
+        this->actor.colChkInfo.damageTable = &sFireWizzrobeDamageTable;
         this->actor.colChkInfo.health = 8;
         this->actor.flags &= ~ACTOR_FLAG_100000;
     } else {
-        this->actor.colChkInfo.damageTable = &D_80A48D14;
+        this->actor.colChkInfo.damageTable = &sIceWizzrobeDamageTable;
         this->actor.colChkInfo.health = 6;
     }
 
@@ -1120,11 +1127,11 @@ void EnWiz_UpdateDamage(EnWiz* this, PlayState* play) {
         }
 
         switch (this->actor.colChkInfo.damageEffect) {
-            case 0xF:
+            case EN_WIZ_DMGEFF_DAMAGE:
                 attackDealsDamage = true;
                 break;
 
-            case 2:
+            case EN_WIZ_DMGEFF_FIRE:
                 if (this->type == EN_WIZ_TYPE_ICE) {
                     this->drawDmgEffTimer = 40;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
@@ -1133,7 +1140,7 @@ void EnWiz_UpdateDamage(EnWiz* this, PlayState* play) {
                 attackDealsDamage = true;
                 break;
 
-            case 3:
+            case EN_WIZ_DMGEFF_FREEZE:
                 if ((this->type == EN_WIZ_TYPE_FIRE) || (this->type == EN_WIZ_TYPE_FIRE_NO_MINI_BOSS_BGM)) {
                     this->drawDmgEffTimer = 80;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
@@ -1145,7 +1152,7 @@ void EnWiz_UpdateDamage(EnWiz* this, PlayState* play) {
                 EnWiz_SetupDamaged(this, play);
                 break;
 
-            case 4:
+            case EN_WIZ_DMGEFF_LIGHT_ORB:
                 if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_SFX) &&
                      (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
                     (this->drawDmgEffTimer == 0)) {
