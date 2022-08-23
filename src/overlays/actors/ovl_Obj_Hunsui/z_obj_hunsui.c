@@ -213,7 +213,7 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
 
     D_80B9DED0 = Lib_SegmentedToVirtual(object_hunsui_Matanimheader_000BF0);
     D_80B9DED4 = Lib_SegmentedToVirtual(object_hunsui_Matanimheader_001888);
-    SubS_FillCutscenesList(&this->dyna.actor, &this->unk_170, 1);
+    SubS_FillCutscenesList(&this->dyna.actor, this->unk_170, ARRAY_COUNT(this->unk_170));
     this->unk_18C = 0;
 
     switch (this->unk_160) {
@@ -326,7 +326,8 @@ void ObjHunsui_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if ((this->unk_172 & 0x40) && SubS_StartActorCutscene(&this->dyna.actor, this->unk_17C, -1, 0)) {
+    if ((this->unk_172 & 0x40) &&
+        SubS_StartActorCutscene(&this->dyna.actor, this->unk_17C, -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         this->unk_172 &= ~0x40;
     }
 
@@ -354,7 +355,7 @@ void func_80B9CE64(ObjHunsui* this, PlayState* play) {
 
     if (!(this->unk_172 & 1)) {
         if (sp2C != this->unk_180) {
-            this->unk_17C = this->unk_170;
+            this->unk_17C = this->unk_170[0];
             this->unk_172 |= 0x40;
         }
     }
@@ -446,7 +447,7 @@ void func_80B9D120(ObjHunsui* this, PlayState* play) {
     }
 
     if (func_80B9C450(play, this->unk_168, this->unk_164)) {
-        this->unk_17C = this->unk_170;
+        this->unk_17C = this->unk_170[0];
         this->unk_172 |= 0x40;
         func_80B9D4D0(this, play);
     }
@@ -559,7 +560,7 @@ void func_80B9D508(ObjHunsui* this, PlayState* play) {
     }
 
     if (!(this->unk_172 & 1) && !func_80B9C450(play, this->unk_168, this->unk_164)) {
-        this->unk_17C = this->unk_170;
+        this->unk_17C = this->unk_170[0];
         this->unk_172 |= 0x40;
         func_80B9D0FC(this, play);
     }
