@@ -49,7 +49,7 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
             // Actors which may be pictographed anywhere
             switch (actor->id) {
                 case ACTOR_EN_KAKASI:
-                    if (GET_KAKASI_ABOVE_GROUND(actor) == 1) {
+                    if (KAKASI_GET_ABOVE_GROUND(actor) == 1) {
                         seen |= PICTO_SEEN_ANYWHERE;
                         break; //! @bug break is inside conditional, meaning it falls through if it is false
                     }

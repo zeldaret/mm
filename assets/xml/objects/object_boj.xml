@@ -75,7 +75,7 @@
         <Limb Name="object_boj_Standardlimb_00C1E0" Type="Standard" EnumName="OBJECT_BOJ_LIMB_0D" Offset="0xC1E0" />
         <Limb Name="object_boj_Standardlimb_00C1EC" Type="Standard" EnumName="OBJECT_BOJ_LIMB_0E" Offset="0xC1EC" />
         <Limb Name="object_boj_Standardlimb_00C1F8" Type="Standard" EnumName="OBJECT_BOJ_LIMB_0F" Offset="0xC1F8" />
-        <Skeleton Name="object_boj_Skel_00C240" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOJ_LIMB_NONE" LimbMax="OBJECT_BOJ_LIMB_MAX" EnumName="object_boj_Limbs" Offset="0xC240" /> <!-- object_ginko_skeleton -->
+        <Skeleton Name="object_boj_Skel_00C240" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOJ_LIMB_NONE" LimbMax="OBJECT_BOJ_LIMB_MAX" EnumName="ObjectBojLimb" Offset="0xC240" /> <!-- object_ginko_skeleton -->
         <Animation Name="object_boj_Anim_00DED8" Offset="0xDED8" />
         <Animation Name="object_boj_Anim_00F920" Offset="0xF920" />
         <Animation Name="object_boj_Anim_00FC1C" Offset="0xFC1C" />
