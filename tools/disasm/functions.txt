@@ -10443,7 +10443,7 @@
     0x80A45568:("EnWiz_Destroy",),
     0x80A455C4:("EnWiz_ChangeAnim",),
     0x80A456A0:("EnWiz_HandleIntroCutscene",),
-    0x80A45CD8:("func_80A45CD8",),
+    0x80A45CD8:("EnWiz_SelectPlatform",),
     0x80A460A4:("EnWiz_MoveGhosts",),
     0x80A46280:("EnWiz_StartIntroCutscene",),
     0x80A462F8:("EnWiz_SetupAppear",),

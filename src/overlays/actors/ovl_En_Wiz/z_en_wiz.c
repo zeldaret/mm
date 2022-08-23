@@ -431,7 +431,7 @@ void EnWiz_HandleIntroCutscene(EnWiz* this, PlayState* play) {
                     }
 
                     EnWiz_ChangeAnim(this, EN_WIZ_ANIM_IDLE, true);
-                    this->unk_3CA = 0;
+                    this->shouldStartTimer = false;
                     this->targetPlatformLightAlpha = 255;
                     Math_Vec3f_Copy(&this->platformLightPos, &this->actor.world.pos);
                     if (this->fightState == EN_WIZ_FIGHT_STATE_FIRST_PHASE) {
@@ -516,7 +516,8 @@ void EnWiz_HandleIntroCutscene(EnWiz* this, PlayState* play) {
     }
 }
 
-void func_80A45CD8(EnWiz* this, PlayState* play) {
+// Also does some ghost stuff, maybe needs a better name
+void EnWiz_SelectPlatform(EnWiz* this, PlayState* play) {
     Actor* prop;
     s32 i;
     s32 j;
@@ -587,7 +588,7 @@ void func_80A45CD8(EnWiz* this, PlayState* play) {
                         Math_Vec3f_Copy(&this->ghostPos[i], &this->platforms[i]->world.pos);
                         this->ghostRot[i] = this->actor.world.rot;
                         this->ghostAlpha[i] = 100;
-                        this->unk_806[i] = i;
+                        this->ghostNextPlatformIndex[i] = i;
                         for (j = 0; j < ARRAY_COUNT(this->jointTable); j++) {
                             this->ghostJointTables[i][j] = this->jointTable[j];
                         }
@@ -602,7 +603,7 @@ void func_80A45CD8(EnWiz* this, PlayState* play) {
 
 void EnWiz_MoveGhosts(EnWiz* this) {
     s32 i;
-    s32 j;
+    s32 ghostNextPlatformIndex;
     s32 playSfx = false;
 
     for (i = 0; i < this->platformCount; i++) {
@@ -610,23 +611,24 @@ void EnWiz_MoveGhosts(EnWiz* this) {
             f32 diffX;
             f32 diffZ;
 
-            j = this->unk_806[i];
-            diffX = this->platforms[j]->world.pos.x - this->ghostPos[i].x;
-            diffZ = this->platforms[j]->world.pos.z - this->ghostPos[i].z;
+            ghostNextPlatformIndex = this->ghostNextPlatformIndex[i];
+            diffX = this->platforms[ghostNextPlatformIndex]->world.pos.x - this->ghostPos[i].x;
+            diffZ = this->platforms[ghostNextPlatformIndex]->world.pos.z - this->ghostPos[i].z;
             playSfx++;
 
             if (sqrtf(SQ(diffX) + SQ(diffZ)) < 30.0f) {
-                this->unk_806[i]--;
-                if (this->unk_806[i] < 0) {
-                    this->unk_806[i] = this->platformCount - 1;
+                this->ghostNextPlatformIndex[i]--;
+                if (this->ghostNextPlatformIndex[i] < 0) {
+                    this->ghostNextPlatformIndex[i] = this->platformCount - 1;
                 }
             }
 
-            j = this->unk_806[i];
-            Math_ApproachF(&this->ghostPos[i].x, this->platforms[j]->world.pos.x, 0.3f, 30.0f);
-            Math_ApproachF(&this->ghostPos[i].y, this->platforms[j]->world.pos.y, 0.3f, 30.0f);
-            Math_ApproachF(&this->ghostPos[i].z, this->platforms[j]->world.pos.z, 0.3f, 30.0f);
-            this->ghostRot[i].y = Math_Vec3f_Yaw(&this->ghostPos[i], &this->platforms[j]->world.pos);
+            ghostNextPlatformIndex = this->ghostNextPlatformIndex[i];
+            Math_ApproachF(&this->ghostPos[i].x, this->platforms[ghostNextPlatformIndex]->world.pos.x, 0.3f, 30.0f);
+            Math_ApproachF(&this->ghostPos[i].y, this->platforms[ghostNextPlatformIndex]->world.pos.y, 0.3f, 30.0f);
+            Math_ApproachF(&this->ghostPos[i].z, this->platforms[ghostNextPlatformIndex]->world.pos.z, 0.3f, 30.0f);
+            this->ghostRot[i].y =
+                Math_Vec3f_Yaw(&this->ghostPos[i], &this->platforms[ghostNextPlatformIndex]->world.pos);
         }
     }
 
@@ -654,7 +656,7 @@ void EnWiz_SetupAppear(EnWiz* this, PlayState* play) {
     this->action = EN_WIZ_ACTION_APPEAR;
 
     if (this->timer == 0) {
-        func_80A45CD8(this, play);
+        EnWiz_SelectPlatform(this, play);
 
         if (this->introCutsceneState != EN_WIZ_INTRO_CS_NOT_STARTED) {
             angle = Math_Vec3f_Yaw(&this->actor.world.pos, &player->actor.world.pos);
@@ -665,7 +667,7 @@ void EnWiz_SetupAppear(EnWiz* this, PlayState* play) {
             }
 
             EnWiz_ChangeAnim(this, EN_WIZ_ANIM_IDLE, true);
-            this->unk_3CA = 0;
+            this->shouldStartTimer = false;
             this->targetPlatformLightAlpha = 255;
             Math_Vec3f_Copy(&this->platformLightPos, &this->actor.world.pos);
 
@@ -700,9 +702,9 @@ void EnWiz_Appear(EnWiz* this, PlayState* play) {
 
             if (this->fightState == EN_WIZ_FIGHT_STATE_FIRST_PHASE) {
                 Math_SmoothStepToS(&this->platformLightAlpha, this->targetPlatformLightAlpha, 10, 10, 10);
-                if (this->unk_3CA == 0) {
+                if (!this->shouldStartTimer) {
                     this->timer = 20;
-                    this->unk_3CA = 1;
+                    this->shouldStartTimer = true;
                 }
             } else {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_VOICE - SFX_FLAG);
@@ -891,7 +893,7 @@ void EnWiz_WindUp(EnWiz* this, PlayState* play) {
 void EnWiz_SetupAttack(EnWiz* this) {
     EnWiz_ChangeAnim(this, EN_WIZ_ANIM_ATTACK, false);
     this->timer = 0;
-    this->unk_3CA = 0;
+    this->shouldStartTimer = false;
     this->action = EN_WIZ_ACTION_ATTACK;
     this->actionFunc = EnWiz_Attack;
 }
@@ -925,9 +927,9 @@ void EnWiz_Attack(EnWiz* this, PlayState* play) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_MAGIC_FIRE);
         }
 
-        if ((curFrame >= 8.0f) && (this->unk_3CA == 0)) {
+        if ((curFrame >= 8.0f) && (!this->shouldStartTimer)) {
             this->timer = 3;
-            this->unk_3CA = 1;
+            this->shouldStartTimer = true;
         }
 
         if (this->endFrame <= curFrame) {
@@ -1113,7 +1115,7 @@ void EnWiz_Dead(EnWiz* this, PlayState* play) {
     }
 
     if (this->alpha < 30) {
-        func_80A45CD8(this, play);
+        EnWiz_SelectPlatform(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EN_EXTINCT);
         Actor_MarkForDeath(&this->actor);
         if (this->switchFlag >= 0) {

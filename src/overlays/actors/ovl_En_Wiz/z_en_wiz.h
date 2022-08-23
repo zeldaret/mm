@@ -39,7 +39,7 @@ typedef struct EnWiz {
     /* 0x3C4 */ s16 platformLightAlpha;
     /* 0x3C6 */ s16 targetPlatformLightAlpha;
     /* 0x3C8 */ s16 introCutsceneCameraAngle;
-    /* 0x3CA */ u8 unk_3CA; // Always false for phase 2. Mostly true for phase 1 except for 1 frame during disappearance
+    /* 0x3CA */ u8 shouldStartTimer;
     /* 0x3CB */ u8 introCutsceneState;
     /* 0x3CC */ s32 musicStartTimer;
     /* 0x3D0 */ f32 endFrame;
@@ -70,7 +70,7 @@ typedef struct EnWiz {
     /* 0x760 */ Vec3f bodyPartsPos[12];
     /* 0x7F0 */ s16 bodyPartsPosIndex;
     /* 0x7F2 */ s16 ghostAlpha[10];
-    /* 0x806 */ s16 unk_806[10];
+    /* 0x806 */ s16 ghostNextPlatformIndex[10];
     /* 0x81C */ Vec3f ghostPos[10];
     /* 0x894 */ Vec3s ghostRot[10];
     /* 0x8D0 */ Vec3s ghostJointTables[10][WIZZROBE_LIMB_MAX];
