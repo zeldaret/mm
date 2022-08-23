@@ -44,7 +44,9 @@
         <Texture Name="object_wiz_Tex_003B00" OutName="tex_003B00" Format="i4" Width="32" Height="64" Offset="0x3B00" />
         <DList Name="object_wiz_DL_003FC0" Offset="0x3FC0" />
         <Texture Name="object_wiz_Tex_0040B0" OutName="tex_0040B0" Format="i8" Width="64" Height="64" Offset="0x40B0" />
-        <!-- <Blob Name="object_wiz_Blob_0050B0" Size="0x40" Offset="0x50B0" /> -->
+        <Array Name="object_wiz_Vtx_0050B0" Count="4" Offset="0x50B0">
+            <Vtx/>
+        </Array>
         <DList Name="object_wiz_DL_005190" Offset="0x5190" />
         <Texture Name="object_wiz_Tex_005230" OutName="tex_005230" Format="i4" Width="32" Height="64" Offset="0x5230" />
         <Texture Name="object_wiz_Tex_005630" OutName="tex_005630" Format="i4" Width="16" Height="16" Offset="0x5630" />
