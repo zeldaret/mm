@@ -7,38 +7,38 @@
 struct Player;
 
 typedef enum {
-    /* 0x00 */ PLAYER_SHIELD_NONE,
-    /* 0x01 */ PLAYER_SHIELD_HEROS_SHIELD,
-    /* 0x02 */ PLAYER_SHIELD_MIRROR_SHIELD,
-    /* 0x03 */ PLAYER_SHIELD_MAX
+    /* 0 */ PLAYER_SHIELD_NONE,
+    /* 1 */ PLAYER_SHIELD_HEROS_SHIELD,
+    /* 2 */ PLAYER_SHIELD_MIRROR_SHIELD,
+    /* 3 */ PLAYER_SHIELD_MAX
 } PlayerShield;
 
 typedef enum {
-    /* 0x00 */ PLAYER_BOOTS_FIERCE_DEITY,
-    /* 0x01 */ PLAYER_BOOTS_HYLIAN,
-    /* 0x02 */ PLAYER_BOOTS_GIANT,
-    /* 0x03 */ PLAYER_BOOTS_DEKU,
-    /* 0x04 */ PLAYER_BOOTS_ZORA_LAND,
-    /* 0x05 */ PLAYER_BOOTS_ZORA_UNDERWATER,
-    /* 0x06 */ PLAYER_BOOTS_GORON,
-    /* 0x07 */ PLAYER_BOOTS_MAX
+    /* 0 */ PLAYER_BOOTS_FIERCE_DEITY,
+    /* 1 */ PLAYER_BOOTS_HYLIAN,
+    /* 2 */ PLAYER_BOOTS_GIANT,
+    /* 3 */ PLAYER_BOOTS_DEKU,
+    /* 4 */ PLAYER_BOOTS_ZORA_LAND,
+    /* 5 */ PLAYER_BOOTS_ZORA_UNDERWATER,
+    /* 6 */ PLAYER_BOOTS_GORON,
+    /* 7 */ PLAYER_BOOTS_MAX
 } PlayerBoots;
 
 typedef enum {
-    /* 0x00 */ PLAYER_STRENGTH_DEKU,
-    /* 0x01 */ PLAYER_STRENGTH_HUMAN,
-    /* 0x02 */ PLAYER_STRENGTH_ZORA,
-    /* 0x03 */ PLAYER_STRENGTH_GORON,
-    /* 0x04 */ PLAYER_STRENGTH_MAX
+    /* 0 */ PLAYER_STRENGTH_DEKU,
+    /* 1 */ PLAYER_STRENGTH_HUMAN,
+    /* 2 */ PLAYER_STRENGTH_ZORA,
+    /* 3 */ PLAYER_STRENGTH_GORON,
+    /* 4 */ PLAYER_STRENGTH_MAX
 } PlayerStrength;
 
 typedef enum {
-    /* 0x00 */ PLAYER_FORM_FIERCE_DEITY,
-    /* 0x01 */ PLAYER_FORM_GORON,
-    /* 0x02 */ PLAYER_FORM_ZORA,
-    /* 0x03 */ PLAYER_FORM_DEKU,
-    /* 0x04 */ PLAYER_FORM_HUMAN,
-    /* 0x05 */ PLAYER_FORM_MAX
+    /* 0 */ PLAYER_FORM_FIERCE_DEITY,
+    /* 1 */ PLAYER_FORM_GORON,
+    /* 2 */ PLAYER_FORM_ZORA,
+    /* 3 */ PLAYER_FORM_DEKU,
+    /* 4 */ PLAYER_FORM_HUMAN,
+    /* 5 */ PLAYER_FORM_MAX
 } PlayerTransformation;
 
 typedef enum {
@@ -70,10 +70,11 @@ typedef enum {
     /* 0x19 */ PLAYER_MASK_MAX
 } PlayerMask;
 
-typedef enum {
+typedef enum PlayerActionParam {
+    /*   -1 */ PLAYER_AP_MINUS1 = -1,
     /* 0x00 */ PLAYER_AP_NONE,
     /* 0x01 */ PLAYER_AP_LAST_USED,
-    /* 0x02 */ PLAYER_AP_FISHING_POLE,
+    /* 0x02 */ PLAYER_AP_FISHING_ROD,
     /* 0x03 */ PLAYER_AP_SWORD_KOKIRI,
     /* 0x04 */ PLAYER_AP_SWORD_RAZOR,
     /* 0x05 */ PLAYER_AP_SWORD_GILDED,
@@ -248,12 +249,12 @@ typedef struct {
 } struct_80122D44_arg1; // size >= 0x114
 
 typedef struct struct_80122744_arg1 {
-    /* 0x00 */ s8 unk_00;
-    /* 0x01 */ s8 unk_01;
-    /* 0x02 */ s8 unk_02;
-    /* 0x03 */ s8 unk_03;
-    /* 0x04 */ Vec3s* unk_04;
-} struct_80122744_arg1; // size = 0x08
+    /* 0x0 */ s8 unk_00;
+    /* 0x1 */ s8 unk_01;
+    /* 0x2 */ s8 unk_02;
+    /* 0x3 */ s8 unk_03;
+    /* 0x4 */ Vec3s* unk_04;
+} struct_80122744_arg1; // size = 0x8
 
 // 
 #define PLAYER_STATE1_1          (1 << 0)

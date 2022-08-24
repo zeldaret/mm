@@ -34,7 +34,7 @@ void AudioPlayback_InitNoteSub(Note* note, NoteSubEu* sub, NoteSubAttributes* at
     sub->bitField0.stereoStrongLeft = false;
     sub->bitField0.stereoHeadsetEffects = stereoData.stereoHeadsetEffects;
     sub->bitField0.usesHeadsetPanEffects = stereoData.usesHeadsetPanEffects;
-    if (stereoHeadsetEffects && gAudioContext.soundMode == AUDIO_MODE_HEADSET) {
+    if (stereoHeadsetEffects && gAudioContext.soundMode == SOUNDMODE_HEADSET) {
         smallPanIndex = pan >> 1;
         if (smallPanIndex > 0x3F) {
             smallPanIndex = 0x3F;
@@ -46,7 +46,7 @@ void AudioPlayback_InitNoteSub(Note* note, NoteSubEu* sub, NoteSubAttributes* at
 
         volLeft = gHeadsetPanVolume[pan];
         volRight = gHeadsetPanVolume[0x7F - pan];
-    } else if (stereoHeadsetEffects && gAudioContext.soundMode == AUDIO_MODE_STEREO) {
+    } else if (stereoHeadsetEffects && gAudioContext.soundMode == SOUNDMODE_STEREO) {
         strongLeft = strongRight = false;
         sub->headsetPanRight = 0;
         sub->headsetPanLeft = 0;
@@ -80,7 +80,7 @@ void AudioPlayback_InitNoteSub(Note* note, NoteSubEu* sub, NoteSubAttributes* at
                 break;
         }
 
-    } else if (gAudioContext.soundMode == AUDIO_MODE_MONO) {
+    } else if (gAudioContext.soundMode == SOUNDMODE_MONO) {
         sub->bitField0.stereoHeadsetEffects = false;
         sub->bitField0.usesHeadsetPanEffects = false;
         volLeft = 0.707f; // approx 1/sqrt(2)

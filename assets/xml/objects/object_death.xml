@@ -75,7 +75,7 @@
         <Limb Name="object_death_Standardlimb_00AC90" Type="Standard" EnumName="OBJECT_DEATH_LIMB_13" Offset="0xAC90" />
         <Limb Name="object_death_Standardlimb_00AC9C" Type="Standard" EnumName="OBJECT_DEATH_LIMB_14" Offset="0xAC9C" />
         <Limb Name="object_death_Standardlimb_00ACA8" Type="Standard" EnumName="OBJECT_DEATH_LIMB_15" Offset="0xACA8" />
-        <Skeleton Name="object_death_Skel_00AD08" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DEATH_LIMB_NONE" LimbMax="OBJECT_DEATH_LIMB_MAX" EnumName="object_death_Limbs" Offset="0xAD08" />
+        <Skeleton Name="object_death_Skel_00AD08" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DEATH_LIMB_NONE" LimbMax="OBJECT_DEATH_LIMB_MAX" EnumName="ObjectDeathLimb" Offset="0xAD08" />
         <Animation Name="object_death_Anim_00B284" Offset="0xB284" />
         <Animation Name="object_death_Anim_00B508" Offset="0xB508" />
         <Animation Name="object_death_Anim_00CB2C" Offset="0xCB2C" />
