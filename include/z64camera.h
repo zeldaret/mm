@@ -391,7 +391,7 @@ typedef struct {
     /* 0x60 */ s16 pitch;
     /* 0x62 */ s16 yaw;
     /* 0x64 */ s16 unk_64;
-    /* 0x66 */ s16 unk_66; // startSwingTimer
+    /* 0x66 */ s16 timer; // startSwingTimer
 } SwingAnimation; // size = 0x68
 
 
@@ -634,13 +634,13 @@ typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
+    /* 0x0C */ f32 timer1;
     /* 0x10 */ Vec3f unk_10;
     /* 0x1C */ s16 unk_1C;
     /* 0x1E */ s16 unk_1E;
     /* 0x20 */ s16 unk_20;
-    /* 0x22 */ s16 unk_22;
-    /* 0x24 */ s16 unk_24;
+    /* 0x22 */ s16 timer2;
+    /* 0x24 */ s16 timer3;
     /* 0x26 */ s16 unk_26;
 } Parallel1ReadWriteData; // size = 0x28
 
@@ -713,7 +713,7 @@ typedef struct {
     /* 0x06 */ s16 unk_06;
     /* 0x08 */ s16 unk_08;
     /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ s16 unk_0C;
+    /* 0x0C */ s16 timer;
     /* 0x0E */ s16 unk_0E;
     /* 0x10 */ s32 unk_10; // unused?
     /* 0x1C */ s16 unk_1C;
@@ -762,9 +762,9 @@ typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ s16 unk_04;
     /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
+    /* 0x08 */ s16 timer1;
     /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ s32 unk_0C; // mode
+    /* 0x0C */ s32 timer2;
     /* 0x10 */ s16 unk_10;
     /* 0x12 */ s16 unk_12;
     /* 0x1C */ s16 unk_1C;
@@ -906,7 +906,7 @@ typedef struct {
  *================================
  */
 
-#define KEEPON3_FIXED_DATA(yOffset, data01, data02, data13, data14, data15, data16, data17, fov, data08, data04, interfaceFlags, data18) \
+#define KEEPON3_FIXED_DATA(yOffset, data01, data02, data13, data14, data15, data16, data17, fov, data08, timer, interfaceFlags, data18) \
     { yOffset, CAM_DATA_Y_OFFSET }, \
     { data01,  CAM_DATA_01 }, \
     { data02,  CAM_DATA_02 }, \
@@ -917,7 +917,7 @@ typedef struct {
     { data17,  CAM_DATA_17 }, \
     { fov,     CAM_DATA_FOV }, \
     { data08,  CAM_DATA_08 }, \
-    { data04,  CAM_DATA_04 }, \
+    { timer,  CAM_DATA_04 }, \
     { interfaceFlags,   CAM_DATA_INTERFACE_FLAGS }, \
     { data18,  CAM_DATA_18 }
 
@@ -933,7 +933,7 @@ typedef struct {
     /* 0x20 */ f32 unk_20;
     /* 0x24 */ f32 unk_24;
     /* 0x28 */ f32 unk_28;
-    /* 0x2C */ s16 unk_2C;
+    /* 0x2C */ s16 timer; // initial timer, stored at twice the value used in code
     /* 0x2E */ s16 interfaceFlags;
 } KeepOn3ReadOnlyData; // size = 0x30
 
@@ -943,7 +943,7 @@ typedef struct {
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ Actor* unk_0C;
     /* 0x10 */ Vec3f unk_10;
-    /* 0x1C */ s16 unk_1C;
+    /* 0x1C */ s16 timer;
 } KeepOn3ReadWriteData; // size = 0x20
 
 typedef struct {
@@ -961,7 +961,7 @@ typedef struct {
  *================================
  */
 
-#define KEEPON4_FIXED_DATA(yOffset, data01, pitchTarget, data10, data18, fov, interfaceFlags, data04, data12) \
+#define KEEPON4_FIXED_DATA(yOffset, data01, pitchTarget, data10, data18, fov, interfaceFlags, data04, timer) \
     { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data01,      CAM_DATA_01 }, \
     { pitchTarget, CAM_DATA_PITCHTARGET }, \
@@ -970,7 +970,7 @@ typedef struct {
     { fov,         CAM_DATA_FOV }, \
     { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }, \
     { data04,      CAM_DATA_04 }, \
-    { data12,      CAM_DATA_12 }
+    { timer,      CAM_DATA_12 }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -981,7 +981,7 @@ typedef struct {
     /* 0x14 */ f32 unk_14;
     /* 0x18 */ f32 unk_18;
     /* 0x1C */ s16 interfaceFlags;
-    /* 0x1E */ s16 unk_1E;
+    /* 0x1E */ s16 timer;
 } KeepOn4ReadOnlyData; // size = 0x20
 
 typedef struct {
@@ -991,7 +991,7 @@ typedef struct {
     /* 0x0C */ Actor* unk_0C;
     /* 0x10 */ s16 unk_10;
     /* 0x12 */ s16 unk_12;
-    /* 0x14 */ s16 unk_14;
+    /* 0x14 */ s16 timer;
     /* 0x16 */ s16 unk_16;
     /* 0x18 */ s16 unk_18;
 } KeepOn4ReadWriteData; // size = 0x1C
@@ -1128,7 +1128,7 @@ typedef struct {
     /* 0x0 */ f32 unk_00;
     /* 0x4 */ s16 unk_04; // yaw
     /* 0x6 */ s16 unk_06; // pitch
-    /* 0x8 */ s16 unk_08;
+    /* 0x8 */ s16 timer;
 } Subject1ReadWriteData; // size = 0xC
 
 typedef struct {
@@ -1198,7 +1198,7 @@ typedef struct {
     /* 0x28 */ Vec3f unk_28;
     /* 0x34 */ Vec3s unk_34;
     /* 0x3A */ s16 unk_3A;
-    /* 0x3C */ s16 unk_3C;
+    /* 0x3C */ s16 timer;
     /* 0x3E */ s16 unk_3E;
 } Unique0ReadWriteData; // size = 0x40
 
@@ -1326,7 +1326,7 @@ typedef struct {
     /* 0x14 */ f32 unk_14;
     /* 0x18 */ VecSph unk_18; // sp18-1C-20--24-26-28 // CutsceneCameraPoint?
     /* 0x20 */ s16 unk_20;
-    /* 0x22 */ s16 unk_22;
+    /* 0x22 */ s16 timer;
 } Demo4ReadWriteData; // size = 0x24
 
 typedef struct {
@@ -1605,7 +1605,7 @@ typedef struct Camera {
     /* 0x15A */ s16 roll;
     /* 0x15C */ s16 viewFlags;
     /* 0x15E */ s16 animState; // Determines the current state of the current camera behavior function
-    /* 0x160 */ s16 unk160;
+    /* 0x160 */ s16 timer; // Unused remnant of OoT: originally destoryed subCamera when timer ran out
     /* 0x162 */ s16 doorTimer2; // a door timer used when door cam is indexed from bgCamDataId
     /* 0x164 */ s16 camId;
     /* 0x166 */ s16 prevBgCamDataId;
