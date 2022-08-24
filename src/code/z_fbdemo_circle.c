@@ -7,8 +7,8 @@ Gfx D_801D0D00[] = {
                      G_AC_THRESHOLD | G_ZS_PRIM | AA_EN | IM_RD | CVG_DST_FULL | ZMODE_OPA | CVG_X_ALPHA | FORCE_BL |
                          GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA) |
                          GBL_c2(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1)),
-    gsDPSetPrimColor(0, 0xFF, 0x00, 0x00, 0x00, 0x01),
-    gsDPSetBlendColor(0x00, 0x00, 0x00, 0x01),
+    gsDPSetPrimColor(0, 255, 0, 0, 0, 1),
+    gsDPSetBlendColor(0, 0, 0, 1),
     gsSPEndDisplayList(),
 };
 
@@ -74,22 +74,22 @@ void TransitionCircle_SetType(void* thisx, s32 type) {
     }
 }
 
-void TransitionCircle_LoadAndSetTexture(Gfx** gfxp, TexturePtr texture, s32 fmt, s32 arg3, s32 arg4, s32 arg5,
+void TransitionCircle_LoadAndSetTexture(Gfx** gfxp, TexturePtr texture, s32 fmt, s32 arg3, s32 masks, s32 maskt,
                                         f32 arg6) {
     Gfx* gfx = *gfxp;
     s32 xh = D_801FBBCC;
     s32 yh = D_801FBBCE;
-    s32 width = 1 << arg4;
-    s32 height = 1 << arg5;
+    s32 width = 1 << masks;
+    s32 height = 1 << maskt;
     f32 s;
     f32 t;
     s32 dtdy;
     s32 dsdx;
 
     gDPLoadTextureBlock_4b(gfx++, texture, fmt, width, height, 0, G_TX_MIRROR | G_TX_CLAMP, G_TX_MIRROR | G_TX_CLAMP,
-                           arg4, arg5, G_TX_NOLOD, G_TX_NOLOD);
-    gDPSetTileSize(gfx++, G_TX_RENDERTILE, (0xA0 - width) << 2, (0x78 - height) << 2, (0xA0 + (width - 1)) << 2,
-                   (0x78 + (height - 1)) << 2);
+                           masks, maskt, G_TX_NOLOD, G_TX_NOLOD);
+    gDPSetTileSize(gfx++, G_TX_RENDERTILE, ((SCREEN_WIDTH / 2) - width) << 2, ((SCREEN_HEIGHT / 2) - height) << 2,
+                   ((SCREEN_WIDTH / 2) + (width - 1)) << 2, ((SCREEN_HEIGHT / 2) + (height - 1)) << 2);
 
     s = ((1.0f - (1.0f / arg6)) * (SCREEN_WIDTH / 2)) + 70.0f;
     t = ((1.0f - (1.0f / arg6)) * (SCREEN_HEIGHT / 2)) + 50.0f;
