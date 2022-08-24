@@ -2645,14 +2645,14 @@ void KaleidoScope_Update(PlayState* play) {
                 D_8082B908 = 0.0f;
                 pauseCtx->alpha = 255;
                 if (gameOverCtx->state == GAMEOVER_INACTIVE) {
-                    pauseCtx->state = PAUSE_STATE_GAMEOVER_6;
+                    pauseCtx->state = PAUSE_STATE_GAMEOVER_SAVE_PROMPT;
                 } else {
-                    pauseCtx->state = PAUSE_STATE_GAMEOVER_9;
+                    pauseCtx->state = PAUSE_STATE_GAMEOVER_CONTINUE_PROMPT;
                 }
             }
             break;
 
-        case PAUSE_STATE_GAMEOVER_6:
+        case PAUSE_STATE_GAMEOVER_SAVE_PROMPT:
             if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
                 if (pauseCtx->promptChoice != PAUSE_PROMPT_YES) {
                     pauseCtx->promptChoice = PAUSE_PROMPT_YES;
@@ -2700,23 +2700,23 @@ void KaleidoScope_Update(PlayState* play) {
         case PAUSE_STATE_GAMEOVER_8:
             D_8082BEA4--;
             if (D_8082BEA4 == 0) {
-                pauseCtx->state = PAUSE_STATE_GAMEOVER_9;
+                pauseCtx->state = PAUSE_STATE_GAMEOVER_CONTINUE_PROMPT;
                 gameOverCtx->state++;
             } else if ((D_8082BEA4 <= 80) &&
                        (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_START))) {
-                pauseCtx->state = PAUSE_STATE_GAMEOVER_9;
+                pauseCtx->state = PAUSE_STATE_GAMEOVER_CONTINUE_PROMPT;
                 gameOverCtx->state++;
                 func_801A3AEC(0);
             }
             break;
 
-        case PAUSE_STATE_GAMEOVER_9:
+        case PAUSE_STATE_GAMEOVER_CONTINUE_PROMPT:
             if (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_START)) {
-                if (pauseCtx->promptChoice == 0) {
+                if (pauseCtx->promptChoice == PAUSE_PROMPT_YES) {
                     play_sound(NA_SE_SY_PIECE_OF_HEART);
                     Play_SaveCycleSceneFlags(&play->state);
                     if (gSaveContext.save.entrance == ENTRANCE(UNSET_0D, 0)) {}
-                } else {
+                } else { // PAUSE_PROMPT_NO
                     play_sound(NA_SE_SY_DECIDE);
                 }
                 pauseCtx->state = PAUSE_STATE_GAMEOVER_10;
@@ -2749,7 +2749,7 @@ void KaleidoScope_Update(PlayState* play) {
                         gSaveContext.unk_3F30 = gSaveContext.save.playerData.magic;
                         gSaveContext.save.playerData.magicLevel = 0;
                         gSaveContext.save.playerData.magic = 0;
-                    } else {
+                    } else { // PAUSE_PROMPT_NO
                         do {
                             GameState* state = &play->state;
 
