@@ -1674,7 +1674,7 @@ void* func_801068FC(PlayState* play, void* arg1, size_t size);
 // void func_80108A10(void);
 // void func_80108A64(void);
 // void func_80108AF8(void);
-// void func_801090B0(void);
+s32 func_801090B0(s32 arg0);
 s32 func_80109124(s16 arg0);
 void func_801091F0(PlayState* play);
 void func_80109428(PlayState* play);
