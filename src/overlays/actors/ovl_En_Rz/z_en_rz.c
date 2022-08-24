@@ -626,7 +626,6 @@ void func_80BFC8F8(EnRz* this, PlayState* play) {
 }
 
 void EnRz_Update(Actor* thisx, PlayState* play) {
-    s32 phi_v0;
     s32 pad;
     EnRz* this = THIS;
 
@@ -637,9 +636,7 @@ void EnRz_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    phi_v0 = DECR(this->unk_412);
-
-    if (!phi_v0) {
+    if (!DECR(this->unk_412)) {
         this->unk_412 = Rand_S16Offset(60, 60);
     }
 
