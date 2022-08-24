@@ -437,7 +437,7 @@ extern BgSpecialSceneMaxObjects sCustomDynapolyMem[];
 // extern UNK_TYPE1 D_801B4708;
 // extern CameraStateParams sCameraSettings[91];
 // extern UNK_PTR sGlobalCamDataSettingsPtr;
-// extern camera_update_func sCameraActionFunctions[71];
+// extern camera_update_func sCameraUpdateHandlers[71];
 // extern UNK_TYPE2 sNextUID;
 // extern UNK_TYPE4 sCameraInterfaceFlags;
 // extern UNK_TYPE4 D_801B9E0C;
