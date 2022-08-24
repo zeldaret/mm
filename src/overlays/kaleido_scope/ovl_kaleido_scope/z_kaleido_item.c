@@ -313,7 +313,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
     if (pauseCtx->pageIndex == PAUSE_ITEM) {
         if ((pauseCtx->state == PAUSE_STATE_6) && ((pauseCtx->unk_200 == 0) || (pauseCtx->unk_200 == 3)) &&
             (pauseCtx->state != PAUSE_STATE_7) &&
-            !((pauseCtx->state >= PAUSE_STATE_8) && (pauseCtx->state <= PAUSE_STATE_12))) {
+            !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
             func_8012C628(play->state.gfxCtx);
             gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 

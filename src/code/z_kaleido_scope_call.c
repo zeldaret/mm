@@ -42,12 +42,12 @@ void KaleidoScopeCall_Update(PlayState* play) {
                 pauseCtx->unk_208 = 0;
                 pauseCtx->state = (pauseCtx->state & 0xFFFF) + 1;
             }
-        } else if (pauseCtx->state == PAUSE_STATE_8) {
+        } else if (pauseCtx->state == PAUSE_STATE_GAMEOVER_0) {
             R_PAUSE_MENU_MODE = 1;
             pauseCtx->unk_200 = 0;
             pauseCtx->unk_208 = 0;
             pauseCtx->state = (pauseCtx->state & 0xFFFF) + 1;
-        } else if ((pauseCtx->state == PAUSE_STATE_2) || (pauseCtx->state == PAUSE_STATE_9) ||
+        } else if ((pauseCtx->state == PAUSE_STATE_2) || (pauseCtx->state == PAUSE_STATE_GAMEOVER_1) ||
                    (pauseCtx->state == PAUSE_STATE_14)) {
             if (R_PAUSE_MENU_MODE == 3) {
                 pauseCtx->state++;
@@ -78,7 +78,7 @@ void KaleidoScopeCall_Draw(PlayState* play) {
 
     if (R_PAUSE_MENU_MODE == 3) {
         if (((play->pauseCtx.state >= PAUSE_STATE_4) && (play->pauseCtx.state <= PAUSE_STATE_7)) ||
-            ((play->pauseCtx.state >= PAUSE_STATE_B) && (play->pauseCtx.state <= PAUSE_STATE_1A))) {
+            ((play->pauseCtx.state >= PAUSE_STATE_GAMEOVER_3) && (play->pauseCtx.state <= PAUSE_STATE_1A))) {
             if (gKaleidoMgrCurOvl == kaleidoScopeOvl) {
                 sKaleidoScopeDrawFunc(play);
             }
