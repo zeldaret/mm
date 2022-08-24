@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define BG_UMAJUMP_GET_OBJECT_INDEX(thisx) (((thisx)->params >> 8) & 0xFF)
+
 struct BgUmajump;
 
 typedef void (*BgUmajumpActionFunc)(struct BgUmajump*, PlayState*);
@@ -11,7 +13,7 @@ typedef struct BgUmajump {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgUmajumpActionFunc actionFunc;
     /* 0x160 */ s32 objectIndex;
-    /* 0x164 */ s32 unk164;
+    /* 0x164 */ s32 hasSoundPlayed;
     /* 0x168 */ Actor* horse;
 } BgUmajump; // size = 0x16C
 

@@ -18,6 +18,7 @@ void BgUmajump_Draw(Actor* thisx, PlayState* play);
 
 void func_8091A5A0(Actor* thisx, PlayState* play);
 void Debug_PrintToScreen(Actor* thisx, PlayState* play);
+
 const ActorInit Bg_Umajump_InitVars = {
     ACTOR_BG_UMAJUMP,
     ACTORCAT_PROP,
@@ -37,7 +38,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_80919F30(BgUmajump* this, PlayState* play) {
-    if (this->objectIndex >= 0x5A) {
+    if (this->objectIndex >= 90) {
         this->objectIndex = 0;
     }
 
@@ -46,34 +47,35 @@ void func_80919F30(BgUmajump* this, PlayState* play) {
         Math_SinS((this->objectIndex / 90.0f) * 65536.0f) * (20.0f / this->dyna.actor.scale.y);
 }
 
-void func_80919FC8(BgUmajump* this, PlayState* play) {
-    if ((play->csCtx.frames >= 6) && !this->unk164) {
-        this->unk164 = true;
+void BgUmajump_StopCutscene(BgUmajump* this, PlayState* play) {
+    if ((play->csCtx.frames >= 6) && !this->hasSoundPlayed) {
+        this->hasSoundPlayed = true;
         play_sound(NA_SE_EV_KID_HORSE_NEIGH);
     }
+
     if (!play->csCtx.state) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         this->dyna.actor.update = Actor_Noop;
     }
 }
 
-void func_8091A044(BgUmajump* this, PlayState* play) {
+void BgUmajump_PlayCutscene(BgUmajump* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         gSaveContext.save.weekEventReg[0x59] |= 0x20;
-        this->actionFunc = func_80919FC8;
+        this->actionFunc = BgUmajump_StopCutscene;
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
 }
 
-void func_8091A0B8(BgUmajump* this, PlayState* play) {
+void BgUmajump_CheckDistance(BgUmajump* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((this->horse != NULL) && (player != NULL) &&
         (Math3D_XZDistance(this->horse->world.pos.x, this->horse->world.pos.z, player->actor.world.pos.x,
                            player->actor.world.pos.z) < 1400.0f)) {
-        this->actionFunc = func_8091A044;
+        this->actionFunc = BgUmajump_PlayCutscene;
     }
 }
 
@@ -84,18 +86,18 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
 
     this->actionFunc = NULL;
     this->horse = NULL;
-    this->unk164 = false;
+    this->hasSoundPlayed = false;
 
     DynaPolyActor_Init(&this->dyna, 0);
 
-    this->objectIndex = (thisx->params >> 8) & 0xFF;
-    thisx->params = thisx->params & 0xFF;
+    this->objectIndex = BG_UMAJUMP_GET_OBJECT_INDEX(thisx);
+    thisx->params &= 0xFF;
 
     if ((this->dyna.actor.params == 2)) {
         if ((((play->sceneNum == SCENE_F01) && !(gSaveContext.save.weekEventReg[0x59] & 0x20)) &&
              !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) &&
             (this->dyna.actor.cutscene != -1)) {
-            this->actionFunc = func_8091A0B8;
+            this->actionFunc = BgUmajump_CheckDistance;
             this->dyna.actor.update = func_8091A5A0;
             this->dyna.actor.flags |= ACTOR_FLAG_10;
             this->horse = SubS_FindActor(play, this->horse, ACTORCAT_BG, ACTOR_EN_HORSE);
@@ -104,7 +106,7 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
         }
     } else {
         this->objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_UMAJUMP);
-        
+
         if (this->objectIndex < 0) {
             Actor_MarkForDeath(&this->dyna.actor);
         }
@@ -210,61 +212,10 @@ void func_8091A5A0(Actor* thisx, PlayState* play) {
     }
 }
 
-void Debug_PrintToScreen(Actor* thisx, PlayState* play) {
-    //ObjBean* this = THIS;
-    BgUmajump* this = THIS;
-    // with explanation comments
-    GfxPrint printer;
-    Gfx* gfx;
-
-    OPEN_DISPS(play->state.gfxCtx);
-
-    // the dlist will be written in the opa buffer because that buffer is larger,
-    // but executed from the overlay buffer (overlay draws last, for example the hud is drawn to overlay)
-    gfx = POLY_OPA_DISP + 1;
-    gSPDisplayList(OVERLAY_DISP++, gfx);
-
-    // initialize GfxPrint struct
-    GfxPrint_Init(&printer);
-    GfxPrint_Open(&printer, gfx);
-
-    GfxPrint_SetColor(&printer, 255, 255, 255, 255);
-    GfxPrint_SetPos(&printer, 1, 7);
-    GfxPrint_Printf(&printer, "unk164: %X", this->unk164);
-    GfxPrint_SetPos(&printer, 1, 10);
-    GfxPrint_Printf(&printer, "play->csCtx.frames: %X", play->csCtx.frames);
-
-    { // address locations
-        u32 convertedAddr = (u32)Fault_ConvertAddress((void*)this->actionFunc);
-        GfxPrint_SetPos(&printer, 1, 11);
-        //GfxPrint_Printf(&printer, "func %X", &EnPoSisters_CheckCollision);
-    }
-
-    GfxPrint_SetPos(&printer, 1, 13);
-
-    //GfxPrint_Printf(&printer, "drawflags %X", this->drawFlags);
-    //GfxPrint_Printf(&printer, "BREG86 %X", BREG(86));
-    GfxPrint_Printf(&printer, "mesgState %X", Message_GetState(&play->msgCtx));
-
-    // end of text printing
-    gfx = GfxPrint_Close(&printer);
-    GfxPrint_Destroy(&printer);
-
-    gSPEndDisplayList(gfx++);
-    // make the opa dlist jump over the part that will be executed as part of overlay
-    gSPBranchList(POLY_OPA_DISP, gfx);
-    POLY_OPA_DISP = gfx;
-
-    CLOSE_DISPS(play->state.gfxCtx);
-    //Debug_PrintToScreen(thisx, play);
-}
-
 void BgUmajump_Draw(Actor* thisx, PlayState* play) {
     BgUmajump* this = THIS;
 
     if (this->dyna.bgId != -1) {
-        Gfx_DrawDListOpa(play, gHorseJumpFence);
+        Gfx_DrawDListOpa(play, gHorseJumpFenceDL);
     }
-
-    Debug_PrintToScreen(thisx, play);
 }
