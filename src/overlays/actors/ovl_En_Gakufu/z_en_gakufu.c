@@ -98,6 +98,9 @@ TexturePtr sOcarinaBtnWallTextures[] = {
 
 #include "overlays/ovl_En_Gakufu/ovl_En_Gakufu.c"
 
+// u32 return of `AudioOcarina_SetInstrument` matches this function
+// but breaks a function in kaleido_collect.c
+#ifdef NON_MATCHING
 void EnGakufu_ProcessNotes(EnGakufu* this) {
     OcarinaStaff* playbackStaff;
     OcarinaSongButtons* ocarinaSongButtons;
@@ -125,6 +128,10 @@ void EnGakufu_ProcessNotes(EnGakufu* this) {
         this->buttonIndex[i] = OCARINA_BTN_INVALID;
     }
 }
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gakufu/EnGakufu_ProcessNotes.s")
+void EnGakufu_ProcessNotes(EnGakufu* this);
+#endif
 
 void EnGakufu_Init(Actor* thisx, PlayState* play) {
     EnGakufu* this = THIS;

@@ -96,7 +96,7 @@ u32 gGsFlagsShift[] = {
 };
 
 // TODO: use symbols for these icon textures once textures are properly in C
-void* gItemIcons[] = {
+TexturePtr gItemIcons[] = {
     0x08000000,        // ITEM_OCARINA
     0x08001000,        // ITEM_BOW
     0x08002000,        // ITEM_ARROW_FIRE

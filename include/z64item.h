@@ -59,7 +59,7 @@ typedef enum {
     /* 0x10 */ QUEST_SONG_STORMS,
     /* 0x11 */ QUEST_SONG_SUN,
     /* 0x12 */ QUEST_BOMBERS_NOTEBOOK, // Obtained Bombers Notebook
-    /* 0x13 */ QUEST_SKULL_TOKEN,
+    /* 0x13 */ QUEST_SKULL_TOKEN, // 0x15?
     /* 0x18 */ QUEST_SONG_LULLABY_INTRO = 0x18,
     /* 0x19 */ QUEST_PICTOGRAPH, // A photo from the pictograph box is saved
     /* 0x1C */ QUEST_HEART_PIECE_COUNT = 0x1C

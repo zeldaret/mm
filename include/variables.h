@@ -1311,7 +1311,7 @@ extern u8 gUpgradeShifts[8];
 extern u16 gUpgradeCapacities[][4];
 extern u32 gGsFlagsMask[];
 extern u32 gGsFlagsShift[];
-extern void* gItemIcons[];
+extern TexturePtr gItemIcons[];
 extern u8 gItemSlots[];
 extern s16 gItemPrices[];
 extern u16 gScenesPerRegion[11][27];
