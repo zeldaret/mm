@@ -133,7 +133,7 @@ static ColliderJntSphInit sWrathJntSphInit1 = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    11,
+    ARRAY_COUNT(sWrathJntSphElementsInit1),
     sWrathJntSphElementsInit1,
 };
 
@@ -180,7 +180,7 @@ static ColliderJntSphInit sWrathJntSphInit2 = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sWrathJntSphElementsInit2),
     sWrathJntSphElementsInit2,
 };
 
@@ -357,7 +357,7 @@ static ColliderJntSphInit sIncarnationJntSphInit1 = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    11,
+    ARRAY_COUNT(sIncarnationJntSphElementsInit),
     sIncarnationJntSphElementsInit,
 };
 
