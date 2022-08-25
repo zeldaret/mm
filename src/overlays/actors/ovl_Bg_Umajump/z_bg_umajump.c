@@ -149,7 +149,7 @@ void BgUmajump_Update(Actor* thisx, PlayState* play) {
         }
 
         if (this->dyna.actor.params == 1) {
-            this->objectIndex = 0;
+            this->rotationTimer = 0;
             this->actionFunc = func_80919F30;
             this->dyna.actor.update = func_8091A5A0;
         } else if (this->dyna.actor.params == 3) {
