@@ -421,7 +421,7 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
             }
 
             if (pauseCtx->cursorSpecialPos == 0) {
-                if ((CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A)) && (msgCtx->msgLength == 0) &&
+                if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) && (msgCtx->msgLength == 0) &&
                     (pauseCtx->cursorPoint[PAUSE_MAP] == 3)) {
                     pauseCtx->itemDescriptionOn = true;
                     func_801514B0(play, 0x17AF, 1);

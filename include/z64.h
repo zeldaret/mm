@@ -447,7 +447,7 @@ typedef struct {
     /* 0x238 */ s16 cursorPoint[5];
     /* 0x242 */ s16 cursorXIndex[5];
     /* 0x24C */ s16 cursorYIndex[5];
-    /* 0x256 */ s16 unk_256;
+    /* 0x256 */ s16 unk_256; // related to both cursorPoint and cursorSlot
     /* 0x258 */ s16 cursorSpecialPos;
     /* 0x25A */ s16 pageSwitchTimer;
     /* 0x25C */ u16 namedItem;
@@ -468,14 +468,14 @@ typedef struct {
     /* 0x28C */ f32 cursorY;
     /* 0x290 */ f32 cursorWidth;
     /* 0x294 */ f32 cursorHeight;
-    /* 0x298 */ f32 cursorShrinkRate;
+    /* 0x298 */ f32 cursorShrinkRate; // TODO: test
     /* 0x29C */ s16 promptChoice; // save/continue choice: 0 = yes; 4 = no
     /* 0x29E */ s16 promptAlpha;
-    /* 0x2A0 */ s16 unk_2A0;
+    /* 0x2A0 */ s16 unk_2A0; // ocarinaStaff state
     /* 0x2A2 */ u8 worldMapPoints[20];
-    /* 0x2B6 */ u8 unk_2B6;
-    /* 0x2B7 */ u8 unk_2B7;
-    /* 0x2B8 */ u8 unk_2B8;
+    /* 0x2B6 */ u8 unk_2B6; // unused red?
+    /* 0x2B7 */ u8 unk_2B7; // unused green?
+    /* 0x2B8 */ u8 unk_2B8; // unused blue?
     /* 0x2B9 */ u8 itemDescriptionOn; // helpful description of item given through a message box
     /* 0x2BA */ s16 equipAnimScale; // scale of item icon while moving being equipped to c-button
     /* 0x2BC */ s16 equipAnimShrinkRate; // rate the scale is shrinking for the item icon while moving being equipped to c-button

@@ -9,6 +9,7 @@
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
 
+// iconItemSegment
 extern TexturePtr D_08064340; // gPauseMenuCursorTex
 extern TexturePtr D_08064440;
 extern TexturePtr D_0806E440;
@@ -63,12 +64,14 @@ extern TexturePtr D_0807E840;
 extern TexturePtr D_08087E40;
 extern TexturePtr D_08091440;
 
+// iconItemVtxSegment
 extern Gfx D_0B000000[]; // gItemNamePanelDL
 extern Gfx D_0B000090[]; // gLButtonIconDL
 extern Gfx D_0B0000E0[]; // gRButtonIconDL
 extern Gfx D_0B000130[]; // gCButtonIconsDL
 extern Gfx D_0B000188[]; // gAButtonIconDL
 
+// iconItemLangSegment
 extern TexturePtr D_0D002000;
 extern TexturePtr D_0D002200;
 extern TexturePtr D_0D002400;
@@ -2328,9 +2331,9 @@ void KaleidoScope_Update(PlayState* play) {
             DmaMgr_SendRequest0(pauseCtx->iconItemVtxSegment, SEGMENT_ROM_START(icon_item_vtx_static),
                                 SEGMENT_ROM_SIZE(icon_item_vtx_static));
 
-            pauseCtx->unk_2B6 = 0xFF;
-            pauseCtx->unk_2B7 = 0xFF;
-            pauseCtx->unk_2B8 = 0xFF;
+            pauseCtx->unk_2B6 = 255;
+            pauseCtx->unk_2B7 = 255;
+            pauseCtx->unk_2B8 = 255;
             pauseCtx->state = PAUSE_STATE_4;
             break;
 
