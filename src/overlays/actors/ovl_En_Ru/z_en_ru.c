@@ -99,15 +99,15 @@ static AnimationInfoS sAnimations[] = {
 
 // in PostLimbdraw, converts limbIndex to bodyPartsPos index
 static s8 sBodyPartPosIndices[] = {
-    -1, -1, 12, 13, 14, -1, 9, 10, 11, -1, 0, 6, -1, -1, 7, 8, 2, -1, -1, 3, 4, 2, 1, 0
+    -1, -1, 12, 13, 14, -1, 9, 10, 11, -1, 0, 6, -1, -1, 7, 8, 2, -1, -1, 3, 4, 2, 1,
 };
 
 static s8 sRuBodyParts[] = {
-    0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13, 0,
+    0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13,
 };
 
 static u8 sRuShadowSizes[] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
 static TrackOptionsSet sTrackOptions = {
