@@ -93,14 +93,13 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = -1.0f;
 
     cs = this->actor.cutscene;
-    i = 0;
-    while (i != 2) {
+
+    for (i = 0; i != 2; i++) {
         this->cutscenes[i] = cs;
         if (cs != -1) {
             this->actor.cutscene = cs;
             cs = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
         }
-        i++;
     }
 
     this->cutsceneIndex = -1;
@@ -195,7 +194,6 @@ s32 func_80968B8C(EnJs* this, PlayState* play) {
     f32 sp18 = 0.0f;
     Vec3s* points;
 
-    pathIndex = ENJS_GET_PATH_INDEX(&this->actor);
     if (pathIndex != 0x3F) {
         this->path = &play->setupPathList[pathIndex];
         if (this->path != NULL) {
@@ -539,10 +537,10 @@ void func_80969748(EnJs* this, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
         itemActionParam = func_80123810(play);
-        if (itemActionParam != 0) {
+        if (itemActionParam != PLAYER_AP_NONE) {
             this->actionFunc = func_80969898;
         }
-        if (itemActionParam > 0) {
+        if (itemActionParam > PLAYER_AP_NONE) {
             func_801477B4(play);
             if ((itemActionParam >= PLAYER_AP_MASK_TRUTH) && (itemActionParam <= PLAYER_AP_MASK_GIANT)) {
                 EnJs_TakeMask(itemActionParam, ENJS_GET_TYPE(&this->actor));
@@ -558,7 +556,7 @@ void func_80969748(EnJs* this, PlayState* play) {
                 player->actor.textId = 0x2210;
             }
         }
-        if (itemActionParam < 0) {
+        if (itemActionParam <= PLAYER_AP_MINUS1) {
             func_80151938(play, 0x2216);
         }
     }
@@ -685,10 +683,10 @@ void func_80969C54(EnJs* this, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
         itemActionParam = func_80123810(play);
-        if (itemActionParam != 0) {
+        if (itemActionParam != PLAYER_AP_NONE) {
             this->actionFunc = func_80969DA4;
         }
-        if (itemActionParam > 0) {
+        if (itemActionParam > PLAYER_AP_NONE) {
             func_801477B4(play);
             if ((itemActionParam >= PLAYER_AP_MASK_TRUTH) && (itemActionParam <= PLAYER_AP_MASK_GIANT)) {
                 EnJs_TakeMask(itemActionParam, ENJS_GET_TYPE(&this->actor));
@@ -704,7 +702,7 @@ void func_80969C54(EnJs* this, PlayState* play) {
                 player->actor.textId = 0x221D;
             }
         }
-        if (itemActionParam < 0) {
+        if (itemActionParam <= PLAYER_AP_MINUS1) {
             func_80151938(play, 0x221E);
         }
     }
