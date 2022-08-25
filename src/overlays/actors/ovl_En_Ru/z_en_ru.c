@@ -114,20 +114,6 @@ static TrackOptionsSet sTrackOptions = {
     { 0xFA0, 4, 1, 3 }, { 0x1770, 4, 1, 6 }, { 0xFA0, 4, 1, 3 }, { 0x1770, 4, 1, 6 }
 };
 
-static Vec3f sHeadFocusPos = { 800.0f, 0, 0 };
-
-static Vec3f sBodyFocusPos = { 0, 0, 0 };
-
-// This is a copy of displaylist found in En_Zo
-static Gfx sTransparencyDlist[] = {
-    gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                          G_RM_FOG_SHADE_A,
-                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                          GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
-    gsDPSetAlphaCompare(G_AC_THRESHOLD),
-    gsSPEndDisplayList(),
-};
-
 s32 EnRu_ChangeAnimation(SkelAnime* skelAnime, s16 animIndex) {
     s16 lastFrame;
     s32 ret = false;
@@ -297,8 +283,8 @@ s32 EnRu_OverrideLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
 void EnRu_PostLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnRu* this = THIS;
-    Vec3f headFocus = sHeadFocusPos;
-    Vec3f bodyPartPos = sBodyFocusPos;
+    Vec3f headFocus = { 800.0f, 0, 0 };
+    Vec3f bodyPartPos = { 0, 0, 0 };
 
     if (sBodyPartPosIndices[limbIndex] >= 0) {
         Matrix_MultVec3f(&bodyPartPos, &this->bodyPartsPos[sBodyPartPosIndices[limbIndex]]);
@@ -314,6 +300,16 @@ void EnRu_PostLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
         Matrix_MultVec3f(&bodyPartPos, &this->rightFootPos);
     }
 }
+
+// This is a copy of displaylist found in En_Zo
+static Gfx sTransparencyDlist[] = {
+    gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                          G_RM_FOG_SHADE_A,
+                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                          GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
+    gsDPSetAlphaCompare(G_AC_THRESHOLD),
+    gsSPEndDisplayList(),
+};
 
 void EnRu_Draw(Actor* thisx, PlayState* play) {
     EnRu* this = THIS;
