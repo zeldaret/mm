@@ -223,7 +223,7 @@ void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay) {
             sPtr->isEnabled = true;
             sPtr->pos = *pos;
             sPtr->alphaFadeDelay = fadeDelay;
-            sPtr->alpha = 0xFF;
+            sPtr->alpha = 255;
 
             sPtr->accel.x = (Rand_ZeroOne() - 0.5f) * 10.0f;
             sPtr->accel.y = (Rand_ZeroOne() - 0.5f) * 10.0f;

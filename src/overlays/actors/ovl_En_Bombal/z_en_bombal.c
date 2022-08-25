@@ -144,8 +144,8 @@ void func_80C05C44(EnBombal* this, PlayState* play) {
 
 void func_80C05DE8(EnBombal* this, PlayState* play) {
     if (this->timer == 0) {
-        if (!(gSaveContext.save.weekEventReg[0x4B] & 0x40) &&
-            !(gSaveContext.save.weekEventReg[0x49] & 0x10) && !(gSaveContext.save.weekEventReg[0x55] & 2)) {
+        if (!(gSaveContext.save.weekEventReg[0x4B] & 0x40) && !(gSaveContext.save.weekEventReg[0x49] & 0x10) &&
+            !(gSaveContext.save.weekEventReg[0x55] & 2)) {
             ActorCutscene_Stop(this->cutscene);
         }
         Actor_MarkForDeath(&this->actor);
@@ -197,7 +197,7 @@ void EnBombal_InitEffects(EnBombal* this, Vec3f* pos, s16 fadeDelay) {
             sPtr->isEnabled = true;
             sPtr->pos = *pos;
             sPtr->alphaFadeDelay = fadeDelay;
-            sPtr->alpha = 0xFF;
+            sPtr->alpha = 255;
 
             sPtr->accel.x = (Rand_ZeroOne() - 0.5f) * 10.0f;
             sPtr->accel.y = (Rand_ZeroOne() - 0.5f) * 10.0f;

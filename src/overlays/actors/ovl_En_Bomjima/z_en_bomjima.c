@@ -200,8 +200,8 @@ void func_80BFE32C(EnBomjima* this, PlayState* play, s32 arg2) {
 void func_80BFE494(EnBomjima* this, s32 animIndex, f32 playSpeed) {
     this->animIndex = animIndex;
     this->animLastFrame = Animation_GetLastFrame(sAnimations[animIndex]);
-    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], playSpeed, 0.0f, this->animLastFrame, D_80C00AE4[this->animIndex],
-                     -4.0f);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], playSpeed, 0.0f, this->animLastFrame,
+                     D_80C00AE4[this->animIndex], -4.0f);
 }
 
 void func_80BFE524(EnBomjima* this) {
@@ -328,7 +328,7 @@ void func_80BFEA94(EnBomjima* this, PlayState* play) {
 
         this->bombal = (EnBombal*)actor;
         Math_Vec3f_Copy(&this->unk_2B0, &actor->world.pos);
-        
+
         if (this->bombalCutscene == 0) {
             this->bombalCutscene = this->bombal->actor.cutscene;
         }
@@ -895,7 +895,8 @@ void func_80C00284(EnBomjima* this, PlayState* play) {
     f32 sp28 = this->skelAnime.curFrame;
 
     Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 1, 5000, 0);
-    if (((this->action == EN_BOMJIMA_ACTION_0) || (this->unk_2C8 == 10) || (this->unk_2C8 == 11) || (this->unk_2CA == 1)) &&
+    if (((this->action == EN_BOMJIMA_ACTION_0) || (this->unk_2C8 == 10) || (this->unk_2C8 == 11) ||
+         (this->unk_2CA == 1)) &&
         (this->animLastFrame <= sp28)) {
         if (!(this->unk_2BC & 1)) {
             func_80BFE494(this, 3, 1.0f);
@@ -920,7 +921,8 @@ void func_80C00284(EnBomjima* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->collider.dim.radius = 10;
         this->collider.dim.height = 30;
-        if ((this->action == EN_BOMJIMA_ACTION_4) || (this->unk_2CA == 1) || ((this->unk_2CA == 3) && (this->unk_2C8 >= 2))) {
+        if ((this->action == EN_BOMJIMA_ACTION_4) || (this->unk_2CA == 1) ||
+            ((this->unk_2CA == 3) && (this->unk_2C8 >= 2))) {
             this->unk_28E = 0;
             if (player->stateFlags1 & 0x20) {
                 player->stateFlags1 &= ~0x20;
