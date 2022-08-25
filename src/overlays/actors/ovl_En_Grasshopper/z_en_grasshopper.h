@@ -38,7 +38,7 @@ typedef struct EnGrasshopper {
     /* 0x02A8 */ EnGrasshopperActionFunc actionFunc;
     /* 0x02AC */ u8 decision;
     /* 0x02AD */ u8 shouldTurn;
-    /* 0x02AE */ char unk_2AE[2];
+    /* 0x02AE */ UNK_TYPE1 unk_2AE[2];
     /* 0x02B0 */ s16 timer;
     /* 0x02B2 */ s16 waitTimer;
     /* 0x02B4 */ s16 postBankTimer;
@@ -62,12 +62,12 @@ typedef struct EnGrasshopper {
     /* 0x0376 */ Vec3s targetRot;
     /* 0x0380 */ Vec3f flyingHomePos;
     /* 0x038C */ s16 bobPhase;
-    /* 0x038E */ char unk_38E[0x26];
+    /* 0x038E */ UNK_TYPE1 unk_38E[0x26];
     /* 0x03B4 */ Vec3f targetApproachPos;
     /* 0x03C0 */ Vec3f tailTipPos;
     /* 0x03CC */ Vec3f effectBasePos;
     /* 0x03D8 */ Vec3f shadowBodyPartsPos[14]; // Was almost certainly declared with 24 entries, but only the first 14 are used.
-    /* 0x0480 */ char unk_480[0x78];
+    /* 0x0480 */ UNK_TYPE1 unk_480[0x78];
     /* 0x04F8 */ f32 waterSurface;
     /* 0x04FC */ Vec3f damagedVelocity;
     /* 0x0508 */ Vec3s targetBankRot;
