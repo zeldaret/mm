@@ -17,6 +17,9 @@ extern UNK_TYPE D_0B000000;
 extern UNK_TYPE D_0C000000;
 extern UNK_TYPE D_0C006C00;
 
+extern TexturePtr D_09007500;
+extern TexturePtr D_0C001980;
+
 void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
     s16 counterDigits[2];
     s16 rectLeft;
@@ -90,40 +93,187 @@ TexturePtr D_8082B4AC[] = {
     0x0D001000,
     0x0D001800,
 };
-s16 D_8082B4BC[] = {
-    0x0043,
-    0x0051,
-    0x005F,
-    0x006D,
-};
-s16 D_8082B4C4 = 0x7B;
-s16 D_8082B4C8 = 30;
-s16 D_8082B4CC = 0;
-s16 D_8082B4D0 = 0xF;
-s16 D_8082B4D4 = 0;
-s16 D_8082B4D8 = 0xFF;
-f32 D_8082B4DC = 100.0f;
-TexturePtr D_8082B4E0[] = {
-    0x02008998, 0x0C001B80, 0x02008998, 0x0C001B80, 0x02009598, 0x0C002780, 0x02009598, 0x0C002780,
-    0x0200A198, 0x0C003380, 0x0200A198, 0x0C003380, 0x0200AD98, 0x0C003F80, 0x0200AD98, 0x0C003F80,
-};
-s32 D_8082B520[] = {
-    0xFF6EA05A,
-    0xFF6478FF,
-    0xFFF5F55A,
-};
-s32 D_8082B52C[] = {
-    0xFFFFFFFF,
-    0xFFFFFFFF,
-    0xFFE1AA00,
-};
-s32 D_8082B538[] = {
-    0x00000400,
-    0x00000000,
-    0x00000000,
-    0x00000000,
-};
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawDungeonMap.s")
+s16 D_8082B4BC[] = { 67, 81, 95, 109 };
+void KaleidoScope_DrawDungeonMap(PlayState* play) {
+    static s16 D_8082B4C4 = 123;
+    static s16 D_8082B4C8 = 30;
+    static s16 D_8082B4CC = 0;
+    static s16 D_8082B4D0 = 15;
+    static s16 D_8082B4D4 = 0;
+    static s16 D_8082B4D8 = 255;
+    static f32 D_8082B4DC = 100.0f;
+    static TexturePtr D_8082B4E0[][4] = {
+        { 0x02008998, 0x0C001B80, 0x02008998, 0x0C001B80 },
+        { 0x02009598, 0x0C002780, 0x02009598, 0x0C002780 },
+        { 0x0200A198, 0x0C003380, 0x0200A198, 0x0C003380 },
+        { 0x0200AD98, 0x0C003F80, 0x0200AD98, 0x0C003F80 },
+    };
+    static u8 D_8082B520[][3] = {
+        { 255, 110, 160 },
+        { 90, 255, 100 },
+        { 120, 255, 255 },
+        { 245, 245, 90 },
+    };
+    static u8 D_8082B52C[][3] = {
+        { 255, 255, 255 },
+        { 255, 255, 255 },
+        { 255, 255, 255 },
+        { 225, 170, 0 },
+    };
+    static s32 D_8082B538[] = { 1 << 10, 0, 0, 0 };
+    PauseContext* pauseCtx = &play->pauseCtx;
+    s16 i;
+    s16 j;
+    f32 scale;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    j = 72 + (pauseCtx->cursorSlot[PAUSE_MAP] * 4);
+    KaleidoScope_SetCursorVtx(pauseCtx, j, pauseCtx->mapPageVtx);
+
+    pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
+    if (pauseCtx->cursorSpecialPos == 0) {
+        if (pauseCtx->cursorPoint[PAUSE_MAP] < 4) {
+            pauseCtx->cursorItem[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_MAP] + 0x74;
+        }
+        pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_MAP];
+    }
+
+    gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[60], 16, 0);
+    gDPPipeSync(POLY_OPA_DISP++);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
+    gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA, G_CC_MODULATEIA);
+
+    POLY_OPA_DISP = func_8010DC58(POLY_OPA_DISP, D_8082B4AC[((void)0, gSaveContext.dungeonIndex)], 128, 16, 0);
+
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+
+    for (i = 0, j = 4; i < 4; i++, j += 4) {
+        if (i == 3) {
+            if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->unk_200 == 0)) {
+                // If (pauseCtx->state == PAUSE_STATE_6), then the other conditions are redundant and always return true
+                if ((pauseCtx->state == PAUSE_STATE_6) && (pauseCtx->state != PAUSE_STATE_7) &&
+                    !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
+                    KaleidoScope_SetView(pauseCtx, 0.0f, 0.0f, 64.0f);
+
+                    if (D_8082B4D4 == 0) {
+                        D_8082B4D8 -= 6;
+                        D_8082B4DC -= 1.0f;
+                    } else {
+                        D_8082B4D8 += 6;
+                        D_8082B4DC += 1.0f;
+                    }
+
+                    D_8082B4D0--;
+                    if (D_8082B4D0 == 0) {
+                        D_8082B4D4 ^= 1;
+                        D_8082B4D0 = 0xF;
+                    }
+
+                    func_8012C8AC(play->state.gfxCtx);
+
+                    gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0,
+                                      PRIMITIVE, 0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE,
+                                      0);
+
+                    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_8082B520[((void)0, gSaveContext.dungeonIndex)][0],
+                                    D_8082B520[((void)0, gSaveContext.dungeonIndex)][1],
+                                    D_8082B520[((void)0, gSaveContext.dungeonIndex)][2], D_8082B4D8);
+                    gDPSetEnvColor(POLY_OPA_DISP++, D_8082B52C[((void)0, gSaveContext.dungeonIndex)][0],
+                                   D_8082B52C[((void)0, gSaveContext.dungeonIndex)][1],
+                                   D_8082B52C[((void)0, gSaveContext.dungeonIndex)][2], 0);
+
+                    scale = D_8082B4DC / 100.0f;
+
+                    Matrix_Translate(-83.0f, -29.0f, -128.0f, MTXMODE_NEW);
+                    Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
+
+                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
+                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+                    pauseCtx->mapPageVtx[76].v.ob[0] = pauseCtx->mapPageVtx[78].v.ob[0] = -16;
+
+                    pauseCtx->mapPageVtx[77].v.ob[0] = pauseCtx->mapPageVtx[79].v.ob[0] =
+                        pauseCtx->mapPageVtx[76].v.ob[0] + 32;
+
+                    pauseCtx->mapPageVtx[76].v.ob[1] = pauseCtx->mapPageVtx[77].v.ob[1] = 12;
+
+                    pauseCtx->mapPageVtx[78].v.ob[1] = pauseCtx->mapPageVtx[79].v.ob[1] =
+                        pauseCtx->mapPageVtx[76].v.ob[1] - 24;
+
+                    gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[76], 4, 0);
+
+                    POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, &D_0200B998, 4, 32, 24, 0);
+                    KaleidoScope_SetView(pauseCtx, pauseCtx->eye.x, pauseCtx->eye.y, pauseCtx->eye.z);
+                    func_8012C628(play->state.gfxCtx);
+
+                    gDPPipeSync(POLY_OPA_DISP++);
+
+                    gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+
+                    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, D_8082B4D8);
+
+                    D_8082B4C8--;
+
+                    if (D_8082B4C8 == 0) {
+                        D_8082B4CC = (D_8082B4CC + 1) & 3;
+                        D_8082B4C8 = 0x22;
+                    }
+
+                    gDPLoadTextureBlock(POLY_OPA_DISP++, D_8082B4E0[((void)0, gSaveContext.dungeonIndex)][D_8082B4CC],
+                                        G_IM_FMT_RGBA, G_IM_SIZ_32b, 32, 24, 0, G_TX_MIRROR | G_TX_WRAP,
+                                        G_TX_NOMIRROR | G_TX_WRAP, 5, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                    gSPTextureRectangle(POLY_OPA_DISP++, 0x00D8, 0x0230, 0x0158, 0x0290, G_TX_RENDERTILE,
+                                        D_8082B538[D_8082B4CC], 0, 0x0400, 0x0400);
+
+                    KaleidoScope_DrawDungeonStrayFairyCount(play);
+                    func_8012C8AC(play->state.gfxCtx);
+                }
+            }
+        } else {
+            if (CHECK_DUNGEON_ITEM(i, gSaveContext.dungeonIndex)) {
+                gDPLoadTextureBlock(POLY_OPA_DISP++, D_8082B4A0[i], G_IM_FMT_RGBA, G_IM_SIZ_32b, 24, 24, 0,
+                                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                    G_TX_NOLOD, G_TX_NOLOD);
+
+                gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
+            }
+        }
+    }
+
+    func_80108AF8(play);
+
+    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->unk_200 == 0)) {
+        // If (pauseCtx->state == PAUSE_STATE_6), then the other conditions are redundant and always return true
+        if ((pauseCtx->state == PAUSE_STATE_6) && (pauseCtx->state != PAUSE_STATE_7) &&
+            !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
+
+            func_8012C628(play->state.gfxCtx);
+
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
+
+            POLY_OPA_DISP =
+                func_8010CB80(POLY_OPA_DISP, &D_09007500, 16, 16, 62, D_8082B4BC[XREG(94)], 16, 16, 1 << 10, 1 << 10);
+
+            if (CHECK_DUNGEON_ITEM(1, gSaveContext.dungeonIndex)) {
+                POLY_OPA_DISP = func_8010CB80(POLY_OPA_DISP, &D_0C001980, 16, 16, 108, D_8082B4BC[4 - func_80105318()],
+                                              16, 16, 1 << 10, 1 << 10);
+            }
+
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
+
+            func_8012C8AC(play->state.gfxCtx);
+        }
+    }
+
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_BILERP);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
 
 void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
     s32 pad;
