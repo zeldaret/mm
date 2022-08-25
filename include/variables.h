@@ -1360,7 +1360,7 @@ extern u8 D_801C6A98[5][5];
 extern u8 D_801CFC98;
 extern s16 D_801CFCA4[9];
 // extern UNK_TYPE2 D_801CFCAC;
-extern s16 D_801CFCB8[];
+extern s16 gOcarinaSongItemMap[];
 // extern UNK_TYPE2 D_801CFCD8;
 // extern UNK_TYPE2 D_801CFCE4;
 // extern UNK_TYPE2 D_801CFCF0;

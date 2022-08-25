@@ -3171,7 +3171,7 @@ void AudioOcarina_StartDefault(u32 ocarinaFlags);
 u8 func_8019B5AC(void);
 void AudioOcarina_ResetAndReadInput(void);
 void AudioOcarina_SetOcarinaDisableTimer(u8 resetUnused, u8 resetDelay);
-u32 AudioOcarina_SetInstrument(u8 ocarinaInstrumentId);
+void AudioOcarina_SetInstrument(u8 ocarinaInstrumentId);
 void AudioOcarina_SetPlaybackSong(s8 songIndexPlusOne, u8 playbackState);
 void AudioOcarina_SetRecordingState(u8 recordingState);
 OcarinaStaff* AudioOcarina_GetRecordingStaff(void);
