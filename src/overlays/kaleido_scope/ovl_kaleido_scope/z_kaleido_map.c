@@ -7,18 +7,16 @@
 #include "z_kaleido_scope.h"
 #include "interface/parameter_static/parameter_static.h"
 
-extern UNK_TYPE D_02001360;
-extern UNK_TYPE D_020044A0;
-extern UNK_TYPE D_02004AA0;
-extern UNK_TYPE D_0200B998;
-extern UNK_TYPE D_08062000;
-extern UNK_TYPE D_08064340;
-extern UNK_TYPE D_0B000000;
-extern UNK_TYPE D_0C000000;
-extern UNK_TYPE D_0C006C00;
+extern s16 D_8082B7F0[];
+extern s16 D_8082B838[];
 
 extern TexturePtr D_09007500;
+
+extern TexturePtr D_0C000000; // gWorldMapImageTex
+extern TexturePtr D_0C006C00; // gWorldMapImageTLUT
+extern TexturePtr D_0C006E00;
 extern TexturePtr D_0C001980;
+extern TexturePtr D_0C014668;
 
 void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
     s16 counterDigits[2];
@@ -205,7 +203,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
                     gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[76], 4, 0);
 
-                    POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, &D_0200B998, 4, 32, 24, 0);
+                    POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, gStrayFairyGlowingCircleIconTex, 4, 32, 24, 0);
                     KaleidoScope_SetView(pauseCtx, pauseCtx->eye.x, pauseCtx->eye.y, pauseCtx->eye.z);
                     func_8012C628(play->state.gfxCtx);
 
@@ -457,11 +455,242 @@ s16 D_8082B59C[] = {
 s16 D_8082B5B4[] = {
     0x007F, 0x0099, 0x008A, 0x00AB, 0x0092, 0x0077, 0x004D, 0x006A, 0x0078, 0x0049, 0x0063, 0x0000,
 };
-
 s16 D_8082B5CC[] = {
     0x0005, 0x0004, 0x0006, 0x0000, 0x0008, 0x0005, 0x0004, 0x0006, 0x0000, 0x0008,
 };
+// Issues with the iterators (t, i, j, k)
+// k appears unused but still shows up as sp46
+#ifdef NON_MATCHING
+void KaleidoScope_DrawWorldMap(PlayState* play) {
+    s16 sceneId;
+    s16 t; // sp4C
+    s16 i; // sp4A
+    s16 j; // sp48
+    s16 k; // sp46???
+    PauseContext* pauseCtx = &play->pauseCtx;
+    u16(*regionSceneIndices)[]; // possibly need a ptr
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[1] * 4, pauseCtx->mapPageVtx);
+
+    if ((pauseCtx->pageIndex == 1) && (pauseCtx->state == 6) &&
+        ((pauseCtx->unk_200 == 0) || (pauseCtx->unk_200 == 3)) && (gGameInfo->data[0x246] != 0) &&
+        (pauseCtx->state != 7) && ((pauseCtx->state < 8) || (pauseCtx->state >= 0x13))) {
+
+        func_8012C628(play->state.gfxCtx);
+
+        gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_POINT);
+        gDPLoadTLUT_pal256(POLY_OPA_DISP++, &D_0C006C00);
+        gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_RGBA16);
+
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
+
+        for (j = 62, t = 0; t < 16; t++, j += 8) {
+            gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)&D_0C000000 + t * 192 * 9, G_IM_FMT_CI, G_IM_SIZ_8b, 216, 8, 0,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
+
+            gSPTextureRectangle(POLY_OPA_DISP++, 204, j * 4, 1068, (j * 4) + 32, G_TX_RENDERTILE, 0, 0, 1 << 10,
+                                1 << 10);
+        }
+
+        func_8012C8AC(play->state.gfxCtx);
+
+    } else {
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_POINT);
+        gDPLoadTLUT_pal256(POLY_OPA_DISP++, &D_0C006C00);
+        gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_RGBA16);
+
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
+        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[204], 32, 0);
+
+        for (i = 0, t = 0, j = 0; i < 8; i++, t++, j += 4) {
+            gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)&D_0C000000 + t * 216 * 9, G_IM_FMT_CI, G_IM_SIZ_8b, 216, 9, 0,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
+
+            gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
+        }
+
+        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[236], 28, 0);
+
+        for (i = 0, j = 0; i < 6; i++, t++, j += 4) {
+            gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)&D_0C000000 + t * 216 * 9, G_IM_FMT_CI, G_IM_SIZ_8b, 216, 9, 0,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
+
+            gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
+        }
+
+        gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)&D_0C000000 + t * 216 * 9, G_IM_FMT_CI, G_IM_SIZ_8b, 216, 2, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
+
+        gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
+    }
+
+    func_8012C8AC(play->state.gfxCtx);
+
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_BILERP);
+
+    gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
+                      ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 215, 235, 235, pauseCtx->alpha);
+    gDPSetEnvColor(POLY_OPA_DISP++, 40, 60, 100, 0);
+
+    for (i = 0; i < 15; i++) {
+        if (!(((void)0, gSaveContext.save.mapsVisible) & gBitFlags[i])) {
+
+            gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[60 + i * 4], 4, 0);
+
+            POLY_OPA_DISP = func_8010DC58(POLY_OPA_DISP, D_8082B548[i], D_8082B7F0[i], D_8082B838[i], 0);
+        }
+    }
+
+    if ((pauseCtx->state >= 0x15) && (pauseCtx->state < 0x1A)) {
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetRenderMode(POLY_OPA_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+        gDPSetCombineMode(POLY_OPA_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, gGameInfo->data[0x597]);
+        gDPFillRectangle(POLY_OPA_DISP++, 50, 62, 270, 190);
+    }
+
+    func_8012C8AC(play->state.gfxCtx);
+
+    j = 0;
+    k = 0;
+    if ((pauseCtx->state < 0x15) || (pauseCtx->state >= 0x1A)) {
+        gDPLoadTextureBlock(POLY_OPA_DISP++, &D_0C006E00, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                          PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_8082B584[0], D_8082B584[1], D_8082B584[2], pauseCtx->alpha);
+
+        gDPSetEnvColor(POLY_OPA_DISP++, D_8082B590[0], D_8082B590[1], D_8082B590[2], 0);
+
+        if (gGameInfo->data[0x572] != 0) {
+            gSaveContext.save.mapsVisible |= (u16)~0x8000;
+
+            pauseCtx->mapPageVtx[0x78].v.ob[0] = pauseCtx->mapPageVtx[0x7A].v.ob[0] = gGameInfo->data[0x574];
+
+            pauseCtx->mapPageVtx[0x79].v.ob[0] = pauseCtx->mapPageVtx[0x7B].v.ob[0] =
+                pauseCtx->mapPageVtx[0x78].v.ob[0] + 8;
+
+            pauseCtx->mapPageVtx[0x78].v.ob[1] = pauseCtx->mapPageVtx[0x79].v.ob[1] = gGameInfo->data[0x575];
+
+            pauseCtx->mapPageVtx[0x7A].v.ob[1] = pauseCtx->mapPageVtx[0x7B].v.ob[1] =
+                pauseCtx->mapPageVtx[0x78].v.ob[1] - 8;
+        }
+
+        for (i = 0; i < 11; i++, k++, j += 4) {
+            if (pauseCtx->worldMapPoints[i] != 0) {
+                gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[120 + i * 4], 4, 0);
+                gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
+            }
+        }
+
+    } else {
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+        gDPLoadTextureBlock(POLY_OPA_DISP++, &D_0C014668, G_IM_FMT_RGBA, G_IM_SIZ_32b, 24, 12, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
+
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
+
+        if (gGameInfo->data[0x572] != 0) {
+            gSaveContext.save.mapsVisible |= (u16)~0x8000;
+
+            pauseCtx->mapPageVtx[0xA4].v.ob[0] = pauseCtx->mapPageVtx[0xA6].v.ob[0] = gGameInfo->data[0x574];
+
+            pauseCtx->mapPageVtx[0xA5].v.ob[0] = pauseCtx->mapPageVtx[0xA7].v.ob[0] =
+                pauseCtx->mapPageVtx[0xA4].v.ob[0] + 24;
+
+            pauseCtx->mapPageVtx[0xA4].v.ob[1] = pauseCtx->mapPageVtx[0xA5].v.ob[1] = gGameInfo->data[0x575];
+
+            pauseCtx->mapPageVtx[0xA6].v.ob[1] = pauseCtx->mapPageVtx[0xA7].v.ob[1] =
+                pauseCtx->mapPageVtx[0xA4].v.ob[1] - 12;
+        }
+
+        for (i = 0, k = 0; i < 10; i++, k++, j += 4) {
+            if (pauseCtx->worldMapPoints[i] != 0) {
+                gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[164 + i * 4], 4, 0);
+                gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
+            }
+        }
+    }
+
+    if ((pauseCtx->pageIndex == 1) && (pauseCtx->unk_200 == 0)) {
+        if ((pauseCtx->state == 6) && (pauseCtx->state != 7) && ((pauseCtx->state < 8) || (pauseCtx->state >= 0x13))) {
+            j = 0;
+            i = 0;
+            sceneId = play->sceneNum;
+            if (sceneId == 7) {
+                if (play->roomCtx.currRoom.num == 5) {
+                    sceneId = 0x4D;
+                } else if ((play->roomCtx.currRoom.num == 6) || (play->roomCtx.currRoom.num == 8) ||
+                           (play->roomCtx.currRoom.num == 0xC)) {
+                    sceneId = 0x2B;
+                } else {
+                    sceneId = Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.respawn[3].entrance));
+                }
+            }
+
+            while (true) {
+                if ((gScenesPerRegion[i][j] == 0xFFFF) && (i++, j = 0, (i == 0xB))) {
+                    i = 0;
+                    if (sceneId == 0x26) {
+                        //! FAKE: (void)0
+                        i = D_8082B5CC[((void)0, play->curSpawn)];
+                        break;
+                    }
+
+                    while (true) {
+                        if (gScenesPerRegion[i][j] == 0xFFFF) {
+                            i++;
+                            if (i == 0xB) {
+                                break;
+                            }
+                            j = 0;
+                            if (Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.respawn[3].entrance)) ==
+                                gScenesPerRegion[i][j]) {
+                                break;
+                            }
+                        }
+                        j++;
+                    }
+                    break;
+                } else if (sceneId == gScenesPerRegion[i][j]) {
+                    break;
+                }
+                j++;
+            }
+
+            if (i != 11) {
+                KaleidoScope_SetView(pauseCtx, pauseCtx->eye.x, pauseCtx->eye.y, pauseCtx->eye.z);
+                func_8012C628(play->state.gfxCtx);
+
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
+
+                POLY_OPA_DISP = func_8010CB80(POLY_OPA_DISP, &D_09007500, 16, 16, D_8082B59C[i], D_8082B5B4[i], 16, 16,
+                                              1 << 10, 1 << 10);
+            }
+        }
+    }
+
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawWorldMap.s")
+#endif
 
 u16 D_8082B5E0[] = {
     0xAF, 0xB3, 0xAA, 0xB1, 0xA9, 0xB2, 0xA8, 0xB0, 0xAC, 0xAE,
