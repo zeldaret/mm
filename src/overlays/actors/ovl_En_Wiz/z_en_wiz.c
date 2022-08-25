@@ -62,8 +62,8 @@ typedef enum {
 typedef enum {
     /* 0 */ EN_WIZ_FIGHT_STATE_FIRST_PHASE,
     /* 1 */ EN_WIZ_FIGHT_STATE_SECOND_PHASE_CUTSCENE,
-    /* 2 */ EN_WIZ_FIGHT_STATE_SECOND_PHASE,
-    /* 3 */ EN_WIZ_FIGHT_STATE_SECOND_PHASE_WITH_RUNNING_GHOSTS,
+    /* 2 */ EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_COPY_WIZROBE,
+    /* 3 */ EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_RUN_AROUND,
 } EnWizFightState;
 
 const ActorInit En_Wiz_InitVars = {
@@ -226,7 +226,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 typedef enum {
     /* 0x0 */ EN_WIZ_DMGEFF_NO_DAMAGE,    // Deals no damage
-    /* 0x1 */ EN_WIZ_DMGEFF_UNK1,         // Deals no damage. Was probably originally intended for destroying the ghosts.
+    /* 0x1 */ EN_WIZ_DMGEFF_UNK1,         // Deals no damage. Was probably originally intended for destroying ghosts.
     /* 0x2 */ EN_WIZ_DMGEFF_FIRE,         // Damages and sets Ice Wizrobes on fire
     /* 0x3 */ EN_WIZ_DMGEFF_FREEZE,       // Damages and surrounds Fire Wizrobes with ice
     /* 0x4 */ EN_WIZ_DMGEFF_LIGHT_ORB,    // Damages and surrounds the Wizrobe with light orbs
@@ -360,11 +360,14 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
     } else {
         this->actor.hintId = 0x4B;
         this->currentPlatformIndex = 777;
+
+        // Setting the radius and scale to zero here effectively disables all of the ghost colliders.
         this->ghostColliders.elements[0].dim.modelSphere.radius = 0;
         this->ghostColliders.elements[0].dim.scale = 0.0f;
         this->ghostColliders.elements[0].dim.modelSphere.center.x = 0;
         this->ghostColliders.elements[0].dim.modelSphere.center.y = 0;
         this->ghostColliders.elements[0].dim.modelSphere.center.z = 0;
+
         this->actionFunc = EnWiz_StartIntroCutscene;
     }
 }
@@ -519,7 +522,10 @@ void EnWiz_HandleIntroCutscene(EnWiz* this, PlayState* play) {
     }
 }
 
-// Also does some ghost stuff, maybe needs a better name
+/**
+ * Chooses which platform the Wizrobe should appear at, and updates its position accordingly.
+ * It also updates the position and alpha of all the ghosts.
+ */
 void EnWiz_SelectPlatform(EnWiz* this, PlayState* play) {
     Actor* prop;
     s32 i;
@@ -604,6 +610,9 @@ void EnWiz_SelectPlatform(EnWiz* this, PlayState* play) {
     }
 }
 
+/**
+ * Makes the ghosts run around the room from platform to platform.
+ */
 void EnWiz_MoveGhosts(EnWiz* this) {
     s32 i;
     s32 ghostNextPlatformIndex;
@@ -756,10 +765,10 @@ void EnWiz_SetupDance(EnWiz* this) {
     this->rotationalVelocity = 0;
     this->animLoopCounter = 0;
     this->action = EN_WIZ_ACTION_DANCE;
-    if (this->fightState >= EN_WIZ_FIGHT_STATE_SECOND_PHASE) {
+    if (this->fightState >= EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_COPY_WIZROBE) {
         Animation_Change(&this->ghostSkelAnime, &gWizrobeRunAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gWizrobeRunAnim),
                          ANIMMODE_LOOP, 0.0f);
-        this->fightState = EN_WIZ_FIGHT_STATE_SECOND_PHASE_WITH_RUNNING_GHOSTS;
+        this->fightState = EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_RUN_AROUND;
     }
 
     Math_SmoothStepToS(&this->alpha, 255, 1, 5, 0);
@@ -778,7 +787,7 @@ void EnWiz_Dance(EnWiz* this, PlayState* play) {
     Math_ApproachF(&this->scale, 0.015f, 0.05f, 0.001f);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_RUN - SFX_FLAG);
     this->actor.world.rot.y += this->rotationalVelocity;
-    if (this->fightState >= EN_WIZ_FIGHT_STATE_SECOND_PHASE_WITH_RUNNING_GHOSTS) {
+    if (this->fightState >= EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_RUN_AROUND) {
         EnWiz_MoveGhosts(this);
     } else {
         for (i = 0; i < this->platformCount; i++) {
@@ -818,6 +827,10 @@ void EnWiz_SetupSecondPhaseCutscene(EnWiz* this, PlayState* play) {
     }
 }
 
+/**
+ * Makes the Wizrobe run between every platform in the room once before returning to its
+ * original platform and disappearing. Ghosts trail behind the Wizrobe as it runs.
+ */
 void EnWiz_SecondPhaseCutscene(EnWiz* this, PlayState* play) {
     Camera* camera;
     s32 i;
@@ -852,7 +865,7 @@ void EnWiz_SecondPhaseCutscene(EnWiz* this, PlayState* play) {
 
                     this->nextPlatformIndex = 0;
                     this->platformCount = 0;
-                    this->fightState = EN_WIZ_FIGHT_STATE_SECOND_PHASE;
+                    this->fightState = EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_COPY_WIZROBE;
                     this->timer = 0;
                     ActorCutscene_Stop(ActorCutscene_GetAdditionalCutscene(this->actor.cutscene));
                     this->actor.flags &= ~ACTOR_FLAG_100000;
@@ -891,7 +904,7 @@ void EnWiz_WindUp(EnWiz* this, PlayState* play) {
     s32 i;
 
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0xC8, 0x1F40, 0x1388);
-    if (this->fightState >= EN_WIZ_FIGHT_STATE_SECOND_PHASE_WITH_RUNNING_GHOSTS) {
+    if (this->fightState >= EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_RUN_AROUND) {
         EnWiz_MoveGhosts(this);
     } else {
         for (i = 0; i < this->platformCount; i++) {
@@ -923,7 +936,7 @@ void EnWiz_SetupAttack(EnWiz* this) {
 void EnWiz_Attack(EnWiz* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
-    if (this->fightState >= EN_WIZ_FIGHT_STATE_SECOND_PHASE_WITH_RUNNING_GHOSTS) {
+    if (this->fightState >= EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_RUN_AROUND) {
         EnWiz_MoveGhosts(this);
     }
 
@@ -1227,8 +1240,16 @@ void EnWiz_UpdateDamage(EnWiz* this, PlayState* play) {
             f32 scaleStep;
             s32 j;
 
+            // If the player throws a Deku Nut or hits a ghost's collider (something that is impossible
+            // in the final game, since EnWiz_Init effectively disables them), then the below code will
+            // "destroy" the ghost by turning into a cloud of smoke.
             if ((iREG(50) != 0) || (this->ghostColliders.elements[i + 1].info.bumperFlags & BUMP_HIT)) {
-                this->fightState = EN_WIZ_FIGHT_STATE_SECOND_PHASE;
+                //! @bug: If a single ghost is destroyed, then changing the fight state here will cause
+                //! strange behavior; the ghosts will stand still and pretend to attack the player like
+                //! the real Wizrobe. Since Deku Nuts destroy all ghosts at once, and since the ghost
+                //! colliders are effectively disabled, this doesn't cause any problems in the final
+                //! game, but it becomes an issue if the ghost colliders are enabled.
+                this->fightState = EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_COPY_WIZROBE;
                 this->ghostColliders.base.acFlags &= ~BUMP_HIT;
                 if (this->ghostPos[i].x != .0f || this->ghostPos[i].z != .0f) {
                     for (j = 0; j < 9; j++) {
@@ -1293,7 +1314,7 @@ void EnWiz_Update(Actor* thisx, PlayState* play) {
 
     if (this->fightState == EN_WIZ_FIGHT_STATE_FIRST_PHASE) {
         this->platformCount = 0;
-    } else if (this->fightState == EN_WIZ_FIGHT_STATE_SECOND_PHASE_WITH_RUNNING_GHOSTS) {
+    } else if (this->fightState == EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_RUN_AROUND) {
         for (i = 0; i < this->platformCount; i++) {
             for (j = 0; j < ARRAY_COUNT(this->ghostBaseJointTable); j++) {
                 this->ghostJointTables[i][j] = this->ghostBaseJointTable[j];
