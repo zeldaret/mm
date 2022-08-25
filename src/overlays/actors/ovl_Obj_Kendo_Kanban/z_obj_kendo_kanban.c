@@ -48,38 +48,22 @@ const ActorInit Obj_Kendo_Kanban_InitVars = {
 };
 
 // Directly applied to the velocity of the actor upon object creation.
-Vec3f OBJKENDOKANBAN_LBREAK_VEL = { -1.5f, 10.0f, 0.5f }; // Surge Left/Up/Back  (Left side Breakaway)
-Vec3f OBJKENDOKANBAN_RBREAK_VEL = { 1.5f, 10.0f, 0.5f };  // Surge Right/Up/Back (Right side Breakaway)
-Vec3f OBJKENDOKANBAN_BBREAK_VEL = { 0.0f, 4.0f, -1.0f };  // Surge Up/Forward?  (Bottom Breakaway)
-Vec3f OBJKENDOKANBAN_TBREAK_VEL = { 1.0f, 7.0f, 4.0f };   // Surge Right Up Back (Top Breakaway)
+Vec3f OBJKENDOKANBAN_LBREAK_VEL = { -1.5f, 10.0f, 0.5f }; // Push Left/Up/Forward  (Left side Breakaway)
+Vec3f OBJKENDOKANBAN_RBREAK_VEL = { 1.5f, 10.0f, 0.5f };  // Push Right/Up/Forward (Right side Breakaway)
+Vec3f OBJKENDOKANBAN_BBREAK_VEL = { 0.0f, 4.0f, -1.0f };  // Push Up/Back  (Bottom Breakaway)
+Vec3f OBJKENDOKANBAN_TBREAK_VEL = { 1.0f, 7.0f, 4.0f };   // Push Right/Up/Forward (Top Breakaway)
 
-Vec3f D_80B66690 = { -150.0f, 425.0f, 40.0f }; // Left    // Large Surge Left/Up/Back (Left side secondary breakway?)
-Vec3f D_80B6669C = { 150.0f, 425.0f, 40.0f };  // Right   // Large Surge Right/Up/Back (Right side Secondary breakaway)
-Vec3f D_80B666A8 = { 0.0f, 140.0f, 40.0f };    // Bottom  // Medium Surge Up/Back (Bottom Secondary Breakaway)
-Vec3f D_80B666B4 = { 0.0f, 565.0f, 40.0f };    // Top     // Large Surge Up/Back (Top Secondary Breakaway)
+// Centerpoint of the piece
+Vec3f OBJKENDOKANBAN_L_CENTERPOINT = { -150.0f, 425.0f, 40.0f }; // Left
+Vec3f OBJKENDOKANBAN_R_CENTERPOINT = { 150.0f, 425.0f, 40.0f };  // Right
+Vec3f OBJKENDOKANBAN_B_CENTERPOINT = { 0.0f, 140.0f, 40.0f };    // Bottom
+Vec3f OBJKENDOKANBAN_T_CENTERPOINT = { 0.0f, 565.0f, 40.0f };    // Top
 
-#if 1
+// Displaylists for the 4 pieces.
 Gfx* sDisplayLists[] = { gKendoKanbanTopRightDL, gKendoKanbanTopLeftDL, gKendoKanbanBottomRightDL,
                          gKendoKanbanBottomLeftDL };
-#else
-Gfx* D_80B666C0 = gKendoKanbanTopRightDL;
-Gfx* D_80B666C4 = gKendoKanbanTopLeftDL;
-Gfx* D_80B666C8 = gKendoKanbanBottomRightDL;
-Gfx* D_80B666CC = gKendoKanbanBottomLeftDL;
-#endif
-// Still not quite known to me what these points represent. They appear as as the 4 pieces of the board with a slight
-// skew in the middle row of points (L->R T->B slashing motion? does the board actually split that way?) Most confusing
-// to me is that 4 points does not a 3d-shape make, so I may be misinterpreting their use. They appear to make up a
-//
-//    X        X        X
-//
-//
-//    X
-//             X
-//                      X
-//
-//    X        X        X
-//
+
+// Coordinates on the object face providing the split
 Vec3f pointTL = { -300.0f, 850.0f, 40.0f }; // Left and Top
 Vec3f pointTC = { 10.0f, 850.0f, 40.0f };   // Right and Left
 Vec3f pointTR = { 300.0f, 850.0f, 40.0f };  // Right and Top
@@ -186,7 +170,7 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 
 Vec3f OBJKENDOKANBAN_NULL_VECTOR = { 0.0f, 0.0f, 0.0f };
-Vec3f OBJKENDOKANBAN_UNITX_VECTOR = { 1.0f, 0.0f, 0.0f }; // Unit Vector X
+Vec3f OBJKENDOKANBAN_UNITX_VECTOR = { 1.0f, 0.0f, 0.0f }; // Unit Vector X (Rotation around the X-axis)
 
 void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
     s32 pad[2];
@@ -218,18 +202,18 @@ void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
 
     this->boardFragments = OBJKENDOKANBAN_GET_F(&this->actor);
     this->actor.gravity = -2.0f;
-    this->unk_2CC_DrawMultSrc = OBJKENDOKANBAN_NULL_VECTOR;
-    this->deltaActorPosition = OBJKENDOKANBAN_NULL_VECTOR;
+    this->fragmentCenterpoint = OBJKENDOKANBAN_NULL_VECTOR;
+    this->centerPos = OBJKENDOKANBAN_NULL_VECTOR;
     this->vectLowestPoint = OBJKENDOKANBAN_NULL_VECTOR;
     this->rotationalAxis = OBJKENDOKANBAN_UNITX_VECTOR;
-    this->rotationalVelocity = 0;
-    this->rotationalAcceleration = 0;
+    this->rotationAngle = 0;
+    this->rotationVelocity = 0;
     this->idxLastLowestPoint = -1;
     this->bHasNewLowestPoint = 0;
     this->framesSinceGrounded = 0;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_26C_4ElemDrawMultDest); i++) {
-        this->unk_26C_4ElemDrawMultDest[i] = this->fourPoints[i] = OBJKENDOKANBAN_NULL_VECTOR;
+    for (i = 0; i < ARRAY_COUNT(this->cornerPos); i++) {
+        this->cornerPos[i] = this->corners[i] = OBJKENDOKANBAN_NULL_VECTOR;
     }
 
     this->unk_30A = 0;
@@ -254,63 +238,72 @@ void ObjKendoKanban_SetupDoNothing(ObjKendoKanban* this) {
 void ObjKendoKanban_DoNothing(ObjKendoKanban* this, PlayState* play) {
 }
 
+/**
+ * @brief Setup the motion of individual board pieces.
+ *
+ * This function both "breaks" the board object in two, and serves as the initializer for boards in motion.
+ *
+ */
 void ObjKendoKanban_SetupAerial(ObjKendoKanban* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    u32 temp;
+
     if (this->boardFragments == PART_FULL) {
         if ((player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_1H) ||
             (player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_2H) ||
             (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_FINISH)) {
 
-            // Retain the right side.
+            // Initialize the right half, spawn the left half.
             this->boardFragments = RIGHT_HALF;
-            this->rotationalAcceleration = DEG_TO_BINANG(10); // 0x71C;
+            this->rotationVelocity = DEG_TO_BINANG(10);
             this->actor.velocity = OBJKENDOKANBAN_RBREAK_VEL;
-            this->unk_2CC_DrawMultSrc = D_80B6669C;
+            this->fragmentCenterpoint = OBJKENDOKANBAN_R_CENTERPOINT;
 
-            // Spawn the left side.
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_KENDO_KANBAN,
                                this->actor.home.pos.x - 5.0f, this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0,
                                LEFT_HALF);
 
-            this->fourPoints[0] = pointTC; // also Left Only
-            this->fourPoints[1] = pointTR; // also Top only
-            this->fourPoints[2] = pointBR; // also Bottom only
-            this->fourPoints[3] = pointBC; // also Left Only
+            this->corners[0] = pointTC;
+            this->corners[1] = pointTR;
+            this->corners[2] = pointBR;
+            this->corners[3] = pointBC;
         } else {
 
-            // A Full board hit with any other slash cuts
+            // Initialize the bottom half, spawn the top half.
             this->boardFragments = BOTTOM_HALF;
-            this->rotationalAcceleration = DEG_TO_BINANG(-10); //-0x71C;
+            this->rotationVelocity = DEG_TO_BINANG(-10);
             this->actor.velocity = OBJKENDOKANBAN_BBREAK_VEL;
-            this->unk_2CC_DrawMultSrc = D_80B666A8;
+            this->fragmentCenterpoint = OBJKENDOKANBAN_B_CENTERPOINT;
 
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_KENDO_KANBAN, this->actor.home.pos.x,
-                               this->actor.home.pos.y + 5.0f, this->actor.home.pos.z, 0, 0, 0, 3);
+                               this->actor.home.pos.y + 5.0f, this->actor.home.pos.z, 0, 0, 0, TOP_HALF);
 
-            this->fourPoints[0] = pointCL;
-            this->fourPoints[1] = pointCR;
-            this->fourPoints[2] = pointBR;
-            this->fourPoints[3] = pointBL;
+            this->corners[0] = pointCL;
+            this->corners[1] = pointCR;
+            this->corners[2] = pointBR;
+            this->corners[3] = pointBL;
         }
     } else if (this->boardFragments == LEFT_HALF) {
-        this->rotationalAcceleration = DEG_TO_BINANG(10); // 0x71C;
+
+        // Initialize the newly spawned left half
+        this->rotationVelocity = DEG_TO_BINANG(10);
         this->actor.velocity = OBJKENDOKANBAN_LBREAK_VEL;
-        this->unk_2CC_DrawMultSrc = D_80B66690;
+        this->fragmentCenterpoint = OBJKENDOKANBAN_L_CENTERPOINT;
 
-        this->fourPoints[0] = pointTL;
-        this->fourPoints[1] = pointTC;
-        this->fourPoints[2] = pointBC;
-        this->fourPoints[3] = pointBL;
+        this->corners[0] = pointTL;
+        this->corners[1] = pointTC;
+        this->corners[2] = pointBC;
+        this->corners[3] = pointBL;
     } else if (this->boardFragments == TOP_HALF) {
-        this->rotationalAcceleration = DEG_TO_BINANG(10); // 0x71C;
-        this->actor.velocity = OBJKENDOKANBAN_TBREAK_VEL;
-        this->unk_2CC_DrawMultSrc = D_80B666B4;
 
-        this->fourPoints[0] = pointTL;
-        this->fourPoints[1] = pointTR;
-        this->fourPoints[2] = pointCR;
-        this->fourPoints[3] = pointCL;
+        // Initialize the newly spawned top half
+        this->rotationVelocity = DEG_TO_BINANG(10);
+        this->actor.velocity = OBJKENDOKANBAN_TBREAK_VEL;
+        this->fragmentCenterpoint = OBJKENDOKANBAN_T_CENTERPOINT;
+
+        this->corners[0] = pointTL;
+        this->corners[1] = pointTR;
+        this->corners[2] = pointCR;
+        this->corners[3] = pointCL;
     }
 
     this->unk_30A = 0;
@@ -320,7 +313,7 @@ void ObjKendoKanban_SetupAerial(ObjKendoKanban* this, PlayState* play) {
 void ObjKendoKanban_Aerial(ObjKendoKanban* this, PlayState* play) {
     this->actor.velocity.y += this->actor.gravity;
     Actor_UpdatePos(&this->actor);
-    this->rotationalVelocity += this->rotationalAcceleration;
+    this->rotationAngle += this->rotationVelocity;
     func_80B65DA8_BounceHandler(this, play);
     if (this->actor.world.pos.y < -200.0f) {
         this->actor.world.pos.y = -200.0f;
@@ -342,33 +335,31 @@ void ObjKendoKanban_Settled(ObjKendoKanban* this, PlayState* play) {
 void func_80B65DA8_BounceHandler(ObjKendoKanban* this, PlayState* play) {
     Vec3f lowestPoint;
     s32 pad[2];
-    Vec3f nextPositionOfLowestPoint;
+    Vec3f vecCenterOut;
     s32 pad2;
     s32 idxLowestPoint = 0;
     s32 i;
-    f32 magicRotationScalar;
+    f32 verticalScalar;
 
-    lowestPoint = this->unk_26C_4ElemDrawMultDest[0];
-    nextPositionOfLowestPoint = this->actor.world.pos;
-    nextPositionOfLowestPoint.x -= this->deltaActorPosition.x;
-    nextPositionOfLowestPoint.y -= this->deltaActorPosition.y;
-    nextPositionOfLowestPoint.z -= this->deltaActorPosition.z;
+    lowestPoint = this->cornerPos[0];
 
-    // Whats this one?
-    // X rotation and Z world position + Z rotation and -X world position, leading towards increasing the increase (an
-    // impulse?) uupon the over rotation when negative, and a decrease when positive?
-    magicRotationScalar = (this->rotationalAxis.x * nextPositionOfLowestPoint.z) +
-                          (this->rotationalAxis.z * -nextPositionOfLowestPoint.x);
-    if (magicRotationScalar < 0.0f) {
-        this->rotationalAcceleration += 0x64;
+    // Calculate gravity's effect on rotation.
+    // Determine whether the board face is pointing down or up. If pointing down, accelerate, if not, decellerate
+    vecCenterOut = this->actor.world.pos;
+    vecCenterOut.x -= this->centerPos.x;
+    vecCenterOut.y -= this->centerPos.y;
+    vecCenterOut.z -= this->centerPos.z;
+    verticalScalar = (this->rotationalAxis.x * vecCenterOut.z) + (this->rotationalAxis.z * -vecCenterOut.x);
+    if (verticalScalar < 0.0f) {
+        this->rotationVelocity += 0x64;
     } else {
-        this->rotationalAcceleration -= 0x64;
+        this->rotationVelocity -= 0x64;
     }
 
     // Find the lowest point? Why? Actor position is set to the lowest point
-    for (i = 0; i < ARRAY_COUNT(this->unk_26C_4ElemDrawMultDest); i++) {
-        if (this->unk_26C_4ElemDrawMultDest[i].y < lowestPoint.y) {
-            lowestPoint = this->unk_26C_4ElemDrawMultDest[i];
+    for (i = 0; i < ARRAY_COUNT(this->cornerPos); i++) {
+        if (this->cornerPos[i].y < lowestPoint.y) {
+            lowestPoint = this->cornerPos[i];
             idxLowestPoint = i;
         }
     }
@@ -377,14 +368,14 @@ void func_80B65DA8_BounceHandler(ObjKendoKanban* this, PlayState* play) {
     if (idxLowestPoint != this->idxLastLowestPoint) {
         this->bHasNewLowestPoint = 1;
         this->idxLastLowestPoint = idxLowestPoint;
-        this->vectLowestPoint = this->fourPoints[idxLowestPoint];
+        this->vectLowestPoint = this->corners[idxLowestPoint];
 
         Matrix_Push();
         Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                      &this->actor.shape.rot);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_MultVec3f(&this->vectLowestPoint, &this->actor.world.pos);
-        this->actor.world.pos = lowestPoint;
+        this->actor.world.pos = lowestPoint; // Doesn't this blast away all the matrix math?
         this->actor.prevPos = this->actor.world.pos;
         Matrix_Pop();
     }
@@ -401,12 +392,12 @@ void func_80B65DA8_BounceHandler(ObjKendoKanban* this, PlayState* play) {
         if (this->framesSinceGrounded >= 7) {
 
             // Suppress rotational velocity?
-            s16 deltarotationalVelocity = this->rotationalVelocity & 0x3FFF; // Limit to 90 degrees
-            if (deltarotationalVelocity >= 0x2000) {                         // If Greater than 45
-                deltarotationalVelocity -= 0x4000;                           // Go 90 degrees opposite
+            s16 deltaRotationAngle = this->rotationAngle & 0x3FFF; // Limit to 90 degrees
+            if (deltaRotationAngle >= 0x2000) {                    // If Greater than 45
+                deltaRotationAngle -= 0x4000;                      // Go 90 degrees opposite
             }
-            this->rotationalVelocity -= deltarotationalVelocity;
-            this->rotationalAcceleration = 0;
+            this->rotationAngle -= deltaRotationAngle;
+            this->rotationVelocity = 0;
             ObjKendoKanban_SetupSettled(this);
             return;
         }
@@ -424,16 +415,16 @@ void func_80B65DA8_BounceHandler(ObjKendoKanban* this, PlayState* play) {
             this->actor.velocity.z *= 0.3f;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
 
-            if (magicRotationScalar > 0.0f) {
-                if (this->rotationalAcceleration > 0) {
-                    this->rotationalAcceleration *= 1.2f;
+            if (verticalScalar > 0.0f) {
+                if (this->rotationVelocity > 0) {
+                    this->rotationVelocity *= 1.2f;
                 } else {
-                    this->rotationalAcceleration *= -0.6f;
+                    this->rotationVelocity *= -0.6f;
                 }
-            } else if (this->rotationalAcceleration < 0) {
-                this->rotationalAcceleration *= 1.2f;
+            } else if (this->rotationVelocity < 0) {
+                this->rotationVelocity *= 1.2f;
             } else {
-                this->rotationalAcceleration *= -0.6f;
+                this->rotationVelocity *= -0.6f;
             }
         }
     }
@@ -450,16 +441,16 @@ s32 func_80B6618C(ObjKendoKanban* this, PlayState* play) {
     f32 x2;
     f32 z2;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_26C_4ElemDrawMultDest); i++) {
+    for (i = 0; i < ARRAY_COUNT(this->cornerPos); i++) {
         nextIdx = i != 3 ? i + 1 : 0;
 
         // Horizontal components of displacement from X[i] to Player
-        z = this->unk_26C_4ElemDrawMultDest[i].z - player->actor.world.pos.z;
-        x = this->unk_26C_4ElemDrawMultDest[i].x - player->actor.world.pos.x;
+        z = this->cornerPos[i].z - player->actor.world.pos.z;
+        x = this->cornerPos[i].x - player->actor.world.pos.x;
 
         // Horizontal components of displacement from X[nextIdx] to Player
-        z2 = (this->unk_26C_4ElemDrawMultDest[nextIdx].z - player->actor.world.pos.z);
-        x2 = (this->unk_26C_4ElemDrawMultDest[nextIdx].x - player->actor.world.pos.x);
+        z2 = (this->cornerPos[nextIdx].z - player->actor.world.pos.z);
+        x2 = (this->cornerPos[nextIdx].x - player->actor.world.pos.x);
 
         // If the cross product's y component is negative
         if ((x * z2) < (z * x2)) {
@@ -518,8 +509,9 @@ void ObjKendoKanban_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gKendoKanbanDL);
     } else {
-        // Pieces of boards are in motion, and are displayed via a subset of possible board fragments
-        Matrix_RotateAxisS(this->rotationalVelocity, &this->rotationalAxis, MTXMODE_APPLY);
+        // Fragments of boards are in motion, so apply their rotation/translation, and display only the DLs which
+        // apply.
+        Matrix_RotateAxisS(this->rotationAngle, &this->rotationalAxis, MTXMODE_APPLY);
         Matrix_Translate(-this->vectLowestPoint.x, -this->vectLowestPoint.y, -this->vectLowestPoint.z, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -533,9 +525,9 @@ void ObjKendoKanban_Draw(Actor* thisx, PlayState* play) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_26C_4ElemDrawMultDest); i++) {
-        Matrix_MultVec3f(&this->fourPoints[i], &this->unk_26C_4ElemDrawMultDest[i]);
+    // Update the alternate position trackers (Corners and Center of the board)
+    for (i = 0; i < ARRAY_COUNT(this->cornerPos); i++) {
+        Matrix_MultVec3f(&this->corners[i], &this->cornerPos[i]);
     }
-
-    Matrix_MultVec3f(&this->unk_2CC_DrawMultSrc, &this->deltaActorPosition);
+    Matrix_MultVec3f(&this->fragmentCenterpoint, &this->centerPos);
 }
