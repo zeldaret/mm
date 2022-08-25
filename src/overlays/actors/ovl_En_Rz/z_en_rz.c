@@ -167,6 +167,7 @@ void EnRz_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
         f32 tempScale = (((27.0f - this->shadowPos.y) + this->actor.world.pos.y) * ((1 / 2.25f) * 0.001f)) + 0.01f;
         this->actor.scale.x = tempScale;
     }
+
     Math_Vec3f_Copy(&oldPos, &this->actor.world.pos);
     Math_Vec3f_Copy(&this->actor.world.pos, &this->shadowPos);
     func_800B4AEC(play, &this->actor, 50.0f);
@@ -192,8 +193,7 @@ void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f3
         animationPtr = D_80BFCD3C;
     }
 
-    if ((animIndex >= ANIMMODE_LOOP) && (animIndex < 9) &&
-        ((animIndex != this->animIndex) || (animMode != ANIMMODE_LOOP))) {
+    if ((animIndex >= 0) && (animIndex < 9) && ((animIndex != this->animIndex) || (animMode != ANIMMODE_LOOP))) {
         if (animIndex >= ARRAY_COUNT(D_80BFCD20)) {
             endFrame = Animation_GetLastFrame(sLinkAnimations[animIndex - ARRAY_COUNT(D_80BFCD20)]);
             if (animMode == ANIMMODE_LOOP) {
@@ -273,9 +273,9 @@ s32 func_80BFBB44(EnRz* this) {
                 return 2;
             }
         }
-        return true;
+        return 1;
     }
-    return false;
+    return 0;
 }
 
 s32 EnRz_CanTalk(EnRz* this, PlayState* play) {
@@ -600,19 +600,18 @@ void func_80BFC8AC(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC8F8(EnRz* this, PlayState* play) {
-    s32 temp_v0;
-
     EnRz_UpdateSkelAnime(this, play);
 
     this->actor.speedXZ = 1.5f;
-    temp_v0 = func_80BFBB44(this);
-    if (temp_v0 != 1) {
-        if (temp_v0 == 2) {
+
+    switch (func_80BFBB44(this)) {
+        case 2:
             func_80BFBA50(this, play);
             func_80BFC8AC(this, play);
-        }
-    } else {
-        func_80BFC8AC(this, play);
+            break;
+        case 1:
+            func_80BFC8AC(this, play);
+            break;
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -636,7 +635,7 @@ void EnRz_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (!DECR(this->unk_412)) {
+    if (DECR(this->unk_412) == 0) {
         this->unk_412 = Rand_S16Offset(60, 60);
     }
 
