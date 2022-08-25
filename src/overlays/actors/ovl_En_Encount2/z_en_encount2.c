@@ -208,8 +208,8 @@ void EnEncount2_Update(Actor* thisx, PlayState* play) {
 void EnEncount2_Draw(Actor* thisx, PlayState* play) {
     EnEncount2* this = THIS;
     if (this->isPopped != true) {
-        Gfx_DrawDListOpa(play, object_fusen_DL_000A00);
-        Gfx_DrawDListOpa(play, object_fusen_DL_000D78);
+        Gfx_DrawDListOpa(play, gMajoraBalloonDL);
+        Gfx_DrawDListOpa(play, gMajoraBalloonKnotDL);
     }
     EnEncount2_DrawEffects(this, play);
 }
