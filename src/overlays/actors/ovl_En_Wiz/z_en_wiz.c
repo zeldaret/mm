@@ -226,7 +226,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 typedef enum {
     /* 0x0 */ EN_WIZ_DMGEFF_NO_DAMAGE,    // Deals no damage
-    /* 0x1 */ EN_WIZ_DMGEFF_UNK1,         // Deals no damage. Was probably originally intended for stunning.
+    /* 0x1 */ EN_WIZ_DMGEFF_UNK1,         // Deals no damage. Was probably originally intended for destroying the ghosts.
     /* 0x2 */ EN_WIZ_DMGEFF_FIRE,         // Damages and sets Ice Wizrobes on fire
     /* 0x3 */ EN_WIZ_DMGEFF_FREEZE,       // Damages and surrounds Fire Wizrobes with ice
     /* 0x4 */ EN_WIZ_DMGEFF_LIGHT_ORB,    // Damages and surrounds the Wizrobe with light orbs
@@ -390,6 +390,9 @@ void EnWiz_ChangeAnim(EnWiz* this, s32 animIndex, s32 updateGhostAnim) {
     }
 }
 
+/**
+ * Responsible for moving the camera around and making the Wizrobe run in circles during the intro cutscene.
+ */
 void EnWiz_HandleIntroCutscene(EnWiz* this, PlayState* play) {
     Camera* camera;
     Vec3f targetEye;
@@ -682,13 +685,20 @@ void EnWiz_SetupAppear(EnWiz* this, PlayState* play) {
     }
 }
 
+/**
+ * Makes the Wizrobe grow in scale and become more opaque.
+ * During the first phase, it also increases the alpha for the platform's light.
+ * If the player gets too close during the first phase, this will set up the Wizrobe to disappear.
+ */
 void EnWiz_Appear(EnWiz* this, PlayState* play) {
     Vec3f staffTargetFlameScale = { 0.006f, 0.006f, 0.006f };
     Player* player = GET_PLAYER(play);
 
     EnWiz_HandleIntroCutscene(this, play);
+
     if (this->introCutsceneState >= EN_WIZ_INTRO_CS_APPEAR) {
         SkelAnime_Update(&this->skelAnime);
+
         if ((this->fightState == EN_WIZ_FIGHT_STATE_FIRST_PHASE) &&
             (this->introCutsceneState >= EN_WIZ_INTRO_CS_DISAPPEAR) &&
             ((this->actor.xzDistToPlayer < 200.0f) ||
@@ -723,6 +733,7 @@ void EnWiz_Appear(EnWiz* this, PlayState* play) {
                     0x1000000 | 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x200 | 0x20 | 0x2;
                 Math_Vec3f_Copy(&this->staffTargetFlameScale, &staffTargetFlameScale);
                 this->targetPlatformLightAlpha = 0;
+
                 if (this->introCutsceneState == EN_WIZ_INTRO_CS_DISAPPEAR) {
                     this->timer = 0;
                     this->introCutsceneTimer = 20;
@@ -755,6 +766,10 @@ void EnWiz_SetupDance(EnWiz* this) {
     this->actionFunc = EnWiz_Dance;
 }
 
+/**
+ * Makes the Wizrobe spin around and dance until there are no active projectiles
+ * and it completes at least three loops of its dancing animation.
+ */
 void EnWiz_Dance(EnWiz* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
     s32 i;
@@ -868,6 +883,9 @@ void EnWiz_SetupWindUp(EnWiz* this) {
     this->actionFunc = EnWiz_WindUp;
 }
 
+/**
+ * Plays the wind up animation for at least two animation loops before attacking.
+ */
 void EnWiz_WindUp(EnWiz* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
     s32 i;
@@ -899,6 +917,9 @@ void EnWiz_SetupAttack(EnWiz* this) {
     this->actionFunc = EnWiz_Attack;
 }
 
+/**
+ * Spawns an EnWizFire projectile that is pointed at the player, then disappears.
+ */
 void EnWiz_Attack(EnWiz* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
@@ -959,6 +980,10 @@ void EnWiz_SetupDisappear(EnWiz* this) {
     this->actionFunc = EnWiz_Disappear;
 }
 
+/**
+ * Spin the Wizrobe around and shrink it so that it disappears into its platform.
+ * Afterwards, set it up to appear again.
+ */
 void EnWiz_Disappear(EnWiz* this, PlayState* play) {
     s32 i;
 
@@ -978,6 +1003,7 @@ void EnWiz_Disappear(EnWiz* this, PlayState* play) {
     Math_Vec3f_Copy(&this->staffTargetFlameScale, &gZeroVec3f);
     if (this->scale < 0.001f) {
         this->scale = 0.0f;
+
         if ((this->introCutsceneState == EN_WIZ_INTRO_CS_DISAPPEAR) && (this->introCutsceneTimer == 0)) {
             this->introCutsceneState = EN_WIZ_INTRO_CS_END;
             ActorCutscene_Stop(this->actor.cutscene);
@@ -1028,6 +1054,10 @@ void EnWiz_SetupDamaged(EnWiz* this, PlayState* play) {
     this->actionFunc = EnWiz_Damaged;
 }
 
+/**
+ * Spins the Wizrobe around quickly and makes it jump in the air if it was defeated or if
+ * it was damaged in a certain way. Afterwards, the Wizrobe either disappears or dies.
+ */
 void EnWiz_Damaged(EnWiz* this, PlayState* play) {
     s32 i;
 
@@ -1101,6 +1131,10 @@ void EnWiz_SetupDead(EnWiz* this) {
     this->actionFunc = EnWiz_Dead;
 }
 
+/**
+ * Slows the Wizrobe's rotation to a stop, then makes it burst into flames.
+ * If the Wizrobe has a switch flag, it will set that switch flag when it dies.
+ */
 void EnWiz_Dead(EnWiz* this, PlayState* play) {
     s32 i;
 
@@ -1441,6 +1475,7 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
     func_8012C2DC(play->state.gfxCtx);
     func_8012C28C(play->state.gfxCtx);
 
+    // Draw the light emanating from the Wizrobe's platform
     if (this->fightState == EN_WIZ_FIGHT_STATE_FIRST_PHASE) {
         Matrix_Push();
 
@@ -1472,7 +1507,7 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
 
     if ((this->type == EN_WIZ_TYPE_FIRE) || (this->type == EN_WIZ_TYPE_FIRE_NO_MINI_BOSS_BGM)) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 170, 255);
-        gDPSetEnvColor(POLY_XLU_DISP++, 0xFF, 50, 0, 255);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 50, 0, 255);
     } else {
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 170, 255, 255, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 255, 255);
