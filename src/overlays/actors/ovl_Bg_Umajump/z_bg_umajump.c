@@ -37,13 +37,13 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_80919F30(BgUmajump* this, PlayState* play) {
-    if (this->objectIndex >= 90) {
-        this->objectIndex = 0;
+    if (this->rotationTimer >= 90) {
+        this->rotationTimer = 0;
     }
 
-    this->objectIndex++;
+    this->rotationTimer++;
     this->dyna.actor.shape.yOffset =
-        Math_SinS((this->objectIndex / 90.0f) * 65536.0f) * (20.0f / this->dyna.actor.scale.y);
+        Math_SinS((this->rotationTimer / 90.0f) * 65536.0f) * (20.0f / this->dyna.actor.scale.y);
 }
 
 void BgUmajump_StopCutscene(BgUmajump* this, PlayState* play) {
@@ -194,7 +194,7 @@ void func_8091A5A0(Actor* thisx, PlayState* play) {
     if (this->dyna.actor.params == 5) {
         if ((this->dyna.bgId == BGACTOR_NEG_ONE) && (gSaveContext.save.weekEventReg[22] & 1)) {
             DynaPolyActor_LoadMesh(play, &this->dyna, &object_umajump_Colheader_001558);
-        } else if ((this->dyna.bgId != -1) && !(gSaveContext.save.weekEventReg[22] & 1)) {
+        } else if ((this->dyna.bgId != BGACTOR_NEG_ONE) && !(gSaveContext.save.weekEventReg[22] & 1)) {
             DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
         }
     } else if (this->dyna.actor.params == 6) {
@@ -203,7 +203,7 @@ void func_8091A5A0(Actor* thisx, PlayState* play) {
              ((gSaveContext.save.day == 2) && (gSaveContext.save.isNight == true) &&
               (gSaveContext.save.time >= CLOCK_TIME(5, 30)) && (gSaveContext.save.time <= CLOCK_TIME(6, 0))))) {
             DynaPolyActor_LoadMesh(play, &this->dyna, &object_umajump_Colheader_001558);
-        } else if ((this->dyna.bgId != -1) && (gSaveContext.save.weekEventReg[22] & 1) &&
+        } else if ((this->dyna.bgId != BGACTOR_NEG_ONE) && (gSaveContext.save.weekEventReg[22] & 1) &&
                    ((gSaveContext.save.day != 2) || (gSaveContext.save.isNight != true) ||
                     (gSaveContext.save.time < CLOCK_TIME(5, 30)) || (gSaveContext.save.time > CLOCK_TIME(6, 0)))) {
             DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -214,7 +214,7 @@ void func_8091A5A0(Actor* thisx, PlayState* play) {
 void BgUmajump_Draw(Actor* thisx, PlayState* play) {
     BgUmajump* this = THIS;
 
-    if (this->dyna.bgId != -1) {
+    if (this->dyna.bgId != BGACTOR_NEG_ONE) {
         Gfx_DrawDListOpa(play, gHorseJumpFenceDL);
     }
 }

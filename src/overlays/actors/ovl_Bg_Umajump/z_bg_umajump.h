@@ -12,7 +12,10 @@ typedef void (*BgUmajumpActionFunc)(struct BgUmajump*, PlayState*);
 typedef struct BgUmajump {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgUmajumpActionFunc actionFunc;
-    /* 0x160 */ s32 objectIndex;
+    /* 0x160 */ union {
+                    s32 objectIndex;
+                    s32 rotationTimer; // y rotation 
+                };
     /* 0x164 */ s32 hasSoundPlayed;
     /* 0x168 */ Actor* horse;
 } BgUmajump; // size = 0x16C
