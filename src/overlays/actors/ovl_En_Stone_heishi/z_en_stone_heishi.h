@@ -24,7 +24,7 @@ typedef struct EnStoneheishi {
     /* 0x26A */ s16 DrinkBottleState;
     /* 0x26C */ f32 endFrame;
     /* 0x270 */ s16 action;
-    /* 0x272 */ s16 textIndex;
+    /* 0x272 */ s16 textIdIndex;
     /* 0x274 */ s16 textIdSet;
     /* 0x276 */ u8 bottleDisplay;
     /* 0x277 */ u8 playerGivesBluePotion;
@@ -32,11 +32,11 @@ typedef struct EnStoneheishi {
 } EnStoneheishi; // size = 0x2C4
 
 typedef enum EN_STONE_ACTION {
-    /* 0 */ EN_STONE_ACTION_1,
-    /* 1 */ EN_STONE_ACTION_2,
+    /* 0 */ EN_STONE_ACTION_0,
+    /* 1 */ EN_STONE_ACTION_1,
     /* 2 */ EN_STONE_ACTION_CHECK_ITEM,
     /* 3 */ EN_STONE_ACTION_DRINK_BOTTLE,
-    /* 4 */ EN_STONE_ACTION_5
+    /* 4 */ EN_STONE_ACTION_4
 } EN_STONE_ACTION;
 
 typedef enum EN_STONE_DRINK_BOTTLE {
