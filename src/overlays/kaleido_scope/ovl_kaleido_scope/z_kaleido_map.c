@@ -456,7 +456,7 @@ s16 D_8082B5B4[] = {
     0x007F, 0x0099, 0x008A, 0x00AB, 0x0092, 0x0077, 0x004D, 0x006A, 0x0078, 0x0049, 0x0063, 0x0000,
 };
 s16 D_8082B5CC[] = {
-    0x0005, 0x0004, 0x0006, 0x0000, 0x0008, 0x0005, 0x0004, 0x0006, 0x0000, 0x0008,
+    5, 4, 6, 0, 8, 5, 4, 6, 0, 8,
 };
 // Issues with the iterators (t, i, j, k)
 // k appears unused but still shows up as sp46
@@ -618,7 +618,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                 pauseCtx->mapPageVtx[0xA4].v.ob[1] - 12;
         }
 
-        for (i = 0, k = 0; i < 10; i++, k++, j += 4) {
+        for (i = 0; i < 10; i++, k++, j += 4) {
             if (pauseCtx->worldMapPoints[i] != 0) {
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[164 + i * 4], 4, 0);
                 gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
@@ -630,43 +630,49 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         if ((pauseCtx->state == 6) && (pauseCtx->state != 7) && ((pauseCtx->state < 8) || (pauseCtx->state >= 0x13))) {
             j = 0;
             i = 0;
-            sceneId = play->sceneNum;
-            if (sceneId == 7) {
+            k = play->sceneNum;
+            if (k == 7) {
                 if (play->roomCtx.currRoom.num == 5) {
-                    sceneId = 0x4D;
+                    k = 0x4D;
                 } else if ((play->roomCtx.currRoom.num == 6) || (play->roomCtx.currRoom.num == 8) ||
                            (play->roomCtx.currRoom.num == 0xC)) {
-                    sceneId = 0x2B;
+                    k = 0x2B;
                 } else {
-                    sceneId = Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.respawn[3].entrance));
+                    k = Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.respawn[3].entrance));
                 }
             }
 
             while (true) {
-                if ((gScenesPerRegion[i][j] == 0xFFFF) && (i++, j = 0, (i == 0xB))) {
-                    i = 0;
-                    if (sceneId == 0x26) {
-                        //! FAKE: (void)0
-                        i = D_8082B5CC[((void)0, play->curSpawn)];
+                if ((gScenesPerRegion[i][j] == 0xFFFF)) {
+                    i++;
+                    j = 0;
+                    if (i == 0xB) {
+                        i = 0;
+                        if (k == 0x26) {
+                            j = play->curSpawn;
+                            i = D_8082B5CC[j];
+                            break;
+                        }
+
+                        while (true) {
+                            if (gScenesPerRegion[i][j] == 0xFFFF) {
+                                i++;
+                                if (i == 0xB) {
+                                    break;
+                                }
+                                j = 0;
+                                if (Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.respawn[3].entrance)) ==
+                                    gScenesPerRegion[i][j]) {
+                                    break;
+                                }
+                            }
+                            j++;
+                        }
                         break;
                     }
+                }
 
-                    while (true) {
-                        if (gScenesPerRegion[i][j] == 0xFFFF) {
-                            i++;
-                            if (i == 0xB) {
-                                break;
-                            }
-                            j = 0;
-                            if (Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.respawn[3].entrance)) ==
-                                gScenesPerRegion[i][j]) {
-                                break;
-                            }
-                        }
-                        j++;
-                    }
-                    break;
-                } else if (sceneId == gScenesPerRegion[i][j]) {
+                if (k == gScenesPerRegion[i][j]) {
                     break;
                 }
                 j++;
