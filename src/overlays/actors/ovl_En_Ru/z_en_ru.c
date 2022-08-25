@@ -349,7 +349,7 @@ void EnRu_Draw(Actor* thisx, PlayState* play) {
 
     for (i = 0; i < 5; i++) {
         SubS_GenShadowTex(&this->bodyPartsPos[0], &this->actor.world.pos, shadowTex, (i / 5.0f),
-                          (ARRAY_COUNT(sRuBodyParts) - 1), sRuShadowSizes, sRuBodyParts);
+                          (ARRAY_COUNT(sRuBodyParts)), sRuShadowSizes, sRuBodyParts);
     }
 
     SubS_DrawShadowTex(&this->actor, &play->state, shadowTex);
