@@ -198,7 +198,7 @@ void func_80821A04(PlayState* play) {
 
     play_sound(NA_SE_SY_CURSOR);
 
-    pauseCtx->unk_298 = 4.0f;
+    pauseCtx->cursorShrinkRate = 4.0f;
 
     // TODO: indexing of D_801C6A98 is likely wrong
     gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
@@ -1858,38 +1858,38 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
     }
 }
 
-f32 D_8082BCB4[] = {
+f32 sItemMaskCursorsX[] = {
     -62.0f, -36.0f, -10.0f, 16.0f, 42.0f, 68.0f,
 };
-f32 D_8082BCCC[] = {
+f32 sItemMaskCursorsY[] = {
     31.0f,
     5.0f,
     -21.0f,
     -47.0f,
 };
-f32 D_8082BCDC[] = {
+f32 sWorldMap2CursorsX[] = {
     -49.0f, -35.0f, -3.0f, 4.0f, 12.0f, 8.0f, 7.0f, 40.0f, 47.0f, 49.0f, 55.0f,
 };
-f32 D_8082BD08[] = {
+f32 sWorldMap2CursorsY[] = {
     -15.0f, -36.0f, -23.0f, -49.0f, -29.0f, -8.0f, 25.0f, 2.0f, -9.0f, 28.0f, 7.0f,
 };
-f32 D_8082BD34[] = {
+f32 sWorldMap1CursorsX[] = {
     -50.0f, -38.0f, 6.0f, 11.0f, 8.0f, 0.0f, 12.0f, 31.0f, 48.0f, 56.0f,
 };
-f32 D_8082BD5C[] = {
+f32 sWorldMap1CursorsY[] = {
     -14.0f, -39.0f, 23.0f, 11.0f, -8.0f, -15.0f, -31.0f, -30.0f, -10.0f, 11.0f,
 };
-f32 D_8082BD84[] = {
+f32 sDungeonMapCursorsX[] = {
     -72.0f, -47.0f, -26.0f, -50.0f, -48.0f, -48.0f, -48.0f, -48.0f, -48.0f,
 };
-f32 D_8082BDA8[] = {
+f32 sDungeonMapCursorsY[] = {
     -47.0f, -47.0f, -47.0f, -30.0f, 33.0f, 22.0f, 11.0f, -2.0f, -13.0f,
 };
-f32 D_8082BDCC[] = {
+f32 sQuestStatusCursorsX[] = {
     52.0f,  80.0f,  24.0f,  52.0f,  81.0f, 24.0f, -78.0f, -61.0f, -44.0f, -24.0f, -6.0f,  -3.0f,
     -78.0f, -61.0f, -44.0f, -24.0f, -6.0f, -3.0f, -68.0f, 22.0f,  83.0f,  -67.0f, -21.0f,
 };
-f32 D_8082BE28[] = {
+f32 sQuestStatusCursorsY[] = {
     33.0f,  18.0f,  18.0f,  0.0f,   -23.0f, -23.0f, -29.0f, -29.0f, -29.0f, -29.0f, -29.0f, -29.0f,
     -11.0f, -11.0f, -11.0f, -11.0f, -11.0f, -11.0f, 27.0f,  -53.0f, -53.0f, 14.0f,  26.0f,
 };
@@ -1906,112 +1906,112 @@ void KaleidoScope_UpdateCursorSize(PlayState* play) {
     if (pauseCtx->cursorSpecialPos == 0) {
         switch (pauseCtx->pageIndex) {
             case PAUSE_ITEM:
-                pauseCtx->unk_288 = D_8082BCB4[pauseCtx->cursorX[PAUSE_ITEM]];
-                pauseCtx->unk_28C = D_8082BCCC[pauseCtx->cursorY[PAUSE_ITEM]];
-                pauseCtx->unk_290 = 15.0f;
-                pauseCtx->unk_294 = 15.0f;
+                pauseCtx->cursorX = sItemMaskCursorsX[pauseCtx->cursorXIndex[PAUSE_ITEM]];
+                pauseCtx->cursorY = sItemMaskCursorsY[pauseCtx->cursorYIndex[PAUSE_ITEM]];
+                pauseCtx->cursorWidth = 15.0f;
+                pauseCtx->cursorHeight = 15.0f;
                 break;
 
             case PAUSE_MAP:
                 if (!sInDungeonScene) {
                     if ((pauseCtx->state >= PAUSE_STATE_15) && (pauseCtx->state <= PAUSE_STATE_19)) {
-                        pauseCtx->unk_288 = D_8082BD34[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
-                        pauseCtx->unk_28C = D_8082BD5C[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
+                        pauseCtx->cursorX = sWorldMap1CursorsX[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
+                        pauseCtx->cursorY = sWorldMap1CursorsY[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
                     } else {
-                        pauseCtx->unk_288 = D_8082BCDC[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
-                        pauseCtx->unk_28C = D_8082BD08[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
+                        pauseCtx->cursorX = sWorldMap2CursorsX[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
+                        pauseCtx->cursorY = sWorldMap2CursorsY[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
                     }
                     if (!((pauseCtx->state >= PAUSE_STATE_15) && (pauseCtx->state <= PAUSE_STATE_19))) {
-                        pauseCtx->unk_294 = 10.0f;
-                        pauseCtx->unk_290 = 10.0f;
+                        pauseCtx->cursorHeight = 10.0f;
+                        pauseCtx->cursorWidth = 10.0f;
                     } else {
-                        pauseCtx->unk_294 = 15.0f;
-                        pauseCtx->unk_290 = 15.0f;
+                        pauseCtx->cursorHeight = 15.0f;
+                        pauseCtx->cursorWidth = 15.0f;
                     }
                 } else {
-                    pauseCtx->unk_288 = D_8082BD84[pauseCtx->cursorPoint[PAUSE_MAP]];
-                    pauseCtx->unk_28C = D_8082BDA8[pauseCtx->cursorPoint[PAUSE_MAP]];
+                    pauseCtx->cursorX = sDungeonMapCursorsX[pauseCtx->cursorPoint[PAUSE_MAP]];
+                    pauseCtx->cursorY = sDungeonMapCursorsY[pauseCtx->cursorPoint[PAUSE_MAP]];
                     if (pauseCtx->cursorSlot[pauseCtx->pageIndex] >= 4) {
-                        pauseCtx->unk_290 = 18.0f;
-                        pauseCtx->unk_294 = 12.0f;
+                        pauseCtx->cursorWidth = 18.0f;
+                        pauseCtx->cursorHeight = 12.0f;
                     } else if (pauseCtx->cursorSlot[pauseCtx->pageIndex] == 3) {
-                        pauseCtx->unk_294 = 12.0f;
-                        pauseCtx->unk_290 = 40.0f;
+                        pauseCtx->cursorHeight = 12.0f;
+                        pauseCtx->cursorWidth = 40.0f;
                     } else {
-                        pauseCtx->unk_294 = 15.0f;
-                        pauseCtx->unk_290 = 15.0f;
+                        pauseCtx->cursorHeight = 15.0f;
+                        pauseCtx->cursorWidth = 15.0f;
                     }
                 }
                 break;
 
             case PAUSE_QUEST:
                 if (YREG(69) == 0) {
-                    pauseCtx->unk_288 = D_8082BDCC[pauseCtx->cursorPoint[PAUSE_QUEST]];
-                    pauseCtx->unk_28C = D_8082BE28[pauseCtx->cursorPoint[PAUSE_QUEST]];
+                    pauseCtx->cursorX = sQuestStatusCursorsX[pauseCtx->cursorPoint[PAUSE_QUEST]];
+                    pauseCtx->cursorY = sQuestStatusCursorsY[pauseCtx->cursorPoint[PAUSE_QUEST]];
                 } else {
-                    pauseCtx->unk_288 = YREG(70);
-                    pauseCtx->unk_28C = YREG(71);
+                    pauseCtx->cursorX = YREG(70);
+                    pauseCtx->cursorY = YREG(71);
                 }
-                pauseCtx->unk_294 = 17.0f;
-                pauseCtx->unk_290 = 17.0f;
+                pauseCtx->cursorHeight = 17.0f;
+                pauseCtx->cursorWidth = 17.0f;
                 if (pauseCtx->cursorSlot[pauseCtx->pageIndex] == 0x17) {
-                    pauseCtx->unk_294 = 25.0f;
-                    pauseCtx->unk_290 = 25.0f;
+                    pauseCtx->cursorHeight = 25.0f;
+                    pauseCtx->cursorWidth = 25.0f;
                 } else if (pauseCtx->cursorSlot[pauseCtx->pageIndex] < 6) {
-                    pauseCtx->unk_294 = 18.0f;
-                    pauseCtx->unk_290 = 18.0f;
+                    pauseCtx->cursorHeight = 18.0f;
+                    pauseCtx->cursorWidth = 18.0f;
                 } else if ((pauseCtx->cursorSlot[pauseCtx->pageIndex] >= 6) &&
                            (pauseCtx->cursorSlot[pauseCtx->pageIndex] < 0x12)) {
-                    pauseCtx->unk_294 = 12.0f;
-                    pauseCtx->unk_290 = 12.0f;
+                    pauseCtx->cursorHeight = 12.0f;
+                    pauseCtx->cursorWidth = 12.0f;
                 }
                 break;
 
             case PAUSE_MASK:
-                pauseCtx->unk_288 = D_8082BCB4[pauseCtx->cursorX[PAUSE_MASK]];
-                pauseCtx->unk_28C = D_8082BCCC[pauseCtx->cursorY[PAUSE_MASK]];
-                pauseCtx->unk_290 = 15.0f;
-                pauseCtx->unk_294 = 15.0f;
+                pauseCtx->cursorX = sItemMaskCursorsX[pauseCtx->cursorXIndex[PAUSE_MASK]];
+                pauseCtx->cursorY = sItemMaskCursorsY[pauseCtx->cursorYIndex[PAUSE_MASK]];
+                pauseCtx->cursorWidth = 15.0f;
+                pauseCtx->cursorHeight = 15.0f;
                 break;
         }
 
-        pauseCtx->unk_286 += 0x300;
+        pauseCtx->cursorSpinPhase += 0x300;
     } else {
         if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
-            pauseCtx->unk_288 = -93.0f;
+            pauseCtx->cursorX = -93.0f;
         } else { // PAUSE_CURSOR_PAGE_RIGHT
-            pauseCtx->unk_288 = 101.0f;
+            pauseCtx->cursorX = 101.0f;
         }
-        pauseCtx->unk_286 += 0x300;
-        pauseCtx->unk_294 = 16.0f;
-        pauseCtx->unk_290 = 16.0f;
-        pauseCtx->unk_28C = -4.0f;
+        pauseCtx->cursorSpinPhase += 0x300;
+        pauseCtx->cursorHeight = 16.0f;
+        pauseCtx->cursorWidth = 16.0f;
+        pauseCtx->cursorY = -4.0f;
     }
 
-    if (pauseCtx->unk_290 < pauseCtx->unk_298) {
-        pauseCtx->unk_290 = 0;
+    if (pauseCtx->cursorWidth < pauseCtx->cursorShrinkRate) {
+        pauseCtx->cursorWidth = 0;
     } else {
-        pauseCtx->unk_290 -= pauseCtx->unk_298;
+        pauseCtx->cursorWidth -= pauseCtx->cursorShrinkRate;
     }
 
-    if (pauseCtx->unk_294 < pauseCtx->unk_298) {
-        pauseCtx->unk_294 = 0.0f;
+    if (pauseCtx->cursorHeight < pauseCtx->cursorShrinkRate) {
+        pauseCtx->cursorHeight = 0.0f;
     } else {
-        pauseCtx->unk_294 -= pauseCtx->unk_298;
+        pauseCtx->cursorHeight -= pauseCtx->cursorShrinkRate;
     }
 
-    if (pauseCtx->unk_298 != 0.0f) {
-        pauseCtx->unk_298 -= 1.0f;
+    if (pauseCtx->cursorShrinkRate != 0.0f) {
+        pauseCtx->cursorShrinkRate -= 1.0f;
     }
 
-    sCursorCirclesX[0] = Math_SinS(pauseCtx->unk_286) * pauseCtx->unk_290;
-    sCursorCirclesX[1] = Math_SinS(pauseCtx->unk_286 + 0x4000) * pauseCtx->unk_290;
-    sCursorCirclesX[2] = Math_SinS(pauseCtx->unk_286 + 0x8000) * pauseCtx->unk_290;
-    sCursorCirclesX[3] = Math_SinS(pauseCtx->unk_286 + 0xC000) * pauseCtx->unk_290;
-    sCursorCirclesY[0] = Math_CosS(pauseCtx->unk_286) * pauseCtx->unk_294;
-    sCursorCirclesY[1] = Math_CosS(pauseCtx->unk_286 + 0x4000) * pauseCtx->unk_294;
-    sCursorCirclesY[2] = Math_CosS(pauseCtx->unk_286 + 0x8000) * pauseCtx->unk_294;
-    sCursorCirclesY[3] = Math_CosS(pauseCtx->unk_286 + 0xC000) * pauseCtx->unk_294;
+    sCursorCirclesX[0] = Math_SinS(pauseCtx->cursorSpinPhase) * pauseCtx->cursorWidth;
+    sCursorCirclesX[1] = Math_SinS(pauseCtx->cursorSpinPhase + 0x4000) * pauseCtx->cursorWidth;
+    sCursorCirclesX[2] = Math_SinS(pauseCtx->cursorSpinPhase + 0x8000) * pauseCtx->cursorWidth;
+    sCursorCirclesX[3] = Math_SinS(pauseCtx->cursorSpinPhase + 0xC000) * pauseCtx->cursorWidth;
+    sCursorCirclesY[0] = Math_CosS(pauseCtx->cursorSpinPhase) * pauseCtx->cursorHeight;
+    sCursorCirclesY[1] = Math_CosS(pauseCtx->cursorSpinPhase + 0x4000) * pauseCtx->cursorHeight;
+    sCursorCirclesY[2] = Math_CosS(pauseCtx->cursorSpinPhase + 0x8000) * pauseCtx->cursorHeight;
+    sCursorCirclesY[3] = Math_CosS(pauseCtx->cursorSpinPhase + 0xC000) * pauseCtx->cursorHeight;
 }
 
 void KaleidoScope_DrawCursor(PlayState* play) {
@@ -2029,7 +2029,7 @@ void KaleidoScope_DrawCursor(PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sCursorPrimR, sCursorPrimG, sCursorPrimB, 255);
         gDPSetEnvColor(POLY_OPA_DISP++, sCursorEnvR, sCursorEnvG, sCursorEnvB, 255);
 
-        Matrix_Translate(pauseCtx->unk_288, pauseCtx->unk_28C, -50.0f, MTXMODE_NEW);
+        Matrix_Translate(pauseCtx->cursorX, pauseCtx->cursorY, -50.0f, MTXMODE_NEW);
         Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
 
         for (i = 0; i < 4; i++) {
@@ -2273,7 +2273,7 @@ void KaleidoScope_Update(PlayState* play) {
             D_8082DA58[EQUIP_SLOT_C_RIGHT] = gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT];
             D_8082DA58[EQUIP_SLOT_A] = gSaveContext.buttonStatus[EQUIP_SLOT_A];
 
-            pauseCtx->cursorX[PAUSE_MAP] = 0;
+            pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
             pauseCtx->cursorSlot[PAUSE_MAP] = XREG(94) + 4;
             pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256 = XREG(94) + 4;
 
@@ -2847,7 +2847,7 @@ void KaleidoScope_Update(PlayState* play) {
             D_8082DA58[EQUIP_SLOT_C_DOWN] = gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN];
             D_8082DA58[EQUIP_SLOT_C_RIGHT] = gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT];
             D_8082DA58[EQUIP_SLOT_A] = gSaveContext.buttonStatus[EQUIP_SLOT_A];
-            pauseCtx->cursorX[PAUSE_MAP] = 0;
+            pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
             pauseCtx->cursorSlot[PAUSE_MAP] = XREG(94) + 4;
             pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256 = XREG(94) + 4;
             D_8082B918 = -175;

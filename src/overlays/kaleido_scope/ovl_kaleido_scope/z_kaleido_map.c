@@ -285,15 +285,15 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
             pauseCtx->cursorColorSet = 0;
             oldCursorPoint = pauseCtx->cursorPoint[PAUSE_MAP];
             if (pauseCtx->stickRelX > 30) {
-                pauseCtx->unk_298 = 4.0f;
+                pauseCtx->cursorShrinkRate = 4.0f;
                 if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
                     func_80821A04(play);
-                    pauseCtx->cursorX[PAUSE_MAP] = 0;
+                    pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
                     pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->unk_256;
                     pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256;
                 } else if (pauseCtx->cursorSpecialPos == 0) {
-                    if (pauseCtx->cursorX[PAUSE_MAP] == 0) {
-                        pauseCtx->cursorX[PAUSE_MAP] = 1;
+                    if (pauseCtx->cursorXIndex[PAUSE_MAP] == 0) {
+                        pauseCtx->cursorXIndex[PAUSE_MAP] = 1;
                         pauseCtx->cursorPoint[PAUSE_MAP] = 3;
                     } else {
                         if (pauseCtx->cursorPoint[PAUSE_MAP] == 3) {
@@ -313,10 +313,10 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
                     }
                 }
             } else if (pauseCtx->stickRelX < -30) {
-                pauseCtx->unk_298 = 4.0f;
+                pauseCtx->cursorShrinkRate = 4.0f;
                 if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_RIGHT) {
                     func_80821A04(play);
-                    pauseCtx->cursorX[PAUSE_MAP] = 1;
+                    pauseCtx->cursorXIndex[PAUSE_MAP] = 1;
                     pauseCtx->cursorPoint[PAUSE_MAP] = 2;
                     if (!CHECK_DUNGEON_ITEM(2, gSaveContext.dungeonIndex)) {
                         pauseCtx->cursorPoint[PAUSE_MAP]--;
@@ -331,10 +331,10 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
                         pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_MAP];
                     }
                 } else if (pauseCtx->cursorSpecialPos == 0) {
-                    if (pauseCtx->cursorX[PAUSE_MAP] == 0) {
+                    if (pauseCtx->cursorXIndex[PAUSE_MAP] == 0) {
                         KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
                     } else if (pauseCtx->cursorPoint[PAUSE_MAP] == 3) {
-                        pauseCtx->cursorX[PAUSE_MAP] = 0;
+                        pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
                         pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->unk_256;
                         pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256;
                     } else {
@@ -359,12 +359,12 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
                                  gBitFlags[i]) ||
                                 func_801090B0(4 - i)) {
                                 pauseCtx->cursorPoint[PAUSE_MAP] = i + 4;
-                                pauseCtx->unk_298 = 4.0f;
+                                pauseCtx->cursorShrinkRate = 4.0f;
                                 break;
                             }
                         }
                     } else if (pauseCtx->cursorPoint[PAUSE_MAP] == 3) {
-                        pauseCtx->cursorX[PAUSE_MAP] = 0;
+                        pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
                         pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->unk_256;
                         pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256;
                     } else {
@@ -378,13 +378,13 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
                                  gBitFlags[i]) ||
                                 func_801090B0(4 - i)) {
                                 pauseCtx->cursorPoint[PAUSE_MAP] = i + 4;
-                                pauseCtx->unk_298 = 4.0f;
+                                pauseCtx->cursorShrinkRate = 4.0f;
                                 break;
                             }
                         }
 
-                    } else if (pauseCtx->cursorX[PAUSE_MAP] == 0) {
-                        pauseCtx->cursorX[PAUSE_MAP] = 1;
+                    } else if (pauseCtx->cursorXIndex[PAUSE_MAP] == 0) {
+                        pauseCtx->cursorXIndex[PAUSE_MAP] = 1;
                         pauseCtx->cursorPoint[PAUSE_MAP] = 3;
                     } else {
                         if (pauseCtx->cursorPoint[PAUSE_MAP] == 3) {
@@ -416,7 +416,7 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
                 Interface_ChangeAlpha(50);
             }
 
-            if ((pauseCtx->cursorX[PAUSE_MAP] == 0) && (pauseCtx->cursorSpecialPos == 0)) {
+            if ((pauseCtx->cursorXIndex[PAUSE_MAP] == 0) && (pauseCtx->cursorSpecialPos == 0)) {
                 pauseCtx->unk_256 = pauseCtx->cursorPoint[PAUSE_MAP];
             }
 
@@ -718,7 +718,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
 
         if (pauseCtx->cursorSpecialPos == 0) {
             if (pauseCtx->stickRelX > 30) {
-                pauseCtx->unk_298 = 4.0f;
+                pauseCtx->cursorShrinkRate = 4.0f;
                 D_8082B5F4 = 0;
 
                 while (true) {
@@ -733,7 +733,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                     }
                 }
             } else if (pauseCtx->stickRelX < -30) {
-                pauseCtx->unk_298 = 4.0f;
+                pauseCtx->cursorShrinkRate = 4.0f;
                 D_8082B5F4 = 0;
 
                 while (true) {
@@ -761,7 +761,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                 if (pauseCtx->stickRelX > 30) {
                     pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = -1;
                     pauseCtx->cursorSpecialPos = 0;
-                    pauseCtx->unk_298 = 4.0f;
+                    pauseCtx->cursorShrinkRate = 4.0f;
 
                     while (true) {
                         pauseCtx->cursorPoint[PAUSE_WORLD_MAP]++;
@@ -785,7 +785,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             } else if (pauseCtx->stickRelX < -30) {
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = 11;
                 pauseCtx->cursorSpecialPos = 0;
-                pauseCtx->unk_298 = 4.0f;
+                pauseCtx->cursorShrinkRate = 4.0f;
 
                 while (true) {
                     pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
@@ -819,7 +819,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 
         if (pauseCtx->stickRelX > 30) {
-            pauseCtx->unk_298 = 4.0f;
+            pauseCtx->cursorShrinkRate = 4.0f;
             D_8082B5F4 = 0;
             do {
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP]++;
@@ -828,7 +828,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                 }
             } while (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] == 0);
         } else if (pauseCtx->stickRelX < -30) {
-            pauseCtx->unk_298 = 4.0f;
+            pauseCtx->cursorShrinkRate = 4.0f;
             D_8082B5F4 = 0;
             do {
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
