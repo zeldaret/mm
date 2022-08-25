@@ -32,20 +32,29 @@ const ActorInit En_Nimotsu_InitVars = {
 };
 
 static ColliderCylinderInit sCylinderInit = {
-    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER },
-    { ELEMTYPE_UNK4,
-      { 0x00000000, 0x00, 0x00 },
-      { 0x00000000, 0x00, 0x00 },
-      TOUCH_NONE | TOUCH_SFX_NORMAL,
-      BUMP_NONE,
-      OCELEM_ON },
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_NONE,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK4,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x00000000, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_NONE,
+        OCELEM_ON,
+    },
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
 void EnNimotsu_UpdateCollision(EnNimotsu* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 4U);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 4);
 }
 
 void EnNimotsu_Init(Actor* thisx, PlayState* play) {
@@ -62,12 +71,14 @@ void EnNimotsu_Init(Actor* thisx, PlayState* play) {
 
 void EnNimotsu_Destroy(Actor* thisx, PlayState* play) {
     EnNimotsu* this = THIS;
+
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnNimotsu_Update(Actor* thisx, PlayState* play) {
+    s32 pad;
     EnNimotsu* this = THIS;
-    u32 pad;
+
     Vec3f dustPosition;
 
     Actor_MoveWithGravity(&this->actor);
@@ -78,11 +89,11 @@ void EnNimotsu_Update(Actor* thisx, PlayState* play) {
             this->dustDone |= 1;
         }
 
-        if ((play->state.frames % 3U) == 0) {
+        if ((play->state.frames % 3) == 0) {
             dustPosition.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(15.0f);
             dustPosition.y = this->actor.world.pos.y;
             dustPosition.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(15.0f);
-            Actor_SpawnFloorDustRing(play, &this->actor, &dustPosition, 20.0f, 0, 2.0f, (s16)0, (s16)0, (u8)0);
+            Actor_SpawnFloorDustRing(play, &this->actor, &dustPosition, 20.0f, 0, 2.0f, 0, 0, 0);
         }
     }
 
@@ -90,15 +101,16 @@ void EnNimotsu_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnNimotsu_Draw(Actor* thisx, PlayState* play) {
+    s32 pad;
     EnNimotsu* this = THIS;
-    u32 pad;
+
     Vec3f position;
     Vec3f scale;
 
     OPEN_DISPS(play->state.gfxCtx);
     func_8012C28C(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, &gBojBombShopBagDL);
+    gSPDisplayList(POLY_OPA_DISP++, &gBombShopBagDL);
     func_8012C2DC(play->state.gfxCtx);
 
     position.x = this->actor.world.pos.x + 7.0f;
@@ -109,6 +121,6 @@ void EnNimotsu_Draw(Actor* thisx, PlayState* play) {
     scale.y = 0.2f;
     scale.z = 0.2f;
 
-    func_800BC620(&position, &scale, 0xFFU, play);
+    func_800BC620(&position, &scale, 0xFF, play);
     CLOSE_DISPS(play->state.gfxCtx);
 }
