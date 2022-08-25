@@ -445,8 +445,8 @@ typedef struct {
     /* 0x230 */ s32 stickRelX;
     /* 0x234 */ s32 stickRelY;
     /* 0x238 */ s16 cursorPoint[5];
-    /* 0x242 */ s16 cursorX[5];
-    /* 0x24C */ s16 cursorY[5];
+    /* 0x242 */ s16 cursorX[5]; // cursorXIndex?
+    /* 0x24C */ s16 cursorY[5]; // cursorYIndex?
     /* 0x256 */ s16 unk_256;
     /* 0x258 */ s16 cursorSpecialPos;
     /* 0x25A */ s16 pageSwitchTimer;
@@ -464,8 +464,8 @@ typedef struct {
     /* 0x282 */ u16 nameColorSet;
     /* 0x284 */ s16 cursorColorSet;
     /* 0x286 */ s16 unk_286;
-    /* 0x288 */ f32 unk_288;
-    /* 0x28C */ f32 unk_28C;
+    /* 0x288 */ f32 unk_288; // true cursorX
+    /* 0x28C */ f32 unk_28C; // true cursorY
     /* 0x290 */ f32 unk_290;
     /* 0x294 */ f32 unk_294;
     /* 0x298 */ f32 unk_298;

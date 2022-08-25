@@ -4,35 +4,103 @@
  * Description: Pause Menu
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_kaleido_scope.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
 
-extern UNK_TYPE D_02001360;
-extern UNK_TYPE D_020044A0;
-extern UNK_TYPE D_02004AA0;
-extern UNK_TYPE D_0200B998;
-extern UNK_TYPE D_08062000;
-extern UNK_TYPE D_08064340;
-extern Gfx D_0B000000[]; // gItemNamePanelDL
-extern UNK_TYPE D_0C000000;
-extern UNK_TYPE D_0C006C00;
+extern TexturePtr D_08064340; // gPauseMenuCursorTex
+extern TexturePtr D_08064440;
+extern TexturePtr D_0806E440;
+extern TexturePtr D_08077A40;
+extern TexturePtr D_08081040;
+extern TexturePtr D_0808A640;
+extern TexturePtr D_0806EE40;
+extern TexturePtr D_08078440;
+extern TexturePtr D_08081A40;
+extern TexturePtr D_0808B040;
+extern TexturePtr D_08065840;
+extern TexturePtr D_0806F840;
+extern TexturePtr D_08078E40;
+extern TexturePtr D_08082440;
+extern TexturePtr D_0808BA40;
+extern TexturePtr D_08070240;
+extern TexturePtr D_08079840;
+extern TexturePtr D_08082E40;
+extern TexturePtr D_0808C440;
+extern TexturePtr D_08070C40;
+extern TexturePtr D_0807A240;
+extern TexturePtr D_08083840;
+extern TexturePtr D_0808CE40;
+extern TexturePtr D_08071640;
+extern TexturePtr D_0807AC40;
+extern TexturePtr D_08084240;
+extern TexturePtr D_0808D840;
+extern TexturePtr D_08068040;
+extern TexturePtr D_08072040;
+extern TexturePtr D_0807B640;
+extern TexturePtr D_08084C40;
+extern TexturePtr D_0808E240;
+extern TexturePtr D_08072A40;
+extern TexturePtr D_0807C040;
+extern TexturePtr D_08085640;
+extern TexturePtr D_0808EC40;
+extern TexturePtr D_08069440;
+extern TexturePtr D_08073440;
+extern TexturePtr D_0807CA40;
+extern TexturePtr D_08086040;
+extern TexturePtr D_0808F640;
+extern TexturePtr D_08073E40;
+extern TexturePtr D_0807D440;
+extern TexturePtr D_08086A40;
+extern TexturePtr D_08090040;
+extern TexturePtr D_08074840;
+extern TexturePtr D_0807DE40;
+extern TexturePtr D_08087440;
+extern TexturePtr D_08090A40;
+extern TexturePtr D_08075240;
+extern TexturePtr D_0807E840;
+extern TexturePtr D_08087E40;
+extern TexturePtr D_08091440;
 
-TexturePtr D_8082B700[] = {
-    0x08064440, 0x0806E440, 0x08077A40, 0x08081040, 0x0808A640, 0x0D003A00, 0x0806EE40, 0x08078440,
-    0x08081A40, 0x0808B040, 0x08065840, 0x0806F840, 0x08078E40, 0x08082440, 0x0808BA40,
+extern Gfx D_0B000000[]; // gItemNamePanelDL
+extern Gfx D_0B000090[]; // gLButtonIconDL
+extern Gfx D_0B0000E0[]; // gRButtonIconDL
+extern Gfx D_0B000130[]; // gCButtonIconsDL
+extern Gfx D_0B000188[]; // gAButtonIconDL
+
+extern TexturePtr D_0D002000;
+extern TexturePtr D_0D002200;
+extern TexturePtr D_0D002400;
+extern TexturePtr D_0D002700;
+extern TexturePtr D_0D002B00;
+extern TexturePtr D_0D002F00;
+extern TexturePtr D_0D003300;
+extern TexturePtr D_0D003700;
+extern TexturePtr D_0D003A00;
+extern TexturePtr D_0D004400;
+extern TexturePtr D_0D004E00;
+extern TexturePtr D_0D005800;
+extern TexturePtr D_0D006200;
+extern TexturePtr D_0D006C00;
+extern TexturePtr D_0D007600;
+extern TexturePtr D_0D008000;
+
+TexturePtr sSelectMaskTextures[] = {
+    &D_08064440, &D_0806E440, &D_08077A40, &D_08081040, &D_0808A640, &D_0D003A00, &D_0806EE40, &D_08078440,
+    &D_08081A40, &D_0808B040, &D_08065840, &D_0806F840, &D_08078E40, &D_08082440, &D_0808BA40,
 };
-TexturePtr D_8082B73C[] = {
-    0x0D004400, 0x08070240, 0x08079840, 0x08082E40, 0x0808C440, 0x0D004E00, 0x08070C40, 0x0807A240,
-    0x08083840, 0x0808CE40, 0x0D005800, 0x08071640, 0x0807AC40, 0x08084240, 0x0808D840,
+TexturePtr sSelectItemTextures[] = {
+    &D_0D004400, &D_08070240, &D_08079840, &D_08082E40, &D_0808C440, &D_0D004E00, &D_08070C40, &D_0807A240,
+    &D_08083840, &D_0808CE40, &D_0D005800, &D_08071640, &D_0807AC40, &D_08084240, &D_0808D840,
 };
-TexturePtr D_8082B778[] = {
-    0x08068040, 0x08072040, 0x0807B640, 0x08084C40, 0x0808E240, 0x0D006200, 0x08072A40, 0x0807C040,
-    0x08085640, 0x0808EC40, 0x08069440, 0x08073440, 0x0807CA40, 0x08086040, 0x0808F640,
+TexturePtr sMapTextures[] = {
+    &D_08068040, &D_08072040, &D_0807B640, &D_08084C40, &D_0808E240, &D_0D006200, &D_08072A40, &D_0807C040,
+    &D_08085640, &D_0808EC40, &D_08069440, &D_08073440, &D_0807CA40, &D_08086040, &D_0808F640,
 };
-TexturePtr D_8082B7B4[] = {
-    0x0D006C00, 0x08073E40, 0x0807D440, 0x08086A40, 0x08090040, 0x0D007600, 0x08074840, 0x0807DE40,
-    0x08087440, 0x08090A40, 0x0D008000, 0x08075240, 0x0807E840, 0x08087E40, 0x08091440,
+TexturePtr sQuestStatusTextures[] = {
+    &D_0D006C00, &D_08073E40, &D_0807D440, &D_08086A40, &D_08090040, &D_0D007600, &D_08074840, &D_0807DE40,
+    &D_08087440, &D_08090A40, &D_0D008000, &D_08075240, &D_0807E840, &D_08087E40, &D_08091440,
 };
 
 s16 D_8082B7F0[] = {
@@ -49,12 +117,12 @@ s16 D_8082B884 = 0;
 s16 D_8082B888 = 0;
 s16 D_8082B88C = 255;
 
-s16 D_8082B890 = 0;
-s16 D_8082B894 = 0;
-s16 D_8082B898 = 0;
-s16 D_8082B89C = 0;
-s16 D_8082B8A0 = 0;
-s16 D_8082B8A4 = 0;
+s16 sCursorPrimR = 0;
+s16 sCursorPrimG = 0;
+s16 sCursorPrimB = 0;
+s16 sCursorEnvR = 0;
+s16 sCursorEnvG = 0;
+s16 sCursorEnvB = 0;
 s16 D_8082B8A8 = 255;
 s16 D_8082B8AC = 0;
 s16 D_8082B8B0 = 0;
@@ -184,6 +252,7 @@ void KaleidoScope_HandlePageToggles(PlayState* play, Input* input) {
     PauseContext* pauseCtx = &play->pauseCtx;
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
+    //! FAKE
     if (1) {}
 
     if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && !pauseCtx->itemDescriptionOn) {
@@ -259,15 +328,15 @@ Gfx* KaleidoScope_DrawPageSections(Gfx* gfx, Vtx* vertices, void** textures) {
     return gfx;
 }
 
-s16 D_8082B948[][3] = {
+s16 sCursorPrimColorTarget[][3] = {
     { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 0 }, { 255, 255, 0 }, { 100, 150, 255 }, { 100, 255, 255 },
 };
-s16 D_8082B96C[][3] = {
+s16 sCursorEnvColorTarget[][3] = {
     { 0, 0, 0 }, { 170, 170, 170 }, { 0, 0, 0 }, { 255, 160, 0 }, { 0, 0, 100 }, { 0, 150, 255 },
 };
 void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
-    static s16 D_8082B990 = 10;
-    static s16 D_8082B994 = 0;
+    static s16 sCursorColorTimer = 10;
+    static s16 sCursorColorTargetIndex = 0;
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 stepR;
     s16 stepG;
@@ -278,60 +347,72 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
     if (!((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
         if (pauseCtx->state != PAUSE_STATE_7) {
 
-            stepR = ABS_ALT(D_8082B890 - D_8082B948[pauseCtx->cursorColorSet + D_8082B994][0]) / D_8082B990;
-            stepG = ABS_ALT(D_8082B894 - D_8082B948[pauseCtx->cursorColorSet + D_8082B994][1]) / D_8082B990;
-            stepB = ABS_ALT(D_8082B898 - D_8082B948[pauseCtx->cursorColorSet + D_8082B994][2]) / D_8082B990;
+            stepR =
+                ABS_ALT(sCursorPrimR - sCursorPrimColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][0]) /
+                sCursorColorTimer;
+            stepG =
+                ABS_ALT(sCursorPrimG - sCursorPrimColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][1]) /
+                sCursorColorTimer;
+            stepB =
+                ABS_ALT(sCursorPrimB - sCursorPrimColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][2]) /
+                sCursorColorTimer;
 
-            if (D_8082B890 >= D_8082B948[pauseCtx->cursorColorSet + D_8082B994][0]) {
-                D_8082B890 -= stepR;
+            if (sCursorPrimR >= sCursorPrimColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][0]) {
+                sCursorPrimR -= stepR;
             } else {
-                D_8082B890 += stepR;
+                sCursorPrimR += stepR;
             }
 
-            if (D_8082B894 >= D_8082B948[pauseCtx->cursorColorSet + D_8082B994][1]) {
-                D_8082B894 -= stepG;
+            if (sCursorPrimG >= sCursorPrimColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][1]) {
+                sCursorPrimG -= stepG;
             } else {
-                D_8082B894 += stepG;
+                sCursorPrimG += stepG;
             }
 
-            if (D_8082B898 >= D_8082B948[pauseCtx->cursorColorSet + D_8082B994][2]) {
-                D_8082B898 -= stepB;
+            if (sCursorPrimB >= sCursorPrimColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][2]) {
+                sCursorPrimB -= stepB;
             } else {
-                D_8082B898 += stepB;
+                sCursorPrimB += stepB;
             }
 
-            stepR = ABS_ALT(D_8082B89C - D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][0]) / D_8082B990;
-            stepG = ABS_ALT(D_8082B8A0 - D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][1]) / D_8082B990;
-            stepB = ABS_ALT(D_8082B8A4 - D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][2]) / D_8082B990;
+            stepR =
+                ABS_ALT(sCursorEnvR - sCursorEnvColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][0]) /
+                sCursorColorTimer;
+            stepG =
+                ABS_ALT(sCursorEnvG - sCursorEnvColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][1]) /
+                sCursorColorTimer;
+            stepB =
+                ABS_ALT(sCursorEnvB - sCursorEnvColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][2]) /
+                sCursorColorTimer;
 
-            if (D_8082B89C >= D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][0]) {
-                D_8082B89C -= stepR;
+            if (sCursorEnvR >= sCursorEnvColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][0]) {
+                sCursorEnvR -= stepR;
             } else {
-                D_8082B89C += stepR;
+                sCursorEnvR += stepR;
             }
 
-            if (D_8082B8A0 >= D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][1]) {
-                D_8082B8A0 -= stepG;
+            if (sCursorEnvG >= sCursorEnvColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][1]) {
+                sCursorEnvG -= stepG;
             } else {
-                D_8082B8A0 += stepG;
+                sCursorEnvG += stepG;
             }
 
-            if (D_8082B8A4 >= D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][2]) {
-                D_8082B8A4 -= stepB;
+            if (sCursorEnvB >= sCursorEnvColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][2]) {
+                sCursorEnvB -= stepB;
             } else {
-                D_8082B8A4 += stepB;
+                sCursorEnvB += stepB;
             }
 
-            D_8082B990--;
-            if (D_8082B990 == 0) {
-                D_8082B890 = D_8082B948[pauseCtx->cursorColorSet + D_8082B994][0];
-                D_8082B894 = D_8082B948[pauseCtx->cursorColorSet + D_8082B994][1];
-                D_8082B898 = D_8082B948[pauseCtx->cursorColorSet + D_8082B994][2];
-                D_8082B89C = D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][0];
-                D_8082B8A0 = D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][1];
-                D_8082B8A4 = D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][2];
-                D_8082B994 ^= 1;
-                D_8082B990 = 10;
+            sCursorColorTimer--;
+            if (sCursorColorTimer == 0) {
+                sCursorPrimR = sCursorPrimColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][0];
+                sCursorPrimG = sCursorPrimColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][1];
+                sCursorPrimB = sCursorPrimColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][2];
+                sCursorEnvR = sCursorEnvColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][0];
+                sCursorEnvG = sCursorEnvColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][1];
+                sCursorEnvB = sCursorEnvColorTarget[pauseCtx->cursorColorSet + sCursorColorTargetIndex][2];
+                sCursorColorTargetIndex ^= 1;
+                sCursorColorTimer = 10;
             }
         }
 
@@ -350,7 +431,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->itemPageVtx, &D_8082B73C[0]);
+            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->itemPageVtx, sSelectItemTextures);
 
             KaleidoScope_DrawItemSelect(play);
         }
@@ -370,7 +451,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, &D_8082B778[0]);
+            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, sMapTextures);
 
             if (sInDungeonScene) {
                 KaleidoScope_DrawDungeonMap(play);
@@ -399,7 +480,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->questPageVtx, &D_8082B7B4[0]);
+            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->questPageVtx, sQuestStatusTextures);
 
             KaleidoScope_DrawQuestStatus(play);
         }
@@ -421,7 +502,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->maskPageVtx, &D_8082B700[0]);
+            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->maskPageVtx, sSelectMaskTextures);
 
             KaleidoScope_DrawMaskSelect(play);
         }
@@ -443,7 +524,8 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->itemPageVtx, &D_8082B73C[0]);
+                    POLY_OPA_DISP =
+                        KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->itemPageVtx, sSelectItemTextures);
 
                     KaleidoScope_DrawItemSelect(play);
                 }
@@ -464,7 +546,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, &D_8082B778[0]);
+                POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, sMapTextures);
 
                 if (sInDungeonScene) {
                     KaleidoScope_DrawDungeonMap(play);
@@ -511,7 +593,8 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->questPageVtx, &D_8082B7B4[0]);
+                POLY_OPA_DISP =
+                    KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->questPageVtx, sQuestStatusTextures);
 
                 KaleidoScope_DrawQuestStatus(play);
                 break;
@@ -531,7 +614,8 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->maskPageVtx, &D_8082B700[0]);
+                POLY_OPA_DISP =
+                    KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->maskPageVtx, sSelectMaskTextures);
 
                 KaleidoScope_DrawMaskSelect(play);
                 break;
@@ -541,26 +625,17 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
     CLOSE_DISPS(gfxCtx);
 }
 
-extern Gfx D_0B000090[]; // gLButtonIconDL
-extern Gfx D_0B0000E0[]; // gRButtonIconDL
-extern Gfx D_0B000130[]; // gCButtonIconsDL
-extern Gfx D_0B000188[]; // gAButtonIconDL
-extern TexturePtr D_0D002000;
-extern TexturePtr D_0D002200;
-extern TexturePtr D_0D002400;
-extern TexturePtr D_0D003700;
-
 TexturePtr D_8082B998[] = {
-    0x0D003300,
-    0x0D002700,
-    0x0D002B00,
-    0x0D002F00,
+    &D_0D003300,
+    &D_0D002700,
+    &D_0D002B00,
+    &D_0D002F00,
 };
 TexturePtr D_8082B9A8[] = {
-    0x0D002B00,
-    0x0D002F00,
-    0x0D003300,
-    0x0D002700,
+    &D_0D002B00,
+    &D_0D002F00,
+    &D_0D003300,
+    &D_0D002700,
 };
 s16 D_8082B9B8[][4] = {
     { 180, 210, 255, 220 },
@@ -927,8 +1002,8 @@ void KaleidoScope_DrawInfoPanel1(PlayState* play);
 #endif
 
 u8 D_8082DA58[5];
-f32 D_8082DA60[4];
-f32 D_8082DA70[4];
+f32 sCursorCirclesX[4];
+f32 sCursorCirclesY[4];
 
 void KaleidoScope_UpdateNamePanel1(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -987,7 +1062,7 @@ void func_808248D0(PlayState* play) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, D_8082B778);
+    POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, sMapTextures);
 
     Matrix_RotateYF(YREG(24) / 1000.0f, MTXMODE_NEW);
 
@@ -1929,14 +2004,14 @@ void KaleidoScope_UpdateCursorSize(PlayState* play) {
         pauseCtx->unk_298 -= 1.0f;
     }
 
-    D_8082DA60[0] = Math_SinS(pauseCtx->unk_286) * pauseCtx->unk_290;
-    D_8082DA60[1] = Math_SinS(pauseCtx->unk_286 + 0x4000) * pauseCtx->unk_290;
-    D_8082DA60[2] = Math_SinS(pauseCtx->unk_286 + 0x8000) * pauseCtx->unk_290;
-    D_8082DA60[3] = Math_SinS(pauseCtx->unk_286 + 0xC000) * pauseCtx->unk_290;
-    D_8082DA70[0] = Math_CosS(pauseCtx->unk_286) * pauseCtx->unk_294;
-    D_8082DA70[1] = Math_CosS(pauseCtx->unk_286 + 0x4000) * pauseCtx->unk_294;
-    D_8082DA70[2] = Math_CosS(pauseCtx->unk_286 + 0x8000) * pauseCtx->unk_294;
-    D_8082DA70[3] = Math_CosS(pauseCtx->unk_286 + 0xC000) * pauseCtx->unk_294;
+    sCursorCirclesX[0] = Math_SinS(pauseCtx->unk_286) * pauseCtx->unk_290;
+    sCursorCirclesX[1] = Math_SinS(pauseCtx->unk_286 + 0x4000) * pauseCtx->unk_290;
+    sCursorCirclesX[2] = Math_SinS(pauseCtx->unk_286 + 0x8000) * pauseCtx->unk_290;
+    sCursorCirclesX[3] = Math_SinS(pauseCtx->unk_286 + 0xC000) * pauseCtx->unk_290;
+    sCursorCirclesY[0] = Math_CosS(pauseCtx->unk_286) * pauseCtx->unk_294;
+    sCursorCirclesY[1] = Math_CosS(pauseCtx->unk_286 + 0x4000) * pauseCtx->unk_294;
+    sCursorCirclesY[2] = Math_CosS(pauseCtx->unk_286 + 0x8000) * pauseCtx->unk_294;
+    sCursorCirclesY[3] = Math_CosS(pauseCtx->unk_286 + 0xC000) * pauseCtx->unk_294;
 }
 
 void KaleidoScope_DrawCursor(PlayState* play) {
@@ -1951,15 +2026,15 @@ void KaleidoScope_DrawCursor(PlayState* play) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
                           PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_8082B890, D_8082B894, D_8082B898, 255);
-        gDPSetEnvColor(POLY_OPA_DISP++, D_8082B89C, D_8082B8A0, D_8082B8A4, 255);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sCursorPrimR, sCursorPrimG, sCursorPrimB, 255);
+        gDPSetEnvColor(POLY_OPA_DISP++, sCursorEnvR, sCursorEnvG, sCursorEnvB, 255);
 
         Matrix_Translate(pauseCtx->unk_288, pauseCtx->unk_28C, -50.0f, MTXMODE_NEW);
         Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
 
         for (i = 0; i < 4; i++) {
             Matrix_Push();
-            Matrix_Translate(D_8082DA60[i], D_8082DA70[i], -50.0f, MTXMODE_APPLY);
+            Matrix_Translate(sCursorCirclesX[i], sCursorCirclesY[i], -50.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPPipeSync(POLY_OPA_DISP++);
             gDPLoadTextureBlock(POLY_OPA_DISP++, &D_08064340, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 16, 0,
