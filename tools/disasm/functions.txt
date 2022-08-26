@@ -8424,7 +8424,7 @@
     0x8098FC2C:("EnTg_Draw",),
     0x8098FD50:("EnTg_SpawnHeart",),
     0x8098FEA8:("EnTg_UpdateHearts",),
-    0x8099000C:("EnTg_DrawHeart",),
+    0x8099000C:("EnTg_DrawHearts",),
     0x80990310:("EnWf_Init",),
     0x80990784:("EnWf_Destroy",),
     0x809907D4:("func_809907D4",),

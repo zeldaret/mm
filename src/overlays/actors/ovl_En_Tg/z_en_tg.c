@@ -19,7 +19,7 @@ void EnTg_Draw(Actor* thisx, PlayState* play);
 
 void EnTg_Idle(EnTg* this, PlayState* play);
 void EnTg_UpdateHearts(PlayState* play, EnTgHeartEffect* effect, s32 numEffects);
-void EnTg_DrawHeart(PlayState* play, EnTgHeartEffect* effect, s32 numEffects);
+void EnTg_DrawHearts(PlayState* play, EnTgHeartEffect* effect, s32 numEffects);
 void EnTg_SpawnHeart(EnTg* this, EnTgHeartEffect* effect, Vec3f* heartStartPos, s32 numEffects);
 
 const ActorInit En_Tg_InitVars = {
@@ -185,7 +185,7 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
     GraphicsContext* gfxCtx;
 
     Matrix_Push();
-    EnTg_DrawHeart(play, this->effects, ARRAY_COUNT(this->effects));
+    EnTg_DrawHearts(play, this->effects, ARRAY_COUNT(this->effects));
     Matrix_Pop();
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -252,7 +252,7 @@ void EnTg_UpdateHearts(PlayState* play, EnTgHeartEffect* effect, s32 numEffects)
     }
 }
 
-void EnTg_DrawHeart(PlayState* play, EnTgHeartEffect* effect, s32 numEffects) {
+void EnTg_DrawHearts(PlayState* play, EnTgHeartEffect* effect, s32 numEffects) {
     s32 i;
     s32 isMaterialApplied = false;
 
