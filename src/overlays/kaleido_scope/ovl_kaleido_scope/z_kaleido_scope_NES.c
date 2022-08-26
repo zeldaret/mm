@@ -644,8 +644,6 @@ s16 D_8082B9B8[][4] = {
     { 180, 210, 255, 220 },
     { 100, 100, 150, 220 },
 };
-// v0/v1 swap
-#ifdef NON_MATCHING
 void KaleidoScope_DrawInfoPanel1(PlayState* play) {
     static s16 D_8082B9C8 = 20;
     static s16 D_8082B9CC = 0;
@@ -802,8 +800,7 @@ void KaleidoScope_DrawInfoPanel1(PlayState* play) {
     // gItemNamePanelDL
     gSPDisplayList(POLY_OPA_DISP++, D_0B000000);
 
-    if ((pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) &&
-        ((pauseCtx->unk_200 == 0) || (pauseCtx->unk_200 == 0x11))) {
+    if ((pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) && (!pauseCtx->unk_200 || (pauseCtx->unk_200 == 0x11))) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 150, 140, 90, D_8082DA56);
     }
 
@@ -811,7 +808,7 @@ void KaleidoScope_DrawInfoPanel1(PlayState* play) {
     gSPDisplayList(POLY_OPA_DISP++, D_0B000090);
 
     if ((pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_RIGHT) &&
-        ((pauseCtx->unk_200 == 0) || (pauseCtx->unk_200 == 0x11))) {
+        (!pauseCtx->unk_200 || (pauseCtx->unk_200 == 0x11))) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 150, 140, 90, D_8082DA56);
     }
 
@@ -993,16 +990,6 @@ void KaleidoScope_DrawInfoPanel1(PlayState* play) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
-#else
-static s16 D_8082B9C8 = 20;
-static s16 D_8082B9CC = 0;
-s16 D_8082DA50;
-s16 D_8082DA52;
-s16 D_8082DA54;
-s16 D_8082DA56;
-void KaleidoScope_DrawInfoPanel1(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawInfoPanel1.s")
-#endif
 
 u8 D_8082DA58[5];
 f32 sCursorCirclesX[4];

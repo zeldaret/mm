@@ -99,7 +99,7 @@ TexturePtr sOcarinaBtnWallTextures[] = {
 #include "overlays/ovl_En_Gakufu/ovl_En_Gakufu.c"
 
 // u32 return of `AudioOcarina_SetInstrument` matches this function
-// but breaks a function in kaleido_collect.c
+// but breaks a different function: `KaleidoScope_UpdateQuestCursor` in z_kaleido_collect.c
 #ifdef NON_MATCHING
 void EnGakufu_ProcessNotes(EnGakufu* this) {
     OcarinaStaff* playbackStaff;
