@@ -181,8 +181,8 @@ void EnTg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnTg_Draw(Actor* thisx, PlayState* play) {
+    s32 pad;
     EnTg* this = THIS;
-    GraphicsContext* gfxCtx;
 
     Matrix_Push();
     EnTg_DrawHearts(play, this->effects, ARRAY_COUNT(this->effects));
