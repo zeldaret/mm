@@ -3,12 +3,13 @@
         <!-- Wizrobe Animation -->
         <Animation Name="gWizrobeAttackAnim" Offset="0x7B0" /> <!-- Original name is "wiz_atack" -->
 
-        <Texture Name="object_wiz_Tex_0007C0" OutName="tex_0007C0" Format="i4" Width="32" Height="64" Offset="0x7C0" />
-        <Texture Name="object_wiz_Tex_000BC0" OutName="tex_000BC0" Format="i4" Width="32" Height="32" Offset="0xBC0" />
-        <Texture Name="object_wiz_Tex_000DC0" OutName="tex_000DC0" Format="i4" Width="16" Height="16" Offset="0xDC0" />
-        <DList Name="object_wiz_DL_000E70" Offset="0xE70" />
-        <DList Name="object_wiz_DL_000F28" Offset="0xF28" />
-        <DList Name="object_wiz_DL_000FD8" Offset="0xFD8" />
+        <!-- Assets for the smoke that rises from the ice pool -->
+        <Texture Name="gWizrobeIceSmokeTex" OutName="wizrobe_ice_smoke" Format="i4" Width="32" Height="64" Offset="0x7C0" />
+        <Texture Name="gWizrobeIceSmokeMaskTex" OutName="wizrobe_ice_smoke_mask" Format="i4" Width="32" Height="32" Offset="0xBC0" />
+        <Texture Name="gWizrobeUnusedTex" OutName="wizrobe_unused" Format="i4" Width="16" Height="16" Offset="0xDC0" />
+        <DList Name="gWizrobeIceSmokeMaterialDL" Offset="0xE70" />
+        <DList Name="gWizrobeUnusedIceSmokeMaterialDL" Offset="0xF28" />
+        <DList Name="gWizrobeIceSmokeModelDL" Offset="0xFD8" /> <!-- Original name might have been "wiz_coolball_modelT" or "wiz_icesmoke" -->
 
         <!-- Assets for the Wizrobe platform -->
         <DList Name="gWizrobePlatformEmptyDL" Offset="0x10E0" /> <!-- Empty, probably was the transparent version of the following DL -->
@@ -29,28 +30,43 @@
         <Animation Name="gWizrobeDanceAnim" Offset="0x2458" /> <!-- Original name is "wiz_dance" -->
         <Animation Name="gWizrobeRunAnim" Offset="0x25F0" /> <!-- Original name is "wiz_dash" -->
 
-        <DList Name="object_wiz_DL_002630" Offset="0x2630" />
-        <Texture Name="object_wiz_Tex_002700" OutName="tex_002700" Format="i4" Width="32" Height="32" Offset="0x2700" />
-        <Texture Name="object_wiz_Tex_002900" OutName="tex_002900" Format="i4" Width="32" Height="32" Offset="0x2900" />
+        <!-- Assets for the small flames during the Fire Wizrobe fight -->
+        <DList Name="gWizrobeSmallFlameDL" Offset="0x2630" /> <!-- Original name is "wiz_fire_model" -->
+        <Texture Name="gWizrobeSmallFlameTex" OutName="wizrobe_small_flame" Format="i4" Width="32" Height="32" Offset="0x2700" />
+        <Texture Name="gWizrobeSmallFlameMaskTex" OutName="wizrobe_small_flame_mask" Format="i4" Width="32" Height="32" Offset="0x2900" />
+
         <TextureAnimation Name="object_wiz_Matanimheader_002B08" Offset="0x2B08" />
-        <DList Name="object_wiz_DL_002B40" Offset="0x2B40" />
-        <Texture Name="object_wiz_Tex_002BD0" OutName="tex_002BD0" Format="i4" Width="32" Height="32" Offset="0x2BD0" />
+
+        <!-- Assets for the Wizrobe's magic projectile -->
+        <DList Name="gWizrobeMagicProjectileDL" Offset="0x2B40" /> <!-- Original name is "wiz_fireball_model" -->
+        <Texture Name="gWizrobeMagicProjectileTex" OutName="wizrobe_magic_projectile" Format="i4" Width="32" Height="32" Offset="0x2BD0" />
+
         <TextureAnimation Name="object_wiz_Matanimheader_002DF4" Offset="0x2DF4" />
-        <Texture Name="object_wiz_Tex_002E00" OutName="tex_002E00" Format="i4" Width="32" Height="32" Offset="0x2E00" />
-        <DList Name="object_wiz_DL_003120" Offset="0x3120" />
-        <Texture Name="object_wiz_Tex_0031E0" OutName="tex_0031E0" Format="i4" Width="32" Height="64" Offset="0x31E0" />
-        <DList Name="object_wiz_DL_003640" Offset="0x3640" />
-        <Texture Name="object_wiz_Tex_003700" OutName="tex_003700" Format="i8" Width="32" Height="32" Offset="0x3700" />
-        <Texture Name="object_wiz_Tex_003B00" OutName="tex_003B00" Format="i4" Width="32" Height="64" Offset="0x3B00" />
-        <DList Name="object_wiz_DL_003FC0" Offset="0x3FC0" />
-        <Texture Name="object_wiz_Tex_0040B0" OutName="tex_0040B0" Format="i8" Width="64" Height="64" Offset="0x40B0" />
+
+        <!-- Assets for the pool of fire that forms when the Fire Wizrobe's projectile hits something -->
+        <Texture Name="gWizrobeFirePoolTex" OutName="wizrobe_fire_pool" Format="i4" Width="32" Height="32" Offset="0x2E00" />
+        <DList Name="gWizrobeFirePoolDL" Offset="0x3120" /> <!-- Original name is "wiz_firefloor_modelT" -->
+
+        <!-- Assets for the smoke that comes off the Fire Wizrobe's fire -->
+        <Texture Name="gWizrobeFireSmokeTex" OutName="wizrobe_fire_smoke" Format="i4" Width="32" Height="64" Offset="0x31E0" />
+        <DList Name="gWizrobeFireSmokeDL" Offset="0x3640" /> <!-- Original name is "wiz_firesmoke_modelT" -->
+
+        <!-- Assets for the big flame during the Fire Wizrobe fight-->
+        <Texture Name="gWizrobeBigFlameTex" OutName="wizrobe_big_flame" Format="i8" Width="32" Height="32" Offset="0x3700" />
+        <Texture Name="gWizrobeBigFlameMaskTex" OutName="wizrobe_big_flame_mask" Format="i4" Width="32" Height="64" Offset="0x3B00" />
+        <DList Name="gWizrobeBigFlameDL" Offset="0x3FC0" /> <!-- Original name is "wiz_firewall_modelT" -->
+
+        <!-- Assets for the ice pool -->
+        <Texture Name="gWizrobeIcePoolTex" OutName="wizrobe_ice_pool" Format="i8" Width="64" Height="64" Offset="0x40B0" />
         <Array Name="object_wiz_Vtx_0050B0" Count="4" Offset="0x50B0">
             <Vtx/>
         </Array>
-        <DList Name="object_wiz_DL_005190" Offset="0x5190" />
-        <Texture Name="object_wiz_Tex_005230" OutName="tex_005230" Format="i4" Width="32" Height="64" Offset="0x5230" />
-        <Texture Name="object_wiz_Tex_005630" OutName="tex_005630" Format="i4" Width="16" Height="16" Offset="0x5630" />
-        <DList Name="object_wiz_DL_005750" Offset="0x5750" />
+        <DList Name="gWizrobeIcePoolDL" Offset="0x5190" /> <!-- Original name is "wiz_icefloor03_modelT" -->
+
+        <!-- Assets for the gleam on top of the ice pool-->
+        <Texture Name="gWizrobeIcePoolShineTex" OutName="wizrobe_ice_pool_shine" Format="i4" Width="32" Height="64" Offset="0x5230" />
+        <Texture Name="gWizrobeIcePoolShineMaskTex" OutName="wizrobe_ice_pool_shine_mask" Format="i4" Width="16" Height="16" Offset="0x5630" />
+        <DList Name="gWizrobeIcePoolShineDL" Offset="0x5750" /> <!-- Original name is "wiz_icefloor03_pika_modelT" ("pika" = onomatopoeic for "sparkle, glisten") -->
 
         <!-- Assets for the glowing light in the center of the Wizrobe platform -->
         <DList Name="gWizrobePlatformCenterDL" Offset="0x5870" /> <!-- Original name is "wiz_lighthole_modelT" -->
