@@ -357,19 +357,20 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
 
     if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
         Actor_MarkForDeath(&this->actor);
-    } else {
-        this->actor.hintId = 0x4B;
-        this->currentPlatformIndex = 777;
-
-        // Setting the radius and scale to zero here effectively disables all of the ghost colliders.
-        this->ghostColliders.elements[0].dim.modelSphere.radius = 0;
-        this->ghostColliders.elements[0].dim.scale = 0.0f;
-        this->ghostColliders.elements[0].dim.modelSphere.center.x = 0;
-        this->ghostColliders.elements[0].dim.modelSphere.center.y = 0;
-        this->ghostColliders.elements[0].dim.modelSphere.center.z = 0;
-
-        this->actionFunc = EnWiz_StartIntroCutscene;
+        return;
     }
+
+    this->actor.hintId = 0x4B;
+    this->currentPlatformIndex = 777;
+
+    // Setting the radius and scale to zero here effectively disables all of the ghost colliders.
+    this->ghostColliders.elements[0].dim.modelSphere.radius = 0;
+    this->ghostColliders.elements[0].dim.scale = 0.0f;
+    this->ghostColliders.elements[0].dim.modelSphere.center.x = 0;
+    this->ghostColliders.elements[0].dim.modelSphere.center.y = 0;
+    this->ghostColliders.elements[0].dim.modelSphere.center.z = 0;
+
+    this->actionFunc = EnWiz_StartIntroCutscene;
 }
 
 void EnWiz_Destroy(Actor* thisx, PlayState* play) {
@@ -397,12 +398,12 @@ void EnWiz_ChangeAnim(EnWiz* this, s32 animIndex, s32 updateGhostAnim) {
  * Responsible for moving the camera around and making the Wizrobe run in circles during the intro cutscene.
  */
 void EnWiz_HandleIntroCutscene(EnWiz* this, PlayState* play) {
-    Camera* camera;
-    Vec3f targetEye;
-    Vec3f targetAt;
+    Camera* subCam;
+    Vec3f eyeNext;
+    Vec3f atNext;
 
     if (this->introCutsceneState < EN_WIZ_INTRO_CS_DISAPPEAR) {
-        camera = Play_GetCamera(play, this->subCamId);
+        subCam = Play_GetCamera(play, this->subCamId);
         switch (this->introCutsceneState) {
             case EN_WIZ_INTRO_CS_NOT_STARTED:
                 this->introCutsceneTimer = 100;
@@ -411,21 +412,21 @@ void EnWiz_HandleIntroCutscene(EnWiz* this, PlayState* play) {
                 break;
 
             case EN_WIZ_INTRO_CS_CAMERA_MOVE_TO_PLATFORM:
-                Math_Vec3f_Copy(&targetEye, &this->actor.world.pos);
-                Math_Vec3f_Copy(&targetAt, &this->actor.world.pos);
-                targetEye.x += Math_SinS(this->introCutsceneCameraAngle) * 200.0f;
-                targetEye.y += 100.0f;
-                targetEye.z += Math_CosS(this->introCutsceneCameraAngle) * 200.0f;
-                targetAt.y += 80.0f;
-                Math_ApproachF(&camera->eye.x, targetEye.x, 0.3f, 30.0f);
-                Math_ApproachF(&camera->eye.z, targetEye.z, 0.3f, 30.0f);
-                Math_ApproachF(&camera->at.x, targetAt.x, 0.3f, 30.0f);
-                Math_ApproachF(&camera->at.z, targetAt.z, 0.3f, 30.0f);
-                camera->eye.y = targetEye.y;
-                camera->at.y = targetAt.y;
-                if ((fabsf(camera->eye.x - targetEye.x) < 2.0f) && (fabsf(camera->eye.y - targetEye.y) < 2.0f) &&
-                    (fabsf(camera->eye.z - targetEye.z) < 2.0f) && (fabsf(camera->at.x - targetAt.x) < 2.0f) &&
-                    (fabsf(camera->at.y - targetAt.y) < 2.0f) && (fabsf(camera->at.z - targetAt.z) < 2.0f)) {
+                Math_Vec3f_Copy(&eyeNext, &this->actor.world.pos);
+                Math_Vec3f_Copy(&atNext, &this->actor.world.pos);
+                eyeNext.x += Math_SinS(this->introCutsceneCameraAngle) * 200.0f;
+                eyeNext.y += 100.0f;
+                eyeNext.z += Math_CosS(this->introCutsceneCameraAngle) * 200.0f;
+                atNext.y += 80.0f;
+                Math_ApproachF(&subCam->eye.x, eyeNext.x, 0.3f, 30.0f);
+                Math_ApproachF(&subCam->eye.z, eyeNext.z, 0.3f, 30.0f);
+                Math_ApproachF(&subCam->at.x, atNext.x, 0.3f, 30.0f);
+                Math_ApproachF(&subCam->at.z, atNext.z, 0.3f, 30.0f);
+                subCam->eye.y = eyeNext.y;
+                subCam->at.y = atNext.y;
+                if ((fabsf(subCam->eye.x - eyeNext.x) < 2.0f) && (fabsf(subCam->eye.y - eyeNext.y) < 2.0f) &&
+                    (fabsf(subCam->eye.z - eyeNext.z) < 2.0f) && (fabsf(subCam->at.x - atNext.x) < 2.0f) &&
+                    (fabsf(subCam->at.y - atNext.y) < 2.0f) && (fabsf(subCam->at.z - atNext.z) < 2.0f)) {
                     Player* player = GET_PLAYER(play);
                     s32 i;
 
@@ -459,19 +460,19 @@ void EnWiz_HandleIntroCutscene(EnWiz* this, PlayState* play) {
                 break;
 
             case EN_WIZ_INTRO_CS_CAMERA_SPIN_TO_FACE_WIZROBE:
-                Math_Vec3f_Copy(&targetEye, &this->actor.world.pos);
-                Math_Vec3f_Copy(&targetAt, &this->actor.world.pos);
-                targetEye.x += Math_SinS(this->actor.world.rot.y) * 160.0f;
-                targetEye.y += 70.0f;
-                targetEye.z += Math_CosS(this->actor.world.rot.y) * 140.0f;
-                targetAt.x += -10.0f;
-                targetAt.y += 100.0f;
-                Math_ApproachF(&camera->eye.x, targetEye.x, 0.3f, 30.0f);
-                Math_ApproachF(&camera->eye.z, targetEye.z, 0.3f, 30.0f);
-                Math_ApproachF(&camera->at.x, targetAt.x, 0.3f, 30.0f);
-                Math_ApproachF(&camera->at.z, targetAt.z, 0.3f, 30.0f);
-                camera->eye.y = targetEye.y;
-                camera->at.y = targetAt.y;
+                Math_Vec3f_Copy(&eyeNext, &this->actor.world.pos);
+                Math_Vec3f_Copy(&atNext, &this->actor.world.pos);
+                eyeNext.x += Math_SinS(this->actor.world.rot.y) * 160.0f;
+                eyeNext.y += 70.0f;
+                eyeNext.z += Math_CosS(this->actor.world.rot.y) * 140.0f;
+                atNext.x += -10.0f;
+                atNext.y += 100.0f;
+                Math_ApproachF(&subCam->eye.x, eyeNext.x, 0.3f, 30.0f);
+                Math_ApproachF(&subCam->eye.z, eyeNext.z, 0.3f, 30.0f);
+                Math_ApproachF(&subCam->at.x, atNext.x, 0.3f, 30.0f);
+                Math_ApproachF(&subCam->at.z, atNext.z, 0.3f, 30.0f);
+                subCam->eye.y = eyeNext.y;
+                subCam->at.y = atNext.y;
                 if (this->introCutsceneTimer == 0) {
                     this->introCutsceneTimer = 10;
                     this->introCutsceneState++;
@@ -498,18 +499,18 @@ void EnWiz_HandleIntroCutscene(EnWiz* this, PlayState* play) {
                     this->actor.world.rot.y += this->rotationalVelocity;
                 }
 
-                Math_Vec3f_Copy(&targetEye, &this->actor.world.pos);
-                Math_Vec3f_Copy(&targetAt, &this->actor.world.pos);
-                targetEye.x += Math_SinS(this->introCutsceneCameraAngle) * 200.0f;
-                targetEye.y += 100.0f;
-                targetEye.z += Math_CosS(this->introCutsceneCameraAngle) * 200.0f;
-                targetAt.y += 80.0f;
-                Math_ApproachF(&camera->eye.x, targetEye.x, 0.3f, 30.0f);
-                Math_ApproachF(&camera->eye.z, targetEye.z, 0.3f, 30.0f);
-                Math_ApproachF(&camera->at.x, targetAt.x, 0.3f, 30.0f);
-                Math_ApproachF(&camera->at.z, targetAt.z, 0.3f, 30.0f);
-                camera->eye.y = targetEye.y;
-                camera->at.y = targetAt.y;
+                Math_Vec3f_Copy(&eyeNext, &this->actor.world.pos);
+                Math_Vec3f_Copy(&atNext, &this->actor.world.pos);
+                eyeNext.x += Math_SinS(this->introCutsceneCameraAngle) * 200.0f;
+                eyeNext.y += 100.0f;
+                eyeNext.z += Math_CosS(this->introCutsceneCameraAngle) * 200.0f;
+                atNext.y += 80.0f;
+                Math_ApproachF(&subCam->eye.x, eyeNext.x, 0.3f, 30.0f);
+                Math_ApproachF(&subCam->eye.z, eyeNext.z, 0.3f, 30.0f);
+                Math_ApproachF(&subCam->at.x, atNext.x, 0.3f, 30.0f);
+                Math_ApproachF(&subCam->at.z, atNext.z, 0.3f, 30.0f);
+                subCam->eye.y = eyeNext.y;
+                subCam->at.y = atNext.y;
                 break;
         }
 
@@ -832,12 +833,12 @@ void EnWiz_SetupSecondPhaseCutscene(EnWiz* this, PlayState* play) {
  * original platform and disappearing. Ghosts trail behind the Wizrobe as it runs.
  */
 void EnWiz_SecondPhaseCutscene(EnWiz* this, PlayState* play) {
-    Camera* camera;
+    Camera* subCam;
     s32 i;
 
     Math_SmoothStepToS(&this->alpha, 255, 1, 5, 0);
-    camera = Play_GetCamera(play, this->subCamId);
-    Math_Vec3f_Copy(&camera->at, &this->actor.focus.pos);
+    subCam = Play_GetCamera(play, this->subCamId);
+    Math_Vec3f_Copy(&subCam->at, &this->actor.focus.pos);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_RUN - SFX_FLAG);
     if (this->platforms[this->nextPlatformIndex] != NULL) {
         f32 diffX = this->actor.world.pos.x - this->platforms[this->nextPlatformIndex]->world.pos.x;
@@ -962,7 +963,7 @@ void EnWiz_Attack(EnWiz* this, PlayState* play) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_MAGIC_FIRE);
         }
 
-        if ((curFrame >= 8.0f) && (!this->shouldStartTimer)) {
+        if ((curFrame >= 8.0f) && !this->shouldStartTimer) {
             this->timer = 3;
             this->shouldStartTimer = true;
         }
@@ -1089,7 +1090,7 @@ void EnWiz_Damaged(EnWiz* this, PlayState* play) {
         this->actor.gravity = -3.0f;
         this->drawDmgEffTimer = 0;
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-    } else if ((!this->isDead) && (this->fightState != EN_WIZ_FIGHT_STATE_FIRST_PHASE) &&
+    } else if (!this->isDead && (this->fightState != EN_WIZ_FIGHT_STATE_FIRST_PHASE) &&
                (this->actor.colChkInfo.health <= 0)) {
         this->actor.velocity.y = 30.0f;
         this->actor.gravity = -3.0f;
@@ -1437,7 +1438,8 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
     if (this->drawDmgEffTimer != 0) {
         f32 drawDmgEffAlpha = this->drawDmgEffTimer * 0.05f;
 
-        if ((this->drawDmgEffType == 0xB) || (this->drawDmgEffType == 0xA)) {
+        if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) ||
+            (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) {
             this->drawDmgEffScale += 0.3f;
             if (this->drawDmgEffScale > 0.5f) {
                 this->drawDmgEffScale = 0.5f;
@@ -1469,7 +1471,7 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
             func_8012C28C(play->state.gfxCtx);
             func_8012C2DC(play->state.gfxCtx);
 
-            if (this->ghostPos[i].x != 0.0f && this->ghostPos[i].z != 0.0f) {
+            if ((this->ghostPos[i].x != 0.0f) && (this->ghostPos[i].z != 0.0f)) {
                 Matrix_Translate(this->ghostPos[i].x, this->ghostPos[i].y + 10.0f, this->ghostPos[i].z, MTXMODE_NEW);
                 Matrix_Scale(this->scale, this->scale, this->scale, MTXMODE_APPLY);
                 Matrix_RotateYS(this->ghostRot[i].y, MTXMODE_APPLY);

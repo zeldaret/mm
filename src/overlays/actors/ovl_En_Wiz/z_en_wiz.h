@@ -33,7 +33,7 @@ typedef struct EnWiz {
     /* 0x3B8 */ s16 staffFlameScroll;
     /* 0x3BA */ s16 hasActiveProjectile;
     /* 0x3BC */ s16 hasRunToEveryPlatform; // used for the second phase cutscene to make sure the Wizrobe visits every platform
-    /* 0x3B4 */ UNK_TYPE1 unk_3BE[2];
+    /* 0x3BE */ UNK_TYPE1 unk_3BE[2];
     /* 0x3C0 */ s16 rotationalVelocity;
     /* 0x3C2 */ s16 alpha;
     /* 0x3C4 */ s16 platformLightAlpha;
