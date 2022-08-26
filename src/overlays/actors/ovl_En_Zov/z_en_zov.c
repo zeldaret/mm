@@ -423,7 +423,7 @@ void func_80BD1DB8(EnZov* this, PlayState* play) {
                 break;
 
             case 0x1039:
-                play->nextEntranceIndex = play->setupExitList[ENZOV_GET_FE00(&this->picto.actor)];
+                play->nextEntrance = play->setupExitList[ENZOV_GET_FE00(&this->picto.actor)];
                 play->transitionType = TRANS_TYPE_05;
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 gSaveContext.save.weekEventReg[78] |= 1;

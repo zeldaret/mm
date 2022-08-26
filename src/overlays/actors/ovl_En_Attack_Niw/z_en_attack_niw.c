@@ -103,12 +103,12 @@ void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, PlayState* play, s16 animati
         this->unkToggle28A &= 1;
 
         switch (animationState) { // only case 2 and 5 are ever called in AttackNiw
-            case NIW_ANIMATION_STILL:
+            case NIW_ANIM_STILL:
                 this->targetLeftWingRotZ = 0.0f;
                 this->targetRightWingRotZ = 0.0f;
                 break;
 
-            case NIW_ANIMATION_HEAD_PECKING:
+            case NIW_ANIM_HEAD_PECKING:
                 this->unkTimer250 = 3;
                 this->targetLeftWingRotZ = 7000.0f;
                 this->targetRightWingRotZ = 7000.0f;
@@ -118,7 +118,7 @@ void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, PlayState* play, s16 animati
                 }
                 break;
 
-            case NIW_ANIMATION_PECKING_AND_WAVING:
+            case NIW_ANIM_PECKING_AND_WAVING:
                 this->unkTimer250 = 2;
                 this->targetLeftWingRotZ = -10000.0f;
                 this->targetRightWingRotZ = -10000.0f;
@@ -132,7 +132,7 @@ void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, PlayState* play, s16 animati
                 }
                 break;
 
-            case NIW_ANIMATION_PECKING_AND_FORFLAPPING:
+            case NIW_ANIM_PECKING_AND_FORFLAPPING:
                 this->unkTimer250 = 2;
                 this->targetRightWingRotY = 10000.0f;
                 this->targetLeftWingRotY = 10000.0f;
@@ -142,12 +142,12 @@ void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, PlayState* play, s16 animati
                 }
                 break;
 
-            case NIW_ANIMATION_FREEZE:
+            case NIW_ANIM_FREEZE:
                 this->unusedTimer24E = 5;
                 this->unkTimer24C = this->unusedTimer24E;
                 break;
 
-            case NIW_ANIMATION_PECKING_SLOW_FORFLAPPING:
+            case NIW_ANIM_PECKING_SLOW_FORFLAPPING:
                 this->unkTimer250 = 5;
                 this->targetRightWingRotY = 14000.0f;
                 this->targetLeftWingRotY = 14000.0f;
@@ -276,7 +276,7 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play) {
         this->unkTimer24C = 10;
         this->targetBodyRotY = -10000.0f;
         this->targetHeadRotZ = -3000.0f;
-        EnAttackNiw_AnimateWingHead(this, play, NIW_ANIMATION_PECKING_AND_WAVING);
+        EnAttackNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_AND_WAVING);
     }
 }
 
@@ -325,10 +325,10 @@ void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play) {
         this->actionFunc = EnAttackNiw_FlyAway;
 
     } else if (this->actor.bgCheckFlags & 1) { // touching floor
-        EnAttackNiw_AnimateWingHead(this, play, NIW_ANIMATION_PECKING_SLOW_FORFLAPPING);
+        EnAttackNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_SLOW_FORFLAPPING);
 
     } else {
-        EnAttackNiw_AnimateWingHead(this, play, NIW_ANIMATION_PECKING_AND_WAVING);
+        EnAttackNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_AND_WAVING);
     }
 }
 
@@ -341,7 +341,7 @@ void EnAttackNiw_FlyAway(EnAttackNiw* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.x, this->targetRotX, 5, this->rotStep, 0);
     Math_ApproachF(&this->rotStep, 5000.0f, 1.0f, 100.0f);
     Math_ApproachF(&this->actor.velocity.y, 5.0f, 0.3f, 1.0f);
-    EnAttackNiw_AnimateWingHead(this, play, NIW_ANIMATION_PECKING_AND_WAVING);
+    EnAttackNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_AND_WAVING);
 }
 
 void EnAttackNiw_Update(Actor* thisx, PlayState* play) {

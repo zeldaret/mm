@@ -62,7 +62,7 @@
         <Limb Name="gTwinmoldHeadLeftAntennaFrontLimb" Type="Standard" EnumName="TWINMOLD_HEAD_LIMB_LEFT_ANTENNA_FRONT" Offset="0x9AD4" />
 
         <!-- Twinmold Head Skeleton -->
-        <Skeleton Name="gTwinmoldHeadSkel" Type="Normal" LimbType="Standard" LimbNone="TWINMOLD_HEAD_LIMB_NONE" LimbMax="TWINMOLD_HEAD_LIMB_MAX" EnumName="TwinmoldHeadLimbs" Offset="0x9B10" />
+        <Skeleton Name="gTwinmoldHeadSkel" Type="Normal" LimbType="Standard" LimbNone="TWINMOLD_HEAD_LIMB_NONE" LimbMax="TWINMOLD_HEAD_LIMB_MAX" EnumName="TwinmoldHeadLimb" Offset="0x9B10" />
 
         <!-- The only used animation for Twinmold's Head -->
         <Animation Name="gTwinmoldHeadFlyAnim" Offset="0x9C78" />
@@ -120,6 +120,6 @@
         <Limb Name="gTwinmoldBodyTailLimb" Type="Standard" EnumName="TWINMOLD_BODY_LIMB_TAIL" Offset="0x13920" />
 
         <!-- Unused Twinmold Body Skeleton -->
-        <Skeleton Name="gTwinmoldBodySkel" Type="Flex" LimbType="Standard" LimbNone="TWINMOLD_BODY_LIMB_NONE" LimbMax="TWINMOLD_BODY_LIMB_MAX" EnumName="TwinmoldBodyLimbs" Offset="0x13988" />
+        <Skeleton Name="gTwinmoldBodySkel" Type="Flex" LimbType="Standard" LimbNone="TWINMOLD_BODY_LIMB_NONE" LimbMax="TWINMOLD_BODY_LIMB_MAX" EnumName="TwinmoldBodyLimb" Offset="0x13988" />
     </File>
 </Root>

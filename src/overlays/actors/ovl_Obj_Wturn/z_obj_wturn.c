@@ -112,10 +112,10 @@ void func_808A7C78(ObjWturn* this, PlayState* play) {
         play->transitionType = TRANS_TYPE_64;
         gSaveContext.nextTransitionType = TRANS_TYPE_03;
         gSaveContext.nextCutsceneIndex = 0;
-        if (play->sceneNum == 0x58) {
-            play->nextEntranceIndex = 0xAC00;
+        if (play->sceneNum == SCENE_F40) {
+            play->nextEntrance = ENTRANCE(STONE_TOWER_INVERTED, 0);
         } else {
-            play->nextEntranceIndex = 0xAA10;
+            play->nextEntrance = ENTRANCE(STONE_TOWER, 1);
         }
         play->transitionTrigger = TRANS_TRIGGER_START;
     }

@@ -1633,7 +1633,7 @@ void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
                     break;
 
                 case 0xA8: // channel: random range large (only cmd that differs from OoT)
-                    rand = Audio_NextRandom();
+                    rand = AudioThread_NextRandom();
                     channel->unk_22 = (cmdArgs[0] == 0) ? (rand & 0xFFFF) : (rand % cmdArgs[0]);
                     channel->unk_22 += cmdArgs[1];
                     temp2 = (channel->unk_22 / 0x100) + 0x80;

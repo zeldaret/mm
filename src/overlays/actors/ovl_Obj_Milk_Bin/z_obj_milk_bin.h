@@ -7,7 +7,7 @@ struct ObjMilkBin;
 
 typedef struct ObjMilkBin {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x4];
+    /* 0x144 */ UNK_TYPE1 unk_144[0x4];
     /* 0x148 */ ColliderCylinder collider;
     /* 0x194 */ s32 disableDraw;
     /* 0x198 */ s32 type;

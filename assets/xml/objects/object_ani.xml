@@ -21,7 +21,7 @@
         <Limb Name="gAniRightForArmLimb" Type="Standard" EnumName="ANI_LIMB_RIGHT_FORARM" Offset="0x2840" />
         <Limb Name="gAniRightHandLimb" Type="Standard" EnumName="ANI_LIMB_RIGHT_HAND" Offset="0x284C" />
         <Limb Name="gAniHeadLimb" Type="Standard" EnumName="ANI_LIMB_HEAD" Offset="0x2858" />
-        <Skeleton Name="gAniSkeleton" Type="Flex" LimbType="Standard" LimbNone="ANI_LIMB_NONE" LimbMax="ANI_LIMB_MAX" EnumName="ObjectAniLimbs" Offset="0x28A0" />
+        <Skeleton Name="gAniSkeleton" Type="Flex" LimbType="Standard" LimbNone="ANI_LIMB_NONE" LimbMax="ANI_LIMB_MAX" EnumName="ObjectAniLimb" Offset="0x28A0" />
         <DList Name="gAniRightHandDL" Offset="0x4860" />
         <DList Name="gAniRightForArmDL" Offset="0x4A50" />
         <DList Name="gAniRightUpperArmDL" Offset="0x4B38" />

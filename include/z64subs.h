@@ -104,7 +104,7 @@ Path* SubS_GetAdditionalPath(struct PlayState* play, u8 pathIndex, s32 max);
 
 Actor* SubS_FindNearestActor(Actor* actor, struct PlayState* play, u8 actorCategory, s16 actorId);
 
-s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animations, s32 index);
+s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 animIndex);
 
 s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex);
 
@@ -151,7 +151,7 @@ s32 SubS_ActorPathing_MoveWithGravity(struct PlayState* play, ActorPathing* acto
 s32 SubS_ActorPathing_MoveWithoutGravityReverse(struct PlayState* play, ActorPathing* actorPath);
 s32 SubS_ActorPathing_SetNextPoint(struct PlayState* play, ActorPathing* actorPath);
 
-void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animations, s32 nextIndex, s32* curIndex);
+void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animationInfo, s32 nextAnimIndex, s32* curAnimIndex);
 
 s32 SubS_StartActorCutscene(Actor* actor, s16 nextCutscene, s16 curCutscene, s32 type);
 s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes);

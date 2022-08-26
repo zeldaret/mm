@@ -210,7 +210,7 @@ typedef enum {
     /* 0x59 */ ITEM_WALLET_DEFAULT,
     /* 0x5A */ ITEM_WALLET_ADULT,
     /* 0x5B */ ITEM_WALLET_GIANT,
-    /* 0x5C */ ITEM_FISHING_POLE,
+    /* 0x5C */ ITEM_FISHING_ROD,
     /* 0x5D */ ITEM_REMAINS_ODOLWA,
     /* 0x5E */ ITEM_REMAINS_GOHT,
     /* 0x5F */ ITEM_REMAINS_GYORG,
@@ -551,25 +551,5 @@ typedef enum {
     /* 0x75 */ GID_MASK_FIERCE_DEITY,
     /* 0x76 */ GID_MAX
 } GetItemDrawID;
-
-// This enum may not be real, and actionparam is just used directly.
-// Keep using it for now.
-// TODO: fill
-typedef enum {
-    /*   -1 */ EXCH_ITEM_MINUS1 = -1, // Unknown usage or function
-    /* 0x00 */ EXCH_ITEM_NONE,
-    /* 0x13 */ EXCH_ITEM_PICTO_BOX = 0x13,
-    /* 0x1E */ EXCH_ITEM_1E = 0x1E, // BOTTLE_MUSHROOM
-    /* 0x2A */ EXCH_ITEM_MOON_TEAR = 0x2A,
-    /* 0x2B */ EXCH_ITEM_DEED_LAND,
-    /* 0x2C */ EXCH_ITEM_ROOM_KEY,
-    /* 0x2D */ EXCH_ITEM_LETTER_TO_KAFEI,
-    /* 0x2E */ EXCH_ITEM_2E,
-    /* 0x2F */ EXCH_ITEM_DEED_SWAMP,
-    /* 0x30 */ EXCH_ITEM_DEED_MOUNTAIN,
-    /* 0x31 */ EXCH_ITEM_DEED_OCEAN,
-    /* 0x32 */ EXCH_ITEM_32,
-    /* 0x33 */ EXCH_ITEM_LETTER_MAMA
-} ExchangeItemID;
 
 #endif
