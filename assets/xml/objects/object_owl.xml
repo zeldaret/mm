@@ -57,7 +57,7 @@
         <Limb Name="object_owl_Standardlimb_00C584" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_12" Offset="0xC584" />
         <Limb Name="object_owl_Standardlimb_00C590" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_13" Offset="0xC590" />
         <Limb Name="object_owl_Standardlimb_00C59C" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_14" Offset="0xC59C" />
-        <Skeleton Name="object_owl_Skel_00C5F8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_OWL_1_LIMB_NONE" LimbMax="OBJECT_OWL_1_LIMB_MAX" EnumName="object_owl_1_Limbs" Offset="0xC5F8" />
+        <Skeleton Name="object_owl_Skel_00C5F8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_OWL_1_LIMB_NONE" LimbMax="OBJECT_OWL_1_LIMB_MAX" EnumName="ObjectOwl1Limb" Offset="0xC5F8" />
         <Animation Name="object_owl_Anim_00C6D4" Offset="0xC6D4" />
         <Animation Name="object_owl_Anim_00CB94" Offset="0xCB94" />
         <Animation Name="object_owl_Anim_00CDB0" Offset="0xCDB0" />
@@ -90,6 +90,6 @@
         <Limb Name="object_owl_Standardlimb_010560" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_0D" Offset="0x10560" />
         <Limb Name="object_owl_Standardlimb_01056C" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_0E" Offset="0x1056C" />
         <Limb Name="object_owl_Standardlimb_010578" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_0F" Offset="0x10578" />
-        <Skeleton Name="object_owl_Skel_0105C0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_OWL_2_LIMB_NONE" LimbMax="OBJECT_OWL_2_LIMB_MAX" EnumName="object_owl_2_Limbs" Offset="0x105C0" />
+        <Skeleton Name="object_owl_Skel_0105C0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_OWL_2_LIMB_NONE" LimbMax="OBJECT_OWL_2_LIMB_MAX" EnumName="ObjectOwl2Limb" Offset="0x105C0" />
     </File>
 </Root>

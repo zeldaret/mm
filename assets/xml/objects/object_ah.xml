@@ -53,6 +53,6 @@
         <Limb Name="object_ah_Standardlimb_009E0C" Type="Standard" EnumName="OBJECT_AH_LIMB_0E" Offset="0x9E0C" />
         <Limb Name="object_ah_Standardlimb_009E18" Type="Standard" EnumName="OBJECT_AH_LIMB_0F" Offset="0x9E18" />
         <Limb Name="object_ah_Standardlimb_009E24" Type="Standard" EnumName="OBJECT_AH_LIMB_10" Offset="0x9E24" />
-        <Skeleton Name="object_ah_Skel_009E70" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AH_LIMB_NONE" LimbMax="OBJECT_AH_LIMB_MAX" EnumName="object_ah_Limbs" Offset="0x9E70" />
+        <Skeleton Name="object_ah_Skel_009E70" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AH_LIMB_NONE" LimbMax="OBJECT_AH_LIMB_MAX" EnumName="ObjectAhLimb" Offset="0x9E70" />
     </File>
 </Root>
