@@ -89,11 +89,11 @@ void func_80C05B3C(EnBombal* this, PlayState* play) {
     Math_ApproachF(&this->scale, 0.1f, 0.3f, 0.01f);
 
     if (play->msgCtx.msgLength == 0) {
-        if (this->collider.base.acFlags & 2) {
+        if (this->collider.base.acFlags & AC_HIT) {
             player = GET_PLAYER(play);
             this->collider.base.acFlags &= ~AC_HIT;
-            if (!(gSaveContext.save.weekEventReg[0x4B] & 0x40) && !(gSaveContext.save.weekEventReg[0x49] & 0x10) &&
-                !(gSaveContext.save.weekEventReg[0x55] & 2)) {
+            if (!(gSaveContext.save.weekEventReg[75] & 0x40) && !(gSaveContext.save.weekEventReg[73] & 0x10) &&
+                !(gSaveContext.save.weekEventReg[85] & 2)) {
                 player->stateFlags1 |= ACTOR_FLAG_20;
                 this->actor.flags |= ACTOR_FLAG_100000;
             }
@@ -107,8 +107,8 @@ void func_80C05C44(EnBombal* this, PlayState* play) {
     s32 i;
     Vec3f pos;
 
-    if (!(gSaveContext.save.weekEventReg[0x4B] & 0x40) && !(gSaveContext.save.weekEventReg[0x49] & 0x10) &&
-        !(gSaveContext.save.weekEventReg[0x55] & 2)) {
+    if (!(gSaveContext.save.weekEventReg[75] & 0x40) && !(gSaveContext.save.weekEventReg[73] & 0x10) &&
+        !(gSaveContext.save.weekEventReg[85] & 2)) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
             ActorCutscene_SetIntentToPlay(this->cutscene);
@@ -144,8 +144,8 @@ void func_80C05C44(EnBombal* this, PlayState* play) {
 
 void func_80C05DE8(EnBombal* this, PlayState* play) {
     if (this->timer == 0) {
-        if (!(gSaveContext.save.weekEventReg[0x4B] & 0x40) && !(gSaveContext.save.weekEventReg[0x49] & 0x10) &&
-            !(gSaveContext.save.weekEventReg[0x55] & 2)) {
+        if (!(gSaveContext.save.weekEventReg[75] & 0x40) && !(gSaveContext.save.weekEventReg[73] & 0x10) &&
+            !(gSaveContext.save.weekEventReg[85] & 2)) {
             ActorCutscene_Stop(this->cutscene);
         }
         Actor_MarkForDeath(&this->actor);
