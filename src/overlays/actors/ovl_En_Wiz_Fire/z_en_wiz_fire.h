@@ -4,11 +4,11 @@
 #include "global.h"
 
 typedef enum {
-    /* 0 */ EN_WIZ_FIRE_TYPE_FIRE_BALL,
-    /* 1 */ EN_WIZ_FIRE_TYPE_SMALL_FIRE_BALL,
-    /* 2 */ EN_WIZ_FIRE_TYPE_ARC_FLAME,
-    /* 3 */ EN_WIZ_FIRE_TYPE_UNK3,
-    /* 4 */ EN_WIZ_FIRE_TYPE_ICE_BALL
+    /* 0 */ EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE,
+    /* 1 */ EN_WIZ_FIRE_TYPE_ARCING_MAGIC_PROJECTILE,
+    /* 2 */ EN_WIZ_FIRE_TYPE_SMALL_FLAME,
+    /* 3 */ EN_WIZ_FIRE_TYPE_REFLECTED_MAGIC_PROJECTILE,
+    /* 4 */ EN_WIZ_FIRE_TYPE_ICE_MAGIC_PROJECTILE
 } EnWizFireType;
 
 #define EN_WIZ_FIRE_GET_TYPE(thisx) ((thisx)->params)
@@ -33,28 +33,31 @@ typedef struct {
 typedef struct EnWizFire {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ EnWizFireActionFunc actionFunc;
-    /* 0x0148 */ u8 unk_148;
+    /* 0x0148 */ u8 hitByIceArrow;
     /* 0x014C */ f32 scale;
     /* 0x0150 */ f32 targetScale;
     /* 0x0154 */ Vec3f scaleMod;
-    /* 0x0160 */ s16 unk_160;
+    /* 0x0160 */ s16 action;
     /* 0x0162 */ s16 type;
-    /* 0x0164 */ u8 unk_164;
-    /* 0x0166 */ s16 unk_166;
-    /* 0x0168 */ s16 unk_168;
-    /* 0x016A */ s16 unk_16A;
-    /* 0x016C */ s16 unk_16C;
-    /* 0x016E */ s16 unk_16E;
+    /* 0x0164 */ union {
+                    u8 shouldPoolFadeOut;
+                    u8 hasSpawnedSmallFlame;
+                };
+    /* 0x0166 */ s16 isIceType;
+    /* 0x0168 */ s16 timer;
+    /* 0x016A */ s16 poolTimer;
+    /* 0x016C */ s16 steamSpawnTimer;
+    /* 0x016E */ s16 lowestValidMagicProjectileIndex;
     /* 0x0170 */ s16 smallFlameScroll;
-    /* 0x0172 */ s16 unk_172;
-    /* 0x0174 */ s8 unk_174; // some sort of flag
-    /* 0x0178 */ Vec3f unk_178[10];
+    /* 0x0172 */ s16 wallCheckTimer;
+    /* 0x0174 */ s8 hitByIceProjectile; // set, but never used
+    /* 0x0178 */ Vec3f magicProjectilePos[10];
     /* 0x01F0 */ f32 poolScale;
     /* 0x01F4 */ f32 bigFlameScale;
     /* 0x01F8 */ f32 fireSmokeScale;
     /* 0x01FC */ f32 alpha;
-    /* 0x0200 */ f32 unk_200;
-    /* 0x0204 */ f32 lightSettingsScale;
+    /* 0x0200 */ f32 lightSettingsScale;
+    /* 0x0204 */ f32 lightSettingsScaleFrac;
     /* 0x0208 */ ColliderCylinder collider;
     /* 0x0254 */ EnWizFireEffect effects[200];
 } EnWizFire; // size = 0x2AF4
