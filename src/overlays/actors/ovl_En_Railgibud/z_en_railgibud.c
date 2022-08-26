@@ -50,27 +50,27 @@ void EnRailgibud_SinkIntoGround(EnRailgibud* this, PlayState* play);
 void EnRailgibud_Cutscene_Update(Actor* thisx, PlayState* play);
 
 typedef enum {
-    /*  0 */ EN_RAILGIBUD_ANIMATION_GRAB_ATTACK,
-    /*  1 */ EN_RAILGIBUD_ANIMATION_GRAB_END,
-    /*  2 */ EN_RAILGIBUD_ANIMATION_GRAB_START,
-    /*  3 */ EN_RAILGIBUD_ANIMATION_LOOK_BACK,
-    /*  4 */ EN_RAILGIBUD_ANIMATION_CROUCH_WIPING_TEARS,
-    /*  5 */ EN_RAILGIBUD_ANIMATION_CROUCH_CRYING,
-    /*  6 */ EN_RAILGIBUD_ANIMATION_DEATH,
-    /*  7 */ EN_RAILGIBUD_ANIMATION_DAMAGE,
-    /*  8 */ EN_RAILGIBUD_ANIMATION_CROUCH_END,
-    /*  9 */ EN_RAILGIBUD_ANIMATION_IDLE,
-    /* 10 */ EN_RAILGIBUD_ANIMATION_WALK,
-    /* 11 */ EN_RAILGIBUD_ANIMATION_DANCE_SQUAT,
-    /* 12 */ EN_RAILGIBUD_ANIMATION_DANCE_PIROUETTE,
-    /* 13 */ EN_RAILGIBUD_ANIMATION_DANCE_CLAP,
-    /* 14 */ EN_RAILGIBUD_ANIMATION_CROUCH_END_2,
-    /* 15 */ EN_RAILGIBUD_ANIMATION_SLUMP_START,
-    /* 16 */ EN_RAILGIBUD_ANIMATION_SLUMP_LOOP,
-    /* 17 */ EN_RAILGIBUD_ANIMATION_CONVULSION,
-    /* 18 */ EN_RAILGIBUD_ANIMATION_ARMS_UP_START,
-    /* 19 */ EN_RAILGIBUD_ANIMATION_ARMS_UP_LOOP,
-} EnRailgibudAnimations;
+    /*  0 */ EN_RAILGIBUD_ANIM_GRAB_ATTACK,
+    /*  1 */ EN_RAILGIBUD_ANIM_GRAB_END,
+    /*  2 */ EN_RAILGIBUD_ANIM_GRAB_START,
+    /*  3 */ EN_RAILGIBUD_ANIM_LOOK_BACK,
+    /*  4 */ EN_RAILGIBUD_ANIM_CROUCH_WIPING_TEARS,
+    /*  5 */ EN_RAILGIBUD_ANIM_CROUCH_CRYING,
+    /*  6 */ EN_RAILGIBUD_ANIM_DEATH,
+    /*  7 */ EN_RAILGIBUD_ANIM_DAMAGE,
+    /*  8 */ EN_RAILGIBUD_ANIM_CROUCH_END,
+    /*  9 */ EN_RAILGIBUD_ANIM_IDLE,
+    /* 10 */ EN_RAILGIBUD_ANIM_WALK,
+    /* 11 */ EN_RAILGIBUD_ANIM_DANCE_SQUAT,
+    /* 12 */ EN_RAILGIBUD_ANIM_DANCE_PIROUETTE,
+    /* 13 */ EN_RAILGIBUD_ANIM_DANCE_CLAP,
+    /* 14 */ EN_RAILGIBUD_ANIM_CROUCH_END_2,
+    /* 15 */ EN_RAILGIBUD_ANIM_SLUMP_START,
+    /* 16 */ EN_RAILGIBUD_ANIM_SLUMP_LOOP,
+    /* 17 */ EN_RAILGIBUD_ANIM_CONVULSION,
+    /* 18 */ EN_RAILGIBUD_ANIM_ARMS_UP_START,
+    /* 19 */ EN_RAILGIBUD_ANIM_ARMS_UP_LOOP,
+} EnRailgibudAnimation;
 
 typedef enum {
     /* 0 */ EN_RAILGIBUD_TYPE_GIBDO,
@@ -95,7 +95,7 @@ const ActorInit En_Railgibud_InitVars = {
     (ActorFunc)EnRailgibud_Draw,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &gGibdoRedeadGrabAttackAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
     { &gGibdoRedeadGrabEndAnim, 0.5f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 0.0f },
     { &gGibdoRedeadGrabStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
@@ -286,7 +286,7 @@ void EnRailgibud_Destroy(Actor* thisx, PlayState* play) {
 
 void EnRailgibud_SetupWalkInCircles(EnRailgibud* this) {
     this->actor.speedXZ = 0.6f;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_WALK);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_WALK);
     this->actionFunc = EnRailgibud_WalkInCircles;
 }
 
@@ -336,7 +336,7 @@ void EnRailgibud_WalkInCircles(EnRailgibud* this, PlayState* play) {
 }
 
 void EnRailgibud_SetupAttemptPlayerFreeze(EnRailgibud* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_IDLE);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_IDLE);
     this->actionFunc = EnRailgibud_AttemptPlayerFreeze;
 }
 
@@ -357,7 +357,7 @@ void EnRailgibud_AttemptPlayerFreeze(EnRailgibud* this, PlayState* play) {
 }
 
 void EnRailgibud_SetupWalkToPlayer(EnRailgibud* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_WALK);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_WALK);
     this->actor.speedXZ = 0.4f;
 
     if (this->actionFunc == EnRailgibud_AttemptPlayerFreeze) {
@@ -418,7 +418,7 @@ void EnRailgibud_WalkToPlayer(EnRailgibud* this, PlayState* play) {
 }
 
 void EnRailgibud_SetupGrab(EnRailgibud* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_GRAB_START);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_GRAB_START);
     this->grabDamageTimer = 0;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->grabState = EN_RAILGIBUD_GRAB_START;
@@ -436,9 +436,9 @@ void EnRailgibud_Grab(EnRailgibud* this, PlayState* play) {
             inPositionToAttack = EnRailgibud_MoveToIdealGrabPositionAndRotation(this, play);
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && (inPositionToAttack == true)) {
                 this->grabState = EN_RAILGIBUD_GRAB_ATTACK;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_GRAB_ATTACK);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_GRAB_ATTACK);
             } else if (!(player->stateFlags2 & 0x80)) {
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_GRAB_END);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_GRAB_END);
                 this->actor.flags |= ACTOR_FLAG_1;
                 this->grabState = EN_RAILGIBUD_GRAB_RELEASE;
                 this->grabDamageTimer = 0;
@@ -468,7 +468,7 @@ void EnRailgibud_Grab(EnRailgibud* this, PlayState* play) {
                     player->unk_AE8 = 100;
                 }
 
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_GRAB_END);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_GRAB_END);
                 this->actor.flags |= ACTOR_FLAG_1;
                 this->grabState = EN_RAILGIBUD_GRAB_RELEASE;
                 this->grabDamageTimer = 0;
@@ -488,7 +488,7 @@ void EnRailgibud_Grab(EnRailgibud* this, PlayState* play) {
 }
 
 void EnRailgibud_SetupGrabFail(EnRailgibud* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_DAMAGE);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_DAMAGE);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->actor.speedXZ = -2.0f;
     this->actionFunc = EnRailgibud_GrabFail;
@@ -510,7 +510,7 @@ void EnRailgibud_GrabFail(EnRailgibud* this, PlayState* play) {
 
 void EnRailgibud_SetupTurnAwayAndShakeHead(EnRailgibud* this) {
     this->headShakeTimer = 0;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_WALK);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_WALK);
     this->actionFunc = EnRailgibud_TurnAwayAndShakeHead;
 }
 
@@ -528,7 +528,7 @@ void EnRailgibud_TurnAwayAndShakeHead(EnRailgibud* this, PlayState* play) {
 }
 
 void EnRailgibud_SetupWalkToHome(EnRailgibud* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_WALK);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_WALK);
     this->actor.speedXZ = 0.4f;
     this->actionFunc = EnRailgibud_WalkToHome;
 }
@@ -561,7 +561,7 @@ void EnRailgibud_WalkToHome(EnRailgibud* this, PlayState* play) {
 }
 
 void EnRailgibud_SetupDamage(EnRailgibud* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_DAMAGE);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_DAMAGE);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->stunTimer = 0;
     this->grabWaitTimer = 0;
@@ -618,7 +618,7 @@ void EnRailgibud_Stunned(EnRailgibud* this, PlayState* play) {
 }
 
 void EnRailgibud_SetupDead(EnRailgibud* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_DEATH);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_DEATH);
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->deathTimer = 0;
@@ -1113,7 +1113,7 @@ void EnRailgibud_InitCutsceneGibdo(EnRailgibud* this, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    if (gSaveContext.save.entranceIndex != 0x2090) { // NOT Cutscene: Music Box House Opens
+    if (gSaveContext.save.entrance != ENTRANCE(IKANA_CANYON, 9)) { // NOT Cutscene: Music Box House Opens
         Actor_MarkForDeath(&this->actor);
     }
 
@@ -1180,38 +1180,38 @@ s32 EnRailgibud_PerformCutsceneActions(EnRailgibud* this, PlayState* play) {
             this->csAction = play->csCtx.actorActions[actionIndex]->action;
             switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 1:
-                    this->cutsceneAnimationIndex = EN_RAILGIBUD_ANIMATION_IDLE;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_IDLE);
+                    this->cutsceneAnimIndex = EN_RAILGIBUD_ANIM_IDLE;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_IDLE);
                     break;
 
                 case 2:
-                    this->cutsceneAnimationIndex = EN_RAILGIBUD_ANIMATION_SLUMP_START;
+                    this->cutsceneAnimIndex = EN_RAILGIBUD_ANIM_SLUMP_START;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_WEAKENED2);
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_SLUMP_START);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_SLUMP_START);
                     break;
 
                 case 3:
-                    this->cutsceneAnimationIndex = EN_RAILGIBUD_ANIMATION_CONVULSION;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_CONVULSION);
+                    this->cutsceneAnimIndex = EN_RAILGIBUD_ANIM_CONVULSION;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_CONVULSION);
                     break;
 
                 case 4:
-                    this->cutsceneAnimationIndex = EN_RAILGIBUD_ANIMATION_ARMS_UP_START;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_ARMS_UP_START);
+                    this->cutsceneAnimIndex = EN_RAILGIBUD_ANIM_ARMS_UP_START;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_ARMS_UP_START);
                     break;
 
                 case 5:
-                    this->cutsceneAnimationIndex = EN_RAILGIBUD_ANIMATION_WALK;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_WALK);
+                    this->cutsceneAnimIndex = EN_RAILGIBUD_ANIM_WALK;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_WALK);
                     break;
             }
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            if (this->cutsceneAnimationIndex == EN_RAILGIBUD_ANIMATION_SLUMP_START) {
-                this->cutsceneAnimationIndex = EN_RAILGIBUD_ANIMATION_SLUMP_LOOP;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_SLUMP_LOOP);
-            } else if (this->cutsceneAnimationIndex == EN_RAILGIBUD_ANIMATION_ARMS_UP_START) {
-                this->cutsceneAnimationIndex = EN_RAILGIBUD_ANIMATION_ARMS_UP_LOOP;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_ARMS_UP_LOOP);
+            if (this->cutsceneAnimIndex == EN_RAILGIBUD_ANIM_SLUMP_START) {
+                this->cutsceneAnimIndex = EN_RAILGIBUD_ANIM_SLUMP_LOOP;
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_SLUMP_LOOP);
+            } else if (this->cutsceneAnimIndex == EN_RAILGIBUD_ANIM_ARMS_UP_START) {
+                this->cutsceneAnimIndex = EN_RAILGIBUD_ANIM_ARMS_UP_LOOP;
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_ARMS_UP_LOOP);
                 EnRailgibud_SetupSinkIntoGround(this);
             }
         }

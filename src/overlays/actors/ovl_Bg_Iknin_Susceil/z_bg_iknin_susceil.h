@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define GET_SUSCEIL_SWITCHFLAG(this) (((this)->dyna.actor.params) & 0x7F)
+#define SUSCEIL_GET_SWITCHFLAG(thisx) (((thisx)->params) & 0x7F)
 
 struct BgIkninSusceil;
 

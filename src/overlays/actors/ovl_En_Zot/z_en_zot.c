@@ -516,7 +516,7 @@ void func_80B975F8(EnZot* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80B973BC;
     } else {
-        func_800B8500(&this->actor, play, 10000.0f, 1000.0f, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, play, 10000.0f, 1000.0f, PLAYER_AP_NONE);
     }
 }
 
@@ -931,7 +931,7 @@ void func_80B9849C(EnZot* this, PlayState* play) {
         }
         this->actionFunc = func_80B98728;
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -941,7 +941,7 @@ void func_80B9854C(EnZot* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B9849C;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     } else {
         Actor_PickUp(&this->actor, play, this->unk_2D4, 10000.0f, 50.0f);
     }
