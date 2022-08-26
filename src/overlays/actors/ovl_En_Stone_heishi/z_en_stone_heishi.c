@@ -330,7 +330,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
 
         case EN_STONE_DRINK_BOTTLE_STAND_UP:
             if (this->endFrame <= currentFrame) {
-                func_801A3098(NA_SE_PL_DUMMY_290);
+                func_801A3098(NA_BGM_GET_ITEM | 0x900);
                 this->bottleDisplay = EN_STONE_BOTTLE_NONE;
                 EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_STAND_UP);
                 this->DrinkBottleState++;
@@ -402,6 +402,7 @@ void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
     if (this->timer != 0) {
         this->timer--;
     }
+
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actionFunc(this, play);
 
