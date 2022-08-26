@@ -45,19 +45,22 @@ typedef struct EnWizFire {
                 };
     /* 0x0166 */ s16 isIceType;
     /* 0x0168 */ s16 timer;
-    /* 0x016A */ s16 poolTimer;
+    /* 0x016A */ union {
+                    s16 poolTimer;
+                    s16 increaseLowestValidMagicProjectileIndexTimer;
+                };
     /* 0x016C */ s16 steamSpawnTimer;
     /* 0x016E */ s16 lowestValidMagicProjectileIndex;
     /* 0x0170 */ s16 smallFlameScroll;
-    /* 0x0172 */ s16 wallCheckTimer;
-    /* 0x0174 */ s8 hitByIceProjectile; // set, but never used
+    /* 0x0172 */ s16 wallCheckTimer; // The projectile won't check for impacts with walls until this is zero
+    /* 0x0174 */ s8 playerHitByIceProjectile; // Set, but never used
     /* 0x0178 */ Vec3f magicProjectilePos[10];
     /* 0x01F0 */ f32 poolScale;
     /* 0x01F4 */ f32 bigFlameScale;
     /* 0x01F8 */ f32 fireSmokeScale;
     /* 0x01FC */ f32 alpha;
-    /* 0x0200 */ f32 lightSettingsScale;
-    /* 0x0204 */ f32 lightSettingsScaleFrac;
+    /* 0x0200 */ f32 blendScale;
+    /* 0x0204 */ f32 blendScaleFrac;
     /* 0x0208 */ ColliderCylinder collider;
     /* 0x0254 */ EnWizFireEffect effects[200];
 } EnWizFire; // size = 0x2AF4

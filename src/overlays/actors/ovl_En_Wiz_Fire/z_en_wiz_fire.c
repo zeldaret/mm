@@ -174,6 +174,10 @@ void EnWiz_SetupMoveMagicProjectile(EnWizFire* this, PlayState* play) {
     this->actionFunc = EnWiz_MoveMagicProjectile;
 }
 
+/**
+ * Moves all types of magic projectiles around, including arcing ones created by the
+ * Fire Wizrobe's attack or ones reflected by the Mirror Shield.
+ */
 void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
     Vec3f velocity = { 0.0f, 0.0f, 0.0f };
 
@@ -188,7 +192,7 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
     if ((this->timer == 0) && (this->scale < 0.001f)) {
         Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
         this->action = EN_WIZ_FIRE_ACTION_KILL_MAGIC_PROJECTILE;
-        this->poolTimer = 0;
+        this->increaseLowestValidMagicProjectileIndexTimer = 0;
         this->actionFunc = EnWiz_KillMagicProjectile;
         return;
     }
@@ -214,7 +218,7 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
         s32 pad;
 
         if (this->type == EN_WIZ_FIRE_TYPE_ARCING_MAGIC_PROJECTILE) {
-            this->poolTimer = 10;
+            this->increaseLowestValidMagicProjectileIndexTimer = 10;
 
             Matrix_Push();
             Matrix_RotateYS((s16)randPlusMinusPoint5Scaled(0x100) + this->actor.world.rot.y, MTXMODE_NEW);
@@ -236,7 +240,7 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
             this->scale = 0.0f;
             Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
             this->action = EN_WIZ_FIRE_ACTION_KILL_MAGIC_PROJECTILE;
-            this->poolTimer = 0;
+            this->increaseLowestValidMagicProjectileIndexTimer = 0;
             this->actionFunc = EnWiz_KillMagicProjectile;
             return;
         }
@@ -262,12 +266,14 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
                 } else if (this->poolTimer != 0) {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
                 }
+
                 Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
                 this->timer = 0;
                 this->action = EN_WIZ_FIRE_ACTION_POOL;
                 this->scale = 0.0f;
                 this->actionFunc = EnWiz_Pool;
             }
+
             return;
         }
     }
@@ -311,6 +317,10 @@ void EnWiz_SetupSmallFlame(EnWizFire* this, PlayState* play) {
     this->actionFunc = EnWiz_SmallFlame;
 }
 
+/**
+ * Manages the small flame that is created when the arcing projectiles from the Fire Wizrobe's
+ * attack hit the floor.
+ */
 void EnWiz_SmallFlame(EnWizFire* this, PlayState* play) {
     if (this->timer > 10) {
         Math_ApproachF(&this->scale, this->targetScale, 0.3f, 0.01f);
@@ -343,13 +353,16 @@ void EnWiz_SmallFlame(EnWizFire* this, PlayState* play) {
     }
 }
 
+/**
+ * Manages the pool of fire or ice that is created when a magic projectile hits the floor.
+ */
 void EnWiz_Pool(EnWizFire* this, PlayState* play) {
     s32 pad;
 
     if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_WIZ) &&
         (this->actor.parent->update != NULL) && (this->actor.parent->colChkInfo.health == 0)) {
         this->poolTimer = 0;
-        this->hitByIceProjectile = true;
+        this->playerHitByIceProjectile = true;
     }
 
     this->lowestValidMagicProjectileIndex++;
@@ -359,7 +372,7 @@ void EnWiz_Pool(EnWizFire* this, PlayState* play) {
     }
 
     if (this->poolTimer != 0) {
-        Math_ApproachF(&this->lightSettingsScale, 60.0f, 0.5f, 10.0f);
+        Math_ApproachF(&this->blendScale, 60.0f, 0.5f, 10.0f);
         if (this->isIceType == true) {
             Vec3f accel = { 0.0f, 0.0f, 0.0f };
             Vec3f pos;
@@ -401,12 +414,13 @@ void EnWiz_Pool(EnWizFire* this, PlayState* play) {
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
             }
         }
+
         this->actor.world.pos.y = this->actor.floorHeight + 10.0f;
         Actor_SetFocus(&this->actor, 0.0f);
         return;
     }
 
-    Math_ApproachZeroF(&this->lightSettingsScale, 0.2f, 3.0f);
+    Math_ApproachZeroF(&this->blendScale, 0.2f, 3.0f);
 
     if (this->isIceType == true) {
         Math_ApproachZeroF(&this->poolScale, 0.046f, 0.001f);
@@ -426,10 +440,11 @@ void EnWiz_Pool(EnWizFire* this, PlayState* play) {
             Math_ApproachZeroF(&this->alpha, 1.0f, 5.0f);
         }
 
-        if ((this->poolScale < 0.001f) && (this->lightSettingsScaleFrac < 0.001f)) {
+        if ((this->poolScale < 0.001f) && (this->blendScaleFrac < 0.001f)) {
             sPoolHitByIceArrow = false;
             Actor_MarkForDeath(&this->actor);
         }
+
         return;
     }
 
@@ -437,7 +452,7 @@ void EnWiz_Pool(EnWizFire* this, PlayState* play) {
 
     if (this->bigFlameScale < 0.01f) {
         Math_ApproachZeroF(&this->alpha, 1.0f, 10.0f);
-        if ((this->alpha < 10.0f) && (this->lightSettingsScaleFrac < 0.001f)) {
+        if ((this->alpha < 10.0f) && (this->blendScaleFrac < 0.001f)) {
             sPoolHitByIceArrow = false;
             if ((this->actor.parent != NULL) && (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) &&
                 (this->actor.parent->id == ACTOR_EN_WIZ) && (this->actor.parent->update != NULL)) {
@@ -445,14 +460,15 @@ void EnWiz_Pool(EnWizFire* this, PlayState* play) {
 
                 wiz->hasActiveProjectile = false;
             }
+
             Actor_MarkForDeath(&this->actor);
         }
     }
 }
 
 void EnWiz_KillMagicProjectile(EnWizFire* this, PlayState* play) {
-    if (this->poolTimer == 0) {
-        this->poolTimer = 2;
+    if (this->increaseLowestValidMagicProjectileIndexTimer == 0) {
+        this->increaseLowestValidMagicProjectileIndexTimer = 2;
         this->lowestValidMagicProjectileIndex++;
         if (this->lowestValidMagicProjectileIndex >= 6) {
             if ((this->actor.parent != NULL) && (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) &&
@@ -464,6 +480,7 @@ void EnWiz_KillMagicProjectile(EnWizFire* this, PlayState* play) {
                     wiz->hasActiveProjectile = false;
                 }
             }
+
             Actor_MarkForDeath(&this->actor);
         }
     }
@@ -484,12 +501,13 @@ void EnWizFire_Update(Actor* thisx, PlayState* play2) {
 
     Actor_SetScale(&this->actor, this->scale);
     EnWizFire_UpdateEffects(this, play);
-    this->lightSettingsScaleFrac = this->lightSettingsScale / 60.0f;
+    this->blendScaleFrac = this->blendScale / 60.0f;
 
     if (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) {
         Actor* wiz = this->actor.parent;
 
-        if ((wiz != NULL) && (wiz->id == ACTOR_EN_WIZ) && (wiz->update != NULL) && (((EnWiz*)wiz)->type != 2)) {
+        if ((wiz != NULL) && (wiz->id == ACTOR_EN_WIZ) && (wiz->update != NULL) &&
+            (((EnWiz*)wiz)->type != EN_WIZ_TYPE_FIRE_NO_MINI_BOSS_BGM)) {
             f32 fogNear;
 
             index = this->isIceType * 4;
@@ -498,48 +516,38 @@ void EnWizFire_Update(Actor* thisx, PlayState* play2) {
                 fogNear = 968.0f;
             }
 
-            play->envCtx.lightSettings.fogNear =
-                (fogNear - (s16)play->envCtx.unk_C4.fogNear) * this->lightSettingsScaleFrac;
+            play->envCtx.lightSettings.fogNear = (fogNear - (s16)play->envCtx.unk_C4.fogNear) * this->blendScaleFrac;
 
             play->envCtx.lightSettings.ambientColor[0] =
-                ((f32)lightSettingsColors[index].r - play->envCtx.unk_C4.ambientColor[0]) *
-                this->lightSettingsScaleFrac;
+                ((f32)lightSettingsColors[index].r - play->envCtx.unk_C4.ambientColor[0]) * this->blendScaleFrac;
             play->envCtx.lightSettings.ambientColor[1] =
-                ((f32)lightSettingsColors[index].g - play->envCtx.unk_C4.ambientColor[1]) *
-                this->lightSettingsScaleFrac;
+                ((f32)lightSettingsColors[index].g - play->envCtx.unk_C4.ambientColor[1]) * this->blendScaleFrac;
             play->envCtx.lightSettings.ambientColor[2] =
-                ((f32)lightSettingsColors[index].b - play->envCtx.unk_C4.ambientColor[2]) *
-                this->lightSettingsScaleFrac;
+                ((f32)lightSettingsColors[index].b - play->envCtx.unk_C4.ambientColor[2]) * this->blendScaleFrac;
 
             index++;
             play->envCtx.lightSettings.diffuseColor1[0] =
-                ((f32)lightSettingsColors[index].r - play->envCtx.unk_C4.diffuseColor1[0]) *
-                this->lightSettingsScaleFrac;
+                ((f32)lightSettingsColors[index].r - play->envCtx.unk_C4.diffuseColor1[0]) * this->blendScaleFrac;
             play->envCtx.lightSettings.diffuseColor1[1] =
-                ((f32)lightSettingsColors[index].g - play->envCtx.unk_C4.diffuseColor1[1]) *
-                this->lightSettingsScaleFrac;
+                ((f32)lightSettingsColors[index].g - play->envCtx.unk_C4.diffuseColor1[1]) * this->blendScaleFrac;
             play->envCtx.lightSettings.diffuseColor1[2] =
-                ((f32)lightSettingsColors[index].b - play->envCtx.unk_C4.diffuseColor1[2]) *
-                this->lightSettingsScaleFrac;
+                ((f32)lightSettingsColors[index].b - play->envCtx.unk_C4.diffuseColor1[2]) * this->blendScaleFrac;
 
             index++;
             play->envCtx.lightSettings.diffuseColor2[0] =
-                ((f32)lightSettingsColors[index].r - play->envCtx.unk_C4.diffuseColor[0]) *
-                this->lightSettingsScaleFrac;
+                ((f32)lightSettingsColors[index].r - play->envCtx.unk_C4.diffuseColor[0]) * this->blendScaleFrac;
             play->envCtx.lightSettings.diffuseColor2[1] =
-                ((f32)lightSettingsColors[index].g - play->envCtx.unk_C4.diffuseColor[1]) *
-                this->lightSettingsScaleFrac;
+                ((f32)lightSettingsColors[index].g - play->envCtx.unk_C4.diffuseColor[1]) * this->blendScaleFrac;
             play->envCtx.lightSettings.diffuseColor2[2] =
-                ((f32)lightSettingsColors[index].b - play->envCtx.unk_C4.diffuseColor[2]) *
-                this->lightSettingsScaleFrac;
+                ((f32)lightSettingsColors[index].b - play->envCtx.unk_C4.diffuseColor[2]) * this->blendScaleFrac;
 
             index++;
             play->envCtx.lightSettings.fogColor[0] =
-                ((f32)lightSettingsColors[index].r - play->envCtx.unk_C4.fogColor[0]) * this->lightSettingsScaleFrac;
+                ((f32)lightSettingsColors[index].r - play->envCtx.unk_C4.fogColor[0]) * this->blendScaleFrac;
             play->envCtx.lightSettings.fogColor[1] =
-                ((f32)lightSettingsColors[index].g - play->envCtx.unk_C4.fogColor[1]) * this->lightSettingsScaleFrac;
+                ((f32)lightSettingsColors[index].g - play->envCtx.unk_C4.fogColor[1]) * this->blendScaleFrac;
             play->envCtx.lightSettings.fogColor[2] =
-                ((f32)lightSettingsColors[index].b - play->envCtx.unk_C4.fogColor[2]) * this->lightSettingsScaleFrac;
+                ((f32)lightSettingsColors[index].b - play->envCtx.unk_C4.fogColor[2]) * this->blendScaleFrac;
         }
     }
 
@@ -620,7 +628,7 @@ void EnWizFire_Update(Actor* thisx, PlayState* play2) {
                 player->invincibilityTimer += 40;
                 if (this->isIceType) {
                     player->invincibilityTimer += 50;
-                    this->hitByIceProjectile = true;
+                    this->playerHitByIceProjectile = true;
                 }
             }
         }
@@ -681,6 +689,7 @@ void EnWizFire_DrawFirePoolAndFlame(EnWizFire* this, PlayState* play2) {
     if ((this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) && (this->action == EN_WIZ_FIRE_ACTION_POOL)) {
         func_8012C28C(play->state.gfxCtx);
         func_8012C2DC(play->state.gfxCtx);
+
         Matrix_Push();
         Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(this->poolScale, this->poolScale, this->poolScale, MTXMODE_APPLY);
@@ -695,6 +704,7 @@ void EnWizFire_DrawFirePoolAndFlame(EnWizFire* this, PlayState* play2) {
         gSPDisplayList(POLY_XLU_DISP++, gWizrobeFirePoolDL);
 
         Matrix_Pop();
+
         Matrix_Push();
         Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_ReplaceRotation(&play->billboardMtxF);
@@ -713,6 +723,7 @@ void EnWizFire_DrawFirePoolAndFlame(EnWizFire* this, PlayState* play2) {
         gSPDisplayList(POLY_XLU_DISP++, gWizrobeFireSmokeDL);
 
         Matrix_Pop();
+
         Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_ReplaceRotation(&play->billboardMtxF);
 
@@ -854,7 +865,7 @@ void EnWizFire_UpdateEffects(EnWizFire* this, PlayState* play) {
 
 void EnWizFire_DrawEffects(EnWizFire* this, PlayState* play) {
     s16 i;
-    u8 flag;
+    u8 materialFlag;
     EnWizFireEffect* effect = &this->effects[0];
     GraphicsContext* gfxCtx = play->state.gfxCtx;
 
@@ -863,12 +874,12 @@ void EnWizFire_DrawEffects(EnWizFire* this, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
     func_8012C2DC(play->state.gfxCtx);
 
-    flag = false;
+    materialFlag = false;
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->isEnabled) {
-            if (!flag) {
+            if (!materialFlag) {
                 gSPDisplayList(POLY_XLU_DISP++, gWizrobeIceSmokeMaterialDL);
-                flag++;
+                materialFlag++;
             }
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, effect->alpha);
