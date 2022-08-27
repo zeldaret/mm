@@ -290,7 +290,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
                 }
 
                 for (i = 0, var_s3 = 0; i < 8; i++, var_s3 += 4, j += 4) {
-                    if (D_8082AEE4[i] == 0xFF) {
+                    if (D_8082AEE4[i] == OCARINA_BTN_INVALID) {
                         break;
                     }
 
@@ -309,7 +309,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
                     gDPPipeSync(POLY_OPA_DISP++);
 
-                    if (D_8082AEE4[i] == 0) {
+                    if (D_8082AEE4[i] == OCARINA_BTN_A) {
                         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 80, 150, 255, D_8082AEF0[i]);
                     } else {
                         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 50, D_8082AEF0[i]);
@@ -360,7 +360,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
                     if (D_8082AEE0 == (pauseCtx->ocarinaStaff->pos - 1)) {
                         if (pauseCtx->ocarinaStaff->buttonIndex < 5) {
                             D_8082AEE4[pauseCtx->ocarinaStaff->pos - 1] = pauseCtx->ocarinaStaff->buttonIndex;
-                            D_8082AEE4[pauseCtx->ocarinaStaff->pos] = 0xFF;
+                            D_8082AEE4[pauseCtx->ocarinaStaff->pos] = OCARINA_BTN_INVALID;
                             D_8082AEE0++;
                         }
                     }
@@ -369,7 +369,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
                 j = i + 32;
                 var_s3 = 0;
                 for (; var_s3 < 8; var_s3++, j += 4) {
-                    if (D_8082AEE4[var_s3] == 0xFF) {
+                    if (D_8082AEE4[var_s3] == OCARINA_BTN_INVALID) {
                         continue;
                     }
 
@@ -388,7 +388,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
                     gDPPipeSync(POLY_OPA_DISP++);
 
-                    if (D_8082AEE4[var_s3] == 0) {
+                    if (D_8082AEE4[var_s3] == OCARINA_BTN_A) {
                         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 80, 150, 255, D_8082AEF0[var_s3]);
                     } else {
                         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 50, D_8082AEF0[var_s3]);
@@ -401,7 +401,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
                 if (pauseCtx->state6SubState == PAUSE_SUBSTATE6_4) {
                     for (var_s3 = 0; var_s3 < 8; var_s3++) {
-                        D_8082AEE4[var_s3] = 0xFF;
+                        D_8082AEE4[var_s3] = OCARINA_BTN_INVALID;
                         D_8082AEF0[var_s3] = 0;
                     }
 
@@ -676,7 +676,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                         D_8082B028 = 10;
 
                         for (var_v0 = 0; var_v0 < 8; var_v0++) {
-                            D_8082AEE4[var_v0] = 0xFF;
+                            D_8082AEE4[var_v0] = OCARINA_BTN_INVALID;
                             D_8082AEF0[var_v0] = 0;
                         }
 
@@ -732,7 +732,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                         }
                         if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) && (msgCtx->msgLength == 0)) {
                             if (pauseCtx->cursorPoint[PAUSE_QUEST] == 0x12) {
-                                play->pauseCtx.unk_1F0 = 1;
+                                play->pauseCtx.unk_1F0 = true;
                                 pauseCtx->state6SubState = PAUSE_SUBSTATE6_10;
                                 play_sound(0x4808U);
                             } else {
@@ -828,7 +828,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
         D_8082B028--;
         if (D_8082B028 == 0) {
             for (var_v0 = 0; var_v0 < 8; var_v0++) {
-                D_8082AEE4[var_v0] = 0xFF;
+                D_8082AEE4[var_v0] = OCARINA_BTN_INVALID;
                 D_8082AEF0[var_v0] = 0;
             }
             D_8082AEE0 = 0;

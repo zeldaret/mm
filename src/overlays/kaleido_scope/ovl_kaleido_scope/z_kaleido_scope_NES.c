@@ -1063,7 +1063,8 @@ void func_808248D0(PlayState* play) {
 
     if ((pauseCtx->state == PAUSE_STATE_4) || (pauseCtx->state == PAUSE_STATE_16) ||
         (pauseCtx->state >= PAUSE_STATE_19) ||
-        ((pauseCtx->state == PAUSE_STATE_7) && ((pauseCtx->state7SubState == 3) || (pauseCtx->state7SubState == 7)))) {
+        ((pauseCtx->state == PAUSE_STATE_7) &&
+         ((pauseCtx->state7SubState == PAUSE_SUBSTATE7_3) || (pauseCtx->state7SubState == PAUSE_SUBSTATE7_7)))) {
         Matrix_Translate(0.0f, (YREG(25) - 8000) / 100.0f, YREG(26) / 100.0f, MTXMODE_APPLY);
     } else {
         Matrix_Translate(0.0f, YREG(25) / 100.0f, YREG(26) / 100.0f, MTXMODE_APPLY);
@@ -1533,15 +1534,16 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
 
     if ((pauseCtx->state == PAUSE_STATE_4) || (pauseCtx->state == PAUSE_STATE_16) ||
         (pauseCtx->state >= PAUSE_STATE_19) ||
-        ((pauseCtx->state == PAUSE_STATE_7) && ((pauseCtx->state7SubState == 3) || (pauseCtx->state7SubState == 7)))) {
+        ((pauseCtx->state == PAUSE_STATE_7) &&
+         ((pauseCtx->state7SubState == PAUSE_SUBSTATE7_3) || (pauseCtx->state7SubState == PAUSE_SUBSTATE7_7)))) {
         pauseCtx->offsetY = 80;
     }
 
     if (pauseCtx->pageIndex != PAUSE_QUEST) {
-        pauseCtx->itemPageVtx = GRAPH_ALLOC(gfxCtx, 0x3C0);
+        pauseCtx->itemPageVtx = GRAPH_ALLOC(gfxCtx, 60 * sizeof(Vtx));
         func_80825A50(play, pauseCtx->itemPageVtx, 1, 0);
 
-        pauseCtx->itemVtx = GRAPH_ALLOC(gfxCtx, 0x6C0);
+        pauseCtx->itemVtx = GRAPH_ALLOC(gfxCtx, 108 * sizeof(Vtx));
 
         for (k = 0, i = 0, var_t3 = 58; k < 4; k++, var_t3 -= 32) {
             for (var_a3 = -96, j = 0; j < 6; j++, i += 4, var_a3 += 32) {
@@ -1628,7 +1630,7 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
 
     if (pauseCtx->pageIndex != PAUSE_MASK) {
         if (!sInDungeonScene) {
-            pauseCtx->mapPageVtx = GRAPH_ALLOC(gfxCtx, 0x1080);
+            pauseCtx->mapPageVtx = GRAPH_ALLOC(gfxCtx, 264 * sizeof(Vtx));
             j = func_80825A50(play, pauseCtx->mapPageVtx, 4, 36);
 
             for (i = 0, var_t3 = 59; i < 15; i++, j += 4, var_t3 -= 9) {
@@ -1672,16 +1674,16 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
             pauseCtx->mapPageVtx[j - 2].v.tc[1] = pauseCtx->mapPageVtx[j - 1].v.tc[1] = 0x40;
 
         } else {
-            pauseCtx->mapPageVtx = GRAPH_ALLOC(gfxCtx, 0x540);
+            pauseCtx->mapPageVtx = GRAPH_ALLOC(gfxCtx, 84 * sizeof(Vtx));
             func_80825A50(play, pauseCtx->mapPageVtx, 2, 6);
         }
     }
 
     if (pauseCtx->pageIndex != PAUSE_ITEM) {
-        pauseCtx->questPageVtx = GRAPH_ALLOC(gfxCtx, 0x3C0);
+        pauseCtx->questPageVtx = GRAPH_ALLOC(gfxCtx, 60 * sizeof(Vtx));
         func_80825A50(play, pauseCtx->questPageVtx, 3, 0);
 
-        pauseCtx->questVtx = GRAPH_ALLOC(gfxCtx, 0x9C0);
+        pauseCtx->questVtx = GRAPH_ALLOC(gfxCtx, 156 * sizeof(Vtx));
 
         for (k = 0, j = 0; j < 39; j++, k += 4) {
             if (j < 6) {
@@ -1733,10 +1735,10 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
     }
 
     if (pauseCtx->pageIndex != PAUSE_MAP) {
-        pauseCtx->maskPageVtx = GRAPH_ALLOC(gfxCtx, 0x3C0);
+        pauseCtx->maskPageVtx = GRAPH_ALLOC(gfxCtx, 60 * sizeof(Vtx));
         func_80825A50(play, pauseCtx->maskPageVtx, 0, 0);
 
-        pauseCtx->maskVtx = GRAPH_ALLOC(gfxCtx, 0x6C0);
+        pauseCtx->maskVtx = GRAPH_ALLOC(gfxCtx, 108 * sizeof(Vtx));
 
         for (k = 0, i = 0, var_t3 = 58; k < 4; k++, var_t3 -= 32) {
             for (var_a3 = -96, j = 0; j < 6; j++, i += 4, var_a3 += 32) {
@@ -1844,11 +1846,11 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
     pauseCtx->cursorVtx[17].v.tc[0] = pauseCtx->cursorVtx[18].v.tc[1] = pauseCtx->cursorVtx[19].v.tc[0] =
         pauseCtx->cursorVtx[19].v.tc[1] = 0x400;
 
-    pauseCtx->infoPanelVtx = GRAPH_ALLOC(gfxCtx, 0x1C0);
+    pauseCtx->infoPanelVtx = GRAPH_ALLOC(gfxCtx, 28 * sizeof(Vtx));
 
     if ((pauseCtx->state == PAUSE_STATE_7) ||
         ((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
-        pauseCtx->unk_1A0 = GRAPH_ALLOC(gfxCtx, 0x500);
+        pauseCtx->unk_1A0 = GRAPH_ALLOC(gfxCtx, 80 * sizeof(Vtx));
         func_80825A50(play, pauseCtx->unk_1A0, 5, 5);
     }
 }
@@ -2433,7 +2435,7 @@ void KaleidoScope_Update(PlayState* play) {
                     break;
 
                 case PAUSE_SUBSTATE6_10:
-                    if (play->pauseCtx.unk_1F0 == 0) {
+                    if (!play->pauseCtx.unk_1F0) {
                         pauseCtx->state6SubState = PAUSE_SUBSTATE6_0;
                     }
                     break;
