@@ -175,7 +175,8 @@ Vec3f OBJKENDOKANBAN_UNITX_VECTOR = { 1.0f, 0.0f, 0.0f }; // Unit Vector X (Rota
 void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
     s32 pad[2];
     ObjKendoKanban* this = THIS;
-    Vec3f sp70[3];
+
+    Vec3f vertices[3];
     s32 i;
     s32 j;
 
@@ -192,10 +193,10 @@ void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->colliderTrisElements); i++) {
-        for (j = 0; j < ARRAY_COUNT(sp70); j++) {
-            Matrix_MultVec3f(&sTrisElementsInit[i].dim.vtx[j], &sp70[j]);
+        for (j = 0; j < ARRAY_COUNT(vertices); j++) {
+            Matrix_MultVec3f(&sTrisElementsInit[i].dim.vtx[j], &vertices[j]);
         }
-        Collider_SetTrisVertices(&this->colliderTris, i, &sp70[0], &sp70[1], &sp70[2]);
+        Collider_SetTrisVertices(&this->colliderTris, i, &vertices[0], &vertices[1], &vertices[2]);
     }
 
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
@@ -210,7 +211,7 @@ void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
     this->rotationVelocity = 0;
     this->idxLastLowestPoint = -1;
     this->bHasNewLowestPoint = 0;
-    this->framesSinceGrounded = 0;
+    this->numBounces = 0;
 
     for (i = 0; i < ARRAY_COUNT(this->cornerPos); i++) {
         this->cornerPos[i] = this->corners[i] = OBJKENDOKANBAN_NULL_VECTOR;
@@ -333,30 +334,26 @@ void ObjKendoKanban_Settled(ObjKendoKanban* this, PlayState* play) {
 }
 
 void func_80B65DA8_BounceHandler(ObjKendoKanban* this, PlayState* play) {
-    Vec3f lowestPoint;
+    Vec3f lowestPoint = this->cornerPos[0];
     s32 pad[2];
-    Vec3f vecCenterOut;
+    Vec3f vecCenterOut = this->actor.world.pos;
     s32 pad2;
     s32 idxLowestPoint = 0;
     s32 i;
     f32 verticalScalar;
 
-    lowestPoint = this->cornerPos[0];
-
     // Calculate gravity's effect on rotation.
-    // Determine whether the board face is pointing down or up. If pointing down, accelerate, if not, decellerate
-    vecCenterOut = this->actor.world.pos;
     vecCenterOut.x -= this->centerPos.x;
     vecCenterOut.y -= this->centerPos.y;
     vecCenterOut.z -= this->centerPos.z;
     verticalScalar = (this->rotationalAxis.x * vecCenterOut.z) + (this->rotationalAxis.z * -vecCenterOut.x);
     if (verticalScalar < 0.0f) {
-        this->rotationVelocity += 0x64;
+        this->rotationVelocity += 0x64; // Accelerate the rotation when facing up
     } else {
-        this->rotationVelocity -= 0x64;
+        this->rotationVelocity -= 0x64; // Decellerate the rotation when facing down
     }
 
-    // Find the lowest point? Why? Actor position is set to the lowest point
+    // Identify which of the four corners is the lowest
     for (i = 0; i < ARRAY_COUNT(this->cornerPos); i++) {
         if (this->cornerPos[i].y < lowestPoint.y) {
             lowestPoint = this->cornerPos[i];
@@ -364,7 +361,7 @@ void func_80B65DA8_BounceHandler(ObjKendoKanban* this, PlayState* play) {
         }
     }
 
-    // When the lowest point changes, re-initialize the actor position to that point?
+    // When the lowest point changes, re-initialize the actor position to that point
     if (idxLowestPoint != this->idxLastLowestPoint) {
         this->bHasNewLowestPoint = 1;
         this->idxLastLowestPoint = idxLowestPoint;
@@ -375,7 +372,7 @@ void func_80B65DA8_BounceHandler(ObjKendoKanban* this, PlayState* play) {
                                      &this->actor.shape.rot);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_MultVec3f(&this->vectLowestPoint, &this->actor.world.pos);
-        this->actor.world.pos = lowestPoint; // Doesn't this blast away all the matrix math?
+        this->actor.world.pos = lowestPoint;
         this->actor.prevPos = this->actor.world.pos;
         Matrix_Pop();
     }
@@ -383,18 +380,17 @@ void func_80B65DA8_BounceHandler(ObjKendoKanban* this, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
     if (this->actor.bgCheckFlags & 1) { // Stationary Grounded
-        // When the board is on the ground, Apply some drag to slow it to a stop?
+        // When the board is on the ground, Apply some drag to slow it to a stop
         this->actor.velocity.x *= 0.8f;
         this->actor.velocity.z *= 0.8f;
     }
 
     if (this->bHasNewLowestPoint == 1) {
-        if (this->framesSinceGrounded >= 7) {
+        if (this->numBounces >= 7) {
 
-            // Suppress rotational velocity?
-            s16 deltaRotationAngle = this->rotationAngle & 0x3FFF; // Limit to 90 degrees
-            if (deltaRotationAngle >= 0x2000) {                    // If Greater than 45
-                deltaRotationAngle -= 0x4000;                      // Go 90 degrees opposite
+            s16 deltaRotationAngle = this->rotationAngle & (DEG_TO_BINANG(90) - 1);
+            if (deltaRotationAngle >= DEG_TO_BINANG(45)) {
+                deltaRotationAngle -= DEG_TO_BINANG(90);
             }
             this->rotationAngle -= deltaRotationAngle;
             this->rotationVelocity = 0;
@@ -403,66 +399,68 @@ void func_80B65DA8_BounceHandler(ObjKendoKanban* this, PlayState* play) {
         }
 
         if (this->actor.bgCheckFlags & 2) {
-            // When the board Touches the ground,...
+            // Upon touching the ground...
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
             this->bHasNewLowestPoint = 0;
             this->actor.velocity.y *= 0.5f;
+
         } else if (this->actor.bgCheckFlags & 1) {
-            // When the board on the ground, ...
-            this->framesSinceGrounded++;
+            // When on the ground
+            this->numBounces++;
             this->bHasNewLowestPoint = 0;
             this->actor.velocity.x *= 0.3f;
             this->actor.velocity.z *= 0.3f;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
 
+            // Adjust and reverse rotation depending on the current
+            // facing of the board and the direction in which it is rotating.
             if (verticalScalar > 0.0f) {
                 if (this->rotationVelocity > 0) {
                     this->rotationVelocity *= 1.2f;
                 } else {
                     this->rotationVelocity *= -0.6f;
                 }
-            } else if (this->rotationVelocity < 0) {
-                this->rotationVelocity *= 1.2f;
             } else {
-                this->rotationVelocity *= -0.6f;
+                if (this->rotationVelocity < 0) {
+                    this->rotationVelocity *= 1.2f;
+                } else {
+                    this->rotationVelocity *= -0.6f;
+                }
             }
         }
     }
 }
 
-// cjb need to check what this function is doing.
+// cjb I think this function determines if the player will climb ontop the board.
 s32 func_80B6618C(ObjKendoKanban* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 nextIdx;
+    s32 j;
     s32 phi_v1 = 0;
     s32 i;
-    f32 x;
-    f32 z;
-    f32 x2;
-    f32 z2;
+    Vec2f playerToCornerA;
+    Vec2f playerToCornerB;
 
     for (i = 0; i < ARRAY_COUNT(this->cornerPos); i++) {
-        nextIdx = i != 3 ? i + 1 : 0;
+        j = i != 3 ? (i + 1) : 0;
 
-        // Horizontal components of displacement from X[i] to Player
-        z = this->cornerPos[i].z - player->actor.world.pos.z;
-        x = this->cornerPos[i].x - player->actor.world.pos.x;
+        // Horizontal component of displacement from the player to each corner
+        playerToCornerA.z = this->cornerPos[i].z - player->actor.world.pos.z;
+        playerToCornerA.x = this->cornerPos[i].x - player->actor.world.pos.x;
+        playerToCornerB.z = (this->cornerPos[j].z - player->actor.world.pos.z);
+        playerToCornerB.x = (this->cornerPos[j].x - player->actor.world.pos.x);
 
-        // Horizontal components of displacement from X[nextIdx] to Player
-        z2 = (this->cornerPos[nextIdx].z - player->actor.world.pos.z);
-        x2 = (this->cornerPos[nextIdx].x - player->actor.world.pos.x);
-
-        // If the cross product's y component is negative
-        if ((x * z2) < (z * x2)) {
+        if ((playerToCornerA.x * playerToCornerB.z) < (playerToCornerA.z * playerToCornerB.x)) {
             if (phi_v1 == 0) {
                 phi_v1 = 1;
             } else if (phi_v1 != 1) {
                 return false;
             }
-        } else if (phi_v1 == 0) {
-            phi_v1 = -1;
-        } else if (phi_v1 != -1) {
-            return false;
+        } else {
+            if (phi_v1 == 0) {
+                phi_v1 = -1;
+            } else if (phi_v1 != -1) {
+                return false;
+            }
         }
     }
     return true;

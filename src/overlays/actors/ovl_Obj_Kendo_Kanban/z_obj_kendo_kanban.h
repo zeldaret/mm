@@ -26,7 +26,7 @@ typedef struct ObjKendoKanban {
     /* 0x302 */ s16 rotationAngle;
     /* 0x304 */ s16 rotationVelocity;
     /* 0x306 */ UNK_TYPE1 pad306[2];
-    /* 0x308 */ s16 framesSinceGrounded;
+    /* 0x308 */ s16 numBounces;
     /* 0x30A */ s16 unk_30A;
     /* 0x30C */ u8 boardFragments;
 } ObjKendoKanban; // size = 0x310
