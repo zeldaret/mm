@@ -1631,7 +1631,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
 
     switch (this->unk_1D18) {
         case 0:
-            if (player->stateFlags1 & 0x100) {
+            if (player->stateFlags1 & PLAYER_STATE1_100) {
                 Cutscene_Start(play, &play->csCtx);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
@@ -1754,7 +1754,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
             this->subCamId = SUB_CAM_ID_DONE;
             Cutscene_End(play, &play->csCtx);
             this->actor.flags |= ACTOR_FLAG_1;
-            player->stateFlags1 &= ~0x100;
+            player->stateFlags1 &= ~PLAYER_STATE1_100;
             this->unk_1D70 = 0.01f;
             func_80165690();
             break;
@@ -2091,7 +2091,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             }
 
             if (this->unk_1D1C == 45) {
-                func_800B7298(play, &this->actor, 21);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_21);
                 sMusicStartTimer = KREG(91) + 43;
             }
 
@@ -2105,7 +2105,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             }
 
             if (this->unk_1D1C == 100) {
-                func_800B7298(play, &this->actor, 0x73);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_115);
             }
 
             if (this->unk_1D1C == 112) {
@@ -2144,7 +2144,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 6);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
                 this->actor.flags |= ACTOR_FLAG_1;
                 this->unk_1D20 = 0;
                 sRedTwinmold->unk_0144 = sBlueTwinmold->unk_0144 = 3;
@@ -2205,7 +2205,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 6);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
                 this->unk_1D20 = 0;
                 this->actor.flags |= ACTOR_FLAG_1;
                 sp68->unk_0144 = 10;

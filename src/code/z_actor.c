@@ -587,7 +587,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
     Vec3f projectedPos;
     f32 invW;
 
-    if ((player->targetedActor != 0) && (player->unk_AE3[player->unk_ADE] == 2)) {
+    if ((player->targetedActor != NULL) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->unk_94 = NULL;
     } else {
         func_800BB8EC(gameState, &play->actorCtx, &sp68, &D_801ED920, player);
@@ -1352,7 +1352,7 @@ void Actor_MountHorse(PlayState* play, Player* player, Actor* horse) {
 }
 
 s32 func_800B7200(Player* player) {
-    return (player->stateFlags1 & 0x20000080) || (player->csMode != 0);
+    return (player->stateFlags1 & 0x20000080) || (player->csMode != PLAYER_CSMODE_0);
 }
 
 void func_800B722C(GameState* gameState, Player* player) {
@@ -1362,7 +1362,7 @@ void func_800B722C(GameState* gameState, Player* player) {
 s32 func_800B724C(PlayState* play, Actor* actor, u8 csMode) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->csMode == 5) || ((csMode == 6) && (player->csMode == 0))) {
+    if ((player->csMode == PLAYER_CSMODE_5) || ((csMode == PLAYER_CSMODE_6) && (player->csMode == PLAYER_CSMODE_0))) {
         return false;
     }
 
@@ -1372,7 +1372,7 @@ s32 func_800B724C(PlayState* play, Actor* actor, u8 csMode) {
     return true;
 }
 
-u32 func_800B7298(PlayState* play, Actor* actor, u8 csMode) {
+s32 func_800B7298(PlayState* play, Actor* actor, u8 csMode) {
     Player* player = GET_PLAYER(play);
 
     if (func_800B724C(play, actor, csMode)) {
@@ -1994,7 +1994,7 @@ s32 Actor_HasParent(Actor* actor, PlayState* play) {
  * GI_NONE is usually used as a special case to lift an actor
  * GI_MAX is usually used to catch an actor in a bottle
  */
-s32 Actor_PickUp(Actor* actor, PlayState* play, s32 getItemId, f32 xzRange, f32 yRange) {
+s32 Actor_PickUp(Actor* actor, PlayState* play, GetItemID getItemId, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(play);
 
     if (!(player->stateFlags1 & 0x3C7080) && Player_GetExplosiveHeld(player) < 0) {
@@ -2025,7 +2025,7 @@ s32 Actor_PickUp(Actor* actor, PlayState* play, s32 getItemId, f32 xzRange, f32 
     return false;
 }
 
-s32 Actor_PickUpNearby(Actor* actor, PlayState* play, s32 getItemId) {
+s32 Actor_PickUpNearby(Actor* actor, PlayState* play, GetItemID getItemId) {
     return Actor_PickUp(actor, play, getItemId, 50.0f, 10.0f);
 }
 
@@ -2033,7 +2033,7 @@ s32 Actor_LiftActor(Actor* actor, PlayState* play) {
     return Actor_PickUpNearby(actor, play, GI_NONE);
 }
 
-s32 Actor_PickUpFar(Actor* actor, PlayState* play, s32 getItemId) {
+s32 Actor_PickUpFar(Actor* actor, PlayState* play, GetItemID getItemId) {
     return Actor_PickUp(actor, play, getItemId, 9999.9f, 9999.9f);
 }
 
@@ -2204,7 +2204,7 @@ void func_800B9098(Actor* actor) {
     actor->audioFlags |= 0x40;
 }
 
-s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgId, s32 arg4) {
+s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgId, Vec3f* arg4) {
     if (func_800C99D4(&play->colCtx, polygon, bgId) == 8) {
         return true;
     }
@@ -2371,7 +2371,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
                         actor->isTargeted = false;
                     }
 
-                    if ((actor->targetPriority != 0) && (params->player->targetedActor == 0)) {
+                    if ((actor->targetPriority != 0) && (params->player->targetedActor == NULL)) {
                         actor->targetPriority = 0;
                     }
 
@@ -3325,7 +3325,7 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
 
     if ((player != NULL) && (actor == player->targetedActor)) {
         func_80123DA4(player);
-        Camera_ChangeMode(Play_GetCamera(play, Play_GetActiveCamId(play)), 0);
+        Camera_ChangeMode(Play_GetCamera(play, Play_GetActiveCamId(play)), CAM_MODE_NORMAL);
     }
 
     if (actor == actorCtx->targetContext.arrowPointedActor) {
@@ -3366,7 +3366,7 @@ s32 func_800BB59C(PlayState* play, Actor* actor) {
 void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player, s32 actorCategory) {
     PlayState* play = (PlayState*)gameState;
     f32 temp_f0_2;
-    Actor* sp8C;
+    Actor* targetedActor;
     Actor* actor;
     s32 phi_s2;
     CollisionPoly* sp80;
@@ -3375,7 +3375,7 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
     s32 phi_s2_2;
 
     actor = actorCtx->actorLists[actorCategory].first;
-    sp8C = player->targetedActor;
+    targetedActor = player->targetedActor;
     while (actor != NULL) {
         if ((actor->update != NULL) && ((Player*)actor != player)) {
             if (actor->flags & (ACTOR_FLAG_40000000 | ACTOR_FLAG_1)) {
@@ -3386,7 +3386,7 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
                     }
                 }
 
-                if ((actor != sp8C) || (actor->flags & ACTOR_FLAG_80000)) {
+                if ((actor != targetedActor) || (actor->flags & ACTOR_FLAG_80000)) {
                     temp_f0_2 = func_800B82EC(actor, player, D_801ED8DC);
                     phi_s2_2 = (actor->flags & 1) != 0;
                     if (phi_s2_2) {

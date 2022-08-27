@@ -255,7 +255,7 @@ s32 EnMttag_ExitRace(PlayState* play, s32 transitionType, s32 nextTransitionType
 void EnMttag_ShowFalseStartMessage(EnMttag* this, PlayState* play) {
     gSaveContext.unk_3DD0[4] = 0;
     Message_StartTextbox(play, 0xE95, NULL); // An entrant made a false start
-    func_800B7298(play, &this->actor, 7);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
     Audio_QueueSeqCmd(0x101400FF);
     this->actionFunc = EnMttag_PotentiallyRestartRace;
 }
@@ -266,7 +266,7 @@ void EnMttag_ShowFalseStartMessage(EnMttag* this, PlayState* play) {
  */
 void EnMttag_ShowCantWinMessage(EnMttag* this, PlayState* play) {
     Message_StartTextbox(play, 0xE97, NULL); // You can't win now...
-    func_800B7298(play, &this->actor, 7);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
     this->actionFunc = EnMttag_HandleCantWinChoice;
 }
 
@@ -318,7 +318,7 @@ void EnMttag_RaceStart(EnMttag* this, PlayState* play) {
                 play->interfaceCtx.unk_280 = 1;
                 Audio_QueueSeqCmd(NA_BGM_GORON_RACE | 0x8000);
                 play->envCtx.unk_E4 = 0xFE;
-                player->stateFlags1 &= ~0x20;
+                player->stateFlags1 &= ~PLAYER_STATE1_20;
             } else if ((this->timer < 60) && (play->interfaceCtx.unk_280 == 8)) {
                 this->timer = 0;
                 gSaveContext.eventInf[1] |= 1;
@@ -432,7 +432,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
             play->transitionType = TRANS_TYPE_02;
             gSaveContext.nextTransitionType = TRANS_TYPE_02;
             func_801477B4(play);
-            func_800B7298(play, &this->actor, 7);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
             Parameter_AddMagic(play,
                                ((void)0, gSaveContext.unk_3F30) + (gSaveContext.save.playerData.doubleMagic * 48) + 48);
 
@@ -466,7 +466,7 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play) {
             // Keep racing
             func_8019F208();
             func_801477B4(play);
-            func_800B7298(play, &this->actor, 6);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
             gSaveContext.eventInf[1] &= (u8)~8;
             this->timer = 100;
             this->actionFunc = EnMttag_Race;
@@ -480,7 +480,7 @@ void EnMttag_Init(Actor* thisx, PlayState* play) {
 
     if (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1)) {
         player = GET_PLAYER(play);
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         this->raceInitialized = false;
         this->timer = 100;
 

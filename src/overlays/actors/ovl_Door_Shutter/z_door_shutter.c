@@ -436,7 +436,8 @@ s32 func_808A1340(DoorShutter* this, PlayState* play) {
     } else {
         Math_StepToF(&this->actor.velocity.y, 15.0f, 3.0f);
 
-        if (Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y + 200.0f, this->actor.velocity.y)) {
+        if (Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y + 200.0f,
+                         this->actor.velocity.y)) {
             return true;
         }
     }
@@ -454,7 +455,7 @@ s32 func_808A1478(DoorShutter* this, PlayState* play, f32 arg2) {
         }
 
         if ((this->unk_160 != -1) && (ActorCutscene_GetCurrentIndex() == this->unk_160)) {
-            func_800B724C(play, &this->actor, 1);
+            func_800B724C(play, &this->actor, PLAYER_CSMODE_1);
         }
     }
 
@@ -571,7 +572,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
         if (ActorCutscene_GetCurrentIndex() == 0x7D) {
             func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));
             player->unk_A86 = -1;
-            func_800B7298(play, NULL, 0x73);
+            func_800B7298(play, NULL, PLAYER_CSMODE_115);
         }
     }
 }
@@ -584,7 +585,8 @@ s32 func_808A1A70(DoorShutter* this) {
 
         Math_StepToF(&this->actor.velocity.y, 5.0f, 0.5f);
 
-        if (Math_Vec3f_StepToXZ(&this->actor.world.pos, &this->actor.home.pos, this->actor.velocity.y) == 0.0f) {
+        if (Math_Vec3f_StepToXZ(&this->actor.world.pos, &this->actor.home.pos,
+                                this->actor.velocity.y) == 0.0f) {
             return true;
         }
     } else {
@@ -592,7 +594,8 @@ s32 func_808A1A70(DoorShutter* this) {
             Math_StepToF(&this->actor.velocity.y, 20.0f, 8.0f);
         }
 
-        if (Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, this->actor.velocity.y)) {
+        if (Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y,
+                         this->actor.velocity.y)) {
             return true;
         }
     }
@@ -605,7 +608,8 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
     if (func_808A1A70(this)) {
         if (this->actor.velocity.y > 20.0f) {
             this->actor.floorHeight = this->actor.home.pos.y;
-            Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 45.0f, 10, 8.0f, 500, 10, 0);
+            Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 45.0f, 10, 8.0f,
+                                     500, 10, 0);
         }
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BIGWALL_BOUND);
         quake = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
@@ -619,8 +623,8 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
 
 void func_808A1C50(DoorShutter* this, PlayState* play) {
     if (this->unk_167++ > 30) {
-        if (GET_PLAYER(play)->csMode == 0x73) {
-            func_800B7298(play, NULL, 6);
+        if (GET_PLAYER(play)->csMode == PLAYER_CSMODE_115) {
+            func_800B7298(play, NULL, PLAYER_CSMODE_6);
         }
         DoorShutter_SetupDoor(this, play);
     }
@@ -630,11 +634,13 @@ void DoorShutter_Update(Actor* thisx, PlayState* play) {
     DoorShutter* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & 0x100004C0) || (this->actionFunc == DoorShutter_SetupType)) {
+    if (!(player->stateFlags1 & 0x100004C0) ||
+        (this->actionFunc == DoorShutter_SetupType)) {
         this->actionFunc(this, play);
 
         if (this->unk_163 == 7) {
-            this->actor.home.rot.z = Math_Vec3f_DistXZ(&this->actor.home.pos, &this->actor.world.pos) * -100.0f;
+            this->actor.home.rot.z =
+                Math_Vec3f_DistXZ(&this->actor.home.pos, &this->actor.world.pos) * -100.0f;
         }
     }
 }

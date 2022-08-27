@@ -201,7 +201,7 @@ s32 func_80AE65F4(EnShn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 temp = play->msgCtx.currentTextId;
 
-    if (player->stateFlags1 & 0x40) {
+    if (player->stateFlags1 & PLAYER_STATE1_40) {
         if (this->unk_1DA != temp) {
             if ((this->unk_1D8 & 0x80) || (this->unk_1D8 & 0x100)) {
                 this->unk_1D8 |= 8;
@@ -259,7 +259,7 @@ s32 func_80AE6704(Actor* thisx, PlayState* play) {
 
         case 6:
             gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
-            func_800B7298(play, &this->actor, 7);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
             play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_POISONED, 6);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;

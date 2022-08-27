@@ -281,6 +281,8 @@ typedef enum SunsSongState {
 
 #define CURRENT_DAY (((void)0, gSaveContext.save.day) % 5)
 
+#define GET_PLAYER_FORM ((void)0, gSaveContext.save.playerForm)
+
 #define SLOT(item) gItemSlots[item]
 #define AMMO(item) gSaveContext.save.inventory.ammo[SLOT(item)]
 #define INV_CONTENT(item) gSaveContext.save.inventory.items[SLOT(item)]

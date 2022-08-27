@@ -353,11 +353,11 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
             if ((this->isPlayerDetected == true) || (this->actor.xzDistToPlayer < 20.0f)) {
                 Player* player = GET_PLAYER(play);
 
-                if (!(player->stateFlags3 & 0x100) && !Play_InCsMode(play)) {
+                if (!(player->stateFlags3 & PLAYER_STATE3_100) && !Play_InCsMode(play)) {
                     Math_Vec3f_Copy(&this->headRotTarget, &gZeroVec3f);
                     this->state = PALACE_GUARD_RUNNING_TO_PLAYER;
                     play_sound(NA_SE_SY_FOUND);
-                    func_800B7298(play, &this->actor, 0x1A);
+                    func_800B7298(play, &this->actor, PLAYER_CSMODE_26);
                     D_80A6862C = 1;
                     this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_10);
                     this->actor.gravity = 0.0f;

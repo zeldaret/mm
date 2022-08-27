@@ -472,7 +472,7 @@ void func_80ADBAB8(EnSellnuts* this, PlayState* play) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
         this->actionFunc = func_80ADBBEC;
-        func_800B7298(play, NULL, 0x13);
+        func_800B7298(play, NULL, PLAYER_CSMODE_19);
     }
 }
 
@@ -704,10 +704,10 @@ void func_80ADC5A4(EnSellnuts* this, PlayState* play) {
             this->unk_338 |= 1;
             this->actor.draw = EnSellnuts_Draw;
             D_80ADD940 = 0;
-            player->stateFlags1 |= 0x20;
+            player->stateFlags1 |= PLAYER_STATE1_20;
             this->actionFunc = func_80ADC7B4;
         } else {
-            player->stateFlags1 &= ~0x20;
+            player->stateFlags1 &= ~PLAYER_STATE1_20;
             this->actionFunc = func_80ADC6D0;
         }
     } else if (func_80ADB08C(play) < 80.0f) {

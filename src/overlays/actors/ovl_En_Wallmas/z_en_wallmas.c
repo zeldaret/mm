@@ -243,8 +243,9 @@ void EnWallmas_WaitToDrop(EnWallmas* this, PlayState* play) {
         this->timer--;
     }
 
-    if ((player->stateFlags1 & 0x08100000) || (player->stateFlags2 & 0x80) || (player->unk_B5E > 0) ||
-        (player->actor.freezeTimer > 0) || !(player->actor.bgCheckFlags & 1) ||
+    if ((player->stateFlags1 & (PLAYER_STATE1_100000 | PLAYER_STATE1_8000000)) ||
+        (player->stateFlags2 & PLAYER_STATE2_80) || (player->unk_B5E > 0) || (player->actor.freezeTimer > 0) ||
+        !(player->actor.bgCheckFlags & 1) ||
         ((WALLMASTER_GET_TYPE(&this->actor) == WALLMASTER_TYPE_PROXIMITY) &&
          (Math_Vec3f_DistXZ(&this->actor.home.pos, playerPos) > (120.f + this->detectionRadius)))) {
         AudioSfx_StopById(NA_SE_EN_FALL_AIM);
@@ -279,9 +280,9 @@ void EnWallmas_SetupDrop(EnWallmas* this, PlayState* play) {
 void EnWallmas_Drop(EnWallmas* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->stateFlags2 & 0x80) || (player->actor.freezeTimer > 0)) {
+    if ((player->stateFlags2 & PLAYER_STATE2_80) || (player->actor.freezeTimer > 0)) {
         EnWallmas_SetupReturnToCeiling(this);
-    } else if (!Play_InCsMode(play) && !(player->stateFlags2 & 0x10) && (player->invincibilityTimer >= 0) &&
+    } else if (!Play_InCsMode(play) && !(player->stateFlags2 & PLAYER_STATE2_10) && (player->invincibilityTimer >= 0) &&
                (this->actor.xzDistToPlayer < 30.0f) && (this->actor.playerHeightRel < -5.0f) &&
                (-(f32)(player->cylinder.dim.height + 10) < this->actor.playerHeightRel)) {
         EnWallmas_SetupTakePlayer(this, play);
@@ -458,7 +459,7 @@ void EnWallmas_SetupTakePlayer(EnWallmas* this, PlayState* play) {
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->yTarget = this->actor.playerHeightRel;
-    func_800B724C(play, &this->actor, 18);
+    func_800B724C(play, &this->actor, PLAYER_CSMODE_18);
 }
 
 void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
@@ -479,7 +480,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
             this->actor.world.pos.y += 10.0f;
         }
 
-        player->actor.world.pos.y = this->actor.world.pos.y - sYOffsetPerForm[((void)0, gSaveContext.save.playerForm)];
+        player->actor.world.pos.y = this->actor.world.pos.y - sYOffsetPerForm[GET_PLAYER_FORM];
         if (this->timer == -30) {
             func_800B8E58(player, player->ageProperties->voiceSfxOffset + NA_SE_VO_LI_TAKEN_AWAY);
         }
@@ -490,8 +491,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
 
         this->timer += 2;
     } else {
-        Math_StepToF(&this->actor.world.pos.y,
-                     sYOffsetPerForm[((void)0, gSaveContext.save.playerForm)] + player->actor.world.pos.y, 5.0f);
+        Math_StepToF(&this->actor.world.pos.y, sYOffsetPerForm[GET_PLAYER_FORM] + player->actor.world.pos.y, 5.0f);
     }
 
     Math_StepToF(&this->actor.world.pos.x, player->actor.world.pos.x, 3.0f);
