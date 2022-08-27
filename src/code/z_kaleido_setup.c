@@ -13,7 +13,7 @@ void func_800F4A10(PlayState* play) {
     Rumble_StateReset();
 
     pauseCtx->unk_206 = 0;
-    pauseCtx->unk_200 = 1;
+    pauseCtx->state6SubState = PAUSE_SUBSTATE6_1;
     pauseCtx->eye.x = sKaleidoSetupEyeX[pauseCtx->pageIndex];
     pauseCtx->eye.z = sKaleidoSetupEyeZ[pauseCtx->pageIndex];
     pauseCtx->pageIndex = D_801BDB00[pauseCtx->pageIndex];

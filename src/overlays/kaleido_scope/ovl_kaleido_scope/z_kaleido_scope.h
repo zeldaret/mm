@@ -48,6 +48,38 @@ typedef enum {
 } PauseState;
 
 typedef enum {
+    /* 0x00 */ PAUSE_SUBSTATE6_0,
+    /* 0x01 */ PAUSE_SUBSTATE6_1,
+    /* 0x02 */ PAUSE_SUBSTATE6_2,
+    /* 0x03 */ PAUSE_SUBSTATE6_3,
+    /* 0x04 */ PAUSE_SUBSTATE6_4,
+    /* 0x05 */ PAUSE_SUBSTATE6_5,
+    /* 0x06 */ PAUSE_SUBSTATE6_6,
+    /* 0x07 */ PAUSE_SUBSTATE6_7,
+    /* 0x08 */ PAUSE_SUBSTATE6_8,
+    /* 0x09 */ PAUSE_SUBSTATE6_9,
+    /* 0x0A */ PAUSE_SUBSTATE6_A,
+    /* 0x0B */ PAUSE_SUBSTATE6_B,
+    /* 0x0C */ PAUSE_SUBSTATE6_C,
+    /* 0x0D */ PAUSE_SUBSTATE6_D,
+    /* 0x0E */ PAUSE_SUBSTATE6_E,
+    /* 0x0F */ PAUSE_SUBSTATE6_F,
+    /* 0x10 */ PAUSE_SUBSTATE6_10,
+    /* 0x11 */ PAUSE_SUBSTATE6_11
+} PauseSubState6;
+
+typedef enum {
+    /* 0x00 */ PAUSE_SUBSTATE7_0,
+    /* 0x01 */ PAUSE_SUBSTATE7_1,
+    /* 0x02 */ PAUSE_SUBSTATE7_2,
+    /* 0x03 */ PAUSE_SUBSTATE7_3,
+    /* 0x04 */ PAUSE_SUBSTATE7_4,
+    /* 0x05 */ PAUSE_SUBSTATE7_5,
+    /* 0x06 */ PAUSE_SUBSTATE7_6,
+    /* 0x07 */ PAUSE_SUBSTATE7_7
+} PauseSubState7;
+
+typedef enum {
     /* 0 */ PAUSE_EQUIP_C_LEFT,
     /* 1 */ PAUSE_EQUIP_C_DOWN,
     /* 2 */ PAUSE_EQUIP_C_RIGHT

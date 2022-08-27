@@ -194,7 +194,7 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
 
         if (((void)0, gSaveContext.save.inventory.items[i + SLOT_MASK_FIRST]) != ITEM_NONE) {
             if (!(gSaveContext.maskMaskBit[D_8082B684[i] >> 8] & (u8)D_8082B684[i])) {
-                if ((pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_MASK) &&
+                if ((pauseCtx->state6SubState == PAUSE_SUBSTATE6_0) && (pauseCtx->pageIndex == PAUSE_MASK) &&
                     (pauseCtx->cursorSpecialPos == 0) &&
                     gMaskPlayerFormSlotRestrictions[(void)0, gSaveContext.save.playerForm][i]) {
                     if ((sMaskEquipState == EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT) && (i == SLOT_ARROW_ICE)) {
@@ -257,8 +257,8 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
     pauseCtx->cursorColorSet = 0;
     pauseCtx->nameColorSet = 0;
 
-    if ((pauseCtx->state == PAUSE_STATE_6) && (pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_MASK) &&
-        !pauseCtx->itemDescriptionOn) {
+    if ((pauseCtx->state == PAUSE_STATE_6) && (pauseCtx->state6SubState == PAUSE_SUBSTATE6_0) &&
+        (pauseCtx->pageIndex == PAUSE_MASK) && !pauseCtx->itemDescriptionOn) {
         moveCursorResult = 0;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_MASK];
 
@@ -504,7 +504,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
             if (cursorItem != PAUSE_ITEM_NONE) {
                 // Equip item to the C buttons
                 if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && !pauseCtx->itemDescriptionOn &&
-                    (pauseCtx->state == PAUSE_STATE_6) && (pauseCtx->unk_200 == 0) &&
+                    (pauseCtx->state == PAUSE_STATE_6) && (pauseCtx->state6SubState == PAUSE_SUBSTATE6_0) &&
                     CHECK_BTN_ANY(input->press.button, BTN_CLEFT | BTN_CDOWN | BTN_CRIGHT)) {
 
                     // Ensure that a non-transformation mask can not be unequipped while being used
@@ -556,7 +556,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                     // Equip item to the C buttons
                     pauseCtx->equipTargetItem = cursorItem;
                     pauseCtx->equipTargetSlot = cursorSlot + SLOT_MASK_FIRST;
-                    pauseCtx->unk_200 = 0xF;
+                    pauseCtx->state6SubState = PAUSE_SUBSTATE6_F;
                     vtxIndex = cursorSlot * 4;
                     pauseCtx->equipAnimX = pauseCtx->maskVtx[vtxIndex].v.ob[0] * 10;
                     pauseCtx->equipAnimY = pauseCtx->maskVtx[vtxIndex].v.ob[1] * 10;
@@ -566,8 +566,8 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                     sMaskEquipAnimTimer = 10;
                     play_sound(NA_SE_SY_DECIDE);
                 } else if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->state == PAUSE_STATE_6) &&
-                           (pauseCtx->unk_200 == 0) && CHECK_BTN_ALL(input->press.button, BTN_A) &&
-                           (msgCtx->msgLength == 0)) {
+                           (pauseCtx->state6SubState == PAUSE_SUBSTATE6_0) &&
+                           CHECK_BTN_ALL(input->press.button, BTN_A) && (msgCtx->msgLength == 0)) {
                     // Give description on item through a message box
                     pauseCtx->itemDescriptionOn = true;
                     if (pauseCtx->cursorYIndex[PAUSE_MASK] < 2) {
@@ -584,7 +584,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_MASK]) {
             play_sound(NA_SE_SY_CURSOR);
         }
-    } else if ((pauseCtx->unk_200 == 0xF) && (pauseCtx->pageIndex == PAUSE_MASK)) {
+    } else if ((pauseCtx->state6SubState == PAUSE_SUBSTATE6_F) && (pauseCtx->pageIndex == PAUSE_MASK)) {
         pauseCtx->cursorColorSet = 2;
     }
 }
@@ -766,7 +766,7 @@ void KaleidoScope_UpdateMaskEquip(PlayState* play) {
             }
 
             // Reset params
-            pauseCtx->unk_200 = 0;
+            pauseCtx->state6SubState = PAUSE_SUBSTATE6_0;
             sMaskEquipAnimTimer = 10;
             pauseCtx->equipAnimScale = 320;
             pauseCtx->equipAnimShrinkRate = 40;

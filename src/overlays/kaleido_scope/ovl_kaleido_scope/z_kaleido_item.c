@@ -273,7 +273,8 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
         if (((void)0, gSaveContext.save.inventory.items[i]) != ITEM_NONE) {
-            if ((pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_ITEM) && (pauseCtx->cursorSpecialPos == 0) &&
+            if ((pauseCtx->state6SubState == PAUSE_SUBSTATE6_0) && (pauseCtx->pageIndex == PAUSE_ITEM) &&
+                (pauseCtx->cursorSpecialPos == 0) &&
                 gPlayerFormSlotRestrictions[(void)0, gSaveContext.save.playerForm][i]) {
                 if ((sEquipState == EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT) && (i == SLOT_ARROW_ICE)) {
                     // Suppose to be `SLOT_BOW`, unchanged from OoT, instead increase size of ice arrow icon
@@ -311,7 +312,8 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
 
     // Draw the ammo digits
     if (pauseCtx->pageIndex == PAUSE_ITEM) {
-        if ((pauseCtx->state == PAUSE_STATE_6) && ((pauseCtx->unk_200 == 0) || (pauseCtx->unk_200 == 3)) &&
+        if ((pauseCtx->state == PAUSE_STATE_6) &&
+            ((pauseCtx->state6SubState == PAUSE_SUBSTATE6_0) || (pauseCtx->state6SubState == PAUSE_SUBSTATE6_3)) &&
             (pauseCtx->state != PAUSE_STATE_7) &&
             !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
             func_8012C628(play->state.gfxCtx);
@@ -355,8 +357,8 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
     pauseCtx->cursorColorSet = 0;
     pauseCtx->nameColorSet = 0;
 
-    if ((pauseCtx->state == PAUSE_STATE_6) && (pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_ITEM) &&
-        !pauseCtx->itemDescriptionOn) {
+    if ((pauseCtx->state == PAUSE_STATE_6) && (pauseCtx->state6SubState == PAUSE_SUBSTATE6_0) &&
+        (pauseCtx->pageIndex == PAUSE_ITEM) && !pauseCtx->itemDescriptionOn) {
         moveCursorResult = 0;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_ITEM];
 
@@ -589,7 +591,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
             if (cursorItem != PAUSE_ITEM_NONE) {
                 // Equip item to the C buttons
                 if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && !pauseCtx->itemDescriptionOn &&
-                    (pauseCtx->state == PAUSE_STATE_6) && (pauseCtx->unk_200 == 0) &&
+                    (pauseCtx->state == PAUSE_STATE_6) && (pauseCtx->state6SubState == PAUSE_SUBSTATE6_0) &&
                     CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button, BTN_CLEFT | BTN_CDOWN | BTN_CRIGHT)) {
 
                     // Ensure that a transformation mask can not be unequipped while being used
@@ -643,7 +645,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                     // Equip item to the C buttons
                     pauseCtx->equipTargetItem = cursorItem;
                     pauseCtx->equipTargetSlot = cursorSlot;
-                    pauseCtx->unk_200 = 3;
+                    pauseCtx->state6SubState = PAUSE_SUBSTATE6_3;
                     vtxIndex = cursorSlot * 4;
                     pauseCtx->equipAnimX = pauseCtx->itemVtx[vtxIndex].v.ob[0] * 10;
                     pauseCtx->equipAnimY = pauseCtx->itemVtx[vtxIndex].v.ob[1] * 10;
@@ -670,8 +672,8 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                         play_sound(NA_SE_SY_DECIDE);
                     }
                 } else if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->state == PAUSE_STATE_6) &&
-                           (pauseCtx->unk_200 == 0) && CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) &&
-                           (msgCtx->msgLength == 0)) {
+                           (pauseCtx->state6SubState == PAUSE_SUBSTATE6_0) &&
+                           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) && (msgCtx->msgLength == 0)) {
                     // Give description on item through a message box
                     pauseCtx->itemDescriptionOn = true;
                     if (pauseCtx->cursorYIndex[PAUSE_ITEM] < 2) {
@@ -688,7 +690,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_ITEM]) {
             play_sound(NA_SE_SY_CURSOR);
         }
-    } else if ((pauseCtx->unk_200 == 3) && (pauseCtx->pageIndex == PAUSE_ITEM)) {
+    } else if ((pauseCtx->state6SubState == PAUSE_SUBSTATE6_3) && (pauseCtx->pageIndex == PAUSE_ITEM)) {
         pauseCtx->cursorColorSet = 2;
     }
 }
@@ -980,7 +982,7 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
             }
 
             // Reset params
-            pauseCtx->unk_200 = 0;
+            pauseCtx->state6SubState = PAUSE_SUBSTATE6_0;
             sEquipAnimTimer = 10;
             pauseCtx->equipAnimScale = 320;
             pauseCtx->equipAnimShrinkRate = 40;

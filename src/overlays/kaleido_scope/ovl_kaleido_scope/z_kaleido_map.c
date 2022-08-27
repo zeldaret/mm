@@ -150,7 +150,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
     for (i = 0, j = 4; i < 4; i++, j += 4) {
         if (i == 3) {
-            if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->unk_200 == 0)) {
+            if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->state6SubState == PAUSE_SUBSTATE6_0)) {
                 // If (pauseCtx->state == PAUSE_STATE_6), then the other conditions are redundant and always return true
                 if ((pauseCtx->state == PAUSE_STATE_6) && (pauseCtx->state != PAUSE_STATE_7) &&
                     !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
@@ -243,7 +243,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
     func_80108AF8(play);
 
-    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->unk_200 == 0)) {
+    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->state6SubState == PAUSE_SUBSTATE6_0)) {
         // If (pauseCtx->state == PAUSE_STATE_6), then the other conditions are redundant and always return true
         if ((pauseCtx->state == PAUSE_STATE_6) && (pauseCtx->state != PAUSE_STATE_7) &&
             !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
@@ -281,7 +281,7 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
     s16 oldCursorPoint;
 
     if (pauseCtx->state == PAUSE_STATE_6) {
-        if ((pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_MAP)) {
+        if ((pauseCtx->state6SubState == PAUSE_SUBSTATE6_0) && (pauseCtx->pageIndex == PAUSE_MAP)) {
             pauseCtx->cursorColorSet = 0;
             oldCursorPoint = pauseCtx->cursorPoint[PAUSE_MAP];
             if (pauseCtx->stickRelX > 30) {
@@ -475,8 +475,9 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
     KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[1] * 4, pauseCtx->mapPageVtx);
 
     if ((pauseCtx->pageIndex == 1) && (pauseCtx->state == 6) &&
-        ((pauseCtx->unk_200 == 0) || (pauseCtx->unk_200 == 3)) && (gGameInfo->data[0x246] != 0) &&
-        (pauseCtx->state != 7) && ((pauseCtx->state < 8) || (pauseCtx->state >= 0x13))) {
+        ((pauseCtx->state6SubState == PAUSE_SUBSTATE6_0) || (pauseCtx->state6SubState == PAUSE_SUBSTATE6_3)) &&
+        (gGameInfo->data[0x246] != 0) && (pauseCtx->state != 7) &&
+        ((pauseCtx->state < 8) || (pauseCtx->state >= 0x13))) {
 
         func_8012C628(play->state.gfxCtx);
 
@@ -626,7 +627,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         }
     }
 
-    if ((pauseCtx->pageIndex == 1) && (pauseCtx->unk_200 == 0)) {
+    if ((pauseCtx->pageIndex == 1) && (pauseCtx->state6SubState == PAUSE_SUBSTATE6_0)) {
         if ((pauseCtx->state == 6) && (pauseCtx->state != 7) && ((pauseCtx->state < 8) || (pauseCtx->state >= 0x13))) {
             j = 0;
             i = 0;
@@ -706,7 +707,8 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 oldCursorPoint;
 
-    if ((pauseCtx->state == PAUSE_STATE_6) && (pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_MAP)) {
+    if ((pauseCtx->state == PAUSE_STATE_6) && (pauseCtx->state6SubState == PAUSE_SUBSTATE6_0) &&
+        (pauseCtx->pageIndex == PAUSE_MAP)) {
         pauseCtx->cursorColorSet = 0;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 

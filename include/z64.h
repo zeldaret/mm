@@ -427,11 +427,11 @@ typedef struct {
     /* 0x1EE */ u16 debugEditor;
     /* 0x1F0 */ u8 unk_1F0;
     /* 0x1F4 */ Vec3f eye;
-    /* 0x200 */ u16 unk_200;
+    /* 0x200 */ u16 state6SubState;
     /* 0x202 */ u16 mode;
     /* 0x204 */ u16 pageIndex;
     /* 0x206 */ u16 unk_206;
-    /* 0x208 */ u16 unk_208;
+    /* 0x208 */ u16 state7SubState;
     /* 0x20C */ f32 unk_20C;
     /* 0x210 */ f32 unk_210;
     /* 0x214 */ f32 unk_214;
