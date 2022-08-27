@@ -1,7 +1,7 @@
 /*
  * File: z_obj_kendo_kanban.c
  * Overlay: ovl_Obj_Kendo_Kanban
- * Description: Swordsman's School - Cuttable Board
+ * Description: Swordsman's School - Cuttable Board at back of school
  */
 
 #include "z_obj_kendo_kanban.h"
@@ -10,6 +10,7 @@
 
 #define FLAGS 0x00000000
 
+// Board Fragment Flags: Identify which of the 4 quadrants fo the board are present.
 #define PART_FULL 0
 #define PART_TOP_RIGHT (1 << 0)
 #define PART_TOP_LEFT (1 << 1)
@@ -48,31 +49,31 @@ const ActorInit Obj_Kendo_Kanban_InitVars = {
 };
 
 // Directly applied to the velocity of the actor upon object creation.
-Vec3f OBJKENDOKANBAN_LBREAK_VEL = { -1.5f, 10.0f, 0.5f }; // Push Left/Up/Forward  (Left side Breakaway)
-Vec3f OBJKENDOKANBAN_RBREAK_VEL = { 1.5f, 10.0f, 0.5f };  // Push Right/Up/Forward (Right side Breakaway)
-Vec3f OBJKENDOKANBAN_BBREAK_VEL = { 0.0f, 4.0f, -1.0f };  // Push Up/Back  (Bottom Breakaway)
-Vec3f OBJKENDOKANBAN_TBREAK_VEL = { 1.0f, 7.0f, 4.0f };   // Push Right/Up/Forward (Top Breakaway)
+static Vec3f sVelocityLeftHalf = { -1.5f, 10.0f, 0.5f };  // Push Left/Up/Forward  (Left side Breakaway)
+static Vec3f sVelocityRightHalf = { 1.5f, 10.0f, 0.5f };  // Push Right/Up/Forward (Right side Breakaway)
+static Vec3f sVelocityBottomHalf = { 0.0f, 4.0f, -1.0f }; // Push _/Up/Back  (Bottom Breakaway)
+static Vec3f sVelocityTopHalf = { 1.0f, 7.0f, 4.0f };     // Push Right/Up/Forward (Top Breakaway)
 
 // Centerpoint of the piece
-Vec3f OBJKENDOKANBAN_L_CENTERPOINT = { -150.0f, 425.0f, 40.0f }; // Left
-Vec3f OBJKENDOKANBAN_R_CENTERPOINT = { 150.0f, 425.0f, 40.0f };  // Right
-Vec3f OBJKENDOKANBAN_B_CENTERPOINT = { 0.0f, 140.0f, 40.0f };    // Bottom
-Vec3f OBJKENDOKANBAN_T_CENTERPOINT = { 0.0f, 565.0f, 40.0f };    // Top
+static Vec3f sCenterPointLeftHalf = { -150.0f, 425.0f, 40.0f };
+static Vec3f sCenterPointRightHalf = { 150.0f, 425.0f, 40.0f };
+static Vec3f sCenterPointBottomHalf = { 0.0f, 140.0f, 40.0f };
+static Vec3f sCenterPointTopHalf = { 0.0f, 565.0f, 40.0f };
 
 // Displaylists for the 4 pieces.
-Gfx* sDisplayLists[] = { gKendoKanbanTopRightDL, gKendoKanbanTopLeftDL, gKendoKanbanBottomRightDL,
-                         gKendoKanbanBottomLeftDL };
+static Gfx* sDisplayLists[] = { gKendoKanbanTopRightDL, gKendoKanbanTopLeftDL, gKendoKanbanBottomRightDL,
+                                gKendoKanbanBottomLeftDL };
 
-// Coordinates on the object face providing the split
-Vec3f pointTL = { -300.0f, 850.0f, 40.0f }; // Left and Top
-Vec3f pointTC = { 10.0f, 850.0f, 40.0f };   // Right and Left
-Vec3f pointTR = { 300.0f, 850.0f, 40.0f };  // Right and Top
-Vec3f pointCL = { -300.0f, 310.0f, 40.0f }; // Bottom and Top
-Vec3f pointCC = { 0.0f, 280.0f, 40.0f };
-Vec3f pointCR = { 300.0f, 250.0f, 40.0f }; // Bottom and Top
-Vec3f pointBL = { -300.0f, 10.0f, 40.0f }; // Left and Bottom
-Vec3f pointBC = { 0.0f, 10.0f, 40.0f };    // Left and Right
-Vec3f pointBR = { 300.0f, 10.0f, 40.0f };  // Right and Bottom
+// Coordinates on the object face upon which the board can break
+static Vec3f sPointTL = { -300.0f, 850.0f, 40.0f };
+static Vec3f sPointTC = { 10.0f, 850.0f, 40.0f };
+static Vec3f sPointTR = { 300.0f, 850.0f, 40.0f };
+static Vec3f sPointCL = { -300.0f, 310.0f, 40.0f };
+static Vec3f sPointCC = { 0.0f, 280.0f, 40.0f }; // Unused
+static Vec3f sPointCR = { 300.0f, 250.0f, 40.0f };
+static Vec3f sPointBL = { -300.0f, 10.0f, 40.0f };
+static Vec3f sPointBC = { 0.0f, 10.0f, 40.0f };
+static Vec3f sPointBR = { 300.0f, 10.0f, 40.0f };
 
 static ColliderTrisElementInit sTrisElementsInit[] = {
     {
@@ -169,8 +170,8 @@ static DamageTable sDamageTable = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 
-Vec3f OBJKENDOKANBAN_NULL_VECTOR = { 0.0f, 0.0f, 0.0f };
-Vec3f OBJKENDOKANBAN_UNITX_VECTOR = { 1.0f, 0.0f, 0.0f }; // Unit Vector X (Rotation around the X-axis)
+static Vec3f sNullVec3F = { 0.0f, 0.0f, 0.0f };
+static Vec3f sUnitVectorX = { 1.0f, 0.0f, 0.0f };
 
 void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
     s32 pad[2];
@@ -201,20 +202,20 @@ void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
 
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
-    this->boardFragments = OBJKENDOKANBAN_GET_F(&this->actor);
+    this->boardFragments = OBJKENDOKANBAN_GET_BOARD_FRAGMENTS_PARAM(&this->actor);
     this->actor.gravity = -2.0f;
-    this->centerPoint = OBJKENDOKANBAN_NULL_VECTOR;
-    this->centerPos = OBJKENDOKANBAN_NULL_VECTOR;
-    this->rootCornerPos = OBJKENDOKANBAN_NULL_VECTOR;
-    this->rotationalAxis = OBJKENDOKANBAN_UNITX_VECTOR;
-    this->rotationAngle = DEG_TO_BINANG(0);
-    this->rotationVelocity = DEG_TO_BINANG(0);
+    this->centerPoint = sNullVec3F;
+    this->centerPos = sNullVec3F;
+    this->rootCornerPos = sNullVec3F;
+    this->rotationalAxis = sUnitVectorX;
+    this->rotationAngle = 0;
+    this->rotationVelocity = 0;
     this->idxLastRootCornerPos = -1;
     this->bHasNewRootCornerPos = false;
     this->numBounces = 0;
 
     for (i = 0; i < ARRAY_COUNT(this->cornerPos); i++) {
-        this->cornerPos[i] = this->cornerPoints[i] = OBJKENDOKANBAN_NULL_VECTOR;
+        this->cornerPos[i] = this->cornerPoints[i] = sNullVec3F;
     }
 
     this->unk_30A = 0;
@@ -249,56 +250,56 @@ void ObjKendoKanban_SetupAerial(ObjKendoKanban* this, PlayState* play) {
 
             // Vertical cuts initialize the right half, spawn the left half.
             this->boardFragments = RIGHT_HALF;
-            this->rotationVelocity = DEG_TO_BINANG(10);
-            this->actor.velocity = OBJKENDOKANBAN_RBREAK_VEL;
-            this->centerPoint = OBJKENDOKANBAN_R_CENTERPOINT;
+            this->rotationVelocity = 0x71C; // 10 degrees
+            this->actor.velocity = sVelocityRightHalf;
+            this->centerPoint = sCenterPointRightHalf;
 
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_KENDO_KANBAN,
                                this->actor.home.pos.x - 5.0f, this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0,
                                LEFT_HALF);
 
-            this->cornerPoints[0] = pointTC;
-            this->cornerPoints[1] = pointTR;
-            this->cornerPoints[2] = pointBR;
-            this->cornerPoints[3] = pointBC;
+            this->cornerPoints[0] = sPointTC;
+            this->cornerPoints[1] = sPointTR;
+            this->cornerPoints[2] = sPointBR;
+            this->cornerPoints[3] = sPointBC;
 
         } else {
             // Horizontal cuts initialize the bottom half, spawn the top half.
             this->boardFragments = BOTTOM_HALF;
-            this->rotationVelocity = DEG_TO_BINANG(-10);
-            this->actor.velocity = OBJKENDOKANBAN_BBREAK_VEL;
-            this->centerPoint = OBJKENDOKANBAN_B_CENTERPOINT;
+            this->rotationVelocity = -0x71C; // -10 degrees
+            this->actor.velocity = sVelocityBottomHalf;
+            this->centerPoint = sCenterPointBottomHalf;
 
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_KENDO_KANBAN, this->actor.home.pos.x,
                                this->actor.home.pos.y + 5.0f, this->actor.home.pos.z, 0, 0, 0, TOP_HALF);
 
-            this->cornerPoints[0] = pointCL;
-            this->cornerPoints[1] = pointCR;
-            this->cornerPoints[2] = pointBR;
-            this->cornerPoints[3] = pointBL;
+            this->cornerPoints[0] = sPointCL;
+            this->cornerPoints[1] = sPointCR;
+            this->cornerPoints[2] = sPointBR;
+            this->cornerPoints[3] = sPointBL;
         }
 
     } else if (this->boardFragments == LEFT_HALF) {
         // Initialize the newly spawned left half
-        this->rotationVelocity = DEG_TO_BINANG(10);
-        this->actor.velocity = OBJKENDOKANBAN_LBREAK_VEL;
-        this->centerPoint = OBJKENDOKANBAN_L_CENTERPOINT;
+        this->rotationVelocity = 0x71C; // 10 degrees
+        this->actor.velocity = sVelocityLeftHalf;
+        this->centerPoint = sCenterPointLeftHalf;
 
-        this->cornerPoints[0] = pointTL;
-        this->cornerPoints[1] = pointTC;
-        this->cornerPoints[2] = pointBC;
-        this->cornerPoints[3] = pointBL;
+        this->cornerPoints[0] = sPointTL;
+        this->cornerPoints[1] = sPointTC;
+        this->cornerPoints[2] = sPointBC;
+        this->cornerPoints[3] = sPointBL;
 
     } else if (this->boardFragments == TOP_HALF) {
         // Initialize the newly spawned top half
-        this->rotationVelocity = DEG_TO_BINANG(10);
-        this->actor.velocity = OBJKENDOKANBAN_TBREAK_VEL;
-        this->centerPoint = OBJKENDOKANBAN_T_CENTERPOINT;
+        this->rotationVelocity = 0x71C; // 10 degrees
+        this->actor.velocity = sVelocityTopHalf;
+        this->centerPoint = sCenterPointTopHalf;
 
-        this->cornerPoints[0] = pointTL;
-        this->cornerPoints[1] = pointTR;
-        this->cornerPoints[2] = pointCR;
-        this->cornerPoints[3] = pointCL;
+        this->cornerPoints[0] = sPointTL;
+        this->cornerPoints[1] = sPointTR;
+        this->cornerPoints[2] = sPointCR;
+        this->cornerPoints[3] = sPointCL;
     }
 
     this->unk_30A = 0;
@@ -381,9 +382,9 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
 
     if (this->bHasNewRootCornerPos == true) {
         if (this->numBounces >= MAX_BOUNCE_COUNT) {
-            s16 deltaRotationAngle = this->rotationAngle & (DEG_TO_BINANG(90) - 1);
-            if (deltaRotationAngle >= DEG_TO_BINANG(45)) {
-                deltaRotationAngle -= DEG_TO_BINANG(90);
+            s16 deltaRotationAngle = this->rotationAngle & 0x3FFF; // 90 degrees
+            if (deltaRotationAngle >= 0x2000) {                    // 45 degrees
+                deltaRotationAngle -= 0x4000;                      // 90 degrees
             }
             this->rotationAngle -= deltaRotationAngle;
             this->rotationVelocity = 0;

@@ -7,7 +7,7 @@ struct ObjKendoKanban;
 
 typedef void (*ObjKendoKanbanActionFunc)(struct ObjKendoKanban*, PlayState*);
 
-#define OBJKENDOKANBAN_GET_F(thisx) ((thisx)->params & 0xF)
+#define OBJKENDOKANBAN_GET_BOARD_FRAGMENTS_PARAM(thisx) ((thisx)->params & 0xF)
 
 typedef struct ObjKendoKanban {
     /* 0x000 */ Actor actor;
