@@ -795,7 +795,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
             player->actor.focus.rot.y = player->actor.shape.rot.y;
             player->currentYaw = player->actor.shape.rot.y;
             player->unk_ABC = 0.0f;
-            player->unk_AC0 = 0.0f;
+            player->displacementY = 0.0f;
             player->actor.shape.yOffset = 0.0f;
             break;
     }

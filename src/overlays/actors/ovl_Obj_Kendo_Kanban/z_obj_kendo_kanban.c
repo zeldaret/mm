@@ -32,8 +32,8 @@ void ObjKendoKanban_DoNothing(ObjKendoKanban* this, PlayState* play);
 void ObjKendoKanban_SetupAerial(ObjKendoKanban* this, PlayState* play);
 void ObjKendoKanban_Aerial(ObjKendoKanban* this, PlayState* play);
 void ObjKendoKanban_Settled(ObjKendoKanban* this, PlayState* play);
-void func_80B65DA8_BounceHandler(ObjKendoKanban* this, PlayState* play);
-s32 func_80B6618C(ObjKendoKanban* this, PlayState* play);
+void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play);
+s32 ObjKendoKanban_IsPlayerOnTop(ObjKendoKanban* this, PlayState* play);
 
 const ActorInit Obj_Kendo_Kanban_InitVars = {
     ACTOR_OBJ_KENDO_KANBAN,
@@ -203,18 +203,18 @@ void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
 
     this->boardFragments = OBJKENDOKANBAN_GET_F(&this->actor);
     this->actor.gravity = -2.0f;
-    this->fragmentCenterpoint = OBJKENDOKANBAN_NULL_VECTOR;
+    this->centerPoint = OBJKENDOKANBAN_NULL_VECTOR;
     this->centerPos = OBJKENDOKANBAN_NULL_VECTOR;
-    this->vectLowestPoint = OBJKENDOKANBAN_NULL_VECTOR;
+    this->rootCornerPos = OBJKENDOKANBAN_NULL_VECTOR;
     this->rotationalAxis = OBJKENDOKANBAN_UNITX_VECTOR;
-    this->rotationAngle = 0;
-    this->rotationVelocity = 0;
-    this->idxLastLowestPoint = -1;
-    this->bHasNewLowestPoint = 0;
+    this->rotationAngle = DEG_TO_BINANG(0);
+    this->rotationVelocity = DEG_TO_BINANG(0);
+    this->idxLastRootCornerPos = -1;
+    this->bHasNewRootCornerPos = false;
     this->numBounces = 0;
 
     for (i = 0; i < ARRAY_COUNT(this->cornerPos); i++) {
-        this->cornerPos[i] = this->corners[i] = OBJKENDOKANBAN_NULL_VECTOR;
+        this->cornerPos[i] = this->cornerPoints[i] = OBJKENDOKANBAN_NULL_VECTOR;
     }
 
     this->unk_30A = 0;
@@ -239,12 +239,6 @@ void ObjKendoKanban_SetupDoNothing(ObjKendoKanban* this) {
 void ObjKendoKanban_DoNothing(ObjKendoKanban* this, PlayState* play) {
 }
 
-/**
- * @brief Setup the motion of individual board pieces.
- *
- * This function both "breaks" the board object in two, and serves as the initializer for boards in motion.
- *
- */
 void ObjKendoKanban_SetupAerial(ObjKendoKanban* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
@@ -253,58 +247,58 @@ void ObjKendoKanban_SetupAerial(ObjKendoKanban* this, PlayState* play) {
             (player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_2H) ||
             (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_FINISH)) {
 
-            // Initialize the right half, spawn the left half.
+            // Vertical cuts initialize the right half, spawn the left half.
             this->boardFragments = RIGHT_HALF;
             this->rotationVelocity = DEG_TO_BINANG(10);
             this->actor.velocity = OBJKENDOKANBAN_RBREAK_VEL;
-            this->fragmentCenterpoint = OBJKENDOKANBAN_R_CENTERPOINT;
+            this->centerPoint = OBJKENDOKANBAN_R_CENTERPOINT;
 
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_KENDO_KANBAN,
                                this->actor.home.pos.x - 5.0f, this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0,
                                LEFT_HALF);
 
-            this->corners[0] = pointTC;
-            this->corners[1] = pointTR;
-            this->corners[2] = pointBR;
-            this->corners[3] = pointBC;
-        } else {
+            this->cornerPoints[0] = pointTC;
+            this->cornerPoints[1] = pointTR;
+            this->cornerPoints[2] = pointBR;
+            this->cornerPoints[3] = pointBC;
 
-            // Initialize the bottom half, spawn the top half.
+        } else {
+            // Horizontal cuts initialize the bottom half, spawn the top half.
             this->boardFragments = BOTTOM_HALF;
             this->rotationVelocity = DEG_TO_BINANG(-10);
             this->actor.velocity = OBJKENDOKANBAN_BBREAK_VEL;
-            this->fragmentCenterpoint = OBJKENDOKANBAN_B_CENTERPOINT;
+            this->centerPoint = OBJKENDOKANBAN_B_CENTERPOINT;
 
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_KENDO_KANBAN, this->actor.home.pos.x,
                                this->actor.home.pos.y + 5.0f, this->actor.home.pos.z, 0, 0, 0, TOP_HALF);
 
-            this->corners[0] = pointCL;
-            this->corners[1] = pointCR;
-            this->corners[2] = pointBR;
-            this->corners[3] = pointBL;
+            this->cornerPoints[0] = pointCL;
+            this->cornerPoints[1] = pointCR;
+            this->cornerPoints[2] = pointBR;
+            this->cornerPoints[3] = pointBL;
         }
-    } else if (this->boardFragments == LEFT_HALF) {
 
+    } else if (this->boardFragments == LEFT_HALF) {
         // Initialize the newly spawned left half
         this->rotationVelocity = DEG_TO_BINANG(10);
         this->actor.velocity = OBJKENDOKANBAN_LBREAK_VEL;
-        this->fragmentCenterpoint = OBJKENDOKANBAN_L_CENTERPOINT;
+        this->centerPoint = OBJKENDOKANBAN_L_CENTERPOINT;
 
-        this->corners[0] = pointTL;
-        this->corners[1] = pointTC;
-        this->corners[2] = pointBC;
-        this->corners[3] = pointBL;
+        this->cornerPoints[0] = pointTL;
+        this->cornerPoints[1] = pointTC;
+        this->cornerPoints[2] = pointBC;
+        this->cornerPoints[3] = pointBL;
+
     } else if (this->boardFragments == TOP_HALF) {
-
         // Initialize the newly spawned top half
         this->rotationVelocity = DEG_TO_BINANG(10);
         this->actor.velocity = OBJKENDOKANBAN_TBREAK_VEL;
-        this->fragmentCenterpoint = OBJKENDOKANBAN_T_CENTERPOINT;
+        this->centerPoint = OBJKENDOKANBAN_T_CENTERPOINT;
 
-        this->corners[0] = pointTL;
-        this->corners[1] = pointTR;
-        this->corners[2] = pointCR;
-        this->corners[3] = pointCL;
+        this->cornerPoints[0] = pointTL;
+        this->cornerPoints[1] = pointTR;
+        this->cornerPoints[2] = pointCR;
+        this->cornerPoints[3] = pointCL;
     }
 
     this->unk_30A = 0;
@@ -315,7 +309,7 @@ void ObjKendoKanban_Aerial(ObjKendoKanban* this, PlayState* play) {
     this->actor.velocity.y += this->actor.gravity;
     Actor_UpdatePos(&this->actor);
     this->rotationAngle += this->rotationVelocity;
-    func_80B65DA8_BounceHandler(this, play);
+    ObjKendoKanban_HandlePhysics(this, play);
     if (this->actor.world.pos.y < -200.0f) {
         this->actor.world.pos.y = -200.0f;
     }
@@ -328,66 +322,65 @@ void ObjKendoKanban_SetupSettled(ObjKendoKanban* this) {
 void ObjKendoKanban_Settled(ObjKendoKanban* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (func_80B6618C(this, play) == 1) {
-        player->unk_AC0 = 700.0f;
+    if (ObjKendoKanban_IsPlayerOnTop(this, play) == true) {
+        player->displacementY = 700.0f;
     }
 }
 
-void func_80B65DA8_BounceHandler(ObjKendoKanban* this, PlayState* play) {
-    Vec3f lowestPoint = this->cornerPos[0];
+void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
+    Vec3f rootCornerPos = this->cornerPos[0];
     s32 pad[2];
     Vec3f vecCenterOut = this->actor.world.pos;
-    s32 pad2;
-    s32 idxLowestPoint = 0;
+    const s16 MAX_BOUNCE_COUNT = 7;
+    s32 idxRootCornerPos = 0;
     s32 i;
     f32 verticalScalar;
 
-    // Calculate gravity's effect on rotation.
+    // Calculate an affect on the rotation from gravity.
     vecCenterOut.x -= this->centerPos.x;
     vecCenterOut.y -= this->centerPos.y;
     vecCenterOut.z -= this->centerPos.z;
     verticalScalar = (this->rotationalAxis.x * vecCenterOut.z) + (this->rotationalAxis.z * -vecCenterOut.x);
     if (verticalScalar < 0.0f) {
-        this->rotationVelocity += 0x64; // Accelerate the rotation when facing up
+        this->rotationVelocity += 0x64;
     } else {
-        this->rotationVelocity -= 0x64; // Decellerate the rotation when facing down
+        this->rotationVelocity -= 0x64;
     }
 
-    // Identify which of the four corners is the lowest
+    // Find the lowest point
     for (i = 0; i < ARRAY_COUNT(this->cornerPos); i++) {
-        if (this->cornerPos[i].y < lowestPoint.y) {
-            lowestPoint = this->cornerPos[i];
-            idxLowestPoint = i;
+        if (this->cornerPos[i].y < rootCornerPos.y) {
+            rootCornerPos = this->cornerPos[i];
+            idxRootCornerPos = i;
         }
     }
 
     // When the lowest point changes, re-initialize the actor position to that point
-    if (idxLowestPoint != this->idxLastLowestPoint) {
-        this->bHasNewLowestPoint = 1;
-        this->idxLastLowestPoint = idxLowestPoint;
-        this->vectLowestPoint = this->corners[idxLowestPoint];
+    if (idxRootCornerPos != this->idxLastRootCornerPos) {
+        this->bHasNewRootCornerPos = true;
+        this->idxLastRootCornerPos = idxRootCornerPos;
+        this->rootCornerPos = this->cornerPoints[idxRootCornerPos];
 
         Matrix_Push();
         Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                      &this->actor.shape.rot);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_MultVec3f(&this->vectLowestPoint, &this->actor.world.pos);
-        this->actor.world.pos = lowestPoint;
+        Matrix_MultVec3f(&this->rootCornerPos, &this->actor.world.pos);
+        this->actor.world.pos = rootCornerPos;
         this->actor.prevPos = this->actor.world.pos;
         Matrix_Pop();
     }
 
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
-    if (this->actor.bgCheckFlags & 1) { // Stationary Grounded
-        // When the board is on the ground, Apply some drag to slow it to a stop
+    if (this->actor.bgCheckFlags & 1) {
+        // When on the ground, apply some friction.
         this->actor.velocity.x *= 0.8f;
         this->actor.velocity.z *= 0.8f;
     }
 
-    if (this->bHasNewLowestPoint == 1) {
-        if (this->numBounces >= 7) {
-
+    if (this->bHasNewRootCornerPos == true) {
+        if (this->numBounces >= MAX_BOUNCE_COUNT) {
             s16 deltaRotationAngle = this->rotationAngle & (DEG_TO_BINANG(90) - 1);
             if (deltaRotationAngle >= DEG_TO_BINANG(45)) {
                 deltaRotationAngle -= DEG_TO_BINANG(90);
@@ -401,18 +394,18 @@ void func_80B65DA8_BounceHandler(ObjKendoKanban* this, PlayState* play) {
         if (this->actor.bgCheckFlags & 2) {
             // Upon touching the ground...
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
-            this->bHasNewLowestPoint = 0;
+            this->bHasNewRootCornerPos = false;
             this->actor.velocity.y *= 0.5f;
 
         } else if (this->actor.bgCheckFlags & 1) {
-            // When on the ground
+            // When on the ground...
             this->numBounces++;
-            this->bHasNewLowestPoint = 0;
+            this->bHasNewRootCornerPos = false;
             this->actor.velocity.x *= 0.3f;
             this->actor.velocity.z *= 0.3f;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
 
-            // Adjust and reverse rotation depending on the current
+            // Adjust and (potentially) reverse rotation depending on the current
             // facing of the board and the direction in which it is rotating.
             if (verticalScalar > 0.0f) {
                 if (this->rotationVelocity > 0) {
@@ -431,34 +424,38 @@ void func_80B65DA8_BounceHandler(ObjKendoKanban* this, PlayState* play) {
     }
 }
 
-// cjb I think this function determines if the player will climb ontop the board.
-s32 func_80B6618C(ObjKendoKanban* this, PlayState* play) {
+s32 ObjKendoKanban_IsPlayerOnTop(ObjKendoKanban* this, PlayState* play) {
+    const s32 UNDETERMINED = 0;
+    const s32 UP = 1;
+    const s32 DOWN = -1;
+
     Player* player = GET_PLAYER(play);
-    s32 j;
-    s32 phi_v1 = 0;
     s32 i;
+    s32 j;
     Vec2f playerToCornerA;
     Vec2f playerToCornerB;
+    s32 priorDir = UNDETERMINED;
 
     for (i = 0; i < ARRAY_COUNT(this->cornerPos); i++) {
         j = i != 3 ? (i + 1) : 0;
 
-        // Horizontal component of displacement from the player to each corner
+        // For each pair of points (moving clockwise around the shape), verify that the normal
+        // vector's magnitute is in the same direction. This condition being true means
+        // the player is within the bounds of the four cornerPoints.
         playerToCornerA.z = this->cornerPos[i].z - player->actor.world.pos.z;
         playerToCornerA.x = this->cornerPos[i].x - player->actor.world.pos.x;
-        playerToCornerB.z = (this->cornerPos[j].z - player->actor.world.pos.z);
-        playerToCornerB.x = (this->cornerPos[j].x - player->actor.world.pos.x);
-
+        playerToCornerB.z = this->cornerPos[j].z - player->actor.world.pos.z;
+        playerToCornerB.x = this->cornerPos[j].x - player->actor.world.pos.x;
         if ((playerToCornerA.x * playerToCornerB.z) < (playerToCornerA.z * playerToCornerB.x)) {
-            if (phi_v1 == 0) {
-                phi_v1 = 1;
-            } else if (phi_v1 != 1) {
+            if (priorDir == UNDETERMINED) {
+                priorDir = UP;
+            } else if (priorDir != UP) {
                 return false;
             }
         } else {
-            if (phi_v1 == 0) {
-                phi_v1 = -1;
-            } else if (phi_v1 != -1) {
+            if (priorDir == UNDETERMINED) {
+                priorDir = DOWN;
+            } else if (priorDir != DOWN) {
                 return false;
             }
         }
@@ -480,7 +477,6 @@ void ObjKendoKanban_UpdateCollision(ObjKendoKanban* this, PlayState* play) {
         if (this->actionFunc == ObjKendoKanban_DoNothing) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderTris.base);
         }
-
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderCylinder.base);
     }
 }
@@ -489,28 +485,26 @@ void ObjKendoKanban_Update(Actor* thisx, PlayState* play) {
     ObjKendoKanban* this = THIS;
 
     this->actionFunc(this, play);
-
     ObjKendoKanban_UpdateCollision(this, play);
 }
 
 void ObjKendoKanban_Draw(Actor* thisx, PlayState* play) {
     ObjKendoKanban* this = THIS;
+
     s32 i;
-    Gfx* poly;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C28C(play->state.gfxCtx);
 
     if (this->boardFragments == PART_FULL) {
-        // A full board is simply displayed
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gKendoKanbanDL);
     } else {
-        // Fragments of boards are in motion, so apply their rotation/translation, and display only the DLs which
+        // Fragments of boards are movable, so apply their rotation/translation, and display only the DLs which
         // apply.
         Matrix_RotateAxisS(this->rotationAngle, &this->rotationalAxis, MTXMODE_APPLY);
-        Matrix_Translate(-this->vectLowestPoint.x, -this->vectLowestPoint.y, -this->vectLowestPoint.z, MTXMODE_APPLY);
+        Matrix_Translate(-this->rootCornerPos.x, -this->rootCornerPos.y, -this->rootCornerPos.z, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         // Display only the fragments of the board which are present
@@ -525,7 +519,7 @@ void ObjKendoKanban_Draw(Actor* thisx, PlayState* play) {
 
     // Update the alternate position trackers (Corners and Center of the board)
     for (i = 0; i < ARRAY_COUNT(this->cornerPos); i++) {
-        Matrix_MultVec3f(&this->corners[i], &this->cornerPos[i]);
+        Matrix_MultVec3f(&this->cornerPoints[i], &this->cornerPos[i]);
     }
-    Matrix_MultVec3f(&this->fragmentCenterpoint, &this->centerPos);
+    Matrix_MultVec3f(&this->centerPoint, &this->centerPos);
 }

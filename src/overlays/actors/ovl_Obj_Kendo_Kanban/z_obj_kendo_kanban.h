@@ -16,18 +16,18 @@ typedef struct ObjKendoKanban {
     /* 0x1B0 */ ColliderTrisElement colliderTrisElements[2];
     /* 0x268 */ ObjKendoKanbanActionFunc actionFunc;
     /* 0x26C */ Vec3f cornerPos[4];
-    /* 0x29C */ Vec3f corners[4];
-    /* 0x2CC */ Vec3f fragmentCenterpoint;
+    /* 0x29C */ Vec3f cornerPoints[4];
+    /* 0x2CC */ Vec3f centerPoint;
     /* 0x2D8 */ Vec3f centerPos;
-    /* 0x2E4 */ Vec3f vectLowestPoint;
+    /* 0x2E4 */ Vec3f rootCornerPos;
     /* 0x2F0 */ Vec3f rotationalAxis;
-    /* 0x2FC */ s32 idxLastLowestPoint;
-    /* 0x300 */ s16 bHasNewLowestPoint;
+    /* 0x2FC */ s32 idxLastRootCornerPos;
+    /* 0x300 */ s16 bHasNewRootCornerPos;
     /* 0x302 */ s16 rotationAngle;
     /* 0x304 */ s16 rotationVelocity;
     /* 0x306 */ UNK_TYPE1 pad306[2];
     /* 0x308 */ s16 numBounces;
-    /* 0x30A */ s16 unk_30A;
+    /* 0x30A */ UNK_TYPE2 unk_30A;
     /* 0x30C */ u8 boardFragments;
 } ObjKendoKanban; // size = 0x310
 

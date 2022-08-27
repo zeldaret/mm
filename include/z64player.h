@@ -585,7 +585,7 @@ typedef struct Player {
     /* 0xAB2 */ Vec3s unk_AB2;
     /* 0xAB8 */ f32 unk_AB8;
     /* 0xABC */ f32 unk_ABC;
-    /* 0xAC0 */ f32 unk_AC0;
+    /* 0xAC0 */ f32 displacementY;
     /* 0xAC4 */ void* unk_AC4;
     /* 0xAC8 */ f32 unk_AC8;
     /* 0xACC */ s16 unk_ACC;
