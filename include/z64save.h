@@ -58,7 +58,7 @@ typedef enum {
     /*  4 */ TIMER_STATE_COUNTING,
     /*  5 */ TIMER_STATE_STOP,
     /*  6 */ TIMER_STATE_6, // like `TIMER_STATE_STOP` but with extra minigame checks
-    /*  7 */ TIMER_STATE_7, // stopped but still update `timerTimeRemaining`
+    /*  7 */ TIMER_STATE_7, // stopped but still update `timerCurTimes`
     /*  8 */ TIMER_STATE_ENV_START,
     /*  9 */ TIMER_STATE_ALT_START,
     /* 10 */ TIMER_STATE_10, // precursor to `TIMER_STATE_ALT_COUNTING`
@@ -238,7 +238,7 @@ typedef struct SaveContext {
     /* 0x101A */ u8 bottleTimerStates[BOTTLE_MAX]; // See the `BottleTimerState` enum. "bottle_status"
     /* 0x1020 */ OSTime bottleTimerStartOsTimes[BOTTLE_MAX]; // The osTime when the timer starts. "bottle_ostime"
     /* 0x1050 */ u64 bottleTimerTimeLimits[BOTTLE_MAX]; // The original total time given before the timer expires, in centiseconds (1/100th sec). "bottle_sub"
-    /* 0x1080 */ u64 bottleTimerTimeRemaining[BOTTLE_MAX]; // The remaining time left before the timer expires, in centiseconds (1/100th sec). "bottle_time"
+    /* 0x1080 */ u64 bottletimerCurTimes[BOTTLE_MAX]; // The remaining time left before the timer expires, in centiseconds (1/100th sec). "bottle_time"
     /* 0x10B0 */ OSTime bottleTimerPausedOsTimes[BOTTLE_MAX]; // The cumulative osTime spent with the timer paused. "bottle_stop_time"
     /* 0x10E0 */ u64 pictoPhoto[1400];                  // buffer containing the pictograph photo
     /* 0x3CA0 */ s32 fileNum;                           // "file_no"
@@ -258,10 +258,10 @@ typedef struct SaveContext {
     /* 0x3DBF */ u8 showTitleCard;                      // "name_display"
     /* 0x3DC0 */ s16 unk_3DC0;                          // "shield_magic_timer"
     /* 0x3DC2 */ u8 unk_3DC2;                           // "pad1"
-    /* 0x3DC8 */ OSTime postmanTimerOsTime;             // "get_time"
+    /* 0x3DC8 */ OSTime postmanTimerStopOsTime; // The osTime when the timer stops for the postman minigame. "get_time"
     /* 0x3DD0 */ u8 timerStates[TIMER_ID_MAX]; // See the `TimerState` enum. "event_fg"
     /* 0x3DD7 */ u8 timerDirections[TIMER_ID_MAX]; // See the `TimerDirection` enum. "calc_flag"
-    /* 0x3DE0 */ u64 timerTimeRemaining[TIMER_ID_MAX]; // The remaining time left before the timer expires, in centiseconds (1/100th sec). "event_ostime"
+    /* 0x3DE0 */ u64 timerCurTimes[TIMER_ID_MAX]; // For countdown, the remaining time left. For countup, the time since the start. In centiseconds (1/100th sec). "event_ostime"
     /* 0x3E18 */ u64 timerTimeLimits[TIMER_ID_MAX]; // The original total time given for the timer to count from, in centiseconds (1/100th sec). "event_sub"
     /* 0x3E50 */ OSTime timerStartOsTimes[TIMER_ID_MAX]; // The osTime when the timer starts. "func_time"
     /* 0x3E88 */ u64 timerStopTimes[TIMER_ID_MAX];  // The total amount of time taken between the start and end of the timer, in centiseconds (1/100th sec). "func_end_time"

@@ -713,7 +713,7 @@ wordReplace = {
     "gSaveContext.unk_3DC8": "gSaveContext.timerOsTime",
     "gSaveContext.unk_3DD0": "gSaveContext.timerStates",
     "gSaveContext.unk_3DD7": "gSaveContext.timerDirections",
-    "gSaveContext.unk_3DE0": "gSaveContext.timerTimeRemaining",
+    "gSaveContext.unk_3DE0": "gSaveContext.timerCurTimes",
     "gSaveContext.unk_3E18": "gSaveContext.timerTimeLimits",
     "gSaveContext.unk_3E50": "gSaveContext.timerStartOsTimes",
     "gSaveContext.unk_3E88": "gSaveContext.timerStopTimes",

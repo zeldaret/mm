@@ -896,7 +896,7 @@ void func_80144A94(SramContext* sramCtx) {
 
     for (i = 0; i < TIMER_ID_MAX; i++) {
         gSaveContext.timerStates[i] = TIMER_STATE_OFF;
-        gSaveContext.timerTimeRemaining[i] = SECONDS_TO_TIMER(0);
+        gSaveContext.timerCurTimes[i] = SECONDS_TO_TIMER(0);
         gSaveContext.timerTimeLimits[i] = SECONDS_TO_TIMER(0);
         gSaveContext.timerStartOsTimes[i] = 0;
         gSaveContext.timerStopTimes[i] = SECONDS_TO_TIMER(0);
@@ -971,7 +971,7 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
 
         for (i = 0; i < TIMER_ID_MAX; i++) {
             gSaveContext.timerStates[i] = TIMER_STATE_OFF;
-            gSaveContext.timerTimeRemaining[i] = SECONDS_TO_TIMER(0);
+            gSaveContext.timerCurTimes[i] = SECONDS_TO_TIMER(0);
             gSaveContext.timerTimeLimits[i] = SECONDS_TO_TIMER(0);
             gSaveContext.timerStartOsTimes[i] = 0;
             gSaveContext.timerStopTimes[i] = SECONDS_TO_TIMER(0);

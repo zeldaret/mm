@@ -516,7 +516,7 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
         if (CHECK_BTN_ALL(controller1->press.button, BTN_A) || CHECK_BTN_ALL(controller1->press.button, BTN_START)) {
             for (i = 0; i < TIMER_ID_MAX; i++) {
                 gSaveContext.timerStates[i] = TIMER_STATE_OFF;
-                gSaveContext.timerTimeRemaining[i] = SECONDS_TO_TIMER(0);
+                gSaveContext.timerCurTimes[i] = SECONDS_TO_TIMER(0);
                 gSaveContext.timerTimeLimits[i] = SECONDS_TO_TIMER(0);
                 gSaveContext.timerStartOsTimes[i] = 0;
                 gSaveContext.timerStopTimes[i] = SECONDS_TO_TIMER(0);

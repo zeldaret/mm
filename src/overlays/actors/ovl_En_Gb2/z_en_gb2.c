@@ -519,7 +519,7 @@ void func_80B10344(EnGb2* this, PlayState* play) {
         }
 
         func_80B0FE7C(play);
-    } else if (gSaveContext.timerTimeRemaining[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
+    } else if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
         gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
         gSaveContext.eventInf[4] |= 0x40;
         gSaveContext.eventInf[4] |= 0x10;
