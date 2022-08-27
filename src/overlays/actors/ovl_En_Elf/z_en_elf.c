@@ -968,8 +968,8 @@ void func_8088E850(EnElf* this, PlayState* play) {
 
             default:
                 arrowPointedActor = play->actorCtx.targetContext.arrowPointedActor;
-                if ((player->stateFlags1 & 0x40) && (player->targetActor != NULL)) {
-                    Math_Vec3f_Copy(&nextPos, &player->targetActor->focus.pos);
+                if ((player->stateFlags1 & 0x40) && (player->talkActor != NULL)) {
+                    Math_Vec3f_Copy(&nextPos, &player->talkActor->focus.pos);
                 } else {
                     Math_Vec3f_Copy(&nextPos, &play->actorCtx.targetContext.unk0);
                 }
@@ -1086,10 +1086,10 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
     }
 
     if (this->fairyFlags & 1) {
-        if ((arrayPointerActor == NULL) || (player->unk_730 == NULL)) {
+        if ((arrayPointerActor == NULL) || (player->targetedActor == NULL)) {
             this->fairyFlags ^= 1;
         }
-    } else if ((arrayPointerActor != NULL) && (player->unk_730 != NULL)) {
+    } else if ((arrayPointerActor != NULL) && (player->targetedActor != NULL)) {
         u8 temp = this->unk_269;
         u16 targetSfxId = this->unk_269 == 0 ? NA_SE_PL_WALK_GROUND - SFX_FLAG : NA_SE_PL_WALK_GROUND - SFX_FLAG;
 
@@ -1282,7 +1282,7 @@ void func_8088FA38(EnElf* this, PlayState* play) {
         if (this->unk_234 != NULL) {
             refPos = this->unk_234->world.pos;
         } else {
-            if ((player->unk_730 == NULL) || (&player->actor == player->unk_730) || (&this->actor == player->unk_730) ||
+            if ((player->targetedActor == NULL) || (&player->actor == player->targetedActor) || (&this->actor == player->targetedActor) ||
                 (this->unk_264 & 4)) {
                 refPos.x = player->bodyPartsPos[7].x + (Math_SinS(player->actor.shape.rot.y) * 20.0f);
                 refPos.y = player->bodyPartsPos[7].y + 5.0f;
@@ -1457,7 +1457,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         gSaveContext.save.playerData.tatlTimer = 0;
     }
 
-    if ((player->tatlTextId == 0) && (player->unk_730 == NULL)) {
+    if ((player->tatlTextId == 0) && (player->targetedActor == NULL)) {
         if ((gSaveContext.save.playerData.tatlTimer >= 600) && (gSaveContext.save.playerData.tatlTimer <= 3000)) {
             player->tatlTextId = ElfMessage_GetFirstCycleHint(play);
         }

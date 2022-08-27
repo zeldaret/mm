@@ -45,14 +45,14 @@ void func_80A5E6F0(Actor* thisx, PlayState* play);
 void func_80A5E9B4(Actor* thisx, PlayState* play);
 void func_80A5EA48(Actor* thisx, PlayState* play);
 
-static EnKusa2UnkBssStruct D_80A5F1C0;
-static u32 D_80A60900;
-static MtxF D_80A60908[8];
-static s16 D_80A60B08;
-static s16 D_80A60B0A;
-static s16 D_80A60B0C;
-static s16 D_80A60B0E;
-static s16 D_80A60B10;
+EnKusa2UnkBssStruct D_80A5F1C0;
+u32 D_80A60900;
+MtxF D_80A60908[8];
+s16 D_80A60B08;
+s16 D_80A60B0A;
+s16 D_80A60B0C;
+s16 D_80A60B0E;
+s16 D_80A60B10;
 
 const ActorInit En_Kusa2_InitVars = {
     ACTOR_EN_KUSA2,

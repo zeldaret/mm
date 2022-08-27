@@ -428,7 +428,7 @@ s32 func_80123448(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->stateFlags1 & PLAYER_STATE1_400000) &&
-           (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->unk_730 == NULL));
+           (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->targetedActor == NULL));
 }
 
 // TODO: Player_IsGoronOrDeku is a temporary name until we have more info on this function.
@@ -602,7 +602,7 @@ void func_801239AC(Player* player) {
     }
 }
 
-void Player_SetModels(Player* player, s32 modelGroup) {
+void Player_SetModels(Player* player, PlayerModelGroup modelGroup) {
     u8* playerModelTypes;
 
     D_801F59E0 = player->transformation * 2;
@@ -678,7 +678,7 @@ void func_80123D50(PlayState* play, Player* player, s32 itemId, s32 actionParam)
 }
 
 void func_80123DA4(Player* player) {
-    player->unk_730 = NULL;
+    player->targetedActor = NULL;
     player->stateFlags2 &= ~PLAYER_STATE2_2000;
 }
 
@@ -703,7 +703,7 @@ void func_80123E90(PlayState* play, Actor* actor) {
     Player* player = GET_PLAYER(play);
 
     func_80123DC0(player);
-    player->unk_730 = actor;
+    player->targetedActor = actor;
     player->unk_A78 = actor;
     player->stateFlags1 |= PLAYER_STATE1_10000;
     Camera_SetViewParam(Play_GetCamera(play, CAM_ID_MAIN), CAM_VIEW_TARGET, actor);
@@ -867,7 +867,7 @@ s32 func_801242DC(PlayState* play) {
 
     if (play->roomCtx.currRoom.unk2 == 3) { // Room is hot
         envIndex = 0;
-    } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->unk_AD8 > 80)) {
+    } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->underwaterTimer > 80)) {
         envIndex = 3;
     } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
         if ((player->transformation == PLAYER_FORM_ZORA) && (player->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&
@@ -1142,7 +1142,7 @@ void Player_DrawGetItem(PlayState* play, Player* player) {
             Math_Vec3f_Copy(&refPos, &D_801F59E8);
         }
 
-        drawIdPlusOne = ABS_ALT(player->unk_B2A);
+        drawIdPlusOne = ABS_ALT(player->getItemDrawId);
         Player_DrawGetItemImpl(play, player, &refPos, drawIdPlusOne);
     }
 }
