@@ -528,11 +528,11 @@ s32 func_8012364C(PlayState* play, Player* player, s32 arg2) {
 
 extern u8 sActionModelGroups[];
 
-s32 Player_ActionToModelGroup(Player* player, s32 actionParam) {
-    s32 modelGroup = sActionModelGroups[actionParam];
+PlayerModelGroup Player_ActionToModelGroup(Player* player, PlayerActionParam actionParam) {
+    PlayerModelGroup modelGroup = sActionModelGroups[actionParam];
 
-    if ((modelGroup == 2) && Player_IsGoronOrDeku(player)) {
-        return 1;
+    if ((modelGroup == PLAYER_MODELGROUP_ONE_HAND_SWORD) && Player_IsGoronOrDeku(player)) {
+        return PLAYER_MODELGROUP_1;
     }
     return modelGroup;
 }
@@ -626,10 +626,10 @@ void Player_SetModels(Player* player, PlayerModelGroup modelGroup) {
     func_801239AC(player);
 }
 
-void Player_SetModelGroup(Player* player, s32 modelGroup) {
+void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup) {
     player->modelGroup = modelGroup;
 
-    if (modelGroup == 1) {
+    if (modelGroup == PLAYER_MODELGROUP_1) {
         player->modelAnimType = 0;
     } else {
         player->modelAnimType = gPlayerModelTypes[modelGroup][0];
