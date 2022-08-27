@@ -328,8 +328,8 @@ void Interface_StartGoronRaceTimer(s32 arg0) {
 
 void Interface_StartBottleTimer(s16 seconds, s16 timerId) {
     gSaveContext.bottleTimerStates[timerId] = BOTTLE_TIMER_STATE_COUNTING;
-    gSaveContext.bottletimerCurTimes[timerId] = SECONDS_TO_TIMER(seconds);
-    gSaveContext.bottleTimerTimeLimits[timerId] = gSaveContext.bottletimerCurTimes[timerId];
+    gSaveContext.bottleTimerCurTimes[timerId] = SECONDS_TO_TIMER(seconds);
+    gSaveContext.bottleTimerTimeLimits[timerId] = gSaveContext.bottleTimerCurTimes[timerId];
     gSaveContext.bottleTimerStartOsTimes[timerId] = osGetTime();
     gSaveContext.bottleTimerPausedOsTimes[timerId] = 0;
     sBottleTimerPausedOsTime = 0;
@@ -1937,19 +1937,19 @@ void Interface_UpdateBottleTimers(PlayState* play) {
 
                 if (osTime == 0) {
                     // No unpaused time has passed since the start of the timer.
-                    gSaveContext.bottletimerCurTimes[i] = gSaveContext.bottleTimerTimeLimits[i] - osTime;
+                    gSaveContext.bottleTimerCurTimes[i] = gSaveContext.bottleTimerTimeLimits[i] - osTime;
                 } else if (osTime <= gSaveContext.bottleTimerTimeLimits[i]) {
                     // Time has passed, but the time limit has not been exceeded
                     if (osTime >= gSaveContext.bottleTimerTimeLimits[i]) {
                         // The time is exactly at the time limit. No time remaining.
-                        gSaveContext.bottletimerCurTimes[i] = SECONDS_TO_TIMER(0);
+                        gSaveContext.bottleTimerCurTimes[i] = SECONDS_TO_TIMER(0);
                     } else {
                         // Update the time remaining
-                        gSaveContext.bottletimerCurTimes[i] = gSaveContext.bottleTimerTimeLimits[i] - osTime;
+                        gSaveContext.bottleTimerCurTimes[i] = gSaveContext.bottleTimerTimeLimits[i] - osTime;
                     }
                 } else {
                     // Time has passed, and the time limit has been exceeded.
-                    gSaveContext.bottletimerCurTimes[i] = SECONDS_TO_TIMER(0);
+                    gSaveContext.bottleTimerCurTimes[i] = SECONDS_TO_TIMER(0);
 
                     if (gSaveContext.save.inventory.items[i + SLOT_BOTTLE_1] == ITEM_HOT_SPRING_WATER) {
                         Inventory_UpdateItem(play, i + SLOT_BOTTLE_1, ITEM_SPRING_WATER);
