@@ -131,7 +131,8 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
 
     if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.001f)) {
         if ((this->actor.targetMode != 0) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
-            (play->transitionMode == TRANS_MODE_OFF) && (player->stateFlags1 & 0x80000000) && (player->unk_AE7 == 0)) {
+            (play->transitionMode == TRANS_MODE_OFF) && (player->stateFlags1 & 0x80000000) &&
+            (player->unk_AE7 == 0)) {
 
             if (grottoType == DOORANA_TYPE_VISIBLE_SCENE_EXIT) {
                 s32 exitIndex = DOORANA_GET_EXIT_INDEX(&this->actor);
@@ -140,7 +141,7 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
             } else {
                 s32 destinationIdx = DOORANA_GET_ENTRANCE(&this->actor);
 
-                Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_UNK_3, 0x4FF);
+                Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_UNK_3, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_4));
 
                 gSaveContext.respawn[RESPAWN_MODE_UNK_3].pos.y = this->actor.world.pos.y;
                 gSaveContext.respawn[RESPAWN_MODE_UNK_3].yaw = this->actor.home.rot.y;
