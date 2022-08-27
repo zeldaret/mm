@@ -247,7 +247,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
         return true;
     }
 
-    if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(180)) {
+    if (gSaveContext.timerTimeRemaining[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(180)) {
         Audio_QueueSeqCmd(0x8041);
         play_sound(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x40000;

@@ -1061,8 +1061,8 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
 
     this->perGameVar1.guaySpawnTimer++;
 
-    if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
-        gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] = SECONDS_TO_TIMER(0);
+    if (gSaveContext.timerTimeRemaining[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
+        gSaveContext.timerTimeRemaining[TIMER_ID_MINIGAME_1] = SECONDS_TO_TIMER(0);
         gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
         this->actor.draw = EnSyatekiMan_Draw;
         this->flagsIndex = 0;
@@ -1148,8 +1148,8 @@ void EnSyatekiMan_Swamp_AddBonusPoints(EnSyatekiMan* this, PlayState* play) {
 
     player->stateFlags1 |= 0x20;
     if (play->interfaceCtx.unk_286 == 0) {
-        if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
-            gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] = SECONDS_TO_TIMER(0);
+        if (gSaveContext.timerTimeRemaining[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
+            gSaveContext.timerTimeRemaining[TIMER_ID_MINIGAME_1] = SECONDS_TO_TIMER(0);
             gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
             this->flagsIndex = 0;
             this->currentWave = 0;
@@ -1293,7 +1293,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
     static s32 sModFromLosingTime = 0;
     Player* player = GET_PLAYER(play);
     s32 timer =
-        (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1]) * 0.1f) + 1.0f; // unit is tenths of a second
+        (((void)0, gSaveContext.timerTimeRemaining[TIMER_ID_MINIGAME_1]) * 0.1f) + 1.0f; // unit is tenths of a second
 
     if (timer <= 750) {
         s32 waveTimer; // unit is hundredths of a second
@@ -1303,10 +1303,11 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
         // begin hiding. This code will ultimately correct waveTimer such that its value is not affected by
         // hitting Blue Octoroks.
         if (sModFromLosingTime == 0) {
-            waveTimer = ((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1]) % SECONDS_TO_TIMER(5);
+            waveTimer = ((void)0, gSaveContext.timerTimeRemaining[TIMER_ID_MINIGAME_1]) % SECONDS_TO_TIMER(5);
         } else {
-            waveTimer = (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1]) + SECONDS_TO_TIMER_PRECISE(2, 50)) %
-                        SECONDS_TO_TIMER(5);
+            waveTimer =
+                (((void)0, gSaveContext.timerTimeRemaining[TIMER_ID_MINIGAME_1]) + SECONDS_TO_TIMER_PRECISE(2, 50)) %
+                SECONDS_TO_TIMER(5);
         }
 
         // Octoroks begin hiding four seconds after a wave begins.
@@ -1338,10 +1339,10 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
             }
         }
 
-        if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
+        if (gSaveContext.timerTimeRemaining[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
             this->flagsIndex = 0;
             this->perGameVar1.octorokState = SG_OCTO_STATE_HIDING;
-            gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] = SECONDS_TO_TIMER(0);
+            gSaveContext.timerTimeRemaining[TIMER_ID_MINIGAME_1] = SECONDS_TO_TIMER(0);
             gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
             player->stateFlags1 |= 0x20;
             sModFromLosingTime = 0;
