@@ -473,10 +473,10 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
     KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[1] * 4, pauseCtx->mapPageVtx);
 
-    if ((pauseCtx->pageIndex == 1) && (pauseCtx->state == 6) &&
+    if ((pauseCtx->pageIndex == 1) && (pauseCtx->state == PAUSE_STATE_6) &&
         ((pauseCtx->state6SubState == PAUSE_SUBSTATE6_0) || (pauseCtx->state6SubState == PAUSE_SUBSTATE6_3)) &&
-        (gGameInfo->data[0x246] != 0) && (pauseCtx->state != 7) &&
-        ((pauseCtx->state < 8) || (pauseCtx->state >= 0x13))) {
+        (YREG(6) != 0) && (pauseCtx->state != PAUSE_STATE_7) &&
+        !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
 
         func_8012C628(play->state.gfxCtx);
 
@@ -492,9 +492,9 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                                 G_TX_NOLOD, G_TX_NOLOD);
 
             rectLeft = 204;
-            rectRight = 1068;
-            gSPTextureRectangle(POLY_OPA_DISP++, rectLeft, t << 2, rectRight, (t << 2) + 32, G_TX_RENDERTILE, 0, 0,
-                                1 << 10, 1 << 10);
+            rectRight = rectLeft + (216 << 2);
+            gSPTextureRectangle(POLY_OPA_DISP++, rectLeft, t << 2, rectRight, (t << 2) + (8 << 2), G_TX_RENDERTILE, 0,
+                                0, 1 << 10, 1 << 10);
         }
 
         func_8012C8AC(play->state.gfxCtx);
@@ -554,17 +554,17 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         }
     }
 
-    if ((pauseCtx->state >= 0x15) && (pauseCtx->state < 0x1A)) {
+    if ((pauseCtx->state >= PAUSE_STATE_15) && (pauseCtx->state <= PAUSE_STATE_19)) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetRenderMode(POLY_OPA_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, gGameInfo->data[0x597]);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, XREG(87));
         gDPFillRectangle(POLY_OPA_DISP++, 50, 62, 270, 190);
     }
 
     func_8012C8AC(play->state.gfxCtx);
 
-    if ((pauseCtx->state < 0x15) || (pauseCtx->state >= 0x1A)) {
+    if (!((pauseCtx->state >= PAUSE_STATE_15) && (pauseCtx->state <= PAUSE_STATE_19))) {
         gDPLoadTextureBlock(POLY_OPA_DISP++, &D_0C006E00, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
@@ -574,18 +574,18 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
         gDPSetEnvColor(POLY_OPA_DISP++, D_8082B590[0], D_8082B590[1], D_8082B590[2], 0);
 
-        if (gGameInfo->data[0x572] != 0) {
+        if (XREG(50) != 0) {
             gSaveContext.save.mapsVisible |= (u16)~0x8000;
 
-            pauseCtx->mapPageVtx[0x78].v.ob[0] = pauseCtx->mapPageVtx[0x7A].v.ob[0] = gGameInfo->data[0x574];
+            pauseCtx->mapPageVtx[120].v.ob[0] = pauseCtx->mapPageVtx[122].v.ob[0] = XREG(52);
 
-            pauseCtx->mapPageVtx[0x79].v.ob[0] = pauseCtx->mapPageVtx[0x7B].v.ob[0] =
-                pauseCtx->mapPageVtx[0x78].v.ob[0] + 8;
+            pauseCtx->mapPageVtx[121].v.ob[0] = pauseCtx->mapPageVtx[123].v.ob[0] =
+                pauseCtx->mapPageVtx[120].v.ob[0] + 8;
 
-            pauseCtx->mapPageVtx[0x78].v.ob[1] = pauseCtx->mapPageVtx[0x79].v.ob[1] = gGameInfo->data[0x575];
+            pauseCtx->mapPageVtx[120].v.ob[1] = pauseCtx->mapPageVtx[121].v.ob[1] = XREG(53);
 
-            pauseCtx->mapPageVtx[0x7A].v.ob[1] = pauseCtx->mapPageVtx[0x7B].v.ob[1] =
-                pauseCtx->mapPageVtx[0x78].v.ob[1] - 8;
+            pauseCtx->mapPageVtx[122].v.ob[1] = pauseCtx->mapPageVtx[123].v.ob[1] =
+                pauseCtx->mapPageVtx[120].v.ob[1] - 8;
         }
 
         for (i = 0, j = 0; i < 11; i++, k++, j += 4) {
@@ -604,18 +604,18 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
-        if (gGameInfo->data[0x572] != 0) {
+        if (XREG(50) != 0) {
             gSaveContext.save.mapsVisible |= (u16)~0x8000;
 
-            pauseCtx->mapPageVtx[0xA4].v.ob[0] = pauseCtx->mapPageVtx[0xA6].v.ob[0] = gGameInfo->data[0x574];
+            pauseCtx->mapPageVtx[164].v.ob[0] = pauseCtx->mapPageVtx[166].v.ob[0] = XREG(52);
 
-            pauseCtx->mapPageVtx[0xA5].v.ob[0] = pauseCtx->mapPageVtx[0xA7].v.ob[0] =
-                pauseCtx->mapPageVtx[0xA4].v.ob[0] + 24;
+            pauseCtx->mapPageVtx[165].v.ob[0] = pauseCtx->mapPageVtx[167].v.ob[0] =
+                pauseCtx->mapPageVtx[164].v.ob[0] + 24;
 
-            pauseCtx->mapPageVtx[0xA4].v.ob[1] = pauseCtx->mapPageVtx[0xA5].v.ob[1] = gGameInfo->data[0x575];
+            pauseCtx->mapPageVtx[164].v.ob[1] = pauseCtx->mapPageVtx[165].v.ob[1] = XREG(53);
 
-            pauseCtx->mapPageVtx[0xA6].v.ob[1] = pauseCtx->mapPageVtx[0xA7].v.ob[1] =
-                pauseCtx->mapPageVtx[0xA4].v.ob[1] - 12;
+            pauseCtx->mapPageVtx[166].v.ob[1] = pauseCtx->mapPageVtx[167].v.ob[1] =
+                pauseCtx->mapPageVtx[164].v.ob[1] - 12;
         }
 
         for (i = 0, j = 0; i < 10; i++, k++, j += 4) {
@@ -626,17 +626,18 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         }
     }
 
-    if ((pauseCtx->pageIndex == 1) && (pauseCtx->state6SubState == PAUSE_SUBSTATE6_0)) {
-        if ((pauseCtx->state == 6) && (pauseCtx->state != 7) && ((pauseCtx->state < 8) || (pauseCtx->state >= 0x13))) {
+    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->state6SubState == PAUSE_SUBSTATE6_0)) {
+        if ((pauseCtx->state == PAUSE_STATE_6) && (pauseCtx->state != PAUSE_STATE_7) &&
+            !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
             j = 0;
             n = 0;
             sceneId = play->sceneNum;
-            if (sceneId == 7) {
+            if (sceneId == SCENE_KAKUSIANA) {
                 if (play->roomCtx.currRoom.num == 5) {
-                    sceneId = 0x4D;
+                    sceneId = SCENE_11GORONNOSATO;
                 } else if ((play->roomCtx.currRoom.num == 6) || (play->roomCtx.currRoom.num == 8) ||
                            (play->roomCtx.currRoom.num == 0xC)) {
-                    sceneId = 0x2B;
+                    sceneId = SCENE_22DEKUCITY;
                 } else {
                     sceneId = Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.respawn[3].entrance));
                 }
@@ -648,7 +649,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                     j = 0;
                     if (n == 11) {
                         n = 0;
-                        if (sceneId == 0x26) {
+                        if (sceneId == SCENE_YOUSEI_IZUMI) {
                             j = play->curSpawn;
                             n = D_8082B5CC[j];
                             break;
