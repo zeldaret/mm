@@ -705,7 +705,11 @@ beginseg
     include "build/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_mask.o"
     include "build/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_prompt.o"
     include "build/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/kaleido_scope/ovl_kaleido_scope/ovl_kaleido_scope_reloc.o"
+#else
     include "build/data/ovl_kaleido_scope/ovl_kaleido_scope.reloc.o"
+#endif
 endseg
 
 beginseg

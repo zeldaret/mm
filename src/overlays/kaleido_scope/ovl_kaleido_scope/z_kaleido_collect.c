@@ -9,8 +9,6 @@
 
 s32 KaleidoScope_UpdateQuestStatusPoint(PauseContext* pauseCtx, s16 point);
 
-extern UNK_TYPE D_020044A0;
-
 extern TexturePtr D_08061000;
 extern TexturePtr D_08062000; // gSongNoteTex
 
@@ -48,7 +46,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
     static s16 D_8082AFA4 = 0;
     static s16 D_8082AFA8 = 20;
     static s16 D_8082AFAC = 0;
-    static TexturePtr D_8082AFB0[] = {
+    static TexturePtr sOcarinaButtonTextures[] = {
         gOcarinaATex, gOcarinaCDownTex, gOcarinaCRightTex, gOcarinaCLeftTex, gOcarinaCUpTex,
     };
     static s16 D_8082AFC4[] = {
@@ -317,13 +315,13 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
                     gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
 
-                    POLY_OPA_DISP = func_8010DC58(POLY_OPA_DISP, D_8082AFB0[D_8082AEE4[i]], 16, 16, 0);
+                    POLY_OPA_DISP = func_8010DC58(POLY_OPA_DISP, sOcarinaButtonTextures[D_8082AEE4[i]], 16, 16, 0);
                 }
             }
         } else if (((pauseCtx->state6SubState >= PAUSE_SUBSTATE6_4) &&
                     (pauseCtx->state6SubState <= PAUSE_SUBSTATE6_6)) ||
                    (pauseCtx->state6SubState == PAUSE_SUBSTATE6_8)) {
-            sp1C8 = pauseCtx->unk_2A0;
+            sp1C8 = pauseCtx->ocarinaSongIndex;
             sp1CA = gOcarinaSongButtons[sp1C8].numButtons;
 
             i = j;
@@ -349,8 +347,8 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
 
-                POLY_OPA_DISP =
-                    func_8010DC58(POLY_OPA_DISP, D_8082AFB0[gOcarinaSongButtons[sp1C8].buttonIndex[var_s3]], 16, 16, 0);
+                POLY_OPA_DISP = func_8010DC58(
+                    POLY_OPA_DISP, sOcarinaButtonTextures[gOcarinaSongButtons[sp1C8].buttonIndex[var_s3]], 16, 16, 0);
             }
 
             if (pauseCtx->state6SubState != PAUSE_SUBSTATE6_8) {
@@ -396,7 +394,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
                     gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
 
-                    POLY_OPA_DISP = func_8010DC58(POLY_OPA_DISP, D_8082AFB0[D_8082AEE4[var_s3]], 16, 16, 0);
+                    POLY_OPA_DISP = func_8010DC58(POLY_OPA_DISP, sOcarinaButtonTextures[D_8082AEE4[var_s3]], 16, 16, 0);
                 }
 
                 if (pauseCtx->state6SubState == PAUSE_SUBSTATE6_4) {
@@ -407,7 +405,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
                     D_8082AEE0 = 0;
                     AudioOcarina_SetInstrument(1);
-                    AudioOcarina_StartDefault((1 << pauseCtx->unk_2A0) | 0x80000000);
+                    AudioOcarina_StartDefault((1 << pauseCtx->ocarinaSongIndex) | 0x80000000);
                     pauseCtx->ocarinaStaff = AudioOcarina_GetPlaybackStaff();
                     pauseCtx->ocarinaStaff->pos = 0;
                     pauseCtx->ocarinaStaff->state = 0xFE;
@@ -473,7 +471,7 @@ s16 D_8082AFA0 = 0;
 s16 D_8082AFA4 = 0;
 s16 D_8082AFA8 = 20;
 s16 D_8082AFAC = 0;
-TexturePtr D_8082AFB0[] = {
+TexturePtr sOcarinaButtonTextures[] = {
     gOcarinaATex, gOcarinaCDownTex, gOcarinaCRightTex, gOcarinaCLeftTex, gOcarinaCUpTex,
 };
 s16 D_8082AFC4[] = {
@@ -672,7 +670,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                             temp_s0 = 0x14;
                         }
 
-                        pauseCtx->unk_2A0 = gOcarinaSongItemMap[temp_s0 - QUEST_SONG_SONATA];
+                        pauseCtx->ocarinaSongIndex = gOcarinaSongItemMap[temp_s0 - QUEST_SONG_SONATA];
                         D_8082B028 = 10;
 
                         for (var_v0 = 0; var_v0 < 8; var_v0++) {
@@ -682,7 +680,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
 
                         D_8082AEE0 = 0;
                         AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_DEFAULT);
-                        AudioOcarina_StartDefault((1 << pauseCtx->unk_2A0) | 0x80000000);
+                        AudioOcarina_StartDefault((1 << pauseCtx->ocarinaSongIndex) | 0x80000000);
                         pauseCtx->ocarinaStaff = AudioOcarina_GetPlaybackStaff();
                         pauseCtx->ocarinaStaff->pos = 0;
                         pauseCtx->ocarinaStaff->state = 0xFF;
@@ -734,7 +732,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                             if (pauseCtx->cursorPoint[PAUSE_QUEST] == 0x12) {
                                 play->pauseCtx.unk_1F0 = true;
                                 pauseCtx->state6SubState = PAUSE_SUBSTATE6_10;
-                                play_sound(0x4808U);
+                                play_sound(NA_SE_SY_DECIDE);
                             } else {
                                 pauseCtx->itemDescriptionOn = true;
                                 if (pauseCtx->cursorYIndex[PAUSE_QUEST] < 2) {
@@ -847,8 +845,8 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
 
             AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_DEFAULT);
             AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_DEFAULT);
-            pauseCtx->unk_2A0 = gOcarinaSongItemMap[temp_s0 - QUEST_SONG_SONATA];
-            AudioOcarina_SetPlaybackSong(pauseCtx->unk_2A0 + 1, 1);
+            pauseCtx->ocarinaSongIndex = gOcarinaSongItemMap[temp_s0 - QUEST_SONG_SONATA];
+            AudioOcarina_SetPlaybackSong(pauseCtx->ocarinaSongIndex + 1, 1);
             pauseCtx->state6SubState = PAUSE_SUBSTATE6_2;
             pauseCtx->ocarinaStaff = AudioOcarina_GetPlaybackStaff();
             pauseCtx->ocarinaStaff->pos = 0;

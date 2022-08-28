@@ -115,20 +115,19 @@ s16 D_8082B838[] = {
     8,  8,  8,  8,  8,  8,  8,  8,  12, 12, 12, 12, 12, 12, 12, 12, 12, 12,
 };
 
-s16 D_8082B880 = 0;
-s16 D_8082B884 = 0;
-s16 D_8082B888 = 0;
-s16 D_8082B88C = 255;
-
+s16 sGameOverPrimR = 0;
+s16 sGameOverPrimG = 0;
+s16 sGameOverPrimB = 0;
+s16 sGameOverPrimAlpha = 255;
 s16 sCursorPrimR = 0;
 s16 sCursorPrimG = 0;
 s16 sCursorPrimB = 0;
 s16 sCursorEnvR = 0;
 s16 sCursorEnvG = 0;
 s16 sCursorEnvB = 0;
-s16 D_8082B8A8 = 255;
-s16 D_8082B8AC = 0;
-s16 D_8082B8B0 = 0;
+s16 sGameOverEnvR = 255;
+s16 sGameOverEnvG = 0;
+s16 sGameOverEnvB = 0;
 
 s16 sInDungeonScene = false;
 
@@ -160,7 +159,7 @@ u8 D_8082B92C[] = {
     0x07, 0x0F, 0x0F, 0xFF, 0xFF, 0xFF, 0x1F, 0x0F, 0x03, 0x0F, 0x00, 0x00,
 };
 
-s16 D_8082B944 = 66;
+s16 sGameOverRectPosY = 66;
 
 void func_80821900(s32 arg0, u32 arg1) {
     func_80178E3C(SEGMENT_ROM_START(map_name_static), arg1, arg0, 0x400);
@@ -2063,8 +2062,8 @@ void KaleidoScope_DrawGameOver(PlayState* play) {
     gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0, 0, 0, 0, TEXEL0, PRIMITIVE, ENVIRONMENT,
                       COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0);
 
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 80, D_8082B880, D_8082B884, D_8082B888, D_8082B88C);
-    gDPSetEnvColor(POLY_OPA_DISP++, D_8082B8A8, D_8082B8AC, D_8082B8B0, 255);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 80, sGameOverPrimR, sGameOverPrimG, sGameOverPrimB, sGameOverPrimAlpha);
+    gDPSetEnvColor(POLY_OPA_DISP++, sGameOverEnvR, sGameOverEnvG, sGameOverEnvB, 255);
 
     D_8082BE84 -= 2;
 
@@ -2076,22 +2075,22 @@ void KaleidoScope_DrawGameOver(PlayState* play) {
 
     gDPSetTileSize(POLY_OPA_DISP++, 1, 0, D_8082BE84 & 0x7F, 252, (D_8082BE84 & 0x7F) + 0x7C);
 
-    gSPTextureRectangle(POLY_OPA_DISP++, 0x0100, D_8082B944 << 2, 0x0200, (D_8082B944 + 32) << 2, G_TX_RENDERTILE, 0, 0,
-                        1 << 10, 1 << 10);
+    gSPTextureRectangle(POLY_OPA_DISP++, 0x100, sGameOverRectPosY << 2, 0x200, (sGameOverRectPosY + 32) << 2,
+                        G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
     gDPLoadTextureBlock(POLY_OPA_DISP++, gGameOverP2Tex, G_IM_FMT_IA, G_IM_SIZ_8b, 64, 32, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
 
-    gSPTextureRectangle(POLY_OPA_DISP++, 0x0200, D_8082B944 << 2, 0x0300, (D_8082B944 + 32) << 2, G_TX_RENDERTILE, 0, 0,
-                        1 << 10, 1 << 10);
+    gSPTextureRectangle(POLY_OPA_DISP++, 0x200, sGameOverRectPosY << 2, 0x300, (sGameOverRectPosY + 32) << 2,
+                        G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
     gDPLoadTextureBlock(POLY_OPA_DISP++, gGameOverP3Tex, G_IM_FMT_IA, G_IM_SIZ_8b, 64, 32, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
 
-    gSPTextureRectangle(POLY_OPA_DISP++, 0x0300, D_8082B944 << 2, 0x0400, (D_8082B944 + 32) << 2, G_TX_RENDERTILE, 0, 0,
-                        1 << 10, 1 << 10);
+    gSPTextureRectangle(POLY_OPA_DISP++, 0x300, sGameOverRectPosY << 2, 0x400, (sGameOverRectPosY + 32) << 2,
+                        G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
     CLOSE_DISPS(gfxCtx);
 }
@@ -2233,7 +2232,7 @@ void KaleidoScope_Update(PlayState* play) {
     static s16 D_8082BE9C = 0;
     static s16 D_8082BEA0 = PAUSE_SUBSTATE6_0;
     static s16 D_8082BEA4 = 10;
-    static s16 D_8082BEA8 = 0;
+    static s16 sGameOverColorTimer = 0;
     static s16 D_8082BEAC = 0;
     static s16 D_8082BEB0 = 0;
     static s16 D_8082BEB4 = 0;
@@ -2394,18 +2393,16 @@ void KaleidoScope_Update(PlayState* play) {
                         D_8082B908 = -6240.0f;
                         func_801A3AEC(0);
                         pauseCtx->state6SubState = PAUSE_SUBSTATE6_0;
-                    } else {
-                        if (pauseCtx->ocarinaStaff->state == pauseCtx->unk_2A0) {
-                            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
-                            D_8082BEA0 = PAUSE_SUBSTATE6_0;
-                            D_8082BEA4 = 30;
-                            pauseCtx->state6SubState = PAUSE_SUBSTATE6_6;
-                        } else if (pauseCtx->ocarinaStaff->state == 0xFF) {
-                            play_sound(NA_SE_SY_OCARINA_ERROR);
-                            D_8082BEA0 = PAUSE_SUBSTATE6_4;
-                            D_8082BEA4 = 20;
-                            pauseCtx->state6SubState = PAUSE_SUBSTATE6_6;
-                        }
+                    } else if (pauseCtx->ocarinaStaff->state == pauseCtx->ocarinaSongIndex) {
+                        play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+                        D_8082BEA0 = PAUSE_SUBSTATE6_0;
+                        D_8082BEA4 = 30;
+                        pauseCtx->state6SubState = PAUSE_SUBSTATE6_6;
+                    } else if (pauseCtx->ocarinaStaff->state == 0xFF) {
+                        play_sound(NA_SE_SY_OCARINA_ERROR);
+                        D_8082BEA0 = PAUSE_SUBSTATE6_4;
+                        D_8082BEA4 = 20;
+                        pauseCtx->state6SubState = PAUSE_SUBSTATE6_6;
                     }
                     break;
 
@@ -2618,15 +2615,17 @@ void KaleidoScope_Update(PlayState* play) {
                                 SEGMENT_ROM_SIZE(icon_item_jpn_static));
 
             gSaveContext.unk_3DD0[3] = 0;
-            D_8082B880 = 255;
-            D_8082B884 = 130;
-            D_8082B888 = 0;
-            D_8082B88C = 0;
-            D_8082B8A8 = 30;
-            D_8082B8AC = 0;
-            D_8082B8B0 = 0;
-            D_8082B944 = 98;
-            D_8082BEA8 = 30;
+
+            sGameOverPrimR = 255;
+            sGameOverPrimG = 130;
+            sGameOverPrimB = 0;
+            sGameOverPrimAlpha = 0;
+            sGameOverEnvR = 30;
+            sGameOverEnvG = 0;
+            sGameOverEnvB = 0;
+            sGameOverRectPosY = 98;
+            sGameOverColorTimer = 30;
+
             pauseCtx->promptChoice = PAUSE_PROMPT_YES;
             pauseCtx->state++;
             if (gameOverCtx->state == GAMEOVER_INACTIVE) {
@@ -2635,69 +2634,69 @@ void KaleidoScope_Update(PlayState* play) {
             break;
 
         case PAUSE_STATE_GAMEOVER_3:
-            stepR = ABS_ALT(D_8082B880 - 30) / D_8082BEA8;
-            stepG = ABS_ALT(D_8082B884) / D_8082BEA8;
-            stepB = ABS_ALT(D_8082B888) / D_8082BEA8;
-            stepA = ABS_ALT(D_8082B88C - 255) / D_8082BEA8;
-            if (D_8082B880 >= 30) {
-                D_8082B880 -= stepR;
+            stepR = ABS_ALT(sGameOverPrimR - 30) / sGameOverColorTimer;
+            stepG = ABS_ALT(sGameOverPrimG - 0) / sGameOverColorTimer;
+            stepB = ABS_ALT(sGameOverPrimB - 0) / sGameOverColorTimer;
+            stepA = ABS_ALT(sGameOverPrimAlpha - 255) / sGameOverColorTimer;
+            if (sGameOverPrimR >= 30) {
+                sGameOverPrimR -= stepR;
             } else {
-                D_8082B880 += stepR;
+                sGameOverPrimR += stepR;
             }
-            if (D_8082B884 >= 0) {
-                D_8082B884 -= stepG;
+            if (sGameOverPrimG >= 0) {
+                sGameOverPrimG -= stepG;
             } else {
-                D_8082B884 += stepG;
+                sGameOverPrimG += stepG;
             }
-            if (D_8082B888 >= 0) {
-                D_8082B888 -= stepB;
+            if (sGameOverPrimB >= 0) {
+                sGameOverPrimB -= stepB;
             } else {
-                D_8082B888 += stepB;
+                sGameOverPrimB += stepB;
             }
-            if (D_8082B88C >= 255) {
-                D_8082B88C -= stepA;
+            if (sGameOverPrimAlpha >= 255) {
+                sGameOverPrimAlpha -= stepA;
             } else {
-                D_8082B88C += stepA;
-            }
-
-            stepR = ABS_ALT(D_8082B8A8 - 255) / D_8082BEA8;
-            stepG = ABS_ALT(D_8082B8AC - 130) / D_8082BEA8;
-            stepB = ABS_ALT(D_8082B8B0) / D_8082BEA8;
-            if (D_8082B8A8 >= 255) {
-                D_8082B8A8 -= stepR;
-            } else {
-                D_8082B8A8 += stepR;
-            }
-            if (D_8082B8AC >= 130) {
-                D_8082B8AC -= stepG;
-            } else {
-                D_8082B8AC += stepG;
-            }
-            if (D_8082B8B0 >= 0) {
-                D_8082B8B0 -= stepB;
-            } else {
-                D_8082B8B0 += stepB;
+                sGameOverPrimAlpha += stepA;
             }
 
-            D_8082BEA8--;
-            if (D_8082BEA8 == 0) {
-                D_8082B880 = 30;
-                D_8082B884 = 0;
-                D_8082B888 = 0;
-                D_8082B88C = 255;
+            stepR = ABS_ALT(sGameOverEnvR - 255) / sGameOverColorTimer;
+            stepG = ABS_ALT(sGameOverEnvG - 130) / sGameOverColorTimer;
+            stepB = ABS_ALT(sGameOverEnvB) / sGameOverColorTimer;
+            if (sGameOverEnvR >= 255) {
+                sGameOverEnvR -= stepR;
+            } else {
+                sGameOverEnvR += stepR;
+            }
+            if (sGameOverEnvG >= 130) {
+                sGameOverEnvG -= stepG;
+            } else {
+                sGameOverEnvG += stepG;
+            }
+            if (sGameOverEnvB >= 0) {
+                sGameOverEnvB -= stepB;
+            } else {
+                sGameOverEnvB += stepB;
+            }
 
-                D_8082B8A8 = 255;
-                D_8082B8AC = 130;
-                D_8082B8B0 = 0;
+            sGameOverColorTimer--;
+            if (sGameOverColorTimer == 0) {
+                sGameOverPrimR = 30;
+                sGameOverPrimG = 0;
+                sGameOverPrimB = 0;
+                sGameOverPrimAlpha = 255;
 
-                D_8082BEA8 = 40;
+                sGameOverEnvR = 255;
+                sGameOverEnvG = 130;
+                sGameOverEnvB = 0;
+
+                sGameOverColorTimer = 40;
                 pauseCtx->state++;
             }
             break;
 
         case PAUSE_STATE_GAMEOVER_4:
-            D_8082BEA8--;
-            if (D_8082BEA8 == 0) {
+            sGameOverColorTimer--;
+            if (sGameOverColorTimer == 0) {
                 pauseCtx->state = PAUSE_STATE_GAMEOVER_5;
             }
             break;
@@ -2707,14 +2706,14 @@ void KaleidoScope_Update(PlayState* play) {
             pauseCtx->unk_220 -= 40.0f;
             pauseCtx->unk_210 = pauseCtx->unk_214 = pauseCtx->unk_218 = pauseCtx->unk_21C = pauseCtx->unk_220;
             interfaceCtx->startAlpha += 63;
-            D_8082B944 -= 3;
+            sGameOverRectPosY -= 3;
             D_8082B918 += (s16)(D_8082B910 / 4);
             D_8082B91C += (s16)(D_8082B914 / 4);
             pauseCtx->alpha += 31;
             if (pauseCtx->unk_220 < -628.0f) {
                 pauseCtx->unk_220 = -628.0f;
                 interfaceCtx->startAlpha = 255;
-                D_8082B944 = 0x42;
+                sGameOverRectPosY = 66;
                 D_8082B908 = 0.0f;
                 pauseCtx->alpha = 255;
                 if (gameOverCtx->state == GAMEOVER_INACTIVE) {
@@ -2874,7 +2873,7 @@ void KaleidoScope_Update(PlayState* play) {
                                 SEGMENT_ROM_SIZE(icon_item_vtx_static));
 
             pauseCtx->state = PAUSE_STATE_16;
-            D_8082B944 = 98;
+            sGameOverRectPosY = 98;
             pauseCtx->promptChoice = PAUSE_PROMPT_YES;
             break;
 
@@ -2883,7 +2882,7 @@ void KaleidoScope_Update(PlayState* play) {
             pauseCtx->infoPanelOffsetY += 10;
             pauseCtx->unk_214 -= 40.0f;
             interfaceCtx->startAlpha += 63;
-            D_8082B944 -= 3;
+            sGameOverRectPosY -= 3;
             D_8082B918 += (s16)(D_8082B910 / 4);
             D_8082B91C += (s16)(D_8082B914 / 4);
             pauseCtx->alpha += 31;

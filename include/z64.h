@@ -471,7 +471,7 @@ typedef struct {
     /* 0x298 */ f32 cursorShrinkRate; // TODO: test
     /* 0x29C */ s16 promptChoice; // save/continue choice: 0 = yes; 4 = no
     /* 0x29E */ s16 promptAlpha;
-    /* 0x2A0 */ s16 unk_2A0; // ocarinaStaff state
+    /* 0x2A0 */ s16 ocarinaSongIndex;
     /* 0x2A2 */ u8 worldMapPoints[20];
     /* 0x2B6 */ u8 unk_2B6; // unused red?
     /* 0x2B7 */ u8 unk_2B7; // unused green?
