@@ -41,9 +41,9 @@ void BgInibsMovebg_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
 
-    this->opaDList = sOpaDLists[BG_INIBS_MOVEBG_GET_SIZE(thisx)];
-    this->xluDList = sXluDLists[BG_INIBS_MOVEBG_GET_SIZE(thisx)];
-    this->sandTexAnim = sSandTexAnims[BG_INIBS_MOVEBG_GET_SIZE(thisx)];
+    this->opaDList = sOpaDLists[BG_INIBS_MOVEBG_GET_MODE(thisx)];
+    this->xluDList = sXluDLists[BG_INIBS_MOVEBG_GET_MODE(thisx)];
+    this->sandTexAnim = sSandTexAnims[BG_INIBS_MOVEBG_GET_MODE(thisx)];
 }
 
 void BgInibsMovebg_Destroy(Actor* thisx, PlayState* play) {

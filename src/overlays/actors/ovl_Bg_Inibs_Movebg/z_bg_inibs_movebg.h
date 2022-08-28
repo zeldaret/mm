@@ -5,7 +5,7 @@
 
 struct BgInibsMovebg;
 
-#define BG_INIBS_MOVEBG_GET_SIZE(thisx) ((u16)((thisx)->params) & 0xF)
+#define BG_INIBS_MOVEBG_GET_MODE(thisx) ((u16)((thisx)->params) & 0xF)
 
 typedef struct BgInibsMovebg {
     /* 0x000 */ DynaPolyActor dyna;
