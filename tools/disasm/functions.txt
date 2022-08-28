@@ -11956,7 +11956,7 @@
     0x80AC5154:("TransitionTriforce_Update",),
     0x80AC5268:("TransitionTriforce_SetColor",),
     0x80AC5274:("TransitionTriforce_SetType",),
-    0x80AC5280:("func_80AC5280",),
+    0x80AC5280:("TransitionTriforce_SetState",),
     0x80AC528C:("TransitionTriforce_Draw",),
     0x80AC559C:("TransitionTriforce_IsDone",),
     0x80AC57B0:("TransitionWipe1_Start",),
