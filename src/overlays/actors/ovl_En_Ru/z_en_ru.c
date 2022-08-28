@@ -86,7 +86,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gAdultRutoIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gAdultRutoIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gAdultRutoRaisingArmsUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
@@ -114,21 +114,21 @@ static TrackOptionsSet sTrackOptions = {
     { 0xFA0, 4, 1, 3 }, { 0x1770, 4, 1, 6 }, { 0xFA0, 4, 1, 3 }, { 0x1770, 4, 1, 6 }
 };
 
-s32 EnRu_ChangeAnimation(SkelAnime* skelAnime, s16 animIndex) {
+s32 EnRu_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 lastFrame;
     s32 ret = false;
 
-    if ((animIndex >= 0) && (animIndex < ARRAY_COUNT(sAnimations))) {
-        lastFrame = sAnimations[animIndex].frameCount;
+    if ((animIndex >= 0) && (animIndex < ARRAY_COUNT(sAnimationInfo))) {
+        lastFrame = sAnimationInfo[animIndex].frameCount;
 
         ret = true;
         if (lastFrame < 0) {
-            lastFrame = Animation_GetLastFrame(sAnimations[animIndex].animation);
+            lastFrame = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
         }
 
-        Animation_Change(skelAnime, sAnimations[animIndex].animation, sAnimations[animIndex].playSpeed,
-                         sAnimations[animIndex].startFrame, lastFrame, sAnimations[animIndex].mode,
-                         sAnimations[animIndex].morphFrames);
+        Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed,
+                         sAnimationInfo[animIndex].startFrame, lastFrame, sAnimationInfo[animIndex].mode,
+                         sAnimationInfo[animIndex].morphFrames);
     }
 
     return ret;
@@ -229,7 +229,7 @@ void EnRu_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gAdultRutoSkel, NULL, this->jointTable, this->morphTable, RU2_LIMB_MAX);
-    EnRu_ChangeAnimation(&this->skelAnime, 0);
+    EnRu_ChangeAnim(&this->skelAnime, 0);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);

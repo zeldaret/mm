@@ -10254,7 +10254,7 @@
     0x80A3862C:("DmZl_OverrideLimbDraw",),
     0x80A38648:("DmZl_PostLimbDraw",),
     0x80A3869C:("DmZl_Draw",),
-    0x80A389A0:("EnRu_ChangeAnimation",),
+    0x80A389A0:("EnRu_ChangeAnim",),
     0x80A38A68:("EnRu_PlayWalkingSound",),
     0x80A38B7C:("EnRu_UpdateEyes",),
     0x80A38BF0:("EnRu_UpdateCollider",),
