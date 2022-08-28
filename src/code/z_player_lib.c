@@ -514,6 +514,7 @@ ItemID func_8012364C(PlayState* play, Player* player, s32 arg2) {
     }
 
     return C_BTN_ITEM(EQUIP_SLOT_C_RIGHT);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123810.s")
 

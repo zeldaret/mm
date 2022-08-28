@@ -201,7 +201,7 @@ s32 func_800CB7CC(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
-        return ((Player*)focalActor)->stateFlags3 & PLAYER_STATE3_10;
+        return ((Player*)focalActor)->stateFlags3 & 0x10;
     } else {
         return 0;
     }
@@ -210,7 +210,7 @@ s32 Camera_IsMountedOnHorse(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
-        return ((Player*)focalActor)->stateFlags1 & PLAYER_STATE1_800000;
+        return ((Player*)focalActor)->stateFlags1 & 0x800000;
     } else {
         return 0;
     }
@@ -220,7 +220,7 @@ s32 Camera_IsDekuHovering(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
-        return ((Player*)focalActor)->stateFlags3 & PLAYER_STATE3_2000;
+        return ((Player*)focalActor)->stateFlags3 & 0x2000;
     } else {
         return 0;
     }
@@ -233,7 +233,7 @@ s32 func_800CB854(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
-        return ((Player*)focalActor)->stateFlags1 & PLAYER_STATE1_20;
+        return ((Player*)focalActor)->stateFlags1 & 0x20;
     } else {
         return 0;
     }
@@ -243,12 +243,12 @@ s32 Camera_IsSwimming(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (focalActor == &GET_PLAYER(camera->play)->actor) {
-        if (((Player*)focalActor)->stateFlags3 & PLAYER_STATE3_8000) {
+        if (((Player*)focalActor)->stateFlags3 & 0x8000) {
             // Swimming as Zora
             return 999;
         } else {
             // Swimming as Human or Fierce Deity
-            return ((Player*)focalActor)->stateFlags1 & PLAYER_STATE1_8000000;
+            return ((Player*)focalActor)->stateFlags1 & 0x8000000;
         }
     } else {
         // Camera not focused on player
@@ -260,7 +260,7 @@ s32 Camera_IsDiving(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
-        return ((Player*)focalActor)->stateFlags2 & PLAYER_STATE2_800;
+        return ((Player*)focalActor)->stateFlags2 & 0x800;
     } else {
         return 0;
     }
@@ -280,7 +280,7 @@ s32 func_800CB924(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
-        return ((Player*)focalActor)->stateFlags3 & PLAYER_STATE3_1000;
+        return ((Player*)focalActor)->stateFlags3 & 0x1000;
     } else {
         return 0;
     }
@@ -313,7 +313,7 @@ s32 func_800CB950(Camera* camera) {
             player = (Player*)camera->focalActor;
             if (!ret) {
                 // Using zora fins
-                ret = player->stateFlags1 & PLAYER_STATE1_200000;
+                ret = player->stateFlags1 & 0x200000;
                 ret = !!ret;
             }
         }
@@ -327,7 +327,7 @@ s32 Camera_IsClimbingLedge(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (focalActor == &GET_PLAYER(camera->play)->actor) {
-        return ((Player*)focalActor)->stateFlags1 & PLAYER_STATE1_4;
+        return ((Player*)focalActor)->stateFlags1 & 0x4;
     } else {
         return 0;
     }
@@ -339,10 +339,10 @@ s32 Camera_IsChargingSwordOrDekuFlowerDive(Camera* camera) {
 
     if (focalActor == &GET_PLAYER(camera->play)->actor) {
         // Charging Sword
-        ret = !!(((Player*)focalActor)->stateFlags1 & PLAYER_STATE1_1000);
+        ret = !!(((Player*)focalActor)->stateFlags1 & 0x1000);
         if (!ret) {
             // Deku Flower Dive
-            ret = !!(((Player*)focalActor)->stateFlags3 & PLAYER_STATE3_100);
+            ret = !!(((Player*)focalActor)->stateFlags3 & 0x100);
         }
         return ret;
     } else {
@@ -354,7 +354,7 @@ s32 func_800CBA7C(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
-        return ((Player*)focalActor)->stateFlags2 & PLAYER_STATE2_800000;
+        return ((Player*)focalActor)->stateFlags2 & 0x800000;
     } else {
         return 0;
     }
@@ -406,7 +406,7 @@ s32 func_800CBB88(Camera* camera) {
             return 3;
         }
 
-        if ((((Player*)focalActor)->stateFlags2 & PLAYER_STATE2_20000) ||
+        if ((((Player*)focalActor)->stateFlags2 & 0x20000) ||
             ((((Player*)focalActor)->meleeWeaponState != 0) &&
              (((Player*)focalActor)->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_KICK))) {
             return 1;
@@ -420,7 +420,7 @@ s32 Camera_IsUsingZoraFins(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
-        return ((Player*)focalActor)->stateFlags1 & PLAYER_STATE1_200000;
+        return ((Player*)focalActor)->stateFlags1 & 0x200000;
     } else {
         return 0;
     }

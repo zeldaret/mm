@@ -596,7 +596,7 @@ void EnRat_Idle(EnRat* this, PlayState* play) {
         this->animLoopCounter = 5;
     }
 
-    if (!(player->stateFlags3 & PLAYER_STATE3_100) && (this->actor.xzDistToPlayer < this->attackRange) &&
+    if (!(player->stateFlags3 & 0x100) && (this->actor.xzDistToPlayer < this->attackRange) &&
         (Player_GetMask(play) != PLAYER_MASK_STONE) && Actor_IsFacingPlayer(&this->actor, 0x3800)) {
         EnRat_SetupSpottedPlayer(this);
     }
@@ -661,11 +661,11 @@ void EnRat_ChasePlayer(EnRat* this, PlayState* play) {
 
     this->actor.speedXZ = 6.1f;
     if (this->hasLostTrackOfPlayer) {
-        if (!(player->stateFlags3 & PLAYER_STATE3_100) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
+        if (!(player->stateFlags3 & 0x100) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
             Actor_IsFacingPlayer(&this->actor, 0x3000)) {
             this->hasLostTrackOfPlayer = false;
         }
-    } else if ((player->stateFlags3 & PLAYER_STATE3_100) || (Player_GetMask(play) == PLAYER_MASK_STONE)) {
+    } else if ((player->stateFlags3 & 0x100) || (Player_GetMask(play) == PLAYER_MASK_STONE)) {
         this->hasLostTrackOfPlayer = true;
     }
 
