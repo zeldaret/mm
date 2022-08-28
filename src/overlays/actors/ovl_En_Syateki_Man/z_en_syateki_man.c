@@ -996,7 +996,7 @@ void EnSyatekiMan_Swamp_StartGame(EnSyatekiMan* this, PlayState* play) {
         player->actor.world.pos = sSwampPlayerPos;
         player->actor.shape.rot.y = -0x8000;
         player->actor.world.rot.y = player->actor.shape.rot.y;
-        play->unk_18790(play, -0x8000, &this->actor);
+        play->unk_18790(play, -0x8000);
         sGameStartTimer--;
     } else {
         sGameStartTimer = 30;
@@ -1206,7 +1206,7 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
         player->actor.prevPos = player->actor.world.pos;
         player->actor.shape.rot.y = -0x8000;
         player->actor.world.rot.y = player->actor.shape.rot.y;
-        play->unk_18790(play, -0x8000, &this->actor);
+        play->unk_18790(play, -0x8000);
         player->stateFlags1 |= 0x20;
         sGameStartTimer--;
     } else if (sGameStartTimer > 0) {

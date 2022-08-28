@@ -100,7 +100,7 @@ void func_801229A0(PlayState* play, Player* player) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
+void func_801229EC(Actor* thisx, PlayState* play) {
 }
 
 extern s16 sMaskObjectIds[PLAYER_MASK_MAX - 1];
@@ -315,27 +315,27 @@ void func_8012300C(PlayState* play, s32 arg1) {
     player->unk_B2B = arg1;
 }
 
-void func_8012301C(Player* player, PlayState* play2) {
+void func_8012301C(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    s32 pad;
+    Player* this = (Player*)thisx;
 
-    player->unk_AE7++;
+    this->unk_AE7++;
 
-    if (player->unk_AE7 == 2) {
-        s16 objectId = gPlayerFormObjectIndices[((void)0, gSaveContext.save.playerForm)];
+    if (this->unk_AE7 == 2) {
+        s16 objectId = gPlayerFormObjectIndices[GET_PLAYER_FORM];
 
         gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = objectId;
-        func_8012F73C(&play->objectCtx, player->actor.objBankIndex, objectId);
-        player->actor.objBankIndex = Object_GetIndex(&play->objectCtx, GAMEPLAY_KEEP);
-    } else if (player->unk_AE7 >= 3) {
+        func_8012F73C(&play->objectCtx, this->actor.objBankIndex, objectId);
+        this->actor.objBankIndex = Object_GetIndex(&play->objectCtx, GAMEPLAY_KEEP);
+    } else if (this->unk_AE7 >= 3) {
         s32 objBankIndex = Object_GetIndex(&play->objectCtx, gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId);
 
         if (Object_IsLoaded(&play->objectCtx, objBankIndex)) {
-            player->actor.objBankIndex = objBankIndex;
-            player->actor.shape.rot.z = gSaveContext.save.playerForm + 1;
-            player->actor.init = PlayerCall_Init;
-            player->actor.update = PlayerCall_Update;
-            player->actor.draw = PlayerCall_Draw;
+            this->actor.objBankIndex = objBankIndex;
+            this->actor.shape.rot.z = gSaveContext.save.playerForm + 1;
+            this->actor.init = PlayerCall_Init;
+            this->actor.update = PlayerCall_Update;
+            this->actor.draw = PlayerCall_Draw;
             gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
         }
     }
@@ -478,13 +478,13 @@ s32 func_801235DC(PlayState* play, f32 arg1, s16 arg2) {
     return false;
 }
 
-s32 func_8012364C(PlayState* play, Player* player, s32 arg2) {
+ItemID func_8012364C(PlayState* play, Player* player, s32 arg2) {
     if (arg2 >= 4) {
         return ITEM_NONE;
     }
 
     if (arg2 == 0) {
-        s32 item = Inventory_GetBtnBItem(play);
+        ItemID item = Inventory_GetBtnBItem(play);
 
         if (item >= ITEM_FD) {
             return item;
@@ -578,7 +578,7 @@ TextTriggerEntry sEnvironmentTextTriggers[] = {
 
 extern Gfx** sPlayerDListGroups[];
 
-void func_801239AC(Player* player) {
+void Player_SetModelsForHoldingShield(Player* player) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
         if ((player->heldItemActionParam < 0) || (player->heldItemActionParam == player->itemActionParam)) {
             if (!Player_IsHoldingTwoHandedWeapon(player)) {
@@ -623,7 +623,7 @@ void Player_SetModels(Player* player, PlayerModelGroup modelGroup) {
     player->sheathDLists = &sPlayerDListGroups[playerModelTypes[3]][D_801F59E0];
     player->waistDLists = &sPlayerDListGroups[playerModelTypes[4]][D_801F59E0];
 
-    func_801239AC(player);
+    Player_SetModelsForHoldingShield(player);
 }
 
 void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup) {
@@ -666,7 +666,7 @@ void Player_SetEquipmentData(PlayState* play, Player* player) {
     }
 }
 
-void func_80123D50(PlayState* play, Player* player, s32 itemId, s32 actionParam) {
+void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemID itemId, PlayerActionParam actionParam) {
     Inventory_UpdateBottleItem(play, itemId, player->heldItemButton);
 
     if (itemId != ITEM_BOTTLE) {
@@ -773,7 +773,7 @@ s32 func_801240DC(Player* player) {
     return Player_IsHoldingHookshot(player) && (player->heldActor == NULL);
 }
 
-s32 func_80124110(Player* player, s32 actionParam) {
+s32 func_80124110(Player* player, PlayerActionParam actionParam) {
     s32 temp_v0 = actionParam - PLAYER_AP_FISHING_ROD;
 
     if (player->transformation != PLAYER_FORM_GORON) {
@@ -790,7 +790,7 @@ s32 func_80124148(Player* player) {
     return func_80124110(player, player->itemActionParam);
 }
 
-s32 Player_ActionToMeleeWeapon(s32 actionParam) {
+s32 Player_ActionToMeleeWeapon(PlayerActionParam actionParam) {
     s32 weapon = actionParam - (PLAYER_AP_SWORD_KOKIRI - 1);
 
     if ((weapon > 0) && (weapon <= (PLAYER_AP_ZORA_FINS - (PLAYER_AP_SWORD_KOKIRI - 1)))) {
@@ -812,7 +812,7 @@ s32 Player_IsHoldingTwoHandedWeapon(Player* player) {
     return false;
 }
 
-s32 Player_ActionToBottle(Player* player, s32 actionParam) {
+s32 Player_ActionToBottle(Player* player, PlayerActionParam actionParam) {
     s32 bottle = actionParam - PLAYER_AP_BOTTLE;
 
     // Relies on bottle-related action params to be contiguous
@@ -827,7 +827,7 @@ s32 Player_GetBottleHeld(Player* Player) {
     return Player_ActionToBottle(Player, Player->itemActionParam);
 }
 
-s32 Player_ActionToExplosive(Player* player, s32 actionParam) {
+s32 Player_ActionToExplosive(Player* player, PlayerActionParam actionParam) {
     s32 explosive = actionParam - PLAYER_AP_BOMB;
 
     // Relies on explosive-related action params to be contiguous
@@ -843,7 +843,7 @@ s32 Player_GetExplosiveHeld(Player* player) {
 }
 
 // Convert actionParam to sword
-s32 func_80124278(Actor* actor, s32 actionParam) {
+s32 Player_ActionToSword(Actor* actor, PlayerActionParam actionParam) {
     s32 sword = 0;
 
     //! FAKE:
@@ -920,7 +920,7 @@ void func_80124618(struct_80124618 arg0[], f32 curFrame, Vec3f* arg2) {
     arg2->z = LERPIMP(temp_f14, arg0->unk_2.z, progress) * 0.01f;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801246F4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_DrawImpl.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124870.s")
 

@@ -140,7 +140,7 @@ QuakeRequest* Quake_AddImpl(Camera* camera, u32 callbackIdx) {
     req->camId = camera->camId;
     req->callbackIdx = callbackIdx;
     req->isShakePerpendicular = true;
-    req->randIdx = ((s16)(Rand_ZeroOne() * (f32)0x10000) & ~3) + idx;
+    req->randIdx = ((s16)(Rand_ZeroOne() * 0x10000) & ~3) + idx;
     sQuakeRequestCount++;
 
     return req;

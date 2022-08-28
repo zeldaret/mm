@@ -98,6 +98,7 @@ wordReplace = {
     "Matrix_InsertRotationAroundUnitVector_s": "Matrix_RotateAxisS",
 
     "func_800B78B8": "Actor_UpdateBgCheckInfo",
+    "func_80123D50": "Player_UpdateBottleHeld",
     "func_8012403C": "Player_GetMask",
     "func_8012404c": "Player_RemoveMask",
     "func_80123AA4": "Player_SetModels",
@@ -594,6 +595,7 @@ wordReplace = {
     "func_800E8FA4": "Actor_TrackPoint",
     "func_800E9250": "Actor_TrackPlayer",
     "func_800E8EA0": "Actor_ContinueText",
+    "func_800B90F4": "Actor_DeactivateLens",
 
     "func_8010A000": "Map_GetDungeonOrBossAreaIndex",
     "func_8010A074": "Map_IsInDungeonOrBossArea",
