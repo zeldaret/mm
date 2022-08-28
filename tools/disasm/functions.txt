@@ -12163,7 +12163,7 @@
     0x80AD3054:("BgCtowerGear_UpdateOrgan",),
     0x80AD3124:("BgCtowerGear_Draw",),
     0x80AD3164:("BgCtowerGear_DrawOrgan",),
-    0x80AD3380:("func_80AD3380",),
+    0x80AD3380:("EnTrt2_ChangeAnim",),
     0x80AD341C:("func_80AD341C",),
     0x80AD349C:("func_80AD349C",),
     0x80AD3530:("func_80AD3530",),

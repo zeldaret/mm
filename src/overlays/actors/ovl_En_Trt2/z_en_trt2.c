@@ -121,18 +121,18 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-void func_80AD3380(SkelAnime* skelAnime, AnimationInfoS* animation, s32 arg2) {
-    f32 phi_f0;
+void EnTrt2_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 animIndex) {
+    f32 endFrame;
 
-    animation += arg2;
+    animationInfo += animIndex;
 
-    if (animation->frameCount < 0) {
-        phi_f0 = Animation_GetLastFrame(animation->animation);
+    if (animationInfo->frameCount < 0) {
+        endFrame = Animation_GetLastFrame(animationInfo->animation);
     } else {
-        phi_f0 = animation->frameCount;
+        endFrame = animationInfo->frameCount;
     }
-    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, phi_f0,
-                     animation->mode, animation->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame, endFrame,
+                     animationInfo->mode, animationInfo->morphFrames);
 }
 
 void func_80AD341C(EnTrt2* this, PlayState* play) {
@@ -183,7 +183,7 @@ void func_80AD3530(EnTrt2* this, PlayState* play) {
 
     if (DECR(this->unk_3AE) == 0) {
         this->unk_3AE = Rand_S16Offset(20, 20);
-        func_80AD3380(&this->skelAnime, sAnimationInfo, 7);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_FLY_LOOK_AROUND);
         this->unk_3B2 = 5;
     }
 }
@@ -290,7 +290,7 @@ void func_80AD3A24(EnTrt2* this, PlayState* play) {
         Math_ApproachF(&this->actor.speedXZ, 0.0f, 0.2f, 1.0f);
     } else if (DECR(this->unk_3AE) == 0) {
         this->unk_3AE = Rand_S16Offset(100, 50);
-        func_80AD3380(&this->skelAnime, sAnimationInfo, 6);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_HOVER);
         this->unk_3B2 = 4;
     }
     Actor_MoveWithGravity(&this->actor);
@@ -301,7 +301,7 @@ void func_80AD3AE4(EnTrt2* this, PlayState* play) {
         Math_ApproachF(&this->actor.velocity.y, 0.5f, 0.2f, 0.1f);
     } else {
         this->actor.velocity.y = 0.0f;
-        func_80AD3380(&this->skelAnime, sAnimationInfo, 6);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_HOVER);
         this->unk_3B2 = 4;
     }
     Actor_MoveWithGravity(&this->actor);
@@ -311,7 +311,7 @@ void func_80AD3B6C(EnTrt2* this, PlayState* play) {
     if (DECR(this->unk_3B0) == 0) {
         this->unk_3B0 = 10;
         this->actor.velocity.y = -1.0f;
-        func_80AD3380(&this->skelAnime, sAnimationInfo, 8);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_FLY_DOWN);
         this->unk_3B2 = 8;
     }
 }
@@ -324,7 +324,7 @@ void func_80AD3BE4(EnTrt2* this, PlayState* play) {
     this->actor.world.rot.y += this->unk_3C0;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (this->actor.world.pos.y < 5.0f) {
-        func_80AD3380(&this->skelAnime, sAnimationInfo, 9);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_FLY);
         this->unk_3B2 = 9;
     }
 }
@@ -348,7 +348,7 @@ void func_80AD3CEC(EnTrt2* this, PlayState* play) {
     } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
-        func_80AD3380(&this->skelAnime, sAnimationInfo, 6);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_HOVER);
         this->unk_3B2 = 4;
     }
 }
@@ -449,7 +449,7 @@ void func_80AD417C(EnTrt2* this, PlayState* play) {
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
             if (this->unk_3A8 == 0x84C) {
-                func_80AD3380(&this->skelAnime, sAnimationInfo, 6);
+                EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_HOVER);
                 this->path = SubS_GetPathByIndex(play, ENTRT2_GET_FC00(&this->actor), 0x3F);
                 this->unk_3B2 = 18;
             } else if (this->unk_3A8 == 0x88F) {
@@ -523,7 +523,7 @@ void func_80AD4550(EnTrt2* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if ((player->transformation != PLAYER_FORM_HUMAN) && (player->transformation != PLAYER_FORM_FIERCE_DEITY)) {
-        func_80AD3380(&this->skelAnime, sAnimationInfo, 7);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_FLY_LOOK_AROUND);
         this->unk_3B2 = 17;
     }
 
@@ -678,7 +678,7 @@ s32 func_80AD4B4C(EnTrt2* this, PlayState* play) {
         } else {
             this->unk_3A8 = 0x84F;
             this->unk_3D8 = true;
-            func_80AD3380(&this->skelAnime, sAnimationInfo, 7);
+            EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_FLY_LOOK_AROUND);
             this->unk_3B2 = 7;
         }
     }
