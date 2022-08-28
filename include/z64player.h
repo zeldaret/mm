@@ -212,7 +212,7 @@ typedef enum PlayerDoorType {
 typedef enum PlayerAnimType {
     /* 0 */ PLAYER_ANIMTYPE_0, // DEFAULT
     /* 1 */ PLAYER_ANIMTYPE_1,
-    /* 2 */ PLAYER_ANIMTYPE_2,
+    /* 2 */ PLAYER_ANIMTYPE_2, // Shield but no sword?
     /* 3 */ PLAYER_ANIMTYPE_3, // Two hand weapon
     /* 4 */ PLAYER_ANIMTYPE_4,
     /* 5 */ PLAYER_ANIMTYPE_5,
@@ -234,7 +234,7 @@ typedef enum PlayerAnimGroup {
     /* 11 */ PLAYER_ANIMGROUP_11, // OPEN_DOOR_RIGHT_HUMAN
     /* 12 */ PLAYER_ANIMGROUP_12, // GRABBING
     /* 13 */ PLAYER_ANIMGROUP_13, // FALLING/LANDING?
-    /* 14 */ PLAYER_ANIMGROUP_14,
+    /* 14 */ PLAYER_ANIMGROUP_14, // landing from short distances?
     /* 15 */ PLAYER_ANIMGROUP_15, // ROLLING
     /* 16 */ PLAYER_ANIMGROUP_16, // BONK/BONKING
     /* 17 */ PLAYER_ANIMGROUP_17,
@@ -820,7 +820,7 @@ typedef enum PlayerCsMode {
 #define PLAYER_STATE3_20000000   (1 << 29)
 // 
 #define PLAYER_STATE3_40000000   (1 << 30)
-// 
+// TARGETING_HOSTILE?
 #define PLAYER_STATE3_80000000   (1 << 31)
 
 
@@ -1005,7 +1005,7 @@ typedef struct Player {
     /* 0xADE */ u8 unk_ADE;
     /* 0xADF */ s8 unk_ADF[4]; // Circular buffer used for testing for triggering a quickspin
     /* 0xAE3 */ s8 unk_AE3[4]; // Circular buffer used for ?
-    /* 0xAE7 */ s8 unk_AE7; // a timer
+    /* 0xAE7 */ s8 unk_AE7; // a timer, used as an index for multiple kinds of animations too, room index?, etc
     /* 0xAE8 */ s16 unk_AE8; // multipurpose timer
     /* 0xAEC */ f32 unk_AEC;
     /* 0xAF0 */ Vec3f unk_AF0[2];

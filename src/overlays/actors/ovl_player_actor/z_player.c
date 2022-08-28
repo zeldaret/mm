@@ -1177,438 +1177,438 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
 LinkAnimationHeader* D_8085BE84[PLAYER_ANIMGROUP_MAX][PLAYER_ANIMTYPE_MAX] = {
     // PLAYER_ANIMGROUP_0
     {
-        &gameplay_keep_Linkanim_00DF28, // Default idle standing, looking forward
-        &gameplay_keep_Linkanim_00DF20, // Default idle standing, looking forward, sword and shield
-        &gameplay_keep_Linkanim_00DF20, // Default idle standing, looking forward, sword and shield
-        &gameplay_keep_Linkanim_00D988, // Default idle standing, looking forward, two hand weapon
-        &gameplay_keep_Linkanim_00DF28, // Default idle standing, looking forward
-        &gameplay_keep_Linkanim_00DF28, // Default idle standing, looking forward
+        &gameplay_keep_Linkanim_00DF28, // boy/anim/link_normal_wait_free // Default idle standing, looking forward
+        &gameplay_keep_Linkanim_00DF20, // boy/anim/link_normal_wait // Default idle standing, looking forward, sword and shield
+        &gameplay_keep_Linkanim_00DF20, // boy/anim/link_normal_wait // Default idle standing, looking forward, sword and shield
+        &gameplay_keep_Linkanim_00D988, // boy/anim/link_fighter_wait_long // Default idle standing, looking forward, two hand weapon
+        &gameplay_keep_Linkanim_00DF28, // boy/anim/link_normal_wait_free // Default idle standing, looking forward
+        &gameplay_keep_Linkanim_00DF28, // boy/anim/link_normal_wait_free // Default idle standing, looking forward
     },
     // PLAYER_ANIMGROUP_1
     {
-        &gameplay_keep_Linkanim_00DF70,
-        &gameplay_keep_Linkanim_00DF48,
-        &gameplay_keep_Linkanim_00DF48,
-        &gameplay_keep_Linkanim_00D9A0,
-        &gameplay_keep_Linkanim_00DF70,
-        &gameplay_keep_Linkanim_00DF70,
+        &gameplay_keep_Linkanim_00DF70, // boy/anim/link_normal_walk_free
+        &gameplay_keep_Linkanim_00DF48, // boy/anim/link_normal_walk
+        &gameplay_keep_Linkanim_00DF48, // boy/anim/link_normal_walk
+        &gameplay_keep_Linkanim_00D9A0, // boy/anim/link_fighter_walk_long
+        &gameplay_keep_Linkanim_00DF70, // boy/anim/link_normal_walk_free
+        &gameplay_keep_Linkanim_00DF70, // boy/anim/link_normal_walk_free
     },
     // PLAYER_ANIMGROUP_2
     {
-        &gameplay_keep_Linkanim_00DE40, // Running with empty hands
-        &gameplay_keep_Linkanim_00D918, // Running with Sword and Shield in hands
-        &gameplay_keep_Linkanim_00DE38,
-        &gameplay_keep_Linkanim_00D920, // Running with Two handed weapon
-        &gameplay_keep_Linkanim_00DE40, // Running with empty hands
-        &gameplay_keep_Linkanim_00DE40, // Running with empty hands
+        &gameplay_keep_Linkanim_00DE40, // boy/anim/link_normal_run_free // Running with empty hands
+        &gameplay_keep_Linkanim_00D918, // boy/anim/link_fighter_run // Running with Sword and Shield in hands
+        &gameplay_keep_Linkanim_00DE38, // boy/anim/link_normal_run
+        &gameplay_keep_Linkanim_00D920, // boy/anim/link_fighter_run_long // Running with Two handed weapon
+        &gameplay_keep_Linkanim_00DE40, // boy/anim/link_normal_run_free // Running with empty hands
+        &gameplay_keep_Linkanim_00DE40, // boy/anim/link_normal_run_free // Running with empty hands
     },
     // PLAYER_ANIMGROUP_3
     {
-        &gameplay_keep_Linkanim_00DBB8,
-        &gameplay_keep_Linkanim_00D808,
-        &gameplay_keep_Linkanim_00DBB8,
-        &gameplay_keep_Linkanim_00D810,
-        &gameplay_keep_Linkanim_00DBB8,
-        &gameplay_keep_Linkanim_00DBB8,
+        &gameplay_keep_Linkanim_00DBB8, // boy/anim/link_normal_damage_run_free
+        &gameplay_keep_Linkanim_00D808, // boy/anim/link_fighter_damage_run
+        &gameplay_keep_Linkanim_00DBB8, // boy/anim/link_normal_damage_run_free
+        &gameplay_keep_Linkanim_00D810, // boy/anim/link_fighter_damage_run_long
+        &gameplay_keep_Linkanim_00DBB8, // boy/anim/link_normal_damage_run_free
+        &gameplay_keep_Linkanim_00DBB8, // boy/anim/link_normal_damage_run_free
     },
     // PLAYER_ANIMGROUP_4
     {
-        &gameplay_keep_Linkanim_00DF08,
-        &gameplay_keep_Linkanim_00D468,
-        &gameplay_keep_Linkanim_00D468,
-        &gameplay_keep_Linkanim_00D970,
-        &gameplay_keep_Linkanim_00DF08,
-        &gameplay_keep_Linkanim_00DF08,
+        &gameplay_keep_Linkanim_00DF08, // boy/anim/link_normal_waitL_free
+        &gameplay_keep_Linkanim_00D468, // boy/anim/link_anchor_waitL
+        &gameplay_keep_Linkanim_00D468, // boy/anim/link_anchor_waitL
+        &gameplay_keep_Linkanim_00D970, // boy/anim/link_fighter_waitL_long
+        &gameplay_keep_Linkanim_00DF08, // boy/anim/link_normal_waitL_free
+        &gameplay_keep_Linkanim_00DF08, // boy/anim/link_normal_waitL_free
     },
     // PLAYER_ANIMGROUP_5
     {
-        &gameplay_keep_Linkanim_00DF18,
-        &gameplay_keep_Linkanim_00D480,
-        &gameplay_keep_Linkanim_00D480,
-        &gameplay_keep_Linkanim_00D980,
-        &gameplay_keep_Linkanim_00DF18,
-        &gameplay_keep_Linkanim_00DF18,
+        &gameplay_keep_Linkanim_00DF18, // boy/anim/link_normal_waitR_free
+        &gameplay_keep_Linkanim_00D480, // boy/anim/link_anchor_waitR
+        &gameplay_keep_Linkanim_00D480, // boy/anim/link_anchor_waitR
+        &gameplay_keep_Linkanim_00D980, // boy/anim/link_fighter_waitR_long
+        &gameplay_keep_Linkanim_00DF18, // boy/anim/link_normal_waitR_free
+        &gameplay_keep_Linkanim_00DF18, // boy/anim/link_normal_waitR_free
     },
     // PLAYER_ANIMGROUP_6
     {
-        &gameplay_keep_Linkanim_00D960,
-        &gameplay_keep_Linkanim_00DEE0,
-        &gameplay_keep_Linkanim_00DEE0,
-        &gameplay_keep_Linkanim_00D960,
-        &gameplay_keep_Linkanim_00D960,
-        &gameplay_keep_Linkanim_00D960,
+        &gameplay_keep_Linkanim_00D960, // boy/anim/link_fighter_wait2waitR_long
+        &gameplay_keep_Linkanim_00DEE0, // boy/anim/link_normal_wait2waitR
+        &gameplay_keep_Linkanim_00DEE0, // boy/anim/link_normal_wait2waitR
+        &gameplay_keep_Linkanim_00D960, // boy/anim/link_fighter_wait2waitR_long
+        &gameplay_keep_Linkanim_00D960, // boy/anim/link_fighter_wait2waitR_long
+        &gameplay_keep_Linkanim_00D960, // boy/anim/link_fighter_wait2waitR_long
     },
     // PLAYER_ANIMGROUP_7
     {
-        &gameplay_keep_Linkanim_00DD98,
-        &gameplay_keep_Linkanim_00D860,
-        &gameplay_keep_Linkanim_00D860,
-        &gameplay_keep_Linkanim_00DD98,
-        &gameplay_keep_Linkanim_00DD98,
-        &gameplay_keep_Linkanim_00DD98,
+        &gameplay_keep_Linkanim_00DD98, // boy/anim/link_normal_normal2fighter_free
+        &gameplay_keep_Linkanim_00D860, // boy/anim/link_fighter_normal2fighter
+        &gameplay_keep_Linkanim_00D860, // boy/anim/link_fighter_normal2fighter
+        &gameplay_keep_Linkanim_00DD98, // boy/anim/link_normal_normal2fighter_free
+        &gameplay_keep_Linkanim_00DD98, // boy/anim/link_normal_normal2fighter_free
+        &gameplay_keep_Linkanim_00DD98, // boy/anim/link_normal_normal2fighter_free
     },
     // PLAYER_ANIMGROUP_8
     {
-        &gameplay_keep_Linkanim_00D578,
-        &gameplay_keep_Linkanim_00D570,
-        &gameplay_keep_Linkanim_00D570,
-        &gameplay_keep_Linkanim_00D578,
-        &gameplay_keep_Linkanim_00D578,
-        &gameplay_keep_Linkanim_00D578,
+        &gameplay_keep_Linkanim_00D578, // boy/anim/link_demo_doorA_link_free
+        &gameplay_keep_Linkanim_00D570, // boy/anim/link_demo_doorA_link
+        &gameplay_keep_Linkanim_00D570, // boy/anim/link_demo_doorA_link
+        &gameplay_keep_Linkanim_00D578, // boy/anim/link_demo_doorA_link_free
+        &gameplay_keep_Linkanim_00D578, // boy/anim/link_demo_doorA_link_free
+        &gameplay_keep_Linkanim_00D578, // boy/anim/link_demo_doorA_link_free
     },
     // PLAYER_ANIMGROUP_9
     {
-        &gameplay_keep_Linkanim_00D140,
-        &gameplay_keep_Linkanim_00D140,
-        &gameplay_keep_Linkanim_00D140,
-        &gameplay_keep_Linkanim_00D140,
-        &gameplay_keep_Linkanim_00D140,
-        &gameplay_keep_Linkanim_00D140,
+        &gameplay_keep_Linkanim_00D140, // boy/anim/clink_demo_doorA_link
+        &gameplay_keep_Linkanim_00D140, // boy/anim/clink_demo_doorA_link
+        &gameplay_keep_Linkanim_00D140, // boy/anim/clink_demo_doorA_link
+        &gameplay_keep_Linkanim_00D140, // boy/anim/clink_demo_doorA_link
+        &gameplay_keep_Linkanim_00D140, // boy/anim/clink_demo_doorA_link
+        &gameplay_keep_Linkanim_00D140, // boy/anim/clink_demo_doorA_link
     },
     // PLAYER_ANIMGROUP_10
     {
-        &gameplay_keep_Linkanim_00D588,
-        &gameplay_keep_Linkanim_00D580,
-        &gameplay_keep_Linkanim_00D580,
-        &gameplay_keep_Linkanim_00D588,
-        &gameplay_keep_Linkanim_00D588,
-        &gameplay_keep_Linkanim_00D588,
+        &gameplay_keep_Linkanim_00D588, // boy/anim/link_demo_doorB_link_free
+        &gameplay_keep_Linkanim_00D580, // boy/anim/link_demo_doorB_link
+        &gameplay_keep_Linkanim_00D580, // boy/anim/link_demo_doorB_link
+        &gameplay_keep_Linkanim_00D588, // boy/anim/link_demo_doorB_link_free
+        &gameplay_keep_Linkanim_00D588, // boy/anim/link_demo_doorB_link_free
+        &gameplay_keep_Linkanim_00D588, // boy/anim/link_demo_doorB_link_free
     },
     // PLAYER_ANIMGROUP_11
     {
-        &gameplay_keep_Linkanim_00D148,
-        &gameplay_keep_Linkanim_00D148,
-        &gameplay_keep_Linkanim_00D148,
-        &gameplay_keep_Linkanim_00D148,
-        &gameplay_keep_Linkanim_00D148,
-        &gameplay_keep_Linkanim_00D148,
+        &gameplay_keep_Linkanim_00D148, // boy/anim/clink_demo_doorB_link
+        &gameplay_keep_Linkanim_00D148, // boy/anim/clink_demo_doorB_link
+        &gameplay_keep_Linkanim_00D148, // boy/anim/clink_demo_doorB_link
+        &gameplay_keep_Linkanim_00D148, // boy/anim/clink_demo_doorB_link
+        &gameplay_keep_Linkanim_00D148, // boy/anim/clink_demo_doorB_link
+        &gameplay_keep_Linkanim_00D148, // boy/anim/clink_demo_doorB_link
     },
     // PLAYER_ANIMGROUP_12
     {
-        &gameplay_keep_Linkanim_00DB28, // Grabbing something from the floor
-        &gameplay_keep_Linkanim_00DB20, //
-        &gameplay_keep_Linkanim_00DB20, //
-        &gameplay_keep_Linkanim_00DB28, // Grabbing something from the floor
-        &gameplay_keep_Linkanim_00DB28, // Grabbing something from the floor
-        &gameplay_keep_Linkanim_00DB28, // Grabbing something from the floor
+        &gameplay_keep_Linkanim_00DB28, // boy/anim/link_normal_carryB_free // Grabbing something from the floor
+        &gameplay_keep_Linkanim_00DB20, // boy/anim/link_normal_carryB
+        &gameplay_keep_Linkanim_00DB20, // boy/anim/link_normal_carryB
+        &gameplay_keep_Linkanim_00DB28, // boy/anim/link_normal_carryB_free // Grabbing something from the floor
+        &gameplay_keep_Linkanim_00DB28, // boy/anim/link_normal_carryB_free // Grabbing something from the floor
+        &gameplay_keep_Linkanim_00DB28, // boy/anim/link_normal_carryB_free // Grabbing something from the floor
     },
     // PLAYER_ANIMGROUP_13
     {
-        &gameplay_keep_Linkanim_00DD18,
-        &gameplay_keep_Linkanim_00DD10,
-        &gameplay_keep_Linkanim_00DD10,
-        &gameplay_keep_Linkanim_00DD18,
-        &gameplay_keep_Linkanim_00DD18,
-        &gameplay_keep_Linkanim_00DD18,
+        &gameplay_keep_Linkanim_00DD18, // boy/anim/link_normal_landing_free
+        &gameplay_keep_Linkanim_00DD10, // boy/anim/link_normal_landing
+        &gameplay_keep_Linkanim_00DD10, // boy/anim/link_normal_landing
+        &gameplay_keep_Linkanim_00DD18, // boy/anim/link_normal_landing_free
+        &gameplay_keep_Linkanim_00DD18, // boy/anim/link_normal_landing_free
+        &gameplay_keep_Linkanim_00DD18, // boy/anim/link_normal_landing_free
     },
     // PLAYER_ANIMGROUP_14
     {
-        &gameplay_keep_Linkanim_00DE70,
-        &gameplay_keep_Linkanim_00DE68,
-        &gameplay_keep_Linkanim_00DE68,
-        &gameplay_keep_Linkanim_00DE70,
-        &gameplay_keep_Linkanim_00DE70,
-        &gameplay_keep_Linkanim_00DE70,
+        &gameplay_keep_Linkanim_00DE70, // boy/anim/link_normal_short_landing_free
+        &gameplay_keep_Linkanim_00DE68, // boy/anim/link_normal_short_landing
+        &gameplay_keep_Linkanim_00DE68, // boy/anim/link_normal_short_landing
+        &gameplay_keep_Linkanim_00DE70, // boy/anim/link_normal_short_landing_free
+        &gameplay_keep_Linkanim_00DE70, // boy/anim/link_normal_short_landing_free
+        &gameplay_keep_Linkanim_00DE70, // boy/anim/link_normal_short_landing_free
     },
     // PLAYER_ANIMGROUP_15
     {
-        &gameplay_keep_Linkanim_00DD28, // Rolling with nothing in hands
-        &gameplay_keep_Linkanim_00DD20, // Rolling with sword and shield
-        &gameplay_keep_Linkanim_00DD20, // Rolling with sword and shield
-        &gameplay_keep_Linkanim_00D858, // Rolling with two hand weapon
-        &gameplay_keep_Linkanim_00DD28, // Rolling with nothing in hands
-        &gameplay_keep_Linkanim_00DD28, // Rolling with nothing in hands
+        &gameplay_keep_Linkanim_00DD28, // boy/anim/link_normal_landing_roll_free // Rolling with nothing in hands
+        &gameplay_keep_Linkanim_00DD20, // boy/anim/link_normal_landing_roll // Rolling with sword and shield
+        &gameplay_keep_Linkanim_00DD20, // boy/anim/link_normal_landing_roll // Rolling with sword and shield
+        &gameplay_keep_Linkanim_00D858, // boy/anim/link_fighter_landing_roll_long // Rolling with two hand weapon
+        &gameplay_keep_Linkanim_00DD28, // boy/anim/link_normal_landing_roll_free // Rolling with nothing in hands
+        &gameplay_keep_Linkanim_00DD28, // boy/anim/link_normal_landing_roll_free // Rolling with nothing in hands
     },
     // PLAYER_ANIMGROUP_16
     {
-        &gameplay_keep_Linkanim_00DCC0, // Rolling bonk
-        &gameplay_keep_Linkanim_00DCB8, // Rolling bonk swrod and shield
-        &gameplay_keep_Linkanim_00DCB8, // Rolling bonk swrod and shield
-        &gameplay_keep_Linkanim_00DCC8, // Rolling bonk two hand weapon
-        &gameplay_keep_Linkanim_00DCC0, // Rolling bonk
-        &gameplay_keep_Linkanim_00DCC0, // Rolling bonk
+        &gameplay_keep_Linkanim_00DCC0, // boy/anim/link_normal_hip_down_free // Rolling bonk
+        &gameplay_keep_Linkanim_00DCB8, // boy/anim/link_normal_hip_down // Rolling bonk swrod and shield
+        &gameplay_keep_Linkanim_00DCB8, // boy/anim/link_normal_hip_down // Rolling bonk swrod and shield
+        &gameplay_keep_Linkanim_00DCC8, // boy/anim/link_normal_hip_down_long // Rolling bonk two hand weapon
+        &gameplay_keep_Linkanim_00DCC0, // boy/anim/link_normal_hip_down_free // Rolling bonk
+        &gameplay_keep_Linkanim_00DCC0, // boy/anim/link_normal_hip_down_free // Rolling bonk
     },
     // PLAYER_ANIMGROUP_17
     {
-        &gameplay_keep_Linkanim_00DF58,
-        &gameplay_keep_Linkanim_00DF50,
-        &gameplay_keep_Linkanim_00DF50,
-        &gameplay_keep_Linkanim_00D990,
-        &gameplay_keep_Linkanim_00DF58,
-        &gameplay_keep_Linkanim_00DF58,
+        &gameplay_keep_Linkanim_00DF58, // boy/anim/link_normal_walk_endL_free
+        &gameplay_keep_Linkanim_00DF50, // boy/anim/link_normal_walk_endL
+        &gameplay_keep_Linkanim_00DF50, // boy/anim/link_normal_walk_endL
+        &gameplay_keep_Linkanim_00D990, // boy/anim/link_fighter_walk_endL_long
+        &gameplay_keep_Linkanim_00DF58, // boy/anim/link_normal_walk_endL_free
+        &gameplay_keep_Linkanim_00DF58, // boy/anim/link_normal_walk_endL_free
     },
     // PLAYER_ANIMGROUP_18
     {
-        &gameplay_keep_Linkanim_00DF68,
-        &gameplay_keep_Linkanim_00DF60,
-        &gameplay_keep_Linkanim_00DF60,
-        &gameplay_keep_Linkanim_00D998,
-        &gameplay_keep_Linkanim_00DF68,
-        &gameplay_keep_Linkanim_00DF68,
+        &gameplay_keep_Linkanim_00DF68, // boy/anim/link_normal_walk_endR_free
+        &gameplay_keep_Linkanim_00DF60, // boy/anim/link_normal_walk_endR
+        &gameplay_keep_Linkanim_00DF60, // boy/anim/link_normal_walk_endR
+        &gameplay_keep_Linkanim_00D998, // boy/anim/link_fighter_walk_endR_long
+        &gameplay_keep_Linkanim_00DF68, // boy/anim/link_normal_walk_endR_free
+        &gameplay_keep_Linkanim_00DF68, // boy/anim/link_normal_walk_endR_free
     },
     // PLAYER_ANIMGROUP_19
     {
-        &gameplay_keep_Linkanim_00DBD8,
-        &gameplay_keep_Linkanim_00DBC0,
-        &gameplay_keep_Linkanim_00DBC0,
-        &gameplay_keep_Linkanim_00DBD8,
-        &gameplay_keep_Linkanim_00D510,
-        &gameplay_keep_Linkanim_00DBD8,
+        &gameplay_keep_Linkanim_00DBD8, // boy/anim/link_normal_defense_free
+        &gameplay_keep_Linkanim_00DBC0, // boy/anim/link_normal_defense
+        &gameplay_keep_Linkanim_00DBC0, // boy/anim/link_normal_defense
+        &gameplay_keep_Linkanim_00DBD8, // boy/anim/link_normal_defense_free
+        &gameplay_keep_Linkanim_00D510, // boy/anim/link_bow_defense
+        &gameplay_keep_Linkanim_00DBD8, // boy/anim/link_normal_defense_free
     },
     // PLAYER_ANIMGROUP_20
     {
-        &gameplay_keep_Linkanim_00DBF8,
-        &gameplay_keep_Linkanim_00DBF0,
-        &gameplay_keep_Linkanim_00DBF0,
-        &gameplay_keep_Linkanim_00DBF8,
-        &gameplay_keep_Linkanim_00D518,
-        &gameplay_keep_Linkanim_00DBF8,
+        &gameplay_keep_Linkanim_00DBF8, // boy/anim/link_normal_defense_wait_free
+        &gameplay_keep_Linkanim_00DBF0, // boy/anim/link_normal_defense_wait
+        &gameplay_keep_Linkanim_00DBF0, // boy/anim/link_normal_defense_wait
+        &gameplay_keep_Linkanim_00DBF8, // boy/anim/link_normal_defense_wait_free
+        &gameplay_keep_Linkanim_00D518, // boy/anim/link_bow_defense_wait
+        &gameplay_keep_Linkanim_00DBF8, // boy/anim/link_normal_defense_wait_free
     },
     // PLAYER_ANIMGROUP_21
     {
-        &gameplay_keep_Linkanim_00DBD0,
-        &gameplay_keep_Linkanim_00DBC8,
-        &gameplay_keep_Linkanim_00DBC8,
-        &gameplay_keep_Linkanim_00DBD0,
-        &gameplay_keep_Linkanim_00DBD0,
-        &gameplay_keep_Linkanim_00DBD0,
+        &gameplay_keep_Linkanim_00DBD0, // boy/anim/link_normal_defense_end_free
+        &gameplay_keep_Linkanim_00DBC8, // boy/anim/link_normal_defense_end
+        &gameplay_keep_Linkanim_00DBC8, // boy/anim/link_normal_defense_end
+        &gameplay_keep_Linkanim_00DBD0, // boy/anim/link_normal_defense_end_free
+        &gameplay_keep_Linkanim_00DBD0, // boy/anim/link_normal_defense_end_free
+        &gameplay_keep_Linkanim_00DBD0, // boy/anim/link_normal_defense_end_free
     },
     // PLAYER_ANIMGROUP_22
     {
-        &gameplay_keep_Linkanim_00DE90,
-        &gameplay_keep_Linkanim_00DE88,
-        &gameplay_keep_Linkanim_00DE88,
-        &gameplay_keep_Linkanim_00D938,
-        &gameplay_keep_Linkanim_00DE90,
-        &gameplay_keep_Linkanim_00DE90,
+        &gameplay_keep_Linkanim_00DE90, // boy/anim/link_normal_side_walk_free
+        &gameplay_keep_Linkanim_00DE88, // boy/anim/link_normal_side_walk
+        &gameplay_keep_Linkanim_00DE88, // boy/anim/link_normal_side_walk
+        &gameplay_keep_Linkanim_00D938, // boy/anim/link_fighter_side_walk_long
+        &gameplay_keep_Linkanim_00DE90, // boy/anim/link_normal_side_walk_free
+        &gameplay_keep_Linkanim_00DE90, // boy/anim/link_normal_side_walk_free
     },
     // PLAYER_ANIMGROUP_23
     {
-        &gameplay_keep_Linkanim_00DE78, // Side walking
-        &gameplay_keep_Linkanim_00D448, // Side walking with sword and shield in hands
-        &gameplay_keep_Linkanim_00D448, // Side walking with sword and shield in hands
-        &gameplay_keep_Linkanim_00D928,
-        &gameplay_keep_Linkanim_00DE78, // Side walking
-        &gameplay_keep_Linkanim_00DE78, // Side walking
+        &gameplay_keep_Linkanim_00DE78, // boy/anim/link_normal_side_walkL_free // Side walking
+        &gameplay_keep_Linkanim_00D448, // boy/anim/link_anchor_side_walkL // Side walking with sword and shield in hands
+        &gameplay_keep_Linkanim_00D448, // boy/anim/link_anchor_side_walkL // Side walking with sword and shield in hands
+        &gameplay_keep_Linkanim_00D928, // boy/anim/link_fighter_side_walkL_long
+        &gameplay_keep_Linkanim_00DE78, // boy/anim/link_normal_side_walkL_free // Side walking
+        &gameplay_keep_Linkanim_00DE78, // boy/anim/link_normal_side_walkL_free // Side walking
     },
     // PLAYER_ANIMGROUP_24
     {
-        &gameplay_keep_Linkanim_00DE80,
-        &gameplay_keep_Linkanim_00D450,
-        &gameplay_keep_Linkanim_00D450,
-        &gameplay_keep_Linkanim_00D930,
-        &gameplay_keep_Linkanim_00DE80,
-        &gameplay_keep_Linkanim_00DE80,
+        &gameplay_keep_Linkanim_00DE80, // boy/anim/link_normal_side_walkR_free
+        &gameplay_keep_Linkanim_00D450, // boy/anim/link_anchor_side_walkR
+        &gameplay_keep_Linkanim_00D450, // boy/anim/link_anchor_side_walkR
+        &gameplay_keep_Linkanim_00D930, // boy/anim/link_fighter_side_walkR_long
+        &gameplay_keep_Linkanim_00DE80, // boy/anim/link_normal_side_walkR_free
+        &gameplay_keep_Linkanim_00DE80, // boy/anim/link_normal_side_walkR_free
     },
     // PLAYER_ANIMGROUP_25
     {
-        &gameplay_keep_Linkanim_00DA80,
-        &gameplay_keep_Linkanim_00DA78,
-        &gameplay_keep_Linkanim_00DA78,
-        &gameplay_keep_Linkanim_00DA80,
-        &gameplay_keep_Linkanim_00DA80,
-        &gameplay_keep_Linkanim_00DA80,
+        &gameplay_keep_Linkanim_00DA80, // boy/anim/link_normal_45_turn_free
+        &gameplay_keep_Linkanim_00DA78, // boy/anim/link_normal_45_turn
+        &gameplay_keep_Linkanim_00DA78, // boy/anim/link_normal_45_turn
+        &gameplay_keep_Linkanim_00DA80, // boy/anim/link_normal_45_turn_free
+        &gameplay_keep_Linkanim_00DA80, // boy/anim/link_normal_45_turn_free
+        &gameplay_keep_Linkanim_00DA80, // boy/anim/link_normal_45_turn_free
     },
     // PLAYER_ANIMGROUP_26
     {
-        &gameplay_keep_Linkanim_00DF00,
-        &gameplay_keep_Linkanim_00DF00,
-        &gameplay_keep_Linkanim_00DF00,
-        &gameplay_keep_Linkanim_00D968,
-        &gameplay_keep_Linkanim_00D968,
-        &gameplay_keep_Linkanim_00D968,
+        &gameplay_keep_Linkanim_00DF00, // boy/anim/link_normal_waitL2wait
+        &gameplay_keep_Linkanim_00DF00, // boy/anim/link_normal_waitL2wait
+        &gameplay_keep_Linkanim_00DF00, // boy/anim/link_normal_waitL2wait
+        &gameplay_keep_Linkanim_00D968, // boy/anim/link_fighter_waitL2wait_long
+        &gameplay_keep_Linkanim_00D968, // boy/anim/link_fighter_waitL2wait_long
+        &gameplay_keep_Linkanim_00D968, // boy/anim/link_fighter_waitL2wait_long
     },
     // PLAYER_ANIMGROUP_27
     {
-        &gameplay_keep_Linkanim_00DF10,
-        &gameplay_keep_Linkanim_00DF10,
-        &gameplay_keep_Linkanim_00DF10,
-        &gameplay_keep_Linkanim_00D978,
-        &gameplay_keep_Linkanim_00D978,
-        &gameplay_keep_Linkanim_00D978,
+        &gameplay_keep_Linkanim_00DF10, // boy/anim/link_normal_waitR2wait
+        &gameplay_keep_Linkanim_00DF10, // boy/anim/link_normal_waitR2wait
+        &gameplay_keep_Linkanim_00DF10, // boy/anim/link_normal_waitR2wait
+        &gameplay_keep_Linkanim_00D978, // boy/anim/link_fighter_waitR2wait_long
+        &gameplay_keep_Linkanim_00D978, // boy/anim/link_fighter_waitR2wait_long
+        &gameplay_keep_Linkanim_00D978, // boy/anim/link_fighter_waitR2wait_long
     },
     // PLAYER_ANIMGROUP_28
     {
-        &gameplay_keep_Linkanim_00DEB8,
-        &gameplay_keep_Linkanim_00DEB0,
-        &gameplay_keep_Linkanim_00DEB0,
-        &gameplay_keep_Linkanim_00DEB8,
-        &gameplay_keep_Linkanim_00DEB8,
-        &gameplay_keep_Linkanim_00DEB8,
+        &gameplay_keep_Linkanim_00DEB8, // boy/anim/link_normal_throw_free
+        &gameplay_keep_Linkanim_00DEB0, // boy/anim/link_normal_throw
+        &gameplay_keep_Linkanim_00DEB0, // boy/anim/link_normal_throw
+        &gameplay_keep_Linkanim_00DEB8, // boy/anim/link_normal_throw_free
+        &gameplay_keep_Linkanim_00DEB8, // boy/anim/link_normal_throw_free
+        &gameplay_keep_Linkanim_00DEB8, // boy/anim/link_normal_throw_free
     },
     // PLAYER_ANIMGROUP_29
     {
-        &gameplay_keep_Linkanim_00DE20,
-        &gameplay_keep_Linkanim_00DE18,
-        &gameplay_keep_Linkanim_00DE18,
-        &gameplay_keep_Linkanim_00DE20,
-        &gameplay_keep_Linkanim_00DE20,
-        &gameplay_keep_Linkanim_00DE20,
+        &gameplay_keep_Linkanim_00DE20, // boy/anim/link_normal_put_free
+        &gameplay_keep_Linkanim_00DE18, // boy/anim/link_normal_put
+        &gameplay_keep_Linkanim_00DE18, // boy/anim/link_normal_put
+        &gameplay_keep_Linkanim_00DE20, // boy/anim/link_normal_put_free
+        &gameplay_keep_Linkanim_00DE20, // boy/anim/link_normal_put_free
+        &gameplay_keep_Linkanim_00DE20, // boy/anim/link_normal_put_free
     },
     // PLAYER_ANIMGROUP_30
     {
-        &gameplay_keep_Linkanim_00DB08,
-        &gameplay_keep_Linkanim_00DB08,
-        &gameplay_keep_Linkanim_00DB08,
-        &gameplay_keep_Linkanim_00DB08,
-        &gameplay_keep_Linkanim_00DB08,
-        &gameplay_keep_Linkanim_00DB08,
+        &gameplay_keep_Linkanim_00DB08, // boy/anim/link_normal_back_walk
+        &gameplay_keep_Linkanim_00DB08, // boy/anim/link_normal_back_walk
+        &gameplay_keep_Linkanim_00DB08, // boy/anim/link_normal_back_walk
+        &gameplay_keep_Linkanim_00DB08, // boy/anim/link_normal_back_walk
+        &gameplay_keep_Linkanim_00DB08, // boy/anim/link_normal_back_walk
+        &gameplay_keep_Linkanim_00DB08, // boy/anim/link_normal_back_walk
     },
     // PLAYER_ANIMGROUP_31
     {
-        &gameplay_keep_Linkanim_00DB50,
-        &gameplay_keep_Linkanim_00DB38,
-        &gameplay_keep_Linkanim_00DB38,
-        &gameplay_keep_Linkanim_00DB50,
-        &gameplay_keep_Linkanim_00DB50,
-        &gameplay_keep_Linkanim_00DB50,
+        &gameplay_keep_Linkanim_00DB50, // boy/anim/link_normal_check_free
+        &gameplay_keep_Linkanim_00DB38, // boy/anim/link_normal_check
+        &gameplay_keep_Linkanim_00DB38, // boy/anim/link_normal_check
+        &gameplay_keep_Linkanim_00DB50, // boy/anim/link_normal_check_free
+        &gameplay_keep_Linkanim_00DB50, // boy/anim/link_normal_check_free
+        &gameplay_keep_Linkanim_00DB50, // boy/anim/link_normal_check_free
     },
     // PLAYER_ANIMGROUP_32
     {
-        &gameplay_keep_Linkanim_00DB60,
-        &gameplay_keep_Linkanim_00DB58,
-        &gameplay_keep_Linkanim_00DB58,
-        &gameplay_keep_Linkanim_00DB60,
-        &gameplay_keep_Linkanim_00DB60,
-        &gameplay_keep_Linkanim_00DB60,
+        &gameplay_keep_Linkanim_00DB60, // boy/anim/link_normal_check_wait_free
+        &gameplay_keep_Linkanim_00DB58, // boy/anim/link_normal_check_wait
+        &gameplay_keep_Linkanim_00DB58, // boy/anim/link_normal_check_wait
+        &gameplay_keep_Linkanim_00DB60, // boy/anim/link_normal_check_wait_free
+        &gameplay_keep_Linkanim_00DB60, // boy/anim/link_normal_check_wait_free
+        &gameplay_keep_Linkanim_00DB60, // boy/anim/link_normal_check_wait_free
     },
     // PLAYER_ANIMGROUP_33
     {
-        &gameplay_keep_Linkanim_00DB48,
-        &gameplay_keep_Linkanim_00DB40,
-        &gameplay_keep_Linkanim_00DB40,
-        &gameplay_keep_Linkanim_00DB48,
-        &gameplay_keep_Linkanim_00DB48,
-        &gameplay_keep_Linkanim_00DB48,
+        &gameplay_keep_Linkanim_00DB48, // boy/anim/link_normal_check_end_free
+        &gameplay_keep_Linkanim_00DB40, // boy/anim/link_normal_check_end
+        &gameplay_keep_Linkanim_00DB40, // boy/anim/link_normal_check_end
+        &gameplay_keep_Linkanim_00DB48, // boy/anim/link_normal_check_end_free
+        &gameplay_keep_Linkanim_00DB48, // boy/anim/link_normal_check_end_free
+        &gameplay_keep_Linkanim_00DB48, // boy/anim/link_normal_check_end_free
     },
     // PLAYER_ANIMGROUP_34
     {
-        &gameplay_keep_Linkanim_00DDD8,
-        &gameplay_keep_Linkanim_00DDD0,
-        &gameplay_keep_Linkanim_00DDD0,
-        &gameplay_keep_Linkanim_00DDD8,
-        &gameplay_keep_Linkanim_00DDD8,
-        &gameplay_keep_Linkanim_00DDD8,
+        &gameplay_keep_Linkanim_00DDD8, // boy/anim/link_normal_pull_start_free
+        &gameplay_keep_Linkanim_00DDD0, // boy/anim/link_normal_pull_start
+        &gameplay_keep_Linkanim_00DDD0, // boy/anim/link_normal_pull_start
+        &gameplay_keep_Linkanim_00DDD8, // boy/anim/link_normal_pull_start_free
+        &gameplay_keep_Linkanim_00DDD8, // boy/anim/link_normal_pull_start_free
+        &gameplay_keep_Linkanim_00DDD8, // boy/anim/link_normal_pull_start_free
     },
     // PLAYER_ANIMGROUP_35
     {
-        &gameplay_keep_Linkanim_00DDE8,
-        &gameplay_keep_Linkanim_00DDE0,
-        &gameplay_keep_Linkanim_00DDE0,
-        &gameplay_keep_Linkanim_00DDE8,
-        &gameplay_keep_Linkanim_00DDE8,
-        &gameplay_keep_Linkanim_00DDE8,
+        &gameplay_keep_Linkanim_00DDE8, // boy/anim/link_normal_pulling_free
+        &gameplay_keep_Linkanim_00DDE0, // boy/anim/link_normal_pulling
+        &gameplay_keep_Linkanim_00DDE0, // boy/anim/link_normal_pulling
+        &gameplay_keep_Linkanim_00DDE8, // boy/anim/link_normal_pulling_free
+        &gameplay_keep_Linkanim_00DDE8, // boy/anim/link_normal_pulling_free
+        &gameplay_keep_Linkanim_00DDE8, // boy/anim/link_normal_pulling_free
     },
     // PLAYER_ANIMGROUP_36
     {
-        &gameplay_keep_Linkanim_00DDC8,
-        &gameplay_keep_Linkanim_00DDC0,
-        &gameplay_keep_Linkanim_00DDC0,
-        &gameplay_keep_Linkanim_00DDC8,
-        &gameplay_keep_Linkanim_00DDC8,
-        &gameplay_keep_Linkanim_00DDC8,
+        &gameplay_keep_Linkanim_00DDC8, // boy/anim/link_normal_pull_end_free
+        &gameplay_keep_Linkanim_00DDC0, // boy/anim/link_normal_pull_end
+        &gameplay_keep_Linkanim_00DDC0, // boy/anim/link_normal_pull_end
+        &gameplay_keep_Linkanim_00DDC8, // boy/anim/link_normal_pull_end_free
+        &gameplay_keep_Linkanim_00DDC8, // boy/anim/link_normal_pull_end_free
+        &gameplay_keep_Linkanim_00DDC8, // boy/anim/link_normal_pull_end_free
     },
     // PLAYER_ANIMGROUP_37
     {
-        &gameplay_keep_Linkanim_00DC40,
-        &gameplay_keep_Linkanim_00DC38,
-        &gameplay_keep_Linkanim_00DC38,
-        &gameplay_keep_Linkanim_00DC40,
-        &gameplay_keep_Linkanim_00DC40,
-        &gameplay_keep_Linkanim_00DC40,
+        &gameplay_keep_Linkanim_00DC40, // boy/anim/link_normal_fall_up_free
+        &gameplay_keep_Linkanim_00DC38, // boy/anim/link_normal_fall_up
+        &gameplay_keep_Linkanim_00DC38, // boy/anim/link_normal_fall_up
+        &gameplay_keep_Linkanim_00DC40, // boy/anim/link_normal_fall_up_free
+        &gameplay_keep_Linkanim_00DC40, // boy/anim/link_normal_fall_up_free
+        &gameplay_keep_Linkanim_00DC40, // boy/anim/link_normal_fall_up_free
     },
     // PLAYER_ANIMGROUP_38
     {
-        &gameplay_keep_Linkanim_00DCE8,
-        &gameplay_keep_Linkanim_00DCE0,
-        &gameplay_keep_Linkanim_00DCE0,
-        &gameplay_keep_Linkanim_00DCE8,
-        &gameplay_keep_Linkanim_00DCE8,
-        &gameplay_keep_Linkanim_00DCE8,
+        &gameplay_keep_Linkanim_00DCE8, // boy/anim/link_normal_jump_climb_hold_free
+        &gameplay_keep_Linkanim_00DCE0, // boy/anim/link_normal_jump_climb_hold
+        &gameplay_keep_Linkanim_00DCE0, // boy/anim/link_normal_jump_climb_hold
+        &gameplay_keep_Linkanim_00DCE8, // boy/anim/link_normal_jump_climb_hold_free
+        &gameplay_keep_Linkanim_00DCE8, // boy/anim/link_normal_jump_climb_hold_free
+        &gameplay_keep_Linkanim_00DCE8, // boy/anim/link_normal_jump_climb_hold_free
     },
     // PLAYER_ANIMGROUP_39
     {
-        &gameplay_keep_Linkanim_00DD08,
-        &gameplay_keep_Linkanim_00DD00,
-        &gameplay_keep_Linkanim_00DD00,
-        &gameplay_keep_Linkanim_00DD08,
-        &gameplay_keep_Linkanim_00DD08,
-        &gameplay_keep_Linkanim_00DD08,
+        &gameplay_keep_Linkanim_00DD08, // boy/anim/link_normal_jump_climb_wait_free
+        &gameplay_keep_Linkanim_00DD00, // boy/anim/link_normal_jump_climb_wait
+        &gameplay_keep_Linkanim_00DD00, // boy/anim/link_normal_jump_climb_wait
+        &gameplay_keep_Linkanim_00DD08, // boy/anim/link_normal_jump_climb_wait_free
+        &gameplay_keep_Linkanim_00DD08, // boy/anim/link_normal_jump_climb_wait_free
+        &gameplay_keep_Linkanim_00DD08, // boy/anim/link_normal_jump_climb_wait_free
     },
     // PLAYER_ANIMGROUP_40
     {
-        &gameplay_keep_Linkanim_00DCF8,
-        &gameplay_keep_Linkanim_00DCF0,
-        &gameplay_keep_Linkanim_00DCF0,
-        &gameplay_keep_Linkanim_00DCF8,
-        &gameplay_keep_Linkanim_00DCF8,
-        &gameplay_keep_Linkanim_00DCF8,
+        &gameplay_keep_Linkanim_00DCF8, // boy/anim/link_normal_jump_climb_up_free
+        &gameplay_keep_Linkanim_00DCF0, // boy/anim/link_normal_jump_climb_up
+        &gameplay_keep_Linkanim_00DCF0, // boy/anim/link_normal_jump_climb_up
+        &gameplay_keep_Linkanim_00DCF8, // boy/anim/link_normal_jump_climb_up_free
+        &gameplay_keep_Linkanim_00DCF8, // boy/anim/link_normal_jump_climb_up_free
+        &gameplay_keep_Linkanim_00DCF8, // boy/anim/link_normal_jump_climb_up_free
     },
     // PLAYER_ANIMGROUP_41
     {
-        &gameplay_keep_Linkanim_00DC10,
-        &gameplay_keep_Linkanim_00DC08,
-        &gameplay_keep_Linkanim_00DC08,
-        &gameplay_keep_Linkanim_00DC18,
-        &gameplay_keep_Linkanim_00DC10,
-        &gameplay_keep_Linkanim_00DC10,
+        &gameplay_keep_Linkanim_00DC10, // boy/anim/link_normal_down_slope_slip_end_free
+        &gameplay_keep_Linkanim_00DC08, // boy/anim/link_normal_down_slope_slip_end
+        &gameplay_keep_Linkanim_00DC08, // boy/anim/link_normal_down_slope_slip_end
+        &gameplay_keep_Linkanim_00DC18, // boy/anim/link_normal_down_slope_slip_end_long
+        &gameplay_keep_Linkanim_00DC10, // boy/anim/link_normal_down_slope_slip_end_free
+        &gameplay_keep_Linkanim_00DC10, // boy/anim/link_normal_down_slope_slip_end_free
     },
     // PLAYER_ANIMGROUP_42
     {
-        &gameplay_keep_Linkanim_00DED0,
-        &gameplay_keep_Linkanim_00DEC8,
-        &gameplay_keep_Linkanim_00DEC8,
-        &gameplay_keep_Linkanim_00DED8,
-        &gameplay_keep_Linkanim_00DED0,
-        &gameplay_keep_Linkanim_00DED0,
+        &gameplay_keep_Linkanim_00DED0, // boy/anim/link_normal_up_slope_slip_end_free
+        &gameplay_keep_Linkanim_00DEC8, // boy/anim/link_normal_up_slope_slip_end
+        &gameplay_keep_Linkanim_00DEC8, // boy/anim/link_normal_up_slope_slip_end
+        &gameplay_keep_Linkanim_00DED8, // boy/anim/link_normal_up_slope_slip_end_long
+        &gameplay_keep_Linkanim_00DED0, // boy/anim/link_normal_up_slope_slip_end_free
+        &gameplay_keep_Linkanim_00DED0, // boy/anim/link_normal_up_slope_slip_end_free
     },
     // PLAYER_ANIMGROUP_43
     {
-        &gameplay_keep_Linkanim_00E450,
-        &gameplay_keep_Linkanim_00E108,
-        &gameplay_keep_Linkanim_00E108,
-        &gameplay_keep_Linkanim_00E450,
-        &gameplay_keep_Linkanim_00E450,
-        &gameplay_keep_Linkanim_00E450,
+        &gameplay_keep_Linkanim_00E450, // boy/anim/sude_nwait
+        &gameplay_keep_Linkanim_00E108, // boy/anim/lkt_nwait
+        &gameplay_keep_Linkanim_00E108, // boy/anim/lkt_nwait
+        &gameplay_keep_Linkanim_00E450, // boy/anim/sude_nwait
+        &gameplay_keep_Linkanim_00E450, // boy/anim/sude_nwait
+        &gameplay_keep_Linkanim_00E450, // boy/anim/sude_nwait
     }
 };
 
 struct_8085C2A4 D_8085C2A4[] = {
     /* 0 / Forward */
     {
-        &gameplay_keep_Linkanim_00D828,
-        &gameplay_keep_Linkanim_00D838,
-        &gameplay_keep_Linkanim_00D830,
+        &gameplay_keep_Linkanim_00D828, // boy/anim/link_fighter_front_jump
+        &gameplay_keep_Linkanim_00D838, // boy/anim/link_fighter_front_jump_end
+        &gameplay_keep_Linkanim_00D830, // boy/anim/link_fighter_front_jump_endR
     },
     /* 1 / Left */
     {
-        &gameplay_keep_Linkanim_00D770,
-        &gameplay_keep_Linkanim_00D780,
-        &gameplay_keep_Linkanim_00D778,
+        &gameplay_keep_Linkanim_00D770, // boy/anim/link_fighter_Lside_jump
+        &gameplay_keep_Linkanim_00D780, // boy/anim/link_fighter_Lside_jump_end
+        &gameplay_keep_Linkanim_00D778, // boy/anim/link_fighter_Lside_jump_endL
     },
     /* 2 / Back */
     {
-        &gameplay_keep_Linkanim_00D7F0,
-        &gameplay_keep_Linkanim_00D800,
-        &gameplay_keep_Linkanim_00D7F8,
+        &gameplay_keep_Linkanim_00D7F0, // boy/anim/link_fighter_backturn_jump
+        &gameplay_keep_Linkanim_00D800, // boy/anim/link_fighter_backturn_jump_end
+        &gameplay_keep_Linkanim_00D7F8, // boy/anim/link_fighter_backturn_jump_endR
     },
     /* 3 / Right */
     {
-        &gameplay_keep_Linkanim_00D7A8,
-        &gameplay_keep_Linkanim_00D7B8,
-        &gameplay_keep_Linkanim_00D7B0,
+        &gameplay_keep_Linkanim_00D7A8, // boy/anim/link_fighter_Rside_jump
+        &gameplay_keep_Linkanim_00D7B8, // boy/anim/link_fighter_Rside_jump_end
+        &gameplay_keep_Linkanim_00D7B0, // boy/anim/link_fighter_Rside_jump_endR
     },
     /* 4 /  */
     {
-        &gameplay_keep_Linkanim_00DD50,
-        &gameplay_keep_Linkanim_00DD58,
-        &gameplay_keep_Linkanim_00DD58,
+        &gameplay_keep_Linkanim_00DD50, // boy/anim/link_normal_newroll_jump_20f
+        &gameplay_keep_Linkanim_00DD58, // boy/anim/link_normal_newroll_jump_end_20f
+        &gameplay_keep_Linkanim_00DD58, // boy/anim/link_normal_newroll_jump_end_20f
     },
     /* 5 /  */
     {
-        &gameplay_keep_Linkanim_00DD60,
-        &gameplay_keep_Linkanim_00DD68,
-        &gameplay_keep_Linkanim_00DD68,
+        &gameplay_keep_Linkanim_00DD60, // boy/anim/link_normal_newside_jump_20f
+        &gameplay_keep_Linkanim_00DD68, // boy/anim/link_normal_newside_jump_end_20f
+        &gameplay_keep_Linkanim_00DD68, // boy/anim/link_normal_newside_jump_end_20f
     },
 };
 
@@ -6333,7 +6333,6 @@ void func_808373A4(PlayState* play, Player* this) {
     func_800B8E58(this, NA_SE_PL_DEKUNUTS_ATTACK);
 }
 
-// related to Deku hopping
 s32 func_808373F8(PlayState* play, Player* this, u16 sfxId) {
     LinkAnimationHeader* anim;
     f32 speed;
@@ -6943,8 +6942,8 @@ u8 D_8085D1A4[PLAYER_AP_MAX] = {
 };
 
 LinkAnimationHeader* D_8085D1F8[] = {
-    &gameplay_keep_Linkanim_00DCA8,
-    &gameplay_keep_Linkanim_00DE98,
+    &gameplay_keep_Linkanim_00DCA8, // boy/anim/link_normal_give_other
+    &gameplay_keep_Linkanim_00DE98, // boy/anim/link_normal_take_out // Hold up cutscene item; "this item doesn't work here"
 };
 
 // TODO: standarize
@@ -7284,7 +7283,7 @@ void func_80839860(Player* this, PlayState* play, s32 arg2) {
     f32 speed = (!(arg2 & 1) ? 5.8f : 3.5f);
 
     if (this->currentBoots == PLAYER_BOOTS_GIANT) {
-        speed *= 0.5f;
+        speed /= 2.0f;
     }
 
     //! FAKE
@@ -8462,8 +8461,8 @@ s32 func_8083CCB4(Player* this, PlayState* play) {
 }
 
 LinkAnimationHeader* D_8085D264[] = {
-    &gameplay_keep_Linkanim_00DC00,
-    &gameplay_keep_Linkanim_00DEC0,
+    &gameplay_keep_Linkanim_00DC00, // boy/anim/link_normal_down_slope_slip
+    &gameplay_keep_Linkanim_00DEC0, // boy/anim/link_normal_up_slope_slip
 };
 
 s32 func_8083CF68(PlayState* play, Player* this) {
@@ -13112,7 +13111,7 @@ void func_808497A0(Player* this, PlayState* play) {
             }
         }
     } else if (this->unk_AE8 < 0) {
-        if (Room_StartRoomTransition(play, &play->roomCtx, this->unk_AE7) != 0) {
+        if (Room_StartRoomTransition(play, &play->roomCtx, this->unk_AE7)) {
             Map_InitRoomData(play, play->roomCtx.currRoom.num);
             Minimap_SavePlayerRoomInitInfo(play);
             this->unk_AE8 = 5;
