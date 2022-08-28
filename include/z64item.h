@@ -445,7 +445,7 @@ typedef enum GetItemID {
 } GetItemID;
 
 typedef enum GetItemDrawID {
-    /*  -1 */ GID_NONE = -1,
+    /*   -1 */ GID_NONE = -1,
     /* 0x00 */ GID_BOTTLE,
     /* 0x01 */ GID_KEY_SMALL,
     /* 0x02 */ GID_MASK_KAMARO,

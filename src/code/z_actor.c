@@ -2214,9 +2214,9 @@ s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgI
 }
 
 void Actor_DeactivateLens(PlayState* play) {
-    if (play->actorCtx.unk3 != 0) {
-        play->actorCtx.unk3 = 0;
-        func_80115D5C(&play->state);
+    if (play->actorCtx.lensActive) {
+        play->actorCtx.lensActive = false;
+        Magic_Reset(&play->state);
     }
 }
 
@@ -2904,7 +2904,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     gSPDisplayList(sp58, &ref2[1]);
     POLY_XLU_DISP = &ref2[1];
 
-    if (play->actorCtx.unk3 != 0) {
+    if (play->actorCtx.lensActive) {
         Math_StepToC(&play->actorCtx.unk4, 100, 20);
         if (GET_PLAYER(play)->stateFlags2 & 0x8000000) {
             Actor_DeactivateLens(play);

@@ -1147,7 +1147,7 @@ void Inventory_ChangeAmmo(s16 item, s16 ammoChange) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Parameter_AddMagic.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80115D5C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Magic_Reset.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80115DB4.s")
 

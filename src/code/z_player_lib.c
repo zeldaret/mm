@@ -523,7 +523,7 @@ extern u8 sActionModelGroups[];
 PlayerModelGroup Player_ActionToModelGroup(Player* player, PlayerActionParam actionParam) {
     PlayerModelGroup modelGroup = sActionModelGroups[actionParam];
 
-    if ((modelGroup == PLAYER_MODELGROUP_ONE_HAND_SWORD) && Player_IsGoronOrDeku(player)) {
+    if ((modelGroup == PLAYER_MODELGROUP_ONE_HANDED_SWORD) && Player_IsGoronOrDeku(player)) {
         return PLAYER_MODELGROUP_1;
     }
     return modelGroup;

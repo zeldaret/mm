@@ -369,7 +369,7 @@ typedef struct ActorContext {
     /* 0x000 */ u8 freezeFlashTimer;
     /* 0x001 */ UNK_TYPE1 pad1;
     /* 0x002 */ u8 unk2;
-    /* 0x003 */ u8 unk3;
+    /* 0x003 */ u8 lensActive;
     /* 0x004 */ s8 unk4;
     /* 0x005 */ u8 unk5;
     /* 0x006 */ UNK_TYPE1 pad6[0x5];
