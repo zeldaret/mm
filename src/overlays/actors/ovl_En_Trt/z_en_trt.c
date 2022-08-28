@@ -1684,7 +1684,7 @@ void EnTrt_UpdateHeadYawAndPitch(EnTrt* this, PlayState* play) {
     this->headYaw = CLAMP(this->headYaw, -0x38E0, 0x38E0);
 
     playerPos = player->actor.world.pos;
-    playerPos.y = player->bodyPartsPos[7].y + 3.0f;
+    playerPos.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     pos = this->actor.world.pos;
     Math_SmoothStepToS(&this->headPitch, Math_Vec3f_Pitch(&pos, &playerPos), 4, 0x1C70, 1);
     this->headPitch = CLAMP(this->headPitch, -0x1C70, 0x1C70);

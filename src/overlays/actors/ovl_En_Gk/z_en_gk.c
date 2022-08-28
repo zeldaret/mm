@@ -442,7 +442,7 @@ s32 func_80B5100C(EnGk* this, PlayState* play) {
     this->unk_324 = CLAMP(this->unk_324, -0x1C70, 0x1C70);
 
     sp40 = player->actor.world.pos;
-    sp40.y = player->bodyPartsPos[7].y + 3.0f;
+    sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
 
     sp34 = this->actor.world.pos;
     sp34.y += 70.0f;

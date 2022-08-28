@@ -140,7 +140,7 @@ void func_801229FC(Player* player) {
                 s32 i;
 
                 for (i = 0; i < ARRAY_COUNT(D_801F58B0); i++) {
-                    func_80127B64(D_801F58B0[i], ARRAY_COUNT(D_801F58B0[i]), &player->bodyPartsPos[7]);
+                    func_80127B64(D_801F58B0[i], ARRAY_COUNT(D_801F58B0[i]), &player->bodyPartsPos[PLAYER_BODYPART_HEAD]);
                 }
             }
         }
@@ -1122,9 +1122,9 @@ void Player_DrawGetItem(PlayState* play, Player* player) {
                 if (player->stateFlags1 & PLAYER_STATE1_400) {
                     refPos.y = player->actor.world.pos.y + 30.0f;
                 } else {
-                    refPos.x = player->bodyPartsPos[0xC].x;
-                    refPos.y = player->bodyPartsPos[0xC].y - 6.0f;
-                    refPos.z = player->bodyPartsPos[0xC].z;
+                    refPos.x = player->bodyPartsPos[PLAYER_BODYPART_LEFT_HAND].x;
+                    refPos.y = player->bodyPartsPos[PLAYER_BODYPART_LEFT_HAND].y - 6.0f;
+                    refPos.z = player->bodyPartsPos[PLAYER_BODYPART_LEFT_HAND].z;
                 }
             } else {
                 refPos.y = player->actor.world.pos.y + 28.0f;

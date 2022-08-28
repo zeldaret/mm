@@ -177,7 +177,7 @@ s32 func_80BC1B60(EnJa* this, PlayState* play) {
     this->unk_35A = CLAMP(this->unk_35A, -0x1C70, 0x1C70);
 
     if (this->unk_1D8.player->actor.id == ACTOR_PLAYER) {
-        sp40.y = this->unk_1D8.player->bodyPartsPos[7].y + 3.0f;
+        sp40.y = this->unk_1D8.player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_1D8.player->actor.focus.pos);
     }
