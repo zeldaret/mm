@@ -102,22 +102,22 @@ void DebugDisplay_DrawPolygon(DebugDispObject* dispObj, void* arg1, PlayState* p
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 D_801BB068[] = {
-    0x00140000, 0x0000FFEC, 0x00000000, 0x00000014, 0x00000000, 0xFFEC0000, 0x00000000, 0x00140000, 0x0000FFEC,
+Vec3s D_801BB068[] = {
+    { 20, 0, 0 }, { -20, 0, 0 }, { 0, 20, 0 }, { 0, -20, 0 }, { 0, 0, 20 }, { 0, 0, -20 },
 };
 
-s32 D_801BB08C = 0;
+s32 D_801BB08C = 0; // FAKE
 
-Gfx* func_800E99B0(GraphicsContext* gfxCtx, s32 arg1);
+Gfx* func_800E99B0(GraphicsContext* gfxCtx, Path* path);
 
-void func_800E992C(PlayState* play, s32 arg1) {
+void func_800E992C(PlayState* play, Path* path) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C560(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, func_800E99B0(play->state.gfxCtx, arg1));
+    gSPDisplayList(POLY_XLU_DISP++, func_800E99B0(play->state.gfxCtx, path));
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
