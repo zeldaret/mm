@@ -23,7 +23,6 @@ typedef struct {
     /* 0x02 */ UNK_TYPE1 unk02[0x4];
     /* 0x06 */ s16 alpha;
     /* 0x08 */ s16 shouldDecreaseAlpha;
-    /* 0x0A */ UNK_TYPE1 unk0A[0x2];
     /* 0x0C */ f32 scale;
     /* 0x10 */ Vec3f pos;
     /* 0x1C */ Vec3f velocity;

@@ -19,7 +19,7 @@ void EnWizBrock_Draw(Actor* thisx, PlayState* play);
 void EnWizBrock_SetupUpdateStatus(EnWizBrock* this, PlayState* play);
 void EnWizBrock_UpdateStatus(EnWizBrock* this, PlayState* play);
 
-s16 platformIndex = 0;
+s16 sPlatformIndex = 0;
 
 const ActorInit En_Wiz_Brock_InitVars = {
     ACTOR_EN_WIZ_BROCK,
@@ -44,7 +44,7 @@ void EnWizBrock_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.colChkInfo.health = 3;
     this->unk_1A6 = 0;
     Actor_SetScale(&this->dyna.actor, 0.01f);
-    this->platformIndex = platformIndex++;
+    this->platformIndex = sPlatformIndex++;
     this->actionFunc = EnWizBrock_SetupUpdateStatus;
     this->dyna.actor.scale.x = this->dyna.actor.scale.y = this->dyna.actor.scale.z = 0.01f;
     this->alpha = 255.0f;
