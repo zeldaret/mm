@@ -323,7 +323,7 @@ void func_80B23910(EnHanabi* this, PlayState* play) {
 }
 
 void func_80B23934(EnHanabi* this, PlayState* play) {
-    if ((gSaveContext.save.entranceIndex == 0x5410) && (gSaveContext.sceneSetupIndex == 7)) {
+    if ((gSaveContext.save.entrance == ENTRANCE(TERMINA_FIELD, 1)) && (gSaveContext.sceneSetupIndex == 7)) {
         if (play->csCtx.frames > 1650) {
             func_80B236C8(this, play);
             func_800B8FE8(&this->actor, NA_SE_EV_FIREWORKS_LAUNCH - SFX_FLAG);

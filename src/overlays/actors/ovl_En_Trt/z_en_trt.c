@@ -77,7 +77,7 @@ typedef enum {
     /* 9 */ TRT_ANIM_FLY
 } TrtAnimation;
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gKotakeIdleAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
     { &gKotakeHalfAwakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
     { &gKotakeSleepingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -110,17 +110,17 @@ static ShopItem sShop[] = {
     { SI_POTION_BLUE, { -12, 32, -36 } },
 };
 
-void EnTrt_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animations, s32 idx) {
+void EnTrt_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 animIndex) {
     f32 frameCount;
 
-    animations += idx;
-    if (animations->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(animations->animation);
+    animationInfo += animIndex;
+    if (animationInfo->frameCount < 0) {
+        frameCount = Animation_GetLastFrame(animationInfo->animation);
     } else {
-        frameCount = animations->frameCount;
+        frameCount = animationInfo->frameCount;
     }
-    Animation_Change(skelAnime, animations->animation, animations->playSpeed, animations->startFrame, frameCount,
-                     animations->mode, animations->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
+                     frameCount, animationInfo->mode, animationInfo->morphFrames);
 }
 
 s32 EnTrt_TestItemSelected(PlayState* play) {
@@ -479,7 +479,7 @@ void EnTrt_GivenRedPotionForKoume(EnTrt* this, PlayState* play) {
                 ActorCutscene_SetIntentToPlay(this->cutscene);
             }
         }
-        func_800B85E0(&this->actor, play, 400.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
         this->actionFunc = EnTrt_ItemGiven;
     }
 }
@@ -798,8 +798,8 @@ void EnTrt_IdleSleeping(EnTrt* this, PlayState* play) {
     }
     if (DECR(this->timer) == 0) {
         this->timer = 40;
-        EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 1);
-        this->animationIndex = 1;
+        EnTrt_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
+        this->animIndex = 1;
         this->actionFunc = EnTrt_IdleAwake;
         this->blinkFunc = EnTrt_OpenThenCloseEyes;
     }
@@ -834,7 +834,7 @@ void EnTrt_IdleAwake(EnTrt* this, PlayState* play) {
         if (player->transformation == PLAYER_FORM_HUMAN) {
             this->flags |= ENTRT_MET;
         }
-        EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 2);
+        EnTrt_ChangeAnim(&this->skelAnime, sAnimationInfo, 2);
         this->blinkFunc = EnTrt_EyesClosed;
         this->timer = 45;
         this->actionFunc = EnTrt_BeginInteraction;
@@ -844,8 +844,8 @@ void EnTrt_IdleAwake(EnTrt* this, PlayState* play) {
     }
     if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(150, 100);
-        EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 2);
-        this->animationIndex = 2;
+        EnTrt_ChangeAnim(&this->skelAnime, sAnimationInfo, 2);
+        this->animIndex = 2;
         this->sleepSoundTimer = 10;
         this->actor.textId = 0;
         this->actionFunc = EnTrt_IdleSleeping;
@@ -865,10 +865,10 @@ void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
-        if (this->animationIndex != 5) {
+        if (this->animIndex != 5) {
             if (curFrame == animLastFrame) {
-                EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 3);
-                this->animationIndex = 3;
+                EnTrt_ChangeAnim(&this->skelAnime, sAnimationInfo, 3);
+                this->animIndex = 3;
                 this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;
                 this->timer = 10;
                 this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
@@ -881,9 +881,9 @@ void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
         }
     } else if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(40, 20);
-        EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
+        EnTrt_ChangeAnim(&this->skelAnime, sAnimationInfo, 5);
         Message_StartTextbox(play, this->textId, &this->actor);
-        this->animationIndex = 5;
+        this->animIndex = 5;
         switch (this->textId) {
             case 0x834:
                 if (!(gSaveContext.save.weekEventReg[12] & 8) && !(gSaveContext.save.weekEventReg[84] & 0x40) &&
@@ -923,8 +923,8 @@ void EnTrt_Surprised(EnTrt* this, PlayState* play) {
         }
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
         if (DECR(this->timer) == 0) {
-            EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 4);
-            this->animationIndex = 4;
+            EnTrt_ChangeAnim(&this->skelAnime, sAnimationInfo, 4);
+            this->animIndex = 4;
             this->blinkFunc = EnTrt_OpenEyes2;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_SURPRISED);
             this->timer = 30;
@@ -932,9 +932,9 @@ void EnTrt_Surprised(EnTrt* this, PlayState* play) {
         }
     } else if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(40, 20);
-        EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
+        EnTrt_ChangeAnim(&this->skelAnime, sAnimationInfo, 5);
         Message_StartTextbox(play, this->textId, &this->actor);
-        this->animationIndex = 5;
+        this->animIndex = 5;
         this->actionFunc = EnTrt_TryToGiveRedPotionAfterSurprised;
     }
 }
@@ -1023,7 +1023,7 @@ void EnTrt_ItemGiven(EnTrt* this, PlayState* play) {
         }
         func_80151938(play, this->textId);
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -1047,9 +1047,9 @@ void EnTrt_ShopkeeperGone(EnTrt* this, PlayState* play) {
     }
     if ((talkState == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         if (gSaveContext.save.weekEventReg[20] & 2) {
-            play->nextEntranceIndex = 0xC50;
+            play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 5);
         } else {
-            play->nextEntranceIndex = 0x8450;
+            play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_POISONED, 5);
         }
         play->transitionType = TRANS_TYPE_64;
         gSaveContext.nextTransitionType = TRANS_TYPE_64;
@@ -1096,7 +1096,7 @@ void EnTrt_SetupItemGiven(EnTrt* this, PlayState* play) {
             this->cutscene = this->lookToShopkeeperCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
-        func_800B85E0(&this->actor, play, 400.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -1119,7 +1119,7 @@ void EnTrt_ContinueShopping(EnTrt* this, PlayState* play) {
                         player->stateFlags2 |= 0x20000000;
                         Message_StartTextbox(play, this->textId, &this->actor);
                         EnTrt_SetupStartShopping(play, this, true);
-                        func_800B85E0(&this->actor, play, 400.0f, EXCH_ITEM_MINUS1);
+                        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
                         break;
                     case 1:
                     default:
@@ -1384,8 +1384,8 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
         }
     } else if (talkState == TEXT_STATE_16) {
         itemGiven = func_80123810(play);
-        if (itemGiven > EXCH_ITEM_NONE) {
-            if (itemGiven == EXCH_ITEM_1E) {
+        if (itemGiven > PLAYER_AP_NONE) {
+            if (itemGiven == PLAYER_AP_BOTTLE_MUSHROOM) {
                 if (gSaveContext.save.weekEventReg[53] & 8) {
                     player->actor.textId = 0x888;
                 } else {
@@ -1404,7 +1404,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
                 this->actionFunc = EnTrt_Goodbye;
             }
             func_801477B4(play);
-        } else if (itemGiven < EXCH_ITEM_NONE) {
+        } else if (itemGiven < PLAYER_AP_NONE) {
             if (this->flags & ENTRT_GIVEN_MUSHROOM) {
                 this->textId = 0x88B;
             } else {

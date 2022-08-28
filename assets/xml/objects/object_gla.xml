@@ -65,7 +65,7 @@
         <Limb Name="object_gla_Standardlimb_008D60" Type="Standard" EnumName="OBJECT_GLA_LIMB_13" Offset="0x8D60" />
         <Limb Name="object_gla_Standardlimb_008D6C" Type="Standard" EnumName="OBJECT_GLA_LIMB_14" Offset="0x8D6C" />
         <Limb Name="object_gla_Standardlimb_008D78" Type="Standard" EnumName="OBJECT_GLA_LIMB_15" Offset="0x8D78" />
-        <Skeleton Name="object_gla_Skel_008DD8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_GLA_LIMB_NONE" LimbMax="OBJECT_GLA_LIMB_MAX" EnumName="object_gla_Limbs" Offset="0x8DD8" />
+        <Skeleton Name="object_gla_Skel_008DD8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_GLA_LIMB_NONE" LimbMax="OBJECT_GLA_LIMB_MAX" EnumName="ObjectGlaLimb" Offset="0x8DD8" />
         <Animation Name="object_gla_Anim_0091D0" Offset="0x91D0" />
         <Animation Name="object_gla_Anim_009D1C" Offset="0x9D1C" />
         <Animation Name="object_gla_Anim_00A344" Offset="0xA344" />
