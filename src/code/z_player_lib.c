@@ -140,7 +140,8 @@ void func_801229FC(Player* player) {
                 s32 i;
 
                 for (i = 0; i < ARRAY_COUNT(D_801F58B0); i++) {
-                    func_80127B64(D_801F58B0[i], ARRAY_COUNT(D_801F58B0[i]), &player->bodyPartsPos[PLAYER_BODYPART_HEAD]);
+                    func_80127B64(D_801F58B0[i], ARRAY_COUNT(D_801F58B0[i]),
+                                  &player->bodyPartsPos[PLAYER_BODYPART_HEAD]);
                 }
             }
         }
