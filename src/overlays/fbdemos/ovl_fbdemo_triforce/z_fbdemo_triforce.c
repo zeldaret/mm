@@ -38,7 +38,8 @@ void* TransitionTriforce_Init(void* thisx) {
     TransitionTriforce* this = (TransitionTriforce*)thisx;
 
     bzero(this, sizeof(TransitionTriforce));
-    guOrtho(&this->projection, -SCREEN_WIDTH / 2, SCREEN_WIDTH / 2, -SCREEN_HEIGHT / 2, SCREEN_HEIGHT / 2, -1000.0f, 1000.0f, 1.0f);
+    guOrtho(&this->projection, -SCREEN_WIDTH / 2, SCREEN_WIDTH / 2, -SCREEN_HEIGHT / 2, SCREEN_HEIGHT / 2, -1000.0f,
+            1000.0f, 1.0f);
     this->transPos = 1.0f;
     this->state = STATE_SPIRAL_IN_FAST;
     this->step = 0.015f;
