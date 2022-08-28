@@ -1,4 +1,5 @@
 ﻿<Root>
+    <ExternalFile XmlPath="misc/link_animetion.xml" OutPath="assets/misc/link_animetion/"/>
     <File Name="gameplay_keep" Segment="4">
         <Texture Name="gameplay_keep_Tex_000000" OutName="tex_000000" Format="i4" Width="16" Height="16" Offset="0x0" />
         <DList Name="gameplay_keep_DL_000320" Offset="0x320" />
