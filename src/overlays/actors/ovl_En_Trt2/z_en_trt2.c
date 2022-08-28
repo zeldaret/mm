@@ -26,17 +26,30 @@ void func_80AD4FE4(EnTrt2* this, PlayState* play);
 void func_80AD5234(EnTrt2* this, PlayState* play);
 void func_80AD56E8(Actor* thisx, PlayState* play);
 
+typedef enum {
+    /* 0 */ TRT_ANIM_IDLE,
+    /* 1 */ TRT_ANIM_HALF_AWAKE,
+    /* 2 */ TRT_ANIM_SLEEPING,
+    /* 3 */ TRT_ANIM_WAKE_UP,
+    /* 4 */ TRT_ANIM_SURPRISED,
+    /* 5 */ TRT_ANIM_HANDS_ON_COUNTER,
+    /* 6 */ TRT_ANIM_HOVER,
+    /* 7 */ TRT_ANIM_FLY_LOOK_AROUND,
+    /* 8 */ TRT_ANIM_FLY_DOWN,
+    /* 9 */ TRT_ANIM_FLY
+} TrtAnimation;
+
 static AnimationInfoS sAnimations[] = {
-    { &object_trt_Anim_00DE68, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_trt_Anim_00EE98, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_trt_Anim_00FD34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_trt_Anim_0030EC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_trt_Anim_003D78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_trt_Anim_00D52C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_trt_Anim_000A44, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_trt_Anim_001EF4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_trt_Anim_002224, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_trt_Anim_002CB0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKotakeIdleAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKotakeHalfAwakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKotakeSleepingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKotakeWakeUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKotakeSurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKotakeHandsOnCounterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKotakeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKotakeFlyLookAroundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKotakeFlyDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKotakeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 const ActorInit En_Trt2_InitVars = {
@@ -539,7 +552,7 @@ void func_80AD4608(EnTrt2* this) {
 }
 
 void func_80AD469C(EnTrt2* this, PlayState* play) {
-    SkelAnime_InitFlex(play, &this->skelAnime, &gKotakeSkel, &object_trt_Anim_000A44, NULL, NULL, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gKotakeSkel, &gKotakeHoverAnim, NULL, NULL, 0);
     this->actor.draw = func_80AD56E8;
 }
 

@@ -2,12 +2,12 @@
     <!-- Assets for Kotake -->
     <File Name="object_trt" Segment="6">
         <!-- Animations -->
-        <Animation Name="object_trt_Anim_000A44" Offset="0xA44" />
-        <Animation Name="object_trt_Anim_001EF4" Offset="0x1EF4" />
-        <Animation Name="object_trt_Anim_002224" Offset="0x2224" />
-        <Animation Name="object_trt_Anim_002CB0" Offset="0x2CB0" />
-        <Animation Name="object_trt_Anim_0030EC" Offset="0x30EC" />
-        <Animation Name="object_trt_Anim_003D78" Offset="0x3D78" />
+        <Animation Name="gKotakeHoverAnim" Offset="0xA44" />
+        <Animation Name="gKotakeFlyLookAroundAnim" Offset="0x1EF4" />
+        <Animation Name="gKotakeFlyDownAnim" Offset="0x2224" />
+        <Animation Name="gKotakeFlyAnim" Offset="0x2CB0" />
+        <Animation Name="gKotakeWakeUpAnim" Offset="0x30EC" />
+        <Animation Name="gKotakeSurprisedAnim" Offset="0x3D78" />
 
         <!-- DLists -->
         <DList Name="gKotakePelivsDL" Offset="0x6380" />
@@ -69,10 +69,10 @@
         <TextureAnimation Name="gKotakeEyesTexAnim" Offset="0xC988" />
 
         <!-- Animations -->
-        <Animation Name="object_trt_Anim_00D52C" Offset="0xD52C" />
-        <Animation Name="object_trt_Anim_00DE68" Offset="0xDE68" />
-        <Animation Name="object_trt_Anim_00EE98" Offset="0xEE98" />
-        <Animation Name="object_trt_Anim_00FD34" Offset="0xFD34" />
+        <Animation Name="gKotakeHandsOnCounterAnim" Offset="0xD52C" />
+        <Animation Name="gKotakeIdleAnim" Offset="0xDE68" />
+        <Animation Name="gKotakeHalfAwakeAnim" Offset="0xEE98" />
+        <Animation Name="gKotakeSleepingAnim" Offset="0xFD34" />
 
         <!-- Skeleton -->
         <Limb Name="gKotakePelivsLimb" Type="Standard" EnumName="KOTAKE_LIMB_PELVIS" Offset="0xFD50" />

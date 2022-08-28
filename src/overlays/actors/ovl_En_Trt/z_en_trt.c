@@ -64,17 +64,30 @@ void EnTrt_Blink(EnTrt* this);
 void EnTrt_OpenEyes2(EnTrt* this);
 void EnTrt_NodOff(EnTrt* this);
 
+typedef enum {
+    /* 0 */ TRT_ANIM_IDLE,
+    /* 1 */ TRT_ANIM_HALF_AWAKE,
+    /* 2 */ TRT_ANIM_SLEEPING,
+    /* 3 */ TRT_ANIM_WAKE_UP,
+    /* 4 */ TRT_ANIM_SURPRISED,
+    /* 5 */ TRT_ANIM_HANDS_ON_COUNTER,
+    /* 6 */ TRT_ANIM_HOVER,
+    /* 7 */ TRT_ANIM_FLY_LOOK_AROUND,
+    /* 8 */ TRT_ANIM_FLY_DOWN,
+    /* 9 */ TRT_ANIM_FLY
+} TrtAnimation;
+
 static AnimationInfoS sAnimations[] = {
-    { &object_trt_Anim_00DE68, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_trt_Anim_00EE98, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_trt_Anim_00FD34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_trt_Anim_0030EC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_trt_Anim_003D78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_trt_Anim_00D52C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_trt_Anim_000A44, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_trt_Anim_001EF4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_trt_Anim_002224, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_trt_Anim_002CB0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKotakeIdleAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKotakeHalfAwakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKotakeSleepingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKotakeWakeUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKotakeSurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKotakeHandsOnCounterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKotakeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKotakeFlyLookAroundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKotakeFlyDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKotakeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 const ActorInit En_Trt_InitVars = {
@@ -842,7 +855,7 @@ void EnTrt_IdleAwake(EnTrt* this, PlayState* play) {
 
 void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame / this->skelAnime.playSpeed;
-    s16 animLastFrame = Animation_GetLastFrame(&object_trt_Anim_0030EC) / (s16)this->skelAnime.playSpeed;
+    s16 animLastFrame = Animation_GetLastFrame(&gKotakeWakeUpAnim) / (s16)this->skelAnime.playSpeed;
 
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -1441,7 +1454,7 @@ void EnTrt_LookToShopkeeperFromShelf(EnTrt* this, PlayState* play) {
 }
 
 void EnTrt_InitShopkeeper(EnTrt* this, PlayState* play) {
-    SkelAnime_InitFlex(play, &this->skelAnime, &gKotakeSkel, &object_trt_Anim_00FD34, NULL, NULL, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gKotakeSkel, &gKotakeSleepingAnim, NULL, NULL, 0);
     if (!(gSaveContext.save.weekEventReg[12] & 8) && !(gSaveContext.save.weekEventReg[84] & 0x40) &&
         (gSaveContext.save.day >= 2)) {
         this->actor.draw = NULL;
