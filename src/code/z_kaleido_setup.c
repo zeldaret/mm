@@ -20,19 +20,19 @@ void func_800F4A10(PlayState* play) {
     pauseCtx->infoPanelOffsetY = -40;
 
     for (i = 0; i < ARRAY_COUNT(pauseCtx->worldMapPoints); i++) {
-        pauseCtx->worldMapPoints[i] = 0;
+        pauseCtx->worldMapPoints[i] = false;
     }
 
     if (pauseCtx->state == PAUSE_STATE_1) {
         for (i = 0; i < 11; i++) {
             if ((gSaveContext.save.mapsVisited >> i) & 1) {
-                pauseCtx->worldMapPoints[i] = 1;
+                pauseCtx->worldMapPoints[i] = true;
             }
         }
     } else {
         for (i = 9; i >= 0; i--) {
             if ((gSaveContext.save.playerData.owlActivationFlags >> i) & 1) {
-                pauseCtx->worldMapPoints[i] = 1;
+                pauseCtx->worldMapPoints[i] = true;
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = i;
             }
         }
@@ -42,22 +42,22 @@ void func_800F4A10(PlayState* play) {
         }
     }
 
-    YREG(11) = -0x00C8;
-    YREG(12) = -0x3840;
-    YREG(13) = 0x2710;
-    YREG(14) = 0x2710;
-    YREG(15) = 0x2710;
-    YREG(16) = -0x00BE;
-    YREG(17) = -0x06D6;
-    YREG(18) = -0x0B90;
-    YREG(19) = 0x06E0;
+    YREG(11) = -200;
+    YREG(12) = -14400;
+    YREG(13) = 10000;
+    YREG(14) = 10000;
+    YREG(15) = 10000;
+    YREG(16) = -190;
+    YREG(17) = -1750;
+    YREG(18) = -2960;
+    YREG(19) = 1760;
     YREG(20) = 0;
-    YREG(21) = -0x0622;
-    YREG(22) = -0x0C44;
-    YREG(23) = 0x0622;
-    YREG(24) = -0x0622;
-    YREG(25) = -0x005A;
-    YREG(26) = -0x3840;
+    YREG(21) = -1570;
+    YREG(22) = -3140;
+    YREG(23) = 1570;
+    YREG(24) = -1570;
+    YREG(25) = -90;
+    YREG(26) = -14400;
 }
 
 void KaleidoSetup_Update(PlayState* play) {

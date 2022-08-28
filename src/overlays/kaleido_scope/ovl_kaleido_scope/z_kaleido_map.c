@@ -464,9 +464,9 @@ s16 D_8082B5CC[] = {
 void KaleidoScope_DrawWorldMap(PlayState* play) {
     s16 sceneId;
     s16 t; // sp4C
-    s16 i; // sp4A
-    s16 j; // sp48
-    s16 k; // sp46???
+    s16 i; // sp4A, t1
+    s16 j; // sp48, t0
+    s16 k; // sp46, t3
     PauseContext* pauseCtx = &play->pauseCtx;
     u16(*regionSceneIndices)[]; // possibly need a ptr
 
@@ -492,7 +492,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
 
-            gSPTextureRectangle(POLY_OPA_DISP++, 204, j * 4, 1068, (j * 4) + 32, G_TX_RENDERTILE, 0, 0, 1 << 10,
+            gSPTextureRectangle(POLY_OPA_DISP++, 204, j << 2, 1068, (j << 2) + 32, G_TX_RENDERTILE, 0, 0, 1 << 10,
                                 1 << 10);
         }
 
@@ -590,7 +590,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         }
 
         for (i = 0; i < 11; i++, k++, j += 4) {
-            if (pauseCtx->worldMapPoints[i] != 0) {
+            if (pauseCtx->worldMapPoints[i]) {
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[120 + i * 4], 4, 0);
                 gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
             }
@@ -620,7 +620,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         }
 
         for (i = 0; i < 10; i++, k++, j += 4) {
-            if (pauseCtx->worldMapPoints[i] != 0) {
+            if (pauseCtx->worldMapPoints[i]) {
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[164 + i * 4], 4, 0);
                 gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
             }
@@ -730,7 +730,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                         pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
                         break;
                     }
-                    if (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] != 0) {
+                    if (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]]) {
                         break;
                     }
                 }
@@ -745,7 +745,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                         pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
                         break;
                     }
-                    if (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] != 0) {
+                    if (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]]) {
                         break;
                     }
                 }
@@ -772,7 +772,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                             pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
                             break;
                         }
-                        if (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] != 0) {
+                        if (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]]) {
                             break;
                         }
                     }
@@ -796,7 +796,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                         pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
                         break;
                     }
-                    if (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] != 0) {
+                    if (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]]) {
                         break;
                     }
                 }
@@ -810,7 +810,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             }
         }
 
-        if (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] == 0) {
+        if (!pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]]) {
             pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
         }
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_WORLD_MAP]) {
@@ -828,7 +828,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                 if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] >= 10) {
                     pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = 0;
                 }
-            } while (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] == 0);
+            } while (!pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]]);
         } else if (pauseCtx->stickRelX < -30) {
             pauseCtx->cursorShrinkRate = 4.0f;
             D_8082B5F4 = 0;
@@ -837,7 +837,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                 if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] < 0) {
                     pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = 9;
                 }
-            } while (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] == 0);
+            } while (!pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]]);
         } else {
             D_8082B5F4++;
         }
