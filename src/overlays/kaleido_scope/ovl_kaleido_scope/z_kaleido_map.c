@@ -101,10 +101,10 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
     static s16 D_8082B4D8 = 255;
     static f32 D_8082B4DC = 100.0f;
     static TexturePtr D_8082B4E0[][4] = {
-        { 0x02008998, 0x0C001B80, 0x02008998, 0x0C001B80 },
-        { 0x02009598, 0x0C002780, 0x02009598, 0x0C002780 },
-        { 0x0200A198, 0x0C003380, 0x0200A198, 0x0C003380 },
-        { 0x0200AD98, 0x0C003F80, 0x0200AD98, 0x0C003F80 },
+        { gStrayFairyWoodfallIconTex, 0x0C001B80, gStrayFairyWoodfallIconTex, 0x0C001B80 },
+        { gStrayFairySnowheadIconTex, 0x0C002780, gStrayFairySnowheadIconTex, 0x0C002780 },
+        { gStrayFairyGreatBayIconTex, 0x0C003380, gStrayFairyGreatBayIconTex, 0x0C003380 },
+        { gStrayFairyStoneTowerIconTex, 0x0C003F80, gStrayFairyStoneTowerIconTex, 0x0C003F80 },
     };
     static u8 D_8082B520[][3] = {
         { 255, 110, 160 },
@@ -224,8 +224,8 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                     gDPLoadTextureBlock(POLY_OPA_DISP++, D_8082B4E0[((void)0, gSaveContext.dungeonIndex)][D_8082B4CC],
                                         G_IM_FMT_RGBA, G_IM_SIZ_32b, 32, 24, 0, G_TX_MIRROR | G_TX_WRAP,
                                         G_TX_NOMIRROR | G_TX_WRAP, 5, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-                    gSPTextureRectangle(POLY_OPA_DISP++, 0x00D8, 0x0230, 0x0158, 0x0290, G_TX_RENDERTILE,
-                                        D_8082B538[D_8082B4CC], 0, 0x0400, 0x0400);
+                    gSPTextureRectangle(POLY_OPA_DISP++, 216, 560, 344, 656, G_TX_RENDERTILE, D_8082B538[D_8082B4CC], 0,
+                                        1 << 10, 1 << 10);
 
                     KaleidoScope_DrawDungeonStrayFairyCount(play);
                     func_8012C8AC(play->state.gfxCtx);
