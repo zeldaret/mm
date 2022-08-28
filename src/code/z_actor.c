@@ -1897,12 +1897,12 @@ s32 Actor_TextboxIsClosing(Actor* actor, PlayState* play) {
  * Fails if Player is not already focussing on an actor or in a talking state
  */
 s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2) {
-    Actor* targetActor;
+    Actor* talkActor;
     Player* player = GET_PLAYER(play);
 
-    targetActor = player->talkActor;
+    talkActor = player->talkActor;
 
-    if ((player->actor.flags & ACTOR_FLAG_100) && (targetActor != NULL)) {
+    if ((player->actor.flags & ACTOR_FLAG_100) && (talkActor != NULL)) {
         player->talkActor = actor2;
         player->targetedActor = actor2;
         return true;

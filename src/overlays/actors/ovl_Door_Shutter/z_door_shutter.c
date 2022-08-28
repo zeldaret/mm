@@ -436,8 +436,7 @@ s32 func_808A1340(DoorShutter* this, PlayState* play) {
     } else {
         Math_StepToF(&this->actor.velocity.y, 15.0f, 3.0f);
 
-        if (Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y + 200.0f,
-                         this->actor.velocity.y)) {
+        if (Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y + 200.0f, this->actor.velocity.y)) {
             return true;
         }
     }
@@ -585,8 +584,7 @@ s32 func_808A1A70(DoorShutter* this) {
 
         Math_StepToF(&this->actor.velocity.y, 5.0f, 0.5f);
 
-        if (Math_Vec3f_StepToXZ(&this->actor.world.pos, &this->actor.home.pos,
-                                this->actor.velocity.y) == 0.0f) {
+        if (Math_Vec3f_StepToXZ(&this->actor.world.pos, &this->actor.home.pos, this->actor.velocity.y) == 0.0f) {
             return true;
         }
     } else {
@@ -594,8 +592,7 @@ s32 func_808A1A70(DoorShutter* this) {
             Math_StepToF(&this->actor.velocity.y, 20.0f, 8.0f);
         }
 
-        if (Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y,
-                         this->actor.velocity.y)) {
+        if (Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, this->actor.velocity.y)) {
             return true;
         }
     }
@@ -608,8 +605,7 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
     if (func_808A1A70(this)) {
         if (this->actor.velocity.y > 20.0f) {
             this->actor.floorHeight = this->actor.home.pos.y;
-            Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 45.0f, 10, 8.0f,
-                                     500, 10, 0);
+            Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 45.0f, 10, 8.0f, 500, 10, 0);
         }
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BIGWALL_BOUND);
         quake = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
@@ -634,13 +630,11 @@ void DoorShutter_Update(Actor* thisx, PlayState* play) {
     DoorShutter* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & 0x100004C0) ||
-        (this->actionFunc == DoorShutter_SetupType)) {
+    if (!(player->stateFlags1 & 0x100004C0) || (this->actionFunc == DoorShutter_SetupType)) {
         this->actionFunc(this, play);
 
         if (this->unk_163 == 7) {
-            this->actor.home.rot.z =
-                Math_Vec3f_DistXZ(&this->actor.home.pos, &this->actor.world.pos) * -100.0f;
+            this->actor.home.rot.z = Math_Vec3f_DistXZ(&this->actor.home.pos, &this->actor.world.pos) * -100.0f;
         }
     }
 }

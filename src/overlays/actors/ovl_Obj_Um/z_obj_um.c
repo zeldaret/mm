@@ -834,7 +834,7 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
                 func_8019F208();
                 gSaveContext.save.weekEventReg[31] |= 0x80;
                 play->nextEntrance = ENTRANCE(ROMANI_RANCH, 11);
-                if (player->stateFlags1 & 0x800000) {
+                if (player->stateFlags1 & PLAYER_STATE1_800000) {
                     D_801BDAA0 = 1;
                 }
                 play->transitionType = TRANS_TYPE_64;
@@ -995,7 +995,7 @@ void ObjUm_RanchWait(ObjUm* this, PlayState* play) {
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
     this->flags |= OBJ_UM_FLAG_WAITING;
     if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) && (gSaveContext.save.time <= CLOCK_TIME(19, 0))) {
-        if (!(player->stateFlags1 & 0x800000)) {
+        if (!(player->stateFlags1 & PLAYER_STATE1_800000)) {
             func_80B7984C(play, this, 0, &this->unk_2B4);
         }
     } else if (!func_80B79A24(this->unk_2B4) && (gSaveContext.save.time > CLOCK_TIME(19, 0))) {
@@ -1198,7 +1198,7 @@ void func_80B7A144(ObjUm* this, PlayState* play) {
     ObjUm_SetPlayerPosition(this, play);
     this->flags |= OBJ_UM_FLAG_0100;
     this->flags |= OBJ_UM_FLAG_0004;
-    player->stateFlags1 |= 0x20;
+    player->stateFlags1 |= PLAYER_STATE1_20;
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
     ObjUm_SetupAction(this, ObjUm_RanchStartCs);
 }
@@ -1275,7 +1275,7 @@ void ObjUm_PreMilkRunStartCs(ObjUm* this, PlayState* play) {
 
     ObjUm_SetPlayerPosition(this, play);
     this->flags |= OBJ_UM_FLAG_0004;
-    player->stateFlags1 |= 0x20;
+    player->stateFlags1 |= PLAYER_STATE1_20;
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         this->lastTime = gSaveContext.save.time;
@@ -1380,7 +1380,7 @@ void func_80B7A7AC(ObjUm* this, PlayState* play) {
 
     this->unk_4DC = 0;
     this->areAllPotsBroken = false;
-    player->stateFlags1 &= ~0x20;
+    player->stateFlags1 &= ~PLAYER_STATE1_20;
     ObjUm_SetPlayerPosition(this, play);
     ObjUm_RotatePlayer(this, play, 0x7FFF);
     func_80B78EBC(this, play);
@@ -1521,7 +1521,7 @@ void func_80B7ABE4(ObjUm* this, PlayState* play) {
 void ObjUm_StartCs(ObjUm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags1 |= 0x20;
+    player->stateFlags1 |= PLAYER_STATE1_20;
     ObjUm_SetPlayerPosition(this, play);
     ObjUm_RotatePlayer(this, play, 0);
     this->flags |= OBJ_UM_FLAG_0004;
@@ -1538,7 +1538,7 @@ void ObjUm_StartCs(ObjUm* this, PlayState* play) {
 void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags1 |= 0x20;
+    player->stateFlags1 |= PLAYER_STATE1_20;
     ObjUm_SetPlayerPosition(this, play);
     ObjUm_RotatePlayer(this, play, 0);
     this->flags |= OBJ_UM_FLAG_0004;
@@ -1562,7 +1562,7 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
 void ObjUm_PostMilkRunStartCs(ObjUm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags1 |= 0x20;
+    player->stateFlags1 |= PLAYER_STATE1_20;
     ObjUm_SetPlayerPosition(this, play);
     ObjUm_RotatePlayer(this, play, 0);
     this->flags |= OBJ_UM_FLAG_0004;

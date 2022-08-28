@@ -1282,8 +1282,8 @@ void func_8088FA38(EnElf* this, PlayState* play) {
         if (this->unk_234 != NULL) {
             refPos = this->unk_234->world.pos;
         } else {
-            if ((player->targetedActor == NULL) || (&player->actor == player->targetedActor) || (&this->actor == player->targetedActor) ||
-                (this->unk_264 & 4)) {
+            if ((player->targetedActor == NULL) || (&player->actor == player->targetedActor) ||
+                (&this->actor == player->targetedActor) || (this->unk_264 & 4)) {
                 refPos.x = player->bodyPartsPos[7].x + (Math_SinS(player->actor.shape.rot.y) * 20.0f);
                 refPos.y = player->bodyPartsPos[7].y + 5.0f;
                 refPos.z = player->bodyPartsPos[7].z + (Math_CosS(player->actor.shape.rot.y) * 20.0f);

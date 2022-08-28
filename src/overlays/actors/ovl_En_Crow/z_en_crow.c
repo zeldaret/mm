@@ -219,7 +219,7 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
         this->timer--;
     }
     if ((this->timer == 0) &&
-        (((this->actor.xzDistToPlayer < 300.0f) && !(player->stateFlags1 & 0x800000)) || (dist < 300.0f)) &&
+        (((this->actor.xzDistToPlayer < 300.0f) && !(player->stateFlags1 & PLAYER_STATE1_800000)) || (dist < 300.0f)) &&
         (this->actor.depthInWater < -40.0f) && (Player_GetMask(play) != PLAYER_MASK_STONE)) {
         if (dist < this->actor.xzDistToPlayer) {
             this->actor.child = this->actor.parent;
@@ -272,7 +272,7 @@ void EnCrow_DiveAttack(EnCrow* this, PlayState* play) {
 
     if (((this->timer == 0) || ((&player->actor != this->actor.child) && (this->actor.child->home.rot.z != 0)) ||
          ((&player->actor == this->actor.child) &&
-          ((Player_GetMask(play) == PLAYER_MASK_STONE) || (player->stateFlags1 & 0x800000))) ||
+          ((Player_GetMask(play) == PLAYER_MASK_STONE) || (player->stateFlags1 & PLAYER_STATE1_800000))) ||
          ((this->collider.base.atFlags & AT_HIT) || (this->actor.bgCheckFlags & 9))) ||
         (this->actor.depthInWater > -40.0f)) {
 
