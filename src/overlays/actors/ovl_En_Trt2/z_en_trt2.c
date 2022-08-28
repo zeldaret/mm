@@ -27,17 +27,17 @@ void func_80AD5234(EnTrt2* this, PlayState* play);
 void func_80AD56E8(Actor* thisx, PlayState* play);
 
 typedef enum {
-    /* 0 */ TRT_ANIM_IDLE,
-    /* 1 */ TRT_ANIM_HALF_AWAKE,
-    /* 2 */ TRT_ANIM_SLEEPING,
-    /* 3 */ TRT_ANIM_WAKE_UP,
-    /* 4 */ TRT_ANIM_SURPRISED,
-    /* 5 */ TRT_ANIM_HANDS_ON_COUNTER,
-    /* 6 */ TRT_ANIM_HOVER,
-    /* 7 */ TRT_ANIM_FLY_LOOK_AROUND,
-    /* 8 */ TRT_ANIM_FLY_DOWN,
-    /* 9 */ TRT_ANIM_FLY
-} TrtAnimation;
+    /* 0 */ TRT2_ANIM_IDLE,
+    /* 1 */ TRT2_ANIM_HALF_AWAKE,
+    /* 2 */ TRT2_ANIM_SLEEPING,
+    /* 3 */ TRT2_ANIM_WAKE_UP,
+    /* 4 */ TRT2_ANIM_SURPRISED,
+    /* 5 */ TRT2_ANIM_HANDS_ON_COUNTER,
+    /* 6 */ TRT2_ANIM_HOVER,
+    /* 7 */ TRT2_ANIM_FLY_LOOK_AROUND,
+    /* 8 */ TRT2_ANIM_FLY_DOWN,
+    /* 9 */ TRT2_ANIM_FLY
+} Trt2Animation;
 
 static AnimationInfoS sAnimationInfo[] = {
     { &gKotakeIdleAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -183,7 +183,7 @@ void func_80AD3530(EnTrt2* this, PlayState* play) {
 
     if (DECR(this->unk_3AE) == 0) {
         this->unk_3AE = Rand_S16Offset(20, 20);
-        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_FLY_LOOK_AROUND);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_FLY_LOOK_AROUND);
         this->unk_3B2 = 5;
     }
 }
@@ -290,7 +290,7 @@ void func_80AD3A24(EnTrt2* this, PlayState* play) {
         Math_ApproachF(&this->actor.speedXZ, 0.0f, 0.2f, 1.0f);
     } else if (DECR(this->unk_3AE) == 0) {
         this->unk_3AE = Rand_S16Offset(100, 50);
-        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_HOVER);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
         this->unk_3B2 = 4;
     }
     Actor_MoveWithGravity(&this->actor);
@@ -301,7 +301,7 @@ void func_80AD3AE4(EnTrt2* this, PlayState* play) {
         Math_ApproachF(&this->actor.velocity.y, 0.5f, 0.2f, 0.1f);
     } else {
         this->actor.velocity.y = 0.0f;
-        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_HOVER);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
         this->unk_3B2 = 4;
     }
     Actor_MoveWithGravity(&this->actor);
@@ -311,7 +311,7 @@ void func_80AD3B6C(EnTrt2* this, PlayState* play) {
     if (DECR(this->unk_3B0) == 0) {
         this->unk_3B0 = 10;
         this->actor.velocity.y = -1.0f;
-        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_FLY_DOWN);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_FLY_DOWN);
         this->unk_3B2 = 8;
     }
 }
@@ -324,7 +324,7 @@ void func_80AD3BE4(EnTrt2* this, PlayState* play) {
     this->actor.world.rot.y += this->unk_3C0;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (this->actor.world.pos.y < 5.0f) {
-        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_FLY);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_FLY);
         this->unk_3B2 = 9;
     }
 }
@@ -348,7 +348,7 @@ void func_80AD3CEC(EnTrt2* this, PlayState* play) {
     } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
-        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_HOVER);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
         this->unk_3B2 = 4;
     }
 }
@@ -449,7 +449,7 @@ void func_80AD417C(EnTrt2* this, PlayState* play) {
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
             if (this->unk_3A8 == 0x84C) {
-                EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_HOVER);
+                EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
                 this->path = SubS_GetPathByIndex(play, ENTRT2_GET_FC00(&this->actor), 0x3F);
                 this->unk_3B2 = 18;
             } else if (this->unk_3A8 == 0x88F) {
@@ -523,7 +523,7 @@ void func_80AD4550(EnTrt2* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if ((player->transformation != PLAYER_FORM_HUMAN) && (player->transformation != PLAYER_FORM_FIERCE_DEITY)) {
-        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_FLY_LOOK_AROUND);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_FLY_LOOK_AROUND);
         this->unk_3B2 = 17;
     }
 
@@ -678,7 +678,7 @@ s32 func_80AD4B4C(EnTrt2* this, PlayState* play) {
         } else {
             this->unk_3A8 = 0x84F;
             this->unk_3D8 = true;
-            EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_FLY_LOOK_AROUND);
+            EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_FLY_LOOK_AROUND);
             this->unk_3B2 = 7;
         }
     }
