@@ -332,7 +332,7 @@ void func_8012301C(Actor* thisx, PlayState* play2) {
 
         if (Object_IsLoaded(&play->objectCtx, objBankIndex)) {
             this->actor.objBankIndex = objBankIndex;
-            this->actor.shape.rot.z = gSaveContext.save.playerForm + 1;
+            this->actor.shape.rot.z = GET_PLAYER_FORM + 1;
             this->actor.init = PlayerCall_Init;
             this->actor.update = PlayerCall_Update;
             this->actor.draw = PlayerCall_Draw;
@@ -506,23 +506,14 @@ ItemID func_8012364C(PlayState* play, Player* player, s32 arg2) {
     }
 
     if (arg2 == 1) {
-        return (gSaveContext.buttonStatus[1] != BTN_DISABLED)
-                   ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
-               : (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
-                                                 : ITEM_NONE;
+        return C_BTN_ITEM(EQUIP_SLOT_C_LEFT);
     }
 
     if (arg2 == 2) {
-        return (gSaveContext.buttonStatus[2] != BTN_DISABLED)
-                   ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
-               : (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
-                                                 : ITEM_NONE;
+        return C_BTN_ITEM(EQUIP_SLOT_C_DOWN);
     }
 
-    return (gSaveContext.buttonStatus[3] != BTN_DISABLED) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
-           : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
-                                                          : ITEM_NONE;
-}
+    return C_BTN_ITEM(EQUIP_SLOT_C_RIGHT);
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123810.s")
 
@@ -736,7 +727,7 @@ s32 Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 y
 }
 
 u8 Player_GetStrength(void) {
-    return sPlayerStrengths[(void)0, gSaveContext.save.playerForm];
+    return sPlayerStrengths[GET_PLAYER_FORM];
 }
 
 u8 Player_GetMask(PlayState* play) {
