@@ -211,10 +211,10 @@ typedef enum PlayerDoorType {
 typedef enum PlayerModelGroup {
     /*  0 */ PLAYER_MODELGROUP_0,
     /*  1 */ PLAYER_MODELGROUP_1,
-    /*  2 */ PLAYER_MODELGROUP_ONE_HAND_SWORD,
+    /*  2 */ PLAYER_MODELGROUP_ONE_HANDED_SWORD,
     /*  3 */ PLAYER_MODELGROUP_DEFAULT, // non-specific models, for items that don't have particular link models
     /*  4 */ PLAYER_MODELGROUP_4,
-    /*  5 */ PLAYER_MODELGROUP_TWO_HAND_SWORD,
+    /*  5 */ PLAYER_MODELGROUP_TWO_HANDED_SWORD,
     /*  6 */ PLAYER_MODELGROUP_BOW,
     /*  7 */ PLAYER_MODELGROUP_EXPLOSIVES,
     /*  8 */ PLAYER_MODELGROUP_8,
