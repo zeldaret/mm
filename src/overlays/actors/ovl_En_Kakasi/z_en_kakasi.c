@@ -933,7 +933,9 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                                     PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
                 func_80169EFC(&play->state);
 
+                //! FAKE
                 if (0) {}
+
                 if (gSaveContext.save.time > CLOCK_TIME(18, 0) || gSaveContext.save.time < CLOCK_TIME(6, 0)) {
                     gSaveContext.save.time = CLOCK_TIME(6, 0);
                     gSaveContext.respawnFlag = -4;

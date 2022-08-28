@@ -616,7 +616,7 @@ typedef enum PlayerCsMode {
 #define PLAYER_STATE2_8000000    (1 << 27)
 // 
 #define PLAYER_STATE2_10000000   (1 << 28)
-// Disable drawing player?
+// Disable drawing player
 #define PLAYER_STATE2_20000000   (1 << 29)
 // Lunge: small forward boost at the end of certain attack animations
 #define PLAYER_STATE2_40000000   (1 << 30)

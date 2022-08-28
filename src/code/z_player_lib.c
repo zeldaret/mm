@@ -834,7 +834,6 @@ s32 Player_GetExplosiveHeld(Player* player) {
     return Player_ActionToExplosive(player, player->itemActionParam);
 }
 
-// Convert actionParam to sword
 s32 Player_ActionToSword(Actor* actor, PlayerActionParam actionParam) {
     s32 sword = 0;
 
