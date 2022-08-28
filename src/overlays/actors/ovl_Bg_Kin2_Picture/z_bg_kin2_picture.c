@@ -97,17 +97,17 @@ s32 func_80B6EFA0(PlayState* play, s32 arg1) {
     return (flag >= 0) && Flags_GetTreasure(play, flag);
 }
 
-void func_80B6EFEC(BgKin2Picture* thisx, PlayState* play) {
+void BgKin2Picture_SpawnGoldSkulltula(BgKin2Picture* thisx, PlayState* play) {
     BgKin2Picture* this = thisx;
     s32 temp_a1;
 
-    if (!BG_KIN2_PICTURE_GET_100000(&this->dyna.actor)) {
+    if (!BG_KIN2_PICTURE_GET_100000(&this->dyna.actor)) { //Gold Skulltula is still here.
         temp_a1 = (BG_KIN2_PICTURE_GET_1F(&this->dyna.actor) << 2) | 0xFF03;
         if (!func_80B6EFA0(play, temp_a1) &&
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->dyna.actor.home.pos.x,
                         this->dyna.actor.home.pos.y + 23.0f, this->dyna.actor.home.pos.z, 0,
                         this->dyna.actor.home.rot.y, 0, temp_a1)) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            play_sound(NA_SE_SY_TRE_BOX_APPEAR); 
         }
     }
 }
@@ -181,9 +181,9 @@ void BgKin2Picture_Init(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->dyna.actor, 23.0f);
     temp_a1 = (BG_KIN2_PICTURE_GET_1F(&this->dyna.actor) << 2) | 0xFF03; // flags?
 
-    // does it have a Golden Skulltula behind?
+    // Checks if the Gold Skulltula behind the painting was collected.
     if (BG_KIN2_PICTURE_GET_100000(&this->dyna.actor) || func_80B6EFA0(play, temp_a1)) {
-        this->unk242 = -1;
+        this->timer = -1;
     }
 
     BgKin2Picture_SetupWait(this);
@@ -201,22 +201,22 @@ void BgKin2Picture_SetupWait(BgKin2Picture* this) {
 }
 
 void BgKin2Picture_Wait(BgKin2Picture* this, PlayState* play) {
-    // hit by hookshot
+    // hit by hookshot or projectile
     if (this->colliderTris.base.acFlags & AC_HIT) {
         this->colliderTris.base.acFlags &= ~AC_HIT;
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
         BgKin2Picture_SetupPlayCutscene(this);
-    } else {
-        if (this->unk242 >= 0) {
-            if (this->unk242 == 0) {
+    } else { //Gold Skulltula can be heard behind Skullkid's painting.
+        if (this->timer >= 0) {
+            if (this->timer == 0) {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
                 if (Rand_ZeroOne() < 0.1f) {
-                    this->unk242 = Rand_S16Offset(40, 80);
+                    this->timer = Rand_S16Offset(40, 80);
                 } else {
-                    this->unk242 = 8;
+                    this->timer = 8;
                 }
             } else {
-                this->unk242--;
+                this->timer--;
             }
         }
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderTris.base);
@@ -278,7 +278,7 @@ void func_80B6F72C(BgKin2Picture* this, PlayState* play) {
         this->unk23A--;
 
         if (this->unk23A == 0) {
-            func_80B6EFEC(this, play);
+            BgKin2Picture_SpawnGoldSkulltula(this, play);
         }
     }
 

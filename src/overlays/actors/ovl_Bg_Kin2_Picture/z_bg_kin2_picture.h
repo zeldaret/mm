@@ -31,7 +31,7 @@ typedef struct BgKin2Picture {
     /* 0x23E */ s16 unk23E; // angle                       /* inferred */
     /* 0x240 */ s8 unk240;  /* inferred */
     /* 0x241 */ s8 unk241;  /* inferred */
-    /* 0x242 */ s8 unk242;  /* inferred */
+    /* 0x242 */ s8 timer;  /* inferred */
     /* 0x243 */ char pad243[1];
 } BgKin2Picture; /* size = 0x244 */
 
