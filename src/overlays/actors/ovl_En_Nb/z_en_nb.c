@@ -25,6 +25,19 @@ void func_80BC0978(EnNb* this, PlayState* play);
 s32 func_80BC00AC(Actor* thisx, PlayState* play);
 s32 func_80BC01DC(Actor* thisx, PlayState* play);
 
+#define EN_NB_FLAG_NONE (0)
+#define EN_NB_FLAG_1    (1 << 0)
+#define EN_NB_FLAG_2    (1 << 1)
+#define EN_NB_FLAG_4    (1 << 2)
+#define EN_NB_FLAG_8    (1 << 3)
+#define EN_NB_FLAG_10   (1 << 4)
+#define EN_NB_FLAG_20   (1 << 5)
+#define EN_NB_FLAG_40   (1 << 6)
+#define EN_NB_FLAG_80   (1 << 7)
+#define EN_NB_FLAG_100  (1 << 8)
+#define EN_NB_FLAG_200  (1 << 9)
+#define EN_NB_FLAG_400  (1 << 10)
+
 typedef enum EnNbScheduleResult {
     /* 0 */ EN_NB_SCH_NONE,
     /* 1 */ EN_NB_SCH_1,
@@ -198,7 +211,7 @@ void func_80BBFF24(EnNb* this, PlayState* play) {
 Actor* func_80BBFF90(EnNb* this, PlayState* play) {
     Actor* actor;
 
-    if (this->schResultValue == EN_NB_SCH_2) {
+    if (this->scheduleResult == EN_NB_SCH_2) {
         actor = EnNb_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
     } else {
         actor = &GET_PLAYER(play)->actor;
@@ -240,16 +253,18 @@ s32 func_80BC00AC(Actor* thisx, PlayState* play) {
 
     switch (this->unk_288) {
         case 0:
-            if (func_80BBFFD4(this, cutscene)) {
-                case 2:
-                case 4:
-                case 6:
-                case 8:
-                    Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(cutscene)),
-                                          &this->actor);
-                    this->unk_288++;
-                    ret = true;
+            if (!func_80BBFFD4(this, cutscene)) {
+                break;
             }
+        // fallthrough
+        case 2:
+        case 4:
+        case 6:
+        case 8:
+            Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(cutscene)),
+                                    &this->actor);
+            this->unk_288++;
+            ret = true;
             break;
 
         case 1:
@@ -346,20 +361,20 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
 UNK_PTR func_80BC045C(EnNb* this, PlayState* play) {
     if (gSaveContext.eventInf[4] & 8) {
         this->unk_28C = func_80BC01DC;
-        return &D_80BC1464;
+        return D_80BC1464;
     }
 
-    if (this->schResultValue == EN_NB_SCH_2) {
+    if (this->scheduleResult == EN_NB_SCH_2) {
         this->unk_28C = func_80BC00AC;
-        return &D_80BC1574;
+        return D_80BC1574;
     }
 
     if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
-        return &D_80BC15C8;
+        return D_80BC15C8;
     }
 
     this->unk_28C = func_80BC01DC;
-    return &D_80BC1464;
+    return D_80BC1464;
 }
 
 s32 func_80BC04FC(EnNb* this, PlayState* play) {
@@ -589,8 +604,8 @@ s32 func_80BC0D08(EnNb* this, PlayState* play) {
 }
 
 void EnNb_HandleSchedule(EnNb* this, PlayState* play) {
-    if ((this->schResultValue == EN_NB_SCH_1) || (this->schResultValue == EN_NB_SCH_2) ||
-        (this->schResultValue == EN_NB_SCH_3) || (this->schResultValue == EN_NB_SCH_4)) {
+    if ((this->scheduleResult == EN_NB_SCH_1) || (this->scheduleResult == EN_NB_SCH_2) ||
+        (this->scheduleResult == EN_NB_SCH_3) || (this->scheduleResult == EN_NB_SCH_4)) {
         func_80BC0D08(this, play);
     }
 
@@ -598,27 +613,27 @@ void EnNb_HandleSchedule(EnNb* this, PlayState* play) {
 }
 
 void EnNb_FollowSchedule(EnNb* this, PlayState* play) {
-    ScheduleOutput scheduleResult;
+    ScheduleOutput scheduleOutput;
 
     this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
 
     if (gSaveContext.eventInf[4] & 8) {
-        scheduleResult.result = EN_NB_SCH_1;
-        EnNb_ProcessScheduleOutput(this, play, &scheduleResult);
+        scheduleOutput.result = EN_NB_SCH_1;
+        EnNb_ProcessScheduleOutput(this, play, &scheduleOutput);
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_1;
-    } else if ((!Schedule_RunScript(play, sScheduleScript, &scheduleResult)) ||
-               ((this->schResultValue != scheduleResult.result) &&
-                !EnNb_ProcessScheduleOutput(this, play, &scheduleResult))) {
+    } else if (!Schedule_RunScript(play, sScheduleScript, &scheduleOutput) ||
+               ((this->scheduleResult != scheduleOutput.result) &&
+                !EnNb_ProcessScheduleOutput(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_1;
-        scheduleResult.result = EN_NB_SCH_NONE;
+        scheduleOutput.result = EN_NB_SCH_NONE;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_1;
     }
 
-    this->schResultValue = scheduleResult.result;
+    this->scheduleResult = scheduleOutput.result;
     this->unk_1E8 = func_80BBFF90(this, play);
     EnNb_HandleSchedule(this, play);
 }
@@ -631,7 +646,7 @@ void func_80BC0EAC(EnNb* this, PlayState* play) {
         }
 
         SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_1 | EN_NB_FLAG_2, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
-        if (this->schResultValue != EN_NB_SCH_2) {
+        if (this->scheduleResult != EN_NB_SCH_2) {
             this->stateFlags &= ~EN_NB_FLAG_20;
         }
 
@@ -682,7 +697,7 @@ void EnNb_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     func_80BC0A18(this, play);
 
-    if (this->schResultValue != EN_NB_SCH_NONE) {
+    if (this->scheduleResult != EN_NB_SCH_NONE) {
         EnNb_UpdateSkelAnime(this);
         func_80BC0800(this);
         if (Actor_IsFacingPlayer(&this->actor, 0x38E0)) {
@@ -750,7 +765,7 @@ void EnNb_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 void EnNb_Draw(Actor* thisx, PlayState* play) {
     EnNb* this = THIS;
 
-    if (this->schResultValue != EN_NB_SCH_NONE) {
+    if (this->scheduleResult != EN_NB_SCH_NONE) {
         func_8012C5B0(play->state.gfxCtx);
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnNb_OverrideLimbDraw, EnNb_PostLimbDraw,

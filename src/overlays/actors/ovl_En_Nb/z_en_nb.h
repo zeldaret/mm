@@ -25,7 +25,7 @@ typedef struct EnNb {
     /* 0x188 */ EnNbActionFunc actionFunc;
     /* 0x18C */ EnNbActionFunc unk_18C;
     /* 0x190 */ ColliderCylinder collider;
-    /* 0x1DC */ u8 schResultValue;
+    /* 0x1DC */ u8 scheduleResult;
     /* 0x1E0 */ UNK_PTR unk_1E0;
     /* 0x1E4 */ s32 unk_1E4;
     /* 0x1E8 */ Actor* unk_1E8;
@@ -53,18 +53,5 @@ typedef struct EnNb {
     /* 0x294 */ UNK_TYPE1 unk_294[0x4];
     /* 0x294 */ TextState prevTalkState;
 } EnNb; // size = 0x29C
-
-#define EN_NB_FLAG_NONE (0)
-#define EN_NB_FLAG_1    (1 << 0)
-#define EN_NB_FLAG_2    (1 << 1)
-#define EN_NB_FLAG_4    (1 << 2)
-#define EN_NB_FLAG_8    (1 << 3)
-#define EN_NB_FLAG_10   (1 << 4)
-#define EN_NB_FLAG_20   (1 << 5)
-#define EN_NB_FLAG_40   (1 << 6)
-#define EN_NB_FLAG_80   (1 << 7)
-#define EN_NB_FLAG_100  (1 << 8)
-#define EN_NB_FLAG_200  (1 << 9)
-#define EN_NB_FLAG_400  (1 << 10)
 
 #endif // Z_EN_NB_H
