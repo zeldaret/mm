@@ -13,7 +13,7 @@ void func_800F4A10(PlayState* play) {
     Rumble_StateReset();
 
     pauseCtx->unk_206 = 0;
-    pauseCtx->state6SubState = PAUSE_SUBSTATE6_1;
+    pauseCtx->actionState = PAUSE_ACTIONSTATE_1;
     pauseCtx->eye.x = sKaleidoSetupEyeX[pauseCtx->pageIndex];
     pauseCtx->eye.z = sKaleidoSetupEyeZ[pauseCtx->pageIndex];
     pauseCtx->pageIndex = D_801BDB00[pauseCtx->pageIndex];
@@ -111,10 +111,10 @@ void KaleidoSetup_Init(PlayState* play) {
 
     pauseCtx->pageIndex = PAUSE_ITEM;
 
-    pauseCtx->unk_21C = 160.0f;
-    pauseCtx->unk_218 = 160.0f;
-    pauseCtx->unk_214 = 160.0f;
-    pauseCtx->unk_210 = 160.0f;
+    pauseCtx->MaskPageRoll = 160.0f;
+    pauseCtx->QuestPageRoll = 160.0f;
+    pauseCtx->MapPageRoll = 160.0f;
+    pauseCtx->itemPageRoll = 160.0f;
 
     pauseCtx->eye.x = -64.0f;
     pauseCtx->unk_20C = 936.0f;
