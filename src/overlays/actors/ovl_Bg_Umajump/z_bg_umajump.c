@@ -52,7 +52,7 @@ void BgUmajump_StopCutscene(BgUmajump* this, PlayState* play) {
         play_sound(NA_SE_EV_KID_HORSE_NEIGH);
     }
 
-    if (!play->csCtx.state) {
+    if (play->csCtx.state == CS_STATE_0) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         this->dyna.actor.update = Actor_Noop;
     }
