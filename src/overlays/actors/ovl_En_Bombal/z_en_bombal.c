@@ -125,10 +125,11 @@ void func_80C05C44(EnBombal* this, PlayState* play) {
         phi_s0 = true;
     }
 
-    if (phi_s0 != false) {
+    if (phi_s0) {
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
         pos.y += 60.0f;
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, pos.x, pos.y, pos.z, 0xFF, 0xFF, 0xC8, 1);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, pos.x, pos.y, pos.z, 0xFF, 0xFF, 0xC8,
+                    CLEAR_TAG_LARGE_EXPLOSION);
 
         for (i = 0; i < 100; i++) {
             EnBombal_InitEffects(this, &pos, 10);
