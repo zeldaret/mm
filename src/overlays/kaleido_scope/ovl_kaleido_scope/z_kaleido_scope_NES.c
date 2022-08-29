@@ -948,7 +948,8 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
             POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, &D_0D002000, 3, 0x40, 0x10, 4);
         } else if ((pauseCtx->pageIndex == PAUSE_MAP) && sInDungeonScene) {
             // No code in this case
-        } else if ((pauseCtx->pageIndex == PAUSE_QUEST) && (pauseCtx->cursorSlot[2] == 0x12)) {
+        } else if ((pauseCtx->pageIndex == PAUSE_QUEST) &&
+                   (pauseCtx->cursorSlot[PAUSE_QUEST] == QUEST_BOMBERS_NOTEBOOK)) {
             if (pauseCtx->namedItem != PAUSE_ITEM_NONE) {
                 pauseCtx->infoPanelVtx[16].v.ob[0] = pauseCtx->infoPanelVtx[18].v.ob[0] = -58;
 
@@ -973,8 +974,8 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
 
                 POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, &D_0D003700, 3, 0x60, 0x10, 4);
             }
-        } else if ((pauseCtx->pageIndex == 2) && (pauseCtx->cursorSlot[2] >= 6) && (pauseCtx->cursorSlot[2] < 0x12) &&
-                   (pauseCtx->namedItem != PAUSE_ITEM_NONE)) {
+        } else if ((pauseCtx->pageIndex == PAUSE_QUEST) && (pauseCtx->cursorSlot[PAUSE_QUEST] >= QUEST_SONG_SONATA) &&
+                   (pauseCtx->cursorSlot[PAUSE_QUEST] <= QUEST_SONG_SUN) && (pauseCtx->namedItem != PAUSE_ITEM_NONE)) {
             pauseCtx->infoPanelVtx[16].v.ob[0] = pauseCtx->infoPanelVtx[18].v.ob[0] = -55;
 
             pauseCtx->infoPanelVtx[17].v.ob[0] = pauseCtx->infoPanelVtx[19].v.ob[0] =
@@ -1028,10 +1029,10 @@ void KaleidoScope_UpdateNamePanel(PlayState* play) {
             pauseCtx->nameDisplayTimer = 0;
         }
     } else if (pauseCtx->nameColorSet == 0) {
-        if (((pauseCtx->pageIndex == PAUSE_QUEST) && (pauseCtx->cursorSlot[PAUSE_QUEST] >= 6) &&
-             (pauseCtx->cursorSlot[PAUSE_QUEST] < 0x12) &&
+        if (((pauseCtx->pageIndex == PAUSE_QUEST) && (pauseCtx->cursorSlot[PAUSE_QUEST] >= QUEST_SONG_SONATA) &&
+             (pauseCtx->cursorSlot[PAUSE_QUEST] <= QUEST_SONG_SUN) &&
              (pauseCtx->mainState == PAUSE_MAINSTATE_IDLE_CURSOR_ON_SONG)) ||
-            ((pauseCtx->pageIndex == PAUSE_QUEST) && (pauseCtx->cursorSlot[PAUSE_QUEST] == 0x12)) ||
+            ((pauseCtx->pageIndex == PAUSE_QUEST) && (pauseCtx->cursorSlot[PAUSE_QUEST] == QUEST_BOMBERS_NOTEBOOK)) ||
             (pauseCtx->pageIndex == PAUSE_ITEM) || (pauseCtx->pageIndex == PAUSE_MASK)) {
 
             pauseCtx->nameDisplayTimer++;
@@ -1311,8 +1312,8 @@ void KaleidoScope_UpdateOwlWarpNamePanel(PlayState* play) {
             pauseCtx->nameDisplayTimer = 0;
         }
     } else if (pauseCtx->nameColorSet == 0) {
-        if (((pauseCtx->pageIndex == PAUSE_QUEST) && (pauseCtx->cursorSlot[PAUSE_QUEST] >= 6) &&
-             (pauseCtx->cursorSlot[PAUSE_QUEST] < 0x12) &&
+        if (((pauseCtx->pageIndex == PAUSE_QUEST) && (pauseCtx->cursorSlot[PAUSE_QUEST] >= QUEST_SONG_SONATA) &&
+             (pauseCtx->cursorSlot[PAUSE_QUEST] <= QUEST_SONG_SUN) &&
              (pauseCtx->mainState == PAUSE_MAINSTATE_IDLE_CURSOR_ON_SONG)) ||
             (pauseCtx->pageIndex == PAUSE_ITEM)) {
 
