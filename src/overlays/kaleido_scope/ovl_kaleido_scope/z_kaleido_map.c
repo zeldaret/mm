@@ -150,10 +150,10 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
     for (i = 0, j = 4; i < 4; i++, j += 4) {
         if (i == 3) {
-            if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->actionState == PAUSE_ACTIONSTATE_IDLE)) {
-                // If (pauseCtx->state == PAUSE_STATE_DEFAULT_ACTION), then the other conditions are redundant and
+            if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->actionState == PAUSE_MAINSTATE_IDLE)) {
+                // If (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN), then the other conditions are redundant and
                 // always return true
-                if ((pauseCtx->state == PAUSE_STATE_DEFAULT_ACTION) &&
+                if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) &&
                     (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
                     !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
                     KaleidoScope_SetView(pauseCtx, 0.0f, 0.0f, 64.0f);
@@ -245,10 +245,10 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
     func_80108AF8(play);
 
-    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->actionState == PAUSE_ACTIONSTATE_IDLE)) {
-        // If (pauseCtx->state == PAUSE_STATE_DEFAULT_ACTION), then the other conditions are redundant and always return
+    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->actionState == PAUSE_MAINSTATE_IDLE)) {
+        // If (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN), then the other conditions are redundant and always return
         // true
-        if ((pauseCtx->state == PAUSE_STATE_DEFAULT_ACTION) && (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
+        if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
             !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
 
             func_8012C628(play->state.gfxCtx);
@@ -283,8 +283,8 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
     s16 i;
     s16 oldCursorPoint;
 
-    if (pauseCtx->state == PAUSE_STATE_DEFAULT_ACTION) {
-        if ((pauseCtx->actionState == PAUSE_ACTIONSTATE_IDLE) && (pauseCtx->pageIndex == PAUSE_MAP)) {
+    if (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) {
+        if ((pauseCtx->actionState == PAUSE_MAINSTATE_IDLE) && (pauseCtx->pageIndex == PAUSE_MAP)) {
             pauseCtx->cursorColorSet = 0;
             oldCursorPoint = pauseCtx->cursorPoint[PAUSE_MAP];
             if (pauseCtx->stickRelX > 30) {
@@ -476,9 +476,8 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
     KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[1] * 4, pauseCtx->mapPageVtx);
 
-    if ((pauseCtx->pageIndex == 1) && (pauseCtx->state == PAUSE_STATE_DEFAULT_ACTION) &&
-        ((pauseCtx->actionState == PAUSE_ACTIONSTATE_IDLE) ||
-         (pauseCtx->actionState == PAUSE_ACTIONSTATE_EQUIP_ITEM)) &&
+    if ((pauseCtx->pageIndex == 1) && (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) &&
+        ((pauseCtx->actionState == PAUSE_MAINSTATE_IDLE) || (pauseCtx->actionState == PAUSE_MAINSTATE_EQUIP_ITEM)) &&
         (YREG(6) != 0) && (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
         !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
 
@@ -630,8 +629,8 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         }
     }
 
-    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->actionState == PAUSE_ACTIONSTATE_IDLE)) {
-        if ((pauseCtx->state == PAUSE_STATE_DEFAULT_ACTION) && (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
+    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->actionState == PAUSE_MAINSTATE_IDLE)) {
+        if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
             !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
             j = 0;
             n = 0;
@@ -708,7 +707,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 oldCursorPoint;
 
-    if ((pauseCtx->state == PAUSE_STATE_DEFAULT_ACTION) && (pauseCtx->actionState == PAUSE_ACTIONSTATE_IDLE) &&
+    if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->actionState == PAUSE_MAINSTATE_IDLE) &&
         (pauseCtx->pageIndex == PAUSE_MAP)) {
         pauseCtx->cursorColorSet = 0;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
@@ -817,7 +816,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_WORLD_MAP]) {
             play_sound(NA_SE_SY_CURSOR);
         }
-    } else if (pauseCtx->state == PAUSE_STATE_OWLWARP_PROMPT) {
+    } else if (pauseCtx->state == PAUSE_STATE_OWLWARP_SELECT) {
         pauseCtx->cursorColorSet = 4;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 

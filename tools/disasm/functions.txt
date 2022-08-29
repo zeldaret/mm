@@ -4233,7 +4233,7 @@
     0x808248D0:("KaleidoScope_DrawOwlWarpMap",),
     0x80824B90:("KaleidoScope_DrawOwlWarpInfoPanel",),
     0x808256E4:("KaleidoScope_UpdateOwlWarpNamePanel",),
-    0x8082585C:("func_8082585C",),
+    0x8082585C:("KaleidoScope_UpdateSwitchPage",),
     0x808259D4:("KaleidoScope_SetView",),
     0x80825A50:("func_80825A50",),
     0x80825E28:("KaleidoScope_InitVertices",),

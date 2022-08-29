@@ -378,13 +378,13 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_PIRATE,
         SCENE_35TAKI,
         SCENE_KINDAN2,
-        -1,
+        0xFFFF,
     },
     // Zora Hall
     {
         SCENE_33ZORACITY,
         SCENE_BANDROOM,
-        -1,
+        0xFFFF,
     },
     // Romani Ranch
     {
@@ -394,7 +394,7 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_F01C,
         SCENE_F01_B,
         SCENE_KOEPONARACE,
-        -1,
+        0xFFFF,
     },
     // Deku Palace
     {
@@ -402,7 +402,7 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_DEKU_KING,
         SCENE_26SARUNOMORI,
         SCENE_DANPEI,
-        -1,
+        0xFFFF,
     },
     // Southern Swamp
     {
@@ -412,19 +412,16 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_WITCH_SHOP,
         SCENE_21MITURINMAE,
         SCENE_KINSTA1,
-        -1,
+        0xFFFF,
     },
     // Clock Town
     {
-        SCENE_00KEIKOKU,    SCENE_TENMON_DAI,   SCENE_13HUBUKINOMITI,
-        SCENE_24KEMONOMITI, SCENE_SYATEKI_MORI, SCENE_IKANAMAE,
-        SCENE_TOWN,         SCENE_SYATEKI_MIZU, SCENE_BOWLING,
-        SCENE_TAKARAYA,     SCENE_YADOYA,       SCENE_SONCHONOIE,
-        SCENE_MILK_BAR,     SCENE_ICHIBA,       SCENE_BOMYA,
-        SCENE_AYASHIISHOP,  SCENE_8ITEMSHOP,    SCENE_DOUJOU,
-        SCENE_POSTHOUSE,    SCENE_TAKARAKUJI,   SCENE_BACKTOWN,
-        SCENE_CLOCKTOWER,   SCENE_INSIDETOWER,  SCENE_OKUJOU,
-        SCENE_ALLEY,        SCENE_DEKUTES,      -1,
+        SCENE_00KEIKOKU,   SCENE_TENMON_DAI, SCENE_13HUBUKINOMITI, SCENE_24KEMONOMITI, SCENE_SYATEKI_MORI,
+        SCENE_IKANAMAE,    SCENE_TOWN,       SCENE_SYATEKI_MIZU,   SCENE_BOWLING,      SCENE_TAKARAYA,
+        SCENE_YADOYA,      SCENE_SONCHONOIE, SCENE_MILK_BAR,       SCENE_ICHIBA,       SCENE_BOMYA,
+        SCENE_AYASHIISHOP, SCENE_8ITEMSHOP,  SCENE_DOUJOU,         SCENE_POSTHOUSE,    SCENE_TAKARAKUJI,
+        SCENE_BACKTOWN,    SCENE_CLOCKTOWER, SCENE_INSIDETOWER,    SCENE_OKUJOU,       SCENE_ALLEY,
+        SCENE_DEKUTES,     0xFFFF,
     },
     // Snowhead
     {
@@ -437,13 +434,13 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_GORON_HAKA,
         SCENE_17SETUGEN,
         SCENE_17SETUGEN2,
-        -1,
+        0xFFFF,
     },
     // Ikana Graveyard
     {
         SCENE_BOTI,
         SCENE_DANPEI2TEST,
-        -1,
+        0xFFFF,
     },
     // Ikana Canyon
     {
@@ -456,7 +453,7 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_REDEAD,
         SCENE_TOUGITES,
         SCENE_HAKASHITA,
-        -1,
+        0xFFFF,
     },
     // Goron Village
     {
@@ -464,13 +461,13 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_11GORONNOSATO2,
         SCENE_16GORON_HOUSE,
         SCENE_GORONSHOP,
-        -1,
+        0xFFFF,
     },
     // Stone Tower
     {
         SCENE_F40,
         SCENE_F41,
-        -1,
+        0xFFFF,
     },
 };
 

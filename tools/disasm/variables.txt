@@ -4826,7 +4826,7 @@
     0x8082BE88:("D_8082BE88","UNK_TYPE1","",0x1),
     0x8082BE9C:("sUnpausedHudVisibility","UNK_TYPE2","",0x2),
     0x8082BEA0:("D_8082BEA0","UNK_TYPE2","",0x2),
-    0x8082BEA4:("D_8082BEA4","UNK_TYPE2","",0x2),
+    0x8082BEA4:("sDelayTimer","UNK_TYPE2","",0x2),
     0x8082BEA8:("sGameOverColorTimer","UNK_TYPE2","",0x2),
     0x8082BEAC:("D_8082BEAC","UNK_TYPE2","",0x2),
     0x8082BEB0:("D_8082BEB0","UNK_TYPE2","",0x2),
