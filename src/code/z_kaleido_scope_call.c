@@ -35,7 +35,7 @@ void KaleidoScopeCall_Update(PlayState* play) {
     KaleidoMgrOverlay* kaleidoScopeOvl = &gKaleidoMgrOverlayTable[KALEIDO_OVL_KALEIDO_SCOPE];
 
     if ((play->pauseCtx.state != PAUSE_STATE_0) || (play->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
-        if ((pauseCtx->state == PAUSE_STATE_1) || (pauseCtx->state == PAUSE_STATE_13)) {
+        if ((pauseCtx->state == PAUSE_STATE_1) || (pauseCtx->state == PAUSE_STATE_OWLWARP_0)) {
             if (ShrinkWindow_GetLetterboxMagnitude() == 0) {
                 R_PAUSE_MENU_MODE = 1;
                 pauseCtx->actionState = PAUSE_ACTIONSTATE_IDLE;
@@ -48,7 +48,7 @@ void KaleidoScopeCall_Update(PlayState* play) {
             pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_0;
             pauseCtx->state = (pauseCtx->state & 0xFFFF) + 1;
         } else if ((pauseCtx->state == PAUSE_STATE_2) || (pauseCtx->state == PAUSE_STATE_GAMEOVER_1) ||
-                   (pauseCtx->state == PAUSE_STATE_14)) {
+                   (pauseCtx->state == PAUSE_STATE_OWLWARP_1)) {
             if (R_PAUSE_MENU_MODE == 3) {
                 pauseCtx->state++;
             }
@@ -78,7 +78,7 @@ void KaleidoScopeCall_Draw(PlayState* play) {
 
     if (R_PAUSE_MENU_MODE == 3) {
         if (((play->pauseCtx.state >= PAUSE_STATE_4) && (play->pauseCtx.state <= PAUSE_STATE_SAVE_PROMPT)) ||
-            ((play->pauseCtx.state >= PAUSE_STATE_GAMEOVER_3) && (play->pauseCtx.state <= PAUSE_STATE_SETUP_UNPAUSE))) {
+            ((play->pauseCtx.state >= PAUSE_STATE_GAMEOVER_3) && (play->pauseCtx.state <= PAUSE_STATE_UNPAUSE_0))) {
             if (gKaleidoMgrCurOvl == kaleidoScopeOvl) {
                 sKaleidoScopeDrawFunc(play);
             }

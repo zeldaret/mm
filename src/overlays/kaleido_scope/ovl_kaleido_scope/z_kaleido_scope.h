@@ -36,15 +36,15 @@ typedef enum {
     /* 0x10 */ PAUSE_STATE_GAMEOVER_8,
     /* 0x11 */ PAUSE_STATE_GAMEOVER_CONTINUE_PROMPT,
     /* 0x12 */ PAUSE_STATE_GAMEOVER_10,
-    /* 0x13 */ PAUSE_STATE_13,
-    /* 0x14 */ PAUSE_STATE_14,
-    /* 0x15 */ PAUSE_STATE_15,
-    /* 0x16 */ PAUSE_STATE_16,
-    /* 0x17 */ PAUSE_STATE_17,
-    /* 0x18 */ PAUSE_STATE_18,
-    /* 0x19 */ PAUSE_STATE_19,
-    /* 0x1A */ PAUSE_STATE_SETUP_UNPAUSE,
-    /* 0x1B */ PAUSE_STATE_UNPAUSE
+    /* 0x13 */ PAUSE_STATE_OWLWARP_0,
+    /* 0x14 */ PAUSE_STATE_OWLWARP_1,
+    /* 0x15 */ PAUSE_STATE_OWLWARP_2,
+    /* 0x16 */ PAUSE_STATE_OWLWARP_3,
+    /* 0x17 */ PAUSE_STATE_OWLWARP_4,
+    /* 0x18 */ PAUSE_STATE_OWLWARP_5,
+    /* 0x19 */ PAUSE_STATE_OWLWARP_6,
+    /* 0x1A */ PAUSE_STATE_UNPAUSE_0,
+    /* 0x1B */ PAUSE_STATE_UNPAUSE_1
 } PauseState;
 
 typedef enum {
@@ -86,10 +86,10 @@ typedef enum {
 } PauseEquipCButton;
 
 typedef enum {
-  /* 0 */ DEBUG_EDITOR_NONE,
-  /* 1 */ DEBUG_EDITOR_INVENTORY_INIT,
-  /* 2 */ DEBUG_EDITOR_INVENTORY,
-  /* 3 */ DEBUG_EDITOR_EVENTS
+    /* 0 */ DEBUG_EDITOR_NONE,
+    /* 1 */ DEBUG_EDITOR_INVENTORY_INIT,
+    /* 2 */ DEBUG_EDITOR_INVENTORY,
+    /* 3 */ DEBUG_EDITOR_EVENTS
 } DebugEditor;
 
 typedef enum {

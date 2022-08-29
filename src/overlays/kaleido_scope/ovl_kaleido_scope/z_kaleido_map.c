@@ -556,7 +556,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         }
     }
 
-    if ((pauseCtx->state >= PAUSE_STATE_15) && (pauseCtx->state <= PAUSE_STATE_19)) {
+    if ((pauseCtx->state >= PAUSE_STATE_OWLWARP_2) && (pauseCtx->state <= PAUSE_STATE_OWLWARP_6)) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetRenderMode(POLY_OPA_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
@@ -566,7 +566,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
     func_8012C8AC(play->state.gfxCtx);
 
-    if (!((pauseCtx->state >= PAUSE_STATE_15) && (pauseCtx->state <= PAUSE_STATE_19))) {
+    if (!((pauseCtx->state >= PAUSE_STATE_OWLWARP_2) && (pauseCtx->state <= PAUSE_STATE_OWLWARP_6))) {
         gDPLoadTextureBlock(POLY_OPA_DISP++, &D_0C006E00, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
@@ -815,7 +815,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_WORLD_MAP]) {
             play_sound(NA_SE_SY_CURSOR);
         }
-    } else if (pauseCtx->state == PAUSE_STATE_17) {
+    } else if (pauseCtx->state == PAUSE_STATE_OWLWARP_4) {
         pauseCtx->cursorColorSet = 4;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 

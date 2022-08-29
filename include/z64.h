@@ -432,7 +432,7 @@ typedef struct {
     /* 0x204 */ u16 pageIndex;
     /* 0x206 */ u16 unk_206;
     /* 0x208 */ u16 savePromptState;
-    /* 0x20C */ f32 unk_20C;
+    /* 0x20C */ f32 unk_20C; // unused
     /* 0x210 */ f32 itemPageRoll;
     /* 0x214 */ f32 MapPageRoll;
     /* 0x218 */ f32 QuestPageRoll;

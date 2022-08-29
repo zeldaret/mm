@@ -504,7 +504,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
     s32 pad;
     s16 var_s0;
-    s16 sp44;
+    s16 oldCursorPoint;
     s16 var_v0;
     u16 temp_s0;
     u16 cursorItem;
@@ -518,15 +518,16 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
          (pauseCtx->actionState == PAUSE_ACTIONSTATE_8)) &&
         (pauseCtx->pageIndex == PAUSE_QUEST) && !pauseCtx->itemDescriptionOn) {
         if (pauseCtx->cursorSpecialPos == 0) {
-            sp44 = pauseCtx->cursorPoint[PAUSE_QUEST];
+            oldCursorPoint = pauseCtx->cursorPoint[PAUSE_QUEST];
 
             if (pauseCtx->stickRelX < -30) {
+                // Move cursor left
                 if (pauseCtx->actionState == PAUSE_ACTIONSTATE_5) {
                     AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 }
                 pauseCtx->cursorShrinkRate = 4.0f;
 
-                var_s0 = D_8082B02C[sp44][2];
+                var_s0 = D_8082B02C[oldCursorPoint][2];
                 if (var_s0 == -3) {
                     KaleidoScope_MoveCursorToSpecialPos(play, 0xA);
                     pauseCtx->actionState = PAUSE_ACTIONSTATE_IDLE;
@@ -543,11 +544,12 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                     }
                 }
             } else if (pauseCtx->stickRelX > 30) {
+                // Move cursor right
                 if (pauseCtx->actionState == PAUSE_ACTIONSTATE_5) {
                     AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 }
                 pauseCtx->cursorShrinkRate = 4.0f;
-                var_s0 = D_8082B02C[sp44][3];
+                var_s0 = D_8082B02C[oldCursorPoint][3];
 
                 if (var_s0 == -2) {
                     KaleidoScope_MoveCursorToSpecialPos(play, 0xB);
@@ -564,10 +566,11 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
             }
 
             if (pauseCtx->stickRelY < -30) {
+                // Move cursor down
                 if (pauseCtx->actionState == PAUSE_ACTIONSTATE_5) {
                     AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 }
-                var_s0 = D_8082B02C[sp44][1];
+                var_s0 = D_8082B02C[oldCursorPoint][1];
 
                 while (var_s0 >= 0) {
                     pauseCtx->cursorShrinkRate = 4.0f;
@@ -577,10 +580,11 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                     var_s0 = D_8082B02C[var_s0][1];
                 }
             } else if (pauseCtx->stickRelY > 30) {
+                // Move cursor up
                 if (pauseCtx->actionState == PAUSE_ACTIONSTATE_5) {
                     AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 }
-                var_s0 = D_8082B02C[sp44][0];
+                var_s0 = D_8082B02C[oldCursorPoint][0];
                 while (var_s0 >= 0) {
                     pauseCtx->cursorShrinkRate = 4.0f;
                     if (KaleidoScope_UpdateQuestStatusPoint(pauseCtx, var_s0) != 0) {
@@ -590,10 +594,12 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                 }
             }
 
-            if (sp44 != pauseCtx->cursorPoint[PAUSE_QUEST]) {
+            if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_QUEST]) {
                 pauseCtx->actionState = PAUSE_ACTIONSTATE_IDLE;
                 play_sound(NA_SE_SY_CURSOR);
             }
+
+            // Update cursor item and slot
 
             if (pauseCtx->cursorPoint[PAUSE_QUEST] != 0x16) {
                 if (pauseCtx->cursorPoint[PAUSE_QUEST] < 4) {

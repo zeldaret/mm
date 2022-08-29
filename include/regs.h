@@ -43,10 +43,13 @@
 #define bREG(r) BASE_REG(28, r)
 
 /* TODO: Actually confirm these, in case of miss-match it's at least a simple list to `sed` */
-#define R_ENABLE_ARENA_DBG          SREG(0) // Same as OoT
 #define R_RUN_SPEED_LIMIT           REG(45)
+#define R_ENABLE_ARENA_DBG          SREG(0) // Same as OoT
 #define R_UPDATE_RATE               SREG(30)
 #define R_PAUSE_MENU_MODE           SREG(94)
+#define R_PAUSE_WORLD_MAP_YAW       YREG(24) // TODO: Test
+#define R_PAUSE_WORLD_MAP_Y_OFFSET  YREG(25)
+#define R_PAUSE_WORLD_MAP_DEPTH     YREG(26)
 #define R_C_UP_ICON_X               YREG(88)
 #define R_C_UP_ICON_Y               YREG(89)
 #define R_MAGIC_FILL_COLOR(i)       ZREG(0 + i)
