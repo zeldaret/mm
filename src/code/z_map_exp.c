@@ -226,7 +226,7 @@ void Map_Update(PlayState* play) {
     s16 floor;
     s32 pad2;
 
-    if ((play->pauseCtx.state <= PAUSE_STATE_3) && (CHECK_BTN_ALL(controller->press.button, BTN_L)) &&
+    if ((play->pauseCtx.state <= PAUSE_STATE_DEFAULT_2) && (CHECK_BTN_ALL(controller->press.button, BTN_L)) &&
         !Play_InCsMode(play) && !func_80106530(play)) {
         if (!R_MINIMAP_DISABLED) {
             play_sound(NA_SE_SY_CAMERA_ZOOM_UP);
@@ -239,7 +239,7 @@ void Map_Update(PlayState* play) {
 
     func_80105B34(play);
 
-    if ((play->pauseCtx.state == PAUSE_STATE_0) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
         if (Map_IsInDungeonArea(play)) {
             floor = func_80109124(player->actor.world.pos.y);
             if (floor != -1) {

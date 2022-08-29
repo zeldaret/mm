@@ -513,7 +513,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
     pauseCtx->cursorColorSet = 0;
 
     // != PAUSE_ACTIONSTATE_IDLE
-    if ((pauseCtx->state == PAUSE_STATE_ACTION) &&
+    if ((pauseCtx->state == PAUSE_STATE_DEFAULT_ACTION) &&
         (!pauseCtx->actionState || (pauseCtx->actionState == PAUSE_ACTIONSTATE_5) ||
          (pauseCtx->actionState == PAUSE_ACTIONSTATE_8)) &&
         (pauseCtx->pageIndex == PAUSE_QUEST) && !pauseCtx->itemDescriptionOn) {
@@ -663,7 +663,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
             pauseCtx->cursorSlot[pauseCtx->pageIndex] = temp_s0;
 
             // Handle part of the ocarina songs playback
-            if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->state == PAUSE_STATE_ACTION) &&
+            if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->state == PAUSE_STATE_DEFAULT_ACTION) &&
                 (pauseCtx->actionState == PAUSE_ACTIONSTATE_IDLE) && (pauseCtx->cursorSpecialPos == 0)) {
                 if ((temp_s0 >= QUEST_SONG_SONATA) && (temp_s0 <= QUEST_SONG_SUN)) {
                     if ((CHECK_QUEST_ITEM(pauseCtx->cursorPoint[PAUSE_QUEST]) ||

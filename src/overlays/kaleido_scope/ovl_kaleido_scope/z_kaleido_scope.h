@@ -17,14 +17,14 @@ typedef enum {
 } PauseMenuPage;
 
 typedef enum {
-    /* 0x00 */ PAUSE_STATE_0,
-    /* 0x01 */ PAUSE_STATE_1,
-    /* 0x02 */ PAUSE_STATE_2,
-    /* 0x03 */ PAUSE_STATE_3,
-    /* 0x04 */ PAUSE_STATE_4,
-    /* 0x05 */ PAUSE_STATE_5,
-    /* 0x06 */ PAUSE_STATE_ACTION,
-    /* 0x07 */ PAUSE_STATE_SAVE_PROMPT,
+    /* 0x00 */ PAUSE_STATE_OFF,
+    /* 0x01 */ PAUSE_STATE_DEFAULT_0,
+    /* 0x02 */ PAUSE_STATE_DEFAULT_1,
+    /* 0x03 */ PAUSE_STATE_DEFAULT_2,
+    /* 0x04 */ PAUSE_STATE_DEFAULT_3,
+    /* 0x05 */ PAUSE_STATE_DEFAULT_4,
+    /* 0x06 */ PAUSE_STATE_DEFAULT_ACTION,
+    /* 0x07 */ PAUSE_STATE_DEFAULT_SAVE_PROMPT,
     /* 0x08 */ PAUSE_STATE_GAMEOVER_0,
     /* 0x09 */ PAUSE_STATE_GAMEOVER_1,
     /* 0x0A */ PAUSE_STATE_GAMEOVER_2,
