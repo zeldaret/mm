@@ -491,23 +491,54 @@ u8 D_8082B024[] = { 0, 1, 0, 0 };
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawQuestStatus.s")
 #endif
 
+typedef enum {
+    /* -3 */ CURSOR_TO_LEFT = -3, // Cursor on the "scroll to left page" position
+    /* -2 */ CURSOR_TO_RIGHT,     // Cursor on the "scroll to right page" position
+    /* -1 */ CURSOR_NONE          // No position in that direction, cursor stays where it is
+} CursorPointNext;
+
+typedef struct {
+    /* 0x0 */ s16 up;
+    /* 0x2 */ s16 down;
+    /* 0x4 */ s16 left;
+    /* 0x6 */ s16 right;
+} CursorPointDirection;
+
 void KaleidoScope_UpdateQuestCursor(PlayState* play) {
     static s16 D_8082B028 = 0;
-    static s16 D_8082B02C[][4] = {
-        { -1, 3, 2, 1 },   { 0, 4, 3, -2 },    { 0, 5, 22, 3 },   { 0, 4, 2, 1 },     { 1, 20, 5, -2 },
-        { 2, 19, 16, 4 },  { 12, -1, -3, 7 },  { 13, -1, 6, 8 },  { 14, -1, 7, 9 },   { 15, -1, 8, 10 },
-        { 16, -1, 9, 19 }, { 17, -1, 10, 5 },  { 18, 6, -3, 13 }, { 18, 7, 12, 14 },  { 22, 8, 13, 15 },
-        { 22, 9, 14, 16 }, { 22, 10, 15, 5 },  { 22, 11, 16, 5 }, { -1, 12, -3, 22 }, { 5, -1, 10, 20 },
-        { 4, -1, 19, -2 }, { 19, 12, -3, 22 }, { -1, 16, 18, 2 },
+    static CursorPointDirection sCursorPointLinks[] = {
+        { CURSOR_NONE, QUEST_REMAINS_TWINMOLD, QUEST_REMAINS_GYORG, QUEST_REMAINS_GOHT },     // QUEST_REMAINS_ODOWLA
+        { QUEST_REMAINS_ODOWLA, QUEST_SHIELD, QUEST_REMAINS_TWINMOLD, CURSOR_TO_RIGHT },      // QUEST_REMAINS_GOHT
+        { QUEST_REMAINS_ODOWLA, QUEST_SWORD, QUEST_HEART_PIECE, QUEST_REMAINS_TWINMOLD },     // QUEST_REMAINS_GYORG
+        { QUEST_REMAINS_ODOWLA, QUEST_SHIELD, QUEST_REMAINS_GYORG, QUEST_REMAINS_GOHT },      // QUEST_REMAINS_TWINMOLD
+        { QUEST_REMAINS_GOHT, QUEST_BOMB_BAG, QUEST_SWORD, CURSOR_TO_RIGHT },                 // QUEST_SHIELD
+        { QUEST_REMAINS_GYORG, QUEST_QUIVER, QUEST_SONG_STORMS, QUEST_SHIELD },               // QUEST_SWORD
+        { QUEST_SONG_TIME, CURSOR_NONE, CURSOR_TO_LEFT, QUEST_SONG_LULLABY },                 // QUEST_SONG_SONATA
+        { QUEST_SONG_HEALING, CURSOR_NONE, QUEST_SONG_SONATA, QUEST_SONG_BOSSA_NOVA },        // QUEST_SONG_LULLABY
+        { QUEST_SONG_EPONA, CURSOR_NONE, QUEST_SONG_LULLABY, QUEST_SONG_ELEGY },              // QUEST_SONG_BOSSA_NOVA
+        { QUEST_SONG_SOARING, CURSOR_NONE, QUEST_SONG_BOSSA_NOVA, QUEST_SONG_OATH },          // QUEST_SONG_ELEGY
+        { QUEST_SONG_STORMS, CURSOR_NONE, QUEST_SONG_ELEGY, QUEST_QUIVER },                   // QUEST_SONG_OATH
+        { QUEST_SONG_SUN, CURSOR_NONE, QUEST_SONG_OATH, QUEST_SWORD },                        // QUEST_SONG_SARIA
+        { QUEST_BOMBERS_NOTEBOOK, QUEST_SONG_SONATA, CURSOR_TO_LEFT, QUEST_SONG_HEALING },    // QUEST_SONG_TIME
+        { QUEST_BOMBERS_NOTEBOOK, QUEST_SONG_LULLABY, QUEST_SONG_TIME, QUEST_SONG_EPONA },    // QUEST_SONG_HEALING
+        { QUEST_HEART_PIECE, QUEST_SONG_BOSSA_NOVA, QUEST_SONG_HEALING, QUEST_SONG_SOARING }, // QUEST_SONG_EPONA
+        { QUEST_HEART_PIECE, QUEST_SONG_ELEGY, QUEST_SONG_EPONA, QUEST_SONG_STORMS },         // QUEST_SONG_SOARING
+        { QUEST_HEART_PIECE, QUEST_SONG_OATH, QUEST_SONG_SOARING, QUEST_SWORD },              // QUEST_SONG_STORMS
+        { QUEST_HEART_PIECE, QUEST_SONG_SARIA, QUEST_SONG_STORMS, QUEST_SWORD },              // QUEST_SONG_SUN
+        { CURSOR_NONE, QUEST_SONG_TIME, CURSOR_TO_LEFT, QUEST_HEART_PIECE },                  // QUEST_BOMBERS_NOTEBOOK
+        { QUEST_SWORD, CURSOR_NONE, QUEST_SONG_OATH, QUEST_BOMB_BAG },                        // QUEST_QUIVER
+        { QUEST_SHIELD, CURSOR_NONE, QUEST_QUIVER, CURSOR_TO_RIGHT },                         // QUEST_BOMB_BAG
+        { QUEST_QUIVER, QUEST_SONG_TIME, CURSOR_TO_LEFT, QUEST_HEART_PIECE },                 // QUEST_SKULL_TOKEN
+        { CURSOR_NONE, QUEST_SONG_STORMS, QUEST_BOMBERS_NOTEBOOK, QUEST_REMAINS_GYORG },      // QUEST_HEART_PIECE
     };
     PauseContext* pauseCtx = &play->pauseCtx;
     MessageContext* msgCtx = &play->msgCtx;
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
     s32 pad;
-    s16 var_s0;
+    s16 nextCursorPoint;
     s16 oldCursorPoint;
-    s16 var_v0;
-    u16 temp_s0;
+    s16 i;
+    u16 cursor;
     u16 cursorItem;
 
     pauseCtx->nameColorSet = 0;
@@ -528,20 +559,20 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                 }
                 pauseCtx->cursorShrinkRate = 4.0f;
 
-                var_s0 = D_8082B02C[oldCursorPoint][2];
-                if (var_s0 == -3) {
-                    KaleidoScope_MoveCursorToSpecialPos(play, 0xA);
+                nextCursorPoint = sCursorPointLinks[oldCursorPoint].left;
+                if (nextCursorPoint == CURSOR_TO_LEFT) {
+                    KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
                     pauseCtx->mainState = PAUSE_MAINSTATE_IDLE;
                     if (interfaceCtx->unk_212 == 6) {
                         func_8011552C(play, 0x15);
                     }
                     return;
                 } else {
-                    while (var_s0 >= 0) {
-                        if (KaleidoScope_UpdateQuestStatusPoint(pauseCtx, var_s0) != 0) {
+                    while (nextCursorPoint > CURSOR_NONE) {
+                        if (KaleidoScope_UpdateQuestStatusPoint(pauseCtx, nextCursorPoint) != 0) {
                             break;
                         }
-                        var_s0 = D_8082B02C[var_s0][2];
+                        nextCursorPoint = sCursorPointLinks[nextCursorPoint].left;
                     }
                 }
             } else if (pauseCtx->stickRelX > 30) {
@@ -550,19 +581,19 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                     AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 }
                 pauseCtx->cursorShrinkRate = 4.0f;
-                var_s0 = D_8082B02C[oldCursorPoint][3];
+                nextCursorPoint = sCursorPointLinks[oldCursorPoint].right;
 
-                if (var_s0 == -2) {
-                    KaleidoScope_MoveCursorToSpecialPos(play, 0xB);
+                if (nextCursorPoint == CURSOR_TO_RIGHT) {
+                    KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_RIGHT);
                     pauseCtx->mainState = PAUSE_MAINSTATE_IDLE;
                     return;
                 }
 
-                while (var_s0 >= 0) {
-                    if (KaleidoScope_UpdateQuestStatusPoint(pauseCtx, var_s0) != 0) {
+                while (nextCursorPoint > CURSOR_NONE) {
+                    if (KaleidoScope_UpdateQuestStatusPoint(pauseCtx, nextCursorPoint) != 0) {
                         break;
                     }
-                    var_s0 = D_8082B02C[var_s0][3];
+                    nextCursorPoint = sCursorPointLinks[nextCursorPoint].right;
                 }
             }
 
@@ -571,30 +602,31 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                 if (pauseCtx->mainState == PAUSE_MAINSTATE_SONG_PLAYER_PLAYING) {
                     AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 }
-                var_s0 = D_8082B02C[oldCursorPoint][1];
+                nextCursorPoint = sCursorPointLinks[oldCursorPoint].down;
 
-                while (var_s0 >= 0) {
+                while (nextCursorPoint > CURSOR_NONE) {
                     pauseCtx->cursorShrinkRate = 4.0f;
-                    if (KaleidoScope_UpdateQuestStatusPoint(pauseCtx, var_s0) != 0) {
+                    if (KaleidoScope_UpdateQuestStatusPoint(pauseCtx, nextCursorPoint) != 0) {
                         break;
                     }
-                    var_s0 = D_8082B02C[var_s0][1];
+                    nextCursorPoint = sCursorPointLinks[nextCursorPoint].down;
                 }
             } else if (pauseCtx->stickRelY > 30) {
                 // Move cursor up
                 if (pauseCtx->mainState == PAUSE_MAINSTATE_SONG_PLAYER_PLAYING) {
                     AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 }
-                var_s0 = D_8082B02C[oldCursorPoint][0];
-                while (var_s0 >= 0) {
+                nextCursorPoint = sCursorPointLinks[oldCursorPoint].up;
+                while (nextCursorPoint > CURSOR_NONE) {
                     pauseCtx->cursorShrinkRate = 4.0f;
-                    if (KaleidoScope_UpdateQuestStatusPoint(pauseCtx, var_s0) != 0) {
+                    if (KaleidoScope_UpdateQuestStatusPoint(pauseCtx, nextCursorPoint) != 0) {
                         break;
                     }
-                    var_s0 = D_8082B02C[var_s0][0];
+                    nextCursorPoint = sCursorPointLinks[nextCursorPoint].up;
                 }
             }
 
+            // if the cursor point changed
             if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_QUEST]) {
                 pauseCtx->mainState = PAUSE_MAINSTATE_IDLE;
                 play_sound(NA_SE_SY_CURSOR);
@@ -602,49 +634,57 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
 
             // Update cursor item and slot
 
-            if (pauseCtx->cursorPoint[PAUSE_QUEST] != 0x16) {
-                if (pauseCtx->cursorPoint[PAUSE_QUEST] < 4) {
+            if (pauseCtx->cursorPoint[PAUSE_QUEST] != QUEST_HEART_PIECE) {
+                if (pauseCtx->cursorPoint[PAUSE_QUEST] <= QUEST_REMAINS_TWINMOLD) {
+                    // Boss Remains
                     if (CHECK_QUEST_ITEM(pauseCtx->cursorPoint[PAUSE_QUEST])) {
                         cursorItem = ITEM_REMAINS_ODOLWA + pauseCtx->cursorPoint[PAUSE_QUEST];
                     } else {
                         cursorItem = PAUSE_ITEM_NONE;
                     }
                 } else if (pauseCtx->cursorPoint[PAUSE_QUEST] == QUEST_BOMBERS_NOTEBOOK) {
+                    // Bombers Notebook
                     if (CHECK_QUEST_ITEM(pauseCtx->cursorPoint[PAUSE_QUEST])) {
                         cursorItem = ITEM_BOMBERS_NOTEBOOK;
                     } else {
                         cursorItem = PAUSE_ITEM_NONE;
                     }
-                } else if (pauseCtx->cursorPoint[PAUSE_QUEST] == 4) {
-                    if (GET_CUR_EQUIP_VALUE(1) != 0) {
-                        cursorItem = (ITEM_SHIELD_HERO - 1) + GET_CUR_EQUIP_VALUE(1);
+                } else if (pauseCtx->cursorPoint[PAUSE_QUEST] == QUEST_SHIELD) {
+                    // Shield
+                    if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD) != EQUIP_VALUE_SHIELD_NONE) {
+                        cursorItem = (ITEM_SHIELD_HERO - EQUIP_TYPE_SHIELD) + GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD);
                     } else {
                         cursorItem = PAUSE_ITEM_NONE;
                     }
-                } else if (pauseCtx->cursorPoint[PAUSE_QUEST] == 5) {
-                    if (GET_CUR_EQUIP_VALUE(0) != 0) {
-                        cursorItem = (ITEM_SWORD_KOKIRI - 1) + GET_CUR_EQUIP_VALUE(0);
+                } else if (pauseCtx->cursorPoint[PAUSE_QUEST] == QUEST_SWORD) {
+                    // Sword
+                    if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) != EQUIP_VALUE_SWORD_NONE) {
+                        cursorItem =
+                            (ITEM_SWORD_KOKIRI - EQUIP_VALUE_SWORD_KOKIRI) + GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD);
                     } else {
                         cursorItem = PAUSE_ITEM_NONE;
                     }
-                } else if (pauseCtx->cursorPoint[PAUSE_QUEST] < 0x12) {
+                } else if (pauseCtx->cursorPoint[PAUSE_QUEST] <= QUEST_SONG_SUN) {
+                    // Songs
                     if (CHECK_QUEST_ITEM(pauseCtx->cursorPoint[PAUSE_QUEST])) {
                         cursorItem = ITEM_WALLET_GIANT + pauseCtx->cursorPoint[PAUSE_QUEST];
-                    } else if ((pauseCtx->cursorPoint[PAUSE_QUEST] == 7) &&
+                    } else if ((pauseCtx->cursorPoint[PAUSE_QUEST] == QUEST_SONG_LULLABY) &&
                                CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO)) {
                         cursorItem = ITEM_SONG_LULLABY_INTRO;
                     } else {
                         cursorItem = PAUSE_ITEM_NONE;
                     }
-                } else if (pauseCtx->cursorPoint[PAUSE_QUEST] == 0x13) {
-                    if (GET_CUR_UPG_VALUE(0) != 0) {
-                        cursorItem = GET_CUR_UPG_VALUE(0) + 0x52;
+                } else if (pauseCtx->cursorPoint[PAUSE_QUEST] == QUEST_QUIVER) {
+                    // Quiver Upgrade
+                    if (GET_CUR_UPG_VALUE(UPG_QUIVER) != 0) {
+                        cursorItem = (ITEM_QUIVER_30 - 1) + GET_CUR_UPG_VALUE(UPG_QUIVER);
                     } else {
                         cursorItem = PAUSE_ITEM_NONE;
                     }
-                } else if (pauseCtx->cursorPoint[PAUSE_QUEST] == 0x14) {
-                    if (GET_CUR_UPG_VALUE(1) != 0) {
-                        cursorItem = GET_CUR_UPG_VALUE(1) + 0x55;
+                } else if (pauseCtx->cursorPoint[PAUSE_QUEST] == QUEST_BOMB_BAG) {
+                    // Bomb Bag Upgrade
+                    if (GET_CUR_UPG_VALUE(UPG_BOMB_BAG) != 0) {
+                        cursorItem = (ITEM_BOMB_BAG_20 - 1) + GET_CUR_UPG_VALUE(UPG_BOMB_BAG);
                     } else {
                         cursorItem = PAUSE_ITEM_NONE;
                     }
@@ -652,6 +692,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                     cursorItem = PAUSE_ITEM_NONE;
                 }
             } else {
+                // Heart Piece Count
                 if ((GET_SAVE_INVENTORY_QUEST_ITEMS >> QUEST_HEART_PIECE_COUNT) != 0) {
                     cursorItem = ITEM_HEART_CONTAINER;
                 } else {
@@ -659,30 +700,30 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                 }
             }
 
-            temp_s0 = pauseCtx->cursorPoint[PAUSE_QUEST];
+            cursor = pauseCtx->cursorPoint[PAUSE_QUEST];
             pauseCtx->cursorItem[pauseCtx->pageIndex] = cursorItem;
-            pauseCtx->cursorSlot[pauseCtx->pageIndex] = temp_s0;
+            pauseCtx->cursorSlot[pauseCtx->pageIndex] = cursor;
 
-            // Handle part of the ocarina songs playback
             if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) &&
                 (pauseCtx->mainState == PAUSE_MAINSTATE_IDLE) && (pauseCtx->cursorSpecialPos == 0)) {
-                if ((temp_s0 >= QUEST_SONG_SONATA) && (temp_s0 <= QUEST_SONG_SUN)) {
+                if ((cursor >= QUEST_SONG_SONATA) && (cursor <= QUEST_SONG_SUN)) {
+                    // Handle part of the ocarina songs playback
                     if ((CHECK_QUEST_ITEM(pauseCtx->cursorPoint[PAUSE_QUEST]) ||
-                         ((temp_s0 == 7) && !CHECK_QUEST_ITEM(pauseCtx->cursorPoint[PAUSE_QUEST]) &&
-                          CHECK_QUEST_ITEM(0x18))) &&
+                         ((cursor == QUEST_SONG_LULLABY) && !CHECK_QUEST_ITEM(pauseCtx->cursorPoint[PAUSE_QUEST]) &&
+                          CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO))) &&
                         (msgCtx->msgLength == 0)) {
                         if (CHECK_QUEST_ITEM(pauseCtx->cursorPoint[PAUSE_QUEST])) {
-                            temp_s0 = pauseCtx->cursorSlot[PAUSE_QUEST];
+                            cursor = pauseCtx->cursorSlot[PAUSE_QUEST];
                         } else {
-                            temp_s0 = 0x14;
+                            cursor = QUEST_BOMB_BAG;
                         }
 
-                        pauseCtx->ocarinaSongIndex = gOcarinaSongItemMap[temp_s0 - QUEST_SONG_SONATA];
+                        pauseCtx->ocarinaSongIndex = gOcarinaSongItemMap[cursor - QUEST_SONG_SONATA];
                         D_8082B028 = 10;
 
-                        for (var_v0 = 0; var_v0 < 8; var_v0++) {
-                            D_8082AEE4[var_v0] = OCARINA_BTN_INVALID;
-                            D_8082AEF0[var_v0] = 0;
+                        for (i = 0; i < 8; i++) {
+                            D_8082AEE4[i] = OCARINA_BTN_INVALID;
+                            D_8082AEF0[i] = 0;
                         }
 
                         D_8082AEE0 = 0;
@@ -720,7 +761,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                         }
                     }
                 } else {
-                    if ((temp_s0 == 0x12) && (pauseCtx->cursorItem[PAUSE_QUEST] != PAUSE_ITEM_NONE)) {
+                    if ((cursor == QUEST_BOMBERS_NOTEBOOK) && (pauseCtx->cursorItem[PAUSE_QUEST] != PAUSE_ITEM_NONE)) {
                         if (interfaceCtx->unk_212 != 6) {
                             func_8011552C(play, 6);
                         }
@@ -735,8 +776,9 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                             gSaveContext.unk_3F22 = 0;
                             Interface_ChangeAlpha(50);
                         }
+
                         if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) && (msgCtx->msgLength == 0)) {
-                            if (pauseCtx->cursorPoint[PAUSE_QUEST] == 0x12) {
+                            if (pauseCtx->cursorPoint[PAUSE_QUEST] == QUEST_BOMBERS_NOTEBOOK) {
                                 play->pauseCtx.unk_1F0 = true;
                                 pauseCtx->mainState = PAUSE_MAINSTATE_10;
                                 play_sound(NA_SE_SY_DECIDE);
@@ -771,7 +813,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                 }
             } else if ((pauseCtx->mainState == PAUSE_MAINSTATE_IDLE_CURSOR_ON_SONG) &&
                        CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) && (msgCtx->msgLength == 0) &&
-                       (temp_s0 >= 6) && (temp_s0 < 0x12)) {
+                       (cursor >= QUEST_SONG_SONATA) && (cursor <= QUEST_SONG_SUN)) {
                 pauseCtx->mainState = 9;
                 D_8082B028 = 10;
             }
@@ -804,9 +846,9 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                     cursorItem = PAUSE_ITEM_NONE;
                 }
 
-                temp_s0 = pauseCtx->cursorPoint[PAUSE_QUEST];
+                cursor = pauseCtx->cursorPoint[PAUSE_QUEST];
                 pauseCtx->cursorItem[pauseCtx->pageIndex] = cursorItem;
-                pauseCtx->cursorSlot[pauseCtx->pageIndex] = temp_s0;
+                pauseCtx->cursorSlot[pauseCtx->pageIndex] = cursor;
             }
         } else if (pauseCtx->stickRelX < -30) {
             if (pauseCtx->mainState == PAUSE_MAINSTATE_SONG_PLAYER_PLAYING) {
@@ -815,27 +857,28 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
 
             func_80821A04(play);
 
-            pauseCtx->cursorPoint[PAUSE_QUEST] = 1;
+            pauseCtx->cursorPoint[PAUSE_QUEST] = QUEST_REMAINS_GOHT;
             if (CHECK_QUEST_ITEM(pauseCtx->cursorPoint[PAUSE_QUEST])) {
-                cursorItem = pauseCtx->cursorPoint[PAUSE_QUEST] + 0x5D;
-                if (pauseCtx->cursorPoint[PAUSE_QUEST] != 0) {
+                cursorItem = (ITEM_REMAINS_GOHT - 1) + pauseCtx->cursorPoint[PAUSE_QUEST];
+                if (pauseCtx->cursorPoint[PAUSE_QUEST] != QUEST_REMAINS_ODOWLA) {
+                    // This condition is never true as `cursorPoint` is set three lines above
                     cursorItem = ITEM_MASK_GIANT;
                 }
             } else {
                 cursorItem = PAUSE_ITEM_NONE;
             }
 
-            temp_s0 = pauseCtx->cursorPoint[PAUSE_QUEST];
+            cursor = pauseCtx->cursorPoint[PAUSE_QUEST];
             pauseCtx->cursorItem[pauseCtx->pageIndex] = cursorItem;
-            pauseCtx->cursorSlot[pauseCtx->pageIndex] = temp_s0;
+            pauseCtx->cursorSlot[pauseCtx->pageIndex] = cursor;
         }
     } else if (pauseCtx->mainState == PAUSE_MAINSTATE_9) {
         pauseCtx->cursorColorSet = 4;
         D_8082B028--;
         if (D_8082B028 == 0) {
-            for (var_v0 = 0; var_v0 < 8; var_v0++) {
-                D_8082AEE4[var_v0] = OCARINA_BTN_INVALID;
-                D_8082AEF0[var_v0] = 0;
+            for (i = 0; i < 8; i++) {
+                D_8082AEE4[i] = OCARINA_BTN_INVALID;
+                D_8082AEF0[i] = 0;
             }
             D_8082AEE0 = 0;
 
@@ -846,14 +889,14 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
             pauseCtx->unk_2BE[4] = -41;
 
             if (CHECK_QUEST_ITEM(pauseCtx->cursorPoint[PAUSE_QUEST])) {
-                temp_s0 = pauseCtx->cursorSlot[PAUSE_QUEST];
+                cursor = pauseCtx->cursorSlot[PAUSE_QUEST];
             } else {
-                temp_s0 = 0x14;
+                cursor = QUEST_BOMB_BAG;
             }
 
             AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_DEFAULT);
             AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_DEFAULT);
-            pauseCtx->ocarinaSongIndex = gOcarinaSongItemMap[temp_s0 - QUEST_SONG_SONATA];
+            pauseCtx->ocarinaSongIndex = gOcarinaSongItemMap[cursor - QUEST_SONG_SONATA];
             AudioOcarina_SetPlaybackSong(pauseCtx->ocarinaSongIndex + 1, 1);
             pauseCtx->mainState = PAUSE_MAINSTATE_SONG_PLAYBACK;
             pauseCtx->ocarinaStaff = AudioOcarina_GetPlaybackStaff();

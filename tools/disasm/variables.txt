@@ -4685,7 +4685,7 @@
     0x8082B00C:("D_8082B00C","void*","[6]",0x18),
     0x8082B024:("D_8082B024","UNK_TYPE1","",0x1),
     0x8082B028:("D_8082B028","UNK_TYPE2","",0x2),
-    0x8082B02C:("D_8082B02C","s16","[98]",0xC4),
+    0x8082B02C:("sCursorPointLinks","s16","[98]",0xC4),
     0x8082B0F0:("sCurSection","UNK_TYPE2","",0x2),
     0x8082B0F4:("sCurRow","UNK_TYPE2","",0x2),
     0x8082B0F8:("sSectionPositions","s16","[280]",0x230),

@@ -318,7 +318,8 @@ u8 Item_Give(PlayState* play, u8 item) {
     }
 
     if (item == ITEM_SKULL_TOKEN) {
-        SET_QUEST_ITEM(item - ITEM_SKULL_TOKEN + QUEST_SKULL_TOKEN);
+        //! @bug: Sets QUEST_QUIVER instead of QUEST_SKULL_TOKEN
+        SET_QUEST_ITEM(item - ITEM_SKULL_TOKEN + QUEST_QUIVER);
         Inventory_IncrementSkullTokenCount(play->sceneNum);
         return ITEM_NONE;
 
