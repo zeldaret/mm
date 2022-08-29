@@ -442,7 +442,7 @@ typedef struct PlayerAgeProperties {
     /* 0x94 */ u16 surfaceSfxOffset;
     /* 0x98 */ f32 unk_98;
     /* 0x9C */ f32 unk_9C;
-    /* 0xA0 */ LinkAnimationHeader* unk_A0;
+    /* 0xA0 */ LinkAnimationHeader* openChestAnim;
     /* 0xA4 */ LinkAnimationHeader* unk_A4;
     /* 0xA8 */ LinkAnimationHeader* unk_A8;
     /* 0xAC */ LinkAnimationHeader* unk_AC;
@@ -828,7 +828,7 @@ typedef enum PlayerCsMode {
 
 typedef enum {
     /* 0x0 */ PLAYER_INITMODE_0,
-    /* 0x1 */ PLAYER_INITMODE_1,
+    /* 0x1 */ PLAYER_INITMODE_1, // Spawning after pulling/putting-back Master sword // OoT leftover
     /* 0x2 */ PLAYER_INITMODE_2,
     /* 0x3 */ PLAYER_INITMODE_3,
     /* 0x4 */ PLAYER_INITMODE_4,

@@ -756,7 +756,7 @@ void Player_RequestRumble(PlayState* play, Player* this, s32 sourceIntensity, s3
 #define SFX_VOICE_BANK_SIZE 0x20
 
 // sAgeProperties
-PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
+PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
     {
         // unk_00;
         84.0f,
@@ -820,25 +820,38 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
         33.0f,
         // f32 unk_9C;
         44.15145f,
-        // LinkAnimationHeader* unk_A0;
-        &gameplay_keep_Linkanim_00D540,
-        // LinkAnimationHeader* unk_A4;
-        &gameplay_keep_Linkanim_00D548,
-        // LinkAnimationHeader* unk_A8;
-        &gameplay_keep_Linkanim_00D660,
-        // LinkAnimationHeader* unk_AC;
-        &gameplay_keep_Linkanim_00DB90,
-        // LinkAnimationHeader* unk_B0;
-        &gameplay_keep_Linkanim_00DB98,
+        // openChestAnim
+        &gameplay_keep_Linkanim_00D540, // boy/anim/link_demo_Tbox_open
+        // unk_A4
+        &gameplay_keep_Linkanim_00D548, // boy/anim/link_demo_back_to_past
+        // unk_A8
+        &gameplay_keep_Linkanim_00D660, // boy/anim/link_demo_return_to_past
+        // unk_AC
+        &gameplay_keep_Linkanim_00DB90, // boy/anim/link_normal_climb_startA
+        // unk_B0
+        &gameplay_keep_Linkanim_00DB98, // boy/anim/link_normal_climb_startB
+        // unk_B4
         {
-            &gameplay_keep_Linkanim_00DBA0,
-            &gameplay_keep_Linkanim_00DBA8,
-            &gameplay_keep_Linkanim_00DAB0,
-            &gameplay_keep_Linkanim_00DAB8,
+            &gameplay_keep_Linkanim_00DBA0, // boy/anim/link_normal_climb_upL
+            &gameplay_keep_Linkanim_00DBA8, // boy/anim/link_normal_climb_upR
+            &gameplay_keep_Linkanim_00DAB0, // boy/anim/link_normal_Fclimb_upL
+            &gameplay_keep_Linkanim_00DAB8, // boy/anim/link_normal_Fclimb_upR
         },
-        { &gameplay_keep_Linkanim_00DA90, &gameplay_keep_Linkanim_00DA98 },
-        { &gameplay_keep_Linkanim_00DB70, &gameplay_keep_Linkanim_00DB78 },
-        { &gameplay_keep_Linkanim_00DB88, &gameplay_keep_Linkanim_00DB80 },
+        // unk_C4
+        {
+            &gameplay_keep_Linkanim_00DA90, // boy/anim/link_normal_Fclimb_sideL
+            &gameplay_keep_Linkanim_00DA98, // boy/anim/link_normal_Fclimb_sideR
+        },
+        // unk_CC
+        {
+            &gameplay_keep_Linkanim_00DB70, // boy/anim/link_normal_climb_endAL
+            &gameplay_keep_Linkanim_00DB78, // boy/anim/link_normal_climb_endAR
+        },
+        // unk_D4
+        {
+            &gameplay_keep_Linkanim_00DB88, // boy/anim/link_normal_climb_endBR
+            &gameplay_keep_Linkanim_00DB80, // boy/anim/link_normal_climb_endBL
+        },
     },
     {
         // unk_00;
@@ -903,25 +916,38 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
         -25.0f,
         // f32 unk_9C;
         42.0f,
-        // LinkAnimationHeader* unk_A0;
-        &gameplay_keep_Linkanim_00E170,
-        // LinkAnimationHeader* unk_A4;
-        &gameplay_keep_Linkanim_00D548,
-        // LinkAnimationHeader* unk_A8;
-        &gameplay_keep_Linkanim_00D660,
-        // LinkAnimationHeader* unk_AC;
-        &gameplay_keep_Linkanim_00E198,
-        // LinkAnimationHeader* unk_B0;
-        &gameplay_keep_Linkanim_00E1A0,
+        // openChestAnim
+        &gameplay_keep_Linkanim_00E170, // goron/anim/pg_Tbox_open
+        // unk_A4
+        &gameplay_keep_Linkanim_00D548, // boy/anim/link_demo_back_to_past
+        // unk_A8
+        &gameplay_keep_Linkanim_00D660, // boy/anim/link_demo_return_to_past
+        // unk_AC
+        &gameplay_keep_Linkanim_00E198, // goron/anim/pg_climb_startA
+        // unk_B0
+        &gameplay_keep_Linkanim_00E1A0, // goron/anim/pg_climb_startB
+        // unk_B4
         {
-            &gameplay_keep_Linkanim_00E1A8,
-            &gameplay_keep_Linkanim_00E1B0,
-            &gameplay_keep_Linkanim_00E1A8,
-            &gameplay_keep_Linkanim_00E1B0,
+            &gameplay_keep_Linkanim_00E1A8, // goron/anim/pg_climb_upL
+            &gameplay_keep_Linkanim_00E1B0, // goron/anim/pg_climb_upR
+            &gameplay_keep_Linkanim_00E1A8, // goron/anim/pg_climb_upL
+            &gameplay_keep_Linkanim_00E1B0, // goron/anim/pg_climb_upR
         },
-        { &gameplay_keep_Linkanim_00DA90, &gameplay_keep_Linkanim_00DA98 },
-        { &gameplay_keep_Linkanim_00E178, &gameplay_keep_Linkanim_00E180 },
-        { &gameplay_keep_Linkanim_00E190, &gameplay_keep_Linkanim_00E188 },
+        // unk_C4
+        {
+            &gameplay_keep_Linkanim_00DA90, // boy/anim/link_normal_Fclimb_sideL
+            &gameplay_keep_Linkanim_00DA98, // boy/anim/link_normal_Fclimb_sideR
+        },
+        // unk_CC
+        {
+            &gameplay_keep_Linkanim_00E178, // goron/anim/pg_climb_endAL
+            &gameplay_keep_Linkanim_00E180, // goron/anim/pg_climb_endAR
+        },
+        // unk_D4
+        {
+            &gameplay_keep_Linkanim_00E190, // goron/anim/pg_climb_endBR
+            &gameplay_keep_Linkanim_00E188, // goron/anim/pg_climb_endBL
+        },
     },
     {
         // unk_00;
@@ -986,25 +1012,38 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
         22.0f,
         // f32 unk_9C;
         36.0f,
-        // LinkAnimationHeader* unk_A0;
-        &gameplay_keep_Linkanim_00E300,
-        // LinkAnimationHeader* unk_A4;
-        &gameplay_keep_Linkanim_00D548,
-        // LinkAnimationHeader* unk_A8;
-        &gameplay_keep_Linkanim_00D660,
-        // LinkAnimationHeader* unk_AC;
-        &gameplay_keep_Linkanim_00E378,
-        // LinkAnimationHeader* unk_B0;
-        &gameplay_keep_Linkanim_00E380,
+        // openChestAnim
+        &gameplay_keep_Linkanim_00E300, // zora/anim/pz_Tbox_open
+        // unk_A4
+        &gameplay_keep_Linkanim_00D548, // boy/anim/link_demo_back_to_past
+        // unk_A8
+        &gameplay_keep_Linkanim_00D660, // boy/anim/link_demo_return_to_past
+        // unk_AC
+        &gameplay_keep_Linkanim_00E378, // zora/anim/pz_climb_startA
+        // unk_B0
+        &gameplay_keep_Linkanim_00E380, // zora/anim/pz_climb_startB
+        // unk_B4
         {
-            &gameplay_keep_Linkanim_00E388,
-            &gameplay_keep_Linkanim_00E390,
-            &gameplay_keep_Linkanim_00DAB0,
-            &gameplay_keep_Linkanim_00DAB8,
+            &gameplay_keep_Linkanim_00E388, // zora/anim/pz_climb_upL
+            &gameplay_keep_Linkanim_00E390, // zora/anim/pz_climb_upR
+            &gameplay_keep_Linkanim_00DAB0, // boy/anim/link_normal_Fclimb_upL
+            &gameplay_keep_Linkanim_00DAB8, // boy/anim/link_normal_Fclimb_upR
         },
-        { &gameplay_keep_Linkanim_00DA90, &gameplay_keep_Linkanim_00DA98 },
-        { &gameplay_keep_Linkanim_00E358, &gameplay_keep_Linkanim_00E360 },
-        { &gameplay_keep_Linkanim_00E370, &gameplay_keep_Linkanim_00E368 },
+        // unk_C4
+        {
+            &gameplay_keep_Linkanim_00DA90, // boy/anim/link_normal_Fclimb_sideL
+            &gameplay_keep_Linkanim_00DA98, // boy/anim/link_normal_Fclimb_sideR
+        },
+        // unk_CC
+        {
+            &gameplay_keep_Linkanim_00E358, // zora/anim/pz_climb_endAL
+            &gameplay_keep_Linkanim_00E360, // zora/anim/pz_climb_endAR
+        },
+        // unk_D4
+        {
+            &gameplay_keep_Linkanim_00E370, // zora/anim/pz_climb_endBR
+            &gameplay_keep_Linkanim_00E368, // zora/anim/pz_climb_endBL
+        },
     },
     {
         // unk_00;
@@ -1069,25 +1108,38 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
         -21.0f,
         // f32 unk_9C;
         33.0f,
-        // LinkAnimationHeader* unk_A0;
-        &gameplay_keep_Linkanim_00E268,
-        // LinkAnimationHeader* unk_A4;
-        &gameplay_keep_Linkanim_00D548,
-        // LinkAnimationHeader* unk_A8;
-        &gameplay_keep_Linkanim_00D660,
-        // LinkAnimationHeader* unk_AC;
-        &gameplay_keep_Linkanim_00D1F8,
-        // LinkAnimationHeader* unk_B0;
-        &gameplay_keep_Linkanim_00D200,
+        // openChestAnim
+        &gameplay_keep_Linkanim_00E268, // nuts/anim/pn_Tbox_open
+        // unk_A4
+        &gameplay_keep_Linkanim_00D548, // boy/anim/link_demo_back_to_past
+        // unk_A8
+        &gameplay_keep_Linkanim_00D660, // boy/anim/link_demo_return_to_past
+        // unk_AC
+        &gameplay_keep_Linkanim_00D1F8, // boy/anim/clink_normal_climb_startA
+        // unk_B0
+        &gameplay_keep_Linkanim_00D200, // boy/anim/clink_normal_climb_startB
+        // unk_B4
         {
-            &gameplay_keep_Linkanim_00D208,
-            &gameplay_keep_Linkanim_00D210,
-            &gameplay_keep_Linkanim_00DAB0,
-            &gameplay_keep_Linkanim_00DAB8,
+            &gameplay_keep_Linkanim_00D208, // boy/anim/clink_normal_climb_upL
+            &gameplay_keep_Linkanim_00D210, // boy/anim/clink_normal_climb_upR
+            &gameplay_keep_Linkanim_00DAB0, // boy/anim/link_normal_Fclimb_upL
+            &gameplay_keep_Linkanim_00DAB8, // boy/anim/link_normal_Fclimb_upR
         },
-        { &gameplay_keep_Linkanim_00DA90, &gameplay_keep_Linkanim_00DA98 },
-        { &gameplay_keep_Linkanim_00D1D8, &gameplay_keep_Linkanim_00D1E0 },
-        { &gameplay_keep_Linkanim_00D1F0, &gameplay_keep_Linkanim_00D1E8 },
+        // unk_C4
+        {
+            &gameplay_keep_Linkanim_00DA90, // boy/anim/link_normal_Fclimb_sideL
+            &gameplay_keep_Linkanim_00DA98, // boy/anim/link_normal_Fclimb_sideR
+        },
+        // unk_CC
+        {
+            &gameplay_keep_Linkanim_00D1D8, // boy/anim/clink_normal_climb_endAL
+            &gameplay_keep_Linkanim_00D1E0, // boy/anim/clink_normal_climb_endAR
+        },
+        // unk_D4
+        {
+            &gameplay_keep_Linkanim_00D1F0, // boy/anim/clink_normal_climb_endBR
+            &gameplay_keep_Linkanim_00D1E8, // boy/anim/clink_normal_climb_endBL
+        },
     },
     {
         // unk_00;
@@ -1152,25 +1204,38 @@ PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX] = {
         22.0f,
         // f32 unk_9C;
         29.4343f,
-        // LinkAnimationHeader* unk_A0;
-        &gameplay_keep_Linkanim_00D128,
-        // LinkAnimationHeader* unk_A4;
-        &gameplay_keep_Linkanim_00D170,
-        // LinkAnimationHeader* unk_A8;
-        &gameplay_keep_Linkanim_00D1B8,
-        // LinkAnimationHeader* unk_AC;
-        &gameplay_keep_Linkanim_00D1F8,
-        // LinkAnimationHeader* unk_B0;
-        &gameplay_keep_Linkanim_00D200,
+        // openChestAnim
+        &gameplay_keep_Linkanim_00D128, // boy/anim/clink_demo_Tbox_open
+        // unk_A4
+        &gameplay_keep_Linkanim_00D170, // boy/anim/clink_demo_goto_future
+        // unk_A8
+        &gameplay_keep_Linkanim_00D1B8, // boy/anim/clink_demo_return_to_future
+        // unk_AC
+        &gameplay_keep_Linkanim_00D1F8, // boy/anim/clink_normal_climb_startA
+        // unk_B0
+        &gameplay_keep_Linkanim_00D200, // boy/anim/clink_normal_climb_startB
+        // unk_B4
         {
-            &gameplay_keep_Linkanim_00D208,
-            &gameplay_keep_Linkanim_00D210,
-            &gameplay_keep_Linkanim_00DAB0,
-            &gameplay_keep_Linkanim_00DAB8,
+            &gameplay_keep_Linkanim_00D208, // boy/anim/clink_normal_climb_upL
+            &gameplay_keep_Linkanim_00D210, // boy/anim/clink_normal_climb_upR
+            &gameplay_keep_Linkanim_00DAB0, // boy/anim/link_normal_Fclimb_upL
+            &gameplay_keep_Linkanim_00DAB8, // boy/anim/link_normal_Fclimb_upR
         },
-        { &gameplay_keep_Linkanim_00DA90, &gameplay_keep_Linkanim_00DA98 },
-        { &gameplay_keep_Linkanim_00D1D8, &gameplay_keep_Linkanim_00D1E0 },
-        { &gameplay_keep_Linkanim_00D1F0, &gameplay_keep_Linkanim_00D1E8 },
+        // unk_C4
+        {
+            &gameplay_keep_Linkanim_00DA90, // boy/anim/link_normal_Fclimb_sideL
+            &gameplay_keep_Linkanim_00DA98, // boy/anim/link_normal_Fclimb_sideR
+        },
+        // unk_CC
+        {
+            &gameplay_keep_Linkanim_00D1D8, // boy/anim/clink_normal_climb_endAL
+            &gameplay_keep_Linkanim_00D1E0, // boy/anim/clink_normal_climb_endAR
+        },
+        // unk_D4
+        {
+            &gameplay_keep_Linkanim_00D1F0, // boy/anim/clink_normal_climb_endBR
+            &gameplay_keep_Linkanim_00D1E8, // boy/anim/clink_normal_climb_endBL
+        },
     },
 };
 
@@ -1848,6 +1913,7 @@ void func_8082E634(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     LinkAnimation_Change(play, &this->skelAnime, anim, 3.0f / 3.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -16.0f);
 }
 
+// Player_AnimationPlayLoopIfCurrentFinished
 s32 func_8082E67C(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     if (LinkAnimation_Update(play, &this->skelAnime)) {
         Player_AnimationPlayLoop(play, this, anim);
@@ -4168,7 +4234,7 @@ void func_80831990(PlayState* play, Player* this, ItemID item) {
                      ((gSaveContext.unk_3F28 != 0) || (gSaveContext.save.playerData.magic == 0))) ||
                     (!(this->stateFlags1 & PLAYER_STATE1_8000000) &&
                      BgCheck_EntityCheckCeiling(&play->colCtx, &sp54, &this->actor.world.pos,
-                                                D_8085BA38[playerForm].unk_00, &sp5C, &sp58, &this->actor))) {
+                                                sPlayerAgeProperties[playerForm].unk_00, &sp5C, &sp58, &this->actor))) {
                     play_sound(NA_SE_SY_ERROR);
                     return;
                 }
@@ -8592,7 +8658,7 @@ s32 func_8083D23C(Player* this, PlayState* play) {
                             if ((giEntry->itemId != ITEM_NONE) && (giEntry->gid >= 0) &&
                                 (Item_CheckObtainability(giEntry->itemId) == ITEM_NONE)) {
                                 this->unk_A86 = chest->cutsceneIdxB;
-                                func_8082DB90(play, this, this->ageProperties->unk_A0);
+                                func_8082DB90(play, this, this->ageProperties->openChestAnim);
                                 func_8082E920(play, this, 1 | ANIM_FLAG_UPDATEY | 4 | 8 | ANIM_FLAG_NOMOVE | 0x80);
                                 this->actor.bgCheckFlags &= ~0x20;
                                 chest->unk_1EC = 1;
@@ -10183,7 +10249,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    this->ageProperties = &D_8085BA38[this->transformation];
+    this->ageProperties = &sPlayerAgeProperties[this->transformation];
 
     this->heldItemActionParam = PLAYER_AP_NONE;
     this->itemActionParam = PLAYER_AP_NONE;
@@ -16100,9 +16166,9 @@ void func_80851F18(PlayState* play, Player* this) {
         temp_v0 = &this->unk_B10[this->unk_B86[i]];
 
         AnimationContext_SetLoadFrame(play, temp->unk_4, *temp_v0, this->skelAnime.limbCount,
-                                      ALIGN16((uintptr_t)this->blendTableBuffer));
+                                      ALIGN16(this->blendTableBuffer));
         AnimationContext_SetCopyTrue(play, this->skelAnime.limbCount, this->skelAnime.jointTable,
-                                     ALIGN16((uintptr_t)this->blendTableBuffer), D_8085BA20);
+                                     ALIGN16(this->blendTableBuffer), D_8085BA20);
     }
 
     temp_v0 = this->unk_B10;
@@ -19036,6 +19102,7 @@ void func_80859CE0(PlayState* play, Player* this, s32 arg2) {
 
 void func_80859CFC(PlayState* play, Player* this, UNK_TYPE arg2) {
     func_80841358(play, this, false);
+    // boy/anim/link_demo_return_to_past
     func_8082DB90(play, this, &gameplay_keep_Linkanim_00D660);
 }
 
@@ -19181,7 +19248,7 @@ struct_8085DA94 D_8085DA94[PLAYER_CSMODE_MAX] = {
     /* PLAYER_CSMODE_134 */ { 3, { &gameplay_keep_Linkanim_00E488 } },
     /* PLAYER_CSMODE_135 */ { 3, { &gameplay_keep_Linkanim_00E498 } },
     /* PLAYER_CSMODE_136 */ { 3, { &gameplay_keep_Linkanim_00E4B0 } },
-    /* PLAYER_CSMODE_137 */ { 3, { &gameplay_keep_Linkanim_00D660 } },
+    /* PLAYER_CSMODE_137 */ { 3, { &gameplay_keep_Linkanim_00D660 } }, // boy/anim/link_demo_return_to_past
     /* PLAYER_CSMODE_138 */ { 3, { &gameplay_keep_Linkanim_00DA00 } },
     /* PLAYER_CSMODE_139 */ { 3, { &gameplay_keep_Linkanim_00DA08 } },
 };

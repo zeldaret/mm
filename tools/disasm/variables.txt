@@ -4964,7 +4964,7 @@
     0x8085B9F0:("D_8085B9F0","UNK_TYPE1","",0x1),
     0x8085BA08:("D_8085BA08","UNK_TYPE1","",0x1),
     0x8085BA20:("D_8085BA20","UNK_TYPE1","",0x1),
-    0x8085BA38:("D_8085BA38","UNK_TYPE1","",0x1),
+    0x8085BA38:("sPlayerAgeProperties","UNK_TYPE1","",0x1),
     0x8085BE84:("D_8085BE84","LinkAnimationHeader*","[264]",0x420),
     0x8085C2A4:("D_8085C2A4","struct_8085C2A4","[6]",0x48),
     0x8085C2EC:("D_8085C2EC","UNK_TYPE1","",0x1),
