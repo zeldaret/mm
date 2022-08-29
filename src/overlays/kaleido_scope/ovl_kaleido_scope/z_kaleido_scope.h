@@ -64,7 +64,7 @@ typedef enum {
     /* 0x0D */ PAUSE_MAINSTATE_D,
     /* 0x0E */ PAUSE_MAINSTATE_E,
     /* 0x0F */ PAUSE_MAINSTATE_EQUIP_MASK,
-    /* 0x10 */ PAUSE_MAINSTATE_10,
+    /* 0x10 */ PAUSE_MAINSTATE_BOMBERS_NOTEBOOK_OPEN,
     /* 0x11 */ PAUSE_MAINSTATE_11
 } PauseMainState;
 
@@ -85,12 +85,6 @@ typedef enum {
     /* 2 */ PAUSE_EQUIP_C_RIGHT
 } PauseEquipCButton;
 
-typedef enum {
-    /* 0 */ DEBUG_EDITOR_NONE,
-    /* 1 */ DEBUG_EDITOR_INVENTORY_INIT,
-    /* 2 */ DEBUG_EDITOR_INVENTORY,
-    /* 3 */ DEBUG_EDITOR_EVENTS
-} DebugEditor;
 
 typedef enum {
     /* 0 */ EQUIP_STATE_MAGIC_ARROW_GROW_ORB,
@@ -98,6 +92,22 @@ typedef enum {
     /* 2 */ EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT,
     /* 3 */ EQUIP_STATE_MOVE_TO_C_BTN
 } EquipState;
+
+typedef enum {
+    /* 0 */ DEBUG_EDITOR_NONE,
+    /* 1 */ DEBUG_EDITOR_INVENTORY_INIT,
+    /* 2 */ DEBUG_EDITOR_INVENTORY,
+    /* 3 */ DEBUG_EDITOR_EVENTS
+} DebugEditor;
+
+// TODO: Taken from OoT. Verify in MM
+typedef enum {
+    /* 1 */ PAUSE_BG_PRERENDER_DRAW = 1, // The current frame is only drawn for the purpose of serving as the pause background.
+    /* 2 */ PAUSE_BG_PRERENDER_FILTER, // The previous frame was PAUSE_BG_PRERENDER_DRAW, now apply prerender filters.
+    /* 3 */ PAUSE_BG_PRERENDER_DONE, // The pause background is ready to be used.
+    /* 4 */ PAUSE_BG_PRERENDER_OFF, // Inactive, do nothing.
+    /* 5 */ PAUSE_BG_PRERENDER_MAX
+} PauseBgPreRenderState;
 
 #define SLOT_MASK_FIRST 24
 

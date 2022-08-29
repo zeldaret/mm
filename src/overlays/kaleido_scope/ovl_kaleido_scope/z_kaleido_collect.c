@@ -24,17 +24,42 @@ s16 D_8082AF04[][4] = {
     { 255, 0, 0, 255 },
 };
 s16 D_8082AF24[][3] = {
-    { 0, 0, 0 },  { 0, 0, 0 },  { 0, 0, 0 },    { 0, 0, 0 },   { 0, 0, 0 },   { 0, 0, 0 },
-    { 0, 60, 0 }, { 90, 0, 0 }, { 0, 40, 110 }, { 80, 40, 0 }, { 70, 0, 90 }, { 90, 90, 0 },
+    { 0, 0, 0 },    // QUEST_REMAINS_ODOWLA Target 1
+    { 0, 0, 0 },    // QUEST_REMAINS_GOHT Target 1
+    { 0, 0, 0 },    // QUEST_REMAINS_GYORG Target 1
+    { 0, 0, 0 },    // QUEST_REMAINS_TWINMOLD Target 1
+    { 0, 0, 0 },    // Unused
+    { 0, 0, 0 },    // Unused
+    { 0, 60, 0 },   // QUEST_REMAINS_ODOWLA Target 2
+    { 90, 0, 0 },   // QUEST_REMAINS_GOHT Target 2
+    { 0, 40, 110 }, // QUEST_REMAINS_GYORG Target 2
+    { 80, 40, 0 },  // QUEST_REMAINS_TWINMOLD Target 2
+    { 70, 0, 90 },  // Unused
+    { 90, 90, 0 },  // Unused
 };
 s16 D_8082AF6C[] = {
-    255, 255, 255, 255, 255, 255,
+    255, // QUEST_REMAINS_ODOWLA
+    255, // QUEST_REMAINS_GOHT
+    255, // QUEST_REMAINS_GYORG
+    255, // QUEST_REMAINS_TWINMOLD
+    255, // Unused
+    255, // Unused
 };
 s16 D_8082AF78[] = {
-    255, 255, 255, 255, 255, 255,
+    255, // QUEST_REMAINS_ODOWLA
+    255, // QUEST_REMAINS_GOHT
+    255, // QUEST_REMAINS_GYORG
+    255, // QUEST_REMAINS_TWINMOLD
+    255, // Unused
+    255, // Unused
 };
 s16 D_8082AF84[] = {
-    150, 150, 150, 150, 150, 150,
+    150, // QUEST_REMAINS_ODOWLA
+    150, // QUEST_REMAINS_GOHT
+    150, // QUEST_REMAINS_GYORG
+    150, // QUEST_REMAINS_TWINMOLD
+    150, // Unused
+    150, // Unused
 };
 #ifdef NON_MATCHING
 void KaleidoScope_DrawQuestStatus(PlayState* play) {
@@ -415,7 +440,8 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
         }
     }
 
-    if (CHECK_QUEST_ITEM(0x15) && ((play->sceneNum == 0x27) || (play->sceneNum == 0x28))) {
+    // QUEST_SKULL_TOKEN never properly set
+    if (CHECK_QUEST_ITEM(QUEST_SKULL_TOKEN) && ((play->sceneNum == 0x27) || (play->sceneNum == 0x28))) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
                           PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
@@ -633,7 +659,6 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
             }
 
             // Update cursor item and slot
-
             if (pauseCtx->cursorPoint[PAUSE_QUEST] != QUEST_HEART_PIECE) {
                 if (pauseCtx->cursorPoint[PAUSE_QUEST] <= QUEST_REMAINS_TWINMOLD) {
                     // Boss Remains
@@ -772,29 +797,29 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
 
                     if ((pauseCtx->cursorItem[PAUSE_QUEST] != PAUSE_ITEM_NONE) && (msgCtx->msgLength == 0)) {
                         if (gSaveContext.buttonStatus[EQUIP_SLOT_A] == BTN_DISABLED) {
-                            gSaveContext.buttonStatus[EQUIP_SLOT_A] = 0;
+                            gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
                             gSaveContext.unk_3F22 = 0;
                             Interface_ChangeAlpha(50);
                         }
 
                         if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) && (msgCtx->msgLength == 0)) {
                             if (pauseCtx->cursorPoint[PAUSE_QUEST] == QUEST_BOMBERS_NOTEBOOK) {
-                                play->pauseCtx.unk_1F0 = true;
-                                pauseCtx->mainState = PAUSE_MAINSTATE_10;
+                                play->pauseCtx.bombersNotebookOpen = true;
+                                pauseCtx->mainState = PAUSE_MAINSTATE_BOMBERS_NOTEBOOK_OPEN;
                                 play_sound(NA_SE_SY_DECIDE);
                             } else {
                                 pauseCtx->itemDescriptionOn = true;
                                 if (pauseCtx->cursorYIndex[PAUSE_QUEST] < 2) {
                                     if (pauseCtx->cursorItem[PAUSE_QUEST] < ITEM_REMAINS_ODOLWA) {
-                                        func_801514B0(play, pauseCtx->cursorItem[PAUSE_QUEST] + 0x1737, 1);
+                                        func_801514B0(play, 0x1737 + pauseCtx->cursorItem[PAUSE_QUEST], 1);
                                     } else {
-                                        func_801514B0(play, pauseCtx->cursorItem[PAUSE_QUEST] + 0x173B, 3);
+                                        func_801514B0(play, 0x173B + pauseCtx->cursorItem[PAUSE_QUEST], 3);
                                     }
                                 } else {
                                     if (pauseCtx->cursorItem[PAUSE_QUEST] < ITEM_REMAINS_ODOLWA) {
-                                        func_801514B0(play, pauseCtx->cursorItem[PAUSE_QUEST] + 0x1737, 1);
+                                        func_801514B0(play, 0x1737 + pauseCtx->cursorItem[PAUSE_QUEST], 1);
                                     } else {
-                                        func_801514B0(play, pauseCtx->cursorItem[PAUSE_QUEST] + 0x173B, 1);
+                                        func_801514B0(play, 0x173B + pauseCtx->cursorItem[PAUSE_QUEST], 1);
                                     }
                                 }
                             }
@@ -861,7 +886,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
             if (CHECK_QUEST_ITEM(pauseCtx->cursorPoint[PAUSE_QUEST])) {
                 cursorItem = (ITEM_REMAINS_GOHT - 1) + pauseCtx->cursorPoint[PAUSE_QUEST];
                 if (pauseCtx->cursorPoint[PAUSE_QUEST] != QUEST_REMAINS_ODOWLA) {
-                    // This condition is never true as `cursorPoint` is set three lines above
+                    // This condition is always true as `cursorPoint` is set three lines above
                     cursorItem = ITEM_MASK_GIANT;
                 }
             } else {

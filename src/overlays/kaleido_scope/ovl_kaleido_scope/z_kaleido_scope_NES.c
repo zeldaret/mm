@@ -2468,8 +2468,8 @@ void KaleidoScope_Update(PlayState* play) {
                     KaleidoScope_UpdateMaskEquip(play);
                     break;
 
-                case PAUSE_MAINSTATE_10:
-                    if (!play->pauseCtx.unk_1F0) {
+                case PAUSE_MAINSTATE_BOMBERS_NOTEBOOK_OPEN:
+                    if (!play->pauseCtx.bombersNotebookOpen) {
                         pauseCtx->mainState = PAUSE_MAINSTATE_IDLE;
                     }
                     break;
@@ -2602,7 +2602,7 @@ void KaleidoScope_Update(PlayState* play) {
                             interfaceCtx->unk_264 = 255;
                             pauseCtx->state = PAUSE_STATE_OFF;
                             Game_SetFramerateDivisor(&play->state, 3);
-                            SREG(94) = 4;
+                            R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_OFF;
                             Object_LoadAll(&play->objectCtx);
                             BgCheck_InitCollisionHeaders(&play->colCtx, play);
                             do {
@@ -2767,7 +2767,7 @@ void KaleidoScope_Update(PlayState* play) {
                     play_sound(NA_SE_SY_DECIDE);
                     pauseCtx->state = PAUSE_STATE_OFF;
                     Game_SetFramerateDivisor(&play->state, 3);
-                    SREG(94) = 4;
+                    R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_OFF;
                     Object_LoadAll(&play->objectCtx);
                     BgCheck_InitCollisionHeaders(&play->colCtx, play);
                 } else {
@@ -2799,7 +2799,7 @@ void KaleidoScope_Update(PlayState* play) {
             if (sramCtx->status == 0) {
                 pauseCtx->state = PAUSE_STATE_OFF;
                 Game_SetFramerateDivisor(&play->state, 3);
-                SREG(94) = 4;
+                R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_OFF;
                 Object_LoadAll(&play->objectCtx);
                 BgCheck_InitCollisionHeaders(&play->colCtx, play);
             }
@@ -2839,8 +2839,7 @@ void KaleidoScope_Update(PlayState* play) {
 
                     pauseCtx->state = PAUSE_STATE_OFF;
                     Game_SetFramerateDivisor(&play->state, 3);
-
-                    SREG(94) = 4;
+                    R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_OFF;
                     Object_LoadAll(&play->objectCtx);
                     BgCheck_InitCollisionHeaders(&play->colCtx, play);
 
@@ -3041,7 +3040,7 @@ void KaleidoScope_Update(PlayState* play) {
         case PAUSE_STATE_UNPAUSE_CLOSE:
             pauseCtx->state = PAUSE_STATE_OFF;
             Game_SetFramerateDivisor(&play->state, 3);
-            SREG(94) = 4;
+            R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_OFF;
             Object_LoadAll(&play->objectCtx);
             BgCheck_InitCollisionHeaders(&play->colCtx, play);
 
@@ -3129,7 +3128,7 @@ void KaleidoScope_Update(PlayState* play) {
         }
     }
 
-    if ((SREG(94) == 3) && (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
+    if ((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_DONE) && (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
         !((pauseCtx->state >= PAUSE_STATE_OWLWARP_2) && (pauseCtx->state <= PAUSE_STATE_OWLWARP_6)) &&
         (((pauseCtx->state >= PAUSE_STATE_DEFAULT_3) && (pauseCtx->state <= PAUSE_STATE_DEFAULT_SAVE_PROMPT)) ||
          ((pauseCtx->state >= PAUSE_STATE_GAMEOVER_2) && (pauseCtx->state <= PAUSE_STATE_UNPAUSE_SETUP)))) {
