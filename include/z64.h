@@ -425,9 +425,9 @@ typedef struct {
     /* 0x1E8 */ OSMesg loadMsg;
     /* 0x1EC */ u16 state;
     /* 0x1EE */ u16 debugEditor;
-    /* 0x1F0 */ u8 unk_1F0;
+    /* 0x1F0 */ u8 unk_1F0; // bool
     /* 0x1F4 */ Vec3f eye;
-    /* 0x200 */ u16 actionState;
+    /* 0x200 */ u16 mainState;
     /* 0x202 */ u16 mode;
     /* 0x204 */ u16 pageIndex;
     /* 0x206 */ u16 unk_206;
