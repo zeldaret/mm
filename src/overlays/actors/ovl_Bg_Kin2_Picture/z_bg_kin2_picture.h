@@ -25,13 +25,13 @@ typedef struct BgKin2Picture {
     /* 0x1D8 */ char pad1D8[0x5C];
     /* 0x234 */ BgKin2PictureActionFunc actionFunc;
     /* 0x238 */ s16 unk238; /* inferred */
-    /* 0x23A */ s8 unk23A;  /* inferred */
+    /* 0x23A */ s8 shiverTimer; //used both for when painting is shaking and when it starts falling to time Gold Skulltula spawn.
     /* 0x23B */ s8 unk23B;  /* inferred */
-    /* 0x23C */ s16 unk23C; // angle                       /* inferred */
-    /* 0x23E */ s16 unk23E; // angle                       /* inferred */
+    /* 0x23C */ s16 xOffsetAngle; // angle                       /* inferred */
+    /* 0x23E */ s16 yOffsetAngle; // angle                       /* inferred */
     /* 0x240 */ s8 unk240;  /* inferred */
     /* 0x241 */ s8 unk241;  /* inferred */
-    /* 0x242 */ s8 timer;  /* inferred */
+    /* 0x242 */ s8 skulltulaSoundTimer;  /* inferred */
     /* 0x243 */ char pad243[1];
 } BgKin2Picture; /* size = 0x244 */
 
