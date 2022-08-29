@@ -160,6 +160,7 @@ u8 gAreaGsFlags[] = {
     0x07, 0x0F, 0x0F, 0xFF, 0xFF, 0xFF, 0x1F, 0x0F, 0x03, 0x0F, 0x00, 0x00,
 };
 
+// TODO: Also applies to owl warps
 s16 sGameOverRectPosY = 66;
 
 void func_80821900(s32 arg0, u32 arg1) {
@@ -999,7 +1000,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-u8 D_8082DA58[5];
+u8 sUnpausedButtonStatus[5];
 f32 sCursorCirclesX[4];
 f32 sCursorCirclesY[4];
 
@@ -1870,16 +1871,16 @@ f32 sItemMaskCursorsY[] = {
     -21.0f,
     -47.0f,
 };
-f32 sWorldMap2CursorsX[] = {
+f32 sWorldMapCursorsX[] = {
     -49.0f, -35.0f, -3.0f, 4.0f, 12.0f, 8.0f, 7.0f, 40.0f, 47.0f, 49.0f, 55.0f,
 };
-f32 sWorldMap2CursorsY[] = {
+f32 sWorldMapCursorsY[] = {
     -15.0f, -36.0f, -23.0f, -49.0f, -29.0f, -8.0f, 25.0f, 2.0f, -9.0f, 28.0f, 7.0f,
 };
-f32 sWorldMap1CursorsX[] = {
+f32 sOwlWarpWorldMapCursorsX[] = {
     -50.0f, -38.0f, 6.0f, 11.0f, 8.0f, 0.0f, 12.0f, 31.0f, 48.0f, 56.0f,
 };
-f32 sWorldMap1CursorsY[] = {
+f32 sOwlWarpWorldMapCursorsY[] = {
     -14.0f, -39.0f, 23.0f, 11.0f, -8.0f, -15.0f, -31.0f, -30.0f, -10.0f, 11.0f,
 };
 f32 sDungeonMapCursorsX[] = {
@@ -1918,11 +1919,11 @@ void KaleidoScope_UpdateCursorSize(PlayState* play) {
             case PAUSE_MAP:
                 if (!sInDungeonScene) {
                     if ((pauseCtx->state >= PAUSE_STATE_OWLWARP_2) && (pauseCtx->state <= PAUSE_STATE_OWLWARP_6)) {
-                        pauseCtx->cursorX = sWorldMap1CursorsX[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
-                        pauseCtx->cursorY = sWorldMap1CursorsY[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
+                        pauseCtx->cursorX = sOwlWarpWorldMapCursorsX[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
+                        pauseCtx->cursorY = sOwlWarpWorldMapCursorsY[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
                     } else {
-                        pauseCtx->cursorX = sWorldMap2CursorsX[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
-                        pauseCtx->cursorY = sWorldMap2CursorsY[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
+                        pauseCtx->cursorX = sWorldMapCursorsX[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
+                        pauseCtx->cursorY = sWorldMapCursorsY[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
                     }
                     if (!((pauseCtx->state >= PAUSE_STATE_OWLWARP_2) && (pauseCtx->state <= PAUSE_STATE_OWLWARP_6))) {
                         pauseCtx->cursorHeight = 10.0f;
@@ -2236,7 +2237,7 @@ void KaleidoScope_Update(PlayState* play) {
     static u16 D_8082BE88[] = {
         28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
     };
-    static s16 D_8082BE9C = 0;
+    static s16 sUnpausedHudVisibility = 0;
     static s16 D_8082BEA0 = PAUSE_ACTIONSTATE_IDLE;
     static s16 D_8082BEA4 = 10;
     static s16 sGameOverColorTimer = 0;
@@ -2269,13 +2270,14 @@ void KaleidoScope_Update(PlayState* play) {
 
     switch (pauseCtx->state) {
         case PAUSE_STATE_DEFAULT_2:
-            D_8082BE9C = gSaveContext.unk_3F22;
+            sUnpausedHudVisibility = gSaveContext.unk_3F22;
             sPauseMenuVerticalOffset = -6240.0f;
-            D_8082DA58[EQUIP_SLOT_B] = gSaveContext.buttonStatus[EQUIP_SLOT_B];
-            D_8082DA58[EQUIP_SLOT_C_LEFT] = gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT];
-            D_8082DA58[EQUIP_SLOT_C_DOWN] = gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN];
-            D_8082DA58[EQUIP_SLOT_C_RIGHT] = gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT];
-            D_8082DA58[EQUIP_SLOT_A] = gSaveContext.buttonStatus[EQUIP_SLOT_A];
+
+            sUnpausedButtonStatus[EQUIP_SLOT_B] = gSaveContext.buttonStatus[EQUIP_SLOT_B];
+            sUnpausedButtonStatus[EQUIP_SLOT_C_LEFT] = gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT];
+            sUnpausedButtonStatus[EQUIP_SLOT_C_DOWN] = gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN];
+            sUnpausedButtonStatus[EQUIP_SLOT_C_RIGHT] = gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT];
+            sUnpausedButtonStatus[EQUIP_SLOT_A] = gSaveContext.buttonStatus[EQUIP_SLOT_A];
 
             pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
             pauseCtx->cursorSlot[PAUSE_MAP] = XREG(94) + 4;
@@ -2857,14 +2859,17 @@ void KaleidoScope_Update(PlayState* play) {
 
         case PAUSE_STATE_OWLWARP_2:
             sPauseMenuVerticalOffset = -6240.0f;
-            D_8082DA58[EQUIP_SLOT_B] = gSaveContext.buttonStatus[EQUIP_SLOT_B];
-            D_8082DA58[EQUIP_SLOT_C_LEFT] = gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT];
-            D_8082DA58[EQUIP_SLOT_C_DOWN] = gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN];
-            D_8082DA58[EQUIP_SLOT_C_RIGHT] = gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT];
-            D_8082DA58[EQUIP_SLOT_A] = gSaveContext.buttonStatus[EQUIP_SLOT_A];
+
+            sUnpausedButtonStatus[EQUIP_SLOT_B] = gSaveContext.buttonStatus[EQUIP_SLOT_B];
+            sUnpausedButtonStatus[EQUIP_SLOT_C_LEFT] = gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT];
+            sUnpausedButtonStatus[EQUIP_SLOT_C_DOWN] = gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN];
+            sUnpausedButtonStatus[EQUIP_SLOT_C_RIGHT] = gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT];
+            sUnpausedButtonStatus[EQUIP_SLOT_A] = gSaveContext.buttonStatus[EQUIP_SLOT_A];
+
             pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
             pauseCtx->cursorSlot[PAUSE_MAP] = XREG(94) + 4;
             pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256 = XREG(94) + 4;
+
             D_8082B918 = -175;
             D_8082B91C = 155;
 
@@ -3023,16 +3028,19 @@ void KaleidoScope_Update(PlayState* play) {
             SREG(94) = 4;
             Object_LoadAll(&play->objectCtx);
             BgCheck_InitCollisionHeaders(&play->colCtx, play);
-            gSaveContext.buttonStatus[EQUIP_SLOT_B] = D_8082DA58[EQUIP_SLOT_B];
-            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = D_8082DA58[EQUIP_SLOT_C_LEFT];
-            gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = D_8082DA58[EQUIP_SLOT_C_DOWN];
-            gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = D_8082DA58[EQUIP_SLOT_C_RIGHT];
-            gSaveContext.buttonStatus[EQUIP_SLOT_A] = D_8082DA58[EQUIP_SLOT_A];
+
+            gSaveContext.buttonStatus[EQUIP_SLOT_B] = sUnpausedButtonStatus[EQUIP_SLOT_B];
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = sUnpausedButtonStatus[EQUIP_SLOT_C_LEFT];
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = sUnpausedButtonStatus[EQUIP_SLOT_C_DOWN];
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = sUnpausedButtonStatus[EQUIP_SLOT_C_RIGHT];
+            gSaveContext.buttonStatus[EQUIP_SLOT_A] = sUnpausedButtonStatus[EQUIP_SLOT_A];
+
             func_80110038(play);
             gSaveContext.unk_3F22 = 0;
             Interface_ChangeAlpha(50);
             MsgEvent_SendNullTask();
             func_80143324(play, &play->skyboxCtx, play->skyboxId);
+
             if ((msgCtx->msgMode != 0) && (msgCtx->currentTextId == 0xFF)) {
                 func_80115844(play, 0x12);
                 func_8011552C(play, 0x12);
@@ -3041,7 +3049,7 @@ void KaleidoScope_Update(PlayState* play) {
                 interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
             }
             gSaveContext.unk_3F22 = 0;
-            Interface_ChangeAlpha(D_8082BE9C);
+            Interface_ChangeAlpha(sUnpausedHudVisibility);
             func_801A3A7C(0);
             break;
     }
