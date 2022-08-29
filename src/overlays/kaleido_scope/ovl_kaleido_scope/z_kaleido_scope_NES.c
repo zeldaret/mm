@@ -1863,13 +1863,18 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
 }
 
 f32 sItemMaskCursorsX[] = {
-    -62.0f, -36.0f, -10.0f, 16.0f, 42.0f, 68.0f,
+    -62.0f, // column 1
+    -36.0f, // column 2
+    -10.0f, // column 3
+    16.0f,  // column 4
+    42.0f,  // column 5
+    68.0f,  // column 6
 };
 f32 sItemMaskCursorsY[] = {
-    31.0f,
-    5.0f,
-    -21.0f,
-    -47.0f,
+    31.0f,  // row 1
+    5.0f,   // row 2
+    -21.0f, // row 3
+    -47.0f, // row 4
 };
 f32 sWorldMapCursorsX[] = {
     -49.0f, -35.0f, -3.0f, 4.0f, 12.0f, 8.0f, 7.0f, 40.0f, 47.0f, 49.0f, 55.0f,
@@ -1949,12 +1954,12 @@ void KaleidoScope_UpdateCursorSize(PlayState* play) {
                 break;
 
             case PAUSE_QUEST:
-                if (YREG(69) == 0) {
+                if (!R_PAUSE_DBG_QUEST_CURSOR_ON) {
                     pauseCtx->cursorX = sQuestStatusCursorsX[pauseCtx->cursorPoint[PAUSE_QUEST]];
                     pauseCtx->cursorY = sQuestStatusCursorsY[pauseCtx->cursorPoint[PAUSE_QUEST]];
                 } else {
-                    pauseCtx->cursorX = YREG(70);
-                    pauseCtx->cursorY = YREG(71);
+                    pauseCtx->cursorX = R_PAUSE_DBG_QUEST_CURSOR_X;
+                    pauseCtx->cursorY = R_PAUSE_DBG_QUEST_CURSOR_Y;
                 }
                 pauseCtx->cursorHeight = 17.0f;
                 pauseCtx->cursorWidth = 17.0f;
@@ -2123,6 +2128,7 @@ void KaleidoScope_Draw(PlayState* play) {
         func_8012C8AC(play->state.gfxCtx);
 
         if (!((pauseCtx->state >= PAUSE_STATE_OWLWARP_2) && (pauseCtx->state <= PAUSE_STATE_OWLWARP_6))) {
+            // Draw Default or Game Over Menus
             KaleidoScope_InitVertices(play, play->state.gfxCtx);
             KaleidoScope_DrawPages(play, play->state.gfxCtx);
 
@@ -2147,6 +2153,7 @@ void KaleidoScope_Draw(PlayState* play) {
                 KaleidoScope_DrawGameOver(play);
             }
         } else {
+            // Draw Owl Warp Menu
             KaleidoScope_InitVertices(play, play->state.gfxCtx);
             KaleidoScope_DrawPages(play, play->state.gfxCtx);
             KaleidoScope_DrawOwlWarpMap(play);
@@ -2159,7 +2166,7 @@ void KaleidoScope_Draw(PlayState* play) {
             KaleidoScope_DrawOwlWarpInfoPanel(play);
             KaleidoScope_UpdateCursorSize(play);
 
-            if (pauseCtx->state == PAUSE_STATE_OWLWARP_4) {
+            if (pauseCtx->state == PAUSE_STATE_OWLWARP_PROMPT) {
                 KaleidoScope_DrawCursor(play);
             }
         }
@@ -2916,12 +2923,12 @@ void KaleidoScope_Update(PlayState* play) {
                 pauseCtx->alpha = 255;
                 pauseCtx->actionState = PAUSE_ACTIONSTATE_IDLE;
                 pauseCtx->cursorSpecialPos = 0;
-                pauseCtx->state = PAUSE_STATE_OWLWARP_4;
+                pauseCtx->state = PAUSE_STATE_OWLWARP_PROMPT;
                 XREG(87) = 120;
             }
             break;
 
-        case PAUSE_STATE_OWLWARP_4:
+        case PAUSE_STATE_OWLWARP_PROMPT:
             if (CHECK_BTN_ALL(input->press.button, BTN_START) || CHECK_BTN_ALL(input->press.button, BTN_B)) {
                 func_8011552C(play, 0xA);
                 pauseCtx->state = PAUSE_STATE_OWLWARP_6;
@@ -2932,13 +2939,13 @@ void KaleidoScope_Update(PlayState* play) {
             } else if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
                 play_sound(NA_SE_SY_DECIDE);
                 Message_StartTextbox(play, 0x1B93, NULL);
-                pauseCtx->state = PAUSE_STATE_OWLWARP_5;
+                pauseCtx->state = PAUSE_STATE_OWLWARP_CONFIRM;
             } else {
                 KaleidoScope_UpdateOwlWarpNamePanel(play);
             }
             break;
 
-        case PAUSE_STATE_OWLWARP_5:
+        case PAUSE_STATE_OWLWARP_CONFIRM:
             if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
                 msgCtx->msgLength = 0;
                 msgCtx->msgMode = 0;
@@ -2950,14 +2957,14 @@ void KaleidoScope_Update(PlayState* play) {
                     play->msgCtx.ocarinaMode = D_8082BE88[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
                     play_sound(NA_SE_SY_DECIDE);
                 } else {
-                    pauseCtx->state = PAUSE_STATE_OWLWARP_4;
+                    pauseCtx->state = PAUSE_STATE_OWLWARP_PROMPT;
                     func_8011552C(play, 0x16);
                     play_sound(NA_SE_SY_MESSAGE_PASS);
                 }
             } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
                 msgCtx->msgLength = 0;
                 msgCtx->msgMode = 0;
-                pauseCtx->state = PAUSE_STATE_OWLWARP_4;
+                pauseCtx->state = PAUSE_STATE_OWLWARP_PROMPT;
                 play_sound(NA_SE_SY_MESSAGE_PASS);
             } else if (CHECK_BTN_ALL(input->press.button, BTN_START)) {
                 msgCtx->msgLength = 0;
@@ -3148,7 +3155,7 @@ void KaleidoScope_Update(PlayState* play) {
         if (pauseCtx->state == PAUSE_STATE_DEFAULT_ACTION) {
             KaleidoScope_UpdateNamePanel(play);
         }
-    } else if (pauseCtx->state == PAUSE_STATE_OWLWARP_4) {
+    } else if (pauseCtx->state == PAUSE_STATE_OWLWARP_PROMPT) {
         KaleidoScope_UpdateWorldMapCursor(play);
         KaleidoScope_UpdateNamePanel(play);
     }

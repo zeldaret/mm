@@ -817,7 +817,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_WORLD_MAP]) {
             play_sound(NA_SE_SY_CURSOR);
         }
-    } else if (pauseCtx->state == PAUSE_STATE_OWLWARP_4) {
+    } else if (pauseCtx->state == PAUSE_STATE_OWLWARP_PROMPT) {
         pauseCtx->cursorColorSet = 4;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 

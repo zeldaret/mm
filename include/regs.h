@@ -50,8 +50,9 @@
 #define R_PAUSE_WORLD_MAP_YAW       YREG(24) // TODO: Test
 #define R_PAUSE_WORLD_MAP_Y_OFFSET  YREG(25)
 #define R_PAUSE_WORLD_MAP_DEPTH     YREG(26)
-#define R_C_UP_ICON_X               YREG(88)
-#define R_C_UP_ICON_Y               YREG(89)
+#define R_PAUSE_DBG_QUEST_CURSOR_ON YREG(69)
+#define R_PAUSE_DBG_QUEST_CURSOR_X  YREG(70)
+#define R_PAUSE_DBG_QUEST_CURSOR_Y  YREG(71)
 #define R_MAGIC_FILL_COLOR(i)       ZREG(0 + i)
 #define R_C_BTN_COLOR(i)            ZREG(39 + i)
 #define R_B_BTN_COLOR(i)            ZREG(43 + i)
