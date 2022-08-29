@@ -37,7 +37,7 @@ void Player_Update(Actor* thisx, PlayState* play);
 void Player_Draw(Actor* thisx, PlayState* play);
 
 s32 Player_GrabPlayer(PlayState* play, Player* player);
-s32 func_8085B28C(PlayState* play, Player* player, s32 mode);
+s32 func_8085B28C(PlayState* play, Player* player, PlayerCsMode csMode);
 void func_8085B384(Player* player, PlayState* play);
 s32 Player_InflictDamage(PlayState* play, s32 damage);
 void func_8085B460(PlayState* play, Actor* actor);
@@ -5003,6 +5003,7 @@ void func_808339B4(Player* this, s32 invincibilityTimer) {
     this->unk_B5F = 0;
 }
 
+// Player_InflictDamageImpl?
 s32 func_808339D4(PlayState* play, Player* this, s32 damage) {
     if ((this->invincibilityTimer != 0) || (this->stateFlags3 & PLAYER_STATE3_400000) ||
         (this->actor.id != ACTOR_PLAYER)) {
@@ -12659,7 +12660,7 @@ s32 func_808482E0(PlayState* play, Player* this) {
             play->transitionType = TRANS_TYPE_03;
             gSaveContext.nextTransitionType = TRANS_TYPE_03;
             this->stateFlags1 &= ~PLAYER_STATE1_20000000;
-            func_8085B28C(play, NULL, 7);
+            func_8085B28C(play, NULL, PLAYER_CSMODE_7);
         }
         this->getItemId = GI_NONE;
     }
@@ -16345,7 +16346,7 @@ void func_8085269C(Player* this, PlayState* play) {
                     if (actor != NULL) {
                         this->stateFlags1 &= ~PLAYER_STATE1_20000000;
                         this->csMode = PLAYER_CSMODE_0;
-                        func_8085B28C(play, NULL, 0x13);
+                        func_8085B28C(play, NULL, PLAYER_CSMODE_19);
                         this->stateFlags1 |= PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000;
                     } else {
                         func_80836A5C(this, play);
@@ -16426,7 +16427,7 @@ void func_80852C04(Player* this, PlayState* play) {
                     func_80838760(this);
                     func_80848250(play, this);
                     this->stateFlags1 &= ~PLAYER_STATE1_20000000;
-                    func_8085B28C(play, NULL, 0x5D);
+                    func_8085B28C(play, NULL, PLAYER_CSMODE_93);
                 } else {
                     s32 var_a2 = ((this->talkActor != NULL) && (this->exchangeItemId < PLAYER_AP_NONE)) ||
                                  (this->stateFlags3 & PLAYER_STATE3_20);
@@ -17128,7 +17129,7 @@ void func_80854800(Player* this, PlayState* play) {
     LinkAnimation_Update(play, &this->skelAnime);
     func_808345A8(this);
 
-    if (((this->unk_AE8 % 25) != 0) || func_808339D4(play, this, -1)) {
+    if (((this->unk_AE8 % 25) != 0) || (func_808339D4(play, this, -1) != 0)) {
         if (DECR(this->unk_AE8) == 0) {
             func_80836988(this, play);
         }
@@ -19743,7 +19744,7 @@ void func_8085AC9C(PlayState* play, Player* this, CsCmdActorAction* actorAction,
     }
 }
 
-void func_8085AD5C(PlayState* play, Player* this, s32 csMode) {
+void func_8085AD5C(PlayState* play, Player* this, PlayerCsMode csMode) {
     if ((csMode != PLAYER_CSMODE_1) && (csMode != PLAYER_CSMODE_7) && (csMode != PLAYER_CSMODE_20) &&
         (csMode != PLAYER_CSMODE_6)) {
         func_8082DCA0(play, this);
@@ -19875,15 +19876,15 @@ s32 Player_GrabPlayer(PlayState* play, Player* player) {
     return false;
 }
 
-s32 func_8085B28C(PlayState* play, Player* this, s32 mode) {
+s32 func_8085B28C(PlayState* play, Player* this, PlayerCsMode csMode) {
     Player* player = GET_PLAYER(play);
 
     if (this != NULL) {
-        if (mode == 0) {
+        if (csMode == PLAYER_CSMODE_0) {
             return func_8084E034 == this->actionFunc;
         }
 
-        if ((this->actor.id == ACTOR_EN_TEST3) && (mode < 0)) {
+        if ((this->actor.id == ACTOR_EN_TEST3) && (csMode < 0)) {
             func_8083B0E4(play, this, this->actor.home.rot.y);
             return false;
         }
@@ -19896,7 +19897,7 @@ s32 func_8085B28C(PlayState* play, Player* this, s32 mode) {
     if ((player->actor.id == ACTOR_EN_TEST3) || !Player_InBlockingCsMode(play, player)) {
         func_8082DE50(play, player);
         Player_SetAction(play, player, func_8085B08C, 0);
-        player->csMode = mode;
+        player->csMode = csMode;
         player->unk_398 = &this->actor;
         func_8082DAD4(player);
 
@@ -19916,7 +19917,7 @@ s32 Player_InflictDamage(PlayState* play, s32 damage) {
     Player* player = GET_PLAYER(play);
 
     if ((player->stateFlags2 & PLAYER_STATE2_80) || !Player_InBlockingCsMode(play, player)) {
-        if (!func_808339D4(play, player, damage)) {
+        if (func_808339D4(play, player, damage) == 0) {
             player->stateFlags2 &= ~PLAYER_STATE2_80;
             return true;
         }

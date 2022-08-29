@@ -254,9 +254,9 @@ typedef enum PlayerAnimGroup {
     /* 31 */ PLAYER_ANIMGROUP_31,
     /* 32 */ PLAYER_ANIMGROUP_32,
     /* 33 */ PLAYER_ANIMGROUP_33,
-    /* 34 */ PLAYER_ANIMGROUP_34, // pulling?
-    /* 35 */ PLAYER_ANIMGROUP_35, // pulling?
-    /* 36 */ PLAYER_ANIMGROUP_36,
+    /* 34 */ PLAYER_ANIMGROUP_34, // PULLING_START
+    /* 35 */ PLAYER_ANIMGROUP_35, // PULLING
+    /* 36 */ PLAYER_ANIMGROUP_36, // PULLING_END
     /* 37 */ PLAYER_ANIMGROUP_37, // climbing from a ledge?
     /* 38 */ PLAYER_ANIMGROUP_38, // ledge
     /* 39 */ PLAYER_ANIMGROUP_39, // ledge
@@ -932,12 +932,12 @@ typedef struct Player {
     /* 0x395 */ u8 prevCsMode; // PlayerCsMode enum
     /* 0x396 */ u8 unk_396; // currentActorActionId?
     /* 0x397 */ u8 unk_397; // PlayerDoorType enum
-    /* 0x398 */ Actor* unk_398;
+    /* 0x398 */ Actor* unk_398; // csActor?
     /* 0x39C */ UNK_TYPE1 unk_39C[0x4];
     /* 0x3A0 */ Vec3f unk_3A0;
     /* 0x3AC */ Vec3f unk_3AC;
     /* 0x3B8 */ u16 unk_3B8;
-    /* 0x3BA */ s16 unk_3BA;
+    /* 0x3BA */ s16 unk_3BA; // csBgCamDataId?
     /* 0x3BC */ s16 subCamId;
     /* 0x3BE */ char unk_3BE[2];
     /* 0x3C0 */ Vec3f unk_3C0;
