@@ -9338,7 +9338,7 @@ void func_8083F358(Player* this, s32 arg1, PlayState* play) {
     }
 
     if (this->unk_B70 != 0) {
-        var_fv1 = this->unk_B70 / 10922.0f;
+        var_fv1 = this->unk_B70 / (f32)0x2AAA;
     } else {
         var_fv1 = this->unk_AB8 * 0.0006f;
     }
@@ -9570,9 +9570,10 @@ s32 func_8083FFEC(PlayState* play, Player* this) {
     return false;
 }
 
-s32 func_80840094(PlayState* play, Player* this) {
+// Could return the last function, but never used as such
+void func_80840094(PlayState* play, Player* this) {
     func_8083FF30(play, this);
-    return func_8083FFEC(play, this);
+    func_8083FFEC(play, this);
 }
 
 LinkAnimationHeader* D_8085D294[] = {
@@ -9904,6 +9905,7 @@ void func_80840EC0(Player* this, PlayState* play) {
     this->unk_B38 = 0.0f;
 }
 
+// Spin attack size
 void func_80840F34(Player* this) {
     Math_StepToF(&this->unk_B08[0], (gSaveContext.save.weekEventReg[23] & 2) ? 1.0f : 0.5f, 0.02f);
 }
