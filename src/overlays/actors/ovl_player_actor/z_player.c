@@ -11128,17 +11128,19 @@ void func_808445C4(PlayState* play, Player* this) {
     }
 }
 
-// controller rumble?
-void func_808446F4(PlayState* play, Player* this) {
-    f32 step = 200000.0f - (this->unk_AA0 * 5.0f);
+/**
+ * Rumbles the controller when close to a secret.
+ */
+void Player_DetectSecrets(PlayState* play, Player* this) {
+    f32 step = (SQ(200.0f) * 5.0f) - (this->closestSecretDistSq * 5.0f);
 
     if (step < 0.0f) {
         step = 0.0f;
     }
 
-    this->unk_A9C += step;
-    if (this->unk_A9C > 4000000.0f) {
-        this->unk_A9C = 0.0f;
+    this->secretRumbleCharge += step;
+    if (this->secretRumbleCharge > SQ(2000.0f)) {
+        this->secretRumbleCharge = 0.0f;
         Player_RequestRumble(play, this, 120, 20, 10, SQ(0));
     }
 }
@@ -11525,7 +11527,8 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         }
 
         player->actor.shape.face = ((play->gameplayFrames & 0x20) ? 0 : 3) + player->blinkInfo.eyeTexIndex;
-        if (player->currentMask == PLAYER_FORM_HUMAN) {
+
+        if (player->currentMask == PLAYER_MASK_BUNNY) {
             func_80124420(player);
         }
 
@@ -11597,7 +11600,7 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
                         player->fallStartHeight = player->actor.world.pos.y;
                     }
 
-                    func_808446F4(play, player);
+                    Player_DetectSecrets(play, player);
                 }
             }
         } else if (!(player->actor.bgCheckFlags & 1) && (func_8084D820 == player->actionFunc) &&
@@ -11706,7 +11709,7 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
 
         player->tatlTextId = 0;
         player->unk_B2B = -1;
-        player->unk_AA0 = FLT_MAX;
+        player->closestSecretDistSq = FLT_MAX;
         player->doorType = PLAYER_DOORTYPE_0;
         player->unk_B75 = 0;
         player->unk_A78 = NULL;
