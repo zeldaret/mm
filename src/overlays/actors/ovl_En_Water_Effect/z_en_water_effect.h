@@ -19,12 +19,12 @@ typedef struct {
 } EnWaterEffectStruct; // size = 0x40
 
 enum {
-    /* 0x001 */ ENWATEREFFECT_1 = 1, // Spawner for falling flaming rocks,
-    /* 0x0FF */ ENWATEREFFECT_FF = 0xFF, // Spawner for water dripping from the ceiling
-    /* 0x309 */ ENWATEREFFECT_309 = 0x309, // Ripples on the surface when Gyrog enters/leaves the water
-    /* 0x30A */ ENWATEREFFECT_30A, // Large "funnel" of water that forms when Gyorg enters/leaves the water
-    /* 0x30B */ ENWATEREFFECT_30B, // Secondary "funnel" in the middle of the larger "funnel"
-    /* 0x30C */ ENWATEREFFECT_30C, // Shockwave on the surface when Gyorg rams into the central platform
+    /* 0x001 */ ENWATEREFFECT_FALLING_ROCK_SPAWNER = 1, // Spawner for falling flaming rocks,
+    /* 0x0FF */ ENWATEREFFECT_FALLING_WATER_SPAWNER = 0xFF, // Spawner for water dripping from the ceiling
+    /* 0x309 */ ENWATEREFFECT_GYORG_RIPPLES = 0x309, // Ripples on the surface when Gyrog enters/leaves the water
+    /* 0x30A */ ENWATEREFFECT_GYORG_PRIMARY_SPRAY, // Large "funnel" of water that forms when Gyorg enters/leaves the water
+    /* 0x30B */ ENWATEREFFECT_GYORG_SECONDARY_SPRAY, // Secondary "funnel" in the middle of the larger "funnel"
+    /* 0x30C */ ENWATEREFFECT_GYORG_SHOCKWAVE, // Shockwave on the surface when Gyorg rams into the central platform
 };
 
 typedef struct EnWaterEffect {

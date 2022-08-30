@@ -680,7 +680,8 @@ void func_80B81570(BgIkanaRotaryroom* this, PlayState* play) {
         sp70.y += this->dyna.actor.world.pos.y;
         sp70.z += this->dyna.actor.world.pos.z;
 
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, sp70.x, sp70.y, sp70.z, 0, 0, 0, ENWATEREFFECT_1);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, sp70.x, sp70.y, sp70.z, 0, 0, 0,
+                    ENWATEREFFECT_FALLING_ROCK_SPAWNER);
     }
 
     Matrix_Pop();
