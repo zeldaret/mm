@@ -24,13 +24,13 @@ void func_800F4A10(PlayState* play) {
     }
 
     if (pauseCtx->state == PAUSE_STATE_DEFAULT_0) {
-        for (i = 0; i < 11; i++) {
-            if ((gSaveContext.save.mapsVisited >> i) & 1) {
+        for (i = 0; i < REGION_MAX; i++) {
+            if ((gSaveContext.save.regionsVisited >> i) & 1) {
                 pauseCtx->worldMapPoints[i] = true;
             }
         }
     } else {
-        for (i = 9; i >= 0; i--) {
+        for (i = OWL_STATUE_STONE_TOWER; i >= OWL_STATUE_GREAT_BAY_COAST; i--) {
             if ((gSaveContext.save.playerData.owlActivationFlags >> i) & 1) {
                 pauseCtx->worldMapPoints[i] = true;
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = i;
@@ -120,18 +120,19 @@ void KaleidoSetup_Init(PlayState* play) {
     pauseCtx->unk_20C = 936.0f;
     pauseCtx->unk_220 = -314.0f;
 
-    pauseCtx->cursorPoint[PAUSE_MAP] = XREG(94) + 3;
+    //! Note: Should likely be `R_REVERSE_FLOOR_INDEX + 4`
+    pauseCtx->cursorPoint[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
 
     pauseCtx->cursorSpecialPos = PAUSE_CURSOR_PAGE_RIGHT;
     pauseCtx->delaySwitchPageInputTimer = 0;
 
     pauseCtx->cursorItem[PAUSE_ITEM] = PAUSE_ITEM_NONE;
-    pauseCtx->cursorItem[PAUSE_MAP] = XREG(94) + 3;
+    pauseCtx->cursorItem[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
     pauseCtx->cursorItem[PAUSE_QUEST] = PAUSE_ITEM_NONE;
     pauseCtx->cursorItem[PAUSE_MASK] = PAUSE_ITEM_NONE;
 
     pauseCtx->cursorSlot[PAUSE_ITEM] = 0;
-    pauseCtx->cursorSlot[PAUSE_MAP] = XREG(94) + 3;
+    pauseCtx->cursorSlot[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
 
     pauseCtx->cursorColorSet = 2;
     pauseCtx->ocarinaSongIndex = -1;

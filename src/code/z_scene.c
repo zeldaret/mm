@@ -501,7 +501,7 @@ void Scene_HeaderCmdSetAreaVisitedFlag(PlayState* play, SceneCmd* cmd) {
             i++;
             j = 0;
 
-            if (i == ARRAY_COUNT(gScenesPerRegion)) {
+            if (i == REGION_MAX) {
                 break;
             }
         }
@@ -513,8 +513,9 @@ void Scene_HeaderCmdSetAreaVisitedFlag(PlayState* play, SceneCmd* cmd) {
         j++;
     }
 
-    if (i < ARRAY_COUNT(gScenesPerRegion)) {
-        gSaveContext.save.mapsVisited = (gBitFlags[i] | gSaveContext.save.mapsVisited) | gSaveContext.save.mapsVisited;
+    if (i < REGION_MAX) {
+        gSaveContext.save.regionsVisited =
+            (gBitFlags[i] | gSaveContext.save.regionsVisited) | gSaveContext.save.regionsVisited;
     }
 }
 

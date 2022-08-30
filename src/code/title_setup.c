@@ -28,8 +28,8 @@ void TitleSetup_GameStateResetContext(void) {
     XREG(89) = 0x258;
     XREG(90) = 0x1C2;
     XREG(91) = 0;
-    XREG(94) = 0;
-    XREG(95) = 0;
+    R_REVERSE_FLOOR_INDEX = 0;
+    R_MINIMAP_DISABLED = false;
 
     YREG(32) = 0x50;
     YREG(33) = 0x3C;

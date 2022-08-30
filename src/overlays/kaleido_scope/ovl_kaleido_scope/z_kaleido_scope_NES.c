@@ -1894,79 +1894,77 @@ f32 sItemMaskCursorsY[] = {
     -21.0f, // Row 3
     -47.0f, // Row 4
 };
-// Regions
-f32 sWorldMapCursorsX[] = {
-    -49.0f, // Great Bay
-    -35.0f, // Zora Hall
-    -3.0f,  // Romani Ranch
-    4.0f,   // Deku Palace
-    12.0f,  // Woodfall
-    8.0f,   // Clock Town
-    7.0f,   // Snowhead
-    40.0f,  // Ikana Graveyard
-    47.0f,  // Ikana Canyon
-    49.0f,  // Goron Village
-    55.0f,  // Stone Tower
+f32 sWorldMapCursorsX[REGION_MAX] = {
+    -49.0f, // REGION_GREAT_BAY
+    -35.0f, // REGION_ZORA_HALL
+    -3.0f,  // REGION_ROMANI_RANCH
+    4.0f,   // REGION_DEKU_PALACE
+    12.0f,  // REGION_WOODFALL
+    8.0f,   // REGION_CLOCK_TOWN
+    7.0f,   // REGION_SNOWHEAD
+    40.0f,  // REGION_IKANA_GRAVEYARD
+    47.0f,  // REGION_IKANA_CANYON
+    49.0f,  // REGION_GORON_VILLAGE
+    55.0f,  // REGION_STONE_TOWER
 };
-f32 sWorldMapCursorsY[] = {
-    -15.0f, // Great Bay
-    -36.0f, // Zora Hall
-    -23.0f, // Romani Ranch
-    -49.0f, // Deku Palace
-    -29.0f, // Woodfall
-    -8.0f,  // Clock Town
-    25.0f,  // Snowhead
-    2.0f,   // Ikana Graveyard
-    -9.0f,  // Ikana Canyon
-    28.0f,  // Goron Village
-    7.0f,   // Stone Tower
+f32 sWorldMapCursorsY[REGION_MAX] = {
+    -15.0f, // REGION_GREAT_BAY
+    -36.0f, // REGION_ZORA_HALL
+    -23.0f, // REGION_ROMANI_RANCH
+    -49.0f, // REGION_DEKU_PALACE
+    -29.0f, // REGION_WOODFALL
+    -8.0f,  // REGION_CLOCK_TOWN
+    25.0f,  // REGION_SNOWHEAD
+    2.0f,   // REGION_IKANA_GRAVEYARD
+    -9.0f,  // REGION_IKANA_CANYON
+    28.0f,  // REGION_GORON_VILLAGE
+    7.0f,   // REGION_STONE_TOWER
 };
-// Owl Statues
-f32 sOwlWarpWorldMapCursorsX[] = {
-    -50.0f, // Great Bay Coast
-    -38.0f, // Zora Cape
-    6.0f,   // Snowhead
-    11.0f,  // Mountain Village
-    8.0f,   // Clock Town
-    0.0f,   // Milk Road
-    12.0f,  // Woodfall
-    31.0f,  // Southern Swamp
-    48.0f,  // Ikana Canyon
-    56.0f,  // Stone Tower
+f32 sOwlWarpWorldMapCursorsX[OWL_STATUE_MAX] = {
+    -50.0f, // OWL_STATUE_GREAT_BAY_COAST
+    -38.0f, // OWL_STATUE_ZORA_CAPE
+    6.0f,   // OWL_STATUE_SNOWHEAD
+    11.0f,  // OWL_STATUE_MOUNTAIN_VILLAGE
+    8.0f,   // OWL_STATUE_CLOCK_TOWN
+    0.0f,   // OWL_STATUE_MILK_ROAD
+    12.0f,  // OWL_STATUE_WOODFALL
+    31.0f,  // OWL_STATUE_SOUTHERN_SWAMP
+    48.0f,  // OWL_STATUE_IKANA_CANYON
+    56.0f,  // OWL_STATUE_STONE_TOWER
 };
-f32 sOwlWarpWorldMapCursorsY[] = {
-    -14.0f, // Great Bay Coast
-    -39.0f, // Zora Cape
-    23.0f,  // Snowhead
-    11.0f,  // Mountain Village
-    -8.0f,  // Clock Town
-    -15.0f, // Milk Road
-    -31.0f, // Woodfall
-    -30.0f, // Southern Swamp
-    -10.0f, // Ikana Canyon
-    11.0f,  // Stone Tower
+f32 sOwlWarpWorldMapCursorsY[OWL_STATUE_MAX] = {
+    -14.0f, // OWL_STATUE_GREAT_BAY_COAST
+    -39.0f, // OWL_STATUE_ZORA_CAPE
+    23.0f,  // OWL_STATUE_SNOWHEAD
+    11.0f,  // OWL_STATUE_MOUNTAIN_VILLAGE
+    -8.0f,  // OWL_STATUE_CLOCK_TOWN
+    -15.0f, // OWL_STATUE_MILK_ROAD
+    -31.0f, // OWL_STATUE_WOODFALL
+    -30.0f, // OWL_STATUE_SOUTHERN_SWAMP
+    -10.0f, // OWL_STATUE_IKANA_CANYON
+    11.0f,  // OWL_STATUE_STONE_TOWER
 };
 f32 sDungeonMapCursorsX[] = {
-    -72.0f, // Big Key
-    -47.0f, // Compass
-    -26.0f, // Dungeon Map
-    -50.0f, // Stray Fairies
-    -48.0f, // Floor Index 4 (top floor)
-    -48.0f, // Floor Index 3
-    -48.0f, // Floor Index 2
-    -48.0f, // Floor Index 1
-    -48.0f, // Floor Index 0 (bottom floor)
+    -72.0f, // DUNGEON_BOSS_KEY
+    -47.0f, // DUNGEON_COMPASS
+    -26.0f, // DUNGEON_MAP
+    -50.0f, // DUNGEON_STRAY_FAIRIES
+    -48.0f, // DUNGEON_FLOOR_INDEX_4 (top floor)
+    -48.0f, // DUNGEON_FLOOR_INDEX_3
+    -48.0f, // DUNGEON_FLOOR_INDEX_2
+    -48.0f, // DUNGEON_FLOOR_INDEX_1
+    -48.0f, // DUNGEON_FLOOR_INDEX_0 (bottom floor)
 };
 f32 sDungeonMapCursorsY[] = {
-    -47.0f, // Big Key
-    -47.0f, // Compass
-    -47.0f, // Dungeon Map
-    -30.0f, // Stray Fairies
-    33.0f,  // Floor Index 4 (top floor)
-    22.0f,  // Floor Index 3
-    11.0f,  // Floor Index 2
-    -2.0f,  // Floor Index 1
-    -13.0f, // Floor Index 0 (bottom floor)
+    -47.0f, // DUNGEON_BOSS_KEY
+    -47.0f, // DUNGEON_COMPASS
+    -47.0f, // DUNGEON_MAP
+    -30.0f, // DUNGEON_STRAY_FAIRIES
+    33.0f,  // DUNGEON_FLOOR_INDEX_4 (top floor)
+    22.0f,  // DUNGEON_FLOOR_INDEX_3
+    11.0f,  // DUNGEON_FLOOR_INDEX_2
+    -2.0f,  // DUNGEON_FLOOR_INDEX_1
+    -13.0f, // DUNGEON_FLOOR_INDEX_0 (bottom floor)
 };
 f32 sQuestStatusCursorsX[] = {
     52.0f,  // QUEST_REMAINS_ODOWLA
@@ -2405,8 +2403,8 @@ void KaleidoScope_Update(PlayState* play) {
             sUnpausedButtonStatus[EQUIP_SLOT_A] = gSaveContext.buttonStatus[EQUIP_SLOT_A];
 
             pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
-            pauseCtx->cursorSlot[PAUSE_MAP] = XREG(94) + 4;
-            pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256 = XREG(94) + 4;
+            pauseCtx->cursorSlot[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + DUNGEON_FLOOR_INDEX_4;
+            pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256 = R_REVERSE_FLOOR_INDEX + DUNGEON_FLOOR_INDEX_4;
 
             sPauseCursorLeftX = -175;
             sPauseCursorRightX = 155;
@@ -2737,8 +2735,8 @@ void KaleidoScope_Update(PlayState* play) {
             break;
 
         case PAUSE_STATE_GAMEOVER_2:
-            pauseCtx->cursorSlot[PAUSE_MAP] = XREG(94) + 4;
-            pauseCtx->cursorPoint[PAUSE_MAP] = XREG(94) + 4;
+            pauseCtx->cursorSlot[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + DUNGEON_FLOOR_INDEX_4;
+            pauseCtx->cursorPoint[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + DUNGEON_FLOOR_INDEX_4;
             sPauseCursorLeftX = -175;
             sPauseCursorRightX = 155;
             pauseCtx->unk_220 = -434.0f;
@@ -2994,8 +2992,8 @@ void KaleidoScope_Update(PlayState* play) {
             sUnpausedButtonStatus[EQUIP_SLOT_A] = gSaveContext.buttonStatus[EQUIP_SLOT_A];
 
             pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
-            pauseCtx->cursorSlot[PAUSE_MAP] = XREG(94) + 4;
-            pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256 = XREG(94) + 4;
+            pauseCtx->cursorSlot[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + DUNGEON_FLOOR_INDEX_4;
+            pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256 = R_REVERSE_FLOOR_INDEX + DUNGEON_FLOOR_INDEX_4;
 
             sPauseCursorLeftX = -175;
             sPauseCursorRightX = 155;

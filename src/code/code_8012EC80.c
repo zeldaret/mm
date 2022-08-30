@@ -365,8 +365,8 @@ s16 gItemPrices[] = {
 };
 
 // Used to map scene indexes to their region in Termina
-u16 gScenesPerRegion[11][27] = {
-    // Great Bay
+u16 gScenesPerRegion[REGION_MAX][27] = {
+    // REGION_GREAT_BAY
     {
         SCENE_30GYOSON,
         SCENE_LABO,
@@ -380,13 +380,13 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_KINDAN2,
         0xFFFF,
     },
-    // Zora Hall
+    // REGION_ZORA_HALL
     {
         SCENE_33ZORACITY,
         SCENE_BANDROOM,
         0xFFFF,
     },
-    // Romani Ranch
+    // REGION_ROMANI_RANCH
     {
         SCENE_F01,
         SCENE_ROMANYMAE,
@@ -396,7 +396,7 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_KOEPONARACE,
         0xFFFF,
     },
-    // Deku Palace
+    // REGION_DEKU_PALACE
     {
         SCENE_22DEKUCITY,
         SCENE_DEKU_KING,
@@ -404,7 +404,7 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_DANPEI,
         0xFFFF,
     },
-    // Woodfall
+    // REGION_WOODFALL
     {
         SCENE_20SICHITAI,
         SCENE_20SICHITAI2,
@@ -414,7 +414,7 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_KINSTA1,
         0xFFFF,
     },
-    // Clock Town
+    // REGION_CLOCK_TOWN
     {
         SCENE_00KEIKOKU,   SCENE_TENMON_DAI, SCENE_13HUBUKINOMITI, SCENE_24KEMONOMITI, SCENE_SYATEKI_MORI,
         SCENE_IKANAMAE,    SCENE_TOWN,       SCENE_SYATEKI_MIZU,   SCENE_BOWLING,      SCENE_TAKARAYA,
@@ -423,7 +423,7 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_BACKTOWN,    SCENE_CLOCKTOWER, SCENE_INSIDETOWER,    SCENE_OKUJOU,       SCENE_ALLEY,
         SCENE_DEKUTES,     0xFFFF,
     },
-    // Snowhead
+    // REGION_SNOWHEAD
     {
         SCENE_10YUKIYAMANOMURA,
         SCENE_10YUKIYAMANOMURA2,
@@ -436,13 +436,13 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_17SETUGEN2,
         0xFFFF,
     },
-    // Ikana Graveyard
+    // REGION_IKANA_GRAVEYARD
     {
         SCENE_BOTI,
         SCENE_DANPEI2TEST,
         0xFFFF,
     },
-    // Ikana Canyon
+    // REGION_IKANA_CANYON
     {
         SCENE_CASTLE,
         SCENE_IKNINSIDE,
@@ -455,7 +455,7 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_HAKASHITA,
         0xFFFF,
     },
-    // Goron Village
+    // REGION_GORON_VILLAGE
     {
         SCENE_11GORONNOSATO,
         SCENE_11GORONNOSATO2,
@@ -463,7 +463,7 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_GORONSHOP,
         0xFFFF,
     },
-    // Stone Tower
+    // REGION_STONE_TOWER
     {
         SCENE_F40,
         SCENE_F41,
@@ -550,9 +550,9 @@ s32 Inventory_IsMapVisible(s16 sceneNum) {
     return false;
 }
 
-static u16 sScenesPerTingleMap[6][12] = {
+static u16 sScenesPerTingleMap[TINGLE_MAP_MAX][12] = {
     {
-        // Clock Town Tingle Map
+        // TINGLE_MAP_CLOCK_TOWN
         SCENE_00KEIKOKU,
         SCENE_BOTI,
         SCENE_13HUBUKINOMITI,
@@ -566,7 +566,7 @@ static u16 sScenesPerTingleMap[6][12] = {
         -1,
     },
     {
-        // Woodfall Tingle Map
+        // TINGLE_MAP_WOODFALL
         SCENE_20SICHITAI,
         SCENE_20SICHITAI2,
         SCENE_21MITURINMAE,
@@ -576,7 +576,7 @@ static u16 sScenesPerTingleMap[6][12] = {
         -1,
     },
     {
-        // Snowhead Tingle Map
+        // TINGLE_MAP_SNOWHEAD
         SCENE_10YUKIYAMANOMURA,
         SCENE_10YUKIYAMANOMURA2,
         SCENE_11GORONNOSATO,
@@ -590,7 +590,7 @@ static u16 sScenesPerTingleMap[6][12] = {
         -1,
     },
     {
-        // Romani Ranch Tingle Map
+        // TINGLE_MAP_ROMANI_RANCH
         SCENE_F01,
         SCENE_ROMANYMAE,
         SCENE_OMOYA,
@@ -600,7 +600,7 @@ static u16 sScenesPerTingleMap[6][12] = {
         -1,
     },
     {
-        // Great Bay Tingle Map
+        // TINGLE_MAP_GREAT_BAY
         SCENE_30GYOSON,
         SCENE_SINKAI,
         SCENE_31MISAKI,
@@ -611,7 +611,7 @@ static u16 sScenesPerTingleMap[6][12] = {
         -1,
     },
     {
-        // Stone Tower Tingle Map
+        // TINGLE_MAP_STONE_TOWER
         SCENE_F40,
         SCENE_F41,
         SCENE_CASTLE,
@@ -622,14 +622,14 @@ static u16 sScenesPerTingleMap[6][12] = {
 };
 
 /**
- * Map visibility is achieved by purchasing a tingle map
+ * Removing clouds from the World Map is achieved by purchasing a tingle map
  */
-void Inventory_SetMapVisibility(s16 tingleIndex) {
+void Inventory_SetWorldMapCloudVisibility(s16 tingleIndex) {
     s16 i = 0;
     s16 index = 0;
     u16(*tingleMapSceneIndices)[] = &sScenesPerTingleMap[tingleIndex];
 
-    if ((tingleIndex >= 0) && (tingleIndex < 6)) {
+    if ((tingleIndex >= 0) && (tingleIndex < TINGLE_MAP_MAX)) {
         while (true) {
             if ((*tingleMapSceneIndices)[i] == 0xFFFF) {
                 break;
@@ -661,22 +661,22 @@ void Inventory_SetMapVisibility(s16 tingleIndex) {
             i++;
         }
 
-        if ((*tingleMapSceneIndices) == sScenesPerTingleMap[0]) {
-            gSaveContext.save.mapsVisible |= 3;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[1]) {
-            gSaveContext.save.mapsVisible |= 0x1C;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[2]) {
-            gSaveContext.save.mapsVisible |= 0xE0;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[3]) {
-            gSaveContext.save.mapsVisible |= 0x100;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[4]) {
-            gSaveContext.save.mapsVisible |= 0x1E00;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[5]) {
-            gSaveContext.save.mapsVisible |= 0x6000;
+        if ((*tingleMapSceneIndices) == sScenesPerTingleMap[TINGLE_MAP_CLOCK_TOWN]) {
+            gSaveContext.save.worldMapCloudVisibility |= 3;
+        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[TINGLE_MAP_WOODFALL]) {
+            gSaveContext.save.worldMapCloudVisibility |= 0x1C;
+        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[TINGLE_MAP_SNOWHEAD]) {
+            gSaveContext.save.worldMapCloudVisibility |= 0xE0;
+        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[TINGLE_MAP_ROMANI_RANCH]) {
+            gSaveContext.save.worldMapCloudVisibility |= 0x100;
+        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[TINGLE_MAP_GREAT_BAY]) {
+            gSaveContext.save.worldMapCloudVisibility |= 0x1E00;
+        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[TINGLE_MAP_STONE_TOWER]) {
+            gSaveContext.save.worldMapCloudVisibility |= 0x6000;
         }
     }
 
-    XREG(95) = 0;
+    R_MINIMAP_DISABLED = false;
 }
 
 /**

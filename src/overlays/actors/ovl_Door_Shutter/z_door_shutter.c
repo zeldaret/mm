@@ -373,7 +373,7 @@ void func_808A1090(DoorShutter* this, PlayState* play) {
                 }
             } else if (this->unk_166 != 0) {
                 if (this->doorType == 5) {
-                    if (!CHECK_DUNGEON_ITEM(0, gSaveContext.mapIndex)) {
+                    if (!CHECK_DUNGEON_ITEM(DUNGEON_BOSS_KEY, gSaveContext.mapIndex)) {
                         player->doorType = -1;
                         this->actor.textId = 0x1803;
                     }
