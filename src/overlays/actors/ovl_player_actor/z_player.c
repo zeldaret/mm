@@ -19063,18 +19063,15 @@ void func_80859B54(PlayState* play, Player* this, UNK_TYPE arg2) {
     Player_SetModels(this, Player_ActionToModelGroup(this, this->heldItemActionParam));
 }
 
-void func_80859BA8(PlayState* play, Player* this, void* arg) {
-    CsCmdActorAction* playerAction = arg;
+void func_80859BA8(PlayState* play, Player* this, CsCmdActorAction* playerAction) {
     f32 startX = playerAction->startPos.x;
     f32 startY = playerAction->startPos.y;
     f32 startZ = playerAction->startPos.z;
     f32 diffX = playerAction->endPos.x - startX;
     f32 diffY = playerAction->endPos.y - startY;
-    f32 progress;
     f32 diffZ = playerAction->endPos.z - startZ;
-
-    progress = (((f32)(play->csCtx.frames - playerAction->startFrame)) /
-                ((f32)(playerAction->endFrame - playerAction->startFrame)));
+    f32 progress = (((f32)(play->csCtx.frames - playerAction->startFrame)) /
+                    ((f32)(playerAction->endFrame - playerAction->startFrame)));
 
     this->actor.world.pos.x = (diffX * progress) + startX;
     this->actor.world.pos.y = (diffY * progress) + startY;
@@ -19651,7 +19648,7 @@ void func_8085A940(PlayState* play, Player* this, UNK_TYPE arg2) {
 
     if (temp_v1 > 0) {
         MREG(68) += temp_v1;
-        if (MREG(68) >= 0x100) {
+        if (MREG(68) > 0xFF) {
             MREG(64) = -0x40;
             MREG(68) = 0xFF;
             gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
