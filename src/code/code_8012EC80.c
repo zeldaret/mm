@@ -404,7 +404,7 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_DANPEI,
         0xFFFF,
     },
-    // Southern Swamp
+    // Woodfall
     {
         SCENE_20SICHITAI,
         SCENE_20SICHITAI2,

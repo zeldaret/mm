@@ -1881,44 +1881,142 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
 }
 
 f32 sItemMaskCursorsX[] = {
-    -62.0f, // column 1
-    -36.0f, // column 2
-    -10.0f, // column 3
-    16.0f,  // column 4
-    42.0f,  // column 5
-    68.0f,  // column 6
+    -62.0f, // Column 1
+    -36.0f, // Column 2
+    -10.0f, // Column 3
+    16.0f,  // Column 4
+    42.0f,  // Column 5
+    68.0f,  // Column 6
 };
 f32 sItemMaskCursorsY[] = {
-    31.0f,  // row 1
-    5.0f,   // row 2
-    -21.0f, // row 3
-    -47.0f, // row 4
+    31.0f,  // Row 1
+    5.0f,   // Row 2
+    -21.0f, // Row 3
+    -47.0f, // Row 4
 };
+// Regions
 f32 sWorldMapCursorsX[] = {
-    -49.0f, -35.0f, -3.0f, 4.0f, 12.0f, 8.0f, 7.0f, 40.0f, 47.0f, 49.0f, 55.0f,
+    -49.0f, // Great Bay
+    -35.0f, // Zora Hall
+    -3.0f,  // Romani Ranch
+    4.0f,   // Deku Palace
+    12.0f,  // Woodfall
+    8.0f,   // Clock Town
+    7.0f,   // Snowhead
+    40.0f,  // Ikana Graveyard
+    47.0f,  // Ikana Canyon
+    49.0f,  // Goron Village
+    55.0f,  // Stone Tower
 };
 f32 sWorldMapCursorsY[] = {
-    -15.0f, -36.0f, -23.0f, -49.0f, -29.0f, -8.0f, 25.0f, 2.0f, -9.0f, 28.0f, 7.0f,
+    -15.0f, // Great Bay
+    -36.0f, // Zora Hall
+    -23.0f, // Romani Ranch
+    -49.0f, // Deku Palace
+    -29.0f, // Woodfall
+    -8.0f,  // Clock Town
+    25.0f,  // Snowhead
+    2.0f,   // Ikana Graveyard
+    -9.0f,  // Ikana Canyon
+    28.0f,  // Goron Village
+    7.0f,   // Stone Tower
 };
+// Owl Statues
 f32 sOwlWarpWorldMapCursorsX[] = {
-    -50.0f, -38.0f, 6.0f, 11.0f, 8.0f, 0.0f, 12.0f, 31.0f, 48.0f, 56.0f,
+    -50.0f, // Great Bay Coast
+    -38.0f, // Zora Cape
+    6.0f,   // Snowhead
+    11.0f,  // Mountain Village
+    8.0f,   // Clock Town
+    0.0f,   // Milk Road
+    12.0f,  // Woodfall
+    31.0f,  // Southern Swamp
+    48.0f,  // Ikana Canyon
+    56.0f,  // Stone Tower
 };
 f32 sOwlWarpWorldMapCursorsY[] = {
-    -14.0f, -39.0f, 23.0f, 11.0f, -8.0f, -15.0f, -31.0f, -30.0f, -10.0f, 11.0f,
+    -14.0f, // Great Bay Coast
+    -39.0f, // Zora Cape
+    23.0f,  // Snowhead
+    11.0f,  // Mountain Village
+    -8.0f,  // Clock Town
+    -15.0f, // Milk Road
+    -31.0f, // Woodfall
+    -30.0f, // Southern Swamp
+    -10.0f, // Ikana Canyon
+    11.0f,  // Stone Tower
 };
 f32 sDungeonMapCursorsX[] = {
-    -72.0f, -47.0f, -26.0f, -50.0f, -48.0f, -48.0f, -48.0f, -48.0f, -48.0f,
+    -72.0f, // Big Key
+    -47.0f, // Compass
+    -26.0f, // Dungeon Map
+    -50.0f, // Stray Fairies
+    -48.0f, // Floor Index 4 (top floor)
+    -48.0f, // Floor Index 3
+    -48.0f, // Floor Index 2
+    -48.0f, // Floor Index 1
+    -48.0f, // Floor Index 0 (bottom floor)
 };
 f32 sDungeonMapCursorsY[] = {
-    -47.0f, -47.0f, -47.0f, -30.0f, 33.0f, 22.0f, 11.0f, -2.0f, -13.0f,
+    -47.0f, // Big Key
+    -47.0f, // Compass
+    -47.0f, // Dungeon Map
+    -30.0f, // Stray Fairies
+    33.0f,  // Floor Index 4 (top floor)
+    22.0f,  // Floor Index 3
+    11.0f,  // Floor Index 2
+    -2.0f,  // Floor Index 1
+    -13.0f, // Floor Index 0 (bottom floor)
 };
 f32 sQuestStatusCursorsX[] = {
-    52.0f,  80.0f,  24.0f,  52.0f,  81.0f, 24.0f, -78.0f, -61.0f, -44.0f, -24.0f, -6.0f,  -3.0f,
-    -78.0f, -61.0f, -44.0f, -24.0f, -6.0f, -3.0f, -68.0f, 22.0f,  83.0f,  -67.0f, -21.0f,
+    52.0f,  // QUEST_REMAINS_ODOWLA
+    80.0f,  // QUEST_REMAINS_GOHT
+    24.0f,  // QUEST_REMAINS_GYORG
+    52.0f,  // QUEST_REMAINS_TWINMOLD
+    81.0f,  // QUEST_SHIELD
+    24.0f,  // QUEST_SWORD
+    -78.0f, // QUEST_SONG_SONATA
+    -61.0f, // QUEST_SONG_LULLABY
+    -44.0f, // QUEST_SONG_BOSSA_NOVA
+    -24.0f, // QUEST_SONG_ELEGY
+    -6.0f,  // QUEST_SONG_OATH
+    -3.0f,  // QUEST_SONG_SARIA
+    -78.0f, // QUEST_SONG_TIME
+    -61.0f, // QUEST_SONG_HEALING
+    -44.0f, // QUEST_SONG_EPONA
+    -24.0f, // QUEST_SONG_SOARING
+    -6.0f,  // QUEST_SONG_STORMS
+    -3.0f,  // QUEST_SONG_SUN
+    -68.0f, // QUEST_BOMBERS_NOTEBOOK
+    22.0f,  // QUEST_QUIVER
+    83.0f,  // QUEST_BOMB_BAG
+    -67.0f, // QUEST_SKULL_TOKEN
+    -21.0f, // QUEST_HEART_PIECE
 };
 f32 sQuestStatusCursorsY[] = {
-    33.0f,  18.0f,  18.0f,  0.0f,   -23.0f, -23.0f, -29.0f, -29.0f, -29.0f, -29.0f, -29.0f, -29.0f,
-    -11.0f, -11.0f, -11.0f, -11.0f, -11.0f, -11.0f, 27.0f,  -53.0f, -53.0f, 14.0f,  26.0f,
+    33.0f,  // QUEST_REMAINS_ODOWLA
+    18.0f,  // QUEST_REMAINS_GOHT
+    18.0f,  // QUEST_REMAINS_GYORG
+    0.0f,   // QUEST_REMAINS_TWINMOLD
+    -23.0f, // QUEST_SHIELD
+    -23.0f, // QUEST_SWORD
+    -29.0f, // QUEST_SONG_SONATA
+    -29.0f, // QUEST_SONG_LULLABY
+    -29.0f, // QUEST_SONG_BOSSA_NOVA
+    -29.0f, // QUEST_SONG_ELEGY
+    -29.0f, // QUEST_SONG_OATH
+    -29.0f, // QUEST_SONG_SARIA
+    -11.0f, // QUEST_SONG_TIME
+    -11.0f, // QUEST_SONG_HEALING
+    -11.0f, // QUEST_SONG_EPONA
+    -11.0f, // QUEST_SONG_SOARING
+    -11.0f, // QUEST_SONG_STORMS
+    -11.0f, // QUEST_SONG_SUN
+    27.0f,  // QUEST_BOMBERS_NOTEBOOK
+    -53.0f, // QUEST_QUIVER
+    -53.0f, // QUEST_BOMB_BAG
+    14.0f,  // QUEST_SKULL_TOKEN
+    26.0f,  // QUEST_HEART_PIECE
 };
 void KaleidoScope_UpdateCursorSize(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
