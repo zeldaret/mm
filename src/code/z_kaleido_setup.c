@@ -12,8 +12,8 @@ void func_800F4A10(PlayState* play) {
 
     Rumble_StateReset();
 
-    pauseCtx->unk_206 = 0;
-    pauseCtx->mainState = PAUSE_MAINSTATE_SWITCHING_PAGE;
+    pauseCtx->switchPageTimer = 0;
+    pauseCtx->mainState = PAUSE_MAIN_STATE_SWITCHING_PAGE;
     pauseCtx->eye.x = sKaleidoSetupEyeX[pauseCtx->pageIndex];
     pauseCtx->eye.z = sKaleidoSetupEyeZ[pauseCtx->pageIndex];
     pauseCtx->pageIndex = D_801BDB00[pauseCtx->pageIndex];
@@ -123,7 +123,7 @@ void KaleidoSetup_Init(PlayState* play) {
     pauseCtx->cursorPoint[PAUSE_MAP] = XREG(94) + 3;
 
     pauseCtx->cursorSpecialPos = PAUSE_CURSOR_PAGE_RIGHT;
-    pauseCtx->pageSwitchTimer = 0;
+    pauseCtx->delaySwitchPageInputTimer = 0;
 
     pauseCtx->cursorItem[PAUSE_ITEM] = PAUSE_ITEM_NONE;
     pauseCtx->cursorItem[PAUSE_MAP] = XREG(94) + 3;

@@ -38,13 +38,13 @@ void KaleidoScopeCall_Update(PlayState* play) {
         if ((pauseCtx->state == PAUSE_STATE_DEFAULT_0) || (pauseCtx->state == PAUSE_STATE_OWLWARP_0)) {
             if (ShrinkWindow_GetLetterboxMagnitude() == 0) {
                 R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_DRAW;
-                pauseCtx->mainState = PAUSE_MAINSTATE_IDLE;
+                pauseCtx->mainState = PAUSE_MAIN_STATE_IDLE;
                 pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_0;
                 pauseCtx->state = (pauseCtx->state & 0xFFFF) + 1;
             }
         } else if (pauseCtx->state == PAUSE_STATE_GAMEOVER_0) {
             R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_DRAW;
-            pauseCtx->mainState = PAUSE_MAINSTATE_IDLE;
+            pauseCtx->mainState = PAUSE_MAIN_STATE_IDLE;
             pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_0;
             pauseCtx->state = (pauseCtx->state & 0xFFFF) + 1;
         } else if ((pauseCtx->state == PAUSE_STATE_DEFAULT_1) || (pauseCtx->state == PAUSE_STATE_GAMEOVER_1) ||

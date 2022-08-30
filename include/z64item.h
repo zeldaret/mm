@@ -63,7 +63,8 @@ typedef enum {
     /* 0x14 */ QUEST_BOMB_BAG,
     /* 0x15 */ QUEST_SKULL_TOKEN,
     /* 0x16 */ QUEST_HEART_PIECE,  // for `pauseCtx->cursorPoint[PAUSE_QUEST]`
-    /* 0x18 */ QUEST_SONG_LULLABY_INTRO = 0x18,
+    /* 0x17 */ QUEST_17, // Used in a conditional for quest cursors
+    /* 0x18 */ QUEST_SONG_LULLABY_INTRO,
     /* 0x19 */ QUEST_PICTOGRAPH, // A photo from the pictograph box is saved
     /* 0x1C */ QUEST_HEART_PIECE_COUNT = 0x1C
 } QuestItem;

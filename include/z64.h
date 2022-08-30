@@ -430,7 +430,7 @@ typedef struct {
     /* 0x200 */ u16 mainState;
     /* 0x202 */ u16 mode;
     /* 0x204 */ u16 pageIndex;
-    /* 0x206 */ u16 unk_206;
+    /* 0x206 */ u16 switchPageTimer;
     /* 0x208 */ u16 savePromptState;
     /* 0x20C */ f32 unk_20C; // unused
     /* 0x210 */ f32 itemPageRoll;
@@ -442,14 +442,14 @@ typedef struct {
     /* 0x226 */ s16 offsetY;
     /* 0x228 */ s32 unk_228;
     /* 0x22C */ s32 unk_22C;
-    /* 0x230 */ s32 stickRelX;
-    /* 0x234 */ s32 stickRelY;
+    /* 0x230 */ s32 stickAdjX;
+    /* 0x234 */ s32 stickAdjY;
     /* 0x238 */ s16 cursorPoint[5];
     /* 0x242 */ s16 cursorXIndex[5];
     /* 0x24C */ s16 cursorYIndex[5];
     /* 0x256 */ s16 unk_256; // related to both cursorPoint and cursorSlot
     /* 0x258 */ s16 cursorSpecialPos;
-    /* 0x25A */ s16 pageSwitchTimer;
+    /* 0x25A */ s16 delaySwitchPageInputTimer; // Used to introduce a delay before switching page when arriving on the "scroll left/right" positions while holding stick left/right.
     /* 0x25C */ u16 namedItem;
     /* 0x25E */ u16 cursorItem[5];
     /* 0x268 */ u16 cursorSlot[5];

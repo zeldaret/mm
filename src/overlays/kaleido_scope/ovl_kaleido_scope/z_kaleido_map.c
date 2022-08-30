@@ -150,7 +150,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
     for (i = 0, j = 4; i < 4; i++, j += 4) {
         if (i == 3) {
-            if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAINSTATE_IDLE)) {
+            if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE)) {
                 // If (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN), then the other conditions are redundant and
                 // always return true
                 if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) &&
@@ -245,7 +245,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
     func_80108AF8(play);
 
-    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAINSTATE_IDLE)) {
+    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE)) {
         // If (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN), then the other conditions are redundant and always return
         // true
         if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
@@ -284,10 +284,10 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
     s16 oldCursorPoint;
 
     if (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) {
-        if ((pauseCtx->mainState == PAUSE_MAINSTATE_IDLE) && (pauseCtx->pageIndex == PAUSE_MAP)) {
+        if ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) && (pauseCtx->pageIndex == PAUSE_MAP)) {
             pauseCtx->cursorColorSet = 0;
             oldCursorPoint = pauseCtx->cursorPoint[PAUSE_MAP];
-            if (pauseCtx->stickRelX > 30) {
+            if (pauseCtx->stickAdjX > 30) {
                 pauseCtx->cursorShrinkRate = 4.0f;
                 if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
                     func_80821A04(play);
@@ -315,7 +315,7 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
                         }
                     }
                 }
-            } else if (pauseCtx->stickRelX < -30) {
+            } else if (pauseCtx->stickAdjX < -30) {
                 pauseCtx->cursorShrinkRate = 4.0f;
                 if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_RIGHT) {
                     func_80821A04(play);
@@ -355,7 +355,7 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
                     }
                 }
             } else {
-                if ((pauseCtx->cursorSpecialPos == 0) && (pauseCtx->stickRelY > 30)) {
+                if ((pauseCtx->cursorSpecialPos == 0) && (pauseCtx->stickAdjY > 30)) {
                     if (pauseCtx->cursorPoint[PAUSE_MAP] >= 4) {
                         for (i = pauseCtx->cursorPoint[PAUSE_MAP] - 5; i >= 0; i--) {
                             if ((gSaveContext.save.permanentSceneFlags[(void)0, gSaveContext.dungeonIndex].unk_14 &
@@ -374,7 +374,7 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
                         pauseCtx->cursorSlot[PAUSE_MAP] = 3;
                         pauseCtx->cursorPoint[PAUSE_MAP] = 3;
                     }
-                } else if ((pauseCtx->cursorSpecialPos == 0) && (pauseCtx->stickRelY < -30)) {
+                } else if ((pauseCtx->cursorSpecialPos == 0) && (pauseCtx->stickAdjY < -30)) {
                     if ((pauseCtx->cursorPoint[PAUSE_MAP] >= 4) && (pauseCtx->cursorPoint[PAUSE_MAP] < 8)) {
                         for (i = pauseCtx->cursorPoint[PAUSE_MAP] - 3; i < 9; i++) {
                             if ((gSaveContext.save.permanentSceneFlags[(void)0, gSaveContext.dungeonIndex].unk_14 &
@@ -447,20 +447,50 @@ TexturePtr D_8082B548[] = {
     0x0C009858, 0x0C009E58, 0x0C00AE58, 0x0C00BE58, 0x0C00CE58, 0x0C0109F8, 0x0C011958,
 };
 s16 D_8082B584[] = {
-    0x0000, 0x0000, 0x00FF, 0x00FF, 0x00FF, 0x0000,
+    0, 0, 255, 255, 255, 0,
 };
 s16 D_8082B590[] = {
-    0x00FF, 0x00FF, 0x0000, 0x0000, 0x0000, 0x00FF,
+    255, 255, 0, 0, 0, 255,
 };
 s16 D_8082B59C[] = {
-    0x0056, 0x0068, 0x0091, 0x0099, 0x00A3, 0x009F, 0x009D, 0x00C7, 0x00D0, 0x00D2, 0x00DA, 0x0000,
+    86,  // Great Bay
+    104, //  Zora Hall
+    145, //  Romani Ranch
+    153, //  Deku Palace
+    163, //  Southern Swamp
+    159, //  Clock Town
+    157, //  Snowhead
+    199, //  Ikana Graveyard
+    208, //  Ikana Canyon
+    210, //  Goron Village
+    218, // Stone Tower
 };
 s16 D_8082B5B4[] = {
-    0x007F, 0x0099, 0x008A, 0x00AB, 0x0092, 0x0077, 0x004D, 0x006A, 0x0078, 0x0049, 0x0063, 0x0000,
+    127, // Great Bay
+    153, // Zora Hall
+    138, // Romani Ranch
+    171, // Deku Palace
+    146, // Southern Swamp
+    119, // Clock Town
+    77,  // Snowhead
+    106, // Ikana Graveyard
+    120, // Ikana Canyon
+    73,  // Goron Village
+    99,  // Stone Tower
 };
 s16 D_8082B5CC[] = {
-    5, 4, 6, 0, 8, 5, 4, 6, 0, 8,
+    5, // Clock Town
+    4, // Southern Swamp
+    6, // Snowhead
+    0, // Great Bay
+    8, // Ikana Canyon
+    5, // Clock Town
+    4, // Southern Swamp
+    6, // Snowhead
+    0, // Great Bay
+    8, // Ikana Canyon
 };
+
 void KaleidoScope_DrawWorldMap(PlayState* play) {
     s16 sceneId;
     s16 t;
@@ -476,8 +506,8 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
     KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[1] * 4, pauseCtx->mapPageVtx);
 
-    if ((pauseCtx->pageIndex == 1) && (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) &&
-        ((pauseCtx->mainState == PAUSE_MAINSTATE_IDLE) || (pauseCtx->mainState == PAUSE_MAINSTATE_EQUIP_ITEM)) &&
+    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) &&
+        ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) || (pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_ITEM)) &&
         (YREG(6) != 0) && (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
         !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
 
@@ -629,18 +659,18 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         }
     }
 
-    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAINSTATE_IDLE)) {
+    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE)) {
         if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
             !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
             j = 0;
             n = 0;
             sceneId = play->sceneNum;
-            if (sceneId == SCENE_KAKUSIANA) {
+            if (sceneId == SCENE_KAKUSIANA) { // Lone Peak Shrine & Grottos
                 if (play->roomCtx.currRoom.num == 5) {
-                    sceneId = SCENE_11GORONNOSATO;
+                    sceneId = SCENE_11GORONNOSATO; // Goron Village (winter)
                 } else if ((play->roomCtx.currRoom.num == 6) || (play->roomCtx.currRoom.num == 8) ||
                            (play->roomCtx.currRoom.num == 0xC)) {
-                    sceneId = SCENE_22DEKUCITY;
+                    sceneId = SCENE_22DEKUCITY; // Deku Palace
                 } else {
                     sceneId = Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.respawn[3].entrance));
                 }
@@ -652,6 +682,8 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                     j = 0;
                     if (n == 11) {
                         n = 0;
+
+                        // Special case for fairy fountains
                         if (sceneId == SCENE_YOUSEI_IZUMI) {
                             j = play->curSpawn;
                             n = D_8082B5CC[j];
@@ -707,7 +739,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 oldCursorPoint;
 
-    if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->mainState == PAUSE_MAINSTATE_IDLE) &&
+    if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
         (pauseCtx->pageIndex == PAUSE_MAP)) {
         pauseCtx->cursorColorSet = 0;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
@@ -719,7 +751,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
         }
 
         if (pauseCtx->cursorSpecialPos == 0) {
-            if (pauseCtx->stickRelX > 30) {
+            if (pauseCtx->stickAdjX > 30) {
                 pauseCtx->cursorShrinkRate = 4.0f;
                 D_8082B5F4 = 0;
 
@@ -734,7 +766,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                         break;
                     }
                 }
-            } else if (pauseCtx->stickRelX < -30) {
+            } else if (pauseCtx->stickAdjX < -30) {
                 pauseCtx->cursorShrinkRate = 4.0f;
                 D_8082B5F4 = 0;
 
@@ -760,7 +792,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
         } else {
             pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
             if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
-                if (pauseCtx->stickRelX > 30) {
+                if (pauseCtx->stickAdjX > 30) {
                     pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = -1;
                     pauseCtx->cursorSpecialPos = 0;
                     pauseCtx->cursorShrinkRate = 4.0f;
@@ -784,7 +816,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                     play_sound(NA_SE_SY_CURSOR);
                     D_8082B5F4 = 0;
                 }
-            } else if (pauseCtx->stickRelX < -30) {
+            } else if (pauseCtx->stickAdjX < -30) {
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = 11;
                 pauseCtx->cursorSpecialPos = 0;
                 pauseCtx->cursorShrinkRate = 4.0f;
@@ -820,7 +852,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
         pauseCtx->cursorColorSet = 4;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 
-        if (pauseCtx->stickRelX > 30) {
+        if (pauseCtx->stickAdjX > 30) {
             pauseCtx->cursorShrinkRate = 4.0f;
             D_8082B5F4 = 0;
             do {
@@ -829,7 +861,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                     pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = 0;
                 }
             } while (!pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]]);
-        } else if (pauseCtx->stickRelX < -30) {
+        } else if (pauseCtx->stickAdjX < -30) {
             pauseCtx->cursorShrinkRate = 4.0f;
             D_8082B5F4 = 0;
             do {
