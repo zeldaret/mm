@@ -1,7 +1,15 @@
 /*
  * File: z_en_water_effect.c
  * Overlay: ovl_En_Water_Effect
- * Description: Water splashing effect (used for Gyorg)
+ * Description: Water/rock drop spawner and Gyorg water splashing effect
+ * 
+ * This actor serves two purposes:
+ * - It can act as a "spawner" for either water drops or flaming rocks. This
+ *   spawner can be placed in the ceiling to drop these repeatedly.
+ * - It is also used to control various water splashing effects for the Gyorg
+ *   fight. Specifically, it handles the splashing that is caused when it
+ *   enters or exits the water, and it handles the shockwave that is created
+ *   when it rams the center platform.
  */
 
 #include "z_en_water_effect.h"
@@ -98,9 +106,9 @@ void EnWaterEffect_Init(Actor* thisx, PlayState* play) {
 
         if (this->actor.params == ENWATEREFFECT_309) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, this->actor.shape.rot.z, 0x30A);
+                        this->actor.world.pos.z, 0, 0, this->actor.shape.rot.z, ENWATEREFFECT_30A);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, this->actor.shape.rot.z, 0x30B);
+                        this->actor.world.pos.z, 0, 0, this->actor.shape.rot.z, ENWATEREFFECT_30B);
         } else if (this->actor.params == ENWATEREFFECT_30A) {
             this->unk_DC4 = -3;
         } else if (this->actor.params == ENWATEREFFECT_30B) {
