@@ -19748,20 +19748,16 @@ void func_8085AD5C(PlayState* play, Player* this, PlayerCsMode csMode) {
     }
 }
 
-void func_8085ADA0(PlayState* play, Player* this, UNK_TYPE arg2) {
-    CsCmdActorAction* actorAction;
-    u16 temp_t3;
-    u8 var_v1;
-    s32 var_a0;
-
-    actorAction = (this->actor.id == ACTOR_EN_TEST3)
-                      ? play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x1FA)]
-                      : play->csCtx.playerAction;
-
-    var_a0 = false;
+void func_8085ADA0(PlayState* play, Player* this, s32 arg2) {
+    CsCmdActorAction* actorAction = (this->actor.id == ACTOR_EN_TEST3)
+                                        ? play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x1FA)]
+                                        : play->csCtx.playerAction;
+    s32 var_a0 = false;
+    s32 pad;
+    s32 csMode;
 
     if ((play->csCtx.state == CS_STATE_0) || (play->csCtx.state == CS_STATE_3) || (play->csCtx.state == CS_STATE_4)) {
-        if ((D_8085D384[this->unk_396] == 0x44) && (play->sceneNum == SCENE_OKUJOU)) {
+        if ((D_8085D384[this->unk_396] == PLAYER_CSMODE_68) && (play->sceneNum == SCENE_OKUJOU)) {
             this->unk_AA5 = 5;
 
             if (func_80838A90(this, play)) {
@@ -19770,7 +19766,8 @@ void func_8085ADA0(PlayState* play, Player* this, UNK_TYPE arg2) {
             return;
         } else {
             var_a0 = true;
-            if (D_8085D384[this->unk_396] != 0x10) {
+
+            if (D_8085D384[this->unk_396] != PLAYER_CSMODE_16) {
                 this->csMode = PLAYER_CSMODE_6;
                 func_800B7298(play, NULL, PLAYER_CSMODE_6);
                 this->unk_396 = 0;
@@ -19785,42 +19782,36 @@ void func_8085ADA0(PlayState* play, Player* this, UNK_TYPE arg2) {
         return;
     }
 
-    var_v1 = this->unk_396;
-    if (!var_a0) {
-        if (var_v1 != actorAction->action) {
-            s32 csMode = D_8085D384[actorAction->action];
+    if (!var_a0 && (this->unk_396 != actorAction->action)) {
+        csMode = D_8085D384[actorAction->action];
 
-            if ((csMode >= PLAYER_CSMODE_0) && (D_801F4DE0 == 0)) {
-                if ((csMode == PLAYER_CSMODE_2) || (csMode == PLAYER_CSMODE_3)) {
-                    func_8085ABA8(this, actorAction);
-                } else {
-                    func_8085AB58(this, actorAction);
-                }
+        if ((csMode >= PLAYER_CSMODE_0) && (D_801F4DE0 == 0)) {
+            if ((csMode == PLAYER_CSMODE_2) || (csMode == PLAYER_CSMODE_3)) {
+                func_8085ABA8(this, actorAction);
+            } else {
+                func_8085AB58(this, actorAction);
             }
-
-            if (csMode == PLAYER_CSMODE_108) {
-                this->stateFlags3 |= PLAYER_STATE3_20000000;
-            } else if (csMode == PLAYER_CSMODE_110) {
-                this->stateFlags3 &= ~PLAYER_STATE3_20000000;
-            }
-
-            D_80862B6C = this->skelAnime.moveFlags;
-            func_8082E794(this);
-
-            func_8085AD5C(play, this, ABS_ALT(csMode));
-
-            func_8085AC9C(play, this, actorAction, &D_8085DA94[ABS_ALT(csMode)]);
-            this->unk_AE8 = 0;
-            this->unk_AE7 = 0;
-
-            //! FAKE
-            temp_t3 = actorAction->action;
-            this->unk_396 = (temp_t3 & 0xFF) & 0xFF;
-            var_v1 = temp_t3 & 0xFF;
         }
+
+        if (csMode == PLAYER_CSMODE_108) {
+            this->stateFlags3 |= PLAYER_STATE3_20000000;
+        } else if (csMode == PLAYER_CSMODE_110) {
+            this->stateFlags3 &= ~PLAYER_STATE3_20000000;
+        }
+
+        D_80862B6C = this->skelAnime.moveFlags;
+
+        func_8082E794(this);
+        func_8085AD5C(play, this, ABS_ALT(csMode));
+        func_8085AC9C(play, this, actorAction, &D_8085DA94[ABS_ALT(csMode)]);
+
+        this->unk_AE8 = 0;
+        this->unk_AE7 = 0;
+        this->unk_396 = actorAction->action;
     }
 
-    func_8085AC9C(play, this, actorAction, &D_8085DEF4[ABS_ALT(D_8085D384[var_v1])]);
+    csMode = D_8085D384[this->unk_396];
+    func_8085AC9C(play, this, actorAction, &D_8085DEF4[ABS_ALT(csMode)]);
 
     if ((u16)actorAction->rot.x != 0) {
         Math_SmoothStepToS(&this->actor.focus.rot.x, (u16)actorAction->rot.x, 4, 0x2710, 0);
