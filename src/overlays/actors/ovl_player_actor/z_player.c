@@ -16383,9 +16383,10 @@ void func_80852B28(Player* this, PlayState* play) {
     if (LinkAnimation_Update(play, &this->skelAnime)) {
         func_80836A98(this, &gameplay_keep_Linkanim_00DD40, play);
     } else if (LinkAnimation_OnFrame(&this->skelAnime, 3.0f)) {
-        if (Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ARROW, this->bodyPartsPos[0xF].x, this->bodyPartsPos[0xF].y,
-                        this->bodyPartsPos[0xF].z, 0xFA0, this->actor.shape.rot.y, 0, 8) != NULL) {
-            Inventory_ChangeAmmo(SLOT_NUT, -1);
+        if (Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ARROW, this->bodyPartsPos[PLAYER_BODYPART_R_HAND].x,
+                        this->bodyPartsPos[PLAYER_BODYPART_R_HAND].y, this->bodyPartsPos[PLAYER_BODYPART_R_HAND].z,
+                        0xFA0, this->actor.shape.rot.y, 0, 8) != NULL) {
+            Inventory_ChangeAmmo(ITEM_NUT, -1);
             this->unk_D57 = 4;
         }
 
