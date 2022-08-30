@@ -582,6 +582,7 @@ beginseg
     include "build/src/code/speed_meter.o"
     include "build/data/code/speed_meter.data.o"
     include "build/data/code/speed_meter.bss.o"
+    include "build/src/code/code_801780F0.o"
     include "build/data/code/sys_cfb.bss.o"
     include "build/src/code/sys_cmpdma.o"
     include "build/data/code/sys_cmpdma.bss.o"

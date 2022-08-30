@@ -464,6 +464,7 @@
             0x80174F10 : "padmgr",
             0x80176280 : "sched",
             0x80177390 : "speed_meter",
+            0x801780F0 : "code_801780F0",
             0x80178750 : "sys_cmpdma",
             0x80178F30 : "sys_initial_check",
             0x80179300 : "sys_math",
