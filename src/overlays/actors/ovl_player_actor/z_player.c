@@ -822,15 +822,15 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
         44.15145f,
         // openChestAnim
         &gameplay_keep_Linkanim_00D540, // boy/anim/link_demo_Tbox_open
-        // unk_A4
+                                        // unk_A4
         &gameplay_keep_Linkanim_00D548, // boy/anim/link_demo_back_to_past
-        // unk_A8
+                                        // unk_A8
         &gameplay_keep_Linkanim_00D660, // boy/anim/link_demo_return_to_past
-        // unk_AC
+                                        // unk_AC
         &gameplay_keep_Linkanim_00DB90, // boy/anim/link_normal_climb_startA
-        // unk_B0
+                                        // unk_B0
         &gameplay_keep_Linkanim_00DB98, // boy/anim/link_normal_climb_startB
-        // unk_B4
+                                        // unk_B4
         {
             &gameplay_keep_Linkanim_00DBA0, // boy/anim/link_normal_climb_upL
             &gameplay_keep_Linkanim_00DBA8, // boy/anim/link_normal_climb_upR
@@ -918,15 +918,15 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
         42.0f,
         // openChestAnim
         &gameplay_keep_Linkanim_00E170, // goron/anim/pg_Tbox_open
-        // unk_A4
+                                        // unk_A4
         &gameplay_keep_Linkanim_00D548, // boy/anim/link_demo_back_to_past
-        // unk_A8
+                                        // unk_A8
         &gameplay_keep_Linkanim_00D660, // boy/anim/link_demo_return_to_past
-        // unk_AC
+                                        // unk_AC
         &gameplay_keep_Linkanim_00E198, // goron/anim/pg_climb_startA
-        // unk_B0
+                                        // unk_B0
         &gameplay_keep_Linkanim_00E1A0, // goron/anim/pg_climb_startB
-        // unk_B4
+                                        // unk_B4
         {
             &gameplay_keep_Linkanim_00E1A8, // goron/anim/pg_climb_upL
             &gameplay_keep_Linkanim_00E1B0, // goron/anim/pg_climb_upR
@@ -1014,15 +1014,15 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
         36.0f,
         // openChestAnim
         &gameplay_keep_Linkanim_00E300, // zora/anim/pz_Tbox_open
-        // unk_A4
+                                        // unk_A4
         &gameplay_keep_Linkanim_00D548, // boy/anim/link_demo_back_to_past
-        // unk_A8
+                                        // unk_A8
         &gameplay_keep_Linkanim_00D660, // boy/anim/link_demo_return_to_past
-        // unk_AC
+                                        // unk_AC
         &gameplay_keep_Linkanim_00E378, // zora/anim/pz_climb_startA
-        // unk_B0
+                                        // unk_B0
         &gameplay_keep_Linkanim_00E380, // zora/anim/pz_climb_startB
-        // unk_B4
+                                        // unk_B4
         {
             &gameplay_keep_Linkanim_00E388, // zora/anim/pz_climb_upL
             &gameplay_keep_Linkanim_00E390, // zora/anim/pz_climb_upR
@@ -1110,15 +1110,15 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
         33.0f,
         // openChestAnim
         &gameplay_keep_Linkanim_00E268, // nuts/anim/pn_Tbox_open
-        // unk_A4
+                                        // unk_A4
         &gameplay_keep_Linkanim_00D548, // boy/anim/link_demo_back_to_past
-        // unk_A8
+                                        // unk_A8
         &gameplay_keep_Linkanim_00D660, // boy/anim/link_demo_return_to_past
-        // unk_AC
+                                        // unk_AC
         &gameplay_keep_Linkanim_00D1F8, // boy/anim/clink_normal_climb_startA
-        // unk_B0
+                                        // unk_B0
         &gameplay_keep_Linkanim_00D200, // boy/anim/clink_normal_climb_startB
-        // unk_B4
+                                        // unk_B4
         {
             &gameplay_keep_Linkanim_00D208, // boy/anim/clink_normal_climb_upL
             &gameplay_keep_Linkanim_00D210, // boy/anim/clink_normal_climb_upR
@@ -1206,15 +1206,15 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
         29.4343f,
         // openChestAnim
         &gameplay_keep_Linkanim_00D128, // boy/anim/clink_demo_Tbox_open
-        // unk_A4
+                                        // unk_A4
         &gameplay_keep_Linkanim_00D170, // boy/anim/clink_demo_goto_future
-        // unk_A8
+                                        // unk_A8
         &gameplay_keep_Linkanim_00D1B8, // boy/anim/clink_demo_return_to_future
-        // unk_AC
+                                        // unk_AC
         &gameplay_keep_Linkanim_00D1F8, // boy/anim/clink_normal_climb_startA
-        // unk_B0
+                                        // unk_B0
         &gameplay_keep_Linkanim_00D200, // boy/anim/clink_normal_climb_startB
-        // unk_B4
+                                        // unk_B4
         {
             &gameplay_keep_Linkanim_00D208, // boy/anim/clink_normal_climb_upL
             &gameplay_keep_Linkanim_00D210, // boy/anim/clink_normal_climb_upR
@@ -1243,9 +1243,12 @@ LinkAnimationHeader* D_8085BE84[PLAYER_ANIMGROUP_MAX][PLAYER_ANIMTYPE_MAX] = {
     // PLAYER_ANIMGROUP_0
     {
         &gameplay_keep_Linkanim_00DF28, // boy/anim/link_normal_wait_free // Default idle standing, looking forward
-        &gameplay_keep_Linkanim_00DF20, // boy/anim/link_normal_wait // Default idle standing, looking forward, sword and shield
-        &gameplay_keep_Linkanim_00DF20, // boy/anim/link_normal_wait // Default idle standing, looking forward, sword and shield
-        &gameplay_keep_Linkanim_00D988, // boy/anim/link_fighter_wait_long // Default idle standing, looking forward, two hand weapon
+        &gameplay_keep_Linkanim_00DF20, // boy/anim/link_normal_wait // Default idle standing, looking forward, sword
+                                        // and shield
+        &gameplay_keep_Linkanim_00DF20, // boy/anim/link_normal_wait // Default idle standing, looking forward, sword
+                                        // and shield
+        &gameplay_keep_Linkanim_00D988, // boy/anim/link_fighter_wait_long // Default idle standing, looking forward,
+                                        // two hand weapon
         &gameplay_keep_Linkanim_00DF28, // boy/anim/link_normal_wait_free // Default idle standing, looking forward
         &gameplay_keep_Linkanim_00DF28, // boy/anim/link_normal_wait_free // Default idle standing, looking forward
     },
@@ -1450,8 +1453,10 @@ LinkAnimationHeader* D_8085BE84[PLAYER_ANIMGROUP_MAX][PLAYER_ANIMTYPE_MAX] = {
     // PLAYER_ANIMGROUP_23
     {
         &gameplay_keep_Linkanim_00DE78, // boy/anim/link_normal_side_walkL_free // Side walking
-        &gameplay_keep_Linkanim_00D448, // boy/anim/link_anchor_side_walkL // Side walking with sword and shield in hands
-        &gameplay_keep_Linkanim_00D448, // boy/anim/link_anchor_side_walkL // Side walking with sword and shield in hands
+        &gameplay_keep_Linkanim_00D448, // boy/anim/link_anchor_side_walkL // Side walking with sword and shield in
+                                        // hands
+        &gameplay_keep_Linkanim_00D448, // boy/anim/link_anchor_side_walkL // Side walking with sword and shield in
+                                        // hands
         &gameplay_keep_Linkanim_00D928, // boy/anim/link_fighter_side_walkL_long
         &gameplay_keep_Linkanim_00DE78, // boy/anim/link_normal_side_walkL_free // Side walking
         &gameplay_keep_Linkanim_00DE78, // boy/anim/link_normal_side_walkL_free // Side walking
@@ -7010,7 +7015,8 @@ u8 D_8085D1A4[PLAYER_AP_MAX] = {
 
 LinkAnimationHeader* D_8085D1F8[] = {
     &gameplay_keep_Linkanim_00DCA8, // boy/anim/link_normal_give_other
-    &gameplay_keep_Linkanim_00DE98, // boy/anim/link_normal_take_out // Hold up cutscene item; "this item doesn't work here"
+    &gameplay_keep_Linkanim_00DE98, // boy/anim/link_normal_take_out // Hold up cutscene item; "this item doesn't work
+                                    // here"
 };
 
 // TODO: standarize
@@ -9903,43 +9909,34 @@ void func_80840F34(Player* this) {
 }
 
 s32 func_80840F90(PlayState* play, Player* this, CsCmdActorAction* playerAction, f32 arg3, s16 arg4, s32 arg5) {
-    f32 temp_ft4; // sp34
-    f32 temp_fa0;
-    f32 temp_fa0_2;
-    f32 temp_ft5; // sp28
-    s32 temp_v1;  // sp24
-    f32 temp_fa1;
-    f32 temp_fv1;
-    s32 temp_ft1;
-
     if ((arg5 != 0) && (this->linearVelocity == 0.0f)) {
         return LinkAnimation_Update(play, &this->skelAnime);
     }
 
     if (arg5 != 2) {
-        temp_ft4 = R_UPDATE_RATE / 2.0f;
-        temp_fa1 = playerAction->endPos.x - this->actor.world.pos.x;
-        temp_fa0 = playerAction->endPos.z - this->actor.world.pos.z;
-        temp_v1 = (playerAction->endFrame - play->csCtx.frames) + 1;
-        temp_ft5 = sqrtf(SQ(temp_fa1) + SQ(temp_fa0)) / temp_ft4;
-        arg4 = Math_FAtan2F(temp_fa0, temp_fa1);
+        f32 halfUpdateRate = R_UPDATE_RATE / 2.0f;
+        f32 curDiffX = playerAction->endPos.x - this->actor.world.pos.x;
+        f32 curDiffZ = playerAction->endPos.z - this->actor.world.pos.z;
+        f32 scaledCurDist = sqrtf(SQ(curDiffX) + SQ(curDiffZ)) / halfUpdateRate;
+        s32 framesLeft = (playerAction->endFrame - play->csCtx.frames) + 1;
+
+        arg4 = Math_FAtan2F(curDiffZ, curDiffX);
+
         if (arg5 == 1) {
-            temp_fv1 = playerAction->endPos.x - playerAction->startPos.x;
-            temp_fa0_2 = playerAction->endPos.z - playerAction->startPos.z;
-            temp_ft1 = (((sqrtf(SQ(temp_fv1) + SQ(temp_fa0_2)) / temp_ft4) /
+            f32 distX = playerAction->endPos.x - playerAction->startPos.x;
+            f32 distZ = playerAction->endPos.z - playerAction->startPos.z;
+            s32 temp = (((sqrtf(SQ(distX) + SQ(distZ)) / halfUpdateRate) /
                          (playerAction->endFrame - playerAction->startFrame)) /
                         1.5f) *
                        4.0f;
-            if (temp_ft1 >= temp_v1) {
+            if (temp >= framesLeft) {
                 arg3 = 0.0f;
                 arg4 = this->actor.shape.rot.y;
             } else {
-                arg3 = temp_ft5 / ((temp_v1 - temp_ft1) + 1);
+                arg3 = scaledCurDist / ((framesLeft - temp) + 1);
             }
-        //! FAKE
-        dummy_label_581070:;
         } else {
-            arg3 = temp_ft5 / temp_v1;
+            arg3 = scaledCurDist / framesLeft;
         }
     }
 
