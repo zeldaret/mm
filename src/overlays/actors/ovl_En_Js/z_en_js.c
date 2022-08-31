@@ -94,7 +94,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
 
     cs = this->actor.cutscene;
 
-    for (i = 0; i != 2; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->cutscenes); i++) {
         this->cutscenes[i] = cs;
         if (cs != -1) {
             this->actor.cutscene = cs;
@@ -606,7 +606,7 @@ void func_80969898(EnJs* this, PlayState* play) {
                     case 0x2210:
                     case 0x2211:
                     case 0x2212:
-                        player->exchangeItemId = 0;
+                        player->exchangeItemId = PLAYER_AP_NONE;
                         func_80151938(play, 0xFF);
                         this->actionFunc = func_80969748;
                         break;
@@ -760,7 +760,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                         }
                         break;
                     case 0x2222:
-                        player->exchangeItemId = 0;
+                        player->exchangeItemId = PLAYER_AP_NONE;
                         func_80151938(play, play->msgCtx.currentTextId + 1);
                         break;
                     case 0x2223:
@@ -786,7 +786,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                     case 0x221D:
                     case 0x2220:
                     case 0x2221:
-                        player->exchangeItemId = 0;
+                        player->exchangeItemId = PLAYER_AP_NONE;
                         func_80151938(play, 0xFF);
                         this->actionFunc = func_80969C54;
                         break;
@@ -865,7 +865,7 @@ void func_8096A2C0(EnJs* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actor.flags |= ACTOR_FLAG_10000;
         this->actionFunc = func_8096A1E8;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     } else {
         Actor_PickUp(&this->actor, play, GI_MASK_FIERCE_DEITY, 10000.0f, 1000.0f);
     }
