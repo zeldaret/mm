@@ -249,7 +249,7 @@ u8 gItemSlots[] = {
     SLOT_LENS,               // ITEM_LENS
     SLOT_HOOKSHOT,           // ITEM_HOOKSHOT
     SLOT_SWORD_GREAT_FAIRY,  // ITEM_SWORD_GREAT_FAIRY
-    SLOT_BOTTLE_1,           //
+    SLOT_BOTTLE_1,           // ITEM_LONGSHOT
     SLOT_BOTTLE_1,           // ITEM_BOTTLE
     SLOT_BOTTLE_1,           // ITEM_POTION_RED
     SLOT_BOTTLE_1,           // ITEM_POTION_GREEN
@@ -365,7 +365,7 @@ s16 gItemPrices[] = {
 };
 
 // Used to map scene indexes to their region in Termina
-u16 gScenesPerRegion[REGION_MAX][27] = {
+u16 gSceneIdsPerRegion[REGION_MAX][27] = {
     // REGION_GREAT_BAY
     {
         SCENE_30GYOSON,
@@ -661,17 +661,17 @@ void Inventory_SetWorldMapCloudVisibility(s16 tingleIndex) {
             i++;
         }
 
-        if ((*tingleMapSceneIndices) == sScenesPerTingleMap[TINGLE_MAP_CLOCK_TOWN]) {
+        if (*tingleMapSceneIndices == sScenesPerTingleMap[TINGLE_MAP_CLOCK_TOWN]) {
             gSaveContext.save.worldMapCloudVisibility |= 3;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[TINGLE_MAP_WOODFALL]) {
+        } else if (*tingleMapSceneIndices == sScenesPerTingleMap[TINGLE_MAP_WOODFALL]) {
             gSaveContext.save.worldMapCloudVisibility |= 0x1C;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[TINGLE_MAP_SNOWHEAD]) {
+        } else if (*tingleMapSceneIndices == sScenesPerTingleMap[TINGLE_MAP_SNOWHEAD]) {
             gSaveContext.save.worldMapCloudVisibility |= 0xE0;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[TINGLE_MAP_ROMANI_RANCH]) {
+        } else if (*tingleMapSceneIndices == sScenesPerTingleMap[TINGLE_MAP_ROMANI_RANCH]) {
             gSaveContext.save.worldMapCloudVisibility |= 0x100;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[TINGLE_MAP_GREAT_BAY]) {
+        } else if (*tingleMapSceneIndices == sScenesPerTingleMap[TINGLE_MAP_GREAT_BAY]) {
             gSaveContext.save.worldMapCloudVisibility |= 0x1E00;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[TINGLE_MAP_STONE_TOWER]) {
+        } else if (*tingleMapSceneIndices == sScenesPerTingleMap[TINGLE_MAP_STONE_TOWER]) {
             gSaveContext.save.worldMapCloudVisibility |= 0x6000;
         }
     }

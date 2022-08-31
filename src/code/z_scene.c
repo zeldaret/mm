@@ -497,7 +497,7 @@ void Scene_HeaderCmdSetAreaVisitedFlag(PlayState* play, SceneCmd* cmd) {
     s16 i = 0;
 
     while (true) {
-        if (gScenesPerRegion[i][j] == 0xFFFF) {
+        if (gSceneIdsPerRegion[i][j] == 0xFFFF) {
             i++;
             j = 0;
 
@@ -506,7 +506,7 @@ void Scene_HeaderCmdSetAreaVisitedFlag(PlayState* play, SceneCmd* cmd) {
             }
         }
 
-        if (play->sceneNum == gScenesPerRegion[i][j]) {
+        if (play->sceneNum == gSceneIdsPerRegion[i][j]) {
             break;
         }
 

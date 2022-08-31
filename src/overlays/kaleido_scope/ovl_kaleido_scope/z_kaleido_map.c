@@ -698,7 +698,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
             // Loop over regionId (n) and regionIdIndex (j)
             while (true) {
-                if ((gScenesPerRegion[n][j] == 0xFFFF)) {
+                if ((gSceneIdsPerRegion[n][j] == 0xFFFF)) {
                     n++;
                     j = 0;
                     if (n == REGION_MAX) {
@@ -712,7 +712,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                         }
 
                         while (true) {
-                            if (gScenesPerRegion[n][j] == 0xFFFF) {
+                            if (gSceneIdsPerRegion[n][j] == 0xFFFF) {
                                 n++;
                                 if (n == REGION_MAX) {
                                     break;
@@ -720,7 +720,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                                 j = 0;
                                 if (Entrance_GetSceneNumAbsolute(
                                         ((void)0, gSaveContext.respawn[RESPAWN_MODE_UNK_3].entrance)) ==
-                                    gScenesPerRegion[n][j]) {
+                                    gSceneIdsPerRegion[n][j]) {
                                     break;
                                 }
                             }
@@ -730,7 +730,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                     }
                 }
 
-                if (sceneId == gScenesPerRegion[n][j]) {
+                if (sceneId == gSceneIdsPerRegion[n][j]) {
                     break;
                 }
                 j++;
