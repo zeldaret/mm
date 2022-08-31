@@ -396,7 +396,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     Actor_MarkForDeath(&this->actor);
                     gSaveContext.eventInf[1] |= 0x80;
                 } else if (((sCutscenes[this->unk_144] < 0) || (play->actorCtx.flags & ACTORCTX_FLAG_1)) &&
-                           CURRENT_DAY != 3) {
+                           (CURRENT_DAY != 3)) {
                     func_80A41FA4(this, play);
                 } else {
                     gSaveContext.screenScale = 0.0f;
