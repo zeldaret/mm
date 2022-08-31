@@ -472,43 +472,35 @@ s16 D_8082B584[] = {
 s16 D_8082B590[] = {
     255, 255, 0, 0, 0, 255,
 };
-s16 D_8082B59C[] = {
-    86,  // Great Bay
-    104, //  Zora Hall
-    145, //  Romani Ranch
-    153, //  Deku Palace
-    163, //  Southern Swamp
-    159, //  Clock Town
-    157, //  Snowhead
-    199, //  Ikana Graveyard
-    208, //  Ikana Canyon
-    210, //  Goron Village
-    218, // Stone Tower
+s16 D_8082B59C[REGION_MAX] = {
+    86,  // REGION_GREAT_BAY
+    104, // REGION_ZORA_HALL
+    145, // REGION_ROMANI_RANCH
+    153, // REGION_DEKU_PALACE
+    163, // REGION_WOODFALL
+    159, // REGION_CLOCK_TOWN
+    157, // REGION_SNOWHEAD
+    199, // REGION_IKANA_GRAVEYARD
+    208, // REGION_IKANA_CANYON
+    210, // REGION_GORON_VILLAGE
+    218, // REGION_STONE_TOWER
 };
-s16 D_8082B5B4[] = {
-    127, // Great Bay
-    153, // Zora Hall
-    138, // Romani Ranch
-    171, // Deku Palace
-    146, // Southern Swamp
-    119, // Clock Town
-    77,  // Snowhead
-    106, // Ikana Graveyard
-    120, // Ikana Canyon
-    73,  // Goron Village
-    99,  // Stone Tower
+s16 D_8082B5B4[REGION_MAX] = {
+    127, // REGION_GREAT_BAY
+    153, // REGION_ZORA_HALL
+    138, // REGION_ROMANI_RANCH
+    171, // REGION_DEKU_PALACE
+    146, // REGION_WOODFALL
+    119, // REGION_CLOCK_TOWN
+    77,  // REGION_SNOWHEAD
+    106, // REGION_IKANA_GRAVEYARD
+    120, // REGION_IKANA_CANYON
+    73,  // REGION_GORON_VILLAGE
+    99,  // REGION_STONE_TOWER
 };
 s16 D_8082B5CC[] = {
-    5, // Clock Town
-    4, // Southern Swamp
-    6, // Snowhead
-    0, // Great Bay
-    8, // Ikana Canyon
-    5, // Clock Town
-    4, // Southern Swamp
-    6, // Snowhead
-    0, // Great Bay
-    8, // Ikana Canyon
+    REGION_CLOCK_TOWN, REGION_WOODFALL, REGION_SNOWHEAD, REGION_GREAT_BAY, REGION_IKANA_CANYON,
+    REGION_CLOCK_TOWN, REGION_WOODFALL, REGION_SNOWHEAD, REGION_GREAT_BAY, REGION_IKANA_CANYON,
 };
 
 void KaleidoScope_DrawWorldMap(PlayState* play) {
@@ -539,6 +531,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
+        // Loop over yPos (t), textureIndex (j)
         for (t = 62, j = 0; j < 16; j++, t += 8) {
             gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)&D_0C000000 + j * (216 * 8), G_IM_FMT_CI, G_IM_SIZ_8b, 216, 8, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
@@ -561,6 +554,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
         gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[204], 32, 0);
 
+        // Loop over textureIndex (i, k), vtxIndex (j)
         for (i = 0, k = 0, j = 0; i < 8; i++, k++, j += 4) {
             gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)&D_0C000000 + k * (216 * 9), G_IM_FMT_CI, G_IM_SIZ_8b, 216, 9, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
@@ -571,6 +565,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
         gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[236], 28, 0);
 
+        // Loop over textureIndex (i, k), vtxIndex (j)
         for (i = 0, j = 0; i < 6; i++, k++, j += 4) {
             gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)&D_0C000000 + k * (216 * 9), G_IM_FMT_CI, G_IM_SIZ_8b, 216, 9, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
@@ -599,6 +594,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
     gDPSetEnvColor(POLY_OPA_DISP++, 40, 60, 100, 0);
 
     // Draw clouds over the world map
+    // Iterate over cloud bits (n)
     for (n = 0; n < 15; n++) {
         if (!(((void)0, gSaveContext.save.worldMapCloudVisibility) & gBitFlags[n])) {
 
@@ -642,7 +638,8 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                 pauseCtx->mapPageVtx[120].v.ob[1] - 8;
         }
 
-        for (i = 0, j = 0; i < 11; i++, k++, j += 4) {
+        // Loop over RegionId (i), unused vtxIndex (j), unused (k)
+        for (i = 0, j = 0; i < REGION_MAX; i++, k++, j += 4) {
             if (pauseCtx->worldMapPoints[i]) {
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[120 + i * 4], 4, 0);
                 gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
@@ -672,7 +669,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                 pauseCtx->mapPageVtx[164].v.ob[1] - 12;
         }
 
-        // Loop over OwlStatueId (i) and vtxIndex (j)
+        // Loop over OwlStatueId (i), unused vtxIndex (j), unused (k)
         for (i = 0, j = 0; i < OWL_STATUE_MAX; i++, k++, j += 4) {
             if (pauseCtx->worldMapPoints[i]) {
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[164 + i * 4], 4, 0);
@@ -699,7 +696,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                 }
             }
 
-            // iterate over regions
+            // Loop over regionId (n) and regionIdIndex (j)
             while (true) {
                 if ((gScenesPerRegion[n][j] == 0xFFFF)) {
                     n++;
