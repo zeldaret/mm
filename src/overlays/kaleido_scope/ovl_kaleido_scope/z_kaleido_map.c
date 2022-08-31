@@ -359,57 +359,55 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
                         }
                     }
                 }
-            } else {
-                if ((pauseCtx->cursorSpecialPos == 0) && (pauseCtx->stickAdjY > 30)) {
-                    if (pauseCtx->cursorPoint[PAUSE_MAP] >= DUNGEON_FLOOR_INDEX_4) {
-                        for (i = pauseCtx->cursorPoint[PAUSE_MAP] - (DUNGEON_FLOOR_INDEX_4 + 1); i >= 0; i--) {
-                            if ((gSaveContext.save.permanentSceneFlags[(void)0, gSaveContext.dungeonIndex].unk_14 &
-                                 gBitFlags[i]) ||
-                                func_801090B0(FLOOR_INDEX_MAX - i)) {
-                                pauseCtx->cursorPoint[PAUSE_MAP] = i + DUNGEON_FLOOR_INDEX_4;
-                                pauseCtx->cursorShrinkRate = 4.0f;
-                                break;
-                            }
+            } else if ((pauseCtx->cursorSpecialPos == 0) && (pauseCtx->stickAdjY > 30)) {
+                if (pauseCtx->cursorPoint[PAUSE_MAP] >= DUNGEON_FLOOR_INDEX_4) {
+                    for (i = pauseCtx->cursorPoint[PAUSE_MAP] - (DUNGEON_FLOOR_INDEX_4 + 1); i >= 0; i--) {
+                        if ((gSaveContext.save.permanentSceneFlags[(void)0, gSaveContext.dungeonIndex].unk_14 &
+                             gBitFlags[i]) ||
+                            func_801090B0(FLOOR_INDEX_MAX - i)) {
+                            pauseCtx->cursorPoint[PAUSE_MAP] = i + DUNGEON_FLOOR_INDEX_4;
+                            pauseCtx->cursorShrinkRate = 4.0f;
+                            break;
                         }
-                    } else if (pauseCtx->cursorPoint[PAUSE_MAP] == DUNGEON_STRAY_FAIRIES) {
-                        pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
-                        pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->unk_256;
-                        pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256;
-                    } else {
-                        pauseCtx->cursorSlot[PAUSE_MAP] = DUNGEON_STRAY_FAIRIES;
-                        pauseCtx->cursorPoint[PAUSE_MAP] = DUNGEON_STRAY_FAIRIES;
                     }
-                } else if ((pauseCtx->cursorSpecialPos == 0) && (pauseCtx->stickAdjY < -30)) {
-                    if ((pauseCtx->cursorPoint[PAUSE_MAP] >= DUNGEON_FLOOR_INDEX_4) &&
-                        (pauseCtx->cursorPoint[PAUSE_MAP] <= DUNGEON_FLOOR_INDEX_1)) {
-                        for (i = pauseCtx->cursorPoint[PAUSE_MAP] - (DUNGEON_FLOOR_INDEX_4 - 1);
-                             i <= DUNGEON_FLOOR_INDEX_0; i++) {
-                            if ((gSaveContext.save.permanentSceneFlags[(void)0, gSaveContext.dungeonIndex].unk_14 &
-                                 gBitFlags[i]) ||
-                                func_801090B0(FLOOR_INDEX_MAX - i)) {
-                                pauseCtx->cursorPoint[PAUSE_MAP] = i + DUNGEON_FLOOR_INDEX_4;
-                                pauseCtx->cursorShrinkRate = 4.0f;
-                                break;
-                            }
+                } else if (pauseCtx->cursorPoint[PAUSE_MAP] == DUNGEON_STRAY_FAIRIES) {
+                    pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
+                    pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->unk_256;
+                    pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256;
+                } else {
+                    pauseCtx->cursorSlot[PAUSE_MAP] = DUNGEON_STRAY_FAIRIES;
+                    pauseCtx->cursorPoint[PAUSE_MAP] = DUNGEON_STRAY_FAIRIES;
+                }
+            } else if ((pauseCtx->cursorSpecialPos == 0) && (pauseCtx->stickAdjY < -30)) {
+                if ((pauseCtx->cursorPoint[PAUSE_MAP] >= DUNGEON_FLOOR_INDEX_4) &&
+                    (pauseCtx->cursorPoint[PAUSE_MAP] <= DUNGEON_FLOOR_INDEX_1)) {
+                    for (i = pauseCtx->cursorPoint[PAUSE_MAP] - (DUNGEON_FLOOR_INDEX_4 - 1); i <= DUNGEON_FLOOR_INDEX_0;
+                         i++) {
+                        if ((gSaveContext.save.permanentSceneFlags[(void)0, gSaveContext.dungeonIndex].unk_14 &
+                             gBitFlags[i]) ||
+                            func_801090B0(FLOOR_INDEX_MAX - i)) {
+                            pauseCtx->cursorPoint[PAUSE_MAP] = i + DUNGEON_FLOOR_INDEX_4;
+                            pauseCtx->cursorShrinkRate = 4.0f;
+                            break;
                         }
+                    }
 
-                    } else if (pauseCtx->cursorXIndex[PAUSE_MAP] == 0) {
-                        pauseCtx->cursorXIndex[PAUSE_MAP] = 1;
-                        pauseCtx->cursorPoint[PAUSE_MAP] = DUNGEON_STRAY_FAIRIES;
-                    } else {
-                        if (pauseCtx->cursorPoint[PAUSE_MAP] == DUNGEON_STRAY_FAIRIES) {
-                            pauseCtx->cursorPoint[PAUSE_MAP] = DUNGEON_NONE;
+                } else if (pauseCtx->cursorXIndex[PAUSE_MAP] == 0) {
+                    pauseCtx->cursorXIndex[PAUSE_MAP] = 1;
+                    pauseCtx->cursorPoint[PAUSE_MAP] = DUNGEON_STRAY_FAIRIES;
+                } else {
+                    if (pauseCtx->cursorPoint[PAUSE_MAP] == DUNGEON_STRAY_FAIRIES) {
+                        pauseCtx->cursorPoint[PAUSE_MAP] = DUNGEON_NONE;
+                    }
+
+                    while (true) {
+                        pauseCtx->cursorPoint[PAUSE_MAP]++;
+                        if (pauseCtx->cursorPoint[PAUSE_MAP] == DUNGEON_FLOOR_INDEX_4) {
+                            KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_RIGHT);
+                            break;
                         }
-
-                        while (true) {
-                            pauseCtx->cursorPoint[PAUSE_MAP]++;
-                            if (pauseCtx->cursorPoint[PAUSE_MAP] == DUNGEON_FLOOR_INDEX_4) {
-                                KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_RIGHT);
-                                break;
-                            }
-                            if (CHECK_DUNGEON_ITEM(pauseCtx->cursorPoint[PAUSE_MAP], gSaveContext.dungeonIndex)) {
-                                break;
-                            }
+                        if (CHECK_DUNGEON_ITEM(pauseCtx->cursorPoint[PAUSE_MAP], gSaveContext.dungeonIndex)) {
+                            break;
                         }
                     }
                 }
