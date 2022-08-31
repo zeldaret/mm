@@ -74,6 +74,10 @@
 #define R_A_ICON_Y                  XREG(19)
 #define R_A_ICON_X                  XREG(20)
 #define R_A_BTN_COLOR(i)            XREG(22 + i)
+#define R_PAUSE_DBG_MAP_CLOUD_ON    XREG(50) // TODO: Test these set of pause regs
+#define R_PAUSE_DBG_MAP_CLOUD_X     XREG(52)
+#define R_PAUSE_DBG_MAP_CLOUD_Y     XREG(53)
+#define R_PAUSE_OWLWARP_ALPHA       XREG(87)
 #define R_REVERSE_FLOOR_INDEX       XREG(94)
 #define R_MINIMAP_DISABLED          XREG(95)
 #define R_B_LABEL_DD                WREG(0)

@@ -524,11 +524,11 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[1] * 4, pauseCtx->mapPageVtx);
+    KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[PAUSE_MAP] * 4, pauseCtx->mapPageVtx);
 
     if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) &&
         ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) || (pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_ITEM)) &&
-        (YREG(6) != 0) && (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
+        YREG(6) && (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
         !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
 
         func_8012C628(play->state.gfxCtx);
@@ -612,7 +612,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetRenderMode(POLY_OPA_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, XREG(87));
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, R_PAUSE_OWLWARP_ALPHA);
         gDPFillRectangle(POLY_OPA_DISP++, 50, 62, 270, 190);
     }
 
@@ -628,15 +628,15 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
         gDPSetEnvColor(POLY_OPA_DISP++, D_8082B590[0], D_8082B590[1], D_8082B590[2], 0);
 
-        if (XREG(50)) {
+        if (R_PAUSE_DBG_MAP_CLOUD_ON) {
             gSaveContext.save.worldMapCloudVisibility |= (u16)~0x8000;
 
-            pauseCtx->mapPageVtx[120].v.ob[0] = pauseCtx->mapPageVtx[122].v.ob[0] = XREG(52);
+            pauseCtx->mapPageVtx[120].v.ob[0] = pauseCtx->mapPageVtx[122].v.ob[0] = R_PAUSE_DBG_MAP_CLOUD_X;
 
             pauseCtx->mapPageVtx[121].v.ob[0] = pauseCtx->mapPageVtx[123].v.ob[0] =
                 pauseCtx->mapPageVtx[120].v.ob[0] + 8;
 
-            pauseCtx->mapPageVtx[120].v.ob[1] = pauseCtx->mapPageVtx[121].v.ob[1] = XREG(53);
+            pauseCtx->mapPageVtx[120].v.ob[1] = pauseCtx->mapPageVtx[121].v.ob[1] = R_PAUSE_DBG_MAP_CLOUD_Y;
 
             pauseCtx->mapPageVtx[122].v.ob[1] = pauseCtx->mapPageVtx[123].v.ob[1] =
                 pauseCtx->mapPageVtx[120].v.ob[1] - 8;
@@ -658,15 +658,15 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
-        if (XREG(50)) {
+        if (R_PAUSE_DBG_MAP_CLOUD_ON) {
             gSaveContext.save.worldMapCloudVisibility |= (u16)~0x8000;
 
-            pauseCtx->mapPageVtx[164].v.ob[0] = pauseCtx->mapPageVtx[166].v.ob[0] = XREG(52);
+            pauseCtx->mapPageVtx[164].v.ob[0] = pauseCtx->mapPageVtx[166].v.ob[0] = R_PAUSE_DBG_MAP_CLOUD_X;
 
             pauseCtx->mapPageVtx[165].v.ob[0] = pauseCtx->mapPageVtx[167].v.ob[0] =
                 pauseCtx->mapPageVtx[164].v.ob[0] + 24;
 
-            pauseCtx->mapPageVtx[164].v.ob[1] = pauseCtx->mapPageVtx[165].v.ob[1] = XREG(53);
+            pauseCtx->mapPageVtx[164].v.ob[1] = pauseCtx->mapPageVtx[165].v.ob[1] = R_PAUSE_DBG_MAP_CLOUD_Y;
 
             pauseCtx->mapPageVtx[166].v.ob[1] = pauseCtx->mapPageVtx[167].v.ob[1] =
                 pauseCtx->mapPageVtx[164].v.ob[1] - 12;
@@ -691,10 +691,11 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                 if (play->roomCtx.currRoom.num == 5) {
                     sceneId = SCENE_11GORONNOSATO; // Goron Village (winter)
                 } else if ((play->roomCtx.currRoom.num == 6) || (play->roomCtx.currRoom.num == 8) ||
-                           (play->roomCtx.currRoom.num == 0xC)) {
+                           (play->roomCtx.currRoom.num == 12)) {
                     sceneId = SCENE_22DEKUCITY; // Deku Palace
                 } else {
-                    sceneId = Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.respawn[3].entrance));
+                    sceneId =
+                        Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.respawn[RESPAWN_MODE_UNK_3].entrance));
                 }
             }
 
@@ -720,7 +721,8 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                                     break;
                                 }
                                 j = 0;
-                                if (Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.respawn[3].entrance)) ==
+                                if (Entrance_GetSceneNumAbsolute(
+                                        ((void)0, gSaveContext.respawn[RESPAWN_MODE_UNK_3].entrance)) ==
                                     gScenesPerRegion[n][j]) {
                                     break;
                                 }
@@ -754,20 +756,20 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-u16 D_8082B5E0[] = {
-    0xAF, // OWL_STATUE_GREAT_BAY_COAST
-    0xB3, // OWL_STATUE_ZORA_CAPE
-    0xAA, // OWL_STATUE_SNOWHEAD
-    0xB1, // OWL_STATUE_MOUNTAIN_VILLAGE
-    0xA9, // OWL_STATUE_CLOCK_TOWN
-    0xB2, // OWL_STATUE_MILK_ROAD
-    0xA8, // OWL_STATUE_WOODFALL
-    0xB0, // OWL_STATUE_SOUTHERN_SWAMP
-    0xAC, // OWL_STATUE_IKANA_CANYON
-    0xAE, // OWL_STATUE_STONE_TOWER
+u16 sOwlStatuePauseItems[] = {
+    0xB + 0xA4, // OWL_STATUE_GREAT_BAY_COAST
+    0xF + 0xA4, // OWL_STATUE_ZORA_CAPE
+    0x6 + 0xA4, // OWL_STATUE_SNOWHEAD
+    0xD + 0xA4, // OWL_STATUE_MOUNTAIN_VILLAGE
+    0x5 + 0xA4, // OWL_STATUE_CLOCK_TOWN
+    0xE + 0xA4, // OWL_STATUE_MILK_ROAD
+    0x4 + 0xA4, // OWL_STATUE_WOODFALL
+    0xC + 0xA4, // OWL_STATUE_SOUTHERN_SWAMP
+    0x8 + 0xA4, // OWL_STATUE_IKANA_CANYON
+    0xA + 0xA4, // OWL_STATUE_STONE_TOWER
 };
 void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
-    static u16 D_8082B5F4 = 0;
+    static u16 sStickAdjTimer = 0; // unused timer that counts up every frame. Resets on reading a stickAdj.
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 oldCursorPoint;
 
@@ -785,7 +787,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
         if (pauseCtx->cursorSpecialPos == 0) {
             if (pauseCtx->stickAdjX > 30) {
                 pauseCtx->cursorShrinkRate = 4.0f;
-                D_8082B5F4 = 0;
+                sStickAdjTimer = 0;
 
                 while (true) {
                     pauseCtx->cursorPoint[PAUSE_WORLD_MAP]++;
@@ -800,7 +802,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                 }
             } else if (pauseCtx->stickAdjX < -30) {
                 pauseCtx->cursorShrinkRate = 4.0f;
-                D_8082B5F4 = 0;
+                sStickAdjTimer = 0;
 
                 while (true) {
                     pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
@@ -814,12 +816,13 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                     }
                 }
             } else {
-                D_8082B5F4++;
+                sStickAdjTimer++;
             }
 
             if (pauseCtx->cursorSpecialPos == 0) {
                 pauseCtx->cursorItem[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
-                pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_WORLD_MAP] + 0x1F;
+                // Used as cursor vtxIndex
+                pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
             }
         } else {
             pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
@@ -843,10 +846,11 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
 
                     if (pauseCtx->cursorSpecialPos == 0) {
                         pauseCtx->cursorItem[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
-                        pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_WORLD_MAP] + 0x1F;
+                        // Used as cursor vtxIndex
+                        pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
                     }
                     play_sound(NA_SE_SY_CURSOR);
-                    D_8082B5F4 = 0;
+                    sStickAdjTimer = 0;
                 }
             } else if (pauseCtx->stickAdjX < -30) {
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = 11;
@@ -867,10 +871,11 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
 
                 if (pauseCtx->cursorSpecialPos == 0) {
                     pauseCtx->cursorItem[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
-                    pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_WORLD_MAP] + 0x1F;
+                    // Used as cursor vtxIndex
+                    pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
                 }
                 play_sound(NA_SE_SY_CURSOR);
-                D_8082B5F4 = 0;
+                sStickAdjTimer = 0;
             }
         }
 
@@ -886,7 +891,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
 
         if (pauseCtx->stickAdjX > 30) {
             pauseCtx->cursorShrinkRate = 4.0f;
-            D_8082B5F4 = 0;
+            sStickAdjTimer = 0;
             do {
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP]++;
                 if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] > OWL_STATUE_STONE_TOWER) {
@@ -895,7 +900,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             } while (!pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]]);
         } else if (pauseCtx->stickAdjX < -30) {
             pauseCtx->cursorShrinkRate = 4.0f;
-            D_8082B5F4 = 0;
+            sStickAdjTimer = 0;
             do {
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
                 if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] < OWL_STATUE_GREAT_BAY_COAST) {
@@ -903,11 +908,13 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                 }
             } while (!pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]]);
         } else {
-            D_8082B5F4++;
+            sStickAdjTimer++;
         }
 
-        pauseCtx->cursorItem[PAUSE_MAP] = D_8082B5E0[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] - 0xA4;
-        pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_WORLD_MAP] + 0x1F;
+        //! TODO: Is the `0xA4` here related to `0xA3` being the last recored item in the `ItemId` enum?
+        pauseCtx->cursorItem[PAUSE_MAP] = sOwlStatuePauseItems[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] - 0xA4;
+        // Used as cursor vtxIndex
+        pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_WORLD_MAP]) {
             play_sound(NA_SE_SY_CURSOR);

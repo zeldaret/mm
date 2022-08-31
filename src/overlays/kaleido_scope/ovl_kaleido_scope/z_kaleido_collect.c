@@ -102,7 +102,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[2] * 4, pauseCtx->questVtx);
+    KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[PAUSE_QUEST] * 4, pauseCtx->questVtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
@@ -188,7 +188,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
     for (i = 0; i < 12; i++, j += 4) {
         if (CHECK_QUEST_ITEM(QUEST_SONG_SONATA + i) ||
             ((i == 1) && !CHECK_QUEST_ITEM(QUEST_SONG_SONATA + i) && CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO))) {
-            if ((i + 6) == pauseCtx->cursorSlot[2]) {
+            if ((i + 6) == pauseCtx->cursorSlot[PAUSE_QUEST]) {
                 pauseCtx->questVtx[j + 0].v.ob[0] = pauseCtx->questVtx[j + 2].v.ob[0] =
                     pauseCtx->questVtx[j + 0].v.ob[0] - 2;
 
@@ -325,7 +325,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
                     }
 
                     pauseCtx->questVtx[j + 0].v.ob[1] = pauseCtx->questVtx[j + 1].v.ob[1] =
-                        pauseCtx->unk_2BE[D_8082AEE4[i]];
+                        pauseCtx->ocarinaButtonsY[D_8082AEE4[i]];
 
                     pauseCtx->questVtx[j + 2].v.ob[1] = pauseCtx->questVtx[j + 3].v.ob[1] =
                         pauseCtx->questVtx[j + 0].v.ob[1] - 12;
@@ -353,7 +353,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
             for (var_s3 = 0; var_s3 < sp1CA; var_s3++, j += 4) {
                 pauseCtx->questVtx[j + 0].v.ob[1] = pauseCtx->questVtx[j + 1].v.ob[1] =
-                    pauseCtx->unk_2BE[gOcarinaSongButtons[sp1C8].buttonIndex[var_s3]];
+                    pauseCtx->ocarinaButtonsY[gOcarinaSongButtons[sp1C8].buttonIndex[var_s3]];
 
                 pauseCtx->questVtx[j + 2].v.ob[1] = pauseCtx->questVtx[j + 3].v.ob[1] =
                     pauseCtx->questVtx[j + 0].v.ob[1] - 12;
@@ -404,7 +404,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
                     }
 
                     pauseCtx->questVtx[j + 0].v.ob[1] = pauseCtx->questVtx[j + 1].v.ob[1] =
-                        pauseCtx->unk_2BE[D_8082AEE4[var_s3]];
+                        pauseCtx->ocarinaButtonsY[D_8082AEE4[var_s3]];
 
                     pauseCtx->questVtx[j + 2].v.ob[1] = pauseCtx->questVtx[j + 3].v.ob[1] =
                         pauseCtx->questVtx[j + 0].v.ob[1] - 12;
@@ -757,11 +757,11 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                         pauseCtx->ocarinaStaff = AudioOcarina_GetPlaybackStaff();
                         pauseCtx->ocarinaStaff->pos = 0;
                         pauseCtx->ocarinaStaff->state = 0xFF;
-                        pauseCtx->unk_2BE[0] = -62;
-                        pauseCtx->unk_2BE[1] = -56;
-                        pauseCtx->unk_2BE[2] = -49;
-                        pauseCtx->unk_2BE[3] = -46;
-                        pauseCtx->unk_2BE[4] = -41;
+                        pauseCtx->ocarinaButtonsY[OCARINA_BTN_A] = -62;
+                        pauseCtx->ocarinaButtonsY[OCARINA_BTN_C_DOWN] = -56;
+                        pauseCtx->ocarinaButtonsY[OCARINA_BTN_C_RIGHT] = -49;
+                        pauseCtx->ocarinaButtonsY[OCARINA_BTN_C_LEFT] = -46;
+                        pauseCtx->ocarinaButtonsY[OCARINA_BTN_C_UP] = -41;
                         pauseCtx->mainState = PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG;
 
                         if (interfaceCtx->unk_212 != 6) {
@@ -907,11 +907,11 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
             }
             D_8082AEE0 = 0;
 
-            pauseCtx->unk_2BE[0] = -62;
-            pauseCtx->unk_2BE[1] = -56;
-            pauseCtx->unk_2BE[2] = -49;
-            pauseCtx->unk_2BE[3] = -46;
-            pauseCtx->unk_2BE[4] = -41;
+            pauseCtx->ocarinaButtonsY[OCARINA_BTN_A] = -62;
+            pauseCtx->ocarinaButtonsY[OCARINA_BTN_C_DOWN] = -56;
+            pauseCtx->ocarinaButtonsY[OCARINA_BTN_C_RIGHT] = -49;
+            pauseCtx->ocarinaButtonsY[OCARINA_BTN_C_LEFT] = -46;
+            pauseCtx->ocarinaButtonsY[OCARINA_BTN_C_UP] = -41;
 
             if (CHECK_QUEST_ITEM(pauseCtx->cursorPoint[PAUSE_QUEST])) {
                 cursor = pauseCtx->cursorSlot[PAUSE_QUEST];

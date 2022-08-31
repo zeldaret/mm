@@ -416,11 +416,11 @@ typedef struct {
     /* 0x194 */ Vtx* mapVtx;
     /* 0x198 */ Vtx* questVtx;
     /* 0x19C */ Vtx* maskVtx;
-    /* 0x1A0 */ Vtx* unk_1A0;
+    /* 0x1A0 */ Vtx* saveVtx;
     /* 0x1A4 */ Vtx* infoPanelVtx;
     /* 0x1A8 */ Vtx* cursorVtx;
     /* 0x1AC */ OcarinaStaff* ocarinaStaff;
-    /* 0x1B0 */ DmaRequest unk_1B0;
+    /* 0x1B0 */ DmaRequest dmaRequest; // TODO: unused. Not sure where DmaRequest came from
     /* 0x1D0 */ OSMesgQueue loadQueue;
     /* 0x1E8 */ OSMesg loadMsg;
     /* 0x1EC */ u16 state;
@@ -432,22 +432,21 @@ typedef struct {
     /* 0x204 */ u16 pageIndex;
     /* 0x206 */ u16 switchPageTimer;
     /* 0x208 */ u16 savePromptState;
-    /* 0x20C */ f32 unk_20C; // unused
+    /* 0x20C */ f32 unk_20C; // set to 936.0f, unused remnant from OoT
     /* 0x210 */ f32 itemPageRoll;
     /* 0x214 */ f32 MapPageRoll;
     /* 0x218 */ f32 QuestPageRoll;
     /* 0x21C */ f32 MaskPageRoll;
-    /* 0x220 */ f32 unk_220;
+    /* 0x220 */ f32 roll;
     /* 0x224 */ u16 alpha;
     /* 0x226 */ s16 offsetY;
-    /* 0x228 */ s32 unk_228;
-    /* 0x22C */ s32 unk_22C;
+    /* 0x228 */ UNK_TYPE1 unk_228[0x8];
     /* 0x230 */ s32 stickAdjX;
     /* 0x234 */ s32 stickAdjY;
     /* 0x238 */ s16 cursorPoint[5];
     /* 0x242 */ s16 cursorXIndex[5];
     /* 0x24C */ s16 cursorYIndex[5];
-    /* 0x256 */ s16 unk_256; // DungeonItem enum
+    /* 0x256 */ s16 unk_256; // Uses DungeonItem enum
     /* 0x258 */ s16 cursorSpecialPos;
     /* 0x25A */ s16 delaySwitchPageInputTimer; // Used to introduce a delay before switching page when arriving on the "scroll left/right" positions while holding stick left/right.
     /* 0x25C */ u16 namedItem;
@@ -468,7 +467,7 @@ typedef struct {
     /* 0x28C */ f32 cursorY;
     /* 0x290 */ f32 cursorWidth;
     /* 0x294 */ f32 cursorHeight;
-    /* 0x298 */ f32 cursorShrinkRate; // TODO: test
+    /* 0x298 */ f32 cursorShrinkRate; // TODO: test and verify
     /* 0x29C */ s16 promptChoice; // save/continue choice: 0 = yes; 4 = no
     /* 0x29E */ s16 promptAlpha;
     /* 0x2A0 */ s16 ocarinaSongIndex;
@@ -479,9 +478,9 @@ typedef struct {
     /* 0x2B9 */ u8 itemDescriptionOn; // helpful description of item given through a message box
     /* 0x2BA */ s16 equipAnimScale; // scale of item icon while moving being equipped to c-button
     /* 0x2BC */ s16 equipAnimShrinkRate; // rate the scale is shrinking for the item icon while moving being equipped to c-button
-    /* 0x2BE */ s16 unk_2BE[5];
-    /* 0x2C8 */ u16 unk_2C8;
-    /* 0x2CA */ s16 unk_2CA;
+    /* 0x2BE */ s16 ocarinaButtonsY[5]; // TODO: test and verify
+    /* 0x2C8 */ u16 unk_2C8; // Uses PauseMenuPage enum for Owl Warp. Never set.
+    /* 0x2CA */ s16 unk_2CA; // Uses OwlStatueId enum for Owl Warp. Never set.
 } PauseContext; // size = 0x2D0
 
 typedef struct {
