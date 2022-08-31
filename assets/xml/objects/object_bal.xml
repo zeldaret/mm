@@ -76,6 +76,6 @@
         <Animation Name="object_bal_Anim_00C8D8" Offset="0xC8D8" />
         <Animation Name="object_bal_Anim_00CB78" Offset="0xCB78" />
         <Animation Name="object_bal_Anim_00D530" Offset="0xD530" />
-        <DList Name="object_bal_DL_00D5A0" Offset="0xD5A0" />
+        <DList Name="gTingleConfettiDL" Offset="0xD5A0" />
     </File>
 </Root>
