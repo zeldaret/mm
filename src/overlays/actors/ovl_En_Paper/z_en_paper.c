@@ -196,8 +196,8 @@ void EnPaper_Update(Actor* thisx, PlayState* play) {
     EnPaper* this = THIS;
 
     this->actionFunc(this, play);
-
     EnPaper_UpdateWind(this);
+
     if (this->timer == 0) {
         Actor_MarkForDeath(&this->actor);
     } else {
