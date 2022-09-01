@@ -7,20 +7,22 @@ struct EnPaper;
 
 typedef void (*EnPaperActionFunc)(struct EnPaper*, PlayState*);
 
+#define ENPAPER_PIECES_COUNT 60
+
 typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ Vec3f axis;
+    /* 0x00 */ Vec3f normal; // normal to the plane of the confetti piece
+    /* 0x0C */ Vec3f rotAxis; // axis to spin around
     /* 0x18 */ Vec3f pos;
     /* 0x24 */ Vec3f vel;
-    /* 0x30 */ s16 angle;
-    /* 0x32 */ s16 angVel;
+    /* 0x30 */ s16 angle;  // angle to rotate around `rotAxis`
+    /* 0x32 */ s16 angVel; // angular velocity of `angle`
 } EnPaperPiece; // size = 0x34
 
 typedef struct EnPaper {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnPaperActionFunc actionFunc;
-    /* 0x148 */ EnPaperPiece pieces[60];
-    /* 0xD78 */ Vec3f unk_D78;
+    /* 0x148 */ EnPaperPiece pieces[ENPAPER_PIECES_COUNT];
+    /* 0xD78 */ Vec3f windPressure;
     /* 0xD84 */ s16 timer;
 } EnPaper; // size = 0xD88
 
