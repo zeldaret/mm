@@ -19,12 +19,12 @@
  * interpreting it the way the RSP does, but the first is likely faster to access and write to. The functions save
  * writing halves by
  *
- * - writing a word 0 if two adjacent elements are 0 in a convenient place
- * - writing a word using a shift and overwriting the dirty half afterwards
+ * - writing a word 0 if two adjacent elements are 0 in a convenient place, or 1 if they are 0 and 1,
+ * - writing a word using a shift and overwriting the dirty half afterwards.
  *
- * Examples of both of these are seen in func_801780F0(); we go into more detail due to the function's relative
- * simplicity. The other two functions we outline where the interesting parts are rather than explaining the whole
- * process.
+ * Examples of both of these are seen in Mtx_SetTranslateScaleMtx(); we explain there in full detail due to the
+ * function's relative simplicity. The other two functions we merely point out the interesting parts rather than
+ * explaining the whole process.
  *
  * We use the following notation throughout: round brackets denote the word-sized elements, square the pairs they cover.
  * The integer and fractional parts of a fixed-point number are denoted by i and f respectively, and these letters are
@@ -71,7 +71,8 @@
  * @param[in] translateY Y component of translation
  * @param[in] translateZ Z component of translation
  */
-void func_801780F0(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 translateX, f32 translateY, f32 translateZ) {
+void Mtx_SetTranslateScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 translateX, f32 translateY,
+                              f32 translateZ) {
     Mtx* m = mtx;
     s32 fixedPoint;
 
@@ -152,7 +153,7 @@ void func_801780F0(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 translateX,
  * @param[in] axisY Y component of axis to rotate about
  * @param[in] axisZ Z component of axis to rotate about
  */
-void func_801781EC(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ) {
+void Mtx_SetRotationMtx(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ) {
     //! FAKE? The somewhat peculiar distribution of temps in this function seems necessary to match?
     f32 tempX;
     f32 tempZ;
@@ -265,8 +266,8 @@ void func_801781EC(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ) {
  * @param[in] translateY Y component of translation
  * @param[in] translateZ Z component of translation
  */
-void func_8017842C(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, s32 angle, f32 axisX, f32 axisY, f32 axisZ,
-                   f32 translateX, f32 translateY, f32 translateZ) {
+void Mtx_SetTranslationRotationScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, s32 angle, f32 axisX, f32 axisY,
+                                        f32 axisZ, f32 translateX, f32 translateY, f32 translateZ) {
     f32 tempX;
     f32 tempY;
     f32 tempZ;

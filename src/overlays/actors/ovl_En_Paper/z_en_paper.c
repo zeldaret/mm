@@ -231,9 +231,9 @@ void EnPaper_Draw(Actor* thisx, PlayState* play) {
             Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Mtx));
 
             //! @bug This function does not necessarily form a correct rotation, see its documentation for details.
-            func_8017842C(mtx, this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, piece->angle,
-                          piece->rotAxis.x, piece->rotAxis.y, piece->rotAxis.z, piece->pos.x, piece->pos.y,
-                          piece->pos.z);
+            Mtx_SetTranslationRotationScaleMtx(mtx, this->actor.scale.x, this->actor.scale.y, this->actor.scale.z,
+                                               piece->angle, piece->rotAxis.x, piece->rotAxis.y, piece->rotAxis.z,
+                                               piece->pos.x, piece->pos.y, piece->pos.z);
 
             gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gTingleConfettiDL);

@@ -2774,9 +2774,9 @@ void SpeedMeter_DrawTimeEntries(void* displayList, GraphicsContext* gfxCtx);
 //void func_80177AC8(void);
 void SpeedMeter_DrawAllocEntries(void* displayList, GraphicsContext* gfxCtx, GameState* gameState);
 
-void func_801780F0(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 translateX, f32 translateY, f32 translateZ);
-void func_801781EC(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ);
-void func_8017842C(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, s32 angle, f32 axisX, f32 axisY, f32 axisZ,f32 translateX, f32 translateY, f32 translateZ);
+void Mtx_SetTranslateScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 translateX, f32 translateY, f32 translateZ);
+void Mtx_SetRotationMtx(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ);
+void Mtx_SetTranslationRotationScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, s32 angle, f32 axisX, f32 axisY, f32 axisZ,f32 translateX, f32 translateY, f32 translateZ);
 
 // void func_80178750(void);
 // void func_80178818(void);
