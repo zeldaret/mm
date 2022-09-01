@@ -1,7 +1,7 @@
 /**
  * @file z_en_paper.c
  * Overlay: ovl_En_Paper
- * Description: Tingle Confetti cloud
+ * Description: Tingle confetti group
  *
  * Complex actor for its length, that creates and manages a group of confetti effects. Each is a triangle of a
  * particular colour, that rotates around a fixed axis at a randomly-chosen fixed velocity, and is subject to gravity,
