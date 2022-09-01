@@ -119,13 +119,16 @@ void EnPaper_InitConfettiPiece(EnPaper* this, EnPaperPiece* piece) {
  * Position \f$ \mathbf{x} \f$ essentially satisfies discretised version of the equation
  *
  * \f[
- *     \ddot{\mathbf{x}} = -0.2 \mathbf{n} \cdot (\dot{\mathbf{x}} + \mathbf{W}) + \mathbf{g} ,
+ *     \ddot{\mathbf{x}} = -0.2 \mathbf{n} (\dot{\mathbf{x}} + \mathbf{W}) + \mathbf{g} ,
  * \f]
  *
  * where
+ *
  * - \f$ \mathbf{n} \f$ is the unit normal to the confetti triangle's plane
  * - \f$ \mathbf{W} \f$ is the random wind pressure
  * - \f$ \mathbf{g} \f$ is gravity
+ *
+ * and the product is componentwise: the normal is being used as a cross-sectional area measure rather than vectorially.
  */
 void EnPaper_FlyConfettiPiece(EnPaper* this, EnPaperPiece* piece) {
     f32 cos = Math_CosS(piece->angle);
@@ -139,7 +142,7 @@ void EnPaper_FlyConfettiPiece(EnPaper* this, EnPaperPiece* piece) {
     // acceleration due to gravity
     piece->vel.y += this->actor.gravity;
 
-    // drag and wind force: normal is used to simulate cross-section size of piece
+    // drag and wind force: normal is used to simulate cross-section size of piece, although
     piece->vel.x -= 0.2f * fabsf(piece->normal.x) * (piece->vel.x + this->windPressure.x);
     piece->vel.y -= 0.2f * fabsf(piece->normal.y) * (piece->vel.y + this->windPressure.y);
     piece->vel.z -= 0.2f * fabsf(piece->normal.z) * (piece->vel.z + this->windPressure.z);
