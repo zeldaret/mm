@@ -119,7 +119,7 @@ void EnPaper_InitConfettiPiece(EnPaper* this, EnPaperPiece* piece) {
  * Position \f$ \mathbf{x} \f$ essentially satisfies discretised version of the equation
  *
  * \f[
- *     \ddot{\mathbf{x}} = -0.2 \mathbf{n} . (\dot{\mathbf{x}} + \mathbf{W}) + \mathbf{g} ,
+ *     \ddot{\mathbf{x}} = -0.2 \mathbf{n} \cdot (\dot{\mathbf{x}} + \mathbf{W}) + \mathbf{g} ,
  * \f]
  *
  * where
