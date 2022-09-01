@@ -46,7 +46,7 @@ void EnPaper_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.01f);
     this->timer = 70;
-    this->windPressure = sUnitVectorZ;
+    this->windForce = sUnitVectorZ;
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     EnPaper_SetupSpreadConfettiGroup(this);
 }
@@ -143,9 +143,9 @@ void EnPaper_FlyConfettiPiece(EnPaper* this, EnPaperPiece* piece) {
     piece->vel.y += this->actor.gravity;
 
     // drag and wind force: normal is used to simulate cross-section size of piece, although
-    piece->vel.x -= 0.2f * fabsf(piece->normal.x) * (piece->vel.x + this->windPressure.x);
-    piece->vel.y -= 0.2f * fabsf(piece->normal.y) * (piece->vel.y + this->windPressure.y);
-    piece->vel.z -= 0.2f * fabsf(piece->normal.z) * (piece->vel.z + this->windPressure.z);
+    piece->vel.x -= 0.2f * fabsf(piece->normal.x) * (piece->vel.x + this->windForce.x);
+    piece->vel.y -= 0.2f * fabsf(piece->normal.y) * (piece->vel.y + this->windForce.y);
+    piece->vel.z -= 0.2f * fabsf(piece->normal.z) * (piece->vel.z + this->windForce.z);
 
     // rotate around axis
     piece->angle += piece->angVel;
@@ -165,17 +165,17 @@ void EnPaper_FlyConfettiPiece(EnPaper* this, EnPaperPiece* piece) {
 #define WIND_PITCH_BOUND (0x10000 / 12)
 
 /**
- * Sets the wind pressure for the whole group, using the shape.rot from the previous frame, and picks a new random one
+ * Sets the wind force for the whole group, using the shape.rot from the previous frame, and picks a new random one
  * for the next frame.
  */
 void EnPaper_UpdateWind(EnPaper* this) {
     f32 strength = (Rand_Centered() * 4.0f) + 6.0f;
     f32 cosX;
 
-    this->windPressure.y = Math_SinS(this->actor.shape.rot.x) * -strength;
+    this->windForce.y = Math_SinS(this->actor.shape.rot.x) * -strength;
     cosX = Math_CosS(this->actor.shape.rot.x) * -strength;
-    this->windPressure.x = Math_SinS(this->actor.shape.rot.y) * cosX;
-    this->windPressure.z = Math_CosS(this->actor.shape.rot.y) * cosX;
+    this->windForce.x = Math_SinS(this->actor.shape.rot.y) * cosX;
+    this->windForce.z = Math_CosS(this->actor.shape.rot.y) * cosX;
 
     // New random wind direction. A uniform distribution of the angles in spherical coordinates is not uniformly
     // distributed on the sphere, so this is biased more towards up and down.

@@ -22,7 +22,7 @@ typedef struct EnPaper {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnPaperActionFunc actionFunc;
     /* 0x148 */ EnPaperPiece pieces[ENPAPER_PIECES_COUNT];
-    /* 0xD78 */ Vec3f windPressure;
+    /* 0xD78 */ Vec3f windForce;
     /* 0xD84 */ s16 timer;
 } EnPaper; // size = 0xD88
 
