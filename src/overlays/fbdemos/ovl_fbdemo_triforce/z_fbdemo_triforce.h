@@ -8,13 +8,13 @@ typedef enum {
     /* 1 */ STATE_SPIRAL_IN_SLOW,
     /* 2 */ STATE_SPIRAL_IN_FAST,
     /* 3 */ STATE_SPIRAL_OUT_SLOW,
-    /* 4 */ STATE_SPIRAL_OUT_FAST,
+    /* 4 */ STATE_SPIRAL_OUT_FAST
 } FbTriforceState;
 
 typedef enum {
     /* 0 */ TYPE_NONE,
     /* 1 */ TYPE_TRANSPARENT_TRIFORCE,
-    /* 2 */ TYPE_FILLED_TRIFORCE,
+    /* 2 */ TYPE_FILLED_TRIFORCE
 } TriforceFadeType;
 
 typedef struct {
