@@ -479,13 +479,13 @@ s32 func_801235DC(PlayState* play, f32 arg1, s16 arg2) {
     return false;
 }
 
-ItemID func_8012364C(PlayState* play, Player* player, s32 arg2) {
+ItemId func_8012364C(PlayState* play, Player* player, s32 arg2) {
     if (arg2 >= 4) {
         return ITEM_NONE;
     }
 
     if (arg2 == 0) {
-        ItemID item = Inventory_GetBtnBItem(play);
+        ItemId item = Inventory_GetBtnBItem(play);
 
         if (item >= ITEM_FD) {
             return item;
@@ -659,7 +659,7 @@ void Player_SetEquipmentData(PlayState* play, Player* player) {
     }
 }
 
-void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemID itemId, PlayerActionParam actionParam) {
+void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemId itemId, PlayerActionParam actionParam) {
     Inventory_UpdateBottleItem(play, itemId, player->heldItemButton);
 
     if (itemId != ITEM_BOTTLE) {
