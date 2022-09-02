@@ -26,17 +26,17 @@ s32 func_80BC00AC(Actor* thisx, PlayState* play);
 s32 func_80BC01DC(Actor* thisx, PlayState* play);
 
 #define EN_NB_FLAG_NONE (0)
-#define EN_NB_FLAG_1    (1 << 0)
-#define EN_NB_FLAG_2    (1 << 1)
-#define EN_NB_FLAG_4    (1 << 2)
-#define EN_NB_FLAG_8    (1 << 3)
-#define EN_NB_FLAG_10   (1 << 4)
-#define EN_NB_FLAG_20   (1 << 5)
-#define EN_NB_FLAG_40   (1 << 6)
-#define EN_NB_FLAG_80   (1 << 7)
-#define EN_NB_FLAG_100  (1 << 8)
-#define EN_NB_FLAG_200  (1 << 9)
-#define EN_NB_FLAG_400  (1 << 10)
+#define EN_NB_FLAG_1 (1 << 0)
+#define EN_NB_FLAG_2 (1 << 1)
+#define EN_NB_FLAG_4 (1 << 2)
+#define EN_NB_FLAG_8 (1 << 3)
+#define EN_NB_FLAG_10 (1 << 4)
+#define EN_NB_FLAG_20 (1 << 5)
+#define EN_NB_FLAG_40 (1 << 6)
+#define EN_NB_FLAG_80 (1 << 7)
+#define EN_NB_FLAG_100 (1 << 8)
+#define EN_NB_FLAG_200 (1 << 9)
+#define EN_NB_FLAG_400 (1 << 10)
 
 typedef enum EnNbScheduleResult {
     /* 0 */ EN_NB_SCH_NONE,
@@ -261,8 +261,7 @@ s32 func_80BC00AC(Actor* thisx, PlayState* play) {
         case 4:
         case 6:
         case 8:
-            Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(cutscene)),
-                                    &this->actor);
+            Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(cutscene)), &this->actor);
             this->unk_288++;
             ret = true;
             break;
