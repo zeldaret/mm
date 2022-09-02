@@ -39,14 +39,14 @@ const ActorInit En_Paper_InitVars = {
     (ActorFunc)EnPaper_Draw,
 };
 
-static Vec3f sUnitVectorZ = { 0.0f, 0.0f, 1.0f };
+static Vec3f sUnitVecZ = { 0.0f, 0.0f, 1.0f };
 
 void EnPaper_Init(Actor* thisx, PlayState* play) {
     EnPaper* this = THIS;
 
     Actor_SetScale(&this->actor, 0.01f);
     this->timer = 70;
-    this->windForce = sUnitVectorZ;
+    this->windForce = sUnitVecZ;
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     EnPaper_SetupSpreadConfettiGroup(this);
 }
@@ -89,7 +89,7 @@ void EnPaper_FlyConfettiGroup(EnPaper* this, PlayState* play) {
 void EnPaper_InitConfettiPiece(EnPaper* this, EnPaperPiece* piece) {
     // Pick rotation axis randomly (significantly biased towards the z = 0 plane)
     Matrix_RotateZYX(Rand_Next(), Rand_Next(), Rand_Next(), MTXMODE_NEW);
-    Matrix_MultVec3f(&sUnitVectorZ, &piece->rotAxis);
+    Matrix_MultVec3f(&sUnitVecZ, &piece->rotAxis);
 
     // copy actor position and distribute uniformly in a cube of side 2 around it
     piece->pos = this->actor.world.pos;
@@ -110,7 +110,7 @@ void EnPaper_InitConfettiPiece(EnPaper* this, EnPaperPiece* piece) {
 
     // Rotate the unit Z-vector by the random starting axis and angle
     Matrix_RotateAxisS(piece->angle, &piece->rotAxis, MTXMODE_NEW);
-    Matrix_MultVec3f(&sUnitVectorZ, &piece->normal);
+    Matrix_MultVec3f(&sUnitVecZ, &piece->normal);
 }
 
 /**
@@ -200,9 +200,9 @@ void EnPaper_Update(Actor* thisx, PlayState* play) {
 
     if (this->timer == 0) {
         Actor_MarkForDeath(&this->actor);
-    } else {
-        this->timer--;
+        return;
     }
+    this->timer--;
 }
 
 void EnPaper_Draw(Actor* thisx, PlayState* play) {

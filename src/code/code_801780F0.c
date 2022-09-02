@@ -238,7 +238,7 @@ void Mtx_SetRotationMtx(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ) {
  *
  * The transformations are applied in the order scale, rotate, translate: \$f SRT \$f
  *
- * The result should be.
+ * The result should be
  * \f[
  * \begin{bmatrix}
  *     s_x((1-a_x^2) \cos \theta + a_x^2) & s_x(a_x a_y (1 - \cos \theta) + a_z \sin \theta) & s_x(a_z a_x (1 - \cos
@@ -248,7 +248,7 @@ void Mtx_SetRotationMtx(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ) {
  *     s_z(a_z a_x (1 - \cos \theta) + a_y \sin \theta) & s_z(a_y a_z (1 - \cos \theta) - a_x \sin \theta) &
  *        s_z((1-a_z^2) \cos \theta + a_z^2) & 0 \\
  *     0 & 0 & 0 & 1
- * \end{bmatrix}
+ * \end{bmatrix} .
  * \f]
  *
  * @warning There is a significant bug in this function, which means it does not actually produce a proper rotation

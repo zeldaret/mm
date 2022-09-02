@@ -59,7 +59,7 @@ void DmBal_Init(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     this->timer = 60;
     this->eyeIndex = 0;
-    this->keepEyesShut = 0;
+    this->keepEyesShut = false;
     DmBal_SetupDoNothing(this);
 }
 
@@ -114,13 +114,13 @@ void func_80C1EAE8(DmBal* this, PlayState* play) {
 }
 
 void func_80C1EC60(DmBal* this, PlayState* play) {
-    f32 temp;
+    f32 scaleX;
 
     this->unk_338 += 0x320;
     this->unk_33A += 0x3E8;
     this->scale.y = this->scale.z = Math_CosS(this->unk_338) * 0.1f + 1.0f;
-    temp = (Math_SinS(this->unk_338) * 0.1f) + 1.0f;
-    this->scale.x = SQ(temp);
+    scaleX = (Math_SinS(this->unk_338) * 0.1f) + 1.0f;
+    this->scale.x = SQ(scaleX);
     this->actor.world.pos.y = this->actor.home.pos.y + (Math_SinS(this->unk_338) * 25.0f);
 }
 
