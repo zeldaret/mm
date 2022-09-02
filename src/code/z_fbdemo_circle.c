@@ -23,24 +23,24 @@ void TransitionCircle_Start(void* thisx) {
     TransitionCircle* this = (TransitionCircle*)thisx;
 
     this->stepValue = 0.1f;
-    if (this->direction == 0) {
-        this->unk_10 = 0.0f;
-        this->unk_0C = 1.0f;
+    if (this->direction == TRANSITION_CIRCLE_IN) {
+        this->targetRadius = 0.0f;
+        this->startingRadius = 1.0f;
     } else {
-        this->unk_0C = 0.0f;
-        this->unk_10 = 1.0f;
+        this->startingRadius = 0.0f;
+        this->targetRadius = 1.0f;
     }
-    this->unk_04 = this->unk_0C;
+    this->referenceRadius = this->startingRadius;
 }
 
 void* TransitionCircle_Init(void* thisx) {
     TransitionCircle* this = (TransitionCircle*)thisx;
 
     bzero(this, sizeof(TransitionCircle));
-    this->unk_15 = 1;
+    this->maskType = 1;
     this->texture = gCircleTex;
-    this->unk_1C = 6;
-    this->unk_1D = 6;
+    this->masks = 6;
+    this->maskt = 6;
     this->unk_1E = 4;
     this->unk_1F = 0;
 
@@ -53,7 +53,7 @@ void TransitionCircle_Destroy(void* thisx) {
 void TransitionCircle_Update(void* thisx) {
     TransitionCircle* this = (TransitionCircle*)thisx;
 
-    this->isDone = Math_StepToF(&this->unk_04, this->unk_10, this->stepValue);
+    this->isDone = Math_StepToF(&this->referenceRadius, this->targetRadius, this->stepValue);
 }
 
 void TransitionCircle_SetColor(void* thisx, u32 color) {
@@ -66,11 +66,11 @@ void TransitionCircle_SetType(void* thisx, s32 type) {
     TransitionCircle* this = (TransitionCircle*)thisx;
 
     if (type & TC_SET_PARAMS) {
-        this->unk_15 = type & 1;
+        this->maskType = type & 1;
     } else if (type == 1) {
-        this->direction = 1;
+        this->direction = TRANSITION_CIRCLE_OUT;
     } else {
-        this->direction = 0;
+        this->direction = TRANSITION_CIRCLE_IN;
     }
 }
 
@@ -122,14 +122,15 @@ void TransitionCircle_Draw(void* thisx, Gfx** gfxp) {
     gDPPipeSync(gfx++);
     gSPDisplayList(gfx++, &D_801D0D00);
     gDPSetPrimColor(gfx++, 0, this->color.a, this->color.r, this->color.g, this->color.b, 1);
-    if (this->unk_15 == 0) {
+    if (this->maskType == 0) {
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIM_LOD_FRAC, PRIMITIVE, 0, 0, 0, PRIMITIVE, TEXEL0, 0,
                           PRIM_LOD_FRAC, PRIMITIVE);
     } else {
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, 1, TEXEL0, PRIM_LOD_FRAC, PRIMITIVE, 0, 0, 0, PRIMITIVE, 1, TEXEL0,
                           PRIM_LOD_FRAC, PRIMITIVE);
     }
-    TransitionCircle_LoadAndSetTexture(&gfx, this->texture, G_IM_FMT_I, 0, this->unk_1C, this->unk_1D, this->unk_04);
+    TransitionCircle_LoadAndSetTexture(&gfx, this->texture, G_IM_FMT_I, 0, this->masks, this->maskt,
+                                       this->referenceRadius);
     gDPPipeSync(gfx++);
 
     *gfxp = gfx;
