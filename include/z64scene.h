@@ -576,13 +576,13 @@ typedef enum {
     /* 0x27 */ SCENE_KINSTA1, // Swamp Spider House
     /* 0x28 */ SCENE_KINDAN2, // Oceanside Spider House
     /* 0x29 */ SCENE_TENMON_DAI, // Astral Observatory
-    /* 0x2A */ SCENE_LAST_DEKU, // Deku Trial
+    /* 0x2A */ SCENE_LAST_DEKU, // Moon Deku Trial
     /* 0x2B */ SCENE_22DEKUCITY, // Deku Palace
     /* 0x2C */ SCENE_KAJIYA, // Mountain Smithy
     /* 0x2D */ SCENE_00KEIKOKU, // Termina Field
     /* 0x2E */ SCENE_POSTHOUSE, // Post Office
     /* 0x2F */ SCENE_LABO, // Marine Research Lab
-    /* 0x30 */ SCENE_DANPEI2TEST, // Dampe's House
+    /* 0x30 */ SCENE_DANPEI2TEST, // Beneath the Graveyard (Day 3) and Dampe's House
     /* 0x31 */ SCENE_UNSET_31,
     /* 0x32 */ SCENE_16GORON_HOUSE, // Goron Shrine
     /* 0x33 */ SCENE_33ZORACITY, // Zora Hall
@@ -597,7 +597,7 @@ typedef enum {
     /* 0x3C */ SCENE_FISHERMAN, // Fisherman's Hut
     /* 0x3D */ SCENE_GORONSHOP, // Goron Shop
     /* 0x3E */ SCENE_DEKU_KING, // Deku King's Chamber
-    /* 0x3F */ SCENE_LAST_GORON, // Goron Trial
+    /* 0x3F */ SCENE_LAST_GORON, // Moon Goron Trial
     /* 0x40 */ SCENE_24KEMONOMITI, // Road to Southern Swamp
     /* 0x41 */ SCENE_F01_B, // Doggy Racetrack
     /* 0x42 */ SCENE_F01C, // Cucco Shack
@@ -605,7 +605,7 @@ typedef enum {
     /* 0x44 */ SCENE_HAKUGIN_BS, // Goht's Lair
     /* 0x45 */ SCENE_20SICHITAI, // Southern Swamp (poison)
     /* 0x46 */ SCENE_21MITURINMAE, // Woodfall
-    /* 0x47 */ SCENE_LAST_ZORA, // Zora Trial
+    /* 0x47 */ SCENE_LAST_ZORA, // Moon Zora Trial
     /* 0x48 */ SCENE_11GORONNOSATO2, // Goron Village (spring)
     /* 0x49 */ SCENE_SEA, // Great Bay Temple
     /* 0x4A */ SCENE_35TAKI, // Waterfall Rapids
@@ -635,8 +635,8 @@ typedef enum {
     /* 0x62 */ SCENE_KONPEKI_ENT, // Great Bay Cutscene
     /* 0x63 */ SCENE_INSIDETOWER, // Clock Tower Interior
     /* 0x64 */ SCENE_26SARUNOMORI, // Woods of Mystery
-    /* 0x65 */ SCENE_LOST_WOODS, // Lost Woods
-    /* 0x66 */ SCENE_LAST_LINK, // Link Trial
+    /* 0x65 */ SCENE_LOST_WOODS, // Lost Woods (Intro)
+    /* 0x66 */ SCENE_LAST_LINK, // Moon Link Trial
     /* 0x67 */ SCENE_SOUGEN, // The Moon
     /* 0x68 */ SCENE_BOMYA, // Bomb Shop
     /* 0x69 */ SCENE_KYOJINNOMA, // Giants' Chamber
