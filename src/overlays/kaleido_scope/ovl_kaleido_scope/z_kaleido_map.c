@@ -80,10 +80,10 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-TexturePtr D_8082B4A0[] = {
-    0x09003600, // DUNGEON_BOSS_KEY
-    0x09003F00, // DUNGEON_COMPASS
-    0x09004800, // DUNGEON_MAP
+TexturePtr sDungeonItemTextures[] = {
+    0x09003600, // `gBossKeyIconTex`: DUNGEON_BOSS_KEY
+    0x09003F00, // `gCompassIconTex`: DUNGEON_COMPASS
+    0x09004800, // `gDungeonMapIconTex`: DUNGEON_MAP
 };
 TexturePtr D_8082B4AC[] = {
     0x0D000000, // DUNGEON_INDEX_WOODFALL_TEMPLE
@@ -240,7 +240,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                 }
             }
         } else if (CHECK_DUNGEON_ITEM(i, gSaveContext.dungeonIndex)) {
-            gDPLoadTextureBlock(POLY_OPA_DISP++, D_8082B4A0[i], G_IM_FMT_RGBA, G_IM_SIZ_32b, 24, 24, 0,
+            gDPLoadTextureBlock(POLY_OPA_DISP++, sDungeonItemTextures[i], G_IM_FMT_RGBA, G_IM_SIZ_32b, 24, 24, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
 
@@ -470,7 +470,8 @@ s16 D_8082B584[] = {
 s16 D_8082B590[] = {
     255, 255, 0, 0, 0, 255,
 };
-s16 D_8082B59C[REGION_MAX] = {
+// TODO: Test names
+s16 sWorldMapCursorsRectLeft[REGION_MAX] = {
     86,  // REGION_GREAT_BAY
     104, // REGION_ZORA_HALL
     145, // REGION_ROMANI_RANCH
@@ -483,7 +484,7 @@ s16 D_8082B59C[REGION_MAX] = {
     210, // REGION_GORON_VILLAGE
     218, // REGION_STONE_TOWER
 };
-s16 D_8082B5B4[REGION_MAX] = {
+s16 sWorldMapCursorsRectTop[REGION_MAX] = {
     127, // REGION_GREAT_BAY
     153, // REGION_ZORA_HALL
     138, // REGION_ROMANI_RANCH
@@ -496,7 +497,7 @@ s16 D_8082B5B4[REGION_MAX] = {
     73,  // REGION_GORON_VILLAGE
     99,  // REGION_STONE_TOWER
 };
-s16 D_8082B5CC[] = {
+s16 sGreatFairySpawnRegions[] = {
     REGION_CLOCK_TOWN, REGION_WOODFALL, REGION_SNOWHEAD, REGION_GREAT_BAY, REGION_IKANA_CANYON,
     REGION_CLOCK_TOWN, REGION_WOODFALL, REGION_SNOWHEAD, REGION_GREAT_BAY, REGION_IKANA_CANYON,
 };
@@ -676,73 +677,71 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         }
     }
 
-    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE)) {
-        if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
-            !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
-            j = 0;
-            n = 0;
-            sceneId = play->sceneNum;
-            if (sceneId == SCENE_KAKUSIANA) { // Lone Peak Shrine & Grottos
-                if (play->roomCtx.currRoom.num == 5) {
-                    sceneId = SCENE_11GORONNOSATO; // Goron Village (winter)
-                } else if ((play->roomCtx.currRoom.num == 6) || (play->roomCtx.currRoom.num == 8) ||
-                           (play->roomCtx.currRoom.num == 12)) {
-                    sceneId = SCENE_22DEKUCITY; // Deku Palace
-                } else {
-                    sceneId =
-                        Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.respawn[RESPAWN_MODE_UNK_3].entrance));
-                }
+    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
+        (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
+        !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
+        j = 0;
+        n = 0;
+        sceneId = play->sceneNum;
+        if (sceneId == SCENE_KAKUSIANA) { // Lone Peak Shrine & Grottos
+            if (play->roomCtx.currRoom.num == 5) {
+                sceneId = SCENE_11GORONNOSATO; // Goron Village (winter)
+            } else if ((play->roomCtx.currRoom.num == 6) || (play->roomCtx.currRoom.num == 8) ||
+                       (play->roomCtx.currRoom.num == 12)) {
+                sceneId = SCENE_22DEKUCITY; // Deku Palace
+            } else {
+                sceneId = Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.respawn[RESPAWN_MODE_UNK_3].entrance));
             }
+        }
 
-            // Loop over regionId (n) and regionIdIndex (j)
-            while (true) {
-                if ((gSceneIdsPerRegion[n][j] == 0xFFFF)) {
-                    n++;
-                    j = 0;
-                    if (n == REGION_MAX) {
-                        n = 0;
+        // Loop over regionId (n) and regionIdIndex (j)
+        while (true) {
+            if ((gSceneIdsPerRegion[n][j] == 0xFFFF)) {
+                n++;
+                j = 0;
+                if (n == REGION_MAX) {
+                    n = 0;
 
-                        // Special case for fairy fountains
-                        if (sceneId == SCENE_YOUSEI_IZUMI) {
-                            j = play->curSpawn;
-                            n = D_8082B5CC[j];
-                            break;
-                        }
-
-                        while (true) {
-                            if (gSceneIdsPerRegion[n][j] == 0xFFFF) {
-                                n++;
-                                if (n == REGION_MAX) {
-                                    break;
-                                }
-                                j = 0;
-                                if (Entrance_GetSceneNumAbsolute(
-                                        ((void)0, gSaveContext.respawn[RESPAWN_MODE_UNK_3].entrance)) ==
-                                    gSceneIdsPerRegion[n][j]) {
-                                    break;
-                                }
-                            }
-                            j++;
-                        }
+                    // Special case for fairy fountains
+                    if (sceneId == SCENE_YOUSEI_IZUMI) {
+                        j = play->curSpawn;
+                        n = sGreatFairySpawnRegions[j];
                         break;
                     }
-                }
 
-                if (sceneId == gSceneIdsPerRegion[n][j]) {
+                    while (true) {
+                        if (gSceneIdsPerRegion[n][j] == 0xFFFF) {
+                            n++;
+                            if (n == REGION_MAX) {
+                                break;
+                            }
+                            j = 0;
+                            if (Entrance_GetSceneNumAbsolute(
+                                    ((void)0, gSaveContext.respawn[RESPAWN_MODE_UNK_3].entrance)) ==
+                                gSceneIdsPerRegion[n][j]) {
+                                break;
+                            }
+                        }
+                        j++;
+                    }
                     break;
                 }
-                j++;
             }
 
-            if (n != REGION_MAX) {
-                KaleidoScope_SetView(pauseCtx, pauseCtx->eye.x, pauseCtx->eye.y, pauseCtx->eye.z);
-                func_8012C628(play->state.gfxCtx);
-
-                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
-
-                POLY_OPA_DISP = func_8010CB80(POLY_OPA_DISP, &D_09007500, 16, 16, D_8082B59C[n], D_8082B5B4[n], 16, 16,
-                                              1 << 10, 1 << 10);
+            if (sceneId == gSceneIdsPerRegion[n][j]) {
+                break;
             }
+            j++;
+        }
+
+        if (n != REGION_MAX) {
+            KaleidoScope_SetView(pauseCtx, pauseCtx->eye.x, pauseCtx->eye.y, pauseCtx->eye.z);
+            func_8012C628(play->state.gfxCtx);
+
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
+
+            POLY_OPA_DISP = func_8010CB80(POLY_OPA_DISP, &D_09007500, 16, 16, sWorldMapCursorsRectLeft[n],
+                                          sWorldMapCursorsRectTop[n], 16, 16, 1 << 10, 1 << 10);
         }
     }
 
