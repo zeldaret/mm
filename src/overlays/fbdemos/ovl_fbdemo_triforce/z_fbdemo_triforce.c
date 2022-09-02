@@ -101,11 +101,11 @@ void TransitionTriforce_Draw(void* thisx, Gfx** gfxP) {
     gSPDisplayList(gfx++, sTriforceWipeDL);
     gDPSetColor(gfx++, G_SETPRIMCOLOR, this->color.rgba);
     gDPSetCombineMode(gfx++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
-    gSPMatrix(gfx++, &this->projection, G_MTX_LOAD | G_MTX_PROJECTION);
-    gSPMatrix(gfx++, &modelView[0], G_MTX_LOAD);
-    gSPMatrix(gfx++, &modelView[1], G_MTX_NOPUSH | G_MTX_MODELVIEW);
-    gSPMatrix(gfx++, &modelView[2], G_MTX_NOPUSH | G_MTX_MODELVIEW);
-    gSPVertex(gfx++, &sTriforceWipeVtx, 10, 0);
+    gSPMatrix(gfx++, &this->projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPMatrix(gfx++, &modelView[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gfx++, &modelView[1], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPMatrix(gfx++, &modelView[2], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPVertex(gfx++, &sTriforceWipeVtx, ARRAY_COUNT(sTriforceWipeVtx), 0);
     if (!TransitionTriforce_IsDone(this)) {
         switch (this->fadeType) {
             case TYPE_TRANSPARENT_TRIFORCE:
