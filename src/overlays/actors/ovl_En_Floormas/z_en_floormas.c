@@ -762,7 +762,7 @@ void func_808D22C8(EnFloormas* this, PlayState* play) {
         this->actor.speedXZ = -3.0f;
         func_808D1740(this);
     } else if ((this->unk_190 % 20) == 0) {
-        func_800B8E58(player, NA_SE_VO_LI_DAMAGE_S + player->ageProperties->voiceSfxOffset);
+        func_800B8E58(player, NA_SE_VO_LI_DAMAGE_S + player->ageProperties->voiceSfxIdOffset);
         play->damagePlayer(play, -4);
     }
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FLOORMASTER_SM_STICK - SFX_FLAG);

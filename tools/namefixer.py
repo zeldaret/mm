@@ -697,8 +697,8 @@ wordReplace = {
     "player->targetActor": "player->talkActor",
     "player->targetActorDistance": "player->talkActorDistance",
     "player->unk_730": "player->targetedActor",
-    "player->ageProperties->unk_92": "player->ageProperties->voiceSfxOffset",
-    "player->ageProperties->unk_94": "player->ageProperties->surfaceSfxOffset",
+    "player->ageProperties->unk_92": "player->ageProperties->voiceSfxIdOffset",
+    "player->ageProperties->unk_94": "player->ageProperties->surfaceSfxIdOffset",
 
     "csCtx.npcActions": "csCtx.actorActions",
     "csCtx->npcActions": "csCtx->actorActions",

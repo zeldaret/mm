@@ -19,6 +19,7 @@ struct Lights;
 struct CollisionPoly;
 
 struct EnBox;
+struct EnTorch2;
 
 typedef void(*ActorFunc)(struct Actor* this, struct PlayState* play);
 
@@ -391,7 +392,7 @@ typedef struct ActorContext {
     /* 0x20C */ ActorContext_unk_20C unk_20C[8];
     /* 0x24C */ UNK_TYPE1 unk_24C[0x4];
     /* 0x250 */ void* absoluteSpace; // Space used to allocate actor overlays of alloc type ALLOCTYPE_ABSOLUTE
-    /* 0x254 */ Actor* unk_254[5]; // PLAYER_FORM_MAX // EnTorch2*
+    /* 0x254 */ struct EnTorch2* elegyShells[5]; // PLAYER_FORM_MAX
     /* 0x268 */ u8 unk268;
     /* 0x269 */ UNK_TYPE1 pad269[0x3];
     /* 0x26C */ Input unk_26C;
@@ -409,7 +410,7 @@ typedef enum {
     /* 32 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE
 } ActorDrawDamageEffectType;
 
-typedef enum ActorID {
+typedef enum ActorId {
     /* 0x000 */ ACTOR_PLAYER,
     /* 0x001 */ ACTOR_EN_TEST,
     /* 0x002 */ ACTOR_EN_GIRLA,
@@ -1101,7 +1102,7 @@ typedef enum ActorID {
     /* 0x2B0 */ ACTOR_OBJ_ENDING,
     /* 0x2B1 */ ACTOR_EN_RSN,
     /* 0x2B2 */ ACTOR_ID_MAX // originally "ACTOR_DLF_MAX"
-} ActorID;
+} ActorId;
 
 typedef enum {
     /* 0 */ DOORLOCK_NORMAL,

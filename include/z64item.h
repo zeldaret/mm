@@ -117,7 +117,7 @@ typedef enum {
     /* 0xFF */ SLOT_NONE = 0xFF
 } InventorySlot;
 
-typedef enum {
+typedef enum ItemId {
     /* 0x00 */ ITEM_OCARINA,
     /* 0x01 */ ITEM_BOW,
     /* 0x02 */ ITEM_ARROW_FIRE,
@@ -231,7 +231,9 @@ typedef enum {
     /* 0x6E */ ITEM_SKULL_TOKEN,
     /* 0x6F */ ITEM_HEART_CONTAINER,
     /* 0x70 */ ITEM_HEART_PIECE,
-    /* 0x73 */ ITEM_SONG_LULLABY_INTRO = 0x73,
+    /* 0x71 */ ITEM_71,
+    /* 0x72 */ ITEM_72,
+    /* 0x73 */ ITEM_SONG_LULLABY_INTRO,
     /* 0x74 */ ITEM_KEY_BOSS,
     /* 0x75 */ ITEM_COMPASS,
     /* 0x76 */ ITEM_DUNGEON_MAP,
@@ -287,12 +289,12 @@ typedef enum {
     /* 0xFD */ ITEM_FD,
     /* 0xFE */ ITEM_FE,
     /* 0xFF */ ITEM_NONE = 0xFF
-} ItemID;
+} ItemId;
 
 #define BOTTLE_FIRST 0
 #define BOTTLE_MAX 6
 
-typedef enum GetItemID {
+typedef enum GetItemId {
     /* 0x00 */ GI_NONE,
     /* 0x01 */ GI_RUPEE_GREEN,
     /* 0x02 */ GI_RUPEE_BLUE,
@@ -442,9 +444,9 @@ typedef enum GetItemID {
     /* 0xB8 */ GI_TINGLE_MAP_GREAT_BAY,
     /* 0xB9 */ GI_TINGLE_MAP_STONE_TOWER,
     /* 0xBA */ GI_MAX
-} GetItemID;
+} GetItemId;
 
-typedef enum GetItemDrawID {
+typedef enum GetItemDrawId {
     /*   -1 */ GID_NONE = -1,
     /* 0x00 */ GID_BOTTLE,
     /* 0x01 */ GID_KEY_SMALL,
@@ -565,6 +567,6 @@ typedef enum GetItemDrawID {
     /* 0x74 */ GID_PICTO_BOX,
     /* 0x75 */ GID_MASK_FIERCE_DEITY,
     /* 0x76 */ GID_MAX
-} GetItemDrawID;
+} GetItemDrawId;
 
 #endif

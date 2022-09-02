@@ -283,29 +283,29 @@ typedef struct PlayerAnimationFrame {
 #define PLAYER_LIMB_BUF_SIZE (ALIGN16(sizeof(PlayerAnimationFrame)) + 0xF)
 
 typedef struct PlayerAgeProperties {
-    /* 0x00 */ f32 unk_00; // ceilingCheckHeight
+    /* 0x00 */ f32 unk_00; // ceilingCheckHeight?
     /* 0x04 */ f32 shadowScale;
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14; // compared to wallHeight
-    /* 0x18 */ f32 unk_18; // compared to wallHeight
-    /* 0x1C */ f32 unk_1C; // compared to wallHeight
-    /* 0x20 */ f32 unk_20; // unused?
-    /* 0x24 */ f32 unk_24; // water stuff // depthInWater
-    /* 0x28 */ f32 unk_28; // water stuff // depthInWater
-    /* 0x2C */ f32 unk_2C; // water stuff // depthInWater
-    /* 0x30 */ f32 unk_30; // water stuff // depthInWater
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ f32 unk_20;
+    /* 0x24 */ f32 unk_24;
+    /* 0x28 */ f32 unk_28;
+    /* 0x2C */ f32 unk_2C;
+    /* 0x30 */ f32 unk_30;
     /* 0x34 */ f32 unk_34;
-    /* 0x38 */ f32 unk_38; // wallCheckHeight
+    /* 0x38 */ f32 unk_38; // wallCheckHeight?
     /* 0x3C */ f32 unk_3C;
     /* 0x40 */ f32 unk_40;
     /* 0x44 */ Vec3s unk_44;
     /* 0x4A */ Vec3s unk_4A[4];
     /* 0x62 */ Vec3s unk_62[4];
     /* 0x7A */ Vec3s unk_7A[4];
-    /* 0x92 */ u16 voiceSfxOffset;
-    /* 0x94 */ u16 surfaceSfxOffset;
+    /* 0x92 */ u16 voiceSfxIdOffset;
+    /* 0x94 */ u16 surfaceSfxIdOffset;
     /* 0x98 */ f32 unk_98;
     /* 0x9C */ f32 unk_9C;
     /* 0xA0 */ LinkAnimationHeader* unk_A0;
@@ -694,7 +694,7 @@ typedef enum PlayerCsMode {
 
 typedef enum {
     /* 0x0 */ PLAYER_INITMODE_0,
-    /* 0x1 */ PLAYER_INITMODE_1,
+    /* 0x1 */ PLAYER_INITMODE_1, // Player after pulling out Master Sword / putting back Master Sword
     /* 0x2 */ PLAYER_INITMODE_2,
     /* 0x3 */ PLAYER_INITMODE_3,
     /* 0x4 */ PLAYER_INITMODE_4,
@@ -711,7 +711,7 @@ typedef enum {
     /* 0xF */ PLAYER_INITMODE_F
 } PlayerInitMode;
 
-#define PLAYER_PARAMS(startBgCamId, initMode) ((startBgCamId & 0xFF) | ((initMode & 0xF) << 8))
+#define PLAYER_PARAMS(startBgCamIndex, initMode) ((startBgCamIndex & 0xFF) | ((initMode & 0xF) << 8))
 
 typedef void (*PlayerActionFunc)(struct Player* this, struct PlayState* play);
 typedef s32 (*PlayerFuncAC4)(struct Player* this, struct PlayState* play);
@@ -819,7 +819,7 @@ typedef struct Player {
     /* 0x564 */ ColliderQuad meleeWeaponQuads[2];
     /* 0x664 */ ColliderQuad shieldQuad;
     /* 0x6E4 */ ColliderCylinder shieldCylinder;
-    /* 0x730 */ Actor* targetedActor; // Z-Targeted actor
+    /* 0x730 */ Actor* targetedActor; // Z/L-Targeted actor
     /* 0x734 */ char unk_734[4];
     /* 0x738 */ s32 unk_738;
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];
@@ -931,7 +931,7 @@ typedef struct Player {
     /* 0xCC4 */ MtxF mf_CC4;
     /* 0xD04 */ MtxF shieldMf;
     /* 0xD44 */ u8 isBurning;
-    /* 0xD45 */ u8 flameTimers[PLAYER_BODYPART_MAX]; // one flame per body part
+    /* 0xD45 */ u8 flameTimers[PLAYER_BODYPART_MAX];
     /* 0xD57 */ u8 unk_D57;
     /* 0xD58 */ PlayerFuncD58 unk_D58;
     /* 0xD5C */ s8 invincibilityTimer; // prevents damage when nonzero (positive = visible, counts towards zero each frame)

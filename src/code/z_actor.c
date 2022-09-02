@@ -1856,7 +1856,7 @@ s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, Player
 
     if ((player->actor.flags & ACTOR_FLAG_100) || ((exchangeItemId > PLAYER_AP_NONE) && Player_InCsMode(play)) ||
         (!actor->isTargeted &&
-         ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || ((actor->xzDistToPlayer > player->talkActorDistance)) ||
+         ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || (actor->xzDistToPlayer > player->talkActorDistance) ||
           (xzRange < actor->xzDistToPlayer)))) {
         return false;
     }
@@ -1995,7 +1995,7 @@ s32 Actor_HasParent(Actor* actor, PlayState* play) {
  * GI_NONE is usually used as a special case to lift an actor
  * GI_MAX is usually used to catch an actor in a bottle
  */
-s32 Actor_PickUp(Actor* actor, PlayState* play, GetItemID getItemId, f32 xzRange, f32 yRange) {
+s32 Actor_PickUp(Actor* actor, PlayState* play, GetItemId getItemId, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(play);
 
     if (!(player->stateFlags1 & 0x3C7080) && Player_GetExplosiveHeld(player) < 0) {
@@ -2026,7 +2026,7 @@ s32 Actor_PickUp(Actor* actor, PlayState* play, GetItemID getItemId, f32 xzRange
     return false;
 }
 
-s32 Actor_PickUpNearby(Actor* actor, PlayState* play, GetItemID getItemId) {
+s32 Actor_PickUpNearby(Actor* actor, PlayState* play, GetItemId getItemId) {
     return Actor_PickUp(actor, play, getItemId, 50.0f, 10.0f);
 }
 
@@ -2034,7 +2034,7 @@ s32 Actor_LiftActor(Actor* actor, PlayState* play) {
     return Actor_PickUpNearby(actor, play, GI_NONE);
 }
 
-s32 Actor_PickUpFar(Actor* actor, PlayState* play, GetItemID getItemId) {
+s32 Actor_PickUpFar(Actor* actor, PlayState* play, GetItemId getItemId) {
     return Actor_PickUp(actor, play, getItemId, 9999.9f, 9999.9f);
 }
 

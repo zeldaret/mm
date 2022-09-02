@@ -706,7 +706,7 @@ ActorOverlay gActorOverlayTable[] = {
     ACTOR_OVERLAY(En_Rsn, ALLOCTYPE_NORMAL),
 };
 
-s32 gMaxActorId = 0;
+ActorId gMaxActorId = 0;
 
 FaultClient D_801ED930;
 FaultAddrConvClient D_801ED940;
