@@ -586,7 +586,8 @@ s32 func_80BA47E0(EnToto* this, PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(D_80BA50DC); i++) {
         if (gSaveContext.save.playerForm != (i + 1) && (D_80BA5128[i] & this->unk2B3)) {
             Math_Vec3s_ToVec3f(&spawnPos, &D_80BA50DC[i].unk6);
-            Actor_Spawn(&play->actorCtx, play, ACTOR_PLAYER, spawnPos.x, spawnPos.y, spawnPos.z, i + 2, 0, 0, -1);
+            
+            Actor_Spawn(&play->actorCtx, play, ACTOR_PLAYER, spawnPos.x, spawnPos.y, spawnPos.z, i + 2, 0, 0, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_F) | 0xFFFFF000);
         }
     }
     func_80BA402C(this, play);

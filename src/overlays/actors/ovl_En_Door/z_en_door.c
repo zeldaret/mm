@@ -467,7 +467,7 @@ void func_80866A5C(EnDoor* this, PlayState* play) {
 }
 
 void func_80866B20(EnDoor* this, PlayState* play) {
-    static s32 D_80867BC0[4];
+    static s32 D_80867BC0;
     Player* player = GET_PLAYER(play);
     Vec3f playerPosRelToDoor;
     s16 temp_a2;
@@ -477,7 +477,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
     u8 temp_a1;
 
     if (Actor_ProcessTalkRequest(&this->door.dyna.actor, &play->state) && (this->door.dyna.actor.textId == 0x1821)) {
-        D_80867BC0[0] = 1;
+        D_80867BC0 = true;
     }
     if (this->door.unk_1A1 != 0) {
         this->actionFunc = func_80867144;
@@ -493,7 +493,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_DOOR_OPEN);
     } else if (!Player_InCsMode(play)) {
         Actor_OffsetOfPointInActorCoords(&this->door.dyna.actor, &playerPosRelToDoor, &player->actor.world.pos);
-        if ((D_80867BC0[0] != 0) || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
+        if (D_80867BC0 || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
                                      (fabsf(playerPosRelToDoor.z) < 50.0f))) {
             yawDiff = player->actor.shape.rot.y - this->door.dyna.actor.shape.rot.y;
             if (playerPosRelToDoor.z > 0.0f) {
@@ -539,7 +539,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                     if (Schedule_RunScript(play, D_8086778C[this->switchFlag], &sp30) != 0) {
                         this->door.dyna.actor.textId = sp30.result + 0x1800;
 
-                        player->doorType = ((this->door.dyna.actor.textId == 0x1821) && (D_80867BC0[0] != 0))
+                        player->doorType = ((this->door.dyna.actor.textId == 0x1821) && D_80867BC0)
                                                ? PLAYER_DOORTYPE_5
                                                : PLAYER_DOORTYPE_MINUS_1;
                     }

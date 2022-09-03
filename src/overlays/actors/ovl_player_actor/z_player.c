@@ -5985,7 +5985,6 @@ LinkAnimationHeader* D_8085D124[] = {
 };
 
 /**
- * PLAYER_DOORTYPE_MINUS_1: EnDoor, EnDoorEtc, DoorShutter
  * PLAYER_DOORTYPE_0:
  * PLAYER_DOORTYPE_1: EnDoor
  * PLAYER_DOORTYPE_3:
@@ -6085,7 +6084,7 @@ s32 func_808365DC(Player* this, PlayState* play) {
             Actor* doorActor = this->doorActor;
             Actor* var_v0_3;
 
-            if (this->doorType < 0) {
+            if (this->doorType <= PLAYER_DOORTYPE_MINUS_1) {
                 func_8085B460(play, doorActor);
                 if (doorActor->textId == 0x1821) {
                     doorActor->flags |= ACTOR_FLAG_100;
@@ -14728,15 +14727,13 @@ void func_8084D820(Player* this, PlayState* play) {
 
 // door stuff
 void func_8084E034(Player* this, PlayState* play) {
-    Actor* doorActor = this->doorActor;
+    EnDoor* doorActor = (EnDoor*)this->doorActor;
     s32 sp38;
     s32 animFinished;
     CollisionPoly* poly;
     s32 bgId;
 
-    //! @bug Incorrect struct access: `doorActor` can be either a `EnDoor` (correct access), `EnDoorEtc` (reads `angle`
-    //! as a s16 instead of a u8) or a `DoorShutter` (OoB read)
-    sp38 = (doorActor != NULL) && (((EnDoor*)doorActor)->unk_1A4 == 7);
+    sp38 = (doorActor != NULL) && (doorActor->unk_1A4 == 7);
     this->stateFlags2 |= PLAYER_STATE2_20;
 
     if (DECR(this->unk_AE7) == 0) {
@@ -14769,7 +14766,7 @@ void func_8084E034(Player* this, PlayState* play) {
         func_80838760(this);
         play->func_18780(this, play);
     } else if (sp38 && LinkAnimation_OnFrame(&this->skelAnime, 15.0f)) {
-        s16 doorRot = (this->doorDirection < 0) ? doorActor->world.rot.x : doorActor->world.rot.z;
+        s16 doorRot = (this->doorDirection < 0) ? doorActor->door.dyna.actor.world.rot.x : doorActor->door.dyna.actor.world.rot.z;
 
         if (doorRot != 0) {
             func_808354A4(play, doorRot - 1, false);
