@@ -7,7 +7,7 @@ struct ObjKendoKanban;
 
 typedef void (*ObjKendoKanbanActionFunc)(struct ObjKendoKanban*, PlayState*);
 
-#define OBJKENDOKANBAN_GET_BOARD_FRAGMENTS_PARAM(thisx) ((thisx)->params & 0xF)
+#define OBJKENDOKANBAN_GET_BOARD_FRAGMENTS(thisx) ((thisx)->params & 0xF)
 
 typedef struct ObjKendoKanban {
     /* 0x000 */ Actor actor;
@@ -21,8 +21,8 @@ typedef struct ObjKendoKanban {
     /* 0x2D8 */ Vec3f centerPos;
     /* 0x2E4 */ Vec3f rootCornerPos;
     /* 0x2F0 */ Vec3f rotationalAxis;
-    /* 0x2FC */ s32 idxLastRootCornerPos;
-    /* 0x300 */ s16 bHasNewRootCornerPos;
+    /* 0x2FC */ s32 indexLastRootCornerPos;
+    /* 0x300 */ s16 hasNewRootCornerPos;
     /* 0x302 */ s16 rotationAngle;
     /* 0x304 */ s16 rotationVelocity;
     /* 0x306 */ UNK_TYPE1 pad306[2];

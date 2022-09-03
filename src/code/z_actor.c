@@ -1772,7 +1772,7 @@ PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor) {
     if (actor->id == ACTOR_PLAYER) {
         Player* player = (Player*)actor;
 
-        sp1C.pos.y += player->displacementY * actor->scale.y;
+        sp1C.pos.y += player->unk_AC0 * actor->scale.y;
     }
     sp1C.rot = actor->shape.rot;
     *dest = sp1C;

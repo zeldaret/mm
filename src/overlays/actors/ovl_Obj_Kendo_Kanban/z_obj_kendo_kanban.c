@@ -6,7 +6,6 @@
 
 #include "z_obj_kendo_kanban.h"
 #include "objects/object_dora/object_dora.h"
-#include "z64math.h"
 
 #define FLAGS 0x00000000
 
@@ -21,7 +20,16 @@
 #define TOP_HALF (PART_TOP_RIGHT | PART_TOP_LEFT)
 #define BOTTOM_HALF (PART_BOTTOM_RIGHT | PART_BOTTOM_LEFT)
 
+// Number of bounces the board takes before settling.
+#define MAX_BOUNCE_COUNT (7)
+
 #define THIS ((ObjKendoKanban*)thisx)
+
+typedef enum {
+    /* -1 */ DOWN = -1,
+    /*  0 */ UNDETERMINED,
+    /*  1 */ UP,
+} BoardDirection;
 
 void ObjKendoKanban_Init(Actor* thisx, PlayState* play);
 void ObjKendoKanban_Destroy(Actor* thisx, PlayState* play);
@@ -30,8 +38,8 @@ void ObjKendoKanban_Draw(Actor* thisx, PlayState* play);
 
 void ObjKendoKanban_SetupDoNothing(ObjKendoKanban* this);
 void ObjKendoKanban_DoNothing(ObjKendoKanban* this, PlayState* play);
-void ObjKendoKanban_SetupAerial(ObjKendoKanban* this, PlayState* play);
-void ObjKendoKanban_Aerial(ObjKendoKanban* this, PlayState* play);
+void ObjKendoKanban_SetupTumble(ObjKendoKanban* this, PlayState* play);
+void ObjKendoKanban_Tumble(ObjKendoKanban* this, PlayState* play);
 void ObjKendoKanban_Settled(ObjKendoKanban* this, PlayState* play);
 void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play);
 s32 ObjKendoKanban_IsPlayerOnTop(ObjKendoKanban* this, PlayState* play);
@@ -61,8 +69,12 @@ static Vec3f sCenterPointBottomHalf = { 0.0f, 140.0f, 40.0f };
 static Vec3f sCenterPointTopHalf = { 0.0f, 565.0f, 40.0f };
 
 // Displaylists for the 4 pieces.
-static Gfx* sDisplayLists[] = { gKendoKanbanTopRightDL, gKendoKanbanTopLeftDL, gKendoKanbanBottomRightDL,
-                                gKendoKanbanBottomLeftDL };
+static Gfx* sDisplayLists[] = {
+    gKendoKanbanTopRightDL,
+    gKendoKanbanTopLeftDL,
+    gKendoKanbanBottomRightDL,
+    gKendoKanbanBottomLeftDL,
+};
 
 // Coordinates on the object face upon which the board can break
 static Vec3f sPointTL = { -300.0f, 850.0f, 40.0f };
@@ -170,8 +182,8 @@ static DamageTable sDamageTable = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 
-static Vec3f sNullVec3F = { 0.0f, 0.0f, 0.0f };
-static Vec3f sUnitVectorX = { 1.0f, 0.0f, 0.0f };
+static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
+static Vec3f sUnitVecX = { 1.0f, 0.0f, 0.0f };
 
 void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
     s32 pad[2];
@@ -202,27 +214,27 @@ void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
 
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
-    this->boardFragments = OBJKENDOKANBAN_GET_BOARD_FRAGMENTS_PARAM(&this->actor);
+    this->boardFragments = OBJKENDOKANBAN_GET_BOARD_FRAGMENTS(&this->actor);
     this->actor.gravity = -2.0f;
-    this->centerPoint = sNullVec3F;
-    this->centerPos = sNullVec3F;
-    this->rootCornerPos = sNullVec3F;
-    this->rotationalAxis = sUnitVectorX;
+    this->centerPoint = sZeroVec;
+    this->centerPos = sZeroVec;
+    this->rootCornerPos = sZeroVec;
+    this->rotationalAxis = sUnitVecX;
     this->rotationAngle = 0;
     this->rotationVelocity = 0;
-    this->idxLastRootCornerPos = -1;
-    this->bHasNewRootCornerPos = false;
+    this->indexLastRootCornerPos = -1;
+    this->hasNewRootCornerPos = false;
     this->numBounces = 0;
 
     for (i = 0; i < ARRAY_COUNT(this->cornerPos); i++) {
-        this->cornerPos[i] = this->cornerPoints[i] = sNullVec3F;
+        this->cornerPos[i] = this->cornerPoints[i] = sZeroVec;
     }
 
     this->unk_30A = 0;
     if (this->boardFragments == PART_FULL) {
         ObjKendoKanban_SetupDoNothing(this);
     } else {
-        ObjKendoKanban_SetupAerial(this, play);
+        ObjKendoKanban_SetupTumble(this, play);
     }
 }
 
@@ -240,7 +252,7 @@ void ObjKendoKanban_SetupDoNothing(ObjKendoKanban* this) {
 void ObjKendoKanban_DoNothing(ObjKendoKanban* this, PlayState* play) {
 }
 
-void ObjKendoKanban_SetupAerial(ObjKendoKanban* this, PlayState* play) {
+void ObjKendoKanban_SetupTumble(ObjKendoKanban* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->boardFragments == PART_FULL) {
@@ -303,10 +315,10 @@ void ObjKendoKanban_SetupAerial(ObjKendoKanban* this, PlayState* play) {
     }
 
     this->unk_30A = 0;
-    this->actionFunc = ObjKendoKanban_Aerial;
+    this->actionFunc = ObjKendoKanban_Tumble;
 }
 
-void ObjKendoKanban_Aerial(ObjKendoKanban* this, PlayState* play) {
+void ObjKendoKanban_Tumble(ObjKendoKanban* this, PlayState* play) {
     this->actor.velocity.y += this->actor.gravity;
     Actor_UpdatePos(&this->actor);
     this->rotationAngle += this->rotationVelocity;
@@ -324,7 +336,7 @@ void ObjKendoKanban_Settled(ObjKendoKanban* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (ObjKendoKanban_IsPlayerOnTop(this, play) == true) {
-        player->displacementY = 700.0f;
+        player->unk_AC0 = 700.0f;
     }
 }
 
@@ -332,8 +344,8 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
     Vec3f rootCornerPos = this->cornerPos[0];
     s32 pad[2];
     Vec3f vecCenterOut = this->actor.world.pos;
-    const s16 MAX_BOUNCE_COUNT = 7;
-    s32 idxRootCornerPos = 0;
+    s32 pad2;
+    s32 indexRootCornerPos = 0;
     s32 i;
     f32 verticalScalar;
 
@@ -352,15 +364,15 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(this->cornerPos); i++) {
         if (this->cornerPos[i].y < rootCornerPos.y) {
             rootCornerPos = this->cornerPos[i];
-            idxRootCornerPos = i;
+            indexRootCornerPos = i;
         }
     }
 
     // When the lowest point changes, re-initialize the actor position to that point
-    if (idxRootCornerPos != this->idxLastRootCornerPos) {
-        this->bHasNewRootCornerPos = true;
-        this->idxLastRootCornerPos = idxRootCornerPos;
-        this->rootCornerPos = this->cornerPoints[idxRootCornerPos];
+    if (indexRootCornerPos != this->indexLastRootCornerPos) {
+        this->hasNewRootCornerPos = true;
+        this->indexLastRootCornerPos = indexRootCornerPos;
+        this->rootCornerPos = this->cornerPoints[indexRootCornerPos];
 
         Matrix_Push();
         Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
@@ -380,7 +392,7 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
         this->actor.velocity.z *= 0.8f;
     }
 
-    if (this->bHasNewRootCornerPos == true) {
+    if (this->hasNewRootCornerPos == true) {
         if (this->numBounces >= MAX_BOUNCE_COUNT) {
             s16 deltaRotationAngle = this->rotationAngle & 0x3FFF; // 90 degrees
             if (deltaRotationAngle >= 0x2000) {                    // 45 degrees
@@ -395,13 +407,13 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
         if (this->actor.bgCheckFlags & 2) {
             // Upon touching the ground...
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
-            this->bHasNewRootCornerPos = false;
+            this->hasNewRootCornerPos = false;
             this->actor.velocity.y *= 0.5f;
 
         } else if (this->actor.bgCheckFlags & 1) {
             // When on the ground...
             this->numBounces++;
-            this->bHasNewRootCornerPos = false;
+            this->hasNewRootCornerPos = false;
             this->actor.velocity.x *= 0.3f;
             this->actor.velocity.z *= 0.3f;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
@@ -426,10 +438,6 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
 }
 
 s32 ObjKendoKanban_IsPlayerOnTop(ObjKendoKanban* this, PlayState* play) {
-    const s32 UNDETERMINED = 0;
-    const s32 UP = 1;
-    const s32 DOWN = -1;
-
     Player* player = GET_PLAYER(play);
     s32 i;
     s32 j;
@@ -438,7 +446,7 @@ s32 ObjKendoKanban_IsPlayerOnTop(ObjKendoKanban* this, PlayState* play) {
     s32 priorDir = UNDETERMINED;
 
     for (i = 0; i < ARRAY_COUNT(this->cornerPos); i++) {
-        j = i != 3 ? (i + 1) : 0;
+        j = (i != 3) ? (i + 1) : 0;
 
         // For each pair of points (moving clockwise around the shape), verify that the normal
         // vector's magnitute is in the same direction. This condition being true means
@@ -465,10 +473,10 @@ s32 ObjKendoKanban_IsPlayerOnTop(ObjKendoKanban* this, PlayState* play) {
 }
 
 void ObjKendoKanban_UpdateCollision(ObjKendoKanban* this, PlayState* play) {
-    if ((this->actionFunc != ObjKendoKanban_Aerial) && (this->actionFunc != ObjKendoKanban_Settled)) {
+    if ((this->actionFunc != ObjKendoKanban_Tumble) && (this->actionFunc != ObjKendoKanban_Settled)) {
         if (this->colliderTris.base.acFlags & AC_HIT) {
             this->colliderTris.base.acFlags &= ~AC_HIT;
-            ObjKendoKanban_SetupAerial(this, play);
+            ObjKendoKanban_SetupTumble(this, play);
         }
 
         Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
