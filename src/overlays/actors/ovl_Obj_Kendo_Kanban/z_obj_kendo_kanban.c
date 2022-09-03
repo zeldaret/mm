@@ -395,8 +395,9 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
     if (this->hasNewRootCornerPos == true) {
         if (this->numBounces >= MAX_BOUNCE_COUNT) {
             s16 deltaRotationAngle = this->rotationAngle & 0x3FFF; // 90 degrees
-            if (deltaRotationAngle >= 0x2000) {                    // 45 degrees
-                deltaRotationAngle -= 0x4000;                      // 90 degrees
+
+            if (deltaRotationAngle >= 0x2000) { // 45 degrees
+                deltaRotationAngle -= 0x4000;   // 90 degrees
             }
             this->rotationAngle -= deltaRotationAngle;
             this->rotationVelocity = 0;
