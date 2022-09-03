@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Assets for Woodfall scene objects (temple, water, walls, etc.) -->
     <File Name="object_mtoride" Segment="6">
         <!-- Textures for the Woodfall scenery. -->
         <Texture Name="gWoodfallSceneryUnusedTLUT" OutName="woodfall_scenery_unused_tlut" Format="rgba16" Width="16" Height="16" Offset="0x0" />
@@ -31,7 +32,7 @@
         
         <!-- Assets for the walls of Woodfall when the swamp is still poisoned. -->
         <DList Name="gWoodfallSceneryPoisonWallsEmptyDL" Offset="0xA390" /> <!-- Probably was the transparent component for the below DL -->
-        <DList Name="gWoodfallSceneryPoisonWallsDL" Offset="0xA398" /> <!-- Original name is "z2_21_DOKUkabe_model" -->
+        <DList Name="gWoodfallSceneryPoisonWallsDL" Offset="0xA398" /> <!-- Original name is "z2_21_DOKUkabe_model" ("doku" = "poison", "kabe" = "wall") -->
         <TextureAnimation Name="gWoodfallSceneryPoisonWallsTexAnim" Offset="0xA5C0" />
 
         <!-- Assets for the static poison water in Woodfall. -->
@@ -46,7 +47,7 @@
 
         <!-- DisplayLists for Woodfall Temple. -->
         <DList Name="gWoodfallSceneryTempleEntrancesDL" Offset="0xDE50" />
-        <DList Name="gWoodfallSceneryTempleDL" Offset="0xDF18" /> <!-- Original name is "z2_21_toride_model" -->
+        <DList Name="gWoodfallSceneryTempleDL" Offset="0xDF18" /> <!-- Original name is "z2_21_toride_model" ("fort, fortress") -->
 
         <!-- Assets for the water the flows over Woodfall Temple during the cutscene where it rises from the water. -->
         <DList Name="gWoodfallSceneryWaterFlowingOverTempleDL" Offset="0xF3C0" /> <!-- Original name is "z2_21_toride2_modelT" -->
@@ -59,7 +60,7 @@
         <Collision Name="gWoodfallSceneryTempleRampAndPlatformCol" Offset="0xFE5C" />
 
         <!-- The collision for Woodfall Temple and an empty texture animation that was seemingly intended to be used with the temple. -->
-        <TextureAnimation Name="gWoodfallSceneryEmptyTexAnim" Offset="0xFE90" />
+        <TextureAnimation Name="gWoodfallSceneryTempleTexAnim" Offset="0xFE90" />
         <Collision Name="gWoodfallSceneryTempleCol" Offset="0x10C3C" />
 
         <!-- Assets for the purified water in Woodfall, as well as the floor visible beneath the water. -->
