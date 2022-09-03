@@ -87,27 +87,27 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-s32 func_80B6EFA0(PlayState* play, s32 arg1) {
+s32 BgKin2Picture_IsSkulltulaCollected(PlayState* play, s32 skulltulaParams) {
     s32 flag = -1;
 
-    if ((u8)arg1 & 3) {
-        flag = (u8)(((arg1 & 0x3FC)) >> 2);
+    if ((u8)skulltulaParams & 3) {
+        flag = (u8)(((skulltulaParams & 0x3FC)) >> 2);
     }
 
     return (flag >= 0) && Flags_GetTreasure(play, flag);
 }
 
-void BgKin2Picture_SpawnGoldSkulltula(BgKin2Picture* thisx, PlayState* play) {
+void BgKin2Picture_SpawnSkulltula(BgKin2Picture* thisx, PlayState* play) {
     BgKin2Picture* this = thisx;
-    s32 temp_a1;
+    s32 actorSpawnParams;
 
-    if (!BG_KIN2_PICTURE_GET_100000(&this->dyna.actor)) { //Gold Skulltula is still here.
-        temp_a1 = (BG_KIN2_PICTURE_GET_1F(&this->dyna.actor) << 2) | 0xFF03;
-        if (!func_80B6EFA0(play, temp_a1) &&
+    if (!BG_KIN2_PICTURE_GET_100000(&this->dyna.actor)) { // Gold Skulltula is still here.
+        actorSpawnParams = (BG_KIN2_PICTURE_GET_1F(&this->dyna.actor) << 2) | 0xFF03;
+        if (!BgKin2Picture_IsSkulltulaCollected(play, actorSpawnParams) &&
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->dyna.actor.home.pos.x,
                         this->dyna.actor.home.pos.y + 23.0f, this->dyna.actor.home.pos.z, 0,
-                        this->dyna.actor.home.rot.y, 0, temp_a1)) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR); 
+                        this->dyna.actor.home.rot.y, 0, actorSpawnParams)) {
+            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
         }
     }
 }
@@ -181,9 +181,8 @@ void BgKin2Picture_Init(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->dyna.actor, 23.0f);
     temp_a1 = (BG_KIN2_PICTURE_GET_1F(&this->dyna.actor) << 2) | 0xFF03; // flags?
 
-    // Checks if the Gold Skulltula behind the painting was collected.
-    if (BG_KIN2_PICTURE_GET_100000(&this->dyna.actor) || func_80B6EFA0(play, temp_a1)) {
-        this->skulltulaSoundTimer = -1;
+    if (BG_KIN2_PICTURE_GET_100000(&this->dyna.actor) || BgKin2Picture_IsSkulltulaCollected(play, temp_a1)) {
+        this->skulltulaNoiseTimer = -1;
     }
 
     BgKin2Picture_SetupWait(this);
@@ -206,17 +205,17 @@ void BgKin2Picture_Wait(BgKin2Picture* this, PlayState* play) {
         this->colliderTris.base.acFlags &= ~AC_HIT;
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
         BgKin2Picture_SetupPlayCutscene(this);
-    } else { //Gold Skulltula can be heard behind Skullkid's painting.
-        if (this->skulltulaSoundTimer >= 0) {
-            if (this->skulltulaSoundTimer == 0) {
+    } else { // Gold Skulltula can be heard behind Skullkid's painting.
+        if (this->skulltulaNoiseTimer >= 0) {
+            if (this->skulltulaNoiseTimer == 0) {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
                 if (Rand_ZeroOne() < 0.1f) {
-                    this->skulltulaSoundTimer = Rand_S16Offset(40, 80);
+                    this->skulltulaNoiseTimer = Rand_S16Offset(40, 80);
                 } else {
-                    this->skulltulaSoundTimer = 8;
+                    this->skulltulaNoiseTimer = 8;
                 }
             } else {
-                this->skulltulaSoundTimer--;
+                this->skulltulaNoiseTimer--;
             }
         }
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderTris.base);
@@ -238,7 +237,7 @@ void BgKin2Picture_PlayCutscene(BgKin2Picture* this, PlayState* play) {
 }
 
 void BgKin2Picture_SetupShiver(BgKin2Picture* this) {
-    this->shiverTimer = 13;
+    this->paintingTimer = 13;
     this->xOffsetAngle = 0;
     this->yOffsetAngle = 0;
     this->actionFunc = BgKin2Picture_Shiver;
@@ -249,8 +248,8 @@ void BgKin2Picture_Shiver(BgKin2Picture* this, PlayState* play) {
     Vec3f sp30;
     Vec3f posOffset;
 
-    this->shiverTimer--;
-    if (this->shiverTimer <= 0) {
+    this->paintingTimer--;
+    if (this->paintingTimer <= 0) {
         Math_Vec3f_Copy(&this->dyna.actor.world.pos, &this->dyna.actor.home.pos);
         BgKin2Picture_SetupFall(this);
     } else {
@@ -268,16 +267,16 @@ void BgKin2Picture_Shiver(BgKin2Picture* this, PlayState* play) {
 void BgKin2Picture_SetupFall(BgKin2Picture* this) {
     this->unk23B = 0;
     this->unk238 = 0;
-    this->shiverTimer = 4;
+    this->paintingTimer = 4;
     this->actionFunc = BgKin2Picture_Fall;
 }
 
 void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play) {
-    if (this->shiverTimer > 0) {
-        this->shiverTimer--;
+    if (this->paintingTimer > 0) {
+        this->paintingTimer--;
 
-        if (this->shiverTimer == 0) {
-            BgKin2Picture_SpawnGoldSkulltula(this, play);
+        if (this->paintingTimer == 0) {
+            BgKin2Picture_SpawnSkulltula(this, play);
         }
     }
 
@@ -311,7 +310,7 @@ void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play) {
         this->unk241 = true;
     }
 
-    if (Math_ScaledStepToS(&this->dyna.actor.shape.rot.x, 0x4000, this->unk238) != 0) { //done rotating to the ground
+    if (Math_ScaledStepToS(&this->dyna.actor.shape.rot.x, 0x4000, this->unk238) != 0) { // done rotating to the ground
         this->dyna.actor.shape.yOffset = 40.0f;
 
         if (this->unk240) {
