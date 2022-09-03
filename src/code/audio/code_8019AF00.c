@@ -3398,7 +3398,7 @@ u8 sRequestCustomSequence = false;
 void AudioOcarina_SetCustomSequence(void) {
     // Never passes true as sRequestCustomSequence is never set true
     if (sRequestCustomSequence && gAudioContext.seqPlayers[SEQ_PLAYER_FANFARE].enabled &&
-        ((u8)gAudioContext.seqPlayers[SEQ_PLAYER_FANFARE].soundScriptIO[0] == 0xFF)) {
+        ((u8)gAudioContext.seqPlayers[SEQ_PLAYER_FANFARE].soundScriptIO[0] == (u8)SEQ_IO_VAL_NONE)) {
         gAudioContext.seqPlayers[SEQ_PLAYER_FANFARE].seqData = sCustomSequenceScript;
         sRequestCustomSequence = false;
     }
@@ -3753,7 +3753,7 @@ s8 AudioSfx_ComputeReverb(u8 bankId, u8 entryIndex, u8 channelIndex) {
 
     if (IS_SEQUENCE_CHANNEL_VALID(gAudioContext.seqPlayers[SEQ_PLAYER_SFX].channels[channelIndex])) {
         scriptAdd = gAudioContext.seqPlayers[SEQ_PLAYER_SFX].channels[channelIndex]->soundScriptIO[1];
-        if (gAudioContext.seqPlayers[SEQ_PLAYER_SFX].channels[channelIndex]->soundScriptIO[1] < 0) {
+        if (gAudioContext.seqPlayers[SEQ_PLAYER_SFX].channels[channelIndex]->soundScriptIO[1] <= SEQ_IO_VAL_NONE) {
             scriptAdd = 0;
         }
     }
@@ -4360,7 +4360,7 @@ s32 Audio_SetGanonsTowerBgmVolume(u8 targetVolume) {
                 gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]) {
                 // soundScriptIO[5] was set to 0x40 in channels 0, 1, and 4 (BGM no longer in OoT)
                 if ((u8)gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]->soundScriptIO[5] !=
-                    0xFF) {
+                    (u8)SEQ_IO_VAL_NONE) {
                     // Higher volume leads to lower reverb
                     reverb =
                         (((u16)gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]->soundScriptIO[5] -
@@ -4700,11 +4700,10 @@ void Audio_StartSceneSequence(u16 seqId) {
         // Start the sequence from the beginning
 
         // Writes to ioPort 7. See `SEQ_FLAG_SKIP_HARP_INTRO` for writing a value of 1 to ioPort 7.
-        // Note: writing 0xFF (-1) to an ioPort will do nothing for all sequences.
         if (sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_SKIP_HARP_INTRO) {
             skipHarpIntro = 1;
         } else {
-            skipHarpIntro = 0xFF;
+            skipHarpIntro = (u8)SEQ_IO_VAL_NONE;
         }
         Audio_PlaySequenceWithSeqPlayerIO(SEQ_PLAYER_BGM_MAIN, seqId, 0, 7, skipHarpIntro);
 
@@ -4750,7 +4749,7 @@ void Audio_PlaySequenceInCutscene(u16 seqId) {
     } else if (sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_NO_AMBIENCE) {
         Audio_QueueSeqCmd(0x00000000 | ((u32)(SEQ_PLAYER_BGM_SUB) << 24) | ((u32)(0) << 0x10) | (u32)(seqId));
     } else {
-        Audio_PlaySequenceWithSeqPlayerIO(SEQ_PLAYER_BGM_MAIN, seqId, 0, 7, 0xFF);
+        Audio_PlaySequenceWithSeqPlayerIO(SEQ_PLAYER_BGM_MAIN, seqId, 0, 7, SEQ_IO_VAL_NONE);
         Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 1, 0x7F, 0);
         Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 3, 0x7F, 0);
         Audio_QueueSeqCmd(0x100000FF | ((u8)(SEQ_PLAYER_FANFARE) << 24) | ((0) << 16));
