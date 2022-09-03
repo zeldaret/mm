@@ -26,9 +26,9 @@
 #define THIS ((ObjKendoKanban*)thisx)
 
 typedef enum {
-    /* -1 */ DOWN = -1,
-    /*  0 */ UNDETERMINED,
-    /*  1 */ UP,
+    /* -1 */ DIR_DOWN = -1,
+    /*  0 */ DIR_UNDETERMINED,
+    /*  1 */ DIR_UP,
 } BoardDirection;
 
 void ObjKendoKanban_Init(Actor* thisx, PlayState* play);
@@ -219,9 +219,9 @@ void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
     this->centerPoint = sZeroVec;
     this->centerPos = sZeroVec;
     this->rootCornerPos = sZeroVec;
-    this->rotationalAxis = sUnitVecX;
-    this->rotationAngle = 0;
-    this->rotationVelocity = 0;
+    this->rotAxis = sUnitVecX;
+    this->rotAngle = 0;
+    this->rotVelocity = 0;
     this->indexLastRootCornerPos = -1;
     this->hasNewRootCornerPos = false;
     this->numBounces = 0;
@@ -262,7 +262,7 @@ void ObjKendoKanban_SetupTumble(ObjKendoKanban* this, PlayState* play) {
 
             // Vertical cuts initialize the right half, spawn the left half.
             this->boardFragments = RIGHT_HALF;
-            this->rotationVelocity = 0x71C; // 10 degrees
+            this->rotVelocity = 0x71C; // 10 degrees
             this->actor.velocity = sVelocityRightHalf;
             this->centerPoint = sCenterPointRightHalf;
 
@@ -274,11 +274,10 @@ void ObjKendoKanban_SetupTumble(ObjKendoKanban* this, PlayState* play) {
             this->cornerPoints[1] = sPointTR;
             this->cornerPoints[2] = sPointBR;
             this->cornerPoints[3] = sPointBC;
-
         } else {
             // Horizontal cuts initialize the bottom half, spawn the top half.
             this->boardFragments = BOTTOM_HALF;
-            this->rotationVelocity = -0x71C; // -10 degrees
+            this->rotVelocity = -0x71C; // -10 degrees
             this->actor.velocity = sVelocityBottomHalf;
             this->centerPoint = sCenterPointBottomHalf;
 
@@ -290,10 +289,9 @@ void ObjKendoKanban_SetupTumble(ObjKendoKanban* this, PlayState* play) {
             this->cornerPoints[2] = sPointBR;
             this->cornerPoints[3] = sPointBL;
         }
-
     } else if (this->boardFragments == LEFT_HALF) {
         // Initialize the newly spawned left half
-        this->rotationVelocity = 0x71C; // 10 degrees
+        this->rotVelocity = 0x71C; // 10 degrees
         this->actor.velocity = sVelocityLeftHalf;
         this->centerPoint = sCenterPointLeftHalf;
 
@@ -301,10 +299,9 @@ void ObjKendoKanban_SetupTumble(ObjKendoKanban* this, PlayState* play) {
         this->cornerPoints[1] = sPointTC;
         this->cornerPoints[2] = sPointBC;
         this->cornerPoints[3] = sPointBL;
-
     } else if (this->boardFragments == TOP_HALF) {
         // Initialize the newly spawned top half
-        this->rotationVelocity = 0x71C; // 10 degrees
+        this->rotVelocity = 0x71C; // 10 degrees
         this->actor.velocity = sVelocityTopHalf;
         this->centerPoint = sCenterPointTopHalf;
 
@@ -321,7 +318,7 @@ void ObjKendoKanban_SetupTumble(ObjKendoKanban* this, PlayState* play) {
 void ObjKendoKanban_Tumble(ObjKendoKanban* this, PlayState* play) {
     this->actor.velocity.y += this->actor.gravity;
     Actor_UpdatePos(&this->actor);
-    this->rotationAngle += this->rotationVelocity;
+    this->rotAngle += this->rotVelocity;
     ObjKendoKanban_HandlePhysics(this, play);
     if (this->actor.world.pos.y < -200.0f) {
         this->actor.world.pos.y = -200.0f;
@@ -353,11 +350,11 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
     vecCenterOut.x -= this->centerPos.x;
     vecCenterOut.y -= this->centerPos.y;
     vecCenterOut.z -= this->centerPos.z;
-    verticalScalar = (this->rotationalAxis.x * vecCenterOut.z) + (this->rotationalAxis.z * -vecCenterOut.x);
+    verticalScalar = (this->rotAxis.x * vecCenterOut.z) + (this->rotAxis.z * -vecCenterOut.x);
     if (verticalScalar < 0.0f) {
-        this->rotationVelocity += 0x64;
+        this->rotVelocity += 0x64;
     } else {
-        this->rotationVelocity -= 0x64;
+        this->rotVelocity -= 0x64;
     }
 
     // Find the lowest point
@@ -394,13 +391,13 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
 
     if (this->hasNewRootCornerPos == true) {
         if (this->numBounces >= MAX_BOUNCE_COUNT) {
-            s16 deltaRotationAngle = this->rotationAngle & 0x3FFF; // 90 degrees
+            s16 deltaRotAngle = this->rotAngle & 0x3FFF;
 
-            if (deltaRotationAngle >= 0x2000) { // 45 degrees
-                deltaRotationAngle -= 0x4000;   // 90 degrees
+            if (deltaRotAngle >= 0x2000) { // 45 degrees
+                deltaRotAngle -= 0x4000;   // 90 degrees
             }
-            this->rotationAngle -= deltaRotationAngle;
-            this->rotationVelocity = 0;
+            this->rotAngle -= deltaRotAngle;
+            this->rotVelocity = 0;
             ObjKendoKanban_SetupSettled(this);
             return;
         }
@@ -410,7 +407,6 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
             this->hasNewRootCornerPos = false;
             this->actor.velocity.y *= 0.5f;
-
         } else if (this->actor.bgCheckFlags & 1) {
             // When on the ground...
             this->numBounces++;
@@ -422,16 +418,16 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
             // Adjust and (potentially) reverse rotation depending on the current
             // facing of the board and the direction in which it is rotating.
             if (verticalScalar > 0.0f) {
-                if (this->rotationVelocity > 0) {
-                    this->rotationVelocity *= 1.2f;
+                if (this->rotVelocity > 0) {
+                    this->rotVelocity *= 1.2f;
                 } else {
-                    this->rotationVelocity *= -0.6f;
+                    this->rotVelocity *= -0.6f;
                 }
             } else {
-                if (this->rotationVelocity < 0) {
-                    this->rotationVelocity *= 1.2f;
+                if (this->rotVelocity < 0) {
+                    this->rotVelocity *= 1.2f;
                 } else {
-                    this->rotationVelocity *= -0.6f;
+                    this->rotVelocity *= -0.6f;
                 }
             }
         }
@@ -444,7 +440,7 @@ s32 ObjKendoKanban_IsPlayerOnTop(ObjKendoKanban* this, PlayState* play) {
     s32 j;
     Vec2f playerToCornerA;
     Vec2f playerToCornerB;
-    s32 priorDir = UNDETERMINED;
+    s32 priorDir = DIR_UNDETERMINED;
 
     for (i = 0; i < ARRAY_COUNT(this->cornerPos); i++) {
         j = (i != 3) ? (i + 1) : 0;
@@ -457,15 +453,15 @@ s32 ObjKendoKanban_IsPlayerOnTop(ObjKendoKanban* this, PlayState* play) {
         playerToCornerB.z = this->cornerPos[j].z - player->actor.world.pos.z;
         playerToCornerB.x = this->cornerPos[j].x - player->actor.world.pos.x;
         if ((playerToCornerA.x * playerToCornerB.z) < (playerToCornerA.z * playerToCornerB.x)) {
-            if (priorDir == UNDETERMINED) {
-                priorDir = UP;
-            } else if (priorDir != UP) {
+            if (priorDir == DIR_UNDETERMINED) {
+                priorDir = DIR_UP;
+            } else if (priorDir != DIR_UP) {
                 return false;
             }
         } else {
-            if (priorDir == UNDETERMINED) {
-                priorDir = DOWN;
-            } else if (priorDir != DOWN) {
+            if (priorDir == DIR_UNDETERMINED) {
+                priorDir = DIR_DOWN;
+            } else if (priorDir != DIR_DOWN) {
                 return false;
             }
         }
@@ -500,7 +496,6 @@ void ObjKendoKanban_Update(Actor* thisx, PlayState* play) {
 
 void ObjKendoKanban_Draw(Actor* thisx, PlayState* play) {
     ObjKendoKanban* this = THIS;
-
     s32 i;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -511,9 +506,7 @@ void ObjKendoKanban_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gKendoKanbanDL);
     } else {
-        // Fragments of boards are movable, so apply their rotation/translation, and display only the DLs which
-        // apply.
-        Matrix_RotateAxisS(this->rotationAngle, &this->rotationalAxis, MTXMODE_APPLY);
+        Matrix_RotateAxisS(this->rotAngle, &this->rotAxis, MTXMODE_APPLY);
         Matrix_Translate(-this->rootCornerPos.x, -this->rootCornerPos.y, -this->rootCornerPos.z, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 

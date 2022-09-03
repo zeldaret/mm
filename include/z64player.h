@@ -151,40 +151,40 @@ typedef enum PlayerActionParam {
 } PlayerActionParam;
 
 typedef enum {
-    /*  0 */ PLAYER_MWA_FORWARD_SLASH_1H,     // Vertical one-handed slash
-    /*  1 */ PLAYER_MWA_FORWARD_SLASH_2H,     // Vertical two-handed slash
-    /*  2 */ PLAYER_MWA_FORWARD_COMBO_1H,     // Third vertical one-handed slash
-    /*  3 */ PLAYER_MWA_FORWARD_COMBO_2H,     // Third vertical two-handed slash
-    /*  4 */ PLAYER_MWA_RIGHT_SLASH_1H,       // Horizontal one-handed slash
-    /*  5 */ PLAYER_MWA_RIGHT_SLASH_2H,       // Horizontal two-handed slash
-    /*  6 */ PLAYER_MWA_RIGHT_COMBO_1H,       // Third horizontal one-handed slash
-    /*  7 */ PLAYER_MWA_RIGHT_COMBO_2H,       // Third horizontal two-handed slash
-    /*  8 */ PLAYER_MWA_LEFT_SLASH_1H,        // Targeted one-handed rightwalk slash
-    /*  9 */ PLAYER_MWA_LEFT_SLASH_2H,        // Targeted two-handed rightwalk slash
-    /* 10 */ PLAYER_MWA_LEFT_COMBO_1H,        // Third targeted one-handed rightwalk slash
-    /* 11 */ PLAYER_MWA_LEFT_COMBO_2H,        // Third targeted two-handed rightwalk slash
-    /* 12 */ PLAYER_MWA_STAB_1H,              // Crouch stab/targeted one-handed stab
-    /* 13 */ PLAYER_MWA_STAB_2H,              // Targeted two-handed stab
-    /* 14 */ PLAYER_MWA_STAB_COMBO_1H,        // Third targeted one-handed stab
-    /* 15 */ PLAYER_MWA_STAB_COMBO_2H,        // Third targeted two-handed stab
-    /* 16 */ PLAYER_MWA_FLIPSLASH_START,      // unused
-    /* 17 */ PLAYER_MWA_JUMPSLASH_START,      // Start of jumpslash
-    /* 18 */ PLAYER_MWA_ZORA_JUMPKICK_START,  // Start of Zora jump attack
-    /* 19 */ PLAYER_MWA_FLIPSLASH_FINISH,     // unused
-    /* 20 */ PLAYER_MWA_JUMPSLASH_FINISH,     // End of jumpslash
-    /* 21 */ PLAYER_MWA_ZORA_JUMPKICK_FINISH, // End of Zora jump attack
-    /* 22 */ PLAYER_MWA_BACKSLASH_RIGHT,      // unused
-    /* 23 */ PLAYER_MWA_BACKSLASH_LEFT,       // unused
-    /* 24 */ PLAYER_MWA_GORON_PUNCH_LEFT,     // Goron punch
-    /* 25 */ PLAYER_MWA_GORON_PUNCH_RIGHT,    // Second Goron punch
-    /* 26 */ PLAYER_MWA_GORON_PUNCH_BUTT,     // Goron butt punch
-    /* 27 */ PLAYER_MWA_ZORA_PUNCH_LEFT,      // Zora punch
-    /* 28 */ PLAYER_MWA_ZORA_PUNCH_COMBO,     // Second Zora punch
-    /* 29 */ PLAYER_MWA_ZORA_PUNCH_KICK,      // Zora kick
-    /* 30 */ PLAYER_MWA_SPIN_ATTACK_1H,       // Half-charged one-handed spin
-    /* 31 */ PLAYER_MWA_SPIN_ATTACK_2H,       // Half-charged two-handed spin
-    /* 32 */ PLAYER_MWA_BIG_SPIN_1H,          // Fully-charged one-handed spin
-    /* 33 */ PLAYER_MWA_BIG_SPIN_2H,          // Fully-charged two-handed spin
+    /*  0 */ PLAYER_MWA_FORWARD_SLASH_1H,      // Vertical one-handed slash
+    /*  1 */ PLAYER_MWA_FORWARD_SLASH_2H,      // Vertical two-handed slash
+    /*  2 */ PLAYER_MWA_FORWARD_COMBO_1H,      // Third vertical one-handed slash
+    /*  3 */ PLAYER_MWA_FORWARD_COMBO_2H,      // Third vertical two-handed slash
+    /*  4 */ PLAYER_MWA_RIGHT_SLASH_1H,        // Horizontal one-handed slash
+    /*  5 */ PLAYER_MWA_RIGHT_SLASH_2H,        // Horizontal two-handed slash
+    /*  6 */ PLAYER_MWA_RIGHT_COMBO_1H,        // Third horizontal one-handed slash
+    /*  7 */ PLAYER_MWA_RIGHT_COMBO_2H,        // Third horizontal two-handed slash
+    /*  8 */ PLAYER_MWA_LEFT_SLASH_1H,         // Targeted one-handed rightwalk slash
+    /*  9 */ PLAYER_MWA_LEFT_SLASH_2H,         // Targeted two-handed rightwalk slash
+    /* 10 */ PLAYER_MWA_LEFT_COMBO_1H,         // Third targeted one-handed rightwalk slash
+    /* 11 */ PLAYER_MWA_LEFT_COMBO_2H,         // Third targeted two-handed rightwalk slash
+    /* 12 */ PLAYER_MWA_STAB_1H,               // Crouch stab/targeted one-handed stab
+    /* 13 */ PLAYER_MWA_STAB_2H,               // Targeted two-handed stab
+    /* 14 */ PLAYER_MWA_STAB_COMBO_1H,         // Third targeted one-handed stab
+    /* 15 */ PLAYER_MWA_STAB_COMBO_2H,         // Third targeted two-handed stab
+    /* 16 */ PLAYER_MWA_FLIPSLASH_START,       // unused
+    /* 17 */ PLAYER_MWA_JUMPSLASH_START,       // Start of jumpslash
+    /* 18 */ PLAYER_MWA_ZORA_JUMPKICK_START,   // Start of Zora jump attack
+    /* 19 */ PLAYER_MWA_FLIPSLASH_FINISH,      // unused
+    /* 20 */ PLAYER_MWA_JUMPSLASH_FINISH,      // End of jumpslash
+    /* 21 */ PLAYER_MWA_ZORA_JUMPKICK_FINISH,  // End of Zora jump attack
+    /* 22 */ PLAYER_MWA_BACKSLASH_RIGHT,       // unused
+    /* 23 */ PLAYER_MWA_BACKSLASH_LEFT,        // unused
+    /* 24 */ PLAYER_MWA_GORON_PUNCH_LEFT,      // Goron punch
+    /* 25 */ PLAYER_MWA_GORON_PUNCH_RIGHT,     // Second Goron punch
+    /* 26 */ PLAYER_MWA_GORON_PUNCH_BUTT,      // Goron butt punch
+    /* 27 */ PLAYER_MWA_ZORA_PUNCH_LEFT,       // Zora punch
+    /* 28 */ PLAYER_MWA_ZORA_PUNCH_COMBO,      // Second Zora punch
+    /* 29 */ PLAYER_MWA_ZORA_PUNCH_KICK,       // Zora kick
+    /* 30 */ PLAYER_MWA_SPIN_ATTACK_1H,        // Half-charged one-handed spin
+    /* 31 */ PLAYER_MWA_SPIN_ATTACK_2H,        // Half-charged two-handed spin
+    /* 32 */ PLAYER_MWA_BIG_SPIN_1H,           // Fully-charged one-handed spin
+    /* 33 */ PLAYER_MWA_BIG_SPIN_2H,           // Fully-charged two-handed spin
     /* 34 */ PLAYER_MWA_MAX
 } PlayerMeleeWeaponAnimation;
 
@@ -231,6 +231,7 @@ typedef struct {
     /* 0x10 */ Vec3f base;
 } WeaponInfo; // size = 0x1C
 
+
 typedef void (*PlayerFuncD58)(struct PlayState*, struct Player*);
 
 typedef struct {
@@ -255,200 +256,203 @@ typedef struct struct_80122744_arg1 {
     /* 0x4 */ Vec3s* unk_04;
 } struct_80122744_arg1; // size = 0x8
 
-//
-#define PLAYER_STATE1_1 (1 << 0)
-//
-#define PLAYER_STATE1_2 (1 << 1)
-//
-#define PLAYER_STATE1_4 (1 << 2)
-//
-#define PLAYER_STATE1_8 (1 << 3)
-//
-#define PLAYER_STATE1_10 (1 << 4)
-//
-#define PLAYER_STATE1_20 (1 << 5)
-//
-#define PLAYER_STATE1_40 (1 << 6)
-//
-#define PLAYER_STATE1_80 (1 << 7)
-//
-#define PLAYER_STATE1_100 (1 << 8)
-//
-#define PLAYER_STATE1_200 (1 << 9)
-//
-#define PLAYER_STATE1_400 (1 << 10)
-//
-#define PLAYER_STATE1_800 (1 << 11)
-//
-#define PLAYER_STATE1_1000 (1 << 12)
-//
-#define PLAYER_STATE1_2000 (1 << 13)
-//
-#define PLAYER_STATE1_4000 (1 << 14)
-//
-#define PLAYER_STATE1_8000 (1 << 15)
-//
-#define PLAYER_STATE1_10000 (1 << 16)
-//
-#define PLAYER_STATE1_20000 (1 << 17)
-//
-#define PLAYER_STATE1_40000 (1 << 18)
-//
-#define PLAYER_STATE1_80000 (1 << 19)
-//
-#define PLAYER_STATE1_100000 (1 << 20)
-//
-#define PLAYER_STATE1_200000 (1 << 21)
-//
-#define PLAYER_STATE1_400000 (1 << 22)
-//
-#define PLAYER_STATE1_800000 (1 << 23)
-//
-#define PLAYER_STATE1_1000000 (1 << 24)
-//
-#define PLAYER_STATE1_2000000 (1 << 25)
-//
-#define PLAYER_STATE1_4000000 (1 << 26)
+// 
+#define PLAYER_STATE1_1          (1 << 0)
+// 
+#define PLAYER_STATE1_2          (1 << 1)
+// 
+#define PLAYER_STATE1_4          (1 << 2)
+// 
+#define PLAYER_STATE1_8          (1 << 3)
+// 
+#define PLAYER_STATE1_10         (1 << 4)
+// 
+#define PLAYER_STATE1_20         (1 << 5)
+// 
+#define PLAYER_STATE1_40         (1 << 6)
+// 
+#define PLAYER_STATE1_80         (1 << 7)
+// 
+#define PLAYER_STATE1_100        (1 << 8)
+// 
+#define PLAYER_STATE1_200        (1 << 9)
+// 
+#define PLAYER_STATE1_400        (1 << 10)
+// 
+#define PLAYER_STATE1_800        (1 << 11)
+// 
+#define PLAYER_STATE1_1000       (1 << 12)
+// 
+#define PLAYER_STATE1_2000       (1 << 13)
+// 
+#define PLAYER_STATE1_4000       (1 << 14)
+// 
+#define PLAYER_STATE1_8000       (1 << 15)
+// 
+#define PLAYER_STATE1_10000      (1 << 16)
+// 
+#define PLAYER_STATE1_20000      (1 << 17)
+// 
+#define PLAYER_STATE1_40000      (1 << 18)
+// 
+#define PLAYER_STATE1_80000      (1 << 19)
+// 
+#define PLAYER_STATE1_100000     (1 << 20)
+// 
+#define PLAYER_STATE1_200000     (1 << 21)
+// 
+#define PLAYER_STATE1_400000     (1 << 22)
+// 
+#define PLAYER_STATE1_800000     (1 << 23)
+// 
+#define PLAYER_STATE1_1000000    (1 << 24)
+// 
+#define PLAYER_STATE1_2000000    (1 << 25)
+// 
+#define PLAYER_STATE1_4000000    (1 << 26)
 // Swimming?
-#define PLAYER_STATE1_8000000 (1 << 27)
-//
-#define PLAYER_STATE1_10000000 (1 << 28)
-//
-#define PLAYER_STATE1_20000000 (1 << 29)
-//
-#define PLAYER_STATE1_40000000 (1 << 30)
-//
-#define PLAYER_STATE1_80000000 (1 << 31)
+#define PLAYER_STATE1_8000000    (1 << 27)
+// 
+#define PLAYER_STATE1_10000000   (1 << 28)
+// 
+#define PLAYER_STATE1_20000000   (1 << 29)
+// 
+#define PLAYER_STATE1_40000000   (1 << 30)
+// 
+#define PLAYER_STATE1_80000000   (1 << 31)
 
-//
-#define PLAYER_STATE2_1 (1 << 0)
-//
-#define PLAYER_STATE2_2 (1 << 1)
-//
-#define PLAYER_STATE2_4 (1 << 2)
-//
-#define PLAYER_STATE2_8 (1 << 3)
-//
-#define PLAYER_STATE2_10 (1 << 4)
-//
-#define PLAYER_STATE2_20 (1 << 5)
-//
-#define PLAYER_STATE2_40 (1 << 6)
-//
-#define PLAYER_STATE2_80 (1 << 7)
-//
-#define PLAYER_STATE2_100 (1 << 8)
-//
-#define PLAYER_STATE2_200 (1 << 9)
-//
-#define PLAYER_STATE2_400 (1 << 10)
-//
-#define PLAYER_STATE2_800 (1 << 11)
-//
-#define PLAYER_STATE2_1000 (1 << 12)
-//
-#define PLAYER_STATE2_2000 (1 << 13)
-//
-#define PLAYER_STATE2_4000 (1 << 14)
-//
-#define PLAYER_STATE2_8000 (1 << 15)
-//
-#define PLAYER_STATE2_10000 (1 << 16)
-//
-#define PLAYER_STATE2_20000 (1 << 17)
-//
-#define PLAYER_STATE2_40000 (1 << 18)
-//
-#define PLAYER_STATE2_80000 (1 << 19)
-//
-#define PLAYER_STATE2_100000 (1 << 20)
-//
-#define PLAYER_STATE2_200000 (1 << 21)
-//
-#define PLAYER_STATE2_400000 (1 << 22)
-//
-#define PLAYER_STATE2_800000 (1 << 23)
-//
-#define PLAYER_STATE2_1000000 (1 << 24)
-//
-#define PLAYER_STATE2_2000000 (1 << 25)
-//
-#define PLAYER_STATE2_4000000 (1 << 26)
-//
-#define PLAYER_STATE2_8000000 (1 << 27)
-//
-#define PLAYER_STATE2_10000000 (1 << 28)
-//
-#define PLAYER_STATE2_20000000 (1 << 29)
-//
-#define PLAYER_STATE2_40000000 (1 << 30)
-//
-#define PLAYER_STATE2_80000000 (1 << 31)
 
-//
-#define PLAYER_STATE3_1 (1 << 0)
-//
-#define PLAYER_STATE3_2 (1 << 1)
-//
-#define PLAYER_STATE3_4 (1 << 2)
-//
-#define PLAYER_STATE3_8 (1 << 3)
-//
-#define PLAYER_STATE3_10 (1 << 4)
-//
-#define PLAYER_STATE3_20 (1 << 5)
-//
-#define PLAYER_STATE3_40 (1 << 6)
-//
-#define PLAYER_STATE3_80 (1 << 7)
-//
-#define PLAYER_STATE3_100 (1 << 8)
-//
-#define PLAYER_STATE3_200 (1 << 9)
-//
-#define PLAYER_STATE3_400 (1 << 10)
-//
-#define PLAYER_STATE3_800 (1 << 11)
-//
-#define PLAYER_STATE3_1000 (1 << 12)
-//
-#define PLAYER_STATE3_2000 (1 << 13)
-//
-#define PLAYER_STATE3_4000 (1 << 14)
-//
-#define PLAYER_STATE3_8000 (1 << 15)
-//
-#define PLAYER_STATE3_10000 (1 << 16)
-//
-#define PLAYER_STATE3_20000 (1 << 17)
-//
-#define PLAYER_STATE3_40000 (1 << 18)
-//
-#define PLAYER_STATE3_80000 (1 << 19)
-//
-#define PLAYER_STATE3_100000 (1 << 20)
-//
-#define PLAYER_STATE3_200000 (1 << 21)
-//
-#define PLAYER_STATE3_400000 (1 << 22)
-//
-#define PLAYER_STATE3_800000 (1 << 23)
-//
-#define PLAYER_STATE3_1000000 (1 << 24)
-//
-#define PLAYER_STATE3_2000000 (1 << 25)
-//
-#define PLAYER_STATE3_4000000 (1 << 26)
-//
-#define PLAYER_STATE3_8000000 (1 << 27)
-//
-#define PLAYER_STATE3_10000000 (1 << 28)
+// 
+#define PLAYER_STATE2_1          (1 << 0)
+// 
+#define PLAYER_STATE2_2          (1 << 1)
+// 
+#define PLAYER_STATE2_4          (1 << 2)
+// 
+#define PLAYER_STATE2_8          (1 << 3)
+// 
+#define PLAYER_STATE2_10         (1 << 4)
+// 
+#define PLAYER_STATE2_20         (1 << 5)
+// 
+#define PLAYER_STATE2_40         (1 << 6)
+// 
+#define PLAYER_STATE2_80         (1 << 7)
+// 
+#define PLAYER_STATE2_100        (1 << 8)
+// 
+#define PLAYER_STATE2_200        (1 << 9)
+// 
+#define PLAYER_STATE2_400        (1 << 10)
+// 
+#define PLAYER_STATE2_800        (1 << 11)
+// 
+#define PLAYER_STATE2_1000       (1 << 12)
+// 
+#define PLAYER_STATE2_2000       (1 << 13)
+// 
+#define PLAYER_STATE2_4000       (1 << 14)
+// 
+#define PLAYER_STATE2_8000       (1 << 15)
+// 
+#define PLAYER_STATE2_10000      (1 << 16)
+// 
+#define PLAYER_STATE2_20000      (1 << 17)
+// 
+#define PLAYER_STATE2_40000      (1 << 18)
+// 
+#define PLAYER_STATE2_80000      (1 << 19)
+// 
+#define PLAYER_STATE2_100000     (1 << 20)
+// 
+#define PLAYER_STATE2_200000     (1 << 21)
+// 
+#define PLAYER_STATE2_400000     (1 << 22)
+// 
+#define PLAYER_STATE2_800000     (1 << 23)
+// 
+#define PLAYER_STATE2_1000000    (1 << 24)
+// 
+#define PLAYER_STATE2_2000000    (1 << 25)
+// 
+#define PLAYER_STATE2_4000000    (1 << 26)
+// 
+#define PLAYER_STATE2_8000000    (1 << 27)
+// 
+#define PLAYER_STATE2_10000000   (1 << 28)
+// 
+#define PLAYER_STATE2_20000000   (1 << 29)
+// 
+#define PLAYER_STATE2_40000000   (1 << 30)
+// 
+#define PLAYER_STATE2_80000000   (1 << 31)
+
+
+// 
+#define PLAYER_STATE3_1          (1 << 0)
+// 
+#define PLAYER_STATE3_2          (1 << 1)
+// 
+#define PLAYER_STATE3_4          (1 << 2)
+// 
+#define PLAYER_STATE3_8          (1 << 3)
+// 
+#define PLAYER_STATE3_10         (1 << 4)
+// 
+#define PLAYER_STATE3_20         (1 << 5)
+// 
+#define PLAYER_STATE3_40         (1 << 6)
+// 
+#define PLAYER_STATE3_80         (1 << 7)
+// 
+#define PLAYER_STATE3_100        (1 << 8)
+// 
+#define PLAYER_STATE3_200        (1 << 9)
+// 
+#define PLAYER_STATE3_400        (1 << 10)
+// 
+#define PLAYER_STATE3_800        (1 << 11)
+// 
+#define PLAYER_STATE3_1000       (1 << 12)
+// 
+#define PLAYER_STATE3_2000       (1 << 13)
+// 
+#define PLAYER_STATE3_4000       (1 << 14)
+// 
+#define PLAYER_STATE3_8000       (1 << 15)
+// 
+#define PLAYER_STATE3_10000      (1 << 16)
+// 
+#define PLAYER_STATE3_20000      (1 << 17)
+// 
+#define PLAYER_STATE3_40000      (1 << 18)
+// 
+#define PLAYER_STATE3_80000      (1 << 19)
+// 
+#define PLAYER_STATE3_100000     (1 << 20)
+// 
+#define PLAYER_STATE3_200000     (1 << 21)
+// 
+#define PLAYER_STATE3_400000     (1 << 22)
+// 
+#define PLAYER_STATE3_800000     (1 << 23)
+// 
+#define PLAYER_STATE3_1000000    (1 << 24)
+// 
+#define PLAYER_STATE3_2000000    (1 << 25)
+// 
+#define PLAYER_STATE3_4000000    (1 << 26)
+// 
+#define PLAYER_STATE3_8000000    (1 << 27)
+// 
+#define PLAYER_STATE3_10000000   (1 << 28)
 // breman mask march?
-#define PLAYER_STATE3_20000000 (1 << 29)
-//
-#define PLAYER_STATE3_40000000 (1 << 30)
-//
-#define PLAYER_STATE3_80000000 (1 << 31)
+#define PLAYER_STATE3_20000000   (1 << 29)
+// 
+#define PLAYER_STATE3_40000000   (1 << 30)
+// 
+#define PLAYER_STATE3_80000000   (1 << 31)
+
 
 typedef struct Player {
     /* 0x000 */ Actor actor;
@@ -598,12 +602,12 @@ typedef struct Player {
     /* 0xADE */ u8 unk_ADE;
     /* 0xADF */ s8 unk_ADF[4];
     /* 0xAE3 */ s8 unk_AE3[4];
-    /* 0xAE7 */ s8 unk_AE7;  // a timer
+    /* 0xAE7 */ s8 unk_AE7; // a timer
     /* 0xAE8 */ s16 unk_AE8; // multipurpose timer
     /* 0xAEC */ f32 unk_AEC;
     /* 0xAF0 */ Vec3f unk_AF0[2];
     /* 0xB08 */ f32 unk_B08[8];
-    /* 0xB28 */ s16 unk_B28; // Burning stick timer?
+    /* 0xB28 */ s16 unk_B28; //Burning stick timer?
     /* 0xB2A */ s8 unk_B2A;
     /* 0xB2B */ s8 unk_B2B;
     /* 0xB2C */ f32 windSpeed;
@@ -660,8 +664,7 @@ typedef struct Player {
     /* 0xD45 */ u8 flameTimers[18]; // one flame per body part
     /* 0xD57 */ u8 unk_D57;
     /* 0xD58 */ PlayerFuncD58 unk_D58;
-    /* 0xD5C */ s8
-        invincibilityTimer; // prevents damage when nonzero (positive = visible, counts towards zero each frame)
+    /* 0xD5C */ s8 invincibilityTimer; // prevents damage when nonzero (positive = visible, counts towards zero each frame)
     /* 0xD5D */ u8 unk_D5D;
     /* 0xD5E */ u8 unk_D5E;
     /* 0xD5F */ u8 unk_D5F;
@@ -672,6 +675,6 @@ typedef struct Player {
     /* 0xD6A */ s8 unk_D6A;
     /* 0xD6B */ u8 unk_D6B;
     /* 0xD6C */ Vec3f unk_D6C; // previous body part 0 position
-} Player;                      // size = 0xD78
+} Player; // size = 0xD78
 
 #endif

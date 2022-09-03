@@ -20,11 +20,11 @@ typedef struct ObjKendoKanban {
     /* 0x2CC */ Vec3f centerPoint;
     /* 0x2D8 */ Vec3f centerPos;
     /* 0x2E4 */ Vec3f rootCornerPos;
-    /* 0x2F0 */ Vec3f rotationalAxis;
+    /* 0x2F0 */ Vec3f rotAxis;
     /* 0x2FC */ s32 indexLastRootCornerPos;
     /* 0x300 */ s16 hasNewRootCornerPos;
-    /* 0x302 */ s16 rotationAngle;
-    /* 0x304 */ s16 rotationVelocity;
+    /* 0x302 */ s16 rotAngle;
+    /* 0x304 */ s16 rotVelocity;
     /* 0x306 */ UNK_TYPE1 pad306[2];
     /* 0x308 */ s16 numBounces;
     /* 0x30A */ s16 unk_30A;
