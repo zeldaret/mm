@@ -4687,12 +4687,12 @@ void Audio_StartSceneSequence(u16 seqId) {
     u8 skipHarpIntro;
 
     if ((sSeqFlags[sPrevSceneSeqId] & SEQ_FLAG_RESUME_PREV) && (sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_RESUME)) {
-        // Resume the sequence from the point where it last left off last time it was played in the scene
+        // Resume the sequence from the point where it left off last time it was played in the scene
         if ((sSeqResumePoint & 0x3F) != 0) {
             fadeInDuration = 30;
         }
 
-        // Write the sequence point to resume from into ioPort 7
+        // Write the sequence resumePoint to resume from into ioPort 7
         Audio_PlaySequenceWithSeqPlayerIO(SEQ_PLAYER_BGM_MAIN, seqId, fadeInDuration, 7, sSeqResumePoint);
 
         sSeqResumePoint = 0;
@@ -4709,6 +4709,7 @@ void Audio_StartSceneSequence(u16 seqId) {
         Audio_PlaySequenceWithSeqPlayerIO(SEQ_PLAYER_BGM_MAIN, seqId, 0, 7, skipHarpIntro);
 
         if (!(sSeqFlags[seqId] & SEQ_FLAG_RESUME_PREV)) {
+            // Reset the sequence resumePoint
             sSeqResumePoint = SEQ_RESUME_POINT_NONE;
         }
     }
@@ -4720,10 +4721,10 @@ void Audio_UpdateSceneSequenceResumePoint(void) {
 
     if ((seqId != NA_BGM_DISABLED) && (sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_RESUME)) {
         if (sSeqResumePoint != SEQ_RESUME_POINT_NONE) {
-            // Get the current spot the sequence is playing in
+            // Get the current point to resume from
             sSeqResumePoint = gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].soundScriptIO[3];
         } else {
-            // Initialize the current sequence spot to the beginning
+            // Initialize the point to resume from to the start of the sequence
             sSeqResumePoint = 0;
         }
     }
