@@ -20,10 +20,10 @@
 
 #define THIS ((EnWaterEffect*)thisx)
 
-void ENWATEREFFECT_TYPE_Init(Actor* thisx, PlayState* play);
-void ENWATEREFFECT_TYPE_Destroy(Actor* thisx, PlayState* play);
-void ENWATEREFFECT_TYPE_Update(Actor* thisx, PlayState* play);
-void ENWATEREFFECT_TYPE_Draw(Actor* thisx, PlayState* play);
+void EnWaterEffect_Init(Actor* thisx, PlayState* play);
+void EnWaterEffect_Destroy(Actor* thisx, PlayState* play);
+void EnWaterEffect_Update(Actor* thisx, PlayState* play);
+void EnWaterEffect_Draw(Actor* thisx, PlayState* play);
 
 void func_80A59C04(Actor* thisx, PlayState* play2);
 void func_80A5A184(Actor* thisx, PlayState* play2);
@@ -36,10 +36,10 @@ const ActorInit En_Water_Effect_InitVars = {
     FLAGS,
     OBJECT_WATER_EFFECT,
     sizeof(EnWaterEffect),
-    (ActorFunc)ENWATEREFFECT_TYPE_Init,
-    (ActorFunc)ENWATEREFFECT_TYPE_Destroy,
-    (ActorFunc)ENWATEREFFECT_TYPE_Update,
-    (ActorFunc)ENWATEREFFECT_TYPE_Draw,
+    (ActorFunc)EnWaterEffect_Init,
+    (ActorFunc)EnWaterEffect_Destroy,
+    (ActorFunc)EnWaterEffect_Update,
+    (ActorFunc)EnWaterEffect_Draw,
 };
 
 static Vec3f D_80A5AFB0 = { 0.0f, 0.0f, 0.0f };
@@ -86,7 +86,7 @@ void func_80A58908(EnWaterEffect* this, Vec3f* arg1, Vec3f* arg2, u8 arg3) {
     }
 }
 
-void ENWATEREFFECT_TYPE_Init(Actor* thisx, PlayState* play) {
+void EnWaterEffect_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnWaterEffect* this = THIS;
 
@@ -138,10 +138,10 @@ void ENWATEREFFECT_TYPE_Init(Actor* thisx, PlayState* play) {
     }
 }
 
-void ENWATEREFFECT_TYPE_Destroy(Actor* thisx, PlayState* play) {
+void EnWaterEffect_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void ENWATEREFFECT_TYPE_Update(Actor* thisx, PlayState* play2) {
+void EnWaterEffect_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnWaterEffect* this = THIS;
     Player* player = GET_PLAYER(play);
@@ -277,7 +277,7 @@ void ENWATEREFFECT_TYPE_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-void ENWATEREFFECT_TYPE_Draw(Actor* thisx, PlayState* play2) {
+void EnWaterEffect_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     EnWaterEffect* this = THIS;
