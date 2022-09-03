@@ -714,7 +714,7 @@ FaultAddrConvClient D_801ED940;
 void ActorOverlayTable_FaultPrint(void* arg0, void* arg1) {
     ActorOverlay* overlayEntry;
     u32 overlaySize;
-    s32 i;
+    ActorId i;
 
     FaultDrawer_SetCharPad(-2, 0);
 
@@ -733,7 +733,7 @@ void ActorOverlayTable_FaultPrint(void* arg0, void* arg1) {
 void* ActorOverlayTable_FaultAddrConv(void* arg0, void* arg1) {
     u8* ptr = arg0;
     ActorOverlay* overlayEntry = &gActorOverlayTable[0];
-    s32 i;
+    ActorId i;
     u8* ramStart;
     u8* ramEnd;
     size_t size;
