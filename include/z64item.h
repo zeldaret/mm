@@ -413,7 +413,7 @@ typedef enum GetItemId {
     /* 0x91 */ GI_CHATEAU = 0x91,
     /* 0x92 */ GI_MILK,
     /* 0x93 */ GI_GOLD_DUST_2,
-    /* 0x94 */ GI_HYLIAN_LOACH, // Unused bottled eel
+    /* 0x94 */ GI_HYLIAN_LOACH_2, // Unused bottled eel
     /* 0x95 */ GI_SEAHORSE_CAUGHT,
     /* 0x96 */ GI_MOON_TEAR,
     /* 0x97 */ GI_DEED_LAND,
