@@ -116,6 +116,25 @@ typedef struct {
     // 0x0000_00FF = CamData index
 } WaterBox; // size = 0x10
 
+typedef enum BgFloorType {
+    /*  0 */ BG_FLOOR_TYPE_0,
+    /*  1 */ BG_FLOOR_TYPE_1,
+    /*  2 */ BG_FLOOR_TYPE_2,
+    /*  3 */ BG_FLOOR_TYPE_3,
+    /*  4 */ BG_FLOOR_TYPE_4,
+    /*  5 */ BG_FLOOR_TYPE_5,
+    /*  6 */ BG_FLOOR_TYPE_6,
+    /*  7 */ BG_FLOOR_TYPE_7,
+    /*  8 */ BG_FLOOR_TYPE_8,
+    /*  9 */ BG_FLOOR_TYPE_9,
+    /* 10 */ BG_FLOOR_TYPE_10,
+    /* 11 */ BG_FLOOR_TYPE_11,
+    /* 12 */ BG_FLOOR_TYPE_12,
+    /* 13 */ BG_FLOOR_TYPE_13,
+    /* 14 */ BG_FLOOR_TYPE_14,
+    /* 15 */ BG_FLOOR_TYPE_15
+} BgFloorType;
+
 typedef struct {
     /* 0x0 */ u32 data[2];
 

@@ -4175,7 +4175,7 @@ u32 SurfaceType_GetSceneExitIndex(CollisionContext* colCtx, CollisionPoly* poly,
 /**
  * SurfaceType Get ? Property (& 0x0003_E000)
  */
-u32 func_800C99D4(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+BgFloorType SurfaceType_GetFloorType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 13 & 0x1F;
 }
 

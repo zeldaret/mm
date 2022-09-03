@@ -1055,7 +1055,7 @@
     0x800C98CC:("BgCheck_GetBgCamFuncDataImpl",),
     0x800C9924:("BgCheck_GetBgCamFuncData",),
     0x800C99AC:("SurfaceType_GetSceneExitIndex",),
-    0x800C99D4:("func_800C99D4",),
+    0x800C99D4:("SurfaceType_GetFloorType",),
     0x800C99FC:("func_800C99FC",),
     0x800C9A24:("func_800C9A24",),
     0x800C9A4C:("func_800C9A4C",),

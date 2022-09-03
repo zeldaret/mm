@@ -904,7 +904,7 @@ Vec3s* BgCheck_GetBgCamFuncDataImpl(CollisionContext* colCtx, s32 bgCamIndex, s3
 Vec3s* BgCheck_GetBgCamFuncData(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 
 u32 SurfaceType_GetSceneExitIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
-u32 func_800C99D4(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+BgFloorType SurfaceType_GetFloorType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 func_800C99FC(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 func_800C9A24(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 s32 func_800C9A4C(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
