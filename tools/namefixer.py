@@ -692,6 +692,8 @@ wordReplace = {
     "player->swordAnimation": "player->meleeWeaponAnimation",
     "player->swordState": "player->meleeWeaponState",
     "player->swordInfo": "player->meleeWeaponInfo",
+    "player->unk_A9C": "player->secretRumbleCharge",
+    "player->unk_AA0": "player->closestSecretDistSq",
     "player->unk_B68": "player->fallStartHeight",
     "player->unk_B6A": "player->fallDistance",
     "player->targetActor": "player->talkActor",
