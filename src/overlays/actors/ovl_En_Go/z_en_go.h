@@ -34,16 +34,17 @@ enum {
 
 typedef struct {
     /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x04 */ Vec3s unk_04;
-    /* 0x0A */ Vec3s unk_0A;
-    /* 0x10 */ Vec3f unk_10;
-    /* 0x1C */ Vec3f unk_1C;
-    /* 0x28 */ Vec3f unk_28;
-    /* 0x34 */ f32 unk_34;
-    /* 0x38 */ f32 unk_38;
-} EnGoStruct; // size = 0x3C;
+    /* 0x01 */ u8 unk_01;    /* Alpha Denominator */
+    /* 0x02 */ u8 unk_02;    /* Alpha Numerator */
+    /* 0x04 */ Vec3s unk_04; /* Rotational Velocity */
+    /* 0x0A */ Vec3s unk_0A; /* Rotational Position */
+    /* 0x10 */
+    Vec3f unk_10;            /* Translation Position */
+    /* 0x1C */ Vec3f unk_1C; /* Translation Accel? (Added to 28) */
+    /* 0x28 */ Vec3f unk_28; /* Translation Vel? (Added to 10) */
+    /* 0x34 */ f32 unk_34;   /* Scale X & Y*/
+    /* 0x38 */ f32 unk_38;   /* Change in Scale */
+} EnGoStruct;                // size = 0x3C;
 
 typedef struct EnGo {
     /* 0x000 */ Actor actor;

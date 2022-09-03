@@ -217,88 +217,85 @@ EnGoStruct* func_80A10FD0(EnGoStruct* ptr, Vec3f arg1, Vec3f arg2, Vec3f arg3, f
     s32 i;
 
     for (i = 16; i < 32; i++, ptr++) {
-        if (ptr->unk_00 == 0) {
-            ptr->unk_00 = 7;
-            ptr->unk_01 = (Rand_ZeroOne() * (2.0f * (arg6 / 3.0f))) + (arg6 / 3.0f);
-            ptr->unk_02 = ptr->unk_01;
-            ptr->unk_10 = arg1;
-            ptr->unk_1C = arg2;
-            ptr->unk_28 = arg3;
-            ptr->unk_34 = arg4;
-            ptr->unk_38 = arg5;
-            break;
-        }
-    }
+        if (ptr->unk_00 != 0)
+            continue;
 
+        ptr->unk_00 = 7;
+        ptr->unk_01 = (Rand_ZeroOne() * (2.0f * (arg6 / 3.0f))) + (arg6 / 3.0f);
+        ptr->unk_02 = ptr->unk_01;
+        ptr->unk_10 = arg1;
+        ptr->unk_1C = arg2;
+        ptr->unk_28 = arg3;
+        ptr->unk_34 = arg4;
+        ptr->unk_38 = arg5;
+        break;
+    }
     return ptr;
 }
 
-void func_80A11144(EnGoStruct* ptr, PlayState* play) {
-    s32 pad;
+void func_80A11144(EnGoStruct* ptr, PlayState* play2) {
+    PlayState* play = play2;
     s32 i;
     s32 flag = false;
     f32 temp;
 
     OPEN_DISPS(play->state.gfxCtx);
-
     func_8012C2DC(play->state.gfxCtx);
-
     for (i = 0; i < 32; i++, ptr++) {
+        if (ptr->unk_00 != 7)
+            continue;
 
-        if (ptr->unk_00 == 7) {
-            gDPPipeSync(POLY_XLU_DISP++);
-
-            if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, gGoronSteamMaterialDL);
-                flag = true;
-            }
-
-            Matrix_Push();
-
-            temp = ((f32)ptr->unk_02 / ptr->unk_01);
-            temp *= 255;
-
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, (u8)temp);
-            gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, (ptr->unk_02 + (i * 3)) * 3,
-                                        (ptr->unk_02 + (i * 3)) * 15, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
-
-            Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
-            Matrix_ReplaceRotation(&play->billboardMtxF);
-            Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gGoronSteamModelDL);
-
-            Matrix_Pop();
-            if (play->state.gfxCtx) {}
+        gDPPipeSync(POLY_XLU_DISP++);
+        if (!flag) {
+            gSPDisplayList(POLY_XLU_DISP++, gGoronSteamMaterialDL);
+            flag = true;
         }
+
+        Matrix_Push();
+
+        temp = ((f32)ptr->unk_02 / ptr->unk_01);
+        temp *= 255;
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, (u8)temp);
+        gSPSegment(POLY_XLU_DISP++, 0x08,
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, (ptr->unk_02 + (i * 3)) * 3, (ptr->unk_02 + (i * 3)) * 15,
+                                    0x20, 0x40, 1, 0, 0, 0x20, 0x20));
+
+        Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
+        Matrix_ReplaceRotation(&play->billboardMtxF);
+        Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, gGoronSteamModelDL);
+
+        Matrix_Pop();
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80A1143C(EnGoStruct* ptr, Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5, s32 arg6, s32 arg7) {
+/*
+Called for each element in the first half of the array,
+*/
+void func_80A1143C(EnGoStruct* ptr, Vec3f pos, Vec3f accel, Vec3f vel, f32 scale, f32 deltaScale, s32 arg6, s32 arg7) {
     s32 i;
 
     for (i = 16; i < 32; i++, ptr++) {
-        if (ptr->unk_00 == 0) {
-            ptr->unk_00 = arg7 + 4;
+        if (ptr->unk_00 != 0)
+            continue;
 
-            ptr->unk_01 = (Rand_ZeroOne() * (2.0f * (arg6 / 3.0f))) + (arg6 / 3.0f);
-            ptr->unk_02 = ptr->unk_01;
-
-            ptr->unk_10 = arg1;
-            ptr->unk_1C = arg2;
-            ptr->unk_28 = arg3;
-            ptr->unk_34 = arg4;
-            ptr->unk_38 = arg5;
-            break;
-        }
+        ptr->unk_00 = arg7 + 4;
+        ptr->unk_01 = (Rand_ZeroOne() * (2.0f * (arg6 / 3.0f))) + (arg6 / 3.0f);
+        ptr->unk_02 = ptr->unk_01;
+        ptr->unk_10 = pos;
+        ptr->unk_1C = accel;
+        ptr->unk_28 = vel;
+        ptr->unk_34 = scale;
+        ptr->unk_38 = deltaScale;
+        break;
     }
 }
 
-void func_80A115B4(EnGoStruct* ptr, PlayState* play) {
+void func_80A115B4(EnGoStruct* ptr, PlayState* play2) {
     static TexturePtr D_80A16644[] = {
         gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
     };
@@ -312,95 +309,97 @@ void func_80A115B4(EnGoStruct* ptr, PlayState* play) {
         { 100, 60, 20, 0 },
         { 0, 0, 0, 0 },
     };
+    PlayState* play = play2;
     s32 i;
     u8 flag = false;
     f32 temp;
 
     OPEN_DISPS(play->state.gfxCtx);
-
     func_8012C2DC(play->state.gfxCtx);
-
     for (i = 0; i < 32; i++, ptr++) {
-        if ((ptr->unk_00 >= 4) && (ptr->unk_00 < 7)) {
-            if (!flag) {
-                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
-                gSPDisplayList(POLY_XLU_DISP++, gGoronDustMaterialDL);
-                flag = true;
-            }
-            Matrix_Push();
+        if ((ptr->unk_00 < 4) || (ptr->unk_00 >= 7))
+            continue;
 
-            temp = (f32)ptr->unk_02 / ptr->unk_01;
-
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80A16664[(s32)ptr->unk_00 - 4].r,
-                            D_80A16664[(s32)ptr->unk_00 - 4].g, D_80A16664[(s32)ptr->unk_00 - 4].b, (u8)(temp * 255));
-            gDPSetEnvColor(POLY_XLU_DISP++, D_80A16670[(s32)ptr->unk_00 - 4].r, D_80A16670[(s32)ptr->unk_00 - 4].g,
-                           D_80A16670[(s32)ptr->unk_00 - 4].b, 0);
-
-            Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
-            Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
-            Matrix_ReplaceRotation(&play->billboardMtxF);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A16644[(s32)(temp * 7.0f)]));
-            gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
-
-            Matrix_Pop();
+        if (!flag) {
+            POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
+            gSPDisplayList(POLY_XLU_DISP++, gGoronDustMaterialDL);
+            flag = true;
         }
-        if (play->state.gfxCtx) {}
+
+        Matrix_Push();
+
+        temp = (f32)ptr->unk_02 / ptr->unk_01;
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80A16664[(s32)ptr->unk_00 - 4].r, D_80A16664[(s32)ptr->unk_00 - 4].g,
+                        D_80A16664[(s32)ptr->unk_00 - 4].b, (u8)(temp * 255));
+        gDPSetEnvColor(POLY_XLU_DISP++, D_80A16670[(s32)ptr->unk_00 - 4].r, D_80A16670[(s32)ptr->unk_00 - 4].g,
+                       D_80A16670[(s32)ptr->unk_00 - 4].b, 0);
+
+        Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
+        Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
+        Matrix_ReplaceRotation(&play->billboardMtxF);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A16644[(s32)(temp * 7.0f)]));
+        gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
+
+        Matrix_Pop();
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-#ifdef NON_MATCHING
-void func_80A118F8(EnGoStruct* ptr, Vec3f arg1) {
+/* Called after Snowball broken sound effect, before goron cold */
+void func_80A118F8(EnGoStruct* ptr, Vec3f worldPos) {
     static u8 D_80A1667C[] = {
         3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2,
     };
-    EnGoStruct* ptr2 = &ptr[16];
+
+    EnGoStruct* pEnd = &ptr[16];
     s32 i;
-    Vec3f spB4;
-    Vec3f spA8;
-    f32 temp_f20;
+    Vec3f randRelativeToWorldPos;
+    Vec3f randYOneToFour;
+    f32 temp_fs0;
 
     for (i = 0; i < 16; i++, ptr++) {
-        if (ptr->unk_00 == 0) {
-            ptr->unk_10 = arg1;
-            ptr->unk_10.y += 56.0f;
+        if (ptr->unk_00 != 0)
+            continue;
 
-            ptr->unk_04.x = (Rand_ZeroOne() - 0.5f) * 5460.0f;
-            ptr->unk_04.y = (Rand_ZeroOne() - 0.5f) * 5460.0f;
-            ptr->unk_04.z = (Rand_ZeroOne() - 0.5f) * 5460.0f;
+        ptr->unk_10 = worldPos;
+        ptr->unk_10.y += 56.0f;
 
-            temp_f20 = (Rand_ZeroOne() * 4.0f) + 6.0f;
-            ptr->unk_28.x = Math_SinS(i * 0x1000) * temp_f20;
-            ptr->unk_28.z = Math_CosS(i * 0x1000) * temp_f20;
-            ptr->unk_28.y = (Rand_ZeroOne() * 3.0f) + 6.0f;
+        // Generate a +-15 degree rotational velocity
+        ptr->unk_04.x = (Rand_ZeroOne() - 0.5f) * (f32)0x1554; /* 30 degrees */
+        ptr->unk_04.y = (Rand_ZeroOne() - 0.5f) * (f32)0x1554; /* 30 degrees */
+        ptr->unk_04.z = (Rand_ZeroOne() - 0.5f) * (f32)0x1554; /* 30 degrees */
 
-            ptr->unk_1C = gZeroVec3f;
-            ptr->unk_1C.y = -0.8f;
+        // Generate a radially outward velocity for each of the 16 pieces
+        temp_fs0 = (Rand_ZeroOne() * 4.0f) + 6.0f;
+        ptr->unk_28.x = Math_SinS(i * (0x10000 / 16)) * temp_fs0;
+        ptr->unk_28.z = Math_CosS(i * (0x10000 / 16)) * temp_fs0;
+        ptr->unk_28.y = (Rand_ZeroOne() * 3.0f) + 6.0f;
 
-            ptr->unk_01 = ptr->unk_02 = 1;
-            ptr->unk_00 = D_80A1667C[i];
+        // No acceleration on the X,Z axis, Negative acceleration on the Y axis
+        ptr->unk_1C = gZeroVec3f;
+        ptr->unk_1C.y = -0.8f;
 
-            spB4.x = ((Rand_ZeroOne() - 0.5f) * 80.0f) + ptr->unk_10.x;
-            spB4.y = ((Rand_ZeroOne() - 0.5f) * 40.0f) + ptr->unk_10.y;
-            spB4.z = ((Rand_ZeroOne() - 0.5f) * 80.0f) + ptr->unk_10.z;
+        // Full visibility (1/1)
+        ptr->unk_01 = ptr->unk_02 = 1;
 
-            spA8 = gZeroVec3f;
-            spA8.y = (Rand_ZeroOne() * 3.0f) + 1.0f;
+        // Assign a value of 1, 2, or 3
+        ptr->unk_00 = D_80A1667C[i];
 
-            func_80A1143C(ptr2, spB4, gZeroVec3f, spA8, 0.6f, 0.2f, 16, 0);
-        }
+        // Initialize the Paired element
+        randRelativeToWorldPos.x = ((Rand_ZeroOne() - 0.5f) * 80.0f) + ptr->unk_10.x;
+        randRelativeToWorldPos.y = ((Rand_ZeroOne() - 0.5f) * 40.0f) + ptr->unk_10.y;
+        randRelativeToWorldPos.z = ((Rand_ZeroOne() - 0.5f) * 80.0f) + ptr->unk_10.z;
+
+        randYOneToFour = gZeroVec3f;
+        randYOneToFour.y = (Rand_ZeroOne() * 3.0f) + 1.0f;
+
+        // Initialize the paired element.
+        func_80A1143C(pEnd, randRelativeToWorldPos, gZeroVec3f, randYOneToFour, 0.6f, 0.2f, 16, 0);
     }
 }
-#else
-static u8 D_80A1667C[] = {
-    3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2,
-};
-void func_80A118F8(EnGoStruct* ptr, Vec3f arg1);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Go/func_80A118F8.s")
-#endif
 
 void func_80A11BF8(EnGoStruct* ptr, f32 arg1) {
     f32 test;
@@ -447,68 +446,60 @@ void func_80A11BF8(EnGoStruct* ptr, f32 arg1) {
     ptr->unk_0A.z += ptr->unk_04.z;
 }
 
-#ifdef NON_MATCHING
 void func_80A11EC0(EnGoStruct* ptr, PlayState* play, Gfx* arg2, Gfx* arg3, u8 arg4) {
     s32 i;
     u8 flag = false;
 
     OPEN_DISPS(play->state.gfxCtx);
-
     func_8012C28C(play->state.gfxCtx);
-
     for (i = 0; i < 16; i++, ptr++) {
-        if (ptr->unk_00 == arg4) {
-            if (!flag) {
-                gSPDisplayList(POLY_OPA_DISP++, arg2);
-                flag = true;
-            }
+        if (ptr->unk_00 != arg4)
+            continue;
 
-            Matrix_Push();
-            Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
-            Matrix_Scale(0.08f, 0.08f, 0.08f, MTXMODE_APPLY);
-            Matrix_RotateZS(ptr->unk_0A.z, MTXMODE_APPLY);
-            Matrix_RotateXS(ptr->unk_0A.x, MTXMODE_APPLY);
-            Matrix_RotateYS(ptr->unk_0A.y, MTXMODE_APPLY);
-
-            if (1) {
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_OPA_DISP++, arg3);
-            }
-
-            Matrix_Pop();
+        if (!flag) {
+            gSPDisplayList(POLY_OPA_DISP++, arg2);
+            flag = true;
         }
+
+        Matrix_Push();
+        Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
+        Matrix_Scale(0.08f, 0.08f, 0.08f, MTXMODE_APPLY);
+        Matrix_RotateZS(ptr->unk_0A.z, MTXMODE_APPLY);
+        Matrix_RotateXS(ptr->unk_0A.x, MTXMODE_APPLY);
+        Matrix_RotateYS(ptr->unk_0A.y, MTXMODE_APPLY);
+
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, arg3);
+
+        Matrix_Pop();
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
-#else
-void func_80A11EC0(EnGoStruct* ptr, PlayState* play, Gfx* arg2, Gfx* arg3, u8 arg4);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Go/func_80A11EC0.s")
-#endif
 
 void func_80A1203C(EnGo* this) {
     EnGoStruct* ptr = this->unk_3F8;
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3F8); i++, ptr++) {
-        if (ptr->unk_00 != 0) {
-            if (ptr->unk_02 == 0) {
-                ptr->unk_00 = 0;
-            } else if ((ptr->unk_00 > 0) && (ptr->unk_00 < 4)) {
-                func_80A11BF8(ptr, this->actor.world.pos.y);
-            } else {
-                ptr->unk_10.x += ptr->unk_28.x;
-                ptr->unk_10.y += ptr->unk_28.y;
-                ptr->unk_10.z += ptr->unk_28.z;
+        if (ptr->unk_00 == 0)
+            continue;
 
-                ptr->unk_28.x += ptr->unk_1C.x;
-                ptr->unk_28.y += ptr->unk_1C.y;
-                ptr->unk_28.z += ptr->unk_1C.z;
+        if (ptr->unk_02 == 0) {
+            ptr->unk_00 = 0;
+        } else if ((ptr->unk_00 > 0) && (ptr->unk_00 < 4)) {
+            func_80A11BF8(ptr, this->actor.world.pos.y);
+        } else {
+            ptr->unk_10.x += ptr->unk_28.x;
+            ptr->unk_10.y += ptr->unk_28.y;
+            ptr->unk_10.z += ptr->unk_28.z;
 
-                ptr->unk_34 += ptr->unk_38;
-                ptr->unk_02--;
-            }
+            ptr->unk_28.x += ptr->unk_1C.x;
+            ptr->unk_28.y += ptr->unk_1C.y;
+            ptr->unk_28.z += ptr->unk_1C.z;
+
+            ptr->unk_34 += ptr->unk_38;
+            ptr->unk_02--;
         }
     }
 }
@@ -1510,6 +1501,7 @@ void func_80A14798(EnGo* this, PlayState* play) {
     }
 }
 
+/* Action function*/
 void func_80A149B0(EnGo* this, PlayState* play) {
     s16 sp26 = this->actor.world.rot.y;
 
@@ -1756,6 +1748,7 @@ void func_80A14FC8(EnGo* this, PlayState* play) {
     }
 }
 
+/* Action function, called on day 2 or greater */
 void func_80A153FC(EnGo* this, PlayState* play) {
     Vec3s* sp5C;
     Vec3f sp50;
