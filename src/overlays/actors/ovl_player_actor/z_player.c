@@ -40,7 +40,7 @@ s32 Player_GrabPlayer(PlayState* play, Player* player);
 s32 func_8085B28C(PlayState* play, Player* player, PlayerCsMode csMode);
 void func_8085B384(Player* player, PlayState* play);
 s32 Player_InflictDamage(PlayState* play, s32 damage);
-void func_8085B460(PlayState* play, Actor* actor);
+void Player_TalkWithPlayer(PlayState* play, Actor* actor);
 void func_8085B74C(PlayState* play);
 void func_8085B820(PlayState* play, s16 arg1);
 PlayerActionParam func_8085B854(PlayState* play, Player* player, ItemID itemId);
@@ -3549,10 +3549,11 @@ void func_8082FE0C(Player* this, PlayState* play) {
             }
         } else if (item == ITEM_F0) {
             if (this->unk_B60 == 0) {
-                EnBom* temp_v0_7 = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.focus.pos.x,
-                                                       this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 0, 0);
-                if (temp_v0_7 != NULL) {
-                    temp_v0_7->timer = 0;
+                EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.focus.pos.x,
+                                                       this->actor.focus.pos.y, this->actor.focus.pos.z, BOMB_CAT_BOMB, 0, 0, BOMB_BODY);
+
+                if (bomb != NULL) {
+                    bomb->timer = 0;
                     this->unk_B60 = 0x136;
                 }
             }
@@ -6085,7 +6086,7 @@ s32 func_808365DC(Player* this, PlayState* play) {
             Actor* var_v0_3;
 
             if (this->doorType <= PLAYER_DOORTYPE_MINUS_1) {
-                func_8085B460(play, doorActor);
+                Player_TalkWithPlayer(play, doorActor);
                 if (doorActor->textId == 0x1821) {
                     doorActor->flags |= ACTOR_FLAG_100;
                 }
@@ -7072,17 +7073,17 @@ s32 func_80838A90(Player* this, PlayState* play) {
                                 (this->heldItemActionParam == PLAYER_AP_MAGIC_BEANS)) ||
                                ((this->exchangeItemId != PLAYER_AP_MAGIC_BEANS) &&
                                 (Player_ActionToBottle(this, this->heldItemActionParam) > -1))))))) {
-                    Actor* targetActor;
+                    Actor* talkActor;
                     s32 heldItemTemp = this->heldItemActionParam;
 
                     func_80838760(this);
                     this->heldItemActionParam = PLAYER_AP_NONE;
                     func_80831760(play, this, func_80853A5C, 0);
-                    targetActor = this->talkActor;
+                    talkActor = this->talkActor;
                     this->heldItemActionParam = heldItemTemp;
                     this->unk_A86 = -1;
 
-                    if ((targetActor != NULL) && (((this->exchangeItemId == PLAYER_AP_MAGIC_BEANS) &&
+                    if ((talkActor != NULL) && (((this->exchangeItemId == PLAYER_AP_MAGIC_BEANS) &&
                                                    (this->heldItemActionParam == PLAYER_AP_MAGIC_BEANS)) ||
                                                   ((this->exchangeItemId != PLAYER_AP_MAGIC_BEANS) &&
                                                    (this->exchangeItemId > PLAYER_AP_NONE)))) {
@@ -7090,9 +7091,9 @@ s32 func_80838A90(Player* this, PlayState* play) {
                         if (this->exchangeItemId == PLAYER_AP_MAGIC_BEANS) {
                             Inventory_ChangeAmmo(ITEM_MAGIC_BEANS, -1);
                             func_80831760(play, this, func_8084B4A8, 0);
-                            this->currentYaw = targetActor->yawTowardsPlayer + 0x8000;
+                            this->currentYaw = talkActor->yawTowardsPlayer + 0x8000;
                             this->actor.shape.rot.y = this->currentYaw;
-                            if (targetActor->xzDistToPlayer < 40.0f) {
+                            if (talkActor->xzDistToPlayer < 40.0f) {
                                 func_8082DB90(play, this, &gameplay_keep_Linkanim_00DB10);
                                 func_8082E920(play, this, 1 | 8 | ANIM_FLAG_NOMOVE);
                             } else {
@@ -7105,7 +7106,8 @@ s32 func_80838A90(Player* this, PlayState* play) {
                         } else {
                             this->unk_A86 = 0x7C;
                         }
-                        targetActor->flags |= ACTOR_FLAG_100;
+
+                        talkActor->flags |= ACTOR_FLAG_100;
                         this->actor.textId = 0;
                         this->targetedActor = this->talkActor;
                     } else {
@@ -7271,7 +7273,7 @@ s32 func_808391D8(Player* this, PlayState* play) {
 
                         this->currentMask = D_80862B2C;
                         gSaveContext.save.equippedMask = this->currentMask;
-                        func_8085B460(play, talkActor);
+                        Player_TalkWithPlayer(play, talkActor);
                         return true;
                     }
                 }
@@ -8467,7 +8469,7 @@ s32 func_8083CCB4(Player* this, PlayState* play) {
             if (CHECK_BTN_ALL(D_80862B44->press.button, BTN_A)) {
                 if (ActorCutscene_GetCanPlayNext(0x7C)) {
                     rideActor->actor.textId = D_8085D254[this->transformation - 1];
-                    func_8085B460(play, &rideActor->actor);
+                    Player_TalkWithPlayer(play, &rideActor->actor);
                     return true;
                 }
             }
@@ -8477,7 +8479,7 @@ s32 func_8083CCB4(Player* this, PlayState* play) {
             if (CHECK_BTN_ALL(D_80862B44->press.button, BTN_A)) {
                 if (ActorCutscene_GetCanPlayNext(0x7C)) {
                     rideActor->actor.textId = D_8085D25C[this->transformation];
-                    func_8085B460(play, &rideActor->actor);
+                    Player_TalkWithPlayer(play, &rideActor->actor);
                     return true;
                 }
             }
@@ -10171,7 +10173,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     s8 objBankIndex;
     s32 respawnFlag;
     s32 var_a1;
-    s32 initMode;
+    PlayerInitMode initMode;
 
     play->playerInit = Player_InitCommon;
     play->playerUpdate = Player_UpdateCommon;
@@ -10181,11 +10183,12 @@ void Player_Init(Actor* thisx, PlayState* play) {
     play->startPlayerCutscene = func_8085B28C;
     play->func_18780 = func_8085B384;
     play->damagePlayer = Player_InflictDamage;
-    play->talkWithPlayer = func_8085B460;
+    play->talkWithPlayer = Player_TalkWithPlayer;
     play->unk_1878C = func_8085B74C;
     play->unk_18790 = func_8085B820;
     play->unk_18794 = func_8085B854;
     play->setPlayerTalkAnim = func_8085B930;
+
     gActorOverlayTable->initInfo->objectId = 1;
 
     this->actor.room = -1;
@@ -16306,11 +16309,11 @@ void func_8085269C(Player* this, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_20000000;
 
             if ((this->talkActor != NULL) && (this->talkActor == this->unk_A90) && (this->unk_A94 >= 0.0f)) {
-                func_8085B460(play, this->talkActor);
+                Player_TalkWithPlayer(play, this->talkActor);
             } else if (this->tatlTextId < 0) {
                 this->talkActor = this->tatlActor;
                 this->tatlActor->textId = -this->tatlTextId;
-                func_8085B460(play, this->talkActor);
+                Player_TalkWithPlayer(play, this->talkActor);
             } else if (!func_80838A90(this, play)) {
                 func_80836A5C(this, play);
                 Player_AnimationPlayOnceReverse(play, this, D_8085D17C[this->transformation]);
@@ -16438,7 +16441,7 @@ void func_80852C04(Player* this, PlayState* play) {
                             func_80848250(play, this);
                             this->exchangeItemId = PLAYER_AP_NONE;
                             if (!func_80847994(play, this)) {
-                                func_8085B460(play, this->talkActor);
+                                Player_TalkWithPlayer(play, this->talkActor);
                             }
                         } else {
                             func_80848294(play, this);
@@ -16663,15 +16666,15 @@ void func_808534C0(Player* this, PlayState* play) {
                 func_801A3098(NA_BGM_GET_ITEM | 0x900);
                 this->unk_AE8 = 1;
             } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
-                Actor* targetActor;
+                Actor* talkActor;
 
                 this->unk_AE7 = 0;
                 func_80838760(this);
                 func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
 
-                targetActor = this->talkActor;
-                if ((targetActor != NULL) && (this->exchangeItemId < PLAYER_AP_NONE)) {
-                    func_8085B460(play, targetActor);
+                talkActor = this->talkActor;
+                if ((talkActor != NULL) && (this->exchangeItemId < PLAYER_AP_NONE)) {
+                    Player_TalkWithPlayer(play, talkActor);
                 }
             }
         } else {
@@ -16819,15 +16822,15 @@ void func_80853A5C(Player* this, PlayState* play) {
 
     if (LinkAnimation_Update(play, &this->skelAnime)) {
         if (this->exchangeItemId == PLAYER_AP_NONE) {
-            Actor* targetActor = this->talkActor;
+            Actor* talkActor = this->talkActor;
 
             func_80838760(this);
             this->getItemDrawId = GID_BOTTLE;
 
-            if ((targetActor->textId != 0) && (targetActor->textId != 0xFFFF)) {
+            if ((talkActor->textId != 0) && (talkActor->textId != 0xFFFF)) {
                 this->actor.flags |= ACTOR_FLAG_100;
             }
-            func_8085B460(play, targetActor);
+            Player_TalkWithPlayer(play, talkActor);
         } else {
             GetItemEntry* giEntry = &sGetItemTable[D_8085D1A4[this->exchangeItemId] - 1];
 
@@ -19915,7 +19918,7 @@ s32 Player_InflictDamage(PlayState* play, s32 damage) {
 }
 
 // Start talking with the given actor
-void func_8085B460(PlayState* play, Actor* actor) {
+void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 

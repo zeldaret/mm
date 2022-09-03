@@ -826,7 +826,7 @@ typedef enum PlayerCsMode {
 
 #define PLAYER_GET_INITMODE(thisx) (((thisx)->params & 0xF00) >> 8)
 
-typedef enum {
+typedef enum PlayerInitMode {
     /* 0x0 */ PLAYER_INITMODE_0,
     /* 0x1 */ PLAYER_INITMODE_1, // Spawning after pulling/putting-back Master sword // OoT leftover
     /* 0x2 */ PLAYER_INITMODE_2,

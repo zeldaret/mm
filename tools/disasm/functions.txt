@@ -4881,7 +4881,7 @@
     0x8085B28C:("func_8085B28C",),
     0x8085B384:("func_8085B384",),
     0x8085B3E0:("Player_InflictDamage",),
-    0x8085B460:("func_8085B460",),
+    0x8085B460:("Player_TalkWithPlayer",),
     0x8085B74C:("func_8085B74C",),
     0x8085B820:("func_8085B820",),
     0x8085B854:("func_8085B854",),
