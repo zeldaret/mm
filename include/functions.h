@@ -907,7 +907,7 @@ u32 SurfaceType_GetSceneExitIndex(CollisionContext* colCtx, CollisionPoly* poly,
 BgFloorType SurfaceType_GetFloorType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 func_800C99FC(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 func_800C9A24(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
-s32 func_800C9A4C(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+s32 SurfaceType_GetWallFlags(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 s32 func_800C9A7C(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 s32 func_800C9AB0(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 s32 func_800C9AE4(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);

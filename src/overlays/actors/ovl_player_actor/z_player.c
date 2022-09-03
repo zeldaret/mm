@@ -491,7 +491,7 @@ s16 D_80862B00;   // analog stick angle/yaw
 s16 D_80862B02;   // analog stick yaw + camera yaw
 s32 D_80862B04;   // boolean, set to the return value of func_8083216C
 BgFloorType sPlayerCurrentFloorType;   // set to the return value of SurfaceType_GetFloorType
-s32 D_80862B0C;   // SurfaceType wall flags, set to the return value of func_800C9A4C
+s32 sPlayerCurrentWallFlags;   // SurfaceType wall flags, set to the return value of SurfaceType_GetWallFlags
 u32 D_80862B10;   // SurfaceType_GetConveyorSpeed
 s16 D_80862B14;   // SurfaceType_GetConveyorType
 s16 D_80862B16;   // SurfaceType_GetConveyorDirection << 0xA
@@ -516,7 +516,7 @@ extern s16 D_80862B00;
 extern s16 D_80862B02;
 extern s32 D_80862B04;
 extern BgFloorType sPlayerCurrentFloorType;
-extern s32 D_80862B0C;
+extern s32 sPlayerCurrentWallFlags;
 extern u32 D_80862B10;
 extern s16 D_80862B14;
 extern s16 D_80862B16;
@@ -5534,7 +5534,7 @@ s32 func_80834DFC(Player* this, PlayState* play) {
             return false;
         }
 
-        if ((this->actor.wallBgId != BGCHECK_SCENE) && (D_80862B0C & 0x40)) {
+        if ((this->actor.wallBgId != BGCHECK_SCENE) && (sPlayerCurrentWallFlags & WALL_FLAG_6)) {
             if (this->unk_B5D >= 6) {
                 this->stateFlags2 |= PLAYER_STATE2_4;
                 if (CHECK_BTN_ALL(D_80862B44->press.button, BTN_A)) {
@@ -6674,7 +6674,7 @@ s32 func_80837DEC(Player* this, PlayState* play) {
                     if ((temp_fv1_2 >= -11.0f) && (temp_fv1_2 <= 0.0f)) {
                         var_v1_2 = D_80862B1C == 6;
                         if (!var_v1_2) {
-                            if (func_800C9A4C(&play->colCtx, entityPoly, entityBgId) & 8) {
+                            if (SurfaceType_GetWallFlags(&play->colCtx, entityPoly, entityBgId) & WALL_FLAG_3) {
                                 var_v1_2 = true;
                             }
                         }
@@ -8745,8 +8745,8 @@ s32 func_8083D860(Player* this, PlayState* play) {
     if ((this->wallHeight >= 79.0f) &&
         (!(this->stateFlags1 & PLAYER_STATE1_8000000) || (this->currentBoots == PLAYER_BOOTS_ZORA_UNDERWATER) ||
          (this->actor.depthInWater < this->ageProperties->unk_2C))) {
-        s32 var_t0 = (D_80862B0C & 8) ? 2 : 0; // sp8C
-        s32 temp_t2 = D_80862B0C & 2;          // sp80
+        s32 var_t0 = (sPlayerCurrentWallFlags & WALL_FLAG_3) ? 2 : 0; // sp8C
+        s32 temp_t2 = sPlayerCurrentWallFlags & WALL_FLAG_1;          // sp80
 
         if ((var_t0 != 0) || temp_t2 || func_800C9AE4(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId)) {
             CollisionPoly* wallPoly = this->actor.wallPoly;
@@ -8883,7 +8883,7 @@ s32 func_8083DD1C(PlayState* play, Player* this, f32 arg2, f32 arg3, f32 arg4, f
         wallPoly = this->actor.wallPoly;
         this->actor.bgCheckFlags |= 0x200;
         this->actor.wallBgId = bgId;
-        D_80862B0C = func_800C9A4C(&play->colCtx, wallPoly, bgId);
+        sPlayerCurrentWallFlags = SurfaceType_GetWallFlags(&play->colCtx, wallPoly, bgId);
 
         wallPolyNormalX = COLPOLY_GET_NORMAL(wallPoly->normal.x);
         wallPolyNormalZ = COLPOLY_GET_NORMAL(wallPoly->normal.z);
@@ -8925,7 +8925,7 @@ s32 func_8083DFC4(Player* this, PlayState* play) {
         }
 
         if (!func_801242B4(this) && ((this->linearVelocity == 0.0f) || !(this->stateFlags2 & PLAYER_STATE2_4)) &&
-            (D_80862B0C & 0x40) && (this->actor.bgCheckFlags & 1) && (this->wallHeight >= 39.0f)) {
+            (sPlayerCurrentWallFlags & WALL_FLAG_6) && (this->actor.bgCheckFlags & 1) && (this->wallHeight >= 39.0f)) {
             this->stateFlags2 |= PLAYER_STATE2_1;
 
             if (CHECK_BTN_ALL(D_80862B44->cur.button, BTN_A)) {
@@ -8995,7 +8995,7 @@ void func_8083E2F4(Player* this, PlayState* play) {
 
 s32 func_8083E354(Player* this, PlayState* play) {
     if (!CHECK_BTN_ALL(D_80862B44->press.button, BTN_A) && (this->actor.bgCheckFlags & 0x200)) {
-        if ((D_80862B0C & 8) || (D_80862B0C & 2) ||
+        if ((sPlayerCurrentWallFlags & WALL_FLAG_3) || (sPlayerCurrentWallFlags & WALL_FLAG_1) ||
             func_800C9AE4(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId)) {
             return false;
         }
@@ -10794,7 +10794,7 @@ void func_80843178(PlayState* play, Player* this) {
         }
 
         temp_v1_3 = this->actor.shape.rot.y - BINANG_ADD(this->actor.wallYaw, 0x8000);
-        D_80862B0C = func_800C9A4C(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId);
+        sPlayerCurrentWallFlags = SurfaceType_GetWallFlags(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId);
         D_80862B20 = ABS_ALT(temp_v1_3);
         temp_v1_3 = BINANG_SUB(this->currentYaw, BINANG_ADD(this->actor.wallYaw, 0x8000));
         D_80862B24 = ABS_ALT(temp_v1_3);

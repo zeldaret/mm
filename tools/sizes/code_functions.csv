@@ -572,7 +572,7 @@ asm/non_matchings/code/z_bgcheck/SurfaceType_GetSceneExitIndex.s,SurfaceType_Get
 asm/non_matchings/code/z_bgcheck/SurfaceType_GetFloorType.s,SurfaceType_GetFloorType,0x800C99D4,0xA
 asm/non_matchings/code/z_bgcheck/func_800C99FC.s,func_800C99FC,0x800C99FC,0xA
 asm/non_matchings/code/z_bgcheck/func_800C9A24.s,func_800C9A24,0x800C9A24,0xA
-asm/non_matchings/code/z_bgcheck/func_800C9A4C.s,func_800C9A4C,0x800C9A4C,0xC
+asm/non_matchings/code/z_bgcheck/SurfaceType_GetWallFlags.s,SurfaceType_GetWallFlags,0x800C9A4C,0xC
 asm/non_matchings/code/z_bgcheck/func_800C9A7C.s,func_800C9A7C,0x800C9A7C,0xD
 asm/non_matchings/code/z_bgcheck/func_800C9AB0.s,func_800C9AB0,0x800C9AB0,0xD
 asm/non_matchings/code/z_bgcheck/func_800C9AE4.s,func_800C9AE4,0x800C9AE4,0xD

@@ -7,8 +7,15 @@
 #define DYNA_RAYCAST_WALLS 2
 #define DYNA_RAYCAST_CEILINGS 4
 
-u32 sWallFlags[32] = {
-    0, 1, 3, 5, 8, 16, 32, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+u32 sWallFlags[BG_WALL_TYPE_MAX] = {
+    0, // BG_WALL_TYPE_0
+    WALL_FLAG_0,                // BG_WALL_TYPE_1
+    WALL_FLAG_0 | WALL_FLAG_1,  // BG_WALL_TYPE_2
+    WALL_FLAG_0 | WALL_FLAG_2,  // BG_WALL_TYPE_3
+    WALL_FLAG_3,                // BG_WALL_TYPE_4
+    WALL_FLAG_4,                // BG_WALL_TYPE_5
+    WALL_FLAG_5,                // BG_WALL_TYPE_6
+    WALL_FLAG_6,                // BG_WALL_TYPE_7
 };
 
 u16 sSurfaceTypeSfx[] = {
@@ -4196,7 +4203,7 @@ u32 func_800C9A24(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
 /**
  * SurfaceType Get Wall Flags
  */
-s32 func_800C9A4C(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+s32 SurfaceType_GetWallFlags(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return sWallFlags[func_800C9A24(colCtx, poly, bgId)];
 }
 
@@ -4204,21 +4211,21 @@ s32 func_800C9A4C(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
  * SurfaceType Is Wall Flag (1 << 0) Set
  */
 s32 func_800C9A7C(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
-    return (func_800C9A4C(colCtx, poly, bgId) & 1) ? true : false;
+    return (SurfaceType_GetWallFlags(colCtx, poly, bgId) & WALL_FLAG_0) ? true : false;
 }
 
 /**
  * SurfaceType Is Wall Flag (1 << 1) Set
  */
 s32 func_800C9AB0(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
-    return (func_800C9A4C(colCtx, poly, bgId) & 2) ? true : false;
+    return (SurfaceType_GetWallFlags(colCtx, poly, bgId) & WALL_FLAG_1) ? true : false;
 }
 
 /**
  * SurfaceType Is Wall Flag (1 << 2) Set
  */
 s32 func_800C9AE4(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
-    return (func_800C9A4C(colCtx, poly, bgId) & 4) ? true : false;
+    return (SurfaceType_GetWallFlags(colCtx, poly, bgId) & WALL_FLAG_2) ? true : false;
 }
 
 u32 func_800C9B18(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {

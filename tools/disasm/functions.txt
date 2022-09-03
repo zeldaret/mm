@@ -1058,7 +1058,7 @@
     0x800C99D4:("SurfaceType_GetFloorType",),
     0x800C99FC:("func_800C99FC",),
     0x800C9A24:("func_800C9A24",),
-    0x800C9A4C:("func_800C9A4C",),
+    0x800C9A4C:("SurfaceType_GetWallFlags",),
     0x800C9A7C:("func_800C9A7C",),
     0x800C9AB0:("func_800C9AB0",),
     0x800C9AE4:("func_800C9AE4",),
