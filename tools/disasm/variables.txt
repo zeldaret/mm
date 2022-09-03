@@ -2283,7 +2283,7 @@
     0x801D66C4:("sBgmEnemyDist","f32","",0x4),
     0x801D66C8:("sBgmEnemyVolume","UNK_TYPE1","",0x1),
     0x801D66CC:("sPrevMainBgmSeqId","UNK_TYPE2","",0x2),
-    0x801D66D0:("sSeqSpot","UNK_TYPE1","",0x1),
+    0x801D66D0:("sSeqResumePoint","UNK_TYPE1","",0x1),
     0x801D66D4:("sPrevSceneSeqId","UNK_TYPE1","",0x1),
     0x801D66D8:("sNumFramesStill","UNK_TYPE4","",0x4),
     0x801D66DC:("sNumFramesMoving","UNK_TYPE4","",0x4),

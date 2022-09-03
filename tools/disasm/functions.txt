@@ -3942,7 +3942,7 @@
     0x801A257C:("Audio_StartMorningSceneSequence",),
     0x801A25E4:("Audio_PlaySceneSequence",),
     0x801A2670:("Audio_StartSceneSequence",),
-    0x801A2778:("Audio_UpdateSceneSequenceSpot",),
+    0x801A2778:("Audio_UpdateSceneSequenceResumePoint",),
     0x801A27E8:("func_801A27E8",),
     0x801A281C:("func_801A281C",),
     0x801A29D4:("func_801A29D4",),
