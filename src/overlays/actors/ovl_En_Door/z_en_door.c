@@ -493,7 +493,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
     } else if (!Player_InCsMode(play)) {
         Actor_OffsetOfPointInActorCoords(&this->door.dyna.actor, &playerPosRelToDoor, &player->actor.world.pos);
         if (D_80867BC0 || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
-                                     (fabsf(playerPosRelToDoor.z) < 50.0f))) {
+                           (fabsf(playerPosRelToDoor.z) < 50.0f))) {
             yawDiff = player->actor.shape.rot.y - this->door.dyna.actor.shape.rot.y;
             if (playerPosRelToDoor.z > 0.0f) {
                 yawDiff = (0x8000 - yawDiff);
@@ -512,7 +512,8 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                 } else if (this->doorType == ENDOOR_TYPE_4) {
                     player->doorType = PLAYER_DOORTYPE_TALK;
                     this->door.dyna.actor.textId = 0x1800;
-                } else if ((this->doorType == ENDOOR_TYPE_0) || (this->doorType == ENDOOR_TYPE_2) || (this->doorType == ENDOOR_TYPE_3)) {
+                } else if ((this->doorType == ENDOOR_TYPE_0) || (this->doorType == ENDOOR_TYPE_2) ||
+                           (this->doorType == ENDOOR_TYPE_3)) {
                     s32 textIdOffset;
 
                     temp_t0 = (play->actorCtx.unkC & 0x2AA) >> 1;
