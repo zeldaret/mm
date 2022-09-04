@@ -425,21 +425,21 @@ typedef struct struct_8085D224 {
     /* 0x8 */ f32 unk_8;
 } struct_8085D224; // size = 0xC
 
-typedef struct struct_8085D13C {
+typedef struct FallImpactInfo {
     /* 0x0 */ s8 damage;
     /* 0x1 */ u8 sourceIntensity;
     /* 0x2 */ u8 decayTimer;
     /* 0x3 */ u8 decayStep;
     /* 0x4 */ u16 sfxId;
-} struct_8085D13C; // size = 0x6
+} FallImpactInfo; // size = 0x6
 
-typedef struct struct_8085CD30 {
+typedef struct AttackAnimInfo {
     /* 0x00 */ LinkAnimationHeader* unk_0;
     /* 0x04 */ LinkAnimationHeader* unk_4;
     /* 0x08 */ LinkAnimationHeader* unk_8;
     /* 0x0C */ u8 unk_C;
     /* 0x0D */ u8 unk_D;
-} struct_8085CD30; // size = 0x10
+} AttackAnimInfo; // size = 0x10
 
 typedef struct MeleeWeaponDamageInfo {
     /* 0x0 */ s32 dmgFlags;
@@ -2835,8 +2835,7 @@ void func_8082F470(PlayState* play, Player* this, PlayerActionParam actionParam)
     }
 }
 
-// sItemActionParams
-s8 D_8085C99C[] = {
+s8 sItemActionParams[] = {
     PLAYER_AP_OCARINA,                 // ITEM_OCARINA,
     PLAYER_AP_BOW,                     // ITEM_BOW,
     PLAYER_AP_BOW_FIRE,                // ITEM_ARROW_FIRE,
@@ -2930,7 +2929,7 @@ PlayerActionParam Player_ItemToActionParam(Player* this, ItemID item) {
     } else if ((item == ITEM_SWORD_KOKIRI) && (this->transformation == PLAYER_FORM_ZORA)) {
         return PLAYER_AP_ZORA_FINS;
     } else {
-        return D_8085C99C[item];
+        return sItemActionParams[item];
     }
 }
 
@@ -3235,7 +3234,7 @@ void func_8082F8BC(PlayState* play, Player* this, PlayerActionParam actionParam)
 }
 
 // AttackAnimInfo sMeleeAttackAnimInfo
-struct_8085CD30 D_8085CD30[PLAYER_MWA_MAX] = {
+AttackAnimInfo sMeleeAttackAnimInfo[PLAYER_MWA_MAX] = {
     // PLAYER_MWA_FORWARD_SLASH_1H
     { &gameplay_keep_Linkanim_00D868, &gameplay_keep_Linkanim_00D878, &gameplay_keep_Linkanim_00D870, 1, 4 },
     // PLAYER_MWA_FORWARD_SLASH_2H
@@ -4985,7 +4984,7 @@ void func_80833864(PlayState* play, Player* this, PlayerMeleeWeaponAnimation mel
     }
 
     this->meleeWeaponAnimation = meleeWeaponAnimation;
-    func_8082DB90(play, this, D_8085CD30[meleeWeaponAnimation].unk_0);
+    func_8082DB90(play, this, sMeleeAttackAnimInfo[meleeWeaponAnimation].unk_0);
     this->unk_ADC = this->skelAnime.animLength + 4.0f;
 
     if ((meleeWeaponAnimation < PLAYER_MWA_FLIPSLASH_START) ||
@@ -6275,55 +6274,62 @@ void func_80836EA0(PlayState* play, u16 quakeSpeed, s16 verticalMag, s16 quakeCo
     Quake_SetCountdown(quake, quakeCountdown);
 }
 
-struct_8085D13C D_8085D13C[] = {
+FallImpactInfo sFallImpactInfos[] = {
     { -8, 180, 40, 100, NA_SE_VO_LI_LAND_DAMAGE_S },
     { -16, 255, 140, 150, NA_SE_VO_LI_LAND_DAMAGE_S },
 };
 
+// Player_FallAgainstTheFloor, Player_LetTheBodiesHitTheFloor, Player_ImpactFloor, Player_ProcessFallDamage, Player_DamageOnFloorImpact
 s32 func_80836F10(PlayState* play, Player* this) {
-    s32 var_s0;
+    s32 fallDistance;
 
     if ((sPlayerCurrentFloorType == BG_FLOOR_TYPE_6) || (sPlayerCurrentFloorType == BG_FLOOR_TYPE_9) || (this->csMode != PLAYER_CSMODE_0)) {
-        var_s0 = 0;
+        fallDistance = 0;
     } else {
-        var_s0 = this->fallDistance;
+        fallDistance = this->fallDistance;
     }
 
     Math_StepToF(&this->linearVelocity, 0.0f, 1.0f);
     this->stateFlags1 &= ~(PLAYER_STATE1_40000 | PLAYER_STATE1_80000);
 
-    if (var_s0 >= 400) {
+    // Height enough for fall damage
+    if (fallDistance >= 400) {
         s32 index;
-        struct_8085D13C* entry;
+        FallImpactInfo* entry;
 
         if (this->fallDistance < 800) {
+            // small fall
             index = 0;
         } else {
+            // big fall
             index = 1;
         }
 
         func_800B8E58(this, NA_SE_PL_BODY_HIT);
 
-        entry = &D_8085D13C[index];
+        entry = &sFallImpactInfos[index];
         Player_AnimSfx_PlayVoice(this, entry->sfxId);
 
         if (Player_InflictDamage(play, entry->damage)) {
+            // Player's dead
             return -1;
         }
 
         func_80833998(this, 40);
-        func_80836EA0(play, 0x80C7, 2, 30);
+        func_80836EA0(play, 0x80C7, 2, 30); // quake
         Player_RequestRumble(play, this, entry->sourceIntensity, entry->decayTimer, entry->decayStep, SQ(0));
 
         return index + 1;
     }
 
-    if (var_s0 > 200) {
-        var_s0 = var_s0 * 2;
-        var_s0 = CLAMP_MAX(var_s0, 255);
+    // Tiny fall, won't damage player
+    if (fallDistance > 200) {
+        fallDistance = fallDistance * 2;
+        fallDistance = CLAMP_MAX(fallDistance, 255);
 
-        Player_RequestRumble(play, this, var_s0, var_s0 * 0.1f, var_s0, SQ(0));
+        Player_RequestRumble(play, this, fallDistance, fallDistance * 0.1f, fallDistance, SQ(0));
         if (sPlayerCurrentFloorType == BG_FLOOR_TYPE_6) {
+            //! bug unreachable code: When sPlayerCurrentFloorType is equal to BG_FLOOR_TYPE_6 then fallDistance is ignored (set to zero), so the previous check based on said variable will always fail, producing this current check to always be false.
             Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_CLIMB_END);
         }
     }
@@ -6384,7 +6390,7 @@ void func_80837134(PlayState* play, Player* this) {
     }
 
     temp_v0_2 = func_80836F10(play, this);
-    if (temp_v0_2 > 0) {
+    if (temp_v0_2 > 0) { // Player suffered damage because of this fall
         func_80836A98(this, D_8085BE84[PLAYER_ANIMGROUP_13][this->modelAnimType], play);
         this->skelAnime.endFrame = 8.0f;
 
@@ -9998,7 +10004,7 @@ void func_80841358(PlayState* play, Player* this, s32 arg2) {
 
     //! @bug OoB read if player is human
     item = D_8085D2B0[this->transformation];
-    actionParam = D_8085C99C[item];
+    actionParam = sItemActionParams[item];
     func_808317C4(this);
     func_8082DCA0(play, this);
     this->heldItemId = item;
@@ -14297,7 +14303,7 @@ void func_8084CA24(Player* this, PlayState* play) {
 }
 
 void func_8084CB58(Player* this, PlayState* play) {
-    struct_8085CD30* sp3C = &D_8085CD30[this->meleeWeaponAnimation];
+    AttackAnimInfo* sp3C = &sMeleeAttackAnimInfo[this->meleeWeaponAnimation];
     f32 sp38;
     s16 sp36;
 
@@ -14316,7 +14322,7 @@ void func_8084CB58(Player* this, PlayState* play) {
         if (!(this->actor.bgCheckFlags & 1)) {
             func_80832F78(this, &sp38, &sp36, 0.0f, play);
             func_8083CBC4(this, sp38, this->currentYaw, 1.0f, 0.05f, 0.1f, 200);
-        } else if (func_80836F10(play, this) >= 0) {
+        } else if (func_80836F10(play, this) >= 0) { // Player didn't die because of this fall
             this->meleeWeaponAnimation += 3;
             func_80833864(play, this, this->meleeWeaponAnimation);
             this->unk_ADD = 3;
@@ -17152,7 +17158,7 @@ void func_80854800(Player* this, PlayState* play) {
 }
 
 void func_808548B8(Player* this, PlayState* play) {
-    struct_8085CD30* sp3C = &D_8085CD30[this->meleeWeaponAnimation];
+    AttackAnimInfo* sp3C = &sMeleeAttackAnimInfo[this->meleeWeaponAnimation];
 
     if (this->skelAnime.curFrame < (this->skelAnime.endFrame - 6.0f)) {
         this->stateFlags2 |= PLAYER_STATE2_20;
@@ -19913,6 +19919,9 @@ void func_8085B384(Player* this, PlayState* play) {
     this->currentYaw = this->actor.shape.rot.y;
 }
 
+/**
+ * Returns true if Player's health reaches zero
+ */
 s32 Player_InflictDamage(PlayState* play, s32 damage) {
     Player* player = GET_PLAYER(play);
 
