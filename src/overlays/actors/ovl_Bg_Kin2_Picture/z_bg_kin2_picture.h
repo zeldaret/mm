@@ -3,16 +3,8 @@
 
 #include "global.h"
 
-// #define BG_NUMA_HANA_GET_TYPE(thisx) ((thisx)->params & 1)
-// #define BG_NUMA_HANA_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)
-
-// #define BG_KIN2_PICTURE_SWITCH_FLAG(thisx) ((thisx)-> params >> 5) & 1
-// ((temp_v0 & 0x1F) * 4) | 0xFF03)
-// temp_v0 = this->dyna.actor.params;
-// #define BGIKANARAY_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
-
 #define BG_KIN2_PICTURE_GET_1F(thisx) ((thisx)->params & 0x1F)
-#define BG_KIN2_PICTURE_GET_100000(thisx) (((thisx)->params >> 5) & 1)
+#define BG_KIN2_PICTURE_GET_PARAMS_05(thisx) (((thisx)->params >> 5) & 1)
 
 struct BgKin2Picture;
 
@@ -26,11 +18,11 @@ typedef struct BgKin2Picture {
     /* 0x234 */ BgKin2PictureActionFunc actionFunc;
     /* 0x238 */ s16 unk238; /* inferred */
     /* 0x23A */ s8 paintingTimer; //used both for when painting is shaking and when it starts falling to time Gold Skulltula spawn.
-    /* 0x23B */ s8 unk23B;  /* inferred */
+    /* 0x23B */ s8 landTimer;  /* inferred */
     /* 0x23C */ s16 xOffsetAngle; // angle                       /* inferred */
     /* 0x23E */ s16 yOffsetAngle; // angle                       /* inferred */
     /* 0x240 */ s8 unk240;  /* inferred */
-    /* 0x241 */ s8 unk241;  /* inferred */
+    /* 0x241 */ s8 hasSpawnedDust;  /* inferred */
     /* 0x242 */ s8 skulltulaNoiseTimer;  /* inferred */
     /* 0x243 */ char pad243[1];
 } BgKin2Picture; /* size = 0x244 */

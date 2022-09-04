@@ -101,7 +101,7 @@ void BgKin2Picture_SpawnSkulltula(BgKin2Picture* thisx, PlayState* play) {
     BgKin2Picture* this = thisx;
     s32 actorSpawnParams;
 
-    if (!BG_KIN2_PICTURE_GET_100000(&this->dyna.actor)) { // Gold Skulltula is still here.
+    if (!BG_KIN2_PICTURE_GET_PARAMS_05(&this->dyna.actor)) { // Gold Skulltula is still here.
         actorSpawnParams = (BG_KIN2_PICTURE_GET_1F(&this->dyna.actor) << 2) | 0xFF03;
         if (!BgKin2Picture_IsSkulltulaCollected(play, actorSpawnParams) &&
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->dyna.actor.home.pos.x,
@@ -155,7 +155,7 @@ void BgKin2Picture_SpawnEffects(BgKin2Picture* this, PlayState* play) {
 void BgKin2Picture_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     BgKin2Picture* this = THIS;
-    s32 temp_a1;
+    s32 skulltulaParams;
     Vec3f vertices[3];
     s32 i;
     s32 j;
@@ -179,9 +179,9 @@ void BgKin2Picture_Init(Actor* thisx, PlayState* play) {
     }
 
     Actor_SetFocus(&this->dyna.actor, 23.0f);
-    temp_a1 = (BG_KIN2_PICTURE_GET_1F(&this->dyna.actor) << 2) | 0xFF03; // flags?
+    skulltulaParams = (BG_KIN2_PICTURE_GET_1F(&this->dyna.actor) << 2) | 0xFF03; 
 
-    if (BG_KIN2_PICTURE_GET_100000(&this->dyna.actor) || BgKin2Picture_IsSkulltulaCollected(play, temp_a1)) {
+    if (BG_KIN2_PICTURE_GET_PARAMS_05(&this->dyna.actor) || BgKin2Picture_IsSkulltulaCollected(play, skulltulaParams)) {
         this->skulltulaNoiseTimer = -1;
     }
 
@@ -200,7 +200,7 @@ void BgKin2Picture_SetupWait(BgKin2Picture* this) {
 }
 
 void BgKin2Picture_Wait(BgKin2Picture* this, PlayState* play) {
-    // hit by hookshot or projectile
+    // hit by projectile
     if (this->colliderTris.base.acFlags & AC_HIT) {
         this->colliderTris.base.acFlags &= ~AC_HIT;
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
@@ -265,7 +265,7 @@ void BgKin2Picture_Shiver(BgKin2Picture* this, PlayState* play) {
 }
 
 void BgKin2Picture_SetupFall(BgKin2Picture* this) {
-    this->unk23B = 0;
+    this->landTimer = 0;
     this->unk238 = 0;
     this->paintingTimer = 4;
     this->actionFunc = BgKin2Picture_Fall;
@@ -286,8 +286,8 @@ void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play) {
     if ((this->dyna.actor.bgCheckFlags & 1)) {
         Math_StepToS(&this->unk238, 0x7D0, 0x78);
 
-        if (this->unk23B < 3) {
-            this->unk23B++;
+        if (this->landTimer < 3) {
+            this->landTimer++;
 
             if (this->dyna.actor.velocity.y <= 0.01f) {
                 this->dyna.actor.velocity.y *= -0.7f;
@@ -296,7 +296,7 @@ void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play) {
                     this->dyna.actor.velocity.y = 6.0f;
                 }
 
-                if (this->unk23B < 3) {
+                if (this->landTimer < 3) {
                     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SMALL_WOODPLATE_BOUND_0);
                 }
             }
@@ -305,12 +305,12 @@ void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play) {
 
     Actor_SetFocus(&this->dyna.actor, 23.0f);
 
-    if (!(this->unk241) && (this->dyna.actor.shape.rot.x > 0x3300)) {
+    if (!(this->hasSpawnedDust) && (this->dyna.actor.shape.rot.x > 0x3300)) {
         BgKin2Picture_SpawnEffects(this, play);
-        this->unk241 = true;
+        this->hasSpawnedDust = true;
     }
 
-    if (Math_ScaledStepToS(&this->dyna.actor.shape.rot.x, 0x4000, this->unk238) != 0) { // done rotating to the ground
+    if (Math_ScaledStepToS(&this->dyna.actor.shape.rot.x, 0x4000, this->unk238) != 0) { // facing the floor
         this->dyna.actor.shape.yOffset = 40.0f;
 
         if (this->unk240) {
