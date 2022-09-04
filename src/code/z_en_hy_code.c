@@ -262,7 +262,7 @@ s32 EnHy_PlayWalkingSound(EnHy* enHy, PlayState* play, f32 distAboveThreshold) {
         }
         sfxId = waterSfxId + SFX_FLAG;
     } else {
-        sfxId = SurfaceType_GetSfx(&play->colCtx, enHy->actor.floorPoly, enHy->actor.floorBgId) + SFX_FLAG;
+        sfxId = SurfaceType_GetSfxIdOffset(&play->colCtx, enHy->actor.floorPoly, enHy->actor.floorBgId) + SFX_FLAG;
     }
 
     enHy->isLeftFootOnGround = isFootOnGround = SubS_IsFloorAbove(play, &enHy->leftFootPos, distAboveThreshold);

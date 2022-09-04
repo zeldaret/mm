@@ -489,7 +489,7 @@ void EnFamos_SetupChase(EnFamos* this) {
 void EnFamos_Chase(EnFamos* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f abovePlayerPos;
-    u32 surfaceType;
+    BgFloorProperty surfaceType;
 
     EnFamos_UpdateBobbingHeight(this);
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x800);
@@ -500,9 +500,9 @@ void EnFamos_Chase(EnFamos* this, PlayState* play) {
     this->actor.world.rot.x = -Actor_PitchToPoint(&this->actor, &abovePlayerPos);
     Math_StepToF(&this->actor.speedXZ, 6.0f, 0.5f);
 
-    surfaceType = func_800C9B18(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+    surfaceType = SurfaceType_GetFloorProperty2(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     if ((this->actor.xzDistToPlayer < 30.0f) && (this->actor.floorHeight > BGCHECK_Y_MIN) && // close enough
-        (surfaceType != 0xC && surfaceType != 0xD)) {
+        (surfaceType != BG_FLOOR_PROPERTY_12 && surfaceType != BG_FLOOR_PROPERTY_13)) {
         EnFamos_SetupAttackAim(this);
 
     } else if ((Player_GetMask(play) == PLAYER_MASK_STONE) ||
@@ -543,7 +543,7 @@ void EnFamos_Attack(EnFamos* this, PlayState* play) {
         this->emblemCollider.base.acFlags &= ~AC_ON;
     }
 
-    surfaceType = func_800C9B18(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+    surfaceType = SurfaceType_GetFloorProperty2(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     hitFloor = this->actor.bgCheckFlags & 1;
     if (hitFloor || (this->actor.floorHeight == BGCHECK_Y_MIN) || (surfaceType == 0xC) || (surfaceType == 0xD)) {
         this->collider1.base.atFlags &= ~AT_ON;

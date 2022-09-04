@@ -48,11 +48,6 @@ struct DynaPolyActor;
 #define COLPOLY_IGNORE_ENTITY (1 << 1)
 #define COLPOLY_IGNORE_PROJECTILES (1 << 2)
 
-// Surface Types
-#define COLPOLY_SURFACE_GROUND 0
-#define COLPOLY_SURFACE_SAND 1
-#define COLPOLY_SURFACE_SNOW 14
-
 // CollisionContext flags
 #define BGCHECK_FLAG_REVERSE_CONVEYOR_FLOW 1
 
@@ -135,7 +130,7 @@ typedef enum BgFloorType {
     /* 15 */ BG_FLOOR_TYPE_15
 } BgFloorType;
 
-typedef enum {
+typedef enum BgWallType {
     /*  0 */ BG_WALL_TYPE_0,
     /*  1 */ BG_WALL_TYPE_1,
     /*  2 */ BG_WALL_TYPE_2,
@@ -150,7 +145,7 @@ typedef enum {
     /* 11 */ BG_WALL_TYPE_11,
     /* 12 */ BG_WALL_TYPE_12,
     /* 32 */ BG_WALL_TYPE_MAX = 32
-} WallType;
+} BgWallType;
 
 #define WALL_FLAG_0 (1 << 0)
 #define WALL_FLAG_1 (1 << 1)
@@ -159,6 +154,40 @@ typedef enum {
 #define WALL_FLAG_4 (1 << 4)
 #define WALL_FLAG_5 (1 << 5)
 #define WALL_FLAG_6 (1 << 6)
+
+typedef enum BgFloorProperty{
+    /*  0 */ BG_FLOOR_PROPERTY_0,
+    /*  1 */ BG_FLOOR_PROPERTY_1,
+    /*  2 */ BG_FLOOR_PROPERTY_2,
+    /*  5 */ BG_FLOOR_PROPERTY_5 = 5,
+    /*  6 */ BG_FLOOR_PROPERTY_6,
+    /*  7 */ BG_FLOOR_PROPERTY_7,
+    /*  8 */ BG_FLOOR_PROPERTY_8,
+    /*  9 */ BG_FLOOR_PROPERTY_9,
+    /* 11 */ BG_FLOOR_PROPERTY_11 = 11,
+    /* 12 */ BG_FLOOR_PROPERTY_12,
+    /* 13 */ BG_FLOOR_PROPERTY_13
+} BgFloorProperty;
+
+// TODO: name after the elements from sSurfaceTypeSfx
+typedef enum BgSurfaceSfxType {
+    /*  0 */ BG_SURFACE_SFX_TYPE_0,
+    /*  1 */ BG_SURFACE_SFX_TYPE_1,
+    /*  2 */ BG_SURFACE_SFX_TYPE_2,
+    /*  3 */ BG_SURFACE_SFX_TYPE_3,
+    /*  4 */ BG_SURFACE_SFX_TYPE_4,
+    /*  5 */ BG_SURFACE_SFX_TYPE_5,
+    /*  6 */ BG_SURFACE_SFX_TYPE_6,
+    /*  7 */ BG_SURFACE_SFX_TYPE_7,
+    /*  8 */ BG_SURFACE_SFX_TYPE_8,
+    /*  9 */ BG_SURFACE_SFX_TYPE_9,
+    /* 10 */ BG_SURFACE_SFX_TYPE_10,
+    /* 11 */ BG_SURFACE_SFX_TYPE_11,
+    /* 12 */ BG_SURFACE_SFX_TYPE_12,
+    /* 13 */ BG_SURFACE_SFX_TYPE_13,
+    /* 14 */ BG_SURFACE_SFX_TYPE_14,
+    /* 15 */ BG_SURFACE_SFX_TYPE_MAX
+} BgSurfaceSfxType;
 
 typedef struct {
     /* 0x0 */ u32 data[2];

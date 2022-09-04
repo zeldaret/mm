@@ -406,7 +406,7 @@ wordReplace = {
     "func_800C9924": "BgCheck_GetBgCamFuncData",
     "func_800C99AC": "SurfaceType_GetSceneExitIndex",
     "func_800C9B90": "SurfaceType_IsHorseBlocked",
-    "func_800C9BDC": "SurfaceType_GetSfx",
+    "func_800C9BDC": "SurfaceType_GetSfxIdOffset",
     "func_800C9C74": "SurfaceType_GetSlope",
     "func_800C9C9C": "SurfaceType_GetLightSettingIndex",
     "func_800C9CC4": "SurfaceType_GetEcho",
