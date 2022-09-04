@@ -485,7 +485,7 @@ typedef struct struct_8085D200 {
 
 // bss
 #if 1
-Vec3f sDogSpawnPos; // sDogSpawnPos // In-function static
+//Vec3f sDogSpawnPos; // sDogSpawnPos // In-function static
 f32 D_80862AFC;   // distance of the analog stick to its center
 s16 D_80862B00;   // analog stick angle/yaw
 s16 D_80862B02;   // analog stick yaw + camera yaw
@@ -11854,10 +11854,8 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
 
 Vec3f D_8085D41C = { 0.0f, 0.0f, -30.0f };
 
-#ifdef NON_MATCHING
-// in-function static bss
 void Player_Update(Actor* thisx, PlayState* play) {
-    static Vec3f sDogSpawnPos; // sDogSpawnPos
+    static Vec3f sDogSpawnPos;
     Player* this = (Player*)thisx;
     s32 dogParams;
     s32 pad;
@@ -11876,7 +11874,7 @@ void Player_Update(Actor* thisx, PlayState* play) {
 
             dogParams = gSaveContext.dogParams;
 
-            dog = Actor_Spawn(&play->actorCtx, play, 0xE2, sDogSpawnPos.x, sDogSpawnPos.y, sDogSpawnPos.z, 0,
+            dog = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_DG, sDogSpawnPos.x, sDogSpawnPos.y, sDogSpawnPos.z, 0,
                               this->actor.shape.rot.y, 0, dogParams | 0x8000);
             if (dog != NULL) {
                 dog->room = -1;
@@ -11915,12 +11913,6 @@ void Player_Update(Actor* thisx, PlayState* play) {
     MREG(54) = this->actor.world.pos.z;
     MREG(55) = this->actor.world.rot.y;
 }
-#else
-#if 0
-Vec3f sDogSpawnPos;
-#endif
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/Player_Update.s")
-#endif
 
 void Player_DrawGameplay(PlayState* play, Player* this, s32 lod, Gfx* cullDList,
                          OverrideLimbDrawFlex overrideLimbDraw) {

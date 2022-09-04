@@ -710,11 +710,7 @@ beginseg
     name "ovl_player_actor"
     compress
     include "build/src/overlays/actors/ovl_player_actor/z_player.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_player_actor/ovl_player_actor_reloc.o"
-#else
-    include "build/data/ovl_player_actor/ovl_player_actor.reloc.o"
-#endif
 endseg
 
 beginseg
