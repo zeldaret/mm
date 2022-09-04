@@ -189,6 +189,14 @@ typedef enum BgSurfaceSfxType {
     /* 15 */ BG_SURFACE_SFX_TYPE_MAX
 } BgSurfaceSfxType;
 
+typedef enum BgConveyorSpeed {
+    /* 0 */ BG_CONVEYOR_SPEED_DISABLED,
+    /* 1 */ BG_CONVEYOR_SPEED_SLOW,
+    /* 2 */ BG_CONVEYOR_SPEED_MEDIUM,
+    /* 3 */ BG_CONVEYOR_SPEED_FAST,
+    /* 4 */ BG_CONVEYOR_SPEED_MAX
+} BgConveyorSpeed;
+
 typedef struct {
     /* 0x0 */ u32 data[2];
 

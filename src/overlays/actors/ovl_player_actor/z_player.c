@@ -492,8 +492,8 @@ s16 D_80862B02;   // analog stick yaw + camera yaw
 s32 D_80862B04;   // boolean, set to the return value of func_8083216C
 BgFloorType sPlayerCurrentFloorType;   // set to the return value of SurfaceType_GetFloorType
 u32 sPlayerCurrentWallFlags;   // SurfaceType wall flags, set to the return value of SurfaceType_GetWallFlags
-u32 D_80862B10;   // SurfaceType_GetConveyorSpeed
-s16 D_80862B14;   // SurfaceType_GetConveyorType
+BgConveyorSpeed sPlayerConveyorSpeedIndex;   // SurfaceType_GetConveyorSpeed
+s16 sPlayerConveyorType;   // SurfaceType_GetConveyorType
 s16 D_80862B16;   // SurfaceType_GetConveyorDirection << 0xA
 f32 D_80862B18;   // D_80862B18 = this->actor.world.pos.y - this->actor.floorHeight;
 BgFloorProperty sPlayerPrevFloorProperty;   // sPlayerPrevFloorProperty = this->floorProperty; // SurfaceType_GetFloorProperty // SurfaceType Get Floor Property
@@ -517,8 +517,8 @@ extern s16 D_80862B02;
 extern s32 D_80862B04;
 extern BgFloorType sPlayerCurrentFloorType;
 extern u32 sPlayerCurrentWallFlags;
-extern u32 D_80862B10;
-extern s16 D_80862B14;
+extern BgConveyorSpeed sPlayerConveyorSpeedIndex;
+extern s16 sPlayerConveyorType;
 extern s16 D_80862B16;
 extern f32 D_80862B18;
 extern BgFloorProperty sPlayerPrevFloorProperty;
@@ -5704,7 +5704,7 @@ void func_808355D8(PlayState* play, Player* this, LinkAnimationHeader* anim) {
 // related to grottos (?)
 s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) {
     u32 var_a3; // sp3C
-    BgFloorType temp_v0_3;
+    BgFloorType floorType;
     s32 sp34;
     s32 sp30;
 
@@ -5754,9 +5754,9 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
                 }
 
                 if (!(this->stateFlags1 & (PLAYER_STATE1_800000 | PLAYER_STATE1_8000000 | PLAYER_STATE1_20000000)) &&
-                    (temp_v0_3 = SurfaceType_GetFloorType(&play->colCtx, poly, bgId), (temp_v0_3 != BG_FLOOR_TYPE_10)) &&
+                    ((floorType = SurfaceType_GetFloorType(&play->colCtx, poly, bgId)) != BG_FLOOR_TYPE_10) &&
                     ((sp34 < 100) || (this->actor.bgCheckFlags & 1))) {
-                    if (temp_v0_3 == BG_FLOOR_TYPE_11) {
+                    if (floorType == BG_FLOOR_TYPE_11) {
                         func_8019F128(NA_SE_OC_SECRET_HOLE_OUT);
                         func_801A4058(5);
                         gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
@@ -10748,28 +10748,28 @@ void func_80843178(PlayState* play, Player* this) {
     }
 
     D_80862B18 = this->actor.world.pos.y - this->actor.floorHeight;
-    D_80862B10 = 0;
+    sPlayerConveyorSpeedIndex = BG_CONVEYOR_SPEED_DISABLED;
     floorPoly = this->actor.floorPoly;
 
     if ((floorPoly != NULL) && (var_v1 & 4)) {
         this->floorProperty = SurfaceType_GetFloorProperty(&play->colCtx, floorPoly, this->actor.floorBgId);
         if (this == GET_PLAYER(play)) {
             func_801A3CF4(SurfaceType_GetEcho(&play->colCtx, floorPoly, this->actor.floorBgId));
-            if (this->actor.floorBgId == 0x32) {
+            if (this->actor.floorBgId == BGCHECK_SCENE) {
                 func_800FAAB4(play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, this->actor.floorBgId));
             } else {
                 DynaPolyActor_SetRidingRotatingStateByIndex(&play->colCtx, this->actor.floorBgId);
             }
         }
 
-        D_80862B10 = SurfaceType_GetConveyorSpeed(&play->colCtx, floorPoly, this->actor.floorBgId);
-        if (D_80862B10 != 0) {
-            D_80862B14 = SurfaceType_GetConveyorType(&play->colCtx, floorPoly, (s32)this->actor.floorBgId);
-            if (((D_80862B14 == CONVEYOR_WATER) && (this->actor.depthInWater > 20.0f)) ||
-                ((D_80862B14 != CONVEYOR_WATER) && (this->actor.bgCheckFlags & 1))) {
+        sPlayerConveyorSpeedIndex = SurfaceType_GetConveyorSpeed(&play->colCtx, floorPoly, this->actor.floorBgId);
+        if (sPlayerConveyorSpeedIndex != BG_CONVEYOR_SPEED_DISABLED) {
+            sPlayerConveyorType = SurfaceType_GetConveyorType(&play->colCtx, floorPoly, this->actor.floorBgId);
+            if (((sPlayerConveyorType == CONVEYOR_WATER) && (this->actor.depthInWater > 20.0f)) ||
+                ((sPlayerConveyorType != CONVEYOR_WATER) && (this->actor.bgCheckFlags & 1))) {
                 D_80862B16 = SurfaceType_GetConveyorDirection(&play->colCtx, floorPoly, this->actor.floorBgId) << 0xA;
             } else {
-                D_80862B10 = 0;
+                sPlayerConveyorSpeedIndex = BG_CONVEYOR_SPEED_DISABLED;
             }
         }
     }
@@ -10901,10 +10901,10 @@ void func_80843178(PlayState* play, Player* this) {
         if (func_808430E0(this) == 0) {
             floorPolyNormalY = COLPOLY_GET_NORMAL(floorPoly->normal.y);
 
-            if (this->actor.floorBgId != 0x32) {
+            if (this->actor.floorBgId != BGCHECK_SCENE) {
                 DynaPolyActor_SetRidingMovingStateByIndex(&play->colCtx, this->actor.floorBgId);
             } else if (!(this->actor.bgCheckFlags & 2) && (this->actor.depthInWater <= 24.0f) && (D_80862B40 != 1) &&
-                       (D_80862B10 == 0) && (floorPolyNormalY > 0.5f)) {
+                       (sPlayerConveyorSpeedIndex == BG_CONVEYOR_SPEED_DISABLED) && (floorPolyNormalY > 0.5f)) {
                 if (ActorCutscene_GetCurrentIndex() != play->playerActorCsIds[8]) {
                     func_80841A50(play, this);
                 }
@@ -11391,8 +11391,17 @@ void func_80844D80(PlayState* play, Player* this) {
 }
 
 f32 D_8085D3FC[] = { 0.005f, 0.05f };
-f32 D_8085D404[] = { 2.0f, 4.0f, 11.0f };
-f32 D_8085D410[] = { 0.5f, 1.0f, 3.0f };
+
+f32 sWaterConveyorSpeeds[BG_CONVEYOR_SPEED_MAX - 1] = { 
+    2.0f,  // BG_CONVEYOR_SPEED_SLOW
+    4.0f,  // BG_CONVEYOR_SPEED_MEDIUM
+    11.0f,  // BG_CONVEYOR_SPEED_FAST
+};
+f32 sFloorConveyorSpeeds[BG_CONVEYOR_SPEED_MAX - 1] = { 
+    0.5f,  // BG_CONVEYOR_SPEED_SLOW
+    1.0f,  // BG_CONVEYOR_SPEED_MEDIUM
+    3.0f, // BG_CONVEYOR_SPEED_FAST
+};
 
 void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
     f32 temp_fv0;
@@ -11552,28 +11561,28 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
                 player->actor.floorPoly = player->rideActor->floorPoly;
                 player->actor.floorBgId = player->rideActor->floorBgId;
             }
-            D_80862B10 = 0;
+            sPlayerConveyorSpeedIndex = BG_CONVEYOR_SPEED_DISABLED;
             player->unk_B80 = 0.0f;
         }
 
         func_8083562C(play, player, player->actor.floorPoly, player->actor.floorBgId);
-        if (D_80862B10 != 0) {
-            f32 var_fv1;
+        if (sPlayerConveyorSpeedIndex != BG_CONVEYOR_SPEED_DISABLED) {
+            f32 conveyorSpeed;
             s32 pad2;
 
-            D_80862B10--;
-            if (D_80862B14 == CONVEYOR_WATER) {
-                var_fv1 = D_8085D404[D_80862B10];
+            sPlayerConveyorSpeedIndex--;
+            if (sPlayerConveyorType == CONVEYOR_WATER) {
+                conveyorSpeed = sWaterConveyorSpeeds[sPlayerConveyorSpeedIndex];
                 if (!(player->stateFlags1 & PLAYER_STATE1_8000000)) {
-                    var_fv1 /= 4.0f;
+                    conveyorSpeed /= 4.0f;
                 }
             } else {
-                var_fv1 = D_8085D410[D_80862B10];
+                conveyorSpeed = sFloorConveyorSpeeds[sPlayerConveyorSpeedIndex];
             }
 
-            Math_StepToF(&player->unk_B80, var_fv1, var_fv1 * 0.1f);
+            Math_StepToF(&player->unk_B80, conveyorSpeed, conveyorSpeed * 0.1f);
             Math_ScaledStepToS(&player->unk_B84, D_80862B16,
-                               ((player->stateFlags1 & PLAYER_STATE1_8000000) ? 400.0f : 800.0f) * var_fv1);
+                               ((player->stateFlags1 & PLAYER_STATE1_8000000) ? 400.0f : 800.0f) * conveyorSpeed);
         } else if (player->unk_B80 != 0.0f) {
             Math_StepToF(&player->unk_B80, 0.0f, (player->stateFlags1 & PLAYER_STATE1_8000000) ? 0.5f : 2.0f);
         }
@@ -14612,7 +14621,7 @@ void func_8084D820(Player* this, PlayState* play) {
             sp5C = 5.0f;
             if (this->stateFlags1 & PLAYER_STATE1_1) {
                 sp5C = gSaveContext.entranceSpeed;
-                if (D_80862B10 != 0) {
+                if (sPlayerConveyorSpeedIndex != BG_CONVEYOR_SPEED_DISABLED) {
                     this->unk_3A0.x = (Math_SinS(D_80862B16) * 400.0f) + this->actor.world.pos.x;
                     this->unk_3A0.z = (Math_CosS(D_80862B16) * 400.0f) + this->actor.world.pos.z;
                 }
@@ -20004,7 +20013,7 @@ void func_8085B74C(PlayState* play) {
         gSaveContext.entranceSpeed = linearVelocity;
     }
 
-    func_80835324(play, player, 400.0f, (D_80862B10 != 0) ? D_80862B16 : player->actor.world.rot.y);
+    func_80835324(play, player, 400.0f, (sPlayerConveyorSpeedIndex != BG_CONVEYOR_SPEED_DISABLED) ? D_80862B16 : player->actor.world.rot.y);
     player->stateFlags1 |= (PLAYER_STATE1_1 | PLAYER_STATE1_20000000);
 }
 
