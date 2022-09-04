@@ -5832,9 +5832,10 @@ void func_80835BC8(Player* this, Vec3f* translation, Vec3f* src, Vec3f* dst) {
     Lib_Vec3f_TranslateAndRotateY(translation, this->actor.shape.rot.y, src, dst);
 }
 
-void func_80835BF8(Vec3f* arg0, s16 arg1, f32 arg2, Vec3f* arg3) {
-    arg3->x = Math_SinS(arg1) * arg2 + arg0->x;
-    arg3->z = Math_CosS(arg1) * arg2 + arg0->z;
+// Player_GetPosInACertainDirectionFromARadiusAway
+void func_80835BF8(Vec3f* srcPos, s16 rotY, f32 radius, Vec3f* dstPos) {
+    dstPos->x = Math_SinS(rotY) * radius + srcPos->x;
+    dstPos->z = Math_CosS(rotY) * radius + srcPos->z;
 }
 
 Actor* Player_SpawnFairy(PlayState* play, Player* this, Vec3f* translation, Vec3f* arg3, s32 elfParams) {
@@ -6039,7 +6040,7 @@ void func_80836258(PlayState* play, Player* this, Actor* door) {
 
     func_8082DAD4(this);
     func_8082E920(play, this, 1 | ANIM_FLAG_UPDATEY | 4 | 8 | 0x80 | 0x200);
-    doorNormal->unk_1A1 = 1;
+    doorNormal->unk_1A1 = true;
     if (this->doorType != PLAYER_DOORTYPE_3) {
         CollisionPoly* poly;
         s32 bgId;
@@ -6279,7 +6280,7 @@ FallImpactInfo sFallImpactInfos[] = {
     { -16, 255, 140, 150, NA_SE_VO_LI_LAND_DAMAGE_S },
 };
 
-// Player_FallAgainstTheFloor, Player_LetTheBodiesHitTheFloor, Player_ImpactFloor, Player_ProcessFallDamage, Player_DamageOnFloorImpact
+// Player_FallAgainstTheFloor, Player_LetTheBodiesHitTheFloor, Player_ImpactFloor, Player_ProcessFallDamage, Player_DamageOnFloorImpact, Player_CalculateFallDamage
 s32 func_80836F10(PlayState* play, Player* this) {
     s32 fallDistance;
 

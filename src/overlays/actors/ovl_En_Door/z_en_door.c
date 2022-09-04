@@ -479,7 +479,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->door.dyna.actor, &play->state) && (this->door.dyna.actor.textId == 0x1821)) {
         D_80867BC0 = true;
     }
-    if (this->door.unk_1A1 != 0) {
+    if (this->door.unk_1A1) {
         this->actionFunc = func_80867144;
         Animation_PlayOnceSetSpeed(&this->door.skelAnime, sAnimations[this->door.animIndex],
                                    (player->stateFlags1 & PLAYER_STATE1_8000000) ? 0.75f : 1.5f);
@@ -599,9 +599,9 @@ void func_80867144(EnDoor* this, PlayState* play) {
     s32 i;
 
     if (DECR(this->unk_1A6) == 0) {
-        if (SkelAnime_Update(&this->door.skelAnime) != 0) {
+        if (SkelAnime_Update(&this->door.skelAnime)) {
             this->actionFunc = func_80866B20;
-            this->door.unk_1A1 = 0;
+            this->door.unk_1A1 = false;
         } else if (Animation_OnFrame(&this->door.skelAnime, sAnimOpenFrames[this->door.animIndex])) {
             Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_OC_DOOR_OPEN);
             if (this->door.skelAnime.playSpeed < 1.5f) {
