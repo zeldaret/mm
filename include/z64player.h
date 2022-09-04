@@ -500,7 +500,7 @@ typedef enum PlayerCsMode {
     /* 0x0F */ PLAYER_CSMODE_15,
     /* 0x10 */ PLAYER_CSMODE_16,
     /* 0x11 */ PLAYER_CSMODE_17,
-    /* 0x12 */ PLAYER_CSMODE_18,
+    /* 0x12 */ PLAYER_CSMODE_18, // Strangled by Wallmaster
     /* 0x13 */ PLAYER_CSMODE_19,
     /* 0x14 */ PLAYER_CSMODE_20,
     /* 0x15 */ PLAYER_CSMODE_21,
@@ -508,7 +508,7 @@ typedef enum PlayerCsMode {
     /* 0x17 */ PLAYER_CSMODE_23,
     /* 0x18 */ PLAYER_CSMODE_24,
     /* 0x19 */ PLAYER_CSMODE_25,
-    /* 0x1A */ PLAYER_CSMODE_26,
+    /* 0x1A */ PLAYER_CSMODE_26, // Halt!
     /* 0x1B */ PLAYER_CSMODE_27,
     /* 0x1C */ PLAYER_CSMODE_28,
     /* 0x1D */ PLAYER_CSMODE_29,
@@ -566,7 +566,7 @@ typedef enum PlayerCsMode {
     /* 0x51 */ PLAYER_CSMODE_81,
     /* 0x52 */ PLAYER_CSMODE_82,
     /* 0x53 */ PLAYER_CSMODE_83,
-    /* 0x54 */ PLAYER_CSMODE_84,
+    /* 0x54 */ PLAYER_CSMODE_84, // Sucked by the moon
     /* 0x55 */ PLAYER_CSMODE_85,
     /* 0x56 */ PLAYER_CSMODE_86,
     /* 0x57 */ PLAYER_CSMODE_87,

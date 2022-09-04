@@ -273,7 +273,7 @@ void func_808595B8(PlayState* play, Player* this, UNK_TYPE arg2);
 void func_80859D70(PlayState* play, Player* this, UNK_TYPE arg2);
 void func_8085A6C0(PlayState* play, Player* this, void* arg2);
 void func_80859FF4(PlayState* play, Player* this, UNK_TYPE arg2);
-void func_8085A04C(PlayState* play, Player* this, void* arg);
+void Player_Cutscene_TranslateReverse(PlayState* play, Player* this, void* arg);
 void func_8085A144(PlayState* play, Player* this, UNK_TYPE arg2);
 void func_8085A1D4(PlayState* play, Player* this, UNK_TYPE arg2);
 void func_8085A364(PlayState* play, Player* this, void* arg2);
@@ -16969,7 +16969,7 @@ void func_808540A0(Player* this, PlayState* play) {
     Actor_Spawn(&play->actorCtx, play, ACTOR_DEMO_KANKYO, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0x10);
 }
 
-void func_8085AB58(Player* this, CsCmdActorAction* playerAction);
+void Player_Cutscene_SetPosAndYawToStart(Player* this, CsCmdActorAction* playerAction);
 
 void func_80854118(Player* this, PlayState* play) {
     if (D_80862B18 < 150.0f) {
@@ -16993,7 +16993,7 @@ void func_80854118(Player* this, PlayState* play) {
             s32 pad;
             f32 sp28 = this->actor.world.pos.y;
 
-            func_8085AB58(this, play->csCtx.playerAction);
+            Player_Cutscene_SetPosAndYawToStart(this, play->csCtx.playerAction);
             this->actor.world.pos.y = sp28;
         }
     }
@@ -19075,7 +19075,7 @@ void func_80859B54(PlayState* play, Player* this, UNK_TYPE arg2) {
     Player_SetModels(this, Player_ActionToModelGroup(this, this->heldItemActionParam));
 }
 
-void func_80859BA8(PlayState* play, Player* this, CsCmdActorAction* playerAction) {
+void Player_Cutscene_Translate(PlayState* play, Player* this, CsCmdActorAction* playerAction) {
     f32 startX = playerAction->startPos.x;
     f32 startY = playerAction->startPos.y;
     f32 startZ = playerAction->startPos.z;
@@ -19090,9 +19090,9 @@ void func_80859BA8(PlayState* play, Player* this, CsCmdActorAction* playerAction
     this->actor.world.pos.z = (diffZ * progress) + startZ;
 }
 
-void func_80859C60(PlayState* play, Player* this, UNK_PTR arg2) {
+void func_80859C60(PlayState* play, Player* this, void* arg2) {
     if (arg2 != NULL) {
-        func_80859BA8(play, this, arg2);
+        Player_Cutscene_Translate(play, this, arg2);
     }
 
     LinkAnimation_Update(play, &this->skelAnime);
@@ -19294,7 +19294,7 @@ struct_8085DA94 D_8085DEF4[PLAYER_CSMODE_MAX] = {
     /* PLAYER_CSMODE_30  */ { 12, { &gameplay_keep_Linkanim_00D298 } },
     /* PLAYER_CSMODE_31  */ { 12, { &gameplay_keep_Linkanim_00D318 } },
     /* PLAYER_CSMODE_32  */ { -1, { func_80859FF4 } },
-    /* PLAYER_CSMODE_33  */ { -1, { func_8085A04C } },
+    /* PLAYER_CSMODE_33  */ { -1, { Player_Cutscene_TranslateReverse } },
     /* PLAYER_CSMODE_34  */ { 11, { NULL } },
     /* PLAYER_CSMODE_35  */ { 12, { &gameplay_keep_Linkanim_00D2C0 } },
     /* PLAYER_CSMODE_36  */ { -1, { func_8085A144 } },
@@ -19472,7 +19472,7 @@ void func_80859FF4(PlayState* play, Player* this, UNK_TYPE arg2) {
     }
 }
 
-void func_8085A04C(PlayState* play, Player* this, void* arg) {
+void Player_Cutscene_TranslateReverse(PlayState* play, Player* this, void* arg) {
     CsCmdActorAction* playerAction = arg;
     f32 xEnd = playerAction->endPos.x;
     f32 yEnd = playerAction->endPos.y;
@@ -19542,7 +19542,7 @@ void func_8085A330(PlayState* play, Player* this, UNK_TYPE arg2) {
 }
 
 void func_8085A364(PlayState* play, Player* this, void* arg2) {
-    func_80859BA8(play, this, arg2);
+    Player_Cutscene_Translate(play, this, arg2);
     if (LinkAnimation_Update(play, &this->skelAnime)) {
         func_8082EB18(play, this, &gameplay_keep_Linkanim_00D100);
     }
@@ -19710,7 +19710,7 @@ void func_8085AACC(PlayState* play, Player* this, UNK_TYPE arg2) {
     this->unk_AA5 = 0;
 }
 
-void func_8085AB58(Player* this, CsCmdActorAction* playerAction) {
+void Player_Cutscene_SetPosAndYawToStart(Player* this, CsCmdActorAction* playerAction) {
     this->actor.world.pos.x = playerAction->startPos.x;
     this->actor.world.pos.y = playerAction->startPos.y;
     this->actor.world.pos.z = playerAction->startPos.z;
@@ -19718,7 +19718,7 @@ void func_8085AB58(Player* this, CsCmdActorAction* playerAction) {
     this->currentYaw = this->actor.shape.rot.y = playerAction->rot.y;
 }
 
-void func_8085ABA8(Player* this, CsCmdActorAction* playerAction) {
+void Player_Cutscene_8085ABA8(Player* this, CsCmdActorAction* playerAction) {
     f32 xDiff = playerAction->startPos.x - (s32)this->actor.world.pos.x;
     f32 yDiff = playerAction->startPos.y - (s32)this->actor.world.pos.y;
     f32 zDiff = playerAction->startPos.z - (s32)this->actor.world.pos.z;
@@ -19729,7 +19729,7 @@ void func_8085ABA8(Player* this, CsCmdActorAction* playerAction) {
     dist = sqrtf(SQ(xDiff) + SQ(yDiff) + SQ(zDiff));
     if (this->linearVelocity == 0.0f) {
         if ((dist > 50.0f) || (ABS_ALT(temp_v0) > 0x4000)) {
-            func_8085AB58(this, playerAction);
+            Player_Cutscene_SetPosAndYawToStart(this, playerAction);
         }
     }
 
@@ -19796,9 +19796,9 @@ void func_8085ADA0(PlayState* play, Player* this, s32 arg2) {
 
         if ((csMode >= PLAYER_CSMODE_0) && (D_801F4DE0 == 0)) {
             if ((csMode == PLAYER_CSMODE_2) || (csMode == PLAYER_CSMODE_3)) {
-                func_8085ABA8(this, actorAction);
+                Player_Cutscene_8085ABA8(this, actorAction);
             } else {
-                func_8085AB58(this, actorAction);
+                Player_Cutscene_SetPosAndYawToStart(this, actorAction);
             }
         }
 
