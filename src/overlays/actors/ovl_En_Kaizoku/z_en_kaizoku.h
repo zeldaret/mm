@@ -63,7 +63,6 @@ typedef struct EnKaizoku {
     /* 0x2D6 */ s16 unk_2D6;
     /* 0x2D8 */ u8 unk_2D8;
     /* 0x2D9 */ u8 unk_2D9;
-    /* 0x2DA */ char pad_2DA[2];
     /* 0x2DC */ f32 unk_2DC;
     /* 0x2E0 */ f32 unk_2E0;
     /* 0x2E4 */ s32 unk_2E4;
@@ -71,7 +70,6 @@ typedef struct EnKaizoku {
     /* 0x2EC */ s32 unk_2EC;
     /* 0x2F0 */ f32 unk_2F0;
     /* 0x2F4 */ s16 unk_2F4;
-    /* 0x2F6 */ char pad_2F6[2];
     /* 0x2F8 */ Vec3f unk_2F8;
     /* 0x304 */ Vec3f unk_304;
     /* 0x310 */ Vec3f unk_310[15];
@@ -79,7 +77,7 @@ typedef struct EnKaizoku {
     /* 0x3D0 */ s32 unk_3D0;
     /* 0x3D4 */ ColliderCylinder unk_3D4;
     /* 0x420 */ ColliderQuad unk_420;
-    /* 0x4A0 */ char pad_4A0[0xD8];
+    /* 0x4A0 */ UNK_TYPE1 pad_4A0[0xD8];
     /* 0x578 */ s16 unk_578;
     /* 0x57A */ s16 unk_57A;
     /* 0x57C */ s16 unk_57C;

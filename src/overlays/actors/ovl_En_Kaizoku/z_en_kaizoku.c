@@ -183,12 +183,12 @@ u32 D_80B8ABF8[] = {
 };
 
 u8 D_80B8AC44[] = {
-    0x00, 0x00, 0x02, 0x00, 0x00, 0x02, 0x02, 0x02, 0x02, 0x02,
-    0x02, 0x02, 0x00, 0x02, 0x02, 0x02, 0x02, 0x00, 0x02, 0x00,
+    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE,
+    ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
 };
 
-Color_RGBA8 D_80B8AC58 = { 0xC8, 0xA0, 0x78, 0xFF };
-Color_RGBA8 D_80B8AC5C = { 0x82, 0x5A, 0x32, 0xFF };
+Color_RGBA8 D_80B8AC58 = { 200, 160, 120, 255};
+Color_RGBA8 D_80B8AC5C = { 130, 90, 50, 255 };
 
 Vec3f D_80B8AC60 = { 0.0f, -1.5f, 0.0f };
 Vec3f D_80B8AC6C = { 0.0f, -0.2f, 0.0f };
@@ -201,7 +201,7 @@ Vec3f D_80B8ACB4 = { -3000.0f, -2000.0f, -1300.0f };
 Vec3f D_80B8ACC0 = { 1000.0f, 1000.0f, 0.0f };
 
 u32 D_80B8ACCC[] = {
-    0x060093B8, 0x06009978, 0x0600A0F8, 0x06009978, 0x00000000,
+    0x060093B8, 0x06009978, 0x0600A0F8, 0x06009978,
 };
 
 extern AnimationHeader D_060058B8;
@@ -246,8 +246,8 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     blureInit.calcMode = 2;
     Effect_Add(play, &this->unk_3D0, EFFECT_BLURE1, 0, 0, &blureInit);
     Actor_SetScale(&this->actor, 0.0125f);
-    this->actor.flags |= 0x8000000;
-    this->actor.flags &= ~1;
+    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     if (this->unk_2BC == 127) {
         this->unk_2BC = -1;
     }
@@ -261,7 +261,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     this->unk_2D6 = this->actor.cutscene;
     this->actor.world.pos.y = player->actor.world.pos.y + 160.0f;
     this->unk_144 = func_80B85EA0;
-    this->actor.flags |= 0x400;
+    this->actor.flags |= ACTOR_FLAG_400;
     func_80B85F48(this);
 }
 
@@ -275,13 +275,12 @@ void EnKaizoku_Destroy(Actor* thisx, PlayState* play) {
 
 s32 func_80B85858(EnKaizoku* this, PlayState* play) {
     Actor* itemAction;
-    Player* player;
-    s16 sp1E;
-
-    player = GET_PLAYER(play);
-    sp1E = this->unk_2B0;
+    Player* player = GET_PLAYER(play);
+    s16 sp1E = this->unk_2B0;
+   
     for (itemAction = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first; itemAction != NULL;
          itemAction = itemAction->next) {
+        //! FAKE:
         if (1) {}
         if ((itemAction->id == ACTOR_ARMS_HOOK || itemAction->id == ACTOR_EN_ARROW) && player->unk_D57) {
             if ((itemAction->id != ACTOR_ARMS_HOOK || this->unk_2B0 != 13) && this->unk_2B0 != 6) {
@@ -291,9 +290,9 @@ s32 func_80B85858(EnKaizoku* this, PlayState* play) {
         }
     }
     if (sp1E != this->unk_2B0) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
@@ -387,8 +386,6 @@ s32 func_80B85A00(EnKaizoku* this, PlayState* play, s16 arg2) {
     return 0;
 }
 
-extern u32 D_80B8ABF8[];
-extern u8 D_80B8AC44[];
 
 void func_80B85E18(EnKaizoku* this, s32 arg1) {
     this->unk_2E4 = arg1;
@@ -413,8 +410,6 @@ void func_80B85F48(EnKaizoku* this) {
     this->actionFunc = func_80B85FA8;
 }
 
-extern Vec3f D_80B8A8E4[];
-extern Vec3f D_80B8AA04[];
 
 void func_80B85FA8(EnKaizoku* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
@@ -427,13 +422,13 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                 break;
             }
 
-            if (ActorCutscene_GetCanPlayNext(this->unk_2D6) == 0) {
+            if (!ActorCutscene_GetCanPlayNext(this->unk_2D6)) {
                 ActorCutscene_SetIntentToPlay(this->unk_2D6);
                 return;
             }
 
             ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D6, &this->actor);
-            func_800B7298(play, &this->actor, 0x15U);
+            func_800B7298(play, &this->actor, 0x15);
             this->unk_59E = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
             this->actor.shape.rot.y = this->actor.world.rot.y = this->actor.yawTowardsPlayer;
 
@@ -475,7 +470,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                 player->actor.world.pos.z = this->actor.home.pos.z - 30.0f;
             }
 
-            if ((Message_GetState(&play->msgCtx) == 5) && (Message_ShouldAdvance(play) != 0)) {
+            if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
                 func_801477B4(play);
                 func_80B85E18(this, 0xB);
                 this->unk_598 = 0;
@@ -490,14 +485,14 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                     this->unk_2D8 = 0;
                     this->actor.world.pos.y = this->actor.floorHeight;
                     this->actor.velocity.y = 0.0f;
-                    func_800B7298(play, &this->actor, 4U);
+                    func_800B7298(play, &this->actor, 4);
                     Actor_SpawnFloorDustRing(play, &this->actor, &this->unk_58C, 3.0f, 2, 2.0f, 0, 0, 0);
                     Actor_SpawnFloorDustRing(play, &this->actor, &this->unk_580, 3.0f, 2, 2.0f, 0, 0, 0);
-                    Actor_PlaySfxAtPos(&this->actor, 0x3A66U);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRATE_ONGND);
                 }
 
                 if (curFrame >= 11.0f) {
-                    this->unk_59C += 1;
+                    this->unk_59C++;
                     this->unk_598 = 0;
                     this->unk_5BC.x = 0.0f;
                 }
@@ -517,17 +512,17 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
 
                 Message_StartTextbox(play, D_80B8A8D0[sp54], &this->actor);
                 func_80B85E18(this, 0xC);
-                this->unk_2C8 += 1;
+                this->unk_2C8++;
                 this->unk_598 = 0;
-                this->unk_59C += 1;
+                this->unk_59C++;
             }
             break;
 
         case 4:
-            if ((Message_GetState(&play->msgCtx) == 5) && (Message_ShouldAdvance(play) != 0)) {
+            if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
                 func_801477B4(play);
                 this->unk_598 = 0;
-                this->unk_59C += 1;
+                this->unk_59C++;
                 func_801A0238(0x7F, 0);
                 func_801A2E54(0x38);
                 func_80B85E18(this, 0xD);
@@ -536,12 +531,12 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
 
         case 5:
             Math_ApproachF(&this->unk_5E0, 2.0f, 0.2f, 1.0f);
-            if (Animation_OnFrame(&this->skelAnime, 20.0f) != 0) {
-                Actor_PlaySfxAtPos(&this->actor, 0x3A4DU);
+            if (Animation_OnFrame(&this->skelAnime, 20.0f)) {
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOSU_SWORD);
             }
             if (curFrame >= 30.0f) {
                 this->unk_598 = 0;
-                this->unk_59C += 1;
+                this->unk_59C++;
             }
             break;
 
@@ -550,7 +545,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
             if (this->unk_2DC <= curFrame) {
                 this->unk_598 = 7;
                 this->unk_2F8.x = 1.0f;
-                this->unk_59C += 1;
+                this->unk_59C++;
                 this->unk_2F8.y = 1.0f;
                 this->unk_2F8.z = 1.0f;
                 this->unk_304.x = 1.0f;
@@ -561,13 +556,13 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
 
         case 7:
             if (this->unk_598 == 0) {
-                func_800B7298(play, &this->actor, 6U);
+                func_800B7298(play, &this->actor, 6);
                 ActorCutscene_Stop(this->unk_2D6);
                 this->unk_59C = 0;
                 this->unk_59E = 0;
-                this->actor.flags &= 0xFFEFFFFF;
-                this->actor.flags &= 0xF7FFFFFF;
-                this->actor.flags |= 1;
+                this->actor.flags &= ~ACTOR_FLAG_100000;
+                this->actor.flags &= ~ACTOR_FLAG_8000000;
+                this->actor.flags |= ACTOR_FLAG_1;
                 func_80B872A4(this);
             }
             break;
@@ -626,10 +621,10 @@ void func_80B86804(EnKaizoku* this, PlayState* play) {
         ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D6, &this->actor);
     }
 
-    func_800B7298(play, &this->actor, 0x60U);
+    func_800B7298(play, &this->actor, 0x60);
     this->unk_59E = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
     this->unk_2B2 = 30;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_598 = 0;
     this->unk_59C = 0;
     this->unk_2D8 = 0;
@@ -663,6 +658,7 @@ void func_80B868B8(EnKaizoku* this, PlayState* play) {
         case 1:
             if (this->unk_2DC <= curFrame) {
                 s32 textId;
+                
                 func_80B85E18(this, 15);
                 textId = this->unk_2CA * 4 + this->unk_2C8;
                 Message_StartTextbox(play, D_80B8A8D0[textId], &this->actor);
@@ -732,26 +728,26 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
             Message_StartTextbox(play, D_80B8A8D0[textId], &this->actor);
             this->unk_2D9 = 0;
             this->unk_598 = 0;
-            this->unk_59C += 1;
+            this->unk_59C++;
             break;
 
         case 1:
             if (this->unk_2DC <= curFrame) {
                 if (this->unk_2D9 == 0) {
-                    Actor_PlaySfxAtPos(&this->actor, 0x3A73U);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRATE_DAMM_BREATH);
                     this->unk_2D9 = 1;
                 } else {
-                    Actor_PlaySfxAtPos(&this->actor, 0x39B7U);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRATE_BREATH);
                 }
             }
 
-            if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play) != 0) {
+            if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
                 func_801477B4(play);
                 func_80B85E18(this, 0x12);
-                func_800B7298(play, &this->actor, 0x85U);
+                func_800B7298(play, &this->actor, 0x85);
                 this->unk_5A0 = 0;
                 this->unk_598 = 0;
-                this->unk_59C += 1;
+                this->unk_59C++;
             }
             break;
 
@@ -763,7 +759,7 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
             this->unk_5D4.x = player->actor.world.pos.x - 110.0f;
             this->unk_5D4.y = player->actor.world.pos.y;
             this->unk_5D4.z = player->actor.world.pos.z + 30.0f;
-            this->unk_5A0 += 1;
+            this->unk_5A0++;
             if (curFrame >= 1.0f) {
                 Math_ApproachZeroF(&this->unk_2F8.x, 0.3f, 0.3f);
                 Math_ApproachZeroF(&this->unk_304.x, 0.3f, 0.3f);
@@ -772,8 +768,9 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
             }
             if (this->unk_5A0 == 0x12) {
                 Actor* temp_v0_2;
-                Actor_PlaySfxAtPos(&this->actor, 0x3A74U);
-                temp_v0_2 = Actor_Spawn(&play->actorCtx, play, 0xF, this->actor.world.pos.x,
+                
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRATE_SHOUT);
+                temp_v0_2 = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ARROW, this->actor.world.pos.x,
                                         this->actor.world.pos.y + 10.0f, this->actor.world.pos.z,
                                         this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z, -8);
                 if (temp_v0_2 != NULL) {
@@ -793,7 +790,7 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
                 this->unk_598 = 10;
                 Math_Vec3f_Copy(&this->unk_2F8, &gZeroVec3f);
                 Math_Vec3f_Copy(&this->unk_304, &gZeroVec3f);
-                this->unk_59C += 1;
+                this->unk_59C++;
             }
             break;
 
@@ -810,7 +807,7 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
                     play->envCtx.fillScreen = 0;
                     this->unk_59C = 0;
                     this->unk_59E = 0;
-                    func_800B7298(play, &this->actor, 6U);
+                    func_800B7298(play, &this->actor, 6);
                     ActorCutscene_Stop(this->unk_2D6);
                     if (this->unk_2BC >= 0) {
                         Flags_SetSwitch(play, this->unk_2BC);
@@ -943,11 +940,11 @@ void func_80B8760C(EnKaizoku* this, PlayState* play) {
     temp_ft0 = this->skelAnime.curFrame - this->skelAnime.playSpeed;
     temp_ft1 = this->skelAnime.curFrame + this->skelAnime.playSpeed;
     if (this->skelAnime.curFrame != 0.0f && ((temp_ft0 < 0 && temp_ft1 > 0) || (temp_ft0 < 5 && temp_ft1 >= 6))) {
-        Actor_PlaySfxAtPos(&this->actor, 0x39A0U);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_WALK);
     }
 
     if (!(play->gameplayFrames & 0x5F)) {
-        Actor_PlaySfxAtPos(&this->actor, 0x39B7U);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRATE_BREATH);
     }
 
     if (this->unk_2B2 == 0) {
@@ -1053,10 +1050,6 @@ void func_80B87C7C(EnKaizoku* this) {
     this->actionFunc = func_80B87D3C;
 }
 
-extern Color_RGBA8 D_80B8AC58;
-extern Color_RGBA8 D_80B8AC5C;
-extern Vec3f D_80B8AC60;
-extern Vec3f D_80B8AC6C;
 
 void func_80B87CF8(PlayState* arg0, Vec3f* arg1) {
     EffectSsKirakira_SpawnSmall(arg0, arg1, &D_80B8AC60, &D_80B8AC6C, &D_80B8AC58, &D_80B8AC5C);
@@ -1936,8 +1929,6 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-extern Color_RGBA8 D_80B8AB24[];
-extern Color_RGBA8 D_80B8AB30[];
 
 s32 func_80B8A318(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnKaizoku* this = THIS;
@@ -1962,16 +1953,9 @@ s32 func_80B8A318(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
-    return 0;
+    return false;
 }
 
-extern Vec3f D_80B8AC78;
-extern Vec3f D_80B8AC84;
-extern Vec3f D_80B8AC90;
-extern Vec3f D_80B8AC9C;
-extern Vec3f D_80B8ACA8;
-extern Vec3f D_80B8ACB4;
-extern Vec3f D_80B8ACC0;
 
 void func_80B8A468(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Vec3f sp4C;
