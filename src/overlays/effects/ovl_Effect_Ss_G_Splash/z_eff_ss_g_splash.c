@@ -58,7 +58,7 @@ u32 EffectSsGSplash_Init(PlayState* play, u32 index, EffectSs* this, void* initP
         this->rType = initParams->type;
     } else {
         switch (initParams->type) {
-            case 0:
+            case EFFSSGSPLASH_TYPE_0:
                 this->rgPrimColorR = 255;
                 this->rgPrimColorG = 255;
                 this->rgPrimColorB = 255;
@@ -67,9 +67,9 @@ u32 EffectSsGSplash_Init(PlayState* play, u32 index, EffectSs* this, void* initP
                 this->rgEnvColorG = 255;
                 this->rgEnvColorB = 255;
                 this->rgEnvColorA = 200;
-                this->rType = 0;
+                this->rType = EFFSSGSPLASH_TYPE_0;
                 break;
-            case 1:
+            case EFFSSGSPLASH_TYPE_1:
                 this->rgPrimColorR = 255;
                 this->rgPrimColorG = 255;
                 this->rgPrimColorB = 255;
@@ -78,9 +78,9 @@ u32 EffectSsGSplash_Init(PlayState* play, u32 index, EffectSs* this, void* initP
                 this->rgEnvColorG = 255;
                 this->rgEnvColorB = 255;
                 this->rgEnvColorA = 255;
-                this->rType = 1;
+                this->rType = EFFSSGSPLASH_TYPE_1;
                 break;
-            case 2:
+            case EFFSSGSPLASH_TYPE_2:
                 this->rgPrimColorR = 255;
                 this->rgPrimColorG = 255;
                 this->rgPrimColorB = 255;
@@ -89,7 +89,7 @@ u32 EffectSsGSplash_Init(PlayState* play, u32 index, EffectSs* this, void* initP
                 this->rgEnvColorG = 255;
                 this->rgEnvColorB = 255;
                 this->rgEnvColorA = 200;
-                this->rType = 2;
+                this->rType = EFFSSGSPLASH_TYPE_2;
                 break;
         }
     }
@@ -100,7 +100,7 @@ void EffectSsGSplash_Draw(PlayState* play, u32 index, EffectSs* this) {
     s16 texIndex;
 
     switch (this->rType) {
-        case 0:
+        case EFFSSGSPLASH_TYPE_0:
             texIndex = this->rgTexIndex / 100;
             if (texIndex > 7) {
                 texIndex = 7;
@@ -108,7 +108,7 @@ void EffectSsGSplash_Draw(PlayState* play, u32 index, EffectSs* this) {
             EffectSs_DrawGEffect(play, this, waterSplashTextures[texIndex]);
             break;
 
-        case 1:
+        case EFFSSGSPLASH_TYPE_1:
             texIndex = this->rgTexIndex / 100;
             if (texIndex > 7) {
                 texIndex = 7;
@@ -116,7 +116,7 @@ void EffectSsGSplash_Draw(PlayState* play, u32 index, EffectSs* this) {
             EffectSs_DrawGEffect(play, this, waterSplashTextures[texIndex]);
             break;
 
-        case 2:
+        case EFFSSGSPLASH_TYPE_2:
             texIndex = this->rgTexIndex / 100;
             if (texIndex > 7) {
                 texIndex = 7;
@@ -129,7 +129,7 @@ void EffectSsGSplash_Draw(PlayState* play, u32 index, EffectSs* this) {
 void EffectSsGSplash_Update(PlayState* play, u32 index, EffectSs* this) {
     Vec3f newSplashPos;
 
-    if ((this->rType == 1) && (this->life == 5)) {
+    if ((this->rType == EFFSSGSPLASH_TYPE_1) && (this->life == 5)) {
         newSplashPos = this->pos;
         newSplashPos.y += ((this->rgScale * 20) * 0.002f);
         EffectSsGSplash_Spawn(play, &newSplashPos, 0, 0, 2, this->rgScale / 2);
