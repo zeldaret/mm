@@ -248,9 +248,9 @@ void EnSyatekiCrow_Dead(EnSyatekiCrow* this, PlayState* play) {
     this->deathTimer++;
 }
 
-static Vec3f sSsExtraVelocity = { 0.0f, 20.0f, 0.0f };
+static Vec3f sVelocity = { 0.0f, 20.0f, 0.0f };
 
-static Vec3f sSsExtraAcceleration = { 0.0f, 0.0f, 0.0f };
+static Vec3f sAccel = { 0.0f, 0.0f, 0.0f };
 
 void EnSyatekiCrow_UpdateDamage(EnSyatekiCrow* this, PlayState* play) {
     if (this->actionFunc == EnSyatekiCrow_Fly) {
@@ -258,7 +258,7 @@ void EnSyatekiCrow_UpdateDamage(EnSyatekiCrow* this, PlayState* play) {
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);
             this->deathTimer = 0;
             this->collider.base.acFlags &= ~AC_HIT;
-            EffectSsExtra_Spawn(play, &this->actor.world.pos, &sSsExtraVelocity, &sSsExtraAcceleration, 5, 1);
+            EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, 1);
             EnSyatekiCrow_SetupDead(this);
         } else {
             this->collider.elements[0].dim.worldSphere.center.x = this->actor.world.pos.x;
