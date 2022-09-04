@@ -15,7 +15,6 @@
 #include "objects/object_wdor03/object_wdor03.h"
 #include "objects/object_wdor04/object_wdor04.h"
 #include "objects/object_wdor05/object_wdor05.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_numa_obj/object_numa_obj.h"
 #include "objects/object_kaizoku_obj/object_kaizoku_obj.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
@@ -387,22 +386,22 @@ static Gfx* D_808679A4[14][2] = {
 void EnDoor_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     s32 objectBankIndex;
-    EnDoorInfo* objectInfo = sObjInfo;
+    EnDoorInfo* objectInfo = &sObjInfo[0];
     EnDoor* this = THIS;
     s32 i;
 
     Actor_ProcessInitChain(&this->door.dyna.actor, sInitChain);
 
-    this->unk_1A4 = ENDOOR_GET_PARAMS_7(thisx);
+    this->doorType = ENDOOR_GET_TYPE(thisx);
 
     this->switchFlag = ENDOOR_GET_PARAMS_7F(thisx);
-    if ((this->unk_1A4 == 7) && (this->switchFlag == 0)) {
+    if ((this->doorType == ENDOOR_TYPE_7) && (this->switchFlag == 0)) {
         DynaPolyActor_Init(&this->door.dyna, 0);
         DynaPolyActor_LoadMesh(play, &this->door.dyna, &gDoorCol);
     }
     SkelAnime_Init(play, &this->door.skelAnime, &gDoorSkel, &gameplay_keep_Anim_020658, this->limbTable,
-                   this->limbTable, 5);
-    if (this->unk_1A4 == 5) {
+                   this->limbTable, DOOR_LIMB_MAX);
+    if (this->doorType == ENDOOR_TYPE_5) {
         objectInfo = &sObjInfo[17 + this->switchFlag];
     } else {
         for (i = 0; i < ARRAY_COUNT(sObjInfo) - 34; i++, objectInfo++) {
@@ -438,7 +437,7 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
 void EnDoor_Destroy(Actor* thisx, PlayState* play) {
     EnDoor* this = (EnDoor*)thisx;
 
-    if (this->unk_1A4 != 7) {
+    if (this->doorType != ENDOOR_TYPE_7) {
         TransitionActorEntry* transitionEntry =
             &play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&this->door.dyna.actor)];
         if (transitionEntry->id < 0) {
@@ -454,11 +453,11 @@ void func_80866A5C(EnDoor* this, PlayState* play) {
         this->door.dyna.actor.objBankIndex = this->door.requiredObjBankIndex;
         this->actionFunc = func_80866B20;
         this->door.dyna.actor.world.rot.y = 0;
-        if (this->unk_1A4 == 1) {
+        if (this->doorType == ENDOOR_TYPE_1) {
             if (!Flags_GetSwitch(play, this->switchFlag)) {
                 this->unk_1A6 = 10;
             }
-        } else if ((this->unk_1A4 == 4) &&
+        } else if ((this->doorType == ENDOOR_TYPE_4) &&
                    (Actor_XZDistanceBetweenActors(&this->door.dyna.actor, &GET_PLAYER(play)->actor) > 120.0f)) {
             this->actionFunc = func_8086704C;
             this->door.dyna.actor.world.rot.y = -0x1800;
@@ -479,7 +478,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->door.dyna.actor, &play->state) && (this->door.dyna.actor.textId == 0x1821)) {
         D_80867BC0 = true;
     }
-    if (this->door.unk_1A1) {
+    if (this->door.playOpenAnim) {
         this->actionFunc = func_80867144;
         Animation_PlayOnceSetSpeed(&this->door.skelAnime, sAnimations[this->door.animIndex],
                                    (player->stateFlags1 & PLAYER_STATE1_8000000) ? 0.75f : 1.5f);
@@ -500,53 +499,53 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                 yawDiff = (0x8000 - yawDiff);
             }
             if (ABS_ALT(yawDiff) < 0x3000) {
-                player->doorType = PLAYER_DOORTYPE_1;
+                player->doorType = PLAYER_DOORTYPE_HANDLE;
                 player->doorDirection = playerPosRelToDoor.z >= 0.0f ? 1.0f : -1.0f;
                 player->doorActor = &this->door.dyna.actor;
                 if (this->unk_1A6 != 0) {
                     if (gSaveContext.save.inventory.dungeonKeys[((void)0, gSaveContext.mapIndex)] <= 0) {
-                        player->doorType = PLAYER_DOORTYPE_MINUS_1;
+                        player->doorType = PLAYER_DOORTYPE_TALK;
                         this->door.dyna.actor.textId = 0x1802;
                     } else {
                         player->doorTimer = 10;
                     }
-                } else if (this->unk_1A4 == 4) {
-                    player->doorType = PLAYER_DOORTYPE_MINUS_1;
+                } else if (this->doorType == ENDOOR_TYPE_4) {
+                    player->doorType = PLAYER_DOORTYPE_TALK;
                     this->door.dyna.actor.textId = 0x1800;
-                } else if ((this->unk_1A4 == 0) || (this->unk_1A4 == 2) || (this->unk_1A4 == 3)) {
+                } else if ((this->doorType == ENDOOR_TYPE_0) || (this->doorType == ENDOOR_TYPE_2) || (this->doorType == ENDOOR_TYPE_3)) {
                     s32 textIdOffset;
 
                     temp_t0 = (play->actorCtx.unkC & 0x2AA) >> 1;
                     temp_a2 = D_801AED48[this->switchFlag & 7];
                     temp_a1_2 = play->actorCtx.unkC & 0x155;
                     textIdOffset = (this->switchFlag >> 3) & 0xF;
-                    if (((this->unk_1A4 == 0) && (((temp_t0 | temp_a1_2) & temp_a2) == 0)) ||
-                        ((this->unk_1A4 == 2) && ((temp_a2 & temp_a1_2) == 0)) ||
-                        ((this->unk_1A4 == 3) && ((temp_a2 & temp_t0) == 0))) {
+                    if (((this->doorType == ENDOOR_TYPE_0) && (((temp_t0 | temp_a1_2) & temp_a2) == 0)) ||
+                        ((this->doorType == ENDOOR_TYPE_2) && ((temp_a2 & temp_a1_2) == 0)) ||
+                        ((this->doorType == ENDOOR_TYPE_3) && ((temp_a2 & temp_t0) == 0))) {
                         s16 baseTextId = 0x182D;
 
-                        if (this->unk_1A4 == 3) {
+                        if (this->doorType == ENDOOR_TYPE_3) {
                             baseTextId = 0x180D;
-                        } else if (this->unk_1A4 == 2) {
+                        } else if (this->doorType == ENDOOR_TYPE_2) {
                             baseTextId = 0x181D;
                         }
-                        player->doorType = PLAYER_DOORTYPE_MINUS_1;
+                        player->doorType = PLAYER_DOORTYPE_TALK;
                         this->door.dyna.actor.textId = baseTextId + textIdOffset;
                     }
-                } else if ((this->unk_1A4 == 5) && (playerPosRelToDoor.z > 0.0f)) {
+                } else if ((this->doorType == ENDOOR_TYPE_5) && (playerPosRelToDoor.z > 0.0f)) {
                     ScheduleOutput sp30;
 
                     if (Schedule_RunScript(play, D_8086778C[this->switchFlag], &sp30) != 0) {
                         this->door.dyna.actor.textId = sp30.result + 0x1800;
 
                         player->doorType = ((this->door.dyna.actor.textId == 0x1821) && D_80867BC0)
-                                               ? PLAYER_DOORTYPE_5
-                                               : PLAYER_DOORTYPE_MINUS_1;
+                                               ? PLAYER_DOORTYPE_PROXIMITY
+                                               : PLAYER_DOORTYPE_TALK;
                     }
                 }
                 func_80122F28(player);
             }
-        } else if ((this->unk_1A4 == 4) && (this->door.dyna.actor.xzDistToPlayer > 240.0f)) {
+        } else if ((this->doorType == ENDOOR_TYPE_4) && (this->door.dyna.actor.xzDistToPlayer > 240.0f)) {
             Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_DOOR_OPEN);
             this->actionFunc = func_80867080;
         }
@@ -601,7 +600,7 @@ void func_80867144(EnDoor* this, PlayState* play) {
     if (DECR(this->unk_1A6) == 0) {
         if (SkelAnime_Update(&this->door.skelAnime)) {
             this->actionFunc = func_80866B20;
-            this->door.unk_1A1 = false;
+            this->door.playOpenAnim = false;
         } else if (Animation_OnFrame(&this->door.skelAnime, sAnimOpenFrames[this->door.animIndex])) {
             Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_OC_DOOR_OPEN);
             if (this->door.skelAnime.playSpeed < 1.5f) {
@@ -626,18 +625,18 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
     TransitionActorEntry* transitionEntry;
     EnDoor* this = THIS;
 
-    if (limbIndex == 4) {
+    if (limbIndex == DOOR_LIMB_4) {
         Gfx** dl = D_808679A4[this->door.dlIndex];
         s16 temp;
         s32 dlIndex;
 
         transitionEntry = NULL;
 
-        if (this->unk_1A4 != 7) {
+        if (this->doorType != ENDOOR_TYPE_7) {
             transitionEntry = &play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&this->door.dyna.actor)];
         }
         rot->z += this->door.dyna.actor.world.rot.y;
-        if ((this->unk_1A4 == 7) || (play->roomCtx.prevRoom.num >= 0) ||
+        if ((this->doorType == ENDOOR_TYPE_7) || (play->roomCtx.prevRoom.num >= 0) ||
             (transitionEntry->sides[0].room == transitionEntry->sides[1].room)) {
             s32 pad;
 
@@ -661,7 +660,7 @@ void EnDoor_Draw(Actor* thisx, PlayState* play) {
 
     if (this->door.dyna.actor.objBankIndex == this->door.requiredObjBankIndex) {
         OPEN_DISPS(play->state.gfxCtx);
-        if ((this->unk_1A4 == 7) && (this->switchFlag == 0)) {
+        if ((this->doorType == ENDOOR_TYPE_7) && (this->switchFlag == 0)) {
             Gfx_DrawDListOpa(play, gameplay_keep_DL_0221B8);
         } else {
             func_8012C28C(play->state.gfxCtx);

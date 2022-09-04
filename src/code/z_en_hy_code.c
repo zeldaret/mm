@@ -142,7 +142,7 @@ void func_800F0BB4(EnHy* enHy, PlayState* play, EnDoor* door, s16 arg3, s16 arg4
     enHy->skelAnime.prevTransl = *enHy->skelAnime.jointTable;
     enHy->skelAnime.moveFlags |= 3;
     AnimationContext_SetMoveActor(play, &enHy->actor, &enHy->skelAnime, 1.0f);
-    door->door.unk_1A1 = 1;
+    door->door.playOpenAnim = true;
     door->door.animIndex = animIndex;
 }
 

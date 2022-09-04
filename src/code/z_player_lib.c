@@ -328,7 +328,7 @@ void func_80122F28(Player* player) {
         (!(player->stateFlags1 & (PLAYER_STATE1_400 | PLAYER_STATE1_800 | PLAYER_STATE1_200000 | PLAYER_STATE1_800000 |
                                   PLAYER_STATE1_20000000))) &&
         (!(player->stateFlags2 & PLAYER_STATE2_1))) {
-        if (player->doorType <= PLAYER_DOORTYPE_MINUS_1) {
+        if (player->doorType <= PLAYER_DOORTYPE_TALK) {
             ActorCutscene_SetIntentToPlay(0x7C);
         } else {
             ActorCutscene_SetIntentToPlay(0x7D);

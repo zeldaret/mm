@@ -3960,7 +3960,7 @@ s32 func_80831010(Player* this, PlayState* play) {
 }
 
 s32 func_80831094(Player* this, PlayState* play) {
-    if ((this->doorType == PLAYER_DOORTYPE_0) && !(this->stateFlags1 & PLAYER_STATE1_2000000)) {
+    if ((this->doorType == PLAYER_DOORTYPE_NONE) && !(this->stateFlags1 & PLAYER_STATE1_2000000)) {
         if ((D_80862B48 != 0) || func_80830F9C(play)) {
             if (func_80830E30(this, play)) {
                 return func_80831010(this, play);
@@ -5886,7 +5886,7 @@ s32 func_80835DF8(PlayState* play, Player* this, CollisionPoly** outPoly, s32* o
 /**
  * PLAYER_DOORTYPE_STAIRCASE: DoorSpiral
  */
-void func_80835EAC(PlayState* play, Player* this, Actor* door) {
+void Player_Door_Staircase(PlayState* play, Player* this, Actor* door) {
     static Vec3f D_8085D10C = { 20.0f, 0.0f, 20.0f };
     DoorSpiral* doorStaircase = (DoorSpiral*)door;
 
@@ -5927,7 +5927,7 @@ void func_80835EAC(PlayState* play, Player* this, Actor* door) {
 /**
  * PLAYER_DOORTYPE_SLIDING: DoorShutter, BgOpenShutter
  */
-void func_8083604C(PlayState* play, Player* this, Actor* door) {
+void Player_Door_Sliding(PlayState* play, Player* this, Actor* door) {
     DoorSlidingActor* doorSliding = (DoorSlidingActor*)door;
     Vec3f sp38;
 
@@ -5986,18 +5986,17 @@ LinkAnimationHeader* D_8085D124[] = {
 };
 
 /**
- * PLAYER_DOORTYPE_0:
- * PLAYER_DOORTYPE_1: EnDoor
- * PLAYER_DOORTYPE_3:
- * PLAYER_DOORTYPE_5: EnDoor
+ * PLAYER_DOORTYPE_HANDLE: EnDoor
+ * PLAYER_DOORTYPE_FAKE:
+ * PLAYER_DOORTYPE_PROXIMITY: EnDoor
  */
-void func_80836258(PlayState* play, Player* this, Actor* door) {
+void Player_Door_Default(PlayState* play, Player* this, Actor* door) {
     s32 temp = this->transformation - 1;
     LinkAnimationHeader* anim;
     f32 temp_fv0; // sp5C
-    DoorBaseActor* doorNormal = (DoorBaseActor*)door;
+    DoorHandleActor* doorHandle = (DoorHandleActor*)door;
 
-    doorNormal->animIndex = this->transformation;
+    doorHandle->animIndex = this->transformation;
 
     if (this->doorDirection < 0) {
         if (this->transformation == PLAYER_FORM_FIERCE_DEITY) {
@@ -6008,7 +6007,7 @@ void func_80836258(PlayState* play, Player* this, Actor* door) {
             anim = D_8085D118[temp];
         }
     } else {
-        doorNormal->animIndex += 5;
+        doorHandle->animIndex += 5;
 
         if (this->transformation == PLAYER_FORM_FIERCE_DEITY) {
             anim = D_8085BE84[PLAYER_ANIMGROUP_10][this->modelAnimType];
@@ -6023,14 +6022,14 @@ void func_80836258(PlayState* play, Player* this, Actor* door) {
     this->stateFlags2 |= PLAYER_STATE2_800000;
     func_8082DE14(play, this);
     if (this->doorDirection < 0) {
-        this->actor.shape.rot.y = doorNormal->dyna.actor.shape.rot.y;
+        this->actor.shape.rot.y = doorHandle->dyna.actor.shape.rot.y;
     } else {
-        this->actor.shape.rot.y = doorNormal->dyna.actor.shape.rot.y - 0x8000;
+        this->actor.shape.rot.y = doorHandle->dyna.actor.shape.rot.y - 0x8000;
     }
 
     this->currentYaw = this->actor.shape.rot.y;
     temp_fv0 = this->doorDirection * 22.0f;
-    func_80835BF8(&doorNormal->dyna.actor.world.pos, doorNormal->dyna.actor.shape.rot.y, temp_fv0,
+    func_80835BF8(&doorHandle->dyna.actor.world.pos, doorHandle->dyna.actor.shape.rot.y, temp_fv0,
                   &this->actor.world.pos);
     func_8082EC9C(play, this, anim);
 
@@ -6040,31 +6039,31 @@ void func_80836258(PlayState* play, Player* this, Actor* door) {
 
     func_8082DAD4(this);
     func_8082E920(play, this, 1 | ANIM_FLAG_UPDATEY | 4 | 8 | 0x80 | 0x200);
-    doorNormal->unk_1A1 = true;
-    if (this->doorType != PLAYER_DOORTYPE_3) {
+    doorHandle->playOpenAnim = true;
+    if (this->doorType != PLAYER_DOORTYPE_FAKE) {
         CollisionPoly* poly;
         s32 bgId;
         Vec3f pos;
-        s32 sp40 = ENDOOR_GET_PARAMS_7(&doorNormal->dyna.actor);
+        s32 enDoorType = ENDOOR_GET_TYPE(&doorHandle->dyna.actor);
 
         this->stateFlags1 |= PLAYER_STATE1_20000000;
 
         if (this->actor.category == ACTORCAT_PLAYER) {
             Actor_DeactivateLens(play);
-            func_80835BF8(&doorNormal->dyna.actor.world.pos, doorNormal->dyna.actor.shape.rot.y, -temp_fv0, &pos);
-            pos.y = doorNormal->dyna.actor.world.pos.y + 10.0f;
+            func_80835BF8(&doorHandle->dyna.actor.world.pos, doorHandle->dyna.actor.shape.rot.y, -temp_fv0, &pos);
+            pos.y = doorHandle->dyna.actor.world.pos.y + 10.0f;
             BgCheck_EntityRaycastFloor5(&play->colCtx, &poly, &bgId, &this->actor, &pos);
 
             if (func_8083562C(play, this, poly, BGCHECK_SCENE)) {
                 gSaveContext.entranceSpeed = 2.0f;
-            } else if (sp40 != 7) {
+            } else if (enDoorType != ENDOOR_TYPE_7) {
                 Camera* cam;
 
                 this->unk_AE7 = 38.0f * D_8085C3E8;
                 cam = Play_GetCamera(play, CAM_ID_MAIN);
 
-                Camera_ChangeDoorCam(cam, &doorNormal->dyna.actor,
-                                     play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorNormal->dyna.actor)]
+                Camera_ChangeDoorCam(cam, &doorHandle->dyna.actor,
+                                     play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorHandle->dyna.actor)]
                                          .sides[(this->doorDirection > 0) ? 0 : 1]
                                          .bgCamDataId,
                                      0.0f, this->unk_AE7, 26.0f * D_8085C3E8, 10.0f * D_8085C3E8);
@@ -6075,17 +6074,17 @@ void func_80836258(PlayState* play, Player* this, Actor* door) {
 
 // door stuff
 s32 func_808365DC(Player* this, PlayState* play) {
-    if ((gSaveContext.save.playerData.health != 0) && (this->doorType != PLAYER_DOORTYPE_0)) {
+    if ((gSaveContext.save.playerData.health != 0) && (this->doorType != PLAYER_DOORTYPE_NONE)) {
         if ((this->actor.category != ACTORCAT_PLAYER) ||
-            ((((this->doorType < 0) && ActorCutscene_GetCanPlayNext(0x7C)) ||
-              ((this->doorType > 0) && ActorCutscene_GetCanPlayNext(0x7D))) &&
+            ((((this->doorType <= PLAYER_DOORTYPE_TALK) && ActorCutscene_GetCanPlayNext(0x7C)) ||
+              ((this->doorType >= PLAYER_DOORTYPE_HANDLE) && ActorCutscene_GetCanPlayNext(0x7D))) &&
              (!(this->stateFlags1 & PLAYER_STATE1_800) &&
               (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) || (func_8085437C == this->actionFunc) ||
-               (this->doorType == PLAYER_DOORTYPE_STAIRCASE) || (this->doorType == PLAYER_DOORTYPE_5))))) {
+               (this->doorType == PLAYER_DOORTYPE_STAIRCASE) || (this->doorType == PLAYER_DOORTYPE_PROXIMITY))))) {
             Actor* doorActor = this->doorActor;
             Actor* var_v0_3;
 
-            if (this->doorType <= PLAYER_DOORTYPE_MINUS_1) {
+            if (this->doorType <= PLAYER_DOORTYPE_TALK) {
                 Player_TalkWithPlayer(play, doorActor);
                 if (doorActor->textId == 0x1821) {
                     doorActor->flags |= ACTOR_FLAG_100;
@@ -6096,11 +6095,11 @@ s32 func_808365DC(Player* this, PlayState* play) {
             gSaveContext.respawn[RESPAWN_MODE_DOWN].data = 0;
 
             if (this->doorType == PLAYER_DOORTYPE_STAIRCASE) {
-                func_80835EAC(play, this, doorActor);
+                Player_Door_Staircase(play, this, doorActor);
             } else if (this->doorType == PLAYER_DOORTYPE_SLIDING) {
-                func_8083604C(play, this, doorActor);
+                Player_Door_Sliding(play, this, doorActor);
             } else {
-                func_80836258(play, this, doorActor);
+                Player_Door_Default(play, this, doorActor);
             }
 
             if (this->actor.category == ACTORCAT_PLAYER) {
@@ -6109,8 +6108,8 @@ s32 func_808365DC(Player* this, PlayState* play) {
             }
 
             if (this->actor.category == ACTORCAT_PLAYER) {
-                if ((this->doorType < PLAYER_DOORTYPE_3) && (doorActor->category == ACTORCAT_DOOR) &&
-                    ((this->doorType != PLAYER_DOORTYPE_1) || (ENDOOR_GET_PARAMS_7(doorActor) != 7))) {
+                if ((this->doorType < PLAYER_DOORTYPE_FAKE) && (doorActor->category == ACTORCAT_DOOR) &&
+                    ((this->doorType != PLAYER_DOORTYPE_HANDLE) || (ENDOOR_GET_TYPE(doorActor) != ENDOOR_TYPE_7))) {
                     s8 roomNum = play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(doorActor)]
                                      .sides[(this->doorDirection > 0) ? 0 : 1]
                                      .room;
@@ -10546,7 +10545,7 @@ void Player_SetDoAction(PlayState* play, Player* this) {
             doActionA = (this->unk_B28 == 2) ? DO_ACTION_REEL : DO_ACTION_NONE; // required to match, maybe FAKE?
         } else if (this->stateFlags3 & PLAYER_STATE3_2000) {
             doActionA = DO_ACTION_DOWN;
-        } else if ((this->doorType != PLAYER_DOORTYPE_0) && (this->doorType != PLAYER_DOORTYPE_STAIRCASE) &&
+        } else if ((this->doorType != PLAYER_DOORTYPE_NONE) && (this->doorType != PLAYER_DOORTYPE_STAIRCASE) &&
                    !(this->stateFlags1 & PLAYER_STATE1_800)) {
             doActionA = DO_ACTION_OPEN;
         } else if (this->stateFlags3 & PLAYER_STATE3_200000) {
@@ -11730,7 +11729,7 @@ void Player_UpdateCommon(Player* player, PlayState* play, Input* input) {
         player->tatlTextId = 0;
         player->unk_B2B = -1;
         player->closestSecretDistSq = FLT_MAX;
-        player->doorType = PLAYER_DOORTYPE_0;
+        player->doorType = PLAYER_DOORTYPE_NONE;
         player->unk_B75 = 0;
         player->unk_A78 = NULL;
 
@@ -14752,7 +14751,7 @@ void func_8084E034(Player* this, PlayState* play) {
     CollisionPoly* poly;
     s32 bgId;
 
-    sp38 = (doorActor != NULL) && (doorActor->unk_1A4 == 7);
+    sp38 = (doorActor != NULL) && (doorActor->doorType == ENDOOR_TYPE_7);
     this->stateFlags2 |= PLAYER_STATE2_20;
 
     if (DECR(this->unk_AE7) == 0) {
