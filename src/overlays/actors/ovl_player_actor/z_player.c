@@ -9994,15 +9994,14 @@ void Player_InitMode_2(PlayState* play, Player* this) {
 u8 D_8085D2B0[] = {
     ITEM_SWORD_RAZOR,
     ITEM_SWORD_KOKIRI,
-    ITEM_OCARINA,
-    ITEM_OCARINA,
 };
 
+// OoT leftover?
 void func_80841358(PlayState* play, Player* this, s32 arg2) {
     ItemID item;
     PlayerActionParam actionParam;
 
-    //! @bug OoB read if player is human
+    //! @bug OoB read if player is goron, deku or human
     item = D_8085D2B0[this->transformation];
     actionParam = sItemActionParams[item];
     func_808317C4(this);
@@ -19451,7 +19450,7 @@ void func_80859EBC(PlayState* play, Player* this, s32 arg2) {
 }
 
 void func_80859F4C(PlayState* play, Player* this, UNK_TYPE arg2) {
-    if (LinkAnimation_Update(play, &this->skelAnime) != 0) {
+    if (LinkAnimation_Update(play, &this->skelAnime)) {
         func_8083FCF0(play, this, 0.0f, 99.0f, this->skelAnime.endFrame - 8.0f);
     }
     if (this->itemActionParam != PLAYER_AP_SWORD_GILDED) {

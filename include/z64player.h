@@ -937,7 +937,7 @@ typedef struct Player {
     /* 0x3A0 */ Vec3f unk_3A0;
     /* 0x3AC */ Vec3f unk_3AC;
     /* 0x3B8 */ u16 unk_3B8;
-    /* 0x3BA */ s16 unk_3BA; // csBgCamDataId?
+    /* 0x3BA */ s16 unk_3BA; // csBgCamDataId? / doorBgCamIndex?
     /* 0x3BC */ s16 subCamId;
     /* 0x3BE */ char unk_3BE[2];
     /* 0x3C0 */ Vec3f unk_3C0;
