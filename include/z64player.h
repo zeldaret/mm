@@ -199,13 +199,13 @@ typedef enum PlayerMeleeWeaponAnimation {
 } PlayerMeleeWeaponAnimation;
 
 typedef enum PlayerDoorType {
-    /* -1 */ PLAYER_DOORTYPE_MINUS_1 = -1, // PLAYER_DOORTYPE_AJAR = -1,
+    /* -1 */ PLAYER_DOORTYPE_TALK = -1, // Prevents opening the door normally
     /*  0 */ PLAYER_DOORTYPE_NONE,
     /*  1 */ PLAYER_DOORTYPE_HANDLE,
     /*  2 */ PLAYER_DOORTYPE_SLIDING,
-    /*  3 */ PLAYER_DOORTYPE_3, // PLAYER_DOORTYPE_FAKE // Unused?
+    /*  3 */ PLAYER_DOORTYPE_FAKE, // Unused? OoT leftover (?)
     /*  4 */ PLAYER_DOORTYPE_STAIRCASE,
-    /*  5 */ PLAYER_DOORTYPE_5
+    /*  5 */ PLAYER_DOORTYPE_PROXIMITY
 } PlayerDoorType;
 
 typedef enum PlayerModelGroup {
