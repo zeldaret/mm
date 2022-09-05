@@ -229,7 +229,7 @@ void BgKin2Picture_SetupPlayCutscene(BgKin2Picture* this) {
 void BgKin2Picture_PlayCutscene(BgKin2Picture* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        this->unk240 = true;
+        this->cutsceneStarted = true;
         BgKin2Picture_SetupShiver(this);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
@@ -266,7 +266,7 @@ void BgKin2Picture_Shiver(BgKin2Picture* this, PlayState* play) {
 
 void BgKin2Picture_SetupFall(BgKin2Picture* this) {
     this->landTimer = 0;
-    this->unk238 = 0;
+    this->step = 0;
     this->paintingTimer = 4;
     this->actionFunc = BgKin2Picture_Fall;
 }
@@ -284,7 +284,7 @@ void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4U);
 
     if ((this->dyna.actor.bgCheckFlags & 1)) {
-        Math_StepToS(&this->unk238, 0x7D0, 0x78);
+        Math_StepToS(&this->step, 0x7D0, 0x78);
 
         if (this->landTimer < 3) {
             this->landTimer++;
@@ -310,10 +310,10 @@ void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play) {
         this->hasSpawnedDust = true;
     }
 
-    if (Math_ScaledStepToS(&this->dyna.actor.shape.rot.x, 0x4000, this->unk238) != 0) { // facing the floor
+    if (Math_ScaledStepToS(&this->dyna.actor.shape.rot.x, 0x4000, this->step)) { // facing the floor
         this->dyna.actor.shape.yOffset = 40.0f;
 
-        if (this->unk240) {
+        if (this->cutsceneStarted) {
             ActorCutscene_Stop(this->dyna.actor.cutscene);
         }
 
