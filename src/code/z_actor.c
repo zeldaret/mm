@@ -3786,29 +3786,29 @@ s32 Actor_OtherIsTargeted(PlayState* play, Actor* actor) {
     return false;
 }
 
-void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 alpha, PlayState* play) {
-    MtxF sp58;
-    f32 sp54;
-    Vec3f sp48;
-    CollisionPoly* sp44;
+void func_800BC620(Vec3f* pos, Vec3f* scale, u8 alpha, PlayState* play) {
+    MtxF mtx;
+    f32 yIntersect;
+    Vec3f pos2;
+    CollisionPoly* poly;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, alpha);
 
-    sp48.x = arg0->x;
-    sp48.y = arg0->y + 1.0f;
-    sp48.z = arg0->z;
+    pos2.x = pos->x;
+    pos2.y = pos->y + 1.0f;
+    pos2.z = pos->z;
 
-    sp54 = BgCheck_EntityRaycastFloor2(play, &play->colCtx, &sp44, &sp48);
-    if (sp44 != NULL) {
-        func_800C0094(sp44, arg0->x, sp54, arg0->z, &sp58);
-        Matrix_Put(&sp58);
+    yIntersect = BgCheck_EntityRaycastFloor2(play, &play->colCtx, &poly, &pos2);
+    if (poly != NULL) {
+        func_800C0094(poly, pos->x, yIntersect, pos->z, &mtx);
+        Matrix_Put(&mtx);
     } else {
-        Matrix_Translate(arg0->x, arg0->y, arg0->z, MTXMODE_NEW);
+        Matrix_Translate(pos->x, pos->y, pos->z, MTXMODE_NEW);
     }
-    Matrix_Scale(arg1->x, 1.0f, arg1->z, MTXMODE_APPLY);
+    Matrix_Scale(scale->x, 1.0f, scale->z, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gCircleShadowDL);
@@ -3832,8 +3832,7 @@ void func_800BC7D8(PlayState* play, s16 y, s16 countdown, s16 speed) {
     Quake_SetCountdown(idx, countdown);
 }
 
-// Actor_RequestRumble?
-void func_800BC848(Actor* actor, PlayState* play, s16 y, s16 countdown) {
+void Actor_RequestRumble(Actor* actor, PlayState* play, s16 y, s16 countdown) {
     if (y >= 5) {
         Rumble_Request(actor->xyzDistToPlayerSq, 255, 20, 150);
     } else {

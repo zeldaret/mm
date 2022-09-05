@@ -861,7 +861,7 @@
     0x800BC620:("func_800BC620",),
     0x800BC770:("func_800BC770",),
     0x800BC7D8:("func_800BC7D8",),
-    0x800BC848:("func_800BC848",),
+    0x800BC848:("Actor_RequestRumble",),
     0x800BC8B8:("Actor_DrawDoorLock",),
     0x800BCB50:("Actor_SpawnShieldParticlesMetal",),
     0x800BCB70:("Actor_SetColorFilter",),

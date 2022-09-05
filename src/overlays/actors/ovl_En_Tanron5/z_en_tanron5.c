@@ -350,7 +350,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
 
                 this->actor.shape.rot.y += phi_v0;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BIG_BOMB_EXPLOSION);
-                func_800BC848(&this->actor, play, 4, 4);
+                Actor_RequestRumble(&this->actor, play, 4, 4);
                 this->unk_1A0++;
             } else {
                 Vec3f sp90;
