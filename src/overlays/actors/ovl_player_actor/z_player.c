@@ -4016,7 +4016,7 @@ s32 func_80831194(PlayState* play, Player* this) {
             this->unk_B48 = 0.0f;
         }
 
-        this->unk_D57 = (this->transformation == PLAYER_FORM_DEKU) ? 0x14 : 4;
+        this->unk_D57 = (this->transformation == PLAYER_FORM_DEKU) ? 20 : 4;
 
         this->heldActor->parent = NULL;
         this->actor.child = NULL;
@@ -5038,7 +5038,7 @@ void func_80833A64(Player* this) {
 }
 
 void func_80833AA0(Player* this, PlayState* play) {
-    if (Player_SetAction(play, this, func_8084C16C, 0) != 0) {
+    if (Player_SetAction(play, this, func_8084C16C, 0)) {
         Player_AnimationPlayLoop(play, this, &gameplay_keep_Linkanim_00DD30);
         this->unk_AE8 = 1;
     }
@@ -5246,13 +5246,11 @@ s32 func_808341F4(PlayState* play, Player* this) {
     f32 flameIntensity;
     s32 i;
     s32 timerStep;
-    s32 spawnedFlame;
+    s32 spawnedFlame = false;
     s32 var_v0;
     s32 var_v1;
-    u8* timerPtr;
+    u8* timerPtr = this->flameTimers;
 
-    spawnedFlame = false;
-    timerPtr = this->flameTimers;
     if ((this->transformation == PLAYER_FORM_ZORA) || (this->transformation == PLAYER_FORM_DEKU)) {
         timerStep = 0;
         if (this->actor.bgCheckFlags & 1) {
@@ -5360,7 +5358,7 @@ s32 func_80834600(Player* this, PlayState* play) {
 
     if (this->unk_D6A != 0) {
         if (!Player_InBlockingCsMode(play, this)) {
-            Player_InflictDamage(play, -0x10);
+            Player_InflictDamage(play, -16);
             this->unk_D6A = 0;
         }
     } else if ((var_v0 = ((Player_GetHeight(this) - 8.0f) < (this->unk_AB8 * this->actor.scale.y))) ||
@@ -5381,13 +5379,13 @@ s32 func_80834600(Player* this, PlayState* play) {
     } else if ((this->unk_B75 != 0) && ((this->unk_B75 >= 3) || (this->invincibilityTimer == 0))) {
         u8 sp6C[] = { 0, 2, 1, 1 };
 
-        if (func_8083456C(play, this) == 0) {
+        if (!func_8083456C(play, this)) {
             if (this->unk_B75 == 4) {
                 this->shockTimer = 40;
             }
 
             this->actor.colChkInfo.damage += this->unk_B74;
-            func_80833B18(play, this, sp6C[this->unk_B75 - 1], this->unk_B78, this->unk_B7C, this->unk_B76, 0x14);
+            func_80833B18(play, this, sp6C[this->unk_B75 - 1], this->unk_B78, this->unk_B7C, this->unk_B76, 20);
         }
     } else if ((this->shieldQuad.base.acFlags & 0x80) || (this->shieldCylinder.base.acFlags & 0x80) ||
                ((this->invincibilityTimer < 0) && (this->cylinder.base.acFlags & 2) &&
@@ -5440,7 +5438,7 @@ s32 func_80834600(Player* this, PlayState* play) {
             this->shockTimer = 40;
         } else if (this->actor.colChkInfo.acHitEffect == 9) {
             var_a2_2 = 1;
-            if (func_80834534(play, this) != 0) {
+            if (func_80834534(play, this)) {
                 return 1;
             }
 
@@ -5449,7 +5447,7 @@ s32 func_80834600(Player* this, PlayState* play) {
             var_a2_2 = 1;
         } else {
             var_a2_2 = 0;
-            if (func_8083456C(play, this) != 0) {
+            if (func_8083456C(play, this)) {
                 return 1;
             }
         }
@@ -5924,7 +5922,7 @@ void Player_Door_Staircase(PlayState* play, Player* this, Actor* door) {
     }
 
     Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), 0x50);
-    this->unk_3BA =
+    this->doorBgCamIndex =
         play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorStaircase->actor)].sides[0].bgCamDataId;
     Actor_DeactivateLens(play);
     this->floorSfxOffset = NA_SE_PL_WALK_CONCRETE - SFX_FLAG;
@@ -5971,7 +5969,7 @@ void Player_Door_Sliding(PlayState* play, Player* this, Actor* door) {
     }
 
     if (doorSliding->dyna.actor.category == ACTORCAT_DOOR) {
-        this->unk_3BA = (s16)play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorSliding->dyna.actor)]
+        this->doorBgCamIndex = play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorSliding->dyna.actor)]
                             .sides[this->doorDirection > 0 ? 0 : 1]
                             .bgCamDataId;
         Actor_DeactivateLens(play);
@@ -6455,31 +6453,32 @@ s32 func_808373F8(PlayState* play, Player* this, u16 sfxId) {
             this->unk_AE8 = -1;
             this->stateFlags2 |= PLAYER_STATE2_80000;
             this->unk_AE7 = var_v1;
-            return 1;
+            return true;
         }
         anim = &gameplay_keep_Linkanim_00DE48;
     }
 
     // Deku hopping
     if (this->transformation == PLAYER_FORM_DEKU) {
-        speed *= 0.3f + ((5 - this->unk_B67) * 0.18f);
+        speed *= 0.3f + ((5 - this->remainingHopsCounter) * 0.18f);
         if (speed < 4.0f) {
             speed = 4.0f;
         }
 
-        if ((this->actor.depthInWater > 0.0f) && (this->unk_B67 != 0)) {
+        if ((this->actor.depthInWater > 0.0f) && (this->remainingHopsCounter != 0)) {
             this->actor.world.pos.y += this->actor.depthInWater;
             func_80834D50(play, this, anim, speed, 0);
             this->unk_AE8 = 1;
             this->stateFlags3 |= PLAYER_STATE3_200000;
-            func_800B8E58(this, (NA_SE_PL_DEKUNUTS_JUMP5 + 1 - this->unk_B67));
+            func_800B8E58(this, (NA_SE_PL_DEKUNUTS_JUMP5 + 1 - this->remainingHopsCounter));
             Player_AnimSfx_PlayVoice(this, sfxId);
-            this->unk_B67--;
-            if (this->unk_B67 == 0) {
+            this->remainingHopsCounter--;
+            if (this->remainingHopsCounter == 0) {
                 this->stateFlags2 |= PLAYER_STATE2_80000;
                 func_808373A4(play, this);
             }
-            return 1;
+
+            return true;
         }
 
         if (this->actor.velocity.y > 0.0f) {
@@ -6490,7 +6489,7 @@ s32 func_808373F8(PlayState* play, Player* this, u16 sfxId) {
     func_80834D50(play, this, anim, speed, sfxId);
     this->unk_AE8 = 1;
 
-    return 1;
+    return true;
 }
 
 s32 func_80837730(PlayState* play, Player* this, f32 arg2, s32 scale) {
@@ -6520,7 +6519,7 @@ s32 func_8083784C(Player* this) {
     if (this->actor.velocity.y < 0.0f) {
         if ((this->actor.depthInWater > 0.0f) &&
             ((this->ageProperties->unk_2C - this->actor.depthInWater) < D_80862B18)) {
-            if ((this->unk_B67 != 0) && (gSaveContext.save.playerData.health != 0) &&
+            if ((this->remainingHopsCounter != 0) && (gSaveContext.save.playerData.health != 0) &&
                 !(this->stateFlags1 & PLAYER_STATE1_4000000)) {
                 if (((this->talkActor == NULL) || !(this->talkActor->flags & ACTOR_FLAG_10000))) {
                     return true;
@@ -6796,7 +6795,7 @@ void func_8083827C(Player* this, PlayState* play) {
 
         this->floorSfxOffset = this->unk_D66;
         if ((this->transformation != PLAYER_FORM_GORON) &&
-            ((this->transformation != PLAYER_FORM_DEKU) || (this->unk_B67 != 0)) && (this->actor.bgCheckFlags & 4)) {
+            ((this->transformation != PLAYER_FORM_DEKU) || (this->remainingHopsCounter != 0)) && (this->actor.bgCheckFlags & 4)) {
             if (!(this->stateFlags1 & PLAYER_STATE1_8000000)) {
                 if ((sPlayerPrevFloorProperty != BG_FLOOR_PROPERTY_6) &&
                     (sPlayerPrevFloorProperty != BG_FLOOR_PROPERTY_9) && (D_80862B18 > 20.0f) &&
@@ -6834,7 +6833,7 @@ void func_8083827C(Player* this, PlayState* play) {
         }
     } else {
         this->fallStartHeight = this->actor.world.pos.y;
-        this->unk_B67 = 5;
+        this->remainingHopsCounter = 5;
     }
 }
 
@@ -6876,7 +6875,7 @@ s32 func_808387A0(PlayState* play, Player* this) {
         func_80838760(this);
         this->actor.flags &= ~ACTOR_FLAG_100;
         Player_SetAction(play, this, func_8085B08C, 0);
-        if (this->unk_3BA != 0) {
+        if (this->doorBgCamIndex != 0) {
             this->stateFlags1 |= PLAYER_STATE1_20000000;
         }
         func_8082DC38(this);
@@ -8159,7 +8158,7 @@ void func_8083BB4C(PlayState* play, Player* this) {
                 func_808345C8();
                 func_8083B8D0(play, this);
             } else if (this->transformation == PLAYER_FORM_DEKU) {
-                if (this->unk_B67 != 0) {
+                if (this->remainingHopsCounter != 0) {
                     func_808373F8(play, this, NA_SE_VO_LI_AUTO_JUMP);
                 } else {
                     if ((play->sceneNum == SCENE_20SICHITAI) && (this->unk_3CF == 0)) {
@@ -9792,7 +9791,7 @@ void func_80840770(PlayState* play, Player* this) {
                 func_8085B384(this, play);
             }
 
-            this->unk_D6B = 0x14;
+            this->unk_D6B = 20;
             func_808339B4(this, -20);
             func_801A01C4();
         }
@@ -10572,7 +10571,7 @@ void Player_SetDoAction(PlayState* play, Player* this) {
                 DO_ACTION_1, DO_ACTION_2, DO_ACTION_3, DO_ACTION_4, DO_ACTION_5, DO_ACTION_6, DO_ACTION_7, DO_ACTION_8,
             };
 
-            doActionA = D_8085D34C[this->unk_B67];
+            doActionA = D_8085D34C[this->remainingHopsCounter];
         } else if ((!(this->stateFlags1 & PLAYER_STATE1_800) || (heldActor == NULL)) && (interactRangeActor != NULL) &&
                    (this->getItemId < GI_NONE)) {
             doActionA = DO_ACTION_OPEN;
@@ -14164,7 +14163,7 @@ void func_8084C16C(Player* this, PlayState* play) {
                     !(this->stateFlags1 & (PLAYER_STATE1_800 | PLAYER_STATE1_8000000)) &&
                     (this->linearVelocity > 0.0f)) {
                     if ((this->transformation != PLAYER_FORM_GORON) &&
-                        ((this->transformation != PLAYER_FORM_DEKU) || (this->unk_B67 != 0))) {
+                        ((this->transformation != PLAYER_FORM_DEKU) || (this->remainingHopsCounter != 0))) {
                         if ((this->wallHeight >= 150.0f) && (this->unk_AE3[this->unk_ADE] == 0)) {
                             if (func_8083D860(this, play)) {
                                 func_8084C124(play, this);
@@ -15721,7 +15720,7 @@ s32 func_80850734(PlayState* play, Player* this) {
 }
 
 s32 func_80850854(PlayState* play, Player* this) {
-    if ((this->transformation == PLAYER_FORM_DEKU) && (this->unk_B67 != 0) &&
+    if ((this->transformation == PLAYER_FORM_DEKU) && (this->remainingHopsCounter != 0) &&
         (gSaveContext.save.playerData.health != 0) && (D_80862AFC != 0.0f)) {
         func_808373F8(play, this, 0);
         return true;
@@ -18622,7 +18621,7 @@ void func_80857BE8(Player* this, PlayState* play) {
             spD8 = this->actor.shape.rot.x;
             this->actor.shape.rot.x += this->unk_AE8;
 
-            Math_ScaledStepToS(this->unk_B86, 0, ABS_ALT(this->unk_AE8));
+            Math_ScaledStepToS(&this->unk_B86[0], 0, ABS_ALT(this->unk_AE8));
             if ((this->actor.bgCheckFlags & 1) && (((this->unk_AE8 + spD8) * spD8) <= 0)) {
                 spE0 =
                     Player_GetFloorSfx(this, (this->unk_B86[1] != 0) ? NA_SE_PL_GORON_CHG_ROLL : NA_SE_PL_GORON_ROLL);

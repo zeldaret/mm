@@ -937,7 +937,7 @@ typedef struct Player {
     /* 0x3A0 */ Vec3f unk_3A0;
     /* 0x3AC */ Vec3f unk_3AC;
     /* 0x3B8 */ u16 unk_3B8;
-    /* 0x3BA */ s16 unk_3BA; // csBgCamDataId? / doorBgCamIndex?
+    /* 0x3BA */ s16 doorBgCamIndex;
     /* 0x3BC */ s16 subCamId;
     /* 0x3BE */ char unk_3BE[2];
     /* 0x3C0 */ Vec3f unk_3C0;
@@ -1037,7 +1037,7 @@ typedef struct Player {
     /* 0xB64 */ u8 unk_B64;
     /* 0xB65 */ u8 shockTimer;
     /* 0xB66 */ u8 unk_B66;
-    /* 0xB67 */ u8 unk_B67; // deku remaining hops counter
+    /* 0xB67 */ u8 remainingHopsCounter; // deku remaining hops counter
     /* 0xB68 */ s16 fallStartHeight; // last truncated Y position before falling
     /* 0xB6A */ s16 fallDistance; // truncated Y distance the player has fallen so far (positive is down)
     /* 0xB6C */ s16 unk_B6C;
@@ -1070,7 +1070,6 @@ typedef struct Player {
     /* 0xD5C */ s8 invincibilityTimer; // prevents damage when nonzero (positive = visible, counts towards zero each frame)
     /* 0xD5D */ u8 unk_D5D;
     /* 0xD5E */ u8 floorProperty; // BgFloorProperty enum
-    /* 0xD5F */ u8 unk_D5F;
     /* 0xD60 */ f32 unk_D60;
     /* 0xD64 */ s16 unk_D64;
     /* 0xD66 */ u16 unk_D66; // sfx

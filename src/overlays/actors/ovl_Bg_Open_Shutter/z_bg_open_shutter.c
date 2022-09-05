@@ -111,7 +111,7 @@ void func_80ACAD88(BgOpenShutter* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
 
         Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
-        Camera_ChangeDoorCam(play->cameraPtrs[CAM_ID_MAIN], &this->door.dyna.actor, player->unk_3BA, 0.0f, 12, 15, 10);
+        Camera_ChangeDoorCam(play->cameraPtrs[CAM_ID_MAIN], &this->door.dyna.actor, player->doorBgCamIndex, 0.0f, 12, 15, 10);
         this->unk_164 = 0;
         this->actionFunc = func_80ACAE5C;
         this->door.dyna.actor.velocity.y = 0.0f;
