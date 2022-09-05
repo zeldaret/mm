@@ -1,5 +1,5 @@
 /**
- * @file code_801780F0.c
+ * @file su_mtx.c
  * @brief "Fast" functions for constructing RSP-compatible matrices directly
  *
  * The three functions in this file construct scaling, rotation, and translation matrices, and combinations thereof. The
@@ -45,6 +45,8 @@
  * @warning The behaviour of the output of the functions in this file is undefined in C89, since both members of the
  * union are used to set the mtxs. (C99+ allow type-punning, but the behaviour is still implementation-defined because
  * it relies on the storage being big-endian.)
+ *
+ * @remark Name inferred from shared Animal Forest functions, meaning of "su" is unclear.
  */
 
 #include "global.h"
@@ -70,6 +72,8 @@
  * @param[in] translateX X component of translation
  * @param[in] translateY Y component of translation
  * @param[in] translateZ Z component of translation
+ *
+ * @remark Original name: "suMtxMakeTS"
  */
 void Mtx_SetTranslateScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 translateX, f32 translateY,
                               f32 translateZ) {
@@ -152,6 +156,8 @@ void Mtx_SetTranslateScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 
  * @param[in] axisX X component of axis to rotate about
  * @param[in] axisY Y component of axis to rotate about
  * @param[in] axisZ Z component of axis to rotate about
+ *
+ * @remark Original name: probably something like "suMtxMakeR" or "suMtxMakeRotateVector"
  */
 void Mtx_SetRotationMtx(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ) {
     //! FAKE? The somewhat peculiar distribution of temps in this function seems necessary to match?
@@ -265,6 +271,9 @@ void Mtx_SetRotationMtx(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ) {
  * @param[in] translateX X component of translation
  * @param[in] translateY Y component of translation
  * @param[in] translateZ Z component of translation
+ *
+ * @remark Original name: probably something like "suMtxMakeSRT", although Animal Forest function is a Tait-Bryan
+ * rotation rather than axis-angle.
  */
 void Mtx_SetTranslationRotationScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, s32 angle, f32 axisX, f32 axisY,
                                         f32 axisZ, f32 translateX, f32 translateY, f32 translateZ) {
