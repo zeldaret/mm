@@ -56,18 +56,18 @@ typedef struct EnGo {
     /* 0x1E0 */ UNK_TYPE1 unk1E0[0x4C];
     /* 0x22C */ ColliderSphere colliderSphere;
     /* 0x284 */ Path* unk_284;
-    /* 0x288 */ s8 unk_288;
-    /* 0x289 */ s8 unk_289;
+    /* 0x288 */ s8 indexTaisou;
+    /* 0x289 */ s8 indexHakuginDemo;
     /* 0x28C */ s32 unk_28C;
-    /* 0x290 */ Vec3f unk_290;
-    /* 0x29C */ Vec3f unk_29C;
-    /* 0x2A8 */ Vec3s unk_2A8;
-    /* 0x2AE */ Vec3s unk_2AE;
+    /* 0x290 */ Vec3f limb17Pos;
+    /* 0x29C */ Vec3f limb10Pos;
+    /* 0x2A8 */ Vec3s limb17Rot;
+    /* 0x2AE */ Vec3s limb10Rot;
     /* 0x2B4 */ Vec3s jointTable[18];
     /* 0x320 */ Vec3s morphTable[18];
-    /* 0x38C */ Actor* unk_38C;
+    /* 0x38C */ Actor* targetActor;
     /* 0x390 */ u16 unk_390;
-    /* 0x392 */ u16 unk_392;
+    /* 0x392 */ u16 lastTextId;
     /* 0x394 */ u8 unk_394;
     /* 0x398 */ f32 unk_398;
     /* 0x39C */ f32 unk_39C;
@@ -76,14 +76,14 @@ typedef struct EnGo {
     /* 0x3A8 */ f32 unk_3A8;
     /* 0x3AC */ UNK_TYPE1 unk3AC[0x2];
     /* 0x3AE */ s16 unk_3AE;
-    /* 0x3B0 */ s16 unk_3B0;
-    /* 0x3B2 */ s16 unk_3B2;
-    /* 0x3B4 */ s16 unk_3B4;
-    /* 0x3B6 */ s16 unk_3B6;
+    /* 0x3B0 */ s16 unk_3B0; // Limb17 rotZ
+    /* 0x3B2 */ s16 unk_3B2; // Limb17 rotY
+    /* 0x3B4 */ s16 unk_3B4; // Limb10 rotZ
+    /* 0x3B6 */ s16 unk_3B6; // Limb10 rotY
     /* 0x3B8 */ s16 unk_3B8;
     /* 0x3BA */ s16 unk_3BA;
     /* 0x3BC */ s16 unk_3BC;
-    /* 0x3BE */ s16 unk_3BE;
+    /* 0x3BE */ s16 indexEyeTex;
     /* 0x3C0 */ s16 unk_3C0;
     /* 0x3C2 */ s16 unk_3C2;
     /* 0x3C4 */ s16 unk_3C4;
@@ -96,7 +96,7 @@ typedef struct EnGo {
     /* 0x3E0 */ UNK_TYPE1 unk3E0[0x4];
     /* 0x3E4 */ s32 unk_3E4;
     /* 0x3E8 */ s32 unk_3E8;
-    /* 0x3EC */ s32 unk_3EC;
+    /* 0x3EC */ s32 sleepState;
     /* 0x3F0 */ s32 unk_3F0;
     /* 0x3F4 */ s32 unk_3F4;
     /* 0x3F8 */ EnGoStruct unk_3F8[32];

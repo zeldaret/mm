@@ -12,22 +12,33 @@
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
+#define ENGO_EYE_OPEN 0
+#define ENGO_EYE_HALF 1
+#define ENGO_EYE_CLOSED 2
+#define ENGO_EYE_HALF2 3
+#define ENGO_EYE_CLOSED2 4
+
+typedef enum {
+    ENGO_AWAKE = 0,
+    ENGO_ASLEEP,
+} EnGoSleepState;
+
 #define THIS ((EnGo*)thisx)
 
 void EnGo_Init(Actor* thisx, PlayState* play);
 void EnGo_Destroy(Actor* thisx, PlayState* play);
 void EnGo_Update(Actor* thisx, PlayState* play);
 
-void func_80A14798(EnGo* this, PlayState* play);
-void func_80A149B0(EnGo* this, PlayState* play);
-void func_80A14B30(EnGo* this, PlayState* play);
-void func_80A14E14(EnGo* this, PlayState* play);
-void func_80A14E74(EnGo* this, PlayState* play);
-void func_80A14EB0(EnGo* this, PlayState* play);
-void func_80A14FC8(EnGo* this, PlayState* play);
-void func_80A153FC(EnGo* this, PlayState* play);
-void func_80A157C4(EnGo* this, PlayState* play);
-void func_80A15FEC(Actor* thisx, PlayState* play);
+void func_ACT_80A14798(EnGo* this, PlayState* play);
+void func_ACT_80A149B0(EnGo* this, PlayState* play);
+void func_ACT_80A14B30(EnGo* this, PlayState* play);
+void func_ACT_80A14E14(EnGo* this, PlayState* play);
+void func_ACT_80A14E74(EnGo* this, PlayState* play);
+void func_ACT_80A14EB0(EnGo* this, PlayState* play);
+void func_ACT_80A14FC8(EnGo* this, PlayState* play);
+void func_ACT_80A153FC(EnGo* this, PlayState* play);
+void func_ACT_80A157C4(EnGo* this, PlayState* play);
+void EnGo_Draw(Actor* thisx, PlayState* play);
 
 static s32 D_80A16100[] = {
     0x00150800, 0x40010022, 0x00150200, 0x180E0E10, 0x0C0F0E11, 0x0C0F0E12, 0x0C0F0E13, 0x0C0F0E14, 0x0C111502,
@@ -521,15 +532,16 @@ s32 func_80A121F4(PlayState* play) {
     return true;
 }
 
-s32 func_80A1222C(EnGo* this, PlayState* play) {
+s32 EnGo_IsEnteringSleep(EnGo* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 ret = false;
 
     if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
-         (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->unk_3EC == 0) &&
+         (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->sleepState == ENGO_AWAKE) &&
          (this->actor.xzDistToPlayer < 400.0f)) ||
         (!(gSaveContext.save.weekEventReg[22] & 4) && (play->sceneNum == SCENE_16GORON_HOUSE) &&
-         (gSaveContext.sceneSetupIndex == 0) && (this->unk_3EC == 0) && (play->csCtx.currentCsIndex == 1))) {
+         (gSaveContext.sceneSetupIndex == 0) && (this->sleepState == ENGO_AWAKE) &&
+         (play->csCtx.currentCsIndex == 1))) {
         ret = true;
     }
     return ret;
@@ -660,7 +672,7 @@ s32 func_80A12774(EnGo* this, PlayState* play) {
     if ((ENGO_GET_F(&this->actor) == ENGO_F_5) || (ENGO_GET_F(&this->actor) == ENGO_F_6) ||
         (ENGO_GET_F(&this->actor) == ENGO_F_7)) {
         this->unk_3BC = 0;
-        this->unk_3BE = 0;
+        this->indexEyeTex = ENGO_EYE_OPEN;
         this->unk_390 |= 0x20;
     }
 
@@ -668,7 +680,7 @@ s32 func_80A12774(EnGo* this, PlayState* play) {
     this->unk_3C0 = 0;
     this->unk_3C4 = 0;
     this->unk_18C = this->actionFunc;
-    this->actionFunc = func_80A157C4;
+    this->actionFunc = func_ACT_80A157C4;
     return true;
 }
 
@@ -710,7 +722,7 @@ s32 func_80A12954(EnGo* this, PlayState* play) {
             this->unk_18C = this->actionFunc;
         }
         SubS_UpdateFlags(&this->unk_390, 0, 7);
-        this->actionFunc = func_80A14FC8;
+        this->actionFunc = func_ACT_80A14FC8;
     } else if (this->unk_3F0 != 0) {
         this->actor.flags |= ACTOR_FLAG_1;
         this->unk_394 = 255;
@@ -727,10 +739,10 @@ s32 func_80A12A64(EnGo* this, PlayState* play) {
     s8 objIdx2 = -1;
     s32 ret = 0;
 
-    if ((this->unk_3DC >= 18) && (this->unk_289 >= 0)) {
-        objIdx2 = this->unk_289;
-    } else if ((this->unk_3DC >= 10) && (this->unk_288 >= 0)) {
-        objIdx2 = this->unk_288;
+    if ((this->unk_3DC >= 18) && (this->indexHakuginDemo >= 0)) {
+        objIdx2 = this->indexHakuginDemo;
+    } else if ((this->unk_3DC >= 10) && (this->indexTaisou >= 0)) {
+        objIdx2 = this->indexTaisou;
     } else if (this->unk_3DC < 10) {
         objIdx2 = this->actor.objBankIndex;
     }
@@ -773,10 +785,10 @@ s32 func_80A12C48(EnGo* this, PlayState* play, s32 arg2) {
     s8 objIdx2 = -1;
     s32 ret = false;
 
-    if ((arg2 >= 18) && (this->unk_289 >= 0)) {
-        objIdx2 = this->unk_289;
-    } else if ((arg2 >= 10) && (this->unk_288 >= 0)) {
-        objIdx2 = this->unk_288;
+    if ((arg2 >= 18) && (this->indexHakuginDemo >= 0)) {
+        objIdx2 = this->indexHakuginDemo;
+    } else if ((arg2 >= 10) && (this->indexTaisou >= 0)) {
+        objIdx2 = this->indexTaisou;
     } else if (arg2 < 10) {
         objIdx2 = this->actor.objBankIndex;
     }
@@ -794,10 +806,10 @@ s32 func_80A12C48(EnGo* this, PlayState* play, s32 arg2) {
 
 void func_80A12D6C(EnGo* this) {
     if ((this->unk_390 & 0x20) && (DECR(this->unk_3BC) == 0)) {
-        this->unk_3BE++;
-        if (this->unk_3BE >= 4) {
+        this->indexEyeTex++;
+        if (this->indexEyeTex >= ENGO_EYE_CLOSED2) {
             this->unk_3BC = Rand_S16Offset(30, 30);
-            this->unk_3BE = 0;
+            this->indexEyeTex = ENGO_EYE_OPEN;
         }
     }
 }
@@ -813,31 +825,31 @@ void func_80A12DF4(EnGo* this, PlayState* play) {
 }
 
 s32 func_80A12E80(EnGo* this, PlayState* play) {
-    u16 temp = play->msgCtx.currentTextId;
+    u16 textId = play->msgCtx.currentTextId;
     Player* player = GET_PLAYER(play);
 
     if (ENGO_GET_F(&this->actor) != ENGO_F_4) {
         return false;
     }
 
-    if (player->stateFlags1 & 0x40) {
-        if (this->unk_392 != temp) {
-            switch (temp) {
+    if (player->stateFlags1 & PLAYER_STATE1_40) {
+        if (this->lastTextId != textId) {
+            switch (textId) {
                 case 0xE1A:
                     this->unk_390 |= 8;
-                    this->unk_38C = this->actor.child;
+                    this->targetActor = this->actor.child;
                     break;
 
                 case 0xE1D:
                 case 0xE25:
                     if (ENGO_GET_70(&this->actor) == ENGO_70_1) {
-                        this->unk_38C = &GET_PLAYER(play)->actor;
+                        this->targetActor = &GET_PLAYER(play)->actor;
                     }
                     break;
 
                 case 0xE27:
                     if (ENGO_GET_70(&this->actor) == ENGO_70_1) {
-                        this->unk_38C = this->actor.child;
+                        this->targetActor = this->actor.child;
                     }
 
                 case 0xE16:
@@ -847,17 +859,17 @@ s32 func_80A12E80(EnGo* this, PlayState* play) {
 
                 case 0xE1F:
                     if (ENGO_GET_70(&this->actor) == ENGO_70_0) {
-                        this->unk_38C = &GET_PLAYER(play)->actor;
+                        this->targetActor = &GET_PLAYER(play)->actor;
                     }
                     break;
             }
         }
         this->unk_3F4 = 1;
-        this->unk_392 = temp;
+        this->lastTextId = textId;
     } else if (this->unk_3F4 != 0) {
         this->unk_3F4 = 0;
         this->unk_190 = NULL;
-        this->unk_392 = 0;
+        this->lastTextId = 0;
         func_80A12C48(this, play, 5);
         this->unk_390 &= ~8;
     }
@@ -871,40 +883,42 @@ s32 func_80A12E80(EnGo* this, PlayState* play) {
 
 s32 func_80A12FE8(EnGo* this, PlayState* play) {
     s32 pad;
-    Vec3f sp40;
-    Vec3f sp34;
-    s16 sp32;
+    Vec3f targetActorPos;
+    Vec3f thisActorPos;
+    s16 yaw;
 
-    Math_Vec3f_Copy(&sp40, &this->unk_38C->world.pos);
-    Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
-    sp32 = Math_Vec3f_Yaw(&sp34, &sp40);
+    Math_Vec3f_Copy(&targetActorPos, &this->targetActor->world.pos);
+    Math_Vec3f_Copy(&thisActorPos, &this->actor.world.pos);
+    yaw = Math_Vec3f_Yaw(&thisActorPos, &targetActorPos);
 
-    Math_ApproachS(&this->unk_3B2, (sp32 - this->unk_3B6) - this->actor.shape.rot.y, 4, 0x2AA8);
-    this->unk_3B2 = CLAMP(this->unk_3B2, -0x1FFE, 0x1FFE);
+    Math_ApproachS(&this->unk_3B2, (yaw - this->unk_3B6) - this->actor.shape.rot.y, 4, 0x2AA8); /* 60 degree */
+    this->unk_3B2 = CLAMP(this->unk_3B2, -0x1FFE, 0x1FFE);                                      /* +-45 degrees */
 
-    Math_ApproachS(&this->unk_3B6, (sp32 - this->unk_3B2) - this->actor.shape.rot.y, 4, 0x2AA8);
-    this->unk_3B6 = CLAMP(this->unk_3B6, -0x1C70, 0x1C70);
+    Math_ApproachS(&this->unk_3B6, (yaw - this->unk_3B2) - this->actor.shape.rot.y, 4, 0x2AA8); /* 60 degree */
+    this->unk_3B6 = CLAMP(this->unk_3B6, -0x1C70, 0x1C70);                                      /* +-40 degrees */
 
-    Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
+    Math_Vec3f_Copy(&thisActorPos, &this->actor.focus.pos);
 
-    if (this->unk_38C->id == ACTOR_PLAYER) {
-        sp40.y = ((Player*)this->unk_38C)->bodyPartsPos[7].y + 3.0f;
+    if (this->targetActor->id == ACTOR_PLAYER) {
+        targetActorPos.y = ((Player*)this->targetActor)->bodyPartsPos[7].y + 3.0f;
     } else {
-        Math_Vec3f_Copy(&sp40, &this->unk_38C->focus.pos);
+        Math_Vec3f_Copy(&targetActorPos, &this->targetActor->focus.pos);
     }
 
-    Math_ApproachS(&this->unk_3B0, Math_Vec3f_Pitch(&sp34, &sp40) - this->unk_3B4, 4, 0x2AA8);
-    this->unk_3B0 = CLAMP(this->unk_3B0, -0x1554, 0x1554);
+    Math_ApproachS(&this->unk_3B0, Math_Vec3f_Pitch(&thisActorPos, &targetActorPos) - this->unk_3B4, 4,
+                   0x2AA8);                                /* 60 degree */
+    this->unk_3B0 = CLAMP(this->unk_3B0, -0x1554, 0x1554); /* +-30 degrees */
 
-    Math_ApproachS(&this->unk_3B4, Math_Vec3f_Pitch(&sp34, &sp40) - this->unk_3B0, 4, 0x2AA8);
-    this->unk_3B4 = CLAMP(this->unk_3B4, -0xE38, 0xE38);
+    Math_ApproachS(&this->unk_3B4, Math_Vec3f_Pitch(&thisActorPos, &targetActorPos) - this->unk_3B0, 4,
+                   0x2AA8);                              /* 60 degree */
+    this->unk_3B4 = CLAMP(this->unk_3B4, -0xE38, 0xE38); /* +-20 degrees */
 
     return false;
 }
 
 s32 func_80A131F8(EnGo* this, PlayState* play) {
     if (this->unk_3F4 == 0) {
-        this->unk_38C = &GET_PLAYER(play)->actor;
+        this->targetActor = &GET_PLAYER(play)->actor;
     }
 
     func_80A12E80(this, play);
@@ -1279,7 +1293,7 @@ void func_80A14018(EnGo* this, PlayState* play) {
     }
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, this->unk_3A4);
-    this->unk_3EC = 0;
+    this->sleepState = ENGO_AWAKE;
     this->unk_390 = 0;
     this->unk_390 |= (0x40 | 0x20);
     this->actor.gravity = 0.0f;
@@ -1294,7 +1308,7 @@ void func_80A14104(EnGo* this, PlayState* play) {
     this->skelAnime.curFrame = temp;
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, this->unk_3A4);
-    this->unk_3EC = 0;
+    this->sleepState = ENGO_AWAKE;
     this->unk_390 = 0;
     this->unk_390 |= 0x40;
     this->unk_390 |= 0x20;
@@ -1306,9 +1320,9 @@ void func_80A141D4(EnGo* this, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->unk_3DC = -1;
     func_80A12C48(this, play, 5);
-    this->unk_3EC = 0;
+    this->sleepState = ENGO_AWAKE;
     this->unk_39C = (this->unk_3A4 / 0.01f) * 0.9f;
-    this->unk_3BE = 2;
+    this->indexEyeTex = ENGO_EYE_CLOSED;
     this->unk_390 = 0;
     this->unk_390 |= 0x40;
     this->unk_390 |= 0x400;
@@ -1340,10 +1354,10 @@ void func_80A14324(EnGo* this, PlayState* play) {
     this->unk_390 = 0;
     this->actor.gravity = -1.0f;
     SubS_UpdateFlags(&this->unk_390, 3, 7);
-    this->unk_3EC = 0;
+    this->sleepState = ENGO_AWAKE;
     this->unk_390 |= 0x40;
     this->unk_3BC = 0;
-    this->unk_3BE = 4;
+    this->indexEyeTex = ENGO_EYE_CLOSED2;
     this->unk_39C = 0.0f;
     this->unk_3A0 = 0.0f;
 }
@@ -1354,11 +1368,11 @@ void func_80A143A8(EnGo* this, PlayState* play) {
     this->unk_390 = 0;
     this->actor.gravity = -1.0f;
     SubS_UpdateFlags(&this->unk_390, 3, 7);
-    this->unk_3EC = 0;
+    this->sleepState = ENGO_AWAKE;
     this->unk_390 |= 0x40;
     this->unk_390 |= 0x20;
     this->unk_3BC = 0;
-    this->unk_3BE = 0;
+    this->indexEyeTex = ENGO_EYE_OPEN;
     this->unk_39C = 0.0f;
     this->unk_3A0 = 0.0f;
 }
@@ -1368,7 +1382,7 @@ void func_80A14430(EnGo* this, PlayState* play) {
          (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 2))) &&
         (gSaveContext.save.weekEventReg[33] & 0x80)) {
         func_80A14018(this, play);
-        this->actionFunc = func_80A149B0;
+        this->actionFunc = func_ACT_80A149B0;
     } else {
         Actor_MarkForDeath(&this->actor);
     }
@@ -1378,7 +1392,7 @@ void func_80A1449C(EnGo* this, PlayState* play) {
     if ((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1)) ||
         (gSaveContext.save.entrance == ENTRANCE(CUTSCENE, 0))) {
         func_80A14104(this, play);
-        this->actionFunc = func_80A149B0;
+        this->actionFunc = func_ACT_80A149B0;
     } else {
         Actor_MarkForDeath(&this->actor);
     }
@@ -1391,37 +1405,38 @@ void func_80A144F4(EnGo* this, PlayState* play) {
             this->unk_3E4 = 1;
         }
         func_80A1428C(this, play);
-        this->actionFunc = func_80A153FC;
+        this->actionFunc = func_ACT_80A153FC;
         this->unk_3D8 = func_80A13B1C;
     } else {
         func_80A143A8(this, play);
-        this->actionFunc = func_80A149B0;
+        this->actionFunc = func_ACT_80A149B0;
         this->unk_3D8 = func_80A13B1C;
     }
 }
 
 void func_80A145AC(EnGo* this, PlayState* play) {
+
     if ((ENGO_GET_70(&this->actor) == ENGO_70_1) &&
-        (((play->sceneNum == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneSetupIndex == 1) &&
-          (play->csCtx.currentCsIndex == 0)) ||
+        (((play->sceneNum == SCENE_10YUKIYAMANOMURA2) && /* Snow Mountain Village */
+          (gSaveContext.sceneSetupIndex == 1) && (play->csCtx.currentCsIndex == 0)) ||
          !(gSaveContext.save.weekEventReg[21] & 8))) {
         this->actor.child = func_80A13400(this, play);
         this->actor.child->child = &this->actor;
         func_80A141D4(this, play);
-        this->actionFunc = func_80A14E14;
+        this->actionFunc = func_ACT_80A14E14;
     } else {
         func_80A143A8(this, play);
-        this->actionFunc = func_80A149B0;
+        this->actionFunc = func_ACT_80A149B0;
     }
 }
 
 void func_80A14668(EnGo* this, PlayState* play) {
     if (!(gSaveContext.save.weekEventReg[22] & 4)) {
         func_80A14324(this, play);
-        this->actionFunc = func_80A149B0;
+        this->actionFunc = func_ACT_80A149B0;
     } else {
         func_80A143A8(this, play);
-        this->actionFunc = func_80A149B0;
+        this->actionFunc = func_ACT_80A149B0;
     }
 }
 
@@ -1438,25 +1453,25 @@ void func_80A146CC(EnGo* this, PlayState* play) {
     this->unk_390 |= 0x40;
     this->unk_390 |= 0x20;
     this->unk_3D8 = func_80A13E80;
-    this->actionFunc = func_80A149B0;
+    this->actionFunc = func_ACT_80A149B0;
 }
 
-void func_80A14798(EnGo* this, PlayState* play) {
+void func_ACT_80A14798(EnGo* this, PlayState* play) {
     EffectTireMarkInit sp38 = {
         0,
         62,
         { 0, 0, 15, 100 },
     };
 
-    if ((this->unk_288 < 0) || SubS_IsObjectLoaded(this->unk_288, play) || (this->unk_289 < 0) ||
-        SubS_IsObjectLoaded(this->unk_289, play)) {
+    if ((this->indexTaisou < 0) || SubS_IsObjectLoaded(this->indexTaisou, play) || (this->indexHakuginDemo < 0) ||
+        SubS_IsObjectLoaded(this->indexHakuginDemo, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
                            GORON_LIMB_MAX);
 
         this->unk_3DC = -1;
         func_80A12C48(this, play, 2);
-        this->actor.draw = func_80A15FEC;
+        this->actor.draw = EnGo_Draw;
 
         Collider_InitAndSetSphere(play, &this->colliderSphere, &this->actor, &sSphereInit);
         Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit2);
@@ -1502,16 +1517,16 @@ void func_80A14798(EnGo* this, PlayState* play) {
 }
 
 /* Action function*/
-void func_80A149B0(EnGo* this, PlayState* play) {
+void func_ACT_80A149B0(EnGo* this, PlayState* play) {
     s16 sp26 = this->actor.world.rot.y;
 
     if ((ENGO_GET_F(&this->actor) == ENGO_F_2) && (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_CHEER - SFX_FLAG);
     } else if (ENGO_GET_F(&this->actor) != ENGO_F_8) {
-        if (func_80A1222C(this, play)) {
+        if (EnGo_IsEnteringSleep(this, play)) {
             SubS_UpdateFlags(&this->unk_390, 0, 7);
-            this->unk_3EC = 1;
-            this->actionFunc = func_80A14B30;
+            this->sleepState = ENGO_ASLEEP;
+            this->actionFunc = func_ACT_80A14B30;
         } else if (ENGO_GET_F(&this->actor) == ENGO_F_4) {
             switch (ENGO_GET_70(&this->actor)) {
                 case ENGO_70_0:
@@ -1533,19 +1548,19 @@ void func_80A149B0(EnGo* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, sp26, 4, 0x2AA8);
 }
 
-void func_80A14B30(EnGo* this, PlayState* play) {
+void func_ACT_80A14B30(EnGo* this, PlayState* play) {
     s16 sp26 = this->actor.world.rot.y;
     u16 sfxId;
 
-    if (func_80A1222C(this, play)) {
-        this->unk_3EC = 1;
+    if (EnGo_IsEnteringSleep(this, play)) {
+        this->sleepState = ENGO_ASLEEP;
     }
 
     if (this->unk_390 & 0x4000) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_390 &= ~0x4000;
             this->unk_390 |= 0x200;
-            if (this->unk_3EC != 0) {
+            if (this->sleepState != ENGO_AWAKE) {
                 this->unk_3AE = 0;
             }
             this->actor.shape.yOffset = 14.0f;
@@ -1556,19 +1571,20 @@ void func_80A14B30(EnGo* this, PlayState* play) {
             this->unk_390 &= ~0x8000;
         }
     } else if (this->unk_390 & 0x200) {
-        if ((this->actor.xzDistToPlayer < 160.0f) && (this->actor.playerHeightRel < 20.0f) && (this->unk_3EC == 0)) {
+        if ((this->actor.xzDistToPlayer < 160.0f) && (this->actor.playerHeightRel < 20.0f) &&
+            (this->sleepState == ENGO_AWAKE)) {
             func_80A12C48(this, play, 3);
             this->unk_390 &= ~0x80;
             this->unk_390 &= ~0x200;
             this->unk_390 |= 0x8000;
             this->actor.shape.yOffset = 0.0f;
-        } else if ((this->unk_3EC != 0) && (gSaveContext.save.weekEventReg[22] & 4)) {
+        } else if ((this->sleepState != ENGO_AWAKE) && (gSaveContext.save.weekEventReg[22] & 4)) {
             this->actor.scale.x = this->unk_3A4 - (Math_SinS(this->unk_3AE) * 0.001f);
             this->actor.scale.y = (Math_SinS(this->unk_3AE) * 0.001f) + this->unk_3A4;
             this->actor.scale.z = (Math_SinS(this->unk_3AE) * 0.001f) + this->unk_3A4;
             if (this->unk_3AE == 0) {
-                this->unk_3EC = -this->unk_3EC;
-                if (this->unk_3EC > 0) {
+                this->sleepState = -this->sleepState;
+                if (this->sleepState > ENGO_AWAKE) {
                     sfxId = NA_SE_EN_GOLON_SNORE1;
                 } else {
                     sfxId = NA_SE_EN_GOLON_SNORE2;
@@ -1580,7 +1596,7 @@ void func_80A14B30(EnGo* this, PlayState* play) {
             SubS_UpdateFlags(&this->unk_390, 3, 7);
         }
     } else if ((this->actor.xzDistToPlayer >= 240.0f) || (this->actor.playerHeightRel >= 20.0f) ||
-               (this->unk_3EC != 0)) {
+               (this->sleepState != ENGO_AWAKE)) {
         func_80A12C48(this, play, 4);
         this->unk_390 &= ~0x80;
         this->unk_390 &= ~0x200;
@@ -1592,22 +1608,22 @@ void func_80A14B30(EnGo* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, sp26, 4, 0x2AA8);
 }
 
-void func_80A14E14(EnGo* this, PlayState* play) {
+void func_ACT_80A14E14(EnGo* this, PlayState* play) {
     Actor* actor = this->colliderCylinder.base.ac;
 
     if ((this->unk_390 & 0x1000) && (((actor != NULL) && (actor->id == ACTOR_OBJ_AQUA) && (actor->params & 1)) ||
                                      (this->actor.colChkInfo.damageEffect == 2))) {
-        this->actionFunc = func_80A14E74;
+        this->actionFunc = func_ACT_80A14E74;
     }
 }
 
-void func_80A14E74(EnGo* this, PlayState* play) {
+void func_ACT_80A14E74(EnGo* this, PlayState* play) {
     if (func_80A134F4(this, this->actor.cutscene)) {
-        this->actionFunc = func_80A14EB0;
+        this->actionFunc = func_ACT_80A14EB0;
     }
 }
 
-void func_80A14EB0(EnGo* this, PlayState* play) {
+void func_ACT_80A14EB0(EnGo* this, PlayState* play) {
     EnGo* sp24 = (EnGo*)this->actor.child;
 
     if ((s32)(this->unk_39C * 3.0f) != 0) {
@@ -1621,13 +1637,13 @@ void func_80A14EB0(EnGo* this, PlayState* play) {
         if ((ENGO_GET_F(&this->actor) == ENGO_F_4) && (ENGO_GET_70(&this->actor) == ENGO_70_1)) {
             SubS_UpdateFlags(&this->unk_390, 4, 7);
             func_80A143A8(sp24, play);
-            sp24->actionFunc = func_80A149B0;
+            sp24->actionFunc = func_ACT_80A149B0;
         }
-        this->actionFunc = func_80A149B0;
+        this->actionFunc = func_ACT_80A149B0;
     }
 }
 
-void func_80A14FC8(EnGo* this, PlayState* play) {
+void func_ACT_80A14FC8(EnGo* this, PlayState* play) {
     s32 sp38[] = {
         0, 2, 6, 20, 18, 5, 5, 15,
     };
@@ -1655,7 +1671,7 @@ void func_80A14FC8(EnGo* this, PlayState* play) {
                 func_80A12C48(this, play, sp38[sp30]);
                 this->unk_390 = 0;
                 this->unk_390 |= 0x20;
-                this->unk_3BE = 0;
+                this->indexEyeTex = ENGO_EYE_OPEN;
                 this->unk_39C = 0.0f;
                 this->unk_3A0 = 0.0f;
 
@@ -1749,7 +1765,7 @@ void func_80A14FC8(EnGo* this, PlayState* play) {
 }
 
 /* Action function, called on day 2 or greater */
-void func_80A153FC(EnGo* this, PlayState* play) {
+void func_ACT_80A153FC(EnGo* this, PlayState* play) {
     Vec3s* sp5C;
     Vec3f sp50;
     Vec3f sp44;
@@ -1768,10 +1784,10 @@ void func_80A153FC(EnGo* this, PlayState* play) {
 
         if (gSaveContext.save.day == 3) {
             func_80A141D4(this, play);
-            this->actionFunc = func_80A14E14;
+            this->actionFunc = func_ACT_80A14E14;
         } else {
             func_80A143A8(this, play);
-            this->actionFunc = func_80A149B0;
+            this->actionFunc = func_ACT_80A149B0;
         }
     } else if (this->unk_284 != NULL) {
         if (this->unk_390 & 0x800) {
@@ -1813,7 +1829,7 @@ s32* func_80A15684(EnGo* this, PlayState* play) {
         D_80A16164,
     };
 
-    if (this->unk_3EC != 0) {
+    if (this->sleepState != 0) {
         return D_80A1640C;
     }
 
@@ -1852,16 +1868,16 @@ s32* func_80A15684(EnGo* this, PlayState* play) {
     }
 }
 
-void func_80A157C4(EnGo* this, PlayState* play) {
+void func_ACT_80A157C4(EnGo* this, PlayState* play) {
     s32 pad;
-    Vec3f sp40;
-    Vec3f sp34;
+    Vec3f targetActorPos;
+    Vec3f thisActorPos;
 
     if (!func_8010BF58(&this->actor, play, func_80A15684(this, play), this->unk_3D8, &this->unk_28C)) {
         if ((ENGO_GET_F(&this->actor) != ENGO_F_1) && !(this->unk_390 & 0x200)) {
-            Math_Vec3f_Copy(&sp40, &this->unk_38C->world.pos);
-            Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
-            Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&sp34, &sp40), 4, 0x2AA8);
+            Math_Vec3f_Copy(&targetActorPos, &this->targetActor->world.pos);
+            Math_Vec3f_Copy(&thisActorPos, &this->actor.world.pos);
+            Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&thisActorPos, &targetActorPos), 4, 0x2AA8);
         }
         SubS_FillLimbRotTables(play, this->unk_3CE, this->unk_3C8, ARRAY_COUNT(this->unk_3CE));
         return;
@@ -1871,7 +1887,7 @@ void func_80A157C4(EnGo* this, PlayState* play) {
         (ENGO_GET_F(&this->actor) == ENGO_F_7)) {
         this->unk_3BC = 0;
         this->unk_390 &= ~0x20;
-        this->unk_3BE = 4;
+        this->indexEyeTex = ENGO_EYE_CLOSED2;
     }
 
     this->unk_390 &= ~0x8;
@@ -1884,9 +1900,9 @@ void func_80A157C4(EnGo* this, PlayState* play) {
 void EnGo_Init(Actor* thisx, PlayState* play) {
     EnGo* this = THIS;
 
-    this->unk_288 = SubS_GetObjectIndex(OBJECT_TAISOU, play);
-    this->unk_289 = SubS_GetObjectIndex(OBJECT_HAKUGIN_DEMO, play);
-    this->actionFunc = func_80A14798;
+    this->indexTaisou = SubS_GetObjectIndex(OBJECT_TAISOU, play);            /* Gymnastics */
+    this->indexHakuginDemo = SubS_GetObjectIndex(OBJECT_HAKUGIN_DEMO, play); /* White Silver / Even Silver? */
+    this->actionFunc = func_ACT_80A14798;
 }
 
 void EnGo_Destroy(Actor* thisx, PlayState* play) {
@@ -1922,7 +1938,7 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
             phi_f0 = this->colliderCylinder.dim.radius + 40;
         }
         func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_AP_NONE, this->unk_390 & 7);
-    } else if ((this->unk_390 & 0x200) && (this->unk_3EC != 0)) {
+    } else if ((this->unk_390 & 0x200) && (this->sleepState != 0)) {
         phi_f0 = this->colliderCylinder.dim.radius + 40;
         func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_AP_NONE, this->unk_390 & 7);
     }
@@ -2026,32 +2042,32 @@ void EnGo_TransfromLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     switch (limbIndex) {
         case 17:
             SubS_UpdateLimb(this->unk_3B0 + this->unk_3B4 + 0x4000,
-                            this->unk_3B2 + this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->unk_290,
-                            &this->unk_2A8, stepRot, overrideRot);
+                            this->unk_3B2 + this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->limb17Pos,
+                            &this->limb17Rot, stepRot, overrideRot);
             Matrix_Pop();
-            Matrix_Translate(this->unk_290.x, this->unk_290.y, this->unk_290.z, MTXMODE_NEW);
+            Matrix_Translate(this->limb17Pos.x, this->limb17Pos.y, this->limb17Pos.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Matrix_RotateYS(this->unk_2A8.y, MTXMODE_APPLY);
-            Matrix_RotateXS(this->unk_2A8.x, MTXMODE_APPLY);
-            Matrix_RotateZS(this->unk_2A8.z, MTXMODE_APPLY);
+            Matrix_RotateYS(this->limb17Rot.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->limb17Rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->limb17Rot.z, MTXMODE_APPLY);
             Matrix_Push();
             break;
 
         case 10:
-            SubS_UpdateLimb(this->unk_3B4 + 0x4000, this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->unk_29C,
-                            &this->unk_2AE, stepRot, overrideRot);
+            SubS_UpdateLimb(this->unk_3B4 + 0x4000, this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->limb10Pos,
+                            &this->limb10Rot, stepRot, overrideRot);
             Matrix_Pop();
-            Matrix_Translate(this->unk_29C.x, this->unk_29C.y, this->unk_29C.z, MTXMODE_NEW);
+            Matrix_Translate(this->limb10Pos.x, this->limb10Pos.y, this->limb10Pos.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Matrix_RotateYS(this->unk_2AE.y, MTXMODE_APPLY);
-            Matrix_RotateXS(this->unk_2AE.x, MTXMODE_APPLY);
-            Matrix_RotateZS(this->unk_2AE.z, MTXMODE_APPLY);
+            Matrix_RotateYS(this->limb10Rot.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->limb10Rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->limb10Rot.z, MTXMODE_APPLY);
             Matrix_Push();
             break;
     }
 }
 
-void func_80A15FEC(Actor* thisx, PlayState* play) {
+void EnGo_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr D_80A1670C[] = {
         gGoronEyeOpenTex, gGoronEyeHalfTex, gGoronEyeClosedTex, gGoronEyeHalfTex, gGoronEyeClosed2Tex,
     };
@@ -2062,7 +2078,7 @@ void func_80A15FEC(Actor* thisx, PlayState* play) {
 
         func_8012C28C(play->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A1670C[this->unk_3BE]));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A1670C[this->indexEyeTex]));
 
         if (this->unk_3DC == 14) {
             Matrix_Translate(0.0f, 0.0f, -4000.0f, MTXMODE_APPLY);
