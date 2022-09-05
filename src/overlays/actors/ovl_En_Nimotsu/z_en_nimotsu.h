@@ -11,7 +11,7 @@ typedef struct EnNimotsu {
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ u16 dustDone;
     /* 0x1DA */ s16 dustTimer;
-} EnNimotsu; /* size = 0x1DC */
+} EnNimotsu; // size = 0x1DC
 
 extern const ActorInit En_Nimotsu_InitVars;
 
