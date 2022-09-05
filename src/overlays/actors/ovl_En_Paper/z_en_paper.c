@@ -24,8 +24,8 @@ void EnPaper_SetupSpreadConfettiGroup(EnPaper* this);
 void EnPaper_SpreadConfettiGroup(EnPaper* this, PlayState* play);
 void EnPaper_SetupFlyConfettiGroup(EnPaper* this);
 void EnPaper_FlyConfettiGroup(EnPaper* this, PlayState* play);
-void EnPaper_InitConfettiPiece(EnPaper* this, EnPaperPiece* piece);
-void EnPaper_FlyConfettiPiece(EnPaper* this, EnPaperPiece* piece);
+void EnPaper_InitConfettiPiece(EnPaper* this, EnPaperConfetto* piece);
+void EnPaper_FlyConfettiPiece(EnPaper* this, EnPaperConfetto* piece);
 
 const ActorInit En_Paper_InitVars = {
     ACTOR_EN_PAPER,
@@ -86,7 +86,7 @@ void EnPaper_FlyConfettiGroup(EnPaper* this, PlayState* play) {
     }
 }
 
-void EnPaper_InitConfettiPiece(EnPaper* this, EnPaperPiece* piece) {
+void EnPaper_InitConfettiPiece(EnPaper* this, EnPaperConfetto* piece) {
     // Pick rotation axis randomly (significantly biased towards the z = 0 plane)
     Matrix_RotateZYX(Rand_Next(), Rand_Next(), Rand_Next(), MTXMODE_NEW);
     Matrix_MultVec3f(&sUnitVecZ, &piece->rotAxis);
@@ -130,7 +130,7 @@ void EnPaper_InitConfettiPiece(EnPaper* this, EnPaperPiece* piece) {
  *
  * and the product is componentwise: the normal is being used as a cross-sectional area measure rather than vectorially.
  */
-void EnPaper_FlyConfettiPiece(EnPaper* this, EnPaperPiece* piece) {
+void EnPaper_FlyConfettiPiece(EnPaper* this, EnPaperConfetto* piece) {
     f32 cos = Math_CosS(piece->angle);
     f32 sin = Math_SinS(piece->angle);
     f32 versin = 1.0f - cos;
@@ -207,7 +207,7 @@ void EnPaper_Update(Actor* thisx, PlayState* play) {
 
 void EnPaper_Draw(Actor* thisx, PlayState* play) {
     EnPaper* this = THIS;
-    EnPaperPiece* piece = this->pieces;
+    EnPaperConfetto* piece = this->pieces;
     s32 i;
 
     OPEN_DISPS(play->state.gfxCtx);

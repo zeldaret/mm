@@ -138,7 +138,6 @@ void DmBal_UpdateEyes(DmBal* this) {
     }
 }
 
-// Throw confetti
 void DmBal_SpawnPaper(DmBal* this, PlayState* play, Vec3f* pos, Vec3f* vel, f32 gravity) {
     Actor* paper = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_PAPER, pos->x, pos->y, pos->z, 0, 0, 0, 0);
 
@@ -152,6 +151,7 @@ void DmBal_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     DmBal* this = THIS;
 
+    // Throw confetti
     if (Animation_OnFrame(&this->skelAnime, 29.0f) && (this->skelAnime.animation == &object_bal_Anim_001804)) {
         Vec3f pos = this->actor.world.pos;
         Vec3f vel = { 0.0f, 9.0f, 0.0f };

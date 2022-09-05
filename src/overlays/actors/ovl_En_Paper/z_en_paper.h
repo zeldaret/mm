@@ -16,12 +16,12 @@ typedef struct {
     /* 0x24 */ Vec3f vel;
     /* 0x30 */ s16 angle;  // angle to rotate around `rotAxis`
     /* 0x32 */ s16 angVel; // angular velocity of `angle`
-} EnPaperPiece; // size = 0x34
+} EnPaperConfetto; // size = 0x34
 
 typedef struct EnPaper {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnPaperActionFunc actionFunc;
-    /* 0x148 */ EnPaperPiece pieces[ENPAPER_PIECES_COUNT];
+    /* 0x148 */ EnPaperConfetto pieces[ENPAPER_PIECES_COUNT];
     /* 0xD78 */ Vec3f windForce;
     /* 0xD84 */ s16 timer;
 } EnPaper; // size = 0xD88
