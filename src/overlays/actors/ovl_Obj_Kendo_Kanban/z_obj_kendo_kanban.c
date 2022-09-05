@@ -9,16 +9,16 @@
 
 #define FLAGS 0x00000000
 
-// Board Fragment Flags: Identify which of the 4 quadrants fo the board are present.
-#define PART_FULL 0
-#define PART_TOP_RIGHT (1 << 0)
-#define PART_TOP_LEFT (1 << 1)
-#define PART_BOTTOM_RIGHT (1 << 2)
-#define PART_BOTTOM_LEFT (1 << 3)
-#define RIGHT_HALF (PART_TOP_RIGHT | PART_BOTTOM_RIGHT)
-#define LEFT_HALF (PART_TOP_LEFT | PART_BOTTOM_LEFT)
-#define TOP_HALF (PART_TOP_RIGHT | PART_TOP_LEFT)
-#define BOTTOM_HALF (PART_BOTTOM_RIGHT | PART_BOTTOM_LEFT)
+// Board Fragment Flags: Identify which of the 4 quadrants of the board are present.
+#define OBJKENDOKANBAN_PART_FULL 0
+#define OBJKENDOKANBAN_PART_TOP_RIGHT (1 << 0)
+#define OBJKENDOKANBAN_PART_TOP_LEFT (1 << 1)
+#define OBJKENDOKANBAN_PART_BOTTOM_RIGHT (1 << 2)
+#define OBJKENDOKANBAN_PART_BOTTOM_LEFT (1 << 3)
+#define OBJKENDOKANBAN_RIGHT_HALF (OBJKENDOKANBAN_PART_TOP_RIGHT | OBJKENDOKANBAN_PART_BOTTOM_RIGHT)
+#define OBJKENDOKANBAN_LEFT_HALF (OBJKENDOKANBAN_PART_TOP_LEFT | OBJKENDOKANBAN_PART_BOTTOM_LEFT)
+#define OBJKENDOKANBAN_TOP_HALF (OBJKENDOKANBAN_PART_TOP_RIGHT | OBJKENDOKANBAN_PART_TOP_LEFT)
+#define OBJKENDOKANBAN_BOTTOM_HALF (OBJKENDOKANBAN_PART_BOTTOM_RIGHT | OBJKENDOKANBAN_PART_BOTTOM_LEFT)
 
 // Number of bounces the board takes before settling.
 #define MAX_BOUNCE_COUNT (7)
@@ -26,10 +26,10 @@
 #define THIS ((ObjKendoKanban*)thisx)
 
 typedef enum {
-    /* -1 */ DIR_DOWN = -1,
-    /*  0 */ DIR_UNDETERMINED,
-    /*  1 */ DIR_UP,
-} BoardDirection;
+    /* -1 */ OBJKENDOKANBAN_DIR_DOWN = -1,
+    /*  0 */ OBJKENDOKANBAN_DIR_UNDETERMINED,
+    /*  1 */ OBJKENDOKANBAN_DIR_UP,
+} ObjKendoKanbanDirection;
 
 void ObjKendoKanban_Init(Actor* thisx, PlayState* play);
 void ObjKendoKanban_Destroy(Actor* thisx, PlayState* play);
@@ -188,7 +188,6 @@ static Vec3f sUnitVecX = { 1.0f, 0.0f, 0.0f };
 void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
     s32 pad[2];
     ObjKendoKanban* this = THIS;
-
     Vec3f vertices[3];
     s32 i;
     s32 j;
@@ -231,7 +230,7 @@ void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
     }
 
     this->unk_30A = 0;
-    if (this->boardFragments == PART_FULL) {
+    if (this->boardFragments == OBJKENDOKANBAN_PART_FULL) {
         ObjKendoKanban_SetupDoNothing(this);
     } else {
         ObjKendoKanban_SetupTumble(this, play);
@@ -255,20 +254,20 @@ void ObjKendoKanban_DoNothing(ObjKendoKanban* this, PlayState* play) {
 void ObjKendoKanban_SetupTumble(ObjKendoKanban* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (this->boardFragments == PART_FULL) {
+    if (this->boardFragments == OBJKENDOKANBAN_PART_FULL) {
         if ((player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_1H) ||
             (player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_2H) ||
             (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_FINISH)) {
 
             // Vertical cuts initialize the right half, spawn the left half.
-            this->boardFragments = RIGHT_HALF;
+            this->boardFragments = OBJKENDOKANBAN_RIGHT_HALF;
             this->rotVelocity = 0x71C; // 10 degrees
             this->actor.velocity = sVelocityRightHalf;
             this->centerPoint = sCenterPointRightHalf;
 
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_KENDO_KANBAN,
                                this->actor.home.pos.x - 5.0f, this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0,
-                               LEFT_HALF);
+                               OBJKENDOKANBAN_LEFT_HALF);
 
             this->cornerPoints[0] = sPointTC;
             this->cornerPoints[1] = sPointTR;
@@ -276,20 +275,20 @@ void ObjKendoKanban_SetupTumble(ObjKendoKanban* this, PlayState* play) {
             this->cornerPoints[3] = sPointBC;
         } else {
             // Horizontal cuts initialize the bottom half, spawn the top half.
-            this->boardFragments = BOTTOM_HALF;
+            this->boardFragments = OBJKENDOKANBAN_BOTTOM_HALF;
             this->rotVelocity = -0x71C; // -10 degrees
             this->actor.velocity = sVelocityBottomHalf;
             this->centerPoint = sCenterPointBottomHalf;
 
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_KENDO_KANBAN, this->actor.home.pos.x,
-                               this->actor.home.pos.y + 5.0f, this->actor.home.pos.z, 0, 0, 0, TOP_HALF);
+                               this->actor.home.pos.y + 5.0f, this->actor.home.pos.z, 0, 0, 0, OBJKENDOKANBAN_TOP_HALF);
 
             this->cornerPoints[0] = sPointCL;
             this->cornerPoints[1] = sPointCR;
             this->cornerPoints[2] = sPointBR;
             this->cornerPoints[3] = sPointBL;
         }
-    } else if (this->boardFragments == LEFT_HALF) {
+    } else if (this->boardFragments == OBJKENDOKANBAN_LEFT_HALF) {
         // Initialize the newly spawned left half
         this->rotVelocity = 0x71C; // 10 degrees
         this->actor.velocity = sVelocityLeftHalf;
@@ -299,7 +298,7 @@ void ObjKendoKanban_SetupTumble(ObjKendoKanban* this, PlayState* play) {
         this->cornerPoints[1] = sPointTC;
         this->cornerPoints[2] = sPointBC;
         this->cornerPoints[3] = sPointBL;
-    } else if (this->boardFragments == TOP_HALF) {
+    } else if (this->boardFragments == OBJKENDOKANBAN_TOP_HALF) {
         // Initialize the newly spawned top half
         this->rotVelocity = 0x71C; // 10 degrees
         this->actor.velocity = sVelocityTopHalf;
@@ -440,7 +439,7 @@ s32 ObjKendoKanban_IsPlayerOnTop(ObjKendoKanban* this, PlayState* play) {
     s32 j;
     Vec2f playerToCornerA;
     Vec2f playerToCornerB;
-    s32 priorDir = DIR_UNDETERMINED;
+    s32 priorDir = OBJKENDOKANBAN_DIR_UNDETERMINED;
 
     for (i = 0; i < ARRAY_COUNT(this->cornerPos); i++) {
         j = (i != 3) ? (i + 1) : 0;
@@ -453,15 +452,15 @@ s32 ObjKendoKanban_IsPlayerOnTop(ObjKendoKanban* this, PlayState* play) {
         playerToCornerB.z = this->cornerPos[j].z - player->actor.world.pos.z;
         playerToCornerB.x = this->cornerPos[j].x - player->actor.world.pos.x;
         if ((playerToCornerA.x * playerToCornerB.z) < (playerToCornerA.z * playerToCornerB.x)) {
-            if (priorDir == DIR_UNDETERMINED) {
-                priorDir = DIR_UP;
-            } else if (priorDir != DIR_UP) {
+            if (priorDir == OBJKENDOKANBAN_DIR_UNDETERMINED) {
+                priorDir = OBJKENDOKANBAN_DIR_UP;
+            } else if (priorDir != OBJKENDOKANBAN_DIR_UP) {
                 return false;
             }
         } else {
-            if (priorDir == DIR_UNDETERMINED) {
-                priorDir = DIR_DOWN;
-            } else if (priorDir != DIR_DOWN) {
+            if (priorDir == OBJKENDOKANBAN_DIR_UNDETERMINED) {
+                priorDir = OBJKENDOKANBAN_DIR_DOWN;
+            } else if (priorDir != OBJKENDOKANBAN_DIR_DOWN) {
                 return false;
             }
         }
@@ -502,7 +501,7 @@ void ObjKendoKanban_Draw(Actor* thisx, PlayState* play) {
 
     func_8012C28C(play->state.gfxCtx);
 
-    if (this->boardFragments == PART_FULL) {
+    if (this->boardFragments == OBJKENDOKANBAN_PART_FULL) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gKendoKanbanDL);
     } else {
