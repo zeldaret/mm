@@ -503,13 +503,13 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                 player->doorActor = &this->dyna.actor;
                 if (this->unk_1A6 != 0) {
                     if (gSaveContext.save.inventory.dungeonKeys[((void)0, gSaveContext.mapIndex)] <= 0) {
-                        player->doorType = PLAYER_DOORTYPE_TALK;
+                        player->doorType = PLAYER_DOORTYPE_TALKING;
                         this->dyna.actor.textId = 0x1802;
                     } else {
                         player->doorTimer = 10;
                     }
                 } else if (this->unk_1A4 == 4) {
-                    player->doorType = PLAYER_DOORTYPE_TALK;
+                    player->doorType = PLAYER_DOORTYPE_TALKING;
                     this->dyna.actor.textId = 0x1800;
                 } else if ((this->unk_1A4 == 0) || (this->unk_1A4 == 2) || (this->unk_1A4 == 3)) {
                     s32 textIdOffset;
@@ -528,7 +528,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                         } else if (this->unk_1A4 == 2) {
                             baseTextId = 0x181D;
                         }
-                        player->doorType = PLAYER_DOORTYPE_TALK;
+                        player->doorType = PLAYER_DOORTYPE_TALKING;
                         this->dyna.actor.textId = baseTextId + textIdOffset;
                     }
                 } else if ((this->unk_1A4 == 5) && (playerPosRelToDoor.z > 0.0f)) {
@@ -539,7 +539,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
 
                         player->doorType = ((this->dyna.actor.textId == 0x1821) && D_80867BC0)
                                                ? PLAYER_DOORTYPE_PROXIMITY
-                                               : PLAYER_DOORTYPE_TALK;
+                                               : PLAYER_DOORTYPE_TALKING;
                     }
                 }
                 func_80122F28(player);

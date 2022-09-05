@@ -199,7 +199,7 @@ typedef enum PlayerMeleeWeaponAnimation {
 } PlayerMeleeWeaponAnimation;
 
 typedef enum PlayerDoorType {
-    /* -1 */ PLAYER_DOORTYPE_TALK = -1, // Prevents opening the door normally
+    /* -1 */ PLAYER_DOORTYPE_TALKING = -1, // Displays a message instead of opening
     /*  0 */ PLAYER_DOORTYPE_NONE,
     /*  1 */ PLAYER_DOORTYPE_HANDLE,
     /*  2 */ PLAYER_DOORTYPE_SLIDING,

@@ -19,14 +19,14 @@ struct PlayerAnimationFrame;
 #define ANIM_FLAG_UPDATEY   (1 << 1)
 #define ANIM_FLAG_NOMOVE    (1 << 4)
 
-typedef enum AnimationModes {
+typedef enum AnimationMode {
     /* 0 */ ANIMMODE_LOOP,
     /* 1 */ ANIMMODE_LOOP_INTERP,
     /* 2 */ ANIMMODE_ONCE,
     /* 3 */ ANIMMODE_ONCE_INTERP,
     /* 4 */ ANIMMODE_LOOP_PARTIAL,
     /* 5 */ ANIMMODE_LOOP_PARTIAL_INTERP
-} AnimationModes;
+} AnimationMode;
 
 typedef enum { 
     /* -1 */ ANIMTAPER_DECEL = -1,
