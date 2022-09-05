@@ -22,7 +22,8 @@ typedef enum PlayerBoots {
     /* 4 */ PLAYER_BOOTS_ZORA_LAND,
     /* 5 */ PLAYER_BOOTS_ZORA_UNDERWATER,
     /* 6 */ PLAYER_BOOTS_GORON,
-    /* 7 */ PLAYER_BOOTS_MAX
+    /* 7 */ PLAYER_BOOTS_7,
+    /* 8 */ PLAYER_BOOTS_MAX
 } PlayerBoots;
 
 typedef enum PlayerStrength {
@@ -876,25 +877,7 @@ typedef struct Player {
     /* 0x15C */ Gfx** leftHandDLists;
     /* 0x160 */ Gfx** sheathDLists;
     /* 0x164 */ Gfx** waistDLists;
-    /* 0x168 */ f32 unk_168;
-    /* 0x16C */ f32 unk_16C;
-    /* 0x170 */ f32 unk_170;
-    /* 0x174 */ f32 unk_174;
-    /* 0x178 */ f32 unk_178;
-    /* 0x17C */ f32 unk_17C;
-    /* 0x180 */ f32 unk_180;
-    /* 0x184 */ f32 unk_184;
-    /* 0x188 */ f32 unk_188;
-    /* 0x18C */ f32 unk_18C;
-    /* 0x190 */ f32 unk_190;
-    /* 0x194 */ f32 unk_194;
-    /* 0x198 */ f32 unk_198;
-    /* 0x19C */ f32 unk_19C;
-    /* 0x1A0 */ f32 unk_1A0;
-    /* 0x1A4 */ f32 unk_1A4;
-    /* 0x1A8 */ f32 unk_1A8;
-    /* 0x1AC */ f32 unk_1AC;
-    /* 0x1B0 */ f32 unk_1B0;
+    /* 0x168 */ UNK_TYPE1 unk_168[0x4C];
     /* 0x1B4 */ s16 unk_1B4;
     /* 0x1B6 */ char unk_1B6[2];
     /* 0x1B8 */ u8 giObjectLoading;
@@ -1032,7 +1015,7 @@ typedef struct Player {
     /* 0xB5D */ u8 unk_B5D;
     /* 0xB5E */ u8 unk_B5E;
     /* 0xB5F */ u8 unk_B5F;
-    /* 0xB60 */ u16 unk_B60; // blast mask timer?
+    /* 0xB60 */ u16 blastMaskTimer;
     /* 0xB62 */ s16 unk_B62;
     /* 0xB64 */ u8 unk_B64;
     /* 0xB65 */ u8 shockTimer;
@@ -1049,8 +1032,8 @@ typedef struct Player {
     /* 0xB76 */ s16 unk_B76;
     /* 0xB78 */ f32 unk_B78;
     /* 0xB7C */ f32 unk_B7C;
-    /* 0xB80 */ f32 unk_B80;
-    /* 0xB84 */ s16 unk_B84;
+    /* 0xB80 */ f32 pushedSpeed; // Pushing player, examples include water currents, floor conveyors, climbing sloped surfaces
+    /* 0xB84 */ s16 pushedYaw; // Yaw direction of player being pushed
     /* 0xB86 */ s16 unk_B86[2]; // unknown length
     /* 0xB8A */ s16 unk_B8A;
     /* 0xB8C */ s16 unk_B8C;

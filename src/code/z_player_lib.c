@@ -384,7 +384,7 @@ FlexSkeletonHeader* gPlayerSkeletons[PLAYER_FORM_MAX] = {
     &gLinkFierceDeitySkel, &gLinkGoronSkel, &gLinkZoraSkel, &gLinkDekuSkel, &gLinkHumanSkel,
 };
 
-s16 D_801BFE14[][18] = {
+s16 D_801BFE14[PLAYER_BOOTS_MAX][18] = {
     { 200, 666, 200, 700, 366, 200, 600, 175, 60, 800, 1000, -100, 600, 590, 800, 125, 300, 65 },
     { 200, 1000, 300, 800, 500, 400, 800, 400, 120, 800, 550, -100, 600, 540, 750, 125, 400, 200 },
     { 100, 1000, 300, 800, 250, 200, 800, 200, 90, 800, 350, -80, 600, 540, 750, 60, 200, 200 },
@@ -433,7 +433,7 @@ void func_80123140(PlayState* play, Player* player) {
     REG(39) = bootRegs[8];
     REG(43) = bootRegs[9];
     R_RUN_SPEED_LIMIT = bootRegs[10];
-    REG(68) = bootRegs[11];
+    REG(68) = bootRegs[11]; // gravity
     REG(69) = bootRegs[12];
     IREG(66) = bootRegs[13];
     IREG(67) = bootRegs[14];
@@ -2879,15 +2879,15 @@ void Player_DrawBlastMask(PlayState* play, Player* player) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (player->unk_B60 != 0) {
+    if (player->blastMaskTimer != 0) {
         s32 alpha;
 
         gSegments[0xA] = VIRTUAL_TO_PHYSICAL(player->maskObjectSegment);
 
         AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_bakuretu_Matanimheader_0011F8));
 
-        if (player->unk_B60 < 11) {
-            alpha = (player->unk_B60 / 10.0f) * 255;
+        if (player->blastMaskTimer <= 10) {
+            alpha = (player->blastMaskTimer / 10.0f) * 255;
         } else {
             alpha = 255;
         }

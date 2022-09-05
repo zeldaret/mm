@@ -3348,8 +3348,7 @@ BlureColors D_8085CF88[] = {
     { { 165, 185, 255, 185 }, { 205, 225, 255, 50 }, { 255, 255, 255, 0 }, { 255, 255, 255, 0 } },
 };
 
-// Player_OverrideBlureColors
-void func_8082F938(PlayState* play, Player* this, s32 colorType, s32 elemDuration) {
+void Player_OverrideBlureColors(PlayState* play, Player* this, s32 colorType, s32 elemDuration) {
     EffectBlure* blure0 = Effect_GetByIndex(this->meleeWeaponEffectIndex[0]);
     EffectBlure* blure1 = Effect_GetByIndex(this->meleeWeaponEffectIndex[1]);
     s32 i;
@@ -3406,7 +3405,7 @@ void func_8082FA5C(PlayState* play, Player* this, s32 meleeWeaponState) {
             Player_AnimSfx_PlayVoice(this, voiceSfx);
         }
 
-        func_8082F938(play, this, 0, 4);
+        Player_OverrideBlureColors(play, this, 0, 4);
     }
 
     this->meleeWeaponState = meleeWeaponState;
@@ -3489,9 +3488,16 @@ EquipSlot func_8082FDC4(void) {
 }
 
 void func_8082FE0C(Player* this, PlayState* play) {
-    if (((this->stateFlags1 & (PLAYER_STATE1_800 | PLAYER_STATE1_20000000)) ||
-         (this->stateFlags2 & PLAYER_STATE2_2000000) || (this->stateFlags3 & PLAYER_STATE3_20000000) ||
-         func_801240DC(this))) {
+    if (this->stateFlags1 & (PLAYER_STATE1_800 | PLAYER_STATE1_20000000)) {
+        return;
+    }
+    if (this->stateFlags2 & PLAYER_STATE2_2000000) {
+        return;
+    }
+    if (this->stateFlags3 & PLAYER_STATE3_20000000) {
+        return;
+    }
+    if (func_801240DC(this)) {
         return;
     }
 
@@ -3550,14 +3556,14 @@ void func_8082FE0C(Player* this, PlayState* play) {
                 D_80862B4C = 1;
             }
         } else if (item == ITEM_F0) {
-            if (this->unk_B60 == 0) {
+            if (this->blastMaskTimer == 0) {
                 EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.focus.pos.x,
                                                   this->actor.focus.pos.y, this->actor.focus.pos.z, BOMB_CAT_BOMB, 0, 0,
                                                   BOMB_BODY);
 
                 if (bomb != NULL) {
                     bomb->timer = 0;
-                    this->unk_B60 = 0x136;
+                    this->blastMaskTimer = 310;
                 }
             }
         } else if (item == ITEM_F1) {
@@ -4528,11 +4534,10 @@ s16 func_80832754(Player* this, s32 arg1) {
 void func_80832888(Player* this, PlayState* play) {
     s32 var_v1 = 0;
     Actor* var_v1_2;
-    s32 pressedZ;
+    s32 pressedZ = CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_Z);
     s32 temp_v0_3;
     s32 var_a1;
 
-    pressedZ = CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_Z);
     if (!pressedZ) {
         this->stateFlags1 &= ~PLAYER_STATE1_40000000;
     }
@@ -5832,7 +5837,7 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
     return false;
 }
 
-void func_80835BC8(Player* this, Vec3f* translation, Vec3f* src, Vec3f* dst) {
+void Player_TranslateAndRotateY(Player* this, Vec3f* translation, Vec3f* src, Vec3f* dst) {
     Lib_Vec3f_TranslateAndRotateY(translation, this->actor.shape.rot.y, src, dst);
 }
 
@@ -5845,13 +5850,13 @@ void func_80835BF8(Vec3f* srcPos, s16 rotY, f32 radius, Vec3f* dstPos) {
 Actor* Player_SpawnFairy(PlayState* play, Player* this, Vec3f* translation, Vec3f* arg3, s32 elfParams) {
     Vec3f pos;
 
-    func_80835BC8(this, translation, arg3, &pos);
+    Player_TranslateAndRotateY(this, translation, arg3, &pos);
 
     return Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, pos.x, pos.y, pos.z, 0, 0, 0, elfParams);
 }
 
 f32 func_80835CD8(PlayState* play, Player* this, Vec3f* arg2, Vec3f* pos, CollisionPoly** outPoly, s32* outBgId) {
-    func_80835BC8(this, &this->actor.world.pos, arg2, pos);
+    Player_TranslateAndRotateY(this, &this->actor.world.pos, arg2, pos);
     return BgCheck_EntityRaycastFloor5(&play->colCtx, outPoly, outBgId, &this->actor, pos);
 }
 
@@ -5869,9 +5874,9 @@ s32 func_80835D58(PlayState* play, Player* this, Vec3f* arg2, CollisionPoly** ou
     posA.x = this->actor.world.pos.x;
     posA.y = this->actor.world.pos.y + arg2->y;
     posA.z = this->actor.world.pos.z;
-    func_80835BC8(this, &this->actor.world.pos, arg2, &posB);
+    Player_TranslateAndRotateY(this, &this->actor.world.pos, arg2, &posB);
 
-    return BgCheck_EntityLineTest2(&play->colCtx, &posA, &posB, posResult, outPoly, 1, 0, 0, 1, bgId, &this->actor);
+    return BgCheck_EntityLineTest2(&play->colCtx, &posA, &posB, posResult, outPoly, true, false, false, true, bgId, &this->actor);
 }
 
 Vec3f D_8085D100 = { 0.0f, 50.0f, 0.0f };
@@ -5908,7 +5913,7 @@ void Player_Door_Staircase(PlayState* play, Player* this, Actor* door) {
 
     D_8085D10C.x = (this->doorDirection != 0) ? -400.0f : 400.0f;
     D_8085D10C.z = 200.0f;
-    func_80835BC8(this, &this->unk_3A0, &D_8085D10C, &this->unk_3AC);
+    Player_TranslateAndRotateY(this, &this->unk_3A0, &D_8085D10C, &this->unk_3AC);
 
     doorStaircase->shouldClimb = true;
     func_8082DAD4(this);
@@ -6736,7 +6741,7 @@ s32 func_808381F8(PlayState* play, Player* this) {
     Vec3f pos;
     f32 yIntersect;
 
-    func_80835BC8(this, &this->actor.prevPos, &D_8085D148, &pos);
+    Player_TranslateAndRotateY(this, &this->actor.prevPos, &D_8085D148, &pos);
 
     yIntersect = BgCheck_EntityRaycastFloor5(&play->colCtx, &poly, &bgId, &this->actor, &pos);
 
@@ -8078,7 +8083,7 @@ void func_8083B850(PlayState* play, Player* this) {
     this->prevBoots = PLAYER_BOOTS_ZORA_LAND;
     Player_SetAction(play, this, func_80850D68, 0);
     this->unk_B48 = sqrtf(SQ(this->linearVelocity) + SQ(this->actor.velocity.y));
-    func_8082F938(play, this, 1, 8);
+    Player_OverrideBlureColors(play, this, 1, 8);
     this->currentBoots = PLAYER_BOOTS_ZORA_LAND;
     this->prevBoots = PLAYER_BOOTS_ZORA_LAND;
 }
@@ -8565,27 +8570,28 @@ LinkAnimationHeader* D_8085D264[] = {
 s32 func_8083CF68(PlayState* play, Player* this) {
     if (!Player_InBlockingCsMode(play, this) && !(this->cylinder.base.ocFlags1 & 2)) {
         if ((func_80853D68 != this->actionFunc) && (func_80857BE8 != this->actionFunc) && (D_80862B40 == 1)) {
-            s16 sp56;
+            s16 playerVelYaw = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
             Vec3f slopeNormal;
             s16 downwardSlopeYaw;
-            s16 temp_v0_2;
-            f32 temp_ft4;
+            s16 velYawToDownwardSlope;
+            f32 slopeSlowdownSpeed;
             f32 temp_fv1;
             f32 var_fa1;
-            f32 var_ft5;
+            f32 slopeSlowdownSpeedStep;
 
-            sp56 = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
             Actor_GetSlopeDirection(this->actor.floorPoly, &slopeNormal, &downwardSlopeYaw);
+            velYawToDownwardSlope = downwardSlopeYaw - playerVelYaw;
 
-            temp_v0_2 = downwardSlopeYaw - sp56;
-            if (ABS_ALT(temp_v0_2) > 16000) {
+            if (ABS_ALT(velYawToDownwardSlope) > 0x3E80) { // 87.9 degrees
                 var_fa1 = (func_80857BE8 == this->actionFunc) ? Math_CosS(this->unk_B6C) : slopeNormal.y;
-                temp_ft4 = (1.0f - var_fa1) * 40.0f;
-                temp_fv1 = fabsf(this->actor.speedXZ) + temp_ft4;
-                var_ft5 = temp_fv1 * temp_fv1 * 0.011f;
-                var_ft5 = CLAMP_MIN(var_ft5, 2.2f);
-                this->unk_B84 = downwardSlopeYaw;
-                Math_StepToF(&this->unk_B80, temp_ft4, var_ft5);
+                slopeSlowdownSpeed = (1.0f - var_fa1) * 40.0f;
+                temp_fv1 = fabsf(this->actor.speedXZ) + slopeSlowdownSpeed;
+                slopeSlowdownSpeedStep = SQ(temp_fv1) * 0.011f;
+                slopeSlowdownSpeedStep = CLAMP_MIN(slopeSlowdownSpeedStep, 2.2f);
+
+                // slows down speed as player is climbing a slope
+                this->pushedYaw = downwardSlopeYaw;
+                Math_StepToF(&this->pushedSpeed, slopeSlowdownSpeed, slopeSlowdownSpeedStep);
             } else {
                 Player_SetAction(play, this, func_80853D68, 0);
                 func_8082DE50(play, this);
@@ -8899,7 +8905,7 @@ s32 func_8083DD1C(PlayState* play, Player* this, f32 arg2, f32 arg3, f32 arg4, f
     sp68.z = this->actor.world.pos.z + (arg4 * cos);
     sp74.y = sp68.y = this->actor.world.pos.y + arg2;
 
-    if (BgCheck_EntityLineTest2(&play->colCtx, &sp74, &sp68, &sp5C, &this->actor.wallPoly, 1, 0, 0, 1, &bgId,
+    if (BgCheck_EntityLineTest2(&play->colCtx, &sp74, &sp68, &sp5C, &this->actor.wallPoly, true, false, false, true, &bgId,
                                 &this->actor)) {
         f32 wallPolyNormalX;
         f32 wallPolyNormalZ;
@@ -10290,7 +10296,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
         EffectTireMark* tireMark;
 
         this->actor.shape.rot.z = 0;
-        func_8082F938(play, this, 0, 4);
+        Player_OverrideBlureColors(play, this, 0, 4);
 
         tireMark = Effect_GetByIndex(this->meleeWeaponEffectIndex[2]);
         if (this->transformation == PLAYER_FORM_GORON) {
@@ -10327,7 +10333,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     Effect_Add(play, &this->meleeWeaponEffectIndex[0], EFFECT_BLURE2, 0, 0, &D_8085D30C);
     Effect_Add(play, &this->meleeWeaponEffectIndex[1], EFFECT_BLURE2, 0, 0, &D_8085D30C);
 
-    func_8082F938(play, this, 0, 4);
+    Player_OverrideBlureColors(play, this, 0, 4);
     if (this->transformation == PLAYER_FORM_GORON) {
         D_8085D330.color = D_8085D338;
     } else {
@@ -11324,13 +11330,13 @@ void func_80844784(PlayState* play, Player* this) {
     Actor_UpdateVelocityWithGravity(&this->actor);
     D_80862B3C = 0.0f;
     if ((gSaveContext.save.playerData.health != 0) &&
-        ((this->unk_B80 != 0.0f) || (this->windSpeed != 0.0f) || (play->envCtx.windSpeed >= 50.0f)) &&
+        ((this->pushedSpeed != 0.0f) || (this->windSpeed != 0.0f) || (play->envCtx.windSpeed >= 50.0f)) &&
         (!Player_InCsMode(play)) &&
         !(this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_200000)) &&
         !(this->stateFlags3 & PLAYER_STATE3_100) && (func_8084D4EC != this->actionFunc) &&
         (this->actor.id == ACTOR_PLAYER)) {
-        this->actor.velocity.x += this->unk_B80 * Math_SinS(this->unk_B84);
-        this->actor.velocity.z += this->unk_B80 * Math_CosS(this->unk_B84);
+        this->actor.velocity.x += this->pushedSpeed * Math_SinS(this->pushedYaw);
+        this->actor.velocity.z += this->pushedSpeed * Math_CosS(this->pushedYaw);
         temp_fv1_2 = 10.0f - this->actor.velocity.y;
         if (temp_fv1_2 > 0.0f) {
             sp58 = D_8085D3E0[this->transformation];
@@ -11471,8 +11477,8 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         this->unk_B64--;
     }
 
-    if (this->unk_B60 != 0) {
-        this->unk_B60--;
+    if (this->blastMaskTimer != 0) {
+        this->blastMaskTimer--;
     }
 
     if (gSaveContext.jinxTimer != 0) {
@@ -11589,7 +11595,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
                 this->actor.floorBgId = this->rideActor->floorBgId;
             }
             sPlayerConveyorSpeedIndex = BG_CONVEYOR_SPEED_DISABLED;
-            this->unk_B80 = 0.0f;
+            this->pushedSpeed = 0.0f;
         }
 
         func_8083562C(play, this, this->actor.floorPoly, this->actor.floorBgId);
@@ -11607,11 +11613,11 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
                 conveyorSpeed = sFloorConveyorSpeeds[sPlayerConveyorSpeedIndex];
             }
 
-            Math_StepToF(&this->unk_B80, conveyorSpeed, conveyorSpeed * 0.1f);
-            Math_ScaledStepToS(&this->unk_B84, D_80862B16,
+            Math_StepToF(&this->pushedSpeed, conveyorSpeed, conveyorSpeed * 0.1f);
+            Math_ScaledStepToS(&this->pushedYaw, D_80862B16,
                                ((this->stateFlags1 & PLAYER_STATE1_8000000) ? 400.0f : 800.0f) * conveyorSpeed);
-        } else if (this->unk_B80 != 0.0f) {
-            Math_StepToF(&this->unk_B80, 0.0f, (this->stateFlags1 & PLAYER_STATE1_8000000) ? 0.5f : 2.0f);
+        } else if (this->pushedSpeed != 0.0f) {
+            Math_StepToF(&this->pushedSpeed, 0.0f, (this->stateFlags1 & PLAYER_STATE1_8000000) ? 0.5f : 2.0f);
         }
         if (!(this->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) &&
             !(this->stateFlags3 & PLAYER_STATE3_80) && (func_80854430 != this->actionFunc)) {
@@ -11796,13 +11802,13 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
                 this->shieldCylinder.info.toucherFlags = 0;
                 this->shieldCylinder.info.bumperFlags = 1;
 
-                if (this->transformation == 1) {
+                if (this->transformation == PLAYER_FORM_GORON) {
                     this->shieldCylinder.dim.height = 35;
                 } else {
                     this->shieldCylinder.dim.height = 30;
                 }
 
-                if (this->transformation == 1) {
+                if (this->transformation == PLAYER_FORM_GORON) {
                     this->shieldCylinder.dim.radius = 30;
                 } else {
                     this->shieldCylinder.dim.radius = 20;
@@ -11881,13 +11887,13 @@ void Player_Update(Actor* thisx, PlayState* play) {
 
     this->stateFlags3 &= ~PLAYER_STATE3_10;
     if (gSaveContext.dogParams < 0) {
-        if (Object_GetIndex(&play->objectCtx, 0x132) < 0) {
+        if (Object_GetIndex(&play->objectCtx, OBJECT_DOG) < 0) {
             gSaveContext.dogParams = 0;
         } else {
             Actor* dog;
 
             gSaveContext.dogParams &= (u16)~0x8000;
-            func_80835BC8(this, &this->actor.world.pos, &D_8085D41C, &sDogSpawnPos);
+            Player_TranslateAndRotateY(this, &this->actor.world.pos, &D_8085D41C, &sDogSpawnPos);
 
             dogParams = gSaveContext.dogParams;
 
@@ -14699,13 +14705,13 @@ void func_8084D820(Player* this, PlayState* play) {
                                                          temp_v1_4->pos.z - 0x32);
                                 }
 
-                                func_80835BC8(this, &this->actor.world.pos, &D_8085D62C, &this->actor.world.pos);
+                                Player_TranslateAndRotateY(this, &this->actor.world.pos, &D_8085D62C, &this->actor.world.pos);
 
                                 D_8085D638.x = (this->doorDirection != 0) ? 130.0f : -130.0f;
                                 D_8085D638.z = 160.0f;
-                                func_80835BC8(this, &this->actor.world.pos, &D_8085D638, &this->unk_3A0);
+                                Player_TranslateAndRotateY(this, &this->actor.world.pos, &D_8085D638, &this->unk_3A0);
                                 D_8085D644.z = 160.0f;
-                                func_80835BC8(this, &this->unk_3A0, &D_8085D644, &this->unk_3AC);
+                                Player_TranslateAndRotateY(this, &this->unk_3A0, &D_8085D644, &this->unk_3AC);
 
                                 this->actor.shape.rot.y += (this->doorDirection != 0) ? 0x4000 : -0x4000;
                                 this->unk_AE7 = 0;
@@ -16564,9 +16570,9 @@ void func_808530E0(PlayState* play, Player* this) {
     Vec3f velocity;
     Vec3f accel;
 
-    func_80835BC8(this, &this->actor.world.pos, &D_8085D764, &pos);
-    func_80835BC8(this, &gZeroVec3f, &D_8085D770, &velocity);
-    func_80835BC8(this, &gZeroVec3f, &D_8085D77C, &accel);
+    Player_TranslateAndRotateY(this, &this->actor.world.pos, &D_8085D764, &pos);
+    Player_TranslateAndRotateY(this, &gZeroVec3f, &D_8085D770, &velocity);
+    Player_TranslateAndRotateY(this, &gZeroVec3f, &D_8085D77C, &accel);
     func_800B0EB0(play, &pos, &velocity, &accel, &D_8085D788, &D_8085D78C, 40, 10, 10);
 }
 
@@ -17393,7 +17399,7 @@ void func_808550D0(PlayState* play, Player* this, f32 arg2, f32 arg3, s32 arg4) 
         lightInit += 1;
     }
 
-    func_80835BC8(this, &this->actor.world.pos, &lightInit->pos, &pos);
+    Player_TranslateAndRotateY(this, &this->actor.world.pos, &lightInit->pos, &pos);
     Lights_PointNoGlowSetInfo(&this->lightInfo, pos.x, pos.y, pos.z, lightInit->color[0], lightInit->color[1],
                               lightInit->color[2], lightInit->radius * arg3);
 }
@@ -18025,8 +18031,8 @@ void func_80856918(Player* this, PlayState* play) {
             } else if (LinkAnimation_OnFrame(&this->skelAnime, 8.0f)) {
                 s32 i;
 
-                func_80835BC8(this, &this->actor.world.pos, &D_8085D960, &this->bodyPartsPos[PLAYER_BODYPART_L_HAND]);
-                func_80835BC8(this, &this->actor.world.pos, &D_8085D96C, &this->bodyPartsPos[PLAYER_BODYPART_R_HAND]);
+                Player_TranslateAndRotateY(this, &this->actor.world.pos, &D_8085D960, &this->bodyPartsPos[PLAYER_BODYPART_L_HAND]);
+                Player_TranslateAndRotateY(this, &this->actor.world.pos, &D_8085D96C, &this->bodyPartsPos[PLAYER_BODYPART_R_HAND]);
 
                 for (i = 0; i < 13; i++) {
                     func_808566C0(play, this, PLAYER_BODYPART_L_HAND, 0.6f, 1.0f, 0.8f, 17);
@@ -18054,8 +18060,8 @@ void func_80856918(Player* this, PlayState* play) {
             this->unk_B66 += (u8)(ABS_ALT(this->unk_B86[1]) * 0.01f);
         }
 
-        if (this->unk_B66 > 0xC8) {
-            this->unk_B66 -= 0xC8;
+        if (this->unk_B66 > 200) {
+            this->unk_B66 -= 200;
             func_808566C0(play, this, PLAYER_BODYPART_L_HAND, 0.0f, 1.0f, 0.0f, 32);
             func_808566C0(play, this, PLAYER_BODYPART_R_HAND, 0.0f, 1.0f, 0.0f, 32);
         }

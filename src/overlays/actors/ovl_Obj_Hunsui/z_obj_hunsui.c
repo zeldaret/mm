@@ -184,8 +184,8 @@ void func_80B9C5E8(ObjHunsui* this, PlayState* play) {
                 Math_ApproachF(&this->unk_1A0, 3.0f, 1.0f, 1.0f);
                 Math_ApproachF(&this->unk_19C, this->unk_1A0, 1.0f, 0.1f);
             }
-            player->unk_B84 = this->unk_1A4;
-            player->unk_B80 = this->unk_19C;
+            player->pushedYaw = this->unk_1A4;
+            player->pushedSpeed = this->unk_19C;
         }
     } else {
         if (this->unk_172 & 8) {

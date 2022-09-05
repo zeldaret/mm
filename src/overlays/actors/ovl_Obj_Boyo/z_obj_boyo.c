@@ -76,8 +76,8 @@ void ObjBoyo_Destroy(Actor* thisx, PlayState* play2) {
 }
 
 void ObjBoyo_UpdatePlayerBumpValues(ObjBoyo* this, Player* target) {
-    target->unk_B80 = 30.0f;
-    target->unk_B84 = this->actor.yawTowardsPlayer;
+    target->pushedSpeed = 30.0f;
+    target->pushedYaw = this->actor.yawTowardsPlayer;
 }
 
 void ObjBoyo_UpdatePirateBumpValues(ObjBoyo* src, EnKaizoku* target) {
