@@ -34,17 +34,17 @@ enum {
 
 typedef struct {
     /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;    /* Alpha Denominator */
-    /* 0x02 */ u8 unk_02;    /* Alpha Numerator */
-    /* 0x04 */ Vec3s unk_04; /* Rotational Velocity */
-    /* 0x0A */ Vec3s unk_0A; /* Rotational Position */
+    /* 0x01 */ u8 alphaDenom;     /* Alpha Denominator */
+    /* 0x02 */ u8 alphaNumer;     /* Alpha Numerator */
+    /* 0x04 */ Vec3s rotVelocity; /* Rotational Velocity */
+    /* 0x0A */ Vec3s rotAngle;    /* Rotational Position */
     /* 0x10 */
-    Vec3f unk_10;            /* Translation Position */
-    /* 0x1C */ Vec3f unk_1C; /* Translation Accel? (Added to 28) */
-    /* 0x28 */ Vec3f unk_28; /* Translation Vel? (Added to 10) */
-    /* 0x34 */ f32 unk_34;   /* Scale X & Y*/
-    /* 0x38 */ f32 unk_38;   /* Change in Scale */
-} EnGoStruct;                // size = 0x3C;
+    Vec3f position;
+    /* 0x1C */ Vec3f acceleration;
+    /* 0x28 */ Vec3f velocity;
+    /* 0x34 */ f32 scaleXY;
+    /* 0x38 */ f32 scaleXYDelta;
+} EnGoStruct; // size = 0x3C;
 
 typedef struct EnGo {
     /* 0x000 */ Actor actor;
@@ -55,7 +55,7 @@ typedef struct EnGo {
     /* 0x194 */ ColliderCylinder colliderCylinder;
     /* 0x1E0 */ UNK_TYPE1 unk1E0[0x4C];
     /* 0x22C */ ColliderSphere colliderSphere;
-    /* 0x284 */ Path* unk_284;
+    /* 0x284 */ Path* path;
     /* 0x288 */ s8 indexTaisou;
     /* 0x289 */ s8 indexHakuginDemo;
     /* 0x28C */ s32 unk_28C;
@@ -82,19 +82,19 @@ typedef struct EnGo {
     /* 0x3B6 */ s16 unk_3B6; // Limb10 rotY
     /* 0x3B8 */ s16 unk_3B8;
     /* 0x3BA */ s16 unk_3BA;
-    /* 0x3BC */ s16 unk_3BC;
+    /* 0x3BC */ s16 blinkCountdown;
     /* 0x3BE */ s16 indexEyeTex;
     /* 0x3C0 */ s16 unk_3C0;
     /* 0x3C2 */ s16 unk_3C2;
     /* 0x3C4 */ s16 unk_3C4;
     /* 0x3C6 */ s16 unk_3C6;
-    /* 0x3C8 */ s16 unk_3C8[3];
-    /* 0x3CE */ s16 unk_3CE[3];
+    /* 0x3C8 */ s16 limbRotTableZ[3];
+    /* 0x3CE */ s16 limbRotTableY[3];
     /* 0x3D4 */ s16 unk_3D4;
     /* 0x3D8 */ void* unk_3D8;
     /* 0x3DC */ s32 unk_3DC;
     /* 0x3E0 */ UNK_TYPE1 unk3E0[0x4];
-    /* 0x3E4 */ s32 unk_3E4;
+    /* 0x3E4 */ s32 indexPathPoint;
     /* 0x3E8 */ s32 unk_3E8;
     /* 0x3EC */ s32 sleepState;
     /* 0x3F0 */ s32 unk_3F0;

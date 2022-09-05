@@ -9699,7 +9699,7 @@
     0x80A12A64:("func_80A12A64",),
     0x80A12B78:("func_80A12B78",),
     0x80A12C48:("func_80A12C48",),
-    0x80A12D6C:("func_80A12D6C",),
+    0x80A12D6C:("EnGo_HandleBlink",),
     0x80A12DF4:("func_80A12DF4",),
     0x80A12E80:("func_80A12E80",),
     0x80A12FE8:("func_80A12FE8",),

@@ -18,6 +18,9 @@
 #define ENGO_EYE_HALF2 3
 #define ENGO_EYE_CLOSED2 4
 
+#define ENGO_FLAG_NONE 0
+#define ENGO_FLAG_BLINKING (1 << 5)
+
 typedef enum {
     ENGO_AWAKE = 0,
     ENGO_ASLEEP,
@@ -224,7 +227,8 @@ static AnimationInfoS sAnimationInfo[] = {
     { &object_hakugin_demo_Anim_003378, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
-EnGoStruct* func_80A10FD0(EnGoStruct* ptr, Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5, s32 arg6) {
+EnGoStruct* func_80A10FD0(EnGoStruct* ptr, Vec3f position, Vec3f acceleration, Vec3f velocity, f32 scale,
+                          f32 deltaScale, s32 arg6) {
     s32 i;
 
     for (i = 16; i < 32; i++, ptr++) {
@@ -232,13 +236,13 @@ EnGoStruct* func_80A10FD0(EnGoStruct* ptr, Vec3f arg1, Vec3f arg2, Vec3f arg3, f
             continue;
 
         ptr->unk_00 = 7;
-        ptr->unk_01 = (Rand_ZeroOne() * (2.0f * (arg6 / 3.0f))) + (arg6 / 3.0f);
-        ptr->unk_02 = ptr->unk_01;
-        ptr->unk_10 = arg1;
-        ptr->unk_1C = arg2;
-        ptr->unk_28 = arg3;
-        ptr->unk_34 = arg4;
-        ptr->unk_38 = arg5;
+        ptr->alphaDenom = (Rand_ZeroOne() * (2.0f * (arg6 / 3.0f))) + (arg6 / 3.0f);
+        ptr->alphaNumer = ptr->alphaDenom;
+        ptr->position = position;
+        ptr->acceleration = acceleration;
+        ptr->velocity = velocity;
+        ptr->scaleXY = scale;
+        ptr->scaleXYDelta = deltaScale;
         break;
     }
     return ptr;
@@ -264,16 +268,16 @@ void func_80A11144(EnGoStruct* ptr, PlayState* play2) {
 
         Matrix_Push();
 
-        temp = ((f32)ptr->unk_02 / ptr->unk_01);
+        temp = ((f32)ptr->alphaNumer / ptr->alphaDenom);
         temp *= 255;
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, (u8)temp);
         gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, (ptr->unk_02 + (i * 3)) * 3, (ptr->unk_02 + (i * 3)) * 15,
-                                    0x20, 0x40, 1, 0, 0, 0x20, 0x20));
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, (ptr->alphaNumer + (i * 3)) * 3,
+                                    (ptr->alphaNumer + (i * 3)) * 15, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
 
-        Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
+        Matrix_Translate(ptr->position.x, ptr->position.y, ptr->position.z, MTXMODE_NEW);
         Matrix_ReplaceRotation(&play->billboardMtxF);
-        Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
+        Matrix_Scale(ptr->scaleXY, ptr->scaleXY, 1.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gGoronSteamModelDL);
@@ -295,30 +299,30 @@ void func_80A1143C(EnGoStruct* ptr, Vec3f pos, Vec3f accel, Vec3f vel, f32 scale
             continue;
 
         ptr->unk_00 = arg7 + 4;
-        ptr->unk_01 = (Rand_ZeroOne() * (2.0f * (arg6 / 3.0f))) + (arg6 / 3.0f);
-        ptr->unk_02 = ptr->unk_01;
-        ptr->unk_10 = pos;
-        ptr->unk_1C = accel;
-        ptr->unk_28 = vel;
-        ptr->unk_34 = scale;
-        ptr->unk_38 = deltaScale;
+        ptr->alphaDenom = (Rand_ZeroOne() * (2.0f * (arg6 / 3.0f))) + (arg6 / 3.0f);
+        ptr->alphaNumer = ptr->alphaDenom;
+        ptr->position = pos;
+        ptr->acceleration = accel;
+        ptr->velocity = vel;
+        ptr->scaleXY = scale;
+        ptr->scaleXYDelta = deltaScale;
         break;
     }
 }
 
 void func_80A115B4(EnGoStruct* ptr, PlayState* play2) {
-    static TexturePtr D_80A16644[] = {
+    static TexturePtr sEnGoDustTexturePtrs[] = {
         gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
     };
-    static Color_RGBA8 D_80A16664[] = {
-        { 255, 255, 255, 0 },
-        { 170, 130, 90, 0 },
-        { 0, 0, 0, 0 },
+    static Color_RGBA8 sEnGoDustColorPrim[] = {
+        { 255, 255, 255, 0 }, // White
+        { 170, 130, 90, 0 },  // Light Brown
+        { 0, 0, 0, 0 },       // Black
     };
-    static Color_RGBA8 D_80A16670[] = {
-        { 255, 255, 255, 0 },
-        { 100, 60, 20, 0 },
-        { 0, 0, 0, 0 },
+    static Color_RGBA8 sEnGoDustColorEnv[] = {
+        { 255, 255, 255, 0 }, // White
+        { 100, 60, 20, 0 },   // Dark Brown
+        { 0, 0, 0, 0 },       // Black
     };
     PlayState* play = play2;
     s32 i;
@@ -339,18 +343,19 @@ void func_80A115B4(EnGoStruct* ptr, PlayState* play2) {
 
         Matrix_Push();
 
-        temp = (f32)ptr->unk_02 / ptr->unk_01;
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80A16664[(s32)ptr->unk_00 - 4].r, D_80A16664[(s32)ptr->unk_00 - 4].g,
-                        D_80A16664[(s32)ptr->unk_00 - 4].b, (u8)(temp * 255));
-        gDPSetEnvColor(POLY_XLU_DISP++, D_80A16670[(s32)ptr->unk_00 - 4].r, D_80A16670[(s32)ptr->unk_00 - 4].g,
-                       D_80A16670[(s32)ptr->unk_00 - 4].b, 0);
+        temp = (f32)ptr->alphaNumer / ptr->alphaDenom;
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, sEnGoDustColorPrim[(s32)ptr->unk_00 - 4].r,
+                        sEnGoDustColorPrim[(s32)ptr->unk_00 - 4].g, sEnGoDustColorPrim[(s32)ptr->unk_00 - 4].b,
+                        (u8)(temp * 255));
+        gDPSetEnvColor(POLY_XLU_DISP++, sEnGoDustColorEnv[(s32)ptr->unk_00 - 4].r,
+                       sEnGoDustColorEnv[(s32)ptr->unk_00 - 4].g, sEnGoDustColorEnv[(s32)ptr->unk_00 - 4].b, 0);
 
-        Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
-        Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
+        Matrix_Translate(ptr->position.x, ptr->position.y, ptr->position.z, MTXMODE_NEW);
+        Matrix_Scale(ptr->scaleXY, ptr->scaleXY, 1.0f, MTXMODE_APPLY);
         Matrix_ReplaceRotation(&play->billboardMtxF);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A16644[(s32)(temp * 7.0f)]));
+        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sEnGoDustTexturePtrs[(s32)(temp * 7.0f)]));
         gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
 
         Matrix_Pop();
@@ -375,34 +380,34 @@ void func_80A118F8(EnGoStruct* ptr, Vec3f worldPos) {
         if (ptr->unk_00 != 0)
             continue;
 
-        ptr->unk_10 = worldPos;
-        ptr->unk_10.y += 56.0f;
+        ptr->position = worldPos;
+        ptr->position.y += 56.0f;
 
         // Generate a +-15 degree rotational velocity
-        ptr->unk_04.x = (Rand_ZeroOne() - 0.5f) * (f32)0x1554; /* 30 degrees */
-        ptr->unk_04.y = (Rand_ZeroOne() - 0.5f) * (f32)0x1554; /* 30 degrees */
-        ptr->unk_04.z = (Rand_ZeroOne() - 0.5f) * (f32)0x1554; /* 30 degrees */
+        ptr->rotVelocity.x = (Rand_ZeroOne() - 0.5f) * (f32)0x1554; /* 30 degrees */
+        ptr->rotVelocity.y = (Rand_ZeroOne() - 0.5f) * (f32)0x1554; /* 30 degrees */
+        ptr->rotVelocity.z = (Rand_ZeroOne() - 0.5f) * (f32)0x1554; /* 30 degrees */
 
         // Generate a radially outward velocity for each of the 16 pieces
         temp_fs0 = (Rand_ZeroOne() * 4.0f) + 6.0f;
-        ptr->unk_28.x = Math_SinS(i * (0x10000 / 16)) * temp_fs0;
-        ptr->unk_28.z = Math_CosS(i * (0x10000 / 16)) * temp_fs0;
-        ptr->unk_28.y = (Rand_ZeroOne() * 3.0f) + 6.0f;
+        ptr->velocity.x = Math_SinS(i * (0x10000 / 16)) * temp_fs0;
+        ptr->velocity.z = Math_CosS(i * (0x10000 / 16)) * temp_fs0;
+        ptr->velocity.y = (Rand_ZeroOne() * 3.0f) + 6.0f;
 
         // No acceleration on the X,Z axis, Negative acceleration on the Y axis
-        ptr->unk_1C = gZeroVec3f;
-        ptr->unk_1C.y = -0.8f;
+        ptr->acceleration = gZeroVec3f;
+        ptr->acceleration.y = -0.8f;
 
         // Full visibility (1/1)
-        ptr->unk_01 = ptr->unk_02 = 1;
+        ptr->alphaDenom = ptr->alphaNumer = 1;
 
         // Assign a value of 1, 2, or 3
         ptr->unk_00 = D_80A1667C[i];
 
         // Initialize the Paired element
-        randRelativeToWorldPos.x = ((Rand_ZeroOne() - 0.5f) * 80.0f) + ptr->unk_10.x;
-        randRelativeToWorldPos.y = ((Rand_ZeroOne() - 0.5f) * 40.0f) + ptr->unk_10.y;
-        randRelativeToWorldPos.z = ((Rand_ZeroOne() - 0.5f) * 80.0f) + ptr->unk_10.z;
+        randRelativeToWorldPos.x = ((Rand_ZeroOne() - 0.5f) * 80.0f) + ptr->position.x;
+        randRelativeToWorldPos.y = ((Rand_ZeroOne() - 0.5f) * 40.0f) + ptr->position.y;
+        randRelativeToWorldPos.z = ((Rand_ZeroOne() - 0.5f) * 80.0f) + ptr->position.z;
 
         randYOneToFour = gZeroVec3f;
         randYOneToFour.y = (Rand_ZeroOne() * 3.0f) + 1.0f;
@@ -418,43 +423,43 @@ void func_80A11BF8(EnGoStruct* ptr, f32 arg1) {
     f32 x;
     f32 z;
 
-    ptr->unk_10.x += ptr->unk_28.x;
-    ptr->unk_10.y += ptr->unk_28.y;
-    ptr->unk_10.z += ptr->unk_28.z;
+    ptr->position.x += ptr->velocity.x;
+    ptr->position.y += ptr->velocity.y;
+    ptr->position.z += ptr->velocity.z;
 
-    ptr->unk_28.y += ptr->unk_1C.y;
-    ptr->unk_34 += ptr->unk_38;
+    ptr->velocity.y += ptr->acceleration.y;
+    ptr->scaleXY += ptr->scaleXYDelta;
 
-    if (ptr->unk_10.y < arg1) {
-        ptr->unk_10.y = arg1;
+    if (ptr->position.y < arg1) {
+        ptr->position.y = arg1;
 
         ptr->unk_00 = 4;
-        ptr->unk_01 = (Rand_ZeroOne() * 8.0f) + 4.0f;
-        ptr->unk_02 = ptr->unk_01;
+        ptr->alphaDenom = (Rand_ZeroOne() * 8.0f) + 4.0f;
+        ptr->alphaNumer = ptr->alphaDenom;
 
-        ptr->unk_28 = gZeroVec3f;
-        ptr->unk_28.y = (Rand_ZeroOne() * 3.0f) + 1.0f;
+        ptr->velocity = gZeroVec3f;
+        ptr->velocity.y = (Rand_ZeroOne() * 3.0f) + 1.0f;
 
-        ptr->unk_34 = 0.4f;
-        ptr->unk_38 = 0.1f;
+        ptr->scaleXY = 0.4f;
+        ptr->scaleXYDelta = 0.1f;
         return;
     }
 
-    if (ptr->unk_28.x != 0.0f) {
-        x = ptr->unk_28.x / fabsf(ptr->unk_28.x);
+    if (ptr->velocity.x != 0.0f) {
+        x = ptr->velocity.x / fabsf(ptr->velocity.x);
         x *= ((sREG(13) + 140) * 0.01f);
-        Math_StepToF(&ptr->unk_28.x, x, (sREG(14) + 40) * 0.01f);
+        Math_StepToF(&ptr->velocity.x, x, (sREG(14) + 40) * 0.01f);
     }
 
-    if (ptr->unk_28.z != 0.0f) {
-        z = ptr->unk_28.z / fabsf(ptr->unk_28.z);
+    if (ptr->velocity.z != 0.0f) {
+        z = ptr->velocity.z / fabsf(ptr->velocity.z);
         z *= ((sREG(13) + 140) * 0.01f);
-        Math_StepToF(&ptr->unk_28.z, z, (sREG(14) + 40) * 0.01f);
+        Math_StepToF(&ptr->velocity.z, z, (sREG(14) + 40) * 0.01f);
     }
 
-    ptr->unk_0A.x += ptr->unk_04.x;
-    ptr->unk_0A.y += ptr->unk_04.y;
-    ptr->unk_0A.z += ptr->unk_04.z;
+    ptr->rotAngle.x += ptr->rotVelocity.x;
+    ptr->rotAngle.y += ptr->rotVelocity.y;
+    ptr->rotAngle.z += ptr->rotVelocity.z;
 }
 
 void func_80A11EC0(EnGoStruct* ptr, PlayState* play, Gfx* arg2, Gfx* arg3, u8 arg4) {
@@ -473,11 +478,11 @@ void func_80A11EC0(EnGoStruct* ptr, PlayState* play, Gfx* arg2, Gfx* arg3, u8 ar
         }
 
         Matrix_Push();
-        Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
+        Matrix_Translate(ptr->position.x, ptr->position.y, ptr->position.z, MTXMODE_NEW);
         Matrix_Scale(0.08f, 0.08f, 0.08f, MTXMODE_APPLY);
-        Matrix_RotateZS(ptr->unk_0A.z, MTXMODE_APPLY);
-        Matrix_RotateXS(ptr->unk_0A.x, MTXMODE_APPLY);
-        Matrix_RotateYS(ptr->unk_0A.y, MTXMODE_APPLY);
+        Matrix_RotateZS(ptr->rotAngle.z, MTXMODE_APPLY);
+        Matrix_RotateXS(ptr->rotAngle.x, MTXMODE_APPLY);
+        Matrix_RotateYS(ptr->rotAngle.y, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, arg3);
@@ -496,21 +501,21 @@ void func_80A1203C(EnGo* this) {
         if (ptr->unk_00 == 0)
             continue;
 
-        if (ptr->unk_02 == 0) {
+        if (ptr->alphaNumer == 0) {
             ptr->unk_00 = 0;
         } else if ((ptr->unk_00 > 0) && (ptr->unk_00 < 4)) {
             func_80A11BF8(ptr, this->actor.world.pos.y);
         } else {
-            ptr->unk_10.x += ptr->unk_28.x;
-            ptr->unk_10.y += ptr->unk_28.y;
-            ptr->unk_10.z += ptr->unk_28.z;
+            ptr->position.x += ptr->velocity.x;
+            ptr->position.y += ptr->velocity.y;
+            ptr->position.z += ptr->velocity.z;
 
-            ptr->unk_28.x += ptr->unk_1C.x;
-            ptr->unk_28.y += ptr->unk_1C.y;
-            ptr->unk_28.z += ptr->unk_1C.z;
+            ptr->velocity.x += ptr->acceleration.x;
+            ptr->velocity.y += ptr->acceleration.y;
+            ptr->velocity.z += ptr->acceleration.z;
 
-            ptr->unk_34 += ptr->unk_38;
-            ptr->unk_02--;
+            ptr->scaleXY += ptr->scaleXYDelta;
+            ptr->alphaNumer--;
         }
     }
 }
@@ -671,9 +676,9 @@ s32 func_80A12774(EnGo* this, PlayState* play) {
 
     if ((ENGO_GET_F(&this->actor) == ENGO_F_5) || (ENGO_GET_F(&this->actor) == ENGO_F_6) ||
         (ENGO_GET_F(&this->actor) == ENGO_F_7)) {
-        this->unk_3BC = 0;
+        this->blinkCountdown = 0;
         this->indexEyeTex = ENGO_EYE_OPEN;
-        this->unk_390 |= 0x20;
+        this->unk_390 |= ENGO_FLAG_BLINKING;
     }
 
     SubS_UpdateFlags(&this->unk_390, 0, 7);
@@ -713,8 +718,9 @@ s32 func_80A12868(EnGo* this, PlayState* play) {
 
 s32 func_80A12954(EnGo* this, PlayState* play) {
     if ((ENGO_GET_F(&this->actor) == ENGO_F_4) && (play->csCtx.state != 0) && (this->actor.draw != NULL) &&
-        (play->sceneNum == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneSetupIndex == 1) &&
-        (play->csCtx.currentCsIndex == 0)) {
+        (play->sceneNum == SCENE_10YUKIYAMANOMURA2) && // Snow Mountain Village
+        (gSaveContext.sceneSetupIndex == 1) && (play->csCtx.currentCsIndex == 0)) {
+
         if (this->unk_3F0 == 0) {
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_394 = 255;
@@ -804,11 +810,11 @@ s32 func_80A12C48(EnGo* this, PlayState* play, s32 arg2) {
     return ret;
 }
 
-void func_80A12D6C(EnGo* this) {
-    if ((this->unk_390 & 0x20) && (DECR(this->unk_3BC) == 0)) {
+void EnGo_HandleBlink(EnGo* this) {
+    if ((this->unk_390 & 0x20) && (DECR(this->blinkCountdown) == 0)) {
         this->indexEyeTex++;
         if (this->indexEyeTex >= ENGO_EYE_CLOSED2) {
-            this->unk_3BC = Rand_S16Offset(30, 30);
+            this->blinkCountdown = Rand_S16Offset(30, 30);
             this->indexEyeTex = ENGO_EYE_OPEN;
         }
     }
@@ -1099,11 +1105,11 @@ void func_80A139E4(EnGo* this) {
     static Vec3f D_80A16698 = { 0.0f, 0.06f, 0.0f };
     Vec3f sp54;
     Vec3f sp48;
-    s16 sp46 = Rand_ZeroOne() * 360.0f * 182.0f;
+    s16 rotAngle = Rand_ZeroOne() * 360.0f * 182.0f;
 
     Math_Vec3f_Copy(&sp54, &gZeroVec3f);
     sp54.z = 28.0f;
-    Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, sp46, &sp54, &sp48);
+    Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, rotAngle, &sp54, &sp48);
     sp48.y = (Rand_ZeroOne() * 10.0f) + 4.0f;
     sp48.y += this->actor.floorHeight;
     func_80A10FD0(&this->unk_3F8[16], sp48, D_80A16698, gZeroVec3f, 0.01f, 0.002f, 16);
@@ -1294,8 +1300,8 @@ void func_80A14018(EnGo* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, this->unk_3A4);
     this->sleepState = ENGO_AWAKE;
-    this->unk_390 = 0;
-    this->unk_390 |= (0x40 | 0x20);
+    this->unk_390 = ENGO_FLAG_NONE;
+    this->unk_390 |= (0x40 | ENGO_FLAG_BLINKING);
     this->actor.gravity = 0.0f;
 }
 
@@ -1309,9 +1315,9 @@ void func_80A14104(EnGo* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, this->unk_3A4);
     this->sleepState = ENGO_AWAKE;
-    this->unk_390 = 0;
+    this->unk_390 = ENGO_FLAG_NONE;
     this->unk_390 |= 0x40;
-    this->unk_390 |= 0x20;
+    this->unk_390 |= ENGO_FLAG_BLINKING;
     this->actor.gravity = 0.0f;
 }
 
@@ -1323,7 +1329,7 @@ void func_80A141D4(EnGo* this, PlayState* play) {
     this->sleepState = ENGO_AWAKE;
     this->unk_39C = (this->unk_3A4 / 0.01f) * 0.9f;
     this->indexEyeTex = ENGO_EYE_CLOSED;
-    this->unk_390 = 0;
+    this->unk_390 = ENGO_FLAG_NONE;
     this->unk_390 |= 0x40;
     this->unk_390 |= 0x400;
     this->unk_3A0 = 100.0f;
@@ -1335,14 +1341,14 @@ void func_80A1428C(EnGo* this, PlayState* play) {
     Vec3f sp24;
 
     Math_Vec3f_Copy(&sp30, &this->actor.world.pos);
-    if (this->unk_284 != NULL) {
+    if (this->path != NULL) {
         this->actor.flags &= ~ACTOR_FLAG_2000000;
-        SubS_CopyPointFromPathCheckBounds(this->unk_284, 0, &sp24);
+        SubS_CopyPointFromPathCheckBounds(this->path, 0, &sp24);
         temp = Math_Vec3f_Yaw(&sp30, &sp24);
         this->actor.shape.rot.y = temp;
         this->actor.world.rot.y = temp;
     }
-    this->unk_390 = 0;
+    this->unk_390 = ENGO_FLAG_NONE;
     this->unk_390 |= 0x100;
     this->actor.shape.yOffset = 46.0f;
     this->actor.gravity = -1.0f;
@@ -1351,12 +1357,12 @@ void func_80A1428C(EnGo* this, PlayState* play) {
 void func_80A14324(EnGo* this, PlayState* play) {
     func_80A12C48(this, play, 8);
     Actor_SetScale(&this->actor, this->unk_3A4);
-    this->unk_390 = 0;
+    this->unk_390 = ENGO_FLAG_NONE;
     this->actor.gravity = -1.0f;
     SubS_UpdateFlags(&this->unk_390, 3, 7);
     this->sleepState = ENGO_AWAKE;
     this->unk_390 |= 0x40;
-    this->unk_3BC = 0;
+    this->blinkCountdown = 0;
     this->indexEyeTex = ENGO_EYE_CLOSED2;
     this->unk_39C = 0.0f;
     this->unk_3A0 = 0.0f;
@@ -1365,13 +1371,13 @@ void func_80A14324(EnGo* this, PlayState* play) {
 void func_80A143A8(EnGo* this, PlayState* play) {
     func_80A12C48(this, play, 5);
     Actor_SetScale(&this->actor, this->unk_3A4);
-    this->unk_390 = 0;
+    this->unk_390 = ENGO_FLAG_NONE;
     this->actor.gravity = -1.0f;
     SubS_UpdateFlags(&this->unk_390, 3, 7);
     this->sleepState = ENGO_AWAKE;
     this->unk_390 |= 0x40;
-    this->unk_390 |= 0x20;
-    this->unk_3BC = 0;
+    this->unk_390 |= ENGO_FLAG_BLINKING;
+    this->blinkCountdown = 0;
     this->indexEyeTex = ENGO_EYE_OPEN;
     this->unk_39C = 0.0f;
     this->unk_3A0 = 0.0f;
@@ -1400,9 +1406,9 @@ void func_80A1449C(EnGo* this, PlayState* play) {
 
 void func_80A144F4(EnGo* this, PlayState* play) {
     if (gSaveContext.save.day >= 2) {
-        this->unk_284 = SubS_GetDayDependentPath(play, ENGO_GET_7F80(&this->actor), 0xFF, &this->unk_3E4);
-        if (this->unk_284 != NULL) {
-            this->unk_3E4 = 1;
+        this->path = SubS_GetDayDependentPath(play, ENGO_GET_7F80(&this->actor), 0xFF, &this->indexPathPoint);
+        if (this->path != NULL) {
+            this->indexPathPoint = 1;
         }
         func_80A1428C(this, play);
         this->actionFunc = func_ACT_80A153FC;
@@ -1447,17 +1453,17 @@ void func_80A146CC(EnGo* this, PlayState* play) {
     Actor_SetScale(&this->actor, this->unk_3A4);
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.targetMode = 3;
-    this->unk_390 = 0;
+    this->unk_390 = ENGO_FLAG_NONE;
     this->actor.gravity = -1.0f;
     SubS_UpdateFlags(&this->unk_390, 3, 7);
     this->unk_390 |= 0x40;
-    this->unk_390 |= 0x20;
+    this->unk_390 |= ENGO_FLAG_BLINKING;
     this->unk_3D8 = func_80A13E80;
     this->actionFunc = func_ACT_80A149B0;
 }
 
 void func_ACT_80A14798(EnGo* this, PlayState* play) {
-    EffectTireMarkInit sp38 = {
+    EffectTireMarkInit tireMarkInit = {
         0,
         62,
         { 0, 0, 15, 100 },
@@ -1476,7 +1482,7 @@ void func_ACT_80A14798(EnGo* this, PlayState* play) {
         Collider_InitAndSetSphere(play, &this->colliderSphere, &this->actor, &sSphereInit);
         Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit2);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-        Effect_Add(play, &this->unk_3E8, EFFECT_TIRE_MARK, 0, 0, &sp38);
+        Effect_Add(play, &this->unk_3E8, EFFECT_TIRE_MARK, 0, 0, &tireMarkInit);
 
         this->actor.targetMode = 1;
         this->unk_3A4 = 0.01f;
@@ -1604,7 +1610,7 @@ void func_ACT_80A14B30(EnGo* this, PlayState* play) {
         this->actor.shape.yOffset = 0.0f;
     }
 
-    SubS_FillLimbRotTables(play, this->unk_3CE, this->unk_3C8, ARRAY_COUNT(this->unk_3CE));
+    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
     Math_ApproachS(&this->actor.shape.rot.y, sp26, 4, 0x2AA8);
 }
 
@@ -1648,7 +1654,7 @@ void func_ACT_80A14FC8(EnGo* this, PlayState* play) {
         0, 2, 6, 20, 18, 5, 5, 15,
     };
     u16 actorActionCmd = 0;
-    s32 sp30;
+    s32 csAction;
     s32 actionIndex;
 
     switch (ENGO_GET_70(&this->actor)) {
@@ -1664,18 +1670,18 @@ void func_ACT_80A14FC8(EnGo* this, PlayState* play) {
     if ((actorActionCmd == 128) || (actorActionCmd == 129)) {
         if (Cutscene_CheckActorAction(play, actorActionCmd)) {
             actionIndex = Cutscene_GetActorActionIndex(play, actorActionCmd);
-            sp30 = play->csCtx.actorActions[actionIndex]->action;
+            csAction = play->csCtx.actorActions[actionIndex]->action;
 
-            if (this->unk_394 != (u8)sp30) {
-                this->unk_394 = sp30;
-                func_80A12C48(this, play, sp38[sp30]);
-                this->unk_390 = 0;
-                this->unk_390 |= 0x20;
+            if (this->unk_394 != (u8)csAction) {
+                this->unk_394 = csAction;
+                func_80A12C48(this, play, sp38[csAction]);
+                this->unk_390 = ENGO_FLAG_NONE;
+                this->unk_390 |= ENGO_FLAG_BLINKING;
                 this->indexEyeTex = ENGO_EYE_OPEN;
                 this->unk_39C = 0.0f;
                 this->unk_3A0 = 0.0f;
 
-                switch (sp30) {
+                switch (csAction) {
                     case 1:
                         this->unk_390 |= 0x80;
                         this->skelAnime.curFrame = this->skelAnime.endFrame;
@@ -1758,7 +1764,7 @@ void func_ACT_80A14FC8(EnGo* this, PlayState* play) {
                 }
             }
 
-            SubS_FillLimbRotTables(play, this->unk_3CE, this->unk_3C8, ARRAY_COUNT(this->unk_3CE));
+            SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
             Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
         }
     }
@@ -1789,22 +1795,22 @@ void func_ACT_80A153FC(EnGo* this, PlayState* play) {
             func_80A143A8(this, play);
             this->actionFunc = func_ACT_80A149B0;
         }
-    } else if (this->unk_284 != NULL) {
+    } else if (this->path != NULL) {
         if (this->unk_390 & 0x800) {
             func_800B8E58(GET_PLAYER(play), NA_SE_PL_BODY_HIT);
             func_800B8D50(play, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
         }
 
-        sp5C = Lib_SegmentedToVirtual(this->unk_284->points);
-        if (SubS_HasReachedPoint(&this->actor, this->unk_284, this->unk_3E4)) {
-            if (this->unk_3E4 >= (this->unk_284->count - 1)) {
-                this->unk_3E4 = 0;
+        sp5C = Lib_SegmentedToVirtual(this->path->points);
+        if (SubS_HasReachedPoint(&this->actor, this->path, this->indexPathPoint)) {
+            if (this->indexPathPoint >= (this->path->count - 1)) {
+                this->indexPathPoint = 0;
             } else {
-                this->unk_3E4++;
+                this->indexPathPoint++;
             }
         }
 
-        Math_Vec3s_ToVec3f(&sp44, &sp5C[this->unk_3E4]);
+        Math_Vec3s_ToVec3f(&sp44, &sp5C[this->indexPathPoint]);
         Math_Vec3f_Copy(&sp50, &this->actor.world.pos);
         Math_ApproachS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&sp50, &sp44), 4, 0x38E);
         this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -1879,14 +1885,14 @@ void func_ACT_80A157C4(EnGo* this, PlayState* play) {
             Math_Vec3f_Copy(&thisActorPos, &this->actor.world.pos);
             Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&thisActorPos, &targetActorPos), 4, 0x2AA8);
         }
-        SubS_FillLimbRotTables(play, this->unk_3CE, this->unk_3C8, ARRAY_COUNT(this->unk_3CE));
+        SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
         return;
     }
 
     if ((ENGO_GET_F(&this->actor) == ENGO_F_5) || (ENGO_GET_F(&this->actor) == ENGO_F_6) ||
         (ENGO_GET_F(&this->actor) == ENGO_F_7)) {
-        this->unk_3BC = 0;
-        this->unk_390 &= ~0x20;
+        this->blinkCountdown = 0;
+        this->unk_390 &= ~ENGO_FLAG_BLINKING;
         this->indexEyeTex = ENGO_EYE_CLOSED2;
     }
 
@@ -1925,7 +1931,7 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (!(this->unk_390 & 0x400)) {
-        func_80A12D6C(this);
+        EnGo_HandleBlink(this);
         func_80A12A64(this, play);
         func_80A131F8(this, play);
         func_80A12B78(this, play);
@@ -2011,8 +2017,8 @@ s32 EnGo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     }
 
     if ((this->unk_390 & 0x80) && (idx < 9)) {
-        rot->y += (s16)(Math_SinS(this->unk_3CE[idx]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->unk_3C8[idx]) * 200.0f);
+        rot->y += (s16)(Math_SinS(this->limbRotTableY[idx]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->limbRotTableZ[idx]) * 200.0f);
     }
     return false;
 }
