@@ -14324,7 +14324,7 @@
     0x80B6ED8C:("BgKin2Fence_Draw",),
     0x80B6EFA0:("BgKin2Picture_IsSkulltulaCollected",),
     0x80B6EFEC:("BgKin2Picture_SpawnSkulltula",),
-    0x80B6F098:("BgKin2Picture_SpawnEffects",),
+    0x80B6F098:("BgKin2Picture_SpawnDust",),
     0x80B6F2DC:("BgKin2Picture_Init",),
     0x80B6F478:("BgKin2Picture_Destroy",),
     0x80B6F4C0:("BgKin2Picture_SetupWait",),

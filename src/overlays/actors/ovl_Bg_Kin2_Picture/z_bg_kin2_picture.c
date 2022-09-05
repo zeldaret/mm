@@ -79,7 +79,7 @@ static ColliderTrisInit sTrisInit = {
     sTrisElementsInit,
 };
 
-static Vec3f D_80B6FA18 = { 0.0f, 23.0f, 0.0f };
+static Vec3f sDustBasePos = { 0.0f, 23.0f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),  ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
@@ -112,9 +112,9 @@ void BgKin2Picture_SpawnSkulltula(BgKin2Picture* thisx, PlayState* play) {
     }
 }
 
-void BgKin2Picture_SpawnEffects(BgKin2Picture* this, PlayState* play) {
+void BgKin2Picture_SpawnDust(BgKin2Picture* this, PlayState* play) {
     f32 temp_fs0;
-    Vec3f temp;
+    Vec3f basePos;
     Vec3f pos;
     Vec3f velocity;
     Vec3f accel;
@@ -129,8 +129,8 @@ void BgKin2Picture_SpawnEffects(BgKin2Picture* this, PlayState* play) {
                                  this->dyna.actor.world.pos.y +
                                      (this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y),
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
-    Matrix_MultVec3f(&D_80B6FA18, &temp);
-    pos.y = temp.y - 7.0f;
+    Matrix_MultVec3f(&sDustBasePos, &basePos);
+    pos.y = basePos.y - 7.0f;
     velocity.y = 0.0f;
     accel.y = 0.2f;
 
@@ -142,13 +142,13 @@ void BgKin2Picture_SpawnEffects(BgKin2Picture* this, PlayState* play) {
         pos.z = Math_CosS(temp_s1) * temp_fs0;
         velocity.x = (Rand_ZeroOne() - 0.5f) + (pos.x * (1.0f / 6.0f));
         velocity.z = (Rand_ZeroOne() - 0.5f) + (pos.z * (1.0f / 6.0f));
-        pos.x += temp.x;
-        pos.z += temp.z;
+        pos.x += basePos.x;
+        pos.z += basePos.z;
         accel.x = velocity.x * (-0.09f);
         accel.z = velocity.z * (-0.09f);
-        scale = ((s32)(Rand_ZeroOne() * 10.0f)) + 0xA;
-        scaleStep = ((s32)(Rand_ZeroOne() * 10.0f)) + 0xF;
-        func_800B1210(play, &pos, &velocity, &accel, scale, scaleStep); // For dust spawn.
+        scale = ((s32)(Rand_ZeroOne() * 10.0f)) + 10;
+        scaleStep = ((s32)(Rand_ZeroOne() * 10.0f)) + 15;
+        func_800B1210(play, &pos, &velocity, &accel, scale, scaleStep);
     }
 }
 
@@ -306,7 +306,7 @@ void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play) {
     Actor_SetFocus(&this->dyna.actor, 23.0f);
 
     if (!(this->hasSpawnedDust) && (this->dyna.actor.shape.rot.x > 0x3300)) {
-        BgKin2Picture_SpawnEffects(this, play);
+        BgKin2Picture_SpawnDust(this, play);
         this->hasSpawnedDust = true;
     }
 
