@@ -6,7 +6,6 @@
 
 #include "z_en_nimotsu.h"
 #include "assets/objects/object_boj/object_boj.h"
-#include "macros.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -78,7 +77,6 @@ void EnNimotsu_Destroy(Actor* thisx, PlayState* play) {
 void EnNimotsu_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnNimotsu* this = THIS;
-
     Vec3f dustPosition;
 
     Actor_MoveWithGravity(&this->actor);
@@ -103,7 +101,6 @@ void EnNimotsu_Update(Actor* thisx, PlayState* play) {
 void EnNimotsu_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     EnNimotsu* this = THIS;
-
     Vec3f position;
     Vec3f scale;
 
@@ -121,6 +118,6 @@ void EnNimotsu_Draw(Actor* thisx, PlayState* play) {
     scale.y = 0.2f;
     scale.z = 0.2f;
 
-    func_800BC620(&position, &scale, 0xFF, play);
+    func_800BC620(&position, &scale, 255, play);
     CLOSE_DISPS(play->state.gfxCtx);
 }
