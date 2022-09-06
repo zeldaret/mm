@@ -444,7 +444,7 @@ wordReplace = {
     "func_8017F9C0": "Math3D_XZInSphere",
     "func_8017FA34": "Math3D_XYInSphere",
     "func_8017FAA8": "Math3D_YZInSphere",
-    "func_800DFB14": "Camera_ChangeDataIdx",
+    "func_800DFB14": "Camera_ChangeActorCsCamIndex",
     "func_800DFC68": "Camera_GetInputDirYaw",
     "func_800DFCB4": "Camera_GetCamDirPitch",
     "func_800DFCDC": "Camera_GetCamDirYaw",

@@ -674,7 +674,7 @@ asm/non_matchings/code/z_camera/Camera_GetBgCamIndex.s,Camera_GetBgCamIndex,0x80
 asm/non_matchings/code/z_camera/Camera_GetWaterBoxBgCamSetting.s,Camera_GetWaterBoxBgCamSetting,0x800CC874,0x31
 asm/non_matchings/code/z_camera/func_800CC938.s,func_800CC938,0x800CC938,0x8
 asm/non_matchings/code/z_camera/Camera_CalcXZAngle.s,Camera_CalcXZAngle,0x800CC958,0x1A
-asm/non_matchings/code/z_camera/Camera_CalcPitchAdjFromFloorHeightDiffs.s,Camera_CalcPitchAdjFromFloorHeightDiffs,0x800CC9C0,0xCB
+asm/non_matchings/code/z_camera/Camera_GetPitchAdjFromFloorHeightDiffs.s,Camera_GetPitchAdjFromFloorHeightDiffs,0x800CC9C0,0xCB
 asm/non_matchings/code/z_camera/func_800CCCEC.s,func_800CCCEC,0x800CCCEC,0xD8
 asm/non_matchings/code/z_camera/Camera_CalcUpFromPitchYawRoll.s,Camera_CalcUpFromPitchYawRoll,0x800CD04C,0x8F
 asm/non_matchings/code/z_camera/Camera_ClampLerpScale.s,Camera_ClampLerpScale,0x800CD288,0x16
@@ -786,7 +786,7 @@ asm/non_matchings/code/z_camera/Camera_ChangeMode.s,Camera_ChangeMode,0x800DF840
 asm/non_matchings/code/z_camera/Camera_CheckValidMode.s,Camera_CheckValidMode,0x800DF86C,0x20
 asm/non_matchings/code/z_camera/Camera_ChangeSettingFlags.s,Camera_ChangeSettingFlags,0x800DF8EC,0x77
 asm/non_matchings/code/z_camera/Camera_ChangeSetting.s,Camera_ChangeSetting,0x800DFAC8,0x13
-asm/non_matchings/code/z_camera/Camera_ChangeDataIdx.s,Camera_ChangeDataIdx,0x800DFB14,0x42
+asm/non_matchings/code/z_camera/Camera_ChangeActorCsCamIndex.s,Camera_ChangeActorCsCamIndex,0x800DFB14,0x42
 asm/non_matchings/code/z_camera/Camera_GetInputDir.s,Camera_GetInputDir,0x800DFC1C,0x9
 asm/non_matchings/code/z_camera/Camera_GetInputDirPitch.s,Camera_GetInputDirPitch,0x800DFC40,0xA
 asm/non_matchings/code/z_camera/Camera_GetInputDirYaw.s,Camera_GetInputDirYaw,0x800DFC68,0xA

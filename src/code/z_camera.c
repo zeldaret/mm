@@ -55,7 +55,7 @@ s16 Camera_UnsetStateFlag(Camera* camera, s16 flags);
 
 #include "z_camera_data.c"
 
-PlayState* D_801EDC28;
+PlayState* sCamPlayState;
 SwingAnimation D_801EDC30[4];
 Vec3f D_801EDDD0;
 Vec3f D_801EDDE0;
@@ -894,13 +894,13 @@ s16 D_801EDBF0;
  *
  * @return pitchOffset resulting pitch adjustment
  */
-s16 Camera_CalcPitchAdjFromFloorHeightDiffs(Camera* camera, s16 viewYaw, s16 initAndReturnZero) {
+s16 Camera_GetPitchAdjFromFloorHeightDiffs(Camera* camera, s16 viewYaw, s16 initAndReturnZero) {
     static f32 sFloorYNear;
     static f32 sFloorYFar;
     static CameraCollision sFarColChk;
     Vec3f focalActorPos;
     Vec3f nearPos;
-    Vec3f floornorm;
+    Vec3f floorNorm;
     f32 checkOffsetY;
     s16 pitchNear;
     s16 pitchFar;
@@ -949,10 +949,10 @@ s16 Camera_CalcPitchAdjFromFloorHeightDiffs(Camera* camera, s16 viewYaw, s16 ini
 
         if (nearDist > farDist) {
             nearDist = farDist;
-            sFloorYNear = sFloorYFar = Camera_GetFloorYLayer(camera, &floornorm, &sFarColChk.pos, &bgId);
+            sFloorYNear = sFloorYFar = Camera_GetFloorYLayer(camera, &floorNorm, &sFarColChk.pos, &bgId);
         } else {
-            sFloorYNear = Camera_GetFloorYLayer(camera, &floornorm, &nearPos, &bgId);
-            sFloorYFar = Camera_GetFloorYLayer(camera, &floornorm, &sFarColChk.pos, &bgId);
+            sFloorYNear = Camera_GetFloorYLayer(camera, &floorNorm, &nearPos, &bgId);
+            sFloorYFar = Camera_GetFloorYLayer(camera, &floorNorm, &sFarColChk.pos, &bgId);
         }
 
         if (sFloorYNear == BGCHECK_Y_MIN) {
@@ -2147,7 +2147,7 @@ s32 Camera_Normal1(Camera* camera) {
     if (roData->interfaceFlags & NORMAL1_FLAG_0) {
         //! FAKE
         if (!spC8) {}
-        temp_a0_3 = Camera_CalcPitchAdjFromFloorHeightDiffs(camera, spA4.yaw + 0x8000, rwData->unk_0C & 1);
+        temp_a0_3 = Camera_GetPitchAdjFromFloorHeightDiffs(camera, spA4.yaw + 0x8000, rwData->unk_0C & 1);
         phi_f2 = (1.0f / roData->unk_10) * 0.7f;
         phi_f16_2 = (1.0f / roData->unk_10) * 0.3f * (1.0f - camera->speedRatio);
         spD0 = phi_f16_2;
@@ -2498,7 +2498,7 @@ s32 Camera_Normal3(Camera* camera) {
     camera->xzOffsetUpdateRate = Camera_ScaledStepToCeilF(0.05f, camera->xzOffsetUpdateRate, sp8C, 0.0001f);
     camera->fovUpdateRate = Camera_ScaledStepToCeilF(0.05f, camera->fovUpdateRate, sp8C, 0.0001f);
 
-    phi_v1_2 = Camera_CalcPitchAdjFromFloorHeightDiffs(camera, BINANG_ROT180(sp70.yaw), rwData->flag & 1);
+    phi_v1_2 = Camera_GetPitchAdjFromFloorHeightDiffs(camera, BINANG_ROT180(sp70.yaw), rwData->flag & 1);
     temp_f2 = ((1.0f / roData->pitchUpdateRateInv) * 0.5f) * (1.0f - camera->speedRatio);
     rwData->curPitch =
         Camera_ScaledStepToCeilS(phi_v1_2, rwData->curPitch, ((1.0f / roData->pitchUpdateRateInv) * 0.5f) + temp_f2, 5);
@@ -2593,7 +2593,7 @@ s32 Camera_Normal4(Camera* camera) {
     s16 roll;
 
     if (RELOAD_PARAMS(camera)) {
-        bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamDataId);
+        bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamIndex);
         D_801EDBF0 = bgCamFuncData->rot.z;
     }
 
@@ -2649,7 +2649,7 @@ s32 Camera_Normal0(Camera* camera) {
     sCameraInterfaceFlags = roData->interfaceFlags;
 
     if (RELOAD_PARAMS(camera)) {
-        bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamDataId);
+        bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamIndex);
         Camera_Vec3sToVec3f(&rwData->unk_00, &bgCamFuncData->pos);
         rwData->unk_20 = bgCamFuncData->rot.x;
         rwData->unk_22 = bgCamFuncData->rot.y;
@@ -2896,7 +2896,7 @@ s32 Camera_Parallel1(Camera* camera) {
                 rwData->timer2 = 1;
                 yNormal = 0.8f - ((68.0f / focalActorHeight) * -0.2f);
 
-                bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamDataId);
+                bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamIndex);
 
                 rwData->unk_20 = bgCamFuncData->rot.x;
                 rwData->unk_1E = bgCamFuncData->rot.y;
@@ -3000,7 +3000,7 @@ s32 Camera_Parallel1(Camera* camera) {
         Camera_ScaledStepToCeilF(0.050f, camera->fovUpdateRate, camera->speedRatio * 0.05f, 0.0001f);
 
     if (roData->interfaceFlags & PARALLEL1_FLAG_0) {
-        tangle = Camera_CalcPitchAdjFromFloorHeightDiffs(camera, BINANG_ROT180(sp80.yaw), rwData->unk_26 = 1);
+        tangle = Camera_GetPitchAdjFromFloorHeightDiffs(camera, BINANG_ROT180(sp80.yaw), rwData->unk_26 = 1);
         spA0 = ((1.0f / roData->unk_10));
         spA0 *= 0.6f;
         sp9C = ((1.0f / roData->unk_10) * 0.4f) * (1.0f - camera->speedRatio);
@@ -4887,7 +4887,7 @@ s32 Camera_Fixed1(Camera* camera) {
     if (!RELOAD_PARAMS(camera)) {
     } else {
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-        bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamDataId);
+        bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamIndex);
         Camera_Vec3sToVec3f(&rwData->eyePosRotTarget.pos, &bgCamFuncData->pos);
 
         rwData->eyePosRotTarget.rot = bgCamFuncData->rot;
@@ -5006,7 +5006,7 @@ s32 Camera_Fixed2(Camera* camera) {
         roData->unk_14 = GET_NEXT_RO_DATA(values);
         roData->interfaceFlags = GET_NEXT_RO_DATA(values);
         rwData->unk_1C = roData->unk_14 * 100.0f;
-        bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamDataId);
+        bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamIndex);
         if (bgCamFuncData != NULL) {
             if (!(roData->interfaceFlags & FIXED2_FLAG_1)) {
                 Camera_Vec3sToVec3f(&rwData->unk_00, &bgCamFuncData->pos);
@@ -5566,7 +5566,7 @@ s32 Camera_Unique0(Camera* camera) {
 
     switch (camera->animState) {
         case 0:
-            bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamDataId);
+            bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamIndex);
             Camera_Vec3sToVec3f(&rwData->unk_1C, &bgCamFuncData->pos);
             camera->eye = camera->eyeNext = rwData->unk_1C;
             rwData->unk_34 = bgCamFuncData->rot;
@@ -6977,7 +6977,7 @@ s32 Camera_Special9(Camera* camera) {
 
             // Setup for the camera moving behind the door
             if (roData->interfaceFlags & SPECIAL9_FLAG_0) {
-                bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamDataId);
+                bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamIndex);
                 Camera_Vec3sToVec3f(eyeNext, &bgCamFuncData->pos);
                 spB8 = *eye = *eyeNext;
             } else {
@@ -7102,7 +7102,7 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, PlayState
 
     __osMemset(camera, 0, sizeof(Camera));
 
-    camera->play = D_801EDC28 = play;
+    camera->play = sCamPlayState = play;
     curUID = sNextUID;
     sNextUID++;
     while (curUID != 0) {
@@ -7142,7 +7142,7 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, PlayState
     sCameraHudVisibility = 0;
 
     camera->setting = camera->prevSetting = CAM_SET_FREE0;
-    camera->bgCamDataId = camera->prevBgCamDataId = -1;
+    camera->bgCamIndex = camera->prevBgCamDataId = -1;
     camera->stateFlags = 0;
     camera->mode = CAM_MODE_NORMAL;
     camera->bgId = BGCHECK_SCENE;
@@ -7313,7 +7313,7 @@ s32 Camera_UpdateWater(Camera* camera) {
             // CAM_SET_NONE
             if (!(camera->stateFlags & CAM_STATE_9)) {
                 Camera_SetStateFlag(camera, CAM_STATE_9);
-                camera->waterPrevBgCamDataId = camera->bgCamDataId;
+                camera->waterPrevBgCamDataId = camera->bgCamIndex;
                 camera->waterQuakeId = -1;
             }
 
@@ -7325,14 +7325,14 @@ s32 Camera_UpdateWater(Camera* camera) {
                 Camera_ChangeSettingFlags(camera, CAM_SET_NORMAL3, CAM_CHANGE_SETTING_1);
                 *waterPrevCamSetting = camera->setting;
                 camera->bgId = prevBgId;
-                camera->bgCamDataId = -2;
+                camera->bgCamIndex = -2;
             }
 
         } else if (camSetting != -1) {
             // player is in a water box
             if (!(camera->stateFlags & CAM_STATE_9)) {
                 Camera_SetStateFlag(camera, CAM_STATE_9);
-                camera->waterPrevBgCamDataId = camera->bgCamDataId;
+                camera->waterPrevBgCamDataId = camera->bgCamIndex;
                 camera->waterQuakeId = -1;
             }
 
@@ -7353,9 +7353,9 @@ s32 Camera_UpdateWater(Camera* camera) {
             camera->bgId = BGCHECK_SCENE;
             if (camera->waterPrevBgCamDataId < 0) {
                 func_800DDFE0(camera);
-                camera->bgCamDataId = -1;
+                camera->bgCamIndex = -1;
             } else {
-                Camera_ChangeDataIdx(camera, camera->waterPrevBgCamDataId);
+                Camera_ChangeActorCsCamIndex(camera, camera->waterPrevBgCamDataId);
             }
             camera->bgId = prevBgId;
         }
@@ -7365,15 +7365,15 @@ s32 Camera_UpdateWater(Camera* camera) {
 }
 
 void Camera_EarthquakeDay3(Camera* camera) {
-    static s16 earthquakeTimer = 0;
+    static s16 sEarthquakeTimer = 0;
     u16 dayTime;
     s16 quake;
     s32 daySpeed;
-    s16 earthquakeFreq[] = {
-        0x0FFC, // 1 Large Earthquake  between CLOCK_TIME(0, 00) to CLOCK_TIME(1, 30)
-        0x07FC, // 2 Large Earthquakes between CLOCK_TIME(1, 30) to CLOCK_TIME(3, 00)
-        0x03FC, // 4 Large Earthquakes between CLOCK_TIME(3, 00) to CLOCK_TIME(4, 30)
-        0x01FC, // 8 Large Earthquakes between CLOCK_TIME(4, 30) to CLOCK_TIME(6, 00)
+    s16 sEarthquakeFreq[] = {
+        0xFFC, // 1 Large Earthquake  between CLOCK_TIME(0, 00) to CLOCK_TIME(1, 30)
+        0x7FC, // 2 Large Earthquakes between CLOCK_TIME(1, 30) to CLOCK_TIME(3, 00)
+        0x3FC, // 4 Large Earthquakes between CLOCK_TIME(3, 00) to CLOCK_TIME(4, 30)
+        0x1FC, // 8 Large Earthquakes between CLOCK_TIME(4, 30) to CLOCK_TIME(6, 00)
     };
 
     if ((CURRENT_DAY == 3) && (ActorCutscene_GetCurrentIndex() == -1)) {
@@ -7383,13 +7383,13 @@ void Camera_EarthquakeDay3(Camera* camera) {
         // Large earthquake created
         // Times based on sEarthquakeFreq
         if ((dayTime > CLOCK_TIME(0, 0)) && (dayTime < CLOCK_TIME(6, 0)) &&
-            ((earthquakeFreq[dayTime >> 12] & dayTime) == 0) && (Quake_NumActiveQuakes() < 2)) {
+            ((sEarthquakeFreq[dayTime >> 12] & dayTime) == 0) && (Quake_NumActiveQuakes() < 2)) {
             quake = Quake_Add(camera, 4);
             if (quake != 0) {
                 Quake_SetSpeed(quake, 30000);
                 Quake_SetQuakeValues(quake, (dayTime >> 12) + 2, 1, 5, 60);
-                earthquakeTimer = ((dayTime >> 10) - daySpeed) + 80;
-                Quake_SetCountdown(quake, earthquakeTimer);
+                sEarthquakeTimer = ((dayTime >> 10) - daySpeed) + 80;
+                Quake_SetCountdown(quake, sEarthquakeTimer);
             }
         }
 
@@ -7401,13 +7401,13 @@ void Camera_EarthquakeDay3(Camera* camera) {
             if (quake != 0) {
                 Quake_SetSpeed(quake, 16000);
                 Quake_SetQuakeValues(quake, 1, 0, 0, dayTime & 0x3F); // %64
-                earthquakeTimer = 120 - daySpeed;
-                Quake_SetCountdown(quake, earthquakeTimer);
+                sEarthquakeTimer = 120 - daySpeed;
+                Quake_SetCountdown(quake, sEarthquakeTimer);
             }
         }
 
-        if (earthquakeTimer != 0) {
-            earthquakeTimer--;
+        if (sEarthquakeTimer != 0) {
+            sEarthquakeTimer--;
             func_8019F128(NA_SE_SY_EARTHQUAKE_OUTDOOR - SFX_FLAG);
         }
     }
@@ -7483,7 +7483,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
     QuakeCamCalc quake;
     Actor* focalActor = camera->focalActor;
     VecSph sp3C;
-    s16 bgCamDataId;
+    s16 bgCamIndex;
     f32 focalActorFloorHeight;
 
     // Camera of status CUT only updates to this point
@@ -7585,10 +7585,10 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
                 !(camera->stateFlags & CAM_STATE_15) && !Camera_IsMountedOnHorse(camera) &&
                 !Camera_RequestGiantsMaskSetting(camera) && !Camera_IsDekuHovering(camera) && (sp98 != 0)) {
 
-                bgCamDataId = Camera_GetBgCamIndex(camera, &bgId, sp90);
-                if ((bgCamDataId != -1) && (camera->bgId == BGCHECK_SCENE)) {
+                bgCamIndex = Camera_GetBgCamIndex(camera, &bgId, sp90);
+                if ((bgCamIndex != -1) && (camera->bgId == BGCHECK_SCENE)) {
                     if (Camera_IsUsingZoraFins(camera) == 0) {
-                        camera->nextCamSceneDataId = bgCamDataId | CAM_DATA_IS_BG;
+                        camera->nextCamSceneDataId = bgCamIndex | CAM_DATA_IS_BG;
                     }
                 }
 
@@ -7599,9 +7599,9 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
 
                 if ((focalActorFloorHeight != BGCHECK_Y_MIN) && (sp8C != sp90) && (bgId == BGCHECK_SCENE) &&
                     ((camera->focalActorFloorHeight - 2.0f) < focalActorFloorHeight)) {
-                    bgCamDataId = Camera_GetBgCamIndex(camera, &bgId, sp8C);
-                    if ((bgCamDataId != -1) && (bgId == BGCHECK_SCENE)) {
-                        camera->nextCamSceneDataId = bgCamDataId | CAM_DATA_IS_BG;
+                    bgCamIndex = Camera_GetBgCamIndex(camera, &bgId, sp8C);
+                    if ((bgCamIndex != -1) && (bgId == BGCHECK_SCENE)) {
+                        camera->nextCamSceneDataId = bgCamIndex | CAM_DATA_IS_BG;
                         changeCamSceneDataType = 1; // change cam scene data based on the bg cam data
                     }
                 }
@@ -7622,7 +7622,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
                  (changeCamSceneDataType != 0)) &&
                 (!(camera->stateFlags & CAM_STATE_9) || Camera_IsUnderwaterAsZora(camera))) {
 
-                Camera_ChangeDataIdx(camera, camera->nextCamSceneDataId);
+                Camera_ChangeActorCsCamIndex(camera, camera->nextCamSceneDataId);
                 camera->nextCamSceneDataId = -1;
                 if (camera->doorTimer2 != 0) {
                     camera->doorTimer1 = camera->doorTimer2;
@@ -7741,7 +7741,7 @@ s32 Camera_SetModeSettingStateFlags(Camera* camera) {
 #define CAM_CHANGE_MODE_FIRST_PERSON (1 << 5)
 
 s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
-    static s32 modeChangeFlags = 0;
+    static s32 sModeChangeFlags = 0;
 
     if ((camera->setting == CAM_SET_TELESCOPE) && ((mode == CAM_MODE_FIRSTPERSON) || (mode == CAM_MODE_DEKUHIDE))) {
         forceChange = true;
@@ -7778,21 +7778,21 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
 
     Camera_ResetActionFuncState(camera, mode);
 
-    modeChangeFlags = 0;
+    sModeChangeFlags = 0;
 
     // Process Requested Camera Mode
     switch (mode) {
         case CAM_MODE_FIRSTPERSON:
-            modeChangeFlags = CAM_CHANGE_MODE_FIRST_PERSON;
+            sModeChangeFlags = CAM_CHANGE_MODE_FIRST_PERSON;
             break;
 
         case CAM_MODE_BATTLE:
-            modeChangeFlags = CAM_CHANGE_MODE_BATTLE;
+            sModeChangeFlags = CAM_CHANGE_MODE_BATTLE;
             break;
 
         case CAM_MODE_FOLLOWTARGET:
             if (camera->target != NULL && camera->target->id != ACTOR_EN_BOOM) {
-                modeChangeFlags = CAM_CHANGE_MODE_FOLLOW_TARGET;
+                sModeChangeFlags = CAM_CHANGE_MODE_FOLLOW_TARGET;
             }
             break;
 
@@ -7801,60 +7801,60 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
         case CAM_MODE_TALK:
         case CAM_MODE_HANGZ:
         case CAM_MODE_PUSHPULL:
-            modeChangeFlags = CAM_CHANGE_MODE_1;
+            sModeChangeFlags = CAM_CHANGE_MODE_1;
             break;
 
         case CAM_MODE_NORMAL:
         case CAM_MODE_HANG:
-            modeChangeFlags = CAM_CHANGE_MODE_4;
+            sModeChangeFlags = CAM_CHANGE_MODE_4;
             break;
     }
 
     // Process Current Camera Mode
     switch (camera->mode) {
         case CAM_MODE_FIRSTPERSON:
-            if (modeChangeFlags & CAM_CHANGE_MODE_FIRST_PERSON) {
+            if (sModeChangeFlags & CAM_CHANGE_MODE_FIRST_PERSON) {
                 camera->animState = 10;
             }
             break;
 
         case CAM_MODE_JUMP:
         case CAM_MODE_HANG:
-            if (modeChangeFlags & CAM_CHANGE_MODE_4) {
+            if (sModeChangeFlags & CAM_CHANGE_MODE_4) {
                 camera->animState = 20;
             }
-            modeChangeFlags |= CAM_CHANGE_MODE_0;
+            sModeChangeFlags |= CAM_CHANGE_MODE_0;
             break;
 
         case CAM_MODE_CHARGE:
-            if (modeChangeFlags & CAM_CHANGE_MODE_4) {
+            if (sModeChangeFlags & CAM_CHANGE_MODE_4) {
                 camera->animState = 20;
             }
-            modeChangeFlags |= CAM_CHANGE_MODE_0;
+            sModeChangeFlags |= CAM_CHANGE_MODE_0;
             break;
 
         case CAM_MODE_FOLLOWTARGET:
-            if (modeChangeFlags & CAM_CHANGE_MODE_FOLLOW_TARGET) {
+            if (sModeChangeFlags & CAM_CHANGE_MODE_FOLLOW_TARGET) {
                 camera->animState = 10;
             }
-            modeChangeFlags |= CAM_CHANGE_MODE_0;
+            sModeChangeFlags |= CAM_CHANGE_MODE_0;
             break;
 
         case CAM_MODE_BATTLE:
-            if (modeChangeFlags & CAM_CHANGE_MODE_BATTLE) {
+            if (sModeChangeFlags & CAM_CHANGE_MODE_BATTLE) {
                 camera->animState = 10;
             }
-            modeChangeFlags |= 1;
+            sModeChangeFlags |= 1;
             break;
 
         case CAM_MODE_BOWARROWZ:
         case CAM_MODE_HANGZ:
         case CAM_MODE_PUSHPULL:
-            modeChangeFlags |= CAM_CHANGE_MODE_0;
+            sModeChangeFlags |= CAM_CHANGE_MODE_0;
             break;
 
         case CAM_MODE_NORMAL:
-            if (modeChangeFlags & CAM_CHANGE_MODE_4) {
+            if (sModeChangeFlags & CAM_CHANGE_MODE_4) {
                 camera->animState = 20;
             }
             break;
@@ -7863,11 +7863,11 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
             break;
     }
 
-    modeChangeFlags &= ~CAM_CHANGE_MODE_4;
+    sModeChangeFlags &= ~CAM_CHANGE_MODE_4;
 
     // Z-Pressing Sfx
     if (camera->status == CAM_STATUS_ACTIVE) {
-        switch (modeChangeFlags) {
+        switch (sModeChangeFlags) {
             case CAM_CHANGE_MODE_0:
                 play_sound(0);
                 break;
@@ -7959,13 +7959,13 @@ s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags) {
     }
 
     if (flags & CAM_CHANGE_SETTING_3) {
-        camera->bgCamDataId = camera->prevBgCamDataId;
+        camera->bgCamIndex = camera->prevBgCamDataId;
         camera->prevBgCamDataId = -1;
     } else if (!(flags & CAM_CHANGE_SETTING_2)) {
         if (!(sCameraSettings[camera->setting].flags & 0x40000000)) {
-            camera->prevBgCamDataId = camera->bgCamDataId;
+            camera->prevBgCamDataId = camera->bgCamIndex;
         }
-        camera->bgCamDataId = -1;
+        camera->bgCamIndex = -1;
     }
 
     camera->setting = setting;
@@ -7981,37 +7981,38 @@ s32 Camera_ChangeSetting(Camera* camera, s16 setting) {
     s32 settingChangeSuccessful = Camera_ChangeSettingFlags(camera, setting, 0);
 
     if (settingChangeSuccessful >= 0) {
-        camera->bgCamDataId = -1;
+        camera->bgCamIndex = -1;
     }
     return settingChangeSuccessful;
 }
 
-s32 Camera_ChangeDataIdx(Camera* camera, s32 bgCamDataId) {
+s32 Camera_ChangeActorCsCamIndex(Camera* camera, s32 bgCamIndex) {
     s16 setting;
 
-    if (bgCamDataId == -1 || bgCamDataId == camera->bgCamDataId) {
+    if ((bgCamIndex == -1) || (bgCamIndex == camera->bgCamIndex)) {
         camera->behaviorFlags |= CAM_BEHAVIOR_BGCAM_2;
         return -1;
     }
 
-    if (bgCamDataId < 0) {
-        setting = sGlobalCamDataSettingsPtr[bgCamDataId];
+    if (bgCamIndex < 0) {
+        setting = sGlobalCamDataSettingsPtr[bgCamIndex];
     } else if (!(camera->behaviorFlags & CAM_BEHAVIOR_BGCAM_2)) {
-        setting = Camera_GetBgCamOrActorCsCamSetting(camera, bgCamDataId);
+        setting = Camera_GetBgCamOrActorCsCamSetting(camera, bgCamIndex);
     } else {
         return -1;
     }
 
     camera->behaviorFlags |= CAM_BEHAVIOR_BGCAM_2;
+
     // Sets camera setting based on bg/scene data
     if ((Camera_ChangeSettingFlags(camera, setting, CAM_CHANGE_SETTING_2 | CAM_CHANGE_SETTING_0) >= 0) ||
         (sCameraSettings[camera->setting].flags & 0x80000000)) {
-        camera->bgCamDataId = bgCamDataId;
+        camera->bgCamIndex = bgCamIndex;
         camera->behaviorFlags |= CAM_BEHAVIOR_BGCAM_1;
         Camera_ResetActionFuncState(camera, camera->mode);
     }
 
-    return bgCamDataId | 0x80000000;
+    return bgCamIndex | 0x80000000;
 }
 
 Vec3s* Camera_GetInputDir(Vec3s* dst, Camera* camera) {
@@ -8144,7 +8145,7 @@ s16 Camera_UnsetStateFlag(Camera* camera, s16 flags) {
     return camera->stateFlags;
 }
 
-s32 Camera_ChangeDoorCam(Camera* camera, Actor* doorActor, s16 bgCamDataId, f32 arg3, s16 timer1, s16 timer2,
+s32 Camera_ChangeDoorCam(Camera* camera, Actor* doorActor, s16 bgCamIndex, f32 arg3, s16 timer1, s16 timer2,
                          s16 timer3) {
     DoorParams* doorParams = &camera->paramData.doorParams;
 
@@ -8156,19 +8157,19 @@ s32 Camera_ChangeDoorCam(Camera* camera, Actor* doorActor, s16 bgCamDataId, f32 
     doorParams->timer1 = timer1;
     doorParams->timer2 = timer2;
     doorParams->timer3 = timer3;
-    doorParams->bgCamDataId = bgCamDataId;
+    doorParams->bgCamIndex = bgCamIndex;
 
-    if (bgCamDataId == -99) {
+    if (bgCamIndex == -99) {
         Camera_ResetActionFuncState(camera, camera->mode);
         return -99;
     }
 
-    if (bgCamDataId == -1) {
+    if (bgCamIndex == -1) {
         Camera_ChangeSettingFlags(camera, CAM_SET_DOORC, 0);
-    } else if (bgCamDataId == -2) {
+    } else if (bgCamIndex == -2) {
         Camera_ChangeSettingFlags(camera, CAM_SET_SPIRAL_DOOR, 0);
     } else {
-        camera->nextCamSceneDataId = bgCamDataId;
+        camera->nextCamSceneDataId = bgCamIndex;
         camera->doorTimer1 = timer1;
         camera->doorTimer2 = timer2 + timer3;
     }
@@ -8211,9 +8212,10 @@ s32 Camera_IsDbgCamEnabled(void) {
     return false;
 }
 
-Vec3f* Camera_GetQuakeOffset(Vec3f* dst, Camera* camera) {
-    *dst = camera->quakeOffset;
-    return dst;
+Vec3f* Camera_GetQuakeOffset(Vec3f* quakeOffset, Camera* camera) {
+    *quakeOffset = camera->quakeOffset;
+
+    return quakeOffset;
 }
 
 void Camera_SetCameraData(Camera* camera, s16 setDataFlags, void* data0, void* data1, s16 data2, s16 data3) {
@@ -8265,7 +8267,6 @@ void Camera_SetTargetActor(Camera* camera, Actor* actor) {
 }
 
 f32 Camera_GetWaterYPos(Camera* camera) {
-    // if underwater
     if (camera->stateFlags & CAM_STATE_UNDERWATER) {
         return camera->waterYPos;
     } else {

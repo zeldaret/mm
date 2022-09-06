@@ -1431,7 +1431,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ Actor* doorActor;
-    /* 0x04 */ s16 bgCamDataId;
+    /* 0x04 */ s16 bgCamIndex;
     /* 0x06 */ union {
         Vec3s eye; // position of the camera while exiting a spiral staircase
         struct {
@@ -1593,11 +1593,11 @@ typedef struct Camera {
     /* 0x142 */ s16 setting;
     /* 0x144 */ s16 mode;
     /* 0x146 */ s16 bgId;
-    /* 0x148 */ s16 bgCamDataId;
+    /* 0x148 */ s16 bgCamIndex;
     /* 0x14A */ s16 behaviorFlags;
     /* 0x14C */ s16 stateFlags;
     /* 0x14E */ s16 childCamId;
-    /* 0x150 */ s16 doorTimer1; // a door timer used when door cam is indexed from bgCamDataId
+    /* 0x150 */ s16 doorTimer1; // a door timer used when door cam is indexed from bgCamIndex
     /* 0x152 */ s16 unk152;
     /* 0x154 */ s16 prevSetting;
     /* 0x156 */ s16 nextCamSceneDataId;
@@ -1606,7 +1606,7 @@ typedef struct Camera {
     /* 0x15C */ s16 viewFlags;
     /* 0x15E */ s16 animState; // Determines the current state of the current camera behavior function
     /* 0x160 */ s16 timer; // Unused remnant of OoT: originally destoryed subCamera when timer ran out
-    /* 0x162 */ s16 doorTimer2; // a door timer used when door cam is indexed from bgCamDataId
+    /* 0x162 */ s16 doorTimer2; // a door timer used when door cam is indexed from bgCamIndex
     /* 0x164 */ s16 camId;
     /* 0x166 */ s16 prevBgCamDataId;
     /* 0x168 */ s16 unk168;

@@ -728,8 +728,8 @@ void func_80962D60(EnFu* this, PlayState* play) {
 void func_80962EBC(EnFu* this, PlayState* play) {
     if (this->unk_542 != 0) {
         if (this->actor.cutscene != -1) {
-            Camera_ChangeDataIdx(play->cameraPtrs[CAM_ID_MAIN],
-                                 ActorCutscene_GetCutscene(this->actor.cutscene)->csCamSceneDataId);
+            Camera_ChangeActorCsCamIndex(play->cameraPtrs[CAM_ID_MAIN],
+                                         ActorCutscene_GetCutscene(this->actor.cutscene)->csCamSceneDataId);
         }
     }
 }
