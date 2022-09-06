@@ -29,7 +29,7 @@ typedef struct EnNb {
     /* 0x1E0 */ UNK_PTR unk_1E0;
     /* 0x1E4 */ s32 unk_1E4;
     /* 0x1E8 */ Actor* unk_1E8;
-    /* 0x1EC */ UNK_TYPE1 unk_1EC[0x04];
+    /* 0x1EC */ UNK_TYPE1 unk_1EC[4];
     /* 0x1F0 */ Vec3f headComputedPos;
     /* 0x1FC */ Vec3s headComputedRot;
     /* 0x202 */ Vec3s jointTable[NB_LIMB_MAX];
