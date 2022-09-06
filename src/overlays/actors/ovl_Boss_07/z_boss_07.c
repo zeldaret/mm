@@ -2830,7 +2830,7 @@ void Boss07_Wrath_MakeShadowTex(u8* shadowTex, Boss07* this, PlayState* play) {
     s32 i;
     s32* shadowTex32 = (s32*)shadowTex;
 
-    for (i = 0; i < 0x40 * 0x40 / sizeof(s32); i++, shadowTex32++) {
+    for (i = 0; i < 0x40 * 0x40 / (s32)sizeof(s32); i++, shadowTex32++) {
         *shadowTex32 = 0;
     }
     // angle of light source
