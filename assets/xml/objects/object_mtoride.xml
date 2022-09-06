@@ -16,10 +16,10 @@
         <Texture Name="gWoodfallSceneryPoisonWaterTex" OutName="woodfall_scenery_poison_water" Format="rgba16" Width="32" Height="32" Offset="0x5D20" />
         <Texture Name="gWoodfallSceneryPoisonWallsScrollTex" OutName="woodfall_scenery_poison_walls_scroll" Format="rgba16" Width="32" Height="32" Offset="0x6520" />
         <Texture Name="gWoodfallSceneryPoisonWallsTex" OutName="woodfall_scenery_poison_walls" Format="rgba16" Width="32" Height="32" Offset="0x6D20" />
-        <Texture Name="gWoodfallSceneryPurifiedWallsColorTex" OutName="woodfall_scenery_purified_walls_color" Format="rgba16" Width="16" Height="32" Offset="0x7520" />
-        <Texture Name="gWoodfallSceneryPurifiedWallsTex" OutName="woodfall_scenery_purified_walls" Format="rgba16" Width="32" Height="32" Offset="0x7920" />
-        <Texture Name="gWoodfallSceneryFloorTex" OutName="woodfall_scenery_floor" Format="rgba16" Width="32" Height="32" Offset="0x8120" />
-        <Texture Name="gWoodfallSceneryFloorDetailTex" OutName="woodfall_scenery_floor_detail" Format="rgba16" Width="32" Height="32" Offset="0x8920" />
+        <Texture Name="gWoodfallSceneryPurifiedWalls1Tex" OutName="woodfall_scenery_purified_walls_1" Format="rgba16" Width="16" Height="32" Offset="0x7520" />
+        <Texture Name="gWoodfallSceneryPurifiedWalls2Tex" OutName="woodfall_scenery_purified_walls_2" Format="rgba16" Width="32" Height="32" Offset="0x7920" />
+        <Texture Name="gWoodfallSceneryFloorBackgroundTex" OutName="woodfall_scenery_floor_background" Format="rgba16" Width="32" Height="32" Offset="0x8120" />
+        <Texture Name="gWoodfallSceneryFloorForegroundTex" OutName="woodfall_scenery_floor_foreground" Format="rgba16" Width="32" Height="32" Offset="0x8920" />
         <Texture Name="gWoodfallSceneryPurifiedWaterTex" OutName="woodfall_scenery_purified_water" Format="rgba16" Width="32" Height="32" Offset="0x9120" />
 
         <!-- Assets for the poison water whose vertices are dynamically adjusted when Woodfall Temple is raised. -->
