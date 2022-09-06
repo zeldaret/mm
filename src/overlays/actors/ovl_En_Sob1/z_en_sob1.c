@@ -229,10 +229,12 @@ u16 EnSob1_GetWelcome(EnSob1* this, PlayState* play) {
             case PLAYER_MASK_BUNNY:
             case PLAYER_MASK_POSTMAN:
                 return 0x644;
+
             case PLAYER_MASK_GORON:
             case PLAYER_MASK_ZORA:
             case PLAYER_MASK_DEKU:
                 return 0x64B;
+
             case PLAYER_MASK_TRUTH:
             case PLAYER_MASK_ALL_NIGHT:
             case PLAYER_MASK_KEATON:
@@ -243,17 +245,22 @@ u16 EnSob1_GetWelcome(EnSob1* this, PlayState* play) {
             case PLAYER_MASK_BREMEN:
             case PLAYER_MASK_SCENTS:
                 return 0x685;
+
             case PLAYER_MASK_GARO:
             case PLAYER_MASK_CIRCUS_LEADER:
             case PLAYER_MASK_GIBDO:
             case PLAYER_MASK_CAPTAIN:
                 return 0x686;
+
             case PLAYER_MASK_COUPLE:
                 return 0x687;
+
             case PLAYER_MASK_STONE:
                 return 0x688;
+
             case PLAYER_MASK_BLAST:
                 return 0x689;
+
             case PLAYER_MASK_KAFEIS_MASK:
                 return 0x68A;
         }
@@ -262,27 +269,39 @@ u16 EnSob1_GetWelcome(EnSob1* this, PlayState* play) {
             case PLAYER_FORM_HUMAN:
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_10)) {
                     return 0x12CF;
+                } else {
+                    SET_WEEKEVENTREG(WEEKEVENTREG_57_10);
+                    return 0x12CE;
                 }
-                SET_WEEKEVENTREG(WEEKEVENTREG_57_10);
-                return 0x12CE;
+                break;
+
             case PLAYER_FORM_DEKU:
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_20)) {
                     return 0x12D1;
+                } else {
+                    SET_WEEKEVENTREG(WEEKEVENTREG_57_20);
+                    return 0x12D0;
                 }
-                SET_WEEKEVENTREG(WEEKEVENTREG_57_20);
-                return 0x12D0;
+                break;
+
             case PLAYER_FORM_GORON:
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_40)) {
                     return 0x12D3;
+                } else {
+                    SET_WEEKEVENTREG(WEEKEVENTREG_57_40);
+                    return 0x12D2;
                 }
-                SET_WEEKEVENTREG(WEEKEVENTREG_57_40);
-                return 0x12D2;
+                break;
+
             case PLAYER_FORM_ZORA:
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_80)) {
                     return 0x12D5;
+                } else {
+                    SET_WEEKEVENTREG(WEEKEVENTREG_57_80);
+                    return 0x12D4;
                 }
-                SET_WEEKEVENTREG(WEEKEVENTREG_57_80);
-                return 0x12D4;
+                break;
+
             default:
                 return 0x12CE;
         }
@@ -290,31 +309,36 @@ u16 EnSob1_GetWelcome(EnSob1* this, PlayState* play) {
         if (player->transformation != PLAYER_FORM_GORON) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_04)) {
                 return 0xBB9;
+            } else {
+                SET_WEEKEVENTREG(WEEKEVENTREG_58_04);
+                return 0xBB8;
             }
-            SET_WEEKEVENTREG(WEEKEVENTREG_58_04);
-            return 0xBB8;
         } else {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_08)) {
                 return 0xBBB;
+            } else {
+                SET_WEEKEVENTREG(WEEKEVENTREG_58_08);
+                return 0xBBA;
             }
-            SET_WEEKEVENTREG(WEEKEVENTREG_58_08);
-            return 0xBBA;
         }
     } else if (this->shopType == GORON_SHOP_SPRING) {
         if (player->transformation != PLAYER_FORM_GORON) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_10)) {
                 return 0xBBD;
+            } else {
+                SET_WEEKEVENTREG(WEEKEVENTREG_58_10);
+                return 0xBBC;
             }
-            SET_WEEKEVENTREG(WEEKEVENTREG_58_10);
-            return 0xBBC;
         } else {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_20)) {
                 return 0xBBF;
+            } else {
+                SET_WEEKEVENTREG(WEEKEVENTREG_58_20);
+                return 0xBBE;
             }
-            SET_WEEKEVENTREG(WEEKEVENTREG_58_20);
-            return 0xBBE;
         }
     }
+
     return 0;
 }
 

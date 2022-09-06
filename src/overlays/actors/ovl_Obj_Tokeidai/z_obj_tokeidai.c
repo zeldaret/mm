@@ -616,7 +616,7 @@ void ObjTokeidai_DoNothing(ObjTokeidai* this, PlayState* play) {
 }
 
 void ObjTokeidai_StaircaseToRooftop_Idle(ObjTokeidai* this, PlayState* play) {
-    if (((CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) ||
+    if ((((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) || CURRENT_DAY >= 4) ||
         CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
         this->actor.draw = ObjTokeidai_Draw;
     } else {

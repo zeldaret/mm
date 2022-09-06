@@ -120,7 +120,6 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_1;
     }
 
-    // check if already healed
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_04)) {
         Actor_MarkForDeath(&this->actor);
     }

@@ -7,10 +7,6 @@
 /**
  * Some notes:
  *
- * Global flags:
- * - CHECK_EVENTINF(EVENTINF_56): Enabled when Gyorg's intro cutscene has been watched
- * - CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80): Checked to know if Gyorg has been defeated
- *
  * Seaweed:
  * - Refers to the seaweed at the bottom of the stage where Player fights Gyorg
  * - The default Gyorg actor will spawn 5 other Gyorg instances using the parameter GYORG_PARAM_SEAWEED to spawn them

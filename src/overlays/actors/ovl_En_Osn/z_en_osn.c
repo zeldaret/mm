@@ -379,16 +379,17 @@ s32 func_80AD0E10(EnOsn* this, PlayState* play) {
                 if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
                     (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     return 0x2006;
+                } else {
+                    return 0x1FCD;
                 }
-                return 0x1FCD;
             }
             this->unk_1EA |= 8;
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_76_20)) {
                 return 0x1FC8;
+            } else {
+                SET_WEEKEVENTREG(WEEKEVENTREG_76_20);
+                return 0x1FCE;
             }
-
-            SET_WEEKEVENTREG(WEEKEVENTREG_76_20);
-            return 0x1FCE;
         }
 
         if (player->transformation == PLAYER_FORM_ZORA) {
@@ -399,13 +400,15 @@ s32 func_80AD0E10(EnOsn* this, PlayState* play) {
                     return 0x2006;
                 }
                 return 0x1FCD;
+            } else {
+                this->unk_1EA |= 0x10;
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_76_40)) {
+                    return 0x1FC8;
+                } else {
+                    SET_WEEKEVENTREG(WEEKEVENTREG_76_40);
+                    return 0x1FD0;
+                }
             }
-            this->unk_1EA |= 0x10;
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_76_40)) {
-                return 0x1FC8;
-            }
-            SET_WEEKEVENTREG(WEEKEVENTREG_76_40);
-            return 0x1FD0;
         }
 
         if (Player_GetMask(play) == PLAYER_MASK_NONE) {

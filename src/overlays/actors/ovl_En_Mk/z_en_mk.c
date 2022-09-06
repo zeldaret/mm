@@ -286,9 +286,9 @@ void func_80959A24(EnMk* this, PlayState* play) {
                         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                             func_801477B4(play);
                             this->actionFunc = func_80959E18;
-                            break;
+                        } else {
+                            func_80151938(play, play->msgCtx.currentTextId + 1);
                         }
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0xFA5:
@@ -316,18 +316,18 @@ void func_80959A24(EnMk* this, PlayState* play) {
                         SET_WEEKEVENTREG(WEEKEVENTREG_19_08);
                         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                             func_80151938(play, 0xFBD);
-                            break;
+                        } else {
+                            func_80151938(play, 0xFA9);
                         }
-                        func_80151938(play, 0xFA9);
                         break;
 
                     case 0xFAC:
                         SET_WEEKEVENTREG(WEEKEVENTREG_19_10);
                         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                             func_80151938(play, 0xFBE);
-                            break;
+                        } else {
+                            func_80151938(play, 0xFAD);
                         }
-                        func_80151938(play, 0xFAD);
                         break;
 
                     case 0xFB1:

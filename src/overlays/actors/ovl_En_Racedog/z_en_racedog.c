@@ -15,7 +15,7 @@
 
 #define THIS ((EnRacedog*)thisx)
 
-// TODO: this file require macros for it uses of weekEventReg
+//! TODO: this file require macros for its uses of weekEventReg
 
 void EnRacedog_Init(Actor* thisx, PlayState* play);
 void EnRacedog_Destroy(Actor* thisx, PlayState* play);

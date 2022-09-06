@@ -228,8 +228,8 @@ void EnGakufu_PlayRewardCutscene(EnGakufu* this, PlayState* play) {
 
 /**
  * Waits for the notes on the wall to be played and updates the corresponding flags
- * (CHECK_EVENTINF(EVENTINF_31)) is checking if Player is within range of the wall
- * (CHECK_EVENTINF(EVENTINF_32)) is checking if Player has played the notes of the wall
+ * EVENTINF_31 is used to track if Player is within range of the wall
+ * EVENTINF_32 is used to track if Player has played the notes of the wall
  */
 void EnGakufu_WaitForSong(EnGakufu* this, PlayState* play) {
     if (CHECK_EVENTINF(EVENTINF_31)) {

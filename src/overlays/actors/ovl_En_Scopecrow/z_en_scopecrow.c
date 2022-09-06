@@ -71,38 +71,44 @@ s32 func_80BCD09C(s16 arg0) {
         case 0:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_04)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 1:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_80)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 2:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_01)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 3:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_02)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 4:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_04)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 5:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_08)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
     }
 
     return false;

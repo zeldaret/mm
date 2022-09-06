@@ -12,7 +12,7 @@
 
 #define THIS ((EnAob01*)thisx)
 
-// TODO: this file require macros for it uses of weekEventReg
+//! TODO: this file require macros for its uses of weekEventReg
 
 void EnAob01_Init(Actor* thisx, PlayState* play);
 void EnAob01_Destroy(Actor* thisx, PlayState* play);

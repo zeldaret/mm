@@ -352,7 +352,7 @@ void func_808F39DC(EnIn* this, PlayState* play) {
     u16 textId = 0;
 
     if (gSaveContext.save.day != 3) {
-        switch (GET_WEEKEVENTREG_RACE_FLAGS()) {
+        switch (GET_WEEKEVENTREG_RACE_FLAGS) {
             case WEEKEVENTREG_RACE_FLAG_2:
                 textId = 0x347A;
                 break;
@@ -362,7 +362,7 @@ void func_808F39DC(EnIn* this, PlayState* play) {
         }
         SET_WEEKEVENTREG_RACE_FLAGS(WEEKEVENTREG_RACE_FLAG_END);
     } else {
-        switch (GET_WEEKEVENTREG_RACE_FLAGS()) {
+        switch (GET_WEEKEVENTREG_RACE_FLAGS) {
             case WEEKEVENTREG_RACE_FLAG_2:
                 textId = 0x349D;
                 break;
@@ -1366,7 +1366,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
     this->unk48C = 0;
     this->unk4AC = 0;
     type = ENIN_GET_TYPE(thisx);
-    this->unk4B0 = GET_WEEKEVENTREG_RACE_FLAGS();
+    this->unk4B0 = GET_WEEKEVENTREG_RACE_FLAGS;
     if (type == ENIN_HORSE_RIDER_BLUE_SHIRT || type == ENIN_BLUE_SHIRT) {
         this->unk4AC |= 8;
     }
@@ -1387,8 +1387,8 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
         this->path = SubS_GetPathByIndex(play, ENIN_GET_PATH(&this->actor), 0x3F);
         this->unk23D = 0;
         if (type == ENIN_YELLOW_SHIRT || type == ENIN_BLUE_SHIRT) {
-            if (GET_WEEKEVENTREG_RACE_FLAGS() == WEEKEVENTREG_RACE_FLAG_2 ||
-                GET_WEEKEVENTREG_RACE_FLAGS() == WEEKEVENTREG_RACE_FLAG_3) {
+            if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_2 ||
+                GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_3) {
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                 this->unk4A8 = 0;
                 this->unk4AC |= 2;
@@ -1396,12 +1396,12 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                 this->unk23C = 0;
                 D_801BDAA0 = 0;
 
-                if (GET_WEEKEVENTREG_RACE_FLAGS() == WEEKEVENTREG_RACE_FLAG_2) {
+                if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_2) {
                     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_6);
                 } else {
                     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_4);
                 }
-                if (GET_WEEKEVENTREG_RACE_FLAGS() == WEEKEVENTREG_RACE_FLAG_2) {
+                if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_2) {
                     this->skelAnime.curFrame = ((Rand_ZeroOne() * 0.6f) + 0.2f) * this->skelAnime.endFrame;
                 }
                 if (this->unk4AC & 8) {
@@ -1410,7 +1410,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                     this->actionFunc = func_808F5C98;
                 }
             } else {
-                if (GET_WEEKEVENTREG_RACE_FLAGS() != WEEKEVENTREG_RACE_FLAG_START) {
+                if (GET_WEEKEVENTREG_RACE_FLAGS != WEEKEVENTREG_RACE_FLAG_START) {
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     this->unk23C = 0;
                     this->unk4AC |= 2;

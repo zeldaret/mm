@@ -59,7 +59,7 @@ s32 func_808F8AA0(EnHorseGameCheck* this, PlayState* play) {
 
     DynaPolyActor_Init(&this->dyna, 0);
 
-    if (GET_WEEKEVENTREG_RACE_FLAGS() != WEEKEVENTREG_RACE_FLAG_START) {
+    if (GET_WEEKEVENTREG_RACE_FLAGS != WEEKEVENTREG_RACE_FLAG_START) {
         Actor_MarkForDeath(&this->dyna.actor);
         return false;
     }
@@ -116,7 +116,7 @@ s32 func_808F8CCC(EnHorseGameCheck* this, PlayState* play2) {
     this->unk_168 = 0;
     this->unk_174 = 0;
 
-    if (GET_WEEKEVENTREG_RACE_FLAGS() != WEEKEVENTREG_RACE_FLAG_START) {
+    if (GET_WEEKEVENTREG_RACE_FLAGS != WEEKEVENTREG_RACE_FLAG_START) {
         Actor_MarkForDeath(&this->dyna.actor);
         return false;
     }
@@ -156,13 +156,13 @@ s32 func_808F8EB0(EnHorseGameCheck* this, PlayState* play) {
         return false;
     }
 
-    if (GET_WEEKEVENTREG_RACE_FLAGS() == WEEKEVENTREG_RACE_FLAG_3) {
+    if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_3) {
         play->transitionType = TRANS_TYPE_64;
         gSaveContext.nextTransitionType = TRANS_TYPE_02;
-    } else if (GET_WEEKEVENTREG_RACE_FLAGS() == WEEKEVENTREG_RACE_FLAG_2) {
+    } else if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_2) {
         play->transitionType = TRANS_TYPE_80;
         gSaveContext.nextTransitionType = TRANS_TYPE_03;
-    } else if (GET_WEEKEVENTREG_RACE_FLAGS() == WEEKEVENTREG_RACE_FLAG_4) {
+    } else if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_4) {
         SET_WEEKEVENTREG_RACE_FLAGS(WEEKEVENTREG_RACE_FLAG_3);
         play->transitionType = TRANS_TYPE_02;
         gSaveContext.nextTransitionType = TRANS_TYPE_02;

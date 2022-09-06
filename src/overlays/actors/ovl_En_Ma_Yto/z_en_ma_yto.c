@@ -277,7 +277,7 @@ void EnMaYto_ChooseAction(EnMaYto* this, PlayState* play) {
 
         case MA_YTO_TYPE_AFTERMILKRUN:
             this->unk310 = 0;
-            if (INV_CONTENT(ITEM_MASK_ROMANI) == ITEM_MASK_ROMANI && CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) &&
+            if ((INV_CONTENT(ITEM_MASK_ROMANI) == ITEM_MASK_ROMANI) && CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) &&
                 (Rand_Next() & 0x80)) {
                 EnMaYto_SetupBeginWarmFuzzyFeelingCs(this);
             } else {
@@ -332,7 +332,7 @@ s32 EnMaYto_TryFindRomani(EnMaYto* this, PlayState* play) {
             return 0;
 
         case MA_YTO_TYPE_DINNER:
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01) && CURRENT_DAY == 2) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01) && (CURRENT_DAY == 2)) {
                 return 0;
             }
             if (EnMaYto_SearchRomani(this, play)) {
@@ -894,7 +894,7 @@ void EnMaYto_AfterMilkRunInit(EnMaYto* this, PlayState* play) {
             Message_StartTextbox(play, 0x33C1, &this->actor);
             this->textId = 0x33C1;
         } else {
-            // Fails milk minigame
+            // Failed milk minigame
             EnMaYto_SetFaceExpression(this, 5, 2);
             Message_StartTextbox(play, 0x33C0, &this->actor);
             this->textId = 0x33C0;
@@ -1377,7 +1377,7 @@ s32 EnMaYto_HasSpokenToPlayerToday(void) {
 }
 
 s32 EnMaYto_HasSpokenToPlayer(void) {
-    // Please note each case doesn't have their respective `break`s.
+    // Please note no case here has a `break`.
     switch (CURRENT_DAY) {
         case 3:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_10)) {

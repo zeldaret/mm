@@ -10,7 +10,7 @@
 
 #define THIS ((EnDg*)thisx)
 
-// TODO: this file require macros for it uses of weekEventReg
+//! TODO: this file require macros for its uses of weekEventReg
 
 void EnDg_Init(Actor* thisx, PlayState* play);
 void EnDg_Destroy(Actor* thisx, PlayState* play);

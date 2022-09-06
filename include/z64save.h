@@ -456,7 +456,7 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_11_40 PACK_WEEKEVENTREG_FLAG(11, 0x40)
 #define WEEKEVENTREG_11_80 PACK_WEEKEVENTREG_FLAG(11, 0x80)
 
-// woodfall temple wood flower unraveled
+// woodfall temple wood flower opened
 #define WEEKEVENTREG_12_01 PACK_WEEKEVENTREG_FLAG(12, 0x01)
 
 #define WEEKEVENTREG_12_02 PACK_WEEKEVENTREG_FLAG(12, 0x02)
@@ -643,7 +643,7 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_31_10 PACK_WEEKEVENTREG_FLAG(31, 0x10)
 #define WEEKEVENTREG_31_20 PACK_WEEKEVENTREG_FLAG(31, 0x20)
 
-// Cremia offered a ride accross the Milk Road to Player
+// Cremia asked the player to accompany her to town
 #define WEEKEVENTREG_31_40 PACK_WEEKEVENTREG_FLAG(31, 0x40)
 // Player is playing the Milk Run
 #define WEEKEVENTREG_31_80 PACK_WEEKEVENTREG_FLAG(31, 0x80)
@@ -682,7 +682,7 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_34_20 PACK_WEEKEVENTREG_FLAG(34, 0x20)
 #define WEEKEVENTREG_34_40 PACK_WEEKEVENTREG_FLAG(34, 0x40)
 
-// Cremia does Milk Run alone. Player didn't interact or didn't accept the ride
+// Cremia did Milk Run alone. Player didn't interact or didn't accept the ride
 #define WEEKEVENTREG_34_80 PACK_WEEKEVENTREG_FLAG(34, 0x80)
 
 #define WEEKEVENTREG_35_01 PACK_WEEKEVENTREG_FLAG(35, 0x01)
@@ -834,7 +834,7 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_52_08 PACK_WEEKEVENTREG_FLAG(52, 0x08)
 #define WEEKEVENTREG_52_10 PACK_WEEKEVENTREG_FLAG(52, 0x10)
 
-// cleared STT
+// cleared Stone Tower Temple
 #define WEEKEVENTREG_52_20 PACK_WEEKEVENTREG_FLAG(52, 0x20)
 
 #define WEEKEVENTREG_52_40 PACK_WEEKEVENTREG_FLAG(52, 0x40)
@@ -1016,7 +1016,7 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_73_04 PACK_WEEKEVENTREG_FLAG(73, 0x04)
 #define WEEKEVENTREG_73_08 PACK_WEEKEVENTREG_FLAG(73, 0x08)
 
-// Unconfirmed: "Bombers Hide & Seek started on Day 1???"
+// Unconfirmed: "Bombers Hide & Seek started on Day 1?"
 #define WEEKEVENTREG_73_10 PACK_WEEKEVENTREG_FLAG(73, 0x10)
 
 #define WEEKEVENTREG_73_20 PACK_WEEKEVENTREG_FLAG(73, 0x20)
@@ -1114,7 +1114,7 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_84_08 PACK_WEEKEVENTREG_FLAG(84, 0x08)
 #define WEEKEVENTREG_84_10 PACK_WEEKEVENTREG_FLAG(84, 0x10)
 
-// Unconfirmed: "Obtained Fierce Deity Mask?"
+// Unconfirmed: "Obtained Fierce Deity's Mask?"
 #define WEEKEVENTREG_84_20 PACK_WEEKEVENTREG_FLAG(84, 0x20)
 
 #define WEEKEVENTREG_84_40 PACK_WEEKEVENTREG_FLAG(84, 0x40)
@@ -1273,7 +1273,7 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_RACE_FLAG_4 4
 #define WEEKEVENTREG_RACE_FLAGS 7
 
-#define GET_WEEKEVENTREG_RACE_FLAGS() (WEEKEVENTREG(92) & WEEKEVENTREG_RACE_FLAGS)
+#define GET_WEEKEVENTREG_RACE_FLAGS (WEEKEVENTREG(92) & WEEKEVENTREG_RACE_FLAGS)
 
 #define SET_WEEKEVENTREG_RACE_FLAGS(flag)             \
     WEEKEVENTREG(92) &= (u8)~WEEKEVENTREG_RACE_FLAGS; \
@@ -1329,7 +1329,10 @@ typedef enum SunsSongState {
 #define EVENTINF_53 0x53
 #define EVENTINF_54 0x54
 #define EVENTINF_55 0x55
+
+// Enabled when Gyorg's intro cutscene has been watched
 #define EVENTINF_56 0x56
+
 #define EVENTINF_57 0x57
 #define EVENTINF_60 0x60
 #define EVENTINF_61 0x61
