@@ -40,7 +40,7 @@ typedef struct EnNb {
     /* 0x26C */ f32 unk_26C; // Related to unk_270
     /* 0x270 */ f32 unk_270; // headDisplacement? controls how much the upper part of the head moves when she talks
     /* 0x274 */ f32 unk_274;
-    /* 0x278 */ UNK_TYPE1 unk_278[0x04];
+    /* 0x278 */ UNK_TYPE1 unk_278[4];
     /* 0x27C */ s16 headRotZ; // Slightly rotates head when talking
     /* 0x27E */ s16 headRotY;
     /* 0x280 */ s16 timePathTimeSpeed;
