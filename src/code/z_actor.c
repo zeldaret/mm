@@ -1326,7 +1326,7 @@ s32 func_800B7118(Player* player) {
 }
 
 s32 func_800B7128(Player* player) {
-    return func_800B7118(player) && player->unk_ACC;
+    return func_800B7118(player) && (player->unk_ACC != 0);
 }
 
 s32 func_800B715C(PlayState* play) {
@@ -1911,7 +1911,7 @@ s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2) {
     return false;
 }
 
-s32 Player_GetExchangeItemId(PlayState* play) {
+PlayerActionParam Player_GetExchangeItemId(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return player->exchangeItemId;
