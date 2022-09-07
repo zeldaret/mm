@@ -266,7 +266,7 @@ void func_80A0B184(BgDyYoseizo* this, PlayState* play) {
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 8)) {
         Animation_Change(&this->skelAnime, sAnimations[5], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[5]), 0, 0.0f);
         this->actionFunc = func_80A0B078;
-    } else if (Cutscene_CheckActorAction(play, 130) &&
+    } else if (Cutscene_CheckActorAction(play, 103) &&
                (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 6)) {
         func_80A0AFDC(this);
     }
