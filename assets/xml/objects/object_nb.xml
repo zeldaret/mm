@@ -8,8 +8,7 @@
         <Animation Name="gNbIdleAnim" Offset="0x990" />
 
         <!-- Anju's Grandma DisplayLists -->
-        <!-- Includes legs -->
-        <DList Name="gNbWheelchairDL" Offset="0x4A70" />
+        <DList Name="gNbWheelchairDL" Offset="0x4A70" /> <!-- Includes legs -->
         <DList Name="gNbRightWheelDL" Offset="0x5170" />
         <DList Name="gNbLeftWheelDL" Offset="0x5430" />
         <DList Name="gNbTorsoDL" Offset="0x56F0" />

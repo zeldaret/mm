@@ -1783,7 +1783,7 @@ void Map_InitRoomData(PlayState* play, s16 room);
 // void func_8010BEBC(void);
 // void func_8010BEF0(void);
 // void func_8010BF24(void);
-s32 func_8010BF58(Actor* actor, PlayState* play, s32* param_3, UNK_PTR param_4, s32* param_5);
+s32 func_8010BF58(Actor* actor, PlayState* play, void* param_3, UNK_PTR param_4, s32* param_5);
 void Nmi_Init(void);
 void Nmi_SetPrenmiStart(void);
 // s32 Nmi_GetPrenmiHasStarted(void);

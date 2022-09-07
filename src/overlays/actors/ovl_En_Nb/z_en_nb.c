@@ -80,26 +80,34 @@ static u8 sScheduleScript[] = {
     /* 0x72 */ SCHEDULE_CMD_RET_NONE(),
 };
 
-s32 D_80BC1464[] = {
-    0x1B040800, 0x6A0A0010, 0x00080010, 0x00080000, 0x00080E29, 0x122D000E, 0x0C100E29, 0x012D000E, 0x0C100E29,
-    0x020C0F29, 0x030C0500, 0x00000600, 0x22312D00, 0x0E121030, 0x1C04040E, 0x29040C20, 0x00030004, 0x150900C4,
-    0x0900000F, 0x29050C15, 0x0900B930, 0x1D04040E, 0x290B0C20, 0x00030004, 0x150900A8, 0x0900000F, 0x290C0C15,
-    0x09009D20, 0x00030017, 0x1B040400, 0x090E2911, 0x2D000E0C, 0x16100E29, 0x0A2D000E, 0x0C16101B, 0x0404003B,
-    0x0E290D0C, 0x05000000, 0x0A00000E, 0x29102D00, 0x0E0C1216, 0x100E290E, 0x00320400, 0x590C0F29, 0x0F0C1206,
-    0x000C0000, 0x13000C2F, 0x00002E2D, 0x002A2D00, 0x0E113204, 0x0C16100E, 0x29060C05, 0x000A0000, 0x00000E29,
-    0x072D000E, 0x0C121610, 0x0E290800, 0x3202001E, 0x0C0F2909, 0x0C120600, 0x0C000013, 0x000C2F00, 0x002E2D00,
-    0x292D000E, 0x1132020C, 0x16102D00, 0x0E0C1216, 0x10000000,
+u8 D_80BC1464[] = {
+    0x1B, 0x04, 0x08, 0x00, 0x6A, 0x0A, 0x00, 0x10, 0x00, 0x08, 0x00, 0x10, 0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x0E,
+    0x29, 0x12, 0x2D, 0x00, 0x0E, 0x0C, 0x10, 0x0E, 0x29, 0x01, 0x2D, 0x00, 0x0E, 0x0C, 0x10, 0x0E, 0x29, 0x02, 0x0C,
+    0x0F, 0x29, 0x03, 0x0C, 0x05, 0x00, 0x00, 0x00, 0x06, 0x00, 0x22, 0x31, 0x2D, 0x00, 0x0E, 0x12, 0x10, 0x30, 0x1C,
+    0x04, 0x04, 0x0E, 0x29, 0x04, 0x0C, 0x20, 0x00, 0x03, 0x00, 0x04, 0x15, 0x09, 0x00, 0xC4, 0x09, 0x00, 0x00, 0x0F,
+    0x29, 0x05, 0x0C, 0x15, 0x09, 0x00, 0xB9, 0x30, 0x1D, 0x04, 0x04, 0x0E, 0x29, 0x0B, 0x0C, 0x20, 0x00, 0x03, 0x00,
+    0x04, 0x15, 0x09, 0x00, 0xA8, 0x09, 0x00, 0x00, 0x0F, 0x29, 0x0C, 0x0C, 0x15, 0x09, 0x00, 0x9D, 0x20, 0x00, 0x03,
+    0x00, 0x17, 0x1B, 0x04, 0x04, 0x00, 0x09, 0x0E, 0x29, 0x11, 0x2D, 0x00, 0x0E, 0x0C, 0x16, 0x10, 0x0E, 0x29, 0x0A,
+    0x2D, 0x00, 0x0E, 0x0C, 0x16, 0x10, 0x1B, 0x04, 0x04, 0x00, 0x3B, 0x0E, 0x29, 0x0D, 0x0C, 0x05, 0x00, 0x00, 0x00,
+    0x0A, 0x00, 0x00, 0x0E, 0x29, 0x10, 0x2D, 0x00, 0x0E, 0x0C, 0x12, 0x16, 0x10, 0x0E, 0x29, 0x0E, 0x00, 0x32, 0x04,
+    0x00, 0x59, 0x0C, 0x0F, 0x29, 0x0F, 0x0C, 0x12, 0x06, 0x00, 0x0C, 0x00, 0x00, 0x13, 0x00, 0x0C, 0x2F, 0x00, 0x00,
+    0x2E, 0x2D, 0x00, 0x2A, 0x2D, 0x00, 0x0E, 0x11, 0x32, 0x04, 0x0C, 0x16, 0x10, 0x0E, 0x29, 0x06, 0x0C, 0x05, 0x00,
+    0x0A, 0x00, 0x00, 0x00, 0x00, 0x0E, 0x29, 0x07, 0x2D, 0x00, 0x0E, 0x0C, 0x12, 0x16, 0x10, 0x0E, 0x29, 0x08, 0x00,
+    0x32, 0x02, 0x00, 0x1E, 0x0C, 0x0F, 0x29, 0x09, 0x0C, 0x12, 0x06, 0x00, 0x0C, 0x00, 0x00, 0x13, 0x00, 0x0C, 0x2F,
+    0x00, 0x00, 0x2E, 0x2D, 0x00, 0x29, 0x2D, 0x00, 0x0E, 0x11, 0x32, 0x02, 0x0C, 0x16, 0x10, 0x2D, 0x00, 0x0E, 0x0C,
+    0x12, 0x16, 0x10, 0x00, 0x00, 0x00,
 };
 
-s32 D_80BC1574[] = {
-    0x0900000E, 0x28C70C09, 0x0000170E, 0x28C80C09, 0x0000180E, 0x28C90C09, 0x0000170E,
-    0x28CA0C09, 0x0000180E, 0x28CB0C09, 0x0000170E, 0x28CC0C09, 0x0000180E, 0x28CD0C09,
-    0x0000170E, 0x28CE0C09, 0x0000180E, 0x28CF2D00, 0x012D000E, 0x0C090000, 0x10000000,
+u8 D_80BC1574[] = {
+    0x09, 0x00, 0x00, 0x0E, 0x28, 0xC7, 0x0C, 0x09, 0x00, 0x00, 0x17, 0x0E, 0x28, 0xC8, 0x0C, 0x09, 0x00,
+    0x00, 0x18, 0x0E, 0x28, 0xC9, 0x0C, 0x09, 0x00, 0x00, 0x17, 0x0E, 0x28, 0xCA, 0x0C, 0x09, 0x00, 0x00,
+    0x18, 0x0E, 0x28, 0xCB, 0x0C, 0x09, 0x00, 0x00, 0x17, 0x0E, 0x28, 0xCC, 0x0C, 0x09, 0x00, 0x00, 0x18,
+    0x0E, 0x28, 0xCD, 0x0C, 0x09, 0x00, 0x00, 0x17, 0x0E, 0x28, 0xCE, 0x0C, 0x09, 0x00, 0x00, 0x18, 0x0E,
+    0x28, 0xCF, 0x2D, 0x00, 0x01, 0x2D, 0x00, 0x0E, 0x0C, 0x09, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00,
 };
 
-s32 D_80BC15C8[] = {
-    0x0E23622D,
-    0x000E0C10,
+u8 D_80BC15C8[] = {
+    0x0E, 0x23, 0x62, 0x2D, 0x00, 0x0E, 0x0C, 0x10,
 };
 
 const ActorInit En_Nb_InitVars = {
@@ -219,17 +227,17 @@ Actor* func_80BBFF90(EnNb* this, PlayState* play) {
     return actor;
 }
 
-s32 func_80BBFFD4(EnNb* this, s16 arg1) {
+s32 func_80BBFFD4(EnNb* this, s16 index) {
     s32 ret = false;
 
     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
         ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(arg1);
-    } else if (ActorCutscene_GetCanPlayNext(arg1)) {
-        ActorCutscene_StartAndSetUnkLinkFields(arg1, &this->actor);
+        ActorCutscene_SetIntentToPlay(index);
+    } else if (ActorCutscene_GetCanPlayNext(index)) {
+        ActorCutscene_StartAndSetUnkLinkFields(index, &this->actor);
         ret = true;
     } else {
-        ActorCutscene_SetIntentToPlay(arg1);
+        ActorCutscene_SetIntentToPlay(index);
     }
 
     return ret;
@@ -246,41 +254,54 @@ s16 func_80BC0050(EnNb* this, s32 arg1) {
     return cutscene;
 }
 
+typedef enum EnNbBehaviour {
+    /* 0 */ ENNB_BEHAVIOUR_0,
+    /* 1 */ ENNB_BEHAVIOUR_1,
+    /* 2 */ ENNB_BEHAVIOUR_2,
+    /* 3 */ ENNB_BEHAVIOUR_3,
+    /* 4 */ ENNB_BEHAVIOUR_4,
+    /* 5 */ ENNB_BEHAVIOUR_5,
+    /* 6 */ ENNB_BEHAVIOUR_6,
+    /* 7 */ ENNB_BEHAVIOUR_7,
+    /* 8 */ ENNB_BEHAVIOUR_8,
+    /* 9 */ ENNB_BEHAVIOUR_9
+} EnNbBehaviour;
+
 s32 func_80BC00AC(Actor* thisx, PlayState* play) {
     EnNb* this = THIS;
     s16 cutscene = func_80BC0050(this, 0);
     s32 ret = false;
 
-    switch (this->unk_288) {
-        case 0:
+    switch (this->behaviour) {
+        case ENNB_BEHAVIOUR_0:
             if (!func_80BBFFD4(this, cutscene)) {
                 break;
             }
         // fallthrough
-        case 2:
-        case 4:
-        case 6:
-        case 8:
+        case ENNB_BEHAVIOUR_2:
+        case ENNB_BEHAVIOUR_4:
+        case ENNB_BEHAVIOUR_6:
+        case ENNB_BEHAVIOUR_8:
             Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(cutscene)), &this->actor);
-            this->unk_288++;
+            this->behaviour++;
             ret = true;
             break;
 
-        case 1:
-        case 3:
-        case 5:
-        case 7:
+        case ENNB_BEHAVIOUR_1:
+        case ENNB_BEHAVIOUR_3:
+        case ENNB_BEHAVIOUR_5:
+        case ENNB_BEHAVIOUR_7:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
                 Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(cutscene)),
                                       this->actor.child);
             }
-            this->unk_288++;
+            this->behaviour++;
             ret = true;
             break;
 
-        case 9:
+        case ENNB_BEHAVIOUR_9:
             ActorCutscene_Stop(cutscene);
-            this->unk_288++;
+            this->behaviour++;
             ret = true;
             break;
     }
@@ -293,22 +314,22 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
     s32 pad;
     s32 ret = false;
 
-    switch (this->unk_288) {
-        case 0:
+    switch (this->behaviour) {
+        case ENNB_BEHAVIOUR_0:
             if (Player_GetMask(play) == PLAYER_MASK_ALL_NIGHT) {
-                this->unk_288 = 1;
+                this->behaviour = ENNB_BEHAVIOUR_1;
             } else {
-                this->unk_288 = 5;
+                this->behaviour = ENNB_BEHAVIOUR_5;
             }
             break;
 
-        case 1:
+        case ENNB_BEHAVIOUR_1:
             func_8016A268(&play->state, 1, 0, 0, 0, 0);
             this->unk_286 = 40;
-            this->unk_288 = (u16)(this->unk_288 + 1);
+            this->behaviour = (u16)(this->behaviour + 1);
             break;
 
-        case 2:
+        case ENNB_BEHAVIOUR_2:
             MREG(68) = (s16)(s32)(255.0f - (((f32)ABS_ALT(20 - this->unk_286) / 20.0f) * 255.0f));
 
             if (this->unk_286 == 20) {
@@ -322,21 +343,21 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
             }
 
             if (DECR(this->unk_286) == 0) {
-                this->unk_288++;
+                this->behaviour++;
             }
             break;
 
-        case 3:
+        case ENNB_BEHAVIOUR_3:
             play->interfaceCtx.unk_31A = 4;
-            this->unk_288++;
+            this->behaviour++;
             ret = true;
             break;
 
-        case 4:
+        case ENNB_BEHAVIOUR_4:
             play->interfaceCtx.unk_31A = 5;
-            this->unk_288++;
+            this->behaviour++;
             // fallthrough
-        case 5:
+        case ENNB_BEHAVIOUR_5:
             if (!(gSaveContext.eventInf[4] & 4)) {
                 gSaveContext.save.time = CLOCK_TIME(8, 0);
                 Sram_IncrementDay();
@@ -344,7 +365,7 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
                 func_800FE658(120.0f);
             }
 
-            this->unk_288++;
+            this->behaviour++;
             play->nextEntrance = ENTRANCE(STOCK_POT_INN, 2);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;
@@ -357,23 +378,19 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
     return ret;
 }
 
-UNK_PTR func_80BC045C(EnNb* this, PlayState* play) {
+u8* func_80BC045C(EnNb* this, PlayState* play) {
     if (gSaveContext.eventInf[4] & 8) {
-        this->unk_28C = func_80BC01DC;
+        this->msgEventCallback = func_80BC01DC;
+        return D_80BC1464;
+    } else if (this->scheduleResult == EN_NB_SCH_2) {
+        this->msgEventCallback = func_80BC00AC;
+        return D_80BC1574;
+    } else if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
+        return D_80BC15C8;
+    } else {
+        this->msgEventCallback = func_80BC01DC;
         return D_80BC1464;
     }
-
-    if (this->scheduleResult == EN_NB_SCH_2) {
-        this->unk_28C = func_80BC00AC;
-        return D_80BC1574;
-    }
-
-    if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
-        return D_80BC15C8;
-    }
-
-    this->unk_28C = func_80BC01DC;
-    return D_80BC1464;
 }
 
 s32 func_80BC04FC(EnNb* this, PlayState* play) {
@@ -383,10 +400,10 @@ s32 func_80BC04FC(EnNb* this, PlayState* play) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->stateFlags |= EN_NB_FLAG_20;
             SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_NONE, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
-            this->unk_288 = 0;
-            this->unk_28C = NULL;
+            this->behaviour = ENNB_BEHAVIOUR_0;
+            this->msgEventCallback = NULL;
             this->actor.child = this->unk_1E8;
-            this->unk_1E0 = func_80BC045C(this, play);
+            this->msgEventScript = func_80BC045C(this, play);
             this->stateFlags |= EN_NB_FLAG_20;
             this->actionFunc = func_80BC0EAC;
             ret = true;
@@ -638,7 +655,7 @@ void EnNb_FollowSchedule(EnNb* this, PlayState* play) {
 }
 
 void func_80BC0EAC(EnNb* this, PlayState* play) {
-    if (func_8010BF58(&this->actor, play, this->unk_1E0, this->unk_28C, &this->unk_1E4)) {
+    if (func_8010BF58(&this->actor, play, this->msgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
         if (gSaveContext.eventInf[4] & 8) {
             gSaveContext.eventInf[4] &= (u8)~4;
             gSaveContext.eventInf[4] &= (u8)~8;
@@ -652,7 +669,7 @@ void func_80BC0EAC(EnNb* this, PlayState* play) {
         this->actor.child = NULL;
         this->stateFlags |= EN_NB_FLAG_400;
         this->unk_282 = 20;
-        this->unk_1E4 = 0;
+        this->msgEventArg4 = 0;
         this->actionFunc = EnNb_FollowSchedule;
     }
 }
