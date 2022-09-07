@@ -787,6 +787,7 @@ typedef enum {
     /* 19 */ TRANS_TYPE_19,
     /* 20 */ TRANS_TYPE_20,
     /* 21 */ TRANS_TYPE_21,
+    /* 38 */ TRANS_TYPE_38 = 38,
     /* 64 */ TRANS_TYPE_64 = 64,
     /* 70 */ TRANS_TYPE_70 = 70,
     /* 72 */ TRANS_TYPE_72 = 72,
