@@ -62,7 +62,7 @@ void EnNimotsu_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    this->dustTimer = 10;
+    this->timer = 10;
     this->actor.gravity = -0.5f;
 
     Actor_SetScale(&this->actor, 0.01f);
@@ -82,8 +82,7 @@ void EnNimotsu_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
 
     if (!(this->dustDone & 1) && (this->actor.bgCheckFlags & 1)) {
-
-        if (DECR(this->dustTimer) == 0) {
+        if (DECR(this->timer) == 0) {
             this->dustDone |= 1;
         }
 
