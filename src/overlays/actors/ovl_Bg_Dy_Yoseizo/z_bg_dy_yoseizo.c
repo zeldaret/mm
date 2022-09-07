@@ -37,11 +37,8 @@ const ActorInit Bg_Dy_Yoseizo_InitVars = {
 };
 
 static AnimationHeader* sAnimations[] = {
-    0x0600129C, 0x06002338, 0x0600C500, 0x060045FC, 0x06005238, 0x06008090, 0x0600D15C, 0x06006DE4, 0x06005E20,
+    &object_dy_obj_Anim_00129C, &object_dy_obj_Anim_002338, &object_dy_obj_Anim_00C500, &object_dy_obj_Anim_0045FC, &object_dy_obj_Anim_005238, &object_dy_obj_Anim_008090, &object_dy_obj_Anim_00D15C, &object_dy_obj_Anim_006DE4, &object_dy_obj_Anim_005E20,
 };
-
-extern AnimationHeader D_06008090;
-extern AnimatedMaterial D_0601C6F4[];
 
 void BgDyYoseizo_Init(Actor* thisx, PlayState* play) {
     BgDyYoseizo* this = THIS;
@@ -49,7 +46,7 @@ void BgDyYoseizo_Init(Actor* thisx, PlayState* play) {
     this->unk2EC = this->actor.world.pos.y + 40.0f;
     this->actor.focus.pos = this->actor.world.pos;
 
-    SkelAnime_InitFlex(play, &this->skelAnime, &gGreatFairySkel, &D_06008090, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGreatFairySkel, &object_dy_obj_Anim_008090, this->jointTable, this->morphTable,
                        GREAT_FAIRY_LIMB_MAX);
 
     this->actionFunc = func_80A0BB08;
@@ -66,7 +63,6 @@ void BgDyYoseizo_Destroy(Actor* thisx, PlayState* play) {
 }
 
 // Has no visible effect since no segment set for manually-controllable eye textures
-// BgDyYoseizo_UpdateEyes
 void BgDyYoseizo_UpdateEyes(BgDyYoseizo* this) {
     if (this->blinkTimer != 0) {
         this->blinkTimer--;
@@ -252,12 +248,12 @@ void func_80A0B078(BgDyYoseizo* this, PlayState* play) {
     BgDyYoseizo_Bob(this, play);
     SkelAnime_Update(&this->skelAnime);
 
-    if (Cutscene_CheckActorAction(play, 0x67) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 7)) {
+    if (Cutscene_CheckActorAction(play, 103) &&
+        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 7)) {
         Animation_Change(&this->skelAnime, sAnimations[4], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[4]), 0, 0.0f);
         this->actionFunc = func_80A0B184;
-    } else if (Cutscene_CheckActorAction(play, 0x67) &&
-               (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 6)) {
+    } else if (Cutscene_CheckActorAction(play, 103) &&
+               (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 6)) {
         func_80A0AFDC(this);
     }
 }
@@ -266,12 +262,12 @@ void func_80A0B184(BgDyYoseizo* this, PlayState* play) {
     BgDyYoseizo_Bob(this, play);
     SkelAnime_Update(&this->skelAnime);
 
-    if (Cutscene_CheckActorAction(play, 0x67) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 8)) {
+    if (Cutscene_CheckActorAction(play, 103) &&
+        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 8)) {
         Animation_Change(&this->skelAnime, sAnimations[5], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[5]), 0, 0.0f);
         this->actionFunc = func_80A0B078;
-    } else if (Cutscene_CheckActorAction(play, 0x67) &&
-               (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 6)) {
+    } else if (Cutscene_CheckActorAction(play, 130) &&
+               (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 6)) {
         func_80A0AFDC(this);
     }
 }
@@ -280,9 +276,9 @@ void func_80A0B290(BgDyYoseizo* this, PlayState* play) {
     BgDyYoseizo_Bob(this, play);
     SkelAnime_Update(&this->skelAnime);
 
-    if (Cutscene_CheckActorAction(play, 0x67) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 7)) {
-        Animation_Change(&this->skelAnime, sAnimations[4], 1.0f, 0.0f, (f32)Animation_GetLastFrame(sAnimations[4]), 0,
+    if (Cutscene_CheckActorAction(play, 103) &&
+        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 7)) {
+        Animation_Change(&this->skelAnime, sAnimations[4], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[4]), 0,
                          -10.0f);
         this->actionFunc = func_80A0B184;
         this->mouthIndex = 0;
@@ -365,8 +361,8 @@ void func_80A0B5F0(BgDyYoseizo* this, PlayState* play) {
         Animation_Change(&this->skelAnime, sAnimations[4], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[4]), 0, 0.0f);
     }
 
-    if (Cutscene_CheckActorAction(play, 0x67) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 5)) {
+    if (Cutscene_CheckActorAction(play, 103) &&
+        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 5)) {
         Animation_Change(&this->skelAnime, sAnimations[0], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[0]), 2,
                          -5.0f);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_FR_SMILE_0);
@@ -375,8 +371,8 @@ void func_80A0B5F0(BgDyYoseizo* this, PlayState* play) {
         this->actionFunc = func_80A0B500;
     }
 
-    if (Cutscene_CheckActorAction(play, 0x67) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 6)) {
+    if (Cutscene_CheckActorAction(play, 103) &&
+        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 6)) {
         func_80A0AFDC(this);
     }
 
@@ -387,8 +383,8 @@ void func_80A0B75C(BgDyYoseizo* this, PlayState* play) {
     func_80A0AD50(this);
     SkelAnime_Update(&this->skelAnime);
 
-    if (Cutscene_CheckActorAction(play, 0x67) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 4)) {
+    if (Cutscene_CheckActorAction(play, 103) &&
+        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 4)) {
         this->actor.shape.rot.y = 0;
         this->actionFunc = func_80A0B5F0;
         Animation_Change(&this->skelAnime, sAnimations[3], 1.0f, 2.0f, Animation_GetLastFrame(sAnimations[3]), 2, 0.0f);
@@ -413,9 +409,9 @@ void func_80A0B8CC(BgDyYoseizo* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     csAction = 0;
-    if (Cutscene_CheckActorAction(play, 0x67)) {
-        csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action;
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 0x67));
+    if (Cutscene_CheckActorAction(play, 103)) {
+        csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action;
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 103));
     } else {
         if (this->actor.home.rot.z != 0) {
             this->actor.home.pos.x = player->actor.world.pos.x;
@@ -471,14 +467,14 @@ void func_80A0B8CC(BgDyYoseizo* this, PlayState* play) {
 }
 
 void func_80A0BB08(BgDyYoseizo* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 0x67) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 2)) {
+    if (Cutscene_CheckActorAction(play, 103) &&
+        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 2)) {
         func_80A0B834(this);
         this->actionFunc = func_80A0B75C;
     }
 
-    if (Cutscene_CheckActorAction(play, 0x67) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 7)) {
+    if (Cutscene_CheckActorAction(play, 103) &&
+        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 7)) {
         this->actor.draw = BgDyYoseizo_Draw;
         Animation_PlayLoop(&this->skelAnime, sAnimations[4]);
         this->actionFunc = func_80A0B184;
@@ -488,8 +484,8 @@ void func_80A0BB08(BgDyYoseizo* this, PlayState* play) {
         this->unk2F8 = 0;
     }
 
-    if (Cutscene_CheckActorAction(play, 0x67) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 9)) {
+    if (Cutscene_CheckActorAction(play, 103) &&
+        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 9)) {
         Actor_SetScale(&this->actor, 0.01f);
         Animation_PlayLoop(&this->skelAnime, sAnimations[6]);
         this->unk2F8 = 9;
