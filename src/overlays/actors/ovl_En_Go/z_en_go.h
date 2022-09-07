@@ -8,6 +8,7 @@ struct EnGo;
 typedef void (*EnGoActionFunc)(struct EnGo*, PlayState*);
 
 #define ENGO_GET_F(thisx) (((thisx)->params & 0xF) & 0xFF)
+// Something to do with Animation
 #define ENGO_GET_70(thisx) ((((thisx)->params & 0x70) >> 4) & 0xFF)
 #define ENGO_GET_7F80(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
 
@@ -32,6 +33,40 @@ enum {
     /* 5 */ ENGO_70_5,
 };
 
+typedef enum {
+    ENGO_ANIM_INVALID,
+    ENGO_ANIM_GORON_START = 0,
+    ENGO_ANIM_LYINGDOWNIDLE = 0,
+    ENGO_ANIM_LYINGDOWNIDLE_IMM,
+    ENGO_ANIM_UNROLL,
+    ENGO_ANIM_UNROLL_IMM,
+    ENGO_ANIM_ROLL,
+    ENGO_ANIM_SHIVER,
+    ENGO_ANIM_SHIVER_IMM,
+    ENGO_ANIM_DROPKEG,
+    ENGO_ANIM_COVEREARS,
+    ENGO_ANIM_SHIVERINGSURPRISED,
+
+    // Gorons doing Gymnastics
+    ENGO_ANIM_TAISOU_START = 10,
+    ENGO_ANIM_TAISOU_10 = 10,
+    ENGO_ANIM_TAISOU_11,
+    ENGO_ANIM_TAISOU_12,
+    ENGO_ANIM_TAISOU_13,
+    ENGO_ANIM_TAISOU_14,
+    ENGO_ANIM_TAISOU_15,
+    ENGO_ANIM_TAISOU_16,
+    ENGO_ANIM_TAISOU_17,
+
+    // ???
+    ENGO_ANIM_HAKUGIN_START = 18,
+    ENGO_ANIM_HAKUGIN_18 = 18,
+    ENGO_ANIM_HAKUGIN_19_IMM,
+    ENGO_ANIM_HAKUGIN_20,
+    ENGO_ANIM_HAKUGIN_21_IMM,
+
+} EnGoAnimationIndex;
+
 typedef struct {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 alphaDenom;     /* Alpha Denominator */
@@ -50,8 +85,8 @@ typedef struct EnGo {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnGoActionFunc actionFunc;
-    /* 0x18C */ EnGoActionFunc unk_18C;
-    /* 0x190 */ EnGoActionFunc unk_190;
+    /* 0x18C */ EnGoActionFunc priorActionFn;
+    /* 0x190 */ EnGoActionFunc dialogActionFn;
     /* 0x194 */ ColliderCylinder colliderCylinder;
     /* 0x1E0 */ UNK_TYPE1 unk1E0[0x4C];
     /* 0x22C */ ColliderSphere colliderSphere;
@@ -66,13 +101,13 @@ typedef struct EnGo {
     /* 0x2B4 */ Vec3s jointTable[18];
     /* 0x320 */ Vec3s morphTable[18];
     /* 0x38C */ Actor* targetActor;
-    /* 0x390 */ u16 unk_390;
+    /* 0x390 */ u16 flags;
     /* 0x392 */ u16 lastTextId;
     /* 0x394 */ u8 unk_394;
-    /* 0x398 */ f32 unk_398;
+    /* 0x398 */ f32 playSpeed;
     /* 0x39C */ f32 unk_39C;
     /* 0x3A0 */ f32 unk_3A0;
-    /* 0x3A4 */ f32 unk_3A4;
+    /* 0x3A4 */ f32 scale;
     /* 0x3A8 */ f32 unk_3A8;
     /* 0x3AC */ UNK_TYPE1 unk3AC[0x2];
     /* 0x3AE */ s16 unk_3AE;
@@ -80,19 +115,27 @@ typedef struct EnGo {
     /* 0x3B2 */ s16 unk_3B2; // Limb17 rotY
     /* 0x3B4 */ s16 unk_3B4; // Limb10 rotZ
     /* 0x3B6 */ s16 unk_3B6; // Limb10 rotY
-    /* 0x3B8 */ s16 unk_3B8;
+    /* 0x3B8 */ s16 indexCutscene;
     /* 0x3BA */ s16 unk_3BA;
     /* 0x3BC */ s16 blinkCountdown;
     /* 0x3BE */ s16 indexEyeTex;
-    /* 0x3C0 */ s16 unk_3C0;
+    /* 0x3C0 */ s16 cutsceneState;
     /* 0x3C2 */ s16 unk_3C2;
     /* 0x3C4 */ s16 unk_3C4;
     /* 0x3C6 */ s16 unk_3C6;
     /* 0x3C8 */ s16 limbRotTableZ[3];
     /* 0x3CE */ s16 limbRotTableY[3];
     /* 0x3D4 */ s16 unk_3D4;
-    /* 0x3D8 */ void* unk_3D8;
-    /* 0x3DC */ s32 unk_3DC;
+    /* 0x3D8 */ void* msgEventCb;        // MsgEventCallback
+    /* 0x3DC */ EnGoAnimationIndex anim; // -1 for invalid,
+                                         // 2|3 Goron CircleOff/Stand,
+                                         // 4 Goron Circle/Sit,
+                                         // <10 use actorObjBank,
+                                         // 10-17 use Taisou,
+                                         // 14 useles Translate&RotateY, Draw at -4000
+                                         // 18+ use Hakugin
+                                         // 20 -> 21 on Anim end
+                                         // 18 -> 19 on Anim end
     /* 0x3E0 */ UNK_TYPE1 unk3E0[0x4];
     /* 0x3E4 */ s32 indexPathPoint;
     /* 0x3E8 */ s32 unk_3E8;

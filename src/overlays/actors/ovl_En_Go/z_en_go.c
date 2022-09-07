@@ -19,7 +19,9 @@
 #define ENGO_EYE_CLOSED2 4
 
 #define ENGO_FLAG_NONE 0
-#define ENGO_FLAG_BLINKING (1 << 5)
+#define ENGO_FLAG_BLINKING (1 << 5) // 0x0020
+#define ENGO_FLAG_CURLED (1 << 9)   // 0x0200
+#define ENGO_FLAG_CURLING (1 << 14) // 0x4000
 
 typedef enum {
     ENGO_AWAKE = 0,
@@ -248,6 +250,7 @@ EnGoStruct* func_80A10FD0(EnGoStruct* ptr, Vec3f position, Vec3f acceleration, V
     return ptr;
 }
 
+// Draw Steam (7)
 void func_80A11144(EnGoStruct* ptr, PlayState* play2) {
     PlayState* play = play2;
     s32 i;
@@ -310,6 +313,7 @@ void func_80A1143C(EnGoStruct* ptr, Vec3f pos, Vec3f accel, Vec3f vel, f32 scale
     }
 }
 
+// Draw Dust (4, 5, 6)
 void func_80A115B4(EnGoStruct* ptr, PlayState* play2) {
     static TexturePtr sEnGoDustTexturePtrs[] = {
         gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
@@ -462,6 +466,7 @@ void func_80A11BF8(EnGoStruct* ptr, f32 arg1) {
     ptr->rotAngle.z += ptr->rotVelocity.z;
 }
 
+// Draw snowball (1, 2, or 3)
 void func_80A11EC0(EnGoStruct* ptr, PlayState* play, Gfx* arg2, Gfx* arg3, u8 arg4) {
     s32 i;
     u8 flag = false;
@@ -520,6 +525,7 @@ void func_80A1203C(EnGo* this) {
     }
 }
 
+// Draw Effects (1,2,3 = Snowball, 4,5,6 = Dust, 7 = Steam)
 void func_80A1213C(EnGo* this, PlayState* play) {
     func_80A11EC0(this->unk_3F8, play, gGoronLargeSnowballFragmentMaterialDL, gGoronLargeSnowballFragmentModelDL, 1);
     func_80A11EC0(this->unk_3F8, play, gGoronMediumSnowballFragmentMaterialDL, gGoronMediumSnowballFragmentModelDL, 2);
@@ -561,7 +567,7 @@ s32 func_80A122EC(EnGo* this) {
         Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80A1668C,
                                       &this->actor.focus.pos);
     } else {
-        if ((this->unk_390 & 0x200) || (this->unk_390 & 0x100)) {
+        if ((this->flags & ENGO_FLAG_CURLED) || (this->flags & 0x100)) {
             sp20 = this->actor.shape.yOffset;
         }
         Math_Vec3f_Copy(&this->actor.focus.pos, &this->actor.world.pos);
@@ -652,11 +658,11 @@ void func_80A126BC(EnGo* this, PlayState* play) {
 
     if (ENGO_GET_F(&this->actor) == ENGO_F_8) {
         func_80A124A0(this, play);
-    } else if (this->unk_390 & 0x100) {
+    } else if (this->flags & 0x100) {
         func_80A123A0(this, play);
-    } else if (this->unk_390 & 0x200) {
+    } else if (this->flags & ENGO_FLAG_CURLED) {
         func_80A124FC(this, play);
-    } else if (this->unk_390 & 0x400) {
+    } else if (this->flags & 0x400) {
         func_80A125BC(this, play);
     } else {
         func_80A12660(this, play);
@@ -664,13 +670,13 @@ void func_80A126BC(EnGo* this, PlayState* play) {
 }
 
 s32 func_80A12774(EnGo* this, PlayState* play) {
-    if (!(this->unk_390 & 7) || !Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (!(this->flags & 7) || !Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         return false;
     }
 
     if ((ENGO_GET_F(&this->actor) != ENGO_F_8) && (ENGO_GET_F(&this->actor) != ENGO_F_1)) {
-        if (!(this->unk_390 & 0x200)) {
-            this->unk_390 |= 8;
+        if (!(this->flags & ENGO_FLAG_CURLED)) {
+            this->flags |= 8;
         }
     }
 
@@ -678,39 +684,39 @@ s32 func_80A12774(EnGo* this, PlayState* play) {
         (ENGO_GET_F(&this->actor) == ENGO_F_7)) {
         this->blinkCountdown = 0;
         this->indexEyeTex = ENGO_EYE_OPEN;
-        this->unk_390 |= ENGO_FLAG_BLINKING;
+        this->flags |= ENGO_FLAG_BLINKING;
     }
 
-    SubS_UpdateFlags(&this->unk_390, 0, 7);
-    this->unk_3C0 = 0;
+    SubS_UpdateFlags(&this->flags, 0, 7);
+    this->cutsceneState = 0;
     this->unk_3C4 = 0;
-    this->unk_18C = this->actionFunc;
+    this->priorActionFn = this->actionFunc;
     this->actionFunc = func_ACT_80A157C4;
     return true;
 }
 
 s32 func_80A12868(EnGo* this, PlayState* play) {
-    this->unk_390 &= ~0x800;
-    this->unk_390 &= ~0x1000;
-    this->unk_390 &= ~0x2000;
+    this->flags &= ~0x800;
+    this->flags &= ~0x1000;
+    this->flags &= ~0x2000;
 
     if ((this->colliderCylinder.base.atFlags & AT_HIT) || (this->colliderSphere.base.atFlags & AT_HIT)) {
         this->colliderCylinder.base.atFlags &= ~AT_HIT;
         this->colliderSphere.base.atFlags &= ~AT_HIT;
-        this->unk_390 |= 0x800;
+        this->flags |= 0x800;
         this->unk_3C6 = 0x28;
     }
 
     if ((this->colliderCylinder.base.acFlags & AC_HIT) || (this->colliderSphere.base.acFlags & AC_HIT)) {
         this->colliderCylinder.base.acFlags &= ~AC_HIT;
         this->colliderSphere.base.acFlags &= ~AC_HIT;
-        this->unk_390 |= 0x1000;
+        this->flags |= 0x1000;
     }
 
     if ((this->colliderCylinder.base.ocFlags1 & OC1_HIT) || (this->colliderSphere.base.ocFlags1 & OC1_HIT)) {
         this->colliderCylinder.base.ocFlags1 &= ~OC1_HIT;
         this->colliderSphere.base.ocFlags1 &= ~OC1_HIT;
-        this->unk_390 |= 0x2000;
+        this->flags |= 0x2000;
     }
 
     return false;
@@ -725,16 +731,16 @@ s32 func_80A12954(EnGo* this, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_394 = 255;
             this->unk_3F0 = 1;
-            this->unk_18C = this->actionFunc;
+            this->priorActionFn = this->actionFunc;
         }
-        SubS_UpdateFlags(&this->unk_390, 0, 7);
+        SubS_UpdateFlags(&this->flags, 0, 7);
         this->actionFunc = func_ACT_80A14FC8;
     } else if (this->unk_3F0 != 0) {
         this->actor.flags |= ACTOR_FLAG_1;
         this->unk_394 = 255;
         this->unk_3F0 = 0;
-        SubS_UpdateFlags(&this->unk_390, 3, 7);
-        this->actionFunc = this->unk_18C;
+        SubS_UpdateFlags(&this->flags, 3, 7);
+        this->actionFunc = this->priorActionFn;
     }
 
     return false;
@@ -745,17 +751,17 @@ s32 func_80A12A64(EnGo* this, PlayState* play) {
     s8 objIdx2 = -1;
     s32 ret = 0;
 
-    if ((this->unk_3DC >= 18) && (this->indexHakuginDemo >= 0)) {
+    if ((this->anim >= 18) && (this->indexHakuginDemo >= 0)) {
         objIdx2 = this->indexHakuginDemo;
-    } else if ((this->unk_3DC >= 10) && (this->indexTaisou >= 0)) {
+    } else if ((this->anim >= 10) && (this->indexTaisou >= 0)) {
         objIdx2 = this->indexTaisou;
-    } else if (this->unk_3DC < 10) {
+    } else if (this->anim < 10) {
         objIdx2 = this->actor.objBankIndex;
     }
 
     if (objIdx2 >= 0) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx2].segment);
-        this->skelAnime.playSpeed = this->unk_398;
+        this->skelAnime.playSpeed = this->playSpeed;
         ret = SkelAnime_Update(&this->skelAnime);
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx].segment);
     }
@@ -763,9 +769,10 @@ s32 func_80A12A64(EnGo* this, PlayState* play) {
     return ret;
 }
 
+// Plays Rolling/Unrolling Sitting/Standing sounds.
 s32 func_80A12B78(EnGo* this, PlayState* play) {
     if (play->csCtx.state == 0) {
-        if (this->unk_3DC == 4) {
+        if (this->anim == ENGO_ANIM_ROLL) {
             if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_CIRCLE);
             }
@@ -773,7 +780,7 @@ s32 func_80A12B78(EnGo* this, PlayState* play) {
             if (Animation_OnFrame(&this->skelAnime, 22.0f)) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
             }
-        } else if ((this->unk_3DC == 2) || (this->unk_3DC == 3)) {
+        } else if ((this->anim == ENGO_ANIM_UNROLL) || (this->anim == ENGO_ANIM_UNROLL_IMM)) {
             if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_CIRCLE_OFF);
             }
@@ -786,24 +793,25 @@ s32 func_80A12B78(EnGo* this, PlayState* play) {
     return 0;
 }
 
-s32 func_80A12C48(EnGo* this, PlayState* play, s32 arg2) {
+// Change the animation to the arg2 value (save as anim)
+s32 func_80A12C48(EnGo* this, PlayState* play, EnGoAnimationIndex anim) {
     s8 objIdx = this->actor.objBankIndex;
     s8 objIdx2 = -1;
     s32 ret = false;
 
-    if ((arg2 >= 18) && (this->indexHakuginDemo >= 0)) {
+    if ((anim >= ENGO_ANIM_HAKUGIN_START) && (this->indexHakuginDemo >= 0)) {
         objIdx2 = this->indexHakuginDemo;
-    } else if ((arg2 >= 10) && (this->indexTaisou >= 0)) {
+    } else if ((anim >= ENGO_ANIM_TAISOU_START) && (this->indexTaisou >= 0)) {
         objIdx2 = this->indexTaisou;
-    } else if (arg2 < 10) {
+    } else if (anim < ENGO_ANIM_TAISOU_START) {
         objIdx2 = this->actor.objBankIndex;
     }
 
     if (objIdx2 >= 0) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx2].segment);
-        this->unk_3DC = arg2;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg2);
-        this->unk_398 = this->skelAnime.playSpeed;
+        this->anim = anim;
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, anim);
+        this->playSpeed = this->skelAnime.playSpeed;
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx].segment);
     }
 
@@ -811,7 +819,7 @@ s32 func_80A12C48(EnGo* this, PlayState* play, s32 arg2) {
 }
 
 void EnGo_HandleBlink(EnGo* this) {
-    if ((this->unk_390 & 0x20) && (DECR(this->blinkCountdown) == 0)) {
+    if ((this->flags & ENGO_FLAG_BLINKING) && (DECR(this->blinkCountdown) == 0)) {
         this->indexEyeTex++;
         if (this->indexEyeTex >= ENGO_EYE_CLOSED2) {
             this->blinkCountdown = Rand_S16Offset(30, 30);
@@ -820,16 +828,18 @@ void EnGo_HandleBlink(EnGo* this) {
     }
 }
 
+// Changes Animation from ? to ShiveringSurprised to Shivering
 void func_80A12DF4(EnGo* this, PlayState* play) {
     if (this->unk_3D4 == 0) {
-        func_80A12C48(this, play, 9);
+        func_80A12C48(this, play, ENGO_ANIM_SHIVERINGSURPRISED);
         this->unk_3D4++;
     } else if ((this->unk_3D4 == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        func_80A12C48(this, play, 6);
+        func_80A12C48(this, play, ENGO_ANIM_SHIVER_IMM);
         this->unk_3D4++;
     }
 }
 
+// Handling Dialog
 s32 func_80A12E80(EnGo* this, PlayState* play) {
     u16 textId = play->msgCtx.currentTextId;
     Player* player = GET_PLAYER(play);
@@ -842,7 +852,7 @@ s32 func_80A12E80(EnGo* this, PlayState* play) {
         if (this->lastTextId != textId) {
             switch (textId) {
                 case 0xE1A:
-                    this->unk_390 |= 8;
+                    this->flags |= 8;
                     this->targetActor = this->actor.child;
                     break;
 
@@ -860,7 +870,7 @@ s32 func_80A12E80(EnGo* this, PlayState* play) {
 
                 case 0xE16:
                 case 0xE1E:
-                    this->unk_190 = func_80A12DF4;
+                    this->dialogActionFn = func_80A12DF4;
                     break;
 
                 case 0xE1F:
@@ -874,19 +884,20 @@ s32 func_80A12E80(EnGo* this, PlayState* play) {
         this->lastTextId = textId;
     } else if (this->unk_3F4 != 0) {
         this->unk_3F4 = 0;
-        this->unk_190 = NULL;
+        this->dialogActionFn = NULL;
         this->lastTextId = 0;
-        func_80A12C48(this, play, 5);
-        this->unk_390 &= ~8;
+        func_80A12C48(this, play, ENGO_ANIM_SHIVER);
+        this->flags &= ~8;
     }
 
-    if (this->unk_190 != NULL) {
-        this->unk_190(this, play);
+    if (this->dialogActionFn != NULL) {
+        this->dialogActionFn(this, play);
     }
 
     return false;
 }
 
+// Move Towards Player?
 s32 func_80A12FE8(EnGo* this, PlayState* play) {
     s32 pad;
     Vec3f targetActorPos;
@@ -927,21 +938,21 @@ s32 func_80A131F8(EnGo* this, PlayState* play) {
         this->targetActor = &GET_PLAYER(play)->actor;
     }
 
-    func_80A12E80(this, play);
+    func_80A12E80(this, play); // Handling Dialog?
 
-    if (this->unk_390 & 8) {
-        this->unk_390 &= ~0x40;
-        this->unk_390 |= 0x10;
-        func_80A12FE8(this, play);
-    } else if (this->unk_390 & 0x10) {
-        this->unk_390 &= ~0x10;
+    if (this->flags & 0x08) {
+        this->flags &= ~0x40;
+        this->flags |= 0x10;
+        func_80A12FE8(this, play); // Moving Towards Player?
+    } else if (this->flags & 0x10) {
+        this->flags &= ~0x10;
         this->unk_3B0 = 0;
         this->unk_3B2 = 0;
         this->unk_3B4 = 0;
         this->unk_3B6 = 0;
         this->unk_3BA = 0x14;
     } else if (DECR(this->unk_3BA) == 0) {
-        this->unk_390 |= 0x40;
+        this->flags |= 0x40;
         this->unk_3BA = 0x14;
     }
 
@@ -953,20 +964,23 @@ void func_80A132C8(EnGo* this, PlayState* play) {
     s16 temp_v1 = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
 
     if ((fabsf(this->actor.playerHeightRel) > 20.0f) || (this->actor.xzDistToPlayer > 300.0f)) {
-        SubS_UpdateFlags(&this->unk_390, 3, 7);
+        // Break off conversation if distances are too great?
+        SubS_UpdateFlags(&this->flags, 3, 7); // |= 0x08 &= ~0x80
     } else if ((player->transformation != PLAYER_FORM_GORON) || (ABS_ALT(temp_v1) >= 0x1C70) ||
                (gSaveContext.save.weekEventReg[21] & 4) || (gSaveContext.save.weekEventReg[21] & 8)) {
-        SubS_UpdateFlags(&this->unk_390, 3, 7);
+        // Change Flags if not goron or yaw too great or certain events are set.
+        SubS_UpdateFlags(&this->flags, 3, 7); // |= 0x08 &= ~0x80
     } else {
-        SubS_UpdateFlags(&this->unk_390, 4, 7);
+        // Change OTHER flags
+        SubS_UpdateFlags(&this->flags, 4, 7); // |= 0x10 &= ~0x80
     }
 }
 
 void func_80A133A8(EnGo* this, PlayState* play) {
     if (gSaveContext.save.weekEventReg[21] & 8) {
-        SubS_UpdateFlags(&this->unk_390, 3, 7);
+        SubS_UpdateFlags(&this->flags, 3, 7);
     } else {
-        SubS_UpdateFlags(&this->unk_390, 4, 7);
+        SubS_UpdateFlags(&this->flags, 4, 7);
     }
 }
 
@@ -1045,8 +1059,8 @@ s32 func_80A13564(EnGo* this, f32 arg1, f32 arg2, s32 arg3) {
     }
 
     this->unk_3A8 = (1.0f - temp_f0) * arg2;
-    this->actor.scale.x = this->unk_3A4 - this->unk_3A8;
-    this->actor.scale.y = this->unk_3A4 + this->unk_3A8;
+    this->actor.scale.x = this->scale - this->unk_3A8;
+    this->actor.scale.y = this->scale + this->unk_3A8;
 
     if (this->actor.scale.y < this->actor.scale.x) {
         this->actor.scale.z = this->actor.scale.x;
@@ -1076,7 +1090,7 @@ void func_80A137C0(EnGo* this, PlayState* play, f32 arg2, f32 arg3) {
     u32 frames1;
     u32 frames2;
 
-    if (this->unk_390 & 0x400) {
+    if (this->flags & 0x400) {
         Matrix_Push();
 
         OPEN_DISPS(play->state.gfxCtx);
@@ -1115,32 +1129,32 @@ void func_80A139E4(EnGo* this) {
     func_80A10FD0(&this->unk_3F8[16], sp48, D_80A16698, gZeroVec3f, 0.01f, 0.002f, 16);
 }
 
-s32 func_80A13B1C(EnGo* this, PlayState* play) {
+s32 func_CB_80A13B1C(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 pad;
+    EnGo* this = THIS;
     s32 ret = false;
 
-    switch (this->unk_3C0) {
+    switch (this->cutsceneState) {
         case 0:
-            this->unk_3B8 = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-            if (func_80A134F4(this, this->unk_3B8)) {
+            this->indexCutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+            if (func_80A134F4(this, this->indexCutscene)) {
                 this->unk_3C4 = 1;
-                this->unk_3C0 = 1;
+                this->cutsceneState = 1;
             } else {
                 break;
             }
 
         case 1:
-            if (ActorCutscene_GetCurrentIndex() != this->unk_3B8) {
-                this->unk_3B8 = ActorCutscene_GetAdditionalCutscene(this->unk_3B8);
-                this->unk_3C0 = 2;
+            if (ActorCutscene_GetCurrentIndex() != this->indexCutscene) {
+                this->indexCutscene = ActorCutscene_GetAdditionalCutscene(this->indexCutscene);
+                this->cutsceneState = 2;
             } else {
                 break;
             }
 
         case 2:
-            if (func_80A134F4(this, this->unk_3B8)) {
-                this->unk_3C0 = 3;
+            if (func_80A134F4(this, this->indexCutscene)) {
+                this->cutsceneState = 3;
             } else {
                 break;
             }
@@ -1148,24 +1162,24 @@ s32 func_80A13B1C(EnGo* this, PlayState* play) {
         case 3:
             if (ActorCutscene_GetCanPlayNext(0x7C)) {
                 ActorCutscene_StartAndSetUnkLinkFields(0x7C, NULL);
-                this->unk_3C0 = 4;
-            } else if (ActorCutscene_GetCurrentIndex() == this->unk_3B8) {
+                this->cutsceneState = 4;
+            } else if (ActorCutscene_GetCurrentIndex() == this->indexCutscene) {
                 ActorCutscene_SetIntentToPlay(0x7C);
             }
     }
 
     switch (this->unk_3C4) {
         case 1:
-            func_80A12C48(this, play, 4);
-            this->unk_390 |= 0x4000;
+            func_80A12C48(this, play, ENGO_ANIM_ROLL);
+            this->flags |= ENGO_FLAG_CURLING;
             this->unk_3C4++;
             break;
 
         case 2:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                this->unk_390 &= ~0x4000;
-                this->unk_390 &= ~0x80;
-                this->unk_390 |= 0x200;
+                this->flags &= ~ENGO_FLAG_CURLING;
+                this->flags &= ~0x80;
+                this->flags |= ENGO_FLAG_CURLED;
                 this->unk_3C4++;
                 this->unk_3C2 = 0;
                 this->actor.shape.yOffset = 14.0f;
@@ -1197,15 +1211,15 @@ s32 func_80A13B1C(EnGo* this, PlayState* play) {
             if (this->unk_3C2 >= 10) {
                 func_80A12C48(this, play, 5);
                 this->actor.shape.rot.x = 0;
-                this->unk_390 &= ~0x200;
-                this->unk_390 |= 0x80;
+                this->flags &= ~ENGO_FLAG_CURLED;
+                this->flags |= 0x80;
                 this->unk_3C4++;
             }
             break;
 
         case 6:
-            this->unk_3C0++;
-            if (this->unk_3C0 >= 65) {
+            this->cutsceneState++;
+            if (this->cutsceneState >= 65) {
                 switch (player->transformation) {
                     case PLAYER_FORM_HUMAN:
                         gSaveContext.save.weekEventReg[88] |= 0x80;
@@ -1232,23 +1246,23 @@ s32 func_80A13B1C(EnGo* this, PlayState* play) {
     return ret;
 }
 
-s32 func_80A13E80(EnGo* this, PlayState* play) {
+s32 func_CB_80A13E80(Actor* thisx, PlayState* play) {
     static Vec3f D_80A166A4 = { 0.0f, 200.0f, 280.0f };
-    s32 pad;
+    EnGo* this = THIS;
     Vec3f sp48;
     s32 ret = false;
 
-    switch (this->unk_3C0) {
+    switch (this->cutsceneState) {
         case 0:
-            this->unk_3B8 = this->actor.cutscene;
-            if (func_80A134F4(this, this->unk_3B8)) {
-                this->unk_3C0++;
+            this->indexCutscene = this->actor.cutscene;
+            if (func_80A134F4(this, this->indexCutscene)) {
+                this->cutsceneState++;
             }
             break;
 
         case 1:
             func_80A12C48(this, play, 7);
-            this->unk_3C0++;
+            this->cutsceneState++;
 
         case 2:
             if (Animation_OnFrame(&this->skelAnime, 16.0f)) {
@@ -1262,15 +1276,15 @@ s32 func_80A13E80(EnGo* this, PlayState* play) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, sp48.x, sp48.y, sp48.z, 1, 0, 0, 0);
                 func_80A134B0(this, play, 1);
                 this->unk_3C2 = 0;
-                this->unk_3C0++;
+                this->cutsceneState++;
             }
             break;
 
         case 3:
             if (this->unk_3C2 >= 60) {
-                ActorCutscene_Stop(this->unk_3B8);
+                ActorCutscene_Stop(this->indexCutscene);
                 this->unk_3C2 = 0;
-                this->unk_3C0 = 0;
+                this->cutsceneState = 0;
                 ret = true;
             } else {
                 this->unk_3C2++;
@@ -1293,45 +1307,47 @@ void func_80A14018(EnGo* this, PlayState* play) {
 
     func_80A12C48(this, play, D_80A166BC[phi_v0]);
 
-    if (this->unk_3DC == 14) {
+    if (this->anim == ENGO_ANIM_TAISOU_14) {
         Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80A166B0, &sp2C);
         Math_Vec3f_Copy(&this->actor.world.pos, &sp2C);
     }
     this->actor.flags &= ~ACTOR_FLAG_1;
-    Actor_SetScale(&this->actor, this->unk_3A4);
+    Actor_SetScale(&this->actor, this->scale);
     this->sleepState = ENGO_AWAKE;
-    this->unk_390 = ENGO_FLAG_NONE;
-    this->unk_390 |= (0x40 | ENGO_FLAG_BLINKING);
+    this->flags = ENGO_FLAG_NONE;
+    this->flags |= (0x40 | ENGO_FLAG_BLINKING);
     this->actor.gravity = 0.0f;
 }
 
 void func_80A14104(EnGo* this, PlayState* play) {
-    static s32 D_80A166D4[] = { 15, 16 };
-    s16 temp;
+    static s32 D_80A166D4[] = { ENGO_ANIM_TAISOU_15, ENGO_ANIM_TAISOU_16 };
+    s16 animFrame;
 
     func_80A12C48(this, play, D_80A166D4[ENGO_GET_70(&this->actor) % 2]);
-    temp = Rand_ZeroOne() * this->skelAnime.endFrame;
-    this->skelAnime.curFrame = temp;
+    // Randomize the starting position of the animation
+    animFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
+    this->skelAnime.curFrame = animFrame;
+
     this->actor.flags &= ~ACTOR_FLAG_1;
-    Actor_SetScale(&this->actor, this->unk_3A4);
+    Actor_SetScale(&this->actor, this->scale);
     this->sleepState = ENGO_AWAKE;
-    this->unk_390 = ENGO_FLAG_NONE;
-    this->unk_390 |= 0x40;
-    this->unk_390 |= ENGO_FLAG_BLINKING;
+    this->flags = ENGO_FLAG_NONE;
+    this->flags |= 0x40;
+    this->flags |= ENGO_FLAG_BLINKING;
     this->actor.gravity = 0.0f;
 }
 
 void func_80A141D4(EnGo* this, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit1);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->unk_3DC = -1;
+    this->anim = -1;
     func_80A12C48(this, play, 5);
     this->sleepState = ENGO_AWAKE;
-    this->unk_39C = (this->unk_3A4 / 0.01f) * 0.9f;
+    this->unk_39C = (this->scale / 0.01f) * 0.9f;
     this->indexEyeTex = ENGO_EYE_CLOSED;
-    this->unk_390 = ENGO_FLAG_NONE;
-    this->unk_390 |= 0x40;
-    this->unk_390 |= 0x400;
+    this->flags = ENGO_FLAG_NONE;
+    this->flags |= 0x40;
+    this->flags |= 0x400;
     this->unk_3A0 = 100.0f;
 }
 
@@ -1348,20 +1364,20 @@ void func_80A1428C(EnGo* this, PlayState* play) {
         this->actor.shape.rot.y = temp;
         this->actor.world.rot.y = temp;
     }
-    this->unk_390 = ENGO_FLAG_NONE;
-    this->unk_390 |= 0x100;
+    this->flags = ENGO_FLAG_NONE;
+    this->flags |= 0x100;
     this->actor.shape.yOffset = 46.0f;
     this->actor.gravity = -1.0f;
 }
 
 void func_80A14324(EnGo* this, PlayState* play) {
     func_80A12C48(this, play, 8);
-    Actor_SetScale(&this->actor, this->unk_3A4);
-    this->unk_390 = ENGO_FLAG_NONE;
+    Actor_SetScale(&this->actor, this->scale);
+    this->flags = ENGO_FLAG_NONE;
     this->actor.gravity = -1.0f;
-    SubS_UpdateFlags(&this->unk_390, 3, 7);
+    SubS_UpdateFlags(&this->flags, 3, 7);
     this->sleepState = ENGO_AWAKE;
-    this->unk_390 |= 0x40;
+    this->flags |= 0x40;
     this->blinkCountdown = 0;
     this->indexEyeTex = ENGO_EYE_CLOSED2;
     this->unk_39C = 0.0f;
@@ -1370,13 +1386,13 @@ void func_80A14324(EnGo* this, PlayState* play) {
 
 void func_80A143A8(EnGo* this, PlayState* play) {
     func_80A12C48(this, play, 5);
-    Actor_SetScale(&this->actor, this->unk_3A4);
-    this->unk_390 = ENGO_FLAG_NONE;
+    Actor_SetScale(&this->actor, this->scale);
+    this->flags = ENGO_FLAG_NONE;
     this->actor.gravity = -1.0f;
-    SubS_UpdateFlags(&this->unk_390, 3, 7);
+    SubS_UpdateFlags(&this->flags, 3, 7);
     this->sleepState = ENGO_AWAKE;
-    this->unk_390 |= 0x40;
-    this->unk_390 |= ENGO_FLAG_BLINKING;
+    this->flags |= 0x40;
+    this->flags |= ENGO_FLAG_BLINKING;
     this->blinkCountdown = 0;
     this->indexEyeTex = ENGO_EYE_OPEN;
     this->unk_39C = 0.0f;
@@ -1412,11 +1428,11 @@ void func_80A144F4(EnGo* this, PlayState* play) {
         }
         func_80A1428C(this, play);
         this->actionFunc = func_ACT_80A153FC;
-        this->unk_3D8 = func_80A13B1C;
+        this->msgEventCb = func_CB_80A13B1C;
     } else {
         func_80A143A8(this, play);
         this->actionFunc = func_ACT_80A149B0;
-        this->unk_3D8 = func_80A13B1C;
+        this->msgEventCb = func_CB_80A13B1C;
     }
 }
 
@@ -1449,16 +1465,16 @@ void func_80A14668(EnGo* this, PlayState* play) {
 void func_80A146CC(EnGo* this, PlayState* play) {
     func_80A134B0(this, play, 0);
     func_80A12C48(this, play, 0);
-    this->unk_3A4 *= 5.0f;
-    Actor_SetScale(&this->actor, this->unk_3A4);
+    this->scale *= 5.0f;
+    Actor_SetScale(&this->actor, this->scale);
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.targetMode = 3;
-    this->unk_390 = ENGO_FLAG_NONE;
+    this->flags = ENGO_FLAG_NONE;
     this->actor.gravity = -1.0f;
-    SubS_UpdateFlags(&this->unk_390, 3, 7);
-    this->unk_390 |= 0x40;
-    this->unk_390 |= ENGO_FLAG_BLINKING;
-    this->unk_3D8 = func_80A13E80;
+    SubS_UpdateFlags(&this->flags, 3, 7);
+    this->flags |= 0x40;
+    this->flags |= ENGO_FLAG_BLINKING;
+    this->msgEventCb = func_CB_80A13E80;
     this->actionFunc = func_ACT_80A149B0;
 }
 
@@ -1475,7 +1491,7 @@ void func_ACT_80A14798(EnGo* this, PlayState* play) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
                            GORON_LIMB_MAX);
 
-        this->unk_3DC = -1;
+        this->anim = -1;
         func_80A12C48(this, play, 2);
         this->actor.draw = EnGo_Draw;
 
@@ -1485,8 +1501,8 @@ void func_ACT_80A14798(EnGo* this, PlayState* play) {
         Effect_Add(play, &this->unk_3E8, EFFECT_TIRE_MARK, 0, 0, &tireMarkInit);
 
         this->actor.targetMode = 1;
-        this->unk_3A4 = 0.01f;
-        this->unk_3D8 = NULL;
+        this->scale = 0.01f;
+        this->msgEventCb = NULL;
 
         switch (ENGO_GET_F(&this->actor)) {
             case ENGO_F_1:
@@ -1530,7 +1546,7 @@ void func_ACT_80A149B0(EnGo* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_CHEER - SFX_FLAG);
     } else if (ENGO_GET_F(&this->actor) != ENGO_F_8) {
         if (EnGo_IsEnteringSleep(this, play)) {
-            SubS_UpdateFlags(&this->unk_390, 0, 7);
+            SubS_UpdateFlags(&this->flags, 0, 7);
             this->sleepState = ENGO_ASLEEP;
             this->actionFunc = func_ACT_80A14B30;
         } else if (ENGO_GET_F(&this->actor) == ENGO_F_4) {
@@ -1545,9 +1561,9 @@ void func_ACT_80A149B0(EnGo* this, PlayState* play) {
             }
         } else if (ENGO_GET_F(&this->actor) == ENGO_F_1) {
             if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x3FFC) {
-                SubS_UpdateFlags(&this->unk_390, 3, 7);
+                SubS_UpdateFlags(&this->flags, 3, 7);
             } else {
-                SubS_UpdateFlags(&this->unk_390, 0, 7);
+                SubS_UpdateFlags(&this->flags, 0, 7);
             }
         }
     }
@@ -1562,32 +1578,32 @@ void func_ACT_80A14B30(EnGo* this, PlayState* play) {
         this->sleepState = ENGO_ASLEEP;
     }
 
-    if (this->unk_390 & 0x4000) {
+    if (this->flags & ENGO_FLAG_CURLING) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            this->unk_390 &= ~0x4000;
-            this->unk_390 |= 0x200;
+            this->flags &= ~ENGO_FLAG_CURLING;
+            this->flags |= ENGO_FLAG_CURLED;
             if (this->sleepState != ENGO_AWAKE) {
                 this->unk_3AE = 0;
             }
             this->actor.shape.yOffset = 14.0f;
         }
-    } else if (this->unk_390 & 0x8000) {
+    } else if (this->flags & 0x8000) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            this->unk_390 |= 0x80;
-            this->unk_390 &= ~0x8000;
+            this->flags |= 0x80;
+            this->flags &= ~0x8000;
         }
-    } else if (this->unk_390 & 0x200) {
+    } else if (this->flags & ENGO_FLAG_CURLED) {
         if ((this->actor.xzDistToPlayer < 160.0f) && (this->actor.playerHeightRel < 20.0f) &&
             (this->sleepState == ENGO_AWAKE)) {
-            func_80A12C48(this, play, 3);
-            this->unk_390 &= ~0x80;
-            this->unk_390 &= ~0x200;
-            this->unk_390 |= 0x8000;
+            func_80A12C48(this, play, ENGO_ANIM_UNROLL_IMM);
+            this->flags &= ~0x80;
+            this->flags &= ~ENGO_FLAG_CURLED;
+            this->flags |= 0x8000;
             this->actor.shape.yOffset = 0.0f;
         } else if ((this->sleepState != ENGO_AWAKE) && (gSaveContext.save.weekEventReg[22] & 4)) {
-            this->actor.scale.x = this->unk_3A4 - (Math_SinS(this->unk_3AE) * 0.001f);
-            this->actor.scale.y = (Math_SinS(this->unk_3AE) * 0.001f) + this->unk_3A4;
-            this->actor.scale.z = (Math_SinS(this->unk_3AE) * 0.001f) + this->unk_3A4;
+            this->actor.scale.x = this->scale - (Math_SinS(this->unk_3AE) * 0.001f);
+            this->actor.scale.y = (Math_SinS(this->unk_3AE) * 0.001f) + this->scale;
+            this->actor.scale.z = (Math_SinS(this->unk_3AE) * 0.001f) + this->scale;
             if (this->unk_3AE == 0) {
                 this->sleepState = -this->sleepState;
                 if (this->sleepState > ENGO_AWAKE) {
@@ -1598,15 +1614,15 @@ void func_ACT_80A14B30(EnGo* this, PlayState* play) {
                 Actor_PlaySfxAtPos(&this->actor, sfxId);
             }
             this->unk_3AE += 0x400;
-            this->actor.shape.yOffset = (this->actor.scale.y / this->unk_3A4) * 14.0f;
-            SubS_UpdateFlags(&this->unk_390, 3, 7);
+            this->actor.shape.yOffset = (this->actor.scale.y / this->scale) * 14.0f;
+            SubS_UpdateFlags(&this->flags, 3, 7);
         }
     } else if ((this->actor.xzDistToPlayer >= 240.0f) || (this->actor.playerHeightRel >= 20.0f) ||
                (this->sleepState != ENGO_AWAKE)) {
-        func_80A12C48(this, play, 4);
-        this->unk_390 &= ~0x80;
-        this->unk_390 &= ~0x200;
-        this->unk_390 |= 0x4000;
+        func_80A12C48(this, play, ENGO_ANIM_ROLL);
+        this->flags &= ~0x80;
+        this->flags &= ~ENGO_FLAG_CURLED;
+        this->flags |= ENGO_FLAG_CURLING;
         this->actor.shape.yOffset = 0.0f;
     }
 
@@ -1617,8 +1633,8 @@ void func_ACT_80A14B30(EnGo* this, PlayState* play) {
 void func_ACT_80A14E14(EnGo* this, PlayState* play) {
     Actor* actor = this->colliderCylinder.base.ac;
 
-    if ((this->unk_390 & 0x1000) && (((actor != NULL) && (actor->id == ACTOR_OBJ_AQUA) && (actor->params & 1)) ||
-                                     (this->actor.colChkInfo.damageEffect == 2))) {
+    if ((this->flags & 0x1000) && (((actor != NULL) && (actor->id == ACTOR_OBJ_AQUA) && (actor->params & 1)) ||
+                                   (this->actor.colChkInfo.damageEffect == 2))) {
         this->actionFunc = func_ACT_80A14E74;
     }
 }
@@ -1641,7 +1657,7 @@ void func_ACT_80A14EB0(EnGo* this, PlayState* play) {
         ActorCutscene_Stop(this->actor.cutscene);
         func_80A143A8(this, play);
         if ((ENGO_GET_F(&this->actor) == ENGO_F_4) && (ENGO_GET_70(&this->actor) == ENGO_70_1)) {
-            SubS_UpdateFlags(&this->unk_390, 4, 7);
+            SubS_UpdateFlags(&this->flags, 4, 7);
             func_80A143A8(sp24, play);
             sp24->actionFunc = func_ACT_80A149B0;
         }
@@ -1675,15 +1691,15 @@ void func_ACT_80A14FC8(EnGo* this, PlayState* play) {
             if (this->unk_394 != (u8)csAction) {
                 this->unk_394 = csAction;
                 func_80A12C48(this, play, sp38[csAction]);
-                this->unk_390 = ENGO_FLAG_NONE;
-                this->unk_390 |= ENGO_FLAG_BLINKING;
+                this->flags = ENGO_FLAG_NONE;
+                this->flags |= ENGO_FLAG_BLINKING;
                 this->indexEyeTex = ENGO_EYE_OPEN;
                 this->unk_39C = 0.0f;
                 this->unk_3A0 = 0.0f;
 
                 switch (csAction) {
                     case 1:
-                        this->unk_390 |= 0x80;
+                        this->flags |= 0x80;
                         this->skelAnime.curFrame = this->skelAnime.endFrame;
                         break;
 
@@ -1696,14 +1712,16 @@ void func_ACT_80A14FC8(EnGo* this, PlayState* play) {
 
             switch (this->unk_394) {
                 case 3:
-                    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && (this->unk_3DC == 20)) {
-                        func_80A12C48(this, play, 21);
+                    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) &&
+                        (this->anim == ENGO_ANIM_HAKUGIN_20)) {
+                        func_80A12C48(this, play, ENGO_ANIM_HAKUGIN_21_IMM);
                     }
                     break;
 
                 case 4:
-                    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && (this->unk_3DC == 18)) {
-                        func_80A12C48(this, play, 19);
+                    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) &&
+                        (this->anim == ENGO_ANIM_HAKUGIN_18)) {
+                        func_80A12C48(this, play, ENGO_ANIM_HAKUGIN_19_IMM);
                     }
                     break;
 
@@ -1713,7 +1731,7 @@ void func_ACT_80A14FC8(EnGo* this, PlayState* play) {
                         Math_ApproachF(&this->unk_39C, 0.0f, 0.02f, 1.0f);
                         this->unk_3A0 = (this->unk_39C / 0.9f) * 100.0f;
                         func_80A139E4(this);
-                    } else if (this->unk_390 & 0x400) {
+                    } else if (this->flags & 0x400) {
                         func_80A143A8(this, play);
                     }
                     break;
@@ -1776,7 +1794,7 @@ void func_ACT_80A153FC(EnGo* this, PlayState* play) {
     Vec3f sp50;
     Vec3f sp44;
 
-    if ((this->unk_390 & 0x1000) && (this->actor.colChkInfo.damageEffect == 0xF)) {
+    if ((this->flags & 0x1000) && (this->actor.colChkInfo.damageEffect == 0xF)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
 
         this->actor.flags &= ~ACTOR_FLAG_10;
@@ -1796,7 +1814,7 @@ void func_ACT_80A153FC(EnGo* this, PlayState* play) {
             this->actionFunc = func_ACT_80A149B0;
         }
     } else if (this->path != NULL) {
-        if (this->unk_390 & 0x800) {
+        if (this->flags & 0x800) {
             func_800B8E58(GET_PLAYER(play), NA_SE_PL_BODY_HIT);
             func_800B8D50(play, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
         }
@@ -1835,7 +1853,7 @@ s32* func_80A15684(EnGo* this, PlayState* play) {
         D_80A16164,
     };
 
-    if (this->sleepState != 0) {
+    if (this->sleepState != ENGO_AWAKE) {
         return D_80A1640C;
     }
 
@@ -1879,8 +1897,11 @@ void func_ACT_80A157C4(EnGo* this, PlayState* play) {
     Vec3f targetActorPos;
     Vec3f thisActorPos;
 
-    if (!func_8010BF58(&this->actor, play, func_80A15684(this, play), this->unk_3D8, &this->unk_28C)) {
-        if ((ENGO_GET_F(&this->actor) != ENGO_F_1) && !(this->unk_390 & 0x200)) {
+    if (!func_8010BF58(&this->actor, play, func_80A15684(this, play), // MsgScript*
+                       this->msgEventCb,                              // MsgEventCallback
+                       &this->unk_28C                                 // s32* resumePosition
+                       )) {
+        if ((ENGO_GET_F(&this->actor) != ENGO_F_1) && !(this->flags & ENGO_FLAG_CURLED)) {
             Math_Vec3f_Copy(&targetActorPos, &this->targetActor->world.pos);
             Math_Vec3f_Copy(&thisActorPos, &this->actor.world.pos);
             Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&thisActorPos, &targetActorPos), 4, 0x2AA8);
@@ -1892,15 +1913,15 @@ void func_ACT_80A157C4(EnGo* this, PlayState* play) {
     if ((ENGO_GET_F(&this->actor) == ENGO_F_5) || (ENGO_GET_F(&this->actor) == ENGO_F_6) ||
         (ENGO_GET_F(&this->actor) == ENGO_F_7)) {
         this->blinkCountdown = 0;
-        this->unk_390 &= ~ENGO_FLAG_BLINKING;
+        this->flags &= ~ENGO_FLAG_BLINKING;
         this->indexEyeTex = ENGO_EYE_CLOSED2;
     }
 
-    this->unk_390 &= ~0x8;
-    SubS_UpdateFlags(&this->unk_390, 3, 7);
+    this->flags &= ~0x8;
+    SubS_UpdateFlags(&this->flags, 3, 7); // |= 0x08 &= 0x80
     this->unk_28C = 0;
-    this->unk_390 |= 0x40;
-    this->actionFunc = this->unk_18C;
+    this->flags |= 0x40;
+    this->actionFunc = this->priorActionFn;
 }
 
 void EnGo_Init(Actor* thisx, PlayState* play) {
@@ -1930,23 +1951,23 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (!(this->unk_390 & 0x400)) {
+    if (!(this->flags & 0x400)) {
         EnGo_HandleBlink(this);
         func_80A12A64(this, play);
         func_80A131F8(this, play);
         func_80A12B78(this, play);
     }
 
-    if (!(this->unk_390 & 0x100) && !(this->unk_390 & 0x200) && !(this->unk_390 & 0x400)) {
+    if (!(this->flags & 0x100) && !(this->flags & ENGO_FLAG_CURLED) && !(this->flags & 0x400)) {
         if (ENGO_GET_F(&this->actor) == ENGO_F_8) {
             phi_f0 = this->colliderSphere.dim.worldSphere.radius + 60;
         } else {
             phi_f0 = this->colliderCylinder.dim.radius + 40;
         }
-        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_AP_NONE, this->unk_390 & 7);
-    } else if ((this->unk_390 & 0x200) && (this->sleepState != 0)) {
+        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_AP_NONE, this->flags & 7);
+    } else if ((this->flags & ENGO_FLAG_CURLED) && (this->sleepState != ENGO_AWAKE)) {
         phi_f0 = this->colliderCylinder.dim.radius + 40;
-        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_AP_NONE, this->unk_390 & 7);
+        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_AP_NONE, this->flags & 7);
     }
 
     if ((ENGO_GET_F(&this->actor) != ENGO_F_8) && (ENGO_GET_F(&this->actor) != ENGO_F_2) &&
@@ -1973,7 +1994,7 @@ void func_80A15B80(EnGo* this, PlayState* play) {
     Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
     Matrix_Translate(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
 
-    if (this->unk_390 & 0x100) {
+    if (this->flags & 0x100) {
         Matrix_Scale(this->actor.scale.x * 8.0f, this->actor.scale.y * 8.0f, this->actor.scale.z * 8.0f, MTXMODE_APPLY);
     } else {
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -1982,7 +2003,7 @@ void func_80A15B80(EnGo* this, PlayState* play) {
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, (this->unk_390 & 0x100) ? gGoronSnowballDL : gGoronRolledUpDL);
+    gSPDisplayList(POLY_OPA_DISP++, (this->flags & 0x100) ? gGoronSnowballDL : gGoronRolledUpDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -2016,7 +2037,7 @@ s32 EnGo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
             break;
     }
 
-    if ((this->unk_390 & 0x80) && (idx < 9)) {
+    if ((this->flags & 0x80) && (idx < 9)) {
         rot->y += (s16)(Math_SinS(this->limbRotTableY[idx]) * 200.0f);
         rot->z += (s16)(Math_CosS(this->limbRotTableZ[idx]) * 200.0f);
     }
@@ -2029,13 +2050,13 @@ void EnGo_TransfromLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     s32 stepRot;
     s32 overrideRot;
 
-    if (this->unk_390 & 0x40) {
+    if (this->flags & 0x40) {
         stepRot = false;
     } else {
         stepRot = true;
     }
 
-    if (this->unk_390 & 0x10) {
+    if (this->flags & 0x10) {
         overrideRot = true;
     } else {
         overrideRot = false;
@@ -2079,14 +2100,14 @@ void EnGo_Draw(Actor* thisx, PlayState* play) {
     };
     EnGo* this = THIS;
 
-    if (!(this->unk_390 & 0x300)) {
+    if (!(this->flags & 0x300)) {
         OPEN_DISPS(play->state.gfxCtx);
 
         func_8012C28C(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A1670C[this->indexEyeTex]));
 
-        if (this->unk_3DC == 14) {
+        if (this->anim == ENGO_ANIM_TAISOU_14) {
             Matrix_Translate(0.0f, 0.0f, -4000.0f, MTXMODE_APPLY);
         }
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
