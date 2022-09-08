@@ -73,7 +73,8 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
     EnGe2* this = (EnGe2*)thisx;
 
     ActorShape_Init(&this->picto.actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gGerudoPurpleSkel, NULL, this->jointTable, this->morphTable, 22);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGerudoPurpleSkel, NULL, this->jointTable, this->morphTable,
+                       GERUDO_PURPLE_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &gGerudoPurpleWalkingAnim);
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
@@ -110,7 +111,7 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
     }
 
     switch (GERUDO_PURPLE_GET_TYPE(&this->picto.actor)) {
-        case 1:
+        case GERUDO_PURPLE_TYPE_OUTSIDE_FORTRESS:
             Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                              Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, 0.0f);
             this->actionFunc = func_80B8C9B8;
@@ -118,8 +119,8 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
             this->picto.actor.uncullZoneForward = 4000.0f;
             break;
 
-        case 2:
-            if (gSaveContext.save.weekEventReg[83] & 2) {
+        case GERUDO_PURPLE_TYPE_AVEIL_GUARD:
+            if (gSaveContext.save.weekEventReg[83] & 2) { // Knocked the beehive down
                 Actor_MarkForDeath(&this->picto.actor);
             }
             break;
@@ -188,7 +189,7 @@ s32 EnGe2_LookForPlayer(PlayState* play, Actor* actor, Vec3f* pos, s16 yaw, s16 
 /* Path functions */
 
 s32 func_80B8B6B4(EnGe2* this, PlayState* play) {
-    if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != 0x3F) {
+    if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != GERUDO_PURPLE_PATH_NONE) {
         this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
         if (this->path != NULL) {
             Path* path = this->path;
@@ -220,7 +221,7 @@ void func_80B8B7A8(EnGe2* this, PlayState* play) {
 
     this->curPointIndex = 0;
 
-    if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != 0x3F) {
+    if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != GERUDO_PURPLE_PATH_NONE) {
         curPath = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
         unk1 = curPath->unk1;
         nextPath = &play->setupPathList[unk1];
@@ -239,7 +240,7 @@ void func_80B8B848(EnGe2* this, PlayState* play) {
     Vec3f nextPoint;
 
     this->curPointIndex = 0;
-    if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != 0x3F) {
+    if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != GERUDO_PURPLE_PATH_NONE) {
         this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
         if (this->path != NULL) {
             points = Lib_SegmentedToVirtual(this->path->points);
@@ -468,7 +469,7 @@ void func_80B8C13C(EnGe2* this, PlayState* play) {
                          Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
     } else if (EnGe2_LookForPlayer(play, &this->picto.actor, &this->picto.actor.focus.pos,
                                    this->picto.actor.shape.rot.y, 0x1800, visionRange, this->verticalDetectRange)) {
-        if ((GERUDO_PURPLE_GET_EXIT(&this->picto.actor) != 0x1F) && !Play_InCsMode(play)) {
+        if ((GERUDO_PURPLE_GET_EXIT(&this->picto.actor) != GERUDO_PURPLE_EXIT_NONE) && !Play_InCsMode(play)) {
             this->picto.actor.speedXZ = 0.0f;
             func_800B7298(play, &this->picto.actor, 0x1A);
             func_801000A4(NA_SE_SY_FOUND);
@@ -648,7 +649,7 @@ void func_80B8C9B8(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (EnGe2_LookForPlayer(play, &this->picto.actor, &this->picto.actor.focus.pos, this->picto.actor.shape.rot.y,
                             0x4000, 720.0f, this->verticalDetectRange)) {
-        if ((GERUDO_PURPLE_GET_EXIT(&this->picto.actor) != 0x1F) && !Play_InCsMode(play)) {
+        if ((GERUDO_PURPLE_GET_EXIT(&this->picto.actor) != GERUDO_PURPLE_EXIT_NONE) && !Play_InCsMode(play)) {
             func_800B7298(play, &this->picto.actor, 0x1A);
             func_801000A4(NA_SE_SY_FOUND);
             Message_StartTextbox(play, 0x1194, &this->picto.actor);
