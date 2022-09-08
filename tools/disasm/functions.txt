@@ -9587,7 +9587,7 @@
     0x80A0B5F0:("func_80A0B5F0",),
     0x80A0B75C:("func_80A0B75C",),
     0x80A0B834:("func_80A0B834",),
-    0x80A0B8CC:("func_80A0B8CC",),
+    0x80A0B8CC:("BgDyYoseizo_TrainPlayer",),
     0x80A0BB08:("func_80A0BB08",),
     0x80A0BC84:("BgDyYoseizo_Update",),
     0x80A0BCD8:("BgDyYoseizo_OverrideLimbDraw",),

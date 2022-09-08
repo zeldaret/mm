@@ -47,10 +47,13 @@ typedef struct BgDyYoseizo {
     /* 0x02DC */ Vec3s headRot;
     /* 0x02DC */ Vec3s torsoRot;
     /* 0x02E8 */ EnDyExtra* beam;
-    /* 0x02EC */ f32 unk2EC;
+    /* 0x02EC */ f32 unk2EC; // unused
     /* 0x02F0 */ f32 unk2F0;
     /* 0x02F4 */ f32 unk2F4;
-    /* 0x02F8 */ s16 unk2F8;
+    /* 0x02F8 */ union {
+        s16 unk2F8;
+        s16 csAction; // used on BgDyYoseizo_TrainPlayer
+    };
     /* 0x02FA */ s16 eyeIndex;
     /* 0x02FC */ s16 mouthIndex;
     /* 0x02FE */ s16 blinkTimer;

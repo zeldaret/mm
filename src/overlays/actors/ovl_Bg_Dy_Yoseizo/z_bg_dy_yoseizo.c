@@ -431,7 +431,7 @@ void func_80A0B834(BgDyYoseizo* this) {
     BgDyYoseizo_SpawnEffects(this, GREAT_FAIRY_EFFECT_TRAJECTORY_FAST_RADIANT, 30);
 }
 
-void func_80A0B8CC(BgDyYoseizo* this, PlayState* play) {
+void BgDyYoseizo_TrainPlayer(BgDyYoseizo* this, PlayState* play) {
     s16 csAction;
     s32 pad;
     Player* player = GET_PLAYER(play);
@@ -475,12 +475,13 @@ void func_80A0B8CC(BgDyYoseizo* this, PlayState* play) {
             }
 
             if (play->msgCtx.currentTextId != 0x59A) {
+                // "Hold B and then release"
                 Message_StartTextbox(play, 0x59A, &this->actor);
             }
         }
     }
 
-    if (csAction != this->unk2F8) {
+    if (csAction != this->csAction) {
         switch (csAction) {
             case 9:
                 Animation_PlayLoop(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_ARMS_FOLDED]);
@@ -492,7 +493,7 @@ void func_80A0B8CC(BgDyYoseizo* this, PlayState* play) {
                 Animation_PlayOnce(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_TEACH_SPIN_ATTACK]);
                 break;
         }
-        this->unk2F8 = csAction;
+        this->csAction = csAction;
     }
 }
 
@@ -518,8 +519,8 @@ void func_80A0BB08(BgDyYoseizo* this, PlayState* play) {
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 9)) {
         Actor_SetScale(&this->actor, 0.01f);
         Animation_PlayLoop(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_ARMS_FOLDED]);
-        this->unk2F8 = 9;
-        this->actionFunc = func_80A0B8CC;
+        this->csAction = 9;
+        this->actionFunc = BgDyYoseizo_TrainPlayer;
         this->actor.draw = BgDyYoseizo_Draw;
     }
 }

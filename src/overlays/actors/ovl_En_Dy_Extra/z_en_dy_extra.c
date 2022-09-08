@@ -97,7 +97,7 @@ void EnDyExtra_Draw(Actor* thisx, PlayState* play) {
         { 255, 100, 0, 255 }, { 255, 0, 100, 255 }, { 100, 255, 0, 255 }, { 0, 100, 255, 255 }, { 255, 230, 0, 255 },
     };
     static u8 sAlphaTypeIndices[] = {
-        2, 1, 1, 2, 0, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 1, 2, 0, 0,
+        2, 1, 1, 2, 0, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 1, 2, 0,
     };
     s32 pad;
     EnDyExtra* this = THIS;
@@ -110,7 +110,7 @@ void EnDyExtra_Draw(Actor* thisx, PlayState* play) {
     alphas[1] = (s8)(this->alphaScale * 240.0f);
     alphas[2] = (s8)(this->alphaScale * 255.0f);
 
-    for (i = 0; i < 27; i++) {
+    for (i = 0; i < ARRAY_COUNT(sAlphaTypeIndices); i++) {
         if (sAlphaTypeIndices[i]) {
             vertices[i].v.cn[3] = alphas[sAlphaTypeIndices[i]];
         }
