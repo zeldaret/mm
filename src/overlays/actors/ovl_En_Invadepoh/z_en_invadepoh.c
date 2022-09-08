@@ -1161,8 +1161,8 @@ s32 func_80B44C80(EnInvadepoh* this, PlayState* play) {
     }
 
     Math_SmoothStepToS(&this->actor.world.rot.y,
-                       Math_Atan2S_Depr(((sp60.z + temp_f0_2) * 0.9f) + sp6C.z, ((sp60.x + temp_f0_3) * 0.9f) + sp6C.x), 4,
-                       0xFA0, 0x64);
+                       Math_Atan2S_Depr(((sp60.z + temp_f0_2) * 0.9f) + sp6C.z, ((sp60.x + temp_f0_3) * 0.9f) + sp6C.x),
+                       4, 0xFA0, 0x64);
     Actor_MoveWithGravity(&this->actor);
     if (func_80B440B8(this, 50.0f, 15.0f)) {
         phi_v0 = 4;

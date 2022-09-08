@@ -1041,7 +1041,7 @@ void EnSnowman_Update(Actor* thisx, PlayState* play) {
                 Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
                 if (!this->turningOnSteepSlope) {
                     this->snowPileTargetRotY = Math_Atan2S_Depr(this->actor.floorPoly->normal.z * SHT_MINV,
-                                                            this->actor.floorPoly->normal.x * SHT_MINV);
+                                                                this->actor.floorPoly->normal.x * SHT_MINV);
                     this->turningOnSteepSlope = true;
                 }
             } else {
