@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "z64snap.h"
+#include "objects/object_gla/object_gla.h"
 
 struct EnGe2;
 
@@ -23,13 +24,13 @@ typedef struct EnGe2 {
     /* 0x2E4 */ Vec3s headRot;
     /* 0x2E8 */ Vec3s unk2EA; // unused
     /* 0x2F0 */ Path *path;
-    /* 0x2F4 */ s32 unk2F4;
-    /* 0x2F8 */ u16 unk2F8;
-    /* 0x2FA */ s16 unk2FA;
-    /* 0x2FC */ f32 unk2FC;
+    /* 0x2F4 */ s32 curPointIndex;
+    /* 0x2F8 */ u16 stateFlags;
+    /* 0x2FA */ s16 yawTarget; //!< used when Player detected to fix the yaw to turn to
+    /* 0x2FC */ f32 verticalDetectRange; //!< vertical range to look for the player within
     /* 0x300 */ u8 timer;
-    /* 0x301 */ u8 unk301;
-    /* 0x302 */ s16 unk302;
+    /* 0x301 */ u8 detectedStatus;
+    /* 0x302 */ s16 csAction;
     /* 0x304 */ s16 unk304; // unused
     /* 0x306 */ s16 screamTimer;
     /* 0x308 */ EnGe2ActionFunc actionFunc;

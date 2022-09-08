@@ -35,6 +35,19 @@ const ActorInit En_Ge2_InitVars = {
     (ActorFunc)EnGe2_Draw,
 };
 
+typedef enum {
+    /* 0 */ GERUDO_PURPLE_DETECTION_UNDETECTED,
+    /* 1 */ GERUDO_PURPLE_DETECTION_HEARD,
+    /* 2 */ GERUDO_PURPLE_DETECTION_PROXIMITY // Higher priority
+} GerudoPurpleDetection;
+
+#define GERUDO_PURPLE_STATE_PATH_REVERSE (1 << 0) //!< Follow path backwards instead of forwards.
+#define GERUDO_PURPLE_STATE_KO (1 << 1)
+#define GERUDO_PURPLE_STATE_STUNNED (1 << 2) //!< Specifically by Deku Nuts
+#define GERUDO_PURPLE_STATE_DISABLE_MOVEMENT \
+    (1 << 3) //!< Disable normal movement to let pathing function control it completely.
+#define GERUDO_PURPLE_STATE_CAPTURING (1 << 5) //!< Set but not used
+
 static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_NONE,
@@ -55,42 +68,32 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 60, 0, { 0, 0, 0 } },
 };
 
-// extern ColliderCylinderInit sCylinderInit;
-extern FlexSkeletonHeader D_06008DD8;
-
-extern AnimationHeader D_0600030C;
-extern AnimationHeader D_06000460;
-extern AnimationHeader D_06001664;
-extern AnimationHeader D_060091D0;
-extern AnimationHeader D_06009D1C;
-extern AnimationHeader D_0600A344;
-
 void EnGe2_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnGe2* this = (EnGe2*)thisx;
 
     ActorShape_Init(&this->picto.actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &D_06008DD8, NULL, this->jointTable, this->morphTable, 22);
-    Animation_PlayLoop(&this->skelAnime, &D_0600A344);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGerudoPurpleSkel, NULL, this->jointTable, this->morphTable, 22);
+    Animation_PlayLoop(&this->skelAnime, &gGerudoPurpleWalkingAnim);
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->picto.actor, 0.01f);
-
     this->picto.actor.uncullZoneForward = 1200.0f;
+
     if (this->picto.actor.world.rot.z == 0) {
-        this->unk2FC = 40.0f;
+        this->verticalDetectRange = 40.0f;
     } else {
-        this->unk2FC = fabsf(this->picto.actor.world.rot.z * 20.0f);
+        this->verticalDetectRange = fabsf(this->picto.actor.world.rot.z * 20.0f);
     }
 
     this->picto.actor.world.rot.x = this->picto.actor.shape.rot.x = 0;
     this->picto.actor.world.rot.z = this->picto.actor.shape.rot.z = 0;
 
     this->picto.actor.targetMode = 6;
-    this->unk2F8 = 0;
-    this->unk301 = 0;
-    this->unk302 = -1;
+    this->stateFlags = 0;
+    this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
+    this->csAction = -1;
 
     this->picto.actor.terminalVelocity = -9.0f;
     this->picto.actor.gravity = -1.0f;
@@ -108,7 +111,8 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
 
     switch (GERUDO_PURPLE_GET_TYPE(&this->picto.actor)) {
         case 1:
-            Animation_Change(&this->skelAnime, &D_06009D1C, 1.0f, 0.0f, Animation_GetLastFrame(&D_06009D1C), 0, 0.0f);
+            Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
+                             Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, 0.0f);
             this->actionFunc = func_80B8C9B8;
             this->picto.actor.speedXZ = 0.0f;
             this->picto.actor.uncullZoneForward = 4000.0f;
@@ -128,20 +132,32 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
 void EnGe2_Destroy(Actor* thisx, PlayState* play) {
 }
 
-s32 func_80B8B514(PlayState* play, EnGe2* this) {
+// Detect Player through hearing or proximity
+GerudoPurpleDetection EnGe2_DetectPlayer(PlayState* play, EnGe2* this) {
     if (this->picto.actor.xzDistToPlayer > 250.0f) {
-        return 0;
+        return GERUDO_PURPLE_DETECTION_UNDETECTED;
     } else if ((Player_GetMask(play) != PLAYER_MASK_STONE) && (this->picto.actor.xzDistToPlayer < 50.0f)) {
-        return 2;
+        return GERUDO_PURPLE_DETECTION_PROXIMITY;
     } else if (func_800B715C(play)) {
-        return 1;
+        return GERUDO_PURPLE_DETECTION_HEARD;
     } else {
-        return 0;
+        return GERUDO_PURPLE_DETECTION_UNDETECTED;
     }
 }
 
-// Spotted Player
-s32 func_80B8B5AC(PlayState* play, Actor* thisx, Vec3f* pos, s16 yaw, s16 yawRange, f32 xzRange, f32 yRange) {
+/**
+ * Spotted Player with line-of-sight
+ *
+ * @param play PlayState
+ * @param thisx Actor to use for range and angle checks
+ * @param pos Position to check from
+ * @param yaw Center of yaw range to check
+ * @param yawRange Spread of angles from `yaw` to check. If 0, do not check yaw
+ * @param xzRange Horizontal range to check
+ * @param yRange Vertical range to check
+ * @return true if Player is visible with these settings
+ */
+s32 EnGe2_LookForPlayer(PlayState* play, Actor* actor, Vec3f* pos, s16 yaw, s16 yawRange, f32 xzRange, f32 yRange) {
     s16 yawToPlayer;
     Vec3f posResult;
     CollisionPoly* outPoly;
@@ -150,14 +166,14 @@ s32 func_80B8B5AC(PlayState* play, Actor* thisx, Vec3f* pos, s16 yaw, s16 yawRan
     if (Player_GetMask(play) == PLAYER_MASK_STONE) {
         return false;
     }
-    if (thisx->xzDistToPlayer > xzRange) {
+    if (actor->xzDistToPlayer > xzRange) {
         return false;
     }
-    if (fabsf(thisx->playerHeightRel) > yRange) {
+    if (fabsf(actor->playerHeightRel) > yRange) {
         return false;
     }
 
-    yawToPlayer = thisx->yawTowardsPlayer - yaw;
+    yawToPlayer = actor->yawTowardsPlayer - yaw;
     if ((yawRange > 0) && (yawRange < ABS_ALT(yawToPlayer))) {
         return false;
     }
@@ -181,32 +197,32 @@ s32 func_80B8B6B4(EnGe2* this, PlayState* play) {
             f32 diffZ = points[0].z - this->picto.actor.world.pos.z;
 
             if ((SQ(diffX) + SQ(diffZ)) < 100.0f) {
-                this->unk2F4 = 0;
-                this->unk2F8 &= ~1;
+                this->curPointIndex = 0;
+                this->stateFlags &= ~GERUDO_PURPLE_STATE_PATH_REVERSE;
             } else {
-                this->unk2F4 = path->count - 1;
-                this->unk2F8 |= 1;
-                return 1;
+                this->curPointIndex = path->count - 1;
+                this->stateFlags |= GERUDO_PURPLE_STATE_PATH_REVERSE;
+                return true;
             }
         }
     } else {
         this->path = NULL;
-        this->unk2F4 = 0;
+        this->curPointIndex = 0;
     }
-    return 0;
+    return false;
 }
 
 void func_80B8B7A8(EnGe2* this, PlayState* play) {
-    Path* firstPath;
+    Path* curPath;
     Path* nextPath;
     Vec3s* points;
     u8 unk1;
 
-    this->unk2F4 = 0;
+    this->curPointIndex = 0;
 
     if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != 0x3F) {
-        firstPath = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
-        unk1 = firstPath->unk1;
+        curPath = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
+        unk1 = curPath->unk1;
         nextPath = &play->setupPathList[unk1];
         this->path = nextPath;
         points = Lib_SegmentedToVirtual(nextPath->points);
@@ -222,13 +238,13 @@ void func_80B8B848(EnGe2* this, PlayState* play) {
     Vec3s* points;
     Vec3f nextPoint;
 
-    this->unk2F4 = 0;
+    this->curPointIndex = 0;
     if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != 0x3F) {
         this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
         if (this->path != NULL) {
             points = Lib_SegmentedToVirtual(this->path->points);
             Math_Vec3s_ToVec3f(&this->picto.actor.world.pos, points);
-            this->unk2F4++;
+            this->curPointIndex++;
             points++;
             Math_Vec3s_ToVec3f(&nextPoint, points);
 
@@ -241,17 +257,23 @@ void func_80B8B848(EnGe2* this, PlayState* play) {
     }
 }
 
-s32 func_80B8B90C(EnGe2* this) {
+typedef enum {
+    /* 0 */ GERUDO_PURPLE_PATHSTATUS_0, //! not near waypoint
+    /* 1 */ GERUDO_PURPLE_PATHSTATUS_1, //! no path or waypoint changed
+    /* 2 */ GERUDO_PURPLE_PATHSTATUS_2  //! reached end of path
+} GerudoPurplePathStatus;
+
+GerudoPurplePathStatus func_80B8B90C(EnGe2* this) {
     Path* path = this->path;
     Vec3s* curPoint;
     f32 diffX;
     f32 diffZ;
 
     if (path == NULL) {
-        return 1;
+        return GERUDO_PURPLE_PATHSTATUS_1;
     }
 
-    curPoint = (Vec3s*)Lib_SegmentedToVirtual(path->points) + this->unk2F4;
+    curPoint = (Vec3s*)Lib_SegmentedToVirtual(path->points) + this->curPointIndex;
 
     diffX = curPoint->x - this->picto.actor.world.pos.x;
     diffZ = curPoint->z - this->picto.actor.world.pos.z;
@@ -260,20 +282,20 @@ s32 func_80B8B90C(EnGe2* this) {
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.world.rot.y, 2, 0x7D0, 0xC8);
 
     if ((SQ(diffX) + SQ(diffZ)) < 100.0f) {
-        if (this->unk2F8 & 1) {
-            this->unk2F4--;
-            if (this->unk2F4 < 0) {
-                return 2;
+        if (this->stateFlags & GERUDO_PURPLE_STATE_PATH_REVERSE) {
+            this->curPointIndex--;
+            if (this->curPointIndex < 0) {
+                return GERUDO_PURPLE_PATHSTATUS_2;
             }
         } else {
-            this->unk2F4++;
-            if (this->unk2F4 >= path->count) {
-                return 2;
+            this->curPointIndex++;
+            if (this->curPointIndex >= path->count) {
+                return GERUDO_PURPLE_PATHSTATUS_2;
             }
         }
-        return 1;
+        return GERUDO_PURPLE_PATHSTATUS_1;
     }
-    return 0;
+    return GERUDO_PURPLE_PATHSTATUS_0;
 }
 
 s32 func_80B8BA40(EnGe2* this) {
@@ -289,7 +311,7 @@ s32 func_80B8BA40(EnGe2* this) {
     }
 
     points = Lib_SegmentedToVirtual(path->points);
-    points += this->unk2F4;
+    points += this->curPointIndex;
     Math_Vec3s_ToVec3f(&point, points);
 
     yawTarget = Math_Vec3f_Yaw(&this->picto.actor.world.pos, &point);
@@ -312,15 +334,14 @@ void EnGe2_SpawnEffects(EnGe2* this, PlayState* play) {
     static Vec3f effectAccel = { 0.0f, -0.025f, 0.0f };
     static Color_RGBA8 effectPrimColor = { 255, 255, 255, 0 };
     static Color_RGBA8 effectEnvColor = { 255, 150, 0, 0 };
-    s16 angle;
-    Vec3f pos;
+    s16 effectAngle = play->state.frames * 0x2800;
+    Vec3f effectPos;
 
-    angle = play->state.frames * 0x2800;
-    pos.x = (Math_CosS(angle) * 5.0f) + this->picto.actor.focus.pos.x;
-    pos.y = this->picto.actor.focus.pos.y + 10.0f;
-    pos.z = (Math_SinS(angle) * 5.0f) + this->picto.actor.focus.pos.z;
-    EffectSsKirakira_SpawnDispersed(play, &pos, &effectVelocity, &effectAccel, &effectPrimColor, &effectEnvColor, 0x3E8,
-                                    0x10);
+    effectPos.x = (Math_CosS(effectAngle) * 5.0f) + this->picto.actor.focus.pos.x;
+    effectPos.y = this->picto.actor.focus.pos.y + 10.0f;
+    effectPos.z = (Math_SinS(effectAngle) * 5.0f) + this->picto.actor.focus.pos.z;
+    EffectSsKirakira_SpawnDispersed(play, &effectPos, &effectVelocity, &effectAccel, &effectPrimColor, &effectEnvColor,
+                                    1000, 16);
 }
 
 void EnGe2_Scream(EnGe2* this) {
@@ -356,7 +377,8 @@ void func_80B8BD38(EnGe2* this, PlayState* play) {
 void func_80B8BD90(EnGe2* this) {
     this->picto.actor.speedXZ = 0.0f;
     this->actionFunc = func_80B8BD38;
-    Animation_Change(&this->skelAnime, &D_06009D1C, 1.0f, 0.0f, Animation_GetLastFrame(&D_06009D1C), 0, -8.0f);
+    Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
+                     Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
 }
 
 void func_80B8BE08(EnGe2* this, PlayState* play) {
@@ -388,7 +410,8 @@ void func_80B8BF04(EnGe2* this, PlayState* play) {
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
 
     if (this->picto.actor.shape.rot.y == this->picto.actor.yawTowardsPlayer) {
-        Animation_Change(&this->skelAnime, &D_060091D0, 1.0f, 0.0f, Animation_GetLastFrame(&D_060091D0), 0, -8.0f);
+        Animation_Change(&this->skelAnime, &gGerudoPurpleChargingAnim, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&gGerudoPurpleChargingAnim), 0, -8.0f);
         this->timer = 50;
         this->actionFunc = func_80B8BE08;
         this->picto.actor.speedXZ = 4.0f;
@@ -396,7 +419,8 @@ void func_80B8BF04(EnGe2* this, PlayState* play) {
 }
 
 void func_80B8BFC8(EnGe2* this) {
-    Animation_Change(&this->skelAnime, &D_06009D1C, 1.0f, 0.0f, Animation_GetLastFrame(&D_06009D1C), 0, -8.0f);
+    Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
+                     Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
     this->timer = 60;
     this->picto.actor.speedXZ = 0.0f;
     this->actionFunc = func_80B8C45C;
@@ -405,9 +429,9 @@ void func_80B8BFC8(EnGe2* this) {
 void func_80B8C048(EnGe2* this, PlayState* play) {
     if (this->picto.actor.colorFilterTimer == 0) {
         func_80B8BFC8(this);
-        this->unk301 = 0;
+        this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
-        this->unk2F8 &= ~4;
+        this->stateFlags &= ~GERUDO_PURPLE_STATE_STUNNED;
     }
 }
 
@@ -420,9 +444,9 @@ void func_80B8C0B0(EnGe2* this, PlayState* play) {
         return;
     } else {
         func_80B8BFC8(this);
-        this->unk301 = 0;
+        this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
-        this->unk2F8 &= ~2;
+        this->stateFlags &= ~GERUDO_PURPLE_STATE_KO;
         this->picto.actor.flags |= ACTOR_FLAG_1;
     }
 }
@@ -434,21 +458,24 @@ void func_80B8C13C(EnGe2* this, PlayState* play) {
     if (player->csMode == 0x1A) {
         this->picto.actor.speedXZ = 0.0f;
         this->actionFunc = func_80B8BF04;
-        Animation_Change(&this->skelAnime, &D_06009D1C, 1.0f, 0.0f, Animation_GetLastFrame(&D_06009D1C), 0, -8.0f);
-        this->unk2F8 |= 0x20;
+        Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
+        this->stateFlags |= GERUDO_PURPLE_STATE_CAPTURING;
     } else if (gSaveContext.save.weekEventReg[80] & 8) {
         this->picto.actor.speedXZ = 0.0f;
         this->actionFunc = func_80B8BCEC;
-        Animation_Change(&this->skelAnime, &D_06009D1C, 1.0f, 0.0f, Animation_GetLastFrame(&D_06009D1C), 0, -8.0f);
-    } else if (func_80B8B5AC(play, &this->picto.actor, &this->picto.actor.focus.pos, this->picto.actor.shape.rot.y,
-                             0x1800, visionRange, this->unk2FC)) {
+        Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
+    } else if (EnGe2_LookForPlayer(play, &this->picto.actor, &this->picto.actor.focus.pos,
+                                   this->picto.actor.shape.rot.y, 0x1800, visionRange, this->verticalDetectRange)) {
         if ((GERUDO_PURPLE_GET_EXIT(&this->picto.actor) != 0x1F) && !Play_InCsMode(play)) {
             this->picto.actor.speedXZ = 0.0f;
             func_800B7298(play, &this->picto.actor, 0x1A);
             func_801000A4(NA_SE_SY_FOUND);
             Message_StartTextbox(play, 0x1194, &this->picto.actor);
             this->actionFunc = func_80B8BF04;
-            Animation_Change(&this->skelAnime, &D_06009D1C, 1.0f, 0.0f, Animation_GetLastFrame(&D_06009D1C), 0, -8.0f);
+            Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
+                             Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
         }
     } else if (this->collider.base.acFlags & AC_HIT) {
         if ((this->collider.info.acHitInfo != NULL) &&
@@ -456,15 +483,16 @@ void func_80B8C13C(EnGe2* this, PlayState* play) {
             Actor_SetColorFilter(&this->picto.actor, 0, 120, 0, 400);
             this->picto.actor.speedXZ = 0.0f;
             this->actionFunc = func_80B8C048;
-            this->unk2F8 |= 4;
+            this->stateFlags |= GERUDO_PURPLE_STATE_STUNNED;
         } else {
-            Animation_Change(&this->skelAnime, &D_06001664, 1.0f, 0.0f, Animation_GetLastFrame(&D_06001664), 2, -8.0f);
+            Animation_Change(&this->skelAnime, &gGerudoPurpleFallingToGroundAnim, 1.0f, 0.0f,
+                             Animation_GetLastFrame(&gGerudoPurpleFallingToGroundAnim), 2, -8.0f);
             this->timer = 200;
             this->picto.actor.speedXZ = 0.0f;
             this->actionFunc = func_80B8C0B0;
             Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
             this->picto.actor.flags &= ~ACTOR_FLAG_1;
-            this->unk2F8 |= 2;
+            this->stateFlags |= GERUDO_PURPLE_STATE_KO;
         }
     } else if (this->picto.actor.home.rot.x == 0) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
@@ -472,16 +500,16 @@ void func_80B8C13C(EnGe2* this, PlayState* play) {
 }
 
 void func_80B8C45C(EnGe2* this, PlayState* play) {
-    u8 temp_v1;
+    u8 detectedStatus;
 
     SkelAnime_Update(&this->skelAnime);
-    temp_v1 = func_80B8B514(play, this);
-    if (temp_v1 != 0) {
+    detectedStatus = EnGe2_DetectPlayer(play, this);
+    if (detectedStatus != GERUDO_PURPLE_DETECTION_UNDETECTED) {
         this->timer = 100;
-        this->unk2FA = this->picto.actor.yawTowardsPlayer;
+        this->yawTarget = this->picto.actor.yawTowardsPlayer;
 
-        if (this->unk301 < temp_v1) {
-            this->unk301 = temp_v1;
+        if (this->detectedStatus < detectedStatus) {
+            this->detectedStatus = detectedStatus;
         }
     }
 
@@ -489,17 +517,21 @@ void func_80B8C45C(EnGe2* this, PlayState* play) {
         this->timer--;
     } else {
         this->actionFunc = func_80B8C59C;
-        Animation_Change(&this->skelAnime, &D_0600A344, 1.0f, 0.0f, Animation_GetLastFrame(&D_0600A344), 0, -8.0f);
+        Animation_Change(&this->skelAnime, &gGerudoPurpleWalkingAnim, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&gGerudoPurpleWalkingAnim), 0, -8.0f);
         this->headRot.y = 0;
-        this->unk301 = 0;
+        this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
     }
 
-    switch (this->unk301) {
-        case 1:
-            Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->unk2FA, 2, 0x3E8, 0x1F4);
+    switch (this->detectedStatus) {
+        case GERUDO_PURPLE_DETECTION_HEARD:
+            Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->yawTarget, 2, 0x3E8, 0x1F4);
             break;
-        case 2:
-            Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->unk2FA, 2, 0xBB8, 0x3E8);
+        case GERUDO_PURPLE_DETECTION_PROXIMITY:
+            Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->yawTarget, 2, 0xBB8, 0x3E8);
+            break;
+
+        default:
             break;
     }
 
@@ -512,62 +544,69 @@ void func_80B8C59C(EnGe2* this, PlayState* play) {
     this->picto.actor.speedXZ = 1.5f;
 
     switch (func_80B8B90C(this)) {
-        case 2:
+        case GERUDO_PURPLE_PATHSTATUS_2:
             func_80B8B6B4(this, play);
             break;
 
-        case 1:
+        case GERUDO_PURPLE_PATHSTATUS_1:
             func_80B8BFC8(this);
-            this->unk301 = 0;
+            this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
             break;
 
         default:
             break;
     }
 
-    this->unk301 = func_80B8B514(play, this);
-    if (this->unk301 != 0) {
+    this->detectedStatus = EnGe2_DetectPlayer(play, this);
+    if (this->detectedStatus != GERUDO_PURPLE_DETECTION_UNDETECTED) {
         func_80B8BFC8(this);
-        this->unk2FA = this->picto.actor.yawTowardsPlayer;
+        this->yawTarget = this->picto.actor.yawTowardsPlayer;
     }
     func_80B8C13C(this, play);
 }
 
-void func_80B8C644(EnGe2* this, PlayState* play) {
+void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Cutscene_CheckActorAction(play, 0x1DC)) {
-        s16 temp_v1 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x1DC)]->action;
-        if (this->unk302 != temp_v1) {
-            this->unk302 = temp_v1;
+        s16 csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x1DC)]->action;
+        if (this->csAction != csAction) {
+            this->csAction = csAction;
 
-            switch (temp_v1) {
+            switch (csAction) {
                 case 1:
-                    Animation_Change(&this->skelAnime, &D_06009D1C, 1.0f, 0.0f, Animation_GetLastFrame(&D_06009D1C), 0,
-                                     -8.0f);
+                    Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
+                                     Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
                     func_80B8B7A8(this, play);
                     break;
+
                 case 2:
-                    Animation_Change(&this->skelAnime, &D_0600030C, 1.0f, 0.0f, Animation_GetLastFrame(&D_0600030C), 0,
-                                     -5.0f);
+                    Animation_Change(&this->skelAnime, &gGerudoPurpleRunningAwayCutsceneAnim, 1.0f, 0.0f,
+                                     Animation_GetLastFrame(&gGerudoPurpleRunningAwayCutsceneAnim), 0, -5.0f);
                     this->screamTimer = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);
                     break;
+
                 case 3:
                     Actor_MarkForDeath(&this->picto.actor);
                     break;
+
                 case 4:
-                    Animation_Change(&this->skelAnime, &D_06000460, 0.0f, 0.0f, 0.0f, 2, 0.0f);
+                    Animation_Change(&this->skelAnime, &gGerudoPurpleGreatBayCutsceneAnim, 0.0f, 0.0f, 0.0f, 2, 0.0f);
                     break;
+
                 case 5:
-                    Animation_Change(&this->skelAnime, &D_06000460, 0.0f, 1.0f, 1.0f, 2, 0.0f);
+                    Animation_Change(&this->skelAnime, &gGerudoPurpleGreatBayCutsceneAnim, 0.0f, 1.0f, 1.0f, 2, 0.0f);
                     func_80B8B848(this, play);
-                    this->unk2F8 |= 8;
+                    this->stateFlags |= GERUDO_PURPLE_STATE_DISABLE_MOVEMENT;
                     this->screamTimer = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);
+                    break;
+
+                default:
                     break;
             }
         }
     }
 
-    switch (this->unk302) {
+    switch (this->csAction) {
         case 2:
             func_80B8B90C(this);
             this->picto.actor.speedXZ = 5.0f;
@@ -585,8 +624,8 @@ void func_80B8C644(EnGe2* this, PlayState* play) {
             break;
 
         case 5:
-            if ((this->unk2F4 < this->path->count) && func_80B8BA40(this)) {
-                this->unk2F4++;
+            if ((this->curPointIndex < this->path->count) && func_80B8BA40(this)) {
+                this->curPointIndex++;
             }
 
             this->picto.actor.shape.rot.x += 0x3E8;
@@ -607,10 +646,10 @@ void func_80B8C644(EnGe2* this, PlayState* play) {
 
 void func_80B8C9B8(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (func_80B8B5AC(play, &this->picto.actor, &this->picto.actor.focus.pos, this->picto.actor.shape.rot.y, 0x4000,
-                      720.0f, this->unk2FC)) {
+    if (EnGe2_LookForPlayer(play, &this->picto.actor, &this->picto.actor.focus.pos, this->picto.actor.shape.rot.y,
+                            0x4000, 720.0f, this->verticalDetectRange)) {
         if ((GERUDO_PURPLE_GET_EXIT(&this->picto.actor) != 0x1F) && !Play_InCsMode(play)) {
-            func_800B7298(play, &this->picto.actor, 0x1AU);
+            func_800B7298(play, &this->picto.actor, 0x1A);
             func_801000A4(NA_SE_SY_FOUND);
             Message_StartTextbox(play, 0x1194, &this->picto.actor);
             this->timer = 50;
@@ -629,16 +668,16 @@ void EnGe2_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnGe2* this = (EnGe2*)thisx;
 
-    if (!(this->unk2F8 & 8)) {
+    if (!(this->stateFlags & GERUDO_PURPLE_STATE_DISABLE_MOVEMENT)) {
         Actor_MoveWithGravity(&this->picto.actor);
     }
     Actor_UpdateBgCheckInfo(play, &this->picto.actor, 40.0f, 25.0f, 40.0f, 5U);
     Collider_UpdateCylinder(&this->picto.actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     if (Cutscene_CheckActorAction(play, 0x1DC)) {
-        this->actionFunc = func_80B8C644;
-        this->unk2F8 &= ~2;
-        this->unk2F8 &= ~1;
+        this->actionFunc = EnGe2_PerformCutsceneActions;
+        this->stateFlags &= ~GERUDO_PURPLE_STATE_KO;
+        this->stateFlags &= ~GERUDO_PURPLE_STATE_PATH_REVERSE;
         this->picto.actor.flags |= ACTOR_FLAG_20;
         this->picto.actor.speedXZ = 0.0f;
     }
@@ -646,9 +685,9 @@ void EnGe2_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     // Blinking
-    if (this->unk2F8 & 2) {
+    if (this->stateFlags & GERUDO_PURPLE_STATE_KO) {
         this->eyeIndex = 2;
-    } else if (!(this->unk2F8 & 4)) {
+    } else if (!(this->stateFlags & GERUDO_PURPLE_STATE_STUNNED)) {
         if (DECR(this->blinkTimer) == 0) {
             this->blinkTimer = Rand_S16Offset(60, 60);
         }
@@ -688,9 +727,9 @@ void EnGe2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 
 void EnGe2_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr sEyeTextures[] = {
-        0x060053E8,
-        0x060059E8,
-        0x06006068,
+        gGerudoPurpleEyeOpenTex,
+        gGerudoPurpleEyeHalfTex,
+        gGerudoPurpleEyeClosedTex,
     };
     s32 pad;
     EnGe2* this = (EnGe2*)thisx;

@@ -14725,7 +14725,7 @@
     0x80B8C13C:("func_80B8C13C",),
     0x80B8C45C:("func_80B8C45C",),
     0x80B8C59C:("func_80B8C59C",),
-    0x80B8C644:("func_80B8C644",),
+    0x80B8C644:("EnGe2_PerformCutsceneActions",),
     0x80B8C9B8:("func_80B8C9B8",),
     0x80B8CAA8:("EnGe2_Update",),
     0x80B8CC0C:("EnGe2_ValidatePictograph",),
