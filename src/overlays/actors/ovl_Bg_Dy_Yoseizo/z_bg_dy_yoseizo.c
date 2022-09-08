@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_dy_yoseizo.h"
+#include "overlays/actors/ovl_Demo_Effect/z_demo_effect.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
@@ -37,27 +38,27 @@ const ActorInit Bg_Dy_Yoseizo_InitVars = {
 };
 
 typedef enum GreatFairyAnimation {
-    /* 0 */ GREATFAIRY_ANIM_0,
-    /* 1 */ GREATFAIRY_ANIM_1,
-    /* 2 */ GREATFAIRY_ANIM_2,
-    /* 3 */ GREATFAIRY_ANIM_3,
-    /* 4 */ GREATFAIRY_ANIM_4,
-    /* 5 */ GREATFAIRY_ANIM_5,
-    /* 6 */ GREATFAIRY_ANIM_6,
-    /* 7 */ GREATFAIRY_ANIM_7,
-    /* 8 */ GREATFAIRY_ANIM_8
+    /* 0 */ GREATFAIRY_ANIM_START_GIVING_UPGRADE,
+    /* 1 */ GREATFAIRY_ANIM_GIVING_UPGRADE,
+    /* 2 */ GREATFAIRY_ANIM_SPIN_LAY_DOWN,
+    /* 3 */ GREATFAIRY_ANIM_LAY_DOWN_TRANSITION,
+    /* 4 */ GREATFAIRY_ANIM_LAYING_DOWN,
+    /* 5 */ GREATFAIRY_ANIM_SHOWING_ITEM,
+    /* 6 */ GREATFAIRY_ANIM_ARMS_FOLDED,
+    /* 7 */ GREATFAIRY_ANIM_CLAPPING,
+    /* 8 */ GREATFAIRY_ANIM_TEACH_SPIN_ATTACK
 } GreatFairyAnimation;
 
 static AnimationHeader* sAnimations[] = {
-    &object_dy_obj_Anim_00129C, // GREATFAIRY_ANIM_0
-    &object_dy_obj_Anim_002338, // GREATFAIRY_ANIM_1
-    &object_dy_obj_Anim_00C500, // GREATFAIRY_ANIM_2
-    &object_dy_obj_Anim_0045FC, // GREATFAIRY_ANIM_3
-    &object_dy_obj_Anim_005238, // GREATFAIRY_ANIM_4
-    &object_dy_obj_Anim_008090, // GREATFAIRY_ANIM_5
-    &object_dy_obj_Anim_00D15C, // GREATFAIRY_ANIM_6
-    &object_dy_obj_Anim_006DE4, // GREATFAIRY_ANIM_7
-    &object_dy_obj_Anim_005E20, // GREATFAIRY_ANIM_8
+    &gGreatFairyStartGivingUpgradeAnim, // GREATFAIRY_ANIM_START_GIVING_UPGRADE
+    &gGreatFairyGivingUpgradeAnim,      // GREATFAIRY_ANIM_GIVING_UPGRADE
+    &gGreatFairySpinLayDownAnim,        // GREATFAIRY_ANIM_SPIN_LAY_DOWN
+    &gGreatFairyLayDownTransitionAnim,  // GREATFAIRY_ANIM_LAY_DOWN_TRANSITION
+    &gGreatFairyLayingDownAnim,         // GREATFAIRY_ANIM_LAYING_DOWN
+    &gGreatFairyShowingItemAnim,        // GREATFAIRY_ANIM_SHOWING_ITEM
+    &gGreatFairyArmsFoldedAnim,         // GREATFAIRY_ANIM_ARMS_FOLDED
+    &gGreatFairyClappingAnim,           // GREATFAIRY_ANIM_CLAPPING
+    &gGreatFairyTeachSpinAttackAnim,    // GREATFAIRY_ANIM_TEACH_SPIN_ATTACK
 };
 
 void BgDyYoseizo_Init(Actor* thisx, PlayState* play) {
@@ -66,7 +67,7 @@ void BgDyYoseizo_Init(Actor* thisx, PlayState* play) {
     this->unk2EC = this->actor.world.pos.y + 40.0f;
     this->actor.focus.pos = this->actor.world.pos;
 
-    SkelAnime_InitFlex(play, &this->skelAnime, &gGreatFairySkel, &object_dy_obj_Anim_008090, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGreatFairySkel, &gGreatFairyShowingItemAnim, this->jointTable,
                        this->morphTable, GREAT_FAIRY_LIMB_MAX);
 
     this->actionFunc = func_80A0BB08;
@@ -230,10 +231,11 @@ void func_80A0AE1C(BgDyYoseizo* this, PlayState* play) {
         if ((GREAT_FAIRY_GET_TYPE(&this->actor)) < 4) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_DEMO_EFFECT, this->actor.world.pos.x,
                         this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 0, 0, 0,
-                        (GREAT_FAIRY_GET_TYPE(&this->actor)) + 4);
+                        (GREAT_FAIRY_GET_TYPE(&this->actor)) + DEMO_EFFECT_TYPE_LIGHT_BASE);
         } else {
             Actor_Spawn(&play->actorCtx, play, ACTOR_DEMO_EFFECT, this->actor.world.pos.x,
-                        this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 0, 0, 0, 4);
+                        this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 0, 0, 0,
+                        DEMO_EFFECT_TYPE_LIGHT_DARK_YELLOW);
         }
         play_sound(NA_SE_SY_WHITE_OUT_T);
     } else {
@@ -253,8 +255,8 @@ void func_80A0AE1C(BgDyYoseizo* this, PlayState* play) {
 }
 
 void func_80A0AFDC(BgDyYoseizo* this) {
-    Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_2], 0.0f, 46.0f,
-                     Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_2]), 2, 0.0f);
+    Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_SPIN_LAY_DOWN], 0.0f, 46.0f,
+                     Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_SPIN_LAY_DOWN]), ANIMMODE_ONCE, 0.0f);
     this->actionFunc = func_80A0AE1C;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_FR_LAUGH_0);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GREAT_FAIRY_VANISH);
@@ -271,8 +273,8 @@ void func_80A0B078(BgDyYoseizo* this, PlayState* play) {
 
     if (Cutscene_CheckActorAction(play, 103) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 7)) {
-        Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_4], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_4]), 0, 0.0f);
+        Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_LAYING_DOWN], 1.0f, 0.0f,
+                         Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_LAYING_DOWN]), ANIMMODE_LOOP, 0.0f);
         this->actionFunc = func_80A0B184;
     } else if (Cutscene_CheckActorAction(play, 103) &&
                (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 6)) {
@@ -286,8 +288,8 @@ void func_80A0B184(BgDyYoseizo* this, PlayState* play) {
 
     if (Cutscene_CheckActorAction(play, 103) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 8)) {
-        Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_5], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_5]), 0, 0.0f);
+        Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_SHOWING_ITEM], 1.0f, 0.0f,
+                         Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_SHOWING_ITEM]), ANIMMODE_LOOP, 0.0f);
         this->actionFunc = func_80A0B078;
     } else if (Cutscene_CheckActorAction(play, 103) &&
                (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 6)) {
@@ -301,8 +303,8 @@ void func_80A0B290(BgDyYoseizo* this, PlayState* play) {
 
     if (Cutscene_CheckActorAction(play, 103) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 7)) {
-        Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_4], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_4]), 0, -10.0f);
+        Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_LAYING_DOWN], 1.0f, 0.0f,
+                         Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_LAYING_DOWN]), ANIMMODE_LOOP, -10.0f);
         this->actionFunc = func_80A0B184;
         this->mouthIndex = 0;
     }
@@ -366,8 +368,8 @@ void func_80A0B500(BgDyYoseizo* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         Vec3f pos;
 
-        Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_1], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_1]), 0, 0.0f);
+        Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_GIVING_UPGRADE], 1.0f, 0.0f,
+                         Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_GIVING_UPGRADE]), ANIMMODE_LOOP, 0.0f);
         this->actionFunc = func_80A0B35C;
         pos.x = player->actor.world.pos.x;
         pos.y = player->actor.world.pos.y + 200.0f;
@@ -382,14 +384,15 @@ void func_80A0B5F0(BgDyYoseizo* this, PlayState* play) {
     BgDyYoseizo_Bob(this, play);
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_4], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_4]), 0, 0.0f);
+        Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_LAYING_DOWN], 1.0f, 0.0f,
+                         Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_LAYING_DOWN]), ANIMMODE_LOOP, 0.0f);
     }
 
     if (Cutscene_CheckActorAction(play, 103) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 5)) {
-        Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_0], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_0]), 2, -5.0f);
+        Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_START_GIVING_UPGRADE], 1.0f, 0.0f,
+                         Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_START_GIVING_UPGRADE]), ANIMMODE_ONCE,
+                         -5.0f);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_FR_SMILE_0);
         this->mouthIndex = 1;
         this->eyeIndex = 0;
@@ -412,8 +415,8 @@ void func_80A0B75C(BgDyYoseizo* this, PlayState* play) {
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 4)) {
         this->actor.shape.rot.y = 0;
         this->actionFunc = func_80A0B5F0;
-        Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_3], 1.0f, 2.0f,
-                         Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_3]), 2, 0.0f);
+        Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_LAY_DOWN_TRANSITION], 1.0f, 2.0f,
+                         Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_LAY_DOWN_TRANSITION]), ANIMMODE_ONCE, 0.0f);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_FR_SMILE_0);
         this->unk2F8 = 0;
     }
@@ -421,8 +424,8 @@ void func_80A0B75C(BgDyYoseizo* this, PlayState* play) {
 
 void func_80A0B834(BgDyYoseizo* this) {
     this->actor.draw = BgDyYoseizo_Draw;
-    Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_2], 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_2]), 2, 0.0f);
+    Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_SPIN_LAY_DOWN], 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_SPIN_LAY_DOWN]), ANIMMODE_ONCE, 0.0f);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_FR_LAUGH_0);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GREAT_FAIRY_APPEAR);
     BgDyYoseizo_SpawnEffects(this, GREAT_FAIRY_EFFECT_TRAJECTORY_FAST_RADIANT, 30);
@@ -480,13 +483,13 @@ void func_80A0B8CC(BgDyYoseizo* this, PlayState* play) {
     if (csAction != this->unk2F8) {
         switch (csAction) {
             case 9:
-                Animation_PlayLoop(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_6]);
+                Animation_PlayLoop(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_ARMS_FOLDED]);
                 break;
             case 10:
-                Animation_PlayLoop(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_7]);
+                Animation_PlayLoop(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_CLAPPING]);
                 break;
             case 11:
-                Animation_PlayOnce(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_8]);
+                Animation_PlayOnce(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_TEACH_SPIN_ATTACK]);
                 break;
         }
         this->unk2F8 = csAction;
@@ -503,7 +506,7 @@ void func_80A0BB08(BgDyYoseizo* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, 103) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 7)) {
         this->actor.draw = BgDyYoseizo_Draw;
-        Animation_PlayLoop(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_4]);
+        Animation_PlayLoop(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_LAYING_DOWN]);
         this->actionFunc = func_80A0B184;
         this->mouthIndex = 0;
         this->actor.world.pos.y = this->actor.home.pos.y + 40.0f;
@@ -514,7 +517,7 @@ void func_80A0BB08(BgDyYoseizo* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, 103) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 9)) {
         Actor_SetScale(&this->actor, 0.01f);
-        Animation_PlayLoop(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_6]);
+        Animation_PlayLoop(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_ARMS_FOLDED]);
         this->unk2F8 = 9;
         this->actionFunc = func_80A0B8CC;
         this->actor.draw = BgDyYoseizo_Draw;

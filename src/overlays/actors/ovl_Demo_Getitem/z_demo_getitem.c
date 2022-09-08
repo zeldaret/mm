@@ -38,7 +38,7 @@ static u16 sCsActorIds[] = { 0x6E, 0x236 };
 
 typedef enum {
     /* 0 */ DEMOGETITEM_ITEM_MASK_GREAT_FAIRY,
-    /* 0 */ DEMOGETITEM_ITEM_SWORD_GREAT_FAIRY,
+    /* 1 */ DEMOGETITEM_ITEM_SWORD_GREAT_FAIRY,
 } GreatFairyRewardItem;
 
 void DemoGetitem_Init(Actor* thisx, PlayState* play) {
@@ -78,7 +78,7 @@ void DemoGetitem_Wait(DemoGetitem* this, PlayState* play) {
 
 void DemoGetitem_PerformCutsceneActions(DemoGetitem* this, PlayState* play) {
     s32 pad;
-    u16 bobPhase = (play->gameplayFrames * 0x3E8) & 0xFFFF;
+    u16 bobPhase = (play->gameplayFrames * 1000) & 0xFFFF;
 
     if (Cutscene_CheckActorAction(play, this->csActorId)) {
         if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csActorId)]->action != 4) {

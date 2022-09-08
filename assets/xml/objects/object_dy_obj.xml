@@ -2,16 +2,16 @@
     <!-- Great Fairy assets -->
     <File Name="object_dy_obj" Segment="6">
         <!-- Great Fairy animations -->
-        <Animation Name="object_dy_obj_Anim_00129C" Offset="0x129C" />
-        <Animation Name="object_dy_obj_Anim_002338" Offset="0x2338" />
-        <Animation Name="object_dy_obj_Anim_0027B0" Offset="0x27B0" />
-        <Animation Name="object_dy_obj_Anim_0045FC" Offset="0x45FC" />
-        <Animation Name="object_dy_obj_Anim_005238" Offset="0x5238" />
-        <Animation Name="object_dy_obj_Anim_005E20" Offset="0x5E20" />
-        <Animation Name="object_dy_obj_Anim_006DE4" Offset="0x6DE4" />
-        <Animation Name="object_dy_obj_Anim_008090" Offset="0x8090" />
-        <Animation Name="object_dy_obj_Anim_00C500" Offset="0xC500" />
-        <Animation Name="object_dy_obj_Anim_00D15C" Offset="0xD15C" />
+        <Animation Name="gGreatFairyStartGivingUpgradeAnim" Offset="0x129C" /> <!-- Original name is "be_mahoukousi" -->
+        <Animation Name="gGreatFairyGivingUpgradeAnim" Offset="0x2338" /> <!-- Original name is "be_mahoukousi_loop" -->
+        <Animation Name="gGreatFairyAnim_0027B0" Offset="0x27B0" /> <!-- Original name is "be_syutugen" --> <!-- unused -->
+        <Animation Name="gGreatFairyLayDownTransitionAnim" Offset="0x45FC" /> <!-- Original name is "be_utubuse" -->
+        <Animation Name="gGreatFairyLayingDownAnim" Offset="0x5238" /> <!-- Original name is "be_utubuse_loop" -->
+        <Animation Name="gGreatFairyTeachSpinAttackAnim" Offset="0x5E20" /> <!-- Original name is "bigelf_denjyu" ("instruction") -->
+        <Animation Name="gGreatFairyClappingAnim" Offset="0x6DE4" /> <!-- Original name is "bigelf_hakusyu" ("applause") -->
+        <Animation Name="gGreatFairyShowingItemAnim" Offset="0x8090" /> <!-- Original name is "bigelf_itemdasu" -->
+        <Animation Name="gGreatFairySpinLayDownAnim" Offset="0xC500" /> <!-- Original name is "bigelf_syutugen" -->
+        <Animation Name="gGreatFairyArmsFoldedAnim" Offset="0xD15C" /> <!-- Original name is "bigelf_udegumi" ("arms crossed") -->
 
         <!-- Great Fairy particles -->
         <DList Name="gGreatFairyParticleSetupDL" Offset="0xD1B0" />
@@ -24,7 +24,7 @@
         <Array Name="gGreatFairySpiralBeamVtx" Count="27" Offset="0xDD40">
             <Vtx/>
         </Array>
-        <DList Name="gGreatFairySpiralBeamDL" Offset="0xDEF0" />
+        <DList Name="gGreatFairySpiralBeamDL" Offset="0xDEF0" /> <!-- Original name is "efc_g_fairly_modelT" -->
 
         <!-- Great Fairy model -->
         <!-- Displaylists -->
