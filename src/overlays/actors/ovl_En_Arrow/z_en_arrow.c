@@ -473,7 +473,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
         }
 
         if (this->actor.params < ENARROW_6) {
-            this->actor.shape.rot.x = Math_FAtan2F(this->actor.speedXZ, -this->actor.velocity.y);
+            this->actor.shape.rot.x = Math_Atan2S_Depr(this->actor.speedXZ, -this->actor.velocity.y);
         }
     }
 
