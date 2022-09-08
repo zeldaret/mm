@@ -25,6 +25,15 @@ typedef enum {
     /* 7 */ GERUDO_PURPLE_TYPE_FORTRESS = 7 //!< In both courtyard and rooms
 } GerudoPurpleType;
 
+//! TODO: work out where to put this
+typedef enum {
+    /* 1 */ ENGE2_CSACTION_BEEHIVE_PATROL = 1,
+    /* 2 */ ENGE2_CSACTION_BEEHIVE_RUN_AWAY,
+    /* 3 */ ENGE2_CSACTION_BEEHIVE_EXIT,
+    /* 4 */ ENGE2_CSACTION_GBT_ENTR_STAND_STILL,
+    /* 5 */ ENGE2_CSACTION_GBT_ENTR_BLOWN_AWAY
+} EnGe2CsAction;
+
 typedef struct EnGe2 {
     /* 0x000 */ PictoActor picto;
     /* 0x148 */ ColliderCylinder collider;

@@ -15,7 +15,7 @@ void EnGe2_Destroy(Actor* thisx, PlayState* play);
 void EnGe2_Update(Actor* thisx, PlayState* play);
 void EnGe2_Draw(Actor* thisx, PlayState* play);
 
-s32 func_80B8B6B4(EnGe2* this, PlayState* play);
+s32 EnGe2_Path_func_80B8B6B4(EnGe2* this, PlayState* play);
 
 void func_80B8C45C(EnGe2* this, PlayState* play);
 void func_80B8C59C(EnGe2* this, PlayState* play);
@@ -103,7 +103,7 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = func_80B8C59C;
     this->picto.validationFunc = EnGe2_ValidatePictograph;
 
-    func_80B8B6B4(this, play);
+    EnGe2_Path_func_80B8B6B4(this, play);
 
     this->picto.actor.flags |= ACTOR_FLAG_10;
     if (play->actorCtx.unk5 & 2) {
@@ -188,7 +188,7 @@ s32 EnGe2_LookForPlayer(PlayState* play, Actor* actor, Vec3f* pos, s16 yaw, s16 
 
 /* Path functions */
 
-s32 func_80B8B6B4(EnGe2* this, PlayState* play) {
+s32 EnGe2_Path_func_80B8B6B4(EnGe2* this, PlayState* play) {
     if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != GERUDO_PURPLE_PATH_NONE) {
         this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
         if (this->path != NULL) {
@@ -213,7 +213,7 @@ s32 func_80B8B6B4(EnGe2* this, PlayState* play) {
     return false;
 }
 
-void func_80B8B7A8(EnGe2* this, PlayState* play) {
+void EnGe2_Path_func_80B8B7A8(EnGe2* this, PlayState* play) {
     Path* curPath;
     Path* nextPath;
     Vec3s* points;
@@ -234,12 +234,13 @@ void func_80B8B7A8(EnGe2* this, PlayState* play) {
     }
 }
 
-void func_80B8B848(EnGe2* this, PlayState* play) {
+void EnGe2_Path_func_80B8B848(EnGe2* this, PlayState* play) {
     s32 pad;
     Vec3s* points;
     Vec3f nextPoint;
 
     this->curPointIndex = 0;
+
     if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != GERUDO_PURPLE_PATH_NONE) {
         this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
         if (this->path != NULL) {
@@ -264,7 +265,7 @@ typedef enum {
     /* 2 */ GERUDO_PURPLE_PATHSTATUS_2  //! reached end of path
 } GerudoPurplePathStatus;
 
-GerudoPurplePathStatus func_80B8B90C(EnGe2* this) {
+GerudoPurplePathStatus EnGe2_Path_func_80B8B90C(EnGe2* this) {
     Path* path = this->path;
     Vec3s* curPoint;
     f32 diffX;
@@ -275,10 +276,8 @@ GerudoPurplePathStatus func_80B8B90C(EnGe2* this) {
     }
 
     curPoint = (Vec3s*)Lib_SegmentedToVirtual(path->points) + this->curPointIndex;
-
     diffX = curPoint->x - this->picto.actor.world.pos.x;
     diffZ = curPoint->z - this->picto.actor.world.pos.z;
-
     this->picto.actor.world.rot.y = Math_Atan2S(diffX, diffZ);
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.world.rot.y, 2, 0x7D0, 0xC8);
 
@@ -299,7 +298,7 @@ GerudoPurplePathStatus func_80B8B90C(EnGe2* this) {
     return GERUDO_PURPLE_PATHSTATUS_0;
 }
 
-s32 func_80B8BA40(EnGe2* this) {
+s32 EnGe2_Path_func_80B8BA40(EnGe2* this) {
     s32 pad;
     Vec3s* points;
     Path* path = this->path;
@@ -353,8 +352,8 @@ void EnGe2_Scream(EnGe2* this) {
     }
 }
 
-// Set up the captured transition
-void func_80B8BC78(EnGe2* this, PlayState* play) {
+// Set up the captured transition when timer is 0
+void EnGe2_ThrowPlayerOut(EnGe2* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
     } else if (play->nextEntrance != play->setupExitList[GERUDO_PURPLE_GET_EXIT(&this->picto.actor)]) {
@@ -364,6 +363,7 @@ void func_80B8BC78(EnGe2* this, PlayState* play) {
     }
 }
 
+// Only used if gSaveContext.save.weekEventReg[80] & 8
 void func_80B8BCEC(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 2, 0x1000, 0x200);
@@ -372,10 +372,10 @@ void func_80B8BCEC(EnGe2* this, PlayState* play) {
 void func_80B8BD38(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 2, 0x400, 0x100);
-    func_80B8BC78(this, play);
+    EnGe2_ThrowPlayerOut(this, play);
 }
 
-void func_80B8BD90(EnGe2* this) {
+void EnGe2_Setup_func_80B8BD38(EnGe2* this) {
     this->picto.actor.speedXZ = 0.0f;
     this->actionFunc = func_80B8BD38;
     Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
@@ -388,16 +388,16 @@ void func_80B8BE08(EnGe2* this, PlayState* play) {
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
 
     if (this->picto.actor.xzDistToPlayer < 50.0f) {
-        func_80B8BD90(this);
+        EnGe2_Setup_func_80B8BD38(this);
     } else if (!(this->picto.actor.bgCheckFlags & 1)) {
         this->picto.actor.world.pos = this->picto.actor.prevPos;
-        func_80B8BD90(this);
+        EnGe2_Setup_func_80B8BD38(this);
     }
 
     if (this->timer > 0) {
         this->timer--;
     } else {
-        func_80B8BC78(this, play);
+        EnGe2_ThrowPlayerOut(this, play);
     }
 
     if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f)) {
@@ -419,7 +419,7 @@ void func_80B8BF04(EnGe2* this, PlayState* play) {
     }
 }
 
-void func_80B8BFC8(EnGe2* this) {
+void EnGe2_Setup_func_80B8C45C(EnGe2* this) {
     Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                      Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
     this->timer = 60;
@@ -427,16 +427,16 @@ void func_80B8BFC8(EnGe2* this) {
     this->actionFunc = func_80B8C45C;
 }
 
-void func_80B8C048(EnGe2* this, PlayState* play) {
+void EnGe2_Stunned(EnGe2* this, PlayState* play) {
     if (this->picto.actor.colorFilterTimer == 0) {
-        func_80B8BFC8(this);
+        EnGe2_Setup_func_80B8C45C(this);
         this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         this->stateFlags &= ~GERUDO_PURPLE_STATE_STUNNED;
     }
 }
 
-void func_80B8C0B0(EnGe2* this, PlayState* play) {
+void EnGe2_KnockedOut(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     EnGe2_SpawnEffects(this, play);
 
@@ -444,7 +444,7 @@ void func_80B8C0B0(EnGe2* this, PlayState* play) {
         this->timer--;
         return;
     } else {
-        func_80B8BFC8(this);
+        EnGe2_Setup_func_80B8C45C(this);
         this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         this->stateFlags &= ~GERUDO_PURPLE_STATE_KO;
@@ -483,14 +483,14 @@ void func_80B8C13C(EnGe2* this, PlayState* play) {
             (this->collider.info.acHitInfo->toucher.dmgFlags & DMG_DEKU_NUT)) {
             Actor_SetColorFilter(&this->picto.actor, 0, 120, 0, 400);
             this->picto.actor.speedXZ = 0.0f;
-            this->actionFunc = func_80B8C048;
+            this->actionFunc = EnGe2_Stunned;
             this->stateFlags |= GERUDO_PURPLE_STATE_STUNNED;
         } else {
             Animation_Change(&this->skelAnime, &gGerudoPurpleFallingToGroundAnim, 1.0f, 0.0f,
                              Animation_GetLastFrame(&gGerudoPurpleFallingToGroundAnim), 2, -8.0f);
             this->timer = 200;
             this->picto.actor.speedXZ = 0.0f;
-            this->actionFunc = func_80B8C0B0;
+            this->actionFunc = EnGe2_KnockedOut;
             Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
             this->picto.actor.flags &= ~ACTOR_FLAG_1;
             this->stateFlags |= GERUDO_PURPLE_STATE_KO;
@@ -544,13 +544,13 @@ void func_80B8C59C(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->picto.actor.speedXZ = 1.5f;
 
-    switch (func_80B8B90C(this)) {
+    switch (EnGe2_Path_func_80B8B90C(this)) {
         case GERUDO_PURPLE_PATHSTATUS_2:
-            func_80B8B6B4(this, play);
+            EnGe2_Path_func_80B8B6B4(this, play);
             break;
 
         case GERUDO_PURPLE_PATHSTATUS_1:
-            func_80B8BFC8(this);
+            EnGe2_Setup_func_80B8C45C(this);
             this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
             break;
 
@@ -560,7 +560,7 @@ void func_80B8C59C(EnGe2* this, PlayState* play) {
 
     this->detectedStatus = EnGe2_DetectPlayer(play, this);
     if (this->detectedStatus != GERUDO_PURPLE_DETECTION_UNDETECTED) {
-        func_80B8BFC8(this);
+        EnGe2_Setup_func_80B8C45C(this);
         this->yawTarget = this->picto.actor.yawTowardsPlayer;
     }
     func_80B8C13C(this, play);
@@ -568,35 +568,35 @@ void func_80B8C59C(EnGe2* this, PlayState* play) {
 
 void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (Cutscene_CheckActorAction(play, 0x1DC)) {
-        s16 csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x1DC)]->action;
+    if (Cutscene_CheckActorAction(play, 476)) {
+        s16 csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 476)]->action;
         if (this->csAction != csAction) {
             this->csAction = csAction;
 
             switch (csAction) {
-                case 1:
+                case ENGE2_CSACTION_BEEHIVE_PATROL:
                     Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                                      Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
-                    func_80B8B7A8(this, play);
+                    EnGe2_Path_func_80B8B7A8(this, play);
                     break;
 
-                case 2:
+                case ENGE2_CSACTION_BEEHIVE_RUN_AWAY:
                     Animation_Change(&this->skelAnime, &gGerudoPurpleRunningAwayCutsceneAnim, 1.0f, 0.0f,
                                      Animation_GetLastFrame(&gGerudoPurpleRunningAwayCutsceneAnim), 0, -5.0f);
                     this->screamTimer = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);
                     break;
 
-                case 3:
+                case ENGE2_CSACTION_BEEHIVE_EXIT:
                     Actor_MarkForDeath(&this->picto.actor);
                     break;
 
-                case 4:
+                case ENGE2_CSACTION_GBT_ENTR_STAND_STILL:
                     Animation_Change(&this->skelAnime, &gGerudoPurpleGreatBayCutsceneAnim, 0.0f, 0.0f, 0.0f, 2, 0.0f);
                     break;
 
-                case 5:
+                case ENGE2_CSACTION_GBT_ENTR_BLOWN_AWAY:
                     Animation_Change(&this->skelAnime, &gGerudoPurpleGreatBayCutsceneAnim, 0.0f, 1.0f, 1.0f, 2, 0.0f);
-                    func_80B8B848(this, play);
+                    EnGe2_Path_func_80B8B848(this, play);
                     this->stateFlags |= GERUDO_PURPLE_STATE_DISABLE_MOVEMENT;
                     this->screamTimer = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);
                     break;
@@ -608,8 +608,8 @@ void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
     }
 
     switch (this->csAction) {
-        case 2:
-            func_80B8B90C(this);
+        case ENGE2_CSACTION_BEEHIVE_RUN_AWAY:
+            EnGe2_Path_func_80B8B90C(this);
             this->picto.actor.speedXZ = 5.0f;
 
             if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f)) {
@@ -624,8 +624,8 @@ void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
             }
             break;
 
-        case 5:
-            if ((this->curPointIndex < this->path->count) && func_80B8BA40(this)) {
+        case ENGE2_CSACTION_GBT_ENTR_BLOWN_AWAY:
+            if ((this->curPointIndex < this->path->count) && EnGe2_Path_func_80B8BA40(this)) {
                 this->curPointIndex++;
             }
 
@@ -654,7 +654,7 @@ void func_80B8C9B8(EnGe2* this, PlayState* play) {
             func_801000A4(NA_SE_SY_FOUND);
             Message_StartTextbox(play, 0x1194, &this->picto.actor);
             this->timer = 50;
-            func_80B8BD90(this);
+            EnGe2_Setup_func_80B8BD38(this);
         }
     }
 
@@ -675,7 +675,7 @@ void EnGe2_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->picto.actor, 40.0f, 25.0f, 40.0f, 5U);
     Collider_UpdateCylinder(&this->picto.actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    if (Cutscene_CheckActorAction(play, 0x1DC)) {
+    if (Cutscene_CheckActorAction(play, 476)) {
         this->actionFunc = EnGe2_PerformCutsceneActions;
         this->stateFlags &= ~GERUDO_PURPLE_STATE_KO;
         this->stateFlags &= ~GERUDO_PURPLE_STATE_PATH_REVERSE;

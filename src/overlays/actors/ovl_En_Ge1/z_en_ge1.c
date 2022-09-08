@@ -260,9 +260,9 @@ void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
         EnGe1_ChangeAnim(this, GERUDO_WHITE_ANIM_STIFF_SHIVERING, ANIMMODE_LOOP, 0.0f);
     }
 
-    if (Cutscene_CheckActorAction(play, 0x79)) {
+    if (Cutscene_CheckActorAction(play, 121)) {
         this->picto.actor.draw = EnGe1_Draw;
-        csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x79)]->action;
+        csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 121)]->action;
         switch (csAction) {
             case 8:
                 this->stateFlags &= ~GERUDO_WHITE_STATE_DISABLE_MOVEMENT;
