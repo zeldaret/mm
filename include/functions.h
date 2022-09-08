@@ -2526,7 +2526,7 @@ void func_80164C14(Gfx** arg0, TexturePtr* arg1, s32 arg2, s32 arg3, s32 arg4, s
 // void func_80165224(void);
 // void func_80165288(void);
 // void func_8016537C(void);
-void func_80165438(UNK_PTR param_1);
+// void func_80165438(UNK_PTR param_1);
 // void func_80165444(s32 param_1, UNK_TYPE4 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5);
 // void func_80165460(void);
 // void func_80165608(void);

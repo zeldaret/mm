@@ -1310,4 +1310,20 @@ typedef struct {
     /* 0x7C */ Camera* camera;
 } DbCameraUnkStruct; // size = 0x80
 
+typedef struct {
+    union {
+    struct {
+        u32 unk_0_0 : 8;
+        u32 unk_0_4 : 24;
+    };
+    u32 unk_0;
+    };
+    u32 unk_4;
+    u32 unk_8;
+    u32 unk_C;
+    u32 unk_10;
+    TransitionInit* unk_14;
+    s32 unk_18;
+} TransitionOverlay;
+ 
 #endif
