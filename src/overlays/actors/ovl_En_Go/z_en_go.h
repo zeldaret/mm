@@ -34,7 +34,7 @@ enum {
 };
 
 typedef enum {
-    ENGO_ANIM_INVALID,
+    ENGO_ANIM_INVALID = -1,
     ENGO_ANIM_GORON_START = 0,
     ENGO_ANIM_LYINGDOWNIDLE = 0,
     ENGO_ANIM_LYINGDOWNIDLE_IMM,
@@ -93,7 +93,7 @@ typedef struct EnGo {
     /* 0x284 */ Path* path;
     /* 0x288 */ s8 indexTaisou;
     /* 0x289 */ s8 indexHakuginDemo;
-    /* 0x28C */ s32 unk_28C;
+    /* 0x28C */ s32 msgScriptResumePos;
     /* 0x290 */ Vec3f limb17Pos;
     /* 0x29C */ Vec3f limb10Pos;
     /* 0x2A8 */ Vec3s limb17Rot;
