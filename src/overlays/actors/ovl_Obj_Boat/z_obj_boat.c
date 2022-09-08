@@ -51,7 +51,7 @@ s16 ObjBoat_GetNextPoint(ObjBoat* this, Vec3f* nextPoint) {
     Math_Vec3s_ToVec3f(nextPoint, &curPoint[this->direction]);
     yaw = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, nextPoint);
 
-    return ((this->direction > 0) ? yaw : BINANG_ROT180(yaw));
+    return ((this->direction > 0) ? yaw : yaw + 0x8000);
 }
 
 void ObjBoat_Init(Actor* thisx, PlayState* play) {
