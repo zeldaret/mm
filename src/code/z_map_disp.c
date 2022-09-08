@@ -95,8 +95,8 @@ f32 func_80102F9C(f32 arg0) {
     return 0.0f;
 }
 
-void func_80103090(MinimapEntry* arg0, s32* out1, s32* out2) {
-    func_80109754(arg0->mapId, out1, out2);
+void MapDisp_GetMapTexDim(MinimapEntry* arg0, s32* out1, s32* out2) {
+    MapData_GetMapTexDim(arg0->mapId, out1, out2);
 }
 
 void MapDisp_GetMapScale(MinimapEntry* arg0, s32* scale) {
@@ -106,31 +106,28 @@ void MapDisp_GetMapScale(MinimapEntry* arg0, s32* scale) {
     }
 }
 
-void func_801030F4(MinimapEntry* arg0, s32* arg1, s32* arg2) {
-    s32 sp2C;
-    s32 sp28;
-    s32 temp_v0;
-    s32 temp_v0_2;
+void MapDisp_GetMapPos(MinimapEntry* arg0, s32* arg1, s32* arg2) {
+    s32 width;
+    s32 height;
+    s32 temp;
+    s32 temp2;
 
     if (arg0->mapId == 0xFFFF) {
         *arg1 = 0;
         *arg2 = 0;
         return;
     }
-    func_80103090(arg0, &sp2C, &sp28);
+    MapDisp_GetMapTexDim(arg0, &width, &height);
     func_801097C8(arg0->mapId, arg1, arg2);
     if (arg0->unk8 & 1) {
-        temp_v0 = sp2C / 2;
-        *arg1 = (temp_v0 - *arg1) + temp_v0;
+        temp = width / 2;
+        *arg1 = (temp - *arg1) + temp;
     }
     if (arg0->unk8 & 2) {
-        temp_v0_2 = sp28 / 2;
-        *arg2 = (temp_v0_2 - *arg2) + temp_v0_2;
+        temp2 = height / 2;
+        *arg2 = (temp2 - *arg2) + temp2;
     }
 }
-
-void func_801098A0(u16, s32*);
-s32 func_80109908(u16);
 
 #ifdef NON_MATCHING
 // https://decomp.me/scratch/XPZfI
@@ -149,7 +146,7 @@ void func_801031D0(PlayState* play, TexturePtr arg1, s32 arg2, s32 arg3, s32 arg
 
     spCC = &D_801BEBB8.unk0->entry[arg4];
     if ((spCC->mapId != 0xFFFF) && (arg1 != 0)) {
-        func_80103090(spCC, &spC8, &spC4);
+        MapDisp_GetMapTexDim(spCC, &spC8, &spC4);
         OPEN_DISPS(play->state.gfxCtx);
         func_8012C654(play->state.gfxCtx);
         func_801094A0(func_80109908(spCC->mapId), &spAC);
@@ -253,8 +250,8 @@ void func_80103A58(PlayState* play, Actor* actor) {
     spDC = &D_801BEBB8.unk0->entry[D_801BEBB8.curRoom];
     spB4 = GET_PLAYER(play);
     if (spDC->mapId != 0xFFFF) {
-        func_801030F4(spDC, &spD0, &spCC);
-        func_80103090(spDC, &spC8, &spC4);
+        MapDisp_GetMapPos(spDC, &spD0, &spCC);
+        MapDisp_GetMapTexDim(spDC, &spC8, &spC4);
         var_v0 = D_801BEBB8.unk0->scale;
         if (D_801BEBB8.unk0->scale == 0) {
             var_v0 = 20;
@@ -412,8 +409,8 @@ void func_801045AC(PlayState* play, Actor* actor) {
     }
     sp7C = &D_801BEBB8.unk0->entry[D_801BEBB8.curRoom];
     if (sp7C->mapId != 0xFFFF) {
-        func_801030F4(sp7C, &sp70, &sp6C);
-        func_80103090(sp7C, &sp68, &sp64);
+        MapDisp_GetMapPos(sp7C, &sp70, &sp6C);
+        MapDisp_GetMapTexDim(sp7C, &sp68, &sp64);
 
         var_v1 = D_801BEBB8.unk0->scale;
         if (D_801BEBB8.unk0->scale == 0) {
@@ -837,8 +834,8 @@ void func_80105C40(s16 room) {
                 D_801BEBB8.unk1C = D_801BEBB8.unk1E;
                 return;
             }
-            func_801030F4(temp_s0, &sp44, &sp40);
-            func_80103090(temp_s0, &sp4C, &sp48);
+            MapDisp_GetMapPos(temp_s0, &sp44, &sp40);
+            MapDisp_GetMapTexDim(temp_s0, &sp4C, &sp48);
             D_801BEBB8.unk8 = 0x127 - sp4C;
             D_801BEBB8.unkA = 0xDC - sp48;
             if (D_801BEBB8.prevRoom != -1) {
@@ -855,7 +852,7 @@ void func_80105C40(s16 room) {
                     s32 sp38;
                     s32 var_v0;
                     s32 pad;
-                    func_801030F4(sp58, &sp3C, &sp38);
+                    MapDisp_GetMapPos(sp58, &sp3C, &sp38);
                     var_v0 = D_801BEBB8.unk0->scale;
                     if (D_801BEBB8.unk0->scale == 0) {
                         var_v0 = 20;
@@ -913,8 +910,8 @@ void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot) {
     sp6C = &D_801BEBB8.unk0->entry[D_801BEBB8.curRoom];
     if (sp6C->mapId != 0xFFFF) {
         f32 sp4C;
-        func_801030F4(sp6C, &sp60, &sp5C);
-        func_80103090(sp6C, &sp58, &sp54);
+        MapDisp_GetMapPos(sp6C, &sp60, &sp5C);
+        MapDisp_GetMapTexDim(sp6C, &sp58, &sp54);
         var_v0 = D_801BEBB8.unk0->scale;
         if (D_801BEBB8.unk0->scale == 0) {
             var_v0 = 20;
@@ -1183,9 +1180,7 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     temp1 = ((D_801F56B0.unk184 * -120.0f / 40.0f) + 200.0f) * 31.0f / 255.0f;
     temp2 = ((D_801F56B0.unk184 * 115.0f / 40.0f) + 140.0f) * 31.0f / 255.0f;
 
-    D_801BECC4[1] =
-        (temp1 << 6) | (temp2 << 1) |
-        1; 
+    D_801BECC4[1] = (temp1 << 6) | (temp2 << 1) | 1;
     if (CHECK_DUNGEON_ITEM(2, arg6)) {
         D_801BEC84[0xF] = 0xAD5F;
         D_801BECA4[0xF] = 0xAD5F;
