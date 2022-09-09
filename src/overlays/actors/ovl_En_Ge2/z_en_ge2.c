@@ -17,8 +17,8 @@ void EnGe2_Draw(Actor* thisx, PlayState* play);
 
 s32 EnGe2_SetupPath(EnGe2* this, PlayState* play);
 
-void func_80B8C45C(EnGe2* this, PlayState* play);
-void func_80B8C59C(EnGe2* this, PlayState* play);
+void EnGe2_LookAround(EnGe2* this, PlayState* play);
+void EnGe2_Walk(EnGe2* this, PlayState* play);
 void EnGe2_GuardStationary(EnGe2* this, PlayState* play);
 
 s32 EnGe2_ValidatePictograph(PlayState* play, Actor* thisx);
@@ -100,7 +100,7 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.gravity = -1.0f;
     this->picto.actor.speedXZ = 1.5f;
 
-    this->actionFunc = func_80B8C59C;
+    this->actionFunc = EnGe2_Walk;
     this->picto.validationFunc = EnGe2_ValidatePictograph;
 
     EnGe2_SetupPath(this, play);
@@ -388,7 +388,7 @@ void EnGe2_SetupCapturePlayer(EnGe2* this) {
                      Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
 }
 
-void func_80B8BE08(EnGe2* this, PlayState* play) {
+void EnGe2_Charge(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 2, 0x400, 0x100);
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
@@ -411,7 +411,7 @@ void func_80B8BE08(EnGe2* this, PlayState* play) {
     }
 }
 
-void func_80B8BF04(EnGe2* this, PlayState* play) {
+void EnGe2_SetupCharge(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 2, 0x400, 0x100);
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
@@ -420,22 +420,22 @@ void func_80B8BF04(EnGe2* this, PlayState* play) {
         Animation_Change(&this->skelAnime, &gGerudoPurpleChargingAnim, 1.0f, 0.0f,
                          Animation_GetLastFrame(&gGerudoPurpleChargingAnim), 0, -8.0f);
         this->timer = 50;
-        this->actionFunc = func_80B8BE08;
         this->picto.actor.speedXZ = 4.0f;
+        this->actionFunc = EnGe2_Charge;
     }
 }
 
-void EnGe2_Setup_func_80B8C45C(EnGe2* this) {
+void EnGe2_SetupLookAround(EnGe2* this) {
     Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                      Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
     this->timer = 60;
     this->picto.actor.speedXZ = 0.0f;
-    this->actionFunc = func_80B8C45C;
+    this->actionFunc = EnGe2_LookAround;
 }
 
 void EnGe2_Stunned(EnGe2* this, PlayState* play) {
     if (this->picto.actor.colorFilterTimer == 0) {
-        EnGe2_Setup_func_80B8C45C(this);
+        EnGe2_SetupLookAround(this);
         this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         this->stateFlags &= ~GERUDO_PURPLE_STATE_STUNNED;
@@ -450,7 +450,7 @@ void EnGe2_KnockedOut(EnGe2* this, PlayState* play) {
         this->timer--;
         return;
     } else {
-        EnGe2_Setup_func_80B8C45C(this);
+        EnGe2_SetupLookAround(this);
         this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         this->stateFlags &= ~GERUDO_PURPLE_STATE_KO;
@@ -464,7 +464,7 @@ void func_80B8C13C(EnGe2* this, PlayState* play) {
 
     if (player->csMode == 0x1A) {
         this->picto.actor.speedXZ = 0.0f;
-        this->actionFunc = func_80B8BF04;
+        this->actionFunc = EnGe2_SetupCharge;
         Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                          Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
         this->stateFlags |= GERUDO_PURPLE_STATE_CAPTURING;
@@ -480,7 +480,7 @@ void func_80B8C13C(EnGe2* this, PlayState* play) {
             func_800B7298(play, &this->picto.actor, 0x1A);
             func_801000A4(NA_SE_SY_FOUND);
             Message_StartTextbox(play, 0x1194, &this->picto.actor);
-            this->actionFunc = func_80B8BF04;
+            this->actionFunc = EnGe2_SetupCharge;
             Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                              Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
         }
@@ -506,10 +506,11 @@ void func_80B8C13C(EnGe2* this, PlayState* play) {
     }
 }
 
-void func_80B8C45C(EnGe2* this, PlayState* play) {
+void EnGe2_LookAround(EnGe2* this, PlayState* play) {
     u8 detectedStatus;
 
     SkelAnime_Update(&this->skelAnime);
+
     detectedStatus = EnGe2_DetectPlayer(play, this);
     if (detectedStatus != GERUDO_PURPLE_DETECTION_UNDETECTED) {
         this->timer = 100;
@@ -523,7 +524,7 @@ void func_80B8C45C(EnGe2* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
     } else {
-        this->actionFunc = func_80B8C59C;
+        this->actionFunc = EnGe2_Walk;
         Animation_Change(&this->skelAnime, &gGerudoPurpleWalkingAnim, 1.0f, 0.0f,
                          Animation_GetLastFrame(&gGerudoPurpleWalkingAnim), 0, -8.0f);
         this->headRot.y = 0;
@@ -546,7 +547,7 @@ void func_80B8C45C(EnGe2* this, PlayState* play) {
     func_80B8C13C(this, play);
 }
 
-void func_80B8C59C(EnGe2* this, PlayState* play) {
+void EnGe2_Walk(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->picto.actor.speedXZ = 1.5f;
 
@@ -556,7 +557,7 @@ void func_80B8C59C(EnGe2* this, PlayState* play) {
             break;
 
         case GERUDO_PURPLE_PATHSTATUS_1:
-            EnGe2_Setup_func_80B8C45C(this);
+            EnGe2_SetupLookAround(this);
             this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
             break;
 
@@ -566,7 +567,7 @@ void func_80B8C59C(EnGe2* this, PlayState* play) {
 
     this->detectedStatus = EnGe2_DetectPlayer(play, this);
     if (this->detectedStatus != GERUDO_PURPLE_DETECTION_UNDETECTED) {
-        EnGe2_Setup_func_80B8C45C(this);
+        EnGe2_SetupLookAround(this);
         this->yawTarget = this->picto.actor.yawTowardsPlayer;
     }
     func_80B8C13C(this, play);
