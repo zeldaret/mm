@@ -19,7 +19,7 @@ s32 EnGe2_SetupPath(EnGe2* this, PlayState* play);
 
 void func_80B8C45C(EnGe2* this, PlayState* play);
 void func_80B8C59C(EnGe2* this, PlayState* play);
-void func_80B8C9B8(EnGe2* this, PlayState* play);
+void EnGe2_GuardStationary(EnGe2* this, PlayState* play);
 
 s32 EnGe2_ValidatePictograph(PlayState* play, Actor* thisx);
 
@@ -111,10 +111,10 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
     }
 
     switch (GERUDO_PURPLE_GET_TYPE(&this->picto.actor)) {
-        case GERUDO_PURPLE_TYPE_OUTSIDE_FORTRESS:
+        case GERUDO_PURPLE_TYPE_BOAT_SENTRY:
             Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                              Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, 0.0f);
-            this->actionFunc = func_80B8C9B8;
+            this->actionFunc = EnGe2_GuardStationary;
             this->picto.actor.speedXZ = 0.0f;
             this->picto.actor.uncullZoneForward = 4000.0f;
             break;
@@ -375,15 +375,15 @@ void func_80B8BCEC(EnGe2* this, PlayState* play) {
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 2, 0x1000, 0x200);
 }
 
-void func_80B8BD38(EnGe2* this, PlayState* play) {
+void EnGe2_CapturePlayer(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 2, 0x400, 0x100);
     EnGe2_ThrowPlayerOut(this, play);
 }
 
-void EnGe2_Setup_func_80B8BD38(EnGe2* this) {
+void EnGe2_SetupCapturePlayer(EnGe2* this) {
     this->picto.actor.speedXZ = 0.0f;
-    this->actionFunc = func_80B8BD38;
+    this->actionFunc = EnGe2_CapturePlayer;
     Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                      Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
 }
@@ -394,10 +394,10 @@ void func_80B8BE08(EnGe2* this, PlayState* play) {
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
 
     if (this->picto.actor.xzDistToPlayer < 50.0f) {
-        EnGe2_Setup_func_80B8BD38(this);
+        EnGe2_SetupCapturePlayer(this);
     } else if (!(this->picto.actor.bgCheckFlags & 1)) {
         this->picto.actor.world.pos = this->picto.actor.prevPos;
-        EnGe2_Setup_func_80B8BD38(this);
+        EnGe2_SetupCapturePlayer(this);
     }
 
     if (this->timer > 0) {
@@ -653,7 +653,8 @@ void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
     }
 }
 
-void func_80B8C9B8(EnGe2* this, PlayState* play) {
+// Used for those on boats
+void EnGe2_GuardStationary(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (EnGe2_LookForPlayer(play, &this->picto.actor, &this->picto.actor.focus.pos, this->picto.actor.shape.rot.y,
                             0x4000, 720.0f, this->verticalDetectRange)) {
@@ -662,7 +663,7 @@ void func_80B8C9B8(EnGe2* this, PlayState* play) {
             func_801000A4(NA_SE_SY_FOUND);
             Message_StartTextbox(play, 0x1194, &this->picto.actor);
             this->timer = 50;
-            EnGe2_Setup_func_80B8BD38(this);
+            EnGe2_SetupCapturePlayer(this);
         }
     }
 

@@ -20,7 +20,7 @@ typedef void (*EnGe2ActionFunc)(struct EnGe2*, PlayState*);
 
 typedef enum {
     /* 0 */ GERUDO_PURPLE_TYPE_CUTSCENE,
-    /* 1 */ GERUDO_PURPLE_TYPE_OUTSIDE_FORTRESS, //!< on boats
+    /* 1 */ GERUDO_PURPLE_TYPE_BOAT_SENTRY, //!< on boats
     /* 2 */ GERUDO_PURPLE_TYPE_AVEIL_GUARD,
     /* 7 */ GERUDO_PURPLE_TYPE_FORTRESS = 7 //!< In both courtyard and rooms
 } GerudoPurpleType;
