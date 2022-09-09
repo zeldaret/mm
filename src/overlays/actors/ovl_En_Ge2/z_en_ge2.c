@@ -38,8 +38,14 @@ const ActorInit En_Ge2_InitVars = {
 typedef enum {
     /* 0 */ GERUDO_PURPLE_DETECTION_UNDETECTED,
     /* 1 */ GERUDO_PURPLE_DETECTION_HEARD,
-    /* 2 */ GERUDO_PURPLE_DETECTION_PROXIMITY // Higher priority
+    /* 2 */ GERUDO_PURPLE_DETECTION_PROXIMITY //!< Higher priority
 } GerudoPurpleDetection;
+
+typedef enum {
+    /* 0 */ GERUDO_PURPLE_PATHSTATUS_NORMAL,   //!< not near waypoint
+    /* 1 */ GERUDO_PURPLE_PATHSTATUS_AT_POINT, //!< no path or new waypoint
+    /* 2 */ GERUDO_PURPLE_PATHSTATUS_END       //!< reached end of path
+} GerudoPurplePathStatus;
 
 #define GERUDO_PURPLE_STATE_PATH_REVERSE (1 << 0) //!< Follow path backwards instead of forwards.
 #define GERUDO_PURPLE_STATE_KO (1 << 1)
@@ -264,12 +270,6 @@ void EnGe2_SetupBlownAwayPath(EnGe2* this, PlayState* play) {
     }
 }
 
-typedef enum {
-    /* 0 */ GERUDO_PURPLE_PATHSTATUS_0, //! not near waypoint
-    /* 1 */ GERUDO_PURPLE_PATHSTATUS_1, //! no path or waypoint changed
-    /* 2 */ GERUDO_PURPLE_PATHSTATUS_2  //! reached end of path
-} GerudoPurplePathStatus;
-
 GerudoPurplePathStatus EnGe2_FollowPath(EnGe2* this) {
     Path* path = this->path;
     Vec3s* curPoint;
@@ -277,7 +277,7 @@ GerudoPurplePathStatus EnGe2_FollowPath(EnGe2* this) {
     f32 diffZ;
 
     if (path == NULL) {
-        return GERUDO_PURPLE_PATHSTATUS_1;
+        return GERUDO_PURPLE_PATHSTATUS_AT_POINT;
     }
 
     curPoint = (Vec3s*)Lib_SegmentedToVirtual(path->points);
@@ -291,17 +291,18 @@ GerudoPurplePathStatus EnGe2_FollowPath(EnGe2* this) {
         if (this->stateFlags & GERUDO_PURPLE_STATE_PATH_REVERSE) {
             this->curPointIndex--;
             if (this->curPointIndex < 0) {
-                return GERUDO_PURPLE_PATHSTATUS_2;
+                return GERUDO_PURPLE_PATHSTATUS_END;
             }
         } else {
             this->curPointIndex++;
             if (this->curPointIndex >= path->count) {
-                return GERUDO_PURPLE_PATHSTATUS_2;
+                return GERUDO_PURPLE_PATHSTATUS_END;
             }
         }
-        return GERUDO_PURPLE_PATHSTATUS_1;
+        return GERUDO_PURPLE_PATHSTATUS_AT_POINT;
     }
-    return GERUDO_PURPLE_PATHSTATUS_0;
+
+    return GERUDO_PURPLE_PATHSTATUS_NORMAL;
 }
 
 s32 EnGe2_FollowPathWithoutGravity(EnGe2* this) {
@@ -552,16 +553,16 @@ void EnGe2_Walk(EnGe2* this, PlayState* play) {
     this->picto.actor.speedXZ = 1.5f;
 
     switch (EnGe2_FollowPath(this)) {
-        case GERUDO_PURPLE_PATHSTATUS_2:
+        case GERUDO_PURPLE_PATHSTATUS_END:
             EnGe2_SetupPath(this, play);
             break;
 
-        case GERUDO_PURPLE_PATHSTATUS_1:
+        case GERUDO_PURPLE_PATHSTATUS_AT_POINT:
             EnGe2_SetupLookAround(this);
             this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
             break;
 
-        default:
+        default: // GERUDO_PURPLE_PATHSTATUS_NORMAL
             break;
     }
 
