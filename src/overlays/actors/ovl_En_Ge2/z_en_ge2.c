@@ -15,7 +15,7 @@ void EnGe2_Destroy(Actor* thisx, PlayState* play);
 void EnGe2_Update(Actor* thisx, PlayState* play);
 void EnGe2_Draw(Actor* thisx, PlayState* play);
 
-s32 EnGe2_Path_func_80B8B6B4(EnGe2* this, PlayState* play);
+s32 EnGe2_SetupPath(EnGe2* this, PlayState* play);
 
 void func_80B8C45C(EnGe2* this, PlayState* play);
 void func_80B8C59C(EnGe2* this, PlayState* play);
@@ -103,7 +103,7 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = func_80B8C59C;
     this->picto.validationFunc = EnGe2_ValidatePictograph;
 
-    EnGe2_Path_func_80B8B6B4(this, play);
+    EnGe2_SetupPath(this, play);
 
     this->picto.actor.flags |= ACTOR_FLAG_10;
     if (play->actorCtx.unk5 & 2) {
@@ -188,7 +188,12 @@ s32 EnGe2_LookForPlayer(PlayState* play, Actor* actor, Vec3f* pos, s16 yaw, s16 
 
 /* Path functions */
 
-s32 EnGe2_Path_func_80B8B6B4(EnGe2* this, PlayState* play) {
+/**
+ * Set up the path if it exists, choose the end and direction
+ *
+ * @return true if path is set up in reverse
+ */
+s32 EnGe2_SetupPath(EnGe2* this, PlayState* play) {
     if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != GERUDO_PURPLE_PATH_NONE) {
         this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
         if (this->path != NULL) {
@@ -213,7 +218,7 @@ s32 EnGe2_Path_func_80B8B6B4(EnGe2* this, PlayState* play) {
     return false;
 }
 
-void EnGe2_Path_func_80B8B7A8(EnGe2* this, PlayState* play) {
+void EnGe2_GetNextPath(EnGe2* this, PlayState* play) {
     Path* curPath;
     Path* nextPath;
     Vec3s* points;
@@ -234,7 +239,7 @@ void EnGe2_Path_func_80B8B7A8(EnGe2* this, PlayState* play) {
     }
 }
 
-void EnGe2_Path_func_80B8B848(EnGe2* this, PlayState* play) {
+void EnGe2_SetupBlownAwayPath(EnGe2* this, PlayState* play) {
     s32 pad;
     Vec3s* points;
     Vec3f nextPoint;
@@ -265,7 +270,7 @@ typedef enum {
     /* 2 */ GERUDO_PURPLE_PATHSTATUS_2  //! reached end of path
 } GerudoPurplePathStatus;
 
-GerudoPurplePathStatus EnGe2_Path_func_80B8B90C(EnGe2* this) {
+GerudoPurplePathStatus EnGe2_FollowPath(EnGe2* this) {
     Path* path = this->path;
     Vec3s* curPoint;
     f32 diffX;
@@ -275,7 +280,8 @@ GerudoPurplePathStatus EnGe2_Path_func_80B8B90C(EnGe2* this) {
         return GERUDO_PURPLE_PATHSTATUS_1;
     }
 
-    curPoint = (Vec3s*)Lib_SegmentedToVirtual(path->points) + this->curPointIndex;
+    curPoint = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+    curPoint += this->curPointIndex;
     diffX = curPoint->x - this->picto.actor.world.pos.x;
     diffZ = curPoint->z - this->picto.actor.world.pos.z;
     this->picto.actor.world.rot.y = Math_Atan2S(diffX, diffZ);
@@ -298,9 +304,9 @@ GerudoPurplePathStatus EnGe2_Path_func_80B8B90C(EnGe2* this) {
     return GERUDO_PURPLE_PATHSTATUS_0;
 }
 
-s32 EnGe2_Path_func_80B8BA40(EnGe2* this) {
+s32 EnGe2_FollowPathWithoutGravity(EnGe2* this) {
     s32 pad;
-    Vec3s* points;
+    Vec3s* curPoint;
     Path* path = this->path;
     Vec3f point;
     s16 yawTarget;
@@ -310,10 +316,10 @@ s32 EnGe2_Path_func_80B8BA40(EnGe2* this) {
         return true;
     }
 
-    points = Lib_SegmentedToVirtual(path->points);
-    points += this->curPointIndex;
-    Math_Vec3s_ToVec3f(&point, points);
+    curPoint = Lib_SegmentedToVirtual(path->points);
+    curPoint += this->curPointIndex;
 
+    Math_Vec3s_ToVec3f(&point, curPoint);
     yawTarget = Math_Vec3f_Yaw(&this->picto.actor.world.pos, &point);
     pitchTarget = Math_Vec3f_Pitch(&this->picto.actor.world.pos, &point);
     Math_SmoothStepToS(&this->picto.actor.world.rot.y, yawTarget, 0xA, 0x3E8, 0x64);
@@ -544,9 +550,9 @@ void func_80B8C59C(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->picto.actor.speedXZ = 1.5f;
 
-    switch (EnGe2_Path_func_80B8B90C(this)) {
+    switch (EnGe2_FollowPath(this)) {
         case GERUDO_PURPLE_PATHSTATUS_2:
-            EnGe2_Path_func_80B8B6B4(this, play);
+            EnGe2_SetupPath(this, play);
             break;
 
         case GERUDO_PURPLE_PATHSTATUS_1:
@@ -577,7 +583,7 @@ void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
                 case ENGE2_CSACTION_BEEHIVE_PATROL:
                     Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                                      Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
-                    EnGe2_Path_func_80B8B7A8(this, play);
+                    EnGe2_GetNextPath(this, play);
                     break;
 
                 case ENGE2_CSACTION_BEEHIVE_RUN_AWAY:
@@ -596,7 +602,7 @@ void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
 
                 case ENGE2_CSACTION_GBT_ENTR_BLOWN_AWAY:
                     Animation_Change(&this->skelAnime, &gGerudoPurpleGreatBayCutsceneAnim, 0.0f, 1.0f, 1.0f, 2, 0.0f);
-                    EnGe2_Path_func_80B8B848(this, play);
+                    EnGe2_SetupBlownAwayPath(this, play);
                     this->stateFlags |= GERUDO_PURPLE_STATE_DISABLE_MOVEMENT;
                     this->screamTimer = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);
                     break;
@@ -609,7 +615,7 @@ void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
 
     switch (this->csAction) {
         case ENGE2_CSACTION_BEEHIVE_RUN_AWAY:
-            EnGe2_Path_func_80B8B90C(this);
+            EnGe2_FollowPath(this);
             this->picto.actor.speedXZ = 5.0f;
 
             if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f)) {
@@ -625,13 +631,15 @@ void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
             break;
 
         case ENGE2_CSACTION_GBT_ENTR_BLOWN_AWAY:
-            if ((this->curPointIndex < this->path->count) && EnGe2_Path_func_80B8BA40(this)) {
+            if ((this->curPointIndex < this->path->count) && EnGe2_FollowPathWithoutGravity(this)) {
                 this->curPointIndex++;
             }
 
+            // Tumble in the air
             this->picto.actor.shape.rot.x += 0x3E8;
             this->picto.actor.shape.rot.y += 0x7D0;
             this->picto.actor.shape.rot.z += 0x1F4;
+
             if (this->screamTimer > 0) {
                 this->screamTimer--;
             } else {
@@ -672,9 +680,10 @@ void EnGe2_Update(Actor* thisx, PlayState* play) {
     if (!(this->stateFlags & GERUDO_PURPLE_STATE_DISABLE_MOVEMENT)) {
         Actor_MoveWithGravity(&this->picto.actor);
     }
-    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 40.0f, 25.0f, 40.0f, 5U);
+    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 40.0f, 25.0f, 40.0f, 5);
     Collider_UpdateCylinder(&this->picto.actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+
     if (Cutscene_CheckActorAction(play, 476)) {
         this->actionFunc = EnGe2_PerformCutsceneActions;
         this->stateFlags &= ~GERUDO_PURPLE_STATE_KO;
