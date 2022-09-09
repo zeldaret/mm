@@ -56,35 +56,42 @@ static s32 D_80A16100[] = {
 // /* 0x0000 0x05 */  MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(0x15, 0x08, 0x0045 - 0x0005),
 // /* 0x0005 0x03 */  MSCRIPT_CMD01(0x002A - 0x0008),
 // /* 0x0008 0x05 */  MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(0x15, 0x02, 0x0025 - 0x000D),
-// /* 0x000D 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E10),
+// /* 0x000D 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E10), // This is the grave where a Goron hero rests.
 // /* 0x0010 0x01 */  MSCRIPT_AWAIT_TEXT(),
-// /* 0x0011 0x03 */  MSCRIPT_CMD15(0x0E11),
+// /* 0x0011 0x03 */  MSCRIPT_CMD15(0x0E11), // I came here to put up the great hero's memorial... But the return rout
+// has been blocked by snow, and I can't get back to Goron Village.
 // /* 0x0014 0x01 */  MSCRIPT_AWAIT_TEXT(),
-// /* 0x0015 0x03 */  MSCRIPT_CMD15(0x0E12),
+// /* 0x0015 0x03 */  MSCRIPT_CMD15(0x0E12), // And even worse, my borther has been frozen solid from teh cold. The way
+// things are looking, I'll be frozen too.
 // /* 0x0018 0x01 */  MSCRIPT_AWAIT_TEXT(),
-// /* 0x0019 0x03 */  MSCRIPT_CMD15(0x0E13),
+// /* 0x0019 0x03 */  MSCRIPT_CMD15(0x0E13), // hhhh...It's times like these that make me wish i had taken some of the
+// hot spring water I found when I was digging the hero's grave.
 // /* 0x001C 0x01 */  MSCRIPT_AWAIT_TEXT(),
 // /* 0x001D 0x03 */  MSCRIPT_CMD15(0x0E14),
 // /* 0x0020 0x01 */  MSCRIPT_AWAIT_TEXT(),
-// /* 0x0021 0x03 */  MSCRIPT_WEEK_EVENT_REG_SET(0x15, 0x02),
+// /* 0x0021 0x03 */  MSCRIPT_WEEK_EVENT_REG_SET(0x15, 0x02), // But the hot spring is now covered by the gravestone. I
+// can't move a gravestone that big by myself. But I guess this is what's meant by the Goron saying, "There's no use in
+// crying over split rocks."...Brrrrrr
 // /* 0x0024 0x01 */  MSCRIPT_DONE(),
 
-// /* 0x0025 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E15),
+// /* 0x0025 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E15), // H-h-hoo. If only I had water from the hot spring beneath the gravt
+// hero's grave...then I could melt the ice off of my brother.
 // /* 0x0028 0x01 */  MSCRIPT_AWAIT_TEXT(),
 // /* 0x0029 0x01 */  MSCRIPT_DONE(),
 
 // /* 0x002A 0x05 */  MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(0x15, 0x04, 0x0040 - 0x002F),
-// /* 0x002F 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E16),
+// /* 0x002F 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E16), //Y-you're...No! No, you're not the great darmani, are you?
 // /* 0x0032 0x01 */  MSCRIPT_AWAIT_TEXT(),
-// /* 0x0033 0x03 */  MSCRIPT_CMD15(0x0E17),
+// /* 0x0033 0x03 */  MSCRIPT_CMD15(0x0E17), // Then...just whose grave was I making?
 // /* 0x0036 0x01 */  MSCRIPT_AWAIT_TEXT(),
-// /* 0x0037 0x03 */  MSCRIPT_CMD15(0x0E18),
+// /* 0x0037 0x03 */  MSCRIPT_CMD15(0x0E18), // Did you come back to life because it was so warm beneath your grave?
 // /* 0x003A 0x01 */  MSCRIPT_AWAIT_TEXT(),
 // /* 0x003B 0x03 */  MSCRIPT_WEEK_EVENT_REG_SET(0x15, 0x04),
 // /* 0x003E 0x01 */  MSCRIPT_CMD22(),
 // /* 0x003F 0x01 */  MSCRIPT_DONE(),
 
-// /* 0x0040 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E19),
+// /* 0x0040 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E19), // There used to be a hot spring bubbling beneath the great Darmani's
+// grave. If I had some of that hot spring water, I might be able to thaw out my frozen brother.
 // /* 0x0043 0x01 */  MSCRIPT_AWAIT_TEXT(),
 // /* 0x0044 0x01 */  MSCRIPT_DONE(),
 
@@ -1294,29 +1301,29 @@ s32 func_80A12E80(EnGo* this, PlayState* play) {
     if (player->stateFlags1 & PLAYER_STATE1_40) {
         if (this->lastTextId != textId) {
             switch (textId) {
-                case 0xE1A:
+                case 0xE1A: // Hunh? What  have I been doing?
                     this->flags |= 8;
                     this->targetActor = this->actor.child;
                     break;
 
-                case 0xE1D:
-                case 0xE25:
+                case 0xE1D: // You hear this guy? The great Darmani died long ago and is lying in his gr...
+                case 0xE25: // ...Really? I don't know who you are, but thank you!
                     if (ENGO_GET_70(&this->actor) == ENGO_70_1) {
                         this->targetActor = &GET_PLAYER(play)->actor;
                     }
                     break;
 
-                case 0xE27:
+                case 0xE27: // What's this?
                     if (ENGO_GET_70(&this->actor) == ENGO_70_1) {
                         this->targetActor = this->actor.child;
                     }
 
-                case 0xE16:
-                case 0xE1E:
+                case 0xE16: // Y-you're...No! No, you're not the great Darmani, are you?
+                case 0xE1E: // Heeee!!! Darmani!
                     this->dialogActionFn = func_80A12DF4;
                     break;
 
-                case 0xE1F:
+                case 0xE1F: // I was shocked, too. But somehow, it seems the great Darmani isn't dead.
                     if (ENGO_GET_70(&this->actor) == ENGO_70_0) {
                         this->targetActor = &GET_PLAYER(play)->actor;
                     }
