@@ -408,7 +408,7 @@ void func_80BFC078(EnRz* this, PlayState* play) {
                 if (this->animIndex != 8) {
                     func_80BFB9E4(play, this, 6);
                     if (this->unk_40C != NULL) {
-                        func_80BFB9E4(play, (EnRz*)this->unk_40C, 6);
+                        func_80BFB9E4(play, this->unk_40C, 6);
                     }
                 }
                 break;
@@ -429,7 +429,7 @@ void func_80BFC19C(EnRz* this, PlayState* play) {
         this->actionFunc = func_80BFC3F8;
         func_80BFBA1C(play, this, 8);
         if (this->unk_40C != NULL) {
-            func_80BFBA1C(play, (EnRz*)this->unk_40C, 8);
+            func_80BFBA1C(play, this->unk_40C, 8);
         }
     }
 }
