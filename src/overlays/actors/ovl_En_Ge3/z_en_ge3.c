@@ -25,7 +25,6 @@ void func_809A00F8(EnGe3* this, PlayState* play);
 
 void func_809A0350(EnGe3* this);
 
-#if 0
 const ActorInit En_Ge3_InitVars = {
     ACTOR_EN_GE3,
     ACTORCAT_NPC,
@@ -40,12 +39,24 @@ const ActorInit En_Ge3_InitVars = {
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809A0DA0 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x01000222, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x01000222, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 20, 50, 0, { 0, 0, 0 } },
 };
-
-#endif
 
 extern ColliderCylinderInit D_809A0DA0;
 
@@ -72,7 +83,7 @@ void EnGe3_Init(Actor* thisx, PlayState* play) {
     this->picto.validationFunc = func_809A096C;
     func_809A020C(this, play);
 
-    if ((this->picto.actor.params & 1) == 1) {
+    if (GERUDO_AVEIL_GET_TYPE(&this->picto.actor) == 1) {
         func_809A0070(this, 2, 0, 0.0f);
         this->actionFunc = func_809A04D0;
         if (gSaveContext.save.weekEventReg[83] & 2) {
@@ -98,6 +109,10 @@ void EnGe3_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
+AnimationHeader* D_809A0DCC[] = {
+    0x0600AA8C, 0x060028A0, 0x06001EFC, 0x06000EE0, 0x060014CC, 0x06001AC8, 0x06000CB0, 0x06000734, 0x06001DFC,
+};
+
 void func_809A0070(EnGe3* this, s16 index, u8 mode, f32 morphFrames) {
     Animation_Change(&this->skelAnime, D_809A0DCC[index], 1.0f, 0.0f, Animation_GetLastFrame(D_809A0DCC[index]), mode,
                      morphFrames);
@@ -117,12 +132,10 @@ void func_809A00F8(EnGe3* this, PlayState* play) {
     }
 }
 
-#define GERUDO_AVEIL_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
-
 void func_809A020C(EnGe3* this, PlayState* play) {
     this->unk300 = 0;
 
-    if (GERUDO_AVEIL_GET_PATH(&this->picto.actor) != 0x3F) {
+    if (GERUDO_AVEIL_GET_PATH(&this->picto.actor) != GERUDO_AVEIL_PATH_NONE) {
         this->unk2FC = &play->setupPathList[GERUDO_AVEIL_GET_PATH(&this->picto.actor)];
     } else {
         this->unk2FC = NULL;
@@ -160,7 +173,6 @@ s32 func_809A024C(EnGe3* this) {
 void func_809A0350(EnGe3* this) {
     if ((s32)Rand_ZeroFloat(2.0f) == 0) {
         Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_VO_FPVO00);
-        return;
     } else {
         Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_VO_FPVO01);
     }
@@ -174,21 +186,17 @@ void func_809A03AC(EnGe3* this, PlayState* play) {
     }
 }
 
-#define GERUDO_AVEIL_GET_EXIT(thisx) (((thisx)->params & 0x1F0) >> 4)
-
 void func_809A03FC(EnGe3* this, PlayState* play) {
-
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 2, 0x400, 0x100);
 
     if (this->unk316 > 0) {
         this->unk316--;
-        return;
     } else {
         if (play->nextEntrance != play->setupExitList[GERUDO_AVEIL_GET_EXIT(&this->picto.actor)]) {
             play->nextEntrance = play->setupExitList[GERUDO_AVEIL_GET_EXIT(&this->picto.actor)];
-            play->transitionTrigger = 0x14;
-            play->transitionType = 0x26;
+            play->transitionTrigger = TRANS_TRIGGER_START;
+            play->transitionType = TRANS_TYPE_38;
             gSaveContext.save.weekEventReg[80] &= (u8)~8;
         }
     }
@@ -198,6 +206,7 @@ void func_809A04D0(EnGe3* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime) && (this->unk314 == 3)) {
         func_809A0070(this, 4, 2, 0.0f);
     }
+
     if (Cutscene_CheckActorAction(play, 108)) {
         s16 csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x6CU)]->action;
 
@@ -360,12 +369,18 @@ s32 func_809A0A14(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 
 void func_809A0C60(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnGe3* this = THIS;
-    Vec3f sp18 = D_809A0DF0; // non-static in-function data
+    Vec3f D_809A0DF0 = { 600.0f, 700.0f, 0.0f };
 
     if (limbIndex == 6) {
-        Matrix_MultVec3f(&sp18, &this->picto.actor.focus.pos);
+        Matrix_MultVec3f(&D_809A0DF0, &this->picto.actor.focus.pos);
     }
 }
+
+TexturePtr D_809A0DFC[] = {
+    0x06006398,
+    0x06006958,
+    0x060070D8,
+};
 
 void EnGe3_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -381,28 +396,3 @@ void EnGe3_Draw(Actor* thisx, PlayState* play) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
-
-// void func_809A0070(EnGe3 *arg0, s16 arg1, u8 arg2, f32 arg3); /* static */
-// void func_809A020C(EnGe3 *arg0, PlayState *arg1);   /* static */
-// void func_809A03AC(EnGe3 *arg0, PlayState *arg1);   /* static */
-// void func_809A04D0(EnGe3 *arg0, PlayState *arg1);   /* static */
-// s32 func_809A096C(PlayState *, Actor *);            /* static */
-// extern AnimationHeader D_06001EFC;
-// ColliderCylinderInit D_809A0DA0 = {
-//     { 0xA, 0, 9, 0x39, 0x10, 1 },
-//     { 0, { 0, 0, 0 }, { 0x01000222, 0, 0 }, 0, 1, 1 },
-//     { 0x14, 0x32, 0, { 0, 0, 0 } },
-// };
-// AnimationHeader *D_809A0DCC[9] = {
-//     (AnimationHeader *)0x0600AA8C,
-//     (AnimationHeader *)0x060028A0,
-//     (AnimationHeader *)0x06001EFC,
-//     (AnimationHeader *)0x06000EE0,
-//     (AnimationHeader *)0x060014CC,
-//     (AnimationHeader *)0x06001AC8,
-//     (AnimationHeader *)0x06000CB0,
-//     (AnimationHeader *)0x06000734,
-//     (AnimationHeader *)0x06001DFC,
-// };
-// Vec3f D_809A0DF0 = { 600.0f, 700.0f, 0.0f };
-// void *D_809A0DFC[5] = { (void *)0x06006398, (void *)0x06006958, (void *)0x060070D8, NULL, NULL };

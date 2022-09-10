@@ -8,6 +8,8 @@
         <Animation Name="object_geldb_Anim_001DFC" Offset="0x1DFC" />
         <Animation Name="object_geldb_Anim_001EFC" Offset="0x1EFC" />
         <Animation Name="object_geldb_Anim_0028A0" Offset="0x28A0" />
+
+        <!-- Model, same as OoT object_geldb 0x2500-0xA470 -->
         <Texture Name="object_geldb_TLUT_0028B0" OutName="tlut_0028B0" Format="rgba16" Width="16" Height="16" Offset="0x28B0" />
         <Texture Name="object_geldb_Tex_002AB0" OutName="tex_002AB0" Format="ci8" Width="8" Height="8" Offset="0x2AB0" />
         <Texture Name="object_geldb_Tex_002AF0" OutName="tex_002AF0" Format="ci8" Width="8" Height="8" Offset="0x2AF0" />
@@ -72,6 +74,8 @@
         <Limb Name="object_geldb_Standardlimb_00A794" Type="Standard" EnumName="OBJECT_GELDB_LIMB_16" Offset="0xA794" />
         <Limb Name="object_geldb_Standardlimb_00A7A0" Type="Standard" EnumName="OBJECT_GELDB_LIMB_17" Offset="0xA7A0" />
         <Skeleton Name="object_geldb_Skel_00A808" Type="Flex" LimbType="Standard" LimbNone="OBJECT_GELDB_LIMB_NONE" LimbMax="OBJECT_GELDB_LIMB_MAX" EnumName="ObjectGeldbLimb" Offset="0xA808" />
+
+        <!-- Same as OoT object_geldb 0xAE10-end -->
         <Animation Name="object_geldb_Anim_00AA8C" Offset="0xAA8C" />
         <Animation Name="object_geldb_Anim_00B0E4" Offset="0xB0E4" />
     </File>

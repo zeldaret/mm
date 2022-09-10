@@ -8,11 +8,11 @@ struct EnGe3;
 
 typedef void (*EnGe3ActionFunc)(struct EnGe3*, PlayState*);
 
-// typedef struct EnGe3 {
-//     /* 0x000 */ PictoActor picto;
-//     /* 0x148 */ char unk_148[0x1D4];
-//     /* 0x31C */ EnGe3ActionFunc actionFunc;
-// } EnGe3; // size = 0x320
+#define GERUDO_AVEIL_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
+#define GERUDO_AVEIL_GET_EXIT(thisx) (((thisx)->params & 0x1F0) >> 4)
+#define GERUDO_AVEIL_GET_TYPE(thisx) ((thisx)->params & 1)
+
+#define GERUDO_AVEIL_PATH_NONE 0x3F
 
 typedef struct EnGe3 {
     /* 0x000 */ PictoActor picto;
