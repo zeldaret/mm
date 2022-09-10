@@ -48,9 +48,7 @@ s32 D_80C22C30[] = {
 
 Actor* func_80C22350(DmTag* this, PlayState* play, u8 actorCat, s16 actorId) {
     Actor* tempActor;
-    Actor* foundActor;
-
-    foundActor = NULL;
+    Actor* foundActor = NULL;
 
     while (true) {
         foundActor = SubS_FindActor(play, foundActor, actorCat, actorId);
@@ -159,11 +157,11 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
 
         case 6:
             func_800B7298(play, &this->actor, 7);
-            play->nextEntranceIndex = 0xBC50;
+            play->nextEntrance = ENTRANCE(STOCK_POT_INN, 5);
             gSaveContext.nextCutsceneIndex = 0;
-            play->transitionTrigger = 0x14;
-            play->transitionType = 2;
-            gSaveContext.nextTransitionType = 6;
+            play->transitionTrigger = TRANS_TRIGGER_START;
+            play->transitionType = TRANS_TYPE_02;
+            gSaveContext.nextTransitionType = TRANS_TYPE_06;
             this->unk_1A4++;
             break;
     }
@@ -173,11 +171,11 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
 s32 func_80C227E8(DmTag* this, PlayState* play) {
     if (this->unk_1A4 == 0) {
         func_800B7298(play, &this->actor, 7);
-        play->nextEntranceIndex = 0xBC40;
+        play->nextEntrance = ENTRANCE(STOCK_POT_INN, 4);
         gSaveContext.nextCutsceneIndex = 0;
-        play->transitionTrigger = 0x14;
-        play->transitionType = 2;
-        gSaveContext.nextTransitionType = 6;
+        play->transitionTrigger = TRANS_TRIGGER_START;
+        play->transitionType = TRANS_TYPE_02;
+        gSaveContext.nextTransitionType = TRANS_TYPE_06;
         this->unk_1A4++;
     }
     return false;
@@ -190,12 +188,12 @@ s32* func_80C22880(DmTag* this, PlayState* play) {
         case 1:
             time = gSaveContext.save.time - 0x3FFC;
             if ((time >= 0xA54B) && (time < 0xB54A) && (gSaveContext.save.day == 2)) {
-                this->unk_1A8 = func_80C227E8;
+                this->msgEventCallback = func_80C227E8;
                 return D_80C22BF0;
             }
             return D_80C22C30;
         case 2:
-            this->unk_1A8 = func_80C224D8;
+            this->msgEventCallback = func_80C224D8;
             return D_80C22BFC;
     }
     return NULL;
@@ -208,7 +206,7 @@ s32 func_80C2291C(DmTag* this, PlayState* play) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->unk_18C |= 8;
             SubS_UpdateFlags(&this->unk_18C, 0, 7);
-            this->unk_190 = func_80C22880(this, play);
+            this->msgEventScript = func_80C22880(this, play);
             this->actionFunc = func_80C229FC;
             ret = true;
         }
@@ -225,7 +223,7 @@ void func_80C229EC(DmTag* this, PlayState* play) {
 }
 
 void func_80C229FC(DmTag* this, PlayState* play) {
-    if (func_8010BF58(&this->actor, play, this->unk_190, this->unk_1A8, &this->unk_194)) {
+    if (func_8010BF58(&this->actor, play, this->msgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
         this->actionFunc = func_80C229AC;
     }
 }
