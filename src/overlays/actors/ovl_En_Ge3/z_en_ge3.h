@@ -14,6 +14,11 @@ typedef void (*EnGe3ActionFunc)(struct EnGe3*, PlayState*);
 
 #define GERUDO_AVEIL_PATH_NONE 0x3F
 
+typedef enum {
+    /* 0 */ GERUDO_AVEIL_TYPE_0,
+    /* 1 */ GERUDO_AVEIL_TYPE_1
+} GerudoAveilType;
+
 typedef struct EnGe3 {
     /* 0x000 */ PictoActor picto;
     /* 0x148 */ ColliderCylinder collider;
@@ -22,15 +27,15 @@ typedef struct EnGe3 {
     /* 0x268 */ Vec3s morphTable[24];
     /* 0x2F8 */ s16 eyeIndex;
     /* 0x2FA */ s16 blinkTimer;
-    /* 0x2FC */ Path *unk2FC;
-    /* 0x300 */ s32 unk300;
-    /* 0x304 */ Vec3s unk304;
-    /* 0x30A */ Vec3s unk30A;
-    /* 0x310 */ s16 unk310;
-    /* 0x312 */ s16 unk312;
-    /* 0x314 */ s16 unk314;
-    /* 0x316 */ s16 unk316;
-    /* 0x318 */ s16 unk318;
+    /* 0x2FC */ Path *path;
+    /* 0x300 */ s32 curPointIndex;
+    /* 0x304 */ Vec3s headRot;
+    /* 0x30A */ Vec3s torsoRot;
+    /* 0x310 */ s16 stateFlags; // Set and not used, named based on OoT use
+    /* 0x312 */ s16 animIndex;
+    /* 0x314 */ s16 csAction;
+    /* 0x316 */ s16 actionTimer;
+    /* 0x318 */ s16 screamTimer;
     /* 0x31C */ EnGe3ActionFunc actionFunc;
 } EnGe3; // size = 0x320
 

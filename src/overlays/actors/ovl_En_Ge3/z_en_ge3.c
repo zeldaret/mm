@@ -1,7 +1,7 @@
 /*
  * File: z_en_ge3.c
  * Overlay: ovl_En_Ge3
- * Description: Aviel
+ * Description: Aviel, leader of the Gerudo Pirates
  */
 
 #include "z_en_ge3.h"
@@ -15,15 +15,24 @@ void EnGe3_Destroy(Actor* thisx, PlayState* play);
 void EnGe3_Update(Actor* thisx, PlayState* play);
 void EnGe3_Draw(Actor* thisx, PlayState* play);
 
-void func_809A0070(EnGe3* this, s16 arg1, u8 arg2, f32 arg3);
-void func_809A020C(EnGe3* this, PlayState* play);
-void func_809A03AC(EnGe3* this, PlayState* play);
-void func_809A04D0(EnGe3* this, PlayState* play);
-s32 func_809A096C(PlayState* play, Actor* thisx);
+void EnGe3_ChangeAnim(EnGe3* this, s16 arg1, u8 arg2, f32 arg3);
+void EnGe3_SetupPath(EnGe3* this, PlayState* play);
+void EnGe3_Idle(EnGe3* this, PlayState* play);
+void EnGe3_PerformCutsceneActions(EnGe3* this, PlayState* play);
+s32 EnGe3_ValidatePictograph(PlayState* play, Actor* thisx);
 
-void func_809A00F8(EnGe3* this, PlayState* play);
-
-void func_809A0350(EnGe3* this);
+typedef enum {
+    /* -1 */ GERUDO_AVEIL_ANIM_NONE = -1,
+    /*  0 */ GERUDO_AVEIL_ANIM_0,
+    /*  1 */ GERUDO_AVEIL_ANIM_1,
+    /*  2 */ GERUDO_AVEIL_ANIM_2,
+    /*  3 */ GERUDO_AVEIL_ANIM_3,
+    /*  4 */ GERUDO_AVEIL_ANIM_4,
+    /*  5 */ GERUDO_AVEIL_ANIM_5,
+    /*  6 */ GERUDO_AVEIL_ANIM_6,
+    /*  7 */ GERUDO_AVEIL_ANIM_7,
+    /*  8 */ GERUDO_AVEIL_ANIM_8,
+} GerudoAveilAnimation;
 
 const ActorInit En_Ge3_InitVars = {
     ACTOR_EN_GE3,
@@ -37,8 +46,7 @@ const ActorInit En_Ge3_InitVars = {
     (ActorFunc)EnGe3_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_809A0DA0 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -58,14 +66,8 @@ static ColliderCylinderInit D_809A0DA0 = {
     { 20, 50, 0, { 0, 0, 0 } },
 };
 
-extern ColliderCylinderInit D_809A0DA0;
-
 extern FlexSkeletonHeader D_0600A808;
-
 extern AnimationHeader D_06001EFC;
-extern AnimationHeader* D_809A0DCC[9];
-extern Vec3f D_809A0DF0;
-extern TexturePtr D_809A0DFC[];
 
 void EnGe3_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -74,29 +76,29 @@ void EnGe3_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->picto.actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &D_0600A808, NULL, this->jointTable, this->morphTable, 24);
     Animation_PlayLoop(&this->skelAnime, &D_06001EFC);
-    Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &D_809A0DA0);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->picto.actor, 0.01f);
 
-    this->unk312 = -1;
-    this->unk314 = -1;
-    this->picto.validationFunc = func_809A096C;
-    func_809A020C(this, play);
+    this->animIndex = GERUDO_AVEIL_ANIM_NONE;
+    this->csAction = -1;
+    this->picto.validationFunc = EnGe3_ValidatePictograph;
+    EnGe3_SetupPath(this, play);
 
-    if (GERUDO_AVEIL_GET_TYPE(&this->picto.actor) == 1) {
-        func_809A0070(this, 2, 0, 0.0f);
-        this->actionFunc = func_809A04D0;
+    if (GERUDO_AVEIL_GET_TYPE(&this->picto.actor) == GERUDO_AVEIL_TYPE_1) {
+        EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_2, ANIMMODE_LOOP, 0.0f);
+        this->actionFunc = EnGe3_PerformCutsceneActions;
         if (gSaveContext.save.weekEventReg[83] & 2) {
             Actor_MarkForDeath(&this->picto.actor);
             return;
         }
     } else {
-        func_809A0070(this, 1, 0, 0.0f);
-        this->actionFunc = func_809A03AC;
+        EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_1, ANIMMODE_LOOP, 0.0f);
+        this->actionFunc = EnGe3_Idle;
         this->picto.actor.speedXZ = 1.5f;
     }
 
-    this->unk310 = 0;
+    this->stateFlags = 0;
     this->picto.actor.targetMode = 6;
     this->picto.actor.terminalVelocity = -4.0f;
     this->picto.actor.gravity = -1.0f;
@@ -109,68 +111,71 @@ void EnGe3_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-AnimationHeader* D_809A0DCC[] = {
+static AnimationHeader* sAnimations[] = {
     0x0600AA8C, 0x060028A0, 0x06001EFC, 0x06000EE0, 0x060014CC, 0x06001AC8, 0x06000CB0, 0x06000734, 0x06001DFC,
 };
 
-void func_809A0070(EnGe3* this, s16 index, u8 mode, f32 morphFrames) {
-    Animation_Change(&this->skelAnime, D_809A0DCC[index], 1.0f, 0.0f, Animation_GetLastFrame(D_809A0DCC[index]), mode,
+void EnGe3_ChangeAnim(EnGe3* this, s16 index, u8 mode, f32 morphFrames) {
+    Animation_Change(&this->skelAnime, sAnimations[index], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[index]), mode,
                      morphFrames);
-    this->unk312 = index;
+    this->animIndex = index;
 }
 
-void func_809A00F8(EnGe3* this, PlayState* play) {
-    s16 yawDiff = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
+void EnGe3_LookAtPlayer(EnGe3* this, PlayState* play) {
+    s16 yawDiff = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y; // temp not required
 
     if ((ABS_ALT(yawDiff) <= 0x2300) && (this->picto.actor.xzDistToPlayer < 100.0f)) {
-        Actor_TrackPlayer(play, &this->picto.actor, &this->unk304, &this->unk30A, this->picto.actor.focus.pos);
+        Actor_TrackPlayer(play, &this->picto.actor, &this->headRot, &this->torsoRot, this->picto.actor.focus.pos);
     } else {
-        Math_SmoothStepToS(&this->unk304.x, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk304.y, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk30A.x, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk30A.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->torsoRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->torsoRot.y, 0, 6, 0x1838, 0x64);
     }
 }
 
-void func_809A020C(EnGe3* this, PlayState* play) {
-    this->unk300 = 0;
+void EnGe3_SetupPath(EnGe3* this, PlayState* play) {
+    this->curPointIndex = 0;
 
     if (GERUDO_AVEIL_GET_PATH(&this->picto.actor) != GERUDO_AVEIL_PATH_NONE) {
-        this->unk2FC = &play->setupPathList[GERUDO_AVEIL_GET_PATH(&this->picto.actor)];
+        this->path = &play->setupPathList[GERUDO_AVEIL_GET_PATH(&this->picto.actor)];
     } else {
-        this->unk2FC = NULL;
+        this->path = NULL;
     }
 }
 
-s32 func_809A024C(EnGe3* this) {
+/**
+ * @return true if no path or reached end of path
+ */
+s32 EnGe3_FollowPath(EnGe3* this) {
     Path* path;
     Vec3s* curPoint;
     f32 diffX;
     f32 diffZ;
 
-    path = this->unk2FC;
+    path = this->path;
 
     if (path == NULL) {
         return true;
     }
 
     curPoint = Lib_SegmentedToVirtual(path->points);
-    curPoint += this->unk300;
+    curPoint += this->curPointIndex;
     diffX = curPoint->x - this->picto.actor.world.pos.x;
     diffZ = curPoint->z - this->picto.actor.world.pos.z;
     this->picto.actor.world.rot.y = Math_Atan2S(diffX, diffZ);
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.world.rot.y, 2, 0x7D0, 0xC8);
 
     if ((SQ(diffX) + SQ(diffZ)) < 100.0f) {
-        this->unk300++;
-        if (this->unk300 >= path->count) {
+        this->curPointIndex++;
+        if (this->curPointIndex >= path->count) {
             return true;
         }
     }
     return false;
 }
 
-void func_809A0350(EnGe3* this) {
+void EnGe3_Scream(EnGe3* this) {
     if ((s32)Rand_ZeroFloat(2.0f) == 0) {
         Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_VO_FPVO00);
     } else {
@@ -178,20 +183,21 @@ void func_809A0350(EnGe3* this) {
     }
 }
 
-void func_809A03AC(EnGe3* this, PlayState* play) {
+void EnGe3_Idle(EnGe3* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    func_809A00F8(this, play);
-    if (func_809A024C(this)) {
-        func_809A020C(this, play);
+    EnGe3_LookAtPlayer(this, play);
+
+    if (EnGe3_FollowPath(this)) {
+        EnGe3_SetupPath(this, play);
     }
 }
 
-void func_809A03FC(EnGe3* this, PlayState* play) {
+void EnGe3_ThrowPlayerOut(EnGe3* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 2, 0x400, 0x100);
 
-    if (this->unk316 > 0) {
-        this->unk316--;
+    if (this->actionTimer > 0) {
+        this->actionTimer--;
     } else {
         if (play->nextEntrance != play->setupExitList[GERUDO_AVEIL_GET_EXIT(&this->picto.actor)]) {
             play->nextEntrance = play->setupExitList[GERUDO_AVEIL_GET_EXIT(&this->picto.actor)];
@@ -202,45 +208,52 @@ void func_809A03FC(EnGe3* this, PlayState* play) {
     }
 }
 
-void func_809A04D0(EnGe3* this, PlayState* play) {
-    if (SkelAnime_Update(&this->skelAnime) && (this->unk314 == 3)) {
-        func_809A0070(this, 4, 2, 0.0f);
+void EnGe3_PerformCutsceneActions(EnGe3* this, PlayState* play) {
+    if (SkelAnime_Update(&this->skelAnime) && (this->csAction == 3)) {
+        EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_4, ANIMMODE_ONCE, 0.0f);
     }
 
     if (Cutscene_CheckActorAction(play, 108)) {
-        s16 csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x6CU)]->action;
+        s16 csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 108)]->action;
 
-        if (this->unk314 != 7) {
+        if (this->csAction != 7) {
             Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, Cutscene_GetActorActionIndex(play, 108));
         }
 
-        if (this->unk314 != csAction) {
-            this->unk314 = csAction;
-            switch (this->unk314) {
+        if (this->csAction != csAction) {
+            this->csAction = csAction;
+            switch (this->csAction) {
                 case 1:
-                    func_809A0070(this, 2, 0, 0.0f);
+                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_2, ANIMMODE_LOOP, 0.0f);
                     break;
+
                 case 2:
-                    func_809A0070(this, 3, 2, 0.0f);
+                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_3, ANIMMODE_ONCE, 0.0f);
                     this->skelAnime.playSpeed = 0.0f;
                     break;
+
                 case 3:
-                    func_809A0070(this, 3, 2, 0.0f);
+                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_3, ANIMMODE_ONCE, 0.0f);
                     break;
+
                 case 4:
-                    func_809A0070(this, 5, 0, 0.0f);
+                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_5, ANIMMODE_LOOP, 0.0f);
                     break;
+
                 case 5:
-                    func_809A0070(this, 6, 2, 0.0f);
+                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_6, ANIMMODE_ONCE, 0.0f);
                     break;
+
                 case 6:
-                    func_809A0070(this, 7, 0, 0.0f);
+                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_7, ANIMMODE_LOOP, 0.0f);
                     break;
+
                 case 7:
-                    func_809A0070(this, 8, 0, 0.0f);
+                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_8, ANIMMODE_LOOP, 0.0f);
                     this->picto.actor.speedXZ = 5.0f;
-                    this->unk318 = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);
+                    this->screamTimer = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);
                     break;
+
                 case 8:
                     Actor_MarkForDeath(&this->picto.actor);
                     break;
@@ -259,28 +272,29 @@ void func_809A04D0(EnGe3* this, PlayState* play) {
             Message_StartTextbox(play, 0x11AE, &this->picto.actor);
         }
 
-        this->actionFunc = func_809A03FC;
-        this->unk316 = 50;
+        this->actionFunc = EnGe3_ThrowPlayerOut;
+        this->actionTimer = 50;
         gSaveContext.save.weekEventReg[80] |= 8;
     }
 
-    if (this->unk314 == 7) {
+    if (this->csAction == 7) {
         this->picto.actor.speedXZ = 5.0f;
-        func_809A024C(this);
+        EnGe3_FollowPath(this);
+
         if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f)) {
             Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
         }
 
-        if (this->unk318 > 0) {
-            this->unk318--;
+        if (this->screamTimer > 0) {
+            this->screamTimer--;
         } else {
-            this->unk318 = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);
-            func_809A0350(this);
+            this->screamTimer = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);
+            EnGe3_Scream(this);
         }
     }
 }
 
-void func_809A0820(Actor* thisx, PlayState* play) {
+void EnGe3_UpdateColliderAndMove(Actor* thisx, PlayState* play) {
     s32 pad;
     EnGe3* this = (EnGe3*)thisx;
 
@@ -290,7 +304,7 @@ void func_809A0820(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->picto.actor, 40.0f, 25.0f, 40.0f, 4);
 }
 
-void func_809A08A4(EnGe3* this, PlayState* play) {
+void EnGe3_Blink(EnGe3* this, PlayState* play) {
     if (DECR(this->blinkTimer) == 0) {
         this->blinkTimer = Rand_S16Offset(60, 60);
     }
@@ -305,20 +319,22 @@ void func_809A08A4(EnGe3* this, PlayState* play) {
 void EnGe3_Update(Actor* thisx, PlayState* play) {
     EnGe3* this = (EnGe3*)thisx;
 
-    func_809A0820(&this->picto.actor, play);
+    EnGe3_UpdateColliderAndMove(&this->picto.actor, play);
     this->actionFunc(this, play);
-    func_809A08A4(this, play);
+    EnGe3_Blink(this, play);
 }
 
-s32 func_809A096C(PlayState* play, Actor* thisx) {
-    s32 sp34 = Snap_ValidatePictograph(play, thisx, 9, &thisx->focus.pos, &thisx->shape.rot, 10.0f, 400.0f, -1);
+s32 EnGe3_ValidatePictograph(PlayState* play, Actor* thisx) {
+    s32 ret = Snap_ValidatePictograph(play, thisx, PICTOGRAPH_PIRATE_GOOD, &thisx->focus.pos, &thisx->shape.rot, 10.0f,
+                                      400.0f, -1);
 
-    sp34 |= Snap_ValidatePictograph(play, thisx, 0xB, &thisx->focus.pos, &thisx->shape.rot, 10.0f, 1200.0f, -1);
+    ret |= Snap_ValidatePictograph(play, thisx, PICTOGRAPH_PIRATE_TOO_FAR, &thisx->focus.pos, &thisx->shape.rot, 10.0f,
+                                   1200.0f, -1);
 
-    return sp34;
+    return ret;
 }
 
-s32 func_809A0A14(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnGe3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnGe3* this = THIS;
 
     switch (limbIndex) {
@@ -328,7 +344,7 @@ s32 func_809A0A14(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
             *dList = NULL;
             return false;
         case 6:
-            rot->x += this->unk304.y;
+            rot->x += this->headRot.y;
             // fallthrough
         default:
             // This is required since EnGe3 shares a skeleton with EnKaizoku; it avoids stale colours being used in the
@@ -356,43 +372,46 @@ s32 func_809A0A14(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 
             CLOSE_DISPS(play->state.gfxCtx);
 
-            if ((this->unk312 == 2) && (((limbIndex == 8) || (limbIndex == 13)) || (limbIndex == 2))) {
-                s32 temp = limbIndex * 50;
+            if (this->animIndex == GERUDO_AVEIL_ANIM_2) {
+                // Fidget
+                if ((limbIndex == 8) || (limbIndex == 13) || (limbIndex == 2)) {
+                    s32 temp = limbIndex * 50;
 
-                rot->y = rot->y + (s32)(Math_SinS(play->state.frames * (temp + 0x814)) * 200.0f);
-                rot->z = rot->z + (s32)(Math_CosS(play->state.frames * (temp + 0x940)) * 200.0f);
+                    // required to match
+                    rot->y = rot->y + (s32)(Math_SinS(play->state.frames * (temp + 0x814)) * 200.0f);
+                    rot->z = rot->z + (s32)(Math_CosS(play->state.frames * (temp + 0x940)) * 200.0f);
+                }
             }
             break;
     }
     return false;
 }
 
-void func_809A0C60(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnGe3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnGe3* this = THIS;
-    Vec3f D_809A0DF0 = { 600.0f, 700.0f, 0.0f };
+    Vec3f sFocusOffset = { 600.0f, 700.0f, 0.0f };
 
     if (limbIndex == 6) {
-        Matrix_MultVec3f(&D_809A0DF0, &this->picto.actor.focus.pos);
+        Matrix_MultVec3f(&sFocusOffset, &this->picto.actor.focus.pos);
     }
 }
 
-TexturePtr D_809A0DFC[] = {
-    0x06006398,
-    0x06006958,
-    0x060070D8,
-};
-
 void EnGe3_Draw(Actor* thisx, PlayState* play) {
+    static TexturePtr sEyeTextures[] = {
+        0x06006398,
+        0x06006958,
+        0x060070D8,
+    };
     s32 pad;
     EnGe3* this = (EnGe3*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C5B0(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_809A0DFC[this->eyeIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
     func_800B8050(&this->picto.actor, play, 0);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_809A0A14, func_809A0C60, &this->picto.actor);
+                          EnGe3_OverrideLimbDraw, EnGe3_PostLimbDraw, &this->picto.actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
