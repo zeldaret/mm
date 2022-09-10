@@ -1266,10 +1266,10 @@ typedef enum {
     /* 0x4D */ TATL_HINT_ID_MAD_SCRUB,
     /* 0x4E */ TATL_HINT_ID_4E, // Empty
     /* 0x4F */ TATL_HINT_ID_4F, // Empty
-    /* 0x50 */ TATL_HINT_ID_MEG,
-    /* 0x51 */ TATL_HINT_ID_JO,
-    /* 0x52 */ TATL_HINT_ID_BETH,
-    /* 0x53 */ TATL_HINT_ID_AMY,
+    /* 0x50 */ TATL_HINT_ID_POE_SISTER_MEG,
+    /* 0x51 */ TATL_HINT_ID_POE_SISTER_JO,
+    /* 0x52 */ TATL_HINT_ID_POE_SISTER_BETH,
+    /* 0x53 */ TATL_HINT_ID_POE_SISTER_AMY,
     /* 0x54 */ TATL_HINT_ID_PIRATE,
     /* 0x55 */ TATL_HINT_ID_STALCHILD,
     /* 0x56 */ TATL_HINT_ID_ICE_KEESE,
