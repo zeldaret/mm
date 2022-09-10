@@ -15596,7 +15596,7 @@
     0x80BC9270:("EnStoneheishi_Init",),
     0x80BC9330:("EnStoneheishi_Destroy",),
     0x80BC935C:("EnStoneheishi_ChangeAnim",),
-    0x80BC941C:("EnStoneheishi_HeadTowardsLink",),
+    0x80BC941C:("EnStoneheishi_TrackPlayer",),
     0x80BC94B0:("func_80BC94B0",),
     0x80BC9560:("func_80BC9560",),
     0x80BC9660:("func_80BC9660",),
