@@ -17,9 +17,9 @@
         <DList Name="gOceanSpiderHouseEmpty5DL" Offset="0x10F0" />
         <DList Name="gOceanSpiderHouseChestOfDrawersDL" Offset="0x10F8" />
         <Collision Name="gOceanSpiderHouseChestOfDrawersCol" Offset="0x1328" />
-        <Texture Name="gOceanSpiderHouseUnusedTLUT1" Size="0x20" Offset="0x1360" />
+        <Texture Name="gOceanSpiderHouseUnusedTLUT1" OutName="ocean_spider_house_unused_tlut1" Format="rgba16" Width="4" Height="4" Offset="0x1360" />
         <Texture Name="gOceanSpiderHouseTLUT" OutName="ocean_spider_house_tlut" Format="rgba16" Width="4" Height="4" Offset="0x1380" />
-        <Texture Name="gOceanSpiderHouseUnusedTLUT2" OutName="ocean_spider_house_unused_tlut" Format="rgba16" Width="4" Height="4" Offset="0x13A0" />
+        <Texture Name="gOceanSpiderHouseUnusedTLUT2" OutName="ocean_spider_house_unused_tlut2" Format="rgba16" Width="4" Height="4" Offset="0x13A0" />
         <Texture Name="gOceanSpiderHouseBombableWallCrackTex" OutName="ocean_spider_house_bombable_wall_crack" Format="ia8" Width="64" Height="64" Offset="0x13C0" />
         <Texture Name="gOceanSpiderHouseBookshelfWoodTex" OutName="ocean_spider_house_bookshelf_wood" Format="rgba16" Width="32" Height="32" Offset="0x23C0" />
         <Texture Name="gOceanSpiderHouseFireplaceGrateTex" OutName="ocean_spider_house_fireplace_grate" Format="rgba16" Width="32" Height="32" Offset="0x2BC0" />
