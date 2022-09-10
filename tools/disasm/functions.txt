@@ -8648,7 +8648,7 @@
     0x809A0350:("EnGe3_Scream",),
     0x809A03AC:("EnGe3_Idle",),
     0x809A03FC:("EnGe3_ThrowPlayerOut",),
-    0x809A04D0:("EnGe3_PerformCutsceneActions",),
+    0x809A04D0:("EnGe3_AveilsChamberIdle",),
     0x809A0820:("EnGe3_UpdateColliderAndMove",),
     0x809A08A4:("EnGe3_Blink",),
     0x809A0920:("EnGe3_Update",),

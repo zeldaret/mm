@@ -16,9 +16,22 @@ typedef void (*EnGe3ActionFunc)(struct EnGe3*, PlayState*);
 #define GERUDO_AVEIL_PATH_NONE 0x3F
 
 typedef enum {
-    /* 0 */ GERUDO_AVEIL_TYPE_0,
-    /* 1 */ GERUDO_AVEIL_TYPE_1
+    /* 0 */ GERUDO_AVEIL_TYPE_0, // Unused, just walks forwards
+    /* 1 */ GERUDO_AVEIL_TYPE_AVEILS_CHAMBER
 } GerudoAveilType;
+
+typedef enum {
+    /* -1 */ GERUDO_AVEIL_CSACTION_NONE = -1,
+    /*  0 */ GERUDO_AVEIL_CSACTION_0, // Unused
+    /*  1 */ GERUDO_AVEIL_CSACTION_WAIT,
+    /*  2 */ GERUDO_AVEIL_CSACTION_PAUSE,
+    /*  3 */ GERUDO_AVEIL_CSACTION_INSTRUCT,
+    /*  4 */ GERUDO_AVEIL_CSACTION_DEMAND,
+    /*  5 */ GERUDO_AVEIL_CSACTION_DISMISS,
+    /*  6 */ GERUDO_AVEIL_CSACTION_BEG,
+    /*  7 */ GERUDO_AVEIL_CSACTION_BEEHIVE_RUN_AWAY,
+    /*  8 */ GERUDO_AVEIL_CSACTION_BEEHIVE_VANISH,
+} GerudoAveilCsAction;
 
 typedef struct EnGe3 {
     /* 0x000 */ PictoActor picto;
