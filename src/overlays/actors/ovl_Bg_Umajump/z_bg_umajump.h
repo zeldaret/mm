@@ -27,7 +27,7 @@ typedef enum {
     BG_UMAJUMP_PARAM_4,
     BG_UMAJUMP_PARAM_5,
     BG_UMAJUMP_PARAM_6,
-} BG_UMAJUMP_PARAMS;
+} BgUmaJumpParam;
 
 extern const ActorInit Bg_Umajump_InitVars;
 
