@@ -21,6 +21,7 @@
 #define ENGO_FLAG_NONE 0
 #define ENGO_FLAG_BLINKING (1 << 5) // 0x0020
 #define ENGO_FLAG_CURLED (1 << 9)   // 0x0200
+#define ENGO_FLAG_FROZEN (1 << 10)  // 0x0400
 #define ENGO_FLAG_CURLING (1 << 14) // 0x4000
 
 typedef enum {
@@ -556,13 +557,13 @@ static s32 D_80A16350[27] = {
 // MsgScript
 static s32 D_80A163BC[4] = { 0x100060E, 0xDFE0C12, 0x100E0DFF, 0xC121000 };
 // MsgScript sMsgScript[] = {
-// /* 0x0000 0x03 */  MSCRIPT_CMD01(0x0009 - 0x0003), //B if Goron
-// /* 0x0003 0x03 */  MSCRIPT_BEGIN_TEXT(0x0DFE), // It's spring! It's spring! I can't sit still any longer!
+// /* 0x0000 0x03 */  MSCRIPT_CMD01(0x0009 - 0x0003),   // B if Goron
+// /* 0x0003 0x03 */  MSCRIPT_BEGIN_TEXT(0x0DFE),       // It's spring! It's spring! I can't sit still any longer!
 // /* 0x0006 0x01 */  MSCRIPT_AWAIT_TEXT(),
 // /* 0x0007 0x01 */  MSCRIPT_CMD18(),
 // /* 0x0008 0x01 */  MSCRIPT_DONE(),
 
-// /* 0x0009 0x03 */  MSCRIPT_BEGIN_TEXT(0x0DFF), // Darmani! Are you ready? I'm rarin' to go!
+// /* 0x0009 0x03 */  MSCRIPT_BEGIN_TEXT(0x0DFF),       // Darmani! Are you ready? I'm rarin' to go!
 // /* 0x000C 0x01 */  MSCRIPT_AWAIT_TEXT(),
 // /* 0x000D 0x01 */  MSCRIPT_CMD18(),
 // /* 0x000E 0x01 */  MSCRIPT_DONE(),
@@ -632,7 +633,7 @@ static s32 D_80A163FC[4] = { 0x100060E, 0xE060C12, 0x100E0E07, 0xC121000 };
 static s32 D_80A1640C[2] = { 0xE023A0C, 0x12100000 };
 // MsgScript sMsgScript[] = {
 // /* 0x0000 0x03 */  MSCRIPT_BEGIN_TEXT(0x023A), // Aha! So the Gorons fall asleep if they hear the Goron's Lullaby!
-// That's convenient...
+                                                  // That's convenient...
 // /* 0x0003 0x01 */  MSCRIPT_AWAIT_TEXT(),
 // /* 0x0004 0x01 */  MSCRIPT_CMD18(),
 // /* 0x0005 0x01 */  MSCRIPT_DONE(),
@@ -713,39 +714,45 @@ static ColliderCylinderInit sCylinderInit2 = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
+typedef enum {
+    /* 0x0 */ ENGO_DMGEFF_NONE,
+    /* 0x1 */ ENGO_DMGEFF_FIRE = 0x2,
+    /* 0xF */ ENGO_DMGEFF_BREAK = 0xF,
+} EnGoDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(1, 0x0),
-    /* Deku Stick     */ DMG_ENTRY(1, 0x0),
-    /* Horse trample  */ DMG_ENTRY(1, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0x0),
-    /* Zora boomerang */ DMG_ENTRY(1, 0x0),
-    /* Normal arrow   */ DMG_ENTRY(1, 0x0),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(1, 0x0),
-    /* Hookshot       */ DMG_ENTRY(1, 0x0),
-    /* Goron punch    */ DMG_ENTRY(1, 0xF),
-    /* Sword          */ DMG_ENTRY(1, 0x0),
-    /* Goron pound    */ DMG_ENTRY(1, 0xF),
-    /* Fire arrow     */ DMG_ENTRY(1, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(1, 0x0),
-    /* Light arrow    */ DMG_ENTRY(1, 0x0),
-    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
-    /* Deku spin      */ DMG_ENTRY(1, 0x0),
-    /* Deku bubble    */ DMG_ENTRY(1, 0x0),
-    /* Deku launch    */ DMG_ENTRY(1, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(1, 0x0),
-    /* Zora barrier   */ DMG_ENTRY(1, 0x0),
-    /* Normal shield  */ DMG_ENTRY(1, 0x0),
-    /* Light ray      */ DMG_ENTRY(1, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0x0),
-    /* Zora punch     */ DMG_ENTRY(1, 0x0),
-    /* Spin attack    */ DMG_ENTRY(1, 0x0),
-    /* Sword beam     */ DMG_ENTRY(1, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(1, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(1, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(1, 0x0),
-    /* Unblockable    */ DMG_ENTRY(1, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(1, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0x0),
+    /* Deku Nut       */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Deku Stick     */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Goron punch    */ DMG_ENTRY(1, ENGO_DMGEFF_BREAK),
+    /* Sword          */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(1, ENGO_DMGEFF_BREAK),
+    /* Fire arrow     */ DMG_ENTRY(1, ENGO_DMGEFF_FIRE),
+    /* Ice arrow      */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Light arrow    */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Goron spikes   */ DMG_ENTRY(1, ENGO_DMGEFF_BREAK),
+    /* Deku spin      */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Deku bubble    */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Zora barrier   */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Normal shield  */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, ENGO_DMGEFF_NONE),
 };
 
 static AnimationInfoS sAnimationInfo[] = {
@@ -797,7 +804,7 @@ EnGoStruct* func_80A10FD0(EnGoStruct* ptr, Vec3f position, Vec3f acceleration, V
 }
 
 // Draw Steam (7)
-void func_80A11144(EnGoStruct* ptr, PlayState* play2) {
+void EnGo_DrawSteam(EnGoStruct* ptr, PlayState* play2) {
     PlayState* play = play2;
     s32 i;
     s32 flag = false;
@@ -860,7 +867,7 @@ void func_80A1143C(EnGoStruct* ptr, Vec3f pos, Vec3f accel, Vec3f vel, f32 scale
 }
 
 // Draw Dust (4, 5, 6)
-void func_80A115B4(EnGoStruct* ptr, PlayState* play2) {
+void EnGo_DrawDust(EnGoStruct* ptr, PlayState* play2) {
     static TexturePtr sEnGoDustTexturePtrs[] = {
         gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
     };
@@ -915,7 +922,7 @@ void func_80A115B4(EnGoStruct* ptr, PlayState* play2) {
 }
 
 /* Called after Snowball broken sound effect, before goron cold */
-void func_80A118F8(EnGoStruct* ptr, Vec3f worldPos) {
+void EnGo_VfxSnowballBreak(EnGoStruct* ptr, Vec3f worldPos) {
     static u8 D_80A1667C[] = {
         3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2,
     };
@@ -1013,7 +1020,7 @@ void func_80A11BF8(EnGoStruct* ptr, f32 arg1) {
 }
 
 // Draw snowball (1, 2, or 3)
-void func_80A11EC0(EnGoStruct* ptr, PlayState* play, Gfx* arg2, Gfx* arg3, u8 arg4) {
+void EnGo_DrawSnow(EnGoStruct* ptr, PlayState* play, Gfx* arg2, Gfx* arg3, u8 arg4) {
     s32 i;
     u8 flag = false;
 
@@ -1072,12 +1079,12 @@ void func_80A1203C(EnGo* this) {
 }
 
 // Draw Effects (1,2,3 = Snowball, 4,5,6 = Dust, 7 = Steam)
-void func_80A1213C(EnGo* this, PlayState* play) {
-    func_80A11EC0(this->unk_3F8, play, gGoronLargeSnowballFragmentMaterialDL, gGoronLargeSnowballFragmentModelDL, 1);
-    func_80A11EC0(this->unk_3F8, play, gGoronMediumSnowballFragmentMaterialDL, gGoronMediumSnowballFragmentModelDL, 2);
-    func_80A11EC0(this->unk_3F8, play, gGoronSmallSnowballFragmentMaterialDL, gGoronSmallSnowballFragmentModelDL, 3);
-    func_80A11144(this->unk_3F8, play);
-    func_80A115B4(this->unk_3F8, play);
+void EnGo_DrawVfx(EnGo* this, PlayState* play) {
+    EnGo_DrawSnow(this->unk_3F8, play, gGoronLargeSnowballFragmentMaterialDL, gGoronLargeSnowballFragmentModelDL, 1);
+    EnGo_DrawSnow(this->unk_3F8, play, gGoronMediumSnowballFragmentMaterialDL, gGoronMediumSnowballFragmentModelDL, 2);
+    EnGo_DrawSnow(this->unk_3F8, play, gGoronSmallSnowballFragmentMaterialDL, gGoronSmallSnowballFragmentModelDL, 3);
+    EnGo_DrawSteam(this->unk_3F8, play);
+    EnGo_DrawDust(this->unk_3F8, play);
 }
 
 s32 func_80A121F4(PlayState* play) {
@@ -1208,7 +1215,7 @@ void func_80A126BC(EnGo* this, PlayState* play) {
         func_80A123A0(this, play);
     } else if (this->flags & ENGO_FLAG_CURLED) {
         func_80A124FC(this, play);
-    } else if (this->flags & 0x400) {
+    } else if (this->flags & ENGO_FLAG_FROZEN) {
         func_80A125BC(this, play);
     } else {
         func_80A12660(this, play);
@@ -1220,13 +1227,15 @@ s32 func_80A12774(EnGo* this, PlayState* play) {
         return false;
     }
 
-    if ((ENGO_GET_F(&this->actor) != ENGO_F_8) && (ENGO_GET_F(&this->actor) != ENGO_F_1)) {
+    if ((ENGO_GET_F(&this->actor) != ENGO_F_8) && //
+        (ENGO_GET_F(&this->actor) != ENGO_F_1)) {
         if (!(this->flags & ENGO_FLAG_CURLED)) {
             this->flags |= 8;
         }
     }
 
-    if ((ENGO_GET_F(&this->actor) == ENGO_F_5) || (ENGO_GET_F(&this->actor) == ENGO_F_6) ||
+    if ((ENGO_GET_F(&this->actor) == ENGO_F_5) || //
+        (ENGO_GET_F(&this->actor) == ENGO_F_6) || //
         (ENGO_GET_F(&this->actor) == ENGO_F_7)) {
         this->blinkCountdown = 0;
         this->indexEyeTex = ENGO_EYE_OPEN;
@@ -1235,7 +1244,7 @@ s32 func_80A12774(EnGo* this, PlayState* play) {
 
     SubS_UpdateFlags(&this->flags, 0, 7);
     this->cutsceneState = 0;
-    this->unk_3C4 = 0;
+    this->animState = 0;
     this->priorActionFn = this->actionFunc;
     this->actionFunc = func_ACT_80A157C4;
     return true;
@@ -1340,6 +1349,7 @@ s32 func_80A12B78(EnGo* this, PlayState* play) {
 }
 
 // Change the animation to the arg2 value (save as anim)
+// EnGo_ChangeAnimation
 s32 func_80A12C48(EnGo* this, PlayState* play, EnGoAnimationIndex anim) {
     s8 objIdx = this->actor.objBankIndex;
     s8 objIdx2 = -1;
@@ -1558,6 +1568,7 @@ Actor* func_80A13400(EnGo* this, PlayState* play) {
     return NULL;
 }
 
+// EnGo_SetupCollider
 void func_80A134B0(EnGo* this, PlayState* play, s32 arg2) {
     if ((gSaveContext.save.weekEventReg[POWDERKEG] & POWDERKEG_CAN_PURCHASE) ||
         (play->actorCtx.unk5 & 1) // Same check in Powderkeg ammo check MessageScript Command
@@ -1568,8 +1579,8 @@ void func_80A134B0(EnGo* this, PlayState* play, s32 arg2) {
     }
 }
 
-// If cutscene started
-s32 func_80A134F4(EnGo* this, s16 indexCutscene) {
+// EnGoCutscene_StopIfDoneAndCheckCanPlay
+s32 EnGoCutscene_StopIfDoneAndCheckCanPlay(EnGo* this, s16 indexCutscene) {
     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
         ActorCutscene_Stop(0x7C);
     } else if (ActorCutscene_GetCanPlayNext(indexCutscene)) {
@@ -1620,27 +1631,29 @@ s32 func_80A13564(EnGo* this, f32 arg1, f32 arg2, s32 arg3) {
     return ret;
 }
 
-void func_80A136B8(PlayState* play, s16 arg1, s16 arg2, s16 arg3) {
-    s16 sp26 = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
+// EnGo_GateKeeper_CameraQuake
+void func_80A136B8(PlayState* play, s16 quakeSpeed, s16 vertMagnitude, s16 quakeTime) {
+    s16 indexQuake = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
 
-    Quake_SetCountdown(sp26, arg3);
-    Quake_SetSpeed(sp26, arg1);
-    Quake_SetQuakeValues(sp26, arg2, 0, 0, 0);
+    Quake_SetCountdown(indexQuake, quakeTime);
+    Quake_SetSpeed(indexQuake, quakeSpeed);
+    Quake_SetQuakeValues(indexQuake, vertMagnitude, 0, 0, 0);
 }
 
+// EnGo_GateKeeper_PoundEffect
 void func_80A13728(EnGo* this, PlayState* play) {
-    func_80A136B8(play, 0x6C77, 7, 20);
+    func_80A136B8(play, 0x6C77, 7, 20); // EnGo_GateKeeper_CameraQuake
     play->actorCtx.unk2 = 4;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TEST, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, 0, 0, 0, 0);
     EffectSsBlast_SpawnWhiteShockwave(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f);
 }
 
-void func_80A137C0(EnGo* this, PlayState* play, f32 arg2, f32 arg3) {
+void EnGo_DrawIceBlockIfFrozen(EnGo* this, PlayState* play, f32 arg2, f32 arg3) {
     u32 frames1;
     u32 frames2;
 
-    if (this->flags & 0x400) {
+    if (this->flags & ENGO_FLAG_FROZEN) {
         Matrix_Push();
 
         OPEN_DISPS(play->state.gfxCtx);
@@ -1665,22 +1678,23 @@ void func_80A137C0(EnGo* this, PlayState* play, f32 arg2, f32 arg3) {
     }
 }
 
+// EnGo_IceMeltEffects
 void func_80A139E4(EnGo* this) {
-    static Vec3f D_80A16698 = { 0.0f, 0.06f, 0.0f };
-    Vec3f sp54;
-    Vec3f sp48;
+    static Vec3f accel = { 0.0f, 0.06f, 0.0f };
+    Vec3f tempPos;
+    Vec3f pos;
     s16 rotAngle = Rand_ZeroOne() * 360.0f * 182.0f;
 
-    Math_Vec3f_Copy(&sp54, &gZeroVec3f);
-    sp54.z = 28.0f;
-    Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, rotAngle, &sp54, &sp48);
-    sp48.y = (Rand_ZeroOne() * 10.0f) + 4.0f;
-    sp48.y += this->actor.floorHeight;
-    func_80A10FD0(&this->unk_3F8[16], sp48, D_80A16698, gZeroVec3f, 0.01f, 0.002f, 16);
+    Math_Vec3f_Copy(&tempPos, &gZeroVec3f);
+    tempPos.z = 28.0f;
+    Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, rotAngle, &tempPos, &pos);
+    pos.y = (Rand_ZeroOne() * 10.0f) + 4.0f;
+    pos.y += this->actor.floorHeight;
+    func_80A10FD0(&this->unk_3F8[16], pos, accel, gZeroVec3f, 0.01f, 0.002f, 16);
 }
 
-// Cutscene Selector?
-s32 func_CB_80A13B1C(Actor* thisx, PlayState* play) {
+// EnGo_GoronGateKeeperCallback
+s32 EnGo_MsgCB_GoronGateKeeper(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
     EnGo* this = THIS;
     s32 ret = false;
@@ -1688,8 +1702,8 @@ s32 func_CB_80A13B1C(Actor* thisx, PlayState* play) {
     switch (this->cutsceneState) {
         case 0:
             this->indexCutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-            if (func_80A134F4(this, this->indexCutscene)) {
-                this->unk_3C4 = 1;
+            if (EnGoCutscene_StopIfDoneAndCheckCanPlay(this, this->indexCutscene)) {
+                this->animState = 1;
                 this->cutsceneState = 1;
             } else {
                 break;
@@ -1704,7 +1718,7 @@ s32 func_CB_80A13B1C(Actor* thisx, PlayState* play) {
             }
 
         case 2:
-            if (func_80A134F4(this, this->indexCutscene)) {
+            if (EnGoCutscene_StopIfDoneAndCheckCanPlay(this, this->indexCutscene)) {
                 this->cutsceneState = 3;
             } else {
                 break;
@@ -1719,11 +1733,11 @@ s32 func_CB_80A13B1C(Actor* thisx, PlayState* play) {
             }
     }
 
-    switch (this->unk_3C4) {
+    switch (this->animState) {
         case 1:
             func_80A12C48(this, play, ENGO_ANIM_ROLL);
             this->flags |= ENGO_FLAG_CURLING;
-            this->unk_3C4++;
+            this->animState++;
             break;
 
         case 2:
@@ -1731,40 +1745,40 @@ s32 func_CB_80A13B1C(Actor* thisx, PlayState* play) {
                 this->flags &= ~ENGO_FLAG_CURLING;
                 this->flags &= ~0x80;
                 this->flags |= ENGO_FLAG_CURLED;
-                this->unk_3C4++;
-                this->unk_3C2 = 0;
+                this->animState++;
+                this->delayTimer = 0;
                 this->actor.shape.yOffset = 14.0f;
             }
             break;
 
         case 3:
-            this->unk_3C2++;
-            if (this->unk_3C2 >= 10) {
+            this->delayTimer++;
+            if (this->delayTimer >= 10) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_JUMP);
                 this->actor.velocity.y = 10.0f;
                 this->actor.gravity = -1.0f;
-                this->unk_3C4++;
+                this->animState++;
             }
             break;
 
         case 4:
             if (func_80A13564(this, 10.0f, 0.004f, 6)) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_LAND_BIG);
-                func_80A13728(this, play);
-                this->unk_3C4++;
-                this->unk_3C2 = 0;
-                gSaveContext.save.weekEventReg[88] |= 0x40;
+                func_80A13728(this, play); // EnGo_GateKeeper_PoundEffect
+                this->animState++;
+                this->delayTimer = 0;
+                gSaveContext.save.weekEventReg[GORONSHRINE] |= GORONSHRINE_GATE_OPEN;
             }
             break;
 
         case 5:
-            this->unk_3C2++;
-            if (this->unk_3C2 >= 10) {
-                func_80A12C48(this, play, 5);
+            this->delayTimer++;
+            if (this->delayTimer >= 10) {
+                func_80A12C48(this, play, ENGO_ANIM_SHIVER);
                 this->actor.shape.rot.x = 0;
                 this->flags &= ~ENGO_FLAG_CURLED;
                 this->flags |= 0x80;
-                this->unk_3C4++;
+                this->animState++;
             }
             break;
 
@@ -1797,22 +1811,24 @@ s32 func_CB_80A13B1C(Actor* thisx, PlayState* play) {
     return ret;
 }
 
+// Powder Keg Salesman Callback
+// EnGo_PowderKegCallback
 s32 func_CB_80A13E80(Actor* thisx, PlayState* play) {
     static Vec3f D_80A166A4 = { 0.0f, 200.0f, 280.0f };
     EnGo* this = THIS;
-    Vec3f sp48;
+    Vec3f bombSpawnPos;
     s32 ret = false;
 
     switch (this->cutsceneState) {
         case 0:
             this->indexCutscene = this->actor.cutscene;
-            if (func_80A134F4(this, this->indexCutscene)) {
+            if (EnGoCutscene_StopIfDoneAndCheckCanPlay(this, this->indexCutscene)) {
                 this->cutsceneState++;
             }
             break;
 
         case 1:
-            func_80A12C48(this, play, 7);
+            func_80A12C48(this, play, ENGO_ANIM_DROPKEG);
             this->cutsceneState++;
 
         case 2:
@@ -1821,24 +1837,26 @@ s32 func_CB_80A13E80(Actor* thisx, PlayState* play) {
             }
 
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                func_80A12C48(this, play, 1);
-                Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80A166A4, &sp48);
+                func_80A12C48(this, play, ENGO_ANIM_LYINGDOWNIDLE_IMM);
+                Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80A166A4,
+                                              &bombSpawnPos);
                 gSaveContext.powderKegTimer = 2400;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, sp48.x, sp48.y, sp48.z, 1, 0, 0, 0);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, bombSpawnPos.x, bombSpawnPos.y, bombSpawnPos.z, 1, 0,
+                            0, 0);
                 func_80A134B0(this, play, 1);
-                this->unk_3C2 = 0;
+                this->delayTimer = 0;
                 this->cutsceneState++;
             }
             break;
 
         case 3:
-            if (this->unk_3C2 >= 60) {
+            if (this->delayTimer >= 60) {
                 ActorCutscene_Stop(this->indexCutscene);
-                this->unk_3C2 = 0;
+                this->delayTimer = 0;
                 this->cutsceneState = 0;
                 ret = true;
             } else {
-                this->unk_3C2++;
+                this->delayTimer++;
             }
             break;
     }
@@ -1846,9 +1864,11 @@ s32 func_CB_80A13E80(Actor* thisx, PlayState* play) {
     return ret;
 }
 
+// EnGo_ChangeGymnasticsAnimation
 void func_80A14018(EnGo* this, PlayState* play) {
     static Vec3f D_80A166B0 = { 0.0f, 0.0f, 40.0f };
-    static s32 D_80A166BC[] = { 11, 10, 12, 13, 14, 17 };
+    static s32 D_80A166BC[] = { ENGO_ANIM_TAISOU_11, ENGO_ANIM_TAISOU_10, ENGO_ANIM_TAISOU_12,
+                                ENGO_ANIM_TAISOU_13, ENGO_ANIM_TAISOU_14, ENGO_ANIM_TAISOU_17 };
     Vec3f sp2C;
     s32 phi_v0 = ENGO_GET_70(&this->actor) % 6;
 
@@ -1870,6 +1890,7 @@ void func_80A14018(EnGo* this, PlayState* play) {
     this->actor.gravity = 0.0f;
 }
 
+// EnGo_ChangeGymnasticsAnimation2
 void func_80A14104(EnGo* this, PlayState* play) {
     static s32 D_80A166D4[] = { ENGO_ANIM_TAISOU_15, ENGO_ANIM_TAISOU_16 };
     s16 animFrame;
@@ -1898,10 +1919,11 @@ void func_80A141D4(EnGo* this, PlayState* play) {
     this->indexEyeTex = ENGO_EYE_CLOSED;
     this->flags = ENGO_FLAG_NONE;
     this->flags |= 0x40;
-    this->flags |= 0x400;
+    this->flags |= ENGO_FLAG_FROZEN;
     this->unk_3A0 = 100.0f;
 }
 
+// Called from Gatekeepr's Setup function
 void func_80A1428C(EnGo* this, PlayState* play) {
     s16 temp;
     Vec3f sp30;
@@ -1922,7 +1944,7 @@ void func_80A1428C(EnGo* this, PlayState* play) {
 }
 
 void func_80A14324(EnGo* this, PlayState* play) {
-    func_80A12C48(this, play, 8);
+    func_80A12C48(this, play, ENGO_ANIM_COVEREARS);
     Actor_SetScale(&this->actor, this->scale);
     this->flags = ENGO_FLAG_NONE;
     this->actor.gravity = -1.0f;
@@ -1936,7 +1958,7 @@ void func_80A14324(EnGo* this, PlayState* play) {
 }
 
 void func_80A143A8(EnGo* this, PlayState* play) {
-    func_80A12C48(this, play, 5);
+    func_80A12C48(this, play, ENGO_ANIM_SHIVER);
     Actor_SetScale(&this->actor, this->scale);
     this->flags = ENGO_FLAG_NONE;
     this->actor.gravity = -1.0f;
@@ -1954,7 +1976,7 @@ void func_80A14430(EnGo* this, PlayState* play) {
     if (((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 0)) ||
          (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 2))) &&
         (gSaveContext.save.weekEventReg[33] & 0x80)) {
-        func_80A14018(this, play);
+        func_80A14018(this, play); // EnGo_ChangeGymnasticsAnimation
         this->actionFunc = func_ACT_80A149B0;
     } else {
         Actor_MarkForDeath(&this->actor);
@@ -1964,13 +1986,14 @@ void func_80A14430(EnGo* this, PlayState* play) {
 void func_80A1449C(EnGo* this, PlayState* play) {
     if ((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1)) ||
         (gSaveContext.save.entrance == ENTRANCE(CUTSCENE, 0))) {
-        func_80A14104(this, play);
+        func_80A14104(this, play); // EnGo_ChangeGymnasticsAnimation2
         this->actionFunc = func_ACT_80A149B0;
     } else {
         Actor_MarkForDeath(&this->actor);
     }
 }
 
+// Gatekeeper's setup function
 void func_80A144F4(EnGo* this, PlayState* play) {
     if (gSaveContext.save.day >= 2) {
         this->path = SubS_GetDayDependentPath(play, ENGO_GET_7F80(&this->actor), 0xFF, &this->indexPathPoint);
@@ -1979,11 +2002,11 @@ void func_80A144F4(EnGo* this, PlayState* play) {
         }
         func_80A1428C(this, play);
         this->actionFunc = func_ACT_80A153FC;
-        this->msgEventCb = func_CB_80A13B1C;
+        this->msgEventCb = EnGo_MsgCB_GoronGateKeeper;
     } else {
         func_80A143A8(this, play);
         this->actionFunc = func_ACT_80A149B0;
-        this->msgEventCb = func_CB_80A13B1C;
+        this->msgEventCb = EnGo_MsgCB_GoronGateKeeper;
     }
 }
 
@@ -2005,14 +2028,15 @@ void func_80A145AC(EnGo* this, PlayState* play) {
 
 void func_80A14668(EnGo* this, PlayState* play) {
     if (!(gSaveContext.save.weekEventReg[ELDERS_SON] & ELDERS_SON_DONE_CRYING)) {
-        func_80A14324(this, play);
+        func_80A14324(this, play); // Cover Ears
         this->actionFunc = func_ACT_80A149B0;
     } else {
-        func_80A143A8(this, play);
+        func_80A143A8(this, play); // Shiver
         this->actionFunc = func_ACT_80A149B0;
     }
 }
 
+// EnGo_SetupGivePowderKeg
 void func_80A146CC(EnGo* this, PlayState* play) {
     func_80A134B0(this, play, 0);
     func_80A12C48(this, play, 0);
@@ -2025,7 +2049,7 @@ void func_80A146CC(EnGo* this, PlayState* play) {
     SubS_UpdateFlags(&this->flags, 3, 7);
     this->flags |= 0x40;
     this->flags |= ENGO_FLAG_BLINKING;
-    this->msgEventCb = func_CB_80A13E80;
+    this->msgEventCb = func_CB_80A13E80; // Powder Keg Salesman Callback
     this->actionFunc = func_ACT_80A149B0;
 }
 
@@ -2076,10 +2100,10 @@ void func_ACT_80A14798(EnGo* this, PlayState* play) {
             case ENGO_F_5:
             case ENGO_F_6:
             case ENGO_F_7:
-                func_80A14668(this, play);
+                func_80A14668(this, play); // Shrine Gorons
                 break;
 
-            case ENGO_F_8:
+            case ENGO_F_8: // PowderKeg Goron
                 func_80A146CC(this, play);
                 break;
 
@@ -2090,11 +2114,12 @@ void func_ACT_80A14798(EnGo* this, PlayState* play) {
     }
 }
 
-/* Action function*/
+// EnGo_DefaultAnimationFunction?
 void func_ACT_80A149B0(EnGo* this, PlayState* play) {
     s16 sp26 = this->actor.world.rot.y;
 
-    if ((ENGO_GET_F(&this->actor) == ENGO_F_2) && (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1))) {
+    if ((ENGO_GET_F(&this->actor) == ENGO_F_2) && //
+        (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_CHEER - SFX_FLAG);
     } else if (ENGO_GET_F(&this->actor) != ENGO_F_8) {
         if (EnGo_IsEnteringSleep(this, play)) {
@@ -2186,18 +2211,20 @@ void func_ACT_80A14B30(EnGo* this, PlayState* play) {
 void func_ACT_80A14E14(EnGo* this, PlayState* play) {
     Actor* actor = this->colliderCylinder.base.ac;
 
-    if ((this->flags & 0x1000) && (((actor != NULL) && (actor->id == ACTOR_OBJ_AQUA) && (actor->params & 1)) ||
-                                   (this->actor.colChkInfo.damageEffect == 2))) {
+    if ((this->flags & 0x1000) && //
+        (((actor != NULL) && (actor->id == ACTOR_OBJ_AQUA) && (actor->params & 1)) ||
+         (this->actor.colChkInfo.damageEffect == 2))) {
         this->actionFunc = func_ACT_80A14E74;
     }
 }
 
 void func_ACT_80A14E74(EnGo* this, PlayState* play) {
-    if (func_80A134F4(this, this->actor.cutscene)) {
+    if (EnGoCutscene_StopIfDoneAndCheckCanPlay(this, this->actor.cutscene)) {
         this->actionFunc = func_ACT_80A14EB0;
     }
 }
 
+// EnGo_IceMelt
 void func_ACT_80A14EB0(EnGo* this, PlayState* play) {
     EnGo* sp24 = (EnGo*)this->actor.child;
 
@@ -2284,7 +2311,7 @@ void func_ACT_80A14FC8(EnGo* this, PlayState* play) {
                         Math_ApproachF(&this->unk_39C, 0.0f, 0.02f, 1.0f);
                         this->unk_3A0 = (this->unk_39C / 0.9f) * 100.0f;
                         func_80A139E4(this);
-                    } else if (this->flags & 0x400) {
+                    } else if (this->flags & ENGO_FLAG_FROZEN) {
                         func_80A143A8(this, play);
                     }
                     break;
@@ -2347,13 +2374,13 @@ void func_ACT_80A153FC(EnGo* this, PlayState* play) {
     Vec3f sp50;
     Vec3f sp44;
 
-    if ((this->flags & 0x1000) && (this->actor.colChkInfo.damageEffect == 0xF)) {
+    if ((this->flags & 0x1000) && (this->actor.colChkInfo.damageEffect == ENGO_DMGEFF_BREAK)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
 
         this->actor.flags &= ~ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
 
-        func_80A118F8(this->unk_3F8, this->actor.world.pos);
+        EnGo_VfxSnowballBreak(this->unk_3F8, this->actor.world.pos);
         this->actor.shape.rot.x = 0;
         this->actor.speedXZ = 0.0f;
 
@@ -2414,7 +2441,7 @@ s32* func_80A15684(EnGo* this, PlayState* play) {
     if (ENGO_GET_F(&this->actor) == ENGO_F_1) {
         switch (ENGO_GET_70(&this->actor) % 6) {
             case ENGO_70_0:
-                return D_80A163BC;
+                return D_80A163BC; // It's Spring!
             case ENGO_70_1:
                 return D_80A163CC;
             case ENGO_70_2:
@@ -2505,14 +2532,14 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (!(this->flags & 0x400)) {
+    if (!(this->flags & ENGO_FLAG_FROZEN)) {
         EnGo_HandleBlink(this);
         func_80A12A64(this, play);
         func_80A131F8(this, play);
         func_80A12B78(this, play);
     }
 
-    if (!(this->flags & 0x100) && !(this->flags & ENGO_FLAG_CURLED) && !(this->flags & 0x400)) {
+    if (!(this->flags & 0x100) && !(this->flags & ENGO_FLAG_CURLED) && !(this->flags & ENGO_FLAG_FROZEN)) {
         if (ENGO_GET_F(&this->actor) == ENGO_F_8) {
             phi_f0 = this->colliderSphere.dim.worldSphere.radius + 60;
         } else {
@@ -2672,6 +2699,6 @@ void EnGo_Draw(Actor* thisx, PlayState* play) {
     } else {
         func_80A15B80(this, play);
     }
-    func_80A137C0(this, play, this->unk_39C, this->unk_3A0);
-    func_80A1213C(this, play);
+    EnGo_DrawIceBlockIfFrozen(this, play, this->unk_39C, this->unk_3A0);
+    EnGo_DrawVfx(this, play);
 }

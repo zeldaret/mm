@@ -16,12 +16,12 @@ enum {
     /* 0 */ ENGO_F_0,
     /* 1 */ ENGO_F_1,
     /* 2 */ ENGO_F_2,
-    /* 3 */ ENGO_F_3,
+    /* 3 */ ENGO_F_3, // Goron Gatekeeper
     /* 4 */ ENGO_F_4,
     /* 5 */ ENGO_F_5,
     /* 6 */ ENGO_F_6,
     /* 7 */ ENGO_F_7,
-    /* 8 */ ENGO_F_8,
+    /* 8 */ ENGO_F_8, // PowderKeg Goron
 };
 
 enum {
@@ -120,8 +120,8 @@ typedef struct EnGo {
     /* 0x3BC */ s16 blinkCountdown;
     /* 0x3BE */ s16 indexEyeTex;
     /* 0x3C0 */ s16 cutsceneState;
-    /* 0x3C2 */ s16 unk_3C2;
-    /* 0x3C4 */ s16 unk_3C4;
+    /* 0x3C2 */ s16 delayTimer;
+    /* 0x3C4 */ s16 animState;
     /* 0x3C6 */ s16 unk_3C6;
     /* 0x3C8 */ s16 limbRotTableZ[3];
     /* 0x3CE */ s16 limbRotTableY[3];
