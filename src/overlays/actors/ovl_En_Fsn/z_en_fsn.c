@@ -212,7 +212,7 @@ void EnFsn_HandleSetupResumeInteraction(EnFsn* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play) &&
         this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
         Actor_ProcessTalkRequest(&this->actor, &play->state);
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IP_MINUS1);
         if (ENFSN_IS_SHOP(&this->actor)) {
             this->actor.textId = 0;
         }
@@ -839,7 +839,7 @@ void EnFsn_StartBuying(EnFsn* this, PlayState* play) {
                 this->actionFunc = EnFsn_DeterminePrice;
                 break;
             case 0x29CF:
-                player->exchangeItemId = PLAYER_AP_NONE;
+                player->exchangeItemId = PLAYER_IP_NONE;
                 this->actionFunc = EnFsn_SetupDeterminePrice;
                 break;
         }
@@ -921,7 +921,7 @@ void EnFsn_DeterminePrice(EnFsn* this, PlayState* play) {
 
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
         itemActionParam = func_80123810(play);
-        if (itemActionParam > PLAYER_AP_NONE) {
+        if (itemActionParam > PLAYER_IP_NONE) {
             if (player->heldItemButton == 0) {
                 buttonItem = CUR_FORM_EQUIP(player->heldItemButton);
             } else {
@@ -938,7 +938,7 @@ void EnFsn_DeterminePrice(EnFsn* this, PlayState* play) {
             }
             this->actor.textId = player->actor.textId;
             func_801477B4(play);
-        } else if (itemActionParam < PLAYER_AP_NONE) {
+        } else if (itemActionParam < PLAYER_IP_NONE) {
             if (CURRENT_DAY == 3) {
                 this->actor.textId = 0x29DF;
             } else {
@@ -986,7 +986,7 @@ void EnFsn_MakeOffer(EnFsn* this, PlayState* play) {
                 break;
             case 1:
                 func_8019F230();
-                player->exchangeItemId = PLAYER_AP_NONE;
+                player->exchangeItemId = PLAYER_IP_NONE;
                 this->actionFunc = EnFsn_SetupDeterminePrice;
                 break;
         }
@@ -1001,7 +1001,7 @@ void EnFsn_GiveItem(EnFsn* this, PlayState* play) {
         }
         this->actor.parent = NULL;
         if (ENFSN_IS_SHOP(&this->actor) && !this->isSelling) {
-            func_80123D50(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+            func_80123D50(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IP_BOTTLE);
         }
         this->actionFunc = EnFsn_SetupResumeInteraction;
     } else if (this->isSelling == true) {
@@ -1042,7 +1042,7 @@ void EnFsn_ResumeInteraction(EnFsn* this, PlayState* play) {
             this->actionFunc = EnFsn_ConverseBackroom;
         }
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IP_MINUS1);
     }
 }
 

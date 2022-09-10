@@ -143,27 +143,27 @@ void EnBjt_UpdateCollision(EnBjt* this, PlayState* play) {
 
 s32 EnBjt_TakeItem(s32 exchangeItem) {
     switch (exchangeItem) {
-        case PLAYER_AP_LETTER_TO_KAFEI:
+        case PLAYER_IP_LETTER_TO_KAFEI:
             Inventory_DeleteItem(ITEM_LETTER_TO_KAFEI, SLOT(ITEM_LETTER_TO_KAFEI));
             break;
 
-        case PLAYER_AP_DEED_SWAMP:
+        case PLAYER_IP_DEED_SWAMP:
             Inventory_DeleteItem(ITEM_DEED_SWAMP, SLOT(ITEM_DEED_SWAMP));
             break;
 
-        case PLAYER_AP_DEED_MOUNTAIN:
+        case PLAYER_IP_DEED_MOUNTAIN:
             Inventory_DeleteItem(ITEM_DEED_MOUNTAIN, SLOT(ITEM_DEED_MOUNTAIN));
             break;
 
-        case PLAYER_AP_DEED_OCEAN:
+        case PLAYER_IP_DEED_OCEAN:
             Inventory_DeleteItem(ITEM_DEED_OCEAN, SLOT(ITEM_DEED_OCEAN));
             break;
 
-        case PLAYER_AP_DEED_LAND:
+        case PLAYER_IP_DEED_LAND:
             Inventory_DeleteItem(ITEM_DEED_LAND, SLOT(ITEM_DEED_LAND));
             break;
 
-        case PLAYER_AP_LETTER_MAMA:
+        case PLAYER_IP_LETTER_MAMA:
             Inventory_DeleteItem(ITEM_LETTER_MAMA, SLOT(ITEM_LETTER_MAMA));
             break;
 
@@ -250,9 +250,9 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
                     // Fallthrough
                 case TEXT_STATE_16:
                     itemAP = func_80123810(play);
-                    if ((itemAP == PLAYER_AP_DEED_LAND) || (itemAP == PLAYER_AP_LETTER_TO_KAFEI) ||
-                        (itemAP == PLAYER_AP_DEED_SWAMP) || (itemAP == PLAYER_AP_DEED_MOUNTAIN) ||
-                        (itemAP == PLAYER_AP_DEED_OCEAN) || (itemAP == PLAYER_AP_LETTER_MAMA)) {
+                    if ((itemAP == PLAYER_IP_DEED_LAND) || (itemAP == PLAYER_IP_LETTER_TO_KAFEI) ||
+                        (itemAP == PLAYER_IP_DEED_SWAMP) || (itemAP == PLAYER_IP_DEED_MOUNTAIN) ||
+                        (itemAP == PLAYER_IP_DEED_OCEAN) || (itemAP == PLAYER_IP_LETTER_MAMA)) {
                         EnBjt_ChangeAnim(this, TOILET_HAND_ANIM_WAITING_MORPH);
                         this->playedSfx = false;
                         this->behaviour++;
@@ -274,9 +274,9 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
             break;
 
         case TOILET_HAND_BEHAVIOUR_TAKE_ITEM:
-            if (player->exchangeItemId != PLAYER_AP_NONE) {
+            if (player->exchangeItemId != PLAYER_IP_NONE) {
                 EnBjt_TakeItem(player->exchangeItemId);
-                player->exchangeItemId = PLAYER_AP_NONE;
+                player->exchangeItemId = PLAYER_IP_NONE;
             }
             if (EnBjt_Vanish(this)) {
                 this->timer = 60;
@@ -446,7 +446,7 @@ void EnBjt_Update(Actor* thisx, PlayState* play) {
 
     if (this->scheduleResult != TOILET_HAND_SCH_NONE) {
         EnBjt_UpdateSkelAnime(this);
-        func_8013C964(&this->actor, play, 60.0f, 10.0f, PLAYER_AP_NONE, this->stateFlags & 7);
+        func_8013C964(&this->actor, play, 60.0f, 10.0f, PLAYER_IP_NONE, this->stateFlags & 7);
         Actor_SetFocus(&this->actor, 26.0f);
         EnBjt_UpdateCollision(this, play);
     }

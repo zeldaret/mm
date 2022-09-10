@@ -207,15 +207,15 @@ s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
                         case TEXT_STATE_16:
                             itemActionParam = func_80123810(play);
                             scriptBranch = 0;
-                            if ((itemActionParam == PLAYER_AP_LETTER_TO_KAFEI) ||
-                                (itemActionParam == PLAYER_AP_LETTER_MAMA)) {
+                            if ((itemActionParam == PLAYER_IP_LETTER_TO_KAFEI) ||
+                                (itemActionParam == PLAYER_IP_LETTER_MAMA)) {
                                 this->exchangeItemId = itemActionParam;
                                 this->behaviour++;
                                 scriptBranch = 1;
-                            } else if (itemActionParam < PLAYER_AP_NONE) {
+                            } else if (itemActionParam < PLAYER_IP_NONE) {
                                 this->behaviour++;
                                 scriptBranch = 3;
-                            } else if (itemActionParam != PLAYER_AP_NONE) {
+                            } else if (itemActionParam != PLAYER_IP_NONE) {
                                 this->behaviour++;
                                 scriptBranch = 2;
                             }
@@ -224,7 +224,7 @@ s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
             }
             break;
         case POSTBOX_BEHAVIOUR_TAKE_ITEM:
-            if (this->exchangeItemId == PLAYER_AP_LETTER_TO_KAFEI) {
+            if (this->exchangeItemId == PLAYER_IP_LETTER_TO_KAFEI) {
                 scriptBranch = 1;
             }
             break;
@@ -253,7 +253,7 @@ s32* EnPst_GetMsgEventScript(EnPst* this, PlayState* play) {
                 return NULL;
         }
     } else if (this->stateFlags & 0x20) {
-        if (this->exchangeItemId == PLAYER_AP_LETTER_MAMA) {
+        if (this->exchangeItemId == PLAYER_IP_LETTER_MAMA) {
             return D_80B2C488;
         } else {
             return D_80B2C490;
@@ -284,10 +284,10 @@ s32 EnPst_CheckTalk(EnPst* this, PlayState* play) {
     if (this->stateFlags & 7) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->stateFlags &= ~0x30;
-            if (player->exchangeItemId == PLAYER_AP_LETTER_TO_KAFEI) {
+            if (player->exchangeItemId == PLAYER_IP_LETTER_TO_KAFEI) {
                 this->stateFlags |= 0x10;
                 this->exchangeItemId = player->exchangeItemId;
-            } else if (player->exchangeItemId != PLAYER_AP_NONE) {
+            } else if (player->exchangeItemId != PLAYER_IP_NONE) {
                 this->stateFlags |= 0x20;
                 this->exchangeItemId = player->exchangeItemId;
             }

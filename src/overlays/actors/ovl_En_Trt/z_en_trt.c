@@ -336,7 +336,7 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
                 this->textId = 0x884;
                 Message_StartTextbox(play, this->textId, &this->actor);
                 gSaveContext.save.weekEventReg[53] |= 8;
-                func_80123D50(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+                func_80123D50(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IP_BOTTLE);
                 break;
             case 0x888:
                 this->textId = 0x889;
@@ -362,7 +362,7 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
 void EnTrt_PayForMushroom(EnTrt* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        func_80123D50(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+        func_80123D50(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IP_BOTTLE);
         this->actionFunc = EnTrt_SetupItemGiven;
     } else {
         Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 300.0f, 300.0f);
@@ -466,7 +466,7 @@ void EnTrt_GivenRedPotionForKoume(EnTrt* this, PlayState* play) {
                 ActorCutscene_SetIntentToPlay(this->cutscene);
             }
         }
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IP_MINUS1);
         this->actionFunc = EnTrt_ItemGiven;
     }
 }
@@ -1010,7 +1010,7 @@ void EnTrt_ItemGiven(EnTrt* this, PlayState* play) {
         }
         func_80151938(play, this->textId);
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IP_MINUS1);
     }
 }
 
@@ -1083,7 +1083,7 @@ void EnTrt_SetupItemGiven(EnTrt* this, PlayState* play) {
             this->cutscene = this->lookToShopkeeperCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IP_MINUS1);
     }
 }
 
@@ -1106,7 +1106,7 @@ void EnTrt_ContinueShopping(EnTrt* this, PlayState* play) {
                         player->stateFlags2 |= 0x20000000;
                         Message_StartTextbox(play, this->textId, &this->actor);
                         EnTrt_SetupStartShopping(play, this, true);
-                        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+                        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IP_MINUS1);
                         break;
                     case 1:
                     default:
@@ -1371,8 +1371,8 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
         }
     } else if (talkState == TEXT_STATE_16) {
         itemGiven = func_80123810(play);
-        if (itemGiven > PLAYER_AP_NONE) {
-            if (itemGiven == PLAYER_AP_BOTTLE_MUSHROOM) {
+        if (itemGiven > PLAYER_IP_NONE) {
+            if (itemGiven == PLAYER_IP_BOTTLE_MUSHROOM) {
                 if (gSaveContext.save.weekEventReg[53] & 8) {
                     player->actor.textId = 0x888;
                 } else {
@@ -1391,7 +1391,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
                 this->actionFunc = EnTrt_Goodbye;
             }
             func_801477B4(play);
-        } else if (itemGiven < PLAYER_AP_NONE) {
+        } else if (itemGiven < PLAYER_IP_NONE) {
             if (this->flags & ENTRT_GIVEN_MUSHROOM) {
                 this->textId = 0x88B;
             } else {
