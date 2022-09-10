@@ -164,7 +164,7 @@ void BgKin2Picture_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_LoadMesh(play, &this->dyna, &gOceanSpiderHouseSkullkidPaintingCol);
     func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_InitTris(play, &this->colliderTris);
-    Collider_SetTris(play, &this->colliderTris, &this->dyna.actor, &sTrisInit, &this->unk17C);
+    Collider_SetTris(play, &this->colliderTris, &this->dyna.actor, &sTrisInit, &this->colliderElement);
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
@@ -177,7 +177,7 @@ void BgKin2Picture_Init(Actor* thisx, PlayState* play) {
     }
 
     Actor_SetFocus(&this->dyna.actor, 23.0f);
-    skulltulaParams = (BG_KIN2_PICTURE_GET_1F(&this->dyna.actor) << 2) | 0xFF03; 
+    skulltulaParams = (BG_KIN2_PICTURE_GET_1F(&this->dyna.actor) << 2) | 0xFF03;
 
     if (BG_KIN2_PICTURE_GET_PARAMS_05(&this->dyna.actor) || BgKin2Picture_IsSkulltulaCollected(play, skulltulaParams)) {
         this->skulltulaNoiseTimer = -1;
