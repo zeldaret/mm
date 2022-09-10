@@ -807,8 +807,8 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
         if (this->unk_2B8 > 30.0f) {
             if ((&this->actor != player->actor.parent) && (play->grabPlayer(play, player) != 0)) {
                 player->actor.parent = &this->actor;
-                Audio_PlaySfxGeneral(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                                     &D_801DB4B8);
+                AudioSfx_PlaySfx(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+                                 &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
                 Boss03_SetupChewPlayer(this, play);
             }
         } else {
@@ -1151,8 +1151,8 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                 Cutscene_Start(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 7);
                 this->subCamId = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-                Play_CameraChangeStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
+                Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
 
                 this->actor.world.rot.y = -0x7B30;
                 this->prevPlayerPos.y = 1850.0f;
@@ -1409,8 +1409,8 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
     }
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
-        Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
-        Play_CameraSetFov(play, this->subCamId, this->subCamFov);
+        Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
+        Play_SetCameraFov(play, this->subCamId, this->subCamFov);
     }
 }
 
@@ -1451,8 +1451,8 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                 Cutscene_Start(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 1);
                 this->subCamId = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-                Play_CameraChangeStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
+                Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
                 this->unk_2BE = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x);
 
                 // Player is above water && Player is standing on ground
@@ -1615,7 +1615,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                             this->actor.focus.pos.z, 0, 0, 0, 0);
                 this->csTimer = 0;
                 Actor_SetScale(&this->actor, 0.0f);
-                Audio_StopSfxByPos(&this->actor.projectedPos);
+                AudioSfx_StopByPos(&this->actor.projectedPos);
             }
             break;
 
@@ -1643,7 +1643,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
     }
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
-        Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
 
@@ -1665,8 +1665,8 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
                 Cutscene_Start(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 1);
                 this->subCamId = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-                Play_CameraChangeStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
+                Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
                 this->csState = 1;
                 this->unk_2BE = 0xBB8;
 
@@ -1734,7 +1734,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
     }
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
-        Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
 

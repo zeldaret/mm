@@ -65,7 +65,7 @@
         <Limb Name="gMadameAromaLegsLimb" Type="Standard" EnumName="MADAME_AROMA_LIMB_LEGS" Offset="0xA04C" />
         <Limb Name="gMadameAromaLeftFootLimb" Type="Standard" EnumName="MADAME_AROMA_LIMB_LEFT_FOOT" Offset="0xA058" />
         <Limb Name="gMadameAromaRightFootLimb" Type="Standard" EnumName="MADAME_AROMA_LIMB_RIGHT_FOOT" Offset="0xA064" />
-        <Skeleton Name="gMadameAromaSkel" Type="Flex" LimbType="Standard" LimbNone="MADAME_AROMA_LIMB_NONE" LimbMax="MADAME_AROMA_LIMB_MAX" EnumName="MadameAromaLimbs" Offset="0xA0D8" />
+        <Skeleton Name="gMadameAromaSkel" Type="Flex" LimbType="Standard" LimbNone="MADAME_AROMA_LIMB_NONE" LimbMax="MADAME_AROMA_LIMB_MAX" EnumName="MadameAromaLimb" Offset="0xA0D8" />
         <Animation Name="object_al_Anim_00A764" Offset="0xA764" />
         <Animation Name="object_al_Anim_00ACA0" Offset="0xACA0" />
         <Animation Name="object_al_Anim_00BCA4" Offset="0xBCA4" />

@@ -97,7 +97,7 @@ void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
     this->path = SubS_GetPathByIndex(play, this->unk_29A, 0x3F);
     this->unk_2C8 = 80.0f;
 
-    if ((gSaveContext.save.entranceIndex == 0xD220) && (gSaveContext.save.weekEventReg[73] & 0x80) &&
+    if ((gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2)) && (gSaveContext.save.weekEventReg[73] & 0x80) &&
         !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
         this->unk_2D6 = this->actor.cutscene;
         if (this->unk_2D6 == 0) {
@@ -332,7 +332,7 @@ void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
 
     if ((play->msgCtx.unk120B1 == 0) &&
         ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
-        play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(6);
+        play->nextEntrance = Entrance_CreateFromSpawn(6);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;
@@ -509,7 +509,7 @@ void func_809C59F0(EnBomBowlMan* this, PlayState* play) {
         } else {
             this->actor.textId = 0x716;
         }
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, -1);
+        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_AP_MINUS1);
         this->actionFunc = func_809C5AA4;
     } else {
         Actor_PickUp(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
@@ -524,7 +524,7 @@ void func_809C5AA4(EnBomBowlMan* this, PlayState* play) {
             this->actionFunc = func_809C5598;
         }
     } else {
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, -1);
+        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_AP_MINUS1);
     }
 }
 

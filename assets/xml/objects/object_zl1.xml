@@ -74,7 +74,7 @@
         <Limb Name="object_zl1_Standardlimb_00F570" Type="Standard" EnumName="OBJECT_ZL1_LIMB_0F" Offset="0xF570" />
         <Limb Name="object_zl1_Standardlimb_00F57C" Type="Standard" EnumName="OBJECT_ZL1_LIMB_10" Offset="0xF57C" />
         <Limb Name="object_zl1_Standardlimb_00F588" Type="Standard" EnumName="OBJECT_ZL1_LIMB_11" Offset="0xF588" />
-        <Skeleton Name="object_zl1_Skel_00F5D8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZL1_LIMB_NONE" LimbMax="OBJECT_ZL1_LIMB_MAX" EnumName="object_zl1_Limbs" Offset="0xF5D8" />
+        <Skeleton Name="object_zl1_Skel_00F5D8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZL1_LIMB_NONE" LimbMax="OBJECT_ZL1_LIMB_MAX" EnumName="ObjectZl1Limb" Offset="0xF5D8" />
         <Animation Name="object_zl1_Anim_010B38" Offset="0x10B38" />
         <Animation Name="object_zl1_Anim_011348" Offset="0x11348" />
         <Animation Name="object_zl1_Anim_0116E4" Offset="0x116E4" />

@@ -23,6 +23,6 @@
         <Limb Name="object_wdhand_Standardlimb_001DE0" Type="Standard" EnumName="OBJECT_WDHAND_LIMB_05" Offset="0x1DE0" />
         <Limb Name="object_wdhand_Standardlimb_001DEC" Type="Standard" EnumName="OBJECT_WDHAND_LIMB_06" Offset="0x1DEC" />
         <Limb Name="object_wdhand_Standardlimb_001DF8" Type="Standard" EnumName="OBJECT_WDHAND_LIMB_07" Offset="0x1DF8" />
-        <Skeleton Name="object_wdhand_Skel_001E20" Type="Flex" LimbType="Standard" LimbNone="OBJECT_WDHAND_LIMB_NONE" LimbMax="OBJECT_WDHAND_LIMB_MAX" EnumName="object_wdhand_Limbs" Offset="0x1E20" />
+        <Skeleton Name="object_wdhand_Skel_001E20" Type="Flex" LimbType="Standard" LimbNone="OBJECT_WDHAND_LIMB_NONE" LimbMax="OBJECT_WDHAND_LIMB_MAX" EnumName="ObjectWdhandLimb" Offset="0x1E20" />
     </File>
 </Root>
