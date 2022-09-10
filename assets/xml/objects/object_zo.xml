@@ -74,7 +74,7 @@
         <Limb Name="gZoraHeadTail2Limb" Type="Standard" EnumName="ZORA_LIMB_HEAD_TAIL_2" Offset="0xD198" />
         <Limb Name="gZoraHeadTail3Limb" Type="Standard" EnumName="ZORA_LIMB_HEAD_TAIL_3" Offset="0xD1A4" />
         <Limb Name="gZoraHeadTailFinLimb" Type="Standard" EnumName="ZORA_LIMB_HEAD_TAIL_FIN" Offset="0xD1B0" />
-        <Skeleton Name="gZoraSkel" Type="Flex" LimbType="Standard" LimbNone="ZORA_LIMB_NONE" LimbMax="ZORA_LIMB_MAX" EnumName="ZoraLimbs" Offset="0xD208" />
+        <Skeleton Name="gZoraSkel" Type="Flex" LimbType="Standard" LimbNone="ZORA_LIMB_NONE" LimbMax="ZORA_LIMB_MAX" EnumName="ZoraLimb" Offset="0xD208" />
 
         <!-- Effects -->
         <DList Name="gZoraRippleMaterialDL" Offset="0xD220" />

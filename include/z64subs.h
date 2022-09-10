@@ -104,7 +104,7 @@ Path* SubS_GetAdditionalPath(struct PlayState* play, u8 pathIndex, s32 max);
 
 Actor* SubS_FindNearestActor(Actor* actor, struct PlayState* play, u8 actorCategory, s16 actorId);
 
-s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animations, s32 index);
+s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 animIndex);
 
 s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex);
 
@@ -122,7 +122,7 @@ void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween
 void SubS_DrawShadowTex(Actor* actor, struct GameState* gameState, u8* tex);
 
 s16 SubS_ComputeTrackPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 stepMin, f32 stepMax);
-s32 SubS_TrackPoint(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* turnTarget, Vec3s* headRot, Vec3s* torsoRot, TrackOptionsSet* options);
+s32 SubS_TrackPoint(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* trackTarget, Vec3s* headRot, Vec3s* torsoRot, TrackOptionsSet* options);
 
 s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB);
 
@@ -151,7 +151,7 @@ s32 SubS_ActorPathing_MoveWithGravity(struct PlayState* play, ActorPathing* acto
 s32 SubS_ActorPathing_MoveWithoutGravityReverse(struct PlayState* play, ActorPathing* actorPath);
 s32 SubS_ActorPathing_SetNextPoint(struct PlayState* play, ActorPathing* actorPath);
 
-void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animations, s32 nextIndex, s32* curIndex);
+void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animationInfo, s32 nextAnimIndex, s32* curAnimIndex);
 
 s32 SubS_StartActorCutscene(Actor* actor, s16 nextCutscene, s16 curCutscene, s32 type);
 s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes);

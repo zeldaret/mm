@@ -11,12 +11,12 @@ struct ObjLightblock;
 typedef void (*ObjLightblockActionFunc)(struct ObjLightblock*, PlayState*);
 
 typedef struct ObjLightblock {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ ColliderCylinder collider;
-    /* 0x01A8 */ ObjLightblockActionFunc actionFunc;
-    /* 0x01AC */ s8 timer;
-    /* 0x01AD */ u8 alpha;
-    /* 0x01AE */ s8 collisionCounter;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ ColliderCylinder collider;
+    /* 0x1A8 */ ObjLightblockActionFunc actionFunc;
+    /* 0x1AC */ s8 timer;
+    /* 0x1AD */ u8 alpha;
+    /* 0x1AE */ s8 collisionCounter;
 } ObjLightblock; // size = 0x1B0
 
 extern const ActorInit Obj_Lightblock_InitVars;

@@ -19,6 +19,6 @@ typedef struct BgIkanaMirror {
     /* 0x5C6 */ u8 lightAbsorptionAlpha;
     /* 0x5C7 */ u8 lightEmissionAlpha;
     /* 0x5C8 */ s8 isEmittingLight;
-} BgIkanaMirror; /* size = 0x5CC */
+} BgIkanaMirror; // size = 0x5CC
 
 #endif // Z_BG_IKANA_MIRROR_H

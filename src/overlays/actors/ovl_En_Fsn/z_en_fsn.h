@@ -22,7 +22,7 @@ typedef struct EnFsn {
     /* 0x144 */ UNK_TYPE1 pad144[0x4C];
     /* 0x190 */ SkelAnime skelAnime;
     /* 0x1D4 */ EnFsnActionFunc actionFunc;
-    /* 0x1D8 */ EnFsnActionFunc tmpActionFunc; // Used to return to correct browsing function
+    /* 0x1D8 */ EnFsnActionFunc prevActionFunc; // Used to return to correct browsing function
     /* 0x1DC */ ColliderCylinder collider;
     /* 0x228 */ s16 limbRotYTable[19];
     /* 0x24E */ s16 limbRotZTable[19];
@@ -64,7 +64,7 @@ typedef struct EnFsn {
     /* 0x444 */ u8 arrowAnimState;
     /* 0x445 */ u8 stickAnimState;
     /* 0x448 */ f32 shopItemSelectedTween;
-    /* 0x44C */ s16 animationIndex;
+    /* 0x44C */ s16 animIndex;
     /* 0x44E */ u16 flags;
 } EnFsn; // size = 0x450
 

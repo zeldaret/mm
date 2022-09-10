@@ -38,7 +38,7 @@ const ActorInit Bg_Ikana_Mirror_InitVars = {
     (ActorFunc)BgIkanaMirror_Draw,
 };
 
-static ColliderTrisElementInit sTrisElementsInit[9] = {
+static ColliderTrisElementInit sMirrorColliderElementsInit[] = {
     {
         {
             ELEMTYPE_UNK4,
@@ -140,7 +140,7 @@ static ColliderTrisElementInit sTrisElementsInit[9] = {
     },
 };
 
-static ColliderTrisInit sTrisInit = {
+static ColliderTrisInit sMirrorColliderInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -149,11 +149,11 @@ static ColliderTrisInit sTrisInit = {
         OC2_NONE,
         COLSHAPE_TRIS,
     },
-    ARRAY_COUNT(sTrisElementsInit),
-    sTrisElementsInit,
+    ARRAY_COUNT(sMirrorColliderElementsInit),
+    sMirrorColliderElementsInit,
 };
 
-static ColliderQuadInit sQuadInit[2] = {
+static ColliderQuadInit sLightRaysCollidersInit[] = {
     {
         {
             COLTYPE_NONE,
@@ -203,7 +203,7 @@ static InitChainEntry sInitChain[] = {
 
 void BgIkanaMirror_SetQuadVertices(BgIkanaMirror* this) {
     ColliderQuadDimInit* dim;
-    ColliderQuad* collider;
+    ColliderQuad* lightRaysCollider;
     Vec3f v0;
     Vec3f v1;
     Vec3f v2;
@@ -214,13 +214,13 @@ void BgIkanaMirror_SetQuadVertices(BgIkanaMirror* this) {
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     for (i = 0; i < ARRAY_COUNT(this->lightRaysColliders); i++) {
-        dim = &sQuadInit[i].dim;
+        dim = &sLightRaysCollidersInit[i].dim;
         Matrix_MultVec3f(&dim->quad[0], &v0);
         Matrix_MultVec3f(&dim->quad[1], &v1);
         Matrix_MultVec3f(&dim->quad[2], &v2);
         Matrix_MultVec3f(&dim->quad[3], &v3);
-        collider = &this->lightRaysColliders[i];
-        Collider_SetQuadVertices(collider, &v0, &v1, &v2, &v3);
+        lightRaysCollider = &this->lightRaysColliders[i];
+        Collider_SetQuadVertices(lightRaysCollider, &v0, &v1, &v2, &v3);
     }
 
     Matrix_Pop();
@@ -229,7 +229,7 @@ void BgIkanaMirror_SetQuadVertices(BgIkanaMirror* this) {
 void BgIkanaMirror_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     BgIkanaMirror* this = THIS;
-    Vec3f* vtx;
+    ColliderTrisElementInit* element;
     Vec3f vertices[3];
     s32 i;
     s32 j;
@@ -238,21 +238,22 @@ void BgIkanaMirror_Init(Actor* thisx, PlayState* play2) {
     DynaPolyActor_Init(&this->dyna, 0);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gStoneTowerTempleMirrorCol);
     Collider_InitTris(play, &this->mirrorCollider);
-    Collider_SetTris(play, &this->mirrorCollider, &this->dyna.actor, &sTrisInit, this->mirrorColliderElements);
+    Collider_SetTris(play, &this->mirrorCollider, &this->dyna.actor, &sMirrorColliderInit,
+                     this->mirrorColliderElements);
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
-    for (i = 0; i < ARRAY_COUNT(sTrisElementsInit); i++) {
-        vtx = &sTrisInit.elements[i].dim.vtx[0];
+    for (i = 0; i < ARRAY_COUNT(sMirrorColliderElementsInit); i++) {
+        element = &sMirrorColliderInit.elements[i];
         for (j = 0; j < 3; j++) {
-            Matrix_MultVec3f(&vtx[j], &vertices[j]);
+            Matrix_MultVec3f(&element->dim.vtx[j], &vertices[j]);
         }
         Collider_SetTrisVertices(&this->mirrorCollider, i, &vertices[0], &vertices[1], &vertices[2]);
     }
 
     for (i = 0; i < ARRAY_COUNT(this->lightRaysColliders); i++) {
         Collider_InitQuad(play, &this->lightRaysColliders[i]);
-        Collider_SetQuad(play, &this->lightRaysColliders[i], &this->dyna.actor, &sQuadInit[i]);
+        Collider_SetQuad(play, &this->lightRaysColliders[i], &this->dyna.actor, &sLightRaysCollidersInit[i]);
     }
 
     BgIkanaMirror_SetQuadVertices(this);
@@ -278,19 +279,15 @@ void BgIkanaMirror_SetupWait(BgIkanaMirror* this) {
     this->actionFunc = BgIkanaMirror_Wait;
 }
 
-/*
- * BgIkanaMirror_Wait is used to charge the mirror with light, increment the alpha value for the light absorption
- * textures and decrement the alpha value for the light emission textures.
- *
- * By not directly setting the alpha values to 255 or 0, the transition from emitting light to
- * absorbing it is visually smoother. Loading the proper display lists for absorption or emission of light is taken care
- * of by BgIkanaMirror_Draw.
+/**
+ * Charges the mirror with light, increment the alpha value for the light absorption textures and decrement the alpha
+ * value for the light emission textures.
  */
 void BgIkanaMirror_Wait(BgIkanaMirror* this, PlayState* play) {
     s8 isEmittingLight;
     s32 startEmittingLight = false;
 
-    // The light emission texture should gradually disappear from sight.
+    // The light emission texture gradually fades.
     if (this->lightEmissionAlpha > 100) {
         this->lightEmissionAlpha -= 100;
     } else {
@@ -334,13 +331,9 @@ void BgIkanaMirror_SetupEmitLight(BgIkanaMirror* this) {
     this->actionFunc = BgIkanaMirror_EmitLight;
 }
 
-/*
- * BgIkanaMirror_Wait is used to deplete the mirror's light and release it, increment the alpha value for the light
- * emission textures and decrement the alpha value for the light absorption textures.
- *
- * By not directly setting the alpha values to 0 or 255, the transition from absorbing light to
- * releasing it is visually smoother. Loading the proper display lists for absorption or emission of light is taken care
- * of by BgIkanaMirror_Draw.
+/**
+ * Depletes the mirror's light and release it, increase alpha value for the light
+ * emission textures and decrease the alpha value for the light absorption textures.
  */
 void BgIkanaMirror_EmitLight(BgIkanaMirror* this, PlayState* play) {
     s32 i;

@@ -100,7 +100,7 @@
         <Limb Name="gSkullKidHatTopLimb" Type="Standard" EnumName="SKULL_KID_LIMB_HAT_TOP" Offset="0x132C8" />
 
         <!-- Skull Kid Skeleton -->
-        <Skeleton Name="gSkullKidSkel" Type="Flex" LimbType="Standard" LimbNone="SKULL_KID_LIMB_NONE" LimbMax="SKULL_KID_LIMB_MAX" EnumName="SkullKidLimbs" Offset="0x13328" />
+        <Skeleton Name="gSkullKidSkel" Type="Flex" LimbType="Standard" LimbNone="SKULL_KID_LIMB_NONE" LimbMax="SKULL_KID_LIMB_MAX" EnumName="SkullKidLimb" Offset="0x13328" />
 
         <Animation Name="gSkullKidHipShakeAndJumpAnim" Offset="0x14920" /> <!-- Original name is "stk_penpen_jump" ("spanking") -->
         <Animation Name="gSkullKidSpankAnim" Offset="0x15028" /> <!-- Original name is "stk_penpen_loop" -->
