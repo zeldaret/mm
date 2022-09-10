@@ -4,8 +4,6 @@
  * Description: Ocean Spider House - Skullkid Painting
  */
 
-// credits for documentation: Isghj, EllipticEllipsis
-
 #include "z_bg_kin2_picture.h"
 #include "assets/objects/object_kin2_obj/object_kin2_obj.h"
 
