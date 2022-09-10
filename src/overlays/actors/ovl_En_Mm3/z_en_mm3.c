@@ -63,11 +63,15 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfo sAnimations[] = {
-    { &object_mm_Anim_002238, 1.0f, 0.0f, 0.0f, 0, -7.0f },  { &object_mm_Anim_00A4E0, -1.0f, 0.0f, 0.0f, 2, -7.0f },
-    { &object_mm_Anim_00C640, 1.0f, 0.0f, 0.0f, 0, -7.0f },  { &object_mm_Anim_00A4E0, 1.0f, 0.0f, 0.0f, 2, -7.0f },
-    { &object_mm_Anim_000468, 1.0f, 0.0f, 0.0f, 0, -7.0f },  { &object_mm_Anim_00CD90, 1.0f, 0.0f, 0.0f, 0, -12.0f },
-    { &object_mm_Anim_00DA50, 1.0f, 0.0f, 0.0f, 0, -12.0f }, { &object_mm_Anim_00DA50, 1.0f, 0.0f, 10.0f, 2, -10.0f },
+static AnimationInfo sAnimationInfo[] = {
+    { &object_mm_Anim_002238, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -7.0f },
+    { &object_mm_Anim_00A4E0, -1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -7.0f },
+    { &object_mm_Anim_00C640, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -7.0f },
+    { &object_mm_Anim_00A4E0, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -7.0f },
+    { &object_mm_Anim_000468, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -7.0f },
+    { &object_mm_Anim_00CD90, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -12.0f },
+    { &object_mm_Anim_00DA50, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -12.0f },
+    { &object_mm_Anim_00DA50, 1.0f, 0.0f, 10.0f, ANIMMODE_ONCE, -10.0f },
 };
 
 #include "overlays/ovl_En_Mm3/ovl_En_Mm3.c"
@@ -119,7 +123,7 @@ s32 func_80A6F22C(EnMm3* this) {
 void func_80A6F270(EnMm3* this) {
     this->unk_1DC = 1;
     this->unk_2B0 &= ~1;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
     this->actionFunc = func_80A6F2C8;
 }
 
@@ -211,7 +215,7 @@ void func_80A6F5E4(EnMm3* this, PlayState* play) {
                 }
                 this->unk_1DC = 0;
                 this->unk_2B0 |= 1;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 7);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 7);
                 break;
 
             case 0x278B:
@@ -355,7 +359,7 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
     }
 
     if ((this->skelAnime.mode == 2) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
     }
 
     if (((this->unk_2B4 == 0x279D) || (this->unk_2B4 == 0x27A0) || (this->unk_2B4 == 0x278B)) &&
@@ -366,7 +370,8 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
 }
 
 void func_80A6FBA0(EnMm3* this) {
-    func_801A5BD0(0x6F);
+    AudioSfx_MuteBanks((1 << BANK_PLAYER) | (1 << BANK_ITEM) | (1 << BANK_ENV) | (1 << BANK_ENEMY) |
+                       (1 << BANK_OCARINA) | (1 << BANK_VOICE));
     func_801A0238(0, 5);
     gSaveContext.save.weekEventReg[63] |= 1;
     gSaveContext.save.weekEventReg[63] &= (u8)~2;
@@ -391,7 +396,7 @@ void func_80A6FBFC(EnMm3* this, PlayState* play) {
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        func_801A5BD0(0);
+        AudioSfx_MuteBanks(0);
         func_801A0238(0x7F, 5);
         Message_StartTextbox(play, 0x2791, &this->actor);
         this->unk_2B4 = 0x2791;

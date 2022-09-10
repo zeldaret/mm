@@ -37,7 +37,7 @@ Please refer to the following for more information:
 
 - [Website](https://zelda64.dev/)
 - [Discord](https://discord.zelda64.dev/)
-- [How to Contribute](CONTRIBUTING.md)
+- [How to Contribute](docs/CONTRIBUTING.md)
 
 ## Installation
 

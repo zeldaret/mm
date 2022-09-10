@@ -659,15 +659,15 @@ void EffectSsHitmark_SpawnCustomScale(PlayState* play, s32 type, s16 scale, Vec3
  * param determines where the ligntning should go
  * 0: dont attach to any actor. spawns at the position specified by pos
  * 1: spawn at one of Player's body parts, chosen at random
- * 2: spawn at one of Phantom Ganon's body parts, chosen at random
+ * 2 - 6: spawn at one of Goht's body parts
  */
-void EffectSsFhgFlash_SpawnShock(PlayState* play, Actor* actor, Vec3f* pos, s16 scale, u8 param) {
+void EffectSsFhgFlash_SpawnShock(PlayState* play, Actor* actor, Vec3f* pos, s16 scale, u8 params) {
     EffectSsFhgFlashInitParams initParams;
 
     initParams.actor = actor;
     Math_Vec3f_Copy(&initParams.pos, pos);
     initParams.scale = scale;
-    initParams.param = param;
+    initParams.params = params;
     initParams.type = FHGFLASH_SHOCK;
 
     EffectSs_Spawn(play, EFFECT_SS_FHG_FLASH, 128, &initParams);
@@ -780,15 +780,15 @@ void EffectSsIcePiece_SpawnBurst(PlayState* play, Vec3f* refPos, f32 scale) {
 
 // EffectSsEnIce Spawn Functions
 
-void EffectSsEnIce_SpawnFlyingVec3f(PlayState* play, Actor* actor, Vec3f* pos, Color_RGBA8* prim, Color_RGBA8* env,
-                                    f32 scale) {
+void EffectSsEnIce_SpawnFlying(PlayState* play, Actor* actor, Vec3f* pos, Color_RGBA8* prim, Color_RGBA8* env,
+                               f32 scale) {
     EffectSsEnIceInitParams initParams;
 
     initParams.actor = actor;
     Math_Vec3f_Copy(&initParams.pos, pos);
     Color_RGBA8_Copy(&initParams.primColor, prim);
     Color_RGBA8_Copy(&initParams.envColor, env);
-    initParams.type = 0;
+    initParams.type = ENICE_TYPE_FLYING;
     initParams.scale = scale;
 
     if (actor != NULL) {
@@ -802,7 +802,7 @@ void func_800B2B44(PlayState* play, Actor* actor, Vec3f* pos, f32 scale) {
     static Color_RGBA8 primColor = { 150, 150, 150, 250 };
     static Color_RGBA8 envColor = { 235, 245, 255, 255 };
 
-    EffectSsEnIce_SpawnFlyingVec3f(play, actor, pos, &primColor, &envColor, scale);
+    EffectSsEnIce_SpawnFlying(play, actor, pos, &primColor, &envColor, scale);
 }
 
 void func_800B2B7C(PlayState* play, Actor* actor, Vec3s* arg2, f32 scale) {
@@ -823,7 +823,7 @@ void EffectSsEnIce_Spawn(PlayState* play, Vec3f* pos, f32 scale, Vec3f* velocity
     Color_RGBA8_Copy(&initParams.envColor, envColor);
     initParams.scale = scale;
     initParams.life = life;
-    initParams.type = 1;
+    initParams.type = ENICE_TYPE_NORMAL;
 
     EffectSs_Spawn(play, EFFECT_SS_EN_ICE, 128, &initParams);
 }
@@ -872,14 +872,14 @@ void EffectSsFireTail_SpawnFlameOnPlayer(PlayState* play, f32 scale, s16 bodyPar
 
 // EffectSsEnFire Spawn Functions
 
-void EffectSsEnFire_SpawnVec3f(PlayState* play, Actor* actor, Vec3f* pos, s16 scale, s16 arg4, s16 flags,
+void EffectSsEnFire_SpawnVec3f(PlayState* play, Actor* actor, Vec3f* pos, s16 scale, s16 params, s16 flags,
                                s16 bodyPart) {
     EffectSsEnFireInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
     initParams.actor = actor;
     initParams.scale = scale;
-    initParams.unk_12 = arg4;
+    initParams.params = params;
     initParams.flags = flags;
     initParams.bodyPart = bodyPart;
 
@@ -890,7 +890,7 @@ void EffectSsEnFire_SpawnVec3f(PlayState* play, Actor* actor, Vec3f* pos, s16 sc
     EffectSs_Spawn(play, EFFECT_SS_EN_FIRE, 128, &initParams);
 }
 
-void EffectSsEnFire_SpawnVec3s(PlayState* play, Actor* actor, Vec3s* pos, s16 scale, s16 arg4, s16 flags,
+void EffectSsEnFire_SpawnVec3s(PlayState* play, Actor* actor, Vec3s* pos, s16 scale, s16 params, s16 flags,
                                s16 bodyPart) {
     EffectSsEnFireInitParams initParams;
 
@@ -899,8 +899,8 @@ void EffectSsEnFire_SpawnVec3s(PlayState* play, Actor* actor, Vec3s* pos, s16 sc
     initParams.pos.z = pos->z;
     initParams.actor = actor;
     initParams.scale = scale;
-    initParams.unk_12 = arg4;
-    initParams.flags = flags | 0x8000;
+    initParams.params = params;
+    initParams.flags = flags | ENFIRE_FLAGS_BODYPART_POS_VEC3S;
     initParams.bodyPart = bodyPart;
 
     if (actor != NULL) {
@@ -978,7 +978,7 @@ void EffectSsDeadDd_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* a
     initParams.envColor.r = env->r;
     initParams.envColor.g = env->g;
     initParams.envColor.b = env->b;
-    initParams.type = 0;
+    initParams.type = DEADDD_TYPE_0;
     initParams.alphaStep = alphaStep;
     initParams.life = life;
 

@@ -28,19 +28,12 @@
 #define AIBUF_LEN 0x580
 
 typedef enum {
-    /* 0 */ AUDIO_FS_STEREO,
-    /* 1 */ AUDIO_FS_HEADSET,
-    /* 2 */ AUDIO_FS_SURROUND,
-    /* 3 */ AUDIO_FS_MONO
-} AudioFileSelectOption;
-
-typedef enum {
-    /* 0 */ AUDIO_MODE_STEREO,
-    /* 1 */ AUDIO_MODE_HEADSET,
-    /* 2 */ AUDIO_MODE_UNK,
-    /* 3 */ AUDIO_MODE_MONO,
-    /* 4 */ AUDIO_MODE_SURROUND
-} AudioSoundMode;
+    /* 0 */ SOUNDMODE_STEREO,
+    /* 1 */ SOUNDMODE_HEADSET,
+    /* 2 */ SOUNDMODE_SURROUND,
+    /* 3 */ SOUNDMODE_MONO,
+    /* 4 */ SOUNDMODE_SURROUND_EXTERNAL,
+} SoundMode;
 
 typedef enum {
     /* 0 */ ADSR_STATE_DISABLED,
@@ -441,7 +434,7 @@ typedef struct SequenceChannel {
     /* 0x80 */ AdsrSettings adsr;
     /* 0x88 */ NotePool notePool;
     /* 0xC8 */ s8 soundScriptIO[8]; // bridge between sound script and audio lib, "io ports"
-    /* 0xD0 */ u8* sfxState;
+    /* 0xD0 */ u8* sfxState; // SfxChannelState
     /* 0xD4 */ s16* filter;
     /* 0xD8 */ Stereo stereo;
     /* 0xDC */ s32 unk_DC;
@@ -1080,51 +1073,47 @@ typedef enum {
     /* 1 */ SFX_STATE_QUEUED,
     /* 2 */ SFX_STATE_READY,
     /* 3 */ SFX_STATE_PLAYING_REFRESH,
-    /* 4 */ SFX_STATE_PLAYING_1,
-    /* 5 */ SFX_STATE_PLAYING_2
+    /* 4 */ SFX_STATE_PLAYING,
+    /* 5 */ SFX_STATE_PLAYING_ONE_FRAME
 } SfxState;
 
 typedef struct {
-    /* 0x00 */ f32*     posX;
-    /* 0x04 */ f32*     posY;
-    /* 0x08 */ f32*     posZ;
-    /* 0x0C */ f32*     freqScale;
-    /* 0x10 */ f32*     vol;
-    /* 0x14 */ s8*      reverbAdd;
-    /* 0x18 */ f32      dist;
-    /* 0x1C */ u32      priority; // lower is more prioritized
-    /* 0x20 */ u16      sfxParams;
-    /* 0x22 */ u16      sfxId;
-    /* 0x25 */ u8       sfxFlags;
-    /* 0x24 */ u8       sfxImportance;
-    /* 0x26 */ u8       state; // uses SfxState enum
-    /* 0x27 */ u8       freshness;
-    /* 0x28 */ u8       prev;
-    /* 0x29 */ u8       next;
-    /* 0x2A */ u8       channelIdx;
-    /* 0x2B */ u8       unk_2F;
-    /* 0x2C */ u8       token;
+    /* 0x00 */ f32* posX;
+    /* 0x04 */ f32* posY;
+    /* 0x08 */ f32* posZ;
+    /* 0x0C */ f32* freqScale;
+    /* 0x10 */ f32* volume;
+    /* 0x14 */ s8* reverbAdd;
+    /* 0x18 */ f32 dist;
+    /* 0x1C */ u32 priority; // lower is more prioritized
+    /* 0x20 */ u16 sfxParams;
+    /* 0x22 */ u16 sfxId;
+    /* 0x25 */ u8 sfxFlags;
+    /* 0x24 */ u8 sfxImportance;
+    /* 0x26 */ u8 state; // uses SfxState enum
+    /* 0x27 */ u8 freshness;
+    /* 0x28 */ u8 prev;
+    /* 0x29 */ u8 next;
+    /* 0x2A */ u8 channelIndex;
+    /* 0x2B */ u8 randFreq;
+    /* 0x2C */ u8 token;
 } SfxBankEntry; // size = 0x30
 
 /*
- * SFX IDs
+ * SfxId:
  *
- * index    0000000111111111    observed in audio code
- * & 200    0000001000000000    single bit
- * & 400    0000010000000000    single bit
- * & 800    0000100000000000    single bit, what we currently call SFX_FLAG
- * & 600    0000011000000000    2 bits
- * & A00    0000101000000000    2 bits
- * & C00    0000110000000000    2 bits, observed in audio code
- * & E00    0000111000000000    all 3 bits
- * bank     1111000000000000    observed in audio code
+ * & 03FF    0000000111111111    index
+ * & 0400    0000010000000000    unused flag
+ * & 0800    0000100000000000    SFX_FLAG
+ * & 0C00    0000110000000000    Flag Mask
+ * & F000    1111000000000000    observed in audio code
  */
 
 #define SFX_BANK_SHIFT(sfxId)   (((sfxId) >> 12) & 0xFF)
 
 #define SFX_BANK_MASK(sfxId)    ((sfxId) & 0xF000)
 
-#define SFX_INDEX(sfxId)    ((sfxId) & 0x03FF)
+#define SFX_INDEX(sfxId)    ((sfxId) & 0x3FF)
 #define SFX_BANK(sfxId)     SFX_BANK_SHIFT(SFX_BANK_MASK(sfxId))
 
 typedef struct {
@@ -1132,19 +1121,74 @@ typedef struct {
     /* 0x4 */ u8 entryIndex;
 } ActiveSfx; // size = 0x08
 
+// SfxParams bit-packing
+
+// Slows the decay of volume with distance (a 3-bit number ranging from 0-7)
+#define SFX_PARAM_DIST_RANGE_SHIFT 0
+#define SFX_PARAM_DIST_RANGE_MASK_UPPER (4 << SFX_PARAM_DIST_RANGE_SHIFT)
+#define SFX_PARAM_DIST_RANGE_MASK (7 << SFX_PARAM_DIST_RANGE_SHIFT)
+
+// Lower SEQ_PLAYER_BGM_MAIN and SEQ_PLAYER_BGM_SUB while the sfx is playing
+#define SFX_FLAG_LOWER_VOLUME_BGM (1 << 3)
+
+// Sfx priority is not raised with distance (making it more likely to be ejected)
+#define SFX_FLAG_PRIORITY_NO_DIST (1 << 4)
+
+// If a new sfx is requested at both the same position with the same importance,
+// Block that new sfx from replacing the current sfx
+// Note: Only 1 sfx can be played at a specific position at once
+#define SFX_FLAG_BLOCK_EQUAL_IMPORTANCE (1 << 5)
+
+// Applies increasingly random offsets to frequency (a 2-bit number ranging from 0-3)
+#define SFX_PARAM_RAND_FREQ_RAISE_SHIFT 6
+#define SFX_PARAM_RAND_FREQ_RAISE_MASK (3 << SFX_PARAM_RAND_FREQ_RAISE_SHIFT)
+
+// Sets a flag to ioPort 5
+#define SFX_FLAG_8 (1 << 8)
+
+// Use lowpass filter on surround sound
+#define SFX_FLAG_SURROUND_LOWPASS_FILTER (1 << 9)
+
+// Unused remnant of OoT
+#define SFX_FLAG_BEHIND_SCREEN_Z_INDEX_SHIFT 10
+#define SFX_FLAG_BEHIND_SCREEN_Z_INDEX (1 << SFX_FLAG_BEHIND_SCREEN_Z_INDEX_SHIFT)
+
+// Randomly scale base frequency each frame through mutiplicative offset
+#define SFX_PARAM_RAND_FREQ_SCALE (1 << 11)
+
+// Sfx reverb is not raised with distance
+#define SFX_FLAG_REVERB_NO_DIST (1 << 12)
+
+// Sfx volume is not lowered with distance
+#define SFX_FLAG_VOLUME_NO_DIST (1 << 13)
+
+// SFX_FLAG_VIBRATO 
+// Randomly lower base frequency each frame through additive offset
+#define SFX_PARAM_RAND_FREQ_LOWER (1 << 14)
+
+// Sfx frequency is not raised with distance
+#define SFX_FLAG_FREQ_NO_DIST (1 << 15)
+
+// Force the sfx to reset from the beginning when requested again
+#define SFX_FLAG2_FORCE_RESET (1 << 0)
+
+// Unused
+#define SFX_FLAG2_UNUSED2 (1 << 2)
+#define SFX_FLAG2_UNUSED4 (1 << 4)
+
+// Do not use highpass filter on surround sound
+#define SFX_FLAG2_SURROUND_NO_HIGHPASS_FILTER (1 << 5)
+
+// Unused
+#define SFX_FLAG2_UNUSED6 (1 << 6)
+
+// Apply a low-pass filter with a lowPassCutoff of 4
+#define SFX_FLAG2_APPLY_LOWPASS_FILTER (1 << 7)
+
 typedef struct {
     /* 0x0 */ u8 importance;
     /* 0x1 */ u8 flags;
     /* 0x2 */ u16 params;
 } SfxParams; // size = 0x4
-
-typedef struct {
-    /* 0x00 */ u16 sfxId;
-    /* 0x02 */ u8 token;
-    /* 0x04 */ s8* reverbAdd;
-    /* 0x08 */ Vec3f* pos;
-    /* 0x0C */ f32* freqScale;
-    /* 0x10 */ f32* vol;
-} SoundRequest; // size = 0x14
 
 #endif

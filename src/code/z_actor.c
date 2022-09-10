@@ -391,13 +391,9 @@ void func_800B4B50(Actor* actor, Lights* mapper, PlayState* play) {
     }
 }
 
-void Actor_GetProjectedPos(PlayState* play, Vec3f* arg1, Vec3f* arg2, f32* arg3) {
-    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, arg1, arg2, arg3);
-    if (*arg3 < 1.0f) {
-        *arg3 = 1.0f;
-    } else {
-        *arg3 = 1.0f / *arg3;
-    }
+void Actor_GetProjectedPos(PlayState* play, Vec3f* worldPos, Vec3f* projectedPos, f32* invW) {
+    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, worldPos, projectedPos, invW);
+    *invW = (*invW < 1.0f) ? 1.0f : (1.0f / *invW);
 }
 
 void Target_SetPos(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 z) {
@@ -419,7 +415,7 @@ TatlColor sTatlColorList[] = {
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         { { 255, 255, 0, 255 }, { 200, 155, 0, 0 } },
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },
-    { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } }
+    { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },
 };
 
 void func_800B4F78(TargetContext* targetCtx, s32 type, PlayState* play) {
@@ -480,9 +476,9 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
             TargetContextEntry* entry;
             s16 alpha = 255;
             f32 var1 = 1.0f;
-            Vec3f spBC;
+            Vec3f projectedPos;
             s32 spB8;
-            f32 spB4;
+            f32 invW;
             s32 spB0;
             s32 spAC;
             f32 var2;
@@ -505,22 +501,22 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
                 alpha = targetCtx->unk48;
             }
 
-            Actor_GetProjectedPos(play, &targetCtx->targetCenterPos, &spBC, &spB4);
+            Actor_GetProjectedPos(play, &targetCtx->targetCenterPos, &projectedPos, &invW);
 
-            spBC.x = (160 * (spBC.x * spB4)) * var1;
-            spBC.x = CLAMP(spBC.x, -320.0f, 320.0f);
+            projectedPos.x = ((SCREEN_WIDTH / 2) * (projectedPos.x * invW)) * var1;
+            projectedPos.x = CLAMP(projectedPos.x, -SCREEN_WIDTH, SCREEN_WIDTH);
 
-            spBC.y = (120 * (spBC.y * spB4)) * var1;
-            spBC.y = CLAMP(spBC.y, -240.0f, 240.0f);
+            projectedPos.y = ((SCREEN_HEIGHT / 2) * (projectedPos.y * invW)) * var1;
+            projectedPos.y = CLAMP(projectedPos.y, -SCREEN_HEIGHT, SCREEN_HEIGHT);
 
-            spBC.z = spBC.z * var1;
+            projectedPos.z = projectedPos.z * var1;
 
             targetCtx->unk4C--;
             if (targetCtx->unk4C < 0) {
                 targetCtx->unk4C = 2;
             }
 
-            Target_SetPos(targetCtx, targetCtx->unk4C, spBC.x, spBC.y, spBC.z);
+            Target_SetPos(targetCtx, targetCtx->unk4C, projectedPos.x, projectedPos.y, projectedPos.z);
 
             if ((!(player->stateFlags1 & 0x40)) || (actor != player->unk_730)) {
                 OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 0x39);
@@ -588,8 +584,8 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
     PlayState* play = (PlayState*)gameState;
     Actor* sp68 = NULL;
     s32 category;
-    Vec3f sp58;
-    f32 sp54;
+    Vec3f projectedPos;
+    f32 invW;
 
     if ((player->unk_730 != 0) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->unk_94 = NULL;
@@ -641,8 +637,9 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
     }
 
     if (actor != NULL && targetCtx->unk4B == 0) {
-        Actor_GetProjectedPos(play, &actor->focus.pos, &sp58, &sp54);
-        if ((sp58.z <= 0.0f) || (fabsf(sp58.x * sp54) >= 1.0f) || (fabsf(sp58.y * sp54) >= 1.0f)) {
+        Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &invW);
+        if ((projectedPos.z <= 0.0f) || (fabsf(projectedPos.x * invW) >= 1.0f) ||
+            (fabsf(projectedPos.y * invW) >= 1.0f)) {
             actor = NULL;
         }
     }
@@ -1853,10 +1850,10 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
 
 // Actor_PickUpExchange? Seems to be called with exchangeItemId -1 if the same actor used Actor_PickUp
 // This function is also used to toggle the "Speak" action on the A button
-s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId) {
+s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerActionParam exchangeItemId) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->actor.flags & ACTOR_FLAG_100) || ((exchangeItemId > EXCH_ITEM_NONE) && Player_InCsMode(play)) ||
+    if ((player->actor.flags & ACTOR_FLAG_100) || ((exchangeItemId > PLAYER_AP_NONE) && Player_InCsMode(play)) ||
         (!actor->isTargeted &&
          ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || ((actor->xzDistToPlayer > player->targetActorDistance)) ||
           (xzRange < actor->xzDistToPlayer)))) {
@@ -1871,12 +1868,12 @@ s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 ex
     return true;
 }
 
-s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, s32 exchangeItemId) {
+s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, PlayerActionParam exchangeItemId) {
     return func_800B8500(actor, play, radius, radius, exchangeItemId);
 }
 
 s32 func_800B8614(Actor* actor, PlayState* play, f32 radius) {
-    return func_800B85E0(actor, play, radius, EXCH_ITEM_NONE);
+    return func_800B85E0(actor, play, radius, PLAYER_AP_NONE);
 }
 
 s32 func_800B863C(Actor* actor, PlayState* play) {
@@ -1963,21 +1960,23 @@ s32 func_800B886C(Actor* actor, PlayState* play) {
 
 void Actor_GetScreenPos(PlayState* play, Actor* actor, s16* x, s16* y) {
     Vec3f projectedPos;
-    f32 w;
+    f32 invW;
 
-    Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &w);
-    *x = (projectedPos.x * w * (SCREEN_WIDTH / 2)) + (SCREEN_WIDTH / 2);
-    *y = (projectedPos.y * w * -(SCREEN_HEIGHT / 2)) + (SCREEN_HEIGHT / 2);
+    Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &invW);
+
+    *x = PROJECTED_TO_SCREEN_X(projectedPos, invW);
+    *y = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
 }
 
-s32 func_800B8934(PlayState* play, Actor* actor) {
-    Vec3f sp2C;
-    f32 sp28;
+s32 Actor_OnScreen(PlayState* play, Actor* actor) {
+    Vec3f projectedPos;
+    f32 invW;
     s32 pad[2];
 
-    Actor_GetProjectedPos(play, &actor->focus.pos, &sp2C, &sp28);
+    Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &invW);
 
-    return (sp2C.x * sp28 >= -1.0f) && (sp2C.x * sp28 <= 1.0f) && (sp2C.y * sp28 >= -1.0f) && (sp2C.y * sp28 <= 1.0f);
+    return (projectedPos.x * invW >= -1.0f) && (projectedPos.x * invW <= 1.0f) && (projectedPos.y * invW >= -1.0f) &&
+           (projectedPos.y * invW <= 1.0f);
 }
 
 s32 Actor_HasParent(Actor* actor, PlayState* play) {
@@ -2128,7 +2127,8 @@ void func_800B8E58(Player* player, u16 sfxId) {
     if (player->currentMask == PLAYER_MASK_GIANT) {
         func_8019F170(&player->actor.projectedPos, sfxId);
     } else {
-        Audio_PlaySfxGeneral(sfxId, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+        AudioSfx_PlaySfx(sfxId, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+                         &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
     }
 }
 
@@ -2568,13 +2568,14 @@ void func_800B9D1C(Actor* actor) {
 
     if (sfxId != 0) {
         if (actor->audioFlags & 2) {
-            Audio_PlaySfxGeneral(sfxId, &actor->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+            AudioSfx_PlaySfx(sfxId, &actor->projectedPos, 4, &gSfxDefaultFreqAndVolScale, &gSfxDefaultFreqAndVolScale,
+                             &gSfxDefaultReverb);
         } else if (actor->audioFlags & 4) {
             play_sound(sfxId);
         } else if (actor->audioFlags & 8) {
             func_8019F128(sfxId);
         } else if (actor->audioFlags & 0x10) {
-            func_801A0810(&D_801DB4A4, NA_SE_SY_TIMER - SFX_FLAG, (sfxId - 1));
+            func_801A0810(&gSfxDefaultPos, NA_SE_SY_TIMER - SFX_FLAG, (sfxId - 1));
         } else if (actor->audioFlags & 1) {
             Audio_PlaySfxAtPos(&actor->projectedPos, sfxId);
         }
@@ -3153,10 +3154,10 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
             overlayEntry->numLoaded = 0;
         }
 
-        actorInit =
-            (uintptr_t)((overlayEntry->initInfo != NULL)
-                            ? (void*)(-OVERLAY_RELOCATION_OFFSET(overlayEntry) + (uintptr_t)overlayEntry->initInfo)
-                            : NULL);
+        actorInit = (uintptr_t)(
+            (overlayEntry->initInfo != NULL)
+                ? (void*)((uintptr_t)overlayEntry->initInfo - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
+                : NULL);
     }
 
     return actorInit;
@@ -3339,7 +3340,7 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
         actorCtx->targetContext.bgmEnemy = NULL;
     }
 
-    Audio_StopSfxByPos(&actor->projectedPos);
+    AudioSfx_StopByPos(&actor->projectedPos);
     Actor_Destroy(actor, play);
 
     newHead = Actor_RemoveFromCategory(play, actorCtx, actor);
@@ -4057,7 +4058,7 @@ s32 func_800BD2B4(PlayState* play, Actor* actor, s16* arg2, f32 arg3, u16 (*text
     } else if (*arg2) {
         *arg2 = arg5(play, actor);
         return false;
-    } else if (!func_800B8934(play, actor)) {
+    } else if (!Actor_OnScreen(play, actor)) {
         return false;
     } else if (!func_800B8614(actor, play, arg3)) {
         return false;
@@ -4292,18 +4293,18 @@ s16 func_800BDB6C(Actor* actor, PlayState* play, s16 arg2, f32 arg3) {
     return arg2;
 }
 
-void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animation, s32 index) {
+void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animationInfo, s32 animIndex) {
     f32 frameCount;
 
-    animation += index;
-    if (animation->frameCount > 0.0f) {
-        frameCount = animation->frameCount;
+    animationInfo += animIndex;
+    if (animationInfo->frameCount > 0.0f) {
+        frameCount = animationInfo->frameCount;
     } else {
-        frameCount = Animation_GetLastFrame(&animation->animation->common);
+        frameCount = Animation_GetLastFrame(&animationInfo->animation->common);
     }
 
-    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, frameCount,
-                     animation->mode, animation->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
+                     frameCount, animationInfo->mode, animationInfo->morphFrames);
 }
 
 // Unused
@@ -4543,7 +4544,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                            Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, gameplayFrames & 0xFF, 32, 16, 1, 0,
                                             (gameplayFrames * 2) & 0xFF, 64, 32));
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, 255);
-                gSPDisplayList(POLY_XLU_DISP++, gFrozenIceDL);
+                gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment2MaterialDL);
 
                 effectAlphaScaled = effectAlpha * 255.0f;
 
@@ -4574,7 +4575,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gFrozenIceVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment2ModelDL);
                 }
 
                 limbPos = limbPosStart; // reset limbPos
@@ -4654,7 +4655,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
                 }
                 break;
 

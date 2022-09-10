@@ -391,7 +391,7 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                                 gSaveContext.gameMode = 2; // Go to FileChoose
                                 play->transitionTrigger = TRANS_TRIGGER_START;
                                 play->transitionType = TRANS_TYPE_02;
-                                play->nextEntranceIndex = 0x1C00;
+                                play->nextEntrance = ENTRANCE(CUTSCENE, 0);
                                 gSaveContext.save.cutscene = 0;
                                 gSaveContext.sceneSetupIndex = 0;
                             }

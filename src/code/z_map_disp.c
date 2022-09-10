@@ -208,7 +208,7 @@ s32 MapDisp_IsDataRotated(PlayState* play) {
 }
 
 s32 func_80103A10(PlayState* play) {
-    if ((gSaveContext.save.entranceIndex == 0x6400) && (Cutscene_GetSceneSetupIndex(play) != 0)) {
+    if ((gSaveContext.save.entrance == 0x6400) && (Cutscene_GetSceneSetupIndex(play) != 0)) {
         return false;
     }
     return true;
@@ -957,7 +957,7 @@ void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot);
 #endif
 
 s32 func_80106408(PlayState* play) {
-    if ((gSaveContext.save.entranceIndex == 0x6400) && (Cutscene_GetSceneSetupIndex(play) != 0)) {
+    if ((gSaveContext.save.entrance == 0x6400) && (Cutscene_GetSceneSetupIndex(play) != 0)) {
         return true;
     }
     return false;

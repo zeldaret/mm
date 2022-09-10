@@ -56,7 +56,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_dnp_Anim_0007D8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &object_dnp_Anim_0021DC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_dnp_Anim_0021DC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
@@ -135,7 +135,7 @@ s32 func_80B3CC38(EnDnp* this, s32 arg1) {
 
     if (arg1 != this->unk_340) {
         this->unk_340 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
     }
 
     return ret;
@@ -304,7 +304,7 @@ void func_80B3D338(EnDnp* this, PlayState* play) {
         } else {
             this->actor.textId = 0x971;
             player->actor.textId = this->actor.textId;
-            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, EXCH_ITEM_MINUS1);
+            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, PLAYER_AP_MINUS1);
         }
     }
 }
@@ -409,7 +409,7 @@ void EnDnp_Update(Actor* thisx, PlayState* play) {
         if ((this->unk_322 & 0x400) && !(gSaveContext.save.weekEventReg[23] & 0x20)) {
             Actor_PickUp(&this->actor, play, GI_MAX, sp2C, sp28);
         }
-        func_8013C964(&this->actor, play, sp2C, sp28, EXCH_ITEM_NONE, this->unk_322 & 7);
+        func_8013C964(&this->actor, play, sp2C, sp28, PLAYER_AP_NONE, this->unk_322 & 7);
         Actor_SetFocus(&this->actor, 30.0f);
         func_80B3CC80(this, play);
     }

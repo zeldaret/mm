@@ -153,7 +153,7 @@ void func_80C0ABA8(BgIkninSusceil* this, PlayState* play) {
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
         func_80C0A86C(this, play, 4, 14, 1);
-        Flags_UnsetSwitch(play, GET_SUSCEIL_SWITCHFLAG(this));
+        Flags_UnsetSwitch(play, SUSCEIL_GET_SWITCHFLAG(&this->dyna.actor));
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
         func_80C0AC74(this);
     } else {
@@ -167,7 +167,7 @@ void func_80C0AC74(BgIkninSusceil* this) {
 }
 
 void func_80C0AC90(BgIkninSusceil* this, PlayState* play) {
-    if (Flags_GetSwitch(play, GET_SUSCEIL_SWITCHFLAG(this))) {
+    if (Flags_GetSwitch(play, SUSCEIL_GET_SWITCHFLAG(&this->dyna.actor))) {
         func_80C0ACD4(this);
     }
 }

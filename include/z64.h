@@ -98,17 +98,17 @@ typedef struct {
 } AnimatedMaterial; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ Vec3s pos;
-    /* 0x06 */ s16   unk_06;
-    /* 0x08 */ Gfx*  opa;
-    /* 0x0C */ Gfx*  xlu;
-} PolygonDlist2; // size = 0x8
+    /* 0x0 */ Vec3s pos;
+    /* 0x6 */ s16   unk_06;
+    /* 0x8 */ Gfx*  opa;
+    /* 0xC */ Gfx*  xlu;
+} PolygonDlist2; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u8    type;
-    /* 0x01 */ u8    num; // number of dlist entries
-    /* 0x04 */ void* start;
-    /* 0x08 */ void* end;
+    /* 0x0 */ u8    type;
+    /* 0x1 */ u8    num; // number of dlist entries
+    /* 0x4 */ void* start;
+    /* 0x8 */ void* end;
 } PolygonType2; // size = 0xC
 
 typedef struct {
@@ -156,7 +156,7 @@ typedef struct {
     /* 0xA */ u8 colorsIndex;
     /* 0xB */ u8 flags;
     /* 0xC */ u8 lightParamsIndex;
-} FireObjInitParams; // size = 0xD
+} FireObjInitParams; // size = 0x10
 
 typedef struct FireObjColors {
     /* 0x0 */ Color_RGBA8 primColor;
@@ -183,17 +183,17 @@ typedef struct {
 } GameInfo; // size = 0x15D4
 
 typedef struct {
-    /* 0x0000 */ u32    size;
-    /* 0x0004 */ void*  bufp;
-    /* 0x0008 */ void*  head;
-    /* 0x000C */ void*  tail;
+    /* 0x0 */ u32    size;
+    /* 0x4 */ void*  bufp;
+    /* 0x8 */ void*  head;
+    /* 0xC */ void*  tail;
 } TwoHeadArena; // size = 0x10
 
 typedef struct {
-    /* 0x0000 */ u32    size;
-    /* 0x0004 */ Gfx*   bufp;
-    /* 0x0008 */ Gfx*   p;
-    /* 0x000C */ Gfx*   d;
+    /* 0x0 */ u32    size;
+    /* 0x4 */ Gfx*   bufp;
+    /* 0x8 */ Gfx*   p;
+    /* 0xC */ Gfx*   d;
 } TwoHeadGfxArena; // size = 0x10
 
 typedef struct {
@@ -663,29 +663,29 @@ typedef struct {
 } EnvironmentContext; // size = 0x100
 
 typedef struct {
-    /* 0x00000 */ View view;
-    /* 0x00168 */ void* skyboxStaticSegment[4];
-    /* 0x00178 */ void* skyboxPaletteStaticSegment;
-    /* 0x0017C */ Gfx* dListBuf;
-    /* 0x00180 */ Gfx* roomDL;
-    /* 0x00184 */ Vtx* roomVtx;
-    /* 0x00188 */ DmaRequest unk188;
-    /* 0x001A8 */ DmaRequest unk1A8;
-    /* 0x001C8 */ DmaRequest unk1C8;
-    /* 0x001E8 */ OSMesgQueue loadQueue;
-    /* 0x00200 */ OSMesg loadMsg;
-    /* 0x00204 */ s16 skyboxShouldDraw;
-    /* 0x00208 */ f32 rotX;
-    /* 0x0020C */ f32 rotY;
-    /* 0x00210 */ f32 rotZ;
-    /* 0x00214 */ Vec3f eye;
-    /* 0x00220 */ s16 angle;
-    /* 0x00222 */ u8 primR;
-    /* 0x00223 */ u8 primG;
-    /* 0x00224 */ u8 primB;
-    /* 0x00225 */ u8 envR;
-    /* 0x00226 */ u8 envG;
-    /* 0x00227 */ u8 envB;
+    /* 0x000 */ View view;
+    /* 0x168 */ void* skyboxStaticSegment[4];
+    /* 0x178 */ void* skyboxPaletteStaticSegment;
+    /* 0x17C */ Gfx* dListBuf;
+    /* 0x180 */ Gfx* roomDL;
+    /* 0x184 */ Vtx* roomVtx;
+    /* 0x188 */ DmaRequest unk188;
+    /* 0x1A8 */ DmaRequest unk1A8;
+    /* 0x1C8 */ DmaRequest unk1C8;
+    /* 0x1E8 */ OSMesgQueue loadQueue;
+    /* 0x200 */ OSMesg loadMsg;
+    /* 0x204 */ s16 skyboxShouldDraw;
+    /* 0x208 */ f32 rotX;
+    /* 0x20C */ f32 rotY;
+    /* 0x210 */ f32 rotZ;
+    /* 0x214 */ Vec3f eye;
+    /* 0x220 */ s16 angle;
+    /* 0x222 */ u8 primR;
+    /* 0x223 */ u8 primG;
+    /* 0x224 */ u8 primB;
+    /* 0x225 */ u8 envR;
+    /* 0x226 */ u8 envG;
+    /* 0x227 */ u8 envB;
 } SkyboxContext; // size = 0x228
 
 typedef enum {
@@ -693,8 +693,8 @@ typedef enum {
 } SkyboxId;
 
 typedef struct ListAlloc {
-    /* 0x00 */ struct ListAlloc* prev;
-    /* 0x04 */ struct ListAlloc* next;
+    /* 0x0 */ struct ListAlloc* prev;
+    /* 0x4 */ struct ListAlloc* next;
 } ListAlloc; // size = 0x8
 
 typedef struct {
@@ -1003,7 +1003,7 @@ struct FireObjLight {
     /* 0x00 */ LightNode* light;
     /* 0x04 */ LightInfo lightInfo;
     /* 0x12 */ u8 lightParamsIndex;
-}; // size = 0x13
+}; // size = 0x14
 
 #define OS_SC_RETRACE_MSG       1
 #define OS_SC_DONE_MSG          2
@@ -1062,22 +1062,21 @@ struct FireObj {
 }; // size = 0x8B
 
 typedef struct {
-    /* 0x00 */ u8   seqIndex;
-    /* 0x01 */ u8   nightSeqIndex;
-    /* 0x02 */ u8   unk_02;
+    /* 0x0 */ u8   seqIndex;
+    /* 0x1 */ u8   nightSeqIndex;
+    /* 0x2 */ u8   unk_02;
 } SoundContext; // size = 0x3
 
 typedef struct {
-    /* 0x00 */ s32 enabled;
-    /* 0x04 */ s32 timer;
+    /* 0x0 */ s32 enabled;
+    /* 0x4 */ s32 timer;
 } FrameAdvanceContext; // size = 0x8
 
 typedef enum {
-    /* 00 */ GAMEOVER_INACTIVE,
-    /* 01 */ GAMEOVER_DEATH_START,
-    /* 02 */ GAMEOVER_DEATH_WAIT_GROUND,    // wait for player to fall and hit the ground
-    /* 03 */ GAMEOVER_DEATH_FADE_OUT,       // wait before fading out
-
+    /*  0 */ GAMEOVER_INACTIVE,
+    /*  1 */ GAMEOVER_DEATH_START,
+    /*  2 */ GAMEOVER_DEATH_WAIT_GROUND,    // wait for player to fall and hit the ground
+    /*  3 */ GAMEOVER_DEATH_FADE_OUT,       // wait before fading out
     /* 20 */ GAMEOVER_REVIVE_START = 20,
     /* 21 */ GAMEOVER_REVIVE_RUMBLE,
     /* 22 */ GAMEOVER_REVIVE_WAIT_GROUND,   // wait for player to fall and hit the ground
@@ -1086,8 +1085,8 @@ typedef enum {
 } GameOverState;
 
 typedef struct {
-    /* 0x00 */ u16 state;
-} GameOverContext; // size = 0x02
+    /* 0x0 */ u16 state;
+} GameOverContext; // size = 0x2
 
 struct PlayState {
     /* 0x00000 */ GameState state;
@@ -1158,7 +1157,7 @@ struct PlayState {
     /* 0x18875 */ s8 transitionTrigger; // "fade_direction"
     /* 0x18876 */ s16 unk_18876;
     /* 0x18878 */ s16 bgCoverAlpha;
-    /* 0x1887A */ u16 nextEntranceIndex;
+    /* 0x1887A */ u16 nextEntrance;
     /* 0x1887C */ s8 unk_1887C; // shootingGalleryStatus?
     /* 0x1887D */ s8 unk_1887D;
     /* 0x1887E */ s8 unk_1887E;
@@ -1199,17 +1198,17 @@ typedef struct {
 } struct_800BD888_arg1; // size = 0x28
 
 typedef struct {
-    /* 0x00 */ u32 type;
-    /* 0x04 */ u32 setScissor;
-    /* 0x08 */ Color_RGBA8 color;
-    /* 0x0C */ Color_RGBA8 envColor;
+    /* 0x0 */ u32 type;
+    /* 0x4 */ u32 setScissor;
+    /* 0x8 */ Color_RGBA8 color;
+    /* 0xC */ Color_RGBA8 envColor;
 } struct_801F8010; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u32 useRgba;
-    /* 0x04 */ u32 setScissor;
-    /* 0x08 */ Color_RGBA8 primColor;
-    /* 0x08 */ Color_RGBA8 envColor;
+    /* 0x0 */ u32 useRgba;
+    /* 0x4 */ u32 setScissor;
+    /* 0x8 */ Color_RGBA8 primColor;
+    /* 0xC */ Color_RGBA8 envColor;
 } struct_801F8020; // size = 0x10
 
 typedef struct {
@@ -1237,9 +1236,9 @@ typedef struct {
 } TargetRangeParams; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8* value;
-    /* 0x04 */ const char* name;
-} FlagSetEntry; // size = 0x08
+    /* 0x0 */ u8* value;
+    /* 0x4 */ const char* name;
+} FlagSetEntry; // size = 0x8
 
 // TODO: Dedicated Header?
 #define FRAM_BASE_ADDRESS 0x08000000           // FRAM Base Address in Cart Memory

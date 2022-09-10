@@ -70,7 +70,7 @@
         <Limb Name="object_eg_Standardlimb_0095E4" Type="Standard" EnumName="OBJECT_EG_LIMB_15" Offset="0x95E4" />
         <Limb Name="object_eg_Standardlimb_0095F0" Type="Standard" EnumName="OBJECT_EG_LIMB_16" Offset="0x95F0" />
         <Limb Name="object_eg_Standardlimb_0095FC" Type="Standard" EnumName="OBJECT_EG_LIMB_17" Offset="0x95FC" />
-        <Skeleton Name="object_eg_Skel_009664" Type="Flex" LimbType="Standard" LimbNone="OBJECT_EG_LIMB_NONE" LimbMax="OBJECT_EG_LIMB_MAX" EnumName="object_eg_Limbs" Offset="0x9664" />
+        <Skeleton Name="object_eg_Skel_009664" Type="Flex" LimbType="Standard" LimbNone="OBJECT_EG_LIMB_NONE" LimbMax="OBJECT_EG_LIMB_MAX" EnumName="ObjectEgLimb" Offset="0x9664" />
         <Animation Name="object_eg_Anim_009D2C" Offset="0x9D2C" />
         <Animation Name="object_eg_Anim_00A204" Offset="0xA204" />
         <Animation Name="object_eg_Anim_00A484" Offset="0xA484" />

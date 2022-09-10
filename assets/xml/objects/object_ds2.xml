@@ -27,6 +27,6 @@
         <Limb Name="object_ds2_Standardlimb_004214" Type="Standard" EnumName="OBJECT_DS2_LIMB_06" Offset="0x4214" />
         <Limb Name="object_ds2_Standardlimb_004220" Type="Standard" EnumName="OBJECT_DS2_LIMB_07" Offset="0x4220" />
         <Limb Name="object_ds2_Standardlimb_00422C" Type="Standard" EnumName="OBJECT_DS2_LIMB_08" Offset="0x422C" />
-        <Skeleton Name="object_ds2_Skel_004258" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DS2_LIMB_NONE" LimbMax="OBJECT_DS2_LIMB_MAX" EnumName="object_ds2_Limbs" Offset="0x4258" />
+        <Skeleton Name="object_ds2_Skel_004258" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DS2_LIMB_NONE" LimbMax="OBJECT_DS2_LIMB_MAX" EnumName="ObjectDs2Limb" Offset="0x4258" />
     </File>
 </Root>
