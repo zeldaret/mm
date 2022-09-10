@@ -587,7 +587,7 @@ typedef enum {
     /* 0x32 */ SCENE_16GORON_HOUSE,
     /* 0x33 */ SCENE_33ZORACITY,
     /* 0x34 */ SCENE_8ITEMSHOP,
-    /* 0x35 */ SCENE_F01, // Romani Ranch
+    /* 0x35 */ SCENE_F01,
     /* 0x36 */ SCENE_INISIE_BS,
     /* 0x37 */ SCENE_30GYOSON,
     /* 0x38 */ SCENE_31MISAKI,

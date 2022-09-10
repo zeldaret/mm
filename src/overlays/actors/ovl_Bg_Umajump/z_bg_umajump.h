@@ -20,6 +20,15 @@ typedef struct BgUmajump {
     /* 0x168 */ Actor* horse;
 } BgUmajump; // size = 0x16C
 
+typedef enum {
+    BG_UMAJUMP_PARAM_1 = 1,
+    BG_UMAJUMP_PARAM_2,
+    BG_UMAJUMP_PARAM_3,
+    BG_UMAJUMP_PARAM_4,
+    BG_UMAJUMP_PARAM_5,
+    BG_UMAJUMP_PARAM_6,
+} BG_UMAJUMP_PARAMS;
+
 extern const ActorInit Bg_Umajump_InitVars;
 
 #endif // Z_BG_UMAJUMP_H

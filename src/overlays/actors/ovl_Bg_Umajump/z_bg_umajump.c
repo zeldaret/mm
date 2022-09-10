@@ -92,7 +92,7 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
     this->objectIndex = BG_UMAJUMP_GET_OBJECT_INDEX(thisx);
     thisx->params &= 0xFF;
 
-    if ((this->dyna.actor.params == 2)) {
+    if ((this->dyna.actor.params == BG_UMAJUMP_PARAM_2)) {
         if ((((play->sceneNum == SCENE_F01) && !(gSaveContext.save.weekEventReg[89] & 0x20)) &&
              !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) &&
             (this->dyna.actor.cutscene != -1)) {
@@ -110,7 +110,7 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
             Actor_MarkForDeath(&this->dyna.actor);
         }
 
-        if ((this->dyna.actor.params == 3) && CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
+        if ((this->dyna.actor.params == BG_UMAJUMP_PARAM_3) && CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, this->dyna.actor.world.pos.x,
                         this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
                         this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 0x3E);
@@ -134,32 +134,32 @@ void BgUmajump_Update(Actor* thisx, PlayState* play) {
 
         Actor_SetObjectDependency(play, &this->dyna.actor);
 
-        if (this->dyna.actor.params == 5) {
+        if (this->dyna.actor.params == BG_UMAJUMP_PARAM_5) {
             if (gSaveContext.save.weekEventReg[22] & 1) {
                 DynaPolyActor_LoadMesh(play, &this->dyna, &object_umajump_Colheader_001558);
             }
-        } else if (this->dyna.actor.params == 6) {
+        } else if (this->dyna.actor.params == BG_UMAJUMP_PARAM_6) {
             if (!(gSaveContext.save.weekEventReg[22] & 1)) {
                 DynaPolyActor_LoadMesh(play, &this->dyna, &object_umajump_Colheader_001558);
             }
-        } else if ((this->dyna.actor.params == 4) || (this->dyna.actor.params == 3)) {
+        } else if ((this->dyna.actor.params == BG_UMAJUMP_PARAM_4) || (this->dyna.actor.params == BG_UMAJUMP_PARAM_3)) {
             DynaPolyActor_LoadMesh(play, &this->dyna, &object_umajump_Colheader_001558);
         } else {
             DynaPolyActor_LoadMesh(play, &this->dyna, &object_umajump_Colheader_001438);
         }
 
-        if (this->dyna.actor.params == 1) {
+        if (this->dyna.actor.params == BG_UMAJUMP_PARAM_1) {
             this->rotationTimer = 0;
             this->actionFunc = func_80919F30;
             this->dyna.actor.update = func_8091A5A0;
-        } else if (this->dyna.actor.params == 3) {
+        } else if (this->dyna.actor.params == BG_UMAJUMP_PARAM_3) {
             this->dyna.actor.update = func_8091A5A0;
-        } else if ((this->dyna.actor.params == 5) || (this->dyna.actor.params == 6)) {
-            if (this->dyna.actor.params == 5) {
+        } else if ((this->dyna.actor.params == BG_UMAJUMP_PARAM_5) || (this->dyna.actor.params == BG_UMAJUMP_PARAM_6)) {
+            if (this->dyna.actor.params == BG_UMAJUMP_PARAM_5) {
                 if ((this->dyna.bgId == BGACTOR_NEG_ONE) && (gSaveContext.save.weekEventReg[22] & 1)) {
                     DynaPolyActor_LoadMesh(play, &this->dyna, &object_umajump_Colheader_001558);
                 }
-            } else if ((this->dyna.actor.params == 6) && (this->dyna.bgId == BGACTOR_NEG_ONE) &&
+            } else if ((this->dyna.actor.params == BG_UMAJUMP_PARAM_6) && (this->dyna.bgId == BGACTOR_NEG_ONE) &&
                        (!(gSaveContext.save.weekEventReg[22] & 1) ||
                         ((gSaveContext.save.day == 2) && (gSaveContext.save.isNight == true) &&
                          ((gSaveContext.save.time >= CLOCK_TIME(5, 30)) &&
@@ -168,7 +168,7 @@ void BgUmajump_Update(Actor* thisx, PlayState* play) {
             }
             func_800C641C(play, &play->colCtx.dyna, this->dyna.bgId);
             this->dyna.actor.update = func_8091A5A0;
-        } else if (this->dyna.actor.params == 4) {
+        } else if (this->dyna.actor.params == BG_UMAJUMP_PARAM_4) {
             func_800C641C(play, &play->colCtx.dyna, this->dyna.bgId);
             this->dyna.actor.update = Actor_Noop;
         } else {
@@ -184,20 +184,20 @@ void func_8091A5A0(Actor* thisx, PlayState* play) {
         this->actionFunc(this, play);
     }
 
-    if ((this->dyna.actor.params == 3) && CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
+    if ((this->dyna.actor.params == BG_UMAJUMP_PARAM_3) && CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                     this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y,
                     this->dyna.actor.shape.rot.z, 0x3E);
         Actor_MarkForDeath(&this->dyna.actor);
     }
 
-    if (this->dyna.actor.params == 5) {
+    if (this->dyna.actor.params == BG_UMAJUMP_PARAM_5) {
         if ((this->dyna.bgId == BGACTOR_NEG_ONE) && (gSaveContext.save.weekEventReg[22] & 1)) {
             DynaPolyActor_LoadMesh(play, &this->dyna, &object_umajump_Colheader_001558);
         } else if ((this->dyna.bgId != BGACTOR_NEG_ONE) && !(gSaveContext.save.weekEventReg[22] & 1)) {
             DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
         }
-    } else if (this->dyna.actor.params == 6) {
+    } else if (this->dyna.actor.params == BG_UMAJUMP_PARAM_6) {
         if ((this->dyna.bgId == BGACTOR_NEG_ONE) &&
             (!(gSaveContext.save.weekEventReg[22] & 1) ||
              ((gSaveContext.save.day == 2) && (gSaveContext.save.isNight == true) &&
