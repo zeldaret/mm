@@ -336,6 +336,8 @@ s32 EnGe2_FollowPathWithoutGravity(EnGe2* this) {
     }
 }
 
+/* Action and helper functions */
+
 void EnGe2_SpawnEffects(EnGe2* this, PlayState* play) {
     static Vec3f effectVelocity = { 0.0f, -0.05f, 0.0f };
     static Vec3f effectAccel = { 0.0f, -0.025f, 0.0f };
@@ -359,7 +361,9 @@ void EnGe2_Scream(EnGe2* this) {
     }
 }
 
-// Set up the captured transition when timer is 0
+/**
+ * Wait for timer to finish, then set up the captured/thrown out transition.
+ */
 void EnGe2_ThrowPlayerOut(EnGe2* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
@@ -370,8 +374,10 @@ void EnGe2_ThrowPlayerOut(EnGe2* this, PlayState* play) {
     }
 }
 
-// Only used if gSaveContext.save.weekEventReg[80] & 8
-void func_80B8BCEC(EnGe2* this, PlayState* play) {
+/**
+ * Used if Aveil spots Player.
+ */
+void EnGe2_TurnToPlayerFast(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 2, 0x1000, 0x200);
 }
@@ -459,7 +465,14 @@ void EnGe2_KnockedOut(EnGe2* this, PlayState* play) {
     }
 }
 
-void func_80B8C13C(EnGe2* this, PlayState* play) {
+/**
+ * Carries out various patrol functions:
+ * - Turning to Player if being arrested
+ * - Turning to Player if spotted by Aveil
+ * - Looking for Player
+ * - Managing collisions and collider
+ */
+void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 visionRange = gSaveContext.save.isNight ? 200.0f : 280.0f;
 
@@ -469,9 +482,9 @@ void func_80B8C13C(EnGe2* this, PlayState* play) {
         Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                          Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
         this->stateFlags |= GERUDO_PURPLE_STATE_CAPTURING;
-    } else if (gSaveContext.save.weekEventReg[80] & 8) {
+    } else if (gSaveContext.save.weekEventReg[80] & 8) { // Aveil has spotted Player
         this->picto.actor.speedXZ = 0.0f;
-        this->actionFunc = func_80B8BCEC;
+        this->actionFunc = EnGe2_TurnToPlayerFast;
         Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                          Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
     } else if (EnGe2_LookForPlayer(play, &this->picto.actor, &this->picto.actor.focus.pos,
@@ -545,7 +558,7 @@ void EnGe2_LookAround(EnGe2* this, PlayState* play) {
     }
 
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
-    func_80B8C13C(this, play);
+    EnGe2_PatrolDuties(this, play);
 }
 
 void EnGe2_Walk(EnGe2* this, PlayState* play) {
@@ -571,7 +584,7 @@ void EnGe2_Walk(EnGe2* this, PlayState* play) {
         EnGe2_SetupLookAround(this);
         this->yawTarget = this->picto.actor.yawTowardsPlayer;
     }
-    func_80B8C13C(this, play);
+    EnGe2_PatrolDuties(this, play);
 }
 
 void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
