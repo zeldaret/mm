@@ -23,15 +23,15 @@ s32 EnGe3_ValidatePictograph(PlayState* play, Actor* thisx);
 
 typedef enum {
     /* -1 */ GERUDO_AVEIL_ANIM_NONE = -1,
-    /*  0 */ GERUDO_AVEIL_ANIM_0,
-    /*  1 */ GERUDO_AVEIL_ANIM_1,
-    /*  2 */ GERUDO_AVEIL_ANIM_2,
-    /*  3 */ GERUDO_AVEIL_ANIM_3,
-    /*  4 */ GERUDO_AVEIL_ANIM_4,
-    /*  5 */ GERUDO_AVEIL_ANIM_5,
-    /*  6 */ GERUDO_AVEIL_ANIM_6,
-    /*  7 */ GERUDO_AVEIL_ANIM_7,
-    /*  8 */ GERUDO_AVEIL_ANIM_8,
+    /*  0 */ GERUDO_AVEIL_ANIM_STAND,
+    /*  1 */ GERUDO_AVEIL_ANIM_WALK,
+    /*  2 */ GERUDO_AVEIL_ANIM_HAND_ON_HIP_WAIT,
+    /*  3 */ GERUDO_AVEIL_ANIM_TURN_HEAD,
+    /*  4 */ GERUDO_AVEIL_ANIM_WAIT,
+    /*  5 */ GERUDO_AVEIL_ANIM_DEMAND,
+    /*  6 */ GERUDO_AVEIL_ANIM_DISMISS,
+    /*  7 */ GERUDO_AVEIL_ANIM_BEG,
+    /*  8 */ GERUDO_AVEIL_ANIM_RUN_AWAY,
 } GerudoAveilAnimation;
 
 //! TODO: Decide where to put this
@@ -80,16 +80,14 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 50, 0, { 0, 0, 0 } },
 };
 
-extern FlexSkeletonHeader D_0600A808;
-extern AnimationHeader D_06001EFC;
-
 void EnGe3_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnGe3* this = (EnGe3*)thisx;
 
     ActorShape_Init(&this->picto.actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &D_0600A808, NULL, this->jointTable, this->morphTable, 24);
-    Animation_PlayLoop(&this->skelAnime, &D_06001EFC);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGerudoRedSkel, NULL, this->jointTable, this->morphTable,
+                       GERUDO_RED_LIMB_MAX);
+    Animation_PlayLoop(&this->skelAnime, &gGerudoRedHandOnHipWaitAnim);
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->picto.actor, 0.01f);
@@ -100,14 +98,14 @@ void EnGe3_Init(Actor* thisx, PlayState* play) {
     EnGe3_SetupPath(this, play);
 
     if (GERUDO_AVEIL_GET_TYPE(&this->picto.actor) == GERUDO_AVEIL_TYPE_1) {
-        EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_2, ANIMMODE_LOOP, 0.0f);
+        EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_HAND_ON_HIP_WAIT, ANIMMODE_LOOP, 0.0f);
         this->actionFunc = EnGe3_PerformCutsceneActions;
         if (gSaveContext.save.weekEventReg[83] & 2) { // Knocked beehive down
             Actor_MarkForDeath(&this->picto.actor);
             return;
         }
     } else {
-        EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_1, ANIMMODE_LOOP, 0.0f);
+        EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_WALK, ANIMMODE_LOOP, 0.0f);
         this->actionFunc = EnGe3_Idle;
         this->picto.actor.speedXZ = 1.5f;
     }
@@ -125,11 +123,19 @@ void EnGe3_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-static AnimationHeader* sAnimations[] = {
-    0x0600AA8C, 0x060028A0, 0x06001EFC, 0x06000EE0, 0x060014CC, 0x06001AC8, 0x06000CB0, 0x06000734, 0x06001DFC,
-};
-
 void EnGe3_ChangeAnim(EnGe3* this, s16 index, u8 mode, f32 morphFrames) {
+    static AnimationHeader* sAnimations[] = {
+        &gGerudoRedStandAnim,         /* GERUDO_AVEIL_ANIM_STAND */
+        &gGerudoRedWalkingAnim,       /* GERUDO_AVEIL_ANIM_WALK */
+        &gGerudoRedHandOnHipWaitAnim, /* GERUDO_AVEIL_ANIM_HAND_ON_HIP_WAIT */
+        &gGerudoRedTurnHeadAnim,      /* GERUDO_AVEIL_ANIM_TURN_HEAD */
+        &gGerudoRedWaitAnim,          /* GERUDO_AVEIL_ANIM_WAIT */
+        &gGerudoRedDemandingAnim,     /* GERUDO_AVEIL_ANIM_DEMAND */
+        &gGerudoRedDismissAnim,       /* GERUDO_AVEIL_ANIM_DISMISS */
+        &gGerudoRedBeggingAnim,       /* GERUDO_AVEIL_ANIM_BEG */
+        &gGerudoRedRunningAwayAnim,   /* GERUDO_AVEIL_ANIM_RUN_AWAY */
+    };
+
     Animation_Change(&this->skelAnime, sAnimations[index], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[index]), mode,
                      morphFrames);
     this->animIndex = index;
@@ -224,7 +230,7 @@ void EnGe3_ThrowPlayerOut(EnGe3* this, PlayState* play) {
 
 void EnGe3_PerformCutsceneActions(EnGe3* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime) && (this->csAction == GERUDO_AVEIL_CSACTION_3)) {
-        EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_4, ANIMMODE_ONCE, 0.0f);
+        EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_WAIT, ANIMMODE_ONCE, 0.0f);
     }
 
     if (Cutscene_CheckActorAction(play, 108)) {
@@ -238,32 +244,32 @@ void EnGe3_PerformCutsceneActions(EnGe3* this, PlayState* play) {
             this->csAction = csAction;
             switch (this->csAction) {
                 case GERUDO_AVEIL_CSACTION_1:
-                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_2, ANIMMODE_LOOP, 0.0f);
+                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_HAND_ON_HIP_WAIT, ANIMMODE_LOOP, 0.0f);
                     break;
 
                 case GERUDO_AVEIL_CSACTION_2:
-                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_3, ANIMMODE_ONCE, 0.0f);
+                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_TURN_HEAD, ANIMMODE_ONCE, 0.0f);
                     this->skelAnime.playSpeed = 0.0f;
                     break;
 
                 case GERUDO_AVEIL_CSACTION_3:
-                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_3, ANIMMODE_ONCE, 0.0f);
+                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_TURN_HEAD, ANIMMODE_ONCE, 0.0f);
                     break;
 
                 case GERUDO_AVEIL_CSACTION_4:
-                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_5, ANIMMODE_LOOP, 0.0f);
+                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_DEMAND, ANIMMODE_LOOP, 0.0f);
                     break;
 
                 case GERUDO_AVEIL_CSACTION_5:
-                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_6, ANIMMODE_ONCE, 0.0f);
+                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_DISMISS, ANIMMODE_ONCE, 0.0f);
                     break;
 
                 case GERUDO_AVEIL_CSACTION_6:
-                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_7, ANIMMODE_LOOP, 0.0f);
+                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_BEG, ANIMMODE_LOOP, 0.0f);
                     break;
 
                 case GERUDO_AVEIL_CSACTION_7:
-                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_8, ANIMMODE_LOOP, 0.0f);
+                    EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_RUN_AWAY, ANIMMODE_LOOP, 0.0f);
                     this->picto.actor.speedXZ = 5.0f;
                     this->screamTimer = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);
                     break;
@@ -352,12 +358,12 @@ s32 EnGe3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     EnGe3* this = THIS;
 
     switch (limbIndex) {
-        case 5:
-        case 11:
-        case 16:
+        case GERUDO_RED_LIMB_VEIL:
+        case GERUDO_RED_LIMB_RIGHT_SWORD:
+        case GERUDO_RED_LIMB_LEFT_SWORD:
             *dList = NULL;
             return false;
-        case 6:
+        case GERUDO_RED_LIMB_HEAD:
             rot->x += this->headRot.y;
             // fallthrough
         default:
@@ -366,14 +372,14 @@ s32 EnGe3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
             OPEN_DISPS(play->state.gfxCtx);
 
             switch (limbIndex) {
-                case 3:
+                case GERUDO_RED_LIMB_NECK:
                     break;
-                case 6:
+                case GERUDO_RED_LIMB_HEAD:
                     gDPPipeSync(POLY_OPA_DISP++);
                     gDPSetEnvColor(POLY_OPA_DISP++, 80, 60, 10, 255);
                     break;
-                case 11:
-                case 16:
+                case GERUDO_RED_LIMB_RIGHT_SWORD:
+                case GERUDO_RED_LIMB_LEFT_SWORD:
                     gDPPipeSync(POLY_OPA_DISP++);
                     gDPSetEnvColor(POLY_OPA_DISP++, 140, 170, 230, 255);
                     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -386,9 +392,10 @@ s32 EnGe3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
             CLOSE_DISPS(play->state.gfxCtx);
 
-            if (this->animIndex == GERUDO_AVEIL_ANIM_2) {
+            if (this->animIndex == GERUDO_AVEIL_ANIM_HAND_ON_HIP_WAIT) {
                 // Fidget
-                if ((limbIndex == 8) || (limbIndex == 13) || (limbIndex == 2)) {
+                if ((limbIndex == GERUDO_RED_LIMB_RIGHT_FOREARM) || (limbIndex == GERUDO_RED_LIMB_LEFT_FOREARM) ||
+                    (limbIndex == GERUDO_RED_LIMB_TORSO)) {
                     s32 temp = limbIndex * 50;
 
                     // required to match
@@ -405,16 +412,16 @@ void EnGe3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     EnGe3* this = THIS;
     Vec3f sFocusOffset = { 600.0f, 700.0f, 0.0f };
 
-    if (limbIndex == 6) {
+    if (limbIndex == GERUDO_RED_LIMB_HEAD) {
         Matrix_MultVec3f(&sFocusOffset, &this->picto.actor.focus.pos);
     }
 }
 
 void EnGe3_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr sEyeTextures[] = {
-        0x06006398,
-        0x06006958,
-        0x060070D8,
+        gGerudoRedEyeOpenTex,
+        gGerudoRedEyeHalfTex,
+        gGerudoRedEyeClosedTex,
     };
     s32 pad;
     EnGe3* this = (EnGe3*)thisx;

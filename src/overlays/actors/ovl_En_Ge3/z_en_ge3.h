@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "z64snap.h"
+#include "objects/object_geldb/object_geldb.h"
 
 struct EnGe3;
 
@@ -23,8 +24,8 @@ typedef struct EnGe3 {
     /* 0x000 */ PictoActor picto;
     /* 0x148 */ ColliderCylinder collider;
     /* 0x194 */ SkelAnime skelAnime;
-    /* 0x1D8 */ Vec3s jointTable[24];
-    /* 0x268 */ Vec3s morphTable[24];
+    /* 0x1D8 */ Vec3s jointTable[GERUDO_RED_LIMB_MAX];
+    /* 0x268 */ Vec3s morphTable[GERUDO_RED_LIMB_MAX];
     /* 0x2F8 */ s16 eyeIndex;
     /* 0x2FA */ s16 blinkTimer;
     /* 0x2FC */ Path *path;
