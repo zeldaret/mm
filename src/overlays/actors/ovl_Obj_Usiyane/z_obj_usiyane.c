@@ -71,9 +71,7 @@ s32 func_80C07CD0(void) {
 
             for (i = 0; i < 8; i++) {
                 temp_v0_2 = func_80C07C80(i);
-                if (temp_v0_2 < var_s1) {
-                    var_s1 = temp_v0_2;
-                }
+                var_s1 = CLAMP_MAX(var_s1, temp_v0_2);
             }
 
             if (time < (var_s1 + 0xE11)) {
