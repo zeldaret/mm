@@ -34,6 +34,20 @@ typedef enum {
     /*  8 */ GERUDO_AVEIL_ANIM_8,
 } GerudoAveilAnimation;
 
+//! TODO: Decide where to put this
+typedef enum {
+    /* -1 */ GERUDO_AVEIL_CSACTION_NONE = -1,
+    /*  0 */ GERUDO_AVEIL_CSACTION_0,
+    /*  1 */ GERUDO_AVEIL_CSACTION_1,
+    /*  2 */ GERUDO_AVEIL_CSACTION_2,
+    /*  3 */ GERUDO_AVEIL_CSACTION_3,
+    /*  4 */ GERUDO_AVEIL_CSACTION_4,
+    /*  5 */ GERUDO_AVEIL_CSACTION_5,
+    /*  6 */ GERUDO_AVEIL_CSACTION_6,
+    /*  7 */ GERUDO_AVEIL_CSACTION_7,
+    /*  8 */ GERUDO_AVEIL_CSACTION_8,
+} GerudoAveilCsAction;
+
 const ActorInit En_Ge3_InitVars = {
     ACTOR_EN_GE3,
     ACTORCAT_NPC,
@@ -81,14 +95,14 @@ void EnGe3_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->picto.actor, 0.01f);
 
     this->animIndex = GERUDO_AVEIL_ANIM_NONE;
-    this->csAction = -1;
+    this->csAction = GERUDO_AVEIL_CSACTION_NONE;
     this->picto.validationFunc = EnGe3_ValidatePictograph;
     EnGe3_SetupPath(this, play);
 
     if (GERUDO_AVEIL_GET_TYPE(&this->picto.actor) == GERUDO_AVEIL_TYPE_1) {
         EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_2, ANIMMODE_LOOP, 0.0f);
         this->actionFunc = EnGe3_PerformCutsceneActions;
-        if (gSaveContext.save.weekEventReg[83] & 2) {
+        if (gSaveContext.save.weekEventReg[83] & 2) { // Knocked beehive down
             Actor_MarkForDeath(&this->picto.actor);
             return;
         }
@@ -209,52 +223,52 @@ void EnGe3_ThrowPlayerOut(EnGe3* this, PlayState* play) {
 }
 
 void EnGe3_PerformCutsceneActions(EnGe3* this, PlayState* play) {
-    if (SkelAnime_Update(&this->skelAnime) && (this->csAction == 3)) {
+    if (SkelAnime_Update(&this->skelAnime) && (this->csAction == GERUDO_AVEIL_CSACTION_3)) {
         EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_4, ANIMMODE_ONCE, 0.0f);
     }
 
     if (Cutscene_CheckActorAction(play, 108)) {
         s16 csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 108)]->action;
 
-        if (this->csAction != 7) {
+        if (this->csAction != GERUDO_AVEIL_CSACTION_7) {
             Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, Cutscene_GetActorActionIndex(play, 108));
         }
 
         if (this->csAction != csAction) {
             this->csAction = csAction;
             switch (this->csAction) {
-                case 1:
+                case GERUDO_AVEIL_CSACTION_1:
                     EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_2, ANIMMODE_LOOP, 0.0f);
                     break;
 
-                case 2:
+                case GERUDO_AVEIL_CSACTION_2:
                     EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_3, ANIMMODE_ONCE, 0.0f);
                     this->skelAnime.playSpeed = 0.0f;
                     break;
 
-                case 3:
+                case GERUDO_AVEIL_CSACTION_3:
                     EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_3, ANIMMODE_ONCE, 0.0f);
                     break;
 
-                case 4:
+                case GERUDO_AVEIL_CSACTION_4:
                     EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_5, ANIMMODE_LOOP, 0.0f);
                     break;
 
-                case 5:
+                case GERUDO_AVEIL_CSACTION_5:
                     EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_6, ANIMMODE_ONCE, 0.0f);
                     break;
 
-                case 6:
+                case GERUDO_AVEIL_CSACTION_6:
                     EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_7, ANIMMODE_LOOP, 0.0f);
                     break;
 
-                case 7:
+                case GERUDO_AVEIL_CSACTION_7:
                     EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_8, ANIMMODE_LOOP, 0.0f);
                     this->picto.actor.speedXZ = 5.0f;
                     this->screamTimer = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);
                     break;
 
-                case 8:
+                case GERUDO_AVEIL_CSACTION_8:
                     Actor_MarkForDeath(&this->picto.actor);
                     break;
             }
@@ -274,10 +288,10 @@ void EnGe3_PerformCutsceneActions(EnGe3* this, PlayState* play) {
 
         this->actionFunc = EnGe3_ThrowPlayerOut;
         this->actionTimer = 50;
-        gSaveContext.save.weekEventReg[80] |= 8;
+        gSaveContext.save.weekEventReg[80] |= 8; // Aveil discovered Player
     }
 
-    if (this->csAction == 7) {
+    if (this->csAction == GERUDO_AVEIL_CSACTION_7) {
         this->picto.actor.speedXZ = 5.0f;
         EnGe3_FollowPath(this);
 
