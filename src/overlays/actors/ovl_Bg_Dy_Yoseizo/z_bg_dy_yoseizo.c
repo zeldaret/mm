@@ -497,6 +497,7 @@ void BgDyYoseizo_TrainPlayer(BgDyYoseizo* this, PlayState* play) {
     }
 }
 
+// Choose behaviour?
 void func_80A0BB08(BgDyYoseizo* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, 103) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 2)) {
