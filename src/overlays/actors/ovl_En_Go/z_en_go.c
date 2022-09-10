@@ -19,10 +19,19 @@
 #define ENGO_EYE_CLOSED2 4
 
 #define ENGO_FLAG_NONE 0
-#define ENGO_FLAG_BLINKING (1 << 5) // 0x0020
-#define ENGO_FLAG_CURLED (1 << 9)   // 0x0200
-#define ENGO_FLAG_FROZEN (1 << 10)  // 0x0400
-#define ENGO_FLAG_CURLING (1 << 14) // 0x4000
+#define ENGO_FLAG_UNK1 (1 << 0)          // These three each
+#define ENGO_FLAG_UNK2 (1 << 2)          // are equivalent to
+#define ENGO_FLAG_UNK3 (1 << 3)          // A false ProcessTalkRequest
+#define ENGO_FLAG_BLINKING (1 << 5)      // 0x0020
+#define ENGO_FLAG_FOCUSING (1 << 7)      // 0x0080
+#define ENGO_FLAG_SNOWBALLED (1 << 8)    // 0x0100
+#define ENGO_FLAG_CURLED (1 << 9)        // 0x0200
+#define ENGO_FLAG_FROZEN (1 << 10)       // 0x0400
+#define ENGO_FLAG_HIT_OTHER (1 << 11)    // 0x0800
+#define ENGO_FLAG_HIT_BY_OTHER (1 << 12) // 0x1000
+#define ENGO_FLAG_HIT_OBJ (1 << 13)      // 0x2000
+#define ENGO_FLAG_CURLING (1 << 14)      // 0x4000
+#define ENGO_FLAG_UNCURLING (1 << 15)    // 0x8000
 
 typedef enum {
     ENGO_AWAKE = 0,
@@ -35,14 +44,14 @@ void EnGo_Init(Actor* thisx, PlayState* play);
 void EnGo_Destroy(Actor* thisx, PlayState* play);
 void EnGo_Update(Actor* thisx, PlayState* play);
 
-void func_ACT_80A14798(EnGo* this, PlayState* play);
-void func_ACT_80A149B0(EnGo* this, PlayState* play);
+void EnGo_Setup(EnGo* this, PlayState* play);
+void EnGo_Idle(EnGo* this, PlayState* play);
 void func_ACT_80A14B30(EnGo* this, PlayState* play);
 void func_ACT_80A14E14(EnGo* this, PlayState* play);
 void func_ACT_80A14E74(EnGo* this, PlayState* play);
 void func_ACT_80A14EB0(EnGo* this, PlayState* play);
 void func_ACT_80A14FC8(EnGo* this, PlayState* play);
-void func_ACT_80A153FC(EnGo* this, PlayState* play);
+void EnGo_Snowballing(EnGo* this, PlayState* play);
 void func_ACT_80A157C4(EnGo* this, PlayState* play);
 void EnGo_Draw(Actor* thisx, PlayState* play);
 
@@ -72,7 +81,7 @@ static s32 D_80A16100[] = {
 // /* 0x0015 0x03 */  MSCRIPT_CMD15(0x0E12),                                                            // And even worse, my borther has been frozen solid 
                                                                                                         // from the cold. The way things are looking, I'll be frozen too.
 // /* 0x0018 0x01 */  MSCRIPT_AWAIT_TEXT(),
-// /* 0x0019 0x03 */  MSCRIPT_CMD15(0x0E13),                                                            // hhhh...It's times like these that make me wish i had taken some of the
+// /* 0x0019 0x03 */  MSCRIPT_CMD15(0x0E13),                                                            // Ohhhh...It's times like these that make me wish i had taken some of the
                                                                                                         // hot spring water I found when I was digging the hero's grave.
 // /* 0x001C 0x01 */  MSCRIPT_AWAIT_TEXT(),
 // /* 0x001D 0x03 */  MSCRIPT_CMD15(0x0E14),                                                            // But the hot spring is now covered by the gravestone. I
@@ -554,7 +563,8 @@ static s32 D_80A16350[27] = {
 // /* 0x0068 0x03 */  MSCRIPT_CMD25(0x0040 - 0x006B),
 // };
 
-// MsgScript
+
+// Side to Side squatting Goron Racer
 static s32 D_80A163BC[4] = { 0x100060E, 0xDFE0C12, 0x100E0DFF, 0xC121000 };
 // MsgScript sMsgScript[] = {
 // /* 0x0000 0x03 */  MSCRIPT_CMD01(0x0009 - 0x0003),   // B if Goron
@@ -572,58 +582,58 @@ static s32 D_80A163BC[4] = { 0x100060E, 0xDFE0C12, 0x100E0DFF, 0xC121000 };
 // MsgScript
 static s32 D_80A163CC[4] = { 0x100060E, 0xE000C12, 0x100E0E01, 0xC121000 };
 // MsgScript sMsgScript[] = {
-// /* 0x0000 0x03 */  MSCRIPT_CMD01(0x0009 - 0x0003), //B if Goron
-// /* 0x0003 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E00),
+// /* 0x0000 0x03 */  MSCRIPT_CMD01(0x0009 - 0x0003), // B if Goron
+// /* 0x0003 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E00),     // (From Japanese: Haru Goro Haru Goro! Goro, the body starts to move naturally)
 // /* 0x0006 0x01 */  MSCRIPT_AWAIT_TEXT(),
 // /* 0x0007 0x01 */  MSCRIPT_CMD18(),
 // /* 0x0008 0x01 */  MSCRIPT_DONE(),
 
-// /* 0x0009 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E01),
+// /* 0x0009 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E01),     // (From Japanese: Darmani, This year, I will win the ground ball.)
 // /* 0x000C 0x01 */  MSCRIPT_AWAIT_TEXT(),
 // /* 0x000D 0x01 */  MSCRIPT_CMD18(),
 // /* 0x000E 0x01 */  MSCRIPT_DONE(),
 // };
 
-// MsgScript
+// Limb Shaking Goron Racer
 static s32 D_80A163DC[4] = { 0x100060E, 0xE020C12, 0x100E0E03, 0xC121000 };
 // MsgScript sMsgScript[] = {
-// /* 0x0000 0x03 */  MSCRIPT_CMD01(0x0009 - 0x0003), //B if Goron
-// /* 0x0003 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E02), 
+// /* 0x0000 0x03 */  MSCRIPT_CMD01(0x0009 - 0x0003), // B if Goron
+// /* 0x0003 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E02),     // Sprint has finally com! I have been waiting for this moment.
 // /* 0x0006 0x01 */  MSCRIPT_AWAIT_TEXT(),
 // /* 0x0007 0x01 */  MSCRIPT_CMD18(),
 // /* 0x0008 0x01 */  MSCRIPT_DONE(),
 
-// /* 0x0009 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E03),
+// /* 0x0009 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E03),     // This year is my debut at the races...Please go easy on me
 // /* 0x000C 0x01 */  MSCRIPT_AWAIT_TEXT(),
 // /* 0x000D 0x01 */  MSCRIPT_CMD18(),
 // /* 0x000E 0x01 */  MSCRIPT_DONE(),
 // };
 
-// MsgScript
+// Side Stretching Goron Racer
 static s32 D_80A163EC[4] = { 0x100060E, 0xE040C12, 0x100E0E05, 0xC121000 };
 // MsgScript sMsgScript[] = {
-// /* 0x0000 0x03 */  MSCRIPT_CMD01(0x0009 - 0x0003), //B if Goron
-// /* 0x0003 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E04),
+// /* 0x0000 0x03 */  MSCRIPT_CMD01(0x0009 - 0x0003),   // B if Goron
+// /* 0x0003 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E04),       // Since it has warmed up... my spirits have lifted!
 // /* 0x0006 0x01 */  MSCRIPT_AWAIT_TEXT(),
 // /* 0x0007 0x01 */  MSCRIPT_CMD18(),
 // /* 0x0008 0x01 */  MSCRIPT_DONE(),
 
-// /* 0x0009 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E05),
+// /* 0x0009 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E05),       // This year, I'm feeling a little different...
 // /* 0x000C 0x01 */  MSCRIPT_AWAIT_TEXT(),
 // /* 0x000D 0x01 */  MSCRIPT_CMD18(),
 // /* 0x000E 0x01 */  MSCRIPT_DONE(),
 // };
 
-// MsgScript
+// Hamstring Stretch Helper (Standing)
 static s32 D_80A163FC[4] = { 0x100060E, 0xE060C12, 0x100E0E07, 0xC121000 };
 // MsgScript sMsgScript[] = {
-// /* 0x0000 0x03 */  MSCRIPT_CMD01(0x0009 - 0x0003), //B if Goron
-// /* 0x0003 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E06),
+// /* 0x0000 0x03 */  MSCRIPT_CMD01(0x0009 - 0x0003),   // B if Goron
+// /* 0x0003 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E06),       // Watch my race!
 // /* 0x0006 0x01 */  MSCRIPT_AWAIT_TEXT(),
 // /* 0x0007 0x01 */  MSCRIPT_CMD18(),
 // /* 0x0008 0x01 */  MSCRIPT_DONE(),
 
-// /* 0x0009 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E07),
+// /* 0x0009 0x03 */  MSCRIPT_BEGIN_TEXT(0x0E07),       // Darmani! Are you entering after all? ...Iguess I'll be last again.
 // /* 0x000C 0x01 */  MSCRIPT_AWAIT_TEXT(),
 // /* 0x000D 0x01 */  MSCRIPT_CMD18(),
 // /* 0x000E 0x01 */  MSCRIPT_DONE(),
@@ -782,15 +792,16 @@ static AnimationInfoS sAnimationInfo[] = {
     { &object_hakugin_demo_Anim_003378, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
-EnGoStruct* func_80A10FD0(EnGoStruct* ptr, Vec3f position, Vec3f acceleration, Vec3f velocity, f32 scale,
-                          f32 deltaScale, s32 arg6) {
+// Sets Steam effect
+EnGoEffect* EnGo_VfxInit_Steam(EnGoEffect* ptr, Vec3f position, Vec3f acceleration, Vec3f velocity, f32 scale,
+                               f32 deltaScale, s32 arg6) {
     s32 i;
 
     for (i = 16; i < 32; i++, ptr++) {
-        if (ptr->unk_00 != 0)
+        if (ptr->vfxType != ENGO_VFX_NONE)
             continue;
 
-        ptr->unk_00 = 7;
+        ptr->vfxType = ENGO_VFX_STEAM;
         ptr->alphaDenom = (Rand_ZeroOne() * (2.0f * (arg6 / 3.0f))) + (arg6 / 3.0f);
         ptr->alphaNumer = ptr->alphaDenom;
         ptr->position = position;
@@ -804,7 +815,7 @@ EnGoStruct* func_80A10FD0(EnGoStruct* ptr, Vec3f position, Vec3f acceleration, V
 }
 
 // Draw Steam (7)
-void EnGo_DrawSteam(EnGoStruct* ptr, PlayState* play2) {
+void EnGo_DrawSteam(EnGoEffect* ptr, PlayState* play2) {
     PlayState* play = play2;
     s32 i;
     s32 flag = false;
@@ -813,7 +824,7 @@ void EnGo_DrawSteam(EnGoStruct* ptr, PlayState* play2) {
     OPEN_DISPS(play->state.gfxCtx);
     func_8012C2DC(play->state.gfxCtx);
     for (i = 0; i < 32; i++, ptr++) {
-        if (ptr->unk_00 != 7)
+        if (ptr->vfxType != ENGO_VFX_STEAM)
             continue;
 
         gDPPipeSync(POLY_XLU_DISP++);
@@ -844,17 +855,15 @@ void EnGo_DrawSteam(EnGoStruct* ptr, PlayState* play2) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-/*
-Called for each element in the first half of the array,
-*/
-void func_80A1143C(EnGoStruct* ptr, Vec3f pos, Vec3f accel, Vec3f vel, f32 scale, f32 deltaScale, s32 arg6, s32 arg7) {
+// Secondary effect, snowball turns to dust
+void func_80A1143C(EnGoEffect* ptr, Vec3f pos, Vec3f accel, Vec3f vel, f32 scale, f32 deltaScale, s32 arg6, s32 arg7) {
     s32 i;
 
     for (i = 16; i < 32; i++, ptr++) {
-        if (ptr->unk_00 != 0)
+        if (ptr->vfxType != ENGO_VFX_NONE)
             continue;
 
-        ptr->unk_00 = arg7 + 4;
+        ptr->vfxType = arg7 + ENGO_VFX_DUST1;
         ptr->alphaDenom = (Rand_ZeroOne() * (2.0f * (arg6 / 3.0f))) + (arg6 / 3.0f);
         ptr->alphaNumer = ptr->alphaDenom;
         ptr->position = pos;
@@ -867,7 +876,7 @@ void func_80A1143C(EnGoStruct* ptr, Vec3f pos, Vec3f accel, Vec3f vel, f32 scale
 }
 
 // Draw Dust (4, 5, 6)
-void EnGo_DrawDust(EnGoStruct* ptr, PlayState* play2) {
+void EnGo_DrawDust(EnGoEffect* ptr, PlayState* play2) {
     static TexturePtr sEnGoDustTexturePtrs[] = {
         gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
     };
@@ -889,7 +898,7 @@ void EnGo_DrawDust(EnGoStruct* ptr, PlayState* play2) {
     OPEN_DISPS(play->state.gfxCtx);
     func_8012C2DC(play->state.gfxCtx);
     for (i = 0; i < 32; i++, ptr++) {
-        if ((ptr->unk_00 < 4) || (ptr->unk_00 >= 7))
+        if ((ptr->vfxType < 4) || (ptr->vfxType >= 7))
             continue;
 
         if (!flag) {
@@ -901,11 +910,11 @@ void EnGo_DrawDust(EnGoStruct* ptr, PlayState* play2) {
         Matrix_Push();
 
         temp = (f32)ptr->alphaNumer / ptr->alphaDenom;
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, sEnGoDustColorPrim[(s32)ptr->unk_00 - 4].r,
-                        sEnGoDustColorPrim[(s32)ptr->unk_00 - 4].g, sEnGoDustColorPrim[(s32)ptr->unk_00 - 4].b,
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, sEnGoDustColorPrim[(s32)ptr->vfxType - 4].r,
+                        sEnGoDustColorPrim[(s32)ptr->vfxType - 4].g, sEnGoDustColorPrim[(s32)ptr->vfxType - 4].b,
                         (u8)(temp * 255));
-        gDPSetEnvColor(POLY_XLU_DISP++, sEnGoDustColorEnv[(s32)ptr->unk_00 - 4].r,
-                       sEnGoDustColorEnv[(s32)ptr->unk_00 - 4].g, sEnGoDustColorEnv[(s32)ptr->unk_00 - 4].b, 0);
+        gDPSetEnvColor(POLY_XLU_DISP++, sEnGoDustColorEnv[(s32)ptr->vfxType - 4].r,
+                       sEnGoDustColorEnv[(s32)ptr->vfxType - 4].g, sEnGoDustColorEnv[(s32)ptr->vfxType - 4].b, 0);
 
         Matrix_Translate(ptr->position.x, ptr->position.y, ptr->position.z, MTXMODE_NEW);
         Matrix_Scale(ptr->scaleXY, ptr->scaleXY, 1.0f, MTXMODE_APPLY);
@@ -922,19 +931,22 @@ void EnGo_DrawDust(EnGoStruct* ptr, PlayState* play2) {
 }
 
 /* Called after Snowball broken sound effect, before goron cold */
-void EnGo_VfxSnowballBreak(EnGoStruct* ptr, Vec3f worldPos) {
+void EnGo_VfxSnowballBreak(EnGoEffect* ptr, Vec3f worldPos) {
     static u8 D_80A1667C[] = {
-        3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2,
+        ENGO_VFX_SNOW3, ENGO_VFX_SNOW1, ENGO_VFX_SNOW1, ENGO_VFX_SNOW2, //
+        ENGO_VFX_SNOW3, ENGO_VFX_SNOW1, ENGO_VFX_SNOW1, ENGO_VFX_SNOW2, //
+        ENGO_VFX_SNOW3, ENGO_VFX_SNOW1, ENGO_VFX_SNOW1, ENGO_VFX_SNOW2, //
+        ENGO_VFX_SNOW3, ENGO_VFX_SNOW1, ENGO_VFX_SNOW1, ENGO_VFX_SNOW2, //
     };
 
-    EnGoStruct* pEnd = &ptr[16];
+    EnGoEffect* pEnd = &ptr[16];
     s32 i;
     Vec3f randRelativeToWorldPos;
     Vec3f randYOneToFour;
     f32 temp_fs0;
 
     for (i = 0; i < 16; i++, ptr++) {
-        if (ptr->unk_00 != 0)
+        if (ptr->vfxType != ENGO_VFX_NONE)
             continue;
 
         ptr->position = worldPos;
@@ -959,7 +971,7 @@ void EnGo_VfxSnowballBreak(EnGoStruct* ptr, Vec3f worldPos) {
         ptr->alphaDenom = ptr->alphaNumer = 1;
 
         // Assign a value of 1, 2, or 3
-        ptr->unk_00 = D_80A1667C[i];
+        ptr->vfxType = D_80A1667C[i];
 
         // Initialize the Paired element
         randRelativeToWorldPos.x = ((Rand_ZeroOne() - 0.5f) * 80.0f) + ptr->position.x;
@@ -974,7 +986,8 @@ void EnGo_VfxSnowballBreak(EnGoStruct* ptr, Vec3f worldPos) {
     }
 }
 
-void func_80A11BF8(EnGoStruct* ptr, f32 arg1) {
+// EnGo_UpdateEffectMovement
+void func_80A11BF8(EnGoEffect* ptr, f32 arg1) {
     f32 test;
     f32 test2;
     f32 x;
@@ -990,7 +1003,7 @@ void func_80A11BF8(EnGoStruct* ptr, f32 arg1) {
     if (ptr->position.y < arg1) {
         ptr->position.y = arg1;
 
-        ptr->unk_00 = 4;
+        ptr->vfxType = 4;
         ptr->alphaDenom = (Rand_ZeroOne() * 8.0f) + 4.0f;
         ptr->alphaNumer = ptr->alphaDenom;
 
@@ -1020,14 +1033,14 @@ void func_80A11BF8(EnGoStruct* ptr, f32 arg1) {
 }
 
 // Draw snowball (1, 2, or 3)
-void EnGo_DrawSnow(EnGoStruct* ptr, PlayState* play, Gfx* arg2, Gfx* arg3, u8 arg4) {
+void EnGo_DrawSnow(EnGoEffect* ptr, PlayState* play, Gfx* arg2, Gfx* arg3, u8 arg4) {
     s32 i;
     u8 flag = false;
 
     OPEN_DISPS(play->state.gfxCtx);
     func_8012C28C(play->state.gfxCtx);
     for (i = 0; i < 16; i++, ptr++) {
-        if (ptr->unk_00 != arg4)
+        if (ptr->vfxType != arg4)
             continue;
 
         if (!flag) {
@@ -1051,17 +1064,18 @@ void EnGo_DrawSnow(EnGoStruct* ptr, PlayState* play, Gfx* arg2, Gfx* arg3, u8 ar
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80A1203C(EnGo* this) {
-    EnGoStruct* ptr = this->unk_3F8;
+void EnGo_UpdateEffects(EnGo* this) {
+    EnGoEffect* ptr = this->effectTable;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_3F8); i++, ptr++) {
-        if (ptr->unk_00 == 0)
+    for (i = 0; i < ARRAY_COUNT(this->effectTable); i++, ptr++) {
+        if (ptr->vfxType == ENGO_VFX_NONE)
             continue;
 
         if (ptr->alphaNumer == 0) {
-            ptr->unk_00 = 0;
-        } else if ((ptr->unk_00 > 0) && (ptr->unk_00 < 4)) {
+            ptr->vfxType = ENGO_VFX_NONE;
+        } else if ((ptr->vfxType > ENGO_VFX_NONE) && (ptr->vfxType < ENGO_VFX_DUST1)) {
+
             func_80A11BF8(ptr, this->actor.world.pos.y);
         } else {
             ptr->position.x += ptr->velocity.x;
@@ -1080,11 +1094,14 @@ void func_80A1203C(EnGo* this) {
 
 // Draw Effects (1,2,3 = Snowball, 4,5,6 = Dust, 7 = Steam)
 void EnGo_DrawVfx(EnGo* this, PlayState* play) {
-    EnGo_DrawSnow(this->unk_3F8, play, gGoronLargeSnowballFragmentMaterialDL, gGoronLargeSnowballFragmentModelDL, 1);
-    EnGo_DrawSnow(this->unk_3F8, play, gGoronMediumSnowballFragmentMaterialDL, gGoronMediumSnowballFragmentModelDL, 2);
-    EnGo_DrawSnow(this->unk_3F8, play, gGoronSmallSnowballFragmentMaterialDL, gGoronSmallSnowballFragmentModelDL, 3);
-    EnGo_DrawSteam(this->unk_3F8, play);
-    EnGo_DrawDust(this->unk_3F8, play);
+    EnGo_DrawSnow(this->effectTable, play, gGoronLargeSnowballFragmentMaterialDL, gGoronLargeSnowballFragmentModelDL,
+                  1);
+    EnGo_DrawSnow(this->effectTable, play, gGoronMediumSnowballFragmentMaterialDL, gGoronMediumSnowballFragmentModelDL,
+                  2);
+    EnGo_DrawSnow(this->effectTable, play, gGoronSmallSnowballFragmentMaterialDL, gGoronSmallSnowballFragmentModelDL,
+                  3);
+    EnGo_DrawSteam(this->effectTable, play);
+    EnGo_DrawDust(this->effectTable, play);
 }
 
 s32 func_80A121F4(PlayState* play) {
@@ -1112,19 +1129,19 @@ s32 EnGo_IsEnteringSleep(EnGo* this, PlayState* play) {
 }
 
 s32 func_80A122EC(EnGo* this) {
-    static Vec3f D_80A1668C = { 0.0f, 100.0f, 160.0f };
+    static Vec3f sPowderKegSellerPos = { 0.0f, 100.0f, 160.0f };
     s32 pad;
-    f32 sp20 = 58.0f;
+    f32 yAxisOffset = 58.0f;
 
-    if (ENGO_GET_F(&this->actor) == ENGO_F_8) {
-        Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80A1668C,
+    if (ENGO_GET_F(&this->actor) == ENGO_PKEG_SELLER) {
+        Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &sPowderKegSellerPos,
                                       &this->actor.focus.pos);
     } else {
-        if ((this->flags & ENGO_FLAG_CURLED) || (this->flags & 0x100)) {
-            sp20 = this->actor.shape.yOffset;
+        if ((this->flags & ENGO_FLAG_CURLED) || (this->flags & ENGO_FLAG_SNOWBALLED)) {
+            yAxisOffset = this->actor.shape.yOffset;
         }
         Math_Vec3f_Copy(&this->actor.focus.pos, &this->actor.world.pos);
-        this->actor.focus.pos.y += sp20;
+        this->actor.focus.pos.y += yAxisOffset;
     }
 
     this->actor.focus.rot.x = this->actor.world.rot.x;
@@ -1133,7 +1150,7 @@ s32 func_80A122EC(EnGo* this) {
     return false;
 }
 
-void func_80A123A0(EnGo* this, PlayState* play) {
+void EnGo_UpdateColliders_Snowball(EnGo* this, PlayState* play) {
     Vec3f sp2C;
 
     Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
@@ -1155,21 +1172,21 @@ void func_80A123A0(EnGo* this, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderSphere.base);
 }
 
-void func_80A124A0(EnGo* this, PlayState* play) {
+void EnGo_UpdateColliders_PkSeller(EnGo* this, PlayState* play) {
     this->colliderSphere.dim.worldSphere.radius =
         this->colliderSphere.dim.modelSphere.radius * this->colliderSphere.dim.scale;
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderSphere.base);
 }
 
-void func_80A124FC(EnGo* this, PlayState* play) {
-    Vec3f sp1C;
+void EnGo_UpdateColliders_Curled(EnGo* this, PlayState* play) {
+    Vec3f worldPos;
 
-    Math_Vec3f_Copy(&sp1C, &this->actor.world.pos);
+    Math_Vec3f_Copy(&worldPos, &this->actor.world.pos);
 
-    this->colliderSphere.dim.worldSphere.center.x = sp1C.x;
-    this->colliderSphere.dim.worldSphere.center.y = sp1C.y;
+    this->colliderSphere.dim.worldSphere.center.x = worldPos.x;
+    this->colliderSphere.dim.worldSphere.center.y = worldPos.y;
     this->colliderSphere.dim.worldSphere.center.y += (s16)this->actor.shape.yOffset;
-    this->colliderSphere.dim.worldSphere.center.z = sp1C.z;
+    this->colliderSphere.dim.worldSphere.center.z = worldPos.z;
 
     this->colliderSphere.dim.modelSphere.radius = 20;
     this->colliderSphere.dim.worldSphere.radius =
@@ -1178,7 +1195,7 @@ void func_80A124FC(EnGo* this, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderSphere.base);
 }
 
-void func_80A125BC(EnGo* this, PlayState* play) {
+void EnGo_UpdateCollider_Frozen(EnGo* this, PlayState* play) {
     s32 pad;
 
     Math_Vec3f_ToVec3s(&this->colliderCylinder.dim.pos, &this->actor.world.pos);
@@ -1186,49 +1203,48 @@ void func_80A125BC(EnGo* this, PlayState* play) {
     this->colliderCylinder.dim.radius = 46;
     this->colliderCylinder.dim.height = 78;
 
-    if (this->unk_3C6 == 0) {
+    if (this->harmlessTimer == 0) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->colliderCylinder.base);
     }
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderCylinder.base);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderCylinder.base);
 }
 
-void func_80A12660(EnGo* this, PlayState* play) {
+void EnGo_UpdateCollider_Default(EnGo* this, PlayState* play) {
     Math_Vec3f_ToVec3s(&this->colliderCylinder.dim.pos, &this->actor.world.pos);
     this->colliderCylinder.dim.radius = 24;
     this->colliderCylinder.dim.height = 62;
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderCylinder.base);
 }
 
-void func_80A126BC(EnGo* this, PlayState* play) {
+void EnGo_UpdateColliders(EnGo* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags2 & 0x4000)) {
-        if (this->unk_3C6 != 0) {
-            this->unk_3C6--;
-        }
+    if (!(player->stateFlags2 & ENGO_FLAG_CURLING)) {
+        DECR(this->harmlessTimer);
     }
 
-    if (ENGO_GET_F(&this->actor) == ENGO_F_8) {
-        func_80A124A0(this, play);
-    } else if (this->flags & 0x100) {
-        func_80A123A0(this, play);
+    if (ENGO_GET_F(&this->actor) == ENGO_PKEG_SELLER) {
+        EnGo_UpdateColliders_PkSeller(this, play);
+    } else if (this->flags & ENGO_FLAG_SNOWBALLED) {
+        EnGo_UpdateColliders_Snowball(this, play);
     } else if (this->flags & ENGO_FLAG_CURLED) {
-        func_80A124FC(this, play);
+        EnGo_UpdateColliders_Curled(this, play);
     } else if (this->flags & ENGO_FLAG_FROZEN) {
-        func_80A125BC(this, play);
+        EnGo_UpdateCollider_Frozen(this, play);
     } else {
-        func_80A12660(this, play);
+        EnGo_UpdateCollider_Default(this, play);
     }
 }
 
+// Interrupt current Action to talk.
 s32 func_80A12774(EnGo* this, PlayState* play) {
     if (!(this->flags & 7) || !Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         return false;
     }
 
-    if ((ENGO_GET_F(&this->actor) != ENGO_F_8) && //
-        (ENGO_GET_F(&this->actor) != ENGO_F_1)) {
+    if ((ENGO_GET_F(&this->actor) != ENGO_PKEG_SELLER) && //
+        (ENGO_GET_F(&this->actor) != ENGO_RACER)) {
         if (!(this->flags & ENGO_FLAG_CURLED)) {
             this->flags |= 8;
         }
@@ -1250,41 +1266,42 @@ s32 func_80A12774(EnGo* this, PlayState* play) {
     return true;
 }
 
-s32 func_80A12868(EnGo* this, PlayState* play) {
-    this->flags &= ~0x800;
-    this->flags &= ~0x1000;
-    this->flags &= ~0x2000;
+s32 EnGo_DetectCollisions(EnGo* this, PlayState* play) {
+    this->flags &= ~ENGO_FLAG_HIT_OTHER;
+    this->flags &= ~ENGO_FLAG_HIT_BY_OTHER;
+    this->flags &= ~ENGO_FLAG_HIT_OBJ;
 
     if ((this->colliderCylinder.base.atFlags & AT_HIT) || (this->colliderSphere.base.atFlags & AT_HIT)) {
         this->colliderCylinder.base.atFlags &= ~AT_HIT;
         this->colliderSphere.base.atFlags &= ~AT_HIT;
-        this->flags |= 0x800;
-        this->unk_3C6 = 0x28;
+        this->flags |= ENGO_FLAG_HIT_OTHER;
+        this->harmlessTimer = 40;
     }
 
     if ((this->colliderCylinder.base.acFlags & AC_HIT) || (this->colliderSphere.base.acFlags & AC_HIT)) {
         this->colliderCylinder.base.acFlags &= ~AC_HIT;
         this->colliderSphere.base.acFlags &= ~AC_HIT;
-        this->flags |= 0x1000;
+        this->flags |= ENGO_FLAG_HIT_BY_OTHER;
     }
 
     if ((this->colliderCylinder.base.ocFlags1 & OC1_HIT) || (this->colliderSphere.base.ocFlags1 & OC1_HIT)) {
         this->colliderCylinder.base.ocFlags1 &= ~OC1_HIT;
         this->colliderSphere.base.ocFlags1 &= ~OC1_HIT;
-        this->flags |= 0x2000;
+        this->flags |= ENGO_FLAG_HIT_OBJ;
     }
 
     return false;
 }
 
 s32 func_80A12954(EnGo* this, PlayState* play) {
-    if ((ENGO_GET_F(&this->actor) == ENGO_F_4) && (play->csCtx.state != 0) && (this->actor.draw != NULL) &&
-        (play->sceneNum == SCENE_10YUKIYAMANOMURA2) && // Snow Mountain Village
-        (gSaveContext.sceneSetupIndex == 1) && (play->csCtx.currentCsIndex == 0)) {
+    const u8 CS_ACTION_INVALID = 255;
 
+    if ((ENGO_GET_F(&this->actor) == ENGO_BROTHER) && (play->csCtx.state != 0) && (this->actor.draw != NULL) &&
+        (play->sceneNum == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneSetupIndex == 1) &&
+        (play->csCtx.currentCsIndex == 0)) {
         if (this->unk_3F0 == 0) {
             this->actor.flags &= ~ACTOR_FLAG_1;
-            this->unk_394 = 255;
+            this->currentCsAction = CS_ACTION_INVALID;
             this->unk_3F0 = 1;
             this->priorActionFn = this->actionFunc;
         }
@@ -1292,7 +1309,7 @@ s32 func_80A12954(EnGo* this, PlayState* play) {
         this->actionFunc = func_ACT_80A14FC8;
     } else if (this->unk_3F0 != 0) {
         this->actor.flags |= ACTOR_FLAG_1;
-        this->unk_394 = 255;
+        this->currentCsAction = CS_ACTION_INVALID;
         this->unk_3F0 = 0;
         SubS_UpdateFlags(&this->flags, 3, 7);
         this->actionFunc = this->priorActionFn;
@@ -1301,16 +1318,16 @@ s32 func_80A12954(EnGo* this, PlayState* play) {
     return false;
 }
 
-s32 func_80A12A64(EnGo* this, PlayState* play) {
+s32 EnGo_HandleAnimation(EnGo* this, PlayState* play) {
     s8 objIdx = this->actor.objBankIndex;
     s8 objIdx2 = -1;
     s32 ret = 0;
 
-    if ((this->anim >= 18) && (this->indexHakuginDemo >= 0)) {
+    if ((this->anim >= ENGO_ANIM_HAKUGIN_START) && (this->indexHakuginDemo >= 0)) {
         objIdx2 = this->indexHakuginDemo;
-    } else if ((this->anim >= 10) && (this->indexTaisou >= 0)) {
+    } else if ((this->anim >= ENGO_ANIM_TAISOU_START) && (this->indexTaisou >= 0)) {
         objIdx2 = this->indexTaisou;
-    } else if (this->anim < 10) {
+    } else if (this->anim < ENGO_ANIM_TAISOU_START) {
         objIdx2 = this->actor.objBankIndex;
     }
 
@@ -1325,7 +1342,7 @@ s32 func_80A12A64(EnGo* this, PlayState* play) {
 }
 
 // Plays Rolling/Unrolling Sitting/Standing sounds.
-s32 func_80A12B78(EnGo* this, PlayState* play) {
+s32 EnGo_HandleSfx(EnGo* this, PlayState* play) {
     if (play->csCtx.state == 0) {
         if (this->anim == ENGO_ANIM_ROLL) {
             if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
@@ -1350,7 +1367,7 @@ s32 func_80A12B78(EnGo* this, PlayState* play) {
 
 // Change the animation to the arg2 value (save as anim)
 // EnGo_ChangeAnimation
-s32 func_80A12C48(EnGo* this, PlayState* play, EnGoAnimationIndex anim) {
+s32 EnGo_ChangeAnimation(EnGo* this, PlayState* play, EnGoAnimationIndex anim) {
     s8 objIdx = this->actor.objBankIndex;
     s8 objIdx2 = -1;
     s32 ret = false;
@@ -1387,10 +1404,10 @@ void EnGo_HandleBlink(EnGo* this) {
 // Changes Animation from ? to ShiveringSurprised to Shivering
 void func_80A12DF4(EnGo* this, PlayState* play) {
     if (this->unk_3D4 == 0) {
-        func_80A12C48(this, play, ENGO_ANIM_SHIVERINGSURPRISED);
+        EnGo_ChangeAnimation(this, play, ENGO_ANIM_SHIVERINGSURPRISED);
         this->unk_3D4++;
     } else if ((this->unk_3D4 == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        func_80A12C48(this, play, ENGO_ANIM_SHIVER_IMM);
+        EnGo_ChangeAnimation(this, play, ENGO_ANIM_SHIVER_IMM);
         this->unk_3D4++;
     }
 }
@@ -1400,7 +1417,7 @@ s32 func_80A12E80(EnGo* this, PlayState* play) {
     u16 textId = play->msgCtx.currentTextId;
     Player* player = GET_PLAYER(play);
 
-    if (ENGO_GET_F(&this->actor) != ENGO_F_4) {
+    if (ENGO_GET_F(&this->actor) != ENGO_BROTHER) {
         return false;
     }
 
@@ -1442,7 +1459,7 @@ s32 func_80A12E80(EnGo* this, PlayState* play) {
         this->unk_3F4 = 0;
         this->dialogActionFn = NULL;
         this->lastTextId = 0;
-        func_80A12C48(this, play, ENGO_ANIM_SHIVER);
+        EnGo_ChangeAnimation(this, play, ENGO_ANIM_SHIVER);
         this->flags &= ~8;
     }
 
@@ -1453,7 +1470,7 @@ s32 func_80A12E80(EnGo* this, PlayState* play) {
     return false;
 }
 
-// Move Towards Player?
+// Focus on Actor
 s32 func_80A12FE8(EnGo* this, PlayState* play) {
     s32 pad;
     Vec3f targetActorPos;
@@ -1489,6 +1506,7 @@ s32 func_80A12FE8(EnGo* this, PlayState* play) {
     return false;
 }
 
+// Handle Dialog + something else
 s32 func_80A131F8(EnGo* this, PlayState* play) {
     if (this->unk_3F4 == 0) {
         this->targetActor = &GET_PLAYER(play)->actor;
@@ -1499,7 +1517,7 @@ s32 func_80A131F8(EnGo* this, PlayState* play) {
     if (this->flags & 0x08) {
         this->flags &= ~0x40;
         this->flags |= 0x10;
-        func_80A12FE8(this, play); // Moving Towards Player?
+        func_80A12FE8(this, play);
     } else if (this->flags & 0x10) {
         this->flags &= ~0x10;
         this->unk_3B0 = 0;
@@ -1520,16 +1538,15 @@ void func_80A132C8(EnGo* this, PlayState* play) {
     s16 temp_v1 = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
 
     if ((fabsf(this->actor.playerHeightRel) > 20.0f) || (this->actor.xzDistToPlayer > 300.0f)) {
-        // Break off conversation if distances are too great?
-        SubS_UpdateFlags(&this->flags, 3, 7); // |= 0x08 &= ~0x80
+        SubS_UpdateFlags(&this->flags, 3, 7); // |= 0x08 &= ~ENGO_FLAG_FOCUSING
     } else if ((player->transformation != PLAYER_FORM_GORON) || (ABS_ALT(temp_v1) >= 0x1C70) ||
                (gSaveContext.save.weekEventReg[FROZBRO] & FROZBRO_MET_DARMANI) ||
                (gSaveContext.save.weekEventReg[FROZBRO] & FROZBRO_THAWED)) {
         // Change Flags if not goron or yaw too great or certain events are set.
-        SubS_UpdateFlags(&this->flags, 3, 7); // |= 0x08 &= ~0x80
+        SubS_UpdateFlags(&this->flags, 3, 7); // |= 0x08 &= ~ENGO_FLAG_FOCUSING
     } else {
         // Change OTHER flags
-        SubS_UpdateFlags(&this->flags, 4, 7); // |= 0x10 &= ~0x80
+        SubS_UpdateFlags(&this->flags, 4, 7); // |= 0x10 &= ~ENGO_FLAG_FOCUSING
     }
 }
 
@@ -1541,6 +1558,7 @@ void func_80A133A8(EnGo* this, PlayState* play) {
     }
 }
 
+// EnGo_FindGoronBrother
 Actor* func_80A13400(EnGo* this, PlayState* play) {
     Actor* actor;
     Actor* retActor = NULL;
@@ -1549,7 +1567,8 @@ Actor* func_80A13400(EnGo* this, PlayState* play) {
         actor = SubS_FindActor(play, retActor, ACTORCAT_NPC, ACTOR_EN_GO);
         retActor = actor;
 
-        if ((actor != NULL) && ((EnGo*)actor != this) && (ENGO_GET_F(actor) == ENGO_F_4) &&
+        if ((actor != NULL) && ((EnGo*)actor != this) && //
+            (ENGO_GET_F(actor) == ENGO_BROTHER) &&       //
             (ENGO_GET_70(actor) == ENGO_70_0)) {
             return retActor;
         }
@@ -1649,7 +1668,7 @@ void func_80A13728(EnGo* this, PlayState* play) {
     EffectSsBlast_SpawnWhiteShockwave(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f);
 }
 
-void EnGo_DrawIceBlockIfFrozen(EnGo* this, PlayState* play, f32 arg2, f32 arg3) {
+void EnGo_DrawIceBlockIfFrozen(EnGo* this, PlayState* play, f32 scale, f32 alpha) {
     u32 frames1;
     u32 frames2;
 
@@ -1661,7 +1680,7 @@ void EnGo_DrawIceBlockIfFrozen(EnGo* this, PlayState* play, f32 arg2, f32 arg3) 
         func_8012C2DC(play->state.gfxCtx);
 
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-        Matrix_Scale(arg2 * 0.7f, arg2 * 0.8f, arg2, MTXMODE_APPLY);
+        Matrix_Scale(scale * 0.7f, scale * 0.8f, scale, MTXMODE_APPLY);
         func_800B8118(&this->actor, play, 0);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1669,7 +1688,7 @@ void EnGo_DrawIceBlockIfFrozen(EnGo* this, PlayState* play, f32 arg2, f32 arg3) 
         frames2 = (play->gameplayFrames * 2) % 256;
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, frames1, 0x20, 0x10, 1, 0, frames2, 0x40, 0x20));
-        gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, (u8)arg3);
+        gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, (u8)alpha);
         gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment3DL);
 
         CLOSE_DISPS(play->state.gfxCtx);
@@ -1678,8 +1697,7 @@ void EnGo_DrawIceBlockIfFrozen(EnGo* this, PlayState* play, f32 arg2, f32 arg3) 
     }
 }
 
-// EnGo_IceMeltEffects
-void func_80A139E4(EnGo* this) {
+void EnGo_MakeSteamEffect(EnGo* this) {
     static Vec3f accel = { 0.0f, 0.06f, 0.0f };
     Vec3f tempPos;
     Vec3f pos;
@@ -1690,7 +1708,7 @@ void func_80A139E4(EnGo* this) {
     Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, rotAngle, &tempPos, &pos);
     pos.y = (Rand_ZeroOne() * 10.0f) + 4.0f;
     pos.y += this->actor.floorHeight;
-    func_80A10FD0(&this->unk_3F8[16], pos, accel, gZeroVec3f, 0.01f, 0.002f, 16);
+    EnGo_VfxInit_Steam(&this->effectTable[16], pos, accel, gZeroVec3f, 0.01f, 0.002f, 16);
 }
 
 // EnGo_GoronGateKeeperCallback
@@ -1735,7 +1753,7 @@ s32 EnGo_MsgCB_GoronGateKeeper(Actor* thisx, PlayState* play) {
 
     switch (this->animState) {
         case 1:
-            func_80A12C48(this, play, ENGO_ANIM_ROLL);
+            EnGo_ChangeAnimation(this, play, ENGO_ANIM_ROLL);
             this->flags |= ENGO_FLAG_CURLING;
             this->animState++;
             break;
@@ -1743,7 +1761,7 @@ s32 EnGo_MsgCB_GoronGateKeeper(Actor* thisx, PlayState* play) {
         case 2:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 this->flags &= ~ENGO_FLAG_CURLING;
-                this->flags &= ~0x80;
+                this->flags &= ~ENGO_FLAG_FOCUSING;
                 this->flags |= ENGO_FLAG_CURLED;
                 this->animState++;
                 this->delayTimer = 0;
@@ -1774,10 +1792,10 @@ s32 EnGo_MsgCB_GoronGateKeeper(Actor* thisx, PlayState* play) {
         case 5:
             this->delayTimer++;
             if (this->delayTimer >= 10) {
-                func_80A12C48(this, play, ENGO_ANIM_SHIVER);
+                EnGo_ChangeAnimation(this, play, ENGO_ANIM_SHIVER);
                 this->actor.shape.rot.x = 0;
                 this->flags &= ~ENGO_FLAG_CURLED;
-                this->flags |= 0x80;
+                this->flags |= ENGO_FLAG_FOCUSING;
                 this->animState++;
             }
             break;
@@ -1828,7 +1846,7 @@ s32 func_CB_80A13E80(Actor* thisx, PlayState* play) {
             break;
 
         case 1:
-            func_80A12C48(this, play, ENGO_ANIM_DROPKEG);
+            EnGo_ChangeAnimation(this, play, ENGO_ANIM_DROPKEG);
             this->cutsceneState++;
 
         case 2:
@@ -1837,7 +1855,7 @@ s32 func_CB_80A13E80(Actor* thisx, PlayState* play) {
             }
 
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                func_80A12C48(this, play, ENGO_ANIM_LYINGDOWNIDLE_IMM);
+                EnGo_ChangeAnimation(this, play, ENGO_ANIM_LYINGDOWNIDLE_IMM);
                 Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80A166A4,
                                               &bombSpawnPos);
                 gSaveContext.powderKegTimer = 2400;
@@ -1864,11 +1882,14 @@ s32 func_CB_80A13E80(Actor* thisx, PlayState* play) {
     return ret;
 }
 
-// EnGo_ChangeGymnasticsAnimation
-void func_80A14018(EnGo* this, PlayState* play) {
+void EnGo_SetRacerAnimation(EnGo* this, PlayState* play) {
     static Vec3f D_80A166B0 = { 0.0f, 0.0f, 40.0f };
-    static s32 D_80A166BC[] = { ENGO_ANIM_TAISOU_11, ENGO_ANIM_TAISOU_10, ENGO_ANIM_TAISOU_12,
-                                ENGO_ANIM_TAISOU_13, ENGO_ANIM_TAISOU_14, ENGO_ANIM_TAISOU_17 };
+    static s32 D_80A166BC[] = { ENGO_ANIM_TAISOU_11,   //
+                                ENGO_ANIM_TAISOU_10,   //
+                                ENGO_ANIM_TAISOU_12,   //
+                                ENGO_ANIM_TAISOU_13,   //
+                                ENGO_ANIM_TAISOU_14,   //
+                                ENGO_ANIM_TAISOU_17 }; //
     Vec3f sp2C;
     s32 phi_v0 = ENGO_GET_70(&this->actor) % 6;
 
@@ -1876,7 +1897,7 @@ void func_80A14018(EnGo* this, PlayState* play) {
         phi_v0 = ((gSaveContext.eventInf[2] & 0xF) + phi_v0) % 4;
     }
 
-    func_80A12C48(this, play, D_80A166BC[phi_v0]);
+    EnGo_ChangeAnimation(this, play, D_80A166BC[phi_v0]);
 
     if (this->anim == ENGO_ANIM_TAISOU_14) {
         Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80A166B0, &sp2C);
@@ -1890,12 +1911,13 @@ void func_80A14018(EnGo* this, PlayState* play) {
     this->actor.gravity = 0.0f;
 }
 
-// EnGo_ChangeGymnasticsAnimation2
-void func_80A14104(EnGo* this, PlayState* play) {
-    static s32 D_80A166D4[] = { ENGO_ANIM_TAISOU_15, ENGO_ANIM_TAISOU_16 };
+void EnGo_SetSpectatorAnimation(EnGo* this, PlayState* play) {
+    static s32 D_80A166D4[] = {
+        ENGO_ANIM_TAISOU_15, ENGO_ANIM_TAISOU_16
+    }; // One of these is hands up cheering, one is clutched infront of face
     s16 animFrame;
 
-    func_80A12C48(this, play, D_80A166D4[ENGO_GET_70(&this->actor) % 2]);
+    EnGo_ChangeAnimation(this, play, D_80A166D4[ENGO_GET_70(&this->actor) % 2]);
     // Randomize the starting position of the animation
     animFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
     this->skelAnime.curFrame = animFrame;
@@ -1909,18 +1931,19 @@ void func_80A14104(EnGo* this, PlayState* play) {
     this->actor.gravity = 0.0f;
 }
 
+// EnGo_SetAsFrozen
 void func_80A141D4(EnGo* this, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit1);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->anim = -1;
-    func_80A12C48(this, play, 5);
+    EnGo_ChangeAnimation(this, play, ENGO_ANIM_SHIVER);
     this->sleepState = ENGO_AWAKE;
-    this->unk_39C = (this->scale / 0.01f) * 0.9f;
+    this->iceBlockScale = (this->scale / 0.01f) * 0.9f;
     this->indexEyeTex = ENGO_EYE_CLOSED;
     this->flags = ENGO_FLAG_NONE;
     this->flags |= 0x40;
     this->flags |= ENGO_FLAG_FROZEN;
-    this->unk_3A0 = 100.0f;
+    this->iceBlockAlpha = 100.0f;
 }
 
 // Called from Gatekeepr's Setup function
@@ -1943,8 +1966,8 @@ void func_80A1428C(EnGo* this, PlayState* play) {
     this->actor.gravity = -1.0f;
 }
 
-void func_80A14324(EnGo* this, PlayState* play) {
-    func_80A12C48(this, play, ENGO_ANIM_COVEREARS);
+void EnGo_SetCoverEarsAnimation(EnGo* this, PlayState* play) {
+    EnGo_ChangeAnimation(this, play, ENGO_ANIM_COVEREARS);
     Actor_SetScale(&this->actor, this->scale);
     this->flags = ENGO_FLAG_NONE;
     this->actor.gravity = -1.0f;
@@ -1953,12 +1976,12 @@ void func_80A14324(EnGo* this, PlayState* play) {
     this->flags |= 0x40;
     this->blinkCountdown = 0;
     this->indexEyeTex = ENGO_EYE_CLOSED2;
-    this->unk_39C = 0.0f;
-    this->unk_3A0 = 0.0f;
+    this->iceBlockScale = 0.0f;
+    this->iceBlockAlpha = 0.0f;
 }
 
-void func_80A143A8(EnGo* this, PlayState* play) {
-    func_80A12C48(this, play, ENGO_ANIM_SHIVER);
+void EnGo_SetShiverAnimation(EnGo* this, PlayState* play) {
+    EnGo_ChangeAnimation(this, play, ENGO_ANIM_SHIVER);
     Actor_SetScale(&this->actor, this->scale);
     this->flags = ENGO_FLAG_NONE;
     this->actor.gravity = -1.0f;
@@ -1968,49 +1991,50 @@ void func_80A143A8(EnGo* this, PlayState* play) {
     this->flags |= ENGO_FLAG_BLINKING;
     this->blinkCountdown = 0;
     this->indexEyeTex = ENGO_EYE_OPEN;
-    this->unk_39C = 0.0f;
-    this->unk_3A0 = 0.0f;
+    this->iceBlockScale = 0.0f;
+    this->iceBlockAlpha = 0.0f;
 }
 
-void func_80A14430(EnGo* this, PlayState* play) {
+// Setup Function for the Goron Racers
+//
+void EnGo_Racer_Setup(EnGo* this, PlayState* play) {
     if (((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 0)) ||
          (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 2))) &&
         (gSaveContext.save.weekEventReg[33] & 0x80)) {
-        func_80A14018(this, play); // EnGo_ChangeGymnasticsAnimation
-        this->actionFunc = func_ACT_80A149B0;
+        EnGo_SetRacerAnimation(this, play);
+        this->actionFunc = EnGo_Idle;
     } else {
         Actor_MarkForDeath(&this->actor);
     }
 }
 
-void func_80A1449C(EnGo* this, PlayState* play) {
+void EnGo_Spectator_Setup(EnGo* this, PlayState* play) {
     if ((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1)) ||
         (gSaveContext.save.entrance == ENTRANCE(CUTSCENE, 0))) {
-        func_80A14104(this, play); // EnGo_ChangeGymnasticsAnimation2
-        this->actionFunc = func_ACT_80A149B0;
+        EnGo_SetSpectatorAnimation(this, play);
+        this->actionFunc = EnGo_Idle;
     } else {
         Actor_MarkForDeath(&this->actor);
     }
 }
 
-// Gatekeeper's setup function
-void func_80A144F4(EnGo* this, PlayState* play) {
+void EnGo_GateKeeper_Setup(EnGo* this, PlayState* play) {
     if (gSaveContext.save.day >= 2) {
         this->path = SubS_GetDayDependentPath(play, ENGO_GET_7F80(&this->actor), 0xFF, &this->indexPathPoint);
         if (this->path != NULL) {
             this->indexPathPoint = 1;
         }
         func_80A1428C(this, play);
-        this->actionFunc = func_ACT_80A153FC;
+        this->actionFunc = EnGo_Snowballing;
         this->msgEventCb = EnGo_MsgCB_GoronGateKeeper;
     } else {
-        func_80A143A8(this, play);
-        this->actionFunc = func_ACT_80A149B0;
+        EnGo_SetShiverAnimation(this, play);
+        this->actionFunc = EnGo_Idle;
         this->msgEventCb = EnGo_MsgCB_GoronGateKeeper;
     }
 }
 
-void func_80A145AC(EnGo* this, PlayState* play) {
+void EnGo_Brother_Setup(EnGo* this, PlayState* play) {
 
     if ((ENGO_GET_70(&this->actor) == ENGO_70_1) &&
         (((play->sceneNum == SCENE_10YUKIYAMANOMURA2) && /* Snow Mountain Village */
@@ -2021,25 +2045,24 @@ void func_80A145AC(EnGo* this, PlayState* play) {
         func_80A141D4(this, play);
         this->actionFunc = func_ACT_80A14E14;
     } else {
-        func_80A143A8(this, play);
-        this->actionFunc = func_ACT_80A149B0;
+        EnGo_SetShiverAnimation(this, play);
+        this->actionFunc = EnGo_Idle;
     }
 }
 
-void func_80A14668(EnGo* this, PlayState* play) {
+void EnGo_ShrineGoron_Setup(EnGo* this, PlayState* play) {
     if (!(gSaveContext.save.weekEventReg[ELDERS_SON] & ELDERS_SON_DONE_CRYING)) {
-        func_80A14324(this, play); // Cover Ears
-        this->actionFunc = func_ACT_80A149B0;
+        EnGo_SetCoverEarsAnimation(this, play); // Cover Ears
+        this->actionFunc = EnGo_Idle;
     } else {
-        func_80A143A8(this, play); // Shiver
-        this->actionFunc = func_ACT_80A149B0;
+        EnGo_SetShiverAnimation(this, play); // Shiver
+        this->actionFunc = EnGo_Idle;
     }
 }
 
-// EnGo_SetupGivePowderKeg
-void func_80A146CC(EnGo* this, PlayState* play) {
+void EnGo_PKegSeller_Setup(EnGo* this, PlayState* play) {
     func_80A134B0(this, play, 0);
-    func_80A12C48(this, play, 0);
+    EnGo_ChangeAnimation(this, play, 0);
     this->scale *= 5.0f;
     Actor_SetScale(&this->actor, this->scale);
     this->actor.flags &= ~ACTOR_FLAG_1;
@@ -2050,61 +2073,61 @@ void func_80A146CC(EnGo* this, PlayState* play) {
     this->flags |= 0x40;
     this->flags |= ENGO_FLAG_BLINKING;
     this->msgEventCb = func_CB_80A13E80; // Powder Keg Salesman Callback
-    this->actionFunc = func_ACT_80A149B0;
+    this->actionFunc = EnGo_Idle;
 }
 
 // Initial Action Function
-void func_ACT_80A14798(EnGo* this, PlayState* play) {
+void EnGo_Setup(EnGo* this, PlayState* play) {
     EffectTireMarkInit tireMarkInit = {
         0,
         62,
         { 0, 0, 15, 100 },
     };
 
-    if ((this->indexTaisou < 0) || SubS_IsObjectLoaded(this->indexTaisou, play) || (this->indexHakuginDemo < 0) ||
-        SubS_IsObjectLoaded(this->indexHakuginDemo, play)) {
+    if (((this->indexTaisou < 0) || SubS_IsObjectLoaded(this->indexTaisou, play)) ||
+        ((this->indexHakuginDemo < 0) || SubS_IsObjectLoaded(this->indexHakuginDemo, play))) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
                            GORON_LIMB_MAX);
 
         this->anim = ENGO_ANIM_INVALID;
-        func_80A12C48(this, play, ENGO_ANIM_UNROLL);
+        EnGo_ChangeAnimation(this, play, ENGO_ANIM_UNROLL);
         this->actor.draw = EnGo_Draw;
 
         Collider_InitAndSetSphere(play, &this->colliderSphere, &this->actor, &sSphereInit);
         Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit2);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-        Effect_Add(play, &this->unk_3E8, EFFECT_TIRE_MARK, 0, 0, &tireMarkInit);
+        Effect_Add(play, &this->indexEffect, EFFECT_TIRE_MARK, 0, 0, &tireMarkInit);
 
         this->actor.targetMode = 1;
         this->scale = 0.01f;
         this->msgEventCb = NULL;
 
         switch (ENGO_GET_F(&this->actor)) {
-            case ENGO_F_1:
-                func_80A14430(this, play);
+            case ENGO_RACER: // Goron Racers
+                EnGo_Racer_Setup(this, play);
                 break;
 
-            case ENGO_F_2:
-                func_80A1449C(this, play);
+            case ENGO_SPECTATOR:
+                EnGo_Spectator_Setup(this, play);
                 break;
 
-            case ENGO_F_3: // Goron Gatekeeper
-                func_80A144F4(this, play);
+            case ENGO_GATEKEEPER:
+                EnGo_GateKeeper_Setup(this, play);
                 break;
 
-            case ENGO_F_4:
-                func_80A145AC(this, play);
+            case ENGO_BROTHER:
+                EnGo_Brother_Setup(this, play);
                 break;
 
             case ENGO_F_5:
             case ENGO_F_6:
             case ENGO_F_7:
-                func_80A14668(this, play); // Shrine Gorons
+                EnGo_ShrineGoron_Setup(this, play); // Shrine Gorons
                 break;
 
-            case ENGO_F_8: // PowderKeg Goron
-                func_80A146CC(this, play);
+            case ENGO_PKEG_SELLER:
+                EnGo_PKegSeller_Setup(this, play);
                 break;
 
             default:
@@ -2114,19 +2137,19 @@ void func_ACT_80A14798(EnGo* this, PlayState* play) {
     }
 }
 
-// EnGo_DefaultAnimationFunction?
-void func_ACT_80A149B0(EnGo* this, PlayState* play) {
+void EnGo_Idle(EnGo* this, PlayState* play) {
     s16 sp26 = this->actor.world.rot.y;
 
-    if ((ENGO_GET_F(&this->actor) == ENGO_F_2) && //
-        (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1))) {
+    if ((ENGO_GET_F(&this->actor) == ENGO_SPECTATOR) && (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1))) {
+        // Spectators only cheer. No other interactions
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_CHEER - SFX_FLAG);
-    } else if (ENGO_GET_F(&this->actor) != ENGO_F_8) {
+    } else if (ENGO_GET_F(&this->actor) != ENGO_PKEG_SELLER) {
+        // All others besides the Powder Keg Seller can be slept,
         if (EnGo_IsEnteringSleep(this, play)) {
-            SubS_UpdateFlags(&this->flags, 0, 7); // &= ~0x80
+            SubS_UpdateFlags(&this->flags, 0, 7); // &= ~ENGO_FLAG_FOCUSING
             this->sleepState = ENGO_ASLEEP;
             this->actionFunc = func_ACT_80A14B30;
-        } else if (ENGO_GET_F(&this->actor) == ENGO_F_4) {
+        } else if (ENGO_GET_F(&this->actor) == ENGO_BROTHER) {
             switch (ENGO_GET_70(&this->actor)) {
                 case ENGO_70_0:
                     func_80A132C8(this, play);
@@ -2136,11 +2159,11 @@ void func_ACT_80A149B0(EnGo* this, PlayState* play) {
                     func_80A133A8(this, play);
                     break;
             }
-        } else if (ENGO_GET_F(&this->actor) == ENGO_F_1) {
+        } else if (ENGO_GET_F(&this->actor) == ENGO_RACER) {
             if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x3FFC) {
-                SubS_UpdateFlags(&this->flags, 3, 7); // |=0x08 &= ~0x80
+                SubS_UpdateFlags(&this->flags, 3, 7); // |=0x08 &= ~ENGO_FLAG_FOCUSING
             } else {
-                SubS_UpdateFlags(&this->flags, 0, 7); // &= ~0x80
+                SubS_UpdateFlags(&this->flags, 0, 7); // &= ~ENGO_FLAG_FOCUSING
             }
         }
     }
@@ -2164,18 +2187,18 @@ void func_ACT_80A14B30(EnGo* this, PlayState* play) {
             }
             this->actor.shape.yOffset = 14.0f;
         }
-    } else if (this->flags & 0x8000) {
+    } else if (this->flags & ENGO_FLAG_UNCURLING) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            this->flags |= 0x80;
-            this->flags &= ~0x8000;
+            this->flags |= ENGO_FLAG_FOCUSING;
+            this->flags &= ~ENGO_FLAG_UNCURLING;
         }
     } else if (this->flags & ENGO_FLAG_CURLED) {
         if ((this->actor.xzDistToPlayer < 160.0f) && (this->actor.playerHeightRel < 20.0f) &&
             (this->sleepState == ENGO_AWAKE)) {
-            func_80A12C48(this, play, ENGO_ANIM_UNROLL_IMM);
-            this->flags &= ~0x80;
+            EnGo_ChangeAnimation(this, play, ENGO_ANIM_UNROLL_IMM);
+            this->flags &= ~ENGO_FLAG_FOCUSING;
             this->flags &= ~ENGO_FLAG_CURLED;
-            this->flags |= 0x8000;
+            this->flags |= ENGO_FLAG_UNCURLING;
             this->actor.shape.yOffset = 0.0f;
         } else if ((this->sleepState != ENGO_AWAKE) &&
                    (gSaveContext.save.weekEventReg[ELDERS_SON] & ELDERS_SON_DONE_CRYING)) {
@@ -2197,8 +2220,8 @@ void func_ACT_80A14B30(EnGo* this, PlayState* play) {
         }
     } else if ((this->actor.xzDistToPlayer >= 240.0f) || (this->actor.playerHeightRel >= 20.0f) ||
                (this->sleepState != ENGO_AWAKE)) {
-        func_80A12C48(this, play, ENGO_ANIM_ROLL);
-        this->flags &= ~0x80;
+        EnGo_ChangeAnimation(this, play, ENGO_ANIM_ROLL);
+        this->flags &= ~ENGO_FLAG_FOCUSING;
         this->flags &= ~ENGO_FLAG_CURLED;
         this->flags |= ENGO_FLAG_CURLING;
         this->actor.shape.yOffset = 0.0f;
@@ -2208,46 +2231,49 @@ void func_ACT_80A14B30(EnGo* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, sp26, 4, 0x2AA8);
 }
 
+// EnGo_FrozenSolid
 void func_ACT_80A14E14(EnGo* this, PlayState* play) {
     Actor* actor = this->colliderCylinder.base.ac;
 
-    if ((this->flags & 0x1000) && //
+    if ((this->flags & ENGO_FLAG_HIT_BY_OTHER) && //
         (((actor != NULL) && (actor->id == ACTOR_OBJ_AQUA) && (actor->params & 1)) ||
          (this->actor.colChkInfo.damageEffect == 2))) {
         this->actionFunc = func_ACT_80A14E74;
     }
 }
 
+// EnGo_ThawApplied
 void func_ACT_80A14E74(EnGo* this, PlayState* play) {
     if (EnGoCutscene_StopIfDoneAndCheckCanPlay(this, this->actor.cutscene)) {
         this->actionFunc = func_ACT_80A14EB0;
     }
 }
 
-// EnGo_IceMelt
+// EnGo_Thawing
 void func_ACT_80A14EB0(EnGo* this, PlayState* play) {
     EnGo* sp24 = (EnGo*)this->actor.child;
 
-    if ((s32)(this->unk_39C * 3.0f) != 0) {
+    if ((s32)(this->iceBlockScale * 3.0f) != 0) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
-        Math_ApproachF(&this->unk_39C, 0.0f, 0.02f, 1.0f);
-        this->unk_3A0 = (this->unk_39C / 0.9f) * 100.0f;
-        func_80A139E4(this);
+        Math_ApproachF(&this->iceBlockScale, 0.0f, 0.02f, 1.0f);
+        this->iceBlockAlpha = (this->iceBlockScale / 0.9f) * 100.0f;
+        EnGo_MakeSteamEffect(this);
     } else {
         ActorCutscene_Stop(this->actor.cutscene);
-        func_80A143A8(this, play);
-        if ((ENGO_GET_F(&this->actor) == ENGO_F_4) && (ENGO_GET_70(&this->actor) == ENGO_70_1)) {
+        EnGo_SetShiverAnimation(this, play);
+        if ((ENGO_GET_F(&this->actor) == ENGO_BROTHER) && (ENGO_GET_70(&this->actor) == ENGO_70_1)) {
             SubS_UpdateFlags(&this->flags, 4, 7);
-            func_80A143A8(sp24, play);
-            sp24->actionFunc = func_ACT_80A149B0;
+            EnGo_SetShiverAnimation(sp24, play);
+            sp24->actionFunc = EnGo_Idle;
         }
-        this->actionFunc = func_ACT_80A149B0;
+        this->actionFunc = EnGo_Idle;
     }
 }
 
 void func_ACT_80A14FC8(EnGo* this, PlayState* play) {
-    s32 sp38[] = {
-        0, 2, 6, 20, 18, 5, 5, 15,
+    s32 animationIndices[] = {
+        ENGO_ANIM_LYINGDOWNIDLE, ENGO_ANIM_UNROLL, ENGO_ANIM_SHIVER_IMM, ENGO_ANIM_HAKUGIN_20,
+        ENGO_ANIM_HAKUGIN_18,    ENGO_ANIM_SHIVER, ENGO_ANIM_SHIVER,     ENGO_ANIM_TAISOU_15,
     };
     u16 actorActionCmd = 0;
     s32 csAction;
@@ -2268,51 +2294,51 @@ void func_ACT_80A14FC8(EnGo* this, PlayState* play) {
             actionIndex = Cutscene_GetActorActionIndex(play, actorActionCmd);
             csAction = play->csCtx.actorActions[actionIndex]->action;
 
-            if (this->unk_394 != (u8)csAction) {
-                this->unk_394 = csAction;
-                func_80A12C48(this, play, sp38[csAction]);
+            if (this->currentCsAction != (u8)csAction) {
+                this->currentCsAction = csAction;
+                EnGo_ChangeAnimation(this, play, animationIndices[csAction]);
                 this->flags = ENGO_FLAG_NONE;
                 this->flags |= ENGO_FLAG_BLINKING;
                 this->indexEyeTex = ENGO_EYE_OPEN;
-                this->unk_39C = 0.0f;
-                this->unk_3A0 = 0.0f;
+                this->iceBlockScale = 0.0f;
+                this->iceBlockAlpha = 0.0f;
 
                 switch (csAction) {
-                    case 1:
-                        this->flags |= 0x80;
+                    case 1: // Unrolling
+                        this->flags |= ENGO_FLAG_FOCUSING;
                         this->skelAnime.curFrame = this->skelAnime.endFrame;
                         break;
 
-                    case 5:
+                    case 5: // Shivering
                     case 6:
                         func_80A141D4(this, play);
                         break;
                 }
             }
 
-            switch (this->unk_394) {
-                case 3:
+            switch (this->currentCsAction) {
+                case 3: // ENGO_ANIM_HAKUGIN_20
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) &&
                         (this->anim == ENGO_ANIM_HAKUGIN_20)) {
-                        func_80A12C48(this, play, ENGO_ANIM_HAKUGIN_21_IMM);
+                        EnGo_ChangeAnimation(this, play, ENGO_ANIM_HAKUGIN_21_IMM);
                     }
                     break;
 
-                case 4:
+                case 4: // ENGO_ANIM_HAKUGIN_18
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) &&
                         (this->anim == ENGO_ANIM_HAKUGIN_18)) {
-                        func_80A12C48(this, play, ENGO_ANIM_HAKUGIN_19_IMM);
+                        EnGo_ChangeAnimation(this, play, ENGO_ANIM_HAKUGIN_19_IMM);
                     }
                     break;
 
-                case 6:
-                    if ((s32)(this->unk_39C * 3.0f) != 0) {
+                case 6: // ENGO_ANIM_SHIVER
+                    if ((s32)(this->iceBlockScale * 3.0f) != 0) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
-                        Math_ApproachF(&this->unk_39C, 0.0f, 0.02f, 1.0f);
-                        this->unk_3A0 = (this->unk_39C / 0.9f) * 100.0f;
-                        func_80A139E4(this);
+                        Math_ApproachF(&this->iceBlockScale, 0.0f, 0.02f, 1.0f);
+                        this->iceBlockAlpha = (this->iceBlockScale / 0.9f) * 100.0f;
+                        EnGo_MakeSteamEffect(this);
                     } else if (this->flags & ENGO_FLAG_FROZEN) {
-                        func_80A143A8(this, play);
+                        EnGo_SetShiverAnimation(this, play);
                     }
                     break;
             }
@@ -2368,19 +2394,19 @@ void func_ACT_80A14FC8(EnGo* this, PlayState* play) {
     }
 }
 
-/* Action function, called on day 2 or greater */
-void func_ACT_80A153FC(EnGo* this, PlayState* play) {
+// The Goron Gatekeeper rolls around the village, accruing snow.
+void EnGo_Snowballing(EnGo* this, PlayState* play) {
     Vec3s* sp5C;
     Vec3f sp50;
     Vec3f sp44;
 
-    if ((this->flags & 0x1000) && (this->actor.colChkInfo.damageEffect == ENGO_DMGEFF_BREAK)) {
+    if ((this->flags & ENGO_FLAG_HIT_BY_OTHER) && (this->actor.colChkInfo.damageEffect == ENGO_DMGEFF_BREAK)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
 
         this->actor.flags &= ~ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
 
-        EnGo_VfxSnowballBreak(this->unk_3F8, this->actor.world.pos);
+        EnGo_VfxSnowballBreak(this->effectTable, this->actor.world.pos);
         this->actor.shape.rot.x = 0;
         this->actor.speedXZ = 0.0f;
 
@@ -2390,11 +2416,11 @@ void func_ACT_80A153FC(EnGo* this, PlayState* play) {
             func_80A141D4(this, play);
             this->actionFunc = func_ACT_80A14E14;
         } else {
-            func_80A143A8(this, play);
-            this->actionFunc = func_ACT_80A149B0;
+            EnGo_SetShiverAnimation(this, play);
+            this->actionFunc = EnGo_Idle;
         }
     } else if (this->path != NULL) {
-        if (this->flags & 0x800) {
+        if (this->flags & ENGO_FLAG_HIT_OTHER) {
             func_800B8E58(GET_PLAYER(play), NA_SE_PL_BODY_HIT);
             func_800B8D50(play, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
         }
@@ -2415,10 +2441,10 @@ void func_ACT_80A153FC(EnGo* this, PlayState* play) {
 
         if (this->actor.bgCheckFlags & 1) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BIGBALL_ROLL - SFX_FLAG);
-            func_800AE930(&play->colCtx, Effect_GetByIndex(this->unk_3E8), &this->actor.world.pos, 18.0f,
+            func_800AE930(&play->colCtx, Effect_GetByIndex(this->indexEffect), &this->actor.world.pos, 18.0f,
                           this->actor.shape.rot.y, this->actor.floorPoly, this->actor.floorBgId);
         } else {
-            func_800AEF44(Effect_GetByIndex(this->unk_3E8));
+            func_800AEF44(Effect_GetByIndex(this->indexEffect));
         }
 
         this->actor.speedXZ = 4.0f;
@@ -2427,8 +2453,8 @@ void func_ACT_80A153FC(EnGo* this, PlayState* play) {
     }
 }
 
-// Get MessageScript
-s32* func_80A15684(EnGo* this, PlayState* play) {
+// Return the Character's Message Script
+s32* EnGo_GetMessageScript(EnGo* this, PlayState* play) {
     static s32 D_80A16704[] = {
         D_80A16100, // Goron with Frozen Brother
         D_80A16164, // Frozen Brother
@@ -2438,27 +2464,27 @@ s32* func_80A15684(EnGo* this, PlayState* play) {
         return D_80A1640C; // Lullaby Hint
     }
 
-    if (ENGO_GET_F(&this->actor) == ENGO_F_1) {
+    if (ENGO_GET_F(&this->actor) == ENGO_RACER) { // Goron Racer
         switch (ENGO_GET_70(&this->actor) % 6) {
             case ENGO_70_0:
-                return D_80A163BC; // It's Spring!
+                return D_80A163BC; // Side to Side Squatting Goron Racer
             case ENGO_70_1:
-                return D_80A163CC;
+                return D_80A163CC; // Unused Goron Racer?
             case ENGO_70_2:
-                return D_80A163DC;
+                return D_80A163DC; // Libm Shaking Goron Racer
             case ENGO_70_3:
-                return D_80A163EC;
+                return D_80A163EC; // Side Stretching Goron Racer
             case ENGO_70_4:
-                return D_80A163FC;
+                return D_80A163FC; // Hamstring Stretchers
             case ENGO_70_5:
-                return D_80A163FC;
+                return D_80A163FC; // Hamstring Stretchers
         }
     }
 
     switch (ENGO_GET_F(&this->actor)) {
-        case ENGO_F_3:
+        case ENGO_GATEKEEPER:
             return D_80A16350; // Goron Gatekeeper Message
-        case ENGO_F_4:
+        case ENGO_BROTHER:
             return D_80A16704[ENGO_GET_70(&this->actor)]; // Goron Brothers
         case ENGO_F_5:
             return D_80A16208; // Store reviewer?
@@ -2466,7 +2492,7 @@ s32* func_80A15684(EnGo* this, PlayState* play) {
             return D_80A16254; // Shrine Gorons Elder's room
         case ENGO_F_7:
             return D_80A16210; // Shrine Gorons
-        case ENGO_F_8:
+        case ENGO_PKEG_SELLER:
             return D_80A16280; // Powder Keg Goron
         default:
             return D_80A16208; // Store reviewer?
@@ -2478,11 +2504,10 @@ void func_ACT_80A157C4(EnGo* this, PlayState* play) {
     Vec3f targetActorPos;
     Vec3f thisActorPos;
 
-    if (!func_8010BF58(&this->actor, play, func_80A15684(this, play), // MsgScript*
-                       this->msgEventCb,                              // MsgEventCallback
-                       &this->msgScriptResumePos                      // s32* resumePosition
-                       )) {
-        if ((ENGO_GET_F(&this->actor) != ENGO_F_1) && !(this->flags & ENGO_FLAG_CURLED)) {
+    if (!func_8010BF58(&this->actor, play, EnGo_GetMessageScript(this, play), this->msgEventCb,
+                       &this->msgScriptResumePos)) {
+        if ((ENGO_GET_F(&this->actor) != ENGO_RACER) && !(this->flags & ENGO_FLAG_CURLED)) {
+            // Turn towards the player when in dialog
             Math_Vec3f_Copy(&targetActorPos, &this->targetActor->world.pos);
             Math_Vec3f_Copy(&thisActorPos, &this->actor.world.pos);
             Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&thisActorPos, &targetActorPos), 4, 0x2AA8);
@@ -2499,7 +2524,7 @@ void func_ACT_80A157C4(EnGo* this, PlayState* play) {
     }
 
     this->flags &= ~0x8;
-    SubS_UpdateFlags(&this->flags, 3, 7); // |= 0x08 &= 0x80
+    SubS_UpdateFlags(&this->flags, 3, 7); // |= 0x08 &= ENGO_FLAG_FOCUSING
     this->msgScriptResumePos = 0;
     this->flags |= 0x40;
     this->actionFunc = this->priorActionFn;
@@ -2510,7 +2535,7 @@ void EnGo_Init(Actor* thisx, PlayState* play) {
 
     this->indexTaisou = SubS_GetObjectIndex(OBJECT_TAISOU, play);            /* Gymnastics */
     this->indexHakuginDemo = SubS_GetObjectIndex(OBJECT_HAKUGIN_DEMO, play); /* White Silver / Even Silver? */
-    this->actionFunc = func_ACT_80A14798;
+    this->actionFunc = EnGo_Setup;
 }
 
 void EnGo_Destroy(Actor* thisx, PlayState* play) {
@@ -2518,14 +2543,16 @@ void EnGo_Destroy(Actor* thisx, PlayState* play) {
 
     Collider_DestroyCylinder(play, &this->colliderCylinder);
     Collider_DestroySphere(play, &this->colliderSphere);
-    Effect_Destroy(play, this->unk_3E8);
+    Effect_Destroy(play, this->indexEffect);
 }
 
 void EnGo_Update(Actor* thisx, PlayState* play) {
     EnGo* this = THIS;
-    f32 phi_f0;
+    f32 xzRange;
 
-    func_80A12868(this, play);
+    EnGo_DetectCollisions(this, play);
+
+    // Something to do with the dialog.
     if (!func_80A12774(this, play)) {
         func_80A12954(this, play);
     }
@@ -2534,34 +2561,34 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
 
     if (!(this->flags & ENGO_FLAG_FROZEN)) {
         EnGo_HandleBlink(this);
-        func_80A12A64(this, play);
+        EnGo_HandleAnimation(this, play);
         func_80A131F8(this, play);
-        func_80A12B78(this, play);
+        EnGo_HandleSfx(this, play);
     }
 
     if (!(this->flags & 0x100) && !(this->flags & ENGO_FLAG_CURLED) && !(this->flags & ENGO_FLAG_FROZEN)) {
-        if (ENGO_GET_F(&this->actor) == ENGO_F_8) {
-            phi_f0 = this->colliderSphere.dim.worldSphere.radius + 60;
+        if (ENGO_GET_F(&this->actor) == ENGO_PKEG_SELLER) {
+            xzRange = this->colliderSphere.dim.worldSphere.radius + 60;
         } else {
-            phi_f0 = this->colliderCylinder.dim.radius + 40;
+            xzRange = this->colliderCylinder.dim.radius + 40;
         }
-        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_AP_NONE, this->flags & 7);
+        func_8013C964(&this->actor, play, xzRange, 20.0f, PLAYER_AP_NONE, this->flags & 7);
     } else if ((this->flags & ENGO_FLAG_CURLED) && (this->sleepState != ENGO_AWAKE)) {
-        phi_f0 = this->colliderCylinder.dim.radius + 40;
-        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_AP_NONE, this->flags & 7);
+        xzRange = this->colliderCylinder.dim.radius + 40;
+        func_8013C964(&this->actor, play, xzRange, 20.0f, PLAYER_AP_NONE, this->flags & 7);
     }
 
-    if ((ENGO_GET_F(&this->actor) != ENGO_F_8) && (ENGO_GET_F(&this->actor) != ENGO_F_2) &&
-        (ENGO_GET_F(&this->actor) != ENGO_F_1)) {
+    if ((ENGO_GET_F(&this->actor) != ENGO_PKEG_SELLER) && (ENGO_GET_F(&this->actor) != ENGO_SPECTATOR) &&
+        (ENGO_GET_F(&this->actor) != ENGO_RACER)) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
     }
 
     func_80A122EC(this);
-    func_80A126BC(this, play);
-    func_80A1203C(this);
+    EnGo_UpdateColliders(this, play);
+    EnGo_UpdateEffects(this);
 }
 
-void func_80A15B80(EnGo* this, PlayState* play) {
+void EnGo_Draw_SnowballedOrCurled(EnGo* this, PlayState* play) {
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -2575,7 +2602,7 @@ void func_80A15B80(EnGo* this, PlayState* play) {
     Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
     Matrix_Translate(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
 
-    if (this->flags & 0x100) {
+    if (this->flags & ENGO_FLAG_SNOWBALLED) {
         Matrix_Scale(this->actor.scale.x * 8.0f, this->actor.scale.y * 8.0f, this->actor.scale.z * 8.0f, MTXMODE_APPLY);
     } else {
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -2584,7 +2611,7 @@ void func_80A15B80(EnGo* this, PlayState* play) {
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, (this->flags & 0x100) ? gGoronSnowballDL : gGoronRolledUpDL);
+    gSPDisplayList(POLY_OPA_DISP++, (this->flags & ENGO_FLAG_SNOWBALLED) ? gGoronSnowballDL : gGoronRolledUpDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -2594,7 +2621,7 @@ s32 EnGo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     Vec3f sp30;
     s32 idx;
 
-    if ((ENGO_GET_F(&this->actor) == ENGO_F_8) && (limbIndex == 10)) {
+    if ((ENGO_GET_F(&this->actor) == ENGO_PKEG_SELLER) && (limbIndex == 10)) {
         Matrix_MultZero(&sp30);
         sp30.y = this->actor.world.pos.y;
         Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp30);
@@ -2618,7 +2645,7 @@ s32 EnGo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
             break;
     }
 
-    if ((this->flags & 0x80) && (idx < 9)) {
+    if ((this->flags & ENGO_FLAG_FOCUSING) && (idx < 9)) {
         rot->y += (s16)(Math_SinS(this->limbRotTableY[idx]) * 200.0f);
         rot->z += (s16)(Math_CosS(this->limbRotTableZ[idx]) * 200.0f);
     }
@@ -2681,7 +2708,7 @@ void EnGo_Draw(Actor* thisx, PlayState* play) {
     };
     EnGo* this = THIS;
 
-    if (!(this->flags & 0x300)) {
+    if (!(this->flags & (ENGO_FLAG_SNOWBALLED | ENGO_FLAG_CURLED))) {
         OPEN_DISPS(play->state.gfxCtx);
 
         func_8012C28C(play->state.gfxCtx);
@@ -2697,8 +2724,8 @@ void EnGo_Draw(Actor* thisx, PlayState* play) {
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else {
-        func_80A15B80(this, play);
+        EnGo_Draw_SnowballedOrCurled(this, play);
     }
-    EnGo_DrawIceBlockIfFrozen(this, play, this->unk_39C, this->unk_3A0);
+    EnGo_DrawIceBlockIfFrozen(this, play, this->iceBlockScale, this->iceBlockAlpha);
     EnGo_DrawVfx(this, play);
 }
