@@ -22,7 +22,7 @@ typedef struct EnRz {
     /* 0x3B8 */ Path* path;
     /* 0x3BC */ s32 unk_3BC;
     /* 0x3C0 */ ColliderCylinder collider;
-    /* 0x40C */ Actor* unk_40C;
+    /* 0x40C */ struct EnRz* unk_40C;
     /* 0x410 */ s16 unk_410;
     /* 0x412 */ s16 unk_412;
     /* 0x414 */ Vec3f shadowPos;

@@ -19,7 +19,7 @@ void EnRz_Draw(Actor* thisx, PlayState* play);
 void EnRz_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play);
 void EnRz_ChangeAnim(PlayState*, EnRz*, s16 animIndex, u8 animMode, f32 transitionRate);
 s32 func_80BFBA50(EnRz* this, PlayState* play);
-Actor* func_80BFBDA0(EnRz* this, PlayState*);
+EnRz* func_80BFBDA0(EnRz* this, PlayState*);
 void func_80BFC058(EnRz* this, PlayState* play);
 void func_80BFC078(EnRz* this, PlayState* play);
 void func_80BFC3F8(EnRz* this, PlayState* play);
@@ -291,7 +291,7 @@ s32 func_80BFBCEC(EnRz* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((this->actor.xzDistToPlayer < 100.0f) && Actor_IsFacingPlayer(&this->actor, 0x3000) &&
-        player->stateFlags2 & PLAYER_STATE2_2000000) {
+        (player->stateFlags2 & PLAYER_STATE2_2000000)) {
         return true;
     }
 
@@ -306,13 +306,13 @@ void EnRz_UpdateSkelAnime(EnRz* this, PlayState* play) {
     }
 }
 
-Actor* func_80BFBDA0(EnRz* this, PlayState* play) {
+EnRz* func_80BFBDA0(EnRz* this, PlayState* play) {
     Actor* npc = play->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (npc != NULL) {
         if ((npc->id == ACTOR_EN_RZ) && (EN_RZ_GET_PARAM_F(&this->actor) == EN_RZ_GET_PARAM_F(npc))) {
             if (&this->actor != npc) {
-                return npc;
+                return (EnRz*)npc;
             }
         }
         npc = npc->next;
@@ -465,7 +465,7 @@ void func_80BFC36C(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
     if (func_80BFBFAC(this, play)) {
         gSaveContext.save.weekEventReg[77] |= 4;
-        if ((gSaveContext.save.weekEventReg[75] & 0x80)) {
+        if (gSaveContext.save.weekEventReg[75] & 0x80) {
             this->actionFunc = func_80BFC214;
         } else {
             this->actionFunc = func_80BFC2F4;
