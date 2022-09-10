@@ -1364,16 +1364,16 @@ void func_80B45648(EnInvadepoh* this) {
     }
 }
 
-s32 func_80B456A8(PlayState* play, Vec3f* vec) {
-    Vec3f multDest;
-    f32 wDest;
+s32 func_80B456A8(PlayState* play, Vec3f* worldPos) {
+    Vec3f projectedPos;
+    f32 invW;
 
-    Actor_GetProjectedPos(play, vec, &multDest, &wDest);
-    if (((multDest.z > 1.0f) && (fabsf(multDest.x * wDest) < 1.0f)) && (fabsf(multDest.y * wDest) < 1.0f)) {
-        s32 wX = (multDest.x * wDest * 160.0f) + 160.0f;
-        s32 wY = (multDest.y * wDest * -120.0f) + 120.0f;
-        s32 wZ = (s32)(multDest.z * wDest * 16352.0f) + 0x3FE0;
-        s32 zBuf = func_80178A94(wX, wY);
+    Actor_GetProjectedPos(play, worldPos, &projectedPos, &invW);
+    if (((projectedPos.z > 1.0f) && (fabsf(projectedPos.x * invW) < 1.0f)) && (fabsf(projectedPos.y * invW) < 1.0f)) {
+        s32 screenPosX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
+        s32 screenPosY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
+        s32 wZ = (s32)(projectedPos.z * invW * 16352.0f) + 16352;
+        s32 zBuf = func_80178A94(screenPosX, screenPosY);
         if (wZ < zBuf) {
             return true;
         }
@@ -1658,10 +1658,10 @@ void func_80B4627C(EnInvadepoh* this, PlayState* play) {
             func_80B46F88(this);
         }
     } else if (D_80B4E940 == 3) {
-        if (gSaveContext.save.entranceIndex == 0x6460) {
+        if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 6)) {
             func_80B471C0(this);
 
-        } else if (gSaveContext.save.entranceIndex == 0x6470) {
+        } else if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 7)) {
             func_80B47248(this);
         } else {
             func_80B47248(this);
@@ -1758,7 +1758,7 @@ void EnInvadepoh_InitRomani(EnInvadepoh* this, PlayState* play) {
         }
     } else if (temp != 8) {
         if (temp == 9) {
-            if (gSaveContext.save.entranceIndex != 0x6460) {
+            if (gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 6)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -1994,7 +1994,7 @@ void func_80B47108(EnInvadepoh* this, PlayState* play) {
     }
     this->actionTimer--;
     if (this->actionTimer <= 0) {
-        play->nextEntranceIndex = 0x6460;
+        play->nextEntrance = ENTRANCE(ROMANI_RANCH, 6);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_73;
@@ -2012,7 +2012,7 @@ void func_80B471C0(EnInvadepoh* this) {
 
 void func_80B471E0(EnInvadepoh* this, PlayState* play) {
     if (D_80B4E998) {
-        play->nextEntranceIndex = 0x6470;
+        play->nextEntrance = ENTRANCE(ROMANI_RANCH, 7);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_72;
@@ -2035,7 +2035,7 @@ void func_80B47278(EnInvadepoh* this) {
 }
 
 void func_80B47298(EnInvadepoh* this, PlayState* play) {
-    play->nextEntranceIndex = 0x6400;
+    play->nextEntrance = ENTRANCE(ROMANI_RANCH, 0);
     gSaveContext.nextCutsceneIndex = 0xFFF3;
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_72;
@@ -3454,7 +3454,7 @@ void func_80B4AF94(EnInvadepoh* this, PlayState* play) {
         func_80151BB4(play, 5);
         func_80B4ADB8(this);
     } else {
-        func_800B85E0(&this->actor, play, 2000.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 2000.0f, PLAYER_AP_MINUS1);
     }
 }
 

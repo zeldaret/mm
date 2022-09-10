@@ -106,7 +106,7 @@ static ColliderSphereInit sSphereInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 20, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS D_80A8B2D8[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_tru_Anim_00F9A0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_tru_Anim_00F9A0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_tru_Anim_0108AC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
@@ -424,7 +424,7 @@ s32 func_80A86924(EnTru* this, s32 arg1) {
 
     if (arg1 != this->unk_37C) {
         this->unk_37C = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80A8B2D8, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
         this->unk_358 = this->skelAnime.playSpeed;
     }
 
@@ -994,7 +994,7 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
             break;
 
         case 2:
-            func_801A75E8(NA_SE_EN_KOUME_MAGIC);
+            AudioSfx_StopById(NA_SE_EN_KOUME_MAGIC);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_AWAY);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_LAUGH);
             func_80A86924(this, 13);
@@ -1105,7 +1105,7 @@ void func_80A881E0(EnTru* this, PlayState* play) {
 void EnTru_Init(Actor* thisx, PlayState* play) {
     EnTru* this = THIS;
 
-    if ((gSaveContext.save.entranceIndex != 0xC200) || (gSaveContext.save.weekEventReg[12] & 8)) {
+    if ((gSaveContext.save.entrance != 0xC200) || (gSaveContext.save.weekEventReg[12] & 8)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -1128,7 +1128,7 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
     if (gSaveContext.save.weekEventReg[16] & 0x10) {
         func_80A86924(this, 5);
     } else {
-        this->unk_388 = EXCH_ITEM_NONE;
+        this->unk_388 = PLAYER_AP_NONE;
     }
 
     this->actionFunc = func_80A87FD0;
@@ -1154,7 +1154,7 @@ void EnTru_Update(Actor* thisx, PlayState* play) {
     func_80A86DB8(this);
 
     radius = this->collider.dim.worldSphere.radius + 30;
-    this->unk_388 = !(this->unk_34E & 0x80) ? EXCH_ITEM_NONE : EXCH_ITEM_NONE;
+    this->unk_388 = !(this->unk_34E & 0x80) ? PLAYER_AP_NONE : PLAYER_AP_NONE;
 
     func_8013C964(&this->actor, play, radius, 20.0f, this->unk_388, this->unk_34E & 7);
     func_80A8697C(this, play);

@@ -56,16 +56,16 @@ typedef struct Inventory {
 } Inventory; // size = 0x88
 
 typedef struct HorseData {
-    /* 0x00 */ s16 scene;                               // "spot_no"
-    /* 0x02 */ Vec3s pos;                               // "horse_x", "horse_y" and "horse_z"
-    /* 0x08 */ s16 yaw;                                 // "horse_a"
-} HorseData; // size = 0x0A
+    /* 0x0 */ s16 scene;                               // "spot_no"
+    /* 0x2 */ Vec3s pos;                               // "horse_x", "horse_y" and "horse_z"
+    /* 0x8 */ s16 yaw;                                 // "horse_a"
+} HorseData; // size = 0xA
 
 typedef struct RespawnData {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ s16 yaw;
     /* 0x0E */ s16 playerParams;
-    /* 0x10 */ u16 entranceIndex;
+    /* 0x10 */ u16 entrance;
     /* 0x12 */ u8 roomIndex;
     /* 0x13 */ s8 data;
     /* 0x14 */ u32 tempSwitchFlags;
@@ -92,36 +92,36 @@ typedef struct CycleSceneFlags {
 } CycleSceneFlags; // size = 0x14
 
 typedef struct SaveOptions {
-    /* 0x00 */ u16 optionId;                            // "option_id"
-    /* 0x02 */ u8 language;                             // "j_n"
-    /* 0x03 */ s8 audioSetting;                         // "s_sound"
-    /* 0x04 */ u8 languageSetting;                      // "language"
-    /* 0x05 */ u8 zTargetSetting;                       // "z_attention", 0: Switch; 1: Hold
-} SaveOptions; // size = 0x06
+    /* 0x0 */ u16 optionId;                            // "option_id"
+    /* 0x2 */ u8 language;                             // "j_n"
+    /* 0x3 */ s8 audioSetting;                         // "s_sound"
+    /* 0x4 */ u8 languageSetting;                      // "language"
+    /* 0x5 */ u8 zTargetSetting;                       // "z_attention", 0: Switch; 1: Hold
+} SaveOptions; // size = 0x6
 
 typedef struct SavePlayerData {
-    /* 0x0000 */ char newf[6];                          // "newf"               Will always be "ZELDA3 for a valid save
-    /* 0x0006 */ u16 deaths;                            // "savect"
-    /* 0x0008 */ char playerName[8];                    // "player_name"
-    /* 0x0010 */ s16 healthCapacity;                    // "max_life"
-    /* 0x0012 */ s16 health;                            // "now_life"
-    /* 0x0014 */ s8 magicLevel;                         // "magic_max"
-    /* 0x0015 */ s8 magic;                              // "magic_now"
-    /* 0x0016 */ s16 rupees;                            // "lupy_count"
-    /* 0x0018 */ u16 swordHealth;                       // "long_sword_hp"
-    /* 0x001A */ u16 tatlTimer;                         // "navi_timer"
-    /* 0x001C */ u8 magicAcquired;                      // "magic_mode"
-    /* 0x001D */ u8 doubleMagic;                        // "magic_ability"
-    /* 0x001E */ u8 doubleDefense;                      // "life_ability"
-    /* 0x001F */ u8 unk_1F;                             // "ocarina_round"
-    /* 0x0020 */ u8 unk_20;                             // "first_memory"
-    /* 0x0022 */ u16 owlActivationFlags;                // "memory_warp_point"
-    /* 0x0024 */ u8 unk_24;                             // "last_warp_pt"
-    /* 0x0026 */ s16 savedSceneNum;                     // "scene_data_ID"
+    /* 0x00 */ char newf[6];                          // "newf"               Will always be "ZELDA3 for a valid save
+    /* 0x06 */ u16 deaths;                            // "savect"
+    /* 0x08 */ char playerName[8];                    // "player_name"
+    /* 0x10 */ s16 healthCapacity;                    // "max_life"
+    /* 0x12 */ s16 health;                            // "now_life"
+    /* 0x14 */ s8 magicLevel;                         // "magic_max"
+    /* 0x15 */ s8 magic;                              // "magic_now"
+    /* 0x16 */ s16 rupees;                            // "lupy_count"
+    /* 0x18 */ u16 swordHealth;                       // "long_sword_hp"
+    /* 0x1A */ u16 tatlTimer;                         // "navi_timer"
+    /* 0x1C */ u8 magicAcquired;                      // "magic_mode"
+    /* 0x1D */ u8 doubleMagic;                        // "magic_ability"
+    /* 0x1E */ u8 doubleDefense;                      // "life_ability"
+    /* 0x1F */ u8 unk_1F;                             // "ocarina_round"
+    /* 0x20 */ u8 unk_20;                             // "first_memory"
+    /* 0x22 */ u16 owlActivationFlags;                // "memory_warp_point"
+    /* 0x24 */ u8 unk_24;                             // "last_warp_pt"
+    /* 0x26 */ s16 savedSceneNum;                     // "scene_data_ID"
 } SavePlayerData; // size = 0x28
 
 typedef struct Save {
-    /* 0x0000 */ u32 entranceIndex;                     // "scene_no"
+    /* 0x0000 */ u32 entrance;                          // "scene_no"
     /* 0x0004 */ u8 equippedMask;                       // "player_mask"
     /* 0x0005 */ u8 isFirstCycle;                       // "opening_flag"
     /* 0x0006 */ u8 unk_06;
@@ -143,8 +143,8 @@ typedef struct Save {
     /* 0x00F8 */ PermanentSceneFlags permanentSceneFlags[120];
     /* 0x0E18 */ u8 unk_E18[0x54];
     /* 0x0E6C */ u32 dekuPlaygroundHighScores[3];
-    /* 0x0E78 */ u32 pictoFlags0;
-    /* 0x0E7C */ u32 pictoFlags1;
+    /* 0x0E78 */ u32 pictoFlags0;                       // Flags set by `PictoActor`s if pictograph is valid
+    /* 0x0E7C */ u32 pictoFlags1;                       // Flags set by Snap_ValidatePictograph() to record errors; volatile since that function is run many times in succession
     /* 0x0E80 */ u32 unk_E80;
     /* 0x0E84 */ u32 unk_E84;
     /* 0x0E88 */ u32 unk_E88[7];                        // Invadepoh flags
@@ -167,7 +167,7 @@ typedef struct Save {
     /* 0x0F60 */ u32 mapsVisible;                       // "cloud_clear"
     /* 0x0F64 */ u8 unk_F64;                            // "oca_rec_flag"                   has scarecrows song
     /* 0x0F65 */ u8 unk_F65;                            // "oca_rec_flag8"                  scarecrows song set?
-    /* 0x0F66 */ u8 scarecrowsSong[128];
+    /* 0x0F66 */ u8 scarecrowSpawnSong[128];
     /* 0x0FE6 */ s8 bombersCaughtNum;                   // "aikotoba_index"
     /* 0x0FE7 */ s8 bombersCaughtOrder[5];              // "aikotoba_table"
     /* 0x0FEC */ s8 lotteryCodes[3][3];                 // "numbers_table", Preset lottery codes

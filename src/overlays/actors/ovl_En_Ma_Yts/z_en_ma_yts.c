@@ -113,10 +113,10 @@ static TexturePtr sEyeTextures[] = {
     gRomaniEyeOpenTex, gRomaniEyeHalfTex, gRomaniEyeClosedTex, gRomaniEyeHappyTex, gRomaniEyeSadTex,
 };
 
-void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[index].animation, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[index].animation), sAnimationInfo[index].mode,
-                     sAnimationInfo[index].morphFrames);
+void EnMaYts_ChangeAnim(EnMaYts* this, s32 animIndex) {
+    Animation_Change(&this->skelAnime, sAnimationInfo[animIndex].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationInfo[animIndex].animation), sAnimationInfo[animIndex].mode,
+                     sAnimationInfo[animIndex].morphFrames);
 }
 
 void func_80B8D12C(EnMaYts* this, PlayState* play) {
@@ -218,7 +218,7 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
     EnMaYts* this = THIS;
     s32 pad;
 
-    this->type = EN_MA_YTS_PARSE_TYPE(thisx);
+    this->type = EN_MA_YTS_GET_TYPE(thisx);
     if (!EnMaYts_CheckValidSpawn(this, play)) {
         Actor_MarkForDeath(&this->actor);
     }

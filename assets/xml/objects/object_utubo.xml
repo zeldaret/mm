@@ -42,7 +42,7 @@
         <Limb Name="gDeepPythonJawLimb" Type="Standard" EnumName="DEEP_PYTHON_LIMB_JAW" Offset="0x4350" />
 
         <!-- Deep Python Skeleton -->
-        <Skeleton Name="gDeepPythonSkel" Type="Flex" LimbType="Standard" LimbNone="DEEP_PYTHON_LIMB_NONE" LimbMax="DEEP_PYTHON_LIMB_MAX" EnumName="DeepPythonLimbs" Offset="0x4398" />
+        <Skeleton Name="gDeepPythonSkel" Type="Flex" LimbType="Standard" LimbNone="DEEP_PYTHON_LIMB_NONE" LimbMax="DEEP_PYTHON_LIMB_MAX" EnumName="DeepPythonLimb" Offset="0x4398" />
 
         <!-- Deep Python Animations -->
         <Animation Name="gDeepPythonUnusedSideSwayAnim" Offset="0x4518" /> <!-- Unused duplicate of gDeepPythonSmallSideSwayAnim -->

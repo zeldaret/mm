@@ -146,20 +146,20 @@ void func_80A715DC(EnDno* this, PlayState* play) {
     Vec3f sp70;
 
     do {
-        crace = (BgCraceMovebg*)SubS_FindActor(play, &crace->actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
+        crace = (BgCraceMovebg*)SubS_FindActor(play, &crace->dyna.actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (crace != NULL) {
-            if (ENDNO_GET_F(&crace->actor) == ENDNO_GET_F_0 && !(crace->unk_170 & 1)) {
-                if (SubS_LineSegVsPlane(&crace->actor.home.pos, &crace->actor.home.rot, &D_80A73B2C,
+            if (ENDNO_GET_F(&crace->dyna.actor) == ENDNO_GET_F_0 && !(crace->unk170 & 1)) {
+                if (SubS_LineSegVsPlane(&crace->dyna.actor.home.pos, &crace->dyna.actor.home.rot, &D_80A73B2C,
                                         &this->actor.prevPos, &this->actor.world.pos, &sp88)) {
-                    Math_Vec3f_Diff(&this->actor.world.pos, &crace->actor.home.pos, &sp7C);
-                    Matrix_RotateYS(-crace->actor.home.rot.y, MTXMODE_NEW);
+                    Math_Vec3f_Diff(&this->actor.world.pos, &crace->dyna.actor.home.pos, &sp7C);
+                    Matrix_RotateYS(-crace->dyna.actor.home.rot.y, MTXMODE_NEW);
                     Matrix_MultVec3f(&sp7C, &sp70);
                     if ((fabsf(sp70.x) < 100.0f) && (sp70.y >= -10.0f) && (sp70.y <= 180.0f) && (sp70.z < 0.0f)) {
-                        crace->unk_170 |= 1;
+                        crace->unk170 |= 1;
                     }
                 }
             }
-            crace = (BgCraceMovebg*)crace->actor.next;
+            crace = (BgCraceMovebg*)crace->dyna.actor.next;
         }
     } while (crace != NULL);
 }
@@ -517,7 +517,7 @@ void func_80A724B8(EnDno* this, PlayState* play) {
 }
 
 void func_80A7256C(EnDno* this, PlayState* play) {
-    func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, EXCH_ITEM_MINUS1);
+    func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_AP_MINUS1);
 }
 
 void func_80A72598(EnDno* this, PlayState* play) {
@@ -1000,7 +1000,7 @@ void EnDno_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, -frames * 20, 0x20, 0x80));
         gDPSetPrimColor(&gfxXlu[2], 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(&gfxXlu[3], 255, 0, 0, 0);
-        gSPDisplayList(&gfxXlu[4], gGameplayKeepDrawFlameDL);
+        gSPDisplayList(&gfxXlu[4], gEffFire1DL);
 
         POLY_XLU_DISP = gfxXlu + 5;
 

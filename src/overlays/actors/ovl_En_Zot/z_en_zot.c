@@ -5,6 +5,7 @@
  */
 
 #include "z_en_zot.h"
+#include "z64snap.h"
 #include "objects/object_zo/object_zo.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
@@ -515,7 +516,7 @@ void func_80B975F8(EnZot* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80B973BC;
     } else {
-        func_800B8500(&this->actor, play, 10000.0f, 1000.0f, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, play, 10000.0f, 1000.0f, PLAYER_AP_NONE);
     }
 }
 
@@ -930,7 +931,7 @@ void func_80B9849C(EnZot* this, PlayState* play) {
         }
         this->actionFunc = func_80B98728;
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -940,7 +941,7 @@ void func_80B9854C(EnZot* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B9849C;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     } else {
         Actor_PickUp(&this->actor, play, this->unk_2D4, 10000.0f, 50.0f);
     }
@@ -955,8 +956,9 @@ void func_80B985EC(EnZot* this, PlayState* play) {
         itemActionParam = func_80123810(play);
         if (itemActionParam > PLAYER_AP_NONE) {
             func_801477B4(play);
-            if ((itemActionParam == PLAYER_AP_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) && func_8013A4C4(4)) {
-                if (func_8013A4C4(5) && func_8013A4C4(6)) {
+            if ((itemActionParam == PLAYER_AP_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) &&
+                Snap_CheckFlag(PICTOGRAPH_LULU_HEAD)) {
+                if (Snap_CheckFlag(PICTOGRAPH_LULU_RIGHT_ARM) && Snap_CheckFlag(PICTOGRAPH_LULU_LEFT_ARM)) {
                     player->actor.textId = 0x12AE;
                 } else {
                     player->actor.textId = 0x12AC;
@@ -1103,14 +1105,14 @@ void func_80B98AD0(EnZot* this, PlayState* play) {
                 func_801477B4(play);
                 this->actionFunc = func_80B98CA8;
                 gSaveContext.save.weekEventReg[41] &= (u8)~0x20;
-                AudioOcarina_SetInstrumentId(OCARINA_INSTRUMENT_OFF);
+                AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 break;
 
             case 0x12BA:
                 func_801477B4(play);
                 this->actionFunc = func_80B98CA8;
                 gSaveContext.save.weekEventReg[41] |= 0x20;
-                AudioOcarina_SetInstrumentId(OCARINA_INSTRUMENT_OFF);
+                AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 break;
 
             default:

@@ -20,7 +20,7 @@
         <Limb Name="object_dekubaba_Standardlimb_002A00" Type="Standard" EnumName="OBJECT_DEKUBABA_LIMB_05" Offset="0x2A00" />
         <Limb Name="object_dekubaba_Standardlimb_002A0C" Type="Standard" EnumName="OBJECT_DEKUBABA_LIMB_06" Offset="0x2A0C" />
         <Limb Name="object_dekubaba_Standardlimb_002A18" Type="Standard" EnumName="OBJECT_DEKUBABA_LIMB_07" Offset="0x2A18" />
-        <Skeleton Name="object_dekubaba_Skel_002A40" Type="Normal" LimbType="Standard" LimbNone="OBJECT_DEKUBABA_LIMB_NONE" LimbMax="OBJECT_DEKUBABA_LIMB_MAX" EnumName="object_dekubaba_Limbs" Offset="0x2A40" />
+        <Skeleton Name="object_dekubaba_Skel_002A40" Type="Normal" LimbType="Standard" LimbNone="OBJECT_DEKUBABA_LIMB_NONE" LimbMax="OBJECT_DEKUBABA_LIMB_MAX" EnumName="ObjectDekubabaLimb" Offset="0x2A40" />
         <DList Name="object_dekubaba_DL_003070" Offset="0x3070" />
         <Texture Name="object_dekubaba_Tex_0031C0" OutName="tex_0031C0" Format="rgba16" Width="32" Height="32" Offset="0x31C0" />
     </File>

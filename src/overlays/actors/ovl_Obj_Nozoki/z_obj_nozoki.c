@@ -362,7 +362,7 @@ void func_80BA2C94(ObjNozoki* this, PlayState* play) {
 
     play->roomCtx.unk7A[0] = this->dyna.actor.velocity.x;
 
-    func_8019FAD8(&D_801DB4A4, NA_SE_EV_SECOM_CONVEYOR - SFX_FLAG, this->dyna.actor.speedXZ);
+    func_8019FAD8(&gSfxDefaultPos, NA_SE_EV_SECOM_CONVEYOR - SFX_FLAG, this->dyna.actor.speedXZ);
 }
 
 void func_80BA3044(ObjNozoki* this, PlayState* play) {
@@ -441,7 +441,7 @@ void func_80BA3344(ObjNozoki* this, PlayState* play) {
             ObjNozoki_SetupAction(this, func_80BA3230);
         }
     } else if ((this->dyna.actor.textId == 0) || Actor_TextboxIsClosing(&this->dyna.actor, play)) {
-        play->nextEntranceIndex = 0xE20;
+        play->nextEntrance = ENTRANCE(CURIOSITY_SHOP, 2);
         play->transitionTrigger = TRANS_TRIGGER_START;
     }
 }
