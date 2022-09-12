@@ -16,7 +16,7 @@ void DmChar08_Update(Actor* thisx, PlayState* play);
 void DmChar08_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Dm_Char08_InitVars = {
+ActorInit Dm_Char08_InitVars = {
     ACTOR_DM_CHAR08,
     ACTORCAT_BG,
     FLAGS,

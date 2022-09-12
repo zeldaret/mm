@@ -27,7 +27,7 @@ void BgKin2Fence_RaiseFence(BgKin2Fence* this, PlayState* play);
 void BgKin2Fence_SetupDoNothing(BgKin2Fence* this);
 void BgKin2Fence_DoNothing(BgKin2Fence* this, PlayState* play);
 
-const ActorInit Bg_Kin2_Fence_InitVars = {
+ActorInit Bg_Kin2_Fence_InitVars = {
     ACTOR_BG_KIN2_FENCE,
     ACTORCAT_BG,
     FLAGS,

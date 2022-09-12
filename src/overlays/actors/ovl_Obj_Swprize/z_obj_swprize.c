@@ -20,7 +20,7 @@ void func_80C2572C(ObjSwprize* this, PlayState* play);
 void func_80C25794(ObjSwprize* this, PlayState* play);
 
 #if 0
-const ActorInit Obj_Swprize_InitVars = {
+ActorInit Obj_Swprize_InitVars = {
     ACTOR_OBJ_SWPRIZE,
     ACTORCAT_PROP,
     FLAGS,

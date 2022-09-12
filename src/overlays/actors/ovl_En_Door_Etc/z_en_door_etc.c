@@ -15,7 +15,7 @@ void EnDoorEtc_Destroy(Actor* thisx, PlayState* play);
 void EnDoorEtc_Update(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Door_Etc_InitVars = {
+ActorInit En_Door_Etc_InitVars = {
     ACTOR_EN_DOOR_ETC,
     ACTORCAT_DOOR,
     FLAGS,

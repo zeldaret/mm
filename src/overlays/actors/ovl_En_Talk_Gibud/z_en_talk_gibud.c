@@ -102,7 +102,7 @@ typedef enum {
     /* 2 */ EN_TALK_GIBUD_GRAB_RELEASE,
 } EnTalkGibudGrabState;
 
-const ActorInit En_Talk_Gibud_InitVars = {
+ActorInit En_Talk_Gibud_InitVars = {
     ACTOR_EN_TALK_GIBUD,
     ACTORCAT_ENEMY,
     FLAGS,

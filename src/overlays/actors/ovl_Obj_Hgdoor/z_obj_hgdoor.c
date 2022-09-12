@@ -26,7 +26,7 @@ void func_80BD4460(ObjHgdoor* this);
 void func_80BD4478(ObjHgdoor* this, PlayState* play);
 s32 func_80BD44D0(ObjHgdoor* this, PlayState* play);
 
-const ActorInit Obj_Hgdoor_InitVars = {
+ActorInit Obj_Hgdoor_InitVars = {
     ACTOR_OBJ_HGDOOR,
     ACTORCAT_PROP,
     FLAGS,

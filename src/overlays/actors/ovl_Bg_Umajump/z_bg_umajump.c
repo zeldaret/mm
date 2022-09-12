@@ -15,7 +15,7 @@ void BgUmajump_Destroy(Actor* thisx, PlayState* play);
 void BgUmajump_Update(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Bg_Umajump_InitVars = {
+ActorInit Bg_Umajump_InitVars = {
     ACTOR_BG_UMAJUMP,
     ACTORCAT_PROP,
     FLAGS,

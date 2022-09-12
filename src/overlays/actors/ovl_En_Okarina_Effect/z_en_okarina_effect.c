@@ -19,7 +19,7 @@ void func_8096B104(EnOkarinaEffect* this, PlayState* play);
 void func_8096B174(EnOkarinaEffect* this, PlayState* play);
 void func_8096B1FC(EnOkarinaEffect* this, PlayState* play);
 
-const ActorInit En_Okarina_Effect_InitVars = {
+ActorInit En_Okarina_Effect_InitVars = {
     ACTOR_EN_OKARINA_EFFECT,
     ACTORCAT_ITEMACTION,
     FLAGS,

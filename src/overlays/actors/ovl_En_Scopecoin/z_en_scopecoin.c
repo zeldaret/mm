@@ -19,7 +19,7 @@ void EnScopecoin_Draw(Actor* thisx, PlayState* play);
 void func_80BFCFA0(EnScopecoin* this, PlayState* play);
 void func_80BFCFB8(EnScopecoin* this, PlayState* play);
 
-const ActorInit En_Scopecoin_InitVars = {
+ActorInit En_Scopecoin_InitVars = {
     ACTOR_EN_SCOPECOIN,
     ACTORCAT_NPC,
     FLAGS,

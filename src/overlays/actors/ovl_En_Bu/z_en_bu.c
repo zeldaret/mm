@@ -17,7 +17,7 @@ void EnBu_Draw(Actor* thisx, PlayState* play);
 
 void EnBu_DoNothing(EnBu* this, PlayState* play);
 
-const ActorInit En_Bu_InitVars = {
+ActorInit En_Bu_InitVars = {
     ACTOR_EN_BU,
     ACTORCAT_ENEMY,
     FLAGS,

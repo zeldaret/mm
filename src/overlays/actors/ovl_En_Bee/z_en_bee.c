@@ -19,7 +19,7 @@ void func_80B5A9E8(EnBee* this, PlayState* play);
 void func_80B5AC3C(EnBee* this, PlayState* play);
 
 #if 0
-const ActorInit En_Bee_InitVars = {
+ActorInit En_Bee_InitVars = {
     ACTOR_EN_BEE,
     ACTORCAT_ENEMY,
     FLAGS,

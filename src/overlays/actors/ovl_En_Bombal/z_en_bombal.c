@@ -20,7 +20,7 @@ void func_80C05C44(EnBombal* this, PlayState* play);
 void func_80C05DE8(EnBombal* this, PlayState* play);
 
 #if 0
-const ActorInit En_Bombal_InitVars = {
+ActorInit En_Bombal_InitVars = {
     ACTOR_EN_BOMBAL,
     ACTORCAT_PROP,
     FLAGS,

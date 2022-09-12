@@ -16,7 +16,7 @@ void DemoMoonend_Update(Actor* thisx, PlayState* play);
 void DemoMoonend_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Demo_Moonend_InitVars = {
+ActorInit Demo_Moonend_InitVars = {
     ACTOR_DEMO_MOONEND,
     ACTORCAT_ITEMACTION,
     FLAGS,

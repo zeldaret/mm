@@ -16,7 +16,7 @@ void BgDkjailIvy_Update(Actor* thisx, PlayState* play);
 void BgDkjailIvy_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Bg_Dkjail_Ivy_InitVars = {
+ActorInit Bg_Dkjail_Ivy_InitVars = {
     ACTOR_BG_DKJAIL_IVY,
     ACTORCAT_BG,
     FLAGS,

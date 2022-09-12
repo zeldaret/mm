@@ -22,7 +22,7 @@ void func_80B6F72C(BgKin2Picture* this, PlayState* play);
 void func_80B6F90C(BgKin2Picture* this, PlayState* play);
 
 #if 0
-const ActorInit Bg_Kin2_Picture_InitVars = {
+ActorInit Bg_Kin2_Picture_InitVars = {
     ACTOR_BG_KIN2_PICTURE,
     ACTORCAT_PROP,
     FLAGS,

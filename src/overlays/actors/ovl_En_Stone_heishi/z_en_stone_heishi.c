@@ -23,7 +23,7 @@ void func_80BC9D28(EnStoneheishi* this, PlayState* play);
 void func_80BC9E50(EnStoneheishi* this, PlayState* play);
 
 #if 0
-const ActorInit En_Stone_heishi_InitVars = {
+ActorInit En_Stone_heishi_InitVars = {
     ACTOR_EN_STONE_HEISHI,
     ACTORCAT_NPC,
     FLAGS,

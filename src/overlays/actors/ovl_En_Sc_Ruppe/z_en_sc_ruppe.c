@@ -23,7 +23,7 @@ typedef struct {
     /* 0x4 */ s16 amount;
 } RuppeInfo;
 
-const ActorInit En_Sc_Ruppe_InitVars = {
+ActorInit En_Sc_Ruppe_InitVars = {
     ACTOR_EN_SC_RUPPE,
     ACTORCAT_NPC,
     FLAGS,

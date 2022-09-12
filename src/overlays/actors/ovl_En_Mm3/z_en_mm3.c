@@ -29,7 +29,7 @@ void func_80A6FEEC(EnMm3* this, PlayState* play);
 s32 func_80A6FFAC(EnMm3* this, PlayState* play);
 void func_80A70084(EnMm3* this, PlayState* play);
 
-const ActorInit En_Mm3_InitVars = {
+ActorInit En_Mm3_InitVars = {
     ACTOR_EN_MM3,
     ACTORCAT_NPC,
     FLAGS,

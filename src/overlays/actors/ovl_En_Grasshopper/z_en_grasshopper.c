@@ -52,7 +52,7 @@ static DamageTable D_809A8CDC = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xE),
 };
 
-const ActorInit En_Grasshopper_InitVars = {
+ActorInit En_Grasshopper_InitVars = {
     ACTOR_EN_GRASSHOPPER,
     ACTORCAT_ENEMY,
     FLAGS,

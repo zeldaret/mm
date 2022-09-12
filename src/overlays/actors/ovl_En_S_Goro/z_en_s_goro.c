@@ -94,7 +94,7 @@ typedef enum EnSGoroAnimation {
     /* 0xF */ EN_S_GORO_ANIM_IDLE_STAND
 } EnSGoroAnimation;
 
-const ActorInit En_S_Goro_InitVars = {
+ActorInit En_S_Goro_InitVars = {
     ACTOR_EN_S_GORO,
     ACTORCAT_NPC,
     FLAGS,

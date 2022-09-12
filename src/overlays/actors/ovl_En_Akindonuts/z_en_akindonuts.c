@@ -31,7 +31,7 @@ void func_80BEF9F0(EnAkindonuts* this, PlayState* play);
 void func_80BEFAF0(EnAkindonuts* this, PlayState* play);
 void func_80BEFD74(EnAkindonuts* this, PlayState* play);
 
-const ActorInit En_Akindonuts_InitVars = {
+ActorInit En_Akindonuts_InitVars = {
     ACTOR_EN_AKINDONUTS,
     ACTORCAT_NPC,
     FLAGS,

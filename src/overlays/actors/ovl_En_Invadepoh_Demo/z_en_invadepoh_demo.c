@@ -23,7 +23,7 @@ void func_80C19EC0(EnInvadepohDemo* this, PlayState* play);
 void func_80C19F7C(EnInvadepohDemo* this, PlayState* play);
 
 #if 0
-const ActorInit En_Invadepoh_Demo_InitVars = {
+ActorInit En_Invadepoh_Demo_InitVars = {
     ACTOR_EN_INVADEPOH_DEMO,
     ACTORCAT_PROP,
     FLAGS,

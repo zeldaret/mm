@@ -32,7 +32,7 @@ void func_80A70F2C(BgCraceMovebg* this, PlayState* play);
 void func_80A70FF4(BgCraceMovebg* this, PlayState* play);
 void func_80A71040(BgCraceMovebg* this, PlayState* play);
 
-const ActorInit Bg_Crace_Movebg_InitVars = {
+ActorInit Bg_Crace_Movebg_InitVars = {
     ACTOR_BG_CRACE_MOVEBG,
     ACTORCAT_BG,
     FLAGS,

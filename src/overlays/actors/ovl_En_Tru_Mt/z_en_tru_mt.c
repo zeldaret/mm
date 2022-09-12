@@ -20,7 +20,7 @@ void func_80B76A64(EnTruMt* this, PlayState* play);
 void func_80B76BB8(EnTruMt* this, PlayState* play);
 void func_80B76C38(EnTruMt* this, PlayState* play);
 
-const ActorInit En_Tru_Mt_InitVars = {
+ActorInit En_Tru_Mt_InitVars = {
     ACTOR_EN_TRU_MT,
     ACTORCAT_NPC,
     FLAGS,

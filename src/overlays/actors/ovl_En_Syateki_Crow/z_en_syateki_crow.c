@@ -26,7 +26,7 @@ void func_809CABC0(EnSyatekiCrow* this, PlayState* play);
 
 static Vec3f D_809CB050 = { 0.0f, 0.0f, 0.0f };
 
-const ActorInit En_Syateki_Crow_InitVars = {
+ActorInit En_Syateki_Crow_InitVars = {
     ACTOR_EN_SYATEKI_CROW,
     ACTORCAT_ENEMY,
     FLAGS,

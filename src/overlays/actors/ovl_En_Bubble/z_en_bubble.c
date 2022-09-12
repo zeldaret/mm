@@ -20,7 +20,7 @@ void func_808A0350(EnBubble* this, PlayState* play);
 void func_808A03E8(EnBubble* this, PlayState* play);
 
 #if 0
-const ActorInit En_Bubble_InitVars = {
+ActorInit En_Bubble_InitVars = {
     ACTOR_EN_BUBBLE,
     ACTORCAT_ENEMY,
     FLAGS,

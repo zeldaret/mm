@@ -31,7 +31,7 @@ void func_8092F7BC(EnHonotrap* this, PlayState* play);
 void func_8092F878(EnHonotrap* this, PlayState* play);
 
 #if 0
-const ActorInit En_Honotrap_InitVars = {
+ActorInit En_Honotrap_InitVars = {
     ACTOR_EN_HONOTRAP,
     ACTORCAT_PROP,
     FLAGS,

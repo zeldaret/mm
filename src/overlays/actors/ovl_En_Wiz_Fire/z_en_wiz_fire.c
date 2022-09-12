@@ -30,7 +30,7 @@ void func_80A4BF78(EnWizFire* this, PlayState* play);
 
 static s32 D_80A4C1C0 = 0;
 
-const ActorInit En_Wiz_Fire_InitVars = {
+ActorInit En_Wiz_Fire_InitVars = {
     ACTOR_EN_WIZ_FIRE,
     ACTORCAT_ENEMY,
     FLAGS,

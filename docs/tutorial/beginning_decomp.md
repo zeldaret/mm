@@ -27,7 +27,7 @@ void EnRecepgirl_Draw(Actor* thisx, PlayState* play);
 
 // --------------- 4 ---------------
 #if 0
-const ActorInit En_Recepgirl_InitVars = {
+ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
     ACTORCAT_NPC,
     FLAGS,
@@ -335,7 +335,7 @@ For now, we do not want to consider the data that mips2c has kindly imported for
 
 ```C
 #if 0
-const ActorInit En_Recepgirl_InitVars = {
+ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
     ACTORCAT_NPC,
     FLAGS,

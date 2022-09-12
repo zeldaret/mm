@@ -64,7 +64,7 @@ static AnimationInfoS sAnimationInfoBombShopkeeper[] = {
     { &gBombShopkeeperSitAtCounterLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
-const ActorInit En_Sob1_InitVars = {
+ActorInit En_Sob1_InitVars = {
     ACTOR_EN_OSSAN,
     ACTORCAT_NPC,
     FLAGS,

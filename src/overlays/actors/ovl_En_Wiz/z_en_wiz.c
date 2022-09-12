@@ -18,7 +18,7 @@ void EnWiz_Update(Actor* thisx, PlayState* play);
 void EnWiz_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Wiz_InitVars = {
+ActorInit En_Wiz_InitVars = {
     ACTOR_EN_WIZ,
     ACTORCAT_ENEMY,
     FLAGS,

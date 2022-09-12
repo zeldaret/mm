@@ -22,7 +22,7 @@ void func_808A7BA0(ObjWturn* this, PlayState* play);
 void func_808A7C04(ObjWturn* this, PlayState* play);
 void func_808A7C78(ObjWturn* this, PlayState* play);
 
-const ActorInit Obj_Wturn_InitVars = {
+ActorInit Obj_Wturn_InitVars = {
     ACTOR_OBJ_WTURN,       ACTORCAT_ITEMACTION,        FLAGS,
     GAMEPLAY_KEEP,         sizeof(ObjWturn),           (ActorFunc)ObjWturn_Init,
     (ActorFunc)Actor_Noop, (ActorFunc)ObjWturn_Update, (ActorFunc)NULL,

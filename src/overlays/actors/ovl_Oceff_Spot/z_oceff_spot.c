@@ -21,7 +21,7 @@ void func_80972934(OceffSpot* this, PlayState* play);
 void OceffSpot_SetupAction(OceffSpot* this, OceffSpotActionFunc actionFunc);
 
 #if 0
-const ActorInit Oceff_Spot_InitVars = {
+ActorInit Oceff_Spot_InitVars = {
     ACTOR_OCEFF_SPOT,
     ACTORCAT_ITEMACTION,
     FLAGS,

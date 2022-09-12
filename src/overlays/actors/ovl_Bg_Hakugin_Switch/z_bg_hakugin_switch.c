@@ -38,7 +38,7 @@ void func_80B165E0(BgHakuginSwitch* this, PlayState* play);
 
 u32 D_80B16AF0;
 
-const ActorInit Bg_Hakugin_Switch_InitVars = {
+ActorInit Bg_Hakugin_Switch_InitVars = {
     ACTOR_BG_HAKUGIN_SWITCH,
     ACTORCAT_SWITCH,
     FLAGS,

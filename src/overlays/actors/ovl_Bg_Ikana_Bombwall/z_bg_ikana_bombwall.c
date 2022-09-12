@@ -25,7 +25,7 @@ void func_80BD503C(BgIkanaBombwall* this, PlayState* play);
 void func_80BD5118(BgIkanaBombwall* this);
 void func_80BD5134(BgIkanaBombwall* this, PlayState* play);
 
-const ActorInit Bg_Ikana_Bombwall_InitVars = {
+ActorInit Bg_Ikana_Bombwall_InitVars = {
     ACTOR_BG_IKANA_BOMBWALL,
     ACTORCAT_BG,
     FLAGS,

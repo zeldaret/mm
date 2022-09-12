@@ -89,7 +89,7 @@ static s32 D_80BF33F0[] = {
     0x10000000,
 };
 
-const ActorInit En_Ig_InitVars = {
+ActorInit En_Ig_InitVars = {
     ACTOR_EN_IG,
     ACTORCAT_NPC,
     FLAGS,

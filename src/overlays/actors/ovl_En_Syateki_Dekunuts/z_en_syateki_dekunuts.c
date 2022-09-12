@@ -34,7 +34,7 @@ void func_80A2C478(EnSyatekiDekunuts* this);
 void func_80A2C48C(EnSyatekiDekunuts* this, PlayState* play);
 void func_80A2C5DC(EnSyatekiDekunuts* this, PlayState* play);
 
-const ActorInit En_Syateki_Dekunuts_InitVars = {
+ActorInit En_Syateki_Dekunuts_InitVars = {
     ACTOR_EN_SYATEKI_DEKUNUTS,
     ACTORCAT_ENEMY,
     FLAGS,

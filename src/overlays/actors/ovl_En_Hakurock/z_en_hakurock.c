@@ -32,7 +32,7 @@ void func_80B22750(EnHakurock* this, PlayState* play);
 void func_80B228F4(Actor* thisx, PlayState* play);
 void EnHakurock_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Hakurock_InitVars = {
+ActorInit En_Hakurock_InitVars = {
     ACTOR_EN_HAKUROCK,
     ACTORCAT_ITEMACTION,
     FLAGS,

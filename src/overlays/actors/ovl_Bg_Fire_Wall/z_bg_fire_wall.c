@@ -21,7 +21,7 @@ void func_809AC638(BgFireWall* this, PlayState* play);
 void func_809AC68C(BgFireWall* this, PlayState* play);
 void func_809AC6C0(BgFireWall* this, PlayState* play);
 
-const ActorInit Bg_Fire_Wall_InitVars = {
+ActorInit Bg_Fire_Wall_InitVars = {
     ACTOR_BG_FIRE_WALL,
     ACTORCAT_BG,
     FLAGS,

@@ -16,7 +16,7 @@ void EnTwig_Update(Actor* thisx, PlayState* play);
 void EnTwig_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Twig_InitVars = {
+ActorInit En_Twig_InitVars = {
     ACTOR_EN_TWIG,
     ACTORCAT_MISC,
     FLAGS,

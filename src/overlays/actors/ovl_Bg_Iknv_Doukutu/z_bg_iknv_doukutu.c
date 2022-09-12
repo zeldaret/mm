@@ -27,7 +27,7 @@ void func_80BD7820(Actor* thisx, PlayState* play);
 void func_80BD78C4(Actor* thisx, PlayState* play);
 void func_80BD7538(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Iknv_Doukutu_InitVars = {
+ActorInit Bg_Iknv_Doukutu_InitVars = {
     ACTOR_BG_IKNV_DOUKUTU,
     ACTORCAT_BG,
     FLAGS,

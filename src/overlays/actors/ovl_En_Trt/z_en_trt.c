@@ -77,7 +77,7 @@ static AnimationInfoS sAnimationInfo[] = {
     { &object_trt_Anim_002CB0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
-const ActorInit En_Trt_InitVars = {
+ActorInit En_Trt_InitVars = {
     ACTOR_EN_TRT,
     ACTORCAT_NPC,
     FLAGS,

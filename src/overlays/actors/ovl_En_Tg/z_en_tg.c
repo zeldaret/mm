@@ -18,7 +18,7 @@ void EnTg_Draw(Actor* thisx, PlayState* play);
 void func_8098FA70(EnTg* this, PlayState* play);
 
 #if 0
-const ActorInit En_Tg_InitVars = {
+ActorInit En_Tg_InitVars = {
     ACTOR_EN_TG,
     ACTORCAT_NPC,
     FLAGS,

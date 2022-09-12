@@ -16,7 +16,7 @@ void EnNimotsu_Update(Actor* thisx, PlayState* play);
 void EnNimotsu_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Nimotsu_InitVars = {
+ActorInit En_Nimotsu_InitVars = {
     ACTOR_EN_NIMOTSU,
     ACTORCAT_PROP,
     FLAGS,

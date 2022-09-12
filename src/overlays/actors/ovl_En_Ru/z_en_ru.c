@@ -18,7 +18,7 @@ void EnRu_Draw(Actor* thisx, PlayState* play);
 void func_80A38DF4(EnRu* this, PlayState* play);
 
 #if 0
-const ActorInit En_Ru_InitVars = {
+ActorInit En_Ru_InitVars = {
     ACTOR_EN_RU,
     ACTORCAT_NPC,
     FLAGS,

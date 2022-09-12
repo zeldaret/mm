@@ -17,7 +17,7 @@ void EnMThunder_Update(Actor* thisx, PlayState* play);
 void EnMThunder_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_M_Thunder_InitVars = {
+ActorInit En_M_Thunder_InitVars = {
     ACTOR_EN_M_THUNDER,
     ACTORCAT_ITEMACTION,
     FLAGS,

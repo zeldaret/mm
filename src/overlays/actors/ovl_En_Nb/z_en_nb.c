@@ -19,7 +19,7 @@ void func_80BC0D84(EnNb* this, PlayState* play);
 void func_80BC0EAC(EnNb* this, PlayState* play);
 
 #if 0
-const ActorInit En_Nb_InitVars = {
+ActorInit En_Nb_InitVars = {
     ACTOR_EN_NB,
     ACTORCAT_NPC,
     FLAGS,

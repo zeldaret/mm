@@ -19,7 +19,7 @@ void func_80A9A1DC(EnEstone* this, PlayState* play);
 void func_80A9A4B0(EnEstone* this, PlayState* play);
 
 #if 0
-const ActorInit En_Estone_InitVars = {
+ActorInit En_Estone_InitVars = {
     ACTOR_EN_ESTONE,
     ACTORCAT_PROP,
     FLAGS,

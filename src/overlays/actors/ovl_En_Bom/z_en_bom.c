@@ -32,7 +32,7 @@ typedef struct {
 
 static PowderKegFuseSegment sPowderKegFuseSegments[16];
 
-const ActorInit En_Bom_InitVars = {
+ActorInit En_Bom_InitVars = {
     ACTOR_EN_BOM,
     ACTORCAT_EXPLOSIVES,
     FLAGS,

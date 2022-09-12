@@ -23,7 +23,7 @@ void func_80C1F4E8(EnPaper* this);
 void func_80C1F55C(EnPaper* this, EnPaperStruct* arg1);
 void func_80C1F6E0(EnPaper* this, EnPaperStruct* arg1);
 
-const ActorInit En_Paper_InitVars = {
+ActorInit En_Paper_InitVars = {
     ACTOR_EN_PAPER,
     ACTORCAT_ITEMACTION,
     FLAGS,

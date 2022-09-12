@@ -16,7 +16,7 @@ void OceffWipe5_Update(Actor* thisx, PlayState* play);
 void OceffWipe5_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Oceff_Wipe5_InitVars = {
+ActorInit Oceff_Wipe5_InitVars = {
     ACTOR_OCEFF_WIPE5,
     ACTORCAT_ITEMACTION,
     FLAGS,

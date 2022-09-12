@@ -16,7 +16,7 @@ void EnJs_Update(Actor* thisx, PlayState* play);
 void EnJs_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Js_InitVars = {
+ActorInit En_Js_InitVars = {
     ACTOR_EN_JS,
     ACTORCAT_NPC,
     FLAGS,

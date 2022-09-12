@@ -28,7 +28,7 @@ void func_80A36504(EnSyatekiOkuta* this, PlayState* play);
 void func_80A365EC(EnSyatekiOkuta* this, PlayState* play);
 void func_80A36CB0(EnSyatekiOkuta* this);
 
-const ActorInit En_Syateki_Okuta_InitVars = {
+ActorInit En_Syateki_Okuta_InitVars = {
     ACTOR_EN_SYATEKI_OKUTA,
     ACTORCAT_ENEMY,
     FLAGS,

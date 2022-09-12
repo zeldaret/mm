@@ -33,7 +33,7 @@ void func_80B95240(EnZog* this, PlayState* play);
 
 static u8 D_80B95E10;
 
-const ActorInit En_Zog_InitVars = {
+ActorInit En_Zog_InitVars = {
     ACTOR_EN_ZOG,
     ACTORCAT_NPC,
     FLAGS,

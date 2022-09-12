@@ -18,7 +18,7 @@ void DmChar02_Draw(Actor* thisx, PlayState* play);
 
 void DmChar02_PerformCutsceneActions(DmChar02* this, PlayState* play);
 
-const ActorInit Dm_Char02_InitVars = {
+ActorInit Dm_Char02_InitVars = {
     ACTOR_DM_CHAR02,
     ACTORCAT_ITEMACTION,
     FLAGS,

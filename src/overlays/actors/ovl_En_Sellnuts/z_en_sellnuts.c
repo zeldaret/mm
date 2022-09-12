@@ -49,7 +49,7 @@ static u16 D_80ADD938[] = { 0x0615, 0x060F, 0x060F };
 
 static u8 D_80ADD940 = 0;
 
-const ActorInit En_Sellnuts_InitVars = {
+ActorInit En_Sellnuts_InitVars = {
     ACTOR_EN_SELLNUTS,
     ACTORCAT_NPC,
     FLAGS,

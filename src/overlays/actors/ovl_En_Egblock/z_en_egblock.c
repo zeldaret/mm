@@ -16,7 +16,7 @@ void EnEgblock_Update(Actor* thisx, PlayState* play);
 void EnEgblock_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Egblock_InitVars = {
+ActorInit En_Egblock_InitVars = {
     ACTOR_EN_EGBLOCK,
     ACTORCAT_PROP,
     FLAGS,

@@ -25,7 +25,7 @@ void func_809A3D38(ObjPzlblock* this, PlayState* play);
 void func_809A3E58(Actor* thisx, PlayState* play);
 void func_809A3F0C(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Pzlblock_InitVars = {
+ActorInit Obj_Pzlblock_InitVars = {
     ACTOR_OBJ_PZLBLOCK,
     ACTORCAT_PROP,
     FLAGS,

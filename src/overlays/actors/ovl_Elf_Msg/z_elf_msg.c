@@ -18,7 +18,7 @@ void ElfMsg_Update(Actor* thisx, PlayState* play);
 void ElfMsg_SetupAction(ElfMsg* this, ElfMsgActionFunc actionFunc);
 void func_8092E284(ElfMsg* this, PlayState* play);
 
-const ActorInit Elf_Msg_InitVars = {
+ActorInit Elf_Msg_InitVars = {
     ACTOR_ELF_MSG,
     ACTORCAT_ITEMACTION,
     FLAGS,

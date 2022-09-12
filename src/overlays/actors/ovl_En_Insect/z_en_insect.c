@@ -32,7 +32,7 @@ void func_8091B984(EnInsect* this, PlayState* play);
 
 s16 D_8091BD60 = 0;
 
-const ActorInit En_Insect_InitVars = {
+ActorInit En_Insect_InitVars = {
     ACTOR_EN_INSECT,
     ACTORCAT_ITEMACTION,
     FLAGS,

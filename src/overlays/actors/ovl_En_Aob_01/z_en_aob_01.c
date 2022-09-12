@@ -32,7 +32,7 @@ void func_809C2C9C(EnAob01* this, PlayState* play);
 void func_809C2D0C(EnAob01* this, PlayState* play);
 s32 func_809C2EC4(EnAob01* this, PlayState* play);
 
-const ActorInit En_Aob_01_InitVars = {
+ActorInit En_Aob_01_InitVars = {
     ACTOR_EN_AOB_01,
     ACTORCAT_NPC,
     FLAGS,

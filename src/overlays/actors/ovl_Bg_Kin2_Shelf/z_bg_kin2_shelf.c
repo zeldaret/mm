@@ -23,7 +23,7 @@ void func_80B70230(BgKin2Shelf* this, PlayState* play);
 void func_80B70498(BgKin2Shelf* this);
 void func_80B704B4(BgKin2Shelf* this, PlayState* play);
 
-const ActorInit Bg_Kin2_Shelf_InitVars = {
+ActorInit Bg_Kin2_Shelf_InitVars = {
     ACTOR_BG_KIN2_SHELF,
     ACTORCAT_BG,
     FLAGS,

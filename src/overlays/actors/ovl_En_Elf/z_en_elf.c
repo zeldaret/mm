@@ -33,7 +33,7 @@ void func_8088F5F4(EnElf* this, PlayState* play, s32 arg2);
 void func_8089010C(Actor* thisx, PlayState* play);
 void func_808908D0(Vec3f* arg0, PlayState* play, u32 arg2);
 
-const ActorInit En_Elf_InitVars = {
+ActorInit En_Elf_InitVars = {
     ACTOR_EN_ELF,
     ACTORCAT_ITEMACTION,
     FLAGS,

@@ -18,7 +18,7 @@ void func_800A6650(EnItem00* this, PlayState* play);
 void func_800A6780(EnItem00* this, PlayState* play);
 void func_800A6A40(EnItem00* this, PlayState* play);
 
-const ActorInit En_Item00_InitVars = {
+ActorInit En_Item00_InitVars = {
     ACTOR_EN_ITEM00,
     ACTORCAT_MISC,
     FLAGS,

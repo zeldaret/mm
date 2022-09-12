@@ -22,7 +22,7 @@ void func_80931A38(ObjIcePoly* this, PlayState* play);
 void func_80931E58(ObjIcePoly* this, PlayState* play);
 void func_80931EEC(ObjIcePoly* this, PlayState* play);
 
-const ActorInit Obj_Ice_Poly_InitVars = {
+ActorInit Obj_Ice_Poly_InitVars = {
     ACTOR_OBJ_ICE_POLY,
     ACTORCAT_ITEMACTION,
     FLAGS,

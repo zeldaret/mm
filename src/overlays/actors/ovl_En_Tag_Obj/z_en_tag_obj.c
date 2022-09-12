@@ -34,7 +34,7 @@ static ColliderCylinderInit sUnusedColliderInit = {
     { 20, 30, 0, { 0, 0, 0 } },
 };
 
-const ActorInit En_Tag_Obj_InitVars = {
+ActorInit En_Tag_Obj_InitVars = {
     ACTOR_EN_TAG_OBJ,
     ACTORCAT_PROP,
     FLAGS,

@@ -19,7 +19,7 @@ void EnDai_Draw(Actor* thisx, PlayState* play);
 void func_80B3F00C(EnDai* this, PlayState* play);
 void func_80B3EF90(EnDai* this, PlayState* play);
 
-const ActorInit En_Dai_InitVars = {
+ActorInit En_Dai_InitVars = {
     ACTOR_EN_DAI,
     ACTORCAT_NPC,
     FLAGS,

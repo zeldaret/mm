@@ -24,7 +24,7 @@ void func_80B65D68(ObjKendoKanban* this, PlayState* play);
 void func_80B65DA8(ObjKendoKanban* this, PlayState* play);
 s32 func_80B6618C(ObjKendoKanban* this, PlayState* play);
 
-const ActorInit Obj_Kendo_Kanban_InitVars = {
+ActorInit Obj_Kendo_Kanban_InitVars = {
     ACTOR_OBJ_KENDO_KANBAN,
     ACTORCAT_NPC,
     FLAGS,

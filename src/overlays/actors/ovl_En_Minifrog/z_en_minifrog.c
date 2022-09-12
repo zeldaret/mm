@@ -26,7 +26,7 @@ void EnMinifrog_UpdateMissingFrog(Actor* thisx, PlayState* play);
 void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play);
 void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, PlayState* play);
 
-const ActorInit En_Minifrog_InitVars = {
+ActorInit En_Minifrog_InitVars = {
     ACTOR_EN_MINIFROG,
     ACTORCAT_NPC,
     FLAGS,

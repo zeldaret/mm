@@ -42,7 +42,7 @@ void func_80C00284(EnBomjima* this, PlayState* play);
 static s32 D_80C009F0 = 0;
 static s32 D_80C009F4 = 0;
 
-const ActorInit En_Bomjima_InitVars = {
+ActorInit En_Bomjima_InitVars = {
     ACTOR_EN_BOMJIMA,
     ACTORCAT_NPC,
     FLAGS,

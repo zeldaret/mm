@@ -21,7 +21,7 @@ void func_80981B48(OceffStorm* this, PlayState* play);
 void OceffStorm_SetupAction(OceffStorm* this, OceffStormActionFunc actionFunc);
 
 #if 0
-const ActorInit Oceff_Storm_InitVars = {
+ActorInit Oceff_Storm_InitVars = {
     ACTOR_OCEFF_STORM,
     ACTORCAT_ITEMACTION,
     FLAGS,

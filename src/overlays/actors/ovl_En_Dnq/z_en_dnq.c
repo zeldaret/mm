@@ -23,7 +23,7 @@ static s32 D_80A53400[] = {
     0x0C0E089D, 0x0C0F089E, 0x0C111202, 0x100E089F, 0x0C100000, 0x0E08A10C, 0x0F08A20C, 0x10000000,
 };
 
-const ActorInit En_Dnq_InitVars = {
+ActorInit En_Dnq_InitVars = {
     ACTOR_EN_DNQ,
     ACTORCAT_NPC,
     FLAGS,

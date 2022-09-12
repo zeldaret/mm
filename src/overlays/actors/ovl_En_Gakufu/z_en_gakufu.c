@@ -25,7 +25,7 @@ void EnGakufu_GiveReward(EnGakufu* this, PlayState* play);
 void EnGakufu_PlayRewardCutscene(EnGakufu* this, PlayState* play);
 void EnGakufu_WaitForSong(EnGakufu* this, PlayState* play);
 
-const ActorInit En_Gakufu_InitVars = {
+ActorInit En_Gakufu_InitVars = {
     ACTOR_EN_GAKUFU,
     ACTORCAT_ITEMACTION,
     FLAGS,
