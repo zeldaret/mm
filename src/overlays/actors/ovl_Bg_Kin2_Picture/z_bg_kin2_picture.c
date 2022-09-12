@@ -73,7 +73,7 @@ static ColliderTrisInit sTrisInit = {
         OC2_NONE,
         COLSHAPE_TRIS,
     },
-    2,
+    ARRAY_COUNT(sTrisElementsInit),
     sTrisElementsInit,
 };
 
@@ -89,18 +89,18 @@ s32 BgKin2Picture_IsSkulltulaCollected(PlayState* play, s32 skulltulaParams) {
     s32 flag = -1;
 
     if ((u8)skulltulaParams & 3) {
-        flag = (u8)(((skulltulaParams & 0x3FC)) >> 2);
+        flag = BG_KIN2_PICTURE_GETS_3FC(skulltulaParams);
     }
 
     return (flag >= 0) && Flags_GetTreasure(play, flag);
 }
 
-void BgKin2Picture_SpawnSkulltula(BgKin2Picture* thisx, PlayState* play) {
-    BgKin2Picture* this = thisx;
+void BgKin2Picture_SpawnSkulltula(BgKin2Picture* this, PlayState* play2) {
+    PlayState* play = play2;
     s32 actorSpawnParams;
 
     if (!BG_KIN2_PICTURE_GET_PARAMS_05(&this->dyna.actor)) { // Gold Skulltula is still here.
-        actorSpawnParams = (BG_KIN2_PICTURE_GET_1F(&this->dyna.actor) << 2) | 0xFF03;
+        actorSpawnParams = BG_KIN2_PICTURE_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
         if (!BgKin2Picture_IsSkulltulaCollected(play, actorSpawnParams) &&
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->dyna.actor.home.pos.x,
                         this->dyna.actor.home.pos.y + 23.0f, this->dyna.actor.home.pos.z, 0,
@@ -177,7 +177,7 @@ void BgKin2Picture_Init(Actor* thisx, PlayState* play) {
     }
 
     Actor_SetFocus(&this->dyna.actor, 23.0f);
-    skulltulaParams = (BG_KIN2_PICTURE_GET_1F(&this->dyna.actor) << 2) | 0xFF03;
+    skulltulaParams = BG_KIN2_PICTURE_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
 
     if (BG_KIN2_PICTURE_GET_PARAMS_05(&this->dyna.actor) || BgKin2Picture_IsSkulltulaCollected(play, skulltulaParams)) {
         this->skulltulaNoiseTimer = -1;
@@ -207,6 +207,7 @@ void BgKin2Picture_Wait(BgKin2Picture* this, PlayState* play) {
         if (this->skulltulaNoiseTimer >= 0) {
             if (this->skulltulaNoiseTimer == 0) {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
+
                 if (Rand_ZeroOne() < 0.1f) {
                     this->skulltulaNoiseTimer = Rand_S16Offset(40, 80);
                 } else {
@@ -279,9 +280,9 @@ void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play) {
     }
 
     Actor_MoveWithGravity(&this->dyna.actor);
-    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4U);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
 
-    if ((this->dyna.actor.bgCheckFlags & 1)) {
+    if (this->dyna.actor.bgCheckFlags & 1) {
         Math_StepToS(&this->step, 0x7D0, 0x78);
 
         if (this->landTimer < 3) {
@@ -303,7 +304,7 @@ void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play) {
 
     Actor_SetFocus(&this->dyna.actor, 23.0f);
 
-    if (!(this->hasSpawnedDust) && (this->dyna.actor.shape.rot.x > 0x3300)) {
+    if (!this->hasSpawnedDust && (this->dyna.actor.shape.rot.x > 0x3300)) {
         BgKin2Picture_SpawnDust(this, play);
         this->hasSpawnedDust = true;
     }
@@ -332,10 +333,12 @@ void BgKin2Picture_DoNothing(BgKin2Picture* this, PlayState* play) {
 
 void BgKin2Picture_Update(Actor* thisx, PlayState* play) {
     BgKin2Picture* this = THIS;
+
     this->actionFunc(this, play);
 }
 
 void BgKin2Picture_Draw(Actor* thisx, PlayState* play) {
     BgKin2Picture* this = THIS;
+
     Gfx_DrawDListOpa(play, gOceanSpiderHouseSkullkidPaintingDL);
 }
