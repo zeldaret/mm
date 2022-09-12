@@ -1,9 +1,8 @@
 #include "global.h"
 #include "z64load.h"
 
-// Overlay_VramToLoaded
-void* func_801651B0(TransitionOverlay* overlayEntry, void* vramAddr) {
-    void* loadedRamAddr = Lib_PhysicalToVirtualNull(overlayEntry->loadedRamAddr);
+void* TransitionOverlay_VramToRam(TransitionOverlay* overlayEntry, void* vramAddr) {
+    void* loadedRamAddr = Lib_PhysicalToVirtual(overlayEntry->load.addr);
 
     if ((loadedRamAddr != NULL) && (vramAddr >= overlayEntry->vramStart) && (vramAddr < overlayEntry->vramEnd)) {
         return ((uintptr_t)loadedRamAddr - (uintptr_t)overlayEntry->vramStart) + (uintptr_t)vramAddr;
@@ -11,24 +10,22 @@ void* func_801651B0(TransitionOverlay* overlayEntry, void* vramAddr) {
     return vramAddr;
 }
 
-// Overlay_VramToLoadedArray
-void func_80165224(TransitionOverlay* overlayEntry, void** vramAddrs, s32 count) {
+void TransitionOverlay_VramToRamArray(TransitionOverlay* overlayEntry, void** vramAddrs, s32 count) {
     s32 i;
 
     for (i = 0; i < count; i++) {
-        vramAddrs[i] = func_801651B0(overlayEntry, vramAddrs[i]);
+        vramAddrs[i] = TransitionOverlay_VramToRam(overlayEntry, vramAddrs[i]);
     }
 }
 
-// Overlay_LoadOverlay
-s32 func_80165288(TransitionOverlay* overlayEntry) {
+s32 TransitionOverlay_Load(TransitionOverlay* overlayEntry) {
     s32 count;
     void* loadedRamAddr;
 
     if (overlayEntry->vromStart == 0) {
         return 3;
     }
-    if (Lib_PhysicalToVirtualNull(overlayEntry->loadedRamAddr) == NULL) {
+    if (Lib_PhysicalToVirtual(overlayEntry->load.addr) == NULL) {
         loadedRamAddr = ZeldaArena_Malloc(VRAM_PTR_SIZE(overlayEntry));
 
         if (loadedRamAddr == NULL) {
@@ -36,14 +33,14 @@ s32 func_80165288(TransitionOverlay* overlayEntry) {
         }
         Load2_LoadOverlay(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart,
                           overlayEntry->vramEnd, loadedRamAddr);
-        overlayEntry->loadedRamAddr = Lib_PhysicalToVirtual(loadedRamAddr);
-        overlayEntry->count = 1;
+        overlayEntry->load.addr = Lib_VirtualToPhysical(loadedRamAddr);
+        overlayEntry->load.count = 1;
         return 0;
     }
-    count = overlayEntry->count;
+    count = overlayEntry->load.count;
     if (count != 0) {
         count++;
-        overlayEntry->count = count;
+        overlayEntry->load.count = count;
         if (count == 0) {
             return 2;
         } else {
@@ -54,23 +51,22 @@ s32 func_80165288(TransitionOverlay* overlayEntry) {
     }
 }
 
-// Overlay_FreeOverlay
-s32 func_8016537C(TransitionOverlay* overlayEntry) {
+s32 TransitionOverlay_Free(TransitionOverlay* overlayEntry) {
     s32 count;
     void* loadedRamAddr;
 
     if (overlayEntry->vromStart == 0) {
         return 3;
     }
-    loadedRamAddr = Lib_PhysicalToVirtualNull(overlayEntry->loadedRamAddr);
+    loadedRamAddr = Lib_PhysicalToVirtual(overlayEntry->load.addr);
     if (loadedRamAddr != NULL) {
-        count = overlayEntry->count;
+        count = overlayEntry->load.count;
         if (count != 0) {
             count--;
-            overlayEntry->count = count;
+            overlayEntry->load.count = count;
             if (count == 0) {
                 ZeldaArena_Free(loadedRamAddr);
-                overlayEntry->loadedRamAddr = Lib_PhysicalToVirtual(NULL);
+                overlayEntry->load.addr = Lib_VirtualToPhysical(NULL);
                 return 0;
             }
             return 1;
@@ -80,13 +76,12 @@ s32 func_8016537C(TransitionOverlay* overlayEntry) {
     return -1;
 }
 
-// Overlay_ClearLoadInfo
-void func_80165438(TransitionOverlay* overlayEntry) {
-    overlayEntry->loadInfo = 0;
+void TransitionOverlay_ClearLoadInfo(TransitionOverlay* overlayEntry) {
+    overlayEntry->loadInfo = 0; // load.count = 0, load.addr = 0
 }
 
-// Overlay_SetSegment
-void func_80165444(TransitionOverlay* overlayEntry, void* vramStart, void* vramEnd, u32 vromStart, u32 vromEnd) {
+void TransitionOverlay_SetSegment(TransitionOverlay* overlayEntry, void* vramStart, void* vramEnd, u32 vromStart,
+                                  u32 vromEnd) {
     overlayEntry->vramStart = vramStart;
     overlayEntry->vramEnd = vramEnd;
     overlayEntry->vromStart = vromStart;

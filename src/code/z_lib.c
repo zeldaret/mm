@@ -709,15 +709,15 @@ void* Lib_SegmentedToVirtualNull(void* ptr) {
     return SEGMENTED_TO_VIRTUAL(ptr);
 }
 
-void* Lib_PhysicalToVirtual(void* ptr) {
+void* Lib_VirtualToPhysical(void* ptr) {
     if (ptr == NULL) {
         return NULL;
     } else {
-        return (void*)PHYSICAL_TO_VIRTUAL(ptr);
+        return (void*)VIRTUAL_TO_PHYSICAL(ptr);
     }
 }
 
-void* Lib_PhysicalToVirtualNull(void* ptr) {
+void* Lib_PhysicalToVirtual(void* ptr) {
     if (ptr == NULL) {
         return NULL;
     } else {

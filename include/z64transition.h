@@ -16,18 +16,18 @@ typedef struct {
 } TransitionInit; // size = 0x24
 
 typedef struct {
-    /* 0x00 */ union {
-                   u32 loadInfo;
-                   struct {
-                       u32 count : 8;
-                       uintptr_t loadedRamAddr : 24;
-                   };
-               };
+    union {
+        struct {
+    /* 0x00 */ u32 count : 8;
+    /* 0x00 */ uintptr_t addr : 24;
+        } load;
+    /* 0x00 */ u32 loadInfo;
+    };
     /* 0x04 */ void* vramStart;
     /* 0x08 */ void* vramEnd;
     /* 0x0C */ uintptr_t vromStart;
     /* 0x10 */ uintptr_t vromEnd;
-    /* 0x14 */ const TransitionInit* initInfo;
+    /* 0x14 */ TransitionInit* initInfo;
     /* 0x18 */ size_t size;
 } TransitionOverlay;
  
@@ -52,7 +52,7 @@ typedef struct {
     /* 0x240 */ void  (*start)(void* transition);
     /* 0x244 */ void  (*setType)(void* transition, s32 type);
     /* 0x248 */ void  (*setColor)(void* transition, u32 color);
-    /* 0x24C */ void  (*setUnkColor)(void* transition, u32 color);
+    /* 0x24C */ void  (*setEnvColor)(void* transition, u32 color);
     /* 0x250 */ s32   (*isDone)(void* transition);
     /* 0x254 */ char unk254[0x4];
 } TransitionContext; // size = 0x258
@@ -61,12 +61,12 @@ typedef struct {
     /* 0x0 */ char unk_0[0xC];
 } TransitionFade; // size = 0xC
 
-extern const TransitionInit TransitionFade_InitVars;
+extern TransitionInit TransitionFade_InitVars;
 
 typedef struct {
     /* 0x00 */ char unk_0[0x20];
 } TransitionCircle; // size = 0x20
 
-extern const TransitionInit TransitionCircle_InitVars;
+extern TransitionInit TransitionCircle_InitVars;
 
 #endif

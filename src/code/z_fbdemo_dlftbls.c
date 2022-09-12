@@ -5,14 +5,14 @@
 #include "overlays/fbdemos/ovl_fbdemo_wipe4/z_fbdemo_wipe4.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.h"
 
-#define TRANSITION_OVERLAY(name, filename)                                                                \
-    {                                                                                                     \
-        0, SEGMENT_START(ovl_##filename), SEGMENT_END(ovl_##filename), SEGMENT_ROM_START(ovl_##filename), \
-            SEGMENT_ROM_END(ovl_##filename), &name##_InitVars, sizeof(name)                               \
+#define TRANSITION_OVERLAY(name, filename)                                                                       \
+    {                                                                                                            \
+        { 0, 0 }, SEGMENT_START(ovl_##filename), SEGMENT_END(ovl_##filename), SEGMENT_ROM_START(ovl_##filename), \
+            SEGMENT_ROM_END(ovl_##filename), &name##_InitVars, sizeof(name)                                      \
     }
 
 #define TRANSITION_OVERLAY_INTERNAL(name) \
-    { 0, NULL, NULL, 0, 0, &name##_InitVars, sizeof(name) }
+    { { 0, 0 }, NULL, NULL, 0, 0, &name##_InitVars, sizeof(name) }
 
 #define TRANSITION_OVERLAY_UNSET \
     { 0 }
@@ -24,17 +24,15 @@ TransitionOverlay gTransitionOverlayTable[] = {
     TRANSITION_OVERLAY(TransitionWipe5, fbdemo_wipe5),
 };
 
-// Transition_Init
-void func_80163C90(TransitionContext* transitionCtx) {
+void Transition_Init(TransitionContext* transitionCtx) {
     TransitionOverlay* overlayEntry;
     intptr_t relocOffset;
     TransitionInit* initInfo[1];
 
     overlayEntry = &gTransitionOverlayTable[transitionCtx->fbdemoType];
-    func_80165288(overlayEntry);
+    TransitionOverlay_Load(overlayEntry);
 
-    relocOffset =
-        (uintptr_t)Lib_PhysicalToVirtualNull(overlayEntry->loadedRamAddr) - (uintptr_t)overlayEntry->vramStart;
+    relocOffset = (uintptr_t)Lib_PhysicalToVirtual(overlayEntry->load.addr) - (uintptr_t)overlayEntry->vramStart;
     initInfo[0] = NULL;
     initInfo[0] = (overlayEntry->initInfo != NULL) ? (TransitionInit*)((uintptr_t)overlayEntry->initInfo + relocOffset)
                                                    : initInfo[0];
@@ -47,10 +45,9 @@ void func_80163C90(TransitionContext* transitionCtx) {
     transitionCtx->update = initInfo[0]->update;
     transitionCtx->setType = initInfo[0]->setType;
     transitionCtx->setColor = initInfo[0]->setColor;
-    transitionCtx->setUnkColor = initInfo[0]->setEnvColor;
+    transitionCtx->setEnvColor = initInfo[0]->setEnvColor;
 }
 
-// Transition_Destroy
-void func_80163D80(TransitionContext* transitionCtx) {
-    func_8016537C(&gTransitionOverlayTable[transitionCtx->fbdemoType]);
+void Transition_Destroy(TransitionContext* transitionCtx) {
+    TransitionOverlay_Free(&gTransitionOverlayTable[transitionCtx->fbdemoType]);
 }

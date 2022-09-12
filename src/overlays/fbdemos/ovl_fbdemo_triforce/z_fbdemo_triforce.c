@@ -16,7 +16,7 @@ void TransitionTriforce_SetColor(void* thisx, u32 color);
 s32 TransitionTriforce_IsDone(void* thisx);
 
 #if 0
-const TransitionInit TransitionTriforce_InitVars = {
+TransitionInit TransitionTriforce_InitVars = {
     TransitionTriforce_Init,
     TransitionTriforce_Destroy,
     TransitionTriforce_Update,
