@@ -43,20 +43,20 @@ void* thing = [
 typedef enum {
     // enum {
     /* 0 */ ENGO_F_0 = 0,
-    /* 1 */ ENGO_RACER,      // Goron Racers
-    /* 2 */ ENGO_SPECTATOR,  // Goron Spectators
-    /* 3 */ ENGO_GATEKEEPER, // Goron Gatekeeper
+    /* 1 */ ENGO_RACER,      // Racers
+    /* 2 */ ENGO_SPECTATOR,  // Spectators
+    /* 3 */ ENGO_GATEKEEPER, // Gatekeeper
     /* 4 */ ENGO_BROTHER,
-    /* 5 */ ENGO_F_5,         // Shrine Gorons?
-    /* 6 */ ENGO_F_6,         // Shrine Gorons?
-    /* 7 */ ENGO_F_7,         // Shrine Gorons?
-    /* 8 */ ENGO_PKEG_SELLER, // PowderKeg Goron
+    /* 5 */ ENGO_ASIDE_STORE,      // Shrine Goron Outside Store
+    /* 6 */ ENGO_ASIDE_ELDERSROOM, // Shrine Goron Outside Elder's room
+    /* 7 */ ENGO_ASIDE_ELDERSSON,  // Shrine Goron Stage Left of throne
+    /* 8 */ ENGO_PKEG_SELLER,      // PowderKeg Goron
 } EnGoType;
 
 typedef enum {
     // enum {
     /* 0 */ ENGO_SQUAT_STRETCHER = 0,
-    /* 1 */ ENGO_70_1,           // Unused Racer
+    /* 1 */ ENGO_UNUSED,         // Unused Racer
     /* 2 */ ENGO_LIMB_SHAKER,    // Limb Shaker
     /* 3 */ ENGO_SIDE_STRETCHER, // Side  Stretcher
     /* 4 */ ENGO_70_4,           // Hamstring Stretcher
@@ -143,10 +143,10 @@ typedef struct EnGo {
     /* 0x288 */ s8 indexTaisou;
     /* 0x289 */ s8 indexHakuginDemo;
     /* 0x28C */ s32 msgScriptResumePos;
-    /* 0x290 */ Vec3f limb17Pos;
-    /* 0x29C */ Vec3f limb10Pos;
-    /* 0x2A8 */ Vec3s limb17Rot;
-    /* 0x2AE */ Vec3s limb10Rot;
+    /* 0x290 */ Vec3f headPos;
+    /* 0x29C */ Vec3f bodyPos;
+    /* 0x2A8 */ Vec3s headRot;
+    /* 0x2AE */ Vec3s bodyRot;
     /* 0x2B4 */ Vec3s jointTable[18];
     /* 0x320 */ Vec3s morphTable[18];
     /* 0x38C */ Actor* targetActor;
@@ -168,7 +168,7 @@ typedef struct EnGo {
     /* 0x3B4 */ s16 bodyRotZ; // Limb10 rotZ
     /* 0x3B6 */ s16 bodyRotY; // Limb10 rotY
     /* 0x3B8 */ s16 indexCutscene;
-    /* 0x3BA */ s16 unk_3BA;
+    /* 0x3BA */ s16 loseAttentionTimer;
     /* 0x3BC */ s16 eyeTimer;
     /* 0x3BE */ s16 eyeTexIndex;
     /* 0x3C0 */ s16 cutsceneState;
@@ -177,7 +177,7 @@ typedef struct EnGo {
     /* 0x3C6 */ s16 harmlessTimer;
     /* 0x3C8 */ s16 limbRotTableZ[3];
     /* 0x3CE */ s16 limbRotTableY[3];
-    /* 0x3D4 */ s16 unk_3D4;
+    /* 0x3D4 */ s16 surprisePhase;
     /* 0x3D8 */ void* msgEventCb; // MsgEventCallback
     /* 0x3DC */ EnGoAnimationIndex anim;
     /* 0x3E0 */ UNK_TYPE1 unk3E0[0x4];
@@ -185,7 +185,7 @@ typedef struct EnGo {
     /* 0x3E8 */ s32 indexEffect;
     /* 0x3EC */ s32 sleepState;
     /* 0x3F0 */ s32 unk_3F0;
-    /* 0x3F4 */ s32 unk_3F4;
+    /* 0x3F4 */ s32 changedText;
     /* 0x3F8 */ EnGoEffect effectTable[ENGO_NUM_EFFECTS];
 } EnGo; // size = 0xB78
 
