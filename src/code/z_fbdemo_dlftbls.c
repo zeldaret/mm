@@ -1,30 +1,56 @@
 #include "global.h"
+#include "overlays/fbdemos/ovl_fbdemo_triforce/z_fbdemo_triforce.h"
+#include "overlays/fbdemos/ovl_fbdemo_wipe1/z_fbdemo_wipe1.h"
+#include "overlays/fbdemos/ovl_fbdemo_wipe3/z_fbdemo_wipe3.h"
+#include "overlays/fbdemos/ovl_fbdemo_wipe4/z_fbdemo_wipe4.h"
+#include "overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.h"
 
-extern TransitionOverlay D_801D0BB0[];
+#define TRANSITION_OVERLAY(name, filename)                                                                \
+    {                                                                                                     \
+        0, SEGMENT_START(ovl_##filename), SEGMENT_END(ovl_##filename), SEGMENT_ROM_START(ovl_##filename), \
+            SEGMENT_ROM_END(ovl_##filename), &name##_InitVars, sizeof(name)                               \
+    }
 
-void func_80163C90(TransitionContext *transitionCtx) {
-    TransitionOverlay *sp24;
-    intptr_t temp2;
-    TransitionInit* sp1C[1];
-     
-    sp24 = &D_801D0BB0[transitionCtx->fbdemoType];
-    func_80165288(sp24);
-    
-    temp2 = (uintptr_t)Lib_PhysicalToVirtualNull(sp24->unk_0_4) - sp24->unk_4;
-    sp1C[0] = NULL;
-    sp1C[0] = (sp24->unk_14 != NULL) ? (TransitionInit*)((uintptr_t)sp24->unk_14 + temp2) : sp1C[0];
+#define TRANSITION_OVERLAY_INTERNAL(name) \
+    { 0, NULL, NULL, 0, 0, &name##_InitVars, sizeof(name) }
 
-    transitionCtx->init = sp1C[0]->init;
-    transitionCtx->destroy = sp1C[0]->destroy;
-    transitionCtx->start = sp1C[0]->start;
-    transitionCtx->isDone = sp1C[0]->isDone;
-    transitionCtx->draw = sp1C[0]->draw;
-    transitionCtx->update = sp1C[0]->update;
-    transitionCtx->setType = sp1C[0]->setType;
-    transitionCtx->setColor = sp1C[0]->setColor;
-    transitionCtx->setUnkColor = sp1C[0]->setEnvColor;
+#define TRANSITION_OVERLAY_UNSET \
+    { 0 }
+
+TransitionOverlay gTransitionOverlayTable[] = {
+    TRANSITION_OVERLAY_INTERNAL(TransitionFade),       TRANSITION_OVERLAY(TransitionTriforce, fbdemo_triforce),
+    TRANSITION_OVERLAY(TransitionWipe1, fbdemo_wipe1), TRANSITION_OVERLAY(TransitionWipe3, fbdemo_wipe3),
+    TRANSITION_OVERLAY(TransitionWipe4, fbdemo_wipe4), TRANSITION_OVERLAY_INTERNAL(TransitionCircle),
+    TRANSITION_OVERLAY(TransitionWipe5, fbdemo_wipe5),
+};
+
+// Transition_Init
+void func_80163C90(TransitionContext* transitionCtx) {
+    TransitionOverlay* overlayEntry;
+    intptr_t relocOffset;
+    TransitionInit* initInfo[1];
+
+    overlayEntry = &gTransitionOverlayTable[transitionCtx->fbdemoType];
+    func_80165288(overlayEntry);
+
+    relocOffset =
+        (uintptr_t)Lib_PhysicalToVirtualNull(overlayEntry->loadedRamAddr) - (uintptr_t)overlayEntry->vramStart;
+    initInfo[0] = NULL;
+    initInfo[0] = (overlayEntry->initInfo != NULL) ? (TransitionInit*)((uintptr_t)overlayEntry->initInfo + relocOffset)
+                                                   : initInfo[0];
+
+    transitionCtx->init = initInfo[0]->init;
+    transitionCtx->destroy = initInfo[0]->destroy;
+    transitionCtx->start = initInfo[0]->start;
+    transitionCtx->isDone = initInfo[0]->isDone;
+    transitionCtx->draw = initInfo[0]->draw;
+    transitionCtx->update = initInfo[0]->update;
+    transitionCtx->setType = initInfo[0]->setType;
+    transitionCtx->setColor = initInfo[0]->setColor;
+    transitionCtx->setUnkColor = initInfo[0]->setEnvColor;
 }
 
-void func_80163D80(TransitionContext *transitionCtx) {
-    func_8016537C(&D_801D0BB0[transitionCtx->fbdemoType]);
+// Transition_Destroy
+void func_80163D80(TransitionContext* transitionCtx) {
+    func_8016537C(&gTransitionOverlayTable[transitionCtx->fbdemoType]);
 }
