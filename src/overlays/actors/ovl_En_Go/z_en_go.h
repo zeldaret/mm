@@ -31,6 +31,15 @@ void* thing = [
     { ACTOR_EN_GO, { 256, 0, -404 }, 0x7FC1 },       // ENGO_GET_TYPE = 1 ENGO_GET_SUBTYPE = 4 // Hamstring Stretcher
     { ACTOR_EN_GO, { 195, 0, -662 }, 0x7FB1 },       // ENGO_GET_TYPE = 1 ENGO_GET_SUBTYPE = 3 // Side Stretcher
     { ACTOR_EN_GO, { 30, 0, -366 }, 0x7FA1 },        // ENGO_GET_TYPE = 1 ENGO_GET_SUBTYPE = 2 // Limb Shaker
+
+
+    { ACTOR_EN_GO, { 256, 0, -404 }, { SRF( 0, 0x0007), SRF(0X13E, 0x007F), SRF( 0, 0x007F) }, 0x7FD1 },
+    { ACTOR_EN_GO, { 256, 0, -404 }, { SRF( 0, 0x0007), SRF(0X13E, 0x007F), SRF( 0, 0x007F) }, 0x7FC1 },
+    { ACTOR_EN_GO, { 195, 0, -662 }, { SRF( 0, 0x0007), SRF( 0X8, 0x007F), SRF( 0, 0x007F) }, 0x7FB1 },
+    { ACTOR_EN_GO, { 30, 0, -366 }, { SRF( 0, 0x0007), SRF( 0X95, 0x007F), SRF( 0, 0x007F) }, 0x7FA1 },
+
+
+
 ];
 */
 
@@ -56,12 +65,18 @@ typedef enum {
 typedef enum {
     // enum {
     /* 0 */ ENGO_SQUAT_STRETCHER = 0,
-    /* 1 */ ENGO_UNUSED,         // Unused Racer
-    /* 2 */ ENGO_LIMB_SHAKER,    // Limb Shaker
-    /* 3 */ ENGO_SIDE_STRETCHER, // Side  Stretcher
-    /* 4 */ ENGO_70_4,           // Hamstring Stretcher
-    /* 5 */ ENGO_70_5,           // Hamstring Stretcher
+    /* 1 */ ENGO_UNUSED,                   // Unused Racer
+    /* 2 */ ENGO_LIMB_SHAKER,              // Limb Shaker
+    /* 3 */ ENGO_SIDE_STRETCHER,           // Side  Stretcher
+    /* 4 */ ENGO_HAMSTRING_STRETCHER,      // Hamstring Stretcher
+    /* 5 */ ENGO_HAMSTRING_STRETCH_HELPER, // Hamstring Stretcher
 } EnGoRacerSubtype;
+
+typedef enum {
+    // enum {
+    /* 0 */ ENGO_ARMS_UP = 6,
+    /* 1 */ ENGO_SHOUTING,
+} EnGoSpectatorSubtype;
 
 typedef enum {
     // enum {
@@ -83,16 +98,16 @@ typedef enum {
     /*  8 */ ENGO_ANIM_COVEREARS,
     /*  9 */ ENGO_ANIM_SHIVERINGSURPRISED,
 
-    // Gorons doing Gymnastics
+    // Gorons doing Gymnastics (object_taisou.c)
     /*  10 */ ENGO_ANIM_TAISOU_START = 10,
-    /*  10 */ ENGO_ANIM_TAISOU_10 = 10,
-    /*  11 */ ENGO_ANIM_TAISOU_11,
-    /*  12 */ ENGO_ANIM_TAISOU_12,
-    /*  13 */ ENGO_ANIM_TAISOU_13,
-    /*  14 */ ENGO_ANIM_TAISOU_14,
-    /*  15 */ ENGO_ANIM_TAISOU_15,
-    /*  16 */ ENGO_ANIM_TAISOU_16,
-    /*  17 */ ENGO_ANIM_TAISOU_17,
+    /*  10 */ ENGO_ANIM_DOUBLE_ARM_SIDEBEND = 10,
+    /*  11 */ ENGO_ANIM_SQUAT_SIDE_TO_SIDE,
+    /*  12 */ ENGO_ANIM_SHAKE_LIMBS,
+    /*  13 */ ENGO_ANIM_SINGLE_ARM_SIDEBEND,
+    /*  14 */ ENGO_ANIM_SITTING_STRETCH,
+    /*  15 */ ENGO_ANIM_CHEER,
+    /*  16 */ ENGO_ANIM_SHOUT,
+    /*  17 */ ENGO_ANIM_HELP_SITTING_STRETCH,
 
     // ???
     /*  18 */ ENGO_ANIM_HAKUGIN_START = 18,
