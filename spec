@@ -324,7 +324,8 @@ beginseg
     name "icon_item_vtx_static"
     compress
     romalign 0x1000
-    include "build/baserom/icon_item_vtx_static.o"
+    include "build/assets/interface/icon_item_vtx_static/icon_item_vtx_static.o"
+    number 11
 endseg
 
 beginseg

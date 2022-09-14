@@ -9,6 +9,7 @@
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
 #include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
+#include "interface/icon_item_vtx_static/icon_item_vtx_static.h"
 
 // iconItemSegment
 extern TexturePtr D_08064340; // gPauseMenuCursorTex
@@ -64,22 +65,6 @@ extern TexturePtr D_08075240;
 extern TexturePtr D_0807E840;
 extern TexturePtr D_08087E40;
 extern TexturePtr D_08091440;
-
-// iconItemVtxSegment
-extern Gfx D_0B000000[]; // gItemNamePanelDL
-extern Gfx D_0B000090[]; // gLButtonIconDL
-extern Gfx D_0B0000E0[]; // gRButtonIconDL
-extern Gfx D_0B000130[]; // gCButtonIconsDL
-extern Gfx D_0B000188[]; // gAButtonIconDL
-
-// iconItemLangSegment
-extern TexturePtr D_0D004400;
-extern TexturePtr D_0D004E00;
-extern TexturePtr D_0D005800;
-extern TexturePtr D_0D006200;
-extern TexturePtr D_0D006C00;
-extern TexturePtr D_0D007600;
-extern TexturePtr D_0D008000;
 
 // Page Textures (Background of Page):
 // Broken up into multiple textures.
@@ -864,24 +849,21 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 150, 140, 90, 255);
     gSPVertex(POLY_OPA_DISP++, &pauseCtx->infoPanelVtx[0], 16, 0);
 
-    // gItemNamePanelDL
-    gSPDisplayList(POLY_OPA_DISP++, D_0B000000);
+    gSPDisplayList(POLY_OPA_DISP++, gItemNamePanelDL);
 
     if ((pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) &&
         (!pauseCtx->mainState || (pauseCtx->mainState == PAUSE_MAIN_STATE_11))) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 150, 140, 90, sPauseLRCursorAlpha);
     }
 
-    // gLButtonIconDL
-    gSPDisplayList(POLY_OPA_DISP++, D_0B000090);
+    gSPDisplayList(POLY_OPA_DISP++, gLButtonIconDL);
 
     if ((pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_RIGHT) &&
         (!pauseCtx->mainState || (pauseCtx->mainState == PAUSE_MAIN_STATE_11))) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 150, 140, 90, sPauseLRCursorAlpha);
     }
 
-    // gRButtonIconDL
-    gSPDisplayList(POLY_OPA_DISP++, D_0B0000E0);
+    gSPDisplayList(POLY_OPA_DISP++, gRButtonIconDL);
 
     if (pauseCtx->cursorSpecialPos != 0) {
         j = (pauseCtx->cursorSpecialPos * 4) - 32;
@@ -961,8 +943,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
 
             pauseCtx->infoPanelVtx[21].v.tc[0] = pauseCtx->infoPanelVtx[23].v.tc[0] = 48 * (1 << 5);
 
-            // gAButtonIconDL
-            gSPDisplayList(POLY_OPA_DISP++, &D_0B000188);
+            gSPDisplayList(POLY_OPA_DISP++, gAButtonIconDL);
             gDPPipeSync(POLY_OPA_DISP++);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
 
@@ -1007,8 +988,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
 
             pauseCtx->infoPanelVtx[21].v.tc[0] = pauseCtx->infoPanelVtx[23].v.tc[0] = 64 * (1 << 5);
 
-            // gCButtonIconsDL
-            gSPDisplayList(POLY_OPA_DISP++, &D_0B000130);
+            gSPDisplayList(POLY_OPA_DISP++, gCButtonIconsDL);
 
             gDPPipeSync(POLY_OPA_DISP++);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -1035,8 +1015,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
 
                 pauseCtx->infoPanelVtx[21].v.tc[0] = pauseCtx->infoPanelVtx[23].v.tc[0] = 96 * (1 << 5);
 
-                // gAButtonIconDL
-                gSPDisplayList(POLY_OPA_DISP++, &D_0B000188);
+                gSPDisplayList(POLY_OPA_DISP++, gAButtonIconDL);
 
                 gDPPipeSync(POLY_OPA_DISP++);
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -1061,8 +1040,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
 
             pauseCtx->infoPanelVtx[21].v.tc[0] = pauseCtx->infoPanelVtx[23].v.tc[0] = 96 * (1 << 5);
 
-            // gAButtonIconDL
-            gSPDisplayList(POLY_OPA_DISP++, &D_0B000188);
+            gSPDisplayList(POLY_OPA_DISP++, gAButtonIconDL);
 
             gDPPipeSync(POLY_OPA_DISP++);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -1322,8 +1300,7 @@ void KaleidoScope_DrawOwlWarpInfoPanel(PlayState* play) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 150, 140, 90, 255);
     gSPVertex(POLY_OPA_DISP++, &pauseCtx->infoPanelVtx[0], 16, 0);
 
-    // gItemNamePanelDL
-    gSPDisplayList(POLY_OPA_DISP++, D_0B000000);
+    gSPDisplayList(POLY_OPA_DISP++, gItemNamePanelDL);
 
     if (pauseCtx->cursorSpecialPos != 0) {
         j = (pauseCtx->cursorSpecialPos * 4) - 32;
