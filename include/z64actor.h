@@ -365,15 +365,18 @@ typedef struct ActorListEntry {
     /* 0x8 */ s32 unk_08;
 } ActorListEntry; // size = 0xC
 
+// Target size when activated
+#define LENS_MASK_ACTIVE_SIZE 100
+
 typedef struct ActorContext {
     /* 0x000 */ u8 freezeFlashTimer;
     /* 0x001 */ UNK_TYPE1 pad1;
     /* 0x002 */ u8 unk2;
-    /* 0x003 */ u8 unk3;
-    /* 0x004 */ s8 unk4;
+    /* 0x003 */ u8 lensActive;
+    /* 0x004 */ s8 lensMaskSize; // The size of the circle when drawn the lens mask. Larger value leads to a smaller circle
     /* 0x005 */ u8 unk5;
     /* 0x006 */ UNK_TYPE1 pad6[0x5];
-    /* 0x00B */ s8 unkB;
+    /* 0x00B */ s8 lensActorsDrawn;
     /* 0x00C */ s16 unkC;
     /* 0x00E */ u8 totalLoadedActors;
     /* 0x00F */ u8 undrawnActorCount;

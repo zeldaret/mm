@@ -571,7 +571,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
         } else {
             this->unk_1D20 = 1;
         }
-        XREG(41) = KREG(14) + 20;
+        R_MAGIC_CONSUME_TIMER_GIANTS_MASK = KREG(14) + 20;
         this->unk_01AC = 1.0f;
         Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_TANRON5, 0.0f, 1000.0f, 0.0f, 0, 0, 0, 0);
     } else if (this->actor.params == TWINMOLD_TAIL) {
