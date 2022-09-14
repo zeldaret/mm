@@ -1977,9 +1977,7 @@ beginseg
     name "ovl_Oceff_Wipe2"
     compress
     include "build/src/overlays/actors/ovl_Oceff_Wipe2/z_oceff_wipe2.o"
-    include "build/data/ovl_Oceff_Wipe2/ovl_Oceff_Wipe2.data.o"
-    include "build/data/ovl_Oceff_Wipe2/ovl_Oceff_Wipe2.bss.o"
-    include "build/data/ovl_Oceff_Wipe2/ovl_Oceff_Wipe2.reloc.o"
+    include "build/src/overlays/actors/ovl_Oceff_Wipe2/ovl_Oceff_Wipe2_reloc.o"
 endseg
 
 beginseg
