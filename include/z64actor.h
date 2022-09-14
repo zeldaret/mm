@@ -83,7 +83,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ s16 unk_0; // frame?
-    /* 0x2 */ Vec3s unk_2; // pos?
+    /* 0x2 */ Vec3s unk_2; // scale
 } struct_80124618; // size = 0x8
 
 typedef struct {
