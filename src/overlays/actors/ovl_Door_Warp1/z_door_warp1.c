@@ -1,7 +1,7 @@
 /*
  * File: z_door_warp1.c
  * Overlay: ovl_Door_Warp1
- * Description: Blue Warp
+ * Description: Blue warp portal and crystal, and the Majora's Mask-shaped boss warp platform
  */
 
 #include "z_door_warp1.h"
