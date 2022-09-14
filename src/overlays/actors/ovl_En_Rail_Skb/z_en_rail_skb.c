@@ -282,7 +282,7 @@ void EnRailSkb_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.speedXZ = 1.6f;
-    this->actor.hintId = 0x55;
+    this->actor.hintId = TATL_HINT_ID_STALCHILD;
     this->unk_3F2 = 0;
     this->unk_2E4 = -1;
     this->unk_3FC = 0;
@@ -825,7 +825,7 @@ void func_80B723F8(EnRailSkb* this) {
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
     this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
     this->actor.flags |= ACTOR_FLAG_100000;
-    this->actor.hintId = 0xFF;
+    this->actor.hintId = TATL_HINT_ID_NONE;
     this->actor.textId = 0;
 }
 
@@ -926,7 +926,7 @@ void func_80B72880(EnRailSkb* this, PlayState* play) {
                 this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
                 this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
                 this->actor.flags |= ACTOR_FLAG_100000;
-                this->actor.hintId = 0xFF;
+                this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
                 func_80B71650(this);
             }
@@ -934,7 +934,7 @@ void func_80B72880(EnRailSkb* this, PlayState* play) {
             this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
             this->actor.flags &= ~ACTOR_FLAG_100000;
             this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
-            this->actor.hintId = 0x55;
+            this->actor.hintId = TATL_HINT_ID_STALCHILD;
             this->actor.textId = 0;
             func_80B70FA0(this);
         }

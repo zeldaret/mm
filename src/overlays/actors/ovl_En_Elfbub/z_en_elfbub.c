@@ -62,7 +62,7 @@ void EnElfbub_Init(Actor* thisx, PlayState* play) {
     }
 
     ActorShape_Init(&this->actor.shape, 16.0f, ActorShadow_DrawCircle, 0.2f);
-    this->actor.hintId = 0x16;
+    this->actor.hintId = TATL_HINT_ID_IGOS_DU_IKANA;
     Actor_SetScale(&this->actor, 1.25f);
 
     this->actionFunc = EnElfbub_Idle;
