@@ -7,14 +7,12 @@
 #include "z_kaleido_scope.h"
 #include "interface/parameter_static/parameter_static.h"
 #include "interface/icon_item_field_static/icon_item_field_static.h"
+#include "interface/icon_item_dungeon_static/icon_item_dungeon_static.h"
 
 extern s16 D_8082B7F0[];
 extern s16 D_8082B838[];
 
 extern TexturePtr D_09007500;
-
-extern TexturePtr D_0C001980;
-extern TexturePtr D_0C014668;
 
 void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
     s16 counterDigits[2];
@@ -100,13 +98,17 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
     static f32 sStrayFairyIconScale = 100.0f;
     static TexturePtr D_8082B4E0[][4] = {
         // DUNGEON_INDEX_WOODFALL_TEMPLE
-        { gStrayFairyWoodfallIconTex, 0x0C001B80, gStrayFairyWoodfallIconTex, 0x0C001B80 },
+        { gStrayFairyWoodfallIconTex, gDungeonStrayFairyWoodfallIconTex, gStrayFairyWoodfallIconTex,
+          gDungeonStrayFairyWoodfallIconTex },
         // DUNGEON_INDEX_SNOWHEAD_TEMPLE
-        { gStrayFairySnowheadIconTex, 0x0C002780, gStrayFairySnowheadIconTex, 0x0C002780 },
+        { gStrayFairySnowheadIconTex, gDungeonStrayFairySnowheadIconTex, gStrayFairySnowheadIconTex,
+          gDungeonStrayFairySnowheadIconTex },
         // DUNGEON_INDEX_GREAT_BAY_TEMPLE
-        { gStrayFairyGreatBayIconTex, 0x0C003380, gStrayFairyGreatBayIconTex, 0x0C003380 },
+        { gStrayFairyGreatBayIconTex, gDungeonStrayFairyGreatBayIconTex, gStrayFairyGreatBayIconTex,
+          gDungeonStrayFairyGreatBayIconTex },
         // DUNGEON_INDEX_STONE_TOWER_TEMPLE
-        { gStrayFairyStoneTowerIconTex, 0x0C003F80, gStrayFairyStoneTowerIconTex, 0x0C003F80 },
+        { gStrayFairyStoneTowerIconTex, gDungeonStrayFairyStoneTowerIconTex, gStrayFairyStoneTowerIconTex,
+          gDungeonStrayFairyStoneTowerIconTex },
     };
     static u8 sStrayFairyIconPrimColors[][3] = {
         { 255, 110, 160 }, // DUNGEON_INDEX_WOODFALL_TEMPLE
@@ -262,7 +264,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                                           16, 1 << 10, 1 << 10);
 
             if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, gSaveContext.dungeonIndex)) {
-                POLY_OPA_DISP = func_8010CB80(POLY_OPA_DISP, &D_0C001980, 16, 16, 108,
+                POLY_OPA_DISP = func_8010CB80(POLY_OPA_DISP, gDungeonMapSkullTex, 16, 16, 108,
                                               D_8082B4BC[FLOOR_INDEX_MAX - func_80105318()], 16, 16, 1 << 10, 1 << 10);
             }
 
@@ -647,7 +649,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
     } else {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-        gDPLoadTextureBlock(POLY_OPA_DISP++, &D_0C014668, G_IM_FMT_RGBA, G_IM_SIZ_32b, 24, 12, 0,
+        gDPLoadTextureBlock(POLY_OPA_DISP++, gWorldMapOwlFaceTex, G_IM_FMT_RGBA, G_IM_SIZ_32b, 24, 12, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                             G_TX_NOLOD);
 

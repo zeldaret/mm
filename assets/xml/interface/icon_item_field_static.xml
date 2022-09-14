@@ -31,5 +31,7 @@
         <Texture Name="gWorldMapCloud13Tex" OutName="world_map_cloud_13" Format="ia8" Width="64" Height="53" Offset="0x12898"/>
         <Texture Name="gWorldMapCloud14Tex" OutName="world_map_cloud_14" Format="ia8" Width="64" Height="53" Offset="0x135D8"/>
         <Texture Name="gWorldMapCloud15Tex" OutName="world_map_cloud_15" Format="ia8" Width="16" Height="53" Offset="0x14318"/>
+
+        <Texture Name="gWorldMapOwlFaceTex" OutName="world_map_owl_face" Format="rgba32" Width="24" Height="12" Offset="0x14668"/>
     </File>
 </Root>

@@ -2414,7 +2414,7 @@ void KaleidoScope_Update(PlayState* play) {
             size0 = SEGMENT_ROM_SIZE(icon_item_static_old);
             func_80178E7C((uintptr_t)SEGMENT_ROM_START(icon_item_static_test), pauseCtx->iconItemSegment, size0);
 
-            gSegments[0x08] = VIRTUAL_TO_PHYSICAL(pauseCtx->iconItemSegment);
+            gSegments[0x08] = PHYSICAL_TO_VIRTUAL(pauseCtx->iconItemSegment);
 
             for (i = 0; i < 75; i++) {
                 if (!D_801C2410[(void)0, gSaveContext.save.playerForm][(s32)i]) {

@@ -300,7 +300,8 @@ beginseg
     name "icon_item_dungeon_static"
     compress
     romalign 0x1000
-    include "build/baserom/icon_item_dungeon_static.o"
+    include "build/assets/interface/icon_item_dungeon_static/icon_item_dungeon_static.o"
+    number 12
 endseg
 
 beginseg
