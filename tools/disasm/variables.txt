@@ -4141,7 +4141,7 @@
     0x801FBBD0:("D_801FBBD0","UNK_TYPE1","",0x1),
     0x801FBBD2:("D_801FBBD2","UNK_TYPE1","",0x1),
     0x801FBBD4:("D_801FBBD4","UNK_TYPE1","",0x1),
-    0x801FBBE0:("sCmpDmaBuffer","UNK_TYPE1","",0x8),
+    0x801FBBE0:("sDmaBuffer","u32","[2]",0x8),
     0x801FBBF0:("D_801FBBF0","Vec3f","",0xc),
     0x801FBC00:("Math3D_ColSphereTri_line","LineSegment","",0x18),
     0x801FBC18:("Math3D_ColSphereTri_point","Vec3f","",0xc),
