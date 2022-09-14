@@ -221,27 +221,151 @@ s16 sFinalHoursClockFrameEnvBlue = 0;
 s16 sFinalHoursClockColorTimer = 15;
 s16 sFinalHoursClockColorTargetIndex = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CB80.s")
+Gfx* Gfx_DrawRectTextureRGBA16(Gfx* displayListHead, TexturePtr texture, s16 textureWidth, s16 textureHeight,
+                               s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
+    gDPLoadTextureBlock(displayListHead++, texture, G_IM_FMT_RGBA, G_IM_SIZ_16b, textureWidth, textureHeight, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CD98.s")
+    gSPTextureRectangle(displayListHead++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4,
+                        (rectTop + rectHeight) * 4, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
 
-Gfx* func_8010CFBC(Gfx* displayListHead, void* texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
-                   s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy, s16 r, s16 g, s16 b, s16 a);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CFBC.s")
+    return displayListHead;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D2D4.s")
+Gfx* Gfx_DrawRectTextureIA8(Gfx* displayListHead, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft,
+                            s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
+    gDPLoadTextureBlock(displayListHead++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
 
-Gfx* func_8010D480(Gfx* displayListHead, void* texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
-                   s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy, s16 r, s16 g, s16 b, s16 a, s32 argE, s32 argF);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D480.s")
+    gSPTextureRectangle(displayListHead++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4,
+                        (rectTop + rectHeight) * 4, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D7D0.s")
+    return displayListHead;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D9F4.s")
+Gfx* Gfx_DrawRectTextureIA8_DropShadow(Gfx* displayListHead, TexturePtr texture, s16 textureWidth, s16 textureHeight,
+                                       s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy,
+                                       s16 r, s16 g, s16 b, s16 a) {
+    s16 dropShadowAlpha = a;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010DC58.s")
+    if (a > 100) {
+        dropShadowAlpha = 100;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010DE38.s")
+    gDPPipeSync(displayListHead++);
+    gDPSetPrimColor(displayListHead++, 0, 0, 0, 0, 0, dropShadowAlpha);
+
+    gDPLoadTextureBlock(displayListHead++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
+
+    gSPTextureRectangle(displayListHead++, (rectLeft + 2) * 4, (rectTop + 2) * 4, (rectLeft + rectWidth + 2) * 4,
+                        (rectTop + rectHeight + 2) * 4, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+
+    gDPPipeSync(displayListHead++);
+    gDPSetPrimColor(displayListHead++, 0, 0, r, g, b, a);
+
+    gSPTextureRectangle(displayListHead++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4,
+                        (rectTop + rectHeight) * 4, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+
+    return displayListHead;
+}
+
+Gfx* Gfx_DrawRect_DropShadow(Gfx* displayListHead, s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx,
+                             u16 dtdy, s16 r, s16 g, s16 b, s16 a) {
+    s16 dropShadowAlpha = a;
+
+    if (a > 100) {
+        dropShadowAlpha = 100;
+    }
+
+    gDPPipeSync(displayListHead++);
+    gDPSetPrimColor(displayListHead++, 0, 0, 0, 0, 0, dropShadowAlpha);
+    gSPTextureRectangle(displayListHead++, (rectLeft + 2) * 4, (rectTop + 2) * 4, (rectLeft + rectWidth + 2) * 4,
+                        (rectTop + rectHeight + 2) * 4, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+
+    gDPPipeSync(displayListHead++);
+    gDPSetPrimColor(displayListHead++, 0, 0, r, g, b, a);
+
+    gSPTextureRectangle(displayListHead++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4,
+                        (rectTop + rectHeight) * 4, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+
+    return displayListHead;
+}
+
+Gfx* Gfx_DrawRectTextureIA8_DropShadowOffset(Gfx* displayListHead, TexturePtr texture, s16 textureWidth,
+                                             s16 textureHeight, s16 rectLeft, s16 rectTop, s16 rectWidth,
+                                             s16 rectHeight, u16 dsdx, u16 dtdy, s16 r, s16 g, s16 b, s16 a, s32 masks,
+                                             s32 rectS) {
+    s16 dropShadowAlpha = a;
+
+    if (a > 100) {
+        dropShadowAlpha = 100;
+    }
+
+    gDPPipeSync(displayListHead++);
+    gDPSetPrimColor(displayListHead++, 0, 0, 0, 0, 0, dropShadowAlpha);
+
+    gDPLoadTextureBlock(displayListHead++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+                        G_TX_MIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, masks, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
+    gSPTextureRectangle(displayListHead++, (rectLeft + 2) * 4, (rectTop + 2) * 4, (rectLeft + rectWidth + 2) * 4,
+                        (rectTop + rectHeight + 2) * 4, G_TX_RENDERTILE, rectS, 0, dsdx, dtdy);
+
+    gDPPipeSync(displayListHead++);
+    gDPSetPrimColor(displayListHead++, 0, 0, r, g, b, a);
+
+    gSPTextureRectangle(displayListHead++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4,
+                        (rectTop + rectHeight) * 4, G_TX_RENDERTILE, rectS, 0, dsdx, dtdy);
+
+    return displayListHead;
+}
+
+Gfx* Gfx_DrawRectTextureI8(Gfx* displayListHead, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft,
+                           s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
+    gDPLoadTextureBlock(displayListHead++, texture, G_IM_FMT_I, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
+
+    gSPTextureRectangle(displayListHead++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4,
+                        (rectTop + rectHeight) * 4, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+
+    return displayListHead;
+}
+
+Gfx* Gfx_DrawRectTexture(Gfx* displayListHead, TexturePtr texture, s32 fmt, s16 textureWidth, s16 textureHeight,
+                         s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, s32 cms, s32 masks, s32 s, u16 dsdx,
+                         u16 dtdy) {
+    gDPLoadTextureBlock_4b(displayListHead++, texture, fmt, textureWidth, textureHeight, 0, cms,
+                           G_TX_NOMIRROR | G_TX_WRAP, masks, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
+    gSPTextureRectangle(displayListHead++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4,
+                        (rectTop + rectHeight) * 4, G_TX_RENDERTILE, s, 0, dsdx, dtdy);
+
+    return displayListHead;
+}
+
+Gfx* Gfx_DrawQuadTextureIA8(Gfx* displayListHead, TexturePtr texture, s16 textureWidth, s16 textureHeight, u16 point) {
+    gDPLoadTextureBlock(displayListHead++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
+
+    gSP1Quadrangle(displayListHead++, point, point + 2, point + 3, point + 1, 0);
+
+    return displayListHead;
+}
+
+Gfx* Gfx_DrawQuadTexture(Gfx* displayListHead, TexturePtr texture, s32 fmt, s16 textureWidth, s16 textureHeight,
+                         u16 point) {
+    gDPLoadTextureBlock_4b(displayListHead++, texture, fmt, textureWidth, textureHeight, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
+    gSP1Quadrangle(displayListHead++, point, point + 2, point + 3, point + 1, 0);
+
+    return displayListHead;
+}
 
 s16 D_801BFA04[] = {
     -14, -14, -24, -8, -12, -12, -7, -8, -7, -8, -12, 0,
@@ -1565,17 +1689,17 @@ void Magic_DrawMeter(PlayState* play) {
 
         gDPSetEnvColor(OVERLAY_DISP++, 100, 50, 50, 255);
 
-        OVERLAY_DISP = func_8010CFBC(OVERLAY_DISP, gMagicMeterEndTex, 8, 16, 18, magicBarY, 8, 16, 1 << 10, 1 << 10,
-                                     sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen, sMagicMeterOutlinePrimBlue,
-                                     interfaceCtx->magicAlpha);
-        OVERLAY_DISP =
-            func_8010CFBC(OVERLAY_DISP, gMagicMeterMidTex, 24, 16, 26, magicBarY, ((void)0, gSaveContext.magicCapacity),
-                          16, 1 << 10, 1 << 10, sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen,
-                          sMagicMeterOutlinePrimBlue, interfaceCtx->magicAlpha);
-        OVERLAY_DISP =
-            func_8010D480(OVERLAY_DISP, gMagicMeterEndTex, 8, 16, ((void)0, gSaveContext.magicCapacity) + 26, magicBarY,
-                          8, 16, 1 << 10, 1 << 10, sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen,
-                          sMagicMeterOutlinePrimBlue, interfaceCtx->magicAlpha, 3, 0x100);
+        OVERLAY_DISP = Gfx_DrawRectTextureIA8_DropShadow(
+            OVERLAY_DISP, gMagicMeterEndTex, 8, 16, 18, magicBarY, 8, 16, 1 << 10, 1 << 10, sMagicMeterOutlinePrimRed,
+            sMagicMeterOutlinePrimGreen, sMagicMeterOutlinePrimBlue, interfaceCtx->magicAlpha);
+        OVERLAY_DISP = Gfx_DrawRectTextureIA8_DropShadow(OVERLAY_DISP, gMagicMeterMidTex, 24, 16, 26, magicBarY,
+                                                         ((void)0, gSaveContext.magicCapacity), 16, 1 << 10, 1 << 10,
+                                                         sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen,
+                                                         sMagicMeterOutlinePrimBlue, interfaceCtx->magicAlpha);
+        OVERLAY_DISP = Gfx_DrawRectTextureIA8_DropShadowOffset(
+            OVERLAY_DISP, gMagicMeterEndTex, 8, 16, ((void)0, gSaveContext.magicCapacity) + 26, magicBarY, 8, 16,
+            1 << 10, 1 << 10, sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen, sMagicMeterOutlinePrimBlue,
+            interfaceCtx->magicAlpha, 3, 0x100);
 
         gDPPipeSync(OVERLAY_DISP++);
         gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, 0, 0, 0, PRIMITIVE, PRIMITIVE,
