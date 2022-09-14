@@ -1,6 +1,6 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A7B10.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/Audio_StartSequence.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A7D04.s")
 

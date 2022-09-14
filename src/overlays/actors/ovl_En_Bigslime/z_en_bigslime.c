@@ -389,7 +389,7 @@ void EnBigslime_Destroy(Actor* thisx, PlayState* play) {
     }
 
     Collider_DestroyCylinder(play, &this->gekkoCollider);
-    Audio_StopSfxByPos(&this->gekkoProjectedPos);
+    AudioSfx_StopByPos(&this->gekkoProjectedPos);
 }
 
 void EnBigslime_DynamicVtxCopyState(EnBigslime* this) {
@@ -795,7 +795,7 @@ void EnBigslime_UpdateCameraGrabPlayer(EnBigslime* this, PlayState* play) {
     Math_StepToF(&subCamAt.y, GBT_ROOM_5_MIN_Y + 87.5f, 10.0f);
     Math_StepToF(&subCamAt.z, this->actor.world.pos.z, 10.0f);
 
-    Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
 }
 
 /**
@@ -810,7 +810,7 @@ void EnBigslime_JerkCameraPlayerHit(EnBigslime* this, PlayState* play) {
     Math_Vec3f_Diff(&subCam->eye, &subCam->at, &subCamEye);
     Math_Vec3f_Scale(&subCamEye, 0.9f);
     Math_Vec3f_Sum(&subCamEye, &subCam->at, &subCamEye);
-    Play_CameraSetAtEye(play, this->subCamId, &subCam->at, &subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &subCam->at, &subCamEye);
 }
 
 /**
@@ -828,7 +828,7 @@ void EnBigslime_UpdateCameraIntroCs(EnBigslime* this, PlayState* play, s32 notic
     subCamEye.z = Math_CosS(yawOffset) * zoom + subCam->at.z;
     subCamEye.y = subCam->at.y + -4.0f + (noticeTimer * 2.0f);
 
-    Play_CameraSetAtEye(play, this->subCamId, &subCam->at, &subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &subCam->at, &subCamEye);
 }
 
 /**
@@ -836,7 +836,7 @@ void EnBigslime_UpdateCameraIntroCs(EnBigslime* this, PlayState* play, s32 notic
  * center of the roof. This is used when the minislimes merges into bigslime.
  */
 void EnBigslime_UpdateCameraFormingBigslime(EnBigslime* this, PlayState* play) {
-    Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &Play_GetCamera(play, this->subCamId)->eye);
+    Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &Play_GetCamera(play, this->subCamId)->eye);
 }
 
 void EnBigslime_EndCutscene(EnBigslime* this, PlayState* play) {
@@ -844,7 +844,7 @@ void EnBigslime_EndCutscene(EnBigslime* this, PlayState* play) {
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
         subCam = Play_GetCamera(play, this->subCamId);
-        Play_CameraSetAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
+        Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
         ActorCutscene_Stop(this->cutscene);
         this->cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
@@ -1495,7 +1495,7 @@ void EnBigslime_SetupCutsceneGrabPlayer(EnBigslime* this, PlayState* play) {
     Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
     s16 yaw;
 
-    Play_CameraSetAtEye(play, this->subCamId, &mainCam->at, &mainCam->eye);
+    Play_SetCameraAtEye(play, this->subCamId, &mainCam->at, &mainCam->eye);
     this->grabPlayerTimer = 15;
     this->wavySurfaceTimer = 0;
     this->bigslimeCollider[0].base.atFlags &= ~AT_ON;
@@ -2343,7 +2343,7 @@ void EnBigslime_SetupCutsceneDefeat(EnBigslime* this, PlayState* play) {
     subCamEye.x = (Math_SinS(yawOffset) * 250.0f) + subCamAt.x;
     subCamEye.y = subCamAt.y + 60.0f;
     subCamEye.z = (Math_CosS(yawOffset) * 250.0f) + subCamAt.z;
-    Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
 
     for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
         this->minislime[i]->actor.params = MINISLIME_DEFEAT_IDLE;
@@ -2370,7 +2370,7 @@ void EnBigslime_CutsceneDefeat(EnBigslime* this, PlayState* play) {
         subCamAt.x = this->actor.world.pos.x;
         subCamAt.y = this->actor.world.pos.y + 40.0f;
         subCamAt.z = this->actor.world.pos.z;
-        Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &subCam->eye);
+        Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCam->eye);
     }
 }
 
@@ -2410,7 +2410,7 @@ void EnBigslime_GekkoDespawn(EnBigslime* this, PlayState* play) {
         Math_Vec3f_Diff(&subCam->eye, &this->subCamDistToFrog, &subCamEye);
         subCamEye.y -= 1.8f;
         subCamAt.y -= 1.7f;
-        Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &subCamEye);
+        Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
     }
 }
 
@@ -2466,7 +2466,7 @@ void EnBigslime_FrogSpawn(EnBigslime* this, PlayState* play) {
     subCamEye.x = subCam->at.x + (this->subCamDistToFrog.x * subCamZoom);
     subCamEye.z = subCam->at.z + (this->subCamDistToFrog.z * subCamZoom);
     subCamEye.y = subCam->at.y + (this->subCamDistToFrog.y * subCamZoom);
-    Play_CameraSetAtEye(play, this->subCamId, &subCam->at, &subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &subCam->at, &subCamEye);
 
     if (this->spawnFrogTimer == 0) {
         EnBigslime_EndCutscene(this, play);

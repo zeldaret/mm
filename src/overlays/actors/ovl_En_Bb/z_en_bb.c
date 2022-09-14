@@ -699,7 +699,7 @@ void EnBb_Draw(Actor* thisx, PlayState* play) {
             Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, (play->gameplayFrames * -20) & 0x1FF, 32, 128));
         currentMatrixState->mf[3][1] -= 47.0f * this->flameScaleY;
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
 
     Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),

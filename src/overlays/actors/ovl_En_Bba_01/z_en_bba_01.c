@@ -150,7 +150,7 @@ s32 func_809CC270(EnBba01* this, PlayState* play) {
     Actor_GetScreenPos(play, &this->enHy.actor, &x, &y);
     //! @bug: Both x and y conditionals are always true, || should be an &&
     if (!this->enHy.waitingOnInit && ((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
-        func_800B85E0(&this->enHy.actor, play, 30.0f, EXCH_ITEM_2E);
+        func_800B85E0(&this->enHy.actor, play, 30.0f, PLAYER_AP_MAGIC_BEANS);
     }
     return true;
 }
@@ -158,7 +158,7 @@ s32 func_809CC270(EnBba01* this, PlayState* play) {
 void EnBba01_FinishInit(EnHy* this, PlayState* play) {
     //! @bug: gBbaSkel does not match EnHy's skeleton assumptions.
     //! Since gBbaSkel has more limbs than expected, joint and morph tables will overflow
-    if (EnHy_Init(this, play, &gBbaSkel, ENHY_ANIMATION_BBA_6)) {
+    if (EnHy_Init(this, play, &gBbaSkel, ENHY_ANIM_BBA_6)) {
         this->actor.flags |= ACTOR_FLAG_1;
         this->actor.draw = EnBba01_Draw;
         this->waitingOnInit = false;

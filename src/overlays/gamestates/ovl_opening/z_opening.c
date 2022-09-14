@@ -7,7 +7,7 @@
 #include "z_opening.h"
 
 void Opening_SetupForTitleCutscene(OpeningContext* this) {
-    static s32 openingEntrances[] = { 0x1C00, 0x1C10 };
+    static s32 openingEntrances[] = { ENTRANCE(CUTSCENE, 0), ENTRANCE(CUTSCENE, 1) };
     static s32 openingCutscenes[] = { 0xFFFA, 0xFFFA };
 
     gSaveContext.eventInf[1] &= (u8)~0x80;
@@ -15,7 +15,7 @@ void Opening_SetupForTitleCutscene(OpeningContext* this) {
 
     Sram_InitNewSave();
 
-    gSaveContext.save.entranceIndex = openingEntrances[D_801BB12C];
+    gSaveContext.save.entrance = openingEntrances[D_801BB12C];
     gSaveContext.nextCutsceneIndex = gSaveContext.save.cutscene = openingCutscenes[D_801BB12C];
     gSaveContext.sceneSetupIndex = 0;
 
@@ -57,8 +57,8 @@ void Opening_Init(GameState* thisx) {
     this->gameState.destroy = Opening_Destroy;
 
     gSaveContext.respawnFlag = 0;
-    gSaveContext.respawn[RESPAWN_MODE_GORON].entranceIndex = 0xFF;
-    gSaveContext.respawn[RESPAWN_MODE_ZORA].entranceIndex = 0xFF;
-    gSaveContext.respawn[RESPAWN_MODE_DEKU].entranceIndex = 0xFF;
-    gSaveContext.respawn[RESPAWN_MODE_HUMAN].entranceIndex = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_GORON].entrance = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_ZORA].entrance = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_DEKU].entrance = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_HUMAN].entrance = 0xFF;
 }

@@ -12,14 +12,14 @@
         <DList Name="gameplay_field_keep_DL_001ED0" Offset="0x1ED0" />
         <DList Name="gameplay_field_keep_DL_001EE0" Offset="0x1EE0" />
         <Texture Name="gameplay_field_keep_Tex_001F30" OutName="tex_001F30" Format="rgba16" Width="32" Height="64" Offset="0x1F30" />
-        <Limb Name="gameplay_field_keep_Standardlimb_002F30" Type="Standard" EnumName="GAMEPLAY_FIELD_KEEP_LIMB_01" Offset="0x2F30" />
-        <Limb Name="gameplay_field_keep_Standardlimb_002F3C" Type="Standard" EnumName="GAMEPLAY_FIELD_KEEP_LIMB_02" Offset="0x2F3C" />
-        <Limb Name="gameplay_field_keep_Standardlimb_002F48" Type="Standard" EnumName="GAMEPLAY_FIELD_KEEP_LIMB_03" Offset="0x2F48" />
-        <Limb Name="gameplay_field_keep_Standardlimb_002F54" Type="Standard" EnumName="GAMEPLAY_FIELD_KEEP_LIMB_04" Offset="0x2F54" />
-        <Limb Name="gameplay_field_keep_Standardlimb_002F60" Type="Standard" EnumName="GAMEPLAY_FIELD_KEEP_LIMB_05" Offset="0x2F60" />
-        <Limb Name="gameplay_field_keep_Standardlimb_002F6C" Type="Standard" EnumName="GAMEPLAY_FIELD_KEEP_LIMB_06" Offset="0x2F6C" />
-        <Limb Name="gameplay_field_keep_Standardlimb_002F78" Type="Standard" EnumName="GAMEPLAY_FIELD_KEEP_LIMB_07" Offset="0x2F78" />
-        <Skeleton Name="gameplay_field_keep_Skel_002FA0" Type="Normal" LimbType="Standard" LimbNone="GAMEPLAY_FIELD_KEEP_LIMB_NONE" LimbMax="GAMEPLAY_FIELD_KEEP_LIMB_MAX" EnumName="gameplay_field_keep_Limbs" Offset="0x2FA0" />
+        <Limb Name="gameplay_field_keep_Standardlimb_002F30" Type="Standard" EnumName="BUTTERFLY_LIMB_01" Offset="0x2F30" />
+        <Limb Name="gameplay_field_keep_Standardlimb_002F3C" Type="Standard" EnumName="BUTTERFLY_LIMB_02" Offset="0x2F3C" />
+        <Limb Name="gameplay_field_keep_Standardlimb_002F48" Type="Standard" EnumName="BUTTERFLY_LIMB_03" Offset="0x2F48" />
+        <Limb Name="gameplay_field_keep_Standardlimb_002F54" Type="Standard" EnumName="BUTTERFLY_LIMB_04" Offset="0x2F54" />
+        <Limb Name="gameplay_field_keep_Standardlimb_002F60" Type="Standard" EnumName="BUTTERFLY_LIMB_05" Offset="0x2F60" />
+        <Limb Name="gameplay_field_keep_Standardlimb_002F6C" Type="Standard" EnumName="BUTTERFLY_LIMB_06" Offset="0x2F6C" />
+        <Limb Name="gameplay_field_keep_Standardlimb_002F78" Type="Standard" EnumName="BUTTERFLY_LIMB_07" Offset="0x2F78" />
+        <Skeleton Name="gameplay_field_keep_Skel_002FA0" Type="Normal" LimbType="Standard" LimbNone="BUTTERFLY_LIMB_NONE" LimbMax="BUTTERFLY_LIMB_MAX" EnumName="ButterflyLimb" Offset="0x2FA0" />
         <Texture Name="gameplay_field_keep_TLUT_002FB0" OutName="tlut_002FB0" Format="rgba16" Width="4" Height="4" Offset="0x2FB0" />
         <Texture Name="gameplay_field_keep_Tex_002FD0" OutName="tex_002FD0" Format="ci4" Width="32" Height="64" Offset="0x2FD0" />
         <Texture Name="gameplay_field_keep_Tex_0033D0" OutName="tex_0033D0" Format="ci4" Width="32" Height="64" Offset="0x33D0" />

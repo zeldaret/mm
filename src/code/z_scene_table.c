@@ -486,22 +486,22 @@ static EntranceTableEntry* sTreasureChestShopEntranceTable[] = {
     sTreasureChestShopEntrance1,
 };
 
-static EntranceTableEntry sStoneTowerTempleReversedEntrance0[] = {
+static EntranceTableEntry sStoneTowerTempleInvertedEntrance0[] = {
     { 0xE8, 0x00, 0xC102 },
 };
 
-static EntranceTableEntry sStoneTowerTempleReversedEntrance1[] = {
+static EntranceTableEntry sStoneTowerTempleInvertedEntrance1[] = {
     { 0xE8, 0x01, 0x8102 },
 };
 
-static EntranceTableEntry sStoneTowerTempleReversedEntrance2[] = {
+static EntranceTableEntry sStoneTowerTempleInvertedEntrance2[] = {
     { 0xE8, 0x02, 0x8102 },
 };
 
-static EntranceTableEntry* sStoneTowerTempleReversedEntranceTable[] = {
-    sStoneTowerTempleReversedEntrance0,
-    sStoneTowerTempleReversedEntrance1,
-    sStoneTowerTempleReversedEntrance2,
+static EntranceTableEntry* sStoneTowerTempleInvertedEntranceTable[] = {
+    sStoneTowerTempleInvertedEntrance0,
+    sStoneTowerTempleInvertedEntrance1,
+    sStoneTowerTempleInvertedEntrance2,
 };
 
 static EntranceTableEntry sClockTowerRooftopEntrance0[] = {
@@ -2678,7 +2678,7 @@ static SceneEntranceTableEntry sSceneEntranceTable[] = {
     /* 0x12 */ SCENE_ENTRANCE(sMilkBarEntranceTable, "Z2_MILK_BAR"),
     /* 0x13 */ SCENE_ENTRANCE(sStoneTowerTempleEntranceTable, "Z2_INISIE_N"),
     /* 0x14 */ SCENE_ENTRANCE(sTreasureChestShopEntranceTable, "Z2_TAKARAYA"),
-    /* 0x15 */ SCENE_ENTRANCE(sStoneTowerTempleReversedEntranceTable, "Z2_INISIE_R"),
+    /* 0x15 */ SCENE_ENTRANCE(sStoneTowerTempleInvertedEntranceTable, "Z2_INISIE_R"),
     /* 0x16 */ SCENE_ENTRANCE(sClockTowerRooftopEntranceTable, "Z2_OKUJOU"),
     /* 0x17 */ SCENE_ENTRANCE(sOpeningDungeonEntranceTable, "Z2_OPENINGDAN"),
     /* 0x18 */ SCENE_ENTRANCE(sWoodfallTempleEntranceTable, "Z2_MITURIN"),
@@ -2772,19 +2772,19 @@ static SceneEntranceTableEntry sSceneEntranceTable[] = {
 /**
  * Returns a pointer to an entrance table from a given entrance index.
  */
-EntranceTableEntry* Entrance_GetTableEntry(u16 entranceIndex) {
-    u32 entranceIndex2 = entranceIndex;
-    EntranceTableEntry** tableEntryP = sSceneEntranceTable[entranceIndex2 >> 9].table;
-    EntranceTableEntry* tableEntry = tableEntryP[(entranceIndex2 >> 4) & 0x1F];
+EntranceTableEntry* Entrance_GetTableEntry(u16 entrance) {
+    u32 entranceIndex = entrance;
+    EntranceTableEntry** tableEntryP = sSceneEntranceTable[entranceIndex >> 9].table;
+    EntranceTableEntry* tableEntry = tableEntryP[(entranceIndex >> 4) & 0x1F];
 
-    return &tableEntry[entranceIndex2 & 0xF];
+    return &tableEntry[entranceIndex & 0xF];
 }
 
 /**
  * Returns the scene index from a given entrance index.
  */
-s32 Entrance_GetSceneNum(u16 entranceIndex) {
-    EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entranceIndex);
+s32 Entrance_GetSceneNum(u16 entrance) {
+    EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entrance);
 
     return tableEntry->sceneNum;
 }
@@ -2792,8 +2792,8 @@ s32 Entrance_GetSceneNum(u16 entranceIndex) {
 /**
  * Returns the absolute value scene index (since for some reason some of them are negative) from a given entrance index.
  */
-s32 Entrance_GetSceneNumAbsolute(u16 entranceIndex) {
-    EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entranceIndex);
+s32 Entrance_GetSceneNumAbsolute(u16 entrance) {
+    EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entrance);
 
     return ABS_ALT(tableEntry->sceneNum);
 }
@@ -2801,8 +2801,8 @@ s32 Entrance_GetSceneNumAbsolute(u16 entranceIndex) {
 /**
  * Returns the spawn index from a given entrance index.
  */
-s32 Entrance_GetSpawnNum(u16 entranceIndex) {
-    EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entranceIndex);
+s32 Entrance_GetSpawnNum(u16 entrance) {
+    EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entrance);
 
     return tableEntry->spawnNum;
 }
@@ -2810,8 +2810,8 @@ s32 Entrance_GetSpawnNum(u16 entranceIndex) {
 /**
  * Returns the transition effect flags from a given entrance index.
  */
-s32 Entrance_GetTransitionFlags(u16 entranceIndex) {
-    EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entranceIndex);
+s32 Entrance_GetTransitionFlags(u16 entrance) {
+    EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entrance);
 
     return tableEntry->flags;
 }
