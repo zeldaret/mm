@@ -8,6 +8,7 @@
 #include "interface/parameter_static/parameter_static.h"
 #include "interface/icon_item_field_static/icon_item_field_static.h"
 #include "interface/icon_item_dungeon_static/icon_item_dungeon_static.h"
+#include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
 
 extern s16 D_8082B7F0[];
 extern s16 D_8082B838[];
@@ -81,11 +82,11 @@ TexturePtr sDungeonItemTextures[] = {
     0x09003F00, // `gCompassIconTex`: DUNGEON_COMPASS
     0x09004800, // `gDungeonMapIconTex`: DUNGEON_MAP
 };
-TexturePtr D_8082B4AC[] = {
-    0x0D000000, // DUNGEON_INDEX_WOODFALL_TEMPLE
-    0x0D000800, // DUNGEON_INDEX_SNOWHEAD_TEMPLE
-    0x0D001000, // DUNGEON_INDEX_GREAT_BAY_TEMPLE
-    0x0D001800, // DUNGEON_INDEX_STONE_TOWER_TEMPLE
+TexturePtr sDungeonTitleTextures[] = {
+    gPauseWoodfallTitleENGTex,   // DUNGEON_INDEX_WOODFALL_TEMPLE
+    gPauseSnowheadTitleENGTex,   // DUNGEON_INDEX_SNOWHEAD_TEMPLE
+    gPauseGreatBayTitleENGTex,   // DUNGEON_INDEX_GREAT_BAY_TEMPLE
+    gPauseStoneTowerTitleENGTex, // DUNGEON_INDEX_STONE_TOWER_TEMPLE
 };
 s16 D_8082B4BC[] = { 67, 81, 95, 109 };
 void KaleidoScope_DrawDungeonMap(PlayState* play) {
@@ -146,7 +147,8 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA, G_CC_MODULATEIA);
 
-    POLY_OPA_DISP = func_8010DC58(POLY_OPA_DISP, D_8082B4AC[((void)0, gSaveContext.dungeonIndex)], 128, 16, 0);
+    POLY_OPA_DISP =
+        func_8010DC58(POLY_OPA_DISP, sDungeonTitleTextures[((void)0, gSaveContext.dungeonIndex)], 128, 16, 0);
 
     gDPPipeSync(POLY_OPA_DISP++);
 
@@ -211,7 +213,8 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
                     gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[76], 4, 0);
 
-                    POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, gStrayFairyGlowingCircleIconTex, 4, 32, 24, 0);
+                    POLY_OPA_DISP =
+                        func_8010DE38(POLY_OPA_DISP, gStrayFairyGlowingCircleIconTex, G_IM_FMT_I, 32, 24, 0);
                     KaleidoScope_SetView(pauseCtx, pauseCtx->eye.x, pauseCtx->eye.y, pauseCtx->eye.z);
                     func_8012C628(play->state.gfxCtx);
 

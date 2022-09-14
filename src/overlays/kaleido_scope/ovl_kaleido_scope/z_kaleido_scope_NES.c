@@ -8,6 +8,7 @@
 #include "z_kaleido_scope.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
+#include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
 
 // iconItemSegment
 extern TexturePtr D_08064340; // gPauseMenuCursorTex
@@ -72,15 +73,6 @@ extern Gfx D_0B000130[]; // gCButtonIconsDL
 extern Gfx D_0B000188[]; // gAButtonIconDL
 
 // iconItemLangSegment
-extern TexturePtr D_0D002000;
-extern TexturePtr D_0D002200;
-extern TexturePtr D_0D002400;
-extern TexturePtr D_0D002700;
-extern TexturePtr D_0D002B00;
-extern TexturePtr D_0D002F00;
-extern TexturePtr D_0D003300;
-extern TexturePtr D_0D003700;
-extern TexturePtr D_0D003A00;
 extern TexturePtr D_0D004400;
 extern TexturePtr D_0D004E00;
 extern TexturePtr D_0D005800;
@@ -89,21 +81,88 @@ extern TexturePtr D_0D006C00;
 extern TexturePtr D_0D007600;
 extern TexturePtr D_0D008000;
 
+// Page Textures (Background of Page):
+// Broken up into multiple textures.
+// Numbered by column/row.
 TexturePtr sSelectMaskTextures[] = {
-    &D_08064440, &D_0806E440, &D_08077A40, &D_08081040, &D_0808A640, &D_0D003A00, &D_0806EE40, &D_08078440,
-    &D_08081A40, &D_0808B040, &D_08065840, &D_0806F840, &D_08078E40, &D_08082440, &D_0808BA40,
+    // Column 0
+    &D_08064440, // gPauseMasks00Tex
+    &D_0806E440, // gPauseMasks01Tex
+    &D_08077A40, // gPauseMasks02Tex
+    &D_08081040, // gPauseMasks03Tex
+    &D_0808A640, // gPauseMasks04Tex
+    // Column 1
+    gPauseMasks10ENGTex,
+    &D_0806EE40, // gPauseMasks11Tex
+    &D_08078440, // gPauseMasks12Tex
+    &D_08081A40, // gPauseMasks13Tex
+    &D_0808B040, // gPauseMasks14Tex
+    // Column 2
+    &D_08065840, // gPauseMasks20Tex
+    &D_0806F840, // gPauseMasks21Tex
+    &D_08078E40, // gPauseMasks22Tex
+    &D_08082440, // gPauseMasks23Tex
+    &D_0808BA40, // gPauseMasks24Tex
 };
 TexturePtr sSelectItemTextures[] = {
-    &D_0D004400, &D_08070240, &D_08079840, &D_08082E40, &D_0808C440, &D_0D004E00, &D_08070C40, &D_0807A240,
-    &D_08083840, &D_0808CE40, &D_0D005800, &D_08071640, &D_0807AC40, &D_08084240, &D_0808D840,
+    // Column 0
+    gPauseSelectItem00ENGTex,
+    &D_08070240, // gPauseSelectItem01Tex
+    &D_08079840, // gPauseSelectItem02Tex
+    &D_08082E40, // gPauseSelectItem03Tex
+    &D_0808C440, // gPauseSelectItem04Tex
+    // Column 1
+    gPauseSelectItem10ENGTex,
+    &D_08070C40, // gPauseSelectItem11Tex
+    &D_0807A240, // gPauseSelectItem12Tex
+    &D_08083840, // gPauseSelectItem13Tex
+    &D_0808CE40, // gPauseSelectItem14Tex
+    // Column 2
+    gPauseSelectItem20ENGTex,
+    &D_08071640, // gPauseSelectItem21Tex
+    &D_0807AC40, // gPauseSelectItem22Tex
+    &D_08084240, // gPauseSelectItem23Tex
+    &D_0808D840, // gPauseSelectItem24Tex
 };
 TexturePtr sMapTextures[] = {
-    &D_08068040, &D_08072040, &D_0807B640, &D_08084C40, &D_0808E240, &D_0D006200, &D_08072A40, &D_0807C040,
-    &D_08085640, &D_0808EC40, &D_08069440, &D_08073440, &D_0807CA40, &D_08086040, &D_0808F640,
+    // Column 0
+    &D_08068040, // gPauseMap00Tex
+    &D_08072040, // gPauseMap01Tex
+    &D_0807B640, // gPauseMap02Tex
+    &D_08084C40, // gPauseMap03Tex
+    &D_0808E240, // gPauseMap04Tex
+    // Column 1
+    gPauseMap10ENGTex,
+    &D_08072A40, // gPauseMap11Tex
+    &D_0807C040, // gPauseMap12Tex
+    &D_08085640, // gPauseMap13Tex
+    &D_0808EC40, // gPauseMap14Tex
+    // Column 2
+    &D_08069440, // gPauseMap20Tex
+    &D_08073440, // gPauseMap21Tex
+    &D_0807CA40, // gPauseMap22Tex
+    &D_08086040, // gPauseMap23Tex
+    &D_0808F640, // gPauseMap24Tex
 };
 TexturePtr sQuestStatusTextures[] = {
-    &D_0D006C00, &D_08073E40, &D_0807D440, &D_08086A40, &D_08090040, &D_0D007600, &D_08074840, &D_0807DE40,
-    &D_08087440, &D_08090A40, &D_0D008000, &D_08075240, &D_0807E840, &D_08087E40, &D_08091440,
+    // Column 0
+    gPauseQuestStatus00ENGTex,
+    &D_08073E40, // gPauseQuestStatus01Tex
+    &D_0807D440, // gPauseQuestStatus02Tex
+    &D_08086A40, // gPauseQuestStatus03Tex
+    &D_08090040, // gPauseQuestStatus04Tex
+    // Column 1
+    gPauseQuestStatus10ENGTex,
+    &D_08074840, // gPauseQuestStatus11Tex
+    &D_0807DE40, // gPauseQuestStatus12Tex
+    &D_08087440, // gPauseQuestStatus13Tex
+    &D_08090A40, // gPauseQuestStatus14Tex
+    // Column 2
+    gPauseQuestStatus20ENGTex,
+    &D_08075240, // gPauseQuestStatus21Tex
+    &D_0807E840, // gPauseQuestStatus22Tex
+    &D_08087E40, // gPauseQuestStatus23Tex
+    &D_08091440, // gPauseQuestStatus24Tex
 };
 
 s16 D_8082B7F0[] = {
@@ -633,16 +692,16 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 }
 
 TexturePtr D_8082B998[] = {
-    &D_0D003300,
-    &D_0D002700,
-    &D_0D002B00,
-    &D_0D002F00,
+    gPauseToMasksENGTex,
+    gPauseToSelectItemENGTex,
+    gPauseToMapENGTex,
+    gPauseToQuestStatusENGTex,
 };
 TexturePtr D_8082B9A8[] = {
-    &D_0D002B00,
-    &D_0D002F00,
-    &D_0D003300,
-    &D_0D002700,
+    gPauseToMapENGTex,
+    gPauseToQuestStatusENGTex,
+    gPauseToMasksENGTex,
+    gPauseToSelectItemENGTex,
 };
 void KaleidoScope_DrawInfoPanel(PlayState* play) {
     static s16 sPauseLRCursorColorTargets[][4] = {
@@ -843,7 +902,8 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
     gDPSetEnvColor(POLY_OPA_DISP++, 20, 30, 40, 0);
 
     if (pauseCtx->itemDescriptionOn ||
-        ((pauseCtx->state == 6) && (pauseCtx->namedItem != PAUSE_ITEM_NONE) && (pauseCtx->nameDisplayTimer < 40) &&
+        ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->namedItem != PAUSE_ITEM_NONE) &&
+         (pauseCtx->nameDisplayTimer < 40) &&
          (!pauseCtx->mainState || (pauseCtx->mainState == PAUSE_MAIN_STATE_SONG_PLAYBACK) ||
           (pauseCtx->mainState == PAUSE_MAIN_STATE_11) ||
           ((pauseCtx->mainState >= PAUSE_MAIN_STATE_SONG_PLAYER_PLAYING_INIT) &&
@@ -871,7 +931,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
             }
 
-            POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, pauseCtx->nameSegment, 3, 0x80, 0x10, 0);
+            POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, pauseCtx->nameSegment, G_IM_FMT_IA, 128, 16, 0);
         }
     } else if ((pauseCtx->mainState <= PAUSE_MAIN_STATE_SONG_PLAYBACK) || (pauseCtx->mainState == PAUSE_MAIN_STATE_7) ||
                (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG) ||
@@ -885,7 +945,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
 
         gSPVertex(POLY_OPA_DISP++, &pauseCtx->infoPanelVtx[16], 8, 0);
 
-        if (pauseCtx->state == 7) {
+        if (pauseCtx->state == PAUSE_STATE_DEFAULT_SAVE_PROMPT) {
             pauseCtx->infoPanelVtx[16].v.ob[0] = pauseCtx->infoPanelVtx[18].v.ob[0] = -33;
 
             pauseCtx->infoPanelVtx[17].v.ob[0] = pauseCtx->infoPanelVtx[19].v.ob[0] =
@@ -906,10 +966,11 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
             gDPPipeSync(POLY_OPA_DISP++);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
 
-            POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, &D_0D002200, 3, 0x30, 0x10, 4);
+            //! @bug: Incorrect dimensions. Should be 64x16
+            POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, gPauseToDecideENGTex, G_IM_FMT_IA, 48, 16, 4);
 
         } else if (pauseCtx->cursorSpecialPos != 0) {
-            if ((pauseCtx->state == 6) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE)) {
+            if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE)) {
 
                 pauseCtx->infoPanelVtx[16].v.ob[0] = pauseCtx->infoPanelVtx[18].v.ob[0] = -63;
 
@@ -922,9 +983,11 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 200, 0, 255);
 
                 if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
-                    POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, D_8082B998[pauseCtx->pageIndex], 3, 0x80, 0x10, 0);
+                    POLY_OPA_DISP =
+                        func_8010DE38(POLY_OPA_DISP, D_8082B998[pauseCtx->pageIndex], G_IM_FMT_IA, 128, 16, 0);
                 } else {
-                    POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, D_8082B9A8[pauseCtx->pageIndex], 3, 0x80, 0x10, 0);
+                    POLY_OPA_DISP =
+                        func_8010DE38(POLY_OPA_DISP, D_8082B9A8[pauseCtx->pageIndex], G_IM_FMT_IA, 128, 16, 0);
                 }
             }
         } else if ((!pauseCtx->pageIndex || (pauseCtx->pageIndex == PAUSE_MASK)) &&
@@ -950,7 +1013,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
             gDPPipeSync(POLY_OPA_DISP++);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
 
-            POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, &D_0D002000, 3, 0x40, 0x10, 4);
+            POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, gPauseToEquipENGTex, G_IM_FMT_IA, 64, 16, 4);
         } else if ((pauseCtx->pageIndex == PAUSE_MAP) && sInDungeonScene) {
             // No code in this case
         } else if ((pauseCtx->pageIndex == PAUSE_QUEST) &&
@@ -978,7 +1041,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
                 gDPPipeSync(POLY_OPA_DISP++);
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
 
-                POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, &D_0D003700, 3, 0x60, 0x10, 4);
+                POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, gPauseToViewNotebookENGTex, G_IM_FMT_IA, 96, 16, 4);
             }
         } else if ((pauseCtx->pageIndex == PAUSE_QUEST) && (pauseCtx->cursorSlot[PAUSE_QUEST] >= QUEST_SONG_SONATA) &&
                    (pauseCtx->cursorSlot[PAUSE_QUEST] <= QUEST_SONG_SUN) && (pauseCtx->namedItem != PAUSE_ITEM_NONE)) {
@@ -1004,7 +1067,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
             gDPPipeSync(POLY_OPA_DISP++);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
 
-            POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, &D_0D002400, 3, 0x60, 0x10, 4);
+            POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, gPauseToPlayMelodyENGTex, G_IM_FMT_IA, 96, 16, 4);
         }
     }
 
@@ -1297,7 +1360,7 @@ void KaleidoScope_DrawOwlWarpInfoPanel(PlayState* play) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
         }
 
-        POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, pauseCtx->nameSegment, 3, 0x80, 0x10, 0);
+        POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, pauseCtx->nameSegment, G_IM_FMT_IA, 128, 16, 0);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
