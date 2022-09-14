@@ -577,7 +577,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
     } else if (this->actor.params == TWINMOLD_TAIL) {
         this->actor.update = Boss02_Tail_Update;
         this->actor.draw = NULL;
-        this->actor.hintId = 0x2E;
+        this->actor.hintId = TATL_HINT_ID_TWINMOLD;
     } else {
         if (this->actor.params != TWINMOLD_BLUE) {
             this->actor.params = TWINMOLD_RED;
