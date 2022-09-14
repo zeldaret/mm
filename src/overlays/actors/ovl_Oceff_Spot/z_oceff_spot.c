@@ -72,7 +72,7 @@ void OceffSpot_Destroy(Actor* thisx, PlayState* play2) {
 
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode1);
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode2);
-    func_80115D5C(&play->state);
+    Magic_Reset(play);
 }
 
 void OceffSpot_End(OceffSpot* this, PlayState* play) {
