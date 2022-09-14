@@ -35,12 +35,19 @@ typedef union {
 } Struct2_80178AC0;
 
 typedef struct {
-    /* 0x00 */ u32 data1;
-    /* 0x00 */ u32 data2;
-} CmpDmaBssStruct;
+    union {
+        u32 dmaWord[2];
+        u32 dataStart;
+        u32 dataSize;
+        struct {
+            u32 start;
+            u32 end;
+        } offset;
+    };
+} CmpDmaBuffer;
 
-// static CmpDmaBssStruct D_801FBBE0;
-extern CmpDmaBssStruct D_801FBBE0;
+// static CmpDmaData sCmpDmaBuffer;
+extern CmpDmaBuffer sCmpDmaBuffer;
 
 #ifdef NON_MATCHING
 // Some constants re-ordered at the top
@@ -97,29 +104,29 @@ void func_80178AC0(u16* src, void* dst, u32 size);
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_cmpdma/func_80178AC0.s")
 #endif
 
-void func_80178C80(u8* vrom, s32 id, s32* start, s32* size, s32* flag) {
+void func_80178C80(u8* fileRomStart, s32 id, s32* start, s32* size, s32* flag) {
     u32 dataStart;
     u32 refOff;
 
-    DmaMgr_DmaRomToRam(vrom, (void*)&D_801FBBE0, sizeof(u32));
+    DmaMgr_DmaRomToRam(fileRomStart, (void*)&sCmpDmaBuffer.dataStart, sizeof(sCmpDmaBuffer.dataStart));
 
-    dataStart = D_801FBBE0.data1;
+    dataStart = sCmpDmaBuffer.dataStart;
     refOff = id * sizeof(u32);
 
     // if id is >= idMax
     if (refOff > (dataStart - 4)) {
-        *start = vrom;
+        *start = fileRomStart;
         *size = 0;
     } else if (refOff == 0) {
         // get offset start of next file, i.e. size of first file
-        DmaMgr_DmaRomToRam(vrom + 4, (void*)&D_801FBBE0, sizeof(u32));
-        *start = vrom + dataStart;
-        *size = D_801FBBE0.data1;
+        DmaMgr_DmaRomToRam(fileRomStart + 4, (void*)&sCmpDmaBuffer.dataSize, sizeof(sCmpDmaBuffer.dataSize));
+        *start = fileRomStart + dataStart;
+        *size = sCmpDmaBuffer.dataSize;
     } else {
-        // get offset start, offset end from dataStart
-        DmaMgr_DmaRomToRam(refOff + vrom, (void*)&D_801FBBE0, sizeof(u32) * 2);
-        *start = D_801FBBE0.data1 + vrom + dataStart;
-        *size = D_801FBBE0.data2 - D_801FBBE0.data1;
+        // get offset start, end from dataStart
+        DmaMgr_DmaRomToRam(refOff + fileRomStart, (void*)&sCmpDmaBuffer.offset, sizeof(sCmpDmaBuffer.offset));
+        *start = sCmpDmaBuffer.offset.start + fileRomStart + dataStart;
+        *size = sCmpDmaBuffer.offset.end - sCmpDmaBuffer.offset.start;
     }
     *flag = 0;
 }
@@ -130,14 +137,15 @@ void func_80178D7C(s32 romStart, s32 size, void* dst) {
     }
 }
 
-void func_80178DAC(u32 vrom, s32 id, void* dst, s32 size) {
+void func_80178DAC(u32 rom, s32 id, void* dst, s32 size) {
     s32 romStart;
     s32 compressedSize;
     s32 flag;
 
-    func_80178C80(vrom, id, &romStart, &compressedSize, &flag);
+    func_80178C80(rom, id, &romStart, &compressedSize, &flag);
     if (flag & 1) {
         void* temp = SystemArena_Malloc(0x1000);
+
         func_80178D7C(romStart, compressedSize, temp);
         func_80178AC0(temp, dst, size);
         SystemArena_Free(temp);
@@ -151,20 +159,20 @@ void func_80178E3C(uintptr_t vrom, s32 id, void* dst, s32 size) {
 }
 
 void func_80178E7C(uintptr_t vrom, void* dst, s32 arg2) {
-    u32 temp_s2 = DmaMgr_TranslateVromToRom(vrom);
+    uintptr_t rom = DmaMgr_TranslateVromToRom(vrom);
     u32 i;
     u32 end;
-    s32 phi_s1;
+    void* nextDst;
     u32 var;
 
-    DmaMgr_DmaRomToRam(temp_s2, (void*)&D_801FBBE0, sizeof(u32));
+    DmaMgr_DmaRomToRam(rom, (void*)&sCmpDmaBuffer.dmaWord[0], sizeof(sCmpDmaBuffer.dmaWord[0]));
 
-    var = D_801FBBE0.data1;
-    phi_s1 = dst;
+    var = sCmpDmaBuffer.dmaWord[0];
+    nextDst = dst;
     end = (var >> 2) - 1;
 
     for (i = 0; i < end; i++) {
-        func_80178DAC(temp_s2, i, phi_s1, 0);
-        phi_s1 = D_8009BE20;
+        func_80178DAC(rom, i, nextDst, 0);
+        nextDst = gYaz0DecompressDstEnd;
     }
 }
