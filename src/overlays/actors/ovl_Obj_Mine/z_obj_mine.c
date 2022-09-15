@@ -6,6 +6,7 @@
 
 #include "z_obj_mine.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "assets/objects/object_ny/object_ny.h"
 
 #define FLAGS 0x00000000
 
@@ -34,9 +35,9 @@ void func_80A83FBC(Actor* thisx, PlayState* play);
 void func_80A84088(Actor* thisx, PlayState* play);
 void func_80A84338(Actor* thisx, PlayState* play);
 
-extern Gfx D_06000030[];
-extern Gfx D_06002068[];
-extern Gfx D_06002188[];
+extern Gfx object_ny_DL_000030[];
+extern Gfx object_ny_DL_002068[];
+extern Gfx object_ny_DL_002188[];
 
 static s32 D_80A849D0[0xC0];
 
@@ -190,9 +191,6 @@ void func_80A8146C(ObjMine* this, s16* arg1, s16* arg2) {
     }
 }
 
-#define NON_MATCHING
-#ifdef NON_MATCHING
-// stack, 1 var needs to go without changing code gen
 void func_80A81544(ObjMine* this, Vec3f* arg1) {
     Actor* ac = this->collider.base.ac;
     Vec3f sp20;
@@ -214,11 +212,6 @@ void func_80A81544(ObjMine* this, Vec3f* arg1) {
         }
     }
 }
-#else
-void func_80A81544(ObjMine* this, Vec3f* arg1);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mine/func_80A81544.s")
-#endif
-#undef NON_MATCHING
 
 void func_80A81640(ObjMine* this) {
 }
@@ -954,8 +947,8 @@ void ObjMine_Draw(Actor* thisx, PlayState* play) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_PASS, G_RM_AA_ZB_OPA_SURF2);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
-    gSPDisplayList(POLY_OPA_DISP++, D_06002068);
-    gSPDisplayList(POLY_OPA_DISP++, D_06002188);
+    gSPDisplayList(POLY_OPA_DISP++, object_ny_DL_002068);
+    gSPDisplayList(POLY_OPA_DISP++, object_ny_DL_002188);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -971,7 +964,7 @@ void func_80A83FBC(Actor* thisx, PlayState* play) {
     gDPSetRenderMode(POLY_XLU_DISP++, G_RM_PASS, G_RM_AA_ZB_XLU_SURF2);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 75);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_06002068);
+    gSPDisplayList(POLY_XLU_DISP++, object_ny_DL_002068);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -994,7 +987,7 @@ void func_80A84088(Actor* thisx, PlayState* play) {
 
     gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
     gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(gfx++, D_06000030);
+    gSPDisplayList(gfx++, object_ny_DL_000030);
 
     func_80A81684(ptr);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -1013,7 +1006,7 @@ void func_80A84088(Actor* thisx, PlayState* play) {
             func_80A8164C(&sp94);
 
             gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(gfx++, D_06000030);
+            gSPDisplayList(gfx++, object_ny_DL_000030);
         }
     }
 
@@ -1024,8 +1017,8 @@ void func_80A84088(Actor* thisx, PlayState* play) {
     gDPPipeSync(gfx++);
     gDPSetRenderMode(gfx++, G_RM_PASS, G_RM_AA_ZB_OPA_SURF2);
     gDPSetEnvColor(gfx++, 0, 0, 0, 255);
-    gSPDisplayList(gfx++, D_06002068);
-    gSPDisplayList(gfx++, D_06002188);
+    gSPDisplayList(gfx++, object_ny_DL_002068);
+    gSPDisplayList(gfx++, object_ny_DL_002188);
 
     POLY_OPA_DISP = gfx;
 
@@ -1047,7 +1040,7 @@ void func_80A84338(Actor* thisx, PlayState* play) {
 
     gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
     gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(gfx++, D_06000030);
+    gSPDisplayList(gfx++, object_ny_DL_000030);
 
     for (i = 0, temp = (ObjMineUnkStruct2*)((u8*)this + 0x1FC); i < temp_s7; i++, temp++) {
         func_80A81684((ObjMineUnkStruct*)temp);
@@ -1058,7 +1051,7 @@ void func_80A84338(Actor* thisx, PlayState* play) {
         func_80A8164C(&temp->unk_24);
 
         gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(gfx++, D_06000030);
+        gSPDisplayList(gfx++, object_ny_DL_000030);
     }
 
     Matrix_RotateXS(0x2000, 1);
@@ -1068,8 +1061,8 @@ void func_80A84338(Actor* thisx, PlayState* play) {
     gDPPipeSync(gfx++);
     gDPSetRenderMode(gfx++, G_RM_PASS, G_RM_AA_ZB_OPA_SURF2);
     gDPSetEnvColor(gfx++, 0, 0, 0, 255);
-    gSPDisplayList(gfx++, D_06002068);
-    gSPDisplayList(gfx++, D_06002188);
+    gSPDisplayList(gfx++, object_ny_DL_002068);
+    gSPDisplayList(gfx++, object_ny_DL_002188);
 
     POLY_OPA_DISP = gfx;
 
