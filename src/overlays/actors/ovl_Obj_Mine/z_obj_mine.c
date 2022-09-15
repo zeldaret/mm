@@ -35,10 +35,6 @@ void func_80A83FBC(Actor* thisx, PlayState* play);
 void func_80A84088(Actor* thisx, PlayState* play);
 void func_80A84338(Actor* thisx, PlayState* play);
 
-extern Gfx object_ny_DL_000030[];
-extern Gfx object_ny_DL_002068[];
-extern Gfx object_ny_DL_002188[];
-
 static s32 D_80A849D0[0xC0];
 
 const ActorInit Obj_Mine_InitVars = {
