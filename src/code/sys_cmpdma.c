@@ -15,32 +15,32 @@ typedef struct {
 
 static CmpDmaBuffer sDmaBuffer;
 
-void func_80178AC0(u16 *src, void *dst, size_t size) {
-  Color_RGBA8_u32 spC;
-  Color_RGBA16_2 tc;
-  Color_RGBA14 tc2;
-  u32 *dstCur = dst;
-  u16 *src16 = src;
+void func_80178AC0(u16* src, void* dst, size_t size) {
+    Color_RGBA8_u32 spC;
+    Color_RGBA16_2 tc;
+    Color_RGBA14 tc2;
+    u32* dstCur = dst;
+    u16* src16 = src;
 
-  while(((u32) dstCur) -  size < ((u32) dst)) {
-    tc.rgba = *(src16++);
-    if (tc.a == 1) {
-      spC.r = (tc.r * 255) / 31;
-      spC.g = (tc.g * 255) / 31;
-      spC.b = (tc.b * 255) / 31;
-      spC.a = 255;
-    } else if (tc.rgba == 0) {
-      spC.rgba = 0;
-    } else {
-      tc2.rgba = tc.rgba;
-      tc.rgba = *(src16++);
-      spC.r = (tc.r << 3) | tc2.r;
-      spC.g = (tc.g << 3) | tc2.g;
-      spC.b = (tc.b << 3) | tc2.b;
-      spC.a = ((tc.rgba & 1) << 7) | ((tc2.a * 127) / 63);
+    while (((u32)dstCur) - size < ((u32)dst)) {
+        tc.rgba = *(src16++);
+        if (tc.a == 1) {
+            spC.r = (tc.r * 255) / 31;
+            spC.g = (tc.g * 255) / 31;
+            spC.b = (tc.b * 255) / 31;
+            spC.a = 255;
+        } else if (tc.rgba == 0) {
+            spC.rgba = 0;
+        } else {
+            tc2.rgba = tc.rgba;
+            tc.rgba = *(src16++);
+            spC.r = (tc.r << 3) | tc2.r;
+            spC.g = (tc.g << 3) | tc2.g;
+            spC.b = (tc.b << 3) | tc2.b;
+            spC.a = ((tc.rgba & 1) << 7) | ((tc2.a * 127) / 63);
+        }
+        *(dstCur++) = spC.rgba;
     }
-    *(dstCur++) = spC.rgba;
-  } 
 }
 
 void CmpDma_GetFileInfo(u8* segmentRom, s32 id, uintptr_t* outFileRom, size_t* size, s32* flag) {
