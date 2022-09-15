@@ -649,7 +649,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, PlayState* play2) {
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                 if (this->actor.params == DEMO_KANKYO_TYPE_GIANTS) {
-                    gSPDisplayList(POLY_XLU_DISP++, object_bubble_DL_001000);
+                    gSPDisplayList(POLY_XLU_DISP++, gBubbleDL);
                 } else {
                     gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
                 }
