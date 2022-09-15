@@ -291,10 +291,10 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
         gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
 
         POLY_OPA_DISP =
-            func_8010DC58(POLY_OPA_DISP,
-                          gItemIcons[((ITEM_HEART_PIECE_2 - 1) +
-                                      ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) >> QUEST_HEART_PIECE_COUNT))],
-                          48, 48, 0);
+            Gfx_DrawTexQuadIA8(POLY_OPA_DISP,
+                               gItemIcons[((ITEM_HEART_PIECE_2 - 1) +
+                                           ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) >> QUEST_HEART_PIECE_COUNT))],
+                               48, 48, 0);
     }
 
     j += 4;
@@ -340,7 +340,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
                     gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
 
-                    POLY_OPA_DISP = func_8010DC58(POLY_OPA_DISP, sOcarinaButtonTextures[D_8082AEE4[i]], 16, 16, 0);
+                    POLY_OPA_DISP = Gfx_DrawTexQuadIA8(POLY_OPA_DISP, sOcarinaButtonTextures[D_8082AEE4[i]], 16, 16, 0);
                 }
             }
         } else if (((pauseCtx->mainState >= PAUSE_MAIN_STATE_SONG_PLAYER_PLAYING_INIT) &&
@@ -372,7 +372,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
 
-                POLY_OPA_DISP = func_8010DC58(
+                POLY_OPA_DISP = Gfx_DrawTexQuadIA8(
                     POLY_OPA_DISP, sOcarinaButtonTextures[gOcarinaSongButtons[sp1C8].buttonIndex[var_s3]], 16, 16, 0);
             }
 
@@ -419,7 +419,8 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
                     gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
 
-                    POLY_OPA_DISP = func_8010DC58(POLY_OPA_DISP, sOcarinaButtonTextures[D_8082AEE4[var_s3]], 16, 16, 0);
+                    POLY_OPA_DISP =
+                        Gfx_DrawTexQuadIA8(POLY_OPA_DISP, sOcarinaButtonTextures[D_8082AEE4[var_s3]], 16, 16, 0);
                 }
 
                 if (pauseCtx->mainState == PAUSE_MAIN_STATE_SONG_PLAYER_PLAYING_INIT) {

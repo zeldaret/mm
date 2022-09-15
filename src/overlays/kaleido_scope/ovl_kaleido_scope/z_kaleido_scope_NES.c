@@ -913,7 +913,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
             }
 
-            POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, pauseCtx->nameSegment, G_IM_FMT_IA, 128, 16, 0);
+            POLY_OPA_DISP = Gfx_DrawTexQuad4b(POLY_OPA_DISP, pauseCtx->nameSegment, G_IM_FMT_IA, 128, 16, 0);
         }
     } else if ((pauseCtx->mainState <= PAUSE_MAIN_STATE_SONG_PLAYBACK) || (pauseCtx->mainState == PAUSE_MAIN_STATE_7) ||
                (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG) ||
@@ -948,7 +948,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
 
             //! @bug: Incorrect dimensions. Should be 64x16
-            POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, gPauseToDecideENGTex, G_IM_FMT_IA, 48, 16, 4);
+            POLY_OPA_DISP = Gfx_DrawTexQuad4b(POLY_OPA_DISP, gPauseToDecideENGTex, G_IM_FMT_IA, 48, 16, 4);
 
         } else if (pauseCtx->cursorSpecialPos != 0) {
             if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE)) {
@@ -965,10 +965,10 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
 
                 if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
                     POLY_OPA_DISP =
-                        func_8010DE38(POLY_OPA_DISP, D_8082B998[pauseCtx->pageIndex], G_IM_FMT_IA, 128, 16, 0);
+                        Gfx_DrawTexQuad4b(POLY_OPA_DISP, D_8082B998[pauseCtx->pageIndex], G_IM_FMT_IA, 128, 16, 0);
                 } else {
                     POLY_OPA_DISP =
-                        func_8010DE38(POLY_OPA_DISP, D_8082B9A8[pauseCtx->pageIndex], G_IM_FMT_IA, 128, 16, 0);
+                        Gfx_DrawTexQuad4b(POLY_OPA_DISP, D_8082B9A8[pauseCtx->pageIndex], G_IM_FMT_IA, 128, 16, 0);
                 }
             }
         } else if ((!pauseCtx->pageIndex || (pauseCtx->pageIndex == PAUSE_MASK)) &&
@@ -993,7 +993,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
             gDPPipeSync(POLY_OPA_DISP++);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
 
-            POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, gPauseToEquipENGTex, G_IM_FMT_IA, 64, 16, 4);
+            POLY_OPA_DISP = Gfx_DrawTexQuad4b(POLY_OPA_DISP, gPauseToEquipENGTex, G_IM_FMT_IA, 64, 16, 4);
         } else if ((pauseCtx->pageIndex == PAUSE_MAP) && sInDungeonScene) {
             // No code in this case
         } else if ((pauseCtx->pageIndex == PAUSE_QUEST) &&
@@ -1020,7 +1020,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
                 gDPPipeSync(POLY_OPA_DISP++);
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
 
-                POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, gPauseToViewNotebookENGTex, G_IM_FMT_IA, 96, 16, 4);
+                POLY_OPA_DISP = Gfx_DrawTexQuad4b(POLY_OPA_DISP, gPauseToViewNotebookENGTex, G_IM_FMT_IA, 96, 16, 4);
             }
         } else if ((pauseCtx->pageIndex == PAUSE_QUEST) && (pauseCtx->cursorSlot[PAUSE_QUEST] >= QUEST_SONG_SONATA) &&
                    (pauseCtx->cursorSlot[PAUSE_QUEST] <= QUEST_SONG_SUN) && (pauseCtx->namedItem != PAUSE_ITEM_NONE)) {
@@ -1045,7 +1045,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
             gDPPipeSync(POLY_OPA_DISP++);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
 
-            POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, gPauseToPlayMelodyENGTex, G_IM_FMT_IA, 96, 16, 4);
+            POLY_OPA_DISP = Gfx_DrawTexQuad4b(POLY_OPA_DISP, gPauseToPlayMelodyENGTex, G_IM_FMT_IA, 96, 16, 4);
         }
     }
 
@@ -1337,7 +1337,7 @@ void KaleidoScope_DrawOwlWarpInfoPanel(PlayState* play) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
         }
 
-        POLY_OPA_DISP = func_8010DE38(POLY_OPA_DISP, pauseCtx->nameSegment, G_IM_FMT_IA, 128, 16, 0);
+        POLY_OPA_DISP = Gfx_DrawTexQuad4b(POLY_OPA_DISP, pauseCtx->nameSegment, G_IM_FMT_IA, 128, 16, 0);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

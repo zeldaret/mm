@@ -221,9 +221,9 @@ s16 sFinalHoursClockFrameEnvBlue = 0;
 s16 sFinalHoursClockColorTimer = 15;
 s16 sFinalHoursClockColorTargetIndex = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CB80.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Gfx_DrawTexRectRGBA16.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CD98.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Gfx_DrawTexRectIA8.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CFBC.s")
 
@@ -231,13 +231,13 @@ s16 sFinalHoursClockColorTargetIndex = 0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D480.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D7D0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Gfx_DrawTexRectI8.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D9F4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010DC58.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Gfx_DrawTexQuadIA8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010DE38.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Gfx_DrawTexQuad4b.s")
 
 s16 D_801BFA04[] = {
     -14, -14, -24, -8, -12, -12, -7, -8, -7, -8, -12, 0,
