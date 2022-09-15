@@ -360,7 +360,7 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    this->actor.hintId = 0x4B;
+    this->actor.hintId = TATL_HINT_ID_WIZROBE;
     this->currentPlatformIndex = 777;
 
     // Setting the radius and scale to zero here effectively disables all of the ghost colliders.
