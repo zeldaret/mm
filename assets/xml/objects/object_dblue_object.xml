@@ -127,7 +127,7 @@
         <Texture Name="gGreatBayTempleObjectSwitchKnobTex" OutName="great_bay_temple_object_switch_knob" Format="rgba16" Width="32" Height="32" Offset="0x111D0" />
         <Texture Name="gGreatBayTempleObjectOneWaySwitchTex" OutName="great_bay_temple_object_one_way_switch" Format="ci4" Width="8" Height="16" Offset="0x119D0" />
         <Texture Name="gGreatBayTempleObjectSwitchSideTex" OutName="great_bay_temple_object_switch_side" Format="rgba16" Width="32" Height="32" Offset="0x11A10" />
-        <!-- <Blob Name="object_dblue_object_Blob_012210" Size="0x360" Offset="0x12210" /> -->
+        <Texture Name="gGreatBayTempleObjectUnusedGearTex" OutName="great_bay_temple_object_unused_gear" Format="ci4" Width="48" Height="36" Offset="0x12210" TlutOffset="0xD530" />
         <Texture Name="gGreatBayTempleObjectUnusedDarkMetalTex" OutName="great_bay_temple_object_unused_dark_metal" Format="ci4" Width="32" Height="32" Offset="0x12570" TlutOffset="0xD630" />
         <Texture Name="gGreatBayTempleObjectUnusedShaftTex" OutName="great_bay_temple_object_unused_shaft" Format="rgba16" Width="32" Height="64" Offset="0x12770" />
         <Texture Name="gGreatBayTempleObjectUnusedPaddleTex" OutName="great_bay_temple_object_unused_paddle_top" Format="ci4" Width="32" Height="128" Offset="0x13770" TlutOffset="0xD670" />
