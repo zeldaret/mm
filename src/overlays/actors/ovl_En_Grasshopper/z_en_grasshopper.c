@@ -201,7 +201,7 @@ void EnGrasshopper_Init(Actor* thisx, PlayState* play) {
     EnGrasshopper* this = THIS;
     s32 i;
 
-    this->actor.hintId = 0x15;
+    this->actor.hintId = TATL_HINT_ID_DRAGONFLY;
     this->actor.targetMode = 4;
     this->actor.colChkInfo.mass = 60;
     this->actor.colChkInfo.health = 2;
