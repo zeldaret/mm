@@ -3000,10 +3000,10 @@ void KaleidoScope_Update(PlayState* play) {
                         gSaveContext.save.playerData.health = 0x30;
                         audio_setBGM(0xA);
                         gSaveContext.healthAccumulator = 0;
-                        gSaveContext.unk_3F28 = 0;
-                        gSaveContext.unk_3F2C = 0;
-                        gSaveContext.unk_3F2E = 0;
-                        gSaveContext.unk_3F30 = gSaveContext.save.playerData.magic;
+                        gSaveContext.magicState = MAGIC_STATE_IDLE;
+                        gSaveContext.magicFlag = 0;
+                        gSaveContext.magicCapacity = 0;
+                        gSaveContext.magicFillTarget = gSaveContext.save.playerData.magic;
                         gSaveContext.save.playerData.magicLevel = 0;
                         gSaveContext.save.playerData.magic = 0;
                     } else { // PAUSE_PROMPT_NO

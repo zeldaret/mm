@@ -8,7 +8,7 @@ void TitleSetup_GameStateResetContext(void) {
     XREG(12) = 0xE;
     XREG(13) = 0;
     XREG(31) = 0;
-    XREG(41) = 0x50;
+    R_MAGIC_CONSUME_TIMER_GIANTS_MASK = 80;
     XREG(43) = 0xFC54;
 
     XREG(44) = 0xD7;

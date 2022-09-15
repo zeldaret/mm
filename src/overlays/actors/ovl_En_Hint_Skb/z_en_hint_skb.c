@@ -158,7 +158,7 @@ void EnHintSkb_Init(Actor* thisx, PlayState* play) {
     Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElement);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->actor.hintId = 0x55;
+    this->actor.hintId = TATL_HINT_ID_STALCHILD;
     this->unk_3E4 = 0;
     this->unk_3DE = 0;
     this->unk_3E0 = 0;
@@ -587,7 +587,7 @@ void func_80C20D64(EnHintSkb* this, PlayState* play) {
             if (Player_GetMask(play) == PLAYER_MASK_CAPTAIN) {
                 this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
                 this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
-                this->actor.hintId = 255;
+                this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
                 if (this->actionFunc == func_80C1FE80) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 12);
@@ -597,7 +597,7 @@ void func_80C20D64(EnHintSkb* this, PlayState* play) {
         } else if (Player_GetMask(play) != PLAYER_MASK_CAPTAIN) {
             this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
             this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
-            this->actor.hintId = 0x55;
+            this->actor.hintId = TATL_HINT_ID_STALCHILD;
             this->actor.textId = 0;
             if (this->skelAnime.animation == &object_skb_Anim_00697C) {
                 func_80C1FE0C(this);
