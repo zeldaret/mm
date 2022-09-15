@@ -2499,6 +2499,60 @@ s32 Boss07_Wrath_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
     return false;
 }
 
+typedef enum {
+    MAJORAS_WRATH_PART_NONE = -1,
+    MAJORAS_WRATH_PART_HEAD,
+    MAJORAS_WRATH_PART_TORSO,
+    MAJORAS_WRATH_PART_PELVIS,
+    MAJORAS_WRATH_PART_LEFT_UPPER_ARM,
+    MAJORAS_WRATH_PART_LEFT_LOWER_ARM_ROOT,
+    MAJORAS_WRATH_PART_LEFT_FOREARM,
+    MAJORAS_WRATH_PART_RIGHT_UPPER_ARM,
+    MAJORAS_WRATH_PART_RIGHT_LOWER_ARM_ROOT,
+    MAJORAS_WRATH_PART_RIGHT_FOREARM,
+    MAJORAS_WRATH_PART_RIGHT_THIGH,
+    MAJORAS_WRATH_PART_RIGHT_SHIN,
+    MAJORAS_WRATH_PART_RIGHT_FOOT,
+    MAJORAS_WRATH_PART_LEFT_THIGH,
+    MAJORAS_WRATH_PART_LEFT_SHIN,
+    MAJORAS_WRATH_PART_LEFT_FOOT,
+    MAJORAS_WRATH_PART_MAX,
+} MajorasWrathBodyPart;
+
+// typedef enum MajorasWrathLimbs {
+//     /* -1 */ MAJORAS_WRATH_LIMB_NONE,
+//     /* -1 */ MAJORAS_WRATH_LIMB_ROOT,
+//     /*  2 */ MAJORAS_WRATH_LIMB_PELVIS,
+//     /* -1 */ MAJORAS_WRATH_LIMB_LEFT_LEG_ROOT,
+//     /* 12 */ MAJORAS_WRATH_LIMB_LEFT_THIGH,
+//     /* -1 */ MAJORAS_WRATH_LIMB_LEFT_LOWER_LEG_ROOT,
+//     /* 13 */ MAJORAS_WRATH_LIMB_LEFT_SHIN,
+//     /* 14 */ MAJORAS_WRATH_LIMB_LEFT_FOOT,
+//     /* -1 */ MAJORAS_WRATH_LIMB_RIGHT_LEG_ROOT,
+//     /*  9 */ MAJORAS_WRATH_LIMB_RIGHT_THIGH,
+//     /* -1 */ MAJORAS_WRATH_LIMB_RIGHT_LOWER_LEG_ROOT,
+//     /* 10 */ MAJORAS_WRATH_LIMB_RIGHT_SHIN,
+//     /* 11 */ MAJORAS_WRATH_LIMB_RIGHT_FOOT,
+//     /* -1 */ MAJORAS_WRATH_LIMB_TORSO_ROOT,
+//     /*  1 */ MAJORAS_WRATH_LIMB_TORSO,
+//     /* -1 */ MAJORAS_WRATH_LIMB_RIGHT_ARM_ROOT,
+//     /*  6 */ MAJORAS_WRATH_LIMB_RIGHT_UPPER_ARM,
+//     /*  7 */ MAJORAS_WRATH_LIMB_RIGHT_LOWER_ARM_ROOT,
+//     /*  8 */ MAJORAS_WRATH_LIMB_RIGHT_FOREARM,
+//     /* -1 */ MAJORAS_WRATH_LIMB_RIGHT_HAND,
+//     /* -1 */ MAJORAS_WRATH_LIMB_LEFT_ARM_ROOT,
+//     /*  3 */ MAJORAS_WRATH_LIMB_LEFT_UPPER_ARM,
+//     /*  4 */ MAJORAS_WRATH_LIMB_LEFT_LOWER_ARM_ROOT,
+//     /*  5 */ MAJORAS_WRATH_LIMB_LEFT_FOREARM,
+//     /* -1 */ MAJORAS_WRATH_LIMB_LEFT_HAND,
+//     /* -1 */ MAJORAS_WRATH_LIMB_HEAD_ROOT,
+//     /*  0 */ MAJORAS_WRATH_LIMB_HEAD,
+//     /* -1 */ MAJORAS_WRATH_LIMB_THIRD_EYE,
+//     /* -1 */ MAJORAS_WRATH_LIMB_MAX
+// } MajorasWrathLimbs;
+
+
+
 void Boss07_Wrath_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static s8 sLimbColliderIndex[30] = {
         -1, -1, 2, -1, 7, -1, 8, -1, -1, 9, -1, 10, -1, -1, 1, -1, 5, -1, 6, -1, -1, 3, -1, 4, -1, -1, 0, -1, -1, -1,
@@ -3630,6 +3684,30 @@ s32 Boss07_Incarnation_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dL
     return false;
 }
 
+// #define IDENTITY(...) __VA_ARGS__
+// #define GROUP(...) __VA_ARGS__
+// #define EVAL3(x) GROUP(x)
+// #define EVAL2(x) EVAL3(EVAL3(EVAL3(GROUP(x))))
+// #define EVAL1(x) EVAL2(EVAL2(EVAL2(GROUP(x))))
+// #define EVAL(x) EVAL1(EVAL1(EVAL1(GROUP(x))))
+
+// #define MAP_OUT
+// #define MAP_END(a,b,...) b
+// #define MAP_NULL(...) 
+// #define END_TEST(com) 0 , com
+// #define GET_SECOND(a, b, ...) b
+// #define GET_COMMAND(com, ecom, a, b, ...) GET_SECOND MAP_OUT (END_TEST b (ecom) , com)
+
+// #define CHECK_ARR_VAL_R(val, i, ...) ((val == i) ? 0 : (1 + VALIDATE_ARR MAP_OUT (val, __VA_ARGS__ - 1)))
+// #define VALIDATE_ARR(val, ...) (GET_COMMAND (CHECK_ARR_VAL_R, MAP_END, __VA_ARGS__, )  (val, __VA_ARGS__))
+// #define CHECK_ARR_VAL(val, ...) CHECK_ARR_VAL_R(val, __VA_ARGS__, -1)
+
+// #define INVERT_ARRAY_R(vals, n, b, ...)   CHECK_ARR_VAL(n, IDENTITY vals) , VALIDATE_INVERSE MAP_OUT (vals, n b, __VA_ARGS__) 
+// #define VALIDATE_INVERSE(vals, n, ...) GET_COMMAND  (INVERT_ARRAY_R, MAP_NULL, __VA_ARGS__, )  (vals, n, __VA_ARGS__)
+// #define INVERT_ARRAY(count, ...) INVERT_ARRAY_R((__VA_ARGS__), 0, +1, COUNTER_##count)
+
+// #define COUNTER_30 +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1, +1
+
 void Boss07_Incarnation_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static s8 sLimbColliderIndex[30] = {
         -1, -1, -1, 1, -1, 9, -1, 10, -1, -1, 5, -1, 6, -1, 1, 3, -1, 4, -1, -1, 7, -1, 8, -1, 0, -1, -1, -1, -1, -1,
@@ -3646,7 +3724,7 @@ void Boss07_Incarnation_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList
     };
     static s8 sLimbBodyPartIndex[32] = {
         -1, -1, -1, 1,  2,  9,  -1, 10, 11, -1, 6,  -1, 7,  8,  1, 3,
-        -1, 4,  5,  -1, 12, -1, 13, 14, 0,  -1, -1, -1, -1, -1, 0, 0,
+        -1, 4,  5,  -1, 12, -1, 13, 14, 0,  -1, -1, -1, -1, -1
     };
 
     Boss07* this = THIS;
