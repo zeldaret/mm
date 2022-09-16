@@ -83,7 +83,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ s16 unk_0; // frame?
-    /* 0x2 */ Vec3s unk_2; // pos?
+    /* 0x2 */ Vec3s unk_2; // scale
 } struct_80124618; // size = 0x8
 
 typedef struct {
@@ -365,15 +365,18 @@ typedef struct ActorListEntry {
     /* 0x8 */ s32 unk_08;
 } ActorListEntry; // size = 0xC
 
+// Target size when activated
+#define LENS_MASK_ACTIVE_SIZE 100
+
 typedef struct ActorContext {
     /* 0x000 */ u8 freezeFlashTimer;
     /* 0x001 */ UNK_TYPE1 pad1;
     /* 0x002 */ u8 unk2;
-    /* 0x003 */ u8 unk3;
-    /* 0x004 */ s8 unk4;
+    /* 0x003 */ u8 lensActive;
+    /* 0x004 */ s8 lensMaskSize; // The size of the circle when drawn the lens mask. Larger value leads to a smaller circle
     /* 0x005 */ u8 unk5;
     /* 0x006 */ UNK_TYPE1 pad6[0x5];
-    /* 0x00B */ s8 unkB;
+    /* 0x00B */ s8 lensActorsDrawn;
     /* 0x00C */ s16 unkC;
     /* 0x00E */ u8 totalLoadedActors;
     /* 0x00F */ u8 undrawnActorCount;
@@ -1184,5 +1187,110 @@ typedef enum {
     /* 0x23 */ CLEAR_TAG_SPLASH = 35,
     /* 0xC8 */ CLEAR_TAG_SMOKE = 200
 } ClearTagType;
+
+typedef enum {
+    /* 0x00 */ TATL_HINT_ID_DEFAULT,
+    /* 0x01 */ TATL_HINT_ID_SNAPPER,
+    /* 0x02 */ TATL_HINT_ID_MINI_BABA,
+    /* 0x03 */ TATL_HINT_ID_MAD_JELLY,
+    /* 0x04 */ TATL_HINT_ID_SKULLTULA,
+    /* 0x05 */ TATL_HINT_ID_RED_CHUCHU,
+    /* 0x06 */ TATL_HINT_ID_BLUE_CHUCHU,
+    /* 0x07 */ TATL_HINT_ID_DEKU_BABA,
+    /* 0x08 */ TATL_HINT_ID_BIO_DEKU_BABA,
+    /* 0x09 */ TATL_HINT_ID_WILTED_DEKU_BABA,
+    /* 0x0A */ TATL_HINT_ID_DEXIHAND,
+    /* 0x0B */ TATL_HINT_ID_NEJIRON,
+    /* 0x0C */ TATL_HINT_ID_GIANT_BEE,
+    /* 0x0D */ TATL_HINT_ID_DODONGO,
+    /* 0x0E */ TATL_HINT_ID_DEEP_PYTHON,
+    /* 0x0F */ TATL_HINT_ID_DEATH_ARMOS,
+    /* 0x10 */ TATL_HINT_ID_DINOLFOS,
+    /* 0x11 */ TATL_HINT_ID_FIRE_KEESE,
+    /* 0x12 */ TATL_HINT_ID_KEESE,
+    /* 0x13 */ TATL_HINT_ID_ARMOS,
+    /* 0x14 */ TATL_HINT_ID_EENO,
+    /* 0x15 */ TATL_HINT_ID_DRAGONFLY,
+    /* 0x16 */ TATL_HINT_ID_IGOS_DU_IKANA,
+    /* 0x17 */ TATL_HINT_ID_GARO,
+    /* 0x18 */ TATL_HINT_ID_GARO_MASTER,
+    /* 0x19 */ TATL_HINT_ID_WART,
+    /* 0x1A */ TATL_HINT_ID_GOMESS,
+    /* 0x1B */ TATL_HINT_ID_GOHT,
+    /* 0x1C */ TATL_HINT_ID_BLUE_BUBBLE,
+    /* 0x1D */ TATL_HINT_ID_KINGS_LACKEYS_DARK_ROOM,
+    /* 0x1E */ TATL_HINT_ID_KINGS_LACKEYS_LIGHT_ROOM,
+    /* 0x1F */ TATL_HINT_ID_SKULLWALLTULA,
+    /* 0x20 */ TATL_HINT_ID_GOLD_SKULLTULA, // Only in JP Ver.
+    /* 0x21 */ TATL_HINT_ID_CAPTAIN_KEETA,
+    /* 0x22 */ TATL_HINT_ID_YELLOW_CHUCHU,
+    /* 0x23 */ TATL_HINT_ID_TAKKURI,
+    /* 0x24 */ TATL_HINT_ID_RED_BUBBLE,
+    /* 0x25 */ TATL_HINT_ID_HIPLOOP,
+    /* 0x26 */ TATL_HINT_ID_MASKED_HIPLOOP,
+    /* 0x27 */ TATL_HINT_ID_SHELLBLADE,
+    /* 0x28 */ TATL_HINT_ID_GYORG, // "if you go near, you'll be eaten!"
+    /* 0x29 */ TATL_HINT_ID_GYORG_STUNNED, // "Jump in and attack it!"
+    /* 0x2A */ TATL_HINT_ID_REDEAD,
+    /* 0x2B */ TATL_HINT_ID_2B,
+    /* 0x2C */ TATL_HINT_ID_BLACK_BOE,
+    /* 0x2D */ TATL_HINT_ID_GIBDO,
+    /* 0x2E */ TATL_HINT_ID_TWINMOLD,
+    /* 0x2F */ TATL_HINT_ID_WEARING_GIANTS_MASK, // Twinmold, JP Ver. only
+    /* 0x30 */ TATL_HINT_ID_WALLMASTER,
+    /* 0x31 */ TATL_HINT_ID_FLOORMASTER,
+    /* 0x32 */ TATL_HINT_ID_MAJORAS_MASK,
+    /* 0x33 */ TATL_HINT_ID_MAJORAS_INCARNATION,
+    /* 0x34 */ TATL_HINT_ID_MAJORAS_WRATH,
+    /* 0x35 */ TATL_HINT_ID_IRON_KNUCKLE,
+    /* 0x36 */ TATL_HINT_ID_36, // Empty
+    /* 0x37 */ TATL_HINT_ID_LIKE_LIKE,
+    /* 0x38 */ TATL_HINT_ID_38, // Empty
+    /* 0x39 */ TATL_HINT_ID_BEAMOS,
+    /* 0x3A */ TATL_HINT_ID_3A, // Empty
+    /* 0x3B */ TATL_HINT_ID_FREEZARD,
+    /* 0x3C */ TATL_HINT_ID_WHITE_BOE,
+    /* 0x3D */ TATL_HINT_ID_3D, // Empty
+    /* 0x3E */ TATL_HINT_ID_3E, // Empty
+    /* 0x3F */ TATL_HINT_ID_3F, // Empty
+    /* 0x40 */ TATL_HINT_ID_40, // Empty
+    /* 0x41 */ TATL_HINT_ID_41, // Empty
+    /* 0x42 */ TATL_HINT_ID_OCTOROK,
+    /* 0x43 */ TATL_HINT_ID_43, // Empty
+    /* 0x44 */ TATL_HINT_ID_POE,
+    /* 0x45 */ TATL_HINT_ID_GEKKO_SNAPPER,
+    /* 0x46 */ TATL_HINT_ID_BLUE_TEKTITE,
+    /* 0x47 */ TATL_HINT_ID_LEEVER,
+    /* 0x48 */ TATL_HINT_ID_PEAHAT,
+    /* 0x49 */ TATL_HINT_ID_PEAHAT_LARVA,
+    /* 0x4A */ TATL_HINT_ID_EYEGORE,
+    /* 0x4B */ TATL_HINT_ID_WIZROBE,
+    /* 0x4C */ TATL_HINT_ID_WOLFOS,
+    /* 0x4D */ TATL_HINT_ID_MAD_SCRUB,
+    /* 0x4E */ TATL_HINT_ID_4E, // Empty
+    /* 0x4F */ TATL_HINT_ID_4F, // Empty
+    /* 0x50 */ TATL_HINT_ID_POE_SISTER_MEG,
+    /* 0x51 */ TATL_HINT_ID_POE_SISTER_JO,
+    /* 0x52 */ TATL_HINT_ID_POE_SISTER_BETH,
+    /* 0x53 */ TATL_HINT_ID_POE_SISTER_AMY,
+    /* 0x54 */ TATL_HINT_ID_PIRATE,
+    /* 0x55 */ TATL_HINT_ID_STALCHILD,
+    /* 0x56 */ TATL_HINT_ID_ICE_KEESE,
+    /* 0x57 */ TATL_HINT_ID_WHITE_WOLFOS,
+    /* 0x58 */ TATL_HINT_ID_GUAY,
+    /* 0x59 */ TATL_HINT_ID_BIG_OCTO,
+    /* 0x5A */ TATL_HINT_ID_BIG_POE,
+    /* 0x5B */ TATL_HINT_ID_SKULLFISH,
+    /* 0x5C */ TATL_HINT_ID_DESBREKO,
+    /* 0x5D */ TATL_HINT_ID_GREEN_CHUCHU,
+    /* 0x5E */ TATL_HINT_ID_ODOLWA_1,
+    /* 0x5F */ TATL_HINT_ID_GEKKO_GIANT_SLIME,
+    /* 0x60 */ TATL_HINT_ID_BAD_BAT,
+    /* 0x61 */ TATL_HINT_ID_REAL_BOMBCHU,
+    /* 0x62 */ TATL_HINT_ID_ODOLWA_2,
+    /* 0x63 */ TATL_HINT_ID_ODOLWA_3,
+    /* 0x64 */ TATL_HINT_ID_MUSHROOM,
+    /* 0xFF */ TATL_HINT_ID_NONE = 0xFF
+} TatlHintId;
 
 #endif

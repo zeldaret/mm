@@ -249,7 +249,7 @@ void EnSkb_Init(Actor* thisx, PlayState* play) {
 
         default:
             this->actor.flags &= ~ACTOR_FLAG_100000;
-            this->actor.hintId = 0x55;
+            this->actor.hintId = TATL_HINT_ID_STALCHILD;
             func_8099495C(this, play);
             break;
     }
@@ -353,7 +353,7 @@ void func_80995068(EnSkb* this, PlayState* play) {
     } else if (Player_GetMask(play) != PLAYER_MASK_CAPTAIN) {
         this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
         this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
-        this->actor.hintId = 0x55;
+        this->actor.hintId = TATL_HINT_ID_STALCHILD;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         func_80995A30(this);
     } else if (!(this->collider.base.acFlags & AC_HIT)) {
@@ -427,7 +427,7 @@ void func_8099533C(EnSkb* this, PlayState* play) {
         this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80994F7C(this, play);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f)) {
-        this->actor.hintId = 0x55;
+        this->actor.hintId = TATL_HINT_ID_STALCHILD;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         func_8099571C(this);
     }
@@ -449,7 +449,7 @@ void func_8099544C(EnSkb* this, PlayState* play) {
         this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80994F7C(this, play);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f)) {
-        this->actor.hintId = 0x55;
+        this->actor.hintId = TATL_HINT_ID_STALCHILD;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         func_8099571C(this);
     }
@@ -487,7 +487,7 @@ void func_8099556C(EnSkb* this, PlayState* play) {
         func_80994F7C(this, play);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f) &&
                (this->skelAnime.curFrame > 24.0f) && (this->skelAnime.curFrame < 28.0f)) {
-        this->actor.hintId = 0x55;
+        this->actor.hintId = TATL_HINT_ID_STALCHILD;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         this->actor.targetArrowOffset = 2000.0f;
         func_8099571C(this);
@@ -571,7 +571,7 @@ void func_80995A8C(EnSkb* this, PlayState* play) {
     if (Player_GetMask(play) == PLAYER_MASK_CAPTAIN) {
         this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
         this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
-        this->actor.hintId = 0xFF;
+        this->actor.hintId = TATL_HINT_ID_NONE;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 12);
         func_8099504C(this);
