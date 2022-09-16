@@ -1,7 +1,7 @@
 /*
  * File: z_bg_dblue_balance.c
  * Overlay: ovl_Bg_Dblue_Balance
- * Description: Great Bay Temple - See-Saw
+ * Description: Great Bay Temple - Seesaw and Waterwheel w/ Platforms
  */
 
 #include "prevent_bss_reordering.h"

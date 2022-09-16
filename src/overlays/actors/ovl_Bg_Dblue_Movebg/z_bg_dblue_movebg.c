@@ -1,7 +1,7 @@
 /*
  * File: z_bg_dblue_movebg.c
  * Overlay: ovl_Bg_Dblue_Movebg
- * Description: Great Bay Temple - Waterwheels and push switches
+ * Description: Great Bay Temple - Waterwheels, push switches, gear shafts, and whirlpools
  */
 
 #include "prevent_bss_reordering.h"
@@ -82,7 +82,7 @@ static CollisionHeader* sColHeaders[] = {
     NULL,
     NULL,
     NULL,
-    &object_dblue_object_Colheader_00D3DC,
+    &gGreatBayTempleObjectUnusedCol,
     &gGreatBayTempleObjectGearShaftWithPlatformsCol,
     &gGreatBayTempleObjectOneWaySwitchCol,
     &gGreatBayTempleObjectWaterwheelCol,

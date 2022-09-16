@@ -1,7 +1,7 @@
 /*
  * File: z_bg_dblue_waterfall.c
  * Overlay: ovl_Bg_Dblue_Waterfall
- * Description: Great Bay Temple - Freezable Geyser
+ * Description: Great Bay Temple - Freezable Waterfall
  */
 
 #include "z_bg_dblue_waterfall.h"
