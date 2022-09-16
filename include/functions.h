@@ -22,7 +22,7 @@ void DmaMgr_Stop(void);
 void* Yaz0_FirstDMA(void);
 void* Yaz0_NextDMA(void* curSrcPos);
 s32 Yaz0_DecompressImpl(u8* hdr, u8* dst);
-void Yaz0_Decompress(u32 romStart, void* dst, size_t size);
+void Yaz0_Decompress(uintptr_t romStart, void* dst, size_t size);
 void IrqMgr_AddClient(IrqMgr* irqmgr, IrqMgrClient* add, OSMesgQueue* msgQ);
 void IrqMgr_RemoveClient(IrqMgr* irqmgr, IrqMgrClient* remove);
 void IrqMgr_SendMesgForClient(IrqMgr* irqmgr, OSMesg msg);
