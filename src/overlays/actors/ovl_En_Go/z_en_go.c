@@ -132,10 +132,10 @@ typedef enum EnGoAnimationIndex {
 
     // ???
     /*  18 */ ENGO_ANIM_HAKUGIN_START = 18,
-    /*  18 */ ENGO_ANIM_HAKUGIN_18 = 18,
-    /*  19 */ ENGO_ANIM_HAKUGIN_19_IMM,
-    /*  20 */ ENGO_ANIM_HAKUGIN_20,
-    /*  21 */ ENGO_ANIM_HAKUGIN_21_IMM,
+    /*  18 */ ENGO_ANIM_SHOW = 18,
+    /*  19 */ ENGO_ANIM_SHOW_LOOPED,
+    /*  20 */ ENGO_ANIM_LOOK_AROUND,
+    /*  21 */ ENGO_ANIM_LOOK_AROUND_LOOPED,
 } EnGoAnimationIndex;
 
 typedef enum EnGoLimbIndex {
@@ -881,19 +881,20 @@ static AnimationInfoS sAnimationInfo[] = {
     { &gGoronShiveringSurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
 
     /* Animations for stretching gorons at the racetrack */
-    { &object_taisou_Anim_004DD4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // gGoronDoubleArmSideBend
-    { &object_taisou_Anim_0016C8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // gGoronSquatSidetoSide
-    { &object_taisou_Anim_00283C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // gGoronShakeLimbs
-    { &object_taisou_Anim_007764, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // gGoronSingleArmSideBend
-    { &object_taisou_Anim_005EE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // gGoronHamstringStretchSitting
-    { &object_taisou_Anim_002C48, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // gGoronCheer
-    { &object_taisou_Anim_0031D8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // gGoronShout
-    { &object_taisou_Anim_005790, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // gGoronHamstringStretchStanding
+    { &gTaisouDoubleArmSideBendAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gTaisouSquatSideToSideAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gTaisouShakeLimbsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gTaisouSingleArmSidebendAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gTaisouHamstringStretchSittingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gTaisouCheerAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gTaisouShoutAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gTaisouHamstringStretchStandingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 
-    { &object_hakugin_demo_Anim_001420, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_hakugin_demo_Anim_001A4C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_hakugin_demo_Anim_002704, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_hakugin_demo_Anim_003378, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    /* Animations for the goron brothers during the spring arrival cutscene */
+    { &gHakuginShowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gHakuginShowLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gHakuginLookAroundAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gHakuginLookAroundLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 Actor* EnGo_FindGravemaker(EnGo* this, PlayState* play);
@@ -930,8 +931,8 @@ s32 EnGo_CheckAndSetupTalk(EnGo* this, PlayState* play);
 void EnGo_Gatekeeper_Snowball(EnGo* this, PlayState* play);
 void EnGo_Gatekeeper_UpdateToSnowball(EnGo* this, PlayState* play);
 
-void EnGo_GraveBroGoron_CutsceneThaw(EnGo* this, PlayState* play);
-s32 EnGo_GraveBroGoron_CheckAndSetupCutsceneThaw(EnGo* this, PlayState* play);
+void EnGo_GraveBroGoron_CutsceneSpringArrival(EnGo* this, PlayState* play);
+s32 EnGo_GraveBroGoron_CheckAndSetupCutsceneSpringArrival(EnGo* this, PlayState* play);
 
 s32 EnGo_GatekeeperGoron_CutsceneOpenShrine(Actor* thisx, PlayState* play);
 s32 EnGo_GatekeeperGoron_CutscenePound(EnGo* this, f32 initialVelocity, f32 maxDistortion, s32 maxHangtime);
@@ -1573,26 +1574,26 @@ s32 EnGo_DetectCollisions(EnGo* this, PlayState* play) {
 }
 
 /**
- * Start, or finish, the cutscene for thawing the brother.
+ * Start, or finish, the cutscene for the arrival of springtime.
  */
-s32 EnGo_GraveBroGoron_CheckAndSetupCutsceneThaw(EnGo* this, PlayState* play) {
+s32 EnGo_GraveBroGoron_CheckAndSetupCutsceneSpringArrival(EnGo* this, PlayState* play) {
     const u8 CS_ACTION_INVALID = UINT8_MAX;
 
     if ((ENGO_GET_TYPE(&this->actor) == ENGO_GRAVEBRO) && (play->csCtx.state != 0) && (this->actor.draw != NULL) &&
         (play->sceneNum == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneSetupIndex == 1) &&
         (play->csCtx.currentCsIndex == 0)) {
-        if (this->brotherThawCutsceneActive == false) {
+        if (this->springArrivalCutsceneActive == false) {
             this->actor.flags &= ~ACTOR_FLAG_1;
-            this->brotherThawCurrentCsAction = CS_ACTION_INVALID;
-            this->brotherThawCutsceneActive = true;
+            this->springArrivalCurrentCsAction = CS_ACTION_INVALID;
+            this->springArrivalCutsceneActive = true;
             this->interruptedActionFn = this->actionFunc;
         }
         SubS_UpdateFlags(&this->actionFlags, 0, 7);
-        this->actionFunc = EnGo_GraveBroGoron_CutsceneThaw;
-    } else if (this->brotherThawCutsceneActive) {
+        this->actionFunc = EnGo_GraveBroGoron_CutsceneSpringArrival;
+    } else if (this->springArrivalCutsceneActive) {
         this->actor.flags |= ACTOR_FLAG_1;
-        this->brotherThawCurrentCsAction = CS_ACTION_INVALID;
-        this->brotherThawCutsceneActive = false;
+        this->springArrivalCurrentCsAction = CS_ACTION_INVALID;
+        this->springArrivalCutsceneActive = false;
         SubS_UpdateFlags(&this->actionFlags, 3, 7);
         this->actionFunc = this->interruptedActionFn;
     }
@@ -1659,8 +1660,8 @@ s32 EnGo_UpdateSfx(EnGo* this, PlayState* play) {
  *
  * Goron animations come from one of three categories
  * - Basic Goron animations
- * - Goron Gymnastics (Stretches, Cheers, etc...)
- * - todo TBD (hakugin)
+ * - Goron Gymnastics like Stretches, Cheers, etc... (Taisou)
+ * - Spring has Arrived Cutscene Animationstodo (Hakugin)
  * Changing animations with this function handles the transitions between the three categories.
  *
  * @return true if animation request was valid
@@ -1957,6 +1958,7 @@ s32 EnGo_GatekeeperGoron_CutscenePound(EnGo* this, f32 initialVelocity, f32 maxD
     s32 isFinished;
 
     if (this->actor.bgCheckFlags & 2) { // Settled to the Ground
+        // Transition 3->DONE
         isFinished = true;
     } else {
         if (velocity > 0.0f) {
@@ -1979,7 +1981,7 @@ s32 EnGo_GatekeeperGoron_CutscenePound(EnGo* this, f32 initialVelocity, f32 maxD
             this->actor.gravity = 0.0f;
             rotAndDistortFactor = velocity / initialVelocity;
         } else {
-            // PHASE 3: Goron is falling
+            // PHASE 3: Goron is falling (Just letting gravity take effect)
         }
         isFinished = false;
     }
@@ -2689,6 +2691,7 @@ void EnGo_AwaitThaw(EnGo* this, PlayState* play) {
 
 /**
  * Action function for thawing of the goron, melting sounds, and steam.
+ *
  */
 void EnGo_Thaw(EnGo* this, PlayState* play) {
     EnGo* unfrozenBro = (EnGo*)this->actor.child;
@@ -2712,12 +2715,19 @@ void EnGo_Thaw(EnGo* this, PlayState* play) {
 }
 
 /**
- * Cutscene action function for thawing the gravemaker's brother
+ * Cutscene action function for the arrival of springtime
+ *
+ * This cutscene consists of:
+ * - The non-frozen brother stops shivering and looks around.
+ * - The frozen brother thaws and shivers briefly.
+ * - The non-frozen brother pats his brother on the back and shows him the change in temperature.
+ * - They both look around
+ * - They both cheer.
  */
-void EnGo_GraveBroGoron_CutsceneThaw(EnGo* this, PlayState* play) {
+void EnGo_GraveBroGoron_CutsceneSpringArrival(EnGo* this, PlayState* play) {
     s32 animationIndices[] = {
-        ENGO_ANIM_LYINGDOWNIDLE, ENGO_ANIM_UNROLL, ENGO_ANIM_SHIVER_IMM, ENGO_ANIM_HAKUGIN_20,
-        ENGO_ANIM_HAKUGIN_18,    ENGO_ANIM_SHIVER, ENGO_ANIM_SHIVER,     ENGO_ANIM_CHEER,
+        ENGO_ANIM_LYINGDOWNIDLE, ENGO_ANIM_UNROLL, ENGO_ANIM_SHIVER_IMM, ENGO_ANIM_LOOK_AROUND,
+        ENGO_ANIM_SHOW,          ENGO_ANIM_SHIVER, ENGO_ANIM_SHIVER,     ENGO_ANIM_CHEER,
     };
     u16 actorActionCmd = 0;
     s32 csAction;
@@ -2738,8 +2748,8 @@ void EnGo_GraveBroGoron_CutsceneThaw(EnGo* this, PlayState* play) {
             actionIndex = Cutscene_GetActorActionIndex(play, actorActionCmd);
             csAction = play->csCtx.actorActions[actionIndex]->action;
 
-            if (this->brotherThawCurrentCsAction != (u8)csAction) {
-                this->brotherThawCurrentCsAction = csAction;
+            if (this->springArrivalCurrentCsAction != (u8)csAction) {
+                this->springArrivalCurrentCsAction = csAction;
                 EnGo_ChangeAnimation(this, play, animationIndices[csAction]);
                 this->actionFlags = ENGO_FLAG_NONE;
                 this->actionFlags |= ENGO_FLAG_EYESOPEN;
@@ -2760,18 +2770,18 @@ void EnGo_GraveBroGoron_CutsceneThaw(EnGo* this, PlayState* play) {
                 }
             }
 
-            switch (this->brotherThawCurrentCsAction) {
+            switch (this->springArrivalCurrentCsAction) {
                 case 3:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) &&
-                        (this->currAnimIndex == ENGO_ANIM_HAKUGIN_20)) {
-                        EnGo_ChangeAnimation(this, play, ENGO_ANIM_HAKUGIN_21_IMM);
+                        (this->currAnimIndex == ENGO_ANIM_LOOK_AROUND)) {
+                        EnGo_ChangeAnimation(this, play, ENGO_ANIM_LOOK_AROUND_LOOPED);
                     }
                     break;
 
                 case 4:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) &&
-                        (this->currAnimIndex == ENGO_ANIM_HAKUGIN_18)) {
-                        EnGo_ChangeAnimation(this, play, ENGO_ANIM_HAKUGIN_19_IMM);
+                        (this->currAnimIndex == ENGO_ANIM_SHOW)) {
+                        EnGo_ChangeAnimation(this, play, ENGO_ANIM_SHOW_LOOPED);
                     }
                     break;
 
@@ -3016,7 +3026,7 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
     EnGo_DetectCollisions(this, play);
 
     if (!EnGo_CheckAndSetupTalk(this, play)) {
-        EnGo_GraveBroGoron_CheckAndSetupCutsceneThaw(this, play);
+        EnGo_GraveBroGoron_CheckAndSetupCutsceneSpringArrival(this, play);
     }
 
     this->actionFunc(this, play);

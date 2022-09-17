@@ -51,7 +51,7 @@ typedef struct EnGo {
     /* 0x38C */ Actor* attentionTarget;
     /* 0x390 */ u16 actionFlags;
     /* 0x392 */ u16 lastTextId;
-    /* 0x394 */ u8 brotherThawCurrentCsAction;
+    /* 0x394 */ u8 springArrivalCurrentCsAction;
     /* 0x398 */ f32 currAnimPlaySpeed;
     /* 0x39C */ f32 iceBlockScale;
     /* 0x3A0 */ f32 iceBlockAlpha;
@@ -83,7 +83,7 @@ typedef struct EnGo {
     /* 0x3E4 */ s32 indexPathPoint;
     /* 0x3E8 */ s32 indexEffect;
     /* 0x3EC */ s32 sleepState;
-    /* 0x3F0 */ s32 brotherThawCutsceneActive;
+    /* 0x3F0 */ s32 springArrivalCutsceneActive;
     /* 0x3F4 */ s32 changedText;
     /* 0x3F8 */ EnGoEffect effectTable[ENGO_NUM_EFFECTS];
 } EnGo; // size = 0xB78
