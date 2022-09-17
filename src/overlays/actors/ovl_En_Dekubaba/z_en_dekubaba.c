@@ -42,7 +42,6 @@ void func_808B3DA8(EnDekubaba* this, PlayState* play);
 void func_808B3E40(EnDekubaba* this, PlayState* play);
 void func_808B3EE8(EnDekubaba* this, PlayState* play);
 
-// #if 0
 const ActorInit En_Dekubaba_InitVars = {
     ACTOR_EN_DEKUBABA,
     ACTORCAT_ENEMY,
@@ -55,49 +54,102 @@ const ActorInit En_Dekubaba_InitVars = {
     (ActorFunc)EnDekubaba_Draw,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[7] = {
-static ColliderJntSphElementInit D_808B4D60[7] = {
+static ColliderJntSphElementInit sJntSphElementsInit[7] = {
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK0,
+            { 0xF7CFFFFF, 0x00, 0x08 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_HARD,
+            BUMP_ON | BUMP_HOOKABLE,
+            OCELEM_ON,
+        },
         { 1, { { 0, 100, 1000 }, 15 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK0,
+            { 0x00000000, 0x00, 0x00 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_NONE,
+            OCELEM_ON,
+        },
         { 51, { { 0, 0, 1500 }, 8 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_NONE, },
+        {
+            ELEMTYPE_UNK0,
+            { 0x00000000, 0x00, 0x00 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_NONE,
+            OCELEM_NONE,
+        },
         { 52, { { 0, 0, 500 }, 8 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_NONE, },
+        {
+            ELEMTYPE_UNK0,
+            { 0x00000000, 0x00, 0x00 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_NONE,
+            OCELEM_NONE,
+        },
         { 53, { { 0, 0, 1500 }, 8 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_NONE, },
+        {
+            ELEMTYPE_UNK0,
+            { 0x00000000, 0x00, 0x00 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_NONE,
+            OCELEM_NONE,
+        },
         { 54, { { 0, 0, 500 }, 8 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_NONE, },
+        {
+            ELEMTYPE_UNK0,
+            { 0x00000000, 0x00, 0x00 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_NONE,
+            OCELEM_NONE,
+        },
         { 55, { { 0, 0, 1500 }, 8 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_NONE, },
+        {
+            ELEMTYPE_UNK0,
+            { 0x00000000, 0x00, 0x00 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_NONE,
+            OCELEM_NONE,
+        },
         { 56, { { 0, 0, 500 }, 8 }, 100 },
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_808B4E5C = {
-    { COLTYPE_HIT6, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    ARRAY_COUNT(D_808B4D60), D_808B4D60, // sJntSphElementsInit,
+static ColliderJntSphInit sJntSphInit = {
+    {
+        COLTYPE_HIT6,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    ARRAY_COUNT(sJntSphElementsInit),
+    sJntSphElementsInit,
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit D_808B4E6C = { 2, 25, 25, MASS_IMMOVABLE };
+static CollisionCheckInfoInit sColChkInfoInit = { 2, 25, 25, MASS_IMMOVABLE };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_808B4E74 = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
     /* Deku Stick     */ DMG_ENTRY(3, 0x0),
     /* Horse trample  */ DMG_ENTRY(1, 0x0),
@@ -132,8 +184,7 @@ static DamageTable D_808B4E74 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_808B4E94[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_STOP),
 };
 
@@ -149,18 +200,18 @@ void EnDekubaba_Init(Actor* thisx, PlayState* play) {
     EnDekubaba* this = THIS;
     s32 i;
 
-    Actor_ProcessInitChain(&this->actor, D_808B4E94);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 22.0f);
     SkelAnime_Init(play, &this->skelAnime, &D_06002A40, &D_060002B8, this->jointTable, this->morphTable, 8);
-    Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &D_808B4E5C, this->colliderElements);
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_808B4E74, &D_808B4E6C);
+    Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     if (this->actor.params == 1) {
         this->size = 2.5f;
 
-        for (i = 0; i < D_808B4E5C.count; i++) {
+        for (i = 0; i < sJntSphInit.count; i++) {
             this->collider.elements[i].dim.worldSphere.radius = this->collider.elements[i].dim.modelSphere.radius =
-                (D_808B4D60[i].dim.modelSphere.radius * 2.50f);
+                (sJntSphElementsInit[i].dim.modelSphere.radius * 2.50f);
         }
 
         this->actor.colChkInfo.health = 4;
@@ -169,7 +220,7 @@ void EnDekubaba_Init(Actor* thisx, PlayState* play) {
     } else {
         this->size = 1.0f;
 
-        for (i = 0; i < D_808B4E5C.count; i++) {
+        for (i = 0; i < sJntSphInit.count; i++) {
             this->collider.elements[i].dim.worldSphere.radius = this->collider.elements[i].dim.modelSphere.radius;
         }
         this->actor.hintId = 7;
@@ -534,8 +585,8 @@ void func_808B2980(EnDekubaba* this) {
 }
 
 void func_808B29C4(EnDekubaba* this, PlayState* play) {
-    static Color_RGBA8 D_808B4E98 = { 105, 255, 105, 255 };
-    static Color_RGBA8 D_808B4E9C = { 150, 250, 150, 0 };
+    static Color_RGBA8 sDustPrimColor = { 105, 255, 105, 255 };
+    static Color_RGBA8 sDustEnvColor = { 150, 250, 150, 0 };
     s32 allStepsDone;
     s16 curFrame10;
     Vec3f velocity;
@@ -564,7 +615,7 @@ void func_808B29C4(EnDekubaba* this, PlayState* play) {
             velocity.x = Math_SinS(this->actor.shape.rot.y) * 5.0f;
             velocity.y = 0.0f;
             velocity.z = Math_CosS(this->actor.shape.rot.y) * 5.0f;
-            func_800B0DE0(play, &this->actor.world.pos, &velocity, &gZeroVec3f, &D_808B4E98, &D_808B4E9C, 1,
+            func_800B0DE0(play, &this->actor.world.pos, &velocity, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 1,
                           (s32)(this->size * 100.0f));
             this->timer = 1;
         }
@@ -1161,10 +1212,8 @@ void func_808B4548(EnDekubaba* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-extern Gfx* D_808B4EA0[];
-
 void func_808B465C(EnDekubaba* this, PlayState* play) {
-    static Gfx* D_808B4EA0[] = { 0x06001330, 0x06001628, 0x06001828 };
+    static Gfx* sStemDLists[] = { 0x06001330, 0x06001628, 0x06001828 };
     MtxF mtx;
     s32 i;
     f32 scale;
@@ -1193,7 +1242,7 @@ void func_808B465C(EnDekubaba* this, PlayState* play) {
         Matrix_Put(&mtx);
         Matrix_RotateZYX(this->stemSectionAngle[i], this->actor.shape.rot.y, 0, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_808B4EA0[i]);
+        gSPDisplayList(POLY_OPA_DISP++, sStemDLists[i]);
 
         Collider_UpdateSpheres(51 + 2 * i, &this->collider);
         Collider_UpdateSpheres(52 + 2 * i, &this->collider);
