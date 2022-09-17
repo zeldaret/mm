@@ -42,7 +42,7 @@ void func_808B3DA8(EnDekubaba* this, PlayState* play);
 void func_808B3E40(EnDekubaba* this, PlayState* play);
 void func_808B3EE8(EnDekubaba* this, PlayState* play);
 
-#if 0
+// #if 0
 const ActorInit En_Dekubaba_InitVars = {
     ACTOR_EN_DEKUBABA,
     ACTORCAT_ENEMY,
@@ -90,7 +90,7 @@ static ColliderJntSphElementInit D_808B4D60[7] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_808B4E5C = {
     { COLTYPE_HIT6, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    ARRAY_COUNT(sJntSphElementsInit), D_808B4D60, // sJntSphElementsInit,
+    ARRAY_COUNT(D_808B4D60), D_808B4D60, // sJntSphElementsInit,
 };
 
 // sColChkInfoInit
@@ -136,14 +136,6 @@ static DamageTable D_808B4E74 = {
 static InitChainEntry D_808B4E94[] = {
     ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_STOP),
 };
-
-#endif
-
-extern ColliderJntSphElementInit D_808B4D60[7];
-extern ColliderJntSphInit D_808B4E5C;
-extern CollisionCheckInfoInit D_808B4E6C;
-extern DamageTable D_808B4E74;
-extern InitChainEntry D_808B4E94[];
 
 extern AnimationHeader D_06000208;
 extern AnimationHeader D_060002B8;
@@ -541,10 +533,9 @@ void func_808B2980(EnDekubaba* this) {
     this->actionFunc = func_808B29C4;
 }
 
-extern Color_RGBA8 D_808B4E98;
-extern Color_RGBA8 D_808B4E9C;
-
 void func_808B29C4(EnDekubaba* this, PlayState* play) {
+    static Color_RGBA8 D_808B4E98 = { 105, 255, 105, 255 };
+    static Color_RGBA8 D_808B4E9C = { 150, 250, 150, 0 };
     s32 allStepsDone;
     s16 curFrame10;
     Vec3f velocity;
@@ -1173,6 +1164,7 @@ void func_808B4548(EnDekubaba* this, PlayState* play) {
 extern Gfx* D_808B4EA0[];
 
 void func_808B465C(EnDekubaba* this, PlayState* play) {
+    static Gfx* D_808B4EA0[] = { 0x06001330, 0x06001628, 0x06001828 };
     MtxF mtx;
     s32 i;
     f32 scale;
