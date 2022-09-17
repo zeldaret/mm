@@ -936,8 +936,8 @@ s32 EnGo_GraveBroGoron_CheckAndSetupCutsceneSpringArrival(EnGo* this, PlayState*
 
 s32 EnGo_GatekeeperGoron_CutsceneOpenShrine(Actor* thisx, PlayState* play);
 s32 EnGo_GatekeeperGoron_CutscenePound(EnGo* this, f32 initialVelocity, f32 maxDistortion, s32 maxHangtime);
-void EnGo_GatekeeperGoron_CutscenePoundQuake(PlayState* play, s16 quakeSpeed, s16 vertMagnitude, s16 quakeTime);
-void EnGo_GatekeeperGoron_CutscenePoundQuakeEffects(EnGo* this, PlayState* play);
+void EnGo_GatekeeperGoron_CreateQuake(PlayState* play, s16 quakeSpeed, s16 vertMagnitude, s16 quakeTime);
+void EnGo_GatekeeperGoron_CreateQuakeEffects(EnGo* this, PlayState* play);
 
 s32 EnGo_PowderKegGoron_CutsceneGivePowderKeg(Actor* thisx, PlayState* play);
 void EnGo_PowderKegGoron_UpdateColliderRadius(EnGo* this, PlayState* play, s32 isGivenPK);
@@ -1998,7 +1998,7 @@ s32 EnGo_GatekeeperGoron_CutscenePound(EnGo* this, f32 initialVelocity, f32 maxD
 /**
  * Create the quake caused by the gatekeeper's pound.
  */
-void EnGo_GatekeeperGoron_CutscenePoundQuake(PlayState* play, s16 quakeSpeed, s16 vertMagnitude, s16 quakeTime) {
+void EnGo_GatekeeperGoron_CreateQuake(PlayState* play, s16 quakeSpeed, s16 vertMagnitude, s16 quakeTime) {
     s16 indexQuake = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
 
     Quake_SetCountdown(indexQuake, quakeTime);
@@ -2009,8 +2009,8 @@ void EnGo_GatekeeperGoron_CutscenePoundQuake(PlayState* play, s16 quakeSpeed, s1
 /**
  * Create the visual effects caused by the gatekeeper's pound.
  */
-void EnGo_GatekeeperGoron_CutscenePoundQuakeEffects(EnGo* this, PlayState* play) {
-    EnGo_GatekeeperGoron_CutscenePoundQuake(play, 0x6C77, 7, 20);
+void EnGo_GatekeeperGoron_CreateQuakeEffects(EnGo* this, PlayState* play) {
+    EnGo_GatekeeperGoron_CreateQuake(play, 0x6C77, 7, 20);
     play->actorCtx.unk2 = 4;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TEST, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, 0, 0, 0, 0);
@@ -2142,7 +2142,7 @@ s32 EnGo_GatekeeperGoron_CutsceneOpenShrine(Actor* thisx, PlayState* play) {
         case 4:
             if (EnGo_GatekeeperGoron_CutscenePound(this, ENGO_POUND_RISE_VEL, (0.4f) * ENGO_NORMAL_SCALE, 6)) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_LAND_BIG);
-                EnGo_GatekeeperGoron_CutscenePoundQuakeEffects(this, play);
+                EnGo_GatekeeperGoron_CreateQuakeEffects(this, play);
                 this->gatekeeperAnimState++;
                 this->cutsceneDelayTimer = 0;
                 gSaveContext.save.weekEventReg[88] |= WE_88_6_GATEKEEPER_OPENED_SHRINE;
@@ -2691,7 +2691,6 @@ void EnGo_AwaitThaw(EnGo* this, PlayState* play) {
 
 /**
  * Action function for thawing of the goron, melting sounds, and steam.
- *
  */
 void EnGo_Thaw(EnGo* this, PlayState* play) {
     EnGo* unfrozenBro = (EnGo*)this->actor.child;
