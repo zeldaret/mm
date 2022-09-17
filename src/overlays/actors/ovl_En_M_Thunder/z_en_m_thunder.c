@@ -80,8 +80,8 @@ void func_808B53C0(EnMThunder* this, PlayState* play) {
     this->actionFunc = func_808B6310;
     this->unk1BC = 8;
     this->unk1A4 = 1.0f;
-    Audio_PlaySfxGeneral(NA_SE_IT_ROLLING_CUT_LV1, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                         &gSfxDefaultReverb);
+    AudioSfx_PlaySfx(NA_SE_IT_ROLLING_CUT_LV1, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+                     &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
     this->actor.child = NULL;
 }
 
@@ -117,13 +117,13 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
     this->unk1C2 = false;
 
     if (player->stateFlags2 & PLAYER_STATE2_20000) {
-        if (!gSaveContext.save.playerData.magicAcquired || (gSaveContext.unk_3F28 != 0) ||
+        if (!gSaveContext.save.playerData.isMagicAcquired || (gSaveContext.magicState != 0) ||
             ((ENMTHUNDER_GET_MAGIC_COST(&this->actor) != 0) &&
-             !func_80115DB4(play, ENMTHUNDER_GET_MAGIC_COST(&this->actor), 0))) {
-            Audio_PlaySfxGeneral(NA_SE_IT_ROLLING_CUT, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                                 &gSfxDefaultReverb);
-            Audio_PlaySfxGeneral(NA_SE_IT_SWORD_SWING_HARD, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                                 &gSfxDefaultReverb);
+             !Magic_Consume(play, ENMTHUNDER_GET_MAGIC_COST(&this->actor), MAGIC_CONSUME_NOW))) {
+            AudioSfx_PlaySfx(NA_SE_IT_ROLLING_CUT, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+                             &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
+            AudioSfx_PlaySfx(NA_SE_IT_SWORD_SWING_HARD, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+                             &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
             Actor_MarkForDeath(&this->actor);
             return;
         }
@@ -167,8 +167,8 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
             this->unk1BC = 8;
         }
 
-        Audio_PlaySfxGeneral(NA_SE_IT_ROLLING_CUT_LV1, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                             &gSfxDefaultReverb);
+        AudioSfx_PlaySfx(NA_SE_IT_ROLLING_CUT_LV1, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+                         &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
 
         this->unk1A4 = 1.0f;
     } else {
@@ -182,7 +182,7 @@ void EnMThunder_Destroy(Actor* thisx, PlayState* play) {
     EnMThunder* this = THIS;
 
     if (this->unk1C2) {
-        func_80115D5C(&play->state);
+        Magic_Reset(play);
     }
 
     Collider_DestroyCylinder(play, &this->collider);
@@ -199,10 +199,10 @@ void func_808B58CC(EnMThunder* this, PlayState* play) {
 
     if (player->stateFlags2 & PLAYER_STATE2_20000) {
         if (player->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H) {
-            Audio_PlaySfxGeneral(NA_SE_IT_ROLLING_CUT, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                                 &gSfxDefaultReverb);
-            Audio_PlaySfxGeneral(NA_SE_IT_SWORD_SWING_HARD, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                                 &gSfxDefaultReverb);
+            AudioSfx_PlaySfx(NA_SE_IT_ROLLING_CUT, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+                             &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
+            AudioSfx_PlaySfx(NA_SE_IT_SWORD_SWING_HARD, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+                             &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
         }
         Actor_MarkForDeath(&this->actor);
     } else if (!(player->stateFlags1 & PLAYER_STATE1_1000)) {
@@ -219,8 +219,9 @@ void func_808B5984(EnMThunder* this, PlayState* play) {
     this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
 
     if (!this->unk1C2 && (player->unk_B08[0] >= 0.1f)) {
-        if ((gSaveContext.unk_3F28 != 0) || ((ENMTHUNDER_GET_MAGIC_COST(&this->actor) != 0) &&
-                                             !func_80115DB4(play, ENMTHUNDER_GET_MAGIC_COST(&this->actor), 4))) {
+        if ((gSaveContext.magicState != 0) ||
+            ((ENMTHUNDER_GET_MAGIC_COST(&this->actor) != 0) &&
+             !Magic_Consume(play, ENMTHUNDER_GET_MAGIC_COST(&this->actor), MAGIC_CONSUME_WAIT_PREVIEW))) {
             func_808B58CC(this, play);
             this->actionFunc = func_808B58CC;
             this->unk1C0 = 0;
@@ -242,10 +243,10 @@ void func_808B5984(EnMThunder* this, PlayState* play) {
 
         if (player->unk_B08[0] <= 0.15f) {
             if ((player->unk_B08[0] >= 0.1f) && (player->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H)) {
-                Audio_PlaySfxGeneral(NA_SE_IT_ROLLING_CUT, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                                     &gSfxDefaultReverb);
-                Audio_PlaySfxGeneral(NA_SE_IT_SWORD_SWING_HARD, &player->actor.projectedPos, 4, &D_801DB4B0,
-                                     &D_801DB4B0, &gSfxDefaultReverb);
+                AudioSfx_PlaySfx(NA_SE_IT_ROLLING_CUT, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+                                 &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
+                AudioSfx_PlaySfx(NA_SE_IT_SWORD_SWING_HARD, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+                                 &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
             }
             Actor_MarkForDeath(&this->actor);
             return;
@@ -254,7 +255,7 @@ void func_808B5984(EnMThunder* this, PlayState* play) {
         player->stateFlags2 &= ~PLAYER_STATE2_20000;
 
         if (ENMTHUNDER_GET_MAGIC_COST(&this->actor) != 0) {
-            gSaveContext.unk_3F28 = 1;
+            gSaveContext.magicState = 1;
         }
 
         if (player->unk_B08[0] < 0.85f) {
@@ -288,8 +289,8 @@ void func_808B5984(EnMThunder* this, PlayState* play) {
             this->unk1BC = 8;
         }
 
-        Audio_PlaySfxGeneral(sSounds[this->unk1BE], &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                             &gSfxDefaultReverb);
+        AudioSfx_PlaySfx(sSounds[this->unk1BE], &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+                         &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
 
         this->unk1A4 = 1.0f;
 

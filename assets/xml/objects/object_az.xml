@@ -50,7 +50,7 @@
         <Limb Name="object_az_Standardlimb_0073B8" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_15" Offset="0x73B8" />
         <Limb Name="object_az_Standardlimb_0073C4" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_16" Offset="0x73C4" />
         <Limb Name="object_az_Standardlimb_0073D0" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_17" Offset="0x73D0" />
-        <Skeleton Name="object_az_Skel_007438" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AZ_1_LIMB_NONE" LimbMax="OBJECT_AZ_1_LIMB_MAX" EnumName="object_az_1_Limbs" Offset="0x7438" />
+        <Skeleton Name="object_az_Skel_007438" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AZ_1_LIMB_NONE" LimbMax="OBJECT_AZ_1_LIMB_MAX" EnumName="ObjectAz1Limb" Offset="0x7438" />
         <Animation Name="object_az_Anim_00750C" Offset="0x750C" />
         <Animation Name="object_az_Anim_007D3C" Offset="0x7D3C" />
         <Animation Name="object_az_Anim_0086AC" Offset="0x86AC" />
@@ -121,7 +121,7 @@
         <Limb Name="object_az_Standardlimb_017910" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_15" Offset="0x17910" />
         <Limb Name="object_az_Standardlimb_01791C" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_16" Offset="0x1791C" />
         <Limb Name="object_az_Standardlimb_017928" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_17" Offset="0x17928" />
-        <Skeleton Name="object_az_Skel_017990" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AZ_2_LIMB_NONE" LimbMax="OBJECT_AZ_2_LIMB_MAX" EnumName="object_az_2_Limbs" Offset="0x17990" />
+        <Skeleton Name="object_az_Skel_017990" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AZ_2_LIMB_NONE" LimbMax="OBJECT_AZ_2_LIMB_MAX" EnumName="ObjectAz2Limb" Offset="0x17990" />
         <!-- <Blob Name="object_az_Blob_0179A0" Size="0x20" Offset="0x179A0" /> -->
         <Texture Name="object_az_Tex_0179C0" OutName="tex_0179C0" Format="i4" Width="32" Height="64" Offset="0x179C0" />
         <Texture Name="object_az_Tex_017DC0" OutName="tex_017DC0" Format="i4" Width="64" Height="64" Offset="0x17DC0" />

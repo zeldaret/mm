@@ -26,7 +26,7 @@ void func_80AD4FE4(EnTrt2* this, PlayState* play);
 void func_80AD5234(EnTrt2* this, PlayState* play);
 void func_80AD56E8(Actor* thisx, PlayState* play);
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_trt_Anim_00DE68, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
     { &object_trt_Anim_00EE98, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
     { &object_trt_Anim_00FD34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -170,7 +170,7 @@ void func_80AD3530(EnTrt2* this, PlayState* play) {
 
     if (DECR(this->unk_3AE) == 0) {
         this->unk_3AE = Rand_S16Offset(20, 20);
-        func_80AD3380(&this->skelAnime, sAnimations, 7);
+        func_80AD3380(&this->skelAnime, sAnimationInfo, 7);
         this->unk_3B2 = 5;
     }
 }
@@ -277,7 +277,7 @@ void func_80AD3A24(EnTrt2* this, PlayState* play) {
         Math_ApproachF(&this->actor.speedXZ, 0.0f, 0.2f, 1.0f);
     } else if (DECR(this->unk_3AE) == 0) {
         this->unk_3AE = Rand_S16Offset(100, 50);
-        func_80AD3380(&this->skelAnime, sAnimations, 6);
+        func_80AD3380(&this->skelAnime, sAnimationInfo, 6);
         this->unk_3B2 = 4;
     }
     Actor_MoveWithGravity(&this->actor);
@@ -288,7 +288,7 @@ void func_80AD3AE4(EnTrt2* this, PlayState* play) {
         Math_ApproachF(&this->actor.velocity.y, 0.5f, 0.2f, 0.1f);
     } else {
         this->actor.velocity.y = 0.0f;
-        func_80AD3380(&this->skelAnime, sAnimations, 6);
+        func_80AD3380(&this->skelAnime, sAnimationInfo, 6);
         this->unk_3B2 = 4;
     }
     Actor_MoveWithGravity(&this->actor);
@@ -298,7 +298,7 @@ void func_80AD3B6C(EnTrt2* this, PlayState* play) {
     if (DECR(this->unk_3B0) == 0) {
         this->unk_3B0 = 10;
         this->actor.velocity.y = -1.0f;
-        func_80AD3380(&this->skelAnime, sAnimations, 8);
+        func_80AD3380(&this->skelAnime, sAnimationInfo, 8);
         this->unk_3B2 = 8;
     }
 }
@@ -311,7 +311,7 @@ void func_80AD3BE4(EnTrt2* this, PlayState* play) {
     this->actor.world.rot.y += this->unk_3C0;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (this->actor.world.pos.y < 5.0f) {
-        func_80AD3380(&this->skelAnime, sAnimations, 9);
+        func_80AD3380(&this->skelAnime, sAnimationInfo, 9);
         this->unk_3B2 = 9;
     }
 }
@@ -335,7 +335,7 @@ void func_80AD3CEC(EnTrt2* this, PlayState* play) {
     } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
-        func_80AD3380(&this->skelAnime, sAnimations, 6);
+        func_80AD3380(&this->skelAnime, sAnimationInfo, 6);
         this->unk_3B2 = 4;
     }
 }
@@ -436,7 +436,7 @@ void func_80AD417C(EnTrt2* this, PlayState* play) {
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
             if (this->unk_3A8 == 0x84C) {
-                func_80AD3380(&this->skelAnime, sAnimations, 6);
+                func_80AD3380(&this->skelAnime, sAnimationInfo, 6);
                 this->path = SubS_GetPathByIndex(play, ENTRT2_GET_FC00(&this->actor), 0x3F);
                 this->unk_3B2 = 18;
             } else if (this->unk_3A8 == 0x88F) {
@@ -510,7 +510,7 @@ void func_80AD4550(EnTrt2* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if ((player->transformation != PLAYER_FORM_HUMAN) && (player->transformation != PLAYER_FORM_FIERCE_DEITY)) {
-        func_80AD3380(&this->skelAnime, sAnimations, 7);
+        func_80AD3380(&this->skelAnime, sAnimationInfo, 7);
         this->unk_3B2 = 17;
     }
 
@@ -665,7 +665,7 @@ s32 func_80AD4B4C(EnTrt2* this, PlayState* play) {
         } else {
             this->unk_3A8 = 0x84F;
             this->unk_3D8 = true;
-            func_80AD3380(&this->skelAnime, sAnimations, 7);
+            func_80AD3380(&this->skelAnime, sAnimationInfo, 7);
             this->unk_3B2 = 7;
         }
     }

@@ -24,13 +24,13 @@ void func_808726DC(PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, s32 a
 void func_80872BC0(PlayState* play, s32 arg1);
 
 typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-} EnBomStruct; // size = 0x1C
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ s16 rotY;
+    /* 0x1A */ s16 rotX;
+} PowderKegFuseSegment; // size = 0x1C
 
-static EnBomStruct D_80874650[16];
+static PowderKegFuseSegment sPowderKegFuseSegments[16];
 
 const ActorInit En_Bom_InitVars = {
     ACTOR_EN_BOM,
@@ -610,7 +610,7 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
             Matrix_MultVec3f(&D_80872EE0, &this->actor.home.pos);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_015FA0);
+            gSPDisplayList(POLY_OPA_DISP++, gBombCapDL);
 
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_RotateXS(0x4000, MTXMODE_APPLY);
@@ -619,7 +619,7 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
             gDPPipeSync(POLY_OPA_DISP++);
             gDPSetEnvColor(POLY_OPA_DISP++, (s8)this->unk_1F4, 0, 40, 255);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, (s8)this->unk_1F4, 0, 40, 255);
-            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_015DB0);
+            gSPDisplayList(POLY_OPA_DISP++, gBombBodyDL);
         } else {
             Vec3f sp58;
             Vec3f sp4C;
@@ -640,8 +640,8 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
 
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, ovl_En_Bom_DL_80873CA0);
-            gSPDisplayList(POLY_OPA_DISP++, ovl_En_Bom_DL_808742F8);
+            gSPDisplayList(POLY_OPA_DISP++, gPowderKegBarrelDL);
+            gSPDisplayList(POLY_OPA_DISP++, gPowderKegGoronSkullDL);
 
             func_808726DC(play, &this->actor.home.pos, &sp58, &sp4C, this->timer);
             func_80872BC0(play, this->timer);
@@ -652,14 +652,14 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
 }
 
 void func_80872648(PlayState* play, Vec3f* arg1) {
-    EnBomStruct* ptr = &D_80874650[0];
+    PowderKegFuseSegment* fuseSegmentPtr = &sPowderKegFuseSegments[0];
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(D_80874650); i++, ptr++) {
-        Math_Vec3f_Copy(&ptr->unk_00, arg1);
-        Math_Vec3f_Copy(&ptr->unk_0C, &gZeroVec3f);
-        ptr->unk_18 = 0;
-        ptr->unk_1A = 0x4000;
+    for (i = 0; i < ARRAY_COUNT(sPowderKegFuseSegments); i++, fuseSegmentPtr++) {
+        Math_Vec3f_Copy(&fuseSegmentPtr->pos, arg1);
+        Math_Vec3f_Copy(&fuseSegmentPtr->velocity, &gZeroVec3f);
+        fuseSegmentPtr->rotY = 0;
+        fuseSegmentPtr->rotX = 0x4000;
     }
 }
 
@@ -668,23 +668,23 @@ void func_808726DC(PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, s32 a
     f32 temp_f20;
     Vec3f spCC;
     Vec3f spC0;
-    EnBomStruct* ptr = &D_80874650[0];
-    EnBomStruct* ptr2 = &D_80874650[1];
+    PowderKegFuseSegment* fuseSegmentPtr = &sPowderKegFuseSegments[0];
+    PowderKegFuseSegment* fuseSegmentPtr2 = &sPowderKegFuseSegments[1];
     f32 temp_f26 = Math_Vec3f_DistXYZ(arg3, arg1);
     s32 spB0;
     f32 temp_f2;
     f32 distXZ;
 
-    Math_Vec3f_Copy(&ptr->unk_00, arg1);
+    Math_Vec3f_Copy(&fuseSegmentPtr->pos, arg1);
     Math_Vec3f_Diff(arg2, arg1, &spCC);
 
-    ptr->unk_18 = Math_FAtan2F(spCC.z, spCC.x);
+    fuseSegmentPtr->rotY = Math_FAtan2F(spCC.z, spCC.x);
     distXZ = sqrtf(SQXZ(spCC));
-    ptr->unk_1A = Math_FAtan2F(distXZ, spCC.y);
+    fuseSegmentPtr->rotX = Math_FAtan2F(distXZ, spCC.y);
 
     spB0 = (arg4 / 240) + 1;
 
-    for (i = 0; i < spB0; i++, ptr++, ptr2++, arg4 -= 240) {
+    for (i = 0; i < spB0; i++, fuseSegmentPtr++, fuseSegmentPtr2++, arg4 -= 240) {
         f32 phi_f22;
         CollisionPoly* spA0;
         s32 sp9C;
@@ -696,8 +696,8 @@ void func_808726DC(PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, s32 a
             phi_f22 = (arg4 % 240) * (1.0f / 240) * 8.0f;
         }
 
-        Math_Vec3f_Sum(&ptr2->unk_00, &ptr2->unk_0C, &ptr2->unk_00);
-        temp_f20 = Math_Vec3f_DistXYZAndStoreDiff(arg3, &ptr2->unk_00, &spCC);
+        Math_Vec3f_Sum(&fuseSegmentPtr2->pos, &fuseSegmentPtr2->velocity, &fuseSegmentPtr2->pos);
+        temp_f20 = Math_Vec3f_DistXYZAndStoreDiff(arg3, &fuseSegmentPtr2->pos, &spCC);
         if (temp_f20 < temp_f26) {
             if (temp_f20 == 0.0f) {
                 spCC.x = 0.0f;
@@ -709,33 +709,35 @@ void func_808726DC(PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, s32 a
                 spCC.y *= temp_f20;
                 spCC.z *= temp_f20;
             }
-            Math_Vec3f_Sum(arg3, &spCC, &ptr2->unk_00);
+            Math_Vec3f_Sum(arg3, &spCC, &fuseSegmentPtr2->pos);
         }
 
-        if (Math_Vec3f_DistXYZAndStoreDiff(&ptr->unk_00, &ptr2->unk_00, &spCC) == 0.0f) {
+        if (Math_Vec3f_DistXYZAndStoreDiff(&fuseSegmentPtr->pos, &fuseSegmentPtr2->pos, &spCC) == 0.0f) {
             spCC.x = 0.0f;
             spCC.y = phi_f22;
             spCC.z = 0.0f;
         }
 
-        ptr2->unk_18 = Math_FAtan2F(spCC.z, spCC.x);
+        fuseSegmentPtr2->rotY = Math_FAtan2F(spCC.z, spCC.x);
         distXZ = sqrtf(SQXZ(spCC));
-        ptr2->unk_1A = Math_FAtan2F(distXZ, spCC.y);
+        fuseSegmentPtr2->rotX = Math_FAtan2F(distXZ, spCC.y);
 
-        ptr2->unk_18 = (s16)CLAMP(BINANG_SUB(ptr2->unk_18, ptr->unk_18), -8000, 8000) + ptr->unk_18;
-        ptr2->unk_1A = (s16)CLAMP(BINANG_SUB(ptr2->unk_1A, ptr->unk_1A), -8000, 8000) + ptr->unk_1A;
+        fuseSegmentPtr2->rotY =
+            (s16)CLAMP(BINANG_SUB(fuseSegmentPtr2->rotY, fuseSegmentPtr->rotY), -8000, 8000) + fuseSegmentPtr->rotY;
+        fuseSegmentPtr2->rotX =
+            (s16)CLAMP(BINANG_SUB(fuseSegmentPtr2->rotX, fuseSegmentPtr->rotX), -8000, 8000) + fuseSegmentPtr->rotX;
 
-        temp_f20 = Math_CosS(ptr2->unk_1A) * phi_f22;
-        spC0.x = Math_SinS(ptr2->unk_18) * temp_f20;
-        spC0.z = Math_CosS(ptr2->unk_18) * temp_f20;
-        spC0.y = Math_SinS(ptr2->unk_1A) * phi_f22;
+        temp_f20 = Math_CosS(fuseSegmentPtr2->rotX) * phi_f22;
+        spC0.x = Math_SinS(fuseSegmentPtr2->rotY) * temp_f20;
+        spC0.z = Math_CosS(fuseSegmentPtr2->rotY) * temp_f20;
+        spC0.y = Math_SinS(fuseSegmentPtr2->rotX) * phi_f22;
 
-        Math_Vec3f_Sum(&ptr->unk_00, &spC0, &ptr2->unk_00);
-        Math_Vec3f_Copy(&sp90, &ptr2->unk_00);
+        Math_Vec3f_Sum(&fuseSegmentPtr->pos, &spC0, &fuseSegmentPtr2->pos);
+        Math_Vec3f_Copy(&sp90, &fuseSegmentPtr2->pos);
 
         sp90.y += 50.0f;
 
-        temp_f2 = BgCheck_EntityRaycastFloor3(&play->colCtx, &spA0, &sp9C, &sp90) - ptr2->unk_00.y;
+        temp_f2 = BgCheck_EntityRaycastFloor3(&play->colCtx, &spA0, &sp9C, &sp90) - fuseSegmentPtr2->pos.y;
         if (temp_f2 >= 0.0f) {
             spC0.y += temp_f2;
             if (phi_f22 < spC0.y) {
@@ -753,48 +755,48 @@ void func_808726DC(PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, s32 a
                 spC0.z *= temp_f2;
             }
 
-            Math_Vec3f_Sum(&ptr->unk_00, &spC0, &ptr2->unk_00);
-            Math_Vec3f_Copy(&ptr2->unk_0C, &gZeroVec3f);
+            Math_Vec3f_Sum(&fuseSegmentPtr->pos, &spC0, &fuseSegmentPtr2->pos);
+            Math_Vec3f_Copy(&fuseSegmentPtr2->velocity, &gZeroVec3f);
         }
 
-        ptr2->unk_0C.y += -1.0f;
-        if (ptr2->unk_0C.y < -10.0f) {
-            ptr2->unk_0C.y = -10.0f;
+        fuseSegmentPtr2->velocity.y += -1.0f;
+        if (fuseSegmentPtr2->velocity.y < -10.0f) {
+            fuseSegmentPtr2->velocity.y = -10.0f;
         }
     }
 
-    Math_Vec3f_Copy(arg1, &ptr->unk_00);
+    Math_Vec3f_Copy(arg1, &fuseSegmentPtr->pos);
 }
 
 void func_80872BC0(PlayState* play, s32 arg1) {
     s32 temp_s5;
     s32 i;
-    EnBomStruct* ptr = &D_80874650[0];
-    EnBomStruct* ptr2;
+    PowderKegFuseSegment* fuseSegmentPtr = &sPowderKegFuseSegments[0];
+    PowderKegFuseSegment* fuseSegmentPtr2;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    Matrix_Translate(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
-    Matrix_RotateZYX(ptr->unk_1A, ptr->unk_18, 0, MTXMODE_APPLY);
+    Matrix_Translate(fuseSegmentPtr->pos.x, fuseSegmentPtr->pos.y, fuseSegmentPtr->pos.z, MTXMODE_NEW);
+    Matrix_RotateZYX(fuseSegmentPtr->rotX, fuseSegmentPtr->rotY, 0, MTXMODE_APPLY);
     Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, ovl_En_Bom_DL_80872F98);
+    gSPDisplayList(POLY_OPA_DISP++, gPowderKegFuseMaterialDL);
 
     temp_s5 = (arg1 / 240) + 1;
-    ptr2 = &D_80874650[1];
+    fuseSegmentPtr2 = &sPowderKegFuseSegments[1];
 
-    for (i = 1; i < temp_s5; i++, ptr2++) {
-        Matrix_Translate(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, MTXMODE_NEW);
-        Matrix_RotateZYX(ptr2->unk_1A, ptr2->unk_18, 0, MTXMODE_APPLY);
+    for (i = 1; i < temp_s5; i++, fuseSegmentPtr2++) {
+        Matrix_Translate(fuseSegmentPtr2->pos.x, fuseSegmentPtr2->pos.y, fuseSegmentPtr2->pos.z, MTXMODE_NEW);
+        Matrix_RotateZYX(fuseSegmentPtr2->rotX, fuseSegmentPtr2->rotY, 0, MTXMODE_APPLY);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if ((i % 2) == 0) {
-            gSPDisplayList(POLY_OPA_DISP++, ovl_En_Bom_DL_80873020);
+            gSPDisplayList(POLY_OPA_DISP++, gPowderKegFuseModel1DL);
         } else {
-            gSPDisplayList(POLY_OPA_DISP++, ovl_En_Bom_DL_80873040);
+            gSPDisplayList(POLY_OPA_DISP++, gPowderKegFuseModel2DL);
         }
     }
 

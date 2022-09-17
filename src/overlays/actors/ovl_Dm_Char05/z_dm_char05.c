@@ -47,7 +47,7 @@ const ActorInit Dm_Char05_InitVars = {
     (ActorFunc)DmChar05_Draw,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &object_dmask_Anim_001090, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &object_dmask_Anim_004288, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &object_dmask_Anim_0001A8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
@@ -76,9 +76,9 @@ void func_80AAC63C(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_dmask_Skel_010B0, NULL, NULL, NULL, 0);
     if (DMCHAR05_GET(&this->actor) == DMCHAR05_0) {
-        func_80AAC5A0(&this->skelAnime, &sAnimations[0], 0);
+        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[0], 0);
     } else {
-        func_80AAC5A0(&this->skelAnime, &sAnimations[1], 0);
+        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[1], 0);
     }
     this->actionFunc = func_80AACC48;
 }
@@ -88,7 +88,7 @@ void func_80AAC6E4(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_dmask_Skel_042B0, NULL, NULL, NULL, 0);
-    func_80AAC5A0(&this->skelAnime, &sAnimations[1], 0);
+    func_80AAC5A0(&this->skelAnime, &sAnimationInfo[1], 0);
     this->actionFunc = func_80AACC48;
 }
 
@@ -97,7 +97,7 @@ void func_80AAC770(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_dmask_Skel_001D0, NULL, NULL, NULL, 0);
-    func_80AAC5A0(&this->skelAnime, &sAnimations[3], 0);
+    func_80AAC5A0(&this->skelAnime, &sAnimationInfo[3], 0);
     this->actionFunc = func_80AACC48;
 }
 
@@ -106,7 +106,7 @@ void func_80AAC7FC(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_dmask_Skel_013D0, NULL, NULL, NULL, 0);
-    func_80AAC5A0(&this->skelAnime, &sAnimations[4], 0);
+    func_80AAC5A0(&this->skelAnime, &sAnimationInfo[4], 0);
     this->actionFunc = func_80AACC48;
 }
 
@@ -347,7 +347,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                     }
 
                     if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &sAnimations[this->unk_18C], 0);
+                        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
                     }
                 }
 
@@ -391,7 +391,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                     }
 
                     if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &sAnimations[this->unk_18C], 0);
+                        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
                     }
                 }
 
@@ -434,7 +434,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                     }
 
                     if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &sAnimations[this->unk_18C], 0);
+                        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
                     }
                 }
 
@@ -470,7 +470,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                     }
 
                     if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &sAnimations[this->unk_18C], 0);
+                        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
                     }
                 }
 
@@ -484,7 +484,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 if (this->unk_18C == 4) {
                     this->unk_18C++;
-                    func_80AAC5A0(&this->skelAnime, &sAnimations[this->unk_18C], 0);
+                    func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
                 }
             }
             break;
