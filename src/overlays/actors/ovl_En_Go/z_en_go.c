@@ -11,9 +11,6 @@
  * - ShrineGoron: Gorons in the goron shrine (specifically, one in the elders room, one outside the elder's room, and
  *     one outside the shop, not all gorons in the goron shrine are covered by this actor)
  * - PowderKegGoron: The Powder Keg Making Goron in Goron Village.
- *
- * TODO:
- * - Do something about conversation references. Good to audit review, bad for readability.
  */
 
 #include "z_en_go.h"
@@ -145,84 +142,13 @@ typedef enum EnGoLimbIndex {
     /* 17 */ ENGO_LIMB_INDEX_HEAD = 17,
 } EnGoLimbIndex;
 
-#if !defined(ENGO_MSGSCRIPT_READY)
 // Message script for the goron who made Darmani's grave in the mountain village
 static s32 sMsgScriptGoronGravemaker[] = {
     0x00150800, 0x40010022, 0x00150200, 0x180E0E10, 0x0C0F0E11, 0x0C0F0E12, 0x0C0F0E13, 0x0C0F0E14, 0x0C111502,
     0x100E0E15, 0x0C100015, 0x0400110E, 0x0E160C0F, 0x0E170C0F, 0x0E180C11, 0x15041610, 0x0E0E190C, 0x10001504,
     0x000D0100, 0x050E0E31, 0x0C100E0E, 0x2F0C1001, 0x00050E0E, 0x2D0C100E, 0x0E2B0C10,
 };
-#else
-MsgScript sMsgScriptGoronGravemaker[] = {
-    /* 0x0000 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(21, WE_21_3_THAWED_GRAVEMAKERS_BROTHER, 0x0045 - 0x0005),
-    /* 0x0005 0x03 */ MSCRIPT_CMD01(0x002A - 0x0008), // Branch if Goron
-    /* 0x0008 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(21, WE_21_1_SPOKE_TO_GRAVEMAKER_AS_NONGORON, 0x0025 - 0x000D),
-    /* 0x000D 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E10), // This is the grave where a Goron hero rests.
-    /* 0x0010 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0011 0x03 */ MSCRIPT_CMD15(0x0E11), // I came here to put up the great hero's memorial... But the return route
-                                             // has been blocked by snow, and I can't get back to Goron Village.
-    /* 0x0014 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0015 0x03 */ MSCRIPT_CMD15(0x0E12), // And even worse, my borther has been frozen solid from the cold. The way
-                                             // things are looking, I'll be frozen too.
-    /* 0x0018 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0019 0x03 */ MSCRIPT_CMD15(0x0E13), // Ohhhh...It's times like these that make me wish i had taken some of the
-                                             // hot spring water I found when I was digging the hero's grave.
-    /* 0x001C 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x001D 0x03 */ MSCRIPT_CMD15(0x0E14), // But the hot spring is now covered by the gravestone. I can't move a
-                                             // gravestone that big by myself. But I guess this is what's meant by the
-                                             // Goron saying, "There's no use in crying over split rocks."...Brrrrrr
-    /* 0x0020 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0021 0x03 */ MSCRIPT_WEEK_EVENT_REG_SET(21, WE_21_1_SPOKE_TO_GRAVEMAKER_AS_NONGORON),
-    /* 0x0024 0x01 */ MSCRIPT_DONE(),
 
-    /* 0x0025 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E15), // H-h-hoo. If only I had water from the hot spring beneath the great
-                                                  // hero's grave...then I could melt the ice off of my brother.
-    /* 0x0028 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0029 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x002A 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(21, WE_21_2_SPOKE_TO_GRAVEMAKER_AS_GORON, 0x0040 - 0x002F),
-    /* 0x002F 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E16), // Y-you're...No! No, you're not the great darmani, are you?
-    /* 0x0032 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0033 0x03 */ MSCRIPT_CMD15(0x0E17), // Then...just whose grave was I making?
-    /* 0x0036 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0037 0x03 */ MSCRIPT_CMD15(0x0E18), // Did you come back to life because it was so warm beneath your grave?
-    /* 0x003A 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x003B 0x03 */ MSCRIPT_WEEK_EVENT_REG_SET(21, WE_21_2_SPOKE_TO_GRAVEMAKER_AS_GORON),
-    /* 0x003E 0x01 */ MSCRIPT_CMD22(),
-    /* 0x003F 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x0040 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E19), // There used to be a hot spring bubbling beneath the great Darmani's
-                                                  // grave. If I had some of that hot spring water, I might be able to
-                                                  // thaw out my frozen brother.
-    /* 0x0043 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0044 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x0045 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(21, WE_21_2_SPOKE_TO_GRAVEMAKER_AS_GORON, 0x0057 - 0x004A),
-    /* 0x004A 0x03 */ MSCRIPT_CMD01(0x0052 - 0x004D), // Branch if Goron
-    /* 0x004D 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E31), // Thank you for saving my brother. But something has to be done about
-                                                  // this cold. Otherwise, we'll be Goronsicles.
-    /* 0x0050 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0051 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x0052 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E2F), // H-h-hooo.,..It's cold. This cold has me hallucinating about
-                                                  // Darmani. I can't take it.
-    /* 0x0055 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0056 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x0057 0x03 */ MSCRIPT_CMD01(0x005F - 0x005A), // Branch if Goron
-    /* 0x005A 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E2D), // Do you know the great Darmani? He is the greatest hero of the Goron
-                                                  // tribe. He is our last hope.
-    /* 0x005D 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x005E 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x005F 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E2B), // Great Darmani! Hurry! Please do something about the blizzard
-                                                  // blowing in from Snow head.
-    /* 0x0062 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0063 0x01 */ MSCRIPT_DONE(),
-};
-#endif
-
-#if !defined(ENGO_MSGSCRIPT_READY)
 // Message script for the frozen brother of the goron who made Darmani's grave in the mountain village
 static s32 sMsgScriptGoronBrother[] = {
     0x00150800, 0x7E01004D, 0x00150400, 0x180E0E1A, 0x0C170F0E, 0x230C180F, 0x0E240C0F, 0x0E250C12, 0x16111508,
@@ -231,222 +157,22 @@ static s32 sMsgScriptGoronBrother[] = {
     0x0F0E1F0C, 0x180F0E20, 0x0C170F0E, 0x210C0F0E, 0x220C1611, 0x15081000, 0x1504000D, 0x0100050E, 0x0E320C10,
     0x0E0E300C, 0x10010005, 0x0E0E2E0C, 0x100E0E2C, 0x0C100000,
 };
-#else
-MsgScript sMsgScriptGoronBrother[] = {
-    /* 0x0000 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(21, WE_21_3_THAWED_GRAVEMAKERS_BROTHER, 0x0083 - 0x0005),
-    /* 0x0005 0x03 */ MSCRIPT_CMD01(0x0055 - 0x0008), // Branch if Goron
-    /* 0x0008 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(21, 0x04, 0x0025 - 0x000D),
-    /* 0x000D 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E1A), // Hunh? What have I been doing?
-    /* 0x0010 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0011 0x01 */ MSCRIPT_CMD23(),
-    /* 0x0012 0x03 */ MSCRIPT_CMD15(0x0E23), // Oh! Are you all right, brother? You were frozen and this person saved
-                                             // you!
-    /* 0x0015 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0016 0x01 */ MSCRIPT_CMD24(),
-    /* 0x0017 0x03 */ MSCRIPT_CMD15(0x0E24), // Frozen?! I was?
-    /* 0x001A 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x001B 0x03 */ MSCRIPT_CMD15(0x0E25), // Really? I don't know who you are, but thank you!
-    /* 0x001E 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x001F 0x01 */ MSCRIPT_CMD18(),
-    /* 0x0020 0x01 */ MSCRIPT_CMD22(),
-    /* 0x0021 0x03 */ MSCRIPT_WEEK_EVENT_REG_SET(21, WE_21_3_THAWED_GRAVEMAKERS_BROTHER),
-    /* 0x0024 0x01 */ MSCRIPT_DONE(),
 
-    /* 0x0025 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E1A), // Hunh? What have I been doing?
-    /* 0x0028 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0029 0x01 */ MSCRIPT_CMD23(),
-    /* 0x002A 0x03 */ MSCRIPT_CMD15(0x0E23), // Oh! Are you all right, brother? You were frozen and this person saved
-                                             // you!
-    /* 0x002D 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x002E 0x01 */ MSCRIPT_CMD24(),
-    /* 0x002F 0x03 */ MSCRIPT_CMD15(0x0E24), // Frozen?! I was?
-    /* 0x0032 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0033 0x03 */ MSCRIPT_CMD15(0x0E25), // Really? I don't know who you are, but thank you!
-    /* 0x0036 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0037 0x01 */ MSCRIPT_CMD23(),
-    /* 0x0038 0x03 */ MSCRIPT_CMD15(0x0E26), // But besides that, it turns out the greate Darmani is alive!
-    /* 0x003B 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x003C 0x01 */ MSCRIPT_CMD24(),
-    /* 0x003D 0x03 */ MSCRIPT_CMD15(0x0E27), // What's this?
-    /* 0x0040 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0041 0x01 */ MSCRIPT_CMD23(),
-    /* 0x0042 0x03 */ MSCRIPT_CMD15(0x0E28), // I was shocked, too, but somehow, it seems the great darmani is not dead.
-    /* 0x0045 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0046 0x01 */ MSCRIPT_CMD24(),
-    /* 0x0047 0x03 */ MSCRIPT_CMD15(0x0E29), // Really? If that's true, then a glimmer of hope has appeared in Goron
-                                             // Village
-    /* 0x004A 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x004B 0x01 */ MSCRIPT_CMD23(),
-    /* 0x004C 0x03 */ MSCRIPT_CMD15(0x0E2A), // It's true! Surely the great Darmani can do something about the blizard
-                                             // that blows in from Snowhead
-    /* 0x004F 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0050 0x01 */ MSCRIPT_CMD22(),
-    /* 0x0051 0x03 */ MSCRIPT_WEEK_EVENT_REG_SET(21, WE_21_3_THAWED_GRAVEMAKERS_BROTHER),
-    /* 0x0054 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x0055 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E1A), // Hunh? What have I been doing?
-    /* 0x0058 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0059 0x01 */ MSCRIPT_CMD23(),
-    /* 0x005A 0x03 */ MSCRIPT_CMD15(0x0E1B), // Oh! Are you all right, brother? You were frozen but the great Darmani
-                                             // saved you!
-    /* 0x005D 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x005E 0x01 */ MSCRIPT_CMD24(),
-    /* 0x005F 0x03 */ MSCRIPT_CMD15(0x0E1C), // The greate Darmani?! What's with you? Are you half asleep?
-    /* 0x0062 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0063 0x03 */ MSCRIPT_CMD15(0x0E1D), // Did you hear this guy? The great Darmani died long ago and is lying in
-                                             // his gr...
-    /* 0x0066 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0067 0x03 */ MSCRIPT_CMD15(0x0E1E), // Heeee!!! Darmani!
-    /* 0x006A 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x006B 0x01 */ MSCRIPT_CMD23(),
-    /* 0x006C 0x03 */ MSCRIPT_CMD15(0x0E1F), // I was shocked, too But somehow, it seems the greate Darmani isn't dead.
-    /* 0x006F 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0070 0x01 */ MSCRIPT_CMD24(),
-    /* 0x0071 0x03 */ MSCRIPT_CMD15(0x0E20), // R-Really?
-    /* 0x0074 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0075 0x01 */ MSCRIPT_CMD23(),
-    /* 0x0076 0x03 */ MSCRIPT_CMD15(0x0E21), // With this, a star of hope appears in Goron Village
-    /* 0x0079 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x007A 0x03 */ MSCRIPT_CMD15(0x0E22), // Great Darmani! Please do something about the blizzard blowing in from
-                                             // Snowhead!
-    /* 0x007D 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x007E 0x01 */ MSCRIPT_CMD22(),
-    /* 0x007F 0x03 */ MSCRIPT_WEEK_EVENT_REG_SET(21, WE_21_3_THAWED_GRAVEMAKERS_BROTHER),
-    /* 0x0082 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x0083 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(21, WE_21_2_SPOKE_TO_GRAVEMAKER_AS_GORON, 0x0095 - 0x0088),
-    /* 0x0088 0x03 */ MSCRIPT_CMD01(0x0090 - 0x008B), // B if Goron
-    /* 0x008B 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E32), // h-h-hoooo. It's cold. I wonder if we'll ever be able to return to
-                                                  // Goron Village.
-    /* 0x008E 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x008F 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x0090 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E30), // h-h-hooo. It's cold. This cold has me seeing Darmani's ghost.
-                                                  // Y-Yikes. I th-think I'll go freeze again...
-    /* 0x0093 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0094 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x0095 0x03 */ MSCRIPT_CMD01(0x009D - 0x0098), // B if Goron
-    /* 0x0098 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E2E), // Have you seen the great Darmani? No one can withstand his punching
-                                                  // and pounding.
-    /* 0x009B 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x009C 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x009D 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E2C), // Great Darmani! Have you seen the Goron Elder yet? If you haven't
-                                                  // you should go see him soon. I'm sure he'll be very happy.
-    /* 0x00A0 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x00A1 0x01 */ MSCRIPT_DONE(),
-};
-#endif
-
-#if !defined(ENGO_MSGSCRIPT_READY)
 // Message script for the shrine goron standing aside the store
 static s32 sMsgScriptGoronAsideStore[2] = { 0xE0E520C, 0x10000000 };
-#else
-MsgScript sMsgScriptGoronAsideStore[] = {
-    /* 0x0000 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E52), // This store is having trouble getting product because of the cold.
-                                                  // Things are kind of expensive now, so you shouldn't shop here...
-    /* 0x0003 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0004 0x01 */ MSCRIPT_DONE(),
-};
-#endif
 
-#if !defined(ENGO_MSGSCRIPT_READY)
 // Messag Script for the shrine goron standing aside the Elder's son
 static s32 sMsgScriptGoronAsideEldersSon[17] = {
     0x160400,  0x38010010, 0xE0E430C, 0xF0E440C, 0xF0E450C,  0x11188010, 0x160800,   0x1B0E0E46, 0xC0F0E47,
     0xC0F0E48, 0xC0F0E49,  0xC0F0E4A, 0xC111608, 0x11188010, 0xE0E4B0C,  0x100E0E42, 0xC100000,
 };
-#else
 
-MsgScript sMsgScriptGoronAsideEldersSon[] = {
-    /* 0x0000 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(22, WE_22_2_GK_CALMED, 0x003D - 0x0005),
-    /* 0x0005 0x03 */ MSCRIPT_CMD01(0x0018 - 0x0008), // B if Goron
-    /* 0x0008 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E43),     // We're at our wits' end.
-    /* 0x000B 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x000C 0x03 */ MSCRIPT_CMD15(0x0E44), // The elder went to Snowhead and doesn't seem to be coming back. Now his
-                                             // son is so lonely that he won't stop crying.
-    /* 0x000F 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0010 0x03 */ MSCRIPT_CMD15(0x0E45), // It keeps getting colder outside, and inside we're so cold we could
-                                             // freeze.
-    /* 0x0013 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0014 0x03 */ MSCRIPT_WEEK_EVENT_REG_SET(24, WE_24_7_TALKED_TO_ASIDE_ELDERSSON_AS_ANY),
-    /* 0x0017 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x0018 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(22, WE_22_4_TALKED_TO_ASIDE_ELDERSSON_AS_GORON, 0x0038 - 0x001D),
-    /* 0x001D 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E46), // Those sideburns... Aren't you Darmani? You're supposed to be dead
-                                                  // but you're alive? The Elder was troubled because he thought you
-                                                  // were dead.
-    /* 0x0020 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0021 0x03 */ MSCRIPT_CMD15(0x0E47), // I'm troubled, too.
-    /* 0x0024 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0025 0x03 */ MSCRIPT_CMD15(0x0E48), // The Elder went to snowhead and hasn't come back, so now his son is so
-                                             // lonely he won't stop crying.
-    /* 0x0028 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0029 0x03 */ MSCRIPT_CMD15(0x0E49), // If you don't find the Goron Elder and ask him to come back. I'll never
-                                             // be able to sleep.
-    /* 0x002C 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x002D 0x03 */ MSCRIPT_CMD15(0x0E4A), // And it just keeps getting colder outside. Even in here it is so cold
-                                             // that we could freeze.
-    /* 0x0030 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0031 0x03 */ MSCRIPT_WEEK_EVENT_REG_SET(22, WE_22_4_TALKED_TO_ASIDE_ELDERSSON_AS_GORON),
-    /* 0x0034 0x03 */ MSCRIPT_WEEK_EVENT_REG_SET(24, WE_24_7_TALKED_TO_ASIDE_ELDERSSON_AS_ANY),
-    /* 0x0037 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x0038 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E4B), // At his age, the Elder couldn't have gotten very far... I fear that
-                                                  // he may have froze out there.
-    /* 0x003B 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x003C 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x003D 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E42), // This is great. The Elder's sone has finally quit crying. Now we can
-                                                  // sleep, too.
-    /* 0x0040 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0041 0x01 */ MSCRIPT_DONE(),
-};
-#endif
-
-#if !defined(ENGO_MSGSCRIPT_READY)
 // Message Script for the shrine goron standing aside the Elder's room
 static s32 sMsgScriptGoronAsideEldersRoom[11] = {
     0x160400,   0x22010009, 0xE0E4D0C, 0xF0E4E0C,  0x10001701, 0xC0E0E,
     0x4F0C0F0E, 0x500C1117, 0x1100E0E, 0x510C100E, 0xE4C0C10,
 };
-#else
-MsgScript sMsgScriptGoronAsideEldersRoom[] = {
-    /* 0x0000 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(ELDERS_SON, WE_22_2_GK_CALMED, 0x0027 - 0x0005),
-    /* 0x0005 0x03 */ MSCRIPT_CMD01(0x0011 - 0x0008), // B if Goron
-    /* 0x0008 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E4D), // This is the room of the Goron Tribe's Elder. Do you have some kind
-                                                  // of business with the Elder? Unfortunately, he's out.
-    /* 0x000B 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x000C 0x03 */ MSCRIPT_CMD15(0x0E4E), // Since the Elder is gone, his sone won't stop crying, I wish someone
-                                             // would do something.
-    /* 0x000F 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0010 0x01 */ MSCRIPT_DONE(),
 
-    /* 0x0011 0x05 */
-    MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(23, WE_23_0_TALKED_TO_ASIDE_ELDERSROOM_AS_GORON, 0x0022 - 0x0016),
-    /* 0x0016 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E4F), // Those sideburns. Aren't you darmani? You're supposed to be dead.
-                                                  // But you're alive? What have you been doing?
-    /* 0x0019 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x001A 0x03 */ MSCRIPT_CMD15(0x0E50), // Thinking you were dead, the Elder went to snowhead on his own. But for
-                                             // now, please go see the elder's son. Hurry!
-    /* 0x001D 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x001E 0x03 */ MSCRIPT_WEEK_EVENT_REG_SET(23, WE_23_0_TALKED_TO_ASIDE_ELDERSROOM_AS_GORON),
-    /* 0x0021 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x0022 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E51), // The Elder's sone is in there This crying is heartbreaking. Will it
-                                                  // ever stop?
-    /* 0x0025 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0026 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x0027 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E4C), // This is nice. The Elder's son has finally stopped crying. Now we
-                                                  // can sleep, too.
-    /* 0x002A 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x002B 0x01 */ MSCRIPT_DONE(),
-};
-#endif
-
-#if !defined(ENGO_MSGSCRIPT_READY)
 // Message script for the goron in the goron village who sells powder kegs
 static s32 sMsgScriptGoronPowderKegSeller[52] = {
     0x1001200,  0x12200008, 0xE0C8E0C,  0x11122010, 0xE0C8F0C,  0x10001240, 0x1D0E0C,   0x800C1112, 0x40001280,
@@ -456,293 +182,32 @@ static s32 sMsgScriptGoronPowderKegSeller[52] = {
     0x11128019, 0x213019,   0xFFC02900, 0x2C0E0C8C, 0xC050000,  0x50000,    0x8006400,  0x6320E0C,  0x8D0C1030,
     0x14FF9C12, 0x6003400,  0x130034,   0x700000E,  0xC870C16,  0x100E0C8B, 0xC100000,
 };
-#else
-MsgScript sMsgScriptGoronPowderKegSeller[] = {
-    /* 0x0000 0x03 */ MSCRIPT_CMD01(0x0015 - 0x0003), // B if Goron
-    /* 0x0003 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(18, WE_18_5_TALKED_TO_PKSELLER_AS_NONGORON, 0x0010 - 0x0008),
-    /* 0x0008 0x03 */ MSCRIPT_BEGIN_TEXT(0x0C8E), // I'm the Goron who sells Poweder Kegs, the most famous product of
-                                                  // the Gorons. But the rules say I can't sell Powder Kegs to anyone
-                                                  // who isn't a Goron, Sorry
-    /* 0x000B 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x000C 0x03 */ MSCRIPT_WEEK_EVENT_REG_SET(18, WE_18_5_TALKED_TO_PKSELLER_AS_NONGORON),
-    /* 0x000F 0x01 */ MSCRIPT_DONE(),
 
-    /* 0x0010 0x03 */ MSCRIPT_BEGIN_TEXT(0x0C8F), // The rules say I can't sell Powder Kegs to anyone who isn't a Goron.
-                                                  // Sorry.
-    /* 0x0013 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0014 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x0015 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(18, WE_18_6_TALKED_TO_PKSELLER_AS_GORON, 0x0037 - 0x001A),
-    /* 0x001A 0x03 */ MSCRIPT_BEGIN_TEXT(0x0C80), // I'm the Goron who sells the Powder Keg, the most famous product of
-                                                  // the Gorons.
-    /* 0x001D 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x001E 0x03 */ MSCRIPT_WEEK_EVENT_REG_SET(18, WE_18_6_TALKED_TO_PKSELLER_AS_GORON),
-    /* 0x0021 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(18, WE_18_7_HAS_PK_PRIVLEDGES, 0x009A - 0x0026),
-    /* 0x0026 0x05 */ MSCRIPT_BRANCH_ON_ITEM(ITEM_POWDER_KEG, 0x009A - 0x002B),
-    /* 0x002B 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(19, WE_19_0_STARTED_PKTEST, 0x0075 - 0x0030),
-    /* 0x0030 0x03 */ MSCRIPT_CMD15(0x0C81), // Want a Powder Keg? Powder Kegs explode with powerful blasts and are very
-                                             // dangerous. Until I have tested you to see if you can use them properly,
-                                             // I can't let you use any on your own.
-    /* 0x0033 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0034 0x03 */ MSCRIPT_BRANCH(0x004A - 0x0037),
-    /* 0x0037 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(18, WE_18_7_HAS_PK_PRIVLEDGES, 0x009A - 0x003C),
-    /* 0x003C 0x05 */ MSCRIPT_BRANCH_ON_ITEM(ITEM_POWDER_KEG, 0x009A - 0x0041),
-    /* 0x0041 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(19, WE_19_0_STARTED_PKTEST, 0x0075 - 0x0046),
-    /* 0x0046 0x03 */ MSCRIPT_BEGIN_TEXT(0x0C81), // Want a Powder Keg? Powder Kegs explode with powerful blasts and are
-                                                  // very dangerous. Until I have tested you to see if you can use them
-                                                  // properly, I can't let you use any on your own.
-    /* 0x0049 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x004A 0x03 */ MSCRIPT_CMD15(0x0C82), // Will you give it a try? [Yes/No]
-    /* 0x004D 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x004E 0x07 */ MSCRIPT_BRANCH_ON_CHOICE(0x0, 0x006F - 0x0055, 0x006F - 0x0055),
-    /* 0x0055 0x01 */ MSCRIPT_PLAYSFX_DECIDE(),
-    /* 0x0056 0x03 */ MSCRIPT_BEGIN_TEXT(0x0C83), // If you can destroy the boulder that blocks the entrance to the
-                                                  // Goron Racetrack near here using the powder keg I'm about to give
-                                                  // you, then I'll approve you to carry them.
-    /* 0x0059 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x005A 0x01 */ MSCRIPT_CMD18(),
-    /* 0x005B 0x03 */ MSCRIPT_BRANCH_ON_CALLBACK(0x0),
-    /* 0x005E 0x03 */ MSCRIPT_CMD07(0x0),
-    /* 0x0061 0x03 */ MSCRIPT_BEGIN_TEXT(0x0C84), // When the Powder Keg beings ticking faster, it means that it's about
-                                                  // to explode. Try to blow up the boulder blocking the goron racetrack
-                                                  // entrance without the powder keg exploding on the way. There's a
-                                                  // sign near the racetrack, so keep an eye out for it. When you've
-                                                  // finished, come see me.
-    /* 0x0064 0x01 */ MSCRIPT_CMD22(),
-    /* 0x0065 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0066 0x03 */ MSCRIPT_WEEK_EVENT_REG_SET(19, WE_19_0_STARTED_PKTEST),
-    /* 0x0069 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x006A 0x03 */ MSCRIPT_BEGIN_TEXT(0x0C84), // When the Powder Keg beings ticking faster, it means that it's about
-                                                  // to explode. Try to blow up the boulder blocking the goron racetrack
-                                                  // entrance without the powder keg exploding on the way. There's a
-                                                  // sign near the racetrack, so keep an eye out for it. When you've
-                                                  // finished, come see me.
-    /* 0x006D 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x006E 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x006F 0x01 */ MSCRIPT_PLAYSFX_CANCEL(),
-    /* 0x0070 0x03 */ MSCRIPT_BEGIN_TEXT(0x0C85), // Come back if you change your mind.
-    /* 0x0073 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0074 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x0075 0x03 */ MSCRIPT_BRANCH_ON_PKAMMO(0x006A - 0x0078),
-
-    /* 0x0078 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(19, WE_19_1_COMPLETED_PKTEST, 0x008C - 0x007D),
-    /* 0x007D 0x03 */ MSCRIPT_BEGIN_TEXT(0x0C88), // You vailed? In that case, I can't approve you to use Powder Kegs.
-    /* 0x0080 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0081 0x03 */ MSCRIPT_CMD15(0x0C89), // Will you take the challenge again? [Yes/No]
-    /* 0x0084 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0085 0x07 */ MSCRIPT_BRANCH_ON_CHOICE(0x0096 - 0x008C, 0x006F - 0x008C, 0x006F - 0x008C),
-
-    /* 0x008C 0x03 */ MSCRIPT_BEGIN_TEXT(0x0C86), // It looks like you managed to succeed! Knowing your skills, I feel
-                                                  // fine letting you handle Powder Kegs on your own. It was bad of me
-                                                  // to put you through such a dangerous test. I wanted you to take this
-                                                  // as  my apology.
-    /* 0x008F 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0090 0x03 */ MSCRIPT_WEEK_EVENT_REG_SET(18, WE_18_7_HAS_PK_PRIVLEDGES),
-    /* 0x0093 0x03 */ MSCRIPT_BRANCH(0x00B7 - 0x0096),
-    /* 0x0096 0x01 */ MSCRIPT_PLAYSFX_DECIDE(),
-    /* 0x0097 0x03 */ MSCRIPT_BRANCH(0x005A - 0x009A),
-
-    /* 0x009A 0x03 */ MSCRIPT_BRANCH_ON_PKAMMO(0x00C9 - 0x009D),
-    /* 0x009D 0x03 */ MSCRIPT_BEGIN_TEXT(0x0C8C), // Will you buy a powder keg for 100 rupees? [I'll buy it/No thanks]
-    /* 0x00A0 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x00A1 0x07 */ MSCRIPT_BRANCH_ON_CHOICE(0x0, 0x00AD - 0x00A8, 0x0),
-    /* 0x00A8 0x05 */ MSCRIPT_BRANCH_ON_RUPEES(100, 0x00B3 - 0x00AD),
-    /* 0x00AD 0x01 */ MSCRIPT_PLAYSFX_ERR(),
-    /* 0x00AE 0x03 */ MSCRIPT_BEGIN_TEXT(0x0C8D), // If you change your mind, see me.
-    /* 0x00B1 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x00B2 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x00B3 0x01 */ MSCRIPT_PLAYSFX_DECIDE(),
-    /* 0x00B4 0x03 */ MSCRIPT_CMD20(0xFF9C),
-    /* 0x00B7 0x01 */ MSCRIPT_CMD18(),
-    /* 0x00B8 0x05 */ MSCRIPT_CMD06(0x0034, 0x0),
-    /* 0x00BD 0x03 */ MSCRIPT_COLLECT_SET(0x0034),
-    /* 0x00C0 0x03 */ MSCRIPT_CMD07(0x0),
-    /* 0x00C3 0x03 */ MSCRIPT_BEGIN_TEXT(0x0C87), // Powder Kegs are very volatile, so you can can carry only one at a
-                                                  // time. If you shoot them with an arrow, they'll explode as soon as
-                                                  // they're hit, so be careful.
-    /* 0x00C6 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x00C7 0x01 */ MSCRIPT_CMD22(),
-    /* 0x00C8 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x00C9 0x03 */ MSCRIPT_BEGIN_TEXT(0x0C8B), // You can carry only one Powder Keg at a time. Once you've used it,
-                                                  // come back.
-    /* 0x00CC 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x00CD 0x01 */ MSCRIPT_DONE(),
-};
-#endif
-
-#if !defined(ENGO_MSGSCRIPT_READY)
 // Message script for the gatekeeper goron in the goron village who opens the shrine gate
 static s32 sMsgScriptGoronGatekeeper[27] = {
     0x584000,  0x2903000E, 0x2001301, 0x180058,   0x80005119, 0x1E0059,   0x1004919, 0x160059,  0x2004119,
     0xE0059,   0x4003919,  0x2F0E0D,  0x4D0C1210, 0xE0D480C,  0xF0D490C,  0xF0D4A0C, 0x5000000, 0xF000F30,
     0xE0D4B0C, 0x15090000, 0xE0D4D0C, 0x1210310E, 0xD4C0C12,  0x100E0D4E, 0xC19FFD8, 0xE0D4F0C, 0x19FFD500,
 };
-#else
-MsgScript sMsgScriptGoronGatekeeper[] = {
-    /* 0x0000 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(88, WE_88_6_GATEKEEPER_OPENED_SHRINE, 0x002E - 0x0005),
-    /* 0x0005 0x03 */ MSCRIPT_CMD03(0x0016 - 0x0008), // B if Deku
-    /* 0x0008 0x03 */ MSCRIPT_CMD02(0x001E - 0x000B), // B if Zora
-    /* 0x000B 0x03 */ MSCRIPT_CMD01(0x0026 - 0x000E), // B if Goron
-    /* 0x000E 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(88, WE_88_7_GATEKEEPER_OPENED_SHRINE_FOR_HUMAN, 0x0064 - 0x0013),
-    /* 0x0013 0x03 */ MSCRIPT_BRANCH(0x0034 - 0x0016),
-    /* 0x0016 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(89, WE_89_0_GATEKEEPER_OPENED_SHRINE_FOR_DEKU, 0x0064 - 0x001B),
-    /* 0x001B 0x03 */ MSCRIPT_BRANCH(0x0034 - 0x001E),
-    /* 0x001E 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(89, WE_89_1_GATEKEEPER_OPENED_SHRINE_FOR_ZORA, 0x0064 - 0x0023),
-    /* 0x0023 0x03 */ MSCRIPT_BRANCH(0x0034 - 0x0026),
-    /* 0x0026 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(89, WE_89_2_GATEKEEPER_OPENED_SHRINE_FOR_GORON, 0x0064 - 0x002B),
-    /* 0x002B 0x03 */ MSCRIPT_BRANCH(0x005D - 0x002E),
-    /* 0x002E 0x03 */ MSCRIPT_BEGIN_TEXT(0x0D4D), // The door's already open. I'm going to close it right away, so hurry
-                                                  // up!
-    /* 0x0031 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0032 0x01 */ MSCRIPT_CMD18(),
-    /* 0x0033 0x01 */ MSCRIPT_DONE(),
 
-    /* 0x0034 0x03 */ MSCRIPT_BEGIN_TEXT(0x0D48), // It's cold...
-    /* 0x0037 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0038 0x03 */ MSCRIPT_CMD15(0x0D49), // Being the gatekeeper in this cold is h-h-hard.
-    /* 0x003B 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x003C 0x03 */ MSCRIPT_CMD15(0x0D4A), // Do you want to enter the Goron Shrine? [Yes/No]
-    /* 0x003F 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0040 0x07 */ MSCRIPT_BRANCH_ON_CHOICE(0x0, 0x0056 - 0x0047, 0x0056 - 0x0047),
-    /* 0x0047 0x01 */ MSCRIPT_PLAYSFX_DECIDE(),
-    /* 0x0048 0x03 */ MSCRIPT_BEGIN_TEXT(0x0D4B), // Then I'll open the door with a Goron Pound. I'm going to close it
-                                                  // right away so it doesn't get cold inside, so hurry up and get in.
-                                                  // Are you ready?
-    /* 0x004B 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x004C 0x01 */ MSCRIPT_CMD21(),
-    /* 0x004D 0x03 */ MSCRIPT_BRANCH_ON_CALLBACK(0x0),
-    /* 0x0050 0x03 */ MSCRIPT_BEGIN_TEXT(0x0D4D), // The door's already open. I'm going to close it right away, so hurry
-                                                  // up!
-    /* 0x0053 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0054 0x01 */ MSCRIPT_CMD18(),
-    /* 0x0055 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x0056 0x01 */ MSCRIPT_PLAYSFX_CANCEL(),
-    /* 0x0057 0x03 */ MSCRIPT_BEGIN_TEXT(0x0D4C), // Are you sure? It's a little bit warmer inside. Ohhh, I want to go
-                                                  // in, too.
-    /* 0x005A 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x005B 0x01 */ MSCRIPT_CMD18(),
-    /* 0x005C 0x01 */ MSCRIPT_DONE(),
-
-    /* 0x005D 0x03 */ MSCRIPT_BEGIN_TEXT(0x0D4E), // You're Darmani! How? You're alive?
-    /* 0x0060 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0061 0x03 */ MSCRIPT_BRANCH(0x003C - 0x0064),
-
-    /* 0x0064 0x03 */ MSCRIPT_BEGIN_TEXT(0x0D4F), // Do you want me to open it again? [Yes/No]
-    /* 0x0067 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0068 0x03 */ MSCRIPT_BRANCH(0x0040 - 0x006B),
-};
-#endif
-
-#if !defined(ENGO_MSGSCRIPT_READY)
 // Message script for one of the goron stretchers at the racetrack (Initially stretching Side to Side while squatting)
 static s32 sMsgScriptGoronStretcherA[4] = { 0x100060E, 0xDFE0C12, 0x100E0DFF, 0xC121000 };
-#else
-MsgScript sMsgScriptGoronStretcherA[] = {
-    /* 0x0000 0x03 */ MSCRIPT_CMD01(0x0009 - 0x0003), // B if Goron
-    /* 0x0003 0x03 */ MSCRIPT_BEGIN_TEXT(0x0DFE),     // It's spring! It's spring! I can't sit still any longer!
-    /* 0x0006 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0007 0x01 */ MSCRIPT_CMD18(),
-    /* 0x0008 0x01 */ MSCRIPT_DONE(),
 
-    /* 0x0009 0x03 */ MSCRIPT_BEGIN_TEXT(0x0DFF), // Darmani! Are you ready? I'm rarin' to go!
-    /* 0x000C 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x000D 0x01 */ MSCRIPT_CMD18(),
-    /* 0x000E 0x01 */ MSCRIPT_DONE(),
-};
-#endif
-
-#if !defined(ENGO_MSGSCRIPT_READY)
 // Message script for one of the goron stretchers at the racetrack (Initially doing sidebend stretches with one arm) -
 // Unused
 static s32 sMsgScriptGoronStretcherB[4] = { 0x100060E, 0xE000C12, 0x100E0E01, 0xC121000 };
-#else
-MsgScript sMsgScriptGoronStretcherB[] = {
-    /* 0x0000 0x03 */ MSCRIPT_CMD01(0x0009 - 0x0003), // B if Goron
-    /* 0x0003 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E00), // (From Japanese: Haru Goro Haru Goro! Goro, the body starts to move
-                                                  // naturally)
-    /* 0x0006 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0007 0x01 */ MSCRIPT_CMD18(),
-    /* 0x0008 0x01 */ MSCRIPT_DONE(),
 
-    /* 0x0009 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E01), // (From Japanese: Darmani, This year, I will win the ground ball.)
-    /* 0x000C 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x000D 0x01 */ MSCRIPT_CMD18(),
-    /* 0x000E 0x01 */ MSCRIPT_DONE(),
-};
-#endif
-
-#if !defined(ENGO_MSGSCRIPT_READY)
 // Message script for one of the goron stretchers at the racetrack (Initially shaking out their limbs)
 static s32 sMsgScriptGoronStretcherC[4] = { 0x100060E, 0xE020C12, 0x100E0E03, 0xC121000 };
-#else
-MsgScript sMsgScriptGoronStretcherC[] = {
-    /* 0x0000 0x03 */ MSCRIPT_CMD01(0x0009 - 0x0003), // B if Goron
-    /* 0x0003 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E02),     // Sprint has finally com! I have been waiting for this moment.
-    /* 0x0006 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0007 0x01 */ MSCRIPT_CMD18(),
-    /* 0x0008 0x01 */ MSCRIPT_DONE(),
 
-    /* 0x0009 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E03), // This year is my debut at the races...Please go easy on me
-    /* 0x000C 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x000D 0x01 */ MSCRIPT_CMD18(),
-    /* 0x000E 0x01 */ MSCRIPT_DONE(),
-};
-#endif
-
-#if !defined(ENGO_MSGSCRIPT_READY)
 // Message script for one of the goron stretchers (Initially doing sidebend stretches with both arms)
 static s32 sMsgScriptGoronStretcherD[4] = { 0x100060E, 0xE040C12, 0x100E0E05, 0xC121000 };
-#else
-MsgScript sMsgScriptGoronStretcherD[] = {
-    /* 0x0000 0x03 */ MSCRIPT_CMD01(0x0009 - 0x0003), // B if Goron
-    /* 0x0003 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E04),     // Since it has warmed up... my spirits have lifted!
-    /* 0x0006 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0007 0x01 */ MSCRIPT_CMD18(),
-    /* 0x0008 0x01 */ MSCRIPT_DONE(),
 
-    /* 0x0009 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E05), // This year, I'm feeling a little different...
-    /* 0x000C 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x000D 0x01 */ MSCRIPT_CMD18(),
-    /* 0x000E 0x01 */ MSCRIPT_DONE(),
-};
-#endif
-
-#if !defined(ENGO_MSGSCRIPT_READY)
 // Message script for the pair of gorons stretching one's hamstrings.
 static s32 sMsgScriptGoronStretcherHamstring[4] = { 0x100060E, 0xE060C12, 0x100E0E07, 0xC121000 };
-#else
-MsgScript sMsgScriptGoronStretcherHamstring[] = {
-    /* 0x0000 0x03 */ MSCRIPT_CMD01(0x0009 - 0x0003), // B if Goron
-    /* 0x0003 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E06),     // Watch my race!
-    /* 0x0006 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0007 0x01 */ MSCRIPT_CMD18(),
-    /* 0x0008 0x01 */ MSCRIPT_DONE(),
 
-    /* 0x0009 0x03 */ MSCRIPT_BEGIN_TEXT(0x0E07), // Darmani! Are you entering after all? ...Iguess I'll be last again.
-    /* 0x000C 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x000D 0x01 */ MSCRIPT_CMD18(),
-    /* 0x000E 0x01 */ MSCRIPT_DONE(),
-};
-#endif
-
-#if !defined(ENGO_MSGSCRIPT_READY)
 // Message script for any sleeping goron
 static s32 sMsgScriptGoronSleeping[2] = { 0xE023A0C, 0x12100000 };
-#else
-MsgScript sMsgScriptGoronSleeping[] = {
-    /* 0x0000 0x03 */ MSCRIPT_BEGIN_TEXT(0x023A), // Aha! So the Gorons fall asleep if they hear the Goron's Lullaby!
-                                                  // That's convenient...
-    /* 0x0003 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0004 0x01 */ MSCRIPT_CMD18(),
-    /* 0x0005 0x01 */ MSCRIPT_DONE(),
-};
-#endif
 
 const ActorInit En_Go_InitVars = {
     ACTOR_EN_GO,
