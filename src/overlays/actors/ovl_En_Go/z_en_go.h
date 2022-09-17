@@ -16,7 +16,7 @@ typedef void (*EnGoActionFunc)(struct EnGo*, PlayState*);
 
 extern const ActorInit En_Go_InitVars;
 
-typedef struct {
+typedef struct EnGoEffect {
     /* 0x00 */ u8 effectType;
     /* 0x01 */ u8 alphaDenom;
     /* 0x02 */ u8 alphaNumer;
@@ -33,12 +33,12 @@ typedef struct EnGo {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnGoActionFunc actionFunc;
-    /* 0x18C */ EnGoActionFunc savedActionFn;
-    /* 0x190 */ EnGoActionFunc dialogActionFn;
+    /* 0x18C */ EnGoActionFunc interruptedActionFn;
+    /* 0x190 */ EnGoActionFunc graveBroDialogActionFn;
     /* 0x194 */ ColliderCylinder colliderCylinder;
     /* 0x1E0 */ UNK_TYPE1 unk1E0[0x4C];
     /* 0x22C */ ColliderSphere colliderSphere;
-    /* 0x284 */ Path* path;
+    /* 0x284 */ Path* gatekeeperPath;
     /* 0x288 */ s8 indexTaisou;
     /* 0x289 */ s8 indexHakuginDemo;
     /* 0x28C */ s32 msgScriptResumePos;
@@ -48,11 +48,11 @@ typedef struct EnGo {
     /* 0x2AE */ Vec3s bodyRot;
     /* 0x2B4 */ Vec3s jointTable[18];
     /* 0x320 */ Vec3s morphTable[18];
-    /* 0x38C */ Actor* targetActor;
+    /* 0x38C */ Actor* attentionTarget;
     /* 0x390 */ u16 actionFlags;
     /* 0x392 */ u16 lastTextId;
     /* 0x394 */ u8 brotherThawCurrentCsAction;
-    /* 0x398 */ f32 playSpeed;
+    /* 0x398 */ f32 currAnimPlaySpeed;
     /* 0x39C */ f32 iceBlockScale;
     /* 0x3A0 */ f32 iceBlockAlpha;
     /* 0x3A4 */ f32 scaleFactor;
@@ -78,24 +78,24 @@ typedef struct EnGo {
     /* 0x3CE */ s16 limbRotTableY[3];
     /* 0x3D4 */ s16 surprisePhase;
     /* 0x3D8 */ void* msgEventCb;
-    /* 0x3DC */ s32 anim;
+    /* 0x3DC */ s32 currAnimIndex;
     /* 0x3E0 */ UNK_TYPE1 unk3E0[0x4];
     /* 0x3E4 */ s32 indexPathPoint;
     /* 0x3E8 */ s32 indexEffect;
     /* 0x3EC */ s32 sleepState;
-    /* 0x3F0 */ s32 brotherThawCutsceneState;
+    /* 0x3F0 */ s32 brotherThawCutsceneActive;
     /* 0x3F4 */ s32 changedText;
     /* 0x3F8 */ EnGoEffect effectTable[ENGO_NUM_EFFECTS];
 } EnGo; // size = 0xB78
 
 /**
- * Goron Type, identified by bits [3..0]
+ * Goron Type, identified by bits [3..0] of the actor's params
  *
  * - The ENGO_STRETCHER and ENGO_SPECTATOR types share the same subtype domain (EnGoGoronRaceSubtype: [0,7])
  * - ENGO_BROTHER types have their own subtype domain (EnGoBrotherSubtype: [0,1])
  * - Others have no subtypes.
  */
-typedef enum {
+typedef enum EnGoType {
     /* 0 */ ENGO_F_0 = 0,
     /* 1 */ ENGO_STRETCHER,        // Racers stretching before the Goron Race
     /* 2 */ ENGO_SPECTATOR,        // Spectators to the Goron Race
@@ -107,7 +107,7 @@ typedef enum {
     /* 8 */ ENGO_PKEG_SELLER,      // PowderKeg Goron
 } EnGoType;
 
-typedef enum {
+typedef enum EnGoGoronRaceSubtype {
     /* 0 */ ENGO_STRETCHER_A = 0,
     /* 1 */ ENGO_STRETCHER_B,
     /* 2 */ ENGO_STRETCHER_C,
@@ -118,7 +118,7 @@ typedef enum {
     /* 7 */ ENGO_SPECTATOR_SHOUTING,
 } EnGoGoronRaceSubtype;
 
-typedef enum {
+typedef enum EnGoBrotherSubtype {
     /* 0 */ ENGO_GRAVEBRO_GRAVEMAKER = 0,
     /* 1 */ ENGO_GRAVEBRO_FROZEN,
 } EnGoBrotherSubtype;
