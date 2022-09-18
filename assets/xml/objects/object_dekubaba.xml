@@ -1,6 +1,8 @@
 ﻿<Root>
+    <!-- Deku Baba and withered Deku Baba assets. Identical to OoT -->
     <File Name="object_dekubaba" Segment="6">
-            <!-- Deku Baba animations -->
+
+        <!-- Deku Baba animations -->
         <Animation Name="gDekuBabaPauseChompAnim" Offset="0x208"/>
         <Animation Name="gDekuBabaFastChompAnim" Offset="0x2B8"/>
 
