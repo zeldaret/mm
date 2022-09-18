@@ -11,8 +11,9 @@ typedef void (*EnGoActionFunc)(struct EnGo*, PlayState*);
 #define ENGO_GET_TYPE(thisx) (((thisx)->params & 0xF) & 0xFF)
 #define ENGO_GET_SUBTYPE(thisx) ((((thisx)->params & 0x70) >> 4) & 0xFF)
 
-#define ENGO_GET_7F80(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
+#define ENGO_GET_PATH(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
 
+#define ENGO_NUM_SNOW_EFFECTS 16
 #define ENGO_NUM_EFFECTS 32
 
 extern const ActorInit En_Go_InitVars;
