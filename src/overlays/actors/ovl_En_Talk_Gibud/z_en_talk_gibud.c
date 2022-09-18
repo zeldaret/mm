@@ -229,7 +229,7 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.targetMode = 0;
-    this->actor.hintId = 0x2D;
+    this->actor.hintId = TATL_HINT_ID_GIBDO;
     this->actor.textId = 0;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
@@ -566,7 +566,7 @@ void EnTalkGibud_Damage(EnTalkGibud* this, PlayState* play) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if ((this->drawDmgEffTimer > 0) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) &&
             (this->type == EN_TALK_GIBUD_TYPE_GIBDO)) {
-            this->actor.hintId = 0x2A;
+            this->actor.hintId = TATL_HINT_ID_REDEAD;
             this->actor.flags &= ~(ACTOR_FLAG_8 | ACTOR_FLAG_1);
             this->actor.flags |= (ACTOR_FLAG_4 | ACTOR_FLAG_1);
             SkelAnime_InitFlex(play, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
@@ -926,7 +926,7 @@ void EnTalkGibud_CheckForGibdoMask(EnTalkGibud* this, PlayState* play) {
             if (Player_GetMask(play) == PLAYER_MASK_GIBDO) {
                 this->actor.flags &= ~(ACTOR_FLAG_4 | ACTOR_FLAG_1);
                 this->actor.flags |= (ACTOR_FLAG_8 | ACTOR_FLAG_1);
-                this->actor.hintId = 0xFF;
+                this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
                 EnTalkGibud_SetupPassiveIdle(this);
             }
@@ -934,9 +934,9 @@ void EnTalkGibud_CheckForGibdoMask(EnTalkGibud* this, PlayState* play) {
             this->actor.flags &= ~(ACTOR_FLAG_8 | ACTOR_FLAG_1);
             this->actor.flags |= (ACTOR_FLAG_4 | ACTOR_FLAG_1);
             if (this->type == EN_TALK_GIBUD_TYPE_REDEAD) {
-                this->actor.hintId = 0x2A;
+                this->actor.hintId = TATL_HINT_ID_REDEAD;
             } else {
-                this->actor.hintId = 0x2D;
+                this->actor.hintId = TATL_HINT_ID_GIBDO;
             }
             this->actor.textId = 0;
             EnTalkGibud_SetupWalkToHome(this);

@@ -1763,7 +1763,7 @@ void Boss03_SetupStunned(Boss03* this, PlayState* play) {
 }
 
 void Boss03_Stunned(Boss03* this, PlayState* play) {
-    this->actor.hintId = 0x29;
+    this->actor.hintId = TATL_HINT_ID_GYORG_STUNNED;
 
     if (this->unk_240 >= 16) {
         Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_COMMON_WEAKENED - SFX_FLAG);
@@ -1956,7 +1956,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
     s16 j;
     f32 yRot;
 
-    this->actor.hintId = 0x28;
+    this->actor.hintId = TATL_HINT_ID_GYORG;
 
     if (!D_809E9842 && (player->actor.world.pos.y < (PLATFORM_HEIGHT + 5.0f))) {
         D_809E9842 = true;

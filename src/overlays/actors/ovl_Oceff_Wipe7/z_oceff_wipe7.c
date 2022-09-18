@@ -42,7 +42,7 @@ void OceffWipe7_Init(Actor* thisx, PlayState* play) {
 void OceffWipe7_Destroy(Actor* thisx, PlayState* play) {
     OceffWipe7* this = THIS;
 
-    Magic_Reset(&play->state);
+    Magic_Reset(play);
     play->msgCtx.unk120B0 = 0;
 }
 

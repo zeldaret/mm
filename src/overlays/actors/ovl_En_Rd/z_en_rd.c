@@ -223,7 +223,7 @@ void EnRd_Init(Actor* thisx, PlayState* play) {
                 if (!EnRd_ShouldNotDance(play)) {
                     EnRd_SetupSquattingDance(this);
                 } else {
-                    this->actor.hintId = 0x2A;
+                    this->actor.hintId = TATL_HINT_ID_REDEAD;
                     EnRd_SetupIdle(this);
                 }
                 this->setupDanceFunc = EnRd_SetupSquattingDance;
@@ -233,7 +233,7 @@ void EnRd_Init(Actor* thisx, PlayState* play) {
                 if (!EnRd_ShouldNotDance(play)) {
                     EnRd_SetupClappingDance(this);
                 } else {
-                    this->actor.hintId = 0x2A;
+                    this->actor.hintId = TATL_HINT_ID_REDEAD;
                     EnRd_SetupIdle(this);
                 }
                 this->setupDanceFunc = EnRd_SetupClappingDance;
@@ -243,7 +243,7 @@ void EnRd_Init(Actor* thisx, PlayState* play) {
                 if (!EnRd_ShouldNotDance(play)) {
                     EnRd_SetupPirouette(this);
                 } else {
-                    this->actor.hintId = 0x2A;
+                    this->actor.hintId = TATL_HINT_ID_REDEAD;
                     EnRd_SetupIdle(this);
                 }
                 this->setupDanceFunc = EnRd_SetupPirouette;
@@ -251,9 +251,9 @@ void EnRd_Init(Actor* thisx, PlayState* play) {
 
             default:
                 if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
-                    this->actor.hintId = 0x2D;
+                    this->actor.hintId = TATL_HINT_ID_GIBDO;
                 } else {
-                    this->actor.hintId = 0x2A;
+                    this->actor.hintId = TATL_HINT_ID_REDEAD;
                 }
                 EnRd_SetupIdle(this);
                 this->setupDanceFunc = EnRd_SetupIdle;
@@ -436,9 +436,9 @@ void EnRd_SquattingDance(EnRd* this, PlayState* play) {
     this->isMourning = false;
     if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_ShouldNotDance(play) && func_800B715C(play)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
-            this->actor.hintId = 0x2D;
+            this->actor.hintId = TATL_HINT_ID_GIBDO;
         } else {
-            this->actor.hintId = 0x2A;
+            this->actor.hintId = TATL_HINT_ID_REDEAD;
         }
         Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 19.0f, ANIMMODE_ONCE, -10.0f);
         this->actionFunc = EnRd_EndClappingOrSquattingDanceWhenPlayerIsClose;
@@ -446,9 +446,9 @@ void EnRd_SquattingDance(EnRd* this, PlayState* play) {
 
     if (EnRd_ShouldNotDance(play)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
-            this->actor.hintId = 0x2D;
+            this->actor.hintId = TATL_HINT_ID_GIBDO;
         } else {
-            this->actor.hintId = 0x2A;
+            this->actor.hintId = TATL_HINT_ID_REDEAD;
         }
         EnRd_SetupIdle(this);
     }
@@ -480,9 +480,9 @@ void EnRd_ClappingDance(EnRd* this, PlayState* play) {
     this->isMourning = false;
     if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_ShouldNotDance(play) && func_800B715C(play)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
-            this->actor.hintId = 0x2D;
+            this->actor.hintId = TATL_HINT_ID_GIBDO;
         } else {
-            this->actor.hintId = 0x2A;
+            this->actor.hintId = TATL_HINT_ID_REDEAD;
         }
         Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 19.0f, ANIMMODE_ONCE, -10.0f);
         this->actionFunc = EnRd_EndClappingOrSquattingDanceWhenPlayerIsClose;
@@ -490,9 +490,9 @@ void EnRd_ClappingDance(EnRd* this, PlayState* play) {
 
     if (EnRd_ShouldNotDance(play)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
-            this->actor.hintId = 0x2D;
+            this->actor.hintId = TATL_HINT_ID_GIBDO;
         } else {
-            this->actor.hintId = 0x2A;
+            this->actor.hintId = TATL_HINT_ID_REDEAD;
         }
         EnRd_SetupIdle(this);
     }
@@ -541,18 +541,18 @@ void EnRd_Pirouette(EnRd* this, PlayState* play) {
     this->isMourning = false;
     if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_ShouldNotDance(play) && func_800B715C(play)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
-            this->actor.hintId = 0x2D;
+            this->actor.hintId = TATL_HINT_ID_GIBDO;
         } else {
-            this->actor.hintId = 0x2A;
+            this->actor.hintId = TATL_HINT_ID_REDEAD;
         }
         this->actionFunc = EnRd_EndPirouetteWhenPlayerIsClose;
     }
 
     if (EnRd_ShouldNotDance(play)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
-            this->actor.hintId = 0x2D;
+            this->actor.hintId = TATL_HINT_ID_GIBDO;
         } else {
-            this->actor.hintId = 0x2A;
+            this->actor.hintId = TATL_HINT_ID_REDEAD;
         }
         EnRd_SetupIdle(this);
     }

@@ -433,8 +433,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
             gSaveContext.nextTransitionType = TRANS_TYPE_02;
             func_801477B4(play);
             func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
-            Parameter_AddMagic(play,
-                               ((void)0, gSaveContext.unk_3F30) + (gSaveContext.save.playerData.doubleMagic * 48) + 48);
+            Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
 
             gSaveContext.eventInf[1] &= (u8)~1;
             gSaveContext.eventInf[1] &= (u8)~2;

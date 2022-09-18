@@ -57,7 +57,7 @@ void ArrowIce_Init(Actor* thisx, PlayState* play) {
 }
 
 void ArrowIce_Destroy(Actor* thisx, PlayState* play) {
-    Magic_Reset(&play->state);
+    Magic_Reset(play);
     (void)"消滅"; // Unreferenced in retail, means "Disappearance"
 }
 

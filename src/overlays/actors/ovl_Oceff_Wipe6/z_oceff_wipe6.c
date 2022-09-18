@@ -38,7 +38,7 @@ void OceffWipe6_Init(Actor* thisx, PlayState* play) {
 }
 
 void OceffWipe6_Destroy(Actor* thisx, PlayState* play) {
-    Magic_Reset(&play->state);
+    Magic_Reset(play);
     play->msgCtx.unk120B0 = 0;
 }
 
