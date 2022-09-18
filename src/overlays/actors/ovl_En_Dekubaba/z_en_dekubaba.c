@@ -777,6 +777,7 @@ void EnDekubaba_SetupHit(EnDekubaba* this, s32 arg1) {
     this->timer = arg1;
     this->collider.base.acFlags &= ~AC_ON;
     Actor_SetScale(&this->actor, this->size * 0.01f);
+
     if (arg1 == 2) {
         Actor_SetColorFilter(&this->actor, 0, 155, 0, 42);
     } else if (arg1 == 3) {
@@ -1087,10 +1088,12 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
                         EnDekubaba_SetupHit(this, 2);
                     } else {
                         EnDekubaba_SetFireLightEffects(this, play, i);
+
                         if (this->actionFunc == EnDekubaba_PullBack) {
                             if (newHealth <= 0) {
                                 newHealth = 1;
                             }
+
                             EnDekubaba_SetupHit(this, 1);
                         } else {
                             EnDekubaba_SetupHit(this, 0);
@@ -1126,11 +1129,9 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
         } else {
             return;
         }
-    } else if ((((((play->actorCtx.unk2 != 0) && (this->actor.xyzDistToPlayerSq < 40000.0f)) &&
-                  (this->collider.base.colType != COLTYPE_HARD)) &&
-                 (this->actionFunc != EnDekubaba_StunnedVertical)) &&
-                (this->actionFunc != EnDekubaba_Hit)) &&
-               (this->actor.colChkInfo.health != 0)) {
+    } else if ((play->actorCtx.unk2 != 0) && (this->actor.xyzDistToPlayerSq < SQ(200.0f)) &&
+               (this->collider.base.colType != COLTYPE_HARD) && (this->actionFunc != EnDekubaba_StunnedVertical) &&
+               (this->actionFunc != EnDekubaba_Hit) && (this->actor.colChkInfo.health != 0)) {
         this->actor.colChkInfo.health--;
         this->actor.dropFlag = 0;
         EnDekubaba_SetupHit(this, 1);
