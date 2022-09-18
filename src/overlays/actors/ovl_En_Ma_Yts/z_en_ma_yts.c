@@ -218,7 +218,7 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
     EnMaYts* this = THIS;
     s32 pad;
 
-    this->type = EN_MA_YTS_PARSE_TYPE(thisx);
+    this->type = EN_MA_YTS_GET_TYPE(thisx);
     if (!EnMaYts_CheckValidSpawn(this, play)) {
         Actor_MarkForDeath(&this->actor);
     }

@@ -81,6 +81,6 @@
         <Limb Name="object_dai_Standardlimb_013064" Type="Standard" EnumName="OBJECT_DAI_LIMB_10" Offset="0x13064" />
         <Limb Name="object_dai_Standardlimb_013070" Type="Standard" EnumName="OBJECT_DAI_LIMB_11" Offset="0x13070" />
         <Limb Name="object_dai_Standardlimb_01307C" Type="Standard" EnumName="OBJECT_DAI_LIMB_12" Offset="0x1307C" />
-        <Skeleton Name="object_dai_Skel_0130D0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DAI_LIMB_NONE" LimbMax="OBJECT_DAI_LIMB_MAX" EnumName="object_dai_Limbs" Offset="0x130D0" />
+        <Skeleton Name="object_dai_Skel_0130D0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DAI_LIMB_NONE" LimbMax="OBJECT_DAI_LIMB_MAX" EnumName="ObjectDaiLimb" Offset="0x130D0" />
     </File>
 </Root>

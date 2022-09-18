@@ -149,7 +149,7 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &D_80971D80);
     SkelAnime_InitFlex(play, &this->skelanime, &object_ka_Skel_0065B0, &object_ka_Anim_000214, 0, 0, 0);
 
-    this->songSummonDist = GET_KAKASI_SUMMON_DISTANCE(&this->picto.actor) * 20.0f;
+    this->songSummonDist = KAKASI_GET_SUMMON_DISTANCE(&this->picto.actor) * 20.0f;
     if (this->songSummonDist < 40.0f) {
         this->songSummonDist = 40.0f;
     }
@@ -158,11 +158,11 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.world.rot.z = 0;
     this->picto.actor.targetMode = 0;
     if (this->picto.actor.world.rot.x > 0 && this->picto.actor.world.rot.x < 8) {
-        this->picto.actor.targetMode = GET_KAKASI_TARGETMODE(thisx);
+        this->picto.actor.targetMode = KAKASI_GET_TARGETMODE(thisx);
     }
     this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y;
 
-    this->aboveGroundStatus = GET_KAKASI_ABOVE_GROUND(&this->picto.actor);
+    this->aboveGroundStatus = KAKASI_GET_ABOVE_GROUND(&this->picto.actor);
     this->picto.actor.world.rot.x = 0;
     this->picto.actor.flags |= ACTOR_FLAG_400;
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -318,7 +318,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
                 this->picto.actor.flags &= ~ACTOR_FLAG_10000;
                 this->actionFunc = EnKakasi_RegularDialogue;
             } else {
-                func_800B8500(&this->picto.actor, play, 9999.9f, 9999.9f, -1);
+                func_800B8500(&this->picto.actor, play, 9999.9f, 9999.9f, PLAYER_AP_MINUS1);
             }
         }
     }

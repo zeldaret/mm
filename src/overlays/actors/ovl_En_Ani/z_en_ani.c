@@ -128,7 +128,7 @@ void EnAni_Init(Actor* thisx, PlayState* play) {
     this->treeReachTimer = 0;
     this->blinkFunc = EnAni_DefaultBlink;
 
-    if (GET_ANI_TYPE(thisx) == ANI_TYPE_TREE_HANGING) {
+    if (ANI_GET_TYPE(thisx) == ANI_TYPE_TREE_HANGING) {
         Animation_Change(&this->skelAnime, &gAniTreeHangingAnim, 1.0f, 0.0f,
                          Animation_GetLastFrame(&gAniTreeHangingAnim), ANIMMODE_ONCE, 0.0f);
         this->actionFunc = EnAni_HangInTree;
