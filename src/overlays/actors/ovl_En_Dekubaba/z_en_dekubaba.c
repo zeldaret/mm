@@ -728,7 +728,7 @@ void EnDekubaba_PullBack(EnDekubaba* this, PlayState* play) {
     } else {
         this->timer++;
         if (this->timer == 10) {
-            Actor_PlaySfxAtPos(&this->actor, 0x3863U);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_SCRAPE);
         }
 
         if (this->timer >= 12) {
@@ -790,6 +790,9 @@ void EnDekubaba_SetupHit(EnDekubaba* this, s32 arg1) {
     this->actionFunc = EnDekubaba_Hit;
 }
 
+/**
+ * Hit by a weapon or hit something when lunging.
+ */
 void EnDekubaba_Hit(EnDekubaba* this, PlayState* play) {
     s32 allStepsDone;
 
@@ -860,7 +863,7 @@ void EnDekubaba_PrunedSomersault(EnDekubaba* this, PlayState* play) {
         }
 
         if (this->actor.bgCheckFlags & 2) {
-            Actor_PlaySfxAtPos(&this->actor, 0x387BU);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
             this->timer = 1;
         }
     } else if (this->timer == 1) {
@@ -891,7 +894,7 @@ void EnDekubaba_SetupShrinkDie(EnDekubaba* this) {
 }
 
 /**
- * Die and drop Deku Nuts (Stick drop is handled elsewhere)
+ * Die and drop Deku Nuts (Deku Stick drop is handled elsewhere).
  */
 void EnDekubaba_ShrinkDie(EnDekubaba* this, PlayState* play) {
     Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, this->size * 5.0f);
@@ -973,6 +976,9 @@ void EnDekubaba_SetupSway(EnDekubaba* this) {
     this->actionFunc = EnDekubaba_Sway;
 }
 
+/**
+ * Sway back and forth with decaying amplitude until close enough to vertical.
+ */
 void EnDekubaba_Sway(EnDekubaba* this, PlayState* play) {
     s16 angleToVertical;
 
@@ -1230,7 +1236,7 @@ void EnDekubaba_DrawStemRetracted(EnDekubaba* this, PlayState* play) {
 
 void EnDekubaba_DrawStemExtended(EnDekubaba* this, PlayState* play) {
     static Gfx* sStemDLists[] = { gDekuBabaStemTopDL, gDekuBabaStemMiddleDL, gDekuBabaStemBaseDL };
-    MtxF mtx;
+    MtxF mf;
     s32 i;
     f32 scale;
     f32 horizontalStepSize;
@@ -1247,15 +1253,15 @@ void EnDekubaba_DrawStemExtended(EnDekubaba* this, PlayState* play) {
     scale = this->size * 0.01f;
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
-    Matrix_Get(&mtx);
+    Matrix_Get(&mf);
 
     for (i = 0; i < stemSections; i++) {
-        mtx.yw += 20.0f * Math_SinS(this->stemSectionAngle[i]) * this->size;
+        mf.yw += 20.0f * Math_SinS(this->stemSectionAngle[i]) * this->size;
         horizontalStepSize = Math_CosS(this->stemSectionAngle[i]) * 20.0f * this->size;
-        mtx.xw -= horizontalStepSize * Math_SinS(this->actor.shape.rot.y);
-        mtx.zw -= horizontalStepSize * Math_CosS(this->actor.shape.rot.y);
+        mf.xw -= horizontalStepSize * Math_SinS(this->actor.shape.rot.y);
+        mf.zw -= horizontalStepSize * Math_CosS(this->actor.shape.rot.y);
 
-        Matrix_Put(&mtx);
+        Matrix_Put(&mf);
         Matrix_RotateZYX(this->stemSectionAngle[i], this->actor.shape.rot.y, 0, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, sStemDLists[i]);
@@ -1265,9 +1271,9 @@ void EnDekubaba_DrawStemExtended(EnDekubaba* this, PlayState* play) {
 
         if (i == 0) {
             if (this->actionFunc != EnDekubaba_Sway) {
-                this->actor.focus.pos.x = mtx.xw;
-                this->actor.focus.pos.y = mtx.yw;
-                this->actor.focus.pos.z = mtx.zw;
+                this->actor.focus.pos.x = mf.xw;
+                this->actor.focus.pos.y = mf.yw;
+                this->actor.focus.pos.z = mf.zw;
             } else {
                 this->actor.focus.pos.x = this->actor.home.pos.x;
                 this->actor.focus.pos.y = this->actor.home.pos.y + (40.0f * this->size);
@@ -1297,7 +1303,7 @@ void EnDekubaba_DrawStemBasePruned(EnDekubaba* this, PlayState* play) {
 }
 
 void EnDekubaba_DrawBaseShadow(EnDekubaba* this, PlayState* play) {
-    MtxF mtx;
+    MtxF mf;
     f32 horizontalScale;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -1306,9 +1312,8 @@ void EnDekubaba_DrawBaseShadow(EnDekubaba* this, PlayState* play) {
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 255);
 
-    func_800C0094(this->boundFloor, this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z, &mtx);
-    Matrix_Mult(&mtx, MTXMODE_NEW);
-
+    func_800C0094(this->boundFloor, this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z, &mf);
+    Matrix_Mult(&mf, MTXMODE_NEW);
     horizontalScale = this->size * 0.15f;
     Matrix_Scale(horizontalScale, 1.0f, horizontalScale, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1356,7 +1361,9 @@ void EnDekubaba_Draw(Actor* thisx, PlayState* play) {
         if (this->boundFloor != NULL) {
             EnDekubaba_DrawBaseShadow(this, play);
         }
-    } else if ((this->timer > 40) || (this->timer & 1)) {
+
+        // Display solid until 40 frames left, then blink until killed.
+    } else if ((this->timer > 40) || ((this->timer % 2) != 0)) {
         Matrix_Translate(0.0f, 0.0f, 200.0f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gDekuBabaStickDropDL);
