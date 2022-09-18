@@ -2,10 +2,16 @@
 #define Z_EN_DEKUBABA_H
 
 #include "global.h"
+#include "objects/object_dekubaba/object_dekubaba.h"
 
 struct EnDekubaba;
 
 typedef void (*EnDekubabaActionFunc)(struct EnDekubaba*, PlayState*);
+
+typedef enum {
+    /* 0 */ DEKUBABA_NORMAL,
+    /* 1 */ DEKUBABA_BIG
+} DekuBabaType;
 
 typedef struct EnDekubaba {
     /* 0x000 */ Actor actor;
@@ -15,8 +21,8 @@ typedef struct EnDekubaba {
     /* 0x18E */ s16 timer;
     /* 0x190 */ s16 targetSwayAngle;
     /* 0x192 */ s16 stemSectionAngle[3];
-    /* 0x198 */ Vec3s jointTable[8];
-    /* 0x1C8 */ Vec3s morphTable[8];
+    /* 0x198 */ Vec3s jointTable[DEKUBABA_LIMB_MAX];
+    /* 0x1C8 */ Vec3s morphTable[DEKUBABA_LIMB_MAX];
     /* 0x1F8 */ f32 size;
     /* 0x1FC */ f32 drawDmgEffAlpha;
     /* 0x200 */ f32 drawDmgEffScale;

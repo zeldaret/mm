@@ -199,25 +199,18 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_STOP),
 };
 
-extern AnimationHeader D_06000208;
-extern AnimationHeader D_060002B8;
-extern Gfx D_060010F0[];
-extern Gfx D_06001330[];
-extern Gfx D_06001828[];
-extern SkeletonHeader D_06002A40;
-extern Gfx D_06003070[];
-
 void EnDekubaba_Init(Actor* thisx, PlayState* play) {
     EnDekubaba* this = THIS;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 22.0f);
-    SkelAnime_Init(play, &this->skelAnime, &D_06002A40, &D_060002B8, this->jointTable, this->morphTable, 8);
+    SkelAnime_Init(play, &this->skelAnime, &gDekuBabaSkel, &gDekuBabaFastChompAnim, this->jointTable, this->morphTable,
+                   DEKUBABA_LIMB_MAX);
     Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    if (this->actor.params == 1) {
+    if (this->actor.params == DEKUBABA_BIG) {
         this->size = 2.5f;
 
         for (i = 0; i < sJntSphInit.count; i++) {
@@ -357,8 +350,9 @@ void EnDekubaba_Wait(EnDekubaba* this, PlayState* play) {
 void EnDekubaba_SetupGrow(EnDekubaba* this) {
     s32 i;
 
-    Animation_Change(&this->skelAnime, &D_060002B8, Animation_GetLastFrame(&D_060002B8) * (1.0f / 15), 0.0f,
-                     Animation_GetLastFrame(&D_060002B8), ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gDekuBabaFastChompAnim,
+                     Animation_GetLastFrame(&gDekuBabaFastChompAnim) * (1.0f / 15), 0.0f,
+                     Animation_GetLastFrame(&gDekuBabaFastChompAnim), ANIMMODE_ONCE, 0.0f);
 
     this->timer = 15;
 
@@ -445,8 +439,8 @@ void EnDekubaba_Grow(EnDekubaba* this, PlayState* play) {
 void EnDekubaba_SetupRetract(EnDekubaba* this) {
     s32 i;
 
-    Animation_Change(&this->skelAnime, &D_060002B8, -1.5f, Animation_GetLastFrame(&D_060002B8), 0.0f, ANIMMODE_ONCE,
-                     -3.0f);
+    Animation_Change(&this->skelAnime, &gDekuBabaFastChompAnim, -1.5f, Animation_GetLastFrame(&gDekuBabaFastChompAnim),
+                     0.0f, ANIMMODE_ONCE, -3.0f);
 
     this->timer = 15;
 
@@ -514,8 +508,8 @@ void EnDekubaba_Retract(EnDekubaba* this, PlayState* play) {
 }
 
 void EnDekubaba_SetupDecideLunge(EnDekubaba* this) {
-    this->timer = Animation_GetLastFrame(&D_060002B8) * 2;
-    Animation_MorphToLoop(&this->skelAnime, &D_060002B8, -3.0f);
+    this->timer = Animation_GetLastFrame(&gDekuBabaFastChompAnim) * 2;
+    Animation_MorphToLoop(&this->skelAnime, &gDekuBabaFastChompAnim, -3.0f);
     this->actionFunc = EnDekubaba_DecideLunge;
 }
 
@@ -524,7 +518,7 @@ void EnDekubaba_DecideLunge(EnDekubaba* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 12.0f)) {
-        if (this->actor.params == 1) {
+        if (this->actor.params == DEKUBABA_BIG) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_MOUTH);
         } else {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MIZUBABA1_MOUTH);
@@ -592,7 +586,7 @@ void EnDekubaba_PrepareLunge(EnDekubaba* this, PlayState* play) {
 }
 
 void EnDekubaba_SetupLunge(EnDekubaba* this) {
-    Animation_PlayOnce(&this->skelAnime, &D_06000208);
+    Animation_PlayOnce(&this->skelAnime, &gDekuBabaPauseChompAnim);
     this->timer = 0;
     this->actionFunc = EnDekubaba_Lunge;
 }
@@ -608,7 +602,7 @@ void EnDekubaba_Lunge(EnDekubaba* this, PlayState* play) {
 
     if (this->timer == 0) {
         if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
-            if (this->actor.params == 1) {
+            if (this->actor.params == DEKUBABA_BIG) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_ATTACK);
             } else {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MIZUBABA1_ATTACK);
@@ -624,7 +618,7 @@ void EnDekubaba_Lunge(EnDekubaba* this, PlayState* play) {
         allStepsDone &= Math_ScaledStepToS(&this->stemSectionAngle[1], -0xE38, curFrame10 + 0x71C);
         allStepsDone &= Math_ScaledStepToS(&this->stemSectionAngle[2], -0xE38, curFrame10 + 0xE38);
         if (allStepsDone) {
-            Animation_PlayLoopSetSpeed(&this->skelAnime, &D_060002B8, 4.0f);
+            Animation_PlayLoopSetSpeed(&this->skelAnime, &gDekuBabaFastChompAnim, 4.0f);
             velocity.x = Math_SinS(this->actor.shape.rot.y) * 5.0f;
             velocity.y = 0.0f;
             velocity.z = Math_CosS(this->actor.shape.rot.y) * 5.0f;
@@ -642,7 +636,7 @@ void EnDekubaba_Lunge(EnDekubaba* this, PlayState* play) {
         }
 
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 12.0f)) {
-            if (this->actor.params == 1) {
+            if (this->actor.params == DEKUBABA_BIG) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_MOUTH);
             } else {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MIZUBABA1_MOUTH);
@@ -654,8 +648,8 @@ void EnDekubaba_Lunge(EnDekubaba* this, PlayState* play) {
 }
 
 void EnDekubaba_SetupPullBack(EnDekubaba* this) {
-    Animation_Change(&this->skelAnime, &D_06000208, 1.0f, 15.0f, Animation_GetLastFrame(&D_06000208), ANIMMODE_ONCE,
-                     -3.0f);
+    Animation_Change(&this->skelAnime, &gDekuBabaPauseChompAnim, 1.0f, 15.0f,
+                     Animation_GetLastFrame(&gDekuBabaPauseChompAnim), ANIMMODE_ONCE, -3.0f);
     this->timer = 0;
     this->actionFunc = EnDekubaba_PullBack;
 }
@@ -779,7 +773,7 @@ void EnDekubaba_Recover(EnDekubaba* this, PlayState* play) {
 }
 
 void EnDekubaba_SetupHit(EnDekubaba* this, s32 arg1) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06000208, -5.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gDekuBabaPauseChompAnim, -5.0f);
     this->timer = arg1;
     this->collider.base.acFlags &= ~AC_ON;
     Actor_SetScale(&this->actor, this->size * 0.01f);
@@ -890,8 +884,8 @@ void EnDekubaba_PrunedSomersault(EnDekubaba* this, PlayState* play) {
 }
 
 void EnDekubaba_SetupShrinkDie(EnDekubaba* this) {
-    Animation_Change(&this->skelAnime, &D_060002B8, -1.5f, Animation_GetLastFrame(&D_060002B8), 0.0f, ANIMMODE_ONCE,
-                     -3.0f);
+    Animation_Change(&this->skelAnime, &gDekuBabaFastChompAnim, -1.5f, Animation_GetLastFrame(&gDekuBabaFastChompAnim),
+                     0.0f, ANIMMODE_ONCE, -3.0f);
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = EnDekubaba_ShrinkDie;
 }
@@ -908,7 +902,7 @@ void EnDekubaba_ShrinkDie(EnDekubaba* this, PlayState* play) {
 
         if (!this->actor.dropFlag) {
             Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
-            if (this->actor.params == 1) {
+            if (this->actor.params == DEKUBABA_BIG) {
                 Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
                 Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
             }
@@ -932,12 +926,12 @@ void EnDekubaba_SetupStunnedVertical(EnDekubaba* this) {
     }
 
     if (this->timer == 1) {
-        Animation_Change(&this->skelAnime, &D_060002B8, 4.0f, 0.0f, Animation_GetLastFrame(&D_060002B8), ANIMMODE_LOOP,
-                         -3.0f);
+        Animation_Change(&this->skelAnime, &gDekuBabaFastChompAnim, 4.0f, 0.0f,
+                         Animation_GetLastFrame(&gDekuBabaFastChompAnim), ANIMMODE_LOOP, -3.0f);
         this->timer = 0x28;
     } else {
-        Animation_Change(&this->skelAnime, &D_060002B8, 0.0f, 0.0f, Animation_GetLastFrame(&D_060002B8), ANIMMODE_LOOP,
-                         -3.0f);
+        Animation_Change(&this->skelAnime, &gDekuBabaFastChompAnim, 0.0f, 0.0f,
+                         Animation_GetLastFrame(&gDekuBabaFastChompAnim), ANIMMODE_LOOP, -3.0f);
         if (this->timer == 2) {
             this->timer = 40;
         } else {
@@ -1154,7 +1148,7 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
             this->drawDmgEffAlpha = 1.5f;
         }
 
-        if (this->actor.params == 1) {
+        if (this->actor.params == DEKUBABA_BIG) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_DEAD);
         } else {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
@@ -1223,7 +1217,7 @@ void EnDekubaba_DrawStemRetracted(EnDekubaba* this, PlayState* play) {
     Matrix_RotateZYX(this->stemSectionAngle[0], this->actor.shape.rot.y, 0, MTXMODE_APPLY);
     Matrix_Scale(horizontalScale, horizontalScale, horizontalScale, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06001330);
+    gSPDisplayList(POLY_OPA_DISP++, gDekuBabaStemTopDL);
 
     for (i = 1; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
         Matrix_MultZero(&this->bodyPartsPos[i]);
@@ -1235,7 +1229,7 @@ void EnDekubaba_DrawStemRetracted(EnDekubaba* this, PlayState* play) {
 }
 
 void EnDekubaba_DrawStemExtended(EnDekubaba* this, PlayState* play) {
-    static Gfx* sStemDLists[] = { 0x06001330, 0x06001628, 0x06001828 };
+    static Gfx* sStemDLists[] = { gDekuBabaStemTopDL, gDekuBabaStemMiddleDL, gDekuBabaStemBaseDL };
     MtxF mtx;
     s32 i;
     f32 scale;
@@ -1292,7 +1286,7 @@ void EnDekubaba_DrawStemBasePruned(EnDekubaba* this, PlayState* play) {
 
     Matrix_RotateZYX(this->stemSectionAngle[2], this->actor.shape.rot.y, 0, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06001828);
+    gSPDisplayList(POLY_OPA_DISP++, gDekuBabaStemBaseDL);
 
     Collider_UpdateSpheres(55, &this->collider);
     Collider_UpdateSpheres(56, &this->collider);
@@ -1326,7 +1320,7 @@ void EnDekubaba_DrawBaseShadow(EnDekubaba* this, PlayState* play) {
 void EnDekubaba_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDekubaba* this = THIS;
 
-    if (limbIndex == 1) {
+    if (limbIndex == DEKUBABA_LIMB_ROOT) {
         Collider_UpdateSpheres(limbIndex, &this->collider);
     }
 }
@@ -1354,7 +1348,7 @@ void EnDekubaba_Draw(Actor* thisx, PlayState* play) {
         Matrix_RotateYS(this->actor.home.rot.y, MTXMODE_APPLY);
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_060010F0);
+        gSPDisplayList(POLY_OPA_DISP++, gDekuBabaBaseLeavesDL);
 
         if (this->actionFunc == EnDekubaba_PrunedSomersault) {
             EnDekubaba_DrawStemBasePruned(this, play);
@@ -1365,7 +1359,7 @@ void EnDekubaba_Draw(Actor* thisx, PlayState* play) {
     } else if ((this->timer > 40) || (this->timer & 1)) {
         Matrix_Translate(0.0f, 0.0f, 200.0f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_06003070);
+        gSPDisplayList(POLY_OPA_DISP++, gDekuBabaStickDropDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

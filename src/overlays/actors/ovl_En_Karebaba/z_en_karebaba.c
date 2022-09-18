@@ -134,17 +134,13 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 1, ICHAIN_STOP),
 };
 
-Color_RGBA8 D_808F2E28 = { 0, 0, 0, 0 };
-
-Gfx* D_808F2E2C[] = { object_dekubaba_DL_001330, object_dekubaba_DL_001628, object_dekubaba_DL_001828 };
-
 void EnKarebaba_Init(Actor* thisx, PlayState* play) {
     EnKarebaba* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 22.0f);
-    SkelAnime_Init(play, &this->skelAnime, &object_dekubaba_Skel_002A40, &object_dekubaba_Anim_0002B8, this->jointTable,
-                   this->morphTable, 8);
+    SkelAnime_Init(play, &this->skelAnime, &gDekuBabaSkel, &gDekuBabaFastChompAnim, this->jointTable, this->morphTable,
+                   8);
 
     Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit1);
     Collider_UpdateCylinder(&this->actor, &this->collider2);
@@ -254,8 +250,8 @@ void func_808F169C(EnKarebaba* this, PlayState* play) {
 }
 
 void func_808F16FC(EnKarebaba* this) {
-    Animation_Change(&this->skelAnime, &object_dekubaba_Anim_0002B8, 4.0f, 0.0f,
-                     Animation_GetLastFrame(&object_dekubaba_Anim_0002B8), ANIMMODE_LOOP, -3.0f);
+    Animation_Change(&this->skelAnime, &gDekuBabaFastChompAnim, 4.0f, 0.0f,
+                     Animation_GetLastFrame(&gDekuBabaFastChompAnim), ANIMMODE_LOOP, -3.0f);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_WAKEUP);
     this->actionFunc = func_808F1778;
 }
@@ -500,8 +496,8 @@ void func_808F21A4(EnKarebaba* this, PlayState* play) {
 }
 
 void func_808F220C(EnKarebaba* this) {
-    Animation_Change(&this->skelAnime, &object_dekubaba_Anim_0002B8, -3.0f,
-                     Animation_GetLastFrame(&object_dekubaba_Anim_0002B8), 0.0f, ANIMMODE_ONCE, -3.0f);
+    Animation_Change(&this->skelAnime, &gDekuBabaFastChompAnim, -3.0f, Animation_GetLastFrame(&gDekuBabaFastChompAnim),
+                     0.0f, ANIMMODE_ONCE, -3.0f);
     func_808F152C(this);
     this->actionFunc = func_808F228C;
 }
@@ -526,7 +522,7 @@ void func_808F228C(EnKarebaba* this, PlayState* play) {
 }
 
 void func_808F238C(EnKarebaba* this) {
-    Animation_Change(&this->skelAnime, &object_dekubaba_Anim_0002B8, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gDekuBabaFastChompAnim, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f);
     func_808F152C(this);
     this->actor.shape.rot.x = -0x4000;
     this->unk_1EE = 200;
@@ -645,6 +641,8 @@ void func_808F280C(EnKarebaba* this, PlayState* play) {
 }
 
 void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
+    static Color_RGBA8 D_808F2E28 = { 0, 0, 0, 0 };
+    static Gfx* D_808F2E2C[] = { gDekuBabaStemTopDL, gDekuBabaStemMiddleDL, gDekuBabaStemBaseDL };
     EnKarebaba* this = THIS;
     s32 i;
     s32 sp94;
@@ -661,7 +659,7 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
             Matrix_Translate(0.0f, 0.0f, 200.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, object_dekubaba_DL_003070);
+            gSPDisplayList(POLY_OPA_DISP++, gDekuBabaStickDropDL);
         }
     } else if (this->actionFunc != func_808F254C) {
         func_800AE2A0(play, &D_808F2E28, 1, 2);
@@ -710,13 +708,13 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
     Matrix_RotateYS(this->actor.home.rot.y, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_dekubaba_DL_0010F0);
+    gSPDisplayList(POLY_OPA_DISP++, gDekuBabaBaseLeavesDL);
 
     if (this->actionFunc == func_808F1C84) {
         Matrix_RotateZYX(-0x4000, this->actor.shape.rot.y - this->actor.home.rot.y, 0, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, object_dekubaba_DL_001828);
+        gSPDisplayList(POLY_OPA_DISP++, gDekuBabaStemBaseDL);
 
         Matrix_MultZero(&this->limbPos[3]);
     }
