@@ -92,7 +92,7 @@ static DamageTable sDamageTable = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 39, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_SHELLBLADE, ICHAIN_CONTINUE),
     ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
