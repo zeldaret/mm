@@ -14,7 +14,6 @@
  */
 
 #include "z_en_go.h"
-#include "objects/object_oF1d_map/object_oF1d_map.h"
 #include "objects/object_hakugin_demo/object_hakugin_demo.h"
 #include "objects/object_taisou/object_taisou.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -135,13 +134,6 @@ typedef enum EnGoAnimationIndex {
     /*  21 */ ENGO_ANIM_LOOK_AROUND_LOOPED,
 } EnGoAnimationIndex;
 
-typedef enum EnGoLimbIndex {
-    /* 10 */ ENGO_LIMB_INDEX_BODY = 10,
-    /* 11 */ ENGO_LIMB_INDEX_LEFTARM = 11,
-    /* 14 */ ENGO_LIMB_INDEX_RIGHTARM = 14,
-    /* 17 */ ENGO_LIMB_INDEX_HEAD = 17,
-} EnGoLimbIndex;
-
 // Message script for the goron who made Darmani's grave in the mountain village
 static s32 sMsgScriptGoronGravemaker[] = {
     0x00150800, 0x40010022, 0x00150200, 0x180E0E10, 0x0C0F0E11, 0x0C0F0E12, 0x0C0F0E13, 0x0C0F0E14, 0x0C111502,
@@ -159,22 +151,22 @@ static s32 sMsgScriptGoronBrother[] = {
 };
 
 // Message script for the shrine goron standing aside the store
-static s32 sMsgScriptGoronAsideStore[2] = { 0xE0E520C, 0x10000000 };
+static s32 sMsgScriptGoronAsideStore[] = { 0xE0E520C, 0x10000000 };
 
 // Messag Script for the shrine goron standing aside the Elder's son
-static s32 sMsgScriptGoronAsideEldersSon[17] = {
+static s32 sMsgScriptGoronAsideEldersSon[] = {
     0x160400,  0x38010010, 0xE0E430C, 0xF0E440C, 0xF0E450C,  0x11188010, 0x160800,   0x1B0E0E46, 0xC0F0E47,
     0xC0F0E48, 0xC0F0E49,  0xC0F0E4A, 0xC111608, 0x11188010, 0xE0E4B0C,  0x100E0E42, 0xC100000,
 };
 
 // Message Script for the shrine goron standing aside the Elder's room
-static s32 sMsgScriptGoronAsideEldersRoom[11] = {
+static s32 sMsgScriptGoronAsideEldersRoom[] = {
     0x160400,   0x22010009, 0xE0E4D0C, 0xF0E4E0C,  0x10001701, 0xC0E0E,
     0x4F0C0F0E, 0x500C1117, 0x1100E0E, 0x510C100E, 0xE4C0C10,
 };
 
 // Message script for the goron in the goron village who sells powder kegs
-static s32 sMsgScriptGoronPowderKegSeller[52] = {
+static s32 sMsgScriptGoronPowderKegSeller[] = {
     0x1001200,  0x12200008, 0xE0C8E0C,  0x11122010, 0xE0C8F0C,  0x10001240, 0x1D0E0C,   0x800C1112, 0x40001280,
     0x742500,   0xC006F00,  0x13010045, 0xF0C810C,  0x19001300, 0x1280005E, 0x25000C00, 0x59001301, 0x2F0E0C,
     0x810C0F0C, 0x820C0500, 0x1A00,     0x1A300E0C, 0x830C1209, 0x700,      0xE0C84,    0x160C1113, 0x1100E0C,
@@ -184,30 +176,30 @@ static s32 sMsgScriptGoronPowderKegSeller[52] = {
 };
 
 // Message script for the gatekeeper goron in the goron village who opens the shrine gate
-static s32 sMsgScriptGoronGatekeeper[27] = {
+static s32 sMsgScriptGoronGatekeeper[] = {
     0x584000,  0x2903000E, 0x2001301, 0x180058,   0x80005119, 0x1E0059,   0x1004919, 0x160059,  0x2004119,
     0xE0059,   0x4003919,  0x2F0E0D,  0x4D0C1210, 0xE0D480C,  0xF0D490C,  0xF0D4A0C, 0x5000000, 0xF000F30,
     0xE0D4B0C, 0x15090000, 0xE0D4D0C, 0x1210310E, 0xD4C0C12,  0x100E0D4E, 0xC19FFD8, 0xE0D4F0C, 0x19FFD500,
 };
 
 // Message script for one of the goron stretchers at the racetrack (Initially stretching Side to Side while squatting)
-static s32 sMsgScriptGoronStretcherA[4] = { 0x100060E, 0xDFE0C12, 0x100E0DFF, 0xC121000 };
+static s32 sMsgScriptGoronStretcherA[] = { 0x100060E, 0xDFE0C12, 0x100E0DFF, 0xC121000 };
 
 // Message script for one of the goron stretchers at the racetrack (Initially doing sidebend stretches with one arm) -
 // Unused
-static s32 sMsgScriptGoronStretcherB[4] = { 0x100060E, 0xE000C12, 0x100E0E01, 0xC121000 };
+static s32 sMsgScriptGoronStretcherB[] = { 0x100060E, 0xE000C12, 0x100E0E01, 0xC121000 };
 
 // Message script for one of the goron stretchers at the racetrack (Initially shaking out their limbs)
-static s32 sMsgScriptGoronStretcherC[4] = { 0x100060E, 0xE020C12, 0x100E0E03, 0xC121000 };
+static s32 sMsgScriptGoronStretcherC[] = { 0x100060E, 0xE020C12, 0x100E0E03, 0xC121000 };
 
 // Message script for one of the goron stretchers (Initially doing sidebend stretches with both arms)
-static s32 sMsgScriptGoronStretcherD[4] = { 0x100060E, 0xE040C12, 0x100E0E05, 0xC121000 };
+static s32 sMsgScriptGoronStretcherD[] = { 0x100060E, 0xE040C12, 0x100E0E05, 0xC121000 };
 
 // Message script for the pair of gorons stretching one's hamstrings.
-static s32 sMsgScriptGoronStretcherHamstring[4] = { 0x100060E, 0xE060C12, 0x100E0E07, 0xC121000 };
+static s32 sMsgScriptGoronStretcherHamstring[] = { 0x100060E, 0xE060C12, 0x100E0E07, 0xC121000 };
 
 // Message script for any sleeping goron
-static s32 sMsgScriptGoronSleeping[2] = { 0xE023A0C, 0x12100000 };
+static s32 sMsgScriptGoronSleeping[] = { 0xE023A0C, 0x12100000 };
 
 const ActorInit En_Go_InitVars = {
     ACTOR_EN_GO,
@@ -363,7 +355,7 @@ static AnimationInfoS sAnimationInfo[] = {
 };
 
 Actor* EnGo_FindGravemaker(EnGo* this, PlayState* play);
-s32 EnGo_ChangeAnimation(EnGo* this, PlayState* play, EnGoAnimationIndex anim);
+s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimationIndex anim);
 s32 EnGo_CheckAndChangeCutscene(EnGo* this, s16 indexCutscene);
 s32 EnGo_IsEnteringSleep(EnGo* this, PlayState* play);
 
@@ -431,13 +423,13 @@ void EnGo_PowderKegGoron_UpdateCollider(EnGo* this, PlayState* play);
 s32 EnGo_Snowball_CanHurtPlayer(PlayState* play);
 
 void EnGo_UpdateEffects(EnGo* this);
-void EnGo_UpdateEffect_Snow(EnGoEffect* pEffect, f32 dustConversionHeight);
-void EnGo_MakeSteamEffect(EnGo* this);
-void EnGo_InitializeEffect_Snow(EnGoEffect* pEffect, Vec3f worldPos);
-void EnGo_InitializeEffect_Dust(EnGoEffect* pEffect, Vec3f pos, Vec3f accel, Vec3f vel, f32 scale, f32 deltaScale,
-                                s32 maxFrames, EnGoEffectType parentEffectType);
-EnGoEffect* EnGo_InitializeEffect_Steam(EnGoEffect* pEffect, Vec3f position, Vec3f acceleration, Vec3f velocity,
-                                        f32 scale, f32 deltaScale, s32 maxFrames);
+void EnGo_UpdateSnow(EnGoEffect* pEffect, f32 dustConversionHeight);
+void EnGo_MakeSteam(EnGo* this);
+void EnGo_InitSnow(EnGoEffect* pEffect, Vec3f worldPos);
+void EnGo_InitDust(EnGoEffect* pEffect, Vec3f pos, Vec3f accel, Vec3f vel, f32 scale, f32 deltaScale, s32 maxFrames,
+                   EnGoEffectType parentEffectType);
+EnGoEffect* EnGo_InitSteam(EnGoEffect* pEffect, Vec3f position, Vec3f acceleration, Vec3f velocity, f32 scale,
+                           f32 deltaScale, s32 maxFrames);
 
 void EnGo_CheckAndDrawIceBlock(EnGo* this, PlayState* play, f32 scale, f32 alpha);
 void EnGo_DrawSnow(EnGoEffect* pEffect, PlayState* play, Gfx* material, Gfx* model, u8 effectType);
@@ -456,8 +448,8 @@ void EnGo_DrawEffects(EnGo* this, PlayState* play);
  * @param deltaScale How much the effect scales per frame (additive)
  * @param maxFrames Maximum number of frames the effect will last. Actual lifetime will be 1/3 * maxFrames -> maxFrames
  */
-EnGoEffect* EnGo_InitializeEffect_Steam(EnGoEffect* pEffect, Vec3f position, Vec3f acceleration, Vec3f velocity,
-                                        f32 scale, f32 deltaScale, s32 maxFrames) {
+EnGoEffect* EnGo_InitSteam(EnGoEffect* pEffect, Vec3f position, Vec3f acceleration, Vec3f velocity, f32 scale,
+                           f32 deltaScale, s32 maxFrames) {
     s32 i;
 
     for (i = (ENGO_NUM_EFFECTS / 2); i < ENGO_NUM_EFFECTS; i++, pEffect++) {
@@ -534,8 +526,8 @@ void EnGo_DrawSteam(EnGoEffect* pEffect, PlayState* play2) {
  * @param maxFrames Maximum number of frames the effect will last. Actual lifetime will be 1/3 * maxFrames -> maxFrames
  * @param parentEffectType Type of the parent effect, determines which of the possible dust effects correspond
  */
-void EnGo_InitializeEffect_Dust(EnGoEffect* pEffect, Vec3f pos, Vec3f accel, Vec3f vel, f32 scale, f32 deltaScale,
-                                s32 maxFrames, EnGoEffectType parentEffectType) {
+void EnGo_InitDust(EnGoEffect* pEffect, Vec3f pos, Vec3f accel, Vec3f vel, f32 scale, f32 deltaScale, s32 maxFrames,
+                   EnGoEffectType parentEffectType) {
     s32 i;
 
     for (i = (ENGO_NUM_EFFECTS / 2); i < ENGO_NUM_EFFECTS; i++, pEffect++) {
@@ -624,7 +616,7 @@ void EnGo_DrawDust(EnGoEffect* pEffect, PlayState* play2) {
  * @param pEffect Pointer to the EnGoEffect Table.
  * @param position Actor's current world position
  */
-void EnGo_InitializeEffect_Snow(EnGoEffect* pEffect, Vec3f worldPos) {
+void EnGo_InitSnow(EnGoEffect* pEffect, Vec3f worldPos) {
     static u8 effectIndexToSnowEffectTable[] = {
         ENGO_EFFECT_SNOW3, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW2, //
         ENGO_EFFECT_SNOW3, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW2, //
@@ -675,8 +667,8 @@ void EnGo_InitializeEffect_Snow(EnGoEffect* pEffect, Vec3f worldPos) {
         randYOneToFour.y = (Rand_ZeroOne() * 3.0f) + 1.0f;
 
         // Initialize the paired element.
-        EnGo_InitializeEffect_Dust(pEnd, randRelativeToWorldPos, gZeroVec3f, randYOneToFour, 0.6f, 0.2f,
-                                   ENGO_DUST_STEAM_LIFETIME, 0);
+        EnGo_InitDust(pEnd, randRelativeToWorldPos, gZeroVec3f, randYOneToFour, 0.6f, 0.2f, ENGO_DUST_STEAM_LIFETIME,
+                      0);
     }
 }
 
@@ -688,7 +680,7 @@ void EnGo_InitializeEffect_Snow(EnGoEffect* pEffect, Vec3f worldPos) {
  * @param pEffect Effect to update
  * @param dustConversionHeight  Height at which to conver the effect to dust
  */
-void EnGo_UpdateEffect_Snow(EnGoEffect* pEffect, f32 dustConversionHeight) {
+void EnGo_UpdateSnow(EnGoEffect* pEffect, f32 dustConversionHeight) {
     f32 test;
     f32 test2;
     f32 x;
@@ -718,7 +710,7 @@ void EnGo_UpdateEffect_Snow(EnGoEffect* pEffect, f32 dustConversionHeight) {
 
     if (pEffect->velocity.x != 0.0f) {
         x = pEffect->velocity.x / fabsf(pEffect->velocity.x);
-        x *= ((sREG(13) + 140) * 0.01f);
+        x *= (sREG(13) + 140) * 0.01f;
         Math_StepToF(&pEffect->velocity.x, x, (sREG(14) + 40) * 0.01f);
     }
 
@@ -788,7 +780,7 @@ void EnGo_UpdateEffects(EnGo* this) {
             pEffect->effectType = ENGO_EFFECT_NONE;
         } else if ((pEffect->effectType > ENGO_EFFECT_NONE) && (pEffect->effectType < ENGO_EFFECT_DUST_START)) {
             // Snow rotates, and changes to dust upon dropping below the actor position
-            EnGo_UpdateEffect_Snow(pEffect, this->actor.world.pos.y);
+            EnGo_UpdateSnow(pEffect, this->actor.world.pos.y);
         } else {
             // Dust and Steam move according to their initial values.
             pEffect->position.x += pEffect->velocity.x;
@@ -1003,7 +995,7 @@ s32 EnGo_CheckAndSetupTalk(EnGo* this, PlayState* play) {
     SubS_UpdateFlags(&this->actionFlags, 0, 7);
     this->cutsceneState = 0;
     this->gatekeeperAnimState = 0;
-    this->interruptedActionFn = this->actionFunc;
+    this->interruptedActionFunc = this->actionFunc;
     this->actionFunc = EnGo_Talk;
     return true;
 }
@@ -1051,7 +1043,7 @@ s32 EnGo_GraveBroGoron_CheckAndSetupCutsceneSpringArrival(EnGo* this, PlayState*
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->springArrivalCurrentCsAction = CS_ACTION_INVALID;
             this->springArrivalCutsceneActive = true;
-            this->interruptedActionFn = this->actionFunc;
+            this->interruptedActionFunc = this->actionFunc;
         }
         SubS_UpdateFlags(&this->actionFlags, 0, 7);
         this->actionFunc = EnGo_GraveBroGoron_CutsceneSpringArrival;
@@ -1060,7 +1052,7 @@ s32 EnGo_GraveBroGoron_CheckAndSetupCutsceneSpringArrival(EnGo* this, PlayState*
         this->springArrivalCurrentCsAction = CS_ACTION_INVALID;
         this->springArrivalCutsceneActive = false;
         SubS_UpdateFlags(&this->actionFlags, 3, 7);
-        this->actionFunc = this->interruptedActionFn;
+        this->actionFunc = this->interruptedActionFunc;
     }
 
     return false;
@@ -1131,23 +1123,23 @@ s32 EnGo_UpdateSfx(EnGo* this, PlayState* play) {
  *
  * @return true if animation request was valid
  */
-s32 EnGo_ChangeAnimation(EnGo* this, PlayState* play, EnGoAnimationIndex anim) {
+s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimationIndex animIndex) {
     s8 objIdx = this->actor.objBankIndex;
     s8 objIdx2 = -1;
     s32 ret = false;
 
-    if ((anim >= ENGO_ANIM_HAKUGIN_START) && (this->indexHakuginDemo >= 0)) {
+    if ((animIndex >= ENGO_ANIM_HAKUGIN_START) && (this->indexHakuginDemo >= 0)) {
         objIdx2 = this->indexHakuginDemo;
-    } else if ((anim >= ENGO_ANIM_TAISOU_START) && (this->indexTaisou >= 0)) {
+    } else if ((animIndex >= ENGO_ANIM_TAISOU_START) && (this->indexTaisou >= 0)) {
         objIdx2 = this->indexTaisou;
-    } else if (anim < ENGO_ANIM_TAISOU_START) {
+    } else if (animIndex < ENGO_ANIM_TAISOU_START) {
         objIdx2 = this->actor.objBankIndex;
     }
 
     if (objIdx2 >= 0) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx2].segment);
-        this->currAnimIndex = anim;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, anim);
+        this->currAnimIndex = animIndex;
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->currAnimPlaySpeed = this->skelAnime.playSpeed;
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx].segment);
     }
@@ -1175,10 +1167,10 @@ void EnGo_UpdateEyes(EnGo* this) {
  */
 void EnGo_GraveBroGoron_UpdateToSurprised(EnGo* this, PlayState* play) {
     if (this->surprisePhase == 0) {
-        EnGo_ChangeAnimation(this, play, ENGO_ANIM_SHIVERINGSURPRISED);
+        EnGo_ChangeAnim(this, play, ENGO_ANIM_SHIVERINGSURPRISED);
         this->surprisePhase++;
     } else if ((this->surprisePhase == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        EnGo_ChangeAnimation(this, play, ENGO_ANIM_SHIVER_IMM);
+        EnGo_ChangeAnim(this, play, ENGO_ANIM_SHIVER_IMM);
         this->surprisePhase++;
     }
 }
@@ -1216,7 +1208,7 @@ s32 EnGo_GraveBroGoron_UpdateAttentionTargetAndReactions(EnGo* this, PlayState* 
 
                 case 0xE16: // Y-you're...No! No, you're not the great Darmani, are you?
                 case 0xE1E: // Heeee!!! Darmani!
-                    this->graveBroDialogActionFn = EnGo_GraveBroGoron_UpdateToSurprised;
+                    this->graveBroDialogActionFunc = EnGo_GraveBroGoron_UpdateToSurprised;
                     break;
 
                 case 0xE1F: // I was shocked, too. But somehow, it seems the great Darmani isn't dead.
@@ -1232,14 +1224,14 @@ s32 EnGo_GraveBroGoron_UpdateAttentionTargetAndReactions(EnGo* this, PlayState* 
         // If the Player isn't Talking, and the text has changed, its the last text
         // Set everything back to the "Idle" behavior.
         this->changedText = false;
-        this->graveBroDialogActionFn = NULL;
+        this->graveBroDialogActionFunc = NULL;
         this->lastTextId = 0;
-        EnGo_ChangeAnimation(this, play, ENGO_ANIM_SHIVER);
+        EnGo_ChangeAnim(this, play, ENGO_ANIM_SHIVER);
         this->actionFlags &= ~ENGO_FLAG_ENGAGED;
     }
 
-    if (this->graveBroDialogActionFn != NULL) {
-        this->graveBroDialogActionFn(this, play);
+    if (this->graveBroDialogActionFunc != NULL) {
+        this->graveBroDialogActionFunc(this, play);
     }
 
     return false;
@@ -1517,7 +1509,7 @@ void EnGo_CheckAndDrawIceBlock(EnGo* this, PlayState* play, f32 scale, f32 alpha
 /**
  * Initialize the steam effect used for melting ice.
  */
-void EnGo_MakeSteamEffect(EnGo* this) {
+void EnGo_MakeSteam(EnGo* this) {
     static Vec3f accel = { 0.0f, 0.06f, 0.0f };
     Vec3f tempPos;
     Vec3f effectPos;
@@ -1528,8 +1520,8 @@ void EnGo_MakeSteamEffect(EnGo* this) {
     Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, rotAngle, &tempPos, &effectPos);
     effectPos.y = (Rand_ZeroOne() * 10.0f) + 4.0f;
     effectPos.y += this->actor.floorHeight;
-    EnGo_InitializeEffect_Steam(&this->effectTable[ENGO_NUM_EFFECTS / 2], effectPos, accel, gZeroVec3f,
-                                ENGO_NORMAL_SCALE, (0.2f * ENGO_NORMAL_SCALE), ENGO_DUST_STEAM_LIFETIME);
+    EnGo_InitSteam(&this->effectTable[ENGO_NUM_EFFECTS / 2], effectPos, accel, gZeroVec3f, ENGO_NORMAL_SCALE,
+                   (0.2f * ENGO_NORMAL_SCALE), ENGO_DUST_STEAM_LIFETIME);
 }
 
 /**
@@ -1578,7 +1570,7 @@ s32 EnGo_GatekeeperGoron_CutsceneOpenShrine(Actor* thisx, PlayState* play) {
 
     switch (this->gatekeeperAnimState) {
         case 1:
-            EnGo_ChangeAnimation(this, play, ENGO_ANIM_ROLL);
+            EnGo_ChangeAnim(this, play, ENGO_ANIM_ROLL);
             this->actionFlags |= ENGO_FLAG_ROLLINGUP;
             this->gatekeeperAnimState++;
             break;
@@ -1617,7 +1609,7 @@ s32 EnGo_GatekeeperGoron_CutsceneOpenShrine(Actor* thisx, PlayState* play) {
         case 5:
             this->cutsceneDelayTimer++;
             if (this->cutsceneDelayTimer >= 10) {
-                EnGo_ChangeAnimation(this, play, ENGO_ANIM_SHIVER);
+                EnGo_ChangeAnim(this, play, ENGO_ANIM_SHIVER);
                 this->actor.shape.rot.x = 0;
                 this->actionFlags &= ~ENGO_FLAG_ROLLEDUP;
                 this->actionFlags |= ENGO_FLAG_STANDING;
@@ -1669,7 +1661,7 @@ s32 EnGo_PowderKegGoron_CutsceneGivePowderKeg(Actor* thisx, PlayState* play) {
             break;
 
         case 1:
-            EnGo_ChangeAnimation(this, play, ENGO_ANIM_DROPKEG);
+            EnGo_ChangeAnim(this, play, ENGO_ANIM_DROPKEG);
             this->cutsceneState++;
 
         case 2:
@@ -1678,7 +1670,7 @@ s32 EnGo_PowderKegGoron_CutsceneGivePowderKeg(Actor* thisx, PlayState* play) {
             }
 
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                EnGo_ChangeAnimation(this, play, ENGO_ANIM_LYINGDOWNIDLE_IMM);
+                EnGo_ChangeAnim(this, play, ENGO_ANIM_LYINGDOWNIDLE_IMM);
                 Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &sPowderKegSpawnOffset,
                                               &powderKegSpawnPos);
                 gSaveContext.powderKegTimer = 2400;
@@ -1728,7 +1720,7 @@ void EnGo_UpdateToStretching(EnGo* this, PlayState* play) {
         subtypeLookup = ((gSaveContext.eventInf[2] & 0xF) + subtypeLookup) % 4;
     }
 
-    EnGo_ChangeAnimation(this, play, sSubtypeToAnimIndex[subtypeLookup]);
+    EnGo_ChangeAnim(this, play, sSubtypeToAnimIndex[subtypeLookup]);
 
     // Move the Sitting Gorward, since it spawns at the same location as its helper.
     if (this->currAnimIndex == ENGO_ANIM_SITTING_STRETCH) {
@@ -1758,7 +1750,7 @@ void EnGo_UpdateToSpectating(EnGo* this, PlayState* play) {
     static s32 sSubtypeToAnimIndex[] = { ENGO_ANIM_CHEER, ENGO_ANIM_SHOUT };
     s16 animFrame;
 
-    EnGo_ChangeAnimation(this, play, sSubtypeToAnimIndex[ENGO_GET_SUBTYPE(&this->actor) % 2]);
+    EnGo_ChangeAnim(this, play, sSubtypeToAnimIndex[ENGO_GET_SUBTYPE(&this->actor) % 2]);
     animFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
     this->skelAnime.curFrame = animFrame;
 
@@ -1782,7 +1774,7 @@ void EnGo_UpdateToFrozen(EnGo* this, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInitFrozen);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->currAnimIndex = -1;
-    EnGo_ChangeAnimation(this, play, ENGO_ANIM_SHIVER);
+    EnGo_ChangeAnim(this, play, ENGO_ANIM_SHIVER);
     this->sleepState = ENGO_AWAKE;
     this->iceBlockScale = (this->scaleFactor / 0.01f) * 0.9f;
     this->eyeTexIndex = ENGO_EYETEX_CLOSED;
@@ -1822,7 +1814,7 @@ void EnGo_Gatekeeper_UpdateToSnowball(EnGo* this, PlayState* play) {
  * @see EnGo_Idle
  */
 void EnGo_UpdateToCoveringEars(EnGo* this, PlayState* play) {
-    EnGo_ChangeAnimation(this, play, ENGO_ANIM_COVEREARS);
+    EnGo_ChangeAnim(this, play, ENGO_ANIM_COVEREARS);
     Actor_SetScale(&this->actor, this->scaleFactor);
     this->actionFlags = ENGO_FLAG_NONE;
     this->actor.gravity = ENGO_NORMAL_GRAVITY;
@@ -1841,7 +1833,7 @@ void EnGo_UpdateToCoveringEars(EnGo* this, PlayState* play) {
  * @see EnGo_Idle
  */
 void EnGo_UpdateToShivering(EnGo* this, PlayState* play) {
-    EnGo_ChangeAnimation(this, play, ENGO_ANIM_SHIVER);
+    EnGo_ChangeAnim(this, play, ENGO_ANIM_SHIVER);
     Actor_SetScale(&this->actor, this->scaleFactor);
     this->actionFlags = ENGO_FLAG_NONE;
     this->actor.gravity = ENGO_NORMAL_GRAVITY;
@@ -1952,7 +1944,7 @@ void EnGo_ShrineGoron_Setup(EnGo* this, PlayState* play) {
  */
 void EnGo_PowderKegGoron_Setup(EnGo* this, PlayState* play) {
     EnGo_PowderKegGoron_UpdateColliderRadius(this, play, false);
-    EnGo_ChangeAnimation(this, play, ENGO_ANIM_LYINGDOWNIDLE);
+    EnGo_ChangeAnim(this, play, ENGO_ANIM_LYINGDOWNIDLE);
     this->scaleFactor *= ENGO_BIGGORON_SCALE_MULTIPLIER;
     Actor_SetScale(&this->actor, this->scaleFactor);
     this->actor.flags &= ~ACTOR_FLAG_1;
@@ -1983,7 +1975,7 @@ void EnGo_SetupAction(EnGo* this, PlayState* play) {
                            GORON_LIMB_MAX);
 
         this->currAnimIndex = ENGO_ANIM_INVALID;
-        EnGo_ChangeAnimation(this, play, ENGO_ANIM_UNROLL);
+        EnGo_ChangeAnim(this, play, ENGO_ANIM_UNROLL);
         this->actor.draw = EnGo_Draw;
 
         Collider_InitAndSetSphere(play, &this->colliderSphere, &this->actor, &sSphereInit);
@@ -2095,7 +2087,7 @@ void EnGo_Sleep(EnGo* this, PlayState* play) {
     } else if (this->actionFlags & ENGO_FLAG_ROLLEDUP) {
         if ((this->actor.xzDistToPlayer < 160.0f) && (this->actor.playerHeightRel < 20.0f) &&
             (this->sleepState == ENGO_AWAKE)) {
-            EnGo_ChangeAnimation(this, play, ENGO_ANIM_UNROLL_IMM);
+            EnGo_ChangeAnim(this, play, ENGO_ANIM_UNROLL_IMM);
             this->actionFlags &= ~ENGO_FLAG_STANDING;
             this->actionFlags &= ~ENGO_FLAG_ROLLEDUP;
             this->actionFlags |= ENGO_FLAG_UNROLLING;
@@ -2118,7 +2110,7 @@ void EnGo_Sleep(EnGo* this, PlayState* play) {
         }
     } else if ((this->actor.xzDistToPlayer >= 240.0f) || (this->actor.playerHeightRel >= 20.0f) ||
                (this->sleepState != ENGO_AWAKE)) {
-        EnGo_ChangeAnimation(this, play, ENGO_ANIM_ROLL);
+        EnGo_ChangeAnim(this, play, ENGO_ANIM_ROLL);
         this->actionFlags &= ~ENGO_FLAG_STANDING;
         this->actionFlags &= ~ENGO_FLAG_ROLLEDUP;
         this->actionFlags |= ENGO_FLAG_ROLLINGUP;
@@ -2164,7 +2156,7 @@ void EnGo_Thaw(EnGo* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
         Math_ApproachF(&this->iceBlockScale, 0.0f, 0.02f, 1.0f);
         this->iceBlockAlpha = (this->iceBlockScale / 0.9f) * 100.0f;
-        EnGo_MakeSteamEffect(this);
+        EnGo_MakeSteam(this);
     } else {
         ActorCutscene_Stop(this->actor.cutscene);
         EnGo_UpdateToShivering(this, play);
@@ -2214,7 +2206,7 @@ void EnGo_GraveBroGoron_CutsceneSpringArrival(EnGo* this, PlayState* play) {
 
             if (this->springArrivalCurrentCsAction != (u8)csAction) {
                 this->springArrivalCurrentCsAction = csAction;
-                EnGo_ChangeAnimation(this, play, animationIndices[csAction]);
+                EnGo_ChangeAnim(this, play, animationIndices[csAction]);
                 this->actionFlags = ENGO_FLAG_NONE;
                 this->actionFlags |= ENGO_FLAG_EYESOPEN;
                 this->eyeTexIndex = ENGO_EYETEX_OPEN;
@@ -2238,14 +2230,14 @@ void EnGo_GraveBroGoron_CutsceneSpringArrival(EnGo* this, PlayState* play) {
                 case 3:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) &&
                         (this->currAnimIndex == ENGO_ANIM_LOOK_AROUND)) {
-                        EnGo_ChangeAnimation(this, play, ENGO_ANIM_LOOK_AROUND_LOOPED);
+                        EnGo_ChangeAnim(this, play, ENGO_ANIM_LOOK_AROUND_LOOPED);
                     }
                     break;
 
                 case 4:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) &&
                         (this->currAnimIndex == ENGO_ANIM_SHOW)) {
-                        EnGo_ChangeAnimation(this, play, ENGO_ANIM_SHOW_LOOPED);
+                        EnGo_ChangeAnim(this, play, ENGO_ANIM_SHOW_LOOPED);
                     }
                     break;
 
@@ -2254,7 +2246,7 @@ void EnGo_GraveBroGoron_CutsceneSpringArrival(EnGo* this, PlayState* play) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
                         Math_ApproachF(&this->iceBlockScale, 0.0f, 0.02f, 1.0f);
                         this->iceBlockAlpha = (this->iceBlockScale / 0.9f) * 100.0f;
-                        EnGo_MakeSteamEffect(this);
+                        EnGo_MakeSteam(this);
                     } else if (this->actionFlags & ENGO_FLAG_FROZEN) {
                         EnGo_UpdateToShivering(this, play);
                     }
@@ -2319,7 +2311,7 @@ void EnGo_GraveBroGoron_CutsceneSpringArrival(EnGo* this, PlayState* play) {
  * On Day 3, they're frozen solid.
  */
 void EnGo_Gatekeeper_Snowball(EnGo* this, PlayState* play) {
-    Vec3s* pPathPoints;
+    Vec3s* pathPoints;
     Vec3f currentPos;
     Vec3f currentPathPoint;
 
@@ -2328,7 +2320,7 @@ void EnGo_Gatekeeper_Snowball(EnGo* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
         this->actor.flags &= ~ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
-        EnGo_InitializeEffect_Snow(this->effectTable, this->actor.world.pos);
+        EnGo_InitSnow(this->effectTable, this->actor.world.pos);
         this->actor.shape.rot.x = 0;
         this->actor.speedXZ = 0.0f;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_COLD);
@@ -2346,7 +2338,7 @@ void EnGo_Gatekeeper_Snowball(EnGo* this, PlayState* play) {
             func_800B8D50(play, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
         }
 
-        pPathPoints = Lib_SegmentedToVirtual(this->gatekeeperPath->points);
+        pathPoints = Lib_SegmentedToVirtual(this->gatekeeperPath->points);
         if (SubS_HasReachedPoint(&this->actor, this->gatekeeperPath, this->indexPathPoint)) {
             if (this->indexPathPoint >= (this->gatekeeperPath->count - 1)) {
                 this->indexPathPoint = 0;
@@ -2355,7 +2347,7 @@ void EnGo_Gatekeeper_Snowball(EnGo* this, PlayState* play) {
             }
         }
 
-        Math_Vec3s_ToVec3f(&currentPathPoint, &pPathPoints[this->indexPathPoint]);
+        Math_Vec3s_ToVec3f(&currentPathPoint, &pathPoints[this->indexPathPoint]);
         Math_Vec3f_Copy(&currentPos, &this->actor.world.pos);
         Math_ApproachS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&currentPos, &currentPathPoint), 4,
                        0x38E /* 5 degrees */);
@@ -2455,7 +2447,7 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
     SubS_UpdateFlags(&this->actionFlags, 3, 7);
     this->msgScriptResumePos = 0;
     this->actionFlags |= ENGO_FLAG_LOST_ATTENTION;
-    this->actionFunc = this->interruptedActionFn;
+    this->actionFunc = this->interruptedActionFunc;
 }
 
 /**
@@ -2562,35 +2554,35 @@ void EnGo_Draw_Limbless(EnGo* this, PlayState* play) {
 s32 EnGo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnGo* this = THIS;
     Vec3f worldPos;
-    s32 idx;
+    s32 rotTableIndex;
 
-    if ((ENGO_GET_TYPE(&this->actor) == ENGO_PKEG_SELLER) && (limbIndex == ENGO_LIMB_INDEX_BODY)) {
+    if ((ENGO_GET_TYPE(&this->actor) == ENGO_PKEG_SELLER) && (limbIndex == GORON_LIMB_BODY)) {
         Matrix_MultZero(&worldPos);
         worldPos.y = this->actor.world.pos.y;
         Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &worldPos);
     }
 
     switch (limbIndex) {
-        case ENGO_LIMB_INDEX_BODY:
-            idx = 0;
+        case GORON_LIMB_BODY:
+            rotTableIndex = 0;
             break;
 
-        case ENGO_LIMB_INDEX_LEFTARM:
-            idx = 1;
+        case GORON_LIMB_LEFT_UPPER_ARM:
+            rotTableIndex = 1;
             break;
 
-        case ENGO_LIMB_INDEX_RIGHTARM:
-            idx = 2;
+        case GORON_LIMB_RIGHT_UPPER_ARM:
+            rotTableIndex = 2;
             break;
 
         default:
-            idx = 9;
+            rotTableIndex = 9;
             break;
     }
 
-    if ((this->actionFlags & ENGO_FLAG_STANDING) && (idx < 9)) {
-        rot->y += (s16)(Math_SinS(this->limbRotTableY[idx]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->limbRotTableZ[idx]) * 200.0f);
+    if ((this->actionFlags & ENGO_FLAG_STANDING) && (rotTableIndex < 9)) {
+        rot->y += (s16)(Math_SinS(this->limbRotTableY[rotTableIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->limbRotTableZ[rotTableIndex]) * 200.0f);
     }
     return false;
 }
@@ -2620,7 +2612,7 @@ void EnGo_TransfromLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     }
 
     switch (limbIndex) {
-        case ENGO_LIMB_INDEX_HEAD:
+        case GORON_LIMB_HEAD:
             SubS_UpdateLimb(this->headRotZ + this->bodyRotZ + 0x4000,
                             this->headRotY + this->bodyRotY + this->actor.shape.rot.y + 0x4000, &this->headPos,
                             &this->headRot, stepRot, overrideRot);
@@ -2633,7 +2625,7 @@ void EnGo_TransfromLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
             Matrix_Push();
             break;
 
-        case ENGO_LIMB_INDEX_BODY:
+        case GORON_LIMB_BODY:
             SubS_UpdateLimb(this->bodyRotZ + 0x4000, this->bodyRotY + this->actor.shape.rot.y + 0x4000, &this->bodyPos,
                             &this->bodyRot, stepRot, overrideRot);
             Matrix_Pop();

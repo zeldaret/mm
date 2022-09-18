@@ -2,6 +2,7 @@
 #define Z_EN_GO_H
 
 #include "global.h"
+#include "objects/object_oF1d_map/object_oF1d_map.h"
 
 struct EnGo;
 
@@ -33,8 +34,8 @@ typedef struct EnGo {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnGoActionFunc actionFunc;
-    /* 0x18C */ EnGoActionFunc interruptedActionFn;
-    /* 0x190 */ EnGoActionFunc graveBroDialogActionFn;
+    /* 0x18C */ EnGoActionFunc interruptedActionFunc;
+    /* 0x190 */ EnGoActionFunc graveBroDialogActionFunc;
     /* 0x194 */ ColliderCylinder colliderCylinder;
     /* 0x1E0 */ UNK_TYPE1 unk1E0[0x4C];
     /* 0x22C */ ColliderSphere colliderSphere;
@@ -46,8 +47,8 @@ typedef struct EnGo {
     /* 0x29C */ Vec3f bodyPos;
     /* 0x2A8 */ Vec3s headRot;
     /* 0x2AE */ Vec3s bodyRot;
-    /* 0x2B4 */ Vec3s jointTable[18];
-    /* 0x320 */ Vec3s morphTable[18];
+    /* 0x2B4 */ Vec3s jointTable[GORON_LIMB_MAX];
+    /* 0x320 */ Vec3s morphTable[GORON_LIMB_MAX];
     /* 0x38C */ Actor* attentionTarget;
     /* 0x390 */ u16 actionFlags;
     /* 0x392 */ u16 lastTextId;
