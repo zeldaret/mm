@@ -7,7 +7,7 @@ struct OceffWipe3;
 
 typedef struct OceffWipe3 {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x4];
+    /* 0x144 */ s16 counter;         
 } OceffWipe3; // size = 0x148
 
 #endif // Z_OCEFF_WIPE3_H

@@ -597,12 +597,12 @@ SavePlayerData sSaveDefaultPlayerData = {
     0x30,                                               // healthCapacity
     0x30,                                               // health
     0,                                                  // magicLevel
-    0x30,                                               // magic
+    MAGIC_NORMAL_METER,                                 // magic
     0,                                                  // rupees
     0,                                                  // swordHealth
     0,                                                  // tatlTimer
-    0,                                                  // magicAcquired
-    0,                                                  // doubleMagic
+    false,                                              // isMagicAcquired
+    false,                                              // isDoubleMagicAcquired
     0,                                                  // doubleDefense
     0,                                                  // unk_1F
     0xFF,                                               // unk_20
@@ -697,12 +697,12 @@ SavePlayerData sSaveDebugPlayerData = {
     0x80,                                               // healthCapacity
     0x80,                                               // health
     0,                                                  // magicLevel
-    0x30,                                               // magic
-    0x32,                                               // rupees
-    0x64,                                               // swordHealth
+    MAGIC_NORMAL_METER,                                 // magic
+    50,                                                 // rupees
+    100,                                                // swordHealth
     0,                                                  // tatlTimer
-    1,                                                  // magicAcquired
-    0,                                                  // doubleMagic
+    true,                                               // isMagicAcquired
+    false,                                              // isDoubleMagicAcquired
     0,                                                  // doubleDefense
     0,                                                  // unk_1F
     0xFF,                                               // unk_20

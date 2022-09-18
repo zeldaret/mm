@@ -72,7 +72,7 @@ static AnimationInfo sAnimationInfo[] = {
 #include "assets/overlays/ovl_En_Syateki_Okuta/ovl_En_Syateki_Okuta.c"
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 66, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_OCTOROK, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 6500, ICHAIN_STOP),
 };
 

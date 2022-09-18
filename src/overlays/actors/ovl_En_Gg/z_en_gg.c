@@ -231,7 +231,7 @@ void func_80B35450(EnGg* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80)) {
-            func_800B90F4(play);
+            Actor_DeactivateLens(play);
         }
         this->unk_308 = 1;
         this->actionFunc = func_80B352A4;
@@ -682,7 +682,7 @@ void EnGg_Destroy(Actor* thisx, PlayState* play) {
 void EnGg_Update(Actor* thisx, PlayState* play) {
     EnGg* this = THIS;
 
-    if (play->actorCtx.unk4 == 100) {
+    if (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) {
         this->actor.flags |= ACTOR_FLAG_80;
         this->actor.flags |= ACTOR_FLAG_1;
     } else {

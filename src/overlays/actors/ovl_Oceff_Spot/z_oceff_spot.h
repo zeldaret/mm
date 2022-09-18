@@ -9,7 +9,12 @@ typedef void (*OceffSpotActionFunc)(struct OceffSpot*, PlayState*);
 
 typedef struct OceffSpot {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x30];
+    /* 0x144 */ LightNode* lightNode1;
+    /* 0x148 */ LightInfo lightInfo1;
+    /* 0x158 */ LightNode* lightNode2;
+    /* 0x15C */ LightInfo lightInfo2;
+    /* 0x16C */ f32 unk16C;
+    /* 0x170 */ u16 timer;
     /* 0x174 */ OceffSpotActionFunc actionFunc;
 } OceffSpot; // size = 0x178
 

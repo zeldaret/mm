@@ -114,7 +114,7 @@ static TexturePtr D_80AD8E34[] = { object_tl_Tex_0055A0, object_tl_Tex_0057A0, o
                                    object_tl_Tex_0057A0 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 1, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_SNAPPER, ICHAIN_CONTINUE),
     ICHAIN_F32(gravity, -1, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 3500, ICHAIN_STOP),
 };

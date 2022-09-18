@@ -177,7 +177,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->type = ENPOSISTERS_GET_TYPE(thisx);
-    this->actor.hintId = this->type + 80;
+    this->actor.hintId = this->type + TATL_HINT_ID_POE_SISTER_MEG;
     this->megCloneId = ENPOSISTERS_GET_MEG_CLONE_ID(thisx);
     this->floatingBobbingTimer = 32;
     this->zTargetTimer = 20;

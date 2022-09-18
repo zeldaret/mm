@@ -110,7 +110,7 @@ void EnPrz_Init(Actor* thisx, PlayState* play) {
 
     this->actor.targetMode = 3;
     this->unk_1E8 = 255;
-    this->actor.hintId = 0x5B;
+    this->actor.hintId = TATL_HINT_ID_SKULLFISH;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.colChkInfo.health = 1;
 

@@ -242,7 +242,7 @@ void EnDragon_Init(Actor* thisx, PlayState* play) {
     this->pythonIndex = EN_DRAGON_GET_PYTHON_INDEX(&this->actor);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->action = DEEP_PYTHON_ACTION_IDLE;
-    this->actor.hintId = 0xE;
+    this->actor.hintId = TATL_HINT_ID_DEEP_PYTHON;
     this->scale = 0.5f;
     this->actor.flags &= ~ACTOR_FLAG_8000000;
 

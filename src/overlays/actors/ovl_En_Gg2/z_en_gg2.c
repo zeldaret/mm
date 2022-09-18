@@ -421,7 +421,7 @@ void EnGg2_Destroy(Actor* thisx, PlayState* play) {
 void EnGg2_Update(Actor* thisx, PlayState* play) {
     EnGg2* this = THIS;
 
-    if (play->actorCtx.unk4 == 100) {
+    if (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) {
         this->actor.flags |= ACTOR_FLAG_80;
         this->actor.flags |= ACTOR_FLAG_1;
         if ((this->unk_2EE == 5) && (this->unk_2EE == 7)) {
@@ -443,7 +443,7 @@ void EnGg2_Update(Actor* thisx, PlayState* play) {
 
     if ((this->unk_2EE == 5) || (this->unk_2EE == 7)) {
         func_800B9010(&this->actor, NA_SE_EN_SHARP_FLOAT - SFX_FLAG);
-        if ((play->actorCtx.unk4 == 100) && ((play->state.frames % 4) == 0)) {
+        if ((play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) && ((play->state.frames % 4) == 0)) {
             func_80B3B4B0(this, play);
         }
     }

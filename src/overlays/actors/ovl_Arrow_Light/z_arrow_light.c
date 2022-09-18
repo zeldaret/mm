@@ -56,7 +56,7 @@ void ArrowLight_Init(Actor* thisx, PlayState* play) {
 }
 
 void ArrowLight_Destroy(Actor* thisx, PlayState* play) {
-    func_80115D5C(&play->state);
+    Magic_Reset(play);
     (void)"消滅"; // Unreferenced in retail, means "Disappearance"
 }
 

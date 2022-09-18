@@ -388,7 +388,7 @@ void EnIk_Idle(EnIk* this, PlayState* play) {
     } else if (this->colliderCylinder.base.acFlags & AC_HIT) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_ARMOR_HIT);
         func_801A2E54(NA_BGM_MINI_BOSS);
-        this->actor.hintId = 0x35;
+        this->actor.hintId = TATL_HINT_ID_IRON_KNUCKLE;
         this->colliderCylinder.base.acFlags &= ~AC_HIT;
         this->invincibilityFrames = 12;
         EnIk_SetupWalk(this);
