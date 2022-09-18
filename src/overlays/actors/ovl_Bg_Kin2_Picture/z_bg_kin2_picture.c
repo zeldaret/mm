@@ -99,7 +99,7 @@ void BgKin2Picture_SpawnSkulltula(BgKin2Picture* this, PlayState* play2) {
     PlayState* play = play2;
     s32 actorSpawnParams;
 
-    if (!BG_KIN2_PICTURE_GET_PARAMS_05(&this->dyna.actor)) { // Gold Skulltula is still here.
+    if (!BG_KIN2_PICTURE_SKULLTULA_COLLECTED(&this->dyna.actor)) { // Gold Skulltula is still here.
         actorSpawnParams = BG_KIN2_PICTURE_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
         if (!BgKin2Picture_IsSkulltulaCollected(play, actorSpawnParams) &&
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->dyna.actor.home.pos.x,
@@ -117,7 +117,6 @@ void BgKin2Picture_SpawnDust(BgKin2Picture* this, PlayState* play) {
     Vec3f velocity;
     Vec3f accel;
     s32 temp_s1;
-    s32 temp2;
     s32 scale;
     s16 scaleStep;
     s32 phi_s3;
@@ -133,8 +132,7 @@ void BgKin2Picture_SpawnDust(BgKin2Picture* this, PlayState* play) {
     accel.y = 0.2f;
 
     for (i = 0, phi_s3 = 0; i < 20; i++, phi_s3 += 0xCCC) {
-        temp2 = Rand_ZeroOne() * 3276.0f;
-        temp_s1 = temp2 + phi_s3;
+        temp_s1 = (s32)(Rand_ZeroOne() * 3276.0f) + phi_s3;
         temp_fs0 = (Rand_ZeroOne() * 14.0f) + 4.0f;
         pos.x = Math_SinS(temp_s1) * temp_fs0;
         pos.z = Math_CosS(temp_s1) * temp_fs0;
@@ -142,10 +140,10 @@ void BgKin2Picture_SpawnDust(BgKin2Picture* this, PlayState* play) {
         velocity.z = (Rand_ZeroOne() - 0.5f) + (pos.z * (1.0f / 6.0f));
         pos.x += basePos.x;
         pos.z += basePos.z;
-        accel.x = velocity.x * (-0.09f);
-        accel.z = velocity.z * (-0.09f);
-        scale = ((s32)(Rand_ZeroOne() * 10.0f)) + 10;
-        scaleStep = ((s32)(Rand_ZeroOne() * 10.0f)) + 15;
+        accel.x = velocity.x * -0.09f;
+        accel.z = velocity.z * -0.09f;
+        scale = (s32)(Rand_ZeroOne() * 10.0f) + 10;
+        scaleStep = (s32)(Rand_ZeroOne() * 10.0f) + 15;
         func_800B1210(play, &pos, &velocity, &accel, scale, scaleStep);
     }
 }
@@ -179,7 +177,8 @@ void BgKin2Picture_Init(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->dyna.actor, 23.0f);
     skulltulaParams = BG_KIN2_PICTURE_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
 
-    if (BG_KIN2_PICTURE_GET_PARAMS_05(&this->dyna.actor) || BgKin2Picture_IsSkulltulaCollected(play, skulltulaParams)) {
+    if (BG_KIN2_PICTURE_SKULLTULA_COLLECTED(&this->dyna.actor) ||
+        BgKin2Picture_IsSkulltulaCollected(play, skulltulaParams)) {
         this->skulltulaNoiseTimer = -1;
     }
 

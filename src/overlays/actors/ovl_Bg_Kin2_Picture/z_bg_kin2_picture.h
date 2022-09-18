@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define BG_KIN2_PICTURE_GET_PARAMS_05(thisx) (((thisx)->params >> 5) & 1)
+#define BG_KIN2_PICTURE_SKULLTULA_COLLECTED(thisx) (((thisx)->params >> 5) & 1)
 #define BG_KIN2_PICTURE_GETS_3FC(thisx) ((u8)(((thisx & 0x3FC)) >> 2))
 #define BG_KIN2_PICTURE_SKULLTULA_SPAWN_PARAM(thisx) ((((thisx)->params & 0x1F) << 2) | 0xFF03)
 
