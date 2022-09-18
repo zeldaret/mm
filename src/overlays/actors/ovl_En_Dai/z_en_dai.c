@@ -639,7 +639,7 @@ void func_80B3F78C(EnDai* this, PlayState* play) {
     };
     s32 pad;
 
-    if (play->actorCtx.unkB != 0) {
+    if (play->actorCtx.lensActorsDrawn) {
         this->unk_1CE |= 0x40;
     } else {
         Actor_RecordUndrawnActor(play, &this->actor);
