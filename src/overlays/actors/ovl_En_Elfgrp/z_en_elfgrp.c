@@ -99,7 +99,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
                         break;
 
                     case ENELFGRP_2:
-                        if (gSaveContext.save.playerData.doubleMagic == true) {
+                        if (gSaveContext.save.playerData.isDoubleMagicAcquired == true) {
                             func_80A396B0(this, 1);
                         }
                         break;
@@ -156,7 +156,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
                         func_80A396B0(this, 3);
                         this->unk_14A |= 2;
                     }
-                } else if (gSaveContext.save.playerData.magicAcquired == true) {
+                } else if (gSaveContext.save.playerData.isMagicAcquired == true) {
                     func_80A396B0(this, 1);
                 }
             } else {
@@ -477,8 +477,7 @@ void func_80A3A610(EnElfgrp* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->unk_144 == 60) {
-        Parameter_AddMagic(play,
-                           ((void)0, gSaveContext.unk_3F30) + (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
+        Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
         gSaveContext.healthAccumulator = 320;
     }
 

@@ -41,11 +41,11 @@ void ObjKinoko_Update(Actor* thisx, PlayState* play) {
 
     if (player->currentMask != PLAYER_MASK_SCENTS) {
         thisx->draw = NULL;
-        thisx->hintId = 0xFF;
+        thisx->hintId = TATL_HINT_ID_NONE;
         thisx->flags &= ~ACTOR_FLAG_1;
     } else {
         thisx->draw = ObjKinoko_Draw;
-        thisx->hintId = 0x64;
+        thisx->hintId = TATL_HINT_ID_MUSHROOM;
         thisx->flags |= ACTOR_FLAG_1;
         if (Actor_HasParent(thisx, play)) {
             Flags_SetCollectible(play, OBJ_KINOKO_GET_FLAG(thisx));
