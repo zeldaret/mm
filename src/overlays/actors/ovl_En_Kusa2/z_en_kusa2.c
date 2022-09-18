@@ -4,7 +4,6 @@
  * Description: Keaton grass
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_kusa2.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -86,11 +85,11 @@ static ColliderCylinderInit sCylinderInit = {
     { 6, 44, 0, { 0, 0, 0 } },
 };
 
-static u8 D_80A5EAEC = 1;
-static s16 D_80A5EAF0 = 0;
-static Vec3s D_80A5EAF4 = { 0, 0, 0 };
-static Vec3s D_80A5EAFC = { 0, 0, 0 };
-static Vec3s D_80A5EB04 = { 0, 0, 0 };
+u8 D_80A5EAEC = 1;
+s16 D_80A5EAF0 = 0;
+Vec3s D_80A5EAF4 = { 0, 0, 0 };
+Vec3s D_80A5EAFC = { 0, 0, 0 };
+Vec3s D_80A5EB04 = { 0, 0, 0 };
 
 void func_80A5B160(EnKusa2* this, PlayState* play) {
     s32 i;
