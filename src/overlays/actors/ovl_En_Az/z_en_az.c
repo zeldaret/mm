@@ -183,8 +183,8 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
     this->actor.targetMode = 1;
     switch (BEAVER_GET_PARAM_F00(thisx)) {
         case 0:
-            phi_v1 = (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 0)) &&
-                     CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01);
+            phi_v1 =
+                (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 0)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01);
             phi_v1 = !phi_v1;
             break;
         case 2:
@@ -195,13 +195,13 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
             phi_v1 = gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 2);
             break;
         case 1:
-            phi_v1 = (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 0)) &&
-                     CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01);
+            phi_v1 =
+                (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 0)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01);
             phi_v1 = !phi_v1;
             break;
         case 3:
-            phi_v1 = (gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 1)) ||
-                     CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04);
+            phi_v1 =
+                (gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 1)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04);
             break;
         case 5:
             phi_v1 = gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 2);
