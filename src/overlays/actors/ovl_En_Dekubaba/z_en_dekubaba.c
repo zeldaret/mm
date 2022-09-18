@@ -17,30 +17,30 @@ void EnDekubaba_Destroy(Actor* thisx, PlayState* play);
 void EnDekubaba_Update(Actor* thisx, PlayState* play);
 void EnDekubaba_Draw(Actor* thisx, PlayState* play);
 
-void func_808B18A8(EnDekubaba* this);
-void func_808B1B14(EnDekubaba* this, PlayState* play);
-void func_808B1BC0(EnDekubaba* this);
-void func_808B1CF0(EnDekubaba* this, PlayState* play);
-void func_808B2158(EnDekubaba* this);
-void func_808B2240(EnDekubaba* this, PlayState* play);
-void func_808B2660(EnDekubaba* this, PlayState* play);
-void func_808B2890(EnDekubaba* this);
-void func_808B28B4(EnDekubaba* this, PlayState* play);
-void func_808B2980(EnDekubaba* this);
-void func_808B29C4(EnDekubaba* this, PlayState* play);
-void func_808B2C40(EnDekubaba* this);
-void func_808B2CB8(EnDekubaba* this, PlayState* play);
-void func_808B3078(EnDekubaba* this, PlayState* play);
-void func_808B3280(EnDekubaba* this, PlayState* play);
-void func_808B3404(EnDekubaba* this, PlayState* play);
-void func_808B3768(EnDekubaba* this);
-void func_808B37E8(EnDekubaba* this, PlayState* play);
-void func_808B39AC(EnDekubaba* this);
-void func_808B3B48(EnDekubaba* this, PlayState* play);
-void func_808B3C50(EnDekubaba* this, PlayState* play);
-void func_808B3DA8(EnDekubaba* this, PlayState* play);
-void func_808B3E40(EnDekubaba* this, PlayState* play);
-void func_808B3EE8(EnDekubaba* this, PlayState* play);
+void EnDekubaba_SetupWait(EnDekubaba* this);
+void EnDekubaba_Wait(EnDekubaba* this, PlayState* play);
+void EnDekubaba_SetupGrow(EnDekubaba* this);
+void EnDekubaba_Grow(EnDekubaba* this, PlayState* play);
+void EnDekubaba_SetupRetract(EnDekubaba* this);
+void EnDekubaba_Retract(EnDekubaba* this, PlayState* play);
+void EnDekubaba_DecideLunge(EnDekubaba* this, PlayState* play);
+void EnDekubaba_SetupPrepareLunge(EnDekubaba* this);
+void EnDekubaba_PrepareLunge(EnDekubaba* this, PlayState* play);
+void EnDekubaba_SetupLunge(EnDekubaba* this);
+void EnDekubaba_Lunge(EnDekubaba* this, PlayState* play);
+void EnDekubaba_SetupPullBack(EnDekubaba* this);
+void EnDekubaba_PullBack(EnDekubaba* this, PlayState* play);
+void EnDekubaba_Recover(EnDekubaba* this, PlayState* play);
+void EnDekubaba_Hit(EnDekubaba* this, PlayState* play);
+void EnDekubaba_PrunedSomersault(EnDekubaba* this, PlayState* play);
+void EnDekubaba_SetupShrinkDie(EnDekubaba* this);
+void EnDekubaba_ShrinkDie(EnDekubaba* this, PlayState* play);
+void EnDekubaba_SetupStunnedVertical(EnDekubaba* this);
+void EnDekubaba_StunnedVertical(EnDekubaba* this, PlayState* play);
+void EnDekubaba_Sway(EnDekubaba* this, PlayState* play);
+void EnDekubaba_Frozen(EnDekubaba* this, PlayState* play);
+void EnDekubaba_SetupDeadStickDrop(EnDekubaba* this, PlayState* play);
+void EnDekubaba_DeadStickDrop(EnDekubaba* this, PlayState* play);
 
 const ActorInit En_Dekubaba_InitVars = {
     ACTOR_EN_DEKUBABA,
@@ -149,39 +149,50 @@ static ColliderJntSphInit sJntSphInit = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 2, 25, 25, MASS_IMMOVABLE };
 
+typedef enum {
+    /* 0x0 */ DEKUBABA_DMGEFF_NONE,
+    /* 0x1 */ DEKUBABA_DMGEFF_NUT,
+    /* 0x2 */ DEKUBABA_DMGEFF_FIRE,
+    /* 0x3 */ DEKUBABA_DMGEFF_ICE,
+    /* 0x4 */ DEKUBABA_DMGEFF_LIGHT,
+    /* 0x5 */ DEKUBABA_DMGEFF_ELECTRIC,
+    /* 0xD */ DEKUBABA_DMGEFF_HOOKSHOT = 0xD,
+    /* 0xF */ DEKUBABA_DMGEFF_CUT = 0xF
+} DekuBabaDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x1),
-    /* Deku Stick     */ DMG_ENTRY(3, 0x0),
-    /* Horse trample  */ DMG_ENTRY(1, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0x0),
-    /* Zora boomerang */ DMG_ENTRY(1, 0xF),
-    /* Normal arrow   */ DMG_ENTRY(3, 0x0),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(0, 0xD),
-    /* Goron punch    */ DMG_ENTRY(2, 0x0),
-    /* Sword          */ DMG_ENTRY(1, 0xF),
-    /* Goron pound    */ DMG_ENTRY(4, 0x0),
-    /* Fire arrow     */ DMG_ENTRY(1, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(3, 0x3),
-    /* Light arrow    */ DMG_ENTRY(3, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(1, 0x0),
-    /* Deku spin      */ DMG_ENTRY(1, 0xF),
-    /* Deku bubble    */ DMG_ENTRY(3, 0x0),
-    /* Deku launch    */ DMG_ENTRY(2, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x1),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x5),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0x0),
-    /* Zora punch     */ DMG_ENTRY(1, 0x0),
-    /* Spin attack    */ DMG_ENTRY(1, 0xF),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0x0),
+    /* Deku Nut       */ DMG_ENTRY(0, DEKUBABA_DMGEFF_NUT),
+    /* Deku Stick     */ DMG_ENTRY(3, DEKUBABA_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(1, DEKUBABA_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, DEKUBABA_DMGEFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(1, DEKUBABA_DMGEFF_CUT),
+    /* Normal arrow   */ DMG_ENTRY(3, DEKUBABA_DMGEFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, DEKUBABA_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(0, DEKUBABA_DMGEFF_HOOKSHOT),
+    /* Goron punch    */ DMG_ENTRY(2, DEKUBABA_DMGEFF_NONE),
+    /* Sword          */ DMG_ENTRY(1, DEKUBABA_DMGEFF_CUT),
+    /* Goron pound    */ DMG_ENTRY(4, DEKUBABA_DMGEFF_NONE),
+    /* Fire arrow     */ DMG_ENTRY(1, DEKUBABA_DMGEFF_FIRE),
+    /* Ice arrow      */ DMG_ENTRY(3, DEKUBABA_DMGEFF_ICE),
+    /* Light arrow    */ DMG_ENTRY(3, DEKUBABA_DMGEFF_LIGHT),
+    /* Goron spikes   */ DMG_ENTRY(1, DEKUBABA_DMGEFF_NONE),
+    /* Deku spin      */ DMG_ENTRY(1, DEKUBABA_DMGEFF_CUT),
+    /* Deku bubble    */ DMG_ENTRY(3, DEKUBABA_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(2, DEKUBABA_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, DEKUBABA_DMGEFF_NUT),
+    /* Zora barrier   */ DMG_ENTRY(0, DEKUBABA_DMGEFF_ELECTRIC),
+    /* Normal shield  */ DMG_ENTRY(0, DEKUBABA_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, DEKUBABA_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(1, DEKUBABA_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, DEKUBABA_DMGEFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(1, DEKUBABA_DMGEFF_CUT),
+    /* Sword beam     */ DMG_ENTRY(0, DEKUBABA_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, DEKUBABA_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, DEKUBABA_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, DEKUBABA_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, DEKUBABA_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, DEKUBABA_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, DEKUBABA_DMGEFF_NONE),
 };
 
 static InitChainEntry sInitChain[] = {
@@ -227,7 +238,7 @@ void EnDekubaba_Init(Actor* thisx, PlayState* play) {
         this->actor.targetMode = 1;
     }
 
-    func_808B18A8(this);
+    EnDekubaba_SetupWait(this);
     this->timer = 0;
     this->boundFloor = NULL;
 }
@@ -238,7 +249,7 @@ void EnDekubaba_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyJntSph(play, &this->collider);
 }
 
-void func_808B1530(EnDekubaba* this) {
+void EnDekubaba_DisableHitboxes(EnDekubaba* this) {
     s32 i;
 
     for (i = 1; i < ARRAY_COUNT(this->colliderElements); i++) {
@@ -246,7 +257,7 @@ void func_808B1530(EnDekubaba* this) {
     }
 }
 
-void func_808B15B8(EnDekubaba* this) {
+void EnDekubaba_UpdateHeadPosition(EnDekubaba* this) {
     f32 horizontalHeadShift = (Math_CosS(this->stemSectionAngle[0]) + Math_CosS(this->stemSectionAngle[1]) +
                                Math_CosS(this->stemSectionAngle[2])) *
                               20.0f;
@@ -261,14 +272,14 @@ void func_808B15B8(EnDekubaba* this) {
         this->actor.home.pos.z + Math_CosS(this->actor.shape.rot.y) * (horizontalHeadShift * this->size);
 }
 
-void func_808B16BC(EnDekubaba* this, PlayState* play, s32 index) {
+void EnDekubaba_SetFireLightEffects(EnDekubaba* this, PlayState* play, s32 index) {
     ColliderJntSphElement* sphElement;
 
-    if (this->actor.colChkInfo.damageEffect == 2) {
+    if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_FIRE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffScale = 0.75f;
         this->drawDmgEffAlpha = 4.0f;
-    } else if (this->actor.colChkInfo.damageEffect == 4) {
+    } else if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_LIGHT) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         this->drawDmgEffScale = 0.75f;
         this->drawDmgEffAlpha = 4.0f;
@@ -279,7 +290,7 @@ void func_808B16BC(EnDekubaba* this, PlayState* play, s32 index) {
     }
 }
 
-void func_808B1798(EnDekubaba* this) {
+void EnDekubaba_SetFrozenEffects(EnDekubaba* this) {
     this->drawDmgEffScale = 0.75f;
     this->drawDmgEffFrozenSteamScale = 1.125f;
     this->drawDmgEffAlpha = 1.0f;
@@ -290,7 +301,7 @@ void func_808B1798(EnDekubaba* this) {
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
-void func_808B1814(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_SpawnIceEffects(EnDekubaba* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = COLTYPE_HIT6;
@@ -301,7 +312,7 @@ void func_808B1814(EnDekubaba* this, PlayState* play) {
     }
 }
 
-void func_808B18A8(EnDekubaba* this) {
+void EnDekubaba_SetupWait(EnDekubaba* this) {
     s32 i;
     ColliderJntSphElement* element;
 
@@ -325,10 +336,10 @@ void func_808B18A8(EnDekubaba* this) {
         element->dim.worldSphere.center.z = this->actor.world.pos.z;
     }
 
-    this->actionFunc = func_808B1B14;
+    this->actionFunc = EnDekubaba_Wait;
 }
 
-void func_808B1B14(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_Wait(EnDekubaba* this, PlayState* play) {
     if (this->timer != 0) {
         this->timer--;
     }
@@ -339,11 +350,11 @@ void func_808B1B14(EnDekubaba* this, PlayState* play) {
 
     if ((this->timer == 0) && (this->actor.xzDistToPlayer < 200.0f * this->size) &&
         (fabsf(this->actor.playerHeightRel) < 30.0f * this->size)) {
-        func_808B1BC0(this);
+        EnDekubaba_SetupGrow(this);
     }
 }
 
-void func_808B1BC0(EnDekubaba* this) {
+void EnDekubaba_SetupGrow(EnDekubaba* this) {
     s32 i;
 
     Animation_Change(&this->skelAnime, &D_060002B8, Animation_GetLastFrame(&D_060002B8) * (1.0f / 15), 0.0f,
@@ -358,10 +369,10 @@ void func_808B1BC0(EnDekubaba* this) {
     this->collider.base.colType = COLTYPE_HIT6;
     this->collider.base.acFlags &= ~AC_HARD;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_WAKEUP);
-    this->actionFunc = func_808B1CF0;
+    this->actionFunc = EnDekubaba_Grow;
 }
 
-void func_808B1CF0(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_Grow(EnDekubaba* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 headDistHorizontal;
     f32 headDistVertical;
@@ -424,14 +435,14 @@ void func_808B1CF0(EnDekubaba* this, PlayState* play) {
 
     if (this->timer == 0) {
         if (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 240.0f * this->size) {
-            func_808B2890(this);
+            EnDekubaba_SetupPrepareLunge(this);
         } else {
-            func_808B2158(this);
+            EnDekubaba_SetupRetract(this);
         }
     }
 }
 
-void func_808B2158(EnDekubaba* this) {
+void EnDekubaba_SetupRetract(EnDekubaba* this) {
     s32 i;
 
     Animation_Change(&this->skelAnime, &D_060002B8, -1.5f, Animation_GetLastFrame(&D_060002B8), 0.0f, ANIMMODE_ONCE,
@@ -443,10 +454,10 @@ void func_808B2158(EnDekubaba* this) {
         this->collider.elements[i].info.ocElemFlags &= ~OCELEM_ON;
     }
 
-    this->actionFunc = func_808B2240;
+    this->actionFunc = EnDekubaba_Retract;
 }
 
-void func_808B2240(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_Retract(EnDekubaba* this, PlayState* play) {
     f32 headDistHorizontal;
     f32 headDistVertical;
     f32 xShift;
@@ -498,25 +509,25 @@ void func_808B2240(EnDekubaba* this, PlayState* play) {
     EffectSsHahen_SpawnBurst(play, &this->actor.home.pos, this->size * 3.0f, 0, this->size * 12.0f, this->size * 5.0f,
                              1, HAHEN_OBJECT_DEFAULT, 10, NULL);
     if (this->timer == 0) {
-        func_808B18A8(this);
+        EnDekubaba_SetupWait(this);
     }
 }
 
-void func_808B2608(EnDekubaba* this) {
+void EnDekubaba_SetupDecideLunge(EnDekubaba* this) {
     this->timer = Animation_GetLastFrame(&D_060002B8) * 2;
     Animation_MorphToLoop(&this->skelAnime, &D_060002B8, -3.0f);
-    this->actionFunc = func_808B2660;
+    this->actionFunc = EnDekubaba_DecideLunge;
 }
 
-void func_808B2660(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_DecideLunge(EnDekubaba* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 12.0f)) {
         if (this->actor.params == 1) {
-            Actor_PlaySfxAtPos(&this->actor, 0x385C);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_MOUTH);
         } else {
-            Actor_PlaySfxAtPos(&this->actor, 0x3860);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MIZUBABA1_MOUTH);
         }
     }
 
@@ -545,22 +556,22 @@ void func_808B2660(EnDekubaba* this, PlayState* play) {
         this->actor.shape.rot.x -= 0x16C;
     }
 
-    func_808B15B8(this);
+    EnDekubaba_UpdateHeadPosition(this);
 
     if ((240.0f * this->size) < Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos)) {
-        func_808B2158(this);
+        EnDekubaba_SetupRetract(this);
     } else if ((this->timer == 0) || (this->actor.xzDistToPlayer < (80.0f * this->size))) {
-        func_808B2890(this);
+        EnDekubaba_SetupPrepareLunge(this);
     }
 }
 
-void func_808B2890(EnDekubaba* this) {
+void EnDekubaba_SetupPrepareLunge(EnDekubaba* this) {
     this->timer = 8;
     this->skelAnime.playSpeed = 0.0f;
-    this->actionFunc = func_808B28B4;
+    this->actionFunc = EnDekubaba_PrepareLunge;
 }
 
-void func_808B28B4(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_PrepareLunge(EnDekubaba* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->timer != 0) {
@@ -572,19 +583,21 @@ void func_808B28B4(EnDekubaba* this, PlayState* play) {
     Math_ScaledStepToS(this->stemSectionAngle, 0xAAA, 0x444);
     Math_ScaledStepToS(&this->stemSectionAngle[1], -0x4718, 0x888);
     Math_ScaledStepToS(&this->stemSectionAngle[2], -0x6AA4, 0x888);
+
     if (this->timer == 0) {
-        func_808B2980(this);
+        EnDekubaba_SetupLunge(this);
     }
-    func_808B15B8(this);
+
+    EnDekubaba_UpdateHeadPosition(this);
 }
 
-void func_808B2980(EnDekubaba* this) {
+void EnDekubaba_SetupLunge(EnDekubaba* this) {
     Animation_PlayOnce(&this->skelAnime, &D_06000208);
     this->timer = 0;
-    this->actionFunc = func_808B29C4;
+    this->actionFunc = EnDekubaba_Lunge;
 }
 
-void func_808B29C4(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_Lunge(EnDekubaba* this, PlayState* play) {
     static Color_RGBA8 sDustPrimColor = { 105, 255, 105, 255 };
     static Color_RGBA8 sDustEnvColor = { 150, 250, 150, 0 };
     s32 allStepsDone;
@@ -596,9 +609,9 @@ void func_808B29C4(EnDekubaba* this, PlayState* play) {
     if (this->timer == 0) {
         if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
             if (this->actor.params == 1) {
-                Actor_PlaySfxAtPos(&this->actor, 0x385DU);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_ATTACK);
             } else {
-                Actor_PlaySfxAtPos(&this->actor, 0x3861U);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MIZUBABA1_ATTACK);
             }
         }
 
@@ -620,7 +633,7 @@ void func_808B29C4(EnDekubaba* this, PlayState* play) {
             this->timer = 1;
         }
     } else if (this->timer > 10) {
-        func_808B2C40(this);
+        EnDekubaba_SetupPullBack(this);
     } else {
         this->timer++;
 
@@ -630,24 +643,24 @@ void func_808B29C4(EnDekubaba* this, PlayState* play) {
 
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 12.0f)) {
             if (this->actor.params == 1) {
-                Actor_PlaySfxAtPos(&this->actor, 0x385CU);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_MOUTH);
             } else {
-                Actor_PlaySfxAtPos(&this->actor, 0x3860U);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MIZUBABA1_MOUTH);
             }
         }
     }
 
-    func_808B15B8(this);
+    EnDekubaba_UpdateHeadPosition(this);
 }
 
-void func_808B2C40(EnDekubaba* this) {
+void EnDekubaba_SetupPullBack(EnDekubaba* this) {
     Animation_Change(&this->skelAnime, &D_06000208, 1.0f, 15.0f, Animation_GetLastFrame(&D_06000208), ANIMMODE_ONCE,
                      -3.0f);
     this->timer = 0;
-    this->actionFunc = func_808B2CB8;
+    this->actionFunc = EnDekubaba_PullBack;
 }
 
-void func_808B2CB8(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_PullBack(EnDekubaba* this, PlayState* play) {
     Vec3f dustPos;
     f32 xIncr;
     f32 zIncr;
@@ -713,9 +726,9 @@ void func_808B2CB8(EnDekubaba* this, PlayState* play) {
         this->timer++;
         if (this->timer > 30) {
             if (this->actor.xzDistToPlayer < (80.0f * this->size)) {
-                func_808B2890(this);
+                EnDekubaba_SetupPrepareLunge(this);
             } else {
-                func_808B2608(this);
+                EnDekubaba_SetupDecideLunge(this);
             }
         }
     } else {
@@ -729,27 +742,27 @@ void func_808B2CB8(EnDekubaba* this, PlayState* play) {
         }
     }
 
-    func_808B15B8(this);
+    EnDekubaba_UpdateHeadPosition(this);
 }
 
-void func_808B3044(EnDekubaba* this) {
+void EnDekubaba_SetupRecover(EnDekubaba* this) {
     this->timer = 9;
     this->collider.base.acFlags |= AC_ON;
     this->skelAnime.playSpeed = -1.0f;
-    this->actionFunc = func_808B3078;
+    this->actionFunc = EnDekubaba_Recover;
 }
 
-void func_808B3078(EnDekubaba* this, PlayState* play) {
-    s32 temp_s0;
+void EnDekubaba_Recover(EnDekubaba* this, PlayState* play) {
+    s32 anyStepsDone;
 
     SkelAnime_Update(&this->skelAnime);
 
     if (this->timer > 8) {
-        temp_s0 = Math_SmoothStepToS(&this->actor.shape.rot.x, 0x1800, 1, 0x11C6, 0x71C);
-        temp_s0 |= Math_SmoothStepToS(&this->stemSectionAngle[0], -0x1555, 1, 0xAAA, 0x71C);
-        temp_s0 |= Math_SmoothStepToS(&this->stemSectionAngle[1], -0x38E3, 1, 0xE38, 0x71C);
-        temp_s0 |= Math_SmoothStepToS(&this->stemSectionAngle[2], -0x5C71, 1, 0x11C6, 0x71C);
-        if (!temp_s0) {
+        anyStepsDone = Math_SmoothStepToS(&this->actor.shape.rot.x, 0x1800, 1, 0x11C6, 0x71C);
+        anyStepsDone |= Math_SmoothStepToS(&this->stemSectionAngle[0], -0x1555, 1, 0xAAA, 0x71C);
+        anyStepsDone |= Math_SmoothStepToS(&this->stemSectionAngle[1], -0x38E3, 1, 0xE38, 0x71C);
+        anyStepsDone |= Math_SmoothStepToS(&this->stemSectionAngle[2], -0x5C71, 1, 0x11C6, 0x71C);
+        if (!anyStepsDone) {
             this->timer = 8;
         }
     } else {
@@ -758,14 +771,14 @@ void func_808B3078(EnDekubaba* this, PlayState* play) {
         }
 
         if (this->timer == 0) {
-            func_808B2608(this);
+            EnDekubaba_SetupDecideLunge(this);
         }
     }
 
-    func_808B15B8(this);
+    EnDekubaba_UpdateHeadPosition(this);
 }
 
-void func_808B3170(EnDekubaba* this, s32 arg1) {
+void EnDekubaba_SetupHit(EnDekubaba* this, s32 arg1) {
     Animation_MorphToPlayOnce(&this->skelAnime, &D_06000208, -5.0f);
     this->timer = arg1;
     this->collider.base.acFlags &= ~AC_ON;
@@ -780,52 +793,52 @@ void func_808B3170(EnDekubaba* this, s32 arg1) {
     } else {
         Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 42);
     }
-    this->actionFunc = func_808B3280;
+    this->actionFunc = EnDekubaba_Hit;
 }
 
-void func_808B3280(EnDekubaba* this, PlayState* play) {
-    s32 temp_s0;
+void EnDekubaba_Hit(EnDekubaba* this, PlayState* play) {
+    s32 allStepsDone;
 
     SkelAnime_Update(&this->skelAnime);
-    temp_s0 = true;
-    temp_s0 &= Math_ScaledStepToS(&this->actor.shape.rot.x, -0x4000, 0xE38);
-    temp_s0 &= Math_ScaledStepToS(this->stemSectionAngle, -0x4000, 0xE38);
-    temp_s0 &= Math_ScaledStepToS(&this->stemSectionAngle[1], -0x4000, 0xE38);
-    temp_s0 &= Math_ScaledStepToS(&this->stemSectionAngle[2], -0x4000, 0xE38);
-    if (temp_s0) {
+    allStepsDone = true;
+    allStepsDone &= Math_ScaledStepToS(&this->actor.shape.rot.x, -0x4000, 0xE38);
+    allStepsDone &= Math_ScaledStepToS(this->stemSectionAngle, -0x4000, 0xE38);
+    allStepsDone &= Math_ScaledStepToS(&this->stemSectionAngle[1], -0x4000, 0xE38);
+    allStepsDone &= Math_ScaledStepToS(&this->stemSectionAngle[2], -0x4000, 0xE38);
+    if (allStepsDone) {
         if (this->actor.colChkInfo.health == 0) {
-            func_808B3768(this);
+            EnDekubaba_SetupShrinkDie(this);
         } else {
             this->collider.base.acFlags |= AC_ON;
 
             if (this->timer == 0) {
                 if (this->actor.xzDistToPlayer < (80.0f * this->size)) {
-                    func_808B2890(this);
+                    EnDekubaba_SetupPrepareLunge(this);
                 } else {
-                    func_808B3044(this);
+                    EnDekubaba_SetupRecover(this);
                 }
             } else {
-                func_808B39AC(this);
+                EnDekubaba_SetupStunnedVertical(this);
             }
         }
     }
 
-    func_808B15B8(this);
+    EnDekubaba_UpdateHeadPosition(this);
 }
 
-void func_808B3390(EnDekubaba* this) {
-    this->skelAnime.playSpeed = 0.0f;
+void EnDekubaba_SetupPrunedSomersault(EnDekubaba* this) {
     this->timer = 0;
+    this->skelAnime.playSpeed = 0.0f;
     this->actor.gravity = -0.8f;
     this->actor.velocity.y = 4.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y + 0x8000;
     this->actor.speedXZ = this->size * 3.0f;
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.flags |= ACTOR_FLAG_10 | ACTOR_FLAG_20;
-    this->actionFunc = func_808B3404;
+    this->actionFunc = EnDekubaba_PrunedSomersault;
 }
 
-void func_808B3404(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_PrunedSomersault(EnDekubaba* this, PlayState* play) {
     s32 i;
     Vec3f dustPos;
     f32 deltaX;
@@ -872,29 +885,32 @@ void func_808B3404(EnDekubaba* this, PlayState* play) {
 
         func_800B1210(play, &this->actor.home.pos, &gZeroVec3f, &gZeroVec3f, (s32)(this->size * 500.0f),
                       (s32)(this->size * 100.0f));
-        func_808B3E40(this, play);
+        EnDekubaba_SetupDeadStickDrop(this, play);
     }
 }
 
-void func_808B3768(EnDekubaba* this) {
+void EnDekubaba_SetupShrinkDie(EnDekubaba* this) {
     Animation_Change(&this->skelAnime, &D_060002B8, -1.5f, Animation_GetLastFrame(&D_060002B8), 0.0f, ANIMMODE_ONCE,
                      -3.0f);
     this->collider.base.acFlags &= ~AC_ON;
-    this->actionFunc = func_808B37E8;
+    this->actionFunc = EnDekubaba_ShrinkDie;
 }
 
-void func_808B37E8(EnDekubaba* this, PlayState* play) {
+/**
+ * Die and drop Deku Nuts (Stick drop is handled elsewhere)
+ */
+void EnDekubaba_ShrinkDie(EnDekubaba* this, PlayState* play) {
     Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, this->size * 5.0f);
 
     if (Math_StepToF(&this->actor.scale.x, this->size * 0.1f * 0.01f, this->size * 0.1f * 0.01f)) {
         func_800B1210(play, &this->actor.home.pos, &gZeroVec3f, &gZeroVec3f, (s32)(this->size * 500.0f),
                       (s32)(this->size * 100.0f));
 
-        if (this->actor.dropFlag == 0) {
-            Item_DropCollectible(play, &this->actor.world.pos, 0xCU);
+        if (!this->actor.dropFlag) {
+            Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
             if (this->actor.params == 1) {
-                Item_DropCollectible(play, &this->actor.world.pos, 0xCU);
-                Item_DropCollectible(play, &this->actor.world.pos, 0xCU);
+                Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
+                Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
             }
         } else {
             Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x30);
@@ -908,7 +924,7 @@ void func_808B37E8(EnDekubaba* this, PlayState* play) {
                              (s32)(this->size * 5.0f), 1, HAHEN_OBJECT_DEFAULT, 10, NULL);
 }
 
-void func_808B39AC(EnDekubaba* this) {
+void EnDekubaba_SetupStunnedVertical(EnDekubaba* this) {
     s32 i;
 
     for (i = 1; i < ARRAY_COUNT(this->colliderElements); i++) {
@@ -932,10 +948,10 @@ void func_808B39AC(EnDekubaba* this) {
     this->actor.world.pos.x = this->actor.home.pos.x;
     this->actor.world.pos.y = this->actor.home.pos.y + (60.0f * this->size);
     this->actor.world.pos.z = this->actor.home.pos.z;
-    this->actionFunc = func_808B3B48;
+    this->actionFunc = EnDekubaba_StunnedVertical;
 }
 
-void func_808B3B48(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_StunnedVertical(EnDekubaba* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (this->timer != 0) {
@@ -943,29 +959,28 @@ void func_808B3B48(EnDekubaba* this, PlayState* play) {
     }
 
     if (this->timer == 0) {
-        func_808B1530(this);
+        EnDekubaba_DisableHitboxes(this);
 
         if (this->actor.xzDistToPlayer < (80.0f * this->size)) {
-            func_808B2890(this);
+            EnDekubaba_SetupPrepareLunge(this);
         } else {
-            func_808B3044(this);
+            EnDekubaba_SetupRecover(this);
         }
     }
 }
 
-void func_808B3BE4(EnDekubaba* this) {
+void EnDekubaba_SetupSway(EnDekubaba* this) {
     this->targetSwayAngle = -0x6000;
     this->stemSectionAngle[2] = -0x5000;
     this->stemSectionAngle[1] = -0x4800;
-    func_808B1530(this);
+    EnDekubaba_DisableHitboxes(this);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 35);
     this->collider.base.acFlags &= ~AC_ON;
-    this->actionFunc = func_808B3C50;
+    this->actionFunc = EnDekubaba_Sway;
 }
 
-void func_808B3C50(EnDekubaba* this, PlayState* play) {
-    s16 temp_v0;
-    s16 var_v1;
+void EnDekubaba_Sway(EnDekubaba* this, PlayState* play) {
+    s16 angleToVertical;
 
     SkelAnime_Update(&this->skelAnime);
     Math_ScaledStepToS(&this->actor.shape.rot.x, this->stemSectionAngle[0], 0x71C);
@@ -975,41 +990,42 @@ void func_808B3C50(EnDekubaba* this, PlayState* play) {
         this->targetSwayAngle = -0x4000 - (s32)((this->targetSwayAngle + 0x4000) * 0.8f);
     }
 
-    temp_v0 = this->targetSwayAngle + 0x4000;
+    angleToVertical = this->targetSwayAngle + 0x4000;
 
-    if (ABS_ALT(temp_v0) < 0x100) {
+    if (ABS_ALT(angleToVertical) < 0x100) {
         this->collider.base.acFlags |= AC_ON;
         if (this->actor.xzDistToPlayer < (80.0f * this->size)) {
-            func_808B2890(this);
+            EnDekubaba_SetupPrepareLunge(this);
         } else {
-            func_808B3044(this);
+            EnDekubaba_SetupRecover(this);
         }
     }
-    func_808B15B8(this);
+    EnDekubaba_UpdateHeadPosition(this);
 }
 
-void func_808B3D74(EnDekubaba* this) {
-    func_808B1798(this);
-    this->actionFunc = func_808B3DA8;
+void EnDekubaba_SetupFrozen(EnDekubaba* this) {
+    EnDekubaba_SetFrozenEffects(this);
+    this->actionFunc = EnDekubaba_Frozen;
 }
 
-void func_808B3DA8(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_Frozen(EnDekubaba* this, PlayState* play) {
     if (this->timer != 0) {
         this->timer--;
     }
     if (this->timer == 0) {
-        func_808B1814(this, play);
+        EnDekubaba_SpawnIceEffects(this, play);
+
         if (this->actor.colChkInfo.health == 0) {
-            func_808B3768(this);
+            EnDekubaba_SetupShrinkDie(this);
         } else if (this->actor.xzDistToPlayer < (80.0f * this->size)) {
-            func_808B2890(this);
+            EnDekubaba_SetupPrepareLunge(this);
         } else {
-            func_808B3044(this);
+            EnDekubaba_SetupRecover(this);
         }
     }
 }
 
-void func_808B3E40(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_SetupDeadStickDrop(EnDekubaba* this, PlayState* play) {
     Actor_SetScale(&this->actor, 0.03f);
     this->actor.shape.rot.x -= 0x4000;
     this->actor.shape.yOffset = 1000.0f;
@@ -1020,10 +1036,10 @@ void func_808B3E40(EnDekubaba* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_20;
     this->timer = 200;
     this->drawDmgEffAlpha = 0.0f;
-    this->actionFunc = func_808B3EE8;
+    this->actionFunc = EnDekubaba_DeadStickDrop;
 }
 
-void func_808B3EE8(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_DeadStickDrop(EnDekubaba* this, PlayState* play) {
     if (this->timer != 0) {
         this->timer--;
     }
@@ -1033,21 +1049,25 @@ void func_808B3EE8(EnDekubaba* this, PlayState* play) {
         return;
     }
 
-    Actor_PickUpNearby(&this->actor, play, 0x19);
+    Actor_PickUpNearby(&this->actor, play, GI_STICKS_1);
 }
 
-void func_808B3F50(EnDekubaba* this, PlayState* play) {
-    s32 temp;
+/* Update and associated functions */
+
+void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
+    s32 newHealth;
     s32 i;
     ColliderJntSphElement* sphElement;
+
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         Actor_SetDropFlagJntSph(&this->actor, &this->collider);
 
-        if ((this->collider.base.colType != COLTYPE_HARD) && (this->actor.colChkInfo.damageEffect != 0xD)) {
+        if ((this->collider.base.colType != COLTYPE_HARD) &&
+            (this->actor.colChkInfo.damageEffect != DEKUBABA_DMGEFF_HOOKSHOT)) {
             sphElement = &this->collider.elements[0];
             for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++, sphElement++) {
-                if (sphElement->info.bumperFlags & 2) {
+                if (sphElement->info.bumperFlags & BUMP_HIT) {
                     break;
                 }
             }
@@ -1055,50 +1075,50 @@ void func_808B3F50(EnDekubaba* this, PlayState* play) {
             if ((i != ARRAY_COUNT(this->colliderElements)) &&
                 ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
                  (!(sphElement->info.acHitInfo->toucher.dmgFlags & 0xDB0B3)))) {
-                func_808B1814(this, play);
-                temp = this->actor.colChkInfo.health - this->actor.colChkInfo.damage;
+                EnDekubaba_SpawnIceEffects(this, play);
+                newHealth = this->actor.colChkInfo.health - this->actor.colChkInfo.damage;
 
-                if (this->actionFunc != func_808B3B48) {
-                    if (this->actor.colChkInfo.damageEffect == 3) {
-                        func_808B3D74(this);
-                    } else if (this->actor.colChkInfo.damageEffect == 5) {
-                        func_808B3170(this, 3);
-                    } else if (this->actor.colChkInfo.damageEffect == 1) {
-                        func_808B3170(this, 2);
+                if (this->actionFunc != EnDekubaba_StunnedVertical) {
+                    if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_ICE) {
+                        EnDekubaba_SetupFrozen(this);
+                    } else if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_ELECTRIC) {
+                        EnDekubaba_SetupHit(this, 3);
+                    } else if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_NUT) {
+                        EnDekubaba_SetupHit(this, 2);
                     } else {
-                        func_808B16BC(this, play, i);
-                        if (this->actionFunc == func_808B2CB8) {
-                            if (temp <= 0) {
-                                temp = 1;
+                        EnDekubaba_SetFireLightEffects(this, play, i);
+                        if (this->actionFunc == EnDekubaba_PullBack) {
+                            if (newHealth <= 0) {
+                                newHealth = 1;
                             }
-                            func_808B3170(this, 1);
+                            EnDekubaba_SetupHit(this, 1);
                         } else {
-                            func_808B3170(this, 0);
+                            EnDekubaba_SetupHit(this, 0);
                         }
                     }
                 } else {
-                    if (this->actor.colChkInfo.damageEffect == 0xF) {
-                        if (temp > 0) {
-                            func_808B3BE4(this);
+                    if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_CUT) {
+                        if (newHealth > 0) {
+                            EnDekubaba_SetupSway(this);
                         } else {
-                            func_808B3390(this);
+                            EnDekubaba_SetupPrunedSomersault(this);
                         }
-                    } else if (this->actor.colChkInfo.damageEffect == 5) {
-                        func_808B3170(this, 3);
-                    } else if (this->actor.colChkInfo.damageEffect == 1) {
-                        func_808B3170(this, 2);
-                    } else if (this->actor.colChkInfo.damageEffect == 3) {
-                        func_808B3D74(this);
+                    } else if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_ELECTRIC) {
+                        EnDekubaba_SetupHit(this, 3);
+                    } else if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_NUT) {
+                        EnDekubaba_SetupHit(this, 2);
+                    } else if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_ICE) {
+                        EnDekubaba_SetupFrozen(this);
                     } else {
-                        func_808B16BC(this, play, i);
-                        func_808B3170(this, 0);
+                        EnDekubaba_SetFireLightEffects(this, play, i);
+                        EnDekubaba_SetupHit(this, 0);
                     }
                 }
 
-                if (temp < 0) {
+                if (newHealth < 0) {
                     this->actor.colChkInfo.health = 0;
                 } else {
-                    this->actor.colChkInfo.health = temp;
+                    this->actor.colChkInfo.health = newHealth;
                 }
             } else {
                 return;
@@ -1108,12 +1128,12 @@ void func_808B3F50(EnDekubaba* this, PlayState* play) {
         }
     } else if ((((((play->actorCtx.unk2 != 0) && (this->actor.xyzDistToPlayerSq < 40000.0f)) &&
                   (this->collider.base.colType != COLTYPE_HARD)) &&
-                 (this->actionFunc != func_808B3B48)) &&
-                (this->actionFunc != func_808B3280)) &&
+                 (this->actionFunc != EnDekubaba_StunnedVertical)) &&
+                (this->actionFunc != EnDekubaba_Hit)) &&
                (this->actor.colChkInfo.health != 0)) {
         this->actor.colChkInfo.health--;
         this->actor.dropFlag = 0;
-        func_808B3170(this, 1);
+        EnDekubaba_SetupHit(this, 1);
     } else {
         return;
     }
@@ -1148,23 +1168,23 @@ void EnDekubaba_Update(Actor* thisx, PlayState* play) {
 
     if (this->collider.base.atFlags & AT_HIT) {
         this->collider.base.atFlags &= ~AT_HIT;
-        func_808B3044(this);
+        EnDekubaba_SetupRecover(this);
     }
 
-    func_808B3F50(this, play);
+    EnDekubaba_UpdateDamage(this, play);
     this->actionFunc(this, play);
 
-    if (this->actionFunc == func_808B3404) {
+    if (this->actionFunc == EnDekubaba_PrunedSomersault) {
         Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, this->size * 15.0f, 10.0f, 5);
-    } else if (this->actionFunc != func_808B3EE8) {
+    } else if (this->actionFunc != EnDekubaba_DeadStickDrop) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
         if (this->boundFloor == NULL) {
             this->boundFloor = this->actor.floorPoly;
         }
     }
 
-    if (this->actionFunc == func_808B29C4) {
+    if (this->actionFunc == EnDekubaba_Lunge) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
         this->actor.flags |= ACTOR_FLAG_1000000;
     }
@@ -1173,7 +1193,7 @@ void EnDekubaba_Update(Actor* thisx, PlayState* play) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 
-    if (this->actionFunc != func_808B3EE8) {
+    if (this->actionFunc != EnDekubaba_DeadStickDrop) {
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 
@@ -1188,7 +1208,9 @@ void EnDekubaba_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-void func_808B4548(EnDekubaba* this, PlayState* play) {
+/* Draw functions */
+
+void EnDekubaba_DrawStemRetracted(EnDekubaba* this, PlayState* play) {
     f32 horizontalScale;
     s32 i;
 
@@ -1212,7 +1234,7 @@ void func_808B4548(EnDekubaba* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_808B465C(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_DrawStemExtended(EnDekubaba* this, PlayState* play) {
     static Gfx* sStemDLists[] = { 0x06001330, 0x06001628, 0x06001828 };
     MtxF mtx;
     s32 i;
@@ -1222,7 +1244,7 @@ void func_808B465C(EnDekubaba* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (this->actionFunc == func_808B3404) {
+    if (this->actionFunc == EnDekubaba_PrunedSomersault) {
         stemSections = 2;
     } else {
         stemSections = 3;
@@ -1248,7 +1270,7 @@ void func_808B465C(EnDekubaba* this, PlayState* play) {
         Collider_UpdateSpheres(52 + 2 * i, &this->collider);
 
         if (i == 0) {
-            if (this->actionFunc != func_808B3C50) {
+            if (this->actionFunc != EnDekubaba_Sway) {
                 this->actor.focus.pos.x = mtx.xw;
                 this->actor.focus.pos.y = mtx.yw;
                 this->actor.focus.pos.z = mtx.zw;
@@ -1265,7 +1287,7 @@ void func_808B465C(EnDekubaba* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_808B48FC(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_DrawStemBasePruned(EnDekubaba* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Matrix_RotateZYX(this->stemSectionAngle[2], this->actor.shape.rot.y, 0, MTXMODE_APPLY);
@@ -1280,7 +1302,7 @@ void func_808B48FC(EnDekubaba* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_808B49C8(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_DrawBaseShadow(EnDekubaba* this, PlayState* play) {
     MtxF mtx;
     f32 horizontalScale;
 
@@ -1301,7 +1323,7 @@ void func_808B49C8(EnDekubaba* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_808B4ABC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnDekubaba_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDekubaba* this = THIS;
 
     if (limbIndex == 1) {
@@ -1318,13 +1340,13 @@ void EnDekubaba_Draw(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
     Math_Vec3f_Copy(&this->bodyPartsPos[0], &this->actor.world.pos);
 
-    if (this->actionFunc != func_808B3EE8) {
-        SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, func_808B4ABC,
+    if (this->actionFunc != EnDekubaba_DeadStickDrop) {
+        SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, EnDekubaba_PostLimbDraw,
                           &this->actor);
-        if (this->actionFunc == func_808B1B14) {
-            func_808B4548(this, play);
+        if (this->actionFunc == EnDekubaba_Wait) {
+            EnDekubaba_DrawStemRetracted(this, play);
         } else {
-            func_808B465C(this, play);
+            EnDekubaba_DrawStemExtended(this, play);
         }
 
         scale = this->size * 0.01f;
@@ -1334,11 +1356,11 @@ void EnDekubaba_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, D_060010F0);
 
-        if (this->actionFunc == func_808B3404) {
-            func_808B48FC(this, play);
+        if (this->actionFunc == EnDekubaba_PrunedSomersault) {
+            EnDekubaba_DrawStemBasePruned(this, play);
         }
         if (this->boundFloor != NULL) {
-            func_808B49C8(this, play);
+            EnDekubaba_DrawBaseShadow(this, play);
         }
     } else if ((this->timer > 40) || (this->timer & 1)) {
         Matrix_Translate(0.0f, 0.0f, 200.0f, MTXMODE_APPLY);
