@@ -365,7 +365,7 @@ void EnGo_AwaitThaw(EnGo* this, PlayState* play);
 s32 EnGo_CheckAndSetupTalk(EnGo* this, PlayState* play);
 
 void EnGo_Gatekeeper_Snowball(EnGo* this, PlayState* play);
-void EnGo_Gatekeeper_UpdateToSnowball(EnGo* this, PlayState* play);
+void EnGo_Gatekeeper_UpdateToSnowballAnimation(EnGo* this, PlayState* play);
 
 void EnGo_GraveBroGoron_CutsceneSpringArrival(EnGo* this, PlayState* play);
 s32 EnGo_GraveBroGoron_CheckAndSetupCutsceneSpringArrival(EnGo* this, PlayState* play);
@@ -385,7 +385,7 @@ void EnGo_UpdateEyes(EnGo* this);
 s32 EnGo_UpdateAnimationToCurrent(EnGo* this, PlayState* play);
 s32 EnGo_UpdateAttentionTargetAndReactions(EnGo* this, PlayState* play);
 s32 EnGo_GraveBroGoron_UpdateAttentionTargetAndReactions(EnGo* this, PlayState* play);
-void EnGo_GraveBroGoron_UpdateToSurprised(EnGo* this, PlayState* play);
+void EnGo_GraveBroGoron_UpdateToSurprisedAnimation(EnGo* this, PlayState* play);
 
 s32 EnGo_UpdateRotationToTarget(EnGo* this, PlayState* play);
 
@@ -1145,7 +1145,7 @@ void EnGo_UpdateEyes(EnGo* this) {
 /**
  * Play the surprise animation then return to shivering.
  */
-void EnGo_GraveBroGoron_UpdateToSurprised(EnGo* this, PlayState* play) {
+void EnGo_GraveBroGoron_UpdateToSurprisedAnimation(EnGo* this, PlayState* play) {
     if (this->surprisePhase == 0) {
         EnGo_ChangeAnim(this, play, ENGO_ANIM_SHIVERINGSURPRISED);
         this->surprisePhase++;
@@ -1188,7 +1188,7 @@ s32 EnGo_GraveBroGoron_UpdateAttentionTargetAndReactions(EnGo* this, PlayState* 
 
                 case 0xE16: // Y-you're...No! No, you're not the great Darmani, are you?
                 case 0xE1E: // Heeee!!! Darmani!
-                    this->graveBroDialogActionFunc = EnGo_GraveBroGoron_UpdateToSurprised;
+                    this->graveBroDialogActionFunc = EnGo_GraveBroGoron_UpdateToSurprisedAnimation;
                     break;
 
                 case 0xE1F: // I was shocked, too. But somehow, it seems the great Darmani isn't dead.
@@ -1769,7 +1769,7 @@ void EnGo_UpdateToFrozenAnimation(EnGo* this, PlayState* play) {
  *
  * @see EnGo_Gatekeeper_Snowball
  */
-void EnGo_Gatekeeper_UpdateToSnowball(EnGo* this, PlayState* play) {
+void EnGo_Gatekeeper_UpdateToSnowballAnimation(EnGo* this, PlayState* play) {
     s16 yawToPathPoint;
     Vec3f currentPos;
     Vec3f startingPathPoint;
@@ -1871,7 +1871,7 @@ void EnGo_GatekeeperGoron_Setup(EnGo* this, PlayState* play) {
         if (this->gatekeeperPath != NULL) {
             this->indexPathPoint = 1;
         }
-        EnGo_Gatekeeper_UpdateToSnowball(this, play);
+        EnGo_Gatekeeper_UpdateToSnowballAnimation(this, play);
         this->actionFunc = EnGo_Gatekeeper_Snowball;
         this->msgEventCb = EnGo_GatekeeperGoron_CutsceneOpenShrine;
     } else {
