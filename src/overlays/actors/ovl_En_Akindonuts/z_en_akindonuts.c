@@ -1042,8 +1042,8 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
     s32 params = ENAKINDONUTS_GET_3(&this->actor);
     s32 itemActionParam = func_80123810(play);
 
-    if (itemActionParam > PLAYER_IP_NONE) {
-        if (itemActionParam == PLAYER_IP_DEED_LAND) {
+    if (itemActionParam > PLAYER_IA_NONE) {
+        if (itemActionParam == PLAYER_IA_DEED_LAND) {
             player->actor.textId = D_80BF048C[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x15E4) {
@@ -1052,7 +1052,7 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemActionParam == PLAYER_IP_DEED_SWAMP) {
+        } else if (itemActionParam == PLAYER_IA_DEED_SWAMP) {
             player->actor.textId = D_80BF0494[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x15F9) {
@@ -1061,7 +1061,7 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemActionParam == PLAYER_IP_DEED_MOUNTAIN) {
+        } else if (itemActionParam == PLAYER_IA_DEED_MOUNTAIN) {
             player->actor.textId = D_80BF049C[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x160C) {
@@ -1070,7 +1070,7 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemActionParam == PLAYER_IP_DEED_OCEAN) {
+        } else if (itemActionParam == PLAYER_IA_DEED_OCEAN) {
             player->actor.textId = D_80BF04A4[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x1621) {
@@ -1085,7 +1085,7 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
             this->actionFunc = func_80BEF18C;
         }
         func_801477B4(play);
-    } else if (itemActionParam < PLAYER_IP_NONE) {
+    } else if (itemActionParam < PLAYER_IA_NONE) {
         this->unk_33C = D_80BF04AC[params];
         func_80151938(play, this->unk_33C);
         this->actionFunc = func_80BEF18C;

@@ -200,16 +200,16 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 
 static EnTalkGibudRequestedItem sRequestedItemTable[] = {
-    { PLAYER_IP_BOTTLE_POTION_BLUE, ITEM_POTION_BLUE, 1, true },
-    { PLAYER_IP_MAGIC_BEANS, ITEM_MAGIC_BEANS, 5, false },
-    { PLAYER_IP_BOTTLE_SPRING_WATER, ITEM_SPRING_WATER, 1, true },
-    { PLAYER_IP_BOTTLE_FISH, ITEM_FISH, 1, true },
-    { PLAYER_IP_BOTTLE_BUG, ITEM_BUG, 1, true },
-    { PLAYER_IP_NUT, ITEM_NUT, 10, false },
-    { PLAYER_IP_BOMB, ITEM_BOMB, 10, false },
-    { PLAYER_IP_BOTTLE_HOT_SPRING_WATER, ITEM_HOT_SPRING_WATER, 1, true },
-    { PLAYER_IP_BOTTLE_BIG_POE, ITEM_BIG_POE, 1, true },
-    { PLAYER_IP_BOTTLE_MILK, ITEM_MILK_BOTTLE, 1, true },
+    { PLAYER_IA_BOTTLE_POTION_BLUE, ITEM_POTION_BLUE, 1, true },
+    { PLAYER_IA_MAGIC_BEANS, ITEM_MAGIC_BEANS, 5, false },
+    { PLAYER_IA_BOTTLE_SPRING_WATER, ITEM_SPRING_WATER, 1, true },
+    { PLAYER_IA_BOTTLE_FISH, ITEM_FISH, 1, true },
+    { PLAYER_IA_BOTTLE_BUG, ITEM_BUG, 1, true },
+    { PLAYER_IA_NUT, ITEM_NUT, 10, false },
+    { PLAYER_IA_BOMB, ITEM_BOMB, 10, false },
+    { PLAYER_IA_BOTTLE_HOT_SPRING_WATER, ITEM_HOT_SPRING_WATER, 1, true },
+    { PLAYER_IA_BOTTLE_BIG_POE, ITEM_BIG_POE, 1, true },
+    { PLAYER_IA_BOTTLE_MILK, ITEM_MILK_BOTTLE, 1, true },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -242,7 +242,7 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
     this->playerStunWaitTimer = 0;
     this->grabState = EN_TALK_GIBUD_GRAB_START;
     this->grabWaitTimer = 0;
-    this->itemActionParam = PLAYER_IP_NONE;
+    this->itemActionParam = PLAYER_IA_NONE;
     this->drawDmgEffTimer = 0;
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     this->isTalking = false;
@@ -725,12 +725,12 @@ void EnTalkGibud_CheckPresentedItem(EnTalkGibud* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 itemActionParam;
 
-    if (this->itemActionParam == PLAYER_IP_NONE) {
+    if (this->itemActionParam == PLAYER_IA_NONE) {
         itemActionParam = func_80123810(play);
-        if (itemActionParam != PLAYER_IP_NONE) {
+        if (itemActionParam != PLAYER_IA_NONE) {
             this->itemActionParam = itemActionParam;
         }
-        if (this->itemActionParam > PLAYER_IP_NONE) {
+        if (this->itemActionParam > PLAYER_IA_NONE) {
             switch (EnTalkGibud_PresentedItemMatchesRequest(this, play, this->itemActionParam)) {
                 case EN_TALK_GIBUD_REQUESTED_ITEM_MET:
                     player->actor.textId = 0x138A;
@@ -751,7 +751,7 @@ void EnTalkGibud_CheckPresentedItem(EnTalkGibud* this, PlayState* play) {
                     break;
             }
             func_801477B4(play);
-        } else if (this->itemActionParam < PLAYER_IP_NONE) {
+        } else if (this->itemActionParam < PLAYER_IA_NONE) {
             Message_StartTextbox(play, 0x1389, &this->actor);
             this->textId = 0x1389;
         }
@@ -787,7 +787,7 @@ void EnTalkGibud_PassiveIdle(EnTalkGibud* this, PlayState* play) {
 }
 
 void EnTalkGibud_SetupTalk(EnTalkGibud* this) {
-    this->itemActionParam = PLAYER_IP_NONE;
+    this->itemActionParam = PLAYER_IA_NONE;
     this->actionFunc = EnTalkGibud_Talk;
 }
 
@@ -822,7 +822,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
                     if (!requestedItem->isBottledItem) {
                         Inventory_ChangeAmmo(requestedItem->item, -requestedItem->amount);
                     } else {
-                        func_80123D50(play, player, ITEM_BOTTLE, PLAYER_IP_BOTTLE);
+                        func_80123D50(play, player, ITEM_BOTTLE, PLAYER_IA_BOTTLE);
                     }
                     player->stateFlags1 |= 0x20;
                     player->stateFlags1 |= 0x20000000;

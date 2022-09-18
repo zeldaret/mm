@@ -727,7 +727,7 @@ s32 Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 y
     Vec3f diff;
     s32 pad;
 
-    if ((this->itemActionParam == PLAYER_IP_STICK) && (this->unk_B28 != 0)) {
+    if ((this->itemActionParam == PLAYER_IA_STICK) && (this->unk_B28 != 0)) {
         Math_Vec3f_Diff(&this->meleeWeaponInfo[0].tip, pos, &diff);
         return (SQXZ(diff) <= SQ(xzRange)) && (0.0f <= diff.y) && (diff.y <= yRange);
     }
@@ -766,7 +766,7 @@ s32 Player_IsHoldingMirrorShield(PlayState* play) {
 }
 
 s32 Player_IsHoldingHookshot(Player* player) {
-    return player->itemActionParam == PLAYER_IP_HOOKSHOT;
+    return player->itemActionParam == PLAYER_IA_HOOKSHOT;
 }
 
 s32 func_801240DC(Player* player) {
@@ -774,11 +774,11 @@ s32 func_801240DC(Player* player) {
 }
 
 s32 func_80124110(Player* player, s32 actionParam) {
-    s32 temp_v0 = actionParam - PLAYER_IP_FISHING_ROD;
+    s32 temp_v0 = actionParam - PLAYER_IA_FISHING_ROD;
 
     if (player->transformation != PLAYER_FORM_GORON) {
-        if (((actionParam - PLAYER_IP_FISHING_ROD) > (PLAYER_IP_FISHING_ROD - PLAYER_IP_FISHING_ROD)) &&
-            ((actionParam - PLAYER_IP_FISHING_ROD) < (PLAYER_IP_SWORD_GREAT_FAIRY - PLAYER_IP_FISHING_ROD))) {
+        if (((actionParam - PLAYER_IA_FISHING_ROD) > (PLAYER_IA_FISHING_ROD - PLAYER_IA_FISHING_ROD)) &&
+            ((actionParam - PLAYER_IA_FISHING_ROD) < (PLAYER_IA_SWORD_GREAT_FAIRY - PLAYER_IA_FISHING_ROD))) {
             return temp_v0;
         }
     }
@@ -791,9 +791,9 @@ s32 func_80124148(Player* player) {
 }
 
 s32 Player_ActionToMeleeWeapon(s32 actionParam) {
-    s32 weapon = actionParam - (PLAYER_IP_SWORD_KOKIRI - 1);
+    s32 weapon = actionParam - (PLAYER_IA_SWORD_KOKIRI - 1);
 
-    if ((weapon > 0) && (weapon <= (PLAYER_IP_ZORA_FINS - (PLAYER_IP_SWORD_KOKIRI - 1)))) {
+    if ((weapon > 0) && (weapon <= (PLAYER_IA_ZORA_FINS - (PLAYER_IA_SWORD_KOKIRI - 1)))) {
         return weapon;
     }
     return 0;
@@ -805,7 +805,7 @@ s32 Player_GetMeleeWeaponHeld(Player* player) {
 
 s32 Player_IsHoldingTwoHandedWeapon(Player* player) {
     // Relies on the actionParams for two-handed weapons being contiguous.
-    if ((player->itemActionParam >= PLAYER_IP_SWORD_GREAT_FAIRY) && (player->itemActionParam <= PLAYER_IP_STICK)) {
+    if ((player->itemActionParam >= PLAYER_IA_SWORD_GREAT_FAIRY) && (player->itemActionParam <= PLAYER_IA_STICK)) {
         return true;
     }
 
@@ -813,10 +813,10 @@ s32 Player_IsHoldingTwoHandedWeapon(Player* player) {
 }
 
 s32 Player_ActionToBottle(Player* player, s32 actionParam) {
-    s32 bottle = actionParam - PLAYER_IP_BOTTLE;
+    s32 bottle = actionParam - PLAYER_IA_BOTTLE;
 
     // Relies on bottle-related action params to be contiguous
-    if ((bottle >= (PLAYER_IP_BOTTLE - PLAYER_IP_BOTTLE)) && (bottle <= (PLAYER_IP_BOTTLE_FAIRY - PLAYER_IP_BOTTLE))) {
+    if ((bottle >= (PLAYER_IA_BOTTLE - PLAYER_IA_BOTTLE)) && (bottle <= (PLAYER_IA_BOTTLE_FAIRY - PLAYER_IA_BOTTLE))) {
         return bottle;
     }
 
@@ -828,10 +828,10 @@ s32 Player_GetBottleHeld(Player* Player) {
 }
 
 s32 Player_ActionToExplosive(Player* player, s32 actionParam) {
-    s32 explosive = actionParam - PLAYER_IP_BOMB;
+    s32 explosive = actionParam - PLAYER_IA_BOMB;
 
     // Relies on explosive-related action params to be contiguous
-    if ((explosive >= (PLAYER_IP_BOMB - PLAYER_IP_BOMB)) && (explosive <= (PLAYER_IP_BOMBCHU - PLAYER_IP_BOMB))) {
+    if ((explosive >= (PLAYER_IA_BOMB - PLAYER_IA_BOMB)) && (explosive <= (PLAYER_IA_BOMBCHU - PLAYER_IA_BOMB))) {
         return explosive;
     }
 
@@ -847,9 +847,9 @@ s32 func_80124278(Actor* actor, s32 actionParam) {
     s32 sword = 0;
 
     //! FAKE:
-    if ((actionParam == PLAYER_IP_LAST_USED) ||
-        ((sword = actionParam - PLAYER_IP_SWORD_KOKIRI, (sword >= PLAYER_IP_SWORD_KOKIRI - PLAYER_IP_SWORD_KOKIRI)) &&
-         (sword <= PLAYER_IP_SWORD_GREAT_FAIRY - PLAYER_IP_SWORD_KOKIRI))) {
+    if ((actionParam == PLAYER_IA_LAST_USED) ||
+        ((sword = actionParam - PLAYER_IA_SWORD_KOKIRI, (sword >= PLAYER_IA_SWORD_KOKIRI - PLAYER_IA_SWORD_KOKIRI)) &&
+         (sword <= PLAYER_IA_SWORD_GREAT_FAIRY - PLAYER_IA_SWORD_KOKIRI))) {
         return sword;
     }
 
