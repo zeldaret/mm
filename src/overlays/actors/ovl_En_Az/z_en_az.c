@@ -184,31 +184,31 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
     switch (BEAVER_GET_PARAM_F00(thisx)) {
         case 0:
             phi_v1 = (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 0)) &&
-                     (gSaveContext.save.weekEventReg[93] & 1);
+                     CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01);
             phi_v1 = !phi_v1;
             break;
         case 2:
             phi_v1 = (gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 1)) ||
-                     !(gSaveContext.save.weekEventReg[24] & 4);
+                     !CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04);
             break;
         case 4:
             phi_v1 = gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 2);
             break;
         case 1:
             phi_v1 = (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 0)) &&
-                     (gSaveContext.save.weekEventReg[93] & 1);
+                     CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01);
             phi_v1 = !phi_v1;
             break;
         case 3:
             phi_v1 = (gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 1)) ||
-                     (gSaveContext.save.weekEventReg[24] & 4);
+                     CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04);
             break;
         case 5:
             phi_v1 = gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 2);
             break;
         case 6:
             phi_v1 = (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 0)) &&
-                     !(gSaveContext.save.weekEventReg[93] & 1);
+                     !CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01);
             phi_v1 = !phi_v1;
             break;
         default:
@@ -268,7 +268,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
 
     switch (gSaveContext.save.entrance) {
         case ENTRANCE(WATERFALL_RAPIDS, 0):
-            if (gSaveContext.save.weekEventReg[93] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01)) {
                 this->unk_2FA = 5;
                 if (this->unk_374 & 2) {
                     this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
@@ -297,14 +297,14 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
             func_80A97C0C(this, play);
             break;
         case ENTRANCE(WATERFALL_RAPIDS, 1):
-            if (gSaveContext.save.weekEventReg[93] & 1) {
-                if (gSaveContext.save.weekEventReg[24] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                     this->unk_2FA = 8;
                 } else {
                     this->unk_2FA = 6;
                 }
             } else {
-                if (gSaveContext.save.weekEventReg[24] & 4) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                     this->unk_2FA = 3;
                 } else {
                     this->unk_2FA = 1;
@@ -314,7 +314,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
                 SubS_CopyPointFromPathList(play->setupPathList, BEAVER_GET_PARAM_FF(thisx),
                                            play->setupPathList[BEAVER_GET_PARAM_FF(thisx)].count - 1, &D_80A99E80);
             }
-            if (gSaveContext.save.weekEventReg[24] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                 if (this->unk_374 & 2) {
                     func_80A97D5C(this, play);
                 } else {
@@ -327,14 +327,14 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
             }
             break;
         case ENTRANCE(WATERFALL_RAPIDS, 2):
-            if (gSaveContext.save.weekEventReg[93] & 1) {
-                if (gSaveContext.save.weekEventReg[24] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                     this->unk_2FA = 9;
                 } else {
                     this->unk_2FA = 7;
                 }
             } else {
-                if (gSaveContext.save.weekEventReg[24] & 4) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                     this->unk_2FA = 4;
                 } else {
                     this->unk_2FA = 2;
@@ -672,14 +672,14 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x70:
                     case 0xCD:
-                        gSaveContext.save.weekEventReg[24] &= (u8)~1;
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_01);
                         this->actor.textId = 0x10F2;
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 11, &this->animIndex);
                         SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, 11, &brother->animIndex);
                         break;
                     case 0x10CE:
                         this->actor.textId = 0x10CF;
-                        gSaveContext.save.weekEventReg[16] |= 0x40;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_16_40);
                         break;
                     case 0x10CF:
                         this->actor.textId = 0x10D0;
@@ -747,7 +747,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x10D9:
                         if ((this->unk_2FA == 3) || (this->unk_2FA == 8)) {
-                            gSaveContext.save.weekEventReg[24] &= (u8)~4;
+                            CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                         }
                         func_80A94AB8(this, play, 0);
                         func_80A979DC(this, play);
@@ -827,7 +827,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         ret = 0;
                         break;
                     case 0x10E7:
-                        gSaveContext.save.weekEventReg[24] &= (u8)~4;
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                         func_80A94AB8(this, play, 0);
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 0, &this->animIndex);
                         SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, 0, &brother->animIndex);
@@ -880,7 +880,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x10ED:
                         if ((this->unk_2FA == 4) || (this->unk_2FA == 9)) {
-                            gSaveContext.save.weekEventReg[24] &= (u8)~4;
+                            CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                         }
                         func_80A94AB8(this, play, 0);
                         func_80A979DC(this, play);
@@ -899,12 +899,12 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         ret = 0;
                         break;
                     case 0x10F1:
-                        gSaveContext.save.weekEventReg[93] |= 1;
-                        if (gSaveContext.save.weekEventReg[23] & 0x80) {
+                        SET_WEEKEVENTREG(WEEKEVENTREG_93_01);
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_80)) {
                             this->getItemId = GI_RUPEE_RED;
                         } else {
                             this->getItemId = GI_BOTTLE;
-                            gSaveContext.save.weekEventReg[23] |= 0x80;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_23_80);
                         }
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 0, &this->animIndex);
                         SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, 0, &brother->animIndex);
@@ -912,7 +912,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x10F2:
                     case 0x1109:
-                        gSaveContext.save.weekEventReg[24] &= (u8)~4;
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 0, &this->animIndex);
                         SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, 0, &brother->animIndex);
                         func_80A94AB8(this, play, 0);
@@ -943,7 +943,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10F8:
                         if (play->msgCtx.choiceIndex == 0) {
                             func_8019F208();
-                            if (gSaveContext.save.weekEventReg[25] & 1) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
                                 this->actor.textId = 0x1107;
                             } else {
                                 this->actor.textId = 0x10FA;
@@ -987,7 +987,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10FE:
                         if (play->msgCtx.choiceIndex == 0) {
                             func_8019F208();
-                            if (gSaveContext.save.weekEventReg[25] & 1) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
                                 this->actor.textId = 0x1108;
                             } else {
                                 this->actor.textId = 0x1101;
@@ -1006,7 +1006,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         ret = 0;
                         break;
                     case 0x1100:
-                        gSaveContext.save.weekEventReg[24] &= (u8)~4;
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 0, &this->animIndex);
                         SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, 0, &brother->animIndex);
                         func_80A94AB8(this, play, 0);
@@ -1033,18 +1033,18 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         ret = 0;
                         break;
                     case 0x1105:
-                        if (gSaveContext.save.weekEventReg[25] & 1) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
                             this->getItemId = GI_RUPEE_PURPLE;
                         } else {
                             this->getItemId = GI_HEART_PIECE;
-                            gSaveContext.save.weekEventReg[25] |= 1;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_25_01);
                         }
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 0, &this->animIndex);
                         SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, 0, &brother->animIndex);
                         ret = 7;
                         break;
                     case 0x1106:
-                        gSaveContext.save.weekEventReg[24] &= (u8)~4;
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 0, &this->animIndex);
                         SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, 0, &brother->animIndex);
                         func_80A94AB8(this, play, 0);
@@ -1116,16 +1116,16 @@ s32 func_80A97274(EnAz* this, PlayState* play) {
     switch (this->unk_2FA) {
         case 0:
         default:
-            gSaveContext.save.weekEventReg[24] &= (u8)~4;
-            if (!(gSaveContext.save.weekEventReg[16] & 0x40)) {
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_16_40))) {
                 textId = 0x10CE;
             } else {
                 textId = 0x10D4;
             }
             break;
         case 2:
-            if (gSaveContext.save.weekEventReg[24] & 1) {
-                gSaveContext.save.weekEventReg[24] |= 4;
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_01)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_24_04);
                 this->unk_3C0 = 0;
                 textId = 0x10DD;
             } else {
@@ -1133,26 +1133,26 @@ s32 func_80A97274(EnAz* this, PlayState* play) {
             }
             break;
         case 4:
-            if (gSaveContext.save.weekEventReg[24] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_01)) {
                 textId = 0x10EE;
             } else {
                 textId = 0x10E9;
             }
             break;
         case 5:
-            gSaveContext.save.weekEventReg[24] &= (u8)~4;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
             textId = 0x10F3;
             break;
         case 7:
-            if (gSaveContext.save.weekEventReg[24] & 1) {
-                gSaveContext.save.weekEventReg[24] |= 4;
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_01)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_24_04);
                 textId = 0x10FB;
             } else {
                 textId = 0x10E9;
             }
             break;
         case 9:
-            if (gSaveContext.save.weekEventReg[24] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_01)) {
                 textId = 0x1102;
             } else {
                 textId = 0x10E9;
@@ -1357,8 +1357,8 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
                             func_80A979DC(this, play);
                         } else {
                             func_8019F230();
-                            if (gSaveContext.save.weekEventReg[24] & 4) {
-                                gSaveContext.save.weekEventReg[24] &= (u8)~4;
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
+                                CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                             }
                             func_80151938(play, 0x10D9);
                         }
@@ -1391,7 +1391,7 @@ void func_80A97C4C(EnAz* this, PlayState* play) {
     }
     func_80A97410(this, play);
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3) || (this->unk_2FA == 6) || (this->unk_2FA == 8)) {
-        gSaveContext.save.weekEventReg[24] &= (u8)~1;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_01);
         func_800FD750(NA_BGM_MINI_GAME_2);
         play->nextEntrance = Entrance_CreateFromSpawn(1);
         gSaveContext.nextCutsceneIndex = 0;
@@ -1413,7 +1413,7 @@ void func_80A97D5C(EnAz* this, PlayState* play) {
     play->interfaceCtx.unk_280 = 1;
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3)) {
         func_8010E9F0(4, 120);
-    } else if (gSaveContext.save.weekEventReg[25] & 1) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
         func_8010E9F0(4, 100);
     } else {
         func_8010E9F0(4, 110);
@@ -1468,9 +1468,9 @@ void func_80A97F9C(EnAz* this, PlayState* play) {
     }
     if (SurfaceType_IsHorseBlocked(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
         if (func_80A94B98(this, play)) {
-            gSaveContext.save.weekEventReg[24] &= (u8)~1;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_01);
         } else {
-            gSaveContext.save.weekEventReg[24] |= 1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_24_01);
         }
         gSaveContext.unk_3DD0[4] = 5;
         this->unk_374 &= ~0x10;

@@ -1195,7 +1195,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                 if (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS) {
                     play->actorCtx.lensActive = false;
                 }
-                if (gSaveContext.save.weekEventReg[14] & 8) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                     // Drank Chateau Romani
                     magicToConsume = 0;
                 }
@@ -1215,7 +1215,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                 if (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS) {
                     play->actorCtx.lensActive = false;
                 }
-                if (gSaveContext.save.weekEventReg[14] & 8) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                     // Drank Chateau Romani
                     magicToConsume = 0;
                 }
@@ -1292,7 +1292,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                 if (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS) {
                     play->actorCtx.lensActive = false;
                 }
-                if (gSaveContext.save.weekEventReg[14] & 8) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                     // Drank Chateau Romani
                     magicToConsume = 0;
                 }
@@ -1381,7 +1381,7 @@ void Magic_Update(PlayState* play) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
     s16 magicCapacityTarget;
 
-    if (gSaveContext.save.weekEventReg[14] & 8) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
         // Drank Chateau Romani
         Magic_FlashMeterBorder();
     }
@@ -1432,7 +1432,7 @@ void Magic_Update(PlayState* play) {
 
         case MAGIC_STATE_CONSUME:
             // Consume magic until target is reached or no more magic is available
-            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                 gSaveContext.save.playerData.magic =
                     ((void)0, gSaveContext.save.playerData.magic) - ((void)0, gSaveContext.magicToConsume);
                 if (gSaveContext.save.playerData.magic <= 0) {
@@ -1445,7 +1445,7 @@ void Magic_Update(PlayState* play) {
         case MAGIC_STATE_METER_FLASH_1:
         case MAGIC_STATE_METER_FLASH_2:
         case MAGIC_STATE_METER_FLASH_3:
-            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                 Magic_FlashMeterBorder();
             }
             break;
@@ -1478,19 +1478,19 @@ void Magic_Update(PlayState* play) {
 
                 interfaceCtx->magicConsumptionTimer--;
                 if (interfaceCtx->magicConsumptionTimer == 0) {
-                    if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                         gSaveContext.save.playerData.magic--;
                     }
                     interfaceCtx->magicConsumptionTimer = 80;
                 }
             }
-            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                 Magic_FlashMeterBorder();
             }
             break;
 
         case MAGIC_STATE_CONSUME_GORON_ZORA_SETUP:
-            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                 gSaveContext.save.playerData.magic -= 2;
             }
             if (gSaveContext.save.playerData.magic <= 0) {
@@ -1505,7 +1505,7 @@ void Magic_Update(PlayState* play) {
                 if (!Play_InCsMode(play)) {
                     interfaceCtx->magicConsumptionTimer--;
                     if (interfaceCtx->magicConsumptionTimer == 0) {
-                        if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                             gSaveContext.save.playerData.magic--;
                         }
                         if (gSaveContext.save.playerData.magic <= 0) {
@@ -1515,7 +1515,7 @@ void Magic_Update(PlayState* play) {
                     }
                 }
             }
-            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                 Magic_FlashMeterBorder();
             }
             break;
@@ -1527,7 +1527,7 @@ void Magic_Update(PlayState* play) {
                 if (!Play_InCsMode(play)) {
                     interfaceCtx->magicConsumptionTimer--;
                     if (interfaceCtx->magicConsumptionTimer == 0) {
-                        if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                             gSaveContext.save.playerData.magic--;
                         }
                         if (gSaveContext.save.playerData.magic <= 0) {
@@ -1537,7 +1537,7 @@ void Magic_Update(PlayState* play) {
                     }
                 }
             }
-            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                 Magic_FlashMeterBorder();
             }
             break;
@@ -1593,7 +1593,7 @@ void Magic_DrawMeter(PlayState* play) {
 
             // Fill the rest of the meter with the normal magic color
             gDPPipeSync(OVERLAY_DISP++);
-            if (gSaveContext.save.weekEventReg[14] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                 // Blue magic (drank Chateau Romani)
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 200, interfaceCtx->magicAlpha);
             } else {
@@ -1607,7 +1607,7 @@ void Magic_DrawMeter(PlayState* play) {
                 (magicBarY + 10) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         } else {
             // Fill the whole meter with the normal magic color
-            if (gSaveContext.save.weekEventReg[14] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                 // Blue magic (drank Chateau Romani)
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 200, interfaceCtx->magicAlpha);
             } else {

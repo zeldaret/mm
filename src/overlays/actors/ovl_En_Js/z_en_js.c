@@ -112,9 +112,9 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
             Animation_PlayLoop(&this->skelAnime, &gMoonChildSittingAnim);
             func_8016566C(0x3C);
 
-            if (gSaveContext.save.weekEventReg[84] & 0x20) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_20)) {
                 Inventory_DeleteItem(ITEM_MASK_FIERCE_DEITY, SLOT(ITEM_MASK_FIERCE_DEITY));
-                gSaveContext.save.weekEventReg[84] &= (u8)~0x20;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_84_20);
             }
             break;
         case 1:
@@ -850,7 +850,7 @@ void func_8096A1E8(EnJs* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = func_8096A38C;
         Message_StartTextbox(play, 0x2208, &this->actor);
-        gSaveContext.save.weekEventReg[84] |= 0x20;
+        SET_WEEKEVENTREG(WEEKEVENTREG_84_20);
         func_809696EC(this, 0);
     } else {
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
