@@ -509,26 +509,26 @@ void EnMThunder_Draw(Actor* thisx, PlayState* play2) {
     switch (this->subtype) {
         case ENMTHUNDER_SUBTYPE_SPIN_GREAT:
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 170, (u16)(this->alphaFrac * 255.0f));
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025DD0);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025EF0);
+            gSPDisplayList(POLY_XLU_DISP++, gGreatSpinAttackDiskDL);
+            gSPDisplayList(POLY_XLU_DISP++, gGreatSpinAttackCylinderDL);
             break;
 
         case ENMTHUNDER_SUBTYPE_SPIN_REGULAR:
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, (u16)(this->alphaFrac * 255.0f));
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025850);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025970);
+            gSPDisplayList(POLY_XLU_DISP++, gSpinAttackDiskDL);
+            gSPDisplayList(POLY_XLU_DISP++, gSpinAttackCylinderDL);
             break;
 
         case ENMTHUNDER_SUBTYPE_SWORDBEAM_REGULAR:
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, (u16)(this->alphaFrac * 255.0f));
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 100, 255, 128);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_027CA0);
+            gSPDisplayList(POLY_XLU_DISP++, gSwordBeamDL);
             break;
 
         case ENMTHUNDER_SUBTYPE_SWORDBEAM_GREAT:
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 0, 255, 255, (u16)(this->alphaFrac * 255.0f));
             gDPSetEnvColor(POLY_XLU_DISP++, 200, 200, 200, 128);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_027CA0);
+            gSPDisplayList(POLY_XLU_DISP++, gSwordBeamDL);
             break;
 
         default:
@@ -565,7 +565,7 @@ void EnMThunder_Draw(Actor* thisx, PlayState* play2) {
     gSPSegment(POLY_XLU_DISP++, 0x09,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, (play->gameplayFrames * 5) & 0xFF, 0, 32, 32, 1,
                                 (play->gameplayFrames * 20) & 0xFF, (play->gameplayFrames * y2Scroll) & 0xFF, 8, 8));
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0268F0);
+    gSPDisplayList(POLY_XLU_DISP++, gSpinAttackChargingDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
