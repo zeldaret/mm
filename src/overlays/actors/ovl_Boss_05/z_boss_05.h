@@ -37,14 +37,19 @@ typedef struct Boss05 {
     /* 0x18A */ char pad18A[2]; /* maybe part of unk189[3]? */
     /* 0x18C */ Vec3f unk18C;
     /* 0x198 */ f32 unk198;
-    /* 0x19C */ char pad19C[0x2C];                  /* maybe part of unk198[0xC]? */
+    /* 0x19C */ s16 unk19C;
+    /* 0x19E */ Vec3s unk19E[1];
+    // /* 0x1A0 */ s16 unk1A0;
+    // /* 0x1A2 */ s16 unk1A2;
+    /* 0x1A4 */ char pad1A4[0x24]; // Some number of other Vec3s in here
     /* 0x1C8 */ ColliderJntSph unk1C8;              /* inferred */
     /* 0x1E8 */ ColliderJntSphElement unk1E8[2];
     /* 0x268 */ SkelAnime unk268;
     /* 0x2AC */ Vec3s unk2AC[10];
     /* 0x2E8 */ Vec3s unk2E8[10];
     /* 0x324 */ Vec3f unk324;
-    /* 0x330 */ char unk330[0x8]; // possibly a Vec3f
+    /* 0x330 */ Vec3s unk330; // ?
+    /* 0x330 */ char unk336[0x2];
     /* 0x330 */ f32 unk338;
     /* 0x33C */ Vec3f unk33C;
     /* 0x348 */ s16 unk348;
