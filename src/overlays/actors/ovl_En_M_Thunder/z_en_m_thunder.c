@@ -22,9 +22,9 @@ void func_808B65BC(Actor* thisx, PlayState* play);
 
 void func_808B5890(PlayState* play, f32 arg1);
 
-void func_808B5984(EnMThunder* this, PlayState* play);
-void func_808B5F68(EnMThunder* this, PlayState* play);
-void func_808B60D4(EnMThunder* this, PlayState* play);
+void EnMThunder_Charge(EnMThunder* this, PlayState* play);
+void EnMThunder_Spin_Attack(EnMThunder* this, PlayState* play);
+void EnMThunder_SwordBeam_Attack(EnMThunder* this, PlayState* play);
 void func_808B6310(EnMThunder* this, PlayState* play);
 
 const ActorInit En_M_Thunder_InitVars = {
@@ -59,7 +59,10 @@ static ColliderCylinderInit sCylinderInit = {
     { 200, 200, 0, { 0, 0, 0 } },
 };
 
-static u8 sDamages[] = { 1, 2, 3, 4, 1, 2, 3, 4 };
+static u8 sDamages[] = {
+    /* Regular    */ 1, 2, 3, 4,
+    /* Great Spin */ 1, 2, 3, 4,
+};
 
 static u16 sSounds[] = {
     NA_SE_IT_ROLLING_CUT_LV2,
@@ -70,16 +73,23 @@ static u16 sSounds[] = {
 
 static f32 sScales[] = { 0.1f, 0.15f, 0.2f, 0.25f, 0.3f, 0.25f, 0.2f, 0.15f, 0.0f };
 
+typedef enum {
+    /* 0 */ ENMTHUNDER_SUBTYPE_SPIN_GREAT,
+    /* 1 */ ENMTHUNDER_SUBTYPE_SPIN_REGULAR,
+    /* 2 */ ENMTHUNDER_SUBTYPE_SWORDBEAM_GREAT,
+    /* 3 */ ENMTHUNDER_SUBTYPE_SWORDBEAM_REGULAR
+} EnMThunderSubType;
+
 void func_808B53C0(EnMThunder* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->actor.update = func_808B65BC;
-    this->unk1C2 = false;
-    this->unk1BE = 1;
-    this->unk1C1 = 2;
+    this->isCharging = false;
+    this->subtype = 1;
+    this->scaleTarget = 2;
     this->actionFunc = func_808B6310;
-    this->unk1BC = 8;
-    this->unk1A4 = 1.0f;
+    this->timer = 8;
+    this->lightColorFrac = 1.0f;
     AudioSfx_PlaySfx(NA_SE_IT_ROLLING_CUT_LV1, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                      &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
     this->actor.child = NULL;
@@ -92,12 +102,12 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
 
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->unk1BF = ENMTHUNDER_GET_UNK1BF(&this->actor);
+    this->type = ENMTHUNDER_GET_TYPE(&this->actor);
     Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y,
                               this->actor.world.pos.z, 255, 255, 255, 0);
     this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
 
-    if (this->unk1BF == 0x80) {
+    if (this->type == ENMTHUNDER_TYPE_UNK) {
         func_808B53C0(this, play);
         return;
     }
@@ -105,16 +115,16 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
     this->collider.dim.radius = 0;
     this->collider.dim.height = 40;
     this->collider.dim.yShift = -20;
-    this->unk1BC = 8;
-    this->unk1AC = 0.0f;
+    this->timer = 8;
+    this->scroll = 0.0f;
     this->actor.world.pos = player->bodyPartsPos[0];
-    this->unk1A4 = 0.0f;
+    this->lightColorFrac = 0.0f;
     this->unk1B4 = 0.0f;
     this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
     this->actor.shape.rot.x = -this->actor.world.rot.x;
     this->actor.room = -1;
     Actor_SetScale(&this->actor, 0.1f);
-    this->unk1C2 = false;
+    this->isCharging = false;
 
     if (player->stateFlags2 & PLAYER_STATE2_20000) {
         if (!gSaveContext.save.playerData.isMagicAcquired || (gSaveContext.magicState != 0) ||
@@ -129,50 +139,50 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
         }
 
         player->stateFlags2 &= ~PLAYER_STATE2_20000;
-        this->unk1C2 = false;
+        this->isCharging = false;
 
         if (gSaveContext.save.weekEventReg[23] & 2) {
             player->unk_B08[0] = 1.0f;
-            this->collider.info.toucher.damage = sDamages[this->unk1BF + 4];
-            this->unk1BE = 0;
-            if (this->unk1BF == 3) {
-                this->unk1C1 = 6;
-            } else if (this->unk1BF == 2) {
-                this->unk1C1 = 4;
+            this->collider.info.toucher.damage = sDamages[this->type + 4];
+            this->subtype = ENMTHUNDER_SUBTYPE_SPIN_GREAT;
+            if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRY_SWORD) {
+                this->scaleTarget = 6;
+            } else if (this->type == ENMTHUNDER_TYPE_GILDED_SWORD) {
+                this->scaleTarget = 4;
             } else {
-                this->unk1C1 = 3;
+                this->scaleTarget = 3;
             }
         } else {
             player->unk_B08[0] = 0.5f;
-            this->collider.info.toucher.damage = sDamages[this->unk1BF];
-            this->unk1BE = 1;
-            if (this->unk1BF == 3) {
-                this->unk1C1 = 4;
-            } else if (this->unk1BF == 2) {
-                this->unk1C1 = 3;
+            this->collider.info.toucher.damage = sDamages[this->type];
+            this->subtype = ENMTHUNDER_SUBTYPE_SPIN_REGULAR;
+            if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRY_SWORD) {
+                this->scaleTarget = 4;
+            } else if (this->type == ENMTHUNDER_TYPE_GILDED_SWORD) {
+                this->scaleTarget = 3;
             } else {
-                this->unk1C1 = 2;
+                this->scaleTarget = 2;
             }
         }
 
         if (player->meleeWeaponAnimation < PLAYER_MWA_SPIN_ATTACK_1H) {
-            this->unk1BE += 2;
-            this->actionFunc = func_808B60D4;
-            this->unk1BC = 1;
-            this->unk1C1 = 12;
+            this->subtype += ENMTHUNDER_SUBTYPE_SWORDBEAM_GREAT;
+            this->actionFunc = EnMThunder_SwordBeam_Attack;
+            this->timer = 1;
+            this->scaleTarget = 12;
             this->collider.info.toucher.dmgFlags = 0x02000000;
             this->collider.info.toucher.damage = 3;
         } else {
-            this->actionFunc = func_808B5F68;
-            this->unk1BC = 8;
+            this->actionFunc = EnMThunder_Spin_Attack;
+            this->timer = 8;
         }
 
         AudioSfx_PlaySfx(NA_SE_IT_ROLLING_CUT_LV1, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                          &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
 
-        this->unk1A4 = 1.0f;
+        this->lightColorFrac = 1.0f;
     } else {
-        this->actionFunc = func_808B5984;
+        this->actionFunc = EnMThunder_Charge;
     }
 
     this->actor.child = NULL;
@@ -181,7 +191,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
 void EnMThunder_Destroy(Actor* thisx, PlayState* play) {
     EnMThunder* this = THIS;
 
-    if (this->unk1C2) {
+    if (this->isCharging) {
         Magic_Reset(play);
     }
 
@@ -194,7 +204,7 @@ void func_808B5890(PlayState* play, f32 arg1) {
     func_800FD2B4(play, arg1, 850.0f, 0.2f, 0.0f);
 }
 
-void func_808B58CC(EnMThunder* this, PlayState* play) {
+void EnMThunder_Spin_AttackNoMagic(EnMThunder* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->stateFlags2 & PLAYER_STATE2_20000) {
@@ -210,7 +220,7 @@ void func_808B58CC(EnMThunder* this, PlayState* play) {
     }
 }
 
-void func_808B5984(EnMThunder* this, PlayState* play) {
+void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Actor* child = this->actor.child;
 
@@ -218,18 +228,18 @@ void func_808B5984(EnMThunder* this, PlayState* play) {
     this->actor.world.pos = player->bodyPartsPos[0];
     this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
 
-    if (!this->unk1C2 && (player->unk_B08[0] >= 0.1f)) {
+    if (!this->isCharging && (player->unk_B08[0] >= 0.1f)) {
         if ((gSaveContext.magicState != 0) ||
             ((ENMTHUNDER_GET_MAGIC_COST(&this->actor) != 0) &&
              !Magic_Consume(play, ENMTHUNDER_GET_MAGIC_COST(&this->actor), MAGIC_CONSUME_WAIT_PREVIEW))) {
-            func_808B58CC(this, play);
-            this->actionFunc = func_808B58CC;
-            this->unk1C0 = 0;
+            EnMThunder_Spin_AttackNoMagic(this, play);
+            this->actionFunc = EnMThunder_Spin_AttackNoMagic;
+            this->chargingAlpha = 0;
             this->unk1B4 = 0.0f;
-            this->unk1A4 = 0.0f;
+            this->lightColorFrac = 0.0f;
             return;
         }
-        this->unk1C2 = true;
+        this->isCharging = true;
     }
 
     if (player->unk_B08[0] >= 0.1f) {
@@ -259,40 +269,40 @@ void func_808B5984(EnMThunder* this, PlayState* play) {
         }
 
         if (player->unk_B08[0] < 0.85f) {
-            this->collider.info.toucher.damage = sDamages[this->unk1BF];
-            this->unk1BE = 1;
-            if (this->unk1BF == 3) {
-                this->unk1C1 = 4;
-            } else if (this->unk1BF == 2) {
-                this->unk1C1 = 3;
+            this->collider.info.toucher.damage = sDamages[this->type];
+            this->subtype = 1;
+            if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRY_SWORD) {
+                this->scaleTarget = 4;
+            } else if (this->type == ENMTHUNDER_TYPE_GILDED_SWORD) {
+                this->scaleTarget = 3;
             } else {
-                this->unk1C1 = 2;
+                this->scaleTarget = 2;
             }
         } else {
-            this->collider.info.toucher.damage = sDamages[this->unk1BF + 4];
-            this->unk1BE = 0;
-            if (this->unk1BF == 3) {
-                this->unk1C1 = 6;
-            } else if (this->unk1BF == 2) {
-                this->unk1C1 = 4;
+            this->collider.info.toucher.damage = sDamages[this->type + 4];
+            this->subtype = 0;
+            if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRY_SWORD) {
+                this->scaleTarget = 6;
+            } else if (this->type == ENMTHUNDER_TYPE_GILDED_SWORD) {
+                this->scaleTarget = 4;
             } else {
-                this->unk1C1 = 3;
+                this->scaleTarget = 3;
             }
         }
 
         if (player->meleeWeaponAnimation < PLAYER_MWA_SPIN_ATTACK_1H) {
-            this->unk1BE += 2;
-            this->actionFunc = func_808B60D4;
-            this->unk1BC = 1;
+            this->subtype += 2;
+            this->actionFunc = EnMThunder_SwordBeam_Attack;
+            this->timer = 1;
         } else {
-            this->actionFunc = func_808B5F68;
-            this->unk1BC = 8;
+            this->actionFunc = EnMThunder_Spin_Attack;
+            this->timer = 8;
         }
 
-        AudioSfx_PlaySfx(sSounds[this->unk1BE], &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+        AudioSfx_PlaySfx(sSounds[this->subtype], &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                          &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
 
-        this->unk1A4 = 1.0f;
+        this->lightColorFrac = 1.0f;
 
         return;
     }
@@ -306,18 +316,18 @@ void func_808B5984(EnMThunder* this, PlayState* play) {
     }
 
     if (player->unk_B08[0] > 0.15f) {
-        this->unk1C0 = 255;
+        this->chargingAlpha = 255;
         if (this->actor.child == NULL) {
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_DUST, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
                                EFF_DUST_TYPE_2);
         }
-        this->unk1B4 += (((player->unk_B08[0] - 0.15f) * 1.5f) - this->unk1B4) * 0.5f; // LERP
+        this->unk1B4 += (((player->unk_B08[0] - 0.15f) * 1.5f) - this->unk1B4) * 0.5f;
     } else if (player->unk_B08[0] > .1f) {
-        this->unk1C0 = (s32)((player->unk_B08[0] - .1f) * 255.0f * 20.0f);
-        this->unk1A4 = (player->unk_B08[0] - .1f) * 10.0f;
+        this->chargingAlpha = (s32)((player->unk_B08[0] - .1f) * 255.0f * 20.0f);
+        this->lightColorFrac = (player->unk_B08[0] - .1f) * 10.0f;
     } else {
-        this->unk1C0 = 0;
+        this->chargingAlpha = 0;
     }
 
     if (player->unk_B08[0] > 0.85f) {
@@ -334,46 +344,46 @@ void func_808B5984(EnMThunder* this, PlayState* play) {
 }
 
 void func_808B5EEC(EnMThunder* this, PlayState* play) {
-    if (this->unk1BC < 2) {
-        if (this->unk1C0 < 40) {
-            this->unk1C0 = 0;
+    if (this->timer < 2) {
+        if (this->chargingAlpha < 40) {
+            this->chargingAlpha = 0;
         } else {
-            this->unk1C0 -= 40;
+            this->chargingAlpha -= 40;
         }
     }
 
-    this->unk1AC += 2.0f * this->unk1A8;
+    this->scroll += 2.0f * this->alphaFrac;
 
-    if (this->unk1B4 < this->unk1A4) {
-        this->unk1B4 = F32_LERPIMP(this->unk1B4, this->unk1A4, 0.1f);
+    if (this->unk1B4 < this->lightColorFrac) {
+        this->unk1B4 = F32_LERPIMP(this->unk1B4, this->lightColorFrac, 0.1f);
     } else {
-        this->unk1B4 = this->unk1A4;
+        this->unk1B4 = this->lightColorFrac;
     }
 }
 
-void func_808B5F68(EnMThunder* this, PlayState* play) {
+void EnMThunder_Spin_Attack(EnMThunder* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Math_StepToF(&this->unk1A4, 0.0f, 0.0625f)) {
+    if (Math_StepToF(&this->lightColorFrac, 0.0f, 0.0625f)) {
         Actor_MarkForDeath(&this->actor);
     } else {
-        Math_SmoothStepToF(&this->actor.scale.x, (s32)this->unk1C1, 0.6f, 0.8f, 0.0f);
+        Math_SmoothStepToF(&this->actor.scale.x, (s32)this->scaleTarget, 0.6f, 0.8f, 0.0f);
         Actor_SetScale(&this->actor, this->actor.scale.x);
         this->collider.dim.radius = this->actor.scale.x * 30.0f;
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     }
 
-    if (this->unk1BC > 0) {
+    if (this->timer > 0) {
         this->actor.world.pos.x = player->bodyPartsPos[0].x;
         this->actor.world.pos.z = player->bodyPartsPos[0].z;
-        this->unk1BC--;
+        this->timer--;
     }
 
-    if (this->unk1A4 > (6.0f / 10.0f)) {
-        this->unk1A8 = 1.0f;
+    if (this->lightColorFrac > (6.0f / 10.0f)) {
+        this->alphaFrac = 1.0f;
     } else {
-        this->unk1A8 = this->unk1A4 * (10.0f / 6.0f);
+        this->alphaFrac = this->lightColorFrac * (10.0f / 6.0f);
     }
 
     func_808B5EEC(this, play);
@@ -383,17 +393,17 @@ void func_808B5F68(EnMThunder* this, PlayState* play) {
     }
 }
 
-void func_808B60D4(EnMThunder* this, PlayState* play) {
+void EnMThunder_SwordBeam_Attack(EnMThunder* this, PlayState* play) {
     s32 pad[2];
     f32 sp2C;
 
-    if (this->unk1A4 > (9.0f / 10.0f)) {
-        this->unk1A8 = 1.0f;
+    if (this->lightColorFrac > (9.0f / 10.0f)) {
+        this->alphaFrac = 1.0f;
     } else {
-        this->unk1A8 = this->unk1A4 * (10.0f / 9.0f);
+        this->alphaFrac = this->lightColorFrac * (10.0f / 9.0f);
     }
 
-    if (Math_StepToF(&this->unk1A4, 0.0f, 0.05f)) {
+    if (Math_StepToF(&this->lightColorFrac, 0.0f, 0.05f)) {
         Actor_MarkForDeath(&this->actor);
     } else {
         sp2C = -80.0f * Math_CosS(this->actor.world.rot.x);
@@ -402,7 +412,7 @@ void func_808B60D4(EnMThunder* this, PlayState* play) {
         this->actor.world.pos.z += sp2C * Math_CosS(this->actor.shape.rot.y);
         this->actor.world.pos.y += -80.0f * Math_SinS(this->actor.world.rot.x);
 
-        Math_SmoothStepToF(&this->actor.scale.x, this->unk1C1, 0.6f, 2.0f, 0.0f);
+        Math_SmoothStepToF(&this->actor.scale.x, this->scaleTarget, 0.6f, 2.0f, 0.0f);
         Actor_SetScale(&this->actor, this->actor.scale.x);
 
         this->collider.dim.radius = this->actor.scale.x * 5.0f;
@@ -420,25 +430,25 @@ void func_808B60D4(EnMThunder* this, PlayState* play) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     }
 
-    if (this->unk1BC > 0) {
-        this->unk1BC--;
+    if (this->timer > 0) {
+        this->timer--;
     }
 
     func_808B5EEC(this, play);
 }
 
 void func_808B6310(EnMThunder* this, PlayState* play) {
-    if (Math_StepToF(&this->unk1A4, 0.0f, 0.0625f)) {
+    if (Math_StepToF(&this->lightColorFrac, 0.0f, 0.0625f)) {
         Actor_MarkForDeath(&this->actor);
     } else {
-        Math_SmoothStepToF(&this->actor.scale.x, (s32)this->unk1C1, 0.6f, 0.8f, 0.0f);
+        Math_SmoothStepToF(&this->actor.scale.x, (s32)this->scaleTarget, 0.6f, 0.8f, 0.0f);
         Actor_SetScale(&this->actor, this->actor.scale.x);
     }
 
-    if (this->unk1A4 > (6.0f / 10.0f)) {
-        this->unk1A8 = 1.0f;
+    if (this->lightColorFrac > (6.0f / 10.0f)) {
+        this->alphaFrac = 1.0f;
     } else {
-        this->unk1A8 = this->unk1A4 * (10.0f / 6.0f);
+        this->alphaFrac = this->lightColorFrac * (10.0f / 6.0f);
     }
 
     func_808B5EEC(this, play);
@@ -450,8 +460,8 @@ void EnMThunder_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     func_808B5890(play, this->unk1B4);
     Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y,
-                              this->actor.world.pos.z, this->unk1A4 * 255.0f, this->unk1A4 * 255.0f,
-                              this->unk1A4 * 100.0f, this->unk1A4 * 800.0f);
+                              this->actor.world.pos.z, this->lightColorFrac * 255.0f, this->lightColorFrac * 255.0f,
+                              this->lightColorFrac * 100.0f, this->lightColorFrac * 800.0f);
 }
 
 void func_808B65BC(Actor* thisx, PlayState* play) {
@@ -459,8 +469,8 @@ void func_808B65BC(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y,
-                              this->actor.world.pos.z, this->unk1A4 * 255.0f, this->unk1A4 * 255.0f,
-                              this->unk1A4 * 100.0f, this->unk1A4 * 800.0f);
+                              this->actor.world.pos.z, this->lightColorFrac * 255.0f, this->lightColorFrac * 255.0f,
+                              this->lightColorFrac * 100.0f, this->lightColorFrac * 800.0f);
 }
 
 void EnMThunder_Draw(Actor* thisx, PlayState* play2) {
@@ -477,46 +487,46 @@ void EnMThunder_Draw(Actor* thisx, PlayState* play2) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    switch (this->unk1BE) {
-        case 0:
-        case 1:
+    switch (this->subtype) {
+        case ENMTHUNDER_SUBTYPE_SPIN_GREAT:
+        case ENMTHUNDER_SUBTYPE_SPIN_REGULAR:
             gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0xFF - ((u16)(s32)(this->unk1AC * 30.0f) & 0xFF), 0, 64,
-                                        32, 1, 0xFF - ((u16)(s32)(this->unk1AC * 20.0f) & 0xFF), 0, 8, 8));
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0xFF - ((u16)(s32)(this->scroll * 30.0f) & 0xFF), 0, 64,
+                                        32, 1, 0xFF - ((u16)(s32)(this->scroll * 20.0f) & 0xFF), 0, 8, 8));
             break;
 
-        case 2:
-        case 3:
+        case ENMTHUNDER_SUBTYPE_SWORDBEAM_GREAT:
+        case ENMTHUNDER_SUBTYPE_SWORDBEAM_REGULAR:
             gSPSegment(POLY_XLU_DISP++, 0x08,
                        Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 16, 64, 1, 0,
-                                        0x1FF - ((u16)(s32)(this->unk1AC * 10.0f) & 0x1FF), 32, 128));
+                                        0x1FF - ((u16)(s32)(this->scroll * 10.0f) & 0x1FF), 32, 128));
             break;
 
         default:
             break;
     }
 
-    switch (this->unk1BE) {
-        case 0:
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 170, (u16)(this->unk1A8 * 255.0f));
+    switch (this->subtype) {
+        case ENMTHUNDER_SUBTYPE_SPIN_GREAT:
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 170, (u16)(this->alphaFrac * 255.0f));
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025DD0);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025EF0);
             break;
 
-        case 1:
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, (u16)(this->unk1A8 * 255.0f));
+        case ENMTHUNDER_SUBTYPE_SPIN_REGULAR:
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, (u16)(this->alphaFrac * 255.0f));
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025850);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025970);
             break;
 
-        case 3:
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, (u16)(this->unk1A8 * 255.0f));
+        case ENMTHUNDER_SUBTYPE_SWORDBEAM_REGULAR:
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, (u16)(this->alphaFrac * 255.0f));
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 100, 255, 128);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_027CA0);
             break;
 
-        case 2:
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 0, 255, 255, (u16)(this->unk1A8 * 255.0f));
+        case ENMTHUNDER_SUBTYPE_SWORDBEAM_GREAT:
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 0, 255, 255, (u16)(this->alphaFrac * 255.0f));
             gDPSetEnvColor(POLY_XLU_DISP++, 200, 200, 200, 128);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_027CA0);
             break;
@@ -527,7 +537,7 @@ void EnMThunder_Draw(Actor* thisx, PlayState* play2) {
 
     Matrix_Mult(&player->mf_CC4, MTXMODE_NEW);
 
-    if (this->unk1BF == 2) {
+    if (this->type == ENMTHUNDER_TYPE_GILDED_SWORD) {
         Matrix_Translate(0.0f, 220.0f, 0.0f, MTXMODE_APPLY);
         Matrix_Scale(-1.2f, -0.8f, -0.6f, MTXMODE_APPLY);
         Matrix_RotateXS(0x4000, MTXMODE_APPLY);
@@ -539,12 +549,12 @@ void EnMThunder_Draw(Actor* thisx, PlayState* play2) {
 
     if (this->unk1B0 >= 0.85f) {
         scale = (sScales[play->gameplayFrames & 7] * 6.0f) + 1.0f;
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 170, this->unk1C0);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 170, this->chargingAlpha);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 100, 0, 128);
         y2Scroll = 40;
     } else {
         scale = (sScales[play->gameplayFrames & 7] * 2.0f) + 1.0f;
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, this->unk1C0);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, this->chargingAlpha);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 100, 255, 128);
         y2Scroll = 20;
     }
