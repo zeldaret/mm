@@ -889,7 +889,8 @@ void func_80AD5394(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
 s32 EnTrt2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTrt2* this = THIS;
 
-    if ((limbIndex == KOTAKE_LIMB_TORSO_LIMB) || (limbIndex == KOTAKE_LIMB_LEFT_HAND) || (limbIndex == KOTAKE_LIMB_RIGHT_HAND)) {
+    if ((limbIndex == KOTAKE_LIMB_TORSO_LIMB) || (limbIndex == KOTAKE_LIMB_LEFT_HAND) ||
+        (limbIndex == KOTAKE_LIMB_RIGHT_HAND)) {
         rot->y += (s16)Math_SinS(this->unk_33C[limbIndex]) * 200;
         rot->z += (s16)Math_CosS(this->unk_372[limbIndex]) * 200;
     }
