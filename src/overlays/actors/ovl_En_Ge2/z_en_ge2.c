@@ -736,7 +736,7 @@ s32 EnGe2_ValidatePictograph(PlayState* play, Actor* thisx) {
 s32 EnGe2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnGe2* this = (EnGe2*)thisx;
 
-    if (limbIndex == 3) {
+    if (limbIndex == GERUDO_PURPLE_NECK_LIMB) {
         rot->x += this->headRot.y;
         rot->z += this->headRot.x;
     }
@@ -746,7 +746,7 @@ s32 EnGe2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 void EnGe2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f sFocusOffset = { 600.0f, 700.0f, 0.0f };
 
-    if (limbIndex == 6) {
+    if (limbIndex == GERUDO_PURPLE_HEAD_LIMB) {
         Matrix_MultVec3f(&sFocusOffset, &thisx->focus.pos);
     }
 }
