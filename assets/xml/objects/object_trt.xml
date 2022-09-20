@@ -75,7 +75,7 @@
         <Animation Name="gKotakeSleepingAnim" Offset="0xFD34" />
 
         <!-- Skeleton -->
-        <Limb Name="gKotakePelivsLimb" Type="Standard" EnumName="KOTAKE_LIMB_PELVIS" Offset="0xFD50" />
+        <Limb Name="gKotakePelvisLimb" Type="Standard" EnumName="KOTAKE_LIMB_PELVIS" Offset="0xFD50" />
         <Limb Name="gKotakeLeftThighLimb" Type="Standard" EnumName="KOTAKE_LIMB_LEFT_THIGH" Offset="0xFD5C" />
         <Limb Name="gKotakeLeftShinLimb" Type="Standard" EnumName="KOTAKE_LIMB_LEFT_SHIN" Offset="0xFD68" />
         <Limb Name="gKotakeLeftFootLimb" Type="Standard" EnumName="KOTAKE_LIMB_LEFT_FOOT" Offset="0xFD74" />
