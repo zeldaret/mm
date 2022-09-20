@@ -86,6 +86,7 @@ void EnGe3_Init(Actor* thisx, PlayState* play) {
     if (GERUDO_AVEIL_GET_TYPE(&this->picto.actor) == GERUDO_AVEIL_TYPE_AVEILS_CHAMBER) {
         EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_HAND_ON_HIP_WAIT, ANIMMODE_LOOP, 0.0f);
         this->actionFunc = EnGe3_AveilsChamberIdle;
+
         if (gSaveContext.save.weekEventReg[83] & 2) { // Knocked beehive down
             Actor_MarkForDeath(&this->picto.actor);
             return;

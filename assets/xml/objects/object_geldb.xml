@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Assets for Gerudo wearing red, i.e. Aveil -->
     <File Name="object_geldb" Segment="6">
         <Animation Name="gGerudoRedBeggingAnim" Offset="0x734" /><!-- begging? Original name: "ga_asonde" "idle"? -->
         <Animation Name="gGerudoRedDismissAnim" Offset="0xCB0" /><!-- Original name: "ga_hayaku" "hurry" -->
