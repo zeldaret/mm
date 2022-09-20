@@ -17,8 +17,14 @@ void EnBee_Draw(Actor* thisx, PlayState* play);
 
 void func_80B5A9E8(EnBee* this, PlayState* play);
 void func_80B5AC3C(EnBee* this, PlayState* play);
+void func_80B5A854(EnBee* this);
+void func_80B5ABC4(EnBee* this);
+void func_80B5AF80(EnBee* this, PlayState* play);
 
-#if 0
+#if 1
+
+static s32 D_80B5B1F0 = 0;
+
 const ActorInit En_Bee_InitVars = {
     ACTOR_EN_BEE,
     ACTORCAT_ENEMY,
@@ -69,32 +75,232 @@ static DamageTable D_80B5B214 = {
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B5B234 = {
-    { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x08, 0x02 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER,
+        OC1_ON,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x08, 0x02 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 6, 13, -4, { 0, 0, 0 } },
 };
 
 #endif
 
-extern DamageTable D_80B5B214;
-extern ColliderCylinderInit D_80B5B234;
-
 extern UNK_TYPE D_0600005C;
+extern SkeletonHeader D_06001398;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/EnBee_Init.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/EnBee_Init.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/EnBee_Destroy.s")
+void EnBee_Init(Actor* thisx, PlayState* play) {
+    EnBee* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/func_80B5A854.s")
+    this->actor.colChkInfo.mass = 0xA;
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
+    SkelAnime_Init(play, &this->skelAnime, &D_06001398, (AnimationHeader*)&D_0600005C, &this->morphTable,
+                   &this->jointTable, 0xA);
+    this->actor.colChkInfo.health = 1;
+    this->actor.colChkInfo.damageTable = &D_80B5B214;
+    this->actor.targetMode = 6;
+    Collider_InitAndSetCylinder(play, &this->unk23C, &this->actor, &D_80B5B234);
+    this->unk218 = D_80B5B1F0;
+    D_80B5B1F0++;
+    this->actor.shape.shadowScale = 12.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/func_80B5A9E8.s")
+    if (ActorCutscene_GetCurrentIndex() != -1) {
+        func_800BC154(play, &play->actorCtx, &this->actor, 7U);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/func_80B5ABC4.s")
+    this->actor.hintId = 0xC;
+    func_80B5A854(this);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/func_80B5AC3C.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/EnBee_Destroy.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/func_80B5AF80.s")
+void EnBee_Destroy(Actor* thisx, PlayState* play) {
+    EnBee* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/EnBee_Update.s")
+    Collider_DestroyCylinder(play, &this->unk23C);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/EnBee_Draw.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/func_80B5A854.s")
+void func_80B5A854(EnBee* this) {
+    s32 pad;
+    Vec3f sp48;
+    s16 sp46;
+
+    Animation_Change(&this->skelAnime, (AnimationHeader*)&D_0600005C, 1.0f, 0.0f,
+                     (f32)Animation_GetLastFrame(&D_0600005C), (u8)0, -10.0f);
+    Math_Vec3f_Copy(&sp48, &this->actor.home.pos);
+    sp46 = (this->unk218 * 0x700) + 0x2000;
+    sp48.x += Math_SinS(sp46) * 50.0f;
+    sp48.y = Rand_ZeroFloat(50.0f) + (this->actor.floorHeight + 30.0f);
+    sp48.z += Math_CosS(sp46) * 50.0f;
+    Math_Vec3f_Copy(&this->unk21C, &sp48);
+    Math_Vec3f_Copy(&sp48, &this->actor.home.pos);
+    sp48.x += Math_SinS(sp46 - 0x4000) * 50.0f;
+    sp48.y = Rand_ZeroFloat(50.0f) + (this->actor.floorHeight + 30.0f);
+    sp48.z += Math_CosS(sp46 - 0x4000) * 50.0f;
+    Math_Vec3f_Copy(&this->unk228, (Vec3f*)&sp48);
+    this->unk204 = Rand_S16Offset(0x14, 0x1E);
+    this->unk208 = 0;
+    this->actionFunc = func_80B5A9E8;
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/func_80B5A9E8.s")
+
+void func_80B5A9E8(EnBee* this, PlayState* play) {
+    Vec3f sp3C;
+    s32 pad[2];
+
+    if ((this->actor.category != 5) && (ActorCutscene_GetCurrentIndex() == -1)) {
+        func_800BC154(play, &play->actorCtx, &this->actor, 5);
+    }
+
+    Math_Vec3f_Copy(&sp3C, &this->unk21C + this->unk214  /*0x21C*/ );
+    sp3C.x += Math_SinS(this->unk20C) * 30.0f;
+    sp3C.z += Math_CosS(this->unk20C) * 30.0f;
+
+    if ((this->unk218 & 1) == 0) {
+        this->unk20C += (s16) (((s32) randPlusMinusPoint5Scaled(1000.0f)) + 0xFA0);
+    } else {
+        this->unk20C = (this->unk20C - (s16)((s32)randPlusMinusPoint5Scaled(1000.0f) + 0xFA0));
+    }
+
+    this->unk210 += 0x3E8;
+    this->actor.velocity.y = Math_SinS(this->unk210 /*212*/);
+
+    if (this->unk20C >= 0x10001) {
+        this->unk20C = 0;
+        this->unk214++;
+        this->unk214 &= 1;
+    }
+
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp3C), 1, 0x7D0, (s16)0);
+    Math_ApproachF(&this->actor.speedXZ, 3.0f, 0.3f, 1.0f);
+
+    if ((this->unk204 == 0) && (this->actor.params != 0)) {
+        func_80B5ABC4(this);
+    }
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/func_80B5ABC4.s")
+
+void func_80B5ABC4(EnBee* this) {
+    Animation_Change(&this->skelAnime, (AnimationHeader*)&D_0600005C, 1.0f, 0.0f, Animation_GetLastFrame(&D_0600005C),
+                     0, -10.0f);
+    this->unk208 = 1;
+    this->actionFunc = func_80B5AC3C;
+}
+
+
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/func_80B5AC3C.s")
+void func_80B5AC3C(EnBee *this, PlayState *play) {
+    Player *player = GET_PLAYER(play);
+    Vec3f sp88;
+    f32 temp_fs0;
+    f32 temp_fs0_2;
+    f32 phi_fs1;
+    Vec3f *phi_s2;
+    s32 i;
+    //s32 j;
+
+    
+    Math_Vec3f_Copy(&sp88, &player->actor.world.pos);
+    phi_fs1 = (f32) ((this->unk218 * 0x700) + 0x2000);
+
+    for (i = 0, phi_s2 = &this->unk21C; i < 0x18; i += 12){
+        temp_fs0 = randPlusMinusPoint5Scaled(20.0f);
+        sp88.x += (Math_SinS((s16) (s32) ((f32) this->actor.yawTowardsPlayer + (f32) this->unk20C + phi_fs1)) * (temp_fs0 + 30.0f));
+        sp88.y = (Math_SinS(this->unk210) * 10.0f) + (player->actor.floorHeight + 40.0f);
+        temp_fs0 = randPlusMinusPoint5Scaled(20.0f);
+        sp88.z += Math_CosS((s16) (s32) ((f32) this->actor.yawTowardsPlayer + (f32) this->unk20C + phi_fs1)) * (temp_fs0 + 30.0f);
+        Math_Vec3f_Copy(phi_s2, &sp88);
+        phi_fs1 -= 16384.0f;
+        phi_s2 ++;
+    }
+
+    Math_Vec3f_Copy(&sp88, &this->unk21C + (this->unk214 ));
+
+    if ((this->unk218 & 1) == 0) {
+        this->unk20C += (this->unk218 * 0x700) + (s32) randPlusMinusPoint5Scaled((f32) (this->unk218 * 0x700) * 0.5f);
+    } else {
+        this->unk20C = (this->unk20C - (this->unk218 * 0x700)) - (s32) randPlusMinusPoint5Scaled((f32) (this->unk218 * 0x700) * 0.5f);
+    }
+    this->unk210 +=(s32) randPlusMinusPoint5Scaled(500.0f) + 1000;
+    if (this->unk20C >= 0x10001) {
+        this->unk20C = 0;
+        this->unk214++;
+        this->unk214 &= 1;
+    }
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp88), 1, 0x1388, (s16) 0);
+    Math_ApproachF(&this->actor.world.pos.y, sp88.y, 0.3f, 3.0f);
+    Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.3f, 1.0f);
+}
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/func_80B5AF80.s")
+void func_80B5AF80(EnBee *this, PlayState *play) {
+    if ((this->unk206 == 0) && ((this->unk23C.base.atFlags & 2) != 0)) {
+        AudioSfx_StopByPosAndId(&this->actor.projectedPos, 0x304AU);
+        this->unk206 = 5;
+    }
+
+    if ((this->unk23C.base.acFlags & 2) != 0) {
+        Enemy_StartFinishingBlow(play, &this->actor);
+        this->actor.speedXZ = 0.0f;
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 0xAU, 0x393BU);
+        this->actor.colChkInfo.health = 0;
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 0x32U, 0x3878U);
+        func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, (s16) 0x64, (s16) 0, 2);
+        Actor_MarkForDeath(&this->actor);
+    }
+}
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/EnBee_Update.s")
+
+void EnBee_Update(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnBee* this = THIS;
+
+    SkelAnime_Update(&this->skelAnime);
+
+    if (this->actor.category == 5) {
+        if (this->unk204 != 0) {
+            this->unk204--;
+        }
+        if (this->unk206 != 0) {
+            this->unk206--;
+        }
+    }
+
+    Actor_PlaySfxAtPos(&this->actor, 0x304A);
+    func_80B5AF80(this, play);
+    Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
+    Actor_SetFocus(&this->actor, 0.0f);
+    Actor_SetScale(&this->actor, 0.01f);
+    this->actionFunc(this, play);
+    Actor_MoveWithGravity(&this->actor);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 40.0f, 40.0f, 0x1D);
+    Collider_UpdateCylinder(&this->actor, &this->unk23C);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->unk23C.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk23C.base);
+    CollisionCheck_SetAT(play, &play->colChkCtx, &this->unk23C.base);
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/EnBee_Draw.s")
+
+void EnBee_Draw(Actor* thisx, PlayState* play) {
+    EnBee* this = THIS;
+
+    func_8012C28C(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
+    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
+}
