@@ -70,7 +70,6 @@ void ObjBoat_Init(Actor* thisx, PlayState* play) {
         this->maxPointIndex = path->count - 1;
         this->points = Lib_SegmentedToVirtual(path->points);
         this->direction = 1;
-        //
         this->dyna.actor.world.pos.x = this->points[this->curPointIndex].x;
         this->dyna.actor.world.pos.z = this->points[this->curPointIndex].z;
         this->dyna.actor.shape.rot.y = ObjBoat_GetNextPoint(this, &sp24);

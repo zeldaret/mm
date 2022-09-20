@@ -208,7 +208,7 @@ s32 EnGe2_SetupPath(EnGe2* this, PlayState* play) {
             f32 diffX = points[0].x - this->picto.actor.world.pos.x;
             f32 diffZ = points[0].z - this->picto.actor.world.pos.z;
 
-            if ((SQ(diffX) + SQ(diffZ)) < 100.0f) {
+            if ((SQ(diffX) + SQ(diffZ)) < SQ(10.0f)) {
                 this->curPointIndex = 0;
                 this->stateFlags &= ~GERUDO_PURPLE_STATE_PATH_REVERSE;
             } else {
@@ -287,7 +287,7 @@ GerudoPurplePathStatus EnGe2_FollowPath(EnGe2* this) {
     this->picto.actor.world.rot.y = Math_Atan2S(diffX, diffZ);
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.world.rot.y, 2, 0x7D0, 0xC8);
 
-    if ((SQ(diffX) + SQ(diffZ)) < 100.0f) {
+    if ((SQ(diffX) + SQ(diffZ)) < SQ(10.0f)) {
         if (this->stateFlags & GERUDO_PURPLE_STATE_PATH_REVERSE) {
             this->curPointIndex--;
             if (this->curPointIndex < 0) {
@@ -455,7 +455,6 @@ void EnGe2_KnockedOut(EnGe2* this, PlayState* play) {
 
     if (this->timer > 0) {
         this->timer--;
-        return;
     } else {
         EnGe2_SetupLookAround(this);
         this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
@@ -549,6 +548,7 @@ void EnGe2_LookAround(EnGe2* this, PlayState* play) {
         case GERUDO_PURPLE_DETECTION_HEARD:
             Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->yawTarget, 2, 0x3E8, 0x1F4);
             break;
+            
         case GERUDO_PURPLE_DETECTION_PROXIMITY:
             Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->yawTarget, 2, 0xBB8, 0x3E8);
             break;
