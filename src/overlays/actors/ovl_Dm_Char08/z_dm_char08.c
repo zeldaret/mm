@@ -358,8 +358,8 @@ void func_80AAFB04(DmChar08* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((fabsf(this->dyna.actor.xzDistToPlayer) < 200.0f) && (player->actor.world.pos.y > 0.0f)) {
-        play->nextEntrance = 0x6A70;
-        play->transitionTrigger = 0x14;
+        play->nextEntrance = ENTRANCE(ZORA_CAPE, 7);
+        play->transitionTrigger = TRANS_TRIGGER_START;
         Scene_SetExitFade(play);
         this->actionFunc = func_80AAFB94;
     }
