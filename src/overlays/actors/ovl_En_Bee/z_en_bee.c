@@ -161,7 +161,7 @@ void func_80B5A9E8(EnBee* this, PlayState* play) {
     if (!(this->unk_218 & 1)) {
         this->unk_20C += (s16)((s32)randPlusMinusPoint5Scaled(1000.0f) + 0xFA0);
     } else {
-        this->unk_20C = (this->unk_20C - (s16)((s32)randPlusMinusPoint5Scaled(1000.0f) + 0xFA0));
+        this->unk_20C -= (s16)((s32)randPlusMinusPoint5Scaled(1000.0f) + 0xFA0);
     }
 
     this->unk_210 += 1000;
@@ -173,7 +173,7 @@ void func_80B5A9E8(EnBee* this, PlayState* play) {
         this->unk_214 &= 1;
     }
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp3C), 1, 0x7D0, (s16)0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp3C), 1, 0x7D0, 0);
     Math_ApproachF(&this->actor.speedXZ, 3.0f, 0.3f, 1.0f);
 
     if ((this->unk_204 == 0) && (this->actor.params != 0)) {
@@ -197,26 +197,26 @@ void func_80B5AC3C(EnBee* this, PlayState* play) {
     s32 i;
 
     Math_Vec3f_Copy(&sp88, &player->actor.world.pos);
-    phi_fs1 = (f32)((this->unk_218 * 0x700) + 0x2000);
+    phi_fs1 = (this->unk_218 * 0x700) + 0x2000;
 
-    for (i = 0, phi_s2 = &this->unk_21C; i < 0x18; i += 12) {
+    for (i = 0, phi_s2 = &this->unk_21C; i < 0x18; i += 12, phi_s2++) {
         rnd = randPlusMinusPoint5Scaled(20.0f);
         sp88.x += (Math_SinS((this->actor.yawTowardsPlayer + (f32)this->unk_20C + phi_fs1)) * (rnd + 30.0f));
         sp88.y = (Math_SinS(this->unk_210) * 10.0f) + (player->actor.floorHeight + 40.0f);
+
         rnd = randPlusMinusPoint5Scaled(20.0f);
         sp88.z += Math_CosS((f32)this->actor.yawTowardsPlayer + this->unk_20C + phi_fs1) * (rnd + 30.0f);
+
         Math_Vec3f_Copy(phi_s2, &sp88);
         phi_fs1 -= 16384.0f;
-        phi_s2++;
     }
 
     Math_Vec3f_Copy(&sp88, &this->unk_21C + (this->unk_214));
 
-    if ((this->unk_218 & 1) == 0) {
+    if (!(this->unk_218 & 1)) {
         this->unk_20C += (this->unk_218 * 0x700) + (s32)randPlusMinusPoint5Scaled((this->unk_218 * 0x700) * 0.5f);
     } else {
-        this->unk_20C =
-            (this->unk_20C - (this->unk_218 * 0x700)) - (s32)randPlusMinusPoint5Scaled((this->unk_218 * 0x700) * 0.5f);
+        this->unk_20C -= (this->unk_218 * 0x700) + (s32)randPlusMinusPoint5Scaled((this->unk_218 * 0x700) * 0.5f);
     }
 
     this->unk_210 += (s32)randPlusMinusPoint5Scaled(500.0f) + 1000;
