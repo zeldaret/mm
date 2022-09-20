@@ -21,8 +21,7 @@ typedef struct EnBee {
     /* 0x210 */ s32 unk_210; 
     /* 0x214 */ s32 unk_214;
     /* 0x218 */ s32 unk_218;
-    /* 0x21C */ Vec3f unk_21C;
-    /* 0x228 */ Vec3f unk_228;
+    /* 0x21C */ Vec3f unk_21C[2];
     /* 0x234 */ char pad234[8];
     /* 0x23C */ ColliderCylinder collider;
 } EnBee;
