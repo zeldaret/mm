@@ -41,8 +41,8 @@ typedef struct EnGo {
     /* 0x1E0 */ UNK_TYPE1 unk1E0[0x4C];
     /* 0x22C */ ColliderSphere colliderSphere;
     /* 0x284 */ Path* gatekeeperPath;
-    /* 0x288 */ s8 indexTaisou;
-    /* 0x289 */ s8 indexHakuginDemo;
+    /* 0x288 */ s8 objIndexTaisou;
+    /* 0x289 */ s8 objIndexHakuginDemo;
     /* 0x28C */ s32 msgScriptResumePos;
     /* 0x290 */ Vec3f headPos;
     /* 0x29C */ Vec3f bodyPos;

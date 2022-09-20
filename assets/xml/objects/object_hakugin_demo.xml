@@ -1,8 +1,9 @@
 ﻿<Root>
+    <!-- Animations for Gorons during the arrival of spring cutscene -->
     <File Name="object_hakugin_demo" Segment="6">
-        <Animation Name="gHakuginShowAnim" Offset="0x1420" />
-        <Animation Name="gHakuginShowLoopAnim" Offset="0x1A4C" />
-        <Animation Name="gHakuginLookAroundAnim" Offset="0x2704" />
-        <Animation Name="gHakuginLookAroundLoopAnim" Offset="0x3378" />
+        <Animation Name="gGoronSpringShowAnim" Offset="0x1420" />
+        <Animation Name="gGoronSpringShowLoopAnim" Offset="0x1A4C" />
+        <Animation Name="gGoronSpringLookAroundAnim" Offset="0x2704" />
+        <Animation Name="gGoronSpringLookAroundLoopAnim" Offset="0x3378" />
     </File>
 </Root>

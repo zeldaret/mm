@@ -96,7 +96,7 @@ typedef enum EnGoAnimationIndex {
     /*  8 */ ENGO_ANIM_COVEREARS,
     /*  9 */ ENGO_ANIM_SHIVERINGSURPRISED,
 
-    /*  10 */ ENGO_ANIM_TAISOU_START = 10,
+    /*  10 */ ENGO_ANIM_ATHLETICS_START = 10,
     /*  10 */ ENGO_ANIM_DOUBLE_ARM_SIDEBEND = 10,
     /*  11 */ ENGO_ANIM_SQUAT_SIDE_TO_SIDE,
     /*  12 */ ENGO_ANIM_SHAKE_LIMBS,
@@ -106,7 +106,7 @@ typedef enum EnGoAnimationIndex {
     /*  16 */ ENGO_ANIM_SHOUT,
     /*  17 */ ENGO_ANIM_HELP_SITTING_STRETCH,
 
-    /*  18 */ ENGO_ANIM_HAKUGIN_START = 18,
+    /*  18 */ ENGO_ANIM_SPRING_START = 18,
     /*  18 */ ENGO_ANIM_SHOW = 18,
     /*  19 */ ENGO_ANIM_SHOW_LOOPED,
     /*  20 */ ENGO_ANIM_LOOK_AROUND,
@@ -317,20 +317,20 @@ static AnimationInfoS sAnimationInfo[] = {
     { &gGoronShiveringSurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
 
     /* Animations for stretching gorons at the racetrack */
-    { &gTaisouDoubleArmSideBendAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gTaisouSquatSideToSideAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gTaisouShakeLimbsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gTaisouSingleArmSidebendAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gTaisouHamstringStretchSittingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gTaisouCheerAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gTaisouShoutAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gTaisouHamstringStretchStandingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronAthleticsDoubleArmSideBendAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronAthleticsSquatSideToSideAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronAthleticsShakeLimbsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronAthleticsSingleArmSideBendAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronAthleticsHamstringStretchSittingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronAthleticsCheerAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronAthleticsShoutAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronAthleticsHamstringStretchStandingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 
     /* Animations for the goron brothers during the spring arrival cutscene */
-    { &gHakuginShowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gHakuginShowLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gHakuginLookAroundAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gHakuginLookAroundLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gGoronSpringShowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gGoronSpringShowLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gGoronSpringLookAroundAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gGoronSpringLookAroundLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 Actor* EnGo_FindGravemaker(EnGo* this, PlayState* play);
@@ -1044,23 +1044,23 @@ s32 EnGo_GraveBroGoron_CheckAndSetupCutsceneSpringArrival(EnGo* this, PlayState*
  * @return true of non-repeating animation has finished
  */
 s32 EnGo_UpdateAnimationToCurrent(EnGo* this, PlayState* play) {
-    s8 objIdx = this->actor.objBankIndex;
-    s8 objIdx2 = -1;
+    s8 objIndex = this->actor.objBankIndex;
+    s8 objIndex2 = -1;
     s32 ret = false;
 
-    if ((this->currAnimIndex >= ENGO_ANIM_HAKUGIN_START) && (this->indexHakuginDemo >= 0)) {
-        objIdx2 = this->indexHakuginDemo;
-    } else if ((this->currAnimIndex >= ENGO_ANIM_TAISOU_START) && (this->indexTaisou >= 0)) {
-        objIdx2 = this->indexTaisou;
-    } else if (this->currAnimIndex < ENGO_ANIM_TAISOU_START) {
-        objIdx2 = this->actor.objBankIndex;
+    if ((this->currAnimIndex >= ENGO_ANIM_SPRING_START) && (this->objIndexHakuginDemo >= 0)) {
+        objIndex2 = this->objIndexHakuginDemo;
+    } else if ((this->currAnimIndex >= ENGO_ANIM_ATHLETICS_START) && (this->objIndexTaisou >= 0)) {
+        objIndex2 = this->objIndexTaisou;
+    } else if (this->currAnimIndex < ENGO_ANIM_ATHLETICS_START) {
+        objIndex2 = this->actor.objBankIndex;
     }
 
-    if (objIdx2 >= 0) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx2].segment);
+    if (objIndex2 >= 0) {
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex2].segment);
         this->skelAnime.playSpeed = this->currAnimPlaySpeed;
         ret = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
     }
 
     return ret;
@@ -1097,31 +1097,31 @@ s32 EnGo_UpdateSfx(EnGo* this, PlayState* play) {
  *
  * Goron animations come from one of three categories
  * - Basic Goron animations
- * - Goron Gymnastics like Stretches, Cheers, etc... (Taisou)
- * - Spring has Arrived Cutscene Animationstodo (Hakugin)
+ * - Goron Athletics like Stretches, Cheers, etc...
+ * - Spring Arrival Cutscene Animations
  * Changing animations with this function handles the transitions between the three categories.
  *
  * @return true if animation request was valid
  */
 s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimationIndex animIndex) {
-    s8 objIdx = this->actor.objBankIndex;
-    s8 objIdx2 = -1;
+    s8 objIndex = this->actor.objBankIndex;
+    s8 objIndex2 = -1;
     s32 ret = false;
 
-    if ((animIndex >= ENGO_ANIM_HAKUGIN_START) && (this->indexHakuginDemo >= 0)) {
-        objIdx2 = this->indexHakuginDemo;
-    } else if ((animIndex >= ENGO_ANIM_TAISOU_START) && (this->indexTaisou >= 0)) {
-        objIdx2 = this->indexTaisou;
-    } else if (animIndex < ENGO_ANIM_TAISOU_START) {
-        objIdx2 = this->actor.objBankIndex;
+    if ((animIndex >= ENGO_ANIM_SPRING_START) && (this->objIndexHakuginDemo >= 0)) {
+        objIndex2 = this->objIndexHakuginDemo;
+    } else if ((animIndex >= ENGO_ANIM_ATHLETICS_START) && (this->objIndexTaisou >= 0)) {
+        objIndex2 = this->objIndexTaisou;
+    } else if (animIndex < ENGO_ANIM_ATHLETICS_START) {
+        objIndex2 = this->actor.objBankIndex;
     }
 
-    if (objIdx2 >= 0) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx2].segment);
+    if (objIndex2 >= 0) {
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex2].segment);
         this->currAnimIndex = animIndex;
         ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->currAnimPlaySpeed = this->skelAnime.playSpeed;
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
     }
 
     return ret;
@@ -1948,8 +1948,8 @@ void EnGo_SetupAction(EnGo* this, PlayState* play) {
         { 0, 0, 15, 100 },
     };
 
-    if (((this->indexTaisou < 0) || SubS_IsObjectLoaded(this->indexTaisou, play)) ||
-        ((this->indexHakuginDemo < 0) || SubS_IsObjectLoaded(this->indexHakuginDemo, play))) {
+    if (((this->objIndexTaisou < 0) || SubS_IsObjectLoaded(this->objIndexTaisou, play)) ||
+        ((this->objIndexHakuginDemo < 0) || SubS_IsObjectLoaded(this->objIndexHakuginDemo, play))) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
                            GORON_LIMB_MAX);
@@ -2437,8 +2437,8 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
 void EnGo_Init(Actor* thisx, PlayState* play) {
     EnGo* this = THIS;
 
-    this->indexTaisou = SubS_GetObjectIndex(OBJECT_TAISOU, play);
-    this->indexHakuginDemo = SubS_GetObjectIndex(OBJECT_HAKUGIN_DEMO, play);
+    this->objIndexTaisou = SubS_GetObjectIndex(OBJECT_TAISOU, play);
+    this->objIndexHakuginDemo = SubS_GetObjectIndex(OBJECT_HAKUGIN_DEMO, play);
     this->actionFunc = EnGo_SetupAction;
 }
 
