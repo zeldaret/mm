@@ -40,7 +40,6 @@ void func_809F0B0C(Boss05* this, PlayState* play);
 
 #include "overlays/ovl_Boss_05/ovl_Boss_05.c"
 
-// #if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 ColliderJntSphElementInit D_809F1B2C[2] = {
     {
@@ -139,9 +138,6 @@ ColliderJntSphInit D_809F1BDC = {
     D_809F1BB8, // sJntSphElementsInit,
 };
 
-// extern Color_RGBA8 D_809F1BEC;
-// extern Color_RGBA8 D_809F1BF0;
-// extern Vec3f D_809F1BF4;
 Color_RGBA8 D_809F1BEC = { 170, 255, 255, 255 };
 Color_RGBA8 D_809F1BF0 = { 200, 200, 255, 255 };
 Vec3f D_809F1BF4 = { 0.0f, -1.0f, 0.0f };
@@ -229,18 +225,6 @@ const ActorInit Boss_05_InitVars = {
     (ActorFunc)Boss05_Update,
     (ActorFunc)Boss05_Draw,
 };
-
-// #endif
-
-// extern CollisionHeader D_809F1B00;
-// extern ColliderJntSphElementInit D_809F1B2C[2];
-// extern ColliderJntSphInit D_809F1B74;
-// extern ColliderJntSphElementInit D_809F1B84[1];
-// extern ColliderJntSphInit D_809F1BA8;
-// extern ColliderJntSphElementInit D_809F1BB8[1];
-// extern ColliderJntSphInit D_809F1BDC;
-// extern DamageTable D_809F1C00;
-// extern DamageTable D_809F1C20;
 
 extern AnimationHeader D_060006A4;
 extern AnimationHeader D_06000A5C;
@@ -431,8 +415,6 @@ void func_809EEDD0(Boss05* this, PlayState* play) {
     this->actionFunc = func_809EEDE8;
 }
 
-// extern Vec3s D_809F1C60[];
-// extern Vec3s D_809F1C8C[];
 Vec3s D_809F1C60[7] = {
     { 0x3200, 0, 0 }, { -0x1E00, 0, 0 }, { -0x1400, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 },
 };
@@ -1219,10 +1201,7 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-// extern s8 D_809F1CB8[];
-s8 D_809F1CB8[] = {
-    -1, -1, 0, 1, 2, 3, 4, 5, 6, -1, -1, 0,
-};
+s8 D_809F1CB8[] = { -1, -1, 0, 1, 2, 3, 4, 5, 6, -1, -1, 0 };
 
 s32 func_809F1050(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     Boss05* this = THIS;
@@ -1255,7 +1234,6 @@ s32 func_809F1050(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-// extern Vec3f D_809F1CC4;
 Vec3f D_809F1CC4 = { 0.0f, -1400.0f, 600.0f };
 
 void func_809F1170(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -1295,11 +1273,9 @@ s32 func_809F1284(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-// extern Vec3f D_809F1CD0;
 Vec3f D_809F1CD0 = { 1600.0f, -300.0f, 0.0f };
-// extern Vec3f D_809F1CDC;
 Vec3f D_809F1CDC = { 700.0f, 0.0f, 0.0f };
-// extern Vec3f D_809F2110; // bss
+
 Vec3f D_809F2110; // bss
 
 void func_809F12A0(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -1360,10 +1336,7 @@ void func_809F1464(PlayState* play, s32 limbIndex, Actor* thisx) {
     }
 }
 
-// extern s32 D_809F1CE8[];
-s32 D_809F1CE8[] = {
-    2, 3, 1, 4, 5, 7, 8, 10, 11, 13, 14, 16, 17, 19,
-};
+s32 D_809F1CE8[] = { 2, 3, 1, 4, 5, 7, 8, 10, 11, 13, 14, 16, 17, 19 };
 
 s32 func_809F14AC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     Boss05* this = THIS;
