@@ -379,7 +379,8 @@ void func_809EEDD0(Boss05* this, PlayState* play) {
 
 extern Vec3s D_809F1C60[];
 extern Vec3s D_809F1C8C[];
-// Vec3s D_809F1C60[7] = {
+// In-function static doesn't seem to help
+// static Vec3s D_809F1C60[7] = {
 //     { 0x3200, 0, 0 },
 //     { -0x1E00, 0, 0 },
 //     { -0x1400, 0, 0 },
@@ -388,8 +389,7 @@ extern Vec3s D_809F1C8C[];
 //     { 0, 0, 0 },
 //     { 0, 0, 0 },
 // };
-
-// Vec3s D_809F1C8C[7] = {
+// static Vec3s D_809F1C8C[7] = {
 //     { -0x3200, 0, 0 },
 //     { 0, 0, 0 },
 //     { 0x1E00, 0, 0 },
@@ -399,70 +399,11 @@ extern Vec3s D_809F1C8C[];
 //     { 0, 0, 0 },
 // };
 
-// The big one
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_05/func_809EEDE8.s")
-// struct _m2c_stack_func_809EEDE8 {
-//     /* 0x000 */ char pad0[0x5C];
-//     /* 0x05C */ s16 *sp5C;
-//     /* 0x060 */ s16 *sp60;
-//     /* 0x064 */ char pad64[8];                      /* maybe part of sp60[3]? */
-//     /* 0x06C */ Vec3s *sp6C;
-//     /* 0x070 */ f32 sp70;
-//     /* 0x074 */ s32 sp74;
-//     /* 0x078 */ char pad78[8];                      /* maybe part of sp74[3]? */
-//     /* 0x080 */ f32 sp80;
-//     /* 0x084 */ char pad84[0x10];                   /* maybe part of sp80[5]? */
-//     /* 0x094 */ Vec3f sp94;
-//     /* 0x0A0 */ char padA0[4];
-//     /* 0x0A4 */ f32 spA4;
-//     /* 0x0A8 */ char padA8[0xC];                    /* maybe part of spA4[4]? */
-//     /* 0x0B4 */ s32 spB4;
-//     /* 0x0B8 */ s32 spB8;
-//     /* 0x0BC */ s32 spBC;
-//     /* 0x0C0 */ s32 spC0;
-//     /* 0x0C4 */ s32 spC4;
-//     /* 0x0C8 */ s32 spC8;
-//     /* 0x0CC */ s32 spCC;
-//     /* 0x0D0 */ s32 spD0;
-//     /* 0x0D4 */ s32 spD4;
-//     /* 0x0D8 */ Vec3s spD8;
-//     /* 0x0DE */ char padDE[0x25];                   /* maybe part of spD8[7]? */
-//     /* 0x103 */ u8 sp103;
-//     /* 0x104 */ char pad104[4];                     /* maybe part of sp103[5]? */
-//     /* 0x108 */ Player *sp108;
-//     /* 0x10C */ char pad10C[4];
-// };                                                  /* size = 0x110 */
-
-// Vec3s D_809F1C60[7] = {
-//     { 0x3200, 0, 0 },
-//     { -0x1E00, 0, 0 },
-//     { -0x1400, 0, 0 },
-//     { 0, 0, 0 },
-//     { 0, 0, 0 },
-//     { 0, 0, 0 },
-//     { 0, 0, 0 },
-// };
-// Vec3s D_809F1C8C[7] = {
-//     { -0x3200, 0, 0 },
-//     { 0, 0, 0 },
-//     { 0x1E00, 0, 0 },
-//     { 0, 0, 0 },
-//     { 0, 0, 0 },
-//     { 0, 0, 0 },
-//     { 0, 0, 0 },
-// };
-
-extern Vec3s D_809F1C60[];
-extern Vec3s D_809F1C8C[];
-
-void func_809EEDE8(Boss05 *this, PlayState *play) {
-    s32 pad;
-    
-    Player *sp108;
-    
-    s32 pad1;
-    
-    u8 sp103;
+void func_809EEDE8(Boss05* this, PlayState* play) {
+    s32 var_s3;
+    Player* sp108 = GET_PLAYER(play);
+    s32 var_v1;
+    u8 sp103 = 0;
     Vec3s spD8[7];
     s32 spD4;
     s32 spD0;
@@ -473,76 +414,17 @@ void func_809EEDE8(Boss05 *this, PlayState *play) {
     s32 spBC;
     s32 spB8;
     s32 spB4;
-
-    s32 pad2;
-    
+    s32 var_s6;
+    s32 var_s7;
+    s16 var_s5;
+    s16 var_s4;
     f32 spA4;
-    Vec3f sp94;
-    // f32 sp80;
-    // s32 sp74;
-    // f32 sp70;
-    // Vec3s *sp6C;
-    // s16 *sp60;
-    // s16 *sp5C;
-    // ? *temp_t5;
-    // ? temp_t2_2;
-    // ? temp_t4;
-    // ? temp_t5_4;
-    // Boss05 *temp_v0_6;
-    // Boss05 *temp_v0_7;
-    // Player *temp_v1;
-    // ActorContext *temp_s0_2;
-    // CollisionCheckContext *temp_s0_3;
-    // CollisionCheckContext *temp_s0_4;
-    // SkelAnime *temp_s0;
-    // Vec3s *var_s1;
-    // f32 *temp_s1;
-    // f32 temp_ft4;
     f32 var_fv1;
-    // s16 var_s4;
-    // s16 var_s5;
-    s16 var_s6;
-    s16 var_s7;
-    // s32 temp_lo;
-    // s32 temp_v0_5;
-    // s32 var_s0;
-    s32 var_s0_2;
-    s32 var_s0_3;
-    s32 var_s3;
-    // s32 var_s3_2;
+    Vec3f sp94;
     s32 var_s4_2;
-    s32 var_v1;
-    // u8 temp_v0;
-    // u8 temp_v0_2;
-    // void *temp_t1;
-    // void *temp_t1_2;
-    // void *temp_t2;
-    // void *temp_t2_3;
-    // void *temp_t2_4;
-    // void *temp_t3;
-    // void *temp_t3_2;
-    // void *temp_t5_2;
-    // void *temp_t5_3;
-    // void *temp_t6;
-    // void *temp_t6_2;
-    // void *temp_t7;
-    // void *temp_t8;
-    // void *temp_t8_2;
-    // void *temp_t9;
-    // void *temp_t9_2;
-    // void *temp_t9_3;
-    // Vec3s *temp_v0_3;
-    // Vec3s *temp_v0_4;
 
-    
-    
-    sp108 = GET_PLAYER(play);
-    sp103 = 0;
-    // var_s3 = 0;
-    // temp_v0 = this->unk174;
     this->dyna.actor.hintId = 8;
-    // var_s0 = 0;
-    // var_s1 = spD8;
+
     if (this->unk174 == 0) {
         spD4 = 0x3E8;
         spD0 = 0x3E80;
@@ -578,17 +460,8 @@ void func_809EEDE8(Boss05 *this, PlayState *play) {
             var_s6 = 1;
             var_s7 = 0x1000;
         } else {
-            var_s6 = 0;
-            var_s7 = 0;
-            spB4 = 0;
-            spB8 = 0;
-            spBC = 0;
-            spC0 = 0;
-            spC4 = 0;
-            spC8 = 0;
-            spCC = 0;
-            spD0 = 0;
-            spD4 = 0;
+
+            spD4 = spD0 = spCC = spC8 = spC4 = spC0 = spBC = spB8 = spB4 = var_s6 = var_s7 = 0;
         }
     }
 
@@ -596,40 +469,46 @@ void func_809EEDE8(Boss05 *this, PlayState *play) {
         if ((this->unk174 == 0) || (this->unk174 == 3)) {
             if (var_s3 < 3) {
                 spD8[var_s3].y = 0;
-                spD8[var_s3].x = (s32) (Math_SinS((this->unk160 * spD4) + (var_s3 * spD0)) * spCC);
+                spD8[var_s3].x = (s32)(Math_SinS((this->unk160 * spD4) + (var_s3 * spD0)) * spCC);
             } else {
                 spD8[var_s3].x = 0;
-                spD8[var_s3].y = (s32) (Math_SinS((this->unk160 * spC8) + (var_s3 * spC4)) * spC0);
+                spD8[var_s3].y = (s32)(Math_SinS((this->unk160 * spC8) + (var_s3 * spC4)) * spC0);
             }
 
             if ((var_s3 == 4) || (var_s3 == 6)) {
-                spD8[var_s3].z = (s32) (2.0f * (Math_SinS((this->unk160 * spBC) + var_s3 * spB8) * spB4));
+                spD8[var_s3].z = (s32)(Math_SinS((this->unk160 * spBC) + (var_s3 * spB8)) * spB4 * 2.0f);
             } else {
-                spD8[var_s3].z = (s32) (Math_SinS((this->unk160 * spBC) + var_s3 * spB8) * spB4);
+                spD8[var_s3].z = (s32)(Math_SinS((this->unk160 * spBC) + (var_s3 * spB8)) * spB4);
             }
-        } else if (this->unk174 == 1) {
-            var_s6 = 5;
-            var_s7 = 0x1000;
-            spD8[var_s3].x = D_809F1C60[var_s3].x;
-            spD8[var_s3].y = D_809F1C60[var_s3].y;
-            spD8[var_s3].z = D_809F1C60[var_s3].z;
-        } else if (this->unk174 == 2) {
-            var_s6 = 1;
-            var_s7 = 0x2000;
-            spD8[var_s3].x = D_809F1C8C[var_s3].x;
-            spD8[var_s3].y = D_809F1C8C[var_s3].y;
-            spD8[var_s3].z = D_809F1C8C[var_s3].z;
+            var_s4 = var_s6;
+            var_s5 = var_s7;
+        } else {
+            if (this->unk174 == 1) {
+                var_s6 = 5;
+                var_s7 = 0x1000;
+                spD8[var_s3].x = D_809F1C60[var_s3].x;
+                spD8[var_s3].y = D_809F1C60[var_s3].y;
+                spD8[var_s3].z = D_809F1C60[var_s3].z;
+            } else if (this->unk174 == 2) {
+                var_s6 = 1;
+                var_s7 = 0x2000;
+                spD8[var_s3].x = D_809F1C8C[var_s3].x;
+                spD8[var_s3].y = D_809F1C8C[var_s3].y;
+                spD8[var_s3].z = D_809F1C8C[var_s3].z;
+            }
+            var_s4 = var_s6;
+            var_s5 = var_s7;
         }
 
         Math_ApproachS(&this->unk19E[var_s3].x, spD8[var_s3].x, var_s6, var_s7);
         Math_ApproachS(&this->unk19E[var_s3].y, spD8[var_s3].y, var_s6, var_s7);
         Math_ApproachS(&this->unk19E[var_s3].z, spD8[var_s3].z, var_s6, var_s7);
-
     }
 
+    // There is some scope for which of var_s4,var_s5 and var_s6,var_s7 are used here
     spA4 = (sp108->actor.world.pos.y - this->dyna.actor.world.pos.y) + 10.0f;
     if (spA4 < 0.0f) {
-        Math_ApproachS(&this->dyna.actor.shape.rot.y, this->dyna.actor.yawTowardsPlayer, var_s6, var_s7);
+        Math_ApproachS(&this->dyna.actor.shape.rot.y, this->dyna.actor.yawTowardsPlayer, var_s4, var_s5);
     }
 
     SkelAnime_Update(&this->unk3C8);
@@ -638,93 +517,95 @@ void func_809EEDE8(Boss05 *this, PlayState *play) {
         Math_ApproachS(&this->dyna.actor.shape.rot.x, 0, 0x14, 0x800);
     }
 
-    switch (this->unk15C) {                         /* irregular */
-    case 0:
-        this->unk174 = 0;
-        this->unk3C8.playSpeed = 1.0f;
-        if (spA4 < 0.0f) {
-            if (sp108->actor.speedXZ > 10.0f) {
-                var_fv1 = 220.0f;
-            } else {
-                var_fv1 = 150.0f;
-            }
-            if ((this->unk162[0] == 0) && (sqrtf(this->dyna.actor.xyzDistToPlayerSq) <= var_fv1)) {
-                this->unk15C = 1;
-                this->unk162[0] = 0xA;
-            }
-            this->unk15E = 0;
-            // goto block_42;
-        } else {
-            
-            sp103 = 1;
-            if (sqrtf(this->dyna.actor.xyzDistToPlayerSq) <= 40.0f) {
-                this->unk15E++;
-                if (this->unk15E > 0x1E) {
-                    this->unk15C = 0xA;
-                    this->unk162[0] = 0x1E;
-                    Actor_PlaySfxAtPos(&this->dyna.actor, 0x3861U);
+    switch (this->unk15C) { /* irregular */
+        case 0:
+            this->unk174 = 0;
+            this->unk3C8.playSpeed = 1.0f;
+            if (spA4 < 0.0f) {
+                if (sp108->actor.speedXZ > 10.0f) {
+                    var_fv1 = 220.0f;
+                } else {
+                    var_fv1 = 150.0f;
                 }
-            } else {
-    // block_42:
+                if ((this->unk162[0] == 0) && (sqrtf(this->dyna.actor.xyzDistToPlayerSq) <= var_fv1)) {
+                    this->unk15C = 1;
+                    this->unk162[0] = 0xA;
+                }
                 this->unk15E = 0;
+                // goto block_42;
+            } else {
+
+                sp103 = 1;
+                if (sqrtf(this->dyna.actor.xyzDistToPlayerSq) <= 40.0f) {
+                    this->unk15E++;
+                    if (this->unk15E > 0x1E) {
+                        this->unk15C = 0xA;
+                        this->unk162[0] = 0x1E;
+                        Actor_PlaySfxAtPos(&this->dyna.actor, 0x3861U);
+                    }
+                } else {
+                    // block_42:
+                    this->unk15E = 0;
+                }
             }
-        }
-        if (!(this->unk160 & 3) && (Rand_ZeroOne() < 0.5f)) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, 0x3860U);
-        }
-        break;
+            if (!(this->unk160 & 3) && (Rand_ZeroOne() < 0.5f)) {
+                Actor_PlaySfxAtPos(&this->dyna.actor, 0x3860U);
+            }
+            break;
 
-    case 10:
-        if (!(this->unk160 & 1)) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, 0x3860U);
-        }
-        this->unk19C = (this->unk162[0] & 1) << 9;
-        this->unk174 = 3;
-        this->unk3C8.playSpeed = 4.0f;
-        Math_ApproachS(&this->dyna.actor.shape.rot.x, -0x8000, 2, 0x2000);
-        Math_ApproachS(&this->dyna.actor.shape.rot.y, this->dyna.actor.yawTowardsPlayer, 2, 0x2000);
-        if (this->unk162[0] == 0) {
-            this->unk15E = 0;
-            this->unk15C = 0;
-            this->unk162[0] = 0x64;
-        }
-        if (this->unk162[0] == 0x1B) {
-            Math_Vec3f_Copy(&sp94, &this->dyna.actor.world.pos);
-            sp94.y += 40.0f;
-            EffectSsGSplash_Spawn(play, &sp94, NULL, NULL, 1, 0x7D0);
-            Actor_PlaySfxAtPos(&this->dyna.actor, 0x2808U);
-        }
-        break;
+        case 10:
+            if (!(this->unk160 & 1)) {
+                Actor_PlaySfxAtPos(&this->dyna.actor, 0x3860U);
+            }
+            this->unk19C = (this->unk162[0] & 1) << 9;
+            this->unk174 = 3;
+            this->unk3C8.playSpeed = 4.0f;
+            Math_ApproachS(&this->dyna.actor.shape.rot.x, -0x8000, 2, 0x2000);
+            Math_ApproachS(&this->dyna.actor.shape.rot.y, this->dyna.actor.yawTowardsPlayer, 2, 0x2000);
+            if (this->unk162[0] == 0) {
+                this->unk15E = 0;
+                this->unk15C = 0;
+                this->unk162[0] = 0x64;
+            }
+            if (this->unk162[0] == 0x1B) {
+                Math_Vec3f_Copy(&sp94, &this->dyna.actor.world.pos);
+                sp94.y += 40.0f;
+                EffectSsGSplash_Spawn(play, &sp94, NULL, NULL, 1, 0x7D0);
+                Actor_PlaySfxAtPos(&this->dyna.actor, 0x2808U);
+            }
+            break;
 
-    case 1:
-        if (Animation_OnFrame(&this->unk3C8, this->unk4FC)) {
-            this->unk3C8.playSpeed = 0.0f;
-        }
-        this->unk174 = 1;
-        if (this->unk162[0] == 0) {
-            this->unk15C = 2;
-            this->unk162[0] = 0x14;
-            Actor_PlaySfxAtPos(&this->dyna.actor, 0x3861U);
-        }
-        break;
+        case 1:
+            if (Animation_OnFrame(&this->unk3C8, this->unk4FC)) {
+                this->unk3C8.playSpeed = 0.0f;
+            }
+            this->unk174 = 1;
+            if (this->unk162[0] == 0) {
+                this->unk15C = 2;
+                this->unk162[0] = 0x14;
+                Actor_PlaySfxAtPos(&this->dyna.actor, 0x3861U);
+            }
+            break;
 
-    case 2:
-        if (!(this->unk160 & 1)) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, 0x3860U);
-        }
-        this->unk19C = (this->unk162[0] & 1) << 9;
-        this->unk3C8.playSpeed = 4.0f;
-        Math_ApproachF(&this->unk35C, 1.5f, 1.0f, 0.7f);
-        this->unk174 = 2;
-        if (this->unk162[0] == 0) {
-            this->unk15C = 0;
-            this->unk162[0] = 0x1E;
-        }
-        break;
+        case 2:
+            if (!(this->unk160 & 1)) {
+                Actor_PlaySfxAtPos(&this->dyna.actor, 0x3860U);
+            }
+            this->unk19C = (this->unk162[0] & 1) << 9;
+            this->unk3C8.playSpeed = 4.0f;
+            Math_ApproachF(&this->unk35C, 1.5f, 1.0f, 0.7f);
+            this->unk174 = 2;
+            if (this->unk162[0] == 0) {
+                this->unk15C = 0;
+                this->unk162[0] = 0x1E;
+            }
+            break;
     }
 
     var_s4_2 = func_809EECBC(this, play);
     if ((var_s4_2 != 0) || (this->unk168 == 1)) {
+        Boss05* temp_v0_6;
+
         this->dyna.actor.params = 2;
         this->actionFunc = func_809EF9BC;
         this->dyna.actor.flags &= ~1;
@@ -733,43 +614,47 @@ void func_809EEDE8(Boss05 *this, PlayState *play) {
             var_s4_2 = 0xA;
         }
         if (var_s4_2 >= 0xA) {
-            Boss05 *temp_v0_6 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, 0x12D, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 3);
+            temp_v0_6 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, 0x12D,
+                                                    this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                                    this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
+                                                    this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 3);
             if (temp_v0_6 != NULL) {
                 Player* temp_v1 = GET_PLAYER(play);
-                if (&this->dyna.actor == temp_v1->targetActor) {
-                    temp_v1->targetActor = &temp_v0_6->dyna.actor;
+                if (temp_v1->unk_730 == &this->dyna.actor) {
+                    temp_v1->unk_730 = &temp_v0_6->dyna.actor;
                     play->actorCtx.targetContext.arrowPointedActor = &temp_v0_6->dyna.actor;
                     play->actorCtx.targetContext.targetedActor = &temp_v0_6->dyna.actor;
                 }
 
-                for (var_s0_2 = 0; var_s0_2 < 10; var_s0_2++) {
-                    temp_v0_6->unk268.jointTable[var_s0_2] = this->unk268.jointTable[var_s0_2];
+                for (var_s3 = 0; var_s3 < 10; var_s3++) {
+                    temp_v0_6->unk268.jointTable[var_s3] = this->unk268.jointTable[var_s3];
                 }
 
-                for (var_s0_2 = 0; var_s0_2 < 20; var_s0_2++) {
-                    temp_v0_6->unk3C8.jointTable[var_s0_2] = this->unk3C8.jointTable[var_s0_2];
+                for (var_s3 = 0; var_s3 < 20; var_s3++) {
+                    temp_v0_6->unk3C8.jointTable[var_s3] = this->unk3C8.jointTable[var_s3];
                 }
 
-                Actor_PlaySfxAtPos(&this->dyna.actor, 0x381EU);
+                Actor_PlaySfxAtPos(&this->dyna.actor, 0x381E);
                 if (var_s4_2 >= 0xB) {
                     temp_v0_6->unk188 = var_s4_2 - 0xA;
                 }
             }
         } else if (var_s4_2 == 2) {
             for (var_s3 = 0; var_s3 < 2; var_s3++) {
-                Boss05 *temp_v0_6 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, 0x12D, this->unk324.x, this->unk324.y, this->unk324.z, this->unk330.x, this->unk330.y, this->unk330.z, var_s3 + 0xA);
+                temp_v0_6 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, 0x12D, this->unk324.x,
+                                                        this->unk324.y, this->unk324.z, this->unk330.x, this->unk330.y,
+                                                        this->unk330.z, var_s3 + 0xA);
                 if (temp_v0_6 != NULL) {
-                    
+
                     for (var_v1 = 0; var_v1 < 20; var_v1++) {
                         temp_v0_6->unk3C8.jointTable[var_v1] = this->unk3C8.jointTable[var_v1];
                     }
 
-                    temp_v0_6->unk162[0] = (s32) (Rand_ZeroFloat(20.0f) + 20.0f);
+                    temp_v0_6->unk162[0] = (s32)(Rand_ZeroFloat(20.0f) + 20.0f);
                 }
             }
-            Actor_PlaySfxAtPos(&this->dyna.actor, 0x381FU);
+            Actor_PlaySfxAtPos(&this->dyna.actor, 0x381F);
         }
-        
     }
 
     if (sp103 == 0) {
@@ -780,411 +665,6 @@ void func_809EEDE8(Boss05 *this, PlayState *play) {
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk1C8.base);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk368.base);
 }
-// void func_809EEDE8(Boss05 *this, PlayState *play) {
-//     Player *sp108;
-//     u8 sp103;
-//     Vec3s spD8;
-//     s32 spD4;
-//     s32 spD0;
-//     s32 spCC;
-//     s32 spC8;
-//     s32 spC4;
-//     s32 spC0;
-//     s32 spBC;
-//     s32 spB8;
-//     s32 spB4;
-//     f32 spA4;
-//     Vec3f sp94;
-//     f32 sp80;
-//     s32 sp74;
-//     f32 sp70;
-//     Vec3s *sp6C;
-//     s16 *sp60;
-//     s16 *sp5C;
-//     // ? *temp_t5;
-//     // ? temp_t2_2;
-//     // ? temp_t4;
-//     // ? temp_t5_4;
-//     Boss05 *temp_v0_6;
-//     Boss05 *temp_v0_7;
-//     Player *temp_v1;
-//     ActorContext *temp_s0_2;
-//     // CollisionCheckContext *temp_s0_3;
-//     // CollisionCheckContext *temp_s0_4;
-//     SkelAnime *temp_s0;
-//     Vec3s *var_s1;
-//     // f32 *temp_s1;
-//     f32 temp_ft4;
-//     f32 var_fv1;
-//     s16 var_s4;
-//     s16 var_s5;
-//     s16 var_s6;
-//     s16 var_s7;
-//     s32 temp_lo;
-//     s32 temp_v0_5;
-//     s32 var_s0;
-//     s32 var_s0_2;
-//     s32 var_s0_3;
-//     s32 var_s3;
-//     s32 var_s3_2;
-//     s32 var_s4_2;
-//     s32 var_v1;
-//     u8 temp_v0;
-//     u8 temp_v0_2;
-//     // void *temp_t1;
-//     // void *temp_t1_2;
-//     // void *temp_t2;
-//     // void *temp_t2_3;
-//     // void *temp_t2_4;
-//     // void *temp_t3;
-//     // void *temp_t3_2;
-//     // void *temp_t5_2;
-//     // void *temp_t5_3;
-//     // void *temp_t6;
-//     // void *temp_t6_2;
-//     // void *temp_t7;
-//     // void *temp_t8;
-//     // void *temp_t8_2;
-//     // void *temp_t9;
-//     // void *temp_t9_2;
-//     // void *temp_t9_3;
-//     Vec3s *temp_v0_3;
-//     Vec3s *temp_v0_4;
-
-//     sp103 = 0;
-//     var_s3 = 0;
-//     sp108 = GET_PLAYER(play);
-//     temp_v0 = this->unk174;
-//     this->dyna.actor.hintId = 8;
-//     var_s0 = 0;
-//     var_s1 = &spD8;
-//     if (temp_v0 == 0) {
-//         spD4 = 0x3E8;
-//         spD0 = 0x3E80;
-//         spCC = 0x7D0;
-//         spC8 = 0x5DC;
-//         spC4 = 0x1770;
-//         spC0 = 0xBB8;
-//         spBC = 0x514;
-//         spB8 = 0x5208;
-//         spB4 = 0xDAC;
-//         var_s6 = 0xA;
-//         var_s7 = 0x300;
-//         if (this->unk16C != 0) {
-//             spD4 = 0x1B58;
-//             spCC = 0x1770;
-//             spC0 = 0x1770;
-//             spBC = 0x1C84;
-//             spB4 = 0x1964;
-//             var_s6 = 1;
-//             var_s7 = 0x1000;
-//         }
-//     } else {
-//         var_s7 = 0;
-//         if (temp_v0 == 3) {
-//             spD4 = 0x1B58;
-//             spD0 = 0x3E80;
-//             spCC = 0x1388;
-//             spC8 = 0x5DC;
-//             spC4 = 0x2328;
-//             spC0 = 0x1388;
-//             spBC = 0x1C84;
-//             spB8 = 0x5208;
-//             spB4 = 0x157C;
-//             var_s6 = 1;
-//             var_s7 = 0x1000;
-//         } else {
-//             var_s6 = 0;
-//             spB4 = 0;
-//             spB8 = 0;
-//             spBC = 0;
-//             spC0 = 0;
-//             spC4 = 0;
-//             spC8 = 0;
-//             spCC = 0;
-//             spD0 = 0;
-//             spD4 = 0;
-//         }
-//     }
-//     sp5C = &this->unk19E[0].z;
-//     sp60 = &this->unk19E[0].y;
-//     sp6C = this->unk19E;
-//     do {
-//         // temp_v0_2 = this->unk174;
-//         if ((this->unk174 == 0) || (this->unk174 == 3)) {
-//             temp_lo = var_s3 * spB8;
-//             var_s5 = var_s7;
-//             var_s4 = var_s6;
-//             sp70 = (f32) spB4;
-//             if (var_s3 < 3) {
-//                 var_s1->y = 0;
-//                 sp74 = temp_lo;
-//                 sp80 = (f32) spCC;
-//                 var_s1->x = (s32) (Math_SinS((this->unk160 * spD4) + (var_s3 * spD0)) * sp80);
-//             } else {
-//                 var_s1->x = 0;
-//                 sp74 = temp_lo;
-//                 sp80 = (f32) spC0;
-//                 var_s1->y = (s32) (Math_SinS((s16) ((this->unk160 * spC8) + (var_s3 * spC4))) * sp80);
-//             }
-//             if ((var_s3 == 4) || (var_s3 == 6)) {
-//                 var_s1->z = (s32) (2.0f * (Math_SinS((this->unk160 * spBC) + temp_lo) * sp70));
-//             } else {
-//                 var_s1->z = (s32) (Math_SinS((this->unk160 * spBC) + temp_lo) * sp70);
-//             }
-//         } else {
-//             if (this->unk174 == 1) {
-//                 temp_v0_3 = var_s0 + D_809F1C60;
-//                 var_s6 = 5;
-//                 var_s7 = 0x1000;
-//                 var_s1->x = temp_v0_3->x;
-//                 var_s1->y = temp_v0_3->y;
-//                 var_s1->z = temp_v0_3->z;
-//             } else if (this->unk174 == 2) {
-//                 temp_v0_4 = var_s0 + D_809F1C8C;
-//                 var_s6 = 1;
-//                 var_s7 = 0x2000;
-//                 var_s1->x = temp_v0_4->x;
-//                 var_s1->y = temp_v0_4->y;
-//                 var_s1->z = temp_v0_4->z;
-//             }
-//             var_s5 = var_s7;
-//             var_s4 = var_s6;
-//         }
-//         Math_ApproachS(&sp6C->x, var_s1->x, var_s4, var_s5);
-//         Math_ApproachS(sp60, var_s1->y, var_s4, var_s5);
-//         Math_ApproachS(sp5C, var_s1->z, var_s4, var_s5);
-//         var_s3 += 1;
-//         sp5C += 6;
-//         sp60 += 6;
-//         sp6C += 6;
-//         var_s0 += 6;
-//         var_s1 += 6;
-//     } while (var_s3 < 7);
-
-
-//     temp_ft4 = (sp108->actor.world.pos.y - this->dyna.actor.world.pos.y) + 10.0f;
-//     spA4 = temp_ft4;
-//     if (temp_ft4 < 0.0f) {
-//         Math_ApproachS(&this->dyna.actor.shape.rot.y, this->dyna.actor.yawTowardsPlayer, var_s4, var_s5);
-//     }
-//     // temp_s0 = &this->unk3C8;
-//     SkelAnime_Update(&this->unk3C8);
-//     // temp_s1 = &this->unk35C;
-//     Math_ApproachF(&this->unk35C, 1.0f, 0.1f, 0.1f);
-//     if (this->unk15C != 0xA) {
-//         Math_ApproachS(&this->dyna.actor.shape.rot.x, 0, 0x14, 0x800);
-//     }
-
-//     switch (this->unk15C) {                         /* irregular */
-//     case 0:
-//         this->unk174 = 0;
-//         this->unk3C8.playSpeed = 1.0f;
-//         if (spA4 < 0.0f) {
-//             if (sp108->actor.speedXZ > 10.0f) {
-//                 var_fv1 = 220.0f;
-//             } else {
-//                 var_fv1 = 150.0f;
-//             }
-//             if ((this->unk162[0] == 0) && (sqrtf(this->dyna.actor.xyzDistToPlayerSq) <= var_fv1)) {
-//                 this->unk15C = 1;
-//                 this->unk162[0] = 0xA;
-//             }
-//             goto block_42;
-//         }
-//         sp103 = 1;
-//         if (sqrtf(this->dyna.actor.xyzDistToPlayerSq) <= 40.0f) {
-//             this->unk15E++;
-//             if (this->unk15E >= 0x1F) {
-//                 this->unk15C = 0xA;
-//                 this->unk162[0] = 0x1E;
-//                 Actor_PlaySfxAtPos(&this->dyna.actor, 0x3861U);
-//             }
-//         } else {
-// block_42:
-//             this->unk15E = 0;
-//         }
-//         if (!(this->unk160 & 3) && (Rand_ZeroOne() < 0.5f)) {
-//             Actor_PlaySfxAtPos(&this->dyna.actor, 0x3860U);
-//         }
-//         break;
-//     case 10:
-//         if (!(this->unk160 & 1)) {
-//             Actor_PlaySfxAtPos(&this->dyna.actor, 0x3860U);
-//         }
-//         this->unk19C = (this->unk162[0] & 1) << 9;
-//         this->unk174 = 3;
-//         this->unk3C8.playSpeed = 4.0f;
-//         Math_ApproachS(&this->dyna.actor.shape.rot.x, -0x8000, 2, 0x2000);
-//         Math_ApproachS(&this->dyna.actor.shape.rot.y, this->dyna.actor.yawTowardsPlayer, 2, 0x2000);
-//         if (this->unk162[0] == 0) {
-//             this->unk162[0] = 0x64;
-//             this->unk15E = 0;
-//             this->unk15C = 0;
-//         }
-//         if (this->unk162[0] == 0x1B) {
-//             Math_Vec3f_Copy(&sp94, &this->dyna.actor.world.pos);
-//             sp94.y += 40.0f;
-//             EffectSsGSplash_Spawn(play, &sp94, NULL, NULL, (s16) 1, (s16) 0x7D0);
-//             Actor_PlaySfxAtPos(&this->dyna.actor, 0x2808U);
-//         }
-//         break;
-//     case 1:
-//         if (Animation_OnFrame(temp_s0, this->unk4FC)) {
-//             this->unk3C8.playSpeed = 0.0f;
-//         }
-//         this->unk174 = 1;
-//         if (this->unk162[0] == 0) {
-//             this->unk15C = 2;
-//             this->unk162[0] = 0x14;
-//             Actor_PlaySfxAtPos(&this->dyna.actor, 0x3861U);
-//         }
-//         break;
-//     case 2:
-//         if (!(this->unk160 & 1)) {
-//             Actor_PlaySfxAtPos(&this->dyna.actor, 0x3860U);
-//         }
-//         this->unk19C = (this->unk162[0] & 1) << 9;
-//         this->unk3C8.playSpeed = 4.0f;
-//         Math_ApproachF(&this->unk35C, 1.5f, 1.0f, 0.7f);
-//         this->unk174 = 2;
-//         if (this->unk162[0] == 0) {
-//             this->unk15C = 0;
-//             this->unk162[0] = 0x1E;
-//         }
-//         break;
-//     }
-
-//     temp_v0_5 = func_809EECBC(this, play);
-//     var_s4_2 = temp_v0_5;
-//     if ((temp_v0_5 != 0) || (this->unk168 == 1)) {
-//         this->dyna.actor.params = 2;
-//         this->actionFunc = func_809EF9BC;
-//         this->dyna.actor.flags &= ~1;
-//         temp_s0_2 = &play->actorCtx;
-//         func_800BC154(play, temp_s0_2, &this->dyna.actor, 1);
-//         if (this->unk168 != 0) {
-//             var_s4_2 = 0xA;
-//         }
-//         if (var_s4_2 >= 0xA) {
-//             temp_v0_6 = (Boss05*)Actor_SpawnAsChild(temp_s0_2, &this->dyna.actor, play, 0x12D, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 3);
-//             if (temp_v0_6 != NULL) {
-//                 var_s0_2 = 0;
-//                 temp_v1 = GET_PLAYER(play);
-//                 if (&this->dyna.actor == temp_v1->targetActor) {
-//                     temp_v1->targetActor = temp_v0_6;
-//                     play->actorCtx.targetContext.arrowPointedActor = temp_v0_6;
-//                     play->actorCtx.targetContext.targetedActor = temp_v0_6;
-//                 }
-
-//                 // do {
-//                 //     temp_t5 = this->unk268.jointTable + var_s0_2;
-//                 //     temp_t4 = (unaligned s32) temp_t5->unk0;
-//                 //     temp_t1 = temp_v0_6->unk288 + var_s0_2;
-//                 //     var_s0_2 += 6;
-//                 //     temp_t1->unk0 = (unaligned s32) temp_t4;
-//                 //     temp_t1->unk4 = (u16) temp_t5->unk4;
-//                 // } while (var_s0_2 < 0x3C);
-
-//                 for (var_s0_2 = 0; var_s0_2 < 10; var_s0_2++) {
-//                     temp_v0_6->unk268.jointTable[var_s0_2] = this->unk268.jointTable[var_s0_2];
-//                 }
-
-//                 for (var_s0_3 = 0; var_s0_3 < 20; var_s0_3++) {
-//                     temp_v0_6->unk3C8.jointTable[var_s0_3] = this->unk3C8.jointTable[var_s0_3];
-//                 }
-
-//                 // var_s0_3 = 0;
-//                 // do {
-//                 //     temp_t9 = this->unk3C8.jointTable + var_s0_3;
-//                 //     temp_t7 = temp_v0_6->unk3E8 + var_s0_3;
-//                 //     temp_t7->unk0 = (unaligned s32) temp_t9->unk0;
-//                 //     temp_t7->unk4 = (u16) temp_t9->unk4;
-//                 //     temp_t6 = this->unk3C8.jointTable + var_s0_3;
-//                 //     temp_t3 = temp_v0_6->unk3E8 + var_s0_3;
-//                 //     temp_t3->unk6 = (unaligned s32) temp_t6->unk6;
-//                 //     temp_t3->unkA = (u16) temp_t6->unkA;
-//                 //     temp_t5_2 = this->unk3C8.jointTable + var_s0_3;
-//                 //     temp_t2 = temp_v0_6->unk3E8 + var_s0_3;
-//                 //     temp_t2->unkC = (unaligned s32) temp_t5_2->unkC;
-//                 //     temp_t2->unk10 = (u16) temp_t5_2->unk10;
-//                 //     temp_t9_2 = this->unk3C8.jointTable + var_s0_3;
-//                 //     temp_t2_2 = (unaligned s32) temp_t9_2->unk12;
-//                 //     temp_t8 = temp_v0_6->unk3E8 + var_s0_3;
-//                 //     var_s0_3 += 0x18;
-//                 //     temp_t8->unk12 = (unaligned s32) temp_t2_2;
-//                 //     temp_t8->unk16 = (u16) temp_t9_2->unk16;
-//                 // } while (var_s0_3 != 0x78);
-
-
-//                 Actor_PlaySfxAtPos(&this->dyna.actor, 0x381EU);
-//                 if (var_s4_2 >= 0xB) {
-//                     temp_v0_6->unk188 = (s8) (var_s4_2 - 0xA);
-//                 }
-//             }
-//         } else {
-//             var_s3_2 = 0;
-//             if (var_s4_2 == 2) {
-//                 for (var_s3_2 = 0; var_s3_2 < 2; var_s3_2++) {
-//                     temp_v0_7 = (Boss05*)Actor_SpawnAsChild(temp_s0_2, &this->dyna.actor, play, 0x12D, this->unk324.x, this->unk324.y, this->unk324.z, this->unk330.x, this->unk330.y, this->unk330.z, var_s3_2 + 0xA);
-//                     if (temp_v0_7 != NULL) {
-                        
-//                         for (var_v1 = 0; var_v1 < 20; var_v1++) {
-//                             temp_v0_6->unk3C8.jointTable[var_v1] = this->unk3C8.jointTable[var_v1];
-//                         }
-
-//                         temp_v0_7->unk162[0] = (s32) (Rand_ZeroFloat(20.0f) + 20.0f);
-//                     }
-//                 }
-//                 // do {
-//                 //     temp_v0_7 = (Boss05*)Actor_SpawnAsChild(temp_s0_2, &this->dyna.actor, play, 0x12D, this->unk324.x, this->unk324.y, this->unk324.z, this->unk330.x, this->unk330.y, this->unk330.z, var_s3_2 + 0xA);
-//                 //     if (temp_v0_7 != NULL) {
-                        
-//                 //         for (var_v1 = 0; var_v1 < 20; var_v1++) {
-//                 //             temp_v0_6->unk3C8.jointTable[var_v1] = this->unk3C8.jointTable[var_v1];
-//                 //         }
-
-//                 //         // var_v1 = 0;
-//                 //         // do {
-//                 //         //     temp_t2_3 = this->unk3C8.jointTable + var_v1;
-//                 //         //     temp_t9_3 = temp_v0_7->unk3E8 + var_v1;
-//                 //         //     temp_t9_3->unk0 = (unaligned s32) temp_t2_3->unk0;
-//                 //         //     temp_t9_3->unk4 = (u16) temp_t2_3->unk4;
-//                 //         //     temp_t8_2 = this->unk3C8.jointTable + var_v1;
-//                 //         //     temp_t6_2 = temp_v0_7->unk3E8 + var_v1;
-//                 //         //     temp_t6_2->unk6 = (unaligned s32) temp_t8_2->unk6;
-//                 //         //     temp_t6_2->unkA = (u16) temp_t8_2->unkA;
-//                 //         //     temp_t3_2 = this->unk3C8.jointTable + var_v1;
-//                 //         //     temp_t5_3 = temp_v0_7->unk3E8 + var_v1;
-//                 //         //     temp_t5_3->unkC = (unaligned s32) temp_t3_2->unkC;
-//                 //         //     temp_t5_3->unk10 = (u16) temp_t3_2->unk10;
-//                 //         //     temp_t2_4 = this->unk3C8.jointTable + var_v1;
-//                 //         //     temp_t5_4 = (unaligned s32) temp_t2_4->unk12;
-//                 //         //     temp_t1_2 = temp_v0_7->unk3E8 + var_v1;
-//                 //         //     var_v1 += 0x18;
-//                 //         //     temp_t1_2->unk12 = (unaligned s32) temp_t5_4;
-//                 //         //     temp_t1_2->unk16 = (u16) temp_t2_4->unk16;
-//                 //         // } while (var_v1 != 0x78);
-
-//                 //         temp_v0_7->unk162[0] = (s32) (Rand_ZeroFloat(20.0f) + 20.0f);
-//                 //     }
-//                 //     var_s3_2 += 1;
-//                 // } while (var_s3_2 != 2);
-
-//                 Actor_PlaySfxAtPos(&this->dyna.actor, 0x381FU);
-//             }
-//         }
-//     }
-
-//     if (sp103 == 0) {
-//         CollisionCheck_SetAT(play, &play->colChkCtx, &this->unk1C8.base);
-//         CollisionCheck_SetAT(play, &play->colChkCtx, &this->unk368.base);
-//     }
-
-//     CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk1C8.base);
-//     CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk368.base);
-// }
-
 
 void func_809EF9BC(Boss05* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
@@ -1262,10 +742,10 @@ void func_809EFAB4(Boss05* this, PlayState* play) {
 
             if (temp_v0 != NULL) {
                 player = GET_PLAYER(play);
-                if (&this->dyna.actor == player->unk_730) {
-                    player->unk_730 = temp_v0;
-                    play->actorCtx.targetContext.arrowPointedActor = temp_v0;
-                    play->actorCtx.targetContext.targetedActor = temp_v0;
+                if (player->unk_730 == &this->dyna.actor) {
+                    player->unk_730 = &temp_v0->dyna.actor;
+                    play->actorCtx.targetContext.arrowPointedActor = &temp_v0->dyna.actor;
+                    play->actorCtx.targetContext.targetedActor = &temp_v0->dyna.actor;
                 }
 
                 for (i = 0; i < 20; i++) {
