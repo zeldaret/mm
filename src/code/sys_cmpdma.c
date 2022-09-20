@@ -22,7 +22,7 @@ void func_80178AC0(u16* src, void* dst, size_t size) {
     u32* dstCur = dst;
     u16* src16 = src;
 
-    while (((u32)dstCur) - size < ((u32)dst)) {
+    while (((uintptr_t)dstCur) - size < ((uintptr_t)dst)) {
         tc.rgba = *(src16++);
         if (tc.a == 1) {
             spC.r = (tc.r * 255) / 31;
