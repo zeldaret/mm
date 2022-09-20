@@ -2399,8 +2399,6 @@ beginseg
     name "ovl_Boss_05"
     compress
     include "build/src/overlays/actors/ovl_Boss_05/z_boss_05.o"
-    include "build/data/ovl_Boss_05/ovl_Boss_05.data.o"
-    include "build/data/ovl_Boss_05/ovl_Boss_05.bss.o"
     include "build/data/ovl_Boss_05/ovl_Boss_05.reloc.o"
 endseg
 

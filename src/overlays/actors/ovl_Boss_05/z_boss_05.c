@@ -38,55 +38,116 @@ void func_809F0A64(Boss05* this, PlayState* play);
 void func_809F0ABC(Boss05* this, PlayState* play);
 void func_809F0B0C(Boss05* this, PlayState* play);
 
-#if 0
+#include "overlays/ovl_Boss_05/ovl_Boss_05.c"
+
+// #if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
-static ColliderJntSphElementInit D_809F1B2C[2] = {
+ColliderJntSphElementInit D_809F1B2C[2] = {
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x08 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_HARD,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 0, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x08 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_HARD,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 0, { { 0, 0, 0 }, 15 }, 100 },
     },
 };
 
 // static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_809F1B74 = {
-    { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    ARRAY_COUNT(sJntSphElementsInit), D_809F1B2C, // sJntSphElementsInit,
+ColliderJntSphInit D_809F1B74 = {
+    {
+        COLTYPE_HIT3,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_PLAYER,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    ARRAY_COUNT(D_809F1B2C),
+    D_809F1B2C, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
-static ColliderJntSphElementInit D_809F1B84[1] = {
+ColliderJntSphElementInit D_809F1B84[1] = {
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x08 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_HARD,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 0, { { 0, 0, 0 }, 20 }, 100 },
     },
 };
 
 // static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_809F1BA8 = {
-    { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    ARRAY_COUNT(sJntSphElementsInit), D_809F1B84, // sJntSphElementsInit,
+ColliderJntSphInit D_809F1BA8 = {
+    {
+        COLTYPE_HIT3,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_PLAYER,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    ARRAY_COUNT(D_809F1B84),
+    D_809F1B84, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
-static ColliderJntSphElementInit D_809F1BB8[1] = {
+ColliderJntSphElementInit D_809F1BB8[1] = {
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7FFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x08 },
+            { 0xF7FFFFFF, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_HARD,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 0, { { 0, 0, 0 }, 15 }, 100 },
     },
 };
 
 // static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_809F1BDC = {
-    { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    ARRAY_COUNT(sJntSphElementsInit), D_809F1BB8, // sJntSphElementsInit,
+ColliderJntSphInit D_809F1BDC = {
+    {
+        COLTYPE_HIT3,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_PLAYER,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    ARRAY_COUNT(D_809F1BB8),
+    D_809F1BB8, // sJntSphElementsInit,
 };
 
+// extern Color_RGBA8 D_809F1BEC;
+// extern Color_RGBA8 D_809F1BF0;
+// extern Vec3f D_809F1BF4;
+Color_RGBA8 D_809F1BEC = { 170, 255, 255, 255 };
+Color_RGBA8 D_809F1BF0 = { 200, 200, 255, 255 };
+Vec3f D_809F1BF4 = { 0.0f, -1.0f, 0.0f };
+
 // static DamageTable sDamageTable = {
-static DamageTable D_809F1C00 = {
+DamageTable D_809F1C00 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(1, 0xF),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -122,7 +183,7 @@ static DamageTable D_809F1C00 = {
 };
 
 // static DamageTable sDamageTable = {
-static DamageTable D_809F1C20 = {
+DamageTable D_809F1C20 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
     /* Deku Stick     */ DMG_ENTRY(3, 0xF),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -169,17 +230,17 @@ const ActorInit Boss_05_InitVars = {
     (ActorFunc)Boss05_Draw,
 };
 
-#endif
+// #endif
 
-extern CollisionHeader D_809F1B00;
-extern ColliderJntSphElementInit D_809F1B2C[2];
-extern ColliderJntSphInit D_809F1B74;
-extern ColliderJntSphElementInit D_809F1B84[1];
-extern ColliderJntSphInit D_809F1BA8;
-extern ColliderJntSphElementInit D_809F1BB8[1];
-extern ColliderJntSphInit D_809F1BDC;
-extern DamageTable D_809F1C00;
-extern DamageTable D_809F1C20;
+// extern CollisionHeader D_809F1B00;
+// extern ColliderJntSphElementInit D_809F1B2C[2];
+// extern ColliderJntSphInit D_809F1B74;
+// extern ColliderJntSphElementInit D_809F1B84[1];
+// extern ColliderJntSphInit D_809F1BA8;
+// extern ColliderJntSphElementInit D_809F1BB8[1];
+// extern ColliderJntSphInit D_809F1BDC;
+// extern DamageTable D_809F1C00;
+// extern DamageTable D_809F1C20;
 
 extern AnimationHeader D_060006A4;
 extern AnimationHeader D_06000A5C;
@@ -193,13 +254,6 @@ extern AnimationHeader D_06006484;
 extern AnimationHeader D_06006E50;
 extern AnimationHeader D_06007488;
 extern AnimationHeader D_06007908;
-
-extern Color_RGBA8 D_809F1BEC;
-extern Color_RGBA8 D_809F1BF0;
-extern Vec3f D_809F1BF4;
-// static Color_RGBA8 D_809F1BEC = { 0xAA, 0xFF, 0xFF, 0xFF };
-// static Color_RGBA8 D_809F1BF0 = { 0xC8, 0xC8, 0xFF, 0xFF };
-// static Vec3f D_809F1BF4 = { 0.0f, -1.0f, 0.0f };
 
 void func_809EE4E0(Boss05* this, PlayState* play) {
     Vec3f sp8C;
@@ -252,7 +306,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.colChkInfo.damageTable = &D_809F1C00;
 
         DynaPolyActor_Init(&this->dyna, 0);
-        CollisionHeader_GetVirtual(&D_809F1B00, &colHeader);
+        CollisionHeader_GetVirtual(&sBioBabaLilypadCol, &colHeader);
         this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
         func_809EEDD0(this, play);
 
@@ -272,7 +326,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
     } else if (this->dyna.actor.params == 2) {
         this->actionFunc = func_809EF9BC;
 
-        CollisionHeader_GetVirtual(&D_809F1B00, &colHeader);
+        CollisionHeader_GetVirtual(&sBioBabaLilypadCol, &colHeader);
         this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
 
         SkelAnime_InitFlex(play, &this->unk268, &D_060024E0, &D_06000ABC, this->unk2AC, this->unk2E8, 10);
@@ -377,27 +431,14 @@ void func_809EEDD0(Boss05* this, PlayState* play) {
     this->actionFunc = func_809EEDE8;
 }
 
-extern Vec3s D_809F1C60[];
-extern Vec3s D_809F1C8C[];
-// In-function static doesn't seem to help
-// static Vec3s D_809F1C60[7] = {
-//     { 0x3200, 0, 0 },
-//     { -0x1E00, 0, 0 },
-//     { -0x1400, 0, 0 },
-//     { 0, 0, 0 },
-//     { 0, 0, 0 },
-//     { 0, 0, 0 },
-//     { 0, 0, 0 },
-// };
-// static Vec3s D_809F1C8C[7] = {
-//     { -0x3200, 0, 0 },
-//     { 0, 0, 0 },
-//     { 0x1E00, 0, 0 },
-//     { 0, 0, 0 },
-//     { 0, 0, 0 },
-//     { 0, 0, 0 },
-//     { 0, 0, 0 },
-// };
+// extern Vec3s D_809F1C60[];
+// extern Vec3s D_809F1C8C[];
+Vec3s D_809F1C60[7] = {
+    { 0x3200, 0, 0 }, { -0x1E00, 0, 0 }, { -0x1400, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 },
+};
+Vec3s D_809F1C8C[7] = {
+    { -0x3200, 0, 0 }, { 0, 0, 0 }, { 0x1E00, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 },
+};
 
 void func_809EEDE8(Boss05* this, PlayState* play) {
     s32 var_s3;
@@ -1178,7 +1219,10 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-extern u8 D_809F1CB8[];
+// extern s8 D_809F1CB8[];
+s8 D_809F1CB8[] = {
+    -1, -1, 0, 1, 2, 3, 4, 5, 6, -1, -1, 0,
+};
 
 s32 func_809F1050(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     Boss05* this = THIS;
@@ -1211,7 +1255,8 @@ s32 func_809F1050(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-extern Vec3f D_809F1CC4;
+// extern Vec3f D_809F1CC4;
+Vec3f D_809F1CC4 = { 0.0f, -1400.0f, 600.0f };
 
 void func_809F1170(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Boss05* this = THIS;
@@ -1250,9 +1295,12 @@ s32 func_809F1284(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-extern Vec3f D_809F1CD0;
-extern Vec3f D_809F1CDC;
-extern Vec3f D_809F2110; // bss
+// extern Vec3f D_809F1CD0;
+Vec3f D_809F1CD0 = { 1600.0f, -300.0f, 0.0f };
+// extern Vec3f D_809F1CDC;
+Vec3f D_809F1CDC = { 700.0f, 0.0f, 0.0f };
+// extern Vec3f D_809F2110; // bss
+Vec3f D_809F2110; // bss
 
 void func_809F12A0(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Boss05* this = THIS;
@@ -1312,7 +1360,10 @@ void func_809F1464(PlayState* play, s32 limbIndex, Actor* thisx) {
     }
 }
 
-extern s32 D_809F1CE8[];
+// extern s32 D_809F1CE8[];
+s32 D_809F1CE8[] = {
+    2, 3, 1, 4, 5, 7, 8, 10, 11, 13, 14, 16, 17, 19,
+};
 
 s32 func_809F14AC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     Boss05* this = THIS;
@@ -1414,203 +1465,3 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
-
-// typedef struct Boss05 {
-//     /* 0x000 */ DynaPolyActor dyna;
-//     /* 0x15C */ u8 unk15C;
-//     /* 0x15D */ char pad15D[1];
-//     /* 0x15E */ s16 unk15E;                         /* inferred */
-//     /* 0x160 */ s16 unk160;
-//     /* 0x162 */ s16 unk162[3];
-//     /* 0x168 */ s16 unk168;
-//     /* 0x16A */ s16 unk16A;
-//     /* 0x16C */ s16 unk16C;
-//     /* 0x16E */ char pad16E[2];
-//     /* 0x170 */ void (*actionFunc)(Boss05 *, PlayState *);
-//     /* 0x174 */ u8 unk174;                          /* inferred */
-//     /* 0x175 */ char pad175[1];
-//     /* 0x176 */ s16 unk176;
-//     /* 0x178 */ s16 unk178;
-//     /* 0x17A */ s16 unk17A;
-//     /* 0x17C */ f32 unk17C;
-//     /* 0x180 */ f32 unk180;
-//     /* 0x184 */ f32 unk184;
-//     /* 0x188 */ u8 unk188;
-//     /* 0x189 */ u8 unk189;
-//     /* 0x18A */ char pad18A[2];                     /* maybe part of unk189[3]? */
-//     /* 0x18C */ Vec3f unk18C;
-//     /* 0x198 */ f32 unk198;
-//     /* 0x19C */ s16 unk19C;                         /* inferred */
-//     /* 0x19E */ s16 unk19E;                         /* inferred */
-//     /* 0x1A0 */ s16 unk1A0;                         /* inferred */
-//     /* 0x1A2 */ s16 unk1A2;                         /* inferred */
-//     /* 0x1A4 */ char pad1A4[0x24];                  /* maybe part of unk1A2[0x13]? */
-//     /* 0x1C8 */ ColliderJntSph unk1C8;
-//     /* 0x1E8 */ ColliderJntSphElement unk1E8[2];
-//     /* 0x268 */ SkelAnime unk268;
-//     /* 0x2AC */ Vec3s unk2AC[0xA];
-//     /* 0x2E8 */ Vec3s unk2E8[0xA];
-//     /* 0x324 */ Vec3f unk324;
-//     /* 0x330 */ Vec3s unk330;
-//     /* 0x336 */ s8 unk336[2];
-//     /* 0x338 */ f32 unk338;
-//     /* 0x33C */ Vec3f unk33C;
-//     /* 0x348 */ s16 unk348;
-//     /* 0x34A */ s8 unk34A[2];
-//     /* 0x34C */ f32 unk34C;
-//     /* 0x350 */ s8 unk350[4];
-//     /* 0x354 */ f32 unk354;
-//     /* 0x358 */ f32 unk358;
-//     /* 0x35C */ f32 unk35C;
-//     /* 0x360 */ f32 unk360;
-//     /* 0x364 */ f32 unk364;
-//     /* 0x368 */ ColliderJntSph unk368;
-//     /* 0x388 */ ColliderJntSphElement unk388[1];
-//     /* 0x3C8 */ SkelAnime unk3C8;
-//     /* 0x40C */ Vec3s unk40C[0x14];
-//     /* 0x484 */ Vec3s unk484[0x14];
-//     /* 0x4FC */ f32 unk4FC;
-//     /* 0x500 */ s16 unk500;
-//     /* 0x502 */ s16 unk502;
-//     /* 0x504 */ char pad504[4];                     /* maybe part of unk502[3]? */
-// } Boss05;                                           /* size = 0x508 */
-
-// static BgCamInfo D_809F1A20 = { 0, 0, NULL };
-// static SurfaceType D_809F1A28 = { { 0x10000, 0x7C8 } };
-// static CollisionPoly D_809F1A30[0xA];               /* unable to generate initializer */
-// static Vec3s D_809F1AD0[8] = {
-//     { -0xDAC, 0, -0xDAC },
-//     { -0xDAC, 0, 0xDAC },
-//     { 0xDAC, 0, 0xDAC },
-//     { 0xDAC, 0, -0xDAC },
-//     { 0xDAC, -0xFA0, -0xDAC },
-//     { -0xDAC, -0xFA0, -0xDAC },
-//     { 0xDAC, -0xFA0, 0xDAC },
-//     { -0xDAC, -0xFA0, 0xDAC },
-// };
-// static ? D_809F1C60;                                /* unable to generate initializer */
-// static ? D_809F1C8C;                                /* unable to generate initializer */
-// static ? D_809F1CB8;                                /* unable to generate initializer */
-// static s32 D_809F1CC0[1] = { 0x06FFFF00 };
-// static Vec3f D_809F1CC4 = { 0.0f, -1400.0f, 600.0f };
-// static Vec3f D_809F1CD0 = { 1600.0f, -300.0f, 0.0f };
-// static Vec3f D_809F1CDC[5] = {
-//     { 700.0f, 0.0f, 0.0f },
-//     { 3e-45.0f, 4e-45.0f, 1e-45.0f },
-//     { 6e-45.0f, 7e-45.0f, 1e-44.0f },
-//     { 1.1e-44f, 1.4e-44f, 1.5e-44f },
-//     { 1.8e-44f, 2e-44.0f, 2.2e-44f },
-// }; /* extra bytes: 8 */
-// static Vec3f D_809F2110;
-// CollisionHeader D_809F1B00 = {
-//     { -0xDAC, -0xFA0, -0xDAC },
-//     { 0xDAC, 0, 0xDAC },
-//     8,
-//     D_809F1AD0,
-//     0xA,
-//     D_809F1A30,
-//     &D_809F1A28,
-//     &D_809F1A20,
-//     0,
-//     NULL,
-// };
-// ColliderJntSphElementInit D_809F1B2C[2] = {
-//     {
-//         { 3, { 0xF7CFFFFF, 0, 8 }, { 0xF7CFFFFF, 0, 0 }, 9, 1, 1 },
-//         { 0, { { 0, 0, 0 }, 0xF }, 0x64 },
-//     },
-//     {
-//         { 3, { 0xF7CFFFFF, 0, 8 }, { 0xF7CFFFFF, 0, 0 }, 9, 1, 1 },
-//         { 0, { { 0, 0, 0 }, 0xF }, 0x64 },
-//     },
-// };
-// ColliderJntSphInit D_809F1B74 = { { 3, 0x11, 9, 9, 0x10, 0 }, 2, D_809F1B2C };
-// ColliderJntSphElementInit D_809F1B84[1] = {
-//     {
-//         { 3, { 0xF7CFFFFF, 0, 8 }, { 0xF7CFFFFF, 0, 0 }, 9, 1, 1 },
-//         { 0, { { 0, 0, 0 }, 0x14 }, 0x64 },
-//     },
-// };
-// ColliderJntSphInit D_809F1BA8 = { { 3, 0x11, 9, 9, 0x10, 0 }, 1, D_809F1B84 };
-// ColliderJntSphElementInit D_809F1BB8[1] = {
-//     {
-//         { 3, { 0xF7CFFFFF, 0, 8 }, { 0xF7FFFFFF, 0, 0 }, 9, 1, 1 },
-//         { 0, { { 0, 0, 0 }, 0xF }, 0x64 },
-//     },
-// };
-// ColliderJntSphInit D_809F1BDC = { { 3, 0x11, 9, 9, 0x10, 0 }, 1, D_809F1BB8 };
-// Color_RGBA8 D_809F1BEC = { 0xAA, 0xFF, 0xFF, 0xFF };
-// Color_RGBA8 D_809F1BF0 = { 0xC8, 0xC8, 0xFF, 0xFF };
-// Vec3f D_809F1BF4 = { 0.0f, -1.0f, 0.0f };
-// DamageTable D_809F1C00 = {
-//     {
-//         0,
-//         0xF1,
-//         0,
-//         0xF1,
-//         0xF1,
-//         0xF3,
-//         0,
-//         3,
-//         0xF2,
-//         0xE1,
-//         0xF1,
-//         0x21,
-//         0x31,
-//         0x43,
-//         0xF1,
-//         0xF1,
-//         0xF3,
-//         0xF2,
-//         0,
-//         0xF1,
-//         0,
-//         0,
-//         0xF1,
-//         0xF1,
-//         0xF1,
-//         0,
-//         0,
-//         0,
-//         0,
-//         0,
-//         0,
-//         0xF1,
-//     },
-// };
-// DamageTable D_809F1C20 = {
-//     {
-//         0x10,
-//         0xF3,
-//         0,
-//         0xF1,
-//         0xF1,
-//         0xF1,
-//         0,
-//         0x10,
-//         0xF1,
-//         0xF1,
-//         0xF1,
-//         0x22,
-//         0x32,
-//         0x42,
-//         0xF1,
-//         0x10,
-//         0xF1,
-//         0xF2,
-//         0x10,
-//         0xF1,
-//         0,
-//         0,
-//         0xF1,
-//         0xF1,
-//         0xF1,
-//         0,
-//         0,
-//         0x21,
-//         0,
-//         0,
-//         0,
-//         0xF1,
-//     },
-// };
