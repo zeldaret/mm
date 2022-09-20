@@ -215,7 +215,7 @@ void func_80B5AC3C(EnBee* this, PlayState* play) {
     Math_Vec3f_Copy(&sp88, &this->unk_21C + (this->unk_214));
 
     if ((this->unk_218 & 1) == 0) {
-        this->unk_20C += (this->unk_218 * 0x700) + (s32)randPlusMinusPoint5Scaled((f32)(this->unk_218 * 0x700) * 0.5f);
+        this->unk_20C += (this->unk_218 * 0x700) + (s32)randPlusMinusPoint5Scaled((this->unk_218 * 0x700) * 0.5f);
     } else {
         this->unk_20C =
             (this->unk_20C - (this->unk_218 * 0x700)) - (s32)randPlusMinusPoint5Scaled((this->unk_218 * 0x700) * 0.5f);
@@ -229,14 +229,14 @@ void func_80B5AC3C(EnBee* this, PlayState* play) {
         this->unk_214 &= 1;
     }
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp88), 1, 0x1388, (s16)0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp88), 1, 0x1388, 0);
     Math_ApproachF(&this->actor.world.pos.y, sp88.y, 0.3f, 3.0f);
     Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.3f, 1.0f);
 }
 
 void func_80B5AF80(EnBee* this, PlayState* play) {
     if ((this->unk_206 == 0) && (this->collider.base.atFlags & 2)) {
-        AudioSfx_StopByPosAndId(&this->actor.projectedPos, NA_SE_EN_BEE_FLY);
+        AudioSfx_StopByPosAndId(&this->actor.projectedPos, NA_SE_EN_BEE_FLY - SFX_FLAG);
         this->unk_206 = 5;
     }
 
@@ -245,7 +245,7 @@ void func_80B5AF80(EnBee* this, PlayState* play) {
         this->actor.speedXZ = 0.0f;
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 10, NA_SE_EN_CUTBODY);
         this->actor.colChkInfo.health = 0;
-        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EN_BUBLEWALK_DEAD);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EN_EXTINCT);
         func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, 100, 0, 2);
         Actor_MarkForDeath(&this->actor);
     }
