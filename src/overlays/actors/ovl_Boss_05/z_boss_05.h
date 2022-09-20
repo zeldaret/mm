@@ -17,7 +17,8 @@ typedef void (*Boss05ActionFunc)(struct Boss05*, PlayState*);
 typedef struct Boss05 {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ u8 unk15C;                          /* inferred */
-    /* 0x15D */ char pad15D[3];                     /* maybe part of unk15C[4]? */
+    /* 0x15D */ char pad15D[1];
+    /* 0x15E */ s16 unk15E;                         /* inferred */
     /* 0x160 */ s16 unk160;                         /* inferred */
     /* 0x162 */ s16 unk162[3];
     /* 0x168 */ s16 unk168;                         /* inferred */
@@ -25,7 +26,9 @@ typedef struct Boss05 {
     /* 0x16C */ s16 unk16C; /* inferred */
     /* 0x16E */ char pad16E[2];
     /* 0x170 */ Boss05ActionFunc actionFunc;
-    /* 0x174 */ char pad174[2]; // possibly this is a Vec3s
+    /* 0x174 */ u8 unk174;                          /* inferred */
+    /* 0x175 */ char pad175[1];
+    // /* 0x174 */ char pad174[2]; // possibly this is a Vec3s
     /* 0x176 */ s16 unk176;
     /* 0x178 */ s16 unk178;
     /* 0x17A */ s16 unk17A;       /* inferred */
