@@ -105,7 +105,7 @@ void EnBee_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.shadowScale = 12.0f;
 
     if (ActorCutscene_GetCurrentIndex() != -1) {
-        func_800BC154(play, &play->actorCtx, &this->actor, 7);
+        func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ITEMACTION);
     }
 
     this->actor.hintId = TATL_HINT_ID_GIANT_BEE;
