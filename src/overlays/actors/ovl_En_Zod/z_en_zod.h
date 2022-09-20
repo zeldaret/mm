@@ -2,6 +2,9 @@
 #define Z_EN_ZOD_H
 
 #include "global.h"
+//#include "assets/objects/object_zod/object_zod.h"
+
+#define ENZOD_GET_ENTRANCE_INDEX(thisx) (((thisx)->params & 0xFE00) >> 9)
 
 struct EnZod;
 
@@ -9,13 +12,15 @@ typedef void (*EnZodActionFunc)(struct EnZod*, PlayState*);
 
 typedef struct EnZod {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ Vec3s morphTable;          /* inferred */
-    /* 0x14A */ char pad14A[0x36];         /* maybe part of unk144[0xA]? */
-    /* 0x180 */ Vec3s JointTable;          /* inferred */
-    /* 0x186 */ char pad186[0x36];         /* maybe part of unk180[0xA]? */
-    /* 0x1BC */ SkelAnime skelAnime;       /* inferred */
-    /* 0x200 */ ColliderCylinder collider; /* inferred */
-    /* 0x24C */ char pad24C[0xA];
+    /* 0x144 */ Vec3s morphTable;
+    /* 0x14A */ char pad14A[0x36];
+    /* 0x180 */ Vec3s JointTable;
+    /* 0x186 */ char pad186[0x36];
+    /* 0x1BC */ SkelAnime skelAnime;
+    /* 0x200 */ ColliderCylinder collider;
+    /* 0x24C */ s16 unk24C;
+    /* 0x24E */ s16 unk24E;
+    /* 0x250 */ Vec3s headRot;
     /* 0x256 */ u16 unk256;
     /* 0x258 */ s16 unk258;
     /* 0x25A */ s16 unk25A;
@@ -34,10 +39,10 @@ typedef struct EnZod {
     /* 0x284 */ f32 unk284;
     /* 0x288 */ f32 unk288;
     /* 0x28C */ f32 unk28C;
-    char pad[0x2];
 
     /* 0x298 */ s16 unk298;
-    /* 0x29A */ s16 unk29A; /* inferred */
+    char pad2[0xC];
+    /* 0x29A */ s16 unk29A;
     /* 0x29C */ EnZodActionFunc actionFunc;
 } EnZod; // size = 0x2A0
 
