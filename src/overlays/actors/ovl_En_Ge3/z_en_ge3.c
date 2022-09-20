@@ -353,7 +353,7 @@ s32 EnGe3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
         case GERUDO_RED_LIMB_LEFT_SWORD:
             *dList = NULL;
             return false;
-            
+
         case GERUDO_RED_LIMB_HEAD:
             rot->x += this->headRot.y;
             // fallthrough
@@ -365,12 +365,12 @@ s32 EnGe3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
             switch (limbIndex) {
                 case GERUDO_RED_LIMB_NECK:
                     break;
-                    
+
                 case GERUDO_RED_LIMB_HEAD:
                     gDPPipeSync(POLY_OPA_DISP++);
                     gDPSetEnvColor(POLY_OPA_DISP++, 80, 60, 10, 255);
                     break;
-                    
+
                 case GERUDO_RED_LIMB_RIGHT_SWORD:
                 case GERUDO_RED_LIMB_LEFT_SWORD:
                     gDPPipeSync(POLY_OPA_DISP++);
