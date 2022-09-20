@@ -64,11 +64,11 @@ static u8 sDamages[] = {
     /* Great Spin */ 1, 2, 3, 4,
 };
 
-static u16 sSounds[] = {
-    NA_SE_IT_ROLLING_CUT_LV2,
-    NA_SE_IT_ROLLING_CUT_LV1,
-    NA_SE_IT_ROLLING_CUT_LV2,
-    NA_SE_IT_ROLLING_CUT_LV1,
+static u16 sChargingSfxIds[] = {
+    /* ENMTHUNDER_SUBTYPE_SPIN_GREAT        */ NA_SE_IT_ROLLING_CUT_LV2,
+    /* ENMTHUNDER_SUBTYPE_SPIN_REGULAR      */ NA_SE_IT_ROLLING_CUT_LV1,
+    /* ENMTHUNDER_SUBTYPE_SWORDBEAM_GREAT   */ NA_SE_IT_ROLLING_CUT_LV2,
+    /* ENMTHUNDER_SUBTYPE_SWORDBEAM_REGULAR */ NA_SE_IT_ROLLING_CUT_LV1,
 };
 
 static f32 sScales[] = { 0.1f, 0.15f, 0.2f, 0.25f, 0.3f, 0.25f, 0.2f, 0.15f, 0.0f };
@@ -85,7 +85,7 @@ void func_808B53C0(EnMThunder* this, PlayState* play) {
 
     this->actor.update = func_808B65BC;
     this->isCharging = false;
-    this->subtype = 1;
+    this->subtype = ENMTHUNDER_SUBTYPE_SPIN_REGULAR;
     this->scaleTarget = 2;
     this->actionFunc = func_808B6310;
     this->timer = 8;
@@ -127,7 +127,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
     this->isCharging = false;
 
     if (player->stateFlags2 & PLAYER_STATE2_20000) {
-        if (!gSaveContext.save.playerData.isMagicAcquired || (gSaveContext.magicState != 0) ||
+        if (!gSaveContext.save.playerData.isMagicAcquired || (gSaveContext.magicState != MAGIC_STATE_IDLE) ||
             ((ENMTHUNDER_GET_MAGIC_COST(&this->actor) != 0) &&
              !Magic_Consume(play, ENMTHUNDER_GET_MAGIC_COST(&this->actor), MAGIC_CONSUME_NOW))) {
             AudioSfx_PlaySfx(NA_SE_IT_ROLLING_CUT, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
@@ -229,7 +229,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
     this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
 
     if (!this->isCharging && (player->unk_B08[0] >= 0.1f)) {
-        if ((gSaveContext.magicState != 0) ||
+        if ((gSaveContext.magicState != MAGIC_STATE_IDLE) ||
             ((ENMTHUNDER_GET_MAGIC_COST(&this->actor) != 0) &&
              !Magic_Consume(play, ENMTHUNDER_GET_MAGIC_COST(&this->actor), MAGIC_CONSUME_WAIT_PREVIEW))) {
             EnMThunder_Spin_AttackNoMagic(this, play);
@@ -265,12 +265,12 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
         player->stateFlags2 &= ~PLAYER_STATE2_20000;
 
         if (ENMTHUNDER_GET_MAGIC_COST(&this->actor) != 0) {
-            gSaveContext.magicState = 1;
+            gSaveContext.magicState = MAGIC_STATE_CONSUME_SETUP;
         }
 
         if (player->unk_B08[0] < 0.85f) {
             this->collider.info.toucher.damage = sDamages[this->type];
-            this->subtype = 1;
+            this->subtype = ENMTHUNDER_SUBTYPE_SPIN_REGULAR;
             if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRY_SWORD) {
                 this->scaleTarget = 4;
             } else if (this->type == ENMTHUNDER_TYPE_GILDED_SWORD) {
@@ -280,7 +280,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
             }
         } else {
             this->collider.info.toucher.damage = sDamages[this->type + 4];
-            this->subtype = 0;
+            this->subtype = ENMTHUNDER_SUBTYPE_SPIN_GREAT;
             if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRY_SWORD) {
                 this->scaleTarget = 6;
             } else if (this->type == ENMTHUNDER_TYPE_GILDED_SWORD) {
@@ -291,7 +291,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
         }
 
         if (player->meleeWeaponAnimation < PLAYER_MWA_SPIN_ATTACK_1H) {
-            this->subtype += 2;
+            this->subtype += ENMTHUNDER_SUBTYPE_SWORDBEAM_GREAT;
             this->actionFunc = EnMThunder_SwordBeam_Attack;
             this->timer = 1;
         } else {
@@ -299,7 +299,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
             this->timer = 8;
         }
 
-        AudioSfx_PlaySfx(sSounds[this->subtype], &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+        AudioSfx_PlaySfx(sChargingSfxIds[this->subtype], &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                          &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
 
         this->lightColorFrac = 1.0f;
