@@ -243,10 +243,10 @@ void func_80B5AF80(EnBee* this, PlayState* play) {
     if (this->collider.base.acFlags & 2) {
         Enemy_StartFinishingBlow(play, &this->actor);
         this->actor.speedXZ = 0.0f;
-        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 0xA, NA_SE_EN_CUTBODY);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 10, NA_SE_EN_CUTBODY);
         this->actor.colChkInfo.health = 0;
-        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 0x32, NA_SE_EN_BUBLEWALK_DEAD);
-        func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, 0x64, 0, 2);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EN_BUBLEWALK_DEAD);
+        func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, 100, 0, 2);
         Actor_MarkForDeath(&this->actor);
     }
 }
