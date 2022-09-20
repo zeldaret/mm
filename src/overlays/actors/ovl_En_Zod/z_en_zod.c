@@ -526,32 +526,33 @@ void func_80BB0170(PlayState *play, s32 limbIndex, Gfx **dList, Vec3s *rot, Acto
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BB01B0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/EnZod_Draw.s")
-/*
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/EnZod_Draw.s")
+
 void EnZod_Draw(Actor* thisx, PlayState* play) {
-    EnZod* this = (EnZod*)thisx;
+    EnZod* this = THIS;
     Gfx* gfxP;
 
     OPEN_DISPS(play->state.gfxCtx);
-    // temp_a0 = play->state.gfxCtx;
+
     func_8012C28C(play->state.gfxCtx);
-    if ((this->unk256 & 2) != 0) {
+
+    if (this->unk256 & 2) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0, 0, 0, 0, this->unk29A, 0x3E8);
     }
-    // temp_v1 = temp_s1->polyOpa.p;
-    // temp_v1->words.w0 = 0xDB060020;
-    // temp_v1->words.w1 = Lib_SegmentedToVirtual(D_80BB062C[this->unk24C]);
-    // gSPSegment(POLY_OPA_DISP++, 0x00, NULL);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BB062C[this->unk24C]));
-    // temp_v1->unk8 = 0xDB060024;
-    // temp_v1->unkC = Lib_SegmentedToVirtual(&D_06007650);
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(&D_06007650));
-    // temp_s1->polyOpa.p = temp_v1 + 0x10;
+
+    gfxP = POLY_OPA_DISP;
+    
+    gSPSegment(gfxP, 0x08, Lib_SegmentedToVirtual(D_80BB062C[this->unk24C]));
+    gSPSegment(gfxP + 1, 0x09, Lib_SegmentedToVirtual(&D_06007650));
+    
+    POLY_OPA_DISP = gfxP + 2;
+    
     func_80BB01B0(this, play);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           func_80BB0128, func_80BB0170, &this->actor);
-    if ((this->unk256 & 2) != 0) {
+    if (this->unk256 & 2) {
         POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
-}*/
+}
