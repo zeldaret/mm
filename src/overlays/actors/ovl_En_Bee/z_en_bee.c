@@ -236,7 +236,7 @@ void func_80B5AC3C(EnBee* this, PlayState* play) {
 
 void func_80B5AF80(EnBee* this, PlayState* play) {
     if ((this->unk_206 == 0) && (this->collider.base.atFlags & 2)) {
-        AudioSfx_StopByPosAndId(&this->actor.projectedPos, 0x304A);
+        AudioSfx_StopByPosAndId(&this->actor.projectedPos, NA_SE_EN_BEE_FLY);
         this->unk_206 = 5;
     }
 
