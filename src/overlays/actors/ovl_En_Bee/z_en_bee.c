@@ -132,7 +132,7 @@ void func_80B5A854(EnBee* this) {
     sp48.y = Rand_ZeroFloat(50.0f) + (this->actor.floorHeight + 30.0f);
     sp48.z += Math_CosS(sp46) * 50.0f;
 
-    Math_Vec3f_Copy(&this->unk_21C, &sp48);
+    Math_Vec3f_Copy(&this->unk_21C[0], &sp48);
     Math_Vec3f_Copy(&sp48, &this->actor.home.pos);
 
     sp48.x += Math_SinS(sp46 - 0x4000) * 50.0f;
@@ -193,21 +193,18 @@ void func_80B5AC3C(EnBee* this, PlayState* play) {
     Vec3f sp88;
     f32 rnd;
     f32 phi_fs1;
-    Vec3f* phi_s2;
     s32 i;
 
     Math_Vec3f_Copy(&sp88, &player->actor.world.pos);
     phi_fs1 = (this->unk_218 * 0x700) + 0x2000;
 
-    for (i = 0, phi_s2 = &this->unk_21C; i < 24; i += 12, phi_s2++) {
+    for (i = 0; i < 2; i++) {
         rnd = randPlusMinusPoint5Scaled(20.0f);
-        sp88.x += (Math_SinS((this->actor.yawTowardsPlayer + (f32)this->unk_20C + phi_fs1)) * (rnd + 30.0f));
+        sp88.x += Math_SinS((this->actor.yawTowardsPlayer + ((f32)this->unk_20C)) + phi_fs1) * (rnd + 30.0f);
         sp88.y = (Math_SinS(this->unk_210) * 10.0f) + (player->actor.floorHeight + 40.0f);
-
         rnd = randPlusMinusPoint5Scaled(20.0f);
-        sp88.z += Math_CosS((f32)this->actor.yawTowardsPlayer + this->unk_20C + phi_fs1) * (rnd + 30.0f);
-
-        Math_Vec3f_Copy(phi_s2, &sp88);
+        sp88.z += Math_CosS((((f32)this->actor.yawTowardsPlayer) + this->unk_20C) + phi_fs1) * (rnd + 30.0f);
+        Math_Vec3f_Copy(&this->unk_21C[i], &sp88);
         phi_fs1 -= 16384.0f;
     }
 
