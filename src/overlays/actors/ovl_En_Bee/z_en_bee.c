@@ -201,12 +201,10 @@ void func_80B5AC3C(EnBee* this, PlayState* play) {
 
     for (i = 0, phi_s2 = &this->unk_21C; i < 0x18; i += 12) {
         rnd = randPlusMinusPoint5Scaled(20.0f);
-        sp88.x +=
-            (Math_SinS((s16)(s32)((f32)this->actor.yawTowardsPlayer + (f32)this->unk_20C + phi_fs1)) * (rnd + 30.0f));
+        sp88.x += (Math_SinS((this->actor.yawTowardsPlayer + (f32)this->unk_20C + phi_fs1)) * (rnd + 30.0f));
         sp88.y = (Math_SinS(this->unk_210) * 10.0f) + (player->actor.floorHeight + 40.0f);
         rnd = randPlusMinusPoint5Scaled(20.0f);
-        sp88.z +=
-            Math_CosS((s16)(s32)((f32)this->actor.yawTowardsPlayer + (f32)this->unk_20C + phi_fs1)) * (rnd + 30.0f);
+        sp88.z += Math_CosS((f32)this->actor.yawTowardsPlayer + this->unk_20C + phi_fs1) * (rnd + 30.0f);
         Math_Vec3f_Copy(phi_s2, &sp88);
         phi_fs1 -= 16384.0f;
         phi_s2++;
