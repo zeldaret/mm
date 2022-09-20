@@ -108,7 +108,7 @@ void EnBee_Init(Actor* thisx, PlayState* play) {
         func_800BC154(play, &play->actorCtx, &this->actor, 7U);
     }
 
-    this->actor.hintId = 0xC;
+    this->actor.hintId = TATL_HINT_ID_GIANT_BEE;
     func_80B5A854(this);
 }
 
