@@ -10,7 +10,7 @@
         <Animation Name="gKotakeSurprisedAnim" Offset="0x3D78" />
 
         <!-- DLists -->
-        <DList Name="gKotakePelivsDL" Offset="0x6380" />
+        <DList Name="gKotakePelvisDL" Offset="0x6380" />
         <DList Name="gKotakeTorsoDL" Offset="0x6590" />
         <DList Name="gKotakeNeckDL" Offset="0x66D8" />
         <DList Name="gKotakeHeadDL" Offset="0x6808" />
