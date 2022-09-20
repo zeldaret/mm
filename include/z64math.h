@@ -6,47 +6,47 @@
 #define VEC_SET(V,X,Y,Z) V.x=X;V.y=Y;V.z=Z
 
 typedef struct {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 z;
-} Vec2s; // size = 0x04
+    /* 0x0 */ s16 x;
+    /* 0x2 */ s16 z;
+} Vec2s; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ f32 x;
-    /* 0x04 */ f32 z;
-} Vec2f; // size = 0x08
+    /* 0x0 */ f32 x;
+    /* 0x4 */ f32 z;
+} Vec2f; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ f32 x;
-    /* 0x04 */ f32 y;
-    /* 0x08 */ f32 z;
-} Vec3f; // size = 0x0C
+    /* 0x0 */ f32 x;
+    /* 0x4 */ f32 y;
+    /* 0x8 */ f32 z;
+} Vec3f; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ u16 x;
-    /* 0x02 */ u16 y;
-    /* 0x04 */ u16 z;
-} Vec3us; // size = 0x06
+    /* 0x0 */ u16 x;
+    /* 0x2 */ u16 y;
+    /* 0x4 */ u16 z;
+} Vec3us; // size = 0x6
 
 typedef struct {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 y;
-    /* 0x04 */ s16 z;
-} Vec3s; // size = 0x06
+    /* 0x0 */ s16 x;
+    /* 0x2 */ s16 y;
+    /* 0x4 */ s16 z;
+} Vec3s; // size = 0x6
 
 typedef struct {
-    /* 0x00 */ s32 x;
-    /* 0x04 */ s32 y;
-    /* 0x08 */ s32 z;
-} Vec3i; // size = 0x0C
+    /* 0x0 */ s32 x;
+    /* 0x4 */ s32 y;
+    /* 0x8 */ s32 z;
+} Vec3i; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ Vec3s center;
-    /* 0x06 */ s16   radius;
-} Sphere16; // size = 0x08
+    /* 0x0 */ Vec3s center;
+    /* 0x6 */ s16   radius;
+} Sphere16; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ Vec3f center;
-    /* 0x0C */ f32   radius;
+    /* 0x0 */ Vec3f center;
+    /* 0xC */ f32   radius;
 } Spheref; // size = 0x10
 
 /* 
@@ -64,11 +64,11 @@ typedef struct {
 } TriNorm; // size = 0x34
 
 typedef struct {
-    /* 0x00 */ s16   radius;
-    /* 0x02 */ s16   height;
-    /* 0x04 */ s16   yShift;
-    /* 0x06 */ Vec3s pos;
-} Cylinder16; // size = 0x0C
+    /* 0x0 */ s16   radius;
+    /* 0x2 */ s16   height;
+    /* 0x4 */ s16   yShift;
+    /* 0x6 */ Vec3s pos;
+} Cylinder16; // size = 0xC
 
 typedef struct {
     /* 0x00 */ f32   radius;
@@ -89,10 +89,10 @@ typedef struct {
 
 // Defines a point in the spherical coordinate system
 typedef struct {
-    /* 0x00 */ f32 r;       // radius
-    /* 0x04 */ s16 pitch;   // polar (zenith) angle
-    /* 0x06 */ s16 yaw;     // azimuthal angle
-} VecSph; // size = 0x08
+    /* 0x0 */ f32 r;       // radius
+    /* 0x4 */ s16 pitch;   // polar (zenith) angle
+    /* 0x6 */ s16 yaw;     // azimuthal angle
+} VecSph; // size = 0x8
 
 #define LERPIMP(v0, v1, t) ((v0) + (((v1) - (v0)) * (t)))
 #define F32_LERP(v0, v1, t) ((1.0f - (t)) * (f32)(v0) + (t) * (f32)(v1))
@@ -100,6 +100,9 @@ typedef struct {
 #define F32_LERPIMPINV(v0, v1, t) ((f32)(v0) + (((f32)(v1) - (f32)(v0)) / (t)))
 #define BINANG_LERPIMP(v0, v1, t) ((v0) + (s16)(BINANG_SUB((v1), (v0)) * (t)))
 #define BINANG_LERPIMPINV(v0, v1, t) ((v0) + BINANG_SUB((v1), (v0)) / (t))
+
+#define LERPWEIGHT(val, prev, next) (((val) - (prev)) / ((next) - (prev)))
+#define F32_LERPWEIGHT(val, prev, next) (((f32)(val) - (f32)(prev)) / ((f32)(next) - (f32)(prev)))
 
 #define VEC3F_LERPIMPDST(dst, v0, v1, t){ \
     (dst)->x = (v0)->x + (((v1)->x - (v0)->x) * t); \

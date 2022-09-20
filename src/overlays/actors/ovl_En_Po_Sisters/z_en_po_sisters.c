@@ -177,7 +177,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->type = ENPOSISTERS_GET_TYPE(thisx);
-    this->actor.hintId = this->type + 80;
+    this->actor.hintId = this->type + TATL_HINT_ID_POE_SISTER_MEG;
     this->megCloneId = ENPOSISTERS_GET_MEG_CLONE_ID(thisx);
     this->floatingBobbingTimer = 32;
     this->zTargetTimer = 20;
@@ -1252,7 +1252,7 @@ void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
 
     Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),

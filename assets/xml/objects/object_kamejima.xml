@@ -11,14 +11,19 @@
         <TextureAnimation Name="gTurtleEmptyTexAnim" Offset="0x2360"/>
         <Collision Name="object_kamejima_Colheader_002470" Offset="0x2470" />
         <Collision Name="object_kamejima_Colheader_002E04" Offset="0x2E04" />
+        
         <Animation Name="object_kamejima_Anim_003980" Offset="0x3980" />
         <Animation Name="object_kamejima_Anim_0047B8" Offset="0x47B8" />
         <Animation Name="object_kamejima_Anim_0048B0" Offset="0x48B0" />
+
         <DList Name="gTurtleShell2DL" Offset="0x4E70" />
+
         <Texture Name="object_kamejima_TLUT_005248" OutName="tlut_005248" Format="rgba16" Width="16" Height="16" Offset="0x5248" />
         <Texture Name="object_kamejima_Tex_005448" OutName="tex_005448" Format="ci8" Width="32" Height="32" Offset="0x5448" />
         <Texture Name="object_kamejima_Tex_005848" OutName="tex_005848" Format="ci8" Width="64" Height="32" Offset="0x5848" />
+
         <Animation Name="object_kamejima_Anim_006980" Offset="0x6980" />
+
         <DList Name="gTurtleShellDL" Offset="0x8760" />
         <DList Name="gTurtleLeftFlipperControlDL" Offset="0x8E18" />
         <DList Name="gTurtleFrontLeftInnerFlipperDL" Offset="0x90E8" />
@@ -33,6 +38,7 @@
         <DList Name="gTurtleHeadDL" Offset="0xA118" />
         <DList Name="gTurtleUpperMouthDL" Offset="0xA4B8" />
         <DList Name="gTurtleLowerMouthDL" Offset="0xA7C8" />
+
         <Texture Name="object_kamejima_TLUT_00AAD8" OutName="tlut_00AAD8" Format="rgba16" Width="16" Height="16" Offset="0xAAD8" />
         <Texture Name="object_kamejima_TLUT_00ACD8" OutName="tlut_00ACD8" Format="rgba16" Width="16" Height="16" Offset="0xACD8" />
         <Texture Name="object_kamejima_Tex_00AED8" OutName="tex_00AED8" Format="ci8" Width="32" Height="32" Offset="0xAED8" />
@@ -51,6 +57,7 @@
         <Texture Name="object_kamejima_Tex_00D7D8" OutName="tex_00D7D8" Format="ci8" Width="32" Height="64" Offset="0xD7D8" />
         <Texture Name="gTurtleShellScutesTex" OutName="shell_scutes" Format="ci8" Width="32" Height="32" Offset="0xDFD8" TlutOffset="0xACD8"/>
         <Texture Name="gTurtleShellBottomTex" OutName="shell_bottom" Format="ci8" Width="16" Height="32" Offset="0xE3D8" TlutOffset="0xAAD8"/>
+
         <Limb Name="gTurtleRootLimb" Type="Standard" EnumName="TURTLE_LIMB_ROOT" Offset="0xE5D8" />
         <Limb Name="gTurtleShellLimb" Type="Standard" EnumName="TURTLE_LIMB_SHELL" Offset="0xE5E4" />
         <Limb Name="object_kamejima_Standardlimb_00E5F0" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_03" Offset="0xE5F0" />
@@ -75,6 +82,7 @@
         <Limb Name="gTurtleFrontRightInnerFlipperLimb" Type="Standard" EnumName="TURTLE_LIMB_FRONT_RIGHT_INNTER_FLIPPER" Offset="0xE6D4" />
         <Limb Name="gTurtleFrontRightOuterFlipperLimb" Type="Standard" EnumName="TURTLE_LIMB_FRONT_RIGHT_OUTER_FLIPPER" Offset="0xE6E0" />
         <Skeleton Name="gTurtleSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_KAMEJIMA_LIMB_NONE" LimbMax="OBJECT_KAMEJIMA_LIMB_MAX" EnumName="object_kamejima_Limbs" Offset="0xE748" />
+
         <Animation Name="object_kamejima_Anim_00EF98" Offset="0xEF98" />
         <Animation Name="object_kamejima_Anim_0100CC" Offset="0x100CC" />
         <Animation Name="object_kamejima_Anim_010918" Offset="0x10918" />

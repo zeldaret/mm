@@ -199,7 +199,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
                 this->unk_207 = 0;
                 this->unk_208 = 0;
                 this->dyna.actor.flags |= ACTOR_FLAG_1;
-                if (gSaveContext.save.entranceIndex == 0x6A80) {
+                if (gSaveContext.save.entrance == 0x6A80) {
                     this->eyeMode = TURTLE_EYEMODE_0;
                     this->actionFunc = func_80AAFAC4;
                 } else {
@@ -350,7 +350,7 @@ void func_80AAFB04(DmChar08* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((fabsf(this->dyna.actor.xzDistToPlayer) < 200.0f) && (player->actor.world.pos.y > 0.0f)) {
-        play->nextEntranceIndex = 0x6A70;
+        play->nextEntrance = 0x6A70;
         play->transitionTrigger = 0x14;
         Scene_SetExitFade(play);
         this->actionFunc = func_80AAFB94;

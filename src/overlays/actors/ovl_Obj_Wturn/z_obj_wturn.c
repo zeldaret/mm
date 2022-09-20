@@ -76,7 +76,7 @@ void func_808A7AAC(ObjWturn* this, PlayState* play) {
     subCamEye.x = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + subCamAt.x;
     subCamEye.z = (Math_CosS(this->actor.shape.rot.y) * 150.0f) + subCamAt.z;
     subCamEye.y = subCamAt.y + 4.0f;
-    Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
     this->actionFunc = func_808A7BA0;
 }
 
@@ -85,7 +85,7 @@ void func_808A7BA0(ObjWturn* this, PlayState* play) {
         func_808A7C04(this, play);
     }
     func_800B8FE8(&this->actor, NA_SE_EV_EARTHQUAKE - SFX_FLAG);
-    Play_CameraSetRoll(play, this->subCamId, this->actor.shape.rot.z);
+    Play_SetCameraRoll(play, this->subCamId, this->actor.shape.rot.z);
 }
 
 void func_808A7C04(ObjWturn* this, PlayState* play) {
@@ -107,15 +107,15 @@ void func_808A7C78(ObjWturn* this, PlayState* play) {
 
     this->unk_14A++;
     player->actor.world.pos.y = this->actor.world.pos.y + this->unk_14A * 4.0f;
-    Play_CameraSetAtEyeUp(play, this->subCamId, &player->actor.focus.pos, &subCam->eye, &sSubCamUp);
+    Play_SetCameraAtEyeUp(play, this->subCamId, &player->actor.focus.pos, &subCam->eye, &sSubCamUp);
     if (this->unk_14A == 1) {
         play->transitionType = TRANS_TYPE_64;
         gSaveContext.nextTransitionType = TRANS_TYPE_03;
         gSaveContext.nextCutsceneIndex = 0;
-        if (play->sceneNum == 0x58) {
-            play->nextEntranceIndex = 0xAC00;
+        if (play->sceneNum == SCENE_F40) {
+            play->nextEntrance = ENTRANCE(STONE_TOWER_INVERTED, 0);
         } else {
-            play->nextEntranceIndex = 0xAA10;
+            play->nextEntrance = ENTRANCE(STONE_TOWER, 1);
         }
         play->transitionTrigger = TRANS_TRIGGER_START;
     }

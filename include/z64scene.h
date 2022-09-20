@@ -9,211 +9,210 @@
 #define SPAWN_ROT_FLAGS(rotation, flags) (((rotation) << 7) | (flags))
 
 typedef struct {
-    /* 0x00 */ uintptr_t vromStart;
-    /* 0x04 */ uintptr_t vromEnd;
+    /* 0x0 */ uintptr_t vromStart;
+    /* 0x4 */ uintptr_t vromEnd;
 } RomFile; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ u32 data2;
-} SCmdBase;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ u32 data2;
+} SCmdBase; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdSpawnList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdSpawnList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  num;
-    /* 0x04 */ void* segment;
-} SCmdActorList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  num;
+    /* 0x4 */ void* segment;
+} SCmdActorList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdCsCameraList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdCsCameraList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdColHeader;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdColHeader; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  num;
-    /* 0x04 */ void* segment;
-} SCmdRoomList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  num;
+    /* 0x4 */ void* segment;
+} SCmdRoomList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x02 */ UNK_TYPE1 pad2[2];
-    /* 0x04 */ s8  west;
-    /* 0x05 */ s8  vertical;
-    /* 0x06 */ s8  south;
-    /* 0x07 */ u8  clothIntensity;
-} SCmdWindSettings;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x2 */ UNK_TYPE1 pad2[2];
+    /* 0x4 */ s8  west;
+    /* 0x5 */ s8  vertical;
+    /* 0x6 */ s8  south;
+    /* 0x7 */ u8  clothIntensity;
+} SCmdWindSettings; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdEntranceList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdEntranceList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  cUpElfMsgNum;
-    /* 0x04 */ u32 subKeepIndex;
-} SCmdSpecialFiles;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  cUpElfMsgNum;
+    /* 0x4 */ u32 subKeepIndex;
+} SCmdSpecialFiles; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  gpFlag1;
-    /* 0x04 */ u32 gpFlag2;
-} SCmdRoomBehavior;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  gpFlag1;
+    /* 0x4 */ u32 gpFlag2;
+} SCmdRoomBehavior; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdMesh;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdMesh; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  num;
-    /* 0x04 */ void* segment;
-} SCmdObjectList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  num;
+    /* 0x4 */ void* segment;
+} SCmdObjectList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  num;
-    /* 0x04 */ void* segment;
-} SCmdLightList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  num;
+    /* 0x4 */ void* segment;
+} SCmdLightList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdPathList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdPathList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  num;
-    /* 0x04 */ void* segment;
-} SCmdTransiActorList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  num;
+    /* 0x4 */ void* segment;
+} SCmdTransiActorList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  num;
-    /* 0x04 */ void* segment;
-} SCmdLightSettingList;
-// Cloudmodding has this as Environment Settings
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  num;
+    /* 0x4 */ void* segment;
+} SCmdLightSettingList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x02 */ UNK_TYPE1 pad2[2];
-    /* 0x04 */ u8  hour;
-    /* 0x05 */ u8  min;
-    /* 0x06 */ u8  unk6;
-} SCmdTimeSettings;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x2 */ UNK_TYPE1 pad2[2];
+    /* 0x4 */ u8  hour;
+    /* 0x5 */ u8  min;
+    /* 0x6 */ u8  unk6;
+} SCmdTimeSettings; // size = 0x7
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x02 */ UNK_TYPE1 pad2[2];
-    /* 0x04 */ u8  skyboxId;
-    /* 0x05 */ u8  unk5;
-    /* 0x06 */ u8  unk6;
-} SCmdSkyboxSettings;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x2 */ UNK_TYPE1 pad2[2];
+    /* 0x4 */ u8  skyboxId;
+    /* 0x5 */ u8  unk5;
+    /* 0x6 */ u8  unk6;
+} SCmdSkyboxSettings; // size = 0x7
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x02 */ UNK_TYPE1 pad2[2];
-    /* 0x04 */ u8  unk4;
-    /* 0x05 */ u8  unk5;
-} SCmdSkyboxDisables;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x2 */ UNK_TYPE1 pad2[2];
+    /* 0x4 */ u8  unk4;
+    /* 0x5 */ u8  unk5;
+} SCmdSkyboxDisables; // size = 0x6
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdExitList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdExitList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ u32 data2;
-} SCmdEndMarker;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ u32 data2;
+} SCmdEndMarker; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  bgmId;
-    /* 0x02 */ UNK_TYPE1 pad2[4];
-    /* 0x06 */ u8  nighttimeSFX;
-    /* 0x07 */ u8  musicSeq;
-} SCmdSoundSettings;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  bgmId;
+    /* 0x2 */ UNK_TYPE1 pad2[4];
+    /* 0x6 */ u8  nighttimeSFX;
+    /* 0x7 */ u8  musicSeq;
+} SCmdSoundSettings; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x02 */ UNK_TYPE1 pad2[5];
-    /* 0x07 */ u8  echo;
-} SCmdEchoSettings;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x2 */ UNK_TYPE1 pad2[5];
+    /* 0x7 */ u8  echo;
+} SCmdEchoSettings; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdCutsceneData;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdCutsceneData; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  cameraMovement;
-    /* 0x04 */ u32 area;
-} SCmdMiscSettings;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  cameraMovement;
+    /* 0x4 */ u32 area;
+} SCmdMiscSettings; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdAltHeaders;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdAltHeaders; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ u32 data2;
-} SCmdWorldMapVisited;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ u32 data2;
+} SCmdWorldMapVisited; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdTextureAnimations;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdTextureAnimations; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  num;
-    /* 0x04 */ void* segment;
-} SCmdCutsceneActorList;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  num;
+    /* 0x4 */ void* segment;
+} SCmdCutsceneActorList; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdMinimapSettings;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdMinimapSettings; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  num;
-    /* 0x04 */ void* segment;
-} SCmdMinimapChests;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  num;
+    /* 0x4 */ void* segment;
+} SCmdMinimapChests; // size = 0x8
 
 typedef struct {
     /* 0x0 */ Gfx* opaqueDl;
@@ -292,17 +291,17 @@ typedef struct {
     struct {
         s8 room;    // Room to switch to
         s8 bgCamDataId; // How the camera reacts during the transition. -2 for spiral staircase. -1 for generic door. 0+ will index scene CamData
-    } /* 0x00 */ sides[2]; // 0 = front, 1 = back
-    /* 0x04 */ s16   id;
-    /* 0x06 */ Vec3s pos;
-    /* 0x0C */ s16   rotY;
-    /* 0x0E */ u16   params;
+    } /* 0x0 */ sides[2]; // 0 = front, 1 = back
+    /* 0x4 */ s16   id;
+    /* 0x6 */ Vec3s pos;
+    /* 0xC */ s16   rotY;
+    /* 0xE */ u16   params;
 } TransitionActorEntry; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u8 numTransitionActors;
-    /* 0x04 */ TransitionActorEntry* transitionActorList;
-} DoorContext;
+    /* 0x0 */ u8 numTransitionActors;
+    /* 0x4 */ TransitionActorEntry* transitionActorList;
+} DoorContext; // size = 0x8
 
 typedef struct {
     /* 0x0 */ s16 id;
@@ -343,7 +342,7 @@ typedef struct {
     /* 0xA */ u8 unk_A;
     /* 0xB */ u8 drawConfig;
     /* 0xC */ u8 unk_C;
-} SceneTableEntry; // size = 0x10;
+} SceneTableEntry; // size = 0x10
 
 typedef struct {
     /* 0x0 */ u8 r;
@@ -392,101 +391,102 @@ typedef struct {
 } ObjectContext; // size = 0x958
 
 typedef struct {
-    u8 headerType;
-} MeshHeaderBase;
+    /* 0x0 */ u8 headerType;
+} MeshHeaderBase; // size = 0x1
 
 typedef struct {
-    MeshHeaderBase base;
-
-    u8 numEntries;
-    u32 dListStart;
-    u32 dListEnd;
-} MeshHeader0;
-
-typedef struct {
-    u32 opaqueDList;
-    u32 translucentDList;
-} MeshEntry0;
+    /* 0x0 */ MeshHeaderBase base;
+    /* 0x1 */ u8 numEntries;
+    /* 0x4 */ u32 dListStart;
+    /* 0x8 */ u32 dListEnd;
+} MeshHeader0; // size = 0xC
 
 typedef struct {
-    MeshHeaderBase base;
-    u8 format;
-    u32 entryRecord;
-} MeshHeader1Base;
+    /* 0x0 */ u32 opaqueDList;
+    /* 0x4 */ u32 translucentDList;
+} MeshEntry0; // size = 0x8
 
 typedef struct {
-    MeshHeader1Base base;
-    u32 imagePtr; // 0x08
-    u32 unknown; // 0x0C
-    u32 unknown2; // 0x10
-    u16 bgWidth; // 0x14
-    u16 bgHeight; // 0x16
-    u8 imageFormat; // 0x18
-    u8 imageSize; // 0x19
-    u16 imagePal; // 0x1A
-    u16 imageFlip; // 0x1C
-} MeshHeader1Single;
+    /* 0x0 */ MeshHeaderBase base;
+    /* 0x1 */ u8 format;
+    /* 0x4 */ u32 entryRecord;
+} MeshHeader1Base; // size = 0x8
 
 typedef struct {
-    MeshHeader1Base base;
-    u8 bgCnt;
-    u32 bgRecordPtr;
-} MeshHeader1Multi;
+    /* 0x00 */ MeshHeader1Base base;
+    /* 0x08 */ u32 imagePtr;
+    /* 0x0C */ u32 unknown;
+    /* 0x10 */ u32 unknown2;
+    /* 0x14 */ u16 bgWidth;
+    /* 0x16 */ u16 bgHeight;
+    /* 0x18 */ u8 imageFormat;
+    /* 0x19 */ u8 imageSize;
+    /* 0x1A */ u16 imagePal;
+    /* 0x1C */ u16 imageFlip;
+} MeshHeader1Single; // size = 0x20
 
 typedef struct {
-    u16 unknown; // 0x00
-    s8 bgID; // 0x02
-    u32 imagePtr; // 0x04
-    u32 unknown2; // 0x08
-    u32 unknown3; // 0x0C
-    u16 bgWidth; // 0x10
-    u16 bgHeight; // 0x12
-    u8 imageFmt; // 0x14
-    u8 imageSize; // 0x15
-    u16 imagePal; // 0x16
-    u16 imageFlip; // 0x18
-} BackgroundRecord;
+    /* 0x0 */ MeshHeader1Base base;
+    /* 0x8 */ u8 bgCnt;
+    /* 0xC */ u32 bgRecordPtr;
+} MeshHeader1Multi; // size = 0x10
 
 typedef struct {
-    s16 playerXMax, playerZMax;
-    s16 playerXMin, playerZMin;
-    u32 opaqueDList;
-    u32 translucentDList;
-} MeshEntry2;
+    /* 0x00 */ u16 unknown;
+    /* 0x02 */ s8 bgID;
+    /* 0x04 */ u32 imagePtr;
+    /* 0x08 */ u32 unknown2;
+    /* 0x0C */ u32 unknown3;
+    /* 0x10 */ u16 bgWidth;
+    /* 0x12 */ u16 bgHeight;
+    /* 0x14 */ u8 imageFmt;
+    /* 0x15 */ u8 imageSize;
+    /* 0x16 */ u16 imagePal;
+    /* 0x18 */ u16 imageFlip;
+} BackgroundRecord; // size = 0x1C
 
 typedef struct {
-    MeshHeaderBase base;
-    u8 numEntries;
-    u32 dListStart;
-    u32 dListEnd;
-} MeshHeader2;
+    /* 0x0 */ s16 playerXMax; 
+    /* 0x2 */ s16 playerZMax;
+    /* 0x4 */ s16 playerXMin; 
+    /* 0x6 */ s16 playerZMin;
+    /* 0x8 */ u32 opaqueDList;
+    /* 0xC */ u32 translucentDList;
+} MeshEntry2; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u8 count; // number of points in the path
-    /* 0x01 */ u8 unk1;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ Vec3s* points; // Segment Address to the array of points
+    /* 0x0 */ MeshHeaderBase base;
+    /* 0x1 */ u8 numEntries;
+    /* 0x4 */ u32 dListStart;
+    /* 0x8 */ u32 dListEnd;
+} MeshHeader2; // size = 0xC 
+
+typedef struct {
+    /* 0x0 */ u8 count; // number of points in the path
+    /* 0x1 */ u8 unk1;
+    /* 0x2 */ s16 unk2;
+    /* 0x4 */ Vec3s* points; // Segment Address to the array of points
 } Path; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE2 unk0;
-    /* 0x02 */ UNK_TYPE2 unk2;
-    /* 0x04 */ UNK_TYPE2 unk4;
-    /* 0x06 */ UNK_TYPE2 unk6;
-    /* 0x08 */ UNK_TYPE2 unk8;
+    /* 0x0 */ UNK_TYPE2 unk0;
+    /* 0x2 */ UNK_TYPE2 unk2;
+    /* 0x4 */ UNK_TYPE2 unk4;
+    /* 0x6 */ UNK_TYPE2 unk6;
+    /* 0x8 */ UNK_TYPE2 unk8;
 } MinimapEntry; // size = 0xA
 
 typedef struct {
-    /* 0x00 */ MinimapEntry* entry;
-    /* 0x04 */ UNK_TYPE unk4;
+    /* 0x0 */ MinimapEntry* entry;
+    /* 0x4 */ UNK_TYPE unk4;
 } MinimapList; // size  = 0x8
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE2 unk0;
-    /* 0x02 */ UNK_TYPE2 unk2;
-    /* 0x04 */ UNK_TYPE2 unk4;
-    /* 0x06 */ UNK_TYPE2 unk6;
-    /* 0x08 */ UNK_TYPE2 unk8;
+    /* 0x0 */ UNK_TYPE2 unk0;
+    /* 0x2 */ UNK_TYPE2 unk2;
+    /* 0x4 */ UNK_TYPE2 unk4;
+    /* 0x6 */ UNK_TYPE2 unk6;
+    /* 0x8 */ UNK_TYPE2 unk8;
 } MinimapChest; // size = 0xA
 
 // TODO: consider merging with bgCamInfo?
@@ -648,7 +648,128 @@ typedef enum {
     /* 0x6F */ SCENE_CLOCKTOWER,
     /* 0x70 */ SCENE_ALLEY,
     /* 0x71 */ SCENE_MAX
-} SceneID;
+} SceneId;
+
+typedef enum {
+    /* 0x00 */ ENTR_SCENE_MAYORS_RESIDENCE,
+    /* 0x01 */ ENTR_SCENE_MAJORAS_LAIR,
+    /* 0x02 */ ENTR_SCENE_MAGIC_HAGS_POTION_SHOP,
+    /* 0x03 */ ENTR_SCENE_RANCH_HOUSE,
+    /* 0x04 */ ENTR_SCENE_HONEY_AND_DARLINGS_SHOP,
+    /* 0x05 */ ENTR_SCENE_BENEATH_THE_GRAVERYARD,
+    /* 0x06 */ ENTR_SCENE_SOUTHERN_SWAMP_CLEARED,
+    /* 0x07 */ ENTR_SCENE_CURIOSITY_SHOP,
+    /* 0x08 */ ENTR_SCENE_UNSET_08,
+    /* 0x09 */ ENTR_SCENE_UNSET_09,
+    /* 0x0A */ ENTR_SCENE_GROTTOS,
+    /* 0x0B */ ENTR_SCENE_UNSET_0B,
+    /* 0x0C */ ENTR_SCENE_UNSET_0C,
+    /* 0x0D */ ENTR_SCENE_UNSET_0D,
+    /* 0x0E */ ENTR_SCENE_CUTSCENE,
+    /* 0x0F */ ENTR_SCENE_UNSET_0F,
+    /* 0x10 */ ENTR_SCENE_IKANA_CANYON,
+    /* 0x11 */ ENTR_SCENE_PIRATES_FORTRESS,
+    /* 0x12 */ ENTR_SCENE_MILK_BAR,
+    /* 0x13 */ ENTR_SCENE_STONE_TOWER_TEMPLE,
+    /* 0x14 */ ENTR_SCENE_TREASURE_CHEST_SHOP,
+    /* 0x15 */ ENTR_SCENE_STONE_TOWER_TEMPLE_INVERTED,
+    /* 0x16 */ ENTR_SCENE_CLOCK_TOWER_ROOFTOP,
+    /* 0x17 */ ENTR_SCENE_OPENING_DUNGEON,
+    /* 0x18 */ ENTR_SCENE_WOODFALL_TEMPLE,
+    /* 0x19 */ ENTR_SCENE_PATH_TO_MOUNTAIN_VILLAGE,
+    /* 0x1A */ ENTR_SCENE_IKANA_CASTLE,
+    /* 0x1B */ ENTR_SCENE_DEKU_SCRUB_PLAYGROUND,
+    /* 0x1C */ ENTR_SCENE_ODOLWAS_LAIR,
+    /* 0x1D */ ENTR_SCENE_TOWN_SHOOTING_GALLERY,
+    /* 0x1E */ ENTR_SCENE_SNOWHEAD_TEMPLE,
+    /* 0x1F */ ENTR_SCENE_MILK_ROAD,
+    /* 0x20 */ ENTR_SCENE_PIRATES_FORTRESS_INTERIOR,
+    /* 0x21 */ ENTR_SCENE_SWAMP_SHOOTING_GALLERY,
+    /* 0x22 */ ENTR_SCENE_PINNACLE_ROCK,
+    /* 0x23 */ ENTR_SCENE_FAIRY_FOUNTAIN,
+    /* 0x24 */ ENTR_SCENE_SWAMP_SPIDER_HOUSE,
+    /* 0x25 */ ENTR_SCENE_OCEANSIDE_SPIDER_HOUSE,
+    /* 0x26 */ ENTR_SCENE_ASTRAL_OBSERVATORY,
+    /* 0x27 */ ENTR_SCENE_MOON_DEKU_TRIAL,
+    /* 0x28 */ ENTR_SCENE_DEKU_PALACE,
+    /* 0x29 */ ENTR_SCENE_MOUNTAIN_SMITHY,
+    /* 0x2A */ ENTR_SCENE_TERMINA_FIELD,
+    /* 0x2B */ ENTR_SCENE_POST_OFFICE,
+    /* 0x2C */ ENTR_SCENE_MARINE_RESEARCH_LAB,
+    /* 0x2D */ ENTR_SCENE_DAMPES_HOUSE,
+    /* 0x2E */ ENTR_SCENE_UNSET_2E,
+    /* 0x2F */ ENTR_SCENE_GORON_SHRINE,
+    /* 0x30 */ ENTR_SCENE_ZORA_HALL,
+    /* 0x31 */ ENTR_SCENE_TRADING_POST,
+    /* 0x32 */ ENTR_SCENE_ROMANI_RANCH,
+    /* 0x33 */ ENTR_SCENE_TWINMOLDS_LAIR,
+    /* 0x34 */ ENTR_SCENE_GREAT_BAY_COAST,
+    /* 0x35 */ ENTR_SCENE_ZORA_CAPE,
+    /* 0x36 */ ENTR_SCENE_LOTTERY_SHOP,
+    /* 0x37 */ ENTR_SCENE_UNSET_37,
+    /* 0x38 */ ENTR_SCENE_PIRATES_FORTRESS_EXTERIOR,
+    /* 0x39 */ ENTR_SCENE_FISHERMANS_HUT,
+    /* 0x3A */ ENTR_SCENE_GORON_SHOP,
+    /* 0x3B */ ENTR_SCENE_DEKU_KINGS_CHAMBER,
+    /* 0x3C */ ENTR_SCENE_MOON_GORON_TRIAL,
+    /* 0x3D */ ENTR_SCENE_ROAD_TO_SOUTHERN_SWAMP,
+    /* 0x3E */ ENTR_SCENE_DOGGY_RACETRACK,
+    /* 0x3F */ ENTR_SCENE_CUCCO_SHACK,
+    /* 0x40 */ ENTR_SCENE_IKANA_GRAVEYARD,
+    /* 0x41 */ ENTR_SCENE_GOHTS_LAIR,
+    /* 0x42 */ ENTR_SCENE_SOUTHERN_SWAMP_POISONED,
+    /* 0x43 */ ENTR_SCENE_WOODFALL,
+    /* 0x44 */ ENTR_SCENE_MOON_ZORA_TRIAL,
+    /* 0x45 */ ENTR_SCENE_GORON_VILLAGE_SPRING,
+    /* 0x46 */ ENTR_SCENE_GREAT_BAY_TEMPLE,
+    /* 0x47 */ ENTR_SCENE_WATERFALL_RAPIDS,
+    /* 0x48 */ ENTR_SCENE_BENEATH_THE_WELL,
+    /* 0x49 */ ENTR_SCENE_ZORA_HALL_ROOMS,
+    /* 0x4A */ ENTR_SCENE_GORON_VILLAGE_WINTER,
+    /* 0x4B */ ENTR_SCENE_GORON_GRAVERYARD,
+    /* 0x4C */ ENTR_SCENE_SAKONS_HIDEOUT,
+    /* 0x4D */ ENTR_SCENE_MOUNTAIN_VILLAGE_WINTER,
+    /* 0x4E */ ENTR_SCENE_GHOST_HUT,
+    /* 0x4F */ ENTR_SCENE_DEKU_SHRINE,
+    /* 0x50 */ ENTR_SCENE_ROAD_TO_IKANA,
+    /* 0x51 */ ENTR_SCENE_SWORDMANS_SCHOOL,
+    /* 0x52 */ ENTR_SCENE_MUSIC_BOX_HOUSE,
+    /* 0x53 */ ENTR_SCENE_IGOS_DU_IKANAS_LAIR,
+    /* 0x54 */ ENTR_SCENE_TOURIST_INFORMATION,
+    /* 0x55 */ ENTR_SCENE_STONE_TOWER,
+    /* 0x56 */ ENTR_SCENE_STONE_TOWER_INVERTED,
+    /* 0x57 */ ENTR_SCENE_MOUNTAIN_VILLAGE_SPRING,
+    /* 0x58 */ ENTR_SCENE_PATH_TO_SNOWHEAD,
+    /* 0x59 */ ENTR_SCENE_SNOWHEAD,
+    /* 0x5A */ ENTR_SCENE_PATH_TO_GORON_VILLAGE_WINTER,
+    /* 0x5B */ ENTR_SCENE_PATH_TO_GORON_VILLAGE_SPRING,
+    /* 0x5C */ ENTR_SCENE_GYORGS_LAIR,
+    /* 0x5D */ ENTR_SCENE_SECRET_SHRINE,
+    /* 0x5E */ ENTR_SCENE_STOCK_POT_INN,
+    /* 0x5F */ ENTR_SCENE_GREAT_BAY_CUTSCENE,
+    /* 0x60 */ ENTR_SCENE_CLOCK_TOWER_INTERIOR,
+    /* 0x61 */ ENTR_SCENE_WOODS_OF_MYSTERY,
+    /* 0x62 */ ENTR_SCENE_LOST_WOODS,
+    /* 0x63 */ ENTR_SCENE_MOON_LINK_TRIAL,
+    /* 0x64 */ ENTR_SCENE_THE_MOON,
+    /* 0x65 */ ENTR_SCENE_BOMB_SHOP,
+    /* 0x66 */ ENTR_SCENE_GIANTS_CHAMBER,
+    /* 0x67 */ ENTR_SCENE_GORMAN_TRACK,
+    /* 0x68 */ ENTR_SCENE_GORON_RACETRACK,
+    /* 0x69 */ ENTR_SCENE_EAST_CLOCK_TOWN,
+    /* 0x6A */ ENTR_SCENE_WEST_CLOCK_TOWN,
+    /* 0x6B */ ENTR_SCENE_NORTH_CLOCK_TOWN,
+    /* 0x6C */ ENTR_SCENE_SOUTH_CLOCK_TOWN,
+    /* 0x6D */ ENTR_SCENE_LAUNDRY_POOL,
+    /* 0x6E */ ENTR_SCENE_MAX
+} EntranceSceneId;
+
+/*
+* 0xFE00:  Index into sSceneEntranceTable (Scene)
+* 0x01F0:  Index into the scenes specific entrance table (Spawn)
+* 0x000F:  Index into the specific entrance table (Layer), stored seperately in sceneSetupIndex
+*/
+#define ENTRANCE(scene, spawn) ((((ENTR_SCENE_##scene) & 0x7F) << 9) | (((spawn) & 0x1F) << 4))
 
 // SceneTableEntry draw configs
 typedef enum {

@@ -675,8 +675,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
         !func_8088C804(&this->actor.world.pos, &refActor->actor.world.pos, 10.0f)) {
         Health_ChangeBy(play, 0x80);
         if (this->fairyFlags & 0x200) {
-            Parameter_AddMagic(play, ((void)0, gSaveContext.unk_3F30) +
-                                         (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
+            Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
         }
         gSaveContext.jinxTimer = 0;
         this->unk_254 = 50.0f;
@@ -1468,7 +1467,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
     }
 
     if (Actor_ProcessTalkRequest(thisx, &play->state)) {
-        func_8019FDC8(&D_801DB4A4, NA_SE_VO_NA_LISTEN, 0x20);
+        func_8019FDC8(&gSfxDefaultPos, NA_SE_VO_NA_LISTEN, 0x20);
         thisx->focus.pos = thisx->world.pos;
 
         if (thisx->textId == ElfMessage_GetFirstCycleHint(play)) {
