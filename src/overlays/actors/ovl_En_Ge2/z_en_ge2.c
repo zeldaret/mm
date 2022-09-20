@@ -548,7 +548,7 @@ void EnGe2_LookAround(EnGe2* this, PlayState* play) {
         case GERUDO_PURPLE_DETECTION_HEARD:
             Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->yawTarget, 2, 0x3E8, 0x1F4);
             break;
-            
+
         case GERUDO_PURPLE_DETECTION_PROXIMITY:
             Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->yawTarget, 2, 0xBB8, 0x3E8);
             break;
