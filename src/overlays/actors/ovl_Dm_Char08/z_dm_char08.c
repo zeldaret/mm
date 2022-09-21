@@ -147,10 +147,10 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     DmChar08* this = THIS;
 
-    this->dyna.actor.targetMode = 5;
+    thisx->targetMode = 5;
     this->eyeMode = TURTLE_EYEMODE_2;
-    this->dyna.actor.targetArrowOffset = 120.0f;
-    ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
+    thisx->targetArrowOffset = 120.0f;
+    ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gTurtleSkel, NULL, NULL, NULL, 0);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     Actor_SetScale(&this->dyna.actor, 0.1f);
@@ -161,7 +161,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
     this->animIndex = TURTLE_ANIM_IDLE;
     this->unk_1FC = 0xFFFF;
     this->dynapolyInitialized = false;
-    this->targetYPos = this->dyna.actor.world.pos.y;
+    this->targetYPos = thisx->world.pos.y;
     this->unk_1F0 = 0.0f;
     if (play->sceneNum == SCENE_31MISAKI) {
         if (gSaveContext.save.weekEventReg[53] & 0x20) {
@@ -176,27 +176,25 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
         DynaPolyActor_Init(&this->dyna, 3);
         DynaPolyActor_LoadMesh(play, &this->dyna, &sTurtleGreatBayTempleCol);
         this->dynapolyInitialized = true;
-        if (this) {}
     }
 
-    this->palmTree1 = Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_YASI, this->dyna.actor.world.pos.x + -80.0f,
-                                  this->dyna.actor.world.pos.y + 390.0f, this->dyna.actor.world.pos.z, 0, 0, 0, 1);
-    this->palmTree2 =
-        Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_YASI, this->dyna.actor.world.pos.x + 68.0f,
-                    this->dyna.actor.world.pos.y + 368.0f, this->dyna.actor.world.pos.z - 174.0f, 0, 0x7530, 0, 1);
+    this->palmTree1 = Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_YASI, thisx->world.pos.x + -80.0f,
+                                  thisx->world.pos.y + 390.0f, thisx->world.pos.z, 0, 0, 0, 1);
+    this->palmTree2 = Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_YASI, thisx->world.pos.x + 68.0f,
+                                  thisx->world.pos.y + 368.0f, thisx->world.pos.z - 174.0f, 0, 0x7530, 0, 1);
 
     switch (play->sceneNum) {
         case SCENE_31MISAKI:
             if (gSaveContext.save.weekEventReg[53] & 0x20) {
-                this->dyna.actor.world.pos.x = -6480.0f;
+                thisx->world.pos.x = -6480.0f;
                 this->targetYPos = -120.0f;
-                this->dyna.actor.world.pos.z = 1750.0f;
-                this->dyna.actor.world.rot.x = 0;
-                this->dyna.actor.world.rot.y = -0x7234;
-                this->dyna.actor.world.rot.z = 0;
-                this->dyna.actor.shape.rot.x = 0;
-                this->dyna.actor.shape.rot.y = -0x7234;
-                this->dyna.actor.shape.rot.z = 0;
+                thisx->world.pos.z = 1750.0f;
+                thisx->world.rot.x = 0;
+                thisx->world.rot.y = -0x7234;
+                thisx->world.rot.z = 0;
+                thisx->shape.rot.x = 0;
+                thisx->shape.rot.y = -0x7234;
+                thisx->shape.rot.z = 0;
                 this->unk_1F0 = 1.0f;
                 this->unk_1FF = 2;
                 this->animIndex = TURTLE_ANIM_FLOAT;
@@ -204,8 +202,8 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
                 this->eyeMode = TURTLE_EYEMODE_1;
                 this->unk_207 = 0;
                 this->unk_208 = 0;
-                this->dyna.actor.flags |= ACTOR_FLAG_1;
-                if (gSaveContext.save.entrance == 0x6A80) {
+                thisx->flags |= ACTOR_FLAG_1;
+                if (gSaveContext.save.entrance == ENTRANCE(ZORA_CAPE, 8)) {
                     this->eyeMode = TURTLE_EYEMODE_0;
                     this->actionFunc = func_80AAFAC4;
                 } else {
@@ -223,7 +221,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
             this->eyeMode = TURTLE_EYEMODE_0;
             this->unk_207 = 0;
             this->unk_208 = 0;
-            this->dyna.actor.flags |= ACTOR_FLAG_1;
+            thisx->flags |= ACTOR_FLAG_1;
             this->actionFunc = func_80AAFAE4;
             this->unk_1F0 = 1.0f;
             break;
