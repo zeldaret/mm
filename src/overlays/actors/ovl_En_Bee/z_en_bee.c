@@ -151,7 +151,7 @@ void func_80B5A9E8(EnBee* this, PlayState* play) {
     s32 pad[2];
 
     if ((this->actor.category != 5) && (ActorCutscene_GetCurrentIndex() == -1)) {
-        func_800BC154(play, &play->actorCtx, &this->actor, 5);
+        func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
     }
 
     Math_Vec3f_Copy(&sp3C, &this->unk_21C[this->unk_214]);
