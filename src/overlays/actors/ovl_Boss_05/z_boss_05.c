@@ -392,7 +392,7 @@ s32 func_809EECBC(Boss05* this, PlayState* play) {
                         Enemy_StartFinishingBlow(play, &this->dyna.actor);
                         return 2;
                     } else {
-                        Actor_PlaySfxAtPos(&this->dyna.actor, 0x3807U);
+                        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
                         this->unk16C = 15;
                         this->unk15C = 0;
                         this->unk162[0] = 30;
@@ -449,21 +449,27 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
         spD4 = 0x3E8;
         spD0 = 0x3E80;
         spCC = 0x7D0;
+
         spC8 = 0x5DC;
         spC4 = 0x1770;
         spC0 = 0xBB8;
+
         spBC = 0x514;
         spB8 = 0x5208;
         spB4 = 0xDAC;
+
         var_s6 = 0xA;
         var_s7 = 0x300;
 
         if (this->unk16C != 0) {
             spD4 = 0x1B58;
             spCC = 0x1770;
+
             spC0 = 0x1770;
+
             spBC = 0x1C84;
             spB4 = 0x1964;
+
             var_s6 = 1;
             var_s7 = 0x1000;
         }
@@ -471,12 +477,15 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
         spD4 = 0x1B58;
         spD0 = 0x3E80;
         spCC = 0x1388;
+
         spC8 = 0x5DC;
         spC4 = 0x2328;
         spC0 = 0x1388;
+
         spBC = 0x1C84;
         spB8 = 0x5208;
         spB4 = 0x157C;
+
         var_s6 = 1;
         var_s7 = 0x1000;
     } else {
@@ -498,18 +507,21 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
             } else {
                 spD8[i].z = (s32)(Math_SinS((this->unk160 * spBC) + (i * spB8)) * spB4);
             }
+
             var_s4 = var_s6;
             var_s5 = var_s7;
         } else {
             if (this->unk174 == 1) {
                 var_s6 = 5;
                 var_s7 = 0x1000;
+
                 spD8[i].x = D_809F1C60[i].x;
                 spD8[i].y = D_809F1C60[i].y;
                 spD8[i].z = D_809F1C60[i].z;
             } else if (this->unk174 == 2) {
                 var_s6 = 1;
                 var_s7 = 0x2000;
+
                 spD8[i].x = D_809F1C8C[i].x;
                 spD8[i].y = D_809F1C8C[i].y;
                 spD8[i].z = D_809F1C8C[i].z;
@@ -531,7 +543,8 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
 
     SkelAnime_Update(&this->unk3C8);
     Math_ApproachF(&this->unk35C, 1.0f, 0.1f, 0.1f);
-    if (this->unk15C != 0xA) {
+
+    if (this->unk15C != 10) {
         Math_ApproachS(&this->dyna.actor.shape.rot.x, 0, 0x14, 0x800);
     }
 
@@ -556,24 +569,24 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
                 if (sqrtf(this->dyna.actor.xyzDistToPlayerSq) <= 40.0f) {
                     this->unk15E++;
                     if (this->unk15E > 30) {
-                        this->unk15C = 0xA;
+                        this->unk15C = 10;
                         this->unk162[0] = 30;
-                        Actor_PlaySfxAtPos(&this->dyna.actor, 0x3861U);
+                        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA1_ATTACK);
                     }
                 } else {
                     this->unk15E = 0;
                 }
             }
             if (!(this->unk160 & 3) && (Rand_ZeroOne() < 0.5f)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, 0x3860U);
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA1_MOUTH);
             }
             break;
 
         case 10:
             if (!(this->unk160 & 1)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, 0x3860U);
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA1_MOUTH);
             }
-            this->unk19C = (this->unk162[0] & 1) << 9;
+            this->unk19C = (this->unk162[0] & 1) * 0x200;
             this->unk174 = 3;
             this->unk3C8.playSpeed = 4.0f;
             Math_ApproachS(&this->dyna.actor.shape.rot.x, -0x8000, 2, 0x2000);
@@ -587,7 +600,7 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
                 Math_Vec3f_Copy(&sp94, &this->dyna.actor.world.pos);
                 sp94.y += 40.0f;
                 EffectSsGSplash_Spawn(play, &sp94, NULL, NULL, 1, 2000);
-                Actor_PlaySfxAtPos(&this->dyna.actor, 0x2808U);
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_OUT_OF_WATER);
             }
             break;
 
@@ -598,16 +611,16 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
             this->unk174 = 1;
             if (this->unk162[0] == 0) {
                 this->unk15C = 2;
-                this->unk162[0] = 0x14;
-                Actor_PlaySfxAtPos(&this->dyna.actor, 0x3861U);
+                this->unk162[0] = 20;
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA1_ATTACK);
             }
             break;
 
         case 2:
             if (!(this->unk160 & 1)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, 0x3860U);
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA1_MOUTH);
             }
-            this->unk19C = (this->unk162[0] & 1) << 9;
+            this->unk19C = (this->unk162[0] & 1) * 0x200;
             this->unk3C8.playSpeed = 4.0f;
             Math_ApproachF(&this->unk35C, 1.5f, 1.0f, 0.7f);
             this->unk174 = 2;
@@ -650,7 +663,7 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
                     temp_v0_6->unk3C8.jointTable[i] = this->unk3C8.jointTable[i];
                 }
 
-                Actor_PlaySfxAtPos(&this->dyna.actor, 0x381E);
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA1_DAMAGE);
                 if (var_s4_2 > 10) {
                     temp_v0_6->unk188 = var_s4_2 - 10;
                 }
@@ -669,7 +682,7 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
                     temp_v0_6->unk162[0] = (s32)(Rand_ZeroFloat(20.0f) + 20.0f);
                 }
             }
-            Actor_PlaySfxAtPos(&this->dyna.actor, 0x381F);
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA_DEAD);
         }
     }
 
@@ -713,7 +726,7 @@ void func_809EFAB4(Boss05* this, PlayState* play) {
     Actor_MoveWithGravity(&this->dyna.actor);
     this->dyna.actor.world.pos.y -= 85.0f;
     this->dyna.actor.prevPos.y -= 85.0f;
-    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, 50.0f, 40.0f, 0x44U);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, 50.0f, 40.0f, 0x44);
     this->dyna.actor.world.pos.y += 85.0f;
     this->dyna.actor.prevPos.y += 85.0f;
 
@@ -1008,7 +1021,7 @@ void func_809F0780(Boss05* this, PlayState* play) {
                 EffectSsBubble_Spawn(play, &sp7C, 20.0f, 10.0f, 20.0f, 0.13f);
             }
 
-            SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 40, 0x381F);
+            SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 40, NA_SE_EN_MIZUBABA_DEAD);
             Actor_MarkForDeath(&this->dyna.actor);
             Item_DropCollectibleRandom(play, NULL, &this->dyna.actor.world.pos, 0xE0);
         }
