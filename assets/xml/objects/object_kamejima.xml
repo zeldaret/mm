@@ -17,7 +17,7 @@
         <Collision Name="gTurtleAwakeCol" Offset="0x2470" />
         <Collision Name="gTurtleUnusedCol" Offset="0x2E04" />
         
-        <Animation Name="gTurtleHide1Anim" Offset="0x3980" />
+        <Animation Name="gTurtleGlitchy1Anim" Offset="0x3980" />
         <Animation Name="gTurtleCoughAnim" Offset="0x47B8" />
         <Animation Name="gTurtleIdleAnim" Offset="0x48B0" />
 
@@ -88,12 +88,12 @@
         <Limb Name="gTurtleFrontRightEndFlipperLimb" Type="Standard" EnumName="TURTLE_LIMB_FRONT_RIGHT_END_FLIPPER" Offset="0xE6E0" />
         <Skeleton Name="gTurtleSkel" Type="Flex" LimbType="Standard" LimbNone="TURTLE_LIMB_NONE" LimbMax="TURTLE_LIMB_MAX" EnumName="TurtleLimb" Offset="0xE748" />
 
-        <Animation Name="gTurtleHide2Anim" Offset="0xEF98" />
+        <Animation Name="gTurtleGlitchy2Anim" Offset="0xEF98" />
         <Animation Name="gTurtleSpeak1Anim" Offset="0x100CC" />
-        <Animation Name="gTurtleHide3Anim" Offset="0x10918" />
+        <Animation Name="gTurtleGlitchyRaiseHeadAnim" Offset="0x10918" />
         <Animation Name="gTurtleSpeak2Anim" Offset="0x119D4" />
         <Animation Name="gTurtleFloatAnim" Offset="0x12260" />
-        <Animation Name="gTurtleHide4Anim" Offset="0x13264" />
+        <Animation Name="gTurtleGlitchyLookAroundAnim" Offset="0x13264" />
         <Animation Name="gTurtleYawnAnim" Offset="0x14E8C" />
     </File>
 </Root>
