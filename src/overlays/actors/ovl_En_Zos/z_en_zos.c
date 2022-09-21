@@ -5,7 +5,6 @@
  */
 
 #include "z_en_zos.h"
-#include "objects/object_zos/object_zos.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_2000000)
 
@@ -73,8 +72,8 @@ void EnZos_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = func_80BBBDE0;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_zos_Skel_015238, &object_zos_Anim_00A164, this->jointTable,
-                       this->morphTable, 18);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gEvanSkel, &object_zos_Anim_00A164, this->jointTable,
+                       this->morphTable, EVAN_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &object_zos_Anim_00A164);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->unk_2B6 = 0;
@@ -692,7 +691,7 @@ s32 func_80BBC4E4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 void func_80BBC500(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80BBC750 = { 0.0f, 0.0f, 0.0f };
 
-    if (limbIndex == 9) {
+    if (limbIndex == EVAN_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80BBC750, &thisx->focus.pos);
     }
 }
@@ -724,7 +723,7 @@ void EnZos_Draw(Actor* thisx, PlayState* play) {
 
     gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(&gfx[2], object_zos_DL_0136E0);
-    gSPDisplayList(&gfx[3], object_zos_DL_013088);
+    gSPDisplayList(&gfx[3], gEvanKeyboardDL);
 
     POLY_OPA_DISP = &gfx[4];
 

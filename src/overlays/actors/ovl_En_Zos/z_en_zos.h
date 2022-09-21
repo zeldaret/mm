@@ -2,6 +2,7 @@
 #define Z_EN_ZOS_H
 
 #include "global.h"
+#include "objects/object_zos/object_zos.h"
 
 struct EnZos;
 
@@ -16,8 +17,8 @@ enum {
 
 typedef struct EnZos {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ Vec3s jointTable[18];
-    /* 0x1B0 */ Vec3s morphTable[18];
+    /* 0x144 */ Vec3s jointTable[EVAN_LIMB_MAX];
+    /* 0x1B0 */ Vec3s morphTable[EVAN_LIMB_MAX];
     /* 0x21C */ SkelAnime skelAnime;
     /* 0x260 */ ColliderCylinder collider;
     /* 0x2AC */ s16 unk_2AC;
