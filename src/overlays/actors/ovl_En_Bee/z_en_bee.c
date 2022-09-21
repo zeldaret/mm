@@ -159,9 +159,9 @@ void func_80B5A9E8(EnBee* this, PlayState* play) {
     sp3C.z += Math_CosS(this->unk_20C) * 30.0f;
 
     if (!(this->unk_218 & 1)) {
-        this->unk_20C += (s16)((s32)randPlusMinusPoint5Scaled(1000.0f) + 0xFA0);
+        this->unk_20C += (s16)((s32)randPlusMinusPoint5Scaled(1000.0f) + 4000);
     } else {
-        this->unk_20C -= (s16)((s32)randPlusMinusPoint5Scaled(1000.0f) + 0xFA0);
+        this->unk_20C -= (s16)((s32)randPlusMinusPoint5Scaled(1000.0f) + 4000);
     }
 
     this->unk_210 += 1000;
@@ -230,12 +230,12 @@ void func_80B5AC3C(EnBee* this, PlayState* play) {
 }
 
 void func_80B5AF80(EnBee* this, PlayState* play) {
-    if ((this->unk_206 == 0) && (this->collider.base.atFlags & 2)) {
+    if ((this->unk_206 == 0) && (this->collider.base.atFlags & AC_HIT)) {
         AudioSfx_StopByPosAndId(&this->actor.projectedPos, NA_SE_EN_BEE_FLY - SFX_FLAG);
         this->unk_206 = 5;
     }
 
-    if (this->collider.base.acFlags & 2) {
+    if (this->collider.base.acFlags & AC_HIT) {
         Enemy_StartFinishingBlow(play, &this->actor);
         this->actor.speedXZ = 0.0f;
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 10, NA_SE_EN_CUTBODY);
@@ -266,9 +266,12 @@ void EnBee_Update(Actor* thisx, PlayState* play) {
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
     Actor_SetFocus(&this->actor, 0.0f);
     Actor_SetScale(&this->actor, 0.01f);
+
     this->actionFunc(this, play);
+
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 40.0f, 40.0f, 0x1D);
+
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
