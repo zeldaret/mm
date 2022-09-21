@@ -185,7 +185,7 @@ void func_80BC9560(EnStoneheishi* this, PlayState* play) {
         return;
     }
 
-    if (!(gSaveContext.save.weekEventReg[41] & 0x40) && (play->actorCtx.unk4 != 100)) {
+    if (!(gSaveContext.save.weekEventReg[41] & 0x40) && (play->actorCtx.lensMaskSize != 100)) {
         this->actor.flags |= ACTOR_FLAG_8000000;
         return;
     }
@@ -435,7 +435,7 @@ void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
     Actor_SetScale(&this->actor, 0.01f);
 
-    if (((gSaveContext.save.weekEventReg[41] & 0x40) || (play->actorCtx.unk4 == 100)) &&
+    if (((gSaveContext.save.weekEventReg[41] & 0x40) || (play->actorCtx.lensMaskSize == 100)) &&
         !(player->stateFlags1 & PLAYER_STATE1_800000)) {
         if ((this->animIndex != EN_STONE_HEISHI_ANIM_WAVE) &&
             ((((this->action == EN_STONE_ACTION_0) || (this->action == EN_STONE_ACTION_1)) ||
