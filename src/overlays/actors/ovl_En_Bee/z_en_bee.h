@@ -24,7 +24,7 @@ typedef struct EnBee {
     /* 0x21C */ Vec3f unk_21C[2];
     /* 0x234 */ char pad234[8];
     /* 0x23C */ ColliderCylinder collider;
-} EnBee;
+} EnBee; // size = 0x288
 
 extern const ActorInit En_Bee_InitVars;
 
