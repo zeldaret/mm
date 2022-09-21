@@ -43,16 +43,16 @@ const ActorInit Bg_Dblue_Balance_InitVars = {
 };
 
 typedef struct {
-    /* 0x00 */ Gfx* unk_00;
-    /* 0x04 */ CollisionHeader* unk_04;
+    /* 0x00 */ Gfx* opaDList;
+    /* 0x04 */ CollisionHeader* colHeader;
     /* 0x08 */ u32 unk_08;
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
-    /* 0x14 */ ActorFunc unk_14;
-    /* 0x18 */ ActorFunc unk_18;
-} BgDblueBalanceStruct2;
+    /* 0x14 */ ActorFunc update;
+    /* 0x18 */ ActorFunc draw;
+} BgDblueBalanceTypeInfo; // size = 0x1C
 
-BgDblueBalanceStruct2 D_80B83A20[] = {
+BgDblueBalanceTypeInfo sTypeInfo[] = {
     {
         gGreatBayTempleObjectSeesawShaftDL,
         &gGreatBayTempleObjectSeesawShaftCol,
@@ -311,14 +311,14 @@ void BgDblueBalance_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
-    this->dyna.actor.flags = D_80B83A20[sp2C].unk_08;
-    this->dyna.actor.uncullZoneScale = D_80B83A20[sp2C].unk_0C;
-    this->dyna.actor.uncullZoneDownward = D_80B83A20[sp2C].unk_10;
-    this->dyna.actor.update = D_80B83A20[sp2C].unk_14;
-    this->dyna.actor.draw = D_80B83A20[sp2C].unk_18;
+    this->dyna.actor.flags = sTypeInfo[sp2C].unk_08;
+    this->dyna.actor.uncullZoneScale = sTypeInfo[sp2C].unk_0C;
+    this->dyna.actor.uncullZoneDownward = sTypeInfo[sp2C].unk_10;
+    this->dyna.actor.update = sTypeInfo[sp2C].update;
+    this->dyna.actor.draw = sTypeInfo[sp2C].draw;
 
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(play, &this->dyna, D_80B83A20[sp2C].unk_04);
+    DynaPolyActor_LoadMesh(play, &this->dyna, sTypeInfo[sp2C].colHeader);
 
     if (sp2C == 3) {
         D_80B83C70 = Lib_SegmentedToVirtual(gGreatBayTempleObjectWaterwheelSplashTexAnim);
@@ -645,11 +645,11 @@ void func_80B83518(Actor* thisx, PlayState* play) {
 void BgDblueBalance_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     BgDblueBalance* this = THIS;
-    BgDblueBalanceStruct2* ptr2 = &D_80B83A20[BGDBLUEBALANCE_GET_300(&this->dyna.actor)];
+    BgDblueBalanceTypeInfo* ptr2 = &sTypeInfo[BGDBLUEBALANCE_GET_300(&this->dyna.actor)];
     BgDblueBalance* sp38;
     Gfx* gfx;
 
-    Gfx_DrawDListOpa(play, ptr2->unk_00);
+    Gfx_DrawDListOpa(play, ptr2->opaDList);
 
     if (!(BGDBLUEBALANCE_GET_300(&this->dyna.actor)) && (this->unk_160 != NULL)) {
         AnimatedMat_Draw(play, D_80B83C74);
@@ -681,7 +681,7 @@ void func_80B83758(Actor* thisx, PlayState* play) {
     Gfx* gfx;
     s32 i;
     BgDblueBalanceStruct* ptr;
-    BgDblueBalanceStruct2* ptr2;
+    BgDblueBalanceTypeInfo* ptr2;
     s32 temp;
 
     if (this->unk_178 != 0) {
@@ -695,8 +695,8 @@ void func_80B83758(Actor* thisx, PlayState* play) {
     }
 
     if (this->dyna.actor.flags & ACTOR_FLAG_40) {
-        ptr2 = &D_80B83A20[BGDBLUEBALANCE_GET_300(&this->dyna.actor)];
-        Gfx_DrawDListOpa(play, ptr2->unk_00);
+        ptr2 = &sTypeInfo[BGDBLUEBALANCE_GET_300(&this->dyna.actor)];
+        Gfx_DrawDListOpa(play, ptr2->opaDList);
 
         if (this->unk_183 != 0) {
             AnimatedMat_Draw(play, D_80B83C70);

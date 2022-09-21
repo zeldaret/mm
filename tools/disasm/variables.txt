@@ -15082,7 +15082,7 @@
     0x80B82228:("D_80B82228","f32","",0x4),
     0x80B8222C:("D_80B8222C","f32","",0x4),
     0x80B83A00:("Bg_Dblue_Balance_InitVars","UNK_TYPE1","",0x1),
-    0x80B83A20:("D_80B83A20","UNK_TYPE4","",0x4),
+    0x80B83A20:("sTypeInfo","UNK_TYPE4","",0x4),
     0x80B83A74:("D_80B83A74","UNK_TYPE1","",0x1),
     0x80B83A90:("D_80B83A90","UNK_TYPE1","",0x1),
     0x80B83A92:("D_80B83A92","UNK_TYPE1","",0x1),
