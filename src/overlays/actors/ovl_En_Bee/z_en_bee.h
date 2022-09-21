@@ -22,7 +22,7 @@ typedef struct EnBee {
     /* 0x214 */ s32 unk_214;
     /* 0x218 */ s32 unk_218;
     /* 0x21C */ Vec3f unk_21C[2];
-    /* 0x234 */ char pad234[8];
+    /* 0x234 */ UNK_TYPE1 pad234[8];
     /* 0x23C */ ColliderCylinder collider;
 } EnBee; // size = 0x288
 

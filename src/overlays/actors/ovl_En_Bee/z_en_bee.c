@@ -92,7 +92,7 @@ static ColliderCylinderInit sCylinderInit = {
 void EnBee_Init(Actor* thisx, PlayState* play) {
     EnBee* this = THIS;
 
-    this->actor.colChkInfo.mass = 0xA;
+    this->actor.colChkInfo.mass = 10;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_bee_Skel_001398, &object_bee_Anim_00005C, this->morphTable,
                    this->jointTable, OBJECT_BEE_LIMB_MAX);
@@ -150,7 +150,7 @@ void func_80B5A9E8(EnBee* this, PlayState* play) {
     Vec3f sp3C;
     s32 pad[2];
 
-    if ((this->actor.category != 5) && (ActorCutscene_GetCurrentIndex() == -1)) {
+    if ((this->actor.category != ACTORCAT_ENEMY) && (ActorCutscene_GetCurrentIndex() == -1)) {
         func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
     }
 
@@ -252,7 +252,7 @@ void EnBee_Update(Actor* thisx, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if (this->actor.category == 5) {
+    if (this->actor.category == ACTORCAT_ENEMY) {
         if (this->unk_204 != 0) {
             this->unk_204--;
         }
