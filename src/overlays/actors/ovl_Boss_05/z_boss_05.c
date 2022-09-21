@@ -144,38 +144,38 @@ Vec3f D_809F1BF4 = { 0.0f, -1.0f, 0.0f };
 
 // static DamageTable sDamageTable = {
 DamageTable D_809F1C00 = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
-    /* Deku Stick     */ DMG_ENTRY(1, 0xF),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0xF),
-    /* Zora boomerang */ DMG_ENTRY(1, 0xF),
-    /* Normal arrow   */ DMG_ENTRY(3, 0xF),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(3, 0x0),
-    /* Goron punch    */ DMG_ENTRY(2, 0xF),
-    /* Sword          */ DMG_ENTRY(1, 0xE),
-    /* Goron pound    */ DMG_ENTRY(1, 0xF),
-    /* Fire arrow     */ DMG_ENTRY(1, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(1, 0x3),
-    /* Light arrow    */ DMG_ENTRY(3, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
-    /* Deku spin      */ DMG_ENTRY(1, 0xF),
-    /* Deku bubble    */ DMG_ENTRY(3, 0xF),
-    /* Deku launch    */ DMG_ENTRY(2, 0xF),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
-    /* Zora barrier   */ DMG_ENTRY(1, 0xF),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0xF),
-    /* Zora punch     */ DMG_ENTRY(1, 0xF),
-    /* Spin attack    */ DMG_ENTRY(1, 0xF),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
+    /* Deku Nut       */ DMG_ENTRY(0, 0x0), // DMG_ENTRY(0, 0x1), //
+    /* Deku Stick     */ DMG_ENTRY(1, 0xF), // DMG_ENTRY(3, 0xF), //
+    /* Horse trample  */ DMG_ENTRY(0, 0x0), // DMG_ENTRY(0, 0x0),
+    /* Explosives     */ DMG_ENTRY(1, 0xF), // DMG_ENTRY(1, 0xF),
+    /* Zora boomerang */ DMG_ENTRY(1, 0xF), // DMG_ENTRY(1, 0xF),
+    /* Normal arrow   */ DMG_ENTRY(3, 0xF), // DMG_ENTRY(1, 0xF), //
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0), // DMG_ENTRY(0, 0x0),
+    /* Hookshot       */ DMG_ENTRY(3, 0x0), // DMG_ENTRY(0, 0x1), //
+    /* Goron punch    */ DMG_ENTRY(2, 0xF), // DMG_ENTRY(1, 0xF), //
+    /* Sword          */ DMG_ENTRY(1, 0xE), // DMG_ENTRY(1, 0xF), //
+    /* Goron pound    */ DMG_ENTRY(1, 0xF), // DMG_ENTRY(1, 0xF),
+    /* Fire arrow     */ DMG_ENTRY(1, 0x2), // DMG_ENTRY(2, 0x2), //
+    /* Ice arrow      */ DMG_ENTRY(1, 0x3), // DMG_ENTRY(2, 0x3), //
+    /* Light arrow    */ DMG_ENTRY(3, 0x4), // DMG_ENTRY(2, 0x4), //
+    /* Goron spikes   */ DMG_ENTRY(1, 0xF), // DMG_ENTRY(1, 0xF),
+    /* Deku spin      */ DMG_ENTRY(1, 0xF), // DMG_ENTRY(0, 0x1),
+    /* Deku bubble    */ DMG_ENTRY(3, 0xF), // DMG_ENTRY(1, 0xF), //
+    /* Deku launch    */ DMG_ENTRY(2, 0xF), // DMG_ENTRY(2, 0xF),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0), // DMG_ENTRY(0, 0x1), //
+    /* Zora barrier   */ DMG_ENTRY(1, 0xF), // DMG_ENTRY(1, 0xF),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0), // DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(0, 0x0), // DMG_ENTRY(0, 0x0),
+    /* Thrown object  */ DMG_ENTRY(1, 0xF), // DMG_ENTRY(1, 0xF),
+    /* Zora punch     */ DMG_ENTRY(1, 0xF), // DMG_ENTRY(1, 0xF),
+    /* Spin attack    */ DMG_ENTRY(1, 0xF), // DMG_ENTRY(1, 0xF),
+    /* Sword beam     */ DMG_ENTRY(0, 0x0), // DMG_ENTRY(0, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0x0), // DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0), // DMG_ENTRY(1, 0x2), //
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0), // DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0), // DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0), // DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(1, 0xF), // DMG_ENTRY(1, 0xF),
 };
 
 // static DamageTable sDamageTable = {
@@ -321,7 +321,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         this->unk198 = 1.0f;
 
         SkelAnime_InitFlex(play, &this->unk268, &D_060024E0, &D_06000ABC, this->unk2AC, this->unk2E8, 10);
-        SkelAnime_InitFlex(play, &this->unk3C8, &D_06006378, &D_06006484, this->unk40C, this->unk484, 0x14);
+        SkelAnime_InitFlex(play, &this->unk3C8, &D_06006378, &D_06006484, this->unk40C, this->unk484, 20);
         this->unk4FC = Animation_GetLastFrame(&D_06006484);
 
         Collider_InitAndSetJntSph(play, &this->unk1C8, &this->dyna.actor, &D_809F1B74, this->unk1E8);
@@ -367,13 +367,10 @@ void Boss05_Destroy(Actor* thisx, PlayState* play) {
 
 s32 func_809EECBC(Boss05* this, PlayState* play) {
     if (this->unk16C == 0) {
-        s32 var_v0 = 0;
-        ColliderJntSphElement* var_v1 = &this->unk1C8.elements[0];
+        s32 i = 0;
 
         while (true) {
-            var_v0 += 0x40;
-
-            if (var_v1->info.bumperFlags & BUMP_HIT) {
+            if (this->unk1C8.elements[i].info.bumperFlags & 2) {
                 switch (this->dyna.actor.colChkInfo.damageEffect) {
                     case 2:
                         return 11;
@@ -385,17 +382,17 @@ s32 func_809EECBC(Boss05* this, PlayState* play) {
                         return 10;
                 }
             }
-            var_v1++;
 
-            if (var_v0 == 0x80) {
-                if (this->unk368.elements[0].info.bumperFlags & BUMP_HIT) {
+            i++;
+            if (i == 2) {
+                if (this->unk368.elements[0].info.bumperFlags & 2) {
                     u8 damage = this->dyna.actor.colChkInfo.damage;
                     this->dyna.actor.colChkInfo.health -= damage;
                     if ((s8)this->dyna.actor.colChkInfo.health <= 0) {
                         Enemy_StartFinishingBlow(play, &this->dyna.actor);
                         return 2;
                     } else {
-                        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
+                        Actor_PlaySfxAtPos(&this->dyna.actor, 0x3807U);
                         this->unk16C = 15;
                         this->unk15C = 0;
                         this->unk162[0] = 30;
@@ -423,9 +420,9 @@ Vec3s D_809F1C8C[7] = {
 };
 
 void func_809EEDE8(Boss05* this, PlayState* play) {
-    s32 var_s3;
+    s32 i;
     Player* sp108 = GET_PLAYER(play);
-    s32 var_v1;
+    s32 j;
     u8 sp103 = 0;
     Vec3s spD8[7];
     s32 spD4;
@@ -446,7 +443,7 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
     Vec3f sp94;
     s32 var_s4_2;
 
-    this->dyna.actor.hintId = 8;
+    this->dyna.actor.hintId = TATL_HINT_ID_BIO_DEKU_BABA;
 
     if (this->unk174 == 0) {
         spD4 = 0x3E8;
@@ -460,6 +457,7 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
         spB4 = 0xDAC;
         var_s6 = 0xA;
         var_s7 = 0x300;
+
         if (this->unk16C != 0) {
             spD4 = 0x1B58;
             spCC = 0x1770;
@@ -469,39 +467,36 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
             var_s6 = 1;
             var_s7 = 0x1000;
         }
+    } else if (this->unk174 == 3) {
+        spD4 = 0x1B58;
+        spD0 = 0x3E80;
+        spCC = 0x1388;
+        spC8 = 0x5DC;
+        spC4 = 0x2328;
+        spC0 = 0x1388;
+        spBC = 0x1C84;
+        spB8 = 0x5208;
+        spB4 = 0x157C;
+        var_s6 = 1;
+        var_s7 = 0x1000;
     } else {
-        if (this->unk174 == 3) {
-            spD4 = 0x1B58;
-            spD0 = 0x3E80;
-            spCC = 0x1388;
-            spC8 = 0x5DC;
-            spC4 = 0x2328;
-            spC0 = 0x1388;
-            spBC = 0x1C84;
-            spB8 = 0x5208;
-            spB4 = 0x157C;
-            var_s6 = 1;
-            var_s7 = 0x1000;
-        } else {
-
-            spD4 = spD0 = spCC = spC8 = spC4 = spC0 = spBC = spB8 = spB4 = var_s6 = var_s7 = 0;
-        }
+        spD4 = spD0 = spCC = spC8 = spC4 = spC0 = spBC = spB8 = spB4 = var_s6 = var_s7 = 0;
     }
 
-    for (var_s3 = 0; var_s3 < 7; var_s3++) {
+    for (i = 0; i < 7; i++) {
         if ((this->unk174 == 0) || (this->unk174 == 3)) {
-            if (var_s3 < 3) {
-                spD8[var_s3].y = 0;
-                spD8[var_s3].x = (s32)(Math_SinS((this->unk160 * spD4) + (var_s3 * spD0)) * spCC);
+            if (i < 3) {
+                spD8[i].y = 0;
+                spD8[i].x = (s32)(Math_SinS((this->unk160 * spD4) + (i * spD0)) * spCC);
             } else {
-                spD8[var_s3].x = 0;
-                spD8[var_s3].y = (s32)(Math_SinS((this->unk160 * spC8) + (var_s3 * spC4)) * spC0);
+                spD8[i].x = 0;
+                spD8[i].y = (s32)(Math_SinS((this->unk160 * spC8) + (i * spC4)) * spC0);
             }
 
-            if ((var_s3 == 4) || (var_s3 == 6)) {
-                spD8[var_s3].z = (s32)(Math_SinS((this->unk160 * spBC) + (var_s3 * spB8)) * spB4 * 2.0f);
+            if ((i == 4) || (i == 6)) {
+                spD8[i].z = (s32)(Math_SinS((this->unk160 * spBC) + (i * spB8)) * spB4 * 2.0f);
             } else {
-                spD8[var_s3].z = (s32)(Math_SinS((this->unk160 * spBC) + (var_s3 * spB8)) * spB4);
+                spD8[i].z = (s32)(Math_SinS((this->unk160 * spBC) + (i * spB8)) * spB4);
             }
             var_s4 = var_s6;
             var_s5 = var_s7;
@@ -509,23 +504,23 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
             if (this->unk174 == 1) {
                 var_s6 = 5;
                 var_s7 = 0x1000;
-                spD8[var_s3].x = D_809F1C60[var_s3].x;
-                spD8[var_s3].y = D_809F1C60[var_s3].y;
-                spD8[var_s3].z = D_809F1C60[var_s3].z;
+                spD8[i].x = D_809F1C60[i].x;
+                spD8[i].y = D_809F1C60[i].y;
+                spD8[i].z = D_809F1C60[i].z;
             } else if (this->unk174 == 2) {
                 var_s6 = 1;
                 var_s7 = 0x2000;
-                spD8[var_s3].x = D_809F1C8C[var_s3].x;
-                spD8[var_s3].y = D_809F1C8C[var_s3].y;
-                spD8[var_s3].z = D_809F1C8C[var_s3].z;
+                spD8[i].x = D_809F1C8C[i].x;
+                spD8[i].y = D_809F1C8C[i].y;
+                spD8[i].z = D_809F1C8C[i].z;
             }
             var_s4 = var_s6;
             var_s5 = var_s7;
         }
 
-        Math_ApproachS(&this->unk19E[var_s3].x, spD8[var_s3].x, var_s6, var_s7);
-        Math_ApproachS(&this->unk19E[var_s3].y, spD8[var_s3].y, var_s6, var_s7);
-        Math_ApproachS(&this->unk19E[var_s3].z, spD8[var_s3].z, var_s6, var_s7);
+        Math_ApproachS(&this->unk19E[i].x, spD8[i].x, var_s6, var_s7);
+        Math_ApproachS(&this->unk19E[i].y, spD8[i].y, var_s6, var_s7);
+        Math_ApproachS(&this->unk19E[i].z, spD8[i].z, var_s6, var_s7);
     }
 
     // There is some scope for which of var_s4,var_s5 and var_s6,var_s7 are used here
@@ -552,22 +547,20 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
                 }
                 if ((this->unk162[0] == 0) && (sqrtf(this->dyna.actor.xyzDistToPlayerSq) <= var_fv1)) {
                     this->unk15C = 1;
-                    this->unk162[0] = 0xA;
+                    this->unk162[0] = 10;
                 }
                 this->unk15E = 0;
-                // goto block_42;
             } else {
-
                 sp103 = 1;
+
                 if (sqrtf(this->dyna.actor.xyzDistToPlayerSq) <= 40.0f) {
                     this->unk15E++;
-                    if (this->unk15E > 0x1E) {
+                    if (this->unk15E > 30) {
                         this->unk15C = 0xA;
-                        this->unk162[0] = 0x1E;
+                        this->unk162[0] = 30;
                         Actor_PlaySfxAtPos(&this->dyna.actor, 0x3861U);
                     }
                 } else {
-                    // block_42:
                     this->unk15E = 0;
                 }
             }
@@ -588,12 +581,12 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
             if (this->unk162[0] == 0) {
                 this->unk15E = 0;
                 this->unk15C = 0;
-                this->unk162[0] = 0x64;
+                this->unk162[0] = 100;
             }
-            if (this->unk162[0] == 0x1B) {
+            if (this->unk162[0] == 27) {
                 Math_Vec3f_Copy(&sp94, &this->dyna.actor.world.pos);
                 sp94.y += 40.0f;
-                EffectSsGSplash_Spawn(play, &sp94, NULL, NULL, 1, 0x7D0);
+                EffectSsGSplash_Spawn(play, &sp94, NULL, NULL, 1, 2000);
                 Actor_PlaySfxAtPos(&this->dyna.actor, 0x2808U);
             }
             break;
@@ -620,7 +613,7 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
             this->unk174 = 2;
             if (this->unk162[0] == 0) {
                 this->unk15C = 0;
-                this->unk162[0] = 0x1E;
+                this->unk162[0] = 30;
             }
             break;
     }
@@ -634,10 +627,10 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
         this->dyna.actor.flags &= ~1;
         func_800BC154(play, &play->actorCtx, &this->dyna.actor, 1);
         if (this->unk168 != 0) {
-            var_s4_2 = 0xA;
+            var_s4_2 = 10;
         }
-        if (var_s4_2 >= 0xA) {
-            temp_v0_6 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, 0x12D,
+        if (var_s4_2 >= 10) {
+            temp_v0_6 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05,
                                                     this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                                     this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
                                                     this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 3);
@@ -649,28 +642,28 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
                     play->actorCtx.targetContext.targetedActor = &temp_v0_6->dyna.actor;
                 }
 
-                for (var_s3 = 0; var_s3 < 10; var_s3++) {
-                    temp_v0_6->unk268.jointTable[var_s3] = this->unk268.jointTable[var_s3];
+                for (i = 0; i < 10; i++) {
+                    temp_v0_6->unk268.jointTable[i] = this->unk268.jointTable[i];
                 }
 
-                for (var_s3 = 0; var_s3 < 20; var_s3++) {
-                    temp_v0_6->unk3C8.jointTable[var_s3] = this->unk3C8.jointTable[var_s3];
+                for (i = 0; i < 20; i++) {
+                    temp_v0_6->unk3C8.jointTable[i] = this->unk3C8.jointTable[i];
                 }
 
                 Actor_PlaySfxAtPos(&this->dyna.actor, 0x381E);
-                if (var_s4_2 >= 0xB) {
-                    temp_v0_6->unk188 = var_s4_2 - 0xA;
+                if (var_s4_2 > 10) {
+                    temp_v0_6->unk188 = var_s4_2 - 10;
                 }
             }
         } else if (var_s4_2 == 2) {
-            for (var_s3 = 0; var_s3 < 2; var_s3++) {
-                temp_v0_6 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, 0x12D, this->unk324.x,
-                                                        this->unk324.y, this->unk324.z, this->unk330.x, this->unk330.y,
-                                                        this->unk330.z, var_s3 + 0xA);
+            for (i = 0; i < 2; i++) {
+                temp_v0_6 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05,
+                                                        this->unk324.x, this->unk324.y, this->unk324.z, this->unk330.x,
+                                                        this->unk330.y, this->unk330.z, i + 10);
                 if (temp_v0_6 != NULL) {
 
-                    for (var_v1 = 0; var_v1 < 20; var_v1++) {
-                        temp_v0_6->unk3C8.jointTable[var_v1] = this->unk3C8.jointTable[var_v1];
+                    for (j = 0; j < 20; j++) {
+                        temp_v0_6->unk3C8.jointTable[j] = this->unk3C8.jointTable[j];
                     }
 
                     temp_v0_6->unk162[0] = (s32)(Rand_ZeroFloat(20.0f) + 20.0f);
@@ -759,9 +752,9 @@ void func_809EFAB4(Boss05* this, PlayState* play) {
         Math_ApproachZeroF(&this->unk198, 1.0f, 0.05f);
 
         if (this->unk198 == 0.0f) {
-            temp_v0 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, 0x12D, this->unk324.x,
-                                                  this->unk324.y, this->unk324.z, this->unk330.x, this->unk330.y,
-                                                  this->unk330.z, 4);
+            temp_v0 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05,
+                                                  this->unk324.x, this->unk324.y, this->unk324.z, this->unk330.x,
+                                                  this->unk330.y, this->unk330.z, 4);
 
             if (temp_v0 != NULL) {
                 player = GET_PLAYER(play);
@@ -997,9 +990,9 @@ void func_809F0780(Boss05* this, PlayState* play) {
         if (Animation_OnFrame(&this->unk3C8, 22.0f)) {
             for (i = 0; i < 14; i++) {
                 temp_v0 = (Boss05*)Actor_SpawnAsChild(
-                    &play->actorCtx, &this->dyna.actor, play, 0x12D, this->dyna.actor.world.pos.x,
+                    &play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05, this->dyna.actor.world.pos.x,
                     this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
-                    this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, i + 0xA);
+                    this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, i + 10);
 
                 if (temp_v0 != NULL) {
                     for (j = 0; j < 20; j++) {
@@ -1427,7 +1420,7 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
 
         Actor_DrawDamageEffects(play, &this->dyna.actor, &this->unk18C, 1, this->unk17C, this->unk180, this->unk184,
                                 this->unk189);
-    } else if (this->dyna.actor.params >= 0xA) {
+    } else if (this->dyna.actor.params >= 10) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(D_06006240));
 
         SkelAnime_DrawFlexOpa(play, this->unk3C8.skeleton, this->unk3C8.jointTable, this->unk3C8.dListCount,
