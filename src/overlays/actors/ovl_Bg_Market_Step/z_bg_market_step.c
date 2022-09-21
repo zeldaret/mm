@@ -32,9 +32,9 @@ Gfx* sMarketDLs[] = {
     gWestClockTownMarketNightDL,
 };
 
-Gfx* sBankAdvertisementsAndFakeDoorDLs[] = {
-    gWestClockTownMarketBankAdvertisementsAndFakeDoorDayDL,
-    gWestClockTownMarketBankAdvertisementsAndFakeDoorNightDL,
+Gfx* sBankAdvertisementsAndDoorDLs[] = {
+    gWestClockTownMarketBankAdvertisementsAndDoorDayDL,
+    gWestClockTownMarketBankAdvertisementsAndDoorNightDL,
 };
 
 void BgMarketStep_Init(Actor* thisx, PlayState* play) {
@@ -47,5 +47,5 @@ void BgMarketStep_Draw(Actor* thisx, PlayState* play) {
     s32 timeOfDay = BG_MARKET_STEP_GET_TIME_OF_DAY(thisx);
 
     Gfx_DrawDListOpa(play, sMarketDLs[timeOfDay]);
-    Gfx_DrawDListOpa(play, sBankAdvertisementsAndFakeDoorDLs[timeOfDay]);
+    Gfx_DrawDListOpa(play, sBankAdvertisementsAndDoorDLs[timeOfDay]);
 }
