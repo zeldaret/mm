@@ -249,6 +249,7 @@ void KaleidoScope_SetCursorVtx(PauseContext* pauseCtx, u16 index, Vtx* vtx) {
 s16 sMagicArrowEffectsR[] = { 255, 100, 255 };
 s16 sMagicArrowEffectsG[] = { 0, 100, 255 };
 s16 sMagicArrowEffectsB[] = { 0, 255, 100 };
+
 void KaleidoScope_DrawItemSelect(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     u16 i;
@@ -283,6 +284,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
             if ((pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_ITEM) && (pauseCtx->cursorSpecialPos == 0) &&
                 gPlayerFormSlotRestrictions[(void)0, gSaveContext.save.playerForm][i]) {
                 if ((sEquipState == EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT) && (i == SLOT_ARROW_ICE)) {
+                    // Possible bug:
                     // Suppose to be `SLOT_BOW`, unchanged from OoT, instead increase size of ice arrow icon
                     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sMagicArrowEffectsR[pauseCtx->equipTargetItem - 0xB5],
                                     sMagicArrowEffectsG[pauseCtx->equipTargetItem - 0xB5],
@@ -343,6 +345,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
 u8 sPlayerFormItems[] = {
     ITEM_MASK_FIERCE_DEITY, ITEM_MASK_GORON, ITEM_MASK_ZORA, ITEM_MASK_DEKU, ITEM_NONE,
 };
+
 void KaleidoScope_UpdateItemCursor(PlayState* play) {
     s32 pad1;
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -701,6 +704,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
 
 s16 sCButtonPosX[] = { 660, 900, 1140 };
 s16 sCButtonPosY[] = { 1100, 920, 1100 };
+
 void KaleidoScope_UpdateItemEquip(PlayState* play) {
     static s16 sEquipMagicArrowBowSlotHoldTimer = 0;
     PauseContext* pauseCtx = &play->pauseCtx;
