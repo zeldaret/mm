@@ -28,7 +28,7 @@
         <Texture Name="gWestClockTownMarketGoldWallTex" OutName="west_clock_town_market_gold_wall" Format="ci4" Width="64" Height="64" Offset="0x4BE0" />
         <Texture Name="gWestClockTownMarketBronzeWallTex" OutName="west_clock_town_market_bronze_wall" Format="ci4" Width="64" Height="64" Offset="0x53E0" />
         <Texture Name="gWestClockTownMarketBankAndDoorFrameTex" OutName="west_clock_town_market_bank_and_door_frame" Format="rgba16" Width="32" Height="32" Offset="0x5BE0" />
-        <Texture Name="gWestClockTownMarketFloorTex" OutName="west_clock_town_market_floor" Format="rgba16" Width="32" Height="32" Offset="0x63E0" />
+        <Texture Name="gWestClockTownMarketGroundTex" OutName="west_clock_town_market_ground" Format="rgba16" Width="32" Height="32" Offset="0x63E0" />
         <Texture Name="gWestClockTownBrickBelowSilverWallTex" OutName="west_clock_town_market_brick_below_silver_wall" Format="rgba16" Width="64" Height="32" Offset="0x6BE0" />
         <Texture Name="gWestClockTownMarketStrawTex" OutName="west_clock_town_market_straw" Format="ci4" Width="64" Height="64" Offset="0x7BE0" />
         <Texture Name="gWestClockTownBrickBelowGoldWallTex" OutName="west_clock_town_market_brick_below_gold_wall" Format="rgba16" Width="64" Height="32" Offset="0x83E0" />
@@ -48,7 +48,7 @@
         <Texture Name="gWestClockTownMarketSilverPatternedWall5Tex" OutName="west_clock_town_market_silver_patterned_wall_5" Format="ci4" Width="64" Height="64" Offset="0xF5E0" />
         <Texture Name="gWestClockTownMarketSilverPatternedWall6Tex" OutName="west_clock_town_market_silver_patterned_wall_6" Format="ci4" Width="64" Height="64" Offset="0xFDE0" />
         <Texture Name="gWestClockTownMarketPoleTex" OutName="west_clock_town_market_pole" Format="rgba16" Width="32" Height="16" Offset="0x105E0" />
-        <Texture Name="gWestClockTownMarketFloorWithEdgeTex" OutName="west_clock_town_market_floor_with_edge" Format="rgba16" Width="32" Height="64" Offset="0x109E0" />
+        <Texture Name="gWestClockTownMarketBrickEdgedGroundTex" OutName="west_clock_town_market_brick_edged_ground" Format="rgba16" Width="32" Height="64" Offset="0x109E0" />
         <Texture Name="gWestClockTownMarketStairRiserTex" OutName="west_clock_town_market_stair_riser" Format="rgba16" Width="32" Height="16" Offset="0x119E0" />
         <Texture Name="gWestClockTownMarketFlowerBedTopTex" OutName="west_clock_town_market_flower_bed_top" Format="rgba16" Width="32" Height="32" Offset="0x11DE0" />
         <Texture Name="gWestClockTownMarketFlowerBedSidesTex" OutName="west_clock_town_market_flower_bed_sides" Format="rgba16" Width="32" Height="32" Offset="0x125E0" />
