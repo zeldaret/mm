@@ -231,7 +231,7 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
                 // on attacking the player; in that case, this code will make it turn in the
                 // opposite direction and swim away. In both cases, the fish's target y-position
                 // will be slightly above the halfway point of the water.
-                atanTemp = Math_Atan2S_Depr(this->targetPos.z, this->targetPos.x);
+                atanTemp = Math_Atan2S_XY(this->targetPos.z, this->targetPos.x);
                 Matrix_RotateYS(atanTemp, MTXMODE_NEW);
                 Matrix_MultVecZ(700.0f, &this->targetPos);
                 this->targetPos.y = 250.0f;
@@ -258,9 +258,9 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
 
         // Rotate the fish to look towards its target
         xzDistance = sqrtf(SQ(xDistance) + SQ(zDistance));
-        atanTemp = Math_Atan2S_Depr(xzDistance, -yDistance);
+        atanTemp = Math_Atan2S_XY(xzDistance, -yDistance);
         Math_ApproachS(&this->actor.world.rot.x, atanTemp, this->rotationScale, this->rotationStep);
-        atanTemp = Math_Atan2S_Depr(zDistance, xDistance);
+        atanTemp = Math_Atan2S_XY(zDistance, xDistance);
         Math_SmoothStepToS(&this->actor.world.rot.y, atanTemp, this->rotationScale, this->rotationStep, 0);
         Math_ApproachS(&this->rotationStep, this->targetRotationStep, 1, 0x100);
 
@@ -303,7 +303,7 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
                     if (Rand_ZeroOne() < 0.5f) {
                         this->targetShapeRotation.y = (s16)Rand_ZeroFloat(0x10000);
                     }
-                    this->actor.world.rot.y = Math_Atan2S_Depr(this->actor.world.pos.z, this->actor.world.pos.x) +
+                    this->actor.world.rot.y = Math_Atan2S_XY(this->actor.world.pos.z, this->actor.world.pos.x) +
                                               (s16)randPlusMinusPoint5Scaled(0xCE20);
                 }
 
@@ -342,8 +342,8 @@ void EnTanron3_SetupDie(EnTanron3* this, PlayState* play) {
     xDistance = this->actor.world.pos.x - player->actor.world.pos.x;
     yDistance = this->actor.world.pos.y - player->actor.world.pos.y + 30.0f;
     zDistance = this->actor.world.pos.z - player->actor.world.pos.z;
-    this->actor.world.rot.x = Math_Atan2S_Depr(sqrtf(SQ(xDistance) + SQ(zDistance)), -yDistance);
-    this->actor.world.rot.y = Math_Atan2S_Depr(zDistance, xDistance);
+    this->actor.world.rot.x = Math_Atan2S_XY(sqrtf(SQ(xDistance) + SQ(zDistance)), -yDistance);
+    this->actor.world.rot.y = Math_Atan2S_XY(zDistance, xDistance);
     this->workTimer[WORK_TIMER_DIE] = 6;
     this->actor.speedXZ = 10.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_MINI_DEAD);
@@ -366,7 +366,7 @@ void EnTanron3_CheckCollisions(EnTanron3* this, PlayState* play) {
     if (player->actor.world.pos.y > 350.0f) {
         if (this->atCollider.base.atFlags & AT_HIT) {
             this->atCollider.base.atFlags &= ~AT_HIT;
-            func_800B8D50(play, NULL, 3.0f, Math_Atan2S_Depr(-player->actor.world.pos.z, -player->actor.world.pos.x),
+            func_800B8D50(play, NULL, 3.0f, Math_Atan2S_XY(-player->actor.world.pos.z, -player->actor.world.pos.x),
                           5.0f, 0);
         }
     }

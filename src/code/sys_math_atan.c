@@ -131,11 +131,11 @@ f32 Math_Atan2F(f32 y, f32 x) {
 }
 
 // Match the OoT implementation of Math_Atan2S
-s16 Math_Atan2S_Depr(f32 x, f32 y) {
+s16 Math_Atan2S_XY(f32 x, f32 y) {
     return Math_Atan2S(y, x);
 }
 
 // Match the OoT implementation of Math_Atan2F
-f32 Math_Atan2F_Depr(f32 x, f32 y) {
+f32 Math_Atan2F_XY(f32 x, f32 y) {
     return Math_Atan2F(y, x);
 }

@@ -2899,8 +2899,8 @@ s32 Math3D_YZInSphere(Sphere16* sphere, f32 y, f32 z);
 
 s16 Math_Atan2S(f32 y, f32 x);
 f32 Math_Atan2F(f32 y, f32 x);
-s16 Math_Atan2S_Depr(f32 x, f32 y);
-f32 Math_Atan2F_Depr(f32 x, f32 y);
+s16 Math_Atan2S_XY(f32 x, f32 y);
+f32 Math_Atan2F_XY(f32 x, f32 y);
 
 u64* SysUcode_GetUCodeBoot(void);
 size_t SysUcode_GetUCodeBootSize(void);

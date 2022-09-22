@@ -150,7 +150,7 @@ void ActorShadow_DrawFoot(PlayState* play, Light* light, MtxF* arg2, s32 lightNu
 
     dir0 = light->l.dir[0];
     dir2 = light->l.dir[2];
-    sp58 = Math_Atan2S_Depr(dir2, dir0);
+    sp58 = Math_Atan2S_XY(dir2, dir0);
     shadowScaleZ *= (4.5f - (light->l.dir[1] * 0.035f));
     shadowScaleZ = CLAMP_MIN(shadowScaleZ, 1.0f);
     Matrix_Put(arg2);
@@ -1491,7 +1491,7 @@ void func_800B75A0(CollisionPoly* poly, Vec3f* normal, s16* azimuth) {
     normal->x = COLPOLY_GET_NORMAL(poly->normal.x);
     normal->y = COLPOLY_GET_NORMAL(poly->normal.y);
     normal->z = COLPOLY_GET_NORMAL(poly->normal.z);
-    *azimuth = Math_Atan2S_Depr(normal->z, normal->x);
+    *azimuth = Math_Atan2S_XY(normal->z, normal->x);
 }
 
 s32 func_800B761C(Actor* actor, f32 arg1, s32 arg2) {
@@ -1588,7 +1588,7 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
                 Math_Vec3f_Copy(&actor->world.pos, &pos);
             }
 
-            actor->wallYaw = Math_Atan2S_Depr(sp7C->normal.z, sp7C->normal.x);
+            actor->wallYaw = Math_Atan2S_XY(sp7C->normal.z, sp7C->normal.x);
             actor->wallBgId = bgId;
         } else {
             actor->bgCheckFlags &= ~8;
@@ -4420,8 +4420,8 @@ void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3) {
     f32 zDiff = arg1->z - arg0->z;
     f32 yDiff = arg3 ? (arg1->y - arg0->y) : (arg0->y - arg1->y);
 
-    arg2->y = Math_Atan2S_Depr(zDiff, xDiff);
-    arg2->x = Math_Atan2S_Depr(sqrtf(SQ(xDiff) + SQ(zDiff)), yDiff);
+    arg2->y = Math_Atan2S_XY(zDiff, xDiff);
+    arg2->x = Math_Atan2S_XY(sqrtf(SQ(xDiff) + SQ(zDiff)), yDiff);
 }
 
 void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2) {
