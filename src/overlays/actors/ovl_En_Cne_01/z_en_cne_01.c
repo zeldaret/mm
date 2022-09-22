@@ -142,13 +142,13 @@ s32 func_809CB4A0(EnCne01* this, PlayState* play) {
     Actor_GetScreenPos(play, &this->enHy.actor, &x, &y);
     //! @bug: Both x and y conditionals are always true, || should be an &&
     if (!this->enHy.waitingOnInit && ((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
-        func_800B85E0(&this->enHy.actor, play, 30.0f, EXCH_ITEM_2E);
+        func_800B85E0(&this->enHy.actor, play, 30.0f, PLAYER_AP_MAGIC_BEANS);
     }
     return true;
 }
 
 void EnCne01_FinishInit(EnHy* this, PlayState* play) {
-    if (EnHy_Init(this, play, &gCneSkel, ENHY_ANIMATION_OS_ANIME_11)) {
+    if (EnHy_Init(this, play, &gCneSkel, ENHY_ANIM_OS_ANIME_11)) {
         this->actor.flags |= ACTOR_FLAG_1;
         this->actor.draw = EnCne01_Draw;
         this->waitingOnInit = false;

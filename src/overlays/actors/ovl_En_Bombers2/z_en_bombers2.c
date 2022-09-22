@@ -64,7 +64,7 @@ static AnimationHeader* sAnimations[] = {
     &object_cs_Anim_0060E8, &object_cs_Anim_005DC4, &object_cs_Anim_0026B0,
 };
 
-static u8 sAnimModes[] = {
+static u8 sAnimationModes[] = {
     ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE,
     ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
 };
@@ -94,7 +94,7 @@ void EnBombers2_Init(Actor* thisx, PlayState* play) {
                        this->jointTable, OBJECT_CS_LIMB_MAX);
     this->actor.targetMode = 6;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    if ((gSaveContext.save.weekEventReg[73] & 0x80) || (gSaveContext.save.entranceIndex == 0xD220)) {
+    if ((gSaveContext.save.weekEventReg[73] & 0x80) || (gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2))) {
         this->actor.world.pos.x += Math_SinS(this->actor.home.rot.y + 0xC100) * 50.0f;
         cos = Math_CosS(this->actor.home.rot.y + 0xC100) * 50.0f;
         this->unk_2AC = 1;
@@ -120,7 +120,7 @@ void EnBombers2_ChangeAnim(EnBombers2* this, s32 animIndex, f32 playSpeed) {
     lastFrame = Animation_GetLastFrame(sAnimations[this->animIndex]);
     this->lastAnimFrame = lastFrame;
     Animation_Change(&this->skelAnime, sAnimations[this->animIndex], playSpeed, 0.0f, lastFrame,
-                     sAnimModes[this->animIndex], -10.0f);
+                     sAnimationModes[this->animIndex], -10.0f);
 }
 
 void func_80C04B40(EnBombers2* this) {

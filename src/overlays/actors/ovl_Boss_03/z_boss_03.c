@@ -807,8 +807,8 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
         if (this->unk_2B8 > 30.0f) {
             if ((&this->actor != player->actor.parent) && (play->grabPlayer(play, player) != 0)) {
                 player->actor.parent = &this->actor;
-                Audio_PlaySfxGeneral(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                                     &gSfxDefaultReverb);
+                AudioSfx_PlaySfx(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+                                 &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
                 Boss03_SetupChewPlayer(this, play);
             }
         } else {
@@ -1615,7 +1615,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                             this->actor.focus.pos.z, 0, 0, 0, 0);
                 this->csTimer = 0;
                 Actor_SetScale(&this->actor, 0.0f);
-                Audio_StopSfxByPos(&this->actor.projectedPos);
+                AudioSfx_StopByPos(&this->actor.projectedPos);
             }
             break;
 
@@ -1762,7 +1762,7 @@ void Boss03_SetupStunned(Boss03* this, PlayState* play) {
 }
 
 void Boss03_Stunned(Boss03* this, PlayState* play) {
-    this->actor.hintId = 0x29;
+    this->actor.hintId = TATL_HINT_ID_GYORG_STUNNED;
 
     if (this->unk_240 >= 16) {
         Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_COMMON_WEAKENED - SFX_FLAG);
@@ -1955,7 +1955,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
     s16 j;
     f32 yRot;
 
-    this->actor.hintId = 0x28;
+    this->actor.hintId = TATL_HINT_ID_GYORG;
 
     if (!D_809E9842 && (player->actor.world.pos.y < (PLATFORM_HEIGHT + 5.0f))) {
         D_809E9842 = true;

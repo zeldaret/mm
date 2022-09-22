@@ -91,10 +91,10 @@ s32 func_808D7928(ObjMure* this, PlayState* play) {
 void ObjMure_Init(Actor* thisx, PlayState* play) {
     ObjMure* this = THIS;
 
-    this->chNum = OBJ_MURE_GET_CHNUM(this->actor.params);
-    this->ptn = OBJ_MURE_GET_PTN(this->actor.params);
-    this->svNum = OBJ_MURE_GET_SVNUM(this->actor.params);
-    this->type = OBJ_MURE_GET_TYPE(this->actor.params);
+    this->chNum = OBJ_MURE_GET_CHNUM(&this->actor);
+    this->ptn = OBJ_MURE_GET_PTN(&this->actor);
+    this->svNum = OBJ_MURE_GET_SVNUM(&this->actor);
+    this->type = OBJ_MURE_GET_TYPE(&this->actor);
     if (this->ptn >= 4) {
         Actor_MarkForDeath(&this->actor);
         return;

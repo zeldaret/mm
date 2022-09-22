@@ -523,7 +523,7 @@ typedef struct {
     /* 0x252 */ s16 lifeSizeChange;
     /* 0x254 */ s16 lifeSizeChangeDirection; // 1 means shrinking, 0 growing
     /* 0x256 */ s16 unk_256;
-    /* 0x258 */ s16 unk_258;
+    /* 0x258 */ s16 magicConsumptionTimer; // For certain magic states, 1 unit of magic is consumed every time the timer reaches 0
     /* 0x25A */ u8 numHorseBoosts;
     /* 0x25C */ u16 unk_25C;
     /* 0x25E */ u16 unk_25E;
@@ -1157,7 +1157,7 @@ struct PlayState {
     /* 0x18875 */ s8 transitionTrigger; // "fade_direction"
     /* 0x18876 */ s16 unk_18876;
     /* 0x18878 */ s16 bgCoverAlpha;
-    /* 0x1887A */ u16 nextEntranceIndex;
+    /* 0x1887A */ u16 nextEntrance;
     /* 0x1887C */ s8 unk_1887C; // shootingGalleryStatus?
     /* 0x1887D */ s8 unk_1887D;
     /* 0x1887E */ s8 unk_1887E;

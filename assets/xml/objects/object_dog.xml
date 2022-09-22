@@ -60,6 +60,6 @@
         <Limb Name="gDogTailLimb" Type="Standard" EnumName="DOG_LIMB_TAIL" Offset="0x80B4" />
 
         <!-- Dog Skeleton -->
-        <Skeleton Name="gDogSkel" Type="Flex" LimbType="Standard" LimbNone="DOG_LIMB_NONE" LimbMax="DOG_LIMB_MAX" EnumName="DogLimbs" Offset="0x80F0" />
+        <Skeleton Name="gDogSkel" Type="Flex" LimbType="Standard" LimbNone="DOG_LIMB_NONE" LimbMax="DOG_LIMB_MAX" EnumName="DogLimb" Offset="0x80F0" />
     </File>
 </Root>

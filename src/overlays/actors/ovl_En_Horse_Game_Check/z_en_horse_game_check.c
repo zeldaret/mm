@@ -152,7 +152,7 @@ s32 func_808F8E94(EnHorseGameCheck* this, PlayState* play) {
 s32 func_808F8EB0(EnHorseGameCheck* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (play->nextEntranceIndex == 0xCE20) {
+    if (play->nextEntrance == ENTRANCE(GORMAN_TRACK, 2)) {
         return false;
     }
 
@@ -172,7 +172,7 @@ s32 func_808F8EB0(EnHorseGameCheck* this, PlayState* play) {
     if (player->stateFlags1 & 0x800000) {
         D_801BDAA0 = 1;
     }
-    play->nextEntranceIndex = 0xCE20;
+    play->nextEntrance = ENTRANCE(GORMAN_TRACK, 2);
     play->transitionTrigger = TRANS_TRIGGER_START;
     return false;
 }
