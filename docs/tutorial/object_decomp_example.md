@@ -110,7 +110,7 @@ After naming the animations, the end result will look something like this:
 Once again, we can run `./extract_assets.py -s objects/object_dns` to extract the object, and we can update the animation names in `z_en_dns.c` to use our new names like so:
 
 ```c
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gKingsChamberDekuGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },

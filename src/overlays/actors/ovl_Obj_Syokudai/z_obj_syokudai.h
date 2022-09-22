@@ -50,10 +50,10 @@ typedef enum {
 #define OBJ_SYOKUDAI_SNUFF_TIMER_JUST_LIT_BONUS 10
 #define OBJ_SYOKUDAI_LIGHT_RADIUS_MAX 250
 
-#define OBJ_SYOKUDAI_GET_TYPE(thisx) (thisx->params >> 0xC)
-#define OBJ_SYOKUDAI_GET_START_LIT(thisx) (thisx->params & 0x800)
-#define OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx) ((thisx->params >> 7) & 0xF)
-#define OBJ_SYOKUDAI_GET_SWITCH_FLAG(thisx) (thisx->params & 0x7F)
+#define OBJ_SYOKUDAI_GET_TYPE(thisx) ((thisx)->params >> 0xC)
+#define OBJ_SYOKUDAI_GET_START_LIT(thisx) ((thisx)->params & 0x800)
+#define OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx) (((thisx)->params >> 7) & 0xF)
+#define OBJ_SYOKUDAI_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 #define OBJ_SYOKUDAI_SNUFF_TIMER_INITIAL(groupSize) ((groupSize * 50) + 100)
 

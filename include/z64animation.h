@@ -34,49 +34,49 @@ typedef enum {
 } AnimationTapers;
 
 typedef struct {
-    /* 0x00 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
-    /* 0x06 */ u8 child;       // The first child's index into the limb table.
-    /* 0x07 */ u8 sibling;     // The parent limb's next limb index into the limb table.
-    /* 0x08 */ Gfx* dList;     // Display lists for the limb. Index 0 is the normal display list, index 1 is the
+    /* 0x0 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
+    /* 0x6 */ u8 child;       // The first child's index into the limb table.
+    /* 0x7 */ u8 sibling;     // The parent limb's next limb index into the limb table.
+    /* 0x8 */ Gfx* dList;     // Display lists for the limb. Index 0 is the normal display list, index 1 is the
                                // far model display list.
 } StandardLimb; // size = 0xC
 
 // Model has limbs with only rigid meshes
 typedef struct {
-    /* 0x00 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
-    /* 0x06 */ u8 child;
-    /* 0x07 */ u8 sibling;
-    /* 0x08 */ Gfx* dLists[2]; // Near and far
+    /* 0x0 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
+    /* 0x6 */ u8 child;
+    /* 0x7 */ u8 sibling;
+    /* 0x8 */ Gfx* dLists[2]; // Near and far
 } LodLimb; // size = 0x10
 
 // Model has limbs with only rigid meshes
 typedef struct {
-    /* 0x00 */ void** segment;
-    /* 0x04 */ u8 limbCount;
+    /* 0x0 */ void** segment;
+    /* 0x4 */ u8 limbCount;
 } SkeletonHeader; // size = 0x8
 
 // Model has limbs with flexible meshes
 typedef struct {
-    /* 0x00 */ SkeletonHeader sh;
-    /* 0x08 */ u8 dListCount;
+    /* 0x0 */ SkeletonHeader sh;
+    /* 0x8 */ u8 dListCount;
 } FlexSkeletonHeader; // size = 0xC
 
 // Index into the frame data table. 
 typedef struct {
-    /* 0x00 */ u16 x;
-    /* 0x02 */ u16 y;
-    /* 0x04 */ u16 z;
-} JointIndex; // size = 0x06
+    /* 0x0 */ u16 x;
+    /* 0x2 */ u16 y;
+    /* 0x4 */ u16 z;
+} JointIndex; // size = 0x6
 
 typedef struct {
-    /* 0x00 */ s16 frameCount;
-} AnimationHeaderCommon;
+    /* 0x0 */ s16 frameCount;
+} AnimationHeaderCommon; // size = 0x2
 
 typedef struct {
-    /* 0x000 */ AnimationHeaderCommon common;
-    /* 0x004 */ s16* frameData; // referenced as tbl
-    /* 0x008 */ JointIndex* jointIndices; // referenced as ref_tbl
-    /* 0x00C */ u16 staticIndexMax;
+    /* 0x0 */ AnimationHeaderCommon common;
+    /* 0x4 */ s16* frameData; // referenced as tbl
+    /* 0x8 */ JointIndex* jointIndices; // referenced as ref_tbl
+    /* 0xC */ u16 staticIndexMax;
 } AnimationHeader; // size = 0x10
 
 typedef struct {
@@ -89,10 +89,10 @@ typedef struct {
 } JointKey; // size = 0x12
 
 typedef struct {
-    /* 0x00 */ s16 frameCount;
-    /* 0x02 */ s16 limbCount;
-    /* 0x04 */ s16* frameData;
-    /* 0x08 */ JointKey* jointKey;
+    /* 0x0 */ s16 frameCount;
+    /* 0x2 */ s16 limbCount;
+    /* 0x4 */ s16* frameData;
+    /* 0x8 */ JointKey* jointKey;
 } LegacyAnimationHeader; // size = 0xC
 
 typedef enum {
@@ -105,46 +105,46 @@ typedef enum {
 } AnimationType;
 
 typedef struct {
-    /* 0x000 */ DmaRequest req;
-    /* 0x020 */ OSMesgQueue msgQueue;
-    /* 0x038 */ OSMesg msg;
+    /* 0x00 */ DmaRequest req;
+    /* 0x20 */ OSMesgQueue msgQueue;
+    /* 0x38 */ OSMesg msg;
 } AnimEntryLoadFrame; // size = 0x3C
 
 typedef struct {
-    /* 0x000 */ u8 queueFlag;
-    /* 0x001 */ u8 vecCount;
-    /* 0x004 */ Vec3s* dst;
-    /* 0x008 */ Vec3s* src;
+    /* 0x0 */ u8 queueFlag;
+    /* 0x1 */ u8 vecCount;
+    /* 0x4 */ Vec3s* dst;
+    /* 0x8 */ Vec3s* src;
 } AnimEntryCopyAll; // size = 0xC
 
 typedef struct {
-    /* 0x000 */ u8 queueFlag;
-    /* 0x001 */ u8 vecCount;
-    /* 0x004 */ Vec3s* base;
-    /* 0x008 */ Vec3s* mod;
-    /* 0x00C */ f32 weight;
+    /* 0x0 */ u8 queueFlag;
+    /* 0x1 */ u8 vecCount;
+    /* 0x4 */ Vec3s* base;
+    /* 0x8 */ Vec3s* mod;
+    /* 0xC */ f32 weight;
 } AnimEntryInterp; // size = 0x10
 
 typedef struct {
-    /* 0x000 */ u8 queueFlag;
-    /* 0x001 */ u8 vecCount;
-    /* 0x004 */ Vec3s* dst;
-    /* 0x008 */ Vec3s* src;
-    /* 0x00C */ u8* copyFlag;
+    /* 0x0 */ u8 queueFlag;
+    /* 0x1 */ u8 vecCount;
+    /* 0x4 */ Vec3s* dst;
+    /* 0x8 */ Vec3s* src;
+    /* 0xC */ u8* copyFlag;
 } AnimEntryCopyTrue; // size = 0x10
 
 typedef struct {
-    /* 0x000 */ u8 queueFlag;
-    /* 0x001 */ u8 vecCount;
-    /* 0x004 */ Vec3s* dst;
-    /* 0x008 */ Vec3s* src;
-    /* 0x00C */ u8* copyFlag;
+    /* 0x0 */ u8 queueFlag;
+    /* 0x1 */ u8 vecCount;
+    /* 0x4 */ Vec3s* dst;
+    /* 0x8 */ Vec3s* src;
+    /* 0xC */ u8* copyFlag;
 } AnimEntryCopyFalse; // size = 0x10
 
 typedef struct {
-    /* 0x000 */ struct Actor* actor;
-    /* 0x004 */ struct SkelAnime* skelAnime;
-    /* 0x008 */ f32 unk08;
+    /* 0x0 */ struct Actor* actor;
+    /* 0x4 */ struct SkelAnime* skelAnime;
+    /* 0x8 */ f32 unk08;
 } AnimEntryMoveActor; // size = 0xC
 
 typedef union {
@@ -157,8 +157,8 @@ typedef union {
 } AnimationEntryData; // size = 0x3C
 
 typedef struct {
-    /* 0x000 */ u8 type;
-    /* 0x004 */ AnimationEntryData data;
+    /* 0x00 */ u8 type;
+    /* 0x04 */ AnimationEntryData data;
 } AnimationEntry; // size = 0x40
 
 typedef struct AnimationContext {
@@ -167,8 +167,8 @@ typedef struct AnimationContext {
 } AnimationContext; // size = 0xC84
 
 typedef struct {
-    /* 0x000 */ AnimationHeaderCommon common;
-    /* 0x004 */ u32 segment;
+    /* 0x0 */ AnimationHeaderCommon common;
+    /* 0x4 */ u32 segment;
 } LinkAnimationHeader; // size = 0x8
 
 typedef struct SkelAnime {
@@ -234,19 +234,19 @@ typedef struct {
 } AnimationInfo; // size = 0x18
 
 typedef struct {
-    /* 0x00 */ AnimationHeader* animation;
-    /* 0x04 */ f32 playSpeed;
-    /* 0x08 */ s16 startFrame;
-    /* 0x0A */ s16 frameCount;
-    /* 0x0C */ u8 mode;
-    /* 0x0E */ s16 morphFrames;
+    /* 0x0 */ AnimationHeader* animation;
+    /* 0x4 */ f32 playSpeed;
+    /* 0x8 */ s16 startFrame;
+    /* 0xA */ s16 frameCount;
+    /* 0xC */ u8 mode;
+    /* 0xE */ s16 morphFrames;
 } AnimationInfoS; // size = 0x10
 
 typedef struct AnimationSpeedInfo {
-    /* 0x00 */ AnimationHeader* animation;
-    /* 0x04 */ f32 playSpeed;
-    /* 0x08 */ u8 mode;
-    /* 0x0C */ f32 morphFrames;
+    /* 0x0 */ AnimationHeader* animation;
+    /* 0x4 */ f32 playSpeed;
+    /* 0x8 */ u8 mode;
+    /* 0xC */ f32 morphFrames;
 } AnimationSpeedInfo; // size = 0x10
 
 struct SkeletonInfo;
@@ -256,18 +256,18 @@ typedef s32 (*UnkKeyframeCallback)(struct PlayState* play, struct SkeletonInfo* 
 
 // Keyframe limb?
 typedef struct {
-    /* 0x00 */ Gfx* dList;
-    /* 0x04 */ u8 unk_4;
-    /* 0x05 */ u8 flags;
-    /* 0x06 */ Vec3s root;
+    /* 0x0 */ Gfx* dList;
+    /* 0x4 */ u8 unk_4;
+    /* 0x5 */ u8 flags;
+    /* 0x6 */ Vec3s root;
 } Struct_801BFA14_Arg1_Field4; // size = 0xC
 
 // Other limb type?
 typedef struct {
-    /* 0x00 */ Gfx* dList;
-    /* 0x04 */ u8 unk_4;
-    /* 0x05 */ u8 flags;
-    /* 0x06 */ u8 unk_6;         // transform limb draw index
+    /* 0x0 */ Gfx* dList;
+    /* 0x4 */ u8 unk_4;
+    /* 0x5 */ u8 flags;
+    /* 0x6 */ u8 unk_6;         // transform limb draw index
 } Struct_801BFA14_Arg1_Field4_2; // size = 0x8
 
 typedef struct {
@@ -279,18 +279,18 @@ typedef struct {
     };
     /* 0x08 */ s16* unk_8;
     /* 0x0C */ s16* unk_C;
-    /* 0x0C */ char unk_10[0x2];
+    /* 0x10 */ char unk_10[0x2];
     /* 0x12 */ s16 unk_12;
-} Struct_801BFA14_Arg1;
+} Struct_801BFA14_Arg1; // size = 0x14
 
 typedef struct {
     /* 0x00 */ u16* unk_0;
     /* 0x04 */ s16* unk_4;
     /* 0x08 */ s16* unk_8;
     /* 0x0C */ s16* unk_C;
-    /* 0x0C */ char unk_10[0x2];
+    /* 0x10 */ char unk_10[0x2];
     /* 0x12 */ s16 unk_12;
-} SkeletonInfo_1C;
+} SkeletonInfo_1C; // size = 0x14
 
 typedef struct {
     /* 0x00 */ f32 unk_0;
@@ -299,7 +299,7 @@ typedef struct {
     /* 0x0C */ f32 unk_C;
     /* 0x10 */ f32 unk_10;
     /* 0x14 */ s32 unk_14;
-} FrameControl;
+} FrameControl; // size = 0x18
 
 // FlexKeyframeSkeleton ?
 typedef struct SkeletonInfo {
@@ -310,7 +310,7 @@ typedef struct SkeletonInfo {
     /* 0x24 */ f32 unk_24;                      // duration? current time?
     /* 0x28 */ Vec3s* frameData;                // array of 3 Vec3s
     /* 0x2C */ s16* unk_2C;
-} SkeletonInfo;
+} SkeletonInfo; // size = 0x30
 
 typedef s32 (*OverrideKeyframeDrawScaled)(struct PlayState* play, SkeletonInfo* skeletonInfo, s32 limbIndex, Gfx** dList,
                                           u8* flags, struct Actor* actor, Vec3f* scale, Vec3s* rot, Vec3f* pos);

@@ -59,6 +59,6 @@
         <Limb Name="gAlienRightEyeLimb" Type="Standard" EnumName="ALIEN_LIMB_RIGHT_EYE" Offset="0x4E10" />
 
         <!-- Alien Skeleton -->
-        <Skeleton Name="gAlienSkel" Type="Flex" LimbType="Standard" LimbNone="ALIEN_LIMB_NONE" LimbMax="ALIEN_LIMB_MAX" EnumName="AlienLimbs" Offset="0x4E50" />
+        <Skeleton Name="gAlienSkel" Type="Flex" LimbType="Standard" LimbNone="ALIEN_LIMB_NONE" LimbMax="ALIEN_LIMB_MAX" EnumName="AlienLimb" Offset="0x4E50" />
     </File>
 </Root>

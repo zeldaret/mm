@@ -143,7 +143,7 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit sColChkInfoInit = { 3, 25, 50, 50 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 68, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_POE, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 3200, ICHAIN_STOP),
 };
 
@@ -388,7 +388,7 @@ void func_80B2D2C0(EnPoh* this) {
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_18E = 0;
-    this->actor.hintId = 0xFF;
+    this->actor.hintId = TATL_HINT_ID_NONE;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actionFunc = func_80B2D300;
 }
@@ -679,7 +679,7 @@ void func_80B2E230(EnPoh* this, PlayState* play) {
 }
 
 void func_80B2E3B0(EnPoh* this) {
-    func_801A7328(&this->actor.projectedPos, NA_SE_EN_PO_BIG_CRY - SFX_FLAG);
+    AudioSfx_StopByPosAndId(&this->actor.projectedPos, NA_SE_EN_PO_BIG_CRY - SFX_FLAG);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH);
     this->actionFunc = func_80B2E3F8;
 }
