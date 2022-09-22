@@ -51,7 +51,7 @@ u32 EffectSsDFire_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
         this->rScaleStep = initParams->scaleStep;
         this->draw = EffectSsDFire_Draw;
         this->update = EffectSsDFire_Update;
-        this->rTexIndex = (play->state.frames % 4) ^ 3;
+        this->rTexIndex = (play->state.frames & 3) ^ 3;
         this->rAlpha = initParams->alpha;
         this->rFadeDelay = this->life - initParams->fadeDelay;
         this->rAlphaStep = initParams->alphaStep;
