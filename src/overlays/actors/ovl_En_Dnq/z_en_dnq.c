@@ -2,6 +2,9 @@
  * File: z_en_dnq.c
  * Overlay: ovl_En_Dnq
  * Description: Deku King
+ *
+ * This actor's name is probably short for "Dekunuts Queen". This is likely a misnamed actor,
+ * since it uses assets from object_dno (probably short for "Dekunuts Ou (king)").
  */
 
 #include "z_en_dnq.h"

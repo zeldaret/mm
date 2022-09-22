@@ -2,6 +2,9 @@
  * File: z_en_dnp.c
  * Overlay: ovl_En_Dnp
  * Description: Deku Princess
+ * 
+ * This actor's name is probably short for "Dekunuts Princess". It uses assets from object_dnq,
+ * which is probably short for "Dekunuts Queen".
  */
 
 #include "z_en_dnp.h"
