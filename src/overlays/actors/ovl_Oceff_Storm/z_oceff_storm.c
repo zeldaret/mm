@@ -93,7 +93,7 @@ void OceffStorm_Init(Actor* thisx, PlayState* play) {
 void OceffStorm_Destroy(Actor* thisx, PlayState* play) {
     OceffStorm* this = THIS;
 
-    func_80115D5C(&play->state);
+    Magic_Reset(play);
 }
 
 void OceffStorm_DefaultAction(OceffStorm* this, PlayState* play) {
