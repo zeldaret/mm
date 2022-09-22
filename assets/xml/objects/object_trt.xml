@@ -14,11 +14,11 @@
         <DList Name="gKotakeTorsoDL" Offset="0x6590" />
         <DList Name="gKotakeNeckDL" Offset="0x66D8" />
         <DList Name="gKotakeHeadDL" Offset="0x6808" />
-        <DList Name="gKotakeLeftHairPieceStartDL" Offset="0x7298" />
-        <DList Name="gKotakeLeftHairPieceEndDL" Offset="0x7398" />
+        <DList Name="gKotakeLeftBraidStartDL" Offset="0x7298" />
+        <DList Name="gKotakeLeftBraidEndDL" Offset="0x7398" />
         <DList Name="gKotakeTeethDL" Offset="0x7478" />
-        <DList Name="gKotakeRightHairPieceStartDL" Offset="0x74C8" />
-        <DList Name="gKotakeRightHairPieceEndDL" Offset="0x75C8" />
+        <DList Name="gKotakeRightBraidStartDL" Offset="0x74C8" />
+        <DList Name="gKotakeRightBraidEndDL" Offset="0x75C8" />
         <DList Name="gKotakeRightSleeveStartDL" Offset="0x76A8" />
         <DList Name="gKotakeRightSleeveFrontDL" Offset="0x77B8" />
         <DList Name="gKotakeRightHandDL" Offset="0x7928" />
@@ -51,7 +51,7 @@
         <Texture Name="gKotakeSkinTex" OutName="kotake_skin" Format="ci8" Width="16" Height="8" Offset="0xA678" />
         <Texture Name="gKotakeMouthTex" OutName="kotake_mouth" Format="ci8" Width="8" Height="8" Offset="0xA6F8" />
         <Texture Name="gKotakeHairTex" OutName="kotake_hair" Format="rgba16" Width="8" Height="32" Offset="0xA738" />
-        <Texture Name="gKotakeHairPieceEndTex" OutName="kotake_hair_piece_end" Format="rgba16" Width="8" Height="8" Offset="0xA938" />
+        <Texture Name="gKotakeBraidEndTex" OutName="kotake_BRAID_end" Format="rgba16" Width="8" Height="8" Offset="0xA938" />
         <Texture Name="gKotakeEarTex" OutName="kotake_ear" Format="ci8" Width="8" Height="8" Offset="0xA9B8" />
         <Texture Name="gKotakeCollarNeckTex" OutName="kotake_collar_neck" Format="rgba16" Width="4" Height="8" Offset="0xA9F8" />
         <Texture Name="gKotakeFingersTex" OutName="kotake_finger" Format="ci8" Width="8" Height="16" Offset="0xAA38" />
@@ -96,11 +96,11 @@
         <Limb Name="gKotakeRightHandLimb" Type="Standard" EnumName="KOTAKE_LIMB_RIGHT_HAND" Offset="0xFE28" />
         <Limb Name="gKotakeNeckLimb" Type="Standard" EnumName="KOTAKE_LIMB_NECK" Offset="0xFE34" />
         <Limb Name="gKotakeHeadLimb" Type="Standard" EnumName="KOTAKE_LIMB_HEAD" Offset="0xFE40" />
-        <Limb Name="gKotakeRightHairPieceStartLimb" Type="Standard" EnumName="KOTAKE_LIMB_RIGHT_HAIR_PIECE_START" Offset="0xFE4C" />
-        <Limb Name="gKotakeRightHairPieceEndLimb" Type="Standard" EnumName="KOTAKE_LIMB_RIGHT_HAIR_PIECE_END" Offset="0xFE58" />
+        <Limb Name="gKotakeRightBraidStartLimb" Type="Standard" EnumName="KOTAKE_LIMB_RIGHT_BRAID_START" Offset="0xFE4C" />
+        <Limb Name="gKotakeRightBraidEndLimb" Type="Standard" EnumName="KOTAKE_LIMB_RIGHT_BRAID_END" Offset="0xFE58" />
         <Limb Name="gKotakeTeethLimb" Type="Standard" EnumName="KOTAKE_LIMB_TEETH" Offset="0xFE64" />
-        <Limb Name="gKotakeLeftHairPieceStartLimb" Type="Standard" EnumName="KOTAKE_LIMB_LEFT_HAIR_PIECE_START" Offset="0xFE70" />
-        <Limb Name="gKotakeLeftHairPieceEndLimb" Type="Standard" EnumName="KOTAKE_LIMB_LEFT_HAIR_PIECE_END" Offset="0xFE7C" />
+        <Limb Name="gKotakeLeftBraidStartLimb" Type="Standard" EnumName="KOTAKE_LIMB_LEFT_BRAID_START" Offset="0xFE70" />
+        <Limb Name="gKotakeLeftBraidEndLimb" Type="Standard" EnumName="KOTAKE_LIMB_LEFT_BRAID_END" Offset="0xFE7C" />
         <Skeleton Name="gKotakeSkel" Type="Flex" LimbType="Standard" LimbNone="KOTAKE_LIMB_NONE" LimbMax="KOTAKE_LIMB_MAX" EnumName="KotakeLimb" Offset="0xFEF0" />
     </File>
 </Root>
