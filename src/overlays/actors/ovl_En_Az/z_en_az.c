@@ -1766,16 +1766,16 @@ static Vec3f D_80A993D0[] = {
     { 1.2f, 1.2f, 120.0f },
     { 1.35f, 1.35f, 240.0f },
 };
-static TexturePtr D_80A993F4[] = {
+static TexturePtr sYoungerBrotherEyeTextures[] = {
     gBeaverYoungerBrotherEye1Tex,
     gBeaverYoungerBrotherEye2Tex,
     gBeaverYoungerBrotherEye3Tex,
     gBeaverYoungerBrotherEye4Tex,
 };
-static TexturePtr D_80A99404[] = {
-    gBeaverYoungerBrotherBelt1Tex,
-    gBeaverYoungerBrotherBelt2Tex,
-    gBeaverYoungerBrotherBelt3Tex,
+static TexturePtr sYoungerBrotherBeltTextures[] = {
+    gBeaverYoungerBrotherBeltRedTex,
+    gBeaverYoungerBrotherBeltGreenTex,
+    gBeaverYoungerBrotherBeltBlueTex,
 };
 
 void EnAz_Draw(Actor* thisx, PlayState* play2) {
@@ -1791,8 +1791,8 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
                               func_80A98DA4, func_80A98E48, &this->actor);
     } else {
         OPEN_DISPS(play->state.gfxCtx);
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A993F4[this->unk_37E]));
-        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80A99404[this->unk_380]));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sYoungerBrotherEyeTextures[this->unk_37E]));
+        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sYoungerBrotherBeltTextures[this->unk_380]));
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               func_80A98DA4, func_80A98E48, &this->actor);
         CLOSE_DISPS(play->state.gfxCtx);

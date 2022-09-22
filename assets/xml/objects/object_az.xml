@@ -109,9 +109,9 @@
         <Texture Name="gBeaverYoungerBrotherLogsTex" OutName="beaver_younger_brother_logs" Format="rgba16" Width="32" Height="32" Offset="0x14818" />
         <Texture Name="gBeaverYoungerBrotherTailTex" OutName="beaver_younger_brother_tail" Format="rgba16" Width="32" Height="32" Offset="0x15018" />
         <Texture Name="gBeaverYoungerBrotherTailSkinTex" OutName="beaver_younger_brother_tail_skin" Format="rgba16" Width="32" Height="32" Offset="0x15818" />
-        <Texture Name="gBeaverYoungerBrotherBelt1Tex" OutName="beaver_younger_brother_belt_1" Format="rgba16" Width="32" Height="32" Offset="0x16018" />
-        <Texture Name="gBeaverYoungerBrotherBelt2Tex" OutName="beaver_younger_brother_belt_2" Format="rgba16" Width="32" Height="32" Offset="0x16818" />
-        <Texture Name="gBeaverYoungerBrotherBelt3Tex" OutName="beaver_younger_brother_belt_3" Format="rgba16" Width="32" Height="32" Offset="0x17018" />
+        <Texture Name="gBeaverYoungerBrotherBeltRedTex" OutName="beaver_younger_brother_belt_red" Format="rgba16" Width="32" Height="32" Offset="0x16018" />
+        <Texture Name="gBeaverYoungerBrotherBeltGreenTex" OutName="beaver_younger_brother_belt_green" Format="rgba16" Width="32" Height="32" Offset="0x16818" />
+        <Texture Name="gBeaverYoungerBrotherBeltBlueTex" OutName="beaver_younger_brother_belt_blue" Format="rgba16" Width="32" Height="32" Offset="0x17018" />
 
         <!-- Younger Beaver Limbs -->
         <Limb Name="gBeaverYoungerBrotherRootLimb" Type="Standard" EnumName="BEAVER_YOUNGER_BROTHER_LIMB_ROOT" Offset="0x17820" />
