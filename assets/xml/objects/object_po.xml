@@ -48,6 +48,6 @@
         <Limb Name="object_po_Standardlimb_00505C" Type="Standard" EnumName="OBJECT_PO_LIMB_12" Offset="0x505C" />
         <Limb Name="object_po_Standardlimb_005068" Type="Standard" EnumName="OBJECT_PO_LIMB_13" Offset="0x5068" />
         <Limb Name="object_po_Standardlimb_005074" Type="Standard" EnumName="OBJECT_PO_LIMB_14" Offset="0x5074" />
-        <Skeleton Name="object_po_Skel_0050D0" Type="Normal" LimbType="Standard" LimbNone="OBJECT_PO_LIMB_NONE" LimbMax="OBJECT_PO_LIMB_MAX" EnumName="object_po_Limbs" Offset="0x50D0" />
+        <Skeleton Name="object_po_Skel_0050D0" Type="Normal" LimbType="Standard" LimbNone="OBJECT_PO_LIMB_NONE" LimbMax="OBJECT_PO_LIMB_MAX" EnumName="ObjectPoLimb" Offset="0x50D0" />
     </File>
 </Root>

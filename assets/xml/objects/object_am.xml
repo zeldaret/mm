@@ -34,7 +34,7 @@
         <Limb Name="object_am_Standardlimb_0058F0" Type="Standard" EnumName="OBJECT_AM_LIMB_0B" Offset="0x58F0" />
         <Limb Name="object_am_Standardlimb_0058FC" Type="Standard" EnumName="OBJECT_AM_LIMB_BASE" Offset="0x58FC" />
         <Limb Name="object_am_Standardlimb_005908" Type="Standard" EnumName="OBJECT_AM_LIMB_0D" Offset="0x5908" />
-        <Skeleton Name="object_am_Skel_005948" Type="Normal" LimbType="Standard" LimbNone="OBJECT_AM_LIMB_NONE" LimbMax="OBJECT_AM_LIMB_MAX" EnumName="object_am_Limbs" Offset="0x5948" />
+        <Skeleton Name="object_am_Skel_005948" Type="Normal" LimbType="Standard" LimbNone="OBJECT_AM_LIMB_NONE" LimbMax="OBJECT_AM_LIMB_MAX" EnumName="ObjectAmLimb" Offset="0x5948" />
         <Animation Name="gArmosTakeDamageAnim" Offset="0x5B3C" />
         <Collision Name="object_am_Colheader_005CF8" Offset="0x5CF8" />
     </File>

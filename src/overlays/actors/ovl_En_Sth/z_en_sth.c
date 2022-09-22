@@ -275,7 +275,7 @@ void func_80B67348(EnSth* this, PlayState* play) {
         }
         Message_StartTextbox(play, phi_a1, &this->actor);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -286,7 +286,7 @@ void func_80B67458(EnSth* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B67348;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
         if (CURRENT_DAY == 3) {
             func_80B670A4(this, 6);
         } else {
@@ -470,7 +470,7 @@ void func_80B67AB4(EnSth* this, PlayState* play) {
         gSaveContext.save.weekEventReg[34] |= 0x40;
         Message_StartTextbox(play, 0x918, &this->actor);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -481,7 +481,7 @@ void func_80B67B50(EnSth* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B67AB4;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     } else {
         this->unk_29C &= ~1;
         gSaveContext.save.weekEventReg[34] |= 8;

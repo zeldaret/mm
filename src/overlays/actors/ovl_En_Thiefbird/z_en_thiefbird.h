@@ -2,6 +2,7 @@
 #define Z_EN_THIEFBIRD_H
 
 #include "global.h"
+#include "objects/object_thiefbird/object_thiefbird.h"
 
 struct EnThiefbird;
 
@@ -27,8 +28,8 @@ typedef struct EnThiefbird {
     /* 0x192 */ s16 unk_192;
     /* 0x194 */ s16 unk_194;
     /* 0x196 */ s16 unk_196[6];
-    /* 0x1A2 */ Vec3s jointTable[17];
-    /* 0x208 */ Vec3s morphTable[17];
+    /* 0x1A2 */ Vec3s jointTable[TAKKURI_LIMB_MAX];
+    /* 0x208 */ Vec3s morphTable[TAKKURI_LIMB_MAX];
     /* 0x270 */ ColliderJntSph collider;
     /* 0x290 */ ColliderJntSphElement colliderElements[3];
     /* 0x350 */ Vec3f limbPos[11];

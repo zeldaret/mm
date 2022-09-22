@@ -186,7 +186,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gGoronLyingDownIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gGoronLyingDownIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gGoronUnrollAnim, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -793,7 +793,7 @@ s32 func_80A12C48(EnGo* this, PlayState* play, s32 arg2) {
     if (objIdx2 >= 0) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx2].segment);
         this->unk_3DC = arg2;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg2);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg2);
         this->unk_398 = this->skelAnime.playSpeed;
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx].segment);
     }
@@ -1082,7 +1082,7 @@ void func_80A137C0(EnGo* this, PlayState* play, f32 arg2, f32 arg3) {
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, frames1, 0x20, 0x10, 1, 0, frames2, 0x40, 0x20));
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, (u8)arg3);
-        gSPDisplayList(POLY_XLU_DISP++, &gameplay_keep_DL_050D10);
+        gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment3DL);
 
         CLOSE_DISPS(play->state.gfxCtx);
 
@@ -1373,7 +1373,8 @@ void func_80A143A8(EnGo* this, PlayState* play) {
 }
 
 void func_80A14430(EnGo* this, PlayState* play) {
-    if (((gSaveContext.save.entranceIndex == 0xD000) || (gSaveContext.save.entranceIndex == 0xD020)) &&
+    if (((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 0)) ||
+         (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 2))) &&
         (gSaveContext.save.weekEventReg[33] & 0x80)) {
         func_80A14018(this, play);
         this->actionFunc = func_80A149B0;
@@ -1383,7 +1384,8 @@ void func_80A14430(EnGo* this, PlayState* play) {
 }
 
 void func_80A1449C(EnGo* this, PlayState* play) {
-    if ((gSaveContext.save.entranceIndex == 0xD010) || (gSaveContext.save.entranceIndex == 0x1C00)) {
+    if ((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1)) ||
+        (gSaveContext.save.entrance == ENTRANCE(CUTSCENE, 0))) {
         func_80A14104(this, play);
         this->actionFunc = func_80A149B0;
     } else {
@@ -1511,7 +1513,7 @@ void func_80A14798(EnGo* this, PlayState* play) {
 void func_80A149B0(EnGo* this, PlayState* play) {
     s16 sp26 = this->actor.world.rot.y;
 
-    if ((ENGO_GET_F(&this->actor) == ENGO_F_2) && (gSaveContext.save.entranceIndex == 0xD010)) {
+    if ((ENGO_GET_F(&this->actor) == ENGO_F_2) && (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_CHEER - SFX_FLAG);
     } else if (ENGO_GET_F(&this->actor) != ENGO_F_8) {
         if (func_80A1222C(this, play)) {
@@ -1926,10 +1928,10 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
         } else {
             phi_f0 = this->colliderCylinder.dim.radius + 40;
         }
-        func_8013C964(&this->actor, play, phi_f0, 20.0f, EXCH_ITEM_NONE, this->unk_390 & 7);
+        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_AP_NONE, this->unk_390 & 7);
     } else if ((this->unk_390 & 0x200) && (this->unk_3EC != 0)) {
         phi_f0 = this->colliderCylinder.dim.radius + 40;
-        func_8013C964(&this->actor, play, phi_f0, 20.0f, EXCH_ITEM_NONE, this->unk_390 & 7);
+        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_AP_NONE, this->unk_390 & 7);
     }
 
     if ((ENGO_GET_F(&this->actor) != ENGO_F_8) && (ENGO_GET_F(&this->actor) != ENGO_F_2) &&

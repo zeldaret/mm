@@ -233,7 +233,7 @@ s32 EnMttag_UpdateCheckpoints(EnMttag* this, PlayState* play) {
  */
 s32 EnMttag_ExitRace(PlayState* play, s32 transitionType, s32 nextTransitionType) {
     CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
-    play->nextEntranceIndex = 0xD020;
+    play->nextEntrance = ENTRANCE(GORON_RACETRACK, 2);
     if (gSaveContext.save.weekEventReg[33] & 0x80) {
         // Spring
         gSaveContext.nextCutsceneIndex = 0xFFF0;
@@ -418,7 +418,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
 
     if (((talkState == TEXT_STATE_5 && Message_ShouldAdvance(play)) || talkState == TEXT_STATE_CLOSING)) {
         if (this->shouldRestartRace) {
-            play->nextEntranceIndex = 0xD010;
+            play->nextEntrance = ENTRANCE(GORON_RACETRACK, 1);
 
             if (gSaveContext.save.weekEventReg[33] & 0x80) {
                 // Spring
@@ -433,8 +433,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
             gSaveContext.nextTransitionType = TRANS_TYPE_02;
             func_801477B4(play);
             func_800B7298(play, &this->actor, 7);
-            Parameter_AddMagic(play,
-                               ((void)0, gSaveContext.unk_3F30) + (gSaveContext.save.playerData.doubleMagic * 48) + 48);
+            Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
 
             gSaveContext.eventInf[1] &= (u8)~1;
             gSaveContext.eventInf[1] &= (u8)~2;
@@ -478,7 +477,7 @@ void EnMttag_Init(Actor* thisx, PlayState* play) {
     Player* player;
     EnMttag* this = THIS;
 
-    if (gSaveContext.save.entranceIndex == 0xD010) {
+    if (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1)) {
         player = GET_PLAYER(play);
         player->stateFlags1 |= 0x20;
         this->raceInitialized = false;
