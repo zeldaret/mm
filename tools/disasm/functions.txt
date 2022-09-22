@@ -5950,7 +5950,7 @@
     0x808B53C0:("func_808B53C0",),
     0x808B545C:("EnMThunder_Init",),
     0x808B5820:("EnMThunder_Destroy",),
-    0x808B5890:("func_808B5890",),
+    0x808B5890:("EnMThunder_AdjustLights",),
     0x808B58CC:("EnMThunder_Spin_AttackNoMagic",),
     0x808B5984:("EnMThunder_Charge",),
     0x808B5EEC:("func_808B5EEC",),

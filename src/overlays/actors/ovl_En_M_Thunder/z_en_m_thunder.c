@@ -20,7 +20,7 @@ void EnMThunder_Draw(Actor* thisx, PlayState* play);
 
 void func_808B65BC(Actor* thisx, PlayState* play);
 
-void func_808B5890(PlayState* play, f32 arg1);
+void EnMThunder_AdjustLights(PlayState* play, f32 arg1);
 
 void EnMThunder_Charge(EnMThunder* this, PlayState* play);
 void EnMThunder_Spin_Attack(EnMThunder* this, PlayState* play);
@@ -196,11 +196,11 @@ void EnMThunder_Destroy(Actor* thisx, PlayState* play) {
     }
 
     Collider_DestroyCylinder(play, &this->collider);
-    func_808B5890(play, 0.0f);
+    EnMThunder_AdjustLights(play, 0.0f);
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
 }
 
-void func_808B5890(PlayState* play, f32 arg1) {
+void EnMThunder_AdjustLights(PlayState* play, f32 arg1) {
     func_800FD2B4(play, arg1, 850.0f, 0.2f, 0.0f);
 }
 
@@ -458,7 +458,7 @@ void EnMThunder_Update(Actor* thisx, PlayState* play) {
     EnMThunder* this = THIS;
 
     this->actionFunc(this, play);
-    func_808B5890(play, this->unk1B4);
+    EnMThunder_AdjustLights(play, this->unk1B4);
     Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y,
                               this->actor.world.pos.z, this->lightColorFrac * 255.0f, this->lightColorFrac * 255.0f,
                               this->lightColorFrac * 100.0f, this->lightColorFrac * 800.0f);
