@@ -40,7 +40,7 @@ void OceffWipe_Init(Actor* thisx, PlayState* play) {
 void OceffWipe_Destroy(Actor* thisx, PlayState* play) {
     OceffWipe* this = THIS;
 
-    func_80115D5C(&play->state);
+    Magic_Reset(play);
     play->msgCtx.unk120B0 = 0;
 }
 
