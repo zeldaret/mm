@@ -101,8 +101,8 @@ void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2) {
     }
 
     this->pathPoints = Lib_SegmentedToVirtual(path->points);
-    this->currentPoint = 1;
-    this->maxPoint = path->count;
+    this->currentPointIndex = 1;
+    this->maxPointIndex = path->count;
     this->deathTimer = 20;
     this->waitTimer = 0;
     EnSyatekiCrow_SetupWaitForSpawn(this);
@@ -121,7 +121,7 @@ void EnSyatekiCrow_SetupWaitForSpawn(EnSyatekiCrow* this) {
     this->actor.world = this->actor.home;
     this->actor.prevPos = this->actor.home.pos;
     this->actor.shape.rot = this->actor.world.rot;
-    this->currentPoint = 1;
+    this->currentPointIndex = 1;
     this->actor.draw = NULL;
     this->actionFunc = EnSyatekiCrow_WaitForSpawn;
 }
@@ -150,9 +150,9 @@ void EnSyatekiCrow_SetupWaitToMove(EnSyatekiCrow* this) {
     this->actor.world.pos.x = this->pathPoints[0].x;
     this->actor.world.pos.y = this->pathPoints[0].y;
     this->actor.world.pos.z = this->pathPoints[0].z;
-    targetPos.x = this->pathPoints[this->currentPoint].x;
-    targetPos.y = this->pathPoints[this->currentPoint].y;
-    targetPos.z = this->pathPoints[this->currentPoint].z;
+    targetPos.x = this->pathPoints[this->currentPointIndex].x;
+    targetPos.y = this->pathPoints[this->currentPointIndex].y;
+    targetPos.z = this->pathPoints[this->currentPointIndex].z;
     this->actor.world.rot.y = this->actor.shape.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &targetPos);
     this->actor.world.rot.x = this->actor.shape.rot.x = Math_Vec3f_Pitch(&this->actor.world.pos, &targetPos);
     this->actor.draw = EnSyatekiCrow_Draw;
@@ -185,9 +185,9 @@ void EnSyatekiCrow_Fly(EnSyatekiCrow* this, PlayState* play) {
         return;
     }
 
-    targetPoint.x = this->pathPoints[this->currentPoint].x;
-    targetPoint.y = this->pathPoints[this->currentPoint].y;
-    targetPoint.z = this->pathPoints[this->currentPoint].z;
+    targetPoint.x = this->pathPoints[this->currentPointIndex].x;
+    targetPoint.y = this->pathPoints[this->currentPointIndex].y;
+    targetPoint.z = this->pathPoints[this->currentPointIndex].z;
 
     distToTarget = Math_Vec3f_DistXZ(&this->actor.world.pos, &targetPoint);
     this->yawTarget = Math_Vec3f_Yaw(&this->actor.world.pos, &targetPoint);
@@ -198,8 +198,8 @@ void EnSyatekiCrow_Fly(EnSyatekiCrow* this, PlayState* play) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Math_SmoothStepToS(&this->actor.shape.rot.x, this->pitchTarget, 5, 0x3000, 0x100);
         this->actor.world.rot.x = -this->actor.shape.rot.x;
-    } else if (this->currentPoint < (this->maxPoint - 1)) {
-        this->currentPoint++;
+    } else if (this->currentPointIndex < (this->maxPointIndex - 1)) {
+        this->currentPointIndex++;
     } else {
         this->isActive = false;
         syatekiMan->guayFlags &= ~(1 << EN_SYATEKI_CROW_GET_NUMBER(&this->actor));
