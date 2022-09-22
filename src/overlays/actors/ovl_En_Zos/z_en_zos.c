@@ -722,7 +722,7 @@ void EnZos_Draw(Actor* thisx, PlayState* play) {
     Matrix_Translate(0.0f, 0.0f, -974.4f, MTXMODE_APPLY);
 
     gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&gfx[2], object_zos_DL_0136E0);
+    gSPDisplayList(&gfx[2], gEvanUnknownWhiteTriangleDL);
     gSPDisplayList(&gfx[3], gEvanKeyboardDL);
 
     POLY_OPA_DISP = &gfx[4];

@@ -39,11 +39,11 @@
         <Texture Name="object_zos_Tex_011118" OutName="tex_011118" Format="rgba16" Width="32" Height="32" Offset="0x11118" />
         <Texture Name="object_zos_Tex_011918" OutName="tex_011918" Format="rgba16" Width="32" Height="32" Offset="0x11918" />
         <DList Name="gEvanKeyboardDL" Offset="0x13088" /> <!-- Original name is "zK_gakki_model" -->
-        <DList Name="object_zos_DL_0136E0" Offset="0x136E0" />
-        <Texture Name="object_zos_Tex_013728" OutName="tex_013728" Format="rgba16" Width="32" Height="32" Offset="0x13728" />
-        <Texture Name="object_zos_Tex_013F28" OutName="tex_013F28" Format="rgba16" Width="32" Height="32" Offset="0x13F28" />
-        <Texture Name="object_zos_Tex_014728" OutName="tex_014728" Format="rgba16" Width="32" Height="32" Offset="0x14728" />
-        <Texture Name="object_zos_Tex_014F28" OutName="tex_014F28" Format="rgba16" Width="16" Height="16" Offset="0x14F28" />
+        <DList Name="gEvanUnknownWhiteTriangleDL" Offset="0x136E0" /> <!-- The purpose of this is unknown. It cannot be seen in-game. -->
+        <Texture Name="gEvanKeyboardRibKeysTex" OutName="evan_keyboard_rib_keys" Format="rgba16" Width="32" Height="32" Offset="0x13728" />
+        <Texture Name="gEvanKeyboardSkullTex" OutName="evan_keyboard_skull" Format="rgba16" Width="32" Height="32" Offset="0x13F28" />
+        <Texture Name="gEvanKeyboardBoneTex" OutName="evan_keyboard_bone" Format="rgba16" Width="32" Height="32" Offset="0x14728" />
+        <Texture Name="gEvanKeyboardOtherKeysTex" OutName="evan_keyboard_other_keys" Format="rgba16" Width="16" Height="16" Offset="0x14F28" />
         <Limb Name="gEvanPelvisLimb" Type="Standard" EnumName="EVAN_LIMB_PELVIS" Offset="0x15128" />
         <Limb Name="gEvanLeftThighLimb" Type="Standard" EnumName="EVAN_LIMB_LEFT_THIGH" Offset="0x15134" />
         <Limb Name="gEvanLeftShinLimb" Type="Standard" EnumName="EVAN_LIMB_LEFT_SHIN" Offset="0x15140" />
