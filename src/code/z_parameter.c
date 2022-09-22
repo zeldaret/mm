@@ -221,81 +221,81 @@ s16 sFinalHoursClockFrameEnvBlue = 0;
 s16 sFinalHoursClockColorTimer = 15;
 s16 sFinalHoursClockColorTargetIndex = 0;
 
-Gfx* Gfx_DrawTexRectRGBA16(Gfx* displayListHead, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft,
-                           s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
-    gDPLoadTextureBlock(displayListHead++, texture, G_IM_FMT_RGBA, G_IM_SIZ_16b, textureWidth, textureHeight, 0,
+Gfx* Gfx_DrawTexRectRGBA16(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
+                           s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_RGBA, G_IM_SIZ_16b, textureWidth, textureHeight, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
 
-    gSPTextureRectangle(displayListHead++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2,
-                        (rectTop + rectHeight) << 2, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+    gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2, (rectTop + rectHeight) << 2,
+                        G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
 
-    return displayListHead;
+    return gfx;
 }
 
-Gfx* Gfx_DrawTexRectIA8(Gfx* displayListHead, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft,
-                        s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
-    gDPLoadTextureBlock(displayListHead++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+Gfx* Gfx_DrawTexRectIA8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
+                        s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
 
-    gSPTextureRectangle(displayListHead++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2,
-                        (rectTop + rectHeight) << 2, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+    gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2, (rectTop + rectHeight) << 2,
+                        G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
 
-    return displayListHead;
+    return gfx;
 }
 
-Gfx* Gfx_DrawTexRectIA8_DropShadow(Gfx* displayListHead, TexturePtr texture, s16 textureWidth, s16 textureHeight,
-                                   s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy, s16 r,
-                                   s16 g, s16 b, s16 a) {
+Gfx* Gfx_DrawTexRectIA8_DropShadow(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft,
+                                   s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy, s16 r, s16 g, s16 b,
+                                   s16 a) {
     s16 dropShadowAlpha = a;
 
     if (a > 100) {
         dropShadowAlpha = 100;
     }
 
-    gDPPipeSync(displayListHead++);
-    gDPSetPrimColor(displayListHead++, 0, 0, 0, 0, 0, dropShadowAlpha);
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, dropShadowAlpha);
 
-    gDPLoadTextureBlock(displayListHead++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
 
-    gSPTextureRectangle(displayListHead++, (rectLeft + 2) * 4, (rectTop + 2) * 4, (rectLeft + rectWidth + 2) * 4,
+    gSPTextureRectangle(gfx++, (rectLeft + 2) * 4, (rectTop + 2) * 4, (rectLeft + rectWidth + 2) * 4,
                         (rectTop + rectHeight + 2) * 4, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
 
-    gDPPipeSync(displayListHead++);
-    gDPSetPrimColor(displayListHead++, 0, 0, r, g, b, a);
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, r, g, b, a);
 
-    gSPTextureRectangle(displayListHead++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4,
-                        (rectTop + rectHeight) * 4, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+    gSPTextureRectangle(gfx++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4, (rectTop + rectHeight) * 4,
+                        G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
 
-    return displayListHead;
+    return gfx;
 }
 
-Gfx* Gfx_DrawRect_DropShadow(Gfx* displayListHead, s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx,
-                             u16 dtdy, s16 r, s16 g, s16 b, s16 a) {
+Gfx* Gfx_DrawRect_DropShadow(Gfx* gfx, s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy,
+                             s16 r, s16 g, s16 b, s16 a) {
     s16 dropShadowAlpha = a;
 
     if (a > 100) {
         dropShadowAlpha = 100;
     }
 
-    gDPPipeSync(displayListHead++);
-    gDPSetPrimColor(displayListHead++, 0, 0, 0, 0, 0, dropShadowAlpha);
-    gSPTextureRectangle(displayListHead++, (rectLeft + 2) * 4, (rectTop + 2) * 4, (rectLeft + rectWidth + 2) * 4,
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, dropShadowAlpha);
+    gSPTextureRectangle(gfx++, (rectLeft + 2) * 4, (rectTop + 2) * 4, (rectLeft + rectWidth + 2) * 4,
                         (rectTop + rectHeight + 2) * 4, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
 
-    gDPPipeSync(displayListHead++);
-    gDPSetPrimColor(displayListHead++, 0, 0, r, g, b, a);
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, r, g, b, a);
 
-    gSPTextureRectangle(displayListHead++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4,
-                        (rectTop + rectHeight) * 4, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+    gSPTextureRectangle(gfx++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4, (rectTop + rectHeight) * 4,
+                        G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
 
-    return displayListHead;
+    return gfx;
 }
 
-Gfx* Gfx_DrawTexRectIA8_DropShadowOffset(Gfx* displayListHead, TexturePtr texture, s16 textureWidth, s16 textureHeight,
+Gfx* Gfx_DrawTexRectIA8_DropShadowOffset(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight,
                                          s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy,
                                          s16 r, s16 g, s16 b, s16 a, s32 masks, s32 rectS) {
     s16 dropShadowAlpha = a;
@@ -304,66 +304,64 @@ Gfx* Gfx_DrawTexRectIA8_DropShadowOffset(Gfx* displayListHead, TexturePtr textur
         dropShadowAlpha = 100;
     }
 
-    gDPPipeSync(displayListHead++);
-    gDPSetPrimColor(displayListHead++, 0, 0, 0, 0, 0, dropShadowAlpha);
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, dropShadowAlpha);
 
-    gDPLoadTextureBlock(displayListHead++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
                         G_TX_MIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, masks, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-    gSPTextureRectangle(displayListHead++, (rectLeft + 2) * 4, (rectTop + 2) * 4, (rectLeft + rectWidth + 2) * 4,
+    gSPTextureRectangle(gfx++, (rectLeft + 2) * 4, (rectTop + 2) * 4, (rectLeft + rectWidth + 2) * 4,
                         (rectTop + rectHeight + 2) * 4, G_TX_RENDERTILE, rectS, 0, dsdx, dtdy);
 
-    gDPPipeSync(displayListHead++);
-    gDPSetPrimColor(displayListHead++, 0, 0, r, g, b, a);
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, r, g, b, a);
 
-    gSPTextureRectangle(displayListHead++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4,
-                        (rectTop + rectHeight) * 4, G_TX_RENDERTILE, rectS, 0, dsdx, dtdy);
+    gSPTextureRectangle(gfx++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4, (rectTop + rectHeight) * 4,
+                        G_TX_RENDERTILE, rectS, 0, dsdx, dtdy);
 
-    return displayListHead;
+    return gfx;
 }
 
-Gfx* Gfx_DrawTexRectI8(Gfx* displayListHead, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft,
-                       s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
-    gDPLoadTextureBlock(displayListHead++, texture, G_IM_FMT_I, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+Gfx* Gfx_DrawTexRectI8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
+                       s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_I, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
 
-    gSPTextureRectangle(displayListHead++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2,
-                        (rectTop + rectHeight) << 2, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+    gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2, (rectTop + rectHeight) << 2,
+                        G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
 
-    return displayListHead;
+    return gfx;
 }
 
-Gfx* Gfx_DrawTexRect4b(Gfx* displayListHead, TexturePtr texture, s32 fmt, s16 textureWidth, s16 textureHeight,
-                       s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, s32 cms, s32 masks, s32 s, u16 dsdx,
-                       u16 dtdy) {
-    gDPLoadTextureBlock_4b(displayListHead++, texture, fmt, textureWidth, textureHeight, 0, cms,
-                           G_TX_NOMIRROR | G_TX_WRAP, masks, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+Gfx* Gfx_DrawTexRect4b(Gfx* gfx, TexturePtr texture, s32 fmt, s16 textureWidth, s16 textureHeight, s16 rectLeft,
+                       s16 rectTop, s16 rectWidth, s16 rectHeight, s32 cms, s32 masks, s32 s, u16 dsdx, u16 dtdy) {
+    gDPLoadTextureBlock_4b(gfx++, texture, fmt, textureWidth, textureHeight, 0, cms, G_TX_NOMIRROR | G_TX_WRAP, masks,
+                           G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-    gSPTextureRectangle(displayListHead++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2,
-                        (rectTop + rectHeight) << 2, G_TX_RENDERTILE, s, 0, dsdx, dtdy);
+    gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2, (rectTop + rectHeight) << 2,
+                        G_TX_RENDERTILE, s, 0, dsdx, dtdy);
 
-    return displayListHead;
+    return gfx;
 }
 
-Gfx* Gfx_DrawTexQuadIA8(Gfx* displayListHead, TexturePtr texture, s16 textureWidth, s16 textureHeight, u16 point) {
-    gDPLoadTextureBlock(displayListHead++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+Gfx* Gfx_DrawTexQuadIA8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, u16 point) {
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
 
-    gSP1Quadrangle(displayListHead++, point, point + 2, point + 3, point + 1, 0);
+    gSP1Quadrangle(gfx++, point, point + 2, point + 3, point + 1, 0);
 
-    return displayListHead;
+    return gfx;
 }
 
-Gfx* Gfx_DrawTexQuad4b(Gfx* displayListHead, TexturePtr texture, s32 fmt, s16 textureWidth, s16 textureHeight,
-                       u16 point) {
-    gDPLoadTextureBlock_4b(displayListHead++, texture, fmt, textureWidth, textureHeight, 0, G_TX_NOMIRROR | G_TX_WRAP,
+Gfx* Gfx_DrawTexQuad4b(Gfx* gfx, TexturePtr texture, s32 fmt, s16 textureWidth, s16 textureHeight, u16 point) {
+    gDPLoadTextureBlock_4b(gfx++, texture, fmt, textureWidth, textureHeight, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-    gSP1Quadrangle(displayListHead++, point, point + 2, point + 3, point + 1, 0);
+    gSP1Quadrangle(gfx++, point, point + 2, point + 3, point + 1, 0);
 
-    return displayListHead;
+    return gfx;
 }
 
 s16 D_801BFA04[] = {
