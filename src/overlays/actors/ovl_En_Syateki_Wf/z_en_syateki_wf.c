@@ -186,7 +186,7 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosNormalSkel, &gWolfosWaitingAnim, this->jointTable,
                        this->morphTable, WOLFOS_NORMAL_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.hintId = 0x4C;
+    this->actor.hintId = TATL_HINT_ID_WOLFOS;
 
     func_80A201CC(this);
 }

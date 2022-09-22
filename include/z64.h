@@ -523,7 +523,7 @@ typedef struct {
     /* 0x252 */ s16 lifeSizeChange;
     /* 0x254 */ s16 lifeSizeChangeDirection; // 1 means shrinking, 0 growing
     /* 0x256 */ s16 unk_256;
-    /* 0x258 */ s16 unk_258;
+    /* 0x258 */ s16 magicConsumptionTimer; // For certain magic states, 1 unit of magic is consumed every time the timer reaches 0
     /* 0x25A */ u8 numHorseBoosts;
     /* 0x25C */ u16 unk_25C;
     /* 0x25E */ u16 unk_25E;
