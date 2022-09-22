@@ -704,7 +704,7 @@ void func_808A6A78(EnSt* this, PlayState* play) {
 
         Actor_SetScale(&this->actor, 0.04f);
         this->actor.draw = func_808A7478;
-        this->actor.hintId = 4;
+        this->actor.hintId = TATL_HINT_ID_SKULLTULA;
         this->actor.gravity = 0.0f;
         func_808A63E8(this);
         this->unk_18C = 0;
