@@ -1472,6 +1472,7 @@ void EnFsn_DrawCursor(EnFsn* this, PlayState* play, f32 x, f32 y, f32 z, u8 draw
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if (drawCursor != 0) {
         func_8012C654(play->state.gfxCtx);
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColor.r, this->cursorColor.g, this->cursorColor.b,
@@ -1486,6 +1487,7 @@ void EnFsn_DrawCursor(EnFsn* this, PlayState* play, f32 x, f32 y, f32 z, u8 draw
         dsdx = (1.0f / z) * 1024.0f;
         gSPTextureRectangle(OVERLAY_DISP++, ulx, uly, lrx, lry, G_TX_RENDERTILE, 0, 0, dsdx, dsdx);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -1501,6 +1503,7 @@ void EnFsn_DrawTextRec(PlayState* play, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y
     s32 dtdy;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     gDPPipeSync(OVERLAY_DISP++);
     gDPSetPrimColor(OVERLAY_DISP++, 0, 0, r, g, b, a);
 
@@ -1517,6 +1520,7 @@ void EnFsn_DrawTextRec(PlayState* play, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y
     dtdy = dy * unk;
 
     gSPTextureRectangle(OVERLAY_DISP++, ulx, uly, lrx, lry, G_TX_RENDERTILE, s, t, dsdx, dtdy);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -1525,6 +1529,7 @@ void EnFsn_DrawStickDirectionPrompts(EnFsn* this, PlayState* play) {
     s32 drawStickLeftPrompt = this->stickRightPrompt.isEnabled;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if (drawStickRightPrompt || drawStickLeftPrompt) {
         func_8012C654(play->state.gfxCtx);
         gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
@@ -1559,6 +1564,7 @@ void EnFsn_DrawStickDirectionPrompts(EnFsn* this, PlayState* play) {
                               this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -1604,8 +1610,10 @@ void EnFsn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         this->actor.focus.pos.z = this->actor.world.pos.z;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         gSPDisplayList(POLY_OPA_DISP++, gFsnGlassesFrameDL);
         gSPDisplayList(POLY_OPA_DISP++, gFsnGlassesLensesDL);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
@@ -1617,6 +1625,7 @@ void EnFsn_Draw(Actor* thisx, PlayState* play) {
     s16 i;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     func_8012C5B0(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
@@ -1631,5 +1640,6 @@ void EnFsn_Draw(Actor* thisx, PlayState* play) {
 
     EnFsn_DrawCursor(this, play, this->cursorPos.x, this->cursorPos.y, this->cursorPos.z, this->drawCursor);
     EnFsn_DrawStickDirectionPrompts(this, play);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

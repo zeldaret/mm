@@ -686,6 +686,7 @@ void EnTrt_HandleCanBuyItem(PlayState* play, EnTrt* this) {
             this->shopItemSelectedTween = 0.0f;
             item->boughtFunc(play, item);
             break;
+
         case CANBUY_RESULT_SUCCESS_2:
             func_8019F208();
             item->buyFunc(play, item);
@@ -694,21 +695,28 @@ void EnTrt_HandleCanBuyItem(PlayState* play, EnTrt* this) {
             this->shopItemSelectedTween = 0.0f;
             item->boughtFunc(play, item);
             break;
+
         case CANBUY_RESULT_NO_ROOM:
             play_sound(NA_SE_SY_ERROR);
             EnTrt_SetupCannotBuy(play, this, 0x641);
             break;
+
         case CANBUY_RESULT_NEED_EMPTY_BOTTLE:
             play_sound(NA_SE_SY_ERROR);
             EnTrt_SetupCannotBuy(play, this, 0x846);
             break;
+
         case CANBUY_RESULT_NEED_RUPEES:
             play_sound(NA_SE_SY_ERROR);
             EnTrt_SetupCannotBuy(play, this, 0x847);
             break;
+
         case CANBUY_RESULT_CANNOT_GET_NOW:
             play_sound(NA_SE_SY_ERROR);
             EnTrt_SetupCannotBuy(play, this, 0x643);
+            break;
+
+        default:
             break;
     }
 }
@@ -1561,6 +1569,7 @@ void EnTrt_DrawCursor(PlayState* play, EnTrt* this, f32 x, f32 y, f32 z, u8 draw
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if (drawCursor != 0) {
         func_8012C654(play->state.gfxCtx);
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColor.r, this->cursorColor.g, this->cursorColor.b,
@@ -1575,6 +1584,7 @@ void EnTrt_DrawCursor(PlayState* play, EnTrt* this, f32 x, f32 y, f32 z, u8 draw
         dsdx = (1.0f / z) * 1024.0f;
         gSPTextureRectangle(OVERLAY_DISP++, ulx, uly, lrx, lry, G_TX_RENDERTILE, 0, 0, dsdx, dsdx);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -1592,6 +1602,7 @@ void EnTrt_DrawTextRec(PlayState* play, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y
     (void)"../z_en_trt.c";
 
     OPEN_DISPS(play->state.gfxCtx);
+
     gDPPipeSync(OVERLAY_DISP++);
     gDPSetPrimColor(OVERLAY_DISP++, 0, 0, r, g, b, a);
 
@@ -1608,6 +1619,7 @@ void EnTrt_DrawTextRec(PlayState* play, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y
     dtdy = dy * unk;
 
     gSPTextureRectangle(OVERLAY_DISP++, ulx, uly, lrx, lry, G_TX_RENDERTILE, s, t, dsdx, dtdy);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -1618,6 +1630,7 @@ void EnTrt_DrawStickDirectionPrompt(PlayState* play, EnTrt* this) {
     (void)"../z_en_trt.c";
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if (drawStickRightPrompt || drawStickLeftPrompt) {
         func_8012C654(play->state.gfxCtx);
         gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
@@ -1652,6 +1665,7 @@ void EnTrt_DrawStickDirectionPrompt(PlayState* play, EnTrt* this) {
                               this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 

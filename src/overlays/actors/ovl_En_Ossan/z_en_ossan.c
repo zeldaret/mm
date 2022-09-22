@@ -1573,6 +1573,7 @@ void EnOssan_DrawCursor(PlayState* play, EnOssan* this, f32 x, f32 y, f32 z, u8 
     (void)"../z_en_oB1.c";
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if (drawCursor != 0) {
         func_8012C654(play->state.gfxCtx);
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColor.r, this->cursorColor.g, this->cursorColor.b,
@@ -1587,6 +1588,7 @@ void EnOssan_DrawCursor(PlayState* play, EnOssan* this, f32 x, f32 y, f32 z, u8 
         dsdx = (1.0f / z) * 1024.0f;
         gSPTextureRectangle(OVERLAY_DISP++, ulx, uly, lrx, lry, G_TX_RENDERTILE, 0, 0, dsdx, dsdx);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -1605,6 +1607,7 @@ void EnOssan_DrawTextRec(PlayState* play, s32 r, s32 g, s32 b, s32 a, f32 x, f32
     (void)"../z_en_oB1.c";
 
     OPEN_DISPS(play->state.gfxCtx);
+
     gDPPipeSync(OVERLAY_DISP++);
     gDPSetPrimColor(OVERLAY_DISP++, 0, 0, r, g, b, a);
 
@@ -1621,6 +1624,7 @@ void EnOssan_DrawTextRec(PlayState* play, s32 r, s32 g, s32 b, s32 a, f32 x, f32
     dtdy = dy * unk;
 
     gSPTextureRectangle(OVERLAY_DISP++, ulx, uly, lrx, lry, G_TX_RENDERTILE, s, t, dsdx, dtdy);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -1631,6 +1635,7 @@ void EnOssan_DrawStickDirectionPrompts(PlayState* play, EnOssan* this) {
     (void)"../z_en_oB1.c";
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if (drawStickRightPrompt || drawStickLeftPrompt) {
         func_8012C654(play->state.gfxCtx);
         gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
@@ -1665,6 +1670,7 @@ void EnOssan_DrawStickDirectionPrompts(PlayState* play, EnOssan* this) {
                                 this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -1713,6 +1719,7 @@ void EnOssan_CuriosityShopMan_Draw(Actor* thisx, PlayState* play) {
     EnOssan* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     func_8012C28C(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
@@ -1720,6 +1727,7 @@ void EnOssan_CuriosityShopMan_Draw(Actor* thisx, PlayState* play) {
                           &this->actor);
     EnOssan_DrawCursor(play, this, this->cursorPos.x, this->cursorPos.y, this->cursorPos.z, this->drawCursor);
     EnOssan_DrawStickDirectionPrompts(play, this);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -1729,11 +1737,13 @@ void EnOssan_PartTimer_Draw(Actor* thisx, PlayState* play) {
     EnOssan* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     func_8012C28C(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnOssan_PartTimer_OverrideLimbDraw, EnOssan_PartTimer_PostLimbDraw, &this->actor);
     EnOssan_DrawCursor(play, this, this->cursorPos.x, this->cursorPos.y, this->cursorPos.z, this->drawCursor);
     EnOssan_DrawStickDirectionPrompts(play, this);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
