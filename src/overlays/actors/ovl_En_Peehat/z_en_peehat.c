@@ -194,7 +194,7 @@ void EnPeehat_Init(Actor* thisx, PlayState* play) {
             this->actor.shape.yOffset = -1000.0f;
         }
         Actor_SetScale(&this->actor, 0.036f);
-        this->actor.hintId = 0x48;
+        this->actor.hintId = TATL_HINT_ID_PEAHAT;
         func_80897498(this);
     } else {
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
@@ -205,7 +205,7 @@ void EnPeehat_Init(Actor* thisx, PlayState* play) {
         this->colliderCylinder.dim.radius = 20;
         this->colliderCylinder.dim.height = 15;
         this->colliderCylinder.dim.yShift = -5;
-        this->actor.hintId = 0x49;
+        this->actor.hintId = TATL_HINT_ID_PEAHAT_LARVA;
         this->colliderCylinder.base.ocFlags1 &= ~OC1_ON;
 
         func_80897A34(this);
