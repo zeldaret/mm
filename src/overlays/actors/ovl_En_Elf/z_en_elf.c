@@ -570,12 +570,12 @@ void func_8088D9BC(EnElf* this, PlayState* play) {
 
         case 3:
             targetYaw = Math_Atan2S_XY(-(this->actor.world.pos.z - player->actor.world.pos.z),
-                                         -(this->actor.world.pos.x - player->actor.world.pos.x));
+                                       -(this->actor.world.pos.x - player->actor.world.pos.x));
             break;
 
         case 2:
             targetYaw = Math_Atan2S_XY(this->actor.world.pos.z - player->actor.world.pos.z,
-                                         this->actor.world.pos.x - player->actor.world.pos.x);
+                                       this->actor.world.pos.x - player->actor.world.pos.x);
             break;
 
         default:

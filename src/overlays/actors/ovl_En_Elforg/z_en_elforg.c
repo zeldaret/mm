@@ -247,8 +247,7 @@ void EnElforg_MoveToTarget(EnElforg* this, Vec3f* targetPos) {
 
     this->actor.shape.yOffset += 100.0f * Math_SinS(this->timer << 9);
     EnElforg_ApproachTargetYPosition(this, targetPos);
-    targetAngle =
-        Math_Atan2S_XY(-(this->actor.world.pos.z - targetPos->z), -(this->actor.world.pos.x - targetPos->x));
+    targetAngle = Math_Atan2S_XY(-(this->actor.world.pos.z - targetPos->z), -(this->actor.world.pos.x - targetPos->x));
 
     if (this->targetSpeedXZ > 2.0f) {
         Math_SmoothStepToS(&this->actor.world.rot.y, targetAngle, 2, 0x400, 0x100);
