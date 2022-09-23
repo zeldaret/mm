@@ -33,12 +33,12 @@ void DmChar08_SpawnBubbles(DmChar08* this, PlayState* play);
 void func_80AAFCCC(DmChar08* this, PlayState* play);
 
 typedef enum {
-    /* 0 */ TURTLE_EYEMODE_0,
-    /* 1 */ TURTLE_EYEMODE_1,
-    /* 2 */ TURTLE_EYEMODE_2,
-    /* 3 */ TURTLE_EYEMODE_3,
-    /* 4 */ TURTLE_EYEMODE_4,
-    /* 5 */ TURTLE_EYEMODE_5,
+    /* 0 */ TURTLE_EYEMODE_BLINK_LEFT,
+    /* 1 */ TURTLE_EYEMODE_BLINK_STRAIGHT,
+    /* 2 */ TURTLE_EYEMODE_CLOSED,
+    /* 3 */ TURTLE_EYEMODE_LOOK_STRAIGHT,
+    /* 4 */ TURTLE_EYEMODE_UNUSED,
+    /* 5 */ TURTLE_EYEMODE_LOOK_RIGHT,
 } EyeMode;
 
 typedef enum {
@@ -83,7 +83,7 @@ static InitChainEntry sInitChain[] = {
 
 void DmChar08_UpdateEyes(DmChar08* this) {
     switch (this->eyeMode) {
-        case TURTLE_EYEMODE_0:
+        case TURTLE_EYEMODE_BLINK_LEFT:
             this->eyeIndex = 0;
             if (this->blinkTimer > 0) {
                 this->blinkTimer--;
@@ -98,7 +98,7 @@ void DmChar08_UpdateEyes(DmChar08* this) {
             }
             break;
 
-        case TURTLE_EYEMODE_1:
+        case TURTLE_EYEMODE_BLINK_STRAIGHT:
             this->eyeIndex = 4;
             if (this->blinkTimer > 0) {
                 this->blinkTimer--;
@@ -113,15 +113,15 @@ void DmChar08_UpdateEyes(DmChar08* this) {
             }
             break;
 
-        case TURTLE_EYEMODE_2:
+        case TURTLE_EYEMODE_CLOSED:
             this->eyeIndex = 2;
             break;
 
-        case TURTLE_EYEMODE_3:
+        case TURTLE_EYEMODE_LOOK_STRAIGHT:
             this->eyeIndex = 4;
             break;
 
-        case TURTLE_EYEMODE_5:
+        case TURTLE_EYEMODE_LOOK_RIGHT:
             this->eyeIndex = 8;
             break;
 
@@ -148,12 +148,12 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
     DmChar08* this = THIS;
 
     thisx->targetMode = 5;
-    this->eyeMode = TURTLE_EYEMODE_2;
+    this->eyeMode = TURTLE_EYEMODE_CLOSED;
     thisx->targetArrowOffset = 120.0f;
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gTurtleSkel, NULL, NULL, NULL, 0);
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    Actor_SetScale(&this->dyna.actor, 0.1f);
+    Actor_ProcessInitChain(thisx, sInitChain);
+    Actor_SetScale(thisx, 0.1f);
     this->unk_1F4 = 0;
     this->bubbleCount = 0;
     this->unk_1FF = 0;
@@ -199,12 +199,12 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
                 this->unk_1FF = 2;
                 this->animIndex = TURTLE_ANIM_FLOAT;
                 this->unk_203 = 0x63;
-                this->eyeMode = TURTLE_EYEMODE_1;
+                this->eyeMode = TURTLE_EYEMODE_BLINK_STRAIGHT;
                 this->unk_207 = 0;
                 this->unk_208 = 0;
                 thisx->flags |= ACTOR_FLAG_1;
                 if (gSaveContext.save.entrance == ENTRANCE(ZORA_CAPE, 8)) {
-                    this->eyeMode = TURTLE_EYEMODE_0;
+                    this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                     this->actionFunc = func_80AAFAC4;
                 } else {
                     this->actionFunc = func_80AAF8F4;
@@ -218,7 +218,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
             this->unk_1FF = 2;
             this->animIndex = TURTLE_ANIM_FLOAT;
             this->unk_203 = 0x63;
-            this->eyeMode = TURTLE_EYEMODE_0;
+            this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
             this->unk_207 = 0;
             this->unk_208 = 0;
             thisx->flags |= ACTOR_FLAG_1;
@@ -230,7 +230,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
             this->unk_1FF = 2;
             this->animIndex = TURTLE_ANIM_FLOAT;
             this->unk_203 = 0x63;
-            this->eyeMode = TURTLE_EYEMODE_0;
+            this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
             this->unk_207 = 0;
             this->unk_208 = 0;
             this->actionFunc = DmChar08_DoNothing;
@@ -248,7 +248,7 @@ void DmChar08_Destroy(Actor* thisx, PlayState* play) {
     }
 }
 
-s16 sBigTurtleOcarinaSoundLatch = false;
+static s16 sSuccessSoundAlreadyPlayed = false;
 
 void DmChar08_WaitForSong(DmChar08* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
@@ -257,12 +257,12 @@ void DmChar08_WaitForSong(DmChar08* this, PlayState* play) {
     if ((player2->stateFlags2 & PLAYER_STATE2_8000000) &&
         ((player2->actor.world.pos.x > -5780.0f) && (player2->actor.world.pos.x < -5385.0f) &&
          (player2->actor.world.pos.z > 1120.0f) && (player2->actor.world.pos.z < 2100.0f))) {
-        if (!sBigTurtleOcarinaSoundLatch) {
+        if (!sSuccessSoundAlreadyPlayed) {
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);
-            sBigTurtleOcarinaSoundLatch = true;
+            sSuccessSoundAlreadyPlayed = true;
         }
     } else {
-        sBigTurtleOcarinaSoundLatch = false;
+        sSuccessSoundAlreadyPlayed = false;
     }
     if ((player->transformation == PLAYER_FORM_ZORA) && (play->msgCtx.ocarinaMode == 3) &&
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_NEW_WAVE)) {
@@ -368,7 +368,7 @@ void func_80AAFB94(DmChar08* this, PlayState* play) {
 
 Color_RGBA8 sLargeTurtleBubblePrimColor = { 250, 200, 250, 100 };
 Color_RGBA8 sLargeTurtleBubbleEnvColor = { 80, 80, 80, 0 };
-Vec3f sLargeTurtleBubbelAccel = { 0.0f, -0.8f, 0.0f };
+Vec3f sLargeTurtleBubbleAccel = { 0.0f, -0.8f, 0.0f };
 
 void DmChar08_SpawnBubbles(DmChar08* this, PlayState* play) {
     s32 i;
@@ -377,11 +377,11 @@ void DmChar08_SpawnBubbles(DmChar08* this, PlayState* play) {
     velocity.x = (Rand_ZeroOne() - 0.5f) * 24.0f;
     velocity.y = -5.2f;
     velocity.z = 4.0f;
-    sLargeTurtleBubbelAccel.x = 0.0f;
-    sLargeTurtleBubbelAccel.y = 1.18f;
-    sLargeTurtleBubbelAccel.z = 0.0f;
+    sLargeTurtleBubbleAccel.x = 0.0f;
+    sLargeTurtleBubbleAccel.y = 1.18f;
+    sLargeTurtleBubbleAccel.z = 0.0f;
     for (i = 0; i < this->bubbleCount; i++) {
-        EffectSsDtBubble_SpawnCustomColor(play, &this->bubblePos, &velocity, &sLargeTurtleBubbelAccel,
+        EffectSsDtBubble_SpawnCustomColor(play, &this->bubblePos, &velocity, &sLargeTurtleBubbleAccel,
                                           &sLargeTurtleBubblePrimColor, &sLargeTurtleBubbleEnvColor,
                                           Rand_S16Offset(80, 130), 30, 0);
     }
@@ -481,11 +481,11 @@ void func_80AAFE88(DmChar08* this, PlayState* play) {
                     break;
 
                 case 6:
-                    this->eyeMode = TURTLE_EYEMODE_0;
+                    this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                     break;
 
                 case 7:
-                    this->eyeMode = TURTLE_EYEMODE_2;
+                    this->eyeMode = TURTLE_EYEMODE_CLOSED;
                     break;
 
                 case 8:
@@ -629,14 +629,14 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
             switch (this->unk_208) {
                 case 0:
                     this->animIndex = TURTLE_ANIM_YAWN;
-                    this->eyeMode = TURTLE_EYEMODE_2;
+                    this->eyeMode = TURTLE_EYEMODE_CLOSED;
                     this->unk_208++;
                     break;
 
                 case 1:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_FLOAT;
-                        this->eyeMode = TURTLE_EYEMODE_0;
+                        this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
@@ -648,14 +648,14 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
             switch (this->unk_208) {
                 case 0:
                     this->animIndex = TURTLE_ANIM_COUGH;
-                    this->eyeMode = TURTLE_EYEMODE_2;
+                    this->eyeMode = TURTLE_EYEMODE_CLOSED;
                     this->unk_208++;
                     break;
 
                 case 1:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_SPEAK1;
-                        this->eyeMode = TURTLE_EYEMODE_0;
+                        this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                         this->unk_208++;
                     }
                     break;
@@ -663,7 +663,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_FLOAT;
-                        this->eyeMode = TURTLE_EYEMODE_0;
+                        this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
@@ -678,9 +678,9 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                 case 0:
                     this->animIndex = TURTLE_ANIM_SPEAK1;
                     if (this->unk_207 >= 5) {
-                        this->eyeMode = TURTLE_EYEMODE_2;
+                        this->eyeMode = TURTLE_EYEMODE_CLOSED;
                     } else {
-                        this->eyeMode = TURTLE_EYEMODE_0;
+                        this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                     }
                     this->unk_208 = 2;
                     break;
@@ -688,7 +688,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_SPEAK2;
-                        this->eyeMode = TURTLE_EYEMODE_2;
+                        this->eyeMode = TURTLE_EYEMODE_CLOSED;
                         this->unk_208++;
                     }
                     break;
@@ -697,12 +697,12 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         if (this->unk_207 != 4) {
                             this->animIndex = TURTLE_ANIM_FLOAT;
-                            this->eyeMode = TURTLE_EYEMODE_0;
+                            this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                             this->unk_207 = 0;
                             this->unk_208 = 0;
                         } else {
                             this->animIndex = TURTLE_ANIM_SPEAK1;
-                            this->eyeMode = TURTLE_EYEMODE_0;
+                            this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                             this->unk_208++;
                         }
                     }
@@ -718,7 +718,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                 case 6:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_FLOAT;
-                        this->eyeMode = TURTLE_EYEMODE_0;
+                        this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
@@ -730,7 +730,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
             switch (this->unk_208) {
                 case 0:
                     this->animIndex = TURTLE_ANIM_SPEAK1;
-                    this->eyeMode = TURTLE_EYEMODE_0;
+                    this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                     this->unk_208++;
                     break;
 
@@ -744,7 +744,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                 case 4:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_SPEAK2;
-                        this->eyeMode = TURTLE_EYEMODE_2;
+                        this->eyeMode = TURTLE_EYEMODE_CLOSED;
                         this->unk_208++;
                     }
                     break;
@@ -752,7 +752,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                 case 5:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_FLOAT;
-                        this->eyeMode = TURTLE_EYEMODE_0;
+                        this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
@@ -764,7 +764,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
             switch (this->unk_208) {
                 case 0:
                     this->animIndex = TURTLE_ANIM_SPEAK1;
-                    this->eyeMode = TURTLE_EYEMODE_5;
+                    this->eyeMode = TURTLE_EYEMODE_LOOK_RIGHT;
                     this->unk_208++;
                     break;
 
@@ -777,7 +777,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_FLOAT;
-                        this->eyeMode = TURTLE_EYEMODE_0;
+                        this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
@@ -789,14 +789,14 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
             switch (this->unk_208) {
                 case 0:
                     this->animIndex = TURTLE_ANIM_SPEAK2;
-                    this->eyeMode = TURTLE_EYEMODE_2;
+                    this->eyeMode = TURTLE_EYEMODE_CLOSED;
                     this->unk_208++;
                     break;
 
                 case 1:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_SPEAK1;
-                        this->eyeMode = TURTLE_EYEMODE_2;
+                        this->eyeMode = TURTLE_EYEMODE_CLOSED;
                         this->unk_208++;
                     }
                     break;
@@ -804,7 +804,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_FLOAT;
-                        this->eyeMode = TURTLE_EYEMODE_0;
+                        this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
@@ -816,7 +816,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
             switch (this->unk_208) {
                 case 0:
                     this->animIndex = TURTLE_ANIM_SPEAK1;
-                    this->eyeMode = TURTLE_EYEMODE_0;
+                    this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                     this->unk_208++;
                     break;
 
@@ -832,7 +832,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_FLOAT;
-                        this->eyeMode = TURTLE_EYEMODE_0;
+                        this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                         this->unk_208++;
                     }
                     if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
@@ -843,7 +843,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                 case 3:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_COUGH;
-                        this->eyeMode = TURTLE_EYEMODE_2;
+                        this->eyeMode = TURTLE_EYEMODE_CLOSED;
                         this->unk_208++;
                     }
                     break;
@@ -851,7 +851,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                 case 4:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_FLOAT;
-                        this->eyeMode = TURTLE_EYEMODE_0;
+                        this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
@@ -862,27 +862,27 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
             switch (this->unk_208) {
                 case 0:
                     this->animIndex = TURTLE_ANIM_SPEAK1;
-                    this->eyeMode = TURTLE_EYEMODE_0;
+                    this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                     this->unk_208++;
                     break;
                 case 1:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_SPEAK2;
-                        this->eyeMode = TURTLE_EYEMODE_2;
+                        this->eyeMode = TURTLE_EYEMODE_CLOSED;
                         this->unk_208++;
                     }
                     break;
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_SPEAK1;
-                        this->eyeMode = TURTLE_EYEMODE_0;
+                        this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                         this->unk_208++;
                     }
                     break;
                 case 3:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_FLOAT;
-                        this->eyeMode = TURTLE_EYEMODE_0;
+                        this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
@@ -1083,9 +1083,9 @@ void DmChar08_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 TexturePtr sBigTurtleEyeTextures[] = {
-    gTurtleEyeHalfLeft2Tex, gTurtleEyeHalfLeftTex,     gTurtleEyeClosedTex,
+    gTurtleEyeOpenLeftTex, gTurtleEyeHalfLeftTex,     gTurtleEyeClosedTex,
     gTurtleEyeHalfLeftTex,  gTurtleEyeOpenStraightTex, gTurtleEyeHalfStraightTex,
-    gTurtleEyeClosedTex,    gTurtleEyeHalfStraightTex, gTurtleEyeHalfRightTex,
+    gTurtleEyeClosedTex,    gTurtleEyeHalfStraightTex, gTurtleEyeOpenRightTex,
 };
 
 void DmChar08_Draw(Actor* thisx, PlayState* play) {
