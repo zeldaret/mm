@@ -201,7 +201,7 @@ void func_80A5063C(EnDnb* this, PlayState* play) {
 void EnDnb_Draw(Actor* thisx, PlayState* play) {
     EnDnb* this = THIS;
 
-    if (play->actorCtx.unk4 != 0) {
+    if (play->actorCtx.lensMaskSize != 0) {
         func_80A50510(this, play);
     } else {
         func_80A5063C(this, play);

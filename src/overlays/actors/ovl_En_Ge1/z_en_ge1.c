@@ -73,7 +73,7 @@ typedef enum {
 } GerudoWhiteAnimations;
 
 void EnGe1_ChangeAnim(EnGe1* this, s16 animIndex, u8 mode, f32 morphFrames);
-void EnGe1_ShadowDraw(Actor* actor, Lights* lights, PlayState* play);
+void EnGe1_ShadowDraw(Actor* thisx, Lights* lights, PlayState* play);
 void EnGe1_Wait(EnGe1* this, PlayState* play);
 void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play);
 s32 EnGe1_ValidatePictograph(PlayState* play, Actor* thisx);

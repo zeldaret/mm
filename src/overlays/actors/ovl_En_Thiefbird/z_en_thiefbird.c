@@ -136,7 +136,7 @@ static s16 D_80C13664[] = { ITEM00_ARROWS_10,  ITEM00_BOMBS_B,   ITEM00_RUPEE_GR
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
-    ICHAIN_S8(hintId, 35, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_TAKKURI, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
