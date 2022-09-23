@@ -1084,8 +1084,8 @@ void DmChar08_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 
 TexturePtr sBigTurtleEyeTextures[] = {
     gTurtleEyeOpenLeftTex, gTurtleEyeHalfLeftTex,     gTurtleEyeClosedTex,
-    gTurtleEyeHalfLeftTex,  gTurtleEyeOpenStraightTex, gTurtleEyeHalfStraightTex,
-    gTurtleEyeClosedTex,    gTurtleEyeHalfStraightTex, gTurtleEyeOpenRightTex,
+    gTurtleEyeHalfLeftTex, gTurtleEyeOpenStraightTex, gTurtleEyeHalfStraightTex,
+    gTurtleEyeClosedTex,   gTurtleEyeHalfStraightTex, gTurtleEyeOpenRightTex,
 };
 
 void DmChar08_Draw(Actor* thisx, PlayState* play) {
