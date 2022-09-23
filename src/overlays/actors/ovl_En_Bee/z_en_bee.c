@@ -203,7 +203,7 @@ void func_80B5AC3C(EnBee* this, PlayState* play) {
         sp88.x += Math_SinS((this->actor.yawTowardsPlayer + ((f32)this->unk_20C)) + phi_fs1) * (rnd + 30.0f);
         sp88.y = (Math_SinS(this->unk_210) * 10.0f) + (player->actor.floorHeight + 40.0f);
         rnd = randPlusMinusPoint5Scaled(20.0f);
-        sp88.z += Math_CosS((f32)this->actor.yawTowardsPlayer + this->unk_20C + phi_fs1) * (rnd + 30.0f);
+        sp88.z += Math_CosS(((f32)this->actor.yawTowardsPlayer + this->unk_20C) + phi_fs1) * (rnd + 30.0f);
         Math_Vec3f_Copy(&this->unk_21C[i], &sp88);
         phi_fs1 -= 16384.0f;
     }
