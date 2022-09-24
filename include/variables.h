@@ -362,8 +362,6 @@ extern ActorInit En_A_Obj_InitVars;
 extern ColliderCylinderInit enAObjCylinderInit;
 extern InitChainEntry enAObjInitVar;
 extern Gfx* enAObjDisplayLists[2];
-extern UNK_PTR D_801ADF30[5];
-extern UNK_PTR D_801ADF44[12];
 extern u8 sDropTable[DROP_TABLE_SIZE * DROP_TABLE_NUMBER];
 extern u8 sDropTableAmounts[DROP_TABLE_SIZE * DROP_TABLE_NUMBER];
 extern s32 D_801AE194[32];
@@ -2968,7 +2966,7 @@ extern f64 D_801E0EB0;
 // extern UNK_TYPE4 D_801E1068;
 extern UNK_PTR D_801E10B0;
 extern const s16 gAudioTatumInit[];
-extern const AudioContextInitSizes gAudioContextInitSizes;
+extern const AudioHeapInitSizes gAudioHeapInitSizes;
 // extern UNK_TYPE4 D_801E1108;
 // extern UNK_TYPE4 D_801E110C;
 extern u8 gSoundFontTable[];
@@ -3489,7 +3487,7 @@ extern ActiveSfx gActiveSfx[7][3];
 extern AudioContext gAudioContext; // at 0x80200C70
 extern void (*D_80208E68)(void);
 extern u32 (*D_80208E6C)(s8 value, SequenceChannel* channel);
-extern s32 (*D_80208E70)(SoundFontSample*, s32, s8, s32);
+extern s32 (*D_80208E70)(Sample*, s32, s8, s32);
 extern Acmd* (*D_80208E74)(Acmd*, s32, s32);
 
 // post-code buffers

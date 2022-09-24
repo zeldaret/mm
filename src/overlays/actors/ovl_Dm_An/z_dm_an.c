@@ -160,7 +160,7 @@ Actor* func_80C1C8E8(PlayState* play) {
         }
 
         tempActor = foundActor->next;
-        if (tempActor == NULL || NULL) {
+        if (tempActor == NULL || false) {
             foundActor = NULL;
             break;
         }

@@ -1,7 +1,7 @@
 /*
  * File: z_bg_dblue_movebg.c
  * Overlay: ovl_Bg_Dblue_Movebg
- * Description: Great Bay Temple - Waterwheels and push switches
+ * Description: Great Bay Temple - Waterwheels, push switches, gear shafts, and whirlpools
  */
 
 #include "prevent_bss_reordering.h"
@@ -57,42 +57,42 @@ const ActorInit Bg_Dblue_Movebg_InitVars = {
     (ActorFunc)BgDblueMovebg_Draw,
 };
 
-Gfx* D_80A2B8AC[] = {
+static Gfx* sOpaDLists[] = {
     NULL,
-    object_dblue_object_DL_0069D8,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    object_dblue_object_DL_004848,
-    object_dblue_object_DL_0061B8,
+    gGreatBayTempleObjectTwoWaySwitchDL,
     NULL,
     NULL,
     NULL,
     NULL,
-};
-
-Gfx* D_80A2B8DC[] = {
-    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, object_dblue_object_DL_00CAA0, NULL,
-};
-
-CollisionHeader* D_80A2B90C[] = {
-    NULL,
-    &object_dblue_object_Colheader_006EA8,
+    gGreatBayTempleObjectGearShaftWithPlatformsDL,
+    gGreatBayTempleObjectOneWaySwitchDL,
     NULL,
     NULL,
-    NULL,
-    &object_dblue_object_Colheader_00D3DC,
-    &object_dblue_object_Colheader_005D28,
-    &object_dblue_object_Colheader_00714C,
-    &object_dblue_object_Colheader_00AED0,
-    &object_dblue_object_Colheader_00AED0,
     NULL,
     NULL,
 };
 
-AnimatedMaterial* D_80A2B93C[] = {
-    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, object_dblue_object_Matanimheader_00CC18, NULL,
+static Gfx* sXluDLists[] = {
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, gGreatBayTempleObjectWhirlpoolDL, NULL,
+};
+
+static CollisionHeader* sColHeaders[] = {
+    NULL,
+    &gGreatBayTempleObjectTwoWaySwitchCol,
+    NULL,
+    NULL,
+    NULL,
+    &gGreatBayTempleObjectUnusedCol,
+    &gGreatBayTempleObjectGearShaftWithPlatformsCol,
+    &gGreatBayTempleObjectOneWaySwitchCol,
+    &gGreatBayTempleObjectWaterwheelCol,
+    &gGreatBayTempleObjectWaterwheelCol,
+    NULL,
+    NULL,
+};
+
+static AnimatedMaterial* sTexAnims[] = {
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, gGreatBayTempleObjectWhirlpoolTexAnim, NULL,
 };
 
 s16 D_80A2B96C[] = { 0, 0x16C, -0x16C, 0 };
@@ -189,13 +189,13 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
         D_80A2BBF4.unk_01 = 1;
     }
 
-    if (D_80A2B90C[this->unk_160] != NULL) {
-        DynaPolyActor_LoadMesh(play, &this->dyna, D_80A2B90C[this->unk_160]);
+    if (sColHeaders[this->unk_160] != NULL) {
+        DynaPolyActor_LoadMesh(play, &this->dyna, sColHeaders[this->unk_160]);
     }
 
-    this->unk_164 = D_80A2B8AC[this->unk_160];
-    this->unk_168 = D_80A2B8DC[this->unk_160];
-    this->unk_16C = D_80A2B93C[this->unk_160];
+    this->opaDList = sOpaDLists[this->unk_160];
+    this->xluDList = sXluDLists[this->unk_160];
+    this->texAnim = sTexAnims[this->unk_160];
 
     SubS_FillCutscenesList(&this->dyna.actor, this->unk_1B6, ARRAY_COUNT(this->unk_1B6));
 
@@ -341,9 +341,9 @@ void func_80A2A1E0(BgDblueMovebg* this, PlayState* play) {
     this->dyna.actor.shape.rot.y += this->unk_1CC;
 
     if (play->roomCtx.currRoom.num == 0) {
-        this->unk_164 = object_dblue_object_DL_004848;
+        this->opaDList = gGreatBayTempleObjectGearShaftWithPlatformsDL;
     } else if (play->roomCtx.currRoom.num == 8) {
-        this->unk_164 = NULL;
+        this->opaDList = NULL;
     }
 
     if (play->roomCtx.currRoom.num != this->unk_170) {
@@ -678,9 +678,9 @@ void func_80A2AED0(BgDblueMovebg* this, PlayState* play) {
     }
 
     if (play->roomCtx.currRoom.num == 0) {
-        this->unk_164 = object_dblue_object_DL_008778;
+        this->opaDList = gGreatBayTempleObjectWaterwheelDL;
     } else if (play->roomCtx.currRoom.num == 8) {
-        this->unk_164 = object_dblue_object_DL_00A528;
+        this->opaDList = gGreatBayTempleObjectWaterwheelWithFakeGearDL;
     }
 
     if (this == D_80A2BBF0) {
@@ -756,7 +756,7 @@ void func_80A2B308(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, this->unk_164);
+    gSPDisplayList(POLY_OPA_DISP++, this->opaDList);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -774,34 +774,34 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if ((this->unk_160 == 9) || (this->unk_160 == 8) || (this->dyna.actor.flags & ACTOR_FLAG_40)) {
-        if (this->unk_16C != NULL) {
-            AnimatedMat_Draw(play, Lib_SegmentedToVirtual(this->unk_16C));
+        if (this->texAnim != NULL) {
+            AnimatedMat_Draw(play, Lib_SegmentedToVirtual(this->texAnim));
         }
 
-        if ((this->unk_164 != 0) || (this->unk_160 == 6)) {
+        if ((this->opaDList != NULL) || (this->unk_160 == 6)) {
             gfx2 = Gfx_CallSetupDL(POLY_OPA_DISP, 0x19);
 
             gSPMatrix(&gfx2[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             if (this->unk_160 == 6) {
-                gSPDisplayList(&gfx2[1], object_dblue_object_DL_0052B8);
-                if (this->unk_164 != 0) {
-                    gSPDisplayList(&gfx2[2], this->unk_164);
+                gSPDisplayList(&gfx2[1], gGreatBayTempleObjectGearShaftDL);
+                if (this->opaDList != NULL) {
+                    gSPDisplayList(&gfx2[2], this->opaDList);
                     POLY_OPA_DISP = &gfx2[3];
                 } else {
                     POLY_OPA_DISP = &gfx2[2];
                 }
             } else {
-                gSPDisplayList(&gfx2[1], this->unk_164);
+                gSPDisplayList(&gfx2[1], this->opaDList);
                 POLY_OPA_DISP = &gfx2[2];
             }
         }
 
-        if (this->unk_168 != NULL) {
+        if (this->xluDList != NULL) {
             gfx = func_8012C2B4(POLY_XLU_DISP);
 
             gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(&gfx[1], this->unk_168);
+            gSPDisplayList(&gfx[1], this->xluDList);
 
             POLY_XLU_DISP = &gfx[2];
         }
@@ -812,7 +812,7 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
     CLOSE_DISPS(play->state.gfxCtx);
 
     if ((this->unk_160 == 8) && (this->unk_172 & 0x20)) {
-        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&object_dblue_object_Matanimheader_00CE00));
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gGreatBayTempleObjectWaterwheelSplashTexAnim));
 
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -844,7 +844,7 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
 
                     gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                     gDPSetEnvColor(gfx++, 255, 255, 255, this->unk_1D8[j][i]);
-                    gSPDisplayList(gfx++, object_dblue_object_DL_00CD10);
+                    gSPDisplayList(gfx++, gGreatBayTempleObjectWaterwheelSplashDL);
 
                     Matrix_Pop();
                 }
