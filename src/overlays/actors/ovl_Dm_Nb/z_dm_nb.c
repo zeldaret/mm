@@ -28,22 +28,22 @@ const ActorInit Dm_Nb_InitVars = {
     (ActorFunc)DmNb_Draw,
 };
 
-static AnimationInfoS D_80C1E200[] = { { &object_nb_Anim_000990, 1.0f, 0, -1, ANIMMODE_LOOP, 0 } };
+static AnimationInfoS sAnimationInfo[] = { { &object_nb_Anim_000990, 1.0f, 0, -1, ANIMMODE_LOOP, 0 } };
 
 s32 func_80C1DED0(DmNb* this, s32 arg1) {
     s32 ret = false;
 
     if (arg1 != this->unk1F0) {
         this->unk1F0 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80C1E200, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
     }
     return ret;
 }
 
 void func_80C1DF18(DmNb* this, PlayState* play) {
     s32 sp2C[] = { 0, 0, 0, 0, 0 };
-    u16 actionUnk0;
-    s32 actionIndex;
+    u16 csAction;
+    s32 csActionIndex;
 
     if (play->csCtx.state != 0) {
         if (this->unk1F8 == 0) {
@@ -51,14 +51,14 @@ void func_80C1DF18(DmNb* this, PlayState* play) {
             this->unk1F8 = 1;
             this->unk1F4 = this->unk1F0;
         }
-        if (Cutscene_CheckActorAction(play, 562)) {
-            actionIndex = Cutscene_GetActorActionIndex(play, 562);
-            actionUnk0 = play->csCtx.actorActions[actionIndex]->action;
-            if (this->unk1EC != (actionUnk0 & 0xFF)) {
-                this->unk1EC = actionUnk0;
-                func_80C1DED0(this, sp2C[actionUnk0]);
+        if (Cutscene_CheckActorAction(play, 0x232)) {
+            csActionIndex = Cutscene_GetActorActionIndex(play, 0x232);
+            csAction = play->csCtx.actorActions[csActionIndex]->action;
+            if (this->unk1EC != (u8)csAction) {
+                this->unk1EC = csAction;
+                func_80C1DED0(this, sp2C[csAction]);
             }
-            Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+            Cutscene_ActorTranslateAndYaw(&this->actor, play, csActionIndex);
         }
     } else if (this->unk1F8 != 0) {
         this->unk1F8 = 0;

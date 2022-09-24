@@ -144,7 +144,7 @@ void ObjTsubo_SpawnGoldSkulltula(ObjTsubo* this, PlayState* play, s32 arg2) {
     if (func_809275C0(this, play)) {
         params = (OBJ_TSUBO_P001F(&this->actor) << 2) | 0xFF01;
         child = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->actor.world.pos.x, this->actor.world.pos.y,
-                            this->actor.world.pos.z, 0, (u32)Rand_Next() >> 0x10, 0, params);
+                            this->actor.world.pos.z, 0, Rand_Next() >> 0x10, 0, params);
         if (child != NULL) {
             child->parent = &this->actor;
             child->velocity.y = 0.0f;
@@ -498,7 +498,7 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
                 this->actor.flags &= ~ACTOR_FLAG_10;
             }
         }
-        if ((this->actor.xzDistToPlayer < 800.0f) || (gSaveContext.save.entranceIndex == 0xD010)) {
+        if ((this->actor.xzDistToPlayer < 800.0f) || (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1))) {
             Collider_UpdateCylinder(&this->actor, &this->cylinderCollider);
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->cylinderCollider.base);
             if (this->actor.xzDistToPlayer < 150.0f) {
@@ -507,8 +507,8 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
                     s16 yawDiff = this->actor.yawTowardsPlayer - GET_PLAYER(play)->actor.world.rot.y;
                     s32 absYawDiff = ABS_ALT(yawDiff);
 
-                    if (absYawDiff > DEGF_TO_BINANG(120.0f)) {
-                        Actor_PickUp(&this->actor, play, 0, 36.0f, 30.0f);
+                    if (absYawDiff > (0x10000 / 3)) {
+                        Actor_PickUp(&this->actor, play, GI_NONE, 36.0f, 30.0f);
                     }
                 }
             }
@@ -665,7 +665,7 @@ void ObjTsubo_Update(Actor* thisx, PlayState* play) {
     }
     if (!this->unk_197) {
         if (this->unk_198) {
-            play->actorCtx.unk5 |= 8;
+            play->actorCtx.flags |= ACTORCTX_FLAG_3;
             this->actor.flags |= ACTOR_FLAG_10;
         }
         if (this->unk_19A >= 0) {

@@ -279,7 +279,7 @@ void EnFall_Setup(EnFall* this, PlayState* play) {
                 this->actor.draw = NULL;
                 this->actionFunc = EnFall_MoonsTear_Fall;
                 Actor_SetScale(&this->actor, 0.02f);
-                if (!(play->actorCtx.unk5 & 2)) {
+                if (!(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
                     Actor_MarkForDeath(&this->actor);
                 }
                 moon = EnFall_MoonsTear_GetTerminaFieldMoon(play);
@@ -341,11 +341,11 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
                         ActorCutscene_SetIntentToPlay(0xB);
                     }
                 } else if (play->csCtx.frames > 1600) {
-                    play->nextEntranceIndex = 0x2C00;
+                    play->nextEntrance = ENTRANCE(CLOCK_TOWER_ROOFTOP, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF2;
-                    play->sceneLoadFlag = 0x14;
-                    play->unk_1887F = 2;
-                    gSaveContext.nextTransition = 2;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
+                    play->transitionType = TRANS_TYPE_02;
+                    gSaveContext.nextTransitionType = TRANS_TYPE_02;
                     sGiantsCutsceneState = 9;
                 }
                 break;

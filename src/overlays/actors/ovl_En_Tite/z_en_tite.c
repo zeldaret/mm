@@ -125,7 +125,7 @@ static Color_RGBA8 D_80896B40 = { 180, 180, 180, 255 };
 static Vec3f D_80896B44 = { 0.0f, 0.45f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 70, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_BLUE_TEKTITE, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32(terminalVelocity, -40, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
@@ -811,7 +811,7 @@ void func_80895A10(EnTite* this) {
     s32 pad;
     s16 rand;
 
-    Animation_Change(&this->skelAnime, &object_tite_Anim_000A14, 2.0f, 0.0f, 0.0f, 0, 4.0f);
+    Animation_Change(&this->skelAnime, &object_tite_Anim_000A14, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 4.0f);
     this->actor.speedXZ = 0.0f;
     rand = Rand_S16Offset(20, 20);
     this->unk_2BC = ((Rand_ZeroOne() < 0.5f) ? -1 : 1) * rand;

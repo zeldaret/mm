@@ -71,7 +71,7 @@ void ObjWarpstone_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
     Actor_SetFocus(&this->dyna.actor, 40.0f);
 
-    if (!OBJ_WARPSTONE_IS_ACTIVATED(OBJ_WARPSTONE_GET_ID(this))) {
+    if (!OBJ_WARPSTONE_IS_ACTIVATED(OBJ_WARPSTONE_GET_ID(&this->dyna.actor))) {
         ObjWarpstone_SetupAction(this, ObjWarpstone_ClosedIdle);
     } else {
         ObjWarpstone_SetupAction(this, ObjWarpstone_OpenedIdle);
@@ -110,7 +110,7 @@ s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, PlayState* play) {
 s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, PlayState* play) {
     if (this->openingCSTimer++ >= OBJ_WARPSTONE_TIMER_ACTIVATE_THRESHOLD) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Sram_ActivateOwl(OBJ_WARPSTONE_GET_ID(this));
+        Sram_ActivateOwl(OBJ_WARPSTONE_GET_ID(&this->dyna.actor));
         ObjWarpstone_SetupAction(this, ObjWarpstone_OpenedIdle);
     } else if (this->openingCSTimer < OBJ_WARPSTONE_TIMER_OPEN_THRESHOLD) {
         Math_StepToF(&this->dyna.actor.velocity.x, 0.01f, 0.001f);
@@ -138,13 +138,13 @@ void ObjWarpstone_Update(Actor* thisx, PlayState* play) {
     if (this->isTalking) {
         if (Actor_TextboxIsClosing(&this->dyna.actor, play)) {
             this->isTalking = false;
-        } else if ((Message_GetState(&play->msgCtx) == 4) && Message_ShouldAdvance(play)) {
+        } else if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
             if (play->msgCtx.choiceIndex != 0) {
                 func_8019F208();
                 play->msgCtx.msgMode = 0x4D;
                 play->msgCtx.unk120D6 = 0;
                 play->msgCtx.unk120D4 = 0;
-                gSaveContext.save.owlSaveLocation = OBJ_WARPSTONE_GET_ID(this);
+                gSaveContext.save.owlSaveLocation = OBJ_WARPSTONE_GET_ID(&this->dyna.actor);
             } else {
                 func_801477B4(play);
             }

@@ -1,5 +1,8 @@
 ﻿<Root>
     <File Name="object_kamejima" Segment="6">
+        <Array Name="object_kamejima_Vtx_000000" Count="20" Offset="0x0">
+            <Vtx/>
+        </Array>
         <DList Name="object_kamejima_DL_000140" Offset="0x140" />
         <Texture Name="object_kamejima_Tex_0002D8" OutName="tex_0002D8" Format="i8" Width="32" Height="64" Offset="0x2D8" />
         <Texture Name="object_kamejima_Tex_000AD8" OutName="tex_000AD8" Format="i8" Width="64" Height="64" Offset="0xAD8" />
@@ -66,7 +69,7 @@
         <Limb Name="object_kamejima_Standardlimb_00E6C8" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_15" Offset="0xE6C8" />
         <Limb Name="object_kamejima_Standardlimb_00E6D4" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_16" Offset="0xE6D4" />
         <Limb Name="object_kamejima_Standardlimb_00E6E0" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_17" Offset="0xE6E0" />
-        <Skeleton Name="object_kamejima_Skel_00E748" Type="Flex" LimbType="Standard" LimbNone="OBJECT_KAMEJIMA_LIMB_NONE" LimbMax="OBJECT_KAMEJIMA_LIMB_MAX" EnumName="object_kamejima_Limbs" Offset="0xE748" />
+        <Skeleton Name="object_kamejima_Skel_00E748" Type="Flex" LimbType="Standard" LimbNone="OBJECT_KAMEJIMA_LIMB_NONE" LimbMax="OBJECT_KAMEJIMA_LIMB_MAX" EnumName="ObjectKamejimaLimb" Offset="0xE748" />
         <Animation Name="object_kamejima_Anim_00EF98" Offset="0xEF98" />
         <Animation Name="object_kamejima_Anim_0100CC" Offset="0x100CC" />
         <Animation Name="object_kamejima_Anim_010918" Offset="0x10918" />

@@ -3,15 +3,23 @@
 
 #include "global.h"
 
+#define EFFKAMEJIMAWAVE_GET_F(thisx) ((thisx)->params & 0xF)
+
 struct EffKamejimaWave;
 
 typedef void (*EffKamejimaWaveActionFunc)(struct EffKamejimaWave*, PlayState*);
 
 typedef struct EffKamejimaWave {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x8];
-    /* 0x014C */ EffKamejimaWaveActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ f32 scaleOffset;
+    /* 0x148 */ UNK_TYPE1 pad148[4];
+    /* 0x14C */ EffKamejimaWaveActionFunc actionFunc;
 } EffKamejimaWave; // size = 0x150
+
+typedef enum params {
+    /* 0x0 */ EFFKAMEJIMAWAVE_PARAMS_0,
+    /* 0x1 */ EFFKAMEJIMAWAVE_PARAMS_1
+} EffKamejimaWaveParams;
 
 extern const ActorInit Eff_Kamejima_Wave_InitVars;
 

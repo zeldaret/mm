@@ -16,10 +16,6 @@
 
 #define THIS ((DoorSpiral*)thisx)
 
-#define GET_ORIENTATION_PARAM(this) ((((Actor*)(this))->params >> 7) & 0x1)
-#define GET_UNK145_PARAM(this) ((((Actor*)(this))->params >> 8) & 0x3)
-#define GET_TRANSITION_ID_PARAM(this) ((u16)((Actor*)(this))->params >> 10)
-
 typedef enum {
     /* 0 */ SPIRAL_OVERWORLD, // does not display anything as there is not a DL in GAMEPLAY_KEEP for it
     /* 1 */ SPIRAL_DUNGEON,
@@ -179,7 +175,7 @@ static InitChainEntry sInitChain[] = {
 void DoorSpiral_Init(Actor* thisx, PlayState* play) {
     DoorSpiral* this = THIS;
     s32 pad;
-    s32 transition = GET_TRANSITION_ID_PARAM(thisx);
+    s32 transition = DOORSPIRAL_GET_TRANSITION_ID(thisx);
     s8 objBankId;
 
     if (this->actor.room != play->doorCtx.transitionActorList[transition].sides[0].room) {
@@ -188,8 +184,8 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play) {
     }
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->unk145 = GET_UNK145_PARAM(thisx); // set but never used
-    this->orientation = GET_ORIENTATION_PARAM(thisx);
+    this->unk145 = DOORSPIRAL_GET_UNK145(thisx); // set but never used
+    this->orientation = DOORSPIRAL_GET_ORIENTATION(thisx);
     this->objectType = DoorSpiral_GetObjectType(play);
     objBankId = Object_GetIndex(&play->objectCtx, sSpiralObjectInfo[this->objectType].objectBankId);
     this->bankIndex = objBankId;
@@ -204,7 +200,7 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play) {
 }
 
 void DoorSpiral_Destroy(Actor* thisx, PlayState* play) {
-    s32 transition = GET_TRANSITION_ID_PARAM(thisx);
+    s32 transition = DOORSPIRAL_GET_TRANSITION_ID(thisx);
 
     play->doorCtx.transitionActorList[transition].id *= -1;
 }
@@ -246,7 +242,7 @@ f32 DoorSpiral_GetDistFromPlayer(PlayState* play, DoorSpiral* this, f32 yOffset,
 s32 DoorSpiral_PlayerShouldClimb(DoorSpiral* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (!Player_InCsMode(&play->state)) {
+    if (!Player_InCsMode(play)) {
         SpiralInfo* spiralInfo = &sSpiralInfo[this->spiralType];
         f32 dist = DoorSpiral_GetDistFromPlayer(play, this, 0.0f, spiralInfo->spiralWidth, spiralInfo->spiralHeight);
 
@@ -281,7 +277,7 @@ void DoorSpiral_Wait(DoorSpiral* this, PlayState* play) {
         player->doorType = 4;
         player->doorDirection = this->orientation;
         player->doorActor = &this->actor;
-        transition = GET_TRANSITION_ID_PARAM(this);
+        transition = DOORSPIRAL_GET_TRANSITION_ID(&this->actor);
         player->doorNext = ((u16)play->doorCtx.transitionActorList[transition].params) >> 10;
 
         func_80122F28(player);

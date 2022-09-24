@@ -21,7 +21,7 @@
         <Limb Name="object_box_Standardlimb_00666C" Type="Standard" EnumName="OBJECT_BOX_CHEST_LIMB_02" Offset="0x666C" />
         <Limb Name="object_box_Standardlimb_006678" Type="Standard" EnumName="OBJECT_BOX_CHEST_LIMB_03" Offset="0x6678" />
         <Limb Name="object_box_Standardlimb_006684" Type="Standard" EnumName="OBJECT_BOX_CHEST_LIMB_04" Offset="0x6684" />
-        <Skeleton Name="gBoxChestSkel" Type="Normal" LimbType="Standard" LimbNone="OBJECT_BOX_CHEST_LIMB_NONE" LimbMax="OBJECT_BOX_CHEST_LIMB_MAX" EnumName="object_box_Chest_Limbs" Offset="0x66A0" />
+        <Skeleton Name="gBoxChestSkel" Type="Normal" LimbType="Standard" LimbNone="OBJECT_BOX_CHEST_LIMB_NONE" LimbMax="OBJECT_BOX_CHEST_LIMB_MAX" EnumName="ObjectBoxChestLimb" Offset="0x66A0" />
         <CurveAnimation Name="gBoxLightAdultCurveAnim" SkelOffset="0x7D78" Offset="0x6A20"/>
         <CurveAnimation Name="gBoxLightChildCurveAnim" SkelOffset="0x7D78" Offset="0x6E30"/>
         <Texture Name="gBoxLightTex" OutName="box_light_tex" Format="i8" Width="64" Height="32" Offset="0x6E40" />
@@ -44,7 +44,7 @@
         <Limb Name="object_box_Curvelimb_007D1C" Type="Curve" EnumName="OBJECT_BOX_LIGHT_LIMB_12" Offset="0x7D1C" />
         <Limb Name="object_box_Curvelimb_007D28" Type="Curve" EnumName="OBJECT_BOX_LIGHT_LIMB_13" Offset="0x7D28" />
         <Limb Name="object_box_Curvelimb_007D34" Type="Curve" EnumName="OBJECT_BOX_LIGHT_LIMB_14" Offset="0x7D34" />
-        <Skeleton Name="gBoxLightCurveSkel" Type="Curve" LimbType="Curve" LimbNone="OBJECT_BOX_LIGHT_LIMB_NONE" LimbMax="OBJECT_BOX_LIGHT_LIMB_MAX" EnumName="object_box_Light_Limbs" Offset="0x7D78" />
+        <Skeleton Name="gBoxLightCurveSkel" Type="Curve" LimbType="Curve" LimbNone="OBJECT_BOX_LIGHT_LIMB_NONE" LimbMax="OBJECT_BOX_LIGHT_LIMB_MAX" EnumName="ObjectBoxLightLimb" Offset="0x7D78" />
         <Animation Name="gBoxBigChestOpenGoronAnim" Offset="0x7E54" />
         <Animation Name="gBoxBigChestOpenDekuAnim" Offset="0x7F30" />
         <Blob Name="object_box_zeroes_unk_00007F40" Size="0xA0" Offset="0x7F40" />

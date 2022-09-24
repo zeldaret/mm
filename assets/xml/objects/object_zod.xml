@@ -44,7 +44,7 @@
         <Limb Name="object_zod_Standardlimb_00D610" Type="Standard" EnumName="OBJECT_ZOD_LIMB_07" Offset="0xD610" />
         <Limb Name="object_zod_Standardlimb_00D61C" Type="Standard" EnumName="OBJECT_ZOD_LIMB_08" Offset="0xD61C" />
         <Limb Name="object_zod_Standardlimb_00D628" Type="Standard" EnumName="OBJECT_ZOD_LIMB_09" Offset="0xD628" />
-        <Skeleton Name="object_zod_Skel_00D658" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZOD_LIMB_NONE" LimbMax="OBJECT_ZOD_LIMB_MAX" EnumName="object_zod_Limbs" Offset="0xD658" />
+        <Skeleton Name="object_zod_Skel_00D658" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZOD_LIMB_NONE" LimbMax="OBJECT_ZOD_LIMB_MAX" EnumName="ObjectZodLimb" Offset="0xD658" />
         <Animation Name="object_zod_Anim_00D9B0" Offset="0xD9B0" />
     </File>
 </Root>

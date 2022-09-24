@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_icefloe.h"
+#include "objects/object_icefloe/object_icefloe.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -15,7 +16,13 @@ void BgIcefloe_Destroy(Actor* thisx, PlayState* play);
 void BgIcefloe_Update(Actor* thisx, PlayState* play);
 void BgIcefloe_Draw(Actor* thisx, PlayState* play);
 
-#if 0
+void func_80AC4A80(BgIcefloe* this, PlayState* play);
+void BgIcefloe_Grow(BgIcefloe* this, PlayState* play);
+void func_80AC4C18(BgIcefloe* this);
+void func_80AC4D2C(BgIcefloe* this, PlayState* play);
+void func_80AC4C34(BgIcefloe* this, PlayState* play);
+void func_80AC4CF0(BgIcefloe* this);
+
 const ActorInit Bg_Icefloe_InitVars = {
     ACTOR_BG_ICEFLOE,
     ACTORCAT_BG,
@@ -27,35 +34,144 @@ const ActorInit Bg_Icefloe_InitVars = {
     (ActorFunc)BgIcefloe_Update,
     (ActorFunc)BgIcefloe_Draw,
 };
+static BgIcefloe* sSpawnedInstances[] = { NULL, NULL, NULL };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80AC4F3C[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 0, ICHAIN_STOP),
 };
 
-#endif
+static s32 numberSpawned;
 
-extern InitChainEntry D_80AC4F3C[];
+void BgIcefloe_Init(Actor* thisx, PlayState* play) {
+    BgIcefloe* this = THIS;
 
-extern UNK_TYPE D_060001E0;
-extern UNK_TYPE D_06000C90;
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gIcefloePlatformCol);
+    if (numberSpawned >= ARRAY_COUNT(sSpawnedInstances)) {
+        s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/BgIcefloe_Init.s")
+        if ((sSpawnedInstances[0] != NULL) && (sSpawnedInstances[0]->dyna.actor.update != NULL) &&
+            (sSpawnedInstances[0]->actionFunc != func_80AC4D2C)) {
+            func_80AC4CF0(sSpawnedInstances[0]);
+        }
+        for (i = 0; i < ARRAY_COUNT(sSpawnedInstances) - 1; i++) {
+            sSpawnedInstances[i] = sSpawnedInstances[i + 1];
+        }
+        sSpawnedInstances[ARRAY_COUNT(sSpawnedInstances) - 1] = this;
+    } else {
+        sSpawnedInstances[numberSpawned] = this;
+    }
+    numberSpawned++;
+    this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 10.0f;
+    func_80AC4A80(this, play);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/BgIcefloe_Destroy.s")
+void BgIcefloe_Destroy(Actor* thisx, PlayState* play) {
+    BgIcefloe* this = THIS;
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4A80.s")
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+    numberSpawned--;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4AE8.s")
+    for (i = 0; i < 3; i++) {
+        if (sSpawnedInstances[i] == this) {
+            sSpawnedInstances[i] = NULL;
+            break;
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4C18.s")
+void func_80AC4A80(BgIcefloe* this, PlayState* play) {
+    this->timer = 20;
+    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &this->dyna.actor.world.pos, &this->dyna.actor.projectedPos,
+                                 &this->dyna.actor.projectedW);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_ICE_STAND_APPEAR);
+    this->actionFunc = BgIcefloe_Grow;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4C34.s")
+static Vec3f sIceBlockAccel = { 0.0f, -0.5f, 0.0f };
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4CF0.s")
+void BgIcefloe_Grow(BgIcefloe* this, PlayState* play) {
+    Vec3f velocity;
+    Vec3f position;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4D2C.s")
+    velocity.x = randPlusMinusPoint5Scaled(6.0f);
+    velocity.z = randPlusMinusPoint5Scaled(6.0f);
+    velocity.y = Rand_ZeroFloat(4.0f) + 4.0f;
+    this->dyna.actor.scale.x += (0.65f * 0.01f);
+    this->dyna.actor.scale.z += (0.65f * 0.01f);
+    this->dyna.actor.scale.y += (0.65f * 0.01f);
+    position.x = this->dyna.actor.world.pos.x + (velocity.x * this->dyna.actor.scale.x * 75.0f);
+    position.z = this->dyna.actor.world.pos.z + (velocity.z * this->dyna.actor.scale.z * 75.0f);
+    position.y = this->dyna.actor.world.pos.y + (300.0f * this->dyna.actor.scale.y);
+    EffectSsIceBlock_Spawn(play, &position, &velocity, &sIceBlockAccel, Rand_S16Offset(10, 10));
+    this->timer--;
+    if (this->timer == 0) {
+        func_80AC4C18(this);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/BgIcefloe_Update.s")
+void func_80AC4C18(BgIcefloe* this) {
+    this->timer = this->dyna.actor.params;
+    this->actionFunc = func_80AC4C34;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/BgIcefloe_Draw.s")
+void func_80AC4C34(BgIcefloe* this, PlayState* play) {
+    WaterBox* water;
+
+    this->timer--;
+    if (this->timer == 0 ||
+        !WaterBox_GetSurface1_2(play, &play->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
+                                &this->dyna.actor.home.pos.y, &water)) {
+        func_80AC4CF0(this);
+    } else {
+        this->dyna.actor.world.pos.y =
+            (sin_rad(this->timer * (M_PI / 30.0f)) * 3.0f) + (this->dyna.actor.home.pos.y + 10.0f);
+    }
+}
+
+void func_80AC4CF0(BgIcefloe* this) {
+    this->timer = 50;
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_ICE_MELT_LEVEL);
+    this->actionFunc = func_80AC4D2C;
+}
+
+void func_80AC4D2C(BgIcefloe* this, PlayState* play) {
+    this->timer--;
+    if ((this->timer >= 38) && !(this->timer % 2)) {
+        Vec3f velocity;
+        Vec3f position;
+
+        velocity.y = (this->timer - 38) * (1 / 12.0f);
+        velocity.x = randPlusMinusPoint5Scaled(1.5f) * velocity.y;
+        velocity.z = randPlusMinusPoint5Scaled(1.5f) * velocity.y;
+        velocity.y += 0.8f;
+        position.x = this->dyna.actor.world.pos.x + (2.0f * velocity.x);
+        position.z = this->dyna.actor.world.pos.z + (2.0f * velocity.z);
+        position.y = this->dyna.actor.world.pos.y + 3.0f;
+        EffectSsIceSmoke_Spawn(play, &position, &velocity, &gZeroVec3f, 200);
+    }
+    if (this->timer < 25) {
+        this->dyna.actor.scale.x -= 0.0052f;
+        this->dyna.actor.scale.z -= 0.0052f;
+    }
+    this->dyna.actor.scale.y -= 0.0026f;
+    if (this->dyna.actor.scale.y <= 0.0f) {
+        Actor_MarkForDeath(&this->dyna.actor);
+    }
+}
+
+void BgIcefloe_Update(Actor* thisx, PlayState* play) {
+    BgIcefloe* this = THIS;
+
+    if (!Play_InCsMode(play)) {
+        this->actionFunc(this, play);
+    }
+}
+
+void BgIcefloe_Draw(Actor* thisx, PlayState* play) {
+    BgIcefloe* this = THIS;
+
+    Gfx_DrawDListOpa(play, gIcefloeIcePlatformDL);
+}

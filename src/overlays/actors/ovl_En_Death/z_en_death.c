@@ -5,6 +5,7 @@
  */
 
 #include "z_en_death.h"
+#include "z64rumble.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_1000)
 
@@ -78,7 +79,7 @@ static ColliderTrisElementInit D_808C9938[2] = {
 // static ColliderTrisInit sTrisInit = {
 static ColliderTrisInit D_808C99B0 = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_TRIS, },
-    2, D_808C9938, // sTrisElementsInit,
+    ARRAY_COUNT(sTrisElementsInit), D_808C9938, // sTrisElementsInit,
 };
 
 // static ColliderQuadInit sQuadInit = {
@@ -130,7 +131,7 @@ static CollisionCheckInfoInit2 D_808C9A30 = { 20, 28, 90, 20, 100 };
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808C9A60[] = {
     ICHAIN_VEC3F(scale, 0, ICHAIN_CONTINUE),
-    ICHAIN_S8(hintId, 26, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_GOMESS, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 6000, ICHAIN_CONTINUE),
     ICHAIN_U8(targetMode, 5, ICHAIN_STOP),
 };

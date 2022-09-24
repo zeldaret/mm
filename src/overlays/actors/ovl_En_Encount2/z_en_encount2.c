@@ -60,7 +60,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -114,7 +114,7 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.targetMode = 6;
     this->dyna.actor.colChkInfo.health = 1;
     this->scale = 0.1;
-    this->switchFlag = GET_ENCOUNT2_SWITCH_FLAG(this);
+    this->switchFlag = ENCOUNT2_GET_SWITCH_FLAG(&this->dyna.actor);
 
     if (this->switchFlag == 0x7F) {
         this->switchFlag = -1;
@@ -137,6 +137,7 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
 
 void EnEncount2_Destroy(Actor* thisx, PlayState* play) {
     EnEncount2* this = THIS;
+
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -283,7 +284,7 @@ void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 255, sPtr->alpha);
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
-            Matrix_RotateZF(DEGTORAD(play->state.frames * 20.0f), MTXMODE_APPLY);
+            Matrix_RotateZF(DEGF_TO_RADF(play->state.frames * 20.0f), MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB58);
         }

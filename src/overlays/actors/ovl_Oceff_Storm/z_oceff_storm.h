@@ -8,9 +8,9 @@ struct OceffStorm;
 typedef void (*OceffStormActionFunc)(struct OceffStorm*, PlayState*);
 
 typedef struct OceffStorm {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x8];
-    /* 0x014C */ OceffStormActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ char unk_144[0x8];
+    /* 0x14C */ OceffStormActionFunc actionFunc;
 } OceffStorm; // size = 0x150
 
 extern const ActorInit Oceff_Storm_InitVars;

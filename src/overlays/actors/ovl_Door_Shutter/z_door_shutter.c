@@ -5,6 +5,7 @@
  */
 
 #include "z_door_shutter.h"
+#include "z64rumble.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_bdoor/object_bdoor.h"
 #include "objects/object_numa_obj/object_numa_obj.h"
@@ -73,11 +74,11 @@ typedef struct {
 } ShutterInfo; // size = 0xC
 
 ShutterInfo D_808A21B0[] = {
-    { object_bdoor_DL_0000C0, NULL, 130, 12, 50, 15 },
+    { gBossDoorDL, NULL, 130, 12, 50, 15 },
     { gameplay_keep_DL_077990, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_numa_obj_DL_007150, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_hakugin_obj_DL_000128, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
-    { object_dblue_object_DL_017D00, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
+    { gGreatBayTempleObjectDoorDL, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_ikana_obj_DL_014A40, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_redead_obj_DL_0001A0, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_ikninside_obj_DL_004440, object_ikninside_obj_DL_005260, 130, 0, 20, 15 },
@@ -128,8 +129,7 @@ Vec3f D_808A22C4 = { 120.0f, 0.0f, 0.0f };
 Vec3f D_808A22D0 = { -90.0f, 0.0f, 0.0f };
 
 TexturePtr D_808A22DC[] = {
-    object_bdoor_Tex_006BA0, object_bdoor_Tex_005BA0, object_bdoor_Tex_0005C0,
-    object_bdoor_Tex_004BA0, object_bdoor_Tex_003BA0,
+    gBossDoorDefaultTex, gBossDoorWoodfallTex, gBossDoorSnowheadTex, gBossDoorGreatBayTex, gBossDoorStoneTowerTex,
 };
 
 void DoorShutter_SetupAction(DoorShutter* this, DoorShutterActionFunc actionFunc) {
@@ -287,7 +287,7 @@ f32 func_808A0D90(PlayState* play, DoorShutter* this, f32 arg2, f32 arg3, f32 ar
 s32 func_808A0E28(DoorShutter* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (!Player_InCsMode(&play->state)) {
+    if (!Player_InCsMode(play)) {
         ShutterInfo* shutterInfo = &D_808A21B0[this->unk_164];
         f32 temp_f0 = func_808A0D90(play, this, 0.0f, shutterInfo->unk_0A, shutterInfo->unk_0B);
 
@@ -404,7 +404,7 @@ void func_808A1288(DoorShutter* this, PlayState* play) {
         this->unk_164 = sp38;
         this->unk_168 = 0.0f;
 
-        func_800DFFAC(play->cameraPtrs[CAM_ID_MAIN], &this->actor, player->unk_3BA, this->unk_168, 12, sp34, 10);
+        Camera_ChangeDoorCam(play->cameraPtrs[CAM_ID_MAIN], &this->actor, player->unk_3BA, this->unk_168, 12, sp34, 10);
     }
 }
 
@@ -568,7 +568,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
     if (DoorShutter_SetupDoor(this, play) && !(player->stateFlags1 & 0x800)) {
         DoorShutter_SetupAction(this, func_808A1C50);
         if (ActorCutscene_GetCurrentIndex() == 0x7D) {
-            func_801226E0(play, ((void)0, gSaveContext.respawn[RESTART_MODE_DOWN].data));
+            func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));
             player->unk_A86 = -1;
             func_800B7298(play, NULL, 0x73);
         }
@@ -607,11 +607,11 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
             Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 45.0f, 10, 8.0f, 500, 10, 0);
         }
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BIGWALL_BOUND);
-        quake = Quake_Add(Play_GetCamera(play, 0), 3);
+        quake = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
         Quake_SetSpeed(quake, -32536);
         Quake_SetQuakeValues(quake, 2, 0, 0, 0);
         Quake_SetCountdown(quake, 10);
-        func_8013ECE0(this->actor.xyzDistToPlayerSq, 180, 20, 100);
+        Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
         func_808A1884(this, play);
     }
 }
@@ -642,7 +642,7 @@ s32 func_808A1D68(DoorShutter* this, PlayState* play) {
     s32 temp_a0;
     s32 temp_a1;
 
-    if (Player_InCsMode(&play->state)) {
+    if (Player_InCsMode(play)) {
         return true;
     }
 

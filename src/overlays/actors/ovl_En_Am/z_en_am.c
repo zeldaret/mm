@@ -128,7 +128,7 @@ static CollisionCheckInfoInit sColChkInfoInit = { 1, 23, 98, MASS_HEAVY };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 14, ICHAIN_CONTINUE),
-    ICHAIN_S8(hintId, 19, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_ARMOS, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -4000, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
@@ -205,7 +205,7 @@ void EnAm_SpawnEffects(EnAm* this, PlayState* play) {
 void func_808AFF9C(EnAm* this) {
     f32 lastFrame = Animation_GetLastFrame(&gArmosPushedBackAnim);
 
-    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, lastFrame, lastFrame, 0, 0.0f);
+    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, lastFrame, lastFrame, ANIMMODE_LOOP, 0.0f);
     this->enemyCollider.info.bumper.dmgFlags = 0x80000088;
     this->interactCollider.info.bumper.dmgFlags = 0x77CFFF77;
     if (this->actor.colChkInfo.health != 0) {
@@ -380,7 +380,7 @@ void func_808B066C(EnAm* this, PlayState* play) {
 
 void EnAm_TakeDamage(EnAm* this, PlayState* play) {
     Animation_Change(&this->skelAnime, &gArmosTakeDamageAnim, 1.0f, 4.0f,
-                     Animation_GetLastFrame(&gArmosTakeDamageAnim) - 6, 2, 0.0f);
+                     Animation_GetLastFrame(&gArmosTakeDamageAnim) - 6, ANIMMODE_ONCE, 0.0f);
     func_800BE504(&this->actor, &this->enemyCollider);
     this->actor.speedXZ = 6.0f;
     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, Animation_GetLastFrame(&gArmosTakeDamageAnim) - 10);
@@ -449,7 +449,7 @@ void func_808B0894(EnAm* this, PlayState* play) {
 }
 
 void func_808B0AD0(EnAm* this, PlayState* play) {
-    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 1.0f, 0.0f, 8.0f, 2, 0.0f);
+    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 1.0f, 0.0f, 8.0f, ANIMMODE_ONCE, 0.0f);
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actor.speedXZ = -6.0f;
     this->actionFunc = func_808B0B4C;

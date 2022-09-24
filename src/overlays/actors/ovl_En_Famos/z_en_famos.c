@@ -5,6 +5,7 @@
  */
 
 #include "z_en_famos.h"
+#include "z64rumble.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -138,7 +139,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    2,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -153,7 +154,7 @@ static AnimatedMaterial* sEmblemAnimatedMats[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 15, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_DEATH_ARMOS, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 3500, ICHAIN_STOP),
 };
 
@@ -165,7 +166,7 @@ void EnFamos_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if (GET_FAMOS_PATH(thisx) != 0xFF) {
+    if (FAMOS_GET_PATH(thisx) != 0xFF) {
         path = &play->setupPathList[this->actor.params];
         this->pathPoints = Lib_SegmentedToVirtual(path->points);
         this->pathNodeCount = path->count;
@@ -192,7 +193,7 @@ void EnFamos_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = 250;
     this->baseHeight = this->actor.world.pos.y;
     // params: [this->actor.shape.rot.x] is used to set aggro distance
-    this->aggroDistance = (GET_FAMOS_AGGRO_DISTANCE(thisx) <= 0) ? (200.0f) : (this->actor.shape.rot.x * 40.0f * 0.1f);
+    this->aggroDistance = (FAMOS_GET_AGGRO_DISTANCE(thisx) <= 0) ? (200.0f) : (this->actor.shape.rot.x * 40.0f * 0.1f);
     this->actor.shape.rot.x = 0;
     this->actor.world.rot.x = 0;
     this->hasFinishedRotating = true;
@@ -548,8 +549,8 @@ void EnFamos_Attack(EnFamos* this, PlayState* play) {
         this->collider1.base.atFlags &= ~AT_ON;
         this->collider2.base.atFlags |= AT_ON;
         if (hitFloor) {
-            func_800DFD04(play->cameraPtrs[play->activeCamera], 2, 15, 10); // camera shake?
-            func_8013ECE0(this->actor.xyzDistToPlayerSq, 180, 20, 100);
+            Camera_AddQuake(GET_ACTIVE_CAM(play), 2, 15, 10);
+            Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
             EnFamos_SetupAttackDebris(this);
 
             // spawn crator on floor

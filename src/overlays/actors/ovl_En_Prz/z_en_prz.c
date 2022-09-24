@@ -96,7 +96,7 @@ const ActorInit En_Prz_InitVars = {
 
 AnimationHeader* D_80A77240[] = { &object_pr_Anim_004340, &object_pr_Anim_004274 };
 
-u8 D_80A77248[] = { 0, 0 };
+u8 D_80A77248[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
 
 Vec3f D_80A7724C = { 0.0f, 0.0f, 0.0f };
 
@@ -110,7 +110,7 @@ void EnPrz_Init(Actor* thisx, PlayState* play) {
 
     this->actor.targetMode = 3;
     this->unk_1E8 = 255;
-    this->actor.hintId = 0x5B;
+    this->actor.hintId = TATL_HINT_ID_SKULLFISH;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.colChkInfo.health = 1;
 
