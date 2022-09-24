@@ -362,8 +362,6 @@ extern ActorInit En_A_Obj_InitVars;
 extern ColliderCylinderInit enAObjCylinderInit;
 extern InitChainEntry enAObjInitVar;
 extern Gfx* enAObjDisplayLists[2];
-extern UNK_PTR D_801ADF30[5];
-extern UNK_PTR D_801ADF44[12];
 extern u8 sDropTable[DROP_TABLE_SIZE * DROP_TABLE_NUMBER];
 extern u8 sDropTableAmounts[DROP_TABLE_SIZE * DROP_TABLE_NUMBER];
 extern s32 D_801AE194[32];

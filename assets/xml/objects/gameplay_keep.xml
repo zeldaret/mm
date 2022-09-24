@@ -1218,37 +1218,44 @@
         <Collision Name="gameplay_keep_Colheader_05A270" Offset="0x5A270" />
         <DList Name="gameplay_keep_DL_05A430" Offset="0x5A430" />
         <DList Name="gameplay_keep_DL_05A600" Offset="0x5A600" />
-        <Texture Name="gameplay_keep_Tex_05A6B0" OutName="tex_05A6B0" Format="i8" Width="16" Height="16" Offset="0x5A6B0" />
-        <DList Name="gameplay_keep_DL_05AAB0" Offset="0x5AAB0" />
-        <DList Name="gameplay_keep_DL_05AED0" Offset="0x5AED0" />
-        <DList Name="gameplay_keep_DL_05B430" Offset="0x5B430" />
-        <Texture Name="gameplay_keep_Tex_05B6F0" OutName="tex_05B6F0" Format="rgba16" Width="32" Height="32" Offset="0x5B6F0" />
-        <Texture Name="gameplay_keep_Tex_05BEF0" OutName="tex_05BEF0" Format="rgba16" Width="32" Height="32" Offset="0x5BEF0" />
-        <Texture Name="gameplay_keep_Tex_05C6F0" OutName="tex_05C6F0" Format="rgba16" Width="32" Height="32" Offset="0x5C6F0" />
-        <Texture Name="gameplay_keep_Tex_05CEF0" OutName="tex_05CEF0" Format="rgba16" Width="32" Height="32" Offset="0x5CEF0" />
-        <Texture Name="gameplay_keep_Tex_05D6F0" OutName="tex_05D6F0" Format="rgba16" Width="32" Height="32" Offset="0x5D6F0" />
-        <Texture Name="gameplay_keep_Tex_05DEF0" OutName="tex_05DEF0" Format="rgba16" Width="32" Height="32" Offset="0x5DEF0" />
-        <Texture Name="gameplay_keep_Tex_05E6F0" OutName="tex_05E6F0" Format="rgba16" Width="32" Height="32" Offset="0x5E6F0" />
-        <Texture Name="gameplay_keep_Tex_05EEF0" OutName="tex_05EEF0" Format="rgba16" Width="32" Height="32" Offset="0x5EEF0" />
-        <DList Name="gameplay_keep_DL_05F6F0" Offset="0x5F6F0" />
-        <Texture Name="gameplay_keep_Tex_05F7C0" OutName="tex_05F7C0" Format="rgba16" Width="32" Height="32" Offset="0x5F7C0" />
-        <Texture Name="gameplay_keep_Tex_05FFC0" OutName="tex_05FFC0" Format="rgba16" Width="32" Height="32" Offset="0x5FFC0" />
-        <Texture Name="gameplay_keep_Tex_0607C0" OutName="tex_0607C0" Format="rgba16" Width="32" Height="32" Offset="0x607C0" />
-        <Texture Name="gameplay_keep_Tex_060FC0" OutName="tex_060FC0" Format="rgba16" Width="32" Height="32" Offset="0x60FC0" />
-        <Texture Name="gameplay_keep_Tex_0617C0" OutName="tex_0617C0" Format="rgba16" Width="32" Height="32" Offset="0x617C0" />
-        <Texture Name="gameplay_keep_Tex_061FC0" OutName="tex_061FC0" Format="rgba16" Width="4" Height="4" Offset="0x61FC0" />
-        <Texture Name="gameplay_keep_Tex_061FE0" OutName="tex_061FE0" Format="rgba16" Width="4" Height="4" Offset="0x61FE0" />
-        <Texture Name="gameplay_keep_Tex_062000" OutName="tex_062000" Format="rgba16" Width="4" Height="4" Offset="0x62000" />
-        <Texture Name="gameplay_keep_Tex_062020" OutName="tex_062020" Format="rgba16" Width="4" Height="4" Offset="0x62020" />
-        <Texture Name="gameplay_keep_Tex_062040" OutName="tex_062040" Format="rgba16" Width="4" Height="4" Offset="0x62040" />
-        <Texture Name="gameplay_keep_Tex_062060" OutName="tex_062060" Format="rgba16" Width="4" Height="4" Offset="0x62060" />
-        <DList Name="gameplay_keep_DL_0622C0" Offset="0x622C0" />
-        <Texture Name="gameplay_keep_Tex_062390" OutName="tex_062390" Format="rgba16" Width="32" Height="32" Offset="0x62390" />
-        <Texture Name="gameplay_keep_Tex_062B90" OutName="tex_062B90" Format="rgba16" Width="32" Height="32" Offset="0x62B90" />
-        <Texture Name="gameplay_keep_Tex_063390" OutName="tex_063390" Format="rgba16" Width="32" Height="32" Offset="0x63390" />
-        <Texture Name="gameplay_keep_Tex_063B90" OutName="tex_063B90" Format="rgba16" Width="4" Height="4" Offset="0x63B90" />
-        <Texture Name="gameplay_keep_Tex_063BB0" OutName="tex_063BB0" Format="rgba16" Width="4" Height="4" Offset="0x63BB0" />
-        <Texture Name="gameplay_keep_Tex_063BD0" OutName="tex_063BD0" Format="rgba16" Width="32" Height="32" Offset="0x63BD0" />
+
+        <Texture Name="gHeartShapeTex" OutName="heart_shape" Format="i8" Width="16" Height="16" Offset="0x5A6B0" />
+        <DList Name="gHeartPieceInteriorDL" Offset="0x5AAB0" />
+        <DList Name="gSignRectangularDL" Offset="0x5AED0" />
+        <DList Name="gSignDirectionalDL" Offset="0x5B430" />
+
+        <!-- Item Drops -->
+        <Texture Name="gDropArrows2Tex" OutName="drop_arrows_2" Format="rgba16" Width="32" Height="32" Offset="0x5B6F0" />
+        <Texture Name="gDropArrows1Tex" OutName="drop_arrows_1" Format="rgba16" Width="32" Height="32" Offset="0x5BEF0" />
+        <Texture Name="gDropArrows3Tex" OutName="drop_arrows_3" Format="rgba16" Width="32" Height="32" Offset="0x5C6F0" />
+        <Texture Name="gDropBombTex" OutName="drop_bomb" Format="rgba16" Width="32" Height="32" Offset="0x5CEF0" />
+        <Texture Name="gDropBombchuTex" OutName="drop_bombchu" Format="rgba16" Width="32" Height="32" Offset="0x5D6F0" />
+        <Texture Name="gDropUnknownPouch" OutName="drop_unknown_pouch" Format="rgba16" Width="32" Height="32" Offset="0x5DEF0" />
+        <Texture Name="gDropRecoveryHeartTex" OutName="drop_recovery_heart" Format="rgba16" Width="32" Height="32" Offset="0x5E6F0" />
+        <Texture Name="gDropHeartPieceTex" OutName="drop_heart_piece" Format="rgba16" Width="32" Height="32" Offset="0x5EEF0" />
+        <DList Name="gItemDropDL" Offset="0x5F6F0" />
+        <Texture Name="gDropKeySmallTex" OutName="drop_key_small" Format="rgba16" Width="32" Height="32" Offset="0x5F7C0" />
+        <Texture Name="gDropMagicSmallTex" OutName="drop_magic_small" Format="rgba16" Width="32" Height="32" Offset="0x5FFC0" />
+        <Texture Name="gDropDekuNutTex" OutName="drop_deku_nut" Format="rgba16" Width="32" Height="32" Offset="0x607C0" />
+        <Texture Name="gDropDekuStickTex" OutName="drop_deku_stick" Format="rgba16" Width="32" Height="32" Offset="0x60FC0" />
+        <Texture Name="gDropMagicLargeTex" OutName="drop_magic_large" Format="rgba16" Width="32" Height="32" Offset="0x617C0" />
+        
+        <!-- Rupees -->
+        <Texture Name="gRupeeGreenTex" OutName="rupee_green" Format="rgba16" Width="4" Height="4" Offset="0x61FC0" />
+        <Texture Name="gRupeeBlueTex" OutName="rupee_blue" Format="rgba16" Width="4" Height="4" Offset="0x61FE0" />
+        <Texture Name="gRupeeRedTex" OutName="rupee_red" Format="rgba16" Width="4" Height="4" Offset="0x62000" />
+        <Texture Name="gRupeePurpleTex" OutName="rupee_purple" Format="rgba16" Width="4" Height="4" Offset="0x62020" />
+        <Texture Name="gRupeeOrangeTex" OutName="rupee_orange" Format="rgba16" Width="4" Height="4" Offset="0x62040" />
+        <Texture Name="gRupeeSilverTex" OutName="rupee_silver" Format="rgba16" Width="4" Height="4" Offset="0x62060" />
+        <DList Name="gRupeeDL" Offset="0x622C0" />
+
+        <Texture Name="gRecoveryHeartTex" OutName="recovery_heart" Format="rgba16" Width="32" Height="32" Offset="0x62390" />
+        <Texture Name="gBombTex" OutName="bomb_tex" Format="rgba16" Width="32" Height="32" Offset="0x62B90" />
+        <Texture Name="gArrowTex" OutName="arrow_tex" Format="rgba16" Width="32" Height="32" Offset="0x63390" />
+        <Texture Name="gRupeeLightRedTex" OutName="rupee_light_red" Format="rgba16" Width="4" Height="4" Offset="0x63B90" />
+        <Texture Name="gRupeeLightBlueTex" OutName="rupee_light_blue" Format="rgba16" Width="4" Height="4" Offset="0x63BB0" />
+        <Texture Name="gHeartContainerTex" OutName="heart_container" Format="rgba16" Width="32" Height="32" Offset="0x63BD0" />
+        
         <Texture Name="gameplay_keep_Tex_0643D0" OutName="tex_0643D0" Format="rgba16" Width="32" Height="32" Offset="0x643D0" />
         <Texture Name="gameplay_keep_Tex_064BD0" OutName="tex_064BD0" Format="rgba16" Width="32" Height="32" Offset="0x64BD0" />
         <Texture Name="gameplay_keep_Tex_0653D0" OutName="tex_0653D0" Format="rgba16" Width="32" Height="32" Offset="0x653D0" />
@@ -1257,10 +1264,12 @@
         <Texture Name="gameplay_keep_Tex_066BD0" OutName="tex_066BD0" Format="rgba16" Width="64" Height="32" Offset="0x66BD0" />
         <Texture Name="gameplay_keep_Tex_067BD0" OutName="tex_067BD0" Format="rgba16" Width="32" Height="32" Offset="0x67BD0" />
         <Texture Name="gameplay_keep_Tex_0683D0" OutName="tex_0683D0" Format="rgba16" Width="32" Height="32" Offset="0x683D0" />
-        <Texture Name="gameplay_keep_Tex_068BD0" OutName="tex_068BD0" Format="rgba16" Width="32" Height="16" Offset="0x68BD0" />
-        <Texture Name="gameplay_keep_Tex_068FD0" OutName="tex_068FD0" Format="rgba16" Width="32" Height="16" Offset="0x68FD0" />
-        <Texture Name="gameplay_keep_Tex_0693D0" OutName="tex_0693D0" Format="rgba16" Width="64" Height="8" Offset="0x693D0" />
-        <Texture Name="gameplay_keep_Tex_0697D0" OutName="tex_0697D0" Format="rgba16" Width="64" Height="32" Offset="0x697D0" />
+        
+        <Texture Name="gSignRectangularSideTex" OutName="sign_rectangular_side" Format="rgba16" Width="32" Height="16" Offset="0x68BD0" />
+        <Texture Name="gSignRectangularFrontTex" OutName="sign_rectangular_front" Format="rgba16" Width="32" Height="16" Offset="0x68FD0" />
+        <Texture Name="gSignPostWoodTex" OutName="sign_post_wood" Format="rgba16" Width="64" Height="8" Offset="0x693D0" />
+        <Texture Name="gSignLetteringTex" OutName="sign_lettering" Format="rgba16" Width="64" Height="32" Offset="0x697D0" />
+        
         <DList Name="gameplay_keep_DL_06A800" Offset="0x6A800" />
         <Texture Name="gameplay_keep_Tex_06A880" OutName="tex_06A880" Format="i8" Width="16" Height="16" Offset="0x6A880" />
         <DList Name="gameplay_keep_DL_06AB30" Offset="0x6AB30" />
