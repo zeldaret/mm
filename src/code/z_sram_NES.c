@@ -267,11 +267,11 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     sceneNum = Play_GetOriginalSceneNumber(play->sceneNum);
     Play_SaveCycleSceneFlags(&play->state);
 
-    play->actorCtx.flags.chest &= D_801C5FC0[sceneNum][2];
-    play->actorCtx.flags.switches[0] &= D_801C5FC0[sceneNum][0];
-    play->actorCtx.flags.switches[1] &= D_801C5FC0[sceneNum][1];
-    play->actorCtx.flags.collectible[0] &= D_801C5FC0[sceneNum][3];
-    play->actorCtx.flags.clearedRoom = 0;
+    play->actorCtx.sceneFlags.chest &= D_801C5FC0[sceneNum][2];
+    play->actorCtx.sceneFlags.switches[0] &= D_801C5FC0[sceneNum][0];
+    play->actorCtx.sceneFlags.switches[1] &= D_801C5FC0[sceneNum][1];
+    play->actorCtx.sceneFlags.collectible[0] &= D_801C5FC0[sceneNum][3];
+    play->actorCtx.sceneFlags.clearedRoom = 0;
 
     for (i = 0; i < SCENE_MAX; i++) {
         gSaveContext.cycleSceneFlags[i].switch0 = ((void)0, gSaveContext.cycleSceneFlags[i].switch0) & D_801C5FC0[i][0];
@@ -597,12 +597,12 @@ SavePlayerData sSaveDefaultPlayerData = {
     0x30,                                               // healthCapacity
     0x30,                                               // health
     0,                                                  // magicLevel
-    0x30,                                               // magic
+    MAGIC_NORMAL_METER,                                 // magic
     0,                                                  // rupees
     0,                                                  // swordHealth
     0,                                                  // tatlTimer
-    0,                                                  // magicAcquired
-    0,                                                  // doubleMagic
+    false,                                              // isMagicAcquired
+    false,                                              // isDoubleMagicAcquired
     0,                                                  // doubleDefense
     0,                                                  // unk_1F
     0xFF,                                               // unk_20
@@ -697,12 +697,12 @@ SavePlayerData sSaveDebugPlayerData = {
     0x80,                                               // healthCapacity
     0x80,                                               // health
     0,                                                  // magicLevel
-    0x30,                                               // magic
-    0x32,                                               // rupees
-    0x64,                                               // swordHealth
+    MAGIC_NORMAL_METER,                                 // magic
+    50,                                                 // rupees
+    100,                                                // swordHealth
     0,                                                  // tatlTimer
-    1,                                                  // magicAcquired
-    0,                                                  // doubleMagic
+    true,                                               // isMagicAcquired
+    false,                                              // isDoubleMagicAcquired
     0,                                                  // doubleDefense
     0,                                                  // unk_1F
     0xFF,                                               // unk_20

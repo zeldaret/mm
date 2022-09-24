@@ -261,26 +261,26 @@ u8 EnFsn_SetCursorIndexFromNeutral(EnFsn* this) {
 }
 
 void EnFsn_CursorLeftRight(EnFsn* this) {
-    u8 cursorScan = this->cursorIdx;
+    u8 cursorScan = this->cursorIndex;
 
     if (this->stickAccumX > 0) {
         if (cursorScan != this->totalSellingItems - 1) {
             while (cursorScan != this->totalSellingItems - 1) {
                 cursorScan++;
                 if (this->itemIds[cursorScan] != -1) {
-                    this->cursorIdx = cursorScan;
+                    this->cursorIndex = cursorScan;
                     break;
                 }
             }
         } else if (this->itemIds[cursorScan] != -1) {
-            this->cursorIdx = cursorScan;
+            this->cursorIndex = cursorScan;
         }
     } else if (this->stickAccumX < 0) {
         if (cursorScan != 0) {
             while (cursorScan != 0) {
                 cursorScan--;
                 if (this->itemIds[cursorScan] != -1) {
-                    this->cursorIdx = cursorScan;
+                    this->cursorIndex = cursorScan;
                     break;
                 } else if (cursorScan == 0) {
                     play_sound(NA_SE_SY_CURSOR);
@@ -294,7 +294,7 @@ void EnFsn_CursorLeftRight(EnFsn* this) {
             this->drawCursor = 0;
             this->actionFunc = EnFsn_LookToShopkeeperFromShelf;
             if (this->itemIds[cursorScan] != -1) {
-                this->cursorIdx = cursorScan;
+                this->cursorIndex = cursorScan;
             }
         }
     }
@@ -417,7 +417,7 @@ s32 EnFsn_TestEndInteraction(EnFsn* this, PlayState* play, Input* input) {
 s32 EnFsn_TestCancelOption(EnFsn* this, PlayState* play, Input* input) {
     if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
         this->actionFunc = this->prevActionFunc;
-        func_80151938(play, this->items[this->cursorIdx]->actor.textId);
+        func_80151938(play, this->items[this->cursorIndex]->actor.textId);
         return true;
     }
     return false;
@@ -429,7 +429,7 @@ void EnFsn_UpdateCursorPos(EnFsn* this, PlayState* play) {
     f32 xOffset = 0.0f;
     f32 yOffset = 17.0f;
 
-    Actor_GetScreenPos(play, &this->items[this->cursorIdx]->actor, &x, &y);
+    Actor_GetScreenPos(play, &this->items[this->cursorIndex]->actor, &x, &y);
     this->cursorPos.x = x + xOffset;
     this->cursorPos.y = y + yOffset;
     this->cursorPos.z = 1.2f;
@@ -466,9 +466,9 @@ s32 EnFsn_HasPlayerSelectedItem(EnFsn* this, PlayState* play, Input* input) {
         return true;
     }
     if (EnFsn_TestItemSelected(play)) {
-        if (!this->items[this->cursorIdx]->isOutOfStock) {
+        if (!this->items[this->cursorIndex]->isOutOfStock) {
             this->prevActionFunc = this->actionFunc;
-            func_80151938(play, this->items[this->cursorIdx]->choiceTextId);
+            func_80151938(play, this->items[this->cursorIndex]->choiceTextId);
             play_sound(NA_SE_SY_DECIDE);
             this->stickLeftPrompt.isEnabled = false;
             this->stickRightPrompt.isEnabled = false;
@@ -522,7 +522,7 @@ void EnFsn_UpdateJoystickInputState(EnFsn* this, PlayState* play) {
 
 void EnFsn_PositionSelectedItem(EnFsn* this) {
     Vec3f selectedItemPosition = { 13.0f, 38.0f, -71.0f };
-    u8 i = this->cursorIdx;
+    u8 i = this->cursorIndex;
     EnGirlA* item = this->items[i];
     Vec3f worldPos;
 
@@ -572,7 +572,7 @@ void EnFsn_UpdateItemSelectedProperty(EnFsn* this) {
             this->drawCursor == 0) {
             (*items)->isSelected = false;
         } else {
-            (*items)->isSelected = (i == this->cursorIdx) ? true : false;
+            (*items)->isSelected = (i == this->cursorIndex) ? true : false;
         }
     }
 }
@@ -712,7 +712,7 @@ void EnFsn_InitShop(EnFsn* this, PlayState* play) {
     }
     this->blinkTimer = 20;
     this->animIndex = FSN_ANIM_HANDS_ON_COUNTER_START;
-    this->eyeTextureIdx = 0;
+    this->eyeTexIndex = 0;
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
     this->actionFunc = EnFsn_Idle;
 }
@@ -995,7 +995,7 @@ void EnFsn_MakeOffer(EnFsn* this, PlayState* play) {
 
 void EnFsn_GiveItem(EnFsn* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if ((this->isSelling == true) && (this->items[this->cursorIdx]->getItemId == GI_MASK_ALL_NIGHT)) {
+        if ((this->isSelling == true) && (this->items[this->cursorIndex]->getItemId == GI_MASK_ALL_NIGHT)) {
             func_80151BB4(play, 45);
             func_80151BB4(play, 3);
         }
@@ -1005,7 +1005,7 @@ void EnFsn_GiveItem(EnFsn* this, PlayState* play) {
         }
         this->actionFunc = EnFsn_SetupResumeInteraction;
     } else if (this->isSelling == true) {
-        Actor_PickUp(&this->actor, play, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
     } else {
         Actor_PickUp(&this->actor, play, this->getItemId, 300.0f, 300.0f);
     }
@@ -1086,7 +1086,7 @@ void EnFsn_LookToShelf(EnFsn* this, PlayState* play) {
             this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
             EnFsn_UpdateCursorPos(this, play);
             this->actionFunc = EnFsn_BrowseShelf;
-            func_80151938(play, this->items[this->cursorIdx]->actor.textId);
+            func_80151938(play, this->items[this->cursorIndex]->actor.textId);
         } else {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
@@ -1096,7 +1096,7 @@ void EnFsn_LookToShelf(EnFsn* this, PlayState* play) {
 void EnFsn_BrowseShelf(EnFsn* this, PlayState* play) {
     u8 talkstate = Message_GetState(&play->msgCtx);
     s32 pad;
-    u8 prevCursorIdx = this->cursorIdx;
+    u8 prevCursorIdx = this->cursorIndex;
 
     if (!EnFsn_ReturnItemToShelf(this)) {
         this->delayTimer = 3;
@@ -1110,9 +1110,9 @@ void EnFsn_BrowseShelf(EnFsn* this, PlayState* play) {
             func_8011552C(play, 6);
             if (!EnFsn_HasPlayerSelectedItem(this, play, CONTROLLER1(&play->state))) {
                 EnFsn_CursorLeftRight(this);
-                if (this->cursorIdx != prevCursorIdx) {
+                if (this->cursorIndex != prevCursorIdx) {
                     play_sound(NA_SE_SY_CURSOR);
-                    func_80151938(play, this->items[this->cursorIdx]->actor.textId);
+                    func_80151938(play, this->items[this->cursorIndex]->actor.textId);
                 }
             }
         }
@@ -1144,7 +1144,7 @@ void EnFsn_LookToShopkeeperFromShelf(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
-    EnGirlA* item = this->items[this->cursorIdx];
+    EnGirlA* item = this->items[this->cursorIndex];
 
     switch (item->canBuyFunc(play, item)) {
         case CANBUY_RESULT_SUCCESS_2:
@@ -1156,23 +1156,23 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
                 this->cutsceneState = ENFSN_CUTSCENESTATE_STOPPED;
             }
             func_8019F208();
-            item = this->items[this->cursorIdx];
+            item = this->items[this->cursorIndex];
             item->buyFanfareFunc(play, item);
-            Actor_PickUp(&this->actor, play, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
+            Actor_PickUp(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
             Interface_ChangeAlpha(50);
             this->drawCursor = 0;
             this->shopItemSelectedTween = 0.0f;
-            item = this->items[this->cursorIdx];
+            item = this->items[this->cursorIndex];
             item->boughtFunc(play, item);
-            if (this->stolenItem1 == this->cursorIdx) {
+            if (this->stolenItem1 == this->cursorIndex) {
                 SET_STOLEN_ITEM_1(STOLEN_ITEM_NONE);
-            } else if (this->stolenItem2 == this->cursorIdx) {
+            } else if (this->stolenItem2 == this->cursorIndex) {
                 SET_STOLEN_ITEM_2(STOLEN_ITEM_NONE);
             }
             this->numSellingItems--;
-            this->itemIds[this->cursorIdx] = -1;
+            this->itemIds[this->cursorIndex] = -1;
             this->actionFunc = EnFsn_GiveItem;
             break;
         case CANBUY_RESULT_NEED_RUPEES:
@@ -1218,7 +1218,7 @@ void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
                 case 1:
                     func_8019F230();
                     this->actionFunc = this->prevActionFunc;
-                    func_80151938(play, this->items[this->cursorIdx]->actor.textId);
+                    func_80151938(play, this->items[this->cursorIndex]->actor.textId);
             }
         }
     }
@@ -1227,7 +1227,7 @@ void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
 void EnFsn_PlayerCannotBuy(EnFsn* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actionFunc = this->prevActionFunc;
-        func_80151938(play, this->items[this->cursorIdx]->actor.textId);
+        func_80151938(play, this->items[this->cursorIndex]->actor.textId);
     }
 }
 
@@ -1326,16 +1326,16 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, PlayState* play) {
 
 void EnFsn_FaceShopkeeperSelling(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
-    u8 cursorIdx;
+    u8 cursorIndex;
 
     if (talkState == TEXT_STATE_CHOICE) {
         func_8011552C(play, 6);
         if (!EnFsn_TestEndInteraction(this, play, CONTROLLER1(&play->state)) &&
             (!Message_ShouldAdvance(play) || !EnFsn_FacingShopkeeperDialogResult(this, play)) &&
             this->stickAccumX > 0) {
-            cursorIdx = EnFsn_SetCursorIndexFromNeutral(this);
-            if (cursorIdx != CURSOR_INVALID) {
-                this->cursorIdx = cursorIdx;
+            cursorIndex = EnFsn_SetCursorIndexFromNeutral(this);
+            if (cursorIndex != CURSOR_INVALID) {
+                this->cursorIndex = cursorIndex;
                 this->actionFunc = EnFsn_LookToShelf;
                 func_8011552C(play, 6);
                 this->stickRightPrompt.isEnabled = false;
@@ -1394,13 +1394,13 @@ void EnFsn_Blink(EnFsn* this) {
     s16 decr = this->blinkTimer - 1;
 
     if (decr >= 3) {
-        this->eyeTextureIdx = 0;
+        this->eyeTexIndex = 0;
         this->blinkTimer = decr;
     } else if (decr == 0) {
-        this->eyeTextureIdx = 2;
+        this->eyeTexIndex = 2;
         this->blinkTimer = (s32)(Rand_ZeroOne() * 60.0f) + 20;
     } else {
-        this->eyeTextureIdx = 1;
+        this->eyeTexIndex = 1;
         this->blinkTimer = decr;
     }
 }
@@ -1427,7 +1427,7 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
         Collider_InitCylinder(play, &this->collider);
         Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         this->blinkTimer = 20;
-        this->eyeTextureIdx = 0;
+        this->eyeTexIndex = 0;
         this->actor.flags |= ACTOR_FLAG_1;
         this->actor.targetMode = 0;
         this->animIndex = FSN_ANIM_IDLE;
@@ -1472,6 +1472,7 @@ void EnFsn_DrawCursor(EnFsn* this, PlayState* play, f32 x, f32 y, f32 z, u8 draw
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if (drawCursor != 0) {
         func_8012C654(play->state.gfxCtx);
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColor.r, this->cursorColor.g, this->cursorColor.b,
@@ -1486,6 +1487,7 @@ void EnFsn_DrawCursor(EnFsn* this, PlayState* play, f32 x, f32 y, f32 z, u8 draw
         dsdx = (1.0f / z) * 1024.0f;
         gSPTextureRectangle(OVERLAY_DISP++, ulx, uly, lrx, lry, G_TX_RENDERTILE, 0, 0, dsdx, dsdx);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -1501,6 +1503,7 @@ void EnFsn_DrawTextRec(PlayState* play, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y
     s32 dtdy;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     gDPPipeSync(OVERLAY_DISP++);
     gDPSetPrimColor(OVERLAY_DISP++, 0, 0, r, g, b, a);
 
@@ -1517,6 +1520,7 @@ void EnFsn_DrawTextRec(PlayState* play, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y
     dtdy = dy * unk;
 
     gSPTextureRectangle(OVERLAY_DISP++, ulx, uly, lrx, lry, G_TX_RENDERTILE, s, t, dsdx, dtdy);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -1525,6 +1529,7 @@ void EnFsn_DrawStickDirectionPrompts(EnFsn* this, PlayState* play) {
     s32 drawStickLeftPrompt = this->stickRightPrompt.isEnabled;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if (drawStickRightPrompt || drawStickLeftPrompt) {
         func_8012C654(play->state.gfxCtx);
         gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
@@ -1559,6 +1564,7 @@ void EnFsn_DrawStickDirectionPrompts(EnFsn* this, PlayState* play) {
                               this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -1604,8 +1610,10 @@ void EnFsn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         this->actor.focus.pos.z = this->actor.world.pos.z;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         gSPDisplayList(POLY_OPA_DISP++, gFsnGlassesFrameDL);
         gSPDisplayList(POLY_OPA_DISP++, gFsnGlassesLensesDL);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
@@ -1617,9 +1625,10 @@ void EnFsn_Draw(Actor* thisx, PlayState* play) {
     s16 i;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     func_8012C5B0(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIdx]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIdx]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnFsn_OverrideLimbDraw, EnFsn_PostLimbDraw, &this->actor);
 
@@ -1631,5 +1640,6 @@ void EnFsn_Draw(Actor* thisx, PlayState* play) {
 
     EnFsn_DrawCursor(this, play, this->cursorPos.x, this->cursorPos.y, this->cursorPos.z, this->drawCursor);
     EnFsn_DrawStickDirectionPrompts(this, play);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

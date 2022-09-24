@@ -536,7 +536,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    if (play->gameOverCtx.state != 0) {
+    if (play->gameOverCtx.state != GAMEOVER_INACTIVE) {
         return;
     }
 
