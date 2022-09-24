@@ -24,6 +24,36 @@ typedef enum RespawnMode {
 
 #define SAVE_BUFFER_SIZE 0x4000
 
+typedef enum {
+    /* 0  */ MAGIC_STATE_IDLE, // Regular gameplay
+    /* 1  */ MAGIC_STATE_CONSUME_SETUP, // Sets the speed at which the magic border flashes
+    /* 2  */ MAGIC_STATE_CONSUME, // Consume magic until target is reached or no more magic is available
+    /* 3  */ MAGIC_STATE_METER_FLASH_1, // Flashes border
+    /* 4  */ MAGIC_STATE_METER_FLASH_2, // Flashes border and draws yellow magic to preview target consumption
+    /* 5  */ MAGIC_STATE_RESET, // Reset colors and return to idle
+    /* 6  */ MAGIC_STATE_METER_FLASH_3, // Flashes border with no additional behaviour
+    /* 7  */ MAGIC_STATE_CONSUME_LENS, // Magic slowly consumed by Lens of Truth
+    /* 8  */ MAGIC_STATE_STEP_CAPACITY, // Step `magicCapacity` to full capacity
+    /* 9  */ MAGIC_STATE_FILL, // Add magic until magicFillTarget is reached
+    /* 10 */ MAGIC_STATE_CONSUME_GORON_ZORA_SETUP,
+    /* 11 */ MAGIC_STATE_CONSUME_GORON_ZORA, // Magic slowly consumed by Goron spiked rolling or Zora electric barrier.
+    /* 12 */ MAGIC_STATE_CONSUME_GIANTS_MASK // Magic slowly consumed by Giant's Mask
+} MagicState;
+
+typedef enum {
+    /* 0 */ MAGIC_CONSUME_NOW, // Consume magic immediately without preview
+    /* 1 */ MAGIC_CONSUME_WAIT_NO_PREVIEW, // Sets consume target but waits to consume. No yellow magic preview to target consumption. Unused
+    /* 2 */ MAGIC_CONSUME_NOW_ALT, // Identical behaviour to MAGIC_CONSUME_NOW. Unused
+    /* 3 */ MAGIC_CONSUME_LENS, // Lens of Truth consumption
+    /* 4 */ MAGIC_CONSUME_WAIT_PREVIEW, // Sets consume target but waits to consume. Show magic to be consumed in yellow.
+    /* 5 */ MAGIC_CONSUME_GORON_ZORA, // Goron spiked rolling or Zora electric barrier slow consumption
+    /* 6 */ MAGIC_CONSUME_GIANTS_MASK, // Giant's Mask slow consumption
+    /* 7 */ MAGIC_CONSUME_DEITY_BEAM // Fierce Deity Beam consumption, consumed magic now and not via request
+} MagicChangeType;
+
+#define MAGIC_NORMAL_METER 0x30
+#define MAGIC_DOUBLE_METER (2 * MAGIC_NORMAL_METER)
+
 typedef struct SramContext {
     /* 0x00 */ u8* readBuff;
     /* 0x04 */ u8 *saveBuf;
@@ -105,13 +135,13 @@ typedef struct SavePlayerData {
     /* 0x08 */ char playerName[8];                    // "player_name"
     /* 0x10 */ s16 healthCapacity;                    // "max_life"
     /* 0x12 */ s16 health;                            // "now_life"
-    /* 0x14 */ s8 magicLevel;                         // "magic_max"
-    /* 0x15 */ s8 magic;                              // "magic_now"
+    /* 0x14 */ s8 magicLevel; // 0 for no magic/new load, 1 for magic, 2 for double magic "magic_max"
+    /* 0x15 */ s8 magic; // current magic available for use "magic_now"
     /* 0x16 */ s16 rupees;                            // "lupy_count"
     /* 0x18 */ u16 swordHealth;                       // "long_sword_hp"
     /* 0x1A */ u16 tatlTimer;                         // "navi_timer"
-    /* 0x1C */ u8 magicAcquired;                      // "magic_mode"
-    /* 0x1D */ u8 doubleMagic;                        // "magic_ability"
+    /* 0x1C */ u8 isMagicAcquired;                    // "magic_mode"
+    /* 0x1D */ u8 isDoubleMagicAcquired;              // "magic_ability"
     /* 0x1E */ u8 doubleDefense;                      // "life_ability"
     /* 0x1F */ u8 unk_1F;                             // "ocarina_round"
     /* 0x20 */ u8 unk_20;                             // "first_memory"
@@ -226,13 +256,13 @@ typedef struct SaveContext {
     /* 0x3F22 */ u16 unk_3F22;                          // "prev_alpha_type"
     /* 0x3F24 */ u16 unk_3F24;                          // "alpha_count"
     /* 0x3F26 */ u16 unk_3F26;                          // "last_time_type"
-    /* 0x3F28 */ s16 unk_3F28;                          // "magic_flag"
-    /* 0x3F2A */ s16 unk_3F2A;                          // "recovery_magic_flag"
-    /* 0x3F2C */ s16 unk_3F2C;                          // "keep_magic_flag"
-    /* 0x3F2E */ s16 unk_3F2E;                          // "magic_now_max"
-    /* 0x3F30 */ s16 unk_3F30;                          // "magic_now_now"
-    /* 0x3F32 */ s16 unk_3F32;                          // "magic_used"
-    /* 0x3F34 */ s16 unk_3F34;                          // "magic_recovery"
+    /* 0x3F28 */ s16 magicState; // determines magic meter behavior on each frame "magic_flag"
+    /* 0x3F2A */ s16 isMagicRequested; // a request to add magic has been given "recovery_magic_flag"
+    /* 0x3F2C */ s16 magicFlag; // Set to 0 in func_80812D94(), otherwise unused "keep_magic_flag"
+    /* 0x3F2E */ s16 magicCapacity; // maximum magic available "magic_now_max"
+    /* 0x3F30 */ s16 magicFillTarget; // target used to fill magic "magic_now_now"
+    /* 0x3F32 */ s16 magicToConsume; // accumulated magic that is requested to be consumed "magic_used"
+    /* 0x3F34 */ s16 magicToAdd; // accumulated magic that is requested to be added "magic_recovery"
     /* 0x3F36 */ u16 mapIndex;                          // "scene_ID"
     /* 0x3F38 */ u16 minigameState;                     // "yabusame_mode"
     /* 0x3F3A */ u16 minigameScore;                     // "yabusame_total"
