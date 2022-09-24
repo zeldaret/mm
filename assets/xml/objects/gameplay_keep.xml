@@ -905,7 +905,7 @@
         <Blob Name="gameplay_keep_zeroes_unk_00022E78" Size="0xA8" Offset="0x22E78" />
         <Animation Name="gameplay_keep_Anim_022FF0" Offset="0x22FF0" />
         <Collision Name="gDoorCol" Offset="0x23100" />
-        <DList Name="gameplay_keep_DL_023130" Offset="0x23130" />
+        <DList Name="gEffDustDL" Offset="0x23130" />
         <DList Name="gOwlStatueWhiteFlashDL" Offset="0x23210" />
         <DList Name="gameplay_keep_DL_023288" Offset="0x23288" />
         <DList Name="gLightOrb1DL" Offset="0x23348" />
@@ -1427,14 +1427,14 @@
         <Texture Name="gameplay_keep_Tex_08D3E0" OutName="tex_08D3E0" Format="i8" Width="64" Height="32" Offset="0x8D3E0" />
         
         <!-- Dust Textures -->
-        <Texture Name="gDust1Tex" OutName="dust_1" Format="i8" Width="32" Height="32" Offset="0x8DBE0" />
-        <Texture Name="gDust2Tex" OutName="dust_2" Format="i8" Width="32" Height="32" Offset="0x8DFE0" />
-        <Texture Name="gDust3Tex" OutName="dust_3" Format="i8" Width="32" Height="32" Offset="0x8E3E0" />
-        <Texture Name="gDust4Tex" OutName="dust_4" Format="i8" Width="32" Height="32" Offset="0x8E7E0" />
-        <Texture Name="gDust5Tex" OutName="dust_5" Format="i8" Width="32" Height="32" Offset="0x8EBE0" />
-        <Texture Name="gDust6Tex" OutName="dust_6" Format="i8" Width="32" Height="32" Offset="0x8EFE0" />
-        <Texture Name="gDust7Tex" OutName="dust_7" Format="i8" Width="32" Height="32" Offset="0x8F3E0" />
-        <Texture Name="gDust8Tex" OutName="dust_8" Format="i8" Width="32" Height="32" Offset="0x8F7E0" />
+        <Texture Name="gEffDust1Tex" OutName="eff_dust_1" Format="i8" Width="32" Height="32" Offset="0x8DBE0" />
+        <Texture Name="gEffDust2Tex" OutName="eff_dust_2" Format="i8" Width="32" Height="32" Offset="0x8DFE0" />
+        <Texture Name="gEffDust3Tex" OutName="eff_dust_3" Format="i8" Width="32" Height="32" Offset="0x8E3E0" />
+        <Texture Name="gEffDust4Tex" OutName="eff_dust_4" Format="i8" Width="32" Height="32" Offset="0x8E7E0" />
+        <Texture Name="gEffDust5Tex" OutName="eff_dust_5" Format="i8" Width="32" Height="32" Offset="0x8EBE0" />
+        <Texture Name="gEffDust6Tex" OutName="eff_dust_6" Format="i8" Width="32" Height="32" Offset="0x8EFE0" />
+        <Texture Name="gEffDust7Tex" OutName="eff_dust_7" Format="i8" Width="32" Height="32" Offset="0x8F3E0" />
+        <Texture Name="gEffDust8Tex" OutName="eff_dust_8" Format="i8" Width="32" Height="32" Offset="0x8F7E0" />
         
         <Texture Name="gameplay_keep_Tex_08FBE0" OutName="tex_08FBE0" Format="i8" Width="32" Height="64" Offset="0x8FBE0" />
         <Texture Name="gameplay_keep_Tex_0903E0" OutName="tex_0903E0" Format="i8" Width="32" Height="64" Offset="0x903E0" />

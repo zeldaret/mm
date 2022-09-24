@@ -91,63 +91,76 @@ void EffectSsDust_Spawn(PlayState* play, u16 drawFlags, Vec3f* pos, Vec3f* veloc
 
 void func_800B0DE0(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
                    Color_RGBA8* envColor, s16 scale, s16 scaleStep) {
-    EffectSsDust_Spawn(play, 0, pos, velocity, accel, primColor, envColor, scale, scaleStep, 10, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG0, pos, velocity, accel, primColor, envColor, scale, scaleStep, 10,
+                       DUST_UPDATE_NORMAL);
 }
 
 void func_800B0E48(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
                    Color_RGBA8* envColor, s16 scale, s16 scaleStep) {
-    EffectSsDust_Spawn(play, 1, pos, velocity, accel, primColor, envColor, scale, scaleStep, 10, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG1, pos, velocity, accel, primColor, envColor, scale, scaleStep, 10,
+                       DUST_UPDATE_NORMAL);
 }
 
 void func_800B0EB0(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
                    Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 life) {
-    EffectSsDust_Spawn(play, 0, pos, velocity, accel, primColor, envColor, scale, scaleStep, life, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG0, pos, velocity, accel, primColor, envColor, scale, scaleStep, life,
+                       DUST_UPDATE_NORMAL);
 }
 
 void func_800B0F18(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
                    Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 life) {
-    EffectSsDust_Spawn(play, 1, pos, velocity, accel, primColor, envColor, scale, scaleStep, life, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG1, pos, velocity, accel, primColor, envColor, scale, scaleStep, life,
+                       DUST_UPDATE_NORMAL);
 }
 
 void func_800B0F80(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
                    Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 life) {
-    EffectSsDust_Spawn(play, 2, pos, velocity, accel, primColor, envColor, scale, scaleStep, life, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG2, pos, velocity, accel, primColor, envColor, scale, scaleStep, life,
+                       DUST_UPDATE_NORMAL);
 }
 
 void func_800B0FE8(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
                    Color_RGBA8* envColor, s16 scale, s16 scaleStep) {
-    EffectSsDust_Spawn(play, 0, pos, velocity, accel, primColor, envColor, scale, scaleStep, 10, 1);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG0, pos, velocity, accel, primColor, envColor, scale, scaleStep, 10,
+                       DUST_UPDATE_FIRE);
 }
 
 void func_800B1054(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
                    Color_RGBA8* envColor, s16 scale, s16 scaleStep) {
-    EffectSsDust_Spawn(play, 1, pos, velocity, accel, primColor, envColor, scale, scaleStep, 10, 1);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG1, pos, velocity, accel, primColor, envColor, scale, scaleStep, 10,
+                       DUST_UPDATE_FIRE);
 }
 
 static Color_RGBA8 sDustBrownPrim = { 170, 130, 90, 255 };
 static Color_RGBA8 sDustBrownEnv = { 100, 60, 20, 255 };
 
 void func_800B10C0(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel) {
-    EffectSsDust_Spawn(play, 4, pos, velocity, accel, &sDustBrownPrim, &sDustBrownEnv, 100, 5, 10, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG_RAND_COLOR_OFFSET | DUST_DRAWFLAG0, pos, velocity, accel, &sDustBrownPrim,
+                       &sDustBrownEnv, 100, 5, 10, DUST_UPDATE_NORMAL);
 }
 
 void func_800B1130(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel) {
-    EffectSsDust_Spawn(play, 5, pos, velocity, accel, &sDustBrownPrim, &sDustBrownEnv, 100, 5, 10, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG_RAND_COLOR_OFFSET | DUST_DRAWFLAG1, pos, velocity, accel, &sDustBrownPrim,
+                       &sDustBrownEnv, 100, 5, 10, DUST_UPDATE_NORMAL);
 }
 
 void func_800B11A0(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep) {
-    EffectSsDust_Spawn(play, 4, pos, velocity, accel, &sDustBrownPrim, &sDustBrownEnv, scale, scaleStep, 10, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG_RAND_COLOR_OFFSET | DUST_DRAWFLAG0, pos, velocity, accel, &sDustBrownPrim,
+                       &sDustBrownEnv, scale, scaleStep, 10, DUST_UPDATE_NORMAL);
 }
 
 void func_800B1210(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep) {
-    EffectSsDust_Spawn(play, 5, pos, velocity, accel, &sDustBrownPrim, &sDustBrownEnv, scale, scaleStep, 10, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG_RAND_COLOR_OFFSET | DUST_DRAWFLAG1, pos, velocity, accel, &sDustBrownPrim,
+                       &sDustBrownEnv, scale, scaleStep, 10, DUST_UPDATE_NORMAL);
 }
 
 void func_800B1280(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep, s16 life) {
-    EffectSsDust_Spawn(play, 4, pos, velocity, accel, &sDustBrownPrim, &sDustBrownEnv, scale, scaleStep, life, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG_RAND_COLOR_OFFSET | DUST_DRAWFLAG0, pos, velocity, accel, &sDustBrownPrim,
+                       &sDustBrownEnv, scale, scaleStep, life, DUST_UPDATE_NORMAL);
 }
 void func_800B12F0(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep, s16 life) {
-    EffectSsDust_Spawn(play, 5, pos, velocity, accel, &sDustBrownPrim, &sDustBrownEnv, scale, scaleStep, life, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG_RAND_COLOR_OFFSET | DUST_DRAWFLAG1, pos, velocity, accel, &sDustBrownPrim,
+                       &sDustBrownEnv, scale, scaleStep, life, DUST_UPDATE_NORMAL);
 }
 
 void func_800B1360(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
