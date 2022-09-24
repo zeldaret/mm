@@ -822,7 +822,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
             if (this->damageReaction.hookedState == EN_RAT_HOOK_STARTED) {
                 // The player just hit the Real Bombchu with the Hookshot.
                 this->damageReaction.hookedState = EN_RAT_HOOKED;
-            } else if ((this->actor.flags & ACTOR_FLAG_2000) != ACTOR_FLAG_2000) {
+            } else if (!CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
                 // The player has hooked the Real Bombchu for more than one frame, but
                 // the actor flag indicating that the Hookshot is attached is *not* set.
                 EnRat_Explode(this, play);
