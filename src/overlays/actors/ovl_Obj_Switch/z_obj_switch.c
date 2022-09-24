@@ -296,7 +296,7 @@ void ObjSwitch_FloorSwitchSnapPlayerToSwitchEdge(ObjSwitch* this, PlayState* pla
     s16 yaw;
     f32 cos;
 
-    if (play->actorCtx.unk5 & 0x80) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_7) {
         player = GET_PLAYER(play);
         // compute yawTowardsPlayer relative to model space
         yaw = BINANG_SUB(this->dyna.actor.yawTowardsPlayer, this->dyna.actor.shape.rot.y);

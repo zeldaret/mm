@@ -299,8 +299,8 @@ void func_80A1143C(EnGoStruct* ptr, Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4
 }
 
 void func_80A115B4(EnGoStruct* ptr, PlayState* play) {
-    static TexturePtr D_80A16644[] = {
-        gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
+    static TexturePtr sDustTextures[] = {
+        gEffDust8Tex, gEffDust7Tex, gEffDust6Tex, gEffDust5Tex, gEffDust4Tex, gEffDust3Tex, gEffDust2Tex, gEffDust1Tex,
     };
     static Color_RGBA8 D_80A16664[] = {
         { 255, 255, 255, 0 },
@@ -341,7 +341,7 @@ void func_80A115B4(EnGoStruct* ptr, PlayState* play) {
             Matrix_ReplaceRotation(&play->billboardMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A16644[(s32)(temp * 7.0f)]));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[(s32)(temp * 7.0f)]));
             gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
 
             Matrix_Pop();
@@ -987,7 +987,7 @@ Actor* func_80A13400(EnGo* this, PlayState* play) {
 }
 
 void func_80A134B0(EnGo* this, PlayState* play, s32 arg2) {
-    if ((gSaveContext.save.weekEventReg[18] & 0x80) || (play->actorCtx.unk5 & 1) || arg2) {
+    if ((gSaveContext.save.weekEventReg[18] & 0x80) || (play->actorCtx.flags & ACTORCTX_FLAG_0) || arg2) {
         this->colliderSphere.dim.modelSphere.radius = 300;
     } else {
         this->colliderSphere.dim.modelSphere.radius = 380;

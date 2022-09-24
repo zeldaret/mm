@@ -253,7 +253,7 @@ static s32 D_8089E350 = 0;
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
-    ICHAIN_S8(hintId, 16, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_DINOLFOS, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 15, ICHAIN_STOP),
 };

@@ -74,11 +74,11 @@ typedef struct {
 } ShutterInfo; // size = 0xC
 
 ShutterInfo D_808A21B0[] = {
-    { object_bdoor_DL_0000C0, NULL, 130, 12, 50, 15 },
+    { gBossDoorDL, NULL, 130, 12, 50, 15 },
     { gameplay_keep_DL_077990, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_numa_obj_DL_007150, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_hakugin_obj_DL_000128, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
-    { object_dblue_object_DL_017D00, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
+    { gGreatBayTempleObjectDoorDL, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_ikana_obj_DL_014A40, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_redead_obj_DL_0001A0, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_ikninside_obj_DL_004440, object_ikninside_obj_DL_005260, 130, 0, 20, 15 },
@@ -129,8 +129,7 @@ Vec3f D_808A22C4 = { 120.0f, 0.0f, 0.0f };
 Vec3f D_808A22D0 = { -90.0f, 0.0f, 0.0f };
 
 TexturePtr D_808A22DC[] = {
-    object_bdoor_Tex_006BA0, object_bdoor_Tex_005BA0, object_bdoor_Tex_0005C0,
-    object_bdoor_Tex_004BA0, object_bdoor_Tex_003BA0,
+    gBossDoorDefaultTex, gBossDoorWoodfallTex, gBossDoorSnowheadTex, gBossDoorGreatBayTex, gBossDoorStoneTowerTex,
 };
 
 void DoorShutter_SetupAction(DoorShutter* this, DoorShutterActionFunc actionFunc) {

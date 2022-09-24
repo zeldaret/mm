@@ -25,7 +25,7 @@ u16 ElfMessage_GetFirstCycleHint(PlayState* play) {
         }
         return 0x21D;
     }
-    if (gSaveContext.save.playerData.magicAcquired != true) {
+    if (gSaveContext.save.playerData.isMagicAcquired != true) {
         return 0x21F;
     }
     if (INV_CONTENT(ITEM_DEED_LAND) == ITEM_DEED_LAND) {
