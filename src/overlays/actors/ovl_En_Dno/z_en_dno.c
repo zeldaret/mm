@@ -2,7 +2,7 @@
  * File: z_en_dno.c
  * Overlay: ovl_En_Dno
  * Description: Deku Butler
- * 
+ *
  * This actor's name is probably short for "Dekunuts Ou (king)". This is likely a misnamed actor,
  * since it uses assets from object_dnj (probably short for "Dekunuts Jii (grandfather, elderly
  * person"). Note that the Deku Princess and King both call the Butler "Jii" in the Japanese text.
