@@ -14,14 +14,14 @@
         <!-- Turtle -->
         <Collision Name="gTurtleAsleepCol" Offset="0x2328" />
         <TextureAnimation Name="gTurtleEmptyTexAnim" Offset="0x2360"/>
-        <Collision Name="gTurtleAwakeCol" Offset="0x2470" />
+        <Collision Name="gTurtleZoraCapeAwakeCol" Offset="0x2470" />
         <Collision Name="gTurtleUnusedCol" Offset="0x2E04" />
         
         <Animation Name="gTurtleGlitchy1Anim" Offset="0x3980" />
         <Animation Name="gTurtleCoughAnim" Offset="0x47B8" />
         <Animation Name="gTurtleIdleAnim" Offset="0x48B0" />
 
-        <DList Name="gTurtleAsleepDL" Offset="0x4E70" />
+        <DList Name="gTurtleAsleepDL" Offset="0x4E70" /> <!-- When asleep, the turtle looks like a giant rock -->
 
         <Texture Name="gTurtleAsleepTLUT" OutName="turtle_asleep_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5248" />
         <Texture Name="gTurtleAsleepGrassTex" OutName="turtle_asleep_grass" Format="ci8" Width="32" Height="32" Offset="0x5448" />

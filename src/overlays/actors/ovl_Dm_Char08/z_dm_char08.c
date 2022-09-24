@@ -166,7 +166,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
     if (play->sceneNum == SCENE_31MISAKI) {
         if (gSaveContext.save.weekEventReg[53] & 0x20) {
             DynaPolyActor_Init(&this->dyna, 3);
-            DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleAwakeCol);
+            DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAwakeCol);
         } else {
             DynaPolyActor_Init(&this->dyna, 3);
             DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleAsleepCol);
@@ -297,7 +297,7 @@ void DmChar08_SetupAppearCs(DmChar08* this, PlayState* play) {
 void func_80AAF884(DmChar08* this, PlayState* play) {
     if (play->csCtx.state == CS_STATE_0) {
         DynaPolyActor_Init(&this->dyna, 3);
-        DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleAwakeCol);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAwakeCol);
         this->dyna.actor.flags |= ACTOR_FLAG_1;
         this->actionFunc = func_80AAF8F4;
     }
