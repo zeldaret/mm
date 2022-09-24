@@ -12,7 +12,7 @@
 
 
         <!-- Turtle -->
-        <Collision Name="gTurtleAsleepCol" Offset="0x2328" />
+        <Collision Name="gTurtleZoraCapeAsleepCol" Offset="0x2328" />
         <TextureAnimation Name="gTurtleEmptyTexAnim" Offset="0x2360"/>
         <Collision Name="gTurtleZoraCapeAwakeCol" Offset="0x2470" />
         <Collision Name="gTurtleUnusedCol" Offset="0x2E04" />

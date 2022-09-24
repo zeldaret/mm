@@ -169,7 +169,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
             DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAwakeCol);
         } else {
             DynaPolyActor_Init(&this->dyna, 3);
-            DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleAsleepCol);
+            DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAsleepCol);
         }
         this->dynapolyInitialized = true;
     } else if (play->sceneNum == SCENE_SEA) {
