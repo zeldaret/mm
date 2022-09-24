@@ -2630,10 +2630,10 @@ asm/non_matchings/code/audioMgr/AudioMgr_HandlePRENMI.s,AudioMgr_HandlePRENMI,0x
 asm/non_matchings/code/audioMgr/AudioMgr_ThreadEntry.s,AudioMgr_ThreadEntry,0x80172ED0,0x5E
 asm/non_matchings/code/audioMgr/AudioMgr_Unlock.s,AudioMgr_Unlock,0x80173048,0xB
 asm/non_matchings/code/audioMgr/AudioMgr_Init.s,AudioMgr_Init,0x80173074,0x2F
-asm/non_matchings/code/title_setup/TitleSetup_GameStateResetContext.s,TitleSetup_GameStateResetContext,0x80173130,0x6B
-asm/non_matchings/code/title_setup/TitleSetup_InitImpl.s,TitleSetup_InitImpl,0x801732DC,0x14
-asm/non_matchings/code/title_setup/TitleSetup_Destroy.s,TitleSetup_Destroy,0x8017332C,0x3
-asm/non_matchings/code/title_setup/TitleSetup_Init.s,TitleSetup_Init,0x80173338,0xA
+asm/non_matchings/code/title_setup/Setup_SetRegs.s,Setup_SetRegs,0x80173130,0x6B
+asm/non_matchings/code/title_setup/Setup_InitImpl.s,Setup_InitImpl,0x801732DC,0x14
+asm/non_matchings/code/title_setup/Setup_Destroy.s,Setup_Destroy,0x8017332C,0x3
+asm/non_matchings/code/title_setup/Setup_Init.s,Setup_Init,0x80173338,0xA
 asm/non_matchings/code/game/Game_UpdateFramerateVariables.s,Game_UpdateFramerateVariables,0x80173360,0x12
 asm/non_matchings/code/game/Game_SetFramerateDivisor.s,Game_SetFramerateDivisor,0x801733A8,0xD
 asm/non_matchings/code/game/GameState_SetFBFilter.s,GameState_SetFBFilter,0x801733DC,0x56
@@ -2648,8 +2648,8 @@ asm/non_matchings/code/game/Game_InitHeap.s,Game_InitHeap,0x80173810,0x1C
 asm/non_matchings/code/game/Game_ResizeHeap.s,Game_ResizeHeap,0x80173880,0x34
 asm/non_matchings/code/game/GameState_Init.s,GameState_Init,0x80173950,0x40
 asm/non_matchings/code/game/GameState_Destroy.s,GameState_Destroy,0x80173A50,0x2C
-asm/non_matchings/code/game/GameState_GetNextStateInit.s,GameState_GetNextStateInit,0x80173B00,0x3
-asm/non_matchings/code/game/GameState_GetNextStateSize.s,GameState_GetNextStateSize,0x80173B0C,0x3
+asm/non_matchings/code/game/GameState_GetInit.s,GameState_GetInit,0x80173B00,0x3
+asm/non_matchings/code/game/GameState_GetSize.s,GameState_GetSize,0x80173B0C,0x3
 asm/non_matchings/code/game/GameState_IsRunning.s,GameState_IsRunning,0x80173B18,0x3
 asm/non_matchings/code/game/Game_GetHeapFreeSize.s,Game_GetHeapFreeSize,0x80173B24,0x9
 asm/non_matchings/code/game/func_80173B48.s,func_80173B48,0x80173B48,0x2A

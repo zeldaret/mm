@@ -867,8 +867,8 @@ typedef struct GameState {
     /* 0x00 */ GraphicsContext* gfxCtx;
     /* 0x04 */ GameStateFunc main;
     /* 0x08 */ GameStateFunc destroy;
-    /* 0x0C */ GameStateFunc nextGameStateInit;
-    /* 0x10 */ size_t nextGameStateSize;
+    /* 0x0C */ GameStateFunc init; // Usually the current game state's init, though after stopping, the graph thread will look here to determine the next game state to load.
+    /* 0x10 */ size_t size;
     /* 0x14 */ Input input[4];
     /* 0x74 */ TwoHeadArena heap;
     /* 0x84 */ GameAlloc alloc;
@@ -879,12 +879,6 @@ typedef struct GameState {
     /* 0xA2 */ u8 framerateDivisor; // game speed?
     /* 0xA3 */ u8 unk_A3;
 } GameState; // size = 0xA4
-
-typedef struct PreNMIContext {
-    /* 0x00 */ GameState state;
-    /* 0xA4 */ u32 timer;
-    /* 0xA8 */ UNK_TYPE4 unkA8;
-} PreNMIContext; // size = 0xAC
 
 typedef struct {
     /* 0x00 */ u32 resetting;
