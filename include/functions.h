@@ -2552,7 +2552,7 @@ void func_80168DAC(PlayState* play);
 void Play_Main(PlayState* play);
 s32 Play_InCsMode(PlayState* play);
 f32 func_80169100(PlayState* play, MtxF* mtx, CollisionPoly** arg2, s32* arg3, Vec3f* feetPosPtr);
-// void func_801691F0(void);
+void func_801691F0(PlayState* play, MtxF* mtx, Vec3f* arg2);
 void* Play_LoadScene(PlayState* play, RomFile* entry);
 void func_8016927C(PlayState* play, s16 sParm2);
 // void func_801692C4(PlayState* play, UNK_TYPE1 uParm2);
