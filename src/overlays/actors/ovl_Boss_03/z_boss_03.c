@@ -724,7 +724,7 @@ void Boss03_ChasePlayer(Boss03* this, PlayState* play) {
 
             if (sp43 != 0) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, player->actor.world.pos.x, this->waterHeight,
-                            player->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_309);
+                            player->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_TYPE_GYORG_RIPPLES);
                 Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_SINK_OLD);
             }
 
@@ -1055,7 +1055,7 @@ void Boss03_Charge(Boss03* this, PlayState* play) {
             play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
             func_800BC848(&this->actor, play, 20, 15);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0, 0x96,
-                        ENWATEREFFECT_30C);
+                        ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE);
 
             // Player is above water && Player is standing on ground
             if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
@@ -1528,7 +1528,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
             if ((this->workTimer[WORK_TIMER_UNK0_C] == 0) && ((this->waterHeight - 100.0f) < this->actor.world.pos.y)) {
                 this->workTimer[WORK_TIMER_UNK0_C] = Rand_ZeroFloat(15.0f) + 15.0f;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
-                            this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_309);
+                            this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_TYPE_GYORG_RIPPLES);
 
                 if (this->actionFunc == Boss03_DeathCutscene) {
                     if ((D_809E9840 % 2) != 0) {
@@ -2012,7 +2012,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
             }
 
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
-                        this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_309);
+                        this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_TYPE_GYORG_RIPPLES);
 
             this->unk_280 = 27;
             this->unk_284 = this->actor.world.pos.x;
