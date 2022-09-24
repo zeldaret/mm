@@ -505,7 +505,7 @@ void EffectSsDtBubble_SpawnColorProfile(PlayState* play, Vec3f* pos, Vec3f* velo
     Math_Vec3f_Copy(&initParams.pos, pos);
     Math_Vec3f_Copy(&initParams.velocity, velocity);
     Math_Vec3f_Copy(&initParams.accel, accel);
-    initParams.customColor = 0;
+    initParams.customColor = false;
     initParams.colorProfile = colorProfile;
     initParams.scale = scale;
     initParams.life = life;
@@ -526,7 +526,7 @@ void EffectSsDtBubble_SpawnCustomColor(PlayState* play, Vec3f* pos, Vec3f* veloc
     initParams.scale = scale;
     initParams.life = life;
     initParams.randXZ = randXZ;
-    initParams.customColor = 1;
+    initParams.customColor = true;
 
     EffectSs_Spawn(play, EFFECT_SS_DT_BUBBLE, 128, &initParams);
 }
