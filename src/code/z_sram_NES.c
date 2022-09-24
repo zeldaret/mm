@@ -267,11 +267,11 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     sceneNum = Play_GetOriginalSceneNumber(play->sceneNum);
     Play_SaveCycleSceneFlags(&play->state);
 
-    play->actorCtx.flags.chest &= D_801C5FC0[sceneNum][2];
-    play->actorCtx.flags.switches[0] &= D_801C5FC0[sceneNum][0];
-    play->actorCtx.flags.switches[1] &= D_801C5FC0[sceneNum][1];
-    play->actorCtx.flags.collectible[0] &= D_801C5FC0[sceneNum][3];
-    play->actorCtx.flags.clearedRoom = 0;
+    play->actorCtx.sceneFlags.chest &= D_801C5FC0[sceneNum][2];
+    play->actorCtx.sceneFlags.switches[0] &= D_801C5FC0[sceneNum][0];
+    play->actorCtx.sceneFlags.switches[1] &= D_801C5FC0[sceneNum][1];
+    play->actorCtx.sceneFlags.collectible[0] &= D_801C5FC0[sceneNum][3];
+    play->actorCtx.sceneFlags.clearedRoom = 0;
 
     for (i = 0; i < SCENE_MAX; i++) {
         gSaveContext.cycleSceneFlags[i].switch0 = ((void)0, gSaveContext.cycleSceneFlags[i].switch0) & D_801C5FC0[i][0];

@@ -987,7 +987,7 @@ Actor* func_80A13400(EnGo* this, PlayState* play) {
 }
 
 void func_80A134B0(EnGo* this, PlayState* play, s32 arg2) {
-    if ((gSaveContext.save.weekEventReg[18] & 0x80) || (play->actorCtx.unk5 & 1) || arg2) {
+    if ((gSaveContext.save.weekEventReg[18] & 0x80) || (play->actorCtx.flags & ACTORCTX_FLAG_0) || arg2) {
         this->colliderSphere.dim.modelSphere.radius = 300;
     } else {
         this->colliderSphere.dim.modelSphere.radius = 380;

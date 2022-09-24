@@ -52,7 +52,7 @@ void EnScopecoin_Init(Actor* thisx, PlayState* play) {
         this->unk148 = 0;
     }
 
-    if (play->actorCtx.unk5 & 2) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
         if (this->unk148 == 2 || this->unk148 == 6) {
             if (Flags_GetCollectible(play, (this->actor.params & 0x7F0) >> 4)) {
                 Actor_MarkForDeath(&this->actor);
