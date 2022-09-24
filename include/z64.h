@@ -469,8 +469,8 @@ typedef struct {
     /* 0x290 */ f32 unk_290;
     /* 0x294 */ f32 unk_294;
     /* 0x298 */ f32 unk_298;
-    /* 0x29C */ s16 unk_29C;
-    /* 0x29E */ s16 unk_29E;
+    /* 0x29C */ s16 promptChoice; // save/continue choice: 0 = yes; 4 = no
+    /* 0x29E */ s16 promptAlpha;
     /* 0x2A0 */ s16 unk_2A0;
     /* 0x2A2 */ u8 worldMapPoints[20];
     /* 0x2B6 */ u8 unk_2B6;

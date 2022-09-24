@@ -138,7 +138,7 @@ void KaleidoSetup_Init(PlayState* play) {
     pauseCtx->unk_2A0 = -1;
     pauseCtx->unk_2BA = 320;
     pauseCtx->unk_2BC = 40;
-    pauseCtx->unk_29E = 100;
+    pauseCtx->promptAlpha = 100;
 
     View_Init(&pauseCtx->view, play->state.gfxCtx);
 }
