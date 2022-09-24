@@ -1348,10 +1348,13 @@
         <DList Name="gameplay_keep_DL_07AB58" Offset="0x7AB58" />
         <DList Name="gSunDL" Offset="0x7AB70" />
         <DList Name="gZTargetLockOnTriangleDL" Offset="0x7AE00" />
-        <DList Name="gameplay_keep_DL_07AFB0" Offset="0x7AFB0" />
-        <DList Name="gameplay_keep_DL_07B0B8" Offset="0x7B0B8" />
-        <Texture Name="gameplay_keep_Tex_07B0C0" OutName="tex_07B0C0" Format="i8" Width="64" Height="64" Offset="0x7B0C0" />
-        <Texture Name="gameplay_keep_Tex_07C0C0" OutName="tex_07C0C0" Format="i8" Width="64" Height="64" Offset="0x7C0C0" />
+
+        <!-- The clock that appears when the player is moving through, slowing down, or speeding up time with the Song of Time -->
+        <DList Name="gSongOfTimeClockDL" Offset="0x7AFB0" /> <!-- Original name is "disk_modelT" -->
+        <DList Name="gSongOfTimeClockEmptyDL" Offset="0x7B0B8" /> <!-- Probably was the opaque component for the above DL -->
+        <Texture Name="gSongOfTimeClockTopTex" OutName="song_of_time_clock_top" Format="i8" Width="64" Height="64" Offset="0x7B0C0" />
+        <Texture Name="gSongOfTimeClockBottomTex" OutName="song_of_time_clock_bottom" Format="i8" Width="64" Height="64" Offset="0x7C0C0" />
+
         <DList Name="gameplay_keep_DL_07D260" Offset="0x7D260" />
         <DList Name="gameplay_keep_DL_07D348" Offset="0x7D348" />
         <Texture Name="gameplay_keep_Tex_07D350" OutName="tex_07D350" Format="i8" Width="16" Height="32" Offset="0x7D350" />

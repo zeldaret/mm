@@ -1126,7 +1126,7 @@ void func_80A93298(EnTest6* this, PlayState* play) {
         gDPSetPrimColor(this->unk_148++, 0, 0xFF, 28, 28, 28, 255);
         gDPSetEnvColor(this->unk_148++, 255, 255, 255, 255);
         gDPSetRenderMode(this->unk_148++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2);
-        gSPDisplayList(this->unk_148++, gameplay_keep_DL_07AFB0);
+        gSPDisplayList(this->unk_148++, gSongOfTimeClockDL);
 
         temp_s4 += 0x1000;
         cos = Math_CosS(temp_s4) * this->unk_150;
@@ -1140,7 +1140,7 @@ void func_80A93298(EnTest6* this, PlayState* play) {
         gDPSetPrimColor(this->unk_148++, 0, 0xFF, 28, 28, 28, 255);
         gDPSetEnvColor(this->unk_148++, 255, 255, 255, 255);
         gDPSetRenderMode(this->unk_148++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2);
-        gSPDisplayList(this->unk_148++, gameplay_keep_DL_07AFB0);
+        gSPDisplayList(this->unk_148++, gSongOfTimeClockDL);
 
         phi_f24 -= this->unk_14C;
         phi_s2 += this->unk_27E;
@@ -1213,7 +1213,7 @@ void func_80A9369C(Actor* thisx, PlayState* play2) {
         gDPSetPrimColor(this->unk_148++, 0, 0xFF, this->unk_280, this->unk_280, this->unk_280, 255);
         gDPSetEnvColor(this->unk_148++, 235, 238, 235, 255);
         gDPSetRenderMode(this->unk_148++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2);
-        gSPDisplayList(this->unk_148++, gameplay_keep_DL_07AFB0);
+        gSPDisplayList(this->unk_148++, gSongOfTimeClockDL);
 
         phi_s2 += 0x505;
     }
@@ -1257,7 +1257,7 @@ void func_80A939E8(EnTest6* this, PlayState* play2) {
                 gDPSetPrimColor(this->unk_148++, 0, 0xFF, 28, 28, 28, 255);
                 gDPSetEnvColor(this->unk_148++, 245, 245, 200, this->unk_282);
                 gDPSetRenderMode(this->unk_148++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2);
-                gSPDisplayList(this->unk_148++, gameplay_keep_DL_07AFB0);
+                gSPDisplayList(this->unk_148++, gSongOfTimeClockDL);
 
                 POLY_XLU_DISP = this->unk_148;
             }
