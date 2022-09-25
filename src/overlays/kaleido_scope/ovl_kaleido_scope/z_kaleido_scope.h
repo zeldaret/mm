@@ -29,6 +29,9 @@ typedef enum {
   /* 3 */ DEBUG_EDITOR_EVENTS
 } DebugEditor;
 
+#define PAUSE_PROMPT_YES 0
+#define PAUSE_PROMPT_NO 4
+
 // NES
 void KaleidoScope_MoveCursorToSpecialPos(PlayState* play, s16 cursorSpecialPos);
 void KaleidoScope_DrawQuadTextureRGBA32(GraphicsContext* gfxCtx, void* texture, u16 width, u16 height, u16 point);
