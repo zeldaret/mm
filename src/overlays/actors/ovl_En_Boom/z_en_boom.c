@@ -219,7 +219,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
                                                    (this->collider.base.at->id == ACTOR_EN_SI))) {
         this->unk_1C8 = this->collider.base.at;
         if (this->collider.base.at->id == ACTOR_EN_SI) {
-            this->collider.base.at->flags |= 0x2000;
+            this->collider.base.at->flags |= ACTOR_FLAG_2000;
         }
     }
 
@@ -264,7 +264,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
                     sp7C->gravity = -0.9f;
                     sp7C->bgCheckFlags &= ~3;
                 } else {
-                    sp7C->flags &= -0x2001;
+                    sp7C->flags &= ~ACTOR_FLAG_2000;
                 }
             }
             Actor_MarkForDeath(&this->actor);

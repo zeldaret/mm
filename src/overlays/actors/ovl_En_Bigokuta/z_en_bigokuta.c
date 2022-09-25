@@ -443,7 +443,7 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play) {
                     bubblePos.z = this->picto.actor.world.pos.z + (2.0f * bubbleVel.z);
 
                     EffectSsDtBubble_SpawnCustomColor(play, &bubblePos, &bubbleVel, &D_80AC45A4, &D_80AC45B0,
-                                                      &D_80AC45B8, Rand_S16Offset(150, 50), 25, 0);
+                                                      &D_80AC45B8, Rand_S16Offset(150, 50), 25, false);
                 }
 
                 if (this->picto.actor.params != 0xFF) {

@@ -219,7 +219,7 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
     }
 
     if (thisx->params == ENBIGPO_REGULAR) { // the well poe, starts immediately
-        thisx->flags &= ~0x10;              // always update OFF
+        thisx->flags &= ~ACTOR_FLAG_10;     // always update OFF
         this->unkBool204 = true;
         EnBigpo_InitWellBigpo(this);
     } else if (thisx->params == ENBIGPO_SUMMONED) { // dampe type
