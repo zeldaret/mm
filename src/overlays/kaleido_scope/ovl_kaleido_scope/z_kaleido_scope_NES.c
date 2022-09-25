@@ -2755,16 +2755,8 @@ void KaleidoScope_Update(PlayState* play) {
                             R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_OFF;
                             Object_LoadAll(&play->objectCtx);
                             BgCheck_InitCollisionHeaders(&play->colCtx, play);
-                            do {
-                                GameState* state = &play->state;
-
-                                state->running = false;
-                            } while (0);
-                            do {
-                                GameState* state = &play->state;
-
-                                SET_NEXT_GAMESTATE(state, Opening_Init, OpeningContext);
-                            } while (0);
+                            STOP_GAMESTATE(&play->state);
+                            SET_NEXT_GAMESTATE(&play->state, TitleSetup_Init, sizeof(TitleSetupState));
                             func_801A4058(0x14);
                             gSaveContext.seqIndex = 0xFF;
                             gSaveContext.nightSeqIndex = 0xFF;
@@ -3007,16 +2999,8 @@ void KaleidoScope_Update(PlayState* play) {
                         gSaveContext.save.playerData.magicLevel = 0;
                         gSaveContext.save.playerData.magic = 0;
                     } else { // PAUSE_PROMPT_NO
-                        do {
-                            GameState* state = &play->state;
-
-                            state->running = false;
-                        } while (0);
-                        do {
-                            GameState* state = &play->state;
-
-                            SET_NEXT_GAMESTATE(state, Opening_Init, OpeningContext);
-                        } while (0);
+                        STOP_GAMESTATE(&play->state);
+                        SET_NEXT_GAMESTATE(&play->state, TitleSetup_Init, sizeof(TitleSetupState));
                     }
                 }
             }

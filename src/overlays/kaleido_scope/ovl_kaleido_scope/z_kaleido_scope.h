@@ -85,7 +85,6 @@ typedef enum {
     /* 2 */ PAUSE_EQUIP_C_RIGHT
 } PauseEquipCButton;
 
-
 typedef enum {
     /* 0 */ EQUIP_STATE_MAGIC_ARROW_GROW_ORB,
     /* 1 */ EQUIP_STATE_MAGIC_ARROW_MOVE_TO_BOW_SLOT,
