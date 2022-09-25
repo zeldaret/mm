@@ -139,7 +139,7 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
     this->flashSpeedScale = 7;
     this->isPowderKeg = ENBOM_GETX_1(&this->actor);
     if (this->isPowderKeg) {
-        play->actorCtx.unk5 |= 1;
+        play->actorCtx.flags |= ACTORCTX_FLAG_0;
         this->timer = gSaveContext.powderKegTimer;
     } else {
         this->timer = 70;
@@ -188,7 +188,7 @@ void EnBom_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyJntSph(play, &this->collider2);
     Collider_DestroyCylinder(play, &this->collider1);
     if (this->isPowderKeg) {
-        play->actorCtx.unk5 &= ~1;
+        play->actorCtx.flags &= ~ACTORCTX_FLAG_0;
     }
 }
 
@@ -541,7 +541,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 Camera_AddQuake(&play->mainCamera, 2, 11, 8);
                 thisx->params = ENBOM_1;
                 this->timer = 10;
-                thisx->flags |= (0x100000 | 0x20);
+                thisx->flags |= (ACTOR_FLAG_20 | ACTOR_FLAG_100000);
                 this->actionFunc = func_808715B8;
                 if (this->isPowderKeg) {
                     gSaveContext.powderKegTimer = 0;
@@ -610,7 +610,7 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
             Matrix_MultVec3f(&D_80872EE0, &this->actor.home.pos);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_015FA0);
+            gSPDisplayList(POLY_OPA_DISP++, gBombCapDL);
 
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_RotateXS(0x4000, MTXMODE_APPLY);
@@ -619,7 +619,7 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
             gDPPipeSync(POLY_OPA_DISP++);
             gDPSetEnvColor(POLY_OPA_DISP++, (s8)this->unk_1F4, 0, 40, 255);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, (s8)this->unk_1F4, 0, 40, 255);
-            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_015DB0);
+            gSPDisplayList(POLY_OPA_DISP++, gBombBodyDL);
         } else {
             Vec3f sp58;
             Vec3f sp4C;

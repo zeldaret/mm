@@ -370,7 +370,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
     } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
         gSaveContext.gameMode = 1;
         STOP_GAMESTATE(&this->state);
-        SET_NEXT_GAMESTATE_TEST(&this->state, Opening_Init, OpeningContext);
+        SET_NEXT_GAMESTATE(&this->state, TitleSetup_Init, sizeof(TitleSetupState));
     } else {
         if (ABS_ALT(this->stickRelY) > 30) {
             play_sound(NA_SE_SY_FSEL_CURSOR);
@@ -1708,10 +1708,10 @@ void FileSelect_LoadGame(GameState* thisx) {
     gSaveContext.gameMode = 0;
 
     STOP_GAMESTATE(&this->state);
-    SET_NEXT_GAMESTATE_TEST(&this->state, Play_Init, PlayState);
+    SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
 
     gSaveContext.respawnFlag = 0;
-    gSaveContext.respawn[0].entranceIndex = 0xFFFF;
+    gSaveContext.respawn[0].entrance = 0xFFFF;
     gSaveContext.seqIndex = 0xFF;
     gSaveContext.nightSeqIndex = 0xFF;
     gSaveContext.showTitleCard = 1;
@@ -1726,7 +1726,7 @@ void FileSelect_LoadGame(GameState* thisx) {
     gSaveContext.unk_3F26 = 0x32;
     gSaveContext.unk_3DC0 = 0;
     gSaveContext.healthAccumulator = 0;
-    gSaveContext.unk_3F2C = 0;
+    gSaveContext.magicFlag = 0;
     gSaveContext.unk_3F46 = 0;
     gSaveContext.skyboxTime = 0;
     gSaveContext.nextTransitionType = TRANS_NEXT_TYPE_DEFAULT;

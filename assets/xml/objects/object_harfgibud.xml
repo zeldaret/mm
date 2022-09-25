@@ -56,7 +56,7 @@
         <Limb Name="gHarfgibudGibdoRightThighLimb" Type="Standard" EnumName="HARFGIBUD_GIBDO_LIMB_RIGHT_THIGH" Offset="0x8514" />
         <Limb Name="gHarfgibudGibdoRightLegLimb" Type="Standard" EnumName="HARFGIBUD_GIBDO_LIMB_RIGHT_LEG" Offset="0x8520" />
         <Limb Name="gHarfgibudGibdoRightFootLimb" Type="Standard" EnumName="HARFGIBUD_GIBDO_LIMB_RIGHT_FOOT" Offset="0x852C" />
-        <Skeleton Name="gHarfgibudGibdoSkel" Type="Flex" LimbType="Standard" LimbNone="HARFGIBUD_GIBDO_LIMB_NONE" LimbMax="HARFGIBUD_GIBDO_LIMB_MAX" EnumName="HarfgibudGibdoLimbs" Offset="0x8580" />
+        <Skeleton Name="gHarfgibudGibdoSkel" Type="Flex" LimbType="Standard" LimbNone="HARFGIBUD_GIBDO_LIMB_NONE" LimbMax="HARFGIBUD_GIBDO_LIMB_MAX" EnumName="HarfgibudGibdoLimb" Offset="0x8580" />
 
         <Animation Name="object_harfgibud_Anim_009D44" Offset="0x9D44" />
         <Animation Name="object_harfgibud_Anim_00A164" Offset="0xA164" />
@@ -116,7 +116,7 @@
         <Limb Name="gHarfgibudHumanRightThighLimb" Type="Standard" EnumName="HARFGIBUD_HUMAN_LIMB_RIGHT_THIGH" Offset="0x129EC" />
         <Limb Name="gHarfgibudHumanRightLegLimb" Type="Standard" EnumName="HARFGIBUD_HUMAN_LIMB_RIGHT_LEG" Offset="0x129F8" />
         <Limb Name="gHarfgibudHumanRightFootLimb" Type="Standard" EnumName="HARFGIBUD_HUMAN_LIMB_RIGHT_FOOT" Offset="0x12A04" />
-        <Skeleton Name="gHarfgibudHumanSkel" Type="Flex" LimbType="Standard" LimbNone="HARFGIBUD_HUMAN_LIMB_NONE" LimbMax="HARFGIBUD_HUMAN_LIMB_MAX" EnumName="HarfgibudHumanLimbs" Offset="0x12A58" />
+        <Skeleton Name="gHarfgibudHumanSkel" Type="Flex" LimbType="Standard" LimbNone="HARFGIBUD_HUMAN_LIMB_NONE" LimbMax="HARFGIBUD_HUMAN_LIMB_MAX" EnumName="HarfgibudHumanLimb" Offset="0x12A58" />
 
         <Animation Name="object_harfgibud_Anim_013684" Offset="0x13684" />
         <Animation Name="object_harfgibud_Anim_014220" Offset="0x14220" />

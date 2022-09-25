@@ -19,6 +19,6 @@
         <Limb Name="gGuayLeftWingTipLimb" Type="Standard" EnumName="OBJECT_CROW_LIMB_LEFT_WING_TIP" Offset="0x107C" />
         <Limb Name="gGuayUpperTailLimb" Type="Standard" EnumName="OBJECT_CROW_LIMB_UPPER_TAIL" Offset="0x1088" />
         <Limb Name="gGuayTailLimb" Type="Standard" EnumName="OBJECT_CROW_LIMB_TAIL" Offset="0x1094" />
-        <Skeleton Name="gGuaySkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_CROW_LIMB_NONE" LimbMax="OBJECT_CROW_LIMB_MAX" EnumName="objectCrowLimbs" Offset="0x10C0" />
+        <Skeleton Name="gGuaySkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_CROW_LIMB_NONE" LimbMax="OBJECT_CROW_LIMB_MAX" EnumName="ObjectCrowLimb" Offset="0x10C0" />
     </File>
 </Root>

@@ -267,11 +267,11 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     sceneNum = Play_GetOriginalSceneNumber(play->sceneNum);
     Play_SaveCycleSceneFlags(&play->state);
 
-    play->actorCtx.flags.chest &= D_801C5FC0[sceneNum][2];
-    play->actorCtx.flags.switches[0] &= D_801C5FC0[sceneNum][0];
-    play->actorCtx.flags.switches[1] &= D_801C5FC0[sceneNum][1];
-    play->actorCtx.flags.collectible[0] &= D_801C5FC0[sceneNum][3];
-    play->actorCtx.flags.clearedRoom = 0;
+    play->actorCtx.sceneFlags.chest &= D_801C5FC0[sceneNum][2];
+    play->actorCtx.sceneFlags.switches[0] &= D_801C5FC0[sceneNum][0];
+    play->actorCtx.sceneFlags.switches[1] &= D_801C5FC0[sceneNum][1];
+    play->actorCtx.sceneFlags.collectible[0] &= D_801C5FC0[sceneNum][3];
+    play->actorCtx.sceneFlags.clearedRoom = 0;
 
     for (i = 0; i < SCENE_MAX; i++) {
         gSaveContext.cycleSceneFlags[i].switch0 = ((void)0, gSaveContext.cycleSceneFlags[i].switch0) & D_801C5FC0[i][0];
@@ -501,7 +501,7 @@ u16 Sram_CalcChecksum(void* data, size_t count) {
 
 // Resets `Save` substruct
 void Sram_ResetSave(void) {
-    gSaveContext.save.entranceIndex = 0x1C00;
+    gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0);
     gSaveContext.save.equippedMask = 0;
     gSaveContext.save.isFirstCycle = false;
     gSaveContext.save.unk_06 = 0;
@@ -597,12 +597,12 @@ SavePlayerData sSaveDefaultPlayerData = {
     0x30,                                               // healthCapacity
     0x30,                                               // health
     0,                                                  // magicLevel
-    0x30,                                               // magic
+    MAGIC_NORMAL_METER,                                 // magic
     0,                                                  // rupees
     0,                                                  // swordHealth
     0,                                                  // tatlTimer
-    0,                                                  // magicAcquired
-    0,                                                  // doubleMagic
+    false,                                              // isMagicAcquired
+    false,                                              // isDoubleMagicAcquired
     0,                                                  // doubleDefense
     0,                                                  // unk_1F
     0xFF,                                               // unk_20
@@ -697,12 +697,12 @@ SavePlayerData sSaveDebugPlayerData = {
     0x80,                                               // healthCapacity
     0x80,                                               // health
     0,                                                  // magicLevel
-    0x30,                                               // magic
-    0x32,                                               // rupees
-    0x64,                                               // swordHealth
+    MAGIC_NORMAL_METER,                                 // magic
+    50,                                                 // rupees
+    100,                                                // swordHealth
     0,                                                  // tatlTimer
-    1,                                                  // magicAcquired
-    0,                                                  // doubleMagic
+    true,                                               // isMagicAcquired
+    false,                                              // isDoubleMagicAcquired
     0,                                                  // doubleDefense
     0,                                                  // unk_1F
     0xFF,                                               // unk_20
@@ -845,7 +845,7 @@ void Sram_InitDebugSave(void) {
     gSaveContext.save.horseData.pos.z = -1285;
     gSaveContext.save.horseData.yaw = -0x7554;
 
-    gSaveContext.save.entranceIndex = 0x1C00;
+    gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0);
     gSaveContext.save.isFirstCycle = true;
 
     //
@@ -910,7 +910,13 @@ void func_80144A94(SramContext* sramCtx) {
     gSaveContext.jinxTimer = 0;
 }
 
-u16 D_801C6A58[] = { 0x68B0, 0x6A60, 0xB230, 0x9A80, 0xD890, 0x3E40, 0x8640, 0x84A0, 0x2040, 0xAA30 };
+u16 D_801C6A58[] = {
+    ENTRANCE(GREAT_BAY_COAST, 11), ENTRANCE(ZORA_CAPE, 6),
+    ENTRANCE(SNOWHEAD, 3),         ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8),
+    ENTRANCE(SOUTH_CLOCK_TOWN, 9), ENTRANCE(MILK_ROAD, 4),
+    ENTRANCE(WOODFALL, 4),         ENTRANCE(SOUTHERN_SWAMP_POISONED, 10),
+    ENTRANCE(IKANA_CANYON, 4),     ENTRANCE(STONE_TOWER, 3),
+};
 
 void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
     s32 i;
@@ -973,22 +979,24 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
         }
 
         if (gSaveContext.save.isFirstCycle) {
-            gSaveContext.save.entranceIndex = 0xD800;
+            gSaveContext.save.entrance = ENTRANCE(SOUTH_CLOCK_TOWN, 0);
             gSaveContext.save.day = 0;
             gSaveContext.save.time = 0x3FFF;
         } else {
-            gSaveContext.save.entranceIndex = 0x1C00;
+            gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0);
             gSaveContext.nextCutsceneIndex = 0;
             gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
         }
     } else {
-        gSaveContext.save.entranceIndex = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
-        if ((gSaveContext.save.entranceIndex == 0x84A0) && (gSaveContext.save.weekEventReg[20] & 2)) {
+        gSaveContext.save.entrance = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
+        if ((gSaveContext.save.entrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) &&
+            (gSaveContext.save.weekEventReg[20] & 2)) {
             // Unconfirmed weekEventReg: "Woodfall Temple Prison Entrance raised / Water cleansed"
-            gSaveContext.save.entranceIndex = 0xCA0;
-        } else if ((gSaveContext.save.entranceIndex == 0x9A80) && (gSaveContext.save.weekEventReg[33] & 0x80)) {
+            gSaveContext.save.entrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10);
+        } else if ((gSaveContext.save.entrance == ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8)) &&
+                   (gSaveContext.save.weekEventReg[33] & 0x80)) {
             // Unconfirmed weekEventReg: "Mountain Village Unfrozen"
-            gSaveContext.save.entranceIndex = 0xAE80;
+            gSaveContext.save.entrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 8);
         }
 
         for (i = 0; i < ARRAY_COUNT(gSaveContext.cycleSceneFlags); i++) {
@@ -1509,14 +1517,14 @@ void func_80146DF8(SramContext* sramCtx) {
 }
 
 void Sram_InitSram(GameState* gameState, SramContext* sramCtx) {
-    if (gSaveContext.save.entranceIndex) {} // Required to match
+    if (gSaveContext.save.entrance) {} // Required to match
 
     func_801A3D98(gSaveContext.options.audioSetting);
 }
 
-void Sram_Alloc(GameState* gamestate, SramContext* sramCtx) {
+void Sram_Alloc(GameState* gameState, SramContext* sramCtx) {
     if (gSaveContext.unk_3F3F) {
-        sramCtx->saveBuf = THA_AllocEndAlign16(&gamestate->heap, SAVE_BUFFER_SIZE);
+        sramCtx->saveBuf = THA_AllocEndAlign16(&gameState->heap, SAVE_BUFFER_SIZE);
         sramCtx->status = 0;
     }
 }

@@ -554,7 +554,7 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
 
                 gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_CLD_SURF2);
                 gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG);
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust5Tex));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust5Tex));
             }
 
             Matrix_Translate(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
@@ -569,7 +569,7 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023130);
+            gSPDisplayList(POLY_XLU_DISP++, gEffDustDL);
         }
     }
 
@@ -629,14 +629,14 @@ void func_808DD970(Actor* thisx, PlayState* play2) {
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust5Tex));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust5Tex));
             gSPClearGeometryMode(POLY_XLU_DISP++, G_LIGHTING);
 
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
 
             gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_CLD_SURF2);
             gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023130);
+            gSPDisplayList(POLY_XLU_DISP++, gEffDustDL);
         }
     }
 
@@ -648,23 +648,22 @@ f32 func_808DDE74(void) {
 }
 
 #ifdef NON_MATCHING
-// play->envCtx.unk_F2[1] needs to be loaded into s0 and then copied to s7
+// s2/s3 swapped
 void func_808DDE9C(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     ObjectKankyo* this = THIS;
     Player* player = GET_PLAYER(play);
     s32 i;
-    s16 temp;
+    u8 phi_s5;
+    u16 end = play->envCtx.unk_F2[1];
     f32 temp_f12;
     f32 temp_f20;
     f32 temp_f22;
     f32 temp_f2;
-    u8 phi_s5;
-    s32 end = play->envCtx.unk_F2[1];
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (end != 0) {
+    if (end) {
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 150, 255, 255, 25);
         POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);

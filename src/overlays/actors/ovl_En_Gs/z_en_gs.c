@@ -184,7 +184,7 @@ void func_80997D38(EnGs* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (this->actor.xzDistToPlayer <= D_8099A408[this->actor.params]) {
             func_8013E8F8(&this->actor, play, D_8099A408[this->actor.params], D_8099A408[this->actor.params],
-                          EXCH_ITEM_NONE, 0x2000, 0x2000);
+                          PLAYER_AP_NONE, 0x2000, 0x2000);
         }
     }
 
@@ -1082,10 +1082,10 @@ void EnGs_Draw(Actor* thisx, PlayState* play) {
     }
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_000950);
+    gSPDisplayList(POLY_OPA_DISP++, gGossipStoneMaterialDL);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_1FA.r, this->unk_1FA.g, this->unk_1FA.b, 255);
-    gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_0009D0);
-    gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_000A60);
+    gSPDisplayList(POLY_OPA_DISP++, gGossipStoneDL);
+    gSPDisplayList(POLY_OPA_DISP++, gGossipStoneBottomModelDL);
 
     Matrix_Pop();
 

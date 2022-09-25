@@ -125,7 +125,7 @@
         <Limb Name="gGoronRightForearmLimb" Type="Standard" EnumName="GORON_LIMB_RIGHT_FOREARM" Offset="0x11A60" />
         <Limb Name="gGoronRightHandLimb" Type="Standard" EnumName="GORON_LIMB_RIGHT_HAND" Offset="0x11A6C" />
         <Limb Name="gGoronHeadLimb" Type="Standard" EnumName="GORON_LIMB_HEAD" Offset="0x11A78" />
-        <Skeleton Name="gGoronSkel" Type="Flex" LimbType="Standard" LimbNone="GORON_LIMB_NONE" LimbMax="GORON_LIMB_MAX" EnumName="GoronLimbs" Offset="0x11AC8" />
+        <Skeleton Name="gGoronSkel" Type="Flex" LimbType="Standard" LimbNone="GORON_LIMB_NONE" LimbMax="GORON_LIMB_MAX" EnumName="GoronLimb" Offset="0x11AC8" />
 
         <!-- Animations -->
         <Animation Name="gGoronLyingDownIdleAnim" Offset="0x11D98" />
