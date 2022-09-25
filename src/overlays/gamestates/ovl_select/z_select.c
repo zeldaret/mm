@@ -8,13 +8,9 @@
 #include "libc/alloca.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
-void MapSelect_LoadTitle(MapSelectState* this) {
-    {
-        GameState* gameState = &this->state;
-        gameState->running = false;
-    }
-
-    SET_NEXT_GAMESTATE(&this->state, Title_Init, TitleContext);
+void MapSelect_LoadConsoleLogo(MapSelectState* this) {
+    STOP_GAMESTATE(&this->state);
+    SET_NEXT_GAMESTATE(&this->state, ConsoleLogo_Init, sizeof(ConsoleLogoState));
 }
 
 void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
@@ -55,11 +51,8 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
     gSaveContext.respawn[RESPAWN_MODE_HUMAN].entrance = 0xFF;
     gWeatherMode = 0;
 
-    do {
-        GameState* gameState = &this->state;
-        gameState->running = false;
-    } while (0);
-    SET_NEXT_GAMESTATE(&this->state, Play_Init, PlayState);
+    STOP_GAMESTATE(&this->state);
+    SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
 }
 
 // "Translation" (Actual name)
@@ -501,7 +494,7 @@ static SceneSelectEntry sScenes[] = {
     { "X 1:SPOT00", MapSelect_LoadGame, ENTRANCE(CUTSCENE, 0) },
 
     // "Title" (Title Screen)
-    { "title", (void*)MapSelect_LoadTitle, 0 },
+    { "title", (void*)MapSelect_LoadConsoleLogo, 0 },
 };
 
 void MapSelect_UpdateMenu(MapSelectState* this) {
