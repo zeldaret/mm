@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "ultra64.h"
 #include "global.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
@@ -1078,7 +1077,7 @@ f32 func_800CCCEC(Camera* camera, s16 reset) {
 /**
  * Calculates a new Up vector from the pitch, yaw, roll
  */
-Vec3f* Camera_CalcUpFromPitchYawRoll(Vec3f* viewUp, s16 pitch, s16 yaw, s16 roll) {
+Vec3f* Camera_CalcUpVec(Vec3f* viewUp, s16 pitch, s16 yaw, s16 roll) {
     f32 sinP = Math_SinS(pitch);
     f32 cosP = Math_CosS(pitch);
     f32 sinY = Math_SinS(yaw);
@@ -7198,8 +7197,8 @@ void func_800DDFE0(Camera* camera) {
 void Camera_Stub800DE0E0(Camera* camera) {
 }
 
-void Camera_InitPlayerSettings(Camera* camera, Player* player) {
-    PosRot playerPosShape;
+void Camera_InitFocalActorSettings(Camera* camera, Actor* focalActor) {
+    PosRot focalActorPosRot;
     VecSph eyeNextAtOffset;
     s32 bgId;
     Vec3f floorPos;
@@ -7207,20 +7206,20 @@ void Camera_InitPlayerSettings(Camera* camera, Player* player) {
     f32 focalActorHeight;
     Vec3f* eye = &camera->eye;
 
-    Actor_GetWorldPosShapeRot(&playerPosShape, &player->actor);
+    Actor_GetWorldPosShapeRot(&focalActorPosRot, focalActor);
 
-    camera->focalActor = &player->actor;
+    camera->focalActor = focalActor;
     focalActorHeight = Camera_GetFocalActorHeight(camera);
-    camera->focalActorPosRot = playerPosShape;
+    camera->focalActorPosRot = focalActorPosRot;
     camera->dist = eyeNextAtOffset.r = 180.0f;
-    camera->inputDir.y = playerPosShape.rot.y;
+    camera->inputDir.y = focalActorPosRot.rot.y;
     eyeNextAtOffset.yaw = BINANG_ROT180(camera->inputDir.y);
     camera->inputDir.x = eyeNextAtOffset.pitch = 0x71C;
     camera->inputDir.z = 0;
     camera->camDir = camera->inputDir;
     camera->xzSpeed = 0.0f;
     camera->focalActorPosOffset.y = 0.0f;
-    camera->at = playerPosShape.pos;
+    camera->at = focalActorPosRot.pos;
     camera->at.y += focalActorHeight;
 
     camera->focalActorAtOffset.x = 0;
@@ -7683,7 +7682,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
         viewEye.y = camera->eye.y + quake.eyeOffset.y;
         viewEye.z = camera->eye.z + quake.eyeOffset.z;
         OLib_Vec3fDiffToVecSphGeo(&sp3C, &viewEye, &viewAt);
-        Camera_CalcUpFromPitchYawRoll(&viewUp, sp3C.pitch, sp3C.yaw, camera->roll + quake.rollOffset);
+        Camera_CalcUpVec(&viewUp, sp3C.pitch, sp3C.yaw, camera->roll + quake.rollOffset);
         viewFov = camera->fov + CAM_BINANG_TO_DEG(quake.zoom);
     } else if (sIsFalse) {
         //! @bug: Condition is impossible to achieve
@@ -7696,7 +7695,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
         viewAt = camera->at;
         viewEye = camera->eye;
         OLib_Vec3fDiffToVecSphGeo(&sp3C, &viewEye, &viewAt);
-        Camera_CalcUpFromPitchYawRoll(&viewUp, sp3C.pitch, sp3C.yaw, camera->roll);
+        Camera_CalcUpVec(&viewUp, sp3C.pitch, sp3C.yaw, camera->roll);
         viewFov = camera->fov;
     }
 
@@ -7727,7 +7726,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
     return inputDir;
 }
 
-s32 Camera_SetModeSettingStateFlags(Camera* camera) {
+s32 func_800DF498(Camera* camera) {
     Camera_SetStateFlag(camera, CAM_STATE_3 | CAM_STATE_2); // CAM_STATE_3 is set only immediately to be unset
     Camera_UnsetStateFlag(camera, CAM_STATE_12 | CAM_STATE_3);
     return true;
@@ -7758,7 +7757,7 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
         if (camera->mode != CAM_MODE_NORMAL) {
             camera->mode = CAM_MODE_NORMAL;
             Camera_ResetActionFuncState(camera, camera->mode);
-            Camera_SetModeSettingStateFlags(camera);
+            func_800DF498(camera);
             return mode | 0xC0000000;
         } else {
             camera->behaviorFlags |= CAM_BEHAVIOR_MODE_VALID;
@@ -7894,7 +7893,7 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
         }
     }
 
-    Camera_SetModeSettingStateFlags(camera);
+    func_800DF498(camera);
     camera->mode = mode;
 
     return mode | 0x80000000;
@@ -7952,7 +7951,7 @@ s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags) {
         camera->behaviorFlags |= CAM_BEHAVIOR_SETTING_USE_PRIORITY;
     }
 
-    Camera_SetModeSettingStateFlags(camera);
+    func_800DF498(camera);
 
     if (!(sCameraSettings[camera->setting].flags & 0x40000000)) {
         camera->prevSetting = camera->setting;
