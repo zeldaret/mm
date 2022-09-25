@@ -545,7 +545,7 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
         }
 
         if (this->unk_1B7 != 0) {
-            play->actorCtx.unk5 |= 8;
+            play->actorCtx.flags |= ACTORCTX_FLAG_3;
             this->actor.flags |= ACTOR_FLAG_10;
         }
     }

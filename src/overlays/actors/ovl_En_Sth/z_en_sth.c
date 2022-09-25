@@ -103,7 +103,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
 
     switch (ENSTH_GET_F(&this->actor)) {
         case ENSTH_F_1:
-            if (play->actorCtx.unk5 & 2) {
+            if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
                 this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
                 this->actionFunc = func_80B67958;
             } else {

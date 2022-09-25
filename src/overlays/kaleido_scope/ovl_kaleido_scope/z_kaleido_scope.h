@@ -18,6 +18,9 @@ typedef enum {
   /* 3 */ DEBUG_EDITOR_EVENTS
 } DebugEditor;
 
+#define PAUSE_PROMPT_YES 0
+#define PAUSE_PROMPT_NO 4
+
 // Debug
 void KaleidoScope_DrawInventoryEditor(PlayState* play);
 void KaleidoScope_UpdateInventoryEditor(PlayState* play);

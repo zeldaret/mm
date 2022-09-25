@@ -297,9 +297,9 @@ void func_80B509A8(EnGk* this, PlayState* play) {
     }
 
     EffectSsDtBubble_SpawnCustomColor(play, &this->unk_2E8, &this->unk_300, &sp4C, &D_80B533A0, &D_80B533A4,
-                                      Rand_S16Offset(15, 15), phi_s1, 0);
+                                      Rand_S16Offset(15, 15), phi_s1, false);
     EffectSsDtBubble_SpawnCustomColor(play, &this->unk_2F4, &this->unk_30C, &sp4C, &D_80B533A0, &D_80B533A4,
-                                      Rand_S16Offset(15, 15), phi_s1, 0);
+                                      Rand_S16Offset(15, 15), phi_s1, false);
 }
 
 void func_80B50B38(EnGk* this, PlayState* play) {

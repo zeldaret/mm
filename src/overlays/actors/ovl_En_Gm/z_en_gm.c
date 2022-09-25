@@ -963,7 +963,8 @@ s32 func_8094F53C(EnGm* this, PlayState* play) {
         this->unk_18C(this, play);
     }
 
-    if ((this->unk_3E8 == 6) && !(play->actorCtx.unk5 & 0x20) && Animation_OnFrame(&this->skelAnime, 20.0f)) {
+    if ((this->unk_3E8 == 6) && !(play->actorCtx.flags & ACTORCTX_FLAG_5) &&
+        Animation_OnFrame(&this->skelAnime, 20.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
     }
 
