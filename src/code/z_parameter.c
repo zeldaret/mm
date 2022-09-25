@@ -1850,7 +1850,7 @@ TexturePtr D_801BFCC4[] = {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8011C4C4.s")
 
 void Interface_StartMoonCrash(PlayState* play) {
-    if (play->actorCtx.unk5 & 2) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
         Audio_QueueSeqCmd(0xE0000100);
     }
 
