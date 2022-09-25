@@ -469,8 +469,8 @@ typedef struct {
     /* 0x290 */ f32 unk_290;
     /* 0x294 */ f32 unk_294;
     /* 0x298 */ f32 unk_298;
-    /* 0x29C */ s16 unk_29C;
-    /* 0x29E */ s16 unk_29E;
+    /* 0x29C */ s16 promptChoice; // save/continue choice: 0 = yes; 4 = no
+    /* 0x29E */ s16 promptAlpha;
     /* 0x2A0 */ s16 unk_2A0;
     /* 0x2A2 */ u8 worldMapPoints[20];
     /* 0x2B6 */ u8 unk_2B6;
@@ -523,7 +523,7 @@ typedef struct {
     /* 0x252 */ s16 lifeSizeChange;
     /* 0x254 */ s16 lifeSizeChangeDirection; // 1 means shrinking, 0 growing
     /* 0x256 */ s16 unk_256;
-    /* 0x258 */ s16 unk_258;
+    /* 0x258 */ s16 magicConsumptionTimer; // For certain magic states, 1 unit of magic is consumed every time the timer reaches 0
     /* 0x25A */ u8 numHorseBoosts;
     /* 0x25C */ u16 unk_25C;
     /* 0x25E */ u16 unk_25E;
@@ -904,8 +904,8 @@ typedef struct GameState {
     /* 0x00 */ GraphicsContext* gfxCtx;
     /* 0x04 */ GameStateFunc main;
     /* 0x08 */ GameStateFunc destroy;
-    /* 0x0C */ GameStateFunc nextGameStateInit;
-    /* 0x10 */ size_t nextGameStateSize;
+    /* 0x0C */ GameStateFunc init; // Usually the current game state's init, though after stopping, the graph thread will look here to determine the next game state to load.
+    /* 0x10 */ size_t size;
     /* 0x14 */ Input input[4];
     /* 0x74 */ TwoHeadArena heap;
     /* 0x84 */ GameAlloc alloc;
@@ -916,12 +916,6 @@ typedef struct GameState {
     /* 0xA2 */ u8 framerateDivisor; // game speed?
     /* 0xA3 */ u8 unk_A3;
 } GameState; // size = 0xA4
-
-typedef struct PreNMIContext {
-    /* 0x00 */ GameState state;
-    /* 0xA4 */ u32 timer;
-    /* 0xA8 */ UNK_TYPE4 unkA8;
-} PreNMIContext; // size = 0xAC
 
 typedef struct {
     /* 0x00 */ u32 resetting;

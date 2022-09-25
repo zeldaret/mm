@@ -100,6 +100,6 @@
         <Limb Name="gIronKnuckleChestArmorBackLimb" EnumName="IRON_KNUCKLE_LIMB_CHEST_ARMOR_BACK" Type="Standard" Offset="0x13608" />
         <Limb Name="gIronKnuckleTorsoLimb" EnumName="IRON_KNUCKLE_LIMB_TORSO" Type="Standard" Offset="0x13614" />
         <Limb Name="gIronKnuckleWaistLimb" EnumName="IRON_KNUCKLE_LIMB_WAIST" Type="Standard" Offset="0x13620" />
-        <Skeleton Name="gIronKnuckleSkel" Type="Flex" LimbType="Standard" LimbNone="IRON_KNUCKLE_LIMB_NONE" LimbMax="IRON_KNUCKLE_LIMB_MAX" EnumName="IronKnuckleLimbs" Offset="0x136A0" />
+        <Skeleton Name="gIronKnuckleSkel" Type="Flex" LimbType="Standard" LimbNone="IRON_KNUCKLE_LIMB_NONE" LimbMax="IRON_KNUCKLE_LIMB_MAX" EnumName="IronKnuckleLimb" Offset="0x136A0" />
     </File>
 </Root>

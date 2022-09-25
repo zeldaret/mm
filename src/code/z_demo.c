@@ -126,12 +126,11 @@ void func_800EA2B8(PlayState* play, CutsceneContext* csCtx) {
 /* Start of command handling section */
 
 // Command 0x96: Miscellaneous commands.
-void Cutscene_Command_Misc(PlayState* play2, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     static u16 D_801BB15C = 0xFFFF;
-    Player* player = GET_PLAYER(play2);
-    PlayState* play = play2;
-    u8 isStartFrame = false;
+    Player* player = GET_PLAYER(play);
     f32 progress;
+    u8 isStartFrame = false;
     SceneTableEntry* loadedScene;
 
     if ((csCtx->frames < cmd->startFrame) || ((csCtx->frames >= cmd->endFrame) && (cmd->endFrame != cmd->startFrame))) {
@@ -346,11 +345,8 @@ void Cutscene_Command_Misc(PlayState* play2, CutsceneContext* csCtx, CsCmdBase* 
 
             gSaveContext.save.day = 9;
 
-            {
-                GameState* gameState = &play->state;
-                gameState->running = false;
-            }
-            SET_NEXT_GAMESTATE(&play->state, Daytelop_Init, DaytelopContext);
+            STOP_GAMESTATE(&play->state);
+            SET_NEXT_GAMESTATE(&play->state, DayTelop_Init, sizeof(DayTelopState));
 
             Sram_SaveSpecialNewDay(play);
             break;

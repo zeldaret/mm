@@ -72,8 +72,8 @@ typedef enum {
     /* 4 */ OBJ_UM_TYPE_POST_MILK_RUN // milk road, post-minigame
 } ObjUmType;
 
-#define OBJ_UM_PARSE_TYPE(thisx) (((thisx)->params & 0xFF00) >> 8)
-#define OBJ_UM_PARSE_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
+#define OBJ_UM_GET_TYPE(thisx) (((thisx)->params & 0xFF00) >> 8)
+#define OBJ_UM_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 
 #define OBJ_UM_FLAG_NONE (0)
 #define OBJ_UM_FLAG_0001 (1 << 0)

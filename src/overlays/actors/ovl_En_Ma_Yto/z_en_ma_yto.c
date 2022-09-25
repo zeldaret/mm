@@ -161,7 +161,7 @@ void EnMaYto_Init(Actor* thisx, PlayState* play) {
 
     this->unk31E = 0;
     this->blinkTimer = 100;
-    this->type = EN_MA_YTO_PARSE_TYPE(this->actor.params);
+    this->type = EN_MA_YTO_GET_TYPE(&this->actor);
     if (!EnMaYto_CheckValidSpawn(this, play)) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -304,7 +304,7 @@ s32 EnMaYto_SearchRomani(EnMaYto* this, PlayState* play) {
     while (npcActor != NULL) {
         if (npcActor->id == ACTOR_EN_MA_YTS) {
             EnMaYts* romani = (EnMaYts*)npcActor;
-            s16 romaniType = EN_MA_YTS_PARSE_TYPE(&romani->actor);
+            s16 romaniType = EN_MA_YTS_GET_TYPE(&romani->actor);
 
             if ((this->type == MA_YTO_TYPE_DINNER && romaniType == MA_YTS_TYPE_SITTING) ||
                 (this->type == MA_YTO_TYPE_BARN && romaniType == MA_YTS_TYPE_BARN)) {

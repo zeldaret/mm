@@ -679,8 +679,8 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
     this->wheelRot = 0;
     ObjUm_DefaultAnim(this, play);
 
-    this->type = OBJ_UM_PARSE_TYPE(thisx);
-    this->initialPathIndex = OBJ_UM_PARSE_PATH_INDEX(thisx);
+    this->type = OBJ_UM_GET_TYPE(thisx);
+    this->initialPathIndex = OBJ_UM_GET_PATH_INDEX(thisx);
 
     // if (!AliensDefeated)
     if (!(gSaveContext.save.weekEventReg[22] & 1)) {
