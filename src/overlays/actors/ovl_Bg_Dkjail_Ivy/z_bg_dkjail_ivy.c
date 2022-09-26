@@ -184,7 +184,7 @@ void BgDkjailIvy_FadeOut(BgDkjailIvy* this, PlayState* play) {
         this->alpha = 0;
         this->dyna.actor.draw = NULL;
     }
-    
+
     this->fadeOutTimer--;
     if (this->fadeOutTimer <= 0) {
         Actor_MarkForDeath(&this->dyna.actor);
