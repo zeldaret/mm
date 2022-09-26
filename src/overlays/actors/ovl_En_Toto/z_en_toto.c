@@ -258,7 +258,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
             this->actor.flags |= ACTOR_FLAG_10000;
-            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, EXCH_ITEM_NONE);
+            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, PLAYER_AP_NONE);
         } else {
             this->actor.flags &= ~ACTOR_FLAG_10000;
             func_800B8614(&this->actor, play, 50.0f);
@@ -315,7 +315,7 @@ void func_80BA3D38(EnToto* this, PlayState* play) {
     this->cutscene = this->actor.cutscene;
     this->text = ENTOTO_WEEK_EVENT_FLAGS ? D_80BA50BC : D_80BA5088;
     func_80BA4C0C(this, play);
-    play->actorCtx.unk5 |= 0x20;
+    play->actorCtx.flags |= ACTORCTX_FLAG_5;
     this->unk260[0] = 0;
 }
 
@@ -344,7 +344,7 @@ void func_80BA3DBC(EnToto* this, PlayState* play) {
 
     func_80BA36C0(this, play, 0);
     ActorCutscene_Stop(this->cutscene);
-    play->actorCtx.unk5 &= ~0x20;
+    play->actorCtx.flags &= ~ACTORCTX_FLAG_5;
 }
 
 s32 func_80BA3EC0(EnToto* this, PlayState* play) {

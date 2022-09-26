@@ -25,6 +25,6 @@
         <Limb Name="object_vm_Standardlimb_003F14" Type="Standard" EnumName="OBJECT_VM_LIMB_08" Offset="0x3F14" />
         <Limb Name="object_vm_Standardlimb_003F20" Type="Standard" EnumName="OBJECT_VM_LIMB_09" Offset="0x3F20" />
         <Limb Name="object_vm_Standardlimb_003F2C" Type="Standard" EnumName="OBJECT_VM_LIMB_0A" Offset="0x3F2C" />
-        <Skeleton Name="object_vm_Skel_003F60" Type="Normal" LimbType="Standard" LimbNone="OBJECT_VM_LIMB_NONE" LimbMax="OBJECT_VM_LIMB_MAX" EnumName="object_vm_Limbs" Offset="0x3F60" />
+        <Skeleton Name="object_vm_Skel_003F60" Type="Normal" LimbType="Standard" LimbNone="OBJECT_VM_LIMB_NONE" LimbMax="OBJECT_VM_LIMB_MAX" EnumName="ObjectVmLimb" Offset="0x3F60" />
     </File>
 </Root>

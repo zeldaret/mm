@@ -35,7 +35,7 @@ typedef struct EnOssan {
     /* 0x230 */ f32 cursorAnimTween;
     /* 0x234 */ u8 cursorAnimState;
     /* 0x235 */ u8 drawCursor;
-    /* 0x236 */ u8 cursorIdx;
+    /* 0x236 */ u8 cursorIndex;
     /* 0x238 */ StickDirectionPrompt stickLeftPrompt;
     /* 0x270 */ StickDirectionPrompt stickRightPrompt;
     /* 0x2A8 */ f32 arrowAnimTween;
@@ -56,7 +56,7 @@ typedef struct EnOssan {
     /* 0x2F8 */ s16 limbRotTableZ[19];
     /* 0x31E */ Vec3s jointTable[ENOSSAN_LIMB_MAX];
     /* 0x390 */ Vec3s morphTable[ENOSSAN_LIMB_MAX];
-    /* 0x402 */ s16 animationIndex;
+    /* 0x402 */ s16 animIndex;
     /* 0x404 */ Vec3s partTimerHeadRot;
     /* 0x40A */ u16 flags;
 } EnOssan; // size = 0x40C

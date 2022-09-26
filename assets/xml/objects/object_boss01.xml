@@ -113,7 +113,7 @@
         <Limb Name="object_boss01_Standardlimb_00EFB8" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_31" Offset="0xEFB8" />
         <Limb Name="object_boss01_Standardlimb_00EFC4" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_32" Offset="0xEFC4" />
         <Limb Name="object_boss01_Standardlimb_00EFD0" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_33" Offset="0xEFD0" />
-        <Skeleton Name="object_boss01_Skel_00F0A8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOSS01_1_LIMB_NONE" LimbMax="OBJECT_BOSS01_1_LIMB_MAX" EnumName="object_boss01_1_Limbs" Offset="0xF0A8" />
+        <Skeleton Name="object_boss01_Skel_00F0A8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOSS01_1_LIMB_NONE" LimbMax="OBJECT_BOSS01_1_LIMB_MAX" EnumName="ObjectBoss011Limb" Offset="0xF0A8" />
         <Animation Name="object_boss01_Anim_00F918" Offset="0xF918" />
         <Animation Name="object_boss01_Anim_00FDEC" Offset="0xFDEC" />
         <Animation Name="object_boss01_Anim_00FF94" Offset="0xFF94" />
@@ -183,7 +183,7 @@
         <Limb Name="object_boss01_Standardlimb_02225C" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_12" Offset="0x2225C" />
         <Limb Name="object_boss01_Standardlimb_022268" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_13" Offset="0x22268" />
         <Limb Name="object_boss01_Standardlimb_022274" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_14" Offset="0x22274" />
-        <Skeleton Name="object_boss01_Skel_0222D0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOSS01_2_LIMB_NONE" LimbMax="OBJECT_BOSS01_2_LIMB_MAX" EnumName="object_boss01_2_Limbs" Offset="0x222D0" />
+        <Skeleton Name="object_boss01_Skel_0222D0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOSS01_2_LIMB_NONE" LimbMax="OBJECT_BOSS01_2_LIMB_MAX" EnumName="ObjectBoss012Limb" Offset="0x222D0" />
         <Animation Name="object_boss01_Anim_022550" Offset="0x22550" />
     </File>
 </Root>
