@@ -53,8 +53,8 @@ void DmChar09_Init(Actor* thisx, PlayState* play) {
     DmChar09* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
-    SkelAnime_Init(play, &this->skelAnime, &gBeeSkel, &gBeeIdleAnim, this->jointTable,
-                   this->morphTable, OBJECT_BEE_LIMB_MAX);
+    SkelAnime_Init(play, &this->skelAnime, &gBeeSkel, &gBeeIdleAnim, this->jointTable, this->morphTable,
+                   OBJECT_BEE_LIMB_MAX);
     DmChar09_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_228 = Rand_ZeroOne() * 65535.0f;

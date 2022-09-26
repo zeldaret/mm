@@ -94,8 +94,8 @@ void EnBee_Init(Actor* thisx, PlayState* play) {
 
     this->actor.colChkInfo.mass = 10;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
-    SkelAnime_Init(play, &this->skelAnime, &gBeeSkel, &gBeeIdleAnim, this->morphTable,
-                   this->jointTable, OBJECT_BEE_LIMB_MAX);
+    SkelAnime_Init(play, &this->skelAnime, &gBeeSkel, &gBeeIdleAnim, this->morphTable, this->jointTable,
+                   OBJECT_BEE_LIMB_MAX);
     this->actor.colChkInfo.health = 1;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.targetMode = 6;
@@ -123,8 +123,7 @@ void EnBee_SetupIdle(EnBee* this) {
     Vec3f tmpPos;
     s16 yawOffset;
 
-    Animation_Change(&this->skelAnime, &gBeeIdleAnim, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&gBeeIdleAnim), 0, -10.0f);
+    Animation_Change(&this->skelAnime, &gBeeIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gBeeIdleAnim), 0, -10.0f);
     Math_Vec3f_Copy(&tmpPos, &this->actor.home.pos);
 
     yawOffset = (this->instanceId * 0x700) + 0x2000;
@@ -182,8 +181,7 @@ void EnBee_Idle(EnBee* this, PlayState* play) {
 }
 
 void EnBee_SetupHostile(EnBee* this) {
-    Animation_Change(&this->skelAnime, &gBeeIdleAnim, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&gBeeIdleAnim), 0, -10.0f);
+    Animation_Change(&this->skelAnime, &gBeeIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gBeeIdleAnim), 0, -10.0f);
     this->isHostile = 1;
     this->actionFunc = EnBee_Hostile;
 }
@@ -200,7 +198,8 @@ void EnBee_Hostile(EnBee* this, PlayState* play) {
 
     for (i = 0; i < 2; i++) {
         rnd = randPlusMinusPoint5Scaled(20.0f);
-        nextDestination.x += Math_SinS((this->actor.yawTowardsPlayer + ((f32)this->targetYaw)) + yawOffset) * (rnd + 30.0f);
+        nextDestination.x +=
+            Math_SinS((this->actor.yawTowardsPlayer + ((f32)this->targetYaw)) + yawOffset) * (rnd + 30.0f);
         nextDestination.y = (Math_SinS(this->flightHoverOffset) * 10.0f) + (player->actor.floorHeight + 40.0f);
         rnd = randPlusMinusPoint5Scaled(20.0f);
 
@@ -212,9 +211,11 @@ void EnBee_Hostile(EnBee* this, PlayState* play) {
     Math_Vec3f_Copy(&nextDestination, &this->moveToDestinations[this->destinationIndex]);
 
     if (!(this->instanceId & 1)) {
-        this->targetYaw += (this->instanceId * 0x700) + (s32)randPlusMinusPoint5Scaled((this->instanceId * 0x700) * 0.5f);
+        this->targetYaw +=
+            (this->instanceId * 0x700) + (s32)randPlusMinusPoint5Scaled((this->instanceId * 0x700) * 0.5f);
     } else {
-        this->targetYaw -= (this->instanceId * 0x700) + (s32)randPlusMinusPoint5Scaled((this->instanceId * 0x700) * 0.5f);
+        this->targetYaw -=
+            (this->instanceId * 0x700) + (s32)randPlusMinusPoint5Scaled((this->instanceId * 0x700) * 0.5f);
     }
 
     this->flightHoverOffset += (s32)randPlusMinusPoint5Scaled(500.0f) + 1000;
@@ -225,7 +226,8 @@ void EnBee_Hostile(EnBee* this, PlayState* play) {
         this->destinationIndex &= 1;
     }
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &nextDestination), 1, 0x1388, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &nextDestination), 1, 0x1388,
+                       0);
     Math_ApproachF(&this->actor.world.pos.y, nextDestination.y, 0.3f, 3.0f);
     Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.3f, 1.0f);
 }
