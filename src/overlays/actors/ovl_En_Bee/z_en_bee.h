@@ -18,13 +18,13 @@ typedef struct EnBee {
     /* 0x206 */ s16 sfxHitTimer;
     /* 0x208 */ s16 isHostile;  // unused
     /* 0x20C */ s32 targetYaw;
-    /* 0x210 */ s32 flightHoverOffset; 
+    /* 0x210 */ s32 flightHoverOffset;
     /* 0x214 */ s32 destinationIndex;
     /* 0x218 */ s32 instanceId;
     /* 0x21C */ Vec3f moveToDestinations[2];
     /* 0x234 */ UNK_TYPE1 pad234[8];
     /* 0x23C */ ColliderCylinder collider;
-} EnBee;
+} EnBee; // size = 0x288
 
 extern const ActorInit En_Bee_InitVars;
 
