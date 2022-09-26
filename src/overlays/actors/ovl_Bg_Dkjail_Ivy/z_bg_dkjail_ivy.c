@@ -71,9 +71,9 @@ void BgDkjailIvy_IvyCutEffects(BgDkjailIvy* this, PlayState* play) {
     f32 phi_fs0;
     s32 i;
     Vec3f spD4;
-    Vec3f spC8;
-    Vec3f spBC;
-    Vec3f spB0;
+    Vec3f pos;
+    Vec3f vel;
+    Vec3f accel;
     s16 i2;
 
     Matrix_RotateYS(this->dyna.actor.home.rot.y, MTXMODE_NEW);
@@ -91,25 +91,25 @@ void BgDkjailIvy_IvyCutEffects(BgDkjailIvy* this, PlayState* play) {
         spD4.x = Math_SinS(i2) * 40.0f * phi_fs0;
         spD4.z = (Rand_ZeroOne() * 6.0f) - 3.0f;
 
-        Matrix_MultVec3f(&spD4, &spC8);
+        Matrix_MultVec3f(&spD4, &pos);
 
-        spBC.x = (Rand_ZeroOne() - 0.5f) + (spC8.x * 0.075f);
-        spBC.y = 2.0f * Rand_ZeroOne();
-        spBC.z = (Rand_ZeroOne() - 0.5f) + (spC8.z * 0.075f);
+        vel.x = (Rand_ZeroOne() - 0.5f) + (pos.x * 0.075f);
+        vel.y = 2.0f * Rand_ZeroOne();
+        vel.z = (Rand_ZeroOne() - 0.5f) + (pos.z * 0.075f);
 
-        spC8.x += this->dyna.actor.world.pos.x;
-        spC8.y += this->dyna.actor.world.pos.y;
-        spC8.z += this->dyna.actor.world.pos.z;
+        pos.x += this->dyna.actor.world.pos.x;
+        pos.y += this->dyna.actor.world.pos.y;
+        pos.z += this->dyna.actor.world.pos.z;
 
-        EffectSsKakera_Spawn(play, &spC8, &spBC, &spC8, -0x82, 0x40, 0x28, 0, 0, sLeafScales[i & 3], 0, 0, 44, -1,
+        EffectSsKakera_Spawn(play, &pos, &vel, &pos, -0x82, 0x40, 0x28, 0, 0, sLeafScales[i & 3], 0, 0, 44, -1,
                              GAMEPLAY_KEEP, sLeafDlists[(s32)Rand_Next() > 0]);
 
         if ((i > 20) && ((i & 1) != 0)) {
-            spB0.x = (Rand_ZeroOne() - 0.5f) * 0.2f;
-            spB0.y = (Rand_ZeroOne() * 0.02f) - 0.1f;
-            spB0.z = (Rand_ZeroOne() - 0.5f) * 0.2f;
+            accel.x = (Rand_ZeroOne() - 0.5f) * 0.2f;
+            accel.y = (Rand_ZeroOne() * 0.02f) - 0.1f;
+            accel.z = (Rand_ZeroOne() - 0.5f) * 0.2f;
 
-            func_800B12F0(play, &spC8, &gZeroVec3f, &spB0, ((Rand_Next() >> 26) + 10), (Rand_Next() >> 28), 50);
+            func_800B12F0(play, &pos, &gZeroVec3f, &accel, ((Rand_Next() >> 26) + 10), (Rand_Next() >> 28), 50);
         }
     }
 }
@@ -184,6 +184,7 @@ void BgDkjailIvy_FadeOut(BgDkjailIvy* this, PlayState* play) {
         this->alpha = 0;
         this->dyna.actor.draw = NULL;
     }
+    
     this->fadeOutTimer--;
     if (this->fadeOutTimer <= 0) {
         Actor_MarkForDeath(&this->dyna.actor);
