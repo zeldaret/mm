@@ -140,7 +140,7 @@ void AudioPlayback_NoteInit(Note* note) {
 
     note->playbackState.status = PLAYBACK_STATUS_0;
     note->playbackState.adsr.action.s.state = ADSR_STATE_INITIAL;
-    note->sampleState = gDefaultNoteSub;
+    note->sampleState = gDefaultSampleState;
 }
 
 void AudioPlayback_NoteDisable(Note* note) {
@@ -211,6 +211,7 @@ void AudioPlayback_ProcessNotes(void) {
 
     out:
         if (playbackState->priority != 0) {
+            //! FAKE:
             if (1) {}
             noteSampleState = &note->sampleState;
             if ((playbackState->status >= 1) || noteSampleState->bitField0.finished) {
@@ -989,7 +990,7 @@ void AudioPlayback_NoteInitAll(void) {
 
     for (i = 0; i < gAudioContext.numNotes; i++) {
         note = &gAudioContext.notes[i];
-        note->sampleState = gZeroNoteSub;
+        note->sampleState = gZeroedSampleState;
         note->playbackState.priority = 0;
         note->playbackState.status = PLAYBACK_STATUS_0;
         note->playbackState.parentLayer = NO_LAYER;
