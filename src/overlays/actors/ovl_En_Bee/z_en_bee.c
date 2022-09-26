@@ -94,7 +94,7 @@ void EnBee_Init(Actor* thisx, PlayState* play) {
 
     this->actor.colChkInfo.mass = 10;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
-    SkelAnime_Init(play, &this->skelAnime, &gBeeSkel, &gBeeIdleAnim, this->morphTable, this->jointTable,
+    SkelAnime_Init(play, &this->skelAnime, &gBeeSkel, &gBeeFlyingAnim, this->morphTable, this->jointTable,
                    OBJECT_BEE_LIMB_MAX);
     this->actor.colChkInfo.health = 1;
     this->actor.colChkInfo.damageTable = &sDamageTable;
@@ -123,7 +123,7 @@ void EnBee_SetupIdle(EnBee* this) {
     Vec3f tmpPos;
     s16 yawOffset;
 
-    Animation_Change(&this->skelAnime, &gBeeIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gBeeIdleAnim), 0, -10.0f);
+    Animation_Change(&this->skelAnime, &gBeeFlyingAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gBeeFlyingAnim), 0, -10.0f);
     Math_Vec3f_Copy(&tmpPos, &this->actor.home.pos);
 
     yawOffset = (this->instanceId * 0x700) + 0x2000;
@@ -181,7 +181,7 @@ void EnBee_Idle(EnBee* this, PlayState* play) {
 }
 
 void EnBee_SetupHostile(EnBee* this) {
-    Animation_Change(&this->skelAnime, &gBeeIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gBeeIdleAnim), 0, -10.0f);
+    Animation_Change(&this->skelAnime, &gBeeFlyingAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gBeeFlyingAnim), 0, -10.0f);
     this->isHostile = 1;
     this->actionFunc = EnBee_Hostile;
 }

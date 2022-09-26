@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_bee" Segment="6">
-        <Animation Name="gBeeIdleAnim" Offset="0x5C" />
+        <Animation Name="gBeeFlyingAnim" Offset="0x5C" />
         <DList Name="gBeeBodyDL" Offset="0x550" />
         <DList Name="gBeeHeadDL" Offset="0x780" />
         <DList Name="gBeeAntennaeDL" Offset="0x848" />
