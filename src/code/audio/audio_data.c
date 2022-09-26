@@ -857,13 +857,13 @@ EnvelopePoint gDefaultEnvelope[] = {
     { ADSR_DISABLE, 0 },
 };
 
-NoteSubEu gZeroNoteSub = { 0 };
+NoteSampleState gZeroNoteSub = { 0 };
 
-NoteSubEu gDefaultNoteSub = {
+NoteSampleState gDefaultNoteSub = {
     { 1, 1, 0, 0, 0, 0, 0, 0 }, { 0 }, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-u16 gHeadsetPanQuantization[64] = {
+u16 gHaasEffectDelaySize[64] = {
     60, 58, 56, 54, 52, 50, 48, 46, 44, 42, 40, 38, 36, 34, 32, 30, 28, 26, 24, 22, 20, 18,
     16, 14, 12, 10, 8,  6,  4,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
@@ -872,7 +872,7 @@ u16 gHeadsetPanQuantization[64] = {
 s32 D_801D58A4 = 0;
 
 // clang-format off
-s16 D_801D58A8[] = {
+s16 gInvalidAdpcmCodeBook[] = {
     0, 0, 0, 0,   0, 0, 0, 0,
     0, 0, 0, 0,   0, 0, 0, 0,
     0, 0, 0, 0,   0, 0, 0, 0,
