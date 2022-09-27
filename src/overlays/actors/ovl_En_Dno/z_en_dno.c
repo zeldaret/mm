@@ -2,12 +2,16 @@
  * File: z_en_dno.c
  * Overlay: ovl_En_Dno
  * Description: Deku Butler
+ *
+ * This actor's name is probably short for "Dekunuts Ou (king)". This is likely a misnamed actor,
+ * since it uses assets from object_dnj (probably short for "Dekunuts Jii (grandfather, elderly
+ * person"). Note that the Deku Princess and King both call the Butler "Jii" in the Japanese text.
  */
 
 #include "z_en_dno.h"
 #include "overlays/actors/ovl_Bg_Crace_Movebg/z_bg_crace_movebg.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_dno/object_dno.h"
+#include "objects/object_dnj/object_dnj.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -41,23 +45,23 @@ s32 EnDno_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 void EnDno_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 static AnimationSpeedInfo sAnimations[] = {
-    { &object_dno_Anim_000470, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dno_Anim_0008F0, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_dno_Anim_000F6C, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dno_Anim_001A50, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_dno_Anim_002530, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dno_Anim_003320, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_dno_Anim_0036D0, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dno_Anim_0041CC, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_dno_Anim_004DD8, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dno_Anim_005F98, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_dno_Anim_006488, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dno_Anim_0073E4, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_dno_Anim_0077A8, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dno_Anim_007CA4, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_dno_Anim_008324, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dno_Anim_008AE4, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_dno_Anim_009100, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dno_Anim_0051E4, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_dno_Anim_005E20, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dno_Anim_006F84, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_dnj_Anim_000470, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dnj_Anim_0008F0, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_dnj_Anim_000F6C, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dnj_Anim_001A50, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_dnj_Anim_002530, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dnj_Anim_003320, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_dnj_Anim_0036D0, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dnj_Anim_0041CC, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_dnj_Anim_004DD8, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dnj_Anim_005F98, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_dnj_Anim_006488, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dnj_Anim_0073E4, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_dnj_Anim_0077A8, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dnj_Anim_007CA4, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_dnj_Anim_008324, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dnj_Anim_008AE4, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_dnj_Anim_009100, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dnj_Anim_0051E4, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_dnj_Anim_005E20, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dnj_Anim_006F84, 1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 const ActorInit En_Dno_InitVars = {
     ACTOR_EN_DNO,
     ACTORCAT_NPC,
     FLAGS,
-    OBJECT_DNO,
+    OBJECT_DNJ,
     sizeof(EnDno),
     (ActorFunc)EnDno_Init,
     (ActorFunc)EnDno_Destroy,
@@ -194,7 +198,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
         if (actor == NULL) {
             Actor_ProcessInitChain(thisx, sInitChain);
             ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 21.0f);
-            SkelAnime_InitFlex(play, &this->skelAnime, &object_dno_Skel_00E1F8, &object_dno_Anim_007CA4,
+            SkelAnime_InitFlex(play, &this->skelAnime, &object_dnj_Skel_00E1F8, &object_dnj_Anim_007CA4,
                                this->jointTable, this->morphTable, 28);
             Collider_InitCylinder(play, &this->collider);
             Collider_SetCylinder(play, &this->collider, thisx, &sCylinderInit);
