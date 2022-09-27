@@ -22,7 +22,7 @@
         <Limb Name="gMamamuYanHeadLimb" Type="Standard" EnumName="MAMAMU_YAN_LIMB_HEAD" Offset="0x138" />
 
         <!-- Mamamu Yan Skeleton -->
-        <Skeleton Name="gMamamuYanSkel" Type="Flex" LimbType="Standard" LimbNone="MAMAMU_YAN_LIMB_NONE" LimbMax="MAMAMU_YAN_LIMB_MAX" EnumName="MamamuYanLimbs" Offset="0x180" />
+        <Skeleton Name="gMamamuYanSkel" Type="Flex" LimbType="Standard" LimbNone="MAMAMU_YAN_LIMB_NONE" LimbMax="MAMAMU_YAN_LIMB_MAX" EnumName="MamamuYanLimb" Offset="0x180" />
 
         <!-- Mamamu Yan Textures -->
         <Texture Name="gMamamuYanTLUT" OutName="mamamu_yan_tlut" Format="rgba16" Width="16" Height="16" Offset="0x198" />

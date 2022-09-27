@@ -831,7 +831,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                     break;
 
                 case 1:
-                    if ((play->msgCtx.ocarinaMode == 4) && (play->msgCtx.unk1202E == 7)) {
+                    if ((play->msgCtx.ocarinaMode == 4) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
                         this->actionState = ENKANBAN_REPAIR;
                         this->bounceX = 1;
                         play_sound(NA_SE_SY_TRE_BOX_APPEAR);
@@ -963,7 +963,7 @@ void EnKanban_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if (this->partFlags == 0xFFFF) {
-            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05AED0);
+            gSPDisplayList(POLY_OPA_DISP++, gSignRectangularDL);
         } else {
             for (i = 0; i < ARRAY_COUNT(sPartFlags); i++) {
                 if (sPartFlags[i] & this->partFlags) {

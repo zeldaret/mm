@@ -3,10 +3,10 @@
 
 #include "global.h"
 
-void FileChoose_Init(GameState* thisx);
-void FileChoose_Destroy(GameState* thisx);
+void FileSelect_Init(GameState* thisx);
+void FileSelect_Destroy(GameState* thisx);
 
-typedef struct FileChooseContext {
+typedef struct FileSelectState {
     /* 0x00000 */ GameState state;
     /* 0x000A4 */ Vtx* unk_A4;
     /* 0x000A8 */ u8* staticSegment;
@@ -17,7 +17,6 @@ typedef struct FileChooseContext {
     /* 0x00248 */ SkyboxContext skyboxCtx;
     /* 0x00470 */ MessageContext msgCtx;
     /* 0x12550 */ Font font;
-    /* 0x242DC */ UNK_TYPE1 unk_242DC[4];
     /* 0x242E0 */ EnvironmentContext envCtx;
     /* 0x243E0 */ Vtx* unk_243E0;
     /* 0x243E4 */ Vtx* unk_243E4;
@@ -111,15 +110,6 @@ typedef struct FileChooseContext {
     /* 0x2454C */ s16  unk_2454C;
     /* 0x2454E */ s16  unk_2454E;
     /* 0x24550 */ s16  unk_24550;
-} FileChooseContext; // size = 0x24558
-
-// TODO: Confirm those values has the same meaning as their OoT counterparts
-typedef enum {
-    /* 0x00 */ PAUSE_0, // PAUSE_ITEM
-    /* 0x01 */ PAUSE_1, // PAUSE_MAP
-    /* 0x02 */ PAUSE_2, // PAUSE_QUEST
-    /* 0x03 */ PAUSE_3, // PAUSE_EQUIP
-    /* 0x04 */ PAUSE_4  // PAUSE_WORLD_MAP
-} PauseMenuPage;
+} FileSelectState; // size = 0x24558
 
 #endif

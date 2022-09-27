@@ -371,7 +371,7 @@ void func_80BB71C8(EnTanron2* this, PlayState* play) {
         sp9C.z = spA8.z * -0.03f;
 
         EffectSsDtBubble_SpawnCustomColor(play, &sp90, &spA8, &sp9C, &D_80BB81E8, &D_80BB81EC,
-                                          Rand_ZeroFloat(100.0f) + 200.0f, Rand_ZeroFloat(5.0f) + 15.0f, 0);
+                                          Rand_ZeroFloat(100.0f) + 200.0f, Rand_ZeroFloat(5.0f) + 15.0f, false);
     }
 }
 
@@ -670,7 +670,7 @@ void EnTanron2_Draw(Actor* thisx, PlayState* play2) {
             Matrix_Scale(D_80BB8454, 0.0f, D_80BB8454, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0377B0);
+            gSPDisplayList(POLY_XLU_DISP++, gEffWaterRippleDL);
         }
         tanron2 = tanron2->next;
     }

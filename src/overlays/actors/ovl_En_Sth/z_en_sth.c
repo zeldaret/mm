@@ -103,7 +103,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
 
     switch (ENSTH_GET_F(&this->actor)) {
         case ENSTH_F_1:
-            if (play->actorCtx.unk5 & 2) {
+            if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
                 this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
                 this->actionFunc = func_80B67958;
             } else {
@@ -200,7 +200,7 @@ void func_80B67148(EnSth* this, PlayState* play) {
 void func_80B671A0(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actionFunc = func_80B67208;
         func_801477B4(play);
     }
@@ -275,7 +275,7 @@ void func_80B67348(EnSth* this, PlayState* play) {
         }
         Message_StartTextbox(play, phi_a1, &this->actor);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -286,7 +286,7 @@ void func_80B67458(EnSth* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B67348;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
         if (CURRENT_DAY == 3) {
             func_80B670A4(this, 6);
         } else {
@@ -312,7 +312,7 @@ void func_80B67540(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1134:
@@ -382,7 +382,7 @@ void func_80B67540(EnSth* this, PlayState* play) {
             }
             break;
 
-        case 2:
+        case TEXT_STATE_CLOSING:
             this->actionFunc = func_80B677BC;
             this->unk_29C |= 2;
             break;
@@ -403,7 +403,7 @@ void func_80B677BC(EnSth* this, PlayState* play) {
 void func_80B67838(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actionFunc = func_80B678A8;
         func_801477B4(play);
     }
@@ -470,7 +470,7 @@ void func_80B67AB4(EnSth* this, PlayState* play) {
         gSaveContext.save.weekEventReg[34] |= 0x40;
         Message_StartTextbox(play, 0x918, &this->actor);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -481,7 +481,7 @@ void func_80B67B50(EnSth* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B67AB4;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     } else {
         this->unk_29C &= ~1;
         gSaveContext.save.weekEventReg[34] |= 8;
@@ -494,7 +494,7 @@ void func_80B67C1C(EnSth* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x90C:
                 func_80B670A4(this, 2);

@@ -2,12 +2,16 @@
  * File: z_en_dno.c
  * Overlay: ovl_En_Dno
  * Description: Deku Butler
+ *
+ * This actor's name is probably short for "Dekunuts Ou (king)". This is likely a misnamed actor,
+ * since it uses assets from object_dnj (probably short for "Dekunuts Jii (grandfather, elderly
+ * person"). Note that the Deku Princess and King both call the Butler "Jii" in the Japanese text.
  */
 
 #include "z_en_dno.h"
 #include "overlays/actors/ovl_Bg_Crace_Movebg/z_bg_crace_movebg.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_dno/object_dno.h"
+#include "objects/object_dnj/object_dnj.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -41,23 +45,23 @@ s32 EnDno_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 void EnDno_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 static AnimationSpeedInfo sAnimations[] = {
-    { &object_dno_Anim_000470, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dno_Anim_0008F0, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_dno_Anim_000F6C, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dno_Anim_001A50, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_dno_Anim_002530, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dno_Anim_003320, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_dno_Anim_0036D0, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dno_Anim_0041CC, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_dno_Anim_004DD8, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dno_Anim_005F98, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_dno_Anim_006488, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dno_Anim_0073E4, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_dno_Anim_0077A8, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dno_Anim_007CA4, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_dno_Anim_008324, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dno_Anim_008AE4, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_dno_Anim_009100, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dno_Anim_0051E4, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_dno_Anim_005E20, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dno_Anim_006F84, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_dnj_Anim_000470, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dnj_Anim_0008F0, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_dnj_Anim_000F6C, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dnj_Anim_001A50, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_dnj_Anim_002530, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dnj_Anim_003320, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_dnj_Anim_0036D0, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dnj_Anim_0041CC, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_dnj_Anim_004DD8, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dnj_Anim_005F98, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_dnj_Anim_006488, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dnj_Anim_0073E4, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_dnj_Anim_0077A8, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dnj_Anim_007CA4, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_dnj_Anim_008324, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dnj_Anim_008AE4, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_dnj_Anim_009100, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dnj_Anim_0051E4, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_dnj_Anim_005E20, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dnj_Anim_006F84, 1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 const ActorInit En_Dno_InitVars = {
     ACTOR_EN_DNO,
     ACTORCAT_NPC,
     FLAGS,
-    OBJECT_DNO,
+    OBJECT_DNJ,
     sizeof(EnDno),
     (ActorFunc)EnDno_Init,
     (ActorFunc)EnDno_Destroy,
@@ -146,20 +150,20 @@ void func_80A715DC(EnDno* this, PlayState* play) {
     Vec3f sp70;
 
     do {
-        crace = (BgCraceMovebg*)SubS_FindActor(play, &crace->actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
+        crace = (BgCraceMovebg*)SubS_FindActor(play, &crace->dyna.actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (crace != NULL) {
-            if (ENDNO_GET_F(&crace->actor) == ENDNO_GET_F_0 && !(crace->unk_170 & 1)) {
-                if (SubS_LineSegVsPlane(&crace->actor.home.pos, &crace->actor.home.rot, &D_80A73B2C,
+            if (ENDNO_GET_F(&crace->dyna.actor) == ENDNO_GET_F_0 && !(crace->unk170 & 1)) {
+                if (SubS_LineSegVsPlane(&crace->dyna.actor.home.pos, &crace->dyna.actor.home.rot, &D_80A73B2C,
                                         &this->actor.prevPos, &this->actor.world.pos, &sp88)) {
-                    Math_Vec3f_Diff(&this->actor.world.pos, &crace->actor.home.pos, &sp7C);
-                    Matrix_RotateYS(-crace->actor.home.rot.y, MTXMODE_NEW);
+                    Math_Vec3f_Diff(&this->actor.world.pos, &crace->dyna.actor.home.pos, &sp7C);
+                    Matrix_RotateYS(-crace->dyna.actor.home.rot.y, MTXMODE_NEW);
                     Matrix_MultVec3f(&sp7C, &sp70);
                     if ((fabsf(sp70.x) < 100.0f) && (sp70.y >= -10.0f) && (sp70.y <= 180.0f) && (sp70.z < 0.0f)) {
-                        crace->unk_170 |= 1;
+                        crace->unk170 |= 1;
                     }
                 }
             }
-            crace = (BgCraceMovebg*)crace->actor.next;
+            crace = (BgCraceMovebg*)crace->dyna.actor.next;
         }
     } while (crace != NULL);
 }
@@ -194,7 +198,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
         if (actor == NULL) {
             Actor_ProcessInitChain(thisx, sInitChain);
             ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 21.0f);
-            SkelAnime_InitFlex(play, &this->skelAnime, &object_dno_Skel_00E1F8, &object_dno_Anim_007CA4,
+            SkelAnime_InitFlex(play, &this->skelAnime, &object_dnj_Skel_00E1F8, &object_dnj_Anim_007CA4,
                                this->jointTable, this->morphTable, 28);
             Collider_InitCylinder(play, &this->collider);
             Collider_SetCylinder(play, &this->collider, thisx, &sCylinderInit);
@@ -322,7 +326,7 @@ void func_80A71C3C(EnDno* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         play->msgCtx.msgMode = 0;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         func_80A71E54(this, play);
     } else if (this->actor.xzDistToPlayer < 60.0f) {
         func_800B8614(&this->actor, play, 60.0f);
@@ -356,7 +360,7 @@ void func_80A71E54(EnDno* this, PlayState* play) {
 void func_80A71F18(EnDno* this, PlayState* play) {
     Math_ScaledStepToS(&this->unk_466, 0, 0x16C);
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
+        case TEXT_STATE_NONE:
             if (!(this->unk_3B0 & 0x10) ||
                 Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xE38)) {
                 switch (this->textId) {
@@ -380,7 +384,7 @@ void func_80A71F18(EnDno* this, PlayState* play) {
             }
             break;
 
-        case 3:
+        case TEXT_STATE_3:
             if (play->msgCtx.currentTextId == 0x80B) {
                 switch (this->unk_32C) {
                     case 16:
@@ -402,9 +406,9 @@ void func_80A71F18(EnDno* this, PlayState* play) {
             }
             break;
 
-        case 4:
-        case 5:
-        case 6:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_5:
+        case TEXT_STATE_DONE:
             switch (play->msgCtx.currentTextId) {
                 case 0x80B:
                     switch (this->unk_32C) {
@@ -517,7 +521,7 @@ void func_80A724B8(EnDno* this, PlayState* play) {
 }
 
 void func_80A7256C(EnDno* this, PlayState* play) {
-    func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, EXCH_ITEM_MINUS1);
+    func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_AP_MINUS1);
 }
 
 void func_80A72598(EnDno* this, PlayState* play) {
@@ -537,7 +541,7 @@ void func_80A725F8(EnDno* this, PlayState* play) {
 
     func_80A71424(&this->unk_466, 0, 0, 0, 0x2000, 0x16C);
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
+        case TEXT_STATE_NONE:
             switch (this->unk_328) {
                 case 0:
                     if (this->unk_32C == 14) {
@@ -569,9 +573,9 @@ void func_80A725F8(EnDno* this, PlayState* play) {
             }
             break;
 
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             if (((play->msgCtx.currentTextId == 0x800) || (play->msgCtx.currentTextId == 0x801)) &&
                 (this->unk_32C == 8)) {
                 Math_SmoothStepToF(&this->unk_454, 1.0f, 1.0f, 0.1f, 0.01f);
@@ -593,9 +597,9 @@ void func_80A725F8(EnDno* this, PlayState* play) {
             }
             break;
 
-        case 4:
-        case 5:
-        case 6:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_5:
+        case TEXT_STATE_DONE:
             switch (play->msgCtx.currentTextId) {
                 case 0x800:
                 case 0x801:
@@ -610,11 +614,11 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                 case 0x802:
                     if (Message_ShouldAdvance(play)) {
                         if (INV_CONTENT(ITEM_MASK_SCENTS) == ITEM_MASK_SCENTS) {
-                            this->unk_458 = GI_RUPEE_RED;
+                            this->getItemId = GI_RUPEE_RED;
                         } else {
-                            this->unk_458 = GI_MASK_SCENTS;
+                            this->getItemId = GI_MASK_SCENTS;
                         }
-                        Actor_PickUp(&this->actor, play, this->unk_458, 60.0f, 60.0f);
+                        Actor_PickUp(&this->actor, play, this->getItemId, 60.0f, 60.0f);
                         func_801477B4(play);
                         func_80A72B84(this, play);
                     }
@@ -678,7 +682,7 @@ void func_80A72BA4(EnDno* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80A72598;
     } else {
-        Actor_PickUp(&this->actor, play, this->unk_458, 60.0f, 60.0f);
+        Actor_PickUp(&this->actor, play, this->getItemId, 60.0f, 60.0f);
     }
 }
 
@@ -1000,7 +1004,7 @@ void EnDno_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, -frames * 20, 0x20, 0x80));
         gDPSetPrimColor(&gfxXlu[2], 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(&gfxXlu[3], 255, 0, 0, 0);
-        gSPDisplayList(&gfxXlu[4], gGameplayKeepDrawFlameDL);
+        gSPDisplayList(&gfxXlu[4], gEffFire1DL);
 
         POLY_XLU_DISP = gfxXlu + 5;
 

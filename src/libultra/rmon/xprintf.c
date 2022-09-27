@@ -51,8 +51,7 @@ int _Printf(PrintCallback pfn, void* arg, const char* fmt, va_list ap) {
         }
         fmt = ++s;
         x.flags = 0;
-        // TODO the cast isn't necessary because strchr should take it in as const, but it currently doesn't
-        for (; (t = strchr((char*)fchar, *s)) != NULL; s++) {
+        for (; (t = strchr(fchar, *s)) != NULL; s++) {
             x.flags |= fbit[t - fchar];
         }
         if (*s == '*') {

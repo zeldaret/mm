@@ -515,11 +515,11 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, PlayState* play2) {
             worldPos.y = this->effects[i].posBase.y + this->effects[i].posOffset.y;
             worldPos.z = this->effects[i].posBase.z + this->effects[i].posOffset.z;
 
-            func_80169474(play, &worldPos, &screenPos); // unnamed Play_ function, func_800C016C from OoT
+            Play_GetScreenPos(play, &worldPos, &screenPos);
 
             // checking if particle is on screen
-            if (screenPos.x >= 0.0f && screenPos.x < SCREEN_WIDTH && screenPos.y >= 0.0f &&
-                screenPos.y < SCREEN_HEIGHT) {
+            if ((screenPos.x >= 0.0f) && (screenPos.x < SCREEN_WIDTH) && (screenPos.y >= 0.0f) &&
+                (screenPos.y < SCREEN_HEIGHT)) {
                 Matrix_Translate(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
                 scaleAlpha = this->effects[i].alpha / 50.0f;
                 if (scaleAlpha > 1.0f) {
@@ -604,11 +604,11 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, PlayState* play2) {
             worldPos.y = this->effects[i].posBase.y + this->effects[i].posOffset.y;
             worldPos.z = this->effects[i].posBase.z + this->effects[i].posOffset.z;
 
-            func_80169474(play, &worldPos, &screenPos); // unnamed Play_ function, func_800C016C from OoT
+            Play_GetScreenPos(play, &worldPos, &screenPos);
 
             // checking if effect is on screen
-            if (screenPos.x >= 0.0f && screenPos.x < SCREEN_WIDTH && screenPos.y >= 0.0f &&
-                screenPos.y < SCREEN_HEIGHT) {
+            if ((screenPos.x >= 0.0f) && (screenPos.x < SCREEN_WIDTH) && (screenPos.y >= 0.0f) &&
+                (screenPos.y < SCREEN_HEIGHT)) {
                 Matrix_Translate(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
                 alphaScale = this->effects[i].alpha / 50.0f;
                 if (alphaScale > 1.0f) {
@@ -649,7 +649,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, PlayState* play2) {
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                 if (this->actor.params == DEMO_KANKYO_TYPE_GIANTS) {
-                    gSPDisplayList(POLY_XLU_DISP++, object_bubble_DL_001000);
+                    gSPDisplayList(POLY_XLU_DISP++, gBubbleDL);
                 } else {
                     gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
                 }

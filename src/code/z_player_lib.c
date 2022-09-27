@@ -274,7 +274,7 @@ u8 Player_MaskIdToItemId(s32 maskIdMinusOne) {
     return sMaskItemIds[maskIdMinusOne];
 }
 
-u8 Player_GetCurMaskItemId(PlayState* play) {
+s32 Player_GetCurMaskItemId(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->currentMask != PLAYER_MASK_NONE) {
@@ -404,9 +404,9 @@ void func_80123140(PlayState* play, Player* player) {
 
 s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_20000000 | PLAYER_STATE1_200 | PLAYER_STATE1_80)) ||
-           player->csMode != 0 || play->sceneLoadFlag == 0x14 || play->unk_18B4A != 0 ||
-           (player->stateFlags1 & PLAYER_STATE1_1) || (player->stateFlags3 & PLAYER_STATE3_80) ||
-           play->actorCtx.unk268 != 0;
+           (player->csMode != 0) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
+           (play->transitionMode != TRANS_MODE_OFF) || (player->stateFlags1 & PLAYER_STATE1_1) ||
+           (player->stateFlags3 & PLAYER_STATE3_80) || (play->actorCtx.unk268 != 0);
 }
 
 s32 Player_InCsMode(PlayState* play) {
@@ -706,8 +706,8 @@ void func_80123E90(PlayState* play, Actor* actor) {
     player->unk_730 = actor;
     player->unk_A78 = actor;
     player->stateFlags1 |= PLAYER_STATE1_10000;
-    func_800DFD78(Play_GetCamera(play, CAM_ID_MAIN), 8, actor);
-    Camera_ChangeMode(Play_GetCamera(play, CAM_ID_MAIN), 9);
+    Camera_SetViewParam(Play_GetCamera(play, CAM_ID_MAIN), CAM_VIEW_TARGET, actor);
+    Camera_ChangeMode(Play_GetCamera(play, CAM_ID_MAIN), CAM_MODE_FOLLOWTARGET);
 }
 
 s32 func_80123F14(PlayState* play) {
@@ -774,11 +774,11 @@ s32 func_801240DC(Player* player) {
 }
 
 s32 func_80124110(Player* player, s32 actionParam) {
-    s32 temp_v0 = actionParam - PLAYER_AP_FISHING_POLE;
+    s32 temp_v0 = actionParam - PLAYER_AP_FISHING_ROD;
 
     if (player->transformation != PLAYER_FORM_GORON) {
-        if (((actionParam - PLAYER_AP_FISHING_POLE) > (PLAYER_AP_FISHING_POLE - PLAYER_AP_FISHING_POLE)) &&
-            ((actionParam - PLAYER_AP_FISHING_POLE) < (PLAYER_AP_SWORD_GREAT_FAIRY - PLAYER_AP_FISHING_POLE))) {
+        if (((actionParam - PLAYER_AP_FISHING_ROD) > (PLAYER_AP_FISHING_ROD - PLAYER_AP_FISHING_ROD)) &&
+            ((actionParam - PLAYER_AP_FISHING_ROD) < (PLAYER_AP_SWORD_GREAT_FAIRY - PLAYER_AP_FISHING_ROD))) {
             return temp_v0;
         }
     }

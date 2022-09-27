@@ -73,7 +73,7 @@ static Vec3f D_80964B0C = { 0.0f, 60.0f, -8.0f };
 static Vec3f D_80964B18 = { 0.0f, 55.0f, 12.0f };
 static Vec3f D_80964B24 = { 0.0f, 60.0f, 0.0f };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &object_mu_Anim_0053E0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &object_mu_Anim_001F74, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &object_mu_Anim_002F64, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
@@ -371,7 +371,7 @@ void func_8096209C(EnFu* this, PlayState* play) {
 }
 
 void func_809622FC(EnFu* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
     this->actionFunc = func_80962340;
 }
 
@@ -536,7 +536,7 @@ void func_80962660(EnFu* this, PlayState* play) {
                 func_801477B4(play);
                 player->stateFlags1 |= 0x20;
                 this->unk_53C = 0;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                 func_801A2BB8(NA_BGM_MINI_GAME_2);
                 if (this->unk_542 == 0) {
                     if (this->unk_546 == 1) {
@@ -577,24 +577,24 @@ void func_809628BC(EnFu* this) {
 }
 
 void func_809628D0(EnFu* this, PlayState* play) {
-    u8 sp27 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    switch (sp27) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
+    switch (talkState) {
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
 
-        case 4:
+        case TEXT_STATE_CHOICE:
             func_80962588(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             func_80962660(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 this->unk_54A = 1;
                 switch (this->unk_552) {
@@ -617,7 +617,7 @@ void func_809628D0(EnFu* this, PlayState* play) {
             break;
     }
 
-    if (sp27 != 3) {
+    if (talkState != TEXT_STATE_3) {
         func_80964190(this, play);
         func_8096426C(this, play);
     }
@@ -651,9 +651,8 @@ void func_80962A10(EnFu* this, PlayState* play) {
         this->unk_546 = 1;
     }
 
-    if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && gSaveContext.save.playerData.magicAcquired) {
-        Parameter_AddMagic(play,
-                           ((void)0, gSaveContext.unk_3F30) + (gSaveContext.save.playerData.doubleMagic * 48) + 48);
+    if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && gSaveContext.save.playerData.isMagicAcquired) {
+        Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
     }
 
     func_80962F10(this);
@@ -840,8 +839,9 @@ void func_80963350(EnFu* this, PlayState* play) {
     static s32 D_80964C24 = 0;
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
-    if ((this->unk_54A == 0) && (((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) ||
-                                 ((Message_GetState(&play->msgCtx) == 2) && (play->msgCtx.unk12023 == 1)))) {
+    if ((this->unk_54A == 0) &&
+        (((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) ||
+         ((Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) && (play->msgCtx.stateTimer == 1)))) {
         func_801477B4(play);
         this->unk_54A = 2;
         D_80964C24 = 1;
@@ -934,7 +934,7 @@ void func_80963630(EnFu* this, PlayState* play) {
         player->stateFlags1 &= ~0x20;
     } else {
         this->actor.child->freezeTimer = 10;
-        func_800B85E0(&this->actor, play, 500.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 500.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -1138,7 +1138,7 @@ void func_80963DE4(EnFu* this, PlayState* play) {
 }
 
 void func_80963EAC(EnFu* this, PlayState* play) {
-    if (gSaveContext.save.playerData.magicAcquired) {
+    if (gSaveContext.save.playerData.isMagicAcquired) {
         if (this->unk_540 == 1) {
             Message_StartTextbox(play, 0x2847, &this->actor);
             this->unk_552 = 0x2847;
@@ -1213,7 +1213,7 @@ void func_80964190(EnFu* this, PlayState* play) {
             case 0x2842:
             case 0x2844:
             case 0x2848:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                 break;
 
             case 0x2840:
@@ -1239,21 +1239,21 @@ void func_80964190(EnFu* this, PlayState* play) {
             case 0x286B:
             case 0x286D:
             case 0x2871:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
                 break;
 
             case 0x2860:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
                 break;
 
             case 0x285F:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
                 break;
 
             case 0x287E:
             case 0x2880:
             case 0x2883:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
                 break;
         }
     }
@@ -1460,7 +1460,7 @@ void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len) {
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(ptr->unk_00, ptr->unk_00, ptr->unk_00, MTXMODE_APPLY);
 
-            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropRecoveryHeartTex));
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0E0);
         }

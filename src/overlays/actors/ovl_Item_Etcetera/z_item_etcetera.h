@@ -30,8 +30,8 @@ typedef enum {
 typedef struct ItemEtcetera {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ItemEtceteraActionFunc futureActionFunc;
-    /* 0x148 */ s16 giDrawId;
-    /* 0x14A */ s16 itemID;
+    /* 0x148 */ s16 getItemDrawId;
+    /* 0x14A */ s16 getItemId;
     /* 0x14C */ u8 objIndex;
     /* 0x150 */ ActorFunc drawFunc;
     /* 0x154 */ ItemEtceteraActionFunc actionFunc;

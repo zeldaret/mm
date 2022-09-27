@@ -229,7 +229,7 @@ s32 func_8095A978(EnOwl* this, PlayState* play, u16 textId, f32 targetDist, f32 
     this->actor.textId = textId;
     if (this->actor.xzDistToPlayer < targetDist) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, targetDist, arg4, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, play, targetDist, arg4, PLAYER_AP_NONE);
     }
 
     return false;
@@ -242,7 +242,7 @@ s32 func_8095A9FC(EnOwl* this, PlayState* play, u16 textId) {
 
     this->actor.textId = textId;
     if (this->actor.xzDistToPlayer < 120.0f) {
-        func_800B8500(&this->actor, play, 350.0f, 1000.0f, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, play, 350.0f, 1000.0f, PLAYER_AP_NONE);
     }
 
     return false;
@@ -324,7 +324,7 @@ void func_8095ACEC(EnOwl* this) {
 }
 
 void func_8095AD54(EnOwl* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 4) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case OWL_REPEAT:
                 func_80151938(play, 0x7D1);
@@ -340,14 +340,14 @@ void func_8095AD54(EnOwl* this, PlayState* play) {
 }
 
 void func_8095AE00(EnOwl* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_80151938(play, 0x7D2);
         this->actionFunc = func_8095AD54;
     }
 }
 
 void func_8095AE60(EnOwl* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_80151938(play, 0x7D1);
         this->actionFunc = func_8095AE00;
     }
@@ -363,7 +363,7 @@ void func_8095AEC0(EnOwl* this, PlayState* play) {
 
 void func_8095AF2C(EnOwl* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 if (play->msgCtx.currentTextId == 0xBFE) {
                     func_8095ACEC(this);
@@ -375,7 +375,7 @@ void func_8095AF2C(EnOwl* this, PlayState* play) {
             }
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             func_8095ACEC(this);
             this->actionFunc = func_8095ABF0;
             break;
@@ -505,7 +505,7 @@ void func_8095B574(EnOwl* this, PlayState* play) {
         this->unk_406 = 2;
     } else if (this->actor.xzDistToPlayer < 200.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 200.0f, 400.0f, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, play, 200.0f, 400.0f, PLAYER_AP_NONE);
     } else {
         this->actor.flags &= ~ACTOR_FLAG_10000;
     }
@@ -606,7 +606,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
     func_8095A920(this, play);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xBEC:
@@ -645,7 +645,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
             }
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xBEA:
@@ -718,11 +718,11 @@ void func_8095BE0C(EnOwl* this, PlayState* play) {
         this->actionFlags |= 0x40;
     } else if (this->actor.textId == 0xBF0) {
         if (this->actor.isTargeted) {
-            func_800B8500(&this->actor, play, 200.0f, 200.0f, EXCH_ITEM_NONE);
+            func_800B8500(&this->actor, play, 200.0f, 200.0f, PLAYER_AP_NONE);
         }
     } else if (this->actor.xzDistToPlayer < 200.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 200.0f, 200.0f, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, play, 200.0f, 200.0f, PLAYER_AP_NONE);
     } else {
         this->actor.flags &= ~ACTOR_FLAG_10000;
     }

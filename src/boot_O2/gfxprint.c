@@ -83,7 +83,7 @@ void GfxPrint_PrintCharImpl(GfxPrint* this, u8 c) {
         if (this->flags & GFXP_FLAG_RAINBOW) {
             gDPSetTextureLUT(this->dList++, G_TT_RGBA16);
             gDPSetCycleType(this->dList++, G_CYC_2CYCLE);
-            gDPSetRenderMode(this->dList++, G_RM_OPA_CI, G_RM_XLU_SURF2);
+            gDPSetRenderMode(this->dList++, G_RM_PASS, G_RM_XLU_SURF2);
             gDPSetCombineMode(this->dList++, G_CC_INTERFERENCE, G_CC_PASS2);
         } else {
             gDPSetTextureLUT(this->dList++, G_TT_IA16);

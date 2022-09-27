@@ -326,7 +326,7 @@ void func_80B32084(EnZoraegg* this, PlayState* play) {
 }
 
 void func_80B32094(EnZoraegg* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 2) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         this->actionFunc = func_80B320E0;
     }
     func_80B31C40(this, play);

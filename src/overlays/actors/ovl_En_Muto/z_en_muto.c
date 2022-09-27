@@ -16,7 +16,7 @@ void EnMuto_Destroy(Actor* thisx, PlayState* play);
 void EnMuto_Update(Actor* thisx, PlayState* play);
 void EnMuto_Draw(Actor* thisx, PlayState* play);
 
-void EnMuto_ChangeAnim(EnMuto* this, s32 arg1);
+void EnMuto_ChangeAnim(EnMuto* this, s32 animIndex);
 void EnMuto_SetHeadRotation(EnMuto* this);
 void EnMuto_SetupIdle(EnMuto* this);
 void EnMuto_Idle(EnMuto* this, PlayState* play);
@@ -198,7 +198,7 @@ void EnMuto_SetupDialogue(EnMuto* this, PlayState* play) {
 void EnMuto_InDialogue(EnMuto* this, PlayState* play) {
     if (!this->isInMayorsRoom) {
         this->yawTowardsTarget = this->actor.yawTowardsPlayer;
-        if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
             func_801477B4(play);
 
             if (this->actor.textId == 0x62C) {

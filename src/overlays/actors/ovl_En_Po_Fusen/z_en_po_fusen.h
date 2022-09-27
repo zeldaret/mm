@@ -5,8 +5,8 @@
 
 struct EnPoFusen;
 
-#define GET_FUSE_LEN_PARAM(thisx) ((thisx)->params & 0x3FF)
-#define GET_IS_FUSE_TYPE_PARAM(thisx) ((thisx)->params & 0x8000)
+#define ENPOFUSEN_GET_FUSE_LEN(thisx) ((thisx)->params & 0x3FF)
+#define ENPOFUSEN_IS_FUSE_TYPE(thisx) ((thisx)->params & 0x8000)
 
 typedef void (*EnPoFusenActionFunc)(struct EnPoFusen*, PlayState*);
 

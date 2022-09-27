@@ -354,7 +354,7 @@ void ObjIcePoly_Draw(Actor* thisx, PlayState* play) {
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, play->gameplayFrames % 256, 0x20, 0x10, 1, 0,
                                 (play->gameplayFrames * 2) % 256, 0x40, 0x20));
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, this->unk_148);
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_050D10);
+    gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment3DL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

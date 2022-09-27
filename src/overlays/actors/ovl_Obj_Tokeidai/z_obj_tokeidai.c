@@ -456,13 +456,13 @@ void ObjTokeidai_TowerOpening_EndCutscene(ObjTokeidai* this, PlayState* play) {
             gSaveContext.save.cutscene = 0;
             gSaveContext.nextCutsceneIndex = 0;
             gSaveContext.respawnFlag = 2;
-            play->sceneLoadFlag = 0x14;
-            play->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_RETURN].entranceIndex;
-            play->unk_1887F = 2;
+            play->transitionTrigger = TRANS_TRIGGER_START;
+            play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
+            play->transitionType = TRANS_TYPE_02;
             if (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams == 0xCFF) {
-                gSaveContext.nextTransition = 0x15;
+                gSaveContext.nextTransitionType = TRANS_TYPE_21;
             } else {
-                gSaveContext.nextTransition = 2;
+                gSaveContext.nextTransitionType = TRANS_TYPE_02;
             }
         }
         this->actionFunc = ObjTokeidai_DoNothing;
@@ -701,7 +701,7 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, PlayState* play) {
         this->clockTime += 3;
         this->actor.draw = ObjTokeidai_Clock_Draw;
     } else {
-        if (!(play->actorCtx.unk5 & 2) &&
+        if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
             OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD &&
             ActorCutscene_GetCurrentIndex() == -1) {
             this->actor.draw = NULL;
@@ -734,9 +734,9 @@ void ObjTokeidai_ExteriorGear_Idle(ObjTokeidai* this, PlayState* play) {
             this->clockTime += 3;
             this->actor.draw = ObjTokeidai_ExteriorGear_Draw;
         } else {
-            if ((play->actorCtx.unk5 & 2) == 0 &&
-                OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_EXTERIOR_GEAR_TERMINA_FIELD &&
-                ActorCutscene_GetCurrentIndex() == -1) {
+            if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
+                (OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_EXTERIOR_GEAR_TERMINA_FIELD) &&
+                (ActorCutscene_GetCurrentIndex() == -1)) {
                 this->actor.draw = NULL;
             }
             this->clockTime = gSaveContext.save.time;
