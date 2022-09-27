@@ -244,6 +244,7 @@ void KaleidoScope_SetCursorVtx(PauseContext* pauseCtx, u16 index, Vtx* vtx) {
 s16 sMagicArrowEffectsR[] = { 255, 100, 255 };
 s16 sMagicArrowEffectsG[] = { 0, 100, 255 };
 s16 sMagicArrowEffectsB[] = { 0, 255, 100 };
+
 void KaleidoScope_DrawItemSelect(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     u16 i;
@@ -279,7 +280,8 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
                 (pauseCtx->cursorSpecialPos == 0) &&
                 gPlayerFormSlotRestrictions[(void)0, gSaveContext.save.playerForm][i]) {
                 if ((sEquipState == EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT) && (i == SLOT_ARROW_ICE)) {
-                    // Suppose to be `SLOT_BOW`, unchanged from OoT, instead increase size of ice arrow icon
+                    // Possible bug:
+                    // Supposed to be `SLOT_BOW`, unchanged from OoT, instead increase size of ice arrow icon
                     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sMagicArrowEffectsR[pauseCtx->equipTargetItem - 0xB5],
                                     sMagicArrowEffectsG[pauseCtx->equipTargetItem - 0xB5],
                                     sMagicArrowEffectsB[pauseCtx->equipTargetItem - 0xB5], pauseCtx->alpha);

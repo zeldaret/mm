@@ -1807,11 +1807,11 @@ Vec3s* OLib_Vec3fDiffBinAng(Vec3s* dest, Vec3f* a, Vec3f* b);
 void OLib_DbCameraVec3fDiff(PosRot* a, Vec3f* b, Vec3f* dest, s16 mode);
 void OLib_DbCameraVec3fSum(PosRot* a, Vec3f* b, Vec3f* dest, s16 mode);
 
-Gfx* Gfx_DrawTexRectRGBA16(Gfx* displayListHead, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy);
-Gfx* Gfx_DrawTexRectIA8(Gfx* displayListHead, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy);
-Gfx* Gfx_DrawTexRectI8(Gfx* displayListHead, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy);
-Gfx* Gfx_DrawTexQuadIA8(Gfx* displayListHead, TexturePtr texture, s16 textureWidth, s16 textureHeight, u16 point);
-Gfx* Gfx_DrawTexQuad4b(Gfx* displayListHead, TexturePtr texture, s32 fmt, s16 textureWidth, s16 textureHeight, u16 point);
+Gfx* Gfx_DrawTexRectRGBA16(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy);
+Gfx* Gfx_DrawTexRectIA8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy);
+Gfx* Gfx_DrawTexRectI8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy);
+Gfx* Gfx_DrawTexQuadIA8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, u16 point);
+Gfx* Gfx_DrawTexQuad4b(Gfx* gfx, TexturePtr texture, s32 fmt, s16 textureWidth, s16 textureHeight, u16 point);
 
 // void func_8010E028(void);
 // void func_8010E968(void);
