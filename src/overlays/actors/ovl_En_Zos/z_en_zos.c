@@ -324,7 +324,7 @@ void func_80BBB574(EnZos* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x124B:
-                if (this->animIndex == 9) {
+                if (this->animIndex == EN_ZOS_ANIM_INSPIRED) {
                     play->msgCtx.msgLength = 0;
                     this->unk_2B6 |= 0x20;
                 } else {
