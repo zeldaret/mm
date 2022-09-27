@@ -415,6 +415,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                 }
             }
         } else { // PAUSE_CURSOR_PAGE_RIGHT
+            //! FAKE:
             if (1) {}
             if (pauseCtx->stickAdjX < -30) {
                 func_80821A04(play);
