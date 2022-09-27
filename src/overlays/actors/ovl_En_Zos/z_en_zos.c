@@ -134,16 +134,23 @@ void EnZos_Destroy(Actor* thisx, PlayState* play) {
     gSaveContext.save.weekEventReg[52] &= (u8)~0x10;
 }
 
+static AnimationHeader* sAnimations[] = {
+    &gEvanLeanOnKeyboardAnim,        // EN_ZOS_ANIM_LEAN_ON_KEYBOARD
+    &gEvanLeanOnKeyboardAndSighAnim, // EN_ZOS_ANIM_LEAN_ON_KEYBOARD_AND_SIGH
+    &gEvanHandsOnHipsAnim,           // EN_ZOS_ANIM_HANDS_ON_HIPS
+    &gEeanTalkFootTapAnim,           // EN_ZOS_ANIM_TALK_FOOT_TAP
+    &gEvanTalkLookDownAnim,          // EN_ZOS_ANIM_TALK_LOOK_DOWN
+    &gEvanTalkArmsOutAnim,           // EN_ZOS_ANIM_TALK_ARMS_OUT
+    &gEvanTalkHandsOnHipsAnim,       // EN_ZOS_ANIM_TALK_HANDS_ON_HIPS
+    &gEvanPlayRightAnim,             // EN_ZOS_ANIM_PLAY_RIGHT
+    &gEvanPlayLeftAnim,              // EN_ZOS_ANIM_PLAY_LEFT
+    &gEvanInspiredAnim,              // EN_ZOS_ANIM_INSPIRED
+    &gEvanSlowPlayAnim,              // EN_ZOS_ANIM_SLOW_PLAY
+    &gEvanPlayRightAnim,             // EN_ZOS_ANIM_PLAY_RIGHT_SHORTENED
+    &gEvanPlayLeftAnim,              // EN_ZOS_ANIM_PLAY_LEFT_SHORTENED
+};
+
 void EnZos_ChangeAnim(EnZos* this, s16 animIndex, u8 animMode) {
-    static AnimationHeader* sAnimations[] = {
-        &gEvanLeanOnKeyboardAnim,  &gEvanLeanOnKeyboardAndSighAnim,
-        &gEvanHandsOnHipsAnim,     &gEeanTalkFootTapAnim,
-        &gEvanTalkLookDownAnim,    &gEvanTalkArmsOutAnim,
-        &gEvanTalkHandsOnHipsAnim, &gEvanPlayRightAnim,
-        &gEvanPlayLeftAnim,        &gEvanInspiredAnim,
-        &gEvanSlowPlayAnim,        &gEvanPlayRightAnim,
-        &gEvanPlayLeftAnim,
-    };
     f32 endFrame;
 
     if ((animIndex != this->animIndex) && (animIndex >= EN_ZOS_ANIM_LEAN_ON_KEYBOARD) &&
