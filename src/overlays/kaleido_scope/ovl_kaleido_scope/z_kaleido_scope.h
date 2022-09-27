@@ -108,7 +108,8 @@ typedef enum {
     /* 5 */ PAUSE_BG_PRERENDER_MAX
 } PauseBgPreRenderState;
 
-#define SLOT_MASK_FIRST 24
+#define NUM_ITEM_SLOTS 24
+#define NUM_MASK_SLOTS 24
 
 #define PAUSE_PROMPT_YES 0
 #define PAUSE_PROMPT_NO 4

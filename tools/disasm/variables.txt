@@ -4729,7 +4729,7 @@
     0x8082B604:("sMaskEquipMagicArrowSlotHoldTimer","UNK_TYPE2","",0x2),
     0x8082B608:("sMaskEquipAnimTimer","UNK_TYPE2","",0x2),
     0x8082B60C:("gMaskPlayerFormSlotRestrictions","UNK_TYPE1","",0x1),
-    0x8082B684:("D_8082B684","UNK_TYPE2","",0x2),
+    0x8082B684:("sMoonMasksTakenBits","UNK_TYPE2","",0x2),
     0x8082B6CC:("sMaskPlayerFormItems","UNK_TYPE1","",0x1),
     0x8082B6D4:("sMaskCButtonPosX","UNK_TYPE1","",0x1),
     0x8082B6DC:("sMaskCButtonPosY","UNK_TYPE1","",0x1),

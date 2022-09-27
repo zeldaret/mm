@@ -292,8 +292,8 @@ void Sram_SaveEndOfCycle(PlayState* play) {
         gSaveContext.cycleSceneFlags[i].collectible = 0;
     }
 
-    for (i = 0; i < ARRAY_COUNT(gSaveContext.maskMaskBit); i++) {
-        gSaveContext.maskMaskBit[i] = 0;
+    for (i = 0; i < ARRAY_COUNT(gSaveContext.moonMasksBits); i++) {
+        gSaveContext.moonMasksBits[i] = 0;
     }
 
     if (gSaveContext.save.weekEventReg[84] & 0x20) {

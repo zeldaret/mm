@@ -15,7 +15,7 @@ s16 sEquipMagicArrowSlotHoldTimer = 0;
 // Number of frames to move icon from slot to target position when equipping.
 s16 sEquipAnimTimer = 10;
 
-u8 gPlayerFormSlotRestrictions[PLAYER_FORM_MAX][24] = {
+u8 gPlayerFormSlotRestrictions[PLAYER_FORM_MAX][NUM_ITEM_SLOTS] = {
     // Fierce Deity
     {
         false, // SLOT_OCARINA
@@ -258,9 +258,9 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
     // Loop over c-buttons (i) and vtx offset (j)
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
-    for (i = 0, j = 24 * 4; i < 3; i++, j += 4) {
+    for (i = 0, j = NUM_ITEM_SLOTS * 4; i < 3; i++, j += 4) {
         if (GET_CUR_FORM_BTN_ITEM(i + 1) != ITEM_NONE) {
-            if (GET_CUR_FORM_BTN_SLOT(i + 1) < 24) {
+            if (GET_CUR_FORM_BTN_SLOT(i + 1) < NUM_ITEM_SLOTS) {
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->itemVtx[j], 4, 0);
                 POLY_OPA_DISP = Gfx_DrawTexQuadIA8(POLY_OPA_DISP, gEquippedItemOutlineTex, 32, 32, 0);
             }
@@ -272,7 +272,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
     // Draw the item icons
     // Loop over slots (i) and vtx offset (j)
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-    for (j = 0, i = 0; i < 24; i++, j += 4) {
+    for (j = 0, i = 0; i < NUM_ITEM_SLOTS; i++, j += 4) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
         if (((void)0, gSaveContext.save.inventory.items[i]) != ITEM_NONE) {
@@ -324,7 +324,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
             gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
             // Loop over slots (i) and ammoIndex (j)
-            for (j = 0, i = 0; i < 24; i++) {
+            for (j = 0, i = 0; i < NUM_ITEM_SLOTS; i++) {
                 if (gAmmoItems[i] != ITEM_NONE) {
                     if (((void)0, gSaveContext.save.inventory.items[i]) != ITEM_NONE) {
                         KaleidoScope_DrawAmmoCount(pauseCtx, play->state.gfxCtx,
@@ -398,7 +398,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                             pauseCtx->cursorPoint[PAUSE_ITEM] =
                                 pauseCtx->cursorXIndex[PAUSE_ITEM] + (pauseCtx->cursorYIndex[PAUSE_ITEM] * 6);
 
-                            if (pauseCtx->cursorPoint[PAUSE_ITEM] >= 24) {
+                            if (pauseCtx->cursorPoint[PAUSE_ITEM] >= NUM_ITEM_SLOTS) {
                                 pauseCtx->cursorPoint[PAUSE_ITEM] = pauseCtx->cursorXIndex[PAUSE_ITEM];
                             }
 
@@ -429,7 +429,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                             pauseCtx->cursorPoint[PAUSE_ITEM] =
                                 pauseCtx->cursorXIndex[PAUSE_ITEM] + (pauseCtx->cursorYIndex[PAUSE_ITEM] * 6);
 
-                            if (pauseCtx->cursorPoint[PAUSE_ITEM] >= 24) {
+                            if (pauseCtx->cursorPoint[PAUSE_ITEM] >= NUM_ITEM_SLOTS) {
                                 pauseCtx->cursorPoint[PAUSE_ITEM] = pauseCtx->cursorXIndex[PAUSE_ITEM];
                             }
 
@@ -702,6 +702,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
 
 s16 sCButtonPosX[] = { 660, 900, 1140 };
 s16 sCButtonPosY[] = { 1100, 920, 1100 };
+
 void KaleidoScope_UpdateItemEquip(PlayState* play) {
     static s16 sEquipMagicArrowBowSlotHoldTimer = 0;
     PauseContext* pauseCtx = &play->pauseCtx;
