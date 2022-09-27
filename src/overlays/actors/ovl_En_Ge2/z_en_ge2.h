@@ -43,7 +43,7 @@ typedef struct EnGe2 {
     /* 0x2E0 */ s16 eyeIndex;
     /* 0x2E2 */ s16 blinkTimer;
     /* 0x2E4 */ Vec3s headRot;
-    /* 0x2E8 */ Vec3s unk2EA; // unused
+    /* 0x2E8 */ Vec3s torsoRot; // unused, inferred from similar usage in other actors
     /* 0x2F0 */ Path* path;
     /* 0x2F4 */ s32 curPointIndex;
     /* 0x2F8 */ u16 stateFlags;

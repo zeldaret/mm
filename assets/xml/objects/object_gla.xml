@@ -5,11 +5,11 @@
         <Animation Name="gGerudoPurpleGreatBayCutsceneAnim" Offset="0x460" /><!-- Original name: g_yari_twister -->
 
         <!-- Identical to OoT's object_gla from here to the end -->
-        <Animation Name="gGerudoPurpleUnusedHorizontalSlashAnim" Offset="0x794" /><!-- Original name: geldA_attack -->
-        <Animation Name="gGerudoPurpleUnusedSlashToStandingAnim" Offset="0xBF0" /><!-- Original name: geldA_attack_end -->
+        <Animation Name="gGerudoPurpleHorizontalSlashAnim" Offset="0x794" /><!-- Unused. Original name: geldA_attack -->
+        <Animation Name="gGerudoPurpleSlashToStandingAnim" Offset="0xBF0" /><!-- Usused. Original name: geldA_attack_end -->
         <Animation Name="gGerudoPurpleFallingToGroundAnim" Offset="0x1664" /><!-- Original name: geldA_down -->
-        <Animation Name="gGerudoPurpleUnusedStandingToCrouchAnim" Offset="0x1A40" /><!-- Original name: geldA_find -->
-        <Animation Name="gGerudoPurpleUnusedCrouchingLookAroundAnim" Offset="0x1FAC" /><!-- Original name: geldA_find_wait -->
+        <Animation Name="gGerudoPurpleStandingToCrouchAnim" Offset="0x1A40" /><!-- Unused. Original name: geldA_find -->
+        <Animation Name="gGerudoPurpleCrouchingLookAroundAnim" Offset="0x1FAC" /><!-- Unused. Original name: geldA_find_wait -->
 
         <DList Name="gGerudoPurpleTorsoDL" Offset="0x39B0" />
         <DList Name="gGerudoPurpleLeftUpperArmDL" Offset="0x3E50" />
