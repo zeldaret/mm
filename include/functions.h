@@ -2431,7 +2431,7 @@ void Message_FindMessageNES(PlayState* play, u16 textId);
 // void Message_LoadLocalizedRupeesNES(void);
 // void Message_LoadRupeesNES(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
 // void Message_LoadTimeNES(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void Message_LoadAreaTextNES(void);
+// void Message_LoadOwlWarpTextNES(void);
 // void func_80159438(void);
 void func_8015966C(PlayState* play, UNK_PTR puParm2, UNK_TYPE arg3);
 // void func_8015A144(void);

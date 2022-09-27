@@ -2394,7 +2394,7 @@ asm/non_matchings/code/z_message_nes/Message_LoadPluralRupeesNES.s,Message_LoadP
 asm/non_matchings/code/z_message_nes/Message_LoadLocalizedRupeesNES.s,Message_LoadLocalizedRupeesNES,0x80158C04,0x65
 asm/non_matchings/code/z_message_nes/Message_LoadRupeesNES.s,Message_LoadRupeesNES,0x80158D98,0x86
 asm/non_matchings/code/z_message_nes/Message_LoadTimeNES.s,Message_LoadTimeNES,0x80158FB0,0xAF
-asm/non_matchings/code/z_message_nes/Message_LoadAreaTextNES.s,Message_LoadAreaTextNES,0x8015926C,0x73
+asm/non_matchings/code/z_message_nes/Message_LoadOwlWarpTextNES.s,Message_LoadOwlWarpTextNES,0x8015926C,0x73
 asm/non_matchings/code/z_message_nes/func_80159438.s,func_80159438,0x80159438,0x8D
 asm/non_matchings/code/z_message_nes/func_8015966C.s,func_8015966C,0x8015966C,0x6CB
 asm/non_matchings/code/z_message_nes/func_8015B198.s,func_8015B198,0x8015B198,0xD6E

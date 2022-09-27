@@ -256,7 +256,7 @@ void Message_LoadTimeNES(PlayState* play, u8 arg1, s32* offset, f32* arg3, s16* 
     *arg3 = f;
 }
 
-void Message_LoadAreaTextNES(PlayState* play, s32* offset, f32* arg2, s16* decodedBufPos) {
+void Message_LoadOwlWarpTextNES(PlayState* play, s32* offset, f32* arg2, s16* decodedBufPos) {
     MessageContext* msgCtx = &play->msgCtx;
     s16 p = *decodedBufPos;
     s32 o = *offset;
