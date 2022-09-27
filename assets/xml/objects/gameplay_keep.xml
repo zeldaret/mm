@@ -1,4 +1,5 @@
 ﻿<Root>
+    <ExternalFile XmlPath="misc/link_animetion.xml" OutPath="assets/misc/link_animetion/"/>
     <File Name="gameplay_keep" Segment="4">
         <Texture Name="gameplay_keep_Tex_000000" OutName="tex_000000" Format="i4" Width="16" Height="16" Offset="0x0" />
         <DList Name="gameplay_keep_DL_000320" Offset="0x320" />
@@ -845,17 +846,17 @@
         <Texture Name="gBombchuBodyTex" OutName="bombchu_body" Format="rgba16" Width="8" Height="8" Offset="0x16060" />
         <DList Name="gBombchuDL" Offset="0x16360" />
         
-        <Texture Name="gameplay_keep_Tex_0164D0" OutName="tex_0164D0" Format="ia16" Width="32" Height="32" Offset="0x164D0" />
-        <Texture Name="gameplay_keep_Tex_016CD0" OutName="tex_016CD0" Format="ia16" Width="32" Height="32" Offset="0x16CD0" />
-        <Texture Name="gameplay_keep_Tex_0174D0" OutName="tex_0174D0" Format="ia16" Width="32" Height="32" Offset="0x174D0" />
-        <Texture Name="gameplay_keep_Tex_017CD0" OutName="tex_017CD0" Format="ia16" Width="32" Height="32" Offset="0x17CD0" />
-        <Texture Name="gameplay_keep_Tex_0184D0" OutName="tex_0184D0" Format="ia16" Width="32" Height="32" Offset="0x184D0" />
-        <Texture Name="gameplay_keep_Tex_018CD0" OutName="tex_018CD0" Format="ia16" Width="32" Height="32" Offset="0x18CD0" />
-        <Texture Name="gameplay_keep_Tex_0194D0" OutName="tex_0194D0" Format="ia16" Width="32" Height="32" Offset="0x194D0" />
-        <Texture Name="gameplay_keep_Tex_019CD0" OutName="tex_019CD0" Format="ia16" Width="32" Height="32" Offset="0x19CD0" />
-        <DList Name="gameplay_keep_DL_01A4D0" Offset="0x1A4D0" />
-        <DList Name="gameplay_keep_DL_01A538" Offset="0x1A538" />
-        <DList Name="gameplay_keep_DL_01A590" Offset="0x1A590" />
+        <Texture Name="gEffBombExplosion1Tex" OutName="eff_bomb_explosion_1" Format="ia16" Width="32" Height="32" Offset="0x164D0" />
+        <Texture Name="gEffBombExplosion2Tex" OutName="eff_bomb_explosion_2" Format="ia16" Width="32" Height="32" Offset="0x16CD0" />
+        <Texture Name="gEffBombExplosion3Tex" OutName="eff_bomb_explosion_3" Format="ia16" Width="32" Height="32" Offset="0x174D0" />
+        <Texture Name="gEffBombExplosion4Tex" OutName="eff_bomb_explosion_4" Format="ia16" Width="32" Height="32" Offset="0x17CD0" />
+        <Texture Name="gEffBombExplosion5Tex" OutName="eff_bomb_explosion_5" Format="ia16" Width="32" Height="32" Offset="0x184D0" />
+        <Texture Name="gEffBombExplosion6Tex" OutName="eff_bomb_explosion_6" Format="ia16" Width="32" Height="32" Offset="0x18CD0" />
+        <Texture Name="gEffBombExplosion7Tex" OutName="eff_bomb_explosion_7" Format="ia16" Width="32" Height="32" Offset="0x194D0" />
+        <Texture Name="gEffBombExplosion8Tex" OutName="eff_bomb_explosion_8" Format="ia16" Width="32" Height="32" Offset="0x19CD0" />
+        <DList Name="gEffBombExplosion1DL" Offset="0x1A4D0" />
+        <DList Name="gEffBombExplosion2DL" Offset="0x1A538" />
+        <DList Name="gEffBombExplosion3DL" Offset="0x1A590" />
         <DList Name="gEffFragments1DL" Offset="0x1A620" />
         <Texture Name="gWitheredLeafTex" OutName="withered_leaf" Format="rgba16" Width="16" Height="16" Offset="0x1A6B0" />
         <Texture Name="gameplay_keep_Tex_01A8B0" OutName="tex_01A8B0" Format="i8" Width="16" Height="32" Offset="0x1A8B0" />
@@ -905,7 +906,7 @@
         <Blob Name="gameplay_keep_zeroes_unk_00022E78" Size="0xA8" Offset="0x22E78" />
         <Animation Name="gameplay_keep_Anim_022FF0" Offset="0x22FF0" />
         <Collision Name="gDoorCol" Offset="0x23100" />
-        <DList Name="gameplay_keep_DL_023130" Offset="0x23130" />
+        <DList Name="gEffDustDL" Offset="0x23130" />
         <DList Name="gOwlStatueWhiteFlashDL" Offset="0x23210" />
         <DList Name="gameplay_keep_DL_023288" Offset="0x23288" />
         <DList Name="gLightOrb1DL" Offset="0x23348" />
@@ -1075,17 +1076,17 @@
         <Texture Name="gEffLightning7Tex" OutName="eff_lightning_7" Format="i4" Width="32" Height="96" Offset="0x3E630" />
         <Texture Name="gEffLightning8Tex" OutName="eff_lightning_8" Format="i4" Width="32" Height="96" Offset="0x3EC30" />
         <DList Name="gEffLightningDL" Offset="0x3F230" />
-        <Texture Name="gameplay_keep_Tex_03F300" OutName="tex_03F300" Format="i8" Width="32" Height="64" Offset="0x3F300" />
-        <Texture Name="gameplay_keep_Tex_03FB00" OutName="tex_03FB00" Format="i8" Width="32" Height="64" Offset="0x3FB00" />
-        <Texture Name="gameplay_keep_Tex_040300" OutName="tex_040300" Format="i8" Width="32" Height="64" Offset="0x40300" />
-        <Texture Name="gameplay_keep_Tex_040B00" OutName="tex_040B00" Format="i8" Width="32" Height="64" Offset="0x40B00" />
-        <Texture Name="gameplay_keep_Tex_041300" OutName="tex_041300" Format="i8" Width="32" Height="64" Offset="0x41300" />
-        <Texture Name="gameplay_keep_Tex_041B00" OutName="tex_041B00" Format="i8" Width="32" Height="64" Offset="0x41B00" />
-        <Texture Name="gameplay_keep_Tex_042300" OutName="tex_042300" Format="i8" Width="32" Height="64" Offset="0x42300" />
-        <Texture Name="gameplay_keep_Tex_042B00" OutName="tex_042B00" Format="i8" Width="32" Height="64" Offset="0x42B00" />
-        <Texture Name="gameplay_keep_Tex_043300" OutName="tex_043300" Format="i8" Width="32" Height="64" Offset="0x43300" />
-        <Texture Name="gameplay_keep_Tex_043B00" OutName="tex_043B00" Format="i8" Width="32" Height="64" Offset="0x43B00" />
-        <DList Name="gameplay_keep_DL_044300" Offset="0x44300" />
+        <Texture Name="gEffEnemyDeathFlame1Tex" OutName="eff_enemy_death_flame_1" Format="i8" Width="32" Height="64" Offset="0x3F300" />
+        <Texture Name="gEffEnemyDeathFlame2Tex" OutName="eff_enemy_death_flame_2" Format="i8" Width="32" Height="64" Offset="0x3FB00" />
+        <Texture Name="gEffEnemyDeathFlame3Tex" OutName="eff_enemy_death_flame_3" Format="i8" Width="32" Height="64" Offset="0x40300" />
+        <Texture Name="gEffEnemyDeathFlame4Tex" OutName="eff_enemy_death_flame_4" Format="i8" Width="32" Height="64" Offset="0x40B00" />
+        <Texture Name="gEffEnemyDeathFlame5Tex" OutName="eff_enemy_death_flame_5" Format="i8" Width="32" Height="64" Offset="0x41300" />
+        <Texture Name="gEffEnemyDeathFlame6Tex" OutName="eff_enemy_death_flame_6" Format="i8" Width="32" Height="64" Offset="0x41B00" />
+        <Texture Name="gEffEnemyDeathFlame7Tex" OutName="eff_enemy_death_flame_7" Format="i8" Width="32" Height="64" Offset="0x42300" />
+        <Texture Name="gEffEnemyDeathFlame8Tex" OutName="eff_enemy_death_flame_8" Format="i8" Width="32" Height="64" Offset="0x42B00" />
+        <Texture Name="gEffEnemyDeathFlame9Tex" OutName="eff_enemy_death_flame_9" Format="i8" Width="32" Height="64" Offset="0x43300" />
+        <Texture Name="gEffEnemyDeathFlame10Tex" OutName="eff_enemy_death_flame_10" Format="i8" Width="32" Height="64" Offset="0x43B00" />
+        <DList Name="gEffEnemyDeathFlameDL" Offset="0x44300" />
         <Texture Name="gameplay_keep_Tex_0443B0" OutName="tex_0443B0" Format="i8" Width="32" Height="32" Offset="0x443B0" />
         <Texture Name="gameplay_keep_Tex_0447B0" OutName="tex_0447B0" Format="i8" Width="32" Height="32" Offset="0x447B0" />
         <Texture Name="gameplay_keep_Tex_044BB0" OutName="tex_044BB0" Format="i8" Width="32" Height="32" Offset="0x44BB0" />
@@ -1182,7 +1183,7 @@
         <Texture Name="gameplay_keep_Tex_053140" OutName="tex_053140" Format="rgba16" Width="32" Height="32" Offset="0x53140" />
         <Texture Name="gameplay_keep_Tex_053940" OutName="tex_053940" Format="i4" Width="64" Height="64" Offset="0x53940" />
         <Texture Name="gameplay_keep_Tex_054140" OutName="tex_054140" Format="i4" Width="64" Height="64" Offset="0x54140" />
-        <DList Name="gameplay_keep_DL_054940" Offset="0x54940" />
+        <DList Name="gLensFlareCircleDL" Offset="0x54940" />
         <DList Name="gameplay_keep_DL_0549A8" Offset="0x549A8" />
         <DList Name="gEffSparklesDL" Offset="0x54A90" />
         <Texture Name="gameplay_keep_Tex_054AF0" OutName="tex_054AF0" Format="i4" Width="16" Height="16" Offset="0x54AF0" />
@@ -1217,37 +1218,44 @@
         <Collision Name="gameplay_keep_Colheader_05A270" Offset="0x5A270" />
         <DList Name="gameplay_keep_DL_05A430" Offset="0x5A430" />
         <DList Name="gameplay_keep_DL_05A600" Offset="0x5A600" />
-        <Texture Name="gameplay_keep_Tex_05A6B0" OutName="tex_05A6B0" Format="i8" Width="16" Height="16" Offset="0x5A6B0" />
-        <DList Name="gameplay_keep_DL_05AAB0" Offset="0x5AAB0" />
-        <DList Name="gameplay_keep_DL_05AED0" Offset="0x5AED0" />
-        <DList Name="gameplay_keep_DL_05B430" Offset="0x5B430" />
-        <Texture Name="gameplay_keep_Tex_05B6F0" OutName="tex_05B6F0" Format="rgba16" Width="32" Height="32" Offset="0x5B6F0" />
-        <Texture Name="gameplay_keep_Tex_05BEF0" OutName="tex_05BEF0" Format="rgba16" Width="32" Height="32" Offset="0x5BEF0" />
-        <Texture Name="gameplay_keep_Tex_05C6F0" OutName="tex_05C6F0" Format="rgba16" Width="32" Height="32" Offset="0x5C6F0" />
-        <Texture Name="gameplay_keep_Tex_05CEF0" OutName="tex_05CEF0" Format="rgba16" Width="32" Height="32" Offset="0x5CEF0" />
-        <Texture Name="gameplay_keep_Tex_05D6F0" OutName="tex_05D6F0" Format="rgba16" Width="32" Height="32" Offset="0x5D6F0" />
-        <Texture Name="gameplay_keep_Tex_05DEF0" OutName="tex_05DEF0" Format="rgba16" Width="32" Height="32" Offset="0x5DEF0" />
-        <Texture Name="gameplay_keep_Tex_05E6F0" OutName="tex_05E6F0" Format="rgba16" Width="32" Height="32" Offset="0x5E6F0" />
-        <Texture Name="gameplay_keep_Tex_05EEF0" OutName="tex_05EEF0" Format="rgba16" Width="32" Height="32" Offset="0x5EEF0" />
-        <DList Name="gameplay_keep_DL_05F6F0" Offset="0x5F6F0" />
-        <Texture Name="gameplay_keep_Tex_05F7C0" OutName="tex_05F7C0" Format="rgba16" Width="32" Height="32" Offset="0x5F7C0" />
-        <Texture Name="gameplay_keep_Tex_05FFC0" OutName="tex_05FFC0" Format="rgba16" Width="32" Height="32" Offset="0x5FFC0" />
-        <Texture Name="gameplay_keep_Tex_0607C0" OutName="tex_0607C0" Format="rgba16" Width="32" Height="32" Offset="0x607C0" />
-        <Texture Name="gameplay_keep_Tex_060FC0" OutName="tex_060FC0" Format="rgba16" Width="32" Height="32" Offset="0x60FC0" />
-        <Texture Name="gameplay_keep_Tex_0617C0" OutName="tex_0617C0" Format="rgba16" Width="32" Height="32" Offset="0x617C0" />
-        <Texture Name="gameplay_keep_Tex_061FC0" OutName="tex_061FC0" Format="rgba16" Width="4" Height="4" Offset="0x61FC0" />
-        <Texture Name="gameplay_keep_Tex_061FE0" OutName="tex_061FE0" Format="rgba16" Width="4" Height="4" Offset="0x61FE0" />
-        <Texture Name="gameplay_keep_Tex_062000" OutName="tex_062000" Format="rgba16" Width="4" Height="4" Offset="0x62000" />
-        <Texture Name="gameplay_keep_Tex_062020" OutName="tex_062020" Format="rgba16" Width="4" Height="4" Offset="0x62020" />
-        <Texture Name="gameplay_keep_Tex_062040" OutName="tex_062040" Format="rgba16" Width="4" Height="4" Offset="0x62040" />
-        <Texture Name="gameplay_keep_Tex_062060" OutName="tex_062060" Format="rgba16" Width="4" Height="4" Offset="0x62060" />
-        <DList Name="gameplay_keep_DL_0622C0" Offset="0x622C0" />
-        <Texture Name="gameplay_keep_Tex_062390" OutName="tex_062390" Format="rgba16" Width="32" Height="32" Offset="0x62390" />
-        <Texture Name="gameplay_keep_Tex_062B90" OutName="tex_062B90" Format="rgba16" Width="32" Height="32" Offset="0x62B90" />
-        <Texture Name="gameplay_keep_Tex_063390" OutName="tex_063390" Format="rgba16" Width="32" Height="32" Offset="0x63390" />
-        <Texture Name="gameplay_keep_Tex_063B90" OutName="tex_063B90" Format="rgba16" Width="4" Height="4" Offset="0x63B90" />
-        <Texture Name="gameplay_keep_Tex_063BB0" OutName="tex_063BB0" Format="rgba16" Width="4" Height="4" Offset="0x63BB0" />
-        <Texture Name="gameplay_keep_Tex_063BD0" OutName="tex_063BD0" Format="rgba16" Width="32" Height="32" Offset="0x63BD0" />
+
+        <Texture Name="gHeartShapeTex" OutName="heart_shape" Format="i8" Width="16" Height="16" Offset="0x5A6B0" />
+        <DList Name="gHeartPieceInteriorDL" Offset="0x5AAB0" />
+        <DList Name="gSignRectangularDL" Offset="0x5AED0" />
+        <DList Name="gSignDirectionalDL" Offset="0x5B430" />
+
+        <!-- Item Drops -->
+        <Texture Name="gDropArrows2Tex" OutName="drop_arrows_2" Format="rgba16" Width="32" Height="32" Offset="0x5B6F0" />
+        <Texture Name="gDropArrows1Tex" OutName="drop_arrows_1" Format="rgba16" Width="32" Height="32" Offset="0x5BEF0" />
+        <Texture Name="gDropArrows3Tex" OutName="drop_arrows_3" Format="rgba16" Width="32" Height="32" Offset="0x5C6F0" />
+        <Texture Name="gDropBombTex" OutName="drop_bomb" Format="rgba16" Width="32" Height="32" Offset="0x5CEF0" />
+        <Texture Name="gDropBombchuTex" OutName="drop_bombchu" Format="rgba16" Width="32" Height="32" Offset="0x5D6F0" />
+        <Texture Name="gDropUnknownPouch" OutName="drop_unknown_pouch" Format="rgba16" Width="32" Height="32" Offset="0x5DEF0" />
+        <Texture Name="gDropRecoveryHeartTex" OutName="drop_recovery_heart" Format="rgba16" Width="32" Height="32" Offset="0x5E6F0" />
+        <Texture Name="gDropHeartPieceTex" OutName="drop_heart_piece" Format="rgba16" Width="32" Height="32" Offset="0x5EEF0" />
+        <DList Name="gItemDropDL" Offset="0x5F6F0" />
+        <Texture Name="gDropKeySmallTex" OutName="drop_key_small" Format="rgba16" Width="32" Height="32" Offset="0x5F7C0" />
+        <Texture Name="gDropMagicSmallTex" OutName="drop_magic_small" Format="rgba16" Width="32" Height="32" Offset="0x5FFC0" />
+        <Texture Name="gDropDekuNutTex" OutName="drop_deku_nut" Format="rgba16" Width="32" Height="32" Offset="0x607C0" />
+        <Texture Name="gDropDekuStickTex" OutName="drop_deku_stick" Format="rgba16" Width="32" Height="32" Offset="0x60FC0" />
+        <Texture Name="gDropMagicLargeTex" OutName="drop_magic_large" Format="rgba16" Width="32" Height="32" Offset="0x617C0" />
+        
+        <!-- Rupees -->
+        <Texture Name="gRupeeGreenTex" OutName="rupee_green" Format="rgba16" Width="4" Height="4" Offset="0x61FC0" />
+        <Texture Name="gRupeeBlueTex" OutName="rupee_blue" Format="rgba16" Width="4" Height="4" Offset="0x61FE0" />
+        <Texture Name="gRupeeRedTex" OutName="rupee_red" Format="rgba16" Width="4" Height="4" Offset="0x62000" />
+        <Texture Name="gRupeePurpleTex" OutName="rupee_purple" Format="rgba16" Width="4" Height="4" Offset="0x62020" />
+        <Texture Name="gRupeeOrangeTex" OutName="rupee_orange" Format="rgba16" Width="4" Height="4" Offset="0x62040" />
+        <Texture Name="gRupeeSilverTex" OutName="rupee_silver" Format="rgba16" Width="4" Height="4" Offset="0x62060" />
+        <DList Name="gRupeeDL" Offset="0x622C0" />
+
+        <Texture Name="gRecoveryHeartTex" OutName="recovery_heart" Format="rgba16" Width="32" Height="32" Offset="0x62390" />
+        <Texture Name="gBombTex" OutName="bomb_tex" Format="rgba16" Width="32" Height="32" Offset="0x62B90" />
+        <Texture Name="gArrowTex" OutName="arrow_tex" Format="rgba16" Width="32" Height="32" Offset="0x63390" />
+        <Texture Name="gRupeeLightRedTex" OutName="rupee_light_red" Format="rgba16" Width="4" Height="4" Offset="0x63B90" />
+        <Texture Name="gRupeeLightBlueTex" OutName="rupee_light_blue" Format="rgba16" Width="4" Height="4" Offset="0x63BB0" />
+        <Texture Name="gHeartContainerTex" OutName="heart_container" Format="rgba16" Width="32" Height="32" Offset="0x63BD0" />
+        
         <Texture Name="gameplay_keep_Tex_0643D0" OutName="tex_0643D0" Format="rgba16" Width="32" Height="32" Offset="0x643D0" />
         <Texture Name="gameplay_keep_Tex_064BD0" OutName="tex_064BD0" Format="rgba16" Width="32" Height="32" Offset="0x64BD0" />
         <Texture Name="gameplay_keep_Tex_0653D0" OutName="tex_0653D0" Format="rgba16" Width="32" Height="32" Offset="0x653D0" />
@@ -1256,10 +1264,12 @@
         <Texture Name="gameplay_keep_Tex_066BD0" OutName="tex_066BD0" Format="rgba16" Width="64" Height="32" Offset="0x66BD0" />
         <Texture Name="gameplay_keep_Tex_067BD0" OutName="tex_067BD0" Format="rgba16" Width="32" Height="32" Offset="0x67BD0" />
         <Texture Name="gameplay_keep_Tex_0683D0" OutName="tex_0683D0" Format="rgba16" Width="32" Height="32" Offset="0x683D0" />
-        <Texture Name="gameplay_keep_Tex_068BD0" OutName="tex_068BD0" Format="rgba16" Width="32" Height="16" Offset="0x68BD0" />
-        <Texture Name="gameplay_keep_Tex_068FD0" OutName="tex_068FD0" Format="rgba16" Width="32" Height="16" Offset="0x68FD0" />
-        <Texture Name="gameplay_keep_Tex_0693D0" OutName="tex_0693D0" Format="rgba16" Width="64" Height="8" Offset="0x693D0" />
-        <Texture Name="gameplay_keep_Tex_0697D0" OutName="tex_0697D0" Format="rgba16" Width="64" Height="32" Offset="0x697D0" />
+        
+        <Texture Name="gSignRectangularSideTex" OutName="sign_rectangular_side" Format="rgba16" Width="32" Height="16" Offset="0x68BD0" />
+        <Texture Name="gSignRectangularFrontTex" OutName="sign_rectangular_front" Format="rgba16" Width="32" Height="16" Offset="0x68FD0" />
+        <Texture Name="gSignPostWoodTex" OutName="sign_post_wood" Format="rgba16" Width="64" Height="8" Offset="0x693D0" />
+        <Texture Name="gSignLetteringTex" OutName="sign_lettering" Format="rgba16" Width="64" Height="32" Offset="0x697D0" />
+        
         <DList Name="gameplay_keep_DL_06A800" Offset="0x6A800" />
         <Texture Name="gameplay_keep_Tex_06A880" OutName="tex_06A880" Format="i8" Width="16" Height="16" Offset="0x6A880" />
         <DList Name="gameplay_keep_DL_06AB30" Offset="0x6AB30" />
@@ -1347,10 +1357,13 @@
         <DList Name="gameplay_keep_DL_07AB58" Offset="0x7AB58" />
         <DList Name="gSunDL" Offset="0x7AB70" />
         <DList Name="gZTargetLockOnTriangleDL" Offset="0x7AE00" />
-        <DList Name="gameplay_keep_DL_07AFB0" Offset="0x7AFB0" />
-        <DList Name="gameplay_keep_DL_07B0B8" Offset="0x7B0B8" />
-        <Texture Name="gameplay_keep_Tex_07B0C0" OutName="tex_07B0C0" Format="i8" Width="64" Height="64" Offset="0x7B0C0" />
-        <Texture Name="gameplay_keep_Tex_07C0C0" OutName="tex_07C0C0" Format="i8" Width="64" Height="64" Offset="0x7C0C0" />
+
+        <!-- The clock that appears when the player is moving through, slowing down, or speeding up time with the Song of Time -->
+        <DList Name="gSongOfTimeClockDL" Offset="0x7AFB0" /> <!-- Original name is "disk_modelT" -->
+        <DList Name="gSongOfTimeClockEmptyDL" Offset="0x7B0B8" /> <!-- Probably was the opaque component for the above DL -->
+        <Texture Name="gSongOfTimeClockTopTex" OutName="song_of_time_clock_top" Format="i8" Width="64" Height="64" Offset="0x7B0C0" />
+        <Texture Name="gSongOfTimeClockBottomTex" OutName="song_of_time_clock_bottom" Format="i8" Width="64" Height="64" Offset="0x7C0C0" />
+
         <DList Name="gameplay_keep_DL_07D260" Offset="0x7D260" />
         <DList Name="gameplay_keep_DL_07D348" Offset="0x7D348" />
         <Texture Name="gameplay_keep_Tex_07D350" OutName="tex_07D350" Format="i8" Width="16" Height="32" Offset="0x7D350" />
@@ -1427,14 +1440,14 @@
         <Texture Name="gameplay_keep_Tex_08D3E0" OutName="tex_08D3E0" Format="i8" Width="64" Height="32" Offset="0x8D3E0" />
         
         <!-- Dust Textures -->
-        <Texture Name="gDust1Tex" OutName="dust_1" Format="i8" Width="32" Height="32" Offset="0x8DBE0" />
-        <Texture Name="gDust2Tex" OutName="dust_2" Format="i8" Width="32" Height="32" Offset="0x8DFE0" />
-        <Texture Name="gDust3Tex" OutName="dust_3" Format="i8" Width="32" Height="32" Offset="0x8E3E0" />
-        <Texture Name="gDust4Tex" OutName="dust_4" Format="i8" Width="32" Height="32" Offset="0x8E7E0" />
-        <Texture Name="gDust5Tex" OutName="dust_5" Format="i8" Width="32" Height="32" Offset="0x8EBE0" />
-        <Texture Name="gDust6Tex" OutName="dust_6" Format="i8" Width="32" Height="32" Offset="0x8EFE0" />
-        <Texture Name="gDust7Tex" OutName="dust_7" Format="i8" Width="32" Height="32" Offset="0x8F3E0" />
-        <Texture Name="gDust8Tex" OutName="dust_8" Format="i8" Width="32" Height="32" Offset="0x8F7E0" />
+        <Texture Name="gEffDust1Tex" OutName="eff_dust_1" Format="i8" Width="32" Height="32" Offset="0x8DBE0" />
+        <Texture Name="gEffDust2Tex" OutName="eff_dust_2" Format="i8" Width="32" Height="32" Offset="0x8DFE0" />
+        <Texture Name="gEffDust3Tex" OutName="eff_dust_3" Format="i8" Width="32" Height="32" Offset="0x8E3E0" />
+        <Texture Name="gEffDust4Tex" OutName="eff_dust_4" Format="i8" Width="32" Height="32" Offset="0x8E7E0" />
+        <Texture Name="gEffDust5Tex" OutName="eff_dust_5" Format="i8" Width="32" Height="32" Offset="0x8EBE0" />
+        <Texture Name="gEffDust6Tex" OutName="eff_dust_6" Format="i8" Width="32" Height="32" Offset="0x8EFE0" />
+        <Texture Name="gEffDust7Tex" OutName="eff_dust_7" Format="i8" Width="32" Height="32" Offset="0x8F3E0" />
+        <Texture Name="gEffDust8Tex" OutName="eff_dust_8" Format="i8" Width="32" Height="32" Offset="0x8F7E0" />
         
         <Texture Name="gameplay_keep_Tex_08FBE0" OutName="tex_08FBE0" Format="i8" Width="32" Height="64" Offset="0x8FBE0" />
         <Texture Name="gameplay_keep_Tex_0903E0" OutName="tex_0903E0" Format="i8" Width="32" Height="64" Offset="0x903E0" />

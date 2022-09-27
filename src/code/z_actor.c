@@ -692,7 +692,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
  */
 s32 Flags_GetSwitch(PlayState* play, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
-        return play->actorCtx.flags.switches[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
+        return play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
 }
@@ -702,7 +702,7 @@ s32 Flags_GetSwitch(PlayState* play, s32 flag) {
  */
 void Flags_SetSwitch(PlayState* play, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
-        play->actorCtx.flags.switches[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
+        play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
     }
 }
 
@@ -711,7 +711,7 @@ void Flags_SetSwitch(PlayState* play, s32 flag) {
  */
 void Flags_UnsetSwitch(PlayState* play, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
-        play->actorCtx.flags.switches[(flag & ~0x1F) >> 5] &= ~(1 << (flag & 0x1F));
+        play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] &= ~(1 << (flag & 0x1F));
     }
 }
 
@@ -719,70 +719,70 @@ void Flags_UnsetSwitch(PlayState* play, s32 flag) {
  * Tests if current scene chest flag is set.
  */
 s32 Flags_GetTreasure(PlayState* play, s32 flag) {
-    return play->actorCtx.flags.chest & (1 << flag);
+    return play->actorCtx.sceneFlags.chest & (1 << flag);
 }
 
 /**
  * Sets current scene chest flag.
  */
 void Flags_SetTreasure(PlayState* play, s32 flag) {
-    play->actorCtx.flags.chest |= (1 << flag);
+    play->actorCtx.sceneFlags.chest |= (1 << flag);
 }
 
 /**
  * Overrides the all the chest flags.
  */
 void Flags_SetAllTreasure(PlayState* play, s32 flag) {
-    play->actorCtx.flags.chest = flag;
+    play->actorCtx.sceneFlags.chest = flag;
 }
 
 /**
  * Returns all the chest flags.
  */
 s32 Flags_GetAllTreasure(PlayState* play) {
-    return play->actorCtx.flags.chest;
+    return play->actorCtx.sceneFlags.chest;
 }
 
 /**
  * Tests if current scene clear flag is set.
  */
 s32 Flags_GetClear(PlayState* play, s32 roomNumber) {
-    return play->actorCtx.flags.clearedRoom & (1 << roomNumber);
+    return play->actorCtx.sceneFlags.clearedRoom & (1 << roomNumber);
 }
 
 /**
  * Sets current scene clear flag.
  */
 void Flags_SetClear(PlayState* play, s32 roomNumber) {
-    play->actorCtx.flags.clearedRoom |= (1 << roomNumber);
+    play->actorCtx.sceneFlags.clearedRoom |= (1 << roomNumber);
 }
 
 /**
  * Unsets current scene clear flag.
  */
 void Flags_UnsetClear(PlayState* play, s32 roomNumber) {
-    play->actorCtx.flags.clearedRoom &= ~(1 << roomNumber);
+    play->actorCtx.sceneFlags.clearedRoom &= ~(1 << roomNumber);
 }
 
 /**
  * Tests if current scene temp clear flag is set.
  */
 s32 Flags_GetClearTemp(PlayState* play, s32 roomNumber) {
-    return play->actorCtx.flags.clearedRoomTemp & (1 << roomNumber);
+    return play->actorCtx.sceneFlags.clearedRoomTemp & (1 << roomNumber);
 }
 
 /**
  * Sets current scene temp clear flag.
  */
 void Flags_SetClearTemp(PlayState* play, s32 roomNumber) {
-    play->actorCtx.flags.clearedRoomTemp |= (1 << roomNumber);
+    play->actorCtx.sceneFlags.clearedRoomTemp |= (1 << roomNumber);
 }
 
 /**
  * Unsets current scene temp clear flag.
  */
 void Flags_UnsetClearTemp(PlayState* play, s32 roomNumber) {
-    play->actorCtx.flags.clearedRoomTemp &= ~(1 << roomNumber);
+    play->actorCtx.sceneFlags.clearedRoomTemp &= ~(1 << roomNumber);
 }
 
 /**
@@ -790,7 +790,7 @@ void Flags_UnsetClearTemp(PlayState* play, s32 roomNumber) {
  */
 s32 Flags_GetCollectible(PlayState* play, s32 flag) {
     if (flag > 0 && flag < 0x80) {
-        return play->actorCtx.flags.collectible[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
+        return play->actorCtx.sceneFlags.collectible[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
 }
@@ -800,7 +800,7 @@ s32 Flags_GetCollectible(PlayState* play, s32 flag) {
  */
 void Flags_SetCollectible(PlayState* play, s32 flag) {
     if (flag > 0 && flag < 0x80) {
-        play->actorCtx.flags.collectible[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
+        play->actorCtx.sceneFlags.collectible[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
     }
 }
 
@@ -1076,7 +1076,7 @@ void Actor_Init(Actor* actor, PlayState* play) {
     actor->uncullZoneScale = 350.0f;
     actor->uncullZoneDownward = 700.0f;
 
-    actor->hintId = 255;
+    actor->hintId = TATL_HINT_ID_NONE;
 
     CollisionCheck_InitInfo(&actor->colChkInfo);
     actor->floorBgId = BGCHECK_SCENE;
@@ -2212,10 +2212,10 @@ s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgI
     return false;
 }
 
-void func_800B90F4(PlayState* play) {
-    if (play->actorCtx.unk3 != 0) {
-        play->actorCtx.unk3 = 0;
-        func_80115D5C(&play->state);
+void Actor_DeactivateLens(PlayState* play) {
+    if (play->actorCtx.lensActive) {
+        play->actorCtx.lensActive = false;
+        Magic_Reset(play);
     }
 }
 
@@ -2249,14 +2249,14 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
         overlayEntry++;
     }
 
-    actorCtx->flags.chest = cycleFlags->chest;
-    actorCtx->flags.switches[0] = cycleFlags->switch0;
-    actorCtx->flags.switches[1] = cycleFlags->switch1;
+    actorCtx->sceneFlags.chest = cycleFlags->chest;
+    actorCtx->sceneFlags.switches[0] = cycleFlags->switch0;
+    actorCtx->sceneFlags.switches[1] = cycleFlags->switch1;
     if (play->sceneNum == SCENE_INISIE_R) {
         cycleFlags = &gSaveContext.cycleSceneFlags[play->sceneNum];
     }
-    actorCtx->flags.collectible[0] = cycleFlags->collectible;
-    actorCtx->flags.clearedRoom = cycleFlags->clearedRoom;
+    actorCtx->sceneFlags.collectible[0] = cycleFlags->collectible;
+    actorCtx->sceneFlags.clearedRoom = cycleFlags->clearedRoom;
 
     TitleCard_ContextInit(&play->state, &actorCtx->titleCtxt);
     func_800B6468(play);
@@ -2594,7 +2594,7 @@ void func_800B9D1C(Actor* actor) {
 
 void Actor_DrawAllSetup(PlayState* play) {
     play->actorCtx.undrawnActorCount = 0;
-    play->actorCtx.unkB = 0;
+    play->actorCtx.lensActorsDrawn = false;
 }
 
 s32 Actor_RecordUndrawnActor(PlayState* play, Actor* actor) {
@@ -2607,13 +2607,12 @@ s32 Actor_RecordUndrawnActor(PlayState* play, Actor* actor) {
     return true;
 }
 
-void func_800B9E84(Gfx** arg0, s32 arg1) {
-    func_80164C14(arg0, D_801DE890, 4, 0, 6, 6, ((100 - arg1) * 0.003f) + 1.0f);
+void Actor_DrawLensOverlay(Gfx** gfxP, s32 lensMaskSize) {
+    func_80164C14(gfxP, &gCircleTex, 4, 0, 6, 6, ((LENS_MASK_ACTIVE_SIZE - lensMaskSize) * 0.003f) + 1.0f);
 }
 
 #ifdef NON_EQUIVALENT
-// Related to draw actors with lens
-void func_800B9EF4(PlayState* play, s32 numActors, Actor** actors) {
+void Actor_DrawLensActors(PlayState* play, s32 numActors, Actor** actors) {
     s32 spB4;
     Gfx* spAC;
     void* spA8; // pad
@@ -2684,7 +2683,7 @@ void func_800B9EF4(PlayState* play, s32 numActors, Actor** actors) {
         }
 
         // spAC = phi_s1;
-        func_800B9E84(&spAC, play->actorCtx.unk4);
+        Actor_DrawLensOverlay(&spAC, play->actorCtx.lensMaskSize);
         phi_s1_2 = func_801660B8(play, spAC);
 
         for (spB4 = 0; spB4 < numActors; spB4++, actors++) {
@@ -2744,7 +2743,7 @@ void func_800B9EF4(PlayState* play, s32 numActors, Actor** actors) {
         spAC = phi_s1_2;
 
         // spAC = temp_s1_11;
-        func_800B9E84(&spAC, (s32)play->actorCtx.unk4);
+        Actor_DrawLensOverlay(&spAC, (s32)play->actorCtx.lensMaskSize);
         // temp_s1_11->words.w0 = 0xE7000000;
         // temp_s1_11->words.w1 = 0;
         // temp_s1_12 = temp_s1_11 + 8;
@@ -2796,15 +2795,15 @@ void func_800B9EF4(PlayState* play, s32 numActors, Actor** actors) {
     // spAC = temp_s1_18 + 8;
     gDPSetPrimColor(spAC++, 0, 0, 74, 0, 0, 74);
 
-    func_800B9E84(&spAC, (s32)play->actorCtx.unk4);
+    Actor_DrawLensOverlay(&spAC, (s32)play->actorCtx.lensMaskSize);
 
     OVERLAY_DISP = spAC;
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 #else
-void func_800B9EF4(PlayState* play, s32 numActors, Actor** actors);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9EF4.s")
+void Actor_DrawLensActors(PlayState* play, s32 numActors, Actor** actors);
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_DrawLensActors.s")
 #endif
 
 s32 func_800BA2D8(PlayState* play, Actor* actor) {
@@ -2883,7 +2882,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
             actor->isDrawn = false;
             if ((actor->init == NULL) && (actor->draw != NULL) && (actor->flags & actorFlags)) {
                 if ((actor->flags & ACTOR_FLAG_80) &&
-                    ((play->roomCtx.currRoom.unk5 == 0) || (play->actorCtx.unk4 == 0x64) ||
+                    ((play->roomCtx.currRoom.unk5 == 0) || (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) ||
                      (actor->room != play->roomCtx.currRoom.num))) {
                     if (Actor_RecordUndrawnActor(play, actor)) {}
                 } else {
@@ -2903,17 +2902,17 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     gSPDisplayList(sp58, &ref2[1]);
     POLY_XLU_DISP = &ref2[1];
 
-    if (play->actorCtx.unk3 != 0) {
-        Math_StepToC(&play->actorCtx.unk4, 100, 20);
+    if (play->actorCtx.lensActive) {
+        Math_StepToC(&play->actorCtx.lensMaskSize, LENS_MASK_ACTIVE_SIZE, 20);
         if (GET_PLAYER(play)->stateFlags2 & 0x8000000) {
-            func_800B90F4(play);
+            Actor_DeactivateLens(play);
         }
     } else {
-        Math_StepToC(&play->actorCtx.unk4, 0, 10);
+        Math_StepToC(&play->actorCtx.lensMaskSize, 0, 10);
     }
-    if (play->actorCtx.unk4 != 0) {
-        play->actorCtx.unkB = 1;
-        func_800B9EF4(play, play->actorCtx.undrawnActorCount, play->actorCtx.undrawnActors);
+    if (play->actorCtx.lensMaskSize != 0) {
+        play->actorCtx.lensActorsDrawn = true;
+        Actor_DrawLensActors(play, play->actorCtx.undrawnActorCount, play->actorCtx.undrawnActors);
     }
 
     tmp2 = POLY_XLU_DISP;
@@ -2977,9 +2976,9 @@ void func_800BA798(PlayState* play, ActorContext* actorCtx) {
     }
 
     CollisionCheck_ClearContext(play, &play->colChkCtx);
-    actorCtx->flags.clearedRoomTemp = 0;
-    actorCtx->flags.switches[3] = 0;
-    actorCtx->flags.collectible[3] = 0;
+    actorCtx->sceneFlags.clearedRoomTemp = 0;
+    actorCtx->sceneFlags.switches[3] = 0;
+    actorCtx->sceneFlags.collectible[3] = 0;
     play->msgCtx.unk_12030 = 0;
 }
 
@@ -3815,9 +3814,9 @@ typedef struct {
 } DoorLockInfo; // size = 0x1C
 
 DoorLockInfo sDoorLocksInfo[DOORLOCK_MAX] = {
-    /* DOORLOCK_NORMAL */ { 0.54f, 6000.0f, 5000.0, 1.0f, 0.0f, gDoorChainsDL, gDoorLockDL },
-    /* DOORLOCK_BOSS */ { 0.644f, 12000.0f, 8000.0f, 1.0f, 0.0f, object_bdoor_DL_000530, object_bdoor_DL_000400 },
-    /* DOORLOCK_2 */ { 0.6400000453f, 8500.0f, 8000.0f, 1.75f, 0.1f, gDoorChainsDL, gDoorLockDL },
+    /* DOORLOCK_NORMAL */ { 0.54f, 6000.0f, 5000.0, 1.0f, 0.0f, gDoorChainDL, gDoorLockDL },
+    /* DOORLOCK_BOSS */ { 0.644f, 12000.0f, 8000.0f, 1.0f, 0.0f, gBossDoorChainDL, gBossDoorLockDL },
+    /* DOORLOCK_2 */ { 0.6400000453f, 8500.0f, 8000.0f, 1.75f, 0.1f, gDoorChainDL, gDoorLockDL },
 };
 
 /**
