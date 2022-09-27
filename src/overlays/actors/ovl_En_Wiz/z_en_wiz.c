@@ -66,6 +66,15 @@ typedef enum {
     /* 3 */ EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_RUN_AROUND,
 } EnWizFightState;
 
+typedef enum {
+    /* 0 */ EN_WIZ_ANIM_IDLE,
+    /* 1 */ EN_WIZ_ANIM_RUN,
+    /* 2 */ EN_WIZ_ANIM_DANCE,
+    /* 3 */ EN_WIZ_ANIM_WIND_UP,
+    /* 4 */ EN_WIZ_ANIM_ATTACK,
+    /* 5 */ EN_WIZ_ANIM_DAMAGE,
+} EnWizAnimation;
+
 const ActorInit En_Wiz_InitVars = {
     ACTOR_EN_WIZ,
     ACTORCAT_ENEMY,
@@ -225,100 +234,82 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 typedef enum {
-    /* 0x0 */ EN_WIZ_DMGEFF_NO_DAMAGE,    // Deals no damage
-    /* 0x1 */ EN_WIZ_DMGEFF_UNK1,         // Deals no damage. Was probably originally intended for destroying ghosts.
-    /* 0x2 */ EN_WIZ_DMGEFF_FIRE,         // Damages and sets Ice Wizrobes on fire
-    /* 0x3 */ EN_WIZ_DMGEFF_FREEZE,       // Damages and surrounds Fire Wizrobes with ice
-    /* 0x4 */ EN_WIZ_DMGEFF_LIGHT_ORB,    // Damages and surrounds the Wizrobe with light orbs
-    /* 0xF */ EN_WIZ_DMGEFF_DAMAGE = 0xF, // Deals regular damage
+    /* 0x0 */ EN_WIZ_DMGEFF_IMMUNE,     // Deals no damage
+    /* 0x1 */ EN_WIZ_DMGEFF_UNK1,       // Deals no damage. Was probably originally intended for destroying ghosts.
+    /* 0x2 */ EN_WIZ_DMGEFF_FIRE,       // Damages and sets Ice Wizrobes on fire
+    /* 0x3 */ EN_WIZ_DMGEFF_FREEZE,     // Damages and surrounds Fire Wizrobes with ice
+    /* 0x4 */ EN_WIZ_DMGEFF_LIGHT_ORB,  // Damages and surrounds the Wizrobe with light orbs
+    /* 0xF */ EN_WIZ_DMGEFF_NONE = 0xF, // Deals regular damage and has no special effect
 } EnWizDamageEffect;
 
 static DamageTable sFireWizrobeDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, EN_WIZ_DMGEFF_UNK1),
-    /* Deku Stick     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Horse trample  */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Explosives     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Zora boomerang */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Normal arrow   */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* UNK_DMG_D_06   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Hookshot       */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Goron punch    */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Sword          */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Goron pound    */ DMG_ENTRY(3, EN_WIZ_DMGEFF_DAMAGE),
+    /* Deku Stick     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Explosives     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* UNK_DMG_D_06   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Hookshot       */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Goron punch    */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Sword          */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(3, EN_WIZ_DMGEFF_NONE),
     /* Fire arrow     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_FIRE),
     /* Ice arrow      */ DMG_ENTRY(2, EN_WIZ_DMGEFF_FREEZE),
     /* Light arrow    */ DMG_ENTRY(2, EN_WIZ_DMGEFF_LIGHT_ORB),
-    /* Goron spikes   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Deku spin      */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Deku bubble    */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Deku launch    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Goron spikes   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Deku spin      */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Deku bubble    */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
     /* UNK_DMG_0x12   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_UNK1),
-    /* Zora barrier   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Normal shield  */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Light ray      */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Thrown object  */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Zora punch     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Spin attack    */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Sword beam     */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Normal Roll    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Unblockable    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Powder Keg     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
+    /* Zora barrier   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Normal shield  */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Light ray      */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Thrown object  */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Normal Roll    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Unblockable    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Powder Keg     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
 };
 
 static DamageTable sIceWizrobeDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, EN_WIZ_DMGEFF_UNK1),
-    /* Deku Stick     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Horse trample  */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Explosives     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Zora boomerang */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Normal arrow   */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* UNK_DMG_D_06   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Hookshot       */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Goron punch    */ DMG_ENTRY(2, EN_WIZ_DMGEFF_DAMAGE),
-    /* Sword          */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Goron pound    */ DMG_ENTRY(3, EN_WIZ_DMGEFF_DAMAGE),
+    /* Deku Stick     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Explosives     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* UNK_DMG_D_06   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Hookshot       */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Goron punch    */ DMG_ENTRY(2, EN_WIZ_DMGEFF_NONE),
+    /* Sword          */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(3, EN_WIZ_DMGEFF_NONE),
     /* Fire arrow     */ DMG_ENTRY(2, EN_WIZ_DMGEFF_FIRE),
     /* Ice arrow      */ DMG_ENTRY(1, EN_WIZ_DMGEFF_FREEZE),
     /* Light arrow    */ DMG_ENTRY(2, EN_WIZ_DMGEFF_LIGHT_ORB),
-    /* Goron spikes   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Deku spin      */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Deku bubble    */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Deku launch    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
+    /* Goron spikes   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Deku spin      */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Deku bubble    */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
     /* UNK_DMG_0x12   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_UNK1),
-    /* Zora barrier   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Normal shield  */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Light ray      */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Thrown object  */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Zora punch     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Spin attack    */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-    /* Sword beam     */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Normal Roll    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Unblockable    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_NO_DAMAGE),
-    /* Powder Keg     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_DAMAGE),
-};
-
-typedef enum {
-    /* 0 */ EN_WIZ_ANIM_IDLE,
-    /* 1 */ EN_WIZ_ANIM_RUN,
-    /* 2 */ EN_WIZ_ANIM_DANCE,
-    /* 3 */ EN_WIZ_ANIM_WIND_UP,
-    /* 4 */ EN_WIZ_ANIM_ATTACK,
-    /* 5 */ EN_WIZ_ANIM_DAMAGE,
-} EnWizAnimation;
-
-static AnimationHeader* sAnimations[] = {
-    &gWizrobeIdleAnim,   &gWizrobeRunAnim,    &gWizrobeDanceAnim,
-    &gWizrobeWindUpAnim, &gWizrobeAttackAnim, &gWizrobeDamageAnim,
-};
-
-static u8 sAnimationModes[] = {
-    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE,
+    /* Zora barrier   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Normal shield  */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Light ray      */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Thrown object  */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Normal Roll    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Unblockable    */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_WIZ_DMGEFF_IMMUNE),
+    /* Powder Keg     */ DMG_ENTRY(1, EN_WIZ_DMGEFF_NONE),
 };
 
 void EnWiz_Init(Actor* thisx, PlayState* play) {
@@ -383,6 +374,24 @@ void EnWiz_Destroy(Actor* thisx, PlayState* play) {
         func_801A2ED8();
     }
 }
+
+static AnimationHeader* sAnimations[] = {
+    &gWizrobeIdleAnim,   // EN_WIZ_ANIM_IDLE
+    &gWizrobeRunAnim,    // EN_WIZ_ANIM_RUN
+    &gWizrobeDanceAnim,  // EN_WIZ_ANIM_DANCE
+    &gWizrobeWindUpAnim, // EN_WIZ_ANIM_WIND_UP
+    &gWizrobeAttackAnim, // EN_WIZ_ANIM_ATTACK
+    &gWizrobeDamageAnim, // EN_WIZ_ANIM_DAMAGE
+};
+
+static u8 sAnimationModes[] = {
+    ANIMMODE_LOOP, // EN_WIZ_ANIM_IDLE
+    ANIMMODE_LOOP, // EN_WIZ_ANIM_RUN
+    ANIMMODE_LOOP, // EN_WIZ_ANIM_DANCE
+    ANIMMODE_LOOP, // EN_WIZ_ANIM_WIND_UP
+    ANIMMODE_LOOP, // EN_WIZ_ANIM_ATTACK
+    ANIMMODE_ONCE, // EN_WIZ_ANIM_DAMAGE
+};
 
 void EnWiz_ChangeAnim(EnWiz* this, s32 animIndex, s32 updateGhostAnim) {
     this->endFrame = Animation_GetLastFrame(sAnimations[animIndex]);
@@ -1187,7 +1196,7 @@ void EnWiz_UpdateDamage(EnWiz* this, PlayState* play) {
         }
 
         switch (this->actor.colChkInfo.damageEffect) {
-            case EN_WIZ_DMGEFF_DAMAGE:
+            case EN_WIZ_DMGEFF_NONE:
                 attackDealsDamage = true;
                 break;
 
