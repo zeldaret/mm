@@ -5941,7 +5941,7 @@
     0x808B4548:("EnDekubaba_DrawStemRetracted",),
     0x808B465C:("EnDekubaba_DrawStemExtended",),
     0x808B48FC:("EnDekubaba_DrawStemBasePruned",),
-    0x808B49C8:("EnDekubaba_DrawBaseShadow",),
+    0x808B49C8:("EnDekubaba_DrawShadow",),
     0x808B4ABC:("EnDekubaba_PostLimbDraw",),
     0x808B4AF8:("EnDekubaba_Draw",),
     0x808B5230:("EnMFire1_Init",),

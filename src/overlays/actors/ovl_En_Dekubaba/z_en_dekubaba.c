@@ -1304,7 +1304,7 @@ void EnDekubaba_DrawStemBasePruned(EnDekubaba* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnDekubaba_DrawBaseShadow(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_DrawShadow(EnDekubaba* this, PlayState* play) {
     MtxF mf;
     f32 horizontalScale;
 
@@ -1361,7 +1361,7 @@ void EnDekubaba_Draw(Actor* thisx, PlayState* play) {
             EnDekubaba_DrawStemBasePruned(this, play);
         }
         if (this->boundFloor != NULL) {
-            EnDekubaba_DrawBaseShadow(this, play);
+            EnDekubaba_DrawShadow(this, play);
         }
 
         // Display solid until 40 frames left, then blink until killed.
