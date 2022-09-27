@@ -993,6 +993,11 @@ void EnGrasshopper_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     Matrix_Pop();
 }
 
+// We need to pass in 14 into SubS_GenShadowTex for the bodyPartsNum, NOT the actual size of the
+// parent body parts array. This is both necessary to match and to prevent extra dots from being
+// drawn with the shadow.
+#define SHADOW_BODY_PARTS_NUM 14
+
 void EnGrasshopper_Draw(Actor* thisx, PlayState* play) {
     EnGrasshopper* this = THIS;
     s32 i;
@@ -1011,9 +1016,8 @@ void EnGrasshopper_Draw(Actor* thisx, PlayState* play) {
         }
 
         for (i = 0; i < 5; i++) {
-            // Need to pass in 14 here for the bodyPartsNum, NOT the actual size of the parent body parts array.
-            SubS_GenShadowTex(this->shadowBodyPartsPos, &this->actor.world.pos, shadowTex, i / 5.0f, 14, sShadowSizes,
-                              sParentBodyParts);
+            SubS_GenShadowTex(this->shadowBodyPartsPos, &this->actor.world.pos, shadowTex, i / 5.0f,
+                              SHADOW_BODY_PARTS_NUM, sShadowSizes, sParentBodyParts);
             //! FAKE: Needed to fix some regs and stack
             //! https://decomp.me/scratch/4wJBW
             if ((shadowTex && shadowTex) && shadowTex) {}
