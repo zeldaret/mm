@@ -550,7 +550,7 @@ typedef enum {
     /* 0x0D */ SCENE_AYASHIISHOP, // Curiosity Shop
     /* 0x0E */ SCENE_UNSET_E,
     /* 0x0F */ SCENE_UNSET_F,
-    /* 0x10 */ SCENE_OMOYA, // Mama's House & Barn
+    /* 0x10 */ SCENE_OMOYA, // Mama's House (Ranch House in PAL) & Barn
     /* 0x11 */ SCENE_BOWLING, // Honey & Darling's Shop
     /* 0x12 */ SCENE_SONCHONOIE, // The Mayor's Residence
     /* 0x13 */ SCENE_IKANA, // Ikana Canyon
