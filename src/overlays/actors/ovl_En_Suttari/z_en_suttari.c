@@ -445,7 +445,7 @@ void func_80BAAFDC(EnSuttari* this, PlayState* play) {
         effectVelOffset.z = 20.0f;
         Matrix_MultVec3f(&effectVelOffset, &effectVel);
         Matrix_Pop();
-        if (this->playerDetected == 0) {
+        if (!this->playerDetected) {
             EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->playerDetected, SOLDERSRCHBALL_INVISIBLE);
         }
         if (this->playerDetected == true) {
@@ -477,7 +477,7 @@ void func_80BAB1A0(EnSuttari* this, PlayState* play) {
         effectVelOffset.z = 20.0f;
         Matrix_MultVec3f(&effectVelOffset, &effectVel);
         Matrix_Pop();
-        if (this->playerDetected == 0) {
+        if (!this->playerDetected) {
             EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->playerDetected, SOLDERSRCHBALL_INVISIBLE);
         }
         if (this->playerDetected == true) {
