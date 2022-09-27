@@ -66,11 +66,22 @@ typedef enum {
     /* 1 */ EN_GRASSHOPPER_BANK_STATE_DONE,
 } EnGrasshopperBankState;
 
+typedef enum {
+    /* 0 */ EN_GRASSHOPPER_ANIM_RAISE_TAIL,
+    /* 1 */ EN_GRASSHOPPER_ANIM_LOWER_TAIL,
+    /* 2 */ EN_GRASSHOPPER_ANIM_FLY,
+    /* 3 */ EN_GRASSHOPPER_ANIM_ATTACK,
+    /* 4 */ EN_GRASSHOPPER_ANIM_HOVER,
+    /* 5 */ EN_GRASSHOPPER_ANIM_DAMAGE,
+    /* 6 */ EN_GRASSHOPPER_ANIM_DEAD,
+    /* 7 */ EN_GRASSHOPPER_ANIM_FALL,
+} EnGrasshopperAnim;
+
 static s32 sOccupiedIndices[] = {
     false, false, false, false, false,
 };
 
-static s8 sLimbIndexToShadowBodyPartsIndex[] = {
+static s8 sLimbIndexToShadowBodyPartsIndex[DRAGONFLY_LIMB_MAX] = {
     -1, -1, 0, 1, 2, 3, 4, 5, -1, -1, 6, 7, -1, 8, 9, -1, 10, 11, -1, 12, 13, -1, -1, -1,
 };
 
@@ -83,46 +94,46 @@ static u8 sShadowSizes[] = {
 };
 
 typedef enum {
-    /* 0x0 */ EN_GRASSHOPPER_DMGEFF_NO_DAMAGE,  // Deals no damage
+    /* 0x0 */ EN_GRASSHOPPER_DMGEFF_IMMUNE,     // Deals no damage
     /* 0x2 */ EN_GRASSHOPPER_DMGEFF_FIRE = 0x2, // Damages and sets the Dragonfly on fire
     /* 0x3 */ EN_GRASSHOPPER_DMGEFF_FREEZE,     // Damages and freezes the Dragonfly in ice
     /* 0x4 */ EN_GRASSHOPPER_DMGEFF_LIGHT_ORB,  // Damages and surrounds the Dragonfly with light orbs
     /* 0xE */ EN_GRASSHOPPER_DMGEFF_HOOK = 0xE, // If hit by the Hookshot, it pulls the Dragonfly towards the player
-    /* 0xF */ EN_GRASSHOPPER_DMGEFF_DAMAGE,     // Deals regular damage
+    /* 0xF */ EN_GRASSHOPPER_DMGEFF_NONE,       // Deals regular damage with no extra effect
 } EnDragonflyDamageEffect;
 
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_DAMAGE),
-    /* Deku Stick     */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_DAMAGE),
-    /* Horse trample  */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_NO_DAMAGE),
-    /* Explosives     */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_DAMAGE),
-    /* Zora boomerang */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_DAMAGE),
-    /* Normal arrow   */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_DAMAGE),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_NO_DAMAGE),
+    /* Deku Nut       */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_NONE),
+    /* Deku Stick     */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_IMMUNE),
+    /* Explosives     */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_IMMUNE),
     /* Hookshot       */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_HOOK),
-    /* Goron punch    */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_DAMAGE),
-    /* Sword          */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_DAMAGE),
-    /* Goron pound    */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_DAMAGE),
+    /* Goron punch    */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_NONE),
+    /* Sword          */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_NONE),
     /* Fire arrow     */ DMG_ENTRY(2, EN_GRASSHOPPER_DMGEFF_FIRE),
     /* Ice arrow      */ DMG_ENTRY(2, EN_GRASSHOPPER_DMGEFF_FREEZE),
     /* Light arrow    */ DMG_ENTRY(2, EN_GRASSHOPPER_DMGEFF_LIGHT_ORB),
-    /* Goron spikes   */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_DAMAGE),
-    /* Deku spin      */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_DAMAGE),
-    /* Deku bubble    */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_DAMAGE),
-    /* Deku launch    */ DMG_ENTRY(2, EN_GRASSHOPPER_DMGEFF_DAMAGE),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_DAMAGE),
-    /* Zora barrier   */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_DAMAGE),
-    /* Normal shield  */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_NO_DAMAGE),
-    /* Light ray      */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_NO_DAMAGE),
-    /* Thrown object  */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_DAMAGE),
-    /* Zora punch     */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_DAMAGE),
-    /* Spin attack    */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_DAMAGE),
-    /* Sword beam     */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_NO_DAMAGE),
-    /* Normal Roll    */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_NO_DAMAGE),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_NO_DAMAGE),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_NO_DAMAGE),
-    /* Unblockable    */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_NO_DAMAGE),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_NO_DAMAGE),
+    /* Goron spikes   */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_NONE),
+    /* Deku spin      */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_NONE),
+    /* Deku bubble    */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(2, EN_GRASSHOPPER_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_NONE),
+    /* Zora barrier   */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_NONE),
+    /* Normal shield  */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_IMMUNE),
+    /* Light ray      */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_IMMUNE),
+    /* Thrown object  */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_IMMUNE),
+    /* Normal Roll    */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_IMMUNE),
+    /* Unblockable    */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_GRASSHOPPER_DMGEFF_IMMUNE),
     /* Powder Keg     */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_HOOK),
 };
 
@@ -174,27 +185,6 @@ static ColliderJntSphInit sJntSphInit = {
     },
     ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
-};
-
-typedef enum {
-    /* 0 */ EN_GRASSHOPPER_ANIM_RAISE_TAIL,
-    /* 1 */ EN_GRASSHOPPER_ANIM_LOWER_TAIL,
-    /* 2 */ EN_GRASSHOPPER_ANIM_FLY,
-    /* 3 */ EN_GRASSHOPPER_ANIM_ATTACK,
-    /* 4 */ EN_GRASSHOPPER_ANIM_HOVER,
-    /* 5 */ EN_GRASSHOPPER_ANIM_DAMAGE,
-    /* 6 */ EN_GRASSHOPPER_ANIM_DEAD,
-    /* 7 */ EN_GRASSHOPPER_ANIM_FALL,
-} EnGrasshopperAnim;
-
-static AnimationHeader* sAnimations[] = {
-    &gDragonflyRaiseTailAnim, &gDragonflyLowerTailAnim, &gDragonflyFlyAnim,  &gDragonflyAttackAnim,
-    &gDragonflyHoverAnim,     &gDragonflyDamageAnim,    &gDragonflyDeadAnim, &gDragonflyFallAnim,
-};
-
-static u8 sAnimationModes[] = {
-    ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE,
-    ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE,
 };
 
 void EnGrasshopper_Init(Actor* thisx, PlayState* play) {
@@ -265,11 +255,33 @@ void EnGrasshopper_Destroy(Actor* thisx, PlayState* play) {
 
     Collider_DestroyJntSph(play, &this->collider);
 
-    //! @bug: If the dragonfly selected a random index in EnGrasshopper_Init (because all indices were occupied),
+    //! @bug If the dragonfly selected a random index in EnGrasshopper_Init (because all indices were occupied),
     //! then two dragonflies will have the same index. When one of those dragonflies sharing an index is destroyed,
     //! it will mark the index as unoccupied, when it still occupied by at least one dragonfly.
     sOccupiedIndices[this->index] = false;
 }
+
+static AnimationHeader* sAnimations[] = {
+    &gDragonflyRaiseTailAnim, // EN_GRASSHOPPER_ANIM_RAISE_TAIL
+    &gDragonflyLowerTailAnim, // EN_GRASSHOPPER_ANIM_LOWER_TAIL
+    &gDragonflyFlyAnim,       // EN_GRASSHOPPER_ANIM_FLY
+    &gDragonflyAttackAnim,    // EN_GRASSHOPPER_ANIM_ATTACK
+    &gDragonflyHoverAnim,     // EN_GRASSHOPPER_ANIM_HOVER
+    &gDragonflyDamageAnim,    // EN_GRASSHOPPER_ANIM_DAMAGE
+    &gDragonflyDeadAnim,      // EN_GRASSHOPPER_ANIM_DEAD
+    &gDragonflyFallAnim,      // EN_GRASSHOPPER_ANIM_FALL
+};
+
+static u8 sAnimationModes[] = {
+    ANIMMODE_ONCE, // EN_GRASSHOPPER_ANIM_RAISE_TAIL
+    ANIMMODE_ONCE, // EN_GRASSHOPPER_ANIM_LOWER_TAIL
+    ANIMMODE_LOOP, // EN_GRASSHOPPER_ANIM_FLY
+    ANIMMODE_ONCE, // EN_GRASSHOPPER_ANIM_ATTACK
+    ANIMMODE_LOOP, // EN_GRASSHOPPER_ANIM_HOVER
+    ANIMMODE_ONCE, // EN_GRASSHOPPER_ANIM_DAMAGE
+    ANIMMODE_ONCE, // EN_GRASSHOPPER_ANIM_DEAD
+    ANIMMODE_ONCE, // EN_GRASSHOPPER_ANIM_FALL
+};
 
 void EnGrasshopper_ChangeAnim(EnGrasshopper* this, s32 animIndex) {
     f32 morphFrames;
@@ -364,7 +376,7 @@ void EnGrasshopper_Fly(EnGrasshopper* this, PlayState* play) {
             this->shouldTurn = false;
         }
 
-        //! @bug: unreachable code. To get here, the type must NOT be EN_GRASSHOPPER_TYPE_WOODFALL
+        //! @bug Unreachable code. To get here, the type must NOT be EN_GRASSHOPPER_TYPE_WOODFALL
         if (this->type == EN_GRASSHOPPER_TYPE_WOODFALL) {
             if (sqrtf(SQ(this->actor.world.pos.x) + SQ(this->actor.world.pos.z)) < 600.0f) {
                 this->shouldTurn = true;
@@ -567,7 +579,7 @@ void EnGrasshopper_ApproachPlayer(EnGrasshopper* this, PlayState* play) {
     if (WaterBox_GetSurface1(play, &play->colCtx, this->tailTipPos.x, this->tailTipPos.z, &this->waterSurface,
                              &waterBox)) {
         if (this->tailTipPos.y < this->waterSurface) {
-            if ((this->splashCount < 3) || !(play->gameplayFrames & 7)) {
+            if ((this->splashCount < 3) || !(play->gameplayFrames % 8)) {
                 this->splashCount++;
                 Math_Vec3f_Copy(&splashPos, &this->tailTipPos);
                 splashPos.x += randPlusMinusPoint5Scaled(20.0f);
@@ -617,7 +629,7 @@ void EnGrasshopper_Attack(EnGrasshopper* this, PlayState* play) {
     if (WaterBox_GetSurface1(play, &play->colCtx, this->tailTipPos.x, this->tailTipPos.z, &this->waterSurface,
                              &waterBox)) {
         if (this->tailTipPos.y < this->waterSurface) {
-            if ((this->splashCount < 3) || !(play->gameplayFrames & 7)) {
+            if ((this->splashCount < 3) || !(play->gameplayFrames % 8)) {
                 this->splashCount++;
                 Math_Vec3f_Copy(&splashPos, &this->tailTipPos);
                 splashPos.x += randPlusMinusPoint5Scaled(20.0f);
@@ -841,7 +853,7 @@ void EnGrasshopper_UpdateDamage(EnGrasshopper* this, PlayState* play) {
         this->collider.base.acFlags &= ~AC_HIT;
         if ((this->action != EN_GRASSHOPPER_ACTION_DAMAGED) && (this->action != EN_GRASSHOPPER_ACTION_DEAD) &&
             (this->action != EN_GRASSHOPPER_ACTION_FALL)) {
-            if (this->actor.colChkInfo.damageEffect == EN_GRASSHOPPER_DMGEFF_DAMAGE) {
+            if (this->actor.colChkInfo.damageEffect == EN_GRASSHOPPER_DMGEFF_NONE) {
                 attackDealsDamage = true;
             } else if (this->actor.colChkInfo.damageEffect == EN_GRASSHOPPER_DMGEFF_FIRE) {
                 this->drawDmgEffTimer = 40;
@@ -961,9 +973,9 @@ void EnGrasshopper_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
         (limbIndex == DRAGONFLY_LIMB_BACK_RIGHT_UPPER_LEG) || (limbIndex == DRAGONFLY_LIMB_FRONT_LEFT_UPPER_LEG) ||
         (limbIndex == DRAGONFLY_LIMB_FRONT_LEFT_FOOT) || (limbIndex == DRAGONFLY_LIMB_FRONT_RIGHT_UPPER_LEG) ||
         (limbIndex == DRAGONFLY_LIMB_HEAD) ||
-        //! @bug: These do not check for valid limbs. Limb index 0x18 is DRAGONFLY_LIMB_MAX, so it (and any index
+        //! @bug: These do not check for valid limbs. Limb index 24 is DRAGONFLY_LIMB_MAX, so it (and any index
         //! larger than it) is not tied to an actual limb.
-        (limbIndex == 0x18) || (limbIndex == 0x19) ||
+        (limbIndex == 24) || (limbIndex == 25) ||
         // While checking for DRAGONFLY_LIMB_ROOT twice is not a bug by itself, it causes another bug below.
         (limbIndex == DRAGONFLY_LIMB_ROOT)) {
         //! @bug: This code only works properly if all 12 elements of bodyPartsPos are updated every frame, since
