@@ -440,13 +440,12 @@ typedef struct {
     /* 0x220 */ f32 unk_220;
     /* 0x224 */ u16 alpha;
     /* 0x226 */ s16 offsetY;
-    /* 0x228 */ s32 unk_228;
-    /* 0x22C */ s32 unk_22C;
-    /* 0x230 */ s32 stickRelX;
-    /* 0x234 */ s32 stickRelY;
+    /* 0x228 */ UNK_TYPE1 unk_228[0x8];
+    /* 0x230 */ s32 stickAdjX;
+    /* 0x234 */ s32 stickAdjY;
     /* 0x238 */ s16 cursorPoint[5];
-    /* 0x242 */ s16 cursorX[5];
-    /* 0x24C */ s16 cursorY[5];
+    /* 0x242 */ s16 cursorXIndex[5];
+    /* 0x24C */ s16 cursorYIndex[5];
     /* 0x256 */ s16 unk_256;
     /* 0x258 */ s16 cursorSpecialPos;
     /* 0x25A */ s16 pageSwitchTimer;
