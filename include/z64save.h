@@ -7,7 +7,7 @@
 
 struct GameState;
 struct PlayState;
-struct FileChooseContext;
+struct FileSelectState;
 
 // TODO: properly name DOWN, RETURN and TOP
 typedef enum RespawnMode {
@@ -398,15 +398,15 @@ u16 Sram_CalcChecksum(void* data, size_t count);
 void Sram_InitNewSave(void);
 void Sram_InitDebugSave(void);
 void func_80144A94(SramContext* sramCtx);
-void Sram_OpenSave(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
+void Sram_OpenSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void func_8014546C(SramContext* sramCtx);
-void func_801457CC(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
-void func_80146580(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx, s32 fileNum);
-void func_80146628(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
-void Sram_InitSave(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
+void func_801457CC(struct FileSelectState* fileSelect, SramContext* sramCtx);
+void func_80146580(struct FileSelectState* fileSelect, SramContext* sramCtx, s32 fileNum);
+void func_80146628(struct FileSelectState* fileSelect, SramContext* sramCtx);
+void Sram_InitSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void func_80146DF8(SramContext* sramCtx);
 void Sram_InitSram(struct GameState* gameState, SramContext* sramCtx);
-void Sram_Alloc(struct GameState* gamestate, SramContext* sramCtx);
+void Sram_Alloc(struct GameState* gameState, SramContext* sramCtx);
 void Sram_SaveSpecialEnterClockTown(struct PlayState* play);
 void Sram_SaveSpecialNewDay(struct PlayState* play);
 void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages);

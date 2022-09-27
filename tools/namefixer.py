@@ -707,6 +707,8 @@ wordReplace = {
     "globalCtx->envCtx.unk_DC": "play->envCtx.lightBlend",
     "globalCtx->interfaceCtx.unk_21E": "play->interfaceCtx.bButtonDoAction",
 
+    # "play->actorCtx.flags": "play->actorCtx.sceneFlags",
+    # "play->actorCtx.unk5": "play->actorCtx.flags",
     "play->msgCtx.unk11F04": "play->msgCtx.currentTextId",
     "play->msgCtx.unk11F10": "play->msgCtx.msgLength",
     "play->msgCtx.unk11F22": "play->msgCtx.msgMode",
