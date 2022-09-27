@@ -21,14 +21,14 @@
         <Texture Name="gDekuBabaBulbTex" OutName="deku_baba_bulb" Format="rgba16" Width="8" Height="8" Offset="0x28D0"/>
         <Texture Name="gDekuBabaStemTex" OutName="deku_baba_stem" Format="rgba16" Width="8" Height="8" Offset="0x2950"/>
 
-        <!-- Deku Baba limbs -->
+        <!-- Deku Baba limbs (upper/lower is only based on the "tongue" being in the lower) -->
         <Limb Name="gDekuBabaRootLimb" Type="Standard" EnumName="DEKUBABA_LIMB_ROOT" Offset="0x29D0" />
-        <Limb Name="gDekuBaba2Limb" Type="Standard" EnumName="DEKUBABA_LIMB_02" Offset="0x29DC" />
-        <Limb Name="gDekuBaba3Limb" Type="Standard" EnumName="DEKUBABA_LIMB_03" Offset="0x29E8" />
-        <Limb Name="gDekuBaba4Limb" Type="Standard" EnumName="DEKUBABA_LIMB_04" Offset="0x29F4" />
-        <Limb Name="gDekuBaba5Limb" Type="Standard" EnumName="DEKUBABA_LIMB_05" Offset="0x2A00" />
-        <Limb Name="gDekuBaba6Limb" Type="Standard" EnumName="DEKUBABA_LIMB_06" Offset="0x2A0C" />
-        <Limb Name="gDekuBaba7Limb" Type="Standard" EnumName="DEKUBABA_LIMB_07" Offset="0x2A18" />
+        <Limb Name="gDekuBabaUpperJawRootRootLimb" Type="Standard" EnumName="DEKUBABA_LIMB_UPPER_JAW_ROOT_ROOT" Offset="0x29DC" />
+        <Limb Name="gDekuBabaUpperJawRootLimb" Type="Standard" EnumName="DEKUBABA_LIMB_UPPER_JAW_ROOT" Offset="0x29E8" />
+        <Limb Name="gDekuBabaUpperJawLimb" Type="Standard" EnumName="DEKUBABA_LIMB_UPPER_JAW" Offset="0x29F4" />
+        <Limb Name="gDekuBabaLowerJawRootRootLimb" Type="Standard" EnumName="DEKUBABA_LIMB_LOWER_JAW_ROOT_ROOT" Offset="0x2A00" />
+        <Limb Name="gDekuBabaLowerJawRootLimb" Type="Standard" EnumName="DEKUBABA_LIMB_LOWER_JAW_ROOT" Offset="0x2A0C" />
+        <Limb Name="gDekuBabaLowerJawLimb" Type="Standard" EnumName="DEKUBABA_LIMB_LOWER_JAW" Offset="0x2A18" />
 
         <!-- Deku Baba skeleton (only used for jaws) -->
         <Skeleton Name="gDekuBabaSkel" Type="Normal" LimbType="Standard" LimbNone="DEKUBABA_LIMB_NONE" LimbMax="DEKUBABA_LIMB_MAX" EnumName="DekuBabaLimb" Offset="0x2A40" />
