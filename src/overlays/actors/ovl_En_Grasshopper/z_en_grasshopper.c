@@ -85,11 +85,11 @@ static s8 sLimbIndexToShadowBodyPartsIndex[DRAGONFLY_LIMB_MAX] = {
     -1, -1, 0, 1, 2, 3, 4, 5, -1, -1, 6, 7, -1, 8, 9, -1, 10, 11, -1, 12, 13, -1, -1, -1,
 };
 
-static s8 sParentBodyParts[] = {
+static s8 sParentBodyParts[DRAGONFLY_LIMB_MAX] = {
     -1, -1, -1, 0, 1, 2, 3, -1, -1, -1, -1, 6, -1, -1, 8, -1, -1, 10, -1, -1, 12, -1, -1, -1,
 };
 
-static u8 sShadowSizes[] = {
+static u8 sShadowSizes[DRAGONFLY_LIMB_MAX] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
@@ -1011,8 +1011,9 @@ void EnGrasshopper_Draw(Actor* thisx, PlayState* play) {
         }
 
         for (i = 0; i < 5; i++) {
-            SubS_GenShadowTex(this->shadowBodyPartsPos, &this->actor.world.pos, shadowTex, i / 5.0f,
-                              ARRAY_COUNT(this->shadowBodyPartsPos), sShadowSizes, sParentBodyParts);
+            // Need to pass in 14 here for the bodyPartsNum, NOT the actual size of the parent body parts array.
+            SubS_GenShadowTex(this->shadowBodyPartsPos, &this->actor.world.pos, shadowTex, i / 5.0f, 14, sShadowSizes,
+                              sParentBodyParts);
             //! FAKE: Needed to fix some regs and stack
             //! https://decomp.me/scratch/4wJBW
             if ((shadowTex && shadowTex) && shadowTex) {}

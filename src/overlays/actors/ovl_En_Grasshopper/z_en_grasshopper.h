@@ -66,8 +66,7 @@ typedef struct EnGrasshopper {
     /* 0x03B4 */ Vec3f targetApproachPos;
     /* 0x03C0 */ Vec3f tailTipPos;
     /* 0x03CC */ Vec3f effectBasePos;
-    /* 0x03D8 */ Vec3f shadowBodyPartsPos[14]; // Was almost certainly declared with 24 entries, but only the first 14 are used.
-    /* 0x0480 */ UNK_TYPE1 unk_480[0x78];
+    /* 0x03D8 */ Vec3f shadowBodyPartsPos[DRAGONFLY_LIMB_MAX];
     /* 0x04F8 */ f32 waterSurface;
     /* 0x04FC */ Vec3f damagedVelocity;
     /* 0x0508 */ Vec3s targetBankRot;
