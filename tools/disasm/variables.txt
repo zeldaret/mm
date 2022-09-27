@@ -4723,7 +4723,7 @@
     0x8082B59C:("sWorldMapCursorsRectLeft","UNK_TYPE1","",0x1),
     0x8082B5B4:("sWorldMapCursorsRectTop","UNK_TYPE1","",0x1),
     0x8082B5CC:("sGreatFairySpawnRegions","UNK_TYPE1","",0x1),
-    0x8082B5E0:("sOwlStatuePauseItems","UNK_TYPE1","",0x1),
+    0x8082B5E0:("sOwlWarpPauseItems","UNK_TYPE1","",0x1),
     0x8082B5F4:("sStickAdjTimer","UNK_TYPE2","",0x2),
     0x8082B600:("D_8082B600","UNK_TYPE2","",0x2),
     0x8082B604:("D_8082B604","UNK_TYPE2","",0x2),

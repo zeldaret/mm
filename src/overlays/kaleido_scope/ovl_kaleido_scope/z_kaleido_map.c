@@ -670,7 +670,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                 pauseCtx->mapPageVtx[164].v.ob[1] - 12;
         }
 
-        // Loop over OwlStatueId (i), unused vtxIndex (j), unused (k)
+        // Loop over OwlWarpId (i), unused vtxIndex (j), unused (k)
         for (i = 0, j = 0; i < OWL_WARP_ENTRANCE; i++, k++, j += 4) {
             if (pauseCtx->worldMapPoints[i]) {
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[164 + i * 4], 4, 0);
@@ -751,7 +751,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-u16 sOwlStatuePauseItems[] = {
+u16 sOwlWarpPauseItems[] = {
     0xAF, // OWL_WARP_GREAT_BAY_COAST
     0xB3, // OWL_WARP_ZORA_CAPE
     0xAA, // OWL_WARP_SNOWHEAD
@@ -907,7 +907,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
         }
 
         //! TODO: Is the `0xA4` here related to `0xA3` being the last recored item in the `ItemId` enum?
-        pauseCtx->cursorItem[PAUSE_MAP] = sOwlStatuePauseItems[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] - 0xA4;
+        pauseCtx->cursorItem[PAUSE_MAP] = sOwlWarpPauseItems[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] - 0xA4;
         // Used as cursor vtxIndex
         pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 
