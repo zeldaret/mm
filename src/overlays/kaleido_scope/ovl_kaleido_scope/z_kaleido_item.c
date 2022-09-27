@@ -285,7 +285,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
                 gPlayerFormSlotRestrictions[(void)0, gSaveContext.save.playerForm][i]) {
                 if ((sEquipState == EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT) && (i == SLOT_ARROW_ICE)) {
                     // Possible bug:
-                    // Suppose to be `SLOT_BOW`, unchanged from OoT, instead increase size of ice arrow icon
+                    // Supposed to be `SLOT_BOW`, unchanged from OoT, instead increase size of ice arrow icon
                     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sMagicArrowEffectsR[pauseCtx->equipTargetItem - 0xB5],
                                     sMagicArrowEffectsG[pauseCtx->equipTargetItem - 0xB5],
                                     sMagicArrowEffectsB[pauseCtx->equipTargetItem - 0xB5], pauseCtx->alpha);
