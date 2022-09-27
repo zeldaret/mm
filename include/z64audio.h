@@ -55,6 +55,8 @@ typedef enum {
 
 #define AUDIO_RELOCATED_ADDRESS_START K0BASE
 
+#define REVERB_INDEX_NONE -1
+
 typedef enum {
     /* 0 */ REVERB_DATA_TYPE_SETTINGS, // Reverb Settings (Init)
     /* 1 */ REVERB_DATA_TYPE_DELAY, // Reverb Delay (numSamples)
@@ -229,6 +231,11 @@ typedef struct {
     /* 0x04 */ f32 tuning; // frequency scale factor
 } TunedSample; // size = 0x8
 
+/**
+ * Stores an entry of decompressed samples in a reverb ring buffer.
+ * By storing the sample in a ring buffer, the time it takes to loop
+ * around back to the same sample acts as a delay, leading to an echo effect.
+ */
 typedef struct {
     /* 0x00 */ s16 numSamplesAfterDownsampling; // never read
     /* 0x02 */ s16 numSamples; // never read

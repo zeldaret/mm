@@ -705,7 +705,8 @@ Acmd* AudioSynth_SaveReverbSamples(Acmd* cmd, SynthesisReverb* reverb, s16 updat
         if (1) {}
 
         downsampleRate = reverb->downsampleRate;
-        numSamples = 0xD0;
+        numSamples = 13 * SAMPLES_PER_FRAME;
+
         while (downsampleRate >= 2) {
             aInterl(cmd++, DMEM_WET_LEFT_CH, DMEM_WET_LEFT_CH, numSamples);
             aInterl(cmd++, DMEM_WET_RIGHT_CH, DMEM_WET_RIGHT_CH, numSamples);
@@ -749,12 +750,6 @@ Acmd* AudioSynth_SaveSubReverbSamples(Acmd* cmd, SynthesisReverb* reverb, s16 up
 /**
  * Process all samples embedded in a note. Every sample has numSamplesPerUpdate processed,
  * and each of those are mixed together into both DMEM_LEFT_CH and DMEM_RIGHT_CH
- *
- * @param aiBuf
- * @param numSamplesPerUpdate
- * @param cmd
- * @param updateIndex
- * @return Acmd*
  */
 Acmd* AudioSynth_ProcessSamples(s16* aiBuf, s32 numSamplesPerUpdate, Acmd* cmd, s32 updateIndex) {
     s32 size;
@@ -825,7 +820,7 @@ Acmd* AudioSynth_ProcessSamples(s16* aiBuf, s32 numSamplesPerUpdate, Acmd* cmd, 
             }
 
             if (subDelay != 0) {
-                if (reverb->mixReverbIndex != -1) {
+                if (reverb->mixReverbIndex != REVERB_INDEX_NONE) {
                     cmd = AudioSynth_MixOtherReverbIndex(cmd, reverb, updateIndex);
                 }
                 cmd = AudioSynth_SaveReverbSamples(cmd, reverb, updateIndex);
@@ -854,7 +849,7 @@ Acmd* AudioSynth_ProcessSamples(s16* aiBuf, s32 numSamplesPerUpdate, Acmd* cmd, 
             if (subDelay != 0) {
                 cmd = AudioSynth_SaveSubReverbSamples(cmd, reverb, updateIndex);
             } else {
-                if (reverb->mixReverbIndex != -1) {
+                if (reverb->mixReverbIndex != REVERB_INDEX_NONE) {
                     cmd = AudioSynth_MixOtherReverbIndex(cmd, reverb, updateIndex);
                 }
                 cmd = AudioSynth_SaveReverbSamples(cmd, reverb, updateIndex);
@@ -1234,7 +1229,7 @@ Acmd* AudioSynth_ProcessSample(s32 noteIndex, NoteSampleState* sampleState, Note
                         aSetBuffer(cmd++, 0, sampleDataDmemAddr + sampleDataChunkAlignPad,
                                    DMEM_UNCOMPRESSED_NOTE + dmemUncompressedAddrOffset2,
                                    numSamplesToDecode * SAMPLE_SIZE);
-                        aADPCMdec(cmd++, flags | 4, synthState->synthesisBuffers->adpcmState);
+                        aADPCMdec(cmd++, flags | A_ADPCM_SHORT, synthState->synthesisBuffers->adpcmState);
                         break;
 
                     case CODEC_S8:
@@ -1585,7 +1580,7 @@ Acmd* AudioSynth_ProcessEnvelope(Acmd* cmd, NoteSampleState* sampleState, NoteSy
 
 Acmd* AudioSynth_LoadWaveSamples(Acmd* cmd, NoteSampleState* sampleState, NoteSynthesisState* synthState,
                                  s32 numSamplesToLoad) {
-    s32 numSamplesAvail;
+    s32 numSamplesAvailable;
     s32 harmonicIndexCurAndPrev = sampleState->harmonicIndexCurAndPrev;
     s32 samplePosInt = synthState->samplePosInt;
     s32 numDuplicates;
@@ -1610,14 +1605,14 @@ Acmd* AudioSynth_LoadWaveSamples(Acmd* cmd, NoteSampleState* sampleState, NoteSy
         // Offset in the WAVE_SAMPLE_COUNT samples of gWaveSamples to start processing the wave for continuity
         samplePosInt = (u32)samplePosInt % WAVE_SAMPLE_COUNT;
         // Number of samples in the initial WAVE_SAMPLE_COUNT samples available to be used to process
-        numSamplesAvail = WAVE_SAMPLE_COUNT - samplePosInt;
+        numSamplesAvailable = WAVE_SAMPLE_COUNT - samplePosInt;
 
         // Require duplicates if there are more samples to load than available
-        if (numSamplesToLoad > numSamplesAvail) {
+        if (numSamplesToLoad > numSamplesAvailable) {
             // Duplicate (copy) the WAVE_SAMPLE_COUNT samples as many times as needed to reach numSamplesToLoad.
-            // (numSamplesToLoad - numSamplesAvail) is the number of samples missing.
+            // (numSamplesToLoad - numSamplesAvailable) is the number of samples missing.
             // Divide by WAVE_SAMPLE_COUNT, rounding up, to get the amount of duplicates
-            numDuplicates = ((numSamplesToLoad - numSamplesAvail + WAVE_SAMPLE_COUNT - 1) / WAVE_SAMPLE_COUNT);
+            numDuplicates = ((numSamplesToLoad - numSamplesAvailable + WAVE_SAMPLE_COUNT - 1) / WAVE_SAMPLE_COUNT);
             if (numDuplicates != 0) {
                 aDuplicate(cmd++, numDuplicates, DMEM_UNCOMPRESSED_NOTE,
                            DMEM_UNCOMPRESSED_NOTE + (WAVE_SAMPLE_COUNT * SAMPLE_SIZE));
