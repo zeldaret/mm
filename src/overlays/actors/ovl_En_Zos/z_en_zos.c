@@ -702,13 +702,13 @@ void EnZos_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (DECR(this->unk_2AE) == 0) {
-        this->unk_2AE = Rand_S16Offset(60, 60);
+    if (DECR(this->blinkTimer) == 0) {
+        this->blinkTimer = Rand_S16Offset(60, 60);
     }
 
-    this->unk_2AC = this->unk_2AE;
-    if (this->unk_2AC >= 3) {
-        this->unk_2AC = 0;
+    this->eyeIndex = this->blinkTimer;
+    if (this->eyeIndex >= 3) {
+        this->eyeIndex = 0;
     }
 }
 
@@ -743,7 +743,7 @@ void EnZos_Draw(Actor* thisx, PlayState* play) {
 
     gfx = POLY_OPA_DISP;
 
-    gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->unk_2AC]));
+    gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
 
     Matrix_Push();
     Matrix_RotateYS(this->actor.home.rot.y - this->actor.shape.rot.y, MTXMODE_APPLY);
