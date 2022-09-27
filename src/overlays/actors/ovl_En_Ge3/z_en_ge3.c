@@ -68,7 +68,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 void EnGe3_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnGe3* this = (EnGe3*)thisx;
+    EnGe3* this = THIS;
 
     ActorShape_Init(&this->picto.actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gGerudoRedSkel, NULL, this->jointTable, this->morphTable,
@@ -105,7 +105,7 @@ void EnGe3_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnGe3_Destroy(Actor* thisx, PlayState* play) {
-    EnGe3* this = (EnGe3*)thisx;
+    EnGe3* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -306,7 +306,7 @@ void EnGe3_AveilsChamberIdle(EnGe3* this, PlayState* play) {
 
 void EnGe3_UpdateColliderAndMove(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnGe3* this = (EnGe3*)thisx;
+    EnGe3* this = THIS;
 
     Collider_UpdateCylinder(&this->picto.actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -327,7 +327,7 @@ void EnGe3_Blink(EnGe3* this, PlayState* play) {
 }
 
 void EnGe3_Update(Actor* thisx, PlayState* play) {
-    EnGe3* this = (EnGe3*)thisx;
+    EnGe3* this = THIS;
 
     EnGe3_UpdateColliderAndMove(&this->picto.actor, play);
     this->actionFunc(this, play);
@@ -417,7 +417,7 @@ void EnGe3_Draw(Actor* thisx, PlayState* play) {
         gGerudoRedEyeClosedTex,
     };
     s32 pad;
-    EnGe3* this = (EnGe3*)thisx;
+    EnGe3* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
 
