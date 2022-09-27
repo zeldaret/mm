@@ -15606,7 +15606,7 @@
     0x80BBC6F0:("D_80BBC6F0","UNK_TYPE1","",0x1),
     0x80BBC71C:("D_80BBC71C","UNK_TYPE1","",0x1),
     0x80BBC750:("D_80BBC750","UNK_TYPE1","",0x1),
-    0x80BBC75C:("D_80BBC75C","UNK_TYPE1","",0x1),
+    0x80BBC75C:("sEyeTextures","UNK_TYPE1","",0x1),
     0x80BBC770:("D_80BBC770","f32","",0x4),
     0x80BBC774:("jtbl_80BBC774","UNK_PTR","",0x4),
     0x80BBF800:("En_S_Goro_InitVars","ActorInit","",0x20),

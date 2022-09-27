@@ -15387,7 +15387,7 @@
     0x80BBA930:("func_80BBA930",),
     0x80BBACA0:("EnZos_Init",),
     0x80BBAE60:("EnZos_Destroy",),
-    0x80BBAE84:("func_80BBAE84",),
+    0x80BBAE84:("EnZos_ChangeAnim",),
     0x80BBAF5C:("func_80BBAF5C",),
     0x80BBAFFC:("func_80BBAFFC",),
     0x80BBB0D4:("func_80BBB0D4",),
