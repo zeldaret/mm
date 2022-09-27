@@ -355,8 +355,8 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
     u16 cursorSlot;
     u8 magicArrowIndex;
     s16 cursorPoint;
-    s16 cursorX;
-    s16 cursorY;
+    s16 cursorXIndex;
+    s16 cursorYIndex;
     s16 oldCursorPoint;
     s16 moveCursorResult;
     s16 pad2;
@@ -376,37 +376,37 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
             // cursor is currently on a slot
             pauseCtx->cursorColorSet = 2;
 
-            if (ABS_ALT(pauseCtx->stickRelX) > 30) {
+            if (ABS_ALT(pauseCtx->stickAdjX) > 30) {
                 cursorPoint = pauseCtx->cursorPoint[PAUSE_ITEM];
-                cursorX = pauseCtx->cursorX[PAUSE_ITEM];
-                cursorY = pauseCtx->cursorY[PAUSE_ITEM];
+                cursorXIndex = pauseCtx->cursorXIndex[PAUSE_ITEM];
+                cursorYIndex = pauseCtx->cursorYIndex[PAUSE_ITEM];
 
                 // Search for slot to move to
                 while (moveCursorResult == 0) {
-                    if (pauseCtx->stickRelX < -30) {
+                    if (pauseCtx->stickAdjX < -30) {
                         // move cursor left
                         pauseCtx->unk_298 = 4.0f;
-                        if (pauseCtx->cursorX[PAUSE_ITEM] != 0) {
-                            pauseCtx->cursorX[PAUSE_ITEM]--;
+                        if (pauseCtx->cursorXIndex[PAUSE_ITEM] != 0) {
+                            pauseCtx->cursorXIndex[PAUSE_ITEM]--;
                             pauseCtx->cursorPoint[PAUSE_ITEM]--;
                             moveCursorResult = 1;
                         } else {
-                            pauseCtx->cursorX[PAUSE_ITEM] = cursorX;
-                            pauseCtx->cursorY[PAUSE_ITEM]++;
+                            pauseCtx->cursorXIndex[PAUSE_ITEM] = cursorXIndex;
+                            pauseCtx->cursorYIndex[PAUSE_ITEM]++;
 
-                            if (pauseCtx->cursorY[PAUSE_ITEM] >= 4) {
-                                pauseCtx->cursorY[PAUSE_ITEM] = 0;
+                            if (pauseCtx->cursorYIndex[PAUSE_ITEM] >= 4) {
+                                pauseCtx->cursorYIndex[PAUSE_ITEM] = 0;
                             }
 
                             pauseCtx->cursorPoint[PAUSE_ITEM] =
-                                pauseCtx->cursorX[PAUSE_ITEM] + (pauseCtx->cursorY[PAUSE_ITEM] * 6);
+                                pauseCtx->cursorXIndex[PAUSE_ITEM] + (pauseCtx->cursorYIndex[PAUSE_ITEM] * 6);
 
                             if (pauseCtx->cursorPoint[PAUSE_ITEM] >= 24) {
-                                pauseCtx->cursorPoint[PAUSE_ITEM] = pauseCtx->cursorX[PAUSE_ITEM];
+                                pauseCtx->cursorPoint[PAUSE_ITEM] = pauseCtx->cursorXIndex[PAUSE_ITEM];
                             }
 
-                            if (cursorY == pauseCtx->cursorY[PAUSE_ITEM]) {
-                                pauseCtx->cursorX[PAUSE_ITEM] = cursorX;
+                            if (cursorYIndex == pauseCtx->cursorYIndex[PAUSE_ITEM]) {
+                                pauseCtx->cursorXIndex[PAUSE_ITEM] = cursorXIndex;
                                 pauseCtx->cursorPoint[PAUSE_ITEM] = cursorPoint;
 
                                 KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
@@ -414,30 +414,30 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                                 moveCursorResult = 2;
                             }
                         }
-                    } else if (pauseCtx->stickRelX > 30) {
+                    } else if (pauseCtx->stickAdjX > 30) {
                         // move cursor right
                         pauseCtx->unk_298 = 4.0f;
-                        if (pauseCtx->cursorX[PAUSE_ITEM] <= 4) {
-                            pauseCtx->cursorX[PAUSE_ITEM]++;
+                        if (pauseCtx->cursorXIndex[PAUSE_ITEM] <= 4) {
+                            pauseCtx->cursorXIndex[PAUSE_ITEM]++;
                             pauseCtx->cursorPoint[PAUSE_ITEM]++;
                             moveCursorResult = 1;
                         } else {
-                            pauseCtx->cursorX[PAUSE_ITEM] = cursorX;
-                            pauseCtx->cursorY[PAUSE_ITEM]++;
+                            pauseCtx->cursorXIndex[PAUSE_ITEM] = cursorXIndex;
+                            pauseCtx->cursorYIndex[PAUSE_ITEM]++;
 
-                            if (pauseCtx->cursorY[PAUSE_ITEM] >= 4) {
-                                pauseCtx->cursorY[PAUSE_ITEM] = 0;
+                            if (pauseCtx->cursorYIndex[PAUSE_ITEM] >= 4) {
+                                pauseCtx->cursorYIndex[PAUSE_ITEM] = 0;
                             }
 
                             pauseCtx->cursorPoint[PAUSE_ITEM] =
-                                pauseCtx->cursorX[PAUSE_ITEM] + (pauseCtx->cursorY[PAUSE_ITEM] * 6);
+                                pauseCtx->cursorXIndex[PAUSE_ITEM] + (pauseCtx->cursorYIndex[PAUSE_ITEM] * 6);
 
                             if (pauseCtx->cursorPoint[PAUSE_ITEM] >= 24) {
-                                pauseCtx->cursorPoint[PAUSE_ITEM] = pauseCtx->cursorX[PAUSE_ITEM];
+                                pauseCtx->cursorPoint[PAUSE_ITEM] = pauseCtx->cursorXIndex[PAUSE_ITEM];
                             }
 
-                            if (cursorY == pauseCtx->cursorY[PAUSE_ITEM]) {
-                                pauseCtx->cursorX[PAUSE_ITEM] = cursorX;
+                            if (cursorYIndex == pauseCtx->cursorYIndex[PAUSE_ITEM]) {
+                                pauseCtx->cursorXIndex[PAUSE_ITEM] = cursorXIndex;
                                 pauseCtx->cursorPoint[PAUSE_ITEM] = cursorPoint;
 
                                 KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_RIGHT);
@@ -453,10 +453,10 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                 }
             }
         } else if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
-            if (pauseCtx->stickRelX > 30) {
+            if (pauseCtx->stickAdjX > 30) {
                 func_80821A04(play);
-                cursorY = 0;
-                cursorX = 0;
+                cursorYIndex = 0;
+                cursorXIndex = 0;
                 cursorPoint = 0; // top row, left column (SLOT_OCARINA)
 
                 // Search for slot to move to
@@ -464,24 +464,24 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                     // Check if current cursor has an item in its slot
                     if (gSaveContext.save.inventory.items[cursorPoint] != ITEM_NONE) {
                         pauseCtx->cursorPoint[PAUSE_ITEM] = cursorPoint;
-                        pauseCtx->cursorX[PAUSE_ITEM] = cursorX;
-                        pauseCtx->cursorY[PAUSE_ITEM] = cursorY;
+                        pauseCtx->cursorXIndex[PAUSE_ITEM] = cursorXIndex;
+                        pauseCtx->cursorYIndex[PAUSE_ITEM] = cursorYIndex;
                         moveCursorResult = 1;
                         break;
                     }
 
                     // move 1 row down and retry
-                    cursorY++;
+                    cursorYIndex++;
                     cursorPoint += 6;
-                    if (cursorY < 4) {
+                    if (cursorYIndex < 4) {
                         continue;
                     }
 
                     // move 1 column right and retry
-                    cursorY = 0;
-                    cursorPoint = cursorX + 1;
-                    cursorX = cursorPoint;
-                    if (cursorX < 6) {
+                    cursorYIndex = 0;
+                    cursorPoint = cursorXIndex + 1;
+                    cursorXIndex = cursorPoint;
+                    if (cursorXIndex < 6) {
                         continue;
                     }
 
@@ -491,35 +491,35 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                 }
             }
         } else { // PAUSE_CURSOR_PAGE_RIGHT
-            if (pauseCtx->stickRelX < -30) {
+            if (pauseCtx->stickAdjX < -30) {
                 func_80821A04(play);
-                cursorX = 5;
+                cursorXIndex = 5;
                 cursorPoint = 5; // top row, right columne (SLOT_TRADE_DEED)
-                cursorY = 0;
+                cursorYIndex = 0;
 
                 // Search for slot to move to
                 while (true) {
                     // Check if current cursor has an item in its slot
                     if (gSaveContext.save.inventory.items[cursorPoint] != ITEM_NONE) {
                         pauseCtx->cursorPoint[PAUSE_ITEM] = cursorPoint;
-                        pauseCtx->cursorX[PAUSE_ITEM] = cursorX;
-                        pauseCtx->cursorY[PAUSE_ITEM] = cursorY;
+                        pauseCtx->cursorXIndex[PAUSE_ITEM] = cursorXIndex;
+                        pauseCtx->cursorYIndex[PAUSE_ITEM] = cursorYIndex;
                         moveCursorResult = 1;
                         break;
                     }
 
                     // move 1 row down and retry
-                    cursorY++;
+                    cursorYIndex++;
                     cursorPoint += 6;
-                    if (cursorY < 4) {
+                    if (cursorYIndex < 4) {
                         continue;
                     }
 
                     // move 1 column left and retry
-                    cursorY = 0;
-                    cursorPoint = cursorX - 1;
-                    cursorX = cursorPoint;
-                    if (cursorX >= 0) {
+                    cursorYIndex = 0;
+                    cursorPoint = cursorXIndex - 1;
+                    cursorXIndex = cursorPoint;
+                    if (cursorXIndex >= 0) {
                         continue;
                     }
 
@@ -532,35 +532,35 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
 
         if (pauseCtx->cursorSpecialPos == 0) {
             // move cursor up/down
-            if (ABS_ALT(pauseCtx->stickRelY) > 30) {
+            if (ABS_ALT(pauseCtx->stickAdjY) > 30) {
                 moveCursorResult = 0;
 
                 cursorPoint = pauseCtx->cursorPoint[PAUSE_ITEM];
-                cursorY = pauseCtx->cursorY[PAUSE_ITEM];
+                cursorYIndex = pauseCtx->cursorYIndex[PAUSE_ITEM];
 
                 while (moveCursorResult == 0) {
-                    if (pauseCtx->stickRelY > 30) {
+                    if (pauseCtx->stickAdjY > 30) {
                         // move cursor up
                         moveCursorResult = 2;
-                        if (pauseCtx->cursorY[PAUSE_ITEM] != 0) {
-                            pauseCtx->cursorY[PAUSE_ITEM]--;
+                        if (pauseCtx->cursorYIndex[PAUSE_ITEM] != 0) {
+                            pauseCtx->cursorYIndex[PAUSE_ITEM]--;
                             pauseCtx->unk_298 = 4.0f;
                             pauseCtx->cursorPoint[PAUSE_ITEM] -= 6;
                             moveCursorResult = 1;
                         } else {
-                            pauseCtx->cursorY[PAUSE_ITEM] = cursorY;
+                            pauseCtx->cursorYIndex[PAUSE_ITEM] = cursorYIndex;
                             pauseCtx->cursorPoint[PAUSE_ITEM] = cursorPoint;
                         }
-                    } else if (pauseCtx->stickRelY < -30) {
+                    } else if (pauseCtx->stickAdjY < -30) {
                         // move cursor down
                         moveCursorResult = 2;
-                        if (pauseCtx->cursorY[PAUSE_ITEM] < 3) {
-                            pauseCtx->cursorY[PAUSE_ITEM]++;
+                        if (pauseCtx->cursorYIndex[PAUSE_ITEM] < 3) {
+                            pauseCtx->cursorYIndex[PAUSE_ITEM]++;
                             pauseCtx->unk_298 = 4.0f;
                             pauseCtx->cursorPoint[PAUSE_ITEM] += 6;
                             moveCursorResult = 1;
                         } else {
-                            pauseCtx->cursorY[PAUSE_ITEM] = cursorY;
+                            pauseCtx->cursorYIndex[PAUSE_ITEM] = cursorYIndex;
                             pauseCtx->cursorPoint[PAUSE_ITEM] = cursorPoint;
                         }
                     }
@@ -683,7 +683,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                            (msgCtx->msgLength == 0)) {
                     // Give description on item through a message box
                     pauseCtx->itemDescriptionOn = true;
-                    if (pauseCtx->cursorY[PAUSE_ITEM] < 2) {
+                    if (pauseCtx->cursorYIndex[PAUSE_ITEM] < 2) {
                         func_801514B0(play, 0x1700 + pauseCtx->cursorItem[PAUSE_ITEM], 3);
                     } else {
                         func_801514B0(play, 0x1700 + pauseCtx->cursorItem[PAUSE_ITEM], 1);

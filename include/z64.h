@@ -440,14 +440,13 @@ typedef struct {
     /* 0x220 */ f32 unk_220;
     /* 0x224 */ u16 alpha;
     /* 0x226 */ s16 offsetY;
-    /* 0x228 */ s32 unk_228;
-    /* 0x22C */ s32 unk_22C;
-    /* 0x230 */ s32 stickRelX;
-    /* 0x234 */ s32 stickRelY;
+    /* 0x228 */ UNK_TYPE1 unk_228[0x8];
+    /* 0x230 */ s32 stickAdjX;
+    /* 0x234 */ s32 stickAdjY;
     /* 0x238 */ s16 cursorPoint[5];
-    /* 0x242 */ s16 cursorX[5];
-    /* 0x24C */ s16 cursorY[5];
-    /* 0x256 */ s16 unk_256;
+    /* 0x242 */ s16 cursorXIndex[5];
+    /* 0x24C */ s16 cursorYIndex[5];
+    /* 0x256 */ s16 unk_256; // Uses DungeonItem enum
     /* 0x258 */ s16 cursorSpecialPos;
     /* 0x25A */ s16 pageSwitchTimer;
     /* 0x25C */ u16 unk_25C;
@@ -480,8 +479,8 @@ typedef struct {
     /* 0x2BA */ s16 equipAnimScale; // scale of item icon while moving being equipped to c-button
     /* 0x2BC */ s16 equipAnimShrinkRate; // rate the scale is shrinking for the item icon while moving being equipped to c-button
     /* 0x2BE */ s16 unk_2BE[5];
-    /* 0x2C8 */ u16 unk_2C8;
-    /* 0x2CA */ s16 unk_2CA;
+    /* 0x2C8 */ u16 unk_2C8; // Uses PauseMenuPage enum for Owl Warp. Never set.
+    /* 0x2CA */ s16 unk_2CA; // Uses OwlStatueId enum for Owl Warp. Never set.
 } PauseContext; // size = 0x2D0
 
 typedef struct {
