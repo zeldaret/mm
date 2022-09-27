@@ -671,7 +671,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         }
 
         // Loop over OwlStatueId (i), unused vtxIndex (j), unused (k)
-        for (i = 0, j = 0; i < OWL_STATUE_MAX; i++, k++, j += 4) {
+        for (i = 0, j = 0; i < OWL_WARP_ENTRANCE; i++, k++, j += 4) {
             if (pauseCtx->worldMapPoints[i]) {
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[164 + i * 4], 4, 0);
                 gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
@@ -752,16 +752,16 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 }
 
 u16 sOwlStatuePauseItems[] = {
-    0xAF, // OWL_STATUE_GREAT_BAY_COAST
-    0xB3, // OWL_STATUE_ZORA_CAPE
-    0xAA, // OWL_STATUE_SNOWHEAD
-    0xB1, // OWL_STATUE_MOUNTAIN_VILLAGE
-    0xA9, // OWL_STATUE_CLOCK_TOWN
-    0xB2, // OWL_STATUE_MILK_ROAD
-    0xA8, // OWL_STATUE_WOODFALL
-    0xB0, // OWL_STATUE_SOUTHERN_SWAMP
-    0xAC, // OWL_STATUE_IKANA_CANYON
-    0xAE, // OWL_STATUE_STONE_TOWER
+    0xAF, // OWL_WARP_GREAT_BAY_COAST
+    0xB3, // OWL_WARP_ZORA_CAPE
+    0xAA, // OWL_WARP_SNOWHEAD
+    0xB1, // OWL_WARP_MOUNTAIN_VILLAGE
+    0xA9, // OWL_WARP_CLOCK_TOWN
+    0xB2, // OWL_WARP_MILK_ROAD
+    0xA8, // OWL_WARP_WOODFALL
+    0xB0, // OWL_WARP_SOUTHERN_SWAMP
+    0xAC, // OWL_WARP_IKANA_CANYON
+    0xAE, // OWL_WARP_STONE_TOWER
 };
 
 void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
@@ -889,8 +889,8 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             sStickAdjTimer = 0;
             do {
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP]++;
-                if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] > OWL_STATUE_STONE_TOWER) {
-                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = OWL_STATUE_GREAT_BAY_COAST;
+                if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] > OWL_WARP_STONE_TOWER) {
+                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = OWL_WARP_GREAT_BAY_COAST;
                 }
             } while (!pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]]);
         } else if (pauseCtx->stickAdjX < -30) {
@@ -898,8 +898,8 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             sStickAdjTimer = 0;
             do {
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
-                if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] < OWL_STATUE_GREAT_BAY_COAST) {
-                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = OWL_STATUE_STONE_TOWER;
+                if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] < OWL_WARP_GREAT_BAY_COAST) {
+                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = OWL_WARP_STONE_TOWER;
                 }
             } while (!pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]]);
         } else {
