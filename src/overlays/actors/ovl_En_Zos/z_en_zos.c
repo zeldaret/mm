@@ -41,12 +41,13 @@ typedef enum {
     /*  4 */ EN_ZOS_ANIM_TALK_LOOK_DOWN,
     /*  5 */ EN_ZOS_ANIM_TALK_ARMS_OUT,
     /*  6 */ EN_ZOS_ANIM_TALK_HANDS_ON_HIPS,
-    /*  7 */ EN_ZOS_ANIM_PLAY_RIGHT_1,
-    /*  8 */ EN_ZOS_ANIM_PLAY_LEFT_1,
+    /*  7 */ EN_ZOS_ANIM_PLAY_RIGHT,
+    /*  8 */ EN_ZOS_ANIM_PLAY_LEFT,
     /*  9 */ EN_ZOS_ANIM_INSPIRED,
     /* 10 */ EN_ZOS_ANIM_SLOW_PLAY,
-    /* 11 */ EN_ZOS_ANIM_PLAY_RIGHT_2,
-    /* 12 */ EN_ZOS_ANIM_PLAY_LEFT_2,
+    /* 11 */ EN_ZOS_ANIM_PLAY_RIGHT_SHORTENED,
+    /* 12 */ EN_ZOS_ANIM_PLAY_LEFT_SHORTENED,
+    /* 13 */ EN_ZOS_ANIM_MAX
 } EnZosAnimation;
 
 const ActorInit En_Zos_InitVars = {
@@ -113,7 +114,7 @@ void EnZos_Init(Actor* thisx, PlayState* play) {
 
         case ENZOS_F_2:
             this->actionFunc = func_80BBC37C;
-            EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_RIGHT_1, ANIMMODE_ONCE);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_RIGHT, ANIMMODE_ONCE);
             this->unk_2BC = -1;
             this->unk_2B6 |= 0x40;
             break;
@@ -145,8 +146,9 @@ void EnZos_ChangeAnim(EnZos* this, s16 animIndex, u8 animMode) {
     };
     f32 endFrame;
 
-    if ((animIndex != this->animIndex) && (animIndex >= 0) && (animIndex < 13)) {
-        if (animIndex > 10) {
+    if ((animIndex != this->animIndex) && (animIndex >= EN_ZOS_ANIM_LEAN_ON_KEYBOARD) &&
+        (animIndex < EN_ZOS_ANIM_MAX)) {
+        if (animIndex > EN_ZOS_ANIM_SLOW_PLAY) {
             endFrame = 29.0f;
         } else {
             endFrame = Animation_GetLastFrame(sAnimations[animIndex]);
@@ -171,19 +173,19 @@ s32 func_80BBAFFC(EnZos* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         switch ((s16)Rand_ZeroFloat(4.0f)) {
             case 0:
-                EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_RIGHT_1, ANIMMODE_ONCE);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_RIGHT, ANIMMODE_ONCE);
                 break;
 
             case 1:
-                EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_LEFT_1, ANIMMODE_ONCE);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_LEFT, ANIMMODE_ONCE);
                 break;
 
             case 2:
-                EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_RIGHT_2, ANIMMODE_ONCE);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_RIGHT_SHORTENED, ANIMMODE_ONCE);
                 break;
 
             default:
-                EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_LEFT_2, ANIMMODE_ONCE);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_LEFT_SHORTENED, ANIMMODE_ONCE);
                 break;
         }
         return true;
@@ -646,7 +648,7 @@ void func_80BBC24C(EnZos* this, PlayState* play) {
     func_80BBB0D4(this, play);
     if (gSaveContext.save.weekEventReg[79] & 1) {
         this->actionFunc = func_80BBC22C;
-        EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_RIGHT_1, ANIMMODE_ONCE);
+        EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_RIGHT, ANIMMODE_ONCE);
     }
 }
 
