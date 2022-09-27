@@ -1,7 +1,7 @@
 /*
  * File: z_eff_ss_solder_srch_ball.c
  * Overlay: ovl_Effect_Ss_Solder_Srch_Ball
- * Description:
+ * Description: Vision sphere
  */
 
 #include "z_eff_ss_solder_srch_ball.h"
@@ -51,14 +51,14 @@ void EffectSsSolderSrchBall_Draw(PlayState* play, u32 index, EffectSs* this) {
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB10);
+    gSPDisplayList(POLY_XLU_DISP++, gSunSparkleMaterialDL);
     gDPPipeSync(POLY_XLU_DISP++);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 255, 255);
     Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
     Matrix_RotateZF(DEGF_TO_RADF(20.0f * play->state.frames), MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB58);
+    gSPDisplayList(POLY_XLU_DISP++, gSunSparkleModelDL);
 
     CLOSE_DISPS(gfxCtx);
 }
