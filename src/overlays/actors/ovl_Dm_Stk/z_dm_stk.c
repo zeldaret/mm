@@ -1089,7 +1089,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
             CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
         } else if ((play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 0)) {
-            if (!(play->actorCtx.unk5 & 2)) {
+            if (!(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
                 Actor_MarkForDeath(&this->actor);
             }
 
@@ -1632,7 +1632,7 @@ void DmStk_UpdateCutscenes(DmStk* this, PlayState* play) {
                 this->alpha = 0;
                 this->fadeOutState = SK_FADE_OUT_STATE_NONE;
                 gSaveContext.save.weekEventReg[12] |= 4;
-                if (!(play->actorCtx.unk5 & 2)) {
+                if (!(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
                     Actor_MarkForDeath(&this->actor);
                 } else {
                     this->shouldDraw = false;
@@ -1813,9 +1813,10 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
 
         // This code is responsible for making in-game time pass while using the telescope in the Astral Observatory.
         // Skull Kid is always loaded in the scene, even if he isn't visible, hence why time always passes.
-        if ((play->actorCtx.unk5 & 2) && (play->msgCtx.msgMode != 0) && (play->msgCtx.currentTextId == 0x5E6) &&
-            !FrameAdvance_IsEnabled(&play->state) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
-            (ActorCutscene_GetCurrentIndex() == -1) && (play->csCtx.state == 0)) {
+        if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != 0) &&
+            (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
+            (play->transitionTrigger == TRANS_TRIGGER_OFF) && (ActorCutscene_GetCurrentIndex() == -1) &&
+            (play->csCtx.state == 0)) {
             gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
             if (REG(15) != 0) {
                 gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.daySpeed);
