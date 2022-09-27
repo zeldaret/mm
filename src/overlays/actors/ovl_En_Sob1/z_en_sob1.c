@@ -273,7 +273,6 @@ u16 EnSob1_GetWelcome(EnSob1* this, PlayState* play) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_57_10);
                     return 0x12CE;
                 }
-                break;
 
             case PLAYER_FORM_DEKU:
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_20)) {
@@ -282,7 +281,6 @@ u16 EnSob1_GetWelcome(EnSob1* this, PlayState* play) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_57_20);
                     return 0x12D0;
                 }
-                break;
 
             case PLAYER_FORM_GORON:
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_40)) {
@@ -291,7 +289,6 @@ u16 EnSob1_GetWelcome(EnSob1* this, PlayState* play) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_57_40);
                     return 0x12D2;
                 }
-                break;
 
             case PLAYER_FORM_ZORA:
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_80)) {
@@ -300,7 +297,6 @@ u16 EnSob1_GetWelcome(EnSob1* this, PlayState* play) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_57_80);
                     return 0x12D4;
                 }
-                break;
 
             default:
                 return 0x12CE;

@@ -558,7 +558,6 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_19_80 PACK_WEEKEVENTREG_FLAG(19, 0x80)
 #define WEEKEVENTREG_20_01 PACK_WEEKEVENTREG_FLAG(20, 0x01)
 
-// Unconfirmed: "Woodfall Temple Prison Entrance raised / Water cleansed"
 // woodfall temple purification cutscene watched
 #define WEEKEVENTREG_20_02 PACK_WEEKEVENTREG_FLAG(20, 0x02)
 
@@ -1338,7 +1337,9 @@ typedef enum SunsSongState {
 #define EVENTINF_26 0x26
 #define EVENTINF_27 0x27
 #define EVENTINF_30 0x30
+// EVENTINF_31 is used to track if Player is within range of the wall
 #define EVENTINF_31 0x31
+// EVENTINF_32 is used to track if Player has played the notes of the wall
 #define EVENTINF_32 0x32
 #define EVENTINF_33 0x33
 #define EVENTINF_34 0x34
