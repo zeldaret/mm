@@ -274,7 +274,7 @@ u8 Player_MaskIdToItemId(s32 maskIdMinusOne) {
     return sMaskItemIds[maskIdMinusOne];
 }
 
-u8 Player_GetCurMaskItemId(PlayState* play) {
+s32 Player_GetCurMaskItemId(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->currentMask != PLAYER_MASK_NONE) {
