@@ -74,11 +74,11 @@ void BgDkjailIvy_IvyCutEffects(BgDkjailIvy* this, PlayState* play) {
     Vec3f pos;
     Vec3f vel;
     Vec3f accel;
-    s16 i2;
+    s16 angle;
 
     Matrix_RotateYS(this->dyna.actor.home.rot.y, MTXMODE_NEW);
 
-    for (i = 0, i2 = 0; i < 50; i++, i2 += 0x4e20) {
+    for (i = 0, angle = 0; i < 50; i++, angle += 0x4e20) {
         spD4.y = (i * (90.0f / 49.0f)) + 2.0f;
         if (spD4.y < 45.0f) {
             phi_fs0 = ((1.0f / 180.0f) * spD4.y) + 0.75f;
@@ -88,7 +88,7 @@ void BgDkjailIvy_IvyCutEffects(BgDkjailIvy* this, PlayState* play) {
             phi_fs0 = ((-1.0f / 30.0f) * spD4.y) + 3.75f;
         }
 
-        spD4.x = Math_SinS(i2) * 40.0f * phi_fs0;
+        spD4.x = Math_SinS(angle) * 40.0f * phi_fs0;
         spD4.z = (Rand_ZeroOne() * 6.0f) - 3.0f;
 
         Matrix_MultVec3f(&spD4, &pos);
