@@ -227,12 +227,12 @@ typedef struct FileSelectState {
     /* 0x2450A */ s16 screenFillAlpha;
     /* 0x2450C */ f32 windowRot;
     /* 0x24510 */ s16 kbdButton;
-    /* 0x24512 */ s16 unk_24512;
+    /* 0x24512 */ s16 charPage;
     /* 0x24514 */ s16 unk_24514;
     /* 0x24516 */ s16 charIndex;
     /* 0x24518 */ s16 kbdX;
     /* 0x2451A */ s16 kbdY;
-    /* 0x2451C */ s16 unk_2451C;
+    /* 0x2451C */ s16 newFileNameCharCount;
     /* 0x2451E */ s16 unk_2451E[5];
     /* 0x24528 */ s16 highlightTimer;
     /* 0x2452A */ s16 unk_2452A;
@@ -248,6 +248,7 @@ typedef struct FileSelectState {
 void FileSelect_Init(GameState* thisx);
 void FileSelect_Destroy(GameState* thisx);
 
-void FileSelect_DrawTexQuadI4(GraphicsContext* gfxCtx, TexturePtr texture, s16 vtx);
+void FileSelect_PulsateCursor(GameState* thisx);
+void FileSelect_DrawTexQuadI4(GraphicsContext* gfxCtx, TexturePtr texture, s16 point);
 
 #endif

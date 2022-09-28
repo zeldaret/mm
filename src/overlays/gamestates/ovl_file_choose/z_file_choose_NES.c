@@ -244,15 +244,15 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                     play_sound(NA_SE_SY_FSEL_DECIDE_L);
                     this->configMode = CM_ROTATE_TO_NAME_ENTRY;
                     this->kbdButton = 99;
-                    this->unk_24512 = 0;
+                    this->charPage = 0;
                     if (gSaveContext.options.language != 0) {
-                        this->unk_24512 = 2;
+                        this->charPage = 2;
                     }
                     this->kbdX = 0;
                     this->kbdY = 0;
                     this->charIndex = 0;
                     this->unk_24514 = 0;
-                    this->unk_2451C = 0;
+                    this->newFileNameCharCount = 0;
                     this->nameEntryBoxPosX = 120;
                     this->nameEntryBoxAlpha = 0;
                     Lib_MemCpy(&this->playerName[this->buttonIndex], &sEmptyName, 8);
@@ -268,15 +268,15 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                 play_sound(NA_SE_SY_FSEL_DECIDE_L);
                 this->configMode = CM_ROTATE_TO_NAME_ENTRY;
                 this->kbdButton = 99;
-                this->unk_24512 = 0;
+                this->charPage = 0;
                 if (gSaveContext.options.language != 0) {
-                    this->unk_24512 = 2;
+                    this->charPage = 2;
                 }
                 this->kbdX = 0;
                 this->kbdY = 0;
                 this->charIndex = 0;
                 this->unk_24514 = 0;
-                this->unk_2451C = 0;
+                this->newFileNameCharCount = 0;
                 this->nameEntryBoxPosX = 120;
                 this->nameEntryBoxAlpha = 0;
                 Lib_MemCpy(&this->playerName[this->buttonIndex], &sEmptyName, 8);
@@ -304,7 +304,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                 this->kbdX = 0;
                 this->kbdY = 0;
                 this->unk_24514 = 0;
-                this->unk_2451C = 0;
+                this->newFileNameCharCount = 0;
                 this->nameEntryBoxPosX = 120;
             }
             this->actionTimer = 4;
@@ -551,7 +551,8 @@ s16 sCursorAlphaTargets[] = { 70, 200 };
 /**
  * Updates the alpha of the cursor to make it pulsate.
  */
-void FileSelect_PulsateCursor(FileSelectState* this) {
+void FileSelect_PulsateCursor(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
     s32 step = ABS_ALT(this->highlightColor[3] - sCursorAlphaTargets[this->highlightPulseDir]) / this->highlightTimer;
 
     if (this->highlightColor[3] >= sCursorAlphaTargets[this->highlightPulseDir]) {
@@ -2600,7 +2601,7 @@ void FileSelect_Main(GameState* thisx) {
 
     this->emptyFileTextAlpha = 0;
 
-    FileSelect_PulsateCursor(this);
+    FileSelect_PulsateCursor(&this->state);
     gFileSelectUpdateFuncs[this->menuMode](&this->state);
     FileSelect_UpdateAndDrawSkybox(this);
     gFileSelectDrawFuncs[this->menuMode](&this->state);
