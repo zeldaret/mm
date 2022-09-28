@@ -96,18 +96,18 @@ Gfx* D_80BD52E0[] = {
     object_ikana_obj_DL_000048,
 };
 
-#ifdef NON_MATCHING
 void func_80BD4720(BgIkanaBombwall* this, PlayState* play) {
     s32 i;
-    Vec3f spE0;
-    Vec3f spD4;
-    Vec3f spC8;
-    Vec3f spBC;
+    Vec3f mtxPos;
+    Vec3f mtxVel;
+    Vec3f pos;
+    Vec3f vel;
     f32 temp_fs0;
     f32 phi_fs1;
+    s16 scale;
     s16 phi_s0;
-    s16 temp;
     s16 phi_t0;
+    s16 gravity;
 
     Matrix_Push();
     Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
@@ -119,27 +119,28 @@ void func_80BD4720(BgIkanaBombwall* this, PlayState* play) {
         if (temp_fs0 > 75.0f) {
             temp_fs0 -= 150.0f;
         }
-        spC8.x = temp_fs0;
 
+        pos.x = temp_fs0;
         phi_fs1 += 5;
-        spC8.y = phi_fs1;
+        pos.y = phi_fs1;
+        pos.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
 
-        spC8.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
+        vel.x = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (temp_fs0 * 0.053333335f);
+        vel.y = (Rand_ZeroOne() * 7.0f) - 2.0f;
+        vel.z = (Rand_ZeroOne() * 4.0f) - 2.0f;
 
-        spBC.x = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (temp_fs0 * 0.053333335f);
-        spBC.y = (Rand_ZeroOne() * 7.0f) - 2.0f;
-        spBC.z = (Rand_ZeroOne() * 4.0f) - 2.0f;
+        Matrix_MultVec3f(&pos, &mtxPos);
+        Matrix_MultVec3f(&vel, &mtxVel);
 
-        Matrix_MultVec3f(&spC8, &spE0);
-        Matrix_MultVec3f(&spBC, &spD4);
+        mtxPos.x += this->dyna.actor.world.pos.x;
+        mtxPos.y += this->dyna.actor.world.pos.y;
+        mtxPos.z += this->dyna.actor.world.pos.z;
 
-        spE0.x += this->dyna.actor.world.pos.x;
-        spE0.y += this->dyna.actor.world.pos.y;
-        spE0.z += this->dyna.actor.world.pos.z;
+        if (1) {}
 
         if ((i & 3) == 0) {
             phi_s0 = 32;
-            func_800BBFB0(play, &spE0, 50.0f, 2, 100, 120, 1);
+            func_800BBFB0(play, &mtxPos, 50.0f, 2, 100, 120, 1);
         } else {
             phi_s0 = 64;
         }
@@ -151,22 +152,21 @@ void func_80BD4720(BgIkanaBombwall* this, PlayState* play) {
             phi_t0 = 0;
         }
 
-        if (D_80BD52C8[i & 3] >= 16) {
-            temp = -550;
+        scale = D_80BD52C8[i & 3];
+    fake_label:;
+
+        if (scale >= 16) {
+            gravity = -550;
         } else {
-            temp = -450;
+            gravity = -450;
         }
 
-        EffectSsKakera_Spawn(play, &spE0, &spD4, &spE0, temp, phi_s0, 30, 0, 0, D_80BD52C8[i & 3], phi_t0, 0, 50, -1,
+        EffectSsKakera_Spawn(play, &mtxPos, &mtxVel, &mtxPos, gravity, phi_s0, 30, 0, 0, scale, phi_t0, 0, 50, -1,
                              OBJECT_IKANA_OBJ, object_ikana_obj_DL_000288);
     }
 
     Matrix_Pop();
 }
-#else
-void func_80BD4720(BgIkanaBombwall* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall/func_80BD4720.s")
-#endif
 
 void func_80BD4A14(BgIkanaBombwall* this, PlayState* play) {
     s32 i;
