@@ -4405,7 +4405,7 @@ s32 WaterBox_GetSurfaceImpl(PlayState* play, CollisionContext* colCtx, f32 x, f3
         for (curWaterBox = colHeader->waterBoxes; curWaterBox < colHeader->waterBoxes + colHeader->numWaterBoxes;
              curWaterBox++) {
             room = 0x3F & (curWaterBox->properties >> 13);
-            if (room == (u32)play->roomCtx.currRoom.num || room == 0x3F) {
+            if (room == (u32)play->roomCtx.curRoom.num || room == 0x3F) {
                 if (curWaterBox->properties & 0x80000) {
                     continue;
                 }
@@ -4490,7 +4490,7 @@ s32 WaterBox_GetSurface2(PlayState* play, CollisionContext* colCtx, Vec3f* pos, 
         waterBox = &colHeader->waterBoxes[i];
 
         room = WATERBOX_ROOM(waterBox->properties);
-        if (!(room == play->roomCtx.currRoom.num || room == 0x3F)) {
+        if (!(room == play->roomCtx.curRoom.num || room == 0x3F)) {
             continue;
         }
         if ((waterBox->properties & 0x80000)) {
@@ -4632,7 +4632,7 @@ s32 func_800CA6F0(PlayState* play, CollisionContext* colCtx, f32 x, f32 z, f32* 
     for (curWaterBox = colHeader->waterBoxes; curWaterBox < colHeader->waterBoxes + colHeader->numWaterBoxes;
          curWaterBox++) {
         room = WATERBOX_ROOM(curWaterBox->properties);
-        if (room == (u32)play->roomCtx.currRoom.num || room == 0x3F) {
+        if (room == (u32)play->roomCtx.curRoom.num || room == 0x3F) {
             if ((curWaterBox->properties & 0x80000) != 0) {
                 if (curWaterBox->minPos.x < x && x < curWaterBox->minPos.x + curWaterBox->xLength) {
                     if (curWaterBox->minPos.z < z && z < curWaterBox->minPos.z + curWaterBox->zLength) {
