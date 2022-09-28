@@ -8915,7 +8915,8 @@ beginseg
     name "title_static"
     compress
     romalign 0x1000
-    include "build/baserom/title_static.o"
+    include "build/assets/misc/title_static/title_static.o"
+    number 1
 endseg
 
 beginseg

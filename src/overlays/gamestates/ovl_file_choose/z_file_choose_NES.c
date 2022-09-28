@@ -9,19 +9,10 @@
 #include "z64rumble.h"
 #include "z64save.h"
 #include "interface/parameter_static/parameter_static.h"
+#include "misc/title_static/title_static.h"
 
 void func_801A3238(u8 playerIdx, u16 seqId, u8 fadeTimer, s8 arg3, s8 arg4);
 void func_801A4058(u16);
-
-extern Gfx D_010311F0[];
-extern Gfx D_01031408[];
-extern Gfx D_01031618[];
-
-extern void* D_01002800[];
-extern void* D_01007980[];
-extern void* D_0102A6B0[];
-extern void* D_0102B170[];
-extern void* D_010310F0[];
 
 // there are uses of D_0E000000.fillRect (appearing as D_0E0002E0) in this file
 extern GfxMasterList D_0E000000;
@@ -53,9 +44,9 @@ s16 D_8081441C[] = {
     72, -48, -48, -48, -48, -48,
 };
 
-s16 D_80814428[] = { 0x0102, 0x1D30, 0x0102, 0x17B0 };
+TexturePtr sBackspaceEndTextures[] = { gFileSelBackspaceButtonTex, gFileSelENDButtonENGTex };
 
-s16 D_80814430[] = { 28, 44 };
+s16 sBackspaceEndWidths[] = { 28, 44 };
 
 s16 D_80814434[] = {
     -30, -16, -6, 4, 14, 24, 34, 44, 54, -16, -16, 0,
@@ -65,14 +56,21 @@ s16 D_8081444C[] = {
     72, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 0,
 };
 
-s32 D_80814464[] = {
-    0x01007180, 0x00800010, 0x01008600, 0x00400010, 0x01008D00,
-    0x00400010, 0x01009700, 0x00600010, 0x01009D00, 0x00300011,
+typedef struct {
+    /* 0x00 */ TexturePtr texture;
+    /* 0x0C */ u16 width;
+    /* 0x12 */ u16 height;
+} OptionsMenuTextureInfo; // size = 0x14
+
+OptionsMenuTextureInfo gOptionsMenuHeaders[] = {
+    { gFileSelOptionsENGTex, 128, 16 },          { gFileSelSOUNDENGTex, 64, 16 },
+    { gFileSelTargetingENGTex, 64, 16 },         { gFileSelCheckBrightnessENGTex, 96, 16 },
+    { gFileSelDolbySurroundLogoENGTex, 48, 17 },
 };
 
-s32 D_8081448C[] = {
-    0x01008A00, 0x00300010, 0x01008300, 0x00300010, 0x01008000, 0x00300010,
-    0x01007D00, 0x00300010, 0x01009100, 0x00300010, 0x01009400, 0x00300010,
+OptionsMenuTextureInfo gOptionsMenuSettings[] = {
+    { gFileSelStereoENGTex, 48, 16 },   { gFileSelMonoENGTex, 48, 16 },   { gFileSelHeadsetENGTex, 48, 16 },
+    { gFileSelSurroundENGTex, 48, 16 }, { gFileSelSwitchENGTex, 48, 16 }, { gFileSelHoldENGTex, 48, 16 },
 };
 
 s16 D_808144BC = 0xFF;
@@ -1230,9 +1228,12 @@ void FileSelect_SetWindowContentVtx(GameState* thisx);
 #endif
 
 u16 D_80814654[] = { 0x88, 0x194, 0x2A0 };
-TexturePtr D_8081465C[] = { 0x0102BCB0, 0x0102CCB0, 0x0102DCB0, 0x0102ECB0 };
-TexturePtr D_8081466C[] = { 0x01030130, 0x01030130, 0x01030370, 0x010305B0 };
-TexturePtr D_8081467C[] = { 0x01030AF0, 0x01030C70, 0x01030DF0, 0x01030F70 };
+TexturePtr D_8081465C[] = { gFileSelOdolwasRemainsTex, gFileSelGohtsRemainsTex, gFileSelGyorgsRemainsTex,
+                            gFileSelTwinmoldsRemainsTex };
+TexturePtr D_8081466C[] = { gFileSelFirstDayENGTex, gFileSelFirstDayENGTex, gFileSelSecondDayENGTex,
+                            gFileSelFinalDayENGTex };
+TexturePtr D_8081467C[] = { gFileSel0QuarterHeartENGTex, gFileSel1QuarterHeartENGTex, gFileSel2QuarterHeartENGTex,
+                            gFileSel3QuarterHeartENGTex };
 static TexturePtr sHeartTextures[] = {
     gHeartEmptyTex,          gHeartQuarterTex,     gHeartHalfTex,
     gHeartThreeQuarterTex,   gHeartFullTex,        gDefenseHeartEmptyTex,
@@ -1252,23 +1253,24 @@ static s16 sHeartEnvColors[2][3] = { { 50, 40, 60 }, { 255, 255, 255 } };
 void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_DrawFileInfo.s")
 
-extern TexturePtr D_010220B0[]; // gFileSelNameBoxTex
-extern TexturePtr D_010277B0[]; // gOptionsButtonTex // Array on PAL
-extern TexturePtr D_0102A030[]; // gFileSelDISKButtonTex in OoT
-extern TexturePtr D_0102AAB0[]; // gFileSelBigButtonHighlightTex
+TexturePtr sFileInfoBoxTextures[] = { gFileSelFileInfoBox0Tex,     gFileSelFileInfoBox1Tex,
+                                      gFileSelFileInfoBox2Tex,     gFileSelFileInfoBox3Tex,
+                                      gFileSelFileInfoBox4Tex,     gFileSelFileExtraInfoBox0Tex,
+                                      gFileSelFileExtraInfoBox1Tex };
 
-TexturePtr sFileInfoBoxTextures[] = {
-    0x01022E30, 0x01023DF0, 0x01024DB0, 0x01025D70, 0x01026D30, 0x010287B0, 0x010293F0
-};
+TexturePtr sTitleLabels[] = { gFileSelPleaseSelectAFileENGTex, gFileSelOpenThisFileENGTex,
+                              gFileSelCopyWhichFileENGTex,     gFileSelCopyToWhichFileENGTex,
+                              gFileSelAreYouSureCopyENGTex,    gFileSelFileCopiedENGTex,
+                              gFileSelEraseWhichFileENGTex,    gFileSelAreYouSureEraseENGTex,
+                              gFileSelFileErasedENGTex };
 
-TexturePtr sTitleLabels[] = { 0x01004980, 0x01005180, 0x01002980, 0x01003180, 0x01003980,
-                              0x01004180, 0x01005980, 0x01006180, 0x01006980 };
+TexturePtr sWarningLabels[] = { gFileSelNoFileToCopyENGTex, gFileSelNoFileToEraseENGTex, gFileSelNoEmptyFileENGTex,
+                                gFileSelFileEmptyENGTex, gFileSelFileInUseENGTex };
 
-TexturePtr sWarningLabels[] = { 0x01000000, 0x01000800, 0x01001000, 0x01001800, 0x01002000 };
+TexturePtr sFileButtonTextures[] = { gFileSelFile1ButtonENGTex, gFileSelFile2ButtonENGTex, gFileSelFile3ButtonENGTex };
 
-TexturePtr sFileButtonTextures[] = { 0x0101EFB0, 0x0101F7B0, 0x0101FFB0 };
-
-TexturePtr sActionButtonTextures[] = { 0x0101E7B0, 0x01020FB0, 0x010207B0, 0x01027FB0 };
+TexturePtr sActionButtonTextures[] = { gFileSelCopyButtonENGTex, gFileSelEraseButtonENGTex, gFileSelYesButtonENGTex,
+                                       gFileSelQuitButtonENGTex };
 
 void FileSelect_DrawWindowContents(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
@@ -1343,14 +1345,14 @@ void FileSelect_DrawWindowContents(GameState* thisx) {
             // draw file name box
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sWindowContentColors[0], sWindowContentColors[1],
                             sWindowContentColors[2], this->nameBoxAlpha[i]);
-            gDPLoadTextureBlock(POLY_OPA_DISP++, D_010220B0, G_IM_FMT_IA, G_IM_SIZ_16b, 108, 16, 0,
+            gDPLoadTextureBlock(POLY_OPA_DISP++, gFileSelFileNameBoxTex, G_IM_FMT_IA, G_IM_SIZ_16b, 108, 16, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
             gSP1Quadrangle(POLY_OPA_DISP++, 4, 6, 7, 5, 0);
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sWindowContentColors[0], sWindowContentColors[1],
                             sWindowContentColors[2], this->connectorAlpha[i]);
-            gDPLoadTextureBlock(POLY_OPA_DISP++, D_01002800, G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0,
+            gDPLoadTextureBlock(POLY_OPA_DISP++, gFileSelConnectorTex, G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
             gSP1Quadrangle(POLY_OPA_DISP++, 8, 10, 11, 9, 0);
@@ -1358,7 +1360,7 @@ void FileSelect_DrawWindowContents(GameState* thisx) {
             if (this->isOwlSave2[i] != 0) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sWindowContentColors[0], sWindowContentColors[1],
                                 sWindowContentColors[2], this->nameBoxAlpha[i]);
-                gDPLoadTextureBlock(POLY_OPA_DISP++, D_0102A030, G_IM_FMT_IA, G_IM_SIZ_16b, 52, 16, 0,
+                gDPLoadTextureBlock(POLY_OPA_DISP++, gFileSelBlankButtonTex, G_IM_FMT_IA, G_IM_SIZ_16b, 52, 16, 0,
                                     G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                     G_TX_NOLOD, G_TX_NOLOD);
                 gSP1Quadrangle(POLY_OPA_DISP++, 12, 14, 15, 13, 0);
@@ -1405,8 +1407,9 @@ void FileSelect_DrawWindowContents(GameState* thisx) {
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->windowColor[0], this->windowColor[1], this->windowColor[2],
                     this->optionButtonAlpha);
-    gDPLoadTextureBlock(POLY_OPA_DISP++, D_010277B0, G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, gFileSelOptionsButtonENGTex, G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
     gSP1Quadrangle(POLY_OPA_DISP++, 8, 10, 11, 9, 0);
 
     // draw highlight over currently selected button
@@ -1420,8 +1423,9 @@ void FileSelect_DrawWindowContents(GameState* thisx) {
                           PRIMITIVE, 0);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->highlightColor[0], this->highlightColor[1],
                         this->highlightColor[2], this->highlightColor[3]);
-        gDPLoadTextureBlock(POLY_OPA_DISP++, D_0102AAB0, G_IM_FMT_I, G_IM_SIZ_8b, 72, 24, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock(POLY_OPA_DISP++, gFileSelBigButtonHighlightTex, G_IM_FMT_I, G_IM_SIZ_8b, 72, 24, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
         gSP1Quadrangle(POLY_OPA_DISP++, 12, 14, 15, 13, 0);
     }
 
@@ -1479,13 +1483,13 @@ void FileSelect_ConfigModeDraw(GameState* thisx) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         gSPVertex(POLY_OPA_DISP++, &this->windowVtx[0], 32, 0);
-        gSPDisplayList(POLY_OPA_DISP++, D_010311F0);
+        gSPDisplayList(POLY_OPA_DISP++, gFileSelWindow1DL);
 
         gSPVertex(POLY_OPA_DISP++, &this->windowVtx[32], 32, 0);
-        gSPDisplayList(POLY_OPA_DISP++, D_01031408);
+        gSPDisplayList(POLY_OPA_DISP++, gFileSelWindow2DL);
 
         gSPVertex(POLY_OPA_DISP++, &this->windowVtx[64], 16, 0);
-        gSPDisplayList(POLY_OPA_DISP++, D_01031618);
+        gSPDisplayList(POLY_OPA_DISP++, gFileSelWindow3DL);
 
         gDPPipeSync(POLY_OPA_DISP++);
 
@@ -1507,13 +1511,13 @@ void FileSelect_ConfigModeDraw(GameState* thisx) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         gSPVertex(POLY_OPA_DISP++, &this->windowVtx[0], 32, 0);
-        gSPDisplayList(POLY_OPA_DISP++, D_010311F0);
+        gSPDisplayList(POLY_OPA_DISP++, gFileSelWindow1DL);
 
         gSPVertex(POLY_OPA_DISP++, &this->windowVtx[32], 32, 0);
-        gSPDisplayList(POLY_OPA_DISP++, D_01031408);
+        gSPDisplayList(POLY_OPA_DISP++, gFileSelWindow2DL);
 
         gSPVertex(POLY_OPA_DISP++, &this->windowVtx[64], 16, 0);
-        gSPDisplayList(POLY_OPA_DISP++, D_01031618);
+        gSPDisplayList(POLY_OPA_DISP++, gFileSelWindow3DL);
 
         gDPPipeSync(POLY_OPA_DISP++);
 
@@ -1535,13 +1539,13 @@ void FileSelect_ConfigModeDraw(GameState* thisx) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         gSPVertex(POLY_OPA_DISP++, &this->windowVtx[0], 32, 0);
-        gSPDisplayList(POLY_OPA_DISP++, D_010311F0);
+        gSPDisplayList(POLY_OPA_DISP++, gFileSelWindow1DL);
 
         gSPVertex(POLY_OPA_DISP++, &this->windowVtx[32], 32, 0);
-        gSPDisplayList(POLY_OPA_DISP++, D_01031408);
+        gSPDisplayList(POLY_OPA_DISP++, gFileSelWindow2DL);
 
         gSPVertex(POLY_OPA_DISP++, &this->windowVtx[64], 16, 0);
-        gSPDisplayList(POLY_OPA_DISP++, D_01031618);
+        gSPDisplayList(POLY_OPA_DISP++, gFileSelWindow3DL);
 
         gDPPipeSync(POLY_OPA_DISP++);
 
@@ -1818,13 +1822,13 @@ void FileSelect_SelectModeDraw(GameState* thisx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gSPVertex(POLY_OPA_DISP++, &this->windowVtx[0], 32, 0);
-    gSPDisplayList(POLY_OPA_DISP++, D_010311F0);
+    gSPDisplayList(POLY_OPA_DISP++, gFileSelWindow1DL);
 
     gSPVertex(POLY_OPA_DISP++, &this->windowVtx[32], 32, 0);
-    gSPDisplayList(POLY_OPA_DISP++, D_01031408);
+    gSPDisplayList(POLY_OPA_DISP++, gFileSelWindow2DL);
 
     gSPVertex(POLY_OPA_DISP++, &this->windowVtx[64], 16, 0);
-    gSPDisplayList(POLY_OPA_DISP++, D_01031618);
+    gSPDisplayList(POLY_OPA_DISP++, gFileSelWindow3DL);
 
     FileSelect_DrawWindowContents(&this->state);
     gDPPipeSync(POLY_OPA_DISP++);
@@ -1869,8 +1873,7 @@ void (*gFileSelectUpdateFuncs[])(GameState*) = {
     FileSelect_SelectModeUpdate,
 };
 
-// Please wait, Decide/Cancel, Decide/Save
-TexturePtr D_808147B4[] = { 0x0100B2B0, 0x0100A030, 0x0100A930 };
+TexturePtr D_808147B4[] = { gFileSelPleaseWaitENGTex, gFileSelDecideCancelENGTex, gFileSelDecideSaveENGTex };
 s16 D_808147C0[] = { 144, 144, 152 };
 s16 D_808147C8[] = { 90, 90, 86 };
 
