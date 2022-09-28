@@ -1,5 +1,5 @@
 /*
- * File: z_file_nameset_NES.c
+ * File: z_file_nameset_NES.c (z_file_copy_erase.c)
  * Overlay: ovl_file_choose
  * Description:
  */
@@ -7,72 +7,1221 @@
 #include "z_file_choose.h"
 #include "z64rumble.h"
 
-extern UNK_TYPE D_01002800;
-extern UNK_TYPE D_01007980;
-extern UNK_TYPE D_0102A6B0;
-extern UNK_TYPE D_0102B170;
-extern UNK_TYPE D_010310F0;
-extern UNK_TYPE D_010311F0;
+extern s16 sChooseFileYOffsets[];
+extern s16 D_8081424C[3][3];
+extern s16 D_80814264[];
+extern s16 D_8081426C[];
+extern s16 sEraseDelayTimer;
 
-// there are uses of D_0E000000.fillRect (appearing as D_0E0002E0) in this file
-extern GfxMasterList D_0E000000;
+/**
+ * Move buttons into place for the select source screen and fade in the proper labels.
+ * Update function for `CM_SETUP_COPY_SOURCE`
+ */
+void FileSelect_SetupCopySource(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    s32 yStep;
+    s16 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80804010.s")
+    for (i = 0; i < 5; i++) {
+        yStep = ABS_ALT(this->buttonYOffsets[i] - sChooseFileYOffsets[i]) / this->actionTimer;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_808041A0.s")
+        if (this->buttonYOffsets[i] >= sChooseFileYOffsets[i]) {
+            this->buttonYOffsets[i] -= yStep;
+        } else {
+            this->buttonYOffsets[i] += yStep;
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80804654.s")
+    this->actionButtonAlpha[FS_BTN_ACTION_COPY] -= 50;
+    this->actionButtonAlpha[FS_BTN_ACTION_ERASE] -= 50;
+    this->optionButtonAlpha -= 50;
+    this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] += 50;
+    this->titleAlpha[0] -= 63;
+    this->titleAlpha[1] += 63;
+    this->actionTimer--;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_808047D8.s")
+    if (this->actionTimer == 0) {
+        this->actionTimer = 4;
+        this->actionButtonAlpha[FS_BTN_ACTION_COPY] = this->actionButtonAlpha[FS_BTN_ACTION_ERASE] =
+            this->optionButtonAlpha = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080489C.s")
+        this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] = 200;
+        this->titleLabel = this->nextTitleLabel;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80804DAC.s")
+        this->titleAlpha[0] = 255;
+        this->titleAlpha[1] = 0;
+        this->buttonIndex = 3;
+        this->configMode++;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80804E74.s")
+/**
+ * Allow the player to select a file to copy or exit back to the main menu.
+ * Update function for `CM_SELECT_COPY_SOURCE`
+ */
+void FileSelect_SelectCopySource(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    Input* input = CONTROLLER1(&this->state);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80804F98.s")
+    if (((this->buttonIndex == 3) && CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) ||
+        CHECK_BTN_ALL(input->press.button, BTN_B)) {
+        this->actionTimer = 4;
+        this->buttonIndex = 3;
+        this->nextTitleLabel = 0;
+        this->configMode = 0x14;
+        this->warningLabel = -1;
+        play_sound(NA_SE_SY_FSEL_CLOSE);
+    } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
+        if (!gSaveContext.unk_3F3F) {
+            if (SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
+                this->actionTimer = 4;
+                this->selectedFileIndex = this->buttonIndex;
+                this->configMode = 5;
+                this->nextTitleLabel = 3;
+                play_sound(NA_SE_SY_FSEL_DECIDE_L);
+                return;
+            }
+            play_sound(NA_SE_SY_FSEL_ERROR);
+        } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, this->buttonIndex)) {
+            this->actionTimer = 4;
+            this->selectedFileIndex = this->buttonIndex;
+            this->configMode = 5;
+            this->nextTitleLabel = 3;
+            play_sound(NA_SE_SY_FSEL_DECIDE_L);
+        } else {
+            play_sound(NA_SE_SY_FSEL_ERROR);
+        }
+    } else {
+        if (ABS_ALT(this->stickRelY) >= 30) {
+            play_sound(NA_SE_SY_FSEL_CURSOR);
+            if (this->stickRelY >= 30) {
+                this->buttonIndex = this->buttonIndex - 1;
+                if (this->buttonIndex == 2) {
+                    this->buttonIndex = 1;
+                }
+                if (this->buttonIndex < 0) {
+                    this->buttonIndex = 3;
+                }
+            } else {
+                this->buttonIndex = this->buttonIndex + 1;
+                if (this->buttonIndex == 2) {
+                    this->buttonIndex = 3;
+                }
+                if (this->buttonIndex >= 4) {
+                    this->buttonIndex = 0;
+                }
+            }
+        }
+        if (this->buttonIndex != 3) {
+            if (!gSaveContext.unk_3F3F) {
+                if (!SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
+                    this->warningLabel = 3;
+                    this->warningButtonIndex = this->buttonIndex;
+                    this->emptyFileTextAlpha = 255;
+                } else {
+                    this->warningLabel = -1;
+                }
+            } else if (!FILE_CHOOSE_SLOT_OCCUPIED(this, this->buttonIndex)) {
+                this->warningLabel = 3;
+                this->warningButtonIndex = this->buttonIndex;
+                this->emptyFileTextAlpha = 255;
+            } else {
+                this->warningLabel = -1;
+            }
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080525C.s")
+/**
+ * Move the menu buttons into place for the copy destination selection and switch titles.
+ * Update function for `CM_SETUP_COPY_DEST_1`
+ */
+void FileSelect_SetupCopyDest1(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    s32 yStep;
+    s16 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_808052B0.s")
+    for (i = 0; i < 3; i++) {
+        yStep = ABS_ALT(this->buttonYOffsets[i] - D_8081424C[this->buttonIndex][i]) / this->actionTimer;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_808054A4.s")
+        if (D_8081424C[this->buttonIndex][i] >= this->buttonYOffsets[i]) {
+            this->buttonYOffsets[i] += yStep;
+        } else {
+            this->buttonYOffsets[i] -= yStep;
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_808055D0.s")
+    this->titleAlpha[0] -= 63;
+    this->titleAlpha[1] += 63;
+    this->nameBoxAlpha[this->buttonIndex] -= 50;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_808058A4.s")
+    this->actionTimer--;
+    if (this->actionTimer == 0) {
+        this->buttonYOffsets[this->buttonIndex] = D_8081424C[this->buttonIndex][this->buttonIndex];
+        this->titleLabel = this->nextTitleLabel;
+        this->titleAlpha[0] = 255;
+        this->titleAlpha[1] = 0;
+        this->actionTimer = 4;
+        this->configMode++;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80805918.s")
+/**
+ * Show the file info of the file selected to copy from.
+ * Update function for `CM_SETUP_COPY_DEST_2`
+ */
+void FileSelect_SetupCopyDest2(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80805A58.s")
+    this->nameBoxAlpha[this->buttonIndex] -= 50;
+    this->fileInfoAlpha[this->buttonIndex] += 50;
+    this->actionTimer--;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80805B30.s")
+    if (this->actionTimer == 0) {
+        this->nameBoxAlpha[this->buttonIndex] = 0;
+        this->fileInfoAlpha[this->buttonIndex] = 200;
+        this->buttonIndex = 3;
+        this->actionTimer = 4;
+        this->configMode = 7;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80805C1C.s")
+/**
+ * Allow the player to select a slot to copy to or exit to the copy select screen.
+ * Update function for `CM_SELECT_COPY_DEST`
+ */
+void FileSelect_SelectCopyDest(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    Input* input = CONTROLLER1(&this->state);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80806014.s")
+    if (((this->buttonIndex == 3) && CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) ||
+        CHECK_BTN_ALL(input->press.button, BTN_B)) {
+        this->buttonIndex = this->selectedFileIndex;
+        this->nextTitleLabel = 2;
+        this->actionTimer = 4;
+        this->configMode = 8;
+        play_sound(NA_SE_SY_FSEL_CLOSE);
+    } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
+        if (!gSaveContext.unk_3F3F) {
+            if (!SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
+                this->fileNum = this->buttonIndex;
+                this->nextTitleLabel = 4;
+                this->actionTimer = 4;
+                this->configMode = 0xA;
+                play_sound(NA_SE_SY_FSEL_DECIDE_L);
+            } else {
+                play_sound(NA_SE_SY_FSEL_ERROR);
+            }
+        } else if (!FILE_CHOOSE_SLOT_OCCUPIED(this, this->buttonIndex)) {
+            this->fileNum = this->buttonIndex;
+            this->nextTitleLabel = 4;
+            this->actionTimer = 4;
+            this->configMode = 0xA;
+            play_sound(NA_SE_SY_FSEL_DECIDE_L);
+        } else {
+            play_sound(NA_SE_SY_FSEL_ERROR);
+        }
+    } else {
+        if (ABS_ALT(this->stickRelY) >= 30) {
+            play_sound(NA_SE_SY_FSEL_CURSOR);
+            if (this->stickRelY >= 30) {
+                this->buttonIndex--;
+                if (this->buttonIndex == 2) {
+                    this->buttonIndex = 1;
+                }
+                if (this->buttonIndex == this->selectedFileIndex) {
+                    this->buttonIndex--;
+                    if (this->buttonIndex < 0) {
+                        this->buttonIndex = 3;
+                    }
+                    if (this->buttonIndex == 2) {
+                        this->buttonIndex = 1;
+                    }
+                } else if (this->buttonIndex < 0) {
+                    this->buttonIndex = 3;
+                }
+            } else {
+                this->buttonIndex++;
+                if (this->buttonIndex >= 4) {
+                    this->buttonIndex = 0;
+                }
+                if (this->buttonIndex == this->selectedFileIndex) {
+                    this->buttonIndex++;
+                }
+                if (this->buttonIndex == 2) {
+                    this->buttonIndex = 3;
+                }
+            }
+        }
+        if (this->buttonIndex != 3) {
+            if (!gSaveContext.unk_3F3F) {
+                if (SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
+                    this->warningLabel = 4;
+                    this->warningButtonIndex = this->buttonIndex;
+                    this->emptyFileTextAlpha = 255;
+                } else {
+                    this->warningLabel = -1;
+                }
+            } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, this->buttonIndex)) {
+                this->warningLabel = 4;
+                this->warningButtonIndex = this->buttonIndex;
+                this->emptyFileTextAlpha = 255;
+            } else {
+                this->warningLabel = -1;
+            }
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80806148.s")
+/**
+ * Fade out file info, bring back the name box, and get ready to return to copy source screen.
+ * Update function for `CM_EXIT_TO_COPY_SOURCE_1`
+ */
+void FileSelect_ExitToCopySource1(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80806310.s")
+    this->fileInfoAlpha[this->buttonIndex] -= 50;
+    this->nameBoxAlpha[this->buttonIndex] += 50;
+    this->actionTimer--;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_808067E0.s")
+    if (this->actionTimer == 0) {
+        this->nextTitleLabel = 2;
+        this->nameBoxAlpha[this->buttonIndex] = 200;
+        this->fileInfoAlpha[this->buttonIndex] = 0;
+        this->actionTimer = 4;
+        this->configMode++;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80806BC8.s")
+/**
+ * Move the buttons back into place and return to copy source select.
+ * Update function for `CM_EXIT_TO_COPY_SOURCE_2`
+ */
+void FileSelect_ExitToCopySource2(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    s16 i;
+    s32 yStep;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80806CA0.s")
+    for (i = 0; i < 3; i++) {
+        yStep = ABS_ALT(this->buttonYOffsets[i] - sChooseFileYOffsets[i]) / this->actionTimer;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80806E84.s")
+        if (this->buttonYOffsets[i] >= sChooseFileYOffsets[i]) {
+            this->buttonYOffsets[i] -= yStep;
+        } else {
+            this->buttonYOffsets[i] += yStep;
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80806F30.s")
+    this->titleAlpha[0] -= 63;
+    this->titleAlpha[1] += 63;
+    this->actionTimer--;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_808071E4.s")
+    if (this->actionTimer == 0) {
+        this->titleLabel = this->nextTitleLabel;
+        this->titleAlpha[0] = 255;
+        this->titleAlpha[1] = 0;
+        this->buttonIndex = 3;
+        this->configMode = 4;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80807390.s")
+/**
+ * Rearrange buttons on the screen to prepare for copy confirmation.
+ * Update function for `CM_SETUP_COPY_CONFIRM_1`
+ */
+void FileSelect_SetupCopyConfirm1(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    s16 i;
+    s32 yStep;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080742C.s")
+    this->titleAlpha[0] -= 63;
+    this->titleAlpha[1] += 63;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_808074B4.s")
+    for (i = 0; i < 3; i++) {
+        if ((i != this->fileNum) && (i != this->selectedFileIndex)) {
+            this->fileButtonAlpha[i] -= 50;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_808077AC.s")
+            if (!gSaveContext.unk_3F3F) {
+                if (SLOT_OCCUPIED(sramCtx, i)) {
+                    this->connectorAlpha[i] -= 63;
+                    this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i];
+                }
+            } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
+                this->connectorAlpha[i] -= 63;
+                this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i];
+            }
+        } else if (i == this->fileNum) {
+            yStep = ABS_ALT(this->buttonYOffsets[i] - D_80814264[i]) / this->actionTimer;
+            this->buttonYOffsets[i] += yStep;
+
+            if (this->buttonYOffsets[i] >= D_80814264[i]) {
+                this->buttonYOffsets[i] = D_80814264[i];
+            }
+        }
+    }
+
+    this->actionTimer--;
+
+    if (this->actionTimer == 0) {
+        this->titleLabel = this->nextTitleLabel;
+        this->titleAlpha[0] = 255;
+        this->titleAlpha[1] = 0;
+        this->actionTimer = 4;
+        this->configMode++;
+    }
+}
+
+/**
+ * Fade in the 'Yes' button before allowing the player to decide.
+ * Update function for `CM_SETUP_COPY_CONFIRM_2`
+ */
+void FileSelect_SetupCopyConfirm2(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+
+    this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] += 50;
+    this->actionTimer--;
+
+    if (this->actionTimer == 0) {
+        this->configMode = 0xC;
+        this->buttonIndex = 1;
+    }
+}
+
+/**
+ * Allow the player to confirm the copy, or quit back to the destination select.
+ * If yes is selected, the actual copy occurs in this function before moving on to the animation.
+ * Update function for `CM_COPY_CONFIRM`
+ */
+void FileSelect_CopyConfirm(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    Input* input = CONTROLLER1(&this->state);
+    u16 dayTime;
+
+    if (((this->buttonIndex != 0) && CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) ||
+        CHECK_BTN_ALL(input->press.button, BTN_B)) {
+        this->actionTimer = 4;
+        this->nextTitleLabel = 3;
+        this->configMode = 0xE;
+        play_sound(NA_SE_SY_FSEL_CLOSE);
+    } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
+        dayTime = gSaveContext.save.time;
+        gSaveContext.save.time = dayTime;
+        this->nameAlpha[this->fileNum] = 0;
+        this->fileInfoAlpha[this->fileNum] = this->nameAlpha[this->fileNum];
+        this->nextTitleLabel = 5;
+        this->actionTimer = 4;
+        func_80146628(this, sramCtx);
+        if (!gSaveContext.unk_3F3F) {
+            this->configMode = 0xF;
+        } else {
+            func_80147008(sramCtx, D_801C67C8[this->fileNum * 2], D_801C6818[this->fileNum * 2]);
+            func_80147020(sramCtx);
+            this->configMode = 0xD;
+        }
+        Rumble_Request(300.0f, 180, 20, 100);
+        play_sound(NA_SE_SY_FSEL_DECIDE_L);
+    } else if (ABS_ALT(this->stickRelY) >= 30) {
+        play_sound(NA_SE_SY_FSEL_CURSOR);
+        this->buttonIndex ^= 1;
+    }
+}
+
+void func_808054A4(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    u16 i;
+
+    func_80147068(sramCtx);
+
+    if (sramCtx->status == 0) {
+        this->configMode = 0xF;
+
+        for (i = 0; i < 6; i++) {
+            this->newf[this->fileNum][i] = gSaveContext.save.playerData.newf[i];
+        }
+
+        this->unk_2440C[this->fileNum] = gSaveContext.save.playerData.deaths;
+
+        for (i = 0; i < 8; i++) {
+            this->unk_24414[this->fileNum][i] = gSaveContext.save.playerData.playerName[i];
+        }
+
+        this->healthCapacity[this->fileNum] = gSaveContext.save.playerData.healthCapacity;
+        this->health[this->fileNum] = gSaveContext.save.playerData.health;
+        this->defenseHearts[this->fileNum] = gSaveContext.save.inventory.defenseHearts;
+    }
+}
+
+/**
+ * Move buttons back in place and return to copy destination select.
+ * Update function for `CM_RETURN_TO_COPY_DEST`
+ */
+void FileSelect_ReturnToCopyDest(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    s16 i;
+    s32 yStep;
+
+    this->titleAlpha[0] -= 63;
+    this->titleAlpha[1] += 63;
+    this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] -= 50;
+
+    for (i = 0; i < 3; i++) {
+        if ((i != this->fileNum) && (i != this->selectedFileIndex)) {
+            this->fileButtonAlpha[i] += 50;
+
+            if (!gSaveContext.unk_3F3F) {
+                if (SLOT_OCCUPIED(sramCtx, i)) {
+                    this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i];
+                    this->connectorAlpha[i] += 63;
+                }
+            } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
+                this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i];
+                this->connectorAlpha[i] += 63;
+            }
+        }
+
+        yStep = ABS_ALT(this->buttonYOffsets[i] - D_8081424C[this->selectedFileIndex][i]) / this->actionTimer;
+
+        if (D_8081424C[this->selectedFileIndex][i] >= this->buttonYOffsets[i]) {
+            this->buttonYOffsets[i] += yStep;
+        } else {
+            this->buttonYOffsets[i] -= yStep;
+        }
+    }
+
+    this->actionTimer--;
+
+    if (this->actionTimer == 0) {
+        this->titleLabel = this->nextTitleLabel;
+        this->titleAlpha[0] = 255;
+        this->titleAlpha[1] = 0;
+        this->actionTimer = 4;
+        this->buttonIndex = 3;
+        this->configMode = 7;
+    }
+}
+
+/**
+ * Hide title
+ * Update function for `CM_COPY_ANIM_1`
+ */
+void FileSelect_CopyAnim1(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+
+    this->titleAlpha[0] -= 63;
+    this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] -= 50;
+    this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] -= 50;
+    this->actionTimer--;
+
+    if (this->actionTimer == 0) {
+        this->titleAlpha[0] = 0;
+        this->actionTimer = 4;
+        this->configMode++;
+    }
+}
+
+/**
+ * Move a copy of the file window down and fade in the file info.
+ * Update function for `CM_COPY_ANIM_2`
+ */
+void FileSelect_CopyAnim2(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    s32 yStep;
+
+    this->fileInfoAlpha[this->fileNum] += 50;
+    this->nameAlpha[this->fileNum] += 50;
+    this->titleAlpha[1] += 63;
+    yStep = ABS_ALT(this->fileNamesY[this->fileNum] + 56) / this->actionTimer;
+    this->fileNamesY[this->fileNum] -= yStep;
+
+    if (this->fileNamesY[this->fileNum] <= -56) {
+        this->fileNamesY[this->fileNum] = -56;
+    }
+
+    this->actionTimer--;
+
+    if (this->actionTimer == 0) {
+        this->actionTimer = 45;
+        this->titleLabel = this->nextTitleLabel;
+        this->titleAlpha[0] = 255;
+        this->titleAlpha[1] = 0;
+        this->configMode++;
+    }
+}
+
+/**
+ * Play a sound effect to indicate that the copy has completed. Wait for a timer or for
+ * the player to press a button before moving on.
+ * Update function for `CM_COPY_ANIM_3`
+ */
+void FileSelect_CopyAnim3(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    Input* input = CONTROLLER1(&this->state);
+
+    if (this->actionTimer == 38) {
+        this->connectorAlpha[this->fileNum] = 255;
+        play_sound(NA_SE_EV_DIAMOND_SWITCH);
+    }
+
+    this->actionTimer--;
+
+    if (this->actionTimer <= 36) {
+        if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_B | BTN_START) || (this->actionTimer == 0)) {
+            this->actionTimer = 4;
+            this->nextTitleLabel = 0;
+            play_sound(NA_SE_SY_FSEL_DECIDE_L);
+            this->configMode = 0x12;
+        }
+    }
+}
+
+/**
+ * Fade out the info boxes for both files and bring in their name boxes. Fade out title.
+ * Update function for `CM_COPY_ANIM_4`
+ */
+void FileSelect_CopyAnim4(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+
+    this->fileInfoAlpha[this->selectedFileIndex] -= 50;
+    this->fileInfoAlpha[this->fileNum] -= 50;
+    this->nameBoxAlpha[this->selectedFileIndex] += 50;
+    this->nameBoxAlpha[this->fileNum] += 50;
+    this->titleAlpha[0] -= 63;
+    this->actionTimer--;
+
+    if (this->actionTimer == 0) {
+        this->fileNamesY[this->fileNum] = this->buttonYOffsets[3] = 0;
+        this->actionTimer = 4;
+        this->titleAlpha[0] = 0;
+        this->configMode++;
+    }
+}
+
+/**
+ * Restore all buttons and labels back to their original place and go back to the main menu.
+ * Update function for `CM_COPY_ANIM_5`
+ */
+void FileSelect_CopyAnim5(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    s16 i;
+    s32 yStep;
+
+    for (i = 0; i < 5; i++) {
+        yStep = ABS_ALT(this->buttonYOffsets[i]) / this->actionTimer;
+
+        if (this->buttonYOffsets[i] >= 0) {
+            this->buttonYOffsets[i] -= yStep;
+        } else {
+            this->buttonYOffsets[i] += yStep;
+        }
+    }
+
+    for (i = 0; i < 3; i++) {
+        if (i != this->buttonIndex) {
+            this->fileButtonAlpha[i] += 50;
+
+            if (!gSaveContext.unk_3F3F) {
+                if (SLOT_OCCUPIED(sramCtx, i)) {
+                    this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i];
+                    this->connectorAlpha[i] += 63;
+                }
+            } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
+                this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i];
+                this->connectorAlpha[i] += 63;
+            }
+        }
+    }
+
+    this->actionButtonAlpha[FS_BTN_ACTION_COPY] += 50;
+    this->actionButtonAlpha[FS_BTN_ACTION_ERASE] += 50;
+    this->optionButtonAlpha += 50;
+    this->titleAlpha[1] += 63;
+    this->actionTimer--;
+
+    if (this->actionTimer == 0) {
+        for (i = 0; i < 3; i++) {
+            this->connectorAlpha[i] = 0;
+            this->fileButtonAlpha[i] = 200;
+            this->nameBoxAlpha[i] = this->nameAlpha[i] = this->connectorAlpha[i];
+
+            if (!gSaveContext.unk_3F3F) {
+                if (SLOT_OCCUPIED(sramCtx, i)) {
+                    this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i];
+                    this->connectorAlpha[i] = 255;
+                }
+            } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
+                this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i];
+                this->connectorAlpha[i] = 255;
+            }
+        }
+
+        this->fileNamesY[this->selectedFileIndex] = 0;
+        this->highlightColor[3] = 70;
+        this->highlightPulseDir = 1;
+        this->highlightTimer = 20;
+        this->titleLabel = this->nextTitleLabel;
+        this->titleAlpha[0] = 255;
+        this->titleAlpha[1] = 0;
+        this->configMode = 2;
+    }
+}
+
+/**
+ * Exit from the copy source screen to the main menu. Return all buttons and labels to their original place.
+ * Update function for `CM_COPY_RETURN_MAIN`
+ */
+void FileSelect_ExitCopyToMain(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    s16 i;
+    s32 yStep;
+
+    for (i = 0; i < 5; i++) {
+        yStep = ABS_ALT(this->buttonYOffsets[i]) / this->actionTimer;
+
+        if (this->buttonYOffsets[i] >= 0) {
+            this->buttonYOffsets[i] -= yStep;
+        } else {
+            this->buttonYOffsets[i] += yStep;
+        }
+    }
+
+    this->actionButtonAlpha[FS_BTN_ACTION_COPY] += 50;
+    this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] -= 50;
+    this->titleAlpha[0] -= 63;
+    this->titleAlpha[1] += 63;
+    this->actionTimer--;
+
+    if (this->actionTimer == 0) {
+        this->actionButtonAlpha[FS_BTN_ACTION_COPY] = 200;
+        this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] = 0;
+        this->titleLabel = this->nextTitleLabel;
+        this->titleAlpha[0] = 255;
+        this->titleAlpha[1] = 0;
+        this->configMode = 2;
+    }
+
+    this->optionButtonAlpha = this->actionButtonAlpha[FS_BTN_ACTION_ERASE] =
+        this->actionButtonAlpha[FS_BTN_ACTION_COPY];
+}
+
+/**
+ * Move buttons into place for the erase select screen and fade in the proper labels.
+ * Update function for `CM_SETUP_ERASE_SELECT`
+ */
+void FileSelect_SetupEraseSelect(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    s16 i;
+    s32 yStep;
+
+    for (i = 0; i < 5; i++) {
+        yStep = ABS_ALT(this->buttonYOffsets[i] - sChooseFileYOffsets[i]) / this->actionTimer;
+
+        if (this->buttonYOffsets[i] >= sChooseFileYOffsets[i]) {
+            this->buttonYOffsets[i] -= yStep;
+        } else {
+            this->buttonYOffsets[i] += yStep;
+        }
+    }
+
+    this->actionButtonAlpha[FS_BTN_ACTION_COPY] -= 100;
+    this->actionButtonAlpha[FS_BTN_ACTION_ERASE] -= 100;
+    this->optionButtonAlpha -= 100;
+    this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] += 50;
+
+    if (this->actionButtonAlpha[FS_BTN_ACTION_COPY] <= 0) {
+        this->actionButtonAlpha[FS_BTN_ACTION_COPY] = this->actionButtonAlpha[FS_BTN_ACTION_ERASE] =
+            this->optionButtonAlpha = 0;
+    }
+
+    this->titleAlpha[0] -= 63;
+    this->titleAlpha[1] += 63;
+    this->actionTimer--;
+
+    if (this->actionTimer == 0) {
+        this->highlightColor[3] = 70;
+        this->highlightPulseDir = 1;
+        this->highlightTimer = 20;
+        this->actionButtonAlpha[FS_BTN_ACTION_COPY] = this->actionButtonAlpha[FS_BTN_ACTION_ERASE] =
+            this->optionButtonAlpha = 0;
+        this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] = 200;
+        this->titleLabel = this->nextTitleLabel;
+        this->titleAlpha[0] = 255;
+        this->titleAlpha[1] = 0;
+        this->buttonIndex = 3;
+        this->configMode++;
+    }
+}
+
+/**
+ * Allow the player to select a file to erase or exit back to the main menu.
+ * Update function for `CM_ERASE_SELECT`
+ */
+void FileSelect_EraseSelect(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    Input* input = CONTROLLER1(&this->state);
+
+    if (((this->buttonIndex == FS_BTN_COPY_QUIT) && CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) ||
+        CHECK_BTN_ALL(input->press.button, BTN_B)) {
+        this->buttonIndex = FS_BTN_MAIN_ERASE;
+        this->actionTimer = 4;
+        this->nextTitleLabel = FS_TITLE_SELECT_FILE;
+        this->configMode = 0x20;
+        this->warningLabel = -1;
+        play_sound(NA_SE_SY_FSEL_CLOSE);
+    } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
+
+        if (!gSaveContext.unk_3F3F) {
+            if (SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
+                this->actionTimer = 4;
+                this->selectedFileIndex = this->buttonIndex;
+                this->configMode = 0x17;
+                this->nextTitleLabel = FS_TITLE_ERASE_CONFIRM;
+                play_sound(NA_SE_SY_FSEL_DECIDE_L);
+            } else {
+                play_sound(NA_SE_SY_FSEL_ERROR);
+            }
+        } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, this->buttonIndex)) {
+            this->actionTimer = 4;
+            this->selectedFileIndex = this->buttonIndex;
+            this->configMode = 0x17;
+            this->nextTitleLabel = FS_TITLE_ERASE_CONFIRM;
+            play_sound(NA_SE_SY_FSEL_DECIDE_L);
+        } else {
+            play_sound(NA_SE_SY_FSEL_ERROR);
+        }
+    } else {
+        if (ABS_ALT(this->stickRelY) >= 30) {
+            play_sound(NA_SE_SY_FSEL_CURSOR);
+
+            if (this->stickRelY >= 30) {
+                this->buttonIndex--;
+                if (this->buttonIndex == 2) {
+                    this->buttonIndex = 1;
+                }
+                if (this->buttonIndex < 0) {
+                    this->buttonIndex = 3;
+                }
+            } else {
+                this->buttonIndex++;
+                if (this->buttonIndex == 2) {
+                    this->buttonIndex = 3;
+                }
+                if (this->buttonIndex >= 4) {
+                    this->buttonIndex = 0;
+                }
+            }
+        }
+
+        if (this->buttonIndex != 3) {
+            if (!gSaveContext.unk_3F3F) {
+                if (!SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
+                    this->warningLabel = 3;
+                    this->warningButtonIndex = this->buttonIndex;
+                    this->emptyFileTextAlpha = 0xFF;
+                } else {
+                    this->warningLabel = -1;
+                }
+            } else if (!FILE_CHOOSE_SLOT_OCCUPIED(this, this->buttonIndex)) {
+                this->warningLabel = 3;
+                this->warningButtonIndex = this->buttonIndex;
+                this->emptyFileTextAlpha = 0xFF;
+            } else {
+                this->warningLabel = -1;
+            }
+        } else {
+            this->warningLabel = -1;
+        }
+    }
+}
+
+/**
+ * Update function for `CM_SETUP_ERASE_CONFIRM_1`
+ */
+void FileSelect_SetupEraseConfirm1(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    s16 i;
+    s32 yStep;
+
+    for (i = 0; i < 3; i++) {
+        if (i != this->buttonIndex) {
+            this->fileButtonAlpha[i] -= 50;
+
+            if (!gSaveContext.unk_3F3F) {
+                if (SLOT_OCCUPIED(sramCtx, i)) {
+                    this->connectorAlpha[i] -= 63;
+                    this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i];
+                }
+            } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
+                this->connectorAlpha[i] -= 63;
+                this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i];
+            }
+        } else {
+            this->nameBoxAlpha[i] -= 50;
+        }
+    }
+    this->titleAlpha[0] -= 31;
+    this->titleAlpha[1] += 31;
+
+    yStep = ABS_ALT(this->buttonYOffsets[this->buttonIndex] - D_8081426C[this->buttonIndex]) / this->actionTimer;
+
+    if (this->buttonYOffsets[this->buttonIndex] >= D_8081426C[this->buttonIndex]) {
+        this->buttonYOffsets[this->buttonIndex] -= yStep;
+    } else {
+        this->buttonYOffsets[this->buttonIndex] += yStep;
+    }
+
+    this->actionTimer--;
+
+    if (this->actionTimer == 0) {
+        for (i = 0; i < 3; i++) {
+            if (i != this->buttonIndex) {
+                this->fileButtonAlpha[i] = 0;
+
+                if (!gSaveContext.unk_3F3F) {
+                    if (SLOT_OCCUPIED(sramCtx, i)) {
+                        this->connectorAlpha[i] = 0;
+                        this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i] = 0;
+                    }
+                } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
+                    this->connectorAlpha[i] = 0;
+                    this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i] = 0;
+                }
+            } else {
+                this->nameBoxAlpha[i] = 0;
+            }
+        }
+
+        this->buttonYOffsets[this->buttonIndex] = D_8081426C[this->buttonIndex];
+        this->actionTimer = 4;
+        this->configMode++;
+    }
+}
+
+/**
+ * Show the file info of the file selected to erase.
+ * Update function for `CM_SETUP_ERASE_CONFIRM_2`
+ */
+void FileSelect_SetupEraseConfirm2(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+
+    this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] += 50;
+    this->titleAlpha[0] -= 31;
+    this->titleAlpha[1] += 31;
+    this->fileInfoAlpha[this->buttonIndex] += 50;
+    this->actionTimer--;
+
+    if (this->actionTimer == 0) {
+        this->actionTimer = 4;
+        this->titleLabel = this->nextTitleLabel;
+        this->fileInfoAlpha[this->buttonIndex] = this->titleAlpha[0] = 255;
+        this->titleAlpha[1] = 0;
+        this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] = 200;
+        this->buttonIndex = 1;
+        this->configMode = 0x19;
+    }
+}
+
+/**
+ * Allow the player to confirm their choice to erase or return back to erase select.
+ * Update function for `CM_ERASE_CONFIRM`
+ */
+void FileSelect_EraseConfirm(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    Input* input = &this->state.input[0];
+
+    if (((this->buttonIndex != FS_BTN_CONFIRM_YES) && CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) ||
+        CHECK_BTN_ALL(input->press.button, BTN_B)) {
+        this->buttonIndex = this->selectedFileIndex;
+        this->nextTitleLabel = FS_TITLE_ERASE_FILE;
+        this->configMode = 0x1A;
+        this->actionTimer = 4;
+        play_sound(NA_SE_SY_FSEL_CLOSE);
+    } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
+        func_80146580(this, sramCtx, this->selectedFileIndex);
+        if (!gSaveContext.unk_3F3F) {
+            this->configMode = 0x1C;
+        } else {
+            func_80147008(sramCtx, D_801C67C8[this->selectedFileIndex * 2], D_801C6818[this->selectedFileIndex * 2]);
+            func_80147020(sramCtx);
+            this->configMode = 0x1D;
+        }
+        this->connectorAlpha[this->selectedFileIndex] = 0;
+        play_sound(NA_SE_EV_DIAMOND_SWITCH);
+        this->actionTimer = 4;
+        this->nextTitleLabel = FS_TITLE_ERASE_COMPLETE;
+        Rumble_Request(200.0f, 255, 20, 150);
+        sEraseDelayTimer = 15;
+    } else if (ABS_ALT(this->stickRelY) >= 30) {
+        play_sound(NA_SE_SY_FSEL_CURSOR);
+        this->buttonIndex ^= 1;
+    }
+}
+
+/**
+ * Fade out file info, bring back the name box, and get ready to return to erase select screen.
+ * Update function for `CM_EXIT_TO_ERASE_SELECT_1`
+ */
+void FileSelect_ExitToEraseSelect1(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+
+    this->fileInfoAlpha[this->buttonIndex] -= 50;
+    this->nameBoxAlpha[this->buttonIndex] += 50;
+    this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] -= 50;
+    this->actionTimer--;
+
+    if (this->actionTimer == 0) {
+        this->actionTimer = 4;
+        this->fileInfoAlpha[this->buttonIndex] = 0;
+        this->configMode++;
+    }
+}
+
+/**
+ * Move the buttons back into place and return to erase select.
+ * Update function for `CM_EXIT_TO_ERASE_SELECT_2`
+ */
+void FileSelect_ExitToEraseSelect2(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    s16 i;
+    s32 yStep;
+
+    yStep =
+        ABS_ALT(this->buttonYOffsets[this->buttonIndex] - sChooseFileYOffsets[this->buttonIndex]) / this->actionTimer;
+
+    if (this->buttonYOffsets[this->buttonIndex] >= sChooseFileYOffsets[this->buttonIndex]) {
+        this->buttonYOffsets[this->buttonIndex] -= yStep;
+    } else {
+        this->buttonYOffsets[this->buttonIndex] += yStep;
+    }
+
+    for (i = 0; i < 3; i++) {
+        if (i != this->buttonIndex) {
+            this->fileButtonAlpha[i] += 50;
+
+            if (!gSaveContext.unk_3F3F) {
+                if (SLOT_OCCUPIED(sramCtx, i)) {
+                    this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i];
+                    this->connectorAlpha[i] += 63;
+                }
+            } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
+                this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i];
+                this->connectorAlpha[i] += 63;
+            }
+        }
+    }
+
+    this->titleAlpha[0] -= 63;
+    this->titleAlpha[1] += 63;
+    this->actionTimer--;
+
+    if (this->actionTimer == 0) {
+        this->buttonYOffsets[this->buttonIndex] = sChooseFileYOffsets[this->buttonIndex];
+        this->actionTimer = 4;
+        this->buttonIndex = 3;
+        this->titleLabel = this->nextTitleLabel;
+        this->titleAlpha[0] = 255;
+        this->titleAlpha[1] = 0;
+        this->configMode = 0x16;
+    }
+}
+
+/**
+ * Wait for an initial delay, then start fading out the selected file.
+ * The actual file deletion occurs in this function
+ * Update function for `CM_ERASE_ANIM_1`
+ */
+void FileSelect_EraseAnim1(GameState* thisx) {
+    static s16 D_80814E80;
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+
+    if (sEraseDelayTimer == 0) {
+        if (this->actionTimer == 4) {
+            D_80814E80 = 1;
+        }
+
+        if (this->actionTimer != 0) {
+            this->titleAlpha[0] -= 63;
+            this->titleAlpha[1] += 63;
+            this->fileInfoAlpha[this->selectedFileIndex] -= 50;
+            this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] -= 50;
+            this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] -= 50;
+        }
+
+        this->fileNamesY[this->selectedFileIndex] -= D_80814E80;
+        D_80814E80 += 2;
+
+        this->actionTimer--;
+        if (this->actionTimer == 0) {
+            this->configMode = 0x1E;
+            this->titleLabel = this->nextTitleLabel;
+            this->titleAlpha[0] = 255;
+            this->titleAlpha[1] = this->connectorAlpha[this->selectedFileIndex] = 0;
+
+            // probably a fake match, there should be a better chained assignment
+            this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] = this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] = 0;
+            if (1) {}
+            if (0) {}
+            this->fileInfoAlpha[this->selectedFileIndex] = this->nameAlpha[this->selectedFileIndex] =
+                this->nameBoxAlpha[this->selectedFileIndex] = this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT];
+
+            this->actionTimer = 45;
+        }
+    } else {
+        sEraseDelayTimer--;
+
+        if (sEraseDelayTimer == 0) {
+            play_sound(NA_SE_OC_ABYSS);
+        }
+    }
+}
+
+void func_80807390(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    u16 i;
+
+    func_80147068(sramCtx);
+
+    if (sramCtx->status == 0) {
+        this->configMode = 0x1C;
+        for (i = 0; i < 6; i++) {
+            this->newf[this->selectedFileIndex][i] = gSaveContext.save.playerData.newf[i];
+        }
+    }
+}
+
+/**
+ * Wait for a delay timer or for the palyer to press a button before returning to the main menu.
+ * Update function for `CM_ERASE_ANIM_2`
+ */
+void FileSelect_EraseAnim2(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    Input* input = &this->state.input[0];
+
+    if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_B | BTN_START) || (--this->actionTimer == 0)) {
+        this->buttonYOffsets[3] = 0;
+        this->actionTimer = 4;
+        this->nextTitleLabel = FS_TITLE_SELECT_FILE;
+        this->configMode++;
+        play_sound(NA_SE_SY_FSEL_CLOSE);
+    }
+}
+
+/**
+ * Exit from the erase animation to the main menu. Return all buttons and labels to their original place.
+ * Update function for `CM_ERASE_ANIM_3`
+ */
+void FileSelect_EraseAnim3(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    s16 i;
+    s32 yStep;
+
+    for (i = 0; i < 5; i++) {
+        yStep = ABS_ALT(this->buttonYOffsets[i]) / this->actionTimer;
+
+        if (this->buttonYOffsets[i] >= 0) {
+            this->buttonYOffsets[i] -= yStep;
+        } else {
+            this->buttonYOffsets[i] += yStep;
+        }
+    }
+
+    for (i = 0; i < 3; i++) {
+        this->fileButtonAlpha[i] += 50;
+
+        if (!gSaveContext.unk_3F3F) {
+            if (SLOT_OCCUPIED(sramCtx, i)) {
+                this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i];
+                this->connectorAlpha[i] += 63;
+            }
+        } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
+            this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i];
+            this->connectorAlpha[i] += 63;
+        }
+    }
+
+    if (this->fileButtonAlpha[this->selectedFileIndex] >= 200) {
+        this->fileButtonAlpha[this->selectedFileIndex] = 200;
+    }
+
+    this->titleAlpha[0] -= 63;
+    this->titleAlpha[1] += 63;
+    this->actionTimer--;
+
+    if (this->actionTimer == 0) {
+        this->fileNamesY[this->selectedFileIndex] = 0;
+        this->highlightColor[3] = 70;
+        this->highlightPulseDir = 1;
+        this->highlightTimer = 20;
+        this->actionButtonAlpha[FS_BTN_ACTION_COPY] = 200;
+        this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] = this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] = 0;
+        this->titleLabel = this->nextTitleLabel;
+        this->titleAlpha[0] = 255;
+        this->titleAlpha[1] = 0;
+        this->configMode = 2;
+    }
+
+    this->optionButtonAlpha = this->actionButtonAlpha[FS_BTN_ACTION_ERASE] =
+        this->actionButtonAlpha[FS_BTN_ACTION_COPY];
+}
+
+/**
+ * Exit from the erase select screen to the main menu. Return all buttons and labels to their original place.
+ * Update function for `CM_EXIT_ERASE_TO_MAIN`
+ */
+void FileSelect_ExitEraseToMain(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    s16 i;
+    s32 yStep;
+
+    for (i = 0; i < 5; i++) {
+        yStep = ABS_ALT(this->buttonYOffsets[i]) / this->actionTimer;
+
+        if (this->buttonYOffsets[i] >= 0) {
+            this->buttonYOffsets[i] -= yStep;
+        } else {
+            this->buttonYOffsets[i] += yStep;
+        }
+    }
+
+    this->actionButtonAlpha[FS_BTN_ACTION_COPY] += 50;
+    this->actionButtonAlpha[FS_BTN_ACTION_ERASE] += 50;
+    this->optionButtonAlpha += 50;
+    this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] -= 100;
+
+    if (this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] <= 0) {
+        this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] = 0;
+    }
+
+    this->titleAlpha[0] -= 63;
+    this->titleAlpha[1] += 63;
+    this->actionTimer--;
+
+    if (this->actionTimer == 0) {
+        this->highlightColor[3] = 70;
+        this->highlightPulseDir = 1;
+        this->highlightTimer = 20;
+        this->actionButtonAlpha[FS_BTN_ACTION_COPY] = 200;
+        this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] = 0;
+        this->titleLabel = this->nextTitleLabel;
+        this->titleAlpha[0] = 255;
+        this->titleAlpha[1] = 0;
+        this->configMode = 2;
+    }
+
+    this->optionButtonAlpha = this->actionButtonAlpha[FS_BTN_ACTION_ERASE] =
+        this->actionButtonAlpha[FS_BTN_ACTION_COPY];
+}

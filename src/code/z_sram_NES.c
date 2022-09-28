@@ -1079,8 +1079,8 @@ void func_80145698(SramContext* sramCtx) {
 
 // Verifies save and use backup if corrupted?
 #ifdef NON_EQUIVALENT
-void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
-    FileSelectState* fileSelect = fileSelect2;
+void func_801457CC(GameState* gameState, SramContext* sramCtx) {
+    FileSelectState* fileSelect = (FileSelectState*)gameState;
     u16 sp7A;
     // u16 sp78;
     u16 sp76;
@@ -1169,7 +1169,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
 
                     fileSelect->healthCapacity[sp76] = gSaveContext.save.playerData.healthCapacity;
                     fileSelect->health[sp76] = gSaveContext.save.playerData.health;
-                    fileSelect->unk_24454[sp76] = gSaveContext.save.inventory.defenseHearts;
+                    fileSelect->defenseHearts[sp76] = gSaveContext.save.inventory.defenseHearts;
                     fileSelect->unk_24444[sp76] = gSaveContext.save.inventory.questItems;
                     fileSelect->unk_24458[sp76] = gSaveContext.save.time;
                     fileSelect->unk_24460[sp76] = gSaveContext.save.day;
@@ -1263,7 +1263,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
 
                         fileSelect->healthCapacity[sp76] = gSaveContext.save.playerData.healthCapacity;
                         fileSelect->health[sp76] = gSaveContext.save.playerData.health;
-                        fileSelect->unk_24454[sp76] = gSaveContext.save.inventory.defenseHearts;
+                        fileSelect->defenseHearts[sp76] = gSaveContext.save.inventory.defenseHearts;
                         fileSelect->unk_24444[sp76] = gSaveContext.save.inventory.questItems;
                         fileSelect->unk_24458[sp76] = gSaveContext.save.time;
                         fileSelect->unk_24460[sp76] = gSaveContext.save.day;
@@ -1366,8 +1366,8 @@ void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
     s16 maskCount;
 
     if (gSaveContext.unk_3F3F) {
-        if (fileSelect->unk_2446A[fileSelect->unk_2448E]) {
-            func_80147414(sramCtx, fileSelect->unk_2448E, fileSelect->fileNum);
+        if (fileSelect->unk_2446A[fileSelect->selectedFileIndex]) {
+            func_80147414(sramCtx, fileSelect->selectedFileIndex, fileSelect->fileNum);
             fileSelect->unk_24410[fileSelect->fileNum] = gSaveContext.save.playerData.deaths;
 
             for (i = 0; i < ARRAY_COUNT(gSaveContext.save.playerData.playerName); i++) {
@@ -1399,11 +1399,12 @@ void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
         // clear buffer
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         // read to buffer
-        func_80185968(sramCtx->saveBuf, D_801C67C8[fileSelect->unk_2448E * 2], D_801C67F0[fileSelect->unk_2448E * 2]);
+        func_80185968(sramCtx->saveBuf, D_801C67C8[fileSelect->selectedFileIndex * 2],
+                      D_801C67F0[fileSelect->selectedFileIndex * 2]);
 
         if (1) {}
-        func_80185968(&sramCtx->saveBuf[0x2000], D_801C67C8[fileSelect->unk_2448E * 2 + 1],
-                      D_801C67F0[fileSelect->unk_2448E * 2 + 1]);
+        func_80185968(&sramCtx->saveBuf[0x2000], D_801C67C8[fileSelect->selectedFileIndex * 2 + 1],
+                      D_801C67F0[fileSelect->selectedFileIndex * 2 + 1]);
         if (1) {}
 
         // copy buffer to save context
@@ -1417,7 +1418,7 @@ void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
 
         fileSelect->healthCapacity[fileSelect->fileNum] = gSaveContext.save.playerData.healthCapacity;
         fileSelect->health[fileSelect->fileNum] = gSaveContext.save.playerData.health;
-        fileSelect->unk_24454[fileSelect->fileNum] = gSaveContext.save.inventory.defenseHearts;
+        fileSelect->defenseHearts[fileSelect->fileNum] = gSaveContext.save.inventory.defenseHearts;
         fileSelect->unk_24444[fileSelect->fileNum] = gSaveContext.save.inventory.questItems;
         fileSelect->unk_24458[fileSelect->fileNum] = gSaveContext.save.time;
         fileSelect->unk_24460[fileSelect->fileNum] = gSaveContext.save.day;
@@ -1485,7 +1486,7 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
 
         fileSelect->healthCapacity[fileSelect->buttonIndex] = gSaveContext.save.playerData.healthCapacity;
         fileSelect->health[fileSelect->buttonIndex] = gSaveContext.save.playerData.health;
-        fileSelect->unk_24454[fileSelect->buttonIndex] = gSaveContext.save.inventory.defenseHearts;
+        fileSelect->defenseHearts[fileSelect->buttonIndex] = gSaveContext.save.inventory.defenseHearts;
         fileSelect->unk_24444[fileSelect->buttonIndex] = gSaveContext.save.inventory.questItems;
         fileSelect->unk_24458[fileSelect->buttonIndex] = gSaveContext.save.time;
         fileSelect->unk_24460[fileSelect->buttonIndex] = gSaveContext.save.day;

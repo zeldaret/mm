@@ -684,7 +684,6 @@ beginseg
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_nameset_NES.o"
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_choose_80807940.o"
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_choose_NES.o"
-    include "build/data/ovl_file_choose/ovl_file_choose.bss.o"
     include "build/data/ovl_file_choose/ovl_file_choose.reloc.o"
 endseg
 

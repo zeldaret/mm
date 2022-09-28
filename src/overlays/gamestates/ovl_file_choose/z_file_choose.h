@@ -3,8 +3,57 @@
 
 #include "global.h"
 
-void FileSelect_Init(GameState* thisx);
-void FileSelect_Destroy(GameState* thisx);
+#define GET_NEWF(sramCtx, slotNum, index) \
+    (sramCtx->readBuff[gSramSlotOffsets[slotNum] + offsetof(SaveContext, save.playerData.newf[index])])
+#define SLOT_OCCUPIED(sramCtx, slotNum)                                                  \
+    ((GET_NEWF(sramCtx, slotNum, 0) == 'Z') || (GET_NEWF(sramCtx, slotNum, 1) == 'E') || \
+     (GET_NEWF(sramCtx, slotNum, 2) == 'L') || (GET_NEWF(sramCtx, slotNum, 3) == 'D') || \
+     (GET_NEWF(sramCtx, slotNum, 4) == 'A') || (GET_NEWF(sramCtx, slotNum, 5) == '3'))
+
+#define GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, index) (fileSelect->newf[slotNum][index])
+#define FILE_CHOOSE_SLOT_OCCUPIED(fileSelect, slotNum)                                                                 \
+    ((GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 0) == 'Z') && (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 1) == 'E') && \
+     (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 2) == 'L') && (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 3) == 'D') && \
+     (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 4) == 'A') && (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 5) == '3'))
+
+typedef enum {
+    /* 0 */ FS_BTN_CONFIRM_YES,
+    /* 1 */ FS_BTN_CONFIRM_QUIT
+} ConfirmButtonIndex;
+
+typedef enum {
+    /* 0 */ FS_BTN_ACTION_COPY,
+    /* 1 */ FS_BTN_ACTION_ERASE
+} ActionButtonIndex;
+
+typedef enum {
+    /* 0 */ FS_BTN_MAIN_FILE_1,
+    /* 1 */ FS_BTN_MAIN_FILE_2,
+    /* 2 */ FS_BTN_MAIN_FILE_3,
+    /* 3 */ FS_BTN_MAIN_COPY,
+    /* 4 */ FS_BTN_MAIN_ERASE,
+    /* 5 */ FS_BTN_MAIN_OPTIONS
+} MainMenuButtonIndex;
+
+typedef enum {
+    /* 0 */ FS_BTN_COPY_FILE_1,
+    /* 1 */ FS_BTN_COPY_FILE_2,
+    /* 2 */ FS_BTN_COPY_FILE_3,
+    /* 3 */ FS_BTN_COPY_QUIT
+} CopyMenuButtonIndex;
+
+typedef enum {
+    /* 0 */ FS_TITLE_SELECT_FILE,   // "Please select a file."
+    /* 1 */ FS_TITLE_OPEN_FILE,     // "Open this file?"
+    /* 2 */ FS_TITLE_COPY_FROM,     // "Copy which file?"
+    /* 3 */ FS_TITLE_COPY_TO,       // "Copy to which file?"
+    /* 4 */ FS_TITLE_COPY_CONFIRM,  // "Are you sure?"
+    /* 5 */ FS_TITLE_COPY_COMPLETE, // "File copied."
+    /* 6 */ FS_TITLE_ERASE_FILE,    // "Erase which file?"
+    /* 7 */ FS_TITLE_ERASE_CONFIRM, // "Are you sure?"
+    /* 8 */ FS_TITLE_ERASE_COMPLETE // "File erased."
+} TitleLabel;
+
 
 typedef struct FileSelectState {
     /* 0x00000 */ GameState state;
@@ -22,8 +71,8 @@ typedef struct FileSelectState {
     /* 0x243E4 */ Vtx* windowContentVtx;
     /* 0x243E8 */ u8   newf2[2][6];
     /* 0x243F4 */ u8   newf[4][6];
-    /* 0x2440C */ u16 unk_2440C[2];
-    /* 0x24410 */ u16 unk_24410[2];
+    /* 0x2440C */ u16 unk_2440C[2]; // deaths (sotCount?)
+    /* 0x24410 */ u16 unk_24410[2]; // deaths (sotCount?)
     /* 0x24414 */ u8 unk_24414[2][8]; // playername
     /* 0x24424 */ u8 unk_24424[2][8]; // playername
     /* 0x24434 */ s16 healthCapacity[2];
@@ -32,7 +81,7 @@ typedef struct FileSelectState {
     /* 0x24440 */ u16 unk_24440[2];
     /* 0x24444 */ u32 unk_24444[2];
     /* 0x2444C */ u32 unk_2444C[2];
-    /* 0x24454 */ s8 unk_24454[2];
+    /* 0x24454 */ s8 defenseHearts[2];
     /* 0x24456 */ u8 unk_24456[2];
     /* 0x24458 */ u16 unk_24458[2];
     /* 0x2445C */ u16 unk_2445C[2];
@@ -55,7 +104,7 @@ typedef struct FileSelectState {
     /* 0x24488 */ s16  unk_24488;
     /* 0x2448A */ s16  nextConfigMode;
     /* 0x2448C */ s16  selectMode;
-    /* 0x2448E */ s16  unk_2448E;
+    /* 0x2448E */ s16  selectedFileIndex;
     /* 0x24490 */ s16  unk_24490;
     /* 0x24492 */ s16  fileNamesY[3];
     /* 0x24498 */ s16  actionTimer;
@@ -111,5 +160,8 @@ typedef struct FileSelectState {
     /* 0x2454E */ s16  unk_2454E;
     /* 0x24550 */ s16  unk_24550;
 } FileSelectState; // size = 0x24558
+
+void FileSelect_Init(GameState* thisx);
+void FileSelect_Destroy(GameState* thisx);
 
 #endif

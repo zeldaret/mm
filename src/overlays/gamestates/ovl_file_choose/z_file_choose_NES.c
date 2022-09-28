@@ -11,7 +11,6 @@
 
 void func_801A3238(u8 playerIdx, u16 seqId, u8 fadeTimer, s8 arg3, s8 arg4);
 void func_801A4058(u16);
-void func_801457CC(FileSelectState* fileSelect, SramContext* sramCtx);
 
 extern Gfx D_010311F0[];
 extern Gfx D_01031408[];
@@ -110,19 +109,6 @@ s16 sWindowContentColors[] = { 100, 150, 255 };
 s16 sFileSelectSkyboxRotation = 0;
 
 s16 D_80814554[] = { 1, 0, 0, 0 };
-
-#define GET_NEWF(sramCtx, slotNum, index) \
-    (sramCtx->readBuff[gSramSlotOffsets[slotNum] + offsetof(SaveContext, save.playerData.newf[index])])
-#define SLOT_OCCUPIED(sramCtx, slotNum)                                                  \
-    ((GET_NEWF(sramCtx, slotNum, 0) == 'Z') || (GET_NEWF(sramCtx, slotNum, 1) == 'E') || \
-     (GET_NEWF(sramCtx, slotNum, 2) == 'L') || (GET_NEWF(sramCtx, slotNum, 3) == 'D') || \
-     (GET_NEWF(sramCtx, slotNum, 4) == 'A') || (GET_NEWF(sramCtx, slotNum, 5) == '3'))
-
-#define GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, index) (fileSelect->newf[slotNum][index])
-#define FILE_CHOOSE_SLOT_OCCUPIED(fileSelect, slotNum)                                                                 \
-    ((GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 0) == 'Z') && (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 1) == 'E') && \
-     (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 2) == 'L') && (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 3) == 'D') && \
-     (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 4) == 'A') && (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 5) == '3'))
 
 void func_8080BC20(FileSelectState* this) {
     this->configMode++;
@@ -231,7 +217,8 @@ void FileSelect_FadeInMenuElements(FileSelectState* this) {
         }
     }
 
-    this->actionButtonAlpha[0] = this->actionButtonAlpha[1] = this->optionButtonAlpha = this->windowAlpha;
+    this->actionButtonAlpha[FS_BTN_ACTION_COPY] = this->actionButtonAlpha[FS_BTN_ACTION_ERASE] =
+        this->optionButtonAlpha = this->windowAlpha;
 }
 
 // SplitDigits? ExtractDigits?
@@ -317,7 +304,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                     play_sound(NA_SE_SY_FSEL_DECIDE_L);
                     this->actionTimer = 4;
                     this->selectMode = 0;
-                    this->unk_2448E = this->buttonIndex;
+                    this->selectedFileIndex = this->buttonIndex;
                     this->menuMode = 2;
                     this->nextTitleLabel = 1;
                 }
@@ -341,7 +328,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                 play_sound(NA_SE_SY_FSEL_DECIDE_L);
                 this->actionTimer = 4;
                 this->selectMode = 0;
-                this->unk_2448E = this->buttonIndex;
+                this->selectedFileIndex = this->buttonIndex;
                 this->menuMode = 2;
                 this->nextTitleLabel = 1;
             }
@@ -495,36 +482,36 @@ void FileSelect_RotateToMain(GameState* thisx) {
 // End of Config Mode Update Functions
 
 // Nameset
-void func_80804010(GameState* thisx);
-void func_808041A0(GameState* thisx);
-void func_80804654(GameState* thisx);
-void func_808047D8(GameState* thisx);
-void func_8080489C(GameState* thisx);
-void func_80804DAC(GameState* thisx);
-void func_80804E74(GameState* thisx);
-void func_80804F98(GameState* thisx);
-void func_8080525C(GameState* thisx);
-void func_808052B0(GameState* thisx);
+void FileSelect_SetupCopySource(GameState* thisx);
+void FileSelect_SelectCopySource(GameState* thisx);
+void FileSelect_SetupCopyDest1(GameState* thisx);
+void FileSelect_SetupCopyDest2(GameState* thisx);
+void FileSelect_SelectCopyDest(GameState* thisx);
+void FileSelect_ExitToCopySource1(GameState* thisx);
+void FileSelect_ExitToCopySource2(GameState* thisx);
+void FileSelect_SetupCopyConfirm1(GameState* thisx);
+void FileSelect_SetupCopyConfirm2(GameState* thisx);
+void FileSelect_CopyConfirm(GameState* thisx);
 void func_808054A4(GameState* thisx);
-void func_808055D0(GameState* thisx);
-void func_808058A4(GameState* thisx);
-void func_80805918(GameState* thisx);
-void func_80805A58(GameState* thisx);
-void func_80805B30(GameState* thisx);
-void func_80805C1C(GameState* thisx);
-void func_80806014(GameState* thisx);
-void func_80806148(GameState* thisx);
-void func_80806310(GameState* thisx);
-void func_808067E0(GameState* thisx);
-void func_80806BC8(GameState* thisx);
-void func_80806CA0(GameState* thisx);
-void func_80806E84(GameState* thisx);
-void func_80806F30(GameState* thisx);
-void func_808071E4(GameState* thisx);
+void FileSelect_ReturnToCopyDest(GameState* thisx);
+void FileSelect_CopyAnim1(GameState* thisx);
+void FileSelect_CopyAnim2(GameState* thisx);
+void FileSelect_CopyAnim3(GameState* thisx);
+void FileSelect_CopyAnim4(GameState* thisx);
+void FileSelect_CopyAnim5(GameState* thisx);
+void FileSelect_ExitCopyToMain(GameState* thisx);
+void FileSelect_SetupEraseSelect(GameState* thisx);
+void FileSelect_EraseSelect(GameState* thisx);
+void FileSelect_SetupEraseConfirm1(GameState* thisx);
+void FileSelect_SetupEraseConfirm2(GameState* thisx);
+void FileSelect_EraseConfirm(GameState* thisx);
+void FileSelect_ExitToEraseSelect1(GameState* thisx);
+void FileSelect_ExitToEraseSelect2(GameState* thisx);
+void FileSelect_EraseAnim1(GameState* thisx);
 void func_80807390(GameState* thisx);
-void func_8080742C(GameState* thisx);
-void func_808074B4(GameState* thisx);
-void func_808077AC(GameState* thisx);
+void FileSelect_EraseAnim2(GameState* thisx);
+void FileSelect_EraseAnim3(GameState* thisx);
+void FileSelect_ExitEraseToMain(GameState* thisx);
 
 // Copy/erase?
 void FileSelect_StartNameEntry(GameState* thisx);
@@ -538,36 +525,36 @@ void (*gConfigModeUpdateFuncs[])(GameState*) = {
     FileSelect_StartFadeIn,
     FileSelect_FinishFadeIn,
     FileSelect_UpdateMainMenu,
-    func_80804010,
-    func_808041A0,
-    func_80804654,
-    func_808047D8,
-    func_8080489C,
-    func_80804DAC,
-    func_80804E74,
-    func_80804F98,
-    func_8080525C,
-    func_808052B0,
+    FileSelect_SetupCopySource,
+    FileSelect_SelectCopySource,
+    FileSelect_SetupCopyDest1,
+    FileSelect_SetupCopyDest2,
+    FileSelect_SelectCopyDest,
+    FileSelect_ExitToCopySource1,
+    FileSelect_ExitToCopySource2,
+    FileSelect_SetupCopyConfirm1,
+    FileSelect_SetupCopyConfirm2,
+    FileSelect_CopyConfirm,
     func_808054A4,
-    func_808055D0,
-    func_808058A4,
-    func_80805918,
-    func_80805A58,
-    func_80805B30,
-    func_80805C1C,
-    func_80806014,
-    func_80806148,
-    func_80806310,
-    func_808067E0,
-    func_80806BC8,
-    func_80806CA0,
-    func_80806E84,
-    func_80806F30,
-    func_808071E4,
+    FileSelect_ReturnToCopyDest,
+    FileSelect_CopyAnim1,
+    FileSelect_CopyAnim2,
+    FileSelect_CopyAnim3,
+    FileSelect_CopyAnim4,
+    FileSelect_CopyAnim5,
+    FileSelect_ExitCopyToMain,
+    FileSelect_SetupEraseSelect,
+    FileSelect_EraseSelect,
+    FileSelect_SetupEraseConfirm1,
+    FileSelect_SetupEraseConfirm2,
+    FileSelect_EraseConfirm,
+    FileSelect_ExitToEraseSelect1,
+    FileSelect_ExitToEraseSelect2,
+    FileSelect_EraseAnim1,
     func_80807390,
-    func_8080742C,
-    func_808074B4,
-    func_808077AC,
+    FileSelect_EraseAnim2,
+    FileSelect_EraseAnim3,
+    FileSelect_ExitEraseToMain,
     func_8080D164,
     FileSelect_RotateToNameEntry,
     FileSelect_StartNameEntry,
@@ -1527,8 +1514,8 @@ void FileSelect_FadeMainToSelect(GameState* thisx) {
     for (i = 0; i < 3; i++) {
         if (i != this->buttonIndex) {
             this->fileButtonAlpha[i] -= 50;
-            this->actionButtonAlpha[0] = this->actionButtonAlpha[1] = this->optionButtonAlpha =
-                this->fileButtonAlpha[i];
+            this->actionButtonAlpha[FS_BTN_ACTION_COPY] = this->actionButtonAlpha[FS_BTN_ACTION_ERASE] =
+                this->optionButtonAlpha = this->fileButtonAlpha[i];
 
             if (gSaveContext.unk_3F3F == 0) {
                 if (SLOT_OCCUPIED(sramCtx, i)) {
@@ -1590,7 +1577,8 @@ void FileSelect_FadeInFileInfo(GameState* thisx) {
         this->selectMode++;
     }
 
-    this->confirmButtonAlpha[0] = this->confirmButtonAlpha[1] = this->fileInfoAlpha[this->buttonIndex];
+    this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] = this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] =
+        this->fileInfoAlpha[this->buttonIndex];
 }
 
 void FileSelect_ConfirmFile(GameState* thisx) {
@@ -1631,7 +1619,8 @@ void FileSelect_FadeOutFileInfo(GameState* thisx) {
         this->actionTimer = 4;
         this->selectMode++;
     }
-    this->confirmButtonAlpha[0] = this->confirmButtonAlpha[1] = this->fileInfoAlpha[this->buttonIndex];
+    this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] = this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] =
+        this->fileInfoAlpha[this->buttonIndex];
 }
 
 void FileSelect_MoveSelectedFileToSlot(GameState* thisx) {
@@ -1655,8 +1644,8 @@ void FileSelect_MoveSelectedFileToSlot(GameState* thisx) {
                 this->fileButtonAlpha[i] = 200;
             }
 
-            this->actionButtonAlpha[0] = this->actionButtonAlpha[1] = this->optionButtonAlpha =
-                this->fileButtonAlpha[i];
+            this->actionButtonAlpha[FS_BTN_ACTION_COPY] = this->actionButtonAlpha[FS_BTN_ACTION_ERASE] =
+                this->optionButtonAlpha = this->fileButtonAlpha[i];
 
             if (gSaveContext.unk_3F3F == 0) {
                 if (SLOT_OCCUPIED(sramCtx, i)) {
@@ -1957,7 +1946,7 @@ void FileSelect_InitContext(GameState* thisx) {
     // this->menuMode = FS_MENU_MODE_INIT;
     this->menuMode = 0;
 
-    this->buttonIndex = this->selectMode = this->unk_2448E = this->fileNum = this->confirmButtonIndex = 0;
+    this->buttonIndex = this->selectMode = this->selectedFileIndex = this->fileNum = this->confirmButtonIndex = 0;
 
     this->confirmButtonTexIndices[0] = 2;
     this->confirmButtonTexIndices[1] = 3;
@@ -1990,10 +1979,10 @@ void FileSelect_InitContext(GameState* thisx) {
         this->fileButtonAlpha[1] = this->fileButtonAlpha[2] = this->nameBoxAlpha[0] = this->nameBoxAlpha[1] =
             this->nameBoxAlpha[2] = this->nameAlpha[0] = this->nameAlpha[1] = this->nameAlpha[2] =
                 this->connectorAlpha[0] = this->connectorAlpha[1] = this->connectorAlpha[2] = this->fileInfoAlpha[0] =
-                    this->fileInfoAlpha[1] = this->fileInfoAlpha[2] = this->actionButtonAlpha[0] =
-                        this->actionButtonAlpha[1] = this->actionButtonAlpha[2] = this->actionButtonAlpha[3] =
-                            this->optionButtonAlpha = this->nameEntryBoxAlpha = this->controlsAlpha =
-                                this->emptyFileTextAlpha = 0;
+                    this->fileInfoAlpha[1] = this->fileInfoAlpha[2] = this->actionButtonAlpha[FS_BTN_ACTION_COPY] =
+                        this->actionButtonAlpha[FS_BTN_ACTION_ERASE] = this->actionButtonAlpha[2] =
+                            this->actionButtonAlpha[3] = this->optionButtonAlpha = this->nameEntryBoxAlpha =
+                                this->controlsAlpha = this->emptyFileTextAlpha = 0;
 
     this->windowPosX = 6;
     this->actionTimer = 4;

@@ -68,26 +68,21 @@ s32 D_808141F0[] = {
     0x05060708, 0x0900403F, 0x3E000000, 0x00000000, 0x00000000, 0x00000000,
 };
 
-s32 D_80814240[] = {
-    0xFFD0FFD0,
-    0xFFD0FFE8,
-    0xFFE80000,
+s16 sChooseFileYOffsets[] = { -48, -48, -48, -24, -24, 0 };
+
+s16 D_8081424C[3][3] = {
+    { 0x0000, 0xFFD0, 0xFFD0 },
+    { 0xFFC0, 0x0010, 0xFFD0 },
+    { 0xFFC0, 0xFFC0, 0x0020 },
 };
 
-s32 D_8081424C[] = {
-    0x0000FFD0, 0xFFD0FFC0, 0x0010FFD0, 0xFFC0FFC0, 0x00200000,
-};
+s16 sEraseDelayTimer = 0xF;
 
-s16 D_80814260 = 0xF;
+s16 D_80814264[] = { -56, -40, -24, 0 };
 
-s32 D_80814264[] = {
-    0xFFC8FFD8,
-    0xFFE80000,
-};
+s16 D_8081426C[] = { 0, 16, 32 };
 
-s32 D_8081426C[] = {
-    0x00000010, 0x00200000, 0x00000000, 0x00000000, 0x00000000,
-};
+s32 D_80814274[] = { 0x00000000, 0x00000000, 0x00000000 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80807940.s")
 
@@ -144,6 +139,7 @@ void FileSelect_StartOptions(GameState* thisx) {
     }
 }
 
+u8 D_80814E90;
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080A4A0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080A6BC.s")
@@ -154,3 +150,9 @@ void FileSelect_DrawOptionsImpl(GameState* thisx);
 void FileSelect_DrawOptions(GameState* thisx) {
     FileSelect_DrawOptionsImpl(thisx);
 }
+
+// bss padding
+s32 D_80814E94;
+s32 D_80814E98;
+s32 D_80814E9C;
+s32 D_80814EA0;

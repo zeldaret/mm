@@ -400,7 +400,7 @@ void Sram_InitDebugSave(void);
 void func_80144A94(SramContext* sramCtx);
 void Sram_OpenSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void func_8014546C(SramContext* sramCtx);
-void func_801457CC(struct FileSelectState* fileSelect, SramContext* sramCtx);
+void func_801457CC(struct GameState* gameState, SramContext* sramCtx);
 void func_80146580(struct FileSelectState* fileSelect, SramContext* sramCtx, s32 fileNum);
 void func_80146628(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void Sram_InitSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
