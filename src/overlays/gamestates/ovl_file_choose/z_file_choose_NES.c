@@ -315,7 +315,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                     }
                     this->kbdX = 0;
                     this->kbdY = 0;
-                    this->unk_24516 = 0;
+                    this->charIndex = 0;
                     this->unk_24514 = 0;
                     this->unk_2451C = 0;
                     this->nameEntryBoxPosX = 120;
@@ -339,7 +339,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                 }
                 this->kbdX = 0;
                 this->kbdY = 0;
-                this->unk_24516 = 0;
+                this->charIndex = 0;
                 this->unk_24514 = 0;
                 this->unk_2451C = 0;
                 this->nameEntryBoxPosX = 120;
@@ -558,10 +558,10 @@ void FileSelect_ExitEraseToMain(GameState* thisx);
 
 // Copy/erase?
 void FileSelect_StartNameEntry(GameState* thisx);
-void func_80809EA0(GameState* thisx);
+void FileSelect_UpdateKeyboardCursor(GameState* thisx);
 void func_8080A3CC(GameState* thisx);
 void FileSelect_StartOptions(GameState* thisx);
-void func_8080A4A0(GameState* thisx);
+void FileSelect_UpdateOptionsMenu(GameState* thisx);
 void func_8080A6BC(GameState* thisx);
 
 void (*gConfigModeUpdateFuncs[])(GameState*) = {
@@ -601,12 +601,12 @@ void (*gConfigModeUpdateFuncs[])(GameState*) = {
     FileSelect_UnusedCM31,
     FileSelect_RotateToNameEntry,
     FileSelect_StartNameEntry,
-    func_80809EA0,
+    FileSelect_UpdateKeyboardCursor,
     func_8080A3CC,
     FileSelect_RotateToMain,
     FileSelect_RotateToOptions,
     FileSelect_StartOptions,
-    func_8080A4A0,
+    FileSelect_UpdateOptionsMenu,
     func_8080A6BC,
     FileSelect_RotateToMain,
     FileSelect_UnusedCMDelay,
@@ -2731,7 +2731,7 @@ void FileSelect_InitContext(GameState* thisx) {
     this->stickXDir = this->inputTimerX = 0;
     this->stickYDir = this->inputTimerY = 0;
 
-    this->kbdX = this->kbdY = this->unk_24516 = 0;
+    this->kbdX = this->kbdY = this->charIndex = 0;
 
     // this->kbdButton = FS_KBD_BTN_NONE;
     this->kbdButton = 99;

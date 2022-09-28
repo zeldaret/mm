@@ -208,6 +208,10 @@ void FileSelect_SetKeyboardVtx(GameState* thisx) {
     }
 }
 
+/**
+ * Set vertices used by all elements of the name entry screen that are NOT the keyboard.
+ * This includes the cursor highlight, the name entry plate and characters, and the buttons.
+ */
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_SetNameEntryVtx.s")
 
 void FileSelect_DrawKeyboard(GameState* thisx) {
@@ -242,6 +246,11 @@ void FileSelect_DrawKeyboard(GameState* thisx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_DrawNameEntry.s")
 
+/**
+ * Fade in the name entry box and slide it to the center of the screen from the right side.
+ * After the name entry box is in place, init the keyboard/cursor and change modes.
+ * Update function for `CM_START_NAME_ENTRY`
+ */
 void FileSelect_StartNameEntry(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
 
@@ -263,10 +272,139 @@ void FileSelect_StartNameEntry(GameState* thisx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80809EA0.s")
+/**
+ * Update the keyboard cursor and play sound effects at the appropriate times.
+ * There are many special cases for warping the cursor depending on where
+ * the cursor currently is.
+ * Update function for `CM_NAME_ENTRY`
+ */
+void FileSelect_UpdateKeyboardCursor(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    s16 prevKbdX;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080A3CC.s")
+    this->kbdButton = 99;
 
+    if (this->kbdY != 5) {
+        if (this->stickAdjX < -30) {
+            play_sound(NA_SE_SY_FSEL_CURSOR);
+            this->charIndex--;
+            this->kbdX--;
+            if (this->kbdX < 0) {
+                this->kbdX = 12;
+                this->charIndex = (this->kbdY * 13) + this->kbdX;
+            }
+        } else if (this->stickAdjX > 30) {
+            play_sound(NA_SE_SY_FSEL_CURSOR);
+            this->charIndex++;
+            this->kbdX++;
+            if (this->kbdX > 12) {
+                this->kbdX = 0;
+                this->charIndex = (this->kbdY * 13) + this->kbdX;
+            }
+        }
+    } else {
+        if (this->stickAdjX < -30) {
+            play_sound(NA_SE_SY_FSEL_CURSOR);
+            this->kbdX--;
+            if (this->kbdX < 3) {
+                this->kbdX = 4;
+            }
+        } else if (this->stickAdjX > 30) {
+            play_sound(NA_SE_SY_FSEL_CURSOR);
+            this->kbdX++;
+            if (this->kbdX > 4) {
+                this->kbdX = 3;
+            }
+        }
+    }
+
+    if (this->stickAdjY > 30) {
+        play_sound(NA_SE_SY_FSEL_CURSOR);
+
+        this->kbdY--;
+
+        if (this->kbdY < 0) {
+            // dont go to bottom row
+            if (this->kbdX < 8) {
+                this->kbdY = 4;
+                this->charIndex = (s32)(this->kbdX + 52);
+            } else {
+                this->kbdY = 5;
+                this->charIndex += 52;
+                prevKbdX = this->kbdX;
+
+                if (this->kbdX < 10) {
+                    this->kbdX = 3;
+                } else if (this->kbdX < 13) {
+                    this->kbdX = 4;
+                }
+                this->unk_2451E[this->kbdX] = prevKbdX;
+            }
+        } else {
+            this->charIndex -= 13;
+
+            if (this->kbdY == 4) {
+                this->charIndex = 52;
+                this->kbdX = this->unk_2451E[this->kbdX];
+                this->charIndex += this->kbdX;
+            }
+        }
+    } else if (this->stickAdjY < -30) {
+        play_sound(NA_SE_SY_FSEL_CURSOR);
+        this->kbdY++;
+
+        if (this->kbdY > 5) {
+            this->kbdY = 0;
+            this->kbdX = this->unk_2451E[this->kbdX];
+            this->charIndex = this->kbdX;
+        } else {
+            this->charIndex += 13;
+
+            if (this->kbdY == 5) {
+                if (this->kbdX < 8) {
+                    this->kbdY = 0;
+                    this->charIndex = this->kbdX;
+                } else {
+                    prevKbdX = this->kbdX;
+
+                    if (this->kbdX < 3) {
+                        this->kbdX = 0;
+                    } else if (this->kbdX < 6) {
+                        this->kbdX = 1;
+                    } else if (this->kbdX < 8) {
+                        this->kbdX = 2;
+                    } else if (this->kbdX < 10) {
+                        this->kbdX = 3;
+                    } else if (this->kbdX < 13) {
+                        this->kbdX = 4;
+                    }
+                    this->unk_2451E[this->kbdX] = prevKbdX;
+                }
+            }
+        }
+    }
+    if (this->kbdY == 5) {
+        this->kbdButton = this->kbdX;
+    }
+}
+
+void func_8080A3CC(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+
+    func_80147068(sramCtx);
+
+    if (sramCtx->status == 0) {
+        this->configMode = 0x26;
+    }
+}
+
+/**
+ * This function is mostly a copy paste of `FileSelect_StartNameEntry`.
+ * The name entry box fades and slides in even though it is not visible.
+ * After this is complete, change to the options config mode.
+ * Update function for `CM_START_OPTIONS`
+ */
 void FileSelect_StartOptions(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
 
@@ -285,10 +423,78 @@ void FileSelect_StartOptions(GameState* thisx) {
     }
 }
 
-u8 D_80814E90;
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080A4A0.s")
+u8 sSelectedSetting;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080A6BC.s")
+/**
+ * Update the cursor and appropriate settings for the options menu.
+ * If the player presses B, write the selected options to the SRAM header
+ * and set config mode to rotate back to the main menu.
+ * Update function for `CM_OPTIONS_MENU`
+ */
+void FileSelect_UpdateOptionsMenu(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    Input* input = CONTROLLER1(&this->state);
+
+    if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+        play_sound(NA_SE_SY_FSEL_DECIDE_L);
+        func_80146DF8(sramCtx);
+        if (!gSaveContext.unk_3F3F) {
+            this->configMode = 0x2B;
+        } else {
+            func_80147008(sramCtx, D_801C67E8[0], D_801C6838[0]);
+            func_80147020(sramCtx);
+            this->configMode = 0x2A;
+        }
+        func_801A3D98(gSaveContext.options.audioSetting);
+        return;
+    }
+
+    if (this->stickAdjX < -30) {
+        play_sound(NA_SE_SY_FSEL_CURSOR);
+
+        if (sSelectedSetting == 0) {
+            gSaveContext.options.audioSetting--;
+            if (gSaveContext.options.audioSetting > 0xF0) {
+                gSaveContext.options.audioSetting = 3;
+            }
+        } else {
+            gSaveContext.options.zTargetSetting ^= 1;
+        }
+    } else if (this->stickAdjX > 30) {
+        play_sound(NA_SE_SY_FSEL_CURSOR);
+
+        if (sSelectedSetting == 0) {
+            gSaveContext.options.audioSetting++;
+            if (gSaveContext.options.audioSetting > 3) {
+                gSaveContext.options.audioSetting = 0;
+            }
+        } else {
+            gSaveContext.options.zTargetSetting ^= 1;
+        }
+    }
+
+    if ((this->stickAdjY < -30) || (this->stickAdjY > 30)) {
+        play_sound(NA_SE_SY_FSEL_CURSOR);
+        sSelectedSetting ^= 1;
+        return;
+    }
+    if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
+        play_sound(NA_SE_SY_FSEL_DECIDE_L);
+        sSelectedSetting ^= 1;
+    }
+}
+
+void func_8080A6BC(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+
+    func_80147068(sramCtx);
+
+    if (sramCtx->status == 0) {
+        this->configMode = 0x2B;
+    }
+}
 
 void FileSelect_DrawOptionsImpl(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_DrawOptionsImpl.s")

@@ -229,7 +229,7 @@ typedef struct FileSelectState {
     /* 0x24510 */ s16 kbdButton;
     /* 0x24512 */ s16 unk_24512;
     /* 0x24514 */ s16 unk_24514;
-    /* 0x24516 */ s16 unk_24516;
+    /* 0x24516 */ s16 charIndex;
     /* 0x24518 */ s16 kbdX;
     /* 0x2451A */ s16 kbdY;
     /* 0x2451C */ s16 unk_2451C;

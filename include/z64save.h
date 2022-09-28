@@ -124,7 +124,7 @@ typedef struct CycleSceneFlags {
 typedef struct SaveOptions {
     /* 0x0 */ u16 optionId;                            // "option_id"
     /* 0x2 */ u8 language;                             // "j_n"
-    /* 0x3 */ s8 audioSetting;                         // "s_sound"
+    /* 0x3 */ u8 audioSetting;                         // "s_sound"
     /* 0x4 */ u8 languageSetting;                      // "language"
     /* 0x5 */ u8 zTargetSetting;                       // "z_attention", 0: Switch; 1: Hold
 } SaveOptions; // size = 0x6
