@@ -11,9 +11,6 @@
 #include "interface/parameter_static/parameter_static.h"
 #include "misc/title_static/title_static.h"
 
-void func_801A3238(u8 playerIdx, u16 seqId, u8 fadeTimer, s8 arg3, s8 arg4);
-void func_801A4058(u16);
-
 // there are uses of D_0E000000.fillRect (appearing as D_0E0002E0) in this file
 extern GfxMasterList D_0E000000;
 
@@ -179,7 +176,7 @@ void FileSelect_RenderView(FileSelectState* this, f32 eyeX, f32 eyeY, f32 eyeZ) 
     View_RenderView(&this->view, 0x7F);
 }
 
-Gfx* FileSelect_QuadTextureIA8(Gfx* gfx, void* texture, s16 width, s16 height, s16 point) {
+Gfx* FileSelect_DrawTexQuadIA8(Gfx* gfx, void* texture, s16 width, s16 height, s16 point) {
     gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, width, height, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
@@ -1581,7 +1578,7 @@ vtxOffset); i += 1; vtxOffset += 4; } while (i < 3); vtxOffset = 0;
         temp_s2->polyOpa.p = temp_v1_33 + 8;
         temp_v1_33->words.w0 = 0x01004008;
         temp_v1_33->words.w1 = (*sp50 * 0x10) + this->windowContentVtx + 0xCC0;
-        temp_s2->polyOpa.p = FileSelect_QuadTextureIA8(temp_s2->polyOpa.p, D_8081467C[sp3C->unk447C], 0x18, 0x10, (s16)
+        temp_s2->polyOpa.p = FileSelect_DrawTexQuadIA8(temp_s2->polyOpa.p, D_8081467C[sp3C->unk447C], 0x18, 0x10, (s16)
 0); var_t2 = 4; if (sp3C->unk4454 == 0) { var_a2 = 0; } else { var_a2 = 1;
         }
         temp_v1_34 = temp_s2->polyOpa.p;
@@ -1621,7 +1618,7 @@ vtxOffset); i += 1; vtxOffset += 4; } while (i < 3); vtxOffset = 0;
                 sp20A = var_t1;
                 var_t3 += 1;
                 vtxOffset += 4;
-                temp_s2->polyOpa.p = FileSelect_QuadTextureIA8(temp_s2->polyOpa.p, *var_t0, 0x10, 0x10, (s16) 0);
+                temp_s2->polyOpa.p = FileSelect_DrawTexQuadIA8(temp_s2->polyOpa.p, *var_t0, 0x10, 0x10, (s16) 0);
             } while (var_t3 < (s16) temp_s0);
             vtxOffset = 0;
             var_t3 = 0;

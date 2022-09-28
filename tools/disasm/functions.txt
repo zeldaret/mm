@@ -4157,7 +4157,7 @@
     0x8080BC58:("FileSelect_InitModeUpdate",),
     0x8080BDAC:("FileSelect_InitModeDraw",),
     0x8080BDDC:("FileSelect_RenderView",),
-    0x8080BE60:("FileSelect_QuadTextureIA8",),
+    0x8080BE60:("FileSelect_DrawTexQuadIA8",),
     0x8080C040:("FileSelect_FadeInMenuElements",),
     0x8080C228:("FileSelect_SplitNumber",),
     0x8080C29C:("FileSelect_StartFadeIn",),

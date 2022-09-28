@@ -3256,7 +3256,7 @@ void func_801A2ED8(void);
 void func_801A3098(u16 seqId);
 // void func_801A312C(void);
 void func_801A31EC(u16 seqId, s8 arg1, u8 arg2);
-// void func_801A3238(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5);
+void func_801A3238(s8 seqPlayerIndex, u16 seqId, u8 fadeTimer, s8 arg3, u8 arg4);
 // void func_801A32CC(void);
 // void func_801A3590(void);
 u8 func_801A3950(s32 playerIndex, s32 isChannelIOSet);

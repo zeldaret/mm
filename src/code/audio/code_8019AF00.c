@@ -68,7 +68,6 @@ typedef struct {
 
 s32 AudioOcarina_MemoryGameNextNote(void);
 s32 Audio_SetGanonsTowerBgmVolume(u8 targetVolume);
-void func_801A3238(s8 playerIndex, u16 seqId, u8 fadeTimer, s8 arg3, u8 arg4);
 
 // Sfx bss
 SfxSettings sSfxSettings[8];
