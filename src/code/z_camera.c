@@ -1175,12 +1175,12 @@ void Camera_UpdateInterface(s32 interfaceFlags) {
 
     if ((interfaceFlags & CAM_HUD_VISIBILITY_MASK) != CAM_HUD_VISIBILITY_IGNORE) {
         hudVisibility = (interfaceFlags & CAM_HUD_VISIBILITY_MASK) >> CAM_HUD_VISIBILITY_SHIFT;
-        if (hudVisibility == (CAM_HUD_VISIBILITY_50 >> CAM_HUD_VISIBILITY_SHIFT)) {
+        if (hudVisibility == (CAM_HUD_VISIBILITY_ALL >> CAM_HUD_VISIBILITY_SHIFT)) {
             hudVisibility = 50;
         }
         if (hudVisibility != sCameraHudVisibility) {
             sCameraHudVisibility = hudVisibility;
-            Interface_ChangeAlpha(sCameraHudVisibility);
+            Interface_SetHudVisibility(sCameraHudVisibility);
         }
     }
 }
@@ -4571,7 +4571,7 @@ s32 Camera_KeepOn3(Camera* camera) {
     Camera_SetFocalActorAtOffset(camera, &focalActorPosRot->pos);
     camera->dist = OLib_Vec3fDist(at, eye);
     if (camera->stateFlags & CAM_STATE_3) {
-        sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_NONE, CAM_HUD_VISIBILITY_50, 0);
+        sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_NONE, CAM_HUD_VISIBILITY_ALL, 0);
         Camera_SetUpdateRatesSlow(camera);
         camera->atLerpStepScale = 0.0f;
 
@@ -5652,7 +5652,7 @@ s32 Camera_Unique0(Camera* camera) {
                 if (rwData->timer > 0) {
                     rwData->timer--;
                     if (rwData->timer == 0) {
-                        sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_NONE, CAM_HUD_VISIBILITY_50, 0);
+                        sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_NONE, CAM_HUD_VISIBILITY_ALL, 0);
                     }
                 } else {
                     rwData->unk_00 = focalActorPosRot->pos;
@@ -6144,7 +6144,7 @@ s32 Camera_Demo2(Camera* camera) {
             eyeOffset.pitch = 0;
             eyeOffset.yaw = atToEye.yaw;
             rwData->unk_0C = 0.1f;
-            sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_LARGE, CAM_HUD_VISIBILITY_4, 0);
+            sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_LARGE, CAM_HUD_VISIBILITY_A, 0);
 
             if (!(((rwData->animFrame < 0) || (camera->xzSpeed > 0.001f) ||
                    CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_A) ||
@@ -6164,7 +6164,7 @@ s32 Camera_Demo2(Camera* camera) {
             Camera_SetStateFlag(camera, CAM_STATE_4 | CAM_STATE_2);
             Camera_UnsetStateFlag(camera, CAM_STATE_3);
             func_800CC938(camera);
-            sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_NONE, CAM_HUD_VISIBILITY_50, 0);
+            sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_NONE, CAM_HUD_VISIBILITY_ALL, 0);
         skipeyeUpdate:
             skipUpdateEye = true;
             break;
@@ -6878,7 +6878,7 @@ s32 Camera_Special8(Camera* camera) {
     } else {
         // Cutscene is finished
         Camera_SetStateFlag(camera, CAM_STATE_10 | CAM_STATE_4);
-        sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_NONE, CAM_HUD_VISIBILITY_50, 0);
+        sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_NONE, CAM_HUD_VISIBILITY_ALL, 0);
 
         // Wait for user input to move to the next camera action function
         if ((camera->xzSpeed > 0.001f) || CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_A) ||
@@ -7046,7 +7046,7 @@ s32 Camera_Special9(Camera* camera) {
         default:
             // Door is closed and is waiting for user input to toggle to a new setting
             Camera_SetStateFlag(camera, CAM_STATE_10 | CAM_STATE_4);
-            sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_NONE, CAM_HUD_VISIBILITY_50, 0);
+            sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_NONE, CAM_HUD_VISIBILITY_ALL, 0);
 
             if ((camera->xzSpeed > 0.001f) || CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_A) ||
                 CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_B) ||
@@ -7166,7 +7166,7 @@ void func_800DDFE0(Camera* camera) {
         camera->prevSetting = camera->setting = CAM_SET_FREE0;
         Camera_UnsetStateFlag(camera, CAM_STATE_2);
     } else {
-        switch (camera->play->roomCtx.currRoom.unk3) {
+        switch (camera->play->roomCtx.curRoom.unk3) {
             case 1:
                 camera->prevSetting = CAM_SET_DUNGEON0;
                 Camera_ChangeSettingFlags(camera, CAM_SET_DUNGEON0, CAM_CHANGE_SETTING_1);
@@ -7265,10 +7265,10 @@ void Camera_InitFocalActorSettings(Camera* camera, Actor* focalActor) {
 
     if (camera == &camera->play->mainCamera) {
         sCameraInterfaceFlags =
-            CAM_INTERFACE_FLAGS(CAM_LETTERBOX_LARGE | CAM_LETTERBOX_INSTANT, CAM_HUD_VISIBILITY_2, 0);
+            CAM_INTERFACE_FLAGS(CAM_LETTERBOX_LARGE | CAM_LETTERBOX_INSTANT, CAM_HUD_VISIBILITY_NONE_ALT, 0);
         func_800F15D8(camera);
     } else {
-        sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_LARGE, CAM_HUD_VISIBILITY_2, 0);
+        sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_LARGE, CAM_HUD_VISIBILITY_NONE_ALT, 0);
     }
     Camera_UpdateWater(camera);
 }
@@ -7418,7 +7418,7 @@ void Camera_EarthquakeDay3(Camera* camera) {
  */
 s32 Camera_UpdateHotRoom(Camera* camera) {
     Distortion_ClearType(1);
-    if (camera->play->roomCtx.currRoom.unk2 == 3) {
+    if (camera->play->roomCtx.curRoom.unk2 == 3) {
         Distortion_SetType(1);
     }
     return true;
@@ -7651,7 +7651,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
     if (camera->status == CAM_STATUS_ACTIVE) {
         if (((sCameraInitSceneTimer != 0) || func_800CB854(camera)) && (camera->camId == CAM_ID_MAIN)) {
             // Surpresses the interface for the first few frames of a scene
-            sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_LARGE, CAM_HUD_VISIBILITY_2, 0);
+            sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_LARGE, CAM_HUD_VISIBILITY_NONE_ALT, 0);
             Camera_UpdateInterface(sCameraInterfaceFlags);
         } else if ((camera->play->transitionMode != TRANS_MODE_OFF) && (camera->camId != CAM_ID_MAIN)) {
             sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_IGNORE, CAM_HUD_VISIBILITY_IGNORE, 0);
@@ -7872,7 +7872,7 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
                 break;
 
             case CAM_CHANGE_MODE_1:
-                if (camera->play->roomCtx.currRoom.unk3 == 1) {
+                if (camera->play->roomCtx.curRoom.unk3 == 1) {
                     play_sound(NA_SE_SY_ATTENTION_URGENCY);
                 } else {
 
