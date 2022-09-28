@@ -532,7 +532,7 @@ void func_8095E95C(EnIshi* this, PlayState* play) {
     s32 sp2C;
 
     if (Actor_HasNoParent(&this->actor, play)) {
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         if (ENISHI_GET_1(&this->actor) == 1) {
             Flags_SetSwitch(play, ENISHI_GET_FE00(&this->actor));
         }

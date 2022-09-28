@@ -166,7 +166,7 @@ s32 ObjTsubo_IsSceneNotGohtOrTwinmold(ObjTsubo* this, PlayState* play) {
 }
 
 void func_8092788C(ObjTsubo* this, PlayState* play) {
-    if (!this->unk_197 && (play->roomCtx.currRoom.num != this->homeRoom)) {
+    if (!this->unk_197 && (play->roomCtx.curRoom.num != this->homeRoom)) {
         this->unk_197 = true;
     }
 }
@@ -527,7 +527,7 @@ void func_80928D80(ObjTsubo* this, PlayState* play) {
 
     func_8092788C(this, play);
     if (Actor_HasNoParent(&this->actor, play)) {
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         Actor_MoveWithGravity(&this->actor);
         this->actor.flags &= ~ACTOR_FLAG_4000000;
         Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0xC5);
