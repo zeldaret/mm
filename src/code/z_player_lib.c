@@ -530,7 +530,7 @@ s32 func_801235DC(PlayState* play, f32 arg1, s16 arg2) {
     return false;
 }
 
-ItemID func_8012364C(PlayState* play, Player* player, s32 arg2) {
+ItemId func_8012364C(PlayState* play, Player* player, s32 arg2) {
     if (arg2 >= 4) {
         return ITEM_NONE;
     }
@@ -559,18 +559,18 @@ ItemID func_8012364C(PlayState* play, Player* player, s32 arg2) {
 
     if (arg2 == 1) {
         return (gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)
-               : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)                              ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)
+               : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)         ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)
                                                                               : ITEM_NONE;
     }
 
     if (arg2 == 2) {
         return (gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)
-               : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)                              ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)
+               : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)         ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)
                                                                               : ITEM_NONE;
     }
 
     return (gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)
-           : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)                               ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)
+           : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)          ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)
                                                                            : ITEM_NONE;
 }
 
@@ -579,7 +579,7 @@ u16 sCItemButtons[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
 s32 func_80123810(PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 temp_v0;
-    ItemID itemId;
+    ItemId itemId;
     s32 i;
 
     if (gSaveContext.save.unk_06 == 0) {
@@ -1263,7 +1263,7 @@ void Player_SetEquipmentData(PlayState* play, Player* player) {
     }
 }
 
-void func_80123D50(PlayState* play, Player* player, ItemID itemId, PlayerActionParam actionParam) {
+void func_80123D50(PlayState* play, Player* player, ItemId itemId, PlayerActionParam actionParam) {
     Inventory_UpdateBottleItem(play, itemId, player->heldItemButton);
 
     if (itemId != ITEM_BOTTLE) {

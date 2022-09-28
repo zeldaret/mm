@@ -595,7 +595,7 @@ typedef struct Player {
     /* 0x145 */ s8 currentBoots;
     /* 0x146 */ s8 heldItemButton;
     /* 0x147 */ s8 itemActionParam; // PlayerActionParam enum
-    /* 0x148 */ u8 heldItemId; // ItemID enum
+    /* 0x148 */ u8 heldItemId; // ItemId enum
     /* 0x149 */ s8 prevBoots;
     /* 0x14A */ s8 heldItemActionParam;
     /* 0x14B */ u8 transformation;
