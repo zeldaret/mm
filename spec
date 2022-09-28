@@ -2078,9 +2078,7 @@ beginseg
     name "ovl_Oceff_Wipe4"
     compress
     include "build/src/overlays/actors/ovl_Oceff_Wipe4/z_oceff_wipe4.o"
-    include "build/data/ovl_Oceff_Wipe4/ovl_Oceff_Wipe4.data.o"
-    include "build/data/ovl_Oceff_Wipe4/ovl_Oceff_Wipe4.bss.o"
-    include "build/data/ovl_Oceff_Wipe4/ovl_Oceff_Wipe4.reloc.o"
+    include "build/src/overlays/actors/ovl_Oceff_Wipe4/ovl_Oceff_Wipe4_reloc.o"
 endseg
 
 beginseg
@@ -2173,8 +2171,7 @@ beginseg
     name "ovl_En_Grasshopper"
     compress
     include "build/src/overlays/actors/ovl_En_Grasshopper/z_en_grasshopper.o"
-    include "build/data/ovl_En_Grasshopper/ovl_En_Grasshopper.data.o"
-    include "build/data/ovl_En_Grasshopper/ovl_En_Grasshopper.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Grasshopper/ovl_En_Grasshopper_reloc.o"
 endseg
 
 beginseg
@@ -7011,11 +7008,11 @@ beginseg
 endseg
 
 beginseg
-    name "object_dnq"
+    name "object_dno"
     compress
     romalign 0x1000
     number 6
-    include "build/assets/objects/object_dnq/object_dnq.o"
+    include "build/assets/objects/object_dno/object_dno.o"
 endseg
 
 beginseg
@@ -7579,11 +7576,11 @@ beginseg
 endseg
 
 beginseg
-    name "object_dnp"
+    name "object_dnq"
     compress
     romalign 0x1000
     number 6
-    include "build/assets/objects/object_dnp/object_dnp.o"
+    include "build/assets/objects/object_dnq/object_dnq.o"
 endseg
 
 beginseg
@@ -7747,11 +7744,11 @@ beginseg
 endseg
 
 beginseg
-    name "object_dno"
+    name "object_dnj"
     compress
     romalign 0x1000
     number 6
-    include "build/assets/objects/object_dno/object_dno.o"
+    include "build/assets/objects/object_dnj/object_dnj.o"
 endseg
 
 beginseg

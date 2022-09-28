@@ -328,8 +328,8 @@ s32 func_8094E054(EnGm* this, PlayState* play, s32 arg2) {
 s32 func_8094E0F8(EnGm* this, PlayState* play) {
     s32 ret = false;
 
-    if ((this->unk_260 != play->roomCtx.currRoom.num) && (play->roomCtx.unk31 == 0)) {
-        this->unk_260 = play->roomCtx.currRoom.num;
+    if ((this->unk_260 != play->roomCtx.curRoom.num) && (play->roomCtx.unk31 == 0)) {
+        this->unk_260 = play->roomCtx.curRoom.num;
         this->unk_262 = SubS_GetObjectIndex(OBJECT_IN2, play);
         this->actor.draw = NULL;
         this->unk_3FC = 1;

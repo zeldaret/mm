@@ -138,9 +138,9 @@ void EnHoll_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnHoll_ChangeRooms(PlayState* play) {
-    Room tempRoom = play->roomCtx.currRoom;
+    Room tempRoom = play->roomCtx.curRoom;
 
-    play->roomCtx.currRoom = play->roomCtx.prevRoom;
+    play->roomCtx.curRoom = play->roomCtx.prevRoom;
     play->roomCtx.prevRoom = tempRoom;
     play->roomCtx.activeMemPage ^= 1;
 }
@@ -204,7 +204,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
                     s32 unclampedAlpha = EN_HOLL_SCALE_ALPHA(playerDistFromCentralPlane);
 
                     this->alpha = CLAMP(unclampedAlpha, 0, 255);
-                    if (play->roomCtx.currRoom.num != this->actor.room) {
+                    if (play->roomCtx.curRoom.num != this->actor.room) {
                         EnHoll_ChangeRooms(play);
                     }
                 }
@@ -239,7 +239,7 @@ void EnHoll_TransparentIdle(EnHoll* this, PlayState* play) {
 
             this->actor.room = room;
 
-            if ((this->actor.room != play->roomCtx.currRoom.num) &&
+            if ((this->actor.room != play->roomCtx.curRoom.num) &&
                 Room_StartRoomTransition(play, &play->roomCtx, this->actor.room)) {
                 this->actionFunc = EnHoll_RoomTransitionIdle;
             }
@@ -264,7 +264,7 @@ void EnHoll_VerticalBgCoverIdle(EnHoll* this, PlayState* play) {
 
             this->actor.room = play->doorCtx.transitionActorList[enHollId].sides[playerSide].room;
 
-            if ((this->actor.room != play->roomCtx.currRoom.num) &&
+            if ((this->actor.room != play->roomCtx.curRoom.num) &&
                 Room_StartRoomTransition(play, &play->roomCtx, this->actor.room)) {
                 this->actionFunc = EnHoll_RoomTransitionIdle;
                 this->bgCoverAlphaActive = true;
@@ -287,7 +287,7 @@ void EnHoll_VerticalIdle(EnHoll* this, PlayState* play) {
             s32 playerSide = (this->actor.playerHeightRel > 0.0f) ? EN_HOLL_ABOVE : EN_HOLL_BELOW;
 
             this->actor.room = play->doorCtx.transitionActorList[enHollId].sides[playerSide].room;
-            if ((this->actor.room != play->roomCtx.currRoom.num) &&
+            if ((this->actor.room != play->roomCtx.curRoom.num) &&
                 Room_StartRoomTransition(play, &play->roomCtx, this->actor.room)) {
                 this->actionFunc = EnHoll_RoomTransitionIdle;
             }

@@ -377,7 +377,7 @@ void Play_SetupRespawnPoint(GameState* thisx, s32 respawnMode, s32 playerParams)
 
     if (this->sceneNum != SCENE_KAKUSIANA) { // Grottos
         Play_SetRespawnData(&this->state, respawnMode, (u16)((void)0, gSaveContext.save.entrance),
-                            this->roomCtx.currRoom.num, playerParams, &player->actor.world.pos,
+                            this->roomCtx.curRoom.num, playerParams, &player->actor.world.pos,
                             player->actor.shape.rot.y);
     }
 }
@@ -427,7 +427,7 @@ void func_80169FDC(GameState* thisx) {
 s32 func_80169FFC(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
 
-    return this->roomCtx.currRoom.mesh->type0.type != 1;
+    return this->roomCtx.curRoom.mesh->type0.type != 1;
 }
 
 s32 FrameAdvance_IsEnabled(GameState* thisx) {

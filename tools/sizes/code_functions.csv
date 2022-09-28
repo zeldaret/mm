@@ -1614,10 +1614,10 @@ asm/non_matchings/code/z_parameter/func_8010EB50.s,func_8010EB50,0x8010EB50,0x14
 asm/non_matchings/code/z_parameter/func_8010EBA0.s,func_8010EBA0,0x8010EBA0,0x2D
 asm/non_matchings/code/z_parameter/func_8010EC54.s,func_8010EC54,0x8010EC54,0x88
 asm/non_matchings/code/z_parameter/func_8010EE74.s,func_8010EE74,0x8010EE74,0x3D
-asm/non_matchings/code/z_parameter/Interface_ChangeAlpha.s,Interface_ChangeAlpha,0x8010EF68,0xD
-asm/non_matchings/code/z_parameter/func_8010EF9C.s,func_8010EF9C,0x8010EF9C,0x4E
-asm/non_matchings/code/z_parameter/func_8010F0D4.s,func_8010F0D4,0x8010F0D4,0x35
-asm/non_matchings/code/z_parameter/func_8010F1A8.s,func_8010F1A8,0x8010F1A8,0x3A4
+asm/non_matchings/code/z_parameter/Interface_SetHudVisibility.s,Interface_SetHudVisibility,0x8010EF68,0xD
+asm/non_matchings/code/z_parameter/Interface_UpdateButtonAlphasByStatus.s,Interface_UpdateButtonAlphasByStatus,0x8010EF9C,0x4E
+asm/non_matchings/code/z_parameter/Interface_UpdateButtonAlphas.s,Interface_UpdateButtonAlphas,0x8010F0D4,0x35
+asm/non_matchings/code/z_parameter/Interface_UpdateHudAlphas.s,Interface_UpdateHudAlphas,0x8010F1A8,0x3A4
 asm/non_matchings/code/z_parameter/func_80110038.s,func_80110038,0x80110038,0x71F
 asm/non_matchings/code/z_parameter/func_80111CB4.s,func_80111CB4,0x80111CB4,0x34C
 asm/non_matchings/code/z_parameter/func_801129E4.s,func_801129E4,0x801129E4,0x44
