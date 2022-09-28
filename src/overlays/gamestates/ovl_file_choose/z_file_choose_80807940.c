@@ -113,7 +113,7 @@ void FileSelect_StartNameEntry(GameState* thisx) {
         this->kbdX = 0;
         this->kbdY = 0;
         this->kbdButton = 99;
-        this->configMode = 36;
+        this->configMode = CM_NAME_ENTRY;
     }
 }
 
@@ -135,7 +135,7 @@ void FileSelect_StartOptions(GameState* thisx) {
     if (this->nameEntryBoxPosX <= 0) {
         this->nameEntryBoxPosX = 0;
         this->nameEntryBoxAlpha = 255;
-        this->configMode = 41;
+        this->configMode = CM_OPTIONS_MENU;
     }
 }
 

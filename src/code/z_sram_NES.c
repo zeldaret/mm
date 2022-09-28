@@ -930,7 +930,7 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
 
         if (gSaveContext.fileNum == 0xFF) {
             func_80185968(sramCtx->saveBuf, D_801C67C8[0], D_801C67F0[0]);
-        } else if (fileSelect->unk_2446A[gSaveContext.fileNum] != 0) {
+        } else if (fileSelect->isOwlSave2[gSaveContext.fileNum] != 0) {
             phi_t1 = gSaveContext.fileNum + 2;
             phi_t1 *= 2;
 
@@ -1119,7 +1119,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
             }
 
             if (sp76 < 2) {
-                fileSelect->unk_24468[sp76] = 0;
+                fileSelect->isOwlSave[sp76] = 0;
                 if (phi_s2) {
                     bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
                     Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
@@ -1161,21 +1161,21 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                 }
 
                 if (!CHECK_NEWF(fileSelect->newf[sp76])) {
-                    fileSelect->unk_2440C[sp76] = gSaveContext.save.playerData.deaths;
+                    fileSelect->deaths[sp76] = gSaveContext.save.playerData.deaths;
 
                     for (sp7A = 0; sp7A < ARRAY_COUNT(gSaveContext.save.playerData.playerName); sp7A++) {
-                        fileSelect->unk_24414[sp76][sp7A] = gSaveContext.save.playerData.playerName[sp7A];
+                        fileSelect->playerName[sp76][sp7A] = gSaveContext.save.playerData.playerName[sp7A];
                     }
 
                     fileSelect->healthCapacity[sp76] = gSaveContext.save.playerData.healthCapacity;
                     fileSelect->health[sp76] = gSaveContext.save.playerData.health;
                     fileSelect->defenseHearts[sp76] = gSaveContext.save.inventory.defenseHearts;
-                    fileSelect->unk_24444[sp76] = gSaveContext.save.inventory.questItems;
-                    fileSelect->unk_24458[sp76] = gSaveContext.save.time;
-                    fileSelect->unk_24460[sp76] = gSaveContext.save.day;
-                    fileSelect->unk_24468[sp76] = gSaveContext.save.isOwlSave;
+                    fileSelect->questItems[sp76] = gSaveContext.save.inventory.questItems;
+                    fileSelect->time[sp76] = gSaveContext.save.time;
+                    fileSelect->day[sp76] = gSaveContext.save.day;
+                    fileSelect->isOwlSave[sp76] = gSaveContext.save.isOwlSave;
                     fileSelect->rupees[sp76] = gSaveContext.save.playerData.rupees;
-                    fileSelect->unk_24474[sp76] = CUR_UPG_VALUE(4);
+                    fileSelect->upgrades[sp76] = CUR_UPG_VALUE(4);
 
                     for (sp7A = 0, phi_a0 = 0; sp7A < 24; sp7A++) {
                         if (gSaveContext.save.inventory.items[sp7A + 24] != 0xFF) {
@@ -1208,7 +1208,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     }
                 }
             } else if (sp76 < 4) {
-                fileSelect->unk_24468[sp76] = 0;
+                fileSelect->isOwlSave[sp76] = 0;
 
                 if (!CHECK_NEWF(fileSelect->newf2[(s32)sp76])) { // TODO: Needed?
                     if (phi_s2) {
@@ -1254,22 +1254,22 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     }
 
                     if (!CHECK_NEWF(fileSelect->newf[sp76])) {
-                        fileSelect->unk_2440C[sp76] = gSaveContext.save.playerData.deaths;
+                        fileSelect->deaths[sp76] = gSaveContext.save.playerData.deaths;
 
                         for (sp7A = 0; sp7A < ARRAY_COUNT(gSaveContext.save.playerData.playerName); sp7A++) {
                             phi_s2 += 0; // TODO: Needed?
-                            fileSelect->unk_24414[sp76][sp7A] = gSaveContext.save.playerData.playerName[sp7A];
+                            fileSelect->playerName[sp76][sp7A] = gSaveContext.save.playerData.playerName[sp7A];
                         }
 
                         fileSelect->healthCapacity[sp76] = gSaveContext.save.playerData.healthCapacity;
                         fileSelect->health[sp76] = gSaveContext.save.playerData.health;
                         fileSelect->defenseHearts[sp76] = gSaveContext.save.inventory.defenseHearts;
-                        fileSelect->unk_24444[sp76] = gSaveContext.save.inventory.questItems;
-                        fileSelect->unk_24458[sp76] = gSaveContext.save.time;
-                        fileSelect->unk_24460[sp76] = gSaveContext.save.day;
-                        fileSelect->unk_24468[sp76] = gSaveContext.save.isOwlSave;
+                        fileSelect->questItems[sp76] = gSaveContext.save.inventory.questItems;
+                        fileSelect->time[sp76] = gSaveContext.save.time;
+                        fileSelect->day[sp76] = gSaveContext.save.day;
+                        fileSelect->isOwlSave[sp76] = gSaveContext.save.isOwlSave;
                         fileSelect->rupees[sp76] = gSaveContext.save.playerData.rupees;
-                        fileSelect->unk_24474[sp76] = CUR_UPG_VALUE(4);
+                        fileSelect->upgrades[sp76] = CUR_UPG_VALUE(4);
 
                         for (sp7A = 0, phi_a0 = 0; sp7A < 24; sp7A++) {
                             if (gSaveContext.save.inventory.items[sp7A + 24] != 0xFF) {
@@ -1346,9 +1346,9 @@ void func_80146580(FileSelectState* fileSelect2, SramContext* sramCtx, s32 fileN
     s32 pad;
 
     if (gSaveContext.unk_3F3F) {
-        if (fileSelect->unk_2446A[fileNum]) {
+        if (fileSelect->isOwlSave2[fileNum]) {
             func_80147314(sramCtx, fileNum);
-            fileSelect->unk_2446A[fileNum] = 0;
+            fileSelect->isOwlSave2[fileNum] = 0;
         }
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, sizeof(Save));
@@ -1366,24 +1366,24 @@ void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
     s16 maskCount;
 
     if (gSaveContext.unk_3F3F) {
-        if (fileSelect->unk_2446A[fileSelect->selectedFileIndex]) {
+        if (fileSelect->isOwlSave2[fileSelect->selectedFileIndex]) {
             func_80147414(sramCtx, fileSelect->selectedFileIndex, fileSelect->fileNum);
-            fileSelect->unk_24410[fileSelect->fileNum] = gSaveContext.save.playerData.deaths;
+            fileSelect->deaths2[fileSelect->fileNum] = gSaveContext.save.playerData.deaths;
 
             for (i = 0; i < ARRAY_COUNT(gSaveContext.save.playerData.playerName); i++) {
-                fileSelect->unk_24424[fileSelect->fileNum][i] = gSaveContext.save.playerData.playerName[i];
+                fileSelect->playerName2[fileSelect->fileNum][i] = gSaveContext.save.playerData.playerName[i];
             }
 
-            fileSelect->unk_24438[fileSelect->fileNum] = gSaveContext.save.playerData.healthCapacity;
-            fileSelect->unk_24440[fileSelect->fileNum] = gSaveContext.save.playerData.health;
-            fileSelect->unk_24456[fileSelect->fileNum] = gSaveContext.save.inventory.defenseHearts;
-            fileSelect->unk_2444C[fileSelect->fileNum] = gSaveContext.save.inventory.questItems;
-            fileSelect->unk_2445C[fileSelect->fileNum] = gSaveContext.save.time;
-            fileSelect->unk_24464[fileSelect->fileNum] = gSaveContext.save.day;
-            fileSelect->unk_2446A[fileSelect->fileNum] = gSaveContext.save.isOwlSave;
-            fileSelect->unk_24470[fileSelect->fileNum] = gSaveContext.save.playerData.rupees;
+            fileSelect->healthCapacity2[fileSelect->fileNum] = gSaveContext.save.playerData.healthCapacity;
+            fileSelect->health2[fileSelect->fileNum] = gSaveContext.save.playerData.health;
+            fileSelect->defenseHearts2[fileSelect->fileNum] = gSaveContext.save.inventory.defenseHearts;
+            fileSelect->questItems2[fileSelect->fileNum] = gSaveContext.save.inventory.questItems;
+            fileSelect->time2[fileSelect->fileNum] = gSaveContext.save.time;
+            fileSelect->day2[fileSelect->fileNum] = gSaveContext.save.day;
+            fileSelect->isOwlSave2[fileSelect->fileNum] = gSaveContext.save.isOwlSave;
+            fileSelect->rupees2[fileSelect->fileNum] = gSaveContext.save.playerData.rupees;
             // = CUR_UPG_VALUE(UPG_WALLET);
-            fileSelect->unk_24476[fileSelect->fileNum] =
+            fileSelect->upgrades2[fileSelect->fileNum] =
                 (gSaveContext.save.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4];
 
             for (i = 0, maskCount = 0; i < 24; i++) {
@@ -1392,8 +1392,9 @@ void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
                 }
             }
 
-            fileSelect->unk_2447A[fileSelect->fileNum] = maskCount;
-            fileSelect->unk_2447E[fileSelect->fileNum] = (gSaveContext.save.inventory.questItems & 0xF0000000) >> 0x1C;
+            fileSelect->maskCount2[fileSelect->fileNum] = maskCount;
+            fileSelect->heartPieceCount2[fileSelect->fileNum] =
+                (gSaveContext.save.inventory.questItems & 0xF0000000) >> 0x1C;
         }
 
         // clear buffer
@@ -1410,22 +1411,22 @@ void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
         // copy buffer to save context
         Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
 
-        fileSelect->unk_2440C[fileSelect->fileNum] = gSaveContext.save.playerData.deaths;
+        fileSelect->deaths[fileSelect->fileNum] = gSaveContext.save.playerData.deaths;
 
         for (i = 0; i < ARRAY_COUNT(gSaveContext.save.playerData.playerName); i++) {
-            fileSelect->unk_24414[fileSelect->fileNum][i] = gSaveContext.save.playerData.playerName[i];
+            fileSelect->playerName[fileSelect->fileNum][i] = gSaveContext.save.playerData.playerName[i];
         }
 
         fileSelect->healthCapacity[fileSelect->fileNum] = gSaveContext.save.playerData.healthCapacity;
         fileSelect->health[fileSelect->fileNum] = gSaveContext.save.playerData.health;
         fileSelect->defenseHearts[fileSelect->fileNum] = gSaveContext.save.inventory.defenseHearts;
-        fileSelect->unk_24444[fileSelect->fileNum] = gSaveContext.save.inventory.questItems;
-        fileSelect->unk_24458[fileSelect->fileNum] = gSaveContext.save.time;
-        fileSelect->unk_24460[fileSelect->fileNum] = gSaveContext.save.day;
-        fileSelect->unk_24468[fileSelect->fileNum] = gSaveContext.save.isOwlSave;
+        fileSelect->questItems[fileSelect->fileNum] = gSaveContext.save.inventory.questItems;
+        fileSelect->time[fileSelect->fileNum] = gSaveContext.save.time;
+        fileSelect->day[fileSelect->fileNum] = gSaveContext.save.day;
+        fileSelect->isOwlSave[fileSelect->fileNum] = gSaveContext.save.isOwlSave;
         fileSelect->rupees[fileSelect->fileNum] = gSaveContext.save.playerData.rupees;
         // = CUR_UPG_VALUE(UPG_WALLET);
-        fileSelect->unk_24474[fileSelect->fileNum] =
+        fileSelect->upgrades[fileSelect->fileNum] =
             (gSaveContext.save.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4];
 
         for (i = 0, maskCount = 0; i < 24; i++) {
@@ -1459,7 +1460,7 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         }
 
         for (phi_v0 = 0; phi_v0 < ARRAY_COUNT(gSaveContext.save.playerData.playerName); phi_v0++) {
-            gSaveContext.save.playerData.playerName[phi_v0] = fileSelect->unk_24414[fileSelect->buttonIndex][phi_v0];
+            gSaveContext.save.playerData.playerName[phi_v0] = fileSelect->playerName[fileSelect->buttonIndex][phi_v0];
         }
 
         gSaveContext.save.playerData.newf[0] = 'Z';
@@ -1478,21 +1479,21 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
             fileSelect->newf[fileSelect->buttonIndex][i] = gSaveContext.save.playerData.newf[i];
         }
 
-        fileSelect->unk_2440C[fileSelect->buttonIndex] = gSaveContext.save.playerData.deaths;
+        fileSelect->deaths[fileSelect->buttonIndex] = gSaveContext.save.playerData.deaths;
 
         for (i = 0; i < ARRAY_COUNT(gSaveContext.save.playerData.playerName); i++) {
-            fileSelect->unk_24414[fileSelect->buttonIndex][i] = gSaveContext.save.playerData.playerName[i];
+            fileSelect->playerName[fileSelect->buttonIndex][i] = gSaveContext.save.playerData.playerName[i];
         }
 
         fileSelect->healthCapacity[fileSelect->buttonIndex] = gSaveContext.save.playerData.healthCapacity;
         fileSelect->health[fileSelect->buttonIndex] = gSaveContext.save.playerData.health;
         fileSelect->defenseHearts[fileSelect->buttonIndex] = gSaveContext.save.inventory.defenseHearts;
-        fileSelect->unk_24444[fileSelect->buttonIndex] = gSaveContext.save.inventory.questItems;
-        fileSelect->unk_24458[fileSelect->buttonIndex] = gSaveContext.save.time;
-        fileSelect->unk_24460[fileSelect->buttonIndex] = gSaveContext.save.day;
-        fileSelect->unk_24468[fileSelect->buttonIndex] = gSaveContext.save.isOwlSave;
+        fileSelect->questItems[fileSelect->buttonIndex] = gSaveContext.save.inventory.questItems;
+        fileSelect->time[fileSelect->buttonIndex] = gSaveContext.save.time;
+        fileSelect->day[fileSelect->buttonIndex] = gSaveContext.save.day;
+        fileSelect->isOwlSave[fileSelect->buttonIndex] = gSaveContext.save.isOwlSave;
         fileSelect->rupees[fileSelect->buttonIndex] = gSaveContext.save.playerData.rupees;
-        fileSelect->unk_24474[fileSelect->buttonIndex] = CUR_UPG_VALUE(UPG_WALLET);
+        fileSelect->upgrades[fileSelect->buttonIndex] = CUR_UPG_VALUE(UPG_WALLET);
 
         for (i = 0, maskCount = 0; i < 24; i++) {
             if (gSaveContext.save.inventory.items[i + 24] != ITEM_NONE) {
