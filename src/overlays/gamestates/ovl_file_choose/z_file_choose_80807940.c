@@ -8,6 +8,7 @@
 #include "z_file_choose.h"
 #include "z64rumble.h"
 #include "misc/title_static/title_static.h"
+#include "overlays/ovl_File_Choose/ovl_file_choose.h"
 
 extern UNK_TYPE D_01002800;
 extern UNK_TYPE D_01007980;
@@ -50,7 +51,7 @@ s16 D_8081441C[] = {
 
 TexturePtr sBackspaceEndTextures[] = { gFileSelBackspaceButtonTex, gFileSelENDButtonENGTex };
 
-s16 sBackspaceEndWidths[] = { 28, 44 };
+u16 sBackspaceEndWidths[] = { 28, 44 };
 
 s16 D_80814434[] = {
     -30, -16, -6, 4, 14, 24, 34, 44, 54, -16, -16, 0,
@@ -58,40 +59,6 @@ s16 D_80814434[] = {
 
 s16 D_8081444C[] = {
     72, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 0,
-};
-
-typedef struct {
-    /* 0x00 */ TexturePtr texture;
-    /* 0x0C */ u16 width;
-    /* 0x12 */ u16 height;
-} OptionsMenuTextureInfo; // size = 0x14
-
-OptionsMenuTextureInfo gOptionsMenuHeaders[] = {
-    { gFileSelOptionsENGTex, 128, 16 },          { gFileSelSOUNDENGTex, 64, 16 },
-    { gFileSelTargetingENGTex, 64, 16 },         { gFileSelCheckBrightnessENGTex, 96, 16 },
-    { gFileSelDolbySurroundLogoENGTex, 48, 17 },
-};
-
-OptionsMenuTextureInfo gOptionsMenuSettings[] = {
-    { gFileSelStereoENGTex, 48, 16 },   { gFileSelMonoENGTex, 48, 16 },   { gFileSelHeadsetENGTex, 48, 16 },
-    { gFileSelSurroundENGTex, 48, 16 }, { gFileSelSwitchENGTex, 48, 16 }, { gFileSelHoldENGTex, 48, 16 },
-};
-
-s16 sCursorPrimRed = 255;
-s16 sCursorPrimGreen = 255;
-s16 sCursorPrimBlue = 255;
-s16 sCursorEnvRed = 0;
-s16 sCursorEnvGreen = 0;
-s16 sCursorEnvBlue = 0;
-s16 sCursorPulseDir = 1;
-s16 sCursorFlashTimer = 20;
-s16 sCursorPrimColors[][3] = {
-    { 255, 255, 255 },
-    { 0, 255, 255 },
-};
-s16 sCursorEnvColors[][3] = {
-    { 0, 0, 0 },
-    { 0, 150, 150 },
 };
 
 void FileSelect_DrawTexQuadI4(GraphicsContext* gfxCtx, TexturePtr texture, s16 point) {
@@ -215,7 +182,124 @@ void FileSelect_SetKeyboardVtx(GameState* thisx) {
  * Set vertices used by all elements of the name entry screen that are NOT the keyboard.
  * This includes the cursor highlight, the name entry plate and characters, and the buttons.
  */
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_SetNameEntryVtx.s")
+void FileSelect_SetNameEntryVtx(GameState* thisx) {
+    FileSelectState* this = (FileSelectState*)thisx;
+    Font* font = &this->font;
+    u8 temp;
+    s16 var_s0;
+    s16 var_t1;
+    s16 sp108;
+
+    OPEN_DISPS(this->state.gfxCtx);
+
+    gDPPipeSync(POLY_OPA_DISP++);
+    gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
+                      ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[0]);
+
+    gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
+    gSPVertex(POLY_OPA_DISP++, this->keyboard2Vtx, 24, 0);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, gFileSelNameENGTex, G_IM_FMT_IA, G_IM_SIZ_8b, 56, 16, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
+    gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    for (var_t1 = 0, var_s0 = 0x10; var_t1 < 2; var_t1++, var_s0 += 4) {
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->windowColor[0], this->windowColor[1], this->windowColor[2], 255);
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
+        gDPLoadTextureBlock(POLY_OPA_DISP++, sBackspaceEndTextures[var_t1], G_IM_FMT_IA, G_IM_SIZ_16b,
+                            sBackspaceEndWidths[var_t1], 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
+                            G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSP1Quadrangle(POLY_OPA_DISP++, var_s0, var_s0 + 2, var_s0 + 3, var_s0 + 1, 0);
+    }
+
+    this->nameEntryVtx = GRAPH_ALLOC(this->state.gfxCtx, 44 * sizeof(Vtx));
+
+    for (var_s0 = 0, var_t1 = 0; var_t1 < 44; var_t1 += 4, var_s0++) {
+        if ((var_s0 > 0) && (var_s0 < 9)) {
+            temp = this->playerName[this->buttonIndex][var_s0 - 1];
+
+            this->nameEntryVtx[var_t1].v.ob[0] = this->nameEntryVtx[var_t1 + 2].v.ob[0] =
+                D_80814434[var_s0] + this->nameEntryBoxPosX + D_80814280[temp];
+
+            this->nameEntryVtx[var_t1 + 1].v.ob[0] = this->nameEntryVtx[var_t1 + 3].v.ob[0] =
+                this->nameEntryVtx[var_t1].v.ob[0] + 0xA;
+        } else {
+            this->nameEntryVtx[var_t1].v.ob[0] = this->nameEntryVtx[var_t1 + 2].v.ob[0] =
+                D_80814434[var_s0] + this->nameEntryBoxPosX;
+
+            this->nameEntryVtx[var_t1 + 1].v.ob[0] = this->nameEntryVtx[var_t1 + 3].v.ob[0] =
+                this->nameEntryVtx[var_t1].v.ob[0] + 0xA;
+        }
+
+        this->nameEntryVtx[var_t1].v.ob[1] = this->nameEntryVtx[var_t1 + 1].v.ob[1] = D_8081444C[var_s0];
+
+        this->nameEntryVtx[var_t1 + 2].v.ob[1] = this->nameEntryVtx[var_t1 + 3].v.ob[1] =
+            this->nameEntryVtx[var_t1].v.ob[1] - 0xA;
+
+        this->nameEntryVtx[var_t1].v.ob[2] = this->nameEntryVtx[var_t1 + 1].v.ob[2] =
+            this->nameEntryVtx[var_t1 + 2].v.ob[2] = this->nameEntryVtx[var_t1 + 3].v.ob[2] = 0;
+
+        this->nameEntryVtx[var_t1].v.flag = this->nameEntryVtx[var_t1 + 1].v.flag =
+            this->nameEntryVtx[var_t1 + 2].v.flag = this->nameEntryVtx[var_t1 + 3].v.flag = 0;
+
+        this->nameEntryVtx[var_t1].v.tc[0] = this->nameEntryVtx[var_t1].v.tc[1] =
+            this->nameEntryVtx[var_t1 + 1].v.tc[1] = this->nameEntryVtx[var_t1 + 2].v.tc[0] = 0;
+
+        this->nameEntryVtx[var_t1 + 1].v.tc[0] = this->nameEntryVtx[var_t1 + 2].v.tc[1] =
+            this->nameEntryVtx[var_t1 + 3].v.tc[0] = this->nameEntryVtx[var_t1 + 3].v.tc[1] = 0x200;
+
+        this->nameEntryVtx[var_t1].v.cn[0] = this->nameEntryVtx[var_t1 + 1].v.cn[0] =
+            this->nameEntryVtx[var_t1 + 2].v.cn[0] = this->nameEntryVtx[var_t1 + 3].v.cn[0] =
+                this->nameEntryVtx[var_t1].v.cn[1] = this->nameEntryVtx[var_t1 + 1].v.cn[1] =
+                    this->nameEntryVtx[var_t1 + 2].v.cn[1] = this->nameEntryVtx[var_t1 + 3].v.cn[1] =
+                        this->nameEntryVtx[var_t1].v.cn[2] = this->nameEntryVtx[var_t1 + 1].v.cn[2] =
+                            this->nameEntryVtx[var_t1 + 2].v.cn[2] = this->nameEntryVtx[var_t1 + 3].v.cn[2] =
+                                this->nameEntryVtx[var_t1].v.cn[3] = this->nameEntryVtx[var_t1 + 1].v.cn[3] =
+                                    this->nameEntryVtx[var_t1 + 2].v.cn[3] = this->nameEntryVtx[var_t1 + 3].v.cn[3] =
+                                        0xFF;
+    }
+
+    this->nameEntryVtx[1].v.ob[0] = this->nameEntryVtx[3].v.ob[0] = this->nameEntryVtx[0].v.ob[0] + 0x6C;
+    this->nameEntryVtx[2].v.ob[1] = this->nameEntryVtx[3].v.ob[1] = this->nameEntryVtx[0].v.ob[1] - 0x10;
+    this->nameEntryVtx[1].v.tc[0] = this->nameEntryVtx[3].v.tc[0] = 0xD80;
+
+    gDPPipeSync(POLY_OPA_DISP++);
+    gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
+                      ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->windowColor[0], this->windowColor[1], this->windowColor[2],
+                    this->nameEntryBoxAlpha);
+    gSPVertex(POLY_OPA_DISP++, this->nameEntryVtx, 4, 0);
+
+    gDPLoadTextureBlock(POLY_OPA_DISP++, gFileSelFileNameBoxTex, G_IM_FMT_IA, G_IM_SIZ_16b, 108, 16, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
+    gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
+    gDPPipeSync(POLY_OPA_DISP++);
+    gDPSetCombineLERP(POLY_OPA_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0,
+                      PRIMITIVE, 0);
+    gSPVertex(POLY_OPA_DISP++, this->nameEntryVtx + 4, 32, 0);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->nameEntryBoxAlpha);
+
+    for (sp108 = 0, var_s0 = 0; var_s0 < 0x20; var_s0 += 4, sp108++) {
+        FileSelect_DrawTexQuadI4(this->state.gfxCtx,
+                                 font->fontBuf + this->playerName[this->buttonIndex][sp108] * FONT_CHAR_TEX_SIZE,
+                                 var_s0);
+    }
+
+    this->nameEntryVtx[0x25].v.tc[0] = this->nameEntryVtx[0x26].v.tc[1] = this->nameEntryVtx[0x27].v.tc[0] =
+        this->nameEntryVtx[0x27].v.tc[1] = this->nameEntryVtx[0x29].v.tc[0] = this->nameEntryVtx[0x2A].v.tc[1] =
+            this->nameEntryVtx[0x2B].v.tc[0] = this->nameEntryVtx[0x2B].v.tc[1] = 0x300;
+
+    if ((this->kbdButton == 0) || (this->kbdButton == 1) || (this->kbdButton == 4)) {
+        this->nameEntryVtx[0x29].v.tc[0] = this->nameEntryVtx[0x2B].v.tc[0] = 0x700;
+    } else if ((this->kbdButton == 2) || (this->kbdButton == 3)) {
+        this->nameEntryVtx[0x29].v.tc[0] = this->nameEntryVtx[0x2B].v.tc[0] = 0x500;
+    }
+
+    CLOSE_DISPS(this->state.gfxCtx);
+}
 
 void FileSelect_DrawKeyboard(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
@@ -427,6 +511,11 @@ void FileSelect_StartOptions(GameState* thisx) {
 }
 
 u8 sSelectedSetting;
+// bss padding
+s32 D_80814E94;
+s32 D_80814E98;
+s32 D_80814E9C;
+s32 D_80814EA0;
 
 /**
  * Update the cursor and appropriate settings for the options menu.
@@ -501,15 +590,237 @@ void func_8080A6BC(GameState* thisx) {
     }
 }
 
-void FileSelect_DrawOptionsImpl(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_DrawOptionsImpl.s")
+typedef struct {
+    /* 0x00 */ TexturePtr texture;
+    /* 0x0C */ u16 width;
+    /* 0x12 */ u16 height;
+} OptionsMenuTextureInfo; // size = 0x14
+
+OptionsMenuTextureInfo gOptionsMenuHeaders[] = {
+    { gFileSelOptionsENGTex, 128, 16 },          { gFileSelSOUNDENGTex, 64, 16 },
+    { gFileSelTargetingENGTex, 64, 16 },         { gFileSelCheckBrightnessENGTex, 96, 16 },
+    { gFileSelDolbySurroundLogoENGTex, 48, 17 },
+};
+
+OptionsMenuTextureInfo gOptionsMenuSettings[] = {
+    { gFileSelStereoENGTex, 48, 16 },   { gFileSelMonoENGTex, 48, 16 },   { gFileSelHeadsetENGTex, 48, 16 },
+    { gFileSelSurroundENGTex, 48, 16 }, { gFileSelSwitchENGTex, 48, 16 }, { gFileSelHoldENGTex, 48, 16 },
+};
+
+void FileSelect_DrawOptionsImpl(GameState* thisx) {
+    static s16 sCursorPrimRed = 255;
+    static s16 sCursorPrimGreen = 255;
+    static s16 sCursorPrimBlue = 255;
+    static s16 sCursorEnvRed = 0;
+    static s16 sCursorEnvGreen = 0;
+    static s16 sCursorEnvBlue = 0;
+    static s16 sCursorPulseDir = 1;
+    static s16 sCursorFlashTimer = 20;
+    static s16 sCursorPrimColors[][3] = {
+        { 255, 255, 255 },
+        { 0, 255, 255 },
+    };
+    static s16 sCursorEnvColors[][3] = {
+        { 0, 0, 0 },
+        { 0, 150, 150 },
+    };
+    FileSelectState* this = (FileSelectState*)thisx;
+    s16 cursorRed;
+    s16 cursorGreen;
+    s16 cursorBlue;
+    s16 i;
+    s16 j;
+    s16 vtx;
+
+    OPEN_DISPS(this->state.gfxCtx);
+
+    cursorRed = ABS_ALT(sCursorPrimRed - sCursorPrimColors[sCursorPulseDir][0]) / sCursorFlashTimer;
+    cursorGreen = ABS_ALT(sCursorPrimGreen - sCursorPrimColors[sCursorPulseDir][1]) / sCursorFlashTimer;
+    cursorBlue = ABS_ALT(sCursorPrimBlue - sCursorPrimColors[sCursorPulseDir][2]) / sCursorFlashTimer;
+
+    if (sCursorPrimRed >= sCursorPrimColors[sCursorPulseDir][0]) {
+        sCursorPrimRed -= cursorRed;
+    } else {
+        sCursorPrimRed += cursorRed;
+    }
+
+    if (sCursorPrimGreen >= sCursorPrimColors[sCursorPulseDir][1]) {
+        sCursorPrimGreen -= cursorGreen;
+    } else {
+        sCursorPrimGreen += cursorGreen;
+    }
+
+    if (sCursorPrimBlue >= sCursorPrimColors[sCursorPulseDir][2]) {
+        sCursorPrimBlue -= cursorBlue;
+    } else {
+        sCursorPrimBlue += cursorBlue;
+    }
+
+    cursorRed = ABS_ALT(sCursorEnvRed - sCursorEnvColors[sCursorPulseDir][0]) / sCursorFlashTimer;
+    cursorGreen = ABS_ALT(sCursorEnvGreen - sCursorEnvColors[sCursorPulseDir][1]) / sCursorFlashTimer;
+    cursorBlue = ABS_ALT(sCursorEnvBlue - sCursorEnvColors[sCursorPulseDir][2]) / sCursorFlashTimer;
+
+    if (sCursorEnvRed >= sCursorEnvColors[sCursorPulseDir][0]) {
+        sCursorEnvRed -= cursorRed;
+    } else {
+        sCursorEnvRed += cursorRed;
+    }
+
+    if (sCursorEnvGreen >= sCursorEnvColors[sCursorPulseDir][1]) {
+        sCursorEnvGreen -= cursorGreen;
+    } else {
+        sCursorEnvGreen += cursorGreen;
+    }
+
+    if (sCursorEnvBlue >= sCursorEnvColors[sCursorPulseDir][2]) {
+        sCursorEnvBlue -= cursorBlue;
+    } else {
+        sCursorEnvBlue += cursorBlue;
+    }
+
+    if (--sCursorFlashTimer == 0) {
+        sCursorPrimRed = sCursorPrimColors[sCursorPulseDir][0];
+        sCursorPrimGreen = sCursorPrimColors[sCursorPulseDir][1];
+        sCursorPrimBlue = sCursorPrimColors[sCursorPulseDir][2];
+
+        sCursorEnvRed = sCursorEnvColors[sCursorPulseDir][0];
+        sCursorEnvGreen = sCursorEnvColors[sCursorPulseDir][1];
+        sCursorEnvBlue = sCursorEnvColors[sCursorPulseDir][2];
+
+        sCursorFlashTimer = 20;
+
+        if (++sCursorPulseDir > 1) {
+            sCursorPulseDir = 0;
+        }
+    }
+
+    // blue divider lines
+    gDPPipeSync(POLY_OPA_DISP++);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 255, 255, this->titleAlpha[0]);
+    gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
+
+    gDPLoadTextureBlock_4b(POLY_OPA_DISP++, gFileSelOptionsDividerTex, G_IM_FMT_IA, 256, 2, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                           G_TX_NOLOD);
+
+    Matrix_Push();
+    Matrix_Translate(0.0f, 0.1f, 0.0f, MTXMODE_APPLY);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPVertex(POLY_OPA_DISP++, D_80814130, 4, 0);
+    gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
+    Matrix_Pop();
+
+    Matrix_Push();
+    Matrix_Translate(0.0f, 0.2f, 0.0f, MTXMODE_APPLY);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPVertex(POLY_OPA_DISP++, D_80814170, 4, 0);
+    gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
+    Matrix_Pop();
+
+    Matrix_Push();
+    Matrix_Translate(0.0f, 0.4f, 0.0f, MTXMODE_APPLY);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPVertex(POLY_OPA_DISP++, D_808141B0, 4, 0);
+    gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
+    Matrix_Pop();
+
+    gSPVertex(POLY_OPA_DISP++, D_80813DF0, 32, 0);
+    gDPPipeSync(POLY_OPA_DISP++);
+    gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
+                      ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[0]);
+    gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
+
+    for (i = 0, vtx = 0; i < 5; i++, vtx += 4) {
+        if (i == 4) {
+            gDPPipeSync(POLY_OPA_DISP++);
+            if (gSaveContext.options.audioSetting == 3) {
+                gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
+            } else {
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, this->titleAlpha[0]);
+                gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
+            }
+        }
+
+        gDPLoadTextureBlock(POLY_OPA_DISP++, gOptionsMenuHeaders[i].texture, G_IM_FMT_IA, G_IM_SIZ_8b,
+                            gOptionsMenuHeaders[i].width, gOptionsMenuHeaders[i].height, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSP1Quadrangle(POLY_OPA_DISP++, vtx, vtx + 2, vtx + 3, vtx + 1, 0);
+    }
+
+    gDPPipeSync(POLY_OPA_DISP++);
+    gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
+                      ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[0]);
+    gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
+    gSPVertex(POLY_OPA_DISP++, D_80813F30, 32, 0);
+
+    for (i = 0, vtx = 0; i < 4; i++, vtx += 4) {
+        gDPPipeSync(POLY_OPA_DISP++);
+        if (i == gSaveContext.options.audioSetting) {
+            if (sSelectedSetting == 0) {
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sCursorPrimRed, sCursorPrimGreen, sCursorPrimBlue,
+                                this->titleAlpha[0]);
+                gDPSetEnvColor(POLY_OPA_DISP++, sCursorEnvRed, sCursorEnvGreen, sCursorEnvBlue, 255);
+            } else {
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[0]);
+                gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
+            }
+        } else {
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 120, 120, 120, this->titleAlpha[0]);
+            gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
+        }
+
+        gDPLoadTextureBlock(POLY_OPA_DISP++, gOptionsMenuSettings[i].texture, G_IM_FMT_IA, G_IM_SIZ_8b,
+                            gOptionsMenuSettings[i].width, gOptionsMenuHeaders[i].height, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSP1Quadrangle(POLY_OPA_DISP++, vtx, vtx + 2, vtx + 3, vtx + 1, 0);
+    }
+
+    for (; i < 6; i++, vtx += 4) {
+        gDPPipeSync(POLY_OPA_DISP++);
+
+        if (i == (gSaveContext.options.zTargetSetting + 4)) {
+            if (sSelectedSetting == 1) {
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sCursorPrimRed, sCursorPrimGreen, sCursorPrimBlue,
+                                this->titleAlpha[0]);
+                gDPSetEnvColor(POLY_OPA_DISP++, sCursorEnvRed, sCursorEnvGreen, sCursorEnvBlue, 255);
+            } else {
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[0]);
+                gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
+            }
+        } else {
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 120, 120, 120, this->titleAlpha[0]);
+            gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
+        }
+
+        gDPLoadTextureBlock(POLY_OPA_DISP++, gOptionsMenuSettings[i].texture, G_IM_FMT_IA, G_IM_SIZ_8b,
+                            gOptionsMenuSettings[i].width, gOptionsMenuHeaders[i].height, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSP1Quadrangle(POLY_OPA_DISP++, vtx, vtx + 2, vtx + 3, vtx + 1, 0);
+    }
+
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    // check brightness bars
+    gDPLoadTextureBlock_4b(POLY_OPA_DISP++, gFileSelBrightnessCheckTex, G_IM_FMT_IA, 96, 16, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                           G_TX_NOLOD);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 55, 55, 55, this->titleAlpha[0]);
+    gDPSetEnvColor(POLY_OPA_DISP++, 40, 40, 40, 255);
+    gSP1Quadrangle(POLY_OPA_DISP++, vtx, vtx + 2, vtx + 3, vtx + 1, 0);
+
+    vtx += 4;
+
+    gDPPipeSync(POLY_OPA_DISP++);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 30, 30, 30, this->titleAlpha[0]);
+    gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
+    gSP1Quadrangle(POLY_OPA_DISP++, vtx, vtx + 2, vtx + 3, vtx + 1, 0);
+
+    CLOSE_DISPS(this->state.gfxCtx);
+}
 
 void FileSelect_DrawOptions(GameState* thisx) {
     FileSelect_DrawOptionsImpl(thisx);
 }
-
-// bss padding
-s32 D_80814E94;
-s32 D_80814E98;
-s32 D_80814E9C;
-s32 D_80814EA0;
