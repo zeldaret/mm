@@ -19,6 +19,6 @@ void SaveContext_Init(void) {
     gSaveContext.unk_3F26 = 50;
 
     gSaveContext.options.language = 1;
-    gSaveContext.options.audioSetting = 0;
+    gSaveContext.options.audioSetting = FS_AUDIO_STEREO;
     gSaveContext.options.zTargetSetting = 0;
 }

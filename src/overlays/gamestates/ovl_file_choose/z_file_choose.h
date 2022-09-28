@@ -137,6 +137,26 @@ typedef enum {
     /* 1 */ FS_BTN_ACTION_ERASE
 } ActionButtonIndex;
 
+typedef enum {
+    /* 0 */ FS_SETTING_AUDIO,
+    /* 1 */ FS_SETTING_TARGET
+} SettingIndex;
+
+typedef enum {
+    /* 0 */ FS_CHAR_PAGE_HIRA,
+    /* 1 */ FS_CHAR_PAGE_KATA,
+    /* 2 */ FS_CHAR_PAGE_ENG
+} CharPage;
+
+typedef enum {
+    /* 00 */ FS_KBD_BTN_HIRA,
+    /* 01 */ FS_KBD_BTN_KATA,
+    /* 02 */ FS_KBD_BTN_ENG,
+    /* 03 */ FS_KBD_BTN_BACKSPACE,
+    /* 04 */ FS_KBD_BTN_END,
+    /* 99 */ FS_KBD_BTN_NONE = 99
+} KeyboardButton;
+
 typedef struct FileSelectState {
     /* 0x00000 */ GameState state;
     /* 0x000A4 */ Vtx* windowVtx;

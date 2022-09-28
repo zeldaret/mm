@@ -1314,7 +1314,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                 if (phi_s2) {
                     gSaveContext.options.optionId = 0xA51D;
                     gSaveContext.options.language = 1;
-                    gSaveContext.options.audioSetting = 0;
+                    gSaveContext.options.audioSetting = FS_AUDIO_STEREO;
                     gSaveContext.options.languageSetting = 0;
                     gSaveContext.options.zTargetSetting = 0;
                 } else {
@@ -1322,7 +1322,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     if (gSaveContext.options.optionId != 0xA51D) {
                         gSaveContext.options.optionId = 0xA51D;
                         gSaveContext.options.language = 1;
-                        gSaveContext.options.audioSetting = 0;
+                        gSaveContext.options.audioSetting = FS_AUDIO_STEREO;
                         gSaveContext.options.languageSetting = 0;
                         gSaveContext.options.zTargetSetting = 0;
                     }

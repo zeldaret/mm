@@ -9,6 +9,13 @@ struct GameState;
 struct PlayState;
 struct FileSelectState;
 
+typedef enum {
+    /* 0 */ FS_AUDIO_STEREO,
+    /* 1 */ FS_AUDIO_MONO,
+    /* 2 */ FS_AUDIO_HEADSET,
+    /* 3 */ FS_AUDIO_SURROUND
+} AudioOption;
+
 // TODO: properly name DOWN, RETURN and TOP
 typedef enum RespawnMode {
     /* 0 */ RESPAWN_MODE_DOWN,                          // "RESTART_MODE_DOWN"

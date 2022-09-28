@@ -243,10 +243,10 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                 if (!SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
                     play_sound(NA_SE_SY_FSEL_DECIDE_L);
                     this->configMode = CM_ROTATE_TO_NAME_ENTRY;
-                    this->kbdButton = 99;
-                    this->charPage = 0;
+                    this->kbdButton = FS_KBD_BTN_NONE;
+                    this->charPage = FS_CHAR_PAGE_HIRA;
                     if (gSaveContext.options.language != 0) {
-                        this->charPage = 2;
+                        this->charPage = FS_CHAR_PAGE_ENG;
                     }
                     this->kbdX = 0;
                     this->kbdY = 0;
@@ -267,10 +267,10 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
             } else if (!FILE_CHOOSE_SLOT_OCCUPIED(this, this->buttonIndex)) {
                 play_sound(NA_SE_SY_FSEL_DECIDE_L);
                 this->configMode = CM_ROTATE_TO_NAME_ENTRY;
-                this->kbdButton = 99;
-                this->charPage = 0;
+                this->kbdButton = FS_KBD_BTN_NONE;
+                this->charPage = FS_CHAR_PAGE_HIRA;
                 if (gSaveContext.options.language != 0) {
-                    this->charPage = 2;
+                    this->charPage = FS_CHAR_PAGE_ENG;
                 }
                 this->kbdX = 0;
                 this->kbdY = 0;
@@ -300,7 +300,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                 this->nextTitleLabel = FS_TITLE_ERASE_FILE;
             } else {
                 this->configMode = CM_MAIN_TO_OPTIONS;
-                this->kbdButton = 0;
+                this->kbdButton = FS_KBD_BTN_HIRA;
                 this->kbdX = 0;
                 this->kbdY = 0;
                 this->unk_24514 = 0;
@@ -610,9 +610,9 @@ void FileSelect_SetWindowVtx(GameState* thisx) {
             this->windowVtx[x].v.tc[0] = this->windowVtx[x].v.tc[1] = this->windowVtx[x + 1].v.tc[1] =
                 this->windowVtx[x + 2].v.tc[0] = 0;
 
-            this->windowVtx[x + 1].v.tc[0] = this->windowVtx[x + 3].v.tc[0] = tmp2 * 0x20;
+            this->windowVtx[x + 1].v.tc[0] = this->windowVtx[x + 3].v.tc[0] = tmp2 << 5;
 
-            this->windowVtx[x + 2].v.tc[1] = this->windowVtx[x + 3].v.tc[1] = 0x400;
+            this->windowVtx[x + 2].v.tc[1] = this->windowVtx[x + 3].v.tc[1] = 32 << 5;
 
             this->windowVtx[x].v.cn[0] = this->windowVtx[x + 2].v.cn[0] = this->windowVtx[x].v.cn[1] =
                 this->windowVtx[x + 2].v.cn[1] = this->windowVtx[x].v.cn[2] = this->windowVtx[x + 2].v.cn[2] =
@@ -2669,8 +2669,7 @@ void FileSelect_InitContext(GameState* thisx) {
 
     this->kbdX = this->kbdY = this->charIndex = 0;
 
-    // this->kbdButton = FS_KBD_BTN_NONE;
-    this->kbdButton = 99;
+    this->kbdButton = FS_KBD_BTN_NONE;
 
     this->windowColor[0] = 100;
     this->windowColor[1] = 150;
