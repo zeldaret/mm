@@ -151,7 +151,9 @@ typedef struct FileSelectState {
     /* 0x242E0 */ EnvironmentContext envCtx;
     /* 0x243E0 */ Vtx* unk_243E0;
     /* 0x243E4 */ Vtx* windowContentVtx;
-    /* 0x243E8 */ u8 newf2[2][6];
+    /* 0x243E8 */ Vtx* keyboardVtx;
+    /* 0x243EC */ Vtx* nameEntryVtx;
+    /* 0x243F0 */ Vtx* keyboard2Vtx;
     /* 0x243F4 */ u8 newf[4][6];
     /* 0x2440C */ u16 deaths[2]; // sotCount?
     /* 0x24410 */ u16 deaths2[2]; // sotCount?
@@ -245,5 +247,7 @@ typedef struct FileSelectState {
 
 void FileSelect_Init(GameState* thisx);
 void FileSelect_Destroy(GameState* thisx);
+
+void FileSelect_DrawTexQuadI4(GraphicsContext* gfxCtx, TexturePtr texture, s16 vtx);
 
 #endif

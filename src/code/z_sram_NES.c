@@ -1210,7 +1210,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
             } else if (sp76 < 4) {
                 fileSelect->isOwlSave[sp76] = 0;
 
-                if (!CHECK_NEWF(fileSelect->newf2[(s32)sp76])) { // TODO: Needed?
+                if (!CHECK_NEWF(fileSelect->newf[(s32)sp76 - 2])) { // TODO: Needed?
                     if (phi_s2) {
                         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
                         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf,
