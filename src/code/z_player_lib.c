@@ -586,7 +586,7 @@ s32 func_80123810(PlayState* play) {
         if (CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button, BTN_A | BTN_B)) {
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
-            Interface_ChangeAlpha(play->msgCtx.unk_120BC);
+            Interface_SetHudVisibility(play->msgCtx.unk_120BC);
             return -1;
         }
     } else {
@@ -600,7 +600,7 @@ s32 func_80123810(PlayState* play) {
 
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
-            Interface_ChangeAlpha(play->msgCtx.unk_120BC);
+            Interface_SetHudVisibility(play->msgCtx.unk_120BC);
 
             if ((itemId >= ITEM_FD) || (temp_v0 = play->unk_18794(play, player, itemId, i), (temp_v0 < 0))) {
                 play_sound(NA_SE_SY_ERROR);
@@ -621,7 +621,7 @@ s32 func_80123810(PlayState* play) {
 u8 sActionModelGroups[PLAYER_AP_MAX] = {
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_NONE
     PLAYER_MODELGROUP_13,             // PLAYER_AP_LAST_USED
-    PLAYER_MODELGROUP_STICK,          // PLAYER_AP_FISHING_POLE
+    PLAYER_MODELGROUP_STICK,          // PLAYER_AP_FISHING_ROD
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_AP_SWORD_KOKIRI
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_AP_SWORD_RAZOR
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_AP_SWORD_GILDED
