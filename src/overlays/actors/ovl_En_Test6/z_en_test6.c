@@ -80,13 +80,7 @@ u8 D_80A93E80[] = {
 };
 
 TexturePtr D_80A9402C[] = {
-    NULL,
-    gameplay_keep_Tex_05B6F0,
-    gameplay_keep_Tex_05CEF0,
-    gameplay_keep_Tex_0607C0,
-    gameplay_keep_Tex_060FC0,
-    gameplay_keep_Tex_061FC0,
-    gameplay_keep_Tex_061FE0,
+    NULL, gDropArrows2Tex, gDropBombTex, gDropDekuNutTex, gDropDekuStickTex, gRupeeGreenTex, gRupeeBlueTex,
 };
 
 Color_RGB8 D_80A94048 = { 230, 230, 220 };
@@ -221,7 +215,7 @@ void func_80A90D34(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A9402C[ptr->unk_00]));
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05F6F0);
+        gSPDisplayList(POLY_OPA_DISP++, gItemDropDL);
     }
 
     Matrix_Translate(ptr->unk_08 * ptr->unk_04, ptr->unk_0C, ptr->unk_10 * ptr->unk_04, MTXMODE_NEW);
@@ -273,7 +267,7 @@ void func_80A90FC0(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A9402C[ptr->unk_00]));
-        gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0622C0);
+        gSPDisplayList(POLY_OPA_DISP++, gRupeeDL);
     }
 
     Matrix_Translate(ptr->unk_08 * ptr->unk_04, ptr->unk_0C, ptr->unk_10 * ptr->unk_04, MTXMODE_NEW);
@@ -1126,7 +1120,7 @@ void func_80A93298(EnTest6* this, PlayState* play) {
         gDPSetPrimColor(this->unk_148++, 0, 0xFF, 28, 28, 28, 255);
         gDPSetEnvColor(this->unk_148++, 255, 255, 255, 255);
         gDPSetRenderMode(this->unk_148++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2);
-        gSPDisplayList(this->unk_148++, gameplay_keep_DL_07AFB0);
+        gSPDisplayList(this->unk_148++, gSongOfTimeClockDL);
 
         temp_s4 += 0x1000;
         cos = Math_CosS(temp_s4) * this->unk_150;
@@ -1140,7 +1134,7 @@ void func_80A93298(EnTest6* this, PlayState* play) {
         gDPSetPrimColor(this->unk_148++, 0, 0xFF, 28, 28, 28, 255);
         gDPSetEnvColor(this->unk_148++, 255, 255, 255, 255);
         gDPSetRenderMode(this->unk_148++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2);
-        gSPDisplayList(this->unk_148++, gameplay_keep_DL_07AFB0);
+        gSPDisplayList(this->unk_148++, gSongOfTimeClockDL);
 
         phi_f24 -= this->unk_14C;
         phi_s2 += this->unk_27E;
@@ -1213,7 +1207,7 @@ void func_80A9369C(Actor* thisx, PlayState* play2) {
         gDPSetPrimColor(this->unk_148++, 0, 0xFF, this->unk_280, this->unk_280, this->unk_280, 255);
         gDPSetEnvColor(this->unk_148++, 235, 238, 235, 255);
         gDPSetRenderMode(this->unk_148++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2);
-        gSPDisplayList(this->unk_148++, gameplay_keep_DL_07AFB0);
+        gSPDisplayList(this->unk_148++, gSongOfTimeClockDL);
 
         phi_s2 += 0x505;
     }
@@ -1257,7 +1251,7 @@ void func_80A939E8(EnTest6* this, PlayState* play2) {
                 gDPSetPrimColor(this->unk_148++, 0, 0xFF, 28, 28, 28, 255);
                 gDPSetEnvColor(this->unk_148++, 245, 245, 200, this->unk_282);
                 gDPSetRenderMode(this->unk_148++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2);
-                gSPDisplayList(this->unk_148++, gameplay_keep_DL_07AFB0);
+                gSPDisplayList(this->unk_148++, gSongOfTimeClockDL);
 
                 POLY_XLU_DISP = this->unk_148;
             }

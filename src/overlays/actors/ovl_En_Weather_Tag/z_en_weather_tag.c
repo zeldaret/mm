@@ -352,7 +352,7 @@ void func_80966FEC(EnWeatherTag* this, PlayState* play) {
     }
 
     // unique pirates fortress behavior?
-    if ((play->sceneNum == SCENE_KAIZOKU) && (play->actorCtx.unk5 & 2)) {
+    if ((play->sceneNum == SCENE_KAIZOKU) && (play->actorCtx.flags & ACTORCTX_FLAG_1)) {
         EnWeatherTag_SetupAction(this, func_80967060);
     }
 }
@@ -482,9 +482,10 @@ void EnWeatherTag_Update(Actor* thisx, PlayState* play) {
     EnWeatherTag* this = THIS;
 
     this->actionFunc(this, play);
-    if ((play->actorCtx.unk5 & 2) && (play->msgCtx.msgMode != 0) && (play->msgCtx.currentTextId == 0x5E6) &&
-        (!FrameAdvance_IsEnabled(&play->state)) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
-        (ActorCutscene_GetCurrentIndex() == -1) && (play->csCtx.state == 0)) {
+    if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != 0) &&
+        (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
+        (play->transitionTrigger == TRANS_TRIGGER_OFF) && (ActorCutscene_GetCurrentIndex() == -1) &&
+        (play->csCtx.state == 0)) {
 
         gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
         if (REG(15) != 0) {
