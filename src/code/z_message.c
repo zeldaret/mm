@@ -270,7 +270,7 @@ void func_8014D62C(PlayState* play, s32* arg1, f32* arg2, s16* arg3) {
     if ((func_8010A0A4(play) != 0) || (play->sceneNum == 0x4F)) {
         phi_v0 = 0xA;
     } else {
-        phi_v0 = pauseCtx->unk_238[PAUSE_WORLD_MAP];
+        phi_v0 = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
     }
 
     temp_s6 = D_801D0250[phi_v0];
