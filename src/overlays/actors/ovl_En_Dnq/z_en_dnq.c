@@ -2,10 +2,13 @@
  * File: z_en_dnq.c
  * Overlay: ovl_En_Dnq
  * Description: Deku King
+ *
+ * This actor's name is probably short for "Dekunuts Queen". This is likely a misnamed actor,
+ * since it uses assets from object_dno (probably short for "Dekunuts Ou (king)").
  */
 
 #include "z_en_dnq.h"
-#include "objects/object_dnq/object_dnq.h"
+#include "objects/object_dno/object_dno.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -27,7 +30,7 @@ const ActorInit En_Dnq_InitVars = {
     ACTOR_EN_DNQ,
     ACTORCAT_NPC,
     FLAGS,
-    OBJECT_DNQ,
+    OBJECT_DNO,
     sizeof(EnDnq),
     (ActorFunc)EnDnq_Init,
     (ActorFunc)EnDnq_Destroy,
@@ -58,26 +61,26 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
 static AnimationInfoS sAnimationInfo[] = {
-    { &object_dnq_Anim_008328, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnq_Anim_008328, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_007528, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_0006F0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnq_Anim_000BF8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_002690, 0.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnq_Anim_002690, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_003408, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_006984, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_005E18, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_005A14, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_005284, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_001AEC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnq_Anim_001100, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnq_Anim_004EA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_00F504, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_0047B8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_003DBC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_005A14, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_003DBC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dno_Anim_008328, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dno_Anim_008328, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dno_Anim_007528, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dno_Anim_0006F0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dno_Anim_000BF8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dno_Anim_002690, 0.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dno_Anim_002690, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dno_Anim_003408, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dno_Anim_006984, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dno_Anim_005E18, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dno_Anim_005A14, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dno_Anim_005284, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dno_Anim_001AEC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dno_Anim_001100, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dno_Anim_004EA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dno_Anim_00F504, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dno_Anim_0047B8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dno_Anim_003DBC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dno_Anim_005A14, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dno_Anim_003DBC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 s32 EnDnq_ValidatePictograph(PlayState* play, Actor* thisx) {
@@ -417,7 +420,7 @@ void EnDnq_Init(Actor* thisx, PlayState* play) {
     EnDnq* this = THIS;
 
     ActorShape_Init(&this->picto.actor.shape, 0.0f, NULL, 14.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_dnq_Skel_00EB48, NULL, this->jointTable, this->morphTable, 33);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_dno_Skel_00EB48, NULL, this->jointTable, this->morphTable, 33);
     this->unk_398 = -1;
     func_80A5257C(this, 0);
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);

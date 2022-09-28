@@ -271,7 +271,7 @@ typedef struct {
 } Room; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ Room currRoom;
+    /* 0x00 */ Room curRoom;
     /* 0x14 */ Room prevRoom;
     /* 0x28 */ void* roomMemPages[2]; // In a scene with transitions, roomMemory is split between two pages that toggle each transition. This is one continuous range, as the second page allocates from the end
     /* 0x30 */ u8 activeMemPage; // 0 - First page in memory, 1 - Second page
@@ -534,119 +534,119 @@ typedef union {
 } SceneCmd; // size = 0x8
 
 typedef enum {
-    /* 0x00 */ SCENE_20SICHITAI2,
+    /* 0x00 */ SCENE_20SICHITAI2, // Southern Swamp (Clear)
     /* 0x01 */ SCENE_UNSET_1,
     /* 0x02 */ SCENE_UNSET_2,
     /* 0x03 */ SCENE_UNSET_3,
     /* 0x04 */ SCENE_UNSET_4,
     /* 0x05 */ SCENE_UNSET_5,
     /* 0x06 */ SCENE_UNSET_6,
-    /* 0x07 */ SCENE_KAKUSIANA,
-    /* 0x08 */ SCENE_SPOT00,
+    /* 0x07 */ SCENE_KAKUSIANA, // Lone Peak Shrine & Grottos
+    /* 0x08 */ SCENE_SPOT00, // Cutscene Scene
     /* 0x09 */ SCENE_UNSET_9,
-    /* 0x0A */ SCENE_WITCH_SHOP,
-    /* 0x0B */ SCENE_LAST_BS,
-    /* 0x0C */ SCENE_HAKASHITA,
-    /* 0x0D */ SCENE_AYASHIISHOP,
+    /* 0x0A */ SCENE_WITCH_SHOP, // Magic Hags' Potion Shop
+    /* 0x0B */ SCENE_LAST_BS, // Majora's Lair
+    /* 0x0C */ SCENE_HAKASHITA, // Beneath the Graveyard
+    /* 0x0D */ SCENE_AYASHIISHOP, // Curiosity Shop
     /* 0x0E */ SCENE_UNSET_E,
     /* 0x0F */ SCENE_UNSET_F,
-    /* 0x10 */ SCENE_OMOYA,
-    /* 0x11 */ SCENE_BOWLING,
-    /* 0x12 */ SCENE_SONCHONOIE,
-    /* 0x13 */ SCENE_IKANA,
-    /* 0x14 */ SCENE_KAIZOKU,
-    /* 0x15 */ SCENE_MILK_BAR,
-    /* 0x16 */ SCENE_INISIE_N,
-    /* 0x17 */ SCENE_TAKARAYA,
-    /* 0x18 */ SCENE_INISIE_R,
-    /* 0x19 */ SCENE_OKUJOU,
-    /* 0x1A */ SCENE_OPENINGDAN,
-    /* 0x1B */ SCENE_MITURIN,
-    /* 0x1C */ SCENE_13HUBUKINOMITI,
-    /* 0x1D */ SCENE_CASTLE,
-    /* 0x1E */ SCENE_DEKUTES,
-    /* 0x1F */ SCENE_MITURIN_BS,
-    /* 0x20 */ SCENE_SYATEKI_MIZU,
-    /* 0x21 */ SCENE_HAKUGIN,
-    /* 0x22 */ SCENE_ROMANYMAE,
-    /* 0x23 */ SCENE_PIRATE,
-    /* 0x24 */ SCENE_SYATEKI_MORI,
-    /* 0x25 */ SCENE_SINKAI,
-    /* 0x26 */ SCENE_YOUSEI_IZUMI,
-    /* 0x27 */ SCENE_KINSTA1,
-    /* 0x28 */ SCENE_KINDAN2,
-    /* 0x29 */ SCENE_TENMON_DAI,
-    /* 0x2A */ SCENE_LAST_DEKU,
-    /* 0x2B */ SCENE_22DEKUCITY,
-    /* 0x2C */ SCENE_KAJIYA,
-    /* 0x2D */ SCENE_00KEIKOKU,
-    /* 0x2E */ SCENE_POSTHOUSE,
-    /* 0x2F */ SCENE_LABO,
-    /* 0x30 */ SCENE_DANPEI2TEST,
+    /* 0x10 */ SCENE_OMOYA, // Mama's House (Ranch House in PAL) & Barn
+    /* 0x11 */ SCENE_BOWLING, // Honey & Darling's Shop
+    /* 0x12 */ SCENE_SONCHONOIE, // The Mayor's Residence
+    /* 0x13 */ SCENE_IKANA, // Ikana Canyon
+    /* 0x14 */ SCENE_KAIZOKU, // Pirates' Fortress
+    /* 0x15 */ SCENE_MILK_BAR, // Milk Bar
+    /* 0x16 */ SCENE_INISIE_N, // Stone Tower Temple
+    /* 0x17 */ SCENE_TAKARAYA, // Treasure Chest Shop
+    /* 0x18 */ SCENE_INISIE_R, // Inverted Stone Tower Temple
+    /* 0x19 */ SCENE_OKUJOU, // Clock Tower Rooftop
+    /* 0x1A */ SCENE_OPENINGDAN, // Before Clock Town
+    /* 0x1B */ SCENE_MITURIN, // Woodfall Temple
+    /* 0x1C */ SCENE_13HUBUKINOMITI, // Path to Mountain Village
+    /* 0x1D */ SCENE_CASTLE, // Ancient Castle of Ikana
+    /* 0x1E */ SCENE_DEKUTES, // Deku Scrub Playground
+    /* 0x1F */ SCENE_MITURIN_BS, // Odolwa's Lair
+    /* 0x20 */ SCENE_SYATEKI_MIZU, // Town Shooting Gallery
+    /* 0x21 */ SCENE_HAKUGIN, // Snowhead Temple
+    /* 0x22 */ SCENE_ROMANYMAE, // Milk Road
+    /* 0x23 */ SCENE_PIRATE, // Pirates' Fortress Interior
+    /* 0x24 */ SCENE_SYATEKI_MORI, // Swamp Shooting Gallery
+    /* 0x25 */ SCENE_SINKAI, // Pinnacle Rock
+    /* 0x26 */ SCENE_YOUSEI_IZUMI, // Fairy's Fountain
+    /* 0x27 */ SCENE_KINSTA1, // Swamp Spider House
+    /* 0x28 */ SCENE_KINDAN2, // Oceanside Spider House
+    /* 0x29 */ SCENE_TENMON_DAI, // Astral Observatory
+    /* 0x2A */ SCENE_LAST_DEKU, // Moon Deku Trial
+    /* 0x2B */ SCENE_22DEKUCITY, // Deku Palace
+    /* 0x2C */ SCENE_KAJIYA, // Mountain Smithy
+    /* 0x2D */ SCENE_00KEIKOKU, // Termina Field
+    /* 0x2E */ SCENE_POSTHOUSE, // Post Office
+    /* 0x2F */ SCENE_LABO, // Marine Research Lab
+    /* 0x30 */ SCENE_DANPEI2TEST, // Beneath the Graveyard (Day 3) and Dampe's House
     /* 0x31 */ SCENE_UNSET_31,
-    /* 0x32 */ SCENE_16GORON_HOUSE,
-    /* 0x33 */ SCENE_33ZORACITY,
-    /* 0x34 */ SCENE_8ITEMSHOP,
-    /* 0x35 */ SCENE_F01,
-    /* 0x36 */ SCENE_INISIE_BS,
-    /* 0x37 */ SCENE_30GYOSON,
-    /* 0x38 */ SCENE_31MISAKI,
-    /* 0x39 */ SCENE_TAKARAKUJI,
+    /* 0x32 */ SCENE_16GORON_HOUSE, // Goron Shrine
+    /* 0x33 */ SCENE_33ZORACITY, // Zora Hall
+    /* 0x34 */ SCENE_8ITEMSHOP, // Trading Post
+    /* 0x35 */ SCENE_F01, // Romani Ranch
+    /* 0x36 */ SCENE_INISIE_BS, // Twinmold's Lair
+    /* 0x37 */ SCENE_30GYOSON, // Great Bay Coast
+    /* 0x38 */ SCENE_31MISAKI, // Zora Cape
+    /* 0x39 */ SCENE_TAKARAKUJI, // Lottery Shop
     /* 0x3A */ SCENE_UNSET_3A,
-    /* 0x3B */ SCENE_TORIDE,
-    /* 0x3C */ SCENE_FISHERMAN,
-    /* 0x3D */ SCENE_GORONSHOP,
-    /* 0x3E */ SCENE_DEKU_KING,
-    /* 0x3F */ SCENE_LAST_GORON,
-    /* 0x40 */ SCENE_24KEMONOMITI,
-    /* 0x41 */ SCENE_F01_B,
-    /* 0x42 */ SCENE_F01C,
-    /* 0x43 */ SCENE_BOTI,
-    /* 0x44 */ SCENE_HAKUGIN_BS,
-    /* 0x45 */ SCENE_20SICHITAI,
-    /* 0x46 */ SCENE_21MITURINMAE,
-    /* 0x47 */ SCENE_LAST_ZORA,
-    /* 0x48 */ SCENE_11GORONNOSATO2,
-    /* 0x49 */ SCENE_SEA,
-    /* 0x4A */ SCENE_35TAKI,
-    /* 0x4B */ SCENE_REDEAD,
-    /* 0x4C */ SCENE_BANDROOM,
-    /* 0x4D */ SCENE_11GORONNOSATO,
-    /* 0x4E */ SCENE_GORON_HAKA,
-    /* 0x4F */ SCENE_SECOM,
-    /* 0x50 */ SCENE_10YUKIYAMANOMURA,
-    /* 0x51 */ SCENE_TOUGITES,
-    /* 0x52 */ SCENE_DANPEI,
-    /* 0x53 */ SCENE_IKANAMAE,
-    /* 0x54 */ SCENE_DOUJOU,
-    /* 0x55 */ SCENE_MUSICHOUSE,
-    /* 0x56 */ SCENE_IKNINSIDE,
-    /* 0x57 */ SCENE_MAP_SHOP,
-    /* 0x58 */ SCENE_F40,
-    /* 0x59 */ SCENE_F41,
-    /* 0x5A */ SCENE_10YUKIYAMANOMURA2,
-    /* 0x5B */ SCENE_14YUKIDAMANOMITI,
-    /* 0x5C */ SCENE_12HAKUGINMAE,
-    /* 0x5D */ SCENE_17SETUGEN,
-    /* 0x5E */ SCENE_17SETUGEN2,
-    /* 0x5F */ SCENE_SEA_BS,
-    /* 0x60 */ SCENE_RANDOM,
-    /* 0x61 */ SCENE_YADOYA,
-    /* 0x62 */ SCENE_KONPEKI_ENT,
-    /* 0x63 */ SCENE_INSIDETOWER,
-    /* 0x64 */ SCENE_26SARUNOMORI,
-    /* 0x65 */ SCENE_LOST_WOODS,
-    /* 0x66 */ SCENE_LAST_LINK,
-    /* 0x67 */ SCENE_SOUGEN,
-    /* 0x68 */ SCENE_BOMYA,
-    /* 0x69 */ SCENE_KYOJINNOMA,
-    /* 0x6A */ SCENE_KOEPONARACE,
-    /* 0x6B */ SCENE_GORONRACE,
-    /* 0x6C */ SCENE_TOWN,
-    /* 0x6D */ SCENE_ICHIBA,
-    /* 0x6E */ SCENE_BACKTOWN,
-    /* 0x6F */ SCENE_CLOCKTOWER,
-    /* 0x70 */ SCENE_ALLEY,
+    /* 0x3B */ SCENE_TORIDE, // Pirates' Fortress Moat
+    /* 0x3C */ SCENE_FISHERMAN, // Fisherman's Hut
+    /* 0x3D */ SCENE_GORONSHOP, // Goron Shop
+    /* 0x3E */ SCENE_DEKU_KING, // Deku King's Chamber
+    /* 0x3F */ SCENE_LAST_GORON, // Moon Goron Trial
+    /* 0x40 */ SCENE_24KEMONOMITI, // Road to Southern Swamp
+    /* 0x41 */ SCENE_F01_B, // Doggy Racetrack
+    /* 0x42 */ SCENE_F01C, // Cucco Shack
+    /* 0x43 */ SCENE_BOTI, // Ikana Graveyard
+    /* 0x44 */ SCENE_HAKUGIN_BS, // Goht's Lair
+    /* 0x45 */ SCENE_20SICHITAI, // Southern Swamp (poison)
+    /* 0x46 */ SCENE_21MITURINMAE, // Woodfall
+    /* 0x47 */ SCENE_LAST_ZORA, // Moon Zora Trial
+    /* 0x48 */ SCENE_11GORONNOSATO2, // Goron Village (spring)
+    /* 0x49 */ SCENE_SEA, // Great Bay Temple
+    /* 0x4A */ SCENE_35TAKI, // Waterfall Rapids
+    /* 0x4B */ SCENE_REDEAD, // Beneath the Well
+    /* 0x4C */ SCENE_BANDROOM, // Zora Hall Rooms
+    /* 0x4D */ SCENE_11GORONNOSATO, // Goron Village (winter)
+    /* 0x4E */ SCENE_GORON_HAKA, // Goron Graveyard
+    /* 0x4F */ SCENE_SECOM, // Sakon's Hideout
+    /* 0x50 */ SCENE_10YUKIYAMANOMURA, // Mountain Village (winter)
+    /* 0x51 */ SCENE_TOUGITES, // Ghost Hut
+    /* 0x52 */ SCENE_DANPEI, // Deku Shrine
+    /* 0x53 */ SCENE_IKANAMAE, // Road to Ikana
+    /* 0x54 */ SCENE_DOUJOU, // Swordsman's School
+    /* 0x55 */ SCENE_MUSICHOUSE, // Music Box House
+    /* 0x56 */ SCENE_IKNINSIDE, // Igos du Ikana's Lair
+    /* 0x57 */ SCENE_MAP_SHOP, // Tourist Information
+    /* 0x58 */ SCENE_F40, // Stone Tower
+    /* 0x59 */ SCENE_F41, // Inverted Stone Tower
+    /* 0x5A */ SCENE_10YUKIYAMANOMURA2, // Mountain Village (spring)
+    /* 0x5B */ SCENE_14YUKIDAMANOMITI, // Path to Snowhead
+    /* 0x5C */ SCENE_12HAKUGINMAE, // Snowhead
+    /* 0x5D */ SCENE_17SETUGEN, // Path to Goron Village (winter)
+    /* 0x5E */ SCENE_17SETUGEN2, // Path to Goron Village (spring)
+    /* 0x5F */ SCENE_SEA_BS, // Gyorg's Lair
+    /* 0x60 */ SCENE_RANDOM, // Secret Shrine
+    /* 0x61 */ SCENE_YADOYA, // Stock Pot Inn
+    /* 0x62 */ SCENE_KONPEKI_ENT, // Great Bay Cutscene
+    /* 0x63 */ SCENE_INSIDETOWER, // Clock Tower Interior
+    /* 0x64 */ SCENE_26SARUNOMORI, // Woods of Mystery
+    /* 0x65 */ SCENE_LOST_WOODS, // Lost Woods (Intro)
+    /* 0x66 */ SCENE_LAST_LINK, // Moon Link Trial
+    /* 0x67 */ SCENE_SOUGEN, // The Moon
+    /* 0x68 */ SCENE_BOMYA, // Bomb Shop
+    /* 0x69 */ SCENE_KYOJINNOMA, // Giants' Chamber
+    /* 0x6A */ SCENE_KOEPONARACE, // Gorman Track
+    /* 0x6B */ SCENE_GORONRACE, // Goron Racetrack
+    /* 0x6C */ SCENE_TOWN, // East Clock Town
+    /* 0x6D */ SCENE_ICHIBA, // West Clock Town
+    /* 0x6E */ SCENE_BACKTOWN, // North Clock Town
+    /* 0x6F */ SCENE_CLOCKTOWER, // South Clock Town
+    /* 0x70 */ SCENE_ALLEY, // Laundry Pool
     /* 0x71 */ SCENE_MAX
 } SceneId;
 
@@ -843,11 +843,11 @@ typedef enum {
 #define SCENE_CMD_SPECIAL_FILES(elfMessageFile, keepObjectId) \
     { SCENE_CMD_ID_SPECIAL_FILES, elfMessageFile, CMD_W(keepObjectId) }
 
-#define SCENE_CMD_ROOM_BEHAVIOR(currRoomUnk3, currRoomUnk2, currRoomUnk5, msgCtxunk12044, enablePosLights,  \
+#define SCENE_CMD_ROOM_BEHAVIOR(curRoomUnk3, curRoomUnk2, curRoomUnk5, msgCtxunk12044, enablePosLights,  \
                                 kankyoContextUnkE2)                                                         \
     {                                                                                                       \
-        SCENE_CMD_ID_ROOM_BEHAVIOR, currRoomUnk3,                                                           \
-            currRoomUnk2 | _SHIFTL(currRoomUnk5, 8, 1) | _SHIFTL(msgCtxunk12044, 10, 1) | \
+        SCENE_CMD_ID_ROOM_BEHAVIOR, curRoomUnk3,                                                           \
+            curRoomUnk2 | _SHIFTL(curRoomUnk5, 8, 1) | _SHIFTL(msgCtxunk12044, 10, 1) | \
                 _SHIFTL(enablePosLights, 11, 1) | _SHIFTL(kankyoContextUnkE2, 12, 1)                        \
     }
 

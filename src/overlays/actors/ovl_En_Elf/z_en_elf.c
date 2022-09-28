@@ -1463,7 +1463,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
     }
 
     if (player->tatlTextId < 0) {
-        thisx->flags |= 0x10000;
+        thisx->flags |= ACTOR_FLAG_10000;
     }
 
     if (Actor_ProcessTalkRequest(thisx, &play->state)) {
@@ -1480,7 +1480,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         thisx->update = func_8088FE64;
         func_8088C51C(this, 3);
         if (this->elfMsg != NULL) {
-            this->elfMsg->flags |= 0x100;
+            this->elfMsg->flags |= ACTOR_FLAG_100;
             thisx->cutscene = this->elfMsg->cutscene;
             if (thisx->cutscene != -1) {
                 func_8088FD04(this);
@@ -1492,7 +1492,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         } else {
             thisx->cutscene = -1;
         }
-        thisx->flags &= ~0x10000;
+        thisx->flags &= ~ACTOR_FLAG_10000;
     } else if (this->unk_264 & 4) {
         thisx->focus.pos = thisx->world.pos;
         this->fairyFlags |= 0x10;

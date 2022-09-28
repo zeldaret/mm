@@ -313,7 +313,7 @@ u8 Player_MaskIdToItemId(s32 maskIdMinusOne) {
     return sMaskItemIds[maskIdMinusOne];
 }
 
-u8 Player_GetCurMaskItemId(PlayState* play) {
+s32 Player_GetCurMaskItemId(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->currentMask != PLAYER_MASK_NONE) {
@@ -441,7 +441,7 @@ void func_80123140(PlayState* play, Player* player) {
     IREG(69) = bootRegs[16];
     MREG(95) = bootRegs[17];
 
-    if (play->roomCtx.currRoom.unk3 == 2) {
+    if (play->roomCtx.curRoom.unk3 == 2) {
         R_RUN_SPEED_LIMIT = 500;
     }
 
@@ -559,18 +559,18 @@ ItemID func_8012364C(PlayState* play, Player* player, s32 arg2) {
 
     if (arg2 == 1) {
         return (gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)
-               : (gSaveContext.unk_3F22 == 0x10)                              ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)
+               : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)                              ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)
                                                                               : ITEM_NONE;
     }
 
     if (arg2 == 2) {
         return (gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)
-               : (gSaveContext.unk_3F22 == 0x10)                              ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)
+               : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)                              ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)
                                                                               : ITEM_NONE;
     }
 
     return (gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)
-           : (gSaveContext.unk_3F22 == 0x10)                               ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)
+           : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)                               ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)
                                                                            : ITEM_NONE;
 }
 
@@ -1461,7 +1461,7 @@ s32 func_801242DC(PlayState* play) {
     TextTriggerEntry* triggerEntry;
     s32 envIndex;
 
-    if (play->roomCtx.currRoom.unk2 == 3) { // Room is hot
+    if (play->roomCtx.curRoom.unk2 == 3) { // Room is hot
         envIndex = 0;
     } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->unk_AD8 > 80)) {
         envIndex = 3;
