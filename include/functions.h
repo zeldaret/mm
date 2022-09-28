@@ -1819,10 +1819,7 @@ Gfx* func_8010DC58(Gfx* displayListHead, void* texture, s16 textureWidth, s16 te
 void Interface_StartTimer(s16 timerId, s16 seconds);
 void Interface_StartPostmanTimer(s16 seconds, s16 bunnyHoodState);
 void func_8010EE74(PlayState* play, s32 day);
-void Interface_ChangeAlpha(u16 param_1);
-// void func_8010EF9C(void);
-// void func_8010F0D4(void);
-// void func_8010F1A8(void);
+void Interface_SetHudVisibility(u16 hudVisibility);
 // void func_80110038(void);
 // void func_80111CB4(void);
 // void func_801129E4(void);

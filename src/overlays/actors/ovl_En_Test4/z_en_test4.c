@@ -507,9 +507,9 @@ void func_80A42F20(EnTest4* this, PlayState* play) {
         if (sCurrentCs >= 0) {
             ActorCutscene_Stop(sCurrentCs);
         }
-        gSaveContext.unk_3F22 = 0;
+        gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
         gSaveContext.eventInf[1] &= (u8)~0x80;
-        Interface_ChangeAlpha(50);
+        Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     }
 }
 

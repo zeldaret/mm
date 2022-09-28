@@ -389,7 +389,7 @@ void func_80123140(PlayState* play, Player* player) {
     IREG(69) = bootRegs[16];
     MREG(95) = bootRegs[17];
 
-    if (play->roomCtx.currRoom.unk3 == 2) {
+    if (play->roomCtx.curRoom.unk3 == 2) {
         R_RUN_SPEED_LIMIT = 500;
     }
 
@@ -508,20 +508,23 @@ s32 func_8012364C(PlayState* play, Player* player, s32 arg2) {
     if (arg2 == 1) {
         return (gSaveContext.buttonStatus[1] != BTN_DISABLED)
                    ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
-               : (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
-                                                 : ITEM_NONE;
+               : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)
+                   ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
+                   : ITEM_NONE;
     }
 
     if (arg2 == 2) {
         return (gSaveContext.buttonStatus[2] != BTN_DISABLED)
                    ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
-               : (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
-                                                 : ITEM_NONE;
+               : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)
+                   ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
+                   : ITEM_NONE;
     }
 
     return (gSaveContext.buttonStatus[3] != BTN_DISABLED) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
-           : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
-                                                          : ITEM_NONE;
+           : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)
+               ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
+               : ITEM_NONE;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123810.s")
@@ -865,7 +868,7 @@ s32 Player_GetEnvTimerType(PlayState* play) {
     TextTriggerEntry* triggerEntry;
     s32 envTimerType;
 
-    if (play->roomCtx.currRoom.unk2 == 3) { // Room is hot
+    if (play->roomCtx.curRoom.unk2 == 3) { // Room is hot
         envTimerType = PLAYER_ENV_TIMER_HOTROOM - 1;
     } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->underwaterTimer > 80)) {
         envTimerType = PLAYER_ENV_TIMER_UNDERWATER_FREE - 1;
