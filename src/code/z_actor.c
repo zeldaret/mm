@@ -692,7 +692,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
  */
 s32 Flags_GetSwitch(PlayState* play, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
-        return play->actorCtx.flags.switches[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
+        return play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
 }
@@ -702,7 +702,7 @@ s32 Flags_GetSwitch(PlayState* play, s32 flag) {
  */
 void Flags_SetSwitch(PlayState* play, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
-        play->actorCtx.flags.switches[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
+        play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
     }
 }
 
@@ -711,7 +711,7 @@ void Flags_SetSwitch(PlayState* play, s32 flag) {
  */
 void Flags_UnsetSwitch(PlayState* play, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
-        play->actorCtx.flags.switches[(flag & ~0x1F) >> 5] &= ~(1 << (flag & 0x1F));
+        play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] &= ~(1 << (flag & 0x1F));
     }
 }
 
@@ -719,70 +719,70 @@ void Flags_UnsetSwitch(PlayState* play, s32 flag) {
  * Tests if current scene chest flag is set.
  */
 s32 Flags_GetTreasure(PlayState* play, s32 flag) {
-    return play->actorCtx.flags.chest & (1 << flag);
+    return play->actorCtx.sceneFlags.chest & (1 << flag);
 }
 
 /**
  * Sets current scene chest flag.
  */
 void Flags_SetTreasure(PlayState* play, s32 flag) {
-    play->actorCtx.flags.chest |= (1 << flag);
+    play->actorCtx.sceneFlags.chest |= (1 << flag);
 }
 
 /**
  * Overrides the all the chest flags.
  */
 void Flags_SetAllTreasure(PlayState* play, s32 flag) {
-    play->actorCtx.flags.chest = flag;
+    play->actorCtx.sceneFlags.chest = flag;
 }
 
 /**
  * Returns all the chest flags.
  */
 s32 Flags_GetAllTreasure(PlayState* play) {
-    return play->actorCtx.flags.chest;
+    return play->actorCtx.sceneFlags.chest;
 }
 
 /**
  * Tests if current scene clear flag is set.
  */
 s32 Flags_GetClear(PlayState* play, s32 roomNumber) {
-    return play->actorCtx.flags.clearedRoom & (1 << roomNumber);
+    return play->actorCtx.sceneFlags.clearedRoom & (1 << roomNumber);
 }
 
 /**
  * Sets current scene clear flag.
  */
 void Flags_SetClear(PlayState* play, s32 roomNumber) {
-    play->actorCtx.flags.clearedRoom |= (1 << roomNumber);
+    play->actorCtx.sceneFlags.clearedRoom |= (1 << roomNumber);
 }
 
 /**
  * Unsets current scene clear flag.
  */
 void Flags_UnsetClear(PlayState* play, s32 roomNumber) {
-    play->actorCtx.flags.clearedRoom &= ~(1 << roomNumber);
+    play->actorCtx.sceneFlags.clearedRoom &= ~(1 << roomNumber);
 }
 
 /**
  * Tests if current scene temp clear flag is set.
  */
 s32 Flags_GetClearTemp(PlayState* play, s32 roomNumber) {
-    return play->actorCtx.flags.clearedRoomTemp & (1 << roomNumber);
+    return play->actorCtx.sceneFlags.clearedRoomTemp & (1 << roomNumber);
 }
 
 /**
  * Sets current scene temp clear flag.
  */
 void Flags_SetClearTemp(PlayState* play, s32 roomNumber) {
-    play->actorCtx.flags.clearedRoomTemp |= (1 << roomNumber);
+    play->actorCtx.sceneFlags.clearedRoomTemp |= (1 << roomNumber);
 }
 
 /**
  * Unsets current scene temp clear flag.
  */
 void Flags_UnsetClearTemp(PlayState* play, s32 roomNumber) {
-    play->actorCtx.flags.clearedRoomTemp &= ~(1 << roomNumber);
+    play->actorCtx.sceneFlags.clearedRoomTemp &= ~(1 << roomNumber);
 }
 
 /**
@@ -790,7 +790,7 @@ void Flags_UnsetClearTemp(PlayState* play, s32 roomNumber) {
  */
 s32 Flags_GetCollectible(PlayState* play, s32 flag) {
     if (flag > 0 && flag < 0x80) {
-        return play->actorCtx.flags.collectible[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
+        return play->actorCtx.sceneFlags.collectible[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
 }
@@ -800,7 +800,7 @@ s32 Flags_GetCollectible(PlayState* play, s32 flag) {
  */
 void Flags_SetCollectible(PlayState* play, s32 flag) {
     if (flag > 0 && flag < 0x80) {
-        play->actorCtx.flags.collectible[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
+        play->actorCtx.sceneFlags.collectible[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
     }
 }
 
@@ -2249,14 +2249,14 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
         overlayEntry++;
     }
 
-    actorCtx->flags.chest = cycleFlags->chest;
-    actorCtx->flags.switches[0] = cycleFlags->switch0;
-    actorCtx->flags.switches[1] = cycleFlags->switch1;
+    actorCtx->sceneFlags.chest = cycleFlags->chest;
+    actorCtx->sceneFlags.switches[0] = cycleFlags->switch0;
+    actorCtx->sceneFlags.switches[1] = cycleFlags->switch1;
     if (play->sceneNum == SCENE_INISIE_R) {
         cycleFlags = &gSaveContext.cycleSceneFlags[play->sceneNum];
     }
-    actorCtx->flags.collectible[0] = cycleFlags->collectible;
-    actorCtx->flags.clearedRoom = cycleFlags->clearedRoom;
+    actorCtx->sceneFlags.collectible[0] = cycleFlags->collectible;
+    actorCtx->sceneFlags.clearedRoom = cycleFlags->clearedRoom;
 
     TitleCard_ContextInit(&play->state, &actorCtx->titleCtxt);
     func_800B6468(play);
@@ -2976,9 +2976,9 @@ void func_800BA798(PlayState* play, ActorContext* actorCtx) {
     }
 
     CollisionCheck_ClearContext(play, &play->colChkCtx);
-    actorCtx->flags.clearedRoomTemp = 0;
-    actorCtx->flags.switches[3] = 0;
-    actorCtx->flags.collectible[3] = 0;
+    actorCtx->sceneFlags.clearedRoomTemp = 0;
+    actorCtx->sceneFlags.switches[3] = 0;
+    actorCtx->sceneFlags.collectible[3] = 0;
     play->msgCtx.unk_12030 = 0;
 }
 
@@ -3814,9 +3814,9 @@ typedef struct {
 } DoorLockInfo; // size = 0x1C
 
 DoorLockInfo sDoorLocksInfo[DOORLOCK_MAX] = {
-    /* DOORLOCK_NORMAL */ { 0.54f, 6000.0f, 5000.0, 1.0f, 0.0f, gDoorChainsDL, gDoorLockDL },
-    /* DOORLOCK_BOSS */ { 0.644f, 12000.0f, 8000.0f, 1.0f, 0.0f, object_bdoor_DL_000530, object_bdoor_DL_000400 },
-    /* DOORLOCK_2 */ { 0.6400000453f, 8500.0f, 8000.0f, 1.75f, 0.1f, gDoorChainsDL, gDoorLockDL },
+    /* DOORLOCK_NORMAL */ { 0.54f, 6000.0f, 5000.0, 1.0f, 0.0f, gDoorChainDL, gDoorLockDL },
+    /* DOORLOCK_BOSS */ { 0.644f, 12000.0f, 8000.0f, 1.0f, 0.0f, gBossDoorChainDL, gBossDoorLockDL },
+    /* DOORLOCK_2 */ { 0.6400000453f, 8500.0f, 8000.0f, 1.75f, 0.1f, gDoorChainDL, gDoorLockDL },
 };
 
 /**
