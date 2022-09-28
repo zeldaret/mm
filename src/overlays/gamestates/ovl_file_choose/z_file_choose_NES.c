@@ -14,75 +14,13 @@
 // there are uses of D_0E000000.fillRect (appearing as D_0E0002E0) in this file
 extern GfxMasterList D_0E000000;
 
-s16 D_80814280[] = {
-    2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 1, 1, 2, 1, 1, 4, 2, 2, 2, 1, 1, 0, 2, 0, 1, 1, 1, 1, 1, 0,
-    1, 1, 1, 2, 2, 2, 2, 2, 3, 2, 2, 4, 3, 2, 4, 1, 2, 2, 1, 1, 2, 2, 3, 2, 2, 0, 2, 2, 2, 0, 3, 1, 0,
-};
+extern s16 D_80814280[];
 
-s16 D_80814304[] = {
-    1, 2, 0, 1, 1, 2, 1, 1, 4, 2, 2, 2, 1, 1, 0, 2, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 2, 2, 2, 2, 2, 3,
-    2, 2, 4, 3, 2, 4, 1, 2, 2, 1, 1, 2, 2, 3, 2, 2, 0, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 3,
-};
-
-s16 D_80814384[] = {
-    0, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-};
-
-s16 D_80814404[] = {
-    -94, -96, -48, 0, 32, 64,
-};
-
-s16 D_80814410[] = {
-    56, 44, 44, 28, 28, 44,
-};
-
-s16 D_8081441C[] = {
-    72, -48, -48, -48, -48, -48,
-};
-
-TexturePtr sBackspaceEndTextures[] = { gFileSelBackspaceButtonTex, gFileSelENDButtonENGTex };
-
-s16 sBackspaceEndWidths[] = { 28, 44 };
-
-s16 D_80814434[] = {
-    -30, -16, -6, 4, 14, 24, 34, 44, 54, -16, -16, 0,
-};
-
-s16 D_8081444C[] = {
-    72, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 0,
-};
-
-typedef struct {
-    /* 0x00 */ TexturePtr texture;
-    /* 0x0C */ u16 width;
-    /* 0x12 */ u16 height;
-} OptionsMenuTextureInfo; // size = 0x14
-
-OptionsMenuTextureInfo gOptionsMenuHeaders[] = {
-    { gFileSelOptionsENGTex, 128, 16 },          { gFileSelSOUNDENGTex, 64, 16 },
-    { gFileSelTargetingENGTex, 64, 16 },         { gFileSelCheckBrightnessENGTex, 96, 16 },
-    { gFileSelDolbySurroundLogoENGTex, 48, 17 },
-};
-
-OptionsMenuTextureInfo gOptionsMenuSettings[] = {
-    { gFileSelStereoENGTex, 48, 16 },   { gFileSelMonoENGTex, 48, 16 },   { gFileSelHeadsetENGTex, 48, 16 },
-    { gFileSelSurroundENGTex, 48, 16 }, { gFileSelSwitchENGTex, 48, 16 }, { gFileSelHoldENGTex, 48, 16 },
-};
-
-s16 D_808144BC = 0xFF;
-s16 D_808144C0 = 0xFF;
-s16 D_808144C4 = 0xFF;
-s16 D_808144C8 = 0;
-s16 D_808144CC = 0;
-s16 D_808144D0 = 0;
-s16 D_808144D4 = 1;
-s16 D_808144D8 = 20;
-s16 D_808144DC[] = { 0xFF, 0xFF, 0xFF, 0, 0xFF, 0xFF };
-
-s32 D_808144E8[] = {
-    0x00000000, 0x00000000, 0x00960096, 0x00000000, 0x00000000,
-    0x00000000, 0x00000064, 0x41000000, 0x42C80000, 0x00000000,
+s32 D_808144F10[] = {
+    0x00000064,
+    0x41000000,
+    0x42C80000,
+    0x00000000,
 };
 
 Gfx sScreenFillSetupDL[] = {
