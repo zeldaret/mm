@@ -835,7 +835,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                         this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                         this->unk_208++;
                     }
-                    if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
+                    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
                         this->unk_208 = 3;
                     }
                     break;
