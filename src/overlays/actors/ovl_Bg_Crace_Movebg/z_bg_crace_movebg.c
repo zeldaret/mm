@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_crace_movebg.h"
+#include "overlays/actors/ovl_En_Dno/z_en_dno.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -118,7 +119,7 @@ s32 func_80A7090C(PlayState* play) {
     Actor* tempActor = SubS_FindActor(play, NULL, ACTORCAT_NPC, ACTOR_EN_DNO);
 
     if (tempActor != NULL) {
-        if (Flags_GetSwitch(play, BGCRACEMOVEBG_GET_3F80(tempActor))) {
+        if (Flags_GetSwitch(play, ENDNO_GET_3F80(tempActor))) {
             returnVal = 2;
         } else {
             returnVal = 1;

@@ -10,7 +10,6 @@ typedef void (*BgCraceMovebgActionFunc)(struct BgCraceMovebg*, PlayState*);
 
 #define BGCRACEMOVEBG_GET_F(thisx) (((thisx)->params) & 0xF)
 #define BGCRACEMOVEBG_GET_7F0(thisx) (((thisx)->params >> 4) & 0x7F)
-#define BGCRACEMOVEBG_GET_3F80(thisx) (((thisx)->params >> 7) & 0x7F)
 #define BGCRACEMOVEBG_GET_F800(thisx) (((thisx)->params >> 0xB) & 0x1F)
 
 typedef struct BgCraceMovebg {
