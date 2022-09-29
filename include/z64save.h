@@ -60,7 +60,7 @@ typedef enum {
 #define OSTIME_TO_TIMER(osTime) ((osTime) * 64 / 3000 / 10000)
 #define OSTIME_TO_TIMER_ALT(osTime) ((osTime) / 10000 * 64 / 3000)
 
-// 1 centiSecond = 10 milliSeconds = 1/100 seconds
+// 1 centisecond = 10 milliseconds = 1/100 seconds
 #define SECONDS_TO_TIMER_PRECISE(seconds, centiSeconds) ((seconds) * 100 + (centiSeconds))
 
 typedef enum {

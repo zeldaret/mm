@@ -183,7 +183,7 @@ OSTime D_801BF930[] = {
 };
 u8 sIsTimerPaused = false;
 u8 sIsBottleTimerPaused = false;
-s16 sTimerId = 99;
+s16 sTimerId = TIMER_ID_NONE;
 
 s16 D_801BF974 = 0;
 s16 D_801BF978 = 10;
