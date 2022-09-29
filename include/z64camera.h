@@ -399,16 +399,16 @@ typedef struct {
 
 
 /*================================
- *   CAMERA MINI-HEAP
+ *   Camera Update-Function Data
  *================================
  */
 
 #define FLAGS_FIXED_DATA(interfaceFlags) \
-    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 
 /*================================
- *   Camera_Normal1() HEAP DATA
+ *   Camera_Normal1() Data
  *================================
  */
 
@@ -422,7 +422,7 @@ typedef struct {
     { yawDiffRange, CAM_DATA_06 }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { interfaceFlags,        CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00; // yOffset
@@ -463,7 +463,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_Normal2() HEAP DATA
+ *   Camera_Normal2() Data
  *================================
  */
 
@@ -477,13 +477,13 @@ typedef struct {
     { data04,      CAM_DATA_04 }, \
     { fov,         CAM_DATA_FOV }, \
     { data08,      CAM_DATA_08 }, \
-    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 #define NORMAL2_FLAG_1 (1 << 1)
 
 
 /*================================
- *   Camera_Normal3() HEAP DATA
+ *   Camera_Normal3() Data
  *================================
  */
 
@@ -496,7 +496,7 @@ typedef struct {
     { posStepScale, CAM_DATA_05 }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { interfaceFlags,        CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 yOffset;
@@ -533,7 +533,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_Normal0() HEAP DATA
+ *   Camera_Normal0() Data
  *================================
  */
 
@@ -546,7 +546,7 @@ typedef struct {
     { yawDiffRange, CAM_DATA_06 }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { interfaceFlags,        CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -584,7 +584,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_Parallel1() HEAP DATA
+ *   Camera_Parallel1() Data
  *================================
  */
 
@@ -598,7 +598,7 @@ typedef struct {
     { data05,       CAM_DATA_05 }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { interfaceFlags,        CAM_DATA_INTERFACE_FLAGS }, \
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }, \
     { data11,       CAM_DATA_11 }, \
     { data12,       CAM_DATA_12 }
 
@@ -613,7 +613,7 @@ typedef struct {
     { data05,       CAM_DATA_05 }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { interfaceFlags,        CAM_DATA_INTERFACE_FLAGS }, \
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }, \
     { data11,       CAM_DATA_11 }, \
     { data12,       CAM_DATA_12 }, \
     { data18,       CAM_DATA_18 }
@@ -663,7 +663,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_Parallel2() HEAP DATA
+ *   Camera_Parallel2() Data
  *================================
  */
 
@@ -677,13 +677,13 @@ typedef struct {
     { data04,      CAM_DATA_04 }, \
     { fov,         CAM_DATA_FOV }, \
     { data08,      CAM_DATA_08 }, \
-    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 #define PARALLEL2_FLAG_1 (1 << 1)
 
 
 /*================================
- *   Camera_Jump2() HEAP DATA
+ *   Camera_Jump2() Data
  *================================
  */
 
@@ -696,7 +696,7 @@ typedef struct {
     { data05,      CAM_DATA_05 }, \
     { fov,         CAM_DATA_FOV }, \
     { data08,      CAM_DATA_08 }, \
-    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -732,7 +732,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_Jump3() HEAP DATA
+ *   Camera_Jump3() Data
  *================================
  */
 
@@ -746,7 +746,7 @@ typedef struct {
     { yawDiffRange, CAM_DATA_06 }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { interfaceFlags,        CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00; // yOffset
@@ -788,7 +788,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_Battle1() HEAP DATA
+ *   Camera_Battle1() Data
  *================================
  */
 
@@ -803,7 +803,7 @@ typedef struct {
     { data17,  CAM_DATA_17 }, \
     { fov,     CAM_DATA_FOV }, \
     { data08,  CAM_DATA_08 }, \
-    { interfaceFlags,   CAM_DATA_INTERFACE_FLAGS }, \
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }, \
     { data11,  CAM_DATA_11 }, \
     { data18,  CAM_DATA_18 }
 
@@ -848,7 +848,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_KeepOn1() HEAP DATA
+ *   Camera_KeepOn1() Data
  *================================
  */
 
@@ -863,7 +863,7 @@ typedef struct {
     { data17,  CAM_DATA_17 }, \
     { fov,     CAM_DATA_FOV }, \
     { data08,  CAM_DATA_08 }, \
-    { interfaceFlags,   CAM_DATA_INTERFACE_FLAGS }, \
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }, \
     { data11,  CAM_DATA_11 }
 
 typedef struct {
@@ -905,7 +905,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_KeepOn3() HEAP DATA
+ *   Camera_KeepOn3() Data
  *================================
  */
 
@@ -921,7 +921,7 @@ typedef struct {
     { fov,     CAM_DATA_FOV }, \
     { data08,  CAM_DATA_08 }, \
     { timer,  CAM_DATA_04 }, \
-    { interfaceFlags,   CAM_DATA_INTERFACE_FLAGS }, \
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }, \
     { data18,  CAM_DATA_18 }
 
 typedef struct {
@@ -960,7 +960,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_KeepOn4() HEAP DATA
+ *   Camera_KeepOn4() Data
  *================================
  */
 
@@ -971,7 +971,7 @@ typedef struct {
     { data10,      CAM_DATA_10 }, \
     { data18,      CAM_DATA_18 }, \
     { fov,         CAM_DATA_FOV }, \
-    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }, \
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }, \
     { data04,      CAM_DATA_04 }, \
     { timer,      CAM_DATA_12 }
 
@@ -1011,7 +1011,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_Fixed1() HEAP DATA
+ *   Camera_Fixed1() Data
  *================================
  */
 
@@ -1019,7 +1019,7 @@ typedef struct {
     { yOffset,     CAM_DATA_00 }, \
     { data04,      CAM_DATA_04 }, \
     { fov,         CAM_DATA_FOV }, \
-    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -1043,7 +1043,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_Fixed2() HEAP DATA
+ *   Camera_Fixed2() Data
  *================================
  */
 
@@ -1054,7 +1054,7 @@ typedef struct {
     { data04,      CAM_DATA_04 }, \
     { data05,      CAM_DATA_05 }, \
     { fov,         CAM_DATA_FOV }, \
-    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -1091,16 +1091,16 @@ typedef struct {
 
 
 /*================================
- *   Camera_Fixed3() HEAP DATA
+ *   Camera_Fixed3() Data
  *================================
  */
 
 #define FIXED3_FIXED_DATA(interfaceFlags) \
-    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 
 /*================================
- *   Camera_Subject1() HEAP DATA
+ *   Camera_Subject1() Data
  *================================
  */
 
@@ -1113,7 +1113,7 @@ typedef struct {
     { data17,  CAM_DATA_17 }, \
     { data18,  CAM_DATA_18 }, \
     { fov,     CAM_DATA_FOV }, \
-    { interfaceFlags,   CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -1143,7 +1143,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_Unique2() HEAP DATA
+ *   Camera_Unique2() Data
  *================================
  */
 
@@ -1151,7 +1151,7 @@ typedef struct {
     { yOffset,     CAM_DATA_00 }, \
     { data01,      CAM_DATA_01 }, \
     { fov,         CAM_DATA_FOV }, \
-    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -1178,14 +1178,14 @@ typedef struct {
 
 
 /*================================
- *   Camera_Unique0() HEAP DATA
+ *   Camera_Unique0() Data
  *================================
  */
 
 #define UNIQUE0_FIXED_DATA(yOffset, data04, interfaceFlags) \
     { yOffset,     CAM_DATA_00 }, \
     { data04,      CAM_DATA_04 }, \
-    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x0 */ f32 unk_00;
@@ -1216,7 +1216,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_Unique6() HEAP DATA
+ *   Camera_Unique6() Data
  *================================
  */
 
@@ -1232,17 +1232,17 @@ typedef struct {
 
 
 /*================================
- *   Camera_Unique7() HEAP DATA
+ *   Camera_Unique7() Data
  *================================
  */
 
 #define UNIQUE7_FIXED_DATA(fov, interfaceFlags) \
     { fov,      CAM_DATA_FOV }, \
-    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 
 /*================================
- *   Camera_Demo1() HEAP DATA
+ *   Camera_Demo1() Data
  *================================
  */
 
@@ -1264,14 +1264,14 @@ typedef struct {
 
 
 /*================================
- *   Camera_Demo2() HEAP DATA
+ *   Camera_Demo2() Data
  *================================
  */
 
 #define DEMO2_FIXED_DATA(fov, data08, interfaceFlags) \
     { fov,    CAM_DATA_FOV }, \
     { data08, CAM_DATA_08 }, \
-    { interfaceFlags,  CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 fov;
@@ -1293,7 +1293,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_Demo3() HEAP DATA
+ *   Camera_Demo3() Data
  *================================
  */
 
@@ -1314,7 +1314,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_Demo4() HEAP DATA
+ *   Camera_Demo4() Data
  *================================
  */
 
@@ -1339,7 +1339,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_Demo5() HEAP DATA
+ *   Camera_Demo5() Data
  *================================
  */
 
@@ -1365,7 +1365,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_Demo0() HEAP DATA
+ *   Camera_Demo0() Data
  *================================
  */
 
@@ -1390,7 +1390,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_Special5() HEAP DATA
+ *   Camera_Special5() Data
  *================================
  */
 
@@ -1402,7 +1402,7 @@ typedef struct {
     { atMaxLERPScale, CAM_DATA_FOV }, \
     { timerInit,      CAM_DATA_08 }, \
     { pitch,          CAM_DATA_12 }, \
-    { interfaceFlags,          CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 yOffset;
@@ -1426,11 +1426,11 @@ typedef struct {
 
 
 /*================================
- *   DOOR HEAP DATA
+ *   DOOR Data
  *================================
  */
 
-// For functions that deal with doors, an extra struct is added to the heap
+// For functions that deal with doors, an extra struct is added to the paramData
 
 typedef struct {
     /* 0x00 */ Actor* doorActor;
@@ -1449,7 +1449,7 @@ typedef struct {
 
 
 /*================================
- *   Camera_Special8() HEAP DATA
+ *   Camera_Special8() Data
  *================================
  */
 
@@ -1459,7 +1459,7 @@ typedef struct {
     { posStepScale,       CAM_DATA_05 }, \
     { fov,                CAM_DATA_FOV }, \
     { spiralDoorCsLength, CAM_DATA_12 }, \
-    { interfaceFlags,              CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 yOffset;
@@ -1486,14 +1486,14 @@ typedef struct {
 
 
 /*================================
- *   Camera_Special9() HEAP DATA
+ *   Camera_Special9() Data
  *================================
  */
 
 #define SPECIAL9_FIXED_DATA(yOffset, fov, interfaceFlags) \
     { yOffset, CAM_DATA_00 }, \
     { fov,     CAM_DATA_FOV }, \
-    { interfaceFlags,   CAM_DATA_INTERFACE_FLAGS }
+    { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 yOffset;
@@ -1553,7 +1553,7 @@ typedef union {
  */
 
 typedef struct Camera {
-    /* 0x000 */ CamParamData paramData; // function Data, acts like a heap that's reset every time a new action function is switched to
+    /* 0x000 */ CamParamData paramData; // update function data that's reset every time a new update function is switched to
     /* 0x050 */ Vec3f at;
     /* 0x05C */ Vec3f eye;
     /* 0x068 */ Vec3f up;
