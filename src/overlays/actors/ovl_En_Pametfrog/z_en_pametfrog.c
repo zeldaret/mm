@@ -190,7 +190,7 @@ void EnPametfrog_Init(Actor* thisx, PlayState* play) {
                        GEKKO_LIMB_MAX);
     Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colElement);
     this->params = CLAMP(this->actor.params, 1, 4);
-    if (Flags_GetClear(play, play->roomCtx.currRoom.num)) {
+    if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
         Actor_MarkForDeath(&this->actor);
         if (!(gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
               (u8)isFrogReturnedFlags[this->actor.params - 1])) {
@@ -963,7 +963,7 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, PlayState* play) {
     this->collider.base.ocFlags1 &= ~OC1_ON;
     func_800B0DE0(play, &vec1, &gZeroVec3f, &gZeroVec3f, &primColor, &envColor, 800, 50);
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_NPC_APPEAR);
-    Flags_SetClearTemp(play, play->roomCtx.currRoom.num);
+    Flags_SetClearTemp(play, play->roomCtx.curRoom.num);
 
     for (i = 0; i < 25; i++) {
         vel.x = randPlusMinusPoint5Scaled(5.0f);

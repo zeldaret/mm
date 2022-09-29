@@ -16,7 +16,7 @@ void SaveContext_Init(void) {
     gSaveContext.skyboxTime = 0;
     gSaveContext.dogIsLost = true;
     gSaveContext.nextTransitionType = TRANS_NEXT_TYPE_DEFAULT;
-    gSaveContext.unk_3F26 = 50;
+    gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
 
     gSaveContext.options.language = 1;
     gSaveContext.options.audioSetting = FS_AUDIO_STEREO;
