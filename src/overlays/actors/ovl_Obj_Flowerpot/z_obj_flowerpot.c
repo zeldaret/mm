@@ -387,7 +387,7 @@ void func_80A1C5E8(ObjFlowerpot* this, PlayState* play) {
 }
 
 void func_80A1C62C(ObjFlowerpot* this, PlayState* play) {
-    if (!(this->unk_1EA & 4) && (play->roomCtx.currRoom.num != this->unk_1EC)) {
+    if (!(this->unk_1EA & 4) && (play->roomCtx.curRoom.num != this->unk_1EC)) {
         this->unk_1EA |= 4;
     }
 }
@@ -536,7 +536,7 @@ void func_80A1CC0C(ObjFlowerpot* this, PlayState* play) {
     func_80A1C62C(this, play);
 
     if (Actor_HasNoParent(&this->actor, play)) {
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         if (fabsf(this->actor.speedXZ) < 0.1f) {
             func_80A1C818(this);
             func_800B8E58(GET_PLAYER(play), NA_SE_PL_PUT_DOWN_POT);
@@ -653,7 +653,7 @@ void ObjFlowerpot_Update(Actor* thisx, PlayState* play2) {
 
     func_80A1C554(this);
 
-    if ((D_80A1D830 != play->gameplayFrames) && (play->roomCtx.currRoom.unk3 == 0)) {
+    if ((D_80A1D830 != play->gameplayFrames) && (play->roomCtx.curRoom.unk3 == 0)) {
         func_80A1B3D0();
         D_80A1D830 = play->gameplayFrames;
     }
@@ -678,7 +678,7 @@ void ObjFlowerpot_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (!(this->unk_1EA & 2)) {
-        if ((play->roomCtx.currRoom.unk3 == 0) && (this->actionFunc == func_80A1C838)) {
+        if ((play->roomCtx.curRoom.unk3 == 0) && (this->actionFunc == func_80A1C838)) {
             if ((this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
                 func_80A1B840(&D_80A1D838[this->unk_1EB]);
 
