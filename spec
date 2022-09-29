@@ -2173,8 +2173,7 @@ beginseg
     name "ovl_En_Grasshopper"
     compress
     include "build/src/overlays/actors/ovl_En_Grasshopper/z_en_grasshopper.o"
-    include "build/data/ovl_En_Grasshopper/ovl_En_Grasshopper.data.o"
-    include "build/data/ovl_En_Grasshopper/ovl_En_Grasshopper.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Grasshopper/ovl_En_Grasshopper_reloc.o"
 endseg
 
 beginseg
@@ -4568,8 +4567,7 @@ beginseg
     name "ovl_En_Nimotsu"
     compress
     include "build/src/overlays/actors/ovl_En_Nimotsu/z_en_nimotsu.o"
-    include "build/data/ovl_En_Nimotsu/ovl_En_Nimotsu.data.o"
-    include "build/data/ovl_En_Nimotsu/ovl_En_Nimotsu.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Nimotsu/ovl_En_Nimotsu_reloc.o"
 endseg
 
 beginseg
@@ -5098,8 +5096,7 @@ beginseg
     name "ovl_Obj_Swprize"
     compress
     include "build/src/overlays/actors/ovl_Obj_Swprize/z_obj_swprize.o"
-    include "build/data/ovl_Obj_Swprize/ovl_Obj_Swprize.data.o"
-    include "build/data/ovl_Obj_Swprize/ovl_Obj_Swprize.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Swprize/ovl_Obj_Swprize_reloc.o"
 endseg
 
 beginseg

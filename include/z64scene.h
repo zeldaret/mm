@@ -271,7 +271,7 @@ typedef struct {
 } Room; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ Room currRoom;
+    /* 0x00 */ Room curRoom;
     /* 0x14 */ Room prevRoom;
     /* 0x28 */ void* roomMemPages[2]; // In a scene with transitions, roomMemory is split between two pages that toggle each transition. This is one continuous range, as the second page allocates from the end
     /* 0x30 */ u8 activeMemPage; // 0 - First page in memory, 1 - Second page
@@ -843,11 +843,11 @@ typedef enum {
 #define SCENE_CMD_SPECIAL_FILES(elfMessageFile, keepObjectId) \
     { SCENE_CMD_ID_SPECIAL_FILES, elfMessageFile, CMD_W(keepObjectId) }
 
-#define SCENE_CMD_ROOM_BEHAVIOR(currRoomUnk3, currRoomUnk2, currRoomUnk5, msgCtxunk12044, enablePosLights,  \
+#define SCENE_CMD_ROOM_BEHAVIOR(curRoomUnk3, curRoomUnk2, curRoomUnk5, msgCtxunk12044, enablePosLights,  \
                                 kankyoContextUnkE2)                                                         \
     {                                                                                                       \
-        SCENE_CMD_ID_ROOM_BEHAVIOR, currRoomUnk3,                                                           \
-            currRoomUnk2 | _SHIFTL(currRoomUnk5, 8, 1) | _SHIFTL(msgCtxunk12044, 10, 1) | \
+        SCENE_CMD_ID_ROOM_BEHAVIOR, curRoomUnk3,                                                           \
+            curRoomUnk2 | _SHIFTL(curRoomUnk5, 8, 1) | _SHIFTL(msgCtxunk12044, 10, 1) | \
                 _SHIFTL(enablePosLights, 11, 1) | _SHIFTL(kankyoContextUnkE2, 12, 1)                        \
     }
 

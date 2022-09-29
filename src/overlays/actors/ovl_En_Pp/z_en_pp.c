@@ -1539,10 +1539,10 @@ void EnPp_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
             (limbIndex == HIPLOOP_LIMB_CENTER_WING_BASE) || (limbIndex == HIPLOOP_LIMB_CENTER_WING_MIDDLE) ||
             (limbIndex == HIPLOOP_LIMB_BACK_LEFT_LOWER_LEG) || (limbIndex == HIPLOOP_LIMB_RIGHT_EYE) ||
             (limbIndex == HIPLOOP_LIMB_LEFT_EYE)) {
-            Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosCount]);
-            this->bodyPartsPosCount++;
-            if (this->bodyPartsPosCount >= ARRAY_COUNT(this->bodyPartsPos)) {
-                this->bodyPartsPosCount = 0;
+            Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosIndex]);
+            this->bodyPartsPosIndex++;
+            if (this->bodyPartsPosIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
+                this->bodyPartsPosIndex = 0;
             }
 
             if ((this->action == EN_PP_ACTION_SPAWN_BODY_PARTS) && (this->deadBodyPartsSpawnedCount < 6) &&

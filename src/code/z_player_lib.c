@@ -389,7 +389,7 @@ void func_80123140(PlayState* play, Player* player) {
     IREG(69) = bootRegs[16];
     MREG(95) = bootRegs[17];
 
-    if (play->roomCtx.currRoom.unk3 == 2) {
+    if (play->roomCtx.curRoom.unk3 == 2) {
         R_RUN_SPEED_LIMIT = 500;
     }
 
@@ -508,20 +508,23 @@ s32 func_8012364C(PlayState* play, Player* player, s32 arg2) {
     if (arg2 == 1) {
         return (gSaveContext.buttonStatus[1] != BTN_DISABLED)
                    ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
-               : (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
-                                                 : ITEM_NONE;
+               : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)
+                   ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
+                   : ITEM_NONE;
     }
 
     if (arg2 == 2) {
         return (gSaveContext.buttonStatus[2] != BTN_DISABLED)
                    ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
-               : (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
-                                                 : ITEM_NONE;
+               : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)
+                   ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
+                   : ITEM_NONE;
     }
 
     return (gSaveContext.buttonStatus[3] != BTN_DISABLED) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
-           : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
-                                                          : ITEM_NONE;
+           : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)
+               ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
+               : ITEM_NONE;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123810.s")
@@ -857,39 +860,40 @@ s32 func_80124278(Actor* actor, s32 actionParam) {
 }
 
 s32 func_801242B4(Player* player) {
-    return (player->stateFlags1 & PLAYER_STATE1_8000000) && player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER;
+    return (player->stateFlags1 & PLAYER_STATE1_8000000) && (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER);
 }
 
-s32 func_801242DC(PlayState* play) {
+s32 Player_GetEnvTimerType(PlayState* play) {
     Player* player = GET_PLAYER(play);
     TextTriggerEntry* triggerEntry;
-    s32 envIndex;
+    s32 envTimerType;
 
-    if (play->roomCtx.currRoom.unk2 == 3) { // Room is hot
-        envIndex = 0;
-    } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->unk_AD8 > 80)) {
-        envIndex = 3;
+    if (play->roomCtx.curRoom.unk2 == 3) { // Room is hot
+        envTimerType = PLAYER_ENV_TIMER_HOTROOM - 1;
+    } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->underwaterTimer > 80)) {
+        envTimerType = PLAYER_ENV_TIMER_UNDERWATER_FREE - 1;
     } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
         if ((player->transformation == PLAYER_FORM_ZORA) && (player->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&
             (player->actor.bgCheckFlags & 1)) {
-            envIndex = 1;
+            envTimerType = PLAYER_ENV_TIMER_UNDERWATER_FLOOR - 1;
         } else {
-            envIndex = 2;
+            envTimerType = PLAYER_ENV_TIMER_SWIMMING - 1;
         }
     } else {
-        return 0;
+        return PLAYER_ENV_TIMER_NONE;
     }
 
     // Trigger general textboxes under certain conditions, like "It's so hot in here!". Unused in MM
-    triggerEntry = &sEnvironmentTextTriggers[envIndex];
+    triggerEntry = &sEnvironmentTextTriggers[envTimerType];
     if (!Player_InCsMode(play)) {
-        if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) && (envIndex == 0)) {
+        if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) &&
+            (envTimerType == (PLAYER_ENV_TIMER_HOTROOM - 1))) {
             Message_StartTextbox(play, triggerEntry->textId, NULL);
             gSaveContext.textTriggerFlags |= triggerEntry->flag;
         }
     }
 
-    return envIndex + 1;
+    return envTimerType + 1;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124420.s")
