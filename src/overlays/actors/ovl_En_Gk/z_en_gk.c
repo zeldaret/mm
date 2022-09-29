@@ -645,7 +645,7 @@ void func_80B51760(EnGk* this, PlayState* play) {
                 this->unk_1E4 |= 2;
             }
         } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) &&
-                   (gSaveContext.save.entrance != 0xD010)) {
+                   (gSaveContext.save.entrance != ENTRANCE(GORON_RACETRACK, 1))) {
             func_800B863C(&this->actor, play);
         }
 

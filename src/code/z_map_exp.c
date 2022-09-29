@@ -169,8 +169,8 @@ void Map_InitRoomData(PlayState* play, s16 room) {
     }
 }
 
-void Map_Destroy(void) {
-    func_80105A40();
+void Map_Destroy(PlayState* play) {
+    func_80105A40(play);
 }
 
 void Map_Init(PlayState* play) {

@@ -219,13 +219,13 @@ void Sram_ActivateOwl(u8 owlId) {
 void Sram_ClearHighscores(void) {
     gSaveContext.save.unk_EE8 = (gSaveContext.save.unk_EE8 & 0xFFFF) | 0x130000;
     gSaveContext.save.unk_EE8 = (gSaveContext.save.unk_EE8 & 0xFFFF0000) | 0xA;
-    gSaveContext.save.horseBackBalloonHighScore = 6000; // 60 seconds
+    gSaveContext.save.horseBackBalloonHighScore = SECONDS_TO_TIMER(60);
     SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(39);
     SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(10);
 
-    gSaveContext.save.dekuPlaygroundHighScores[0] = 7500; // 75 seconds
-    gSaveContext.save.dekuPlaygroundHighScores[1] = 7500; // 75 seconds
-    gSaveContext.save.dekuPlaygroundHighScores[2] = 7600; // 76 seconds
+    gSaveContext.save.dekuPlaygroundHighScores[0] = SECONDS_TO_TIMER(75);
+    gSaveContext.save.dekuPlaygroundHighScores[1] = SECONDS_TO_TIMER(75);
+    gSaveContext.save.dekuPlaygroundHighScores[2] = SECONDS_TO_TIMER(76);
 }
 
 /**
@@ -646,7 +646,7 @@ Inventory sSaveDefaultInventory = {
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     // dungeonKeys
     { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
-    // defenceHearts
+    // defenseHearts
     0,
     // strayFairies
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -792,7 +792,7 @@ Inventory sSaveDebugInventory = {
     { 7, 7, 7, 7, 7, 7, 7, 7, 7, 7 },
     // dungeonKeys
     { 8, 8, 8, 8, 8, 8, 8, 8, 8 },
-    // defenceHearts
+    // defenseHearts
     0,
     // strayFairies
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -894,13 +894,13 @@ void func_80144A94(SramContext* sramCtx) {
         gSaveContext.cycleSceneFlags[i].collectible = gSaveContext.save.permanentSceneFlags[i].collectible;
     }
 
-    for (i = 0; i < ARRAY_COUNT(gSaveContext.unk_3DD0); i++) {
-        gSaveContext.unk_3DD0[i] = 0;
-        gSaveContext.unk_3DE0[i] = 0;
-        gSaveContext.unk_3E18[i] = 0;
-        gSaveContext.unk_3E50[i] = 0;
-        gSaveContext.unk_3E88[i] = 0;
-        gSaveContext.unk_3EC0[i] = 0;
+    for (i = 0; i < TIMER_ID_MAX; i++) {
+        gSaveContext.timerStates[i] = TIMER_STATE_OFF;
+        gSaveContext.timerCurTimes[i] = SECONDS_TO_TIMER(0);
+        gSaveContext.timerTimeLimits[i] = SECONDS_TO_TIMER(0);
+        gSaveContext.timerStartOsTimes[i] = 0;
+        gSaveContext.timerStopTimes[i] = SECONDS_TO_TIMER(0);
+        gSaveContext.timerPausedOsTimes[i] = 0;
     }
 
     D_801BDAA0 = 1;
@@ -969,13 +969,13 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
             gSaveContext.cycleSceneFlags[i].collectible = gSaveContext.save.permanentSceneFlags[i].collectible;
         }
 
-        for (i = 0; i < ARRAY_COUNT(gSaveContext.unk_3DD0); i++) {
-            gSaveContext.unk_3DD0[i] = 0;
-            gSaveContext.unk_3DE0[i] = 0;
-            gSaveContext.unk_3E18[i] = 0;
-            gSaveContext.unk_3E50[i] = 0;
-            gSaveContext.unk_3E88[i] = 0;
-            gSaveContext.unk_3EC0[i] = 0;
+        for (i = 0; i < TIMER_ID_MAX; i++) {
+            gSaveContext.timerStates[i] = TIMER_STATE_OFF;
+            gSaveContext.timerCurTimes[i] = SECONDS_TO_TIMER(0);
+            gSaveContext.timerTimeLimits[i] = SECONDS_TO_TIMER(0);
+            gSaveContext.timerStartOsTimes[i] = 0;
+            gSaveContext.timerStopTimes[i] = SECONDS_TO_TIMER(0);
+            gSaveContext.timerPausedOsTimes[i] = 0;
         }
 
         if (gSaveContext.save.isFirstCycle) {
@@ -1598,7 +1598,7 @@ void func_80147068(SramContext* sramCtx) {
                 sramCtx->status = 4;
             }
         }
-    } else if (((osGetTime() - sramCtx->unk_18) * 0x40) / 3000 / 10000 >= 200) {
+    } else if (OSTIME_TO_TIMER(osGetTime() - sramCtx->unk_18) >= SECONDS_TO_TIMER(2)) {
         sramCtx->status = 0;
     }
 }
@@ -1635,7 +1635,7 @@ void func_80147198(SramContext* sramCtx) {
                 sramCtx->status = 4;
             }
         }
-    } else if (((osGetTime() - sramCtx->unk_18) * 0x40) / 3000 / 10000 >= 200) {
+    } else if (OSTIME_TO_TIMER(osGetTime() - sramCtx->unk_18) >= SECONDS_TO_TIMER(2)) {
         sramCtx->status = 0;
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         gSaveContext.save.isOwlSave = false;
