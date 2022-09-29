@@ -1097,7 +1097,7 @@ void DmChar08_Draw(Actor* thisx, PlayState* play) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sBigTurtleEyeTextures[this->eyeIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sBigTurtleEyeTextures[this->eyeIndex]));
-    if ((this->unk_1FF > 0) || (play->csCtx.state != 0)) {
+    if ((this->unk_1FF > 0) || (play->csCtx.state != CS_STATE_0)) {
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, DmChar08_OverrideLimbDraw, DmChar08_PostLimbDraw,
                                        DmChar08_TransformLimbDraw, &this->dyna.actor);
