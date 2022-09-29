@@ -1365,10 +1365,12 @@ typedef enum SunsSongState {
 #define EVENTINF_26 0x26
 #define EVENTINF_27 0x27
 #define EVENTINF_30 0x30
-// EVENTINF_31 is used to track if Player is within range of the wall
+
+// EVENTINF_31 is used to track if Player is within range of the "2D Song Buttons Appearing on Wall"
 #define EVENTINF_31 0x31
-// EVENTINF_32 is used to track if Player has played the notes of the wall
+// EVENTINF_32 is used to track if Player has played the notes of the "2D Song Buttons Appearing on Wall"
 #define EVENTINF_32 0x32
+
 #define EVENTINF_33 0x33
 #define EVENTINF_34 0x34
 #define EVENTINF_35 0x35
