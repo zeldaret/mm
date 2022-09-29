@@ -78,7 +78,7 @@ void BgDkjailIvy_IvyCutEffects(BgDkjailIvy* this, PlayState* play) {
 
     Matrix_RotateYS(this->dyna.actor.home.rot.y, MTXMODE_NEW);
 
-    for (i = 0, angle = 0; i < 50; i++, angle += 0x4e20) {
+    for (i = 0, angle = 0; i < 50; i++, angle += 0x4E20) {
         spD4.y = (i * (90.0f / 49.0f)) + 2.0f;
         if (spD4.y < 45.0f) {
             phi_fs0 = ((1.0f / 180.0f) * spD4.y) + 0.75f;
