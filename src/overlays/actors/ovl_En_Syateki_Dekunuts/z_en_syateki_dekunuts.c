@@ -314,7 +314,8 @@ void EnSyatekiDekunuts_BonusLookAround(EnSyatekiDekunuts* this, PlayState* play)
     // There are some cases where the minigame timer can reach 0, but the shooting game state is
     // still SG_GAME_STATE_RUNNING. This check just makes absolutely sure that once the game is
     // over, these Deku Scrubs will burrow.
-    if ((gSaveContext.unk_3DE0[1] <= 0) || (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING)) {
+    if ((gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] <= SECONDS_TO_TIMER(0)) ||
+        (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING)) {
         EnSyatekiDekunuts_SetupBurrow(this);
     }
 
