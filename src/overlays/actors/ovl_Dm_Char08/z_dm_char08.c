@@ -403,7 +403,7 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
 
                     case 2:
                         // "Heh, heh, heh.  Of course I know your name."...
-                        if (Message_GetState(&play->msgCtx) == 2) {
+                        if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
                             Message_StartTextbox(play, 0x102B, &this->dyna.actor);
                             this->unk_206 = 0;
                         }
