@@ -177,7 +177,7 @@ void func_80BD4A14(BgIkanaBombwall* this, PlayState* play) {
     s32 i;
     Vec3f spD8;
     Vec3f spCC;
-    f32 offsetPosX;
+    f32 temp_fs0;
     f32 temp_fs1;
     f32 temp_fs3;
     s16 temp_v1;
@@ -194,16 +194,16 @@ void func_80BD4A14(BgIkanaBombwall* this, PlayState* play) {
             temp_fs3 -= 60.0f;
         }
 
-        offsetPosX = Math_SinS(phi_s2);
+        temp_fs0 = Math_SinS(phi_s2);
         temp_fs1 = Math_CosS(phi_s2);
 
-        spD8.x = (offsetPosX * temp_fs3) + this->dyna.actor.world.pos.x;
+        spD8.x = (temp_fs0 * temp_fs3) + this->dyna.actor.world.pos.x;
         spD8.y = this->dyna.actor.world.pos.y;
         spD8.z = (temp_fs1 * temp_fs3) + this->dyna.actor.world.pos.z;
 
-        spCC.x = ((Rand_ZeroOne() - 0.5f) * 3.0f * offsetPosX) + ((offsetPosX * temp_fs3) * 0.033333335f);
+        spCC.x = ((Rand_ZeroOne() - 0.5f) * 3.0f * temp_fs0) + ((temp_fs0 * temp_fs3) * (1.0f / 30.0f));
         spCC.y = (Rand_ZeroOne() * 18.0f) + 4.0f;
-        spCC.z = ((Rand_ZeroOne() - 0.5f) * 3.0f * temp_fs1) + ((temp_fs1 * temp_fs3) * 0.033333335f);
+        spCC.z = ((Rand_ZeroOne() - 0.5f) * 3.0f * temp_fs1) + ((temp_fs1 * temp_fs3) * (1.0f / 30.0f));
 
         temp_v1 = (Rand_Next() & 3) + (i >> 1) + 6;
 
