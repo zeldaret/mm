@@ -56,7 +56,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 80, 80, 0, { 0, 0, 0 } },
 };
 
-static s16 rockScale[4] = { 24, 15, 10, 5 };
+static s16 sRockScale[4] = { 24, 15, 10, 5 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -76,13 +76,13 @@ s32 func_80BD5E00(BgHakaBombwall* this) {
 }
 
 void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
-    s32 i;
+    u32 i;
     Vec3f mtxPos;
     Vec3f mtxVel;
     Vec3f pos;
     Vec3f vel;
-    f32 temp_fs0;
-    f32 phi_fs1;
+    f32 offsetPosX;
+    f32 offsetPosY;
     s16 scale;
     s16 phi_s0;
     s16 phi_t0;
@@ -91,21 +91,23 @@ void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
     Matrix_Push();
     Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
 
-    temp_fs0 = 0.0f;
-    phi_fs1 = 0.0f;
+    offsetPosX = 0.0f;
+    offsetPosY = 0.0f;
 
     for (i = 0; i < 30; i++) {
-        temp_fs0 += 60.0f + (Rand_ZeroOne() * 20.0f);
-        if (temp_fs0 > 75.0f) {
-            temp_fs0 -= 150.0f;
+        offsetPosX += 60.0f + (Rand_ZeroOne() * 20.0f);
+
+        if (offsetPosX > 75.0f) {
+            offsetPosX -= 150.0f;
         }
 
-        pos.x = temp_fs0;
-        phi_fs1 += 5;
-        pos.y = phi_fs1;
+        offsetPosY += 5;
+
+        pos.x = offsetPosX;
+        pos.y = offsetPosY;
         pos.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
 
-        vel.x = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (temp_fs0 * (4.0f / 75.0f));
+        vel.x = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (offsetPosX * (4.0f / 75.0f));
         vel.y = (Rand_ZeroOne() * 7.0f) - 2.0f;
         vel.z = (Rand_ZeroOne() * 4.0f) - 2.0f;
 
@@ -115,6 +117,8 @@ void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
         mtxPos.x += this->dyna.actor.world.pos.x;
         mtxPos.y += this->dyna.actor.world.pos.y;
         mtxPos.z += this->dyna.actor.world.pos.z;
+
+        //! FAKE
 
         if (1) {}
 
@@ -132,7 +136,9 @@ void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
             phi_t0 = 0;
         }
 
-        scale = rockScale[i & 3];
+        scale = sRockScale[i & 3];
+
+        //! FAKE
     fake_label:;
 
         if (scale >= 16) {

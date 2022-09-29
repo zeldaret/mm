@@ -102,8 +102,8 @@ void func_80BD4720(BgIkanaBombwall* this, PlayState* play) {
     Vec3f mtxVel;
     Vec3f pos;
     Vec3f vel;
-    f32 temp_fs0;
-    f32 phi_fs1;
+    f32 offsetPosX;
+    f32 offsetPosY;
     s16 scale;
     s16 phi_s0;
     s16 phi_t0;
@@ -111,21 +111,22 @@ void func_80BD4720(BgIkanaBombwall* this, PlayState* play) {
 
     Matrix_Push();
     Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
-    temp_fs0 = 0.0f;
-    phi_fs1 = 0.0f;
+    offsetPosX = 0.0f;
+    offsetPosY = 0.0f;
 
     for (i = 0; i < 30; i++) {
-        temp_fs0 += 60.0f + (Rand_ZeroOne() * 20.0f);
-        if (temp_fs0 > 75.0f) {
-            temp_fs0 -= 150.0f;
+        offsetPosX += 60.0f + (Rand_ZeroOne() * 20.0f);
+        if (offsetPosX > 75.0f) {
+            offsetPosX -= 150.0f;
         }
 
-        pos.x = temp_fs0;
-        phi_fs1 += 5;
-        pos.y = phi_fs1;
+        offsetPosY += 5;
+
+        pos.x = offsetPosX;
+        pos.y = offsetPosY;
         pos.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
 
-        vel.x = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (temp_fs0 * 0.053333335f);
+        vel.x = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (offsetPosX * (4.0f / 75.0f));
         vel.y = (Rand_ZeroOne() * 7.0f) - 2.0f;
         vel.z = (Rand_ZeroOne() * 4.0f) - 2.0f;
 
@@ -135,6 +136,8 @@ void func_80BD4720(BgIkanaBombwall* this, PlayState* play) {
         mtxPos.x += this->dyna.actor.world.pos.x;
         mtxPos.y += this->dyna.actor.world.pos.y;
         mtxPos.z += this->dyna.actor.world.pos.z;
+
+        //! FAKE
 
         if (1) {}
 
@@ -153,6 +156,8 @@ void func_80BD4720(BgIkanaBombwall* this, PlayState* play) {
         }
 
         scale = D_80BD52C8[i & 3];
+
+        //! FAKE
     fake_label:;
 
         if (scale >= 16) {
@@ -172,7 +177,7 @@ void func_80BD4A14(BgIkanaBombwall* this, PlayState* play) {
     s32 i;
     Vec3f spD8;
     Vec3f spCC;
-    f32 temp_fs0;
+    f32 offsetPosX;
     f32 temp_fs1;
     f32 temp_fs3;
     s16 temp_v1;
@@ -189,14 +194,14 @@ void func_80BD4A14(BgIkanaBombwall* this, PlayState* play) {
             temp_fs3 -= 60.0f;
         }
 
-        temp_fs0 = Math_SinS(phi_s2);
+        offsetPosX = Math_SinS(phi_s2);
         temp_fs1 = Math_CosS(phi_s2);
 
-        spD8.x = (temp_fs0 * temp_fs3) + this->dyna.actor.world.pos.x;
+        spD8.x = (offsetPosX * temp_fs3) + this->dyna.actor.world.pos.x;
         spD8.y = this->dyna.actor.world.pos.y;
         spD8.z = (temp_fs1 * temp_fs3) + this->dyna.actor.world.pos.z;
 
-        spCC.x = ((Rand_ZeroOne() - 0.5f) * 3.0f * temp_fs0) + ((temp_fs0 * temp_fs3) * 0.033333335f);
+        spCC.x = ((Rand_ZeroOne() - 0.5f) * 3.0f * offsetPosX) + ((offsetPosX * temp_fs3) * 0.033333335f);
         spCC.y = (Rand_ZeroOne() * 18.0f) + 4.0f;
         spCC.z = ((Rand_ZeroOne() - 0.5f) * 3.0f * temp_fs1) + ((temp_fs1 * temp_fs3) * 0.033333335f);
 
