@@ -837,7 +837,7 @@
     0x801B986C:("sCameraSettings","CameraSetting","[91]",0x444),
     0x801B9CE0:("D_801B9CE0","UNK_PTR","",0x4),
     0x801B9CE8:("sCameraUpdateHandlers","camera_update_func","[71]",0x11c),
-    0x801B9E04:("sNextUID","UNK_TYPE2","",0x2),
+    0x801B9E04:("sCameraNextUID","UNK_TYPE2","",0x2),
     0x801B9E08:("sCameraInterfaceFlags","UNK_TYPE4","",0x4),
     0x801B9E0C:("sCameraHudVisibility","UNK_TYPE4","",0x4),
     0x801B9E10:("sCameraLetterboxSize","UNK_TYPE4","",0x4),

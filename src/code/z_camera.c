@@ -7102,11 +7102,11 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, PlayState
     __osMemset(camera, 0, sizeof(Camera));
 
     camera->play = sCamPlayState = play;
-    curUID = sNextUID;
-    sNextUID++;
+    curUID = sCameraNextUID;
+    sCameraNextUID++;
     while (curUID != 0) {
         if (curUID == 0) {
-            sNextUID++;
+            sCameraNextUID++;
         }
 
         for (j = 0; j < NUM_CAMS; j++) {
@@ -7120,7 +7120,7 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, PlayState
             break;
         }
 
-        curUID = sNextUID++;
+        curUID = sCameraNextUID++;
     }
 
     camera->inputDir.y = 0x4000;
