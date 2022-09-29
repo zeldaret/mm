@@ -441,7 +441,7 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
                     break;
 
                 case 2:
-                    if (Message_GetState(&play->msgCtx) == 2) {
+                    if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
                         Message_StartTextbox(play, 0x102F, &this->dyna.actor);
                         this->unk_206 = 0;
                     }
