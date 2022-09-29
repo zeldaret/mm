@@ -530,7 +530,7 @@ s32 func_801235DC(PlayState* play, f32 arg1, s16 arg2) {
     return false;
 }
 
-ItemID func_8012364C(PlayState* play, Player* player, s32 arg2) {
+ItemId func_8012364C(PlayState* play, Player* player, s32 arg2) {
     if (arg2 >= 4) {
         return ITEM_NONE;
     }
@@ -573,14 +573,14 @@ u16 sCItemButtons[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
 PlayerActionParam func_80123810(PlayState* play) {
     Player* player = GET_PLAYER(play);
     PlayerActionParam actionParam;
-    ItemID itemId;
+    ItemId itemId;
     s32 i;
 
     if (gSaveContext.save.unk_06 == 0) {
         if (CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button, BTN_A | BTN_B)) {
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
-            Interface_ChangeAlpha(play->msgCtx.unk_120BC);
+            Interface_SetHudVisibility(play->msgCtx.unk_120BC);
             return -1;
         }
     } else {
@@ -594,7 +594,7 @@ PlayerActionParam func_80123810(PlayState* play) {
 
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
-            Interface_ChangeAlpha(play->msgCtx.unk_120BC);
+            Interface_SetHudVisibility(play->msgCtx.unk_120BC);
 
             if ((itemId >= ITEM_FD) || ((actionParam = play->unk_18794(play, player, itemId)) < PLAYER_AP_NONE)) {
                 play_sound(NA_SE_SY_ERROR);
@@ -1257,7 +1257,7 @@ void Player_SetEquipmentData(PlayState* play, Player* player) {
     }
 }
 
-void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemID itemId, PlayerActionParam actionParam) {
+void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemId itemId, PlayerActionParam actionParam) {
     Inventory_UpdateBottleItem(play, itemId, player->heldItemButton);
 
     if (itemId != ITEM_BOTTLE) {
@@ -3102,7 +3102,7 @@ void func_80127DA4(PlayState* play, struct_801F58B0 arg1[], struct_80128388_arg1
     arg2 += 1;
 
     while (i < arg3) {
-        if ((play->actorCtx.unk5 & 8) != 0) {
+        if (play->actorCtx.flags & ACTORCTX_FLAG_3) {
             if ((*arg6 & 0x20) != 0) {
                 sp8C = -0.2f;
             } else {
@@ -3157,7 +3157,7 @@ void func_80127DA4(PlayState* play, struct_801F58B0 arg1[], struct_80128388_arg1
         f24 = Math_SinS(s0) * f28;
         phi_s1->unk_0C.y += sp8C;
 
-        if ((play->actorCtx.unk5 & 8) != 0) {
+        if (play->actorCtx.flags & ACTORCTX_FLAG_3) {
             phi_s1->unk_0C.y = CLAMP(phi_s1->unk_0C.y, -0.8f, 0.8f);
         } else {
             phi_s1->unk_0C.y = phi_s1->unk_0C.y;

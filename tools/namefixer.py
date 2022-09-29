@@ -744,6 +744,7 @@ wordReplace = {
     "play->sceneLoadFlag": "play->transitionTrigger",
     "play->unk_18B4A": "play->transitionMode",
     "play->unk_1887F": "play->transitionType",
+    "play->roomCtx.currRoom": "play->roomCtx.curRoom",
     "gSaveContext.nextTransition": "gSaveContext.nextTransitionType",
     "gSaveContext.unk_3F48": "gSaveContext.cutsceneTransitionControl",
     "gSaveContext.fadeDuration": "gSaveContext.transFadeDuration",

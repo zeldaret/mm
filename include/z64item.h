@@ -292,7 +292,7 @@ typedef enum {
 #define BOTTLE_FIRST 0
 #define BOTTLE_MAX 6
 
-typedef enum GetItemID {
+typedef enum GetItemId {
     /* 0x00 */ GI_NONE,
     /* 0x01 */ GI_RUPEE_GREEN,
     /* 0x02 */ GI_RUPEE_BLUE,

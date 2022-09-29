@@ -859,7 +859,7 @@ typedef struct Player {
     /* 0x145 */ s8 currentBoots;
     /* 0x146 */ s8 heldItemButton;
     /* 0x147 */ s8 itemActionParam; // PlayerActionParam enum
-    /* 0x148 */ u8 heldItemId; // ItemID enum
+    /* 0x148 */ u8 heldItemId; // ItemId enum
     /* 0x149 */ s8 prevBoots;
     /* 0x14A */ s8 heldItemActionParam; // PlayerActionParam enum
     /* 0x14B */ u8 transformation; // PlayerTransformation enum
@@ -906,7 +906,7 @@ typedef struct Player {
     /* 0x37E */ s8 doorTimer;
     /* 0x37F */ s8 doorNext; // used with spiral staircase
     /* 0x380 */ Actor* doorActor;
-    /* 0x384 */ s16 getItemId; // GetItemID enum
+    /* 0x384 */ s16 getItemId; // GetItemId enum
     /* 0x386 */ u16 getItemDirection;
     /* 0x388 */ Actor* interactRangeActor;
     /* 0x38C */ s8 mountSide;

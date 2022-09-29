@@ -45,7 +45,7 @@ s32 Player_InflictDamage(PlayState* play, s32 damage);
 void Player_TalkWithPlayer(PlayState* play, Actor* actor);
 void func_8085B74C(PlayState* play);
 void func_8085B820(PlayState* play, s16 arg1);
-PlayerActionParam func_8085B854(PlayState* play, Player* player, ItemID itemId);
+PlayerActionParam func_8085B854(PlayState* play, Player* player, ItemId itemId);
 s32 func_8085B930(PlayState* play, LinkAnimationHeader* talkAnim, s32 animMode);
 
 void Player_UpdateCommon(Player* player, PlayState* play, Input* input);
@@ -54,7 +54,7 @@ void func_8085B170(PlayState* play, Player* this);
 s32 func_8083A658(PlayState* play, Player* this);
 void func_8082F8BC(PlayState* play, Player* this, PlayerActionParam actionParam);
 
-void func_80831990(PlayState* play, Player* this, ItemID item);
+void func_80831990(PlayState* play, Player* this, ItemId item);
 
 s32 func_80848BF4(Player* this, PlayState* play);
 
@@ -2770,9 +2770,9 @@ void func_8082F1AC(PlayState* play, Player* this) {
     s32 var_v0;
 
     if ((gSaveContext.save.playerData.magic != 0) && (this->stateFlags1 & PLAYER_STATE1_10)) {
-        if (gSaveContext.unk_3F28 == 0) {
+        if (gSaveContext.magicState == 0) {
             // Magic_Consume
-            func_80115DB4(play, 0, 5);
+            Magic_Consume(play, 0, 5);
         }
 
         temp = 16.0f;
@@ -2782,9 +2782,8 @@ void func_8082F1AC(PlayState* play, Player* this) {
             var_v0 = (gSaveContext.save.playerData.magic / temp) * 255.0f;
         }
         Math_StepToS(&this->unk_B62, var_v0, 50);
-    } else if ((Math_StepToS(&this->unk_B62, 0, 50) != 0) && (gSaveContext.unk_3F28 != 0)) {
-        // Magic_Reset
-        func_80115D5C(&play->state);
+    } else if ((Math_StepToS(&this->unk_B62, 0, 50) != 0) && (gSaveContext.magicState != 0)) {
+        Magic_Reset(play);
     }
 
     if ((this->unk_B62 != 0) || (sp4C != 0)) {
@@ -2922,7 +2921,7 @@ s8 sItemActionParams[] = {
     PLAYER_AP_SWORD_GREAT_FAIRY,       // ITEM_SWORD_DEITY,
 };
 
-PlayerActionParam Player_ItemToActionParam(Player* this, ItemID item) {
+PlayerActionParam Player_ItemToActionParam(Player* this, ItemId item) {
     if (item >= ITEM_FD) {
         return PLAYER_AP_NONE;
     } else if (item == ITEM_FC) {
@@ -3440,7 +3439,7 @@ void func_8082FC60(Player* this) {
     this->unk_B40 = 0.0f;
 }
 
-s32 func_8082FC78(Player* this, ItemID item) {
+s32 func_8082FC78(Player* this, ItemId item) {
     if ((item < ITEM_FD) && (Player_ItemToActionParam(this, item) == this->heldItemActionParam)) {
         return true;
     } else {
@@ -3448,7 +3447,7 @@ s32 func_8082FC78(Player* this, ItemID item) {
     }
 }
 
-s32 func_8082FCC4(Player* this, ItemID item, PlayerActionParam actionParam) {
+s32 func_8082FCC4(Player* this, ItemId item, PlayerActionParam actionParam) {
     if ((item < ITEM_FD) && (Player_ItemToActionParam(this, item) == actionParam)) {
         return true;
     } else {
@@ -3535,7 +3534,7 @@ void func_8082FE0C(Player* this, PlayState* play) {
         func_80831990(play, this, ITEM_NONE);
     } else {
         s32 pad;
-        ItemID item;
+        ItemId item;
         s32 i = func_8082FDC4();
 
         i = ((i >= 4) && (this->transformation == PLAYER_FORM_FIERCE_DEITY) &&
@@ -3650,7 +3649,7 @@ void func_808304BC(Player* this, PlayState* play) {
 }
 
 // EN_ARROW ammo related?
-s32 func_808305BC(PlayState* play, Player* this, ItemID* item, s32* typeParam) {
+s32 func_808305BC(PlayState* play, Player* this, ItemId* item, s32* typeParam) {
     if (this->itemActionParam == PLAYER_AP_NUT) {
         *item = ITEM_NUT;
         *typeParam = (this->transformation == PLAYER_FORM_DEKU) ? 7 : 6;
@@ -3695,7 +3694,7 @@ u8 sMagicArrowCosts[] = {
 // Draw bow or hookshot / first person items?
 s32 func_808306F8(Player* this, PlayState* play) {
     if ((this->itemActionParam >= PLAYER_AP_BOW_FIRE) && (this->itemActionParam <= PLAYER_AP_BOW_LIGHT) &&
-        (gSaveContext.unk_3F28 != 0)) {
+        (gSaveContext.magicState != 0)) {
         play_sound(NA_SE_SY_ERROR);
     } else {
         func_8082F43C(play, this, func_80848BF4);
@@ -3705,7 +3704,7 @@ s32 func_808306F8(Player* this, PlayState* play) {
 
         if (this->unk_B28 >= 0) {
             s32 var_v1 = ABS_ALT(this->unk_B28);
-            ItemID item;
+            ItemId item;
             s32 arrowType;
             s32 magicArrowType;
 
@@ -3735,7 +3734,7 @@ s32 func_808306F8(Player* this, PlayState* play) {
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, arrowType);
 
                     if ((this->heldActor != NULL) && (magicArrowType >= 0)) {
-                        func_80115DB4(play, sMagicArrowCosts[magicArrowType], 0);
+                        Magic_Consume(play, sMagicArrowCosts[magicArrowType], 0);
                     }
                 }
             }
@@ -3995,7 +3994,7 @@ s32 func_80831124(PlayState* play, Player* this) {
 s32 func_80831194(PlayState* play, Player* this) {
     if (this->heldActor != NULL) {
         if (!Player_IsHoldingHookshot(this)) {
-            ItemID item;
+            ItemId item;
             s32 sp30;
 
             func_808305BC(play, this, &item, &sp30);
@@ -4075,7 +4074,7 @@ s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc,
         return false;
     }
 
-    play->actorCtx.unk5 &= ~4;
+    play->actorCtx.flags &= ~ACTORCTX_FLAG_2;
 
     if (this->actor.flags & ACTOR_FLAG_20000000) {
         AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
@@ -4086,7 +4085,7 @@ s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc,
         this->unk_ABC = 0.0f;
         if (func_80857BE8 == this->actionFunc) {
             if (this->stateFlags3 & PLAYER_STATE3_80000) {
-                func_80115D5C(&play->state);
+                Magic_Reset(play);
             }
             func_8082DD2C(play, this);
             this->actor.shape.rot.x = 0;
@@ -4196,14 +4195,14 @@ s32 func_80831814(Player* this, PlayState* play, s32 arg2) {
 
 // Toggle Lens
 void func_808318C0(PlayState* play) {
-    if (func_80115DB4(play, 0, 3) != 0) {
-        if (play->actorCtx.unk3 != 0) {
+    if (Magic_Consume(play, 0, 3) != 0) {
+        if (play->actorCtx.lensActive != 0) {
             Actor_DeactivateLens(play);
         } else {
-            play->actorCtx.unk3 = 1;
+            play->actorCtx.lensActive = 1;
         }
 
-        play_sound(play->actorCtx.unk3 != 0 ? NA_SE_SY_GLASSMODE_ON : NA_SE_SY_GLASSMODE_OFF);
+        play_sound(play->actorCtx.lensActive != 0 ? NA_SE_SY_GLASSMODE_ON : NA_SE_SY_GLASSMODE_OFF);
     } else {
         play_sound(NA_SE_SY_ERROR);
     }
@@ -4217,7 +4216,7 @@ void func_80831944(PlayState* play, Player* this) {
 }
 
 // Proposed name: Player_UseItem
-void func_80831990(PlayState* play, Player* this, ItemID item) {
+void func_80831990(PlayState* play, Player* this, ItemId item) {
     PlayerActionParam actionParam = Player_ItemToActionParam(this, item);
 
     if ((((this->itemActionParam == this->heldItemActionParam) &&
@@ -4246,7 +4245,7 @@ void func_80831990(PlayState* play, Player* this, ItemID item) {
                                                       : actionParam - PLAYER_AP_MASK_FIERCE_DEITY;
 
                 if (((this->currentMask != PLAYER_MASK_GIANT) && (actionParam == PLAYER_AP_MASK_GIANT) &&
-                     ((gSaveContext.unk_3F28 != 0) || (gSaveContext.save.playerData.magic == 0))) ||
+                     ((gSaveContext.magicState != 0) || (gSaveContext.save.playerData.magic == 0))) ||
                     (!(this->stateFlags1 & PLAYER_STATE1_8000000) &&
                      BgCheck_EntityCheckCeiling(&play->colCtx, &sp54, &this->actor.world.pos,
                                                 sPlayerAgeProperties[playerForm].unk_00, &sp5C, &sp58, &this->actor))) {
@@ -4802,7 +4801,7 @@ void func_808332A0(PlayState* play, Player* this, s32 arg2, s32 arg3) {
                             var_v1, 0, 0, (this->itemActionParam - 3) | arg2);
 
         if ((actor != NULL) && (arg3 != 0)) {
-            func_80115DB4(play, 1, 7);
+            Magic_Consume(play, 1, 7);
             this->unk_D57 = 4;
         }
     }
@@ -6123,15 +6122,15 @@ s32 func_808365DC(Player* this, PlayState* play) {
                                      .sides[(this->doorDirection > 0) ? 0 : 1]
                                      .room;
 
-                    if ((roomNum >= 0) && (roomNum != play->roomCtx.currRoom.num)) {
+                    if ((roomNum >= 0) && (roomNum != play->roomCtx.curRoom.num)) {
                         Room_StartRoomTransition(play, &play->roomCtx, roomNum);
                     }
                 }
             }
 
-            doorActor->room = play->roomCtx.currRoom.num;
+            doorActor->room = play->roomCtx.curRoom.num;
             if (((var_v0_3 = doorActor->child) != NULL) || ((var_v0_3 = doorActor->parent) != NULL)) {
-                var_v0_3->room = play->roomCtx.currRoom.num;
+                var_v0_3->room = play->roomCtx.curRoom.num;
             }
             return true;
         }
@@ -6932,7 +6931,7 @@ void func_80838A20(PlayState* play, Player* this) {
     this->currentMask = PLAYER_MASK_NONE;
     this->stateFlags1 |= (PLAYER_STATE1_100 | PLAYER_STATE1_20000000);
     func_8082DAD4(this);
-    func_80115D5C(&play->state);
+    Magic_Reset(play);
 }
 
 u8 sPlayerMass[PLAYER_FORM_MAX] = {
@@ -7203,7 +7202,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                         this->unk_AE8 = 13;
                         func_80836D8C(this);
                         if (this->unk_AA5 == 2) {
-                            play->actorCtx.unk5 |= 4;
+                            play->actorCtx.flags |= ACTORCTX_FLAG_2;
                         }
                     }
                     this->stateFlags1 |= PLAYER_STATE1_100000;
@@ -7439,7 +7438,7 @@ s32 func_80839A84(PlayState* play, Player* this) {
 }
 
 s32 func_80839B18(Player* this, PlayState* play) {
-    if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) && (play->roomCtx.currRoom.unk3 != 2) &&
+    if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) && (play->roomCtx.curRoom.unk3 != 2) &&
         (sPlayerCurrentFloorType != BG_FLOOR_TYPE_7) && (D_80862B40 != 1)) {
         s32 temp_a2 = this->unk_AE3[this->unk_ADE];
 
@@ -7859,7 +7858,7 @@ void Player_InitMode_Telescope(PlayState* play, Player* this) {
         this->actor.focus.rot.y = 0x2102;
         this->unk_AE8 = 20;
     }
-    play->actorCtx.unk5 |= 2;
+    play->actorCtx.flags |= ACTORCTX_FLAG_1;
 }
 
 void Player_InitMode_B(PlayState* play, Player* this) {
@@ -9214,7 +9213,7 @@ void Player_ChooseIdleAnim(PlayState* play, Player* this) {
         if (this->stateFlags1 & PLAYER_STATE1_800) {
             anim = func_8082ED20(this);
         } else {
-            animIndex = play->roomCtx.currRoom.unk2;
+            animIndex = play->roomCtx.curRoom.unk2;
 
             if (healthIsCritical) {
                 if (this->unk_AA4 >= 0) {
@@ -10023,7 +10022,7 @@ u8 D_8085D2B0[] = {
 
 // OoT leftover?
 void func_80841358(PlayState* play, Player* this, s32 arg2) {
-    ItemID item;
+    ItemId item;
     PlayerActionParam actionParam;
 
     //! @bug OoB read if player is goron, deku or human
@@ -10150,10 +10149,10 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
 }
 
 void func_80841A50(PlayState* play, Player* this) {
-    if ((play->roomCtx.currRoom.num >= 0) && (play->roomCtx.prevRoom.num < 0)) {
+    if ((play->roomCtx.curRoom.num >= 0) && (play->roomCtx.prevRoom.num < 0)) {
         Math_Vec3f_Copy(&this->unk_3C0, &this->actor.world.pos);
         this->unk_3CC = this->actor.shape.rot.y;
-        this->unk_3CE = play->roomCtx.currRoom.num;
+        this->unk_3CE = play->roomCtx.curRoom.num;
         this->unk_3CF = 1;
     }
 }
@@ -10392,9 +10391,9 @@ void Player_Init(Actor* thisx, PlayState* play) {
                     this->actor.params = gSaveContext.respawn[respawnIndex].playerParams;
                 }
 
-                play->actorCtx.flags.switches[2] = gSaveContext.respawn[respawnIndex].tempSwitchFlags;
-                play->actorCtx.flags.collectible[1] = gSaveContext.respawn[respawnIndex].unk_18;
-                play->actorCtx.flags.collectible[2] = gSaveContext.respawn[respawnIndex].tempCollectFlags;
+                play->actorCtx.sceneFlags.switches[2] = gSaveContext.respawn[respawnIndex].tempSwitchFlags;
+                play->actorCtx.sceneFlags.collectible[1] = gSaveContext.respawn[respawnIndex].unk_18;
+                play->actorCtx.sceneFlags.collectible[2] = gSaveContext.respawn[respawnIndex].tempCollectFlags;
             }
         }
     }
@@ -10556,7 +10555,7 @@ void Player_SetDoAction(PlayState* play, Player* this) {
                 ? DO_ACTION_CURL
                 : DO_ACTION_NONE;
 
-        if (play->actorCtx.unk5 & 4) {
+        if (play->actorCtx.flags & ACTORCTX_FLAG_2) {
             doActionA = DO_ACTION_SNAP;
         } else if (Player_InBlockingCsMode(play, this) || (this->actor.flags & ACTOR_FLAG_20000000) ||
                    (this->stateFlags1 & PLAYER_STATE1_1000) || (this->stateFlags3 & PLAYER_STATE3_80000) ||
@@ -10652,10 +10651,10 @@ void Player_SetDoAction(PlayState* play, Player* this) {
                     !(this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_4000)) && (sp28 <= 0) &&
                     ((func_80123420(this)) ||
                      ((sPlayerCurrentFloorType != BG_FLOOR_TYPE_7) &&
-                      ((func_80123434(this)) || ((play->roomCtx.currRoom.unk3 != 2) &&
+                      ((func_80123434(this)) || ((play->roomCtx.curRoom.unk3 != 2) &&
                                                  !(this->stateFlags1 & PLAYER_STATE1_400000) && (sp28 == 0)))))) {
                     doActionA = DO_ACTION_ATTACK;
-                } else if ((play->roomCtx.currRoom.unk3 != 2) && sp24 && (sp28 > 0)) {
+                } else if ((play->roomCtx.curRoom.unk3 != 2) && sp24 && (sp28 > 0)) {
                     doActionA = DO_ACTION_JUMP;
                 } else if ((this->transformation == PLAYER_FORM_DEKU) && !(this->stateFlags1 & PLAYER_STATE1_8000000) &&
                            (this->actor.bgCheckFlags & 1)) {
@@ -10736,7 +10735,7 @@ void func_80843178(PlayState* play, Player* this) {
             var_v1 = 0x38;
             this->actor.bgCheckFlags &= ~1;
         } else {
-            if ((this->stateFlags1 & 1) && (play->roomCtx.currRoom.unk3 != 1) &&
+            if ((this->stateFlags1 & 1) && (play->roomCtx.curRoom.unk3 != 1) &&
                 ((this->unk_D68 - (s32)this->actor.world.pos.y) >= 0x64)) {
                 var_v1 = 0x39;
             } else if (!(this->stateFlags1 & PLAYER_STATE1_1) &&
@@ -11131,7 +11130,7 @@ void func_808442D8(PlayState* play, Player* this) {
     if (var_fa0 > 0.0f) {
         func_800B0EB0(play, &this->meleeWeaponInfo[0].tip, &D_8085D364, &D_8085D370, &D_8085D37C, &D_8085D380,
                       (var_fa0 * 200.0f), 0, 8);
-        if (((play->roomCtx.currRoom.enablePosLights != 0)) || (MREG(93) != 0)) {
+        if (((play->roomCtx.curRoom.enablePosLights != 0)) || (MREG(93) != 0)) {
             temp_fv1 = (Rand_ZeroOne() * 30.0f) + 225.0f;
             Lights_PointSetColorAndRadius(&this->lightInfo, temp_fv1, temp_fv1 * 0.7f, 0, var_fa0 * 300.0f);
         }
@@ -11495,7 +11494,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         Math_StepToF(&this->unk_B10[0], var_v0, D_8085D3FC[var_v0]);
     }
     func_80832888(this, play);
-    if (play->roomCtx.currRoom.enablePosLights != 0) {
+    if (play->roomCtx.curRoom.enablePosLights != 0) {
         Lights_PointSetColorAndRadius(&this->lightInfo, 255, 255, 255, 60);
     } else {
         this->lightInfo.params.point.radius = -1;
@@ -11757,7 +11756,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         this->unk_A78 = NULL;
 
         Math_StepToF(&this->windSpeed, 0.0f, 0.5f);
-        if ((this->unk_B62 != 0) || ((gSaveContext.unk_3F28 == 0) && (gSaveContext.save.playerData.magic != 0) &&
+        if ((this->unk_B62 != 0) || ((gSaveContext.magicState == 0) && (gSaveContext.save.playerData.magic != 0) &&
                                      (this->stateFlags1 & PLAYER_STATE1_10))) {
             func_8082F1AC(play, this);
         }
@@ -12255,7 +12254,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
-    play->actorCtx.unk5 &= ~8;
+    play->actorCtx.flags &= ~ACTORCTX_FLAG_3;
 }
 
 void Player_Destroy(Actor* thisx, PlayState* play) {
@@ -12272,7 +12271,7 @@ void Player_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyQuad(play, &this->shieldQuad);
     ZeldaArena_Free(this->giObjectSegment);
     ZeldaArena_Free(this->maskObjectSegment);
-    func_80115D5C(&play->state);
+    Magic_Reset(play);
     func_80831454(this);
 }
 
@@ -13197,12 +13196,12 @@ void func_808497A0(Player* this, PlayState* play) {
                 this->actor.velocity.y = 0.0f;
                 Player_AnimationPlayOnce(play, this, func_8082ED20(this));
 
-                if ((play->roomCtx.currRoom.num == this->unk_3CE) && (play->roomCtx.prevRoom.num < 0)) {
+                if ((play->roomCtx.curRoom.num == this->unk_3CE) && (play->roomCtx.prevRoom.num < 0)) {
                     this->unk_AE8 = 5;
                 } else {
-                    play->roomCtx.currRoom.num = -1;
+                    play->roomCtx.curRoom.num = -1;
                     play->roomCtx.prevRoom.num = -1;
-                    play->roomCtx.currRoom.segment = NULL;
+                    play->roomCtx.curRoom.segment = NULL;
                     play->roomCtx.prevRoom.segment = NULL;
 
                     func_8012EBF8(play, &play->roomCtx);
@@ -13213,7 +13212,7 @@ void func_808497A0(Player* this, PlayState* play) {
         }
     } else if (this->unk_AE8 < 0) {
         if (Room_StartRoomTransition(play, &play->roomCtx, this->unk_AE7)) {
-            Map_InitRoomData(play, play->roomCtx.currRoom.num);
+            Map_InitRoomData(play, play->roomCtx.curRoom.num);
             Minimap_SavePlayerRoomInitInfo(play);
             this->unk_AE8 = 5;
         }
@@ -14075,7 +14074,7 @@ AnimSfxEntry D_8085D60C[] = {
 
 void func_8084BFDC(Player* this, PlayState* play) {
     if ((this->transformation != PLAYER_FORM_GORON) && (this->actor.depthInWater <= 0.0f)) {
-        if ((play->roomCtx.currRoom.unk2 == 3) || (sPlayerCurrentFloorType == BG_FLOOR_TYPE_9) ||
+        if ((play->roomCtx.curRoom.unk2 == 3) || (sPlayerCurrentFloorType == BG_FLOOR_TYPE_9) ||
             ((func_808340AC(sPlayerCurrentFloorType) >= 0) &&
              !SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId))) {
             func_808344C0(play, this);
@@ -14668,11 +14667,11 @@ void func_8084D820(Player* this, PlayState* play) {
                             roomNum = temp_v1_4->sides[0].room;
                             MREG(68) = 0xFF;
 
-                            if ((roomNum != play->roomCtx.currRoom.num) && (play->roomCtx.currRoom.num >= 0)) {
-                                play->roomCtx.prevRoom = play->roomCtx.currRoom;
+                            if ((roomNum != play->roomCtx.curRoom.num) && (play->roomCtx.curRoom.num >= 0)) {
+                                play->roomCtx.prevRoom = play->roomCtx.curRoom;
 
-                                play->roomCtx.currRoom.num = -1;
-                                play->roomCtx.currRoom.segment = NULL;
+                                play->roomCtx.curRoom.num = -1;
+                                play->roomCtx.curRoom.segment = NULL;
                                 func_8012EBF8(play, &play->roomCtx);
                             } else {
                                 static Vec3f D_8085D62C = { 0.0f, 0.0f, 0.0f };
@@ -14680,7 +14679,7 @@ void func_8084D820(Player* this, PlayState* play) {
                                 static Vec3f D_8085D644 = { 0.0f, 0.0f, 0.0f };
 
                                 MREG(64) = -0x10;
-                                if (play->roomCtx.currRoom.num < 0) {
+                                if (play->roomCtx.curRoom.num < 0) {
                                     Room_StartRoomTransition(play, &play->roomCtx, temp_v1_4->sides[0].room);
                                     play->roomCtx.prevRoom.num = -1;
                                     play->roomCtx.prevRoom.segment = NULL;
@@ -14730,7 +14729,7 @@ void func_8084D820(Player* this, PlayState* play) {
             if ((this->unk_AE8 == 0) ||
                 ((temp_v0_8 == 0) && (this->linearVelocity == 0.0f) && (Play_GetCamera(play, 0)->stateFlags & 0x10))) {
                 if (this->unk_397 == 4) {
-                    Map_InitRoomData(play, (s16)play->roomCtx.currRoom.num);
+                    Map_InitRoomData(play, (s16)play->roomCtx.curRoom.num);
                     Minimap_SavePlayerRoomInitInfo(play);
                 }
 
@@ -14940,7 +14939,7 @@ void func_8084E724(Player* this, PlayState* play) {
     temp_v1 = this->unk_AA5;
     new_var = temp_v1;
 
-    if (((temp_v1 == 2) && (!(play->actorCtx.unk5 & 4))) ||
+    if (((temp_v1 == 2) && !(play->actorCtx.flags & ACTORCTX_FLAG_2)) ||
         ((temp_v1 != 2) &&
          (((((((((this->csMode != PLAYER_CSMODE_0) || (new_var == 0)) || (((s32)temp_v1) >= 5)) ||
                (func_8082FB68(this) != 0)) ||
@@ -16612,8 +16611,7 @@ void func_80853194(Player* this, PlayState* play) {
                     gSaveContext.healthAccumulator = 0x140;
                 }
                 if (temp_v1 & 2) {
-                    Parameter_AddMagic(play, ((void)0, gSaveContext.unk_3F30) +
-                                                 (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
+                    Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
                 }
                 if (temp_v1 & 4) {
                     gSaveContext.healthAccumulator = 0x50;
@@ -16646,7 +16644,7 @@ void func_80853194(Player* this, PlayState* play) {
             func_80839E74(this, play);
         }
     } else if (this->unk_AE8 == 1) {
-        if ((gSaveContext.healthAccumulator == 0) && (gSaveContext.unk_3F28 != 9)) {
+        if ((gSaveContext.healthAccumulator == 0) && (gSaveContext.magicState != 9)) {
             if (this->transformation == PLAYER_FORM_DEKU) {
                 LinkAnimation_Change(play, &this->skelAnime, &gameplay_keep_Linkanim_00E298, 2.0f / 3.0f, 0.0f, 5.0f, 2,
                                      -6.0f);
@@ -17091,7 +17089,7 @@ void func_80854430(Player* this, PlayState* play) {
             play->unk_1887C = 0;
             func_80847190(play, this, 0);
 
-            if (play->actorCtx.unk5 & 4) {
+            if (play->actorCtx.flags & ACTORCTX_FLAG_2) {
                 this->stateFlags1 |= PLAYER_STATE1_100000;
                 func_8083868C(play, this);
             } else {
@@ -17100,7 +17098,7 @@ void func_80854430(Player* this, PlayState* play) {
                     (func_8012364C(play, this, func_8082FDC4()) == ITEM_PICTO_BOX)) {
                     s32 requiredScopeTemp;
 
-                    play->actorCtx.unk5 |= 4;
+                    play->actorCtx.flags |= ACTORCTX_FLAG_2;
                 }
             }
         }
@@ -17607,7 +17605,7 @@ void func_80855AF4(Player* this, PlayState* play) {
     if (!(this->stateFlags1 & PLAYER_STATE1_100)) {
         this->prevMask = this->currentMask;
         gSaveContext.save.equippedMask = this->currentMask = PLAYER_MASK_GIANT;
-        func_80115DB4(play, 0, 6);
+        Magic_Consume(play, 0, 6);
         this->currentBoots = PLAYER_BOOTS_GIANT;
         this->prevBoots = PLAYER_BOOTS_GIANT;
         func_80123140(play, this);
@@ -18349,7 +18347,7 @@ void func_80857BE8(Player* this, PlayState* play) {
                  ((this->unk_AE7 == 4) && (this->unk_B08[0] < 12.0f)))) {
                 if (Math_StepToS(&this->unk_B86[1], 0, 1) != 0) {
                     this->stateFlags3 &= ~PLAYER_STATE3_80000;
-                    func_80115D5C(&play->state);
+                    Magic_Reset(play);
                     func_800B8E58(this, NA_SE_PL_GORON_BALL_CHARGE_FAILED);
                 }
                 this->unk_AE7 = 4;
@@ -18400,7 +18398,7 @@ void func_80857BE8(Player* this, PlayState* play) {
                 if (this->unk_B86[1] == 0) {
                     this->unk_B08[1] = 0.0f;
                     if (this->unk_AE7 >= 0x36) {
-                        func_80115DB4(play, 2, 5);
+                        Magic_Consume(play, 2, 5);
                         this->unk_B08[0] = 18.0f;
                         this->unk_B86[1] = 1;
                         this->stateFlags3 |= PLAYER_STATE3_80000;
@@ -18462,7 +18460,7 @@ void func_80857BE8(Player* this, PlayState* play) {
                     f32 var_fa1;
 
                     if (this->unk_B86[1] == 0) {
-                        if ((gSaveContext.unk_3F28 == 0) && (gSaveContext.save.playerData.magic >= 2) &&
+                        if ((gSaveContext.magicState == 0) && (gSaveContext.save.playerData.magic >= 2) &&
                             (this->unk_AE8 >= 0x36B0)) {
                             this->unk_AE7 += 1;
                             func_800B8F98(&this->actor, NA_SE_PL_GORON_BALL_CHARGE - SFX_FLAG);
@@ -18513,7 +18511,7 @@ void func_80857BE8(Player* this, PlayState* play) {
                         this->unk_B8E = 0x14;
                         this->unk_AE8 = 0;
                         this->stateFlags3 &= ~PLAYER_STATE3_80000;
-                        func_80115D5C(&play->state);
+                        Magic_Reset(play);
                     }
                 } else {
                     f32 temp_ft4_2 = (0.6f * slopeNormal.x) + spA4;
@@ -19020,7 +19018,7 @@ void func_8085978C(PlayState* play, Player* this, UNK_TYPE arg2) {
         this->linearVelocity = 2.5f;
     }
 
-    if ((this->transformation != PLAYER_FORM_HUMAN) && (play->roomCtx.currRoom.unk3 == 5)) {
+    if ((this->transformation != PLAYER_FORM_HUMAN) && (play->roomCtx.curRoom.unk3 == 5)) {
         MREG(64) = 0x2D;
         MREG(65) = 0xFF;
         MREG(66) = 0xFF;
@@ -19678,7 +19676,7 @@ void func_8085A7C0(PlayState* play, Player* this, UNK_TYPE arg2) {
 }
 
 void func_8085A8C4(PlayState* play, Player* this, UNK_TYPE arg2) {
-    if ((this->transformation != PLAYER_FORM_HUMAN) && (play->roomCtx.currRoom.unk3 == 5)) {
+    if ((this->transformation != PLAYER_FORM_HUMAN) && (play->roomCtx.curRoom.unk3 == 5)) {
         MREG(64) = 0x2D;
         MREG(65) = 0xFF;
         MREG(66) = 0xFF;
@@ -20058,7 +20056,7 @@ void func_8085B820(PlayState* play, s16 arg1) {
     func_80836D8C(player);
 }
 
-PlayerActionParam func_8085B854(PlayState* play, Player* player, ItemID itemId) {
+PlayerActionParam func_8085B854(PlayState* play, Player* player, ItemId itemId) {
     PlayerActionParam actionParam = Player_ItemToActionParam(player, itemId);
 
     if ((actionParam >= PLAYER_AP_MASK_TRUTH) && (actionParam <= PLAYER_AP_MASK_DEKU) &&
