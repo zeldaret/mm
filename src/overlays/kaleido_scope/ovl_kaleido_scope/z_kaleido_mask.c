@@ -516,13 +516,13 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
             if ((cursorItem != PAUSE_ITEM_NONE) && (msgCtx->msgLength == 0)) {
                 if (gSaveContext.buttonStatus[EQUIP_SLOT_A] == BTN_DISABLED) {
                     gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
-                    gSaveContext.unk_3F22 = 0;
-                    Interface_ChangeAlpha(50);
+                    gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+                    Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
                 }
             } else if (gSaveContext.buttonStatus[EQUIP_SLOT_A] != BTN_DISABLED) {
                 gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_DISABLED;
-                gSaveContext.unk_3F22 = 0;
-                Interface_ChangeAlpha(50);
+                gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+                Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
             }
 
             pauseCtx->cursorItem[PAUSE_MASK] = cursorItem;
@@ -563,7 +563,8 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                         }
                     }
 
-                    if ((func_801242DC(play) >= 2) && (func_801242DC(play) <= 4) &&
+                    if ((Player_GetEnvTimerType(play) >= PLAYER_ENV_TIMER_UNDERWATER_FLOOR) &&
+                        (Player_GetEnvTimerType(play) <= PLAYER_ENV_TIMER_UNDERWATER_FREE) &&
                         ((cursorSlot == (SLOT_MASK_DEKU - NUM_ITEM_SLOTS)) ||
                          (cursorSlot == (SLOT_MASK_GORON - NUM_ITEM_SLOTS)))) {
                         play_sound(NA_SE_SY_ERROR);

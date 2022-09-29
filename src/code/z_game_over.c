@@ -18,14 +18,14 @@ static s16 sGameOverTimer = 0;
 
 void GameOver_Update(PlayState* play) {
     GameOverContext* gameOverCtx = &play->gameOverCtx;
-    s16 i;
+    s16 timerId;
 
     switch (gameOverCtx->state) {
         case GAMEOVER_DEATH_START:
             func_801477B4(play);
 
-            for (i = 0; i < ARRAY_COUNT(gSaveContext.unk_3DD0); i++) {
-                gSaveContext.unk_3DD0[i] = 0;
+            for (timerId = 0; timerId < TIMER_ID_MAX; timerId++) {
+                gSaveContext.timerStates[timerId] = TIMER_STATE_OFF;
             }
 
             gSaveContext.eventInf[1] &= ~1;
@@ -57,10 +57,10 @@ void GameOver_Update(PlayState* play) {
             gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;
             gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
             gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
-            gSaveContext.unk_3F1E = 0;
-            gSaveContext.unk_3F20 = 0;
-            gSaveContext.unk_3F22 = 0;
-            gSaveContext.unk_3F24 = 0;
+            gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
+            gSaveContext.nextHudVisibility = HUD_VISIBILITY_IDLE;
+            gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+            gSaveContext.hudVisibilityTimer = 0;
             Kankyo_InitGameOverLights(play);
             sGameOverTimer = 20;
             Rumble_Request(0.0f, 126, 124, 63);

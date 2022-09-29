@@ -234,8 +234,8 @@ void KaleidoScope_MoveCursorToSpecialPos(PlayState* play, s16 cursorSpecialPos) 
     gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
     gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_DISABLED;
 
-    gSaveContext.unk_3F22 = 0;
-    Interface_ChangeAlpha(50);
+    gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+    Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
 }
 
 void func_80821A04(PlayState* play) {
@@ -255,9 +255,9 @@ void func_80821A04(PlayState* play) {
     gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = D_801C6A98[pauseCtx->pageIndex + 1][1];
     gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
 
-    gSaveContext.unk_3F22 = 0;
+    gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
 
-    Interface_ChangeAlpha(50);
+    Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
 }
 
 void KaleidoScope_DrawQuadTextureRGBA32(GraphicsContext* gfxCtx, void* texture, u16 width, u16 height, u16 point) {
@@ -292,8 +292,8 @@ void KaleidoScope_SwitchPage(PauseContext* pauseCtx, u8 pt) {
     gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
     gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_DISABLED;
 
-    gSaveContext.unk_3F22 = 0;
-    Interface_ChangeAlpha(50);
+    gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+    Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
 }
 
 void KaleidoScope_HandlePageToggles(PlayState* play, Input* input) {
@@ -2433,7 +2433,7 @@ void KaleidoScope_Update(PlayState* play) {
 
     switch (pauseCtx->state) {
         case PAUSE_STATE_DEFAULT_2:
-            sUnpausedHudVisibility = gSaveContext.unk_3F22;
+            sUnpausedHudVisibility = gSaveContext.hudVisibility;
             sPauseMenuVerticalOffset = -6240.0f;
 
             sUnpausedButtonStatus[EQUIP_SLOT_B] = gSaveContext.buttonStatus[EQUIP_SLOT_B];
@@ -2772,7 +2772,7 @@ void KaleidoScope_Update(PlayState* play) {
             sPauseCursorLeftX = -175;
             sPauseCursorRightX = 155;
             pauseCtx->roll = -434.0f;
-            Interface_ChangeAlpha(1);
+            Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
 
             pauseCtx->iconItemSegment =
                 (void*)(((uintptr_t)play->objectCtx.spaceStart + 0x30) & ~0x3F); // Messed up ALIGN64
@@ -2791,7 +2791,7 @@ void KaleidoScope_Update(PlayState* play) {
             DmaMgr_SendRequest0(pauseCtx->iconItemLangSegment, SEGMENT_ROM_START(icon_item_jpn_static),
                                 SEGMENT_ROM_SIZE(icon_item_jpn_static));
 
-            gSaveContext.unk_3DD0[3] = 0;
+            gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
 
             sGameOverPrimR = 255;
             sGameOverPrimG = 130;
@@ -3077,7 +3077,7 @@ void KaleidoScope_Update(PlayState* play) {
                 sPauseMenuVerticalOffset = -6240.0f;
                 func_801A3AEC(0);
                 play->msgCtx.ocarinaMode = 4;
-                gSaveContext.unk_3F26 = 50;
+                gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
             } else if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
                 play_sound(NA_SE_SY_DECIDE);
                 Message_StartTextbox(play, 0x1B93, NULL);
@@ -3116,7 +3116,7 @@ void KaleidoScope_Update(PlayState* play) {
                 sPauseMenuVerticalOffset = -6240.0f;
                 func_801A3AEC(0);
                 play->msgCtx.ocarinaMode = 4;
-                gSaveContext.unk_3F26 = 50;
+                gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
             }
             break;
 
@@ -3185,20 +3185,20 @@ void KaleidoScope_Update(PlayState* play) {
             gSaveContext.buttonStatus[EQUIP_SLOT_A] = sUnpausedButtonStatus[EQUIP_SLOT_A];
 
             func_80110038(play);
-            gSaveContext.unk_3F22 = 0;
-            Interface_ChangeAlpha(50);
+            gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+            Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
             MsgEvent_SendNullTask();
             func_80143324(play, &play->skyboxCtx, play->skyboxId);
 
             if ((msgCtx->msgMode != 0) && (msgCtx->currentTextId == 0xFF)) {
                 func_80115844(play, 0x12);
                 func_8011552C(play, 0x12);
-                Interface_ChangeAlpha(16);
+                Interface_SetHudVisibility(HUD_VISIBILITY_A_B_C);
             } else {
                 interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
             }
-            gSaveContext.unk_3F22 = 0;
-            Interface_ChangeAlpha(sUnpausedHudVisibility);
+            gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+            Interface_SetHudVisibility(sUnpausedHudVisibility);
             func_801A3A7C(0);
             break;
     }

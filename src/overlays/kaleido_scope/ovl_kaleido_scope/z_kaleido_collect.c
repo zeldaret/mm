@@ -773,8 +773,8 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
 
                         if (gSaveContext.buttonStatus[EQUIP_SLOT_A] == BTN_DISABLED) {
                             gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
-                            gSaveContext.unk_3F22 = 0;
-                            Interface_ChangeAlpha(50);
+                            gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+                            Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
                         }
                     } else {
                         if (interfaceCtx->unk_212 != 6) {
@@ -782,8 +782,8 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                         }
                         if (gSaveContext.buttonStatus[EQUIP_SLOT_A] != BTN_DISABLED) {
                             gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_DISABLED;
-                            gSaveContext.unk_3F22 = 0;
-                            Interface_ChangeAlpha(50);
+                            gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+                            Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
                         }
                     }
                 } else {
@@ -799,8 +799,8 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                     if ((pauseCtx->cursorItem[PAUSE_QUEST] != PAUSE_ITEM_NONE) && (msgCtx->msgLength == 0)) {
                         if (gSaveContext.buttonStatus[EQUIP_SLOT_A] == BTN_DISABLED) {
                             gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
-                            gSaveContext.unk_3F22 = 0;
-                            Interface_ChangeAlpha(50);
+                            gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+                            Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
                         }
 
                         if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) && (msgCtx->msgLength == 0)) {
@@ -827,8 +827,8 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                         }
                     } else if (gSaveContext.buttonStatus[EQUIP_SLOT_A] != BTN_DISABLED) {
                         gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_DISABLED;
-                        gSaveContext.unk_3F22 = 0;
-                        Interface_ChangeAlpha(50);
+                        gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+                        Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
                     }
                 }
             } else if (pauseCtx->mainState == PAUSE_MAIN_STATE_SONG_PLAYER_PLAYING) {

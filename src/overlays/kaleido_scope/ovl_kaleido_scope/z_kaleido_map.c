@@ -419,13 +419,13 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
             if ((pauseCtx->cursorPoint[PAUSE_MAP] <= DUNGEON_STRAY_FAIRIES) && (pauseCtx->cursorSpecialPos == 0)) {
                 if (gSaveContext.buttonStatus[EQUIP_SLOT_A] == BTN_DISABLED) {
                     gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
-                    gSaveContext.unk_3F22 = 0;
-                    Interface_ChangeAlpha(50);
+                    gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+                    Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
                 }
             } else if (gSaveContext.buttonStatus[EQUIP_SLOT_A] != BTN_DISABLED) {
                 gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_DISABLED;
-                gSaveContext.unk_3F22 = 0;
-                Interface_ChangeAlpha(50);
+                gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+                Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
             }
 
             if ((pauseCtx->cursorXIndex[PAUSE_MAP] == 0) && (pauseCtx->cursorSpecialPos == 0)) {
@@ -689,10 +689,10 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         n = 0;
         sceneId = play->sceneNum;
         if (sceneId == SCENE_KAKUSIANA) { // Lone Peak Shrine & Grottos
-            if (play->roomCtx.currRoom.num == 5) {
+            if (play->roomCtx.curRoom.num == 5) {
                 sceneId = SCENE_11GORONNOSATO; // Goron Village (winter)
-            } else if ((play->roomCtx.currRoom.num == 6) || (play->roomCtx.currRoom.num == 8) ||
-                       (play->roomCtx.currRoom.num == 12)) {
+            } else if ((play->roomCtx.curRoom.num == 6) || (play->roomCtx.curRoom.num == 8) ||
+                       (play->roomCtx.curRoom.num == 12)) {
                 sceneId = SCENE_22DEKUCITY; // Deku Palace
             } else {
                 sceneId = Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.respawn[RESPAWN_MODE_UNK_3].entrance));
@@ -779,8 +779,8 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
 
         if (gSaveContext.buttonStatus[EQUIP_SLOT_A] != BTN_DISABLED) {
             gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_DISABLED;
-            gSaveContext.unk_3F22 = 0;
-            Interface_ChangeAlpha(50);
+            gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+            Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
         }
 
         if (pauseCtx->cursorSpecialPos == 0) {
