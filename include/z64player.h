@@ -848,6 +848,15 @@ typedef enum PlayerInitMode {
 
 #define PLAYER_PARAMS(startBgCamId, initMode) ((startBgCamId & 0xFF) | ((initMode & 0xF) << 8))
 
+typedef enum PlayerUnkAA5 {
+    /* 0 */ PLAYER_UNKAA5_0,
+    /* 1 */ PLAYER_UNKAA5_1,
+    /* 2 */ PLAYER_UNKAA5_2,
+    /* 3 */ PLAYER_UNKAA5_3,
+    /* 4 */ PLAYER_UNKAA5_4,
+    /* 5 */ PLAYER_UNKAA5_5,
+} PlayerUnkAA5;
+
 typedef void (*PlayerActionFunc)(struct Player* this, struct PlayState* play);
 typedef s32 (*PlayerFuncAC4)(struct Player* this, struct PlayState* play);
 typedef void (*PlayerFuncD58)(struct PlayState* play, struct Player* this);
@@ -963,7 +972,7 @@ typedef struct Player {
     /* 0xA9C */ f32 secretRumbleCharge; // builds per frame until discharges with a rumble request
     /* 0xAA0 */ f32 closestSecretDistSq; // Used to augment `secretRumbleCharge`. Cleared every frame
     /* 0xAA4 */ s8 unk_AA4;
-    /* 0xAA5 */ u8 unk_AA5;
+    /* 0xAA5 */ u8 unk_AA5; // PlayerUnkAA5 enum
     /* 0xAA6 */ u16 unk_AA6; // flags of some kind
     /* 0xAA8 */ s16 unk_AA8;
     /* 0xAAA */ s16 unk_AAA;

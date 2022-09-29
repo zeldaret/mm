@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -464,7 +463,7 @@ s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
 s32 Player_InCsMode(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return Player_InBlockingCsMode(play, player) || player->unk_AA5 == 5;
+    return Player_InBlockingCsMode(play, player) || (player->unk_AA5 == PLAYER_UNKAA5_5);
 }
 
 s32 func_80123420(Player* player) {
@@ -1239,7 +1238,7 @@ void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup) {
 void func_80123C58(Player* player) {
     player->heldItemActionParam = player->itemActionParam;
     Player_SetModelGroup(player, Player_ActionToModelGroup(player, player->itemActionParam));
-    player->unk_AA5 = 0;
+    player->unk_AA5 = PLAYER_UNKAA5_0;
 }
 
 void Player_SetEquipmentData(PlayState* play, Player* player) {
@@ -2264,7 +2263,7 @@ s32 func_801262C8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     Player* player = (Player*)actor;
 
     if (func_80125580(play, limbIndex, dList, pos, rot, actor) == 0) {
-        if (player->unk_AA5 != 3) {
+        if (player->unk_AA5 != PLAYER_UNKAA5_3) {
             *dList = NULL;
         } else if (limbIndex == PLAYER_LIMB_L_FOREARM) {
             *dList = D_801C0294[player->transformation];
