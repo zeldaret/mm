@@ -427,10 +427,10 @@ typedef enum {
 #define DEFINE_ACTOR_INTERNAL(_name, enumValue, _allocType, _debugName) enumValue,
 #define DEFINE_ACTOR_UNSET(enumValue) enumValue,
 
-typedef enum ActorID {
+typedef enum ActorId {
     #include "tables/actor_table.h"
     /* 0x2B2 */ ACTOR_ID_MAX // originally "ACTOR_DLF_MAX"
-} ActorID;
+} ActorId;
 
 #undef DEFINE_ACTOR
 #undef DEFINE_ACTOR_INTERNAL
