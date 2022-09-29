@@ -1168,13 +1168,12 @@ TexturePtr D_8081466C[] = { gFileSelFirstDayENGTex, gFileSelFirstDayENGTex, gFil
                             gFileSelFinalDayENGTex };
 TexturePtr D_8081467C[] = { gFileSel0QuarterHeartENGTex, gFileSel1QuarterHeartENGTex, gFileSel2QuarterHeartENGTex,
                             gFileSel3QuarterHeartENGTex };
-static TexturePtr sHeartTextures[] = {
-    gHeartEmptyTex,          gHeartQuarterTex,     gHeartHalfTex,
-    gHeartThreeQuarterTex,   gHeartFullTex,        gDefenseHeartEmptyTex,
-    gDefenseHeartQuarterTex, gDefenseHeartHalfTex, gDefenseHeartThreeQuarterTex,
-    gDefenseHeartFullTex,
+static TexturePtr sHeartTextures[2][5] = {
+    { gHeartEmptyTex, gHeartQuarterTex, gHeartHalfTex, gHeartThreeQuarterTex, gHeartFullTex },
+    { gDefenseHeartEmptyTex, gDefenseHeartQuarterTex, gDefenseHeartHalfTex, gDefenseHeartThreeQuarterTex,
+      gDefenseHeartFullTex },
 };
-s32 D_808146B4[] = { 0x00010101, 0x01010202, 0x02020203, 0x03030303 };
+u8 D_808146B4[] = { 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03 };
 s16 D_808146C4[3][3] = {
     { 200, 255, 100 },
     { 170, 170, 255 },
@@ -1188,41 +1187,21 @@ s16 D_808146D8[3][3] = {
 static s16 sHeartPrimColors[2][3] = { { 255, 70, 50 }, { 200, 0, 0 } };
 static s16 sHeartEnvColors[2][3] = { { 50, 40, 60 }, { 255, 255, 255 } };
 
-void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_DrawFileInfo.s")
-#if 0
 void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
     FileSelectState* this = (FileSelectState*)thisx;
     Font* font = &this->font;
-    s32 heartType;
+    s16 j;
+    s16 vtxOffset;
+    s32 heartType; // can be smaller size
+    s16 i;         // sp216
 
-    s16 sp216;
     s16 sp20C;
     s16 sp20A;
 
     s16 sp200[5];
     u16 sp1F8[3];
-
     u8 sp1F7;
-
-    s16 i;
-    s16 vtxOffset;
-
-    f32 var_ft1;
-    s16 var_t1;
-    s16 var_v0_2;
-    s16 var_v0_3;
-    s16 var_v1;
-    s16 var_v1_2;
-    s32 temp_ft0;
-    s32 temp_hi;
-    s32 temp_s0;
-    s32 var_v0;
-    u16 temp_t9;
-    u8 temp_v0_3;
-    u8 var_t2;
-    void* var_t4;
-    void** var_t0;
+    s16 temp_s0;
 
     OPEN_DISPS(this->state.gfxCtx);
 
@@ -1234,27 +1213,21 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
 
     // draw file name
     if (this->nameAlpha[fileIndex] != 0) {
-        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0x20], 32, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex] + 0x20], 32, 0);
         gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 0, 0, 0, this->nameAlpha[fileIndex]);
 
-        for (i = 0, vtxOffset = 0; vtxOffset < 0x20; i++, vtxOffset += 4) {
+        for (vtxOffset = 0, i = 0; vtxOffset < 0x20; i++, vtxOffset += 4) {
             FileSelect_DrawTexQuadI4(this->state.gfxCtx,
-                                     font->fontBuf + (this->playerName[fileIndex][i] << 7) * FONT_CHAR_TEX_SIZE,
-                                     vtxOffset);
+                                     font->fontBuf + this->playerName[fileIndex][i] * FONT_CHAR_TEX_SIZE, vtxOffset);
         }
 
-        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2]], 32, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex]], 32, 0);
         gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 255, 255, 255, this->nameAlpha[fileIndex]);
 
-        vtxOffset = 0;
-        i = 0;
-        do {
+        for (vtxOffset = 0, i = 0; vtxOffset < 0x20; i++, vtxOffset += 4) {
             FileSelect_DrawTexQuadI4(this->state.gfxCtx,
-                                     font->fontBuf + (this->playerName[fileIndex][i] << 7) * FONT_CHAR_TEX_SIZE,
-                                     vtxOffset);
-            vtxOffset += 4;
-            i += 1;
-        } while (vtxOffset < 0x20);
+                                     font->fontBuf + this->playerName[fileIndex][i] * FONT_CHAR_TEX_SIZE, vtxOffset);
+        }
     }
 
     if ((fileIndex == this->selectedFileIndex) || (fileIndex == this->fileNum)) {
@@ -1270,7 +1243,7 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
         gDPSetEnvColor(POLY_OPA_DISP++, D_808146D8[this->upgrades[sp20C]][0], D_808146D8[this->upgrades[sp20C]][1],
                        D_808146D8[this->upgrades[sp20C]][2], 255);
 
-        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0xC8], 4, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex] + 0xC8], 4, 0);
 
         gDPLoadTextureBlock(POLY_OPA_DISP++, gFileSelRupeeTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 16, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -1282,25 +1255,15 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
                           PRIMITIVE, 0);
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 0, 0, 0, this->fileInfoAlpha[fileIndex]);
-        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0x4C], 12, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex] + 0x4C], 12, 0);
 
         FileSelect_SplitNumber((u16)this->rupees[sp20C], &sp1F8[0], &sp1F8[1], &sp1F8[2]);
-        vtxOffset = 0;
-        temp_v0_3 = this->upgrades[sp20C];
-        var_v0 = temp_v0_3 * 2;
-        i = D_80814554[temp_v0_3];
-        if (i < 3) {
-            do {
-                FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + (sp1F8[i] << 7) * FONT_CHAR_TEX_SIZE,
-                                         vtxOffset);
-                i += 1;
-                vtxOffset += 4;
-            } while (i < 3);
-            vtxOffset = 0;
-            var_v0 = this->upgrades[sp20C] * 2;
+
+        for (vtxOffset = 0, i = D_80814554[this->upgrades[sp20C]]; i < 3; i++, vtxOffset += 4) {
+            FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + sp1F8[i] * FONT_CHAR_TEX_SIZE, vtxOffset);
         }
 
-        if (this->rupees[sp20C] == *(gUpgradeCapacities + 0x20 + var_v0)) {
+        if (this->rupees[sp20C] == gUpgradeCapacities[4][this->upgrades[sp20C]]) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 120, 255, 0, this->fileInfoAlpha[fileIndex]);
         } else if (this->rupees[sp20C] != 0) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 255, 255, 255, this->fileInfoAlpha[fileIndex]);
@@ -1308,17 +1271,10 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 100, 100, 100, this->fileInfoAlpha[fileIndex]);
         }
 
-        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0x40], 12, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex] + 0x40], 12, 0);
 
-        i = D_80814554[this->upgrades[sp20C]];
-        if (i < 3) {
-            do {
-                FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + (sp1F8[i] << 7) * FONT_CHAR_TEX_SIZE,
-                                         vtxOffset);
-                i += 1;
-                vtxOffset += 4;
-            } while (i < 3);
-            vtxOffset = 0;
+        for (vtxOffset = 0, i = D_80814554[this->upgrades[sp20C]]; i < 3; i++, vtxOffset += 4) {
+            FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + sp1F8[i] * FONT_CHAR_TEX_SIZE, vtxOffset);
         }
 
         gDPPipeSync(POLY_OPA_DISP++);
@@ -1328,11 +1284,10 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 255, 0, 0, this->fileInfoAlpha[fileIndex]);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
 
-        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0xCC], 4, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex] + 0xCC], 4, 0);
 
         POLY_OPA_DISP =
             FileSelect_DrawTexQuadIA8(POLY_OPA_DISP, D_8081467C[this->heartPieceCount[sp20C]], 0x18, 0x10, (s16)0);
-        var_t2 = 4;
 
         if (this->defenseHearts[sp20C] == 0) {
             heartType = 0;
@@ -1345,40 +1300,28 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
         gDPSetEnvColor(POLY_OPA_DISP++, sHeartEnvColors[heartType][0], sHeartEnvColors[heartType][1],
                        sHeartEnvColors[heartType][2], 255);
 
-        var_t1 = this->health[sp20C];
-        temp_s0 = this->healthCapacity[sp20C] / 0x10;
-        if (var_t1 <= 0x30) {
-            var_t1 = 0x30;
+        i = this->healthCapacity[sp20C] / 0x10;
+
+        sp20A = this->health[sp20C];
+        if (sp20A <= 0x30) {
+            sp20A = 0x30;
         }
-        i = 0;
-        if ((s16)temp_s0 > 0) {
-            var_t4 = (heartType * 0x14) + sHeartTextures;
-            do {
-                if (var_t1 < 0x10) {
-                    var_t2 = 0;
-                    if (var_t1 != 0) {
-                        var_t2 = *(D_808146B4 + var_t1);
-                        var_t1 = 0;
-                        var_t0 = var_t4 + (var_t2 * 4);
-                    } else {
-                        var_t0 = var_t4 + (0U * 4);
-                    }
+
+        sp1F7 = 4;
+        for (vtxOffset = 0, j = 0; j < i; j++, vtxOffset += 4) {
+            if (sp20A < 0x10) {
+                if (sp20A != 0) {
+                    sp1F7 = D_808146B4[sp20A];
+                    sp20A = 0;
                 } else {
-                    var_t0 = var_t4 + (var_t2 * 4);
-                    var_t1 -= 0x10;
+                    sp1F7 = 0;
                 }
+            } else {
+                sp20A -= 0x10;
+            }
 
-                gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0x68], 4, 0);
-
-                sp216 = i;
-                sp1F7 = var_t2;
-                sp20A = var_t1;
-                i += 1;
-                vtxOffset += 4;
-                POLY_OPA_DISP = FileSelect_DrawTexQuadIA8(POLY_OPA_DISP, *var_t0, 0x10, 0x10, (s16)0);
-            } while (i < (s16)temp_s0);
-            vtxOffset = 0;
-            i = 0;
+            gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex] + 0x68 + vtxOffset], 4, 0);
+            POLY_OPA_DISP = FileSelect_DrawTexQuadIA8(POLY_OPA_DISP, sHeartTextures[heartType][sp1F7], 0x10, 0x10, 0);
         }
 
         gDPPipeSync(POLY_OPA_DISP++);
@@ -1386,24 +1329,23 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 255, 255, 255, this->fileInfoAlpha[fileIndex]);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
 
-        do {
-            i += 1;
-            if (gBitFlags[i] & this->questItems[sp20C]) {
-                gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0xB8], 4, 0);
-                gDPLoadTextureBlock(POLY_OPA_DISP++, D_8081465C[i], G_IM_FMT_RGBA, G_IM_SIZ_32b, 32, 32, 0,
+        for (vtxOffset = 0, j = 0; j < 4; j++, vtxOffset += 4) {
+            if (this->questItems[sp20C] & gBitFlags[j]) {
+                gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex] + 0xB8 + vtxOffset], 4, 0);
+                gDPLoadTextureBlock(POLY_OPA_DISP++, D_8081465C[j], G_IM_FMT_RGBA, G_IM_SIZ_32b, 32, 32, 0,
                                     G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                     G_TX_NOLOD, G_TX_NOLOD);
                 gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
             }
-            vtxOffset += 4;
-        } while (i < 4);
+        }
 
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineLERP(POLY_OPA_DISP++, 1, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, 1, 0, PRIMITIVE, 0, TEXEL0, 0,
                           PRIMITIVE, 0);
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 0, 0, 0, this->fileInfoAlpha[fileIndex]);
-        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0xD0], 8, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex] + 0xD0], 8, 0);
+        if (1) {}
         gDPLoadTextureBlock_4b(POLY_OPA_DISP++, gFileSelMASKSENGTex, G_IM_FMT_I, 64, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         gSP1Quadrangle(POLY_OPA_DISP++, 4, 6, 7, 5, 0);
@@ -1413,23 +1355,21 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
         gDPPipeSync(POLY_OPA_DISP++);
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 0, 0, 0, this->fileInfoAlpha[fileIndex]);
-        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0x60], 8, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex] + 0x60], 8, 0);
 
         FileSelect_SplitNumber(this->maskCount[sp20C], &sp1F8[0], &sp1F8[1], &sp1F8[2]);
 
-        for (i = 1, vtxOffset = 0; i < 3; i++, vtxOffset += 4) {
-            FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + (sp1F8[i] << 7) * FONT_CHAR_TEX_SIZE,
-                                     vtxOffset);
+        for (vtxOffset = 0, i = 1; i < 3; i++, vtxOffset += 4) {
+            FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + sp1F8[i] * FONT_CHAR_TEX_SIZE, vtxOffset);
         }
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 255, 255, 255, this->fileInfoAlpha[fileIndex]);
 
-        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0x58], 8, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex] + 0x58], 8, 0);
 
-        for (i = 1, vtxOffset = 0; i < 3; i++, vtxOffset += 4) {
+        for (vtxOffset = 0, i = 1; i < 3; i++, vtxOffset += 4) {
 
-            FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + (sp1F8[i] << 7) * FONT_CHAR_TEX_SIZE,
-                                     vtxOffset);
+            FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + sp1F8[i] * FONT_CHAR_TEX_SIZE, vtxOffset);
         }
     }
 
@@ -1439,7 +1379,7 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 255, 255, 255, this->nameAlpha[fileIndex]);
 
-        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0xD8], 4, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex] + 0xD8], 4, 0);
 
         gDPLoadTextureBlock(POLY_OPA_DISP++, gFileSelOwlSaveIconTex, G_IM_FMT_RGBA, G_IM_SIZ_32b, 24, 12, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -1449,7 +1389,7 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
-        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0xDC], 8, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex] + 0xDC], 8, 0);
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 0, 0, 0, this->fileInfoAlpha[fileIndex]);
 
@@ -1462,36 +1402,19 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
         gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
 
         sp200[0] = 0;
-        temp_ft0 = (s32)(((f32)this->time[sp20C] * 0.021972656f) / 60.0f);
-        sp200[1] = (s16)temp_ft0;
+        sp200[1] = (this->time[sp20C] * 0.021972656f) / 60.0f;
 
-        if ((s16)temp_ft0 >= 0xA) {
-            var_v0_2 = (s16)temp_ft0;
-            var_v1 = 0;
-            do {
-                var_v0_2 -= 0xA;
-                var_v1 += 1;
-            } while (var_v0_2 >= 0xA);
-            sp200[0] = var_v1;
-            sp200[1] = var_v0_2;
+        while (sp200[1] >= 10) {
+            sp200[0]++;
+            sp200[1] -= 10;
         }
+
         sp200[3] = 0;
-        temp_t9 = this->time[sp20C];
-        var_ft1 = (f32)temp_t9;
-        if ((s32)temp_t9 < 0) {
-            var_ft1 += 4294967296.0f;
-        }
-        var_v1_2 = 0;
-        temp_hi = (s32)(var_ft1 * 0.021972656f) % 60;
-        sp200[4] = (s16)temp_hi;
-        if ((s16)temp_hi >= 0xA) {
-            var_v0_3 = (s16)temp_hi;
-            do {
-                var_v0_3 -= 0xA;
-                var_v1_2 += 1;
-            } while (var_v0_3 >= 0xA);
-            sp200[3] = var_v1_2;
-            sp200[4] = var_v0_3;
+        sp200[4] = (s32)(this->time[sp20C] * 0.021972656f) % 60;
+
+        while (sp200[4] >= 10) {
+            sp200[3]++;
+            sp200[4] -= 10;
         }
         sp200[2] = 0x41;
 
@@ -1500,19 +1423,17 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
                           PRIMITIVE, 0);
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 0, 0, 0, this->fileInfoAlpha[fileIndex]);
-        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0xF8], 20, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex] + 0xF8], 20, 0);
 
         for (i = 0, vtxOffset = 0; i < 5; i++, vtxOffset += 4) {
-            FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + (sp200[i] << 7) * FONT_CHAR_TEX_SIZE,
-                                     vtxOffset);
+            FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + sp200[i] * FONT_CHAR_TEX_SIZE, vtxOffset);
         }
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 255, 255, 255, this->fileInfoAlpha[fileIndex]);
-        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0xE4], 20, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex] + 0xE4], 20, 0);
 
         for (i = 0, vtxOffset = 0; i < 5; i++, vtxOffset += 4) {
-            FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + (sp200[i] << 7) * FONT_CHAR_TEX_SIZE,
-                                     vtxOffset);
+            FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + sp200[i] * FONT_CHAR_TEX_SIZE, vtxOffset);
         }
     }
 
@@ -1520,7 +1441,6 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
 
     CLOSE_DISPS(this->state.gfxCtx);
 }
-#endif
 
 TexturePtr sFileInfoBoxTextures[] = {
     gFileSelFileInfoBox0Tex, gFileSelFileInfoBox1Tex,      gFileSelFileInfoBox2Tex,      gFileSelFileInfoBox3Tex,

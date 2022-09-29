@@ -199,7 +199,7 @@ typedef struct FileSelectState {
     /* 0x24476 */ s8 upgrades2[2];
     /* 0x24478 */ u8 maskCount[2];
     /* 0x2447A */ s8 maskCount2[2];
-    /* 0x2447C */ s8 heartPieceCount[2];
+    /* 0x2447C */ u8 heartPieceCount[2];
     /* 0x2447E */ s8 heartPieceCount2[2];
     /* 0x24480 */ s16 buttonIndex;
     /* 0x24482 */ s16 confirmButtonIndex;
