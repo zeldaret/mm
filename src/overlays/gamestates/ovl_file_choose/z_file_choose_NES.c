@@ -1177,11 +1177,15 @@ static TexturePtr sHeartTextures[] = {
     gDefenseHeartFullTex,
 };
 s32 D_808146B4[] = { 0x00010101, 0x01010202, 0x02020203, 0x03030303 };
-s16 D_808146C4[] = {
-    200, 255, 100, 170, 170, 255, 255, 105, 105, 0,
+s16 D_808146C4[3][3] = {
+    { 200, 255, 100 },
+    { 170, 170, 255 },
+    { 255, 105, 105 },
 };
-s16 D_808146D8[] = {
-    0, 80, 0, 10, 10, 80, 40, 10, 0, 0,
+s16 D_808146D8[3][3] = {
+    { 0, 80, 0 },
+    { 10, 10, 80 },
+    { 40, 10, 0 },
 };
 static s16 sHeartPrimColors[2][3] = { { 255, 70, 50 }, { 200, 0, 0 } };
 static s16 sHeartEnvColors[2][3] = { { 50, 40, 60 }, { 255, 255, 255 } };
@@ -1191,349 +1195,166 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex);
 /*
 void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
     FileSelectState* this = (FileSelectState*)thisx;
+    Font* font = &this->font;
+    s32 heartType;
+
     s16 sp216;
     s16 sp20C;
     s16 sp20A;
-    s16 sp208;
-    s16 sp206;
-    s16 sp204;
-    s16 sp202;
-    s16 sp200;
-    u16 sp1FC;
-    u16 sp1FA;
-    u16 sp1F8;
+
+    s16 sp200[5];
+    u16 sp1F8[3];
+
     u8 sp1F7;
-    s32 sp54;
-    u16* sp50;
-    void* sp48;
-    void* sp3C;
-    Font* temp_s4_2;
-    Font* temp_s4_3;
-    Gfx* temp_v1;
-    Gfx* temp_v1_100;
-    Gfx* temp_v1_101;
-    Gfx* temp_v1_10;
-    Gfx* temp_v1_11;
-    Gfx* temp_v1_12;
-    Gfx* temp_v1_13;
-    Gfx* temp_v1_14;
-    Gfx* temp_v1_15;
-    Gfx* temp_v1_16;
-    Gfx* temp_v1_17;
-    Gfx* temp_v1_18;
-    Gfx* temp_v1_19;
-    Gfx* temp_v1_20;
-    Gfx* temp_v1_21;
-    Gfx* temp_v1_22;
-    Gfx* temp_v1_23;
-    Gfx* temp_v1_25;
-    Gfx* temp_v1_26;
-    Gfx* temp_v1_27;
-    Gfx* temp_v1_28;
-    Gfx* temp_v1_29;
-    Gfx* temp_v1_2;
-    Gfx* temp_v1_30;
-    Gfx* temp_v1_31;
-    Gfx* temp_v1_32;
-    Gfx* temp_v1_33;
-    Gfx* temp_v1_34;
-    Gfx* temp_v1_35;
-    Gfx* temp_v1_36;
-    Gfx* temp_v1_37;
-    Gfx* temp_v1_38;
-    Gfx* temp_v1_39;
-    Gfx* temp_v1_3;
-    Gfx* temp_v1_40;
-    Gfx* temp_v1_41;
-    Gfx* temp_v1_42;
-    Gfx* temp_v1_43;
-    Gfx* temp_v1_44;
-    Gfx* temp_v1_45;
-    Gfx* temp_v1_46;
-    Gfx* temp_v1_47;
-    Gfx* temp_v1_48;
-    Gfx* temp_v1_49;
-    Gfx* temp_v1_4;
-    Gfx* temp_v1_50;
-    Gfx* temp_v1_51;
-    Gfx* temp_v1_52;
-    Gfx* temp_v1_53;
-    Gfx* temp_v1_54;
-    Gfx* temp_v1_55;
-    Gfx* temp_v1_56;
-    Gfx* temp_v1_57;
-    Gfx* temp_v1_58;
-    Gfx* temp_v1_59;
-    Gfx* temp_v1_5;
-    Gfx* temp_v1_60;
-    Gfx* temp_v1_61;
-    Gfx* temp_v1_62;
-    Gfx* temp_v1_63;
-    Gfx* temp_v1_64;
-    Gfx* temp_v1_65;
-    Gfx* temp_v1_66;
-    Gfx* temp_v1_67;
-    Gfx* temp_v1_68;
-    Gfx* temp_v1_69;
-    Gfx* temp_v1_6;
-    Gfx* temp_v1_70;
-    Gfx* temp_v1_71;
-    Gfx* temp_v1_72;
-    Gfx* temp_v1_73;
-    Gfx* temp_v1_74;
-    Gfx* temp_v1_75;
-    Gfx* temp_v1_76;
-    Gfx* temp_v1_77;
-    Gfx* temp_v1_78;
-    Gfx* temp_v1_79;
-    Gfx* temp_v1_7;
-    Gfx* temp_v1_80;
-    Gfx* temp_v1_81;
-    Gfx* temp_v1_82;
-    Gfx* temp_v1_83;
-    Gfx* temp_v1_84;
-    Gfx* temp_v1_85;
-    Gfx* temp_v1_86;
-    Gfx* temp_v1_87;
-    Gfx* temp_v1_88;
-    Gfx* temp_v1_89;
-    Gfx* temp_v1_8;
-    Gfx* temp_v1_90;
-    Gfx* temp_v1_91;
-    Gfx* temp_v1_92;
-    Gfx* temp_v1_93;
-    Gfx* temp_v1_94;
-    Gfx* temp_v1_95;
-    Gfx* temp_v1_96;
-    Gfx* temp_v1_97;
-    Gfx* temp_v1_98;
-    Gfx* temp_v1_99;
-    Gfx* temp_v1_9;
-    GraphicsContext* temp_s2;
-    f32 var_ft1;
-    s16 temp_v1_24;
-    s16 var_a1;
+
     s16 i;
     s16 vtxOffset;
+
+    f32 var_ft1;
     s16 var_t1;
-    s16 var_t3;
     s16 var_v0_2;
     s16 var_v0_3;
     s16 var_v1;
     s16 var_v1_2;
-    s16* temp_v0_4;
-    s16* temp_v0_5;
-    s32 temp_a0;
     s32 temp_ft0;
     s32 temp_hi;
     s32 temp_s0;
-    s32 temp_t6;
-    s32 var_a2;
     s32 var_v0;
     u16 temp_t9;
-    u16* temp_a0_2;
-    u16* temp_a3_2;
     u8 temp_v0_3;
     u8 var_t2;
-    void* temp_v0;
-    void* temp_v0_2;
     void* var_t4;
     void** var_t0;
 
-    var_a1 = fileIndex;
-    temp_s2 = this->state.gfxCtx;
+    OPEN_DISPS(this->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetCombineLERP(POLY_OPA_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0,
-PRIMITIVE, 0);
+                      PRIMITIVE, 0);
 
-
-    temp_t6 = fileIndex * 2;
     sp20C = fileIndex;
 
-    sp54 = temp_t6;
-
-    vtxOffset = 0;
-    i = 0;
-
+    // draw file name
     if (this->nameAlpha[fileIndex] != 0) {
-        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[sp54]] + 0x20, 32, 0);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0x20], 32, 0);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 0, 0, 0, this->nameAlpha[fileIndex]);
 
-        temp_v1_4 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_4 + 8;
-        temp_v1_4->words.w0 = 0xFA000000;
-        temp_v1_4->words.w1 = this->nameAlpha[fileIndex] & 0xFF;
+        for (i = 0, vtxOffset = 0; vtxOffset < 0x20; i++, vtxOffset += 4) {
+            FileSelect_DrawTexQuadI4(this->state.gfxCtx,
+                                     font->fontBuf + (this->playerName[fileIndex][i] << 7) * FONT_CHAR_TEX_SIZE,
+                                     vtxOffset);
+        }
 
-        sp50 = &D_80814654[sp54];
-        this->playerName[fileIndex][i]
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2]], 32, 0);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 255, 255, 255, this->nameAlpha[fileIndex]);
 
-        do {
-            FileSelect_DrawTexQuadI4(this->state.gfxCtx, (this->playerName[fileIndex][i] << 7) + &this->font + 0x7880,
-vtxOffset); vtxOffset += 4; i += 1; } while (vtxOffset < 0x20);
-
-        temp_v1_5 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_5 + 8;
-        temp_v1_5->words.w0 = 0x01020040;
         vtxOffset = 0;
         i = 0;
-        temp_v1_5->words.w1 = (*sp50 * 0x10) + this->windowContentVtx;
-        temp_v1_6 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_6 + 8;
-        temp_v1_6->words.w0 = 0xFA000000;
-        temp_v1_6->words.w1 = (this->nameAlpha[fileIndex] & 0xFF) | ~0xFF;
         do {
-            FileSelect_DrawTexQuadI4(this->state.gfxCtx, (this->playerName[fileIndex][i] << 7) + &this->font + 0x7880,
-vtxOffset); vtxOffset += 4; i += 1; } while (vtxOffset < 0x20);
+            FileSelect_DrawTexQuadI4(this->state.gfxCtx,
+                                     font->fontBuf + (this->playerName[fileIndex][i] << 7) * FONT_CHAR_TEX_SIZE,
+                                     vtxOffset);
+            vtxOffset += 4;
+            i += 1;
+        } while (vtxOffset < 0x20);
     }
 
-    temp_s4_2 = &this->font;
     if ((fileIndex == this->selectedFileIndex) || (fileIndex == this->fileNum)) {
-        temp_a3_2 = sp54 + D_80814654;
         if (this->isOwlSave2[fileIndex] != 0) {
             sp20C = fileIndex + 2;
         }
 
-        temp_v1_7 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_7 + 8;
-        temp_v1_7->words.w1 = 0;
-        temp_v1_7->words.w0 = 0xE7000000;
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, D_808146C4[this->upgrades[sp20C]][0],
+                        D_808146C4[this->upgrades[sp20C]][1], D_808146C4[this->upgrades[sp20C]][2],
+                        this->fileInfoAlpha[fileIndex]);
+        gDPSetEnvColor(POLY_OPA_DISP++, D_808146D8[this->upgrades[sp20C]][0], D_808146D8[this->upgrades[sp20C]][1],
+                       D_808146D8[this->upgrades[sp20C]][2], 255);
 
-        temp_v1_8 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_8 + 8;
-        temp_v1_8->words.w0 = 0xFC119623;
-        temp_v1_8->words.w1 = 0xFF2FFFFF;
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0xC8], 4, 0);
 
-        temp_v1_9 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_9 + 8;
-        temp_v1_9->words.w0 = 0xFA000000;
-        temp_v0 = (this->upgrades[sp20C] * 6) + D_808146C4;
-        temp_v1_9->words.w1 = (this->fileInfoAlpha[fileIndex] & 0xFF) | (temp_v0->unk0 << 0x18) | ((temp_v0->unk2 &
-0xFF) << 0x10) | ((temp_v0->unk4 & 0xFF) << 8); temp_v1_10 = temp_s2->polyOpa.p; temp_s2->polyOpa.p = temp_v1_10 + 8;
-        temp_v1_10->words.w0 = 0xFB000000;
-        temp_v0_2 = (this->upgrades[sp20C] * 6) + D_808146D8;
-        temp_v1_10->words.w1 = ((temp_v0_2->unk4 & 0xFF) << 8) | (temp_v0_2->unk0 << 0x18) | ((temp_v0_2->unk2 & 0xFF)
-<< 0x10) | 0xFF; temp_v1_11 = temp_s2->polyOpa.p; temp_s2->polyOpa.p = temp_v1_11 + 8; temp_v1_11->words.w0 =
-0x01004008; temp_v1_11->words.w1 = (*temp_a3_2 * 0x10) + this->windowContentVtx + 0xC80; temp_v1_12 =
-temp_s2->polyOpa.p; temp_s2->polyOpa.p = temp_v1_12 + 8; temp_v1_12->words.w0 = 0xFD700000; temp_v1_12->words.w1 = (u32)
-&D_010310F0; temp_v1_13 = temp_s2->polyOpa.p; temp_s2->polyOpa.p = temp_v1_13 + 8; temp_v1_13->words.w1 = 0x07000000;
-        temp_v1_13->words.w0 = 0xF5700000;
-        temp_v1_14 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_14 + 8;
-        temp_v1_14->words.w1 = 0;
-        temp_v1_14->words.w0 = 0xE6000000;
-        sp50 = temp_a3_2;
-        temp_v1_15 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_15 + 8;
-        temp_v1_15->words.w1 = 0x0707F400;
-        temp_v1_15->words.w0 = 0xF3000000;
-        temp_v1_16 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_16 + 8;
-        temp_v1_16->words.w1 = 0;
-        temp_v1_16->words.w0 = 0xE7000000;
-        temp_v1_17 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_17 + 8;
-        temp_v1_17->words.w1 = 0;
-        temp_v1_17->words.w0 = 0xF5680400;
-        sp3C = this + sp20C + 0x20000;
-        temp_v1_18 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_18 + 8;
-        temp_v1_18->words.w1 = 0x3C03C;
-        temp_v1_18->words.w0 = 0xF2000000;
-        temp_v1_19 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_19 + 8;
-        temp_v1_19->words.w1 = 0x602;
-        temp_v1_19->words.w0 = 0x07000406;
-        temp_v1_20 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_20 + 8;
-        temp_v1_20->words.w1 = 0;
-        temp_v1_20->words.w0 = 0xE7000000;
-        temp_v1_21 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_21 + 8;
-        temp_v1_21->words.w1 = 0xFF2FFFFF;
-        temp_v1_21->words.w0 = 0xFC6196C3;
-        temp_v1_22 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_22 + 8;
-        temp_v1_22->words.w0 = 0xFA000000;
-        temp_v1_22->words.w1 = this->fileInfoAlpha[fileIndex] & 0xFF;
-        temp_v1_23 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_23 + 8;
-        temp_v1_23->words.w0 = 0x0100C018;
-        temp_v1_23->words.w1 = (*sp50 * 0x10) + this->windowContentVtx + 0x4C0;
-        sp48 = this + (sp20C * 2) + 0x20000;
-        FileSelect_SplitNumber((u16) this->rupees[sp20C], &sp1F8, &sp1FA, &sp1FC);
+        gDPLoadTextureBlock(POLY_OPA_DISP++, gFileSelRupeeTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 16, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
+        gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
+
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetCombineLERP(POLY_OPA_DISP++, 1, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, 1, 0, PRIMITIVE, 0, TEXEL0, 0,
+                          PRIMITIVE, 0);
+
+        gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 0, 0, 0, this->fileInfoAlpha[fileIndex]);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0x4C], 12, 0);
+
+        FileSelect_SplitNumber((u16)this->rupees[sp20C], &sp1F8[0], &sp1F8[1], &sp1F8[2]);
         vtxOffset = 0;
-        temp_v0_3 = sp3C->unk4474;
+        temp_v0_3 = this->upgrades[sp20C];
         var_v0 = temp_v0_3 * 2;
         i = D_80814554[temp_v0_3];
         if (i < 3) {
             do {
-                FileSelect_DrawTexQuadI4(this->state.gfxCtx, ((sp + (i * 2))->unk1F8 << 7) + temp_s4_2 + 0x7880,
-vtxOffset); i += 1; vtxOffset += 4; } while (i < 3); vtxOffset = 0; var_v0 = sp3C->unk4474 * 2;
+                FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + (sp1F8[i] << 7) * FONT_CHAR_TEX_SIZE,
+                                         vtxOffset);
+                i += 1;
+                vtxOffset += 4;
+            } while (i < 3);
+            vtxOffset = 0;
+            var_v0 = this->upgrades[sp20C] * 2;
         }
-        temp_v1_24 = sp48->unk446C;
-        if (temp_v1_24 == *(gUpgradeCapacities + 0x20 + var_v0)) {
-            temp_v1_25 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v1_25 + 8;
-            temp_v1_25->words.w0 = 0xFA000000;
-            temp_v1_25->words.w1 = (this->fileInfoAlpha[fileIndex] & 0xFF) | 0x78FF0000;
-        } else if (temp_v1_24 != 0) {
-            temp_v1_26 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v1_26 + 8;
-            temp_v1_26->words.w0 = 0xFA000000;
-            temp_v1_26->words.w1 = (this->fileInfoAlpha[fileIndex] & 0xFF) | ~0xFF;
+
+        if (this->rupees[sp20C] == *(gUpgradeCapacities + 0x20 + var_v0)) {
+            gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 120, 255, 0, this->fileInfoAlpha[fileIndex]);
+        } else if (this->rupees[sp20C] != 0) {
+            gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 255, 255, 255, this->fileInfoAlpha[fileIndex]);
         } else {
-            temp_v1_27 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v1_27 + 8;
-            temp_v1_27->words.w0 = 0xFA000000;
-            temp_v1_27->words.w1 = (this->fileInfoAlpha[fileIndex] & 0xFF) | 0x64646400;
+            gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 100, 100, 100, this->fileInfoAlpha[fileIndex]);
         }
-        temp_v1_28 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_28 + 8;
-        temp_v1_28->words.w0 = 0x0100C018;
-        temp_v1_28->words.w1 = (*sp50 * 0x10) + this->windowContentVtx + 0x400;
-        i = D_80814554[sp3C->unk4474];
+
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0x40], 12, 0);
+
+        i = D_80814554[this->upgrades[sp20C]];
         if (i < 3) {
             do {
-                FileSelect_DrawTexQuadI4(this->state.gfxCtx, ((sp + (i * 2))->unk1F8 << 7) + temp_s4_2 + 0x7880,
-vtxOffset); i += 1; vtxOffset += 4; } while (i < 3); vtxOffset = 0;
+                FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + (sp1F8[i] << 7) * FONT_CHAR_TEX_SIZE,
+                                         vtxOffset);
+                i += 1;
+                vtxOffset += 4;
+            } while (i < 3);
+            vtxOffset = 0;
         }
-        temp_v1_29 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_29 + 8;
-        temp_v1_29->words.w1 = 0;
-        temp_v1_29->words.w0 = 0xE7000000;
-        temp_v1_30 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_30 + 8;
-        temp_v1_30->words.w0 = 0xFC309661;
-        temp_v1_30->words.w1 = 0x552EFF7F;
-        temp_v1_31 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_31 + 8;
-        temp_v1_31->words.w0 = 0xFA000000;
-        temp_v1_31->words.w1 = (this->fileInfoAlpha[fileIndex] & 0xFF) | 0xFF000000;
-        temp_v1_32 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_32 + 8;
-        temp_v1_32->words.w1 = 0xFF;
-        temp_v1_32->words.w0 = 0xFB000000;
-        temp_v1_33 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_33 + 8;
-        temp_v1_33->words.w0 = 0x01004008;
-        temp_v1_33->words.w1 = (*sp50 * 0x10) + this->windowContentVtx + 0xCC0;
-        temp_s2->polyOpa.p = FileSelect_DrawTexQuadIA8(temp_s2->polyOpa.p, D_8081467C[sp3C->unk447C], 0x18, 0x10, (s16)
-0); var_t2 = 4; if (sp3C->unk4454 == 0) { var_a2 = 0; } else { var_a2 = 1;
+
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                          PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+
+        gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 255, 0, 0, this->fileInfoAlpha[fileIndex]);
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
+
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0xCC], 4, 0);
+
+        POLY_OPA_DISP =
+            FileSelect_DrawTexQuadIA8(POLY_OPA_DISP, D_8081467C[this->heartPieceCount[sp20C]], 0x18, 0x10, (s16)0);
+        var_t2 = 4;
+
+        if (this->defenseHearts[sp20C] == 0) {
+            heartType = 0;
+        } else {
+            heartType = 1;
         }
-        temp_v1_34 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_34 + 8;
-        temp_v1_34->words.w0 = 0xFA000000;
-        temp_v0_4 = sHeartPrimColors[var_a2];
-        temp_v1_34->words.w1 = (this->fileInfoAlpha[fileIndex] & 0xFF) | (temp_v0_4->unk0 << 0x18) | ((temp_v0_4->unk2 &
-0xFF) << 0x10) | ((temp_v0_4->unk4 & 0xFF) << 8); temp_v1_35 = temp_s2->polyOpa.p; temp_s2->polyOpa.p = temp_v1_35 + 8;
-        temp_v0_5 = sHeartEnvColors[var_a2];
-        temp_v1_35->words.w0 = 0xFB000000;
-        temp_v1_35->words.w1 = ((temp_v0_5->unk4 & 0xFF) << 8) | (temp_v0_5->unk0 << 0x18) | ((temp_v0_5->unk2 & 0xFF)
-<< 0x10) | 0xFF; var_t1 = sp48->unk443C; temp_s0 = (s16) sp48->unk4434 / 16; if (var_t1 < 0x31) { var_t1 = 0x30;
+
+        gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, sHeartPrimColors[heartType][0], sHeartPrimColors[heartType][1],
+                        sHeartPrimColors[heartType][2], this->fileInfoAlpha[fileIndex]);
+        gDPSetEnvColor(POLY_OPA_DISP++, sHeartEnvColors[heartType][0], sHeartEnvColors[heartType][1],
+                       sHeartEnvColors[heartType][2], 255);
+
+        var_t1 = this->health[sp20C];
+        temp_s0 = this->healthCapacity[sp20C] / 0x10;
+        if (var_t1 < 0x31) {
+            var_t1 = 0x30;
         }
-        var_t3 = 0;
-        if ((s16) temp_s0 > 0) {
-            var_t4 = (var_a2 * 0x14) + sHeartTextures;
+        i = 0;
+        if ((s16)temp_s0 > 0) {
+            var_t4 = (heartType * 0x14) + sHeartTextures;
             do {
                 if (var_t1 < 0x10) {
                     var_t2 = 0;
@@ -1548,357 +1369,158 @@ vtxOffset); i += 1; vtxOffset += 4; } while (i < 3); vtxOffset = 0;
                     var_t0 = var_t4 + (var_t2 * 4);
                     var_t1 -= 0x10;
                 }
-                temp_v1_36 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v1_36 + 8;
-                temp_v1_36->words.w0 = 0x01004008;
-                temp_v1_36->words.w1 = ((*sp50 + vtxOffset) * 0x10) + this->windowContentVtx + 0x680;
-                sp216 = var_t3;
+
+                gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0x68], 4, 0);
+
+                sp216 = i;
                 sp1F7 = var_t2;
                 sp20A = var_t1;
-                var_t3 += 1;
+                i += 1;
                 vtxOffset += 4;
-                temp_s2->polyOpa.p = FileSelect_DrawTexQuadIA8(temp_s2->polyOpa.p, *var_t0, 0x10, 0x10, (s16) 0);
-            } while (var_t3 < (s16) temp_s0);
+                POLY_OPA_DISP = FileSelect_DrawTexQuadIA8(POLY_OPA_DISP, *var_t0, 0x10, 0x10, (s16)0);
+            } while (i < (s16)temp_s0);
             vtxOffset = 0;
-            var_t3 = 0;
+            i = 0;
         }
-        temp_v1_37 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_37 + 8;
-        temp_v1_37->words.w1 = 0;
-        temp_v1_37->words.w0 = 0xE7000000;
-        temp_v1_38 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_38 + 8;
-        temp_v1_38->words.w0 = 0xFC119623;
-        temp_v1_38->words.w1 = 0xFF2FFFFF;
-        temp_v1_39 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_39 + 8;
-        temp_v1_39->words.w0 = 0xFA000000;
-        temp_v1_39->words.w1 = (this->fileInfoAlpha[fileIndex] & 0xFF) | ~0xFF;
-        temp_v1_40 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_40 + 8;
-        temp_v1_40->words.w1 = 0xFF;
-        temp_v1_40->words.w0 = 0xFB000000;
+
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 255, 255, 255, this->fileInfoAlpha[fileIndex]);
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
+
         do {
-            temp_a0 = var_t3 * 4;
-            var_t3 += 1;
-            if (gBitFlags[var_t3] & this->questItems[sp20C]) {
-                temp_v1_41 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v1_41 + 8;
-                temp_v1_41->words.w0 = 0x01004008;
-                temp_v1_41->words.w1 = ((*sp50 + vtxOffset) * 0x10) + this->windowContentVtx + 0xB80;
-                temp_v1_42 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v1_42 + 8;
-                temp_v1_42->words.w0 = 0xFD180000;
-                temp_v1_42->words.w1 = *(D_8081465C + temp_a0);
-                temp_v1_43 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v1_43 + 8;
-                temp_v1_43->words.w1 = 0x07000000;
-                temp_v1_43->words.w0 = 0xF5180000;
-                temp_v1_44 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v1_44 + 8;
-                temp_v1_44->words.w1 = 0;
-                temp_v1_44->words.w0 = 0xE6000000;
-                temp_v1_45 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v1_45 + 8;
-                temp_v1_45->words.w1 = 0x073FF080;
-                temp_v1_45->words.w0 = 0xF3000000;
-                temp_v1_46 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v1_46 + 8;
-                temp_v1_46->words.w1 = 0;
-                temp_v1_46->words.w0 = 0xE7000000;
-                temp_v1_47 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v1_47 + 8;
-                temp_v1_47->words.w1 = 0;
-                temp_v1_47->words.w0 = 0xF5181000;
-                temp_v1_48 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v1_48 + 8;
-                temp_v1_48->words.w1 = 0x7C07C;
-                temp_v1_48->words.w0 = 0xF2000000;
-                temp_v1_49 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v1_49 + 8;
-                temp_v1_49->words.w1 = 0x602;
-                temp_v1_49->words.w0 = 0x07000406;
+            i += 1;
+            if (gBitFlags[i] & this->questItems[sp20C]) {
+                gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0xB8], 4, 0);
+                gDPLoadTextureBlock(POLY_OPA_DISP++, D_8081465C[i], G_IM_FMT_RGBA, G_IM_SIZ_32b, 32, 32, 0,
+                                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                    G_TX_NOLOD, G_TX_NOLOD);
+                gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
             }
             vtxOffset += 4;
-        } while (var_t3 < 4);
-        temp_v1_50 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_50 + 8;
-        temp_v1_50->words.w1 = 0;
-        temp_v1_50->words.w0 = 0xE7000000;
-        temp_v1_51 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_51 + 8;
-        temp_v1_51->words.w0 = 0xFC6196C3;
-        temp_v1_51->words.w1 = 0xFF2FFFFF;
-        temp_v1_52 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_52 + 8;
-        temp_v1_52->words.w0 = 0xFA000000;
-        temp_v1_52->words.w1 = this->fileInfoAlpha[fileIndex] & 0xFF;
-        temp_v1_53 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_53 + 8;
-        temp_v1_53->words.w0 = 0x01008010;
-        temp_v1_53->words.w1 = (*sp50 * 0x10) + this->windowContentVtx + 0xD00;
-        temp_v1_54 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_54 + 8;
-        temp_v1_54->words.w0 = 0xFD900000;
-        temp_v1_54->words.w1 = (u32) &D_010308F0;
-        temp_v1_55 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_55 + 8;
-        temp_v1_55->words.w1 = 0x07000000;
-        temp_v1_55->words.w0 = 0xF5900000;
-        temp_v1_56 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_56 + 8;
-        temp_v1_56->words.w1 = 0;
-        temp_v1_56->words.w0 = 0xE6000000;
-        temp_v1_57 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_57 + 8;
-        temp_v1_57->words.w1 = 0x070FF200;
-        temp_v1_57->words.w0 = 0xF3000000;
-        temp_v1_58 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_58 + 8;
-        temp_v1_58->words.w1 = 0;
-        temp_v1_58->words.w0 = 0xE7000000;
-        temp_v1_59 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_59 + 8;
-        temp_v1_59->words.w1 = 0;
-        temp_v1_59->words.w0 = 0xF5800800;
-        temp_v1_60 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_60 + 8;
-        temp_v1_60->words.w0 = 0xF2000000;
-        temp_v1_60->words.w1 = 0xFC03C;
-        temp_v1_61 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_61 + 8;
-        temp_v1_61->words.w0 = 0x07080C0E;
-        temp_v1_61->words.w1 = 0x80E0A;
-        temp_v1_62 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_62 + 8;
-        temp_v1_62->words.w0 = 0xFA000000;
-        temp_v1_62->words.w1 = (this->fileInfoAlpha[fileIndex] & 0xFF) | ~0xFF;
-        temp_v1_63 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_63 + 8;
-        temp_v1_63->words.w1 = 0x602;
-        temp_v1_63->words.w0 = 0x07000406;
-        temp_v1_64 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_64 + 8;
-        temp_v1_64->words.w1 = 0;
-        temp_v1_64->words.w0 = 0xE7000000;
-        temp_v1_65 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_65 + 8;
-        temp_v1_65->words.w0 = 0xFA000000;
-        temp_v1_65->words.w1 = this->fileInfoAlpha[fileIndex] & 0xFF;
-        temp_v1_66 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_66 + 8;
-        temp_v1_66->words.w0 = 0x01008010;
-        temp_v1_66->words.w1 = (*sp50 * 0x10) + this->windowContentVtx + 0x600;
-        FileSelect_SplitNumber((u16) sp3C->unk4478, &sp1F8, &sp1FA, &sp1FC);
-        vtxOffset = 0;
-        i = 1;
-        do {
-            FileSelect_DrawTexQuadI4(this->state.gfxCtx, ((sp + (i * 2))->unk1F8 << 7) + temp_s4_2 + 0x7880, vtxOffset);
-            i += 1;
-            vtxOffset += 4;
-        } while (i < 3);
-        temp_v1_67 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_67 + 8;
-        temp_v1_67->words.w0 = 0xFA000000;
-        vtxOffset = 0;
-        i = 1;
-        temp_v1_67->words.w1 = (this->fileInfoAlpha[fileIndex] & 0xFF) | ~0xFF;
-        temp_v1_68 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_68 + 8;
-        temp_v1_68->words.w0 = 0x01008010;
-        temp_v1_68->words.w1 = (*sp50 * 0x10) + this->windowContentVtx + 0x580;
-        do {
-            FileSelect_DrawTexQuadI4(this->state.gfxCtx, ((sp + (i * 2))->unk1F8 << 7) + temp_s4_2 + 0x7880, vtxOffset);
-            i += 1;
-            vtxOffset += 4;
-        } while (i < 3);
+        } while (i < 4);
+
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetCombineLERP(POLY_OPA_DISP++, 1, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, 1, 0, PRIMITIVE, 0, TEXEL0, 0,
+                          PRIMITIVE, 0);
+
+        gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 0, 0, 0, this->fileInfoAlpha[fileIndex]);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0xD0], 8, 0);
+        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, gFileSelMASKSENGTex, G_IM_FMT_I, 64, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                               G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSP1Quadrangle(POLY_OPA_DISP++, 4, 6, 7, 5, 0);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 255, 255, 255, this->fileInfoAlpha[fileIndex]);
+        gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
+
+        gDPPipeSync(POLY_OPA_DISP++);
+
+        gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 0, 0, 0, this->fileInfoAlpha[fileIndex]);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0x60], 8, 0);
+
+        FileSelect_SplitNumber(this->maskCount[sp20C], &sp1F8[0], &sp1F8[1], &sp1F8[2]);
+
+        for (i = 1, vtxOffset = 0; i < 3; i++, vtxOffset += 4) {
+            FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + (sp1F8[i] << 7) * FONT_CHAR_TEX_SIZE,
+                                     vtxOffset);
+        }
+
+        gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 255, 255, 255, this->fileInfoAlpha[fileIndex]);
+
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0x58], 8, 0);
+
+        for (i = 1, vtxOffset = 0; i < 3; i++, vtxOffset += 4) {
+
+            FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + (sp1F8[i] << 7) * FONT_CHAR_TEX_SIZE,
+                                     vtxOffset);
+        }
     }
 
-    temp_s4_3 = &this->font;
-
     if (this->isOwlSave2[fileIndex] != 0) {
-        temp_a0_2 = sp54 + D_80814654;
-        sp48 = this + (sp20C * 2) + 0x20000;
-        temp_v1_69 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_69 + 8;
-        temp_v1_69->words.w1 = 0;
-        temp_v1_69->words.w0 = 0xE7000000;
-        temp_v1_70 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_70 + 8;
-        temp_v1_70->words.w0 = 0xFC119623;
-        temp_v1_70->words.w1 = 0xFF2FFFFF;
-        temp_v1_71 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_71 + 8;
-        temp_v1_71->words.w0 = 0xFA000000;
-        temp_v1_71->words.w1 = (this->nameAlpha[fileIndex] & 0xFF) | ~0xFF;
-        temp_v1_72 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_72 + 8;
-        temp_v1_72->words.w0 = 0x01004008;
-        temp_v1_72->words.w1 = (*temp_a0_2 * 0x10) + this->windowContentVtx + 0xD80;
-        temp_v1_73 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_73 + 8;
-        temp_v1_73->words.w0 = 0xFD180000;
-        temp_v1_73->words.w1 = (u32) &D_0102FCB0;
-        temp_v1_74 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_74 + 8;
-        temp_v1_74->words.w1 = 0x07000000;
-        temp_v1_74->words.w0 = 0xF5180000;
-        temp_v1_75 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_75 + 8;
-        temp_v1_75->words.w1 = 0;
-        temp_v1_75->words.w0 = 0xE6000000;
-        temp_v1_76 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_76 + 8;
-        temp_v1_76->words.w1 = 0x0711F0AB;
-        temp_v1_76->words.w0 = 0xF3000000;
-        temp_v1_77 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_77 + 8;
-        temp_v1_77->words.w1 = 0;
-        temp_v1_77->words.w0 = 0xE7000000;
-        temp_v1_78 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_78 + 8;
-        temp_v1_78->words.w1 = 0;
-        temp_v1_78->words.w0 = 0xF5180C00;
-        temp_v1_79 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_79 + 8;
-        temp_v1_79->words.w0 = 0xF2000000;
-        temp_v1_79->words.w1 = 0x5C02C;
-        temp_v1_80 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_80 + 8;
-        temp_v1_80->words.w1 = 0x602;
-        temp_v1_80->words.w0 = 0x07000406;
-        sp50 = temp_a0_2;
-        temp_v1_81 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_81 + 8;
-        temp_v1_81->words.w1 = 0;
-        temp_v1_81->words.w0 = 0xE7000000;
-        temp_v1_82 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_82 + 8;
-        temp_v1_82->words.w0 = 0xFC119623;
-        temp_v1_82->words.w1 = 0xFF2FFFFF;
-        temp_v1_83 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_83 + 8;
-        temp_v1_83->words.w0 = 0x01008010;
-        temp_v1_83->words.w1 = (*sp50 * 0x10) + this->windowContentVtx + 0xDC0;
-        temp_v1_84 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_84 + 8;
-        temp_v1_84->words.w0 = 0xFA000000;
-        temp_v1_84->words.w1 = this->fileInfoAlpha[fileIndex] & 0xFF;
-        temp_v1_85 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_85 + 8;
-        temp_v1_85->words.w0 = 0xFD900000;
-        temp_v1_85->words.w1 = (u32) D_8081466C[sp48->unk4460];
-        temp_v1_86 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_86 + 8;
-        temp_v1_86->words.w1 = 0x07080200;
-        temp_v1_86->words.w0 = 0xF5900000;
-        temp_v1_87 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_87 + 8;
-        temp_v1_87->words.w1 = 0;
-        temp_v1_87->words.w0 = 0xE6000000;
-        temp_v1_88 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_88 + 8;
-        temp_v1_88->words.w1 = 0x0711F2AB;
-        temp_v1_88->words.w0 = 0xF3000000;
-        temp_v1_89 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_89 + 8;
-        temp_v1_89->words.w1 = 0;
-        temp_v1_89->words.w0 = 0xE7000000;
-        temp_v1_90 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_90 + 8;
-        temp_v1_90->words.w0 = 0xF5800600;
-        temp_v1_90->words.w1 = 0x80200;
-        temp_v1_91 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_91 + 8;
-        temp_v1_91->words.w0 = 0xF2000000;
-        temp_v1_91->words.w1 = 0xBC05C;
-        temp_v1_92 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_92 + 8;
-        temp_v1_92->words.w0 = 0x07080C0E;
-        temp_v1_92->words.w1 = 0x80E0A;
-        temp_v1_93 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_93 + 8;
-        temp_v1_93->words.w0 = 0xFA000000;
-        i = 0;
-        vtxOffset = 0;
-        temp_v1_93->words.w1 = (this->fileInfoAlpha[fileIndex] & 0xFF) | ~0xFF;
-        temp_v1_94 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_94 + 8;
-        temp_v1_94->words.w1 = 0x602;
-        temp_v1_94->words.w0 = 0x07000406;
-        sp200 = 0;
-        temp_ft0 = (s32) (((f32) sp48->unk4458 * 0.021972656f) / 60.0f);
-        sp202 = (s16) temp_ft0;
-        if ((s16) temp_ft0 >= 0xA) {
-            var_v0_2 = (s16) temp_ft0;
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+
+        gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 255, 255, 255, this->nameAlpha[fileIndex]);
+
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0xD8], 4, 0);
+
+        gDPLoadTextureBlock(POLY_OPA_DISP++, gFileSelOwlSaveIconTex, G_IM_FMT_RGBA, G_IM_SIZ_32b, 24, 12, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
+        gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
+
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0xDC], 8, 0);
+
+        gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 0, 0, 0, this->fileInfoAlpha[fileIndex]);
+
+        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, D_8081466C[this->day[sp20C]], G_IM_FMT_I, 48, 24, 0,
+                               G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
+                               G_TX_NOLOD, G_TX_NOLOD);
+        gSP1Quadrangle(POLY_OPA_DISP++, 4, 6, 7, 5, 0);
+
+        gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 255, 255, 255, this->fileInfoAlpha[fileIndex]);
+        gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
+
+        sp200[0] = 0;
+        temp_ft0 = (s32)(((f32)this->time[sp20C] * 0.021972656f) / 60.0f);
+        sp200[1] = (s16)temp_ft0;
+
+        if ((s16)temp_ft0 >= 0xA) {
+            var_v0_2 = (s16)temp_ft0;
             var_v1 = 0;
             do {
                 var_v0_2 -= 0xA;
                 var_v1 += 1;
             } while (var_v0_2 >= 0xA);
-            sp200 = var_v1;
-            sp202 = var_v0_2;
+            sp200[0] = var_v1;
+            sp200[1] = var_v0_2;
         }
-        sp206 = 0;
-        temp_t9 = sp48->unk4458;
-        var_ft1 = (f32) temp_t9;
-        if ((s32) temp_t9 < 0) {
+        sp200[3] = 0;
+        temp_t9 = this->time[sp20C];
+        var_ft1 = (f32)temp_t9;
+        if ((s32)temp_t9 < 0) {
             var_ft1 += 4294967296.0f;
         }
         var_v1_2 = 0;
-        temp_hi = (s32) (var_ft1 * 0.021972656f) % 60;
-        sp208 = (s16) temp_hi;
-        if ((s16) temp_hi >= 0xA) {
-            var_v0_3 = (s16) temp_hi;
+        temp_hi = (s32)(var_ft1 * 0.021972656f) % 60;
+        sp200[4] = (s16)temp_hi;
+        if ((s16)temp_hi >= 0xA) {
+            var_v0_3 = (s16)temp_hi;
             do {
                 var_v0_3 -= 0xA;
                 var_v1_2 += 1;
             } while (var_v0_3 >= 0xA);
-            sp206 = var_v1_2;
-            sp208 = var_v0_3;
+            sp200[3] = var_v1_2;
+            sp200[4] = var_v0_3;
         }
-        sp204 = 0x41;
-        temp_v1_95 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_95 + 8;
-        temp_v1_95->words.w1 = 0;
-        temp_v1_95->words.w0 = 0xE7000000;
-        temp_v1_96 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_96 + 8;
-        temp_v1_96->words.w0 = 0xFC6196C3;
-        temp_v1_96->words.w1 = 0xFF2FFFFF;
-        temp_v1_97 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_97 + 8;
-        temp_v1_97->words.w0 = 0xFA000000;
-        temp_v1_97->words.w1 = this->fileInfoAlpha[fileIndex] & 0xFF;
-        temp_v1_98 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_98 + 8;
-        temp_v1_98->words.w0 = 0x01014028;
-        temp_v1_98->words.w1 = (*sp50 * 0x10) + this->windowContentVtx + 0xF80;
-        do {
-            FileSelect_DrawTexQuadI4(this->state.gfxCtx, ((sp + (i * 2))->unk200 << 7) + temp_s4_3 + 0x7880, vtxOffset);
-            i += 1;
-            vtxOffset += 4;
-        } while (i < 5);
-        temp_v1_99 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_99 + 8;
-        temp_v1_99->words.w0 = 0xFA000000;
-        i = 0;
-        vtxOffset = 0;
-        temp_v1_99->words.w1 = (this->fileInfoAlpha[fileIndex] & 0xFF) | ~0xFF;
-        temp_v1_100 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v1_100 + 8;
-        temp_v1_100->words.w0 = 0x01014028;
-        temp_v1_100->words.w1 = (*sp50 * 0x10) + this->windowContentVtx + 0xE40;
-        do {
-            FileSelect_DrawTexQuadI4(this->state.gfxCtx, ((sp + (i * 2))->unk200 << 7) + temp_s4_3 + 0x7880, vtxOffset);
-            i += 1;
-            vtxOffset += 4;
-        } while (i < 5);
+        sp200[2] = 0x41;
+
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetCombineLERP(POLY_OPA_DISP++, 1, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, 1, 0, PRIMITIVE, 0, TEXEL0, 0,
+                          PRIMITIVE, 0);
+
+        gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 0, 0, 0, this->fileInfoAlpha[fileIndex]);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0xF8], 20, 0);
+
+        for (i = 0, vtxOffset = 0; i < 5; i++, vtxOffset += 4) {
+            FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + (sp200[i] << 7) * FONT_CHAR_TEX_SIZE,
+                                     vtxOffset);
+        }
+
+        gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x00, 255, 255, 255, this->fileInfoAlpha[fileIndex]);
+        gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex * 2] + 0xE4], 20, 0);
+
+        for (i = 0, vtxOffset = 0; i < 5; i++, vtxOffset += 4) {
+            FileSelect_DrawTexQuadI4(this->state.gfxCtx, font->fontBuf + (sp200[i] << 7) * FONT_CHAR_TEX_SIZE,
+                                     vtxOffset);
+        }
     }
-    temp_v1_101 = temp_s2->polyOpa.p;
-    temp_s2->polyOpa.p = temp_v1_101 + 8;
-    temp_v1_101->words.w1 = 0;
-    temp_v1_101->words.w0 = 0xE7000000;
+
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    CLOSE_DISPS(this->state.gfxCtx);
 }
 */
 
