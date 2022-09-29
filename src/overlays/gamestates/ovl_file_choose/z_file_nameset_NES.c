@@ -100,9 +100,9 @@ void FileSelect_SelectCopySource(GameState* thisx) {
                 this->configMode = CM_SETUP_COPY_DEST_1;
                 this->nextTitleLabel = FS_TITLE_COPY_TO;
                 play_sound(NA_SE_SY_FSEL_DECIDE_L);
-                return;
+            } else {
+                play_sound(NA_SE_SY_FSEL_ERROR);
             }
-            play_sound(NA_SE_SY_FSEL_ERROR);
         } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, this->buttonIndex)) {
             this->actionTimer = 4;
             this->selectedFileIndex = this->buttonIndex;
@@ -845,14 +845,14 @@ void FileSelect_EraseSelect(GameState* thisx) {
                 if (!SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
                     this->warningLabel = FS_WARNING_FILE_EMPTY;
                     this->warningButtonIndex = this->buttonIndex;
-                    this->emptyFileTextAlpha = 0xFF;
+                    this->emptyFileTextAlpha = 255;
                 } else {
                     this->warningLabel = FS_WARNING_NONE;
                 }
             } else if (!FILE_CHOOSE_SLOT_OCCUPIED(this, this->buttonIndex)) {
                 this->warningLabel = FS_WARNING_FILE_EMPTY;
                 this->warningButtonIndex = this->buttonIndex;
-                this->emptyFileTextAlpha = 0xFF;
+                this->emptyFileTextAlpha = 255;
             } else {
                 this->warningLabel = FS_WARNING_NONE;
             }
