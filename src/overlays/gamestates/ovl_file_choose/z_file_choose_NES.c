@@ -2038,8 +2038,8 @@ void FileSelect_LoadGame(GameState* thisx) {
     gSaveContext.showTitleCard = 1;
     gSaveContext.dogParams = 0;
 
-    for (i = 0; i < 7; i++) {
-        gSaveContext.unk_3DD0[i] = 0;
+    for (i = 0; i < TIMER_ID_MAX; i++) {
+        gSaveContext.timerStates[i] = TIMER_STATE_OFF;
     }
 
     gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
