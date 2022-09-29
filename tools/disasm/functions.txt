@@ -16061,7 +16061,7 @@
     0x80BE16B4:("EnTab_PostLimbDraw",),
     0x80BE1704:("EnTab_TransformLimbDraw",),
     0x80BE1810:("EnTab_Draw",),
-    0x80BE1C80:("func_80BE1C80",),
+    0x80BE1C80:("EnNimotsu_UpdateCollision",),
     0x80BE1CEC:("EnNimotsu_Init",),
     0x80BE1D5C:("EnNimotsu_Destroy",),
     0x80BE1D88:("EnNimotsu_Update",),

@@ -4567,8 +4567,7 @@ beginseg
     name "ovl_En_Nimotsu"
     compress
     include "build/src/overlays/actors/ovl_En_Nimotsu/z_en_nimotsu.o"
-    include "build/data/ovl_En_Nimotsu/ovl_En_Nimotsu.data.o"
-    include "build/data/ovl_En_Nimotsu/ovl_En_Nimotsu.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Nimotsu/ovl_En_Nimotsu_reloc.o"
 endseg
 
 beginseg
