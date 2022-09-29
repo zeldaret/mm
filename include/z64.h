@@ -444,15 +444,15 @@ typedef struct {
     /* 0x22C */ s32 unk_22C;
     /* 0x230 */ s32 stickRelX;
     /* 0x234 */ s32 stickRelY;
-    /* 0x238 */ s16 unk_238[5];
-    /* 0x242 */ s16 unk_242[5];
-    /* 0x24C */ s16 unk_24C[5];
+    /* 0x238 */ s16 cursorPoint[5];
+    /* 0x242 */ s16 cursorX[5];
+    /* 0x24C */ s16 cursorY[5];
     /* 0x256 */ s16 unk_256;
-    /* 0x258 */ s16 unk_258;
-    /* 0x25A */ s16 unk_25A;
+    /* 0x258 */ s16 cursorSpecialPos;
+    /* 0x25A */ s16 pageSwitchTimer;
     /* 0x25C */ u16 unk_25C;
     /* 0x25E */ u16 cursorItem[5];
-    /* 0x268 */ u16 unk_268[5];
+    /* 0x268 */ u16 cursorSlot[5];
     /* 0x272 */ u16 equipTargetItem;
     /* 0x274 */ u16 equipTargetSlot;
     /* 0x276 */ u16 equipTargetCBtn;
@@ -461,8 +461,8 @@ typedef struct {
     /* 0x27C */ s16 equipAnimAlpha;
     /* 0x27E */ s16 unk_27E;
     /* 0x280 */ u16 unk_280;
-    /* 0x282 */ u16 unk_282;
-    /* 0x284 */ s16 unk_284;
+    /* 0x282 */ u16 nameColorSet;
+    /* 0x284 */ s16 cursorColorSet;
     /* 0x286 */ s16 unk_286;
     /* 0x288 */ f32 unk_288;
     /* 0x28C */ f32 unk_28C;
@@ -476,9 +476,9 @@ typedef struct {
     /* 0x2B6 */ u8 unk_2B6;
     /* 0x2B7 */ u8 unk_2B7;
     /* 0x2B8 */ u8 unk_2B8;
-    /* 0x2B9 */ u8 unk_2B9;
-    /* 0x2BA */ s16 unk_2BA;
-    /* 0x2BC */ s16 unk_2BC;
+    /* 0x2B9 */ u8 itemDescriptionOn; // helpful description of item given through a message box
+    /* 0x2BA */ s16 equipAnimScale; // scale of item icon while moving being equipped to c-button
+    /* 0x2BC */ s16 equipAnimShrinkRate; // rate the scale is shrinking for the item icon while moving being equipped to c-button
     /* 0x2BE */ s16 unk_2BE[5];
     /* 0x2C8 */ u16 unk_2C8;
     /* 0x2CA */ s16 unk_2CA;

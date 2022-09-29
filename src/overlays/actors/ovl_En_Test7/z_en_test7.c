@@ -762,7 +762,7 @@ void func_80AF2938(EnTest7* this, PlayState* play) {
     player->stateFlags2 |= 0x20000000;
     this->unk_144 |= 2;
     this->unk_148.unk_04 = 30.0f;
-    if (play->roomCtx.currRoom.unk3 != 1) {
+    if (play->roomCtx.curRoom.unk3 != 1) {
         func_80AF082C(this, func_80AF2AE8);
     } else {
         func_80AF082C(this, func_80AF2EC8);
