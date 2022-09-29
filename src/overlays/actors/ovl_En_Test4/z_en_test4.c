@@ -388,7 +388,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                 func_80A41FA4(this, play);
             } else if (temp_a0 == CLOCK_TIME(6, 0)) {
                 if (CURRENT_DAY == 3) {
-                    func_8011C808(play);
+                    Interface_StartMoonCrash(play);
                     Actor_MarkForDeath(&this->actor);
                     gSaveContext.eventInf[1] |= 0x80;
                 } else if (((sCutscenes[this->unk_144] < 0) || (play->actorCtx.flags & ACTORCTX_FLAG_1)) &&
