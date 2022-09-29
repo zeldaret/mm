@@ -88,22 +88,22 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS sAnimationInfo[] = {
-    { &object_tru_Anim_00F9A0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_tru_Anim_00F9A0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_tru_Anim_0108AC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_tru_Anim_009348, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_tru_Anim_00EEDC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_tru_Anim_015CA0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_tru_Anim_015CA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_tru_Anim_014728, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_tru_Anim_01B5C4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_tru_Anim_007FA0, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_tru_Anim_016B4C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_tru_Anim_011F88, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_tru_Anim_00446C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_tru_Anim_003698, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_tru_Anim_002BD8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_tru_Anim_00446C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKoumeLyingDownInjuredAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKoumeLyingDownInjuredAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gKoumeTryGetUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gKoumeInjuredGetUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gKoumeInjuredTalkingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gKoumeInjuredIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKoumeInjuredIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gKoumeTakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKoumeShakesHandsOutFrontAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKoumeDrinkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gKoumeShakeAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gKoumeHealedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gKoumeFlyFastAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKoumeTakeOffAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gKoumeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKoumeFlyFastAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 Vec3f D_80B7765C = { 3000.0f, -800.0f, 0.0f };
@@ -404,8 +404,8 @@ void EnTruMt_Init(Actor* thisx, PlayState* play) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_tru_Skel_01AA60, NULL, this->jointTable, this->morphTable,
-                       OBJECT_TRU_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gKoumeSkel, NULL, this->jointTable, this->morphTable,
+                       KOUME_LIMB_MAX);
 
     Collider_InitSphere(play, &this->collider);
     Collider_SetSphere(play, &this->collider, &this->actor, &sSphereInit);
@@ -477,11 +477,11 @@ void func_80B76ED4(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
 s32 EnTruMt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTruMt* this = THIS;
 
-    if (limbIndex == OBJECT_TRU_LIMB_15) {
+    if (limbIndex == KOUME_LIMB_HEAD) {
         Matrix_MultVec3f(&gZeroVec3f, &this->unk_35C);
     }
 
-    if (limbIndex == OBJECT_TRU_LIMB_15) {
+    if (limbIndex == KOUME_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80B7765C, &this->unk_350);
     }
     return false;
@@ -493,7 +493,7 @@ void EnTruMt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
     MtxF* sp54;
     s32 phi_v0;
 
-    if (limbIndex == OBJECT_TRU_LIMB_15) {
+    if (limbIndex == KOUME_LIMB_HEAD) {
         if (this->unk_328 & 0x10) {
             phi_v0 = 1;
         } else {
@@ -507,7 +507,7 @@ void EnTruMt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         Matrix_RotateZS(this->unk_336.z, MTXMODE_APPLY);
     }
 
-    if (limbIndex == OBJECT_TRU_LIMB_0E) {
+    if (limbIndex == KOUME_LIMB_BROOM) {
         func_8012C28C(play->state.gfxCtx);
 
         OPEN_DISPS(play->state.gfxCtx);
@@ -520,7 +520,7 @@ void EnTruMt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         Matrix_Scale(0.008f, 0.008f, 0.008f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, object_tru_DL_0004C8);
+        gSPDisplayList(POLY_OPA_DISP++, gKoumeChainDL);
 
         CLOSE_DISPS(play->state.gfxCtx);
 
@@ -545,7 +545,7 @@ void EnTruMt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 void EnTruMt_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnTruMt* this = THIS;
 
-    if (limbIndex == OBJECT_TRU_LIMB_15) {
+    if (limbIndex == KOUME_LIMB_HEAD) {
         Matrix_Translate(this->unk_33C.x, this->unk_33C.y, this->unk_33C.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateYS(this->unk_336.y, MTXMODE_APPLY);
@@ -557,9 +557,9 @@ void EnTruMt_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 void EnTruMt_Draw(Actor* thisx, PlayState* play) {
     EnTruMt* this = THIS;
     TexturePtr sp48[] = {
-        object_tru_Tex_018FA0,
-        object_tru_Tex_0197A0,
-        object_tru_Tex_019FA0,
+        gKoumeEyeOpenTex,
+        gKoumeEyeHalfTex,
+        gKoumeEyeClosedTex,
     };
 
     OPEN_DISPS(play->state.gfxCtx);

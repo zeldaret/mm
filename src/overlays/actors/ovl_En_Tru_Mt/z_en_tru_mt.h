@@ -16,8 +16,8 @@ typedef struct EnTruMt {
     /* 0x144 */ EnTruMtActionFunc actionFunc;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ ColliderSphere collider;
-    /* 0x1E4 */ Vec3s jointTable[OBJECT_TRU_LIMB_MAX];
-    /* 0x286 */ Vec3s morphTable[OBJECT_TRU_LIMB_MAX];
+    /* 0x1E4 */ Vec3s jointTable[KOUME_LIMB_MAX];
+    /* 0x286 */ Vec3s morphTable[KOUME_LIMB_MAX];
     /* 0x328 */ u16 unk_328;
     /* 0x32A */ UNK_TYPE1 unk32A[0xC];
     /* 0x336 */ Vec3s unk_336;

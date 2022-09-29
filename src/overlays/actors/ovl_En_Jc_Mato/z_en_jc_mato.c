@@ -145,7 +145,7 @@ void EnJcMato_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-static Vec3f movement = { 0.0f, -2500.0f, 0.0f };
+static Vec3f sOffset = { 0.0f, -2500.0f, 0.0f };
 
 void EnJcMato_Draw(Actor* thisx, PlayState* play) {
     EnJcMato* this = THIS;
@@ -153,7 +153,7 @@ void EnJcMato_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     func_8012C28C(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_tru_DL_000390);
-    Matrix_MultVec3f(&movement, &this->pos);
+    gSPDisplayList(POLY_OPA_DISP++, gKoumeTargetDL);
+    Matrix_MultVec3f(&sOffset, &this->pos);
     CLOSE_DISPS(play->state.gfxCtx);
 }
