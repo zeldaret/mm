@@ -7,6 +7,11 @@ struct EnMm3;
 
 typedef void (*EnMm3ActionFunc)(struct EnMm3*, PlayState*);
 
+typedef enum {
+    /* 0 */ POSTMAN_MINIGAME_BUNNY_HOOD_OFF,
+    /* 2 */ POSTMAN_MINIGAME_BUNNY_HOOD_ON = 2
+} PostmanMinigameBunnyHoodState;
+
 typedef struct EnMm3 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;

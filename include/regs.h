@@ -71,6 +71,8 @@
 #define R_A_ICON_X                        XREG(20)
 #define R_A_BTN_COLOR(i)                  XREG(22 + i)
 #define R_MAGIC_CONSUME_TIMER_GIANTS_MASK XREG(41)
+#define R_MOON_CRASH_TIMER_Y              XREG(80)
+#define R_MOON_CRASH_TIMER_X              XREG(81)
 #define R_MINIMAP_DISABLED                XREG(95)
 #define R_B_LABEL_DD                      WREG(0)
 #define R_OW_MINIMAP_X                    WREG(29)
