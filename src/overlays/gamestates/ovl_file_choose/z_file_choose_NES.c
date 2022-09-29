@@ -2412,7 +2412,7 @@ void FileSelect_LoadGame(GameState* thisx) {
         gSaveContext.unk_3DD0[i] = 0;
     }
 
-    gSaveContext.unk_3F26 = 0x32;
+    gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
     gSaveContext.unk_3DC0 = 0;
     gSaveContext.healthAccumulator = 0;
     gSaveContext.magicFlag = 0;
@@ -2430,10 +2430,11 @@ void FileSelect_LoadGame(GameState* thisx) {
     gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
     gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
 
-    gSaveContext.unk_3F1E = 0;
-    gSaveContext.unk_3F20 = 0;
-    gSaveContext.unk_3F22 = 0;
-    gSaveContext.unk_3F24 = 0;
+    gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
+    gSaveContext.nextHudVisibility = HUD_VISIBILITY_IDLE;
+    gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+    gSaveContext.hudVisibilityTimer = 0;
+
     gSaveContext.save.playerData.tatlTimer = 0;
 }
 
