@@ -59,7 +59,7 @@ u16 D_801D5FC4[] = {
 };
 
 u8 sNumSamplesPerWavePeriod[] = {
-    WAVE_SAMPLE_COUNT,     // 1st harmonic
+    WAVE_SAMPLE_COUNT / 1, // 1st harmonic
     WAVE_SAMPLE_COUNT / 2, // 2nd harmonic
     WAVE_SAMPLE_COUNT / 4, // 4th harmonic
     WAVE_SAMPLE_COUNT / 8, // 8th harmonic
