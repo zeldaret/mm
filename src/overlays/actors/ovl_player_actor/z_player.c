@@ -5875,7 +5875,8 @@ s32 func_80835D58(PlayState* play, Player* this, Vec3f* arg2, CollisionPoly** ou
     posA.z = this->actor.world.pos.z;
     Player_TranslateAndRotateY(this, &this->actor.world.pos, arg2, &posB);
 
-    return BgCheck_EntityLineTest2(&play->colCtx, &posA, &posB, posResult, outPoly, true, false, false, true, bgId, &this->actor);
+    return BgCheck_EntityLineTest2(&play->colCtx, &posA, &posB, posResult, outPoly, true, false, false, true, bgId,
+                                   &this->actor);
 }
 
 Vec3f D_8085D100 = { 0.0f, 50.0f, 0.0f };
@@ -5974,8 +5975,8 @@ void Player_Door_Sliding(PlayState* play, Player* this, Actor* door) {
 
     if (doorSliding->dyna.actor.category == ACTORCAT_DOOR) {
         this->doorBgCamIndex = play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorSliding->dyna.actor)]
-                            .sides[this->doorDirection > 0 ? 0 : 1]
-                            .bgCamDataId;
+                                   .sides[this->doorDirection > 0 ? 0 : 1]
+                                   .bgCamDataId;
         Actor_DeactivateLens(play);
     }
 }
@@ -6799,7 +6800,8 @@ void func_8083827C(Player* this, PlayState* play) {
 
         this->floorSfxOffset = this->unk_D66;
         if ((this->transformation != PLAYER_FORM_GORON) &&
-            ((this->transformation != PLAYER_FORM_DEKU) || (this->remainingHopsCounter != 0)) && (this->actor.bgCheckFlags & 4)) {
+            ((this->transformation != PLAYER_FORM_DEKU) || (this->remainingHopsCounter != 0)) &&
+            (this->actor.bgCheckFlags & 4)) {
             if (!(this->stateFlags1 & PLAYER_STATE1_8000000)) {
                 if ((sPlayerPrevFloorProperty != BG_FLOOR_PROPERTY_6) &&
                     (sPlayerPrevFloorProperty != BG_FLOOR_PROPERTY_9) && (D_80862B18 > 20.0f) &&
@@ -8904,8 +8906,8 @@ s32 func_8083DD1C(PlayState* play, Player* this, f32 arg2, f32 arg3, f32 arg4, f
     sp68.z = this->actor.world.pos.z + (arg4 * cos);
     sp74.y = sp68.y = this->actor.world.pos.y + arg2;
 
-    if (BgCheck_EntityLineTest2(&play->colCtx, &sp74, &sp68, &sp5C, &this->actor.wallPoly, true, false, false, true, &bgId,
-                                &this->actor)) {
+    if (BgCheck_EntityLineTest2(&play->colCtx, &sp74, &sp68, &sp5C, &this->actor.wallPoly, true, false, false, true,
+                                &bgId, &this->actor)) {
         f32 wallPolyNormalX;
         f32 wallPolyNormalZ;
 
@@ -14704,7 +14706,8 @@ void func_8084D820(Player* this, PlayState* play) {
                                                          temp_v1_4->pos.z - 0x32);
                                 }
 
-                                Player_TranslateAndRotateY(this, &this->actor.world.pos, &D_8085D62C, &this->actor.world.pos);
+                                Player_TranslateAndRotateY(this, &this->actor.world.pos, &D_8085D62C,
+                                                           &this->actor.world.pos);
 
                                 D_8085D638.x = (this->doorDirection != 0) ? 130.0f : -130.0f;
                                 D_8085D638.z = 160.0f;
@@ -18029,8 +18032,10 @@ void func_80856918(Player* this, PlayState* play) {
             } else if (LinkAnimation_OnFrame(&this->skelAnime, 8.0f)) {
                 s32 i;
 
-                Player_TranslateAndRotateY(this, &this->actor.world.pos, &D_8085D960, &this->bodyPartsPos[PLAYER_BODYPART_L_HAND]);
-                Player_TranslateAndRotateY(this, &this->actor.world.pos, &D_8085D96C, &this->bodyPartsPos[PLAYER_BODYPART_R_HAND]);
+                Player_TranslateAndRotateY(this, &this->actor.world.pos, &D_8085D960,
+                                           &this->bodyPartsPos[PLAYER_BODYPART_L_HAND]);
+                Player_TranslateAndRotateY(this, &this->actor.world.pos, &D_8085D96C,
+                                           &this->bodyPartsPos[PLAYER_BODYPART_R_HAND]);
 
                 for (i = 0; i < 13; i++) {
                     func_808566C0(play, this, PLAYER_BODYPART_L_HAND, 0.6f, 1.0f, 0.8f, 17);
