@@ -118,7 +118,7 @@ void EnPr_Init(Actor* thisx, PlayState* play2) {
 
     this->actor.colChkInfo.health = 3;
     this->actor.colChkInfo.mass = 50;
-    this->actor.hintId = 0x5C;
+    this->actor.hintId = TATL_HINT_ID_DESBREKO;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 

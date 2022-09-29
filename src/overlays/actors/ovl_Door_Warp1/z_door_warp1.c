@@ -1,7 +1,7 @@
 /*
  * File: z_door_warp1.c
  * Overlay: ovl_Door_Warp1
- * Description: Blue Warp
+ * Description: Blue warp portal and crystal, and the Majora's Mask-shaped boss warp platform
  */
 
 #include "prevent_bss_reordering.h"
@@ -153,7 +153,7 @@ void DoorWarp1_Init(Actor* thisx, PlayState* play) {
         case ENDOORWARP1_FF_5:
             this->unk_1D3 = 1;
             DynaPolyActor_Init(&this->dyna, 0);
-            DynaPolyActor_LoadMesh(play, &this->dyna, &object_warp1_Colheader_008BD4);
+            DynaPolyActor_LoadMesh(play, &this->dyna, &gWarpBossWarpPlatformCol);
             func_808B8C48(this, play);
             break;
 
@@ -211,8 +211,8 @@ void func_808B8924(DoorWarp1* this, PlayState* play) {
 }
 
 void func_808B8A7C(DoorWarp1* this, PlayState* play) {
-    SkelAnime_Init(play, &this->skelAnime, &object_warp1_Skel_002CA8, &object_warp1_Anim_001374, NULL, NULL, 0);
-    Animation_ChangeImpl(&this->skelAnime, &object_warp1_Anim_001374, 1.0f, 1.0f, 1.0f, 2, 40.0f, 1);
+    SkelAnime_Init(play, &this->skelAnime, &gWarpCrystalSkel, &gWarpCrystalAnim, NULL, NULL, 0);
+    Animation_ChangeImpl(&this->skelAnime, &gWarpCrystalAnim, 1.0f, 1.0f, 1.0f, 2, 40.0f, 1);
     this->unk_1C4 = 0;
     this->unk_1C6 = -140;
     this->unk_1C8 = -80;
@@ -599,7 +599,7 @@ void func_808B9F10(DoorWarp1* this, PlayState* play) {
     if ((this->unk_203 == 0) && func_808B866C(this, play) && !Play_InCsMode(play) && (this->unk_203 == 0)) {
         Player* player = GET_PLAYER(play);
 
-        Interface_ChangeAlpha(1);
+        Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
         func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_9);
         player->unk_3A0.x = this->dyna.actor.world.pos.x;
         player->unk_3A0.z = this->dyna.actor.world.pos.z;
@@ -623,9 +623,8 @@ void func_808B9FD0(DoorWarp1* this, PlayState* play) {
         ActorCutscene_Start(play->playerActorCsIds[9], NULL);
         AudioSfx_PlaySfx(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                          &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
-        Animation_ChangeImpl(&this->skelAnime, &object_warp1_Anim_001374, 1.0f,
-                             Animation_GetLastFrame(&object_warp1_Anim_001374.common),
-                             Animation_GetLastFrame(&object_warp1_Anim_001374.common), 2, 40.0f, 1);
+        Animation_ChangeImpl(&this->skelAnime, &gWarpCrystalAnim, 1.0f, Animation_GetLastFrame(&gWarpCrystalAnim),
+                             Animation_GetLastFrame(&gWarpCrystalAnim), 2, 40.0f, 1);
         this->unk_1CA = 50;
         D_808BC004 = player2->actor.world.pos.y;
         DoorWarp1_SetupAction(this, func_808BA550);
@@ -873,7 +872,7 @@ void func_808BA550(DoorWarp1* this, PlayState* play) {
 
         play->envCtx.lightSettings.fogNear = -500.0f * temp_f0;
         if (play->envCtx.lightSettings.fogNear < -300) {
-            play->roomCtx.currRoom.segment = NULL;
+            play->roomCtx.curRoom.segment = NULL;
         }
     }
 }
@@ -993,7 +992,7 @@ void func_808BAE9C(DoorWarp1* this, PlayState* play) {
                  MTXMODE_APPLY);
 
     gSPSegment(POLY_XLU_DISP++, 0x09, Matrix_NewMtx(play->state.gfxCtx));
-    gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_0001A0);
+    gSPDisplayList(POLY_XLU_DISP++, gWarpPortalDL);
 
     Matrix_Pop();
 
@@ -1011,14 +1010,14 @@ void func_808BAE9C(DoorWarp1* this, PlayState* play) {
                      MTXMODE_APPLY);
 
         gSPSegment(POLY_XLU_DISP++, 0x09, Matrix_NewMtx(play->state.gfxCtx));
-        gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_0001A0);
+        gSPDisplayList(POLY_XLU_DISP++, gWarpPortalDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
 void func_808BB4C4(DoorWarp1* this, PlayState* play) {
-    Gfx_DrawDListOpa(play, object_warp1_DL_0076C0);
+    Gfx_DrawDListOpa(play, gWarpBossWarpPlatformDL);
 }
 
 void func_808BB4F4(DoorWarp1* this, PlayState* play2) {
@@ -1036,8 +1035,8 @@ void func_808BB4F4(DoorWarp1* this, PlayState* play2) {
         Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + this->unk_1A4,
                          this->dyna.actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(4.0f, this->unk_1AC, 4.0f, MTXMODE_APPLY);
-        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_warp1_Matanimheader_0044D8));
-        Gfx_DrawDListXlu(play, object_warp1_DL_003230);
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWarpBossWarpActivationBeamTexAnim));
+        Gfx_DrawDListXlu(play, gWarpBossWarpActivationBeamDL);
         return;
     }
 
@@ -1055,7 +1054,7 @@ void func_808BB4F4(DoorWarp1* this, PlayState* play2) {
                      MTXMODE_NEW);
     Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
     Matrix_Scale(1.0f, this->unk_1A8, 1.0f, MTXMODE_APPLY);
-    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_warp1_Matanimheader_0057D8));
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWarpBossWarpLightShaftsTexAnim));
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1064,13 +1063,13 @@ void func_808BB4F4(DoorWarp1* this, PlayState* play2) {
     gDPSetEnvColor(POLY_XLU_DISP++, sp64[sp60].r, sp64[sp60].g, sp64[sp60].b, 255);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, 255);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_004690);
+    gSPDisplayList(POLY_XLU_DISP++, gWarpBossWarpLightShaftsDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_warp1_Matanimheader_007238));
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWarpBossWarpGlowTexAnim));
     Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                      MTXMODE_NEW);
     Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
@@ -1081,7 +1080,7 @@ void func_808BB4F4(DoorWarp1* this, PlayState* play2) {
     gDPSetEnvColor(POLY_XLU_DISP++, sp64[sp60].r, sp64[sp60].g, sp64[sp60].b, 255);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->unk_203);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_0058C8);
+    gSPDisplayList(POLY_XLU_DISP++, gWarpBossWarpGlowDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

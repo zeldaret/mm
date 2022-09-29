@@ -725,7 +725,7 @@ void Boss03_ChasePlayer(Boss03* this, PlayState* play) {
 
             if (sp43 != 0) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, player->actor.world.pos.x, this->waterHeight,
-                            player->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_309);
+                            player->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_TYPE_GYORG_RIPPLES);
                 Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_SINK_OLD);
             }
 
@@ -1056,7 +1056,7 @@ void Boss03_Charge(Boss03* this, PlayState* play) {
             play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
             Actor_RequestRumble(&this->actor, play, 20, 15);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0, 0x96,
-                        ENWATEREFFECT_30C);
+                        ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE);
 
             // Player is above water && Player is standing on ground
             if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
@@ -1529,7 +1529,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
             if ((this->workTimer[WORK_TIMER_UNK0_C] == 0) && ((this->waterHeight - 100.0f) < this->actor.world.pos.y)) {
                 this->workTimer[WORK_TIMER_UNK0_C] = Rand_ZeroFloat(15.0f) + 15.0f;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
-                            this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_309);
+                            this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_TYPE_GYORG_RIPPLES);
 
                 if (this->actionFunc == Boss03_DeathCutscene) {
                     if ((D_809E9840 % 2) != 0) {
@@ -1763,7 +1763,7 @@ void Boss03_SetupStunned(Boss03* this, PlayState* play) {
 }
 
 void Boss03_Stunned(Boss03* this, PlayState* play) {
-    this->actor.hintId = 0x29;
+    this->actor.hintId = TATL_HINT_ID_GYORG_STUNNED;
 
     if (this->unk_240 >= 16) {
         Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_COMMON_WEAKENED - SFX_FLAG);
@@ -1956,7 +1956,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
     s16 j;
     f32 yRot;
 
-    this->actor.hintId = 0x28;
+    this->actor.hintId = TATL_HINT_ID_GYORG;
 
     if (!D_809E9842 && (player->actor.world.pos.y < (PLATFORM_HEIGHT + 5.0f))) {
         D_809E9842 = true;
@@ -2013,7 +2013,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
             }
 
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
-                        this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_309);
+                        this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_TYPE_GYORG_RIPPLES);
 
             this->unk_280 = 27;
             this->unk_284 = this->actor.world.pos.x;
@@ -2429,7 +2429,7 @@ void Boss03_DrawEffects(PlayState* play) {
             if (!flag) {
                 POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
 
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust1Tex));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
 
@@ -2463,7 +2463,7 @@ void Boss03_DrawEffects(PlayState* play) {
             if (!flag) {
                 func_8012C448(gfxCtx);
 
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust1Tex));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
 

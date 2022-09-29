@@ -963,7 +963,7 @@ void EnKanban_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if (this->partFlags == 0xFFFF) {
-            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05AED0);
+            gSPDisplayList(POLY_OPA_DISP++, gSignRectangularDL);
         } else {
             for (i = 0; i < ARRAY_COUNT(sPartFlags); i++) {
                 if (sPartFlags[i] & this->partFlags) {

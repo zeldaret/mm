@@ -7,7 +7,7 @@
 
 struct GameState;
 struct PlayState;
-struct FileChooseContext;
+struct FileSelectState;
 
 // TODO: properly name DOWN, RETURN and TOP
 typedef enum RespawnMode {
@@ -23,6 +23,64 @@ typedef enum RespawnMode {
 } RespawnMode;
 
 #define SAVE_BUFFER_SIZE 0x4000
+
+typedef enum {
+    /* 0  */ MAGIC_STATE_IDLE, // Regular gameplay
+    /* 1  */ MAGIC_STATE_CONSUME_SETUP, // Sets the speed at which the magic border flashes
+    /* 2  */ MAGIC_STATE_CONSUME, // Consume magic until target is reached or no more magic is available
+    /* 3  */ MAGIC_STATE_METER_FLASH_1, // Flashes border
+    /* 4  */ MAGIC_STATE_METER_FLASH_2, // Flashes border and draws yellow magic to preview target consumption
+    /* 5  */ MAGIC_STATE_RESET, // Reset colors and return to idle
+    /* 6  */ MAGIC_STATE_METER_FLASH_3, // Flashes border with no additional behaviour
+    /* 7  */ MAGIC_STATE_CONSUME_LENS, // Magic slowly consumed by Lens of Truth
+    /* 8  */ MAGIC_STATE_STEP_CAPACITY, // Step `magicCapacity` to full capacity
+    /* 9  */ MAGIC_STATE_FILL, // Add magic until magicFillTarget is reached
+    /* 10 */ MAGIC_STATE_CONSUME_GORON_ZORA_SETUP,
+    /* 11 */ MAGIC_STATE_CONSUME_GORON_ZORA, // Magic slowly consumed by Goron spiked rolling or Zora electric barrier.
+    /* 12 */ MAGIC_STATE_CONSUME_GIANTS_MASK // Magic slowly consumed by Giant's Mask
+} MagicState;
+
+typedef enum {
+    /* 0 */ MAGIC_CONSUME_NOW, // Consume magic immediately without preview
+    /* 1 */ MAGIC_CONSUME_WAIT_NO_PREVIEW, // Sets consume target but waits to consume. No yellow magic preview to target consumption. Unused
+    /* 2 */ MAGIC_CONSUME_NOW_ALT, // Identical behaviour to MAGIC_CONSUME_NOW. Unused
+    /* 3 */ MAGIC_CONSUME_LENS, // Lens of Truth consumption
+    /* 4 */ MAGIC_CONSUME_WAIT_PREVIEW, // Sets consume target but waits to consume. Show magic to be consumed in yellow.
+    /* 5 */ MAGIC_CONSUME_GORON_ZORA, // Goron spiked rolling or Zora electric barrier slow consumption
+    /* 6 */ MAGIC_CONSUME_GIANTS_MASK, // Giant's Mask slow consumption
+    /* 7 */ MAGIC_CONSUME_DEITY_BEAM // Fierce Deity Beam consumption, consumed magic now and not via request
+} MagicChangeType;
+
+#define MAGIC_NORMAL_METER 0x30
+#define MAGIC_DOUBLE_METER (2 * MAGIC_NORMAL_METER)
+
+typedef enum {
+    /*  0 */ HUD_VISIBILITY_IDLE,
+    /*  1 */ HUD_VISIBILITY_NONE,
+    /*  2 */ HUD_VISIBILITY_NONE_ALT, // Identical to HUD_VISIBILITY_NONE
+    /*  3 */ HUD_VISIBILITY_HEARTS_WITH_OVERWRITE, // Uses Interface_UpdateButtonAlphas so gives the opportunity to dim only disabled buttons
+    /*  4 */ HUD_VISIBILITY_A,
+    /*  5 */ HUD_VISIBILITY_A_HEARTS_MAGIC_WITH_OVERWRITE, // Uses Interface_UpdateButtonAlphas so gives the opportunity to dim only disabled buttons
+    /*  6 */ HUD_VISIBILITY_A_HEARTS_MAGIC_MINIMAP_WITH_OVERWRITE, // Uses Interface_UpdateButtonAlphas so gives the opportunity to dim only disabled buttons
+    /*  7 */ HUD_VISIBILITY_ALL_NO_MINIMAP_W_DISABLED, // Only raises button alphas if not disabled
+    /*  8 */ HUD_VISIBILITY_B,
+    /*  9 */ HUD_VISIBILITY_HEARTS_MAGIC,
+    /* 10 */ HUD_VISIBILITY_B_ALT,
+    /* 11 */ HUD_VISIBILITY_HEARTS,
+    /* 12 */ HUD_VISIBILITY_A_B_MINIMAP,
+    /* 13 */ HUD_VISIBILITY_HEARTS_MAGIC_WITH_OVERWRITE, // Uses Interface_UpdateButtonAlphas so gives the opportunity to dim only disabled buttons
+    /* 14 */ HUD_VISIBILITY_HEARTS_MAGIC_C,
+    /* 15 */ HUD_VISIBILITY_ALL_NO_MINIMAP,
+    /* 16 */ HUD_VISIBILITY_A_B_C,
+    /* 17 */ HUD_VISIBILITY_B_MINIMAP,
+    /* 18 */ HUD_VISIBILITY_HEARTS_MAGIC_MINIMAP,
+    /* 19 */ HUD_VISIBILITY_A_HEARTS_MAGIC_MINIMAP,
+    /* 20 */ HUD_VISIBILITY_B_MAGIC,
+    /* 21 */ HUD_VISIBILITY_A_B,
+    /* 22 */ HUD_VISIBILITY_A_B_HEARTS_MAGIC_MINIMAP,
+    /* 50 */ HUD_VISIBILITY_ALL = 50,
+    /* 52 */ HUD_VISIBILITY_NONE_INSTANT = 52
+} HudVisibility;
 
 typedef struct SramContext {
     /* 0x00 */ u8* readBuff;
@@ -105,13 +163,13 @@ typedef struct SavePlayerData {
     /* 0x08 */ char playerName[8];                    // "player_name"
     /* 0x10 */ s16 healthCapacity;                    // "max_life"
     /* 0x12 */ s16 health;                            // "now_life"
-    /* 0x14 */ s8 magicLevel;                         // "magic_max"
-    /* 0x15 */ s8 magic;                              // "magic_now"
+    /* 0x14 */ s8 magicLevel; // 0 for no magic/new load, 1 for magic, 2 for double magic "magic_max"
+    /* 0x15 */ s8 magic; // current magic available for use "magic_now"
     /* 0x16 */ s16 rupees;                            // "lupy_count"
     /* 0x18 */ u16 swordHealth;                       // "long_sword_hp"
     /* 0x1A */ u16 tatlTimer;                         // "navi_timer"
-    /* 0x1C */ u8 magicAcquired;                      // "magic_mode"
-    /* 0x1D */ u8 doubleMagic;                        // "magic_ability"
+    /* 0x1C */ u8 isMagicAcquired;                    // "magic_mode"
+    /* 0x1D */ u8 isDoubleMagicAcquired;              // "magic_ability"
     /* 0x1E */ u8 doubleDefense;                      // "life_ability"
     /* 0x1F */ u8 unk_1F;                             // "ocarina_round"
     /* 0x20 */ u8 unk_20;                             // "first_memory"
@@ -221,18 +279,18 @@ typedef struct SaveContext {
     /* 0x3F16 */ u8 seqIndex;                           // "old_bgm"
     /* 0x3F17 */ u8 nightSeqIndex;                      // "old_env"
     /* 0x3F18 */ u8 buttonStatus[6];                    // "button_item"
-    /* 0x3F1E */ u8 unk_3F1E;                           // "ck_fg"
-    /* 0x3F20 */ u16 unk_3F20;                          // "alpha_type"
-    /* 0x3F22 */ u16 unk_3F22;                          // "prev_alpha_type"
-    /* 0x3F24 */ u16 unk_3F24;                          // "alpha_count"
-    /* 0x3F26 */ u16 unk_3F26;                          // "last_time_type"
-    /* 0x3F28 */ s16 unk_3F28;                          // "magic_flag" // magicState
-    /* 0x3F2A */ s16 unk_3F2A;                          // "recovery_magic_flag"
-    /* 0x3F2C */ s16 unk_3F2C;                          // "keep_magic_flag"
-    /* 0x3F2E */ s16 unk_3F2E;                          // "magic_now_max"
-    /* 0x3F30 */ s16 unk_3F30;                          // "magic_now_now"
-    /* 0x3F32 */ s16 unk_3F32;                          // "magic_used"
-    /* 0x3F34 */ s16 unk_3F34;                          // "magic_recovery"
+    /* 0x3F1E */ u8 hudVisibilityForceButtonAlphasByStatus; // if btn alphas are updated through Interface_UpdateButtonAlphas, instead update them through Interface_UpdateButtonAlphasByStatus "ck_fg"
+    /* 0x3F20 */ u16 nextHudVisibility; // triggers the hud to change visibility to the requested value. Reset to HUD_VISIBILITY_IDLE when target is reached "alpha_type"
+    /* 0x3F22 */ u16 hudVisibility; // current hud visibility "prev_alpha_type"
+    /* 0x3F24 */ u16 hudVisibilityTimer; // number of frames in the transition to a new hud visibility. Used to step alpha "alpha_count"
+    /* 0x3F26 */ u16 prevHudVisibility; // used to store and recover hud visibility for pause menu and text boxes "last_time_type"
+    /* 0x3F28 */ s16 magicState; // determines magic meter behavior on each frame "magic_flag"
+    /* 0x3F2A */ s16 isMagicRequested; // a request to add magic has been given "recovery_magic_flag"
+    /* 0x3F2C */ s16 magicFlag; // Set to 0 in func_80812D94(), otherwise unused "keep_magic_flag"
+    /* 0x3F2E */ s16 magicCapacity; // maximum magic available "magic_now_max"
+    /* 0x3F30 */ s16 magicFillTarget; // target used to fill magic "magic_now_now"
+    /* 0x3F32 */ s16 magicToConsume; // accumulated magic that is requested to be consumed "magic_used"
+    /* 0x3F34 */ s16 magicToAdd; // accumulated magic that is requested to be added "magic_recovery"
     /* 0x3F36 */ u16 mapIndex;                          // "scene_ID"
     /* 0x3F38 */ u16 minigameState;                     // "yabusame_mode"
     /* 0x3F3A */ u16 minigameScore;                     // "yabusame_total"
@@ -326,7 +384,7 @@ typedef enum SunsSongState {
 #define C_BTN_ITEM(btn)                                 \
     ((gSaveContext.buttonStatus[(btn)] != BTN_DISABLED) \
          ? BUTTON_ITEM_EQUIP(0, (btn))                  \
-         : ((gSaveContext.unk_3F22 == 0x10) ? BUTTON_ITEM_EQUIP(0, (btn)) : ITEM_NONE))
+         : ((gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C) ? BUTTON_ITEM_EQUIP(0, (btn)) : ITEM_NONE))
 
 #define SET_CUR_FORM_BTN_ITEM(btn, item)             \
     if ((btn) == EQUIP_SLOT_B) {                     \
@@ -1375,15 +1433,15 @@ u16 Sram_CalcChecksum(void* data, size_t count);
 void Sram_InitNewSave(void);
 void Sram_InitDebugSave(void);
 void func_80144A94(SramContext* sramCtx);
-void Sram_OpenSave(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
+void Sram_OpenSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void func_8014546C(SramContext* sramCtx);
-void func_801457CC(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
-void func_80146580(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx, s32 fileNum);
-void func_80146628(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
-void Sram_InitSave(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
+void func_801457CC(struct FileSelectState* fileSelect, SramContext* sramCtx);
+void func_80146580(struct FileSelectState* fileSelect, SramContext* sramCtx, s32 fileNum);
+void func_80146628(struct FileSelectState* fileSelect, SramContext* sramCtx);
+void Sram_InitSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void func_80146DF8(SramContext* sramCtx);
 void Sram_InitSram(struct GameState* gameState, SramContext* sramCtx);
-void Sram_Alloc(struct GameState* gamestate, SramContext* sramCtx);
+void Sram_Alloc(struct GameState* gameState, SramContext* sramCtx);
 void Sram_SaveSpecialEnterClockTown(struct PlayState* play);
 void Sram_SaveSpecialNewDay(struct PlayState* play);
 void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages);

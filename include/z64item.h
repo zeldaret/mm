@@ -287,7 +287,7 @@ typedef enum {
     /* 0xFD */ ITEM_FD,
     /* 0xFE */ ITEM_FE,
     /* 0xFF */ ITEM_NONE = 0xFF
-} ItemID;
+} ItemId;
 
 #define BOTTLE_FIRST 0
 #define BOTTLE_MAX 6
@@ -442,7 +442,7 @@ typedef enum GetItemID {
     /* 0xB8 */ GI_TINGLE_MAP_GREAT_BAY,
     /* 0xB9 */ GI_TINGLE_MAP_STONE_TOWER,
     /* 0xBA */ GI_MAX
-} GetItemID;
+} GetItemId;
 
 typedef enum GetItemDrawID {
     /*  -1 */ GID_NONE = -1,

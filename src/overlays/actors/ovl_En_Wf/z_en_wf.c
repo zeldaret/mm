@@ -319,7 +319,7 @@ void EnWf_Init(Actor* thisx, PlayState* play) {
     if (this->actor.params == 0) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosNormalSkel, &gWolfosWaitingAnim, this->jointTable,
                            this->morphTable, WOLFOS_NORMAL_LIMB_MAX);
-        this->actor.hintId = 0x4C;
+        this->actor.hintId = TATL_HINT_ID_WOLFOS;
         CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable2, &sColChkInfoInit);
         this->collider1.elements[0].info.toucher.damage = 8;
         this->collider1.elements[1].info.toucher.damage = 8;
@@ -327,7 +327,7 @@ void EnWf_Init(Actor* thisx, PlayState* play) {
     } else {
         SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosWhiteSkel, &gWolfosWaitingAnim, this->jointTable,
                            this->morphTable, WOLFOS_WHITE_LIMB_MAX);
-        this->actor.hintId = 0x57;
+        this->actor.hintId = TATL_HINT_ID_WHITE_WOLFOS;
         CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable1, &sColChkInfoInit);
     }
 

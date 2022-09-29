@@ -139,11 +139,11 @@ u16 sMinigameScoreDigits[] = { 0, 0, 0, 0 };
 u16 sCUpInvisible = 0;
 u16 sCUpTimer = 0;
 
-s16 sMagicBarOutlinePrimRed = 255;
-s16 sMagicBarOutlinePrimGreen = 255;
-s16 sMagicBarOutlinePrimBlue = 255;
-s16 D_801BF8AC = 2; // sMagicBorderRatio
-s16 D_801BF8B0 = 1;
+s16 sMagicMeterOutlinePrimRed = 255;
+s16 sMagicMeterOutlinePrimGreen = 255;
+s16 sMagicMeterOutlinePrimBlue = 255;
+s16 sMagicBorderRatio = 2;
+s16 sMagicBorderStep = 1;
 
 s16 sExtraItemBases[] = {
     ITEM_STICK,   // ITEM_STICKS_5
@@ -225,10 +225,14 @@ s16 sFinalHoursClockColorTargetIndex = 0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CD98.s")
 
+Gfx* func_8010CFBC(Gfx* displayListHead, void* texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
+                   s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy, s16 r, s16 g, s16 b, s16 a);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CFBC.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D2D4.s")
 
+Gfx* func_8010D480(Gfx* displayListHead, void* texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
+                   s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy, s16 r, s16 g, s16 b, s16 a, s32 argE, s32 argF);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D480.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D7D0.s")
@@ -277,13 +281,770 @@ void func_8010EBA0(s16 timer, s16 timerId);
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010EE74.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Interface_ChangeAlpha.s")
+void Interface_SetHudVisibility(u16 hudVisibility) {
+    if (gSaveContext.hudVisibility != hudVisibility) {
+        gSaveContext.hudVisibility = hudVisibility;
+        gSaveContext.nextHudVisibility = hudVisibility;
+        gSaveContext.hudVisibilityTimer = 1;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010EF9C.s")
+/**
+ * Sets the button alphas to be dimmed for disabled buttons, or to the requested alpha for non-disabled buttons
+ */
+void Interface_UpdateButtonAlphasByStatus(PlayState* play, s16 risingAlpha) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010F0D4.s")
+    if ((gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) || (gSaveContext.unk_1015 == ITEM_NONE)) {
+        if (interfaceCtx->bAlpha != 70) {
+            interfaceCtx->bAlpha = 70;
+        }
+    } else {
+        if (interfaceCtx->bAlpha != 255) {
+            interfaceCtx->bAlpha = risingAlpha;
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010F1A8.s")
+    if (gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] == BTN_DISABLED) {
+        if (interfaceCtx->cLeftAlpha != 70) {
+            interfaceCtx->cLeftAlpha = 70;
+        }
+    } else {
+        if (interfaceCtx->cLeftAlpha != 255) {
+            interfaceCtx->cLeftAlpha = risingAlpha;
+        }
+    }
+
+    if (gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] == BTN_DISABLED) {
+        if (interfaceCtx->cDownAlpha != 70) {
+            interfaceCtx->cDownAlpha = 70;
+        }
+    } else {
+        if (interfaceCtx->cDownAlpha != 255) {
+            interfaceCtx->cDownAlpha = risingAlpha;
+        }
+    }
+
+    if (gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] == BTN_DISABLED) {
+        if (interfaceCtx->cRightAlpha != 70) {
+            interfaceCtx->cRightAlpha = 70;
+        }
+    } else {
+        if (interfaceCtx->cRightAlpha != 255) {
+            interfaceCtx->cRightAlpha = risingAlpha;
+        }
+    }
+
+    if (gSaveContext.buttonStatus[EQUIP_SLOT_A] == BTN_DISABLED) {
+        if (interfaceCtx->aAlpha != 70) {
+            interfaceCtx->aAlpha = 70;
+        }
+    } else {
+        if (interfaceCtx->aAlpha != 255) {
+            interfaceCtx->aAlpha = risingAlpha;
+        }
+    }
+}
+
+/**
+ * Lower button alphas on the HUD to the requested value
+ * If (gSaveContext.hudVisibilityForceButtonAlphasByStatus), then instead update button alphas
+ * depending on button status
+ */
+void Interface_UpdateButtonAlphas(PlayState* play, s16 dimmingAlpha, s16 risingAlpha) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+
+    if (gSaveContext.hudVisibilityForceButtonAlphasByStatus) {
+        Interface_UpdateButtonAlphasByStatus(play, risingAlpha);
+        return;
+    }
+
+    if ((interfaceCtx->bAlpha != 0) && (interfaceCtx->bAlpha > dimmingAlpha)) {
+        interfaceCtx->bAlpha = dimmingAlpha;
+    }
+
+    if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
+        interfaceCtx->aAlpha = dimmingAlpha;
+    }
+
+    if ((interfaceCtx->cLeftAlpha != 0) && (interfaceCtx->cLeftAlpha > dimmingAlpha)) {
+        interfaceCtx->cLeftAlpha = dimmingAlpha;
+    }
+
+    if ((interfaceCtx->cDownAlpha != 0) && (interfaceCtx->cDownAlpha > dimmingAlpha)) {
+        interfaceCtx->cDownAlpha = dimmingAlpha;
+    }
+
+    if ((interfaceCtx->cRightAlpha != 0) && (interfaceCtx->cRightAlpha > dimmingAlpha)) {
+        interfaceCtx->cRightAlpha = dimmingAlpha;
+    }
+}
+
+void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+    s16 risingAlpha = 255 - dimmingAlpha;
+
+    switch (gSaveContext.nextHudVisibility) {
+        case HUD_VISIBILITY_NONE:
+        case HUD_VISIBILITY_NONE_ALT:
+        case HUD_VISIBILITY_B:
+            if (gSaveContext.nextHudVisibility == HUD_VISIBILITY_B) {
+                if (interfaceCtx->bAlpha != 255) {
+                    interfaceCtx->bAlpha = risingAlpha;
+                }
+            } else {
+                if ((interfaceCtx->bAlpha != 0) && (interfaceCtx->bAlpha > dimmingAlpha)) {
+                    interfaceCtx->bAlpha = dimmingAlpha;
+                }
+            }
+
+            if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
+                interfaceCtx->aAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cLeftAlpha != 0) && (interfaceCtx->cLeftAlpha > dimmingAlpha)) {
+                interfaceCtx->cLeftAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cDownAlpha != 0) && (interfaceCtx->cDownAlpha > dimmingAlpha)) {
+                interfaceCtx->cDownAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cRightAlpha != 0) && (interfaceCtx->cRightAlpha > dimmingAlpha)) {
+                interfaceCtx->cRightAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->healthAlpha != 0) && (interfaceCtx->healthAlpha > dimmingAlpha)) {
+                interfaceCtx->healthAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->magicAlpha != 0) && (interfaceCtx->magicAlpha > dimmingAlpha)) {
+                interfaceCtx->magicAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
+                interfaceCtx->minimapAlpha = dimmingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_HEARTS_WITH_OVERWRITE:
+            // aAlpha is immediately overwritten in Interface_UpdateButtonAlphas
+            if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
+                interfaceCtx->aAlpha = dimmingAlpha;
+            }
+
+            Interface_UpdateButtonAlphas(play, dimmingAlpha, risingAlpha + 0);
+
+            if ((interfaceCtx->magicAlpha != 0) && (interfaceCtx->magicAlpha > dimmingAlpha)) {
+                interfaceCtx->magicAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
+                interfaceCtx->minimapAlpha = dimmingAlpha;
+            }
+
+            if (interfaceCtx->healthAlpha != 255) {
+                interfaceCtx->healthAlpha = risingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_A:
+            if ((interfaceCtx->bAlpha != 0) && (interfaceCtx->bAlpha > dimmingAlpha)) {
+                interfaceCtx->bAlpha = dimmingAlpha;
+            }
+
+            // aAlpha is immediately overwritten below
+            if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
+                interfaceCtx->aAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cLeftAlpha != 0) && (interfaceCtx->cLeftAlpha > dimmingAlpha)) {
+                interfaceCtx->cLeftAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cDownAlpha != 0) && (interfaceCtx->cDownAlpha > dimmingAlpha)) {
+                interfaceCtx->cDownAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cRightAlpha != 0) && (interfaceCtx->cRightAlpha > dimmingAlpha)) {
+                interfaceCtx->cRightAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->healthAlpha != 0) && (interfaceCtx->healthAlpha > dimmingAlpha)) {
+                interfaceCtx->healthAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->magicAlpha != 0) && (interfaceCtx->magicAlpha > dimmingAlpha)) {
+                interfaceCtx->magicAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
+                interfaceCtx->minimapAlpha = dimmingAlpha;
+            }
+
+            if (interfaceCtx->aAlpha != 255) {
+                interfaceCtx->aAlpha = risingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_A_HEARTS_MAGIC_WITH_OVERWRITE:
+            Interface_UpdateButtonAlphas(play, dimmingAlpha, risingAlpha);
+
+            if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
+                interfaceCtx->minimapAlpha = dimmingAlpha;
+            }
+
+            // aAlpha overwrites the value set in Interface_UpdateButtonAlphas
+            if (interfaceCtx->aAlpha != 255) {
+                interfaceCtx->aAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->healthAlpha != 255) {
+                interfaceCtx->healthAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->magicAlpha != 255) {
+                interfaceCtx->magicAlpha = risingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_A_HEARTS_MAGIC_MINIMAP_WITH_OVERWRITE:
+            Interface_UpdateButtonAlphas(play, dimmingAlpha, risingAlpha);
+
+            // aAlpha overwrites the value set in Interface_UpdateButtonAlphas
+            if (interfaceCtx->aAlpha != 255) {
+                interfaceCtx->aAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->healthAlpha != 255) {
+                interfaceCtx->healthAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->magicAlpha != 255) {
+                interfaceCtx->magicAlpha = risingAlpha;
+            }
+
+            if (play->sceneNum == SCENE_SPOT00) {
+                if (interfaceCtx->minimapAlpha < 170) {
+                    interfaceCtx->minimapAlpha = risingAlpha;
+                } else {
+                    interfaceCtx->minimapAlpha = 170;
+                }
+            } else if (interfaceCtx->minimapAlpha != 255) {
+                interfaceCtx->minimapAlpha = risingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_ALL_NO_MINIMAP_W_DISABLED:
+            if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
+                interfaceCtx->minimapAlpha = dimmingAlpha;
+            }
+
+            Interface_UpdateButtonAlphasByStatus(play, risingAlpha);
+
+            if (interfaceCtx->healthAlpha != 255) {
+                interfaceCtx->healthAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->magicAlpha != 255) {
+                interfaceCtx->magicAlpha = risingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_HEARTS_MAGIC:
+            if ((interfaceCtx->bAlpha != 0) && (interfaceCtx->bAlpha > dimmingAlpha)) {
+                interfaceCtx->bAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
+                interfaceCtx->aAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cLeftAlpha != 0) && (interfaceCtx->cLeftAlpha > dimmingAlpha)) {
+                interfaceCtx->cLeftAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cDownAlpha != 0) && (interfaceCtx->cDownAlpha > dimmingAlpha)) {
+                interfaceCtx->cDownAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cRightAlpha != 0) && (interfaceCtx->cRightAlpha > dimmingAlpha)) {
+                interfaceCtx->cRightAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
+                interfaceCtx->minimapAlpha = dimmingAlpha;
+            }
+
+            if (interfaceCtx->magicAlpha != 255) {
+                interfaceCtx->magicAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->healthAlpha != 255) {
+                interfaceCtx->healthAlpha = risingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_B_ALT:
+            if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
+                interfaceCtx->aAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cLeftAlpha != 0) && (interfaceCtx->cLeftAlpha > dimmingAlpha)) {
+                interfaceCtx->cLeftAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cDownAlpha != 0) && (interfaceCtx->cDownAlpha > dimmingAlpha)) {
+                interfaceCtx->cDownAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cRightAlpha != 0) && (interfaceCtx->cRightAlpha > dimmingAlpha)) {
+                interfaceCtx->cRightAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->healthAlpha != 0) && (interfaceCtx->healthAlpha > dimmingAlpha)) {
+                interfaceCtx->healthAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->magicAlpha != 0) && (interfaceCtx->magicAlpha > dimmingAlpha)) {
+                interfaceCtx->magicAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
+                interfaceCtx->minimapAlpha = dimmingAlpha;
+            }
+
+            if (interfaceCtx->bAlpha != 255) {
+                interfaceCtx->bAlpha = risingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_HEARTS:
+            if ((interfaceCtx->bAlpha != 0) && (interfaceCtx->bAlpha > dimmingAlpha)) {
+                interfaceCtx->bAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
+                interfaceCtx->aAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cLeftAlpha != 0) && (interfaceCtx->cLeftAlpha > dimmingAlpha)) {
+                interfaceCtx->cLeftAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cDownAlpha != 0) && (interfaceCtx->cDownAlpha > dimmingAlpha)) {
+                interfaceCtx->cDownAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cRightAlpha != 0) && (interfaceCtx->cRightAlpha > dimmingAlpha)) {
+                interfaceCtx->cRightAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
+                interfaceCtx->minimapAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->magicAlpha != 0) && (interfaceCtx->magicAlpha > dimmingAlpha)) {
+                interfaceCtx->magicAlpha = dimmingAlpha;
+            }
+
+            if (interfaceCtx->healthAlpha != 255) {
+                interfaceCtx->healthAlpha = risingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_A_B_MINIMAP:
+            if (interfaceCtx->aAlpha != 255) {
+                interfaceCtx->aAlpha = risingAlpha;
+            }
+
+            if ((gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) || (gSaveContext.unk_1015 == ITEM_NONE)) {
+                if (interfaceCtx->bAlpha != 70) {
+                    interfaceCtx->bAlpha = 70;
+                }
+            } else {
+                if (interfaceCtx->bAlpha != 255) {
+                    interfaceCtx->bAlpha = risingAlpha;
+                }
+            }
+
+            if (interfaceCtx->minimapAlpha != 255) {
+                interfaceCtx->minimapAlpha = risingAlpha;
+            }
+
+            if ((interfaceCtx->cLeftAlpha != 0) && (interfaceCtx->cLeftAlpha > dimmingAlpha)) {
+                interfaceCtx->cLeftAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cDownAlpha != 0) && (interfaceCtx->cDownAlpha > dimmingAlpha)) {
+                interfaceCtx->cDownAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cRightAlpha != 0) && (interfaceCtx->cRightAlpha > dimmingAlpha)) {
+                interfaceCtx->cRightAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->magicAlpha != 0) && (interfaceCtx->magicAlpha > dimmingAlpha)) {
+                interfaceCtx->magicAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->healthAlpha != 0) && (interfaceCtx->healthAlpha > dimmingAlpha)) {
+                interfaceCtx->healthAlpha = dimmingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_HEARTS_MAGIC_WITH_OVERWRITE:
+            Interface_UpdateButtonAlphas(play, dimmingAlpha, risingAlpha);
+
+            if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
+                interfaceCtx->minimapAlpha = dimmingAlpha;
+            }
+
+            // aAlpha overwrites the value set in Interface_UpdateButtonAlphas
+            if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
+                interfaceCtx->aAlpha = dimmingAlpha;
+            }
+
+            if (interfaceCtx->magicAlpha != 255) {
+                interfaceCtx->magicAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->healthAlpha != 255) {
+                interfaceCtx->healthAlpha = risingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_HEARTS_MAGIC_C:
+            if ((interfaceCtx->bAlpha != 0) && (interfaceCtx->bAlpha > dimmingAlpha)) {
+                interfaceCtx->bAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
+                interfaceCtx->aAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
+                interfaceCtx->minimapAlpha = dimmingAlpha;
+            }
+
+            if (interfaceCtx->cLeftAlpha != 255) {
+                interfaceCtx->cLeftAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->cDownAlpha != 255) {
+                interfaceCtx->cDownAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->cRightAlpha != 255) {
+                interfaceCtx->cRightAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->magicAlpha != 255) {
+                interfaceCtx->magicAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->healthAlpha != 255) {
+                interfaceCtx->healthAlpha = risingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_ALL_NO_MINIMAP:
+            if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
+                interfaceCtx->minimapAlpha = dimmingAlpha;
+            }
+
+            if (interfaceCtx->bAlpha != 255) {
+                interfaceCtx->bAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->aAlpha != 255) {
+                interfaceCtx->aAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->cLeftAlpha != 255) {
+                interfaceCtx->cLeftAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->cDownAlpha != 255) {
+                interfaceCtx->cDownAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->cRightAlpha != 255) {
+                interfaceCtx->cRightAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->magicAlpha != 255) {
+                interfaceCtx->magicAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->healthAlpha != 255) {
+                interfaceCtx->healthAlpha = risingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_A_B_C:
+            if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
+                interfaceCtx->minimapAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->magicAlpha != 0) && (interfaceCtx->magicAlpha > dimmingAlpha)) {
+                interfaceCtx->magicAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->healthAlpha != 0) && (interfaceCtx->healthAlpha > dimmingAlpha)) {
+                interfaceCtx->healthAlpha = dimmingAlpha;
+            }
+
+            if (interfaceCtx->bAlpha != 255) {
+                interfaceCtx->bAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->aAlpha != 255) {
+                interfaceCtx->aAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->cLeftAlpha != 255) {
+                interfaceCtx->cLeftAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->cDownAlpha != 255) {
+                interfaceCtx->cDownAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->cRightAlpha != 255) {
+                interfaceCtx->cRightAlpha = risingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_B_MINIMAP:
+            if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
+                interfaceCtx->aAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cLeftAlpha != 0) && (interfaceCtx->cLeftAlpha > dimmingAlpha)) {
+                interfaceCtx->cLeftAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cDownAlpha != 0) && (interfaceCtx->cDownAlpha > dimmingAlpha)) {
+                interfaceCtx->cDownAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cRightAlpha != 0) && (interfaceCtx->cRightAlpha > dimmingAlpha)) {
+                interfaceCtx->cRightAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->magicAlpha != 0) && (interfaceCtx->magicAlpha > dimmingAlpha)) {
+                interfaceCtx->magicAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->healthAlpha != 0) && (interfaceCtx->healthAlpha > dimmingAlpha)) {
+                interfaceCtx->healthAlpha = dimmingAlpha;
+            }
+
+            if (interfaceCtx->bAlpha != 255) {
+                interfaceCtx->bAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->minimapAlpha != 255) {
+                interfaceCtx->minimapAlpha = risingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_HEARTS_MAGIC_MINIMAP:
+            if ((interfaceCtx->bAlpha != 0) && (interfaceCtx->bAlpha > dimmingAlpha)) {
+                interfaceCtx->bAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
+                interfaceCtx->aAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cLeftAlpha != 0) && (interfaceCtx->cLeftAlpha > dimmingAlpha)) {
+                interfaceCtx->cLeftAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cDownAlpha != 0) && (interfaceCtx->cDownAlpha > dimmingAlpha)) {
+                interfaceCtx->cDownAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cRightAlpha != 0) && (interfaceCtx->cRightAlpha > dimmingAlpha)) {
+                interfaceCtx->cRightAlpha = dimmingAlpha;
+            }
+
+            if (interfaceCtx->healthAlpha != 255) {
+                interfaceCtx->healthAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->magicAlpha != 255) {
+                interfaceCtx->magicAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->minimapAlpha != 255) {
+                interfaceCtx->minimapAlpha = risingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_A_HEARTS_MAGIC_MINIMAP:
+            if ((interfaceCtx->bAlpha != 0) && (interfaceCtx->bAlpha > dimmingAlpha)) {
+                interfaceCtx->bAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cLeftAlpha != 0) && (interfaceCtx->cLeftAlpha > dimmingAlpha)) {
+                interfaceCtx->cLeftAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cDownAlpha != 0) && (interfaceCtx->cDownAlpha > dimmingAlpha)) {
+                interfaceCtx->cDownAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cRightAlpha != 0) && (interfaceCtx->cRightAlpha > dimmingAlpha)) {
+                interfaceCtx->cRightAlpha = dimmingAlpha;
+            }
+
+            if (interfaceCtx->aAlpha != 255) {
+                interfaceCtx->aAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->minimapAlpha != 255) {
+                interfaceCtx->minimapAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->magicAlpha != 255) {
+                interfaceCtx->magicAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->healthAlpha != 255) {
+                interfaceCtx->healthAlpha = risingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_B_MAGIC:
+            if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
+                interfaceCtx->aAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cLeftAlpha != 0) && (interfaceCtx->cLeftAlpha > dimmingAlpha)) {
+                interfaceCtx->cLeftAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cDownAlpha != 0) && (interfaceCtx->cDownAlpha > dimmingAlpha)) {
+                interfaceCtx->cDownAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cRightAlpha != 0) && (interfaceCtx->cRightAlpha > dimmingAlpha)) {
+                interfaceCtx->cRightAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
+                interfaceCtx->minimapAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->healthAlpha != 0) && (interfaceCtx->healthAlpha > dimmingAlpha)) {
+                interfaceCtx->healthAlpha = dimmingAlpha;
+            }
+
+            if (interfaceCtx->bAlpha != 255) {
+                interfaceCtx->bAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->magicAlpha != 255) {
+                interfaceCtx->magicAlpha = risingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_A_B:
+            if (interfaceCtx->aAlpha != 255) {
+                interfaceCtx->aAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->bAlpha != 255) {
+                interfaceCtx->bAlpha = risingAlpha;
+            }
+
+            if ((interfaceCtx->cLeftAlpha != 0) && (interfaceCtx->cLeftAlpha > dimmingAlpha)) {
+                interfaceCtx->cLeftAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cDownAlpha != 0) && (interfaceCtx->cDownAlpha > dimmingAlpha)) {
+                interfaceCtx->cDownAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cRightAlpha != 0) && (interfaceCtx->cRightAlpha > dimmingAlpha)) {
+                interfaceCtx->cRightAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
+                interfaceCtx->minimapAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->magicAlpha != 0) && (interfaceCtx->magicAlpha > dimmingAlpha)) {
+                interfaceCtx->magicAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->healthAlpha != 0) && (interfaceCtx->healthAlpha > dimmingAlpha)) {
+                interfaceCtx->healthAlpha = dimmingAlpha;
+            }
+
+            break;
+
+        case HUD_VISIBILITY_A_B_HEARTS_MAGIC_MINIMAP:
+            if ((interfaceCtx->cLeftAlpha != 0) && (interfaceCtx->cLeftAlpha > dimmingAlpha)) {
+                interfaceCtx->cLeftAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cDownAlpha != 0) && (interfaceCtx->cDownAlpha > dimmingAlpha)) {
+                interfaceCtx->cDownAlpha = dimmingAlpha;
+            }
+
+            if ((interfaceCtx->cRightAlpha != 0) && (interfaceCtx->cRightAlpha > dimmingAlpha)) {
+                interfaceCtx->cRightAlpha = dimmingAlpha;
+            }
+
+            if (interfaceCtx->bAlpha != 255) {
+                interfaceCtx->bAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->aAlpha != 255) {
+                interfaceCtx->aAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->minimapAlpha != 255) {
+                interfaceCtx->minimapAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->magicAlpha != 255) {
+                interfaceCtx->magicAlpha = risingAlpha;
+            }
+
+            if (interfaceCtx->healthAlpha != 255) {
+                interfaceCtx->healthAlpha = risingAlpha;
+            }
+
+            break;
+    }
+
+    if ((play->roomCtx.curRoom.unk3 == 1) && (interfaceCtx->minimapAlpha >= 255)) {
+        interfaceCtx->minimapAlpha = 255;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80110038.s")
 
@@ -600,7 +1361,7 @@ u8 Item_Give(PlayState* play, u8 item) {
         return item;
 
     } else if (item == ITEM_MAGIC_SMALL) {
-        Parameter_AddMagic(play, 0x18);
+        Magic_Add(play, MAGIC_NORMAL_METER / 2);
         if (!(gSaveContext.save.weekEventReg[12] & 0x80)) {
             gSaveContext.save.weekEventReg[12] |= 0x80;
             return ITEM_NONE;
@@ -608,7 +1369,7 @@ u8 Item_Give(PlayState* play, u8 item) {
         return item;
 
     } else if (item == ITEM_MAGIC_LARGE) {
-        Parameter_AddMagic(play, 0x30);
+        Magic_Add(play, MAGIC_NORMAL_METER);
         if (!(gSaveContext.save.weekEventReg[12] & 0x80)) {
             gSaveContext.save.weekEventReg[12] |= 0x80;
             return ITEM_NONE;
@@ -1145,26 +1906,482 @@ void Inventory_ChangeAmmo(s16 item, s16 ammoChange) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Parameter_AddMagic.s")
+void Magic_Add(PlayState* play, s16 magicToAdd) {
+    if (((void)0, gSaveContext.save.playerData.magic) < ((void)0, gSaveContext.magicCapacity)) {
+        gSaveContext.magicToAdd += magicToAdd;
+        gSaveContext.isMagicRequested = true;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80115D5C.s")
+void Magic_Reset(PlayState* play) {
+    if ((gSaveContext.magicState != MAGIC_STATE_STEP_CAPACITY) && (gSaveContext.magicState != MAGIC_STATE_FILL)) {
+        sMagicMeterOutlinePrimRed = sMagicMeterOutlinePrimGreen = sMagicMeterOutlinePrimBlue = 255;
+        gSaveContext.magicState = MAGIC_STATE_IDLE;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80115DB4.s")
+/**
+ * Request to consume magic.
+ *
+ * @param magicToConsume the positive-valued amount to decrease magic by
+ * @param type how the magic is consumed.
+ * @return false if the request failed
+ */
+s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80116088.s")
+    // Magic is not acquired yet
+    if (!gSaveContext.save.playerData.isMagicAcquired) {
+        return false;
+    }
 
-s16 magicBorderColors[][3] = {
+    // Not enough magic available to consume
+    if ((gSaveContext.save.playerData.magic - magicToConsume) < 0) {
+        if (gSaveContext.magicCapacity != 0) {
+            play_sound(NA_SE_SY_ERROR);
+        }
+        return false;
+    }
+
+    switch (type) {
+        case MAGIC_CONSUME_NOW:
+        case MAGIC_CONSUME_NOW_ALT:
+            // Drain magic immediately e.g. Deku Bubble
+            if ((gSaveContext.magicState == MAGIC_STATE_IDLE) ||
+                (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS)) {
+                if (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS) {
+                    play->actorCtx.lensActive = false;
+                }
+                if (gSaveContext.save.weekEventReg[14] & 8) {
+                    // Drank Chateau Romani
+                    magicToConsume = 0;
+                }
+                gSaveContext.magicToConsume = magicToConsume;
+                gSaveContext.magicState = MAGIC_STATE_CONSUME_SETUP;
+                return true;
+            } else {
+                play_sound(NA_SE_SY_ERROR);
+                return false;
+            }
+
+        case MAGIC_CONSUME_WAIT_NO_PREVIEW:
+            // Sets consume target but waits to consume.
+            // No yellow magic to preview target consumption.
+            if ((gSaveContext.magicState == MAGIC_STATE_IDLE) ||
+                (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS)) {
+                if (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS) {
+                    play->actorCtx.lensActive = false;
+                }
+                if (gSaveContext.save.weekEventReg[14] & 8) {
+                    // Drank Chateau Romani
+                    magicToConsume = 0;
+                }
+                gSaveContext.magicToConsume = magicToConsume;
+                gSaveContext.magicState = MAGIC_STATE_METER_FLASH_3;
+                return true;
+            } else {
+                play_sound(NA_SE_SY_ERROR);
+                return false;
+            }
+
+        case MAGIC_CONSUME_LENS:
+            if (gSaveContext.magicState == MAGIC_STATE_IDLE) {
+                if (gSaveContext.save.playerData.magic != 0) {
+                    interfaceCtx->magicConsumptionTimer = 80;
+                    gSaveContext.magicState = MAGIC_STATE_CONSUME_LENS;
+                    return true;
+                } else {
+                    return false;
+                }
+            } else if (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS) {
+                return true;
+            } else {
+                return false;
+            }
+
+        case MAGIC_CONSUME_WAIT_PREVIEW:
+            // Sets consume target but waits to consume.
+            // Preview consumption with a yellow bar. e.g. Spin Attack
+            if ((gSaveContext.magicState == MAGIC_STATE_IDLE) ||
+                (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS)) {
+                if (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS) {
+                    play->actorCtx.lensActive = false;
+                }
+                gSaveContext.magicToConsume = magicToConsume;
+                gSaveContext.magicState = MAGIC_STATE_METER_FLASH_2;
+                return true;
+            } else {
+                play_sound(NA_SE_SY_ERROR);
+                return false;
+            }
+
+        case MAGIC_CONSUME_GORON_ZORA:
+            // Goron spiked rolling or Zora electric barrier
+            if (gSaveContext.save.playerData.magic != 0) {
+                interfaceCtx->magicConsumptionTimer = 10;
+                gSaveContext.magicState = MAGIC_STATE_CONSUME_GORON_ZORA_SETUP;
+                return true;
+            } else {
+                return false;
+            }
+
+        case MAGIC_CONSUME_GIANTS_MASK:
+            // Wearing Giant's Mask
+            if (gSaveContext.magicState == MAGIC_STATE_IDLE) {
+                if (gSaveContext.save.playerData.magic != 0) {
+                    interfaceCtx->magicConsumptionTimer = R_MAGIC_CONSUME_TIMER_GIANTS_MASK;
+                    gSaveContext.magicState = MAGIC_STATE_CONSUME_GIANTS_MASK;
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            if (gSaveContext.magicState == MAGIC_STATE_CONSUME_GIANTS_MASK) {
+                return true;
+            } else {
+                return false;
+            }
+
+        case MAGIC_CONSUME_DEITY_BEAM:
+            // Consumes magic immediately
+            if ((gSaveContext.magicState == MAGIC_STATE_IDLE) ||
+                (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS)) {
+                if (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS) {
+                    play->actorCtx.lensActive = false;
+                }
+                if (gSaveContext.save.weekEventReg[14] & 8) {
+                    // Drank Chateau Romani
+                    magicToConsume = 0;
+                }
+                gSaveContext.save.playerData.magic -= magicToConsume;
+                return true;
+            } else {
+                play_sound(NA_SE_SY_ERROR);
+                return false;
+            }
+    }
+
+    return false;
+}
+
+void Magic_UpdateAddRequest(void) {
+    if (gSaveContext.isMagicRequested) {
+        gSaveContext.save.playerData.magic += 4;
+        play_sound(NA_SE_SY_GAUGE_UP - SFX_FLAG);
+
+        if (((void)0, gSaveContext.save.playerData.magic) >= ((void)0, gSaveContext.magicCapacity)) {
+            gSaveContext.save.playerData.magic = gSaveContext.magicCapacity;
+            gSaveContext.magicToAdd = 0;
+            gSaveContext.isMagicRequested = false;
+        } else {
+            gSaveContext.magicToAdd -= 4;
+            if (gSaveContext.magicToAdd <= 0) {
+                gSaveContext.magicToAdd = 0;
+                gSaveContext.isMagicRequested = false;
+            }
+        }
+    }
+}
+
+s16 sMagicBorderColors[][3] = {
     { 255, 255, 255 },
     { 150, 150, 150 },
 };
-s16 magicBorderIndices[] = { 0, 1, 1, 0 };
-s16 magicBorderColorTimerIndex[] = { 2, 1, 2, 1 };
+s16 sMagicBorderIndices[] = { 0, 1, 1, 0 };
+s16 sMagicBorderColorTimerIndex[] = { 2, 1, 2, 1 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80116114.s")
+void Magic_FlashMeterBorder(void) {
+    s16 borderChangeR;
+    s16 borderChangeG;
+    s16 borderChangeB;
+    s16 index = sMagicBorderIndices[sMagicBorderStep];
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80116348.s")
+    borderChangeR = ABS_ALT(sMagicMeterOutlinePrimRed - sMagicBorderColors[index][0]) / sMagicBorderRatio;
+    borderChangeG = ABS_ALT(sMagicMeterOutlinePrimGreen - sMagicBorderColors[index][1]) / sMagicBorderRatio;
+    borderChangeB = ABS_ALT(sMagicMeterOutlinePrimBlue - sMagicBorderColors[index][2]) / sMagicBorderRatio;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80116918.s")
+    if (sMagicMeterOutlinePrimRed >= sMagicBorderColors[index][0]) {
+        sMagicMeterOutlinePrimRed -= borderChangeR;
+    } else {
+        sMagicMeterOutlinePrimRed += borderChangeR;
+    }
+
+    if (sMagicMeterOutlinePrimGreen >= sMagicBorderColors[index][1]) {
+        sMagicMeterOutlinePrimGreen -= borderChangeG;
+    } else {
+        sMagicMeterOutlinePrimGreen += borderChangeG;
+    }
+
+    if (sMagicMeterOutlinePrimBlue >= sMagicBorderColors[index][2]) {
+        sMagicMeterOutlinePrimBlue -= borderChangeB;
+    } else {
+        sMagicMeterOutlinePrimBlue += borderChangeB;
+    }
+
+    sMagicBorderRatio--;
+    if (sMagicBorderRatio == 0) {
+        sMagicMeterOutlinePrimRed = sMagicBorderColors[index][0];
+        sMagicMeterOutlinePrimGreen = sMagicBorderColors[index][1];
+        sMagicMeterOutlinePrimBlue = sMagicBorderColors[index][2];
+
+        sMagicBorderRatio = sMagicBorderColorTimerIndex[sMagicBorderStep];
+
+        sMagicBorderStep++;
+        if (sMagicBorderStep >= 4) {
+            sMagicBorderStep = 0;
+        }
+    }
+}
+
+void Magic_Update(PlayState* play) {
+    MessageContext* msgCtx = &play->msgCtx;
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+    s16 magicCapacityTarget;
+
+    if (gSaveContext.save.weekEventReg[14] & 8) {
+        // Drank Chateau Romani
+        Magic_FlashMeterBorder();
+    }
+
+    switch (gSaveContext.magicState) {
+        case MAGIC_STATE_STEP_CAPACITY:
+            // Step magicCapacity to the capacity determined by magicLevel
+            // This changes the width of the magic meter drawn
+            magicCapacityTarget = gSaveContext.save.playerData.magicLevel * MAGIC_NORMAL_METER;
+            if (gSaveContext.magicCapacity != magicCapacityTarget) {
+                if (gSaveContext.magicCapacity < magicCapacityTarget) {
+                    gSaveContext.magicCapacity += 0x10;
+                    if (gSaveContext.magicCapacity > magicCapacityTarget) {
+                        gSaveContext.magicCapacity = magicCapacityTarget;
+                    }
+                } else {
+                    gSaveContext.magicCapacity -= 0x10;
+                    if (gSaveContext.magicCapacity <= magicCapacityTarget) {
+                        gSaveContext.magicCapacity = magicCapacityTarget;
+                    }
+                }
+            } else {
+                // Once the capacity has reached its target,
+                // follow up by filling magic to magicFillTarget
+                gSaveContext.magicState = MAGIC_STATE_FILL;
+            }
+            break;
+
+        case MAGIC_STATE_FILL:
+            // Add magic until magicFillTarget is reached
+            gSaveContext.save.playerData.magic += 0x10;
+
+            if ((gSaveContext.gameMode == 0) && (gSaveContext.sceneSetupIndex < 4)) {
+                play_sound(NA_SE_SY_GAUGE_UP - SFX_FLAG);
+            }
+
+            if (((void)0, gSaveContext.save.playerData.magic) >= ((void)0, gSaveContext.magicFillTarget)) {
+                gSaveContext.save.playerData.magic = gSaveContext.magicFillTarget;
+                gSaveContext.magicState = MAGIC_STATE_IDLE;
+            }
+            break;
+
+        case MAGIC_STATE_CONSUME_SETUP:
+            // Sets the speed at which magic border flashes
+            sMagicBorderRatio = 2;
+            gSaveContext.magicState = MAGIC_STATE_CONSUME;
+            break;
+
+        case MAGIC_STATE_CONSUME:
+            // Consume magic until target is reached or no more magic is available
+            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+                gSaveContext.save.playerData.magic =
+                    ((void)0, gSaveContext.save.playerData.magic) - ((void)0, gSaveContext.magicToConsume);
+                if (gSaveContext.save.playerData.magic <= 0) {
+                    gSaveContext.save.playerData.magic = 0;
+                }
+                gSaveContext.magicState = MAGIC_STATE_METER_FLASH_1;
+                sMagicMeterOutlinePrimRed = sMagicMeterOutlinePrimGreen = sMagicMeterOutlinePrimBlue = 255;
+            }
+            // fallthrough (flash border while magic is being consumed)
+        case MAGIC_STATE_METER_FLASH_1:
+        case MAGIC_STATE_METER_FLASH_2:
+        case MAGIC_STATE_METER_FLASH_3:
+            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+                Magic_FlashMeterBorder();
+            }
+            break;
+
+        case MAGIC_STATE_RESET:
+            sMagicMeterOutlinePrimRed = sMagicMeterOutlinePrimGreen = sMagicMeterOutlinePrimBlue = 255;
+            gSaveContext.magicState = MAGIC_STATE_IDLE;
+            break;
+
+        case MAGIC_STATE_CONSUME_LENS:
+            // Slowly consume magic while Lens of Truth is active
+            if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
+                (msgCtx->msgMode == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
+                (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
+                !Play_InCsMode(play)) {
+
+                if ((gSaveContext.save.playerData.magic == 0) ||
+                    ((func_801242DC(play) >= 2) && (func_801242DC(play) <= 4)) ||
+                    ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) != ITEM_LENS) &&
+                     (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) != ITEM_LENS) &&
+                     (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) != ITEM_LENS)) ||
+                    !play->actorCtx.lensActive) {
+                    // Deactivate Lens of Truth and set magic state to idle
+                    play->actorCtx.lensActive = false;
+                    play_sound(NA_SE_SY_GLASSMODE_OFF);
+                    gSaveContext.magicState = MAGIC_STATE_IDLE;
+                    sMagicMeterOutlinePrimRed = sMagicMeterOutlinePrimGreen = sMagicMeterOutlinePrimBlue = 255;
+                    break;
+                }
+
+                interfaceCtx->magicConsumptionTimer--;
+                if (interfaceCtx->magicConsumptionTimer == 0) {
+                    if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+                        gSaveContext.save.playerData.magic--;
+                    }
+                    interfaceCtx->magicConsumptionTimer = 80;
+                }
+            }
+            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+                Magic_FlashMeterBorder();
+            }
+            break;
+
+        case MAGIC_STATE_CONSUME_GORON_ZORA_SETUP:
+            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+                gSaveContext.save.playerData.magic -= 2;
+            }
+            if (gSaveContext.save.playerData.magic <= 0) {
+                gSaveContext.save.playerData.magic = 0;
+            }
+            gSaveContext.magicState = MAGIC_STATE_CONSUME_GORON_ZORA;
+            // fallthrough
+        case MAGIC_STATE_CONSUME_GORON_ZORA:
+            if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == 0) && (msgCtx->msgMode == 0) &&
+                (play->gameOverCtx.state == GAMEOVER_INACTIVE) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
+                (play->transitionMode == TRANS_MODE_OFF)) {
+                if (!Play_InCsMode(play)) {
+                    interfaceCtx->magicConsumptionTimer--;
+                    if (interfaceCtx->magicConsumptionTimer == 0) {
+                        if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+                            gSaveContext.save.playerData.magic--;
+                        }
+                        if (gSaveContext.save.playerData.magic <= 0) {
+                            gSaveContext.save.playerData.magic = 0;
+                        }
+                        interfaceCtx->magicConsumptionTimer = 10;
+                    }
+                }
+            }
+            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+                Magic_FlashMeterBorder();
+            }
+            break;
+
+        case MAGIC_STATE_CONSUME_GIANTS_MASK:
+            if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
+                (msgCtx->msgMode == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
+                (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
+                if (!Play_InCsMode(play)) {
+                    interfaceCtx->magicConsumptionTimer--;
+                    if (interfaceCtx->magicConsumptionTimer == 0) {
+                        if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+                            gSaveContext.save.playerData.magic--;
+                        }
+                        if (gSaveContext.save.playerData.magic <= 0) {
+                            gSaveContext.save.playerData.magic = 0;
+                        }
+                        interfaceCtx->magicConsumptionTimer = R_MAGIC_CONSUME_TIMER_GIANTS_MASK;
+                    }
+                }
+            }
+            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+                Magic_FlashMeterBorder();
+            }
+            break;
+
+        default:
+            gSaveContext.magicState = MAGIC_STATE_IDLE;
+            break;
+    }
+}
+
+void Magic_DrawMeter(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+    s16 magicBarY;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    if (gSaveContext.save.playerData.magicLevel != 0) {
+        if (gSaveContext.save.playerData.healthCapacity > 0xA0) {
+            magicBarY = 42; // two rows of hearts
+        } else {
+            magicBarY = 34; // one row of hearts
+        }
+
+        func_8012C654(play->state.gfxCtx);
+
+        gDPSetEnvColor(OVERLAY_DISP++, 100, 50, 50, 255);
+
+        OVERLAY_DISP = func_8010CFBC(OVERLAY_DISP, gMagicMeterEndTex, 8, 16, 18, magicBarY, 8, 16, 1 << 10, 1 << 10,
+                                     sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen, sMagicMeterOutlinePrimBlue,
+                                     interfaceCtx->magicAlpha);
+        OVERLAY_DISP =
+            func_8010CFBC(OVERLAY_DISP, gMagicMeterMidTex, 24, 16, 26, magicBarY, ((void)0, gSaveContext.magicCapacity),
+                          16, 1 << 10, 1 << 10, sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen,
+                          sMagicMeterOutlinePrimBlue, interfaceCtx->magicAlpha);
+        OVERLAY_DISP =
+            func_8010D480(OVERLAY_DISP, gMagicMeterEndTex, 8, 16, ((void)0, gSaveContext.magicCapacity) + 26, magicBarY,
+                          8, 16, 1 << 10, 1 << 10, sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen,
+                          sMagicMeterOutlinePrimBlue, interfaceCtx->magicAlpha, 3, 0x100);
+
+        gDPPipeSync(OVERLAY_DISP++);
+        gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, 0, 0, 0, PRIMITIVE, PRIMITIVE,
+                          ENVIRONMENT, TEXEL0, ENVIRONMENT, 0, 0, 0, PRIMITIVE);
+        gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, 255);
+
+        if (gSaveContext.magicState == MAGIC_STATE_METER_FLASH_2) {
+            // Yellow part of the meter indicating the amount of magic to be subtracted
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 250, 250, 0, interfaceCtx->magicAlpha);
+            gDPLoadTextureBlock_4b(OVERLAY_DISP++, gMagicMeterFillTex, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                                   G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gSPTextureRectangle(OVERLAY_DISP++, 104, (magicBarY + 3) << 2,
+                                (((void)0, gSaveContext.save.playerData.magic) + 26) << 2, (magicBarY + 10) << 2,
+                                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+
+            // Fill the rest of the meter with the normal magic color
+            gDPPipeSync(OVERLAY_DISP++);
+            if (gSaveContext.save.weekEventReg[14] & 8) {
+                // Blue magic (drank Chateau Romani)
+                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 200, interfaceCtx->magicAlpha);
+            } else {
+                // Green magic (default)
+                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 200, 0, interfaceCtx->magicAlpha);
+            }
+
+            gSPTextureRectangle(
+                OVERLAY_DISP++, 104, (magicBarY + 3) << 2,
+                ((((void)0, gSaveContext.save.playerData.magic) - ((void)0, gSaveContext.magicToConsume)) + 26) << 2,
+                (magicBarY + 10) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+        } else {
+            // Fill the whole meter with the normal magic color
+            if (gSaveContext.save.weekEventReg[14] & 8) {
+                // Blue magic (drank Chateau Romani)
+                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 200, interfaceCtx->magicAlpha);
+            } else {
+                // Green magic (default)
+                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 200, 0, interfaceCtx->magicAlpha);
+            }
+
+            gDPLoadTextureBlock_4b(OVERLAY_DISP++, gMagicMeterFillTex, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                                   G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gSPTextureRectangle(OVERLAY_DISP++, 104, (magicBarY + 3) << 2,
+                                (((void)0, gSaveContext.save.playerData.magic) + 26) << 2, (magicBarY + 10) << 2,
+                                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+        }
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80116FD8.s")
 

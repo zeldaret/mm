@@ -420,8 +420,8 @@ void func_80B9D0FC(ObjHunsui* this, PlayState* play) {
 
 void func_80B9D120(ObjHunsui* this, PlayState* play) {
     if (((this->unk_160 == OBJHUNSUI_F000_5) || (this->unk_160 == OBJHUNSUI_F000_6)) &&
-        (this->unk_16C != play->roomCtx.currRoom.num) && (this->unk_16C != play->roomCtx.prevRoom.num) &&
-        ((this->unk_16D != play->roomCtx.currRoom.num) && (this->unk_16D != play->roomCtx.prevRoom.num))) {
+        (this->unk_16C != play->roomCtx.curRoom.num) && (this->unk_16C != play->roomCtx.prevRoom.num) &&
+        ((this->unk_16D != play->roomCtx.curRoom.num) && (this->unk_16D != play->roomCtx.prevRoom.num))) {
         switch (this->unk_160) {
             case OBJHUNSUI_F000_5:
                 D_80B9DED8.unk_01 = 0;
@@ -525,8 +525,8 @@ void func_80B9D4D0(ObjHunsui* this, PlayState* play) {
 
 void func_80B9D508(ObjHunsui* this, PlayState* play) {
     if (((this->unk_160 == OBJHUNSUI_F000_5) || (this->unk_160 == OBJHUNSUI_F000_6)) &&
-        (this->unk_16C != play->roomCtx.currRoom.num) && (this->unk_16C != play->roomCtx.prevRoom.num) &&
-        (this->unk_16D != play->roomCtx.currRoom.num) && (this->unk_16D != play->roomCtx.prevRoom.num)) {
+        (this->unk_16C != play->roomCtx.curRoom.num) && (this->unk_16C != play->roomCtx.prevRoom.num) &&
+        (this->unk_16D != play->roomCtx.curRoom.num) && (this->unk_16D != play->roomCtx.prevRoom.num)) {
         switch (this->unk_160) {
             case OBJHUNSUI_F000_5:
                 D_80B9DED8.unk_01 = 0;
@@ -544,7 +544,7 @@ void func_80B9D508(ObjHunsui* this, PlayState* play) {
     func_80B9D094(this, play);
 
     if (((this->unk_160 == OBJHUNSUI_F000_5) || (this->unk_160 == OBJHUNSUI_F000_6)) &&
-        (play->roomCtx.currRoom.num == 8)) {
+        (play->roomCtx.curRoom.num == 8)) {
         func_80B9D334(this, play);
     }
 
@@ -572,8 +572,8 @@ void func_80B9D714(ObjHunsui* this, PlayState* play) {
     s16 cs;
     f32 sp28;
 
-    if ((this->unk_16C != play->roomCtx.currRoom.num) && (this->unk_16C != play->roomCtx.prevRoom.num) &&
-        (this->unk_16D != play->roomCtx.currRoom.num) && (this->unk_16D != play->roomCtx.prevRoom.num)) {
+    if ((this->unk_16C != play->roomCtx.curRoom.num) && (this->unk_16C != play->roomCtx.prevRoom.num) &&
+        (this->unk_16D != play->roomCtx.curRoom.num) && (this->unk_16D != play->roomCtx.prevRoom.num)) {
         Actor_MarkForDeath(&this->dyna.actor);
     } else {
         if (Flags_GetSwitch(play, this->unk_168)) {

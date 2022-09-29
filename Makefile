@@ -28,6 +28,9 @@ N_THREADS ?= $(shell nproc)
 
 #### Setup ####
 
+# Ensure the map file being created using English localization
+export LANG := C
+
 ifeq ($(NON_MATCHING),1)
   CFLAGS := -DNON_MATCHING
   CPPFLAGS := -DNON_MATCHING

@@ -303,7 +303,7 @@ static AnimationHeader* sGekkoAttackAnimations[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 95, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_GEKKO_GIANT_SLIME, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(targetArrowOffset, -13221, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
     ICHAIN_U8(targetMode, 5, ICHAIN_STOP),
@@ -339,7 +339,7 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
     this->gekkoCollider.base.ocFlags1 &= ~OC1_NO_PUSH;
     this->actor.params = CLAMP(this->actor.params, 1, 4);
 
-    if (Flags_GetClear(play, play->roomCtx.currRoom.num)) {
+    if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
         Actor_MarkForDeath(&this->actor);
         if (!(gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
               (u8)isFrogReturnedFlags[this->actor.params - 1])) {
@@ -765,7 +765,7 @@ void EnBigslime_BreakIntoMinislime(EnBigslime* this, PlayState* play) {
     this->actor.colChkInfo.mass = 50;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_400);
     this->actor.flags |= ACTOR_FLAG_200;
-    this->actor.hintId = 95;
+    this->actor.hintId = TATL_HINT_ID_GEKKO_GIANT_SLIME;
     this->gekkoRot.x = 0;
     this->gekkoRot.y = 0;
     this->actor.bgCheckFlags &= ~1;
@@ -2308,7 +2308,7 @@ void EnBigslime_FormBigslime(EnBigslime* this, PlayState* play) {
 
     if (this->minislimeCounter == MINISLIME_NUM_SPAWN) {
         this->minislimeState = MINISLIME_INACTIVE_STATE;
-        this->actor.hintId = 3;
+        this->actor.hintId = TATL_HINT_ID_MAD_JELLY;
         EnBigslime_SetupMoveOnCeiling(this);
     }
 }
@@ -2497,7 +2497,7 @@ void EnBigslime_Despawn(EnBigslime* this, PlayState* play) {
     }
 
     if (!this->isDespawned) {
-        Flags_SetClearTemp(play, play->roomCtx.currRoom.num);
+        Flags_SetClearTemp(play, play->roomCtx.curRoom.num);
         this->isDespawned = true;
     }
 

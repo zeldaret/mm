@@ -263,7 +263,7 @@ void EnElforg_MoveToTarget(EnElforg* this, Vec3f* targetPos) {
 }
 
 void func_80ACCBB8(EnElforg* this, PlayState* play) {
-    play->actorCtx.unk5 |= 8;
+    play->actorCtx.flags |= ACTORCTX_FLAG_3;
 }
 
 void EnElforg_TrappedByBubble(EnElforg* this, PlayState* play) {

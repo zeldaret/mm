@@ -509,7 +509,7 @@ void EnKusa_LiftedUp(EnKusa* this, PlayState* play) {
     s32 bgId;
 
     if (Actor_HasNoParent(&this->actor, play)) {
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         EnKusa_SetupFall(this);
         this->actor.velocity.x = this->actor.speedXZ * Math_SinS(this->actor.world.rot.y);
         this->actor.velocity.z = this->actor.speedXZ * Math_CosS(this->actor.world.rot.y);
@@ -682,7 +682,7 @@ void EnKusa_Update(Actor* thisx, PlayState* play2) {
     } else {
         this->actor.shape.yOffset = 0.0f;
     }
-    if ((kusaGameplayFrames != play->gameplayFrames) && (play->roomCtx.currRoom.unk3 == 0)) {
+    if ((kusaGameplayFrames != play->gameplayFrames) && (play->roomCtx.curRoom.unk3 == 0)) {
         EnKusa_Sway();
         kusaGameplayFrames = play->gameplayFrames;
     }
@@ -694,7 +694,7 @@ void EnKusa_DrawBush(Actor* thisx, PlayState* play2) {
 
     if ((this->actor.projectedPos.z <= 1200.0f) || ((this->isInWater & 1) && (this->actor.projectedPos.z < 1300.0f))) {
 
-        if ((play->roomCtx.currRoom.unk3 == 0) && (this->actionFunc == EnKusa_WaitForInteract) &&
+        if ((play->roomCtx.curRoom.unk3 == 0) && (this->actionFunc == EnKusa_WaitForInteract) &&
             (this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
             EnKusa_ApplySway(&D_80936AD8[this->kusaMtxIdx]);
         }
@@ -723,7 +723,7 @@ void EnKusa_DrawGrass(Actor* thisx, PlayState* play) {
     if (this->isCut) {
         Gfx_DrawDListOpa(play, gKusaStump);
     } else {
-        if ((play->roomCtx.currRoom.unk3 == 0) && (this->actionFunc == EnKusa_WaitForInteract)) {
+        if ((play->roomCtx.curRoom.unk3 == 0) && (this->actionFunc == EnKusa_WaitForInteract)) {
             if ((this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
                 EnKusa_ApplySway(&D_80936AD8[this->kusaMtxIdx]);
             }

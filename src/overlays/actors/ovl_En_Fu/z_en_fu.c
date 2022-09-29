@@ -651,9 +651,8 @@ void func_80962A10(EnFu* this, PlayState* play) {
         this->unk_546 = 1;
     }
 
-    if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && gSaveContext.save.playerData.magicAcquired) {
-        Parameter_AddMagic(play,
-                           ((void)0, gSaveContext.unk_3F30) + (gSaveContext.save.playerData.doubleMagic * 48) + 48);
+    if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && gSaveContext.save.playerData.isMagicAcquired) {
+        Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
     }
 
     func_80962F10(this);
@@ -821,7 +820,7 @@ void func_8096326C(EnFu* this, PlayState* play) {
 
 void func_809632D0(EnFu* this) {
     if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
-        Interface_ChangeAlpha(50);
+        Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     }
 
     gSaveContext.save.weekEventReg[8] &= (u8)~1;
@@ -1139,7 +1138,7 @@ void func_80963DE4(EnFu* this, PlayState* play) {
 }
 
 void func_80963EAC(EnFu* this, PlayState* play) {
-    if (gSaveContext.save.playerData.magicAcquired) {
+    if (gSaveContext.save.playerData.isMagicAcquired) {
         if (this->unk_540 == 1) {
             Message_StartTextbox(play, 0x2847, &this->actor);
             this->unk_552 = 0x2847;
@@ -1461,7 +1460,7 @@ void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len) {
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(ptr->unk_00, ptr->unk_00, ptr->unk_00, MTXMODE_APPLY);
 
-            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropRecoveryHeartTex));
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0E0);
         }

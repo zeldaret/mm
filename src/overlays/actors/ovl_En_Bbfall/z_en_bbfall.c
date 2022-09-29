@@ -143,7 +143,7 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit sColChkInfoInit = { 2, 20, 40, 50 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 36, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_RED_BUBBLE, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 10, ICHAIN_STOP),
 };
 
