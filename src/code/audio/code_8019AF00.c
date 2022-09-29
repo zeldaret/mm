@@ -402,10 +402,12 @@ s8 sSpecReverbs[] = {
     0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
+#define AMBIENCE_CHANNEL_PROPERTIES_ENTRIES_MAX 33
+
 typedef struct {
-    /* 0x0 */ u16 initChannelMask;     // bitpacked channel mask to initialize channels
-    /* 0x2 */ u16 initMuteChannelMask; // bitpacked channel mask to mute channel upon initialization
-    /* 0x4 */ u8 channelProperties[3 * 33 + 1];
+    /* 0x0 */ u16 initChannelMask;     // bitwise flag for 16 channels, channels to initialize
+    /* 0x2 */ u16 initMuteChannelMask; // bitwise flag for 16 channels, channels to mute upon initialization
+    /* 0x4 */ u8 channelProperties[3 * AMBIENCE_CHANNEL_PROPERTIES_ENTRIES_MAX + 1];
 } AmbienceDataIO; // size = 0x68
 
 AmbienceDataIO sAmbienceData[20] = {
