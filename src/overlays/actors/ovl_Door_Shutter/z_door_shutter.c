@@ -553,9 +553,9 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
             play->doorCtx.transitionActorList[DOORSHUTTER_GET_FC00(&this->actor)].sides[(sp44.z < 0.0f) ? 0 : 1].room;
 
         if (room != this->actor.room) {
-            Room temp = play->roomCtx.currRoom;
+            Room temp = play->roomCtx.curRoom;
 
-            play->roomCtx.currRoom = play->roomCtx.prevRoom;
+            play->roomCtx.curRoom = play->roomCtx.prevRoom;
             play->roomCtx.prevRoom = temp;
             play->roomCtx.activeMemPage ^= 1;
         }

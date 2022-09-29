@@ -177,7 +177,7 @@ void Map_Init(PlayState* play) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
     s32 dungeonIndex;
 
-    func_80105C40(play->roomCtx.currRoom.num);
+    func_80105C40(play->roomCtx.curRoom.num);
     interfaceCtx->unk_278 = -1;
     interfaceCtx->dungeonOrBossAreaMapIndex = -1;
     interfaceCtx->mapSegment = THA_AllocEndAlign16(&play->state.heap, 0x1000);
@@ -208,7 +208,7 @@ void Map_Init(PlayState* play) {
         }
 
         gSaveContext.dungeonIndex = dungeonIndex;
-        Map_InitRoomData(play, play->roomCtx.currRoom.num);
+        Map_InitRoomData(play, play->roomCtx.curRoom.num);
     }
 }
 

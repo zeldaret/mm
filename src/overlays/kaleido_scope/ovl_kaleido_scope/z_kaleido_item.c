@@ -584,13 +584,13 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
             if ((cursorItem != (u32)PAUSE_ITEM_NONE) && (msgCtx->msgLength == 0)) {
                 if (gSaveContext.buttonStatus[EQUIP_SLOT_A] == BTN_DISABLED) {
                     gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
-                    gSaveContext.unk_3F22 = 0;
-                    Interface_ChangeAlpha(50);
+                    gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+                    Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
                 }
             } else if (gSaveContext.buttonStatus[EQUIP_SLOT_A] != BTN_DISABLED) {
                 gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_DISABLED;
-                gSaveContext.unk_3F22 = 0;
-                Interface_ChangeAlpha(50);
+                gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+                Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
             }
 
             pauseCtx->cursorItem[PAUSE_ITEM] = cursorItem;

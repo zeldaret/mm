@@ -81,7 +81,7 @@ void KaleidoSetup_Update(PlayState* play) {
                             if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
                                 !(play->actorCtx.flags & ACTORCTX_FLAG_2)) {
                                 if ((play->actorCtx.unk268 == 0) && CHECK_BTN_ALL(input->press.button, BTN_START)) {
-                                    gSaveContext.unk_3F26 = gSaveContext.unk_3F22;
+                                    gSaveContext.prevHudVisibility = gSaveContext.hudVisibility;
                                     pauseCtx->itemDescriptionOn = false;
                                     pauseCtx->state = 1;
                                     func_800F4A10(play);
