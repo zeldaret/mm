@@ -112,17 +112,6 @@ typedef struct {
 } PolygonType2; // size = 0xC
 
 typedef struct {
-    /* 0x0 */ s16 func;
-    /* 0x2 */ UNK_TYPE1 pad2[0x6];
-} CameraModeParams; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ u32 validModes;
-    /* 0x4 */ UNK_TYPE1 pad4[0x4];
-    /* 0x8 */ CameraModeParams* modes;
-} CameraStateParams; // size = 0xC
-
-typedef struct {
     /* 0x0 */ s16 x;
     /* 0x2 */ s16 y;
     /* 0x4 */ s16 z;
