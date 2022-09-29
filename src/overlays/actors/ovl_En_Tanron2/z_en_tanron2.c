@@ -371,7 +371,7 @@ void func_80BB71C8(EnTanron2* this, PlayState* play) {
         sp9C.z = spA8.z * -0.03f;
 
         EffectSsDtBubble_SpawnCustomColor(play, &sp90, &spA8, &sp9C, &D_80BB81E8, &D_80BB81EC,
-                                          Rand_ZeroFloat(100.0f) + 200.0f, Rand_ZeroFloat(5.0f) + 15.0f, 0);
+                                          Rand_ZeroFloat(100.0f) + 200.0f, Rand_ZeroFloat(5.0f) + 15.0f, false);
     }
 }
 

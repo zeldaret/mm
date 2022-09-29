@@ -364,7 +364,7 @@ void EnWood02_Update(Actor* thisx, PlayState* play2) {
 
     // Despawn extra trees in a group if out of range
     if ((this->spawnType == WOOD_SPAWN_SPAWNED) && (thisx->parent != NULL)) {
-        if (!(thisx->flags & 0x40) && (this->unk_151 != 2)) {
+        if (!(thisx->flags & ACTOR_FLAG_40) && (this->unk_151 != 2)) {
             s32 index = this->unk_14A[0];
             s32 phi_v0 = 0;
 

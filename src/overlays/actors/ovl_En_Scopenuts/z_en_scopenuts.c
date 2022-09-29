@@ -707,7 +707,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_0) {
         if (gSaveContext.save.weekEventReg[52] & 0x40) {
             Actor_MarkForDeath(&this->actor);
-        } else if (play->actorCtx.unk5 & 2) {
+        } else if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
             this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
             this->actor.draw = NULL;
             this->actionFunc = func_80BCAFA8;

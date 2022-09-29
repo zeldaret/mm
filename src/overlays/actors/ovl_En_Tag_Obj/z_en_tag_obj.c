@@ -1,7 +1,7 @@
 /*
  * File: z_en_tag_obj.c
  * Overlay: ovl_En_Tag_Obj
- * Description:
+ * Description: Unused Seahorse Spawner
  */
 
 #include "z_en_tag_obj.h"

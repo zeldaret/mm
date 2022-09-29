@@ -1,7 +1,7 @@
 /*
  * File: z_en_hs2.c
  * Overlay: ovl_En_Hs2
- * Description: Blue Target Spot (?)
+ * Description: Near-empty actor. Does nothing, but can be targeted.
  */
 
 #include "z_en_hs2.h"

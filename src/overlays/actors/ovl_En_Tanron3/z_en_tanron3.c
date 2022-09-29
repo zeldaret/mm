@@ -142,7 +142,8 @@ void EnTanron3_SpawnBubbles(EnTanron3* this, PlayState* play) {
         acceleration.y = velocity.y * -0.05f;
         acceleration.z = velocity.z * -0.05f;
         EffectSsDtBubble_SpawnCustomColor(play, &this->actor.world.pos, &velocity, &acceleration, &sPrimColor,
-                                          &sEnvColor, Rand_ZeroFloat(30.0f) + 70.0f, Rand_ZeroFloat(5.0f) + 15.0f, 0);
+                                          &sEnvColor, Rand_ZeroFloat(30.0f) + 70.0f, Rand_ZeroFloat(5.0f) + 15.0f,
+                                          false);
     }
 }
 

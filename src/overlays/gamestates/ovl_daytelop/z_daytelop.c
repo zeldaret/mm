@@ -63,7 +63,7 @@ UNK_TYPE D_808158E0[] = {
     0x00000001, 0x00000000,
 };
 
-void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
+void DayTelop_Update(DayTelopState* this, GameState* thisx) {
     static u8 D_80815FF0 = 0;
     s16 new_var;
     u8 temp_v0_2;
@@ -77,12 +77,9 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
             gSaveContext.save.day = 1;
         }
 
-        {
-            GameState* state = &this->state;
-            state->running = 0;
-        }
+        STOP_GAMESTATE(&this->state);
+        SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
 
-        SET_NEXT_GAMESTATE(&this->state, Play_Init, PlayState);
         gSaveContext.save.time = CLOCK_TIME(6, 0);
         D_801BDBC8 = 0xFE;
     } else if (this->transitionCountdown == 90) {
@@ -126,7 +123,7 @@ TexturePtr sHoursLeftTextures[] = {
     gDaytelop24HoursNESTex,
 };
 
-void Daytelop_Draw(DaytelopContext* this) {
+void DayTelop_Draw(DayTelopState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
@@ -187,11 +184,11 @@ void Daytelop_Draw(DaytelopContext* this) {
                             0x0400, 0x0400);
     }
 
-    CLOSE_DISPS(this->state.gfxCtx);
+    CLOSE_DISPS(gfxCtx);
 }
 
-void Daytelop_Main(GameState* thisx) {
-    DaytelopContext* this = (DaytelopContext*)thisx;
+void DayTelop_Main(GameState* thisx) {
+    DayTelopState* this = (DayTelopState*)thisx;
 
     func_8012CF0C(this->state.gfxCtx, true, true, 0, 0, 0);
 
@@ -200,18 +197,18 @@ void Daytelop_Main(GameState* thisx) {
     gSPSegment(POLY_OPA_DISP++, 0x0C, this->gameoverStaticFile);
     CLOSE_DISPS(this->state.gfxCtx);
 
-    Daytelop_Draw(this);
-    Daytelop_Update(this, &this->state);
+    DayTelop_Draw(this);
+    DayTelop_Update(this, &this->state);
 }
 
-void Daytelop_Destroy(GameState* thisx) {
+void DayTelop_Destroy(GameState* thisx) {
     ShrinkWindow_Destroy();
 }
 
-void Daytelop_nop80815770(DaytelopContext* this) {
+void DayTelop_Noop(DayTelopState* this) {
 }
 
-void Daytelop_LoadGraphics(DaytelopContext* this) {
+void DayTelop_LoadGraphics(DayTelopState* this) {
     size_t segmentSize = SEGMENT_ROM_SIZE(daytelop_static);
 
     this->daytelopStaticFile = THA_AllocEndAlign16(&this->state.heap, segmentSize);
@@ -222,15 +219,15 @@ void Daytelop_LoadGraphics(DaytelopContext* this) {
     DmaMgr_SendRequest0(this->gameoverStaticFile, SEGMENT_ROM_START(icon_item_gameover_static), segmentSize);
 }
 
-void Daytelop_Init(GameState* thisx) {
-    DaytelopContext* this = (DaytelopContext*)thisx;
+void DayTelop_Init(GameState* thisx) {
+    DayTelopState* this = (DayTelopState*)thisx;
 
-    Game_SetFramerateDivisor(thisx, 1);
-    Matrix_Init(thisx);
+    Game_SetFramerateDivisor(&this->state, 1);
+    Matrix_Init(&this->state);
     ShrinkWindow_Destroy();
-    View_Init(&this->view, thisx->gfxCtx);
-    thisx->main = Daytelop_Main;
-    thisx->destroy = Daytelop_Destroy;
+    View_Init(&this->view, this->state.gfxCtx);
+    this->state.main = DayTelop_Main;
+    this->state.destroy = DayTelop_Destroy;
     this->transitionCountdown = 140;
     this->fadeInState = DAYTELOP_HOURSTEXT_OFF;
 
@@ -241,7 +238,7 @@ void Daytelop_Init(GameState* thisx) {
         Sram_IncrementDay();
     }
 
-    Daytelop_nop80815770(this);
-    Daytelop_LoadGraphics(this);
+    DayTelop_Noop(this);
+    DayTelop_LoadGraphics(this);
     play_sound(NA_SE_OC_TELOP_IMPACT);
 }

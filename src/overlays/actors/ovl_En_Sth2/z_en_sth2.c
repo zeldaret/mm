@@ -40,7 +40,7 @@ void EnSth2_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     this->unused = 0;
 
-    if (play->actorCtx.unk5 & 2) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
         this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
     } else {
         Actor_MarkForDeath(&this->actor);

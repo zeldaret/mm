@@ -96,7 +96,7 @@ void EnTest2_Update(Actor* thisx, PlayState* play) {
             Actor_SetObjectDependency(play, &this->actor);
             this->animMat = Lib_SegmentedToVirtual(modelInfo->animMat);
         }
-        if (play->roomCtx.currRoom.unk5) {
+        if (play->roomCtx.curRoom.unk5) {
             this->actor.update = EnTest2_UpdateForLens;
         } else {
             this->actor.update = Actor_Noop;

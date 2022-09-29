@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define BG_MARKET_STEP_GET_TIME_OF_DAY(thisx) ((thisx)->params & 1)
+
 struct BgMarketStep;
 
 typedef struct BgMarketStep {

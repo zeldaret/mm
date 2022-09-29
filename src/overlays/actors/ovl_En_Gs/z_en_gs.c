@@ -1082,10 +1082,10 @@ void EnGs_Draw(Actor* thisx, PlayState* play) {
     }
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_000950);
+    gSPDisplayList(POLY_OPA_DISP++, gGossipStoneMaterialDL);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_1FA.r, this->unk_1FA.g, this->unk_1FA.b, 255);
-    gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_0009D0);
-    gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_000A60);
+    gSPDisplayList(POLY_OPA_DISP++, gGossipStoneDL);
+    gSPDisplayList(POLY_OPA_DISP++, gGossipStoneBottomModelDL);
 
     Matrix_Pop();
 

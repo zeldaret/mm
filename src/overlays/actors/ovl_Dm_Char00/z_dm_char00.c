@@ -915,7 +915,7 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
     Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 4);
 
     if ((play->csCtx.state == 0) && ((play->sceneNum != SCENE_OPENINGDAN) || (gSaveContext.sceneSetupIndex != 0) ||
-                                     (play->roomCtx.currRoom.num != 0) || (play->csCtx.currentCsIndex != 1) ||
+                                     (play->roomCtx.curRoom.num != 0) || (play->csCtx.currentCsIndex != 1) ||
                                      (DMCHAR00_GET(&this->actor) != DMCHAR00_0))) {
         return;
     }

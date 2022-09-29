@@ -5,6 +5,7 @@
  */
 
 #include "z_en_part.h"
+#include "overlays/effects/ovl_Effect_Ss_Dt_Bubble/z_eff_ss_dt_bubble.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -96,7 +97,7 @@ void func_808654C4(EnPart* this, PlayState* play) {
                     effectVelocity.y = Rand_ZeroOne() + 1.0f;
                     effectScale = Rand_S16Offset(80, 100);
                     EffectSsDtBubble_SpawnColorProfile(play, &effectPos, &effectVelocity, &gZeroVec3f, effectScale, 25,
-                                                       0, 1);
+                                                       DTBUBBLE_COLOR_PROFILE_RED, true);
                 }
                 break;
         }

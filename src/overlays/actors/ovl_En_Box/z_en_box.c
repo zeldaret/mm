@@ -604,7 +604,7 @@ void EnBox_Update(Actor* thisx, PlayState* play) {
         EnBox_ClipToGround(this, play);
     }
     if ((this->getItemId == GI_STRAY_FAIRY) && !Flags_GetTreasure(play, ENBOX_GET_CHEST_FLAG(&this->dyna.actor))) {
-        play->actorCtx.unk5 |= 8;
+        play->actorCtx.flags |= ACTORCTX_FLAG_3;
     }
     this->actionFunc(this, play);
     if (this->movementFlags & ENBOX_MOVE_0x80) {

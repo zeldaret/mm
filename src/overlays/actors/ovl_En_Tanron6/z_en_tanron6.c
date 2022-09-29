@@ -1,7 +1,7 @@
 /*
  * File: z_en_tanron6.c
  * Overlay: ovl_En_Tanron6
- * Description: Swarm of Giant Bees
+ * Description: Unused invisible enemy. Only draws a circle shadow.
  */
 
 #include "z_en_tanron6.h"

@@ -317,7 +317,8 @@ void EnDragon_SpawnBubbles(EnDragon* this, PlayState* play, Vec3f basePos) {
         sBubbleAccel.y = Rand_ZeroFloat(1.0f) * 20.0f * 3.0f;
         scale = Rand_S16Offset(380, 240);
         EffectSsDtBubble_SpawnCustomColor(play, &bubblePos, &sBubbleVelocity, &sBubbleAccel,
-                                          &sBubblePrimColors[colorIndex], &sBubbleEnvColors[colorIndex], scale, 30, 0);
+                                          &sBubblePrimColors[colorIndex], &sBubbleEnvColors[colorIndex], scale, 30,
+                                          false);
     }
 }
 

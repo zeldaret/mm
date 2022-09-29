@@ -1,7 +1,7 @@
 /*
  * File: z_dm_gm.c
  * Overlay: ovl_Dm_Gm
- * Description: Anju (cutscene) (duplicate of Dm_An?)
+ * Description: Complete duplicate of Dm_An
  */
 
 #include "z_dm_gm.h"

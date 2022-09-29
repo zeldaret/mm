@@ -389,11 +389,12 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             if (sp50 && (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4)) {
                 sp7C = this->collider.base.at;
 
-                if ((sp7C->update != NULL) && !(this->collider.base.atFlags & AT_BOUNCED) && (sp7C->flags & 0x4000)) {
+                if ((sp7C->update != NULL) && !(this->collider.base.atFlags & AT_BOUNCED) &&
+                    (sp7C->flags & ACTOR_FLAG_4000)) {
                     this->unk_264 = sp7C;
                     func_8088A894(this, play);
                     Math_Vec3f_Diff(&sp7C->world.pos, &this->actor.world.pos, &this->unk_268);
-                    sp7C->flags |= 0x8000;
+                    sp7C->flags |= ACTOR_FLAG_8000;
                     this->collider.base.atFlags &= ~AT_HIT;
                     this->actor.speedXZ *= 0.5f;
                     this->actor.velocity.y *= 0.5f;

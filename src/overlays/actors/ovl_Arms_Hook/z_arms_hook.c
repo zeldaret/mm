@@ -69,7 +69,7 @@ void ArmsHook_Destroy(Actor* thisx, PlayState* play) {
     ArmsHook* this = THIS;
 
     if (this->grabbed != NULL) {
-        this->grabbed->flags &= ~0x2000;
+        this->grabbed->flags &= ~ACTOR_FLAG_2000;
     }
     Collider_DestroyQuad(play, &this->collider);
 }
@@ -100,7 +100,7 @@ s32 ArmsHook_AttachToPlayer(ArmsHook* this, Player* player) {
 
 void ArmsHook_DetachHookFromActor(ArmsHook* this) {
     if (this->grabbed != NULL) {
-        this->grabbed->flags &= ~0x2000;
+        this->grabbed->flags &= ~ACTOR_FLAG_2000;
         this->grabbed = NULL;
     }
 }
@@ -120,7 +120,7 @@ s32 ArmsHook_CheckForCancel(ArmsHook* this) {
 }
 
 void ArmsHook_AttachHookToActor(ArmsHook* this, Actor* actor) {
-    actor->flags |= 0x2000;
+    actor->flags |= ACTOR_FLAG_2000;
     this->grabbed = actor;
     Math_Vec3f_Diff(&actor->world.pos, &this->actor.world.pos, &this->unk1FC);
 }
@@ -140,10 +140,10 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
     if (this->timer != 0 && (this->collider.base.atFlags & AT_HIT) &&
         (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4)) {
         Actor* touchedActor = this->collider.base.at;
-        if ((touchedActor->update != NULL) && (touchedActor->flags & 0x600)) {
+        if ((touchedActor->update != NULL) && (touchedActor->flags & (ACTOR_FLAG_200 | ACTOR_FLAG_400))) {
             if (this->collider.info.atHitInfo->bumperFlags & BUMP_HOOKABLE) {
                 ArmsHook_AttachHookToActor(this, touchedActor);
-                if ((touchedActor->flags & 0x400) == 0x400) {
+                if ((touchedActor->flags & ACTOR_FLAG_400) == ACTOR_FLAG_400) {
                     func_808C1154(this);
                 }
             }
@@ -164,7 +164,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
 
         grabbed = this->grabbed;
         if (grabbed != NULL) {
-            if ((grabbed->update == NULL) || (grabbed->flags & 0x2000) != 0x2000) {
+            if ((grabbed->update == NULL) || !CHECK_FLAG_ALL(grabbed->flags, ACTOR_FLAG_2000)) {
                 grabbed = NULL;
                 this->grabbed = NULL;
             } else {

@@ -43,7 +43,7 @@ void BgLotus_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(play, &this->dyna, &object_lotus_Colheader_000A20);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gLilyPadCol);
     this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &thisx->floorPoly, &bgId,
                                                                &this->dyna.actor, &this->dyna.actor.world.pos);
     this->timer2 = 96;
@@ -171,5 +171,5 @@ void BgLotus_Update(Actor* thisx, PlayState* play) {
 }
 
 void BgLotus_Draw(Actor* thisx, PlayState* play) {
-    Gfx_DrawDListOpa(play, object_lotus_DL_000040);
+    Gfx_DrawDListOpa(play, gLilyPadDL);
 }
