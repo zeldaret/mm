@@ -16,12 +16,10 @@ extern GfxMasterList D_0E000000;
 
 extern s16 D_80814280[];
 
-s32 D_808144F10[] = {
-    0x00000064,
-    0x41000000,
-    0x42C80000,
-    0x00000000,
-};
+s32 D_808144F10 = 100;
+f32 D_808144F14 = 8.0f;
+f32 D_808144F18 = 100.0f;
+s32 D_808144F1C = 0;
 
 Gfx sScreenFillSetupDL[] = {
     gsDPPipeSync(),
@@ -1192,7 +1190,7 @@ static s16 sHeartEnvColors[2][3] = { { 50, 40, 60 }, { 255, 255, 255 } };
 
 void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_DrawFileInfo.s")
-/*
+#if 0
 void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
     FileSelectState* this = (FileSelectState*)thisx;
     Font* font = &this->font;
@@ -1349,7 +1347,7 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
 
         var_t1 = this->health[sp20C];
         temp_s0 = this->healthCapacity[sp20C] / 0x10;
-        if (var_t1 < 0x31) {
+        if (var_t1 <= 0x30) {
             var_t1 = 0x30;
         }
         i = 0;
@@ -1522,26 +1520,36 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
 
     CLOSE_DISPS(this->state.gfxCtx);
 }
-*/
+#endif
 
-TexturePtr sFileInfoBoxTextures[] = { gFileSelFileInfoBox0Tex,     gFileSelFileInfoBox1Tex,
-                                      gFileSelFileInfoBox2Tex,     gFileSelFileInfoBox3Tex,
-                                      gFileSelFileInfoBox4Tex,     gFileSelFileExtraInfoBox0Tex,
-                                      gFileSelFileExtraInfoBox1Tex };
+TexturePtr sFileInfoBoxTextures[] = {
+    gFileSelFileInfoBox0Tex, gFileSelFileInfoBox1Tex,      gFileSelFileInfoBox2Tex,      gFileSelFileInfoBox3Tex,
+    gFileSelFileInfoBox4Tex, gFileSelFileExtraInfoBox0Tex, gFileSelFileExtraInfoBox1Tex,
+};
 
-TexturePtr sTitleLabels[] = { gFileSelPleaseSelectAFileENGTex, gFileSelOpenThisFileENGTex,
-                              gFileSelCopyWhichFileENGTex,     gFileSelCopyToWhichFileENGTex,
-                              gFileSelAreYouSureCopyENGTex,    gFileSelFileCopiedENGTex,
-                              gFileSelEraseWhichFileENGTex,    gFileSelAreYouSureEraseENGTex,
-                              gFileSelFileErasedENGTex };
+TexturePtr sTitleLabels[] = {
+    gFileSelPleaseSelectAFileENGTex, gFileSelOpenThisFileENGTex,    gFileSelCopyWhichFileENGTex,
+    gFileSelCopyToWhichFileENGTex,   gFileSelAreYouSureCopyENGTex,  gFileSelFileCopiedENGTex,
+    gFileSelEraseWhichFileENGTex,    gFileSelAreYouSureEraseENGTex, gFileSelFileErasedENGTex,
+};
 
-TexturePtr sWarningLabels[] = { gFileSelNoFileToCopyENGTex, gFileSelNoFileToEraseENGTex, gFileSelNoEmptyFileENGTex,
-                                gFileSelFileEmptyENGTex, gFileSelFileInUseENGTex };
+TexturePtr sWarningLabels[] = {
+    gFileSelNoFileToCopyENGTex, gFileSelNoFileToEraseENGTex, gFileSelNoEmptyFileENGTex,
+    gFileSelFileEmptyENGTex,    gFileSelFileInUseENGTex,
+};
 
-TexturePtr sFileButtonTextures[] = { gFileSelFile1ButtonENGTex, gFileSelFile2ButtonENGTex, gFileSelFile3ButtonENGTex };
+TexturePtr sFileButtonTextures[] = {
+    gFileSelFile1ButtonENGTex,
+    gFileSelFile2ButtonENGTex,
+    gFileSelFile3ButtonENGTex,
+};
 
-TexturePtr sActionButtonTextures[] = { gFileSelCopyButtonENGTex, gFileSelEraseButtonENGTex, gFileSelYesButtonENGTex,
-                                       gFileSelQuitButtonENGTex };
+TexturePtr sActionButtonTextures[] = {
+    gFileSelCopyButtonENGTex,
+    gFileSelEraseButtonENGTex,
+    gFileSelYesButtonENGTex,
+    gFileSelQuitButtonENGTex,
+};
 
 void FileSelect_DrawWindowContents(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;

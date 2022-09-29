@@ -39,7 +39,10 @@ s16 D_8081441C[] = {
     72, -48, -48, -48, -48, -48,
 };
 
-TexturePtr sBackspaceEndTextures[] = { gFileSelBackspaceButtonTex, gFileSelENDButtonENGTex };
+TexturePtr sBackspaceEndTextures[] = {
+    gFileSelBackspaceButtonTex,
+    gFileSelENDButtonENGTex,
+};
 
 u16 sBackspaceEndWidths[] = { 28, 44 };
 
