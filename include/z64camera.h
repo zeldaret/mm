@@ -739,7 +739,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ Jump2ReadOnlyData roData;
-    /* 0x02 */ Jump2ReadWriteData rwData;
+    /* 0x24 */ Jump2ReadWriteData rwData;
 } Jump2; // size = 0x44
 
 #define JUMP2_FLAG_1 (1 << 1)

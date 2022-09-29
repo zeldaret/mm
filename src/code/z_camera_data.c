@@ -3577,7 +3577,7 @@ CameraSetting sCameraSettings[] = {
     { 0x03FFFFFF, 0x00000005, sCamSetDungeon4Modes },              // CAM_SET_DUNGEON4
 };
 
-static s16 sGlobalCamDataSettings[26] = {
+s16 sGlobalCamDataSettings[] = {
     /* -25 */ CAM_SET_ELEGY_SHELL,
     /* -24 */ CAM_SET_SIDED,
     /* -23 */ CAM_SET_BOAT_CRUISE,
@@ -3606,7 +3606,7 @@ static s16 sGlobalCamDataSettings[26] = {
     /*   0 */ CAM_SET_NONE,
 };
 
-static s16* sGlobalCamDataSettingsPtr = &sGlobalCamDataSettings[25];
+s16* sGlobalCamDataSettingsPtr = &sGlobalCamDataSettings[ARRAY_COUNT(sGlobalCamDataSettings) - 1];
 
 s32 Camera_Noop(Camera* camera);
 s32 Camera_Normal1(Camera* camera);
