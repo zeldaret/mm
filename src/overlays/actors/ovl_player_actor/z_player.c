@@ -2788,8 +2788,7 @@ void func_8082F1AC(PlayState* play, Player* this) {
 
     if ((gSaveContext.save.playerData.magic != 0) && (this->stateFlags1 & PLAYER_STATE1_10)) {
         if (gSaveContext.magicState == 0) {
-            // Magic_Consume
-            Magic_Consume(play, 0, 5);
+            Magic_Consume(play, 0, MAGIC_CONSUME_GORON_ZORA);
         }
 
         temp = 16.0f;
@@ -3751,7 +3750,7 @@ s32 func_808306F8(Player* this, PlayState* play) {
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, arrowType);
 
                     if ((this->heldActor != NULL) && (magicArrowType >= 0)) {
-                        Magic_Consume(play, sMagicArrowCosts[magicArrowType], 0);
+                        Magic_Consume(play, sMagicArrowCosts[magicArrowType], MAGIC_CONSUME_NOW);
                     }
                 }
             }
@@ -4212,14 +4211,14 @@ s32 func_80831814(Player* this, PlayState* play, PlayerUnkAA5 arg2) {
 
 // Toggle Lens
 void func_808318C0(PlayState* play) {
-    if (Magic_Consume(play, 0, 3) != 0) {
-        if (play->actorCtx.lensActive != 0) {
+    if (Magic_Consume(play, 0, MAGIC_CONSUME_LENS)) {
+        if (play->actorCtx.lensActive) {
             Actor_DeactivateLens(play);
         } else {
-            play->actorCtx.lensActive = 1;
+            play->actorCtx.lensActive = true;
         }
 
-        play_sound(play->actorCtx.lensActive != 0 ? NA_SE_SY_GLASSMODE_ON : NA_SE_SY_GLASSMODE_OFF);
+        play_sound(play->actorCtx.lensActive ? NA_SE_SY_GLASSMODE_ON : NA_SE_SY_GLASSMODE_OFF);
     } else {
         play_sound(NA_SE_SY_ERROR);
     }
@@ -4791,34 +4790,33 @@ s32 func_808331FC(PlayState* play, Player* this, SkelAnime* skelAnime, f32 frame
     return -1;
 }
 
-void func_808332A0(PlayState* play, Player* this, s32 arg2, s32 arg3) {
-    if (arg2 != 0) {
+void func_808332A0(PlayState* play, Player* this, s32 magicCost, s32 consumeMagic) {
+    if (magicCost != 0) {
         this->unk_B08[0] = 0.0f;
     } else {
         this->unk_B08[0] = 0.5f;
     }
 
     this->stateFlags1 |= PLAYER_STATE1_1000;
-    if ((this->actor.id == ACTOR_PLAYER) && ((arg3 != 0) || (this->transformation == PLAYER_FORM_HUMAN))) {
-        s16 var_v1;
-        Actor* actor;
+    if ((this->actor.id == ACTOR_PLAYER) && (consumeMagic || (this->transformation == PLAYER_FORM_HUMAN))) {
+        s16 pitch = 0;
+        Actor* thunder;
 
-        var_v1 = 0;
-        if (arg3 != 0) {
+        if (consumeMagic) {
             if (this->targetedActor != NULL) {
-                var_v1 = Math_Vec3f_Pitch(&this->bodyPartsPos[PLAYER_BODYPART_WAIST], &this->targetedActor->focus.pos);
+                pitch = Math_Vec3f_Pitch(&this->bodyPartsPos[PLAYER_BODYPART_WAIST], &this->targetedActor->focus.pos);
             }
             if (gSaveContext.save.playerData.magic == 0) {
                 return;
             }
         }
 
-        actor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_M_THUNDER, this->bodyPartsPos[PLAYER_BODYPART_WAIST].x,
-                            this->bodyPartsPos[PLAYER_BODYPART_WAIST].y, this->bodyPartsPos[PLAYER_BODYPART_WAIST].z,
-                            var_v1, 0, 0, (this->itemActionParam - 3) | arg2);
+        thunder = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_M_THUNDER, this->bodyPartsPos[PLAYER_BODYPART_WAIST].x,
+                              this->bodyPartsPos[PLAYER_BODYPART_WAIST].y, this->bodyPartsPos[PLAYER_BODYPART_WAIST].z,
+                              pitch, 0, 0, (this->itemActionParam - PLAYER_AP_SWORD_KOKIRI) | magicCost);
 
-        if ((actor != NULL) && (arg3 != 0)) {
-            Magic_Consume(play, 1, 7);
+        if ((thunder != NULL) && consumeMagic) {
+            Magic_Consume(play, 1, MAGIC_CONSUME_DEITY_BEAM);
             this->unk_D57 = 4;
         }
     }
@@ -4834,32 +4832,32 @@ s32 func_808333CC(Player* this) {
     s32 i;
 
     if (this->itemActionParam == PLAYER_AP_STICK) {
-        return 0;
+        return false;
     }
 
     iter = &this->unk_ADF[0];
     iter2 = &sp3C[0];
     for (i = 0; i < 4; i++, iter++, iter2++) {
         if ((*iter2 = *iter) < 0) {
-            return 0;
+            return false;
         }
         *iter2 *= 2;
     }
 
     temp1 = sp3C[0] - sp3C[1];
     if (ABS_ALT(temp1) < 10) {
-        return 0;
+        return false;
     }
 
     iter2 = &sp3C[1];
     for (i = 1; i < 3; i++, iter2++) {
         temp2 = *iter2 - *(iter2 + 1);
         if ((ABS_ALT(temp2) < 10) || (temp2 * temp1 < 0)) {
-            return 0;
+            return false;
         }
     }
 
-    return 1;
+    return true;
 }
 
 void func_808334D4(PlayState* play, Player* this) {
@@ -4874,7 +4872,7 @@ void func_808334D4(PlayState* play, Player* this) {
 
     func_8082DC38(this);
     LinkAnimation_Change(play, &this->skelAnime, anim, 1.0f, 8.0f, Animation_GetLastFrame(anim), ANIMMODE_ONCE, -9.0f);
-    func_808332A0(play, this, 0x200, 0);
+    func_808332A0(play, this, 2 << 8, false);
 }
 
 void func_808335B0(PlayState* play, Player* this) {
@@ -17617,7 +17615,7 @@ void func_80855A7C(Player* this, PlayState* play) {
     }
 }
 
-// giant mask
+// Giant's Mask
 void func_80855AF4(Player* this, PlayState* play) {
     this->stateFlags2 |= PLAYER_STATE2_40;
 
@@ -17627,7 +17625,7 @@ void func_80855AF4(Player* this, PlayState* play) {
     if (!(this->stateFlags1 & PLAYER_STATE1_100)) {
         this->prevMask = this->currentMask;
         gSaveContext.save.equippedMask = this->currentMask = PLAYER_MASK_GIANT;
-        Magic_Consume(play, 0, 6);
+        Magic_Consume(play, 0, MAGIC_CONSUME_GIANTS_MASK);
         this->currentBoots = PLAYER_BOOTS_GIANT;
         this->prevBoots = PLAYER_BOOTS_GIANT;
         func_80123140(play, this);
@@ -18303,6 +18301,7 @@ void func_80857AEC(PlayState* play, Player* this) {
     }
 }
 
+// At least Goron rolling
 void func_80857BE8(Player* this, PlayState* play) {
     if (func_80833058(play, this, D_8085D050, 0)) {
         return;
@@ -18422,7 +18421,7 @@ void func_80857BE8(Player* this, PlayState* play) {
                 if (this->unk_B86[1] == 0) {
                     this->unk_B08[1] = 0.0f;
                     if (this->unk_AE7 >= 0x36) {
-                        Magic_Consume(play, 2, 5);
+                        Magic_Consume(play, 2, MAGIC_CONSUME_GORON_ZORA);
                         this->unk_B08[0] = 18.0f;
                         this->unk_B86[1] = 1;
                         this->stateFlags3 |= PLAYER_STATE3_80000;
