@@ -220,7 +220,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
                     } else {
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 14, &this->unk_32C);
                         thisx->room = -1;
-                        gSaveContext.unk_3DD0[1] = 5;
+                        gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
                         this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
                         this->unk_3B0 |= 1;
                         this->actionFunc = func_80A72438;
@@ -821,7 +821,7 @@ void func_80A73244(EnDno* this, PlayState* play) {
     this->unk_328 = 2;
     this->actor.speedXZ = 0.0f;
     Flags_UnsetSwitch(play, ENDNO_GET_3F80(&this->actor));
-    gSaveContext.unk_3DD0[1] = 5;
+    gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
     this->unk_44E = 0;
     this->actionFunc = func_80A732C8;
 }

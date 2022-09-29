@@ -154,7 +154,7 @@ static s32 sSwampTargetActorListLengths[] = {
 };
 
 static Vec3f sSwampPlayerPos = { 0.0f, 10.0f, 140.0f };
-static Vec3f sTownFierceDietyPlayerPos = { -20.0f, 20.0f, 198.0f };
+static Vec3f sTownFierceDeityPlayerPos = { -20.0f, 20.0f, 198.0f };
 static Vec3f sTownPlayerPos = { -20.0f, 40.0f, 175.0f };
 
 /**
@@ -1012,7 +1012,7 @@ void EnSyatekiMan_Swamp_StartGame(EnSyatekiMan* this, PlayState* play) {
         this->guayHitCounter = 0;
         this->currentWave = 0;
         this->perGameVar2.bonusDekuScrubHitCounter = 0;
-        func_8010E9F0(1, 100);
+        Interface_StartTimer(TIMER_ID_MINIGAME_1, 100);
         this->actor.draw = NULL;
         this->actionFunc = EnSyatekiMan_Swamp_RunGame;
     }
@@ -1061,9 +1061,9 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
 
     this->perGameVar1.guaySpawnTimer++;
 
-    if (gSaveContext.unk_3DE0[1] == 0) {
-        gSaveContext.unk_3DE0[1] = 0;
-        gSaveContext.unk_3DD0[1] = 5;
+    if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
+        gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] = SECONDS_TO_TIMER(0);
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
         this->actor.draw = EnSyatekiMan_Draw;
         this->flagsIndex = 0;
         this->currentWave = 0;
@@ -1082,10 +1082,10 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         this->shootingGameState = SG_GAME_STATE_GIVING_BONUS;
         if (this->score == 2120) {
             func_8011B4E0(play, 2);
-            gSaveContext.unk_3DD0[1] = 6;
+            gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_6;
             this->actionFunc = EnSyatekiMan_Swamp_AddBonusPoints;
         } else {
-            gSaveContext.unk_3DD0[1] = 5;
+            gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
             this->actionFunc = EnSyatekiMan_Swamp_EndGame;
         }
     }
@@ -1148,15 +1148,15 @@ void EnSyatekiMan_Swamp_AddBonusPoints(EnSyatekiMan* this, PlayState* play) {
 
     player->stateFlags1 |= 0x20;
     if (play->interfaceCtx.unk_286 == 0) {
-        if (gSaveContext.unk_3DE0[1] == 0) {
-            gSaveContext.unk_3DE0[1] = 0;
-            gSaveContext.unk_3DD0[1] = 5;
+        if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
+            gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] = SECONDS_TO_TIMER(0);
+            gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
             this->flagsIndex = 0;
             this->currentWave = 0;
             this->actionFunc = EnSyatekiMan_Swamp_EndGame;
             sBonusTimer = 0;
         } else if (sBonusTimer > 10) {
-            gSaveContext.unk_3E88[1] += 100;
+            gSaveContext.timerStopTimes[TIMER_ID_MINIGAME_1] += SECONDS_TO_TIMER(1);
             play->interfaceCtx.unk_25C += 10;
             this->score += 10;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
@@ -1171,7 +1171,7 @@ void EnSyatekiMan_Town_MovePlayerAndSayHighScore(EnSyatekiMan* this, PlayState* 
     Vec3f targetPlayerPos;
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_FIERCE_DEITY) {
-        targetPlayerPos = sTownFierceDietyPlayerPos;
+        targetPlayerPos = sTownFierceDeityPlayerPos;
     } else {
         targetPlayerPos = sTownPlayerPos;
     }
@@ -1198,7 +1198,7 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
 
     if (sGameStartTimer == 30) {
         if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
-            player->actor.world.pos = sTownFierceDietyPlayerPos;
+            player->actor.world.pos = sTownFierceDeityPlayerPos;
         } else {
             player->actor.world.pos = sTownPlayerPos;
         }
@@ -1220,7 +1220,7 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
         this->perGameVar1.octorokState = SG_OCTO_STATE_INITIAL;
         this->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_NONE;
         sGameStartTimer = 30;
-        func_8010E9F0(1, 75);
+        Interface_StartTimer(TIMER_ID_MINIGAME_1, 75);
         this->actor.draw = NULL;
         this->actionFunc = EnSyatekiMan_Town_RunGame;
     }
@@ -1292,7 +1292,8 @@ static const s32 sOctorokFlagsPerWave[] = {
 void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
     static s32 sModFromLosingTime = 0;
     Player* player = GET_PLAYER(play);
-    s32 timer = (((void)0, gSaveContext.unk_3DE0[1]) * 0.1f) + 1.0f; // unit is tenths of a second
+    s32 timer =
+        (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1]) * 0.1f) + 1.0f; // unit is tenths of a second
 
     if (timer <= 750) {
         s32 waveTimer; // unit is hundredths of a second
@@ -1302,9 +1303,10 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
         // begin hiding. This code will ultimately correct waveTimer such that its value is not affected by
         // hitting Blue Octoroks.
         if (sModFromLosingTime == 0) {
-            waveTimer = ((void)0, gSaveContext.unk_3DE0[1]) % 500;
+            waveTimer = ((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1]) % SECONDS_TO_TIMER(5);
         } else {
-            waveTimer = (((void)0, gSaveContext.unk_3DE0[1]) + 250) % 500;
+            waveTimer = (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1]) + SECONDS_TO_TIMER_PRECISE(2, 50)) %
+                        SECONDS_TO_TIMER(5);
         }
 
         // Octoroks begin hiding four seconds after a wave begins.
@@ -1314,7 +1316,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
 
         if (this->perGameVar2.octorokHitType != SG_OCTO_HIT_TYPE_NONE) {
             if (this->perGameVar2.octorokHitType == SG_OCTO_HIT_TYPE_BLUE) {
-                gSaveContext.unk_3E18[1] -= 250;
+                gSaveContext.timerTimeLimits[TIMER_ID_MINIGAME_1] -= SECONDS_TO_TIMER_PRECISE(2, 50);
                 sModFromLosingTime = (sModFromLosingTime + 25) % 50;
             }
 
@@ -1336,11 +1338,11 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
             }
         }
 
-        if (gSaveContext.unk_3DE0[1] == 0) {
+        if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
             this->flagsIndex = 0;
             this->perGameVar1.octorokState = SG_OCTO_STATE_HIDING;
-            gSaveContext.unk_3DE0[1] = 0;
-            gSaveContext.unk_3DD0[1] = 5;
+            gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] = SECONDS_TO_TIMER(0);
+            gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
             player->stateFlags1 |= 0x20;
             sModFromLosingTime = 0;
             this->actor.draw = EnSyatekiMan_Draw;
