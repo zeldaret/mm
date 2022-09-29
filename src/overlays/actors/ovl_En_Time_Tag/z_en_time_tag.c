@@ -90,7 +90,7 @@ void func_80AC9FE4(EnTimeTag* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         this->actionFunc = func_80AC9FD4;
-        gSaveContext.unk_3DD0[3] = 0;
+        gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
         if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
             CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
             gSaveContext.save.weekEventReg[25] |= 2;
@@ -107,7 +107,7 @@ void func_80ACA0A8(EnTimeTag* this, PlayState* play) {
         if (this->actor.cutscene != -1) {
             this->actionFunc = func_80AC9FE4;
             ActorCutscene_SetIntentToPlay(this2->actor.cutscene);
-            gSaveContext.unk_3DD0[3] = 0;
+            gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
         }
         play->msgCtx.ocarinaMode = 4;
     }
