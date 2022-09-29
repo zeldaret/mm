@@ -102,7 +102,7 @@ static s8 sBodyPartPosIndices[] = {
     -1, -1, 12, 13, 14, -1, 9, 10, 11, -1, 0, 6, -1, -1, 7, 8, 2, -1, -1, 3, 4, 2, 1,
 };
 
-static s8 sRuBodyParts[] = {
+static s8 sRuBodyParts[RU_BODYPARTSPOS_SIZE] = {
     0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13,
 };
 
@@ -234,7 +234,6 @@ void EnRu_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    // path is prepared but unused after this
     this->path = SubS_GetPathByIndex(play, RU_GET_PATH(thisx), 0x3F);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = EnRu_DoNothing;
