@@ -1,9 +1,9 @@
 #include "global.h"
 
 // Init Vars declarations (also used in the table below)
-#define DEFINE_ACTOR(name, _1, _2, _3) extern ActorInit name##_InitVars;
-#define DEFINE_ACTOR_INTERNAL(name, _1, _2, _3) extern ActorInit name##_InitVars;
-#define DEFINE_ACTOR_UNSET(_0)
+#define DEFINE_ACTOR(name, _enumValue, _allocType, _debugName) extern ActorInit name##_InitVars;
+#define DEFINE_ACTOR_INTERNAL(name, _enumValue, _allocType, _debugName) extern ActorInit name##_InitVars;
+#define DEFINE_ACTOR_UNSET(_enumValue)
 
 #include "tables/actor_table.h"
 
@@ -12,20 +12,21 @@
 #undef DEFINE_ACTOR_UNSET
 
 // Actor Overlay Table definition
-#define DEFINE_ACTOR(name, _1, allocType, _3) \
-    { SEGMENT_ROM_START(ovl_##name),          \
-      SEGMENT_ROM_END(ovl_##name),            \
-      SEGMENT_START(ovl_##name),              \
-      SEGMENT_END(ovl_##name),                \
-      NULL,                                   \
-      &name##_InitVars,                       \
-      NULL,                                   \
-      allocType,                              \
+#define DEFINE_ACTOR(name, _enumValue, allocType, _debugName) \
+    { SEGMENT_ROM_START(ovl_##name),                          \
+      SEGMENT_ROM_END(ovl_##name),                            \
+      SEGMENT_START(ovl_##name),                              \
+      SEGMENT_END(ovl_##name),                                \
+      NULL,                                                   \
+      &name##_InitVars,                                       \
+      NULL,                                                   \
+      allocType,                                              \
       0 },
 
-#define DEFINE_ACTOR_INTERNAL(name, _1, allocType, _3) { 0, 0, NULL, NULL, NULL, &name##_InitVars, NULL, allocType, 0 },
+#define DEFINE_ACTOR_INTERNAL(name, _enumValue, allocType, _debugName) \
+    { 0, 0, NULL, NULL, NULL, &name##_InitVars, NULL, allocType, 0 },
 
-#define DEFINE_ACTOR_UNSET(_1) { 0 },
+#define DEFINE_ACTOR_UNSET(_enumValue) { 0 },
 
 ActorOverlay gActorOverlayTable[] = {
 #include "tables/actor_table.h"
