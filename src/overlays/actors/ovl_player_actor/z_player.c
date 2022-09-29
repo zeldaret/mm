@@ -2707,7 +2707,10 @@ void func_8082F02C(PlayState* play, struct_8082F02C_arg1* arg1, f32 arg2) {
     func_800FD698(play, arg1->unk_A, arg1->unk_C, arg2);
 }
 
-void func_8082F09C(Player* this) {
+/**
+ * Revert cylinder to normal properties
+ */
+void Player_ResetCylinder(Player* this) {
     this->cylinder.base.colType = COLTYPE_HIT5;
     this->cylinder.base.atFlags = AT_NONE;
     this->cylinder.base.acFlags = AC_ON | AC_TYPE_ENEMY;
@@ -2719,8 +2722,22 @@ void func_8082F09C(Player* this) {
     this->cylinder.dim.radius = 12;
 }
 
-// Set damage cylinders (Goron pound, Zora barrier, Deku launch, roll, probably others)
-void func_8082F0E4(Player* this, u32 dmgFlags, s32 damage, s32 radius) {
+/**
+ * Give cylinder special properties for attacks, uses include
+ * - Normal roll
+ * - Deku spin
+ * - Deku launch
+ * - Goron pound
+ * - Goron spike roll
+ * - Zora barrier
+ *
+ * and possibly more.
+ *
+ * @param dmgFlags Damage flags (DMGFLAG defines)
+ * @param damage to do
+ * @param radius of cylinder
+ */
+void Player_SetCylinderForAttack(Player* this, u32 dmgFlags, s32 damage, s32 radius) {
     this->cylinder.base.atFlags = AT_ON | AT_TYPE_PLAYER;
     if (radius > 30) {
         this->cylinder.base.ocFlags1 = OC1_NONE;
@@ -4144,7 +4161,7 @@ s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc,
 
     this->actor.shape.rot.z = 0;
 
-    func_8082F09C(this);
+    Player_ResetCylinder(this);
     func_8082E00C(this);
 
     return true;
@@ -7319,7 +7336,8 @@ s32 func_80839518(Player* this, PlayState* play) {
                 (this->targetedActor->hintId != 0xFF))) {
         this->stateFlags2 |= PLAYER_STATE2_200000;
     } else if ((this->tatlTextId == 0) && !func_80123420(this) &&
-               CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_CUP) && !func_80831814(this, play, PLAYER_UNKAA5_1)) {
+               CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_CUP) &&
+               !func_80831814(this, play, PLAYER_UNKAA5_1)) {
         play_sound(NA_SE_SY_ERROR);
     }
     return false;
@@ -7590,7 +7608,8 @@ s32 func_8083A114(Player* this, PlayState* play) {
 }
 
 s32 func_8083A274(Player* this, PlayState* play) {
-    if (CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_R) && (this->unk_AA5 == PLAYER_UNKAA5_0) && (play->unk_1887C == 0)) {
+    if (CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_R) && (this->unk_AA5 == PLAYER_UNKAA5_0) &&
+        (play->unk_1887C == 0)) {
         if (Player_IsGoronOrDeku(this) ||
             ((((this->transformation == PLAYER_FORM_ZORA) && !(this->stateFlags1 & PLAYER_STATE1_2000000)) ||
               ((this->transformation == PLAYER_FORM_HUMAN) && (this->currentShield != PLAYER_SHIELD_NONE))) &&
@@ -14229,9 +14248,9 @@ void func_8084C6EC(Player* this, PlayState* play) {
 
     if (this->skelAnime.curFrame >= 8.0f) {
         if (this->skelAnime.curFrame < 18.0f) {
-            func_8082F0E4(this, DMG_NORMAL_ROLL, 1, 12);
+            Player_SetCylinderForAttack(this, DMG_NORMAL_ROLL, 1, 12);
         } else {
-            func_8082F09C(this);
+            Player_ResetCylinder(this);
         }
     }
 
@@ -15940,7 +15959,7 @@ void func_80850D68(Player* this, PlayState* play) {
             }
         }
 
-        func_8082F09C(this);
+        Player_ResetCylinder(this);
     }
 
     if ((this->unk_B8C < 8) && (this->actor.bgCheckFlags & 1)) {
@@ -16331,8 +16350,8 @@ void func_808525C4(PlayState* play, Player* this) {
 
 void func_8085269C(Player* this, PlayState* play) {
     if ((this->unk_AA5 != PLAYER_UNKAA5_4) && ((LinkAnimation_Update(play, &this->skelAnime) &&
-                                  (this->skelAnime.animation == D_8085D17C[this->transformation])) ||
-                                 ((this->skelAnime.mode == 0) && (this->unk_AE8 == 0)))) {
+                                                (this->skelAnime.animation == D_8085D17C[this->transformation])) ||
+                                               ((this->skelAnime.mode == 0) && (this->unk_AE8 == 0)))) {
         func_808525C4(play, this);
         if (!(this->actor.flags & ACTOR_FLAG_20000000) || (this->unk_A90->id == ACTOR_EN_ZOT)) {
             func_80152434(play, 1);
@@ -17858,7 +17877,7 @@ void func_808561B0(Player* this, PlayState* play) {
 
             this->unk_AE7 = var_v1;
             this->unk_AE8 = 9999;
-            func_8082F0E4(this, DMG_DEKU_LAUNCH, 2, 20);
+            Player_SetCylinderForAttack(this, DMG_DEKU_LAUNCH, 2, 20);
         } else if (this->unk_ABC < 0.0f) {
             func_80856074(play, this);
         }
@@ -17958,7 +17977,7 @@ void func_80856918(Player* this, PlayState* play) {
     if ((this->actor.velocity.y > 0.0f) && (this->stateFlags3 & PLAYER_STATE3_200)) {
         this->actor.terminalVelocity = -20.0f;
         this->actor.gravity = -5.5f;
-        func_8082F0E4(this, DMG_DEKU_LAUNCH, 2, 20);
+        Player_SetCylinderForAttack(this, DMG_DEKU_LAUNCH, 2, 20);
         func_80856110(play, this, 0.0f, 0.0f, -1.0f, 500, 0, 8);
 
         if (this->actor.bgCheckFlags & 0x10) {
@@ -17984,7 +18003,7 @@ void func_80856918(Player* this, PlayState* play) {
 
         this->actor.terminalVelocity = -10.0f;
         this->actor.gravity = -0.5f;
-        func_8082F09C(this);
+        Player_ResetCylinder(this);
     } else if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A)) {
         func_808355D8(play, this, &gameplay_keep_Linkanim_00E2D8);
     } else {
@@ -18136,7 +18155,7 @@ void func_808573A4(Player* this, PlayState* play) {
     this->stateFlags2 |= PLAYER_STATE2_20 | PLAYER_STATE2_40;
 
     LinkAnimation_Update(play, &this->skelAnime);
-    func_8082F0E4(this, DMG_DEKU_SPIN, 1, 30);
+    Player_SetCylinderForAttack(this, DMG_DEKU_SPIN, 1, 30);
 
     if (!func_80838A90(this, play)) {
         s16 prevYaw = this->currentYaw;
@@ -18639,12 +18658,12 @@ void func_80857BE8(Player* this, PlayState* play) {
         }
 
         if (this->unk_AE7 == 2) {
-            func_8082F0E4(this, DMG_GORON_POUND, 4, 60);
+            Player_SetCylinderForAttack(this, DMG_GORON_POUND, 4, 60);
             func_800B648C(play, 0, 2, 100.0f, &this->actor.world.pos);
         } else if (this->unk_B86[1] != 0) {
-            func_8082F0E4(this, DMG_GORON_SPIKES, 1, 25);
+            Player_SetCylinderForAttack(this, DMG_GORON_SPIKES, 1, 25);
         } else {
-            func_8082F0E4(this, DMG_NORMAL_ROLL, 1, 25);
+            Player_SetCylinderForAttack(this, DMG_NORMAL_ROLL, 1, 25);
         }
     }
 }
