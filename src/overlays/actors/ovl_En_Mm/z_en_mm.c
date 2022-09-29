@@ -185,7 +185,7 @@ void func_80965DB4(EnMm* this, PlayState* play) {
 void func_8096611C(EnMm* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         EnMm_SetupAction(this, func_80965DB4);
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         this->actor.bgCheckFlags &= ~1;
         Math_Vec3s_ToVec3f(&this->actor.prevPos, &this->actor.home.rot);
         gSaveContext.unk_1014 = 0;

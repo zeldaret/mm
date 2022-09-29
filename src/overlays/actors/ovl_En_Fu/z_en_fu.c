@@ -820,7 +820,7 @@ void func_8096326C(EnFu* this, PlayState* play) {
 
 void func_809632D0(EnFu* this) {
     if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
-        Interface_ChangeAlpha(50);
+        Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     }
 
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_08_01);

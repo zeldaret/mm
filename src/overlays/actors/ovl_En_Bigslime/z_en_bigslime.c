@@ -337,7 +337,7 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
     this->gekkoCollider.base.ocFlags1 &= ~OC1_NO_PUSH;
     this->actor.params = CLAMP(this->actor.params, 1, 4);
 
-    if (Flags_GetClear(play, play->roomCtx.currRoom.num)) {
+    if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
         Actor_MarkForDeath(&this->actor);
         if (!CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_MINIFROG, this->actor.world.pos.x, this->actor.world.pos.y,
@@ -2494,7 +2494,7 @@ void EnBigslime_Despawn(EnBigslime* this, PlayState* play) {
     }
 
     if (!this->isDespawned) {
-        Flags_SetClearTemp(play, play->roomCtx.currRoom.num);
+        Flags_SetClearTemp(play, play->roomCtx.curRoom.num);
         this->isDespawned = true;
     }
 

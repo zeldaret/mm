@@ -34,10 +34,10 @@ s16 sCurRow = 0;
 
 // Geometry of the highlights for the selected section
 typedef struct {
-    /* 0 */ s16 screenX;
-    /* 1 */ s16 screenY;
-    /* 2 */ s16 width;
-} SectionPosition;
+    /* 0x0 */ s16 screenX;
+    /* 0x2 */ s16 screenY;
+    /* 0x4 */ s16 width;
+} SectionPosition; // size = 0x6;
 
 // clang-format off
 SectionPosition sSectionPositions[] = {

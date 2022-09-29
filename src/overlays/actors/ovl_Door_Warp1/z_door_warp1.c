@@ -598,7 +598,7 @@ void func_808B9F10(DoorWarp1* this, PlayState* play) {
     if ((this->unk_203 == 0) && func_808B866C(this, play) && !Play_InCsMode(play) && (this->unk_203 == 0)) {
         Player* player = GET_PLAYER(play);
 
-        Interface_ChangeAlpha(1);
+        Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
         func_800B7298(play, &this->dyna.actor, 9);
         player->unk_3A0.x = this->dyna.actor.world.pos.x;
         player->unk_3A0.z = this->dyna.actor.world.pos.z;
@@ -871,7 +871,7 @@ void func_808BA550(DoorWarp1* this, PlayState* play) {
 
         play->envCtx.lightSettings.fogNear = -500.0f * temp_f0;
         if (play->envCtx.lightSettings.fogNear < -300) {
-            play->roomCtx.currRoom.segment = NULL;
+            play->roomCtx.curRoom.segment = NULL;
         }
     }
 }

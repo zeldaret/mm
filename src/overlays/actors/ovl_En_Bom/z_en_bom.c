@@ -301,7 +301,7 @@ void func_80871058(EnBom* this, PlayState* play) {
 void func_808714D4(EnBom* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actionFunc = func_80871058;
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         this->actor.flags &= ~ACTOR_FLAG_100000;
         this->actor.bgCheckFlags &= ~1;
         Math_Vec3s_ToVec3f(&this->actor.prevPos, &this->actor.home.rot);
