@@ -449,7 +449,7 @@ void func_80AA5E2C(DmChar00* this, PlayState* play) {
 
 void func_80AA5EBC(DmChar00* this, PlayState* play) {
     if (play->csCtx.state != 0) {
-        switch (play->sceneNum) {
+        switch (play->sceneId) {
             case SCENE_LOST_WOODS:
                 if (gSaveContext.sceneSetupIndex == 1) {
                     func_80AA561C(this, play);
@@ -527,7 +527,7 @@ void DmChar00_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     DmChar00* this = THIS;
 
-    if ((play->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
+    if ((play->sceneId == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
         Actor_MarkForDeath(thisx);
     }
 
@@ -914,7 +914,7 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
     s32 pad;
     Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 4);
 
-    if ((play->csCtx.state == 0) && ((play->sceneNum != SCENE_OPENINGDAN) || (gSaveContext.sceneSetupIndex != 0) ||
+    if ((play->csCtx.state == 0) && ((play->sceneId != SCENE_OPENINGDAN) || (gSaveContext.sceneSetupIndex != 0) ||
                                      (play->roomCtx.curRoom.num != 0) || (play->csCtx.currentCsIndex != 1) ||
                                      (DMCHAR00_GET(&this->actor) != DMCHAR00_0))) {
         return;

@@ -1312,7 +1312,7 @@ extern u32 gGsFlagsShift[];
 extern void* gItemIcons[];
 extern u8 gItemSlots[];
 extern s16 gItemPrices[];
-extern u16 gScenesPerRegion[11][27];
+extern u16 gSceneIdsPerRegion[11][27];
 extern u32 D_801C2410[];
 extern s16 gPlayerFormObjectIndices[8];
 extern RomFile gObjectTable[643];
