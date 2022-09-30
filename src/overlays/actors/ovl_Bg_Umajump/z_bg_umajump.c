@@ -93,7 +93,7 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
     thisx->params &= 0xFF;
 
     if ((this->dyna.actor.params == BG_UMAJUMP_PARAM_2)) {
-        if ((((play->sceneNum == SCENE_F01) && !(gSaveContext.save.weekEventReg[89] & 0x20)) &&
+        if ((((play->sceneId == SCENE_F01) && !(gSaveContext.save.weekEventReg[89] & 0x20)) &&
              !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) &&
             (this->dyna.actor.cutscene != -1)) {
             this->actionFunc = BgUmajump_CheckDistance;
