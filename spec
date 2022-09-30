@@ -1730,9 +1730,7 @@ beginseg
     name "ovl_Oceff_Wipe"
     compress
     include "build/src/overlays/actors/ovl_Oceff_Wipe/z_oceff_wipe.o"
-    include "build/data/ovl_Oceff_Wipe/ovl_Oceff_Wipe.data.o"
-    include "build/data/ovl_Oceff_Wipe/ovl_Oceff_Wipe.bss.o"
-    include "build/data/ovl_Oceff_Wipe/ovl_Oceff_Wipe.reloc.o"
+    include "build/src/overlays/actors/ovl_Oceff_Wipe/ovl_Oceff_Wipe_reloc.o"
 endseg
 
 beginseg
