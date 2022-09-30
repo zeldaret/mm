@@ -6,6 +6,7 @@
 
 #include "z_obj_tokei_step.h"
 #include "z64rumble.h"
+#include "z64quake.h"
 #include "objects/object_tokei_step/object_tokei_step.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400000)
@@ -62,11 +63,11 @@ void ObjTokeiStep_SetSysMatrix(ObjTokeiStepPanel* panel) {
 
 void ObjTokeiStep_AddQuake(ObjTokeiStep* this, PlayState* play) {
     s32 pad[2];
-    s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+    s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-    Quake_SetSpeed(quake, 20000);
-    Quake_SetQuakeValues(quake, 1, 0, 0, 0);
-    Quake_SetCountdown(quake, 7);
+    Quake_SetSpeed(quakeIndex, 20000);
+    Quake_SetQuakeValues(quakeIndex, 1, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, 7);
     Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
 }
 
