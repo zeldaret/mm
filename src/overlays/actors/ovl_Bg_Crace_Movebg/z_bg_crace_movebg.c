@@ -132,18 +132,18 @@ void BgCraceMovebg_Init(Actor* thisx, PlayState* play) {
 
 s32 BgCraceMovebg_GetRaceStatus(PlayState* play) {
     s32 pad;
-    s32 ret = BG_CRACE_MOVEBG_RACE_STATUS_BUTLER_NOT_PRESENT;
+    s32 raceStatus = BG_CRACE_MOVEBG_RACE_STATUS_BUTLER_NOT_PRESENT;
     Actor* butler = SubS_FindActor(play, NULL, ACTORCAT_NPC, ACTOR_EN_DNO);
 
     if (butler != NULL) {
         if (Flags_GetSwitch(play, EN_DNO_GET_RACE_STARTED_SWITCH_FLAG(butler))) {
-            ret = BG_CRACE_MOVEBG_RACE_STATUS_SUBSEQUENT_RACE;
+            raceStatus = BG_CRACE_MOVEBG_RACE_STATUS_SUBSEQUENT_RACE;
         } else {
-            ret = BG_CRACE_MOVEBG_RACE_STATUS_FIRST_RACE;
+            raceStatus = BG_CRACE_MOVEBG_RACE_STATUS_FIRST_RACE;
         }
     }
 
-    return ret;
+    return raceStatus;
 }
 
 void BgCraceMovebg_OpeningDoor_SetupIdle(BgCraceMovebg* this, PlayState* play) {
