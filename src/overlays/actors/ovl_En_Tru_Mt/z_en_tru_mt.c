@@ -20,6 +20,26 @@ void func_80B76A64(EnTruMt* this, PlayState* play);
 void func_80B76BB8(EnTruMt* this, PlayState* play);
 void func_80B76C38(EnTruMt* this, PlayState* play);
 
+typedef enum {
+    /* 0x00 */ KOUME_ANIM_INJURED_LYING_DOWN1,
+    /* 0x01 */ KOUME_ANIM_INJURED_LYING_DOWN2,
+    /* 0x02 */ KOUME_ANIM_TRY_GET_UP,
+    /* 0x03 */ KOUME_ANIM_INJURED_RAISE_HEAD,
+    /* 0x04 */ KOUME_ANIM_INJURED_TALKING,
+    /* 0x05 */ KOUME_ANIM_INJURED_HEAD_UP1,
+    /* 0x06 */ KOUME_ANIM_INJURED_HEAD_UP2,
+    /* 0x07 */ KOUME_ANIM_TAKE,
+    /* 0x08 */ KOUME_ANIM_SHAKE,
+    /* 0x09 */ KOUME_ANIM_DRINK,
+    /* 0x0A */ KOUME_ANIM_FINISHED_DRINKING,
+    /* 0x0B */ KOUME_ANIM_HEALED,
+    /* 0x0C */ KOUME_ANIM_HOVER1,
+    /* 0x0D */ KOUME_ANIM_TAKE_OFF,
+    /* 0x0E */ KOUME_ANIM_FLY,
+    /* 0x0F */ KOUME_ANIM_HOVER2,
+    /* 0x10 */ KOUME_ANIM_MAX
+} KoumeAnimation;
+
 const ActorInit En_Tru_Mt_InitVars = {
     ACTOR_EN_TRU_MT,
     ACTORCAT_NPC,
@@ -88,57 +108,57 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS sAnimationInfo[] = {
-    { &gKoumeLyingDownInjuredAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeLyingDownInjuredAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gKoumeTryGetUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeInjuredGetUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gKoumeInjuredRaiseHeadAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &gKoumeInjuredTalkingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKoumeInjuredIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeInjuredIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gKoumeTakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKoumeShakesHandsOutFrontAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKoumeShakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
     { &gKoumeDrinkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeShakeAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gKoumeFinishedDrinkingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gKoumeHealedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeFlyFastAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gKoumeTakeOffAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &gKoumeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeFlyFastAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 Vec3f D_80B7765C = { 3000.0f, -800.0f, 0.0f };
 
 Vec3f D_80B77668 = { 0.0f, 0.0f, -3000.0f };
 
-s32 func_80B76030(SkelAnime* skelAnime, s16 arg1) {
+s32 EnTruMt_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 endFrame;
     s16 startFrame;
-    s32 ret = false;
+    s32 didChange = false;
 
-    if ((arg1 >= 0) && (arg1 < ARRAY_COUNT(sAnimationInfo))) {
-        endFrame = sAnimationInfo[arg1].frameCount;
+    if ((animIndex >= KOUME_ANIM_INJURED_LYING_DOWN1) && (animIndex < KOUME_ANIM_MAX)) {
+        endFrame = sAnimationInfo[animIndex].frameCount;
         if (endFrame < 0) {
-            endFrame = Animation_GetLastFrame(sAnimationInfo[arg1].animation);
+            endFrame = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
         }
 
-        startFrame = sAnimationInfo[arg1].startFrame;
+        startFrame = sAnimationInfo[animIndex].startFrame;
         if (startFrame < 0) {
-            startFrame = Animation_GetLastFrame(sAnimationInfo[arg1].animation);
+            startFrame = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
         }
 
-        Animation_Change(skelAnime, sAnimationInfo[arg1].animation, sAnimationInfo[arg1].playSpeed, startFrame,
-                         endFrame, sAnimationInfo[arg1].mode, sAnimationInfo[arg1].morphFrames);
-        ret = true;
+        Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed,
+                         startFrame, endFrame, sAnimationInfo[animIndex].mode, sAnimationInfo[animIndex].morphFrames);
+        didChange = true;
     }
-    return ret;
+    return didChange;
 }
 
 void func_80B76110(EnTruMt* this) {
     if (DECR(this->unk_34E) == 0) {
-        this->unk_34C++;
-        if (this->unk_34C >= 3) {
+        this->eyeTexIndex++;
+        if (this->eyeTexIndex >= 3) {
             this->unk_34E = Rand_S16Offset(30, 30);
-            this->unk_34C = 0;
+            this->eyeTexIndex = 0;
         }
     }
 }
@@ -404,8 +424,7 @@ void EnTruMt_Init(Actor* thisx, PlayState* play) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gKoumeSkel, NULL, this->jointTable, this->morphTable,
-                       KOUME_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gKoumeSkel, NULL, this->jointTable, this->morphTable, KOUME_LIMB_MAX);
 
     Collider_InitSphere(play, &this->collider);
     Collider_SetSphere(play, &this->collider, &this->actor, &sSphereInit);
@@ -421,7 +440,7 @@ void EnTruMt_Init(Actor* thisx, PlayState* play) {
     this->unk_328 = 0;
     this->actor.room = -1;
     this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FC00(&this->actor), 0x3F);
-    func_80B76030(&this->skelAnime, 14);
+    EnTruMt_ChangeAnim(&this->skelAnime, KOUME_ANIM_FLY);
     this->actionFunc = func_80B76A64;
 }
 
@@ -556,7 +575,7 @@ void EnTruMt_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 
 void EnTruMt_Draw(Actor* thisx, PlayState* play) {
     EnTruMt* this = THIS;
-    TexturePtr sp48[] = {
+    TexturePtr eyeTextures[] = {
         gKoumeEyeOpenTex,
         gKoumeEyeHalfTex,
         gKoumeEyeClosedTex,
@@ -566,8 +585,8 @@ void EnTruMt_Draw(Actor* thisx, PlayState* play) {
 
     func_8012C28C(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp48[this->unk_34C]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sp48[this->unk_34C]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(eyeTextures[this->eyeTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(eyeTextures[this->eyeTexIndex]));
 
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, EnTruMt_OverrideLimbDraw, EnTruMt_PostLimbDraw,

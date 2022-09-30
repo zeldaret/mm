@@ -14,9 +14,9 @@
 
         <Animation Name="gKoumeFlyAnim" Offset="0x2BD8" />
         <Animation Name="gKoumeTakeOffAnim" Offset="0x3698" />
-        <Animation Name="gKoumeFlyFastAnim" Offset="0x446C" />
+        <Animation Name="gKoumeHoverAnim" Offset="0x446C" />
         <Animation Name="gKoumeDrinkAnim" Offset="0x7FA0" />
-        <Animation Name="gKoumeInjuredGetUpAnim" Offset="0x9348" />
+        <Animation Name="gKoumeInjuredRaiseHeadAnim" Offset="0x9348" />
 
         <DList Name="gKoumePelvisDL" Offset="0xB730" />
         <DList Name="gKoumeTorsoDL" Offset="0xB940" />
@@ -46,13 +46,13 @@
         <DList Name="gKoumeLeftFootDL" Offset="0xDEC8" />
 
         <Animation Name="gKoumeInjuredTalkingAnim" Offset="0xEEDC" />
-        <Animation Name="gKoumeLyingDownInjuredAnim" Offset="0xF9A0" />
+        <Animation Name="gKoumeInjuredLyingDownAnim" Offset="0xF9A0" />
         <Animation Name="gKoumeTryGetUpAnim" Offset="0x108AC" />
         <Animation Name="gKoumeHealedAnim" Offset="0x11F88" />
         <Animation Name="gKoumeTakeAnim" Offset="0x14728" />
         <Animation Name="gKoumeIdleAnim" Offset="0x15068" />
-        <Animation Name="gKoumeInjuredIdleAnim" Offset="0x15CA0" />
-        <Animation Name="gKoumeShakeAnim" Offset="0x16B4C" />
+        <Animation Name="gKoumeInjuredHeadUpAnim" Offset="0x15CA0" />
+        <Animation Name="gKoumeFinishedDrinkingAnim" Offset="0x16B4C" />
 
         <Texture Name="gKoumeSkinTLUT" OutName="koume_skin_tlut" Format="rgba16" Width="16" Height="16" Offset="0x16B60" />
         <Texture Name="gKoumeMouthTLUT" OutName="koume_mouth_tlut" Format="rgba16" Width="16" Height="16" Offset="0x16D60" />
@@ -112,6 +112,6 @@
         <Limb Name="gKoumeLeftBraidEndLimb" Type="Standard" EnumName="KOUME_LIMB_LEFT_BRAID_END" Offset="0x1A9EC" />
         <Skeleton Name="gKoumeSkel" Type="Flex" LimbType="Standard" LimbNone="KOUME_LIMB_NONE" LimbMax="KOUME_LIMB_MAX" EnumName="KoumeLimb" Offset="0x1AA60" />
 
-        <Animation Name="gKoumeShakesHandsOutFrontAnim" Offset="0x1B5C4" />
+        <Animation Name="gKoumeShakeAnim" Offset="0x1B5C4" />
     </File>
 </Root>
