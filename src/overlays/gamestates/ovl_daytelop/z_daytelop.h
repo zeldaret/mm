@@ -3,8 +3,8 @@
 
 #include "global.h"
 
-void Daytelop_Init(GameState* thisx);
-void Daytelop_Destroy(GameState* thisx);
+void DayTelop_Init(GameState* thisx);
+void DayTelop_Destroy(GameState* thisx);
 
 typedef struct {
     /* 0x000 */ GameState state;
@@ -16,12 +16,12 @@ typedef struct {
     /* 0x240 */ s16 transitionCountdown;
     /* 0x242 */ s16 fadeInState;
     /* 0x244 */ s16 alpha;
-} DaytelopContext; // size = 0x248
+} DayTelopState; // size = 0x248
 
 typedef enum {
     /* 0 */ DAYTELOP_HOURSTEXT_OFF,
     /* 1 */ DAYTELOP_HOURSTEXT_FADEIN,
     /* 2 */ DAYTELOP_HOURSTEXT_ON
-} Daytelop_FadeState;
+} DaytelopFadeState;
 
 #endif

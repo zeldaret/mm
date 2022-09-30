@@ -50,18 +50,10 @@ s16 D_8082B6DC[] = {
     0x0000,
 };
 
-s32 D_8082B6E4[] = { 0, 0, 0 };
-
-s16 D_8082B6F0[] = { 100, 255 };
-
-s32 D_8082B6F4 = 0;
-
-s16 D_8082B6F8[] = { 10, 0, 0, 0 };
+s16 D_8082B6E4 = 0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081FF80.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808204AC.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80820FA4.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80821730.s")

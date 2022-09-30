@@ -30,7 +30,7 @@ typedef struct EnBigpo {
     /* 0x188 */ Vec3s jointTable[ENBIGPO_LIMBCOUNT];
     /* 0x1C4 */ Vec3s morphTable[ENBIGPO_LIMBCOUNT];
     /* 0x200 */ EnBigPoActionFunc actionFunc;
-    /* 0x204 */ u8 unkBool204; // need to know what func_801A2E54 does to know what this is
+    /* 0x204 */ u8 storePrevBgm;
     /* 0x206 */ s16 idleTimer; // frame counter
     /* 0x208 */ s16 unk208; // facing rotY?
     /* 0x20A */ s16 rotVelocity;

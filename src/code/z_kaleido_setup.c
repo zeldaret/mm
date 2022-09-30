@@ -33,12 +33,12 @@ void func_800F4A10(PlayState* play) {
         for (i = 9; i >= 0; i--) {
             if ((gSaveContext.save.playerData.owlActivationFlags >> i) & 1) {
                 pauseCtx->worldMapPoints[i] = 1;
-                pauseCtx->unk_238[4] = i;
+                pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = i;
             }
         }
 
         if ((gSaveContext.save.playerData.owlActivationFlags >> 4) & 1) {
-            pauseCtx->unk_238[4] = 4;
+            pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = 4;
         }
     }
 
@@ -78,10 +78,11 @@ void KaleidoSetup_Update(PlayState* play) {
                     if ((play->unk_1887C < 2) && (gSaveContext.magicState != MAGIC_STATE_STEP_CAPACITY) &&
                         (gSaveContext.magicState != MAGIC_STATE_FILL)) {
                         if (!(gSaveContext.eventInf[1] & 0x80) && !(player->stateFlags1 & 0x20)) {
-                            if (!(play->actorCtx.unk5 & 2) && !(play->actorCtx.unk5 & 4)) {
+                            if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
+                                !(play->actorCtx.flags & ACTORCTX_FLAG_2)) {
                                 if ((play->actorCtx.unk268 == 0) && CHECK_BTN_ALL(input->press.button, BTN_START)) {
-                                    gSaveContext.unk_3F26 = gSaveContext.unk_3F22;
-                                    pauseCtx->unk_2B9 = 0;
+                                    gSaveContext.prevHudVisibility = gSaveContext.hudVisibility;
+                                    pauseCtx->itemDescriptionOn = false;
                                     pauseCtx->state = 1;
                                     func_800F4A10(play);
                                     pauseCtx->mode = pauseCtx->pageIndex * 2 + 1;
@@ -121,24 +122,24 @@ void KaleidoSetup_Init(PlayState* play) {
     pauseCtx->unk_20C = 936.0f;
     pauseCtx->unk_220 = -314.0f;
 
-    pauseCtx->unk_238[PAUSE_MAP] = XREG(94) + 3;
+    pauseCtx->cursorPoint[PAUSE_MAP] = XREG(94) + 3;
 
-    pauseCtx->unk_258 = 11;
-    pauseCtx->unk_25A = 0;
+    pauseCtx->cursorSpecialPos = PAUSE_CURSOR_PAGE_RIGHT;
+    pauseCtx->pageSwitchTimer = 0;
 
-    pauseCtx->cursorItem[PAUSE_ITEM] = 999;
+    pauseCtx->cursorItem[PAUSE_ITEM] = PAUSE_ITEM_NONE;
     pauseCtx->cursorItem[PAUSE_MAP] = XREG(94) + 3;
-    pauseCtx->cursorItem[PAUSE_QUEST] = 999;
-    pauseCtx->cursorItem[PAUSE_MASK] = 999;
+    pauseCtx->cursorItem[PAUSE_QUEST] = PAUSE_ITEM_NONE;
+    pauseCtx->cursorItem[PAUSE_MASK] = PAUSE_ITEM_NONE;
 
-    pauseCtx->unk_268[PAUSE_ITEM] = 0;
-    pauseCtx->unk_268[PAUSE_MAP] = XREG(94) + 3;
+    pauseCtx->cursorSlot[PAUSE_ITEM] = 0;
+    pauseCtx->cursorSlot[PAUSE_MAP] = XREG(94) + 3;
 
-    pauseCtx->unk_284 = 2;
+    pauseCtx->cursorColorSet = 2;
     pauseCtx->unk_2A0 = -1;
-    pauseCtx->unk_2BA = 320;
-    pauseCtx->unk_2BC = 40;
-    pauseCtx->unk_29E = 100;
+    pauseCtx->equipAnimScale = 320;
+    pauseCtx->equipAnimShrinkRate = 40;
+    pauseCtx->promptAlpha = 100;
 
     View_Init(&pauseCtx->view, play->state.gfxCtx);
 }
