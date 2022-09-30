@@ -670,7 +670,7 @@ void DmStk_PlaySfxForPlayingWithFairiesCutscene(DmStk* this, PlayState* play) {
 void DmStk_PlaySfxForEndingCutsceneFirstPart(DmStk* this, PlayState* play) {
     switch (play->csCtx.frames) {
         case 5:
-            func_801A4A28(12);
+            Audio_PlayAmbience(AMBIENCE_ID_0C);
             break;
 
         case 660:
@@ -688,7 +688,7 @@ void DmStk_PlaySfxForEndingCutsceneSecondPart(DmStk* this, PlayState* play) {
 
     switch (play->csCtx.frames) {
         case 5:
-            func_801A4A28(12);
+            Audio_PlayAmbience(AMBIENCE_ID_0C);
             break;
 
         case 45:

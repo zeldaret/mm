@@ -436,11 +436,12 @@ void Scene_HeaderCmd09(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x15: Sound Settings=
 void Scene_HeaderCmdSoundSettings(PlayState* play, SceneCmd* cmd) {
-    play->soundCtx.seqIndex = cmd->soundSettings.musicSeq;
-    play->soundCtx.nightSeqIndex = cmd->soundSettings.nighttimeSFX;
+    play->sequenceCtx.seqId = cmd->soundSettings.seqId;
+    play->sequenceCtx.ambienceId = cmd->soundSettings.ambienceId;
 
-    if (gSaveContext.seqIndex == (u8)NA_BGM_DISABLED || func_801A8A50(0) == NA_BGM_FINAL_HOURS) {
-        audio_setBGM(cmd->soundSettings.bgmId);
+    if (gSaveContext.seqId == (u8)NA_BGM_DISABLED ||
+        Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS) {
+        Audio_SetSpec(cmd->soundSettings.specId);
     }
 }
 
