@@ -191,22 +191,22 @@ void Quake_RemoveRequest(QuakeRequest* req) {
     sQuakeRequestCount--;
 }
 
-QuakeRequest* Quake_GetRequest(s16 index) {
-    QuakeRequest* req = &sQuakeRequest[index & 3];
+QuakeRequest* Quake_GetRequest(s16 quakeIndex) {
+    QuakeRequest* req = &sQuakeRequest[quakeIndex & 3];
 
     if (req->type == 0) {
         return NULL;
     }
 
-    if (index != req->randIndex) {
+    if (quakeIndex != req->randIndex) {
         return NULL;
     }
 
     return req;
 }
 
-u32 Quake_SetValue(s16 index, s16 valueType, s16 value) {
-    QuakeRequest* req = Quake_GetRequest(index);
+u32 Quake_SetValue(s16 quakeIndex, s16 valueType, s16 value) {
+    QuakeRequest* req = Quake_GetRequest(quakeIndex);
 
     if (req == NULL) {
         return false;
@@ -257,29 +257,29 @@ u32 Quake_SetValue(s16 index, s16 valueType, s16 value) {
     }
 }
 
-u32 Quake_SetSpeed(s16 index, s16 value) {
-    QuakeRequest* req = Quake_GetRequest(index);
+u32 Quake_SetSpeed(s16 quakeIndex, s16 speed) {
+    QuakeRequest* req = Quake_GetRequest(quakeIndex);
 
     if (req != NULL) {
-        req->speed = value;
+        req->speed = speed;
         return true;
     }
     return false;
 }
 
-u32 Quake_SetCountdown(s16 index, s16 value) {
-    QuakeRequest* req = Quake_GetRequest(index);
+u32 Quake_SetCountdown(s16 quakeIndex, s16 countdown) {
+    QuakeRequest* req = Quake_GetRequest(quakeIndex);
 
     if (req != NULL) {
-        req->countdown = value;
+        req->countdown = countdown;
         req->countdownMax = req->countdown;
         return true;
     }
     return false;
 }
 
-s16 Quake_GetCountdown(s16 index) {
-    QuakeRequest* req = Quake_GetRequest(index);
+s16 Quake_GetCountdown(s16 quakeIndex) {
+    QuakeRequest* req = Quake_GetRequest(quakeIndex);
 
     if (req != NULL) {
         return req->countdown;
@@ -287,8 +287,8 @@ s16 Quake_GetCountdown(s16 index) {
     return 0;
 }
 
-u32 Quake_SetQuakeValues(s16 index, s16 verticalMag, s16 horizontalMag, s16 zoom, s16 rollOffset) {
-    QuakeRequest* req = Quake_GetRequest(index);
+u32 Quake_SetQuakeValues(s16 quakeIndex, s16 verticalMag, s16 horizontalMag, s16 zoom, s16 rollOffset) {
+    QuakeRequest* req = Quake_GetRequest(quakeIndex);
 
     if (req != NULL) {
         req->verticalMag = verticalMag;
@@ -300,8 +300,8 @@ u32 Quake_SetQuakeValues(s16 index, s16 verticalMag, s16 horizontalMag, s16 zoom
     return false;
 }
 
-u32 Quake_SetQuakeValues2(s16 index, s16 isShakePerpendicular, Vec3s shakePlaneOffset) {
-    QuakeRequest* req = Quake_GetRequest(index);
+u32 Quake_SetQuakeValues2(s16 quakeIndex, s16 isShakePerpendicular, Vec3s shakePlaneOffset) {
+    QuakeRequest* req = Quake_GetRequest(quakeIndex);
 
     if (req != NULL) {
         req->isShakePerpendicular = isShakePerpendicular;

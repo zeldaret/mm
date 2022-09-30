@@ -34,15 +34,15 @@ typedef enum {
     /* 6 */ QUAKE_TYPE_6
 } QuakeType;
 
-u32 Quake_SetValue(s16 index, s16 valueType, s16 value);
-u32 Quake_SetSpeed(s16 index, s16 value);
-u32 Quake_SetCountdown(s16 index, s16 value);
-s16 Quake_GetCountdown(s16 index);
-u32 Quake_SetQuakeValues(s16 index, s16 verticalMag, s16 horizontalMag, s16 zoom, s16 rollOffset);
-u32 Quake_SetQuakeValues2(s16 index, s16 isShakePerpendicular, Vec3s shakePlaneOffset);
+u32 Quake_SetValue(s16 quakeIndex, s16 valueType, s16 value);
+u32 Quake_SetSpeed(s16 quakeIndex, s16 speed);
+u32 Quake_SetCountdown(s16 quakeIndex, s16 countdown);
+s16 Quake_GetCountdown(s16 quakeIndex);
+u32 Quake_SetQuakeValues(s16 quakeIndex, s16 verticalMag, s16 horizontalMag, s16 zoom, s16 rollOffset);
+u32 Quake_SetQuakeValues2(s16 quakeIndex, s16 isShakePerpendicular, Vec3s shakePlaneOffset);
 s16 Quake_Add(Camera* camera, u32 type);
 s16 Quake_Calc(Camera* camera, QuakeCamCalc* camData);
-u32 Quake_Remove(s16 index);
+u32 Quake_Remove(s16 quakeIndex);
 s32 Quake_NumActiveQuakes(void);
 void Quake_Init(void);
 
