@@ -13,7 +13,7 @@ typedef struct {
     };
 } CmpDmaBuffer;
 
-static CmpDmaBuffer sDmaBuffer;
+CmpDmaBuffer sDmaBuffer;
 
 void func_80178AC0(u16* src, void* dst, size_t size) {
     Color_RGBA8_u32 spC;
