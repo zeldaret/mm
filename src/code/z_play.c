@@ -450,7 +450,7 @@ void Play_Destroy(GameState* thisx) {
     }
     gSaveContext.save.weekEventReg[0x5C] &= (u8)~0x80;
 
-    func_80121F94(this);
+    Interface_Destroy(this);
     KaleidoScopeCall_Destroy(this);
     KaleidoManager_Destroy();
     ZeldaArena_Cleanup();
@@ -593,7 +593,7 @@ void Play_UpdateTransition(PlayState* this) {
             if (this->transitionTrigger != TRANS_TRIGGER_END) {
                 s16 sceneLayer = 0;
 
-                Interface_ChangeAlpha(1);
+                Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
 
                 if (gSaveContext.nextCutsceneIndex >= 0xFFF0) {
                     sceneLayer = (gSaveContext.nextCutsceneIndex & 0xF) + 1;
@@ -608,7 +608,7 @@ void Play_UpdateTransition(PlayState* this) {
                       !(gSaveContext.save.weekEventReg[0x37] & 0x80)) ||
                      ((this->nextEntrance == ENTRANCE(ROAD_TO_IKANA, 1)) &&
                       !(gSaveContext.save.weekEventReg[0x34] & 0x20))) &&
-                    (!func_800FE590(this) || (Entrance_GetSceneNum(this->nextEntrance + sceneLayer) < 0) ||
+                    (!func_800FE590(this) || (Entrance_GetSceneId(this->nextEntrance + sceneLayer) < 0) ||
                      (func_801A8A50(0) != NA_BGM_FINAL_HOURS))) {
                     func_801A4058(20);
                     gSaveContext.seqIndex = 0xFF;
@@ -621,7 +621,7 @@ void Play_UpdateTransition(PlayState* this) {
                     gSaveContext.nightSeqIndex = 0xFF;
                 }
 
-                if (func_800FE590(this) && (Entrance_GetSceneNum(this->nextEntrance + sceneLayer) >= 0) &&
+                if (func_800FE590(this) && (Entrance_GetSceneId(this->nextEntrance + sceneLayer) >= 0) &&
                     (func_801A8A50(0) == NA_BGM_FINAL_HOURS)) {
                     func_801A41C8(20);
                 }
@@ -1012,7 +1012,7 @@ void Play_Update(PlayState* this) {
                 Rumble_SetUpdateEnabled(false);
             }
 
-            Room_nop8012D510(this, &this->roomCtx.currRoom, &pad58[1], 0);
+            Room_nop8012D510(this, &this->roomCtx.curRoom, &pad58[1], 0);
             Room_nop8012D510(this, &this->roomCtx.prevRoom, &pad58[1], 1);
             SkyboxDraw_Update(&this->skyboxCtx);
 
@@ -1149,7 +1149,7 @@ void Play_Draw(PlayState* this) {
     }
 
     if ((SREG(94) < 2) && (gTrnsnUnkState < 2)) {
-        if (this->skyboxCtx.skyboxShouldDraw || (this->roomCtx.currRoom.mesh->type0.type == 1)) {
+        if (this->skyboxCtx.skyboxShouldDraw || (this->roomCtx.curRoom.mesh->type0.type == 1)) {
             func_8012CF0C(gfxCtx, 0, 1, 0, 0, 0);
         } else {
             func_8012CF0C(gfxCtx, 1, 1, this->lightCtx.unk7, this->lightCtx.unk8, this->lightCtx.unk9);
@@ -1299,7 +1299,7 @@ void Play_Draw(PlayState* this) {
             func_800FE390(this);
             sp268 = LightContext_NewLights(&this->lightCtx, gfxCtx);
 
-            if (this->roomCtx.currRoom.enablePosLights || (MREG(93) != 0)) {
+            if (this->roomCtx.curRoom.enablePosLights || (MREG(93) != 0)) {
                 sp268->enablePosLights = true;
             }
 
@@ -1314,7 +1314,7 @@ void Play_Draw(PlayState* this) {
                 //        `if (stuff that evaluates to 0 but not trivially)`
                 s64 roomDrawFlags = 3;
 
-                Room_Draw(this, &this->roomCtx.currRoom, roomDrawFlags);
+                Room_Draw(this, &this->roomCtx.curRoom, roomDrawFlags);
                 Room_Draw(this, &this->roomCtx.prevRoom, roomDrawFlags);
             }
 
@@ -1575,13 +1575,13 @@ void func_801692C4(PlayState* this, s32 spawn) {
     func_8016927C(this, this->skyboxId);
 }
 
-void Play_SceneInit(PlayState* this, s32 scene, s32 spawn) {
+void Play_SceneInit(PlayState* this, s32 sceneId, s32 spawn) {
     s32 pad;
-    SceneTableEntry* sp1C = &gSceneTable[scene];
+    SceneTableEntry* sp1C = &gSceneTable[sceneId];
 
     sp1C->unk_D = 0;
     this->loadedScene = sp1C;
-    this->sceneNum = scene;
+    this->sceneId = sceneId;
     this->sceneConfig = sp1C->drawConfig;
     this->sceneSegment = Play_LoadScene(this, &sp1C->segment);
     sp1C->unk_D = 0;
@@ -1818,38 +1818,38 @@ Vec3s* Play_GetActorCsCamFuncData(PlayState* this, s32 csCamDataIndex) {
  * Converts the number of a scene to its "original" equivalent, the default version of the area which the player first
  * enters.
  */
-s16 Play_GetOriginalSceneNumber(s16 sceneNum) {
+s16 Play_GetOriginalSceneId(s16 sceneId) {
     // Inverted Stone Tower Temple -> Stone Tower Temple
-    if (sceneNum == SCENE_INISIE_R) {
+    if (sceneId == SCENE_INISIE_R) {
         return SCENE_INISIE_N;
     }
 
     // Purified Southern Swamp -> Poisoned Sothern Swamp
-    if (sceneNum == SCENE_20SICHITAI2) {
+    if (sceneId == SCENE_20SICHITAI2) {
         return SCENE_20SICHITAI;
     }
 
     // Spring Mountain Village -> Winter Mountain Village
-    if (sceneNum == SCENE_10YUKIYAMANOMURA2) {
+    if (sceneId == SCENE_10YUKIYAMANOMURA2) {
         return SCENE_10YUKIYAMANOMURA;
     }
 
     // Spring Goron Village -> Winter Goron Village
-    if (sceneNum == SCENE_11GORONNOSATO2) {
+    if (sceneId == SCENE_11GORONNOSATO2) {
         return SCENE_11GORONNOSATO;
     }
 
     // Spring Path to Goron Village -> Winter Path to Goron Village
-    if (sceneNum == SCENE_17SETUGEN2) {
+    if (sceneId == SCENE_17SETUGEN2) {
         return SCENE_17SETUGEN;
     }
 
     // Inverted Stone Tower -> Stone Tower
-    if (sceneNum == SCENE_F41) {
+    if (sceneId == SCENE_F41) {
         return SCENE_F40;
     }
 
-    return sceneNum;
+    return sceneId;
 }
 
 /**
@@ -1860,13 +1860,13 @@ void Play_SaveCycleSceneFlags(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
     CycleSceneFlags* cycleSceneFlags;
 
-    cycleSceneFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneNumber(this->sceneNum)];
+    cycleSceneFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneId(this->sceneId)];
     cycleSceneFlags->chest = this->actorCtx.sceneFlags.chest;
     cycleSceneFlags->switch0 = this->actorCtx.sceneFlags.switches[0];
     cycleSceneFlags->switch1 = this->actorCtx.sceneFlags.switches[1];
 
-    if (this->sceneNum == SCENE_INISIE_R) { // Inverted Stone Tower Temple
-        cycleSceneFlags = &gSaveContext.cycleSceneFlags[this->sceneNum];
+    if (this->sceneId == SCENE_INISIE_R) { // Inverted Stone Tower Temple
+        cycleSceneFlags = &gSaveContext.cycleSceneFlags[this->sceneId];
     }
 
     cycleSceneFlags->collectible = this->actorCtx.sceneFlags.collectible[0];
@@ -1891,16 +1891,16 @@ void Play_SetupRespawnPoint(GameState* thisx, s32 respawnMode, s32 playerParams)
     PlayState* this = (PlayState*)thisx;
     Player* player = GET_PLAYER(this);
 
-    if (this->sceneNum != SCENE_KAKUSIANA) { // Grottos
+    if (this->sceneId != SCENE_KAKUSIANA) { // Grottos
         Play_SetRespawnData(&this->state, respawnMode, (u16)((void)0, gSaveContext.save.entrance),
-                            this->roomCtx.currRoom.num, playerParams, &player->actor.world.pos,
+                            this->roomCtx.curRoom.num, playerParams, &player->actor.world.pos,
                             player->actor.shape.rot.y);
     }
 }
 
 // Override respawn data in Sakon's Hideout
 void func_80169ECC(PlayState* this) {
-    if (this->sceneNum == SCENE_SECOM) {
+    if (this->sceneId == SCENE_SECOM) {
         this->nextEntrance = ENTRANCE(IKANA_CANYON, 6);
         gSaveContext.respawnFlag = -7;
     }
@@ -1943,7 +1943,7 @@ void func_80169FDC(GameState* thisx) {
 s32 func_80169FFC(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
 
-    return this->roomCtx.currRoom.mesh->type0.type != 1;
+    return this->roomCtx.curRoom.mesh->type0.type != 1;
 }
 
 s32 FrameAdvance_IsEnabled(GameState* thisx) {
@@ -2214,7 +2214,7 @@ void Play_Init(GameState* thisx) {
 
     Play_SceneInit(
         this,
-        Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneSetupIndex)),
+        Entrance_GetSceneIdAbsolute(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneSetupIndex)),
         Entrance_GetSpawnNum(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneSetupIndex)));
     KaleidoScopeCall_Init(this);
     func_80121FC4(this);
@@ -2301,7 +2301,7 @@ void Play_Init(GameState* thisx) {
 
     while (Room_HandleLoadCallbacks(this, &this->roomCtx) == 0) {}
 
-    if ((CURRENT_DAY != 0) && ((this->roomCtx.currRoom.unk3 == 1) || (this->roomCtx.currRoom.unk3 == 5))) {
+    if ((CURRENT_DAY != 0) && ((this->roomCtx.curRoom.unk3 == 1) || (this->roomCtx.curRoom.unk3 == 5))) {
         Actor_Spawn(&this->actorCtx, this, 0x15A, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0);
     }
 
