@@ -5,9 +5,9 @@
 #include "objects/object_dekunuts/object_dekunuts.h"
 
 #define EN_SYATEKI_DEKUNUTS_GET_TYPE(thisx) ((thisx)->params & 0xF)
-#define EN_SYATEKI_DEKUNUTS_GET_NUMBER(thisx) (((thisx)->params & 0xF0) >> 4)
+#define EN_SYATEKI_DEKUNUTS_GET_INDEX(thisx) (((thisx)->params & 0xF0) >> 4)
 #define EN_SYATEKI_DEKUNUTS_GET_PARAM_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
-#define EN_SYATEKI_DEKUNUTS_PARAMS(unkFF00, number, type) (((unkFF00 << 8) & 0xFF00) | ((number << 4) & 0xF0) | (type & 0xF))
+#define EN_SYATEKI_DEKUNUTS_PARAMS(unkFF00, index, type) (((unkFF00 << 8) & 0xFF00) | ((index << 4) & 0xF0) | (type & 0xF))
 
 typedef enum {
     /* 0 */ EN_SYATEKI_DEKUNUTS_TYPE_NORMAL, // Worth 30 points
@@ -29,8 +29,8 @@ typedef struct EnSyatekiDekunuts {
     /* 0x1DE */ UNK_TYPE1 unk_1DE[0x4];
     /* 0x1E2 */ s16 isAlive;
     /* 0x1E4 */ Vec3s* flowerPos;
-    /* 0x1E8 */ s16 number;
-    /* 0x1EA */ s16 numFlowers;
+    /* 0x1E8 */ s16 index;
+    /* 0x1EA */ s16 flowerCount;
     /* 0x1EC */ s16 shouldDrawFlowers;
     /* 0x1EE */ s16 timeToBurrow;
     /* 0x1F0 */ s16 headdressType;

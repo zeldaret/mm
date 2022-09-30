@@ -100,7 +100,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
-    static s32 sShouldThisActorDrawFlowers = true; // This makes it so only one EnSyatekiDekunuts draws all the flowers.
+    static s32 sDrawFlowers = true; // This makes it so only one EnSyatekiDekunuts draws all the flowers.
     EnSyatekiDekunuts* this = THIS;
     PlayState* play = play2;
     s32 unkPathComparison;
@@ -129,9 +129,9 @@ void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
         path = &play->setupPathList[path->unk1];
     }
 
-    if (sShouldThisActorDrawFlowers == true) {
+    if (sDrawFlowers == true) {
         this->shouldDrawFlowers = true;
-        sShouldThisActorDrawFlowers = false;
+        sDrawFlowers = false;
     } else {
         this->shouldDrawFlowers = false;
     }
@@ -147,8 +147,8 @@ void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
     }
 
     this->flowerPos = Lib_SegmentedToVirtual(path->points);
-    this->number = EN_SYATEKI_DEKUNUTS_GET_NUMBER(&this->actor);
-    this->numFlowers = path->count;
+    this->index = EN_SYATEKI_DEKUNUTS_GET_INDEX(&this->actor);
+    this->flowerCount = path->count;
     this->timer = 0;
     this->unk_1DC = 0;
     this->waitTimer = 0;
@@ -186,13 +186,13 @@ void EnSyatekiDekunuts_WaitForSpawn(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
     if ((syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) && (this->isAlive == true) &&
-        ((syatekiMan->dekuScrubFlags & (1 << this->number)) != 0)) {
+        (syatekiMan->dekuScrubFlags & (1 << this->index))) {
         EnSyatekiDekunuts_SetupSpawn(this);
     } else if (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING) {
         this->isAlive = true;
     }
 
-    if ((syatekiMan->dekuScrubFlags == 0) && (syatekiMan->guayFlags == 0) &&
+    if (!syatekiMan->dekuScrubFlags && !syatekiMan->guayFlags &&
         (EN_SYATEKI_DEKUNUTS_GET_TYPE(&this->actor) != EN_SYATEKI_DEKUNUTS_TYPE_BONUS)) {
         this->isAlive = true;
     }
@@ -206,9 +206,9 @@ void EnSyatekiDekunuts_SetupSpawn(EnSyatekiDekunuts* this) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
     this->timer = 0;
-    pos.x = this->flowerPos[this->number].x;
-    pos.y = this->flowerPos[this->number].y;
-    pos.z = this->flowerPos[this->number].z;
+    pos.x = this->flowerPos[this->index].x;
+    pos.y = this->flowerPos[this->index].y;
+    pos.z = this->flowerPos[this->index].z;
     this->actor.world.pos = this->actor.prevPos = pos;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
@@ -319,7 +319,7 @@ void EnSyatekiDekunuts_BonusLookAround(EnSyatekiDekunuts* this, PlayState* play)
         EnSyatekiDekunuts_SetupBurrow(this);
     }
 
-    if (this->timer < 11) {
+    if (this->timer <= 10) {
         this->timer++;
     }
 }
@@ -337,7 +337,7 @@ void EnSyatekiDekunuts_Burrow(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
     if (syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) {
-        if (this->timer > 160 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        if ((this->timer > 160) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->timer = 0;
             EnSyatekiDekunuts_SetupWaitToEmerge(this);
         } else {
@@ -408,7 +408,7 @@ void EnSyatekiDekunuts_Dead(EnSyatekiDekunuts* this, PlayState* play) {
             EffectSsHahen_SpawnBurst(play, &pos, 3.0f, 0, 12, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
             if (EN_SYATEKI_DEKUNUTS_GET_TYPE(&this->actor) != EN_SYATEKI_DEKUNUTS_TYPE_BONUS) {
-                syatekiMan->dekuScrubFlags &= ~(1 << this->number);
+                syatekiMan->dekuScrubFlags &= ~(1 << this->index);
             }
 
             EnSyatekiDekunuts_SetupWaitForSpawn(this);
@@ -469,7 +469,7 @@ void EnSyatekiDekunuts_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (this->shouldDrawFlowers == true) {
-        for (i = 0; i < this->numFlowers; i++) {
+        for (i = 0; i < this->flowerCount; i++) {
             flowerPos.x = this->flowerPos[i].x;
             flowerPos.y = this->flowerPos[i].y;
             flowerPos.z = this->flowerPos[i].z;

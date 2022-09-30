@@ -11116,7 +11116,7 @@
     0x80A2CADC:("sBonusDekuScrubColliderDimensions","UNK_TYPE4","",0x4),
     0x80A2CAE8:("sAnimationInfo","UNK_PTR","",0x4),
     0x80A2CB90:("sInitChain","UNK_TYPE1","",0x1),
-    0x80A2CB9C:("sShouldThisActorDrawFlowers","UNK_TYPE4","",0x4),
+    0x80A2CB9C:("sDrawFlowers","UNK_TYPE4","",0x4),
     0x80A2CBA0:("sVelocity","UNK_TYPE1","",0x1),
     0x80A2CBAC:("sAccel","UNK_TYPE1","",0x1),
     0x80A2CBB8:("sPrimColor","UNK_TYPE1","",0x1),
