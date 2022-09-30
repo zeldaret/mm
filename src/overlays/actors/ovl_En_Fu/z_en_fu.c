@@ -74,13 +74,13 @@ static Vec3f D_80964B18 = { 0.0f, 55.0f, 12.0f };
 static Vec3f D_80964B24 = { 0.0f, 60.0f, 0.0f };
 
 static AnimationInfo sAnimationInfo[] = {
-    { &object_mu_Anim_0053E0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_mu_Anim_001F74, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_mu_Anim_002F64, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_mu_Anim_004904, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_mu_Anim_005304, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_mu_Anim_005304, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_mu_Anim_00BAC4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gHoneyAndDarlingIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gHoneyAndDarlingCupCheeksLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gHoneyAndDarlingHugLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gHoneyAndDarlingGameDanceLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHoneyAndDarlingHoldHandsLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &gHoneyAndDarlingHoldHandsLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHoneyAndDarlingSurpiseAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -194,8 +194,8 @@ void EnFu_Init(Actor* thisx, PlayState* play) {
 
     if (fuKaiten != NULL) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_mu_Skel_00B2B0, &object_mu_Anim_001F74, this->jointTable,
-                           this->morphTable, 21);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gHoneyAndDarlingSkel, &gHoneyAndDarlingCupCheeksLoopAnim,
+                           this->jointTable, this->morphTable, HONEY_AND_DARLING_LIMB_MAX);
         Collider_InitCylinder(play, &this->collider);
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -1454,7 +1454,7 @@ void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len) {
     for (i = 0; i < len; i++, ptr++) {
         if (ptr->unk_36 == 1) {
             if (!flag) {
-                gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0A0);
+                gSPDisplayList(POLY_OPA_DISP++, gHoneyAndDarlingHeartMaterialDL);
                 flag = true;
             }
             Matrix_Translate(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
@@ -1463,7 +1463,7 @@ void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len) {
 
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropRecoveryHeartTex));
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0E0);
+            gSPDisplayList(POLY_OPA_DISP++, gHoneyAndDarlingHeartModelDL);
         }
     }
 
