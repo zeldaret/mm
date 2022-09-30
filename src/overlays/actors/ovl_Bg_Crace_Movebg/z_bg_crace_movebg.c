@@ -39,6 +39,8 @@ typedef enum {
     /* 2 */ BG_CRACE_MOVEBG_RACE_STATUS_SUBSEQUENT_RACE
 } BgCraceMovebgRaceStatus;
 
+u8 sIsLoaded[32];
+
 const ActorInit Bg_Crace_Movebg_InitVars = {
     ACTOR_BG_CRACE_MOVEBG,
     ACTORCAT_BG,
@@ -50,8 +52,6 @@ const ActorInit Bg_Crace_Movebg_InitVars = {
     (ActorFunc)BgCraceMovebg_Update,
     (ActorFunc)BgCraceMovebg_Draw,
 };
-
-u8 sIsLoaded[32];
 
 static u8 sHasInitializedIsLoaded = 0;
 static u8 sLoadedDoorCount = 0;
