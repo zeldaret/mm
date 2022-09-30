@@ -511,7 +511,7 @@ void func_8089B3D4(EnDinofos* this, PlayState* play) {
     Math_Vec3f_StepTo(&subCam->eye, &this->unk_2BC, 10.0f);
     this->unk_290++;
     if (this->unk_290 == 10) {
-        func_801A2E54(NA_BGM_MINI_BOSS);
+        Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
     }
 
     subCamAt.x = this->actor.world.pos.x;
@@ -530,7 +530,7 @@ void func_8089B3D4(EnDinofos* this, PlayState* play) {
 
 void func_8089B4A4(EnDinofos* this) {
     if (this->unk_290 < 10) {
-        func_801A2E54(NA_BGM_MINI_BOSS);
+        Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
     }
     Animation_PlayOnce(&this->skelAnime, &object_dinofos_Anim_00C974);
     this->unk_2BC.x = (Math_SinS(this->actor.shape.rot.y + 0x200) * 123.0f) + this->actor.world.pos.x;
@@ -551,7 +551,7 @@ void func_8089B580(EnDinofos* this, PlayState* play) {
     }
 
     if (this->skelAnime.curFrame > 35.0f) {
-        if ((play->sceneNum == SCENE_MITURIN) && Animation_OnFrame(&this->skelAnime, 38.0f)) {
+        if ((play->sceneId == SCENE_MITURIN) && Animation_OnFrame(&this->skelAnime, 38.0f)) {
             play->envCtx.lightSettingOverride = 11;
         }
 
@@ -562,7 +562,7 @@ void func_8089B580(EnDinofos* this, PlayState* play) {
         }
     }
 
-    if ((play->sceneNum == SCENE_MITURIN) && Animation_OnFrame(&this->skelAnime, 55.0f)) {
+    if ((play->sceneId == SCENE_MITURIN) && Animation_OnFrame(&this->skelAnime, 55.0f)) {
         play->envCtx.lightSettingOverride = 0xFF;
     }
 
@@ -1053,7 +1053,7 @@ void func_8089CB10(EnDinofos* this, PlayState* play) {
         worldSphere->center.z = this->limbPos[10].z;
     }
 
-    if (play->sceneNum == SCENE_MITURIN) {
+    if (play->sceneId == SCENE_MITURIN) {
         play->envCtx.lightSettingOverride = 11;
     }
 
@@ -1114,7 +1114,7 @@ void func_8089CBEC(EnDinofos* this, PlayState* play) {
 void func_8089CF00(EnDinofos* this, PlayState* play) {
     Animation_PlayOnce(&this->skelAnime, &object_dinofos_Anim_0017B8);
     this->colliderJntSph.base.atFlags &= ~AT_ON;
-    if (play->sceneNum == SCENE_MITURIN) {
+    if (play->sceneId == SCENE_MITURIN) {
         play->envCtx.lightSettingOverride = 255;
     }
     this->actionFunc = func_8089CF70;
@@ -1279,13 +1279,13 @@ s32 func_8089D60C(EnDinofos* this, PlayState* play) {
             }
 
             if (this->actor.cutscene != -1) {
-                func_801A2ED8();
+                Audio_RestorePrevBgm();
             }
         }
 
         func_8089ACEC(this, play);
         func_8089AD70(this);
-        if (play->sceneNum == SCENE_MITURIN) {
+        if (play->sceneId == SCENE_MITURIN) {
             play->envCtx.lightSettingOverride = 255;
         }
 

@@ -220,7 +220,7 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
 
     if (thisx->params == ENBIGPO_REGULAR) { // the well poe, starts immediately
         thisx->flags &= ~ACTOR_FLAG_10;     // always update OFF
-        this->unkBool204 = true;
+        this->storePrevBgm = true;
         EnBigpo_InitWellBigpo(this);
     } else if (thisx->params == ENBIGPO_SUMMONED) { // dampe type
         EnBigpo_InitDampeMainPo(this);
@@ -439,9 +439,9 @@ void EnBigpo_SpawnCutsceneStage6(EnBigpo* this, PlayState* play) {
  */
 void EnBigpo_SpawnCutsceneStage7(EnBigpo* this) {
     this->idleTimer = 15;
-    if (this->unkBool204 == false) {
-        func_801A2E54(NA_BGM_MINI_BOSS);
-        this->unkBool204 = true;
+    if (this->storePrevBgm == false) {
+        Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
+        this->storePrevBgm = true;
     }
     this->actionFunc = EnBigpo_SpawnCutsceneStage8;
 }
@@ -525,9 +525,9 @@ void EnBigpo_WarpingIn(EnBigpo* this, PlayState* play) {
     this->mainColor.a = this->idleTimer * (255.0f / 32.0f);
     if (this->idleTimer == 32) {
         this->mainColor.a = 255; // fully visible
-        if (this->unkBool204 == false) {
-            func_801A2E54(NA_BGM_MINI_BOSS);
-            this->unkBool204 = true;
+        if (this->storePrevBgm == false) {
+            Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
+            this->storePrevBgm = true;
         }
         EnBigpo_SetupIdleFlying(this);
     }
@@ -1124,7 +1124,7 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, PlayState* play) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DEAD);
             Enemy_StartFinishingBlow(play, &this->actor);
             if (this->actor.params == ENBIGPO_SUMMONED) { // dampe type
-                func_801A2ED8();
+                Audio_RestorePrevBgm();
             }
         } else {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DAMAGE);

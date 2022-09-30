@@ -303,7 +303,7 @@ void func_80A6F5E4(EnMm3* this, PlayState* play) {
         this->unk_2AC--;
         if (this->unk_2AC == 0) {
             if (gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] == SECONDS_TO_TIMER(10)) {
-                func_801A3098(0x922);
+                Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
             } else {
                 play_sound(NA_SE_SY_ERROR);
             }
