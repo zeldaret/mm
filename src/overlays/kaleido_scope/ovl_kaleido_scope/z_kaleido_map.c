@@ -699,6 +699,8 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
     }
 
     // Find and draw Player's face at the current region based on the current scene
+    // If (pauseCtx->state == 6), then the other pauseCtx->state conditions are redundant
+    // and always return true
     if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->unk_200 == 0) && (pauseCtx->state == 6) &&
         (pauseCtx->state != 7) && !((pauseCtx->state >= 8) && (pauseCtx->state <= 0x12))) {
         j = 0;
