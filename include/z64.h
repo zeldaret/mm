@@ -1056,10 +1056,9 @@ struct FireObj {
 }; // size = 0x8B
 
 typedef struct {
-    /* 0x0 */ u8   seqIndex;
-    /* 0x1 */ u8   nightSeqIndex;
-    /* 0x2 */ u8   unk_02;
-} SoundContext; // size = 0x3
+    /* 0x0 */ u8   seqId;
+    /* 0x1 */ u8   ambienceId;
+} SequenceContext; // size = 0x2
 
 typedef struct {
     /* 0x0 */ s32 enabled;
@@ -1095,7 +1094,7 @@ struct PlayState {
     /* 0x00800 */ Camera* cameraPtrs[NUM_CAMS];
     /* 0x00810 */ s16 activeCamId;
     /* 0x00812 */ s16 nextCamera;
-    /* 0x00814 */ SoundContext soundCtx;
+    /* 0x00814 */ SequenceContext sequenceCtx;
     /* 0x00818 */ LightContext lightCtx;
     /* 0x00828 */ FrameAdvanceContext frameAdvCtx;
     /* 0x00830 */ CollisionContext colCtx;

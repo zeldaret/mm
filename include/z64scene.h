@@ -153,16 +153,16 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8  code;
-    /* 0x1 */ u8  bgmId;
-    /* 0x2 */ UNK_TYPE1 pad2[4];
-    /* 0x6 */ u8  nighttimeSFX;
-    /* 0x7 */ u8  musicSeq;
+    /* 0x1 */ u8  specId;
+    /* 0x2 */ UNK_TYPE1 unk_02[4];
+    /* 0x6 */ u8  ambienceId;
+    /* 0x7 */ u8  seqId;
 } SCmdSoundSettings; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
     /* 0x1 */ u8  data1;
-    /* 0x2 */ UNK_TYPE1 pad2[5];
+    /* 0x2 */ UNK_TYPE1 unk_02[5];
     /* 0x7 */ u8  echo;
 } SCmdEchoSettings; // size = 0x8
 
@@ -817,7 +817,7 @@ typedef enum {
     /* 0x1D */ SCENE_CMD_ID_UNUSED_1D,
     /* 0x1E */ SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO,
     /* 0x1F */ SCENE_CMD_MAX
-} SceneCommandTypeID;
+} SceneCommandTypeId;
 
 #define SCENE_CMD_SPAWN_LIST(numSpawns, spawnList) \
     { SCENE_CMD_ID_SPAWN_LIST, numSpawns, CMD_PTR(spawnList) }
@@ -887,8 +887,8 @@ typedef enum {
 #define SCENE_CMD_END() \
     { SCENE_CMD_ID_END, 0, CMD_W(0) }
 
-#define SCENE_CMD_SOUND_SETTINGS(audioSessionId, nighttimeSfx, bgmId) \
-    { SCENE_CMD_ID_SOUND_SETTINGS, audioSessionId, CMD_BBBB(0, 0, nighttimeSfx, bgmId) }
+#define SCENE_CMD_SOUND_SETTINGS(specId, ambienceId, seqId) \
+    { SCENE_CMD_ID_SOUND_SETTINGS, specId, CMD_BBBB(0, 0, ambienceId, seqId) }
 
 #define SCENE_CMD_ECHO_SETTINGS(echo) \
     { SCENE_CMD_ID_ECHO_SETTINGS, 0, CMD_BBBB(0, 0, 0, echo) }

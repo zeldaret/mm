@@ -424,7 +424,7 @@ void EnSyatekiWf_Update(Actor* thisx, PlayState* play2) {
         this->unk_34C.base.acFlags &= ~AC_HIT;
         this->actor.colChkInfo.health -= 2;
         if (this->actor.colChkInfo.health == 0) {
-            func_801A3098(NA_BGM_GET_ITEM | 0x900);
+            Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
             func_80A20858(this, play);
         } else {
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);

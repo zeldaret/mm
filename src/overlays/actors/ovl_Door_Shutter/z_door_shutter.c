@@ -537,7 +537,7 @@ void func_808A1784(DoorShutter* this, PlayState* play) {
         } else {
             DoorShutter_SetupAction(this, func_808A1090);
         }
-        func_801A2ED8();
+        Audio_RestorePrevBgm();
     }
 }
 
