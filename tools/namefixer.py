@@ -729,6 +729,7 @@ wordReplace = {
     "play->actorCtx.unk3": "play->actorCtx.lensActive",
     "play->actorCtx.unk4": "play->actorCtx.lensMaskSize",
     "play->nextEntranceIndex": "play->nextEntrance",
+    "play->sceneNum": "play->sceneId",
 
     "gSaveContext.unk_3DC8": "gSaveContext.timerOsTime",
     "gSaveContext.unk_3DD0": "gSaveContext.timerStates",

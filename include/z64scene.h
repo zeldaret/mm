@@ -316,7 +316,7 @@ typedef struct {
 } EntranceEntry; // size = 0x2
 
 typedef struct {
-    /* 0x0 */ s8 sceneNum;
+    /* 0x0 */ s8 sceneId;
     /* 0x1 */ s8 spawnNum;
     /* 0x2 */ u16 flags;
 } EntranceTableEntry; // size = 0x4

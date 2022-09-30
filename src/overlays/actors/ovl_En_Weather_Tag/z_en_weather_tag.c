@@ -351,8 +351,7 @@ void func_80966FEC(EnWeatherTag* this, PlayState* play) {
         D_801F4E7A = distance;
     }
 
-    // unique pirates fortress behavior?
-    if ((play->sceneNum == SCENE_KAIZOKU) && (play->actorCtx.flags & ACTORCTX_FLAG_1)) {
+    if ((play->sceneId == SCENE_KAIZOKU) && (play->actorCtx.flags & ACTORCTX_FLAG_1)) {
         EnWeatherTag_SetupAction(this, func_80967060);
     }
 }

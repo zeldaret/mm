@@ -100,7 +100,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 sceneNum;
+    /* 0x00 */ s16 sceneId;
     /* 0x02 */ u8 index;
 } ShutterSceneInfo; // size = 0x4
 
@@ -114,8 +114,8 @@ ShutterSceneInfo D_808A2258[] = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 dungeonScene;
-    /* 0x02 */ s16 bossScene;
+    /* 0x00 */ s16 dungeonSceneId;
+    /* 0x02 */ s16 bossSceneId;
     /* 0x04 */ u8 index;
 } BossDoorInfo; // size = 0x6
 
@@ -209,7 +209,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
         ShutterSceneInfo* shutterSceneInfo = &D_808A2258[0];
 
         for (i = 0; i < ARRAY_COUNT(D_808A2258) - 1; i++, shutterSceneInfo++) {
-            if (play->sceneNum == shutterSceneInfo->sceneNum) {
+            if (play->sceneId == shutterSceneInfo->sceneId) {
                 break;
             }
         }
@@ -222,7 +222,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
         BossDoorInfo* bossDoorInfo = &D_808A22A0[0];
 
         for (i = 0; i < ARRAY_COUNT(D_808A22A0) - 1; i++, bossDoorInfo++) {
-            if ((play->sceneNum == bossDoorInfo->dungeonScene) || (play->sceneNum == bossDoorInfo->bossScene)) {
+            if ((play->sceneId == bossDoorInfo->dungeonSceneId) || (play->sceneId == bossDoorInfo->bossSceneId)) {
                 break;
             }
         }
