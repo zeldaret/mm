@@ -1356,7 +1356,7 @@ void Cutscene_ActorTranslate(Actor* actor, PlayState* play, s32 actorActionIndex
 void Cutscene_ActorTranslateAndYaw(Actor* actor, PlayState* play, s32 actorActionIndex);
 void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, PlayState* play, s32 actorActionIndex);
 void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, PlayState* play, s32 actorActionIndex);
-s32 Cutscene_GetSceneSetupIndex(PlayState* play);
+s32 Cutscene_GetSceneLayer(PlayState* play);
 s32 Cutscene_GetActorActionIndex(PlayState* play, u16 actorActionCmd);
 s32 Cutscene_CheckActorAction(PlayState* play, u16 actorActionCmd);
 u8 Cutscene_IsPlaying(PlayState* play);
