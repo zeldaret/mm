@@ -159,7 +159,7 @@ void ObjChikuwa_Update(Actor* thisx, PlayState* play) {
     ObjChikuwa* this = THIS;
     ObjChikuwaStruct* temp;
     f32 temp_fs0;
-    s16 var_s2;
+    s16 quakeVerticalMag;
     s32 i;
     s32 quakeIndex;
 
@@ -176,13 +176,13 @@ void ObjChikuwa_Update(Actor* thisx, PlayState* play) {
             if (temp_fs0 < SQ(240.0f)) {
                 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
                 if (temp_fs0 < SQ(120.0f)) {
-                    var_s2 = 4;
+                    quakeVerticalMag = 4;
                 } else {
-                    var_s2 = 3;
+                    quakeVerticalMag = 3;
                 }
 
                 Quake_SetSpeed(quakeIndex, 17232);
-                Quake_SetQuakeValues(quakeIndex, var_s2, 0, 0, 0);
+                Quake_SetQuakeValues(quakeIndex, quakeVerticalMag, 0, 0, 0);
                 Quake_SetCountdown(quakeIndex, 7);
             }
         }

@@ -293,12 +293,12 @@ void func_80A54600(PlayState* play, Vec3f* arg1, f32 arg2, f32 arg3) {
     }
 }
 
-void func_80A54980(ObjHugebombiwa* this, PlayState* play, s32 arg2) {
+void ObjHugebombiwa_AddQuake(ObjHugebombiwa* this, PlayState* play, s32 quakeVerticalMag) {
     s32 pad[2];
     s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
     Quake_SetSpeed(quakeIndex, 20000);
-    Quake_SetQuakeValues(quakeIndex, arg2, 0, 0, 0);
+    Quake_SetQuakeValues(quakeIndex, quakeVerticalMag, 0, 0, 0);
     Quake_SetCountdown(quakeIndex, 7);
     Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
 }
@@ -515,7 +515,7 @@ void func_80A55064(ObjHugebombiwa* this, PlayState* play) {
             ptr->unk_24 = 1;
             func_80A53E60(play, &ptr->unk_0C, ptr->unk_18, ptr->unk_00.y * 9.8f);
             if ((play->gameplayFrames % 4) == 0) {
-                func_80A54980(this, play, (s32)(Rand_ZeroOne() * 5.5f) + 1);
+                ObjHugebombiwa_AddQuake(this, play, (s32)(Rand_ZeroOne() * 5.5f) + 1);
             }
         }
     }
@@ -611,7 +611,7 @@ void func_80A55564(ObjHugebombiwa* this, PlayState* play) {
             ptr->unk_24 = 1;
             func_80A54600(play, &ptr->unk_0C, ptr->unk_18, ptr->unk_00.y * 10.1f);
             if ((play->gameplayFrames % 4) == 0) {
-                func_80A54980(this, play, (s32)(Rand_ZeroOne() * 5.5f) + 1);
+                ObjHugebombiwa_AddQuake(this, play, (s32)(Rand_ZeroOne() * 5.5f) + 1);
             }
         }
     }

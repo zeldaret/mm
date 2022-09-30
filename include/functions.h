@@ -745,8 +745,8 @@ s16 Actor_TestFloorInDirection(Actor* actor, PlayState* play, f32 distance, s16 
 s32 Actor_IsTargeted(PlayState* play, Actor* actor);
 s32 Actor_OtherIsTargeted(PlayState* play, Actor* actor);
 void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 alpha, PlayState* play);
-void func_800BC770(PlayState* play, s16 y, s16 countdown);
-void func_800BC7D8(PlayState* play, s16 y, s16 countdown, s16 speed);
+void Actor_AddQuake(PlayState* play, s16 verticalMag, s16 countdown);
+void Actor_AddQuakeWithSpeed(PlayState* play, s16 verticalMag, s16 countdown, s16 speed);
 void func_800BC848(Actor* actor, PlayState* play, s16 y, s16 countdown);
 void Actor_DrawDoorLock(PlayState* play, s32 frame, s32 type);
 void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 xluFlag, u16 duration);

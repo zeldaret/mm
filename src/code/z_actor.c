@@ -3778,19 +3778,19 @@ void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 alpha, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_800BC770(PlayState* play, s16 y, s16 countdown) {
+void Actor_AddQuake(PlayState* play, s16 verticalMag, s16 countdown) {
     s16 quakeIndex = Quake_Add(&play->mainCamera, QUAKE_TYPE_3);
 
     Quake_SetSpeed(quakeIndex, 20000);
-    Quake_SetQuakeValues(quakeIndex, y, 0, 0, 0);
+    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
     Quake_SetCountdown(quakeIndex, countdown);
 }
 
-void func_800BC7D8(PlayState* play, s16 y, s16 countdown, s16 speed) {
+void Actor_AddQuakeWithSpeed(PlayState* play, s16 verticalMag, s16 countdown, s16 speed) {
     s16 quakeIndex = Quake_Add(&play->mainCamera, QUAKE_TYPE_3);
 
     Quake_SetSpeed(quakeIndex, speed);
-    Quake_SetQuakeValues(quakeIndex, y, 0, 0, 0);
+    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
     Quake_SetCountdown(quakeIndex, countdown);
 }
 
@@ -3801,7 +3801,7 @@ void func_800BC848(Actor* actor, PlayState* play, s16 y, s16 countdown) {
     } else {
         Rumble_Request(actor->xyzDistToPlayerSq, 180, 20, 100);
     }
-    func_800BC770(play, y, countdown);
+    Actor_AddQuake(play, y, countdown);
 }
 
 typedef struct {
