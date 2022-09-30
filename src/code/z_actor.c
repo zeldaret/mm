@@ -2236,7 +2236,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     s32 i;
 
     gSaveContext.save.weekEventReg[92] |= 0x80;
-    cycleFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneNumber(play->sceneNum)];
+    cycleFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneId(play->sceneId)];
 
     bzero(actorCtx, sizeof(ActorContext));
     ActorOverlayTable_Init();
@@ -2253,8 +2253,8 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     actorCtx->sceneFlags.chest = cycleFlags->chest;
     actorCtx->sceneFlags.switches[0] = cycleFlags->switch0;
     actorCtx->sceneFlags.switches[1] = cycleFlags->switch1;
-    if (play->sceneNum == SCENE_INISIE_R) {
-        cycleFlags = &gSaveContext.cycleSceneFlags[play->sceneNum];
+    if (play->sceneId == SCENE_INISIE_R) {
+        cycleFlags = &gSaveContext.cycleSceneFlags[play->sceneId];
     }
     actorCtx->sceneFlags.collectible[0] = cycleFlags->collectible;
     actorCtx->sceneFlags.clearedRoom = cycleFlags->clearedRoom;

@@ -658,7 +658,7 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
 
     this->unk_148.unk_10 -= 0x2EE0;
 
-    if (play->sceneNum == SCENE_SECOM) {
+    if (play->sceneId == SCENE_SECOM) {
         play->nextEntrance = ENTRANCE(IKANA_CANYON, 6);
     } else if (ENTEST7_GET(&this->actor) == ENTEST7_26) {
         func_80169F78(&play->state);

@@ -683,7 +683,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         (pauseCtx->state != 7) && !((pauseCtx->state >= 8) && (pauseCtx->state <= 0x12))) {
         j = 0;
         n = 0;
-        sceneId = play->sceneNum;
+        sceneId = play->sceneId;
         if (sceneId == SCENE_KAKUSIANA) { // Lone Peak Shrine & Grottos
             if (play->roomCtx.curRoom.num == 5) {
                 sceneId = SCENE_11GORONNOSATO; // Goron Village (winter)
@@ -691,7 +691,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                        (play->roomCtx.curRoom.num == 12)) {
                 sceneId = SCENE_22DEKUCITY; // Deku Palace
             } else {
-                sceneId = Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.respawn[RESPAWN_MODE_UNK_3].entrance));
+                sceneId = Entrance_GetSceneIdAbsolute(((void)0, gSaveContext.respawn[RESPAWN_MODE_UNK_3].entrance));
             }
         }
 
@@ -717,7 +717,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                                 break;
                             }
                             j = 0;
-                            if (Entrance_GetSceneNumAbsolute(
+                            if (Entrance_GetSceneIdAbsolute(
                                     ((void)0, gSaveContext.respawn[RESPAWN_MODE_UNK_3].entrance)) ==
                                 gSceneIdsPerRegion[n][j]) {
                                 break;

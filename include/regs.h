@@ -75,6 +75,8 @@
 #define R_PAUSE_DBG_MAP_CLOUD_ON          XREG(50)
 #define R_PAUSE_DBG_MAP_CLOUD_X           XREG(52)
 #define R_PAUSE_DBG_MAP_CLOUD_Y           XREG(53)
+#define R_MOON_CRASH_TIMER_Y              XREG(80)
+#define R_MOON_CRASH_TIMER_X              XREG(81)
 #define R_PAUSE_OWLWARP_ALPHA             XREG(87)
 #define R_REVERSE_FLOOR_INDEX             XREG(94)
 #define R_MINIMAP_DISABLED                XREG(95)
