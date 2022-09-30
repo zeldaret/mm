@@ -163,7 +163,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
     this->dynapolyInitialized = false;
     this->targetYPos = thisx->world.pos.y;
     this->unk_1F0 = 0.0f;
-    if (play->sceneNum == SCENE_31MISAKI) {
+    if (play->sceneId == SCENE_31MISAKI) {
         if (gSaveContext.save.weekEventReg[53] & 0x20) {
             DynaPolyActor_Init(&this->dyna, 3);
             DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAwakeCol);
@@ -172,7 +172,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
             DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAsleepCol);
         }
         this->dynapolyInitialized = true;
-    } else if (play->sceneNum == SCENE_SEA) {
+    } else if (play->sceneId == SCENE_SEA) {
         DynaPolyActor_Init(&this->dyna, 3);
         DynaPolyActor_LoadMesh(play, &this->dyna, &sTurtleGreatBayTempleCol);
         this->dynapolyInitialized = true;
@@ -183,7 +183,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
     this->palmTree2 = Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_YASI, thisx->world.pos.x + 68.0f,
                                   thisx->world.pos.y + 368.0f, thisx->world.pos.z - 174.0f, 0, 0x7530, 0, 1);
 
-    switch (play->sceneNum) {
+    switch (play->sceneId) {
         case SCENE_31MISAKI:
             if (gSaveContext.save.weekEventReg[53] & 0x20) {
                 thisx->world.pos.x = -6480.0f;
@@ -388,7 +388,7 @@ void DmChar08_SpawnBubbles(DmChar08* this, PlayState* play) {
 }
 
 void func_80AAFCCC(DmChar08* this, PlayState* play) {
-    switch (play->sceneNum) {
+    switch (play->sceneId) {
         case SCENE_31MISAKI:
             if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
                 switch (this->unk_206) {
@@ -893,7 +893,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
 }
 
 void func_80AB096C(DmChar08* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (play->sceneNum == SCENE_31MISAKI) && (gSaveContext.sceneSetupIndex == 0) &&
+    if ((play->csCtx.state != 0) && (play->sceneId == SCENE_31MISAKI) && (gSaveContext.sceneSetupIndex == 0) &&
         (play->csCtx.currentCsIndex == 0)) {
         if ((play->csCtx.frames >= 890) && (play->csCtx.frames < 922)) {
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
@@ -986,7 +986,7 @@ void DmChar08_Update(Actor* thisx, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     DmChar08_SpawnBubbles(this, play);
     this->dyna.actor.world.pos.y = this->targetYPos;
-    if (play->sceneNum == SCENE_31MISAKI) {
+    if (play->sceneId == SCENE_31MISAKI) {
         if (this->dyna.actor.xzDistToPlayer > 1300.0f) {
             func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
         } else {
@@ -1002,7 +1002,7 @@ void DmChar08_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 DmChar08_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    if ((play->csCtx.state == 0) && (play->sceneNum == SCENE_31MISAKI) &&
+    if ((play->csCtx.state == 0) && (play->sceneId == SCENE_31MISAKI) &&
         (limbIndex == TURTLE_LIMB_FRONT_RIGHT_UPPER_FLIPPER)) {
         rot->z = -0x5E24;
     }
