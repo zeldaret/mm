@@ -792,7 +792,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->stateFlags = 0;
     }
 
-    if (((play->sceneNum == SCENE_KOEPONARACE) && (GET_RACE_FLAGS == 1)) ||
+    if (((play->sceneId == SCENE_KOEPONARACE) && (GET_RACE_FLAGS == 1)) ||
         ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && Cutscene_GetSceneSetupIndex(play))) {
         this->stateFlags |= ENHORSE_FLAG_25;
     }
@@ -878,7 +878,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         func_80112AFC(play);
     } else if (thisx->params == ENHORSE_14) {
         func_808846F0(this, play);
-        if ((play->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
+        if ((play->sceneId == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
             Actor_MarkForDeath(&this->actor);
         }
     } else if (thisx->params == ENHORSE_16) {
@@ -3498,7 +3498,7 @@ void EnHorse_ObstructMovement(EnHorse* this, PlayState* play, s32 obstacleType, 
             this->unk_1EC |= 0x80;
             this->actor.world.pos = this->actor.prevPos;
             this->actor.speedXZ = 0.0f;
-        } else if ((play->sceneNum != SCENE_KOEPONARACE) || (this->unk_1EC & 2)) {
+        } else if ((play->sceneId != SCENE_KOEPONARACE) || (this->unk_1EC & 2)) {
             this->unk_1EC &= ~2;
             this->actor.world.pos = this->lastPos;
             this->stateFlags |= ENHORSE_OBSTACLE;
@@ -3822,7 +3822,7 @@ void EnHorse_UpdateBgCheckInfo(EnHorse* this, PlayState* play) {
         }
 
         if (((movingFast == false) && (intersectDist < 80.0f)) || ((movingFast == true) && (intersectDist < 150.0f))) {
-            if ((play->sceneNum != SCENE_KOEPONARACE) && (Math_CosS(sp7E) < 0.9f) && (this->playerControlled == true)) {
+            if ((play->sceneId != SCENE_KOEPONARACE) && (Math_CosS(sp7E) < 0.9f) && (this->playerControlled == true)) {
                 if (movingFast == false) {
                     this->stateFlags |= ENHORSE_FORCE_REVERSING;
                 } else if (movingFast == true) {
@@ -3876,7 +3876,7 @@ void EnHorse_UpdateBgCheckInfo(EnHorse* this, PlayState* play) {
                                COLPOLY_GET_NORMAL(obstacleFloor->normal.z), obstacleFloor->dist,
                                &this->actor.world.pos) > 40.0f)) {
         if ((movingFast == true) && (this->playerControlled == true) && (this->action != ENHORSE_ACTION_STOPPING) &&
-            (play->sceneNum != SCENE_KOEPONARACE)) {
+            (play->sceneId != SCENE_KOEPONARACE)) {
             this->stateFlags |= ENHORSE_FORCE_REVERSING;
             EnHorse_StartBraking(this, play);
         }
@@ -3888,7 +3888,7 @@ void EnHorse_UpdateBgCheckInfo(EnHorse* this, PlayState* play) {
     if ((temp_f0 < 0.81915206f) || SurfaceType_IsHorseBlocked(&play->colCtx, obstacleFloor, bgId) ||
         (func_800C99D4(&play->colCtx, obstacleFloor, bgId) == 7)) {
         if ((Math_CosS(sp7E) < 0.9f) && (movingFast == true) && (this->playerControlled == true) &&
-            (this->action != ENHORSE_ACTION_STOPPING) && (play->sceneNum != SCENE_KOEPONARACE)) {
+            (this->action != ENHORSE_ACTION_STOPPING) && (play->sceneId != SCENE_KOEPONARACE)) {
             this->stateFlags |= ENHORSE_FORCE_REVERSING;
             EnHorse_StartBraking(this, play);
         }
@@ -3951,13 +3951,13 @@ void EnHorse_UpdateBgCheckInfo(EnHorse* this, PlayState* play) {
     if ((temp_f0 < 0.81915206f) || SurfaceType_IsHorseBlocked(&play->colCtx, obstacleFloor, bgId) ||
         (func_800C99D4(&play->colCtx, obstacleFloor, bgId) == 7)) {
         if ((movingFast == true) && (this->playerControlled == true) && (this->action != ENHORSE_ACTION_STOPPING) &&
-            (play->sceneNum != SCENE_KOEPONARACE)) {
+            (play->sceneId != SCENE_KOEPONARACE)) {
             this->stateFlags |= ENHORSE_FORCE_REVERSING;
             EnHorse_StartBraking(this, play);
         }
     } else if (behindObstacleHeight < -70.0f) {
         if ((movingFast == true) && (this->playerControlled == true) && (this->action != ENHORSE_ACTION_STOPPING) &&
-            (play->sceneNum != SCENE_KOEPONARACE)) {
+            (play->sceneId != SCENE_KOEPONARACE)) {
             this->stateFlags |= ENHORSE_FORCE_REVERSING;
             EnHorse_StartBraking(this, play);
         }
