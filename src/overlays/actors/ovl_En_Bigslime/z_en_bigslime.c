@@ -5,8 +5,8 @@
  */
 
 #include "z_en_bigslime.h"
-#include "z64rumble.h"
 #include "z64quake.h"
+#include "z64rumble.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_bigslime/object_bigslime.h"
 #include "objects/gameplay_keep/gameplay_keep.h"

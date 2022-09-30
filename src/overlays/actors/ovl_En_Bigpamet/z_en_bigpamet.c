@@ -5,8 +5,8 @@
  */
 
 #include "z_en_bigpamet.h"
-#include "z64rumble.h"
 #include "z64quake.h"
+#include "z64rumble.h"
 #include "overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 

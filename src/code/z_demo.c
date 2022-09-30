@@ -1,6 +1,6 @@
 #include "global.h"
-#include "z64rumble.h"
 #include "z64quake.h"
+#include "z64rumble.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 
 void Cutscene_DoNothing(PlayState* play, CutsceneContext* csCtx);

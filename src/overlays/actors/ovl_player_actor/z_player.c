@@ -5,8 +5,8 @@
  */
 
 #include "global.h"
-#include "z64rumble.h"
 #include "z64quake.h"
+#include "z64rumble.h"
 
 #define THIS ((Player*)thisx)
 
