@@ -184,11 +184,14 @@ void OceffStorm_Draw2(Actor* thisx, PlayState* play) {
 
     gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
+
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 200, 200, 150, this->primColorAlpha);
+
     gSPDisplayList(POLY_XLU_DISP++, &sSongOfStormsMaterialDL);
-    gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, 0, scroll * 8, scroll * 4, 0x40, 0x40, 1,
-                                                     scroll * 4, scroll * 4, 0x40, 0x40));
-    gSPTextureRectangle(POLY_XLU_DISP++, 0, 0, 0x0500, 0x03C0, G_TX_RENDERTILE, 0, 0, 0x008C, -0x008C);
+    gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, scroll * 8, scroll * 4, 64,
+                                                     64, 1, scroll * 4, scroll * 4, 64, 64));
+    gSPTextureRectangle(POLY_XLU_DISP++, 0, 0, SCREEN_WIDTH << 2, SCREEN_HEIGHT << 2, G_TX_RENDERTILE, 0, 0,
+                        (s32)(0.13671875 * (1 << 10)), (s32)(-0.13671875 * (1 << 10)));
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
