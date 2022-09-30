@@ -31,14 +31,16 @@ const ActorInit Oceff_Storm_InitVars = {
     (ActorFunc)OceffStorm_Draw,
 };
 
+typedef enum { OCEFF_STORM_ACTION_PARAM_1 = 1 } OceffStormActionParams;
+
 void OceffStorm_SetupAction(OceffStorm* this, OceffStormActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
 
 s32 func_8098176C(PlayState* play) {
-    s32 phi_v1 = false;
+    s32 ret = false;
 
-    switch (play->sceneNum) {
+    switch (play->sceneId) {
         case SCENE_13HUBUKINOMITI:
         case SCENE_11GORONNOSATO:
         case SCENE_10YUKIYAMANOMURA:
@@ -47,16 +49,17 @@ s32 func_8098176C(PlayState* play) {
         case SCENE_17SETUGEN:
         case SCENE_GORONRACE:
             if (gSaveContext.sceneSetupIndex == 0) {
-                phi_v1 = true;
+                ret = true;
             }
             break;
+
         case SCENE_10YUKIYAMANOMURA2:
             if (gSaveContext.sceneSetupIndex == 1) {
-                phi_v1 = true;
+                ret = true;
             }
             break;
     }
-    return phi_v1;
+    return ret;
 }
 
 void OceffStorm_Init(Actor* thisx, PlayState* play) {
@@ -75,7 +78,7 @@ void OceffStorm_Init(Actor* thisx, PlayState* play) {
     this->actor.scale.x = 0.0f;
     this->posYOff = this->posYOffAdd;
 
-    if (this->actor.params == 1) {
+    if (this->actor.params == OCEFF_STORM_ACTION_PARAM_1) {
         OceffStorm_SetupAction(this, func_80981B48);
         this->actor.draw = OceffStorm_Draw2;
     } else {
@@ -103,12 +106,15 @@ void OceffStorm_DefaultAction(OceffStorm* this, PlayState* play) {
         default:
             cylinderScale = 1.0f;
             break;
+
         case PLAYER_FORM_DEKU:
             cylinderScale = 1.3f;
             break;
+
         case PLAYER_FORM_ZORA:
             cylinderScale = 1.2f;
             break;
+
         case PLAYER_FORM_GORON:
             cylinderScale = 2.0f;
             break;
@@ -121,6 +127,7 @@ void OceffStorm_DefaultAction(OceffStorm* this, PlayState* play) {
     } else {
         this->primColorAlpha = 100;
     }
+
     if ((this->counter < 10) || (this->counter >= 60)) {
         this->vtxAlpha = 0;
     } else if (this->counter <= 40) {
@@ -135,11 +142,13 @@ void OceffStorm_DefaultAction(OceffStorm* this, PlayState* play) {
         this->actor.scale.x = this->actor.scale.z = 0.4f * cylinderScale;
         this->vtxAlpha = -1;
     }
+
     if (this->counter > 40) {
         this->actor.world.pos.y += this->posYOff * 0.01f;
         this->posYOff += this->posYOffAdd;
         this->posYOffAdd += 10;
     }
+
     if (this->counter < 70) {
         this->counter++;
     } else {
@@ -151,6 +160,7 @@ void func_80981B48(OceffStorm* this, PlayState* play) {
     if (this->primColorAlpha < 100) {
         this->primColorAlpha += 5;
     }
+    //! @bug Actor_Kill is never called so the actor will stay alive forever
 }
 
 void OceffStorm_Update(Actor* thisx, PlayState* play) {
