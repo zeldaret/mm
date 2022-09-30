@@ -1476,7 +1476,7 @@ extern const TransitionInit TransitionFade_InitVars;
 extern const TransitionInit TransitionCircle_InitVars;
 extern s32 gDbgCamEnabled;
 // extern UNK_TYPE1 D_801D0D54;
-// extern UNK_TYPE2 D_801D0D58;
+// extern UNK_TYPE2 sQuakeIndex;
 // extern UNK_TYPE2 sIsCameraUnderwater;
 extern Input* D_801D0D60;
 // extern UNK_TYPE2 D_801D0D64;
@@ -3193,7 +3193,7 @@ extern Input D_801F6C18;
 // extern UNK_TYPE1 sTrnsnUnk;
 // extern UNK_TYPE1 D_801F6D0C;
 extern UNK_TYPE4 gTrnsnUnkState;
-// extern UNK_TYPE1 D_801F6D18;
+// extern UNK_TYPE1 sVisMono;
 extern Color_RGBA8_u32 gVisMonoColor;
 // extern UNK_TYPE1 D_801F6D38;
 // extern UNK_TYPE4 D_801F6D4C;
@@ -3497,7 +3497,7 @@ extern GfxPool gGfxPools[2];
 extern u8 gAudioHeap[0x138000];
 extern u8 gSystemHeap[UNK_SIZE];
 
-extern u8 D_80780000[0x4600];
+extern u8 gPictoPhotoI8[0x4600];
 extern u8 D_80784600[0x56200];
 extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH];
 

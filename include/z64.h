@@ -1166,7 +1166,7 @@ struct PlayState {
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 playerActorCsIds[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
-    /* 0x187F0 */ Vec3f unk_187F0;
+    /* 0x187F0 */ Vec3f projectionMtxFDiagonal;
     /* 0x187FC */ MtxF billboardMtxF;
     /* 0x1883C */ Mtx* billboardMtx;
     /* 0x18840 */ u32 gameplayFrames;
@@ -1205,7 +1205,7 @@ struct PlayState {
     /* 0x18E48 */ TransitionFade unk_18E48;
     /* 0x18E54 */ SceneTableEntry* loadedScene;
     /* 0x18E58 */ UNK_PTR unk_18E58;
-    /* 0x18E5C */ UNK_PTR unk_18E5C;
+    /* 0x18E5C */ TexturePtr pictoPhotoI8;
     /* 0x18E60 */ void* unk_18E60;
     /* 0x18E64 */ void* unk_18E64;
     /* 0x18E68 */ void* unk_18E68;

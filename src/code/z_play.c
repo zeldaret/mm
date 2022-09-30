@@ -16,7 +16,7 @@ extern Input D_801F6C18;
 extern FbDemoStruct sTrnsnUnk;
 extern u16* D_801F6D0C;
 extern s32 gTrnsnUnkState;
-extern VisMono D_801F6D18;
+extern VisMono sVisMono;
 extern Color_RGBA8_u32 gVisMonoColor;
 extern Struct_80140E80 D_801F6D38;
 extern Struct_80140E80* D_801F6D4C;
@@ -207,9 +207,10 @@ void func_80165E04(void) {
     SREG(89) = 1;
 }
 
+// Takes the picto photo, stores it as I8 to gPictoPhotoI8
 void func_80165E1C(PreRender* prerender) {
     PreRender_ApplyFilters(prerender);
-    func_801656A4(D_80780000, prerender->fbufSave, 320, 80, 64, 240 - 1, 176 - 1, 8);
+    func_801656A4(gPictoPhotoI8, prerender->fbufSave, 320, 80, 64, 240 - 1, 176 - 1, 8);
 }
 
 s32 func_80165E7C(PlayState* this, s32 transitionType) {
@@ -376,7 +377,7 @@ const char D_801DFB20[] = "fi";
 const char D_801DFB24[] = "fj";
 const char D_801DFB28[] = "fk";
 
-void func_80166060(PlayState* this) {
+void Play_ClearTransitionInstanceType(PlayState* this) {
     if (this->transitionCtx.fbdemoType != -1) {
         func_80163D80(&this->transitionCtx, this);
     }
@@ -420,7 +421,7 @@ void Play_Destroy(GameState* thisx) {
     SREG(89) = 0;
     PreRender_Destroy(&this->pauseBgPreRender);
     this->unk_18E58 = NULL;
-    this->unk_18E5C = NULL;
+    this->pictoPhotoI8 = NULL;
     this->unk_18E60 = NULL;
     this->unk_18E64 = NULL;
     this->unk_18E68 = NULL;
@@ -435,13 +436,13 @@ void Play_Destroy(GameState* thisx) {
 
     if ((this->transitionMode == TRANS_MODE_INSTANCE_RUNNING) || D_801D0D54) {
         this->transitionCtx.destroy(&this->transitionCtx.instanceData);
-        func_80166060(this);
+        Play_ClearTransitionInstanceType(this);
         this->transitionMode = TRANS_MODE_OFF;
     }
 
     ShrinkWindow_Destroy();
     TransitionFade_Destroy(&this->unk_18E48);
-    VisMono_Destroy(&D_801F6D18);
+    VisMono_Destroy(&sVisMono);
     func_80140EA0(D_801F6D4C);
     D_801F6D4C = NULL;
 
@@ -456,17 +457,18 @@ void Play_Destroy(GameState* thisx) {
     ZeldaArena_Cleanup();
 }
 
-void func_801663C4(u8* arg0, s8* arg1, u32 arg2) {
+// compresses from I8 to I5 and stores it in the save file
+void func_801663C4(u8* srcI8, s8* destI5, size_t size) {
     u32 i;
-    u8* var_v0 = arg0;
-    s8* var_v1 = arg1;
+    u8* src = srcI8;
+    s8* dest = destI5;
     s32 var_a3 = 8;
     u32 var_t0 = 0;
     s32 var_a1;
     u32 temp_lo_2;
 
-    for (i = 0; i < arg2; i++) {
-        temp_lo_2 = *var_v0++;
+    for (i = 0; i < size; i++) {
+        temp_lo_2 = *src++;
         temp_lo_2 = (temp_lo_2 * 0x1F + 0x80) / 255;
         var_a1 = var_a3 - 5;
         if (var_a1 > 0) {
@@ -474,27 +476,28 @@ void func_801663C4(u8* arg0, s8* arg1, u32 arg2) {
 
         } else {
             var_t0 |= temp_lo_2 >> -(var_a1);
-            *var_v1++ = var_t0;
+            *dest++ = var_t0;
             var_a1 += 8;
             var_t0 = temp_lo_2 << (var_a1);
         }
         var_a3 = var_a1;
     }
     if (var_a3 < 8) {
-        *var_v1 = var_t0;
+        *dest = var_t0;
     }
 }
 
-void func_80166644(u8* arg0, s8* arg1, u32 arg2) {
+// decompresses from the save file from I5 to I8
+void func_80166644(u8* srcI5, s8* destI8, size_t size) {
     u32 i;
-    u8* var_v0 = arg0;
-    s8* var_v1 = arg1;
+    u8* src = srcI5;
+    s8* dest = destI8;
     s32 var_a3 = 8;
     u32 var_t0;
     s32 var_a1;
-    u32 temp_lo_2 = *var_v0++;
+    u32 temp_lo_2 = *src++;
 
-    for (i = 0; i < arg2; i++) {
+    for (i = 0; i < size; i++) {
         var_a1 = var_a3 - 5;
         if (var_a1 > 0) {
             var_t0 = 0;
@@ -502,12 +505,12 @@ void func_80166644(u8* arg0, s8* arg1, u32 arg2) {
         } else {
             var_t0 = 0;
             var_t0 |= temp_lo_2 << -(var_a1);
-            temp_lo_2 = *var_v0++;
+            temp_lo_2 = *src++;
             var_a1 += 8;
             var_t0 |= temp_lo_2 >> var_a1;
         }
         var_t0 = (var_t0 & 0x1F) * 0xFF / 0x1F;
-        *var_v1++ = var_t0;
+        *dest++ = var_t0;
         var_a3 = var_a1;
     }
 }
@@ -531,7 +534,7 @@ f32 func_801668B4(PlayState* this, Vec3f* arg1, s32* arg2) {
 }
 
 void func_80166968(PlayState* this, Camera* camera) {
-    static s16 D_801D0D58 = -1;
+    static s16 sQuakeIndex = -1;
     static s16 sIsCameraUnderwater = false;
     s32 pad;
     s32 sp28;
@@ -541,7 +544,7 @@ void func_80166968(PlayState* this, Camera* camera) {
     if (func_801668B4(this, &camera->eye, &sp28) != BGCHECK_Y_MIN) {
         if (!sIsCameraUnderwater) {
             Camera_SetFlags(camera, CAM_STATE_UNDERWATER);
-            D_801D0D58 = -1;
+            sQuakeIndex = -1;
             Distortion_SetType(0x10);
             Distortion_SetCountdown(80);
         }
@@ -549,14 +552,14 @@ void func_80166968(PlayState* this, Camera* camera) {
         func_801A3EC0(0x20);
         func_800F6834(this, sp28);
 
-        if ((D_801D0D58 == -1) || (Quake_GetCountdown(D_801D0D58) == 0xA)) {
-            s16 quake = Quake_Add(camera, 5);
+        if ((sQuakeIndex == -1) || (Quake_GetCountdown(sQuakeIndex) == 0xA)) {
+            s16 quakeIndex = Quake_Add(camera, 5);
 
-            D_801D0D58 = quake;
-            if (quake != 0) {
-                Quake_SetSpeed(D_801D0D58, 550);
-                Quake_SetQuakeValues(D_801D0D58, 1, 1, 180, 0);
-                Quake_SetCountdown(D_801D0D58, 1000);
+            sQuakeIndex = quakeIndex;
+            if (quakeIndex != 0) {
+                Quake_SetSpeed(sQuakeIndex, 550);
+                Quake_SetQuakeValues(sQuakeIndex, 1, 1, 180, 0);
+                Quake_SetCountdown(sQuakeIndex, 1000);
             }
         }
         if (player->stateFlags3 & PLAYER_STATE3_8000) {
@@ -573,8 +576,8 @@ void func_80166968(PlayState* this, Camera* camera) {
         Distortion_ClearType(4);
         Distortion_ClearType(0x10);
         Distortion_ClearType(8);
-        if (D_801D0D58 != 0) {
-            Quake_RemoveFromIdx(D_801D0D58);
+        if (sQuakeIndex != 0) {
+            Quake_RemoveFromIdx(sQuakeIndex);
         }
         func_800F694C(this);
         func_801A3EC0(0);
@@ -743,7 +746,7 @@ void Play_UpdateTransition(PlayState* this) {
                         D_801D0D54 = true;
                     } else {
                         this->transitionCtx.destroy(&this->transitionCtx.instanceData);
-                        func_80166060(this);
+                        Play_ClearTransitionInstanceType(this);
                     }
                     this->transitionMode = TRANS_MODE_OFF;
                     if (gTrnsnUnkState == 3) {
@@ -1191,12 +1194,13 @@ void Play_Draw(PlayState* this) {
 
     View_RenderView(&this->view, 0xF);
 
+    // The billboard matrix temporarily stores the viewing matrix
     Matrix_MtxToMtxF(&this->view.viewing, &this->billboardMtxF);
     Matrix_MtxToMtxF(&this->view.projection, &this->viewProjectionMtxF);
 
-    this->unk_187F0.x = this->viewProjectionMtxF.xx;
-    this->unk_187F0.y = this->viewProjectionMtxF.yy;
-    this->unk_187F0.z = -this->viewProjectionMtxF.zz;
+    this->projectionMtxFDiagonal.x = this->viewProjectionMtxF.xx;
+    this->projectionMtxFDiagonal.y = this->viewProjectionMtxF.yy;
+    this->projectionMtxFDiagonal.z = -this->viewProjectionMtxF.zz;
 
     SkinMatrix_MtxFMtxFMult(&this->viewProjectionMtxF, &this->billboardMtxF, &this->viewProjectionMtxF);
 
@@ -1241,8 +1245,8 @@ void Play_Draw(PlayState* this) {
         TransitionFade_Draw(&this->unk_18E48, &sp218);
 
         if (gVisMonoColor.a != 0) {
-            D_801F6D18.primColor.rgba = gVisMonoColor.rgba;
-            VisMono_Draw(&D_801F6D18, &sp218);
+            sVisMono.primColor.rgba = gVisMonoColor.rgba;
+            VisMono_Draw(&sVisMono, &sp218);
         }
 
         gSPEndDisplayList(sp218++);
@@ -1346,8 +1350,9 @@ void Play_Draw(PlayState* this) {
 
         Environment_DrawCustomLensFlare(this);
 
-        if (MREG(64) != 0) {
-            Environment_FillScreen(gfxCtx, MREG(65), MREG(66), MREG(67), MREG(68), 3);
+        if (R_PLAY_FILL_SCREEN_ON) {
+            Environment_FillScreen(gfxCtx, R_PLAY_FILL_SCREEN_R, R_PLAY_FILL_SCREEN_G, R_PLAY_FILL_SCREEN_B,
+                                   R_PLAY_FILL_SCREEN_ALPHA, 3);
         }
 
         switch (this->envCtx.fillScreen) {
@@ -1542,20 +1547,21 @@ void func_801691F0(PlayState* this, MtxF* mtx, Vec3f* feetPos) {
     func_80169100(this, mtx, &poly, &bgId, feetPos);
 }
 
-void* Play_LoadScene(PlayState* this, RomFile* entry) {
+void* Play_LoadFile(PlayState* this, RomFile* entry) {
     size_t size = entry->vromEnd - entry->vromStart;
-    void* sp18 = THA_AllocEndAlign16(&this->state.heap, size);
+    void* allocp = THA_AllocEndAlign16(&this->state.heap, size);
 
-    DmaMgr_SendRequest0(sp18, entry->vromStart, size);
-    return sp18;
+    DmaMgr_SendRequest0(allocp, entry->vromStart, size);
+
+    return allocp;
 }
 
-void func_8016927C(PlayState* this, s16 skyboxId) {
-    func_801434E4(&this->state, &this->skyboxCtx, skyboxId);
-    Kankyo_Init(this, &this->envCtx, 0);
+void Play_InitEnvironment(PlayState* this, s16 skyboxId) {
+    Skybox_Init(&this->state, &this->skyboxCtx, skyboxId);
+    Environment_Init(this, &this->envCtx, 0);
 }
 
-void func_801692C4(PlayState* this, s32 spawn) {
+void Play_InitScene(PlayState* this, s32 spawn) {
     this->curSpawn = spawn;
     this->linkActorEntry = NULL;
     this->actorCsCamList = NULL;
@@ -1572,10 +1578,10 @@ void func_801692C4(PlayState* this, s32 spawn) {
     Room_Init(this, &this->roomCtx);
     gSaveContext.worldMapArea = 0;
     Scene_ProcessHeader(this, this->sceneSegment);
-    func_8016927C(this, this->skyboxId);
+    Play_InitEnvironment(this, this->skyboxId);
 }
 
-void Play_SceneInit(PlayState* this, s32 sceneId, s32 spawn) {
+void Play_SpawnScene(PlayState* this, s32 sceneId, s32 spawn) {
     s32 pad;
     SceneTableEntry* sp1C = &gSceneTable[sceneId];
 
@@ -1583,10 +1589,10 @@ void Play_SceneInit(PlayState* this, s32 sceneId, s32 spawn) {
     this->loadedScene = sp1C;
     this->sceneId = sceneId;
     this->sceneConfig = sp1C->drawConfig;
-    this->sceneSegment = Play_LoadScene(this, &sp1C->segment);
+    this->sceneSegment = Play_LoadFile(this, &sp1C->segment);
     sp1C->unk_D = 0;
     gSegments[0x02] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
-    func_801692C4(this, spawn);
+    Play_InitScene(this, spawn);
     Room_AllocateAndLoad(this, &this->roomCtx);
 }
 
@@ -1906,9 +1912,7 @@ void func_80169ECC(PlayState* this) {
     }
 }
 
-// Gameplay_TriggerVoidOut ?
-// Used by Player, Ikana_Rotaryroom, Bji01, Kakasi, LiftNuts, Test4, Warptag, WarpUzu, Roomtimer
-void func_80169EFC(GameState* thisx) {
+void Play_TriggerVoidOut(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
 
     gSaveContext.respawn[RESPAWN_MODE_DOWN].tempSwitchFlags = this->actorCtx.sceneFlags.switches[2];
@@ -1921,9 +1925,7 @@ void func_80169EFC(GameState* thisx) {
     this->transitionType = TRANS_TYPE_FADE_BLACK;
 }
 
-// Gameplay_LoadToLastEntrance ?
-// Used by game_over and Test7
-void func_80169F78(GameState* thisx) {
+void Play_LoadToLastEntrance(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
 
     this->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_TOP].entrance;
@@ -1933,10 +1935,8 @@ void func_80169F78(GameState* thisx) {
     this->transitionType = TRANS_TYPE_FADE_BLACK;
 }
 
-// Gameplay_TriggerRespawn ?
-// Used for void by Wallmaster, Deku Shrine doors. Also used by Player, Kaleido, DoorWarp1
-void func_80169FDC(GameState* thisx) {
-    func_80169F78(thisx);
+void Play_TriggerRespawn(GameState* thisx) {
+    Play_LoadToLastEntrance(thisx);
 }
 
 // Used by Kankyo to determine how to change the lighting, e.g. for game over.
@@ -2052,13 +2052,13 @@ void Play_AssignPlayerActorCsIdsFromScene(GameState* thisx, s32 startActorCsId) 
     }
 }
 
-// These regs are used by Gameplay_Draw, and several actors, purpose as yet unclear.
-void func_8016A268(GameState* thisx, s16 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5) {
-    MREG(64) = arg1;
-    MREG(65) = arg2;
-    MREG(66) = arg3;
-    MREG(67) = arg4;
-    MREG(68) = arg5;
+// Set values to fill screen
+void Play_FillScreen(GameState* thisx, s16 fillScreenOn, u8 red, u8 green, u8 blue, u8 alpha) {
+    R_PLAY_FILL_SCREEN_ON = fillScreenOn;
+    R_PLAY_FILL_SCREEN_R = red;
+    R_PLAY_FILL_SCREEN_G = green;
+    R_PLAY_FILL_SCREEN_B = blue;
+    R_PLAY_FILL_SCREEN_ALPHA = alpha;
 }
 
 void Play_Init(GameState* thisx) {
@@ -2168,7 +2168,7 @@ void Play_Init(GameState* thisx) {
 
     func_800DFF18(&this->mainCamera, 0x7F);
     Sram_Alloc(&this->state, &this->sramCtx);
-    func_801AAAA0(this);
+    Construct_InitRegs(this);
     Message_Init(this);
     GameOver_Init(this);
     SoundSource_InitAll(this);
@@ -2212,7 +2212,7 @@ void Play_Init(GameState* thisx) {
 
     sp87 = gSaveContext.sceneSetupIndex;
 
-    Play_SceneInit(
+    Play_SpawnScene(
         this,
         Entrance_GetSceneIdAbsolute(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneSetupIndex)),
         Entrance_GetSpawnNum(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneSetupIndex)));
@@ -2240,7 +2240,7 @@ void Play_Init(GameState* thisx) {
     PreRender_SetValues(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, NULL, NULL);
 
     this->unk_18E64 = D_801FBB90;
-    this->unk_18E5C = D_80780000;
+    this->pictoPhotoI8 = gPictoPhotoI8;
     this->unk_18E68 = D_80784600;
     this->unk_18E58 = D_80784600;
     this->unk_18E60 = D_80784600;
@@ -2277,7 +2277,7 @@ void Play_Init(GameState* thisx) {
     TransitionFade_SetType(&this->unk_18E48, 3);
     TransitionFade_SetColor(&this->unk_18E48, RGBA8(160, 160, 160, 255));
     TransitionFade_Start(&this->unk_18E48);
-    VisMono_Init(&D_801F6D18);
+    VisMono_Init(&sVisMono);
 
     gVisMonoColor.a = 0;
     D_801F6D4C = &D_801F6D38;

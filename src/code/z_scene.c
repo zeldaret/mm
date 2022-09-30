@@ -228,7 +228,7 @@ void Scene_HeaderCmdSpecialFiles(PlayState* play, SceneCmd* cmd) {
     }
 
     if (cmd->specialFiles.cUpElfMsgNum != 0) {
-        play->unk_18868 = Play_LoadScene(play, &tatlMessageFiles[cmd->specialFiles.cUpElfMsgNum - 1]);
+        play->unk_18868 = Play_LoadFile(play, &tatlMessageFiles[cmd->specialFiles.cUpElfMsgNum - 1]);
     }
 }
 

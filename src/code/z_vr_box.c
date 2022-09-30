@@ -133,7 +133,7 @@ void func_80143324(PlayState* play, SkyboxContext* skyboxCtx, s16 skyType) {
     }
 }
 
-void func_801434E4(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType) {
+void Skybox_Init(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType) {
     skyboxCtx->skyboxShouldDraw = 0;
     skyboxCtx->rotX = skyboxCtx->rotY = skyboxCtx->rotZ = 0.0f;
 

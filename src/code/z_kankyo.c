@@ -4,7 +4,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F50D4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Kankyo_Init.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F5954.s")
 

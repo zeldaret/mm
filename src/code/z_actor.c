@@ -2819,9 +2819,9 @@ s32 func_800BA2FC(PlayState* play, Actor* actor, Vec3f* projectedPos, f32 projec
         f32 phi_f16;
 
         if (play->view.fovy != 60.0f) {
-            phi_f12 = actor->uncullZoneScale * play->unk_187F0.x * 0.76980036f; // sqrt(16/27)
+            phi_f12 = actor->uncullZoneScale * play->projectionMtxFDiagonal.x * 0.76980036f; // sqrt(16/27)
 
-            phi_f14 = play->unk_187F0.y * 0.57735026f; // 1 / sqrt(3)
+            phi_f14 = play->projectionMtxFDiagonal.y * 0.57735026f; // 1 / sqrt(3)
             phi_f16 = actor->uncullZoneScale * phi_f14;
             phi_f14 *= actor->uncullZoneDownward;
         } else {

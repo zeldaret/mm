@@ -68,7 +68,7 @@ void GameOver_Update(PlayState* play) {
             break;
         case GAMEOVER_DEATH_FADE_OUT:
             if (func_801A8A50(1) != NA_BGM_GAME_OVER) {
-                func_80169F78(&play->state);
+                Play_LoadToLastEntrance(&play->state);
                 if (gSaveContext.respawnFlag != -7) {
                     gSaveContext.respawnFlag = -6;
                 }
