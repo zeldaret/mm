@@ -1407,7 +1407,7 @@ Acmd* AudioSynth_ProcessSample(s32 noteIndex, NoteSampleState* sampleState, Note
     }
 
     // Apply an unknown effect based on the surround sound-mode
-    if (gAudioContext.soundMode == SOUNDMODE_SURROUND_EXTERNAL) {
+    if (gAudioContext.soundMode == SOUNDMODE_SURROUND) {
         sampleState->targetVolLeft = sampleState->targetVolLeft >> 1;
         sampleState->targetVolRight = sampleState->targetVolRight >> 1;
         if (sampleState->surroundEffectIndex != 0xFF) {
@@ -1514,7 +1514,7 @@ Acmd* AudioSynth_ProcessEnvelope(Acmd* cmd, NoteSampleState* sampleState, NoteSy
     targetVolRight = sampleState->targetVolRight;
     targetVolRight <<= 4;
 
-    if ((gAudioContext.soundMode == SOUNDMODE_SURROUND_EXTERNAL) && (sampleState->surroundEffectIndex != 0xFF)) {
+    if ((gAudioContext.soundMode == SOUNDMODE_SURROUND) && (sampleState->surroundEffectIndex != 0xFF)) {
         defaultPanVolume = gDefaultPanVolume[sampleState->surroundEffectIndex];
         targetVolLeft *= defaultPanVolume;
         targetVolRight *= defaultPanVolume;
