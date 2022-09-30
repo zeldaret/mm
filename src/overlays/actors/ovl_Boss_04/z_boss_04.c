@@ -155,7 +155,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
     s16 phi_s0_2;
     s32 pad;
 
-    if (Flags_GetClear(play, play->roomCtx.currRoom.num)) {
+    if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -163,7 +163,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
     this->actor.params = 0x64;
     Actor_SetScale(&this->actor, 0.1f);
     this->actor.targetMode = 5;
-    this->actor.hintId = 0x19;
+    this->actor.hintId = TATL_HINT_ID_WART;
     this->actor.colChkInfo.health = 20;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->unk_700 = 1.0f;
@@ -521,7 +521,7 @@ void func_809ED224(Boss04* this) {
     this->unk_2C8 = 200;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_DEAD);
     this->actor.flags &= ~ACTOR_FLAG_1;
-    func_801A2ED8();
+    Audio_RestorePrevBgm();
     this->unk_1F6 = 10;
 }
 
@@ -759,7 +759,7 @@ void Boss04_Update(Actor* thisx, PlayState* play2) {
     if (D_809EE4D0 != 0) {
         D_809EE4D0--;
         if (D_809EE4D0 == 0) {
-            func_801A2E54(0x38);
+            Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
         }
     }
 

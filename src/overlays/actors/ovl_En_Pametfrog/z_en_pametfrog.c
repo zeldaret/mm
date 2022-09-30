@@ -163,7 +163,7 @@ static ColliderJntSphInit sJntSphInit = {
 static CollisionCheckInfoInit sColChkInit = { 3, 30, 60, 50 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 69, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_GEKKO_SNAPPER, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(targetArrowOffset, -13221, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 7, ICHAIN_CONTINUE),
@@ -190,7 +190,7 @@ void EnPametfrog_Init(Actor* thisx, PlayState* play) {
                        GEKKO_LIMB_MAX);
     Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colElement);
     this->params = CLAMP(this->actor.params, 1, 4);
-    if (Flags_GetClear(play, play->roomCtx.currRoom.num)) {
+    if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
         Actor_MarkForDeath(&this->actor);
         if (!(gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
               (u8)isFrogReturnedFlags[this->actor.params - 1])) {
@@ -963,7 +963,7 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, PlayState* play) {
     this->collider.base.ocFlags1 &= ~OC1_ON;
     func_800B0DE0(play, &vec1, &gZeroVec3f, &gZeroVec3f, &primColor, &envColor, 800, 50);
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_NPC_APPEAR);
-    Flags_SetClearTemp(play, play->roomCtx.currRoom.num);
+    Flags_SetClearTemp(play, play->roomCtx.curRoom.num);
 
     for (i = 0; i < 25; i++) {
         vel.x = randPlusMinusPoint5Scaled(5.0f);
@@ -1035,7 +1035,7 @@ void EnPametfrog_LookAround(EnPametfrog* this, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (SkelAnime_Update(&this->skelAnime) && !Play_InCsMode(play)) {
         if (!this->unk_2AE) {
-            func_801A2E54(NA_BGM_MINI_BOSS);
+            Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
             this->unk_2AE = true;
         }
         EnPametfrog_SetupJumpToLink(this);
@@ -1191,7 +1191,7 @@ void EnPametfrog_SetupCallSnapper(EnPametfrog* this, PlayState* play) {
     // Zooms in on Gekko
     Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
     this->timer = 0;
-    this->actor.hintId = 0x5F;
+    this->actor.hintId = TATL_HINT_ID_GEKKO_GIANT_SLIME;
     this->actionFunc = EnPametfrog_CallSnapper;
 }
 
@@ -1255,7 +1255,7 @@ void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, PlayState* play)
 
 void EnPametfrog_TransitionGekkoSnapper(EnPametfrog* this, PlayState* play) {
     if (this->actor.params == GEKKO_INIT_SNAPPER) {
-        func_801A2E54(NA_BGM_MINI_BOSS);
+        Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
         EnPametfrog_SetupRunToSnapper(this);
     }
 }
@@ -1267,7 +1267,7 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, PlayState* play) {
             !(this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             if (this->actor.params == GEKKO_PRE_SNAPPER) {
                 if (Actor_ApplyDamage(&this->actor) == 0) {
-                    func_801A2ED8();
+                    Audio_RestorePrevBgm();
                 }
 
                 if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ZORA_BARRIER) {
@@ -1303,7 +1303,7 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, PlayState* play) {
                 EnPametfrog_ApplyMagicArrowEffects(this, play);
                 Enemy_StartFinishingBlow(play, &this->actor);
                 this->actor.flags &= ~ACTOR_FLAG_1;
-                func_801A2ED8();
+                Audio_RestorePrevBgm();
                 EnPametfrog_SetupCutscene(this);
             } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ZORA_BARRIER) {
                 EnPametfrog_ApplyElectricStun(this);

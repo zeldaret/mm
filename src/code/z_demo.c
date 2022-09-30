@@ -105,7 +105,7 @@ s32 func_800EA220(PlayState* play, CutsceneContext* csCtx, f32 target) {
 }
 
 void func_800EA258(PlayState* play, CutsceneContext* csCtx) {
-    Interface_ChangeAlpha(1);
+    Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
     Letterbox_SetSizeTarget(32);
     if (func_800EA220(play, csCtx, 1.0f)) {
         Audio_SetCutsceneFlag(true);
@@ -115,7 +115,7 @@ void func_800EA258(PlayState* play, CutsceneContext* csCtx) {
 
 void func_800EA2B8(PlayState* play, CutsceneContext* csCtx) {
     func_800ED980(play, csCtx);
-    Interface_ChangeAlpha(1);
+    Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
     Letterbox_SetSizeTarget(32);
     if (func_800EA220(play, csCtx, 1.0f)) {
         Audio_SetCutsceneFlag(true);
@@ -126,12 +126,11 @@ void func_800EA2B8(PlayState* play, CutsceneContext* csCtx) {
 /* Start of command handling section */
 
 // Command 0x96: Miscellaneous commands.
-void Cutscene_Command_Misc(PlayState* play2, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     static u16 D_801BB15C = 0xFFFF;
-    Player* player = GET_PLAYER(play2);
-    PlayState* play = play2;
-    u8 isStartFrame = false;
+    Player* player = GET_PLAYER(play);
     f32 progress;
+    u8 isStartFrame = false;
     SceneTableEntry* loadedScene;
 
     if ((csCtx->frames < cmd->startFrame) || ((csCtx->frames >= cmd->endFrame) && (cmd->endFrame != cmd->startFrame))) {
@@ -153,7 +152,7 @@ void Cutscene_Command_Misc(PlayState* play2, CutsceneContext* csCtx, CsCmdBase* 
             break;
         case 0x2:
             if (isStartFrame) {
-                func_801A47DC(NATURE_CHANNEL_LIGHTNING, CHANNEL_IO_PORT_0, 0);
+                Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_LIGHTNING, CHANNEL_IO_PORT_0, 0);
                 Environment_AddLightningBolts(play, 3);
                 D_801F4E68 = 1;
             }
@@ -216,7 +215,7 @@ void Cutscene_Command_Misc(PlayState* play2, CutsceneContext* csCtx, CsCmdBase* 
             D_801F6D30.a = 255 * progress;
             break;
         case 0xC:
-            play->roomCtx.currRoom.segment = NULL;
+            play->roomCtx.curRoom.segment = NULL;
             break;
         case 0xD:
             if (play->state.frames & 8) {
@@ -346,11 +345,8 @@ void Cutscene_Command_Misc(PlayState* play2, CutsceneContext* csCtx, CsCmdBase* 
 
             gSaveContext.save.day = 9;
 
-            {
-                GameState* gameState = &play->state;
-                gameState->running = false;
-            }
-            SET_NEXT_GAMESTATE(&play->state, Daytelop_Init, DaytelopContext);
+            STOP_GAMESTATE(&play->state);
+            SET_NEXT_GAMESTATE(&play->state, DayTelop_Init, sizeof(DayTelopState));
 
             Sram_SaveSpecialNewDay(play);
             break;
@@ -380,14 +376,14 @@ void Cutscene_Command_SetLighting(PlayState* play, CutsceneContext* csCtx, CsCmd
 // Command 0x12C: Plays a sequence (Background music or Fanfare)
 void Cutscene_Command_PlaySequence(PlayState* play, CutsceneContext* csCtx, CsCmdSequenceChange* cmd) {
     if (csCtx->frames == cmd->startFrame) {
-        func_801A2C88(cmd->sequence - 1);
+        Audio_PlaySequenceInCutscene(cmd->sequence - 1);
     }
 }
 
 // Command 0x12D: Stops a sequence (Background music or Fanfare)
 void Cutscene_Command_StopSequence(PlayState* play, CutsceneContext* csCtx, CsCmdSequenceChange* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
-        func_801A2D54(cmd->sequence - 1);
+        Audio_StopSequenceInCutscene(cmd->sequence - 1);
     }
 }
 
@@ -407,9 +403,7 @@ void Cutscene_Command_FadeSequence(PlayState* play, CutsceneContext* csCtx, CsCm
 // Command 0x12E: Play Ambience sequence
 void Cutscene_Command_PlayAmbienceSequence(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (csCtx->frames == cmd->startFrame) {
-        // Audio_PlayNatureAmbienceSequence
-        // nightSeqIndex is natureAmbienceId
-        func_801A4A28(play->soundCtx.nightSeqIndex);
+        Audio_PlayAmbience(play->sequenceCtx.ambienceId);
     }
 }
 
@@ -459,29 +453,27 @@ void func_800EADB0(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
                 break;
 
             case 4:
-                // func_801A246C(SEQ_PLAYER_NATURE, TYPE_1);
-                func_801A246C(SEQ_PLAYER_NATURE, 1);
+                // func_801A246C(SEQ_PLAYER_AMBIENCE, TYPE_1);
+                func_801A246C(SEQ_PLAYER_AMBIENCE, 1);
                 break;
 
             case 5:
-                // func_801A246C(SEQ_PLAYER_NATURE, TYPE_0);
-                func_801A246C(SEQ_PLAYER_NATURE, 0);
+                // func_801A246C(SEQ_PLAYER_AMBIENCE, TYPE_0);
+                func_801A246C(SEQ_PLAYER_AMBIENCE, 0);
                 break;
 
             case 6:
-                // func_801A246C(SEQ_PLAYER_NATURE, TYPE_2);
-                func_801A246C(SEQ_PLAYER_NATURE, 2);
+                // func_801A246C(SEQ_PLAYER_AMBIENCE, TYPE_2);
+                func_801A246C(SEQ_PLAYER_AMBIENCE, 2);
                 break;
 
             case 7:
-                // Audio_GetActiveSequence
-                seqId = func_801A8A50(0);
+                seqId = Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN);
                 break;
 
             case 8:
                 if (seqId != NA_BGM_DISABLED) {
-                    // Audio_PlayBgmForDayScene
-                    func_801A25E4(seqId, dayMinusOne);
+                    Audio_PlaySceneSequence(seqId, dayMinusOne);
                 }
                 break;
         }
@@ -565,7 +557,7 @@ void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase*
     gSaveContext.cutsceneTransitionControl = 1;
 
     if ((gSaveContext.gameMode != 0) && (csCtx->frames != cmd->startFrame)) {
-        gSaveContext.unk_3F1E = 1;
+        gSaveContext.hudVisibilityForceButtonAlphasByStatus = true;
     }
 
     gSaveContext.save.cutscene = 0;
@@ -651,7 +643,7 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
 // Command 0x15F: Chooses between a cutscene or a rotating mask depending on whether the player has the corresponding
 // mask
 void Cutscene_Command_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    if ((csCtx->frames >= cmd->startFrame) && (func_801A3950(0, true) != 0xFF)) {
+    if ((csCtx->frames >= cmd->startFrame) && (func_801A3950(SEQ_PLAYER_BGM_MAIN, true) != 0xFF)) {
         switch (cmd->base) {
             case 1:
                 Cutscene_TerminatorImpl(play, csCtx, cmd);
@@ -1082,7 +1074,7 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
             }
 
             if (originalCsFrames == csCtx->frames) {
-                Interface_ChangeAlpha(1);
+                Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
                 D_801BB124 = 0;
                 D_801BB128 = 0;
                 func_80161C0C();
@@ -1455,7 +1447,7 @@ void func_800EDA84(PlayState* play, CutsceneContext* csCtx) {
             csCtx->unk_18 = 0xFFFF;
 
             if (gSaveContext.cutsceneTrigger == 0) {
-                Interface_ChangeAlpha(1);
+                Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
                 Letterbox_SetSizeTarget(32);
                 Letterbox_SetSize(32);
                 csCtx->state++;
