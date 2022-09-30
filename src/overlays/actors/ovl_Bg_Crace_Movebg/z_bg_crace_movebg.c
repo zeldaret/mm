@@ -51,9 +51,10 @@ const ActorInit Bg_Crace_Movebg_InitVars = {
     (ActorFunc)BgCraceMovebg_Draw,
 };
 
+u8 sIsLoaded[32];
+
 static u8 sHasInitializedIsLoaded = 0;
 static u8 sLoadedDoorCount = 0;
-u8 sIsLoaded[32];
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
@@ -219,6 +220,9 @@ void BgCraceMovebg_Update(Actor* thisx, PlayState* play) {
             } else {
                 this->dyna.actor.shape.rot.y = this->dyna.actor.home.rot.y + 0x8000;
             }
+            break;
+
+        default:
             break;
     }
 
