@@ -176,7 +176,8 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
             sp74.x += randPlusMinusPoint5Scaled(15.0f);
             sp74.z += randPlusMinusPoint5Scaled(15.0f);
 
-            EffectSsDtBubble_SpawnCustomColor(play, &sp74, &sp94, &sp88, &sp84, &sp80, Rand_S16Offset(120, 90), 30, 1);
+            EffectSsDtBubble_SpawnCustomColor(play, &sp74, &sp94, &sp88, &sp84, &sp80, Rand_S16Offset(120, 90), 30,
+                                              true);
         }
         this->unk_218 = 30;
     }
@@ -218,7 +219,8 @@ void func_80BDB59C(EnHiddenNuts* this, PlayState* play) {
             sp78.x += randPlusMinusPoint5Scaled(15.0f);
             sp78.z += randPlusMinusPoint5Scaled(15.0f);
 
-            EffectSsDtBubble_SpawnCustomColor(play, &sp78, &sp98, &sp8C, &sp88, &sp84, Rand_S16Offset(120, 90), 30, 1);
+            EffectSsDtBubble_SpawnCustomColor(play, &sp78, &sp98, &sp8C, &sp88, &sp84, Rand_S16Offset(120, 90), 30,
+                                              true);
         }
         this->unk_218 = 30;
     }
