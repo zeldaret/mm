@@ -2452,7 +2452,7 @@
     0x80130540:("Scene_HeaderCmdMiniMap",),
     0x80130578:("Scene_HeaderCmd1D",),
     0x80130588:("Scene_HeaderCmdMiniMapCompassInfo",),
-    0x801305B0:("Scene_HeaderCmdSetAreaVisitedFlag",),
+    0x801305B0:("Scene_HeaderCmdSetRegionVisitedFlag",),
     0x80130674:("Scene_HeaderCmdAnimatedMaterials",),
     0x801306A4:("Scene_SetExitFade",),
     0x801306E8:("Scene_ProcessHeader",),

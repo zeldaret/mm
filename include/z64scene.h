@@ -174,9 +174,9 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8  code;
-    /* 0x1 */ u8  cameraMovement;
-    /* 0x4 */ u32 area;
-} SCmdMiscSettings; // size = 0x8
+    /* 0x1 */ u8  sceneCsCount;
+    /* 0x4 */ void* segment;
+} SCmdCutsceneList; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
@@ -186,9 +186,8 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8  code;
-    /* 0x1 */ u8  data1;
-    /* 0x4 */ u32 data2;
-} SCmdWorldMapVisited; // size = 0x8
+    /* 0x1 */ UNK_TYPE1 pad[7];
+} SCmdRegionVisited; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
@@ -523,9 +522,9 @@ typedef union {
     /* Command: 0x14 */ SCmdEndMarker         endMarker;
     /* Command: 0x15 */ SCmdSoundSettings     soundSettings;
     /* Command: 0x16 */ SCmdEchoSettings      echoSettings;
-    /* Command: 0x17 */ SCmdMiscSettings      miscSettings;
+    /* Command: 0x17 */ SCmdCutsceneList      cutsceneList;
     /* Command: 0x18 */ SCmdAltHeaders        altHeaders;
-    /* Command: 0x19 */ SCmdWorldMapVisited   worldMapVisited;
+    /* Command: 0x19 */ SCmdRegionVisited     regionVisited;
     /* Command: 0x1A */ SCmdTextureAnimations textureAnimations;
     /* Command: 0x1B */ SCmdCutsceneActorList cutsceneActorList;
     /* Command: 0x1C */ SCmdMinimapSettings   minimapSettings;
@@ -853,7 +852,7 @@ typedef enum {
     /* 0x16 */ SCENE_CMD_ID_ECHO_SETTINGS,
     /* 0x17 */ SCENE_CMD_ID_CUTSCENE_LIST,
     /* 0x18 */ SCENE_CMD_ID_ALTERNATE_HEADER_LIST,
-    /* 0x19 */ SCENE_CMD_ID_MISC_SETTINGS,
+    /* 0x19 */ SCENE_CMD_ID_SET_REGION_VISITED,
     /* 0x1A */ SCENE_CMD_ID_ANIMATED_MATERIAL_LIST,
     /* 0x1B */ SCENE_CMD_ID_ACTOR_CUTSCENE_LIST,
     /* 0x1C */ SCENE_CMD_ID_MINIMAP_INFO,
@@ -942,8 +941,9 @@ typedef enum {
 #define SCENE_CMD_ALTERNATE_HEADER_LIST(alternateHeaderList) \
     { SCENE_CMD_ID_ALTERNATE_HEADER_LIST, 0, CMD_PTR(alternateHeaderList) }
 
-#define SCENE_CMD_MISC_SETTINGS() \
-    { SCENE_CMD_ID_MISC_SETTINGS, 0, CMD_W(0) }
+#define SCENE_CMD_MISC_SETTINGS SCENE_CMD_SET_REGION_VISITED // TODO: ZAPD Capatability
+#define SCENE_CMD_SET_REGION_VISITED() \
+    { SCENE_CMD_ID_SET_REGION_VISITED, 0, CMD_W(0) }
 
 #define SCENE_CMD_ANIMATED_MATERIAL_LIST(matAnimList) \
     { SCENE_CMD_ID_ANIMATED_MATERIAL_LIST, 0, CMD_PTR(matAnimList) }

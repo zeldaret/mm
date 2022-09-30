@@ -2130,7 +2130,7 @@ void Scene_HeaderCmdActorCutsceneList(PlayState* play, SceneCmd* cmd);
 void Scene_HeaderCmdMiniMap(PlayState* play, SceneCmd* cmd);
 void Scene_HeaderCmd1D(PlayState* play, SceneCmd* cmd);
 void Scene_HeaderCmdMiniMapCompassInfo(PlayState* play, SceneCmd* cmd);
-void Scene_HeaderCmdSetAreaVisitedFlag(PlayState* play, SceneCmd* cmd);
+void Scene_HeaderCmdSetRegionVisitedFlag(PlayState* play, SceneCmd* cmd);
 void Scene_HeaderCmdAnimatedMaterials(PlayState* play, SceneCmd* cmd);
 void Scene_SetExitFade(PlayState* play);
 s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header);

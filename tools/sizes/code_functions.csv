@@ -1966,7 +1966,7 @@ asm/non_matchings/code/z_scene/Scene_HeaderCmdActorCutsceneList.s,Scene_HeaderCm
 asm/non_matchings/code/z_scene/Scene_HeaderCmdMiniMap.s,Scene_HeaderCmdMiniMap,0x80130540,0xE
 asm/non_matchings/code/z_scene/Scene_HeaderCmd1D.s,Scene_HeaderCmd1D,0x80130578,0x4
 asm/non_matchings/code/z_scene/Scene_HeaderCmdMiniMapCompassInfo.s,Scene_HeaderCmdMiniMapCompassInfo,0x80130588,0xA
-asm/non_matchings/code/z_scene/Scene_HeaderCmdSetAreaVisitedFlag.s,Scene_HeaderCmdSetAreaVisitedFlag,0x801305B0,0x31
+asm/non_matchings/code/z_scene/Scene_HeaderCmdSetRegionVisitedFlag.s,Scene_HeaderCmdSetRegionVisitedFlag,0x801305B0,0x31
 asm/non_matchings/code/z_scene/Scene_HeaderCmdAnimatedMaterials.s,Scene_HeaderCmdAnimatedMaterials,0x80130674,0xC
 asm/non_matchings/code/z_scene/Scene_SetExitFade.s,Scene_SetExitFade,0x801306A4,0x11
 asm/non_matchings/code/z_scene/Scene_ProcessHeader.s,Scene_ProcessHeader,0x801306E8,0x20
