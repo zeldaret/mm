@@ -11,10 +11,10 @@ typedef void (*EnDnoActionFunc)(struct EnDno*, PlayState*);
 #define EN_DNO_GET_RACE_STARTED_SWITCH_FLAG(thisx) (((thisx)->params >> 7) & 0x7F)
 #define EN_DNO_GET_C000(thisx) (((thisx)->params >> 0xE) & 0x3)
 
-enum {
+typedef enum {
     /* 0x0 */ EN_DNO_GET_C000_0,
     /* 0x1 */ EN_DNO_GET_C000_1,
-};
+} EnDnoUnkC000;
 
 typedef struct EnDno {
     /* 0x000 */ Actor actor;

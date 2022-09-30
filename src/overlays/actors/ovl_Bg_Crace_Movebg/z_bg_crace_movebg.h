@@ -21,7 +21,7 @@ typedef void (*BgCraceMovebgActionFunc)(struct BgCraceMovebg*, PlayState*);
 typedef enum {
     /* 0 */ BG_CRACE_MOVEBG_TYPE_CLOSING,
     /* 1 */ BG_CRACE_MOVEBG_TYPE_OPENING,
-    /* 2 */ BG_CRACE_MOVEBG_TYPE_UNUSED_CLOSING // Not triggered to close by the Deku Butler, and voids the player out no matter which side of the door they're on.
+    /* 2 */ BG_CRACE_MOVEBG_TYPE_UNUSED_CLOSING // Not triggered to close by the Deku Butler, and triggers a voidout no matter which side of the door they're on.
 } BgCraceMovebgType;
 
 typedef struct BgCraceMovebg {
@@ -31,9 +31,9 @@ typedef struct BgCraceMovebg {
     /* 0x164 */ f32 targetDoorHeight;
     /* 0x168 */ UNK_TYPE1 pad168[0x4];
     /* 0x16C */ f32 openSpeed;
-    /* 0x170 */ s32 flags;
+    /* 0x170 */ s32 stateFlags;
     /* 0x174 */ s32 closeWaitTimer;
-    /* 0x178 */ Vec3f relativePointOfIntersection;
+    /* 0x178 */ Vec3f intersectionOffsetFromHome;
     /* 0x184 */ u8 index;
     /* 0x188 */ Vec3f prevPlayerPos;
 } BgCraceMovebg; // size = 0x194
