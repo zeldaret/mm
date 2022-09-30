@@ -122,8 +122,8 @@ void func_80A714B4(EnDno* this, PlayState* play) {
     do {
         actor = SubS_FindActor(play, actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (actor != NULL) {
-            if (ENDNO_GET_F(actor) == ENDNO_GET_F_1) {
-                Flags_SetSwitch(play, ENDNO_GET_7F0(actor));
+            if (BG_CRACE_MOVEBG_GET_TYPE(actor) == BG_CRACE_MOVEBG_TYPE_OPENING) {
+                Flags_SetSwitch(play, BG_CRACE_MOVEBG_GET_SWITCH_FLAG(actor));
             }
             actor = actor->next;
         }
@@ -152,14 +152,15 @@ void func_80A715DC(EnDno* this, PlayState* play) {
     do {
         crace = (BgCraceMovebg*)SubS_FindActor(play, &crace->dyna.actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (crace != NULL) {
-            if (ENDNO_GET_F(&crace->dyna.actor) == ENDNO_GET_F_0 && !(crace->unk170 & 1)) {
+            if (BG_CRACE_MOVEBG_GET_TYPE(&crace->dyna.actor) == BG_CRACE_MOVEBG_TYPE_CLOSING &&
+                !(crace->stateFlags & BG_CRACE_MOVEBG_FLAG_BUTLER_IS_BEYOND_DOOR)) {
                 if (SubS_LineSegVsPlane(&crace->dyna.actor.home.pos, &crace->dyna.actor.home.rot, &D_80A73B2C,
                                         &this->actor.prevPos, &this->actor.world.pos, &sp88)) {
                     Math_Vec3f_Diff(&this->actor.world.pos, &crace->dyna.actor.home.pos, &sp7C);
                     Matrix_RotateYS(-crace->dyna.actor.home.rot.y, MTXMODE_NEW);
                     Matrix_MultVec3f(&sp7C, &sp70);
                     if ((fabsf(sp70.x) < 100.0f) && (sp70.y >= -10.0f) && (sp70.y <= 180.0f) && (sp70.z < 0.0f)) {
-                        crace->unk170 |= 1;
+                        crace->stateFlags |= BG_CRACE_MOVEBG_FLAG_BUTLER_IS_BEYOND_DOOR;
                     }
                 }
             }
@@ -174,7 +175,7 @@ void func_80A71788(EnDno* this, PlayState* play) {
     do {
         actor = SubS_FindActor(play, actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (actor != NULL) {
-            Flags_UnsetSwitch(play, ENDNO_GET_7F0(actor));
+            Flags_UnsetSwitch(play, BG_CRACE_MOVEBG_GET_SWITCH_FLAG(actor));
             actor = actor->next;
         }
     } while (actor != NULL);
@@ -212,8 +213,8 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
             this->unk_468 = 99;
             this->skelAnime.playSpeed = 0.0f;
 
-            switch (ENDNO_GET_C000(thisx)) {
-                case ENDNO_GET_C000_0:
+            switch (EN_DNO_GET_C000(thisx)) {
+                case EN_DNO_GET_C000_0:
                     func_80A71788(this, play);
                     if (!(gSaveContext.save.weekEventReg[23] & 0x20) || (gSaveContext.save.weekEventReg[93] & 2)) {
                         Actor_MarkForDeath(thisx);
@@ -228,7 +229,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
                     }
                     break;
 
-                case ENDNO_GET_C000_1:
+                case EN_DNO_GET_C000_1:
                     if (gSaveContext.save.weekEventReg[23] & 0x20) {
                         Actor_MarkForDeath(thisx);
                     } else {
@@ -502,7 +503,7 @@ void func_80A72438(EnDno* this, PlayState* play) {
     this->unk_452 = 1;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 14, &this->unk_32C);
     this->actor.textId = 0;
-    if (Flags_GetSwitch(play, ENDNO_GET_3F80(&this->actor))) {
+    if (Flags_GetSwitch(play, EN_DNO_GET_RACE_STARTED_SWITCH_FLAG(&this->actor))) {
         this->unk_454 = 1.0f;
     }
     this->actionFunc = func_80A724B8;
@@ -549,7 +550,7 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 5, &this->unk_32C);
                         }
                     } else if ((this->unk_32C == 5) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                        if (Flags_GetSwitch(play, ENDNO_GET_3F80(&this->actor))) {
+                        if (Flags_GetSwitch(play, EN_DNO_GET_RACE_STARTED_SWITCH_FLAG(&this->actor))) {
                             Message_StartTextbox(play, 0x801, &this->actor);
                         } else if (Player_GetMask(play) == PLAYER_MASK_SCENTS) {
                             Message_StartTextbox(play, 0x806, &this->actor);
@@ -692,13 +693,13 @@ void func_80A72C04(EnDno* this, PlayState* play) {
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
     Math_Vec3f_Copy(&this->unk_334, &this->actor.world.pos);
     SubS_ActorPathing_Init(play, &this->unk_334, &this->actor, &this->actorPath, play->setupPathList,
-                           ENDNO_GET_7F(&this->actor), 1, 0, 1, 0);
+                           EN_DNO_GET_7F(&this->actor), 1, 0, 1, 0);
     SubS_ActorPathing_ComputePointInfo(play, &this->actorPath);
 
     this->actor.world.rot.y = this->actorPath.rotToCurPoint.y;
     this->actor.world.rot.x = this->actorPath.rotToCurPoint.x;
 
-    Flags_SetSwitch(play, ENDNO_GET_3F80(&this->actor));
+    Flags_SetSwitch(play, EN_DNO_GET_RACE_STARTED_SWITCH_FLAG(&this->actor));
     this->actionFunc = func_80A730A0;
 }
 
@@ -820,7 +821,7 @@ void func_80A73244(EnDno* this, PlayState* play) {
     this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
     this->unk_328 = 2;
     this->actor.speedXZ = 0.0f;
-    Flags_UnsetSwitch(play, ENDNO_GET_3F80(&this->actor));
+    Flags_UnsetSwitch(play, EN_DNO_GET_RACE_STARTED_SWITCH_FLAG(&this->actor));
     gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
     this->unk_44E = 0;
     this->actionFunc = func_80A732C8;

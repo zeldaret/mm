@@ -7,21 +7,14 @@ struct EnDno;
 
 typedef void (*EnDnoActionFunc)(struct EnDno*, PlayState*);
 
-#define ENDNO_GET_F(thisx) ((thisx)->params & 0xF)
-#define ENDNO_GET_7F(thisx) ((thisx)->params & 0x7F)
-#define ENDNO_GET_7F0(thisx) (((thisx)->params >> 4) & 0x7F)
-#define ENDNO_GET_3F80(thisx) (((thisx)->params >> 7) & 0x7F)
-#define ENDNO_GET_C000(thisx) (((thisx)->params >> 0xE) & 0x3)
+#define EN_DNO_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define EN_DNO_GET_RACE_STARTED_SWITCH_FLAG(thisx) (((thisx)->params >> 7) & 0x7F)
+#define EN_DNO_GET_C000(thisx) (((thisx)->params >> 0xE) & 0x3)
 
-enum {
-    /* 0x0 */ ENDNO_GET_F_0,
-    /* 0x1 */ ENDNO_GET_F_1,
-};
-
-enum {
-    /* 0x0 */ ENDNO_GET_C000_0,
-    /* 0x1 */ ENDNO_GET_C000_1,
-};
+typedef enum {
+    /* 0x0 */ EN_DNO_GET_C000_0,
+    /* 0x1 */ EN_DNO_GET_C000_1,
+} EnDnoUnkC000;
 
 typedef struct EnDno {
     /* 0x000 */ Actor actor;
