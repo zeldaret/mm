@@ -307,6 +307,16 @@ typedef enum {
     /* 0x0C */ ACTORCAT_MAX
 } ActorType;
 
+#define ACTORCTX_FLAG_0 (1 << 0)
+#define ACTORCTX_FLAG_1 (1 << 1)
+#define ACTORCTX_FLAG_2 (1 << 2)
+#define ACTORCTX_FLAG_3 (1 << 3)
+#define ACTORCTX_FLAG_4 (1 << 4)
+#define ACTORCTX_FLAG_5 (1 << 5)
+#define ACTORCTX_FLAG_6 (1 << 6)
+#define ACTORCTX_FLAG_7 (1 << 7)
+
+
 typedef struct {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ f32 unkC;
@@ -351,13 +361,13 @@ typedef struct ActorContext_unk_20C {
     /* 0x4 */ void* ptr;
 } ActorContext_unk_20C; // size = 0x8
 
-typedef struct ActorContextFlags {
+typedef struct ActorContextSceneFlags {
     /* 0x00 */ u32 switches[4]; // First 0x40 are permanent, second 0x40 are temporary
     /* 0x10 */ u32 chest;
     /* 0x14 */ u32 clearedRoom;
     /* 0x18 */ u32 clearedRoomTemp;
     /* 0x1C */ u32 collectible[4]; // bitfield of 128 bits
-} ActorContextFlags; // size = 0x2C
+} ActorContextSceneFlags; // size = 0x2C
 
 typedef struct ActorListEntry {
     /* 0x0 */ s32 length; // number of actors loaded of this type
@@ -374,7 +384,7 @@ typedef struct ActorContext {
     /* 0x002 */ u8 unk2;
     /* 0x003 */ u8 lensActive;
     /* 0x004 */ s8 lensMaskSize; // The size of the circle when drawn the lens mask. Larger value leads to a smaller circle
-    /* 0x005 */ u8 unk5;
+    /* 0x005 */ u8 flags;
     /* 0x006 */ UNK_TYPE1 pad6[0x5];
     /* 0x00B */ s8 lensActorsDrawn;
     /* 0x00C */ s16 unkC;
@@ -383,7 +393,7 @@ typedef struct ActorContext {
     /* 0x010 */ ActorListEntry actorLists[ACTORCAT_MAX];
     /* 0x0A0 */ Actor* undrawnActors[32]; // Records the first 32 actors drawn each frame
     /* 0x120 */ TargetContext targetContext;
-    /* 0x1B8 */ ActorContextFlags flags;
+    /* 0x1B8 */ ActorContextSceneFlags sceneFlags;
     /* 0x1E4 */ TitleCardContext titleCtxt;
     /* 0x1F4 */ u8 unk1F4;
     /* 0x1F5 */ u8 unk1F5;

@@ -113,7 +113,7 @@ void EnElfbub_Pop(EnElfbub* this, PlayState* play) {
             velocity.y = Rand_ZeroOne() * 7.0f;
             velocity.z = (Rand_ZeroOne() - 0.5f) * 7.0f;
             EffectSsDtBubble_SpawnCustomColor(play, &pos, &velocity, &sAccel, &sPrimColor, &sEnvColor,
-                                              Rand_S16Offset(100, 50), 25, 0);
+                                              Rand_S16Offset(100, 50), 25, false);
         }
 
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 60, NA_SE_EN_AWA_BREAK);

@@ -1045,11 +1045,11 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
 
             if (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_ROOFTOP, 0)) {
                 if (gSaveContext.sceneSetupIndex == 0) {
-                    if (gSaveContext.unk_3DD0[3] == 0) {
+                    if (gSaveContext.timerStates[TIMER_ID_MOON_CRASH] == TIMER_STATE_OFF) {
                         // Starts a 5 minute (300 second) timer until the moon falls.
-                        func_8010E9F0(3, 300);
-                        XREG(80) = 200;
-                        XREG(81) = 115;
+                        Interface_StartTimer(TIMER_ID_MOON_CRASH, 300);
+                        R_MOON_CRASH_TIMER_Y = 200;
+                        R_MOON_CRASH_TIMER_X = 115;
                     }
 
                     if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
@@ -1062,12 +1062,12 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
 
                 } else if (gSaveContext.sceneSetupIndex == 3) {
                     this->animIndex = SK_ANIM_FLOATING_ARMS_CROSSED;
-                    if (gSaveContext.unk_3DD0[3] == 0) {
+                    if (gSaveContext.timerStates[TIMER_ID_MOON_CRASH] == TIMER_STATE_OFF) {
                         // This code is called when the Giants fail to stop the moon.
                         // Starts a 1 minute (60 second) timer until the moon falls.
-                        func_8010E9F0(3, 60);
-                        XREG(80) = 200;
-                        XREG(81) = 115;
+                        Interface_StartTimer(TIMER_ID_MOON_CRASH, 60);
+                        R_MOON_CRASH_TIMER_Y = 200;
+                        R_MOON_CRASH_TIMER_X = 115;
                     }
 
                     this->actor.world.pos.y = 120.0f;
@@ -1089,7 +1089,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
             CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
         } else if ((play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 0)) {
-            if (!(play->actorCtx.unk5 & 2)) {
+            if (!(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
                 Actor_MarkForDeath(&this->actor);
             }
 
@@ -1632,7 +1632,7 @@ void DmStk_UpdateCutscenes(DmStk* this, PlayState* play) {
                 this->alpha = 0;
                 this->fadeOutState = SK_FADE_OUT_STATE_NONE;
                 gSaveContext.save.weekEventReg[12] |= 4;
-                if (!(play->actorCtx.unk5 & 2)) {
+                if (!(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
                     Actor_MarkForDeath(&this->actor);
                 } else {
                     this->shouldDraw = false;
@@ -1813,9 +1813,10 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
 
         // This code is responsible for making in-game time pass while using the telescope in the Astral Observatory.
         // Skull Kid is always loaded in the scene, even if he isn't visible, hence why time always passes.
-        if ((play->actorCtx.unk5 & 2) && (play->msgCtx.msgMode != 0) && (play->msgCtx.currentTextId == 0x5E6) &&
-            !FrameAdvance_IsEnabled(&play->state) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
-            (ActorCutscene_GetCurrentIndex() == -1) && (play->csCtx.state == 0)) {
+        if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != 0) &&
+            (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
+            (play->transitionTrigger == TRANS_TRIGGER_OFF) && (ActorCutscene_GetCurrentIndex() == -1) &&
+            (play->csCtx.state == 0)) {
             gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
             if (REG(15) != 0) {
                 gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.daySpeed);

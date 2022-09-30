@@ -2,12 +2,13 @@
 #define Z64SAVE_H
 
 #include "ultra64.h"
+#include "z64item.h"
 #include "z64math.h"
 #include "os.h"
 
 struct GameState;
 struct PlayState;
-struct FileChooseContext;
+struct FileSelectState;
 
 // TODO: properly name DOWN, RETURN and TOP
 typedef enum RespawnMode {
@@ -53,6 +54,84 @@ typedef enum {
 
 #define MAGIC_NORMAL_METER 0x30
 #define MAGIC_DOUBLE_METER (2 * MAGIC_NORMAL_METER)
+
+#define SECONDS_TO_TIMER(seconds) ((seconds) * 100)
+
+#define OSTIME_TO_TIMER(osTime) ((osTime) * 64 / 3000 / 10000)
+#define OSTIME_TO_TIMER_ALT(osTime) ((osTime) / 10000 * 64 / 3000)
+
+// 1 centisecond = 10 milliseconds = 1/100 seconds
+#define SECONDS_TO_TIMER_PRECISE(seconds, centiSeconds) ((seconds) * 100 + (centiSeconds))
+
+typedef enum {
+    /*  0 */ TIMER_ID_POSTMAN, // postman's counting minigame
+    /*  1 */ TIMER_ID_MINIGAME_1, // minigame timer
+    /*  2 */ TIMER_ID_2,
+    /*  3 */ TIMER_ID_MOON_CRASH, // timer used for mooncrash on the clocktower roof
+    /*  4 */ TIMER_ID_MINIGAME_2, // minigame timer
+    /*  5 */ TIMER_ID_ENV, // environmental timer (underwater or hot room)
+    /*  6 */ TIMER_ID_GORON_RACE_UNUSED,
+    /*  7 */ TIMER_ID_MAX,
+    /* 99 */ TIMER_ID_NONE = 99,
+} TimerId;
+
+typedef enum {
+    /* 0 */ TIMER_COUNT_DOWN,
+    /* 1 */ TIMER_COUNT_UP
+} TimerDirection;
+
+typedef enum {
+    /*  0 */ TIMER_STATE_OFF,
+    /*  1 */ TIMER_STATE_START,
+    /*  2 */ TIMER_STATE_HOLD_TIMER, // Hold timer frozen at the screen center
+    /*  3 */ TIMER_STATE_MOVING_TIMER, // Move timer to a target location
+    /*  4 */ TIMER_STATE_COUNTING,
+    /*  5 */ TIMER_STATE_STOP,
+    /*  6 */ TIMER_STATE_6, // like `TIMER_STATE_STOP` but with extra minigame checks
+    /*  7 */ TIMER_STATE_7, // stopped but still update `timerCurTimes`
+    /*  8 */ TIMER_STATE_ENV_START,
+    /*  9 */ TIMER_STATE_ALT_START,
+    /* 10 */ TIMER_STATE_10, // precursor to `TIMER_STATE_ALT_COUNTING`
+    /* 11 */ TIMER_STATE_ALT_COUNTING,
+    /* 12 */ TIMER_STATE_12, // Updated paused time?
+    /* 13 */ TIMER_STATE_POSTMAN_START,
+    /* 14 */ TIMER_STATE_POSTMAN_COUNTING,
+    /* 15 */ TIMER_STATE_POSTMAN_STOP,
+    /* 16 */ TIMER_STATE_POSTMAN_END
+} TimerState;
+
+typedef enum {
+    /* 0 */ BOTTLE_TIMER_STATE_OFF,
+    /* 1 */ BOTTLE_TIMER_STATE_COUNTING
+} BottleTimerState;
+
+typedef enum {
+    /*  0 */ HUD_VISIBILITY_IDLE,
+    /*  1 */ HUD_VISIBILITY_NONE,
+    /*  2 */ HUD_VISIBILITY_NONE_ALT, // Identical to HUD_VISIBILITY_NONE
+    /*  3 */ HUD_VISIBILITY_HEARTS_WITH_OVERWRITE, // Uses Interface_UpdateButtonAlphas so gives the opportunity to dim only disabled buttons
+    /*  4 */ HUD_VISIBILITY_A,
+    /*  5 */ HUD_VISIBILITY_A_HEARTS_MAGIC_WITH_OVERWRITE, // Uses Interface_UpdateButtonAlphas so gives the opportunity to dim only disabled buttons
+    /*  6 */ HUD_VISIBILITY_A_HEARTS_MAGIC_MINIMAP_WITH_OVERWRITE, // Uses Interface_UpdateButtonAlphas so gives the opportunity to dim only disabled buttons
+    /*  7 */ HUD_VISIBILITY_ALL_NO_MINIMAP_W_DISABLED, // Only raises button alphas if not disabled
+    /*  8 */ HUD_VISIBILITY_B,
+    /*  9 */ HUD_VISIBILITY_HEARTS_MAGIC,
+    /* 10 */ HUD_VISIBILITY_B_ALT,
+    /* 11 */ HUD_VISIBILITY_HEARTS,
+    /* 12 */ HUD_VISIBILITY_A_B_MINIMAP,
+    /* 13 */ HUD_VISIBILITY_HEARTS_MAGIC_WITH_OVERWRITE, // Uses Interface_UpdateButtonAlphas so gives the opportunity to dim only disabled buttons
+    /* 14 */ HUD_VISIBILITY_HEARTS_MAGIC_C,
+    /* 15 */ HUD_VISIBILITY_ALL_NO_MINIMAP,
+    /* 16 */ HUD_VISIBILITY_A_B_C,
+    /* 17 */ HUD_VISIBILITY_B_MINIMAP,
+    /* 18 */ HUD_VISIBILITY_HEARTS_MAGIC_MINIMAP,
+    /* 19 */ HUD_VISIBILITY_A_HEARTS_MAGIC_MINIMAP,
+    /* 20 */ HUD_VISIBILITY_B_MAGIC,
+    /* 21 */ HUD_VISIBILITY_A_B,
+    /* 22 */ HUD_VISIBILITY_A_B_HEARTS_MAGIC_MINIMAP,
+    /* 50 */ HUD_VISIBILITY_ALL = 50,
+    /* 52 */ HUD_VISIBILITY_NONE_INSTANT = 52
+} HudVisibility;
 
 typedef struct SramContext {
     /* 0x00 */ u8* readBuff;
@@ -214,11 +293,11 @@ typedef struct SaveContext {
     /* 0x1015 */ u8 unk_1015;
     /* 0x1016 */ u16 jinxTimer;
     /* 0x1018 */ s16 rupeeAccumulator;                  // "lupy_udct"
-    /* 0x101A */ u8 unk_101A[6];                        // "bottle_status", one entry for each bottle
-    /* 0x1020 */ OSTime unk_1020[6];                    // "bottle_ostime", one entry for each bottle
-    /* 0x1050 */ OSTime unk_1050[6];                    // "bottle_sub", one entry for each bottle
-    /* 0x1080 */ OSTime unk_1080[6];                    // "bottle_time", one entry for each bottle
-    /* 0x10B0 */ OSTime unk_10B0[6];                    // "bottle_stop_time", one entry for each bottle
+    /* 0x101A */ u8 bottleTimerStates[BOTTLE_MAX]; // See the `BottleTimerState` enum. "bottle_status"
+    /* 0x1020 */ OSTime bottleTimerStartOsTimes[BOTTLE_MAX]; // The osTime when the timer starts. "bottle_ostime"
+    /* 0x1050 */ u64 bottleTimerTimeLimits[BOTTLE_MAX]; // The original total time given before the timer expires, in centiseconds (1/100th sec). "bottle_sub"
+    /* 0x1080 */ u64 bottleTimerCurTimes[BOTTLE_MAX]; // The remaining time left before the timer expires, in centiseconds (1/100th sec). "bottle_time"
+    /* 0x10B0 */ OSTime bottleTimerPausedOsTimes[BOTTLE_MAX]; // The cumulative osTime spent with the timer paused. "bottle_stop_time"
     /* 0x10E0 */ u64 pictoPhoto[1400];                  // buffer containing the pictograph photo
     /* 0x3CA0 */ s32 fileNum;                           // "file_no"
     /* 0x3CA4 */ s16 powderKegTimer;                    // "big_bom_timer"
@@ -237,25 +316,25 @@ typedef struct SaveContext {
     /* 0x3DBF */ u8 showTitleCard;                      // "name_display"
     /* 0x3DC0 */ s16 unk_3DC0;                          // "shield_magic_timer"
     /* 0x3DC2 */ u8 unk_3DC2;                           // "pad1"
-    /* 0x3DC8 */ OSTime unk_3DC8;                       // "get_time"
-    /* 0x3DD0 */ u8 unk_3DD0[7];                        // "event_fg"
-    /* 0x3DD7 */ u8 unk_3DD7[7];                        // "calc_flag"
-    /* 0x3DE0 */ OSTime unk_3DE0[7];                    // "event_ostime"
-    /* 0x3E18 */ OSTime unk_3E18[7];                    // "event_sub"
-    /* 0x3E50 */ OSTime unk_3E50[7];                    // "func_time"
-    /* 0x3E88 */ OSTime unk_3E88[7];                    // "func_end_time"
-    /* 0x3EC0 */ OSTime unk_3EC0[7];                    // "func_stop_time"
-    /* 0x3EF8 */ s16 timerX[7];                         // "event_xp"
-    /* 0x3F06 */ s16 timerY[7];                         // "event_yp"
+    /* 0x3DC8 */ OSTime postmanTimerStopOsTime; // The osTime when the timer stops for the postman minigame. "get_time"
+    /* 0x3DD0 */ u8 timerStates[TIMER_ID_MAX]; // See the `TimerState` enum. "event_fg"
+    /* 0x3DD7 */ u8 timerDirections[TIMER_ID_MAX]; // See the `TimerDirection` enum. "calc_flag"
+    /* 0x3DE0 */ u64 timerCurTimes[TIMER_ID_MAX]; // For countdown, the remaining time left. For countup, the time since the start. In centiseconds (1/100th sec). "event_ostime"
+    /* 0x3E18 */ u64 timerTimeLimits[TIMER_ID_MAX]; // The original total time given for the timer to count from, in centiseconds (1/100th sec). "event_sub"
+    /* 0x3E50 */ OSTime timerStartOsTimes[TIMER_ID_MAX]; // The osTime when the timer starts. "func_time"
+    /* 0x3E88 */ u64 timerStopTimes[TIMER_ID_MAX];  // The total amount of time taken between the start and end of the timer, in centiseconds (1/100th sec). "func_end_time"
+    /* 0x3EC0 */ OSTime timerPausedOsTimes[TIMER_ID_MAX]; // The cumulative osTime spent with the timer paused. "func_stop_time"
+    /* 0x3EF8 */ s16 timerX[TIMER_ID_MAX];              // "event_xp"
+    /* 0x3F06 */ s16 timerY[TIMER_ID_MAX];              // "event_yp"
     /* 0x3F14 */ s16 unk_3F14;                          // "character_change"
     /* 0x3F16 */ u8 seqIndex;                           // "old_bgm"
     /* 0x3F17 */ u8 nightSeqIndex;                      // "old_env"
     /* 0x3F18 */ u8 buttonStatus[6];                    // "button_item"
-    /* 0x3F1E */ u8 unk_3F1E;                           // "ck_fg"
-    /* 0x3F20 */ u16 unk_3F20;                          // "alpha_type"
-    /* 0x3F22 */ u16 unk_3F22;                          // "prev_alpha_type"
-    /* 0x3F24 */ u16 unk_3F24;                          // "alpha_count"
-    /* 0x3F26 */ u16 unk_3F26;                          // "last_time_type"
+    /* 0x3F1E */ u8 hudVisibilityForceButtonAlphasByStatus; // if btn alphas are updated through Interface_UpdateButtonAlphas, instead update them through Interface_UpdateButtonAlphasByStatus "ck_fg"
+    /* 0x3F20 */ u16 nextHudVisibility; // triggers the hud to change visibility to the requested value. Reset to HUD_VISIBILITY_IDLE when target is reached "alpha_type"
+    /* 0x3F22 */ u16 hudVisibility; // current hud visibility "prev_alpha_type"
+    /* 0x3F24 */ u16 hudVisibilityTimer; // number of frames in the transition to a new hud visibility. Used to step alpha "alpha_count"
+    /* 0x3F26 */ u16 prevHudVisibility; // used to store and recover hud visibility for pause menu and text boxes "last_time_type"
     /* 0x3F28 */ s16 magicState; // determines magic meter behavior on each frame "magic_flag"
     /* 0x3F2A */ s16 isMagicRequested; // a request to add magic has been given "recovery_magic_flag"
     /* 0x3F2C */ s16 magicFlag; // Set to 0 in func_80812D94(), otherwise unused "keep_magic_flag"
@@ -398,15 +477,15 @@ u16 Sram_CalcChecksum(void* data, size_t count);
 void Sram_InitNewSave(void);
 void Sram_InitDebugSave(void);
 void func_80144A94(SramContext* sramCtx);
-void Sram_OpenSave(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
+void Sram_OpenSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void func_8014546C(SramContext* sramCtx);
-void func_801457CC(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
-void func_80146580(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx, s32 fileNum);
-void func_80146628(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
-void Sram_InitSave(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
+void func_801457CC(struct FileSelectState* fileSelect, SramContext* sramCtx);
+void func_80146580(struct FileSelectState* fileSelect, SramContext* sramCtx, s32 fileNum);
+void func_80146628(struct FileSelectState* fileSelect, SramContext* sramCtx);
+void Sram_InitSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void func_80146DF8(SramContext* sramCtx);
 void Sram_InitSram(struct GameState* gameState, SramContext* sramCtx);
-void Sram_Alloc(struct GameState* gamestate, SramContext* sramCtx);
+void Sram_Alloc(struct GameState* gameState, SramContext* sramCtx);
 void Sram_SaveSpecialEnterClockTown(struct PlayState* play);
 void Sram_SaveSpecialNewDay(struct PlayState* play);
 void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages);
