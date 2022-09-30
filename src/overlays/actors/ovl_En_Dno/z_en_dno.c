@@ -153,14 +153,14 @@ void func_80A715DC(EnDno* this, PlayState* play) {
         crace = (BgCraceMovebg*)SubS_FindActor(play, &crace->dyna.actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (crace != NULL) {
             if (BG_CRACE_MOVEBG_GET_TYPE(&crace->dyna.actor) == BG_CRACE_MOVEBG_TYPE_CLOSING &&
-                !(crace->flags & BG_CRACE_MOVEBG_FLAG_BUTLER_IS_BEYOND_DOOR)) {
+                !(crace->stateFlags & BG_CRACE_MOVEBG_FLAG_BUTLER_IS_BEYOND_DOOR)) {
                 if (SubS_LineSegVsPlane(&crace->dyna.actor.home.pos, &crace->dyna.actor.home.rot, &D_80A73B2C,
                                         &this->actor.prevPos, &this->actor.world.pos, &sp88)) {
                     Math_Vec3f_Diff(&this->actor.world.pos, &crace->dyna.actor.home.pos, &sp7C);
                     Matrix_RotateYS(-crace->dyna.actor.home.rot.y, MTXMODE_NEW);
                     Matrix_MultVec3f(&sp7C, &sp70);
                     if ((fabsf(sp70.x) < 100.0f) && (sp70.y >= -10.0f) && (sp70.y <= 180.0f) && (sp70.z < 0.0f)) {
-                        crace->flags |= BG_CRACE_MOVEBG_FLAG_BUTLER_IS_BEYOND_DOOR;
+                        crace->stateFlags |= BG_CRACE_MOVEBG_FLAG_BUTLER_IS_BEYOND_DOOR;
                     }
                 }
             }
