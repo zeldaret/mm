@@ -27,7 +27,7 @@ const ActorInit Oceff_Wipe_InitVars = {
     (ActorFunc)OceffWipe_Draw,
 };
 
-s32 D_80977200;
+UNK_TYPE4 D_80977200;
 
 void OceffWipe_Init(Actor* thisx, PlayState* play) {
     OceffWipe* this = THIS;
