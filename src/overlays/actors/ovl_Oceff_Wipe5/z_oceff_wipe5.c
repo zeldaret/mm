@@ -27,7 +27,7 @@ const ActorInit Oceff_Wipe5_InitVars = {
     (ActorFunc)OceffWipe5_Draw,
 };
 
-s32 D_80BC9260;
+UNK_TYPE4 D_80BC9260;
 
 void OceffWipe5_Init(Actor* thisx, PlayState* play) {
     OceffWipe5* this = THIS;
@@ -78,20 +78,24 @@ void OceffWipe5_Draw(Actor* thisx, PlayState* play) {
     s32 colorIndex = OCEFF_WIPE5_GET_SONG_TYPE(thisx) * 3;
     f32 phi_fv1 = 1220.0f;
 
-    if ((((OCEFF_WIPE5_GET_SONG_TYPE(thisx) == 2) && (play->sceneNum == SCENE_LABO)) &&
+    if ((((OCEFF_WIPE5_GET_SONG_TYPE(thisx) == 2) && (play->sceneId == SCENE_LABO)) &&
          ((play->csCtx.currentCsIndex == 0) || (play->csCtx.currentCsIndex == 1))) &&
         (play->csCtx.state != 0)) {
         phi_fv1 = 1150.0f;
     }
+
     if (colorIndex >= 13) {
         colorIndex = 0;
     }
+
     Camera_GetQuakeOffset(&quakeOffset, cam);
+
     if (this->counter < 32) {
         z = Math_SinS(this->counter << 9) * phi_fv1;
     } else {
         z = phi_fv1;
     }
+
     if (this->counter >= 80) {
         alpha = 12 * (100 - this->counter);
     } else {
