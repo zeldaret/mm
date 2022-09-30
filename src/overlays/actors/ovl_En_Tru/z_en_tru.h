@@ -2,6 +2,7 @@
 #define Z_EN_TRU_H
 
 #include "global.h"
+#include "objects/object_tru/object_tru.h"
 
 struct EnTru;
 
@@ -31,8 +32,8 @@ typedef struct EnTru {
     /* 0x1EC */ Vec3f unk_1EC;
     /* 0x1F8 */ Vec3f unk_1F8;
     /* 0x204 */ Vec3s unk_204;
-    /* 0x20A */ Vec3s jointTable[27];
-    /* 0x2AC */ Vec3s morphTable[27];
+    /* 0x20A */ Vec3s jointTable[KOUME_LIMB_MAX];
+    /* 0x2AC */ Vec3s morphTable[KOUME_LIMB_MAX];
     /* 0x34E */ u16 unk_34E;
     /* 0x350 */ UNK_TYPE1 unk350[0x4];
     /* 0x354 */ s32* unk_354;
