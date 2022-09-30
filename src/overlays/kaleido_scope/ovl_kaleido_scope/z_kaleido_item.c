@@ -359,7 +359,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
 
     if ((pauseCtx->state == 6) && (pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_ITEM) &&
         !pauseCtx->itemDescriptionOn) {
-        moveCursorResult = 0;
+        moveCursorResult = PAUSE_CURSOR_RESULT_NONE;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_ITEM];
 
         cursorItem = pauseCtx->cursorItem[PAUSE_ITEM];
@@ -375,14 +375,14 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                 cursorYIndex = pauseCtx->cursorYIndex[PAUSE_ITEM];
 
                 // Search for slot to move to
-                while (moveCursorResult == 0) {
+                while (moveCursorResult == PAUSE_CURSOR_RESULT_NONE) {
                     if (pauseCtx->stickAdjX < -30) {
                         // move cursor left
                         pauseCtx->unk_298 = 4.0f;
                         if (pauseCtx->cursorXIndex[PAUSE_ITEM] != 0) {
                             pauseCtx->cursorXIndex[PAUSE_ITEM]--;
                             pauseCtx->cursorPoint[PAUSE_ITEM]--;
-                            moveCursorResult = 1;
+                            moveCursorResult = PAUSE_CURSOR_RESULT_SLOT;
                         } else {
                             pauseCtx->cursorXIndex[PAUSE_ITEM] = cursorXIndex;
                             pauseCtx->cursorYIndex[PAUSE_ITEM]++;
@@ -404,7 +404,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
 
                                 KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
 
-                                moveCursorResult = 2;
+                                moveCursorResult = PAUSE_CURSOR_RESULT_SPECIAL_POS;
                             }
                         }
                     } else if (pauseCtx->stickAdjX > 30) {
@@ -413,7 +413,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                         if (pauseCtx->cursorXIndex[PAUSE_ITEM] <= 4) {
                             pauseCtx->cursorXIndex[PAUSE_ITEM]++;
                             pauseCtx->cursorPoint[PAUSE_ITEM]++;
-                            moveCursorResult = 1;
+                            moveCursorResult = PAUSE_CURSOR_RESULT_SLOT;
                         } else {
                             pauseCtx->cursorXIndex[PAUSE_ITEM] = cursorXIndex;
                             pauseCtx->cursorYIndex[PAUSE_ITEM]++;
@@ -435,13 +435,13 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
 
                                 KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_RIGHT);
 
-                                moveCursorResult = 2;
+                                moveCursorResult = PAUSE_CURSOR_RESULT_SPECIAL_POS;
                             }
                         }
                     }
                 }
 
-                if (moveCursorResult == 1) {
+                if (moveCursorResult == PAUSE_CURSOR_RESULT_SLOT) {
                     cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_ITEM]];
                 }
             }
@@ -459,7 +459,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                         pauseCtx->cursorPoint[PAUSE_ITEM] = cursorPoint;
                         pauseCtx->cursorXIndex[PAUSE_ITEM] = cursorXIndex;
                         pauseCtx->cursorYIndex[PAUSE_ITEM] = cursorYIndex;
-                        moveCursorResult = 1;
+                        moveCursorResult = PAUSE_CURSOR_RESULT_SLOT;
                         break;
                     }
 
@@ -497,7 +497,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                         pauseCtx->cursorPoint[PAUSE_ITEM] = cursorPoint;
                         pauseCtx->cursorXIndex[PAUSE_ITEM] = cursorXIndex;
                         pauseCtx->cursorYIndex[PAUSE_ITEM] = cursorYIndex;
-                        moveCursorResult = 1;
+                        moveCursorResult = PAUSE_CURSOR_RESULT_SLOT;
                         break;
                     }
 
@@ -526,32 +526,32 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
         if (pauseCtx->cursorSpecialPos == 0) {
             // move cursor up/down
             if (ABS_ALT(pauseCtx->stickAdjY) > 30) {
-                moveCursorResult = 0;
+                moveCursorResult = PAUSE_CURSOR_RESULT_NONE;
 
                 cursorPoint = pauseCtx->cursorPoint[PAUSE_ITEM];
                 cursorYIndex = pauseCtx->cursorYIndex[PAUSE_ITEM];
 
-                while (moveCursorResult == 0) {
+                while (moveCursorResult == PAUSE_CURSOR_RESULT_NONE) {
                     if (pauseCtx->stickAdjY > 30) {
                         // move cursor up
-                        moveCursorResult = 2;
+                        moveCursorResult = PAUSE_CURSOR_RESULT_SPECIAL_POS;
                         if (pauseCtx->cursorYIndex[PAUSE_ITEM] != 0) {
                             pauseCtx->cursorYIndex[PAUSE_ITEM]--;
                             pauseCtx->unk_298 = 4.0f;
                             pauseCtx->cursorPoint[PAUSE_ITEM] -= 6;
-                            moveCursorResult = 1;
+                            moveCursorResult = PAUSE_CURSOR_RESULT_SLOT;
                         } else {
                             pauseCtx->cursorYIndex[PAUSE_ITEM] = cursorYIndex;
                             pauseCtx->cursorPoint[PAUSE_ITEM] = cursorPoint;
                         }
                     } else if (pauseCtx->stickAdjY < -30) {
                         // move cursor down
-                        moveCursorResult = 2;
+                        moveCursorResult = PAUSE_CURSOR_RESULT_SPECIAL_POS;
                         if (pauseCtx->cursorYIndex[PAUSE_ITEM] < 3) {
                             pauseCtx->cursorYIndex[PAUSE_ITEM]++;
                             pauseCtx->unk_298 = 4.0f;
                             pauseCtx->cursorPoint[PAUSE_ITEM] += 6;
-                            moveCursorResult = 1;
+                            moveCursorResult = PAUSE_CURSOR_RESULT_SLOT;
                         } else {
                             pauseCtx->cursorYIndex[PAUSE_ITEM] = cursorYIndex;
                             pauseCtx->cursorPoint[PAUSE_ITEM] = cursorPoint;
@@ -563,9 +563,9 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
             cursorSlot = pauseCtx->cursorPoint[PAUSE_ITEM];
             pauseCtx->cursorColorSet = 2;
 
-            if (moveCursorResult == 1) {
+            if (moveCursorResult == PAUSE_CURSOR_RESULT_SLOT) {
                 cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_ITEM]];
-            } else if (moveCursorResult != 2) {
+            } else if (moveCursorResult != PAUSE_CURSOR_RESULT_SPECIAL_POS) {
                 cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_ITEM]];
             }
 

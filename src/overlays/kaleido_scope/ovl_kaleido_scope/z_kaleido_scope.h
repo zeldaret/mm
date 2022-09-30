@@ -36,6 +36,13 @@ typedef enum {
   /* 3 */ DEBUG_EDITOR_EVENTS
 } DebugEditor;
 
+// To be used for Item-Page cursor and Mask-Page cursor
+typedef enum {
+    /* 0 */ PAUSE_CURSOR_RESULT_NONE,
+    /* 1 */ PAUSE_CURSOR_RESULT_SLOT,
+    /* 2 */ PAUSE_CURSOR_RESULT_SPECIAL_POS
+} PauseMoveCursorResult;
+
 #define NUM_ITEM_SLOTS 24
 #define NUM_MASK_SLOTS 24
 
