@@ -43,7 +43,7 @@ void func_80919F30(BgUmajump* this, PlayState* play) {
 
     this->rotationTimer++;
     this->dyna.actor.shape.yOffset =
-        Math_SinS((this->rotationTimer / 90.0f) * 65536.0f) * (20.0f / this->dyna.actor.scale.y);
+        Math_SinS((this->rotationTimer / 90.0f) * 0x10000) * (20.0f / this->dyna.actor.scale.y);
 }
 
 void BgUmajump_StopCutscene(BgUmajump* this, PlayState* play) {
@@ -81,7 +81,7 @@ void BgUmajump_CheckDistance(BgUmajump* this, PlayState* play) {
 void BgUmajump_Init(Actor* thisx, PlayState* play) {
     BgUmajump* this = THIS;
 
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+    Actor_ProcessInitChain(thisx, sInitChain);
 
     this->actionFunc = NULL;
     this->horse = NULL;
@@ -92,29 +92,28 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
     this->objectIndex = BG_UMAJUMP_GET_OBJECT_INDEX(thisx);
     thisx->params &= 0xFF;
 
-    if ((this->dyna.actor.params == BG_UMAJUMP_PARAM_2)) {
+    if ((thisx->params == BG_UMAJUMP_PARAM_2)) {
         if ((((play->sceneId == SCENE_F01) && !(gSaveContext.save.weekEventReg[89] & 0x20)) &&
              !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) &&
-            (this->dyna.actor.cutscene != -1)) {
+            (thisx->cutscene != -1)) {
             this->actionFunc = BgUmajump_CheckDistance;
-            this->dyna.actor.update = func_8091A5A0;
-            this->dyna.actor.flags |= ACTOR_FLAG_10;
+            thisx->update = func_8091A5A0;
+            thisx->flags |= ACTOR_FLAG_10;
             this->horse = SubS_FindActor(play, this->horse, ACTORCAT_BG, ACTOR_EN_HORSE);
         } else {
-            this->dyna.actor.update = Actor_Noop;
+            thisx->update = Actor_Noop;
         }
     } else {
         this->objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_UMAJUMP);
 
         if (this->objectIndex < 0) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_MarkForDeath(thisx);
         }
 
-        if ((this->dyna.actor.params == BG_UMAJUMP_PARAM_3) && CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, this->dyna.actor.world.pos.x,
-                        this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
-                        this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 0x3E);
-            Actor_MarkForDeath(&this->dyna.actor);
+        if ((thisx->params == BG_UMAJUMP_PARAM_3) && CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, thisx->world.pos.x, thisx->world.pos.y,
+                        thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y, thisx->shape.rot.z, 0x3E);
+            Actor_MarkForDeath(thisx);
         }
     }
 }
