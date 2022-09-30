@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64shrink_window.h"
 #include "z64view.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165460.s")

@@ -2401,19 +2401,6 @@ void Message_FindCreditsMessage(PlayState* play, u16 textId);
 void func_8015E7EC(PlayState* play, UNK_PTR puParm2);
 // void func_8015F8A8(UNK_TYPE4 ctxt);
 
-void Letterbox_SetSizeTarget(s32 target);
-s32 Letterbox_GetSizeTarget(void);
-void Letterbox_SetSize(s32 size);
-s32 Letterbox_GetSize(void);
-void Pillarbox_SetSizeTarget(s32 target);
-s32 Pillarbox_GetSizeTarget(void);
-void Pillarbox_SetSize(s32 size);
-s32 Pillarbox_GetSize(void);
-void ShrinkWindow_Init(void);
-void ShrinkWindow_Destroy(void);
-void ShrinkWindow_Update(s32 framerateDivisor);
-void ShrinkWindow_Draw(GraphicsContext* gfxCtx);
-
 // void func_80161180(void);
 s32 func_8016119C(Camera* camera, DbCameraUnkStruct* arg1);
 // void func_8016122C(void);

@@ -1,5 +1,6 @@
 #include "global.h"
 #include "z64rumble.h"
+#include "z64shrink_window.h"
 #include "z64view.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
@@ -92,8 +93,8 @@ void KaleidoSetup_Update(PlayState* play) {
 
                                 if (pauseCtx->state == 1) {
                                     Game_SetFramerateDivisor(&play->state, 2);
-                                    if (Letterbox_GetSizeTarget() != 0) {
-                                        Letterbox_SetSizeTarget(0);
+                                    if (ShrinkWindow_Letterbox_GetSizeTarget() != 0) {
+                                        ShrinkWindow_Letterbox_SetSizeTarget(0);
                                     }
                                     func_801A3AEC(1);
                                 }

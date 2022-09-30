@@ -1,5 +1,6 @@
 #include "global.h"
 #include "z64rumble.h"
+#include "z64shrink_window.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 
 void Cutscene_DoNothing(PlayState* play, CutsceneContext* csCtx);
@@ -106,7 +107,7 @@ s32 func_800EA220(PlayState* play, CutsceneContext* csCtx, f32 target) {
 
 void func_800EA258(PlayState* play, CutsceneContext* csCtx) {
     Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
-    Letterbox_SetSizeTarget(32);
+    ShrinkWindow_Letterbox_SetSizeTarget(32);
     if (func_800EA220(play, csCtx, 1.0f)) {
         Audio_SetCutsceneFlag(true);
         csCtx->state++;
@@ -116,7 +117,7 @@ void func_800EA258(PlayState* play, CutsceneContext* csCtx) {
 void func_800EA2B8(PlayState* play, CutsceneContext* csCtx) {
     func_800ED980(play, csCtx);
     Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
-    Letterbox_SetSizeTarget(32);
+    ShrinkWindow_Letterbox_SetSizeTarget(32);
     if (func_800EA220(play, csCtx, 1.0f)) {
         Audio_SetCutsceneFlag(true);
         csCtx->state++;
@@ -1448,8 +1449,8 @@ void func_800EDA84(PlayState* play, CutsceneContext* csCtx) {
 
             if (gSaveContext.cutsceneTrigger == 0) {
                 Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
-                Letterbox_SetSizeTarget(32);
-                Letterbox_SetSize(32);
+                ShrinkWindow_Letterbox_SetSizeTarget(32);
+                ShrinkWindow_Letterbox_SetSize(32);
                 csCtx->state++;
             }
 

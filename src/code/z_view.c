@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64shrink_window.h"
 #include "z64view.h"
 
 s32 View_ApplyPerspective(View* view);
@@ -159,7 +160,7 @@ void View_ApplyLetterbox(View* view) {
 
     OPEN_DISPS(view->gfxCtx);
 
-    letterboxY = Letterbox_GetSize();
+    letterboxY = ShrinkWindow_Letterbox_GetSize();
 
     letterboxX = -1; // The following is optimized to varX = 0 but affects codegen
 
@@ -337,14 +338,14 @@ s32 View_ApplyPerspective(View* view) {
     height = view->viewport.bottomY - view->viewport.topY;
     aspect = (f32)width / (f32)height;
 
-    guPerspective(projection, &view->normal, view->fovy, aspect, view->zNear, view->zFar, view->scale);
+    guPerspective(projection, &view->perspNorm, view->fovy, aspect, view->zNear, view->zFar, view->scale);
     view->projection = *projection;
 
     View_StepDistortion(view, projection);
 
-    gSPPerspNormalize(POLY_OPA_DISP++, view->normal);
+    gSPPerspNormalize(POLY_OPA_DISP++, view->perspNorm);
     gSPMatrix(POLY_OPA_DISP++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-    gSPPerspNormalize(POLY_XLU_DISP++, view->normal);
+    gSPPerspNormalize(POLY_XLU_DISP++, view->perspNorm);
     gSPMatrix(POLY_XLU_DISP++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 
     // View matrix (look-at)
@@ -482,11 +483,11 @@ s32 View_ApplyPerspectiveToOverlay(View* view) {
     height = view->viewport.bottomY - view->viewport.topY;
     aspect = (f32)width / (f32)height;
 
-    guPerspective(projection, &view->normal, view->fovy, aspect, view->zNear, view->zFar, view->scale);
+    guPerspective(projection, &view->perspNorm, view->fovy, aspect, view->zNear, view->zFar, view->scale);
 
     view->projection = *projection;
 
-    gSPPerspNormalize(OVERLAY_DISP++, view->normal);
+    gSPPerspNormalize(OVERLAY_DISP++, view->perspNorm);
     gSPMatrix(OVERLAY_DISP++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 
     viewing = GRAPH_ALLOC(gfxCtx, sizeof(Mtx));
