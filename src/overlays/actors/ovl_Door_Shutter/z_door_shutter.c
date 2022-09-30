@@ -74,11 +74,11 @@ typedef struct {
 } ShutterInfo; // size = 0xC
 
 ShutterInfo D_808A21B0[] = {
-    { object_bdoor_DL_0000C0, NULL, 130, 12, 50, 15 },
+    { gBossDoorDL, NULL, 130, 12, 50, 15 },
     { gameplay_keep_DL_077990, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_numa_obj_DL_007150, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_hakugin_obj_DL_000128, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
-    { object_dblue_object_DL_017D00, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
+    { gGreatBayTempleObjectDoorDL, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_ikana_obj_DL_014A40, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_redead_obj_DL_0001A0, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_ikninside_obj_DL_004440, object_ikninside_obj_DL_005260, 130, 0, 20, 15 },
@@ -100,7 +100,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 sceneNum;
+    /* 0x00 */ s16 sceneId;
     /* 0x02 */ u8 index;
 } ShutterSceneInfo; // size = 0x4
 
@@ -114,8 +114,8 @@ ShutterSceneInfo D_808A2258[] = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 dungeonScene;
-    /* 0x02 */ s16 bossScene;
+    /* 0x00 */ s16 dungeonSceneId;
+    /* 0x02 */ s16 bossSceneId;
     /* 0x04 */ u8 index;
 } BossDoorInfo; // size = 0x6
 
@@ -129,8 +129,7 @@ Vec3f D_808A22C4 = { 120.0f, 0.0f, 0.0f };
 Vec3f D_808A22D0 = { -90.0f, 0.0f, 0.0f };
 
 TexturePtr D_808A22DC[] = {
-    object_bdoor_Tex_006BA0, object_bdoor_Tex_005BA0, object_bdoor_Tex_0005C0,
-    object_bdoor_Tex_004BA0, object_bdoor_Tex_003BA0,
+    gBossDoorDefaultTex, gBossDoorWoodfallTex, gBossDoorSnowheadTex, gBossDoorGreatBayTex, gBossDoorStoneTowerTex,
 };
 
 void DoorShutter_SetupAction(DoorShutter* this, DoorShutterActionFunc actionFunc) {
@@ -210,7 +209,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
         ShutterSceneInfo* shutterSceneInfo = &D_808A2258[0];
 
         for (i = 0; i < ARRAY_COUNT(D_808A2258) - 1; i++, shutterSceneInfo++) {
-            if (play->sceneNum == shutterSceneInfo->sceneNum) {
+            if (play->sceneId == shutterSceneInfo->sceneId) {
                 break;
             }
         }
@@ -223,7 +222,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
         BossDoorInfo* bossDoorInfo = &D_808A22A0[0];
 
         for (i = 0; i < ARRAY_COUNT(D_808A22A0) - 1; i++, bossDoorInfo++) {
-            if ((play->sceneNum == bossDoorInfo->dungeonScene) || (play->sceneNum == bossDoorInfo->bossScene)) {
+            if ((play->sceneId == bossDoorInfo->dungeonSceneId) || (play->sceneId == bossDoorInfo->bossSceneId)) {
                 break;
             }
         }
@@ -554,9 +553,9 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
             play->doorCtx.transitionActorList[DOORSHUTTER_GET_FC00(&this->actor)].sides[(sp44.z < 0.0f) ? 0 : 1].room;
 
         if (room != this->actor.room) {
-            Room temp = play->roomCtx.currRoom;
+            Room temp = play->roomCtx.curRoom;
 
-            play->roomCtx.currRoom = play->roomCtx.prevRoom;
+            play->roomCtx.curRoom = play->roomCtx.prevRoom;
             play->roomCtx.prevRoom = temp;
             play->roomCtx.activeMemPage ^= 1;
         }
