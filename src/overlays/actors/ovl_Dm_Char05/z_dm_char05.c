@@ -544,7 +544,7 @@ void func_80AAD4A8(DmChar05* this, PlayState* play) {
             }
         }
     } else if (DMCHAR05_GET(&this->actor) == DMCHAR05_3) {
-        if (play->sceneNum == SCENE_OKUJOU) {
+        if (play->sceneId == SCENE_OKUJOU) {
             if (gSaveContext.sceneSetupIndex == 2) {
                 if (play->csCtx.currentCsIndex == 0) {
                     func_80AAD3F8(this, play);
@@ -552,7 +552,7 @@ void func_80AAD4A8(DmChar05* this, PlayState* play) {
                     func_80AAD450(this, play);
                 }
             }
-        } else if (play->sceneNum == SCENE_SPOT00) {
+        } else if (play->sceneId == SCENE_SPOT00) {
             if (gSaveContext.sceneSetupIndex == 9) {
                 if ((play->csCtx.currentCsIndex == 0) && (play->csCtx.frames == 255)) {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EVIL_POWER);

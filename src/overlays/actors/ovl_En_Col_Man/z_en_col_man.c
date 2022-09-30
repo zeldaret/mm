@@ -234,7 +234,7 @@ void func_80AFE414(Actor* thisx, PlayState* play) {
     func_8012C2DC(play->state.gfxCtx);
     func_800B8118(&this->actor, play, 0);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_05AAB0);
+    gSPDisplayList(POLY_XLU_DISP++, gHeartPieceInteriorDL);
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -246,9 +246,9 @@ void func_80AFE4AC(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropRecoveryHeartTex));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05F6F0);
+    gSPDisplayList(POLY_OPA_DISP++, gItemDropDL);
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -268,8 +268,8 @@ void func_80AFE650(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05CEF0));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropBombTex));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05F6F0);
+    gSPDisplayList(POLY_OPA_DISP++, gItemDropDL);
     CLOSE_DISPS(play->state.gfxCtx);
 }
