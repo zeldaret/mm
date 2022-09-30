@@ -1,7 +1,7 @@
 /*
  * File: z_obj_dowsing.c
  * Overlay: ovl_Obj_Dowsing
- * Description:
+ * Description: Rumbles controller if switch or collectible/chest flag is unset
  */
 
 #include "z_obj_dowsing.h"

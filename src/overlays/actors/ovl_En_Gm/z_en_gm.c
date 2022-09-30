@@ -328,8 +328,8 @@ s32 func_8094E054(EnGm* this, PlayState* play, s32 arg2) {
 s32 func_8094E0F8(EnGm* this, PlayState* play) {
     s32 ret = false;
 
-    if ((this->unk_260 != play->roomCtx.currRoom.num) && (play->roomCtx.unk31 == 0)) {
-        this->unk_260 = play->roomCtx.currRoom.num;
+    if ((this->unk_260 != play->roomCtx.curRoom.num) && (play->roomCtx.unk31 == 0)) {
+        this->unk_260 = play->roomCtx.curRoom.num;
         this->unk_262 = SubS_GetObjectIndex(OBJECT_IN2, play);
         this->actor.draw = NULL;
         this->unk_3FC = 1;
@@ -762,7 +762,7 @@ s32 func_8094EFC4(EnGm* this, PlayState* play) {
 
     if (play->csCtx.state != 0) {
         if (this->unk_3F8 == 0) {
-            if ((play->sceneNum == SCENE_MILK_BAR) && (gSaveContext.sceneSetupIndex == 2)) {
+            if ((play->sceneId == SCENE_MILK_BAR) && (gSaveContext.sceneSetupIndex == 2)) {
                 func_8094E054(this, play, 0);
                 this->unk_258 = 255;
             }
@@ -771,7 +771,7 @@ s32 func_8094EFC4(EnGm* this, PlayState* play) {
         }
         ret = true;
     } else if (this->unk_3F8 != 0) {
-        if (play->sceneNum == SCENE_MILK_BAR) {
+        if (play->sceneId == SCENE_MILK_BAR) {
             this->unk_400 = 0;
         }
         this->unk_3F8 = 0;
@@ -963,7 +963,8 @@ s32 func_8094F53C(EnGm* this, PlayState* play) {
         this->unk_18C(this, play);
     }
 
-    if ((this->unk_3E8 == 6) && !(play->actorCtx.unk5 & 0x20) && Animation_OnFrame(&this->skelAnime, 20.0f)) {
+    if ((this->unk_3E8 == 6) && !(play->actorCtx.flags & ACTORCTX_FLAG_5) &&
+        Animation_OnFrame(&this->skelAnime, 20.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
     }
 

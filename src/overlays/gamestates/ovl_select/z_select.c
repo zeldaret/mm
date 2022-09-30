@@ -8,13 +8,9 @@
 #include "libc/alloca.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
-void MapSelect_LoadTitle(MapSelectState* this) {
-    {
-        GameState* gameState = &this->state;
-        gameState->running = false;
-    }
-
-    SET_NEXT_GAMESTATE(&this->state, Title_Init, TitleContext);
+void MapSelect_LoadConsoleLogo(MapSelectState* this) {
+    STOP_GAMESTATE(&this->state);
+    SET_NEXT_GAMESTATE(&this->state, ConsoleLogo_Init, sizeof(ConsoleLogoState));
 }
 
 void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
@@ -27,10 +23,10 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
     gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;
     gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
     gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
-    gSaveContext.unk_3F1E = 0;
-    gSaveContext.unk_3F20 = 0;
-    gSaveContext.unk_3F22 = 0;
-    gSaveContext.unk_3F24 = 0;
+    gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
+    gSaveContext.nextHudVisibility = HUD_VISIBILITY_IDLE;
+    gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+    gSaveContext.hudVisibilityTimer = 0;
 
     Audio_QueueSeqCmd(NA_BGM_STOP);
     gSaveContext.save.entrance = entrance;
@@ -45,8 +41,8 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
     }
 
     gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = 0xFFFF;
-    gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
-    gSaveContext.nightSeqIndex = 0xFF;
+    gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+    gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
     gSaveContext.showTitleCard = true;
     gSaveContext.respawnFlag = 0;
     gSaveContext.respawn[RESPAWN_MODE_GORON].entrance = 0xFF;
@@ -55,11 +51,8 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
     gSaveContext.respawn[RESPAWN_MODE_HUMAN].entrance = 0xFF;
     gWeatherMode = 0;
 
-    do {
-        GameState* gameState = &this->state;
-        gameState->running = false;
-    } while (0);
-    SET_NEXT_GAMESTATE(&this->state, Play_Init, PlayState);
+    STOP_GAMESTATE(&this->state);
+    SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
 }
 
 // "Translation" (Actual name)
@@ -501,7 +494,7 @@ static SceneSelectEntry sScenes[] = {
     { "X 1:SPOT00", MapSelect_LoadGame, ENTRANCE(CUTSCENE, 0) },
 
     // "Title" (Title Screen)
-    { "title", (void*)MapSelect_LoadTitle, 0 },
+    { "title", (void*)MapSelect_LoadConsoleLogo, 0 },
 };
 
 void MapSelect_UpdateMenu(MapSelectState* this) {
@@ -514,13 +507,13 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
 
     if (this->verticalInputAccumulator == 0) {
         if (CHECK_BTN_ALL(controller1->press.button, BTN_A) || CHECK_BTN_ALL(controller1->press.button, BTN_START)) {
-            for (i = 0; i < ARRAY_COUNT(gSaveContext.unk_3EC0); i++) {
-                gSaveContext.unk_3DD0[i] = 0;
-                gSaveContext.unk_3DE0[i] = 0;
-                gSaveContext.unk_3E18[i] = 0;
-                gSaveContext.unk_3E50[i] = 0;
-                gSaveContext.unk_3E88[i] = 0;
-                gSaveContext.unk_3EC0[i] = 0;
+            for (i = 0; i < TIMER_ID_MAX; i++) {
+                gSaveContext.timerStates[i] = TIMER_STATE_OFF;
+                gSaveContext.timerCurTimes[i] = SECONDS_TO_TIMER(0);
+                gSaveContext.timerTimeLimits[i] = SECONDS_TO_TIMER(0);
+                gSaveContext.timerStartOsTimes[i] = 0;
+                gSaveContext.timerStopTimes[i] = SECONDS_TO_TIMER(0);
+                gSaveContext.timerPausedOsTimes[i] = 0;
             }
             gSaveContext.minigameState = 0;
 

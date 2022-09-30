@@ -79,7 +79,7 @@ static AnimationInfo sAnimationInfo[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 77, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_MAD_SCRUB, ICHAIN_CONTINUE),
     ICHAIN_F32(gravity, 0, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2600, ICHAIN_STOP),
 };
@@ -271,7 +271,8 @@ void func_80A2C2E0(EnSyatekiDekunuts* this, PlayState* play) {
 void func_80A2C33C(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if ((gSaveContext.unk_3DE0[1] <= 0) || (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING)) {
+    if ((gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] <= SECONDS_TO_TIMER(0)) ||
+        (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING)) {
         func_80A2C3AC(this);
     }
 
@@ -376,7 +377,7 @@ void EnSyatekiDekunuts_Update(Actor* thisx, PlayState* play) {
     if ((this->actionFunc != func_80A2BF18) && (this->unk_1D8 < this->unk_1EE) && (this->unk_1D8 > 10)) {
         if ((this->collider.base.acFlags & AC_HIT) && (this->unk_1E2 == 1)) {
             if (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) == 1) {
-                func_801A3098(NA_BGM_GET_ITEM | 0x900);
+                Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
             } else {
                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
             }

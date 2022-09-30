@@ -186,7 +186,7 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosNormalSkel, &gWolfosWaitingAnim, this->jointTable,
                        this->morphTable, WOLFOS_NORMAL_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.hintId = 0x4C;
+    this->actor.hintId = TATL_HINT_ID_WOLFOS;
 
     func_80A201CC(this);
 }
@@ -424,7 +424,7 @@ void EnSyatekiWf_Update(Actor* thisx, PlayState* play2) {
         this->unk_34C.base.acFlags &= ~AC_HIT;
         this->actor.colChkInfo.health -= 2;
         if (this->actor.colChkInfo.health == 0) {
-            func_801A3098(NA_BGM_GET_ITEM | 0x900);
+            Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
             func_80A20858(this, play);
         } else {
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);
