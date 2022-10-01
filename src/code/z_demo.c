@@ -1497,7 +1497,7 @@ void func_800EDBE0(PlayState* play) {
         sp24 = play->loadedScene;
         if ((sp24->titleTextId != 0) && gSaveContext.showTitleCard) {
             if ((Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entrance) +
-                                             ((void)0, gSaveContext.sceneSetupIndex)) &
+                                             ((void)0, gSaveContext.sceneLayer)) &
                  0x4000) != 0) {
                 func_80151A68(play, sp24->titleTextId);
             }
@@ -1608,13 +1608,13 @@ void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, PlayState* play, s32 ac
     actor->shape.rot.y = actor->world.rot.y;
 }
 
-s32 Cutscene_GetSceneSetupIndex(PlayState* play) {
-    s32 sceneSetupIndex = 0;
+s32 Cutscene_GetSceneLayer(PlayState* play) {
+    s32 sceneLayer = 0;
 
-    if (gSaveContext.sceneSetupIndex > 0) {
-        sceneSetupIndex = gSaveContext.sceneSetupIndex;
+    if (gSaveContext.sceneLayer > 0) {
+        sceneLayer = gSaveContext.sceneLayer;
     }
-    return sceneSetupIndex;
+    return sceneLayer;
 }
 
 s32 Cutscene_GetActorActionIndex(PlayState* play, u16 actorActionCmd) {

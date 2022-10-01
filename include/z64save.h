@@ -304,7 +304,7 @@ typedef struct SaveContext {
     /* 0x3CA6 */ u8 unk_3CA6;
     /* 0x3CA7 */ u8 unk_3CA7;                           // "day_night_flag"
     /* 0x3CA8 */ s32 gameMode;                          // "mode"
-    /* 0x3CAC */ s32 sceneSetupIndex;                   // "counter"
+    /* 0x3CAC */ s32 sceneLayer;                        // "counter"
     /* 0x3CB0 */ s32 respawnFlag;                       // "restart_flag"
     /* 0x3CB4 */ RespawnData respawn[RESPAWN_MODE_MAX]; // "restart_data"
     /* 0x3DB4 */ f32 entranceSpeed;                     // "player_wipe_speedF"
