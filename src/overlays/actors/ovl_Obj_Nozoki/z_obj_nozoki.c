@@ -71,7 +71,7 @@ void ObjNozoki_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.shape.rot.z = 0;
     this->unk_15F = this->dyna.actor.cutscene;
 
-    if (play->sceneNum == SCENE_AYASHIISHOP) {
+    if (play->sceneId == SCENE_AYASHIISHOP) {
         this->unk_15C = 4;
         ObjNozoki_SetupAction(this, func_80BA3230);
         this->dyna.actor.colChkInfo.cylRadius = -40;

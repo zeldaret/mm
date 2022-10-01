@@ -356,7 +356,7 @@ void func_8095AE60(EnOwl* this, PlayState* play) {
 void func_8095AEC0(EnOwl* this, PlayState* play) {
     func_8095A920(this, play);
     if (func_8095A978(this, play, 0x7D0, 360.0f, 200.0f)) {
-        func_801A3098(NA_BGM_OWL);
+        Audio_PlayFanfare(NA_BGM_OWL);
         this->actionFunc = func_8095AE60;
     }
 }
@@ -385,7 +385,7 @@ void func_8095AF2C(EnOwl* this, PlayState* play) {
 void func_8095AFEC(EnOwl* this, PlayState* play) {
     func_8095A920(this, play);
     if (func_8095A978(this, play, 0xBF6, 200.0f, 100.0f)) {
-        func_801A3098(NA_BGM_OWL);
+        Audio_PlayFanfare(NA_BGM_OWL);
         this->actionFunc = func_8095AF2C;
         this->unk_406 = 0;
         this->actionFlags |= 0x40;
@@ -500,7 +500,7 @@ void func_8095B574(EnOwl* this, PlayState* play) {
     func_8095A920(this, play);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_8095BA84;
-        func_801A3098(NA_BGM_OWL);
+        Audio_PlayFanfare(NA_BGM_OWL);
         this->actionFlags |= 0x40;
         this->unk_406 = 2;
     } else if (this->actor.xzDistToPlayer < 200.0f) {
@@ -713,7 +713,7 @@ void func_8095BE0C(EnOwl* this, PlayState* play) {
     func_8095A920(this, play);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_8095BA84;
-        func_801A3098(NA_BGM_OWL);
+        Audio_PlayFanfare(NA_BGM_OWL);
         this->unk_406 = 1;
         this->actionFlags |= 0x40;
     } else if (this->actor.textId == 0xBF0) {

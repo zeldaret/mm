@@ -878,7 +878,7 @@ void EnMaYto_SetupAfterMilkRunInit(EnMaYto* this) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
         EnMaYto_SetFaceExpression(this, 3, 1);
     } else {
-        func_801A3098(NA_BGM_FAILURE_1);
+        Audio_PlayFanfare(NA_BGM_FAILURE_1);
         EnMaYto_SetFaceExpression(this, 5, 2);
     }
     this->actionFunc = EnMaYto_AfterMilkRunInit;

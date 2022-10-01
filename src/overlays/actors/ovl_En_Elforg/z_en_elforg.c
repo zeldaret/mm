@@ -493,7 +493,7 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
                 // You found a Stray Fairy!
                 Message_StartTextbox(play, 0x11, NULL);
                 if (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] >= 15) {
-                    func_801A3098(NA_BGM_GET_ITEM | 0x900);
+                    Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
                 }
             }
         }

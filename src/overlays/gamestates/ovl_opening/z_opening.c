@@ -17,7 +17,7 @@ void TitleSetup_SetupTitleScreen(TitleSetupState* this) {
 
     gSaveContext.save.entrance = sOpeningEntrances[D_801BB12C];
     gSaveContext.nextCutsceneIndex = gSaveContext.save.cutscene = sOpeningCutscenes[D_801BB12C];
-    gSaveContext.sceneSetupIndex = 0;
+    gSaveContext.sceneLayer = 0;
 
     gSaveContext.save.time = CLOCK_TIME(8, 0);
     gSaveContext.save.day = 1;

@@ -220,7 +220,7 @@ void EnGiant_Init(Actor* thisx, PlayState* play) {
 
     this->sfxId = 0xFFFF;
     if (GIANT_TYPE_IS_CHAMBER_OR_ENDING(type)) {
-        switch (gSaveContext.sceneSetupIndex) {
+        switch (gSaveContext.sceneLayer) {
             case 0:
             case 10:
                 this->sfxId = NA_SE_EV_KYOJIN_GRATITUDE2 - SFX_FLAG;

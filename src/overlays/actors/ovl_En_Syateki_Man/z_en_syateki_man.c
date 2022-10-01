@@ -179,7 +179,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
 
     this->actor.targetMode = 1;
     Actor_SetScale(&this->actor, 0.01f);
-    if (play->sceneNum == SCENE_SYATEKI_MORI) {
+    if (play->sceneId == SCENE_SYATEKI_MORI) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gBurlyGuySkel, &gSwampShootingGalleryManHeadScratchLoopAnim,
                            this->jointTable, this->morphTable, BURLY_GUY_LIMB_MAX);
     } else {
@@ -205,7 +205,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     this->eyeIndex = 0;
     this->blinkTimer = 0;
 
-    if (play->sceneNum == SCENE_SYATEKI_MORI) {
+    if (play->sceneId == SCENE_SYATEKI_MORI) {
         this->path = path;
         EnSyatekiMan_Swamp_SpawnTargetActors(this, play, sSwampTargetActorLists[this->swampTargetActorListIndex],
                                              actorListLength);
@@ -247,9 +247,9 @@ s32 EnSyatekiMan_MovePlayerToPos(PlayState* play, Vec3f pos) {
 }
 
 void EnSyatekiMan_SetupIdle(EnSyatekiMan* this, PlayState* play) {
-    if (play->sceneNum == SCENE_SYATEKI_MORI) {
+    if (play->sceneId == SCENE_SYATEKI_MORI) {
         this->actionFunc = EnSyatekiMan_Swamp_Idle;
-    } else if (play->sceneNum == SCENE_SYATEKI_MIZU) {
+    } else if (play->sceneId == SCENE_SYATEKI_MIZU) {
         this->actionFunc = EnSyatekiMan_Town_Idle;
     }
 }
@@ -395,7 +395,7 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
                 func_80123F2C(play, 80);
                 this->shootingGameState = SG_GAME_STATE_RUNNING;
                 this->actionFunc = EnSyatekiMan_Swamp_StartGame;
-                func_801A2BB8(NA_BGM_MINI_GAME_2);
+                func_801A2BB8(NA_BGM_TIMED_MINI_GAME);
                 break;
 
             case 0xA32: // You have to try harder!
@@ -753,7 +753,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 func_80112AFC(play);
                 func_80123F2C(play, 0x63);
                 this->shootingGameState = SG_GAME_STATE_RUNNING;
-                func_801A2BB8(NA_BGM_MINI_GAME_2);
+                func_801A2BB8(NA_BGM_TIMED_MINI_GAME);
                 this->actionFunc = EnSyatekiMan_Town_StartGame;
                 break;
 
@@ -1349,7 +1349,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
             func_801A2C20();
             this->actionFunc = EnSyatekiMan_Town_EndGame;
             if (this->score == 50) {
-                func_801A3098(NA_BGM_GET_ITEM | 0x900);
+                Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
                 func_8011B4E0(play, 1);
             }
         }
@@ -1447,7 +1447,7 @@ void EnSyatekiMan_Update(Actor* thisx, PlayState* play) {
 s32 EnSyatekiMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnSyatekiMan* this = THIS;
 
-    if ((play->sceneNum == SCENE_SYATEKI_MIZU) && (limbIndex == BURLY_GUY_LIMB_HEAD)) {
+    if ((play->sceneId == SCENE_SYATEKI_MIZU) && (limbIndex == BURLY_GUY_LIMB_HEAD)) {
         *dList = gTownShootingGalleryManHeadDL;
     }
 
@@ -1481,7 +1481,7 @@ void EnSyatekiMan_Draw(Actor* thisx, PlayState* play) {
     EnSyatekiMan* this = THIS;
     s32 pad;
 
-    if (play->sceneNum == SCENE_SYATEKI_MIZU) {
+    if (play->sceneId == SCENE_SYATEKI_MIZU) {
         sEyeTextures[0] = gTownShootingGalleryManEyeOpenTex;
         sEyeTextures[1] = gTownShootingGalleryManEyeClosedTex;
         sEyeTextures[2] = gTownShootingGalleryManEyeClosedTex;

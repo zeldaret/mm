@@ -42,8 +42,8 @@ typedef enum {
     /* 0x07 */ SCHEDULE_CMD_ID_NOP,                  // No-Op
     /* 0x08 */ SCHEDULE_CMD_ID_CHECK_MISC_S,         // Special check based on items or masks and branches if check passes, short range branch
     /* 0x09 */ SCHEDULE_CMD_ID_RET_VAL_S,            // Ends script and returns byte value
-    /* 0x0A */ SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_S, // Checks if the current scene is not SceneNum and branches if so, short range branch
-    /* 0x0B */ SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_L, // Checks if the current scene is not SceneNum and branches if so, long range branch
+    /* 0x0A */ SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_S, // Checks if the current scene is not SceneId and branches if so, short range branch
+    /* 0x0B */ SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_L, // Checks if the current scene is not SceneId and branches if so, long range branch
     /* 0x0C */ SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_S,   // Checks if the current day is not Day and branches if so, short range branch
     /* 0x0D */ SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_L,   // Checks if the current day is not Day and branches if so, long range branch
     /* 0x0E */ SCHEDULE_CMD_ID_RET_TIME,             // Returns 2 time values
@@ -130,15 +130,15 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ ScheduleCmdBase base;
-    /* 0x1 */ u8 sceneH;
-    /* 0x2 */ u8 sceneL;
+    /* 0x1 */ u8 sceneIdH;
+    /* 0x2 */ u8 sceneIdL;
     /* 0x3 */ s8 offset;
 } ScheduleCmdCheckNotInSceneS; // size = 0x4
 
 typedef struct {
     /* 0x0 */ ScheduleCmdBase base;
-    /* 0x1 */ u8 sceneH;
-    /* 0x2 */ u8 sceneL;
+    /* 0x1 */ u8 sceneIdH;
+    /* 0x2 */ u8 sceneIdL;
     /* 0x3 */ u8 offsetH;
     /* 0x4 */ u8 offsetL;
 } ScheduleCmdCheckNotInSceneL; // size = 0x5

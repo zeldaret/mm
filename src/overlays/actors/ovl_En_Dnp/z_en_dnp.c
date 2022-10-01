@@ -250,7 +250,7 @@ void func_80B3D11C(EnDnp* this, PlayState* play) {
     s32 temp_v0;
     s32 val;
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40) && (play->sceneNum == SCENE_MITURIN) &&
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40) && (play->sceneId == SCENE_MITURIN) &&
         (play->csCtx.currentCsIndex == 0)) {
         this->unk_322 |= 0x20;
         SET_WEEKEVENTREG(WEEKEVENTREG_29_40);
@@ -373,7 +373,7 @@ void EnDnp_Init(Actor* thisx, PlayState* play) {
         Actor_SetScale(&this->actor, 0.0085f);
         SubS_UpdateFlags(&this->unk_322, 3, 7);
         this->unk_322 |= 0x400;
-        if ((play->sceneNum == SCENE_MITURIN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40)) {
+        if ((play->sceneId == SCENE_MITURIN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40)) {
             this->unk_322 |= 0x20;
             func_80B3CC38(this, 1);
         }
