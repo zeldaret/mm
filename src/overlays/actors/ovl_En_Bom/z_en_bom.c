@@ -345,7 +345,7 @@ void func_808715B8(EnBom* this, PlayState* play) {
 
     this->collider2.elements->dim.worldSphere.radius = D_80872E8C[this->isPowderKeg];
     if (this->timer == 7) {
-        this->collider2.base.atFlags &= ~OC1_TYPE_1;
+        this->collider2.base.atFlags &= ~AT_TYPE_ENEMY;
     }
 
     if (this->actor.params == BOMB_EXPLOSION) {
