@@ -670,7 +670,7 @@ void DmStk_PlaySfxForPlayingWithFairiesCutscene(DmStk* this, PlayState* play) {
 void DmStk_PlaySfxForEndingCutsceneFirstPart(DmStk* this, PlayState* play) {
     switch (play->csCtx.frames) {
         case 5:
-            func_801A4A28(12);
+            Audio_PlayAmbience(AMBIENCE_ID_0C);
             break;
 
         case 660:
@@ -688,7 +688,7 @@ void DmStk_PlaySfxForEndingCutsceneSecondPart(DmStk* this, PlayState* play) {
 
     switch (play->csCtx.frames) {
         case 5:
-            func_801A4A28(12);
+            Audio_PlayAmbience(AMBIENCE_ID_0C);
             break;
 
         case 45:
@@ -917,25 +917,25 @@ void DmStk_PlaySfxForMoonWarpCutsceneVersion2(DmStk* this, PlayState* play) {
  */
 void DmStk_PlaySfxForCutscenes(DmStk* this, PlayState* play) {
     if (play->csCtx.state != 0) {
-        switch (play->sceneNum) {
+        switch (play->sceneId) {
             case SCENE_LOST_WOODS:
-                if (gSaveContext.sceneSetupIndex == 1) {
+                if (gSaveContext.sceneLayer == 1) {
                     DmStk_PlaySfxForIntroCutsceneFirstPart(this, play);
-                } else if (gSaveContext.sceneSetupIndex == 0) {
+                } else if (gSaveContext.sceneLayer == 0) {
                     DmStk_PlaySfxForIntroCutsceneSecondPart(this, play);
-                } else if ((gSaveContext.sceneSetupIndex == 2) && (play->csCtx.currentCsIndex == 0)) {
+                } else if ((gSaveContext.sceneLayer == 2) && (play->csCtx.currentCsIndex == 0)) {
                     DmStk_PlaySfxForObtainingMajorasMaskCutscene(this, play);
                 }
                 break;
 
             case SCENE_CLOCKTOWER:
-                if (gSaveContext.sceneSetupIndex == 1) {
+                if (gSaveContext.sceneLayer == 1) {
                     DmStk_PlaySfxForTitleCutscene(this, play);
                 }
                 break;
 
             case SCENE_OPENINGDAN:
-                if (gSaveContext.sceneSetupIndex == 0) {
+                if (gSaveContext.sceneLayer == 0) {
                     if (play->csCtx.currentCsIndex == 0) {
                         DmStk_PlaySfxForCurseCutsceneFirstPart(this, play);
                     } else if (play->csCtx.currentCsIndex == 1) {
@@ -945,7 +945,7 @@ void DmStk_PlaySfxForCutscenes(DmStk* this, PlayState* play) {
                 break;
 
             case SCENE_OKUJOU:
-                if (gSaveContext.sceneSetupIndex == 0) {
+                if (gSaveContext.sceneLayer == 0) {
                     if (play->csCtx.currentCsIndex == 0) {
                         DmStk_PlaySfxForClockTowerIntroCutsceneVersion1(this, play);
                     } else if (play->csCtx.currentCsIndex == 1) {
@@ -955,7 +955,7 @@ void DmStk_PlaySfxForCutscenes(DmStk* this, PlayState* play) {
                     } else if (play->csCtx.currentCsIndex == 3) {
                         DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(this, play);
                     }
-                } else if (gSaveContext.sceneSetupIndex == 2) {
+                } else if (gSaveContext.sceneLayer == 2) {
                     if (play->csCtx.currentCsIndex == 0) {
                         DmStk_PlaySfxForMoonWarpCutsceneVersion1(this, play);
                     } else if (play->csCtx.currentCsIndex == 1) {
@@ -965,13 +965,13 @@ void DmStk_PlaySfxForCutscenes(DmStk* this, PlayState* play) {
                 break;
 
             case SCENE_00KEIKOKU:
-                if (gSaveContext.sceneSetupIndex == 3) {
+                if (gSaveContext.sceneLayer == 3) {
                     if (play->csCtx.currentCsIndex == 0) {
                         DmStk_PlaySfxForShiveringInRainCutscene(this, play);
                     } else if (play->csCtx.currentCsIndex == 2) {
                         DmStk_PlaySfxForPlayingWithFairiesCutscene(this, play);
                     }
-                } else if (gSaveContext.sceneSetupIndex == 7) {
+                } else if (gSaveContext.sceneLayer == 7) {
                     if (play->csCtx.currentCsIndex == 0) {
                         DmStk_PlaySfxForEndingCutsceneFirstPart(this, play);
                     } else if (play->csCtx.currentCsIndex == 1) {
@@ -1028,13 +1028,13 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
         this->fogG = play->lightCtx.unk8;
         this->fogB = play->lightCtx.unk9;
 
-        if ((play->sceneNum == SCENE_LOST_WOODS) && (gSaveContext.sceneSetupIndex == 1)) {
+        if ((play->sceneId == SCENE_LOST_WOODS) && (gSaveContext.sceneLayer == 1)) {
             this->alpha = 0;
             this->fogN = 0;
             this->fogF = 1000;
             this->fogScale = 1.0f;
             this->actionFunc = DmStk_DoNothing;
-        } else if (play->sceneNum == SCENE_OKUJOU) {
+        } else if (play->sceneId == SCENE_OKUJOU) {
             this->alpha = 255;
             this->fogN = 996;
             this->fogF = 1000;
@@ -1044,7 +1044,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
             Collider_InitCylinder(play, &this->collider);
 
             if (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_ROOFTOP, 0)) {
-                if (gSaveContext.sceneSetupIndex == 0) {
+                if (gSaveContext.sceneLayer == 0) {
                     if (gSaveContext.timerStates[TIMER_ID_MOON_CRASH] == TIMER_STATE_OFF) {
                         // Starts a 5 minute (300 second) timer until the moon falls.
                         Interface_StartTimer(TIMER_ID_MOON_CRASH, 300);
@@ -1060,7 +1060,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
                         this->actionFunc = DmStk_ClockTower_StartIntroCutsceneVersion2;
                     }
 
-                } else if (gSaveContext.sceneSetupIndex == 3) {
+                } else if (gSaveContext.sceneLayer == 3) {
                     this->animIndex = SK_ANIM_FLOATING_ARMS_CROSSED;
                     if (gSaveContext.timerStates[TIMER_ID_MOON_CRASH] == TIMER_STATE_OFF) {
                         // This code is called when the Giants fail to stop the moon.
@@ -1088,7 +1088,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
             Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
             CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-        } else if ((play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 0)) {
+        } else if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 0)) {
             if (!(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
                 Actor_MarkForDeath(&this->actor);
             }
@@ -1101,7 +1101,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
             this->animIndex = SK_ANIM_BENT_OVER_HEAD_TWITCH;
             this->actionFunc = DmStk_WaitForTelescope;
         } else {
-            if ((play->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
+            if ((play->sceneId == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
                 Actor_MarkForDeath(&this->actor);
             }
 
@@ -1127,8 +1127,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.01f);
 
-    if ((play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 3) &&
-        (play->csCtx.currentCsIndex > 0)) {
+    if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 3) && (play->csCtx.currentCsIndex > 0)) {
         play->envCtx.unk_17 = 15;
         play->envCtx.unk_18 = 15;
     }
@@ -1316,7 +1315,7 @@ void DmStk_UpdateCutscenes(DmStk* this, PlayState* play) {
         if (play->csCtx.frames == play->csCtx.actorActions[actorActionIndex]->startFrame) {
             if (this->csAction != play->csCtx.actorActions[actorActionIndex]->action) {
                 this->csAction = play->csCtx.actorActions[actorActionIndex]->action;
-                if (play->sceneNum == SCENE_CLOCKTOWER) {
+                if (play->sceneId == SCENE_CLOCKTOWER) {
                     this->handType = SK_HAND_TYPE_HOLDING_FLUTE;
                 } else {
                     this->handType = SK_HAND_TYPE_DEFAULT;
@@ -1685,7 +1684,7 @@ void DmStk_UpdateCutscenes(DmStk* this, PlayState* play) {
         this->handType = SK_HAND_TYPE_HOLDING_MAJORAS_MASK;
     } else if (((this->animIndex >= SK_ANIM_HUDDLE_WITH_FAIRIES) && (this->animIndex <= SK_ANIM_DRAW)) ||
                ((this->animIndex >= SK_ANIM_PLAY_FLUTE) && (this->animIndex <= SK_ANIM_CARTWHEEL)) ||
-               ((play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 7))) {
+               ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 7))) {
         this->maskType = SK_MASK_TYPE_NO_MASK;
         if ((this->animIndex == SK_ANIM_HOLD_UP_MASK_START) || (this->animIndex == SK_ANIM_HOLD_UP_MASK_LOOP)) {
             this->handType = SK_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE;
@@ -1777,7 +1776,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
 
         this->actionFunc(this, play);
 
-        if (play->sceneNum == SCENE_OKUJOU) {
+        if (play->sceneId == SCENE_OKUJOU) {
             DmStk_UpdateCollision(this, play);
         }
 
@@ -1824,8 +1823,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    if ((play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 3) &&
-        (play->csCtx.currentCsIndex > 0)) {
+    if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 3) && (play->csCtx.currentCsIndex > 0)) {
         play->envCtx.unk_17 = 15;
         play->envCtx.unk_18 = 15;
     }
@@ -1888,7 +1886,7 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
                 break;
 
             case SK_MASK_TYPE_NORMAL:
-                if ((play->sceneNum == SCENE_LOST_WOODS) && (gSaveContext.sceneSetupIndex == 1) &&
+                if ((play->sceneId == SCENE_LOST_WOODS) && (gSaveContext.sceneLayer == 1) &&
                     (play->csCtx.frames < 1400)) {
                     if (this->fogN == this->fogF) {
                         this->fogF = this->fogN;
@@ -1950,7 +1948,7 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
             case SK_HAND_TYPE_HOLDING_OCARINA:
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaHoldingRightHand);
 
-                if ((play->sceneNum == SCENE_LOST_WOODS) && (gSaveContext.sceneSetupIndex == 1)) {
+                if ((play->sceneId == SCENE_LOST_WOODS) && (gSaveContext.sceneLayer == 1)) {
                     gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaOfTimeDL);
                 }
                 break;
@@ -1988,7 +1986,7 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
                 break;
 
             case SK_HAND_TYPE_HOLDING_OCARINA:
-                if ((play->sceneNum != SCENE_LOST_WOODS) || (gSaveContext.sceneSetupIndex != 1)) {
+                if ((play->sceneId != SCENE_LOST_WOODS) || (gSaveContext.sceneLayer != 1)) {
                     gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaOfTimeDL);
                 }
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidTwoFingersExtendedLeftHand);

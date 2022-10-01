@@ -752,7 +752,7 @@ void func_80AD4DB4(EnTrt2* this, PlayState* play) {
         return;
     }
 
-    if ((play->sceneNum == SCENE_20SICHITAI) || (play->sceneNum == SCENE_20SICHITAI2)) {
+    if ((play->sceneId == SCENE_20SICHITAI) || (play->sceneId == SCENE_20SICHITAI2)) {
         if (gSaveContext.save.day == 2) {
             if (!(gSaveContext.save.weekEventReg[15] & 0x80)) {
                 gSaveContext.save.weekEventReg[15] |= 0x80;
@@ -790,7 +790,7 @@ void func_80AD4FE4(EnTrt2* this, PlayState* play) {
     D_80AD5910[this->unk_3B2](this, play);
     Actor_MoveWithGravity(&this->actor);
 
-    if (play->sceneNum != SCENE_20SICHITAI) {
+    if (play->sceneId != SCENE_20SICHITAI) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, 5);
     }
 

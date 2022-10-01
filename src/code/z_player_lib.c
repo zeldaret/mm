@@ -78,7 +78,7 @@ void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2);
 s32 func_801226E0(PlayState* play, s32 arg1) {
     if (arg1 == 0) {
         Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_DOWN, 0xBFF);
-        if (play->sceneNum == SCENE_KAKUSIANA) {
+        if (play->sceneId == SCENE_KAKUSIANA) {
             return 1;
         }
     }
