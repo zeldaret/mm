@@ -507,7 +507,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
                 gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
                 func_801091F0(play);
             } else {
-                func_8081E7D8(play);
+                KaleidoScope_DrawWorldMap(play);
             }
         }
 
@@ -623,7 +623,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    func_8081E7D8(play);
+                    KaleidoScope_DrawWorldMap(play);
                 }
                 break;
 
@@ -1134,7 +1134,7 @@ void KaleidoScope_DrawOwlWarpMapPage(PlayState* play) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_8081E7D8(play);
+    KaleidoScope_DrawWorldMap(play);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -2655,7 +2655,7 @@ void KaleidoScope_Update(PlayState* play) {
                         } else {
                             play_sound(NA_SE_SY_PIECE_OF_HEART);
                             Play_SaveCycleSceneFlags(&play->state);
-                            gSaveContext.save.playerData.savedSceneNum = play->sceneNum;
+                            gSaveContext.save.playerData.savedSceneId = play->sceneId;
                             func_8014546C(sramCtx);
                             if (gSaveContext.unk_3F3F == 0) {
                                 pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_5;
@@ -2758,8 +2758,8 @@ void KaleidoScope_Update(PlayState* play) {
                             STOP_GAMESTATE(&play->state);
                             SET_NEXT_GAMESTATE(&play->state, TitleSetup_Init, sizeof(TitleSetupState));
                             func_801A4058(0x14);
-                            gSaveContext.seqIndex = 0xFF;
-                            gSaveContext.nightSeqIndex = 0xFF;
+                            gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+                            gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                         }
                     }
                     break;
@@ -2916,7 +2916,7 @@ void KaleidoScope_Update(PlayState* play) {
                     play_sound(NA_SE_SY_PIECE_OF_HEART);
                     pauseCtx->promptChoice = PAUSE_PROMPT_YES;
                     Play_SaveCycleSceneFlags(&play->state);
-                    gSaveContext.save.playerData.savedSceneNum = play->sceneNum;
+                    gSaveContext.save.playerData.savedSceneId = play->sceneId;
                     gSaveContext.save.playerData.health = 0x30;
                     func_8014546C(sramCtx);
                     if (gSaveContext.unk_3F3F == 0) {
@@ -2990,7 +2990,7 @@ void KaleidoScope_Update(PlayState* play) {
                         gSaveContext.respawnFlag = -2;
                         gSaveContext.nextTransitionType = TRANS_TYPE_02;
                         gSaveContext.save.playerData.health = 0x30;
-                        audio_setBGM(0xA);
+                        Audio_SetSpec(0xA);
                         gSaveContext.healthAccumulator = 0;
                         gSaveContext.magicState = MAGIC_STATE_IDLE;
                         gSaveContext.magicFlag = 0;

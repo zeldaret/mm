@@ -130,7 +130,7 @@ void func_80821A04(PlayState* play);
 // Map
 void KaleidoScope_DrawDungeonMap(PlayState*);
 void KaleidoScope_UpdateDungeonCursor(PlayState* play);
-void func_8081E7D8(PlayState* play);
+void KaleidoScope_DrawWorldMap(PlayState* play);
 void KaleidoScope_UpdateWorldMapCursor(PlayState* play);
 
 // Collect

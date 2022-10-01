@@ -519,7 +519,7 @@ void Inventory_ChangeUpgrade(s16 upgrade, u32 value) {
     gSaveContext.save.inventory.upgrades = upgrades;
 }
 
-s32 Inventory_IsMapVisible(s16 sceneNum) {
+s32 Inventory_IsMapVisible(s16 sceneId) {
     s16 index = 0;
 
     /**
@@ -527,30 +527,30 @@ s32 Inventory_IsMapVisible(s16 sceneNum) {
      * increment to the next index of scenesVisible so that every scene gets a unique flag in scenesVisible,
      * 224 bits were allocated to this although there are only 112 scenes
      */
-    if (sceneNum >= 0x20) {
-        if (sceneNum < 0x40) {
+    if (sceneId >= 0x20) {
+        if (sceneId < 0x40) {
             index = 1;
-        } else if (sceneNum < 0x60) {
+        } else if (sceneId < 0x60) {
             index = 2;
-        } else if (sceneNum < 0x80) {
+        } else if (sceneId < 0x80) {
             index = 3;
-        } else if (sceneNum < 0xA0) {
+        } else if (sceneId < 0xA0) {
             index = 4;
-        } else if (sceneNum < 0xC0) {
+        } else if (sceneId < 0xC0) {
             index = 5;
-        } else if (sceneNum < 0xE0) {
+        } else if (sceneId < 0xE0) {
             index = 6;
         }
     }
 
-    if (gSaveContext.save.scenesVisible[index] & gBitFlags[sceneNum - (index << 5)]) {
+    if (gSaveContext.save.scenesVisible[index] & gBitFlags[sceneId - (index << 5)]) {
         return true;
     }
 
     return false;
 }
 
-static u16 sScenesPerTingleMap[TINGLE_MAP_MAX][12] = {
+static u16 sSceneIdsPerTingleMap[TINGLE_MAP_MAX][12] = {
     {
         // TINGLE_MAP_CLOCK_TOWN
         SCENE_00KEIKOKU,
@@ -627,11 +627,11 @@ static u16 sScenesPerTingleMap[TINGLE_MAP_MAX][12] = {
 void Inventory_SetWorldMapCloudVisibility(s16 tingleIndex) {
     s16 i = 0;
     s16 index = 0;
-    u16(*tingleMapSceneIndices)[] = &sScenesPerTingleMap[tingleIndex];
+    u16(*tingleMapSceneIds)[] = &sSceneIdsPerTingleMap[tingleIndex];
 
     if ((tingleIndex >= 0) && (tingleIndex < TINGLE_MAP_MAX)) {
         while (true) {
-            if ((*tingleMapSceneIndices)[i] == 0xFFFF) {
+            if ((*tingleMapSceneIds)[i] == 0xFFFF) {
                 break;
             }
 
@@ -640,38 +640,38 @@ void Inventory_SetWorldMapCloudVisibility(s16 tingleIndex) {
              * increment to the next index of scenesVisible so that every scene gets a unique flag in scenesVisible,
              * 224 bits were allocated to this although there are only 112 scenes
              */
-            if (((s16)(*tingleMapSceneIndices)[i]) < 0x20) {
+            if (((s16)(*tingleMapSceneIds)[i]) < 0x20) {
                 index = 0;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x40) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0x40) {
                 index = 1;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x60) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0x60) {
                 index = 2;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x80) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0x80) {
                 index = 3;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xA0) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0xA0) {
                 index = 4;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xC0) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0xC0) {
                 index = 5;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xE0) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0xE0) {
                 index = 6;
             }
 
             gSaveContext.save.scenesVisible[index] =
-                gSaveContext.save.scenesVisible[index] | gBitFlags[(s16)(*tingleMapSceneIndices)[i] - (index << 5)];
+                gSaveContext.save.scenesVisible[index] | gBitFlags[(s16)(*tingleMapSceneIds)[i] - (index << 5)];
             i++;
         }
 
-        if (*tingleMapSceneIndices == sScenesPerTingleMap[TINGLE_MAP_CLOCK_TOWN]) {
+        if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_CLOCK_TOWN]) {
             gSaveContext.save.worldMapCloudVisibility |= 3;
-        } else if (*tingleMapSceneIndices == sScenesPerTingleMap[TINGLE_MAP_WOODFALL]) {
+        } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_WOODFALL]) {
             gSaveContext.save.worldMapCloudVisibility |= 0x1C;
-        } else if (*tingleMapSceneIndices == sScenesPerTingleMap[TINGLE_MAP_SNOWHEAD]) {
+        } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_SNOWHEAD]) {
             gSaveContext.save.worldMapCloudVisibility |= 0xE0;
-        } else if (*tingleMapSceneIndices == sScenesPerTingleMap[TINGLE_MAP_ROMANI_RANCH]) {
+        } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_ROMANI_RANCH]) {
             gSaveContext.save.worldMapCloudVisibility |= 0x100;
-        } else if (*tingleMapSceneIndices == sScenesPerTingleMap[TINGLE_MAP_GREAT_BAY]) {
+        } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_GREAT_BAY]) {
             gSaveContext.save.worldMapCloudVisibility |= 0x1E00;
-        } else if (*tingleMapSceneIndices == sScenesPerTingleMap[TINGLE_MAP_STONE_TOWER]) {
+        } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_STONE_TOWER]) {
             gSaveContext.save.worldMapCloudVisibility |= 0x6000;
         }
     }

@@ -442,14 +442,14 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
     }
 
     // QUEST_SKULL_TOKEN never properly set
-    if (CHECK_QUEST_ITEM(QUEST_SKULL_TOKEN) && ((play->sceneNum == 0x27) || (play->sceneNum == 0x28))) {
+    if (CHECK_QUEST_ITEM(QUEST_SKULL_TOKEN) && ((play->sceneId == 0x27) || (play->sceneId == 0x28))) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
                           PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
         sp1B4[0] = sp1B4[1] = 0;
-        sp1B4[2] = Inventory_GetSkullTokenCount(play->sceneNum);
+        sp1B4[2] = Inventory_GetSkullTokenCount(play->sceneId);
 
         while (sp1B4[2] >= 100) {
             sp1B4[0]++;
@@ -466,7 +466,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
         for (var_s3 = 0, i = 0; var_s3 < 2; var_s3 += 1) {
             if (var_s3 == 0) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, pauseCtx->alpha);
-            } else if (Inventory_GetSkullTokenCount(play->sceneNum) == 100) {
+            } else if (Inventory_GetSkullTokenCount(play->sceneId) == 100) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 200, 50, 50, pauseCtx->alpha);
             } else {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);

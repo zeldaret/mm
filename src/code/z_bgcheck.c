@@ -47,7 +47,7 @@ u8 D_801B46C0[] = {
     /* 0x0E */ 1
 };
 
-s16 sSmallMemScenes[] = {
+s16 sSmallMemSceneIds[] = {
     SCENE_F01,
 };
 
@@ -1463,10 +1463,10 @@ u32 BgCheck_InitStaticLookup(CollisionContext* colCtx, PlayState* play, StaticLo
  * Returns whether the current scene should reserve less memory for it's collision lookup
  */
 s32 BgCheck_IsSmallMemScene(PlayState* play) {
-    s16* i;
+    s16* sceneId;
 
-    for (i = sSmallMemScenes; i < sSmallMemScenes + ARRAY_COUNT(sSmallMemScenes); i++) {
-        if (play->sceneNum == *i) {
+    for (sceneId = sSmallMemSceneIds; sceneId < sSmallMemSceneIds + ARRAY_COUNT(sSmallMemSceneIds); sceneId++) {
+        if (play->sceneId == *sceneId) {
             return true;
         }
     }
@@ -1505,7 +1505,7 @@ s32 BgCheck_GetSpecialSceneMaxObjects(PlayState* play, s32* maxNodes, s32* maxPo
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(sCustomDynapolyMem); i++) {
-        if (play->sceneNum == sCustomDynapolyMem[i].sceneId) {
+        if (play->sceneId == sCustomDynapolyMem[i].sceneId) {
             *maxNodes = sCustomDynapolyMem[i].maxNodes;
             *maxPolygons = sCustomDynapolyMem[i].maxPolygons;
             *maxVertices = sCustomDynapolyMem[i].maxVertices;
@@ -1542,7 +1542,7 @@ void BgCheck_Allocate(CollisionContext* colCtx, PlayState* play, CollisionHeader
         s32 useCustomSubdivisions;
         s32 i;
 
-        if (BgCheck_TryGetCustomMemsize(play->sceneNum, &customMemSize)) {
+        if (BgCheck_TryGetCustomMemsize(play->sceneId, &customMemSize)) {
             colCtx->memSize = customMemSize;
         } else {
             colCtx->memSize = 0x23000;
@@ -1555,7 +1555,7 @@ void BgCheck_Allocate(CollisionContext* colCtx, PlayState* play, CollisionHeader
         useCustomSubdivisions = false;
 
         for (i = 0; i < ARRAY_COUNT(sSceneSubdivisionList); i++) {
-            if (play->sceneNum == sSceneSubdivisionList[i].sceneId) {
+            if (play->sceneId == sSceneSubdivisionList[i].sceneId) {
                 colCtx->subdivAmount.x = sSceneSubdivisionList[i].subdivAmount.x;
                 colCtx->subdivAmount.y = sSceneSubdivisionList[i].subdivAmount.y;
                 colCtx->subdivAmount.z = sSceneSubdivisionList[i].subdivAmount.z;

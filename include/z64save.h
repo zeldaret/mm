@@ -165,7 +165,7 @@ typedef struct Inventory {
 } Inventory; // size = 0x88
 
 typedef struct HorseData {
-    /* 0x0 */ s16 scene;                               // "spot_no"
+    /* 0x0 */ s16 sceneId;                             // "spot_no"
     /* 0x2 */ Vec3s pos;                               // "horse_x", "horse_y" and "horse_z"
     /* 0x8 */ s16 yaw;                                 // "horse_a"
 } HorseData; // size = 0xA
@@ -226,7 +226,7 @@ typedef struct SavePlayerData {
     /* 0x20 */ u8 unk_20;                             // "first_memory"
     /* 0x22 */ u16 owlActivationFlags;                // "memory_warp_point"
     /* 0x24 */ u8 unk_24;                             // "last_warp_pt"
-    /* 0x26 */ s16 savedSceneNum;                     // "scene_data_ID"
+    /* 0x26 */ s16 savedSceneId;                      // "scene_data_ID"
 } SavePlayerData; // size = 0x28
 
 typedef struct Save {
@@ -327,8 +327,8 @@ typedef struct SaveContext {
     /* 0x3EF8 */ s16 timerX[TIMER_ID_MAX];              // "event_xp"
     /* 0x3F06 */ s16 timerY[TIMER_ID_MAX];              // "event_yp"
     /* 0x3F14 */ s16 unk_3F14;                          // "character_change"
-    /* 0x3F16 */ u8 seqIndex;                           // "old_bgm"
-    /* 0x3F17 */ u8 nightSeqIndex;                      // "old_env"
+    /* 0x3F16 */ u8 seqId;                              // "old_bgm"
+    /* 0x3F17 */ u8 ambienceId;                         // "old_env"
     /* 0x3F18 */ u8 buttonStatus[6];                    // "button_item"
     /* 0x3F1E */ u8 hudVisibilityForceButtonAlphasByStatus; // if btn alphas are updated through Interface_UpdateButtonAlphas, instead update them through Interface_UpdateButtonAlphasByStatus "ck_fg"
     /* 0x3F20 */ u16 nextHudVisibility; // triggers the hud to change visibility to the requested value. Reset to HUD_VISIBILITY_IDLE when target is reached "alpha_type"

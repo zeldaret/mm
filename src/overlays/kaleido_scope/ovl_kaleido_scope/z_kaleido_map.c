@@ -520,7 +520,7 @@ s16 sGreatFairySpawnRegions[] = {
     REGION_CLOCK_TOWN, REGION_WOODFALL, REGION_SNOWHEAD, REGION_GREAT_BAY, REGION_IKANA_CANYON,
 };
 
-void func_8081E7D8(PlayState* play) {
+void KaleidoScope_DrawWorldMap(PlayState* play) {
     s16 sceneId;
     s16 t;
     s16 n;
@@ -728,7 +728,7 @@ void func_8081E7D8(PlayState* play) {
         n = 0;
 
         // Map grottos/shrines to sceneId's to be used in different regions
-        sceneId = play->sceneNum;
+        sceneId = play->sceneId;
         if (sceneId == SCENE_KAKUSIANA) {
             if (play->roomCtx.curRoom.num == 5) {
                 sceneId = SCENE_11GORONNOSATO;
@@ -736,7 +736,7 @@ void func_8081E7D8(PlayState* play) {
                        (play->roomCtx.curRoom.num == 12)) {
                 sceneId = SCENE_22DEKUCITY;
             } else {
-                sceneId = Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.respawn[RESPAWN_MODE_UNK_3].entrance));
+                sceneId = Entrance_GetSceneIdAbsolute(((void)0, gSaveContext.respawn[RESPAWN_MODE_UNK_3].entrance));
             }
         }
 
@@ -763,7 +763,7 @@ void func_8081E7D8(PlayState* play) {
                                 break;
                             }
                             j = 0;
-                            if (Entrance_GetSceneNumAbsolute(
+                            if (Entrance_GetSceneIdAbsolute(
                                     ((void)0, gSaveContext.respawn[RESPAWN_MODE_UNK_3].entrance)) ==
                                 gSceneIdsPerRegion[n][j]) {
                                 break;
