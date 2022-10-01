@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64quake.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165460.s")
 
@@ -302,38 +303,38 @@ Vec3s* Play_GetActorCsCamFuncData(PlayState* this, s32 csCamDataIndex) {
  * Converts the number of a scene to its "original" equivalent, the default version of the area which the player first
  * enters.
  */
-s16 Play_GetOriginalSceneNumber(s16 sceneNum) {
+s16 Play_GetOriginalSceneId(s16 sceneId) {
     // Inverted Stone Tower Temple -> Stone Tower Temple
-    if (sceneNum == SCENE_INISIE_R) {
+    if (sceneId == SCENE_INISIE_R) {
         return SCENE_INISIE_N;
     }
 
     // Purified Southern Swamp -> Poisoned Sothern Swamp
-    if (sceneNum == SCENE_20SICHITAI2) {
+    if (sceneId == SCENE_20SICHITAI2) {
         return SCENE_20SICHITAI;
     }
 
     // Spring Mountain Village -> Winter Mountain Village
-    if (sceneNum == SCENE_10YUKIYAMANOMURA2) {
+    if (sceneId == SCENE_10YUKIYAMANOMURA2) {
         return SCENE_10YUKIYAMANOMURA;
     }
 
     // Spring Goron Village -> Winter Goron Village
-    if (sceneNum == SCENE_11GORONNOSATO2) {
+    if (sceneId == SCENE_11GORONNOSATO2) {
         return SCENE_11GORONNOSATO;
     }
 
     // Spring Path to Goron Village -> Winter Path to Goron Village
-    if (sceneNum == SCENE_17SETUGEN2) {
+    if (sceneId == SCENE_17SETUGEN2) {
         return SCENE_17SETUGEN;
     }
 
     // Inverted Stone Tower -> Stone Tower
-    if (sceneNum == SCENE_F41) {
+    if (sceneId == SCENE_F41) {
         return SCENE_F40;
     }
 
-    return sceneNum;
+    return sceneId;
 }
 
 /**
@@ -344,13 +345,13 @@ void Play_SaveCycleSceneFlags(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
     CycleSceneFlags* cycleSceneFlags;
 
-    cycleSceneFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneNumber(this->sceneNum)];
+    cycleSceneFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneId(this->sceneId)];
     cycleSceneFlags->chest = this->actorCtx.sceneFlags.chest;
     cycleSceneFlags->switch0 = this->actorCtx.sceneFlags.switches[0];
     cycleSceneFlags->switch1 = this->actorCtx.sceneFlags.switches[1];
 
-    if (this->sceneNum == SCENE_INISIE_R) { // Inverted Stone Tower Temple
-        cycleSceneFlags = &gSaveContext.cycleSceneFlags[this->sceneNum];
+    if (this->sceneId == SCENE_INISIE_R) { // Inverted Stone Tower Temple
+        cycleSceneFlags = &gSaveContext.cycleSceneFlags[this->sceneId];
     }
 
     cycleSceneFlags->collectible = this->actorCtx.sceneFlags.collectible[0];
@@ -375,7 +376,7 @@ void Play_SetupRespawnPoint(GameState* thisx, s32 respawnMode, s32 playerParams)
     PlayState* this = (PlayState*)thisx;
     Player* player = GET_PLAYER(this);
 
-    if (this->sceneNum != SCENE_KAKUSIANA) { // Grottos
+    if (this->sceneId != SCENE_KAKUSIANA) { // Grottos
         Play_SetRespawnData(&this->state, respawnMode, (u16)((void)0, gSaveContext.save.entrance),
                             this->roomCtx.curRoom.num, playerParams, &player->actor.world.pos,
                             player->actor.shape.rot.y);
@@ -384,7 +385,7 @@ void Play_SetupRespawnPoint(GameState* thisx, s32 respawnMode, s32 playerParams)
 
 // Override respawn data in Sakon's Hideout
 void func_80169ECC(PlayState* this) {
-    if (this->sceneNum == SCENE_SECOM) {
+    if (this->sceneId == SCENE_SECOM) {
         this->nextEntrance = ENTRANCE(IKANA_CANYON, 6);
         gSaveContext.respawnFlag = -7;
     }

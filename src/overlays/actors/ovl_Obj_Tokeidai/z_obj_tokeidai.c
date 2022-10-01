@@ -121,9 +121,9 @@ void ObjTokeidai_ExteriorGear_Init(ObjTokeidai* this, PlayState* play) {
     this->opaDList = gClockTowerExteriorGearDL;
     ObjTokeidai_SetupClockOrExteriorGear(this);
 
-    if (((play->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
+    if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
          (play->csCtx.currentCsIndex == 0)) ||
-        ((play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
+        ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
          (play->csCtx.currentCsIndex == 0))) {
         ObjTokeidai_SetupTowerOpening(this);
     } else if ((CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
@@ -140,9 +140,9 @@ void ObjTokeidai_TowerClock_Init(ObjTokeidai* this, PlayState* play) {
     this->actor.draw = ObjTokeidai_Clock_Draw;
     ObjTokeidai_Clock_Init(this);
 
-    if (((play->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
+    if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
          (play->csCtx.currentCsIndex == 0)) ||
-        ((play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
+        ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
          (play->csCtx.currentCsIndex == 0))) {
         ObjTokeidai_SetupTowerOpening(this);
     } else if ((CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
@@ -175,9 +175,9 @@ void ObjTokeidai_Counterweight_Init(ObjTokeidai* this, PlayState* play) {
         this->spotlightIntensity = 0;
     }
 
-    if (((play->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
+    if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
          (play->csCtx.currentCsIndex == 0)) ||
-        ((play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
+        ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
          (play->csCtx.currentCsIndex == 0))) {
         this->spotlightIntensity = 0;
         ObjTokeidai_SetupTowerOpening(this);
@@ -448,9 +448,9 @@ void ObjTokeidai_TowerOpening_EndCutscene(ObjTokeidai* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, 132) != 0 &&
         play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 132)]->action == 5) {
         gSaveContext.save.weekEventReg[8] |= 0x40;
-        if (((play->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
+        if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
              (play->csCtx.currentCsIndex == 0)) ||
-            ((play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
+            ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
              (play->csCtx.currentCsIndex == 0))) {
             Audio_SetCutsceneFlag(false);
             gSaveContext.save.cutscene = 0;

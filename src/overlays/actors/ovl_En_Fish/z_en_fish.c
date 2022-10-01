@@ -167,7 +167,7 @@ Actor* func_8091D944(EnFish* this, PlayState* play) {
 }
 
 s32 func_8091DA14(EnFish* this, PlayState* play) {
-    return play->sceneNum == SCENE_LABO && func_8091D944(this, play);
+    return (play->sceneId == SCENE_LABO) && func_8091D944(this, play);
 }
 
 void EnFish_Init(Actor* thisx, PlayState* play) {
@@ -853,7 +853,8 @@ void func_8091F5A4(Actor* thisx, PlayState* play) {
         func_8091D7C4(this);
         Actor_MoveWithGravity(&this->actor);
         if (this->unk_248 != 0) {
-            u32 temp = (play->sceneNum ^ SCENE_LABO) != 0;
+            u32 temp = (play->sceneId != SCENE_LABO);
+
             phi_f0 = BREG(1) + 10.0f;
 
             if (temp) {

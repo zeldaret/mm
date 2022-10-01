@@ -170,7 +170,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
 
         EnHoll_SetPlayerSide(play, this, &transformedPlayerPos);
         playerDistFromCentralPlane = fabsf(transformedPlayerPos.z);
-        if (play->sceneNum == SCENE_IKANA) {
+        if (play->sceneId == SCENE_IKANA) {
             enHollBottom = EN_HOLL_BOTTOM_IKANA;
             enHollHalfwidth = EN_HOLL_HALFWIDTH_IKANA;
         }
@@ -209,7 +209,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
                     }
                 }
             }
-        } else if ((this->type == EN_HOLL_TYPE_DEFAULT) && (play->sceneNum == SCENE_26SARUNOMORI) &&
+        } else if ((this->type == EN_HOLL_TYPE_DEFAULT) && (play->sceneId == SCENE_26SARUNOMORI) &&
                    (sInstancePlayingSound == NULL)) {
             sInstancePlayingSound = this;
         }
@@ -225,7 +225,7 @@ void EnHoll_TransparentIdle(EnHoll* this, PlayState* play) {
 
     Actor_OffsetOfPointInActorCoords(&this->actor, &transformedPlayerPos,
                                      useViewEye ? &play->view.eye : &player->actor.world.pos);
-    enHollTop = (play->sceneNum == SCENE_PIRATE) ? EN_HOLL_TOP_PIRATE : EN_HOLL_TOP_DEFAULT;
+    enHollTop = (play->sceneId == SCENE_PIRATE) ? EN_HOLL_TOP_PIRATE : EN_HOLL_TOP_DEFAULT;
 
     if ((transformedPlayerPos.y > EN_HOLL_BOTTOM_DEFAULT) && (transformedPlayerPos.y < enHollTop) &&
         (fabsf(transformedPlayerPos.x) < EN_HOLL_HALFWIDTH_TRANSPARENT)) {
