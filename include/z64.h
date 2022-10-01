@@ -440,13 +440,12 @@ typedef struct {
     /* 0x220 */ f32 unk_220;
     /* 0x224 */ u16 alpha;
     /* 0x226 */ s16 offsetY;
-    /* 0x228 */ s32 unk_228;
-    /* 0x22C */ s32 unk_22C;
-    /* 0x230 */ s32 stickRelX;
-    /* 0x234 */ s32 stickRelY;
+    /* 0x228 */ UNK_TYPE1 unk_228[0x8];
+    /* 0x230 */ s32 stickAdjX;
+    /* 0x234 */ s32 stickAdjY;
     /* 0x238 */ s16 cursorPoint[5];
-    /* 0x242 */ s16 cursorX[5];
-    /* 0x24C */ s16 cursorY[5];
+    /* 0x242 */ s16 cursorXIndex[5];
+    /* 0x24C */ s16 cursorYIndex[5];
     /* 0x256 */ s16 unk_256;
     /* 0x258 */ s16 cursorSpecialPos;
     /* 0x25A */ s16 pageSwitchTimer;
@@ -1056,10 +1055,9 @@ struct FireObj {
 }; // size = 0x8B
 
 typedef struct {
-    /* 0x0 */ u8   seqIndex;
-    /* 0x1 */ u8   nightSeqIndex;
-    /* 0x2 */ u8   unk_02;
-} SoundContext; // size = 0x3
+    /* 0x0 */ u8   seqId;
+    /* 0x1 */ u8   ambienceId;
+} SequenceContext; // size = 0x2
 
 typedef struct {
     /* 0x0 */ s32 enabled;
@@ -1084,7 +1082,7 @@ typedef struct {
 
 struct PlayState {
     /* 0x00000 */ GameState state;
-    /* 0x000A4 */ s16 sceneNum;
+    /* 0x000A4 */ s16 sceneId;
     /* 0x000A6 */ u8 sceneConfig;
     /* 0x000A7 */ char unk_A7[0x9];
     /* 0x000B0 */ void* sceneSegment;
@@ -1095,7 +1093,7 @@ struct PlayState {
     /* 0x00800 */ Camera* cameraPtrs[NUM_CAMS];
     /* 0x00810 */ s16 activeCamId;
     /* 0x00812 */ s16 nextCamera;
-    /* 0x00814 */ SoundContext soundCtx;
+    /* 0x00814 */ SequenceContext sequenceCtx;
     /* 0x00818 */ LightContext lightCtx;
     /* 0x00828 */ FrameAdvanceContext frameAdvCtx;
     /* 0x00830 */ CollisionContext colCtx;

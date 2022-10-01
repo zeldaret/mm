@@ -1954,8 +1954,8 @@ void FileSelect_LoadGame(GameState* thisx) {
 
     gSaveContext.respawnFlag = 0;
     gSaveContext.respawn[0].entrance = 0xFFFF;
-    gSaveContext.seqIndex = 0xFF;
-    gSaveContext.nightSeqIndex = 0xFF;
+    gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+    gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
     gSaveContext.showTitleCard = 1;
     gSaveContext.dogParams = 0;
 
@@ -2314,6 +2314,7 @@ void FileSelect_Init(GameState* thisx) {
     this->titleSegment = THA_AllocEndAlign16(&this->state.heap, size);
     DmaMgr_SendRequest0(this->titleSegment, gObjectTable[OBJECT_MAG].vromStart, size);
 
-    audio_setBGM(0xA);
-    func_801A3238(SEQ_PLAYER_BGM_MAIN, NA_BGM_FILE_SELECT, 0, 7, 1);
+    Audio_SetSpec(0xA);
+    // Setting ioData to 1 and writing it to ioPort 7 will skip the harp intro
+    Audio_PlaySequenceWithSeqPlayerIO(SEQ_PLAYER_BGM_MAIN, NA_BGM_FILE_SELECT, 0, 7, 1);
 }

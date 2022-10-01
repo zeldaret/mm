@@ -690,7 +690,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
             break;
 
         case 110:
-            func_801A3098(0x4A);
+            Audio_PlayFanfare(NA_BGM_SONG_OF_DOUBLE_TIME);
             break;
 
         case 38:

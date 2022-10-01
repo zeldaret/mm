@@ -128,8 +128,8 @@ void ConsoleLogo_Main(GameState* thisx) {
     ConsoleLogo_UpdateCounters(this);
     ConsoleLogo_Draw(&this->state);
     if (this->exit) {
-        gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
-        gSaveContext.nightSeqIndex = 0xFF;
+        gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+        gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
         gSaveContext.gameMode = 1;
 
         STOP_GAMESTATE(&this->state);
