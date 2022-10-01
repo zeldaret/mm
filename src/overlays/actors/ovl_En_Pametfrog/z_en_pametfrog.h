@@ -32,7 +32,7 @@ typedef struct EnPametfrog {
     /* 0x2AE */ u8 unk_2AE; // True/False
     /* 0x2B0 */ s16 cutscene;
     /* 0x2B2 */ s16 params;
-    /* 0x2B4 */ s16 quake;
+    /* 0x2B4 */ s16 quakeIndex;
     /* 0x2B6 */ s16 timer;
     /* 0x2B8 */ s16 spinYaw;
     /* 0x2BA */ s16 subCamId;

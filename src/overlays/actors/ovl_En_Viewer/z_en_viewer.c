@@ -102,7 +102,7 @@ void func_8089F17C(EnViewer* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 xzDist = fabsf(this->actor.xzDistToPlayer);
 
-    if ((((play->roomCtx.currRoom.num == this->actor.room) && (xzDist <= this->unk_148)) &&
+    if ((((play->roomCtx.curRoom.num == this->actor.room) && (xzDist <= this->unk_148)) &&
          (this->actor.playerHeightRel <= this->unk_150)) &&
         (this->actor.world.pos.y <= player->actor.world.pos.y)) {
         xzDist = this->actor.playerHeightRel / this->unk_150;
@@ -117,7 +117,7 @@ void func_8089F218(EnViewer* this, PlayState* play) {
     f32 xzDist = fabsf(this->actor.xzDistToPlayer);
     f32 temp;
 
-    if ((play->roomCtx.currRoom.num == this->actor.room) && (xzDist <= this->unk_148) &&
+    if ((play->roomCtx.curRoom.num == this->actor.room) && (xzDist <= this->unk_148) &&
         (this->actor.playerHeightRel <= this->unk_150) && (this->actor.world.pos.y <= player->actor.world.pos.y)) {
         temp = (xzDist - this->unk_14C) / (this->unk_148 - this->unk_14C);
         func_8089F014(this, play, temp);
@@ -135,7 +135,7 @@ void func_8089F2C4(EnViewer* this, PlayState* play) {
     if (this->unk_14C == 0.0f) {
         this->unk_14C = 0.1f;
     }
-    if ((play->roomCtx.currRoom.num == this->actor.room) && (sp20.x < fabsf(this->unk_148))) {
+    if ((play->roomCtx.curRoom.num == this->actor.room) && (sp20.x < fabsf(this->unk_148))) {
         temp = sp20.z / this->unk_14C;
         func_8089F014(this, play, temp);
     } else {

@@ -310,7 +310,7 @@ void ObjTaru_Update(Actor* thisx, PlayState* play) {
 
     if (!OBJ_TARU_GET_80(thisx)) {
         if (this->unk_1AC != 0) {
-            play->actorCtx.unk5 |= 8;
+            play->actorCtx.flags |= ACTORCTX_FLAG_3;
         }
         if (this->unk_1AD >= 0) {
             switch (this->unk_1AD) {
