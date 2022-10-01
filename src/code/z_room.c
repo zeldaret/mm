@@ -111,8 +111,7 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
             func_80123140(play, GET_PLAYER(play));
             Actor_SpawnTransitionActors(play, &play->actorCtx);
 
-            if (((play->sceneNum != SCENE_IKANA) || (roomCtx->curRoom.num != 1)) &&
-                (play->sceneNum != SCENE_IKNINSIDE)) {
+            if (((play->sceneId != SCENE_IKANA) || (roomCtx->curRoom.num != 1)) && (play->sceneId != SCENE_IKNINSIDE)) {
                 play->envCtx.lightSettingOverride = 0xFF;
                 play->envCtx.unk_E0 = 0;
             }

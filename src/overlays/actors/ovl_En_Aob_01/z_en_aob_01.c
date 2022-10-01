@@ -671,7 +671,7 @@ void func_809C2730(EnAob01* this, PlayState* play) {
 void func_809C2788(EnAob01* this, PlayState* play) {
     this->unk_2D2 |= 0x20;
     if (func_809C25E4(this, play)) {
-        if (func_801A8A50(0) != 0x41) {
+        if (Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) != NA_BGM_HORSE_GOAL) {
             play->nextEntrance = ENTRANCE(DOGGY_RACETRACK, 1);
             gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & (u8)~7) | 3;
             play->transitionType = TRANS_TYPE_64;

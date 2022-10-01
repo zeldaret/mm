@@ -158,8 +158,8 @@ void func_80BCF398(EnHg* this, PlayState* play) {
             !Cutscene_CheckActorAction(play, 0x1E3)) {
             func_80BCF468(this);
         }
-        if ((gSaveContext.sceneSetupIndex == 0 && play->csCtx.currentCsIndex == 0) &&
-            (play->csCtx.frames == 20 || play->csCtx.frames == 60)) {
+        if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0) &&
+            ((play->csCtx.frames == 20) || (play->csCtx.frames == 60))) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
         }
     }

@@ -335,11 +335,11 @@ void EnDg_MoveAlongPath(EnDg* this, PlayState* play) {
         }
 
         if ((this->index == ENDG_INDEX_SWAMP_SPIDER_HOUSE) ||
-            ((this->index == ENDG_INDEX_ROMANI_RANCH) && (play->sceneNum == SCENE_OMOYA))) {
+            ((this->index == ENDG_INDEX_ROMANI_RANCH) && (play->sceneId == SCENE_OMOYA))) {
             Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
         } else if (this->index == ENDG_INDEX_ROMANI_RANCH) {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
-        } else if (play->sceneNum == SCENE_CLOCKTOWER) {
+        } else if (play->sceneId == SCENE_CLOCKTOWER) {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
         } else if (sRacetrackDogInfo[this->index].textId & 0x11) {
             Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
@@ -397,11 +397,11 @@ void EnDg_PlaySfxGrowl(EnDg* this, f32 frame) {
 void EnDg_SetupIdleMove(EnDg* this, PlayState* play) {
     if (!(this->actor.bgCheckFlags & 0x20)) {
         if ((this->index == ENDG_INDEX_SWAMP_SPIDER_HOUSE) ||
-            ((this->index == ENDG_INDEX_ROMANI_RANCH) && (play->sceneNum == SCENE_OMOYA))) {
+            ((this->index == ENDG_INDEX_ROMANI_RANCH) && (play->sceneId == SCENE_OMOYA))) {
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK);
         } else if (this->index == ENDG_INDEX_ROMANI_RANCH) {
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
-        } else if (play->sceneNum == SCENE_CLOCKTOWER) {
+        } else if (play->sceneId == SCENE_CLOCKTOWER) {
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
         } else if (sRacetrackDogInfo[this->index].textId & 0x11) {
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK);
@@ -1319,7 +1319,7 @@ void EnDg_Init(Actor* thisx, PlayState* play) {
     this->index = ENDG_GET_INDEX(&this->actor);
     this->behavior = DOG_BEHAVIOR_INITIAL;
     this->grabState = DOG_GRAB_STATE_NONE;
-    if (play->sceneNum == SCENE_F01_B) {
+    if (play->sceneId == SCENE_F01_B) {
         this->sitAfterThrowTimer = 100;
         EnDg_UpdateTextId(this);
     }
@@ -1340,7 +1340,7 @@ void EnDg_Update(Actor* thisx, PlayState* play) {
     Vec3f floorRot = { 0.0f, 0.0f, 0.0f };
 
     this->selectedDogIndex = sSelectedRacetrackDogInfo.index;
-    if (!(player->stateFlags1 & 0x20) || (play->sceneNum != SCENE_CLOCKTOWER)) {
+    if (!(player->stateFlags1 & 0x20) || (play->sceneId != SCENE_CLOCKTOWER)) {
         if (EnDg_ShouldReactToNonHumanPlayer(this, play)) {
             EnDg_ChooseActionForForm(this, play);
         } else if (this->behavior != DOG_BEHAVIOR_DEFAULT) {

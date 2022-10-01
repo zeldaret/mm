@@ -436,7 +436,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
             if (CURRENT_DAY == 3) {
                 if ((this->nextBellTime == CLOCK_TIME(0, 0)) &&
                     ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
-                     (play->sceneNum == SCENE_CLOCKTOWER))) {
+                     (play->sceneId == SCENE_CLOCKTOWER))) {
                     s32 playerParams;
                     u32 entrance = gSaveContext.save.entrance;
 
@@ -448,7 +448,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     Play_SetRespawnData(&play->state, RESPAWN_MODE_RETURN, entrance, player->unk_3CE, playerParams,
                                         &player->unk_3C0, player->unk_3CC);
 
-                    if ((play->sceneNum == SCENE_TENMON_DAI) || (play->sceneNum == SCENE_00KEIKOKU)) {
+                    if ((play->sceneId == SCENE_TENMON_DAI) || (play->sceneId == SCENE_00KEIKOKU)) {
                         play->nextEntrance = ENTRANCE(TERMINA_FIELD, 0);
                     } else {
                         play->nextEntrance = ENTRANCE(SOUTH_CLOCK_TOWN, 0);

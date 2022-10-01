@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_ikana_dharma.h"
+#include "z64quake.h"
 #include "assets/objects/object_ikana_obj/object_ikana_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -226,11 +227,12 @@ void BgIkanaDharma_Update(Actor* thisx, PlayState* play) {
             Actor_MoveWithGravity(&this->dyna.actor);
             Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
             if (this->dyna.actor.bgCheckFlags & 2) {
-                s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+                s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-                Quake_SetSpeed(quake, 21536);
-                Quake_SetQuakeValues(quake, 4, 0, 0, 0);
-                Quake_SetCountdown(quake, 12);
+                Quake_SetSpeed(quakeIndex, 21536);
+                Quake_SetQuakeValues(quakeIndex, 4, 0, 0, 0);
+                Quake_SetCountdown(quakeIndex, 12);
+
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else {

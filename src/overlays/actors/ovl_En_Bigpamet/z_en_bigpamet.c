@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bigpamet.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -518,7 +519,7 @@ void func_80A28760(EnBigpamet* this) {
 }
 
 void func_80A287E8(EnBigpamet* this, PlayState* play) {
-    s16 quake;
+    s16 quakeIndex;
 
     this->actor.shape.rot.y += 0x3B00;
     func_800B9010(&this->actor, NA_SE_EN_B_PAMET_ROLL - SFX_FLAG);
@@ -538,12 +539,16 @@ void func_80A287E8(EnBigpamet* this, PlayState* play) {
     }
 
     if (this->actor.bgCheckFlags & 8) {
-        quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+        quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+
         this->actor.velocity.y = this->unk_29E * 0.375f;
-        Quake_SetSpeed(quake, 0x4E20);
-        Quake_SetQuakeValues(quake, 15, 0, 0, 0);
-        Quake_SetCountdown(quake, 10);
+
+        Quake_SetSpeed(quakeIndex, 20000);
+        Quake_SetQuakeValues(quakeIndex, 15, 0, 0, 0);
+        Quake_SetCountdown(quakeIndex, 10);
+
         Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
+
         func_80A27B58(this);
         func_80A27DD8(this, play);
         func_80A28970(this);

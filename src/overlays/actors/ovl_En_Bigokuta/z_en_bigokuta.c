@@ -485,7 +485,7 @@ s32 EnBigokuta_IsNearSwampBoat(EnBigokuta* this, PlayState* play) {
 void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
     if ((this->bodyCollider.base.acFlags & AC_ON) &&
         ((this->bodyCollider.base.acFlags & AC_HIT) ||
-         ((play->sceneNum == SCENE_20SICHITAI || play->sceneNum == SCENE_20SICHITAI2) &&
+         ((play->sceneId == SCENE_20SICHITAI || play->sceneId == SCENE_20SICHITAI2) &&
           EnBigokuta_IsNearSwampBoat(this, play)))) {
         Enemy_StartFinishingBlow(play, &this->picto.actor);
 

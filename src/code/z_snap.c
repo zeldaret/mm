@@ -21,7 +21,7 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
     gSaveContext.save.pictoFlags0 = 0;
     gSaveContext.save.pictoFlags1 = 0;
 
-    if (play->sceneNum == SCENE_20SICHITAI) {
+    if (play->sceneId == SCENE_20SICHITAI) {
         Snap_SetFlag(PICTOGRAPH_IN_SWAMP);
     }
 
@@ -30,7 +30,7 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
             seen = 0;
 
             // Actors which must be pictographed in a specific scene
-            switch (play->sceneNum) {
+            switch (play->sceneId) {
                 case SCENE_20SICHITAI:
                     if ((actor->id == ACTOR_EN_MNK) || (actor->id == ACTOR_EN_BIGOKUTA)) {
                         seen = PICTO_SEEN_IN_SCENE;

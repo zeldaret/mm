@@ -206,8 +206,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
     if ((ENZOG_GET_F(&this->actor) != ENZOG_F_2) && (INV_CONTENT(ITEM_MASK_ZORA) == ITEM_MASK_ZORA) &&
-        ((play->csCtx.currentCsIndex != 2) || (gSaveContext.sceneSetupIndex != 0) ||
-         (play->sceneNum != SCENE_30GYOSON))) {
+        ((play->csCtx.currentCsIndex != 2) || (gSaveContext.sceneLayer != 0) || (play->sceneId != SCENE_30GYOSON))) {
         Actor_MarkForDeath(&this->actor);
         return;
     }

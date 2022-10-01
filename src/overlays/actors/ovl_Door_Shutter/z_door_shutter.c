@@ -5,6 +5,7 @@
  */
 
 #include "z_door_shutter.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_bdoor/object_bdoor.h"
@@ -100,7 +101,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 sceneNum;
+    /* 0x00 */ s16 sceneId;
     /* 0x02 */ u8 index;
 } ShutterSceneInfo; // size = 0x4
 
@@ -114,8 +115,8 @@ ShutterSceneInfo D_808A2258[] = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 dungeonScene;
-    /* 0x02 */ s16 bossScene;
+    /* 0x00 */ s16 dungeonSceneId;
+    /* 0x02 */ s16 bossSceneId;
     /* 0x04 */ u8 index;
 } BossDoorInfo; // size = 0x6
 
@@ -209,7 +210,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
         ShutterSceneInfo* shutterSceneInfo = &D_808A2258[0];
 
         for (i = 0; i < ARRAY_COUNT(D_808A2258) - 1; i++, shutterSceneInfo++) {
-            if (play->sceneNum == shutterSceneInfo->sceneNum) {
+            if (play->sceneId == shutterSceneInfo->sceneId) {
                 break;
             }
         }
@@ -222,7 +223,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
         BossDoorInfo* bossDoorInfo = &D_808A22A0[0];
 
         for (i = 0; i < ARRAY_COUNT(D_808A22A0) - 1; i++, bossDoorInfo++) {
-            if ((play->sceneNum == bossDoorInfo->dungeonScene) || (play->sceneNum == bossDoorInfo->bossScene)) {
+            if ((play->sceneId == bossDoorInfo->dungeonSceneId) || (play->sceneId == bossDoorInfo->bossSceneId)) {
                 break;
             }
         }
@@ -537,7 +538,7 @@ void func_808A1784(DoorShutter* this, PlayState* play) {
         } else {
             DoorShutter_SetupAction(this, func_808A1090);
         }
-        func_801A2ED8();
+        Audio_RestorePrevBgm();
     }
 }
 
@@ -599,7 +600,7 @@ s32 func_808A1A70(DoorShutter* this) {
 }
 
 void func_808A1B48(DoorShutter* this, PlayState* play) {
-    s16 quake;
+    s16 quakeIndex;
 
     if (func_808A1A70(this)) {
         if (this->actor.velocity.y > 20.0f) {
@@ -607,11 +608,14 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
             Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 45.0f, 10, 8.0f, 500, 10, 0);
         }
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BIGWALL_BOUND);
-        quake = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
-        Quake_SetSpeed(quake, -32536);
-        Quake_SetQuakeValues(quake, 2, 0, 0, 0);
-        Quake_SetCountdown(quake, 10);
+
+        quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
+        Quake_SetSpeed(quakeIndex, -32536);
+        Quake_SetQuakeValues(quakeIndex, 2, 0, 0, 0);
+        Quake_SetCountdown(quakeIndex, 10);
+
         Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
+
         func_808A1884(this, play);
     }
 }

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bigslime.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_bigslime/object_bigslime.h"
@@ -743,12 +744,14 @@ void EnBigslime_EndThrowMinislime(EnBigslime* this) {
 
 void EnBigslime_BreakIntoMinislime(EnBigslime* this, PlayState* play) {
     s32 i;
-    s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+    s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-    Quake_SetSpeed(quake, 20000);
-    Quake_SetQuakeValues(quake, 15, 0, 0, 0);
-    Quake_SetCountdown(quake, 15);
+    Quake_SetSpeed(quakeIndex, 20000);
+    Quake_SetQuakeValues(quakeIndex, 15, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, 15);
+
     Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
+
     this->bigslimeCollider[0].base.atFlags &= ~AT_ON;
     this->gekkoCollider.base.acFlags &= ~(AC_ON | AC_HIT);
 
@@ -1005,7 +1008,7 @@ void EnBigslime_CallMinislime(EnBigslime* this, PlayState* play) {
     } else if (this->isAnimUpdate) {
         Animation_PlayLoop(&this->skelAnime, &gGekkoNervousIdleAnim);
         EnBigslime_UpdateCameraIntroCs(this, play, 25);
-        func_801A2E54(0x38);
+        Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
         EnBigslime_InitFallMinislime(this);
         play->envCtx.lightSettingOverride = 0xFF;
         this->callTimer = 35;
@@ -2620,7 +2623,7 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, PlayState* play) {
             if (this->actor.colChkInfo.damageEffect != BIGSLIME_DMGEFF_HOOKSHOT) {
                 if (Actor_ApplyDamage(&this->actor) == 0) {
                     func_800BE504(&this->actor, &this->gekkoCollider);
-                    func_801A2ED8();
+                    Audio_RestorePrevBgm();
                     Enemy_StartFinishingBlow(play, &this->actor);
                     this->gekkoCollider.base.acFlags &= ~AC_ON;
                     EnBigslime_GekkoThaw(this, play);
