@@ -108,6 +108,10 @@ void EnWizFire_Init(Actor* thisx, PlayState* play) {
             this->action = EN_WIZ_FIRE_ACTION_SMALL_FLAME;
             this->collider.info.toucher.damage = 2;
             this->actionFunc = EnWiz_SetupSmallFlame;
+            break;
+
+        default:
+            break;
     }
 }
 

@@ -526,6 +526,9 @@ void EnWiz_HandleIntroCutscene(EnWiz* this, PlayState* play) {
                 subCam->eye.y = eyeNext.y;
                 subCam->at.y = atNext.y;
                 break;
+
+            default:
+                break;
         }
 
         if (this->musicStartTimer < 11) {
