@@ -5412,7 +5412,7 @@
     0x80862B08:("sPlayerCurrentFloorType","UNK_TYPE1","",0x1),
     0x80862B0C:("sPlayerCurrentWallFlags","UNK_TYPE1","",0x1),
     0x80862B10:("sPlayerConveyorSpeedIndex","UNK_TYPE1","",0x1),
-    0x80862B14:("sPlayerConveyorType","UNK_TYPE1","",0x1),
+    0x80862B14:("sPlayerIsOnFloorConveyor","UNK_TYPE1","",0x1),
     0x80862B16:("D_80862B16","UNK_TYPE1","",0x1),
     0x80862B18:("D_80862B18","f32","",0x4),
     0x80862B1C:("sPlayerPrevFloorProperty","UNK_TYPE1","",0x1),

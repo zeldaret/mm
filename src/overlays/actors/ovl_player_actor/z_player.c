@@ -496,7 +496,7 @@ s32 D_80862B04;                      // boolean, set to the return value of func
 BgFloorType sPlayerCurrentFloorType; // set to the return value of SurfaceType_GetFloorType
 u32 sPlayerCurrentWallFlags;         // SurfaceType wall flags, set to the return value of SurfaceType_GetWallFlags
 BgConveyorSpeed sPlayerConveyorSpeedIndex; // SurfaceType_GetConveyorSpeed
-s16 sPlayerConveyorType;                   // SurfaceType_GetConveyorType
+s16 sPlayerIsOnFloorConveyor;                   // SurfaceType_IsFloorConveyor
 s16 D_80862B16;                            // SurfaceType_GetConveyorDirection << 0xA
 f32 D_80862B18;                            // D_80862B18 = this->actor.world.pos.y - this->actor.floorHeight;
 BgFloorProperty sPlayerPrevFloorProperty;  // sPlayerPrevFloorProperty = this->floorProperty; //
@@ -522,7 +522,7 @@ extern s32 D_80862B04;
 extern BgFloorType sPlayerCurrentFloorType;
 extern u32 sPlayerCurrentWallFlags;
 extern BgConveyorSpeed sPlayerConveyorSpeedIndex;
-extern s16 sPlayerConveyorType;
+extern s16 sPlayerIsOnFloorConveyor;
 extern s16 D_80862B16;
 extern f32 D_80862B18;
 extern BgFloorProperty sPlayerPrevFloorProperty;
@@ -3652,7 +3652,7 @@ void func_808304BC(Player* this, PlayState* play) {
         if ((this->itemActionParam == this->heldItemActionParam) || (this->stateFlags1 & PLAYER_STATE1_400000)) {
             if ((gSaveContext.save.playerData.health != 0) && (play->csCtx.state == CS_STATE_0)) {
                 if ((this->csMode == PLAYER_CSMODE_0) && (play->unk_1887C == 0) && (play->activeCamId == 0)) {
-                    if (!func_8082DA90(play) && (gSaveContext.unk_3DD0[4] != 5)) {
+                    if (!func_8082DA90(play) && (gSaveContext.timerStates[4] != 5)) {
                         func_8082FE0C(this, play);
                     }
                 }
@@ -3678,7 +3678,7 @@ s32 func_808305BC(PlayState* play, Player* this, ItemId* item, s32* typeParam) {
 
     if (this->transformation == PLAYER_FORM_DEKU) {
         return ((gSaveContext.save.playerData.magic >= 2) ||
-                ((gSaveContext.save.weekEventReg[8] & 1) && (play->sceneNum == SCENE_BOWLING)))
+                ((gSaveContext.save.weekEventReg[8] & 1) && (play->sceneId == SCENE_BOWLING)))
                    ? 1
                    : 0;
     }
@@ -3740,7 +3740,7 @@ s32 func_808306F8(Player* this, PlayState* play) {
                             magicArrowType = -1;
                         }
                     } else if ((arrowType == ENARROW_7) &&
-                               (!(gSaveContext.save.weekEventReg[8] & 1) || (play->sceneNum != SCENE_BOWLING))) {
+                               (!(gSaveContext.save.weekEventReg[8] & 1) || (play->sceneId != SCENE_BOWLING))) {
                         magicArrowType = ENARROW_3;
                     } else {
                         magicArrowType = -1;
@@ -4017,8 +4017,8 @@ s32 func_80831194(PlayState* play, Player* this) {
             func_808305BC(play, this, &item, &sp30);
             if ((this->transformation != PLAYER_FORM_DEKU) && !(this->stateFlags3 & PLAYER_STATE3_400)) {
                 if (gSaveContext.minigameState == 1) {
-                    if ((play->sceneNum != SCENE_SYATEKI_MIZU) && (play->sceneNum != SCENE_F01) &&
-                        (play->sceneNum != SCENE_SYATEKI_MORI)) {
+                    if ((play->sceneId != SCENE_SYATEKI_MIZU) && (play->sceneId != SCENE_F01) &&
+                        (play->sceneId != SCENE_SYATEKI_MORI)) {
                         play->interfaceCtx.hbaAmmo -= 1;
                     }
                 } else if (play->unk_1887C != 0) {
@@ -4367,9 +4367,9 @@ void func_80831F34(PlayState* play, Player* this, LinkAnimationHeader* anim) {
         } else {
             play->gameOverCtx.state = GAMEOVER_DEATH_START;
             func_801A41F8(0);
-            func_801A3098(NA_BGM_GAME_OVER);
-            gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
-            gSaveContext.nightSeqIndex = 0xFF;
+            Audio_PlayFanfare(NA_BGM_GAME_OVER);
+            gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+            gSaveContext.ambienceId = 0xFF;
         }
 
         ShrinkWindow_SetLetterboxTarget(32);
@@ -5734,10 +5734,10 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
         (this->csMode == PLAYER_CSMODE_0) && !(this->stateFlags1 & PLAYER_STATE1_1)) {
         var_a3 = 0;
         if (((poly != NULL) && (var_a3 = SurfaceType_GetSceneExitIndex(&play->colCtx, poly, bgId), (var_a3 != 0)) &&
-             (((play->sceneNum != SCENE_GORONRACE) && (play->sceneNum != SCENE_DEKU_KING)) || ((s32)var_a3 < 3)) &&
-             (((play->sceneNum != SCENE_20SICHITAI) && (play->sceneNum != SCENE_20SICHITAI2)) ||
+             (((play->sceneId != SCENE_GORONRACE) && (play->sceneId != SCENE_DEKU_KING)) || ((s32)var_a3 < 3)) &&
+             (((play->sceneId != SCENE_20SICHITAI) && (play->sceneId != SCENE_20SICHITAI2)) ||
               ((s32)var_a3 < 0x15)) &&
-             ((play->sceneNum != SCENE_11GORONNOSATO) || ((s32)var_a3 < 6))) ||
+             ((play->sceneId != SCENE_11GORONNOSATO) || ((s32)var_a3 < 6))) ||
             (func_808340D4(sPlayerCurrentFloorType) && (this->floorProperty == BG_FLOOR_PROPERTY_12))) {
             sp34 = this->unk_D68 - (s32)this->actor.world.pos.y;
             if (!(this->stateFlags1 & (PLAYER_STATE1_800000 | PLAYER_STATE1_8000000 | PLAYER_STATE1_20000000)) &&
@@ -5760,8 +5760,8 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
                     if ((this->stateFlags1 & PLAYER_STATE1_8000000) && (this->floorProperty == BG_FLOOR_PROPERTY_5)) {
                         func_8019F128(NA_SE_OC_TUNAMI);
                         func_801A4058(5);
-                        gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
-                        gSaveContext.nightSeqIndex = 0xFF;
+                        gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+                        gSaveContext.ambienceId = 0xFF;
                     } else if (!(this->actor.bgCheckFlags & 1) && (this->floorProperty == BG_FLOOR_PROPERTY_12)) {
                         func_8019F128(NA_SE_OC_SECRET_WARP_IN);
                     }
@@ -5781,8 +5781,8 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
                     if (floorType == BG_FLOOR_TYPE_11) {
                         func_8019F128(NA_SE_OC_SECRET_HOLE_OUT);
                         func_801A4058(5);
-                        gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
-                        gSaveContext.nightSeqIndex = 0xFF;
+                        gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+                        gSaveContext.ambienceId = 0xFF;
                     } else {
                         func_8085B74C(play);
                     }
@@ -7426,7 +7426,7 @@ void func_80839978(PlayState* play, Player* this) {
         func_8082E920(play, this, (4 | 0x200));
         this->stateFlags3 |= PLAYER_STATE3_20000000;
         this->unk_B48 = this->linearVelocity;
-        func_801A3098(NA_BGM_BREMEN_MARCH);
+        Audio_PlayFanfare(NA_BGM_BREMEN_MARCH);
     }
 }
 
@@ -7436,7 +7436,7 @@ void func_80839A10(PlayState* play, Player* this) {
         func_80831760(play, this, func_8084AEEC, 0);
         func_8082DB60(play, this, &gameplay_keep_Linkanim_00CF98);
         this->stateFlags2 |= PLAYER_STATE3_2000000;
-        func_801A3098(NA_BGM_KAMARO_DANCE);
+        Audio_PlayFanfare(NA_BGM_KAMARO_DANCE);
     }
 }
 
@@ -7785,11 +7785,11 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
     }
 
     if (DECR(this->unk_AE8) != 0) {
-        camMode = (play->sceneNum != SCENE_AYASHIISHOP) ? CAM_MODE_FIRSTPERSON : CAM_MODE_DEKUHIDE;
+        camMode = (play->sceneId != SCENE_AYASHIISHOP) ? CAM_MODE_FIRSTPERSON : CAM_MODE_DEKUHIDE;
 
         // Show controls overlay. SCENE_AYASHIISHOP does not have Zoom, so has a different one.
         if (this->unk_AE8 == 1) {
-            Message_StartTextbox(play, (play->sceneNum == SCENE_AYASHIISHOP) ? 0x2A00 : 0x5E6, NULL);
+            Message_StartTextbox(play, (play->sceneId == SCENE_AYASHIISHOP) ? 0x2A00 : 0x5E6, NULL);
         }
     } else {
         sPlayerControlInput = play->state.input;
@@ -7817,7 +7817,7 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
             newYaw = CLAMP(newYaw, -0x3E80, 0x3E80);
             thisx->focus.rot.y = thisx->shape.rot.y + newYaw;
 
-            if (play->sceneNum == SCENE_00KEIKOKU) {
+            if (play->sceneId == SCENE_00KEIKOKU) {
                 f32 focusDeltaX = (s16)(thisx->focus.rot.x - prevFocusX);
                 f32 focusDeltaY = (s16)(thisx->focus.rot.y - prevFocusY);
 
@@ -7826,7 +7826,7 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
             }
         }
 
-        if (play->sceneNum == SCENE_AYASHIISHOP) {
+        if (play->sceneId == SCENE_AYASHIISHOP) {
             camMode = CAM_MODE_DEKUHIDE;
         } else if (CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_A)) { // Zoom
             camMode = CAM_MODE_TARGET;
@@ -7838,12 +7838,12 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
         if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_B)) {
             func_801477B4(play);
 
-            if (play->sceneNum == SCENE_00KEIKOKU) {
+            if (play->sceneId == SCENE_00KEIKOKU) {
                 gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = ENTRANCE(ASTRAL_OBSERVATORY, 2);
             } else {
                 u16 entrance;
 
-                if (play->sceneNum == SCENE_AYASHIISHOP) {
+                if (play->sceneId == SCENE_AYASHIISHOP) {
                     entrance = ENTRANCE(CURIOSITY_SHOP, 3);
                 } else {
                     entrance = ENTRANCE(PIRATES_FORTRESS_INTERIOR, 8);
@@ -7865,11 +7865,11 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
 void Player_InitMode_Telescope(PlayState* play, Player* this) {
     this->actor.update = func_8083A98C;
     this->actor.draw = NULL;
-    if (play->sceneNum == SCENE_00KEIKOKU) {
+    if (play->sceneId == SCENE_00KEIKOKU) {
         this->actor.focus.rot.x = 0xBD8;
         this->actor.focus.rot.y = -0x4D74;
         this->unk_AE8 = 20;
-    } else if (play->sceneNum == SCENE_AYASHIISHOP) {
+    } else if (play->sceneId == SCENE_AYASHIISHOP) {
         this->actor.focus.rot.x = 0x9A6;
         this->actor.focus.rot.y = 0x2102;
         this->unk_AE8 = 2;
@@ -8185,7 +8185,7 @@ void func_8083BB4C(PlayState* play, Player* this) {
                 if (this->remainingHopsCounter != 0) {
                     func_808373F8(play, this, NA_SE_VO_LI_AUTO_JUMP);
                 } else {
-                    if ((play->sceneNum == SCENE_20SICHITAI) && (this->unk_3CF == 0)) {
+                    if ((play->sceneId == SCENE_20SICHITAI) && (this->unk_3CF == 0)) {
                         if (gSaveContext.eventInf[5] & 1) {
                             play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 2);
                         } else {
@@ -8196,8 +8196,8 @@ void func_8083BB4C(PlayState* play, Player* this) {
                         this->stateFlags1 |= PLAYER_STATE1_200;
                         play_sound(NA_SE_SY_DEKUNUTS_JUMP_FAILED);
                     } else if ((this->unk_3CF == 0) &&
-                               ((play->sceneNum == SCENE_30GYOSON) || (play->sceneNum == SCENE_31MISAKI) ||
-                                (play->sceneNum == SCENE_TORIDE))) {
+                               ((play->sceneId == SCENE_30GYOSON) || (play->sceneId == SCENE_31MISAKI) ||
+                                (play->sceneId == SCENE_TORIDE))) {
                         func_80169EFC(&play->state);
                         func_808345C8();
                     } else {
@@ -10439,7 +10439,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     D_8085D2CC[initMode](play, this);
 
     if ((this->actor.draw != NULL) && gSaveContext.save.hasTatl &&
-        ((gSaveContext.gameMode == 0) || (gSaveContext.gameMode == 3)) && (play->sceneNum != SCENE_SPOT00)) {
+        ((gSaveContext.gameMode == 0) || (gSaveContext.gameMode == 3)) && (play->sceneId != SCENE_SPOT00)) {
         this->tatlActor = Player_SpawnFairy(play, this, &this->actor.world.pos, &D_8085D340, 0);
 
         if (gSaveContext.dogParams != 0) {
@@ -10813,9 +10813,9 @@ void func_80843178(PlayState* play, Player* this) {
 
         sPlayerConveyorSpeedIndex = SurfaceType_GetConveyorSpeed(&play->colCtx, floorPoly, this->actor.floorBgId);
         if (sPlayerConveyorSpeedIndex != BG_CONVEYOR_SPEED_DISABLED) {
-            sPlayerConveyorType = SurfaceType_GetConveyorType(&play->colCtx, floorPoly, this->actor.floorBgId);
-            if (((sPlayerConveyorType == CONVEYOR_WATER) && (this->actor.depthInWater > 20.0f)) ||
-                ((sPlayerConveyorType != CONVEYOR_WATER) && (this->actor.bgCheckFlags & 1))) {
+            sPlayerIsOnFloorConveyor = SurfaceType_IsFloorConveyor(&play->colCtx, floorPoly, this->actor.floorBgId);
+            if ((!sPlayerIsOnFloorConveyor && (this->actor.depthInWater > 20.0f)) ||
+                (sPlayerIsOnFloorConveyor && (this->actor.bgCheckFlags & 1))) {
                 D_80862B16 = SurfaceType_GetConveyorDirection(&play->colCtx, floorPoly, this->actor.floorBgId) << 0xA;
             } else {
                 sPlayerConveyorSpeedIndex = BG_CONVEYOR_SPEED_DISABLED;
@@ -11113,7 +11113,7 @@ void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
 
         if (play->actorCtx.targetContext.bgmEnemy != NULL) {
             seqMode = SEQ_MODE_ENEMY;
-            Audio_SetBgmEnemyVolume(sqrtf(play->actorCtx.targetContext.bgmEnemy->xyzDistToPlayerSq));
+            Audio_UpdateEnemyBgmVolume(sqrtf(play->actorCtx.targetContext.bgmEnemy->xyzDistToPlayerSq));
         }
 
         Audio_SetSequenceMode(seqMode);
@@ -11623,7 +11623,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             s32 pad2;
 
             sPlayerConveyorSpeedIndex--;
-            if (sPlayerConveyorType == CONVEYOR_WATER) {
+            if (!sPlayerIsOnFloorConveyor) {
                 conveyorSpeed = sWaterConveyorSpeeds[sPlayerConveyorSpeedIndex];
                 if (!(this->stateFlags1 & PLAYER_STATE1_8000000)) {
                     conveyorSpeed /= 4.0f;
@@ -12410,7 +12410,7 @@ void func_808477D0(PlayState* play, Player* this, Input* input, f32 arg3) {
 
 s32 func_80847880(PlayState* play, Player* this) {
     if (play->unk_1887C != 0) {
-        if (play->sceneNum == SCENE_20SICHITAI) {
+        if (play->sceneId == SCENE_20SICHITAI) {
             Player_SetAction(play, this, func_80854430, 0);
             play->unk_1887C = 0;
             this->csMode = PLAYER_CSMODE_0;
@@ -12680,7 +12680,7 @@ s32 func_808482E0(PlayState* play, Player* this) {
         Item_Give(play, giEntry->itemId);
 
         if ((this->getItemId >= GI_MASK_DEKU) && (this->getItemId <= GI_MASK_KAFEIS_MASK)) {
-            func_801A3098(NA_BGM_GET_NEW_MASK);
+            Audio_PlayFanfare(NA_BGM_GET_NEW_MASK);
         } else if (((this->getItemId >= GI_RUPEE_GREEN) && (this->getItemId <= GI_RUPEE_10)) ||
                    (this->getItemId == GI_RECOVERY_HEART)) {
             play_sound(NA_SE_SY_GET_BOXITEM);
@@ -12702,7 +12702,7 @@ s32 func_808482E0(PlayState* play, Player* this) {
                 seqId = var_v1;
             }
 
-            func_801A3098(seqId);
+            Audio_PlayFanfare(seqId);
         }
     } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         if (this->getItemId == GI_OCARINA) {
@@ -14764,7 +14764,7 @@ void func_8084D820(Player* this, PlayState* play) {
                 if (play->unk_1887C != 0) {
                     play->func_18780(this, play);
                     Player_SetAction(play, this, func_80854430, 0);
-                    if (play->sceneNum == 0x45) {
+                    if (play->sceneId == 0x45) {
                         play->unk_1887C = 0;
                     }
                 } else if (!func_808391D8(this, play)) {
@@ -15711,7 +15711,7 @@ void func_808505D0(Player* this, PlayState* play) {
         D_801BDA9C = 0;
 
         if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA) || (DREG(1) != 0)) {
-            gSaveContext.save.horseData.scene = play->sceneNum;
+            gSaveContext.save.horseData.sceneId = play->sceneId;
             gSaveContext.save.horseData.pos.x = rideActor->world.pos.x;
             gSaveContext.save.horseData.pos.y = rideActor->world.pos.y;
             gSaveContext.save.horseData.pos.z = rideActor->world.pos.z;
@@ -16140,8 +16140,8 @@ void func_80851BD4(Player* this, PlayState* play) {
 }
 
 s32 func_80851C40(PlayState* play, Player* this) {
-    return ((play->sceneNum == SCENE_MILK_BAR) && Audio_IsSequencePlaying(NA_BGM_BALLAD_OF_THE_WIND_FISH)) ||
-           (((play->sceneNum != SCENE_MILK_BAR) && (this->csMode == PLAYER_CSMODE_68)) ||
+    return ((play->sceneId == SCENE_MILK_BAR) && Audio_IsSequencePlaying(NA_BGM_BALLAD_OF_THE_WIND_FISH)) ||
+           (((play->sceneId != SCENE_MILK_BAR) && (this->csMode == PLAYER_CSMODE_68)) ||
             ((play->msgCtx.msgMode == 0x12) || (play->msgCtx.msgMode == 0x13) || (play->msgCtx.msgMode == 0x14) ||
              ((play->msgCtx.ocarinaMode != 1) &&
               ((this->csMode == PLAYER_CSMODE_5) || (play->msgCtx.ocarinaMode == 3) ||
@@ -16715,7 +16715,7 @@ void func_808534C0(Player* this, PlayState* play) {
             if (this->unk_AE8 == 0) {
                 Message_StartTextbox(play, D_8085D798[this->unk_AE7 - 1].textId, &this->actor);
 
-                func_801A3098(NA_BGM_GET_ITEM | 0x900);
+                Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
                 this->unk_AE8 = 1;
             } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
                 Actor* talkActor;
@@ -16929,7 +16929,7 @@ void func_80853CC0(Player* this, PlayState* play) {
         Player_AnimationPlayLoop(play, this, &gameplay_keep_Linkanim_00DE30);
     }
 
-    if (play->sceneNum != SCENE_SEA_BS) {
+    if (play->sceneId != SCENE_SEA_BS) {
         func_8082F164(this, BTN_R);
     }
 
@@ -17073,8 +17073,8 @@ void func_8085421C(Player* this, PlayState* play) {
         } else {
             play->transitionType = TRANS_TYPE_02;
             gSaveContext.nextTransitionType = TRANS_TYPE_02;
-            gSaveContext.seqIndex = 0xFF;
-            gSaveContext.nightSeqIndex = 0xFF;
+            gSaveContext.seqId = 0xFF;
+            gSaveContext.ambienceId = 0xFF;
         }
 
         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -17101,7 +17101,7 @@ void func_80854430(Player* this, PlayState* play) {
         play->unk_1887C = 0;
         func_80839ED0(this, play);
     } else if (this->unk_AE7 == 0) {
-        if ((play->sceneNum != SCENE_20SICHITAI) && CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_B)) {
+        if ((play->sceneId != SCENE_20SICHITAI) && CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_B)) {
             play->unk_1887C = 0xA;
             func_80847880(play, this);
             Player_SetAction(play, this, func_80854430, 1);
@@ -17115,7 +17115,7 @@ void func_80854430(Player* this, PlayState* play) {
                 func_8083868C(play, this);
             } else {
                 this->stateFlags1 &= ~PLAYER_STATE1_100000;
-                if ((play->sceneNum == SCENE_20SICHITAI) &&
+                if ((play->sceneId == SCENE_20SICHITAI) &&
                     (func_8012364C(play, this, func_8082FDC4()) == ITEM_PICTO_BOX)) {
                     s32 requiredScopeTemp;
 
@@ -19021,7 +19021,7 @@ void func_80859708(PlayState* play, Player* this, UNK_TYPE arg2) {
     if ((this->actor.id == ACTOR_EN_TEST3) && Animation_OnFrame(&this->skelAnime, 20.0f)) {
         this->getItemDrawId = GID_MASK_BLAST;
         func_80151BB4(play, 0x1B);
-        func_801A3098(0x37);
+        Audio_PlayFanfare(0x37);
     }
 }
 
@@ -19633,7 +19633,7 @@ void func_8085A4A4(PlayState* play, Player* this, void* arg2) {
 
 void func_8085A530(PlayState* play, Player* this, void* arg2) {
     LinkAnimation_Change(play, &this->skelAnime, &gameplay_keep_Linkanim_00DCA8, 1.0f,
-                         (play->sceneNum == SCENE_ALLEY) ? IREG(56) : 0.0f,
+                         (play->sceneId == SCENE_ALLEY) ? IREG(56) : 0.0f,
                          Animation_GetLastFrame(&gameplay_keep_Linkanim_00DCA8), ANIMMODE_ONCE, -8.0f);
 }
 
@@ -19821,7 +19821,7 @@ void func_8085ADA0(PlayState* play, Player* this, s32 arg2) {
     s32 csMode;
 
     if ((play->csCtx.state == CS_STATE_0) || (play->csCtx.state == CS_STATE_3) || (play->csCtx.state == CS_STATE_4)) {
-        if ((D_8085D384[this->unk_396] == PLAYER_CSMODE_68) && (play->sceneNum == SCENE_OKUJOU)) {
+        if ((D_8085D384[this->unk_396] == PLAYER_CSMODE_68) && (play->sceneId == SCENE_OKUJOU)) {
             this->unk_AA5 = PLAYER_UNKAA5_5;
 
             if (func_80838A90(this, play)) {

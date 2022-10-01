@@ -155,7 +155,7 @@ s32 EnRu_PlayWalkingSound(EnRu* this, PlayState* play) {
         sfxId = waterSfxId + SFX_FLAG;
 
     } else {
-        sfxId = SurfaceType_GetSfx(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) + SFX_FLAG;
+        sfxId = SurfaceType_GetSfxIdOffset(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) + SFX_FLAG;
     }
 
     this->isLeftFootGrounded = isFootGrounded = SubS_IsFloorAbove(play, &this->leftFootPos, -6.0f);
