@@ -16,15 +16,15 @@ void BgKin2Picture_Destroy(Actor* thisx, PlayState* play);
 void BgKin2Picture_Update(Actor* thisx, PlayState* play);
 void BgKin2Picture_Draw(Actor* thisx, PlayState* play);
 
+void BgKin2Picture_SetupWait(BgKin2Picture* this);
 void BgKin2Picture_Wait(BgKin2Picture* this, PlayState* play);
 void BgKin2Picture_SetupPlayCutscene(BgKin2Picture* this);
 void BgKin2Picture_PlayCutscene(BgKin2Picture* this, PlayState* play);
-void BgKin2Picture_SetupDoNothing(BgKin2Picture* this);
 void BgKin2Picture_SetupShiver(BgKin2Picture* this);
 void BgKin2Picture_Shiver(BgKin2Picture* this, PlayState* play);
 void BgKin2Picture_SetupFall(BgKin2Picture* this);
 void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play);
-void BgKin2Picture_SetupWait(BgKin2Picture* this);
+void BgKin2Picture_SetupDoNothing(BgKin2Picture* this);
 void BgKin2Picture_DoNothing(BgKin2Picture* this, PlayState* play);
 
 const ActorInit Bg_Kin2_Picture_InitVars = {
@@ -89,7 +89,7 @@ s32 BgKin2Picture_IsSkulltulaCollected(PlayState* play, s32 skulltulaParams) {
     s32 flag = -1;
 
     if ((u8)skulltulaParams & 3) {
-        flag = BG_KIN2_PICTURE_GETS_3FC(skulltulaParams);
+        flag = BG_KIN2_PICTURE_GET_3FC(skulltulaParams);
     }
 
     return (flag >= 0) && Flags_GetTreasure(play, flag);
@@ -97,14 +97,14 @@ s32 BgKin2Picture_IsSkulltulaCollected(PlayState* play, s32 skulltulaParams) {
 
 void BgKin2Picture_SpawnSkulltula(BgKin2Picture* this, PlayState* play2) {
     PlayState* play = play2;
-    s32 actorSpawnParams;
+    s32 skulltulaSpawnParams;
 
     if (!BG_KIN2_PICTURE_SKULLTULA_COLLECTED(&this->dyna.actor)) { // Gold Skulltula is still here.
-        actorSpawnParams = BG_KIN2_PICTURE_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
-        if (!BgKin2Picture_IsSkulltulaCollected(play, actorSpawnParams) &&
+        skulltulaSpawnParams = BG_KIN2_PICTURE_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
+        if (!BgKin2Picture_IsSkulltulaCollected(play, skulltulaSpawnParams) &&
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->dyna.actor.home.pos.x,
                         this->dyna.actor.home.pos.y + 23.0f, this->dyna.actor.home.pos.z, 0,
-                        this->dyna.actor.home.rot.y, 0, actorSpawnParams)) {
+                        this->dyna.actor.home.rot.y, 0, skulltulaSpawnParams)) {
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);
         }
     }
