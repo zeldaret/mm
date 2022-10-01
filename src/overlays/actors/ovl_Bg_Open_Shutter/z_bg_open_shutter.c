@@ -6,6 +6,7 @@
 
 #include "z_bg_open_shutter.h"
 #include "objects/object_open_obj/object_open_obj.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -105,7 +106,7 @@ void BgOpenShutter_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80ACAD88(BgOpenShutter* this, PlayState* play) {
-    s32 quake;
+    s32 doorDirection;
 
     if (this->door.unk_15C != 0) {
         Player* player = GET_PLAYER(play);
@@ -119,10 +120,10 @@ void func_80ACAD88(BgOpenShutter* this, PlayState* play) {
     } else {
         Player* player = GET_PLAYER(play);
 
-        quake = func_80ACABA8(this, play);
-        if (quake > 0) {
+        doorDirection = func_80ACABA8(this, play);
+        if (doorDirection > 0) {
             player->doorType = PLAYER_DOORTYPE_SLIDING;
-            player->doorDirection = quake;
+            player->doorDirection = doorDirection;
             player->doorActor = &this->door.dyna.actor;
             func_80122F28(player);
         }
@@ -143,7 +144,7 @@ void func_80ACAE5C(BgOpenShutter* this, PlayState* play) {
 
 void func_80ACAEF0(BgOpenShutter* this, PlayState* play) {
     s32 pad;
-    s16 quake;
+    s16 quakeIndex;
 
     Math_StepToF(&this->door.dyna.actor.velocity.y, 20.0f, 8.0f);
     if (Math_StepToF(&this->door.dyna.actor.world.pos.y, this->door.dyna.actor.home.pos.y,
@@ -152,11 +153,14 @@ void func_80ACAEF0(BgOpenShutter* this, PlayState* play) {
         Actor_SpawnFloorDustRing(play, &this->door.dyna.actor, &this->door.dyna.actor.world.pos, 60.0f, 10, 8.0f, 500,
                                  10, true);
         Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_BIGWALL_BOUND);
-        quake = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
-        Quake_SetSpeed(quake, -0x7F18);
-        Quake_SetQuakeValues(quake, 2, 0, 0, 0);
-        Quake_SetCountdown(quake, 10);
+
+        quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
+        Quake_SetSpeed(quakeIndex, -32536);
+        Quake_SetQuakeValues(quakeIndex, 2, 0, 0, 0);
+        Quake_SetCountdown(quakeIndex, 10);
+
         Rumble_Request(this->door.dyna.actor.xyzDistToPlayerSq, 180, 20, 100);
+
         this->door.unk_15C = 0;
         this->actionFunc = func_80ACAD88;
     }

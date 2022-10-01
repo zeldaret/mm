@@ -18,14 +18,14 @@ static s16 sGameOverTimer = 0;
 
 void GameOver_Update(PlayState* play) {
     GameOverContext* gameOverCtx = &play->gameOverCtx;
-    s16 i;
+    s16 timerId;
 
     switch (gameOverCtx->state) {
         case GAMEOVER_DEATH_START:
             func_801477B4(play);
 
-            for (i = 0; i < ARRAY_COUNT(gSaveContext.unk_3DD0); i++) {
-                gSaveContext.unk_3DD0[i] = 0;
+            for (timerId = 0; timerId < TIMER_ID_MAX; timerId++) {
+                gSaveContext.timerStates[timerId] = TIMER_STATE_OFF;
             }
 
             gSaveContext.eventInf[1] &= ~1;
@@ -46,8 +46,8 @@ void GameOver_Update(PlayState* play) {
 
             gSaveContext.unk_3DC0 = 2000;
             gSaveContext.save.playerData.tatlTimer = 0;
-            gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
-            gSaveContext.nightSeqIndex = 0xFF;
+            gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+            gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
             gSaveContext.eventInf[0] = 0;
             gSaveContext.eventInf[1] = 0;
             gSaveContext.eventInf[2] = 0;
@@ -67,7 +67,7 @@ void GameOver_Update(PlayState* play) {
             gameOverCtx->state = GAMEOVER_DEATH_WAIT_GROUND;
             break;
         case GAMEOVER_DEATH_FADE_OUT:
-            if (func_801A8A50(1) != NA_BGM_GAME_OVER) {
+            if (Audio_GetActiveSequence(SEQ_PLAYER_FANFARE) != NA_BGM_GAME_OVER) {
                 func_80169F78(&play->state);
                 if (gSaveContext.respawnFlag != -7) {
                     gSaveContext.respawnFlag = -6;

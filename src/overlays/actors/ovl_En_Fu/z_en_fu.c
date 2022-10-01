@@ -74,13 +74,13 @@ static Vec3f D_80964B18 = { 0.0f, 55.0f, 12.0f };
 static Vec3f D_80964B24 = { 0.0f, 60.0f, 0.0f };
 
 static AnimationInfo sAnimationInfo[] = {
-    { &object_mu_Anim_0053E0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_mu_Anim_001F74, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_mu_Anim_002F64, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_mu_Anim_004904, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_mu_Anim_005304, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_mu_Anim_005304, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_mu_Anim_00BAC4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gHoneyAndDarlingIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gHoneyAndDarlingCupCheeksLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gHoneyAndDarlingHugLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gHoneyAndDarlingGameDanceLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHoneyAndDarlingHoldHandsLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &gHoneyAndDarlingHoldHandsLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHoneyAndDarlingSurpiseAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -194,8 +194,8 @@ void EnFu_Init(Actor* thisx, PlayState* play) {
 
     if (fuKaiten != NULL) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_mu_Skel_00B2B0, &object_mu_Anim_001F74, this->jointTable,
-                           this->morphTable, 21);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gHoneyAndDarlingSkel, &gHoneyAndDarlingCupCheeksLoopAnim,
+                           this->jointTable, this->morphTable, HONEY_AND_DARLING_LIMB_MAX);
         Collider_InitCylinder(play, &this->collider);
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -401,7 +401,8 @@ void func_80962340(EnFu* this, PlayState* play) {
                     Message_StartTextbox(play, 0x287E, &this->actor);
                     this->unk_552 = 0x287E;
                 }
-            } else if ((gSaveContext.unk_3DE0[4] == 0) && (this->unk_552 != 0x2888)) {
+            } else if ((gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] == SECONDS_TO_TIMER(0)) &&
+                       (this->unk_552 != 0x2888)) {
                 Message_StartTextbox(play, 0x2886, &this->actor);
                 this->unk_552 = 0x2886;
             } else {
@@ -537,7 +538,7 @@ void func_80962660(EnFu* this, PlayState* play) {
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 this->unk_53C = 0;
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
-                func_801A2BB8(NA_BGM_MINI_GAME_2);
+                func_801A2BB8(NA_BGM_TIMED_MINI_GAME);
                 if (this->unk_542 == 0) {
                     if (this->unk_546 == 1) {
                         func_80961EC8(play);
@@ -644,7 +645,7 @@ void func_80962A10(EnFu* this, PlayState* play) {
 
     play_sound(NA_SE_SY_FOUND);
     player->stateFlags1 &= ~PLAYER_STATE1_20;
-    func_8010E9F0(4, 60);
+    Interface_StartTimer(TIMER_ID_MINIGAME_2, 60);
     if (this->unk_546 == 1) {
         func_809616E0(this, play);
     } else {
@@ -681,7 +682,7 @@ void func_80962BCC(EnFu* this, PlayState* play) {
     play_sound(NA_SE_SY_FOUND);
     player->stateFlags1 &= ~PLAYER_STATE1_20;
     player->stateFlags3 |= PLAYER_STATE3_400000;
-    func_8010E9F0(4, 60);
+    Interface_StartTimer(TIMER_ID_MINIGAME_2, 60);
 
     if (this->unk_546 == 1) {
         func_809616E0(this, play);
@@ -712,7 +713,7 @@ void func_80962D60(EnFu* this, PlayState* play) {
     play_sound(NA_SE_SY_FOUND);
     player->stateFlags1 &= ~PLAYER_STATE1_20;
     player->stateFlags3 |= PLAYER_STATE3_400000;
-    func_8010E9F0(4, 60);
+    Interface_StartTimer(TIMER_ID_MINIGAME_2, 60);
 
     if (this->unk_546 == 1) {
         func_809616E0(this, play);
@@ -760,11 +761,11 @@ void func_80962F4C(EnFu* this, PlayState* play) {
             break;
     }
 
-    if (gSaveContext.unk_3DE0[4] < 2000) {
+    if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] < SECONDS_TO_TIMER(20)) {
         s16 val = D_80964B00[this->unk_542] + 200;
 
         Math_SmoothStepToS(&fuKaiten->rotationSpeed, val, 10, 5, 5);
-    } else if (gSaveContext.unk_3DE0[4] < 4000) {
+    } else if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] < SECONDS_TO_TIMER(40)) {
         s16 val = D_80964B00[this->unk_542] + 100;
 
         Math_SmoothStepToS(&fuKaiten->rotationSpeed, val, 10, 5, 5);
@@ -776,12 +777,12 @@ void func_80962F4C(EnFu* this, PlayState* play) {
 
     if ((!DynaPolyActor_IsInRidingRotatingState((DynaPolyActor*)this->actor.child) &&
          (player->actor.bgCheckFlags & 1)) ||
-        (gSaveContext.unk_3DE0[4] < 1) || (this->unk_548 == this->unk_54C)) {
+        (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] <= SECONDS_TO_TIMER(0)) || (this->unk_548 == this->unk_54C)) {
         player->stateFlags3 &= ~PLAYER_STATE3_400000;
         func_80961E88(play);
         player->stateFlags1 |= PLAYER_STATE1_20;
         if (this->unk_548 < this->unk_54C) {
-            if (gSaveContext.unk_3DE0[4] == 0) {
+            if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] == SECONDS_TO_TIMER(0)) {
                 Message_StartTextbox(play, 0x2885, &this->actor);
                 this->unk_552 = 0x2885;
             } else {
@@ -789,16 +790,16 @@ void func_80962F4C(EnFu* this, PlayState* play) {
                 this->unk_552 = 0x2888;
             }
             func_801A2C20();
-            gSaveContext.unk_3DE0[4] = 0;
-            gSaveContext.unk_3DD0[4] = 5;
+            gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] = SECONDS_TO_TIMER(0);
+            gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
             this->unk_548 = 0;
             func_809632D0(this);
         } else {
             this->unk_548 = 0;
             func_801A2C20();
-            gSaveContext.unk_3DE0[4] = 0;
-            gSaveContext.unk_3DD0[4] = 5;
-            func_801A3098(NA_BGM_GET_ITEM | 0x900);
+            gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] = SECONDS_TO_TIMER(0);
+            gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
+            Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
             func_8011B4E0(play, 1);
             this->unk_54A = 3;
             func_809632D0(this);
@@ -1453,7 +1454,7 @@ void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len) {
     for (i = 0; i < len; i++, ptr++) {
         if (ptr->unk_36 == 1) {
             if (!flag) {
-                gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0A0);
+                gSPDisplayList(POLY_OPA_DISP++, gHoneyAndDarlingHeartMaterialDL);
                 flag = true;
             }
             Matrix_Translate(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
@@ -1462,7 +1463,7 @@ void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len) {
 
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropRecoveryHeartTex));
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0E0);
+            gSPDisplayList(POLY_OPA_DISP++, gHoneyAndDarlingHeartModelDL);
         }
     }
 
