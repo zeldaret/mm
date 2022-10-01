@@ -767,7 +767,7 @@ typedef enum {
 /*
 * 0xFE00:  Index into sSceneEntranceTable (Scene)
 * 0x01F0:  Index into the scenes specific entrance table (Spawn)
-* 0x000F:  Index into the specific entrance table (Layer), stored seperately in sceneSetupIndex
+* 0x000F:  Index into the specific entrance table (Layer), stored seperately in sceneLayer
 */
 #define ENTRANCE(scene, spawn) ((((ENTR_SCENE_##scene) & 0x7F) << 9) | (((spawn) & 0x1F) << 4))
 

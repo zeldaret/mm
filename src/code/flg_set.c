@@ -1,6 +1,6 @@
 /**
  * File: flg_set.c
- * Description: Event Editor, used to view and edit weekEventReg, eventInf and maskMaskBit flags.
+ * Description: Event Editor, used to view and edit weekEventReg, eventInf and masksGivenOnMoon flags.
  * Controls:
  *  + Left and Right: select different flags/bits in array element
  *  + Up and Down: select array element (byte) 1 up/down
@@ -123,9 +123,9 @@ static FlagSetEntry sFlagEntries[] = {
     { &gSaveContext.eventInf[6], "event_inf[6]" },
     { &gSaveContext.eventInf[7], "event_inf[7]" },
 
-    { &gSaveContext.maskMaskBit[0], "mask_mask_bit[0]" },
-    { &gSaveContext.maskMaskBit[1], "mask_mask_bit[1]" },
-    { &gSaveContext.maskMaskBit[2], "mask_mask_bit[2]" },
+    { &gSaveContext.masksGivenOnMoon[0], "mask_mask_bit[0]" },
+    { &gSaveContext.masksGivenOnMoon[1], "mask_mask_bit[1]" },
+    { &gSaveContext.masksGivenOnMoon[2], "mask_mask_bit[2]" },
 
     { NULL, NULL }, // used in the code to detect array end
 };
