@@ -261,7 +261,7 @@ void func_80BE09A8(EnTab* this, PlayState* play) {
 
 void func_80BE0A98(EnTab* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 sp20 = Message_GetState(&play->msgCtx);
+    s32 talkState = Message_GetState(&play->msgCtx);
 
     this->unk_308 += (this->unk_304 != 0.0f) ? 40.0f : -40.0f;
     this->unk_308 = CLAMP(this->unk_308, 0.0f, 80.0f);
@@ -269,8 +269,8 @@ void func_80BE0A98(EnTab* this, PlayState* play) {
     Matrix_Translate(this->unk_308, 0.0f, 0.0f, MTXMODE_APPLY);
 
     if ((&this->actor == player->targetActor) &&
-        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (sp20 == 3) &&
-        (this->unk_334 == 3)) {
+        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_3) &&
+        (this->prevTalkState == TEXT_STATE_3)) {
         if ((play->state.frames % 2) == 0) {
             if (this->unk_304 != 0.0f) {
                 this->unk_304 = 0.0f;
@@ -281,7 +281,7 @@ void func_80BE0A98(EnTab* this, PlayState* play) {
     } else {
         this->unk_304 = 0.0f;
     }
-    this->unk_334 = sp20;
+    this->prevTalkState = talkState;
 }
 
 s32 func_80BE0C04(EnTab* this, Actor* actor, f32 arg2) {
@@ -552,7 +552,7 @@ void EnTab_Update(Actor* thisx, PlayState* play) {
         radius = this->collider.dim.radius + this->unk_30C;
         height = this->collider.dim.height + 10;
 
-        func_8013C964(&this->actor, play, radius, height, EXCH_ITEM_NONE, this->unk_2FC & 7);
+        func_8013C964(&this->actor, play, radius, height, PLAYER_AP_NONE, this->unk_2FC & 7);
         Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         func_80BE0620(this, play);

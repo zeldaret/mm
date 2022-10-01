@@ -296,7 +296,7 @@ void func_80B39908(ObjSnowball2* this, PlayState* play) {
 }
 
 void func_80B39B28(ObjSnowball2* this, PlayState* play) {
-    if ((this->unk_1AE == 0) && (play->roomCtx.currRoom.num != this->unk_1AF)) {
+    if ((this->unk_1AE == 0) && (play->roomCtx.curRoom.num != this->unk_1AF)) {
         this->unk_1AE = 1;
     }
 }
@@ -416,7 +416,7 @@ void func_80B39FA8(ObjSnowball2* this, PlayState* play) {
     }
 
     if (Actor_HasNoParent(&this->actor, play)) {
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         this->actor.speedXZ *= 3.8f;
         this->actor.velocity.y *= 0.4f;
         this->actor.gravity = -2.8f;

@@ -1,5 +1,7 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "vt.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 #define DYNA_RAYCAST_FLOORS 1
 #define DYNA_RAYCAST_WALLS 2
@@ -45,7 +47,7 @@ u8 D_801B46C0[] = {
     /* 0x0E */ 1
 };
 
-s16 sSmallMemScenes[] = {
+s16 sSmallMemSceneIds[] = {
     SCENE_F01,
 };
 
@@ -1191,7 +1193,7 @@ void BgCheck_GetSubdivisionMinBounds(CollisionContext* colCtx, Vec3f* pos, s32* 
 
 /**
  * Get positive bias subdivision indices
- * increments indicies if `pos` is within BGCHECK_SUBDIV_OVERLAP units of the postive subdivision boundary
+ * increments indices if `pos` is within BGCHECK_SUBDIV_OVERLAP units of the positive subdivision boundary
  * `sx`, `sy`, `sz` returns the subdivision x, y, z indices
  */
 void BgCheck_GetSubdivisionMaxBounds(CollisionContext* colCtx, Vec3f* pos, s32* sx, s32* sy, s32* sz) {
@@ -1461,10 +1463,10 @@ u32 BgCheck_InitStaticLookup(CollisionContext* colCtx, PlayState* play, StaticLo
  * Returns whether the current scene should reserve less memory for it's collision lookup
  */
 s32 BgCheck_IsSmallMemScene(PlayState* play) {
-    s16* i;
+    s16* sceneId;
 
-    for (i = sSmallMemScenes; i < sSmallMemScenes + ARRAY_COUNT(sSmallMemScenes); i++) {
-        if (play->sceneNum == *i) {
+    for (sceneId = sSmallMemSceneIds; sceneId < sSmallMemSceneIds + ARRAY_COUNT(sSmallMemSceneIds); sceneId++) {
+        if (play->sceneId == *sceneId) {
             return true;
         }
     }
@@ -1503,7 +1505,7 @@ s32 BgCheck_GetSpecialSceneMaxObjects(PlayState* play, s32* maxNodes, s32* maxPo
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(sCustomDynapolyMem); i++) {
-        if (play->sceneNum == sCustomDynapolyMem[i].sceneId) {
+        if (play->sceneId == sCustomDynapolyMem[i].sceneId) {
             *maxNodes = sCustomDynapolyMem[i].maxNodes;
             *maxPolygons = sCustomDynapolyMem[i].maxPolygons;
             *maxVertices = sCustomDynapolyMem[i].maxVertices;
@@ -1540,7 +1542,7 @@ void BgCheck_Allocate(CollisionContext* colCtx, PlayState* play, CollisionHeader
         s32 useCustomSubdivisions;
         s32 i;
 
-        if (BgCheck_TryGetCustomMemsize(play->sceneNum, &customMemSize)) {
+        if (BgCheck_TryGetCustomMemsize(play->sceneId, &customMemSize)) {
             colCtx->memSize = customMemSize;
         } else {
             colCtx->memSize = 0x23000;
@@ -1553,7 +1555,7 @@ void BgCheck_Allocate(CollisionContext* colCtx, PlayState* play, CollisionHeader
         useCustomSubdivisions = false;
 
         for (i = 0; i < ARRAY_COUNT(sSceneSubdivisionList); i++) {
-            if (play->sceneNum == sSceneSubdivisionList[i].sceneId) {
+            if (play->sceneId == sSceneSubdivisionList[i].sceneId) {
                 colCtx->subdivAmount.x = sSceneSubdivisionList[i].subdivAmount.x;
                 colCtx->subdivAmount.y = sSceneSubdivisionList[i].subdivAmount.y;
                 colCtx->subdivAmount.z = sSceneSubdivisionList[i].subdivAmount.z;
@@ -3295,7 +3297,7 @@ f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast) {
     if ((result != BGCHECK_Y_MIN) && (dynaActor != NULL) && (dynaRaycast->play != NULL)) {
         pauseState = dynaRaycast->play->pauseCtx.state != 0;
         if (!pauseState) {
-            pauseState = dynaRaycast->play->pauseCtx.debugState != 0;
+            pauseState = dynaRaycast->play->pauseCtx.debugEditor != DEBUG_EDITOR_NONE;
         }
         if (!pauseState && (dynaRaycast->colCtx->dyna.bgActorFlags[*dynaRaycast->bgId] & 2)) {
             curTransform = &dynaRaycast->dyna->bgActors[*dynaRaycast->bgId].curTransform;
@@ -3961,8 +3963,8 @@ void CollisionHeader_SegmentedToVirtual(CollisionHeader* colHeader) {
     if (colHeader->surfaceTypeList) {
         colHeader->surfaceTypeList = Lib_SegmentedToVirtual(colHeader->surfaceTypeList);
     }
-    if (colHeader->cameraDataList) {
-        colHeader->cameraDataList = Lib_SegmentedToVirtual(colHeader->cameraDataList);
+    if (colHeader->bgCamList) {
+        colHeader->bgCamList = Lib_SegmentedToVirtual(colHeader->bgCamList);
     }
     if (colHeader->waterBoxes) {
         colHeader->waterBoxes = Lib_SegmentedToVirtual(colHeader->waterBoxes);
@@ -4025,128 +4027,142 @@ u32 SurfaceType_GetData(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId,
 }
 
 /**
- * SurfaceType return CamData Index
+ * SurfaceType get index of bgCam
  */
-u32 SurfaceType_GetCamDataIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+u32 SurfaceType_GetBgCamIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) & 0xFF;
 }
 
 /**
- * CamData return camera setting
+ * BgCam get setting of bgCam
  */
-u16 func_800C9728(CollisionContext* colCtx, u32 camId, s32 bgId) {
-    u16 result;
+u16 BgCheck_GetBgCamSettingImpl(CollisionContext* colCtx, u32 bgCamIndex, s32 bgId) {
+    u16 camSetting;
     CollisionHeader* colHeader;
-    CamData* camData;
+    BgCamInfo* bgCamList;
 
     colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
     if (colHeader == NULL) {
-        return 0;
+        return CAM_SET_NONE;
     }
-    camData = colHeader->cameraDataList;
-    result = camData[camId].setting;
-    return result;
+
+    bgCamList = colHeader->bgCamList;
+    camSetting = bgCamList[bgCamIndex].setting;
+
+    return camSetting;
 }
 
 /**
- * SurfaceType return camera setting
+ * BgCam Get the camera setting of bgCam
  */
-u16 SurfaceType_GetCameraSetting(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+u16 BgCheck_GetBgCamSetting(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     CollisionHeader* colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
-    CamData* camData;
+    BgCamInfo* bgCamList;
+    SurfaceType* surfaceTypes;
+
+    if (colHeader == NULL) {
+        return CAM_SET_NONE;
+    }
+
+    bgCamList = colHeader->bgCamList;
+    if (bgCamList == NULL) {
+        return CAM_SET_NONE;
+    }
+
+    surfaceTypes = colHeader->surfaceTypeList;
+    if (surfaceTypes == NULL) {
+        return CAM_SET_NONE;
+    }
+
+    return BgCheck_GetBgCamSettingImpl(colCtx, SurfaceType_GetBgCamIndex(colCtx, poly, bgId), bgId);
+}
+
+/**
+ * BgCam Get the total count of Vec3s data from bgCamFuncData
+ */
+u16 BgCheck_GetBgCamCountImpl(CollisionContext* colCtx, u32 bgCamIndex, s32 bgId) {
+    CollisionHeader* colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
+    BgCamInfo* bgCamList;
+
+    if (colHeader == NULL) {
+        return 0;
+    }
+
+    bgCamList = colHeader->bgCamList;
+    if (bgCamList == NULL) {
+        return 0;
+    }
+
+    return bgCamList[bgCamIndex].count;
+}
+
+/**
+ * BgCam Get the total count of Vec3s data from bgCamFuncData
+ */
+u16 BgCheck_GetBgCamCount(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    CollisionHeader* colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
+    BgCamInfo* bgCamList;
     SurfaceType* surfaceTypes;
 
     if (colHeader == NULL) {
         return 0;
     }
-    camData = colHeader->cameraDataList;
-    if (camData == NULL) {
+
+    bgCamList = colHeader->bgCamList;
+    if (bgCamList == NULL) {
         return 0;
     }
+
     surfaceTypes = colHeader->surfaceTypeList;
     if (surfaceTypes == NULL) {
         return 0;
     }
-    return func_800C9728(colCtx, SurfaceType_GetCamDataIndex(colCtx, poly, bgId), bgId);
+
+    return BgCheck_GetBgCamCountImpl(colCtx, SurfaceType_GetBgCamIndex(colCtx, poly, bgId), bgId);
 }
 
 /**
- * CamData get number of camera data blocks
+ * BgCam Get Vec3s data from bgCamFuncData
  */
-u16 func_800C97F8(CollisionContext* colCtx, u32 camId, s32 bgId) {
+Vec3s* BgCheck_GetBgCamFuncDataImpl(CollisionContext* colCtx, s32 bgCamIndex, s32 bgId) {
     CollisionHeader* colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
-    CamData* camData;
-
-    if (colHeader == NULL) {
-        return 0;
-    }
-
-    camData = colHeader->cameraDataList;
-    if (camData == NULL) {
-        return 0;
-    }
-    return camData[camId].numData;
-}
-
-/**
- * SurfaceType get number of camera data blocks
- */
-u16 func_800C9844(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
-    CollisionHeader* colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
-    CamData* camData;
-    SurfaceType* surfaceTypes;
-
-    if (colHeader == NULL) {
-        return 0;
-    }
-    camData = colHeader->cameraDataList;
-    if (camData == NULL) {
-        return 0;
-    }
-    surfaceTypes = colHeader->surfaceTypeList;
-    if (surfaceTypes == NULL) {
-        return 0;
-    }
-    return func_800C97F8(colCtx, SurfaceType_GetCamDataIndex(colCtx, poly, bgId), bgId);
-}
-
-/**
- * CamData get data
- */
-Vec3s* func_800C98CC(CollisionContext* colCtx, s32 camId, s32 bgId) {
-    CollisionHeader* colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
-    CamData* cameraDataList;
+    BgCamInfo* bgCamList;
 
     if (colHeader == NULL) {
         return NULL;
     }
-    cameraDataList = colHeader->cameraDataList;
-    if (cameraDataList == NULL) {
+
+    bgCamList = colHeader->bgCamList;
+    if (bgCamList == NULL) {
         return NULL;
     }
-    return Lib_SegmentedToVirtual(cameraDataList[camId].data);
+
+    return Lib_SegmentedToVirtual(bgCamList[bgCamIndex].bgCamFuncData);
 }
 
 /**
- * SurfaceType Get data
+ * BgCam Get Vec3s data from bgCamFuncData
  */
-Vec3s* SurfaceType_GetCamPosData(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+Vec3s* BgCheck_GetBgCamFuncData(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     CollisionHeader* colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
-    CamData* camData;
+    BgCamInfo* bgCamList;
     SurfaceType* surfaceTypes;
 
     if (colHeader == NULL) {
         return NULL;
     }
-    camData = colHeader->cameraDataList;
-    if (camData == NULL) {
+
+    bgCamList = colHeader->bgCamList;
+    if (bgCamList == NULL) {
         return NULL;
     }
+
     surfaceTypes = colHeader->surfaceTypeList;
     if (surfaceTypes == NULL) {
         return NULL;
     }
-    return func_800C98CC(colCtx, SurfaceType_GetCamDataIndex(colCtx, poly, bgId), bgId);
+
+    return BgCheck_GetBgCamFuncDataImpl(colCtx, SurfaceType_GetBgCamIndex(colCtx, poly, bgId), bgId);
 }
 
 /**
@@ -4315,18 +4331,22 @@ s32 SurfaceType_IsIgnoredByProjectiles(CollisionContext* colCtx, CollisionPoly* 
 }
 
 /**
- * SurfaceType Get Conveyor Surface Type
- * Return type 0 (CONVEYOR_WATER) if 'poly' is a surface that will only move player underwater
- * Return type 1 (CONVEYOR_FLOOR) if `poly` is a surface that must be stood on to move player
+ * Checks if poly is a floor conveyor
+ *
+ * A conveyor surface is enabled with non-zero speed.
+ * When enabled, the conveyor will exhibit two types of behaviour depending on the return value:
+ *
+ * If true, then it is a floor conveyor and will push player only while being stood on
+ * If false, then it is a water conveyor and will push player only while in water
  */
-s32 SurfaceType_GetConveyorType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+s32 SurfaceType_IsFloorConveyor(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     u32 flags;
 
     if (BgCheck_GetCollisionHeader(colCtx, bgId) == NULL) {
-        return CONVEYOR_FLOOR;
+        return true;
     }
     if (poly == NULL) {
-        return CONVEYOR_WATER;
+        return false;
     }
     flags = poly->flags_vIB & 0x2000;
     return !!flags;
@@ -4389,7 +4409,7 @@ s32 WaterBox_GetSurfaceImpl(PlayState* play, CollisionContext* colCtx, f32 x, f3
         for (curWaterBox = colHeader->waterBoxes; curWaterBox < colHeader->waterBoxes + colHeader->numWaterBoxes;
              curWaterBox++) {
             room = 0x3F & (curWaterBox->properties >> 13);
-            if (room == (u32)play->roomCtx.currRoom.num || room == 0x3F) {
+            if (room == (u32)play->roomCtx.curRoom.num || room == 0x3F) {
                 if (curWaterBox->properties & 0x80000) {
                     continue;
                 }
@@ -4474,7 +4494,7 @@ s32 WaterBox_GetSurface2(PlayState* play, CollisionContext* colCtx, Vec3f* pos, 
         waterBox = &colHeader->waterBoxes[i];
 
         room = WATERBOX_ROOM(waterBox->properties);
-        if (!(room == play->roomCtx.currRoom.num || room == 0x3F)) {
+        if (!(room == play->roomCtx.curRoom.num || room == 0x3F)) {
             continue;
         }
         if ((waterBox->properties & 0x80000)) {
@@ -4540,41 +4560,46 @@ f32 func_800CA568(CollisionContext* colCtx, s32 waterBoxId, s32 bgId) {
 }
 
 /**
- * WaterBox get CamData index
+ * WaterBox get BgCam index
  */
-u32 WaterBox_GetCamDataIndex(CollisionContext* colCtx, WaterBox* waterBox) {
+u32 WaterBox_GetBgCamIndex(CollisionContext* colCtx, WaterBox* waterBox) {
     u32 prop = waterBox->properties >> 0;
 
     return prop & 0xFF;
 }
 
 /**
- * WaterBox get CamData camera setting
+ * WaterBox get BgCam setting
  */
-u16 WaterBox_GetCameraSetting(CollisionContext* colCtx, WaterBox* waterBox, s32 bgId) {
+u16 WaterBox_GetBgCamSetting(CollisionContext* colCtx, WaterBox* waterBox, s32 bgId) {
     s32 pad[2];
-    u16 result = 0;
+    u16 camSetting = CAM_SET_NONE;
     CollisionHeader* colHeader;
-    CamData* camData;
-    s32 camId;
+    BgCamInfo* bgCamList;
+    s32 bgCamIndex;
 
     colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
     if (colHeader == NULL) {
-        return result;
-    }
-    camId = WaterBox_GetCamDataIndex(colCtx, waterBox);
-    camData = colHeader->cameraDataList;
-
-    if (camData == NULL) {
-        return result;
+        return camSetting;
     }
 
-    result = camData[camId].setting;
-    return result;
+    bgCamIndex = WaterBox_GetBgCamIndex(colCtx, waterBox);
+    bgCamList = colHeader->bgCamList;
+
+    if (bgCamList == NULL) {
+        return camSetting;
+    }
+
+    camSetting = bgCamList[bgCamIndex].setting;
+
+    return camSetting;
 }
 
-void func_800CA6B8(CollisionContext* colCtx, WaterBox* waterBox) {
-    WaterBox_GetCameraSetting(colCtx, waterBox, BGCHECK_SCENE);
+/**
+ * WaterBox get scene BgCam setting
+ */
+void WaterBox_GetSceneBgCamSetting(CollisionContext* colCtx, WaterBox* waterBox) {
+    WaterBox_GetBgCamSetting(colCtx, waterBox, BGCHECK_SCENE);
 }
 
 /**
@@ -4611,7 +4636,7 @@ s32 func_800CA6F0(PlayState* play, CollisionContext* colCtx, f32 x, f32 z, f32* 
     for (curWaterBox = colHeader->waterBoxes; curWaterBox < colHeader->waterBoxes + colHeader->numWaterBoxes;
          curWaterBox++) {
         room = WATERBOX_ROOM(curWaterBox->properties);
-        if (room == (u32)play->roomCtx.currRoom.num || room == 0x3F) {
+        if (room == (u32)play->roomCtx.curRoom.num || room == 0x3F) {
             if ((curWaterBox->properties & 0x80000) != 0) {
                 if (curWaterBox->minPos.x < x && x < curWaterBox->minPos.x + curWaterBox->xLength) {
                     if (curWaterBox->minPos.z < z && z < curWaterBox->minPos.z + curWaterBox->zLength) {

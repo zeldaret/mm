@@ -206,13 +206,13 @@ void EnZoraegg_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80B319A8(PlayState* play) {
-    return gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 & 7;
+    return gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 7;
 }
 
 void func_80B319D0(PlayState* play, s32 arg1) {
     if ((arg1 < 8) && (arg1 >= 0)) {
-        gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 &= ~7;
-        gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 |= arg1;
+        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~7;
+        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= arg1;
     }
 }
 
@@ -326,7 +326,7 @@ void func_80B32084(EnZoraegg* this, PlayState* play) {
 }
 
 void func_80B32094(EnZoraegg* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 2) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         this->actionFunc = func_80B320E0;
     }
     func_80B31C40(this, play);

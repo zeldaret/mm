@@ -209,7 +209,7 @@ void func_80A5B508(void) {
     sp74[7] = (spAC - temp_f20) * temp_f22 * temp_f24 * temp_f2;
 
     for (i = 0; i < ARRAY_COUNT(D_80A60908); i++) {
-        ptr = (f32*)&D_80A60908[i].mf[0];
+        ptr = &D_80A60908[i].xx;
 
         tempf1 = sp74[(i + 0) & 7];
         tempf2 = sp74[(i + 1) & 7];
@@ -242,8 +242,8 @@ void func_80A5B508(void) {
 void func_80A5B954(MtxF* matrix, f32 arg1) {
     s32 i;
     MtxF* temp = Matrix_GetCurrent();
-    f32* tmp = (f32*)&temp->mf[0];
-    f32* tmp2 = (f32*)&matrix->mf[0];
+    f32* tmp = &temp->xx;
+    f32* tmp2 = &matrix->xx;
 
     for (i = 0; i < 16; i++) {
         *tmp++ += *tmp2++ * arg1;
@@ -1033,7 +1033,7 @@ void func_80A5D9C8(EnKusa2* this, PlayState* play) {
     D_80A5EAFC.z = Math_SinS(D_80A5EB04.z) * 1000.0f;
 
     if (Actor_HasNoParent(&this->actor, play)) {
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         this->actor.colChkInfo.mass = 80;
         this->actor.home.rot.y = this->actor.world.rot.y;
         this->actor.velocity.y = 12.5f;
@@ -1289,7 +1289,7 @@ void func_80A5E604(Actor* thisx, PlayState* play) {
     } else {
         this->actor.draw = func_80A5E6F0;
 
-        if (play->roomCtx.currRoom.unk3 == 0) {
+        if (play->roomCtx.curRoom.unk3 == 0) {
             func_80A5B508();
         }
         func_80A5CAF4(&D_80A5F1C0);
@@ -1352,7 +1352,7 @@ void EnKusa2_Draw(Actor* thisx, PlayState* play) {
     EnKusa2* this = THIS;
 
     if (this->actor.projectedPos.z <= 1200.0f) {
-        if ((play->roomCtx.currRoom.unk3 == 0) && (this->actor.projectedPos.z > -150.0f) &&
+        if ((play->roomCtx.curRoom.unk3 == 0) && (this->actor.projectedPos.z > -150.0f) &&
             (this->actor.projectedPos.z < 400.0f)) {
             func_80A5B954(&D_80A60908[this->unk_1CE], 0.0015f);
         }

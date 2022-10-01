@@ -118,7 +118,7 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit sColChkInfoInit = { 3, 45, 60, 250 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 55, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_LIKE_LIKE, ICHAIN_CONTINUE),
     ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -400, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
@@ -313,7 +313,7 @@ void func_808FA4F4(EnRr* this, PlayState* play) {
             sp34 = false;
         }
 
-        if (sp34 && (Message_GetState(&play->msgCtx) == 0)) {
+        if (sp34 && (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE)) {
             Message_StartTextbox(play, 0xF6, NULL);
         }
 

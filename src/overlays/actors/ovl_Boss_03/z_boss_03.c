@@ -53,6 +53,7 @@
  * - Seaweed
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
@@ -724,7 +725,7 @@ void Boss03_ChasePlayer(Boss03* this, PlayState* play) {
 
             if (sp43 != 0) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, player->actor.world.pos.x, this->waterHeight,
-                            player->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_309);
+                            player->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_TYPE_GYORG_RIPPLES);
                 Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_SINK_OLD);
             }
 
@@ -807,8 +808,8 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
         if (this->unk_2B8 > 30.0f) {
             if ((&this->actor != player->actor.parent) && (play->grabPlayer(play, player) != 0)) {
                 player->actor.parent = &this->actor;
-                Audio_PlaySfxGeneral(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                                     &D_801DB4B8);
+                AudioSfx_PlaySfx(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+                                 &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
                 Boss03_SetupChewPlayer(this, play);
             }
         } else {
@@ -1055,7 +1056,7 @@ void Boss03_Charge(Boss03* this, PlayState* play) {
             play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
             func_800BC848(&this->actor, play, 20, 15);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0, 0x96,
-                        ENWATEREFFECT_30C);
+                        ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE);
 
             // Player is above water && Player is standing on ground
             if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
@@ -1151,8 +1152,8 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                 Cutscene_Start(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 7);
                 this->subCamId = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-                Play_CameraChangeStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
+                Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
 
                 this->actor.world.rot.y = -0x7B30;
                 this->prevPlayerPos.y = 1850.0f;
@@ -1409,8 +1410,8 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
     }
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
-        Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
-        Play_CameraSetFov(play, this->subCamId, this->subCamFov);
+        Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
+        Play_SetCameraFov(play, this->subCamId, this->subCamFov);
     }
 }
 
@@ -1451,8 +1452,8 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                 Cutscene_Start(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 1);
                 this->subCamId = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-                Play_CameraChangeStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
+                Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
                 this->unk_2BE = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x);
 
                 // Player is above water && Player is standing on ground
@@ -1528,7 +1529,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
             if ((this->workTimer[WORK_TIMER_UNK0_C] == 0) && ((this->waterHeight - 100.0f) < this->actor.world.pos.y)) {
                 this->workTimer[WORK_TIMER_UNK0_C] = Rand_ZeroFloat(15.0f) + 15.0f;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
-                            this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_309);
+                            this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_TYPE_GYORG_RIPPLES);
 
                 if (this->actionFunc == Boss03_DeathCutscene) {
                     if ((D_809E9840 % 2) != 0) {
@@ -1615,7 +1616,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                             this->actor.focus.pos.z, 0, 0, 0, 0);
                 this->csTimer = 0;
                 Actor_SetScale(&this->actor, 0.0f);
-                Audio_StopSfxByPos(&this->actor.projectedPos);
+                AudioSfx_StopByPos(&this->actor.projectedPos);
             }
             break;
 
@@ -1643,7 +1644,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
     }
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
-        Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
 
@@ -1665,8 +1666,8 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
                 Cutscene_Start(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 1);
                 this->subCamId = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-                Play_CameraChangeStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
+                Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
                 this->csState = 1;
                 this->unk_2BE = 0xBB8;
 
@@ -1734,7 +1735,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
     }
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
-        Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
 
@@ -1762,7 +1763,7 @@ void Boss03_SetupStunned(Boss03* this, PlayState* play) {
 }
 
 void Boss03_Stunned(Boss03* this, PlayState* play) {
-    this->actor.hintId = 0x29;
+    this->actor.hintId = TATL_HINT_ID_GYORG_STUNNED;
 
     if (this->unk_240 >= 16) {
         Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_COMMON_WEAKENED - SFX_FLAG);
@@ -1955,7 +1956,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
     s16 j;
     f32 yRot;
 
-    this->actor.hintId = 0x28;
+    this->actor.hintId = TATL_HINT_ID_GYORG;
 
     if (!D_809E9842 && (player->actor.world.pos.y < (PLATFORM_HEIGHT + 5.0f))) {
         D_809E9842 = true;
@@ -2012,7 +2013,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
             }
 
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
-                        this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_309);
+                        this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_TYPE_GYORG_RIPPLES);
 
             this->unk_280 = 27;
             this->unk_284 = this->actor.world.pos.x;
@@ -2428,7 +2429,7 @@ void Boss03_DrawEffects(PlayState* play) {
             if (!flag) {
                 POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
 
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust1Tex));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
 
@@ -2462,7 +2463,7 @@ void Boss03_DrawEffects(PlayState* play) {
             if (!flag) {
                 func_8012C448(gfxCtx);
 
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust1Tex));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
 

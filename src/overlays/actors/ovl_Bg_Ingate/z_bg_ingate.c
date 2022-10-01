@@ -216,7 +216,7 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
         if (ActorCutscene_GetCurrentIndex() != -1) {
             Camera_ChangeSetting(mainCam, CAM_SET_NORMAL0);
             player->stateFlags1 |= 0x20;
-            play->actorCtx.unk5 &= ~0x4;
+            play->actorCtx.flags &= ~ACTORCTX_FLAG_2;
         } else {
             Camera_ChangeSetting(mainCam, CAM_SET_BOAT_CRUISE);
             player->stateFlags1 &= ~0x20;
@@ -245,10 +245,10 @@ void func_809541B8(BgIngate* this, PlayState* play) {
 
 void func_809542A0(BgIngate* this, PlayState* play) {
     if (gSaveContext.eventInf[5] & 1) {
-        play->nextEntranceIndex = 0xA820;
+        play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 2);
         gSaveContext.eventInf[5] &= (u8)~1;
     } else {
-        play->nextEntranceIndex = 0xA810;
+        play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 1);
     }
     gSaveContext.nextCutsceneIndex = 0;
     play->transitionTrigger = TRANS_TRIGGER_START;
@@ -273,7 +273,7 @@ void func_80954340(BgIngate* this, PlayState* play) {
 void func_809543D4(BgIngate* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((talkState == 4) || (talkState == 5)) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_CHOICE) || (talkState == TEXT_STATE_5)) && Message_ShouldAdvance(play)) {
         switch (this->dyna.actor.textId) {
             case 0x9E4:
                 this->dyna.actor.textId = 0x9E5;

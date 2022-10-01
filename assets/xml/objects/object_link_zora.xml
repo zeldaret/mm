@@ -91,6 +91,6 @@
         <Limb Name="object_link_zora_Lodlimb_012BB0" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_13" Offset="0x12BB0" />
         <Limb Name="object_link_zora_Lodlimb_012BC0" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_14" Offset="0x12BC0" />
         <Limb Name="object_link_zora_Lodlimb_012BD0" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_15" Offset="0x12BD0" />
-        <Skeleton Name="object_link_zora_Skel_012C34" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_ZORA_LIMB_NONE" LimbMax="OBJECT_LINK_ZORA_LIMB_MAX" EnumName="object_link_zora_Limbs" Offset="0x12C34" />
+        <Skeleton Name="object_link_zora_Skel_012C34" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_ZORA_LIMB_NONE" LimbMax="OBJECT_LINK_ZORA_LIMB_MAX" EnumName="ObjectLinkZoraLimb" Offset="0x12C34" />
     </File>
 </Root>

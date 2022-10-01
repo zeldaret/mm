@@ -81,7 +81,7 @@ static AnimationHeader* sAnimations[] = {
     &object_cs_Anim_0031C4, &object_cs_Anim_010B68,
 };
 
-static u8 sAnimModes[] = {
+static u8 sAnimationModes[] = {
     ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
     ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
     ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
@@ -177,8 +177,8 @@ void EnBomjimb_Destroy(Actor* thisx, PlayState* play) {
 void func_80C0113C(EnBomjimb* this, s32 arg1, f32 arg2) {
     this->unk_2DC = arg1;
     this->unk_2B8 = Animation_GetLastFrame(sAnimations[arg1]);
-    Animation_Change(&this->skelAnime, sAnimations[this->unk_2DC], arg2, 0.0f, this->unk_2B8, sAnimModes[this->unk_2DC],
-                     -4.0f);
+    Animation_Change(&this->skelAnime, sAnimations[this->unk_2DC], arg2, 0.0f, this->unk_2B8,
+                     sAnimationModes[this->unk_2DC], -4.0f);
 }
 
 void func_80C011CC(EnBomjimb* this) {
@@ -214,7 +214,7 @@ s32 func_80C012FC(EnBomjimb* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (!Play_InCsMode(play) && (this->actor.xzDistToPlayer < 40.0f) &&
-        (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 50.0f) && (play->msgCtx.unk11F10 == 0)) {
+        (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 50.0f) && (play->msgCtx.msgLength == 0)) {
         this->actor.speedXZ = 0.0f;
         func_80C02740(this, play);
         return true;
@@ -691,7 +691,7 @@ void func_80C02740(EnBomjimb* this, PlayState* play) {
     gSaveContext.save.bombersCaughtNum++;
 
     if (gSaveContext.save.bombersCaughtNum > 4) {
-        func_801A3098(0x922);
+        Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
     } else {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
     }
@@ -759,7 +759,7 @@ void func_80C02A14(EnBomjimb* this, PlayState* play) {
         player->actor.freezeTimer = 3;
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         if ((this->unk_2CA == 8) && (gSaveContext.save.bombersCaughtNum >= 5)) {
             func_80C02CA4(this, play);
@@ -778,7 +778,7 @@ void func_80C02BCC(EnBomjimb* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 5000, 0);
     if (this->unk_2C0 == 0) {
         player->actor.freezeTimer = 3;
-        if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
             func_801477B4(play);
             this->unk_2C0 = 1;
             player->stateFlags1 &= ~0x10000000;
@@ -790,12 +790,12 @@ void func_80C02BCC(EnBomjimb* this, PlayState* play) {
 
 void func_80C02CA4(EnBomjimb* this, PlayState* play) {
     if (BREG(13) == 0) {
-        play->nextEntranceIndex = play->setupExitList[this->unk_2B2];
+        play->nextEntrance = play->setupExitList[this->unk_2B2];
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
     } else {
-        play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(5);
+        play->nextEntrance = Entrance_CreateFromSpawn(5);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;
