@@ -4790,7 +4790,7 @@ s32 func_808331FC(PlayState* play, Player* this, SkelAnime* skelAnime, f32 frame
     return -1;
 }
 
-void func_808332A0(PlayState* play, Player* this, s32 magicCost, s32 consumeMagic) {
+void func_808332A0(PlayState* play, Player* this, s32 magicCost, s32 isSwordBeam) {
     if (magicCost != 0) {
         this->unk_B08[0] = 0.0f;
     } else {
@@ -4798,11 +4798,11 @@ void func_808332A0(PlayState* play, Player* this, s32 magicCost, s32 consumeMagi
     }
 
     this->stateFlags1 |= PLAYER_STATE1_1000;
-    if ((this->actor.id == ACTOR_PLAYER) && (consumeMagic || (this->transformation == PLAYER_FORM_HUMAN))) {
+    if ((this->actor.id == ACTOR_PLAYER) && (isSwordBeam || (this->transformation == PLAYER_FORM_HUMAN))) {
         s16 pitch = 0;
         Actor* thunder;
 
-        if (consumeMagic) {
+        if (isSwordBeam) {
             if (this->targetedActor != NULL) {
                 pitch = Math_Vec3f_Pitch(&this->bodyPartsPos[PLAYER_BODYPART_WAIST], &this->targetedActor->focus.pos);
             }
@@ -4815,7 +4815,7 @@ void func_808332A0(PlayState* play, Player* this, s32 magicCost, s32 consumeMagi
                               this->bodyPartsPos[PLAYER_BODYPART_WAIST].y, this->bodyPartsPos[PLAYER_BODYPART_WAIST].z,
                               pitch, 0, 0, (this->itemActionParam - PLAYER_AP_SWORD_KOKIRI) | magicCost);
 
-        if ((thunder != NULL) && consumeMagic) {
+        if ((thunder != NULL) && isSwordBeam) {
             Magic_Consume(play, 1, MAGIC_CONSUME_DEITY_BEAM);
             this->unk_D57 = 4;
         }
