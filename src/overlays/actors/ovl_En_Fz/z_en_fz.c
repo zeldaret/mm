@@ -156,7 +156,7 @@ static DamageTable sDamageTable = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 59, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_FREEZARD, ICHAIN_CONTINUE),
     ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 1400, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
@@ -241,10 +241,10 @@ void EnFz_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider3);
 
     if ((this->actor.parent != NULL) && (this->unk_BC4 == 0) && (this->actor.parent->id == ACTOR_EN_WIZ) &&
-        (this->actor.parent->update != NULL) && (((EnWiz*)this->actor.parent)->unk_448 != 0)) {
+        (this->actor.parent->update != NULL) && (((EnWiz*)this->actor.parent)->freezard != NULL)) {
         EnWiz* wiz = (EnWiz*)this->actor.parent;
 
-        wiz->unk_448 = 0;
+        wiz->freezard = NULL;
     }
 }
 
