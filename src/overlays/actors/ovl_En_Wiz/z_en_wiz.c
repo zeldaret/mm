@@ -352,7 +352,7 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
     }
 
     this->actor.hintId = TATL_HINT_ID_WIZROBE;
-    this->currentPlatformIndex = 777;
+    this->curPlatformIndex = 777;
 
     // Setting the radius and scale to zero here effectively disables all of the ghost colliders.
     this->ghostColliders.elements[0].dim.modelSphere.radius = 0;
@@ -542,7 +542,7 @@ void EnWiz_SelectPlatform(EnWiz* this, PlayState* play) {
     s32 j;
     s16 ghostAlpha;
     s16 type;
-    s16 currentPlatformIndex;
+    s16 curPlatformIndex;
 
     for (i = 0; i < ARRAY_COUNT(this->platforms); i++) {
         this->platforms[i] = NULL;
@@ -580,16 +580,16 @@ void EnWiz_SelectPlatform(EnWiz* this, PlayState* play) {
             this->platformCount = 10;
         }
 
-        currentPlatformIndex = Rand_ZeroFloat(i);
-        while ((this->currentPlatformIndex == currentPlatformIndex) || ((s16)i == currentPlatformIndex)) {
-            currentPlatformIndex = Rand_ZeroFloat(i);
+        curPlatformIndex = Rand_ZeroFloat(i);
+        while ((this->curPlatformIndex == curPlatformIndex) || ((s16)i == curPlatformIndex)) {
+            curPlatformIndex = Rand_ZeroFloat(i);
             if (1) {}
         }
 
-        this->currentPlatformIndex = currentPlatformIndex;
+        this->curPlatformIndex = curPlatformIndex;
         switch (this->fightState) {
             case EN_WIZ_FIGHT_STATE_FIRST_PHASE:
-                Math_Vec3f_Copy(&this->actor.world.pos, &this->platforms[currentPlatformIndex]->world.pos);
+                Math_Vec3f_Copy(&this->actor.world.pos, &this->platforms[curPlatformIndex]->world.pos);
                 break;
 
             case EN_WIZ_FIGHT_STATE_SECOND_PHASE_CUTSCENE:
@@ -601,9 +601,9 @@ void EnWiz_SelectPlatform(EnWiz* this, PlayState* play) {
                 break;
 
             default:
-                Math_Vec3f_Copy(&this->actor.world.pos, &this->platforms[currentPlatformIndex]->world.pos);
+                Math_Vec3f_Copy(&this->actor.world.pos, &this->platforms[curPlatformIndex]->world.pos);
                 for (i--; i >= 0; i--) {
-                    if (currentPlatformIndex != i) {
+                    if (curPlatformIndex != i) {
                         Math_Vec3f_Copy(&this->ghostPos[i], &this->platforms[i]->world.pos);
                         this->ghostRot[i] = this->actor.world.rot;
                         this->ghostAlpha[i] = 100;
@@ -745,11 +745,11 @@ void EnWiz_Appear(EnWiz* this, PlayState* play) {
             }
 
             if (this->scale < 0.0138f) {
+                return;
             } else {
                 this->action = EN_WIZ_ACTION_RUN_IN_CIRCLES;
                 this->actor.flags &= ~ACTOR_FLAG_8000000;
-                this->ghostColliders.elements[0].info.bumper.dmgFlags =
-                    0x1000000 | 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x200 | 0x20 | 0x2;
+                this->ghostColliders.elements[0].info.bumper.dmgFlags = 0x1013A22;
                 Math_Vec3f_Copy(&this->staffTargetFlameScale, &staffTargetFlameScale);
                 this->targetPlatformLightAlpha = 0;
 
@@ -1036,7 +1036,7 @@ void EnWiz_Disappear(EnWiz* this, PlayState* play) {
         if (this->introCutsceneState != EN_WIZ_INTRO_CS_DISAPPEAR) {
             this->alpha = 0;
             if (this->fightState == EN_WIZ_FIGHT_STATE_FIRST_PHASE) {
-                this->ghostColliders.elements[0].info.bumper.dmgFlags = 0x1000000 | 0x200 | 0x2;
+                this->ghostColliders.elements[0].info.bumper.dmgFlags = 0x1000202;
             }
 
             this->actor.flags |= ACTOR_FLAG_1;
@@ -1114,7 +1114,7 @@ void EnWiz_Damaged(EnWiz* this, PlayState* play) {
 
     if ((this->timer == 1) ||
         ((this->actor.velocity.y < 0.0f) &&
-         (this->actor.world.pos.y < (this->platforms[this->currentPlatformIndex]->world.pos.y + 11.0f)))) {
+         (this->actor.world.pos.y < (this->platforms[this->curPlatformIndex]->world.pos.y + 11.0f)))) {
         this->timer = 0;
         this->actor.velocity.y = 0.0f;
         this->actor.gravity = 0.0f;
@@ -1339,7 +1339,7 @@ void EnWiz_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-void EnWiz_OpaPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnWiz_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Vec3f staffFlamePos = { 0.0f, 0.0f, 0.0f };
     EnWiz* this = THIS;
 
@@ -1371,7 +1371,7 @@ void EnWiz_OpaPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
     }
 }
 
-void EnWiz_XluPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnWiz_PostLimbDrawXlu(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     Vec3f staffFlamePos = { 0.0f, 0.0f, 0.0f };
     s32 pad;
     EnWiz* this = THIS;
@@ -1435,13 +1435,13 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                               NULL, EnWiz_XluPostLimbDraw, &this->actor, POLY_XLU_DISP);
+                               NULL, EnWiz_PostLimbDrawXlu, &this->actor, POLY_XLU_DISP);
     } else {
         Scene_SetRenderModeXlu(play, 0, 1);
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, this->alpha);
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                              NULL, EnWiz_OpaPostLimbDraw, &this->actor);
+                              NULL, EnWiz_PostLimbDrawOpa, &this->actor);
     }
 
     if (this->drawDmgEffTimer != 0) {
