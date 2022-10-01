@@ -531,9 +531,15 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
     KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[PAUSE_MAP] * 4, pauseCtx->mapPageVtx);
 
+    // Draw the world map image
     if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->state == 6) &&
         ((pauseCtx->unk_200 == 0) || (pauseCtx->unk_200 == 3)) && YREG(6) && (pauseCtx->state != 7) &&
         !((pauseCtx->state >= 8) && (pauseCtx->state <= 0x12))) {
+
+        // Draw the world map image flat
+        // Because it is flat, the texture is loaded by filling it in 8 rows at a time.
+        // 8 is chosen because it is smaller than `TMEM_SIZE / 2 / WIDTH` and divides the texture's height.
+        // (`TMEM_SIZE / 2` because the texture is color-indexed so the TLUT uses the other half of TMEM.)
 
         func_8012C628(play->state.gfxCtx);
 
@@ -543,7 +549,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
-        // Process all 128 rows of pixels for gWorldMapImageTex over 16 iterations
+        // Process the 128 rows of pixels for gWorldMapImageTex 8 rows at a time over 16 iterations
         // Loop over yPos (t), textureIndex (j)
         for (t = 62, j = 0; j < 16; j++, t += 8) {
             gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + j * (WORLD_MAP_IMAGE_TEX_WIDTH * 8),
@@ -559,16 +565,26 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         func_8012C8AC(play->state.gfxCtx);
 
     } else {
+        // Draw the world map angled
+        // Because it is at an angle, vertices are used to place it.
+        // The structure of the loops here is to satisfy the constraints of both TMEM and the size of the vertex cache.
+        // - Each loop iteration loads 9 rows, because 9 is the largest number smaller than `TMEM_SIZE / 2 / WIDTH`
+        // - Each loop is at most 8 iterations long because each row uses 4 vertices and the vertex cache has size 32 =
+        // 8 * 4 Hence there is one loop of length 8, one of length 6, and then the remaining `128 - (8 + 6) * 9 = 2`
+        // rows are drawn at the end.
+
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_POINT);
         gDPLoadTLUT_pal256(POLY_OPA_DISP++, gWorldMapImageTLUT);
         gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_RGBA16);
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
-        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[204], 32, 0);
 
-        // Process the first 72 rows of pixels for gWorldMapImageTex over 8 iterations
-        // Loop over textureIndex (i, k), vtxIndex (j)
+        // Set the vertices for the first 8 quads attached to the world map texture.
+        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[204], 8 * 4, 0);
+
+        // Process the first 72 rows of pixels for gWorldMapImageTex 9 rows at a time over 8 iterations
+        // Loop over quadIndex of this loop (i), quadIndex of the entire texture (k), vtxIndex (j)
         for (i = 0, k = 0, j = 0; i < 8; i++, k++, j += 4) {
             gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_TEX_WIDTH * 9),
                                 G_IM_FMT_CI, G_IM_SIZ_8b, WORLD_MAP_IMAGE_TEX_WIDTH, 9, 0, G_TX_NOMIRROR | G_TX_WRAP,
@@ -577,10 +593,12 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
             gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
         }
 
-        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[236], 28, 0);
+        // Set the vertices for the last 7 quads attached to the world map texture:
+        // 6 quads with a height of 9, 1 quad with a height of 2
+        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[236], (6 + 1) * 4, 0);
 
-        // Process the next 54 rows of pixels for gWorldMapImageTex over 6 iterations
-        // Loop over textureIndex (i, k), vtxIndex (j)
+        // Process the next 54 rows of pixels for gWorldMapImageTex 9 rows at a time over 6 iterations
+        // Loop over quadIndex of this loop (i), quadIndex of the entire texture (k), vtxIndex (j)
         for (i = 0, j = 0; i < 6; i++, k++, j += 4) {
             gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_TEX_WIDTH * 9),
                                 G_IM_FMT_CI, G_IM_SIZ_8b, WORLD_MAP_IMAGE_TEX_WIDTH, 9, 0, G_TX_NOMIRROR | G_TX_WRAP,
