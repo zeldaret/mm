@@ -377,7 +377,7 @@ void EnSyatekiDekunuts_Update(Actor* thisx, PlayState* play) {
     if ((this->actionFunc != func_80A2BF18) && (this->unk_1D8 < this->unk_1EE) && (this->unk_1D8 > 10)) {
         if ((this->collider.base.acFlags & AC_HIT) && (this->unk_1E2 == 1)) {
             if (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) == 1) {
-                func_801A3098(NA_BGM_GET_ITEM | 0x900);
+                Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
             } else {
                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
             }

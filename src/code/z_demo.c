@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 
@@ -152,7 +153,7 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
             break;
         case 0x2:
             if (isStartFrame) {
-                func_801A47DC(NATURE_CHANNEL_LIGHTNING, CHANNEL_IO_PORT_0, 0);
+                Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_LIGHTNING, CHANNEL_IO_PORT_0, 0);
                 Environment_AddLightningBolts(play, 3);
                 D_801F4E68 = 1;
             }
@@ -191,7 +192,7 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
         case 0x8:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
             if (isStartFrame) {
-                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), 6);
+                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 22000);
                 Quake_SetQuakeValues(sCutsceneQuakeIndex, 6, 4, 0, 0);
                 Quake_SetCountdown(sCutsceneQuakeIndex, 800);
@@ -281,7 +282,7 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
         case 0x1A:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
             if (isStartFrame) {
-                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), 6);
+                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 30000);
                 Quake_SetQuakeValues(sCutsceneQuakeIndex, 20, 10, 0, 0);
                 Quake_SetCountdown(sCutsceneQuakeIndex, 800);
@@ -333,7 +334,7 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
         case 0x24:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
             if (isStartFrame) {
-                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), 6);
+                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 22000);
                 Quake_SetQuakeValues(sCutsceneQuakeIndex, 2, 1, 0, 0);
                 Quake_SetCountdown(sCutsceneQuakeIndex, 800);
@@ -376,14 +377,14 @@ void Cutscene_Command_SetLighting(PlayState* play, CutsceneContext* csCtx, CsCmd
 // Command 0x12C: Plays a sequence (Background music or Fanfare)
 void Cutscene_Command_PlaySequence(PlayState* play, CutsceneContext* csCtx, CsCmdSequenceChange* cmd) {
     if (csCtx->frames == cmd->startFrame) {
-        func_801A2C88(cmd->sequence - 1);
+        Audio_PlaySequenceInCutscene(cmd->sequence - 1);
     }
 }
 
 // Command 0x12D: Stops a sequence (Background music or Fanfare)
 void Cutscene_Command_StopSequence(PlayState* play, CutsceneContext* csCtx, CsCmdSequenceChange* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
-        func_801A2D54(cmd->sequence - 1);
+        Audio_StopSequenceInCutscene(cmd->sequence - 1);
     }
 }
 
@@ -403,9 +404,7 @@ void Cutscene_Command_FadeSequence(PlayState* play, CutsceneContext* csCtx, CsCm
 // Command 0x12E: Play Ambience sequence
 void Cutscene_Command_PlayAmbienceSequence(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (csCtx->frames == cmd->startFrame) {
-        // Audio_PlayNatureAmbienceSequence
-        // nightSeqIndex is natureAmbienceId
-        func_801A4A28(play->soundCtx.nightSeqIndex);
+        Audio_PlayAmbience(play->sequenceCtx.ambienceId);
     }
 }
 
@@ -455,29 +454,27 @@ void func_800EADB0(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
                 break;
 
             case 4:
-                // func_801A246C(SEQ_PLAYER_NATURE, TYPE_1);
-                func_801A246C(SEQ_PLAYER_NATURE, 1);
+                // func_801A246C(SEQ_PLAYER_AMBIENCE, TYPE_1);
+                func_801A246C(SEQ_PLAYER_AMBIENCE, 1);
                 break;
 
             case 5:
-                // func_801A246C(SEQ_PLAYER_NATURE, TYPE_0);
-                func_801A246C(SEQ_PLAYER_NATURE, 0);
+                // func_801A246C(SEQ_PLAYER_AMBIENCE, TYPE_0);
+                func_801A246C(SEQ_PLAYER_AMBIENCE, 0);
                 break;
 
             case 6:
-                // func_801A246C(SEQ_PLAYER_NATURE, TYPE_2);
-                func_801A246C(SEQ_PLAYER_NATURE, 2);
+                // func_801A246C(SEQ_PLAYER_AMBIENCE, TYPE_2);
+                func_801A246C(SEQ_PLAYER_AMBIENCE, 2);
                 break;
 
             case 7:
-                // Audio_GetActiveSequence
-                seqId = func_801A8A50(0);
+                seqId = Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN);
                 break;
 
             case 8:
                 if (seqId != NA_BGM_DISABLED) {
-                    // Audio_PlayBgmForDayScene
-                    func_801A25E4(seqId, dayMinusOne);
+                    Audio_PlaySceneSequence(seqId, dayMinusOne);
                 }
                 break;
         }
@@ -647,7 +644,7 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
 // Command 0x15F: Chooses between a cutscene or a rotating mask depending on whether the player has the corresponding
 // mask
 void Cutscene_Command_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    if ((csCtx->frames >= cmd->startFrame) && (func_801A3950(0, true) != 0xFF)) {
+    if ((csCtx->frames >= cmd->startFrame) && (func_801A3950(SEQ_PLAYER_BGM_MAIN, true) != 0xFF)) {
         switch (cmd->base) {
             case 1:
                 Cutscene_TerminatorImpl(play, csCtx, cmd);
@@ -1500,7 +1497,7 @@ void func_800EDBE0(PlayState* play) {
         sp24 = play->loadedScene;
         if ((sp24->titleTextId != 0) && gSaveContext.showTitleCard) {
             if ((Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entrance) +
-                                             ((void)0, gSaveContext.sceneSetupIndex)) &
+                                             ((void)0, gSaveContext.sceneLayer)) &
                  0x4000) != 0) {
                 func_80151A68(play, sp24->titleTextId);
             }
@@ -1611,13 +1608,13 @@ void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, PlayState* play, s32 ac
     actor->shape.rot.y = actor->world.rot.y;
 }
 
-s32 Cutscene_GetSceneSetupIndex(PlayState* play) {
-    s32 sceneSetupIndex = 0;
+s32 Cutscene_GetSceneLayer(PlayState* play) {
+    s32 sceneLayer = 0;
 
-    if (gSaveContext.sceneSetupIndex > 0) {
-        sceneSetupIndex = gSaveContext.sceneSetupIndex;
+    if (gSaveContext.sceneLayer > 0) {
+        sceneLayer = gSaveContext.sceneLayer;
     }
-    return sceneSetupIndex;
+    return sceneLayer;
 }
 
 s32 Cutscene_GetActorActionIndex(PlayState* play, u16 actorActionCmd) {
