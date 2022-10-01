@@ -2711,8 +2711,7 @@ beginseg
     name "ovl_En_Wiz"
     compress
     include "build/src/overlays/actors/ovl_En_Wiz/z_en_wiz.o"
-    include "build/data/ovl_En_Wiz/ovl_En_Wiz.data.o"
-    include "build/data/ovl_En_Wiz/ovl_En_Wiz.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Wiz/ovl_En_Wiz_reloc.o"
 endseg
 
 beginseg
