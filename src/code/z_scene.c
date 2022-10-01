@@ -28,12 +28,12 @@ void Object_InitBank(GameState* gameState, ObjectContext* objectCtx) {
     u32 spaceSize;
     s32 i;
 
-    if (play->sceneNum == SCENE_CLOCKTOWER || play->sceneNum == SCENE_TOWN || play->sceneNum == SCENE_BACKTOWN ||
-        play->sceneNum == SCENE_ICHIBA) {
+    if (play->sceneId == SCENE_CLOCKTOWER || play->sceneId == SCENE_TOWN || play->sceneId == SCENE_BACKTOWN ||
+        play->sceneId == SCENE_ICHIBA) {
         spaceSize = OBJECT_SPACE_SIZE_CLOCK_TOWN;
-    } else if (play->sceneNum == SCENE_MILK_BAR) {
+    } else if (play->sceneId == SCENE_MILK_BAR) {
         spaceSize = OBJECT_SPACE_SIZE_MILK_BAR;
-    } else if (play->sceneNum == SCENE_00KEIKOKU) {
+    } else if (play->sceneId == SCENE_00KEIKOKU) {
         spaceSize = OBJECT_SPACE_SIZE_TERMINA_FIELD;
     } else {
         spaceSize = OBJECT_SPACE_SIZE_DEFAULT;
@@ -234,17 +234,17 @@ void Scene_HeaderCmdSpecialFiles(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x08: Room Behavior
 void Scene_HeaderCmdRoomBehavior(PlayState* play, SceneCmd* cmd) {
-    play->roomCtx.currRoom.unk3 = cmd->roomBehavior.gpFlag1;
-    play->roomCtx.currRoom.unk2 = cmd->roomBehavior.gpFlag2 & 0xFF;
-    play->roomCtx.currRoom.unk5 = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
+    play->roomCtx.curRoom.unk3 = cmd->roomBehavior.gpFlag1;
+    play->roomCtx.curRoom.unk2 = cmd->roomBehavior.gpFlag2 & 0xFF;
+    play->roomCtx.curRoom.unk5 = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
     play->msgCtx.unk12044 = (cmd->roomBehavior.gpFlag2 >> 0xA) & 1;
-    play->roomCtx.currRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xB) & 1;
+    play->roomCtx.curRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xB) & 1;
     play->envCtx.unk_E2 = (cmd->roomBehavior.gpFlag2 >> 0xC) & 1;
 }
 
 // SceneTableEntry Header Command 0x0A: Mesh Header
 void Scene_HeaderCmdMesh(PlayState* play, SceneCmd* cmd) {
-    play->roomCtx.currRoom.mesh = Lib_SegmentedToVirtual(cmd->mesh.segment);
+    play->roomCtx.curRoom.mesh = Lib_SegmentedToVirtual(cmd->mesh.segment);
 }
 
 // SceneTableEntry Header Command 0x0B:  Object List
@@ -436,17 +436,18 @@ void Scene_HeaderCmd09(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x15: Sound Settings=
 void Scene_HeaderCmdSoundSettings(PlayState* play, SceneCmd* cmd) {
-    play->soundCtx.seqIndex = cmd->soundSettings.musicSeq;
-    play->soundCtx.nightSeqIndex = cmd->soundSettings.nighttimeSFX;
+    play->sequenceCtx.seqId = cmd->soundSettings.seqId;
+    play->sequenceCtx.ambienceId = cmd->soundSettings.ambienceId;
 
-    if (gSaveContext.seqIndex == (u8)NA_BGM_DISABLED || func_801A8A50(0) == NA_BGM_FINAL_HOURS) {
-        audio_setBGM(cmd->soundSettings.bgmId);
+    if (gSaveContext.seqId == (u8)NA_BGM_DISABLED ||
+        Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS) {
+        Audio_SetSpec(cmd->soundSettings.specId);
     }
 }
 
 // SceneTableEntry Header Command 0x16: Echo Setting
 void Scene_HeaderCmdEchoSetting(PlayState* play, SceneCmd* cmd) {
-    play->roomCtx.currRoom.echo = cmd->echoSettings.echo;
+    play->roomCtx.curRoom.echo = cmd->echoSettings.echo;
 }
 
 // SceneTableEntry Header Command 0x18: Alternate Header List=
@@ -454,9 +455,9 @@ void Scene_HeaderCmdAltHeaderList(PlayState* play, SceneCmd* cmd) {
     SceneCmd** altHeaderList;
     SceneCmd* altHeader;
 
-    if (gSaveContext.sceneSetupIndex) {
+    if (gSaveContext.sceneLayer != 0) {
         altHeaderList = Lib_SegmentedToVirtual(cmd->altHeaders.segment);
-        altHeader = altHeaderList[gSaveContext.sceneSetupIndex - 1];
+        altHeader = altHeaderList[gSaveContext.sceneLayer - 1];
 
         if (altHeader != NULL) {
             Scene_ProcessHeader(play, Lib_SegmentedToVirtual(altHeader));
@@ -497,23 +498,23 @@ void Scene_HeaderCmdSetAreaVisitedFlag(PlayState* play, SceneCmd* cmd) {
     s16 i = 0;
 
     while (true) {
-        if (gScenesPerRegion[i][j] == 0xFFFF) {
+        if (gSceneIdsPerRegion[i][j] == 0xFFFF) {
             i++;
             j = 0;
 
-            if (i == ARRAY_COUNT(gScenesPerRegion)) {
+            if (i == ARRAY_COUNT(gSceneIdsPerRegion)) {
                 break;
             }
         }
 
-        if (play->sceneNum == gScenesPerRegion[i][j]) {
+        if (play->sceneId == gSceneIdsPerRegion[i][j]) {
             break;
         }
 
         j++;
     }
 
-    if (i < ARRAY_COUNT(gScenesPerRegion)) {
+    if (i < ARRAY_COUNT(gSceneIdsPerRegion)) {
         gSaveContext.save.mapsVisited = (gBitFlags[i] | gSaveContext.save.mapsVisited) | gSaveContext.save.mapsVisited;
     }
 }
@@ -527,7 +528,7 @@ void Scene_HeaderCmdAnimatedMaterials(PlayState* play, SceneCmd* cmd) {
  * Sets the exit fade from the next entrance index.
  */
 void Scene_SetExitFade(PlayState* play) {
-    play->transitionType = Entrance_GetTransitionFlags(play->nextEntranceIndex) & 0x7F;
+    play->transitionType = Entrance_GetTransitionFlags(play->nextEntrance) & 0x7F;
 }
 
 /**
@@ -587,15 +588,15 @@ s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header) {
 }
 
 /**
- * Creates an entrance index from the scene index, spawn index, and scene setup.
+ * Creates an entrance from the scene, spawn, and lyaer.
  */
-u16 Entrance_CreateIndex(s32 sceneIndex, s32 spawnIndex, s32 sceneSetup) {
-    return (((sceneIndex << 9) | (spawnIndex << 4)) | sceneSetup) & 0xFFFF;
+u16 Entrance_Create(s32 scene, s32 spawn, s32 layer) {
+    return (scene << 9) | (spawn << 4) | layer;
 }
 
 /**
- * Creates an entrance index from the current entrance index with the given spawn index.
+ * Creates an layer 0 entranace from the current entrance and the given spawn.
  */
-u16 Entrance_CreateIndexFromSpawn(s32 spawnIndex) {
-    return Entrance_CreateIndex(gSaveContext.save.entranceIndex >> 9, spawnIndex, 0);
+u16 Entrance_CreateFromSpawn(s32 spawn) {
+    return Entrance_Create(gSaveContext.save.entrance >> 9, spawn, 0);
 }

@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "vt.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
@@ -46,7 +47,7 @@ u8 D_801B46C0[] = {
     /* 0x0E */ 1
 };
 
-s16 sSmallMemScenes[] = {
+s16 sSmallMemSceneIds[] = {
     SCENE_F01,
 };
 
@@ -1462,10 +1463,10 @@ u32 BgCheck_InitStaticLookup(CollisionContext* colCtx, PlayState* play, StaticLo
  * Returns whether the current scene should reserve less memory for it's collision lookup
  */
 s32 BgCheck_IsSmallMemScene(PlayState* play) {
-    s16* i;
+    s16* sceneId;
 
-    for (i = sSmallMemScenes; i < sSmallMemScenes + ARRAY_COUNT(sSmallMemScenes); i++) {
-        if (play->sceneNum == *i) {
+    for (sceneId = sSmallMemSceneIds; sceneId < sSmallMemSceneIds + ARRAY_COUNT(sSmallMemSceneIds); sceneId++) {
+        if (play->sceneId == *sceneId) {
             return true;
         }
     }
@@ -1504,7 +1505,7 @@ s32 BgCheck_GetSpecialSceneMaxObjects(PlayState* play, s32* maxNodes, s32* maxPo
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(sCustomDynapolyMem); i++) {
-        if (play->sceneNum == sCustomDynapolyMem[i].sceneId) {
+        if (play->sceneId == sCustomDynapolyMem[i].sceneId) {
             *maxNodes = sCustomDynapolyMem[i].maxNodes;
             *maxPolygons = sCustomDynapolyMem[i].maxPolygons;
             *maxVertices = sCustomDynapolyMem[i].maxVertices;
@@ -1541,7 +1542,7 @@ void BgCheck_Allocate(CollisionContext* colCtx, PlayState* play, CollisionHeader
         s32 useCustomSubdivisions;
         s32 i;
 
-        if (BgCheck_TryGetCustomMemsize(play->sceneNum, &customMemSize)) {
+        if (BgCheck_TryGetCustomMemsize(play->sceneId, &customMemSize)) {
             colCtx->memSize = customMemSize;
         } else {
             colCtx->memSize = 0x23000;
@@ -1554,7 +1555,7 @@ void BgCheck_Allocate(CollisionContext* colCtx, PlayState* play, CollisionHeader
         useCustomSubdivisions = false;
 
         for (i = 0; i < ARRAY_COUNT(sSceneSubdivisionList); i++) {
-            if (play->sceneNum == sSceneSubdivisionList[i].sceneId) {
+            if (play->sceneId == sSceneSubdivisionList[i].sceneId) {
                 colCtx->subdivAmount.x = sSceneSubdivisionList[i].subdivAmount.x;
                 colCtx->subdivAmount.y = sSceneSubdivisionList[i].subdivAmount.y;
                 colCtx->subdivAmount.z = sSceneSubdivisionList[i].subdivAmount.z;
@@ -4330,18 +4331,22 @@ s32 SurfaceType_IsIgnoredByProjectiles(CollisionContext* colCtx, CollisionPoly* 
 }
 
 /**
- * SurfaceType Get Conveyor Surface Type
- * Return type 0 (CONVEYOR_WATER) if 'poly' is a surface that will only move player underwater
- * Return type 1 (CONVEYOR_FLOOR) if `poly` is a surface that must be stood on to move player
+ * Checks if poly is a floor conveyor
+ *
+ * A conveyor surface is enabled with non-zero speed.
+ * When enabled, the conveyor will exhibit two types of behaviour depending on the return value:
+ *
+ * If true, then it is a floor conveyor and will push player only while being stood on
+ * If false, then it is a water conveyor and will push player only while in water
  */
-s32 SurfaceType_GetConveyorType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+s32 SurfaceType_IsFloorConveyor(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     u32 flags;
 
     if (BgCheck_GetCollisionHeader(colCtx, bgId) == NULL) {
-        return CONVEYOR_FLOOR;
+        return true;
     }
     if (poly == NULL) {
-        return CONVEYOR_WATER;
+        return false;
     }
     flags = poly->flags_vIB & 0x2000;
     return !!flags;
@@ -4404,7 +4409,7 @@ s32 WaterBox_GetSurfaceImpl(PlayState* play, CollisionContext* colCtx, f32 x, f3
         for (curWaterBox = colHeader->waterBoxes; curWaterBox < colHeader->waterBoxes + colHeader->numWaterBoxes;
              curWaterBox++) {
             room = 0x3F & (curWaterBox->properties >> 13);
-            if (room == (u32)play->roomCtx.currRoom.num || room == 0x3F) {
+            if (room == (u32)play->roomCtx.curRoom.num || room == 0x3F) {
                 if (curWaterBox->properties & 0x80000) {
                     continue;
                 }
@@ -4489,7 +4494,7 @@ s32 WaterBox_GetSurface2(PlayState* play, CollisionContext* colCtx, Vec3f* pos, 
         waterBox = &colHeader->waterBoxes[i];
 
         room = WATERBOX_ROOM(waterBox->properties);
-        if (!(room == play->roomCtx.currRoom.num || room == 0x3F)) {
+        if (!(room == play->roomCtx.curRoom.num || room == 0x3F)) {
             continue;
         }
         if ((waterBox->properties & 0x80000)) {
@@ -4631,7 +4636,7 @@ s32 func_800CA6F0(PlayState* play, CollisionContext* colCtx, f32 x, f32 z, f32* 
     for (curWaterBox = colHeader->waterBoxes; curWaterBox < colHeader->waterBoxes + colHeader->numWaterBoxes;
          curWaterBox++) {
         room = WATERBOX_ROOM(curWaterBox->properties);
-        if (room == (u32)play->roomCtx.currRoom.num || room == 0x3F) {
+        if (room == (u32)play->roomCtx.curRoom.num || room == 0x3F) {
             if ((curWaterBox->properties & 0x80000) != 0) {
                 if (curWaterBox->minPos.x < x && x < curWaterBox->minPos.x + curWaterBox->xLength) {
                     if (curWaterBox->minPos.z < z && z < curWaterBox->minPos.z + curWaterBox->zLength) {

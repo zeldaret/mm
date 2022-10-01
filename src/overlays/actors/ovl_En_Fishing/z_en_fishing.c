@@ -830,7 +830,7 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
 
         thisx->focus.pos = thisx->world.pos;
         thisx->focus.pos.y += 75.0f;
-        thisx->flags |= 9;
+        thisx->flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
 
         if (sLinkAge != 1) {
             // HIGH_SCORE(HS_FISHING) from OoT
@@ -960,7 +960,7 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
         this->unk_150 = 100;
         func_800BC154(play, &play->actorCtx, thisx, ACTORCAT_PROP);
         thisx->targetMode = 0;
-        thisx->flags |= 9;
+        thisx->flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     } else {
         this->unk_150 = 10;
@@ -5156,8 +5156,8 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
         case 1:
             sSubCamId = Play_CreateSubCamera(play);
-            Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-            Play_CameraChangeStatus(play, sSubCamId, CAM_STATUS_ACTIVE);
+            Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_ChangeCameraStatus(play, sSubCamId, CAM_STATUS_ACTIVE);
             mainCam = Play_GetCamera(play, CAM_ID_MAIN);
             sSubCamEye.x = mainCam->eye.x;
             sSubCamEye.y = mainCam->eye.y;
@@ -5166,7 +5166,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             sSubCamAt.y = mainCam->at.y;
             sSubCamAt.z = mainCam->at.z;
             D_8090CD4C = 2;
-            Interface_ChangeAlpha(12);
+            Interface_SetHudVisibility(HUD_VISIBILITY_A_B_MINIMAP);
             sSubCamVelFactor = 0.0f;
             // fallthrough
         case 2:
@@ -5283,8 +5283,8 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
         case 10:
             Cutscene_Start(play, &play->csCtx);
             sSubCamId = Play_CreateSubCamera(play);
-            Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-            Play_CameraChangeStatus(play, sSubCamId, CAM_STATUS_ACTIVE);
+            Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_ChangeCameraStatus(play, sSubCamId, CAM_STATUS_ACTIVE);
             func_800B7298(play, &this->actor, 4);
 
             mainCam = Play_GetCamera(play, CAM_ID_MAIN);
@@ -5324,8 +5324,8 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
         case 20:
             Cutscene_Start(play, &play->csCtx);
             sSubCamId = Play_CreateSubCamera(play);
-            Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-            Play_CameraChangeStatus(play, sSubCamId, CAM_STATUS_ACTIVE);
+            Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_ChangeCameraStatus(play, sSubCamId, CAM_STATUS_ACTIVE);
             func_800B7298(play, &this->actor, 4);
 
             mainCam = Play_GetCamera(play, CAM_ID_MAIN);
@@ -5432,7 +5432,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
     }
 
     if (sSubCamId != SUB_CAM_ID_DONE) {
-        Play_CameraSetAtEye(play, sSubCamId, &sSubCamAt, &sSubCamEye);
+        Play_SetCameraAtEye(play, sSubCamId, &sSubCamAt, &sSubCamEye);
         Math_ApproachF(&sSubCamVelFactor, 1.0f, 1.0f, 0.02f);
 
         if (sSubCamEye.y <= (WATER_SURFACE_Y(play) + 1.0f)) {

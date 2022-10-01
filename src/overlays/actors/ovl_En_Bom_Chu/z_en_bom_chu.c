@@ -116,7 +116,6 @@ s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, PlayState
     }
 
     normDotUp = DOTXYZ(normal, this->axisUp);
-
     if (fabsf(normDotUp) >= 0.999f) {
         return false;
     }
@@ -129,7 +128,6 @@ s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, PlayState
     Math3D_CrossProduct(&this->axisUp, &normal, &vec);
 
     magnitude = Math3D_Vec3fMagnitude(&vec);
-
     if (magnitude < 0.001f) {
         EnBomChu_Explode(this, play);
         return false;
@@ -357,7 +355,8 @@ void EnBomChu_WaitForDeath(EnBomChu* this, PlayState* play) {
 }
 
 /**
- * Transform coordinates from actor coordinate space to world space, according to current orientation.
+ * Transform coordinates from actor coordinate space (origin at actor's world.pos, z-axis is facing
+ * angle, i.e. shape.rot.y) to world space, according to current orientation.
  * `offset` is expected to already be at world scale.
  */
 void EnBomChu_ActorCoordsToWorld(EnBomChu* this, Vec3f* offset, Vec3f* pos) {
@@ -497,7 +496,7 @@ void EnBomChu_Update(Actor* thisx, PlayState* play) {
 
     if (this->isMoving) {
         this->visualJitter =
-            (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS((((s32)(Rand_ZeroOne() * 512.0f) + 0x3000) * this->timer));
+            (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS((((s32)(Rand_ZeroOne() * 0x200) + 0x3000) * this->timer));
         EnBomChu_ActorCoordsToWorld(this, &sBlureP1Offset, &blureP1);
 
         EnBomChu_ActorCoordsToWorld(this, &sBlureP2LeftOffset, &blureP2);

@@ -28,6 +28,9 @@ N_THREADS ?= $(shell nproc)
 
 #### Setup ####
 
+# Ensure the map file being created using English localization
+export LANG := C
+
 ifeq ($(NON_MATCHING),1)
   CFLAGS := -DNON_MATCHING
   CPPFLAGS := -DNON_MATCHING
@@ -113,6 +116,7 @@ ELF2ROM    := tools/buildtools/elf2rom
 MKLDSCRIPT := tools/buildtools/mkldscript
 YAZ0       := tools/buildtools/yaz0
 ZAPD       := tools/ZAPD/ZAPD.out
+FADO       := tools/fado/fado.elf
 
 OPTFLAGS := -O2 -g3
 ASFLAGS := -march=vr4300 -32 -Iinclude
@@ -184,9 +188,11 @@ O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
                  $(foreach f,$(C_FILES:.c=.o),build/$f) \
                  $(foreach f,$(BASEROM_FILES),build/$f.o)
 
+OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' )
+
 # Automatic dependency files
-# (Only asm_processor dependencies are handled for now)
-DEP_FILES := $(O_FILES:.o=.asmproc.d)
+# (Only asm_processor dependencies and reloc dependencies are handled for now)
+DEP_FILES := $(O_FILES:.o=.asmproc.d) $(OVL_RELOC_FILES:.o=.d)
 
 # create build directories
 $(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS),build/$(dir)))
@@ -262,9 +268,20 @@ $(ROM): $(ELF)
 $(ROMC): $(ROM)
 	python3 tools/z64compress_wrapper.py $(COMPFLAGS) $(ROM) $@ $(ELF) build/$(SPEC)
 
-$(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) build/ldscript.txt build/undefined_syms.txt
+$(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) $(OVL_RELOC_FILES) build/ldscript.txt build/undefined_syms.txt
 	$(LD) -T build/undefined_syms.txt -T build/ldscript.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map build/mm.map -o $@
 
+## Order-only prerequisites 
+# These ensure e.g. the O_FILES are built before the OVL_RELOC_FILES.
+# The intermediate phony targets avoid quadratically-many dependencies between the targets and prerequisites.
+
+o_files: $(O_FILES)
+$(OVL_RELOC_FILES): | o_files
+
+asset_files: $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT)
+$(O_FILES): | asset_files
+
+.PHONY: o_files asset_files
 
 #### Main commands ####
 
@@ -313,9 +330,11 @@ init:
 build/undefined_syms.txt: undefined_syms.txt
 	$(CPP) $(CPPFLAGS) $< > build/undefined_syms.txt
 
-build/ldscript.txt: $(SPEC)
-	$(CPP) $(CPPFLAGS) $< > build/spec
-	$(MKLDSCRIPT) build/spec $@
+build/$(SPEC): $(SPEC)
+	$(CPP) $(CPPFLAGS) $< > $@
+
+build/ldscript.txt: build/$(SPEC)
+	$(MKLDSCRIPT) $< $@
 
 build/asm/%.o: asm/%.s
 	$(AS) $(ASFLAGS) $< -o $@
@@ -334,12 +353,12 @@ build/data/%.o: data/%.s
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	$(OBJDUMP_CMD)
-# TODO: `() || true` is currently necessary to suppress `Error 1 (ignored)` make warnings caused by `test`, but this will go away if 
-# 	the following is moved to a separate rule that is only run once when all the required objects have been compiled. 
-	$(ZAPD) bovl -eh -i $@ -cfg $< --outputpath $(@D)/$(notdir $(@D))_reloc.s
-	(test -f $(@D)/$(notdir $(@D))_reloc.s && $(AS) $(ASFLAGS) $(@D)/$(notdir $(@D))_reloc.s -o $(@D)/$(notdir $(@D))_reloc.o) || true
+	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 	$(RM_MDEBUG)
+
+build/src/overlays/%_reloc.o: build/$(SPEC)
+	$(FADO) $$(tools/buildtools/reloc_prereq $< $(notdir $*)) -n $(notdir $*) -o $(@:.o=.s) -M $(@:.o=.d)
+	$(AS) $(ASFLAGS) $(@:.o=.s) -o $@
 
 build/src/%.o: src/%.c
 	$(CC_CHECK) $<

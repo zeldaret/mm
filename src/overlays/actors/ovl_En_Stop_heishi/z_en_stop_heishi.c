@@ -5,6 +5,7 @@
  */
 
 #include "z_en_stop_heishi.h"
+#include "z64quake.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bigslime.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_bigslime/object_bigslime.h"
@@ -303,7 +304,7 @@ static AnimationHeader* sGekkoAttackAnimations[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 95, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_GEKKO_GIANT_SLIME, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(targetArrowOffset, -13221, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
     ICHAIN_U8(targetMode, 5, ICHAIN_STOP),
@@ -339,7 +340,7 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
     this->gekkoCollider.base.ocFlags1 &= ~OC1_NO_PUSH;
     this->actor.params = CLAMP(this->actor.params, 1, 4);
 
-    if (Flags_GetClear(play, play->roomCtx.currRoom.num)) {
+    if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
         Actor_MarkForDeath(&this->actor);
         if (!(gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
               (u8)isFrogReturnedFlags[this->actor.params - 1])) {
@@ -389,7 +390,7 @@ void EnBigslime_Destroy(Actor* thisx, PlayState* play) {
     }
 
     Collider_DestroyCylinder(play, &this->gekkoCollider);
-    Audio_StopSfxByPos(&this->gekkoProjectedPos);
+    AudioSfx_StopByPos(&this->gekkoProjectedPos);
 }
 
 void EnBigslime_DynamicVtxCopyState(EnBigslime* this) {
@@ -743,12 +744,14 @@ void EnBigslime_EndThrowMinislime(EnBigslime* this) {
 
 void EnBigslime_BreakIntoMinislime(EnBigslime* this, PlayState* play) {
     s32 i;
-    s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+    s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-    Quake_SetSpeed(quake, 20000);
-    Quake_SetQuakeValues(quake, 15, 0, 0, 0);
-    Quake_SetCountdown(quake, 15);
+    Quake_SetSpeed(quakeIndex, 20000);
+    Quake_SetQuakeValues(quakeIndex, 15, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, 15);
+
     Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
+
     this->bigslimeCollider[0].base.atFlags &= ~AT_ON;
     this->gekkoCollider.base.acFlags &= ~(AC_ON | AC_HIT);
 
@@ -765,7 +768,7 @@ void EnBigslime_BreakIntoMinislime(EnBigslime* this, PlayState* play) {
     this->actor.colChkInfo.mass = 50;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_400);
     this->actor.flags |= ACTOR_FLAG_200;
-    this->actor.hintId = 95;
+    this->actor.hintId = TATL_HINT_ID_GEKKO_GIANT_SLIME;
     this->gekkoRot.x = 0;
     this->gekkoRot.y = 0;
     this->actor.bgCheckFlags &= ~1;
@@ -795,7 +798,7 @@ void EnBigslime_UpdateCameraGrabPlayer(EnBigslime* this, PlayState* play) {
     Math_StepToF(&subCamAt.y, GBT_ROOM_5_MIN_Y + 87.5f, 10.0f);
     Math_StepToF(&subCamAt.z, this->actor.world.pos.z, 10.0f);
 
-    Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
 }
 
 /**
@@ -810,7 +813,7 @@ void EnBigslime_JerkCameraPlayerHit(EnBigslime* this, PlayState* play) {
     Math_Vec3f_Diff(&subCam->eye, &subCam->at, &subCamEye);
     Math_Vec3f_Scale(&subCamEye, 0.9f);
     Math_Vec3f_Sum(&subCamEye, &subCam->at, &subCamEye);
-    Play_CameraSetAtEye(play, this->subCamId, &subCam->at, &subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &subCam->at, &subCamEye);
 }
 
 /**
@@ -828,7 +831,7 @@ void EnBigslime_UpdateCameraIntroCs(EnBigslime* this, PlayState* play, s32 notic
     subCamEye.z = Math_CosS(yawOffset) * zoom + subCam->at.z;
     subCamEye.y = subCam->at.y + -4.0f + (noticeTimer * 2.0f);
 
-    Play_CameraSetAtEye(play, this->subCamId, &subCam->at, &subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &subCam->at, &subCamEye);
 }
 
 /**
@@ -836,7 +839,7 @@ void EnBigslime_UpdateCameraIntroCs(EnBigslime* this, PlayState* play, s32 notic
  * center of the roof. This is used when the minislimes merges into bigslime.
  */
 void EnBigslime_UpdateCameraFormingBigslime(EnBigslime* this, PlayState* play) {
-    Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &Play_GetCamera(play, this->subCamId)->eye);
+    Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &Play_GetCamera(play, this->subCamId)->eye);
 }
 
 void EnBigslime_EndCutscene(EnBigslime* this, PlayState* play) {
@@ -844,7 +847,7 @@ void EnBigslime_EndCutscene(EnBigslime* this, PlayState* play) {
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
         subCam = Play_GetCamera(play, this->subCamId);
-        Play_CameraSetAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
+        Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
         ActorCutscene_Stop(this->cutscene);
         this->cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
@@ -1005,7 +1008,7 @@ void EnBigslime_CallMinislime(EnBigslime* this, PlayState* play) {
     } else if (this->isAnimUpdate) {
         Animation_PlayLoop(&this->skelAnime, &gGekkoNervousIdleAnim);
         EnBigslime_UpdateCameraIntroCs(this, play, 25);
-        func_801A2E54(0x38);
+        Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
         EnBigslime_InitFallMinislime(this);
         play->envCtx.lightSettingOverride = 0xFF;
         this->callTimer = 35;
@@ -1495,7 +1498,7 @@ void EnBigslime_SetupCutsceneGrabPlayer(EnBigslime* this, PlayState* play) {
     Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
     s16 yaw;
 
-    Play_CameraSetAtEye(play, this->subCamId, &mainCam->at, &mainCam->eye);
+    Play_SetCameraAtEye(play, this->subCamId, &mainCam->at, &mainCam->eye);
     this->grabPlayerTimer = 15;
     this->wavySurfaceTimer = 0;
     this->bigslimeCollider[0].base.atFlags &= ~AT_ON;
@@ -2308,7 +2311,7 @@ void EnBigslime_FormBigslime(EnBigslime* this, PlayState* play) {
 
     if (this->minislimeCounter == MINISLIME_NUM_SPAWN) {
         this->minislimeState = MINISLIME_INACTIVE_STATE;
-        this->actor.hintId = 3;
+        this->actor.hintId = TATL_HINT_ID_MAD_JELLY;
         EnBigslime_SetupMoveOnCeiling(this);
     }
 }
@@ -2343,7 +2346,7 @@ void EnBigslime_SetupCutsceneDefeat(EnBigslime* this, PlayState* play) {
     subCamEye.x = (Math_SinS(yawOffset) * 250.0f) + subCamAt.x;
     subCamEye.y = subCamAt.y + 60.0f;
     subCamEye.z = (Math_CosS(yawOffset) * 250.0f) + subCamAt.z;
-    Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
 
     for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
         this->minislime[i]->actor.params = MINISLIME_DEFEAT_IDLE;
@@ -2370,7 +2373,7 @@ void EnBigslime_CutsceneDefeat(EnBigslime* this, PlayState* play) {
         subCamAt.x = this->actor.world.pos.x;
         subCamAt.y = this->actor.world.pos.y + 40.0f;
         subCamAt.z = this->actor.world.pos.z;
-        Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &subCam->eye);
+        Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCam->eye);
     }
 }
 
@@ -2410,7 +2413,7 @@ void EnBigslime_GekkoDespawn(EnBigslime* this, PlayState* play) {
         Math_Vec3f_Diff(&subCam->eye, &this->subCamDistToFrog, &subCamEye);
         subCamEye.y -= 1.8f;
         subCamAt.y -= 1.7f;
-        Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &subCamEye);
+        Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
     }
 }
 
@@ -2466,7 +2469,7 @@ void EnBigslime_FrogSpawn(EnBigslime* this, PlayState* play) {
     subCamEye.x = subCam->at.x + (this->subCamDistToFrog.x * subCamZoom);
     subCamEye.z = subCam->at.z + (this->subCamDistToFrog.z * subCamZoom);
     subCamEye.y = subCam->at.y + (this->subCamDistToFrog.y * subCamZoom);
-    Play_CameraSetAtEye(play, this->subCamId, &subCam->at, &subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &subCam->at, &subCamEye);
 
     if (this->spawnFrogTimer == 0) {
         EnBigslime_EndCutscene(this, play);
@@ -2497,7 +2500,7 @@ void EnBigslime_Despawn(EnBigslime* this, PlayState* play) {
     }
 
     if (!this->isDespawned) {
-        Flags_SetClearTemp(play, play->roomCtx.currRoom.num);
+        Flags_SetClearTemp(play, play->roomCtx.curRoom.num);
         this->isDespawned = true;
     }
 
@@ -2620,7 +2623,7 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, PlayState* play) {
             if (this->actor.colChkInfo.damageEffect != BIGSLIME_DMGEFF_HOOKSHOT) {
                 if (Actor_ApplyDamage(&this->actor) == 0) {
                     func_800BE504(&this->actor, &this->gekkoCollider);
-                    func_801A2ED8();
+                    Audio_RestorePrevBgm();
                     Enemy_StartFinishingBlow(play, &this->actor);
                     this->gekkoCollider.base.acFlags &= ~AC_ON;
                     EnBigslime_GekkoThaw(this, play);

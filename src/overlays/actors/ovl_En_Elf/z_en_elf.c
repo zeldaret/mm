@@ -675,8 +675,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
         !func_8088C804(&this->actor.world.pos, &refActor->actor.world.pos, 10.0f)) {
         Health_ChangeBy(play, 0x80);
         if (this->fairyFlags & 0x200) {
-            Parameter_AddMagic(play, ((void)0, gSaveContext.unk_3F30) +
-                                         (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
+            Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
         }
         gSaveContext.jinxTimer = 0;
         this->unk_254 = 50.0f;
@@ -904,14 +903,14 @@ void func_8088E850(EnElf* this, PlayState* play) {
             func_8088D660(this, &nextPos, 0.2f);
         }
 
-        if ((play->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 0) &&
+        if ((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 0) &&
             (play->csCtx.currentCsIndex == 0) &&
             ((play->csCtx.frames == 149) || (play->csCtx.frames == 381) || (play->csCtx.frames == 591))) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }
 
-        if ((play->sceneNum == SCENE_SECOM) && (gSaveContext.sceneSetupIndex == 0) &&
-            (play->csCtx.currentCsIndex == 4) && (play->csCtx.frames == 95)) {
+        if ((play->sceneId == SCENE_SECOM) && (gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 4) &&
+            (play->csCtx.frames == 95)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }
     } else {
@@ -1464,11 +1463,11 @@ void func_8089010C(Actor* thisx, PlayState* play) {
     }
 
     if (player->tatlTextId < 0) {
-        thisx->flags |= 0x10000;
+        thisx->flags |= ACTOR_FLAG_10000;
     }
 
     if (Actor_ProcessTalkRequest(thisx, &play->state)) {
-        func_8019FDC8(&D_801DB4A4, NA_SE_VO_NA_LISTEN, 0x20);
+        func_8019FDC8(&gSfxDefaultPos, NA_SE_VO_NA_LISTEN, 0x20);
         thisx->focus.pos = thisx->world.pos;
 
         if (thisx->textId == ElfMessage_GetFirstCycleHint(play)) {
@@ -1481,7 +1480,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         thisx->update = func_8088FE64;
         func_8088C51C(this, 3);
         if (this->elfMsg != NULL) {
-            this->elfMsg->flags |= 0x100;
+            this->elfMsg->flags |= ACTOR_FLAG_100;
             thisx->cutscene = this->elfMsg->cutscene;
             if (thisx->cutscene != -1) {
                 func_8088FD04(this);
@@ -1493,7 +1492,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         } else {
             thisx->cutscene = -1;
         }
-        thisx->flags &= ~0x10000;
+        thisx->flags &= ~ACTOR_FLAG_10000;
     } else if (this->unk_264 & 4) {
         thisx->focus.pos = thisx->world.pos;
         this->fairyFlags |= 0x10;

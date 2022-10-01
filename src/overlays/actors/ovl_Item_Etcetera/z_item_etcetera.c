@@ -123,7 +123,7 @@ void ItemEtcetera_Update(Actor* thisx, PlayState* play) {
 void ItemEtcetera_DrawThroughLens(Actor* thisx, PlayState* play) {
     ItemEtcetera* this = THIS;
 
-    if (play->actorCtx.unk4 == 100) {
+    if (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) {
         func_800B8050(&this->actor, play, 0);
         func_800B8118(&this->actor, play, 0);
         GetItem_Draw(play, this->getItemDrawId);

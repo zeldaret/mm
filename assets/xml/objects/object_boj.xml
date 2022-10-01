@@ -75,7 +75,7 @@
         <Limb Name="object_boj_Standardlimb_00C1E0" Type="Standard" EnumName="OBJECT_BOJ_LIMB_0D" Offset="0xC1E0" />
         <Limb Name="object_boj_Standardlimb_00C1EC" Type="Standard" EnumName="OBJECT_BOJ_LIMB_0E" Offset="0xC1EC" />
         <Limb Name="object_boj_Standardlimb_00C1F8" Type="Standard" EnumName="OBJECT_BOJ_LIMB_0F" Offset="0xC1F8" />
-        <Skeleton Name="object_boj_Skel_00C240" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOJ_LIMB_NONE" LimbMax="OBJECT_BOJ_LIMB_MAX" EnumName="object_boj_Limbs" Offset="0xC240" /> <!-- object_ginko_skeleton -->
+        <Skeleton Name="object_boj_Skel_00C240" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOJ_LIMB_NONE" LimbMax="OBJECT_BOJ_LIMB_MAX" EnumName="ObjectBojLimb" Offset="0xC240" /> <!-- object_ginko_skeleton -->
         <Animation Name="object_boj_Anim_00DED8" Offset="0xDED8" />
         <Animation Name="object_boj_Anim_00F920" Offset="0xF920" />
         <Animation Name="object_boj_Anim_00FC1C" Offset="0xFC1C" />
@@ -87,8 +87,8 @@
         <Animation Name="object_boj_Anim_011F84" Offset="0x11F84" />
         <Animation Name="object_boj_Anim_0128F4" Offset="0x128F4" />
         <Animation Name="object_boj_Anim_012E84" Offset="0x12E84" />
-        <DList Name="object_boj_DL_013380" Offset="0x13380" />
-        <Texture Name="object_boj_TLUT_0134C0" OutName="tlut_0134C0" Format="rgba16" Width="16" Height="16" Offset="0x134C0" />
-        <Texture Name="object_boj_Tex_0136C0" OutName="tex_0136C0" Format="ci8" Width="16" Height="16" Offset="0x136C0" />
+        <DList Name="gBombShopBagDL" Offset="0x13380" />
+        <Texture Name="gBombShopBagTLUT" OutName="bomb_shop_bag_tlut" Format="rgba16" Width="16" Height="16" Offset="0x134C0" />
+        <Texture Name="gBombShopBagTex" OutName="bomb_shop_bag" Format="ci8" Width="16" Height="16" Offset="0x136C0" />
     </File>
 </Root>

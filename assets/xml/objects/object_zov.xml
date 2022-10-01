@@ -76,6 +76,6 @@
         <Limb Name="object_zov_Standardlimb_0161DC" Type="Standard" EnumName="OBJECT_ZOV_LIMB_14" Offset="0x161DC" />
         <Limb Name="object_zov_Standardlimb_0161E8" Type="Standard" EnumName="OBJECT_ZOV_LIMB_15" Offset="0x161E8" />
         <Limb Name="object_zov_Standardlimb_0161F4" Type="Standard" EnumName="OBJECT_ZOV_LIMB_16" Offset="0x161F4" />
-        <Skeleton Name="object_zov_Skel_016258" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZOV_LIMB_NONE" LimbMax="OBJECT_ZOV_LIMB_MAX" EnumName="object_zov_Limbs" Offset="0x16258" />
+        <Skeleton Name="object_zov_Skel_016258" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZOV_LIMB_NONE" LimbMax="OBJECT_ZOV_LIMB_MAX" EnumName="ObjectZovLimb" Offset="0x16258" />
     </File>
 </Root>

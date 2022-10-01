@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_iknin_susceil.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "objects/object_ikninside_obj/object_ikninside_obj.h"
 
@@ -70,11 +71,12 @@ void func_80C0A838(BgIkninSusceil* this, PlayState* play) {
 
 void func_80C0A86C(BgIkninSusceil* this, PlayState* play, s16 verticalMag, s16 countdown, s32 arg4) {
     s32 pad;
-    s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+    s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-    Quake_SetSpeed(quake, 0x7B30);
-    Quake_SetQuakeValues(quake, verticalMag, 0, 0, 0);
-    Quake_SetCountdown(quake, countdown);
+    Quake_SetSpeed(quakeIndex, 31536);
+    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, countdown);
+
     if (arg4 == 1) {
         Rumble_Request(SQ(100.0f), 255, 20, 150);
     } else if (arg4 == 2) {
@@ -153,7 +155,7 @@ void func_80C0ABA8(BgIkninSusceil* this, PlayState* play) {
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
         func_80C0A86C(this, play, 4, 14, 1);
-        Flags_UnsetSwitch(play, GET_SUSCEIL_SWITCHFLAG(this));
+        Flags_UnsetSwitch(play, SUSCEIL_GET_SWITCHFLAG(&this->dyna.actor));
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
         func_80C0AC74(this);
     } else {
@@ -167,7 +169,7 @@ void func_80C0AC74(BgIkninSusceil* this) {
 }
 
 void func_80C0AC90(BgIkninSusceil* this, PlayState* play) {
-    if (Flags_GetSwitch(play, GET_SUSCEIL_SWITCHFLAG(this))) {
+    if (Flags_GetSwitch(play, SUSCEIL_GET_SWITCHFLAG(&this->dyna.actor))) {
         func_80C0ACD4(this);
     }
 }

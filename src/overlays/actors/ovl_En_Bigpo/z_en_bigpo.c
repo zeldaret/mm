@@ -154,7 +154,7 @@ static DamageTable sDamageTable = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 90, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_BIG_POE, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 3200, ICHAIN_STOP),
 };
 
@@ -181,8 +181,7 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    // thisx req to match
-    this->switchFlags = GET_BIGPO_SWITCHFLAGS(thisx);
+    this->switchFlags = BIGPO_GET_SWITCHFLAGS(thisx);
     thisx->params &= 0xFF;
     if (thisx->params == ENBIGPO_POSSIBLEFIRE) {
         if (Flags_GetSwitch(play, this->switchFlags)) {
@@ -220,8 +219,8 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
     }
 
     if (thisx->params == ENBIGPO_REGULAR) { // the well poe, starts immediately
-        thisx->flags &= ~0x10;              // always update OFF
-        this->unkBool204 = true;
+        thisx->flags &= ~ACTOR_FLAG_10;     // always update OFF
+        this->storePrevBgm = true;
         EnBigpo_InitWellBigpo(this);
     } else if (thisx->params == ENBIGPO_SUMMONED) { // dampe type
         EnBigpo_InitDampeMainPo(this);
@@ -278,7 +277,7 @@ void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, PlayState* play) {
             subCam->eye.x -= 1.5f * Math_SinS(this->actor.yawTowardsPlayer);
             subCam->eye.z -= 1.5f * Math_CosS(this->actor.yawTowardsPlayer);
         }
-        Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &subCam->eye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &subCam->eye);
     }
 }
 
@@ -338,7 +337,7 @@ void EnBigpo_SpawnCutsceneStage1(EnBigpo* this, PlayState* play) {
         subCamEye.x = ((this->actor.world.pos.x - this->fires[0].pos.x) * 1.8f) + this->actor.world.pos.x;
         subCamEye.y = this->actor.world.pos.y + 150.0f;
         subCamEye.z = ((this->actor.world.pos.z - this->fires[0].pos.z) * 1.8f) + this->actor.world.pos.z;
-        Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
     }
     this->actionFunc = EnBigpo_SpawnCutsceneStage2;
 }
@@ -440,9 +439,9 @@ void EnBigpo_SpawnCutsceneStage6(EnBigpo* this, PlayState* play) {
  */
 void EnBigpo_SpawnCutsceneStage7(EnBigpo* this) {
     this->idleTimer = 15;
-    if (this->unkBool204 == false) {
-        func_801A2E54(NA_BGM_MINI_BOSS);
-        this->unkBool204 = true;
+    if (this->storePrevBgm == false) {
+        Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
+        this->storePrevBgm = true;
     }
     this->actionFunc = EnBigpo_SpawnCutsceneStage8;
 }
@@ -460,7 +459,7 @@ void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, PlayState* play) {
     this->idleTimer--;
     if (this->idleTimer == 0) {
         subCam = Play_GetCamera(play, this->subCamId);
-        Play_CameraSetAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
+        Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
         if (this->actor.params == ENBIGPO_SUMMONED) {
             dampe = SubS_FindActor(play, NULL, ACTORCAT_NPC, ACTOR_EN_TK);
@@ -526,9 +525,9 @@ void EnBigpo_WarpingIn(EnBigpo* this, PlayState* play) {
     this->mainColor.a = this->idleTimer * (255.0f / 32.0f);
     if (this->idleTimer == 32) {
         this->mainColor.a = 255; // fully visible
-        if (this->unkBool204 == false) {
-            func_801A2E54(NA_BGM_MINI_BOSS);
-            this->unkBool204 = true;
+        if (this->storePrevBgm == false) {
+            Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
+            this->storePrevBgm = true;
         }
         EnBigpo_SetupIdleFlying(this);
     }
@@ -672,7 +671,7 @@ void EnBigpo_SetupDeath(EnBigpo* this) {
     this->idleTimer = 0;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->actor.hintId = 0xFF;
+    this->actor.hintId = TATL_HINT_ID_NONE;
     this->collider.base.ocFlags1 &= ~OC1_ON;
     this->actionFunc = EnBigpo_BurnAwayDeath;
 }
@@ -957,7 +956,7 @@ void EnBigpo_SetupFlameCirclePositions(EnBigpo* this, PlayState* play) {
         subCamEye.x = (Math_SinS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.x;
         subCamEye.y = this->actor.world.pos.y + 150.0f;
         subCamEye.z = (Math_CosS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.z;
-        Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
     }
 
     this->actionFunc = EnBigpo_DoNothing;
@@ -1125,7 +1124,7 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, PlayState* play) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DEAD);
             Enemy_StartFinishingBlow(play, &this->actor);
             if (this->actor.params == ENBIGPO_SUMMONED) { // dampe type
-                func_801A2ED8();
+                Audio_RestorePrevBgm();
             }
         } else {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DAMAGE);
@@ -1444,7 +1443,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play) {
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        gSPDisplayList(POLY_XLU_DISP++, &gGameplayKeepDrawFlameDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -1471,7 +1470,7 @@ void EnBigpo_RevealedFire(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(POLY_XLU_DISP++, &gGameplayKeepDrawFlameDL);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

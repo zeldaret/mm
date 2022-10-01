@@ -155,7 +155,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
     s16 phi_s0_2;
     s32 pad;
 
-    if (Flags_GetClear(play, play->roomCtx.currRoom.num)) {
+    if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -163,7 +163,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
     this->actor.params = 0x64;
     Actor_SetScale(&this->actor, 0.1f);
     this->actor.targetMode = 5;
-    this->actor.hintId = 0x19;
+    this->actor.hintId = TATL_HINT_ID_WART;
     this->actor.colChkInfo.health = 20;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->unk_700 = 1.0f;
@@ -260,8 +260,8 @@ void func_809EC568(Boss04* this, PlayState* play) {
                     this->unk_704 = 0;
                     Cutscene_Start(play, &play->csCtx);
                     this->subCamId = Play_CreateSubCamera(play);
-                    Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-                    Play_CameraChangeStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
+                    Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                    Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
                     func_800B7298(play, &this->actor, 7);
                     player->actor.world.pos.x = this->unk_6E8;
                     player->actor.world.pos.z = this->unk_6F0 + 410.0f;
@@ -405,8 +405,8 @@ void func_809EC568(Boss04* this, PlayState* play) {
         }
         Math_Vec3f_Copy(&subCamAt, &this->subCamAt);
         subCamAt.y += Math_SinS(this->subCamAtOscillator * 0x4000) * this->subCamAtOscillator * 1.5f;
-        Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &this->subCamEye);
-        Play_CameraSetFov(play, this->subCamId, this->subCamFov);
+        Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &this->subCamEye);
+        Play_SetCameraFov(play, this->subCamId, this->subCamFov);
         Math_ApproachF(&this->subCamFov, 60.0f, 0.1f, 1.0f);
     }
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
@@ -521,7 +521,7 @@ void func_809ED224(Boss04* this) {
     this->unk_2C8 = 200;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_DEAD);
     this->actor.flags &= ~ACTOR_FLAG_1;
-    func_801A2ED8();
+    Audio_RestorePrevBgm();
     this->unk_1F6 = 10;
 }
 
@@ -759,7 +759,7 @@ void Boss04_Update(Actor* thisx, PlayState* play2) {
     if (D_809EE4D0 != 0) {
         D_809EE4D0--;
         if (D_809EE4D0 == 0) {
-            func_801A2E54(0x38);
+            Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
         }
     }
 

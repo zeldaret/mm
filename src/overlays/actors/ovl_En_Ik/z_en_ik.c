@@ -387,8 +387,8 @@ void EnIk_Idle(EnIk* this, PlayState* play) {
         }
     } else if (this->colliderCylinder.base.acFlags & AC_HIT) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_ARMOR_HIT);
-        func_801A2E54(NA_BGM_MINI_BOSS);
-        this->actor.hintId = 0x35;
+        Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
+        this->actor.hintId = TATL_HINT_ID_IRON_KNUCKLE;
         this->colliderCylinder.base.acFlags &= ~AC_HIT;
         this->invincibilityFrames = 12;
         EnIk_SetupWalk(this);
@@ -647,7 +647,7 @@ void EnIk_SetupReactToAttack(EnIk* this, s32 arg1) {
 void EnIk_ReactToAttack(EnIk* this, PlayState* play) {
     Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f);
     if (this->subCamId != SUB_CAM_ID_DONE) {
-        Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &Play_GetCamera(play, this->subCamId)->eye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &Play_GetCamera(play, this->subCamId)->eye);
     }
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->subCamId != SUB_CAM_ID_DONE) {
@@ -742,7 +742,7 @@ void EnIk_PlayCutscene(EnIk* this, PlayState* play) {
             subCamEye.x = (Math_SinS((this->actor.shape.rot.y - 0x2000)) * 120.0f) + this->actor.focus.pos.x;
             subCamEye.y = this->actor.focus.pos.y + 20.0f;
             subCamEye.z = (Math_CosS((this->actor.shape.rot.y - 0x2000)) * 120.0f) + this->actor.focus.pos.z;
-            Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
+            Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
         }
         if (this->actor.colChkInfo.health != 0) {
             EnIk_SetupReactToAttack(this, false);
@@ -786,7 +786,7 @@ void EnIk_UpdateDamage(EnIk* this, PlayState* play) {
                     isArmorBroken = true;
                 } else {
                     Enemy_StartFinishingBlow(play, &this->actor);
-                    func_801A2ED8();
+                    Audio_RestorePrevBgm();
                 }
             }
             if (isArmorBroken == true) {

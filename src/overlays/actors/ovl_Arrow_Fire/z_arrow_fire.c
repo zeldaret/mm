@@ -81,7 +81,7 @@ void ArrowFire_Init(Actor* thisx, PlayState* play) {
 void ArrowFire_Destroy(Actor* thisx, PlayState* play) {
     ArrowFire* this = THIS;
 
-    func_80115D5C(&play->state);
+    Magic_Reset(play);
     Collider_DestroyQuad(play, &this->collider1);
     Collider_DestroyQuad(play, &this->collider2);
 }

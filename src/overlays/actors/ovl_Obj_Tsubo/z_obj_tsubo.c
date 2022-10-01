@@ -162,11 +162,11 @@ void func_80927818(ObjTsubo* this, PlayState* play, s32 arg2) {
 }
 
 s32 ObjTsubo_IsSceneNotGohtOrTwinmold(ObjTsubo* this, PlayState* play) {
-    return (play->sceneNum != SCENE_HAKUGIN_BS) && (play->sceneNum != SCENE_INISIE_BS);
+    return (play->sceneId != SCENE_HAKUGIN_BS) && (play->sceneId != SCENE_INISIE_BS);
 }
 
 void func_8092788C(ObjTsubo* this, PlayState* play) {
-    if (!this->unk_197 && (play->roomCtx.currRoom.num != this->homeRoom)) {
+    if (!this->unk_197 && (play->roomCtx.curRoom.num != this->homeRoom)) {
         this->unk_197 = true;
     }
 }
@@ -498,7 +498,7 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
                 this->actor.flags &= ~ACTOR_FLAG_10;
             }
         }
-        if ((this->actor.xzDistToPlayer < 800.0f) || (gSaveContext.save.entranceIndex == 0xD010)) {
+        if ((this->actor.xzDistToPlayer < 800.0f) || (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1))) {
             Collider_UpdateCylinder(&this->actor, &this->cylinderCollider);
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->cylinderCollider.base);
             if (this->actor.xzDistToPlayer < 150.0f) {
@@ -527,7 +527,7 @@ void func_80928D80(ObjTsubo* this, PlayState* play) {
 
     func_8092788C(this, play);
     if (Actor_HasNoParent(&this->actor, play)) {
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         Actor_MoveWithGravity(&this->actor);
         this->actor.flags &= ~ACTOR_FLAG_4000000;
         Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0xC5);
@@ -665,7 +665,7 @@ void ObjTsubo_Update(Actor* thisx, PlayState* play) {
     }
     if (!this->unk_197) {
         if (this->unk_198) {
-            play->actorCtx.unk5 |= 8;
+            play->actorCtx.flags |= ACTORCTX_FLAG_3;
             this->actor.flags |= ACTOR_FLAG_10;
         }
         if (this->unk_19A >= 0) {

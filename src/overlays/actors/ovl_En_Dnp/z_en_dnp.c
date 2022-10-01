@@ -2,10 +2,13 @@
  * File: z_en_dnp.c
  * Overlay: ovl_En_Dnp
  * Description: Deku Princess
+ *
+ * This actor's name is probably short for "Dekunuts Princess". It uses assets from object_dnq,
+ * which is probably short for "Dekunuts Queen".
  */
 
 #include "z_en_dnp.h"
-#include "objects/object_dnp/object_dnp.h"
+#include "objects/object_dnq/object_dnq.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
@@ -26,7 +29,7 @@ const ActorInit En_Dnp_InitVars = {
     ACTOR_EN_DNP,
     ACTORCAT_NPC,
     FLAGS,
-    OBJECT_DNP,
+    OBJECT_DNQ,
     sizeof(EnDnp),
     (ActorFunc)EnDnp_Init,
     (ActorFunc)EnDnp_Destroy,
@@ -56,33 +59,33 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimations[] = {
-    { &object_dnp_Anim_0007D8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnp_Anim_0021DC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnp_Anim_0021DC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnp_Anim_0026B8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnp_Anim_004D08, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnp_Anim_0071F4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnp_Anim_007960, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnp_Anim_008588, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnp_Anim_00A900, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnp_Anim_00AEB8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnp_Anim_00B754, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnp_Anim_00674C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnp_Anim_00BAD8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnp_Anim_006B74, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnp_Anim_012428, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnp_Anim_00B324, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnp_Anim_00B324, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnp_Anim_0115B8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnp_Anim_0115B8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnp_Anim_00923C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnp_Anim_009AA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnp_Anim_00125C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnp_Anim_0017F8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnp_Anim_001C1C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnp_Anim_0057AC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnp_Anim_00625C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+static AnimationInfoS sAnimationInfo[] = {
+    { &object_dnq_Anim_0007D8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_0021DC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnq_Anim_0021DC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_0026B8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_004D08, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_0071F4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_007960, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_008588, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnq_Anim_00A900, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_00AEB8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_00B754, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_00674C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_00BAD8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_006B74, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_012428, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_00B324, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnq_Anim_00B324, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_0115B8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_0115B8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnq_Anim_00923C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_009AA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_00125C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_0017F8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnq_Anim_001C1C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_0057AC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnq_Anim_00625C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 static s32 D_80B3DE58[] = {
@@ -135,7 +138,7 @@ s32 func_80B3CC38(EnDnp* this, s32 arg1) {
 
     if (arg1 != this->unk_340) {
         this->unk_340 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
     }
 
     return ret;
@@ -247,7 +250,7 @@ void func_80B3D11C(EnDnp* this, PlayState* play) {
     s32 temp_v0;
     s32 val;
 
-    if (!(gSaveContext.save.weekEventReg[29] & 0x40) && (play->sceneNum == SCENE_MITURIN) &&
+    if (!(gSaveContext.save.weekEventReg[29] & 0x40) && (play->sceneId == SCENE_MITURIN) &&
         (play->csCtx.currentCsIndex == 0)) {
         this->unk_322 |= 0x20;
         gSaveContext.save.weekEventReg[29] |= 0x40;
@@ -304,7 +307,7 @@ void func_80B3D338(EnDnp* this, PlayState* play) {
         } else {
             this->actor.textId = 0x971;
             player->actor.textId = this->actor.textId;
-            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, EXCH_ITEM_MINUS1);
+            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, PLAYER_AP_MINUS1);
         }
     }
 }
@@ -347,7 +350,7 @@ void EnDnp_Init(Actor* thisx, PlayState* play) {
     EnDnp* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 16.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_dnp_Skel_010D60, NULL, this->jointTable, this->morphTable, 26);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_dnq_Skel_010D60, NULL, this->jointTable, this->morphTable, 26);
     this->unk_340 = -1;
     func_80B3CC38(this, 15);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -370,7 +373,7 @@ void EnDnp_Init(Actor* thisx, PlayState* play) {
         Actor_SetScale(&this->actor, 0.0085f);
         SubS_UpdateFlags(&this->unk_322, 3, 7);
         this->unk_322 |= 0x400;
-        if ((play->sceneNum == SCENE_MITURIN) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
+        if ((play->sceneId == SCENE_MITURIN) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
             this->unk_322 |= 0x20;
             func_80B3CC38(this, 1);
         }
@@ -409,7 +412,7 @@ void EnDnp_Update(Actor* thisx, PlayState* play) {
         if ((this->unk_322 & 0x400) && !(gSaveContext.save.weekEventReg[23] & 0x20)) {
             Actor_PickUp(&this->actor, play, GI_MAX, sp2C, sp28);
         }
-        func_8013C964(&this->actor, play, sp2C, sp28, EXCH_ITEM_NONE, this->unk_322 & 7);
+        func_8013C964(&this->actor, play, sp2C, sp28, PLAYER_AP_NONE, this->unk_322 & 7);
         Actor_SetFocus(&this->actor, 30.0f);
         func_80B3CC80(this, play);
     }
@@ -479,10 +482,10 @@ void EnDnp_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 
 void EnDnp_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr D_80B3DEAC[] = {
-        object_dnp_Tex_0103D0,
-        object_dnp_Tex_0105D0,
-        object_dnp_Tex_0107D0,
-        object_dnp_Tex_0109D0,
+        object_dnq_Tex_0103D0,
+        object_dnq_Tex_0105D0,
+        object_dnq_Tex_0107D0,
+        object_dnq_Tex_0109D0,
     };
     EnDnp* this = THIS;
 
