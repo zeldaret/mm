@@ -53,15 +53,15 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 typedef struct {
-    /* 0x0 */ s16 sceneNum;
+    /* 0x0 */ s16 sceneId;
     /* 0x2 */ u8 dListIndex;
     /* 0x4 */ s16 objectId;
-} EnDoorEtcInfo; // size: 0x6;
+} EnDoorEtcInfo; // size = 0x6
 
 EnDoorEtcInfo sObjInfo[] = {
     { SCENE_MITURIN, 1, OBJECT_NUMA_OBJ },
     { -1, 0, GAMEPLAY_KEEP },
-    { -1, 0xD, GAMEPLAY_FIELD_KEEP },
+    { -1, 13, GAMEPLAY_FIELD_KEEP },
     { 0, 0, OBJECT_UNSET_0 },
     { 0, 0, OBJECT_UNSET_0 },
     { 0, 0, OBJECT_UNSET_0 },
@@ -96,12 +96,12 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.shape.rot.x = -0x4000;
     this->angle = 0;
-    for (i = 0; i < 0xF; i++, objectInfo++) {
-        if (play->sceneNum == objectInfo->sceneNum) {
+    for (i = 0; i < 15; i++, objectInfo++) {
+        if (play->sceneId == objectInfo->sceneId) {
             break;
         }
     }
-    if ((i >= 0xF) && (Object_GetIndex(&play->objectCtx, GAMEPLAY_FIELD_KEEP) >= 0)) {
+    if ((i >= 15) && (Object_GetIndex(&play->objectCtx, GAMEPLAY_FIELD_KEEP) >= 0)) {
         objectInfo++;
     }
     objectIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
@@ -135,7 +135,7 @@ s32 EnDoorEtc_IsDistanceGreater(Vec3f* a, Vec3f* b, f32 c) {
     f32 dy = b->y - a->y;
     f32 dz = b->z - a->z;
 
-    return ((SQ(dx) + SQ(dy) + SQ(dz)) < (SQ(c)));
+    return ((SQ(dx) + SQ(dy) + SQ(dz)) < SQ(c));
 }
 
 void EnDoorEtc_WaitForObject(EnDoorEtc* this, PlayState* play) {
@@ -177,7 +177,7 @@ void func_80AC21A0(EnDoorEtc* this, PlayState* play) {
 
     Actor_OffsetOfPointInActorCoords(&this->actor, &playerOffsetFromDoor, &player->actor.world.pos);
     if (this->unk_1A1 == 0) {
-        if ((Player_InCsMode(play) == 0) &&
+        if ((!Player_InCsMode(play)) &&
             ((fabsf(playerOffsetFromDoor.y) < 20.0f) && fabsf(playerOffsetFromDoor.x) < 20.0f) &&
             (fabsf(playerOffsetFromDoor.z) < 50.0f)) {
             yawDiff = player->actor.shape.rot.y - this->actor.shape.rot.y;
@@ -186,7 +186,7 @@ void func_80AC21A0(EnDoorEtc* this, PlayState* play) {
             }
             yawDiffAbs = ABS_ALT(yawDiff);
             if (yawDiffAbs < 0x3000) {
-                player->doorDirection = playerOffsetFromDoor.z >= 0.0f ? 1.0f : -1.0f;
+                player->doorDirection = (playerOffsetFromDoor.z >= 0.0f) ? 1.0f : -1.0f;
                 player->doorActor = &this->actor;
                 player->doorType = -1;
             }
