@@ -154,7 +154,7 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
         }
     } else {
         this->unk_15E = false;
-        if (shutterType != 0) {
+        if (shutterType != BARRED_SHUTTER) {
             func_800B9010(&this->dyna.actor, NA_SE_EV_METALDOOR_SLIDE - SFX_FLAG);
         }
     }
