@@ -480,7 +480,7 @@ typedef struct {
     /* 0x2BC */ s16 equipAnimShrinkRate; // rate the scale is shrinking for the item icon while moving being equipped to c-button
     /* 0x2BE */ s16 ocarinaButtonsY[5]; // TODO: test and verify
     /* 0x2C8 */ u16 unk_2C8; // Uses PauseMenuPage enum for Owl Warp. Never set.
-    /* 0x2CA */ s16 unk_2CA; // Uses OwlStatueId enum for Owl Warp. Never set.
+    /* 0x2CA */ s16 unk_2CA; // Uses OwlWarpId enum for Owl Warp. Never set.
 } PauseContext; // size = 0x2D0
 
 typedef struct {

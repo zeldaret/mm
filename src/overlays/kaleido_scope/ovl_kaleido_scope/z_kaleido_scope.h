@@ -108,6 +108,13 @@ typedef enum {
     /* 5 */ PAUSE_BG_PRERENDER_MAX
 } PauseBgPreRenderState;
 
+// To be used for Item-Page cursor and Mask-Page cursor
+typedef enum {
+    /* 0 */ PAUSE_CURSOR_RESULT_NONE,
+    /* 1 */ PAUSE_CURSOR_RESULT_SLOT,
+    /* 2 */ PAUSE_CURSOR_RESULT_SPECIAL_POS
+} PauseMoveCursorResult;
+
 #define NUM_ITEM_SLOTS 24
 #define NUM_MASK_SLOTS 24
 
@@ -123,7 +130,7 @@ void func_80821A04(PlayState* play);
 // Map
 void KaleidoScope_DrawDungeonMap(PlayState*);
 void KaleidoScope_UpdateDungeonCursor(PlayState* play);
-void KaleidoScope_DrawWorldMap(PlayState* play);
+void func_8081E7D8(PlayState* play);
 void KaleidoScope_UpdateWorldMapCursor(PlayState* play);
 
 // Collect

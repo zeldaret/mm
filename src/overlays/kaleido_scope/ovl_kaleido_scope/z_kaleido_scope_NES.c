@@ -507,7 +507,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
                 gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
                 func_801091F0(play);
             } else {
-                KaleidoScope_DrawWorldMap(play);
+                func_8081E7D8(play);
             }
         }
 
@@ -623,7 +623,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    KaleidoScope_DrawWorldMap(play);
+                    func_8081E7D8(play);
                 }
                 break;
 
@@ -1134,7 +1134,7 @@ void KaleidoScope_DrawOwlWarpMapPage(PlayState* play) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    KaleidoScope_DrawWorldMap(play);
+    func_8081E7D8(play);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -1960,29 +1960,29 @@ f32 sWorldMapCursorsY[REGION_MAX] = {
     28.0f,  // REGION_GORON_VILLAGE
     7.0f,   // REGION_STONE_TOWER
 };
-f32 sOwlWarpWorldMapCursorsX[OWL_STATUE_MAX] = {
-    -50.0f, // OWL_STATUE_GREAT_BAY_COAST
-    -38.0f, // OWL_STATUE_ZORA_CAPE
-    6.0f,   // OWL_STATUE_SNOWHEAD
-    11.0f,  // OWL_STATUE_MOUNTAIN_VILLAGE
-    8.0f,   // OWL_STATUE_CLOCK_TOWN
-    0.0f,   // OWL_STATUE_MILK_ROAD
-    12.0f,  // OWL_STATUE_WOODFALL
-    31.0f,  // OWL_STATUE_SOUTHERN_SWAMP
-    48.0f,  // OWL_STATUE_IKANA_CANYON
-    56.0f,  // OWL_STATUE_STONE_TOWER
+f32 sOwlWarpWorldMapCursorsX[OWL_WARP_MAX - 1] = {
+    -50.0f, // OWL_WARP_GREAT_BAY_COAST
+    -38.0f, // OWL_WARP_ZORA_CAPE
+    6.0f,   // OWL_WARP_SNOWHEAD
+    11.0f,  // OWL_WARP_MOUNTAIN_VILLAGE
+    8.0f,   // OWL_WARP_CLOCK_TOWN
+    0.0f,   // OWL_WARP_MILK_ROAD
+    12.0f,  // OWL_WARP_WOODFALL
+    31.0f,  // OWL_WARP_SOUTHERN_SWAMP
+    48.0f,  // OWL_WARP_IKANA_CANYON
+    56.0f,  // OWL_WARP_STONE_TOWER
 };
-f32 sOwlWarpWorldMapCursorsY[OWL_STATUE_MAX] = {
-    -14.0f, // OWL_STATUE_GREAT_BAY_COAST
-    -39.0f, // OWL_STATUE_ZORA_CAPE
-    23.0f,  // OWL_STATUE_SNOWHEAD
-    11.0f,  // OWL_STATUE_MOUNTAIN_VILLAGE
-    -8.0f,  // OWL_STATUE_CLOCK_TOWN
-    -15.0f, // OWL_STATUE_MILK_ROAD
-    -31.0f, // OWL_STATUE_WOODFALL
-    -30.0f, // OWL_STATUE_SOUTHERN_SWAMP
-    -10.0f, // OWL_STATUE_IKANA_CANYON
-    11.0f,  // OWL_STATUE_STONE_TOWER
+f32 sOwlWarpWorldMapCursorsY[OWL_WARP_MAX - 1] = {
+    -14.0f, // OWL_WARP_GREAT_BAY_COAST
+    -39.0f, // OWL_WARP_ZORA_CAPE
+    23.0f,  // OWL_WARP_SNOWHEAD
+    11.0f,  // OWL_WARP_MOUNTAIN_VILLAGE
+    -8.0f,  // OWL_WARP_CLOCK_TOWN
+    -15.0f, // OWL_WARP_MILK_ROAD
+    -31.0f, // OWL_WARP_WOODFALL
+    -30.0f, // OWL_WARP_SOUTHERN_SWAMP
+    -10.0f, // OWL_WARP_IKANA_CANYON
+    11.0f,  // OWL_WARP_STONE_TOWER
 };
 f32 sDungeonMapCursorsX[] = {
     -72.0f, // DUNGEON_BOSS_KEY

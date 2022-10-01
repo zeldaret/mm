@@ -30,7 +30,7 @@ void func_800F4A10(PlayState* play) {
             }
         }
     } else {
-        for (i = OWL_STATUE_STONE_TOWER; i >= OWL_STATUE_GREAT_BAY_COAST; i--) {
+        for (i = OWL_WARP_STONE_TOWER; i >= OWL_WARP_GREAT_BAY_COAST; i--) {
             if ((gSaveContext.save.playerData.owlActivationFlags >> i) & 1) {
                 pauseCtx->worldMapPoints[i] = true;
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = i;

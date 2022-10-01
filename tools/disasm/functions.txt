@@ -4212,7 +4212,7 @@
     0x8081D240:("KaleidoScope_DrawDungeonStrayFairyCount",),
     0x8081D6DC:("KaleidoScope_DrawDungeonMap",),
     0x8081E118:("KaleidoScope_UpdateDungeonCursor",),
-    0x8081E7D8:("KaleidoScope_DrawWorldMap",),
+    0x8081E7D8:("func_8081E7D8",),
     0x8081FB1C:("KaleidoScope_UpdateWorldMapCursor",),
     0x8081FF80:("KaleidoScope_DrawMaskSelect",),
     0x808204AC:("KaleidoScope_UpdateMaskCursor",),

@@ -153,11 +153,12 @@ u8 gMaskPlayerFormSlotRestrictions[PLAYER_FORM_MAX][NUM_MASK_SLOTS] = {
     },
 };
 
-#define SET_MOON_MASK_BIT(moonMasksBitsIndex, moonMasksBitsFlag) ((moonMasksBitsIndex) << 8 | (moonMasksBitsFlag))
-#define CHECK_MOON_MASK_TAKEN(maskIndex) \
-    (gSaveContext.moonMasksBits[sMoonMasksTakenBits[maskIndex] >> 8] & (u8)sMoonMasksTakenBits[maskIndex])
+#define SET_MOON_MASK_BIT(masksGivenOnMoonIndex, masksGivenOnMoonFlag) \
+    ((masksGivenOnMoonIndex) << 8 | (masksGivenOnMoonFlag))
+#define CHECK_GIVEN_MASK_ON_MOON(maskIndex) \
+    (gSaveContext.masksGivenOnMoon[sMasksGivenOnMoonBits[maskIndex] >> 8] & (u8)sMasksGivenOnMoonBits[maskIndex])
 
-u16 sMoonMasksTakenBits[] = {
+u16 sMasksGivenOnMoonBits[] = {
     SET_MOON_MASK_BIT(1, 0x1),  // SLOT_MASK_POSTMAN
     SET_MOON_MASK_BIT(0, 0x4),  // SLOT_MASK_ALL_NIGHT
     SET_MOON_MASK_BIT(2, 0x2),  // SLOT_MASK_BLAST
@@ -221,7 +222,7 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
         if (((void)0, gSaveContext.save.inventory.items[i + NUM_ITEM_SLOTS]) != ITEM_NONE) {
-            if (!CHECK_MOON_MASK_TAKEN(i)) {
+            if (!CHECK_GIVEN_MASK_ON_MOON(i)) {
                 if ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) && (pauseCtx->pageIndex == PAUSE_MASK) &&
                     (pauseCtx->cursorSpecialPos == 0) &&
                     gMaskPlayerFormSlotRestrictions[(void)0, gSaveContext.save.playerForm][i]) {
@@ -269,6 +270,7 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
 u8 sMaskPlayerFormItems[] = {
     ITEM_MASK_FIERCE_DEITY, ITEM_MASK_GORON, ITEM_MASK_ZORA, ITEM_MASK_DEKU, ITEM_NONE,
 };
+
 void KaleidoScope_UpdateMaskCursor(PlayState* play) {
     Input* input = CONTROLLER1(&play->state);
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -288,7 +290,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
 
     if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
         (pauseCtx->pageIndex == PAUSE_MASK) && !pauseCtx->itemDescriptionOn) {
-        moveCursorResult = 0;
+        moveCursorResult = PAUSE_CURSOR_RESULT_NONE;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_MASK];
 
         cursorItem = pauseCtx->cursorItem[PAUSE_MASK];
@@ -304,14 +306,14 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                 cursorY = pauseCtx->cursorYIndex[PAUSE_MASK];
 
                 // Search for slot to move to
-                while (moveCursorResult == 0) {
+                while (moveCursorResult == PAUSE_CURSOR_RESULT_NONE) {
                     if (pauseCtx->stickAdjX < -30) {
                         // move cursor left
                         pauseCtx->cursorShrinkRate = 4.0f;
                         if (pauseCtx->cursorXIndex[PAUSE_MASK] != 0) {
                             pauseCtx->cursorXIndex[PAUSE_MASK]--;
                             pauseCtx->cursorPoint[PAUSE_MASK]--;
-                            moveCursorResult = 1;
+                            moveCursorResult = PAUSE_CURSOR_RESULT_SLOT;
                         } else {
                             pauseCtx->cursorYIndex[PAUSE_MASK]++;
 
@@ -332,7 +334,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
 
                                 KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
 
-                                moveCursorResult = 2;
+                                moveCursorResult = PAUSE_CURSOR_RESULT_SPECIAL_POS;
                             }
                         }
                     } else if (pauseCtx->stickAdjX > 30) {
@@ -341,7 +343,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                         if (pauseCtx->cursorXIndex[PAUSE_MASK] <= 4) {
                             pauseCtx->cursorXIndex[PAUSE_MASK]++;
                             pauseCtx->cursorPoint[PAUSE_MASK]++;
-                            moveCursorResult = 1;
+                            moveCursorResult = PAUSE_CURSOR_RESULT_SLOT;
                         } else {
                             pauseCtx->cursorYIndex[PAUSE_MASK]++;
 
@@ -362,15 +364,15 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
 
                                 KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_RIGHT);
 
-                                moveCursorResult = 2;
+                                moveCursorResult = PAUSE_CURSOR_RESULT_SPECIAL_POS;
                             }
                         }
                     }
                 }
 
-                if (moveCursorResult == 1) {
+                if (moveCursorResult == PAUSE_CURSOR_RESULT_SLOT) {
                     cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + NUM_ITEM_SLOTS];
-                    if (CHECK_MOON_MASK_TAKEN(pauseCtx->cursorPoint[PAUSE_MASK])) {
+                    if (CHECK_GIVEN_MASK_ON_MOON(pauseCtx->cursorPoint[PAUSE_MASK])) {
                         cursorItem = ITEM_NONE;
                     }
                 }
@@ -386,11 +388,11 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                 while (true) {
                     // Check if current cursor has an item in its slot
                     if ((gSaveContext.save.inventory.items[cursorPoint + NUM_ITEM_SLOTS] != ITEM_NONE) &&
-                        !CHECK_MOON_MASK_TAKEN(cursorPoint)) {
+                        !CHECK_GIVEN_MASK_ON_MOON(cursorPoint)) {
                         pauseCtx->cursorPoint[PAUSE_MASK] = cursorPoint;
                         pauseCtx->cursorXIndex[PAUSE_MASK] = cursorX;
                         pauseCtx->cursorYIndex[PAUSE_MASK] = cursorY;
-                        moveCursorResult = 1;
+                        moveCursorResult = PAUSE_CURSOR_RESULT_SLOT;
                         break;
                     }
 
@@ -415,6 +417,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                 }
             }
         } else { // PAUSE_CURSOR_PAGE_RIGHT
+            //! FAKE:
             if (1) {}
             if (pauseCtx->stickAdjX < -30) {
                 func_80821A04(play);
@@ -426,11 +429,11 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                 while (true) {
                     // Check if current cursor has an item in its slot
                     if ((gSaveContext.save.inventory.items[cursorPoint + NUM_ITEM_SLOTS] != ITEM_NONE) &&
-                        !CHECK_MOON_MASK_TAKEN(cursorPoint)) {
+                        !CHECK_GIVEN_MASK_ON_MOON(cursorPoint)) {
                         pauseCtx->cursorPoint[PAUSE_MASK] = cursorPoint;
                         pauseCtx->cursorXIndex[PAUSE_MASK] = cursorX;
                         pauseCtx->cursorYIndex[PAUSE_MASK] = cursorY;
-                        moveCursorResult = 1;
+                        moveCursorResult = PAUSE_CURSOR_RESULT_SLOT;
                         break;
                     }
 
@@ -459,32 +462,32 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
         if (pauseCtx->cursorSpecialPos == 0) {
             // move cursor up/down
             if (ABS_ALT(pauseCtx->stickAdjY) > 30) {
-                moveCursorResult = 0;
+                moveCursorResult = PAUSE_CURSOR_RESULT_NONE;
 
                 cursorPoint = pauseCtx->cursorPoint[PAUSE_MASK];
                 cursorY = pauseCtx->cursorYIndex[PAUSE_MASK];
 
-                while (moveCursorResult == 0) {
+                while (moveCursorResult == PAUSE_CURSOR_RESULT_NONE) {
                     if (pauseCtx->stickAdjY > 30) {
                         // move cursor up
-                        moveCursorResult = 2;
+                        moveCursorResult = PAUSE_CURSOR_RESULT_SPECIAL_POS;
                         if (pauseCtx->cursorYIndex[PAUSE_MASK] != 0) {
                             pauseCtx->cursorShrinkRate = 4.0f;
                             pauseCtx->cursorYIndex[PAUSE_MASK]--;
                             pauseCtx->cursorPoint[PAUSE_MASK] -= 6;
-                            moveCursorResult = 1;
+                            moveCursorResult = PAUSE_CURSOR_RESULT_SLOT;
                         } else {
                             pauseCtx->cursorYIndex[PAUSE_MASK] = cursorY;
                             pauseCtx->cursorPoint[PAUSE_MASK] = cursorPoint;
                         }
                     } else if (pauseCtx->stickAdjY < -30) {
                         // move cursor down
-                        moveCursorResult = 2;
+                        moveCursorResult = PAUSE_CURSOR_RESULT_SPECIAL_POS;
                         if (pauseCtx->cursorYIndex[PAUSE_MASK] < 3) {
                             pauseCtx->cursorShrinkRate = 4.0f;
                             pauseCtx->cursorYIndex[PAUSE_MASK]++;
                             pauseCtx->cursorPoint[PAUSE_MASK] += 6;
-                            moveCursorResult = 1;
+                            moveCursorResult = PAUSE_CURSOR_RESULT_SLOT;
                         } else {
                             pauseCtx->cursorYIndex[PAUSE_MASK] = cursorY;
                             pauseCtx->cursorPoint[PAUSE_MASK] = cursorPoint;
@@ -496,14 +499,14 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
             cursorSlot = pauseCtx->cursorPoint[PAUSE_MASK];
             pauseCtx->cursorColorSet = 2;
 
-            if (moveCursorResult == 1) {
+            if (moveCursorResult == PAUSE_CURSOR_RESULT_SLOT) {
                 cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + NUM_ITEM_SLOTS];
-                if (CHECK_MOON_MASK_TAKEN(pauseCtx->cursorPoint[PAUSE_MASK])) {
+                if (CHECK_GIVEN_MASK_ON_MOON(pauseCtx->cursorPoint[PAUSE_MASK])) {
                     cursorItem = ITEM_NONE;
                 }
-            } else if (moveCursorResult != 2) {
+            } else if (moveCursorResult != PAUSE_CURSOR_RESULT_SPECIAL_POS) {
                 cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + NUM_ITEM_SLOTS];
-                if (CHECK_MOON_MASK_TAKEN(pauseCtx->cursorPoint[PAUSE_MASK])) {
+                if (CHECK_GIVEN_MASK_ON_MOON(pauseCtx->cursorPoint[PAUSE_MASK])) {
                     cursorItem = ITEM_NONE;
                 }
             }
@@ -533,7 +536,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                     (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
                     CHECK_BTN_ANY(input->press.button, BTN_CLEFT | BTN_CDOWN | BTN_CRIGHT)) {
 
-                    // Ensure that a non-transformation mask can not be unequipped while being used
+                    // Ensure that a mask is not unequipped while being used
                     if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                         if (((Player_GetCurMaskItemId(play) != ITEM_NONE) &&
                              (Player_GetCurMaskItemId(play) == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT))) ||
@@ -571,7 +574,6 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                         return;
                     }
 
-                    // Ensure that a non-transformation mask can not be unequipped while being used
                     if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                         pauseCtx->equipTargetCBtn = PAUSE_EQUIP_C_LEFT;
                     } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {

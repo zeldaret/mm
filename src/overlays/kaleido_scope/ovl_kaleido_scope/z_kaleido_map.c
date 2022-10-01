@@ -13,7 +13,10 @@
 extern s16 D_8082B7F0[];
 extern s16 D_8082B838[];
 
-extern TexturePtr D_09007500;
+extern TexturePtr D_09007500; // gPlayerFaceIcon
+
+#define WORLD_MAP_IMAGE_TEX_WIDTH 216
+#define WORLD_MAP_IMAGE_TEX_HEIGHT 128
 
 void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
     s16 counterDigits[2];
@@ -22,12 +25,12 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    // Get digits for max number of stray faries
+    // Get digits for max number of stray fairies
     counterDigits[1] = 15;
     counterDigits[0] = counterDigits[1] / 10;
     counterDigits[1] -= (s16)(counterDigits[0] * 10);
 
-    // Draw max number of stray faries
+    // Draw max number of stray fairies
     for (rectLeft = 116, digitIndex = 0; digitIndex < 2; digitIndex++, rectLeft += 8) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 255);
@@ -38,8 +41,8 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
 
-        gSPTextureRectangle(POLY_OPA_DISP++, rectLeft * 4, 580, (rectLeft * 4) + 32, 644, G_TX_RENDERTILE, 0, 0,
-                            1 << 10, 1 << 10);
+        gSPTextureRectangle(POLY_OPA_DISP++, rectLeft * 4, 145 << 2, (rectLeft + 8) * 4, 161 << 2, G_TX_RENDERTILE, 0,
+                            0, 1 << 10, 1 << 10);
     }
 
     // Draw Counter slash
@@ -52,14 +55,15 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
 
-    gSPTextureRectangle(POLY_OPA_DISP++, 424, 580, 456, 644, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(POLY_OPA_DISP++, 106 << 2, 145 << 2, 114 << 2, 161 << 2, G_TX_RENDERTILE, 0, 0, 1 << 10,
+                        1 << 10);
 
-    // Get digits for current number of stray faries collected
+    // Get digits for current number of stray fairies collected
     counterDigits[1] = gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex];
     counterDigits[0] = counterDigits[1] / 10;
     counterDigits[1] -= (s16)(counterDigits[0] * 10);
 
-    // Draw digits for current number of stray faries collected
+    // Draw digits for current number of stray fairies collected
     for (rectLeft = 88, digitIndex = 0; digitIndex < 2; digitIndex++, rectLeft += 8) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 255);
@@ -70,8 +74,8 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
 
-        gSPTextureRectangle(POLY_OPA_DISP++, rectLeft * 4, 580, (rectLeft * 4) + 32, 644, G_TX_RENDERTILE, 0, 0,
-                            1 << 10, 1 << 10);
+        gSPTextureRectangle(POLY_OPA_DISP++, rectLeft * 4, 145 << 2, (rectLeft + 8) * 4, 161 << 2, G_TX_RENDERTILE, 0,
+                            0, 1 << 10, 1 << 10);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -82,13 +86,16 @@ TexturePtr sDungeonItemTextures[] = {
     0x09003F00, // `gCompassIconTex`: DUNGEON_COMPASS
     0x09004800, // `gDungeonMapIconTex`: DUNGEON_MAP
 };
+
 TexturePtr sDungeonTitleTextures[] = {
     gPauseWoodfallTitleENGTex,   // DUNGEON_INDEX_WOODFALL_TEMPLE
     gPauseSnowheadTitleENGTex,   // DUNGEON_INDEX_SNOWHEAD_TEMPLE
     gPauseGreatBayTitleENGTex,   // DUNGEON_INDEX_GREAT_BAY_TEMPLE
     gPauseStoneTowerTitleENGTex, // DUNGEON_INDEX_STONE_TOWER_TEMPLE
 };
+
 s16 D_8082B4BC[] = { 67, 81, 95, 109 };
+
 void KaleidoScope_DrawDungeonMap(PlayState* play) {
     static s16 D_8082B4C4 = 123;
     static s16 sStrayFairyIconTimer = 30;
@@ -235,7 +242,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                                         D_8082B4E0[((void)0, gSaveContext.dungeonIndex)][sStrayFairyIconIndex],
                                         G_IM_FMT_RGBA, G_IM_SIZ_32b, 32, 24, 0, G_TX_MIRROR | G_TX_WRAP,
                                         G_TX_NOMIRROR | G_TX_WRAP, 5, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-                    gSPTextureRectangle(POLY_OPA_DISP++, 216, 560, 344, 656, G_TX_RENDERTILE,
+                    gSPTextureRectangle(POLY_OPA_DISP++, 54 << 2, 140 << 2, 86 << 2, 164 << 2, G_TX_RENDERTILE,
                                         D_8082B538[sStrayFairyIconIndex], 0, 1 << 10, 1 << 10);
 
                     KaleidoScope_DrawDungeonStrayFairyCount(play);
@@ -263,6 +270,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
+            // Draw Player's face at the current floor
             POLY_OPA_DISP = Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, &D_09007500, 16, 16, 62,
                                                   D_8082B4BC[R_REVERSE_FLOOR_INDEX], 16, 16, 1 << 10, 1 << 10);
 
@@ -452,29 +460,33 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
 }
 
 TexturePtr sCloudTextures[] = {
-    gWorldMapCloud1Tex,  // TINGLE_MAP_CLOCK_TOWN
-    gWorldMapCloud2Tex,  // TINGLE_MAP_CLOCK_TOWN
-    gWorldMapCloud13Tex, // TINGLE_MAP_WOODFALL
-    gWorldMapCloud14Tex, // TINGLE_MAP_WOODFALL
-    gWorldMapCloud15Tex, // TINGLE_MAP_WOODFALL
-    gWorldMapCloud8Tex,  // TINGLE_MAP_SNOWHEAD
-    gWorldMapCloud9Tex,  // TINGLE_MAP_SNOWHEAD
-    gWorldMapCloud10Tex, // TINGLE_MAP_SNOWHEAD
-    gWorldMapCloud3Tex,  // TINGLE_MAP_ROMANI_RANCH
-    gWorldMapCloud4Tex,  // TINGLE_MAP_GREAT_BAY
-    gWorldMapCloud5Tex,  // TINGLE_MAP_GREAT_BAY
-    gWorldMapCloud6Tex,  // TINGLE_MAP_GREAT_BAY
-    gWorldMapCloud7Tex,  // TINGLE_MAP_GREAT_BAY
-    gWorldMapCloud11Tex, // TINGLE_MAP_STONE_TOWER
-    gWorldMapCloud12Tex, // TINGLE_MAP_STONE_TOWER
+    gWorldMapClockTownCloud1Tex,  // TINGLE_MAP_CLOCK_TOWN
+    gWorldMapClockTownCloud2Tex,  // TINGLE_MAP_CLOCK_TOWN
+    gWorldMapWoodfallCloud1Tex,   // TINGLE_MAP_WOODFALL
+    gWorldMapWoodfallCloud2Tex,   // TINGLE_MAP_WOODFALL
+    gWorldMapWoodfallCloud3Tex,   // TINGLE_MAP_WOODFALL
+    gWorldMapSnowheadCloud1Tex,   // TINGLE_MAP_SNOWHEAD
+    gWorldMapSnowheadCloud2Tex,   // TINGLE_MAP_SNOWHEAD
+    gWorldMapSnowheadCloud3Tex,   // TINGLE_MAP_SNOWHEAD
+    gWorldMapRomaniRanchCloudTex, // TINGLE_MAP_ROMANI_RANCH
+    gWorldMapGreatBayCloud1Tex,   // TINGLE_MAP_GREAT_BAY
+    gWorldMapGreatBayCloud2Tex,   // TINGLE_MAP_GREAT_BAY
+    gWorldMapGreatBayCloud3Tex,   // TINGLE_MAP_GREAT_BAY
+    gWorldMapGreatBayCloud4Tex,   // TINGLE_MAP_GREAT_BAY
+    gWorldMapStoneTowerCloud1Tex, // TINGLE_MAP_STONE_TOWER
+    gWorldMapStoneTowerCloud2Tex, // TINGLE_MAP_STONE_TOWER
 };
-s16 D_8082B584[] = {
-    0, 0, 255, 255, 255, 0,
+
+s16 sWorldMapDotPrimColors[][3] = {
+    { 0, 0, 255 },
+    { 255, 255, 0 },
 };
-s16 D_8082B590[] = {
-    255, 255, 0, 0, 0, 255,
+
+s16 sWorldMapDotEnvColors[][3] = {
+    { 255, 255, 0 },
+    { 0, 0, 255 },
 };
-// TODO: Test names
+
 s16 sWorldMapCursorsRectLeft[REGION_MAX] = {
     86,  // REGION_GREAT_BAY
     104, // REGION_ZORA_HALL
@@ -488,6 +500,7 @@ s16 sWorldMapCursorsRectLeft[REGION_MAX] = {
     210, // REGION_GORON_VILLAGE
     218, // REGION_STONE_TOWER
 };
+
 s16 sWorldMapCursorsRectTop[REGION_MAX] = {
     127, // REGION_GREAT_BAY
     153, // REGION_ZORA_HALL
@@ -501,12 +514,13 @@ s16 sWorldMapCursorsRectTop[REGION_MAX] = {
     73,  // REGION_GORON_VILLAGE
     99,  // REGION_STONE_TOWER
 };
+
 s16 sGreatFairySpawnRegions[] = {
     REGION_CLOCK_TOWN, REGION_WOODFALL, REGION_SNOWHEAD, REGION_GREAT_BAY, REGION_IKANA_CANYON,
     REGION_CLOCK_TOWN, REGION_WOODFALL, REGION_SNOWHEAD, REGION_GREAT_BAY, REGION_IKANA_CANYON,
 };
 
-void KaleidoScope_DrawWorldMap(PlayState* play) {
+void func_8081E7D8(PlayState* play) {
     s16 sceneId;
     s16 t;
     s16 n;
@@ -521,10 +535,16 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
     KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[PAUSE_MAP] * 4, pauseCtx->mapPageVtx);
 
+    // Draw the world map image
     if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) &&
         ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) || (pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_ITEM)) &&
         YREG(6) && (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
         !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
+
+        // Draw the world map image flat
+        // Because it is flat, the texture is loaded by filling it in 8 rows at a time.
+        // 8 is chosen because it is smaller than `TMEM_SIZE / 2 / WIDTH` and divides the texture's height.
+        // (`TMEM_SIZE / 2` because the texture is color-indexed so the TLUT uses the other half of TMEM.)
 
         func_8012C628(play->state.gfxCtx);
 
@@ -534,14 +554,15 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
+        // Process the 128 rows of pixels for gWorldMapImageTex 8 rows at a time over 16 iterations
         // Loop over yPos (t), textureIndex (j)
         for (t = 62, j = 0; j < 16; j++, t += 8) {
-            gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + j * (216 * 8), G_IM_FMT_CI, G_IM_SIZ_8b, 216,
-                                8, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
-                                G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + j * (WORLD_MAP_IMAGE_TEX_WIDTH * 8),
+                                G_IM_FMT_CI, G_IM_SIZ_8b, WORLD_MAP_IMAGE_TEX_WIDTH, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-            rectLeft = 204;
-            rectRight = rectLeft + (216 << 2);
+            rectLeft = 51 << 2;
+            rectRight = rectLeft + (WORLD_MAP_IMAGE_TEX_WIDTH << 2);
             gSPTextureRectangle(POLY_OPA_DISP++, rectLeft, t << 2, rectRight, (t << 2) + (8 << 2), G_TX_RENDERTILE, 0,
                                 0, 1 << 10, 1 << 10);
         }
@@ -549,26 +570,38 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         func_8012C8AC(play->state.gfxCtx);
 
     } else {
+        // Draw the world map angled
+        // Because it is at an angle, vertices are used to place it.
+        // The structure of the loops here is to satisfy the constraints of both TMEM and the size of the vertex cache.
+        // - Each loop iteration loads 9 rows, because 9 is the largest number smaller than `TMEM_SIZE / 2 / WIDTH`
+        // - Each loop is at most 8 iterations long because each row uses 4 vertices and the vertex cache has size 32 =
+        // 8 * 4 Hence there is one loop of length 8, one of length 6, and then the remaining `128 - (8 + 6) * 9 = 2`
+        // rows are drawn at the end.
+
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_POINT);
         gDPLoadTLUT_pal256(POLY_OPA_DISP++, gWorldMapImageTLUT);
         gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_RGBA16);
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
+
+        // Set the vertices for the first 8 quads attached to the world map texture.
         gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[204], 32, 0);
 
-        // Loop over textureIndex (i, k), vtxIndex (j)
+        // Process the first 72 rows of pixels for gWorldMapImageTex 9 rows at a time over 8 iterations
+        // Loop over quadIndex of this loop (i), quadIndex of the entire texture (k), vtxIndex (j)
         for (i = 0, k = 0, j = 0; i < 8; i++, k++, j += 4) {
-            gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (216 * 9), G_IM_FMT_CI, G_IM_SIZ_8b, 216,
-                                9, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
-                                G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_TEX_WIDTH * 9),
+                                G_IM_FMT_CI, G_IM_SIZ_8b, WORLD_MAP_IMAGE_TEX_WIDTH, 9, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
             gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
         }
 
         gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[236], 28, 0);
 
-        // Loop over textureIndex (i, k), vtxIndex (j)
+        // Process the next 54 rows of pixels for gWorldMapImageTex 9 rows at a time over 6 iterations
+        // Loop over quadIndex of this loop (i), quadIndex of the entire texture (k), vtxIndex (j)
         for (i = 0, j = 0; i < 6; i++, k++, j += 4) {
             gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (216 * 9), G_IM_FMT_CI, G_IM_SIZ_8b, 216,
                                 9, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
@@ -577,9 +610,10 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
             gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
         }
 
-        gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (216 * 9), G_IM_FMT_CI, G_IM_SIZ_8b, 216, 2,
-                            0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
-                            G_TX_NOLOD, G_TX_NOLOD);
+        // Process the last 2 rows of pixels for gWorldMapImageTex
+        gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_TEX_WIDTH * 9), G_IM_FMT_CI,
+                            G_IM_SIZ_8b, WORLD_MAP_IMAGE_TEX_WIDTH, 2, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
         gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
     }
@@ -618,15 +652,18 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
     func_8012C8AC(play->state.gfxCtx);
 
     if (!((pauseCtx->state >= PAUSE_STATE_OWLWARP_2) && (pauseCtx->state <= PAUSE_STATE_OWLWARP_6))) {
+        // Browsing the world map regions on the pause menu
         gDPLoadTextureBlock(POLY_OPA_DISP++, gWorldMapDotTex, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                             G_TX_NOLOD);
         gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
                           PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
 
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_8082B584[0], D_8082B584[1], D_8082B584[2], pauseCtx->alpha);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sWorldMapDotPrimColors[0][0], sWorldMapDotPrimColors[0][1],
+                        sWorldMapDotPrimColors[0][2], pauseCtx->alpha);
 
-        gDPSetEnvColor(POLY_OPA_DISP++, D_8082B590[0], D_8082B590[1], D_8082B590[2], 0);
+        gDPSetEnvColor(POLY_OPA_DISP++, sWorldMapDotEnvColors[0][0], sWorldMapDotEnvColors[0][1],
+                       sWorldMapDotEnvColors[0][2], 0);
 
         if (R_PAUSE_DBG_MAP_CLOUD_ON) {
             gSaveContext.save.worldMapCloudVisibility |= (u16)~0x8000;
@@ -651,6 +688,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         }
 
     } else {
+        // Selecting an owl warp
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPLoadTextureBlock(POLY_OPA_DISP++, gWorldMapOwlFaceTex, G_IM_FMT_RGBA, G_IM_SIZ_32b, 24, 12, 0,
@@ -673,8 +711,8 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                 pauseCtx->mapPageVtx[164].v.ob[1] - 12;
         }
 
-        // Loop over OwlStatueId (i), unused vtxIndex (j), unused (k)
-        for (i = 0, j = 0; i < OWL_STATUE_MAX; i++, k++, j += 4) {
+        // Loop over OwlWarpId (i), unused vtxIndex (j), unused (k)
+        for (i = 0, j = 0; i < OWL_WARP_ENTRANCE; i++, k++, j += 4) {
             if (pauseCtx->worldMapPoints[i]) {
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[164 + i * 4], 4, 0);
                 gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
@@ -682,23 +720,27 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         }
     }
 
+    // Find and draw Player's face at the current region based on the current scene
     if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
         (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
         !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
         j = 0;
         n = 0;
+
+        // Map grottos/shrines to sceneId's to be used in different regions
         sceneId = play->sceneNum;
-        if (sceneId == SCENE_KAKUSIANA) { // Lone Peak Shrine & Grottos
+        if (sceneId == SCENE_KAKUSIANA) {
             if (play->roomCtx.curRoom.num == 5) {
-                sceneId = SCENE_11GORONNOSATO; // Goron Village (winter)
+                sceneId = SCENE_11GORONNOSATO;
             } else if ((play->roomCtx.curRoom.num == 6) || (play->roomCtx.curRoom.num == 8) ||
                        (play->roomCtx.curRoom.num == 12)) {
-                sceneId = SCENE_22DEKUCITY; // Deku Palace
+                sceneId = SCENE_22DEKUCITY;
             } else {
                 sceneId = Entrance_GetSceneNumAbsolute(((void)0, gSaveContext.respawn[RESPAWN_MODE_UNK_3].entrance));
             }
         }
 
+        // Find the regionId that player is currently in
         // Loop over regionId (n) and regionIdIndex (j)
         while (true) {
             if ((gSceneIdsPerRegion[n][j] == 0xFFFF)) {
@@ -739,6 +781,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
             j++;
         }
 
+        // Draw Player's face at the current region
         if (n != REGION_MAX) {
             KaleidoScope_SetView(pauseCtx, pauseCtx->eye.x, pauseCtx->eye.y, pauseCtx->eye.z);
             func_8012C628(play->state.gfxCtx);
@@ -755,17 +798,17 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-u16 sOwlStatuePauseItems[] = {
-    0xB + 0xA4, // OWL_STATUE_GREAT_BAY_COAST
-    0xF + 0xA4, // OWL_STATUE_ZORA_CAPE
-    0x6 + 0xA4, // OWL_STATUE_SNOWHEAD
-    0xD + 0xA4, // OWL_STATUE_MOUNTAIN_VILLAGE
-    0x5 + 0xA4, // OWL_STATUE_CLOCK_TOWN
-    0xE + 0xA4, // OWL_STATUE_MILK_ROAD
-    0x4 + 0xA4, // OWL_STATUE_WOODFALL
-    0xC + 0xA4, // OWL_STATUE_SOUTHERN_SWAMP
-    0x8 + 0xA4, // OWL_STATUE_IKANA_CANYON
-    0xA + 0xA4, // OWL_STATUE_STONE_TOWER
+u16 sOwlWarpPauseItems[] = {
+    0xB + 0xA4, // OWL_WARP_GREAT_BAY_COAST
+    0xF + 0xA4, // OWL_WARP_ZORA_CAPE
+    0x6 + 0xA4, // OWL_WARP_SNOWHEAD
+    0xD + 0xA4, // OWL_WARP_MOUNTAIN_VILLAGE
+    0x5 + 0xA4, // OWL_WARP_CLOCK_TOWN
+    0xE + 0xA4, // OWL_WARP_MILK_ROAD
+    0x4 + 0xA4, // OWL_WARP_WOODFALL
+    0xC + 0xA4, // OWL_WARP_SOUTHERN_SWAMP
+    0x8 + 0xA4, // OWL_WARP_IKANA_CANYON
+    0xA + 0xA4, // OWL_WARP_STONE_TOWER
 };
 void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
     static u16 sStickAdjTimer = 0; // unused timer that counts up every frame. Resets on reading a stickAdj.
@@ -893,8 +936,8 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             sStickAdjTimer = 0;
             do {
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP]++;
-                if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] > OWL_STATUE_STONE_TOWER) {
-                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = OWL_STATUE_GREAT_BAY_COAST;
+                if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] > OWL_WARP_STONE_TOWER) {
+                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = OWL_WARP_GREAT_BAY_COAST;
                 }
             } while (!pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]]);
         } else if (pauseCtx->stickAdjX < -30) {
@@ -902,8 +945,8 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             sStickAdjTimer = 0;
             do {
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
-                if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] < OWL_STATUE_GREAT_BAY_COAST) {
-                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = OWL_STATUE_STONE_TOWER;
+                if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] < OWL_WARP_GREAT_BAY_COAST) {
+                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = OWL_WARP_STONE_TOWER;
                 }
             } while (!pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]]);
         } else {
@@ -911,7 +954,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
         }
 
         //! TODO: Is the `0xA4` here related to `0xA3` being the last recored item in the `ItemId` enum?
-        pauseCtx->cursorItem[PAUSE_MAP] = sOwlStatuePauseItems[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] - 0xA4;
+        pauseCtx->cursorItem[PAUSE_MAP] = sOwlWarpPauseItems[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] - 0xA4;
         // Used as cursor vtxIndex
         pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 
