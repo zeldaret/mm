@@ -322,7 +322,7 @@ void Interface_StartPostmanTimer(s16 seconds, s16 bunnyHoodState) {
 void Interface_StartGoronRaceTimer(s32 arg0) {
     if (gSaveContext.timerStates[TIMER_ID_GORON_RACE_UNUSED] != TIMER_STATE_OFF) {
         // Goron race started
-        if (gSaveContext.eventInf[1] & 1) {
+        if (CHECK_EVENTINF(EVENTINF_10)) {
             gSaveContext.timerCurTimes[TIMER_ID_GORON_RACE_UNUSED] = SECONDS_TO_TIMER_PRECISE(2, 39);
         } else {
             gSaveContext.timerCurTimes[TIMER_ID_GORON_RACE_UNUSED] = SECONDS_TO_TIMER_PRECISE(0, 1);
@@ -2892,7 +2892,7 @@ void Interface_DrawTimers(PlayState* play) {
                             gSaveContext.timerStopTimes[sTimerId] = SECONDS_TO_TIMER(120);
                             gSaveContext.timerCurTimes[sTimerId] = SECONDS_TO_TIMER(120);
                         }
-                    } else if ((gSaveContext.eventInf[3] & 0x10) && (play->sceneId == SCENE_DEKUTES) &&
+                    } else if (CHECK_EVENTINF(EVENTINF_34) && (play->sceneId == SCENE_DEKUTES) &&
                                (gSaveContext.timerStopTimes[sTimerId] >= SECONDS_TO_TIMER(120))) {
                         gSaveContext.timerCurTimes[sTimerId] = SECONDS_TO_TIMER(120);
                     }
@@ -3001,7 +3001,7 @@ void Interface_DrawTimers(PlayState* play) {
                     if (osTime >= SECONDS_TO_TIMER(120)) {
                         osTime = SECONDS_TO_TIMER(120);
                     }
-                } else if ((gSaveContext.eventInf[3] & 0x10) && (play->sceneId == SCENE_DEKUTES) &&
+                } else if (CHECK_EVENTINF(EVENTINF_34) && (play->sceneId == SCENE_DEKUTES) &&
                            (osTime >= SECONDS_TO_TIMER(120))) {
                     osTime = SECONDS_TO_TIMER(120);
                 }
@@ -3018,7 +3018,7 @@ void Interface_DrawTimers(PlayState* play) {
                         play_sound(NA_SE_SY_WARNING_COUNT_E);
                         sTimerBeepSfxSeconds = sTimerDigits[4];
                     }
-                } else if ((gSaveContext.eventInf[3] & 0x10) && (play->sceneId == SCENE_DEKUTES)) {
+                } else if (CHECK_EVENTINF(EVENTINF_34) && (play->sceneId == SCENE_DEKUTES)) {
                     if ((((void)0, gSaveContext.timerCurTimes[sTimerId]) >
                          (gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1] - SECONDS_TO_TIMER(9))) &&
                         (sTimerBeepSfxSeconds != sTimerDigits[4])) {
@@ -3056,7 +3056,7 @@ void Interface_DrawTimers(PlayState* play) {
                         } else {
                             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, 255);
                         }
-                    } else if ((gSaveContext.eventInf[3] & 0x10) && (play->sceneId == SCENE_DEKUTES)) {
+                    } else if (CHECK_EVENTINF(EVENTINF_34) && (play->sceneId == SCENE_DEKUTES)) {
                         if (((void)0, gSaveContext.timerCurTimes[sTimerId]) >=
                             gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
                             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 50, 0, 255);
