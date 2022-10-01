@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_iknin_susceil.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "objects/object_ikninside_obj/object_ikninside_obj.h"
 
@@ -70,11 +71,12 @@ void func_80C0A838(BgIkninSusceil* this, PlayState* play) {
 
 void func_80C0A86C(BgIkninSusceil* this, PlayState* play, s16 verticalMag, s16 countdown, s32 arg4) {
     s32 pad;
-    s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+    s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-    Quake_SetSpeed(quake, 0x7B30);
-    Quake_SetQuakeValues(quake, verticalMag, 0, 0, 0);
-    Quake_SetCountdown(quake, countdown);
+    Quake_SetSpeed(quakeIndex, 31536);
+    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, countdown);
+
     if (arg4 == 1) {
         Rumble_Request(SQ(100.0f), 255, 20, 150);
     } else if (arg4 == 2) {

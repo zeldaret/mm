@@ -77,7 +77,7 @@ void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2);
 s32 func_801226E0(PlayState* play, s32 arg1) {
     if (arg1 == 0) {
         Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_DOWN, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B));
-        if (play->sceneNum == SCENE_KAKUSIANA) {
+        if (play->sceneId == SCENE_KAKUSIANA) {
             return 1;
         }
     }
@@ -1447,39 +1447,40 @@ s32 Player_ActionToSword(Actor* actor, PlayerActionParam actionParam) {
 }
 
 s32 func_801242B4(Player* player) {
-    return (player->stateFlags1 & PLAYER_STATE1_8000000) && player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER;
+    return (player->stateFlags1 & PLAYER_STATE1_8000000) && (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER);
 }
 
-s32 func_801242DC(PlayState* play) {
+s32 Player_GetEnvTimerType(PlayState* play) {
     Player* player = GET_PLAYER(play);
     TextTriggerEntry* triggerEntry;
-    s32 envIndex;
+    s32 envTimerType;
 
     if (play->roomCtx.curRoom.unk2 == 3) { // Room is hot
-        envIndex = 0;
+        envTimerType = PLAYER_ENV_TIMER_HOTROOM - 1;
     } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->underwaterTimer > 80)) {
-        envIndex = 3;
+        envTimerType = PLAYER_ENV_TIMER_UNDERWATER_FREE - 1;
     } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
         if ((player->transformation == PLAYER_FORM_ZORA) && (player->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&
             (player->actor.bgCheckFlags & 1)) {
-            envIndex = 1;
+            envTimerType = PLAYER_ENV_TIMER_UNDERWATER_FLOOR - 1;
         } else {
-            envIndex = 2;
+            envTimerType = PLAYER_ENV_TIMER_SWIMMING - 1;
         }
     } else {
-        return 0;
+        return PLAYER_ENV_TIMER_NONE;
     }
 
     // Trigger general textboxes under certain conditions, like "It's so hot in here!". Unused in MM
-    triggerEntry = &sEnvironmentTextTriggers[envIndex];
+    triggerEntry = &sEnvironmentTextTriggers[envTimerType];
     if (!Player_InCsMode(play)) {
-        if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) && (envIndex == 0)) {
+        if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) &&
+            (envTimerType == (PLAYER_ENV_TIMER_HOTROOM - 1))) {
             Message_StartTextbox(play, triggerEntry->textId, NULL);
             gSaveContext.textTriggerFlags |= triggerEntry->flag;
         }
     }
 
-    return envIndex + 1;
+    return envTimerType + 1;
 }
 
 #ifdef NON_MATCHING

@@ -5,6 +5,7 @@
  */
 
 #include "global.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 
 #include "overlays/actors/ovl_Arms_Hook/z_arms_hook.h"

@@ -205,13 +205,13 @@ s32 func_80A39C1C(PlayState* play, s32 arg1) {
     }
 
     if (arg1 == 0) {
-        if (gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 & 1) {
+        if (gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 1) {
             return 25;
         }
         return 24;
     }
 
-    temp_v1 = (gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 >> (((arg1 - 1) * 5) + 1)) & 0x1F;
+    temp_v1 = (gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 >> (((arg1 - 1) * 5) + 1)) & 0x1F;
     if (temp_v1 < 10) {
         temp_v1 = 10;
     } else if (temp_v1 > 25) {
@@ -227,13 +227,13 @@ void func_80A39CD4(PlayState* play, s32 arg1, s32 arg2) {
 
     if (arg1 == 0) {
         if (arg2 == 25) {
-            gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 |= 1;
+            gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= 1;
         } else {
-            gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 &= ~1;
+            gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~1;
         }
     } else {
-        gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 &= ~(0x1F << ((arg1 * 5) - 4));
-        gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 |= arg2 << ((arg1 * 5) - 4);
+        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~(0x1F << ((arg1 * 5) - 4));
+        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= arg2 << ((arg1 * 5) - 4);
     }
 }
 
