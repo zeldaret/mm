@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64quake.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165460.s")
 

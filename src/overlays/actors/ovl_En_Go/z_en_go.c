@@ -5,6 +5,7 @@
  */
 
 #include "z_en_go.h"
+#include "z64quake.h"
 #include "objects/object_oF1d_map/object_oF1d_map.h"
 #include "objects/object_hakugin_demo/object_hakugin_demo.h"
 #include "objects/object_taisou/object_taisou.h"
@@ -1045,16 +1046,16 @@ s32 func_80A13564(EnGo* this, f32 arg1, f32 arg2, s32 arg3) {
     return ret;
 }
 
-void func_80A136B8(PlayState* play, s16 arg1, s16 arg2, s16 arg3) {
-    s16 sp26 = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
+void func_80A136B8(PlayState* play, s16 speed, s16 verticalMag, s16 countdown) {
+    s16 quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
 
-    Quake_SetCountdown(sp26, arg3);
-    Quake_SetSpeed(sp26, arg1);
-    Quake_SetQuakeValues(sp26, arg2, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, countdown);
+    Quake_SetSpeed(quakeIndex, speed);
+    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
 }
 
 void func_80A13728(EnGo* this, PlayState* play) {
-    func_80A136B8(play, 0x6C77, 7, 20);
+    func_80A136B8(play, 27767, 7, 20);
     play->actorCtx.unk2 = 4;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TEST, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, 0, 0, 0, 0);
