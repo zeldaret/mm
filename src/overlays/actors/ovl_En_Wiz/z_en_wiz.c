@@ -36,6 +36,11 @@ void EnWiz_Damaged(EnWiz* this, PlayState* play);
 void EnWiz_SetupDead(EnWiz* this);
 void EnWiz_Dead(EnWiz* this, PlayState* play);
 
+// This number is almost-entirely arbirary, with the only requirement being
+// that cannot be a valid curPlatformIndex. Any negative number, or any number
+// larger than 10, would work just as well.
+#define INITIAL_CUR_PLATFORM_INDEX 777
+
 typedef enum {
     /* 1 */ EN_WIZ_ACTION_APPEAR = 1,
     /* 2 */ EN_WIZ_ACTION_RUN_BETWEEN_PLATFORMS,
@@ -352,7 +357,7 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
     }
 
     this->actor.hintId = TATL_HINT_ID_WIZROBE;
-    this->curPlatformIndex = 777;
+    this->curPlatformIndex = INITIAL_CUR_PLATFORM_INDEX;
 
     // Setting the radius and scale to zero here effectively disables all of the ghost colliders.
     this->ghostColliders.elements[0].dim.modelSphere.radius = 0;
