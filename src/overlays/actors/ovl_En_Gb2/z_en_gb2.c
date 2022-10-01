@@ -459,7 +459,7 @@ void func_80B10240(EnGb2* this, PlayState* play) {
                            D_80B119B0[this->unk_280].unk_04.y, D_80B119B0[this->unk_280].unk_04.z, 0, 0, 0,
                            this->unk_27E);
         if (this->unk_280 == 0) {
-            func_8010E9F0(1, 180);
+            Interface_StartTimer(TIMER_ID_MINIGAME_1, 180);
         }
         this->actionFunc = func_80B10344;
     } else {
@@ -487,7 +487,7 @@ void func_80B10344(EnGb2* this, PlayState* play) {
     if (this->unk_26C & 0x200) {
         if (this->unk_280 == 3) {
             this->unk_26C &= ~0x200;
-            gSaveContext.unk_3DD0[1] = 5;
+            gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
             func_800FE498();
             gSaveContext.eventInf[4] |= 0x40;
             func_80B0FE7C(play);
@@ -506,7 +506,7 @@ void func_80B10344(EnGb2* this, PlayState* play) {
     }
 
     if (gSaveContext.save.playerData.health < 49) {
-        gSaveContext.unk_3DD0[1] = 5;
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
         gSaveContext.eventInf[4] |= 0x40;
         gSaveContext.eventInf[4] |= 0x20;
 
@@ -519,8 +519,8 @@ void func_80B10344(EnGb2* this, PlayState* play) {
         }
 
         func_80B0FE7C(play);
-    } else if (gSaveContext.unk_3DE0[1] == 0) {
-        gSaveContext.unk_3DD0[1] = 5;
+    } else if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
         gSaveContext.eventInf[4] |= 0x40;
         gSaveContext.eventInf[4] |= 0x10;
 

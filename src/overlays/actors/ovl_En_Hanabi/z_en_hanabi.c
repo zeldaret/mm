@@ -330,7 +330,7 @@ void func_80B23934(EnHanabi* this, PlayState* play) {
         }
     }
 
-    if ((play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 7) &&
+    if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 7) &&
         (play->csCtx.currentCsIndex == 0) && (play->csCtx.frames == 610)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KYOJIN_GROAN);
     }

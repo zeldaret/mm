@@ -1,5 +1,6 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "z64quake.h"
 
 #include "z_camera_data.c"
 
