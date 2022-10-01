@@ -6317,12 +6317,12 @@ s32 func_80836DC0(PlayState* play, Player* this) {
     return false;
 }
 
-void func_80836EA0(PlayState* play, u16 quakeSpeed, s16 verticalMag, s16 quakeCountdown) {
-    s16 quake = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
+void Player_AddQuake(PlayState* play, u16 quakeSpeed, s16 verticalMag, s16 countdown) {
+    s16 quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
 
-    Quake_SetSpeed(quake, quakeSpeed);
-    Quake_SetQuakeValues(quake, verticalMag, 0, 0, 0);
-    Quake_SetCountdown(quake, quakeCountdown);
+    Quake_SetSpeed(quakeIndex, quakeSpeed);
+    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, countdown);
 }
 
 FallImpactInfo sFallImpactInfos[] = {
@@ -6369,7 +6369,7 @@ s32 func_80836F10(PlayState* play, Player* this) {
         }
 
         func_80833998(this, 40);
-        func_80836EA0(play, 0x80C7, 2, 30); // quake
+        Player_AddQuake(play, 32967, 2, 30);
         Player_RequestRumble(play, this, entry->sourceIntensity, entry->decayTimer, entry->decayStep, SQ(0));
 
         return index + 1;
@@ -9610,8 +9610,9 @@ s32 func_8083FE38(Player* this, PlayState* play) {
     return func_80838A90(this, play) || func_808391D8(this, play) || func_8083D23C(this, play);
 }
 
+// Player_RumbleAndPlaySfx?
 void func_8083FE90(PlayState* play, Player* this, u16 sfxId) {
-    func_80836EA0(play, 0x6C77, 7, 20);
+    Player_AddQuake(play, 27767, 7, 20);
     Player_RequestRumble(play, this, 255, 20, 150, SQ(0));
     func_800B8E58(this, sfxId);
 }
@@ -9933,7 +9934,7 @@ s32 func_80840A30(PlayState* play, Player* this, f32* arg2, f32 arg3) {
                 }
 
                 this->linearVelocity = -this->linearVelocity;
-                func_80836EA0(play, 33267, 3, 12);
+                Player_AddQuake(play, 33267, 3, 12);
                 Player_RequestRumble(play, this, 255, 20, 150, SQ(0));
                 func_800B648C(play, 2, 2, 100.0f, &this->actor.world.pos);
                 func_800B8E58(this, NA_SE_PL_BODY_HIT);

@@ -2134,6 +2134,7 @@ void func_800B8E1C(PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4) 
     func_800B8DD4(play, actor, arg2, arg3, arg4, 0);
 }
 
+// Player_PlaySfx
 void func_800B8E58(Player* player, u16 sfxId) {
     if (player->currentMask == PLAYER_MASK_GIANT) {
         func_8019F170(&player->actor.projectedPos, sfxId);
@@ -3831,13 +3832,13 @@ void Actor_AddQuakeWithSpeed(PlayState* play, s16 verticalMag, s16 countdown, s1
     Quake_SetCountdown(quakeIndex, countdown);
 }
 
-void Actor_RequestRumble(Actor* actor, PlayState* play, s16 y, s16 countdown) {
-    if (y >= 5) {
+void Actor_RequestRumble(Actor* actor, PlayState* play, s16 verticalMag, s16 countdown) {
+    if (verticalMag >= 5) {
         Rumble_Request(actor->xyzDistToPlayerSq, 255, 20, 150);
     } else {
         Rumble_Request(actor->xyzDistToPlayerSq, 180, 20, 100);
     }
-    Actor_AddQuake(play, y, countdown);
+    Actor_AddQuake(play, verticalMag, countdown);
 }
 
 typedef struct {
