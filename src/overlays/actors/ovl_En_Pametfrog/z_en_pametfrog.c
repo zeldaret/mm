@@ -1223,11 +1223,14 @@ void EnPametfrog_SetupSnapperSpawn(EnPametfrog* this, PlayState* play) {
 
     // Zooms in on Snapper spawn point
     Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
+
     this->quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
     Quake_SetSpeed(this->quakeIndex, 18000);
     Quake_SetQuakeValues(this->quakeIndex, 2, 0, 0, 0);
     Quake_SetCountdown(this->quakeIndex, 15);
+
     Rumble_Request(this->actor.xyzDistToPlayerSq, 120, 20, 10);
+
     this->timer = 40;
     this->actionFunc = EnPametfrog_SnapperSpawn;
 }
@@ -1245,12 +1248,16 @@ void EnPametfrog_SnapperSpawn(EnPametfrog* this, PlayState* play) {
 
 void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, PlayState* play) {
     this->actor.params = GEKKO_GET_SNAPPER;
+
     Quake_Remove(this->quakeIndex);
+
     this->quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
     Quake_SetSpeed(this->quakeIndex, 20000);
     Quake_SetQuakeValues(this->quakeIndex, 17, 0, 0, 0);
     Quake_SetCountdown(this->quakeIndex, 12);
+
     Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
+
     this->actionFunc = EnPametfrog_TransitionGekkoSnapper;
 }
 

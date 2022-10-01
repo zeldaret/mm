@@ -600,6 +600,7 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
             Quake_SetSpeed(quakeIndex, 17232);
             Quake_SetQuakeValues(quakeIndex, 3, 0, 0, 0);
             Quake_SetCountdown(quakeIndex, 7);
+
             Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
         }
 

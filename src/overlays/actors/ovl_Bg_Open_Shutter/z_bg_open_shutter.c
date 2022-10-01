@@ -155,6 +155,7 @@ void func_80ACAEF0(BgOpenShutter* this, PlayState* play) {
         Quake_SetSpeed(quakeIndex, -32536);
         Quake_SetQuakeValues(quakeIndex, 2, 0, 0, 0);
         Quake_SetCountdown(quakeIndex, 10);
+
         Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 180, 20, 100);
 
         this->unk_15C = 0;

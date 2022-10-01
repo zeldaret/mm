@@ -227,6 +227,7 @@ u32 Quake_SetValue(s16 quakeIndex, s16 valueType, s16 value) {
             case QUAKE_ZOOM:
                 req->zoom = value;
                 break;
+
             case QUAKE_ROLL_OFFSET:
                 req->rollOffset = value;
                 break;
@@ -250,6 +251,9 @@ u32 Quake_SetValue(s16 quakeIndex, s16 valueType, s16 value) {
 
             case QUAKE_IS_SHAKE_PERPENDICULAR:
                 req->isShakePerpendicular = value;
+                break;
+
+            default:
                 break;
         }
 

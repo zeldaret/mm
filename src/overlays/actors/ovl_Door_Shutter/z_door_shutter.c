@@ -613,6 +613,7 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
         Quake_SetSpeed(quakeIndex, -32536);
         Quake_SetQuakeValues(quakeIndex, 2, 0, 0, 0);
         Quake_SetCountdown(quakeIndex, 10);
+
         Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
 
         func_808A1884(this, play);

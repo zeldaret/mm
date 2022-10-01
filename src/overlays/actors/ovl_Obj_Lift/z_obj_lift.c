@@ -137,6 +137,7 @@ void func_8093D7A0(ObjLift* this, PlayState* play) {
                 Quake_SetSpeed(quakeIndex, 10000);
                 Quake_SetQuakeValues(quakeIndex, 2, 0, 0, 0);
                 Quake_SetCountdown(quakeIndex, 20);
+
                 func_8093D88C(this);
             }
         }

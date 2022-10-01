@@ -749,6 +749,7 @@ void EnBigslime_BreakIntoMinislime(EnBigslime* this, PlayState* play) {
     Quake_SetSpeed(quakeIndex, 20000);
     Quake_SetQuakeValues(quakeIndex, 15, 0, 0, 0);
     Quake_SetCountdown(quakeIndex, 15);
+
     Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
 
     this->bigslimeCollider[0].base.atFlags &= ~AT_ON;

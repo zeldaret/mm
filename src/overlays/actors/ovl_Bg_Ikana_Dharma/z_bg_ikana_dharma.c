@@ -232,6 +232,7 @@ void BgIkanaDharma_Update(Actor* thisx, PlayState* play) {
                 Quake_SetSpeed(quakeIndex, 21536);
                 Quake_SetQuakeValues(quakeIndex, 4, 0, 0, 0);
                 Quake_SetCountdown(quakeIndex, 12);
+
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else {

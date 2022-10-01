@@ -300,6 +300,7 @@ void ObjHugebombiwa_AddQuake(ObjHugebombiwa* this, PlayState* play, s32 quakeVer
     Quake_SetSpeed(quakeIndex, 20000);
     Quake_SetQuakeValues(quakeIndex, quakeVerticalMag, 0, 0, 0);
     Quake_SetCountdown(quakeIndex, 7);
+
     Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
 }
 

@@ -76,6 +76,7 @@ void func_80C0A86C(BgIkninSusceil* this, PlayState* play, s16 verticalMag, s16 c
     Quake_SetSpeed(quakeIndex, 31536);
     Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
     Quake_SetCountdown(quakeIndex, countdown);
+
     if (arg4 == 1) {
         Rumble_Request(SQ(100.0f), 255, 20, 150);
     } else if (arg4 == 2) {

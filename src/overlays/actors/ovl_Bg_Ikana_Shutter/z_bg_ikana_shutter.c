@@ -155,6 +155,7 @@ void func_80BD5A18(BgIkanaShutter* this, PlayState* play) {
         Quake_SetSpeed(quakeIndex, 21536);
         Quake_SetQuakeValues(quakeIndex, 4, 0, 0, 0);
         Quake_SetCountdown(quakeIndex, 12);
+
         func_80BD5828(this);
     }
 }

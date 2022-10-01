@@ -68,6 +68,7 @@ void ObjTokeiStep_AddQuake(ObjTokeiStep* this, PlayState* play) {
     Quake_SetSpeed(quakeIndex, 20000);
     Quake_SetQuakeValues(quakeIndex, 1, 0, 0, 0);
     Quake_SetCountdown(quakeIndex, 7);
+
     Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
 }
 
