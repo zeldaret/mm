@@ -324,37 +324,44 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
             break;
 
         case ENNB_BEHAVIOUR_1:
-            func_8016A268(&play->state, 1, 0, 0, 0, 0);
-            this->unk_286 = 40;
+            // Setup a black fill-screen, although initialize to 0 alpha
+            Play_FillScreen(&play->state, true, 0, 0, 0, 0);
+            this->storyTimer = 40;
             this->behaviour = (u16)(this->behaviour + 1);
             break;
 
         case ENNB_BEHAVIOUR_2:
-            MREG(68) = (s16)(s32)(255.0f - (((f32)ABS_ALT(20 - this->unk_286) / 20.0f) * 255.0f));
+            // Slowly increase alpha to fill the screen with a black rectangle
+            R_PLAY_FILL_SCREEN_ALPHA = (s16)(s32)(255.0f - (((f32)ABS_ALT(20 - this->storyTimer) / 20.0f) * 255.0f));
 
-            if (this->unk_286 == 20) {
+            if (this->storyTimer == 20) {
                 if (gSaveContext.eventInf[4] & 4) {
-                    play->interfaceCtx.unk_31B = 0;
+                    // play->interfaceCtx.storyType = STORY_TYPE_MASK_FESTIVAL;
+                    play->interfaceCtx.storyType = 0;
                 } else {
-                    play->interfaceCtx.unk_31B = 1;
+                    // play->interfaceCtx.storyType = STORY_TYPE_GIANTS_LEAVING;
+                    play->interfaceCtx.storyType = 1;
                 }
-                play->interfaceCtx.unk_31A = 6;
-                XREG(91) = 0xFF;
+                // play->interfaceCtx.storyState = STORY_STATE_FADE_IN;
+                play->interfaceCtx.storyState = 6;
+                R_STORY_FILL_SCREEN_ALPHA = 255;
             }
 
-            if (DECR(this->unk_286) == 0) {
+            if (DECR(this->storyTimer) == 0) {
                 this->behaviour++;
             }
             break;
 
         case ENNB_BEHAVIOUR_3:
-            play->interfaceCtx.unk_31A = 4;
+            // play->interfaceCtx.storyState = STORY_STATE_SETUP_IDLE;
+            play->interfaceCtx.storyState = 4;
             this->behaviour++;
             ret = true;
             break;
 
         case ENNB_BEHAVIOUR_4:
-            play->interfaceCtx.unk_31A = 5;
+            // play->interfaceCtx.storyState = STORY_STATE_FADE_OUT;
+            play->interfaceCtx.storyState = 5;
             this->behaviour++;
             // fallthrough
         case ENNB_BEHAVIOUR_5:
@@ -703,7 +710,7 @@ void EnNb_Destroy(Actor* thisx, PlayState* play) {
     EnNb* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    play->interfaceCtx.unk_31A = 3;
+    play->interfaceCtx.storyState = 3;
 }
 
 void EnNb_Update(Actor* thisx, PlayState* play) {

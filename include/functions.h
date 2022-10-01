@@ -2539,7 +2539,7 @@ s32 func_8016A02C(GameState* gameState, Actor* actor, s16* yaw);
 s32 Play_IsUnderwater(PlayState* play, Vec3f* pos);
 s32 Play_IsDebugCamEnabled(void);
 void Play_AssignPlayerActorCsIdsFromScene(GameState* gameState, s32 cutscene);
-void func_8016A268(GameState* gameState, s16 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5);
+void Play_FillScreen(GameState* gameState, s16 fillScreenOn, u8 red, u8 green, u8 blue, u8 alpha);
 void Play_Init(GameState* gameState);
 // void func_8016AC10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
 // void func_8016AE1C(void);

@@ -934,7 +934,7 @@ s32 func_80A87B48(Actor* thisx, PlayState* play) {
                 sp4C.z = 40.0f;
                 Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, sp3E, &sp4C, &sp40);
                 func_80A85620(this->unk_394, &sp40, 2.0f, 0.08f, 60.0f);
-                func_8016A268(&play->state, 1, 160, 160, 160, 0);
+                Play_FillScreen(&play->state, true, 160, 160, 160, 0);
                 this->unk_370 = 20;
                 this->unk_372 = 10;
                 this->unk_364++;
@@ -946,7 +946,7 @@ s32 func_80A87B48(Actor* thisx, PlayState* play) {
 
         case 2:
             if (DECR(this->unk_370) != 0) {
-                MREG(68) = 255.0f - ((fabsf(10.0f - this->unk_370) / 10) * 255.0f);
+                R_PLAY_FILL_SCREEN_ALPHA = 255.0f - ((fabsf(10.0f - this->unk_370) / 10) * 255.0f);
                 if (this->unk_370 == 9) {
                     this->actor.shape.shadowDraw = NULL;
                     this->unk_34E |= (0x200 | 0x8);
@@ -957,7 +957,7 @@ s32 func_80A87B48(Actor* thisx, PlayState* play) {
                     func_80A86924(this, 12);
                 }
             } else {
-                MREG(64) = 0;
+                R_PLAY_FILL_SCREEN_ON = false;
                 ret = true;
             }
             break;

@@ -47,7 +47,7 @@ typedef struct EnNb {
     /* 0x280 */ s16 timePathTimeSpeed;
     /* 0x282 */ s16 unk_282; // timer?
     /* 0x284 */ s16 unk_284; // storyState?
-    /* 0x286 */ s16 unk_286; // another timer?
+    /* 0x286 */ s16 storyTimer;
     /* 0x288 */ s16 behaviour;
     /* 0x28C */ EnNbUnkFunc msgEventCallback;
     /* 0x290 */ EnNbAnimation animIndex;
