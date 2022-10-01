@@ -254,7 +254,7 @@ void Message_LoadAreaTextNES(PlayState* play, s32* offset, f32* arg2, s16* decod
     s16 currentArea;
     s16 stringLimit;
 
-    if ((func_8010A0A4(play) != 0) || (play->sceneNum == SCENE_SECOM)) {
+    if ((func_8010A0A4(play) != 0) || (play->sceneId == SCENE_SECOM)) {
         currentArea = 10;
     } else {
         currentArea = play->pauseCtx.cursorPoint[PAUSE_WORLD_MAP];

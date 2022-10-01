@@ -42,8 +42,8 @@ void func_808A7968(ObjWturn* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode >= 28 && play->msgCtx.ocarinaMode < 39) {
         Flags_UnsetSwitch(play, this->actor.params);
         Actor_MarkForDeath(&this->actor);
-    } else if ((Flags_GetSwitch(play, this->actor.params) && (play->sceneNum == SCENE_F40)) ||
-               (!Flags_GetSwitch(play, this->actor.params) && (play->sceneNum == SCENE_F41))) {
+    } else if ((Flags_GetSwitch(play, this->actor.params) && (play->sceneId == SCENE_F40)) ||
+               (!Flags_GetSwitch(play, this->actor.params) && (play->sceneId == SCENE_F41))) {
         func_808A7A24(this);
     }
 }
@@ -112,7 +112,7 @@ void func_808A7C78(ObjWturn* this, PlayState* play) {
         play->transitionType = TRANS_TYPE_64;
         gSaveContext.nextTransitionType = TRANS_TYPE_03;
         gSaveContext.nextCutsceneIndex = 0;
-        if (play->sceneNum == SCENE_F40) {
+        if (play->sceneId == SCENE_F40) {
             play->nextEntrance = ENTRANCE(STONE_TOWER_INVERTED, 0);
         } else {
             play->nextEntrance = ENTRANCE(STONE_TOWER, 1);

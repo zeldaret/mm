@@ -731,7 +731,7 @@ void func_80AD16A8(EnOsn* this, PlayState* play) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->unk_1EC);
         }
 
-        if ((this->unk_1EC == 5) && (play->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 0xB) &&
+        if ((this->unk_1EC == 5) && (play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 0xB) &&
             (play->csCtx.frames == 400)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_OMVO00);
         }
@@ -795,7 +795,7 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
                 this->unk_1EA |= 1;
             }
             this->unk_1F0 = 1;
-            if (play->sceneNum == SCENE_INSIDETOWER) {
+            if (play->sceneId == SCENE_INSIDETOWER) {
                 if ((gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 2)) ||
                     (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 6))) {
                     this->actionFunc = func_80AD16A8;

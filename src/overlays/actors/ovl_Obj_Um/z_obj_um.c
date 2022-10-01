@@ -751,7 +751,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         ObjUm_SetupAction(this, ObjUm_PostMilkRunStartCs);
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, play, 0);
-        func_801A3098(NA_BGM_CLEAR_EVENT);
+        Audio_PlayFanfare(NA_BGM_CLEAR_EVENT);
     } else {
         this->type = OBJ_UM_TYPE_TERMINA_FIELD;
         ObjUm_SetupAction(this, ObjUm_TerminaFieldIdle);
@@ -1295,9 +1295,9 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
     switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
-            gSaveContext.seqIndex = 0xFF;
+            gSaveContext.seqId = (u8)NA_BGM_DISABLED;
             gSaveContext.save.weekEventReg[31] &= (u8)~0x80;
-            gSaveContext.nightSeqIndex = 0xFF;
+            gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
 
             if (!(gSaveContext.save.weekEventReg[52] & 1) && !(gSaveContext.save.weekEventReg[52] & 2)) {
                 if (!this->areAllPotsBroken) {

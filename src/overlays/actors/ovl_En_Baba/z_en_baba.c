@@ -503,12 +503,12 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
     this->stateFlags |= BOMB_SHOP_LADY_STATE_DRAW_SHADOW;
     this->actor.flags |= ACTOR_FLAG_1;
 
-    if (play->sceneNum == SCENE_BOMYA) {
+    if (play->sceneId == SCENE_BOMYA) {
         this->stateFlags |= BOMB_SHOP_LADY_STATE_VISIBLE;
         this->animIndex = BOMB_SHOP_LADY_ANIM_IDLE;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnBaba_Idle;
-    } else if (play->sceneNum == SCENE_BACKTOWN) {
+    } else if (play->sceneId == SCENE_BACKTOWN) {
         if ((BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_FOLLOW_SCHEDULE) &&
             (gSaveContext.save.entrance != ENTRANCE(NORTH_CLOCK_TOWN, 7)) &&
             (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != 0x3F)) {

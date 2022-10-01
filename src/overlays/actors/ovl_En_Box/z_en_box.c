@@ -482,7 +482,7 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
                                this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                                this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z,
                                -1);
-            func_801A3098(0x2B | 0x900);
+            Audio_PlayFanfare(NA_BGM_OPEN_CHEST | 0x900);
         }
 
         if (this->getItemId == GI_STRAY_FAIRY) {
