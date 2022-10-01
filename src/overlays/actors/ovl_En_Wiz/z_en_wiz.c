@@ -342,7 +342,7 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
         this->switchFlag = -1;
     }
 
-    if ((this->type == EN_WIZ_TYPE_FIRE) || (this->type == EN_WIZ_TYPE_FIRE_NO_MINI_BOSS_BGM)) {
+    if ((this->type == EN_WIZ_TYPE_FIRE) || (this->type == EN_WIZ_TYPE_FIRE_NO_BGM)) {
         this->actor.colChkInfo.damageTable = &sFireWizrobeDamageTable;
         this->actor.colChkInfo.health = 8;
         this->actor.flags &= ~ACTOR_FLAG_100000;
@@ -375,7 +375,7 @@ void EnWiz_Destroy(Actor* thisx, PlayState* play) {
 
     Collider_DestroyCylinder(play, &this->collider);
     Collider_DestroyJntSph(play, &this->ghostColliders);
-    if (this->type != EN_WIZ_TYPE_FIRE_NO_MINI_BOSS_BGM) {
+    if (this->type != EN_WIZ_TYPE_FIRE_NO_BGM) {
         Audio_RestorePrevBgm();
     }
 }
@@ -530,7 +530,7 @@ void EnWiz_HandleIntroCutscene(EnWiz* this, PlayState* play) {
 
         if (this->musicStartTimer < 11) {
             this->musicStartTimer++;
-            if ((this->type != EN_WIZ_TYPE_FIRE_NO_MINI_BOSS_BGM) && (this->musicStartTimer == 11)) {
+            if ((this->type != EN_WIZ_TYPE_FIRE_NO_BGM) && (this->musicStartTimer == 11)) {
                 Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
             }
         }
@@ -565,7 +565,7 @@ void EnWiz_SelectPlatform(EnWiz* this, PlayState* play) {
         i++;
         if (this->action != EN_WIZ_ACTION_BURST_INTO_FLAMES) {
             type = this->type;
-            if (type == EN_WIZ_TYPE_FIRE_NO_MINI_BOSS_BGM) {
+            if (type == EN_WIZ_TYPE_FIRE_NO_BGM) {
                 type = EN_WIZ_TYPE_FIRE;
             }
 
@@ -965,7 +965,7 @@ void EnWiz_Attack(EnWiz* this, PlayState* play) {
             pos.x += Math_SinS(this->actor.world.rot.y) * 40.0f;
             pos.y += 60.0f;
             pos.z += Math_CosS(this->actor.world.rot.y) * 40.0f;
-            if (type == EN_WIZ_TYPE_FIRE_NO_MINI_BOSS_BGM) {
+            if (type == EN_WIZ_TYPE_FIRE_NO_BGM) {
                 type = EN_WIZ_TYPE_FIRE;
             }
 
@@ -1129,7 +1129,7 @@ void EnWiz_Damaged(EnWiz* this, PlayState* play) {
         if (this->actor.colChkInfo.health <= 0) {
             if (this->fightState == EN_WIZ_FIGHT_STATE_FIRST_PHASE) {
                 this->fightState = EN_WIZ_FIGHT_STATE_SECOND_PHASE_CUTSCENE;
-                if ((this->type == EN_WIZ_TYPE_FIRE) || (this->type == EN_WIZ_TYPE_FIRE_NO_MINI_BOSS_BGM)) {
+                if ((this->type == EN_WIZ_TYPE_FIRE) || (this->type == EN_WIZ_TYPE_FIRE_NO_BGM)) {
                     this->actor.colChkInfo.health = 8;
                 } else {
                     this->actor.colChkInfo.health = 6;
@@ -1215,7 +1215,7 @@ void EnWiz_UpdateDamage(EnWiz* this, PlayState* play) {
                 break;
 
             case EN_WIZ_DMGEFF_FREEZE:
-                if ((this->type == EN_WIZ_TYPE_FIRE) || (this->type == EN_WIZ_TYPE_FIRE_NO_MINI_BOSS_BGM)) {
+                if ((this->type == EN_WIZ_TYPE_FIRE) || (this->type == EN_WIZ_TYPE_FIRE_NO_BGM)) {
                     this->drawDmgEffTimer = 80;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
                     this->drawDmgEffScale = 0.0f;
@@ -1522,7 +1522,7 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->platformLightAlpha);
 
-        if ((this->type == EN_WIZ_TYPE_FIRE) || (this->type == EN_WIZ_TYPE_FIRE_NO_MINI_BOSS_BGM)) {
+        if ((this->type == EN_WIZ_TYPE_FIRE) || (this->type == EN_WIZ_TYPE_FIRE_NO_BGM)) {
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 100, 255);
         } else {
             gDPSetEnvColor(POLY_XLU_DISP++, 50, 0, 255, 255);
@@ -1542,7 +1542,7 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
                                 ((this->staffFlameScroll * 10) - (play->state.frames * 20)) % 512, 32, 128));
     gDPPipeSync(POLY_XLU_DISP++);
 
-    if ((this->type == EN_WIZ_TYPE_FIRE) || (this->type == EN_WIZ_TYPE_FIRE_NO_MINI_BOSS_BGM)) {
+    if ((this->type == EN_WIZ_TYPE_FIRE) || (this->type == EN_WIZ_TYPE_FIRE_NO_BGM)) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 170, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 50, 0, 255);
     } else {

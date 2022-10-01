@@ -507,7 +507,7 @@ void EnWizFire_Update(Actor* thisx, PlayState* play2) {
         Actor* wiz = this->actor.parent;
 
         if ((wiz != NULL) && (wiz->id == ACTOR_EN_WIZ) && (wiz->update != NULL) &&
-            (((EnWiz*)wiz)->type != EN_WIZ_TYPE_FIRE_NO_MINI_BOSS_BGM)) {
+            (((EnWiz*)wiz)->type != EN_WIZ_TYPE_FIRE_NO_BGM)) {
             f32 fogNear;
 
             index = this->isIceType * 4;
