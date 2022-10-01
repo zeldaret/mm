@@ -371,7 +371,7 @@ void EnWiz_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
     Collider_DestroyJntSph(play, &this->ghostColliders);
     if (this->type != EN_WIZ_TYPE_FIRE_NO_MINI_BOSS_BGM) {
-        func_801A2ED8();
+        Audio_RestorePrevBgm();
     }
 }
 
@@ -526,7 +526,7 @@ void EnWiz_HandleIntroCutscene(EnWiz* this, PlayState* play) {
         if (this->musicStartTimer < 11) {
             this->musicStartTimer++;
             if ((this->type != EN_WIZ_TYPE_FIRE_NO_MINI_BOSS_BGM) && (this->musicStartTimer == 11)) {
-                func_801A2E54(NA_BGM_MINI_BOSS);
+                Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
             }
         }
     }
