@@ -91,14 +91,12 @@ void EnWizFire_Init(Actor* thisx, PlayState* play) {
             this->collider.info.bumper.dmgFlags = (0x1000000 | 0x800 | 0x200 | 0x2);
             this->type = EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE;
             // fallthrough
-
         case EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE:
             if (this->type == EN_WIZ_FIRE_TYPE_ICE_MAGIC_PROJECTILE) {
                 this->type = EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE;
                 this->collider.info.toucher.damage = 8;
             }
             // fallthrough
-
         case EN_WIZ_FIRE_TYPE_ARCING_MAGIC_PROJECTILE:
         case EN_WIZ_FIRE_TYPE_REFLECTED_MAGIC_PROJECTILE:
             this->actionFunc = EnWiz_SetupMoveMagicProjectile;
@@ -143,7 +141,7 @@ void EnWiz_SetupMoveMagicProjectile(EnWizFire* this, PlayState* play) {
         this->magicProjectilePos[i] = this->actor.world.pos;
     }
 
-    this->lowestValidMagicProjectileIndex = 0;
+    this->lowestUsedIndex = 0;
 
     Matrix_Push();
     Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_NEW);
@@ -192,7 +190,7 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
     if ((this->timer == 0) && (this->scale < 0.001f)) {
         Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
         this->action = EN_WIZ_FIRE_ACTION_KILL_MAGIC_PROJECTILE;
-        this->increaseLowestValidMagicProjectileIndexTimer = 0;
+        this->increaseLowestUsedIndexTimer = 0;
         this->actionFunc = EnWiz_KillMagicProjectile;
         return;
     }
@@ -218,7 +216,7 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
         s32 pad;
 
         if (this->type == EN_WIZ_FIRE_TYPE_ARCING_MAGIC_PROJECTILE) {
-            this->increaseLowestValidMagicProjectileIndexTimer = 10;
+            this->increaseLowestUsedIndexTimer = 10;
 
             Matrix_Push();
             Matrix_RotateYS((s16)randPlusMinusPoint5Scaled(0x100) + this->actor.world.rot.y, MTXMODE_NEW);
@@ -240,7 +238,7 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
             this->scale = 0.0f;
             Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
             this->action = EN_WIZ_FIRE_ACTION_KILL_MAGIC_PROJECTILE;
-            this->increaseLowestValidMagicProjectileIndexTimer = 0;
+            this->increaseLowestUsedIndexTimer = 0;
             this->actionFunc = EnWiz_KillMagicProjectile;
             return;
         }
@@ -365,10 +363,10 @@ void EnWiz_Pool(EnWizFire* this, PlayState* play) {
         this->playerHitByIceProjectile = true;
     }
 
-    this->lowestValidMagicProjectileIndex++;
+    this->lowestUsedIndex++;
 
-    if (this->lowestValidMagicProjectileIndex > 10) {
-        this->lowestValidMagicProjectileIndex = 10;
+    if (this->lowestUsedIndex > 10) {
+        this->lowestUsedIndex = 10;
     }
 
     if (this->poolTimer != 0) {
@@ -467,10 +465,10 @@ void EnWiz_Pool(EnWizFire* this, PlayState* play) {
 }
 
 void EnWiz_KillMagicProjectile(EnWizFire* this, PlayState* play) {
-    if (this->increaseLowestValidMagicProjectileIndexTimer == 0) {
-        this->increaseLowestValidMagicProjectileIndexTimer = 2;
-        this->lowestValidMagicProjectileIndex++;
-        if (this->lowestValidMagicProjectileIndex >= 6) {
+    if (this->increaseLowestUsedIndexTimer == 0) {
+        this->increaseLowestUsedIndexTimer = 2;
+        this->lowestUsedIndex++;
+        if (this->lowestUsedIndex >= 6) {
             if ((this->actor.parent != NULL) && (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) &&
                 (this->actor.parent->id == ACTOR_EN_WIZ)) {
                 EnWiz* wiz = (EnWiz*)this->actor.parent;
@@ -754,7 +752,7 @@ void EnWizFire_Draw(Actor* thisx, PlayState* play2) {
     func_8012C2DC(play->state.gfxCtx);
     Matrix_Push();
 
-    for (i = ARRAY_COUNT(this->magicProjectilePos) - 1; i >= this->lowestValidMagicProjectileIndex; i--) {
+    for (i = ARRAY_COUNT(this->magicProjectilePos) - 1; i >= this->lowestUsedIndex; i--) {
         f32 scale = this->actor.scale.x - (i * -0.0019f);
 
         if (scale > 0.0f) {
