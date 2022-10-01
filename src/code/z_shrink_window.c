@@ -13,67 +13,67 @@ typedef struct {
     /* 0x3 */ s8 pillarboxSize;
 } ShrinkWindow; // size = 0x4
 
-ShrinkWindow gShrinkWindow;
-ShrinkWindow* gShrinkWindowPtr;
+ShrinkWindow sShrinkWindow;
+ShrinkWindow* sShrinkWindowPtr;
 
 void ShrinkWindow_Letterbox_SetSizeTarget(s32 target) {
-    gShrinkWindowPtr->letterboxTarget = target;
+    sShrinkWindowPtr->letterboxTarget = target;
 }
 
 s32 ShrinkWindow_Letterbox_GetSizeTarget(void) {
-    return gShrinkWindowPtr->letterboxTarget;
+    return sShrinkWindowPtr->letterboxTarget;
 }
 
 void ShrinkWindow_Letterbox_SetSize(s32 size) {
-    gShrinkWindowPtr->letterboxSize = size;
+    sShrinkWindowPtr->letterboxSize = size;
 }
 
 s32 ShrinkWindow_Letterbox_GetSize(void) {
-    return gShrinkWindowPtr->letterboxSize;
+    return sShrinkWindowPtr->letterboxSize;
 }
 
 void ShrinkWindow_Pillarbox_SetSizeTarget(s32 target) {
-    gShrinkWindowPtr->pillarboxTarget = target;
+    sShrinkWindowPtr->pillarboxTarget = target;
 }
 
 s32 ShrinkWindow_Pillarbox_GetSizeTarget(void) {
-    return gShrinkWindowPtr->pillarboxTarget;
+    return sShrinkWindowPtr->pillarboxTarget;
 }
 
 void ShrinkWindow_Pillarbox_SetSize(s32 size) {
-    gShrinkWindowPtr->pillarboxSize = size;
+    sShrinkWindowPtr->pillarboxSize = size;
 }
 
 s32 ShrinkWindow_Pillarbox_GetSize(void) {
-    return gShrinkWindowPtr->pillarboxSize;
+    return sShrinkWindowPtr->pillarboxSize;
 }
 
 void ShrinkWindow_Init(void) {
-    gShrinkWindowPtr = &gShrinkWindow;
-    bzero(gShrinkWindowPtr, sizeof(gShrinkWindow));
+    sShrinkWindowPtr = &sShrinkWindow;
+    bzero(sShrinkWindowPtr, sizeof(sShrinkWindow));
 }
 
 void ShrinkWindow_Destroy(void) {
-    gShrinkWindowPtr = NULL;
+    sShrinkWindowPtr = NULL;
 }
 
 void ShrinkWindow_Update(s32 framerateDivisor) {
     s32 step = (framerateDivisor == 3) ? 10 : (30 / framerateDivisor);
     s32 nextSize;
 
-    nextSize = gShrinkWindowPtr->letterboxSize;
-    Math_StepToIGet(&nextSize, gShrinkWindowPtr->letterboxTarget, step);
-    gShrinkWindowPtr->letterboxSize = nextSize;
+    nextSize = sShrinkWindowPtr->letterboxSize;
+    Math_StepToIGet(&nextSize, sShrinkWindowPtr->letterboxTarget, step);
+    sShrinkWindowPtr->letterboxSize = nextSize;
 
-    nextSize = gShrinkWindowPtr->pillarboxSize;
-    Math_StepToIGet(&nextSize, gShrinkWindowPtr->pillarboxTarget, step);
-    gShrinkWindowPtr->pillarboxSize = nextSize;
+    nextSize = sShrinkWindowPtr->pillarboxSize;
+    Math_StepToIGet(&nextSize, sShrinkWindowPtr->pillarboxTarget, step);
+    sShrinkWindowPtr->pillarboxSize = nextSize;
 }
 
 void ShrinkWindow_Draw(GraphicsContext* gfxCtx) {
     Gfx* gfx;
-    s8 letterboxSize = gShrinkWindowPtr->letterboxSize;
-    s8 pillarboxSize = gShrinkWindowPtr->pillarboxSize;
+    s8 letterboxSize = sShrinkWindowPtr->letterboxSize;
+    s8 pillarboxSize = sShrinkWindowPtr->pillarboxSize;
 
     if (letterboxSize > 0) {
         OPEN_DISPS(gfxCtx);
