@@ -1,4 +1,6 @@
 #include "global.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
 #include "message_data_static.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
@@ -267,7 +269,7 @@ void func_8014D62C(PlayState* play, s32* arg1, f32* arg2, s16* arg3) {
     s16 phi_v0;
     s16 phi_s0;
 
-    if ((func_8010A0A4(play) != 0) || (play->sceneNum == 0x4F)) {
+    if ((func_8010A0A4(play) != 0) || (play->sceneId == SCENE_SECOM)) {
         phi_v0 = 0xA;
     } else {
         phi_v0 = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
@@ -489,7 +491,7 @@ u8 Message_GetState(MessageContext* msgCtx) {
 
 void func_80152C64(View* view) {
     SET_FULLSCREEN_VIEWPORT(view);
-    func_8013FBC8(view);
+    View_ApplyOrthoToOverlay(view);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80152CAC.s")

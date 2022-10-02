@@ -402,7 +402,7 @@ void EnAz_Destroy(Actor* thisx, PlayState* play2) {
     EnAz* this = THIS;
 
     if (gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 1)) {
-        gSaveContext.unk_3DD0[4] = 5;
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
     }
     Collider_DestroyCylinder(play2, &this->collider);
 }
@@ -1426,7 +1426,7 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
                         if (play->msgCtx.choiceIndex == 0) {
                             func_8019F208();
                             play->msgCtx.msgMode = 0x44;
-                            func_800FD750(NA_BGM_MINI_GAME_2);
+                            func_800FD750(NA_BGM_TIMED_MINI_GAME);
                             func_80A94AB8(this, play, 1);
                             func_80A979DC(this, play);
                         } else {
@@ -1466,7 +1466,7 @@ void func_80A97C4C(EnAz* this, PlayState* play) {
     func_80A97410(this, play);
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3) || (this->unk_2FA == 6) || (this->unk_2FA == 8)) {
         gSaveContext.save.weekEventReg[24] &= (u8)~1;
-        func_800FD750(NA_BGM_MINI_GAME_2);
+        func_800FD750(NA_BGM_TIMED_MINI_GAME);
         play->nextEntrance = Entrance_CreateFromSpawn(1);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -1486,11 +1486,11 @@ void func_80A97D5C(EnAz* this, PlayState* play) {
     gSaveContext.minigameScore = (this->unk_374 & 2) ? 25 : 20;
     play->interfaceCtx.unk_280 = 1;
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3)) {
-        func_8010E9F0(4, 120);
+        Interface_StartTimer(TIMER_ID_MINIGAME_2, 120);
     } else if (gSaveContext.save.weekEventReg[25] & 1) {
-        func_8010E9F0(4, 100);
+        Interface_StartTimer(TIMER_ID_MINIGAME_2, 100);
     } else {
-        func_8010E9F0(4, 110);
+        Interface_StartTimer(TIMER_ID_MINIGAME_2, 110);
     }
     this->actionFunc = func_80A97E48;
 }
@@ -1547,7 +1547,7 @@ void func_80A97F9C(EnAz* this, PlayState* play) {
         } else {
             gSaveContext.save.weekEventReg[24] |= 1;
         }
-        gSaveContext.unk_3DD0[4] = 5;
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
         this->unk_374 &= ~0x10;
         play->nextEntrance = Entrance_CreateFromSpawn(2);
         gSaveContext.nextCutsceneIndex = 0;
@@ -1557,8 +1557,8 @@ void func_80A97F9C(EnAz* this, PlayState* play) {
         this->actor.speedXZ = 0.0f;
         func_80A979DC(this, play);
     } else {
-        if (gSaveContext.unk_3DE0[4] == 0) {
-            gSaveContext.unk_3DD0[4] = 5;
+        if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] == SECONDS_TO_TIMER(0)) {
+            gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
             this->unk_374 |= 0x4000;
             func_80A97A28(this, play);
         }

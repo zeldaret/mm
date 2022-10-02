@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_lift.h"
+#include "z64quake.h"
 #include "objects/object_d_lift/object_d_lift.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -125,17 +126,18 @@ void func_8093D760(ObjLift* this) {
 
 void func_8093D7A0(ObjLift* this, PlayState* play) {
     s32 pad;
-    s16 quake;
+    s16 quakeIndex;
 
     if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
         if (this->timer <= 0) {
             if (OBJLIFT_GET_7(&this->dyna.actor) == 7) {
                 func_8093D9C0(this);
             } else {
-                quake = Quake_Add(GET_ACTIVE_CAM(play), 1);
-                Quake_SetSpeed(quake, 10000);
-                Quake_SetQuakeValues(quake, 2, 0, 0, 0);
-                Quake_SetCountdown(quake, 20);
+                quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_1);
+                Quake_SetSpeed(quakeIndex, 10000);
+                Quake_SetQuakeValues(quakeIndex, 2, 0, 0, 0);
+                Quake_SetCountdown(quakeIndex, 20);
+
                 func_8093D88C(this);
             }
         }

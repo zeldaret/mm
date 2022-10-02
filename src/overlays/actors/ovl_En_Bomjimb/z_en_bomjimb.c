@@ -691,7 +691,7 @@ void func_80C02740(EnBomjimb* this, PlayState* play) {
     gSaveContext.save.bombersCaughtNum++;
 
     if (gSaveContext.save.bombersCaughtNum > 4) {
-        func_801A3098(0x922);
+        Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
     } else {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
     }

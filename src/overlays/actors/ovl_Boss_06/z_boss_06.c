@@ -6,6 +6,7 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_boss_06.h"
+#include "z64shrink_window.h"
 #include "overlays/actors/ovl_En_Knight/z_en_knight.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_knight/object_knight.h"
@@ -339,7 +340,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
     }
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
-        ShrinkWindow_SetLetterboxTarget(27);
+        ShrinkWindow_Letterbox_SetSizeTarget(27);
         Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
