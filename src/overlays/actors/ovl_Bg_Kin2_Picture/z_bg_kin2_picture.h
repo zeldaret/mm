@@ -14,12 +14,10 @@ typedef void (*BgKin2PictureActionFunc)(struct BgKin2Picture*, PlayState*);
 typedef struct BgKin2Picture {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ColliderTris colliderTris;
-    /* 0x17C */ ColliderTrisElement colliderElement;
-    /* 0x1D8 */ UNK_TYPE1 pad1D8[0x5C];
+    /* 0x17C */ ColliderTrisElement colliderElement[2];
     /* 0x234 */ BgKin2PictureActionFunc actionFunc;
     /* 0x238 */ s16 step;
-    /* 0x23A */ s8 paintingTimer; // used both for when painting is shaking and when it starts falling to time Gold
-                                  // Skulltula spawn.
+    /* 0x23A */ s8 paintingTimer; // Used for when painting is shaking and for timing Gold Skulltula spawn.
     /* 0x23B */ s8 landTimer;
     /* 0x23C */ s16 xOffsetAngle;
     /* 0x23E */ s16 yOffsetAngle;

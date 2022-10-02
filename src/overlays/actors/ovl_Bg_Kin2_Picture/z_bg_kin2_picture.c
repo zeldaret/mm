@@ -110,6 +110,8 @@ void BgKin2Picture_SpawnSkulltula(BgKin2Picture* this, PlayState* play2) {
     }
 }
 
+#define DUST_COUNT 20
+
 void BgKin2Picture_SpawnDust(BgKin2Picture* this, PlayState* play) {
     f32 temp_fs0;
     Vec3f basePos;
@@ -119,7 +121,7 @@ void BgKin2Picture_SpawnDust(BgKin2Picture* this, PlayState* play) {
     s32 temp_s1;
     s32 scale;
     s16 scaleStep;
-    s32 phi_s3;
+    s32 baseAngle;
     s32 i;
 
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x,
@@ -131,8 +133,8 @@ void BgKin2Picture_SpawnDust(BgKin2Picture* this, PlayState* play) {
     velocity.y = 0.0f;
     accel.y = 0.2f;
 
-    for (i = 0, phi_s3 = 0; i < 20; i++, phi_s3 += 0xCCC) {
-        temp_s1 = (s32)(Rand_ZeroOne() * 3276.0f) + phi_s3;
+    for (i = 0, baseAngle = 0; i < DUST_COUNT; i++, baseAngle += 0xCCC) {
+        temp_s1 = (s32)(Rand_ZeroOne() * 0xCCC) + baseAngle;
         temp_fs0 = (Rand_ZeroOne() * 14.0f) + 4.0f;
         pos.x = Math_SinS(temp_s1) * temp_fs0;
         pos.z = Math_CosS(temp_s1) * temp_fs0;
@@ -162,7 +164,7 @@ void BgKin2Picture_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_LoadMesh(play, &this->dyna, &gOceanSpiderHouseSkullkidPaintingCol);
     func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_InitTris(play, &this->colliderTris);
-    Collider_SetTris(play, &this->colliderTris, &this->dyna.actor, &sTrisInit, &this->colliderElement);
+    Collider_SetTris(play, &this->colliderTris, &this->dyna.actor, &sTrisInit, this->colliderElement);
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
@@ -243,7 +245,7 @@ void BgKin2Picture_SetupShiver(BgKin2Picture* this) {
 
 void BgKin2Picture_Shiver(BgKin2Picture* this, PlayState* play) {
     s32 pad;
-    Vec3f sp30;
+    Vec3f basePosOffset;
     Vec3f posOffset;
 
     this->paintingTimer--;
@@ -253,11 +255,11 @@ void BgKin2Picture_Shiver(BgKin2Picture* this, PlayState* play) {
     } else {
         this->xOffsetAngle += 0x7BAC;
         this->yOffsetAngle += 0x4E20;
-        sp30.x = Math_CosS(this->xOffsetAngle);
-        sp30.y = Math_CosS(this->yOffsetAngle) * 0.2f;
-        sp30.z = 0.0f;
+        basePosOffset.x = Math_CosS(this->xOffsetAngle);
+        basePosOffset.y = Math_CosS(this->yOffsetAngle) * 0.2f;
+        basePosOffset.z = 0.0f;
         Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
-        Matrix_MultVec3f(&sp30, &posOffset);
+        Matrix_MultVec3f(&basePosOffset, &posOffset);
         Math_Vec3f_Sum(&this->dyna.actor.home.pos, &posOffset, &this->dyna.actor.world.pos);
     }
 }
