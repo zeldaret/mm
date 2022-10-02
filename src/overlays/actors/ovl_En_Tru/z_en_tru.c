@@ -792,7 +792,8 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
             break;
 
         case 2:
-            if ((this->animIndex != KOUME_ANIM_INJURED_HEAD_UP) && (this->animIndex != KOUME_ANIM_INJURED_HEAD_UP_MORPH)) {
+            if ((this->animIndex != KOUME_ANIM_INJURED_HEAD_UP) &&
+                (this->animIndex != KOUME_ANIM_INJURED_HEAD_UP_MORPH)) {
                 EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_RAISE_HEAD);
                 this->unk_364++;
             } else {
