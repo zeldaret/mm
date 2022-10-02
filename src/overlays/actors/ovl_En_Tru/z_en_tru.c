@@ -25,15 +25,15 @@ void func_80A87FD0(EnTru* this, PlayState* play);
 void func_80A881E0(EnTru* this, PlayState* play);
 
 typedef enum {
-    /* 0x00 */ KOUME_ANIM_INJURED_LYING_DOWN1,
-    /* 0x01 */ KOUME_ANIM_INJURED_LYING_DOWN2,
+    /* 0x00 */ KOUME_ANIM_INJURED_LYING_DOWN,
+    /* 0x01 */ KOUME_ANIM_INJURED_LYING_DOWN_MORPH,
     /* 0x02 */ KOUME_ANIM_TRY_GET_UP,
     /* 0x03 */ KOUME_ANIM_INJURED_RAISE_HEAD,
-    /* 0x04 */ KOUME_ANIM_INJURED_TALKING,
-    /* 0x05 */ KOUME_ANIM_INJURED_HEAD_UP1,
-    /* 0x06 */ KOUME_ANIM_INJURED_HEAD_UP2,
+    /* 0x04 */ KOUME_ANIM_INJURED_TALK,
+    /* 0x05 */ KOUME_ANIM_INJURED_HEAD_UP,
+    /* 0x06 */ KOUME_ANIM_INJURED_HEAD_UP_MORPH,
     /* 0x07 */ KOUME_ANIM_TAKE,
-    /* 0x08 */ KOUME_ANIM_SHAKE,
+    /* 0x08 */ KOUME_ANIM_SHAKE, // Unused
     /* 0x09 */ KOUME_ANIM_DRINK,
     /* 0x0A */ KOUME_ANIM_FINISHED_DRINKING,
     /* 0x0B */ KOUME_ANIM_HEALED,
@@ -130,7 +130,7 @@ static AnimationInfoS sAnimationInfo[] = {
     { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gKoumeTryGetUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &gKoumeInjuredRaiseHeadAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKoumeInjuredTalkingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gKoumeInjuredTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gKoumeTakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -551,8 +551,8 @@ s32 func_80A86DB8(EnTru* this) {
     }
 
     switch (this->animIndex) {
-        case KOUME_ANIM_INJURED_LYING_DOWN1:
-        case KOUME_ANIM_INJURED_LYING_DOWN2:
+        case KOUME_ANIM_INJURED_LYING_DOWN:
+        case KOUME_ANIM_INJURED_LYING_DOWN_MORPH:
             if (DECR(this->unk_36C) == 0) {
                 s16 rand = Rand_S16Offset(40, 20);
 
@@ -792,11 +792,11 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
             break;
 
         case 2:
-            if ((this->animIndex != KOUME_ANIM_INJURED_HEAD_UP1) && (this->animIndex != KOUME_ANIM_INJURED_HEAD_UP2)) {
+            if ((this->animIndex != KOUME_ANIM_INJURED_HEAD_UP) && (this->animIndex != KOUME_ANIM_INJURED_HEAD_UP_MORPH)) {
                 EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_RAISE_HEAD);
                 this->unk_364++;
             } else {
-                EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_TALKING);
+                EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_TALK);
                 ret = true;
             }
             break;
@@ -804,7 +804,7 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
         case 3:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 this->unk_364++;
-                EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_TALKING);
+                EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_TALK);
                 ret = true;
             }
             break;
@@ -1072,7 +1072,7 @@ void func_80A87FD0(EnTru* this, PlayState* play) {
             if ((this->animIndex == KOUME_ANIM_TRY_GET_UP) &&
                 Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 this->unk_362 = Rand_S16Offset(40, 20);
-                EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_LYING_DOWN2);
+                EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_LYING_DOWN_MORPH);
                 func_80A86460(this);
             } else if (this->animIndex != KOUME_ANIM_TRY_GET_UP) {
                 if (DECR(this->unk_362) == 0) {
@@ -1105,12 +1105,12 @@ void func_80A881E0(EnTru* this, PlayState* play) {
         }
 
         if (!(this->unk_34E & 0x40) && !(gSaveContext.save.weekEventReg[16] & 0x10)) {
-            EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_LYING_DOWN1);
+            EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_LYING_DOWN);
         } else if (this->unk_34E & 0x80) {
-            EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_LYING_DOWN1);
+            EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_LYING_DOWN);
             func_80A86460(this);
         } else if (gSaveContext.save.weekEventReg[16] & 0x10) {
-            EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_HEAD_UP2);
+            EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_HEAD_UP_MORPH);
         }
 
         SubS_UpdateFlags(&this->unk_34E, 0, 7);
@@ -1136,7 +1136,7 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->animIndex = -1;
-    EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_LYING_DOWN1);
+    EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_LYING_DOWN);
     this->path = SubS_GetDayDependentPath(play, ENTRU_GET_PATH(&this->actor), 255, &this->unk_384);
     if (this->path != NULL) {
         this->unk_384 = 1;
@@ -1147,7 +1147,7 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
     this->unk_34E = 0;
 
     if (gSaveContext.save.weekEventReg[16] & 0x10) {
-        EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_HEAD_UP1);
+        EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_HEAD_UP);
     } else {
         this->unk_388 = PLAYER_AP_NONE;
     }

@@ -45,7 +45,7 @@
         <DList Name="gKoumeLeftShinDL" Offset="0xDE18" />
         <DList Name="gKoumeLeftFootDL" Offset="0xDEC8" />
 
-        <Animation Name="gKoumeInjuredTalkingAnim" Offset="0xEEDC" />
+        <Animation Name="gKoumeInjuredTalkAnim" Offset="0xEEDC" />
         <Animation Name="gKoumeInjuredLyingDownAnim" Offset="0xF9A0" />
         <Animation Name="gKoumeTryGetUpAnim" Offset="0x108AC" />
         <Animation Name="gKoumeHealedAnim" Offset="0x11F88" />

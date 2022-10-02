@@ -21,15 +21,15 @@ void func_80B76BB8(EnTruMt* this, PlayState* play);
 void func_80B76C38(EnTruMt* this, PlayState* play);
 
 typedef enum {
-    /* 0x00 */ KOUME_ANIM_INJURED_LYING_DOWN1,
-    /* 0x01 */ KOUME_ANIM_INJURED_LYING_DOWN2,
+    /* 0x00 */ KOUME_ANIM_INJURED_LYING_DOWN,
+    /* 0x01 */ KOUME_ANIM_INJURED_LYING_DOWN_MORPH,
     /* 0x02 */ KOUME_ANIM_TRY_GET_UP,
     /* 0x03 */ KOUME_ANIM_INJURED_RAISE_HEAD,
-    /* 0x04 */ KOUME_ANIM_INJURED_TALKING,
-    /* 0x05 */ KOUME_ANIM_INJURED_HEAD_UP1,
-    /* 0x06 */ KOUME_ANIM_INJURED_HEAD_UP2,
+    /* 0x04 */ KOUME_ANIM_INJURED_TALK,
+    /* 0x05 */ KOUME_ANIM_INJURED_HEAD_UP,
+    /* 0x06 */ KOUME_ANIM_INJURED_HEAD_UP_MORPH,
     /* 0x07 */ KOUME_ANIM_TAKE,
-    /* 0x08 */ KOUME_ANIM_SHAKE,
+    /* 0x08 */ KOUME_ANIM_SHAKE, // Unused
     /* 0x09 */ KOUME_ANIM_DRINK,
     /* 0x0A */ KOUME_ANIM_FINISHED_DRINKING,
     /* 0x0B */ KOUME_ANIM_HEALED,
@@ -112,7 +112,7 @@ static AnimationInfoS sAnimationInfo[] = {
     { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gKoumeTryGetUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &gKoumeInjuredRaiseHeadAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeInjuredTalkingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gKoumeInjuredTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gKoumeTakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -135,7 +135,7 @@ s32 EnTruMt_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 startFrame;
     s32 didChange = false;
 
-    if ((animIndex >= KOUME_ANIM_INJURED_LYING_DOWN1) && (animIndex < KOUME_ANIM_MAX)) {
+    if ((animIndex >= KOUME_ANIM_INJURED_LYING_DOWN) && (animIndex < KOUME_ANIM_MAX)) {
         endFrame = sAnimationInfo[animIndex].frameCount;
         if (endFrame < 0) {
             endFrame = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
