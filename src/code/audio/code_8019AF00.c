@@ -4078,7 +4078,7 @@ void AudioSfx_SetProperties(u8 bankId, u8 entryIndex, u8 channelIndex) {
 }
 
 u32 AudioSfx_SetFreqAndStereoBits(u8 seqScriptValIn, SequenceChannel* channel) {
-    channel->stereo.asByte = sSfxChannelState[seqScriptValIn].stereoBits;
+    channel->stereoData.asByte = sSfxChannelState[seqScriptValIn].stereoBits;
     channel->freqScale = sSfxChannelState[seqScriptValIn].freqScale;
     channel->changes.s.freqScale = true;
 
