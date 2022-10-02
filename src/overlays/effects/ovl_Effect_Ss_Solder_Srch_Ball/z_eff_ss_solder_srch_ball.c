@@ -33,7 +33,10 @@ u32 EffectSsSolderSrchBall_Init(PlayState* play, u32 index, EffectSs* this, void
     this->life = 10;
     this->rgScale = initParams->scale;
     this->rFlags = initParams->flags;
-    this->actor = (Actor*)initParams->playerDetected; //! @bug actor field used to store an s16*
+
+    //! @bug actor field used to store an s16*
+    // This is purly cosmetic. Nothing external will ever read this as an Actor, so there is no unintended side-effects.
+    this->actor = (Actor*)initParams->playerDetected;
     return 1;
 }
 
