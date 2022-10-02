@@ -372,7 +372,7 @@ s32 EnGo_GraveBroGoron_CheckAndSetupCutsceneSpringArrival(EnGo* this, PlayState*
 
 s32 EnGo_GatekeeperGoron_CutsceneOpenShrine(Actor* thisx, PlayState* play);
 s32 EnGo_GatekeeperGoron_CutscenePound(EnGo* this, f32 initialVelocity, f32 maxDistortion, s32 maxHangtime);
-void EnGo_GatekeeperGoron_CreateQuake(PlayState* play, s16 quakeSpeed, s16 vertMagnitude, s16 quakeTime);
+void EnGo_GatekeeperGoron_QuakeAdd(PlayState* play, s16 quakeSpeed, s16 vertMagnitude, s16 quakeTime);
 void EnGo_GatekeeperGoron_CreateQuakeEffects(EnGo* this, PlayState* play);
 
 s32 EnGo_PowderKegGoron_CutsceneGivePowderKeg(Actor* thisx, PlayState* play);
@@ -1435,19 +1435,19 @@ s32 EnGo_GatekeeperGoron_CutscenePound(EnGo* this, f32 initialVelocity, f32 maxD
 /**
  * Create the quake caused by the gatekeeper's pound.
  */
-void EnGo_GatekeeperGoron_CreateQuake(PlayState* play, s16 quakeSpeed, s16 vertMagnitude, s16 quakeTime) {
-    s16 indexQuake = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
+void EnGo_GatekeeperGoron_QuakeAdd(PlayState* play, s16 speed, s16 verticalMag, s16 time) {
+    s16 quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
 
-    Quake_SetCountdown(indexQuake, quakeTime);
-    Quake_SetSpeed(indexQuake, quakeSpeed);
-    Quake_SetQuakeValues(indexQuake, vertMagnitude, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, time);
+    Quake_SetSpeed(quakeIndex, speed);
+    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
 }
 
 /**
  * Create the visual effects caused by the gatekeeper's pound.
  */
 void EnGo_GatekeeperGoron_CreateQuakeEffects(EnGo* this, PlayState* play) {
-    EnGo_GatekeeperGoron_CreateQuake(play, 0x6C77, 7, 20);
+    EnGo_GatekeeperGoron_QuakeAdd(play, 27767, 7, 20);
     play->actorCtx.unk2 = 4;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TEST, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, 0, 0, 0, 0);
