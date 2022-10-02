@@ -1377,8 +1377,8 @@
         <Texture Name="gSunEvening2Tex" OutName="sun_evening_2" Format="i4" Width="64" Height="16" Offset="0x7A6F0" />
         <Texture Name="gSunEvening3Tex" OutName="sun_evening_3" Format="i4" Width="64" Height="17" Offset="0x7A8F0" />
         
-        <DList Name="gameplay_keep_DL_07AB10" Offset="0x7AB10" /> <!-- sun (sparkles when small) displaylist -->
-        <DList Name="gameplay_keep_DL_07AB58" Offset="0x7AB58" />
+        <DList Name="gSunSparkleMaterialDL" Offset="0x7AB10" /> <!-- sun (sparkles when small) displaylist -->
+        <DList Name="gSunSparkleModelDL" Offset="0x7AB58" />
         <DList Name="gSunDL" Offset="0x7AB70" />
         <DList Name="gZTargetLockOnTriangleDL" Offset="0x7AE00" />
 
