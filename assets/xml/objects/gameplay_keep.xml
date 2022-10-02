@@ -915,18 +915,23 @@
         <DList Name="gElectricSparkDL" Offset="0x23480" />
         <DList Name="gElectricSparkVtxDL" Offset="0x234F0" />
         <Texture Name="gLightOrbTex" OutName="light_orb" Format="i8" Width="64" Height="64" Offset="0x23508" />
-        <Texture Name="gameplay_keep_Tex_024510" OutName="tex_024510" Format="i8" Width="64" Height="32" Offset="0x24510" />
-        <Texture Name="gameplay_keep_Tex_024D10" OutName="tex_024D10" Format="i8" Width="64" Height="32" Offset="0x24D10" />
-        <DList Name="gameplay_keep_DL_025850" Offset="0x25850" />
-        <DList Name="gameplay_keep_DL_025970" Offset="0x25970" />
-        <DList Name="gameplay_keep_DL_025DD0" Offset="0x25DD0" />
-        <DList Name="gameplay_keep_DL_025EF0" Offset="0x25EF0" />
-        <Texture Name="gameplay_keep_Tex_026010" OutName="tex_026010" Format="i8" Width="32" Height="32" Offset="0x26010" />
-        <Texture Name="gameplay_keep_Tex_026410" OutName="tex_026410" Format="i8" Width="32" Height="32" Offset="0x26410" />
-        <DList Name="gameplay_keep_DL_0268F0" Offset="0x268F0" />
-        <Texture Name="gameplay_keep_Tex_0269E0" OutName="tex_0269E0" Format="i8" Width="32" Height="64" Offset="0x269E0" />
-        <Texture Name="gameplay_keep_Tex_0271E0" OutName="tex_0271E0" Format="i8" Width="32" Height="64" Offset="0x271E0" />
-        <DList Name="gameplay_keep_DL_027CA0" Offset="0x27CA0" />
+
+        <!-- EnMThunder (Spin Attack and Sword Beams)-->
+        <!-- Spin Attack -->
+        <Texture Name="gSpinAttack1Tex" OutName="spin_attack_1" Format="i8" Width="64" Height="32" Offset="0x24510" />
+        <Texture Name="gSpinAttack2Tex" OutName="spin_attack_2" Format="i8" Width="64" Height="32" Offset="0x24D10" />
+        <DList Name="gSpinAttackDiskDL" Offset="0x25850" />
+        <DList Name="gSpinAttackCylinderDL" Offset="0x25970" />
+        <DList Name="gGreatSpinAttackDiskDL" Offset="0x25DD0" />
+        <DList Name="gGreatSpinAttackCylinderDL" Offset="0x25EF0" />
+        <Texture Name="gSpinAttackCharging1Tex" OutName="spin_attack_charging_1" Format="i8" Width="32" Height="32" Offset="0x26010" />
+        <Texture Name="gSpinAttackCharging2Tex" OutName="spin_attack_charging_2" Format="i8" Width="32" Height="32" Offset="0x26410" />
+        <DList Name="gSpinAttackChargingDL" Offset="0x268F0" />
+        <!-- Sword Beam -->
+        <Texture Name="gSwordBeam1Tex" OutName="sword_beam_1" Format="i8" Width="32" Height="64" Offset="0x269E0" />
+        <Texture Name="gSwordBeam2Tex" OutName="sword_beam_2" Format="i8" Width="32" Height="64" Offset="0x271E0" />
+        <DList Name="gSwordBeamDL" Offset="0x27CA0" />
+
         <Blob Name="gameplay_keep_Blob_027DD0" Size="0x32C" Offset="0x27DD0" />
         <Blob Name="gameplay_keep_Blob_0281DC" Size="0xF4" Offset="0x281DC" />
         <DList Name="gameplay_keep_DL_0282D0" Offset="0x282D0" />

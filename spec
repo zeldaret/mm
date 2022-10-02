@@ -984,8 +984,7 @@ beginseg
     name "ovl_En_M_Thunder"
     compress
     include "build/src/overlays/actors/ovl_En_M_Thunder/z_en_m_thunder.o"
-    include "build/data/ovl_En_M_Thunder/ovl_En_M_Thunder.data.o"
-    include "build/data/ovl_En_M_Thunder/ovl_En_M_Thunder.reloc.o"
+    include "build/src/overlays/actors/ovl_En_M_Thunder/ovl_En_M_Thunder_reloc.o"
 endseg
 
 beginseg
