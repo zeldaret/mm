@@ -923,13 +923,11 @@ Acmd* AudioSynth_ProcessSample(s32 noteIndex, NoteSampleState* sampleState, Note
     u16 combFilterSize;
     u16 combFilterGain;
     s16* filter;
-    s32 bookOffset;
-    s32 finished;
+    s32 bookOffset = sampleState->bitField1.bookOffset;
+    s32 finished = sampleState->bitField0.finished;
     s32 sampleDataChunkSize;
     s16 sampleDataDmemAddr;
 
-    bookOffset = sampleState->bitField1.bookOffset;
-    finished = sampleState->bitField0.finished;
     note = &gAudioContext.notes[noteIndex];
     flags = A_CONTINUE;
 
@@ -1443,7 +1441,7 @@ Acmd* AudioSynth_ApplySurroundEffect(Acmd* cmd, NoteSampleState* sampleState, No
     AudioSynth_DMemMove(cmd++, haasDmem, DMEM_HAAS_TEMP, numSamplesPerUpdate * SAMPLE_SIZE);
     dryGain = synthState->surroundEffectGain;
 
-    if (flags == 1) {
+    if (flags == A_INIT) {
         aClearBuffer(cmd++, dmem, sizeof(synthState->synthesisBuffers->surroundEffectState));
         synthState->surroundEffectGain = 0;
     } else {
