@@ -21,24 +21,24 @@ void func_80B76BB8(EnTruMt* this, PlayState* play);
 void func_80B76C38(EnTruMt* this, PlayState* play);
 
 typedef enum {
-    /* 0x00 */ KOUME_ANIM_INJURED_LYING_DOWN,
-    /* 0x01 */ KOUME_ANIM_INJURED_LYING_DOWN_MORPH,
-    /* 0x02 */ KOUME_ANIM_TRY_GET_UP,
-    /* 0x03 */ KOUME_ANIM_INJURED_RAISE_HEAD,
-    /* 0x04 */ KOUME_ANIM_INJURED_TALK,
-    /* 0x05 */ KOUME_ANIM_INJURED_HEAD_UP,
-    /* 0x06 */ KOUME_ANIM_INJURED_HEAD_UP_MORPH,
-    /* 0x07 */ KOUME_ANIM_TAKE,
-    /* 0x08 */ KOUME_ANIM_SHAKE, // Unused
-    /* 0x09 */ KOUME_ANIM_DRINK,
-    /* 0x0A */ KOUME_ANIM_FINISHED_DRINKING,
-    /* 0x0B */ KOUME_ANIM_HEALED,
-    /* 0x0C */ KOUME_ANIM_HOVER1,
-    /* 0x0D */ KOUME_ANIM_TAKE_OFF,
-    /* 0x0E */ KOUME_ANIM_FLY,
-    /* 0x0F */ KOUME_ANIM_HOVER2,
-    /* 0x10 */ KOUME_ANIM_MAX
-} KoumeAnimation;
+    /* 0x00 */ KOUME_MT_ANIM_INJURED_LYING_DOWN,
+    /* 0x01 */ KOUME_MT_ANIM_INJURED_LYING_DOWN_MORPH,
+    /* 0x02 */ KOUME_MT_ANIM_TRY_GET_UP,
+    /* 0x03 */ KOUME_MT_ANIM_INJURED_RAISE_HEAD,
+    /* 0x04 */ KOUME_MT_ANIM_INJURED_TALK,
+    /* 0x05 */ KOUME_MT_ANIM_INJURED_HEAD_UP,
+    /* 0x06 */ KOUME_MT_ANIM_INJURED_HEAD_UP_MORPH,
+    /* 0x07 */ KOUME_MT_ANIM_TAKE,
+    /* 0x08 */ KOUME_MT_ANIM_SHAKE, // Unused
+    /* 0x09 */ KOUME_MT_ANIM_DRINK,
+    /* 0x0A */ KOUME_MT_ANIM_FINISHED_DRINKING,
+    /* 0x0B */ KOUME_MT_ANIM_HEALED,
+    /* 0x0C */ KOUME_MT_ANIM_HOVER1,
+    /* 0x0D */ KOUME_MT_ANIM_TAKE_OFF,
+    /* 0x0E */ KOUME_MT_ANIM_FLY,
+    /* 0x0F */ KOUME_MT_ANIM_HOVER2,
+    /* 0x10 */ KOUME_MT_ANIM_MAX
+} KoumeMtAnimation;
 
 const ActorInit En_Tru_Mt_InitVars = {
     ACTOR_EN_TRU_MT,
@@ -135,7 +135,7 @@ s32 EnTruMt_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 startFrame;
     s32 didChange = false;
 
-    if ((animIndex >= KOUME_ANIM_INJURED_LYING_DOWN) && (animIndex < KOUME_ANIM_MAX)) {
+    if ((animIndex >= KOUME_MT_ANIM_INJURED_LYING_DOWN) && (animIndex < KOUME_MT_ANIM_MAX)) {
         endFrame = sAnimationInfo[animIndex].frameCount;
         if (endFrame < 0) {
             endFrame = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
@@ -440,7 +440,7 @@ void EnTruMt_Init(Actor* thisx, PlayState* play) {
     this->unk_328 = 0;
     this->actor.room = -1;
     this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FC00(&this->actor), 0x3F);
-    EnTruMt_ChangeAnim(&this->skelAnime, KOUME_ANIM_FLY);
+    EnTruMt_ChangeAnim(&this->skelAnime, KOUME_MT_ANIM_FLY);
     this->actionFunc = func_80B76A64;
 }
 
