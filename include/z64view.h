@@ -33,15 +33,26 @@ typedef struct View {
     /* 0x0E0 */ Mtx unkE0;
     /* 0x120 */ Mtx* projectionPtr;
     /* 0x124 */ Mtx* viewingPtr;
-    /* 0x128 */ Vec3f distortionDirRot;
+    /* 0x128 */ Vec3f distortionOrientation;
     /* 0x134 */ Vec3f distortionScale;
     /* 0x140 */ f32 distortionSpeed;
-    /* 0x144 */ Vec3f curDistortionDirRot;
+    /* 0x144 */ Vec3f curDistortionOrientation;
     /* 0x150 */ Vec3f curDistortionScale;
-    /* 0x15C */ u16 normal; // used to normalize the projection matrix
+    /* 0x15C */ u16 perspNorm; // used to normalize the projection matrix
     /* 0x160 */ u32 flags;  // bit 3: Render to an orthographic perspective
     /* 0x164 */ s32 unk164;
 } View; // size = 0x168
+
+#define VIEW_VIEWING (1 << 0)
+#define VIEW_VIEWPORT (1 << 1)
+#define VIEW_PROJECTION_PERSPECTIVE (1 << 2)
+#define VIEW_PROJECTION_ORTHO (1 << 3)
+#define VIEW_ALL (VIEW_VIEWING | VIEW_VIEWPORT | VIEW_PROJECTION_PERSPECTIVE | VIEW_PROJECTION_ORTHO)
+
+#define VIEW_FORCE_VIEWING (VIEW_VIEWING << 4)
+#define VIEW_FORCE_VIEWPORT (VIEW_VIEWPORT << 4)
+#define VIEW_FORCE_PROJECTION_PERSPECTIVE (VIEW_PROJECTION_PERSPECTIVE << 4)
+#define VIEW_FORCE_PROJECTION_ORTHO (VIEW_PROJECTION_ORTHO << 4)
 
 #define SET_FULLSCREEN_VIEWPORT(view)      \
     {                                      \
@@ -53,5 +64,29 @@ typedef struct View {
         View_SetViewport(view, &viewport); \
     }                                      \
     (void)0
+
+void View_Init(View* view, struct GraphicsContext* gfxCtx);
+void View_LookAt(View* view, Vec3f* eye, Vec3f* at, Vec3f* up);
+void View_SetScale(View* view, f32 scale);
+void View_GetScale(View* view, f32* scale);
+void View_SetPerspective(View* view, f32 fovy, f32 zNear, f32 zFar);
+void View_GetPerspective(View* view, f32* fovy, f32* zNear, f32* zFar);
+void View_SetOrtho(View* view, f32 fovy, f32 zNear, f32 zFar);
+void View_GetOrtho(View* view, f32* fovy, f32* zNear, f32* zFar);
+void View_SetViewport(View* view, Viewport* viewport);
+void View_GetViewport(View* view, Viewport* viewport);
+
+s32 View_SetDistortionOrientation(View* view, f32 rotX, f32 rotY, f32 rotZ);
+s32 View_SetDistortionScale(View* view, f32 scaleX, f32 scaleY, f32 scaleZ);
+s32 View_SetDistortionSpeed(View* view, f32 speed);
+s32 View_InitDistortion(View* view);
+s32 View_ClearDistortion(View* view);
+s32 View_SetDistortion(View* view, Vec3f orientation, Vec3f scale, f32 speed);
+
+void View_Apply(View* view, s32 mask);
+s32 View_ApplyOrthoToOverlay(View* view);
+s32 View_ApplyPerspectiveToOverlay(View* view);
+s32 View_UpdateViewingMatrix(View* view);
+s32 View_ApplyTo(View* view, Gfx** gfxp);
 
 #endif
