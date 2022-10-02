@@ -5029,8 +5029,7 @@ beginseg
     name "ovl_Dm_Tag"
     compress
     include "build/src/overlays/actors/ovl_Dm_Tag/z_dm_tag.o"
-    include "build/data/ovl_Dm_Tag/ovl_Dm_Tag.data.o"
-    include "build/data/ovl_Dm_Tag/ovl_Dm_Tag.reloc.o"
+    include "build/src/overlays/actors/ovl_Dm_Tag/ovl_Dm_Tag_reloc.o"
 endseg
 
 beginseg
