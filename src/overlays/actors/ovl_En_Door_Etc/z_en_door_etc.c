@@ -128,7 +128,7 @@ void EnDoorEtc_Destroy(Actor* thisx, PlayState* play) {
 }
 
 /**
- * Calculates if the distance between `a` and `b` are greater than distance `c`
+ * Calculates if the distance between `a` and `b` is greater than distance `c`
  */
 s32 EnDoorEtc_IsDistanceGreater(Vec3f* a, Vec3f* b, f32 c) {
     f32 dx = b->x - a->x;
