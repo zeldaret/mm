@@ -47,7 +47,6 @@ s32 D_80C22C30[] = {
 };
 
 Actor* func_80C22350(DmTag* this, PlayState* play, u8 actorCat, s16 actorId) {
-    Actor* tempActor;
     Actor* foundActor = NULL;
 
     while (true) {
@@ -57,12 +56,11 @@ Actor* func_80C22350(DmTag* this, PlayState* play, u8 actorCat, s16 actorId) {
             break;
         }
 
-        tempActor = foundActor->next;
-        if (tempActor == NULL) {
+        if (foundActor->next == NULL) {
             foundActor = NULL;
             break;
         }
-        foundActor = tempActor;
+        foundActor = foundActor->next;
     }
     return foundActor;
 }
@@ -237,7 +235,7 @@ void DmTag_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if ((play->sceneNum == SCENE_YADOYA) && (play->curSpawn == 4)) {
+    if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {
         player->stateFlags1 |= PLAYER_STATE1_20;
         this->unk_18E = 2;
         this->unk_18C = 0;
