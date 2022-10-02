@@ -4223,7 +4223,7 @@
     0x80821958:("func_80821958",),
     0x80821984:("KaleidoScope_MoveCursorToSpecialPos",),
     0x80821A04:("func_80821A04",),
-    0x80821AD4:("KaleidoScope_DrawQuadTextureRGBA32",),
+    0x80821AD4:("KaleidoScope_DrawTexQuadRGBA32",),
     0x80821CC4:("KaleidoScope_SwitchPage",),
     0x80821D84:("KaleidoScope_HandlePageToggles",),
     0x80821F30:("KaleidoScope_DrawPageSections",),

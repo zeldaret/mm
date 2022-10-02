@@ -257,7 +257,7 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
                 }
 
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->maskVtx[j + 0], 4, 0);
-                KaleidoScope_DrawQuadTextureRGBA32(
+                KaleidoScope_DrawTexQuadRGBA32(
                     play->state.gfxCtx, gItemIcons[((void)0, gSaveContext.save.inventory.items[i + NUM_ITEM_SLOTS])],
                     32, 32, 0);
             }
@@ -288,7 +288,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
     pauseCtx->cursorColorSet = 0;
     pauseCtx->nameColorSet = 0;
 
-    if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
+    if ((pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
         (pauseCtx->pageIndex == PAUSE_MASK) && !pauseCtx->itemDescriptionOn) {
         moveCursorResult = PAUSE_CURSOR_RESULT_NONE;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_MASK];
@@ -533,7 +533,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
             if (cursorItem != PAUSE_ITEM_NONE) {
                 // Equip item to the C buttons
                 if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && !pauseCtx->itemDescriptionOn &&
-                    (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
+                    (pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
                     CHECK_BTN_ANY(input->press.button, BTN_CLEFT | BTN_CDOWN | BTN_CRIGHT)) {
 
                     // Ensure that a mask is not unequipped while being used
@@ -594,8 +594,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                     sMaskEquipState = EQUIP_STATE_MOVE_TO_C_BTN;
                     sMaskEquipAnimTimer = 10;
                     play_sound(NA_SE_SY_DECIDE);
-                } else if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
-                           (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) &&
+                } else if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->state == PAUSE_STATE_MAIN) &&
                            (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
                            CHECK_BTN_ALL(input->press.button, BTN_A) && (msgCtx->msgLength == 0)) {
                     // Give description on item through a message box

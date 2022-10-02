@@ -165,10 +165,9 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
     for (i = DUNGEON_BOSS_KEY, j = 4; i <= DUNGEON_STRAY_FAIRIES; i++, j += 4) {
         if (i == DUNGEON_STRAY_FAIRIES) {
             if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE)) {
-                // If (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN), then the other conditions are redundant and
+                // If (pauseCtx->state == PAUSE_STATE_MAIN), then the other conditions are redundant and
                 // always return true
-                if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) &&
-                    (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
+                if ((pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) &&
                     !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
                     KaleidoScope_SetView(pauseCtx, 0.0f, 0.0f, 64.0f);
 
@@ -261,9 +260,9 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
     func_80108AF8(play);
 
     if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE)) {
-        // If (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN), then the other conditions are redundant and always return
+        // If (pauseCtx->state == PAUSE_STATE_MAIN), then the other conditions are redundant and always return
         // true
-        if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
+        if ((pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) &&
             !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
 
             func_8012C628(play->state.gfxCtx);
@@ -300,7 +299,7 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
     s16 i;
     s16 oldCursorPoint;
 
-    if (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) {
+    if (pauseCtx->state == PAUSE_STATE_MAIN) {
         if ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) && (pauseCtx->pageIndex == PAUSE_MAP)) {
             pauseCtx->cursorColorSet = 0;
             oldCursorPoint = pauseCtx->cursorPoint[PAUSE_MAP];
@@ -536,9 +535,9 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
     KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[PAUSE_MAP] * 4, pauseCtx->mapPageVtx);
 
     // Draw the world map image
-    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) &&
+    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->state == PAUSE_STATE_MAIN) &&
         ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) || (pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_ITEM)) &&
-        YREG(6) && (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
+        YREG(6) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) &&
         !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
 
         // Draw the world map image flat
@@ -722,7 +721,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
     // Find and draw Player's face at the current region based on the current scene
     if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
-        (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
+        (pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) &&
         !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
         j = 0;
         n = 0;
@@ -815,7 +814,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 oldCursorPoint;
 
-    if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
+    if ((pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
         (pauseCtx->pageIndex == PAUSE_MAP)) {
         pauseCtx->cursorColorSet = 0;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];

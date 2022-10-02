@@ -18,13 +18,13 @@ typedef enum {
 
 typedef enum {
     /* 0x00 */ PAUSE_STATE_OFF,
-    /* 0x01 */ PAUSE_STATE_DEFAULT_0,
-    /* 0x02 */ PAUSE_STATE_DEFAULT_1,
-    /* 0x03 */ PAUSE_STATE_DEFAULT_2,
-    /* 0x04 */ PAUSE_STATE_DEFAULT_3,
-    /* 0x05 */ PAUSE_STATE_DEFAULT_4,
-    /* 0x06 */ PAUSE_STATE_DEFAULT_MAIN, // Pause menu ready for player inputs.
-    /* 0x07 */ PAUSE_STATE_DEFAULT_SAVE_PROMPT,
+    /* 0x01 */ PAUSE_STATE_OPENING_0,
+    /* 0x02 */ PAUSE_STATE_OPENING_1,
+    /* 0x03 */ PAUSE_STATE_OPENING_2,
+    /* 0x04 */ PAUSE_STATE_OPENING_3,
+    /* 0x05 */ PAUSE_STATE_OPENING_4,
+    /* 0x06 */ PAUSE_STATE_MAIN, // Pause menu ready for player inputs.
+    /* 0x07 */ PAUSE_STATE_SAVEPROMPT,
     /* 0x08 */ PAUSE_STATE_GAMEOVER_0,
     /* 0x09 */ PAUSE_STATE_GAMEOVER_1,
     /* 0x0A */ PAUSE_STATE_GAMEOVER_2,
@@ -43,7 +43,7 @@ typedef enum {
     /* 0x17 */ PAUSE_STATE_OWLWARP_SELECT, // Selecting the destination
     /* 0x18 */ PAUSE_STATE_OWLWARP_CONFIRM, // Confirming the choice given
     /* 0x19 */ PAUSE_STATE_OWLWARP_6,
-    /* 0x1A */ PAUSE_STATE_UNPAUSE_SETUP,
+    /* 0x1A */ PAUSE_STATE_UNPAUSE_SETUP, // Unpause
     /* 0x1B */ PAUSE_STATE_UNPAUSE_CLOSE
 } PauseState;
 
@@ -123,7 +123,7 @@ typedef enum {
 
 // NES
 void KaleidoScope_MoveCursorToSpecialPos(PlayState* play, s16 cursorSpecialPos);
-void KaleidoScope_DrawQuadTextureRGBA32(GraphicsContext* gfxCtx, void* texture, u16 width, u16 height, u16 point);
+void KaleidoScope_DrawTexQuadRGBA32(GraphicsContext* gfxCtx, void* texture, u16 width, u16 height, u16 point);
 void KaleidoScope_SetView(PauseContext* pauseCtx, f32 x, f32 y, f32 z);
 void func_80821A04(PlayState* play);
 

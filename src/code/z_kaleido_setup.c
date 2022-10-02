@@ -25,7 +25,7 @@ void func_800F4A10(PlayState* play) {
         pauseCtx->worldMapPoints[i] = false;
     }
 
-    if (pauseCtx->state == PAUSE_STATE_DEFAULT_0) {
+    if (pauseCtx->state == PAUSE_STATE_OPENING_0) {
         for (i = 0; i < REGION_MAX; i++) {
             if ((gSaveContext.save.regionsVisited >> i) & 1) {
                 pauseCtx->worldMapPoints[i] = true;
@@ -85,13 +85,13 @@ void KaleidoSetup_Update(PlayState* play) {
                                 if ((play->actorCtx.unk268 == 0) && CHECK_BTN_ALL(input->press.button, BTN_START)) {
                                     gSaveContext.prevHudVisibility = gSaveContext.hudVisibility;
                                     pauseCtx->itemDescriptionOn = false;
-                                    pauseCtx->state = PAUSE_STATE_DEFAULT_0;
+                                    pauseCtx->state = PAUSE_STATE_OPENING_0;
                                     func_800F4A10(play);
-                                    pauseCtx->mode = pauseCtx->pageIndex * 2 + 1;
+                                    pauseCtx->switchPageMode = pauseCtx->pageIndex * 2 + 1;
                                     func_801A3A7C(1);
                                 }
 
-                                if (pauseCtx->state == PAUSE_STATE_DEFAULT_0) {
+                                if (pauseCtx->state == PAUSE_STATE_OPENING_0) {
                                     Game_SetFramerateDivisor(&play->state, 2);
                                     if (ShrinkWindow_Letterbox_GetSizeTarget() != 0) {
                                         ShrinkWindow_Letterbox_SetSizeTarget(0);
@@ -128,7 +128,7 @@ void KaleidoSetup_Init(PlayState* play) {
     pauseCtx->cursorPoint[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
 
     pauseCtx->cursorSpecialPos = PAUSE_CURSOR_PAGE_RIGHT;
-    pauseCtx->delaySwitchPageInputTimer = 0;
+    pauseCtx->pageSwitchInputTimer = 0;
 
     pauseCtx->cursorItem[PAUSE_ITEM] = PAUSE_ITEM_NONE;
     pauseCtx->cursorItem[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);

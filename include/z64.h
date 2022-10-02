@@ -421,7 +421,7 @@ typedef struct {
     /* 0x1F0 */ u8 bombersNotebookOpen;
     /* 0x1F4 */ Vec3f eye;
     /* 0x200 */ u16 mainState;
-    /* 0x202 */ u16 mode;
+    /* 0x202 */ u16 switchPageMode;
     /* 0x204 */ u16 pageIndex;
     /* 0x206 */ u16 switchPageTimer;
     /* 0x208 */ u16 savePromptState;
@@ -441,7 +441,7 @@ typedef struct {
     /* 0x24C */ s16 cursorYIndex[5];
     /* 0x256 */ s16 unk_256; // Uses DungeonItem enum
     /* 0x258 */ s16 cursorSpecialPos;
-    /* 0x25A */ s16 delaySwitchPageInputTimer; // Used to introduce a delay before switching page when arriving on the "scroll left/right" positions while holding stick left/right.
+    /* 0x25A */ s16 pageSwitchInputTimer; // Used to introduce a delay before switching page when arriving on the "scroll left/right" positions while holding stick left/right.
     /* 0x25C */ u16 namedItem;
     /* 0x25E */ u16 cursorItem[5];
     /* 0x268 */ u16 cursorSlot[5];

@@ -309,16 +309,16 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
             }
 
             gSPVertex(POLY_OPA_DISP++, &pauseCtx->itemVtx[j + 0], 4, 0);
-            KaleidoScope_DrawQuadTextureRGBA32(play->state.gfxCtx,
-                                               gItemIcons[((void)0, gSaveContext.save.inventory.items[i])], 32, 32, 0);
+            KaleidoScope_DrawTexQuadRGBA32(play->state.gfxCtx,
+                                           gItemIcons[((void)0, gSaveContext.save.inventory.items[i])], 32, 32, 0);
         }
     }
 
     // Draw the ammo digits
     if (pauseCtx->pageIndex == PAUSE_ITEM) {
-        if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) &&
+        if ((pauseCtx->state == PAUSE_STATE_MAIN) &&
             ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) || (pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_ITEM)) &&
-            (pauseCtx->state != PAUSE_STATE_DEFAULT_SAVE_PROMPT) &&
+            (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) &&
             !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
             func_8012C628(play->state.gfxCtx);
             gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
@@ -361,7 +361,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
     pauseCtx->cursorColorSet = 0;
     pauseCtx->nameColorSet = 0;
 
-    if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
+    if ((pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
         (pauseCtx->pageIndex == PAUSE_ITEM) && !pauseCtx->itemDescriptionOn) {
         moveCursorResult = PAUSE_CURSOR_RESULT_NONE;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_ITEM];
@@ -595,7 +595,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
             if (cursorItem != PAUSE_ITEM_NONE) {
                 // Equip item to the C buttons
                 if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && !pauseCtx->itemDescriptionOn &&
-                    (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
+                    (pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
                     CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button, BTN_CLEFT | BTN_CDOWN | BTN_CRIGHT)) {
 
                     // Ensure that a transformation mask can not be unequipped while being used
@@ -675,8 +675,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                     } else {
                         play_sound(NA_SE_SY_DECIDE);
                     }
-                } else if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
-                           (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) &&
+                } else if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->state == PAUSE_STATE_MAIN) &&
                            (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
                            CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) && (msgCtx->msgLength == 0)) {
                     // Give description on item through a message box

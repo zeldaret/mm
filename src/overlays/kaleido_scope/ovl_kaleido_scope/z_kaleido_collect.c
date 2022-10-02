@@ -147,7 +147,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
             gDPSetEnvColor(POLY_OPA_DISP++, D_8082AF6C[i], D_8082AF78[i], D_8082AF84[i], 0);
             gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
-            KaleidoScope_DrawQuadTextureRGBA32(play->state.gfxCtx, gItemIcons[ITEM_REMAINS_ODOLWA + i], 32, 32, 0);
+            KaleidoScope_DrawTexQuadRGBA32(play->state.gfxCtx, gItemIcons[ITEM_REMAINS_ODOLWA + i], 32, 32, 0);
         }
     }
 
@@ -164,16 +164,16 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
     if (GET_CUR_EQUIP_VALUE(1) != 0) {
         gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
-        KaleidoScope_DrawQuadTextureRGBA32(play->state.gfxCtx,
-                                           gItemIcons[(ITEM_SHIELD_HERO - 1) + GET_CUR_EQUIP_VALUE(1)], 32, 32, 0);
+        KaleidoScope_DrawTexQuadRGBA32(play->state.gfxCtx, gItemIcons[(ITEM_SHIELD_HERO - 1) + GET_CUR_EQUIP_VALUE(1)],
+                                       32, 32, 0);
     }
 
     j += 4;
 
     if (GET_CUR_EQUIP_VALUE(0) != 0) {
         gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
-        KaleidoScope_DrawQuadTextureRGBA32(play->state.gfxCtx,
-                                           gItemIcons[(ITEM_SWORD_KOKIRI - 1) + GET_CUR_EQUIP_VALUE(0)], 32, 32, 0);
+        KaleidoScope_DrawTexQuadRGBA32(play->state.gfxCtx, gItemIcons[(ITEM_SWORD_KOKIRI - 1) + GET_CUR_EQUIP_VALUE(0)],
+                                       32, 32, 0);
     }
 
     j += 4;
@@ -214,7 +214,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
         gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
-        KaleidoScope_DrawQuadTextureRGBA32(play->state.gfxCtx, &D_08061000, 32, 32, 0);
+        KaleidoScope_DrawTexQuadRGBA32(play->state.gfxCtx, &D_08061000, 32, 32, 0);
     }
 
     j += 4;
@@ -227,8 +227,8 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
         if (GET_CUR_UPG_VALUE(D_8082B024[i]) != 0) {
-            KaleidoScope_DrawQuadTextureRGBA32(play->state.gfxCtx, D_8082B00C[i][GET_CUR_UPG_VALUE(D_8082B024[i]) - 1],
-                                               32, 32, 0);
+            KaleidoScope_DrawTexQuadRGBA32(play->state.gfxCtx, D_8082B00C[i][GET_CUR_UPG_VALUE(D_8082B024[i]) - 1], 32,
+                                           32, 0);
         }
     }
 
@@ -572,7 +572,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
     pauseCtx->cursorColorSet = 0;
 
     // != PAUSE_MAIN_STATE_IDLE
-    if ((pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) &&
+    if ((pauseCtx->state == PAUSE_STATE_MAIN) &&
         (!pauseCtx->mainState || (pauseCtx->mainState == PAUSE_MAIN_STATE_SONG_PLAYER_PLAYING) ||
          (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG)) &&
         (pauseCtx->pageIndex == PAUSE_QUEST) && !pauseCtx->itemDescriptionOn) {
@@ -730,7 +730,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
             pauseCtx->cursorItem[pauseCtx->pageIndex] = cursorItem;
             pauseCtx->cursorSlot[pauseCtx->pageIndex] = cursor;
 
-            if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->state == PAUSE_STATE_DEFAULT_MAIN) &&
+            if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->state == PAUSE_STATE_MAIN) &&
                 (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) && (pauseCtx->cursorSpecialPos == 0)) {
                 if ((cursor >= QUEST_SONG_SONATA) && (cursor <= QUEST_SONG_SUN)) {
                     // Handle part of the ocarina songs playback
