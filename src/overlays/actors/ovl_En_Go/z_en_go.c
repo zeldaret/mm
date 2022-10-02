@@ -372,7 +372,7 @@ s32 EnGo_GraveBroGoron_CheckAndSetupCutsceneSpringArrival(EnGo* this, PlayState*
 
 s32 EnGo_GatekeeperGoron_CutsceneOpenShrine(Actor* thisx, PlayState* play);
 s32 EnGo_GatekeeperGoron_CutscenePound(EnGo* this, f32 initialVelocity, f32 maxDistortion, s32 maxHangtime);
-void EnGo_GatekeeperGoron_QuakeAdd(PlayState* play, s16 quakeSpeed, s16 vertMagnitude, s16 quakeTime);
+void EnGo_GatekeeperGoron_QuakeAdd(PlayState* play, s16 speed, s16 verticalMag, s16 countdown);
 void EnGo_GatekeeperGoron_CreateQuakeEffects(EnGo* this, PlayState* play);
 
 s32 EnGo_PowderKegGoron_CutsceneGivePowderKeg(Actor* thisx, PlayState* play);
@@ -579,7 +579,7 @@ void EnGo_DrawDust(EnGoEffect* pEffect, PlayState* play2) {
         Matrix_ReplaceRotation(&play->billboardMtxF);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[(s32)(alpha * 7.0f)]));
+        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[(s32)(alpha * 7.0f)]));
         gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
 
         Matrix_Pop();
