@@ -4,7 +4,6 @@
  * Description: Ranch nighttime actors
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_invadepoh.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -1990,7 +1989,7 @@ void func_80B470E0(EnInvadepoh* this) {
 
 void func_80B47108(EnInvadepoh* this, PlayState* play) {
     if (this->actionTimer == 100) {
-        func_801A3098(NA_BGM_CLEAR_EVENT);
+        Audio_PlayFanfare(NA_BGM_CLEAR_EVENT);
     }
     this->actionTimer--;
     if (this->actionTimer <= 0) {

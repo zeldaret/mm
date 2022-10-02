@@ -5,6 +5,7 @@
 
 #include "global.h"
 #include "z64load.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
@@ -1336,7 +1337,7 @@ s32 func_800B715C(PlayState* play) {
 }
 
 void Actor_SetCameraHorseSetting(PlayState* play, Player* player) {
-    if ((play->roomCtx.currRoom.unk3 != 4) && (player->actor.id == ACTOR_PLAYER)) {
+    if ((play->roomCtx.curRoom.unk3 != 4) && (player->actor.id == ACTOR_PLAYER)) {
         EnHorse* rideActor = (EnHorse*)player->rideActor;
 
         if ((rideActor != NULL) && !(rideActor->unk_1EC & 0x10)) {
@@ -2235,7 +2236,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     s32 i;
 
     gSaveContext.save.weekEventReg[92] |= 0x80;
-    cycleFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneNumber(play->sceneNum)];
+    cycleFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneId(play->sceneId)];
 
     bzero(actorCtx, sizeof(ActorContext));
     ActorOverlayTable_Init();
@@ -2252,8 +2253,8 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     actorCtx->sceneFlags.chest = cycleFlags->chest;
     actorCtx->sceneFlags.switches[0] = cycleFlags->switch0;
     actorCtx->sceneFlags.switches[1] = cycleFlags->switch1;
-    if (play->sceneNum == SCENE_INISIE_R) {
-        cycleFlags = &gSaveContext.cycleSceneFlags[play->sceneNum];
+    if (play->sceneId == SCENE_INISIE_R) {
+        cycleFlags = &gSaveContext.cycleSceneFlags[play->sceneId];
     }
     actorCtx->sceneFlags.collectible[0] = cycleFlags->collectible;
     actorCtx->sceneFlags.clearedRoom = cycleFlags->clearedRoom;
@@ -2499,7 +2500,7 @@ void Actor_Draw(PlayState* play, Actor* actor) {
     OPEN_DISPS(play->state.gfxCtx);
 
     light = LightContext_NewLights(&play->lightCtx, play->state.gfxCtx);
-    if ((actor->flags & ACTOR_FLAG_10000000) && (play->roomCtx.currRoom.enablePosLights || (MREG(93) != 0))) {
+    if ((actor->flags & ACTOR_FLAG_10000000) && (play->roomCtx.curRoom.enablePosLights || (MREG(93) != 0))) {
         light->enablePosLights = true;
     }
 
@@ -2669,7 +2670,7 @@ void Actor_DrawLensActors(PlayState* play, s32 numActors, Actor** actors) {
         gDPSetPrimColor(spAC++, 0, 0, 0, 0, 0, 255);
         // temp_s1_5 = spAC;
 
-        if (play->roomCtx.currRoom.unk5 == 0) {
+        if (play->roomCtx.curRoom.unk5 == 0) {
             // temp_s1_5->words.w0 = 0xFC61E6C3;
             // temp_s1_5->words.w1 = 0x11CF9FCF;
             // phi_s1 = temp_s1_5 + 8;
@@ -2719,7 +2720,7 @@ void Actor_DrawLensActors(PlayState* play, s32 numActors, Actor** actors) {
 
         // temp_a0_2 = &spAC;
         // if (sp34->unk_6E5 == 0) {
-        if (play->roomCtx.currRoom.unk5 == 0) {
+        if (play->roomCtx.curRoom.unk5 == 0) {
             //    temp_s1_10->unk_0 = 0xFC119623;
             //    temp_s1_10->unk_4 = 0xFF2FFFFF;
             //    phi_s1_4 = temp_s1_10 + 8;
@@ -2882,8 +2883,8 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
             actor->isDrawn = false;
             if ((actor->init == NULL) && (actor->draw != NULL) && (actor->flags & actorFlags)) {
                 if ((actor->flags & ACTOR_FLAG_80) &&
-                    ((play->roomCtx.currRoom.unk5 == 0) || (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) ||
-                     (actor->room != play->roomCtx.currRoom.num))) {
+                    ((play->roomCtx.curRoom.unk5 == 0) || (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) ||
+                     (actor->room != play->roomCtx.curRoom.num))) {
                     if (Actor_RecordUndrawnActor(play, actor)) {}
                 } else {
                     Actor_Draw(play, actor);
@@ -2960,7 +2961,7 @@ void func_800BA798(PlayState* play, ActorContext* actorCtx) {
         actor = actorCtx->actorLists[i].first;
 
         while (actor != NULL) {
-            if ((actor->room >= 0) && (actor->room != play->roomCtx.currRoom.num) &&
+            if ((actor->room >= 0) && (actor->room != play->roomCtx.curRoom.num) &&
                 (actor->room != play->roomCtx.prevRoom.num)) {
                 if (!actor->isDrawn) {
                     actor = Actor_Delete(actorCtx, actor, play);
@@ -3091,9 +3092,9 @@ Actor* Actor_RemoveFromCategory(PlayState* play, ActorContext* actorCtx, Actor* 
     actorToRemove->next = NULL;
     actorToRemove->prev = NULL;
 
-    if ((actorToRemove->room == play->roomCtx.currRoom.num) && (actorToRemove->category == ACTORCAT_ENEMY) &&
+    if ((actorToRemove->room == play->roomCtx.curRoom.num) && (actorToRemove->category == ACTORCAT_ENEMY) &&
         (actorCtx->actorLists[ACTORCAT_ENEMY].length == 0)) {
-        Flags_SetClearTemp(play, play->roomCtx.currRoom.num);
+        Flags_SetClearTemp(play, play->roomCtx.curRoom.num);
     }
 
     return newHead;
@@ -3180,8 +3181,8 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     }
 
     objBankIndex = Object_GetIndex(&play->objectCtx, actorInit->objectId);
-    if ((objBankIndex < 0) || ((actorInit->type == ACTORCAT_ENEMY) &&
-                               Flags_GetClear(play, play->roomCtx.currRoom.num) && (actorInit->id != ACTOR_BOSS_05))) {
+    if ((objBankIndex < 0) || ((actorInit->type == ACTORCAT_ENEMY) && Flags_GetClear(play, play->roomCtx.curRoom.num) &&
+                               (actorInit->id != ACTOR_BOSS_05))) {
         Actor_FreeOverlay(&gActorOverlayTable[index]);
         return NULL;
     }
@@ -3219,7 +3220,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
         actor->parent = parent;
         parent->child = actor;
     } else {
-        actor->room = play->roomCtx.currRoom.num;
+        actor->room = play->roomCtx.curRoom.num;
     }
 
     actor->home.pos.x = x;
@@ -3267,10 +3268,10 @@ void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx) {
     for (i = 0; i < numTransitionActors; transitionActorList++, i++) {
         if (transitionActorList->id >= 0) {
             if ((transitionActorList->sides[0].room >= 0 &&
-                 (play->roomCtx.currRoom.num == transitionActorList->sides[0].room ||
+                 (play->roomCtx.curRoom.num == transitionActorList->sides[0].room ||
                   play->roomCtx.prevRoom.num == transitionActorList->sides[0].room)) ||
                 (transitionActorList->sides[1].room >= 0 &&
-                 (play->roomCtx.currRoom.num == transitionActorList->sides[1].room ||
+                 (play->roomCtx.curRoom.num == transitionActorList->sides[1].room ||
                   play->roomCtx.prevRoom.num == transitionActorList->sides[1].room))) {
                 s16 rotY = ((transitionActorList->rotY >> 7) & 0x1FF) * (0x10000 / 360.0f);
 
@@ -3777,20 +3778,20 @@ void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 alpha, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_800BC770(PlayState* play, s16 y, s16 countdown) {
-    s16 idx = Quake_Add(&play->mainCamera, 3);
+void Actor_AddQuake(PlayState* play, s16 verticalMag, s16 countdown) {
+    s16 quakeIndex = Quake_Add(&play->mainCamera, QUAKE_TYPE_3);
 
-    Quake_SetSpeed(idx, 20000);
-    Quake_SetQuakeValues(idx, y, 0, 0, 0);
-    Quake_SetCountdown(idx, countdown);
+    Quake_SetSpeed(quakeIndex, 20000);
+    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, countdown);
 }
 
-void func_800BC7D8(PlayState* play, s16 y, s16 countdown, s16 speed) {
-    s16 idx = Quake_Add(&play->mainCamera, 3);
+void Actor_AddQuakeWithSpeed(PlayState* play, s16 verticalMag, s16 countdown, s16 speed) {
+    s16 quakeIndex = Quake_Add(&play->mainCamera, QUAKE_TYPE_3);
 
-    Quake_SetSpeed(idx, speed);
-    Quake_SetQuakeValues(idx, y, 0, 0, 0);
-    Quake_SetCountdown(idx, countdown);
+    Quake_SetSpeed(quakeIndex, speed);
+    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, countdown);
 }
 
 // Actor_RequestRumble?
@@ -3800,7 +3801,7 @@ void func_800BC848(Actor* actor, PlayState* play, s16 y, s16 countdown) {
     } else {
         Rumble_Request(actor->xyzDistToPlayerSq, 180, 20, 100);
     }
-    func_800BC770(play, y, countdown);
+    Actor_AddQuake(play, y, countdown);
 }
 
 typedef struct {

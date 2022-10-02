@@ -14,6 +14,7 @@
  */
 
 #include "z_en_go.h"
+#include "z64quake.h"
 #include "objects/object_hakugin_demo/object_hakugin_demo.h"
 #include "objects/object_taisou/object_taisou.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -814,7 +815,7 @@ s32 EnGo_IsEnteringSleep(EnGo* this, PlayState* play) {
          (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->sleepState == ENGO_AWAKE) &&
          (this->actor.xzDistToPlayer < 400.0f)) ||
         (!(gSaveContext.save.weekEventReg[22] & 0x4 /* Elder's son has been calmed */) &&
-         (play->sceneNum == SCENE_16GORON_HOUSE) && (gSaveContext.sceneSetupIndex == 0) &&
+         (play->sceneId == SCENE_16GORON_HOUSE) && (gSaveContext.sceneLayer == 0) &&
          (this->sleepState == ENGO_AWAKE) && (play->csCtx.currentCsIndex == 1))) {
         isEnteringSleep = true;
     }
@@ -1017,7 +1018,7 @@ s32 EnGo_GraveBroGoron_CheckAndSetupCutsceneSpringArrival(EnGo* this, PlayState*
     const u8 CS_ACTION_INVALID = UINT8_MAX;
 
     if ((ENGO_GET_TYPE(&this->actor) == ENGO_GRAVEBRO) && (play->csCtx.state != 0) && (this->actor.draw != NULL) &&
-        (play->sceneNum == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneSetupIndex == 1) &&
+        (play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneLayer == 1) &&
         (play->csCtx.currentCsIndex == 0)) {
         if (this->springArrivalCutsceneActive == false) {
             this->actor.flags &= ~ACTOR_FLAG_1;
@@ -1435,10 +1436,10 @@ s32 EnGo_GatekeeperGoron_CutscenePound(EnGo* this, f32 initialVelocity, f32 maxD
 /**
  * Create the quake caused by the gatekeeper's pound.
  */
-void EnGo_GatekeeperGoron_QuakeAdd(PlayState* play, s16 speed, s16 verticalMag, s16 time) {
-    s16 quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
+void EnGo_GatekeeperGoron_QuakeAdd(PlayState* play, s16 speed, s16 verticalMag, s16 countdown) {
+    s16 quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
 
-    Quake_SetCountdown(quakeIndex, time);
+    Quake_SetCountdown(quakeIndex, countdown);
     Quake_SetSpeed(quakeIndex, speed);
     Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
 }
@@ -1888,8 +1889,8 @@ void EnGo_GatekeeperGoron_Setup(EnGo* this, PlayState* play) {
  */
 void EnGo_GraveBroGoron_Setup(EnGo* this, PlayState* play) {
     if ((ENGO_GET_SUBTYPE(&this->actor) == ENGO_GRAVEBRO_FROZEN) &&
-        (((play->sceneNum == SCENE_10YUKIYAMANOMURA2) && /* Snow Mountain Village */
-          (gSaveContext.sceneSetupIndex == 1) && (play->csCtx.currentCsIndex == 0)) ||
+        (((play->sceneId == SCENE_10YUKIYAMANOMURA2) && /* Snow Mountain Village */
+          (gSaveContext.sceneLayer == 1) && (play->csCtx.currentCsIndex == 0)) ||
          !(gSaveContext.save.weekEventReg[21] & 0x8 /* Thawed gravemaker's brother */))) {
         this->actor.child = EnGo_FindGravemaker(this, play);
         this->actor.child->child = &this->actor;
