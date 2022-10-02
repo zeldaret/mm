@@ -893,7 +893,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
 }
 
 void func_80AB096C(DmChar08* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (play->sceneId == SCENE_31MISAKI) && (gSaveContext.sceneSetupIndex == 0) &&
+    if ((play->csCtx.state != 0) && (play->sceneId == SCENE_31MISAKI) && (gSaveContext.sceneLayer == 0) &&
         (play->csCtx.currentCsIndex == 0)) {
         if ((play->csCtx.frames >= 890) && (play->csCtx.frames < 922)) {
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
