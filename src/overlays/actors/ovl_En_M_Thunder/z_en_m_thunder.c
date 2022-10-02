@@ -18,14 +18,16 @@ void EnMThunder_Destroy(Actor* thisx, PlayState* play);
 void EnMThunder_Update(Actor* thisx, PlayState* play);
 void EnMThunder_Draw(Actor* thisx, PlayState* play);
 
-void func_808B65BC(Actor* thisx, PlayState* play);
+void EnMThunder_UnkType_Update(Actor* thisx, PlayState* play);
 
 void EnMThunder_AdjustLights(PlayState* play, f32 arg1);
 
 void EnMThunder_Charge(EnMThunder* this, PlayState* play);
 void EnMThunder_Spin_Attack(EnMThunder* this, PlayState* play);
 void EnMThunder_SwordBeam_Attack(EnMThunder* this, PlayState* play);
-void func_808B6310(EnMThunder* this, PlayState* play);
+void EnMThunder_UnkType_Attack(EnMThunder* this, PlayState* play);
+
+#define ENMTHUNDER_TYPE_MAX 4
 
 const ActorInit En_M_Thunder_InitVars = {
     ACTOR_EN_M_THUNDER,
@@ -60,7 +62,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static u8 sDamages[] = {
-    1, 2, 3, 4, // Regular    
+    1, 2, 3, 4, // Regular
     1, 2, 3, 4, // Great Spin
 };
 
@@ -80,14 +82,14 @@ typedef enum {
     /* 3 */ ENMTHUNDER_SUBTYPE_SWORDBEAM_REGULAR
 } EnMThunderSubType;
 
-void func_808B53C0(EnMThunder* this, PlayState* play) {
+void EnMThunder_UnkType_Setup(EnMThunder* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    this->actor.update = func_808B65BC;
+    this->actor.update = EnMThunder_UnkType_Update;
     this->isCharging = false;
     this->subtype = ENMTHUNDER_SUBTYPE_SPIN_REGULAR;
     this->scaleTarget = 2;
-    this->actionFunc = func_808B6310;
+    this->actionFunc = EnMThunder_UnkType_Attack;
     this->timer = 8;
     this->lightColorFrac = 1.0f;
     AudioSfx_PlaySfx(NA_SE_IT_ROLLING_CUT_LV1, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
@@ -108,7 +110,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
     this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
 
     if (this->type == ENMTHUNDER_TYPE_UNK) {
-        func_808B53C0(this, play);
+        EnMThunder_UnkType_Setup(this, play);
         return;
     }
 
@@ -119,7 +121,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
     this->scroll = 0.0f;
     this->actor.world.pos = player->bodyPartsPos[0];
     this->lightColorFrac = 0.0f;
-    this->unk1B4 = 0.0f;
+    this->adjustLightsArg1 = 0.0f;
     this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
     this->actor.shape.rot.x = -this->actor.world.rot.x;
     this->actor.room = -1;
@@ -143,7 +145,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
 
         if (gSaveContext.save.weekEventReg[23] & 2) {
             player->unk_B08[0] = 1.0f;
-            this->collider.info.toucher.damage = sDamages[this->type + 4];
+            this->collider.info.toucher.damage = sDamages[this->type + ENMTHUNDER_TYPE_MAX];
             this->subtype = ENMTHUNDER_SUBTYPE_SPIN_GREAT;
             if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRY_SWORD) {
                 this->scaleTarget = 6;
@@ -170,7 +172,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnMThunder_SwordBeam_Attack;
             this->timer = 1;
             this->scaleTarget = 12;
-            this->collider.info.toucher.dmgFlags = 0x02000000;
+            this->collider.info.toucher.dmgFlags = DMG_SWORD_BEAM;
             this->collider.info.toucher.damage = 3;
         } else {
             this->actionFunc = EnMThunder_Spin_Attack;
@@ -235,7 +237,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
             EnMThunder_Spin_AttackNoMagic(this, play);
             this->actionFunc = EnMThunder_Spin_AttackNoMagic;
             this->chargingAlpha = 0;
-            this->unk1B4 = 0.0f;
+            this->adjustLightsArg1 = 0.0f;
             this->lightColorFrac = 0.0f;
             return;
         }
@@ -279,7 +281,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
                 this->scaleTarget = 2;
             }
         } else {
-            this->collider.info.toucher.damage = sDamages[this->type + 4];
+            this->collider.info.toucher.damage = sDamages[this->type + ENMTHUNDER_TYPE_MAX];
             this->subtype = ENMTHUNDER_SUBTYPE_SPIN_GREAT;
             if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRY_SWORD) {
                 this->scaleTarget = 6;
@@ -320,9 +322,9 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
         if (this->actor.child == NULL) {
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_DUST, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
-                               EFF_DUST_TYPE_2);
+                               EFF_DUST_TYPE_SPIN_ATTACK_CHARGE);
         }
-        this->unk1B4 += (((player->unk_B08[0] - 0.15f) * 1.5f) - this->unk1B4) * 0.5f;
+        this->adjustLightsArg1 += (((player->unk_B08[0] - 0.15f) * 1.5f) - this->adjustLightsArg1) * 0.5f;
     } else if (player->unk_B08[0] > .1f) {
         this->chargingAlpha = (s32)((player->unk_B08[0] - .1f) * 255.0f * 20.0f);
         this->lightColorFrac = (player->unk_B08[0] - .1f) * 10.0f;
@@ -354,10 +356,10 @@ void func_808B5EEC(EnMThunder* this, PlayState* play) {
 
     this->scroll += 2.0f * this->alphaFrac;
 
-    if (this->unk1B4 < this->lightColorFrac) {
-        this->unk1B4 = F32_LERPIMP(this->unk1B4, this->lightColorFrac, 0.1f);
+    if (this->adjustLightsArg1 < this->lightColorFrac) {
+        this->adjustLightsArg1 = F32_LERPIMP(this->adjustLightsArg1, this->lightColorFrac, 0.1f);
     } else {
-        this->unk1B4 = this->lightColorFrac;
+        this->adjustLightsArg1 = this->lightColorFrac;
     }
 }
 
@@ -437,7 +439,7 @@ void EnMThunder_SwordBeam_Attack(EnMThunder* this, PlayState* play) {
     func_808B5EEC(this, play);
 }
 
-void func_808B6310(EnMThunder* this, PlayState* play) {
+void EnMThunder_UnkType_Attack(EnMThunder* this, PlayState* play) {
     if (Math_StepToF(&this->lightColorFrac, 0.0f, 0.0625f)) {
         Actor_MarkForDeath(&this->actor);
     } else {
@@ -458,13 +460,13 @@ void EnMThunder_Update(Actor* thisx, PlayState* play) {
     EnMThunder* this = THIS;
 
     this->actionFunc(this, play);
-    EnMThunder_AdjustLights(play, this->unk1B4);
+    EnMThunder_AdjustLights(play, this->adjustLightsArg1);
     Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y,
                               this->actor.world.pos.z, this->lightColorFrac * 255.0f, this->lightColorFrac * 255.0f,
                               this->lightColorFrac * 100.0f, this->lightColorFrac * 800.0f);
 }
 
-void func_808B65BC(Actor* thisx, PlayState* play) {
+void EnMThunder_UnkType_Update(Actor* thisx, PlayState* play) {
     EnMThunder* this = THIS;
 
     this->actionFunc(this, play);

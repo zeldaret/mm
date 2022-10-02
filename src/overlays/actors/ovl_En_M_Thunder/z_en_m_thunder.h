@@ -27,7 +27,7 @@ typedef struct EnMThunder {
     /* 0x1A8 */ f32 alphaFrac;
     /* 0x1AC */ f32 scroll;
     /* 0x1B0 */ f32 unk1B0;
-    /* 0x1B4 */ f32 unk1B4;
+    /* 0x1B4 */ f32 adjustLightsArg1;
     /* 0x1B8 */ EnMThunderActionFunc actionFunc;
     /* 0x1BC */ u16 timer;
     /* 0x1BE */ u8 subtype;
