@@ -815,8 +815,8 @@ s32 EnGo_IsEnteringSleep(EnGo* this, PlayState* play) {
          (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->sleepState == ENGO_AWAKE) &&
          (this->actor.xzDistToPlayer < 400.0f)) ||
         (!(gSaveContext.save.weekEventReg[22] & 0x4 /* Elder's son has been calmed */) &&
-         (play->sceneId == SCENE_16GORON_HOUSE) && (gSaveContext.sceneLayer == 0) &&
-         (this->sleepState == ENGO_AWAKE) && (play->csCtx.currentCsIndex == 1))) {
+         (play->sceneId == SCENE_16GORON_HOUSE) && (gSaveContext.sceneLayer == 0) && (this->sleepState == ENGO_AWAKE) &&
+         (play->csCtx.currentCsIndex == 1))) {
         isEnteringSleep = true;
     }
     return isEnteringSleep;
