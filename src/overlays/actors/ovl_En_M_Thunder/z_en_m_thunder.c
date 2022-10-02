@@ -60,15 +60,15 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static u8 sDamages[] = {
-    /* Regular    */ 1, 2, 3, 4,
-    /* Great Spin */ 1, 2, 3, 4,
+    1, 2, 3, 4, // Regular    
+    1, 2, 3, 4, // Great Spin
 };
 
 static u16 sChargingSfxIds[] = {
-    /* ENMTHUNDER_SUBTYPE_SPIN_GREAT        */ NA_SE_IT_ROLLING_CUT_LV2,
-    /* ENMTHUNDER_SUBTYPE_SPIN_REGULAR      */ NA_SE_IT_ROLLING_CUT_LV1,
-    /* ENMTHUNDER_SUBTYPE_SWORDBEAM_GREAT   */ NA_SE_IT_ROLLING_CUT_LV2,
-    /* ENMTHUNDER_SUBTYPE_SWORDBEAM_REGULAR */ NA_SE_IT_ROLLING_CUT_LV1,
+    NA_SE_IT_ROLLING_CUT_LV2, // ENMTHUNDER_SUBTYPE_SPIN_GREAT
+    NA_SE_IT_ROLLING_CUT_LV1, // ENMTHUNDER_SUBTYPE_SPIN_REGULAR
+    NA_SE_IT_ROLLING_CUT_LV2, // ENMTHUNDER_SUBTYPE_SWORDBEAM_GREAT
+    NA_SE_IT_ROLLING_CUT_LV1, // ENMTHUNDER_SUBTYPE_SWORDBEAM_REGULAR
 };
 
 static f32 sScales[] = { 0.1f, 0.15f, 0.2f, 0.25f, 0.3f, 0.25f, 0.2f, 0.15f, 0.0f };
