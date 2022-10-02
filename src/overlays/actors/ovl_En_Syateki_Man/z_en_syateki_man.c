@@ -103,13 +103,20 @@ typedef struct {
 static SwampTargetActorEntry sNormalSwampTargetActorList[] = {
     { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_WF_PARAMS(1, 3, 0) },
     { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_WF_PARAMS(0, 2, 0) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 0, 0) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 1, 0) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 2, 0) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 3, 0) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 4, 0) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 0, 1) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 1, 1) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
+      EN_SYATEKI_DEKUNUTS_PARAMS(0, 0, EN_SYATEKI_DEKUNUTS_TYPE_NORMAL) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
+      EN_SYATEKI_DEKUNUTS_PARAMS(0, 1, EN_SYATEKI_DEKUNUTS_TYPE_NORMAL) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
+      EN_SYATEKI_DEKUNUTS_PARAMS(0, 2, EN_SYATEKI_DEKUNUTS_TYPE_NORMAL) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
+      EN_SYATEKI_DEKUNUTS_PARAMS(0, 3, EN_SYATEKI_DEKUNUTS_TYPE_NORMAL) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
+      EN_SYATEKI_DEKUNUTS_PARAMS(0, 4, EN_SYATEKI_DEKUNUTS_TYPE_NORMAL) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
+      EN_SYATEKI_DEKUNUTS_PARAMS(0, 0, EN_SYATEKI_DEKUNUTS_TYPE_BONUS) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
+      EN_SYATEKI_DEKUNUTS_PARAMS(0, 1, EN_SYATEKI_DEKUNUTS_TYPE_BONUS) },
     { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(0, 0, 0) },
     { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(1, 0, 0) },
     { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(2, 0, 0) },
@@ -129,8 +136,10 @@ static SwampTargetActorEntry sNormalSwampTargetActorList[] = {
 static SwampTargetActorEntry sUnusedSwampTargetActorList[] = {
     { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(0, 0, 0) },
     { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(1, 0, 0) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 0, 1) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 1, 1) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
+      EN_SYATEKI_DEKUNUTS_PARAMS(0, 0, EN_SYATEKI_DEKUNUTS_TYPE_BONUS) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
+      EN_SYATEKI_DEKUNUTS_PARAMS(0, 1, EN_SYATEKI_DEKUNUTS_TYPE_BONUS) },
     { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(2, 0, 2) },
     { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(3, 0, 2) },
     { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(0, 0, 3) },
@@ -395,7 +404,7 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
                 func_80123F2C(play, 80);
                 this->shootingGameState = SG_GAME_STATE_RUNNING;
                 this->actionFunc = EnSyatekiMan_Swamp_StartGame;
-                func_801A2BB8(NA_BGM_MINI_GAME_2);
+                func_801A2BB8(NA_BGM_TIMED_MINI_GAME);
                 break;
 
             case 0xA32: // You have to try harder!
@@ -753,7 +762,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 func_80112AFC(play);
                 func_80123F2C(play, 0x63);
                 this->shootingGameState = SG_GAME_STATE_RUNNING;
-                func_801A2BB8(NA_BGM_MINI_GAME_2);
+                func_801A2BB8(NA_BGM_TIMED_MINI_GAME);
                 this->actionFunc = EnSyatekiMan_Town_StartGame;
                 break;
 
@@ -1349,7 +1358,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
             func_801A2C20();
             this->actionFunc = EnSyatekiMan_Town_EndGame;
             if (this->score == 50) {
-                func_801A3098(NA_BGM_GET_ITEM | 0x900);
+                Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
                 func_8011B4E0(play, 1);
             }
         }

@@ -2264,7 +2264,7 @@ void Magic_Update(PlayState* play) {
             // Add magic until magicFillTarget is reached
             gSaveContext.save.playerData.magic += 0x10;
 
-            if ((gSaveContext.gameMode == 0) && (gSaveContext.sceneSetupIndex < 4)) {
+            if ((gSaveContext.gameMode == 0) && (gSaveContext.sceneLayer < 4)) {
                 play_sound(NA_SE_SY_GAUGE_UP - SFX_FLAG);
             }
 
@@ -2863,7 +2863,7 @@ void Interface_DrawTimers(PlayState* play) {
 
                     if (sTimerId == TIMER_ID_MOON_CRASH) {
                         gSaveContext.save.day = 4;
-                        if ((play->sceneId == SCENE_OKUJOU) && (gSaveContext.sceneSetupIndex == 3)) {
+                        if ((play->sceneId == SCENE_OKUJOU) && (gSaveContext.sceneLayer == 3)) {
                             play->nextEntrance = ENTRANCE(TERMINA_FIELD, 1);
                             gSaveContext.nextCutsceneIndex = 0xFFF0;
                             play->transitionTrigger = TRANS_TRIGGER_START;
