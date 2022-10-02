@@ -359,7 +359,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
     s16 pad2;
 
     pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_WHITE;
-    pauseCtx->nameColorSet = 0;
+    pauseCtx->nameColorSet = PAUSE_NAME_COLOR_SET_WHITE;
 
     if ((pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
         (pauseCtx->pageIndex == PAUSE_ITEM) && !pauseCtx->itemDescriptionOn) {

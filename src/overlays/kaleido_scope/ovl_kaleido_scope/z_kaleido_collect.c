@@ -62,6 +62,7 @@ s16 D_8082AF84[] = {
     150, // Unused
 };
 #ifdef NON_MATCHING
+// A single small regalloc at the first `Gfx_DrawTexQuadIA8` for the heart piece count (see `gItemIcons`)
 void KaleidoScope_DrawQuestStatus(PlayState* play) {
     static s16 D_8082AF90 = 20;
     static s16 D_8082AF94 = 0;
@@ -87,7 +88,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
         { 0x08053000, 0x08054000, 0x08055000 },
         { 0x08056000, 0x08057000, 0x08058000 },
     };
-    static u8 D_8082B024[] = { 0, 1, 0, 0 };
+    static u8 D_8082B024[] = { UPG_QUIVER, UPG_BOMB_BAG };
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 sp1CA;
     s16 sp1C8;
@@ -280,7 +281,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
         gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
                           PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
 
-        if ((pauseCtx->state == 4) || (pauseCtx->state == 0x1A)) {
+        if ((pauseCtx->state == PAUSE_STATE_OPENING_3) || (pauseCtx->state == PAUSE_STATE_UNPAUSE_SETUP)) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_8082AF04[0][0], D_8082AF04[0][1], D_8082AF04[0][2],
                             pauseCtx->alpha);
         } else {
@@ -299,7 +300,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
     j += 4;
 
-    if (pauseCtx->state == 6) {
+    if (pauseCtx->state == PAUSE_STATE_MAIN) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
@@ -514,7 +515,7 @@ TexturePtr D_8082B00C[][3] = {
     { 0x08053000, 0x08054000, 0x08055000 },
     { 0x08056000, 0x08057000, 0x08058000 },
 };
-u8 D_8082B024[] = { 0, 1, 0, 0 };
+u8 D_8082B024[] = { UPG_QUIVER, UPG_BOMB_BAG };
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawQuestStatus.s")
 #endif
 
@@ -568,7 +569,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
     u16 cursor;
     u16 cursorItem;
 
-    pauseCtx->nameColorSet = 0;
+    pauseCtx->nameColorSet = PAUSE_NAME_COLOR_SET_WHITE;
     pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_WHITE;
 
     // != PAUSE_MAIN_STATE_IDLE
@@ -840,7 +841,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
             } else if ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG) &&
                        CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) && (msgCtx->msgLength == 0) &&
                        (cursor >= QUEST_SONG_SONATA) && (cursor <= QUEST_SONG_SUN)) {
-                pauseCtx->mainState = 9;
+                pauseCtx->mainState = PAUSE_MAIN_STATE_SONG_PLAYBACK_INIT;
                 D_8082B028 = 10;
             }
 
