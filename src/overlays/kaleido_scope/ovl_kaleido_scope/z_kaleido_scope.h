@@ -48,24 +48,19 @@ typedef enum {
 } PauseState;
 
 typedef enum {
-    /* 0x00 */ PAUSE_MAIN_STATE_IDLE,
+    /* 0x00 */ PAUSE_MAIN_STATE_IDLE, // Await input for the next action
     /* 0x01 */ PAUSE_MAIN_STATE_SWITCHING_PAGE,
     /* 0x02 */ PAUSE_MAIN_STATE_SONG_PLAYBACK,
     /* 0x03 */ PAUSE_MAIN_STATE_EQUIP_ITEM,
     /* 0x04 */ PAUSE_MAIN_STATE_SONG_PLAYER_PLAYING_INIT,
     /* 0x05 */ PAUSE_MAIN_STATE_SONG_PLAYER_PLAYING,
     /* 0x06 */ PAUSE_MAIN_STATE_SONG_PLAYER_PLAYING_DONE,
-    /* 0x07 */ PAUSE_MAIN_STATE_7,
-    /* 0x08 */ PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG,
-    /* 0x09 */ PAUSE_MAIN_STATE_SONG_PLAYBACK_START,
-    /* 0x0A */ PAUSE_MAIN_STATE_A,
-    /* 0x0B */ PAUSE_MAIN_STATE_B,
-    /* 0x0C */ PAUSE_MAIN_STATE_C,
-    /* 0x0D */ PAUSE_MAIN_STATE_D,
-    /* 0x0E */ PAUSE_MAIN_STATE_E,
-    /* 0x0F */ PAUSE_MAIN_STATE_EQUIP_MASK,
+    /* 0x07 */ PAUSE_MAIN_STATE_SONG_PLAYER_PLAYING_UNUSED,
+    /* 0x08 */ PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG, // Await input but the cursor is on a song
+    /* 0x09 */ PAUSE_MAIN_STATE_SONG_PLAYBACK_INIT,
+    /* 0x0F */ PAUSE_MAIN_STATE_EQUIP_MASK = 0xF,
     /* 0x10 */ PAUSE_MAIN_STATE_BOMBERS_NOTEBOOK_OPEN,
-    /* 0x11 */ PAUSE_MAIN_STATE_11
+    /* 0x11 */ PAUSE_MAIN_STATE_UNK
 } PauseMainState;
 
 typedef enum {
@@ -107,6 +102,10 @@ typedef enum {
     /* 4 */ PAUSE_BG_PRERENDER_OFF, // Inactive, do nothing.
     /* 5 */ PAUSE_BG_PRERENDER_MAX
 } PauseBgPreRenderState;
+
+#define PAUSE_CURSOR_COLOR_SET_WHITE 0
+#define PAUSE_CURSOR_COLOR_SET_YELLOW 2
+#define PAUSE_CURSOR_COLOR_SET_BLUE 4
 
 // To be used for Item-Page cursor and Mask-Page cursor
 typedef enum {

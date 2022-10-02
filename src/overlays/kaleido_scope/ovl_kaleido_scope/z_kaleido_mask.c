@@ -285,7 +285,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
     s16 moveCursorResult;
     s16 pad2;
 
-    pauseCtx->cursorColorSet = 0;
+    pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_WHITE;
     pauseCtx->nameColorSet = 0;
 
     if ((pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
@@ -298,7 +298,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
         // Move cursor left/right
         if (pauseCtx->cursorSpecialPos == 0) {
             // cursor is currently on a slot
-            pauseCtx->cursorColorSet = 2;
+            pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_YELLOW;
 
             if (ABS_ALT(pauseCtx->stickAdjX) > 30) {
                 cursorPoint = pauseCtx->cursorPoint[PAUSE_MASK];
@@ -497,7 +497,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
             }
 
             cursorSlot = pauseCtx->cursorPoint[PAUSE_MASK];
-            pauseCtx->cursorColorSet = 2;
+            pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_YELLOW;
 
             if (moveCursorResult == PAUSE_CURSOR_RESULT_SLOT) {
                 cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + NUM_ITEM_SLOTS];
@@ -513,7 +513,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
 
             if (cursorItem == ITEM_NONE) {
                 cursorItem = PAUSE_ITEM_NONE;
-                pauseCtx->cursorColorSet = 0;
+                pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_WHITE;
             }
 
             if ((cursorItem != PAUSE_ITEM_NONE) && (msgCtx->msgLength == 0)) {
@@ -614,7 +614,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
             play_sound(NA_SE_SY_CURSOR);
         }
     } else if ((pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_MASK) && (pauseCtx->pageIndex == PAUSE_MASK)) {
-        pauseCtx->cursorColorSet = 2;
+        pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_YELLOW;
     }
 }
 

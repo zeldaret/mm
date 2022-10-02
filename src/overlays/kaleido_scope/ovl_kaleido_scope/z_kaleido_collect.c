@@ -569,7 +569,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
     u16 cursorItem;
 
     pauseCtx->nameColorSet = 0;
-    pauseCtx->cursorColorSet = 0;
+    pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_WHITE;
 
     // != PAUSE_MAIN_STATE_IDLE
     if ((pauseCtx->state == PAUSE_STATE_MAIN) &&
@@ -791,7 +791,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                         if (interfaceCtx->unk_212 != 6) {
                             func_8011552C(play, 6);
                         }
-                        pauseCtx->cursorColorSet = 4;
+                        pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_BLUE;
                     } else if (interfaceCtx->unk_212 == 6) {
                         func_8011552C(play, 0x15);
                     }
@@ -850,10 +850,10 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                      (pauseCtx->mainState == PAUSE_MAIN_STATE_SONG_PLAYER_PLAYING) ||
                      (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG)) &&
                     (pauseCtx->cursorItem[pauseCtx->pageIndex] != PAUSE_ITEM_NONE)) {
-                    pauseCtx->cursorColorSet = 4;
+                    pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_BLUE;
                     if ((pauseCtx->mainState >= PAUSE_MAIN_STATE_SONG_PLAYBACK) &&
                         (pauseCtx->mainState <= PAUSE_MAIN_STATE_SONG_PLAYER_PLAYING_DONE)) {
-                        pauseCtx->cursorColorSet = 0;
+                        pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_WHITE;
                     }
                 }
             }
@@ -898,8 +898,8 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
             pauseCtx->cursorItem[pauseCtx->pageIndex] = cursorItem;
             pauseCtx->cursorSlot[pauseCtx->pageIndex] = cursor;
         }
-    } else if (pauseCtx->mainState == PAUSE_MAIN_STATE_SONG_PLAYBACK_START) {
-        pauseCtx->cursorColorSet = 4;
+    } else if (pauseCtx->mainState == PAUSE_MAIN_STATE_SONG_PLAYBACK_INIT) {
+        pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_BLUE;
         D_8082B028--;
         if (D_8082B028 == 0) {
             for (i = 0; i < 8; i++) {
