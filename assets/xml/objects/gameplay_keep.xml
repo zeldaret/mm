@@ -39,7 +39,7 @@
         <Texture Name="gameplay_keep_Tex_002E08" OutName="tex_002E08" Format="rgba16" Width="16" Height="16" Offset="0x2E08" />
         <Texture Name="gameplay_keep_Tex_003008" OutName="tex_003008" Format="i8" Width="8" Height="8" Offset="0x3008" />
         <Blob Name="gameplay_keep_Blob_003050" Size="0x20" Offset="0x3050" />
-        <DList Name="gDekuStickDL" Offset="0x32B0" />
+        <DList Name="gDekuStickDL" Offset="0x32B0" /> <!-- @bug Supplies the wrong size to gsDPLoadTextureBlock, meaning it uses part of gLinkPauseChildJointTable as if it were a texture. -->
         <Blob Name="gameplay_keep_Blob_003400" Size="0x9D0" Offset="0x3400" />
         <DList Name="gameplay_keep_DL_005360" Offset="0x5360" />
         <DList Name="gameplay_keep_DL_0056C0" Offset="0x56C0" />
@@ -69,8 +69,26 @@
         <Texture Name="gameplay_keep_Tex_00C7B0" OutName="tex_00C7B0" Format="rgba16" Width="8" Height="8" Offset="0xC7B0" />
         <Texture Name="gameplay_keep_Tex_00C830" OutName="tex_00C830" Format="rgba16" Width="16" Height="16" Offset="0xC830" />
         <Texture Name="gameplay_keep_Tex_00CA30" OutName="tex_00CA30" Format="rgba16" Width="16" Height="16" Offset="0xCA30" />
-        <Texture Name="gDekuStickTex" OutName="tex_00CC30" Format="i8" Width="16" Height="16" Offset="0xCC30" />
-        <Blob Name="gameplay_keep_Blob_00CD30" Size="0x210" Offset="0xCD30" />
+        <Texture Name="gDekuStickTex" OutName="deku_stick" Format="i8" Width="8" Height="8" Offset="0xCC30" />
+
+        <!-- Leftover joint tables from Ocarina of Time's Pause Menu. -->
+        <Array Name="gLinkPauseChildJointTable" Count="24" Offset="0xCC70">
+            <Vector Type="s16" Dimensions="3"/>
+        </Array>
+        <Array Name="gLinkPauseChildDekuShieldJointTable" Count="24" Offset="0xCD00">
+            <Vector Type="s16" Dimensions="3"/>
+        </Array>
+        <Array Name="gLinkPauseAdultBgsJointTable" Count="24" Offset="0xCD90">
+            <Vector Type="s16" Dimensions="3"/>
+        </Array>
+        <Array Name="gLinkPauseAdultJointTable" Count="24" Offset="0xCE20">
+            <Vector Type="s16" Dimensions="3"/>
+        </Array>
+        <Array Name="gLinkPauseAdultShieldJointTable" Count="24" Offset="0xCEB0">
+            <Vector Type="s16" Dimensions="3"/>
+        </Array>
+
+        <!-- Player Animations -->
         <PlayerAnimation Name="gPlayerAnim_al_elf_tobidasi" Offset="0xCF40" />
         <PlayerAnimation Name="gPlayerAnim_al_fuwafuwa" Offset="0xCF48" />
         <PlayerAnimation Name="gPlayerAnim_al_fuwafuwa_loop" Offset="0xCF50" />
@@ -766,6 +784,7 @@
         <PlayerAnimation Name="gPlayerAnim_Link_muku" Offset="0xE4E0" />
         <PlayerAnimation Name="gPlayerAnim_Link_otituku_w" Offset="0xE4E8" />
         <PlayerAnimation Name="gPlayerAnim_Link_ue_wait" Offset="0xE4F0" />
+        
         <DList Name="gameplay_keep_DL_00E5C0" Offset="0xE5C0" />
 
         <!-- Deku Flower -->
