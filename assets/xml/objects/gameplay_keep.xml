@@ -69,10 +69,15 @@
         <Texture Name="gameplay_keep_Tex_00C7B0" OutName="tex_00C7B0" Format="rgba16" Width="8" Height="8" Offset="0xC7B0" />
         <Texture Name="gameplay_keep_Tex_00C830" OutName="tex_00C830" Format="rgba16" Width="16" Height="16" Offset="0xC830" />
         <Texture Name="gameplay_keep_Tex_00CA30" OutName="tex_00CA30" Format="rgba16" Width="16" Height="16" Offset="0xCA30" />
-        <Texture Name="gDekuStickTex" OutName="tex_00CC30" Format="i8" Width="16" Height="16" Offset="0xCC30" />
-        <Blob Name="gameplay_keep_Blob_00CD30" Size="0x60" Offset="0xCD30" />
+        <Texture Name="gDekuStickTex" OutName="deku_stick" Format="i8" Width="8" Height="8" Offset="0xCC30" />
 
         <!-- Leftover joint tables from Ocarina of Time's Pause Menu. -->
+        <Array Name="gLinkPauseChildJointTable" Count="24" Offset="0xCC70">
+            <Vector Type="s16" Dimensions="3"/>
+        </Array>
+        <Array Name="gLinkPauseChildDekuShieldJointTable" Count="24" Offset="0xCD00">
+            <Vector Type="s16" Dimensions="3"/>
+        </Array>
         <Array Name="gLinkPauseAdultBgsJointTable" Count="24" Offset="0xCD90">
             <Vector Type="s16" Dimensions="3"/>
         </Array>
