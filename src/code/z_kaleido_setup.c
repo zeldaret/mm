@@ -78,7 +78,8 @@ void KaleidoSetup_Update(PlayState* play) {
                     if ((play->unk_1887C < 2) && (gSaveContext.magicState != MAGIC_STATE_STEP_CAPACITY) &&
                         (gSaveContext.magicState != MAGIC_STATE_FILL)) {
                         if (!(gSaveContext.eventInf[1] & 0x80) && !(player->stateFlags1 & 0x20)) {
-                            if (!(play->actorCtx.unk5 & 2) && !(play->actorCtx.unk5 & 4)) {
+                            if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
+                                !(play->actorCtx.flags & ACTORCTX_FLAG_2)) {
                                 if ((play->actorCtx.unk268 == 0) && CHECK_BTN_ALL(input->press.button, BTN_START)) {
                                     gSaveContext.unk_3F26 = gSaveContext.unk_3F22;
                                     pauseCtx->unk_2B9 = 0;
@@ -138,7 +139,7 @@ void KaleidoSetup_Init(PlayState* play) {
     pauseCtx->unk_2A0 = -1;
     pauseCtx->unk_2BA = 320;
     pauseCtx->unk_2BC = 40;
-    pauseCtx->unk_29E = 100;
+    pauseCtx->promptAlpha = 100;
 
     View_Init(&pauseCtx->view, play->state.gfxCtx);
 }

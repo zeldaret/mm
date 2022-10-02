@@ -533,8 +533,8 @@ void EnGo_InitDust(EnGoEffect* pEffect, Vec3f pos, Vec3f accel, Vec3f vel, f32 s
  * @param pEffect First element in EnGoEffect table.
  */
 void EnGo_DrawDust(EnGoEffect* pEffect, PlayState* play2) {
-    static TexturePtr sEnGoDustTexturePtrs[] = {
-        gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
+    static TexturePtr sDustTextures[] = {
+        gEffDust8Tex, gEffDust7Tex, gEffDust6Tex, gEffDust5Tex, gEffDust4Tex, gEffDust3Tex, gEffDust2Tex, gEffDust1Tex,
     };
     static Color_RGBA8 sEnGoDustColorPrim[] = {
         { 255, 255, 255, 0 }, // White
@@ -579,7 +579,7 @@ void EnGo_DrawDust(EnGoEffect* pEffect, PlayState* play2) {
         Matrix_ReplaceRotation(&play->billboardMtxF);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sEnGoDustTexturePtrs[(s32)(alpha * 7.0f)]));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[(s32)(alpha * 7.0f)]));
         gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
 
         Matrix_Pop();
@@ -1346,7 +1346,7 @@ Actor* EnGo_FindGravemaker(EnGo* this, PlayState* play) {
  */
 void EnGo_PowderKegGoron_UpdateColliderRadius(EnGo* this, PlayState* play, s32 isGivenPK) {
     if ((gSaveContext.save.weekEventReg[18] & 0x80 /* Has Powder Keg Privileges */) ||
-        (play->actorCtx.unk5 & 1) // Same check occurs in PowderKeg ammo check MessageScript Command
+        (play->actorCtx.flags & ACTORCTX_FLAG_0) // Same check occurs in PowderKeg ammo check MessageScript Command
         || isGivenPK) {
         this->colliderSphere.dim.modelSphere.radius = 300;
     } else {
