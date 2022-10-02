@@ -2898,7 +2898,7 @@ s32 osFlashWriteBuffer(OSIoMesg* mb, s32 priority, void* dramAddr, OSMesgQueue* 
 s32 osFlashWriteArray(u32 pageNum);
 s32 osFlashReadArray(OSIoMesg* mb, s32 priority, u32 pageNum, void* dramAddr, u32 pageCount, OSMesgQueue* mq);
 
-Acmd* AudioSynth_Update(Acmd* cmdStart, s32* numAbiCmds, s16* aiStart, s32 aiBufLen);
+Acmd* AudioSynth_Update(Acmd* abiCmdStart, s32* numAbiCmds, s16* aiBufStart, s32 numSamplesPerFrame);
 
 void AudioHeap_DiscardFont(s32 fontId);
 void* AudioHeap_WritebackDCache(void* addr, size_t size);
@@ -2918,7 +2918,7 @@ void* AudioHeap_SearchPermanentCache(s32 tableType, s32 id);
 void* AudioHeap_AllocPermanent(s32 tableType, s32 id, size_t size);
 void* AudioHeap_AllocSampleCache(size_t size, s32 sampleBankId, void* sampleAddr, s8 medium, s32 cache);
 void AudioHeap_ApplySampleBankCache(s32 sampleBankId);
-void AudioHeap_SetReverbData(s32 reverbIndex, u32 dataType, s32 data, s32 flags);
+void AudioHeap_SetReverbData(s32 reverbIndex, u32 dataType, s32 data, s32 isFirstInit);
 
 void AudioLoad_DecreaseSampleDmaTtls(void);
 void* AudioLoad_DmaSampleData(uintptr_t devAddr, size_t size, s32 arg2, u8* dmaIndexRef, s32 medium);
