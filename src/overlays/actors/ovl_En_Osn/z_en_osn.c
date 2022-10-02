@@ -731,7 +731,7 @@ void func_80AD16A8(EnOsn* this, PlayState* play) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->unk_1EC);
         }
 
-        if ((this->unk_1EC == 5) && (play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 0xB) &&
+        if ((this->unk_1EC == 5) && (play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 0xB) &&
             (play->csCtx.frames == 400)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_OMVO00);
         }

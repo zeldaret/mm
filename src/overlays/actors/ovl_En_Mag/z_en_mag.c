@@ -393,7 +393,7 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                                 play->transitionType = TRANS_TYPE_02;
                                 play->nextEntrance = ENTRANCE(CUTSCENE, 0);
                                 gSaveContext.save.cutscene = 0;
-                                gSaveContext.sceneSetupIndex = 0;
+                                gSaveContext.sceneLayer = 0;
                             }
                             this->unk11F54 = 15;
                             this->unk11F56 = 25;

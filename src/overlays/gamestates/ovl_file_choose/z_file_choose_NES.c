@@ -8,6 +8,8 @@
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "z64rumble.h"
 #include "z64save.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
 #include "interface/parameter_static/parameter_static.h"
 #include "misc/title_static/title_static.h"
 
@@ -108,8 +110,8 @@ void FileSelect_RenderView(FileSelectState* this, f32 eyeX, f32 eyeY, f32 eyeZ) 
     up.x = up.z = 0.0f;
     up.y = 1.0f;
 
-    View_SetViewOrientation(&this->view, &eye, &lookAt, &up);
-    View_RenderView(&this->view, 0x7F);
+    View_LookAt(&this->view, &eye, &lookAt, &up);
+    View_Apply(&this->view, VIEW_ALL | VIEW_FORCE_VIEWING | VIEW_FORCE_VIEWPORT | VIEW_FORCE_PROJECTION_PERSPECTIVE);
 }
 
 Gfx* FileSelect_DrawTexQuadIA8(Gfx* gfx, void* texture, s16 width, s16 height, s16 point) {
@@ -2251,7 +2253,7 @@ void FileSelect_InitContext(GameState* thisx) {
     this->unk_2451E[4] = 10;
     this->highlightTimer = 20;
 
-    ShrinkWindow_SetLetterboxTarget(0);
+    ShrinkWindow_Letterbox_SetSizeTarget(0);
 
     gSaveContext.skyboxTime = 0;
     gSaveContext.save.time = 0;
