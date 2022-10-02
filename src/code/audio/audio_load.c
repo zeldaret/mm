@@ -1218,9 +1218,9 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
     s32 i;
     s32 j;
 
-    D_80208E68 = NULL;
-    D_80208E70 = NULL;
-    D_80208E74 = NULL;
+    gCustomAudioUpdateFunction = NULL;
+    gCustomAudioReverbFunction = NULL;
+    gCustomAudioSynthFunction = NULL;
 
     for (i = 0; i < ARRAY_COUNT(gAudioContext.unk_29A8); i++) {
         gAudioContext.unk_29A8[i] = NULL;
