@@ -21,7 +21,11 @@ CLANG_VER = 11
 FORMAT_OPTS = "-i -style=file"
 
 # Clang-Tidy options (see .clang-tidy for checks enabled)
-TIDY_OPTS = "-p . --fix --fix-errors"
+TIDY_OPTS = "-p ."
+TIDY_FIX_OPTS = "--fix --fix-errors"
+
+# Clang-Apply-Replacements options (used for multiprocessing)
+APPLY_OPTS = "--format --style=file"
 
 # Compiler options used with Clang-Tidy
 # Normal warnings are disabled with -Wno-everything to focus only on tidying
@@ -46,20 +50,20 @@ def get_tidy_version(tidy_executable: str):
     return int(match.group(1))
 
 
-CLANG_FORMAT = get_clang_executable([f"clang-format-{CLANG_VER}"])
+CLANG_FORMAT = get_clang_executable([f"clang-format-{CLANG_VER}", "clang-format"])
 if CLANG_FORMAT is None:
-    sys.exit(f"Error: clang-format-{CLANG_VER} not found")
+    sys.exit(f"Error: neither clang-format nor clang-format-{CLANG_VER} found")
 
-CLANG_TIDY = get_clang_executable([f"clang-tidy-{CLANG_VER}"])
+CLANG_TIDY = get_clang_executable([f"clang-tidy-{CLANG_VER}", "clang-tidy"])
 if CLANG_TIDY is None:
-    sys.exit(f"Error: clang-tidy-{CLANG_VER} not found")
+    sys.exit(f"Error: neither clang-tidy nor clang-tidy-{CLANG_VER} found")
 
-CLANG_APPLY_REPLACEMENTS = get_clang_executable([f"clang-apply-replacements-{CLANG_VER}"])
+CLANG_APPLY_REPLACEMENTS = get_clang_executable([f"clang-apply-replacements-{CLANG_VER}", "clang-apply-replacements"])
 
 # Try to detect the clang-tidy version and add --fix-notes for version 13+
 # This is used to ensure all fixes are applied properly in recent versions
 if get_tidy_version(CLANG_TIDY) >= 13:
-    TIDY_OPTS += " --fix-notes"
+    TIDY_FIX_OPTS += " --fix-notes"
 
 
 def list_chunks(list: List, chunk_length: int):
@@ -73,7 +77,7 @@ def run_clang_format(files: List[str]):
 
 
 def run_clang_tidy(files: List[str]):
-    exec_str = f"{CLANG_TIDY} {TIDY_OPTS} {' '.join(files)} -- {COMPILER_OPTS}"
+    exec_str = f"{CLANG_TIDY} {TIDY_OPTS} {TIDY_FIX_OPTS} {' '.join(files)} -- {COMPILER_OPTS}"
     subprocess.run(exec_str, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
@@ -86,8 +90,8 @@ def run_clang_tidy_with_export(tmp_dir: str, files: List[str]):
 
 
 def run_clang_apply_replacements(tmp_dir: str):
-    exec_str = f"{CLANG_APPLY_REPLACEMENTS} --format --style=file --style-config=. {tmp_dir}"
-    subprocess.run(exec_str, shell=True, stderr=subprocess.DEVNULL)
+    exec_str = f"{CLANG_APPLY_REPLACEMENTS} {APPLY_OPTS} {tmp_dir}"
+    subprocess.run(exec_str, shell=True)
 
 
 def add_final_new_line(file: str):
@@ -155,7 +159,7 @@ def main():
     if nb_jobs > 1:
         if CLANG_APPLY_REPLACEMENTS is None:
             sys.exit(
-                f"Error: clang-apply-replacements-{CLANG_VER} not found (required to use -j)"
+                f"Error: neither clang-apply-replacements nor clang-apply-replacements-{CLANG_VER} found (required to use -j)"
             )
 
     if args.files:
