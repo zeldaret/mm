@@ -294,7 +294,7 @@ void func_80A85F84(EnTruUnkStruct* arg0, PlayState* play) {
 
     for (i = 0; i < 30; i++, arg0++) {
         f32 alpha;
-        s32 idx;
+        s32 index;
 
         if ((arg0->unk_00 == 3) || (arg0->unk_00 == 4) || (arg0->unk_00 == 5)) {
             if (!flag) {
@@ -325,8 +325,8 @@ void func_80A85F84(EnTruUnkStruct* arg0, PlayState* play) {
             Matrix_ReplaceRotation(&play->billboardMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            idx = ((f32)arg0->unk_02 / arg0->unk_01) * 8.0f;
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[(idx)]));
+            index = ((f32)arg0->unk_02 / arg0->unk_01) * 8.0f;
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[index]));
             gSPDisplayList(POLY_XLU_DISP++, gKoumeDustModelDL);
 
             Matrix_Pop();
