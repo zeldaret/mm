@@ -20,16 +20,16 @@ u16 ElfMessage_GetFirstCycleHint(PlayState* play) {
         if (gSaveContext.save.weekEventReg[9] & 1) {
             return 0x21E;
         }
-        if (play->sceneNum == SCENE_YOUSEI_IZUMI) {
+        if (play->sceneId == SCENE_YOUSEI_IZUMI) {
             return 0;
         }
         return 0x21D;
     }
-    if (gSaveContext.save.playerData.magicAcquired != true) {
+    if (gSaveContext.save.playerData.isMagicAcquired != true) {
         return 0x21F;
     }
     if (INV_CONTENT(ITEM_DEED_LAND) == ITEM_DEED_LAND) {
-        if (play->sceneNum != SCENE_OKUJOU) {
+        if (play->sceneId != SCENE_OKUJOU) {
             return 0x244;
         }
         return 0;
