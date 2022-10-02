@@ -145,9 +145,8 @@ void EnJcMato_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-static Vec3f sOffset = { 0.0f, -2500.0f, 0.0f };
-
 void EnJcMato_Draw(Actor* thisx, PlayState* play) {
+    static Vec3f sOffset = { 0.0f, -2500.0f, 0.0f };
     EnJcMato* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);

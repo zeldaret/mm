@@ -154,10 +154,10 @@ s32 EnTruMt_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
 }
 
 void func_80B76110(EnTruMt* this) {
-    if (DECR(this->unk_34E) == 0) {
+    if (DECR(this->blinkTimer) == 0) {
         this->eyeTexIndex++;
         if (this->eyeTexIndex >= 3) {
-            this->unk_34E = Rand_S16Offset(30, 30);
+            this->blinkTimer = Rand_S16Offset(30, 30);
             this->eyeTexIndex = 0;
         }
     }

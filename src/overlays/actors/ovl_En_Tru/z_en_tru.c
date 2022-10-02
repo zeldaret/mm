@@ -553,13 +553,13 @@ s32 func_80A86DB8(EnTru* this) {
     switch (this->animIndex) {
         case KOUME_ANIM_INJURED_LYING_DOWN:
         case KOUME_ANIM_INJURED_LYING_DOWN_MORPH:
-            if (DECR(this->unk_36C) == 0) {
+            if (DECR(this->blinkTimer) == 0) {
                 s16 rand = Rand_S16Offset(40, 20);
 
                 if (this->eyeTexIndex == 2) {
-                    this->unk_36C = 8;
+                    this->blinkTimer = 8;
                 } else {
-                    this->unk_36C = rand;
+                    this->blinkTimer = rand;
                 }
 
                 if (this->eyeTexIndex == 2) {
@@ -592,21 +592,21 @@ s32 func_80A86DB8(EnTru* this) {
 
         case KOUME_ANIM_DRINK:
             if (Animation_OnFrame(&this->skelAnime, 57.0f)) {
-                this->unk_36C = 0;
+                this->blinkTimer = 0;
                 this->eyeTexIndex = 0;
             }
 
             if (this->skelAnime.curFrame < 57.0f) {
-                if (DECR(this->unk_36C) == 0) {
-                    this->unk_36C = Rand_S16Offset(8, 8);
+                if (DECR(this->blinkTimer) == 0) {
+                    this->blinkTimer = Rand_S16Offset(8, 8);
                     this->eyeTexIndex = 2;
                 } else {
                     this->eyeTexIndex = 1;
                 }
-            } else if (DECR(this->unk_36C) == 0) {
+            } else if (DECR(this->blinkTimer) == 0) {
                 this->eyeTexIndex++;
                 if (this->eyeTexIndex >= 4) {
-                    this->unk_36C = Rand_S16Offset(20, 10);
+                    this->blinkTimer = Rand_S16Offset(20, 10);
                     this->eyeTexIndex = 0;
                 }
             }
@@ -637,13 +637,13 @@ s32 func_80A86DB8(EnTru* this) {
             return false;
 
         default:
-            if (DECR(this->unk_36C) == 0) {
+            if (DECR(this->blinkTimer) == 0) {
                 if ((this->eyeTexIndex != 2) || !(this->unk_34E & 0x80)) {
                     this->eyeTexIndex++;
                 }
 
                 if (this->eyeTexIndex >= 4) {
-                    this->unk_36C = Rand_S16Offset(30, 30);
+                    this->blinkTimer = Rand_S16Offset(30, 30);
                     this->eyeTexIndex = 0;
                 }
             }

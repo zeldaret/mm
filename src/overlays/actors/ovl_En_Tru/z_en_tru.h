@@ -45,7 +45,7 @@ typedef struct EnTru {
     /* 0x366 */ s16 unk_366;
     /* 0x368 */ s16 unk_368;
     /* 0x36A */ s16 unk_36A;
-    /* 0x36C */ s16 unk_36C;
+    /* 0x36C */ s16 blinkTimer;
     /* 0x36E */ s16 eyeTexIndex;
     /* 0x370 */ s16 unk_370;
     /* 0x372 */ s16 unk_372;

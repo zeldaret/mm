@@ -25,7 +25,7 @@ typedef struct EnTruMt {
     /* 0x348 */ s16 unk_348;
     /* 0x34A */ s16 unk_34A;
     /* 0x34C */ s16 eyeTexIndex;
-    /* 0x34E */ s16 unk_34E;
+    /* 0x34E */ s16 blinkTimer;
     /* 0x350 */ Vec3f unk_350;
     /* 0x35C */ Vec3f unk_35C;
     /* 0x368 */ Path* path;
