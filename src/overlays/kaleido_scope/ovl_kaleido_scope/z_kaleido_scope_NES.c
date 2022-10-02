@@ -6,6 +6,7 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_kaleido_scope.h"
+#include "z64view.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
 #include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
@@ -1420,8 +1421,9 @@ void KaleidoScope_SetView(PauseContext* pauseCtx, f32 eyeX, f32 eyeY, f32 eyeZ) 
     up.x = up.z = 0.0f;
     up.y = 1.0f;
 
-    View_SetViewOrientation(&pauseCtx->view, &eye, &at, &up);
-    View_RenderView(&pauseCtx->view, 0x7F);
+    View_LookAt(&pauseCtx->view, &eye, &at, &up);
+    View_Apply(&pauseCtx->view,
+               VIEW_ALL | VIEW_FORCE_VIEWING | VIEW_FORCE_VIEWPORT | VIEW_FORCE_PROJECTION_PERSPECTIVE);
 }
 
 s16 D_8082B9E8[] = { 0, 0 };

@@ -411,7 +411,7 @@ void EnMinifrog_NextFrogReturned(EnMinifrog* this, PlayState* play) {
         this->actionFunc = EnMinifrog_ContinueChoirCutscene;
         this->flags &= ~(0x2 << MINIFROG_YELLOW | 0x2 << MINIFROG_CYAN | 0x2 << MINIFROG_PINK | 0x2 << MINIFROG_BLUE |
                          0x2 << MINIFROG_WHITE);
-        play->setPlayerTalkAnim(play, &gameplay_keep_Linkanim_00DEA8, 0);
+        play->setPlayerTalkAnim(play, &gPlayerAnim_link_normal_talk_free_wait, 0);
     }
 }
 
@@ -442,7 +442,7 @@ void EnMinifrog_SetupNextFrogChoir(EnMinifrog* this, PlayState* play) {
         this->flags &= ~0x100;
         this->flags &= ~(0x2 << MINIFROG_YELLOW | 0x2 << MINIFROG_CYAN | 0x2 << MINIFROG_PINK | 0x2 << MINIFROG_BLUE |
                          0x2 << MINIFROG_WHITE);
-        play->setPlayerTalkAnim(play, &gameplay_keep_Linkanim_00DEA8, 0);
+        play->setPlayerTalkAnim(play, &gPlayerAnim_link_normal_talk_free_wait, 0);
     } else if (this->timer <= 0) {
         this->actionFunc = EnMinifrog_NextFrogReturned;
         this->timer = 30;
@@ -462,7 +462,7 @@ void EnMinifrog_BeginChoirCutscene(EnMinifrog* this, PlayState* play) {
         this->timer = 5;
         func_801A1F00(3, NA_BGM_FROG_SONG);
         this->flags |= 0x100;
-        play->setPlayerTalkAnim(play, &gameplay_keep_Linkanim_00E2A8, 0);
+        play->setPlayerTalkAnim(play, &gPlayerAnim_pn_gakkiplay, 0);
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }

@@ -1,4 +1,6 @@
 #include "global.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
 #include "message_data_static.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
@@ -489,7 +491,7 @@ u8 Message_GetState(MessageContext* msgCtx) {
 
 void func_80152C64(View* view) {
     SET_FULLSCREEN_VIEWPORT(view);
-    func_8013FBC8(view);
+    View_ApplyOrthoToOverlay(view);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80152CAC.s")

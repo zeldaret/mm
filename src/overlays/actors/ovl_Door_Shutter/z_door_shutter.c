@@ -5,6 +5,7 @@
  */
 
 #include "z_door_shutter.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_bdoor/object_bdoor.h"
@@ -599,7 +600,7 @@ s32 func_808A1A70(DoorShutter* this) {
 }
 
 void func_808A1B48(DoorShutter* this, PlayState* play) {
-    s16 quake;
+    s16 quakeIndex;
 
     if (func_808A1A70(this)) {
         if (this->actor.velocity.y > 20.0f) {
@@ -607,11 +608,14 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
             Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 45.0f, 10, 8.0f, 500, 10, 0);
         }
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BIGWALL_BOUND);
-        quake = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
-        Quake_SetSpeed(quake, -32536);
-        Quake_SetQuakeValues(quake, 2, 0, 0, 0);
-        Quake_SetCountdown(quake, 10);
+
+        quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
+        Quake_SetSpeed(quakeIndex, -32536);
+        Quake_SetQuakeValues(quakeIndex, 2, 0, 0, 0);
+        Quake_SetCountdown(quakeIndex, 10);
+
         Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
+
         func_808A1884(this, play);
     }
 }
