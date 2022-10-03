@@ -5,6 +5,8 @@
  */
 
 #include "z_select.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
 #include "libc/alloca.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
@@ -41,8 +43,8 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
     }
 
     gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = 0xFFFF;
-    gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
-    gSaveContext.nightSeqIndex = 0xFF;
+    gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+    gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
     gSaveContext.showTitleCard = true;
     gSaveContext.respawnFlag = 0;
     gSaveContext.respawn[RESPAWN_MODE_GORON].entrance = 0xFF;
@@ -1026,7 +1028,7 @@ void MapSelect_Draw(MapSelectState* this) {
     func_8012CF0C(gfxCtx, true, true, 0, 0, 0);
 
     SET_FULLSCREEN_VIEWPORT(&this->view);
-    View_RenderView(&this->view, 0xF);
+    View_Apply(&this->view, VIEW_ALL);
     if (!this->state.running) {
         MapSelect_DrawLoadingScreen(this);
     } else {

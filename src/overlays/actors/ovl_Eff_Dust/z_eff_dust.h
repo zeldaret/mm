@@ -24,7 +24,7 @@ typedef struct EffDust {
 typedef enum {
     /* 0x0 */ EFF_DUST_TYPE_0,
     /* 0x1 */ EFF_DUST_TYPE_1,
-    /* 0x2 */ EFF_DUST_TYPE_2,
+    /* 0x2 */ EFF_DUST_TYPE_SPIN_ATTACK_CHARGE,
     /* 0x3 */ EFF_DUST_TYPE_3,
     /* 0x4 */ EFF_DUST_TYPE_4,
     /* 0x5 */ EFF_DUST_TYPE_5

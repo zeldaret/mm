@@ -284,7 +284,7 @@ void func_80ACA840(EnTimeTag* this, PlayState* play) {
     s16 temp_ft4;
     s16 temp_hi;
 
-    if ((play->sceneNum != SCENE_YADOYA) || (INV_CONTENT(ITEM_ROOM_KEY) != ITEM_ROOM_KEY)) {
+    if ((play->sceneId != SCENE_YADOYA) || (INV_CONTENT(ITEM_ROOM_KEY) != ITEM_ROOM_KEY)) {
         temp_ft4 = gSaveContext.save.time * (24.0f / 0x10000); // TIME_TO_HOURS_F
         temp_hi = (s32)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60;
         if (gSaveContext.save.weekEventReg[63] & 1) {

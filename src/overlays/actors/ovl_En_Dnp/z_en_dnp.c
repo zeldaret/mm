@@ -250,7 +250,7 @@ void func_80B3D11C(EnDnp* this, PlayState* play) {
     s32 temp_v0;
     s32 val;
 
-    if (!(gSaveContext.save.weekEventReg[29] & 0x40) && (play->sceneNum == SCENE_MITURIN) &&
+    if (!(gSaveContext.save.weekEventReg[29] & 0x40) && (play->sceneId == SCENE_MITURIN) &&
         (play->csCtx.currentCsIndex == 0)) {
         this->unk_322 |= 0x20;
         gSaveContext.save.weekEventReg[29] |= 0x40;
@@ -373,7 +373,7 @@ void EnDnp_Init(Actor* thisx, PlayState* play) {
         Actor_SetScale(&this->actor, 0.0085f);
         SubS_UpdateFlags(&this->unk_322, 3, 7);
         this->unk_322 |= 0x400;
-        if ((play->sceneNum == SCENE_MITURIN) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
+        if ((play->sceneId == SCENE_MITURIN) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
             this->unk_322 |= 0x20;
             func_80B3CC38(this, 1);
         }
