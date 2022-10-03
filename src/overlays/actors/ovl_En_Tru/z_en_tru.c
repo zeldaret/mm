@@ -838,9 +838,9 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
         // Fallthrough
         case TEXT_STATE_16:
             itemActionParam = func_80123810(play);
-            if ((itemActionParam == PLAYER_AP_BOTTLE_POTION_RED) || (itemActionParam == PLAYER_AP_BOTTLE_POTION_BLUE)) {
+            if ((itemActionParam == PLAYER_IA_BOTTLE_POTION_RED) || (itemActionParam == PLAYER_IA_BOTTLE_POTION_BLUE)) {
                 this->unk_34E |= 8;
-                if (itemActionParam == PLAYER_AP_BOTTLE_POTION_RED) {
+                if (itemActionParam == PLAYER_IA_BOTTLE_POTION_RED) {
                     this->unk_390 = 1;
                 } else {
                     this->unk_390 = 2;
@@ -848,9 +848,9 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
                 this->unk_378 = func_80A87880;
                 this->unk_364 = 0;
                 ret = 1;
-            } else if (itemActionParam < PLAYER_AP_NONE) {
+            } else if (itemActionParam <= PLAYER_IA_MINUS1) {
                 ret = 3;
-            } else if (itemActionParam != PLAYER_AP_NONE) {
+            } else if (itemActionParam != PLAYER_IA_NONE) {
                 ret = 2;
             }
             break;
