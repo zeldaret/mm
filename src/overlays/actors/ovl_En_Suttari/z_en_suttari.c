@@ -7,6 +7,7 @@
 #include "z_en_suttari.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+#include "overlays/effects/ovl_Effect_Ss_Solder_Srch_Ball/z_eff_ss_solder_srch_ball.h"
 #include "objects/object_boj/object_boj.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
@@ -444,12 +445,13 @@ void func_80BAAFDC(EnSuttari* this, PlayState* play) {
         effectVelOffset.z = 20.0f;
         Matrix_MultVec3f(&effectVelOffset, &effectVel);
         Matrix_Pop();
-        if (this->unk3F0 == 0) {
-            EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->unk3F0, 1);
+        if (!this->playerDetected) {
+            EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->playerDetected,
+                                         SOLDERSRCHBALL_INVISIBLE);
         }
-        if (this->unk3F0 == 1) {
+        if (this->playerDetected == true) {
             play_sound(NA_SE_SY_FOUND);
-            this->unk3F0 = 0;
+            this->playerDetected = false;
             this->actor.speedXZ = 0.0f;
             if (this->unk1F4[0] != 0) {
                 this->unk1F4[0]--;
@@ -476,12 +478,13 @@ void func_80BAB1A0(EnSuttari* this, PlayState* play) {
         effectVelOffset.z = 20.0f;
         Matrix_MultVec3f(&effectVelOffset, &effectVel);
         Matrix_Pop();
-        if (this->unk3F0 == 0) {
-            EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->unk3F0, 1);
+        if (!this->playerDetected) {
+            EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->playerDetected,
+                                         SOLDERSRCHBALL_INVISIBLE);
         }
-        if (this->unk3F0 == 1) {
+        if (this->playerDetected == true) {
             play_sound(NA_SE_SY_FOUND);
-            this->unk3F0 = 0;
+            this->playerDetected = false;
             this->actor.speedXZ = 0.0f;
             if (this->unk1F4[0] != 0) {
                 this->unk1F4[0]--;
@@ -942,7 +945,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
                        this->morphTable, 16);
     this->actor.draw = EnSuttari_Draw;
     this->actor.flags |= ACTOR_FLAG_1;
-    if (play->sceneNum == SCENE_IKANA) {
+    if (play->sceneId == SCENE_IKANA) {
         this->flags1 |= 1;
         if (gSaveContext.save.day == 1 || gSaveContext.save.day == 2) {
             this->animIndex = 2;
@@ -958,7 +961,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
             this->actionFunc = func_80BACEE0;
             return;
         }
-    } else if (play->sceneNum == SCENE_BACKTOWN) {
+    } else if (play->sceneId == SCENE_BACKTOWN) {
         if (gSaveContext.save.time >= CLOCK_TIME(0, 20) && gSaveContext.save.time < CLOCK_TIME(6, 00)) {
             Actor_MarkForDeath(&this->actor);
         }
@@ -974,7 +977,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = func_80BAD004;
         return;
-    } else if (play->sceneNum == SCENE_ICHIBA) {
+    } else if (play->sceneId == SCENE_ICHIBA) {
         if (gSaveContext.save.weekEventReg[33] & 8) {
             Actor_MarkForDeath(&this->actor);
             return;
@@ -984,7 +987,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
         this->flags1 |= 2;
         this->actionFunc = func_80BAD5F8;
         return;
-    } else if (play->sceneNum == SCENE_AYASHIISHOP) {
+    } else if (play->sceneId == SCENE_AYASHIISHOP) {
         if (gSaveContext.save.weekEventReg[33] & 8) {
             Actor_MarkForDeath(&this->actor);
             return;
@@ -1461,7 +1464,7 @@ void EnSuttari_Init(Actor* thisx, PlayState* play) {
 void EnSuttari_Destroy(Actor* thisx, PlayState* play) {
     EnSuttari* this = THIS;
 
-    if ((play->sceneNum == SCENE_BACKTOWN) && !(this->flags2 & 4)) {
+    if ((play->sceneId == SCENE_BACKTOWN) && !(this->flags2 & 4)) {
         Audio_QueueSeqCmd(0x101400FF);
     }
     Collider_DestroyCylinder(play, &this->collider);
@@ -1542,7 +1545,7 @@ void EnSuttari_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
                 } else {
                     func_8012C28C(play->state.gfxCtx);
                     OPEN_DISPS(play->state.gfxCtx);
-                    gSPDisplayList(POLY_OPA_DISP++, object_boj_DL_013380);
+                    gSPDisplayList(POLY_OPA_DISP++, gBombShopBagDL);
                     CLOSE_DISPS(play->state.gfxCtx);
                 }
             }

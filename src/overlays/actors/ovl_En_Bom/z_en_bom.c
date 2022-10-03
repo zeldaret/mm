@@ -139,7 +139,7 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
     this->flashSpeedScale = 7;
     this->isPowderKeg = ENBOM_GETX_1(&this->actor);
     if (this->isPowderKeg) {
-        play->actorCtx.unk5 |= 1;
+        play->actorCtx.flags |= ACTORCTX_FLAG_0;
         this->timer = gSaveContext.powderKegTimer;
     } else {
         this->timer = 70;
@@ -188,7 +188,7 @@ void EnBom_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyJntSph(play, &this->collider2);
     Collider_DestroyCylinder(play, &this->collider1);
     if (this->isPowderKeg) {
-        play->actorCtx.unk5 &= ~1;
+        play->actorCtx.flags &= ~ACTORCTX_FLAG_0;
     }
 }
 
@@ -301,7 +301,7 @@ void func_80871058(EnBom* this, PlayState* play) {
 void func_808714D4(EnBom* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actionFunc = func_80871058;
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         this->actor.flags &= ~ACTOR_FLAG_100000;
         this->actor.bgCheckFlags &= ~1;
         Math_Vec3s_ToVec3f(&this->actor.prevPos, &this->actor.home.rot);
@@ -541,7 +541,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 Camera_AddQuake(&play->mainCamera, 2, 11, 8);
                 thisx->params = ENBOM_1;
                 this->timer = 10;
-                thisx->flags |= (0x100000 | 0x20);
+                thisx->flags |= (ACTOR_FLAG_20 | ACTOR_FLAG_100000);
                 this->actionFunc = func_808715B8;
                 if (this->isPowderKeg) {
                     gSaveContext.powderKegTimer = 0;

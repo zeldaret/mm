@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ishi.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -532,7 +533,7 @@ void func_8095E95C(EnIshi* this, PlayState* play) {
     s32 sp2C;
 
     if (Actor_HasNoParent(&this->actor, play)) {
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         if (ENISHI_GET_1(&this->actor) == 1) {
             Flags_SetSwitch(play, ENISHI_GET_FE00(&this->actor));
         }
@@ -594,11 +595,12 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
         }
 
         if (sp70 == 1) {
-            s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+            s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-            Quake_SetSpeed(quake, 0x4350);
-            Quake_SetQuakeValues(quake, 3, 0, 0, 0);
-            Quake_SetCountdown(quake, 7);
+            Quake_SetSpeed(quakeIndex, 17232);
+            Quake_SetQuakeValues(quakeIndex, 3, 0, 0, 0);
+            Quake_SetCountdown(quakeIndex, 7);
+
             Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
         }
 

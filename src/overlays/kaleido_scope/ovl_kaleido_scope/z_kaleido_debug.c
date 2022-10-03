@@ -34,10 +34,10 @@ s16 sCurRow = 0;
 
 // Geometry of the highlights for the selected section
 typedef struct {
-    /* 0 */ s16 screenX;
-    /* 1 */ s16 screenY;
-    /* 2 */ s16 width;
-} SectionPosition;
+    /* 0x0 */ s16 screenX;
+    /* 0x2 */ s16 screenY;
+    /* 0x4 */ s16 width;
+} SectionPosition; // size = 0x6;
 
 // clang-format off
 SectionPosition sSectionPositions[] = {
@@ -663,8 +663,8 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
     s16 value;
     s32 dBtnInput = input->cur.button & (BTN_DUP | BTN_DDOWN | BTN_DLEFT | BTN_DRIGHT);
 
-    pauseCtx->stickRelX = input->rel.stick_x;
-    pauseCtx->stickRelY = input->rel.stick_y;
+    pauseCtx->stickAdjX = input->rel.stick_x;
+    pauseCtx->stickAdjY = input->rel.stick_y;
 
     // Handles navigating the menu to different sections with the D-Pad
     // When the same direction is held, registers the input periodically based on a timer

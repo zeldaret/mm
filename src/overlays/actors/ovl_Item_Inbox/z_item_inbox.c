@@ -1,7 +1,7 @@
 /*
  * File: z_item_inbox.c
  * Overlay: ovl_Item_Inbox
- * Description:
+ * Description: Unused, can draw GetItem models. Perhaps intended to draw items inside chests.
  */
 
 #include "z_item_inbox.h"
