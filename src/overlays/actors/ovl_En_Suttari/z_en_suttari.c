@@ -7,6 +7,7 @@
 #include "z_en_suttari.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+#include "overlays/effects/ovl_Effect_Ss_Solder_Srch_Ball/z_eff_ss_solder_srch_ball.h"
 #include "objects/object_boj/object_boj.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
@@ -444,12 +445,13 @@ void func_80BAAFDC(EnSuttari* this, PlayState* play) {
         effectVelOffset.z = 20.0f;
         Matrix_MultVec3f(&effectVelOffset, &effectVel);
         Matrix_Pop();
-        if (this->unk3F0 == 0) {
-            EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->unk3F0, 1);
+        if (!this->playerDetected) {
+            EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->playerDetected,
+                                         SOLDERSRCHBALL_INVISIBLE);
         }
-        if (this->unk3F0 == 1) {
+        if (this->playerDetected == true) {
             play_sound(NA_SE_SY_FOUND);
-            this->unk3F0 = 0;
+            this->playerDetected = false;
             this->actor.speedXZ = 0.0f;
             if (this->unk1F4[0] != 0) {
                 this->unk1F4[0]--;
@@ -476,12 +478,13 @@ void func_80BAB1A0(EnSuttari* this, PlayState* play) {
         effectVelOffset.z = 20.0f;
         Matrix_MultVec3f(&effectVelOffset, &effectVel);
         Matrix_Pop();
-        if (this->unk3F0 == 0) {
-            EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->unk3F0, 1);
+        if (!this->playerDetected) {
+            EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->playerDetected,
+                                         SOLDERSRCHBALL_INVISIBLE);
         }
-        if (this->unk3F0 == 1) {
+        if (this->playerDetected == true) {
             play_sound(NA_SE_SY_FOUND);
-            this->unk3F0 = 0;
+            this->playerDetected = false;
             this->actor.speedXZ = 0.0f;
             if (this->unk1F4[0] != 0) {
                 this->unk1F4[0]--;
