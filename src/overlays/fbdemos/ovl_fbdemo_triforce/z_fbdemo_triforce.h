@@ -28,6 +28,4 @@ typedef struct {
     /* 0x060 */ Mtx modelView[2][3];
 } TransitionTriforce; // size = 0x1E0
 
-extern const TransitionTriforce_InitVars
-
 #endif

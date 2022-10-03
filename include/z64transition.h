@@ -61,12 +61,8 @@ typedef struct {
     /* 0x0 */ char unk_0[0xC];
 } TransitionFade; // size = 0xC
 
-extern TransitionInit TransitionFade_InitVars;
-
 typedef struct {
     /* 0x00 */ char unk_0[0x20];
 } TransitionCircle; // size = 0x20
-
-extern TransitionInit TransitionCircle_InitVars;
 
 #endif
