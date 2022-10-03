@@ -5,6 +5,8 @@
  */
 
 #include "z_title.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "misc/nintendo_rogo_static/nintendo_rogo_static.h"
 
@@ -44,9 +46,9 @@ void ConsoleLogo_RenderView(ConsoleLogoState* this, f32 x, f32 y, f32 z) {
     up.x = up.z = 0.0f;
     at.x = at.y = at.z = 0.0f;
     up.y = 1.0f;
-    func_8013F0D0(view, 30.0f, 10.0f, 12800.0f);
-    View_SetViewOrientation(view, &eye, &at, &up);
-    View_RenderView(view, 0xF);
+    View_SetPerspective(view, 30.0f, 10.0f, 12800.0f);
+    View_LookAt(view, &eye, &at, &up);
+    View_Apply(view, VIEW_ALL);
 }
 
 void ConsoleLogo_Draw(GameState* thisx) {

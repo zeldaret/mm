@@ -286,13 +286,6 @@ typedef struct {
     /* 0x10 */ OSTime resetTime;
 } NmiBuff; // size >= 0x18
 
-typedef struct {
-    /* 0x0 */ s8 letterboxTarget;
-    /* 0x1 */ s8 letterboxMagnitude;
-    /* 0x2 */ s8 pillarboxTarget;
-    /* 0x3 */ s8 pillarboxMagnitude;
-} ShrinkWindowContext; // size = 0x4
-
 typedef void(*osCreateThread_func)(void*);
 
 typedef enum {

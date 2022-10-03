@@ -508,7 +508,7 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, PlayState* play2) {
         POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
 
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB10);
+        gSPDisplayList(POLY_XLU_DISP++, gSunSparkleMaterialDL);
 
         for (i = 0; i < play->envCtx.unk_F2[3]; i++) {
             worldPos.x = this->effects[i].posBase.x + this->effects[i].posOffset.x;
@@ -575,7 +575,7 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, PlayState* play2) {
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB58);
+                gSPDisplayList(POLY_XLU_DISP++, gSunSparkleModelDL);
             }
         }
 

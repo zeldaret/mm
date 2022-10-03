@@ -146,7 +146,7 @@ void func_80B22FA8(EnHanabiStruct* arg0, PlayState* play2) {
     POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
 
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB10);
+    gSPDisplayList(POLY_XLU_DISP++, gSunSparkleMaterialDL);
 
     sp53 = 0xFF;
     if (sp53) {}
@@ -181,7 +181,7 @@ void func_80B22FA8(EnHanabiStruct* arg0, PlayState* play2) {
                                 D_80B23C2C[arg0->unk_02 + 2], 255);
             }
 
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB58);
+            gSPDisplayList(POLY_XLU_DISP++, gSunSparkleModelDL);
         }
     }
 
