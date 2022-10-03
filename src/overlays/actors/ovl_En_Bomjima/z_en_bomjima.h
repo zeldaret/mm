@@ -56,17 +56,6 @@ typedef struct EnBomjima {
     /* 0x2F8 */ ColliderCylinder collider;
 } EnBomjima; // size = 0x344
 
-typedef enum EN_BOMJIMA_ACTION {
-    /* 0 */ EN_BOMJIMA_ACTION_0,
-    /* 1 */ EN_BOMJIMA_ACTION_1,
-    /* 2 */ EN_BOMJIMA_ACTION_2,
-    /* 3 */ EN_BOMJIMA_ACTION_3,
-    /* 4 */ EN_BOMJIMA_ACTION_4,
-    /* 5 */ EN_BOMJIMA_ACTION_5,
-    /* 6 */ EN_BOMJIMA_ACTION_6,
-    /* 7 */ EN_BOMJIMA_ACTION_7,
-} EN_BOMJIMA_ACTION;
-
 extern const ActorInit En_Bomjima_InitVars;
 
 #endif // Z_EN_BOMJIMA_H

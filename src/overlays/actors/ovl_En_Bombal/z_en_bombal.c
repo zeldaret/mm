@@ -128,14 +128,14 @@ void func_80C05C44(EnBombal* this, PlayState* play) {
     if (phi_s0) {
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
         pos.y += 60.0f;
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, pos.x, pos.y, pos.z, 0xFF, 0xFF, 0xC8,
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, pos.x, pos.y, pos.z, 255, 255, 200,
                     CLEAR_TAG_LARGE_EXPLOSION);
 
         for (i = 0; i < 100; i++) {
             EnBombal_InitEffects(this, &pos, 10);
         }
 
-        gSaveContext.save.weekEventReg[0x53] = gSaveContext.save.weekEventReg[0x53] | 4;
+        gSaveContext.save.weekEventReg[83] |= 4;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
         this->timer = 30;
         this->isPopped = true;
