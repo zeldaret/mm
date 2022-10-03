@@ -3,10 +3,10 @@
 
 #include "global.h"
 
-void FileChoose_Init(GameState* thisx);
-void FileChoose_Destroy(GameState* thisx);
+void FileSelect_Init(GameState* thisx);
+void FileSelect_Destroy(GameState* thisx);
 
-typedef struct FileChooseContext {
+typedef struct FileSelectState {
     /* 0x00000 */ GameState state;
     /* 0x000A4 */ Vtx* unk_A4;
     /* 0x000A8 */ u8* staticSegment;
@@ -110,6 +110,6 @@ typedef struct FileChooseContext {
     /* 0x2454C */ s16  unk_2454C;
     /* 0x2454E */ s16  unk_2454E;
     /* 0x24550 */ s16  unk_24550;
-} FileChooseContext; // size = 0x24558
+} FileSelectState; // size = 0x24558
 
 #endif

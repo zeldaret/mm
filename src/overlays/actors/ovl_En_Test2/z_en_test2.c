@@ -96,7 +96,7 @@ void EnTest2_Update(Actor* thisx, PlayState* play) {
             Actor_SetObjectDependency(play, &this->actor);
             this->animMat = Lib_SegmentedToVirtual(modelInfo->animMat);
         }
-        if (play->roomCtx.currRoom.unk5) {
+        if (play->roomCtx.curRoom.unk5) {
             this->actor.update = EnTest2_UpdateForLens;
         } else {
             this->actor.update = Actor_Noop;
@@ -107,7 +107,7 @@ void EnTest2_Update(Actor* thisx, PlayState* play) {
 void EnTest2_UpdateForLens(Actor* thisx, PlayState* play) {
     EnTest2* this = THIS;
 
-    if (play->actorCtx.unk4 == 100) {
+    if (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) {
         this->actor.flags |= ACTOR_FLAG_80;
     } else {
         this->actor.flags &= ~ACTOR_FLAG_80;
