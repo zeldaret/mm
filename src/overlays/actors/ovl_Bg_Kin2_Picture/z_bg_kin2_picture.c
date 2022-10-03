@@ -133,8 +133,8 @@ void BgKin2Picture_SpawnDust(BgKin2Picture* this, PlayState* play) {
     velocity.y = 0.0f;
     accel.y = 0.2f;
 
-    for (i = 0, baseAngle = 0; i < DUST_COUNT; i++, baseAngle += 0xCCC) {
-        temp_s1 = (s32)(Rand_ZeroOne() * 0xCCC) + baseAngle;
+    for (i = 0, baseAngle = 0; i < DUST_COUNT; i++, baseAngle += (0x10000 / DUST_COUNT)) {
+        temp_s1 = (s32)(Rand_ZeroOne() * (0x10000 / DUST_COUNT)) + baseAngle;
         temp_fs0 = (Rand_ZeroOne() * 14.0f) + 4.0f;
         pos.x = Math_SinS(temp_s1) * temp_fs0;
         pos.z = Math_CosS(temp_s1) * temp_fs0;
